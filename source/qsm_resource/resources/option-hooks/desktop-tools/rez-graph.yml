@@ -1,0 +1,19 @@
+option:
+    type: tool-panel
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Rez Graph'
+        icon_name: 'application/python'
+
+        size: [ 1280, 960 ]
+#
+hook_option:
+    script:
+        packages: ''
+    rez:
+        extend_packages: []

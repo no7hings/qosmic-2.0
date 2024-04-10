@@ -1,0 +1,41 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'user_material_group'
+    type_abr: 'usr_mtl_grp'
+    create_type: 'MaterialGroup_Wsp_Usr'
+    description:
+        |-
+        group for user material create
+    variant_key: 'look'
+    #
+    auto_color: False
+#
+main:
+    type: MaterialGroup_Wsp
+    base_type: GroupMerge
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.input'
+    output: '<.path>.output'
+    #
+    clear_ports: False
+    #
+    attributes:
+        comment: '<option.description>'
+    #
+    parameters:
+        # basic
+        user/type: '<option.create_type>'
+    #
+    child:
+        type: Material_Wsp_Usr
+        #
+        tag: 'MTL'
+        #
+        path_pattern: '{parent}/<.tag>_{key}'
+        #
+        nodes:
+            user: {}
+
+

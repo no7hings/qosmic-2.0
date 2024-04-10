@@ -1,0 +1,99 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'geometry_properties_assign_group'
+    type_abr: 'gmt_prt_asn_grp'
+    create_type: 'GeometryPropertiesAssignGroup_Wsp'
+    description:
+        |-
+        group for geometry properties assign create
+    variant_key: 'look'
+    #
+    auto_color: False
+    #
+    color_hsv:
+        h: 210
+        s: .25
+        v: .25
+    #
+    color:
+        r: .125
+        g: .25
+        b: .375
+    #
+    size:
+        w: 480
+        h: 240
+#
+main:
+    type: GroupStack
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.input'
+    output: '<.path>.output'
+    #
+    clear_start: 'user'
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        #
+        user/parameters/ass/file:
+            widget: file
+            value: ''
+            tool_tip: '...'
+
+        user/parameters/ass/tools:
+            widget: buttons
+            value:
+                - {
+                    name: 'load latest file',
+                    script: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.SpcWspGeometryPropertiesAssignGroup(node).load_latest_ass_file()'
+                }
+                - {
+                    name: 'build from file',
+                    script: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.SpcWspGeometryPropertiesAssignGroup(node).build_from_ass_file()'
+                }
+        #
+        user/option/geometry_root:
+            widget: path
+            value: '/root/world/geo/master'
+            tool_tip: '...'
+            lock: True
+        #
+        user/option/material_root:
+            widget: path
+            value: '/root/materials'
+            tool_tip: '...'
+            lock: True
+    #
+    expand_groups:
+        - 'user'
+        - 'user/parameters'
+        - 'user/parameters/ass'
+    #
+    child:
+        type: GeometryPropertiesAssign_Wsp
+        #
+        path_pattern: '{parent}/<option.type_abr>_{key}'
+        #
+        nodes: {}
+

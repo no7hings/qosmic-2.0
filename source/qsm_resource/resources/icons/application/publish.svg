@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#1F1F1F;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st1{fill:#3F588C;}
+	.st2{fill:#6F82A9;}
+	.st3{fill:#1D2840;}
+	.st4{fill:#FFA109;}
+	.st5{fill:#805104;}
+	.st6{fill:none;stroke:#1F1F1F;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st7{fill:none;stroke:#FFFFFF;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<polygon class="st0" points="46,28 42,32 42,28 44,28 52,20 36,4 4,36 4,52 12,60 44,60 60,44 60,28 "/>
+<g>
+	<polygon class="st1" points="38,46 18,46 18,36 4,36 4,52 12,60 44,60 52,52 52,36 38,36 	"/>
+	<g>
+		<g>
+			<g>
+				<polygon class="st2" points="38,36 46,28 60,28 52,36 				"/>
+				<polygon class="st2" points="4,36 12,28 26,28 18,36 				"/>
+				<polygon class="st2" points="26,38 18,46 38,46 38,38 				"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<g>
+				<polygon class="st3" points="52,36 52,52 60,44 60,28 				"/>
+				<polygon class="st3" points="26,28 26,38 18,46 18,36 				"/>
+			</g>
+		</g>
+	</g>
+</g>
+<g>
+	<polygon class="st4" points="28,12 12,28 22,28 22,42 34,42 34,28 44,28 	"/>
+	<g>
+		
+			<rect x="34.3" y="4.7" transform="matrix(0.7071 -0.7071 0.7071 0.7071 0.3874 32.9176)" class="st5" width="11.3" height="22.6"/>
+		<polygon class="st5" points="42,28 34,28 34,42 38,38 38,36 42,32 		"/>
+	</g>
+</g>
+<polyline class="st6" points="12,28 22,28 22,42 34,42 37.1,38.9 37.1,35.5 42,30.6 "/>
+<g>
+	<polyline class="st7" points="36,4 4,36 4,52 	"/>
+	<line class="st7" x1="4" y1="36" x2="18" y2="36"/>
+	<polyline class="st7" points="18,46 38,46 38,36 46,28 	"/>
+	<line class="st7" x1="22" y1="28" x2="22" y2="42"/>
+	<line class="st7" x1="38" y1="36" x2="52" y2="36"/>
+</g>
+</svg>

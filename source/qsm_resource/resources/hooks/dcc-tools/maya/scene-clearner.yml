@@ -1,0 +1,75 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Scene Cleaner'
+        group_name: 'Scene(s)'
+        #
+        icon_name: 'application/python'
+        tool_tip: ''
+        #
+        size: [480, 480]
+#
+build:
+    node:
+        options:
+            unused/clear_script:
+                widget: check_button
+                value: 'import lxmaya.dcc.objects as mya_dcc_objects; mya_dcc_objects.Scene.set_unused_scripts_clear()'
+                check: True
+                tool_tip: 'delete unused script(s) / script-job(s), etc: "breed_gene", "vaccine_gene", ...'
+                join_to_next: True
+
+            unused/window:
+                widget: check_button
+                value: 'import lxmaya.dcc.objects as mya_dcc_objects; mya_dcc_objects.Scene.set_unused_windows_clear()'
+                check: True
+                tool_tip: 'delete unused window(s)'
+
+            unused/namepsace:
+                widget: check_button
+                value: 'import lxmaya.dcc.objects as mya_dcc_objects; mya_dcc_objects.Scene.set_unused_namespaces_clear()'
+                check: True
+                tool_tip: 'remove unused namespace(s) not from reference / assembly-reference'
+                join_to_next: True
+
+            unused/name:
+                widget: check_button
+                value: 'import lxmaya.dcc.objects as mya_dcc_objects; mya_dcc_objects.Scene.set_unused_names_clear()'
+                check: False
+                tool_tip: 'remove unused name(s) match "pasted__*"'
+
+            unused/shader:
+                widget: check_button
+                value: 'import lxmaya.dcc.objects as mya_dcc_objects; mya_dcc_objects.Scene.set_unused_shaders_clear()'
+                check: False
+                tool_tip: 'remove unused shader(s)'
+                join_to_next: True
+
+            unused/display_layer:
+                widget: check_button
+                value: 'import lxmaya.dcc.objects as mya_dcc_objects; mya_dcc_objects.Scene.set_unused_display_layers_clear()'
+                check: False
+                tool_tip: 'remove unused display-layer(s)'
+            #
+            unknown/plug_in:
+                widget: check_button
+                value: 'import lxmaya.dcc.objects as mya_dcc_objects; mya_dcc_objects.Scene.set_unknown_plug_ins_clear()'
+                check: True
+                tool_tip: 'delete unknown plug-in(s)'
+                join_to_next: True
+
+            unknown/node:
+                widget: check_button
+                value: 'import lxmaya.dcc.objects as mya_dcc_objects; mya_dcc_objects.Scene.set_unknown_plug_ins_clear()'
+                check: True
+                tool_tip: 'delete unknown node(s)'
+            #
+            unload/reference:
+                widget: check_button
+                value: 'import lxmaya.dcc.objects as mya_dcc_objects; mya_dcc_objects.Scene.set_unload_references_clear()'
+                check: True
+                tool_tip: 'delete unloaded reference(s)'

@@ -1,0 +1,25 @@
+<args format="1.0">
+    <help>
+    build by lynxi
+    </help>
+    <page name="osl string to int">
+        <param name="input" constant="True">
+            <help>
+            </help>
+        </param>
+        <param name="input_mapper" constant="True">
+            <help>
+            </help>
+        </param>
+        <page name="extra">
+            <param name="output_default" constant="True" slider="True" slidermin="0" slidermax="100">
+                <help>
+                </help>
+            </param>
+            <param name="output_maximum" constant="True" slider="True" slidermin="0" slidermax="100">
+                <help>
+                </help>
+            </param>
+        </page>
+    </page>
+</args>

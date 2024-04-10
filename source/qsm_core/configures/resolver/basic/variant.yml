@@ -1,0 +1,148 @@
+# ******************************************************************************************************************** #
+# scheme
+schemes:
+    framework: default
+    storage: default
+# workspaces
+workspaces:
+    work: work
+    source: work
+    user: user
+    release: publish
+    temporary: output
+# roles
+roles:
+    character: chr
+    prop: prp
+    environment: env
+    light: lgt
+    light_rig: lig
+    scenery: scn
+    vision_effect: vfx
+    workspace: wsp
+    plant: flg
+    #
+    camera: cam
+    #
+    exploration: exp
+    assembly: asb
+    #
+    other: oth
+# step
+#   project
+project_steps:
+    surface: srf
+#   asset
+asset_steps:
+    art: art
+    concept: cpt
+    paint: pnt
+    #
+    sketch: skt
+    #
+    reference: ref
+    #
+    model: mod
+    groom: grm
+    effect: efx
+    character_effect: cfx
+    rig: rig
+    surface: srf
+    #
+    camera: cam
+    animation: ani
+    light: lgt
+    light_rig: lgt
+    #
+    plant: plt
+    #
+    digital_environment: dem
+    digital_matte_paint: dmp
+    #
+    set_dressing: set
+    #
+    archive: archive
+#   sequence
+sequence_steps:
+    art: art
+    concept: cpt
+    storyboard: stb
+    #
+    sound: sound
+    previs: previs
+    #
+    edit: edt
+    #
+    light: lgt
+    light_rig: lgtrig
+    #
+    set_dressing: set
+#   shot
+shot_steps:
+    art: art
+    concept: cpt
+    storyboard: stb
+    #
+    reference: ref
+    #
+    sound: sound
+    previs: previs
+    #
+    edit: edt
+    #
+    camera: cam
+    rough_layout: rlo
+    animation: ani
+    final_layout: flo
+    effect: efx
+    character_effext: cfx
+    light: lgt
+    # use light
+    light_rig: lgt
+    #
+    digital_matte_paint: dmp
+    composition: cmp
+    #
+    set_dressing: set
+# step extra
+asset_steps_extra:
+    - '{key}_qc'
+    - '{key}_tech'
+#
+sequence_steps_extra:
+    - '{key}_qc'
+    - '{key}_tech'
+#
+shot_steps_extra:
+    - '{key}_qc'
+    - '{key}_tech'
+# task
+#   project
+project_tasks:
+    template: template
+#   asset
+asset_tasks:
+    model: modeling
+    model_dynamic: mod_dynamic
+    groom: groom
+    effect: effect
+    rig: rigging
+    character_effect: cfx
+    surface: surfacing
+    surface_prv: srf_anishading
+    surface_cfx: srf_cfxshading
+    light: lighting
+    light_rig: lighting
+    camera: camera
+#   sequence
+sequence_tasks: {}
+#   shot
+shot_tasks:
+    animation: animation
+#
+asset_usd_variant_indices:
+    model: modeling
+    groom: groom
+    effect: effect
+    rig: rigging
+    surface: surfacing

@@ -1,0 +1,9 @@
+option:
+    entities:
+        # resource type
+        /:
+            entity_type: 'category_root'
+            options: {kind: 'resource-category-root', gui_icon_name: 'database/all'}
+#
+database:
+    file: '{root}/.database/sqlite-atlas.db'

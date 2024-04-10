@@ -1,0 +1,450 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'quality'
+    type_abr: 'qlt'
+    create_type: 'Quality_Wsp'
+    description:
+        |-
+        for quality load
+    variant_key: 'quality'
+    #
+    auto_color: False
+    #
+    color:
+        r: 0
+        g: 0
+        b: 0
+#
+main:
+    type: 'Group'
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.join_upstream'
+    output: '<.path>.output'
+    #
+    attributes:
+        ns_offsetX: 720
+        ns_offsetY: 120
+        #
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports:
+        - 'join_upstream'
+        - 'join_other'
+    #
+    output_ports:
+        - output
+    #
+    ports:
+        # basic
+        type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        #
+        parameters/scheme:
+            widget: capsule_string
+            value: ['custom', 'low', 'medium', 'high']
+            default: 'custom'
+            tool_tip: '...'
+
+        parameters/custom:
+            label: 'setting'
+            widget: group
+            expand: True
+            visible_condition_hint: {
+                conditionalVisOp: 'equalTo', conditionalVisPath: '../scheme', conditionalVisValue: 'custom'
+            }
+
+        parameters/custom/render_properties/builtin:
+            widget: script
+            value:
+                |-
+                interactiveOutputs=
+            tool_tip: '...'
+
+        parameters/custom/render_properties/arnold:
+            widget: script
+            value:
+                |-
+                enable_adaptive_sampling=0
+                enable_progressive_render=1
+                AA_progressive_samples_min=-1
+                sss_use_autobump=1
+                abort_on_error=0
+                bucket_size=32
+                texture_max_memory_MB=20480
+                
+                AA_samples=8
+
+                GI_diffuse_samples=2
+                GI_specular_samples=3
+                GI_transmission_samples=2
+                GI_volume_samples=0
+                GI_sss_samples=4
+                
+                GI_total_depth=14
+                GI_diffuse_depth=2
+                GI_specular_depth=3
+                GI_transmission_depth=8
+                GI_volume_depth=0
+                
+                parallel_node_init=0
+
+            tool_tip: '...'
+
+        parameters/custom/render_resolution/percent:
+            widget: capsule_string
+            value: ['25%', '50%', '75%', '100%', '125%', '150%', '175%', '200%']
+            default: '100%'
+            tool_tip: '...'
+
+        parameters/low:
+            label: 'setting'
+            widget: group
+            expand: True
+            visible_condition_hint: {
+                conditionalVisOp: 'equalTo', conditionalVisPath: '../scheme', conditionalVisValue: 'low'
+            }
+
+        parameters/low/render_properties/builtin:
+            widget: script
+            value:
+                |-
+                interactiveOutputs=
+            tool_tip: '...'
+
+        parameters/low/render_properties/arnold:
+            widget: script
+            value:
+                |-
+                enable_adaptive_sampling=0
+                enable_progressive_render=1
+                AA_progressive_samples_min=-1
+                sss_use_autobump=1
+                abort_on_error=0
+                bucket_size=32
+                texture_max_memory_MB=20480
+                
+                AA_samples=5
+                
+                GI_diffuse_samples=2
+                GI_specular_samples=2
+                GI_transmission_samples=2
+                GI_volume_samples=0
+                GI_sss_samples=3
+                
+                GI_total_depth=14
+                GI_diffuse_depth=2
+                GI_specular_depth=3
+                GI_transmission_depth=5
+                GI_volume_depth=0
+                
+                parallel_node_init=0
+
+            tool_tip: '...'
+
+        parameters/low/render_resolution/percent:
+            widget: capsule_string
+            value: ['25%', '50%', '75%', '100%', '125%', '150%', '175%', '200%']
+            default: '50%'
+            tool_tip: '...'
+
+        parameters/medium:
+            label: 'setting'
+            widget: group
+            expand: True
+            visible_condition_hint: {
+                conditionalVisOp: 'equalTo', conditionalVisPath: '../scheme', conditionalVisValue: 'medium'
+            }
+
+        parameters/medium/render_properties/builtin:
+            widget: script
+            value:
+                |-
+                interactiveOutputs=
+            tool_tip: '...'
+
+        parameters/medium/render_properties/arnold:
+            widget: script
+            value:
+                |-
+                enable_adaptive_sampling=0
+                enable_progressive_render=1
+                AA_progressive_samples_min=-1
+                sss_use_autobump=1
+                abort_on_error=0
+                bucket_size=32
+                texture_max_memory_MB=20480
+                
+                AA_samples=5
+                
+                GI_diffuse_samples=2
+                GI_specular_samples=2
+                GI_transmission_samples=2
+                GI_volume_samples=0
+                GI_sss_samples=3
+                
+                GI_total_depth=14
+                GI_diffuse_depth=2
+                GI_specular_depth=3
+                GI_transmission_depth=5
+                GI_volume_depth=0
+                
+                parallel_node_init=0
+
+            tool_tip: '...'
+
+        parameters/medium/render_resolution/percent:
+            widget: capsule_string
+            value: ['25%', '50%', '75%', '100%', '125%', '150%', '175%', '200%']
+            default: '75%'
+            tool_tip: '...'
+
+        parameters/high:
+            label: 'setting'
+            widget: group
+            expand: True
+            visible_condition_hint: {
+                conditionalVisOp: 'equalTo', conditionalVisPath: '../scheme', conditionalVisValue: 'high'
+            }
+
+        parameters/high/render_properties/builtin:
+            widget: script
+            value:
+                |-
+                interactiveOutputs=
+            tool_tip: '...'
+
+        parameters/high/render_properties/arnold:
+            widget: script
+            value:
+                |-
+                enable_adaptive_sampling=0
+                enable_progressive_render=1
+                AA_progressive_samples_min=-1
+                sss_use_autobump=1
+                abort_on_error=0
+                bucket_size=32
+                texture_max_memory_MB=20480
+                
+                AA_samples=10
+                
+                GI_diffuse_samples=2
+                GI_specular_samples=3
+                GI_transmission_samples=2
+                GI_volume_samples=0
+                GI_sss_samples=4
+                
+                GI_total_depth=14
+                GI_diffuse_depth=2
+                GI_specular_depth=3
+                GI_transmission_depth=8
+                GI_volume_depth=0
+                
+                parallel_node_init=0
+
+            tool_tip: '...'
+
+        parameters/high/render_resolution/percent:
+            widget: capsule_string
+            value: ['25%', '50%', '75%', '100%', '125%', '150%', '175%', '200%']
+            default: '100%'
+            tool_tip: '...'
+        #   render override
+        parameters/extra/render_properties_override/builtin_enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        parameters/extra/render_properties_override/builtin:
+            widget: script
+            value: ''
+            tool_tip: '...'
+
+        parameters/extra/render_properties_override/arnold_enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        parameters/extra/render_properties_override/arnold:
+            widget: script
+            value: ''
+            tool_tip: '...'
+        # record
+        record/variant_properties_opt:
+            widget: node
+            value: '<node.variant_properties_opt.name>'
+            tool_tip: '...'
+            lock: True
+    #
+    expand_groups:
+        - 'parameters'
+        - 'parameters/custom'
+        - 'parameters/custom/render_properties'
+        - 'parameters/custom/render_resolution'
+        - 'parameters/low'
+        - 'parameters/low/render_properties'
+        - 'parameters/low/render_resolution'
+        - 'parameters/medium'
+        - 'parameters/medium/render_properties'
+        - 'parameters/medium/render_resolution'
+        - 'parameters/high'
+        - 'parameters/high/render_properties'
+        - 'parameters/high/render_resolution'
+#
+node:
+    # dot
+    join_upstream_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        connections:
+            # input
+            - '<main.input>'
+            - '<.input>'
+    #
+    join_other_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        connections:
+            # input
+            - '<main.path>.join_other'
+            - '<.input>'
+    # upstream merge
+    upstream_merge:
+        tag: 'UMG'
+        type: UpstreamMerge_Wsp
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        input_ports:
+            - 'join_upstream'
+            - 'join_other'
+        #
+        connections:
+            # join upstream
+            - '<..join_upstream_dot.output>'
+            - '<.path>.join_upstream'
+            # join other
+            - '<..join_other_dot.output>'
+            - '<.path>.join_other'
+    #
+    default__render_properties_opt:
+        tag: 'RPO'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: RenderProperties_Opt
+        name: '<option.type_abr>__<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        parameters:
+            user/properties/builtin_enable: True
+            user/properties/arnold_enable: True
+        #
+        expressions:
+            user/properties/builtin:
+                |-
+                self.getNode().getParent().getParameter(
+                    'parameters.{}.render_properties.builtin'.format(getParent().parameters.scheme)
+                ).getValue(0)
+            user/properties/arnold:
+                |-
+                self.getNode().getParent().getParameter(
+                    'parameters.{}.render_properties.arnold'.format(getParent().parameters.scheme)
+                ).getValue(0)
+        #
+        connections:
+            #
+            - '<..upstream_merge.output>'
+            - '<.input>'
+    # user render properties
+    override__render_properties_opt:
+        tag: 'RPO'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: RenderProperties_Opt
+        name: '<option.type_abr>__<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        expressions:
+            user/properties/builtin_enable: 'getParent().parameters.extra.render_properties_override.builtin_enable'
+            user/properties/builtin: 'getParent().parameters.extra.render_properties_override.builtin'
+            user/properties/arnold_enable: 'getParent().parameters.extra.render_properties_override.arnold_enable'
+            user/properties/arnold: 'getParent().parameters.extra.render_properties_override.arnold'
+        #
+        connections:
+            #
+            - '<..default__render_properties_opt.output>'
+            - '<.input>'
+    # render resolution
+    render_resolution_opt:
+        tag: 'RRO'
+        type: RenderResolution_Opt
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        parameters:
+            user/enable: True
+        #
+        expressions:
+            user/percent:
+                |-
+                self.getNode().getParent().getParameter(
+                    'parameters.{}.render_resolution.percent'.format(getParent().parameters.scheme)
+                ).getValue(0)
+        #
+        connections:
+            #
+            - '<..override__render_properties_opt.output>'
+            - '<.input>'
+    # variant properties opt
+    variant_properties_opt:
+        tag: 'VPO'
+        type: VariantProperties_Opt
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        parameters:
+            user/data_1/i0: '<option.variant_key>.current'
+            user/data_2/i0: '<option.variant_key>.render_resolution_percent'
+        #
+        expressions:
+            user/data_1/i1: 'getParent().getNodeName()'
+            user/data_2/i1:
+                |-
+                self.getNode().getParent().getParameter(
+                    'parameters.{}.render_resolution.percent'.format(getParent().parameters.scheme)
+                ).getValue(0)
+        #
+        connections:
+            - '<..render_resolution_opt.output>'
+            - '<.input>'
+            # output
+            - '<.output>'
+            - '<main.output>'

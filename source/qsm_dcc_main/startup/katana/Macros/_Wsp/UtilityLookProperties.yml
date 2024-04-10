@@ -1,0 +1,651 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'utility_look_properties'
+    type_abr: 'utl_lok_prt'
+    create_type: 'UtilityLookProperties_Wsp'
+    description:
+        |-
+        utility assigns
+    variant_key: 'look'
+    #
+    auto_color: False
+    #
+    color:
+        r: .5
+        g: .5
+        b: .5
+    #
+    size:
+        w: 480
+        h: 240
+#
+main:
+    type: Group
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.join_upstream'
+    output: '<.path>.output'
+    #
+    attributes:
+        ns_offsetX: 480
+        ns_offsetY: 120
+        #
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports:
+        - join_upstream
+        - join_other
+    #
+    output_ports:
+        - output
+    #
+    ports:
+        # basic
+        type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        # option
+        option/scheme:
+            widget: enumerate
+            value: ['passthrough', 'lambert', 'wire', 'plastic', 'metal', 'ambocc', 'white', 'white_disp', 'white_zbrush', 'assess']
+            tool_tip: '...'
+        #   root
+        option/geometry_root:
+            widget: path
+            value: '/root/world/geo/master'
+            tool_tip: '...'
+            lock: True
+
+        option/material_root:
+            widget: path
+            value: '/root/materials'
+            tool_tip: '...'
+            lock: True
+        #   renderable
+        option/renderable/root:
+            widget: path
+            value: '/root/world/geo/master'
+            tool_tip: '...'
+
+        option/renderable/mesh/material:
+            widget: path
+            value: '/root/materials/mtl_lambert'
+            tool_tip: '...'
+
+        option/renderable/mesh/properties:
+            widget: script
+            value:
+                |-
+                smoothing=1
+                subdiv_type=catclark
+                subdiv_iterations=1
+                subdiv_smooth_derivs=1
+                sss_setname=sss
+            tool_tip: '...'
+
+        option/renderable/curve/material:
+            widget: path
+            value: '/root/materials/mtl_lambert'
+            tool_tip: '...'
+
+        option/renderable/curve/properties:
+            widget: script
+            value: ''
+            tool_tip: '...'
+        #   shape
+        option/shape/root:
+            widget: path
+            value: '/root/world/geo/master/shape'
+            tool_tip: '...'
+
+        option/shape/mesh/material:
+            widget: path
+            value: '/root/materials/mtl_lambert'
+            tool_tip: '...'
+
+        option/shape/mesh/properties:
+            widget: script
+            value:
+                |-
+                smoothing=0
+                subdiv_type=none
+                subdiv_iterations=0
+                sss_setname=sss
+            tool_tip: '...'
+
+        option/shape/curve/material:
+            widget: path
+            value: '/root/materials/mtl_lambert'
+            tool_tip: '...'
+
+        option/shape/curve/properties:
+            widget: script
+            value: ''
+            tool_tip: '...'
+        # override
+        override/renderable/mesh/enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        override/renderable/mesh/material:
+            widget: path
+            value: ''
+            tool_tip: '...'
+
+        override/renderable/mesh/properties:
+            widget: script
+            value: ''
+            tool_tip: '...'
+
+        override/renderable/curve/enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        override/renderable/curve/material:
+            widget: path
+            value: ''
+            tool_tip: '...'
+
+        override/renderable/curve/properties:
+            widget: script
+            value: ''
+            tool_tip: '...'
+#
+node:
+    # join upstream dot
+    join_upstream_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        connections:
+            # input
+            - '<main.path>.join_upstream'
+            - '<.input>'
+    # join other dot
+    join_other_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        connections:
+            # input
+            - '<main.path>.join_other'
+            - '<.input>'
+    #
+    passthrough:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        attributes:
+            ns_basicDisplay: 1
+        #
+        connections:
+            # input
+            - '<main.path>.join_upstream'
+            - '<.input>'
+    # upstream_merge
+    upstream_merge:
+        tag: 'UMG'
+        type: UpstreamMerge_Wsp
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        input_ports:
+            - 'join_upstream'
+            - 'join_other'
+        #
+        connections:
+            # join geometry
+            - '<..join_upstream_dot.output>'
+            - '<.path>.join_upstream'
+            # join material
+            - '<..join_other_dot.output>'
+            - '<.path>.join_other'
+    #
+    main_look_properties_group:
+        type: GroupStack
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.in'
+        output: '<.path>.out'
+        #
+        connections:
+            - '<..upstream_merge.output>'
+            - '<.input>'
+        #
+        child:
+            type: LookProperties_Opt
+            #
+            path_pattern: '{parent}/<option.type_abr>__<...key>__{key}'
+            #
+            nodes:
+                renderable_mesh:
+                    expressions:
+                        CEL:
+                            |-
+                            '{}//*{{attr("type") == "subdmesh"}}'.format(
+                                getParent().getParent().option.renderable.root
+                            )
+                        user/enable: 'getParent().getParent().option.renderable.enable'
+                        user/material: 'getParent().getParent().option.renderable.mesh.material'
+                        user/geometry/properties: 'getParent().getParent().option.renderable.mesh.properties'
+                #
+                renderable_curve:
+                    expressions:
+                        CEL:
+                            |-
+                            '{}//*{{attr("type") == "curves" or attr("type") == "renderer procedural"}}'.format(
+                                getParent().getParent().option.renderable.root
+                            )
+                        user/enable: 'getParent().getParent().option.renderable.enable'
+                        user/material: 'getParent().getParent().option.renderable.curve.material'
+                        user/geometry/properties: 'getParent().getParent().option.renderable.curve.properties'
+                #
+                shape_mesh:
+                    expressions:
+                        CEL:
+                            |-
+                            '{}//*{{attr("type") == "subdmesh"}}'.format(
+                                getParent().getParent().option.shape.root
+                            )
+                        user/enable: 'getParent().getParent().option.shape.enable'
+                        user/material: 'getParent().getParent().option.shape.mesh.material'
+                        user/geometry/properties: 'getParent().getParent().option.shape.mesh.properties'
+                #
+                shape_curve:
+                    expressions:
+                        CEL:
+                            |-
+                            '{}//*{{attr("type") == "curves" or attr("type") == "renderer procedural"}}'.format(
+                                getParent().getParent().option.shape.root
+                            )
+                        user/enable: 'getParent().getParent().option.shape.enable'
+                        user/material: 'getParent().getParent().option.shape.curve.material'
+                        user/geometry/properties: 'getParent().getParent().option.shape.curve.properties'
+    #
+    main_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        connections:
+            # input
+            - '<..main_look_properties_group.output>'
+            - '<.input>'
+    # material assign
+    lambert__look_properties:
+        tag: 'LPO'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: LookProperties_Opt
+        name: '<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        parameters:
+            user/enable: True
+            user/material: '/root/materials/mtl_<..variant>'
+        #
+        expressions:
+            CEL:
+                |-
+                '{}//*{{attr("type") == "subdmesh" or attr("type") == "renderer procedural"}}'.format(
+                    getParent().option.geometry_root
+                )
+        #
+        connections:
+            - '<..main_dot.output>'
+            - '<.input>'
+
+    wire__look_properties: '$ .lambert__look_properties'
+
+    plastic__look_properties: '$ .lambert__look_properties'
+
+    metal__look_properties: '$ .lambert__look_properties'
+
+    ambocc__look_properties: '$ .lambert__look_properties'
+    # white
+    white_curve__look_properties:
+        tag: 'LPO'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: LookProperties_Opt
+        name: '<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        parameters:
+            user/enable: True
+            user/material: '/root/materials/mtl_white_curve'
+            user/geometry/properties: ''
+        #
+        expressions:
+            CEL:
+                |-
+                '{}//*{{attr("type") == "curves" or attr("type") == "renderer procedural"}}'.format(
+                    getParent().option.geometry_root
+                )
+        #
+        connections:
+            - '<..main_dot.output>'
+            - '<.input>'
+
+    white_eye__look_properties:
+        tag: 'LPO'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: LookProperties_Opt
+        name: '<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        parameters:
+            user/enable: True
+            user/material: '/root/materials/mtl_white_mesh_eye'
+            user/geometry/properties:
+                |-
+                smoothing=1
+                subdiv_type=catclark
+                subdiv_iterations=1
+                subdiv_smooth_derivs=1
+                sss_setname=sss
+        #
+        expressions:
+            CEL:
+                |-
+                '{}//*out_eye_*Shape'.format(
+                    getParent().option.geometry_root
+                )
+        #
+        connections:
+            - '<..white_curve__look_properties.output>'
+            - '<.input>'
+    #
+    white_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        connections:
+            # input
+            - '<..white_eye__look_properties.output>'
+            - '<.input>'
+
+    white_mesh__look_properties:
+        tag: 'LPO'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: LookProperties_Opt
+        name: '<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        parameters:
+            user/enable: True
+            user/material: '/root/materials/mtl_white_mesh'
+        #
+        expressions:
+            CEL:
+                |-
+                '{}//*{{attr("type") == "subdmesh"}}'.format(
+                    getParent().option.geometry_root
+                )
+        #
+        connections:
+            - '<..white_dot.output>'
+            - '<.input>'
+    # white disp
+    white_disp_mesh__look_properties:
+        tag: 'LPO'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: LookProperties_Opt
+        name: '<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        parameters:
+            user/enable: True
+            user/material: '/root/materials/mtl_white_mesh'
+
+        #
+        expressions:
+            CEL:
+                |-
+                '{}//*{{attr("type") == "subdmesh"}}'.format(
+                    getParent().option.geometry_root
+                )
+        #
+        connections:
+            - '<..white_dot.output>'
+            - '<.input>'
+    # white zbrush
+    white_zbrush_mesh__look_properties:
+        tag: 'LPO'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: LookProperties_Opt
+        name: '<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        parameters:
+            user/enable: True
+            user/material: '/root/materials/mtl_white_mesh'
+            user/geometry/properties:
+                |-
+                smoothing=0
+                subdiv_type=none
+                subdiv_iterations=0
+                sss_setname=sss
+        #
+        expressions:
+            CEL:
+                |-
+                '{}//*{{attr("type") == "subdmesh"}}'.format(
+                    getParent().option.geometry_root
+                )
+        #
+        connections:
+            - '<..white_dot.output>'
+            - '<.input>'
+    # assess
+    # aov
+    ass_aovs:
+        type: GroupStack
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.in'
+        output: '<.path>.out'
+        #
+        connections:
+            - '<..main_dot.output>'
+            - '<.input>'
+        #
+        child:
+            type: Aov_Wsp
+            #
+            path_pattern: '{parent}/<option.type_abr>__<...key>__{key}'
+            #
+            nodes:
+                ass_asset_color:
+                    parameters:
+                        option/enable: True
+                        option/name: '<...key>'
+
+                ass_group_color:
+                    parameters:
+                        option/enable: True
+                        option/name: '<...key>'
+
+                ass_object_color:
+                    parameters:
+                        option/enable: True
+                        option/name: '<...key>'
+
+                ass_shell_color:
+                    parameters:
+                        option/enable: True
+                        option/name: '<...key>'
+
+                ass_wire:
+                    parameters:
+                        option/enable: True
+                        option/name: '<...key>'
+
+    assess__look_properties:
+        tag: 'LPO'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: LookProperties_Opt
+        name: '<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        parameters:
+            user/enable: True
+            user/material: '/root/materials/mtl_assess'
+            user/geometry/properties:
+                |-
+                smoothing=1
+                subdiv_type=none
+                receive_shadows=0
+                self_shadows=0
+        #
+        expressions:
+            CEL:
+                |-
+                '{}//*{{attr("type") == "subdmesh" or attr("type") == "curves" or attr("type") == "renderer procedural"}}'.format(
+                    getParent().option.geometry_root
+                )
+        #
+        connections:
+            - '<..ass_aovs.output>'
+            - '<.input>'
+    # switch
+    scheme_switch:
+        type: Switch
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.output'
+        #
+        input_ports:
+            - 'passthrough'
+            - 'lambert'
+            - 'wire'
+            - 'plastic'
+            - 'metal'
+            - 'ambocc'
+            - 'white'
+            - 'white_disp'
+            - 'white_zbrush'
+            - 'assess'
+        #
+        expressions:
+            in:
+                |-
+                ['passthrough', 'lambert', 'wire', 'plastic', 'metal', 'ambocc', 'white', 'white_disp', 'white_zbrush', 'assess'].index(getParent().option.scheme)
+        #
+        connections:
+            # passthrough
+            - '<..passthrough.output>'
+            - '<.path>.passthrough'
+            # lambert
+            - '<..lambert__look_properties.output>'
+            - '<.path>.lambert'
+            # wire
+            - '<..wire__look_properties.output>'
+            - '<.path>.wire'
+            # plastic
+            - '<..plastic__look_properties.output>'
+            - '<.path>.plastic'
+            # metal
+            - '<..metal__look_properties.output>'
+            - '<.path>.metal'
+            # ambocc
+            - '<..ambocc__look_properties.output>'
+            - '<.path>.ambocc'
+            # white
+            - '<..white_mesh__look_properties.output>'
+            - '<.path>.white'
+            # white disp
+            - '<..white_disp_mesh__look_properties.output>'
+            - '<.path>.white_disp'
+            # white zbrush
+            - '<..white_zbrush_mesh__look_properties.output>'
+            - '<.path>.white_zbrush'
+            # assess
+            - '<..assess__look_properties.output>'
+            - '<.path>.assess'
+    #
+    override_look_properties_group:
+        type: GroupStack
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.in'
+        output: '<.path>.out'
+        #
+        connections:
+            - '<..scheme_switch.output>'
+            - '<.input>'
+            # output
+            - '<.output>'
+            - '<main.output>'
+        #
+        child:
+            type: LookProperties_Opt
+            #
+            path_pattern: '{parent}/<option.type_abr>__<...key>__{key}'
+            #
+            nodes:
+                renderable_mesh:
+                    expressions:
+                        CEL:
+                            |-
+                            '{}//*{{attr("type") == "subdmesh"}}'.format(
+                                getParent().getParent().option.renderable.root
+                            )
+                        user/enable: 'getParent().getParent().override.renderable.enable'
+                        user/material: 'getParent().getParent().override.renderable.mesh.material'
+                        user/geometry/properties: 'getParent().getParent().override.renderable.mesh.properties'
+                #
+                renderable_curve:
+                    expressions:
+                        CEL:
+                            |-
+                            '{}//*{{attr("type") == "curves" or attr("type") == "renderer procedural"}}'.format(
+                                getParent().getParent().option.renderable.root
+                            )
+                        user/enable: 'getParent().getParent().override.renderable.enable'
+                        user/material: 'getParent().getParent().override.renderable.curve.material'
+                        user/geometry/properties: 'getParent().getParent().override.renderable.curve.properties'

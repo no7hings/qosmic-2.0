@@ -1,0 +1,38 @@
+#usda 1.0
+(
+    defaultPrim = "{{ dcc.root_name }}"
+    metersPerUnit = 0.01
+    upAxis = "Y"
+)
+
+over "{{ dcc.root_name }}" (
+    variants = {
+        string user_property = "default"
+        string display_color = "None"
+    }
+    prepend variantSets = [
+        "user_property",
+        "display_color",
+    ]
+) {
+    variantSet "user_property" = {
+        "None" (){}
+        "default" (
+            payload = [
+                @{{ geometries.user_property }}@,
+            ]
+        ){
+            asset userProperties:usd:variants:asset:geo_extra:user_property:file = @{{ geometries.user_property }}@
+        }
+    }
+    variantSet "display_color" = {
+        "None" (){}
+{%- for i_name, i_file in geometries.display_colors.iteritems() %}
+        "{{ i_name }}" (
+            payload = @{{ i_file }}@
+        ){
+            asset userProperties:usd:variants:asset:geo_extra:display_color:file = @{{ i_file }}@
+        }
+{%- endfor %}
+    }
+}

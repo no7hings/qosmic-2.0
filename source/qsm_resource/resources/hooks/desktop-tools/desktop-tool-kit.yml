@@ -1,0 +1,388 @@
+option:
+    type: kit-panel
+    # config used system
+    systems:
+        - '*-*'
+    #
+    gui:
+        name: 'Desktop Tool Kit'
+        group_name: ''
+        #
+        icon_name: 'application/tool_kit'
+        tool_tip: ''
+        #
+        size: [480, 720]
+        item_frame_size: [64, 108]
+        item_name_frame_size: [64, 48]
+    #
+    packages:
+        - 'lxdcc'
+#
+hook_option:
+    rez: {}
+#
+app:
+    hooks: []
+    #
+    option-hooks: []
+#
+build:
+    page_name_mapper: {
+#        'Studio': '工作室',
+#        'Share': '共享',
+#        'Test': '测试',
+    }
+    node:
+        create_content:
+            |-
+            1. choose type and enter a name for this app;
+                a, name only support "word", "number", "_"
+            2, configure this app support system;
+            3, entry ui name for app or ignore;
+            4, entry script, or drop file to the enter frame;
+            5, press "Apply" or "Apply and Close" to continue.
+
+        #
+        create_options:
+            type:
+                widget: capsule_string
+                value: ['python-script', 'shell-script']
+                default: 'python-script'
+                tool_tip: '...'
+                enable: True
+            #
+            root:
+                widget: directory
+                open_or_save: save
+                value: ''
+                tool_tip: '...'
+                enable: True
+                lock: True
+            #
+            name:
+                widget: name
+                value: 'untitled'
+                tool_tip: '...'
+                enable: True
+            #
+            systems:
+                widget: capsule_strings
+                value: ['windows', 'linux']
+                default: ['windows']
+                tool_tip: '...'
+                enable: True
+            #
+            gui/name:
+                widget: string
+                value: ''
+                tool_tip: '...'
+                enable: True
+            #
+            gui/group_name:
+                widget: enumerate
+                value: ['None', 'Share', 'User']
+                default: 'None'
+                tool_tip: '...'
+                enable: True
+                lock: True
+            #
+            gui/group_sub_name:
+                widget: enumerate
+                value: ['Application', 'Tool', 'URL', 'Other', 'Python Script', 'Shell Script']
+                default: 'Tool'
+                tool_tip: '...'
+                enable: True
+            #
+            gui/icon_name:
+                widget: icon
+                value: []
+                all_application_icon: True
+                default: ''
+                tool_tip: '...'
+                enable: True
+            #
+            gui/icon_sub_name:
+                widget: icon
+                value: ['None', 'application/python', 'application/shell']
+                default: 'None'
+                tool_tip: '...'
+                enable: True
+                lock: True
+            #
+            gui/icon_style:
+                widget: icon
+                value: []
+                all_tool_base_icon: True
+                default: ''
+                tool_tip: '...'
+                enable: True
+            #
+            gui/icon_color:
+                widget: rgba
+                value: [255, 255, 255, 255]
+                tool_tip: '...'
+                enable: True
+            #
+            gui/tool_tip:
+                widget: script
+                value: ''
+                tool_tip: '...'
+                enable: True
+            #
+            script/python:
+                widget: script
+                value: ''
+                tool_tip: '...'
+                visible_condition: {
+                    operator: 'is', port: 'type', value: 'python-script'
+                }
+                external_editor_ext: '.py'
+                enable: True
+            #
+            script/linux:
+                widget: script
+                value: ''
+                tool_tip: '...'
+                visible_condition: {
+                    operator: 'is', port: 'type', value: 'shell-script'
+                }
+                external_editor_ext: '.sh'
+                enable: True
+            #
+            script/windows:
+                widget: script
+                value: ''
+                tool_tip: '...'
+                visible_condition: {
+                    operator: 'is', port: 'type', value: 'shell-script'
+                }
+                external_editor_ext: '.bat'
+                enable: True
+        #
+        modify_options:
+            type:
+                widget: capsule_string
+                value: ['python-script', 'shell-script']
+                default: 'python-script'
+                tool_tip: '...'
+                enable: True
+            #
+            name:
+                widget: name
+                value: 'untitled'
+                tool_tip: '...'
+                enable: True
+                lock: True
+            #
+            systems:
+                widget: capsule_strings
+                value: ['windows', 'linux']
+                default: ['windows']
+                tool_tip: '...'
+                enable: True
+
+            gui/name:
+                widget: string
+                value: ''
+                tool_tip: '...'
+                enable: True
+            #
+            gui/group_name:
+                widget: enumerate
+                value: ['None', 'Share', 'User']
+                default: 'None'
+                tool_tip: '...'
+                enable: True
+                lock: True
+            #
+            gui/group_sub_name:
+                widget: enumerate
+                value: ['Application', 'Tool', 'URL', 'Other', 'Python Script', 'Shell Script']
+                default: 'Tool'
+                tool_tip: '...'
+                enable: True
+            #
+            gui/icon_name:
+                widget: icon
+                value: []
+                all_application_icon: True
+                default: ''
+                tool_tip: '...'
+                enable: True
+            #
+            gui/icon_sub_name:
+                widget: icon
+                value: ['', 'application/python', 'application/shell']
+                default: ''
+                tool_tip: '...'
+                enable: True
+                lock: True
+            #
+            gui/icon_style:
+                widget: icon
+                value: []
+                all_tool_base_icon: True
+                default: ''
+                tool_tip: '...'
+                enable: True
+            #
+            gui/icon_color:
+                widget: rgba
+                value: [0, 0, 0, 0]
+                tool_tip: '...'
+                enable: True
+            #
+            gui/tool_tip:
+                widget: script
+                value: ''
+                tool_tip: '...'
+                enable: True
+            #
+            script/python:
+                widget: script
+                value: ''
+                tool_tip: '...'
+                visible_condition: {
+                    operator: 'is', port: 'type', value: 'python-script'
+                }
+                external_editor_ext: '.py'
+                enable: True
+            #
+            script/linux:
+                widget: script
+                value: ''
+                tool_tip: '...'
+                visible_condition: {
+                    operator: 'is', port: 'type', value: 'shell-script'
+                }
+                external_editor_ext: '.sh'
+                enable: True
+            #
+            script/windows:
+                widget: script
+                value: ''
+                tool_tip: '...'
+                visible_condition: {
+                    operator: 'is', port: 'type', value: 'shell-script'
+                }
+                external_editor_ext: '.bat'
+                enable: True
+        #
+        modify_content:
+            |-
+            1. modify options;
+            2, press "Apply" or "Apply and Close" to continue.
+
+        #
+        copy_options:
+            type:
+                widget: capsule_string
+                value: ['python-script', 'shell-script']
+                default: 'python-script'
+                tool_tip: '...'
+                enable: True
+            #
+            name:
+                widget: name
+                value: 'untitled'
+                tool_tip: '...'
+                enable: True
+            #
+            systems:
+                widget: capsule_strings
+                value: ['windows', 'linux']
+                default: ['windows']
+                tool_tip: '...'
+                enable: True
+            #
+            gui/name:
+                widget: string
+                value: ''
+                tool_tip: '...'
+                enable: True
+            #
+            gui/group_name:
+                widget: enumerate
+                value: ['Share', 'User']
+                default: 'Share'
+                tool_tip: '...'
+                enable: True
+            #
+            gui/group_sub_name:
+                widget: enumerate
+                value: ['Application', 'Tool', 'URL', 'Other', 'Python Script', 'Shell Script']
+                default: 'Tool'
+                tool_tip: '...'
+                enable: True
+            #
+            gui/icon_name:
+                widget: icon
+                value: []
+                all_application_icon: True
+                default: ''
+                tool_tip: '...'
+                enable: True
+            #
+            gui/icon_sub_name:
+                widget: icon
+                value: ['None', 'application/python', 'application/shell']
+                default: 'None'
+                tool_tip: '...'
+                enable: True
+                lock: True
+            #
+            gui/icon_style:
+                widget: icon
+                value: []
+                all_tool_base_icon: True
+                default: ''
+                tool_tip: '...'
+                enable: True
+            #
+            gui/icon_color:
+                widget: rgba
+                value: [255, 255, 255, 255]
+                tool_tip: '...'
+                enable: True
+            #
+            gui/tool_tip:
+                widget: script
+                value: ''
+                tool_tip: '...'
+                enable: True
+            #
+            script/python:
+                widget: script
+                value: ''
+                tool_tip: '...'
+                visible_condition: {
+                    operator: 'is', port: 'type', value: 'python-script'
+                }
+                external_editor_ext: '.py'
+                enable: True
+            #
+            script/linux:
+                widget: script
+                value: ''
+                tool_tip: '...'
+                visible_condition: {
+                    operator: 'is', port: 'type', value: 'shell-script'
+                }
+                external_editor_ext: '.sh'
+                enable: True
+            #
+            script/windows:
+                widget: script
+                value: ''
+                tool_tip: '...'
+                visible_condition: {
+                    operator: 'is', port: 'type', value: 'shell-script'
+                }
+                external_editor_ext: '.bat'
+                enable: True
+        #
+        copy_content:
+            |-
+            1. modify options;
+            2, press "Apply" or "Apply and Close" to continue.
+            

@@ -1,0 +1,20 @@
+tools:
+    properties:
+        obj_type: group
+        obj_path: /<...key>
+        #
+        obj_attributes:
+            gui:
+                label: Root
+                description: None
+                icon: group
+    geometry:
+        properties:
+            obj_type: group
+            obj_path: <...properties.obj_path>/<...key>
+            #
+            obj_attributes:
+                gui:
+                    label: Utility
+                    description: None
+                    icon: group

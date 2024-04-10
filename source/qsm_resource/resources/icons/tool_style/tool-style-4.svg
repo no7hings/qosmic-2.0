@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#BFBFBF;}
+	.st1{fill:#5F5F5F;}
+	.st2{fill:#8F8F8F;}
+	.st3{fill:#575757;}
+	.st4{fill:#A7A7A7;}
+	.st5{fill:#FFFFFF;}
+	.st6{fill:#6F6F6F;}
+	.st7{fill:#DFDFDF;}
+	.st8{fill:#3F3F3F;}
+	.st9{fill:#AFAFAF;}
+	.st10{display:none;fill:#FFFFFF;}
+</style>
+<g>
+	<path class="st0" d="M59,42V13h-9V4H19h-1l-2,2v7h-2h-1l-6,6v28l-3,3v12h1h49l8-8V42H59z M22,10h22v3H22V10z"/>
+	<path class="st1" d="M54,64H4c-1.1,0-2-0.9-2-2V50c0-0.5,0.2-1,0.6-1.4L5,46.2V19c0-0.5,0.2-1,0.6-1.4l6-6C12,11.2,12.5,11,13,11h1
+		V6c0-0.5,0.2-1,0.6-1.4l2-2C17,2.2,17.5,2,18,2h32c1.1,0,2,0.9,2,2v7h7c1.1,0,2,0.9,2,2v27h1c1.1,0,2,0.9,2,2v12
+		c0,0.5-0.2,1-0.6,1.4l-8,8C55,63.8,54.5,64,54,64z M6,60h47.2l6.8-6.8V44h-1c-1.1,0-2-0.9-2-2V15h-7c-1.1,0-2-0.9-2-2V6H18.8
+		L18,6.8V13c0,1.1-0.9,2-2,2h-2.2L9,19.8V47c0,0.5-0.2,1-0.6,1.4L6,50.8V60z M44,15H22c-1.1,0-2-0.9-2-2v-3c0-1.1,0.9-2,2-2h22
+		c1.1,0,2,0.9,2,2v3C46,14.1,45.1,15,44,15z"/>
+</g>
+<g>
+	<g>
+		<rect x="4" y="50" class="st2" width="50" height="12"/>
+		<polygon class="st3" points="62,42 54,50 54,62 62,54 		"/>
+		<polygon class="st4" points="7,47 4,50 54,50 62,42 59,42 59,43 53,49 7,49 		"/>
+		<polygon class="st5" points="54,50 5,50 7,48 7,47 4,50 4,62 5,62 5,51 54,51 		"/>
+	</g>
+	<g>
+		<rect x="7" y="19" class="st0" width="46" height="30"/>
+		<polygon class="st6" points="59,13 53,19 53,49 59,43 		"/>
+		<polygon class="st7" points="7,19 13,13 59,13 53,19 		"/>
+		<polygon class="st5" points="13,13 7,19 7,49 8,49 8,20 53,20 53,19 8,19 14,13 		"/>
+	</g>
+	<g>
+		<polygon class="st2" points="16,6 16,17 20,17 20,10 44,10 44,17 48,17 48,6 		"/>
+		<polygon class="st8" points="20,17 22,15 22,10 20,10 		"/>
+		<polygon class="st9" points="16,6 18,4 50,4 48,6 		"/>
+		<polygon class="st3" points="50,4 48,6 48,17 50,15 		"/>
+		<rect x="44" y="10" class="st5" width="1" height="7"/>
+		<polygon class="st5" points="19,4 17,6 48,6 48,7 17,7 17,17 16,17 16,6 18,4 		"/>
+	</g>
+</g>
+<rect x="4" y="19" class="st10" width="48" height="30"/>
+<rect x="10" y="19" class="st10" width="40" height="30"/>
+</svg>

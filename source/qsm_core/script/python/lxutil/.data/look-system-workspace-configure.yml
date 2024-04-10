@@ -1,0 +1,67 @@
+option:
+    root: None
+#
+workspace:
+    set:
+        enable: True
+        directories:
+            - <option.root>/<..key>/scene
+            - <option.root>/<..key>/reference
+            - <option.root>/<..key>/temporary
+    geometry:
+        enable: True
+        directories:
+            - <option.root>/<..key>/scene
+            - <option.root>/<..key>/reference
+            - <option.root>/<..key>/temporary
+    look:
+        enable: True
+        directories:
+            - <option.root>/<..key>/scene
+            - <option.root>/<..key>/reference
+            - <option.root>/<..key>/temporary
+    texture:
+        enable: True
+        directories:
+            - <option.root>/<..key>/scene
+            - <option.root>/<..key>/reference
+            - <option.root>/<..key>/temporary
+    render:
+        enable: True
+        directories:
+            - <option.root>/<..key>
+    maya:
+        enable: True
+        directories:
+            - <option.root>/<..key>/output
+            - <option.root>/<..key>/temporary
+    houdini:
+        enable: True
+        directories:
+            - <option.root>/<..key>/output
+            - <option.root>/<..key>/temporary
+    katana:
+        enable: True
+        directories:
+            - <option.root>/<..key>/output
+            - <option.root>/<..key>/temporary
+    nuke:
+        enable: True
+        directories:
+            - <option.root>/<..key>/output
+            - <option.root>/<..key>/temporary
+    ps:
+        enable: True
+        directories:
+            - <option.root>/<..key>/output
+            - <option.root>/<..key>/temporary
+    sp:
+        enable: True
+        directories:
+            - <option.root>/<..key>/output
+            - <option.root>/<..key>/temporary
+    zb:
+        enable: True
+        directories:
+            - <option.root>/<..key>/output
+            - <option.root>/<..key>/temporary

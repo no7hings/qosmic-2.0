@@ -1,0 +1,784 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'aovs'
+    type_abr: 'aov'
+    create_type: 'Aovs_Wsp'
+    description:
+        |-
+        aovs
+    #
+    auto_color: False
+    #
+    color_use_type: True
+    #
+    color:
+        r: 0
+        g: 0
+        b: 0
+    #
+    size:
+        w: 480
+        h: 240
+
+BUILTIN_AOVS:
+    |-
+    (
+    #
+    ('A',                   'float'),
+    ('Z',                   'float'),
+    ('volume_Z',           'float'),
+    #
+    ('opacity',             'rgb'),
+    ('volume_opacity',      'rgb'),
+    ('ID',                  'uint'),
+    ('P',                   'vector'),
+    ('Pref',                'rgb'),
+    ('N',                   'vector'),
+    ('motionvector',        'rgb'),
+    ('shadow_matte',        'rgba'),
+    ('cputime',             'float'),
+    ('raycount',            'float'),
+    #
+    ('shader',            'node'),
+    ('object',            'node'),
+    #
+    ('AA_inv_density',      'float'))
+    #
+    ('RGBA',                'rgba'),
+    #
+    ('direct',              'rgb'),
+    ('indirect',            'rgb'),
+    ('albedo',              'rgb'),
+    ('emission',            'rgb'),
+    ('background',          'rgb'),
+    #
+    ('diffuse',             'rgb'),
+    ('diffuse_direct',      'rgb'),
+    ('diffuse_indirect',    'rgb'),
+    ('diffuse_albedo',      'rgb'),
+    #
+    ('specular',            'rgb'),
+    ('specular_direct',     'rgb'),
+    ('specular_indirect',   'rgb'),
+    ('specular_albedo',     'rgb'),
+    #
+    ('transmission',        'rgb'),
+    ('transmission_direct', 'rgb'),
+    ('transmission_indirect','rgb'),
+    ('transmission_albedo', 'rgb'),
+    #
+    ('sss',                 'rgb'),
+    ('sss_direct',          'rgb'),
+    ('sss_indirect',        'rgb'),
+    ('sss_albedo',          'rgb'),
+    #
+    ('coat',                'rgb'),
+    ('coat_direct',         'rgb'),
+    ('coat_indirect',       'rgb'),
+    ('coat_albedo',         'rgb'),
+    #
+    ('sheen',                'rgb'),
+    ('sheen_direct',         'rgb'),
+    ('sheen_indirect',       'rgb'),
+    ('sheen_albedo',         'rgb'),
+    #
+    ('volume',              'rgb'),
+    ('volume_direct',       'rgb'),
+    ('volume_indirect',     'rgb'),
+    ('volume_albedo',       'rgb'),
+#
+main:
+    type: Group
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.input'
+    output: '<.path>.output'
+    #
+    attributes:
+        ns_offsetX: 480
+        ns_offsetY: 120
+        #
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+#    clear_children: False
+    #
+    input_ports:
+        - 'join_upstream'
+        - 'join_other'
+    #
+    output_ports:
+        - 'output'
+    #
+    ports:
+        # basic
+        type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        # builtin
+        #   lpe
+        builtin/lpe:
+            widget: group
+            expand: True
+            label: 'LPE'
+            tool_tip: '...'
+
+        builtin/lpe/primary:
+            widget: capsule_strings
+            value: ['primary', 'beauty', 'rgba']
+            default: ['primary']
+            tool_tip: '...'
+        #
+        builtin/lpe/additive_set:
+            widget: capsule_strings
+            value: ['additive_set_1', 'additive_set_2', 'additive_set_3']
+            default: ['additive_set_2']
+            tool_tip:
+                |-
+                primary = direct, indirect, emission, background
+                primary = diffuse, specular, coat, transmission, sss, volume, emission, background
+                primary = diffuse_direct, diffuse_indirect, specular_direct, specular_indirect, coat, transmission, sss, volume, emission, background
+        # set 1
+        builtin/lpe/additive_set_1:
+            widget: group
+            expand: True
+            tool_tip:
+                |-
+                primary = direct, indirect, emission, background
+            visible_condition_hint: {
+                conditionalVisOp: 'contains', conditionalVisPath: '../additive_set', conditionalVisValue: 'additive_set_1'
+            }
+
+        builtin/lpe/additive_set_1/main:
+            label: ' '
+            widget: capsule_strings
+            value: ['direct', 'indirect', 'albedo']
+            tool_tip: '...'
+
+        builtin/lpe/additive_set_1/extend:
+            label: ' '
+            widget: capsule_strings
+            value: ['emission', 'background']
+            tool_tip: '...'
+        # set 2
+        builtin/lpe/additive_set_2:
+            widget: group
+            expand: True
+            tool_tip:
+                |-
+                primary = diffuse, specular, coat, transmission, sss, volume, emission, background
+            visible_condition_hint: {
+                conditionalVisOp: 'contains', conditionalVisPath: '../additive_set', conditionalVisValue: 'additive_set_2'
+            }
+
+        builtin/lpe/additive_set_2/main:
+            label: ' '
+            widget: capsule_strings
+            value: ['diffuse', 'specular', 'transmission', 'sss', 'coat', 'sheen', 'volume']
+            tool_tip: '...'
+
+        builtin/lpe/additive_set_2/extend:
+            label: ' '
+            widget: capsule_strings
+            value: ['emission', 'background']
+            tool_tip: '...'
+        # set 3
+        builtin/lpe/additive_set_3:
+            widget: group
+            expand: True
+            tool_tip:
+                |-
+                primary = diffuse_direct, diffuse_indirect, specular_direct, specular_indirect, coat, transmission, sss, volume, emission, background
+            visible_condition_hint: {
+                conditionalVisOp: 'contains', conditionalVisPath: '../additive_set', conditionalVisValue: 'additive_set_3'
+            }
+        #   diffuse
+        builtin/lpe/additive_set_3/diffuse:
+            label: ' '
+            widget: capsule_strings
+            value: ['diffuse_direct', 'diffuse_indirect', 'diffuse_albedo']
+            tool_tip: '...'
+        #   specular
+        builtin/lpe/additive_set_3/specular:
+            label: ' '
+            widget: capsule_strings
+            value: ['specular_direct', 'specular_indirect', 'specular_albedo']
+            tool_tip: '...'
+        #   transmission
+        builtin/lpe/additive_set_3/transmission:
+            label: ' '
+            widget: capsule_strings
+            value: ['transmission_direct', 'transmission_indirect', 'transmission_albedo']
+            tool_tip: '...'
+        #   sss
+        builtin/lpe/additive_set_3/sss:
+            label: ' '
+            widget: capsule_strings
+            value: ['sss_direct', 'sss_indirect', 'sss_albedo']
+            tool_tip: '...'
+        #   coat
+        builtin/lpe/additive_set_3/coat:
+            label: ' '
+            widget: capsule_strings
+            value: ['coat_direct', 'coat_indirect', 'coat_albedo']
+            tool_tip: '...'
+        #   sheen
+        builtin/lpe/additive_set_3/sheen:
+            label: ' '
+            widget: capsule_strings
+            value: ['sheen_direct', 'sheen_indirect', 'sheen_albedo']
+            tool_tip: '...'
+        #   volume
+        builtin/lpe/additive_set_3/volume:
+            label: ' '
+            widget: capsule_strings
+            value: ['volume_direct', 'volume_indirect', 'volume_albedo']
+            tool_tip: '...'
+        #
+        builtin/lpe/additive_set_3/extend:
+            label: ' '
+            widget: capsule_strings
+            value: ['emission', 'background']
+            tool_tip: '...'
+        #
+        builtin/lpe/extend/set_1:
+            label: ' '
+            widget: capsule_strings
+            value: ['A', 'Z', 'N', 'P', 'Pref']
+            default: ['A', 'Z', 'N', 'P', 'Pref']
+            tool_tip: '...'
+
+        builtin/lpe/extend/set_2:
+            label: ' '
+            widget: capsule_strings
+            value: ['opacity', 'volume_opacity', 'shadow_matte', 'motionvector']
+            default: ['opacity', 'volume_opacity']
+            tool_tip: '...'
+
+        builtin/lpe/extend/set_3:
+            label: ' '
+            widget: capsule_strings
+            value: ['cputime', 'raycount']
+            default: ['cputime', 'raycount']
+            tool_tip: '...'
+
+        builtin/lpe/extend/set_4:
+            label: ' '
+            widget: capsule_strings
+            value: ['shader', 'object']
+            default: []
+            tool_tip: '...'
+        #
+        custom/crypto/set_1:
+            label: ' '
+            widget: capsule_strings
+            value: ['crypto_object', 'crypto_material', 'crypto_asset']
+            tool_tip: '...'
+#
+node:
+    # join geometry dot
+    join_upstream_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        connections:
+            # input
+            - '<main.path>.join_upstream'
+            - '<.input>'
+    # join other dot
+    join_other_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        connections:
+            # input
+            - '<main.path>.join_other'
+            - '<.input>'
+    # upstream_merge
+    upstream_merge:
+        tag: 'UMG'
+        type: UpstreamMerge_Wsp
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        input_ports:
+            - 'join_upstream'
+            - 'join_current'
+            - 'join_other'
+        #
+        connections:
+            # join upstream
+            - '<..join_upstream_dot.output>'
+            - '<.path>.join_upstream'
+            # join other
+            - '<..join_other_dot.output>'
+            - '<.path>.join_other'
+    # material
+    material:
+        tag: 'MTL'
+        type: Material_Wsp
+        base_type: NetworkMaterialCreate
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.in'
+        output: '<.path>.out'
+        #
+        connections:
+            - '<.output>'
+            - '<..upstream_merge.path>.join_current'
+        #
+        node_graph:
+            cryptomatte:
+                type: 'NetworkMaterial'
+                name: '<..key>'
+                path: '<...path>/<.name>'
+            #
+            sdr_crypto:
+                type: 'ArnoldShadingNode'
+                shader_type: 'cryptomatte'
+                name: '<..key>'
+                path: '<...path>/<.name>'
+                #
+                connections:
+                    - '<.path>.out'
+                    - '<..cryptomatte.path>.arnoldSurface'
+    # render properties
+    render_properties:
+        tag: 'RPO'
+        type: RenderProperties_Opt
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        parameters:
+            user/properties/arnold_enable: True
+            user/properties/arnold:
+                |-
+                aov_shaders=/root/materials/cryptomatte
+        #
+        connections:
+            - '<..upstream_merge.output>'
+            - '<.input>'
+    # aovs
+    primary__group_stack:
+        tag: 'GRP'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: AovGroup_Wsp
+        base_type: GroupStack
+        name: '<option.type_abr>__<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.in'
+        output: '<.path>.out'
+        #
+        connections:
+            # join upstream
+            - '<..render_properties.output>'
+            - '<.input>'
+        #
+        child:
+            type: Aov_Wsp
+            #
+            path_pattern: '{parent}/<option.type_abr>_{key}'
+            #
+            nodes:
+                primary:
+                    parameters:
+                        option/type: 'RGBA'
+                        option/name: '<...key>'
+                        option/channel: 'RGBA'
+                    #
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if '<...key>' in str(getParent().getParent().builtin.lpe.primary) else 0
+                #
+                beauty: '$ .primary'
+                #
+                RGBA: '$ .primary'
+    #
+    lpe_1__group_stack:
+        tag: 'GRP'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: AovGroup_Wsp
+        base_type: GroupStack
+        name: '<option.type_abr>__<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.in'
+        output: '<.path>.out'
+        #
+        connections:
+            #
+            - '<..primary__group_stack.output>'
+            - '<.input>'
+        #
+        child:
+            type: Aov_Wsp
+            #
+            path_pattern: '{parent}/<option.type_abr>__<..variant>__{key}'
+            #
+            nodes:
+                direct:
+                    parameters:
+                        option/type: 'RGB'
+                        option/name: '<...key>'
+                    #
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if (
+                                'additive_set_1' in str(getParent().getParent().builtin.lpe.additive_set).split(', ') and
+                                '<...key>' in str(getParent().getParent().builtin.lpe.additive_set_1.main).split(', ')
+                            ) else 0
+                #
+                indirect: '$ .direct'
+                #
+                albedo: '$ .direct'
+                #
+                emission:
+                    $: '..direct'
+                    #
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if (
+                                'additive_set_1' in str(getParent().getParent().builtin.lpe.additive_set).split(', ') and
+                                '<...key>' in str(getParent().getParent().builtin.lpe.additive_set_1.extend).split(', ')
+                            ) else 0
+                #
+                background: '$ .emission'
+    #
+    lpe_2__group_stack:
+        tag: 'GRP'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: AovGroup_Wsp
+        base_type: GroupStack
+        name: '<option.type_abr>__<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.in'
+        output: '<.path>.out'
+        #
+        connections:
+            #
+            - '<..lpe_1__group_stack.output>'
+            - '<.input>'
+        #
+        child:
+            type: Aov_Wsp
+            #
+            path_pattern: '{parent}/<option.type_abr>__<..variant>__{key}'
+            #
+            nodes:
+                diffuse:
+                    parameters:
+                        option/type: 'RGB'
+                        option/name: '<...key>'
+                    #
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if (
+                                'additive_set_2' in str(getParent().getParent().builtin.lpe.additive_set).split(', ') and
+                                '<...key>' in str(getParent().getParent().builtin.lpe.additive_set_2.main).split(', ')
+                            ) else 0
+                #
+                specular: '$ .diffuse'
+                #
+                transmission: '$ .diffuse'
+                #
+                sss: '$ .diffuse'
+                #
+                coat: '$ .diffuse'
+                #
+                sheen: '$ .diffuse'
+                #
+                volume: '$ .diffuse'
+                #
+                emission:
+                    $: '..diffuse'
+                    #
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if (
+                                'additive_set_2' in str(getParent().getParent().builtin.lpe.additive_set).split(', ') and
+                                '<...key>' in str(getParent().getParent().builtin.lpe.additive_set_2.extend).split(', ')
+                            ) else 0
+                #
+                background: '$ .emission'
+    #
+    lpe_3__group_stack:
+        tag: 'GRP'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: AovGroup_Wsp
+        base_type: GroupStack
+        name: '<option.type_abr>__<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.in'
+        output: '<.path>.out'
+        #
+        connections:
+            #
+            - '<..lpe_2__group_stack.output>'
+            - '<.input>'
+        #
+        child:
+            type: Aov_Wsp
+            #
+            path_pattern: '{parent}/<option.type_abr>__<..variant>__{key}'
+            #
+            nodes:
+                # diffuse
+                diffuse_direct:
+                    parameters:
+                        option/type: 'RGB'
+                        option/name: '<...key>'
+                    #
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if (
+                                'additive_set_3' in str(getParent().getParent().builtin.lpe.additive_set).split(', ') and
+                                '<...key>' in str(getParent().getParent().builtin.lpe.additive_set_3.diffuse).split(', ')
+                            ) else 0
+                #
+                diffuse_indirect: '$ .diffuse_direct'
+
+                diffuse_albedo: '$ .diffuse_direct'
+                # specular
+                specular_direct:
+                    $: '..diffuse_direct'
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if (
+                                'additive_set_3' in str(getParent().getParent().builtin.lpe.additive_set).split(', ') and
+                                '<...key>' in str(getParent().getParent().builtin.lpe.additive_set_3.specular).split(', ')
+                            ) else 0
+                #
+                specular_indirect: '$ .specular_direct'
+
+                specular_albedo: '$ .specular_direct'
+                # transmission
+                transmission_direct:
+                    $: '..diffuse_direct'
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if (
+                                'additive_set_3' in str(getParent().getParent().builtin.lpe.additive_set).split(', ') and
+                                '<...key>' in str(getParent().getParent().builtin.lpe.additive_set_3.transmission).split(', ')
+                            ) else 0
+                #
+                transmission_indirect: '$ .transmission_direct'
+
+                transmission_albedo: '$ .transmission_direct'
+                # sss
+                sss_direct:
+                    $: '..diffuse_direct'
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if (
+                                'additive_set_3' in str(getParent().getParent().builtin.lpe.additive_set).split(', ') and
+                                '<...key>' in str(getParent().getParent().builtin.lpe.additive_set_3.sss).split(', ')
+                            ) else 0
+
+                sss_indirect: '$ .sss_direct'
+
+                sss_albedo: '$ .sss_direct'
+                # coat
+                coat_direct:
+                    $: '..diffuse_direct'
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if (
+                                'additive_set_3' in str(getParent().getParent().builtin.lpe.additive_set).split(', ') and
+                                '<...key>' in str(getParent().getParent().builtin.lpe.additive_set_3.coat).split(', ')
+                            ) else 0
+                #
+                coat_indirect: '$ .coat_direct'
+
+                coat_albedo: '$ .coat_direct'
+                # sheen
+                sheen_direct:
+                    $: '..diffuse_direct'
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if (
+                                'additive_set_3' in str(getParent().getParent().builtin.lpe.additive_set).split(', ') and
+                                '<...key>' in str(getParent().getParent().builtin.lpe.additive_set_3.sheen).split(', ')
+                            ) else 0
+                #
+                sheen_indirect: '$ .sheen_direct'
+
+                sheen_albedo: '$ .sheen_direct'
+                # volume
+                volume_direct:
+                    $: '..diffuse_direct'
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if (
+                                'additive_set_3' in str(getParent().getParent().builtin.lpe.additive_set).split(', ') and
+                                '<...key>' in str(getParent().getParent().builtin.lpe.additive_set_3.volume).split(', ')
+                            ) else 0
+
+                volume_indirect: '$ .volume_direct'
+
+                volume_albedo: '$ .volume_direct'
+                # extend
+                emission:
+                    $: '..diffuse_direct'
+                    #
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if (
+                                'additive_set_3' in str(getParent().getParent().builtin.lpe.additive_set).split(', ') and
+                                '<...key>' in str(getParent().getParent().builtin.lpe.additive_set_3.extend).split(', ')
+                            ) else 0
+                #
+                background: '$ .emission'
+    #
+    lpe_extend__group_stack:
+        tag: 'GRP'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: AovGroup_Wsp
+        base_type: GroupStack
+        name: '<option.type_abr>__<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.in'
+        output: '<.path>.out'
+        #
+        connections:
+            #
+            - '<..lpe_3__group_stack.output>'
+            - '<.input>'
+        #
+        child:
+            type: Aov_Wsp
+            #
+            path_pattern: '{parent}/<option.type_abr>__<..variant>__{key}'
+            #
+            nodes:
+                A:
+                    parameters:
+                        option/type: 'FLOAT'
+                        option/name: '<...key>'
+                    #
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if '<...key>' in str(getParent().getParent().builtin.lpe.extend.set_1).split(', ') else 0
+                Z: '$ .A'
+                N:
+                    $: '..A'
+                    parameters:
+                        option/type: 'VECTOR'
+                        option/name: '<...key>'
+                P: '$ .N'
+                Pref: '$ .N'
+                #
+                opacity:
+                    parameters:
+                        option/type: 'RGB'
+                        option/name: '<...key>'
+                    #
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if '<...key>' in str(getParent().getParent().builtin.lpe.extend.set_2).split(', ') else 0
+                volume_opacity: '$ .opacity'
+                shadow_matte: '$ .opacity'
+                motionvector:
+                    $: '..opacity'
+                    parameters:
+                        option/type: 'VECTOR2'
+                        option/name: '<...key>'
+                #
+                cputime:
+                    parameters:
+                        option/type: 'FLOAT'
+                        option/name: '<...key>'
+                    #
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if '<...key>' in str(getParent().getParent().builtin.lpe.extend.set_3).split(', ') else 0
+                raycount: '$ .cputime'
+                #
+                shader:
+                    parameters:
+                        option/type: 'NODE'
+                        option/name: '<...key>'
+                    #
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if '<...key>' in str(getParent().getParent().builtin.lpe.extend.set_4).split(', ') else 0
+                object: '$ .shader'
+    #
+    crypto__group_stack:
+        tag: 'GRP'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: AovGroup_Wsp
+        base_type: GroupStack
+        name: '<option.type_abr>__<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.in'
+        output: '<.path>.out'
+        #
+        connections:
+            #
+            - '<..lpe_extend__group_stack.output>'
+            - '<.input>'
+            # output
+            - '<.output>'
+            - '<main.output>'
+        #
+        child:
+            type: Aov_Wsp
+            #
+            path_pattern: '{parent}/<option.type_abr>__<..variant>__{key}'
+            #
+            nodes:
+                crypto_object:
+                    parameters:
+                        option/type: 'RGBA'
+                        option/name: '<...key>'
+                    #
+                    expressions:
+                        option/enable:
+                            |-
+                            1 if '<...key>' in str(getParent().getParent().custom.crypto.set_1).split(', ') else 0
+                crypto_material: '$ .crypto_object'
+                crypto_asset: '$ .crypto_object'

@@ -1,0 +1,42 @@
+option:
+    type: 'tool-panel'
+    # config used system
+    systems:
+        - '*-*'
+    #
+    gui:
+        name: 'USD Format Convert'
+        group_name: 'Extra(s)'
+        #
+        icon_name: 'application/usd'
+        icon_sub_name: 'application/python'
+        tool_tip: '...'
+        #
+        size: [480, 240]
+
+build:
+    node:
+        content:
+            |-
+            1. open a ".usd", ".usda", ".abc" file
+            2. press "Apply" or "Apply and Close" to continue
+
+        options:
+            from:
+                widget: file
+                open_or_save: open
+                history_key: 'tool-panels.usd-format-convert.file-open'
+                pull_history_latest: True
+                ext_includes: ['.usda', '.usd', '.abc']
+                value: ''
+                tool_tip: '...'
+                enable: True
+            to:
+                widget: file
+                open_or_save: save
+                history_key: 'tool-panels.usd-format-convert.file-save'
+                pull_history_latest: True
+                ext_includes: ['.usda', '.usd', '.abc']
+                value: ''
+                tool_tip: '...'
+                enable: True

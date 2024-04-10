@@ -1,0 +1,89 @@
+option: {}
+
+main:
+    environment:
+        root: 'user.workspace.environment'
+        #
+        ports:
+            user/workspace/environment/data_0:
+                widget: string3
+                label: ' '
+                value: ['', '', '']
+                tool_tip: '...'
+                lock: True
+
+            user/workspace/environment/data_1:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_2:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_3:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_4:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_5:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_6:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_7:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_8:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_9:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_10:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_11:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_12:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_13:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_14:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_15:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_16:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_17:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_18:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_19:
+                $: '..user/workspace/environment/data_0'
+
+            user/workspace/environment/data_20:
+                $: '..user/workspace/environment/data_0'
+    #
+    look:
+        root: 'user.workspace.look'
+        dialog_options:
+            dcc/node:
+                widget: enumerate
+                value: []
+                tool_tip: 'select a "LookFileBake" Node'
+                enable: True
+
+        ports:
+            user/workspace/look/output:
+                widget: string
+                value: ''
+                tool_tip: '...'
+                lock: True

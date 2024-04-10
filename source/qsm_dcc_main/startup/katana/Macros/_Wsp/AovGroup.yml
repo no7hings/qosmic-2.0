@@ -1,0 +1,63 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'aov_group'
+    type_abr: 'aov_grp'
+    create_type: 'AovGroup_Wsp'
+    description:
+        |-
+        group for aov create
+    #
+    auto_color: False
+    #
+    color_use_type: True
+    #
+    color:
+        r: 0
+        g: 0
+        b: 0
+    #
+    size:
+        w: 480
+        h: 240
+#
+main:
+    type: GroupStack
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.input'
+    output: '<.path>.output'
+    #
+    attributes:
+        ns_offsetX: 480
+        ns_offsetY: 120
+        #
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    clear_children: False
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+    #
+    child:
+        type: Aov_Wsp
+        #
+        path_pattern: '{parent}/<option.type_abr>_{key}'
+        #
+        nodes: {}

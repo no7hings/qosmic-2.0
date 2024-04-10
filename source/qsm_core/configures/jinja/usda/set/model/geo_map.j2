@@ -1,0 +1,27 @@
+#usda 1.0
+(
+    defaultPrim = "{{ dcc.root_name }}"
+    metersPerUnit = 0.01
+    upAxis = "Y"
+)
+
+over "{{ dcc.root_name }}" (
+    variants = {
+        string uv = "default"
+    }
+    prepend variantSets = [
+        "uv",
+    ]
+) {
+    variantSet "uv" = {
+        "None" (){}
+        "default" (
+            payload = [
+                @{{ geometries.uv_map }}@,
+            ]
+        ){
+            asset userProperties:usd:variants:asset:geo_map:uv:file = @{{ geometries.uv_map }}@
+            asset userProperties:usd:variants:asset:geo_map:uv:source_file = @{{ geometries.hi }}@
+        }
+    }
+}

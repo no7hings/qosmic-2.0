@@ -1,0 +1,377 @@
+shaders:
+    to-arnold:
+        aiAbs: abs
+        aiAdd: add
+        aiAmbientOcclusion: ambient_occlusion
+        aiReadFloat: aov_read_float
+        aiReadInt: aov_read_int
+        aiReadRGB: aov_read_rgb
+        aiReadRGBA: aov_read_rgba
+        aiWriteFloat: aov_write_float
+        aiWriteInt: aov_write_int
+        aiWriteColor: aov_write_rgb
+        aiWriteRgba: aov_write_rgba
+        aiAtan: atan
+        aiAtmosphereVolume: atmosphere_volume
+        aiBlackbody: blackbody
+        aiBump2d: bump2d
+        aiBump3d: bump3d
+        aiCache: cache
+        aiCameraProjection: camera_projection
+        aiCarPaint: car_paint
+        aiCellNoise: cell_noise
+        checker: checkerboard
+        aiClamp: clamp
+        aiClipGeo: clip_geo
+        aiColorConvert: color_convert
+        aiColorCorrect: color_correct
+        aiColorJitter: color_jitter
+        aiCompare: compare
+        aiComplement: complement
+        aiComplexIor: complex_ior
+        aiComposite: composite
+        aiCross: cross
+        aiCurvature: curvature
+        aiDivide: divide
+        aiDot: dot
+        aiExp: exp
+        aiFacingRatio: facing_ratio
+        aiFlakes: flakes
+        aiFlat: flat
+        aiFloatToInt: float_to_int
+        aiFloatToRgba: float_to_rgba
+        aiFog: fog
+        aiFraction: fraction
+        aiHair: hair
+        aiImage: image
+        aiIsFinite: is_finite
+        aiLambert: lambert
+        aiLayerFloat: layer_float
+        aiLayerRgba: layer_rgba
+        aiLayerShader: layer_shader
+        aiLength: length
+        aiLog: log
+        aiMatrixInterpolate: matrix_interpolate
+        aiMatrixMultiplyVector: matrix_multiply_vector
+        aiMatrixTransform: matrix_transform
+        aiMatte: matte
+        aiMax: max
+        layeredShader: maya_layered_shader
+        aiMin: min
+        aiMixShader: mix_shader
+        aiModulo: modulo
+        aiMotionVector: motion_vector
+        aiMultiply: multiply
+        aiNegate: negate
+        aiNoise: noise
+        aiNormalMap: normal_map
+        aiNormalize: normalize
+        aiPassthrough: passthrough
+        aiPhysicalSky: physical_sky
+        aiPow: pow
+        aiRampFloat: ramp_float
+        aiRampRgb: ramp_rgb
+        aiRandom: random
+        aiRange: range
+        aiRaySwitch: ray_switch_shader
+        aiReciprocal: reciprocal
+        aiColorToFloat: rgb_to_float
+        aiRgbaToFloat: rgba_to_float
+        aiRoundCorners: round_corners
+        aiShadowMatte: shadow_matte
+        aiShuffle: shuffle
+        aiSign: sign
+        aiSkin: skin
+        aiSky: sky
+        aiSpaceTransform: space_transform
+        aiSqrt: sqrt
+        aiStandard: standard
+        aiStandardHair: standard_hair
+        aiStandardSurface: standard_surface
+        aiStandardVolume: standard_volume
+        aiStateFloat: state_float
+        aiStateInt: state_int
+        aiStateVector: state_vector
+        aiSubtract: subtract
+        aiSwitch: switch_shader
+        aiThinFilm: thin_film
+        aiToon: toon
+        aiTraceSet: trace_set
+        aiTrigo: trigo
+        aiTriplanar: triplanar
+        aiTwoSided: two_sided
+        aiUserDataFloat: user_data_float
+        aiUserDataInt: user_data_int
+        aiUserDataColor: user_data_rgb
+        aiUserDataString: user_data_string
+        aiUtility: utility
+        aiUvProjection: uv_projection
+        aiUvTransform: uv_transform
+        aiVectorMap: vector_map
+        aiVolumeCollector: volume_collector
+        aiVolumeSampleFloat: volume_sample_float
+        aiVolumeSampleRgb: volume_sample_rgb
+        aiWireframe: wireframe
+    #
+    to-maya:
+        abs: aiAbs
+        add: aiAdd
+        ambient_occlusion: aiAmbientOcclusion
+        aov_read_float: aiReadFloat
+        aov_read_int: aiReadInt
+        aov_read_rgb: aiReadRGB
+        aov_read_rgba: aiReadRGBA
+        aov_write_float: aiWriteFloat
+        aov_write_int: aiWriteInt
+        aov_write_rgb: aiWriteColor
+        aov_write_rgba: aiWriteRgba
+        atan: aiAtan
+        atmosphere_volume: aiAtmosphereVolume
+        blackbody: aiBlackbody
+        bump2d: aiBump2d
+        bump3d: aiBump3d
+        cache: aiCache
+        camera_projection: aiCameraProjection
+        car_paint: aiCarPaint
+        cell_noise: aiCellNoise
+        checkerboard: checker
+        clamp: aiClamp
+        clip_geo: aiClipGeo
+        color_convert: aiColorConvert
+        color_correct: aiColorCorrect
+        color_jitter: aiColorJitter
+        compare: aiCompare
+        complement: aiComplement
+        complex_ior: aiComplexIor
+        composite: aiComposite
+        cross: aiCross
+        curvature: aiCurvature
+        divide: aiDivide
+        dot: aiDot
+        exp: aiExp
+        facing_ratio: aiFacingRatio
+        flakes: aiFlakes
+        flat: aiFlat
+        float_to_int: aiFloatToInt
+        float_to_rgba: aiFloatToRgba
+        # maya do not has float_to_rgb
+        float_to_rgb: aiFloatToRgba
+        fog: aiFog
+        fraction: aiFraction
+        hair: aiHair
+        image: aiImage
+        is_finite: aiIsFinite
+        lambert: aiLambert
+        layer_float: aiLayerFloat
+        layer_rgba: aiLayerRgba
+        layer_shader: aiLayerShader
+        length: aiLength
+        log: aiLog
+        matrix_interpolate: aiMatrixInterpolate
+        matrix_multiply_vector: aiMatrixMultiplyVector
+        matrix_transform: aiMatrixTransform
+        matte: aiMatte
+        max: aiMax
+        maya_layered_shader: layeredShader
+        min: aiMin
+        mix_shader: aiMixShader
+        # maya do not has mix_rgba
+        mix_rgba: aiMixShader
+        modulo: aiModulo
+        motion_vector: aiMotionVector
+        multiply: aiMultiply
+        negate: aiNegate
+        noise: aiNoise
+        normal_map: aiNormalMap
+        normalize: aiNormalize
+        passthrough: aiPassthrough
+        physical_sky: aiPhysicalSky
+        pow: aiPow
+        ramp_float: aiRampFloat
+        ramp_rgb: aiRampRgb
+        random: aiRandom
+        range: aiRange
+        ray_switch_rgba: aiRaySwitch
+        ray_switch_shader: aiRaySwitch
+        reciprocal: aiReciprocal
+        rgb_to_float: aiColorToFloat
+        rgba_to_float: aiRgbaToFloat
+        round_corners: aiRoundCorners
+        shadow_matte: aiShadowMatte
+        shuffle: aiShuffle
+        sign: aiSign
+        skin: aiSkin
+        sky: aiSky
+        space_transform: aiSpaceTransform
+        sqrt: aiSqrt
+        standard: aiStandard
+        standard_hair: aiStandardHair
+        standard_surface: aiStandardSurface
+        standard_volume: aiStandardVolume
+        state_float: aiStateFloat
+        state_int: aiStateInt
+        state_vector: aiStateVector
+        subtract: aiSubtract
+        switch_shader: aiSwitch
+        thin_film: aiThinFilm
+        toon: aiToon
+        trace_set: aiTraceSet
+        trigo: aiTrigo
+        triplanar: aiTriplanar
+        two_sided: aiTwoSided
+        user_data_float: aiUserDataFloat
+        user_data_int: aiUserDataInt
+        user_data_rgb: aiUserDataColor
+        user_data_string: aiUserDataString
+        utility: aiUtility
+        uv_projection: aiUvProjection
+        uv_transform: aiUvTransform
+        vector_map: aiVectorMap
+        volume_collector: aiVolumeCollector
+        volume_sample_float: aiVolumeSampleFloat
+        volume_sample_rgb: aiVolumeSampleRgb
+        wireframe: aiWireframe
+        #
+        switch_rgba: aiSwitch
+#
+input-ports:
+    to-maya:
+        standard_surface:
+            normal: normalCamera
+        #
+        mix_rgba:
+            input1: shader1
+            input2: shader2
+        #
+        ramp_float:
+            position: ramp.ramp_Position
+            interpolation: ramp.ramp_Interp
+            value: ramp.ramp_FloatValue
+        ramp_rgb:
+            position: ramp.ramp_Position
+            interpolation: ramp.ramp_Interp
+            color: ramp.ramp_Color
+    #
+    to-katana:
+        ramp_float:
+            position: ramp_Knots
+            interpolation: ramp_Interpolation
+            value: ramp_Floats
+        ramp_rgb:
+            position: ramp_Knots
+            interpolation: ramp_Interpolation
+            color: ramp_Colors
+#
+output-ports:
+    to-maya:
+        integer: outValue
+        float: outValue
+        boolean: outValue
+        string: outValue
+        #
+        ra: outColor
+        #
+        rgb: outColor
+        #
+        rgba: outColor
+        #
+        coord: outValue
+        #
+        vector: outValue
+        #
+        matrix: outValue
+        #
+        shader: outColor
+        #
+        channels:
+            ra:
+                r: outColor.outColorR
+                a: outAlpha
+            #
+            rgb:
+                r: outColor.outColorR
+                g: outColor.outColorG
+                b: outColor.outColorB
+            #
+            rgba:
+                r: outColor.outColorR
+                g: outColor.outColorG
+                b: outColor.outColorB
+                a: outAlpha
+            #
+            coord:
+                x: outValue.outValueX
+                y: outValue.outValueY
+            #
+            vector:
+                x: outValue.outValueX
+                y: outValue.outValueY
+                z: outValue.outValueZ
+#
+properties:
+    to-maya:
+        mesh:
+            # basic
+            opaque: aiOpaque
+            matte: aiMatte
+            # visibility
+            self_shadows: aiSelfShadows
+            # trace_sets: aiTraceSets
+            # subdiv
+            subdiv_type: aiSubdivType
+            subdiv_iterations: aiSubdivIterations
+            subdiv_adaptive_error: aiSubdivPixelError
+            subdiv_adaptive_metric: aiSubdivAdaptiveMetric
+            subdiv_adaptive_space: aiSubdivAdaptiveSpace
+            subdiv_uv_smoothing: aiSubdivUvSmoothing
+            subdiv_smooth_derivs: aiSubdivSmoothDerivs
+            subdiv_frustum_ignore: aiSubdivFrustumIgnore
+            # displacement
+            disp_height: aiDispHeight
+            disp_padding: aiDispPadding
+            disp_zero_value: aiDispZeroValue
+            disp_autobump: aiDispAutobump
+            autobump_visibility: aiAutobumpVisibility
+            # volume
+            step_size: aiStepSize
+            volume_padding: aiVolumePadding
+            # export
+            sss_setname: aiSssSetname
+        curve:
+            # basic
+            opaque: aiOpaque
+            matte: aiMatte
+            # visibility
+            self_shadows: aiSelfShadows
+            # trace_sets: aiTraceSets
+            mode: aiMode
+            min_pixel_width: aiMinPixelWidth
+            # export
+            sss_setname: aiSssSetname
+        xgen_description:
+            # basic
+            opaque: aiOpaque
+            matte: aiMatte
+            # visibility
+            self_shadows: aiSelfShadows
+            # trace_sets: aiTraceSets
+            mode: aiMode
+            min_pixel_width: aiMinPixelWidth
+    #
+    to-katana:
+        mesh:
+            subdiv_iterations: iterations
+            disp_zero_value: zero_value
+#
+visibilities:
+    to-maya:
+        # basic
+        camera: primaryVisibility
+        shadow: castsShadows
+        diffuse_reflect: aiVisibleInDiffuseReflection
+        specular_reflect: aiVisibleInSpecularReflection
+        diffuse_transmit: aiVisibleInDiffuseTransmission
+        specular_transmit: aiVisibleInSpecularTransmission
+        volume: aiVisibleInVolume
+        # autobump
+        autobump_visibility: aiAutobumpVisibility

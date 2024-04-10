@@ -1,0 +1,24 @@
+#usda 1.0
+(
+    defaultPrim = "{{ root }}"
+    upAxis = "{{ preset.up_axis }}"
+    metersPerUnit = {{ preset.linear_unit }}
+    subLayers = [
+        @{{ look_file }}@
+    ]
+)
+
+over "{{ root }}" (
+    variants = {
+        string uv = "default"
+    }
+    prepend variantSets="uv"
+)
+{
+    variantSet "uv" = {
+        "None" (){}
+        "default" (
+            payload = @{{ uv_map_file }}@
+        ){}
+       }
+}

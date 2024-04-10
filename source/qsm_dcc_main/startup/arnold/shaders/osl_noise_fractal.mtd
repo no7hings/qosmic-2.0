@@ -1,0 +1,6 @@
+# Arnold MetaData File
+[node osl_noise_fractal]
+    desc STRING "arnold osl shader"
+    maya.name STRING "osl_noise_fractal"
+    maya.id INT 0x00f000f03
+    maya.classification STRING "utility/osl"

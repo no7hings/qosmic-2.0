@@ -1,0 +1,43 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Export to Maya Auto'
+        icon_name: 'application/maya'
+        #
+        size: [480, 240]
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        database: ''
+        database_configure: ''
+        database_configure_extend: ''
+        #
+        entity_type: ''
+        entity: ''
+        #
+        keyword: ''
+#
+build:
+    content:
+        |-
+        1. press "execute" to continue
+    node:
+        options:
+            file_type:
+                widget: capsule_string
+                value: ['ASS', 'ABC', 'USD', 'FBX', 'TX', 'HDRI']
+                default: 'ASS'
+                enable: True
+                tool_tip: '...'
+            #
+            execute:
+                widget: sub_process_button
+                value: ''
+                tool_tip: [ 'press to export file to maya' ]

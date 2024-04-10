@@ -1,0 +1,412 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'storage'
+        #
+        name: 'Add any Resource'
+        icon_name: 'file/add-file'
+        #
+        size: [960, 720]
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        database: ''
+        database_configure: ''
+        database_configure_extend: ''
+
+build:
+    node:
+        content:
+            |-
+            1. open a directory
+            2. choose a "category group"
+                a. "when category and type use name" is checked, "category" and "type" words in "resource name"
+                etc. "resource name" is dirt_wipes_001, "category" is "dirt" and "type" is "wipes"
+            3. press "match" show all matched "node"
+            4. check "node" what you need
+            5. press "Apply" or "Apply and Close" to continue
+        #
+        options:
+            directory:
+                widget: directory
+                open_or_save: open
+                history_key: 'tool-panels.resource-library.resource-add-directory'
+                value: '/l/resource/srf/hdri/test_1'
+#                value: '/l/temp/zeqi/lib/shanhu'
+                tool_tip: [ 'choose a directory' ]
+                enable: True
+            #
+            scheme/name:
+                widget: enumerate
+                value: ['None']
+                default: 'None'
+                enable: True
+
+            scheme/load:
+                widget: button
+            #
+            includes:
+                widget: capsule_strings
+                value: ['image', 'texture', 'hdri', 'geometry', 'cache']
+                default: []
+                enable: True
+            #
+            classification/category_and_type_use_name:
+                widget: boolean
+                value: False
+                enable: True
+            #
+            classification/category_group:
+                widget: enumerate
+                value: ['surface', 'imperfection', 'displacement', 'atlas', '3d_asset', '3d_plant', 'texture', 'hdri']
+                default_index: -1
+                enable: True
+            #
+            classification/category:
+                widget: enumerate
+                value: ['other']
+                enable: True
+                visible_condition: {
+                    operator: 'is', port: 'classification/category_and_type_use_name', value: False
+                }
+            #
+            classification/type:
+                widget: enumerate
+                value: ['other']
+                enable: True
+                visible_condition: {
+                    operator: 'is', port: 'classification/category_and_type_use_name', value: False
+                }
+            # resource
+            resource:
+                widget: group
+#                collapse: True
+
+            resource/reduce_name:
+                widget: boolean
+                value: False
+                enable: True
+
+            resource/includes:
+                widget: capsule_strings
+                value: ['file', 'directory']
+                default: ['directory']
+                enable: True
+
+            resource/name_pattern:
+                widget: enumerate
+                value: [
+                    '{any_name}',
+                ]
+            #
+            resource/match_patterns:
+                widget: enumerate
+                value: [
+                    '{directory}/{any_name}',
+                ]
+            # image
+            image:
+                widget: group
+                collapse: True
+                visible_condition: {
+                    operator: 'in', port: 'includes', value: 'image'
+                }
+            #
+            image/preview_enable:
+                widget: boolean
+                value: False
+            #
+            image/preview/match_patterns:
+                widget: enumerate
+                value: [
+                    '{directory}/{any_name}.jpg, {directory}/{any_name}.png',
+                ]
+            # texture
+            texture:
+                widget: group
+                collapse: True
+                visible_condition: {
+                    operator: 'in', port: 'includes', value: 'texture'
+                }
+            #   diffuse
+            texture/diffuse_enable:
+                widget: boolean
+                value: False
+
+            texture/diffuse:
+                widget: group
+                label: 'diffuse ( texture type )'
+                visible_condition: {
+                    operator: 'is', port: 'texture/diffuse_enable', value: True
+                }
+
+            texture/diffuse/match_patterns:
+                widget: enumerate
+                value: [
+                    '{directory}/diffuse.{format}',
+                ]
+            #   albedo
+            texture/albedo_enable:
+                widget: boolean
+                value: False
+
+            texture/albedo:
+                widget: group
+                label: 'albedo ( texture type )'
+                visible_condition: {
+                    operator: 'is', port: 'texture/albedo_enable', value: True
+                }
+
+            texture/albedo/match_patterns:
+                widget: enumerate
+                value: [
+                    '{directory}/albedo.{format}',
+                ]
+            #   specular
+            texture/specular_enable:
+                widget: boolean
+                value: False
+
+            texture/specular:
+                widget: group
+                visible_condition: {
+                    operator: 'is', port: 'texture/specular_enable', value: True
+                }
+
+            texture/specular/match_patterns:
+                widget: enumerate
+                value: [
+                    '{directory}/specular.{format}',
+                ]
+            #   roughness
+            texture/roughness_enable:
+                widget: boolean
+                value: False
+
+            texture/roughness:
+                widget: group
+                visible_condition: {
+                    operator: 'is', port: 'texture/roughness_enable', value: True
+                }
+
+            texture/roughness/match_patterns:
+                widget: enumerate
+                value: [
+                    '{directory}/roughness.{format}',
+                ]
+            #   glossiness
+            texture/glossiness_enable:
+                widget: boolean
+                value: False
+
+            texture/glossiness:
+                widget: group
+                visible_condition: {
+                    operator: 'is', port: 'texture/glossiness_enable', value: True
+                }
+
+            texture/glossiness/match_patterns:
+                widget: enumerate
+                value: [
+                    '{directory}/glossiness.{format}',
+                ]
+            #   coat
+            texture/coat_enable:
+                widget: boolean
+                value: False
+
+            texture/coat:
+                widget: group
+                visible_condition: {
+                    operator: 'is', port: 'texture/coat_enable', value: True
+                }
+
+            texture/coat/match_patterns:
+                widget: enumerate
+                value: [
+                    '{directory}/coat.{format}',
+                ]
+            #   coat_roughness
+            texture/coat_roughness_enable:
+                widget: boolean
+                value: False
+
+            texture/coat_roughness:
+                widget: group
+                visible_condition: {
+                    operator: 'is', port: 'texture/coat_roughness_enable', value: True
+                }
+
+            texture/coat_roughness/match_patterns:
+                widget: enumerate
+                value: [
+                    '{directory}/coat_roughness.{format}',
+                ]
+            #   ao
+            texture/ao_enable:
+                widget: boolean
+                value: False
+
+            texture/ao:
+                widget: group
+                visible_condition: {
+                    operator: 'is', port: 'texture/ao_enable', value: True
+                }
+
+            texture/ao/match_patterns:
+                widget: enumerate
+                value: [
+                    '{directory}/ao.{format}'
+                ]
+            #   opacity
+            texture/opacity_enable:
+                widget: boolean
+                value: False
+
+            texture/opacity:
+                widget: group
+                visible_condition: {
+                    operator: 'is', port: 'texture/opacity_enable', value: True
+                }
+
+            texture/opacity/match_patterns:
+                widget: enumerate
+                value: [
+                    '{directory}/opacity.{format}'
+                ]
+            #   normal
+            texture/normal_enable:
+                widget: boolean
+                value: False
+
+            texture/normal:
+                widget: group
+                visible_condition: {
+                    operator: 'is', port: 'texture/normal_enable', value: True
+                }
+
+            texture/normal/match_patterns:
+                widget: enumerate
+                value: [
+                    '{directory}/normal.{format}',
+                ]
+            #   displacement
+            texture/displacement_enable:
+                widget: boolean
+                value: False
+
+            texture/displacement:
+                widget: group
+                visible_condition: {
+                    operator: 'is', port: 'texture/displacement_enable', value: True
+                }
+
+            texture/displacement/match_patterns:
+                widget: enumerate
+                value: [
+                    '{directory}/displacement.{format}'
+                ]
+            #   mask
+            texture/mask_enable:
+                widget: boolean
+                value: False
+
+            texture/mask:
+                widget: group
+                visible_condition: {
+                    operator: 'is', port: 'texture/mask_enable', value: True
+                }
+
+            texture/mask/match_patterns:
+                widget: enumerate
+                value: [
+                    '{directory}/mask.{format}',
+                ]
+            # hdri
+            hdri:
+                widget: group
+                collapse: True
+                visible_condition: {
+                    operator: 'in', port: 'includes', value: 'hdri'
+                }
+            # geometry
+            geometry:
+                widget: group
+                collapse: True
+                visible_condition: {
+                    operator: 'in', port: 'includes', value: 'geometry'
+                }
+            # cache
+            cache:
+                widget: group
+                collapse: True
+                visible_condition: {
+                    operator: 'in', port: 'includes', value: 'cache'
+                }
+    #
+    schemes:
+#        A:
+#            resource:
+#                includes: ['directory']
+#                name_pattern: '{any_name}'
+#                match_patterns: '{directory}/{any_name}'
+#            #
+#            image:
+#                preview: '{directory}/{any_name}.jpg, {directory}/{any_name}.png'
+#            #
+#            texture:
+#                albedo: '{directory}/albedo.{format}'
+#                roughness: '{directory}/roughness.{format}'
+#                normal: '{directory}/normal.{format}'
+#                displacement: '{directory}/displacement.{format}'
+#                opacity: '{directory}/opacity.{format}'
+#        #
+#        B:
+#            resource:
+#                includes: ['directory']
+#                name_pattern: '{any_name}'
+#                match_patterns: '{directory}/{any_name}'
+#            #
+#            image:
+#                preview: '{directory}/{any_name}.jpg, {directory}/{any_name}.png'
+#            #
+#            texture:
+#                albedo: '{directory}/{any_name}/{any_0}_COL_{any_1}.{format}'
+#                glossiness: '{directory}/{any_name}/{any_0}_GLOSS_{any_1}.{format}'
+#                coat_roughness: '{directory}/{any_name}/{any_0}_REFL_{any_1}.{format}'
+#                normal: '{directory}/{any_name}/{any_0}_NRM_{any_1}.{format}'
+#                mask: '{directory}/{any_name}/{any_0}_OVERLAY_{any_1}.{format}'
+        #
+        imperfection:
+            resource:
+                includes: ['file']
+                name_pattern: '{any_name}_{number.zfill(3)}'
+                match_patterns: '{directory}/{any_name} seamless {number}-png.{format}'
+            #
+            classification:
+                category_group: 'imperfection'
+            #
+            texture:
+                roughness: '{directory}/{any_name} seamless {number}-png.{format}'
+        #
+        hdri:
+            resource:
+                includes: ['file']
+                name_pattern: '{any_name}_{resolution}k'
+                match_patterns: '{directory}/{category}/{type}/{any_name}_{resolution}k.{color_space}.{format}, {directory}/{category}/{type}/{any_name}_{resolution}k.{format}'
+
+            #
+            classification:
+                category_group: 'hdri'
+
+            image:
+                preview: '{directory}/{category}/{type}/{any_name}_{resolution}k.{format}'
+            #
+            hdri:
+                map: '{directory}/{any_name}_{resolution}k.{format}'
+

@@ -1,0 +1,52 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'upstream_merge'
+    type_abr: 'usr_mrg'
+    create_type: 'UpstreamMerge_Wsp'
+    description:
+        |-
+        for upstream merge
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .5
+        g: .125
+        b: .125
+#
+main:
+    type: Merge
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    output: '<.path>.out'
+    #
+    clear_start: 'option'
+    #
+    clear_ports: False
+    clear_children: False
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+    #
+    parameters:
+        showAdvancedOptions: 'Yes'
+        advanced/mergeGroupAttributes: ['lynxi.variants']

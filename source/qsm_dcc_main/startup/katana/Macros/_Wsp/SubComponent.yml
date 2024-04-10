@@ -1,0 +1,146 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'sub_component'
+    type_abr: 'scp'
+    create_type: 'SubComponent_Wsp'
+    description:
+        |-
+        for component
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: 0
+        g: 0
+        b: 0
+#
+main:
+    type: Group
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.input'
+    output: '<.path>.output'
+    #
+    attributes:
+        ns_offsetX: 720
+        ns_offsetY: 120
+        #
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports:
+        - 'input'
+    #
+    output_ports:
+        - 'output'
+    #
+    ports:
+        # basic
+        type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        # root
+        option/root:
+            widget: path
+            value: '/root/world/geo/master'
+            tool_tip: '...'
+        #
+        option/path:
+            widget: path
+            value: '/root/world/geo/master/hi'
+            tool_tip: '...'
+        #
+        option/usd_active_enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+        #
+        option/isolate_enable:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+#
+node:
+    usd_active:
+        type: UsdInActivationSet
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.in'
+        output: '<.path>.out'
+        #
+        parameters:
+            locations: ['']
+            active: True
+        #
+        expressions:
+            locations/i0: 'getParent().option.path'
+        connections:
+            - '<main.input>'
+            - '<.input>'
+    #
+    usd_active_enable:
+        type: Switch
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.output'
+        #
+        input_ports:
+            - 'off'
+            - 'on'
+        #
+        expressions:
+            in: '1 if getParent().option.usd_active_enable else 0'
+        #
+        connections:
+            # off
+            - '<main.input>'
+            - '<.path>.off'
+            # on
+            - '<..usd_active.output>'
+            - '<.path>.on'
+
+    isolate:
+        type: Isolate
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.out'
+        #
+        parameters:
+            isolateLocations: ['']
+        #
+        expressions:
+            isolateFrom: 'getParent().option.root'
+            isolateLocations/i0: 'getParent().option.path'
+        #
+        connections:
+            - '<..usd_active_enable.output>'
+            - '<.input>'
+    #
+    isolate_enable:
+        type: Switch
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.output'
+        #
+        input_ports:
+            - 'off'
+            - 'on'
+        #
+        expressions:
+            in: '1 if getParent().option.isolate_enable else 0'
+        #
+        connections:
+            # on
+            - '<..isolate.output>'
+            - '<.path>.on'
+            # output
+            - '<.output>'
+            - '<main.output>'
+

@@ -1,0 +1,20 @@
+# utility
+## module
+### project
+- lx{dcc.fullname}
+- .doc
+- .data
+- .icon
+- .image
+- .setup
+    - maya
+    - houdini
+- .test
+    - \_test\_{tag}.py
+- commands
+    - \_\_init\_\_
+    - {dcc.shotname}\_cmd\_{tag}
+- dcc
+    - {dcc.shotname}_dcc_objects
+        - \_\_init\_\_
+        - {dcc.shotname}\_dcc_obj\_{tag}

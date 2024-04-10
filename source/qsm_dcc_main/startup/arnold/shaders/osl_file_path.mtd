@@ -1,0 +1,6 @@
+# Arnold MetaData File
+[node osl_file_path]
+    desc STRING "arnold osl shader"
+    maya.name STRING "osl_file_path"
+    maya.id INT 0x00f000f02
+    maya.classification STRING "utility/osl"

@@ -1,0 +1,135 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'camera_properties_opt'
+    type_abr: 'cmr_prt_opt'
+    create_type: 'CameraProperties_Opt'
+    description:
+        |-
+        for camera properties operator
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .5
+        g: .125
+        b: .125
+#
+main:
+    type: OpScript
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.i0'
+    output: '<.path>.out'
+    #
+    clear_start: 'user'
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        #
+        user/enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        user/fov:
+            widget: float
+            value: 35
+            tool_tip: '...'
+        #   clip plane
+        user/clip_plane/near:
+            widget: float
+            value: .1
+
+        user/clip_plane/far:
+            widget: float
+            value: 100000
+        #   screen
+        user/screen/mode:
+            widget: enumerate
+            value: ['horizontal', 'vertical', 'fill']
+            tool_tip: '...'
+        #   render
+        user/render/resolution:
+            widget: resolution
+            value: '2048x2048'
+            tool_tip: '...'
+    #
+    parameters:
+        script/lua:
+            |-
+            local location = Interface.GetInputLocationPath()
+
+            function set_camera_screen(location, w, h, screen_mode)
+                Interface.SetAttr('geometry.screen_mode', StringAttribute(screen_mode))
+                local film_fit_value = Interface.GetAttr('geometry.arbitrary.lx_film_fit.value')
+                if (film_fit_value ~= nil) then
+                    if (film_fit_value:getValue() == 0) then
+                        Interface.SetAttr('geometry.top', DoubleAttribute(0.6666))
+                        Interface.SetAttr('geometry.bottom', DoubleAttribute(-0.6666))
+                        Interface.SetAttr('geometry.right', DoubleAttribute(0.6666))
+                        Interface.SetAttr('geometry.left', DoubleAttribute(-0.6666))
+                    end
+                else
+                    local x = 1
+                    local y = 1
+                    if (screen_mode == 'horizontal') then
+                        x = 1
+                        y = h/w
+                    elseif (screen_mode == 'vertical') then
+                        x = w/h
+                        y = 1
+                    else
+                        if (w > h) then
+                            x = 1
+                            y = h/w
+                        else
+                            x = w/h
+                            y = 1
+                        end
+                    end
+                    Interface.SetAttr('geometry.top', DoubleAttribute(y))
+                    Interface.SetAttr('geometry.bottom', DoubleAttribute(-y))
+                    Interface.SetAttr('geometry.right', DoubleAttribute(x))
+                    Interface.SetAttr('geometry.left', DoubleAttribute(-x))
+                end
+            end
+            
+            function main()
+                if (Interface.GetOpArg('user.enable'):getValue() == 1) then
+                    local render_resolution = Interface.GetOpArg('user.render.resolution')
+                    local r = ResolutionTable.GetResolution(render_resolution:getValue())
+                    local w, h = r:getXRes(), r:getYRes()
+                    
+                    local screen_mode = Interface.GetOpArg('user.screen.mode'):getValue()
+                    set_camera_screen(location, w, h, screen_mode)
+                    
+                    local clip_plane_near = Interface.GetOpArg('user.clip_plane.near'):getValue()
+                    Interface.SetAttr('geometry.near', DoubleAttribute(clip_plane_near))
+                    local clip_plane_far = Interface.GetOpArg('user.clip_plane.far'):getValue()
+                    Interface.SetAttr('geometry.far', DoubleAttribute(clip_plane_far))
+                end
+            end
+            
+            main()
+

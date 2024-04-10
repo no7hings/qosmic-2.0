@@ -1,0 +1,79 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Create Texture Auto'
+        icon_name: 'application/python'
+        #
+        size: [720, 720]
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        database: ''
+        database_configure: ''
+        database_configure_extend: ''
+        #
+        entity_type: ''
+        entity: ''
+        #
+        keyword: ''
+#
+build:
+    content:
+        |-
+        1. check or uncheck "with_acescg_exr" and "with_acescg_tx"
+        2. press "execute" to continue
+    node:
+        options:
+            files:
+                widget: file_list
+                value: []
+                enable: True
+                height: 320
+                tool_tip: '...'
+            #
+            deduplication_priority_formats:
+                widget: string
+                value: 'exr, tiff, png, jpg'
+                tool_tip: 'entry deduplication priority by format, etc. "exr, tiff, png, jpg"'
+            #
+            deduplication:
+                widget: button
+                value: ''
+                tool_tip: 'press to remove duplication textures by "deduplication priority"'
+            #
+            with_acescg_exr:
+                widget: boolean
+                value: True
+                enable: True
+                join_to_next: True
+                tool_tip: 'check "enable" or "disable" create "exr" to "../texture/acescg/src"'
+            #
+            with_acescg_jpg:
+                widget: boolean
+                value: True
+                enable: True
+                tool_tip: 'check "enable" or "disable" create "exr" to "../texture/acescg/jpg"'
+            #
+            with_acescg_tx:
+                widget: boolean
+                value: True
+                enable: True
+                tool_tip: 'check "enable" or "disable" create "tx"'
+            #
+            use_update_mode:
+                widget: boolean
+                value: True
+                enable: True
+                tool_tip: 'create use update mode'
+            #
+            execute:
+                widget: sub_process_button
+                value: ''
+                tool_tip: 'press to create "exr" and or "tx" as acescg color space'

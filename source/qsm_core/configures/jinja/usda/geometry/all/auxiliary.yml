@@ -1,0 +1,27 @@
+dcc:
+    root:
+        name: 'master'
+        location: '/master'
+#
+elements:
+#    - {
+#        name: 'grm',
+#        location: '/master/grm',
+#        file: 'geo/grm.usd'
+#    }
+#    - {
+#        name: 'cfx',
+#        location: '/master/cfx',
+#        file: 'geo/grm.usd'
+#    }
+#    - {
+#        name: 'efx',
+#        location: '/master/efx',
+#        file: 'geo/grm.usd'
+#    }
+#    - {
+#        name: 'misc',
+#        location: '/master/misc',
+#        file: 'geo/grm.usd'
+#    }
+

@@ -1,0 +1,265 @@
+// ===========================================================================
+// Copyright 2016 Autodesk, Inc. All rights reserved.
+//
+// Use of this software is subject to the terms of the Autodesk license
+// agreement provided at the time of installation or download, or which
+// otherwise accompanies this software in either electronic or hard copy form.
+// ===========================================================================
+global proc pasteScene()
+{
+
+	/* Begin: MAYA-39777
+
+	   Maya 2015 copy writes out to ascii or binary
+	   depending on file format open:
+	   paste expects matching file type:
+	   therefore ascii copy paste to binary fails
+	*/
+
+	string $userTmpDir = `internalVar -userTmpDir`;
+	string $clipBoardFiles;
+	string $filePath;
+
+	//Get the latest maya clipboard scene, whether ascii or binary
+	if (!`about -ltVersion`)
+	{
+		string $presentWorkingDir = `pwd`;
+		chdir($userTmpDir);
+
+		if (`about -linux` == 1)
+		{
+			$clipBoardFiles = `system("ls -t maya_sceneClipBoard.m*")`;
+		}
+		else if (`about -mac` == 1)
+		{
+			$clipBoardFiles = `system("ls -t maya_sceneClipBoard.m*")`;
+		}
+		else if (`about -windows` == 1)
+		{
+			$clipBoardFiles = `system("dir /b /o:-D maya_sceneClipBoard.m*")`;
+		}
+
+		string $mayaSceneBuffer[];
+		int $sceneCount = tokenize($clipBoardFiles, $mayaSceneBuffer);
+
+		if (`file -q -exists ($userTmpDir + $mayaSceneBuffer[0])` == 1)
+		{
+			$filePath = ($userTmpDir + $mayaSceneBuffer[0]);
+		}
+		chdir($presentWorkingDir);
+	}
+	//End: MAYA-39777
+
+	else
+	{
+		// Determine current scene file type
+		string $getFileType[] = `file -q -type`;
+		string $fileExt;
+
+		if (`about -ltVersion`) {
+			$fileExt = ".mlt";
+		}
+
+		// determine temp directory
+		string $tmpFile = "/maya_sceneClipBoard" + $fileExt;
+		$filePath = ($userTmpDir + $tmpFile);
+	}
+
+	// import scene
+	string $newTransforms[] = `file -force
+		-import
+		-renameAll true
+		-renamingPrefix "pasted_"
+		-groupReference
+		-returnNewNodes
+		$filePath`;
+
+	select -replace `ls -dag -head 1 $newTransforms`;
+}
+
+global proc cutCopyScene (int $cut){
+
+    // Determine current Maya scenes file type
+    string $getFileType[] = `file -q -type`;
+    string $fileExt;
+    string $fileType;
+
+    if ( 0 != size($getFileType) && $getFileType[0] == "mayaAscii" ){
+        $fileExt = ".ma";
+        $fileType = "mayaAscii";
+    }
+    else {
+        $fileExt = ".mb";
+        $fileType = "mayaBinary";
+    }
+	if (`about -ltVersion`) {
+		$fileExt  = ".mlt";
+		$fileType = "mayaLT";
+	}
+
+	// determine temp directory
+	string $tmpFile = "/maya_sceneClipBoard" + $fileExt;
+	string $tmpdir = `getenv TMPDIR`;
+	string $filePath = ($tmpdir + $tmpFile);
+
+	// export selected nodes
+	file -force
+		-exportSelected
+		-constructionHistory true
+		-channels true
+		-expressions true
+		-constraints true
+		-shader true
+		-type $fileType
+		$filePath;
+
+	// delete nodes if user asks for cut
+	if ($cut){
+		delete;
+	}
+}
+
+global proc cutCopyPasteCover (string $operation){
+
+	// $operation:	cut
+	//				copy
+	//				paste
+
+	// make sure generateChannelMenu has been sourced so channelBox commands work
+	if (!`exists channelBoxCommand`){
+		source generateChannelMenu.mel;
+	}
+
+	// based on active panel, channelBox selection and selected nodes
+	// determine what user wants to cut copy paste
+
+	string $option = "none";;
+	string $parameter;
+	string $selection[] = `ls -sl`;
+
+	// determine if active panel is animation based
+	// this value should override the channelBox cut copy paste
+	string $currentPanel = `getPanel -underPointer`;
+	if( $currentPanel == "" ) {
+		$currentPanel = `getPanel -withFocus`;
+	}
+	string $panelType = `getPanel -typeOf $currentPanel`;
+	if( $panelType == "scriptedPanel" ) {
+		$panelType = `scriptedPanel -q -type $currentPanel`;
+		if (   $panelType == "graphEditor"
+			|| $panelType == "dopeSheetPanel"
+			|| $panelType == "clipEditorPanel"
+			|| $panelType == "timeEditorPanel"
+			)
+		{
+			$option = $panelType;
+			if( $panelType == "dopeSheetPanel" ) {
+				$parameter = $currentPanel + "OutlinerSelection";
+			} else {
+				$parameter = editorNameFromPanel( $currentPanel );
+			}
+		} else {
+			$option = "nodes";
+		}
+	}
+	// determine if anything is selected
+	else if (size($selection)){
+		$option = "nodes";
+
+		// determine if attrs are selected in channelBox
+		string $attrList[] = `channelBox -q -selectedMainAttributes mainChannelBox`;
+		string $attrHistoryList[] = `channelBox -q -selectedHistoryAttributes mainChannelBox`;
+		string $attrOutputList[] = `channelBox -q -selectedOutputAttributes mainChannelBox`;
+		string $attrShapeList[] = `channelBox -q -selectedShapeAttributes mainChannelBox`;
+		if ((size($attrList) != 0) ||
+			(size($attrHistoryList) != 0) ||
+			(size($attrOutputList) != 0) ||
+			(size($attrOutputList) != 0)){
+
+			$option = "channels";
+		}
+
+	} else if (!size($selection) && $operation == "paste"){
+		$option = "nodes";
+	}
+
+	switch ($option){
+	case "channels":
+		if ($operation == "cut"){
+			channelBoxCommand -cut;
+		} else if ($operation == "copy"){
+			channelBoxCommand -copy;
+		} else {
+			channelBoxCommand -paste;
+		}
+		break;
+
+	case "graphEditor":
+		if ($operation == "cut"){
+			performCutKeyArgList 1 {"3", $parameter, "1"};
+		} else if ($operation == "copy"){
+			performCopyKeyArgList 1 {"3", $parameter, "1"};
+		} else {
+			performPasteKeyArgList 1 {"3", $parameter, "1"};
+		}
+		break;
+
+	case "dopeSheetPanel":
+		if ($operation == "cut"){
+			performCutKeyArgList 1 {"0", $parameter, "2"};
+		} else if ($operation == "copy"){
+			performCopyKeyArgList 1 {"0", $parameter, "2"};
+		} else {
+			performPasteKeyArgList 1 {"0", $parameter, "2"};
+		}
+		break;
+
+	case "clipEditorPanel":
+		if ($operation == "cut"){
+			doCutClipArgList 1 { $parameter };
+		} else if ($operation == "copy"){
+			doCopyClipArgList 1 { $parameter };
+		} else {
+			performPasteClip 0;
+		}
+		break;
+	case "timeEditorPanel":
+		{
+			// for basic copy & paste support, do nothing here to avoid wrong scene object duplication
+			// the code to finish real clip copy & paste job locates inside TtimeviewView.cpp for now
+		}
+		break;
+	case "nodes":
+		if ($operation == "cut"){
+			cutCopyScene 1;
+		} else if ($operation == "copy"){
+			cutCopyScene 0;
+		} else {
+			pasteScene;
+		}
+		break;
+
+	case "none":
+		// nothing selected - nothing required but a warning
+		warning( (uiRes("m_cutCopyPaste.kNothingIsSelected")) );
+		break;
+
+	}
+
+
+}
+
+global proc cutCopyPaste (string $operation){
+    string $result = "No";
+    if ($operation == "copy"){
+        $result = `confirmDialog -title "maya copy" -message "press Yes to continue" -button "Yes" -button "No" -defaultButton "Yes" -cancelButton "No" -dismissString "No"`;
+    } else if ($operation == "cut") {
+        $result = `confirmDialog -title "maya cut" -message "press Yes to continue" -button "Yes" -button "No" -defaultButton "Yes" -cancelButton "No" -dismissString "No"`;
+    } else if ($operation == "paste") {
+        $result = `confirmDialog -title "maya paste" -message "press Yes to continue" -button "Yes" -button "No" -defaultButton "Yes" -cancelButton "No" -dismissString "No"`;
+    }
+
+    if ($result == "Yes") {
+        cutCopyPasteCover($operation);
+    }
+}

@@ -1,0 +1,26 @@
+menu:
+    name: TD-tool(s)
+    tools:
+        - loader
+        - separator
+        #
+        - package_reloader
+tool:
+    package_reloader:
+        type: item
+        name: Package-reloader
+        icon: None
+        command: import lxhoudini;lxhoudini.Packages.set_reload()
+    #
+    loader:
+        type: group
+        name: Loader(s)
+        icon: None
+        items:
+            - asset_loader
+    #
+    asset_loader:
+        type: item
+        name: Asset Loader
+        icon: None
+        command: 'import lxsession.commands as ssn_commands; ssn_commands.execute_hook("rsv-panels/asset-loader")'

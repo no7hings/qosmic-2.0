@@ -1,0 +1,315 @@
+default:
+    # diffuse
+    diffuse_weight:
+        abbreviation: 'dif_wgt'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # pg
+            - 'diff_int'
+    #   color
+    diffuse_color:
+        abbreviation: 'dif_clr'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # quixel
+            - 'diffuse'
+            # pg
+            - 'diff_clr'
+            # other
+            - 'diff'
+    #   roughness
+    diffuse_roughness:
+        abbreviation: 'dif_rgh'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+    #   albedo, use as color
+    albedo:
+        abbreviation: 'alb'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+    # specular
+    #   weight
+    specular_weight:
+        abbreviation: 'spc_wgt'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # pg
+            - 'spec_int'
+    #   color
+    specular_color:
+        abbreviation: 'spc_clr'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # quixel
+            - 'specular'
+            # pg
+            - 'spec_clr'
+            # extend
+            - 'spec'
+    #   roughness
+    specular_roughness:
+        abbreviation: 'spc_rgh'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            #
+            - 'roughness'
+            - 'rgh'
+            # pg
+            - 'rough'
+    #   IOR
+    specular_ior:
+        abbreviation: 'spc_ior'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            #
+            - 'ior'
+    #   glossiness, convert to roughness, =1+(glossiness)*-1
+    glossiness:
+        abbreviation: 'gls'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+    #   metalness
+    metalness:
+        abbreviation: 'mtl'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # pg
+            - 'metal'
+    # transmission
+    #   weight
+    transmission_weight:
+        abbreviation: 'tsm_wgt'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # pg
+            - 'tran_int'
+    #   color
+    transmission_color:
+        abbreviation: 'tsm_cls'
+        keywords:
+            - '<..key>'
+            - 'transmission'
+            # pg
+            - 'tran_clr'
+    #   roughness
+    transmission_roughness:
+        abbreviation: 'tsm_rgh'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+    #   depth
+    transmission_depth:
+        abbreviation: 'tsm_dpt'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # pg
+            - 'tran_dep'
+    #   scatter
+    transmission_scatter:
+        abbreviation: 'tsm_sct'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # pg
+            - 'tran_scl'
+    # emission
+    emission_weight:
+        abbreviation: 'ems_wgt'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # pg
+            - 'emis'
+    #   color
+    emission_color:
+        abbreviation: 'ems_clr'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # quixel
+            - 'emission'
+            # pg
+            - 'emis_clr'
+    # sheen
+    sheen_weight:
+        abbreviation: 'shn_wgt'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+    #   color
+    sheen_color:
+        abbreviation: 'shn_wgt'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # quixel
+            - 'sheen'
+    #   roughness
+    sheen_roughness:
+        abbreviation: 'shn_rgh'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+    # subsurface scattering
+    #   weight
+    subsurface_weight:
+        abbreviation: 'sss_wgt'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # pg
+            - 'sss_int'
+    #   color
+    subsurface_color:
+        abbreviation: 'sss_clr'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # quixel
+            - 'subsurface'
+            #
+            - 'sss'
+            # pg
+            - 'sss_clr'
+    #   radius
+    subsurface_radius:
+        abbreviation: 'sss_rdu'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+    #   scale
+    subsurface_scale:
+        abbreviation: 'sss_scl'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # pg
+            - 'sss_scl'
+    # geometry
+    #   opacity
+    opacity:
+        abbreviation: 'opc'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+    #   translucency, convert to opacity, =1+(translucency)*-1
+    translucency:
+        abbreviation: 'tlc'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+    #   normal, tangent space
+    normal:
+        abbreviation: 'nrm'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+    #   bump
+    bump:
+        abbreviation: 'bmp'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+    #   displacement
+    #   value mode
+    displacement:
+        abbreviation: 'dis'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # pg
+            - 'disp'
+    #   vector mode
+    vector_displacement:
+        abbreviation: 'vct_dis'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+    # coat
+    #   weight
+    coat_weight:
+        abbreviation: 'cot_wgt'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+    #   color
+    coat_color:
+        abbreviation: 'cot_clr'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # quixel
+            - 'coat'
+    #   roughness
+    coat_roughness:
+        abbreviation: 'cot_rgh'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+    #   IOR
+    coat_ior:
+        abbreviation: 'cot_ior'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+    # other
+    #   mask
+    mask:
+        abbreviation: 'msk'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+    #   OCC
+    ambocc:
+        abbreviation: 'amb_occ'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+            # quixel
+            - 'ao'
+            #
+            - 'occ'
+    #   cavity
+    cavity:
+        abbreviation: 'cvt'
+        keywords:
+            - '<..key>'
+            - '<.abbreviation>'
+#
+arnold:
+    includes: [
+        'diffuse_color', 'albedo',
+        'specular_color', 'specular_roughness', 'metalness',
+        'coat_color', 'coat_roughness',
+        'transmission', 'emission',
+        'opacity', 'normal', 'displacement',
+        'ambocc'
+    ]
+    mapper: {
+        'albedo': 'diffuse_color',
+        'roughness': 'specular_roughness'
+    }
+#
+usd:
+    includes: [
+        'diffuse_color', 'albedo',
+        'specular_color', 'specular_roughness', 'metalness',
+        'coat_color', 'coat_roughness',
+        'opacity', 'normal', 'displacement',
+        'ambocc',
+    ]
+    mapper: {
+        albedo: 'diffuse_color'
+    }

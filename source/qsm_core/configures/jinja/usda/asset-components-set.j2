@@ -1,0 +1,40 @@
+#usda 1.0
+(
+    defaultPrim = "{{ asset.root_name }}"
+    startTimeCode = {{ asset.start_frame }}
+    endTimeCode = {{ asset.end_frame }}
+    upAxis = "Y"
+)
+
+def Xform "{{ asset.root_name }}" (
+    kind = "component"
+    variants = {
+        {% for i_component_key, i_variant in asset.components.iteritems() -%}
+            string {{ i_component_key }} = "{{ i_variant.default }}"
+        {% endfor %}
+    }
+    prepend variantSets = [
+        {% for i_component_key, i_variant in asset.components.iteritems() -%}
+            "{{ i_component_key }}",
+        {% endfor %}
+    ]
+)
+{
+    string userProperties:usd:variants:asset:project = "{{ asset.project }}"
+    string userProperties:usd:variants:asset:role = "{{ asset.role }}"
+    string userProperties:usd:variants:asset:name = "{{ asset.name }}"
+    {% for i_component_key, i_variant in asset.components.iteritems() -%}
+    variantSet "{{ i_component_key }}" = {
+        "None" {
+        }
+        {%- for j_version, j_file in i_variant.files.iteritems() %}
+        "{{ j_version }}" (
+            prepend references = {{ '@%s@</master>' | format(j_file) }}
+        ) {
+            string userProperties:usd:variants:asset:components:{{ i_component_key }}:version = "{{ j_version }}"
+            string userProperties:usd:variants:asset:components:{{ i_component_key }}:file = "{{ j_file }}"
+        }
+        {%- endfor %}
+    }
+    {% endfor %}
+}

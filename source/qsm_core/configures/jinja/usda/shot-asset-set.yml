@@ -1,0 +1,41 @@
+asset:
+    project: ''
+    role: ''
+    name: ''
+    #
+    root_name: master
+    #
+    version:
+        model: {}
+        groom: {}
+        rig: {}
+        effect: {}
+        surface: {}
+    #
+    version_override:
+        model: {}
+        groom: {}
+        rig: {}
+        effect: {}
+        surface: {}
+#
+shot:
+    sequence: ''
+    name: ''
+    #
+    root_name: assets
+    #
+    start_frame: 1001
+    end_frame: 1024
+    #
+    set_file: ''
+    #
+    version_override:
+        animation: {}
+#
+camera:
+    root_name: cameras
+    #
+    path: /renderCamera
+#
+shot_assets: {}

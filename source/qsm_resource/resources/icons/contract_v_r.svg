@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+    viewBox="0 0 64 128" style="enable-background:new 0 0 64 128;" xml:space="preserve">
+<style
+   id="style51"
+   type="text/css">
+	.st0{fill:#5F5F5F;}
+	.st1{fill:#FFFFFF;}
+</style>
+<polygon
+   transform="matrix(1.5,0,0,1.1428571,-16,-21.714283)"
+   id="polygon53"
+   points="32,82 48,68 48,96 48,124 32,110 16,96 "
+   class="st0" />
+<polygon
+   transform="matrix(1.5,0,0,1.1428571,-16,3.4285714)"
+   id="polygon55"
+   points="16,32 16,4 32,18 48,32 32,46 16,60 "
+   class="st1" />
+</svg>

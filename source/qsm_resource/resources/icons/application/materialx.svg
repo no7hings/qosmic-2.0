@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   height="128"
+   width="128"
+   version="1.1"
+   id="svg3336"
+   viewBox="0 0 128.00001 128">
+  <metadata
+     id="metadata3534">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>mtlx.glyph</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3338">
+    <style
+       id="style3340">.cls-1{fill:#306384;}.cls-2{fill:#276d88;}.cls-3{fill:#0b7a90;}.cls-4{fill:#bd295b;}.cls-5{fill:#fcc;}.cls-6{fill:#d64274;}.cls-7{fill:none;}.cls-8{fill:url(#linear-gradient);}.cls-9{fill:#b3e0df;}.cls-10{fill:url(#linear-gradient-2);}</style>
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="-39.959999"
+       x2="402.45999"
+       y1="369.23999"
+       x1="166.21001"
+       id="linear-gradient">
+      <stop
+         id="stop3343"
+         stop-color="#025361"
+         offset="0" />
+      <stop
+         id="stop3345"
+         stop-color="#0b7a90"
+         offset="0.38" />
+      <stop
+         id="stop3347"
+         stop-color="#406185"
+         offset="0.42" />
+      <stop
+         id="stop3349"
+         stop-color="#406185"
+         offset="0.58" />
+      <stop
+         id="stop3351"
+         stop-color="#0b7a90"
+         offset="0.62" />
+      <stop
+         id="stop3353"
+         stop-color="#025361"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="300.92999"
+       x2="426.10001"
+       y1="55.5"
+       x1="567.79999"
+       id="linear-gradient-2">
+      <stop
+         id="stop3356"
+         stop-color="#16a9c4"
+         offset="0" />
+      <stop
+         id="stop3358"
+         stop-color="#8ad4ec"
+         offset="0.05" />
+      <stop
+         id="stop3360"
+         stop-color="#8ad4e2"
+         offset="0.08" />
+      <stop
+         id="stop3362"
+         stop-color="#1facc5"
+         offset="0.2" />
+      <stop
+         id="stop3364"
+         stop-color="#0190a9"
+         offset="0.5" />
+      <stop
+         id="stop3366"
+         stop-color="#025361"
+         offset="1" />
+    </linearGradient>
+  </defs>
+  <title
+     id="title3368">mtlx.glyph</title>
+  <g
+     transform="matrix(0.22211335,0,0,0.22211335,0.84651882,27.432369)"
+     data-name="Layer 2"
+     id="Layer_2">
+    <g
+       id="Glyph">
+      <polygon
+         style="fill:#306384"
+         id="polygon3372"
+         points="378.83,273.64 284.33,219.08 284.33,219.08 378.83,164.52 "
+         class="cls-1" />
+      <polygon
+         style="fill:#276d88"
+         id="polygon3374"
+         points="378.83,164.52 473.33,219.08 473.33,219.08 378.83,273.64 "
+         class="cls-2" />
+      <polygon
+         style="fill:#0b7a90"
+         id="polygon3376"
+         points="473.33,328.2 378.83,273.64 378.83,273.64 473.33,219.08 "
+         class="cls-3" />
+      <polygon
+         style="fill:#0b7a90"
+         id="polygon3378"
+         points="473.33,219.08 567.83,273.64 567.83,273.64 473.33,328.2 "
+         class="cls-3" />
+      <polygon
+         style="fill:#0b7a90"
+         id="polygon3380"
+         points="473.33,0.96 567.83,55.52 567.83,55.52 473.33,110.08 "
+         class="cls-3" />
+      <polygon
+         style="fill:#bd295b"
+         id="polygon3382"
+         points="189.83,55.52 284.33,110.08 284.33,110.08 189.83,164.64 "
+         class="cls-4" />
+      <path
+         style="fill:#ffcccc"
+         id="path3384"
+         d="m 189,166.07 0,-112 97,56 z M 190.66,57 l 0,106.2 92,-53.12 z"
+         class="cls-5" />
+      <polygon
+         style="fill:#bd295b"
+         id="polygon3386"
+         points="189.83,164.64 95.33,110.08 95.33,110.08 189.83,55.52 "
+         class="cls-4" />
+      <polygon
+         style="fill:#d64274"
+         id="polygon3388"
+         points="95.33,110.08 0.83,55.52 0.83,55.52 95.33,0.96 "
+         class="cls-6" />
+      <polygon
+         style="fill:#bd295b"
+         id="polygon3390"
+         points="95.33,0.96 189.83,55.52 189.83,55.52 95.33,110.08 "
+         class="cls-4" />
+      <polygon
+         style="fill:none"
+         id="polygon3392"
+         points="188.17,55.52 96.16,2.4 96.16,2.4 96.16,108.64 "
+         class="cls-7" />
+      <polygon
+         style="fill:none"
+         id="polygon3394"
+         points="96.99,110.08 189,163.2 189,56.96 143,83.52 96.99,110.08 "
+         class="cls-7" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3396"
+         points="94.5,109.6 93.67,110.08 93.67,110.08 94.5,110.56 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3398"
+         points="96.16,108.64 142.16,82.08 95.33,109.12 96.16,109.6 96.16,108.64 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3400"
+         points="189,163.2 96.99,110.08 143,83.52 95.33,111.04 190.66,166.07 190.66,56 190.66,56 189,56.96 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3402"
+         points="189,56.95 143,83.52 143,83.52 189,56.96 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3404"
+         points="95.33,109.12 94.5,108.64 94.5,108.64 94.5,109.6 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3406"
+         points="94.5,110.56 94.5,111.52 94.5,111.52 95.33,111.04 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3408"
+         points="189.83,54.56 96.16,0.48 96.16,0.48 96.16,2.4 188.17,55.52 142.16,82.08 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3410"
+         points="190.66,56 191.49,55.52 191.49,55.52 190.66,55.04 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3412"
+         points="94.5,110.56 95.33,111.04 143,83.52 189,56.95 189,56.95 189,56.96 190.66,56 190.66,55.04 189.83,54.56 142.16,82.08 96.16,108.64 96.16,109.6 95.33,109.12 94.5,109.6 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3414"
+         points="94.5,0.48 0.83,54.56 0.83,54.56 48.49,82.08 2.49,55.52 94.5,2.4 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3416"
+         points="96.16,108.64 96.16,2.4 96.16,0.48 95.33,0 94.5,0.48 94.5,2.4 94.5,108.64 96.16,109.6 96.16,109.6 "
+         class="cls-5" />
+      <polygon
+         style="fill:url(#linear-gradient)"
+         id="polygon3418"
+         points="473.33,110.08 95.33,328.32 95.33,219.2 473.33,0.96 473.33,110.08 "
+         class="cls-8" />
+      <polygon
+         style="fill:#d64274"
+         id="polygon3420"
+         points="0.83,164.64 95.33,219.2 95.33,219.2 0.83,273.76 "
+         class="cls-6" />
+      <polygon
+         style="fill:#d64274"
+         id="polygon3422"
+         points="95.33,219.2 0.83,164.64 0.83,164.64 95.33,110.08 "
+         class="cls-6" />
+      <polygon
+         style="fill:#d64274"
+         id="polygon3424"
+         points="0.83,55.52 95.33,110.08 95.33,110.08 0.83,164.64 "
+         class="cls-6" />
+      <polygon
+         style="fill:none"
+         id="polygon3426"
+         points="93.67,110.08 47.66,83.52 1.66,56.96 1.66,163.2 93.67,110.08 "
+         class="cls-7" />
+      <polygon
+         style="fill:none"
+         id="polygon3428"
+         points="2.49,55.52 48.49,82.08 94.5,108.64 94.5,2.4 2.49,55.52 "
+         class="cls-7" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3430"
+         points="96.16,110.56 96.99,110.08 96.99,110.08 96.16,109.6 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3432"
+         points="48.49,82.08 94.5,108.64 94.5,108.64 94.5,108.64 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3434"
+         points="1.66,56.96 0,56 0,166.07 95.33,111.04 47.66,83.52 93.67,110.08 93.67,110.08 1.66,163.2 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3436"
+         points="96.16,111.52 96.16,110.56 96.16,110.56 95.33,111.04 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3438"
+         points="47.66,83.52 1.66,56.95 1.66,56.95 1.66,56.96 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3440"
+         points="95.33,111.04 96.16,110.56 96.16,109.6 96.16,109.6 94.5,108.64 94.5,108.64 48.49,82.08 0.83,54.56 0,55.04 0,56 1.66,56.96 1.66,56.95 47.66,83.52 "
+         class="cls-5" />
+      <polygon
+         style="fill:#d64274"
+         id="polygon3442"
+         points="95.33,328.32 0.83,273.76 0.83,273.76 95.33,219.2 "
+         class="cls-6" />
+      <polygon
+         style="fill:none"
+         id="polygon3444"
+         points="2.49,273.76 94.5,326.88 94.5,326.88 94.5,220.63 "
+         class="cls-7" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3446"
+         points="284.33,220.16 282.67,219.2 96.16,326.88 96.16,328.8 284.33,220.16 "
+         class="cls-9" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3448"
+         points="188.17,164.64 94.92,218.48 94.5,218.72 94.5,218.72 96.16,217.76 96.16,219.68 96.16,219.68 189.83,165.59 "
+         class="cls-9" />
+      <polygon
+         style="fill:none"
+         id="polygon3450"
+         points="1.66,166.07 1.66,272.32 46.77,246.28 93.67,219.2 1.66,166.07 "
+         class="cls-7" />
+      <polygon
+         style="fill:none"
+         id="polygon3452"
+         points="2.49,164.64 48.49,191.2 94.5,217.76 94.5,111.52 2.49,164.64 "
+         class="cls-7" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3454"
+         points="1.66,166.07 1.66,166.07 1.66,166.07 47.66,192.64 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3456"
+         points="94.5,217.76 96.16,218.72 96.16,108.64 0.83,163.68 48.49,191.2 2.49,164.64 2.49,164.64 94.5,111.52 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3458"
+         points="96.16,220.63 96.16,219.68 96.16,219.68 95.33,220.16 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3460"
+         points="94.5,218.72 93.67,219.2 93.67,219.2 94.5,219.68 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3462"
+         points="0,273.28 1.66,272.32 1.66,166.07 0,165.12 0,273.28 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3464"
+         points="93.67,219.2 46.77,246.28 93.67,219.2 47.66,192.64 93.67,219.2 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3466"
+         points="94.5,220.63 48.49,247.2 95.33,220.16 94.5,219.68 94.5,220.63 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3468"
+         points="48.49,191.2 94.5,217.76 94.5,217.76 94.5,217.76 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3470"
+         points="0.83,163.68 0,163.2 0,163.2 0,164.16 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3472"
+         points="93.67,219.2 94.5,218.72 94.5,219.68 95.33,220.16 96.16,219.68 96.16,218.72 96.16,218.72 94.5,217.76 94.5,217.76 48.49,191.2 0.83,163.68 0,164.16 0,165.12 1.66,166.07 1.66,166.07 47.66,192.64 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3474"
+         points="2.49,273.76 48.49,247.2 48.49,247.2 0.83,274.71 94.5,328.8 94.5,326.88 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3476"
+         points="1.66,272.32 1.66,272.32 1.66,272.32 46.77,246.28 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3478"
+         points="94.5,220.63 94.5,218.72 46.77,246.28 1.66,272.32 1.66,272.32 0,273.28 0,274.24 0.83,274.71 48.49,247.2 94.5,220.63 "
+         class="cls-5" />
+      <polygon
+         style="fill:#ffcccc"
+         id="polygon3480"
+         points="96.16,326.88 96.16,219.68 96.16,217.76 94.5,218.72 94.5,220.63 94.5,326.88 94.5,328.8 95.33,329.27 96.16,328.8 96.16,326.88 "
+         class="cls-5" />
+      <polygon
+         style="fill:url(#linear-gradient-2)"
+         id="polygon3482"
+         points="567.83,273.64 473.33,328.2 473.33,0.96 567.83,55.52 567.83,273.64 "
+         class="cls-10" />
+      <polygon
+         style="fill:none"
+         id="polygon3484"
+         points="96.16,326.88 472.5,109.6 472.5,2.4 96.16,219.68 96.16,326.88 "
+         class="cls-7" />
+      <polygon
+         style="fill:none"
+         id="polygon3486"
+         points="567,56 474.16,2.4 474.16,110.56 474.16,110.56 474.16,110.56 474.16,326.76 567,273.16 "
+         class="cls-7" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3488"
+         points="474.16,110.56 474.16,110.56 474.16,2.4 474.16,2.4 474.16,110.56 "
+         class="cls-9" />
+      <polygon
+         style="fill:none"
+         id="polygon3490"
+         points="96.16,109.6 472.5,326.88 472.5,219.67 96.16,2.4 96.16,109.6 "
+         class="cls-7" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3492"
+         points="474.16,326.76 474.16,218.72 474.16,218.72 474.16,326.76 474.16,326.76 "
+         class="cls-9" />
+      <polygon
+         style="fill:none"
+         id="polygon3494"
+         points="96.16,2.4 96.16,109.6 189.83,163.68 282.67,110.08 96.16,2.4 "
+         class="cls-7" />
+      <polygon
+         style="fill:none"
+         id="polygon3496"
+         points="284.33,218.24 377.17,164.64 284.33,111.04 191.49,164.64 284.33,218.24 "
+         class="cls-7" />
+      <polygon
+         style="fill:none"
+         id="polygon3498"
+         points="96.16,219.68 96.16,326.88 282.67,219.2 189.83,165.59 96.16,219.68 "
+         class="cls-7" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3500"
+         points="284.33,218.24 285.99,219.2 378.83,165.59 377.17,164.64 284.33,218.24 "
+         class="cls-9" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3502"
+         points="189.83,163.68 191.49,164.64 284.33,111.04 282.67,110.08 189.83,163.68 "
+         class="cls-9" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3504"
+         points="472.5,2.4 472.5,0.48 284.33,109.12 285.99,110.08 472.5,2.4 "
+         class="cls-9" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3506"
+         points="472.5,111.52 472.5,109.6 378.83,163.68 380.49,164.64 472.5,111.52 "
+         class="cls-9" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3508"
+         points="472.5,328.79 472.5,326.88 285.99,219.2 284.33,220.16 472.5,328.79 "
+         class="cls-9" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3510"
+         points="472.5,219.67 472.5,217.76 380.49,164.64 378.83,165.59 472.5,219.67 "
+         class="cls-9" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3512"
+         points="378.83,165.59 380.49,164.64 378.83,163.68 377.17,164.64 378.83,165.59 "
+         class="cls-9" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3514"
+         points="191.49,164.64 189.83,163.68 188.17,164.64 189.83,165.59 191.49,164.64 "
+         class="cls-9" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3516"
+         points="282.67,219.2 284.33,220.16 285.99,219.2 284.33,218.24 282.67,219.2 "
+         class="cls-9" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3518"
+         points="284.33,111.04 285.99,110.08 284.33,109.12 282.67,110.08 284.33,111.04 "
+         class="cls-9" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3520"
+         points="472.5,326.88 472.5,219.68 472.5,219.67 472.5,326.88 472.5,326.88 "
+         class="cls-9" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3522"
+         points="474.16,0.48 474.16,2.4 567,56 567,273.16 474.16,326.76 474.16,328.68 568.25,274.36 568.66,274.12 568.66,55.04 474.16,0.48 "
+         class="cls-9" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3524"
+         points="474.16,218.72 474.16,110.56 474.16,110.56 473.75,110.8 472.5,111.52 472.5,217.76 "
+         class="cls-9" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3526"
+         points="474.16,326.76 474.16,326.76 474.16,326.76 474.16,218.72 472.5,217.76 472.5,219.67 472.5,219.68 472.5,326.88 472.5,326.88 472.5,328.79 473.23,329.21 474.16,328.68 "
+         class="cls-9" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3528"
+         points="472.5,109.6 472.5,2.4 472.5,2.4 472.5,109.6 472.5,109.6 "
+         class="cls-9" />
+      <polygon
+         style="fill:#b3e0df"
+         id="polygon3530"
+         points="472.5,111.52 473.75,110.8 474.16,110.56 474.16,110.56 474.16,2.4 474.16,2.4 474.16,0.48 473.33,0 472.5,0.48 472.5,2.4 472.5,2.4 472.5,109.6 472.5,109.6 "
+         class="cls-9" />
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,15 @@
+option:
+    type: action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'movie'
+        #
+        name: 'open movie use RV'
+        icon_name: 'application/rv'
+#
+hook_option:
+    script:
+        file: ''

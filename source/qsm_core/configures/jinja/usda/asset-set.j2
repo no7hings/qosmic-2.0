@@ -1,0 +1,98 @@
+#usda 1.0
+(
+    defaultPrim = "{{ asset.root_name }}"
+    startTimeCode = {{ asset.start_frame }}
+    endTimeCode = {{ asset.end_frame }}
+    upAxis = "Y"
+)
+
+def Xform "{{ asset.root_name }}" (
+    kind = "component"
+    prepend references = [
+        {{ '@%s@<%s>' | format(asset.set_file, asset.path) }}
+    ]
+    variants = {
+        string model_override = "None"
+        string groom_override = "None"
+        string rig_override = "None"
+        string effect_override = "None"
+        string surface_override = "None"
+    }
+    prepend variantSets = [
+        "surface_override",
+        "effect_override",
+        "rig_override",
+        "groom_override",
+        "model_override",
+    ]
+)
+{
+    string userProperties:usd:variants:asset:project = "{{ asset.project }}"
+    string userProperties:usd:variants:asset:role = "{{ asset.role }}"
+    string userProperties:usd:variants:asset:name = "{{ asset.name }}"
+    variantSet "model_override" = {
+        "None" {
+        }
+        {% for i_variant_key, i_variant_file in asset.version_override.model.iteritems() -%}
+        "{{ i_variant_key }}" (
+            prepend references = {{ '@%s@</master>' | format(i_variant_file) }}
+        ) {
+            string userProperties:usd:variants:asset:step:override = "model"
+            string userProperties:usd:variants:asset:model:override:version = "{{ i_variant_key }}"
+            string userProperties:usd:variants:asset:model:override:file = "{{ i_variant_file }}"
+        }
+        {%- endfor %}
+    }
+    variantSet "groom_override" = {
+        "None" {
+        }
+        {% for i_variant_key, i_variant_file in asset.version_override.groom.iteritems() -%}
+        "{{ i_variant_key }}" (
+            prepend references = {{ '@%s@</master>' | format(i_variant_file) }}
+        ) {
+            string userProperties:usd:variants:asset:step:override = "groom"
+            string userProperties:usd:variants:asset:groom:override:version = "{{ i_variant_key }}"
+            string userProperties:usd:variants:asset:groom:override:file = "{{ i_variant_file }}"
+        }
+        {%- endfor %}
+    }
+    variantSet "rig_override" = {
+        "None" {
+        }
+        {% for i_variant_key, i_variant_file in asset.version_override.rig.iteritems() -%}
+        "{{ i_variant_key }}" (
+            prepend references = {{ '@%s@</master>' | format(i_variant_file) }}
+        ) {
+            string userProperties:usd:variants:asset:step:override = "rig"
+            string userProperties:usd:variants:asset:rig:override:version = "{{ i_variant_key }}"
+            string userProperties:usd:variants:asset:rig:override:file = "{{ i_variant_file }}"
+        }
+        {%- endfor %}
+    }
+    variantSet "effect_override" = {
+        "None" {
+        }
+        {% for i_variant_key, i_variant_file in asset.version_override.effect.iteritems() -%}
+        "{{ i_variant_key }}" (
+            prepend references = {{ '@%s@</master>' | format(i_variant_file) }}
+        ) {
+            string userProperties:usd:variants:asset:step:override = "effect"
+            string userProperties:usd:variants:asset:effect:override:version = "{{ i_variant_key }}"
+            string userProperties:usd:variants:asset:effect:override:file = "{{ i_variant_file }}"
+        }
+        {%- endfor %}
+    }
+    variantSet "surface_override" = {
+        "None" {
+        }
+        {% for i_variant_key, i_variant_file in asset.version_override.surface.iteritems() -%}
+        "{{ i_variant_key }}" (
+            prepend references = {{ '@%s@</master>' | format(i_variant_file) }}
+        ) {
+            string userProperties:usd:variants:asset:step:override = "surface"
+            string userProperties:usd:variants:asset:surface:override:version = "{{ i_variant_key }}"
+            string userProperties:usd:variants:asset:surface:override:file = "{{ i_variant_file }}"
+        }
+        {%- endfor %}
+    }
+}

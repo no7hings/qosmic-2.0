@@ -1,0 +1,43 @@
+<args format="1.0">
+    <help>
+    build by lynxi
+    </help>
+{%- for i_port_name, i_port in ports.iteritems() -%}
+    {%- if i_port.assign == 'input' -%}
+        {{- '\n' -}}
+        {{- '    <param name="%s"' | format(i_port_name) -}}
+        {%- if i_port.type in ['int', 'float', 'string'] -%}
+            {{- ' constant="True"' -}}
+        {%- endif -%}
+        {%- if i_port.metadata.widget -%}
+            {%- if i_port.metadata.widget.value == 'boolean' -%}
+                {{- ' widget="checkBox"' -}}
+                {{- '>\n' -}}
+            {%- elif i_port.metadata.widget.value == 'filename' -%}
+                {{- ' widget="fileInput"' -}}
+                {{- '>\n' -}}
+            {%- elif i_port.metadata.widget.value == 'enumerate' -%}
+                {{- ' widget="mapper"' -}}
+                {{- '>\n' -}}
+                {{- '        <hintdict name="options">\n' -}}
+                {%- for i in i_port.metadata.options.value.split('|') -%}
+                    {{- '            <int value="%s" name="%s"/>\n' | format(loop.index-1, i) -}}
+                {%- endfor %}
+                {{- '        </hintdict>\n' -}}
+            {%- else -%}
+                {{- '>\n' -}}
+            {%- endif -%}
+        {%- else -%}
+            {%- if i_port.metadata.min and i_port.metadata.max -%}
+                {{- ' slider="True"' -}}
+                {{- ' slidermin="%s"' | format(i_port.metadata.min.value) -}}
+                {{- ' slidermax="%s"' | format(i_port.metadata.max.value) -}}
+            {%- endif -%}
+            {{- '>\n' -}}
+        {%- endif -%}
+        {{- '        <help>\n' -}}
+        {{- '        </help>\n' -}}
+        {{- '    </param>' -}}
+    {%- endif -%}
+{%- endfor %}
+</args>

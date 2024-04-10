@@ -1,0 +1,164 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'property_assign'
+    type_abr: 'prt_asn'
+    create_type: 'PropertyAssign_Opt'
+    description:
+        |-
+        Assign property use json
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .5
+        g: .125
+        b: .125
+#
+main:
+    type: OpScript
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.i0'
+    output: '<.path>.out'
+    #
+    clear_start: 'user'
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+
+        user/enable:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+
+        user/script_visible:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        user/setting/attribute:
+            widget: string
+            value: 'ist_color'
+            tool_tip: '...'
+
+        user/setting/node_type:
+            widget: string
+            value: 'usd point instancer'
+            tool_tip: '...'
+
+        user/setting/scope:
+            widget: string
+            value: 'point'
+            tool_tip: '...'
+
+        user/setting/input_type:
+            widget: string
+            value: 'color3'
+            tool_tip: '...'
+
+        user/setting/usd_role:
+            widget: string
+            value: 'Color'
+            tool_tip: '...'
+
+        user/setting/location:
+            widget: path
+            value: '/root/world/geo'
+            tool_tip: '...'
+
+        user/cache/json:
+            widget: file
+            value: ''
+            tool_tip: '...'
+
+    port_hints:
+        script: {
+            conditionalVisOps: {"conditionalVisOp": "equalTo", conditionalVisPath: "../user/script_visible", conditionalVisValue: 1}
+        }
+        user: {label: 'parameters'}
+
+    parameters:
+        script/lua:
+            |-
+            local json = require('json')
+            
+            function read_json(file_path)
+                local f = io.open(file_path, 'rb')
+                if not f then return nil end
+                local c = f:read "*a"
+                f:close()
+                if c == nil then return nil end
+                local j_c = json.decode(c)
+                return j_c
+            end
+            
+            function flatten(data)
+                local t = {}
+                for i=1, #data do
+                    local i_color = data[i]
+                    for j=1, #i_color do
+                        table.insert(t, i_color[j])
+                    end
+                end
+                return t
+            end
+            
+            function assign(key, attribute, scope, input_type, usd_role, data)
+                if data == nil then return end
+                local values = data[key]
+                if values == nil then return end
+                local values_f = flatten(values)
+                local atr_s = 'geometry.arbitrary.'..attribute
+                Interface.SetAttr(atr_s..'.scope', StringAttribute(scope))
+                Interface.SetAttr(atr_s..'.inputType', StringAttribute(input_type))
+                Interface.SetAttr(atr_s..'.usd.role', StringAttribute(usd_role))
+                Interface.SetAttr(atr_s..'.value', FloatAttribute(values_f, 3))
+            end
+            
+            function main()
+                if (Interface.GetOpArg('user.enable'):getValue() == 1) then
+                    local path_cur = Interface.GetInputLocationPath()
+                    local location = Interface.GetOpArg('user.setting.location'):getValue()
+                    if not pystring.startswith(path_cur, location) then return end
+                    local json_file_path = Interface.GetOpArg('user.cache.json'):getValue()
+                    local data = read_json(json_file_path)
+                    local attribute = Interface.GetOpArg('user.setting.attribute'):getValue()
+                    local scope = Interface.GetOpArg('user.setting.scope'):getValue()
+                    local input_type = Interface.GetOpArg('user.setting.input_type'):getValue()
+                    local usd_role = Interface.GetOpArg('user.setting.usd_role'):getValue()
+                    local key = pystring.replace(path_cur, location, '')
+                    print(key)
+                    assign(key, attribute, scope, input_type, usd_role, data)
+                end
+            end
+            
+            main()
+
+    expressions:
+        CEL:
+            |-
+            '(({}//*{{attr("type") == "{}"}}))'.format(
+                self.getNode().getParameter("user.setting.location").getValue(0),
+                self.getNode().getParameter("user.setting.node_type").getValue(0)
+            )

@@ -1,0 +1,77 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'variant_register'
+    type_abr: 'vrn_rgt'
+    create_type: 'VariantRegister_Wsp'
+    description:
+        |-
+        for variant register
+    #
+    auto_color: False
+    #
+    color_use_type: True
+    #
+    color:
+        r: .75
+        g: .5
+        b: 0
+#
+main:
+    type: VariableSwitch
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    output: '<.path>.out'
+    #
+    clear_start: 'user'
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        # option
+        user/option/auto_register_enable:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+
+        user/option/auto_register_scheme:
+            widget: enumerate
+            value: ['append', 'prepend', 'override']
+            default: 'append'
+            tool_tip: '...'
+        # variant
+        user/variant/key:
+            widget: enumerate
+            value: ['geometry', 'look', 'camera', 'light', 'quality', 'layer']
+            default: 'geometry'
+            tool_tip: '...'
+
+        user/variant/register:
+            widget: button
+            value: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpWspVariantRegister(node).register_variable()'
+            tool_tip: '...'
+    #
+    port_hints:
+        variableName: {label: 'key', readOnly: True}
+        patterns: {label: 'branches'}
+    #
+    expressions:
+        variableName: 'user.variant.key'

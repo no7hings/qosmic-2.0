@@ -1,0 +1,102 @@
+#usda 1.0
+(
+    defaultPrim = ""
+    metersPerUnit = 0.01
+    upAxis = "Y"
+)
+
+
+def Scope "looks"
+{
+    {%- for i_material, i_textures in materials.iteritems() %}
+
+    def Material "{{ i_material }}"
+    {
+        token outputs:surface.connect = </looks/{{ i_material }}/sdr_preview.outputs:surface>
+        token outputs:displacement.connect = </looks/{{ i_material }}/sdr_preview.outputs:displacement>
+        string inputs:frame:tangentsPrimvarName = "tangents"
+        string inputs:frame:binormalsPrimvarName = "binormals"
+        string inputs:frame:stPrimvarName = "st"
+
+        def Shader "uv_st"
+        {
+            uniform token info:id = "UsdPrimvarReader_float2"
+            string inputs:varname.connect = </looks/{{ i_material }}.inputs:frame:stPrimvarName>
+            float2 outputs:result
+        }
+
+        def Shader "uv_transform"
+        {
+            uniform token info:id = "UsdTransform2d"
+            float2 inputs:in.connect = </looks/{{ i_material }}/uv_st.outputs:result>
+            float inputs:rotation = 0
+            float2 inputs:scale = (1.0, 1.0)
+            float2 inputs:translation = (0.0, 0.0)
+            float2 outputs:result
+        }
+
+        def Shader "sdr_preview"
+        {
+            uniform token info:id = "UsdPreviewSurface"
+            token outputs:surface
+            token outputs:displacement
+            color3f inputs:diffuseColor.connect = </looks/{{ i_material }}/txr_diffuse_color.outputs:rgb>
+            color3f inputs:emissiveColor = (0.0, 0.0, 0.0)
+            int inputs:useSpecularWorkflow = 0
+            color3f inputs:specularColor = (1.0, 1.0, 1.0)
+            float inputs:metallic = 0.0
+            float inputs:roughness.connect = </looks/{{ i_material }}/txr_specular_roughness.outputs:r>
+            float inputs:clearcoat = 0.0
+            float inputs:clearcoatRoughness = 0.01
+            float inputs:opacity = 1.0
+            float inputs:opacityThreshold = 0.0
+            float inputs:ior = 1.5
+            normal3f inputs:normal.connect = </looks/{{ i_material }}/txr_normal.outputs:rgb>
+            float inputs:displacement = 0.0
+            float inputs:occlusion = 1.0
+        }
+
+        def Shader "txr_diffuse_color"
+        {
+            uniform token info:id = "UsdUVTexture"
+            asset inputs:file = @{{ i_textures.diffuse }}@
+            token inputs:wrapS = "repeat"
+            token inputs:wrapT = "repeat"
+            float3 inputs:fallback = (0.18, 0.18, 0.18)
+            float4 inputs:scale = (1.0, 1.0, 1.0, 1.0)
+            float4 inputs:bias  = (0.0, 0.0, 0.0, 0.0)
+            token inputs:sourceColorSpace = "sRGB"
+            float2 inputs:st.connect = </looks/{{ i_material }}/uv_transform.outputs:result>
+            float3 outputs:rgb
+        }
+
+        def Shader "txr_specular_roughness"
+        {
+            uniform token info:id = "UsdUVTexture"
+            asset inputs:file = @{{ i_textures.roughness }}@
+            token inputs:wrapS = "repeat"
+            token inputs:wrapT = "repeat"
+            float inputs:fallback = 0.5
+            float4 inputs:scale = (1.0, 1.0, 1.0, 1.0)
+            float4 inputs:bias  = (0.0, 0.0, 0.0, 0.0)
+            token inputs:sourceColorSpace = "raw"
+            float2 inputs:st.connect = </looks/{{ i_material }}/uv_transform.outputs:result>
+            float outputs:r
+        }
+
+        def Shader "txr_normal"
+        {
+            uniform token info:id = "UsdUVTexture"
+            asset inputs:file = @{{ i_textures.normal }}@
+            token inputs:wrapS = "repeat"
+            token inputs:wrapT = "repeat"
+            float3 inputs:fallback = (0.5, 0.5, 1.0)
+            float4 inputs:scale = (2.0, 2.0, 2.0, 2.0)
+            float4 inputs:bias  = (-1.0, -1.0, -1.0, -1.0)
+            token inputs:sourceColorSpace = "raw"
+            float2 inputs:st.connect = </looks/{{ i_material }}/uv_transform.outputs:result>
+            float3f outputs:rgb
+        }
+    }
+    {%- endfor %}
+}

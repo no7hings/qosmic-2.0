@@ -1,0 +1,214 @@
+option:
+    entities:
+        # resource type
+        /:
+            entity_type: 'category_root'
+            options: {kind: 'resource-category-root', gui_icon_name: 'database/all'}
+        #
+        /surface:
+            entity_type: 'category_group'
+            options: {kind: 'resource-category-group', gui_icon_name: 'database/groups'}
+        #
+        /surface/asphalt:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            # definition children
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['fine', 'rough', 'torn', 'other']
+        #
+        /surface/bark:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['beech', 'birch', 'oak', 'palm', 'pine', 'spruce', 'willow', 'other']
+        #
+        /surface/branch:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['alder', 'birch', 'juniper', 'pine', 'spruce', 'other']
+        #
+        /surface/brick:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['modern', 'mortar', 'painted', 'rough', 'other']
+        #
+        /surface/coal:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['brick', 'debris', 'other']
+        #
+        /surface/concrete:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['cast_in_situ', 'damaged', 'dirty', 'painted', 'rough', 'slab', 'smooth', 'other']
+        #
+        /surface/debris:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['construction', 'nature', 'other']
+        #
+        /surface/fabric:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['carpet', 'leather', 'pattern', 'plain', 'tarp', 'other']
+        #
+        /surface/grass:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['artificial', 'dried', 'lawn', 'patchy', 'wild', 'other']
+        #
+        /surface/gravel:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['construction', 'natural', 'pebbledash', 'other']
+        #
+        /surface/ground:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['forest', 'jungle', 'roots', 'other']
+        #
+        /surface/historical:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['asian', 'medieval', 'middle_eastern', 'roman', 'other']
+        #
+        /surface/marble:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['polished', 'rough', 'tile', 'other']
+        #
+        /surface/metal:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['bare', 'corroded', 'corrugated', 'gun', 'painted', 'sheet', 'treated', 'other']
+        #
+        /surface/moss:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['ground', 'rock', 'other']
+        #
+        /surface/plaster:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['damaged', 'fresh', 'old', 'painted', 'other']
+        #
+        /surface/rock:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['cliff', 'jagged', 'lava', 'mossy', 'rough', 'smooth', 'other']
+        #
+        /surface/roofing:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['new', 'old', 'other']
+        #
+        /surface/sand:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['beach', 'desert', 'other']
+        #
+        /surface/snow:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['mixed', 'pure', 'other']
+        #
+        /surface/soil:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['clay', 'mud', 'mulch', 'sandy', 'other']
+        #
+        /surface/stone:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['castle', 'cobblestone', 'floor', 'granite', 'limestone', 'mosaic', 'pebble', 'terrazzo', 'tile', 'wall', 'other']
+        #
+        /surface/tile:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['ceramic', 'grout', 'pavestone', 'sidewalk', 'stone', 'other']
+        #
+        /surface/wood:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['board', 'log', 'parquet', 'plank', 'veneer', 'other']
+        #
+        /surface/other:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: ['climber', 'creature', 'dirt road', 'edible', 'fur', 'paper', 'various', 'other']
+#
+database:
+    file: '{root}/.database/sqlite-surface.db'

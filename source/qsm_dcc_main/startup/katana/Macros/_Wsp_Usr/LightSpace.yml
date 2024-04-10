@@ -1,0 +1,70 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'user_light_space'
+    type_abr: 'usr_lgt_spc'
+    create_type: 'LightSpace_Wsp_Usr'
+    description:
+        |-
+        User Light Space
+        - include all light per variant
+    variant_key: 'light'
+    #
+    auto_color: False
+    #
+    size:
+        w_s: 240
+        h_s: 80
+        #
+        w: 1200
+        h: 480
+    #
+    position:
+        x_start: =-<option.size.w>/2-<option.size.w_s>/2
+        y_start: =<option.size.h>/2+<option.size.h_s>
+#
+main:
+    type: LightSpace_Wsp
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.join_upstream'
+    output: '<.path>.output'
+    #
+    clear_ports: False
+    clear_children: False
+    force_update: True
+    #
+    attributes:
+        comment: '<option.description>'
+    #
+    parameters:
+        type: '<option.create_type>'
+#
+record_update:
+    backdrop:
+        attributes:
+            ns_text: '<option.description>'
+#
+node_add:
+    asset_standard__light_rig:
+        index_x: 1
+        tag: 'LRG'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: AssetLightRig_Wsp
+        name: '<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.join_upstream'
+        output: '<.path>.output'
+        #
+        attributes:
+            x: =<option.position.x_start>+<option.size.w_s>*<..index_x>
+            y: =<option.position.y_start>
+        #
+        force_connections:
+            - '{upstream_merge}.out'
+            - '<.input>'
+            #
+            - '<.output>'
+            - '{variant_register}.<.variant>'

@@ -1,0 +1,215 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'utility_light'
+    type_abr: 'utl_lgt'
+    create_type: 'UtilityLight_Wsp'
+    description:
+        |-
+        utility light
+    variant_key: 'light'
+    #
+    auto_color: False
+    #
+    color:
+        r: .125
+        g: .125
+        b: .5
+#
+main:
+    # create form self
+    type: UtilityLight_Wsp
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.join_upstream'
+    output: '<.path>.output'
+    #
+    clear_children: False
+    #
+    attributes:
+        ns_offsetX: 720
+        ns_offsetY: 120
+        #
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports:
+        - 'join_upstream'
+        - 'join_other'
+    #
+    output_ports:
+        - output
+    #
+    ports:
+        # basic
+        type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+
+        parameters/setting/skydome_light/image:
+            widget: file
+            value: '/l/resource/srf/std_lgt_rig/hdr/WinterForest_Ref_ACES_fix11_fill.tx'
+            tool_tip: '...'
+
+        parameters/setting/ground/enable:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+
+        parameters/setting/background/enable:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+
+        parameters/setting/background/mode:
+            widget: capsule_string
+            value: ['color', 'image']
+            default: 'image'
+            tool_tip: '...'
+
+        parameters/setting/background/color:
+            widget: color3
+            value: [0.18, 0.18, 0.18]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'equalTo', conditionalVisPath: '../mode', conditionalVisValue: 'color'
+            }
+        # option
+        option/variant_key:
+            widget: string
+            value: '<option.variant_key>'
+            tool_tip: '...'
+            lock: True
+
+        option/branch:
+            widget: capsule_string
+            value: ['asset', 'shot']
+            default: 'asset'
+            tool_tip: '...'
+
+        option/location:
+            widget: path
+            value: '/root/world/lgt'
+            tool_tip: '...'
+            lock: True
+
+        option/root:
+            widget: path
+            value: '/root/world/lgt/gaffer'
+            tool_tip: '...'
+            lock: True
+
+        option/default:
+            widget: path
+            value: '/root/world/lgt/gaffer/rig'
+            tool_tip: '...'
+            lock: True
+
+        option/elements/skydome_light:
+            widget: path
+            value: '/root/world/lgt/gaffer/rig/skydome_light'
+            tool_tip: '...'
+
+        option/elements/background:
+            widget: path
+            value: '/root/world/lgt/gaffer/rig/BG_no_Illumination'
+            tool_tip: '...'
+
+        option/elements/ground:
+            widget: path
+            value: '/root/world/cam/cameras/sub/temp/ground'
+            tool_tip: '...'
+        # record
+        record/variant_properties_opt:
+            widget: node
+            value: '<node.variant_properties_opt.name>'
+            tool_tip: '...'
+            lock: True
+    #
+    expand_groups:
+        - 'parameters'
+        - 'parameters/setting'
+        - 'parameters/setting/skydome_light'
+        - 'parameters/setting/ground'
+        - 'parameters/setting/background'
+#
+node:
+    join_upstream_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        connections:
+            # input
+            - '<main.input>'
+            - '<.input>'
+    # join other dot
+    join_other_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        connections:
+            # input
+            - '<main.path>.join_other'
+            - '<.input>'
+    # upstream_merge
+    upstream_merge:
+        tag: 'UMG'
+        type: UpstreamMerge_Wsp
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        input_ports:
+            - 'join_upstream'
+            - 'join_other'
+        #
+        connections:
+            # join upstream
+            - '<..join_upstream_dot.output>'
+            - '<.path>.join_upstream'
+            # join other
+            - '<..join_other_dot.output>'
+            - '<.path>.join_other'
+    # variant properties opt
+    variant_properties_opt:
+        tag: 'VPO'
+        type: VariantProperties_Opt
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        parameters:
+            user/data_1/i0: '<option.variant_key>.current'
+            user/data_2/i0: '<option.variant_key>.branch'
+            user/data_3/i0: '<option.variant_key>.root'
+            user/data_4/i0: '<option.variant_key>.default'
+            #
+            user/data_5/i0: '<option.variant_key>.cache.current'
+            user/data_6/i0: '<option.variant_key>.cache.file'
+        #
+        expressions:
+            user/data_1/i1: 'getParent().getNodeName()'
+            user/data_2/i1: 'getParent().option.branch'
+            user/data_3/i1: 'getParent().option.root'
+            user/data_4/i1: 'getParent().option.default'
+            #
+            user/data_5/i1: 'getParent().getNodeName()'
+            user/data_6/i1: 'getParent().parameters.setting.skydome_light.image'
+        #
+        connections:
+            # output
+            - '<.output>'
+            - '<main.output>'

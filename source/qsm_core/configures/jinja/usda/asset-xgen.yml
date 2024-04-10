@@ -1,0 +1,12 @@
+asset:
+    root_name: master
+    path: '/master'
+    #
+    xgen:
+        root_name: hair
+        collections: {
+#            'test_cellection': {
+#                file: ''
+#                description_names: ['test_description'],
+#            }
+        }

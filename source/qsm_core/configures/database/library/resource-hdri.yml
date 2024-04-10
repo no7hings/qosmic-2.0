@@ -1,0 +1,78 @@
+option:
+    entities:
+        # resource type
+        /:
+            entity_type: 'category_root'
+            options: {kind: 'resource-category-root', gui_icon_name: 'database/all'}
+        #
+        /hdri:
+            entity_type: 'category_group'
+            options: {kind: 'resource-category-group', gui_icon_name: 'database/groups'}
+        #
+        /hdri/indoor:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            # definition children
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: [
+                    'urban', 'studio',
+                    'other'
+                ]
+        #
+        /hdri/outdoor:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            # definition children
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: [
+                    'urban', 'natural',
+                    'other'
+                ]
+        #
+        /hdri/skies:
+            entity_type: 'category'
+            options: {kind: 'resource-category', gui_icon_name: 'database/group'}
+            # definition children
+            children:
+                entity_type: 'type'
+                options: {kind: 'resource-type', group: '<....key>'}
+                names: [
+                    'urban', 'natural',
+                    'other'
+                ]
+        # semantic-tag
+        /contrast:
+            entity_type: 'tag_group'
+            options: {kind: 'resource-semantic-tag-group', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'tag'
+                options: {kind: 'resource-primary-semantic-tag', group: '<....key>'}
+                names: ['high_contrast', 'medium_contrast', 'low_contrast', 'overcast']
+        #
+        /time_of_day:
+            entity_type: 'tag_group'
+            options: {kind: 'resource-semantic-tag-group', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'tag'
+                options: {kind: 'resource-primary-semantic-tag', group: '<....key>'}
+                names: ['sunrise_or_sunset', 'morning_or_afternoon', 'midday', 'night']
+        #
+        /light:
+            entity_type: 'tag_group'
+            options: {kind: 'resource-semantic-tag-group', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'tag'
+                options: {kind: 'resource-primary-semantic-tag', group: '<....key>'}
+                names: ['artificial_light', 'natural_light']
+    #
+    tag_group_includes: [
+        '/color', '/environment', '/contrast', '/time_of_day', '/light'
+    ]
+
+#
+database:
+    file: '{root}/.database/sqlite-hdri.db'

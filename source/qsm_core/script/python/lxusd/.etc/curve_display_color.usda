@@ -1,0 +1,32 @@
+#usda 1.0
+(
+    defaultPrim = ""
+    doc = """Generated from Composed Stage of root layer 
+"""
+    metersPerUnit = 0.01
+    upAxis = "Y"
+)
+
+def Xform "group1"
+{
+    token visibility = "inherited"
+    matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+    uniform token[] xformOpOrder = ["xformOp:transform"]
+
+    def Xform "curve5"
+    {
+        token visibility = "inherited"
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def BasisCurves "curveShape5"
+        {
+            uniform token basis = "catmullRom"
+            int[] curveVertexCounts = [4]
+            point3f[] points = [(4, 0, 0), (4, 0, 0), (6, 0, 0), (6, 0, 0)]
+            uniform token type = "cubic"
+            float[] widths = [0.003]
+        }
+    }
+}
+

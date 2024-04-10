@@ -1,0 +1,22 @@
+#usda 1.0
+(
+    defaultPrim = "{{ root }}"
+)
+
+over "{{ root }}" (
+    variants = {
+        string {{ variant_set_name }} = "{{ variant_name }}"
+    }
+    prepend variantSets="{{ variant_set_name }}"
+)
+{
+    variantSet "{{ variant_set_name }}" = {
+{% for variant_name in variant_names -%}
+    {%- if loop.last -%}
+        {{ '%s"%s" (){}' | format(option.indent*2*' ', variant_name) }}
+    {%- else -%}
+        {{ '%s"%s" (){}%s' | format(option.indent*2*' ', variant_name, option.linesep) }}
+    {%- endif -%}
+{%- endfor %}
+       }
+}

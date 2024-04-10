@@ -1,0 +1,37 @@
+# ******************************************************************************************************************** #
+package-data:
+    scheme: default
+    #
+    application-configure-file:
+        windows: ''
+        linux: ''
+    #
+    deadline-configure-file:
+        windows: ''
+        linux: ''
+    #
+    package-root-patterns:
+        windows: [ '{home}/packages', 'l:/packages/pg/prod' ]
+        linux: [ '{home}/packages', '/l/packages/pg/prod' ]
+    #
+    package-user-root-patterns:
+        windows: [ '{home}/packages' ]
+        linux: [ '{home}/packages' ]
+    #
+    package-pre_release-root-patterns:
+        windows: [ 'l:/packages/pg/beta' ]
+        linux: [ '/l/packages/pg/beta' ]
+    #
+    package-release-root-patterns:
+        windows: [ 'l:/packages/pg/prod' ]
+        linux: [ '/l/packages/pg/prod' ]
+    #
+    package-file-patterns:
+      [ '{root}/{package_name}/{version}/package.py' ]
+    #
+    configure-root-patterns:
+        windows: [ '{home}/packages/pglauncher/{version}', 'l:/packages/pg/prod/pglauncher/{version}' ]
+        linux: [ '{home}/packages/pglauncher/{version}', '/l/packages/pg/prod/pglauncher/{version}' ]
+    #
+    configure-file-patterns:
+        [ '{root}/{project}_config/bin/config/{application}.yml', '{root}/{project}_config/config/{application}.yml' ]

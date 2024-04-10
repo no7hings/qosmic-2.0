@@ -1,0 +1,75 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'geometry_space'
+    type_abr: 'gmt_spc'
+    create_type: 'GeometrySpace_Wsp'
+    description:
+        |-
+        Geometry Space
+        - include all geometry per variant
+    variant_key: 'geometry'
+    #
+    auto_color: False
+    #
+    color_use_variant: True
+    #
+    color:
+        r: 0
+        g: 0
+        b: 0
+    #
+    size:
+        w: 1200
+        h: 480
+#
+main:
+    type: Space_Wsp
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.join_upstream'
+    output: '<.path>.output'
+    #
+    clear_ports: False
+    clear_children: False
+    force_update: True
+    #
+    attributes:
+        ns_pin: 1.0
+        ns_offsetX: =-(<option.size.w>/2+320)
+        ns_offsetY: =<option.size.h>/2+72
+        #
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    capsules:
+        extra/default_name: ['asset', 'shot']
+    #
+    port_hints:
+        variant/key: {readOnly: True}
+    #
+    parameters:
+        type: '<option.create_type>'
+        option/color: [<option.color.r>, <option.color.g>, <option.color.b>]
+        variant/key: <option.variant_key>
+#
+record_update:
+    backdrop:
+        attributes:
+            ns_text: '<option.description>'
+            ns_fontScale: 3
+            x: 0
+            y: =<option.size.h>/2+120
+            ns_sizeX: =<option.size.w>
+            ns_sizeY: =<option.size.h>
+            ns_colorr: <option.color.r>
+            ns_colorg: <option.color.g>
+            ns_colorb: <option.color.b>
+            ns_stickyLock: 1
+

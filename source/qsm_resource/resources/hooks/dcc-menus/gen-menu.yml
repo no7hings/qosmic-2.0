@@ -1,0 +1,24 @@
+option:
+    type: 'dcc-menu'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'TD Tool(s)'
+        group_name: ''
+        #
+        icon_name: ''
+        tool_tip: ''
+#
+hooks:
+    # asset
+    # shot
+    # general
+    - 'dcc-tools/gen-tool-kit': {gui_parent: '/General'}
+    - 'dcc-tools/gen-asset-dcc-texture-manager': {gui_parent: '/General'}
+    - 'dcc-tools/maya/scene-clearner': {gui_parent: '/General'}
+    # lib
+    - 'desktop-tools/resource-library': {gui_parent: '/Asset', gui_icon_name: 'window/loader'}
+#
+option-hooks: {}

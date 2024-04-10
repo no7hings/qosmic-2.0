@@ -1,0 +1,32 @@
+#usda 1.0
+
+def Xform "aiSkyDomeLight1"
+{
+    def DomeLight "aiSkyDomeLightShape1"
+    {
+        color3f color = (1, 1, 1)
+        float diffuse = 1
+        float exposure = 0
+        float intensity = 1
+        float primvars:arnold:camera = 0
+        string primvars:dcc_name = "aiSkyDomeLightShape1" (
+            elementSize = 1
+            interpolation = "constant"
+        )
+        float specular = 0
+        asset texture:file = @/data/e/myworkspace/td/lynxi/script/python/.resources/assets/library/light/acescg/tx/stinson-beach.tx@
+        token texture:format = "latlong"
+    }
+}
+
+def Shader "file3"
+{
+    uniform token info:id = "arnold:image"
+    string inputs:color_space = ""
+    string inputs:filename = "/data/e/myworkspace/td/lynxi/script/python/.resources/assets/library/light/acescg/tx/stinson-beach.tx"
+    bool inputs:ignore_missing_textures = 1
+    color4f inputs:missing_texture_color = (0.5, 0.5, 0.5, 0)
+    string inputs:name = "file3"
+    color4f outputs:out
+}
+

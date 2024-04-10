@@ -1,0 +1,229 @@
+# storage-configure for cg-project
+# ******************************************************************************************************************** #
+# pattern-rule:
+#     keyword: str(pattern)
+#     if <keyword> in value auto resolve to final value
+# ******************************************************************************************************************** #
+#
+variant-fnmatch-patterns:
+    role: '[a-z][a-z][a-z]'
+    sequence: '[a-z]*'
+    step: '[a-z]*'
+    version: '[a-z][0-9][0-9][0-9]*'
+    version_extra: '[0-9][0-9][0-9]*'
+    look_pass: '[A-Za-z]*'
+    shot: '[a-z]*'
+#
+root-step-choice:
+    source: {}
+    release: {}
+    temporary: {}
+# <root>
+project-root-windows-dir: 'z:/shows'
+project-root-linux-dir: '/production/shows'
+#
+project-root_primary-windows-dir: 'z:/shows'
+project-root_primary-linux-dir: '/production/shows'
+#
+project-root_secondary-windows-dir: 't:/prod'
+project-root_secondary-linux-dir: '/t/prod'
+# project
+#   step
+project-source-step-dir: <project-dir>/user/<workspace-name>.<step-name>
+project-user-step-dir: <project-dir>/user/<workspace-name>.<artist-name>
+project-release-step-dir: <project-dir>/<workspace-name>/<step-name>
+project-temporary-step-dir: <project-dir>/<workspace-name>/<step-name>
+#   step search patterns
+project-step-search-patterns:
+    source: '<project-dir>/user/team.<step-name>/<app-name>/scenes/{any_0}/<project-name>.<step-name>.{any_1}.{format}'
+    user: '<project-dir>/user/work.{any_0}/<app-name>/scenes/{any_1}/<project-name>.<step-name>.{any_2}.{format}'
+    release: <project-release-step-dir>
+#   task
+project-source-task-dir: <project-dir>/user/<workspace-name>.<step-name>
+project-user-task-dir: <project-dir>/user/<workspace-name>.<artist-name>
+project-release-task-dir: <project-release-step-dir>/<task-name>
+project-temporary-task-dir: <project-temporary-step-dir>/<task-name>
+#   task search patterns
+project-task-search-patterns:
+    source: '<project-dir>/user/team.<step-name>/<app-name>/scenes/{any_0}/<project-name>.<step-name>.<task-name>.{any_1}.{format}'
+    user: '<project-dir>/user/work.{any_0}/<app-name>/scenes/{any_1}/<project-name>.<step-name>.<task-name>.{any_2}.{format}'
+    release: <project-release-task-dir>
+#   maya
+#       source
+project-source-maya-dir: <project-source-area-dir>/maya
+project-source-maya-scene-src-dir: <project-source-maya-dir>/scenes
+project-source-maya-scene-src-file: <project-source-maya-scene-src-dir>/<task_extra-name>/<project-version-name>.ma
+#       user
+project-user-maya-dir: <project-user-area-dir>/maya
+project-user-maya-scene-src-dir: <project-user-maya-dir>/scenes
+project-user-maya-scene-src-file: <project-user-maya-scene-src-dir>/<task_extra-name>/<project-version-name>.ma
+#   katana
+#       source
+project-source-katana-dir: <project-source-area-dir>/katana
+project-source-katana-scene-src-dir: <project-source-katana-dir>/scenes
+project-source-katana-scene-src-file: <project-source-katana-scene-src-dir>/<task_extra-name>/<project-version-name>.katana
+#       user
+project-user-katana-dir: <project-user-area-dir>/katana
+project-user-katana-scene-src-dir: <project-user-katana-dir>/scenes
+project-user-katana-scene-src-file: <project-user-katana-scene-src-dir>/<task_extra-name>/<project-version-name>.katana
+# asset
+asset-area-dir: <project-dir>/assets
+# asset step
+asset-source-step-dir: <asset-dir>/user/<workspace-name>.<step-name>
+asset-user-step-dir: <asset-dir>/user/<workspace-name>.<artist-name>
+asset-release-step-dir: <asset-dir>/<workspace-name>/<step-name>
+asset-temporary-step-dir: <asset-dir>/<workspace-name>/<step-name>
+#
+asset-step-search-patterns:
+    source: '<asset-dir>/user/team.<step-name>/<app-name>/scenes/{any_0}/<asset-name>.<step-name>.{any_1}.{format}'
+    user: '<asset-dir>/user/work.{any_0}/<app-name>/scenes/{any_1}/<asset-name>.<step-name>.{any_2}.{format}'
+    release: <asset-release-step-dir>
+# task
+asset-source-task-dir: <asset-dir>/user/<workspace-name>.<step-name>
+asset-user-task-dir: <asset-dir>/user/<workspace-name>.<artist-name>
+asset-release-task-dir: <asset-release-step-dir>/<task-name>
+asset-temporary-task-dir: <asset-temporary-step-dir>/<task-name>
+#
+asset-task-search-patterns:
+    source: '<asset-dir>/user/team.<step-name>/<app-name>/scenes/{any_0}/<asset-name>.<step-name>.<task-name>.{any_1}.{format}'
+    user: '<asset-dir>/user/work.{any_0}/<app-name>/scenes/{any_1}/<asset-name>.<step-name>.<task-name>.{any_2}.{format}'
+    release: <asset-release-task-dir>
+# maya
+#   source
+asset-source-maya-dir: <asset-source-task-dir>/maya
+asset-source-maya-scene-src-dir: <asset-source-maya-dir>/scenes
+asset-source-maya-scene-src-file: <asset-source-maya-scene-src-dir>/<task_extra-name>/<asset-version-name>.ma
+#
+asset-user-maya-dir: <asset-user-task-dir>/maya
+asset-user-maya-scene-src-dir: <asset-user-maya-dir>/scenes
+asset-user-maya-scene-src-file: <asset-user-maya-scene-src-dir>/<task_extra-name>/<asset-version-name>.ma
+# houdini
+#   source
+asset-source-houdini-dir: <asset-source-task-dir>/houdini
+asset-source-houdini-scene-src-dir: <asset-source-houdini-dir>/scenes
+asset-source-houdini-scene-src-file: <asset-source-houdini-scene-src-dir>/<task_extra-name>/<asset-version-name>.hip
+#   user
+asset-user-houdini-dir: <asset-user-task-dir>/houdini
+asset-user-houdini-scene-src-dir: <asset-user-houdini-dir>/scenes
+asset-user-houdini-scene-src-file: <asset-user-houdini-scene-src-dir>/<task_extra-name>/<asset-version-name>.hip
+# katana
+#   source
+asset-source-katana-dir: <asset-source-task-dir>/katana
+asset-source-katana-scene-src-dir: <asset-source-katana-dir>/scenes
+asset-source-katana-scene-src-file: <asset-source-katana-scene-src-dir>/<task_extra-name>/<asset-version-name>.katana
+#   user
+asset-user-katana-dir: <asset-user-task-dir>/katana
+asset-user-katana-scene-src-dir: <asset-user-katana-dir>/scenes
+asset-user-katana-scene-src-file: <asset-user-katana-scene-src-dir>/<task_extra-name>/<asset-version-name>.katana
+# clarisse
+#   source
+asset-source-clarisse-dir: <asset-source-task-dir>/clarisse
+asset-source-clarisse-scene-src-dir: <asset-source-clarisse-dir>/scenes
+asset-source-clarisse-scene-src-file: <asset-source-clarisse-scene-src-dir>/<task_extra-name>/<asset-version-name>.project
+#   user
+asset-user-clarisse-dir: <asset-user-task-dir>/clarisse
+asset-user-clarisse-scene-src-dir: <asset-user-clarisse-dir>/scenes
+asset-user-clarisse-scene-src-file: <asset-user-clarisse-scene-src-dir>/<task_extra-name>/<asset-version-name>.project
+# nuke
+#   source
+asset-source-nuke-dir: <asset-source-task-dir>/nuke
+asset-source-nuke-scene-src-dir: <asset-source-nuke-dir>/scenes
+asset-source-nuke-scene-src-file: <asset-source-nuke-scene-src-dir>/<task_extra-name>/<asset-version-name>.nk
+#   user
+asset-user-nuke-dir: <asset-user-task-dir>/nuke
+asset-user-nuke-scene-src-dir: <asset-user-nuke-dir>/scenes
+asset-user-nuke-scene-src-file: <asset-user-nuke-scene-src-dir>/<task_extra-name>/<asset-version-name>.nk
+# extra area
+asset-source-extend-dir: <asset-source-task-dir>/extend
+#
+asset-scene-src-dir: <asset-release-version-dir>/source
+# shot =============================================================================================================== #
+shot-area-dir: <project-dir>/sequences
+# sequence
+#   step
+sequence-source-step-dir: <sequence-dir>/<workspace-name>.<step-name>
+sequence-user-step-dir: <sequence-dir>/<workspace-name>.<artist-name>
+sequence-release-step-dir: <sequence-dir>/<workspace-name>/<step-name>
+sequence-temporary-step-dir: <sequence-dir>/<workspace-name>/<step-name>
+#   step search patterns
+sequence-step-search-patterns:
+    source: '<sequence-dir>/user/team.<step-name>/<app-name>/scenes/{any_0}/<sequence-name>.<step-name>.{any_1}.{format}'
+    user: '<sequence-dir>/user/work.{any_0}/<app-name>/scenes/{any_1}/<sequence-name>.<step-name>.{any_2}.{format}'
+    release: <sequence-release-step-dir>
+#   task
+sequence-source-task-dir: <sequence-dir>/<workspace-name>.<step-name>
+sequence-user-task-dir: <sequence-dir>/<workspace-name>.<artist-name>
+sequence-release-task-dir: <sequence-release-step-dir>/<task-name>
+sequence-temporary-task-dir: <sequence-temporary-step-dir>/<task-name>
+#   task search patterns
+sequence-task-search-patterns:
+    source: '<sequence-dir>/user/team.<step-name>/<app-name>/scenes/{any_0}/<sequence-name>.<step-name>.<task-name>.{any_1}.{format}'
+    user: '<sequence-dir>/user/work.{any_0}/<app-name>/scenes/{any_1}/<sequence-name>.<step-name>.<task-name>.{any_2}.{format}'
+    release: <sequence-release-task-dir>
+#
+shot-source-step-dir: <shot-dir>/user/<workspace-name>.<step-name>
+shot-user-step-dir: <shot-dir>/user/<workspace-name>.<artist-name>
+shot-release-step-dir: <shot-dir>/<workspace-name>/<step-name>
+shot-temporary-step-dir: <shot-dir>/<workspace-name>/<step-name>
+#
+shot-step-search-patterns:
+    source: '<shot-dir>/user/team.<step-name>/<app-name>/scenes/{any_0}/<shot-name>.<step-name>.{any_1}.{format}'
+    user: '<shot-dir>/user/work.{any_0}/<app-name>/scenes/{any_1}/<shot-name>.<step-name>.{any_2}.{format}'
+    release: <shot-release-step-dir>
+# task
+shot-source-task-dir: <shot-dir>/user/<workspace-name>.<step-name>
+shot-user-task-dir: <shot-dir>/user/<workspace-name>.<artist-name>
+shot-release-task-dir: <shot-release-step-dir>/<task-name>
+shot-temporary-task-dir: <shot-temporary-step-dir>/<task-name>
+#
+shot-task-search-patterns:
+    source: '<shot-dir>/user/team.<step-name>/<app-name>/scenes/{any_0}/<shot-name>.<step-name>.<task-name>.{any_1}.{format}'
+    user: '<shot-dir>/user/work.{any_0}/<app-name>/scenes/{any_1}/<shot-name>.<step-name>.<task-name>.{any_2}.{format}'
+    release: <shot-release-task-dir>
+# maya
+#   source
+shot-source-maya-dir: <shot-source-task-dir>/maya
+shot-source-maya-scene-src-dir: <shot-source-maya-dir>/scenes
+shot-source-maya-scene-src-file: <shot-source-maya-scene-src-dir>/<task_extra-name>/<shot-version-name>.ma
+#
+shot-user-maya-dir: <shot-user-task-dir>/maya
+shot-user-maya-scene-src-dir: <shot-user-maya-dir>/scenes
+shot-user-maya-scene-src-file: <shot-user-maya-scene-src-dir>/<task_extra-name>/<shot-version-name>.ma
+# houdini
+#   source
+shot-source-houdini-dir: <shot-source-task-dir>/houdini
+shot-source-houdini-scene-src-dir: <shot-source-houdini-dir>/scenes
+shot-source-houdini-scene-src-file: <shot-source-houdini-scene-src-dir>/<task_extra-name>/<shot-version-name>.hip
+#   user
+shot-user-houdini-dir: <shot-user-task-dir>/houdini
+shot-user-houdini-scene-src-dir: <shot-user-houdini-dir>/scenes
+shot-user-houdini-scene-src-file: <shot-user-houdini-scene-src-dir>/<task_extra-name>/<shot-version-name>.hip
+# katana
+#   source
+shot-source-katana-dir: <shot-source-task-dir>/katana
+shot-source-katana-scene-src-dir: <shot-source-katana-dir>/scenes
+shot-source-katana-scene-src-file: <shot-source-katana-scene-src-dir>/<task_extra-name>/<shot-version-name>.katana
+#   user
+shot-user-katana-dir: <shot-user-task-dir>/katana
+shot-user-katana-scene-src-dir: <shot-user-katana-dir>/scenes
+shot-user-katana-scene-src-file: <shot-user-katana-scene-src-dir>/<task_extra-name>/<shot-version-name>.katana
+# clarisse
+#   source
+shot-source-clarisse-dir: <shot-source-task-dir>/clarisse
+shot-source-clarisse-scene-src-dir: <shot-source-clarisse-dir>/scenes
+shot-source-clarisse-scene-src-file: <shot-source-clarisse-scene-src-dir>/<task_extra-name>/<shot-version-name>.project
+#   user
+shot-user-clarisse-dir: <shot-user-task-dir>/clarisse
+shot-user-clarisse-scene-src-dir: <shot-user-clarisse-dir>/scenes
+shot-user-clarisse-scene-src-file: <shot-user-clarisse-scene-src-dir>/<task_extra-name>/<shot-version-name>.project
+# nuke
+#   source
+shot-source-nuke-dir: <shot-source-task-dir>/nuke
+shot-source-nuke-scene-src-dir: <shot-source-nuke-dir>/scenes
+shot-source-nuke-scene-src-file: <shot-source-nuke-scene-src-dir>/<task_extra-name>/<shot-version-name>.nk
+#   user
+shot-user-nuke-dir: <shot-user-task-dir>/nuke
+shot-user-nuke-scene-src-dir: <shot-user-nuke-dir>/scenes
+shot-user-nuke-scene-src-file: <shot-user-nuke-scene-src-dir>/<task_extra-name>/<shot-version-name>.nk
+#
+shot-scene-src-dir: <shot-release-version-dir>/source

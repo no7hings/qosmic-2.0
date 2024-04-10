@@ -1,0 +1,63 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+        - '*-katana'
+    #
+    gui:
+        name: 'Tool-kit'
+        group_name: 'Tool-kit(s)'
+        #
+        icon_name: 'application/tool_kit'
+        tool_tip: ''
+        #
+        size: [480, 640]
+#
+hooks:
+    # scene
+    #   general
+    - 'dcc-tools/sys-extend-area-creator'
+    - 'dcc-tools/sys-extend-area-manager'
+    #   katana
+    - 'dcc-tools/katana/dcc-workspace-loader'
+    #   maya
+    - 'dcc-tools/maya/scene-clearner'
+    - 'dcc-tools/maya/asset-scene-importer'
+    # geometry
+    #   general
+    - 'dcc-tool-panels/gen-asset-dcc-geometry-comparer': {gui_parent: 'Geometry(s)'}
+    #   maya
+    - 'dcc-tools/maya/hash-geometry'
+    - 'dcc-tools/maya/asset-geometry-builder'
+    - 'dcc-tools/maya/asset-geometry-exporter'
+    # look
+    #   katana
+    - 'dcc-tools/katana/asset-look-importer'
+    - 'dcc-tools/katana/asset-look-exporter'
+    - 'dcc-tools/katana/asset-material-viewer'
+    - 'dcc-tools/katana/shader-viewer'
+    - 'dcc-tools/katana/add-user-data'
+    #   maya
+    - 'dcc-tools/maya/asset-look-importer'
+    - 'dcc-tools/maya/asset-look-exporter'
+    - 'dcc-tools/maya/asset-look-preview-importer'
+    - 'dcc-tools/maya/asset-look-preview-exporter'
+    - 'dcc-tools/maya/asset-look-builder'
+    # texture
+    #   general
+    - 'dcc-tool-panels/gen-asset-texture-manager'
+    - 'dcc-tool-panels/gen-asset-dcc-texture-manager'
+    #   maya
+    - 'dcc-tools/maya/switch-color-space-auto'
+    - 'dcc-tools/maya/generate-texture-tiles-preview'
+    # render
+    - 'dcc-tool-panels/katana/asset-render-submitter'
+    # extend
+    - 'rsv-panels/asset-publisher': {gui_parent: 'Extend(s)'}
+    - 'rsv-panels/gen-publisher': {gui_parent: 'Extend(s)'}
+    - 'dcc-tool-panels/gen-asset-builder': {gui_parent: 'Extend(s)'}
+    - 'dcc-tool-panels/gen-render-submitter': {gui_parent: 'Extend(s)'}
+    - 'desktop-tools/resource-library': {gui_parent: 'Extend(s)', gui_icon_name: 'window/loader'}
+#
+option-hooks: {}

@@ -1,0 +1,35 @@
+#usda 1.0
+(
+    defaultPrim = "{{ dcc.root_name }}"
+    metersPerUnit = 0.01
+    upAxis = "Y"
+)
+
+def "{{ dcc.root_name }}" (
+    variants = {
+        string proxy_model = "proxy_low"
+    }
+    prepend variantSets = "proxy_model"
+)
+{
+    variantSet "proxy_model" = {
+        "proxy_low" (
+            prepend references = @geo/proxy_low.usd@
+        ) {
+            over "hi"
+            {
+                asset userProperties:pgOpIn:proxy:fileName = @geo/proxy_low.usd@
+            }
+
+        }
+        "proxy_shell" (
+            prepend references = @geo/proxy_shell.usd@
+        ) {
+            over "hi"
+            {
+                asset userProperties:pgOpIn:proxy:fileName = @geo/proxy_shell.usd@
+            }
+
+        }
+    }
+}

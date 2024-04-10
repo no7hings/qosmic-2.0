@@ -1,0 +1,1496 @@
+option:
+    look_pass: default
+    look_pass_color:
+        r: 0.102
+        g: 0.6824
+        b: 0.6235
+    #
+    light_pass: all
+    quality: low
+    layer: master
+    #
+    root: /rootNode
+    #
+    geometry_root: /root/world/geo
+    material_root: /root/materials
+    camera_root: /root/world/cam
+    #
+    asset_root: <.geometry_root>/master
+    shot_root: <.geometry_root>/assets
+    #
+    x: 0.0
+    y: 0.0
+    w: 480.0
+    h: 320.0
+    #
+    margin: 24.0
+    spacing_x: 240.0
+    spacing_y: 48.0
+    #
+    offset_x: 0
+    offset_y: 0
+#
+workspace:
+    # geometries
+    # y=1.0
+    # asset
+    asset_geometries:
+        label: <..key>
+        offset:
+            x: -1.5
+            y: 1.0
+        geometry:
+            x: =<option.x>+<option.w>*<..offset.x>
+            y: =<option.y>+<option.h>*<..offset.y>
+        main:
+            path: <option.root>/<..label>_merge
+            obj_type: Merge
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>
+                ns_colorr: 0.5
+                ns_colorg: 0.25
+                ns_colorb: 0.25
+        backdrop:
+            path: <option.root>/<..label>_backdrop
+            obj_type: Backdrop
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>+<option.h>
+                ns_text: 'asset-geometry(s)'
+                ns_fontScale: 3.0
+                ns_sizeX: =<option.w>-<option.margin>*2
+                ns_sizeY: =<option.h>*2-<option.margin>*2
+                ns_colorr: 0.1725
+                ns_colorg: 0.5333
+                ns_colorb: 0.851
+                ns_stickyLock: 1
+        node_graph:
+            nodes:
+                asset:
+                    name: <..key>__geometries
+                    path: <option.root>/<.name>
+                    obj_category: node
+                    obj_type: lx_asset
+                    base_obj_type: Group
+                    attributes:
+                        x: =<.....geometry.x>
+                        y: =<.....geometry.y>+<option.h>*0.5
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        options/scheme: 'asset'
+                        lynxi_variants/geometry: 'asset'
+                        lynxi_variants/look: 'asset'
+                        lynxi_settings/render_start_frame: 1001.0
+                        lynxi_settings/render_end_frame: 1240.0
+                        lynxi_settings/resolution: '2048x2048'
+                    connections:
+                        # source to target
+                        - <.path>.output
+                        - <....main.path>.<.name>
+                    executes:
+                        - 'reset'
+                        - 'usd.guess'
+                        - 'usd.create'
+    # shot
+    shot_geometries:
+        label: <..key>
+        offset:
+            x: -0.5
+            y: 1.0
+        geometry:
+            x: =<option.x>+<option.w>*<..offset.x>
+            y: =<option.y>+<option.h>*<..offset.y>
+        main:
+            path: <option.root>/<..label>_merge
+            obj_type: Merge
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>
+                ns_colorr: 0.5
+                ns_colorg: 0.25
+                ns_colorb: 0.25
+            parameters:
+                lynxi_variants/look: asset-work
+        backdrop:
+            path: <option.root>/<..label>_backdrop
+            obj_type: Backdrop
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>+<option.h>
+                ns_text: 'shot-geometry(s)'
+                ns_fontScale: 3.0
+                ns_sizeX: =<option.w>-<option.margin>*2
+                ns_sizeY: =<option.h>*2-<option.margin>*2
+                ns_colorr: 0.1725
+                ns_colorg: 0.5333
+                ns_colorb: 0.851
+                ns_stickyLock: 1
+        node_graph:
+            nodes:
+                shot:
+                    name: <..key>__geometries
+                    path: <option.root>/<.name>
+                    obj_category: node
+                    obj_type: lx_asset
+                    base_obj_type: Group
+                    attributes:
+                        x: =<.....geometry.x>
+                        y: =<.....geometry.y>+<option.h>*0.5
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        options/scheme: 'shot_asset'
+                        lynxi_variants/geometry: 'shot'
+                        lynxi_variants/look: 'asset'
+                        lynxi_settings/resolution: '2048x858'
+                    connections:
+                        - <.path>.output
+                        - <....main.path>.<.name>
+                    executes:
+                        - 'reset'
+                        - 'usd.guess'
+                        - 'usd.create'
+    # materials
+    # y=1.0
+    materials:
+        label: materials
+        offset:
+            x: 1.0
+            y: 1.0
+        geometry:
+            x: =<option.x>+<option.w>*<..offset.x>
+            y: =<option.y>+<option.h>*<..offset.y>
+        main:
+            path: <option.root>/<..label>_merge
+            obj_type: MtlMerge_Srf
+            base_obj_type: Merge
+            output: <.path>.out
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>
+                ns_colorr: 0.5
+                ns_colorg: 0.25
+                ns_colorb: 0.25
+        backdrop:
+            path: <option.root>/<..label>_backdrop
+            obj_type: Backdrop
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>+<option.h>
+                ns_sizeX: =<option.w>*2-<option.margin>*2
+                ns_sizeY: =<option.h>*2-<option.margin>*2
+                ns_colorr: 0.102
+                ns_colorg: 0.6824
+                ns_colorb: 0.6235
+                # "\n" = '\n', '\n'= '\\n'
+                ns_text: "<...label>\nobj_type: NetworkMaterialCreate"
+                ns_fontScale: 3.0
+                ns_stickyLock: 1
+    # geometry switch
+    # y=0.75
+    geometry_switch:
+        label: <..key>
+        offset:
+            x: -1.0
+            y: .75
+        geometry:
+            x: =<option.x>+<option.w>*<..offset.x>
+            y: =<option.y>+<option.h>*<..offset.y>
+        main:
+            path: <option.root>/<..label>
+            obj_type: lx_variant
+            base_obj_type: VariableSwitch
+            output: <.path>.out
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+            parameters:
+                lynxi_variants/key: geometry
+            connections:
+                - <...asset_geometries.main.path>.out
+                - <.path>.asset
+                - <...shot_geometries.main.path>.out
+                - <.path>.shot
+    # geometry settings
+    # y=0.25
+    geometry_settings:
+        label: <..key>
+        offset:
+            x: -1.0
+            y: .25
+        geometry:
+            x: =<option.x>+<option.w>*<..offset.x>
+            y: =<option.y>+<option.h>*<..offset.y>
+        main:
+            path: <option.root>/<..label>
+            obj_type: lx_geometry_settings
+            base_obj_type: Group
+            input: <.path>.input
+            output: <.path>.output
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>
+                ns_colorr: 0.125
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+            parameters:
+                options/scheme: 'asset'
+            executes: []
+            connections:
+                - <...geometry_switch.main.output>
+                - <.input>
+        dot:
+            path: <option.root>/<..label>_dot
+            obj_type: Dot
+            input: <.path>.input
+            output: <.path>.output
+            attributes:
+                x: =<...geometry.x>
+                y: =<....property_assigns.geometry.y>
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+            connections:
+                - <...geometry_settings.main.output>
+                - <.input>
+    # look
+    # y=0.0
+    look_pass:
+        label: look_pass
+        offset:
+            x: 0.0
+            y: 0.0
+        geometry:
+            x: =<option.x>+<option.w>*<..offset.x>+<option.offset_x>
+            y: =<option.y>+<option.h>*<..offset.y>
+        main:
+            variable: True
+            path: <option.root>/<option.look_pass>__<..label>_merge
+            obj_type: Merge
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>
+                ns_colorr: 0.5
+                ns_colorg: 0.25
+                ns_colorb: 0.25
+            connections:
+                - <...geometry_settings.main.output>
+                - <.path>.geometries
+                - <...materials.main.output>
+                - <.path>.materials
+    # y=-2.0
+    material_assigns:
+        label: material_assigns
+        offset:
+            x: 0.0
+            y: -2.0
+        geometry:
+            x: =<option.x>+<option.w>*<..offset.x>+<option.offset_x>
+            y: =<option.y>+<option.h>*<..offset.y>
+        #
+        main:
+            variable: True
+            path: <option.root>/<option.look_pass>__<..label>_merge
+            obj_type: Merge
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>
+                ns_colorr: 0.5
+                ns_colorg: 0.25
+                ns_colorb: 0.25
+            connections:
+                - <...look_pass.main.path>.out
+                - <.path>.<option.look_pass>
+        backdrop:
+            variable: True
+            path: <option.root>/<option.look_pass>__<..label>_backdrop
+            obj_type: Backdrop
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>+<option.h>
+                ns_sizeX: =<option.w>*2-<option.margin>*2
+                ns_sizeY: =<option.h>*2-<option.margin>*2
+                ns_colorr: =<option.look_pass_color.r>
+                ns_colorg: =<option.look_pass_color.g>
+                ns_colorb: =<option.look_pass_color.b>
+                ns_text: "<...label> for <option.look_pass>\nobj_type: MaterialAssign"
+                ns_fontScale: 3.0
+                ns_stickyLock: 1
+        node_graph:
+            nodes:
+                definition:
+                    variable: True
+                    path: <option.root>/<option.look_pass>__<....label>_group
+                    obj_category: group
+                    obj_type: GroupStack
+                    child_obj_type: MaterialAssign
+                    attributes:
+                        ns_colorr: 0.75
+                        ns_colorg: 0.5
+                        ns_colorb: 0.25
+                    insert_scheme: TB
+                    insert_connections:
+                        - <.....look_pass.main.path>.out
+                        - <....main.path>.<option.look_pass>
+                        - <.path>.in
+                        - <.path>.out
+                customize:
+                    variable: True
+                    path: <option.root>/<option.look_pass>__<..key>__<....label>_group
+                    obj_category: group
+                    obj_type: GroupStack
+                    child_obj_type: MaterialAssign
+                    attributes:
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.25
+                    insert_scheme: TB
+                    insert_connections:
+                        - <.....look_pass.main.path>.out
+                        - <....main.path>.<option.look_pass>
+                        - <.path>.in
+                        - <.path>.out
+    # y=-4.0
+    property_assigns:
+        label: property_assigns
+        offset:
+            x: 0.0
+            y: -4.0
+        geometry:
+            x: =<option.x>+<option.w>*<..offset.x>+<option.offset_x>
+            y: =<option.y>+<option.h>*<..offset.y>
+        #
+        main:
+            variable: True
+            path: <option.root>/<option.look_pass>__<..label>_merge
+            obj_type: Merge
+            output: <.path>.out
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>
+                ns_colorr: 0.5
+                ns_colorg: 0.25
+                ns_colorb: 0.25
+            connections:
+                - <...material_assigns.main.path>.out
+                - <.path>.<option.look_pass>
+        backdrop:
+            variable: True
+            path: <option.root>/<option.look_pass>__<..label>_backdrop
+            obj_type: Backdrop
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>+<option.h>
+                ns_sizeX: =<option.w>*2-<option.margin>*2
+                ns_sizeY: =<option.h>*2-<option.margin>*2
+                ns_colorr: =<option.look_pass_color.r>
+                ns_colorg: =<option.look_pass_color.g>
+                ns_colorb: =<option.look_pass_color.b>
+                ns_text: "<...label> for <option.look_pass>\nobj_type: ArnoldObjectSettings"
+                ns_fontScale: 3.0
+                ns_stickyLock: 1
+        node_graph:
+            nodes:
+                # groups
+                definition:
+                    variable: True
+                    path: <option.root>/<option.look_pass>__<....label>_group
+                    obj_category: group
+                    obj_type: GroupStack
+                    child_obj_type: ArnoldObjectSettings
+                    attributes:
+                        ns_colorr: 0.75
+                        ns_colorg: 0.5
+                        ns_colorb: 0.25
+                    insert_scheme: TB
+                    insert_connections:
+                        - <.....material_assigns.main.path>.out
+                        - <....main.path>.<option.look_pass>
+                        - <.path>.in
+                        - <.path>.out
+                customize:
+                    variable: True
+                    path: <option.root>/<option.look_pass>__<..key>__<....label>_group
+                    obj_category: group
+                    obj_type: GroupStack
+                    child_obj_type: ArnoldObjectSettings
+                    attributes:
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.25
+                    insert_scheme: TB
+                    insert_connections:
+                        - <.....material_assigns.main.path>.out
+                        - <....main.path>.<option.look_pass>
+                        - <.path>.in
+                        - <.path>.out
+                subdiv_assign:
+                    variable: True
+                    path: <option.root>/<option.look_pass>__<..key>
+                    obj_category: node
+                    obj_type: ArnoldObjectSettings
+                    attributes:
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.25
+                    arnold_geometry_properties:
+                        smoothing: True
+                        subdiv_type: catclark
+                        subdiv_iterations: 2
+                        subdiv_smooth_derivs: True
+                    insert_scheme: TB
+                    insert_connections:
+                        - <.....material_assigns.main.path>.out
+                        - <....main.path>.<option.look_pass>
+                        - <.path>.input
+                        - <.path>.out
+                no_subdiv_assign:
+                    variable: True
+                    path: <option.root>/<option.look_pass>__<..key>
+                    obj_category: node
+                    obj_type: ArnoldObjectSettings
+                    attributes:
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.25
+                    insert_scheme: TB
+                    insert_connections:
+                        - <.....material_assigns.main.path>.out
+                        - <....main.path>.<option.look_pass>
+                        - <.path>.input
+                        - <.path>.out
+                displacemenet_assign:
+                    variable: True
+                    path: <option.root>/<option.look_pass>__<..key>
+                    obj_category: node
+                    obj_type: ArnoldObjectSettings
+                    attributes:
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.25
+                    arnold_geometry_properties:
+                        smoothing: True
+                        subdiv_type: catclark
+                        subdiv_iterations: 3
+                        subdiv_smooth_derivs: True
+                        disp_padding: 1
+                        disp_autobump: True
+                    insert_scheme: TB
+                    insert_connections:
+                        - <.....material_assigns.main.path>.out
+                        - <....main.path>.<option.look_pass>
+                        - <.path>.input
+                        - <.path>.out
+                opacity_assign:
+                    variable: True
+                    path: <option.root>/<option.look_pass>__<..key>
+                    obj_category: node
+                    obj_type: ArnoldObjectSettings
+                    attributes:
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.25
+                    arnold_geometry_properties:
+                        opaque: False
+                    insert_scheme: TB
+                    insert_connections:
+                        - <.....material_assigns.main.path>.out
+                        - <....main.path>.<option.look_pass>
+                        - <.path>.input
+                        - <.path>.out
+                sss_assign:
+                    variable: True
+                    path: <option.root>/<option.look_pass>__<..key>
+                    obj_category: node
+                    obj_type: ArnoldObjectSettings
+                    attributes:
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.25
+                    arnold_geometry_properties:
+                        sss_setname: sss
+                    insert_scheme: TB
+                    insert_connections:
+                        - <.....material_assigns.main.path>.out
+                        - <....main.path>.<option.look_pass>
+                        - <.path>.input
+                        - <.path>.out
+    # look-pass
+    # y=-5.0
+    look_pass_switch:
+        label: <..key>
+        offset:
+            x: 0.0
+            y: -5.0
+        geometry:
+            x: =<option.x>+<option.w>*<..offset.x>
+            y: =<option.y>+<option.h>*<..offset.y>
+        main:
+            variable: True
+            path: <option.root>/<..label>
+            obj_type: lx_variant
+            base_obj_type: VariableSwitch
+            output: <.path>.out
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+            parameters:
+                lynxi_variants/key: look_pass
+            connections:
+                - <...property_assigns.main.path>.out
+                - <.path>.<option.look_pass>
+        option:
+            layout_use_backdrop: True
+        backdrop:
+            path: <option.root>/<..label>_backdrop
+            obj_type: Backdrop
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>+<option.h>/2
+                ns_sizeX: =<option.w>*2-<option.margin>*2
+                ns_sizeY: =<option.h>-<option.margin>*2
+                ns_colorr: 0.25
+                ns_colorg: 0.25
+                ns_colorb: 0.5
+                ns_text: 'look-pass(s)'
+                ns_fontScale: 6.0
+                ns_stickyLock: 1
+        node_graph:
+            nodes:
+                look_pass:
+                    variable: True
+                    path: <option.root>/<option.look_pass>__look
+                    obj_category: node
+                    obj_type: lx_look_pass
+                    base_obj_type: Group
+                    input: <.path>.input
+                    output: <.path>.output
+                    attributes:
+                        x: =<.....geometry.x>+<option.offset_x>
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        look_pass/scheme: passthrough
+                        lynxi_scheme/override/look_pass: <option.look_pass>
+                    connections:
+                        - <.....property_assigns.main.output>
+                        - <.input>
+                        - <.output>
+                        - <....main.path>.<option.look_pass>
+                        - <.output>
+                        - <.....look_outputs.main.path>.<option.look_pass>
+                #
+                plastic:
+                    path: <option.root>/<..key>__look
+                    obj_category: node
+                    obj_type: lx_look_pass
+                    base_obj_type: Group
+                    input: <.path>.input
+                    output: <.path>.output
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*1
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        look_pass/scheme: plastic
+                    connections:
+                        - <.....geometry_settings.dot.output>
+                        - <.input>
+                        - <.output>
+                        - <....main.path>.<..key>
+                #
+                ambocc:
+                    path: <option.root>/<..key>__look
+                    obj_category: node
+                    obj_type: lx_look_pass
+                    base_obj_type: Group
+                    input: <.path>.input
+                    output: <.path>.output
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*2
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        look_pass/scheme: ambocc
+                    connections:
+                        - <.....geometry_settings.dot.output>
+                        - <.input>
+                        - <.output>
+                        - <....main.path>.<..key>
+                #
+                wire:
+                    path: <option.root>/<..key>__look
+                    obj_category: node
+                    obj_type: lx_look_pass
+                    base_obj_type: Group
+                    input: <.path>.input
+                    output: <.path>.output
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*3
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        look_pass/scheme: wire
+                    connections:
+                        - <.....geometry_settings.dot.output>
+                        - <.input>
+                        - <.output>
+                        - <....main.path>.<..key>
+                #
+                white:
+                    path: <option.root>/<..key>__look
+                    obj_category: node
+                    obj_type: lx_look_pass
+                    base_obj_type: Group
+                    input: <.path>.input
+                    output: <.path>.output
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*4
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        look_pass/scheme: white
+                    connections:
+                        - <.....geometry_settings.dot.output>
+                        - <.input>
+                        - <.output>
+                        - <....main.path>.<..key>
+                #
+                assess:
+                    path: <option.root>/<..key>__look
+                    obj_category: node
+                    obj_type: lx_look_pass
+                    base_obj_type: Group
+                    input: <.path>.input
+                    output: <.path>.output
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*5
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        look_pass/scheme: assess
+                    connections:
+                        - <.....geometry_settings.dot.output>
+                        - <.input>
+                        - <.output>
+                        - <....main.path>.<..key>
+    # camera
+    # y=-6.0
+    cameras:
+        label: <..key>
+        offset:
+            x: 0.0
+            y: -6.0
+        geometry:
+            x: =<option.x>+<option.w>*<..offset.x>
+            y: =<option.y>+<option.h>*<..offset.y>
+        main:
+            path: <option.root>/<..label>_merge
+            obj_type: Merge
+            output: <.path>.out
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>
+                ns_colorr: 0.5
+                ns_colorg: 0.25
+                ns_colorb: 0.25
+            connections:
+                - <...look_pass_switch.main.output>
+                - <.path>.cameras
+        backdrop:
+            path: <option.root>/<..label>_backdrop
+            obj_type: Backdrop
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>+<option.h>/2
+                ns_sizeX: =<option.w>*2-<option.margin>*2
+                ns_sizeY: =<option.h>-<option.margin>*2
+                ns_colorr: 0.25
+                ns_colorg: 0.25
+                ns_colorb: 0.5
+                ns_text: 'cameras(s)'
+                ns_fontScale: 6.0
+                ns_stickyLock: 1
+        node_graph:
+            nodes:
+                cameras:
+                    path: <option.root>/<..key>
+                    obj_category: node
+                    obj_type: lx_cameras
+                    base_obj_type: Group
+                    #
+                    input: <.path>.input
+                    output: <.path>.output
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*0
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.5
+                        ns_colorg: 0.25
+                        ns_colorb: 0.25
+                    parameters:
+                        alembic/location: '/root/world/cam/cameras/main'
+                        settings/screen_modify_enable: True
+                        settings/screen_modify_mode: 'fill'
+                        settings/visible_enable: True
+                        settings/visible: 0
+                        rotations/value_offset: 0.0
+                        rotations/directions: '-1'
+                        rotations/frame_ranges: '1-120'
+                        rotations/frame_offset: 1000.0
+                    #
+                    connections:
+                        - <.....look_pass_switch.main.output>
+                        - <.input>
+                        - <.output>
+                        - <.....cameras.main.path>.cameras
+                    executes:
+                        - 'reset'
+                        - 'alembic.load'
+    # light-pass
+    # y=-7.0
+    light_pass_switch:
+        label: <..key>
+        offset:
+            x: 0.0
+            y: -7.0
+        geometry:
+            x: =<option.x>+<option.w>*<..offset.x>
+            y: =<option.y>+<option.h>*<..offset.y>
+        main:
+            path: <option.root>/<..label>
+            obj_type: lx_variant
+            base_obj_type: VariableSwitch
+            output: <.path>.out
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+            parameters:
+                lynxi_variants/key: light_pass
+            connections:
+                - <...cameras.main.path>.out
+                - <.path>.<option.light_pass>
+        option:
+            layout_use_backdrop: True
+        backdrop:
+            path: <option.root>/<..label>_backdrop
+            obj_type: Backdrop
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>+<option.h>/2
+                ns_sizeX: =<option.w>*2-<option.margin>*2
+                ns_sizeY: =<option.h>-<option.margin>*2
+                ns_colorr: 0.25
+                ns_colorg: 0.25
+                ns_colorb: 0.5
+                ns_text: 'light(s)'
+                ns_fontScale: 6.0
+                ns_stickyLock: 1
+        node_graph:
+            nodes:
+                all:
+                    path: <option.root>/<..key>__light
+                    obj_category: node
+                    obj_type: lx_light_pass
+                    base_obj_type: Group
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*0
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        options/scheme: 'light_rig'
+                        lights/light_rig/index: 0
+                        rotations/enable: 1
+                        rotations/value_offset: 0.0
+                        rotations/directions: '-1,1'
+                        rotations/frame_ranges: '1-120,121-240'
+                        rotations/frame_offset: 1000.0
+                    connections:
+                        - <.....cameras.main.path>.out
+                        - <.path>.input
+                        - <.path>.output
+                        - <....main.path>.<..key>
+                    executes:
+                        - 'lights.light_rig.refresh'
+                        - 'lights.light_rig.load'
+                #
+                add_1:
+                    path: <option.root>/<..key>__light
+                    obj_category: node
+                    obj_type: lx_light_pass
+                    base_obj_type: Group
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*1
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        options/scheme: 'light_rig'
+                        lights/light_rig/index: 1
+                        rotations/enable: 1
+                        rotations/value_offset: 0.0
+                        rotations/start_frame: 121.0
+                        rotations/end_frame: 240.0
+                        rotations/frame_offset: 1000.0
+                    connections:
+                        - <.....cameras.main.path>.out
+                        - <.path>.input
+                        - <.path>.output
+                        - <....main.path>.<..key>
+                    executes:
+                        - 'lights.light_rig.refresh'
+                        - 'lights.light_rig.load'
+                #
+                add_2:
+                    path: <option.root>/<..key>__light
+                    obj_category: node
+                    obj_type: lx_light_pass
+                    base_obj_type: Group
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*2
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        options/scheme: 'light_rig'
+                        lights/light_rig/index: 2
+                        rotations/enable: 1
+                        rotations/value_offset: 0.0
+                        rotations/start_frame: 121.0
+                        rotations/end_frame: 240.0
+                        rotations/frame_offset: 1000.0
+                    connections:
+                        - <.....cameras.main.path>.out
+                        - <.path>.input
+                        - <.path>.output
+                        - <....main.path>.<..key>
+                    executes:
+                        - 'lights.light_rig.refresh'
+                        - 'lights.light_rig.load'
+    # quality
+    # y=-8.0
+    quality_switch:
+        label: <..key>
+        offset:
+            x: 0.0
+            y: -8.0
+        geometry:
+            x: =<option.x>+<option.w>*<..offset.x>
+            y: =<option.y>+<option.h>*<..offset.y>
+        main:
+            path: <option.root>/<..label>
+            obj_type: lx_variant
+            base_obj_type: VariableSwitch
+            output: <.path>.out
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+            parameters:
+                lynxi_variants/key: quality
+            connections:
+                - <...light_pass_switch.main.output>
+                - <.path>.<option.quality>
+        option:
+            layout_use_backdrop: True
+        backdrop:
+            path: <option.root>/<..label>_backdrop
+            obj_type: Backdrop
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>+<option.h>/2
+                ns_sizeX: =<option.w>*2-<option.margin>*2
+                ns_sizeY: =<option.h>-<option.margin>*2
+                ns_colorr: 0.25
+                ns_colorg: 0.25
+                ns_colorb: 0.5
+                ns_text: 'quality(s)'
+                ns_fontScale: 6.0
+                ns_stickyLock: 1
+        node_graph:
+            nodes:
+                low:
+                    path: <option.root>/<..key>__quality
+                    obj_category: node
+                    obj_type: lx_quality
+                    base_obj_type: Group
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*0
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        quality/scheme: low
+                        lynxi_variants/percent: '50%'
+                        lynxi_variants/arnold_override/aa_sample: 2.0
+                    connections:
+                        - <.....light_pass_switch.main.output>
+                        - <.path>.input
+                        - <.path>.output
+                        - <....main.path>.<..key>
+                med:
+                    path: <option.root>/<..key>__quality
+                    obj_category: node
+                    obj_type: lx_quality
+                    base_obj_type: Group
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*1
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        quality/scheme: med
+                        lynxi_variants/percent: '75%'
+                        lynxi_variants/arnold_override/aa_sample: 3.0
+                    connections:
+                        - <.....light_pass_switch.main.output>
+                        - <.path>.input
+                        - <.path>.output
+                        - <....main.path>.<..key>
+                hi:
+                    path: <option.root>/<..key>__quality
+                    obj_category: node
+                    obj_type: lx_quality
+                    base_obj_type: Group
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*2
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        quality/scheme: hi
+                        lynxi_variants/percent: '100%'
+                        lynxi_variants/arnold_override/aa_sample: 6.0
+                    connections:
+                        - <.....light_pass_switch.main.output>
+                        - <.path>.input
+                        - <.path>.output
+                        - <....main.path>.<..key>
+                custom:
+                    path: <option.root>/<..key>__quality
+                    obj_category: node
+                    obj_type: lx_quality
+                    base_obj_type: Group
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*3
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        quality/scheme: hi
+                        lynxi_variants/percent: '100%'
+                        lynxi_variants/arnold_override/aa_sample: 6.0
+                    connections:
+                        - <.....light_pass_switch.main.output>
+                        - <.path>.input
+                        - <.path>.output
+                        - <....main.path>.<..key>
+    # layer
+    # y=-9.0
+    layer_switch:
+        label: <..key>
+        offset:
+            x: 0.0
+            y: -9.0
+        geometry:
+            x: =<option.x>+<option.w>*<..offset.x>
+            y: =<option.y>+<option.h>*<..offset.y>
+        main:
+            path: <option.root>/<..label>
+            obj_type: lx_variant
+            base_obj_type: VariableSwitch
+            output: <.path>.out
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+            parameters:
+                lynxi_variants/key: layer
+            connections:
+                - <...quality_switch.main.output>
+                - <.path>.<option.layer>
+        option:
+            layout_use_backdrop: True
+        backdrop:
+            path: <option.root>/<..label>_backdrop
+            obj_type: Backdrop
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>+<option.h>/2
+                ns_sizeX: =<option.w>*2-<option.margin>*2
+                ns_sizeY: =<option.h>-<option.margin>*2
+                ns_colorr: 0.25
+                ns_colorg: 0.25
+                ns_colorb: 0.5
+                ns_text: 'layer(s)'
+                ns_fontScale: 6.0
+                ns_stickyLock: 1
+        node_graph:
+            nodes:
+                master:
+                    path: <option.root>/<..key>__layer
+                    obj_category: node
+                    obj_type: lx_layer
+                    base_obj_type: Group
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*0
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        layer/scheme: master
+                    connections:
+                        - <.....quality_switch.main.output>
+                        - <.path>.input
+                        - <.path>.output
+                        - <....main.path>.<..key>
+                #
+                no_hair:
+                    path: <option.root>/<..key>__layer
+                    obj_category: node
+                    obj_type: lx_layer
+                    base_obj_type: Group
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*1
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        layer/scheme: no_hair
+                    connections:
+                        - <.....quality_switch.main.output>
+                        - <.path>.input
+                        - <.path>.output
+                        - <....main.path>.<..key>
+                #
+                high:
+                    path: <option.root>/<..key>__layer
+                    obj_category: node
+                    obj_type: lx_layer
+                    base_obj_type: Group
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*2
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        layer/scheme: high
+                    connections:
+                        - <.....quality_switch.main.output>
+                        - <.path>.input
+                        - <.path>.output
+                        - <....main.path>.<..key>
+                #
+                shape:
+                    path: <option.root>/<..key>__layer
+                    obj_category: node
+                    obj_type: lx_layer
+                    base_obj_type: Group
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*3
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        layer/scheme: shape
+                    connections:
+                        - <.....quality_switch.main.output>
+                        - <.path>.input
+                        - <.path>.output
+                        - <....main.path>.<..key>
+                #
+                hair_shape:
+                    path: <option.root>/<..key>__layer
+                    obj_category: node
+                    obj_type: lx_layer
+                    base_obj_type: Group
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*4
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        layer/scheme: hair_shape
+                    connections:
+                        - <.....quality_switch.main.output>
+                        - <.path>.input
+                        - <.path>.output
+                        - <....main.path>.<..key>
+                #
+                cloth_shape:
+                    path: <option.root>/<..key>__layer
+                    obj_category: node
+                    obj_type: lx_layer
+                    base_obj_type: Group
+                    attributes:
+                        x: =<.....geometry.x>-<option.w>/2*5
+                        y: =<.....geometry.y>+<option.h>/4
+                        ns_colorr: 0.25
+                        ns_colorg: 0.5
+                        ns_colorb: 0.75
+                    parameters:
+                        layer/scheme: cloth_shape
+                    connections:
+                        - <.....quality_switch.main.output>
+                        - <.path>.input
+                        - <.path>.output
+                        - <....main.path>.<..key>
+    # render settings
+    # y=-5.5
+    render_settings:
+        label: <..key>
+        offset:
+            x: 2.0
+            y: -5.5
+        geometry:
+            x: =<option.x>+<option.w>*<..offset.x>
+            y: =<option.y>+<option.h>*<..offset.y>
+        main:
+            path: <option.root>/<..label>
+            obj_type: lx_render_settings
+            base_obj_type: Group
+            input: <.path>.input
+            output: <.path>.output
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>
+                ns_colorr: 0.125
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+            parameters:
+#                render_settings/override_enable: 1
+                # for usd memery crash
+#                render_settings/override: 'sceneTraversal.maxCores=2'
+                arnold_render_settings/override_enable: 1
+                arnold_render_settings/override: 'abort_on_error=0'
+                lynxi_settings/render_output_enable: 1
+            executes:
+                - 'lynxi_settings.set_render_output'
+            connections:
+                - <...layer_switch.main.output>
+                - <.input>
+    # renders
+    # y=-6.0
+    render_outputs:
+        label: <..key>
+        offset:
+            x: 2.0
+            y: -6.0
+        geometry:
+            x: =<option.x>+<option.w>*<..offset.x>
+            y: =<option.y>+<option.h>*<..offset.y>
+        main:
+            path: <option.root>/<..label>
+            obj_type: lx_render_outputs
+            input: <.path>.input
+            output: ''
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>
+                ns_colorr: 0.5
+                ns_colorg: 0.25
+                ns_colorb: 0.25
+            parameters:
+                lynxi_variants/quality_enable: 0
+            connections:
+                - <...render_settings.main.output>
+                - <.input>
+        backdrop:
+            path: <option.root>/<..label>_backdrop
+            obj_type: Backdrop
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>+<option.h>/2
+                ns_sizeX: =<option.w>*2-<option.margin>*2
+                ns_sizeY: =<option.h>-<option.margin>*2
+                ns_colorr: 0.7412
+                ns_colorg: 0.2039
+                ns_colorb: 0.8196
+                ns_text: 'render output(s)'
+                ns_fontScale: 6.0
+                ns_stickyLock: 1
+    # look outputs
+    # y=-6.0
+    look_outputs:
+        label: <..key>
+        offset:
+            x: -2.0
+            y: -6.0
+        geometry:
+            x: =<option.x>+<option.w>*<..offset.x>
+            y: =<option.y>+<option.h>*<..offset.y>
+        main:
+            variable: True
+            path: <option.root>/<..label>
+            obj_type: LookFileBake
+            input: <.path>.orig
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>
+                ns_colorr: 0.5
+                ns_colorg: 0.25
+                ns_colorb: 0.25
+            parameters:
+                rootLocations:
+                    - <option.asset_root>
+            file_parameter: saveTo
+            connections:
+                - <...geometry_settings.main.output>
+                - <.path>.orig
+        backdrop:
+            path: <option.root>/<..label>_backdrop
+            obj_type: Backdrop
+            attributes:
+                x: =<...geometry.x>
+                y: =<...geometry.y>+<option.h>/2
+                ns_sizeX: =<option.w>*2-<option.margin>*2
+                ns_sizeY: =<option.h>-<option.margin>*2
+                ns_colorr: 0.7412
+                ns_colorg: 0.2039
+                ns_colorb: 0.8196
+                ns_text: 'look output(s)'
+                ns_fontScale: 6.0
+                ns_stickyLock: 1
+#
+node:
+    geometry_abc:
+        keyword: asset_geometries
+        label: <..key>
+        main:
+            path: <option.root>/<..label>
+            obj_type: Alembic_In
+            attributes:
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+            parameters:
+                name: <option.asset_root>
+            file_parameter: abcAsset
+            connections:
+                - <.path>.out
+                - <workspace.asset_geometries.main.path>.<..label>
+    #
+    geometry_xgen:
+        keyword: asset_geometries
+        label: <..key>
+        main:
+            name: 'geometry_xgen__{xgen}'
+            path: <option.root>/<.name>
+            output: <.path>.out
+            obj_type: ArnoldXGen
+            attributes:
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+            parameters:
+                location: '<option.asset_root>/hair/{xgen}'
+                name_scheme: '\<description\>'
+            file_parameter: xgen_file
+            connections:
+                - <.output>
+                - '<workspace.asset_geometries.main.path>.<.name>'
+    #
+    geometry_usd:
+        keyword: asset_geometries
+        label: <..key>
+        main:
+            path: <option.root>/<..label>
+            obj_type: DollarUsdIn
+            attributes:
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+            parameters:
+                location: <option.geometry_root>
+            file_parameter: usd.fileName
+            connections:
+                - <.path>.o0
+                - <workspace.asset_geometries.main.path>.<..label>
+    #
+    model_usd:
+        keyword: asset_geometries
+        label: <..key>
+        main:
+            path: <option.root>/<..label>
+            obj_type: DollarUsdIn
+            attributes:
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+            parameters:
+                location: <option.geometry_root>
+            file_parameter: usd.fileName
+            connections:
+                - <.path>.o0
+                - <workspace.asset_geometries.main.path>.<..label>
+    #
+    groom_geometry_usd:
+        keyword: asset_geometries
+        label: <..key>
+        main:
+            path: <option.root>/<..label>
+            obj_type: DollarUsdIn
+            attributes:
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+            parameters:
+                location: <option.geometry_root>
+            file_parameter: usd.fileName
+            connections:
+                - <.path>.o0
+                - <workspace.asset_geometries.main.path>.<..label>
+    #
+    effect_usd:
+        keyword: asset_geometries
+        label: <..key>
+        main:
+            path: <option.root>/<..label>
+            obj_type: DollarUsdIn
+            attributes:
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+            parameters:
+                location: <option.geometry_root>
+            file_parameter: usd.fileName
+            connections:
+                - <.path>.o0
+                - <workspace.asset_geometries.main.path>.<..label>
+    #
+    set_usd:
+        keyword: asset_geometries
+        label: <..key>
+        main:
+            path: <option.root>/<..label>
+            obj_type: DollarUsdIn
+            attributes:
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+            parameters:
+                location: <option.geometry_root>
+            file_parameter: usd.fileName
+            connections:
+                - <.path>.o0
+                - <workspace.asset_geometries.main.path>.<..label>
+    #
+    material_group:
+        keyword: materials
+        label: mtl_grp
+        main:
+            path: '<option.root>/<.name>'
+            name: '<option.look_pass>__<..label>__{name}'
+            obj_type: NetworkMaterialCreate
+            attributes:
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+
+    material:
+        keyword: materials
+        label: mtl
+        main:
+            path: '<node.material_group.main.path>/<.name>'
+            name: '<..label>__{name}'
+            obj_type: NetworkMaterialCreate
+            attributes:
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+
+    shader:
+        keyword: materials
+        label: sdr
+        main:
+            path: ''
+            name: '<..label>__{name}'
+            obj_type: ArnoldShadingNode
+            attributes:
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+
+    material_assign:
+        keyword: material_assigns
+        label: mtl_asn
+        main:
+            path: <workspace.material_assigns.node_graph.nodes.definition.path>/<option.look_pass>__<..label>__{name}
+            obj_type: MaterialAssign
+            attributes:
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+
+    property_assign:
+        keyword: property_assigns
+        label: prt_asn
+        main:
+            path: <workspace.property_assigns.node_graph.nodes.definition.path>/<option.look_pass>__<..label>__{name}
+            obj_type: ArnoldObjectSettings
+            attributes:
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+    #
+    camera_abc:
+        keyword: cameras
+        label: <..key>
+        main:
+            path: <option.root>/<..label>
+            obj_type: lx_camera_abc_importer
+            base_obj_type: Group
+            #
+            input: input
+            output: <.path>.output
+            attributes:
+                ns_colorr: 0.75
+                ns_colorg: 0.5
+                ns_colorb: 0.25
+            parameters:
+                camera/location: <option.camera_root>
+            file_parameter: camera.file
+            connections:
+                - <.output>
+                - <workspace.cameras.main.path>.camera_abc

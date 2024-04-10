@@ -1,0 +1,38 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'storage'
+        #
+        name: 'Add Type'
+        icon_name: 'file/add-file'
+        #
+        size: [ 480, 480 ]
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        database: ''
+        database_configure: ''
+        database_configure_extend: ''
+        #
+        entity_type: ''
+        entity: ''
+#
+build:
+    node:
+        options:
+            category:
+                widget: enumerate
+                value: [ 'None' ]
+                enable: True
+                tool_tip: [ 'choose a category' ]
+            #
+            type_name:
+                widget: string
+                value: ''
+                enable: True
+                tool_tip: [ 'entry type name' ]

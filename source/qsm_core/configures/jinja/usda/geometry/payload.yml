@@ -1,0 +1,12 @@
+dcc:
+    root:
+        name: 'master'
+        location: '/master'
+#
+elements: []
+#    - {
+#        file: 'renderable.usda'
+#    }
+#    - {
+#        file: 'auxiliary.usda'
+#    }

@@ -1,0 +1,207 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'turntable_rotate_opt'
+    type_abr: 'ttb_rot_opt'
+    create_type: 'TurntableRotate_Opt'
+    description:
+        |-
+        for turntable rotate oprator
+    variant_key: ''
+    #
+    layout_gui: False
+    #
+    auto_color: False
+    #
+    color:
+        r: .5
+        g: .125
+        b: .125
+#
+main:
+    type: OpScript
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.i0'
+    output: '<.path>.out'
+    #
+    clear_start: 'user'
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+
+        user/parameters/enable:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+
+        user/parameters/direction:
+            widget: capsule_string
+            value: ['clockwise', 'anticlockwise']
+            default: 'clockwise'
+            tool_tip: '...'
+
+        user/parameters/start_frame:
+            widget: integer
+            value: 1
+            tool_tip: '...'
+
+        user/parameters/end_frame:
+            widget: integer
+            value: 60
+            tool_tip: '...'
+
+        user/parameters/frame_offset:
+            widget: integer
+            value: 0
+            tool_tip: '...'
+
+        user/parameters/axis:
+            widget: capsule_string
+            value: ['X', 'Y', 'Z']
+            default: 'Y'
+            tool_tip: '...'
+
+        user/parameters/pivot_locator:
+            widget: path
+            value: '/root/world/loc/turntable/pivot_locator_for_geometry'
+            tool_tip: '...'
+
+        user/parameters/condition/enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        user/parameters/condition/path:
+            widget: path
+            value: '/root'
+            tool_tip: '...'
+
+        user/parameters/condition/properties:
+            widget: script
+            value: 'lynxi.variants.geometry.branch=asset'
+            tool_tip: '...'
+    #
+    parameters:
+        script/lua:
+            |-
+            function rotate_fnc(direction, start_frame, end_frame, frame_offset, axis)
+                local frame = Interface.GetCurrentTime()
+                local d = 1
+                if (direction == 'clockwise') then
+                    d = -1
+                elseif (direction == 'anticlockwise') then
+                    d = 1
+                end
+                local value = 0
+                if start_frame <= (frame-frame_offset) and (frame-frame_offset) <= end_frame then
+                    value = 360/(
+                        end_frame-start_frame+1
+                    )*(
+                        (frame-frame_offset)-start_frame
+                    )*d
+                end
+                
+                if (axis == 'X') then
+                    Interface.SetAttr(
+                        'xform.group.rotateX', DoubleAttribute({value, 1, 0, 0})
+                    )
+                elseif (axis == 'Y') then
+                     Interface.SetAttr(
+                        'xform.group.rotateY', DoubleAttribute({value, 0, 1, 0})
+                    )
+                elseif (axis == 'Z') then
+                    Interface.SetAttr(
+                        'xform.group.rotateZ', DoubleAttribute({value, 0, 0, 1})
+                    )
+                end
+            end
+            
+            function pivot_rotate_fnc(direction, start_frame, end_frame, frame_offset, axis, pivot_locator)
+                if (pivot_locator ~= nil) then
+                    local pivot_translate = Interface.GetAttr(
+                        'xform.interactive.translate', pivot_locator
+                    )
+                    Interface.SetAttr(
+                        'xform.translate_pivot.translate_pivot', pivot_translate
+                    )
+                    
+                    rotate_fnc(direction, start_frame, end_frame, frame_offset, axis)
+            
+                    local s = pivot_translate:getSamples():get(0)
+                    local x = -s:get(0)
+                    local y = -s:get(1)
+                    local z = -s:get(2)
+                    Interface.SetAttr(
+                        'xform.translate_pivotInverse.translate_pivotInverse', DoubleAttribute({x, y, z})
+                    )
+                end
+            end
+            
+            function get_condition_result(path, properties)
+                local d = {}
+                if (properties ~= nil) then
+                    local raw_ = pystring.split(properties, '\n')
+                    for i, i_s in ipairs(raw_) do
+                        if (i_s ~= '') then
+                            if (pystring.find(i_s, '=') ~= -1) then
+                                local i_s_ = pystring.split(i_s, '=')
+                                local i_name = pystring.rstrip(pystring.lstrip(i_s_[1]))
+                                local i_value = pystring.rstrip(pystring.lstrip(i_s_[2]))
+                                local i_atr = Interface.GetAttr(i_name, path)
+                                if (i_atr ~= nil) then
+                                    local i_value_ = i_atr:getValue()
+                                    if (i_value == i_value_) then
+                                        return 1
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+                return 0
+            end
+                        
+            function main()
+                if (Interface.GetOpArg('user.parameters.enable'):getValue() == 1) then
+                    local direction = Interface.GetOpArg('user.parameters.direction'):getValue()
+                    local start_frame = Interface.GetOpArg('user.parameters.start_frame'):getValue()
+                    local end_frame = Interface.GetOpArg('user.parameters.end_frame'):getValue()
+                    local frame_offset = Interface.GetOpArg('user.parameters.frame_offset'):getValue()
+                    local axis = Interface.GetOpArg('user.parameters.axis'):getValue()
+                    local pivot_locator = Interface.GetOpArg('user.parameters.pivot_locator'):getValue()
+                    local condition_enable = Interface.GetOpArg('user.parameters.condition.enable'):getValue()
+                    if (condition_enable == 1) then
+                        local condition_path = Interface.GetOpArg('user.parameters.condition.path'):getValue()
+                        local condition_properties = Interface.GetOpArg('user.parameters.condition.properties'):getValue()
+                        local condition_result = get_condition_result(condition_path, condition_properties)
+                        if condition_result == 1 then
+                            pivot_rotate_fnc(direction, start_frame, end_frame, frame_offset, axis, pivot_locator)
+                        end
+                    else
+                        pivot_rotate_fnc(direction, start_frame, end_frame, frame_offset, axis, pivot_locator)
+                    end
+                    
+                end
+            end
+            
+            main()

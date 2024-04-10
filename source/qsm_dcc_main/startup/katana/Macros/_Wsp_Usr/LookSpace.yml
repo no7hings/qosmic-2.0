@@ -1,0 +1,118 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'user_look_space'
+    type_abr: 'usr_lok_spc'
+    create_type: 'LookSpace_Wsp_Usr'
+    description:
+        |-
+        User Look Space
+        - include all look per variant
+    #
+    variant_key: 'look'
+    #
+    auto_color: False
+    #
+    layout_gui: False
+    #
+    size:
+        w_s: 240
+        h_s: 80
+        #
+        w: 1800
+        h: 960
+    #
+    position:
+        x_start: =0-<option.size.w_s>/2
+        y_start: =<option.size.h>/4+<option.size.h_s>
+#
+main:
+    type: LookSpace_Wsp
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.join_upstream'
+    output: '<.path>.output'
+    #
+    clear_ports: False
+    clear_children: False
+    force_update: True
+    #
+    attributes:
+        comment: '<option.description>'
+    #
+    parameters:
+        type: '<option.create_type>'
+#
+record_update:
+    backdrop:
+        attributes:
+            ns_text: '<option.description>'
+#
+node_add:
+    default__material_group:
+        index_x: 1
+        index_y: 0
+        tag: 'MTL_GRP'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: MaterialGroup_Wsp_Usr
+        name: '<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        attributes:
+            x: =<option.position.x_start>+<option.size.w_s>*<..index_x>
+            y: =<option.position.y_start>-<option.size.h_s>*<..index_y>+<option.size.h>/2
+        #
+        force_connections:
+            - '<.output>'
+            - '{material_merge}.<.variant>'
+    #
+    default__geometry_properties_assign_group:
+        index_x: 1
+        index_y: -.5
+        tag: 'GPA_GRP'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: GeometryPropertiesAssignGroup_Wsp_Usr
+        name: '<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.in'
+        output: '<.path>.out'
+        #
+        attributes:
+            x: =<option.position.x_start>+<option.size.w_s>*<..index_x>
+            y: =<option.position.y_start>-<option.size.h_s>*<..index_y>
+        #
+        force_connections:
+            - '{upstream_merge}.out'
+            - '<.input>'
+    #
+    default__material_assign_group:
+        index_x: 1
+        index_y: .5
+        tag: 'MTA_GRP'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: MaterialAssignGroup_Wsp_Usr
+        name: '<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.in'
+        output: '<.path>.out'
+        #
+        attributes:
+            x: =<option.position.x_start>+<option.size.w_s>*<..index_x>
+            y: =<option.position.y_start>-<option.size.h_s>*<..index_y>
+        #
+        force_connections:
+            - '<..default__geometry_properties_assign_group.output>'
+            - '<.input>'
+            #
+            - '<.output>'
+            - '{variant_register}.<.variant>'
+            #
+            - '<.output>'
+            - '{output}.<.variant>'

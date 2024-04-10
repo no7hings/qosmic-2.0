@@ -1,0 +1,92 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'camera_copy_opt'
+    type_abr: 'cmr_cop_opt'
+    create_type: 'CameraCopy_Opt'
+    description:
+        |-
+        for camera fit operator
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .5
+        g: .125
+        b: .125
+#
+main:
+    type: OpScript
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.i0'
+    output: '<.path>.out'
+    #
+    clear_start: 'user'
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        #
+        user/option/enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+        #
+        user/option/from:
+            widget: path
+            value: ''
+            tool_tip: '...'
+    #
+    parameters:
+        script/lua:
+            |-
+            function copy_fnc(from_path)
+                local transform_atrs = {
+                    'xform.interactive.translate',
+                    'xform.interactive.rotateX',
+                    'xform.interactive.rotateY',
+                    'xform.interactive.rotateZ',
+                }
+                for i, i_s in ipairs(transform_atrs) do
+                    local i_data = Interface.GetAttr(i_s, from_path)
+                    Interface.SetAttr(i_s, i_data)
+                end
+                local shape_atrs = {
+                    'geometry',
+                    'geometry.arbitrary',
+                    'info.abcCamera',
+                }
+                for i, i_s in ipairs(shape_atrs) do
+                    local i_data = Interface.GetAttr(i_s, from_path)
+                    Interface.SetAttr(i_s, i_data)
+                end
+            end
+            
+            function main()
+                if (Interface.GetOpArg('user.option.enable'):getValue() == 1) then
+                    local from_path = Interface.GetOpArg('user.option.from'):getValue()
+                    copy_fnc(from_path)
+                end
+            end
+            
+            main()

@@ -1,0 +1,25 @@
+project: ''
+role: ''
+asset: ''
+step: ''
+task: ''
+version: ''
+asset_shot: ''
+shot_asset: {}
+#
+dcc:
+    root: /asset
+    root_name: asset
+#
+option:
+    indent: 4
+    linesep: "\n"
+#
+usd:
+    presets:
+        up_axis: Y
+        linear_unit: 0.01
+#
+usdas:
+    assets: 'assets.usda'
+    shot-assets: 'shot-assets.usda'

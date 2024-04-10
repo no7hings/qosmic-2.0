@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 240 240" style="enable-background:new 0 0 240 240;" xml:space="preserve">
+<circle style="fill:#BDBDBD;stroke:#1D1D1D;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;" cx="120" cy="120" r="103.667"/>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="168.7991" y1="51.8423" x2="97.4646" y2="175.3974">
+	<stop  offset="0" style="stop-color:#CFCFCF"/>
+	<stop  offset="1" style="stop-color:#3D3D3D"/>
+</linearGradient>
+<rect x="91.883" y="55.065" style="fill-rule:evenodd;clip-rule:evenodd;fill:url(#SVGID_1_);stroke:#1D1D1D;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;" width="82.497" height="117.111"/>
+<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="103.2836" y1="105.5563" x2="61.4013" y2="178.0984">
+	<stop  offset="0" style="stop-color:#CFCFCF"/>
+	<stop  offset="1" style="stop-color:#3D3D3D"/>
+</linearGradient>
+<circle style="fill-rule:evenodd;clip-rule:evenodd;fill:url(#SVGID_2_);stroke:#1D1D1D;stroke-width:8;stroke-linecap:round;stroke-miterlimit:10;" cx="82.342" cy="141.827" r="41.875"/>
+<rect style="fill-rule:evenodd;clip-rule:evenodd;fill:none;" width="240" height="240"/>
+</svg>

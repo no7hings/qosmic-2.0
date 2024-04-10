@@ -1,0 +1,15 @@
+option:
+    type: ''
+    # config used system
+    systems:
+        - '*-*'
+    #
+    gui:
+        name: ''
+        group_name: ''
+        #
+        icon_name: ''
+        icon_sub_name: ''
+        tool_tip: ''
+        #
+        size: [480, 480]

@@ -1,0 +1,27 @@
+asset:
+    role: ''
+    name: ''
+    #
+    root_name: master
+    # surface usd file
+    geometry_uv_map: None
+#
+shot:
+    sequence: ''
+    name: ''
+    #
+    root_name: assets
+    #
+    start_frame: 1001
+    end_frame: 1024
+    #
+    set_file: ''
+#
+camera:
+    root_name: cameras
+    #
+    path: /renderCamera
+#
+shot_assets: {}
+#
+geometry_uv_maps: {}

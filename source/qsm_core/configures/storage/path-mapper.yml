@@ -1,0 +1,28 @@
+windows:
+    'L:':
+        - '/l'
+    'O:':
+        - '/o'
+    'Q:':
+        - '/depts'
+    'Z:':
+        - '/production'
+    'X:':
+        - '/job'
+#
+linux:
+    '/l':
+        - 'L:'
+        - 'l:'
+    '/o':
+        - 'O:'
+        - 'o:'
+    '/depts':
+        - 'Q:'
+        - 'q:'
+    '/production':
+        - 'Z:'
+        - 'z:'
+    '/job':
+        - 'X:'
+        - 'x:'

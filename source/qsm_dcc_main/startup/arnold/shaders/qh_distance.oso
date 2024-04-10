@@ -1,0 +1,106 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.11.6
+# options: -o /data/f/osl/qh_distance.oso
+shader qh_distance
+param	vector	scale	1 1 1		%read{3,3} %write{2147483647,-1}
+param	vector	offset	0 0 0		%read{5,5} %write{2147483647,-1}
+param	int	mode	0		%meta{string,widget,"enumerate"} %meta{string,options,"manhattan|euclidian|quadrance"} %meta{string,page,"basic"}  %read{6,19} %write{2147483647,-1}
+param	float	radius	1		%meta{string,page,"basic"}  %read{23,23} %write{2147483647,-1}
+param	float	contrast	1		%meta{string,page,"basic"}  %read{25,25} %write{2147483647,-1}
+oparam	color	out	0 0 0		%read{2147483647,-1} %write{31,31}
+global	point	P	%read{1,1} %write{2147483647,-1}
+local	point	Po	%read{2,2} %write{1,1}
+local	vector	rePosition	%read{8,21} %write{5,5}
+local	float	tmp	%read{24,24} %write{15,22}
+local	vector	result	%read{30,30} %write{26,26}
+const	string	$const1	"object"		%read{1,1} %write{2147483647,-1}
+const	string	$const2	"transform"		%read{0,0} %write{2147483647,-1}
+const	string	$const3	"common"		%read{1,1} %write{2147483647,-1}
+const	float	$const4	0.00999999978		%read{2,2} %write{2147483647,-1}
+temp	point	$tmp1	%read{4,4} %write{2,2}
+const	color	$const5	1 1 1		%read{3,23} %write{2147483647,-1}
+temp	color	$tmp3	%read{4,4} %write{3,3}
+temp	point	$tmp4	%read{5,5} %write{4,4}
+const	int	$const6	0		%read{6,8} %write{2147483647,-1}
+temp	int	$tmp5	%read{7,7} %write{6,6}
+temp	float	$tmp6	%read{12,12} %write{9,9}
+temp	float	$tmp7	%read{9,9} %write{8,8}
+temp	float	$tmp8	%read{12,12} %write{11,11}
+const	int	$const7	1		%read{10,22} %write{2147483647,-1}
+temp	float	$tmp9	%read{11,11} %write{10,10}
+temp	float	$tmp10	%read{15,15} %write{12,12}
+temp	float	$tmp11	%read{15,15} %write{14,14}
+const	int	$const8	2		%read{13,19} %write{2147483647,-1}
+temp	float	$tmp12	%read{14,14} %write{13,13}
+temp	int	$tmp13	%read{17,17} %write{16,16}
+temp	int	$tmp14	%read{20,20} %write{19,19}
+temp	color	$tmp16	%read{24,24} %write{23,23}
+temp	color	$tmp17	%read{26,26} %write{24,24}
+temp	float	$tmp18	%read{26,26} %write{25,25}
+const	float	$const10	-1		%read{25,25} %write{2147483647,-1}
+const	float	$const11	0		%read{27,27} %write{2147483647,-1}
+temp	vector	$tmp19	%read{31,31} %write{27,27}
+const	float	$const12	1		%read{28,28} %write{2147483647,-1}
+temp	vector	$tmp20	%read{30,30} %write{28,28}
+const	string	$const13	"clamp"		%read{29,29} %write{2147483647,-1}
+temp	vector	$tmp21	%read{31,31} %write{30,30}
+code ___main___
+# /data/f/osl/qh_distance.osl:13
+# 		point Po = transform("object",P);
+	functioncall	$const2 2 	%filename{"/data/f/osl/qh_distance.osl"} %line{13} %argrw{"r"}
+# /job/PLE/bundle/thirdparty/arnold/6.1.0.1/Linux/osl/include/stdosl.h:263
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	Po $const3 $const1 P 	%filename{"/job/PLE/bundle/thirdparty/arnold/6.1.0.1/Linux/osl/include/stdosl.h"} %line{263} %argrw{"wrrr"}
+# /data/f/osl/qh_distance.osl:14
+# 		vector rePosition = (Po*.01)*(color(1,1,1)/scale)-offset;
+	mul		$tmp1 Po $const4 	%filename{"/data/f/osl/qh_distance.osl"} %line{14} %argrw{"wrr"}
+	div		$tmp3 $const5 scale 	%argrw{"wrr"}
+	mul		$tmp4 $tmp1 $tmp3 	%argrw{"wrr"}
+	sub		rePosition $tmp4 offset 	%argrw{"wrr"}
+# /data/f/osl/qh_distance.osl:16
+# 		if (mode == 0){
+	eq		$tmp5 mode $const6 	%line{16} %argrw{"wrr"}
+	if		$tmp5 16 23 	%argrw{"r"}
+# /data/f/osl/qh_distance.osl:17
+# 			tmp = abs(rePosition[0]) + abs(rePosition[1]) + abs(rePosition[2]);
+	compref		$tmp7 rePosition $const6 	%line{17} %argrw{"wrr"}
+	abs		$tmp6 $tmp7 	%argrw{"wr"}
+	compref		$tmp9 rePosition $const7 	%argrw{"wrr"}
+	abs		$tmp8 $tmp9 	%argrw{"wr"}
+	add		$tmp10 $tmp6 $tmp8 	%argrw{"wrr"}
+	compref		$tmp12 rePosition $const8 	%argrw{"wrr"}
+	abs		$tmp11 $tmp12 	%argrw{"wr"}
+	add		tmp $tmp10 $tmp11 	%argrw{"wrr"}
+# /data/f/osl/qh_distance.osl:19
+# 		else if (mode == 1){
+	eq		$tmp13 mode $const7 	%line{19} %argrw{"wrr"}
+	if		$tmp13 19 23 	%argrw{"r"}
+# /data/f/osl/qh_distance.osl:20
+# 			tmp = length(rePosition);
+	length		tmp rePosition 	%line{20} %argrw{"wr"}
+# /data/f/osl/qh_distance.osl:22
+# 		else if (mode == 2){
+	eq		$tmp14 mode $const8 	%line{22} %argrw{"wrr"}
+	if		$tmp14 22 23 	%argrw{"r"}
+# /data/f/osl/qh_distance.osl:23
+# 			tmp = dot(rePosition,rePosition);
+	dot		tmp rePosition rePosition 	%line{23} %argrw{"wrr"}
+# /data/f/osl/qh_distance.osl:26
+# 			tmp = 1;
+	assign		tmp $const7 	%line{26} %argrw{"wr"}
+# /data/f/osl/qh_distance.osl:28
+# 		vector result = pow(tmp*(color(1,1,1)/radius),contrast*-1);
+	div		$tmp16 $const5 radius 	%line{28} %argrw{"wrr"}
+	mul		$tmp17 tmp $tmp16 	%argrw{"wrr"}
+	mul		$tmp18 contrast $const10 	%argrw{"wrr"}
+	pow		result $tmp17 $tmp18 	%argrw{"wrr"}
+# /data/f/osl/qh_distance.osl:29
+# 		out = clamp(result,0,1);
+	assign		$tmp19 $const11 	%line{29} %argrw{"wr"}
+	assign		$tmp20 $const12 	%argrw{"wr"}
+	functioncall	$const13 32 	%argrw{"r"}
+# /job/PLE/bundle/thirdparty/arnold/6.1.0.1/Linux/osl/include/stdosl.h:138
+# vector clamp (vector x, vector minval, vector maxval) { return max(min(x,maxval),minval); }
+	min		$tmp21 result $tmp20 	%filename{"/job/PLE/bundle/thirdparty/arnold/6.1.0.1/Linux/osl/include/stdosl.h"} %line{138} %argrw{"wrr"}
+	max		out $tmp21 $tmp19 	%argrw{"wrr"}
+	end

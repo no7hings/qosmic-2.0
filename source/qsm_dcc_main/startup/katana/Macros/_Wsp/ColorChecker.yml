@@ -1,0 +1,298 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'color_checker'
+    type_abr: 'clr_ckr'
+    create_type: 'ColorChecker_Wsp'
+    description:
+        |-
+        for camera attach a color-checker and fit to bottom left
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .25
+        g: .125
+        b: .5
+#
+main:
+    type: 'Group'
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.input'
+    output: '<.path>.output'
+    #
+    attributes:
+        ns_offsetX: 480
+        ns_offsetY: 120
+        #
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports:
+        - 'input'
+    #
+    output_ports:
+        - 'output'
+    #
+    ports:
+        # basic
+        type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+
+        parameters/enable:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+        #   visible
+        parameters/visible/main:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+
+        parameters/visible/color_chart:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+
+        parameters/visible/color_chart_flat:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+        #
+        parameters/attach_fit:
+            widget: proxy
+            value: ''
+            tool_tip: '...'
+        # option
+        option/location:
+            widget: path
+            value: '/root/world/etr'
+            tool_tip: '...'
+            lock: True
+
+        option/root:
+            widget: path
+            value: '/root/world/etr/color_checker'
+            tool_tip: '...'
+            lock: True
+
+        option/default:
+            widget: path
+            value: '/root/world/etr/color_checker/ass'
+            tool_tip: '...'
+            lock: True
+        #   ass
+        option/ass/main_file:
+            widget: file
+            value: '/l/resource/td/asset/ass/color-checker-main.ass'
+            tool_tip: '...'
+
+        option/ass/color_chart_file:
+            widget: file
+            value: '/l/resource/td/asset/ass/color-checker-color-chart.ass'
+            tool_tip: '...'
+
+        option/ass/color_chart_flat_file:
+            widget: file
+            value: '/l/resource/td/asset/ass/color-checker-color-chart-flat.ass'
+            tool_tip: '...'
+    #
+    expand_groups:
+        - 'parameters'
+        - 'parameters/visible'
+        - 'parameters/attach_fit'
+#
+node:
+    input_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        connections:
+            # input
+            - '<main.input>'
+            - '<.input>'
+    # ass
+    ass_main:
+        type: ArnoldStandin
+        name: '<option.type_abr>__<..key>'
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.out'
+        #
+        expressions:
+            filename: 'getParent().option.ass.main_file'
+            location:
+                |-
+                getParent().option.default + '/main'
+
+    main_visible:
+        type: Switch
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.output'
+        #
+        input_ports:
+            - 'off'
+            - 'on'
+        #
+        expressions:
+            in: '1 if getParent().parameters.visible.main else 0'
+        #
+        connections:
+            # on
+            - '<..ass_main.output>'
+            - '<.path>.on'
+
+    ass_color_chart:
+        type: ArnoldStandin
+        name: '<option.type_abr>__<..key>'
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.out'
+        #
+        expressions:
+            filename: 'getParent().option.ass.color_chart_file'
+            location:
+                |-
+                getParent().option.default + '/color_chart'
+
+    color_chart_visible:
+        type: Switch
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.output'
+        #
+        input_ports:
+            - 'off'
+            - 'on'
+        #
+        expressions:
+            in: '1 if getParent().parameters.visible.color_chart else 0'
+        #
+        connections:
+            # on
+            - '<..ass_color_chart.output>'
+            - '<.path>.on'
+
+    ass_color_chart_flat:
+        type: ArnoldStandin
+        name: '<option.type_abr>__<..key>'
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.out'
+        #
+        expressions:
+            filename: 'getParent().option.ass.color_chart_flat_file'
+            location:
+                |-
+                getParent().option.default + '/color_chart_flat'
+
+    color_chart_flat_visible:
+        type: Switch
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.output'
+        #
+        input_ports:
+            - 'off'
+            - 'on'
+        #
+        expressions:
+            in: '1 if getParent().parameters.visible.color_chart_flat else 0'
+        #
+        connections:
+            # on
+            - '<..ass_color_chart_flat.output>'
+            - '<.path>.on'
+    # ass merge
+    ass_merge:
+        type: Merge
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.out'
+        #
+        input_ports:
+            - 'main'
+            - 'color_chart'
+            - 'color_chart_flat'
+        #
+        connections:
+            # main
+            - '<..main_visible.output>'
+            - '<.path>.main'
+            # color chart
+            - '<..color_chart_visible.output>'
+            - '<.path>.color_chart'
+            # color chart flat
+            - '<..color_chart_flat_visible.output>'
+            - '<.path>.color_chart_flat'
+    # merge
+    upstream_merge:
+        tag: 'UMG'
+        type: UpstreamMerge_Wsp
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        input_ports:
+            - 'join_upstream'
+            - 'join_current'
+        #
+        connections:
+            # join upstream
+            - '<main.input>'
+            - '<.path>.join_upstream'
+            # join current
+            - '<..ass_merge.output>'
+            - '<.path>.join_current'
+    #   setting
+    #   camera fit
+    attach_fit_opt:
+        tag: 'CFO'
+        type: ColorCheckerAttachFit_Opt
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        proxy_ports:
+            user/option: ['<main.name>', 'parameters/attach_fit']
+        #
+        expressions:
+            CEL: 'getParent().option.default'
+        #
+        connections:
+            #
+            - '<..upstream_merge.output>'
+            - '<.input>'
+    # enable
+    enable:
+        type: Switch
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.output'
+        #
+        input_ports:
+            - 'off'
+            - 'on'
+        #
+        expressions:
+            in: '1 if getParent().parameters.enable else 0'
+        #
+        connections:
+            # off
+            - '<..input_dot.output>'
+            - '<.path>.off'
+            # on
+            - '<..attach_fit_opt.output>'
+            - '<.path>.on'
+            # output
+            - '<.output>'
+            - '<main.output>'
+
+

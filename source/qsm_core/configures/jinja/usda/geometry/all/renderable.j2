@@ -1,0 +1,22 @@
+#usda 1.0
+(
+    defaultPrim = "{{ dcc.root.name }}"
+    metersPerUnit = 0.01
+    upAxis = "Y"
+)
+
+def "{{ dcc.root.name }}" (
+)
+{
+{%- for i in elements -%}
+    {{- '    def Xform "%s" (\n' | format(i.name) -}}
+    {{- '        kind = "subcomponent"\n' -}}
+    {{- '        prepend references = @%s@<%s>\n' | format(i.file, i.location) -}}
+    {{- '    )\n' -}}
+    {{- '    {\n' -}}
+    {{- '    }' -}}
+    {%- if not loop.last -%}
+        {{- '\n\n' -}}
+    {%- endif -%}
+{%- endfor %}
+}

@@ -1,0 +1,149 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'color_check_attach_fit_opt'
+    type_abr: 'clr_ckr_atc_fit_opt'
+    create_type: 'ColorCheckerAttachFit_Opt'
+    description:
+        |-
+        for camera fit operator
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .5
+        g: .125
+        b: .125
+#
+main:
+    type: OpScript
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.i0'
+    output: '<.path>.out'
+    #
+    clear_start: 'user'
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        #
+        user/option/enable:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+        #
+        user/option/scale_percent:
+            widget: float
+            value: 0.125
+            tool_tip: '...'
+
+        user/option/margin_percent:
+            widget: float
+            value: .0125
+            tool_tip: '...'
+    #
+    parameters:
+        script/lua:
+            |-
+            function attach_fnc(camera_path)
+                local t, r, s = decompose_matrix(get_world_matrix(camera_path))
+                print(t, r, s)
+                local atr_base = 'xform.interactive.translate'
+                local xform = Interface.GetAttr('xform.interactive', camera_path)
+                Interface.SetAttr('xform.group.translate', DoubleAttribute(t))
+                Interface.SetAttr('xform.group.rotateX', DoubleAttribute({r[1], 1, 0, 0}))
+                Interface.SetAttr('xform.group.rotateY', DoubleAttribute({r[2], 0, 1, 0}))
+                Interface.SetAttr('xform.group.rotateZ', DoubleAttribute({r[3], 0, 0, 1}))
+                Interface.SetAttr('xform.group.scale', DoubleAttribute(s))
+            end
+            
+            function decompose_matrix(m)
+                local t = { m[13], m[14], m[15] }
+                local s = {
+                math.sqrt(m[1] * m[1] + m[2] * m[2] + m[3] * m[3]),
+                math.sqrt(m[5] * m[5] + m[6] * m[6] + m[7] * m[7]),
+                math.sqrt(m[9] * m[9] + m[10] * m[10] + m[11] * m[11])
+                }
+                local r = {}
+                
+                r[1] = -math.deg(math.atan2(m[10] / s[3], m[11] / s[3]))
+                r[2] = -math.deg(math.atan2(-m[9] / s[3], math.sqrt(m[10] * m[10] + m[11] * m[11]) / s[3]))
+                r[3] = -math.deg(math.atan2(m[5] / s[2], m[1] / s[1]))
+            
+                return t, r, s
+            end
+            
+            function get_world_matrix(path)
+                local camera_path = Interface.GetAttr('renderSettings.cameraName', '/root'):getValue()
+                local t=Interface.GetGlobalXFormGroup(camera_path)
+                local m = XFormUtils.CalcTransformMatrixAtTimes(t, {0}):getSamples():get(0)
+                local mtx = {}
+                for i, i_s in ipairs(m) do
+                    mtx[i+1] = i_s
+                end
+                return mtx
+            end
+
+            function fit_fnc(size, scale_percent, margin_percent, camera_fov, camera_screen_mode, render_resolution)
+                local b = (size/2)/math.tan(math.rad(camera_fov/2))
+                local x, y = 1, 1
+                local r = ResolutionTable.GetResolution(render_resolution)
+                local w, h = r:getXRes(), r:getYRes()
+                if camera_screen_mode == 'horizontal' then
+                    x, y = 1, h/w
+                elseif camera_screen_mode == 'vertical' then
+                    x, y = w/h, 1
+                end
+                local s_s = math.min(x, y)
+                local s = scale_percent*s_s
+                local t_x, t_y, t_z = -(0.5*x-s/2)+margin_percent, -(0.5*y-s/2)+margin_percent, -b
+                local s_x, s_y, s_z = s, s, s
+                Interface.SetAttr('xform.interactive.translate', DoubleAttribute({t_x, t_y, t_z}, 3))
+                Interface.SetAttr('xform.interactive.scale', DoubleAttribute({s_x, s_y, s_z}, 3))
+            end
+            
+            function main()
+                if (Interface.GetOpArg('user.option.enable'):getValue() == 1) then
+                    local size = 1.0
+                    local scale_percent = Interface.GetOpArg('user.option.scale_percent'):getValue()
+                    local margin_percent = Interface.GetOpArg('user.option.margin_percent'):getValue()
+                    local camera_path = Interface.GetAttr('renderSettings.cameraName', '/root'):getValue()
+                    local film_fit_atr = Interface.GetAttr('geometry.arbitrary.lx_film_fit.value', camera_path)
+                    if film_fit_atr ~= nil then
+                        if (film_fit_atr:getValue() == 0) then
+                            size = 1.5
+                        end
+                    end
+                    local camera_fov = Interface.GetAttr('geometry.fov', camera_path):getValue()
+                    local camera_screen_mode_atr = Interface.GetAttr('geometry.screen_mode', camera_path)
+                    local camera_screen_mode = 'horizontal'
+                    if camera_screen_mode_atr ~= nil then
+                        camera_screen_mode = camera_screen_mode_atr:getValue()
+                    end
+                    local render_resolution = Interface.GetAttr('renderSettings.resolution', '/root'):getValue()
+                    attach_fnc(camera_path)
+                    fit_fnc(size, scale_percent, margin_percent, camera_fov, camera_screen_mode, render_resolution)
+                end
+            end
+            
+            main()

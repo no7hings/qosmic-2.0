@@ -1,0 +1,30 @@
+#include <stdosl.h>
+
+shader osl_color_correct(
+    color input = 1.0,
+    color rgb_over = 0.0,
+    float rgb_over_scale = 1 [[ float min = 0.0, float max = 1.0]],
+    float h_offset = 0.5 [[ float min = 0.0, float max = 1.0]],
+    float s_offset = 0.5 [[ float min = 0.0, float max = 1.0]],
+    float v_offset = 0.5 [[ float min = 0.0, float max = 1.0]],
+    float offset_scale = 1.0 [[ float min = 0.0, float max = 1.0]],
+    output color out_rgb = 0.0,
+)
+{
+    color hsv_in = transformc("rgb", "hsv", input);
+    // rgb_over
+    color hsv_over = transformc("rgb", "hsv", rgb_over);
+    float h_over = hsv_over[0];
+    float s_over = hsv_over[1];
+    float v_over = hsv_over[2];
+    // use s value
+    float h_out_1 = hsv_in[0]*(1-v_over*rgb_over_scale) + h_over*v_over*rgb_over_scale;
+    float s_out_1 = hsv_in[1];
+    float v_out_1 = hsv_in[2];
+    // hsv offset
+    float h_out_2 = clamp(float(int((h_out_1+(h_offset-0.5))*offset_scale*100)%100)/100.0, 0.0, 1.0);
+    float s_out_2 = clamp((s_out_1+(s_offset-0.5)*offset_scale*2), 0.0, 1.0);
+    float v_out_2 = clamp((v_out_1+(v_offset-0.5)*offset_scale*2), 0.0, 1.0);
+    color out_rgb_2 = color("hsv", h_out_2, s_out_2, v_out_2);
+    out_rgb = out_rgb_2;
+}

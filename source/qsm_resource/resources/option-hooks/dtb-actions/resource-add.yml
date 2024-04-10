@@ -1,0 +1,59 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'storage'
+        #
+        name: 'Add Resource'
+        icon_name: 'file/add-file'
+        #
+        size: [480, 480]
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        database: ''
+        database_configure: ''
+        database_configure_extend: ''
+        #
+        entity_type: ''
+        entity: ''
+#
+build:
+    node:
+        options:
+            scheme:
+                widget: enumerate
+                value: [ 'custom', 'quixel' ]
+                current_index: 0
+                enable: True
+                tool_tip: [ 'choose a scheme' ]
+
+            type:
+                widget: string
+                value: ''
+                enable: True
+                tool_tip: [ 'choose a type' ]
+                lock: True
+            #
+            resource_name:
+                widget: name
+                value: ''
+                enable: True
+                tool_tip: [ 'entry a resource name', 'use "a-z", "A-Z", "0-9", "_"' ]
+            #
+            resource_directory:
+                widget: directory
+                open_or_save: open
+                value: ''
+                enable: True
+                tool_tip: [ 'choose a directory' ]
+            #
+            guess:
+                widget: button
+                value: ''
+                tool_tip: [ 'choose a directory' ]
+

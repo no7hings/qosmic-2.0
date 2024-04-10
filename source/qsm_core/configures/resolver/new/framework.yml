@@ -1,0 +1,37 @@
+# ******************************************************************************************************************** #
+package-data:
+    scheme: new
+    #
+    application-configure-file:
+        windows: 'x:/CFG/SHOW-CFG/{project.upper()}/presets/global.applications.json'
+        linux: '/job/CFG/SHOW-CFG/{project.upper()}/presets/global.applications.json'
+    #
+    deadline-configure-file:
+        windows: 'x:/CFG/SHOW-CFG/{project.upper()}/presets/global.farm.deadline.json'
+        linux: '/job/CFG/SHOW-CFG/{project.upper()}/presets/global.farm.deadline.json'
+    #
+    package-root-patterns:
+        windows: [ '{home}/packages', 'x:/PLE/bundle/internal', 'x:/PLE/bundle/thirdparty' ]
+        linux: [ '{home}/packages', '/job/PLE/bundle/internal', '/job/PLE/bundle/thirdparty' ]
+    #
+    package-user-root-patterns:
+        windows: [ '{home}/packages' ]
+        linux: [ '{home}/packages' ]
+    #
+    package-pre_release-root-patterns:
+        windows: [ 'x:/PLE/workspace/pre_release/packages' ]
+        linux: [ '/job/PLE/workspace/pre_release/packages' ]
+    #
+    package-release-root-patterns:
+        windows: [ 'x:/PLE/bundle/internal', 'x:/PLE/bundle/thirdparty' ]
+        linux: [ '/job/PLE/bundle/internal', '/job/PLE/bundle/thirdparty' ]
+    #
+    package-file-patterns:
+        [ '{root}/{package_name}/{version}/paper_configure_bundle.py' ]
+    #
+    configure-root-patterns:
+        windows: [ 'x:/CFG/SHOW-CFG/{project.upper()}' ]
+        linux: [ '/job/CFG/SHOW-CFG/{project.upper()}' ]
+    #
+    configure-file-patterns:
+      [ '{root}/presets/global.applications.json' ]

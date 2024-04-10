@@ -1,0 +1,24 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-katana'
+    #
+    gui:
+        group_name: 'storage'
+        #
+        name: 'Import Resource'
+        icon_name: 'file/add-file'
+        #
+        size: [480, 480]
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        database: ''
+        database_configure: ''
+        database_configure_extend: ''
+        #
+        entity_type: ''
+        entity: ''
+

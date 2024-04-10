@@ -1,0 +1,307 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'asset_light_rig'
+    type_abr: 'ast_lgt_rig'
+    create_type: 'AssetLightRig_Wsp'
+    description:
+        |-
+        for asset light rig load
+    variant_key: 'light'
+    #
+    auto_color: False
+    #
+    color:
+        r: 0
+        g: 0
+        b: 0
+#
+main:
+    type: 'Group'
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.join_upstream'
+    output: '<.path>.output'
+    #
+    attributes:
+        ns_offsetX: 360
+        ns_offsetY: 120
+        #
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports:
+        - 'join_upstream'
+        - 'join_other'
+    #
+    output_ports:
+        - output
+    #
+    ports:
+        # basic
+        type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+
+        parameters:
+            widget: group
+            expand: True
+
+        parameters/resource:
+            widget: group
+            expand: True
+
+        parameters/resource/project:
+            widget: string
+            value: '\$PG_PROJECT'
+            default: 'current'
+            tool_tip: '...'
+
+        parameters/resource/name:
+            widget: enumerate
+            value: ['None']
+            default: 'None'
+            tool_tip: '...'
+
+        parameters/resource/tools:
+            widget: buttons
+            value:
+                - {
+                    name: 'load from default',
+                    script: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpWspAssetLightRig(node).load_resource("default")'
+                }
+                - {
+                    name: 'load from current',
+                    script: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpWspAssetLightRig(node).load_resource("current")'
+                }
+        # live_group
+        parameters/live_group:
+            widget: group
+            expand: True
+
+        parameters/live_group/placeholder:
+            widget: file
+            value: '/l/resource/td/asset/live-group/asset-standard.livegroup'
+            tool_tip: '...'
+            lock: True
+
+        parameters/live_group/file:
+            widget: enumerate
+            value: ['None']
+            tool_tip: '...'
+
+        parameters/live_group/reload:
+            widget: button
+            value: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpWspAssetLightRig(node).reload_live_group()'
+            tool_tip: '...'
+
+        parameters/live_group/tools:
+            widget: buttons
+            value:
+                - {
+                    name: 'load latest',
+                    script: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpWspAssetLightRig(node).load_latest_light_rig()'
+                }
+                - {
+                    name: 'load all',
+                    script: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpWspAssetLightRig(node).load_all_light_rig()'
+                }
+        # setting
+        parameters/setting/background_enable:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+
+        parameters/setting/ground_enable:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+        # option
+        option/variant_key:
+            widget: string
+            value: '<option.variant_key>'
+            tool_tip: '...'
+            lock: True
+
+        option/branch:
+            widget: string
+            value: 'asset'
+            tool_tip: '...'
+            lock: True
+
+        option/location:
+            widget: path
+            value: '/root/world/lgt'
+            tool_tip: '...'
+            lock: True
+
+        option/root:
+            widget: path
+            value: '/root/world/lgt/gaffer'
+            tool_tip: '...'
+            lock: True
+
+        option/default:
+            widget: path
+            value: '/root/world/lgt/gaffer/rig'
+            tool_tip: '...'
+            lock: True
+
+        option/elements/background:
+            widget: path
+            value: '/root/world/lgt/gaffer/rig/BG_no_Illumination'
+            tool_tip: '...'
+
+        option/elements/ground:
+            widget: path
+            value: '/root/world/cam/cameras/sub/temp/ground'
+            tool_tip: '...'
+        # record
+        record/variant_properties_opt:
+            widget: node
+            value: '<node.variant_properties_opt.name>'
+            tool_tip: '...'
+            lock: True
+
+        record/live_group:
+            widget: node
+            value: '<node.live_group.name>'
+            tool_tip: '...'
+    #
+    expand_groups:
+        - 'parameters'
+        - 'parameters/resource'
+        - 'parameters/live_group'
+#
+node:
+    # join geometry dot
+    join_upstream_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        connections:
+            # input
+            - '<main.path>.join_upstream'
+            - '<.input>'
+    # join other dot
+    join_other_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        connections:
+            # input
+            - '<main.path>.join_other'
+            - '<.input>'
+    # upstream_merge
+    upstream_merge:
+        tag: 'UMG'
+        type: UpstreamMerge_Wsp
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        input_ports:
+            - 'join_upstream'
+            - 'join_other'
+        #
+        connections:
+            # join upstream
+            - '<..join_upstream_dot.output>'
+            - '<.path>.join_upstream'
+            # join other
+            - '<..join_other_dot.output>'
+            - '<.path>.join_other'
+    # live group
+    live_group:
+        type: 'LiveGroup'
+        name: '<option.type_abr>__<..key>'
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.i0'
+        output: '<.path>.o0'
+        #
+        parameters:
+            source: '/l/resource/td/asset/live-group/asset-standard.livegroup'
+        #
+        expressions:
+            source:
+                |-
+                getParent().parameters.live_group.file if getParent().parameters.live_group.file != 'None' else getParent().parameters.live_group.placeholder
+        #
+        connections:
+            - '<..upstream_merge.output>'
+            - '<.input>'
+    #
+    background_enable:
+        type: Prune
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.A'
+        output: '<.path>.out'
+        #
+        expressions:
+            cel:
+                |-
+                getParent().option.elements.background if getParent().parameters.setting.background_enable == 0 else ''
+        #
+        connections:
+            - '<..live_group.output>'
+            - '<.input>'
+    #
+    ground_enable:
+        type: Prune
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.A'
+        output: '<.path>.out'
+        #
+        expressions:
+            cel:
+                |-
+                getParent().option.elements.ground if getParent().parameters.setting.ground_enable == 0 else ''
+        #
+        connections:
+            - '<..background_enable.output>'
+            - '<.input>'
+    # variant properties opt
+    variant_properties_opt:
+        tag: 'VPO'
+        type: VariantProperties_Opt
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        parameters:
+            user/data_1/i0: '<option.variant_key>.current'
+            user/data_2/i0: '<option.variant_key>.branch'
+            user/data_3/i0: '<option.variant_key>.root'
+            user/data_4/i0: '<option.variant_key>.default'
+            #
+            user/data_5/i0: '<option.variant_key>.cache.current'
+            user/data_6/i0: '<option.variant_key>.cache.file'
+        #
+        expressions:
+            user/data_1/i1: 'getParent().getNodeName()'
+            user/data_2/i1: 'getParent().option.branch'
+            user/data_3/i1: 'getParent().option.root'
+            user/data_4/i1: 'getParent().option.default'
+            #
+            user/data_5/i1: 'getParent().getNodeName()'
+            user/data_6/i1: 'getParent().parameters.live_group.file'
+        #
+        connections:
+            - '<..ground_enable.output>'
+            - '<.input>'
+            # output
+            - '<.output>'
+            - '<main.output>'

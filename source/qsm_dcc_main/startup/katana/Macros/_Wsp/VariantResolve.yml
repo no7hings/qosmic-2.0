@@ -1,0 +1,195 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'variant_resolve'
+    type_abr: 'vrn_rsv'
+    create_type: 'VariantResolve_Wsp'
+    description:
+        |-
+        for variant resolve
+    #
+    auto_color: False
+    #
+    color_use_type: True
+    #
+    color:
+        r: 0
+        g: 0
+        b: 0
+#
+main:
+    type: Group
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.input'
+    output: '<.path>.output'
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports:
+        - 'input'
+    #
+    output_ports:
+        - 'output'
+    #
+    ports:
+        # basic
+        type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        #
+        parameters/tools:
+            widget: buttons
+            value:
+                - {
+                      name: 'resolve all',
+                      script: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpWspVariantResolve(node).resolve_all_variants()'
+                }
+                - {
+                      name: 'clear all',
+                      script: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpWspVariantResolve(node).clear_all_variants()'
+                }
+            tool_tip: '...'
+
+        parameters/keys:
+            label: ' '
+            widget: capsule_strings
+            value: ['None']
+        # 0
+        parameters/variant/key_0:
+            label: ' '
+            widget: string
+            value: ''
+            lock: True
+            visible_condition_hint: {
+                conditionalVisOp: 'contains',
+                conditionalVisPath: '../../keys',
+                conditionalVisValue: '<...key % "variant_{}".format(int(x.split("/")[-1].split("_")[-1]))>',
+            }
+
+        parameters/variant/value_0:
+            label: ' '
+            widget: capsule_string
+            value: ['None']
+            default: 'None'
+            visible_condition_hint: {
+                conditionalVisOp: 'contains',
+                conditionalVisPath: '../../keys',
+                conditionalVisValue: '<...key % "variant_{}".format(int(x.split("/")[-1].split("_")[-1]))>',
+            }
+        # 1
+        parameters/variant/key_1:
+            $: '..parameters/variant/key_0'
+
+        parameters/variant/value_1:
+            $: '..parameters/variant/value_0'
+        # 2
+        parameters/variant/key_2:
+            $: '..parameters/variant/key_0'
+
+        parameters/variant/value_2:
+            $: '..parameters/variant/value_0'
+        # 3
+        parameters/variant/key_3:
+            $: '..parameters/variant/key_0'
+
+        parameters/variant/value_3:
+            $: '..parameters/variant/value_0'
+        # 4
+        parameters/variant/key_4:
+            $: '..parameters/variant/key_0'
+
+        parameters/variant/value_4:
+            $: '..parameters/variant/value_0'
+        # 5
+        parameters/variant/key_5:
+            $: '..parameters/variant/key_0'
+
+        parameters/variant/value_5:
+            $: '..parameters/variant/value_0'
+        # 6
+        parameters/variant/key_6:
+            $: '..parameters/variant/key_0'
+
+        parameters/variant/value_6:
+            $: '..parameters/variant/value_0'
+        # 7
+        parameters/variant/key_7:
+            $: '..parameters/variant/key_0'
+
+        parameters/variant/value_7:
+            $: '..parameters/variant/value_0'
+        # 8
+        parameters/variant/key_8:
+            $: '..parameters/variant/key_0'
+
+        parameters/variant/value_8:
+            $: '..parameters/variant/value_0'
+        # 9
+        parameters/variant/key_9:
+            $: '..parameters/variant/key_0'
+
+        parameters/variant/value_9:
+            $: '..parameters/variant/value_0'
+    #
+    expand_groups:
+        - 'parameters'
+        - 'parameters/variant'
+#
+node:
+    variable_set_group:
+        type: GroupStack
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.in'
+        output: '<.path>.out'
+        #
+        connections:
+            # input
+            - '<main.input>'
+            - '<.input>'
+            # output
+            - '<.output>'
+            - '<main.output>'
+        #
+        child:
+            type: VariableSet
+            #
+            path_pattern: '{parent}/<option.type_abr>__{key}'
+            #
+            nodes:
+                variant_0:
+                    expressions:
+                        variableName:
+                            |-
+                            getParent().getParent().parameters.variant.<...key % "key_{}".format(x.split("_")[-1])> if '<...key>' in str(getParent().getParent().parameters.keys).split(', ') else ''
+                        variableValue:
+                            |-
+                            getParent().getParent().parameters.variant.<...key % "value_{}".format(x.split("_")[-1])>
+                variant_1:
+                    $: '..variant_0'
+                variant_2:
+                    $: '..variant_0'
+                variant_3:
+                    $: '..variant_0'
+                variant_4:
+                    $: '..variant_0'
+                variant_5:
+                    $: '..variant_0'
+                variant_6:
+                    $: '..variant_0'
+                variant_7:
+                    $: '..variant_0'
+                variant_8:
+                    $: '..variant_0'
+                variant_9:
+                    $: '..variant_0'

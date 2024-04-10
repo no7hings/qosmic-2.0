@@ -1,0 +1,20 @@
+#usda 1.0
+
+def Xform "persp1"
+{
+    def Camera "perspShape1"
+    {
+        float2 clippingRange = (0.1, 10000)
+        float focusDistance = 1
+        float horizontalAperture = 0.87268716
+        string primvars:dcc_name = "perspShape1" (
+            elementSize = 1
+            interpolation = "constant"
+        )
+        token projection = "perspective"
+        double shutter:close = 0
+        double shutter:open = 0
+        float verticalAperture = 0.49088654
+    }
+}
+

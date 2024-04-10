@@ -1,0 +1,34 @@
+asset:
+    project: ''
+    role: ''
+    name: ''
+    #
+    root_name: master
+    #
+    start_frame: 1001.0
+    end_frame: 1001.0
+    #
+    set_file: None
+    #
+    path: '/master'
+    #
+    version_main:
+        model: {}
+        groom: {}
+        rig: {}
+        effect: {}
+        surface: {}
+        light: {}
+    #
+    version_override:
+        model: {}
+        groom: {}
+        rig: {}
+        effect: {}
+        surface: {}
+        light: {}
+    #
+    component: {}
+#
+camera:
+    root_name: cameras

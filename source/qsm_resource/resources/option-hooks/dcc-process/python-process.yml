@@ -1,0 +1,26 @@
+option:
+    type: method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Python Process'
+        icon_name: 'application/python'
+#
+hook_option:
+    engine: 'maya-python'
+    #
+    script:
+        method: ''
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

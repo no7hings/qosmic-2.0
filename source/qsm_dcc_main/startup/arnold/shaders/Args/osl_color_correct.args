@@ -1,0 +1,31 @@
+<args format="1.0">
+    <help>
+    build by lynxi
+    </help>
+    <page name="osl color correct">
+        <param name="input">
+            <help>
+            </help>
+        </param>
+        <param name="rgb_over">
+            <help>
+            </help>
+        </param>
+        <param name="h_offset" constant="True" slider="True" slidermin="0" slidermax="1">
+            <help>
+            </help>
+        </param>
+        <param name="s_offset" constant="True" slider="True" slidermin="0" slidermax="1">
+            <help>
+            </help>
+        </param>
+        <param name="v_offset" constant="True" slider="True" slidermin="0" slidermax="1">
+            <help>
+            </help>
+        </param>
+        <param name="scale" constant="True" slider="True" slidermin="0" slidermax="1">
+            <help>
+            </help>
+        </param>
+    </page>
+</args>

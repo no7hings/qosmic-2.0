@@ -1,0 +1,147 @@
+#usda 1.0
+(
+    defaultPrim = ""
+    doc = """
+        https://openusd.org/release/spec_usdpreviewsurface.html
+    """
+    metersPerUnit = 0.01
+    upAxis = "Y"
+)
+
+def "materials" {
+
+}
+
+def Material "mtl_preview"
+{
+    token outputs:surface.connect      = </mtl_preview/mtl_shader.outputs:surface>
+    token outputs:displacement.connect = </mtl_preview/mtl_shader.outputs:displacement>
+
+    string inputs:frame:tangentsPrimvarName = "tangents"
+    string inputs:frame:binormalsPrimvarName = "binormals"
+    string inputs:frame:stPrimvarName = "st"
+
+    def Shader "mtl_shader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+
+        token outputs:surface
+        token outputs:displacement
+
+        int inputs:useSpecularWorkflow = 0
+        color3f inputs:diffuseColor.connect = </mtl_preview/txr_diffuse_color.outputs:rgb>
+        color3f inputs:specularColor = (0, 0, 0)
+        float inputs:roughness.connect = </mtl_preview/txr_specular_roughness.outputs:r>
+        float inputs:metallic = 0.0
+        float inputs:ior = 1.5
+        float inputs:clearcoat = 0.0
+        float inputs:clearcoatRoughness = 0.0
+        float inputs:occlusion.connect = </mtl_preview/txr_ambocc.outputs:r>
+        #
+        normal3f inputs:normal.connect = </mtl_preview/txr_normal.outputs:rgb>
+        float inputs:displacement.connect = </mtl_preview/txr_displacement.outputs:r>
+        float inputs:opacity.connect = </mtl_preview/txr_opacity.outputs:r>
+        # opacityThreshold must greater than 0.0
+        float inputs:opacityThreshold = .1
+        #
+        color3f inputs:emissiveColor = (0, 0, 0)
+    }
+
+    def Shader "default_uv_map"
+    {
+        uniform token info:id = "UsdPrimvarReader_float2"
+        string inputs:varname.connect = </mtl_preview.inputs:frame:stPrimvarName>
+        float2 outputs:result
+    }
+
+    def Shader "uv_transform"
+    {
+        uniform token info:id = "UsdTransform2d"
+        float2 inputs:in.connect = </mtl_preview/default_uv_map.outputs:result>
+        float inputs:rotation = 0
+        float2 inputs:scale = (1.0, 1.0)
+        float2 inputs:translation = (0.0, 0.0)
+        float2 outputs:result
+    }
+
+    def Shader "txr_diffuse_color"
+    {
+        uniform token info:id = "UsdUVTexture"
+        asset inputs:file = @txr/acescg/jpg/albedo.jpg@
+        token inputs:wrapS = "repeat"
+        token inputs:wrapT = "repeat"
+        float3 inputs:fallback = (0.18, 0.18, 0.18)
+        token inputs:sourceColorSpace = "ACES - ACEScg"
+        float2 inputs:st.connect = </mtl_preview/uv_transform.outputs:result>
+        float3 outputs:rgb
+        float outputs:a
+    }
+
+    def Shader "txr_specular_roughness"
+    {
+        uniform token info:id = "UsdUVTexture"
+        asset inputs:file = @txr/acescg/jpg/roughness.jpg@
+        token inputs:wrapS = "repeat"
+        token inputs:wrapT = "repeat"
+        float inputs:fallback = 0.5
+        token inputs:sourceColorSpace = "ACES - ACEScg"
+        float2 inputs:st.connect = </mtl_preview/uv_transform.outputs:result>
+        float outputs:r
+    }
+
+    def Shader"txr_ambocc"
+    {
+        uniform token info:id = "UsdUVTexture"
+        asset inputs:file = @txr/acescg/jpg/ao.jpg@
+        token inputs:wrapS = "repeat"
+        token inputs:wrapT = "repeat"
+        float4 inputs:scale = (1.0, 1.0, 1.0, 1.0)
+        float inputs:fallback = 1.0
+        token inputs:sourceColorSpace = "ACES - ACEScg"
+        float2 inputs:st.connect = </mtl_preview/uv_transform.outputs:result>
+        float outputs:r
+    }
+
+    def Shader "txr_opacity"
+    {
+        uniform token info:id = "UsdUVTexture"
+        asset inputs:file = @txr/acescg/jpg/opacity.jpg@
+        token inputs:wrapS = "repeat"
+        token inputs:wrapT = "repeat"
+        float inputs:fallback = 1.0
+        token inputs:sourceColorSpace = "ACES - ACEScg"
+        float2 inputs:st.connect = </mtl_preview/uv_transform.outputs:result>
+        float3f outputs:rgb
+        float3f outputs:r
+    }
+
+    def Shader "txr_normal"
+    {
+        uniform token info:id = "UsdUVTexture"
+        asset inputs:file = @txr/acescg/jpg/normal.jpg@
+        token inputs:wrapS = "repeat"
+        token inputs:wrapT = "repeat"
+        float3 inputs:fallback = (0.5, 0.5, 1.0)
+        # value * scale + bias
+#        float4 inputs:scale = (2.0, 2.0, 2.0, 2.0)
+#        float4 inputs:bias  = (-1.0, -1.0, -1.0, -1.0)
+        token inputs:sourceColorSpace = "ACES - ACEScg"
+        float2 inputs:st.connect = </mtl_preview/uv_transform.outputs:result>
+        float3f outputs:rgb
+    }
+
+    def Shader "txr_displacement"
+    {
+        uniform token info:id = "UsdUVTexture"
+        asset inputs:file = @txr/acescg/jpg/displacement.jpg@
+        token inputs:wrapS = "repeat"
+        token inputs:wrapT = "repeat"
+        float inputs:fallback = 0.5
+        float4 inputs:scale = (.5, .5, .5, .5)
+        float4 inputs:bias  = (-0.25, -0.25, -0.25, -0.25)
+        token inputs:sourceColorSpace = "ACES - ACEScg"
+        float2 inputs:st.connect = </mtl_preview/uv_transform.outputs:result>
+        float3f outputs:rgb
+        float3f outputs:r
+    }
+}

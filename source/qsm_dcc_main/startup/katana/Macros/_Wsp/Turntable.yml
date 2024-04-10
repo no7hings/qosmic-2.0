@@ -1,0 +1,203 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'turntable'
+    type_abr: 'ttb'
+    create_type: 'Turntable_Wsp'
+    description:
+        |-
+        for turntable
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .25
+        g: .125
+        b: .5
+#
+main:
+    type: 'Group'
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.input'
+    output: '<.path>.output'
+    #
+    attributes:
+        ns_offsetX: 480
+        ns_offsetY: 120
+        #
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports:
+        - 'input'
+    #
+    output_ports:
+        - 'output'
+    #
+    ports:
+        # basic
+        type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+
+        parameters/mode:
+            widget: capsule_string
+            value: ['geometry', 'camera', 'light']
+            default: 'geometry'
+            tool_tip: '...'
+
+        parameters/target:
+            widget: CEL
+            value: ''
+            tool_tip: '...'
+        #
+        parameters/rotate:
+            widget: proxy
+
+        option/pivot_locator:
+            widget: path
+            value: '/root/world/loc/turntable/pivot_locator'
+            tool_tip: '...'
+        # record
+        record/variant_properties_opt:
+            widget: node
+            value: '<node.variant_properties_opt.name>'
+            tool_tip: '...'
+            lock: True
+    #
+    expressions:
+        parameters/target:
+            |-
+            {
+                'geometry': '/root/world/geo/master',
+                'camera': '/root/world/cam/renderCamera',
+                'light': '/root/world/lgt/gaffer',
+            }[str(parameters.mode)]
+        option/pivot_locator:
+            |-
+            '/root/world/loc/turntable/pivot_locator_for_{}'.format(parameters.mode)
+    #
+    expand_groups:
+        - 'parameters'
+        - 'parameters/rotate'
+#
+node:
+    # locator
+    locator:
+        type: 'PrimitiveCreate'
+        name: '<option.type_abr>__<..key>'
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.out'
+        #
+        parameters:
+            type: 'locator'
+        #
+        expressions:
+            name: 'getParent().option.pivot_locator'
+    # upstream_merge
+    upstream_merge:
+        tag: 'UMG'
+        type: UpstreamMerge_Wsp
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        input_ports:
+            - 'join_upstream'
+            - 'join_current'
+        #
+        connections:
+            # join upstream
+            - '<main.input>'
+            - '<.path>.join_upstream'
+            # join current
+            - '<..locator.output>'
+            - '<.path>.join_current'
+    #
+    rotate_opt:
+        tag: 'TTR'
+        type: TurntableRotate_Opt
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        proxy_ports:
+            user/parameters: ['<main.name>', 'parameters/rotate']
+        #
+        expressions:
+            CEL: 'getParent().parameters.target'
+            user/parameters/pivot_locator: 'getParent().option.pivot_locator'
+        #
+        connections:
+            - '<..upstream_merge.output>'
+            - '<.input>'
+    #
+    light_background_rotate_y_opt:
+        tag: 'PPS'
+        type: PropertySet_Opt
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        parameters:
+            CEL: '/root/materials/light/mtl_background_image'
+            user/setting/attribute: 'material.nodes.sdr_lgt_bkg_image_rotate*.parameters.input1.i1'
+            user/setting/value: '/root/world/lgt/gaffer.xform.group.rotateY.i0'
+        #
+        connections:
+            - '<..rotate_opt.output>'
+            - '<.input>'
+
+    # variant properties opt
+    variant_properties_opt:
+        tag: 'VPO'
+        type: VariantProperties_Opt
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        expressions:
+            user/data_1/i0:
+                |-
+                '{}.turntable.current'.format(getParent().parameters.mode)
+            user/data_1/i1: 'getParent().getNodeName()'
+            #
+            user/data_2/i0:
+                |-
+                '{}.turntable.traget'.format(getParent().parameters.mode)
+            user/data_2/i1: 'getParent().parameters.target'
+            #
+            user/data_3/i0:
+                |-
+                '{}.turntable.start_frame'.format(getParent().parameters.mode)
+            user/data_3/i1: 'getNode("<node.rotate_opt.name>").user.parameters.start_frame'
+            #
+            user/data_4/i0:
+                |-
+                '{}.turntable.end_frame'.format(getParent().parameters.mode)
+            user/data_4/i1: 'getNode("<node.rotate_opt.name>").user.parameters.end_frame'
+            #
+            user/data_5/i0:
+                |-
+                '{}.turntable.frame_offset'.format(getParent().parameters.mode)
+            user/data_5/i1: 'getNode("<node.rotate_opt.name>").user.parameters.frame_offset'
+        #
+        connections:
+            - '<..light_background_rotate_y_opt.output>'
+            - '<.input>'
+            # output
+            - '<.output>'
+            - '<main.output>'
+

@@ -1,0 +1,169 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'geometry'
+    type_abr: 'gmt'
+    create_type: 'Geometry_Wsp'
+    description:
+        |-
+        for geometry load
+    variant_key: 'geometry'
+    #
+    auto_color: False
+    #
+    color:
+        r: 0
+        g: 0
+        b: 0
+#
+main:
+    type: Group
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.join_other'
+    output: '<.path>.output'
+    #
+    attributes:
+        ns_offsetX: 480
+        ns_offsetY: 120
+        #
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports:
+        - join_other
+    #
+    output_ports:
+        - output
+    #
+    ports:
+        # basic
+        type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        # preset
+        preset/name:
+            widget: enumerate
+            value: ['default', 'test_0']
+            tool_tip: '...'
+
+        preset/load:
+            widget: button
+            value: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpWspGeometry(node).load_preset()'
+            tool_tip: '...'
+        #
+        parameters/branch:
+            widget: capsule_string
+            value: ['asset', 'shot']
+            default: 'asset'
+            tool_tip: '...'
+
+        parameters/asset:
+            widget: proxy
+            expand: True
+            visible_condition_hint: {
+                conditionalVisOp: 'equalTo', conditionalVisPath: '../branch', conditionalVisValue: 'asset'
+            }
+
+        # option
+        option/variant_key:
+            widget: string
+            value: '<option.variant_key>'
+            tool_tip: '...'
+            lock: True
+        # record
+        record/variant_properties_opt:
+            widget: node
+            value: '<node.variant_properties_opt.name>'
+            tool_tip: '...'
+            lock: True
+#
+node:
+    # join other dot
+    join_other_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        connections:
+            # input
+            - '<main.path>.join_other'
+            - '<.input>'
+    #
+    asset:
+        tag: 'AGT'
+        type: AssetGeometry_Wsp
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.output'
+        #
+        proxy_ports:
+            parameters: ['<main.name>', 'parameters/asset']
+    #
+    branch_switch:
+        type: Switch
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.output'
+        #
+        input_ports:
+            - 'asset'
+            - 'shot'
+        #
+        expressions:
+            in:
+                |-
+                ['asset', 'shot'].index(getParent().option.branch)
+        #
+        connections:
+            # off
+            - '<..asset.output>'
+            - '<.path>.asset'
+    # upstream_merge
+    upstream_merge:
+        tag: 'UMG'
+        type: UpstreamMerge_Wsp
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        input_ports:
+            - 'join_upstream'
+            - 'join_other'
+        #
+        connections:
+            # join upstream
+            - '<..branch_switch.output>'
+            - '<.path>.join_upstream'
+            # join other
+            - '<..join_other_dot.output>'
+            - '<.path>.join_other'
+    # variant properties opt
+    variant_properties_opt:
+        tag: 'VPO'
+        type: VariantProperties_Opt
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        parameters:
+            user/data_1/i0: '<option.variant_key>.current'
+        #
+        expressions:
+            user/data_1/i1: 'getParent().getNodeName()'
+        #
+        connections:
+            - '<..upstream_merge.output>'
+            - '<.input>'
+            # output
+            - '<.output>'
+            - '<main.output>'

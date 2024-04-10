@@ -1,0 +1,121 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'asset_ass_export'
+    type_abr: 'ast_ass_ept'
+    create_type: 'AssetAssExport_Wsp'
+    description:
+        |-
+        for asset light rig load
+    variant_key: 'light'
+    #
+    auto_color: False
+    #
+    color:
+        r: 0
+        g: 0
+        b: 0
+#
+main:
+    # create form self
+    type: AssetAssExport_Wsp
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.join_upstream'
+    output: '<.path>.output'
+    #
+    clear_children: False
+    #
+    attributes:
+        ns_offsetX: 720
+        ns_offsetY: 120
+        #
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports:
+        - 'input'
+    #
+    output_ports:
+        - output
+    #
+    ports:
+        # basic
+        type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+
+        parameters/mode:
+            widget: capsule_string
+            value: ['static', 'dynamic']
+            default: 'static'
+            tool_tip: '...'
+
+        parameters/look_pass:
+            widget: string
+            value: 'default'
+            tool_tip: '...'
+
+        parameters/start_frame:
+            widget: float
+            value: 1001
+            tool_tip: '...'
+
+        parameters/end_frame:
+            widget: float
+            value: 1001
+            tool_tip: '...'
+
+        parameters/dynamic/override_points:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+
+        parameters/dynamic/override_uv_maps:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+
+        parameters/dynamic/input_usd_file:
+            widget: file
+            value: ''
+            tool_tip: '...'
+
+        parameters/ass/file:
+            widget: file
+            value: ''
+            tool_tip: '...'
+
+        parameters/ass/includes:
+            widget: capsule_strings
+            value: ['geometry', 'look', 'camera', 'light']
+            default: ['geometry', 'look']
+            tool_tip: '...'
+
+        parameters/ass/guess:
+            widget: button
+            value: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpAssetAssExport(node).set_guess()'
+            tool_tip: '...'
+
+        parameters/execute:
+            widget: button
+            value: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpAssetAssExport(node).set_ass_export()'
+            tool_tip: '...'
+
+        option/geometry_root:
+            widget: path
+            value: '/root/world/geo/master'
+            tool_tip: '...'
+
+        option/camera_path:
+            widget: path
+            value: '/root/world/cam/camera'
+            tool_tip: '...'

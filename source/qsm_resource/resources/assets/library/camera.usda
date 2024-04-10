@@ -1,0 +1,118 @@
+#usda 1.0
+(
+    defaultPrim = ""
+    doc = """
+    """
+    metersPerUnit = 0.01
+    upAxis = "Y"
+)
+
+def Xform "cameras"
+{
+    matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+    uniform token[] xformOpOrder = ["xformOp:transform"]
+
+    def Xform "cam_top"
+    {
+        matrix4d xformOp:transform = ( (1, 0, -0, 0), (-0, 2.220446049250313e-16, -1, 0), (0, 1, 2.220446049250313e-16, 0), (0, 0, 0, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def Camera "cam_top_shape"
+        {
+            float2 clippingRange = (10, 100000)
+            float focusDistance = 1
+            float horizontalAperture = 1
+            float verticalAperture = 1
+            token projection = "perspective"
+            double shutter:close = 0
+            double shutter:open = 0
+
+            string primvars:gui:name = "Top-Y"
+
+            def NurbsCurves "cam_top_guide"
+            {
+                int[] curveVertexCounts = [38]
+                float3[] extent = [(-1, -1, -0.5), (1, 1, 2)]
+                double[] knots = [0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 37]
+                int[] order = [2]
+                point3f[] points = [(-0.5, 0.5, 1.110223e-16), (0.5, 0.5, 0), (0.5, -0.5, 0), (-0.5, -0.5, 1.110223e-16), (-0.5, 0.5, 1.110223e-16), (-0.25, 0.25, 0.5), (-0.25, -0.25, 0.5), (-0.5, -0.5, 1.110223e-16), (-0.25, -0.25, 0.5), (0.25, -0.25, 0.5), (0.5, -0.5, 0), (0.25, -0.25, 0.5), (0.25, 0.25, 0.5), (0.5, 0.5, 0), (0.25, 0.25, 0.5), (-0.25, 0.25, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (0.25, 0.25, 0.5), (0.5, 0.5, 0.5), (0.5, -0.5, 0.5), (0.25, -0.25, 0.5), (0.5, -0.5, 0.5), (-0.5, -0.5, 0.5), (-0.25, -0.25, 0.5), (-0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (-0.5, 0.5, 1.5), (-0.5, -0.5, 1.5), (-0.5, -0.5, 0.5), (-0.5, -0.5, 1.5), (0.5, -0.5, 1.5), (0.5, -0.5, 0.5), (0.5, -0.5, 1.5), (0.5, 0.5, 1.5), (0.5, 0.5, 0.5), (0.5, 0.5, 1.5), (-0.5, 0.5, 1.5)]
+                double2[] ranges = [(0, 37)]
+                float[] widths = [1] (
+                    interpolation = "constant"
+                )
+
+                uniform token purpose = "guide"
+            }
+        }
+    }
+
+    def Xform "cam_front"
+    {
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def Camera "cam_front_shape"
+        {
+            float2 clippingRange = (10, 100000)
+            float focusDistance = 1
+            float horizontalAperture = 1
+            float verticalAperture = 1
+            token projection = "perspective"
+            double shutter:close = 0
+            double shutter:open = 0
+
+            string primvars:gui:name = "Front-Z"
+
+            rel proxyPrim = <cameras/cam_top/cam_front_shape/cam_front_guide>
+
+            def NurbsCurves "cam_front_guide"
+            {
+                int[] curveVertexCounts = [38]
+                float3[] extent = [(-1, -1, -0.5), (1, 1, 2)]
+                double[] knots = [0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 37]
+                int[] order = [2]
+                point3f[] points = [(-0.5, 0.5, 1.110223e-16), (0.5, 0.5, 0), (0.5, -0.5, 0), (-0.5, -0.5, 1.110223e-16), (-0.5, 0.5, 1.110223e-16), (-0.25, 0.25, 0.5), (-0.25, -0.25, 0.5), (-0.5, -0.5, 1.110223e-16), (-0.25, -0.25, 0.5), (0.25, -0.25, 0.5), (0.5, -0.5, 0), (0.25, -0.25, 0.5), (0.25, 0.25, 0.5), (0.5, 0.5, 0), (0.25, 0.25, 0.5), (-0.25, 0.25, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (0.25, 0.25, 0.5), (0.5, 0.5, 0.5), (0.5, -0.5, 0.5), (0.25, -0.25, 0.5), (0.5, -0.5, 0.5), (-0.5, -0.5, 0.5), (-0.25, -0.25, 0.5), (-0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (-0.5, 0.5, 1.5), (-0.5, -0.5, 1.5), (-0.5, -0.5, 0.5), (-0.5, -0.5, 1.5), (0.5, -0.5, 1.5), (0.5, -0.5, 0.5), (0.5, -0.5, 1.5), (0.5, 0.5, 1.5), (0.5, 0.5, 0.5), (0.5, 0.5, 1.5), (-0.5, 0.5, 1.5)]
+                double2[] ranges = [(0, 37)]
+                float[] widths = [1] (
+                    interpolation = "constant"
+                )
+
+                uniform token purpose = "guide"
+            }
+        }
+    }
+    def Xform "cam_side"
+    {
+        matrix4d xformOp:transform = ( (2.220446049250313e-16, 0, 1, 0), (-0, 1, 0, 0), (-1, -0, 2.220446049250313e-16, 0), (0, 0, 0, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def Camera "cam_side_shape"
+        {
+            float2 clippingRange = (10, 100000)
+            float focusDistance = 1
+            float horizontalAperture = 1
+            float verticalAperture = 1
+            token projection = "perspective"
+            double shutter:close = 0
+            double shutter:open = 0
+
+            string primvars:gui:name = "Side-X"
+
+            def NurbsCurves "cam_side_guide"
+            {
+                int[] curveVertexCounts = [38]
+                float3[] extent = [(-1, -1, -0.5), (1, 1, 2)]
+                double[] knots = [0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 37]
+                int[] order = [2]
+                point3f[] points = [(-0.5, 0.5, 1.110223e-16), (0.5, 0.5, 0), (0.5, -0.5, 0), (-0.5, -0.5, 1.110223e-16), (-0.5, 0.5, 1.110223e-16), (-0.25, 0.25, 0.5), (-0.25, -0.25, 0.5), (-0.5, -0.5, 1.110223e-16), (-0.25, -0.25, 0.5), (0.25, -0.25, 0.5), (0.5, -0.5, 0), (0.25, -0.25, 0.5), (0.25, 0.25, 0.5), (0.5, 0.5, 0), (0.25, 0.25, 0.5), (-0.25, 0.25, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (0.25, 0.25, 0.5), (0.5, 0.5, 0.5), (0.5, -0.5, 0.5), (0.25, -0.25, 0.5), (0.5, -0.5, 0.5), (-0.5, -0.5, 0.5), (-0.25, -0.25, 0.5), (-0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (-0.5, 0.5, 1.5), (-0.5, -0.5, 1.5), (-0.5, -0.5, 0.5), (-0.5, -0.5, 1.5), (0.5, -0.5, 1.5), (0.5, -0.5, 0.5), (0.5, -0.5, 1.5), (0.5, 0.5, 1.5), (0.5, 0.5, 0.5), (0.5, 0.5, 1.5), (-0.5, 0.5, 1.5)]
+                double2[] ranges = [(0, 37)]
+                float[] widths = [1] (
+                    interpolation = "constant"
+                )
+
+                uniform token purpose = "guide"
+            }
+        }
+    }
+}
+

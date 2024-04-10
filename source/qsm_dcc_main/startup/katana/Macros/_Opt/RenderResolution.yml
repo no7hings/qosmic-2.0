@@ -1,0 +1,110 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'render_resolution_opt'
+    type_abr: 'rdr_rsl_opt'
+    create_type: 'RenderResolution_Opt'
+    description:
+        |-
+        for render properties operator
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .5
+        g: .125
+        b: .125
+#
+main:
+    type: OpScript
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.i0'
+    output: '<.path>.out'
+    #
+    clear_start: 'user'
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        #
+        user/enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+        #
+        user/percent:
+            widget: enumerate
+            value: ['25%', '50%', '75%', '100%', '125%', '150%', '175%', '200%']
+            default: '100%'
+            tool_tip: '...'
+    #
+    parameters:
+        CEL: '/root'
+        script/lua:
+            |-
+            function to_integer(n)
+                local s = tostring(n)
+                local i, j = s:find('%.')
+                if i then
+                    return tonumber(s:sub(1, i-1))
+                else
+                    return n
+                end
+            end
+            
+            function get_new_render_resolution(render_resolution, percent)
+                local percent_mapper = {
+                    ['25%']=0.25,
+                    ['50%']=0.5,
+                    ['75%']=0.75,
+                    ['100%']=1.0,
+                    ['125%']=1.25,
+                    ['150%']=1.5,
+                    ['175%']=1.75,
+                    ['200%']=2.0,
+                }
+            
+                local percent_value = percent:getValue()
+                
+                local percent_float = percent_mapper[percent_value]
+                if (render_resolution ~= nil) then
+                    local r = ResolutionTable.GetResolution(render_resolution:getValue())
+                    local x = r:getXRes()
+                    local y = r:getYRes()
+                    local new_x = to_integer(x*percent_float)
+                    local new_y = to_integer(y*percent_float)
+                    local new_resolution_string = tostring(new_x)..'x'..tostring(new_y)
+                    Interface.SetAttr('renderSettings.resolution', StringAttribute(new_resolution_string))
+                end
+            end
+            
+            function main()
+                if (Interface.GetOpArg('user.enable'):getValue() == 1) then
+                    get_new_render_resolution(
+                        Interface.GetAttr('renderSettings.resolution'), 
+                        Interface.GetOpArg('user.percent')
+                    )
+                end
+            end
+            
+            main()

@@ -1,0 +1,11 @@
+dcc:
+    root:
+        name: 'master'
+        location: '/master'
+#
+elements: []
+#    - {
+#        name: 'hi',
+#        location: '/master/mod/hi',
+#        file: 'geo/hi.uv_map.usd'
+#    }

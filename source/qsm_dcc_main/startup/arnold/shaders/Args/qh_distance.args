@@ -1,0 +1,34 @@
+<args format="1.0">
+    <help>
+    build by lynxi
+    </help>
+    <page name="qh distance">
+        <param name="scale">
+            <help>
+            </help>
+        </param>
+        <param name="offset">
+            <help>
+            </help>
+        </param>
+        <page name="basic">
+            <param name="mode" constant="True" widget="mapper">
+                <hintdict name="options">
+                    <int value="0" name="manhattan"/>
+                    <int value="1" name="euclidian"/>
+                    <int value="2" name="quadrance"/>
+                </hintdict>
+                <help>
+                </help>
+            </param>
+            <param name="radius" constant="True">
+                <help>
+                </help>
+            </param>
+            <param name="contrast" constant="True">
+                <help>
+                </help>
+            </param>
+        </page>
+    </page>
+</args>

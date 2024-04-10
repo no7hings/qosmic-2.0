@@ -1,0 +1,54 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'user_material_assign_group'
+    type_abr: 'usr_mtl_asn_grp'
+    create_type: 'MaterialAssignGroup_Wsp_Usr'
+    description:
+        |-
+        group for user material assign create
+    variant_key: 'look'
+    #
+    auto_color: False
+#
+main:
+    type: MaterialAssignGroup_Wsp
+    base_type: GroupStack
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.input'
+    output: '<.path>.output'
+    #
+    clear_ports: False
+    #
+    attributes:
+        comment: '<option.description>'
+    #
+    parameters:
+        # basic
+        user/type: '<option.create_type>'
+    #
+    child:
+        type: MaterialAssign_Wsp
+        #
+        tag: 'MTA'
+        #
+        path_pattern: '{parent}/<.tag>_{key}'
+        #
+        nodes:
+            lambert:
+                paramerters:
+                    args/materialAssign/enable: True
+
+                expressions:
+                    CEL:
+                        |-
+                        '{}//*{{attr("type") == "subdmesh" or attr("type") == "curves" or attr("type") == "renderer procedural"}}'.format(
+                            getParent().user.option.geometry_root
+                        )
+                    args/materialAssign/value:
+                        |-
+                        '{}/mtl_lambert'.format(
+                            getParent().user.option.material_root
+                        )
+

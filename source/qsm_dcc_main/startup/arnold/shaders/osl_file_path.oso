@@ -1,0 +1,17 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.12.0
+# options: -o /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file_path.oso
+shader osl_file_path
+param	string	filename	""		%meta{string,widget,"filename"}  %read{0,0} %write{2147483647,-1}
+param	int	udim_enable	0		%meta{int,min,0} %meta{int,max,1} %meta{string,widget,"boolean"}  %read{2147483647,-1} %write{2147483647,-1}
+param	int	sequence_enable	0		%meta{int,min,0} %meta{int,max,1} %meta{string,widget,"boolean"}  %read{2147483647,-1} %write{2147483647,-1}
+oparam	string	out_string	""		%read{2147483647,-1} %write{1,1}
+local	string	file_path	%read{1,1} %write{0,0}
+code ___main___
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file_path.osl:10
+#     string file_path = filename;
+	assign		file_path filename 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file_path.osl"} %line{10} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file_path.osl:11
+#     out_string = file_path;
+	assign		out_string file_path 	%line{11} %argrw{"wr"}
+	end

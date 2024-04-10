@@ -1,0 +1,55 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'material'
+    type_abr: 'mtl'
+    create_type: 'Material_Wsp'
+    description:
+        |-
+        for upstream merge
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: 0
+        g: 0
+        b: 0
+#
+main:
+    type: NetworkMaterialCreate
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    output: '<.path>.out'
+    #
+    clear_start: 'user'
+    #
+    clear_ports: False
+    clear_children: False
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        # extra
+        user/extra/texture_directory:
+            widget: file
+            value: '/texture_directory'
+            tool_tip: '...'

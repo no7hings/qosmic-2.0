@@ -1,0 +1,64 @@
+properties:
+    mesh:
+        - visibility
+        # basic
+        - opaque
+        - matte
+        # visibility
+        - self_shadows
+        - trace_sets
+        # subdiv
+        - subdiv_type
+        - subdiv_iterations
+        - subdiv_adaptive_error
+        - subdiv_adaptive_metric
+        - subdiv_adaptive_space
+        - subdiv_uv_smoothing
+        - subdiv_smooth_derivs
+        - subdiv_frustum_ignore
+        - smoothing
+        # displacement
+        - disp_height
+        - disp_padding
+        - disp_zero_value
+        - disp_autobump
+        - autobump_visibility
+        # volume
+        - step_size
+        - volume_padding
+        # export
+        - sss_setname
+    curve:
+        - visibility
+        # basic
+        - opaque
+        - matte
+        # visibility
+        - self_shadows
+        - trace_sets
+        - mode
+        - min_pixel_width
+        # export
+        - sss_setname
+    xgen_description:
+        - visibility
+        # basic
+        - opaque
+        - matte
+        # visibility
+        - self_shadows
+        - trace_sets
+        - mode
+        - min_pixel_width
+#
+visibilities:
+    # basic
+    - camera
+    - shadow
+    - diffuse_reflect
+    - specular_reflect
+    - diffuse_transmit
+    - specular_transmit
+    - volume
+    - subsurface
+

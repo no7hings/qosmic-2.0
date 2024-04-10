@@ -1,0 +1,19 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Any File to Clarisse'
+        icon_name: 'application/clarisse'
+        #
+        size: [720, 720]
+#
+hook_option:
+    script:
+        location: ''
+        file_type: ''
+        file: ''

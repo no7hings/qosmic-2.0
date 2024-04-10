@@ -1,0 +1,26 @@
+#usda 1.0
+
+def Xform "pointLight1"
+{
+    def SphereLight "pointLightShape1"
+    {
+        color3f color = (1, 1, 1)
+        float diffuse = 1
+        float exposure = 15
+        float intensity = 1
+        bool normalize = 1
+        vector3f[] primvars:arnold:position = [(0, 0, 0)]
+        string primvars:dcc_name = "pointLightShape1" (
+            elementSize = 1
+            interpolation = "constant"
+        )
+        float radius = 10
+        float specular = 1
+        bool treatAsPoint = 0
+        matrix4d xformOp:transform.timeSamples = {
+            0: ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (50, 50, 50, 1) ),
+        }
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+    }
+}
+

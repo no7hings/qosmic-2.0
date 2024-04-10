@@ -1,0 +1,372 @@
+option:
+    icon-dir: ''
+    #
+    background:
+        color-transparent: '0, 0, 0, 0'
+        #
+        color-black: '31, 31, 31, 255'
+        color-dim: '47, 47, 47, 255'
+        color-dark: '55, 55, 55, 255'
+        color-basic: '63, 63, 63, 255'
+        color-light: '71, 71, 71, 255'
+        color-light-hover: '103, 103, 103, 255'
+        color-white: '223, 223, 223, 255'
+        #
+        color-hovered: '255, 179, 47, 255'
+        color-selected: '79, 95, 151, 255'
+        color-checked: '255, 95, 159, 255'
+        color-pressed: '95, 255, 159, 255'
+        color-actioned: '95, 255, 159, 255'
+        #
+        color-item-selected: '79, 95, 151, 255'
+        color-item-selected-indirect: '39, 79, 127, 255'
+        color-item-hovered: '255, 179, 47, 255'
+        #
+        color-item-loading: '31, 31, 31, 63'
+        #
+        color-button: '111, 111, 111, 255'
+        color-button-hovered: '151, 151, 151'
+        color-button-disable: '79, 79, 79, 255'
+        #
+        color-tool-tip: '223, 223, 191, 255'
+        #
+        color-icon: '191, 191, 191, 255'
+        #
+        color-error: '255, 0, 63, 255'
+    #
+    border:
+        color-transparent: '0, 0, 0, 0'
+        #
+        color-dim: '55, 55, 55, 255'
+        color-dark: '63, 63, 63, 255'
+        color-basic: '71, 71, 71, 255'
+        color-light: '79, 79, 79, 255'
+        color-high-light: '95, 95, 95, 255'
+        color-light-hover: '111, 111, 111, 255'
+        #
+        color-line: '79, 79, 79, 255'
+        #
+        color-button: '95, 95, 95, 255'
+        color-button-hovered: '143, 143, 151'
+        color-button-disable: '71, 71, 71, 255'
+        #
+        color-tool-tip: '223, 223, 191, 255'
+        #
+        color-hovered: '255, 179, 47, 255'
+        color-selected: '79, 95, 151, 255'
+        color-actioned: '63, 255, 127, 255'
+        #
+        color-icon: '207, 207, 207, 255'
+        #
+        border-radius: 1
+        border-style: 'solid'
+    #
+    font:
+        color-black: '31, 31, 31, 255'
+        color-dark: '127, 127, 127, 255'
+        color-basic: '223, 223, 223, 255'
+        color-light: '255, 255, 255, 255'
+        #
+        color-hovered: '31, 31, 31, 255'
+        color-selected: '31, 31, 31, 255'
+        #
+        color-item-hovered: '255, 179, 47, 255'
+        color-item-selected: '79, 159, 255, 255'
+        #
+        color-key-basic: '191, 191, 191, 255'
+        color-key-hovered: '63, 63, 63, 255'
+        color-value-basic: '255, 255, 255, 255'
+        color-value-hovered: '31, 31, 31, 255'
+        #
+        color-tool-tip: '31, 31, 31, 255'
+        #
+        color-normal: '223, 223, 223, 255'
+        color-correct: '63, 255, 127, 255'
+        color-warning: '255, 255, 63, 255'
+        color-error: '255, 0, 63, 255'
+        color-active: '63, 127, 255, 255'
+        color-disable: '127, 127, 127, 255'
+    #
+    icon-file:
+        collapse: '<option.icon-dir>/collapse.svg'
+        expand: '<option.icon-dir>/expand.svg'
+        up-arrow: '<option.icon-dir>/up-arrow.svg'
+        down-arrow: '<option.icon-dir>/down-arrow.svg'
+    #
+    size:
+        head-view:
+            width: 16
+            height: 16
+        scroll-bar:
+            width: 16
+            height: 16
+        #
+        item:
+             width: -1
+             height: 20
+#
+widget:
+    QMainWindow:
+        |-
+        QMainWindow{
+            background: rgba(<option.background.color-basic>);
+            border: none;
+        }
+    QScrollArea:
+        |-
+        QScrollArea{
+            background: rgba(<option.background.color-basic>); 
+            color: rgba(<option.font.color-basic>);
+            border: none;
+        }
+    QMenuBar:
+        |-
+        QMenuBar{
+            background: rgba(<option.background.color-transparent>); 
+            color: rgba(<option.font.color-basic>); 
+            border: none;
+        }
+        QMenuBar::item{
+            background: rgba(<option.background.color-dark>); 
+            color: rgba(<option.font.color-basic>); 
+            border: none;
+            padding: 2px 4px 2px 4px;
+        }
+        QMenuBar::item:selected{
+            background: rgba(<option.background.color-selected>); 
+            color: rgba(<option.font.color-basic>);
+            border: none;
+        }
+        QMenuBar::item:passed{
+            background: rgba(<option.background.color-transparent>);
+            color: rgba(<option.font.color-basic>); 
+            border: none;
+        }
+    QMenu:
+        |-
+        QMenu{
+            background: rgba(<option.background.color-basic>); 
+            color: rgba(<option.font.color-basic>);
+            border: 1px rgba(<option.border.color-basic>); border-radius: 0px; border-style: solid;
+        }
+        QMenu::item{
+            background: rgba(<option.background.color-basic>); 
+            color: rgba(<option.font.color-basic>);
+        }
+        QMenu::item:selected{
+            background: rgba(<option.background.color-selected>); 
+            color: rgba(<option.font.color-selected>);
+        }
+        QMenu::separator{
+            background: rgba(<option.background.color-light>); 
+            color: rgba(<option.font.color-basic>);
+            height: 2px;
+        }
+    QTreeView:
+        |-
+        QTreeView{
+            show-decoration-selected: 1;
+            background: rgba(<option.background.color-transparent>);
+            color: rgba(<option.font.color-basic>); 
+            border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+        }
+        QTreeView::item{
+            background: rgba(<option.background.color-transparent>);
+            border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+        }
+        QTreeView::item:hover{
+            background: rgba(<option.background.color-transparent>);
+            color: rgba(<option.font.color-item-hovered>); 
+            border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+        }
+        QTreeView::item:selected{
+            background: rgba(<option.background.color-transparent>);
+            color: rgba(<option.font.color-item-selected>); 
+            border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+        }
+        QTreeView::item:selected:hover{
+            background: rgba(<option.background.color-transparent>);
+            color: rgba(<option.font.color-item-hovered>); 
+            border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+        }
+        QTreeView::branch:open:has-children:has-siblings{
+            border-image: none; image: url(<option.icon-file.expand>);
+        }
+        QTreeView::branch:open:has-children:has-siblings:hover{
+            border-image: none; image: url(<option.icon-file.expand>);
+        }
+        QTreeView::branch:open:has-children:!has-siblings{
+            border-image: none; image: url(<option.icon-file.expand>);
+        }
+        QTreeView::branch:open:has-children:!has-siblings:hover{
+            border-image: none; image: url(<option.icon-file.expand>);
+        }
+        QTreeView::branch:closed:has-children:has-siblings{
+            border-image: none; image: url(<option.icon-file.collapse>);
+        }
+        QTreeView::branch:closed:has-children:has-siblings:hover{
+            border-image: none; image: url(<option.icon-file.collapse>);
+        }
+        QTreeView::branch:closed:has-children:!has-siblings{
+            border-image: none; image: url(<option.icon-file.collapse>);
+        }
+        QTreeView::branch:closed:has-children:!has-siblings:hover{
+            border-image: none; image: url(<option.icon-file.collapse>);
+        }
+        QTreeView::indicator:checked{
+            image: url(<option.icon-dir>/tree-box-check-on.svg);
+        }
+        QTreeView::indicator:checked:hover {
+            image: url(<option.icon-dir>/tree-box-check-on-hover.svg);
+        }
+        QTreeView::indicator:checked:disabled {
+            image: url(<option.icon-dir>/tree-box-check-disable.svg);
+        }
+        QTreeView::indicator:unchecked{
+            image: url(<option.icon-dir>/tree-box-check-off.svg);
+        }
+        QTreeView::indicator:unchecked:hover{
+            image: url(<option.icon-dir>/tree-box-check-off-hover.svg);
+        }
+        QTreeView::indicator:unchecked:disabled {
+            image: url(<option.icon-dir>/tree-box-check-disable.svg);
+        }
+    QHeaderView:
+        |-
+        QHeaderView{
+            background: rgba(<option.background.color-transparent>); 
+            color: rgba(<option.font.color-basic>);
+            border: 1px rgba(<option.border.color-basic>); border-radius: 0px; border-style: none none solid none; 
+        }
+        QHeaderView::section{
+            background: rgba(<option.background.color-transparent>); 
+            color: rgba(<option.font.color-basic>);
+            border: none;
+        }
+        QHeaderView::section:hover{
+            background: rgba(<option.background.color-transparent>);
+            color: rgba(<option.font.color-basic>);
+            border: none; 
+        }
+        QHeaderView::section:checked{
+            background: rgba(<option.background.color-transparent>);
+            color: rgba(<option.font.color-basic>);
+            border: none; 
+        }
+        QHeaderView::up-arrow{
+            image: url(<option.icon-file.up-arrow>);
+        }
+        QHeaderView::down-arrow{
+            image: url(<option.icon-file.down-arrow>);
+        }
+    QScrollBar:
+        |-
+        QScrollBar:vertical{
+            background: rgba(<option.background.color-transparent>);
+            border: 1px rgba(<option.border.color-dark>); border-radius: 1px; border-style: none none none solid;
+            width: <option.size.scroll-bar.width>px; margin: 0px, 0px, 0px, 0px; padding: <option.size.scroll-bar.width>px 1px <option.size.scroll-bar.width>px 1px;
+        }
+        QScrollBar::handle:vertical{
+            background: rgba(<option.background.color-light>); width: 5px; min-height: 5px;
+            border: 1px rgba(<option.border.color-light>); border-radius: 1px; border-style: solid;
+        }
+        QScrollBar::handle:vertical:hover{
+            background:rgba(<option.background.color-light-hover>); min-height: 5px;
+            border: 1px rgba(<option.border.color-light-hover>); border-radius: 1px; border-style: solid;
+        }
+        QScrollBar::add-line:vertical{
+            image: url(<option.icon-dir>/v_scroll_add.svg);
+        }
+        QScrollBar::add-line:vertical:hover{
+            image: url(<option.icon-dir>/v_scroll_add_hover.svg);
+        }
+        QScrollBar::sub-line:vertical{
+            image: url(<option.icon-dir>/v_scroll_sub.svg);
+        }
+        QScrollBar::sub-line:vertical:hover{
+            image: url(<option.icon-dir>/v_scroll_sub_hover.svg);
+        }
+        QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+            background: rgba(<option.background.color-transparent>);
+        }
+        QScrollBar:horizontal{
+            background: rgba(<option.background.color-transparent>);
+            border: 1px rgba(<option.border.color-dark>); border-radius: 1px; border-style: solid none none none;
+            height: <option.size.scroll-bar.height>px; margin: 0px, 0px, 0px, 0px; padding: 1px <option.size.scroll-bar.height>px 1px <option.size.scroll-bar.height>px;
+        }
+        QScrollBar::handle:horizontal{
+            background: rgba(<option.background.color-light>); height: 5px; min-height: 5px;
+            border: 1px rgba(<option.border.color-light>); border-radius: 1px; border-style: solid;
+        }
+        QScrollBar::handle:horizontal:hover{
+            background: rgba(<option.background.color-light-hover>); min-width: 5px;
+            border: 1px rgba(<option.border.color-light-hover>); border-radius: 1px; border-style: solid;
+        }
+        QScrollBar::add-line:horizontal{
+            image: url(<option.icon-dir>/h_scroll_add.svg);
+        }
+        QScrollBar::add-line:horizontal:hover{
+            image: url(<option.icon-dir>/h_scroll_add_hover.svg);
+        }
+        QScrollBar::sub-line:horizontal{
+            image: url(<option.icon-dir>/h_scroll_sub.svg);
+        }
+        QScrollBar::sub-line:horizontal:hover{
+            image: url(<option.icon-dir>/h_scroll_sub_hover.svg);
+        }
+        QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal{
+            background: rgba(<option.background.color-transparent>);
+        }
+    QListView:
+        |-
+        QListView{
+            background: rgba(<option.background.color-transparent>); 
+            color: rgba(<option.font.color-basic>);
+            border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid; 
+        }
+    QTextBrowser:
+        |-
+        QTextBrowser{
+            background: rgba(<option.background.color-transparent>); 
+            color: rgba(<option.font.color-basic>);
+            border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+            selection-color: rgba(<option.font.color-basic>) ; selection-background-color: rgba(<option.background.color-selected>)
+        }
+    QTextEdit:
+        |-
+        QTextEdit{
+            background: rgba(<option.background.color-transparent>); 
+            color: rgba(<option.font.color-basic>);
+            border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+            selection-color: rgba(<option.font.color-basic>) ; selection-background-color: rgba(<option.background.color-selected>)
+        }
+    QLineEdit:
+        |-
+        QLineEdit{
+            background: rgba(<option.background.color-transparent>); 
+            color: rgba(<option.font.color-basic>);
+            border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+            selection-color: rgba(<option.font.color-basic>) ; selection-background-color: rgba(<option.background.color-selected>)
+        }
+    QSplitter:
+        |-
+        QSplitter{
+            background: rgba(<option.background.color-transparent>); 
+            color: rgba(<option.font.color-basic>);
+            border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+        }
+        QSplitter::handle{
+            background: rgba(<option.background.color-light>);
+            border: 1px rgba(<option.border.color-light>); border-radius: 0px; border-style: solid none none none
+        }
+        QSplitter::handle:pressed{
+            background: rgba(<option.background.color-actioned>);
+            border: 1px rgba(<option.border.color-actioned>); border-radius: 0px; border-style: solid none none none
+        }
+    QFileDialog:
+        |-
+        QPushButton{
+            background: rgba(<option.background.color-basic>); 
+            color: rgba(<option.font.color-basic>);
+            border: 1px rgba(<option.border.color-basic>); border-radius: 0px; border-style: solid;
+        }

@@ -1,0 +1,30 @@
+asset:
+    project: ''
+    role: ''
+    name: ''
+    #
+    root_name: master
+    #
+    start_frame: 1001.0
+    end_frame: 1001.0
+    #
+    set_file: None
+    #
+    path: '/master'
+    #
+    components: {
+        mod_var_a: {
+            default: 'V001',
+            files: {
+                v001: '/production/shows/nsa_dev/assets/env/tree_round_kit/shared/mod/mod_var_a/tree_round_kit.mod.mod_var_a.v001/cache/usd/tree_round_kit.usda',
+                v002: '/production/shows/nsa_dev/assets/env/tree_round_kit/shared/mod/mod_var_a/tree_round_kit.mod.mod_var_a.v001/cache/usd/tree_round_kit.usda'
+            }
+        },
+        mod_var_b: {
+            default: 'V001',
+            files: {
+                v001: '/production/shows/nsa_dev/assets/env/tree_round_kit/shared/mod/mod_var_b/tree_round_kit.mod.mod_var_b.v001/cache/usd/tree_round_kit.usda',
+                v002: '/production/shows/nsa_dev/assets/env/tree_round_kit/shared/mod/mod_var_b/tree_round_kit.mod.mod_var_b.v001/cache/usd/tree_round_kit.usda'
+            }
+        }
+    }

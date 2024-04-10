@@ -1,0 +1,46 @@
+# encoding=utf-8
+# noinspection PyUnresolvedReferences
+import maya.cmds as cmds
+# noinspection PyUnresolvedReferences
+import maya.mel as mel
+
+from lxmaya.node_template import base as mya_node_template_base
+
+
+# build by lynxi
+{{ 'class %s(ma_ae.AbsNodeTemplate):' | format(name) }}
+    def setup(self):
+        self._create_dict = {}
+        with self.scroll_layout():
+{{ '            with self.layout(\'%s\', collapse=False):' | format(' '.join(name.split('_'))) }}
+{{- '\n' -}}
+
+{%- set ns = namespace(group_name = '') -%}
+{%- for i_port_name, i_port in ports.iteritems() -%}
+    {%- if i_port.assign == 'input' -%}
+        {%- if i_port.metadata.page -%}
+            {%- if ns.group_name != i_port.metadata.page.value -%}
+                {{- '                with self.layout(\'%s\', collapse=False):\n' | format(i_port.metadata.page.value) -}}
+                {%- set ns.group_name = i_port.metadata.page.value -%}
+            {%- endif -%}
+            {{- '                    self.addControl(\'%s\'' | format(i_port_name) -}}
+        {%- else -%}
+            {{- '                self.addControl(\'%s\'' | format(i_port_name) -}}
+        {%- endif -%}
+        {%- if i_port.metadata.widget -%}
+            {%- if i_port.metadata.widget.value == 'filename' -%}
+                {{- ', useAsFileName=True' -}}
+                {{- ')' -}}
+            {%- elif i_port.metadata.widget.value == 'enumerate' -%}
+                {{- ', enumerateOption=\'%s\'' | format(i_port.metadata.options.value) -}}
+                {{- ')' -}}
+            {%- else -%}
+                {{- ')' -}}
+            {%- endif -%}
+        {%- else -%}
+            {{- ')' -}}
+        {%- endif -%}
+        {{- '\n' -}}
+    {%- endif -%}
+{%- endfor %}
+            self.addExtraControls()

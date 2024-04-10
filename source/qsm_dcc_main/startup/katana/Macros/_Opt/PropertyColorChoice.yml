@@ -1,0 +1,347 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'property_color_choice_opt'
+    type_abr: 'prt_clr_coc_opt'
+    create_type: 'PropertyColorChoice_Opt'
+    description:
+        |-
+        create color choice for property
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .5
+        g: .125
+        b: .125
+#
+main:
+    type: OpScript
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.i0'
+    output: '<.path>.out'
+    #
+    clear_start: 'user'
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        #
+        user/enable:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+
+        user/script_visible:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        user/setting/attribute:
+            widget: string
+            value: 'color_choice'
+            tool_tip: '...'
+
+        user/setting/scope:
+            widget: string
+            value: 'point'
+            tool_tip: '...'
+
+        user/colors/count:
+            widget: integer
+            value: 3
+            tool_tip: '...'
+            range: [0, 10]
+
+        user/colors/rgb_1:
+            label: '1'
+            widget: color3
+            value: [0, 0, 0]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'greaterThanOrEqualTo', conditionalVisPath: '../count', conditionalVisValue: 1
+            }
+
+        user/colors/rgb_2:
+            label: '2'
+            widget: color3
+            value: [0, 0, 0]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'greaterThanOrEqualTo', conditionalVisPath: '../count', conditionalVisValue: 2
+            }
+
+        user/colors/rgb_3:
+            label: '3'
+            widget: color3
+            value: [0, 0, 0]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'greaterThanOrEqualTo', conditionalVisPath: '../count', conditionalVisValue: 3
+            }
+
+        user/colors/rgb_4:
+            label: '4'
+            widget: color3
+            value: [0, 0, 0]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'greaterThanOrEqualTo', conditionalVisPath: '../count', conditionalVisValue: 4
+            }
+
+        user/colors/rgb_5:
+            label: '5'
+            widget: color3
+            value: [0, 0, 0]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'greaterThanOrEqualTo', conditionalVisPath: '../count', conditionalVisValue: 5
+            }
+
+        user/colors/rgb_6:
+            label: '6'
+            widget: color3
+            value: [0, 0, 0]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'greaterThanOrEqualTo', conditionalVisPath: '../count', conditionalVisValue: 6
+            }
+
+        user/colors/rgb_7:
+            label: '7'
+            widget: color3
+            value: [0, 0, 0]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'greaterThanOrEqualTo', conditionalVisPath: '../count', conditionalVisValue: 7
+            }
+
+        user/colors/rgb_8:
+            label: '8'
+            widget: color3
+            value: [0, 0, 0]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'greaterThanOrEqualTo', conditionalVisPath: '../count', conditionalVisValue: 8
+            }
+
+        user/colors/rgb_9:
+            label: '9'
+            widget: color3
+            value: [0, 0, 0]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'greaterThanOrEqualTo', conditionalVisPath: '../count', conditionalVisValue: 9
+            }
+
+        user/colors/rgb_10:
+            label: '10'
+            widget: color3
+            value: [0, 0, 0]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'greaterThanOrEqualTo', conditionalVisPath: '../count', conditionalVisValue: 10
+            }
+
+        user/colors/mode:
+            widget: capsule_string
+            value: ['HSV', 'RGB']
+            default: 'HSV'
+            tool_tip: '...'
+
+        user/colors/h_range:
+            widget: float2
+            value: [0.0, 1.0]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'equalTo', conditionalVisPath: '../mode', conditionalVisValue: 'HSV'
+            }
+
+        user/colors/s_range:
+            widget: float2
+            value: [0.0, 1.0]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'equalTo', conditionalVisPath: '../mode', conditionalVisValue: 'HSV'
+            }
+
+        user/colors/v_range:
+            widget: float2
+            value: [0.0, 1.0]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'equalTo', conditionalVisPath: '../mode', conditionalVisValue: 'HSV'
+            }
+
+        user/colors/r_range:
+            widget: float2
+            value: [0.0, 1.0]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'equalTo', conditionalVisPath: '../mode', conditionalVisValue: 'RGB'
+            }
+
+        user/colors/g_range:
+            widget: float2
+            value: [0.0, 1.0]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'equalTo', conditionalVisPath: '../mode', conditionalVisValue: 'RGB'
+            }
+
+        user/colors/b_range:
+            widget: float2
+            value: [0.0, 1.0]
+            tool_tip: '...'
+            visible_condition_hint: {
+                conditionalVisOp: 'equalTo', conditionalVisPath: '../mode', conditionalVisValue: 'RGB'
+            }
+
+        user/colors/seed:
+            widget: interge
+            value: 1
+            tool_tip: '...'
+
+        user/colors/generator:
+            widget: button
+            value:
+                |-
+                def main(node):
+                    import colorsys
+                    import random
+                    mode = node.getParameter('user.colors.mode').getValue(0)
+                    seed = int(node.getParameter('user.colors.seed').getValue(0))
+                    if mode == 'HSV':
+                        h_0, h_1 = node.getParameter('user.colors.h_range.i0').getValue(0), node.getParameter('user.colors.h_range.i1').getValue(1)
+                        s_0, s_1 = node.getParameter('user.colors.s_range.i0').getValue(0), node.getParameter('user.colors.s_range.i1').getValue(1)
+                        v_0, v_1 = node.getParameter('user.colors.v_range.i0').getValue(0), node.getParameter('user.colors.v_range.i1').getValue(1)
+                        h_values = range(int(min(h_0, h_1)*100), int(max(h_0, h_1)*100)) or [h_0*100]
+                        s_values = range(int(min(s_0, s_1)*100), int(max(s_0, s_1)*100)) or [s_0*100]
+                        v_values = range(int(min(v_0, v_1)*100), int(max(v_0, v_1)*100)) or [v_0*100]
+                        random.seed(seed)
+                        for i in range(10):
+                            i_h, i_s, i_v = random.choice(h_values)/100.0, random.choice(s_values)/100.0, random.choice(v_values)/100.0
+                            i_r, i_g, i_b = colorsys.hsv_to_rgb(i_h, i_s, i_v)
+                            i_p = node.getParameter('user.colors.rgb_{}'.format(i+1))
+                            i_p.getChildByIndex(0).setValue(i_r, 0)
+                            i_p.getChildByIndex(1).setValue(i_g, 0)
+                            i_p.getChildByIndex(2).setValue(i_b, 0)
+                    elif mode == 'RGB':
+                        r_0, r_1 = node.getParameter('user.colors.r_range.i0').getValue(0), node.getParameter('user.colors.r_range.i1').getValue(1)
+                        g_0, g_1 = node.getParameter('user.colors.g_range.i0').getValue(0), node.getParameter('user.colors.g_range.i1').getValue(1)
+                        b_0, b_1 = node.getParameter('user.colors.b_range.i0').getValue(0), node.getParameter('user.colors.b_range.i1').getValue(1)
+                        r_values = range(int(min(r_0, r_1)*100), int(max(r_0, r_1)*100)) or [r_0*100]
+                        g_values = range(int(min(g_0, g_1)*100), int(max(g_0, g_1)*100)) or [g_0*100]
+                        b_values = range(int(min(b_0, b_1)*100), int(max(b_0, b_1)*100)) or [b_0*100]
+                        random.seed(seed)
+                        for i in range(10):
+                            i_r, i_g, i_b = random.choice(r_values)/100.0, random.choice(g_values)/100.0, random.choice(b_values)/100.0
+                            i_p = node.getParameter('user.colors.rgb_{}'.format(i+1))
+                            i_p.getChildByIndex(0).setValue(i_r, 0)
+                            i_p.getChildByIndex(1).setValue(i_g, 0)
+                            i_p.getChildByIndex(2).setValue(i_b, 0)
+                main(node)
+
+            tool_tip: '...'
+
+        user/indices/maximum:
+            widget: interge
+            value: 1000
+            tool_tip: '...'
+
+        user/indices/seed:
+            widget: interge
+            value: 1
+            tool_tip: '...'
+
+        user/indices/generator:
+            widget: button
+            value:
+                |-
+                def main(node):
+                    import random
+                    seed = int(node.getParameter('user.indices.seed').getValue(0))
+                    maximum = int(node.getParameter('user.indices.maximum').getValue(0))
+                    color_count = int(node.getParameter('user.colors.count').getValue(0))
+                    cache_p = node.getParameter('user.indices.cache')
+                    cache_p.resizeArray(maximum)
+                    indices = range(maximum)
+                    color_indices = range(color_count)
+                    random.seed(seed)
+                    [cache_p.getChildByIndex(i).setValue(random.choice(color_indices), 0) for i in indices]
+                main(node)
+            tool_tip: '...'
+
+        user/indices/cache:
+            widget: integer_array
+            value: []
+            tool_tip: '...'
+
+    port_hints:
+        script: {
+            conditionalVisOps: {"conditionalVisOp": "equalTo", conditionalVisPath: "../user/script_visible", conditionalVisValue: 1}
+        }
+        user: {label: 'parameters'}
+
+    parameters:
+        script/lua:
+            |-
+            function create_fnc()
+                local atr_name = Interface.GetOpArg('user.setting.attribute'):getValue()
+                local scope_atr = Interface.GetOpArg('user.setting.scope')
+                local rgbs = {
+                    Interface.GetOpArg('user.colors.rgb_1'),
+                    Interface.GetOpArg('user.colors.rgb_2'),
+                    Interface.GetOpArg('user.colors.rgb_3'),
+                    Interface.GetOpArg('user.colors.rgb_4'),
+                    Interface.GetOpArg('user.colors.rgb_5'),
+                    Interface.GetOpArg('user.colors.rgb_6'),
+                    Interface.GetOpArg('user.colors.rgb_7'),
+                    Interface.GetOpArg('user.colors.rgb_8'),
+                    Interface.GetOpArg('user.colors.rgb_9'),
+                    Interface.GetOpArg('user.colors.rgb_10')
+                }
+                local indices_atr = Interface.GetOpArg('user.indices.cache')
+                Interface.SetAttr('geometry.arbitrary.'..atr_name..'.scope', scope_atr)
+                Interface.SetAttr('geometry.arbitrary.'..atr_name..'.inputType', StringAttribute('color3'))
+                Interface.SetAttr('geometry.arbitrary.'..atr_name..'.elementSize', IntAttribute(3))
+            
+                local value_tb = {}
+                local indices = indices_atr:getSamples():get(0)
+                for i, i_v in ipairs(indices) do
+                    local i_rgb_atr = rgbs[i_v+1]
+                    local i_rgb = i_rgb_atr:getSamples():get(0)
+                    for j, j_v in ipairs(i_rgb) do
+                        value_tb[i*3+j+1] = j_v
+                    end
+                end
+                Interface.SetAttr('geometry.arbitrary.'..atr_name..'.value', FloatAttribute(value_tb, 3))
+            end
+            
+            function main()
+                if (Interface.GetOpArg('user.enable'):getValue() == 1) then
+                    create_fnc()
+                end
+            end
+            
+            main()

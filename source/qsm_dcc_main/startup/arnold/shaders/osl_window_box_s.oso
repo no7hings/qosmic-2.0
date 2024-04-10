@@ -1,0 +1,2680 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.12.0
+# options: -o /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.oso
+shader osl_window_box_s
+param	string	filename	""		%meta{string,widget,"filename"} %meta{string,page,"texture"}  %read{12,25} %write{2147483647,-1}
+param	int	udim_maximum	1002		%meta{int,min,1001} %meta{int,max,1100} %meta{string,page,"texture"}  %read{29,29} %write{2147483647,-1}
+param	int	texture_flip	0		%meta{string,widget,"boolean"} %meta{string,page,"texture"}  %read{109,977} %write{2147483647,-1} %derivs
+param	int	texture_flop	0		%meta{string,widget,"boolean"} %meta{string,page,"texture"}  %read{103,1014} %write{2147483647,-1} %derivs
+param	int	space	0		%meta{string,widget,"enumerate"} %meta{string,options,"x|-x|y|-y|z|-z"} %meta{string,page,"basic"}  %read{126,653} %write{2147483647,-1}
+param	float	rotation_x	0		%meta{float,min,-90} %meta{float,max,90} %meta{string,page,"basic"}  %read{180,671} %write{2147483647,-1} %derivs
+param	float	rotation_y	0		%meta{float,min,-90} %meta{float,max,90} %meta{string,page,"basic"}  %read{235,726} %write{2147483647,-1} %derivs
+param	float	rotation_z	0		%meta{float,min,-90} %meta{float,max,90} %meta{string,page,"basic"}  %read{290,781} %write{2147483647,-1} %derivs
+param	float	depth	1		%meta{float,min,0.00999999978} %meta{float,max,100} %meta{string,page,"extra"}  %read{77,568} %write{2147483647,-1} %derivs
+param	float	overscan_left	0		%meta{float,min,0} %meta{float,max,0.899999976} %meta{string,page,"extra"}  %read{80,571} %write{2147483647,-1} %derivs
+param	float	overscan_right	0		%meta{float,min,0} %meta{float,max,0.899999976} %meta{string,page,"extra"}  %read{84,575} %write{2147483647,-1} %derivs
+param	float	overscan_top	0		%meta{float,min,0} %meta{float,max,0.899999976} %meta{string,page,"extra"}  %read{88,579} %write{2147483647,-1} %derivs
+param	float	overscan_bottom	0		%meta{float,min,0} %meta{float,max,0.899999976} %meta{string,page,"extra"}  %read{92,583} %write{2147483647,-1} %derivs
+param	float	contract_back	0		%meta{float,min,0} %meta{float,max,0.899999976} %meta{string,page,"extra"}  %read{96,587} %write{2147483647,-1} %derivs
+param	int	curtains_enable	1		%meta{string,widget,"boolean"} %meta{string,page,"extra"}  %read{549,1040} %write{2147483647,-1}
+param	int	middle_enable	1		%meta{string,widget,"boolean"} %meta{string,page,"extra"}  %read{543,1034} %write{2147483647,-1}
+param	float	middle_depth	0.5		%meta{float,min,0.00999999978} %meta{float,max,100} %meta{string,page,"extra"}  %read{101,592} %write{2147483647,-1} %derivs
+param	float	middle_offset_x	0		%meta{string,page,"extra"}  %read{107,598} %write{2147483647,-1} %derivs
+param	float	middle_offset_y	0		%meta{string,page,"extra"}  %read{113,604} %write{2147483647,-1} %derivs
+oparam	color	out_rgb	0 0 0		%read{2147483647,-1} %write{1047,1047}
+global	vector	I	%read{116,607} %write{2147483647,-1} %derivs
+global	float	u	%read{30,834} %write{2147483647,-1} %derivs
+global	float	v	%read{30,834} %write{2147483647,-1} %derivs
+local	vector	___257_axis	%read{33,790} %write{33,785} %derivs
+local	float	___257_cosang	%read{33,828} %write{33,786} %derivs
+local	float	___257_sinang	%read{33,823} %write{33,786} %derivs
+local	float	___257_cosang1	%read{33,822} %write{33,787} %derivs
+local	float	___257_x	%read{33,823} %write{33,788} %derivs
+local	float	___257_y	%read{33,821} %write{33,789} %derivs
+local	float	___257_z	%read{33,826} %write{33,790} %derivs
+local	matrix	___257_M	%read{33,832} %write{33,830} %derivs
+local	string[1]	___337_keys	%read{5,24} %write{3,3}
+local	string[1]	___337_values	%read{8,24} %write{4,4}
+local	int	___337_c	%read{8,24} %write{5,5}
+local	int	___338_i	%read{8,24} %write{7,24}
+local	string	___339_i_key	%read{8,24} %write{8,24}
+local	string	___339_i_value	%read{8,24} %write{8,24}
+local	int	___339_i_match	%read{8,24} %write{8,24}
+local	int	___340_i_start	%read{8,24} %write{8,24}
+local	string	___340_i_string_0	%read{8,24} %write{8,24}
+local	string	___340_i_out_string	%read{8,24} %write{8,24}
+local	float	___341_depth_0	%read{33,953} %write{33,569} %derivs
+local	float	___341_overscan_left_0	%read{33,613} %write{33,573} %derivs
+local	float	___341_overscan_right_0	%read{33,611} %write{33,577} %derivs
+local	float	___341_overscan_top_0	%read{33,611} %write{33,581} %derivs
+local	float	___341_overscan_bottom_0	%read{33,614} %write{33,585} %derivs
+local	float	___341_contract_back_0	%read{33,616} %write{33,589} %derivs
+local	float	___341_middle_depth_0	%read{33,972} %write{33,593} %derivs
+local	float	___341_middle_offset_x_0	%read{33,1011} %write{33,599} %derivs
+local	float	___341_middle_offset_y_0	%read{33,1011} %write{33,605} %derivs
+local	vector	___341_obj_I	%read{33,968} %write{33,833} %derivs
+local	vector	___341_axis_x	%read{33,674} %write{33,608} %derivs
+local	vector	___341_axis_y	%read{33,729} %write{33,609} %derivs
+local	vector	___341_axis_z	%read{33,784} %write{33,610} %derivs
+local	color	___341_top_right_mult	%read{33,841} %write{33,611} %derivs
+local	color	___341_left_bottom_mult	%read{33,842} %write{33,612} %derivs
+local	color	___341_left_bottom_add	%read{33,843} %write{33,615} %derivs
+local	color	___341_back_mult	%read{33,668} %write{33,616} %derivs
+local	color	___341_obj_P_orig	%read{33,976} %write{33,840} %derivs
+local	color	___341_obj_P	%read{33,970} %write{33,843} %derivs
+local	vector	___341_sections	%read{33,944} %write{33,845} %derivs
+local	color	___341_base_depth	%read{33,862} %write{33,849} %derivs
+local	color	___341_mid_ground_depth	%read{2147483647,-1} %write{33,853}
+local	color	___341_base_back	%read{33,967} %write{33,856} %derivs
+local	color	___341_base_width	%read{33,870} %write{33,857} %derivs
+local	color	___341_base_depth_x	%read{33,880} %write{33,861} %derivs
+local	color	___341_base_depth_y	%read{33,874} %write{33,865} %derivs
+local	color	___341_base_width_x	%read{33,876} %write{33,869} %derivs
+local	color	___341_base_width_y	%read{33,878} %write{33,873} %derivs
+local	float	___341_h_u	%read{33,957} %write{33,875} %derivs
+local	float	___341_v_u	%read{33,929} %write{33,877} %derivs
+local	float	___341_h_v	%read{33,904} %write{33,879} %derivs
+local	float	___341_v_v	%read{33,958} %write{33,881} %derivs
+local	color	___341_top_index	%read{33,931} %write{33,884} %derivs
+local	color	___341_bottom_index	%read{33,935} %write{33,886} %derivs
+local	color	___341_left_index	%read{33,910} %write{33,888} %derivs
+local	color	___341_right_index	%read{33,906} %write{33,891} %derivs
+local	color	___341_back_index	%read{33,956} %write{33,894} %derivs
+local	color	___341_front_index	%read{33,976} %write{33,897} %derivs
+local	float	___341_left_right_mask	%read{33,918} %write{33,903} %derivs
+local	color	___341_left_right_uv	%read{33,910} %write{33,905} %derivs
+local	color	___341_right_uv	%read{33,963} %write{33,909} %derivs
+local	color	___341_left_uv	%read{33,964} %write{33,922} %derivs
+local	float	___341_top_bottom_mask	%read{33,943} %write{33,928} %derivs
+local	color	___341_top_bottom_uv	%read{33,935} %write{33,930} %derivs
+local	color	___341_top_uv	%read{33,962} %write{33,934} %derivs
+local	color	___341_bottom_uv	%read{33,962} %write{33,947} %derivs
+local	color	___341_back_uv	%read{33,965} %write{33,961} %derivs
+local	color	___341_room_uv	%read{33,1031} %write{33,1018} %derivs
+local	color	___341_middle_uv	%read{33,1037} %write{33,1029} %derivs
+local	color	___341_front_uv	%read{33,1043} %write{33,1025} %derivs
+local	float	___341_middle_mask	%read{33,1013} %write{33,1010} %derivs
+local	color	___341_room_rgb	%read{33,1039} %write{33,1032}
+local	color	___341_final_rgb	%read{33,1046} %write{33,1045}
+local	float	___351_mid_ground_a	%read{33,1039} %write{33,1038}
+local	color	___351_mid_ground_rgb	%read{33,1039} %write{33,1038}
+local	float	___352_curtains_a	%read{33,1045} %write{33,1044}
+local	color	___352_curtains_rgb	%read{33,1045} %write{33,1044}
+local	color	final_rgb	%read{33,1047} %write{0,1046}
+local	int	udim_index	%read{33,560} %write{1,560} %derivs
+local	string	filename_new	%read{26,1044} %write{8,25}
+local	int	is_udim	%read{27,27} %write{26,26}
+local	int	___353_c	%read{33,560} %write{29,29}
+local	point	___353_uv	%read{33,560} %write{30,30}
+local	int	___354_i	%read{33,560} %write{32,560}
+local	float	___355_i_uv_offset_x	%read{33,560} %write{33,560} %derivs
+local	float	___355_i_uv_offset_y	%read{33,560} %write{33,560} %derivs
+local	string	___355_i_udim_str	%read{33,560} %write{33,560}
+local	string[2]	___355_i_args	%read{33,560} %write{33,560}
+local	string	___355_i_file	%read{33,560} %write{33,560}
+local	int	___355_i_e	%read{33,560} %write{33,560}
+local	float	___356_i_x_next	%read{33,560} %write{33,560}
+local	float	___356_i_y_next	%read{33,560} %write{33,560}
+local	color	___357_i_rgb	%read{33,560} %write{33,560}
+local	float	___359_uv_offset_x	%read{836,836} %write{561,561} %derivs
+local	float	___359_uv_offset_y	%read{839,839} %write{562,562} %derivs
+local	int	___359_e	%read{564,564} %write{563,563}
+const	float	$const1	0		%read{0,1011} %write{2147483647,-1}
+const	int	$const2	1001		%read{1,38} %write{2147483647,-1}
+const	string	$const3	"resolver_filename_form_environ"		%read{2,2} %write{2147483647,-1}
+const	string[1]	$const4	"[QSM_PROJECT_ROOT]"		%read{3,3} %write{2147483647,-1}
+const	string[1]	$const5	"/l/prod"		%read{4,4} %write{2147483647,-1}
+const	int	$const6	0		%read{7,1042} %write{2147483647,-1}
+temp	int	$tmp1	%read{8,24} %write{8,24}
+temp	int	$tmp2	%read{6,24} %write{7,24}
+temp	int	$tmp3	%read{8,24} %write{8,24}
+const	string	$const7	"substr"		%read{16,16} %write{2147483647,-1}
+temp	int	$tmp4	%read{8,24} %write{8,24}
+const	string	$const8	"resolver texture from environ: %s >> %s"		%read{20,20} %write{2147483647,-1}
+const	int	$const9	1		%read{24,1043} %write{2147483647,-1}
+temp	int	$tmp5	%read{2147483647,-1} %write{8,24}
+const	string	$const10	"<udim>"		%read{26,43} %write{2147483647,-1}
+temp	int	$tmp6	%read{28,28} %write{27,27}
+const	int	$const11	1000		%read{29,29} %write{2147483647,-1}
+temp	int	$tmp7	%read{33,560} %write{33,560}
+temp	int	$tmp8	%read{31,560} %write{32,560}
+temp	int	$tmp9	%read{33,560} %write{33,560} %derivs
+const	int	$const12	10		%read{36,36} %write{2147483647,-1}
+temp	int	$tmp10	%read{33,560} %write{33,560} %derivs
+temp	int	$tmp11	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp12	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp13	%read{33,560} %write{33,560} %derivs
+const	float	$const13	10		%read{41,41} %write{2147483647,-1}
+const	string	$const14	"%d"		%read{42,42} %write{2147483647,-1}
+temp	int	$tmp14	%read{2147483647,-1} %write{33,560}
+temp	string	$tmp15	%read{33,560} %write{33,560}
+temp	string	$tmp16	%read{33,560} %write{33,560}
+const	string	$const15	"concat"		%read{46,46} %write{2147483647,-1}
+temp	string	$tmp17	%read{33,560} %write{33,560}
+temp	int	$tmp18	%read{2147483647,-1} %write{33,560}
+const	string	$const16	"exists"		%read{49,563} %write{2147483647,-1}
+temp	int	$tmp19	%read{33,560} %write{33,560}
+const	float	$const17	1		%read{52,1026} %write{2147483647,-1}
+temp	float	$tmp20	%read{33,560} %write{33,560}
+temp	int	$tmp21	%read{33,560} %write{33,560}
+temp	int	$tmp22	%read{33,560} %write{33,560}
+temp	float	$tmp23	%read{33,560} %write{33,560}
+temp	int	$tmp24	%read{33,560} %write{33,560}
+temp	int	$tmp25	%read{33,560} %write{33,560}
+temp	int	$tmp26	%read{33,560} %write{33,560}
+temp	float	$tmp27	%read{33,560} %write{33,560}
+temp	int	$tmp28	%read{33,560} %write{33,560}
+temp	int	$tmp29	%read{33,560} %write{33,560}
+temp	float	$tmp30	%read{33,560} %write{33,560}
+temp	int	$tmp31	%read{33,560} %write{33,560}
+temp	int	$tmp32	%read{33,560} %write{33,560}
+temp	int	$tmp33	%read{33,560} %write{33,560}
+const	string	$const18	"wb"		%read{75,566} %write{2147483647,-1}
+const	float	$const19	0.00999999978		%read{78,593} %write{2147483647,-1}
+const	float	$const20	100		%read{77,568} %write{2147483647,-1}
+const	string	$const21	"clamp"		%read{76,591} %write{2147483647,-1}
+temp	float	$tmp34	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp35	%read{33,560} %write{33,560} %derivs
+const	float	$const22	0.899999976		%read{80,587} %write{2147483647,-1}
+temp	float	$tmp36	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp37	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp38	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp39	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp40	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp41	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp42	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp43	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp44	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp45	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp46	%read{33,560} %write{33,560} %derivs
+const	int	$const23	2		%read{103,967} %write{2147483647,-1}
+temp	int	$tmp47	%read{33,560} %write{33,560} %derivs
+temp	int	$tmp48	%read{33,560} %write{33,560} %derivs
+temp	int	$tmp49	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp50	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp51	%read{33,560} %write{33,560} %derivs
+const	float	$const24	0.100000001		%read{108,605} %write{2147483647,-1}
+temp	int	$tmp52	%read{33,560} %write{33,560} %derivs
+temp	int	$tmp53	%read{33,560} %write{33,560} %derivs
+temp	int	$tmp54	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp55	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp56	%read{33,560} %write{33,560} %derivs
+const	string	$const25	"object"		%read{116,607} %write{2147483647,-1}
+const	string	$const26	"transform"		%read{115,606} %write{2147483647,-1}
+const	string	$const27	"common"		%read{116,607} %write{2147483647,-1}
+const	vector	$const28	1 0 0		%read{117,608} %write{2147483647,-1}
+const	vector	$const29	0 1 0		%read{118,609} %write{2147483647,-1}
+const	vector	$const30	0 0 1		%read{119,610} %write{2147483647,-1}
+temp	float	$tmp57	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp58	%read{33,560} %write{33,560} %derivs
+temp	int	$tmp59	%read{33,560} %write{33,560}
+temp	float	$tmp60	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp61	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp62	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp63	%read{33,560} %write{33,560} %derivs
+temp	int	$tmp64	%read{33,560} %write{33,560}
+temp	float	$tmp65	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp66	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp67	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp68	%read{33,560} %write{33,560} %derivs
+temp	int	$tmp69	%read{33,560} %write{33,560}
+temp	float	$tmp70	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp71	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp72	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp73	%read{33,560} %write{33,560} %derivs
+const	int	$const31	3		%read{147,638} %write{2147483647,-1}
+temp	int	$tmp74	%read{33,560} %write{33,560}
+temp	float	$tmp75	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp76	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp77	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp78	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp79	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp80	%read{33,560} %write{33,560} %derivs
+const	int	$const32	4		%read{156,647} %write{2147483647,-1}
+temp	int	$tmp81	%read{33,560} %write{33,560}
+temp	float	$tmp82	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp83	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp84	%read{33,560} %write{33,560} %derivs
+const	int	$const33	5		%read{162,653} %write{2147483647,-1}
+temp	int	$tmp85	%read{33,560} %write{33,560}
+temp	float	$tmp86	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp87	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp88	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp89	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp90	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp91	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp92	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp93	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp94	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp95	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp96	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp97	%read{33,560} %write{33,560} %derivs
+const	string	$const34	"radians"		%read{178,779} %write{2147483647,-1}
+const	float	$const35	3.14159274		%read{179,780} %write{2147483647,-1}
+const	float	$const36	180		%read{179,780} %write{2147483647,-1}
+temp	float	$tmp98	%read{33,560} %write{33,560} %derivs
+const	string	$const37	"rotate"		%read{181,783} %write{2147483647,-1}
+const	point	$const38	0 0 0		%read{183,833} %write{2147483647,-1}
+temp	vector	$tmp100	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp101	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp102	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp103	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp104	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp105	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp106	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp107	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp108	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp109	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp110	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp111	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp112	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp113	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp114	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp115	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp116	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp117	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp118	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp119	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp120	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp121	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp122	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp123	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp124	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp125	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp126	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp127	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp128	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp129	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp130	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp131	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp132	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp133	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp134	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp135	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp136	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp137	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp138	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp139	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp140	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp141	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp142	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp143	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp145	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp146	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp147	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp148	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp149	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp150	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp151	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp152	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp153	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp154	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp155	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp156	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp157	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp158	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp159	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp160	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp161	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp162	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp163	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp164	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp165	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp166	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp167	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp168	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp169	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp170	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp171	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp172	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp173	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp174	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp175	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp176	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp177	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp178	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp179	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp180	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp181	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp182	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp183	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp184	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp185	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp186	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp187	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp188	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp190	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp191	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp192	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp193	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp194	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp195	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp196	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp197	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp198	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp199	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp200	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp201	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp202	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp203	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp204	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp205	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp206	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp207	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp208	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp209	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp210	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp211	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp212	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp213	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp214	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp215	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp216	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp217	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp218	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp219	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp220	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp221	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp222	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp223	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp224	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp225	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp226	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp227	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp228	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp229	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp230	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp231	%read{33,560} %write{33,560} %derivs
+const	float	$const39	0.5		%read{343,881} %write{2147483647,-1}
+temp	float	$tmp232	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp233	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp234	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp235	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp236	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp237	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp238	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp239	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp240	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp241	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp242	%read{33,560} %write{33,560}
+temp	vector	$tmp243	%read{33,560} %write{33,560}
+temp	vector	$tmp244	%read{33,560} %write{33,560}
+temp	color	$tmp245	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp246	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp247	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp248	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp249	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp250	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp251	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp252	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp253	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp254	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp255	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp256	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp257	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp258	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp259	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp260	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp261	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp262	%read{33,560} %write{33,560} %derivs
+const	float	$const40	3		%read{391,1026} %write{2147483647,-1}
+temp	float	$tmp263	%read{33,560} %write{33,560} %derivs
+const	float	$const41	2		%read{392,972} %write{2147483647,-1}
+temp	float	$tmp264	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp265	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp266	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp267	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp268	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp269	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp270	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp271	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp272	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp273	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp274	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp275	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp276	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp277	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp278	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp279	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp280	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp281	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp282	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp283	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp284	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp285	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp286	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp287	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp288	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp289	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp290	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp291	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp292	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp293	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp294	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp295	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp296	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp297	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp298	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp299	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp300	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp301	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp302	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp303	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp304	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp305	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp306	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp307	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp308	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp309	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp310	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp311	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp312	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp313	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp314	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp315	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp316	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp317	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp318	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp319	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp320	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp321	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp322	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp323	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp324	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp325	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp326	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp327	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp328	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp329	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp330	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp331	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp332	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp333	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp334	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp335	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp336	%read{33,560} %write{33,560} %derivs
+temp	vector	$tmp337	%read{33,560} %write{33,560} %derivs
+temp	int	$tmp338	%read{33,560} %write{33,560}
+temp	float	$tmp339	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp340	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp341	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp342	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp343	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp344	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp345	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp346	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp347	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp348	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp349	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp350	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp351	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp352	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp353	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp354	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp355	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp356	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp357	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp358	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp359	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp360	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp361	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp362	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp363	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp364	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp365	%read{33,560} %write{33,560} %derivs
+temp	color	$tmp366	%read{33,560} %write{33,560} %derivs
+temp	int	$tmp367	%read{33,560} %write{33,560}
+temp	float	$tmp368	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp369	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp370	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp371	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp372	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp373	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp374	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp375	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp376	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp377	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp378	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp379	%read{33,560} %write{33,560} %derivs
+temp	int	$tmp380	%read{33,560} %write{33,560}
+temp	float	$tmp381	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp382	%read{33,560} %write{33,560} %derivs
+const	string	$const42	"alpha"		%read{547,1044} %write{2147483647,-1}
+temp	int	$tmp383	%read{33,560} %write{33,560}
+temp	float	$tmp384	%read{33,560} %write{33,560} %derivs
+temp	float	$tmp385	%read{33,560} %write{33,560} %derivs
+const	string	$const43	"%s, is non-exists"		%read{557,557} %write{2147483647,-1}
+temp	int	$tmp386	%read{2147483647,-1} %write{33,560}
+temp	int	$tmp387	%read{2147483647,-1} %write{563,563}
+temp	int	$tmp388	%read{565,565} %write{564,564}
+temp	float	$tmp389	%read{569,569} %write{568,568} %derivs
+temp	float	$tmp390	%read{573,573} %write{572,572} %derivs
+temp	float	$tmp391	%read{572,572} %write{571,571} %derivs
+temp	float	$tmp392	%read{577,577} %write{576,576} %derivs
+temp	float	$tmp393	%read{576,576} %write{575,575} %derivs
+temp	float	$tmp394	%read{581,581} %write{580,580} %derivs
+temp	float	$tmp395	%read{580,580} %write{579,579} %derivs
+temp	float	$tmp396	%read{585,585} %write{584,584} %derivs
+temp	float	$tmp397	%read{584,584} %write{583,583} %derivs
+temp	float	$tmp398	%read{589,589} %write{588,588} %derivs
+temp	float	$tmp399	%read{588,588} %write{587,587} %derivs
+temp	float	$tmp400	%read{592,592} %write{590,590} %derivs
+temp	float	$tmp401	%read{593,593} %write{592,592} %derivs
+temp	int	$tmp402	%read{595,595} %write{594,594} %derivs
+temp	int	$tmp403	%read{596,596} %write{595,595} %derivs
+temp	int	$tmp404	%read{597,597} %write{596,596} %derivs
+temp	float	$tmp405	%read{599,599} %write{598,598} %derivs
+temp	float	$tmp406	%read{598,598} %write{597,597} %derivs
+temp	int	$tmp407	%read{601,601} %write{600,600} %derivs
+temp	int	$tmp408	%read{602,602} %write{601,601} %derivs
+temp	int	$tmp409	%read{603,603} %write{602,602} %derivs
+temp	float	$tmp410	%read{605,605} %write{604,604} %derivs
+temp	float	$tmp411	%read{604,604} %write{603,603} %derivs
+temp	float	$tmp412	%read{615,615} %write{613,613} %derivs
+temp	float	$tmp413	%read{615,615} %write{614,614} %derivs
+temp	int	$tmp414	%read{618,618} %write{617,617}
+temp	float	$tmp415	%read{620,620} %write{619,619} %derivs
+temp	float	$tmp416	%read{623,623} %write{620,620} %derivs
+temp	float	$tmp417	%read{623,623} %write{621,621} %derivs
+temp	float	$tmp418	%read{623,623} %write{622,622} %derivs
+temp	int	$tmp419	%read{625,625} %write{624,624}
+temp	float	$tmp420	%read{630,630} %write{626,626} %derivs
+temp	float	$tmp421	%read{630,630} %write{627,627} %derivs
+temp	float	$tmp422	%read{629,629} %write{628,628} %derivs
+temp	float	$tmp423	%read{630,630} %write{629,629} %derivs
+temp	int	$tmp424	%read{632,632} %write{631,631}
+temp	float	$tmp425	%read{634,634} %write{633,633} %derivs
+temp	float	$tmp426	%read{637,637} %write{634,634} %derivs
+temp	float	$tmp427	%read{637,637} %write{635,635} %derivs
+temp	float	$tmp428	%read{637,637} %write{636,636} %derivs
+temp	int	$tmp429	%read{639,639} %write{638,638}
+temp	float	$tmp430	%read{641,641} %write{640,640} %derivs
+temp	float	$tmp431	%read{646,646} %write{641,641} %derivs
+temp	float	$tmp432	%read{643,643} %write{642,642} %derivs
+temp	float	$tmp433	%read{646,646} %write{643,643} %derivs
+temp	float	$tmp434	%read{645,645} %write{644,644} %derivs
+temp	float	$tmp435	%read{646,646} %write{645,645} %derivs
+temp	int	$tmp436	%read{648,648} %write{647,647}
+temp	float	$tmp437	%read{652,652} %write{649,649} %derivs
+temp	float	$tmp438	%read{652,652} %write{650,650} %derivs
+temp	float	$tmp439	%read{652,652} %write{651,651} %derivs
+temp	int	$tmp440	%read{654,654} %write{653,653}
+temp	float	$tmp441	%read{656,656} %write{655,655} %derivs
+temp	float	$tmp442	%read{660,660} %write{656,656} %derivs
+temp	float	$tmp443	%read{660,660} %write{657,657} %derivs
+temp	float	$tmp444	%read{659,659} %write{658,658} %derivs
+temp	float	$tmp445	%read{660,660} %write{659,659} %derivs
+temp	float	$tmp446	%read{665,665} %write{661,661} %derivs
+temp	float	$tmp447	%read{663,663} %write{662,662} %derivs
+temp	float	$tmp448	%read{665,665} %write{663,663} %derivs
+temp	float	$tmp449	%read{665,665} %write{664,664} %derivs
+temp	vector	$tmp450	%read{667,667} %write{666,666} %derivs
+temp	vector	$tmp451	%read{668,668} %write{667,667} %derivs
+temp	float	$tmp452	%read{676,676} %write{671,671} %derivs
+temp	float	$tmp453	%read{671,671} %write{670,670} %derivs
+temp	vector	$tmp455	%read{675,675} %write{674,674} %derivs
+temp	float	$tmp456	%read{685,685} %write{681,681} %derivs
+temp	float	$tmp457	%read{683,683} %write{682,682} %derivs
+temp	float	$tmp458	%read{684,684} %write{683,683} %derivs
+temp	float	$tmp459	%read{685,685} %write{684,684} %derivs
+temp	float	$tmp460	%read{720,720} %write{685,685} %derivs
+temp	float	$tmp461	%read{687,687} %write{686,686} %derivs
+temp	float	$tmp462	%read{689,689} %write{687,687} %derivs
+temp	float	$tmp463	%read{689,689} %write{688,688} %derivs
+temp	float	$tmp464	%read{720,720} %write{689,689} %derivs
+temp	float	$tmp465	%read{691,691} %write{690,690} %derivs
+temp	float	$tmp466	%read{693,693} %write{691,691} %derivs
+temp	float	$tmp467	%read{693,693} %write{692,692} %derivs
+temp	float	$tmp468	%read{720,720} %write{693,693} %derivs
+temp	float	$tmp469	%read{695,695} %write{694,694} %derivs
+temp	float	$tmp470	%read{697,697} %write{695,695} %derivs
+temp	float	$tmp471	%read{697,697} %write{696,696} %derivs
+temp	float	$tmp472	%read{720,720} %write{697,697} %derivs
+temp	float	$tmp473	%read{702,702} %write{698,698} %derivs
+temp	float	$tmp474	%read{700,700} %write{699,699} %derivs
+temp	float	$tmp475	%read{701,701} %write{700,700} %derivs
+temp	float	$tmp476	%read{702,702} %write{701,701} %derivs
+temp	float	$tmp477	%read{720,720} %write{702,702} %derivs
+temp	float	$tmp478	%read{704,704} %write{703,703} %derivs
+temp	float	$tmp479	%read{706,706} %write{704,704} %derivs
+temp	float	$tmp480	%read{706,706} %write{705,705} %derivs
+temp	float	$tmp481	%read{720,720} %write{706,706} %derivs
+temp	float	$tmp482	%read{708,708} %write{707,707} %derivs
+temp	float	$tmp483	%read{710,710} %write{708,708} %derivs
+temp	float	$tmp484	%read{710,710} %write{709,709} %derivs
+temp	float	$tmp485	%read{720,720} %write{710,710} %derivs
+temp	float	$tmp486	%read{712,712} %write{711,711} %derivs
+temp	float	$tmp487	%read{714,714} %write{712,712} %derivs
+temp	float	$tmp488	%read{714,714} %write{713,713} %derivs
+temp	float	$tmp489	%read{720,720} %write{714,714} %derivs
+temp	float	$tmp490	%read{719,719} %write{715,715} %derivs
+temp	float	$tmp491	%read{717,717} %write{716,716} %derivs
+temp	float	$tmp492	%read{718,718} %write{717,717} %derivs
+temp	float	$tmp493	%read{719,719} %write{718,718} %derivs
+temp	float	$tmp494	%read{720,720} %write{719,719} %derivs
+temp	vector	$tmp495	%read{723,723} %write{722,722} %derivs
+temp	vector	$tmp496	%read{722,722} %write{721,721} %derivs
+temp	float	$tmp497	%read{731,731} %write{726,726} %derivs
+temp	float	$tmp498	%read{726,726} %write{725,725} %derivs
+temp	vector	$tmp500	%read{730,730} %write{729,729} %derivs
+temp	float	$tmp501	%read{740,740} %write{736,736} %derivs
+temp	float	$tmp502	%read{738,738} %write{737,737} %derivs
+temp	float	$tmp503	%read{739,739} %write{738,738} %derivs
+temp	float	$tmp504	%read{740,740} %write{739,739} %derivs
+temp	float	$tmp505	%read{775,775} %write{740,740} %derivs
+temp	float	$tmp506	%read{742,742} %write{741,741} %derivs
+temp	float	$tmp507	%read{744,744} %write{742,742} %derivs
+temp	float	$tmp508	%read{744,744} %write{743,743} %derivs
+temp	float	$tmp509	%read{775,775} %write{744,744} %derivs
+temp	float	$tmp510	%read{746,746} %write{745,745} %derivs
+temp	float	$tmp511	%read{748,748} %write{746,746} %derivs
+temp	float	$tmp512	%read{748,748} %write{747,747} %derivs
+temp	float	$tmp513	%read{775,775} %write{748,748} %derivs
+temp	float	$tmp514	%read{750,750} %write{749,749} %derivs
+temp	float	$tmp515	%read{752,752} %write{750,750} %derivs
+temp	float	$tmp516	%read{752,752} %write{751,751} %derivs
+temp	float	$tmp517	%read{775,775} %write{752,752} %derivs
+temp	float	$tmp518	%read{757,757} %write{753,753} %derivs
+temp	float	$tmp519	%read{755,755} %write{754,754} %derivs
+temp	float	$tmp520	%read{756,756} %write{755,755} %derivs
+temp	float	$tmp521	%read{757,757} %write{756,756} %derivs
+temp	float	$tmp522	%read{775,775} %write{757,757} %derivs
+temp	float	$tmp523	%read{759,759} %write{758,758} %derivs
+temp	float	$tmp524	%read{761,761} %write{759,759} %derivs
+temp	float	$tmp525	%read{761,761} %write{760,760} %derivs
+temp	float	$tmp526	%read{775,775} %write{761,761} %derivs
+temp	float	$tmp527	%read{763,763} %write{762,762} %derivs
+temp	float	$tmp528	%read{765,765} %write{763,763} %derivs
+temp	float	$tmp529	%read{765,765} %write{764,764} %derivs
+temp	float	$tmp530	%read{775,775} %write{765,765} %derivs
+temp	float	$tmp531	%read{767,767} %write{766,766} %derivs
+temp	float	$tmp532	%read{769,769} %write{767,767} %derivs
+temp	float	$tmp533	%read{769,769} %write{768,768} %derivs
+temp	float	$tmp534	%read{775,775} %write{769,769} %derivs
+temp	float	$tmp535	%read{774,774} %write{770,770} %derivs
+temp	float	$tmp536	%read{772,772} %write{771,771} %derivs
+temp	float	$tmp537	%read{773,773} %write{772,772} %derivs
+temp	float	$tmp538	%read{774,774} %write{773,773} %derivs
+temp	float	$tmp539	%read{775,775} %write{774,774} %derivs
+temp	vector	$tmp540	%read{778,778} %write{777,777} %derivs
+temp	vector	$tmp541	%read{777,777} %write{776,776} %derivs
+temp	float	$tmp542	%read{786,786} %write{781,781} %derivs
+temp	float	$tmp543	%read{781,781} %write{780,780} %derivs
+temp	vector	$tmp545	%read{785,785} %write{784,784} %derivs
+temp	float	$tmp546	%read{795,795} %write{791,791} %derivs
+temp	float	$tmp547	%read{793,793} %write{792,792} %derivs
+temp	float	$tmp548	%read{794,794} %write{793,793} %derivs
+temp	float	$tmp549	%read{795,795} %write{794,794} %derivs
+temp	float	$tmp550	%read{830,830} %write{795,795} %derivs
+temp	float	$tmp551	%read{797,797} %write{796,796} %derivs
+temp	float	$tmp552	%read{799,799} %write{797,797} %derivs
+temp	float	$tmp553	%read{799,799} %write{798,798} %derivs
+temp	float	$tmp554	%read{830,830} %write{799,799} %derivs
+temp	float	$tmp555	%read{801,801} %write{800,800} %derivs
+temp	float	$tmp556	%read{803,803} %write{801,801} %derivs
+temp	float	$tmp557	%read{803,803} %write{802,802} %derivs
+temp	float	$tmp558	%read{830,830} %write{803,803} %derivs
+temp	float	$tmp559	%read{805,805} %write{804,804} %derivs
+temp	float	$tmp560	%read{807,807} %write{805,805} %derivs
+temp	float	$tmp561	%read{807,807} %write{806,806} %derivs
+temp	float	$tmp562	%read{830,830} %write{807,807} %derivs
+temp	float	$tmp563	%read{812,812} %write{808,808} %derivs
+temp	float	$tmp564	%read{810,810} %write{809,809} %derivs
+temp	float	$tmp565	%read{811,811} %write{810,810} %derivs
+temp	float	$tmp566	%read{812,812} %write{811,811} %derivs
+temp	float	$tmp567	%read{830,830} %write{812,812} %derivs
+temp	float	$tmp568	%read{814,814} %write{813,813} %derivs
+temp	float	$tmp569	%read{816,816} %write{814,814} %derivs
+temp	float	$tmp570	%read{816,816} %write{815,815} %derivs
+temp	float	$tmp571	%read{830,830} %write{816,816} %derivs
+temp	float	$tmp572	%read{818,818} %write{817,817} %derivs
+temp	float	$tmp573	%read{820,820} %write{818,818} %derivs
+temp	float	$tmp574	%read{820,820} %write{819,819} %derivs
+temp	float	$tmp575	%read{830,830} %write{820,820} %derivs
+temp	float	$tmp576	%read{822,822} %write{821,821} %derivs
+temp	float	$tmp577	%read{824,824} %write{822,822} %derivs
+temp	float	$tmp578	%read{824,824} %write{823,823} %derivs
+temp	float	$tmp579	%read{830,830} %write{824,824} %derivs
+temp	float	$tmp580	%read{829,829} %write{825,825} %derivs
+temp	float	$tmp581	%read{827,827} %write{826,826} %derivs
+temp	float	$tmp582	%read{828,828} %write{827,827} %derivs
+temp	float	$tmp583	%read{829,829} %write{828,828} %derivs
+temp	float	$tmp584	%read{830,830} %write{829,829} %derivs
+temp	vector	$tmp585	%read{833,833} %write{832,832} %derivs
+temp	vector	$tmp586	%read{832,832} %write{831,831} %derivs
+temp	float	$tmp587	%read{836,836} %write{835,835} %derivs
+temp	float	$tmp588	%read{837,837} %write{836,836} %derivs
+temp	float	$tmp589	%read{839,839} %write{838,838} %derivs
+temp	float	$tmp590	%read{840,840} %write{839,839} %derivs
+temp	color	$tmp591	%read{842,842} %write{841,841} %derivs
+temp	color	$tmp592	%read{843,843} %write{842,842} %derivs
+temp	vector	$tmp593	%read{845,845} %write{844,844} %derivs
+temp	color	$tmp594	%read{849,849} %write{846,846} %derivs
+temp	vector	$tmp595	%read{848,848} %write{847,847} %derivs
+temp	vector	$tmp596	%read{849,849} %write{848,848} %derivs
+temp	color	$tmp597	%read{853,853} %write{850,850}
+temp	vector	$tmp598	%read{852,852} %write{851,851}
+temp	vector	$tmp599	%read{853,853} %write{852,852}
+temp	color	$tmp600	%read{856,856} %write{854,854} %derivs
+temp	vector	$tmp601	%read{856,856} %write{855,855} %derivs
+temp	float	$tmp602	%read{859,859} %write{858,858} %derivs
+temp	vector	$tmp603	%read{860,860} %write{859,859} %derivs
+temp	vector	$tmp604	%read{861,861} %write{860,860} %derivs
+temp	float	$tmp605	%read{863,863} %write{862,862} %derivs
+temp	vector	$tmp606	%read{864,864} %write{863,863} %derivs
+temp	vector	$tmp607	%read{865,865} %write{864,864} %derivs
+temp	float	$tmp608	%read{867,867} %write{866,866} %derivs
+temp	vector	$tmp609	%read{868,868} %write{867,867} %derivs
+temp	vector	$tmp610	%read{869,869} %write{868,868} %derivs
+temp	float	$tmp611	%read{871,871} %write{870,870} %derivs
+temp	vector	$tmp612	%read{872,872} %write{871,871} %derivs
+temp	vector	$tmp613	%read{873,873} %write{872,872} %derivs
+temp	float	$tmp614	%read{875,875} %write{874,874} %derivs
+temp	float	$tmp615	%read{877,877} %write{876,876} %derivs
+temp	float	$tmp616	%read{879,879} %write{878,878} %derivs
+temp	float	$tmp617	%read{881,881} %write{880,880} %derivs
+temp	float	$tmp618	%read{884,884} %write{882,882} %derivs
+temp	float	$tmp619	%read{884,884} %write{883,883} %derivs
+temp	float	$tmp620	%read{886,886} %write{885,885} %derivs
+temp	float	$tmp621	%read{888,888} %write{887,887} %derivs
+temp	float	$tmp622	%read{891,891} %write{889,889} %derivs
+temp	float	$tmp623	%read{891,891} %write{890,890} %derivs
+temp	float	$tmp624	%read{894,894} %write{892,892} %derivs
+temp	float	$tmp625	%read{894,894} %write{893,893} %derivs
+temp	float	$tmp626	%read{897,897} %write{895,895} %derivs
+temp	float	$tmp627	%read{897,897} %write{896,896} %derivs
+temp	float	$tmp628	%read{903,903} %write{898,898} %derivs
+temp	float	$tmp629	%read{903,903} %write{902,902} %derivs
+temp	float	$tmp630	%read{901,901} %write{900,900} %derivs
+temp	float	$tmp631	%read{900,900} %write{899,899} %derivs
+temp	float	$tmp632	%read{902,902} %write{901,901} %derivs
+temp	color	$tmp633	%read{905,905} %write{904,904} %derivs
+temp	color	$tmp634	%read{907,907} %write{906,906} %derivs
+temp	color	$tmp635	%read{909,909} %write{907,907} %derivs
+temp	float	$tmp636	%read{909,909} %write{908,908} %derivs
+temp	color	$tmp637	%read{911,911} %write{910,910} %derivs
+temp	color	$tmp638	%read{914,914} %write{911,911} %derivs
+temp	float	$tmp639	%read{913,913} %write{912,912} %derivs
+temp	float	$tmp640	%read{914,914} %write{913,913} %derivs
+temp	float	$tmp641	%read{917,917} %write{915,915} %derivs
+temp	float	$tmp642	%read{917,917} %write{916,916} %derivs
+temp	float	$tmp643	%read{918,918} %write{917,917} %derivs
+temp	float	$tmp644	%read{921,921} %write{918,918} %derivs
+temp	float	$tmp645	%read{920,920} %write{919,919} %derivs
+temp	float	$tmp646	%read{921,921} %write{920,920} %derivs
+temp	float	$tmp647	%read{922,922} %write{921,921} %derivs
+temp	float	$tmp648	%read{928,928} %write{923,923} %derivs
+temp	float	$tmp649	%read{928,928} %write{927,927} %derivs
+temp	float	$tmp650	%read{926,926} %write{925,925} %derivs
+temp	float	$tmp651	%read{925,925} %write{924,924} %derivs
+temp	float	$tmp652	%read{927,927} %write{926,926} %derivs
+temp	color	$tmp653	%read{930,930} %write{929,929} %derivs
+temp	color	$tmp654	%read{932,932} %write{931,931} %derivs
+temp	color	$tmp655	%read{934,934} %write{932,932} %derivs
+temp	float	$tmp656	%read{934,934} %write{933,933} %derivs
+temp	color	$tmp657	%read{936,936} %write{935,935} %derivs
+temp	color	$tmp658	%read{939,939} %write{936,936} %derivs
+temp	float	$tmp659	%read{938,938} %write{937,937} %derivs
+temp	float	$tmp660	%read{939,939} %write{938,938} %derivs
+temp	float	$tmp661	%read{942,942} %write{940,940} %derivs
+temp	float	$tmp662	%read{942,942} %write{941,941} %derivs
+temp	float	$tmp663	%read{943,943} %write{942,942} %derivs
+temp	float	$tmp664	%read{946,946} %write{943,943} %derivs
+temp	float	$tmp665	%read{945,945} %write{944,944} %derivs
+temp	float	$tmp666	%read{946,946} %write{945,945} %derivs
+temp	float	$tmp667	%read{947,947} %write{946,946} %derivs
+temp	float	$tmp668	%read{949,949} %write{948,948} %derivs
+temp	vector	$tmp669	%read{952,952} %write{949,949} %derivs
+temp	color	$tmp670	%read{951,951} %write{950,950} %derivs
+temp	color	$tmp671	%read{952,952} %write{951,951} %derivs
+temp	vector	$tmp672	%read{954,954} %write{952,952} %derivs
+temp	float	$tmp673	%read{954,954} %write{953,953} %derivs
+temp	vector	$tmp674	%read{955,955} %write{954,954} %derivs
+temp	vector	$tmp675	%read{956,956} %write{955,955} %derivs
+temp	vector	$tmp676	%read{961,961} %write{956,956} %derivs
+temp	float	$tmp677	%read{960,960} %write{959,959} %derivs
+temp	float	$tmp678	%read{959,959} %write{957,957} %derivs
+temp	float	$tmp679	%read{959,959} %write{958,958} %derivs
+temp	float	$tmp680	%read{961,961} %write{960,960} %derivs
+temp	color	$tmp681	%read{963,963} %write{962,962} %derivs
+temp	color	$tmp682	%read{964,964} %write{963,963} %derivs
+temp	color	$tmp683	%read{965,965} %write{964,964} %derivs
+temp	float	$tmp684	%read{975,975} %write{966,966} %derivs
+temp	float	$tmp685	%read{968,968} %write{967,967} %derivs
+temp	vector	$tmp686	%read{971,971} %write{968,968} %derivs
+temp	float	$tmp687	%read{970,970} %write{969,969} %derivs
+temp	color	$tmp688	%read{971,971} %write{970,970} %derivs
+temp	vector	$tmp689	%read{973,973} %write{971,971} %derivs
+temp	float	$tmp690	%read{973,973} %write{972,972} %derivs
+temp	vector	$tmp691	%read{974,974} %write{973,973} %derivs
+temp	vector	$tmp692	%read{975,975} %write{974,974} %derivs
+temp	int	$tmp693	%read{978,978} %write{977,977}
+temp	float	$tmp694	%read{980,980} %write{979,979} %derivs
+temp	float	$tmp695	%read{982,982} %write{980,980} %derivs
+temp	float	$tmp696	%read{982,982} %write{981,981} %derivs
+temp	float	$tmp697	%read{983,983} %write{982,982} %derivs
+temp	float	$tmp698	%read{985,985} %write{984,984} %derivs
+temp	float	$tmp699	%read{987,987} %write{985,985} %derivs
+temp	float	$tmp700	%read{987,987} %write{986,986} %derivs
+temp	float	$tmp701	%read{988,988} %write{987,987} %derivs
+temp	float	$tmp702	%read{990,990} %write{989,989} %derivs
+temp	float	$tmp703	%read{991,991} %write{990,990} %derivs
+temp	float	$tmp704	%read{993,993} %write{992,992} %derivs
+temp	float	$tmp705	%read{995,995} %write{994,994} %derivs
+temp	float	$tmp706	%read{996,996} %write{995,995} %derivs
+temp	float	$tmp707	%read{1010,1010} %write{1003,1003} %derivs
+temp	float	$tmp708	%read{998,998} %write{997,997} %derivs
+temp	float	$tmp709	%read{1002,1002} %write{998,998} %derivs
+temp	float	$tmp710	%read{1000,1000} %write{999,999} %derivs
+temp	float	$tmp711	%read{1001,1001} %write{1000,1000} %derivs
+temp	float	$tmp712	%read{1002,1002} %write{1001,1001} %derivs
+temp	float	$tmp713	%read{1003,1003} %write{1002,1002} %derivs
+temp	float	$tmp714	%read{1010,1010} %write{1009,1009} %derivs
+temp	float	$tmp715	%read{1008,1008} %write{1004,1004} %derivs
+temp	float	$tmp716	%read{1007,1007} %write{1005,1005} %derivs
+temp	float	$tmp717	%read{1007,1007} %write{1006,1006} %derivs
+temp	float	$tmp718	%read{1008,1008} %write{1007,1007} %derivs
+temp	float	$tmp719	%read{1009,1009} %write{1008,1008} %derivs
+temp	color	$tmp720	%read{1012,1012} %write{1011,1011} %derivs
+temp	color	$tmp721	%read{1013,1013} %write{1012,1012} %derivs
+temp	int	$tmp722	%read{1015,1015} %write{1014,1014}
+temp	float	$tmp723	%read{1017,1017} %write{1016,1016} %derivs
+temp	float	$tmp724	%read{1018,1018} %write{1017,1017} %derivs
+temp	float	$tmp725	%read{1020,1020} %write{1019,1019} %derivs
+temp	float	$tmp726	%read{1022,1022} %write{1021,1021} %derivs
+temp	float	$tmp727	%read{1024,1024} %write{1022,1022} %derivs
+temp	float	$tmp728	%read{1024,1024} %write{1023,1023} %derivs
+temp	float	$tmp729	%read{1025,1025} %write{1024,1024} %derivs
+temp	float	$tmp730	%read{1028,1028} %write{1026,1026} %derivs
+temp	float	$tmp731	%read{1028,1028} %write{1027,1027} %derivs
+temp	float	$tmp732	%read{1029,1029} %write{1028,1028} %derivs
+temp	float	$tmp733	%read{1032,1032} %write{1030,1030} %derivs
+temp	float	$tmp734	%read{1032,1032} %write{1031,1031} %derivs
+temp	int	$tmp735	%read{1035,1035} %write{1034,1034}
+temp	float	$tmp736	%read{1038,1038} %write{1036,1036} %derivs
+temp	float	$tmp737	%read{1038,1038} %write{1037,1037} %derivs
+temp	int	$tmp738	%read{1041,1041} %write{1040,1040}
+temp	float	$tmp739	%read{1044,1044} %write{1042,1042} %derivs
+temp	float	$tmp740	%read{1044,1044} %write{1043,1043} %derivs
+code ___main___
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:234
+#     color final_rgb = 0.0;
+	assign		final_rgb $const1 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{234} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:235
+#     int udim_index = 1001;
+	assign		udim_index $const2 	%line{235} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:237
+#     string filename_new = resolver_filename_form_environ(filename);
+	functioncall	$const3 26 	%line{237} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:8
+#     string keys[1] = {"[QSM_PROJECT_ROOT]"};
+	assign		___337_keys $const4 	%line{8} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:9
+#     string values[1] = {"/l/prod"};
+	assign		___337_values $const5 	%line{9} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:10
+#     int c = arraylength(keys);
+	arraylength	___337_c ___337_keys 	%line{10} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:11
+#     for (int i = 0; i < c; i++) {
+	for		$tmp2 8 10 23 25 	%line{11} %argrw{"r"}
+	assign		___338_i $const6 	%argrw{"wr"}
+	lt		$tmp1 ___338_i ___337_c 	%argrw{"wrr"}
+	neq		$tmp2 $tmp1 $const6 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:12
+#         string i_key = keys[i];
+	aref		___339_i_key ___337_keys ___338_i 	%line{12} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:13
+#         string i_value = values[i];
+	aref		___339_i_value ___337_values ___338_i 	%line{13} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:14
+#         int i_match = startswith(in_string, i_key);
+	startswith	___339_i_match filename ___339_i_key 	%line{14} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:15
+#         if (i_match > 0) {
+	gt		$tmp3 ___339_i_match $const6 	%line{15} %argrw{"wrr"}
+	if		$tmp3 23 23 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:16
+#             int i_start = strlen(i_key);
+	strlen		___340_i_start ___339_i_key 	%line{16} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:17
+#             string i_string_0 = substr(in_string, i_start);
+	functioncall	$const7 19 	%line{17} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:427
+# string substr (string s, int start) { return substr (s, start, strlen(s)); }
+	strlen		$tmp4 filename 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{427} %argrw{"wr"}
+	substr		___340_i_string_0 filename ___340_i_start $tmp4 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:18
+#             string i_out_string = concat(i_value, i_string_0);
+	concat		___340_i_out_string ___339_i_value ___340_i_string_0 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{18} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:19
+#             warning("resolver texture from environ: %s >> %s", in_string, i_out_string);
+	warning		$const8 filename ___340_i_out_string 	%line{19} %argrw{"rrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:20
+#             return i_out_string;
+	assign		filename_new ___340_i_out_string 	%line{20} %argrw{"wr"}
+	return
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:11
+#     for (int i = 0; i < c; i++) {
+	assign		$tmp5 ___338_i 	%line{11} %argrw{"wr"}
+	add		___338_i ___338_i $const9 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:23
+#     return in_string;
+	assign		filename_new filename 	%line{23} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:238
+#     int is_udim = regex_search(filename_new, "<udim>");
+	regex_search	is_udim filename_new $const10 	%line{238} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:239
+#     if (is_udim > 0) {
+	gt		$tmp6 is_udim $const6 	%line{239} %argrw{"wrr"}
+	if		$tmp6 561 1047 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:241
+#         int c = udim_maximum - 1000;
+	sub		___353_c udim_maximum $const11 	%line{241} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:242
+#         point uv = point(u, v, 0.0);
+	point		___353_uv u v $const1 	%line{242} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:243
+#         for (int i = 0; i < c; i++) {
+	for		$tmp8 33 35 559 561 	%line{243} %argrw{"r"}
+	assign		___354_i $const6 	%argrw{"wr"}
+	lt		$tmp7 ___354_i ___353_c 	%argrw{"wrr"}
+	neq		$tmp8 $tmp7 $const6 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:244
+#             float i_uv_offset_x = (udim_index-1001)%10;
+	sub		$tmp9 udim_index $const2 	%line{244} %argrw{"wrr"}
+	mod		$tmp10 $tmp9 $const12 	%argrw{"wrr"}
+	assign		___355_i_uv_offset_x $tmp10 	%argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:245
+#             float i_uv_offset_y = ((udim_index-1001)-i_uv_offset_x)/10;
+	sub		$tmp11 udim_index $const2 	%line{245} %argrw{"wrr"}
+	assign		$tmp13 $tmp11 	%argrw{"wr"}
+	sub		$tmp12 $tmp13 ___355_i_uv_offset_x 	%argrw{"wrr"}
+	div		___355_i_uv_offset_y $tmp12 $const13 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:247
+#             string i_udim_str = format("%d", udim_index);
+	format		___355_i_udim_str $const14 udim_index 	%line{247} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:249
+#             split(filename_new, i_args, "<udim>");
+	split		$tmp14 filename_new ___355_i_args $const10 	%line{249} %argrw{"wrwr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:250
+#             string i_file = concat(i_args[0], i_udim_str, i_args[1]);
+	aref		$tmp15 ___355_i_args $const6 	%line{250} %argrw{"wrr"}
+	aref		$tmp16 ___355_i_args $const9 	%argrw{"wrr"}
+	functioncall	$const15 49 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:433
+#     return concat(concat(a,b), c);
+	concat		$tmp17 $tmp15 ___355_i_udim_str 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{433} %argrw{"wrr"}
+	concat		___355_i_file $tmp17 $tmp16 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:253
+#             gettextureinfo(i_file, "exists", i_e);
+	gettextureinfo	$tmp18 ___355_i_file $const16 ___355_i_e 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{253} %argrw{"wrrw"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:254
+#             if (i_e > 0) {
+	gt		$tmp19 ___355_i_e $const6 	%line{254} %argrw{"wrr"}
+	if		$tmp19 557 558 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:255
+#                 float i_x_next = (i_uv_offset_x+1);
+	add		___356_i_x_next ___355_i_uv_offset_x $const17 	%line{255} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:256
+#                 float i_y_next = (i_uv_offset_y+1);
+	add		___356_i_y_next ___355_i_uv_offset_y $const17 	%line{256} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:258
+#                 if (((uv[0] >= i_uv_offset_x)&&(uv[0] <= i_x_next))&&((uv[1] >= i_uv_offset_y)&&(uv[1] <= i_y_next))){
+	compref		$tmp20 ___353_uv $const6 	%line{258} %argrw{"wrr"}
+	ge		$tmp21 $tmp20 ___355_i_uv_offset_x 	%argrw{"wrr"}
+	neq		$tmp22 $tmp21 $const6 	%argrw{"wrr"}
+	if		$tmp22 62 62 	%argrw{"r"}
+	compref		$tmp23 ___353_uv $const6 	%argrw{"wrr"}
+	le		$tmp24 $tmp23 ___356_i_x_next 	%argrw{"wrr"}
+	neq		$tmp25 $tmp24 $const6 	%argrw{"wrr"}
+	assign		$tmp22 $tmp25 	%argrw{"wr"}
+	neq		$tmp26 $tmp22 $const6 	%argrw{"wrr"}
+	if		$tmp26 74 74 	%argrw{"r"}
+	compref		$tmp27 ___353_uv $const9 	%argrw{"wrr"}
+	ge		$tmp28 $tmp27 ___355_i_uv_offset_y 	%argrw{"wrr"}
+	neq		$tmp29 $tmp28 $const6 	%argrw{"wrr"}
+	if		$tmp29 72 72 	%argrw{"r"}
+	compref		$tmp30 ___353_uv $const9 	%argrw{"wrr"}
+	le		$tmp31 $tmp30 ___356_i_y_next 	%argrw{"wrr"}
+	neq		$tmp32 $tmp31 $const6 	%argrw{"wrr"}
+	assign		$tmp29 $tmp32 	%argrw{"wr"}
+	neq		$tmp33 $tmp29 $const6 	%argrw{"wrr"}
+	assign		$tmp26 $tmp33 	%argrw{"wr"}
+	if		$tmp26 557 557 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:259
+#                     color i_rgb = wb(
+	functioncall	$const18 556 	%line{259} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:53
+#     float depth_0 = clamp(depth, 0.01, 100.0);
+	functioncall	$const21 79 	%line{53} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp34 depth $const20 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		___341_depth_0 $tmp34 $const19 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:55
+#     float overscan_left_0 = 1-clamp(overscan_left, 0, 0.9);
+	functioncall	$const21 82 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{55} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp36 overscan_left $const22 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		$tmp35 $tmp36 $const1 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:55
+#     float overscan_left_0 = 1-clamp(overscan_left, 0, 0.9);
+	sub		___341_overscan_left_0 $const17 $tmp35 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{55} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:56
+#     float overscan_right_0 = 1-clamp(overscan_right, 0, 0.9);
+	functioncall	$const21 86 	%line{56} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp38 overscan_right $const22 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		$tmp37 $tmp38 $const1 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:56
+#     float overscan_right_0 = 1-clamp(overscan_right, 0, 0.9);
+	sub		___341_overscan_right_0 $const17 $tmp37 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{56} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:57
+#     float overscan_top_0 = 1-clamp(overscan_top, 0, 0.9);
+	functioncall	$const21 90 	%line{57} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp40 overscan_top $const22 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		$tmp39 $tmp40 $const1 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:57
+#     float overscan_top_0 = 1-clamp(overscan_top, 0, 0.9);
+	sub		___341_overscan_top_0 $const17 $tmp39 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{57} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:58
+#     float overscan_bottom_0 = 1-clamp(overscan_bottom, 0, 0.9);
+	functioncall	$const21 94 	%line{58} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp42 overscan_bottom $const22 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		$tmp41 $tmp42 $const1 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:58
+#     float overscan_bottom_0 = 1-clamp(overscan_bottom, 0, 0.9);
+	sub		___341_overscan_bottom_0 $const17 $tmp41 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{58} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:60
+#     float contract_back_0 = 1-clamp(contract_back, 0, 0.9);
+	functioncall	$const21 98 	%line{60} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp44 contract_back $const22 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		$tmp43 $tmp44 $const1 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:60
+#     float contract_back_0 = 1-clamp(contract_back, 0, 0.9);
+	sub		___341_contract_back_0 $const17 $tmp43 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{60} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:62
+#     float middle_depth_0 = clamp(middle_depth, 0.01, depth_0-0.01);
+	sub		$tmp45 ___341_depth_0 $const19 	%line{62} %argrw{"wrr"}
+	functioncall	$const21 103 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp46 middle_depth $tmp45 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		___341_middle_depth_0 $tmp46 $const19 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:63
+#     float middle_offset_x_0 = middle_offset_x*-(texture_flop*2-1)*0.1;
+	mul		$tmp47 texture_flop $const23 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{63} %argrw{"wrr"}
+	sub		$tmp48 $tmp47 $const9 	%argrw{"wrr"}
+	neg		$tmp49 $tmp48 	%argrw{"wr"}
+	assign		$tmp51 $tmp49 	%argrw{"wr"}
+	mul		$tmp50 middle_offset_x $tmp51 	%argrw{"wrr"}
+	mul		___341_middle_offset_x_0 $tmp50 $const24 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:64
+#     float middle_offset_y_0 = middle_offset_y*-(texture_flip*2-1)*0.1;
+	mul		$tmp52 texture_flip $const23 	%line{64} %argrw{"wrr"}
+	sub		$tmp53 $tmp52 $const9 	%argrw{"wrr"}
+	neg		$tmp54 $tmp53 	%argrw{"wr"}
+	assign		$tmp56 $tmp54 	%argrw{"wr"}
+	mul		$tmp55 middle_offset_y $tmp56 	%argrw{"wrr"}
+	mul		___341_middle_offset_y_0 $tmp55 $const24 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:67
+#     vector obj_I = transform("object", I);
+	functioncall	$const26 117 	%line{67} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:262
+# vector transform (string to, vector p) { return transform("common",to,p); }
+	transformv	___341_obj_I $const27 $const25 I 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{262} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:69
+#     vector axis_x = vector(1, 0, 0);
+	assign		___341_axis_x $const28 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{69} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:70
+#     vector axis_y = vector(0, 1, 0);
+	assign		___341_axis_y $const29 	%line{70} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:71
+#     vector axis_z = vector(0, 0, 1);
+	assign		___341_axis_z $const30 	%line{71} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:73
+#     color top_right_mult = color(overscan_right_0, overscan_top_0, 1);
+	color		___341_top_right_mult ___341_overscan_right_0 ___341_overscan_top_0 $const17 	%line{73} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:74
+#     color left_bottom_mult = color(overscan_left_0, overscan_bottom_0, 1);
+	color		___341_left_bottom_mult ___341_overscan_left_0 ___341_overscan_bottom_0 $const17 	%line{74} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:75
+#     color left_bottom_add = color(1-overscan_left_0, 1-overscan_bottom_0, 0);
+	sub		$tmp57 $const17 ___341_overscan_left_0 	%line{75} %argrw{"wrr"}
+	sub		$tmp58 $const17 ___341_overscan_bottom_0 	%argrw{"wrr"}
+	color		___341_left_bottom_add $tmp57 $tmp58 $const1 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:77
+#     color back_mult = color(contract_back_0, 1, 1);
+	color		___341_back_mult ___341_contract_back_0 $const17 $const17 	%line{77} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:79
+#     if (space == 0){
+	eq		$tmp59 space $const6 	%line{79} %argrw{"wrr"}
+	if		$tmp59 133 175 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:80
+#         obj_I = vector(-obj_I[2], obj_I[1], obj_I[0]);
+	compref		$tmp60 ___341_obj_I $const23 	%line{80} %argrw{"wrr"}
+	neg		$tmp61 $tmp60 	%argrw{"wr"}
+	compref		$tmp62 ___341_obj_I $const9 	%argrw{"wrr"}
+	compref		$tmp63 ___341_obj_I $const6 	%argrw{"wrr"}
+	vector		___341_obj_I $tmp61 $tmp62 $tmp63 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:83
+#     else if (space == 1){
+	eq		$tmp64 space $const9 	%line{83} %argrw{"wrr"}
+	if		$tmp64 140 175 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:84
+#         obj_I = vector(obj_I[2], obj_I[1], -obj_I[0]);
+	compref		$tmp65 ___341_obj_I $const23 	%line{84} %argrw{"wrr"}
+	compref		$tmp66 ___341_obj_I $const9 	%argrw{"wrr"}
+	compref		$tmp67 ___341_obj_I $const6 	%argrw{"wrr"}
+	neg		$tmp68 $tmp67 	%argrw{"wr"}
+	vector		___341_obj_I $tmp65 $tmp66 $tmp68 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:87
+#     else if (space == 2){
+	eq		$tmp69 space $const23 	%line{87} %argrw{"wrr"}
+	if		$tmp69 147 175 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:88
+#         obj_I = vector(-obj_I[0], obj_I[2], obj_I[1]);
+	compref		$tmp70 ___341_obj_I $const6 	%line{88} %argrw{"wrr"}
+	neg		$tmp71 $tmp70 	%argrw{"wr"}
+	compref		$tmp72 ___341_obj_I $const23 	%argrw{"wrr"}
+	compref		$tmp73 ___341_obj_I $const9 	%argrw{"wrr"}
+	vector		___341_obj_I $tmp71 $tmp72 $tmp73 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:91
+#     else if (space == 3){
+	eq		$tmp74 space $const31 	%line{91} %argrw{"wrr"}
+	if		$tmp74 156 175 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:92
+#       obj_I = vector(-obj_I[0], -obj_I[2], -obj_I[1]);
+	compref		$tmp75 ___341_obj_I $const6 	%line{92} %argrw{"wrr"}
+	neg		$tmp76 $tmp75 	%argrw{"wr"}
+	compref		$tmp77 ___341_obj_I $const23 	%argrw{"wrr"}
+	neg		$tmp78 $tmp77 	%argrw{"wr"}
+	compref		$tmp79 ___341_obj_I $const9 	%argrw{"wrr"}
+	neg		$tmp80 $tmp79 	%argrw{"wr"}
+	vector		___341_obj_I $tmp76 $tmp78 $tmp80 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:95
+#     else if (space == 4){
+	eq		$tmp81 space $const32 	%line{95} %argrw{"wrr"}
+	if		$tmp81 162 175 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:96
+#         obj_I = vector(obj_I[0], obj_I[1], obj_I[2]);
+	compref		$tmp82 ___341_obj_I $const6 	%line{96} %argrw{"wrr"}
+	compref		$tmp83 ___341_obj_I $const9 	%argrw{"wrr"}
+	compref		$tmp84 ___341_obj_I $const23 	%argrw{"wrr"}
+	vector		___341_obj_I $tmp82 $tmp83 $tmp84 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:99
+#     else if (space == 5){
+	eq		$tmp85 space $const33 	%line{99} %argrw{"wrr"}
+	if		$tmp85 170 175 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:100
+#         obj_I = vector(-obj_I[0], obj_I[1], -obj_I[2]);
+	compref		$tmp86 ___341_obj_I $const6 	%line{100} %argrw{"wrr"}
+	neg		$tmp87 $tmp86 	%argrw{"wr"}
+	compref		$tmp88 ___341_obj_I $const9 	%argrw{"wrr"}
+	compref		$tmp89 ___341_obj_I $const23 	%argrw{"wrr"}
+	neg		$tmp90 $tmp89 	%argrw{"wr"}
+	vector		___341_obj_I $tmp87 $tmp88 $tmp90 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:103
+#         obj_I = vector(obj_I[0], -obj_I[2], obj_I[1]);
+	compref		$tmp91 ___341_obj_I $const6 	%line{103} %argrw{"wrr"}
+	compref		$tmp92 ___341_obj_I $const23 	%argrw{"wrr"}
+	neg		$tmp93 $tmp92 	%argrw{"wr"}
+	compref		$tmp94 ___341_obj_I $const9 	%argrw{"wrr"}
+	vector		___341_obj_I $tmp91 $tmp93 $tmp94 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:106
+#     obj_I = obj_I*top_right_mult*left_bottom_mult/back_mult;
+	mul		$tmp95 ___341_obj_I ___341_top_right_mult 	%line{106} %argrw{"wrr"}
+	mul		$tmp96 $tmp95 ___341_left_bottom_mult 	%argrw{"wrr"}
+	div		___341_obj_I $tmp96 ___341_back_mult 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:111
+#     obj_I = rotate(obj_I, radians(rotation_x), axis_x);
+	functioncall	$const34 181 	%line{111} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:65
+# float  radians (float x)  { return x*(M_PI/180.0); }
+	div		$tmp98 $const35 $const36 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{65} %argrw{"wrr"}
+	mul		$tmp97 rotation_x $tmp98 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:111
+#     obj_I = rotate(obj_I, radians(rotation_x), axis_x);
+	functioncall	$const37 233 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{111} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:293
+#     return rotate (p, angle, point(0), axis);
+	functioncall	$const37 233 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{293} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:270
+#     vector axis = normalize (b - a);
+	sub		$tmp100 ___341_axis_x $const38 	%line{270} %argrw{"wrr"}
+	normalize	___257_axis $tmp100 	%argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:272
+#     sincos (angle, sinang, cosang);
+	sincos		$tmp97 ___257_sinang ___257_cosang 	%line{272} %argrw{"rww"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:273
+#     float cosang1 = 1.0 - cosang;
+	sub		___257_cosang1 $const17 ___257_cosang 	%line{273} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:274
+#     float x = axis[0], y = axis[1], z = axis[2];
+	compref		___257_x ___257_axis $const6 	%line{274} %argrw{"wrr"}
+	compref		___257_y ___257_axis $const9 	%argrw{"wrr"}
+	compref		___257_z ___257_axis $const23 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	mul		$tmp101 ___257_x ___257_x 	%line{275} %argrw{"wrr"}
+	mul		$tmp102 ___257_x ___257_x 	%argrw{"wrr"}
+	sub		$tmp103 $const17 $tmp102 	%argrw{"wrr"}
+	mul		$tmp104 $tmp103 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp105 $tmp101 $tmp104 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:276
+#                        x * y * cosang1 + z * sinang,
+	mul		$tmp106 ___257_x ___257_y 	%line{276} %argrw{"wrr"}
+	mul		$tmp107 $tmp106 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp108 ___257_z ___257_sinang 	%argrw{"wrr"}
+	add		$tmp109 $tmp107 $tmp108 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:277
+#                        x * z * cosang1 - y * sinang,
+	mul		$tmp110 ___257_x ___257_z 	%line{277} %argrw{"wrr"}
+	mul		$tmp111 $tmp110 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp112 ___257_y ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp113 $tmp111 $tmp112 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:279
+#                        x * y * cosang1 - z * sinang,
+	mul		$tmp114 ___257_x ___257_y 	%line{279} %argrw{"wrr"}
+	mul		$tmp115 $tmp114 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp116 ___257_z ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp117 $tmp115 $tmp116 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:280
+#                        y * y + (1.0 - y * y) * cosang,
+	mul		$tmp118 ___257_y ___257_y 	%line{280} %argrw{"wrr"}
+	mul		$tmp119 ___257_y ___257_y 	%argrw{"wrr"}
+	sub		$tmp120 $const17 $tmp119 	%argrw{"wrr"}
+	mul		$tmp121 $tmp120 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp122 $tmp118 $tmp121 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:281
+#                        y * z * cosang1 + x * sinang,
+	mul		$tmp123 ___257_y ___257_z 	%line{281} %argrw{"wrr"}
+	mul		$tmp124 $tmp123 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp125 ___257_x ___257_sinang 	%argrw{"wrr"}
+	add		$tmp126 $tmp124 $tmp125 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:283
+#                        x * z * cosang1 + y * sinang,
+	mul		$tmp127 ___257_x ___257_z 	%line{283} %argrw{"wrr"}
+	mul		$tmp128 $tmp127 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp129 ___257_y ___257_sinang 	%argrw{"wrr"}
+	add		$tmp130 $tmp128 $tmp129 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:284
+#                        y * z * cosang1 - x * sinang,
+	mul		$tmp131 ___257_y ___257_z 	%line{284} %argrw{"wrr"}
+	mul		$tmp132 $tmp131 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp133 ___257_x ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp134 $tmp132 $tmp133 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:285
+#                        z * z + (1.0 - z * z) * cosang,
+	mul		$tmp135 ___257_z ___257_z 	%line{285} %argrw{"wrr"}
+	mul		$tmp136 ___257_z ___257_z 	%argrw{"wrr"}
+	sub		$tmp137 $const17 $tmp136 	%argrw{"wrr"}
+	mul		$tmp138 $tmp137 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp139 $tmp135 $tmp138 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	matrix		___257_M $tmp105 $tmp109 $tmp113 $const1 $tmp117 $tmp122 $tmp126 $const1 $tmp130 $tmp134 $tmp139 $const1 $const1 $const1 $const1 $const17 	%line{275} %argrw{"wrrrrrrrrrrrrrrrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:288
+#     return transform (M, p-a) + a;
+	sub		$tmp141 ___341_obj_I $const38 	%line{288} %argrw{"wrr"}
+	transformv	$tmp140 ___257_M $tmp141 	%argrw{"wrr"}
+	add		___341_obj_I $tmp140 $const38 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:112
+#     obj_I = rotate(obj_I, radians(rotation_y), axis_y);
+	functioncall	$const34 236 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{112} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:65
+# float  radians (float x)  { return x*(M_PI/180.0); }
+	div		$tmp143 $const35 $const36 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{65} %argrw{"wrr"}
+	mul		$tmp142 rotation_y $tmp143 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:112
+#     obj_I = rotate(obj_I, radians(rotation_y), axis_y);
+	functioncall	$const37 288 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{112} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:293
+#     return rotate (p, angle, point(0), axis);
+	functioncall	$const37 288 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{293} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:270
+#     vector axis = normalize (b - a);
+	sub		$tmp145 ___341_axis_y $const38 	%line{270} %argrw{"wrr"}
+	normalize	___257_axis $tmp145 	%argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:272
+#     sincos (angle, sinang, cosang);
+	sincos		$tmp142 ___257_sinang ___257_cosang 	%line{272} %argrw{"rww"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:273
+#     float cosang1 = 1.0 - cosang;
+	sub		___257_cosang1 $const17 ___257_cosang 	%line{273} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:274
+#     float x = axis[0], y = axis[1], z = axis[2];
+	compref		___257_x ___257_axis $const6 	%line{274} %argrw{"wrr"}
+	compref		___257_y ___257_axis $const9 	%argrw{"wrr"}
+	compref		___257_z ___257_axis $const23 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	mul		$tmp146 ___257_x ___257_x 	%line{275} %argrw{"wrr"}
+	mul		$tmp147 ___257_x ___257_x 	%argrw{"wrr"}
+	sub		$tmp148 $const17 $tmp147 	%argrw{"wrr"}
+	mul		$tmp149 $tmp148 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp150 $tmp146 $tmp149 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:276
+#                        x * y * cosang1 + z * sinang,
+	mul		$tmp151 ___257_x ___257_y 	%line{276} %argrw{"wrr"}
+	mul		$tmp152 $tmp151 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp153 ___257_z ___257_sinang 	%argrw{"wrr"}
+	add		$tmp154 $tmp152 $tmp153 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:277
+#                        x * z * cosang1 - y * sinang,
+	mul		$tmp155 ___257_x ___257_z 	%line{277} %argrw{"wrr"}
+	mul		$tmp156 $tmp155 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp157 ___257_y ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp158 $tmp156 $tmp157 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:279
+#                        x * y * cosang1 - z * sinang,
+	mul		$tmp159 ___257_x ___257_y 	%line{279} %argrw{"wrr"}
+	mul		$tmp160 $tmp159 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp161 ___257_z ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp162 $tmp160 $tmp161 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:280
+#                        y * y + (1.0 - y * y) * cosang,
+	mul		$tmp163 ___257_y ___257_y 	%line{280} %argrw{"wrr"}
+	mul		$tmp164 ___257_y ___257_y 	%argrw{"wrr"}
+	sub		$tmp165 $const17 $tmp164 	%argrw{"wrr"}
+	mul		$tmp166 $tmp165 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp167 $tmp163 $tmp166 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:281
+#                        y * z * cosang1 + x * sinang,
+	mul		$tmp168 ___257_y ___257_z 	%line{281} %argrw{"wrr"}
+	mul		$tmp169 $tmp168 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp170 ___257_x ___257_sinang 	%argrw{"wrr"}
+	add		$tmp171 $tmp169 $tmp170 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:283
+#                        x * z * cosang1 + y * sinang,
+	mul		$tmp172 ___257_x ___257_z 	%line{283} %argrw{"wrr"}
+	mul		$tmp173 $tmp172 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp174 ___257_y ___257_sinang 	%argrw{"wrr"}
+	add		$tmp175 $tmp173 $tmp174 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:284
+#                        y * z * cosang1 - x * sinang,
+	mul		$tmp176 ___257_y ___257_z 	%line{284} %argrw{"wrr"}
+	mul		$tmp177 $tmp176 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp178 ___257_x ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp179 $tmp177 $tmp178 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:285
+#                        z * z + (1.0 - z * z) * cosang,
+	mul		$tmp180 ___257_z ___257_z 	%line{285} %argrw{"wrr"}
+	mul		$tmp181 ___257_z ___257_z 	%argrw{"wrr"}
+	sub		$tmp182 $const17 $tmp181 	%argrw{"wrr"}
+	mul		$tmp183 $tmp182 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp184 $tmp180 $tmp183 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	matrix		___257_M $tmp150 $tmp154 $tmp158 $const1 $tmp162 $tmp167 $tmp171 $const1 $tmp175 $tmp179 $tmp184 $const1 $const1 $const1 $const1 $const17 	%line{275} %argrw{"wrrrrrrrrrrrrrrrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:288
+#     return transform (M, p-a) + a;
+	sub		$tmp186 ___341_obj_I $const38 	%line{288} %argrw{"wrr"}
+	transformv	$tmp185 ___257_M $tmp186 	%argrw{"wrr"}
+	add		___341_obj_I $tmp185 $const38 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:113
+#     obj_I = rotate(obj_I, radians(rotation_z), axis_z);
+	functioncall	$const34 291 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{113} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:65
+# float  radians (float x)  { return x*(M_PI/180.0); }
+	div		$tmp188 $const35 $const36 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{65} %argrw{"wrr"}
+	mul		$tmp187 rotation_z $tmp188 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:113
+#     obj_I = rotate(obj_I, radians(rotation_z), axis_z);
+	functioncall	$const37 343 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{113} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:293
+#     return rotate (p, angle, point(0), axis);
+	functioncall	$const37 343 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{293} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:270
+#     vector axis = normalize (b - a);
+	sub		$tmp190 ___341_axis_z $const38 	%line{270} %argrw{"wrr"}
+	normalize	___257_axis $tmp190 	%argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:272
+#     sincos (angle, sinang, cosang);
+	sincos		$tmp187 ___257_sinang ___257_cosang 	%line{272} %argrw{"rww"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:273
+#     float cosang1 = 1.0 - cosang;
+	sub		___257_cosang1 $const17 ___257_cosang 	%line{273} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:274
+#     float x = axis[0], y = axis[1], z = axis[2];
+	compref		___257_x ___257_axis $const6 	%line{274} %argrw{"wrr"}
+	compref		___257_y ___257_axis $const9 	%argrw{"wrr"}
+	compref		___257_z ___257_axis $const23 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	mul		$tmp191 ___257_x ___257_x 	%line{275} %argrw{"wrr"}
+	mul		$tmp192 ___257_x ___257_x 	%argrw{"wrr"}
+	sub		$tmp193 $const17 $tmp192 	%argrw{"wrr"}
+	mul		$tmp194 $tmp193 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp195 $tmp191 $tmp194 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:276
+#                        x * y * cosang1 + z * sinang,
+	mul		$tmp196 ___257_x ___257_y 	%line{276} %argrw{"wrr"}
+	mul		$tmp197 $tmp196 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp198 ___257_z ___257_sinang 	%argrw{"wrr"}
+	add		$tmp199 $tmp197 $tmp198 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:277
+#                        x * z * cosang1 - y * sinang,
+	mul		$tmp200 ___257_x ___257_z 	%line{277} %argrw{"wrr"}
+	mul		$tmp201 $tmp200 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp202 ___257_y ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp203 $tmp201 $tmp202 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:279
+#                        x * y * cosang1 - z * sinang,
+	mul		$tmp204 ___257_x ___257_y 	%line{279} %argrw{"wrr"}
+	mul		$tmp205 $tmp204 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp206 ___257_z ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp207 $tmp205 $tmp206 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:280
+#                        y * y + (1.0 - y * y) * cosang,
+	mul		$tmp208 ___257_y ___257_y 	%line{280} %argrw{"wrr"}
+	mul		$tmp209 ___257_y ___257_y 	%argrw{"wrr"}
+	sub		$tmp210 $const17 $tmp209 	%argrw{"wrr"}
+	mul		$tmp211 $tmp210 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp212 $tmp208 $tmp211 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:281
+#                        y * z * cosang1 + x * sinang,
+	mul		$tmp213 ___257_y ___257_z 	%line{281} %argrw{"wrr"}
+	mul		$tmp214 $tmp213 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp215 ___257_x ___257_sinang 	%argrw{"wrr"}
+	add		$tmp216 $tmp214 $tmp215 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:283
+#                        x * z * cosang1 + y * sinang,
+	mul		$tmp217 ___257_x ___257_z 	%line{283} %argrw{"wrr"}
+	mul		$tmp218 $tmp217 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp219 ___257_y ___257_sinang 	%argrw{"wrr"}
+	add		$tmp220 $tmp218 $tmp219 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:284
+#                        y * z * cosang1 - x * sinang,
+	mul		$tmp221 ___257_y ___257_z 	%line{284} %argrw{"wrr"}
+	mul		$tmp222 $tmp221 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp223 ___257_x ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp224 $tmp222 $tmp223 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:285
+#                        z * z + (1.0 - z * z) * cosang,
+	mul		$tmp225 ___257_z ___257_z 	%line{285} %argrw{"wrr"}
+	mul		$tmp226 ___257_z ___257_z 	%argrw{"wrr"}
+	sub		$tmp227 $const17 $tmp226 	%argrw{"wrr"}
+	mul		$tmp228 $tmp227 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp229 $tmp225 $tmp228 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	matrix		___257_M $tmp195 $tmp199 $tmp203 $const1 $tmp207 $tmp212 $tmp216 $const1 $tmp220 $tmp224 $tmp229 $const1 $const1 $const1 $const1 $const17 	%line{275} %argrw{"wrrrrrrrrrrrrrrrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:288
+#     return transform (M, p-a) + a;
+	sub		$tmp231 ___341_obj_I $const38 	%line{288} %argrw{"wrr"}
+	transformv	$tmp230 ___257_M $tmp231 	%argrw{"wrr"}
+	add		___341_obj_I $tmp230 $const38 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:115
+#     color obj_P_orig = color(u, v, 0.5);
+	color		___341_obj_P_orig u v $const39 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{115} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:117
+#     obj_P_orig[0] = obj_P_orig[0] - uv_offset_x;
+	compref		$tmp232 ___341_obj_P_orig $const6 	%line{117} %argrw{"wrr"}
+	sub		$tmp233 $tmp232 ___355_i_uv_offset_x 	%argrw{"wrr"}
+	compassign	___341_obj_P_orig $const6 $tmp233 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:118
+#     obj_P_orig[1] = obj_P_orig[1] - uv_offset_y;
+	compref		$tmp234 ___341_obj_P_orig $const9 	%line{118} %argrw{"wrr"}
+	sub		$tmp235 $tmp234 ___355_i_uv_offset_y 	%argrw{"wrr"}
+	compassign	___341_obj_P_orig $const9 $tmp235 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:120
+#     color obj_P = obj_P_orig*top_right_mult*left_bottom_mult+left_bottom_add;
+	mul		$tmp236 ___341_obj_P_orig ___341_top_right_mult 	%line{120} %argrw{"wrr"}
+	mul		$tmp237 $tmp236 ___341_left_bottom_mult 	%argrw{"wrr"}
+	add		___341_obj_P $tmp237 ___341_left_bottom_add 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:122
+#     vector sections = step(0, obj_I);
+	assign		$tmp238 $const1 	%line{122} %argrw{"wr"}
+	step		___341_sections $tmp238 ___341_obj_I 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:123
+#     color base_depth = (obj_P-sections)/(-obj_I*depth_0);
+	sub		$tmp239 ___341_obj_P ___341_sections 	%line{123} %argrw{"wrr"}
+	neg		$tmp240 ___341_obj_I 	%argrw{"wr"}
+	mul		$tmp241 $tmp240 ___341_depth_0 	%argrw{"wrr"}
+	div		___341_base_depth $tmp239 $tmp241 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:124
+#     color mid_ground_depth = (obj_P-sections)/(-obj_I*middle_depth_0);
+	sub		$tmp242 ___341_obj_P ___341_sections 	%line{124} %argrw{"wrr"}
+	neg		$tmp243 ___341_obj_I 	%argrw{"wr"}
+	mul		$tmp244 $tmp243 ___341_middle_depth_0 	%argrw{"wrr"}
+	div		___341_mid_ground_depth $tmp242 $tmp244 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:125
+#     color base_back = (obj_P-sections)/(-obj_I);
+	sub		$tmp245 ___341_obj_P ___341_sections 	%line{125} %argrw{"wrr"}
+	neg		$tmp246 ___341_obj_I 	%argrw{"wr"}
+	div		___341_base_back $tmp245 $tmp246 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:126
+#     color base_width = base_depth*depth_0;
+	mul		___341_base_width ___341_base_depth ___341_depth_0 	%line{126} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:128
+#     color base_depth_x = (base_depth[1]*obj_I+obj_P+1);
+	compref		$tmp247 ___341_base_depth $const9 	%line{128} %argrw{"wrr"}
+	mul		$tmp248 $tmp247 ___341_obj_I 	%argrw{"wrr"}
+	add		$tmp249 $tmp248 ___341_obj_P 	%argrw{"wrr"}
+	add		___341_base_depth_x $tmp249 $const17 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:129
+#     color base_depth_y = (base_depth[0]*obj_I+obj_P+1);
+	compref		$tmp250 ___341_base_depth $const6 	%line{129} %argrw{"wrr"}
+	mul		$tmp251 $tmp250 ___341_obj_I 	%argrw{"wrr"}
+	add		$tmp252 $tmp251 ___341_obj_P 	%argrw{"wrr"}
+	add		___341_base_depth_y $tmp252 $const17 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:130
+#     color base_width_x = (base_width[1]*obj_I+obj_P+1);
+	compref		$tmp253 ___341_base_width $const9 	%line{130} %argrw{"wrr"}
+	mul		$tmp254 $tmp253 ___341_obj_I 	%argrw{"wrr"}
+	add		$tmp255 $tmp254 ___341_obj_P 	%argrw{"wrr"}
+	add		___341_base_width_x $tmp255 $const17 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:131
+#     color base_width_y = (base_width[0]*obj_I+obj_P+1);
+	compref		$tmp256 ___341_base_width $const6 	%line{131} %argrw{"wrr"}
+	mul		$tmp257 $tmp256 ___341_obj_I 	%argrw{"wrr"}
+	add		$tmp258 $tmp257 ___341_obj_P 	%argrw{"wrr"}
+	add		___341_base_width_y $tmp258 $const17 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:133
+#     float h_u = base_depth_y[2]-0.5;
+	compref		$tmp259 ___341_base_depth_y $const23 	%line{133} %argrw{"wrr"}
+	sub		___341_h_u $tmp259 $const39 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:134
+#     float v_u = base_width_x[0]-1;
+	compref		$tmp260 ___341_base_width_x $const6 	%line{134} %argrw{"wrr"}
+	sub		___341_v_u $tmp260 $const17 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:135
+#     float h_v = base_width_y[1]-1;
+	compref		$tmp261 ___341_base_width_y $const9 	%line{135} %argrw{"wrr"}
+	sub		___341_h_v $tmp261 $const17 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:136
+#     float v_v = base_depth_x[2]-0.5;
+	compref		$tmp262 ___341_base_depth_x $const23 	%line{136} %argrw{"wrr"}
+	sub		___341_v_v $tmp262 $const39 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:138
+#     color top_index = color(1.0/3.0, 2.0/3.0, 0);
+	div		$tmp263 $const17 $const40 	%line{138} %argrw{"wrr"}
+	div		$tmp264 $const41 $const40 	%argrw{"wrr"}
+	color		___341_top_index $tmp263 $tmp264 $const1 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:139
+#     color bottom_index = color(1.0/3.0, 0, 0);
+	div		$tmp265 $const17 $const40 	%line{139} %argrw{"wrr"}
+	color		___341_bottom_index $tmp265 $const1 $const1 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:140
+#     color left_index = color(0.0, 1.0/3.0, 0);
+	div		$tmp266 $const17 $const40 	%line{140} %argrw{"wrr"}
+	color		___341_left_index $const1 $tmp266 $const1 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:141
+#     color right_index = color(2.0/3.0, 1.0/3.0, 0);
+	div		$tmp267 $const41 $const40 	%line{141} %argrw{"wrr"}
+	div		$tmp268 $const17 $const40 	%argrw{"wrr"}
+	color		___341_right_index $tmp267 $tmp268 $const1 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:142
+#     color back_index = color(1.0/3.0, 1.0/3.0, 0);
+	div		$tmp269 $const17 $const40 	%line{142} %argrw{"wrr"}
+	div		$tmp270 $const17 $const40 	%argrw{"wrr"}
+	color		___341_back_index $tmp269 $tmp270 $const1 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:143
+#     color front_index = color(1.0/3.0, 1.0/3.0, 0);
+	div		$tmp271 $const17 $const40 	%line{143} %argrw{"wrr"}
+	div		$tmp272 $const17 $const40 	%argrw{"wrr"}
+	color		___341_front_index $tmp271 $tmp272 $const1 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:145
+#     float left_right_mask = step(0, h_u)*step(0,1-max(h_v, 1-h_v));
+	step		$tmp273 $const1 ___341_h_u 	%line{145} %argrw{"wrr"}
+	sub		$tmp276 $const17 ___341_h_v 	%argrw{"wrr"}
+	max		$tmp275 ___341_h_v $tmp276 	%argrw{"wrr"}
+	sub		$tmp277 $const17 $tmp275 	%argrw{"wrr"}
+	step		$tmp274 $const1 $tmp277 	%argrw{"wrr"}
+	mul		___341_left_right_mask $tmp273 $tmp274 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:146
+#     color left_right_uv = color(h_u, h_v, 0) / 3;
+	color		$tmp278 ___341_h_u ___341_h_v $const1 	%line{146} %argrw{"wrrr"}
+	div		___341_left_right_uv $tmp278 $const40 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:147
+#     color right_uv = (left_right_uv+right_index)*left_right_mask*sections[0];
+	add		$tmp279 ___341_left_right_uv ___341_right_index 	%line{147} %argrw{"wrr"}
+	mul		$tmp280 $tmp279 ___341_left_right_mask 	%argrw{"wrr"}
+	compref		$tmp281 ___341_sections $const6 	%argrw{"wrr"}
+	mul		___341_right_uv $tmp280 $tmp281 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:148
+#     color left_uv = (left_right_uv+left_index)*left_right_mask*(1-sections[0]);
+	add		$tmp282 ___341_left_right_uv ___341_left_index 	%line{148} %argrw{"wrr"}
+	mul		$tmp283 $tmp282 ___341_left_right_mask 	%argrw{"wrr"}
+	compref		$tmp284 ___341_sections $const6 	%argrw{"wrr"}
+	sub		$tmp285 $const17 $tmp284 	%argrw{"wrr"}
+	mul		___341_left_uv $tmp283 $tmp285 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:149
+#     left_uv[0] = (1.0/3.0-left_uv[0])*left_right_mask*(1-sections[0]);
+	div		$tmp286 $const17 $const40 	%line{149} %argrw{"wrr"}
+	compref		$tmp287 ___341_left_uv $const6 	%argrw{"wrr"}
+	sub		$tmp288 $tmp286 $tmp287 	%argrw{"wrr"}
+	mul		$tmp289 $tmp288 ___341_left_right_mask 	%argrw{"wrr"}
+	compref		$tmp290 ___341_sections $const6 	%argrw{"wrr"}
+	sub		$tmp291 $const17 $tmp290 	%argrw{"wrr"}
+	mul		$tmp292 $tmp289 $tmp291 	%argrw{"wrr"}
+	compassign	___341_left_uv $const6 $tmp292 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:151
+#     float top_bottom_mask = step(0, v_v)*step(0,1-max(v_u, 1-v_u));
+	step		$tmp293 $const1 ___341_v_v 	%line{151} %argrw{"wrr"}
+	sub		$tmp296 $const17 ___341_v_u 	%argrw{"wrr"}
+	max		$tmp295 ___341_v_u $tmp296 	%argrw{"wrr"}
+	sub		$tmp297 $const17 $tmp295 	%argrw{"wrr"}
+	step		$tmp294 $const1 $tmp297 	%argrw{"wrr"}
+	mul		___341_top_bottom_mask $tmp293 $tmp294 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:152
+#     color top_bottom_uv = color(v_u, v_v, 0)/3;
+	color		$tmp298 ___341_v_u ___341_v_v $const1 	%line{152} %argrw{"wrrr"}
+	div		___341_top_bottom_uv $tmp298 $const40 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:153
+#     color top_uv = (top_bottom_uv+top_index)*top_bottom_mask*sections[1];
+	add		$tmp299 ___341_top_bottom_uv ___341_top_index 	%line{153} %argrw{"wrr"}
+	mul		$tmp300 $tmp299 ___341_top_bottom_mask 	%argrw{"wrr"}
+	compref		$tmp301 ___341_sections $const9 	%argrw{"wrr"}
+	mul		___341_top_uv $tmp300 $tmp301 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:154
+#     color bottom_uv = (top_bottom_uv+bottom_index)*top_bottom_mask*(1-sections[1]);
+	add		$tmp302 ___341_top_bottom_uv ___341_bottom_index 	%line{154} %argrw{"wrr"}
+	mul		$tmp303 $tmp302 ___341_top_bottom_mask 	%argrw{"wrr"}
+	compref		$tmp304 ___341_sections $const9 	%argrw{"wrr"}
+	sub		$tmp305 $const17 $tmp304 	%argrw{"wrr"}
+	mul		___341_bottom_uv $tmp303 $tmp305 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:155
+#     bottom_uv[1] = (1.0/3.0-bottom_uv[1])*top_bottom_mask*(1-sections[1]);
+	div		$tmp306 $const17 $const40 	%line{155} %argrw{"wrr"}
+	compref		$tmp307 ___341_bottom_uv $const9 	%argrw{"wrr"}
+	sub		$tmp308 $tmp306 $tmp307 	%argrw{"wrr"}
+	mul		$tmp309 $tmp308 ___341_top_bottom_mask 	%argrw{"wrr"}
+	compref		$tmp310 ___341_sections $const9 	%argrw{"wrr"}
+	sub		$tmp311 $const17 $tmp310 	%argrw{"wrr"}
+	mul		$tmp312 $tmp309 $tmp311 	%argrw{"wrr"}
+	compassign	___341_bottom_uv $const9 $tmp312 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:157
+#     color back_uv = ((base_back[2]*obj_I+(obj_P/2)/(depth_0))*(depth_0*2)/3+back_index)*(1-max(step(0,h_u), step(0,v_v)));
+	compref		$tmp313 ___341_base_back $const23 	%line{157} %argrw{"wrr"}
+	mul		$tmp314 $tmp313 ___341_obj_I 	%argrw{"wrr"}
+	div		$tmp315 ___341_obj_P $const41 	%argrw{"wrr"}
+	div		$tmp316 $tmp315 ___341_depth_0 	%argrw{"wrr"}
+	add		$tmp317 $tmp314 $tmp316 	%argrw{"wrr"}
+	mul		$tmp318 ___341_depth_0 $const41 	%argrw{"wrr"}
+	mul		$tmp319 $tmp317 $tmp318 	%argrw{"wrr"}
+	div		$tmp320 $tmp319 $const40 	%argrw{"wrr"}
+	add		$tmp321 $tmp320 ___341_back_index 	%argrw{"wrr"}
+	step		$tmp323 $const1 ___341_h_u 	%argrw{"wrr"}
+	step		$tmp324 $const1 ___341_v_v 	%argrw{"wrr"}
+	max		$tmp322 $tmp323 $tmp324 	%argrw{"wrr"}
+	sub		$tmp325 $const17 $tmp322 	%argrw{"wrr"}
+	mul		___341_back_uv $tmp321 $tmp325 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:159
+#     color room_uv = top_uv+bottom_uv+right_uv+left_uv+back_uv;
+	add		$tmp326 ___341_top_uv ___341_bottom_uv 	%line{159} %argrw{"wrr"}
+	add		$tmp327 $tmp326 ___341_right_uv 	%argrw{"wrr"}
+	add		$tmp328 $tmp327 ___341_left_uv 	%argrw{"wrr"}
+	add		___341_room_uv $tmp328 ___341_back_uv 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:161
+#     color middle_uv = (1.0/3.0-(base_back[2]*obj_I+obj_P/(middle_depth_0*2))*(middle_depth_0*2)/3);
+	div		$tmp329 $const17 $const40 	%line{161} %argrw{"wrr"}
+	compref		$tmp330 ___341_base_back $const23 	%argrw{"wrr"}
+	mul		$tmp331 $tmp330 ___341_obj_I 	%argrw{"wrr"}
+	mul		$tmp332 ___341_middle_depth_0 $const41 	%argrw{"wrr"}
+	div		$tmp333 ___341_obj_P $tmp332 	%argrw{"wrr"}
+	add		$tmp334 $tmp331 $tmp333 	%argrw{"wrr"}
+	mul		$tmp335 ___341_middle_depth_0 $const41 	%argrw{"wrr"}
+	mul		$tmp336 $tmp334 $tmp335 	%argrw{"wrr"}
+	div		$tmp337 $tmp336 $const40 	%argrw{"wrr"}
+	sub		___341_middle_uv $tmp329 $tmp337 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:162
+#     color front_uv = obj_P_orig*front_index;
+	mul		___341_front_uv ___341_obj_P_orig ___341_front_index 	%line{162} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:165
+#     if (texture_flip > 0){
+	gt		$tmp338 texture_flip $const6 	%line{165} %argrw{"wrr"}
+	if		$tmp338 498 501 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:166
+#         middle_uv[1] = -middle_uv[1]+1.0/3.0;
+	compref		$tmp339 ___341_middle_uv $const9 	%line{166} %argrw{"wrr"}
+	neg		$tmp340 $tmp339 	%argrw{"wr"}
+	div		$tmp341 $const17 $const40 	%argrw{"wrr"}
+	add		$tmp342 $tmp340 $tmp341 	%argrw{"wrr"}
+	compassign	___341_middle_uv $const9 $tmp342 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:167
+#         front_uv[1] = -front_uv[1]+1.0/3.0;
+	compref		$tmp343 ___341_front_uv $const9 	%line{167} %argrw{"wrr"}
+	neg		$tmp344 $tmp343 	%argrw{"wr"}
+	div		$tmp345 $const17 $const40 	%argrw{"wrr"}
+	add		$tmp346 $tmp344 $tmp345 	%argrw{"wrr"}
+	compassign	___341_front_uv $const9 $tmp346 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:169
+#         room_uv[1] = 1-room_uv[1];
+	compref		$tmp347 ___341_room_uv $const9 	%line{169} %argrw{"wrr"}
+	sub		$tmp348 $const17 $tmp347 	%argrw{"wrr"}
+	compassign	___341_room_uv $const9 $tmp348 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:170
+#         middle_uv[1] = middle_uv[1];
+	compref		$tmp349 ___341_middle_uv $const9 	%line{170} %argrw{"wrr"}
+	compassign	___341_middle_uv $const9 $tmp349 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:171
+#         front_uv[1] = 1-front_uv[1];
+	compref		$tmp350 ___341_front_uv $const9 	%line{171} %argrw{"wrr"}
+	sub		$tmp351 $const17 $tmp350 	%argrw{"wrr"}
+	compassign	___341_front_uv $const9 $tmp351 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:173
+#     float middle_mask = step(0, middle_uv[1]*3*(1-middle_uv[1]*3))*step(0, middle_uv[0]*(1.0/3.0-middle_uv[0]));
+	compref		$tmp353 ___341_middle_uv $const9 	%line{173} %argrw{"wrr"}
+	mul		$tmp354 $tmp353 $const40 	%argrw{"wrr"}
+	compref		$tmp355 ___341_middle_uv $const9 	%argrw{"wrr"}
+	mul		$tmp356 $tmp355 $const40 	%argrw{"wrr"}
+	sub		$tmp357 $const17 $tmp356 	%argrw{"wrr"}
+	mul		$tmp358 $tmp354 $tmp357 	%argrw{"wrr"}
+	step		$tmp352 $const1 $tmp358 	%argrw{"wrr"}
+	compref		$tmp360 ___341_middle_uv $const6 	%argrw{"wrr"}
+	div		$tmp361 $const17 $const40 	%argrw{"wrr"}
+	compref		$tmp362 ___341_middle_uv $const6 	%argrw{"wrr"}
+	sub		$tmp363 $tmp361 $tmp362 	%argrw{"wrr"}
+	mul		$tmp364 $tmp360 $tmp363 	%argrw{"wrr"}
+	step		$tmp359 $const1 $tmp364 	%argrw{"wrr"}
+	mul		___341_middle_mask $tmp352 $tmp359 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:174
+#     middle_uv = (color(middle_offset_x_0, middle_offset_y_0, 0)+middle_uv)*middle_mask;
+	color		$tmp365 ___341_middle_offset_x_0 ___341_middle_offset_y_0 $const1 	%line{174} %argrw{"wrrr"}
+	add		$tmp366 $tmp365 ___341_middle_uv 	%argrw{"wrr"}
+	mul		___341_middle_uv $tmp366 ___341_middle_mask 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:176
+#     if (texture_flop > 0){
+	gt		$tmp367 texture_flop $const6 	%line{176} %argrw{"wrr"}
+	if		$tmp367 535 539 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:177
+#         room_uv[0] = 1-room_uv[0];
+	compref		$tmp368 ___341_room_uv $const6 	%line{177} %argrw{"wrr"}
+	sub		$tmp369 $const17 $tmp368 	%argrw{"wrr"}
+	compassign	___341_room_uv $const6 $tmp369 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:178
+#         middle_uv[0] = middle_uv[0];
+	compref		$tmp370 ___341_middle_uv $const6 	%line{178} %argrw{"wrr"}
+	compassign	___341_middle_uv $const6 $tmp370 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:179
+#         front_uv[0] = -front_uv[0]+1.0/3.0;
+	compref		$tmp371 ___341_front_uv $const6 	%line{179} %argrw{"wrr"}
+	neg		$tmp372 $tmp371 	%argrw{"wr"}
+	div		$tmp373 $const17 $const40 	%argrw{"wrr"}
+	add		$tmp374 $tmp372 $tmp373 	%argrw{"wrr"}
+	compassign	___341_front_uv $const6 $tmp374 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:181
+#         middle_uv[0] = 1.0/3.0-middle_uv[0];
+	div		$tmp375 $const17 $const40 	%line{181} %argrw{"wrr"}
+	compref		$tmp376 ___341_middle_uv $const6 	%argrw{"wrr"}
+	sub		$tmp377 $tmp375 $tmp376 	%argrw{"wrr"}
+	compassign	___341_middle_uv $const6 $tmp377 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:183
+#     color room_rgb = texture(filename, room_uv[0], room_uv[1]);
+	compref		$tmp378 ___341_room_uv $const6 	%line{183} %argrw{"wrr"}
+	compref		$tmp379 ___341_room_uv $const9 	%argrw{"wrr"}
+	texture		___341_room_rgb ___355_i_file $tmp378 $tmp379 	%argrw{"wrrr"} %argderivs{2,3}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:187
+#     final_rgb = room_rgb;
+	assign		___341_final_rgb ___341_room_rgb 	%line{187} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:190
+#     if (middle_enable > 0){
+	gt		$tmp380 middle_enable $const6 	%line{190} %argrw{"wrr"}
+	if		$tmp380 549 549 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:192
+#         color mid_ground_rgb = texture(filename, middle_uv[0], middle_uv[1], "alpha", mid_ground_a);
+	compref		$tmp381 ___341_middle_uv $const6 	%line{192} %argrw{"wrr"}
+	compref		$tmp382 ___341_middle_uv $const9 	%argrw{"wrr"}
+	texture		___351_mid_ground_rgb ___355_i_file $tmp381 $tmp382 $const42 ___351_mid_ground_a 	%argrw{"wrrrrw"} %argderivs{2,3}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:193
+#         final_rgb = mix(room_rgb, mid_ground_rgb, mid_ground_a);
+	mix		___341_final_rgb ___341_room_rgb ___351_mid_ground_rgb ___351_mid_ground_a 	%line{193} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:197
+#     if (curtains_enable > 0){
+	gt		$tmp383 curtains_enable $const6 	%line{197} %argrw{"wrr"}
+	if		$tmp383 555 555 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:199
+#         color curtains_rgb = texture(filename, front_uv[0], front_uv[1], "alpha", curtains_a);
+	compref		$tmp384 ___341_front_uv $const6 	%line{199} %argrw{"wrr"}
+	compref		$tmp385 ___341_front_uv $const9 	%argrw{"wrr"}
+	texture		___352_curtains_rgb ___355_i_file $tmp384 $tmp385 $const42 ___352_curtains_a 	%argrw{"wrrrrw"} %argderivs{2,3}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:200
+#         final_rgb = mix(final_rgb, curtains_rgb, curtains_a);
+	mix		___341_final_rgb ___341_final_rgb ___352_curtains_rgb ___352_curtains_a 	%line{200} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:202
+#     return final_rgb;
+	assign		___357_i_rgb ___341_final_rgb 	%line{202} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:281
+#                     final_rgb += i_rgb;
+	add		final_rgb final_rgb ___357_i_rgb 	%line{281} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:285
+#                 warning(
+	warning		$const43 ___355_i_file 	%line{285} %argrw{"rr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:289
+#             udim_index += 1;
+	add		udim_index udim_index $const9 	%line{289} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:243
+#         for (int i = 0; i < c; i++) {
+	assign		$tmp386 ___354_i 	%line{243} %argrw{"wr"}
+	add		___354_i ___354_i $const9 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:293
+#         float uv_offset_x = 0;
+	assign		___359_uv_offset_x $const6 	%line{293} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:294
+#         float uv_offset_y = 0;
+	assign		___359_uv_offset_y $const6 	%line{294} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:296
+#         gettextureinfo(filename_new, "exists", e);
+	gettextureinfo	$tmp387 filename_new $const16 ___359_e 	%line{296} %argrw{"wrrw"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:297
+#         if (e > 0) {
+	gt		$tmp388 ___359_e $const6 	%line{297} %argrw{"wrr"}
+	if		$tmp388 1047 1047 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:298
+#             final_rgb = wb(
+	functioncall	$const18 1047 	%line{298} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:53
+#     float depth_0 = clamp(depth, 0.01, 100.0);
+	functioncall	$const21 570 	%line{53} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp389 depth $const20 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		___341_depth_0 $tmp389 $const19 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:55
+#     float overscan_left_0 = 1-clamp(overscan_left, 0, 0.9);
+	functioncall	$const21 573 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{55} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp391 overscan_left $const22 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		$tmp390 $tmp391 $const1 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:55
+#     float overscan_left_0 = 1-clamp(overscan_left, 0, 0.9);
+	sub		___341_overscan_left_0 $const17 $tmp390 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{55} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:56
+#     float overscan_right_0 = 1-clamp(overscan_right, 0, 0.9);
+	functioncall	$const21 577 	%line{56} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp393 overscan_right $const22 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		$tmp392 $tmp393 $const1 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:56
+#     float overscan_right_0 = 1-clamp(overscan_right, 0, 0.9);
+	sub		___341_overscan_right_0 $const17 $tmp392 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{56} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:57
+#     float overscan_top_0 = 1-clamp(overscan_top, 0, 0.9);
+	functioncall	$const21 581 	%line{57} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp395 overscan_top $const22 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		$tmp394 $tmp395 $const1 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:57
+#     float overscan_top_0 = 1-clamp(overscan_top, 0, 0.9);
+	sub		___341_overscan_top_0 $const17 $tmp394 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{57} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:58
+#     float overscan_bottom_0 = 1-clamp(overscan_bottom, 0, 0.9);
+	functioncall	$const21 585 	%line{58} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp397 overscan_bottom $const22 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		$tmp396 $tmp397 $const1 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:58
+#     float overscan_bottom_0 = 1-clamp(overscan_bottom, 0, 0.9);
+	sub		___341_overscan_bottom_0 $const17 $tmp396 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{58} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:60
+#     float contract_back_0 = 1-clamp(contract_back, 0, 0.9);
+	functioncall	$const21 589 	%line{60} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp399 contract_back $const22 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		$tmp398 $tmp399 $const1 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:60
+#     float contract_back_0 = 1-clamp(contract_back, 0, 0.9);
+	sub		___341_contract_back_0 $const17 $tmp398 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{60} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:62
+#     float middle_depth_0 = clamp(middle_depth, 0.01, depth_0-0.01);
+	sub		$tmp400 ___341_depth_0 $const19 	%line{62} %argrw{"wrr"}
+	functioncall	$const21 594 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp401 middle_depth $tmp400 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		___341_middle_depth_0 $tmp401 $const19 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:63
+#     float middle_offset_x_0 = middle_offset_x*-(texture_flop*2-1)*0.1;
+	mul		$tmp402 texture_flop $const23 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{63} %argrw{"wrr"}
+	sub		$tmp403 $tmp402 $const9 	%argrw{"wrr"}
+	neg		$tmp404 $tmp403 	%argrw{"wr"}
+	assign		$tmp406 $tmp404 	%argrw{"wr"}
+	mul		$tmp405 middle_offset_x $tmp406 	%argrw{"wrr"}
+	mul		___341_middle_offset_x_0 $tmp405 $const24 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:64
+#     float middle_offset_y_0 = middle_offset_y*-(texture_flip*2-1)*0.1;
+	mul		$tmp407 texture_flip $const23 	%line{64} %argrw{"wrr"}
+	sub		$tmp408 $tmp407 $const9 	%argrw{"wrr"}
+	neg		$tmp409 $tmp408 	%argrw{"wr"}
+	assign		$tmp411 $tmp409 	%argrw{"wr"}
+	mul		$tmp410 middle_offset_y $tmp411 	%argrw{"wrr"}
+	mul		___341_middle_offset_y_0 $tmp410 $const24 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:67
+#     vector obj_I = transform("object", I);
+	functioncall	$const26 608 	%line{67} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:262
+# vector transform (string to, vector p) { return transform("common",to,p); }
+	transformv	___341_obj_I $const27 $const25 I 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{262} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:69
+#     vector axis_x = vector(1, 0, 0);
+	assign		___341_axis_x $const28 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{69} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:70
+#     vector axis_y = vector(0, 1, 0);
+	assign		___341_axis_y $const29 	%line{70} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:71
+#     vector axis_z = vector(0, 0, 1);
+	assign		___341_axis_z $const30 	%line{71} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:73
+#     color top_right_mult = color(overscan_right_0, overscan_top_0, 1);
+	color		___341_top_right_mult ___341_overscan_right_0 ___341_overscan_top_0 $const17 	%line{73} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:74
+#     color left_bottom_mult = color(overscan_left_0, overscan_bottom_0, 1);
+	color		___341_left_bottom_mult ___341_overscan_left_0 ___341_overscan_bottom_0 $const17 	%line{74} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:75
+#     color left_bottom_add = color(1-overscan_left_0, 1-overscan_bottom_0, 0);
+	sub		$tmp412 $const17 ___341_overscan_left_0 	%line{75} %argrw{"wrr"}
+	sub		$tmp413 $const17 ___341_overscan_bottom_0 	%argrw{"wrr"}
+	color		___341_left_bottom_add $tmp412 $tmp413 $const1 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:77
+#     color back_mult = color(contract_back_0, 1, 1);
+	color		___341_back_mult ___341_contract_back_0 $const17 $const17 	%line{77} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:79
+#     if (space == 0){
+	eq		$tmp414 space $const6 	%line{79} %argrw{"wrr"}
+	if		$tmp414 624 666 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:80
+#         obj_I = vector(-obj_I[2], obj_I[1], obj_I[0]);
+	compref		$tmp415 ___341_obj_I $const23 	%line{80} %argrw{"wrr"}
+	neg		$tmp416 $tmp415 	%argrw{"wr"}
+	compref		$tmp417 ___341_obj_I $const9 	%argrw{"wrr"}
+	compref		$tmp418 ___341_obj_I $const6 	%argrw{"wrr"}
+	vector		___341_obj_I $tmp416 $tmp417 $tmp418 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:83
+#     else if (space == 1){
+	eq		$tmp419 space $const9 	%line{83} %argrw{"wrr"}
+	if		$tmp419 631 666 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:84
+#         obj_I = vector(obj_I[2], obj_I[1], -obj_I[0]);
+	compref		$tmp420 ___341_obj_I $const23 	%line{84} %argrw{"wrr"}
+	compref		$tmp421 ___341_obj_I $const9 	%argrw{"wrr"}
+	compref		$tmp422 ___341_obj_I $const6 	%argrw{"wrr"}
+	neg		$tmp423 $tmp422 	%argrw{"wr"}
+	vector		___341_obj_I $tmp420 $tmp421 $tmp423 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:87
+#     else if (space == 2){
+	eq		$tmp424 space $const23 	%line{87} %argrw{"wrr"}
+	if		$tmp424 638 666 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:88
+#         obj_I = vector(-obj_I[0], obj_I[2], obj_I[1]);
+	compref		$tmp425 ___341_obj_I $const6 	%line{88} %argrw{"wrr"}
+	neg		$tmp426 $tmp425 	%argrw{"wr"}
+	compref		$tmp427 ___341_obj_I $const23 	%argrw{"wrr"}
+	compref		$tmp428 ___341_obj_I $const9 	%argrw{"wrr"}
+	vector		___341_obj_I $tmp426 $tmp427 $tmp428 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:91
+#     else if (space == 3){
+	eq		$tmp429 space $const31 	%line{91} %argrw{"wrr"}
+	if		$tmp429 647 666 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:92
+#       obj_I = vector(-obj_I[0], -obj_I[2], -obj_I[1]);
+	compref		$tmp430 ___341_obj_I $const6 	%line{92} %argrw{"wrr"}
+	neg		$tmp431 $tmp430 	%argrw{"wr"}
+	compref		$tmp432 ___341_obj_I $const23 	%argrw{"wrr"}
+	neg		$tmp433 $tmp432 	%argrw{"wr"}
+	compref		$tmp434 ___341_obj_I $const9 	%argrw{"wrr"}
+	neg		$tmp435 $tmp434 	%argrw{"wr"}
+	vector		___341_obj_I $tmp431 $tmp433 $tmp435 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:95
+#     else if (space == 4){
+	eq		$tmp436 space $const32 	%line{95} %argrw{"wrr"}
+	if		$tmp436 653 666 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:96
+#         obj_I = vector(obj_I[0], obj_I[1], obj_I[2]);
+	compref		$tmp437 ___341_obj_I $const6 	%line{96} %argrw{"wrr"}
+	compref		$tmp438 ___341_obj_I $const9 	%argrw{"wrr"}
+	compref		$tmp439 ___341_obj_I $const23 	%argrw{"wrr"}
+	vector		___341_obj_I $tmp437 $tmp438 $tmp439 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:99
+#     else if (space == 5){
+	eq		$tmp440 space $const33 	%line{99} %argrw{"wrr"}
+	if		$tmp440 661 666 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:100
+#         obj_I = vector(-obj_I[0], obj_I[1], -obj_I[2]);
+	compref		$tmp441 ___341_obj_I $const6 	%line{100} %argrw{"wrr"}
+	neg		$tmp442 $tmp441 	%argrw{"wr"}
+	compref		$tmp443 ___341_obj_I $const9 	%argrw{"wrr"}
+	compref		$tmp444 ___341_obj_I $const23 	%argrw{"wrr"}
+	neg		$tmp445 $tmp444 	%argrw{"wr"}
+	vector		___341_obj_I $tmp442 $tmp443 $tmp445 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:103
+#         obj_I = vector(obj_I[0], -obj_I[2], obj_I[1]);
+	compref		$tmp446 ___341_obj_I $const6 	%line{103} %argrw{"wrr"}
+	compref		$tmp447 ___341_obj_I $const23 	%argrw{"wrr"}
+	neg		$tmp448 $tmp447 	%argrw{"wr"}
+	compref		$tmp449 ___341_obj_I $const9 	%argrw{"wrr"}
+	vector		___341_obj_I $tmp446 $tmp448 $tmp449 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:106
+#     obj_I = obj_I*top_right_mult*left_bottom_mult/back_mult;
+	mul		$tmp450 ___341_obj_I ___341_top_right_mult 	%line{106} %argrw{"wrr"}
+	mul		$tmp451 $tmp450 ___341_left_bottom_mult 	%argrw{"wrr"}
+	div		___341_obj_I $tmp451 ___341_back_mult 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:111
+#     obj_I = rotate(obj_I, radians(rotation_x), axis_x);
+	functioncall	$const34 672 	%line{111} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:65
+# float  radians (float x)  { return x*(M_PI/180.0); }
+	div		$tmp453 $const35 $const36 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{65} %argrw{"wrr"}
+	mul		$tmp452 rotation_x $tmp453 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:111
+#     obj_I = rotate(obj_I, radians(rotation_x), axis_x);
+	functioncall	$const37 724 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{111} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:293
+#     return rotate (p, angle, point(0), axis);
+	functioncall	$const37 724 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{293} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:270
+#     vector axis = normalize (b - a);
+	sub		$tmp455 ___341_axis_x $const38 	%line{270} %argrw{"wrr"}
+	normalize	___257_axis $tmp455 	%argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:272
+#     sincos (angle, sinang, cosang);
+	sincos		$tmp452 ___257_sinang ___257_cosang 	%line{272} %argrw{"rww"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:273
+#     float cosang1 = 1.0 - cosang;
+	sub		___257_cosang1 $const17 ___257_cosang 	%line{273} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:274
+#     float x = axis[0], y = axis[1], z = axis[2];
+	compref		___257_x ___257_axis $const6 	%line{274} %argrw{"wrr"}
+	compref		___257_y ___257_axis $const9 	%argrw{"wrr"}
+	compref		___257_z ___257_axis $const23 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	mul		$tmp456 ___257_x ___257_x 	%line{275} %argrw{"wrr"}
+	mul		$tmp457 ___257_x ___257_x 	%argrw{"wrr"}
+	sub		$tmp458 $const17 $tmp457 	%argrw{"wrr"}
+	mul		$tmp459 $tmp458 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp460 $tmp456 $tmp459 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:276
+#                        x * y * cosang1 + z * sinang,
+	mul		$tmp461 ___257_x ___257_y 	%line{276} %argrw{"wrr"}
+	mul		$tmp462 $tmp461 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp463 ___257_z ___257_sinang 	%argrw{"wrr"}
+	add		$tmp464 $tmp462 $tmp463 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:277
+#                        x * z * cosang1 - y * sinang,
+	mul		$tmp465 ___257_x ___257_z 	%line{277} %argrw{"wrr"}
+	mul		$tmp466 $tmp465 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp467 ___257_y ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp468 $tmp466 $tmp467 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:279
+#                        x * y * cosang1 - z * sinang,
+	mul		$tmp469 ___257_x ___257_y 	%line{279} %argrw{"wrr"}
+	mul		$tmp470 $tmp469 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp471 ___257_z ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp472 $tmp470 $tmp471 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:280
+#                        y * y + (1.0 - y * y) * cosang,
+	mul		$tmp473 ___257_y ___257_y 	%line{280} %argrw{"wrr"}
+	mul		$tmp474 ___257_y ___257_y 	%argrw{"wrr"}
+	sub		$tmp475 $const17 $tmp474 	%argrw{"wrr"}
+	mul		$tmp476 $tmp475 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp477 $tmp473 $tmp476 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:281
+#                        y * z * cosang1 + x * sinang,
+	mul		$tmp478 ___257_y ___257_z 	%line{281} %argrw{"wrr"}
+	mul		$tmp479 $tmp478 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp480 ___257_x ___257_sinang 	%argrw{"wrr"}
+	add		$tmp481 $tmp479 $tmp480 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:283
+#                        x * z * cosang1 + y * sinang,
+	mul		$tmp482 ___257_x ___257_z 	%line{283} %argrw{"wrr"}
+	mul		$tmp483 $tmp482 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp484 ___257_y ___257_sinang 	%argrw{"wrr"}
+	add		$tmp485 $tmp483 $tmp484 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:284
+#                        y * z * cosang1 - x * sinang,
+	mul		$tmp486 ___257_y ___257_z 	%line{284} %argrw{"wrr"}
+	mul		$tmp487 $tmp486 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp488 ___257_x ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp489 $tmp487 $tmp488 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:285
+#                        z * z + (1.0 - z * z) * cosang,
+	mul		$tmp490 ___257_z ___257_z 	%line{285} %argrw{"wrr"}
+	mul		$tmp491 ___257_z ___257_z 	%argrw{"wrr"}
+	sub		$tmp492 $const17 $tmp491 	%argrw{"wrr"}
+	mul		$tmp493 $tmp492 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp494 $tmp490 $tmp493 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	matrix		___257_M $tmp460 $tmp464 $tmp468 $const1 $tmp472 $tmp477 $tmp481 $const1 $tmp485 $tmp489 $tmp494 $const1 $const1 $const1 $const1 $const17 	%line{275} %argrw{"wrrrrrrrrrrrrrrrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:288
+#     return transform (M, p-a) + a;
+	sub		$tmp496 ___341_obj_I $const38 	%line{288} %argrw{"wrr"}
+	transformv	$tmp495 ___257_M $tmp496 	%argrw{"wrr"}
+	add		___341_obj_I $tmp495 $const38 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:112
+#     obj_I = rotate(obj_I, radians(rotation_y), axis_y);
+	functioncall	$const34 727 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{112} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:65
+# float  radians (float x)  { return x*(M_PI/180.0); }
+	div		$tmp498 $const35 $const36 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{65} %argrw{"wrr"}
+	mul		$tmp497 rotation_y $tmp498 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:112
+#     obj_I = rotate(obj_I, radians(rotation_y), axis_y);
+	functioncall	$const37 779 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{112} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:293
+#     return rotate (p, angle, point(0), axis);
+	functioncall	$const37 779 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{293} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:270
+#     vector axis = normalize (b - a);
+	sub		$tmp500 ___341_axis_y $const38 	%line{270} %argrw{"wrr"}
+	normalize	___257_axis $tmp500 	%argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:272
+#     sincos (angle, sinang, cosang);
+	sincos		$tmp497 ___257_sinang ___257_cosang 	%line{272} %argrw{"rww"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:273
+#     float cosang1 = 1.0 - cosang;
+	sub		___257_cosang1 $const17 ___257_cosang 	%line{273} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:274
+#     float x = axis[0], y = axis[1], z = axis[2];
+	compref		___257_x ___257_axis $const6 	%line{274} %argrw{"wrr"}
+	compref		___257_y ___257_axis $const9 	%argrw{"wrr"}
+	compref		___257_z ___257_axis $const23 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	mul		$tmp501 ___257_x ___257_x 	%line{275} %argrw{"wrr"}
+	mul		$tmp502 ___257_x ___257_x 	%argrw{"wrr"}
+	sub		$tmp503 $const17 $tmp502 	%argrw{"wrr"}
+	mul		$tmp504 $tmp503 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp505 $tmp501 $tmp504 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:276
+#                        x * y * cosang1 + z * sinang,
+	mul		$tmp506 ___257_x ___257_y 	%line{276} %argrw{"wrr"}
+	mul		$tmp507 $tmp506 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp508 ___257_z ___257_sinang 	%argrw{"wrr"}
+	add		$tmp509 $tmp507 $tmp508 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:277
+#                        x * z * cosang1 - y * sinang,
+	mul		$tmp510 ___257_x ___257_z 	%line{277} %argrw{"wrr"}
+	mul		$tmp511 $tmp510 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp512 ___257_y ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp513 $tmp511 $tmp512 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:279
+#                        x * y * cosang1 - z * sinang,
+	mul		$tmp514 ___257_x ___257_y 	%line{279} %argrw{"wrr"}
+	mul		$tmp515 $tmp514 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp516 ___257_z ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp517 $tmp515 $tmp516 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:280
+#                        y * y + (1.0 - y * y) * cosang,
+	mul		$tmp518 ___257_y ___257_y 	%line{280} %argrw{"wrr"}
+	mul		$tmp519 ___257_y ___257_y 	%argrw{"wrr"}
+	sub		$tmp520 $const17 $tmp519 	%argrw{"wrr"}
+	mul		$tmp521 $tmp520 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp522 $tmp518 $tmp521 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:281
+#                        y * z * cosang1 + x * sinang,
+	mul		$tmp523 ___257_y ___257_z 	%line{281} %argrw{"wrr"}
+	mul		$tmp524 $tmp523 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp525 ___257_x ___257_sinang 	%argrw{"wrr"}
+	add		$tmp526 $tmp524 $tmp525 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:283
+#                        x * z * cosang1 + y * sinang,
+	mul		$tmp527 ___257_x ___257_z 	%line{283} %argrw{"wrr"}
+	mul		$tmp528 $tmp527 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp529 ___257_y ___257_sinang 	%argrw{"wrr"}
+	add		$tmp530 $tmp528 $tmp529 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:284
+#                        y * z * cosang1 - x * sinang,
+	mul		$tmp531 ___257_y ___257_z 	%line{284} %argrw{"wrr"}
+	mul		$tmp532 $tmp531 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp533 ___257_x ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp534 $tmp532 $tmp533 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:285
+#                        z * z + (1.0 - z * z) * cosang,
+	mul		$tmp535 ___257_z ___257_z 	%line{285} %argrw{"wrr"}
+	mul		$tmp536 ___257_z ___257_z 	%argrw{"wrr"}
+	sub		$tmp537 $const17 $tmp536 	%argrw{"wrr"}
+	mul		$tmp538 $tmp537 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp539 $tmp535 $tmp538 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	matrix		___257_M $tmp505 $tmp509 $tmp513 $const1 $tmp517 $tmp522 $tmp526 $const1 $tmp530 $tmp534 $tmp539 $const1 $const1 $const1 $const1 $const17 	%line{275} %argrw{"wrrrrrrrrrrrrrrrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:288
+#     return transform (M, p-a) + a;
+	sub		$tmp541 ___341_obj_I $const38 	%line{288} %argrw{"wrr"}
+	transformv	$tmp540 ___257_M $tmp541 	%argrw{"wrr"}
+	add		___341_obj_I $tmp540 $const38 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:113
+#     obj_I = rotate(obj_I, radians(rotation_z), axis_z);
+	functioncall	$const34 782 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{113} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:65
+# float  radians (float x)  { return x*(M_PI/180.0); }
+	div		$tmp543 $const35 $const36 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{65} %argrw{"wrr"}
+	mul		$tmp542 rotation_z $tmp543 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:113
+#     obj_I = rotate(obj_I, radians(rotation_z), axis_z);
+	functioncall	$const37 834 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{113} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:293
+#     return rotate (p, angle, point(0), axis);
+	functioncall	$const37 834 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{293} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:270
+#     vector axis = normalize (b - a);
+	sub		$tmp545 ___341_axis_z $const38 	%line{270} %argrw{"wrr"}
+	normalize	___257_axis $tmp545 	%argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:272
+#     sincos (angle, sinang, cosang);
+	sincos		$tmp542 ___257_sinang ___257_cosang 	%line{272} %argrw{"rww"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:273
+#     float cosang1 = 1.0 - cosang;
+	sub		___257_cosang1 $const17 ___257_cosang 	%line{273} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:274
+#     float x = axis[0], y = axis[1], z = axis[2];
+	compref		___257_x ___257_axis $const6 	%line{274} %argrw{"wrr"}
+	compref		___257_y ___257_axis $const9 	%argrw{"wrr"}
+	compref		___257_z ___257_axis $const23 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	mul		$tmp546 ___257_x ___257_x 	%line{275} %argrw{"wrr"}
+	mul		$tmp547 ___257_x ___257_x 	%argrw{"wrr"}
+	sub		$tmp548 $const17 $tmp547 	%argrw{"wrr"}
+	mul		$tmp549 $tmp548 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp550 $tmp546 $tmp549 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:276
+#                        x * y * cosang1 + z * sinang,
+	mul		$tmp551 ___257_x ___257_y 	%line{276} %argrw{"wrr"}
+	mul		$tmp552 $tmp551 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp553 ___257_z ___257_sinang 	%argrw{"wrr"}
+	add		$tmp554 $tmp552 $tmp553 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:277
+#                        x * z * cosang1 - y * sinang,
+	mul		$tmp555 ___257_x ___257_z 	%line{277} %argrw{"wrr"}
+	mul		$tmp556 $tmp555 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp557 ___257_y ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp558 $tmp556 $tmp557 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:279
+#                        x * y * cosang1 - z * sinang,
+	mul		$tmp559 ___257_x ___257_y 	%line{279} %argrw{"wrr"}
+	mul		$tmp560 $tmp559 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp561 ___257_z ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp562 $tmp560 $tmp561 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:280
+#                        y * y + (1.0 - y * y) * cosang,
+	mul		$tmp563 ___257_y ___257_y 	%line{280} %argrw{"wrr"}
+	mul		$tmp564 ___257_y ___257_y 	%argrw{"wrr"}
+	sub		$tmp565 $const17 $tmp564 	%argrw{"wrr"}
+	mul		$tmp566 $tmp565 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp567 $tmp563 $tmp566 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:281
+#                        y * z * cosang1 + x * sinang,
+	mul		$tmp568 ___257_y ___257_z 	%line{281} %argrw{"wrr"}
+	mul		$tmp569 $tmp568 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp570 ___257_x ___257_sinang 	%argrw{"wrr"}
+	add		$tmp571 $tmp569 $tmp570 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:283
+#                        x * z * cosang1 + y * sinang,
+	mul		$tmp572 ___257_x ___257_z 	%line{283} %argrw{"wrr"}
+	mul		$tmp573 $tmp572 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp574 ___257_y ___257_sinang 	%argrw{"wrr"}
+	add		$tmp575 $tmp573 $tmp574 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:284
+#                        y * z * cosang1 - x * sinang,
+	mul		$tmp576 ___257_y ___257_z 	%line{284} %argrw{"wrr"}
+	mul		$tmp577 $tmp576 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp578 ___257_x ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp579 $tmp577 $tmp578 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:285
+#                        z * z + (1.0 - z * z) * cosang,
+	mul		$tmp580 ___257_z ___257_z 	%line{285} %argrw{"wrr"}
+	mul		$tmp581 ___257_z ___257_z 	%argrw{"wrr"}
+	sub		$tmp582 $const17 $tmp581 	%argrw{"wrr"}
+	mul		$tmp583 $tmp582 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp584 $tmp580 $tmp583 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	matrix		___257_M $tmp550 $tmp554 $tmp558 $const1 $tmp562 $tmp567 $tmp571 $const1 $tmp575 $tmp579 $tmp584 $const1 $const1 $const1 $const1 $const17 	%line{275} %argrw{"wrrrrrrrrrrrrrrrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:288
+#     return transform (M, p-a) + a;
+	sub		$tmp586 ___341_obj_I $const38 	%line{288} %argrw{"wrr"}
+	transformv	$tmp585 ___257_M $tmp586 	%argrw{"wrr"}
+	add		___341_obj_I $tmp585 $const38 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:115
+#     color obj_P_orig = color(u, v, 0.5);
+	color		___341_obj_P_orig u v $const39 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl"} %line{115} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:117
+#     obj_P_orig[0] = obj_P_orig[0] - uv_offset_x;
+	compref		$tmp587 ___341_obj_P_orig $const6 	%line{117} %argrw{"wrr"}
+	sub		$tmp588 $tmp587 ___359_uv_offset_x 	%argrw{"wrr"}
+	compassign	___341_obj_P_orig $const6 $tmp588 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:118
+#     obj_P_orig[1] = obj_P_orig[1] - uv_offset_y;
+	compref		$tmp589 ___341_obj_P_orig $const9 	%line{118} %argrw{"wrr"}
+	sub		$tmp590 $tmp589 ___359_uv_offset_y 	%argrw{"wrr"}
+	compassign	___341_obj_P_orig $const9 $tmp590 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:120
+#     color obj_P = obj_P_orig*top_right_mult*left_bottom_mult+left_bottom_add;
+	mul		$tmp591 ___341_obj_P_orig ___341_top_right_mult 	%line{120} %argrw{"wrr"}
+	mul		$tmp592 $tmp591 ___341_left_bottom_mult 	%argrw{"wrr"}
+	add		___341_obj_P $tmp592 ___341_left_bottom_add 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:122
+#     vector sections = step(0, obj_I);
+	assign		$tmp593 $const1 	%line{122} %argrw{"wr"}
+	step		___341_sections $tmp593 ___341_obj_I 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:123
+#     color base_depth = (obj_P-sections)/(-obj_I*depth_0);
+	sub		$tmp594 ___341_obj_P ___341_sections 	%line{123} %argrw{"wrr"}
+	neg		$tmp595 ___341_obj_I 	%argrw{"wr"}
+	mul		$tmp596 $tmp595 ___341_depth_0 	%argrw{"wrr"}
+	div		___341_base_depth $tmp594 $tmp596 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:124
+#     color mid_ground_depth = (obj_P-sections)/(-obj_I*middle_depth_0);
+	sub		$tmp597 ___341_obj_P ___341_sections 	%line{124} %argrw{"wrr"}
+	neg		$tmp598 ___341_obj_I 	%argrw{"wr"}
+	mul		$tmp599 $tmp598 ___341_middle_depth_0 	%argrw{"wrr"}
+	div		___341_mid_ground_depth $tmp597 $tmp599 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:125
+#     color base_back = (obj_P-sections)/(-obj_I);
+	sub		$tmp600 ___341_obj_P ___341_sections 	%line{125} %argrw{"wrr"}
+	neg		$tmp601 ___341_obj_I 	%argrw{"wr"}
+	div		___341_base_back $tmp600 $tmp601 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:126
+#     color base_width = base_depth*depth_0;
+	mul		___341_base_width ___341_base_depth ___341_depth_0 	%line{126} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:128
+#     color base_depth_x = (base_depth[1]*obj_I+obj_P+1);
+	compref		$tmp602 ___341_base_depth $const9 	%line{128} %argrw{"wrr"}
+	mul		$tmp603 $tmp602 ___341_obj_I 	%argrw{"wrr"}
+	add		$tmp604 $tmp603 ___341_obj_P 	%argrw{"wrr"}
+	add		___341_base_depth_x $tmp604 $const17 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:129
+#     color base_depth_y = (base_depth[0]*obj_I+obj_P+1);
+	compref		$tmp605 ___341_base_depth $const6 	%line{129} %argrw{"wrr"}
+	mul		$tmp606 $tmp605 ___341_obj_I 	%argrw{"wrr"}
+	add		$tmp607 $tmp606 ___341_obj_P 	%argrw{"wrr"}
+	add		___341_base_depth_y $tmp607 $const17 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:130
+#     color base_width_x = (base_width[1]*obj_I+obj_P+1);
+	compref		$tmp608 ___341_base_width $const9 	%line{130} %argrw{"wrr"}
+	mul		$tmp609 $tmp608 ___341_obj_I 	%argrw{"wrr"}
+	add		$tmp610 $tmp609 ___341_obj_P 	%argrw{"wrr"}
+	add		___341_base_width_x $tmp610 $const17 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:131
+#     color base_width_y = (base_width[0]*obj_I+obj_P+1);
+	compref		$tmp611 ___341_base_width $const6 	%line{131} %argrw{"wrr"}
+	mul		$tmp612 $tmp611 ___341_obj_I 	%argrw{"wrr"}
+	add		$tmp613 $tmp612 ___341_obj_P 	%argrw{"wrr"}
+	add		___341_base_width_y $tmp613 $const17 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:133
+#     float h_u = base_depth_y[2]-0.5;
+	compref		$tmp614 ___341_base_depth_y $const23 	%line{133} %argrw{"wrr"}
+	sub		___341_h_u $tmp614 $const39 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:134
+#     float v_u = base_width_x[0]-1;
+	compref		$tmp615 ___341_base_width_x $const6 	%line{134} %argrw{"wrr"}
+	sub		___341_v_u $tmp615 $const17 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:135
+#     float h_v = base_width_y[1]-1;
+	compref		$tmp616 ___341_base_width_y $const9 	%line{135} %argrw{"wrr"}
+	sub		___341_h_v $tmp616 $const17 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:136
+#     float v_v = base_depth_x[2]-0.5;
+	compref		$tmp617 ___341_base_depth_x $const23 	%line{136} %argrw{"wrr"}
+	sub		___341_v_v $tmp617 $const39 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:138
+#     color top_index = color(1.0/3.0, 2.0/3.0, 0);
+	div		$tmp618 $const17 $const40 	%line{138} %argrw{"wrr"}
+	div		$tmp619 $const41 $const40 	%argrw{"wrr"}
+	color		___341_top_index $tmp618 $tmp619 $const1 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:139
+#     color bottom_index = color(1.0/3.0, 0, 0);
+	div		$tmp620 $const17 $const40 	%line{139} %argrw{"wrr"}
+	color		___341_bottom_index $tmp620 $const1 $const1 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:140
+#     color left_index = color(0.0, 1.0/3.0, 0);
+	div		$tmp621 $const17 $const40 	%line{140} %argrw{"wrr"}
+	color		___341_left_index $const1 $tmp621 $const1 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:141
+#     color right_index = color(2.0/3.0, 1.0/3.0, 0);
+	div		$tmp622 $const41 $const40 	%line{141} %argrw{"wrr"}
+	div		$tmp623 $const17 $const40 	%argrw{"wrr"}
+	color		___341_right_index $tmp622 $tmp623 $const1 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:142
+#     color back_index = color(1.0/3.0, 1.0/3.0, 0);
+	div		$tmp624 $const17 $const40 	%line{142} %argrw{"wrr"}
+	div		$tmp625 $const17 $const40 	%argrw{"wrr"}
+	color		___341_back_index $tmp624 $tmp625 $const1 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:143
+#     color front_index = color(1.0/3.0, 1.0/3.0, 0);
+	div		$tmp626 $const17 $const40 	%line{143} %argrw{"wrr"}
+	div		$tmp627 $const17 $const40 	%argrw{"wrr"}
+	color		___341_front_index $tmp626 $tmp627 $const1 	%argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:145
+#     float left_right_mask = step(0, h_u)*step(0,1-max(h_v, 1-h_v));
+	step		$tmp628 $const1 ___341_h_u 	%line{145} %argrw{"wrr"}
+	sub		$tmp631 $const17 ___341_h_v 	%argrw{"wrr"}
+	max		$tmp630 ___341_h_v $tmp631 	%argrw{"wrr"}
+	sub		$tmp632 $const17 $tmp630 	%argrw{"wrr"}
+	step		$tmp629 $const1 $tmp632 	%argrw{"wrr"}
+	mul		___341_left_right_mask $tmp628 $tmp629 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:146
+#     color left_right_uv = color(h_u, h_v, 0) / 3;
+	color		$tmp633 ___341_h_u ___341_h_v $const1 	%line{146} %argrw{"wrrr"}
+	div		___341_left_right_uv $tmp633 $const40 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:147
+#     color right_uv = (left_right_uv+right_index)*left_right_mask*sections[0];
+	add		$tmp634 ___341_left_right_uv ___341_right_index 	%line{147} %argrw{"wrr"}
+	mul		$tmp635 $tmp634 ___341_left_right_mask 	%argrw{"wrr"}
+	compref		$tmp636 ___341_sections $const6 	%argrw{"wrr"}
+	mul		___341_right_uv $tmp635 $tmp636 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:148
+#     color left_uv = (left_right_uv+left_index)*left_right_mask*(1-sections[0]);
+	add		$tmp637 ___341_left_right_uv ___341_left_index 	%line{148} %argrw{"wrr"}
+	mul		$tmp638 $tmp637 ___341_left_right_mask 	%argrw{"wrr"}
+	compref		$tmp639 ___341_sections $const6 	%argrw{"wrr"}
+	sub		$tmp640 $const17 $tmp639 	%argrw{"wrr"}
+	mul		___341_left_uv $tmp638 $tmp640 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:149
+#     left_uv[0] = (1.0/3.0-left_uv[0])*left_right_mask*(1-sections[0]);
+	div		$tmp641 $const17 $const40 	%line{149} %argrw{"wrr"}
+	compref		$tmp642 ___341_left_uv $const6 	%argrw{"wrr"}
+	sub		$tmp643 $tmp641 $tmp642 	%argrw{"wrr"}
+	mul		$tmp644 $tmp643 ___341_left_right_mask 	%argrw{"wrr"}
+	compref		$tmp645 ___341_sections $const6 	%argrw{"wrr"}
+	sub		$tmp646 $const17 $tmp645 	%argrw{"wrr"}
+	mul		$tmp647 $tmp644 $tmp646 	%argrw{"wrr"}
+	compassign	___341_left_uv $const6 $tmp647 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:151
+#     float top_bottom_mask = step(0, v_v)*step(0,1-max(v_u, 1-v_u));
+	step		$tmp648 $const1 ___341_v_v 	%line{151} %argrw{"wrr"}
+	sub		$tmp651 $const17 ___341_v_u 	%argrw{"wrr"}
+	max		$tmp650 ___341_v_u $tmp651 	%argrw{"wrr"}
+	sub		$tmp652 $const17 $tmp650 	%argrw{"wrr"}
+	step		$tmp649 $const1 $tmp652 	%argrw{"wrr"}
+	mul		___341_top_bottom_mask $tmp648 $tmp649 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:152
+#     color top_bottom_uv = color(v_u, v_v, 0)/3;
+	color		$tmp653 ___341_v_u ___341_v_v $const1 	%line{152} %argrw{"wrrr"}
+	div		___341_top_bottom_uv $tmp653 $const40 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:153
+#     color top_uv = (top_bottom_uv+top_index)*top_bottom_mask*sections[1];
+	add		$tmp654 ___341_top_bottom_uv ___341_top_index 	%line{153} %argrw{"wrr"}
+	mul		$tmp655 $tmp654 ___341_top_bottom_mask 	%argrw{"wrr"}
+	compref		$tmp656 ___341_sections $const9 	%argrw{"wrr"}
+	mul		___341_top_uv $tmp655 $tmp656 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:154
+#     color bottom_uv = (top_bottom_uv+bottom_index)*top_bottom_mask*(1-sections[1]);
+	add		$tmp657 ___341_top_bottom_uv ___341_bottom_index 	%line{154} %argrw{"wrr"}
+	mul		$tmp658 $tmp657 ___341_top_bottom_mask 	%argrw{"wrr"}
+	compref		$tmp659 ___341_sections $const9 	%argrw{"wrr"}
+	sub		$tmp660 $const17 $tmp659 	%argrw{"wrr"}
+	mul		___341_bottom_uv $tmp658 $tmp660 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:155
+#     bottom_uv[1] = (1.0/3.0-bottom_uv[1])*top_bottom_mask*(1-sections[1]);
+	div		$tmp661 $const17 $const40 	%line{155} %argrw{"wrr"}
+	compref		$tmp662 ___341_bottom_uv $const9 	%argrw{"wrr"}
+	sub		$tmp663 $tmp661 $tmp662 	%argrw{"wrr"}
+	mul		$tmp664 $tmp663 ___341_top_bottom_mask 	%argrw{"wrr"}
+	compref		$tmp665 ___341_sections $const9 	%argrw{"wrr"}
+	sub		$tmp666 $const17 $tmp665 	%argrw{"wrr"}
+	mul		$tmp667 $tmp664 $tmp666 	%argrw{"wrr"}
+	compassign	___341_bottom_uv $const9 $tmp667 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:157
+#     color back_uv = ((base_back[2]*obj_I+(obj_P/2)/(depth_0))*(depth_0*2)/3+back_index)*(1-max(step(0,h_u), step(0,v_v)));
+	compref		$tmp668 ___341_base_back $const23 	%line{157} %argrw{"wrr"}
+	mul		$tmp669 $tmp668 ___341_obj_I 	%argrw{"wrr"}
+	div		$tmp670 ___341_obj_P $const41 	%argrw{"wrr"}
+	div		$tmp671 $tmp670 ___341_depth_0 	%argrw{"wrr"}
+	add		$tmp672 $tmp669 $tmp671 	%argrw{"wrr"}
+	mul		$tmp673 ___341_depth_0 $const41 	%argrw{"wrr"}
+	mul		$tmp674 $tmp672 $tmp673 	%argrw{"wrr"}
+	div		$tmp675 $tmp674 $const40 	%argrw{"wrr"}
+	add		$tmp676 $tmp675 ___341_back_index 	%argrw{"wrr"}
+	step		$tmp678 $const1 ___341_h_u 	%argrw{"wrr"}
+	step		$tmp679 $const1 ___341_v_v 	%argrw{"wrr"}
+	max		$tmp677 $tmp678 $tmp679 	%argrw{"wrr"}
+	sub		$tmp680 $const17 $tmp677 	%argrw{"wrr"}
+	mul		___341_back_uv $tmp676 $tmp680 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:159
+#     color room_uv = top_uv+bottom_uv+right_uv+left_uv+back_uv;
+	add		$tmp681 ___341_top_uv ___341_bottom_uv 	%line{159} %argrw{"wrr"}
+	add		$tmp682 $tmp681 ___341_right_uv 	%argrw{"wrr"}
+	add		$tmp683 $tmp682 ___341_left_uv 	%argrw{"wrr"}
+	add		___341_room_uv $tmp683 ___341_back_uv 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:161
+#     color middle_uv = (1.0/3.0-(base_back[2]*obj_I+obj_P/(middle_depth_0*2))*(middle_depth_0*2)/3);
+	div		$tmp684 $const17 $const40 	%line{161} %argrw{"wrr"}
+	compref		$tmp685 ___341_base_back $const23 	%argrw{"wrr"}
+	mul		$tmp686 $tmp685 ___341_obj_I 	%argrw{"wrr"}
+	mul		$tmp687 ___341_middle_depth_0 $const41 	%argrw{"wrr"}
+	div		$tmp688 ___341_obj_P $tmp687 	%argrw{"wrr"}
+	add		$tmp689 $tmp686 $tmp688 	%argrw{"wrr"}
+	mul		$tmp690 ___341_middle_depth_0 $const41 	%argrw{"wrr"}
+	mul		$tmp691 $tmp689 $tmp690 	%argrw{"wrr"}
+	div		$tmp692 $tmp691 $const40 	%argrw{"wrr"}
+	sub		___341_middle_uv $tmp684 $tmp692 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:162
+#     color front_uv = obj_P_orig*front_index;
+	mul		___341_front_uv ___341_obj_P_orig ___341_front_index 	%line{162} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:165
+#     if (texture_flip > 0){
+	gt		$tmp693 texture_flip $const6 	%line{165} %argrw{"wrr"}
+	if		$tmp693 989 992 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:166
+#         middle_uv[1] = -middle_uv[1]+1.0/3.0;
+	compref		$tmp694 ___341_middle_uv $const9 	%line{166} %argrw{"wrr"}
+	neg		$tmp695 $tmp694 	%argrw{"wr"}
+	div		$tmp696 $const17 $const40 	%argrw{"wrr"}
+	add		$tmp697 $tmp695 $tmp696 	%argrw{"wrr"}
+	compassign	___341_middle_uv $const9 $tmp697 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:167
+#         front_uv[1] = -front_uv[1]+1.0/3.0;
+	compref		$tmp698 ___341_front_uv $const9 	%line{167} %argrw{"wrr"}
+	neg		$tmp699 $tmp698 	%argrw{"wr"}
+	div		$tmp700 $const17 $const40 	%argrw{"wrr"}
+	add		$tmp701 $tmp699 $tmp700 	%argrw{"wrr"}
+	compassign	___341_front_uv $const9 $tmp701 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:169
+#         room_uv[1] = 1-room_uv[1];
+	compref		$tmp702 ___341_room_uv $const9 	%line{169} %argrw{"wrr"}
+	sub		$tmp703 $const17 $tmp702 	%argrw{"wrr"}
+	compassign	___341_room_uv $const9 $tmp703 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:170
+#         middle_uv[1] = middle_uv[1];
+	compref		$tmp704 ___341_middle_uv $const9 	%line{170} %argrw{"wrr"}
+	compassign	___341_middle_uv $const9 $tmp704 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:171
+#         front_uv[1] = 1-front_uv[1];
+	compref		$tmp705 ___341_front_uv $const9 	%line{171} %argrw{"wrr"}
+	sub		$tmp706 $const17 $tmp705 	%argrw{"wrr"}
+	compassign	___341_front_uv $const9 $tmp706 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:173
+#     float middle_mask = step(0, middle_uv[1]*3*(1-middle_uv[1]*3))*step(0, middle_uv[0]*(1.0/3.0-middle_uv[0]));
+	compref		$tmp708 ___341_middle_uv $const9 	%line{173} %argrw{"wrr"}
+	mul		$tmp709 $tmp708 $const40 	%argrw{"wrr"}
+	compref		$tmp710 ___341_middle_uv $const9 	%argrw{"wrr"}
+	mul		$tmp711 $tmp710 $const40 	%argrw{"wrr"}
+	sub		$tmp712 $const17 $tmp711 	%argrw{"wrr"}
+	mul		$tmp713 $tmp709 $tmp712 	%argrw{"wrr"}
+	step		$tmp707 $const1 $tmp713 	%argrw{"wrr"}
+	compref		$tmp715 ___341_middle_uv $const6 	%argrw{"wrr"}
+	div		$tmp716 $const17 $const40 	%argrw{"wrr"}
+	compref		$tmp717 ___341_middle_uv $const6 	%argrw{"wrr"}
+	sub		$tmp718 $tmp716 $tmp717 	%argrw{"wrr"}
+	mul		$tmp719 $tmp715 $tmp718 	%argrw{"wrr"}
+	step		$tmp714 $const1 $tmp719 	%argrw{"wrr"}
+	mul		___341_middle_mask $tmp707 $tmp714 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:174
+#     middle_uv = (color(middle_offset_x_0, middle_offset_y_0, 0)+middle_uv)*middle_mask;
+	color		$tmp720 ___341_middle_offset_x_0 ___341_middle_offset_y_0 $const1 	%line{174} %argrw{"wrrr"}
+	add		$tmp721 $tmp720 ___341_middle_uv 	%argrw{"wrr"}
+	mul		___341_middle_uv $tmp721 ___341_middle_mask 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:176
+#     if (texture_flop > 0){
+	gt		$tmp722 texture_flop $const6 	%line{176} %argrw{"wrr"}
+	if		$tmp722 1026 1030 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:177
+#         room_uv[0] = 1-room_uv[0];
+	compref		$tmp723 ___341_room_uv $const6 	%line{177} %argrw{"wrr"}
+	sub		$tmp724 $const17 $tmp723 	%argrw{"wrr"}
+	compassign	___341_room_uv $const6 $tmp724 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:178
+#         middle_uv[0] = middle_uv[0];
+	compref		$tmp725 ___341_middle_uv $const6 	%line{178} %argrw{"wrr"}
+	compassign	___341_middle_uv $const6 $tmp725 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:179
+#         front_uv[0] = -front_uv[0]+1.0/3.0;
+	compref		$tmp726 ___341_front_uv $const6 	%line{179} %argrw{"wrr"}
+	neg		$tmp727 $tmp726 	%argrw{"wr"}
+	div		$tmp728 $const17 $const40 	%argrw{"wrr"}
+	add		$tmp729 $tmp727 $tmp728 	%argrw{"wrr"}
+	compassign	___341_front_uv $const6 $tmp729 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:181
+#         middle_uv[0] = 1.0/3.0-middle_uv[0];
+	div		$tmp730 $const17 $const40 	%line{181} %argrw{"wrr"}
+	compref		$tmp731 ___341_middle_uv $const6 	%argrw{"wrr"}
+	sub		$tmp732 $tmp730 $tmp731 	%argrw{"wrr"}
+	compassign	___341_middle_uv $const6 $tmp732 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:183
+#     color room_rgb = texture(filename, room_uv[0], room_uv[1]);
+	compref		$tmp733 ___341_room_uv $const6 	%line{183} %argrw{"wrr"}
+	compref		$tmp734 ___341_room_uv $const9 	%argrw{"wrr"}
+	texture		___341_room_rgb filename_new $tmp733 $tmp734 	%argrw{"wrrr"} %argderivs{2,3}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:187
+#     final_rgb = room_rgb;
+	assign		___341_final_rgb ___341_room_rgb 	%line{187} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:190
+#     if (middle_enable > 0){
+	gt		$tmp735 middle_enable $const6 	%line{190} %argrw{"wrr"}
+	if		$tmp735 1040 1040 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:192
+#         color mid_ground_rgb = texture(filename, middle_uv[0], middle_uv[1], "alpha", mid_ground_a);
+	compref		$tmp736 ___341_middle_uv $const6 	%line{192} %argrw{"wrr"}
+	compref		$tmp737 ___341_middle_uv $const9 	%argrw{"wrr"}
+	texture		___351_mid_ground_rgb filename_new $tmp736 $tmp737 $const42 ___351_mid_ground_a 	%argrw{"wrrrrw"} %argderivs{2,3}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:193
+#         final_rgb = mix(room_rgb, mid_ground_rgb, mid_ground_a);
+	mix		___341_final_rgb ___341_room_rgb ___351_mid_ground_rgb ___351_mid_ground_a 	%line{193} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:197
+#     if (curtains_enable > 0){
+	gt		$tmp738 curtains_enable $const6 	%line{197} %argrw{"wrr"}
+	if		$tmp738 1046 1046 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:199
+#         color curtains_rgb = texture(filename, front_uv[0], front_uv[1], "alpha", curtains_a);
+	compref		$tmp739 ___341_front_uv $const6 	%line{199} %argrw{"wrr"}
+	compref		$tmp740 ___341_front_uv $const9 	%argrw{"wrr"}
+	texture		___352_curtains_rgb filename_new $tmp739 $tmp740 $const42 ___352_curtains_a 	%argrw{"wrrrrw"} %argderivs{2,3}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:200
+#         final_rgb = mix(final_rgb, curtains_rgb, curtains_a);
+	mix		___341_final_rgb ___341_final_rgb ___352_curtains_rgb ___352_curtains_a 	%line{200} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:202
+#     return final_rgb;
+	assign		final_rgb ___341_final_rgb 	%line{202} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_window_box_s.osl:323
+#     out_rgb = final_rgb;
+	assign		out_rgb final_rgb 	%line{323} %argrw{"wr"}
+	end

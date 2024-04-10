@@ -1,0 +1,31 @@
+<args format="1.0">
+    <help>
+    build by lynxi
+    </help>
+    <page name="osl file">
+        <page name="test">
+            <param name="space" constant="True" widget="mapper">
+                <hintdict name="options">
+                    <int value="0" name="x"/>
+                    <int value="1" name="-x"/>
+                    <int value="2" name="y"/>
+                    <int value="3" name="-y"/>
+                    <int value="4" name="z"/>
+                    <int value="5" name="-z"/>
+                </hintdict>
+                <help>
+                </help>
+            </param>
+        </page>
+        <page name="basic">
+            <param name="filename" constant="True" widget="fileInput">
+                <help>
+                </help>
+            </param>
+            <param name="udim_maximum" constant="True" slider="True" slidermin="1001" slidermax="1100">
+                <help>
+                </help>
+            </param>
+        </page>
+    </page>
+</args>

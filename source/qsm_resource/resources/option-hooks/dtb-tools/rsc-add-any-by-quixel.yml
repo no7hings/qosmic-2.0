@@ -1,0 +1,52 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'storage'
+        #
+        name: 'Add Resources by Quixel'
+        icon_name: 'file/add-file'
+        #
+        size: [480, 720]
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        database: ''
+        database_configure: ''
+        database_configure_extend: ''
+
+build:
+    node:
+        options:
+            directory:
+                widget: directory
+                open_or_save: open
+                history_key: 'tool-panels.resource-library.quixel-directory'
+                value: '/l/resource/srf/tex_lib/surfaces'
+                tool_tip: [ 'choose a directory' ]
+            #
+            show_all_quixel_json_files:
+                widget: button
+                value: ''
+                tool_tip: [ 'press to show all quixel json files from choose directory' ]
+            #
+            quixel_json_files:
+                widget: files
+                value: ''
+                tool_tip: [ 'show all quixel json files from choose directory' ]
+                height: 240
+                ext_includes: ['.json']
+            #
+            ignore_exists:
+                widget: boolean
+                value: True
+                tool_tip: 'when it is checked do not show added json'
+            #
+            add_resources:
+                widget: button
+                value: ''
+                tool_tip: [ 'press to add resources by quixel json files' ]

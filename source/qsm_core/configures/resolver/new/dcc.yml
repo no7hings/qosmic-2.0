@@ -1,0 +1,110 @@
+# ******************************************************************************************************************** #
+dcc-data:
+    dcc-extend:
+        # renderable
+        renderable_location: '{root}'
+        renderable:
+            model:
+                high: '{root}/hi'
+                low: '{root}/lo'
+            groom: '{root}/hair'
+            character_effect: ''
+            effect: ''
+            rig: ''
+            surface: '{root}/look'
+            light: '{root}/light'
+            plant: '{root}/plant'
+            misc: '{root}/misc'
+        # auxiliary
+        auxiliary_location: '{root}/aux'
+        auxiliary:
+            model: ''
+            groom: '{root}/aux/grm'
+            character_effect: '{root}/aux/cfx'
+            effect: '{root}/aux/efx'
+            rig: '{root}/aux/rig'
+            surface: '{root}/aux/srf'
+            light: '{root}/aux/lgt'
+            plant: '{root}/aux/plt'
+            misc: '{root}/aux/misc'
+    #
+    maya-extend:
+        renderable_location: ''
+        renderable:
+            model:
+                high: '{root}/mod/hi'
+                low: '{root}/mod/lo'
+            groom: '{root}/hair'
+            character_effect: ''
+            effect: ''
+            rig: ''
+            surface: '{root}/look'
+            light: '{root}/light'
+            plant: '{root}/plant'
+            misc: ''
+        # auxiliary
+        auxiliary_location: ''
+        auxiliary:
+            model: '{root}/mod/misc'
+            groom: '{root}/grm'
+            character_effect: '{root}/cfx'
+            effect: '{root}/efx'
+            rig: '{root}/rig'
+            surface: '{root}/srf'
+            light: '{root}/lgt'
+            plant: '{root}/plt'
+            misc: '{root}/misc'
+    #
+    usd:
+        pathsep: '/'
+        geometry_location: '/'
+        #
+        root_name: 'master'
+        root: '/master'
+        camera_root: '/cameras'
+        camera_root_name: 'cameras'
+    #
+    maya:
+        pathsep: '|'
+        geometry_location: '/'
+        #
+        root_name: 'master'
+        root: '/master'
+        camera_root: '/cameras'
+        camera_root_name: 'cameras'
+    #
+    houdini:
+        pathsep: '/'
+        geometry_location: '/'
+        #
+        root_name: 'master'
+        root: '/master'
+        camera_root: '/cameras'
+        camera_root_name: 'cameras'
+    #
+    katana:
+        pathsep: '/'
+        geometry_location: '/root/world/geo'
+        #
+        root_name: 'master'
+        root: '/master'
+        camera_root: '/cameras'
+        camera_root_name: 'cameras'
+    #
+    clarisse:
+        pathsep: '/'
+        geometry_location: '/'
+        #
+        root_name: 'master'
+        root: '/master'
+        camera_root: '/cameras'
+        camera_root_name: 'cameras'
+    #
+    nuke:
+        pathsep: '/'
+        geometry_location: '/'
+        #
+        root_name: 'master'
+        root: '/master'
+        camera_root: '/cameras'
+        camera_root_name: 'cameras'

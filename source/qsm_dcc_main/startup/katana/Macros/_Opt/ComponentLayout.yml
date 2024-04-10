@@ -1,0 +1,153 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'component_layout'
+    type_abr: 'cmp_lot'
+    create_type: 'ComponentLayout_Opt'
+    description:
+        |-
+        layout component
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .5
+        g: .125
+        b: .125
+#
+main:
+    type: OpScript
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.i0'
+    output: '<.path>.out'
+    #
+    clear_start: 'user'
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+
+        user/enable:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+
+        user/script_visible:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        user/setting/spacing:
+            widget: float
+            value: 0.0
+            tool_tip: '...'
+
+        user/setting/move_to_floor:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        user/cache/json:
+            widget: file
+            value: ''
+            tool_tip: '...'
+
+        user/cache/generate:
+            widget: button
+            value: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpComponentLayout(node).generate_cache()'
+            tool_tip: '...'
+
+    port_hints:
+        script: {
+            conditionalVisOps: {"conditionalVisOp": "equalTo", conditionalVisPath: "../user/script_visible", conditionalVisValue: 1}
+        }
+        user: {label: 'parameters'}
+
+    parameters:
+        script/lua:
+            |-
+            local json = require('json')
+
+            function read_json(file_path)
+                local f = io.open(file_path, 'rb')
+                if not f then return nil end
+                local c = f:read "*a"
+                f:close()
+                if c == nil then return nil end
+                local j_c = json.decode(c)
+                return j_c
+            end
+            
+            function assign(key, data)
+                if data == nil then return end
+                local value = data[key]
+                if value == nil then return end
+                Interface.SetAttr(
+                    'xform.parentInverse.matrix.indexedValue', 
+                    DoubleAttribute(
+                        {
+                            1.0, 0.0, 0.0, 0.0, 
+                            0.0, 1.0, 0.0, 0.0,
+                            0.0, 0.0, 1.0, 0.0,
+                            0.0, 0.0, 0.0, 1.0
+                        }, 
+                        4
+                    )
+                )
+                Interface.SetAttr(
+                    'xform.interactive.translate', 
+                    DoubleAttribute(
+                        value[1]
+                    )
+                )
+                Interface.SetAttr(
+                    'bound', 
+                    DoubleAttribute(
+                        value[2]
+                    )
+                )
+                Interface.SetAttr(
+                    'viewer.default.annotation.color', 
+                    FloatAttribute(
+                        value[3]
+                    )
+                )
+                local ks = pystring.split(key, '/')
+                Interface.SetAttr(
+                    'viewer.default.annotation.text', 
+                    StringAttribute(
+                        ks[#ks]
+                    )
+                )
+            end
+            
+            function main()
+                if (Interface.GetOpArg('user.enable'):getValue() == 1) then
+                    local path_cur = Interface.GetInputLocationPath()
+                    local json_file_path = Interface.GetOpArg('user.cache.json'):getValue()
+                    local data = read_json(json_file_path)
+                    assign(path_cur, data)
+                end
+            end
+            
+            main()

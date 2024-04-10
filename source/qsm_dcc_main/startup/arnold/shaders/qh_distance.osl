@@ -1,0 +1,31 @@
+shader qh_distance
+(
+	vector scale = vector(1.0,1.0,1.0),
+	vector offset = vector(0.0,0.0,0.0),
+	//mode = manhattan|euclidian|quadrance
+	int mode = 0 [[string widget = "enumerate",string options = "manhattan|euclidian|quadrance", string page = "basic"]],
+	float radius = 1 [[string page = "basic"]],
+	float contrast = 1 [[string page = "basic"]],
+	output color out = color(0,0,0)
+)
+
+{
+		point Po = transform("object",P);
+		vector rePosition = (Po*.01)*(color(1,1,1)/scale)-offset;
+		float tmp;
+		if (mode == 0){
+			tmp = abs(rePosition[0]) + abs(rePosition[1]) + abs(rePosition[2]);
+		}
+		else if (mode == 1){
+			tmp = length(rePosition);
+		}
+		else if (mode == 2){
+			tmp = dot(rePosition,rePosition);
+		}
+		else {
+			tmp = 1;
+		}
+		vector result = pow(tmp*(color(1,1,1)/radius),contrast*-1);
+		out = clamp(result,0,1);
+    
+} 

@@ -1,0 +1,26 @@
+The unit tests can be run in two different ways:
+
+
+## rez-selftest
+
+Via the "rez-selftest" cli tool. This will run the unit tests even if the current
+environment is not configured for Rez (ie, Rez is not on PYTHONPATH). Useful
+for running the tests even if the user is in a rez-env'd environment. Some
+tests only run in this mode, since they rely on Rez being fully installed (and
+its cli tools available within a resolved environment).
+
+
+## python cli
+
+Via direct invocation of unittest on the Python cli. This can be done either
+directly on Rez's uninstalled source, or on an installed instance.
+
+To run all tests from source:
+
+```
+]$ cd <rez source root>
+]$ python -m unittest discover
+
+To run a specific test once installed:
+]$ python -m unittest rez.tests.test_solver
+```

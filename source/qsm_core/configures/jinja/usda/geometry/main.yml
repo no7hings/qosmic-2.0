@@ -1,0 +1,9 @@
+dcc:
+    root:
+        name: 'master'
+        location: '/master'
+#
+elements: []
+#    - {
+#        file: 'payload.usda'
+#    }

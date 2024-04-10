@@ -1,0 +1,37 @@
+# encoding=utf-8
+# noinspection PyUnresolvedReferences
+import maya.cmds as cmds
+# noinspection PyUnresolvedReferences
+import maya.mel as mel
+
+from lxmaya import ma_ae
+
+
+{{ 'class %s(ma_ae.AbsNodeTemplate):' | format(name) }}
+    def setup(self):
+        self._create_dict = {}
+        #
+        with self.scroll_layout():
+            with self.layout('Attribute(s)', collapse=False):
+{{- '\n' -}}
+{%- for i_port_name, i_port in ports.iteritems() -%}
+    {%- if i_port.assign == 'input' -%}
+        {{- '                self.addControl(\'%s\'' | format(i_port_name) -}}
+        {%- if i_port.metadata.widget -%}
+            {%- if i_port.metadata.widget.value == 'filename' -%}
+                {{- ', useAsFileName=True' -}}
+                {{- ')' -}}
+            {%- elif i_port.metadata.widget.value == 'enumerate' -%}
+                {{- ', enumerateOption=\'%s\'' | format(i_port.metadata.options.value) -}}
+                {{- ')' -}}
+            {%- else -%}
+                {{- ')' -}}
+            {%- endif -%}
+        {%- else -%}
+            {{- ')' -}}
+        {%- endif -%}
+        {{- '\n' -}}
+    {%- endif -%}
+{%- endfor %}
+            #
+            self.addExtraControls()

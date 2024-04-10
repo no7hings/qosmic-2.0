@@ -1,0 +1,248 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'instance_color_map'
+    type_abr: 'ist_clr_map'
+    create_type: 'InstanceColorMap_Wsp'
+    description:
+        |-
+        use for instance color map
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .25
+        g: .125
+        b: .5
+#
+main:
+    type: 'Group'
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.input'
+    output: '<.path>.output'
+    #
+    attributes:
+        ns_offsetX: 480
+        ns_offsetY: 120
+        #
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports:
+        - 'input'
+    #
+    output_ports:
+        - 'output'
+    #
+    ports:
+        # basic
+        parameters/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+
+        parameters/enable:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+
+        parameters/CEL:
+            widget: CEL
+            value: '/root/world/geo/master//*{attr("type") == "usd point instancer"}'
+            tool_tip: '...'
+
+        parameters/setting/location:
+            widget: path
+            value: '/root/world/geo'
+            tool_tip: '...'
+
+        parameters/setting/attribute:
+            widget: string
+            value: 'geometry.arbitrary.ist_color_map'
+            tool_tip: '...'
+
+        parameters/setting/distance_tolerance:
+            widget: float
+            value: 10.0
+            tool_tip: '...'
+
+        parameters/grow/usd:
+            widget: file
+            value: ''
+            tool_tip: '...'
+
+        parameters/grow/image:
+            widget: file
+            value: ''
+            tool_tip: '...'
+
+        parameters/grow/uv_map_name:
+            widget: string
+            value: 'st'
+            tool_tip: '...'
+
+        parameters/grow/preview:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        parameters/grow/force:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        parameters/grow/generate_cache:
+            widget: button
+            value: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpInstanceColorMap(node).generate_grow_cache()'
+            tool_tip: '...'
+
+        parameters/grow/cache/usd:
+            widget: file
+            value: ''
+            tool_tip: '...'
+
+        parameters/instance/usd:
+            widget: file
+            value: ''
+            tool_tip: '...'
+
+        parameters/instance/preview:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        parameters/instance/force:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        parameters/instance/generate_cache:
+            widget: button
+            value: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpInstanceColorMap(node).generate_instance_cache()'
+            tool_tip: '...'
+
+        parameters/instance/cache/usd:
+            widget: file
+            value: ''
+            tool_tip: '...'
+
+        parameters/instance/cache/json:
+            widget: file
+            value: ''
+            tool_tip: '...'
+    #
+    expand_groups:
+        - 'parameters'
+#
+node:
+    input_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        connections:
+            # input
+            - '<main.input>'
+            - '<.input>'
+
+    grow_usd:
+        type: UsdIn
+        name: '<option.type_abr>__<..key>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        expressions:
+            fileName: 'self.getParent().parameters.grow.cache.usd'
+            location: 'self.getParent().parameters.setting.location'
+
+    grow_usd_enable:
+        type: Switch
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.output'
+        #
+        input_ports:
+            - 'off'
+            - 'on'
+        #
+        expressions:
+            in: '1 if getParent().parameters.grow.preview else 0'
+        #
+        connections:
+            # on
+            - '<..grow_usd.output>'
+            - '<.path>.on'
+
+    instance_usd:
+        type: UsdIn
+        name: '<option.type_abr>__<..key>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        expressions:
+            fileName: 'self.getParent().parameters.instance.cache.usd'
+            location: 'self.getParent().parameters.setting.location'
+
+    instance_usd_enable:
+        type: Switch
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.output'
+        #
+        input_ports:
+            - 'off'
+            - 'on'
+        #
+        expressions:
+            in: '1 if getParent().parameters.instance.preview else 0'
+        #
+        connections:
+            # on
+            - '<..instance_usd.output>'
+            - '<.path>.on'
+
+    preview_merge:
+        type: Merge
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.out'
+        #
+        input_ports:
+            - 'main'
+            - 'grow'
+            - 'instance'
+        #
+        connections:
+            # main
+            - '<..input_dot.output>'
+            - '<.path>.main'
+            # grow
+            - '<..grow_usd_enable.output>'
+            - '<.path>.grow'
+            # instance
+            - '<..instance_usd_enable.output>'
+            - '<.path>.instance'
+
+    instance_op_script:
+        type: PropertyAssign_Opt
+        name: '<option.type_abr>__<..key>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+
+        expressions:
+            user/setting/location: 'self.getParent().parameters.setting.location'
+            user/cache/json: 'self.getParent().parameters.cache.json'
+
+        connections:
+            - '<..preview_merge.output>'
+            - '<.path>.i0'
+            # output
+            - '<.output>'
+            - '<main.output>'

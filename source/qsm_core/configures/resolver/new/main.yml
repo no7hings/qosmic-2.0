@@ -1,0 +1,7 @@
+#
+inherit_key: 'basic'
+#
+key: new
+#
+projects-include: [ 'nsa_dev', 'tnt' ]
+#

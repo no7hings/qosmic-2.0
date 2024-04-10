@@ -1,0 +1,93 @@
+color fbm (vector x, float v1, int octaves, float lacunarity, float gain, float distortion, float frame, int mode) {
+    // Initial values
+    vector m_x = x;
+    color value = v1;
+    float amplitud = 0.668;
+    //float frequency = 0.760;
+    //
+    // Loop of octaves
+    for (int i = 0; i < octaves; i++) {
+        if (distortion != 0){
+            m_x += distortion*noise("perlin",m_x, frame);
+        }
+        if (mode == 1){
+            vector noise_3d = noise("perlin",m_x, frame);
+            value += amplitud * noise_3d;
+        }else{
+            float noise_1d = noise("perlin",m_x, frame);
+            value += amplitud * noise_1d;
+        }
+        m_x *= lacunarity;
+        amplitud *= gain;
+    }
+    return value;
+}
+
+
+shader osl_noise_fractal(
+    int octaves = 8 [[ int min = 1, int max = 8 ]],
+    float distortion = 0.0 [[ float min = 0.0, float max = 10.0 ]],
+    float value = 0.0,
+    float gain = 0.6 [[ float min = 0.0, float max = 1.0 ]],
+    float lacunarity = 2.0 [[ float min = 1.0, float max = 5.0 ]],
+    //
+    vector rotation = 0.0,
+    vector offset = 0.0,
+    vector scale = 1.0,
+    //
+    int coord_space = 0 [[ string widget = "enumerate", string options = "world|object|Pref|uv" ]],
+    vector position = 0.0,
+    float frame = 0.0,
+    color color1 = 0.0,
+    color color2 = 1.0,
+    int mode = 0 [[ string widget = "enumerate", string options = "scalar|vector" ]],
+    //
+    int turbulent_enable = 0 [[ int min = 0, int max = 1, string widget = "boolean" ]],
+    int clamp_enable = 1 [[ int min = 0, int max = 1, string widget = "boolean" ]],
+
+	output color out_rgb = 0.0
+)
+{
+    point pp = P;
+    vector pref = vector(0.0);
+    color resout = color(0);
+
+    if (isconnected(position)){
+        pp = position;
+    }
+    else if (coord_space == 2){
+        if (getattribute("Pref", pref)){
+            pp = pref;
+        }
+    }
+    else if (coord_space == 1){
+        pp = transform("object", P);
+    }
+    else if (coord_space == 3){
+        pp = vector(u, v, 0);
+    }
+
+    pp += offset;
+    pp *= scale;
+    if (rotation != vector(0,0,0)){
+        pp = rotate(pp,rotation[0],point(0,0,0), point(1,0,0));
+        pp = rotate(pp,rotation[1],point(0,0,0), point(0,1,0));
+        pp = rotate(pp,rotation[2],point(0,0,0), point(0,0,1));
+    }
+    // if (distortion != 0.0){
+    //     vector noi = fbm(pp,0,2,0.5,0.6,0,"vector");
+    //     pp *= (noi*distortion);
+    // }
+
+    resout = fbm(pp, value, octaves, lacunarity, gain, distortion, frame, mode);
+
+    if (turbulent_enable){
+        resout = abs(resout);
+    }
+
+    if(clamp_enable){
+        resout = clamp(resout,color(0),color(1));
+    }
+
+	out_rgb = mix(color1,color2,resout);
+}

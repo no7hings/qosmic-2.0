@@ -1,0 +1,100 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'user_geometry_properties_assign_group'
+    type_abr: 'usr_gmt_prt_asn_grp'
+    create_type: 'GeometryPropertiesAssignGroup_Wsp_Usr'
+    description:
+        |-
+        geometry properties assign group for user
+    variant_key: 'look'
+    #
+    auto_color: False
+#
+main:
+    type: GeometryPropertiesAssignGroup_Wsp
+    base_type: GroupStack
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.input'
+    output: '<.path>.output'
+    #
+    clear_ports: False
+    #
+    attributes:
+        comment: '<option.description>'
+    #
+    parameters:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+    #
+    child:
+        type: GeometryPropertiesAssign_Wsp
+        #
+        tag: 'GPA'
+        #
+        path_pattern: '{parent}/<.tag>__{key}'
+        #
+        nodes:
+            #
+            subdiv:
+                arnold_geometry_properties:
+                    smoothing: True
+                    subdiv_type: 'catclark'
+                    subdiv_iterations: 2
+                    subdiv_smooth_derivs: True
+                #
+                attributes:
+                    comment:
+                        |-
+                        put subdiv geometry in here
+            #
+            no_subdiv:
+                parameters:
+                    CEL:
+                        |-
+                        //master//*{attr("type") == "subdmesh" and hasattr("userProperties.pg_notSmooth") == 1}
+                arnold_geometry_properties:
+                    smoothing: True
+                    subdiv_type: 'none'
+                #
+                attributes:
+                    comment:
+                        |-
+                        put non-subdiv geometry in here
+            #
+            displacemenet:
+                arnold_geometry_properties:
+                    smoothing: True
+                    subdiv_type: 'catclark'
+                    subdiv_iterations: 3
+                    subdiv_smooth_derivs: True
+                    disp_padding: 1
+                    disp_autobump: True
+                #
+                attributes:
+                    comment:
+                        |-
+                        put displacemenet geometry in here
+            #
+            opacity:
+                arnold_geometry_properties:
+                    opaque: False
+                #
+                attributes:
+                    comment:
+                        |-
+                        put opacity geometry in here
+            #
+            sss:
+                arnold_geometry_properties:
+                    sss_setname: sss
+                #
+                attributes:
+                    comment:
+                        |-
+                        put sss geometry in here

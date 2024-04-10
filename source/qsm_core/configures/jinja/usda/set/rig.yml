@@ -1,0 +1,40 @@
+project: ''
+role: ''
+asset: ''
+step: ''
+task: ''
+version: ''
+#
+dcc:
+    root: /master
+    root_name: master
+#
+look:
+    passes:
+        - 'default'
+    #
+    properties:
+        - 'default'
+#
+option:
+    indent: 4
+    linesep: "\n"
+
+usd:
+    presets:
+        up_axis: Y
+        linear_unit: 0.01
+#
+geometries:
+    hi: 'geo/hi.usd'
+    shape: 'geo/shape.usd'
+    hair: 'geo/hair.usd'
+    #
+    uv_map: 'uv_map.usda'
+#
+usdas:
+    material: 'shading.usda'
+    #
+    payload: 'payload.usda'
+    registry: 'registry.usda'
+    asset: '<asset>.usda'

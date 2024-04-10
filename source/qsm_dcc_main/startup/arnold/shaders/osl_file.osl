@@ -1,0 +1,56 @@
+#include <stdosl.h>
+
+shader osl_file (
+    int space = 0 [[ string widget = "enumerate", string options = "x|-x|y|-y|z|-z", string page = "extra" ]],
+    string filename = "" [[ string widget = "filename", string page = "basic" ]],
+    int udim_maximum = 1010 [[ int min = 1001, int max = 1100, string page = "basic" ]],
+
+    output color out_rgb = 0.0,
+) {
+    color final_rgb = 0.0;
+    int udim_index = 1001;
+    // check is udim
+    int is_udim = regex_search(filename, "<udim>");
+    if (is_udim > 0) {
+        // maximum search
+        int c = udim_maximum - 1000;
+        point uv = point(u, v, 0.0);
+        for (int i = 0; i < c; i++) {
+            float i_uv_offset_x = (udim_index-1001)%10;
+            float i_uv_offset_y = ((udim_index-1001)-i_uv_offset_x)/10;
+            //float uv_y_hundreds = ( i_uv_offset_y / 10 );
+            string i_udim_str = format("%d", udim_index);
+            string i_args[2];
+            split(filename, i_args, "<udim>");
+            string i_file = concat(i_args[0], i_udim_str, i_args[1]);
+            // check exists
+            int e;
+            gettextureinfo(i_file, "exists", e);
+            if (e > 0) {
+                float i_coord_x = 0;
+                float i_coord_y = 0;
+
+                float i_x_next = (i_uv_offset_x + 1);
+                float i_y_next = (i_uv_offset_y + 1);
+
+                if (((uv[0] >= i_uv_offset_x)&&(uv[0] <= i_x_next))&&((uv[1] >= i_uv_offset_y)&&(uv[1] <= i_y_next))){
+                    i_coord_x = uv[0]-i_uv_offset_x;
+                    i_coord_y = uv[1]-i_uv_offset_y;
+                    color i_rgb = texture(i_file, i_coord_x, 1-i_coord_y);
+                    final_rgb += i_rgb;
+                }
+            }
+            else {
+                warning(
+                    "%s, is non-exists", i_file
+                );
+            }
+            udim_index += 1;
+        }
+    }
+    else {
+        final_rgb = texture(filename, u, 1-v);
+    }
+
+    out_rgb = final_rgb;
+}

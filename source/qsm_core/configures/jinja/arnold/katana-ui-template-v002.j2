@@ -1,0 +1,67 @@
+<args format="1.0">
+    <help>
+    build by lynxi
+    </help>
+{{ '    <page name="%s">' | format(' '.join(name.split('_'))) }}
+{%- set ns = namespace(indent = 0) -%}
+{%- set ns = namespace(group_name = 'root') -%}
+{%- for i_port_name, i_port in ports.iteritems() -%}
+    {%- if i_port.assign == 'input' -%}
+        {{- '\n' -}}
+        {%- if i_port.metadata.page -%}
+            {%- if ns.group_name != i_port.metadata.page.value -%}
+                {%- if ns.group_name != 'root' -%}
+                    {{ '        </page>\n' }}
+                {%- endif -%}
+                {%- set ns.indent = 4 -%}
+                {%- set ns.group_name = i_port.metadata.page.value -%}
+                {{ '        <page name="%s">\n' | format(i_port.metadata.page.value) }}
+            {%- endif -%}
+        {%- else -%}
+            {%- if ns.group_name != 'root' -%}
+                {{ '        </page>\n' }}
+            {%- endif -%}
+            {%- set ns.indent = 0 -%}
+            {%- set ns.group_name = 'root' -%}
+        {%- endif -%}
+        {{- '        %s<param name="%s"' | format(ns.indent*' ', i_port_name) -}}
+        {%- if i_port.type in ['int', 'float', 'string'] -%}
+            {{- ' constant="True"' -}}
+        {%- endif -%}
+        {%- if i_port.metadata.widget -%}
+            {%- if i_port.metadata.widget.value == 'boolean' -%}
+                {{- ' widget="checkBox"' -}}
+                {{- '>\n' -}}
+            {%- elif i_port.metadata.widget.value == 'filename' -%}
+                {{- ' widget="fileInput"' -}}
+                {{- '>\n' -}}
+            {%- elif i_port.metadata.widget.value == 'enumerate' -%}
+                {{- ' widget="mapper"' -}}
+                {{- '>\n' -}}
+                {{- '            %s<hintdict name="options">\n' | format(ns.indent*' ') -}}
+                {%- for i in i_port.metadata.options.value.split('|') -%}
+                    {{- '                %s<int value="%s" name="%s"/>\n' | format(ns.indent*' ', loop.index-1, i) -}}
+                {%- endfor %}
+                {{- '            %s</hintdict>\n' | format(ns.indent*' ') -}}
+            {%- else -%}
+                {{- '>\n' -}}
+            {%- endif -%}
+        {%- else -%}
+            {%- if i_port.metadata.min and i_port.metadata.max -%}
+                {{- ' slider="True"' -}}
+                {{- ' slidermin="%s"' | format(i_port.metadata.min.value) -}}
+                {{- ' slidermax="%s"' | format(i_port.metadata.max.value) -}}
+            {%- endif -%}
+            {{- '>\n' -}}
+        {%- endif -%}
+        {{- '            %s<help>\n' | format(ns.indent*' ') -}}
+        {{- '            %s</help>\n' | format(ns.indent*' ') -}}
+        {{- '        %s</param>' | format(ns.indent*' ') -}}
+    {% else %}
+        {%- if ns.group_name != 'root' -%}
+            {{ '\n        </page>' }}
+        {%- endif -%}
+    {%- endif -%}
+{%- endfor %}
+{{ '    </page>' }}
+</args>

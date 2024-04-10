@@ -1,0 +1,27 @@
+command:
+    qosmic: '-- qsm-python {lxdcc_root}/script/bin/python/qsm-hook-engine-script.py "{hook_option}"'
+    qosmic-python: '-- qsm-python {lxdcc_root}/script/bin/python/qsm-hook-engine-script.py "{hook_option}"'
+    #
+    python: '<command.maya-python>'
+    #
+    maya: '-- maya -batch -command "python(\"importlib=__import__(\\\"importlib\\\");ssn_commands=importlib.import_module(\\\"lxsession.commands\\\");ssn_commands.execute_option_hook(option=\\\"{hook_option}\\\")\")"'
+    maya-python: '-- mayapy {lxdcc_root}/script/bin/python/qsm-hook-engine-script.py "{hook_option}"'
+    #
+    maya-render: '-- Render -r arnold -rd {render_directory} -cam {render_camera} -rt 0 -ai:lve 3 -s {start_index} -e {end_index} "{render_file}"'
+    #
+    houdini: '<command.houdini-python>'
+    houdini-python: '-- hython {lxdcc_root}/script/bin/python/qsm-hook-engine-script.py "{hook_option}"'
+    #
+    katana: '<command.katana-python>'
+    katana-python: '-- katana --script={lxdcc_root}/script/bin/python/qsm-hook-engine-script.py "{hook_option}"'
+    #
+    katana-render: '-- katana --batch --katana-file="{render_file}" -t {start_index}-{end_index} --render-node="{renderer}"'
+    katana-render-new: '-- katana --batch --katana-file="{render_file}" -t {start_index}-{end_index} --render-node="{render_node}"'
+    #
+    usd: '<command.maya-python>'
+    #
+    shotgun: '<command.maya-python>'
+    #
+    rv: '-- /opt/rv/bin/rvio "{image_file}" -overlay frameburn .4 1.0 30.0 -dlut "{lut_directory}" -o "{movie_file}" -comment "{user}" -outparams timecode={start_frame}'
+    #
+    rv-movie-convert: '-- /opt/rv/bin/rvio "{image_file}" -overlay frameburn .4 1.0 30.0 -dlut "{lut_directory}" -o "{movie_file}" -comment "{user}" -outparams timecode={start_frame}'

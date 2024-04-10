@@ -1,0 +1,9 @@
+preset:
+    default: {}
+    test_0:
+        parameters: {}
+        #
+        proxy_parameters:
+            asset/usd:
+                usd/enable: True
+                usd/file: '/l/prod/cgm/work/assets/chr/nn_4y/srf/surfacing/set/scene/v037/nn_4y.usda'

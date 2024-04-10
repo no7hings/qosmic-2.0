@@ -1,0 +1,1769 @@
+option:
+    root: ''
+    texture_name: ''
+    time_tag: ''
+    #
+    unique_name: '<.texture_name>__<.time_tag>'
+# node
+node:
+    # katana type is "NetworkMaterialCreate"
+    material_group:
+        type: 'NetworkMaterialCreate'
+        path: '<option.root>/<option.texture_name>__<option.time_tag>_MTL_GRP'
+    # katana type is "NetworkMaterial"
+    material:
+        type: 'NetworkMaterial'
+        path: '<..material_group.path>/<option.texture_name>__<option.time_tag>_MTL'
+    # katana type is "ShadingGroup"
+    node_group:
+        type: 'ShadingGroup'
+        path: '<..material_group.path>/<option.texture_name>__<option.time_tag>_NOD_GRP'
+        # dynamic create for texture input, there are builtin ports
+        input_ports:
+            # texture
+            #   basic
+            - 'inputs.basic.mode'
+            #   uv-map
+            #       uv-map basic
+            - 'inputs.uv_map.uv_map_coords'
+            #       uv-map transform
+            - 'inputs.uv_map.uv_map_translate'
+            - 'inputs.uv_map.uv_map_rotate'
+            - 'inputs.uv_map.uv_map_scale'
+            - 'inputs.uv_map.uv_map_pivot'
+            - 'inputs.uv_map.uv_map_coverage'
+            #       uv-map frame transform
+            - 'inputs.uv_map.uv_map_frame_translate'
+            - 'inputs.uv_map.uv_map_frame_rotate'
+            - 'inputs.uv_map.uv_map_frame_scale'
+            - 'inputs.uv_map.uv_map_frame_pivot'
+            - 'inputs.uv_map.uv_map_frame_wrap_u'
+            - 'inputs.uv_map.uv_map_frame_wrap_v'
+            #   triplanar
+            #       triplanar basic
+            - 'inputs.triplanar.triplanar_coord_space'
+            - 'inputs.triplanar.triplanar_pref_name'
+            #       triplanar transform
+            - 'inputs.triplanar.triplanar_translate'
+            - 'inputs.triplanar.triplanar_rotate'
+            - 'inputs.triplanar.triplanar_scale'
+            - 'inputs.triplanar.triplanar_blend'
+            #       triplanar cell
+            - 'inputs.triplanar.triplanar_cell_enable'
+            - 'inputs.triplanar.triplanar_cell_rotate'
+            - 'inputs.triplanar.triplanar_cell_blend'
+        # dynamic create for texture output, there are builtin ports
+        output_ports:
+            #   uv_map
+            - 'outputs.proxy.uv_map_proxy'
+            #   triplanar
+            - 'outputs.proxy.triplanar_proxy'
+            # shader
+            #   arnold
+            - 'outputs.arnold_shader.arnold_surface'
+            - 'outputs.arnold_shader.arnold_displacement'
+            #   usd
+            - 'outputs.usd_shader.usd_surface'
+            - 'outputs.usd_shader.usd_displacement'
+        #
+        connections:
+            - '<.path>.outputs.arnold_shader.arnold_surface'
+            - '<..material.path>.arnoldSurface'
+            #
+            - '<.path>.outputs.arnold_shader.arnold_displacement'
+            - '<..material.path>.arnoldDisplacement'
+            #
+            - '<.path>.outputs.usd_shader.usd_surface'
+            - '<..material.path>.usdSurface'
+            #
+            - '<.path>.outputs.usd_shader.usd_displacement'
+            - '<..material.path>.usdDisplacement'
+    #
+    node_backdrop:
+        type: 'Backdrop'
+        path: '<..material_group.path>/<option.texture_name>__<option.time_tag>_MTL_BDP'
+        #
+        attributes:
+            x: 0
+            y: 0
+            ns_sizeX: 320
+            ns_sizeY: 320
+            ns_colorr: 0.7412
+            ns_colorg: 0.2039
+            ns_colorb: 0.8196
+            ns_text: 'Test'
+            ns_fontScale: 6.0
+    # basic
+    node_passthrough:
+        tag: 'passthrough'
+        type: 'ShadingGroup'
+        path: '<..node_group.path>/<.tag>__<option.time_tag>_DOT'
+        #
+        input_ports:
+            # texture
+            #   uv-map
+            #       uv-map basic
+            - 'inputs.uv_map.uv_map_coords'
+            #       uv-map transform
+            - 'inputs.uv_map.uv_map_translate'
+            - 'inputs.uv_map.uv_map_rotate'
+            - 'inputs.uv_map.uv_map_scale'
+            - 'inputs.uv_map.uv_map_pivot'
+            - 'inputs.uv_map.uv_map_coverage'
+            #       uv-map frame transform
+            - 'inputs.uv_map.uv_map_frame_translate'
+            - 'inputs.uv_map.uv_map_frame_rotate'
+            - 'inputs.uv_map.uv_map_frame_scale'
+            - 'inputs.uv_map.uv_map_frame_pivot'
+            - 'inputs.uv_map.uv_map_frame_wrap_u'
+            - 'inputs.uv_map.uv_map_frame_wrap_v'
+            #   triplanar
+            #       triplanar basic
+            - 'inputs.triplanar.triplanar_coord_space'
+            - 'inputs.triplanar.triplanar_pref_name'
+            #       triplanar transform
+            - 'inputs.triplanar.triplanar_translate'
+            - 'inputs.triplanar.triplanar_rotate'
+            - 'inputs.triplanar.triplanar_scale'
+            - 'inputs.triplanar.triplanar_blend'
+            #       triplanar cell
+            - 'inputs.triplanar.triplanar_cell_enable'
+            - 'inputs.triplanar.triplanar_cell_rotate'
+            - 'inputs.triplanar.triplanar_cell_blend'
+        #
+        output_ports:
+            # texture
+            #   uv-map
+            #       uv-map basic
+            - 'outputs.uv_map.uv_map_coords'
+            #       uv-map transform
+            - 'outputs.uv_map.uv_map_translate'
+            - 'outputs.uv_map.uv_map_rotate'
+            - 'outputs.uv_map.uv_map_scale'
+            - 'outputs.uv_map.uv_map_pivot'
+            - 'outputs.uv_map.uv_map_coverage'
+            #       uv-map frame transform
+            - 'outputs.uv_map.uv_map_frame_translate'
+            - 'outputs.uv_map.uv_map_frame_rotate'
+            - 'outputs.uv_map.uv_map_frame_scale'
+            - 'outputs.uv_map.uv_map_frame_pivot'
+            - 'outputs.uv_map.uv_map_frame_wrap_u'
+            - 'outputs.uv_map.uv_map_frame_wrap_v'
+            #   triplanar
+            #       triplanar basic
+            - 'outputs.triplanar.triplanar_coord_space'
+            - 'outputs.triplanar.triplanar_pref_name'
+            #       triplanar transform
+            - 'outputs.triplanar.triplanar_translate'
+            - 'outputs.triplanar.triplanar_rotate'
+            - 'outputs.triplanar.triplanar_scale'
+            - 'outputs.triplanar.triplanar_blend'
+            #       triplanar cell
+            - 'outputs.triplanar.triplanar_cell_enable'
+            - 'outputs.triplanar.triplanar_cell_rotate'
+            - 'outputs.triplanar.triplanar_cell_blend'
+        #
+        shader_parameters:
+            attribute: '<...key>'
+        #
+        connections:
+            # connections from "self-node"
+            #   uv-map
+            #       uv-map basic
+            - '<.path>.inputs.uv_map.uv_map_coords'
+            - '<.path>.outputs.uv_map.uv_map_coords'
+            #       uv-map transform
+            - '<.path>.inputs.uv_map.uv_map_translate'
+            - '<.path>.outputs.uv_map.uv_map_translate'
+            - '<.path>.inputs.uv_map.uv_map_rotate'
+            - '<.path>.outputs.uv_map.uv_map_rotate'
+            - '<.path>.inputs.uv_map.uv_map_scale'
+            - '<.path>.outputs.uv_map.uv_map_scale'
+            - '<.path>.inputs.uv_map.uv_map_pivot'
+            - '<.path>.outputs.uv_map.uv_map_pivot'
+            - '<.path>.inputs.uv_map.uv_map_coverage'
+            - '<.path>.outputs.uv_map.uv_map_coverage'
+            #       uv-map frame transform
+            - '<.path>.inputs.uv_map.uv_map_frame_translate'
+            - '<.path>.outputs.uv_map.uv_map_frame_translate'
+            - '<.path>.inputs.uv_map.uv_map_frame_rotate'
+            - '<.path>.outputs.uv_map.uv_map_frame_rotate'
+            - '<.path>.inputs.uv_map.uv_map_frame_scale'
+            - '<.path>.outputs.uv_map.uv_map_frame_scale'
+            - '<.path>.inputs.uv_map.uv_map_frame_pivot'
+            - '<.path>.outputs.uv_map.uv_map_frame_pivot'
+            - '<.path>.inputs.uv_map.uv_map_frame_wrap_u'
+            - '<.path>.outputs.uv_map.uv_map_frame_wrap_u'
+            - '<.path>.inputs.uv_map.uv_map_frame_wrap_v'
+            - '<.path>.outputs.uv_map.uv_map_frame_wrap_v'
+            #   triplanar
+            #       triplanar basic
+            - '<.path>.inputs.triplanar.triplanar_coord_space'
+            - '<.path>.outputs.triplanar.triplanar_coord_space'
+            - '<.path>.inputs.triplanar.triplanar_pref_name'
+            - '<.path>.outputs.triplanar.triplanar_pref_name'
+            #       triplanar transform
+            - '<.path>.inputs.triplanar.triplanar_translate'
+            - '<.path>.outputs.triplanar.triplanar_translate'
+            - '<.path>.inputs.triplanar.triplanar_rotate'
+            - '<.path>.outputs.triplanar.triplanar_rotate'
+            - '<.path>.inputs.triplanar.triplanar_scale'
+            - '<.path>.outputs.triplanar.triplanar_scale'
+            - '<.path>.inputs.triplanar.triplanar_blend'
+            - '<.path>.outputs.triplanar.triplanar_blend'
+            #       triplanar cell
+            - '<.path>.inputs.triplanar.triplanar_cell_enable'
+            - '<.path>.outputs.triplanar.triplanar_cell_enable'
+            - '<.path>.inputs.triplanar.triplanar_cell_rotate'
+            - '<.path>.outputs.triplanar.triplanar_cell_rotate'
+            - '<.path>.inputs.triplanar.triplanar_cell_blend'
+            - '<.path>.outputs.triplanar.triplanar_cell_blend'
+            # connections from "node_group"
+            #   uv-map
+            #       uv-map basic
+            - '<..node_group.path>.inputs.uv_map.uv_map_coords'
+            - '<.path>.inputs.uv_map.uv_map_coords'
+            #       uv-map transform
+            - '<..node_group.path>.inputs.uv_map.uv_map_translate'
+            - '<.path>.inputs.uv_map.uv_map_translate'
+            - '<..node_group.path>.inputs.uv_map.uv_map_rotate'
+            - '<.path>.inputs.uv_map.uv_map_rotate'
+            - '<..node_group.path>.inputs.uv_map.uv_map_scale'
+            - '<.path>.inputs.uv_map.uv_map_scale'
+            - '<..node_group.path>.inputs.uv_map.uv_map_pivot'
+            - '<.path>.inputs.uv_map.uv_map_pivot'
+            - '<..node_group.path>.inputs.uv_map.uv_map_coverage'
+            - '<.path>.inputs.uv_map.uv_map_coverage'
+            #       uv-map frame transform
+            - '<..node_group.path>.inputs.uv_map.uv_map_frame_translate'
+            - '<.path>.inputs.uv_map.uv_map_frame_translate'
+            - '<..node_group.path>.inputs.uv_map.uv_map_frame_rotate'
+            - '<.path>.inputs.uv_map.uv_map_frame_rotate'
+            - '<..node_group.path>.inputs.uv_map.uv_map_frame_scale'
+            - '<.path>.inputs.uv_map.uv_map_frame_scale'
+            - '<..node_group.path>.inputs.uv_map.uv_map_frame_pivot'
+            - '<.path>.inputs.uv_map.uv_map_frame_pivot'
+            - '<..node_group.path>.inputs.uv_map.uv_map_frame_wrap_u'
+            - '<.path>.inputs.uv_map.uv_map_frame_wrap_u'
+            - '<..node_group.path>.inputs.uv_map.uv_map_frame_wrap_v'
+            - '<.path>.inputs.uv_map.uv_map_frame_wrap_v'
+            #   triplanar
+            #       triplanar basic
+            - '<..node_group.path>.inputs.triplanar.triplanar_coord_space'
+            - '<.path>.inputs.triplanar.triplanar_coord_space'
+            - '<..node_group.path>.inputs.triplanar.triplanar_pref_name'
+            - '<.path>.inputs.triplanar.triplanar_pref_name'
+            #       triplanar transform
+            - '<..node_group.path>.inputs.triplanar.triplanar_translate'
+            - '<.path>.inputs.triplanar.triplanar_translate'
+            - '<..node_group.path>.inputs.triplanar.triplanar_rotate'
+            - '<.path>.inputs.triplanar.triplanar_rotate'
+            - '<..node_group.path>.inputs.triplanar.triplanar_scale'
+            - '<.path>.inputs.triplanar.triplanar_scale'
+            - '<..node_group.path>.inputs.triplanar.triplanar_blend'
+            - '<.path>.inputs.triplanar.triplanar_blend'
+            #       triplanar cell
+            - '<..node_group.path>.inputs.triplanar.triplanar_cell_enable'
+            - '<.path>.inputs.triplanar.triplanar_cell_enable'
+            - '<..node_group.path>.inputs.triplanar.triplanar_cell_rotate'
+            - '<.path>.inputs.triplanar.triplanar_cell_rotate'
+            - '<..node_group.path>.inputs.triplanar.triplanar_cell_blend'
+            - '<.path>.inputs.triplanar.triplanar_cell_blend'
+    # arnold shader
+    arnold_surface_shader:
+        tag: 'surface'
+        type: 'ArnoldShadingNode'
+        shader_type: 'standard_surface'
+        path: '<..material_group.path>/<option.texture_name>__<.tag>__<option.time_tag>_AND_SDR'
+        #
+        connections:
+            - '<.path>.out'
+            - '<..material.path>.arnoldSurface'
+    # texture
+    #   basic
+    arnold_texture_basic_mode:
+        tag: 'texture_basic'
+        type: 'ArnoldShadingNode'
+        shader_type: 'user_data_int'
+        path: '<..node_group.path>/<.tag>__<option.time_tag>_AND_NOD'
+        #
+        shader_parameters:
+            attribute: '<...key>'
+        #
+        shader_hints:
+            default: '{"page": "basic", "label": "mode", "dstPage": "<option.unique_name>.basic", "dstName": "<option.unique_name>__basic_mode", "options__order": ["default", "use uv map", "use triplaner"], "widget": "mapper", "options": {"default": 0.0, "use uv map": 1.0, "use triplaner": 2.0}}'
+        #
+        connections:
+            - '<..node_group.path>.inputs.basic.mode'
+            - '<.path>.default'
+    # triplanar
+    arnold_texture_uv_map_proxy:
+        tag: 'texture_uv_map'
+        type: 'ArnoldShadingNode'
+        shader_type: 'uv_transform'
+        name: '<.tag>__<option.time_tag>_AND_NOD'
+        path: '<..node_group.path>/<.name>'
+        #
+        shader_hints:
+            # frame transform
+            translate_frame: '{"page": "uv-map frame transform", "label": "translate", "dstPage": "<option.unique_name>.uv-map frame transform", "dstName": "<option.unique_name>__uv_map__frame_translate"}'
+            rotate_frame: '{"page": "uv-map frame transform", "label": "rotate", "dstPage": "<option.unique_name>.uv-map frame transform", "dstName": "<option.unique_name>__uv_map__frame_rotate"}'
+            scale_frame: '{"page": "uv-map frame transform", "label": "scale", "dstPage": "<option.unique_name>.uv-map frame transform", "dstName": "<option.unique_name>__uv_map__frame_scale"}'
+            pivot_frame: '{"page": "uv-map frame transform", "label": "pivot", "dstPage": "<option.unique_name>.uv-map frame transform", "dstName": "<option.unique_name>__uv_map__frame_pivot"}'
+            wrap_frame_u: '{"page": "uv-map frame transform", "label": "wrap U", "dstPage": "<option.unique_name>.uv-map frame transform", "dstName": "<option.unique_name>__uv_map__frame_wrap_u"}'
+            wrap_frame_v: '{"page": "uv-map frame transform", "label": "wrap V", "dstPage": "<option.unique_name>.uv-map frame transform", "dstName": "<option.unique_name>__uv_map__frame_wrap_v"}'
+            # transform
+            offset: '{"page": "uv-map transform", "label": "translate", "dstPage": "<option.unique_name>.uv-map transform", "dstName": "<option.unique_name>__uv_map__translate"}'
+            rotate: '{"page": "uv-map transform", "label": "rotate", "dstPage": "<option.unique_name>.uv-map transform", "dstName": "<option.unique_name>__uv_map__rotate"}'
+            repeat: '{"page": "uv-map transform", "label": "scale", "dstPage": "<option.unique_name>.uv-map transform", "dstName": "<option.unique_name>__uv_map__scale"}'
+            pivot: '{"page": "uv-map transform", "label": "pivot", "dstPage": "<option.unique_name>.uv-map transform", "dstName": "<option.unique_name>__uv_map__pivot"}'
+            coverage: '{"page": "uv-map transform", "label": "coverage", "dstPage": "<option.unique_name>.uv-map transform", "dstName": "<option.unique_name>__uv_map__coverage"}'
+        #
+        connections:
+            - '<.path>.out'
+            - '<..node_group.path>.outputs.proxy.uv_map_proxy'
+            # frame transform
+            #   basic
+            - '<..node_group.path>.inputs.uv_map.uv_map_frame_translate'
+            - '<.path>.translate_frame'
+            - '<..node_group.path>.inputs.uv_map.uv_map_frame_rotate'
+            - '<.path>.rotate_frame'
+            - '<..node_group.path>.inputs.uv_map.uv_map_frame_scale'
+            - '<.path>.scale_frame'
+            - '<..node_group.path>.inputs.uv_map.uv_map_frame_pivot'
+            - '<.path>.pivot_frame'
+            #   extra
+            - '<..node_group.path>.inputs.uv_map.uv_map_frame_wrap_u'
+            - '<.path>.wrap_frame_u'
+            - '<..node_group.path>.inputs.uv_map.uv_map_frame_wrap_v'
+            - '<.path>.wrap_frame_v'
+            # transform
+            #   basic
+            - '<..node_group.path>.inputs.uv_map.uv_map_translate'
+            - '<.path>.offset'
+            - '<..node_group.path>.inputs.uv_map.uv_map_rotate'
+            - '<.path>.rotate'
+            - '<..node_group.path>.inputs.uv_map.uv_map_scale'
+            - '<.path>.repeat'
+            - '<..node_group.path>.inputs.uv_map.uv_map_pivot'
+            - '<.path>.pivot'
+            #   extra
+            - '<..node_group.path>.inputs.uv_map.uv_map_coverage'
+            - '<.path>.coverage'
+    # triplanar
+    arnold_texture_triplanar_proxy:
+        tag: 'texture_triplanar'
+        type: 'ArnoldShadingNode'
+        shader_type: 'triplanar'
+        name: '<.tag>__<option.time_tag>_AND_NOD'
+        path: '<..node_group.path>/<.name>'
+        #
+        shader_parameters:
+            coord_space: '2'
+        #
+        shader_hints:
+            # basic
+            coord_space: '{"page": "triplanar basic", "label": "coord space", "dstPage": "<option.unique_name>.triplanar basic", "dstName": "<option.unique_name>__triplanar_basic__coord_space"}'
+            pref_name: '{"page": "triplanar basic", "label": "pref name", "dstPage": "<option.unique_name>.triplanar basic", "dstName": "<option.unique_name>__triplanar_basic__pref_name"}'
+            # transform
+            offset: '{"page": "triplanar transform", "label": "translate", "dstPage": "<option.unique_name>.triplanar transform", "dstName": "<option.unique_name>__triplanar_transform__translate"}'
+            rotate: '{"page": "triplanar transform", "label": "rotate", "dstPage": "<option.unique_name>.triplanar transform", "dstName": "<option.unique_name>__triplanar_transform__rotate"}'
+            scale: '{"page": "triplanar transform", "label": "scale", "dstPage": "<option.unique_name>.triplanar transform", "dstName": "<option.unique_name>__triplanar_transform__scale"}'
+            blend: '{"page": "triplanar transform", "label": "blend", "dstPage": "<option.unique_name>.triplanar transform", "dstName": "<option.unique_name>__triplanar_transform__blend"}'
+            # cell
+            cell: '{"page": "triplanar cell", "label": "enable", "dstPage": "<option.unique_name>.triplanar cell", "dstName": "<option.unique_name>__triplanar_cell__enable"}'
+            cell_rotate: '{"page": "triplanar cell", "label": "rotate", "dstPage": "<option.unique_name>.triplanar cell", "dstName": "<option.unique_name>__triplanar_cell__rotate"}'
+            cell_blend: '{"page": "triplanar cell", "label": "blend", "dstPage": "<option.unique_name>.triplanar cell", "dstName": "<option.unique_name>__triplanar_cell__blend"}'
+        #
+        connections:
+            - '<.path>.out'
+            - '<..node_group.path>.outputs.proxy.triplanar_proxy'
+            #
+            - '<..node_group.path>.inputs.triplanar.triplanar_translate'
+            - '<.path>.offset'
+            - '<..node_group.path>.inputs.triplanar.triplanar_rotate'
+            - '<.path>.rotate'
+            - '<..node_group.path>.inputs.triplanar.triplanar_scale'
+            - '<.path>.scale'
+            - '<..node_group.path>.inputs.triplanar.triplanar_blend'
+            - '<.path>.blend'
+            #
+            - '<..node_group.path>.inputs.triplanar.triplanar_coord_space'
+            - '<.path>.coord_space'
+            - '<..node_group.path>.inputs.triplanar.triplanar_pref_name'
+            - '<.path>.pref_name'
+            #
+            - '<..node_group.path>.inputs.triplanar.triplanar_cell_enable'
+            - '<.path>.cell'
+            - '<..node_group.path>.inputs.triplanar.triplanar_cell_rotate'
+            - '<.path>.cell_rotate'
+            - '<..node_group.path>.inputs.triplanar.triplanar_cell_blend'
+            - '<.path>.cell_blend'
+    #
+    arnold_texture_triplanar_translate:
+        tag: 'texture_triplanar_translate'
+        type: ArnoldShadingNode
+        shader_type: 'user_data_rgb'
+        path: '<..node_group.path>/<.tag>__<option.time_tag>_AND_NOD'
+        #
+        shader_parameters:
+            attribute: '<...key>'
+        #
+        shader_expressions:
+            default: 'getNode("<...arnold_texture_triplanar_proxy.name>").parameters.offset.value'
+    #
+    arnold_texture_triplanar_rotate:
+        tag: 'texture_triplanar_rotate'
+        type: ArnoldShadingNode
+        shader_type: 'user_data_rgb'
+        path: '<..node_group.path>/<.tag>__<option.time_tag>_AND_NOD'
+        #
+        shader_parameters:
+            attribute: '<...key>'
+        #
+        shader_expressions:
+            default: 'getNode("<...arnold_texture_triplanar_proxy.name>").parameters.rotate.value'
+    #
+    arnold_texture_triplanar_scale:
+        tag: 'texture_triplanar_scale'
+        type: ArnoldShadingNode
+        shader_type: 'user_data_rgb'
+        path: '<..node_group.path>/<.tag>__<option.time_tag>_AND_NOD'
+        #
+        shader_parameters:
+            attribute: '<...key>'
+        #
+        shader_expressions:
+            default: 'getNode("<...arnold_texture_triplanar_proxy.name>").parameters.scale.value'
+    # usd
+    usd_shader:
+        tag: 'preview'
+        type: 'UsdShadingNode'
+        shader_type: 'UsdPreviewSurface'
+        path: '<..node_group.path>/<.tag>__<option.time_tag>_USD_SDR'
+        #
+        connections:
+            - '<.path>.surface'
+            - '<..node_group.path>.outputs.usd_shader.usd_surface'
+            - '<.path>.displacement'
+            - '<..node_group.path>.outputs.usd_shader.usd_displacement'
+    #
+    usd_uv_transform:
+        tag: 'usd_uv_transform'
+        type: 'UsdShadingNode'
+        shader_type: 'UsdTransform2d'
+        path: '<..node_group.path>/<.tag>__<option.time_tag>_USD_IMG'
+    #
+    usd_uv:
+        tag: 'usd_uv'
+        type: 'UsdShadingNode'
+        shader_type: 'UsdPrimvarReader_float2'
+        path: '<..node_group.path>/<.tag>__<option.time_tag>_USD_IMG'
+        #
+        shader_parameters:
+            varname: 'st'
+
+        connections:
+            - '<.path>.result'
+            - '<..usd_uv_transform.path>.in'
+# texture
+#   arnold
+arnold_texture:
+    base_node:
+        group: ''
+        tag: ''
+        # all node definition here
+        node_graph:
+            # image input
+            image:
+                type: ArnoldShadingNode
+                shader_type: 'image'
+                path: '<node.node_group.path>/<...tag>__<..key>__<option.time_tag>_AND_NOD'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.0, 0.0, 0.0, 0.0]
+                #
+                connections:
+                    - '<node.node_passthrough.path>.outputs.uv_map.uv_map_coords'
+                    - '<.path>.uvcoords'
+            #
+            image_dot:
+                type: Dot
+                path: '<node.node_group.path>/<...tag>__<..key>__<option.time_tag>_DOT'
+                #
+                connections:
+                    - '<..image.path>.out'
+                    - '<.path>.input'
+            # use uv-map transform
+            uv_map:
+                type: ArnoldShadingNode
+                shader_type: 'uv_transform'
+                path: '<node.node_group.path>/<...tag>__<..key>__<option.time_tag>_AND_NOD'
+                #
+                shader_expressions:
+                    offset: 'getNode("<node.arnold_texture_uv_map_proxy.name>").parameters.<.key>.value'
+                    rotate: 'getNode("<node.arnold_texture_uv_map_proxy.name>").parameters.<.key>.value'
+                    repeat: 'getNode("<node.arnold_texture_uv_map_proxy.name>").parameters.<.key>.value'
+                    pivot: 'getNode("<node.arnold_texture_uv_map_proxy.name>").parameters.<.key>.value'
+                    coverage: 'getNode("<node.arnold_texture_uv_map_proxy.name>").parameters.<.key>.value'
+                    #
+                    translate_frame: 'getNode("<node.arnold_texture_uv_map_proxy.name>").parameters.<.key>.value'
+                    rotate_frame: 'getNode("<node.arnold_texture_uv_map_proxy.name>").parameters.<.key>.value'
+                    scale_frame: 'getNode("<node.arnold_texture_uv_map_proxy.name>").parameters.<.key>.value'
+                    pivot_frame: 'getNode("<node.arnold_texture_uv_map_proxy.name>").parameters.<.key>.value'
+                    wrap_frame_u: 'getNode("<node.arnold_texture_uv_map_proxy.name>").parameters.<.key>.value'
+                    wrap_frame_v: 'getNode("<node.arnold_texture_uv_map_proxy.name>").parameters.<.key>.value'
+                #
+                connections:
+                    # connections from "image"
+                    - '<..image_dot.path>.output'
+                    - '<.path>.passthrough'
+            # use tri-planar when no uv-map
+            triplanar:
+                type: ArnoldShadingNode
+                shader_type: 'triplanar'
+                path: '<node.node_group.path>/<...tag>__<..key>__<option.time_tag>_AND_NOD'
+                #
+                shader_parameters:
+                    coord_space: '2'
+                #
+                shader_expressions:
+                    cell: 'getNode("<node.arnold_texture_triplanar_proxy.name>").parameters.<.key>.value'
+                    cell_rotate: 'getNode("<node.arnold_texture_triplanar_proxy.name>").parameters.<.key>.value'
+                    cell_blend: 'getNode("<node.arnold_texture_triplanar_proxy.name>").parameters.<.key>.value'
+                    coord_space: 'getNode("<node.arnold_texture_triplanar_proxy.name>").parameters.<.key>.value'
+                    blend: 'getNode("<node.arnold_texture_triplanar_proxy.name>").parameters.<.key>.value'
+                    pref_name: 'getNode("<node.arnold_texture_triplanar_proxy.name>").parameters.<.key>.value'
+                #
+                connections:
+                    - '<..image.path>.out'
+                    - '<.path>.input'
+                    #
+                    - '<node.arnold_texture_triplanar_translate.path>.out'
+                    - '<.path>.offset'
+                    #
+                    - '<node.arnold_texture_triplanar_rotate.path>.out'
+                    - '<.path>.rotate'
+                    #
+                    - '<node.arnold_texture_triplanar_scale.path>.out'
+                    - '<.path>.scale'
+            #
+            mode_switch:
+                type: ArnoldShadingNode
+                shader_type: 'switch_rgba'
+                path: '<node.node_group.path>/<...tag>__<..key>__<option.time_tag>_AND_NOD'
+                #
+                connections:
+                    - '<node.arnold_texture_basic_mode.path>.out'
+                    - '<.path>.index'
+                    #
+                    - '<..image.path>.out'
+                    - '<.path>.input0'
+                    #
+                    - '<..uv_map.path>.out'
+                    - '<.path>.input1'
+                    #
+                    - '<..triplanar.path>.out'
+                    - '<.path>.input2'
+            #
+            output_dot:
+                type: Dot
+                path: '<node.node_group.path>/<...tag>__<..key>__<option.time_tag>_DOT'
+                #
+                connections:
+                    - '<..mode_switch.path>.out'
+                    - '<.path>.input'
+    # diffuse
+    #   weight, default is 1.0
+    diffuse_weight:
+        group: 'diffuse'
+        tag: 'diffuse_weight'
+        shader_attribute: 'base'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [1.0, 1.0, 1.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   color, default is (0.8, 0.8, 0.8, 1.0), todo: blend ao
+    diffuse_color:
+        group: 'diffuse'
+        tag: 'diffuse_color'
+        shader_attribute: 'base_color'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.8, 0.8, 0.8, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   convert to diffuse_color
+    albedo: '$.diffuse_color'
+    #   roughness, default is 0.0
+    diffuse_roughness:
+        group: 'diffuse'
+        tag: 'diffuse_roughness'
+        shader_attribute: 'diffuse_roughness'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.0, 0.0, 0.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    # specular
+    #   weight, default is 1.0
+    specular_weight:
+        group: 'specular'
+        tag: 'specular_weight'
+        shader_attribute: 'specular'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [1.0, 1.0, 1.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   color, default is (1.0, 1.0, 1.0)
+    specular_color:
+        group: 'specular'
+        tag: 'specular_color'
+        shader_attribute: 'specular_color'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [1.0, 1.0, 1.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   roughness, default is 0.2
+    specular_roughness:
+        group: 'specular'
+        tag: 'specular_roughness'
+        shader_attribute: 'specular_roughness'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.2, 0.2, 0.2, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   glossiness, convert to roughness
+    glossiness:
+        group: 'specular'
+        tag: 'specular_roughness'
+        shader_attribute: 'specular_roughness'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.2, 0.2, 0.2, 1.0]
+                    #
+                    multiply: [-1.0, -1.0, -1.0, 1.0]
+                    offset: [1.0, 1.0, 1.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   ior, default is 1.5
+    specular_ior:
+        group: 'specular'
+        tag: 'specular_ior'
+        shader_attribute: 'specular_IOR'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [1.5, 1.5, 1.5, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   metalness, default is 0.0
+    metalness:
+        group: 'specular'
+        tag: 'metalness'
+        shader_attribute: 'metalness'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.0, 0.0, 0.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    # transmission
+    #   weight, default is 0.0
+    transmission_weight:
+        group: 'transmission'
+        tag: 'transmission_weight'
+        shader_attribute: 'transmission'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.0, 0.0, 0.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   color, default is (1.0, 1.0, 1.0, 1.0)
+    transmission_color:
+        group: 'transmission'
+        tag: 'transmission_color'
+        shader_attribute: 'transmission_color'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [1.0, 1.0, 1.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   depth, default is 0.0
+    transmission_depth:
+        group: 'transmission'
+        tag: 'transmission_depth'
+        shader_attribute: 'transmission_depth'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.0, 0.0, 0.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   scatter, default is (0.0, 0.0, 0.0, 1.0)
+    transmission_scatter:
+        group: 'transmission'
+        tag: 'transmission_scatter'
+        shader_attribute: 'transmission_scatter'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.0, 0.0, 0.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   roughness, default is 0.0
+    transmission_roughness:
+        group: 'transmission'
+        tag: 'transmission_roughness'
+        shader_attribute: 'transmission_extra_scatter'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.0, 0.0, 0.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    # sheen
+    #   weight, default is 0.0
+    sheen_weight:
+        group: 'sheen'
+        tag: 'sheen_weight'
+        shader_attribute: 'sheen'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.0, 0.0, 0.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   color, default is (1.0, 1.0, 1.0, 1.0)
+    sheen_color:
+        group: 'sheen'
+        tag: 'sheen_color'
+        shader_attribute: 'sheen_color'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [1.0, 1.0, 1.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   roughness, default is 0.3
+    sheen_roughness:
+        group: 'sheen'
+        tag: 'sheen_roughness'
+        shader_attribute: 'sheen_roughness'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.3, 0.3, 0.3, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    # emission
+    #   weight, default is 0.0
+    emission_weight:
+        group: 'emission'
+        tag: 'emission_weight'
+        shader_attribute: 'emission'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.0, 0.0, 0.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   color, default is (1.0, 1.0, 1.0, 1.0)
+    emission_color:
+        group: 'emission'
+        tag: 'emission_color'
+        shader_attribute: 'emission_color'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [1.0, 1.0, 1.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    # subsurface scattering
+    #   weight, default is 0.0
+    subsurface_weight:
+        group: 'subsurface'
+        tag: 'subsurface_weight'
+        shader_attribute: 'subsurface'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.0, 0.0, 0.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   color, default is (1.0, 1.0, 1.0, 1.0)
+    subsurface_color:
+        group: 'subsurface'
+        tag: 'subsurface_color'
+        shader_attribute: 'subsurface_color'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [1.0, 1.0, 1.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   radius, default is (1.0, 1.0, 1.0, 1.0)
+    subsurface_radius:
+        group: 'subsurface'
+        tag: 'subsurface_radius'
+        shader_attribute: 'subsurface_radius'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [1.0, 1.0, 1.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   scale, default is 1.0
+    subsurface_scale:
+        group: 'subsurface'
+        tag: 'subsurface_scale'
+        shader_attribute: 'subsurface_scale'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [1.0, 1.0, 1.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    # geometry
+    #   opacity, default is (1.0, 1.0, 1.0, 1.0)
+    opacity:
+        group: 'geometry'
+        tag: 'opacity'
+        shader_attribute: 'opacity'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [1.0, 1.0, 1.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   translucency
+    translucency:
+        group: 'geometry'
+        tag: 'opacity'
+        shader_attribute: 'opacity'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [1.0, 1.0, 1.0, 1.0]
+                    #
+                    multiply: [-1.0, -1.0, -1.0, 1.0]
+                    offset: [1.0, 1.0, 1.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   normal, default is (0.5, 0.5, 1.0)
+    normal:
+        group: 'geometry'
+        tag: 'normal'
+        shader_attribute: 'normal'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.5, 0.5, 1.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            normal_map:
+                tag: 'texture_normal'
+                type: ArnoldShadingNode
+                shader_type: 'normal_map'
+                path: '<node.node_group.path>/texture_<..key>__<option.time_tag>_AND_NOD'
+                #
+                shader_hints:
+                    # basic
+                    strength: '{"page": "normal basic", "label": "strength", "dstPage": "<option.unique_name>.normal basic", "dstName": "<option.unique_name>__normal_basic__strength"}'
+                    # invert
+                    invert_x: '{"page": "normal invert", "label": "invert X", "dstPage": "<option.unique_name>.normal invert", "dstName": "<option.unique_name>__normal_invert__invert_x"}'
+                    invert_y: '{"page": "normal invert", "label": "invert Y", "dstPage": "<option.unique_name>.normal invert", "dstName": "<option.unique_name>__normal_invert__invert_y"}'
+                    invert_z: '{"page": "normal invert", "label": "invert Z", "dstPage": "<option.unique_name>.normal invert", "dstName": "<option.unique_name>__normal_invert__invert_z"}'
+                #
+                connections:
+                    # connection from node_graph
+                    - '<..mode_switch.path>.out'
+                    - '<.path>.input'
+                    # connection from node_group
+                    - '<node.node_group.path>.inputs.geometry.normal_invert_x'
+                    -  '<.path>.invert_x'
+                    - '<node.node_group.path>.inputs.geometry.normal_invert_y'
+                    -  '<.path>.invert_y'
+                    - '<node.node_group.path>.inputs.geometry.normal_invert_z'
+                    -  '<.path>.invert_z'
+                    - '<node.node_group.path>.inputs.geometry.normal_strength'
+                    -  '<.path>.strength'
+        #
+        connections:
+            # connection to node_group
+            #   image
+            - '<.node_graph.image.path>.out'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            #   map
+            - '<.node_graph.normal_map.path>.out'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>_map'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>_map'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   displacement, default is (0.0, 0.0, 0.0, 1.0)
+    displacement:
+        group: 'geometry'
+        tag: 'displacement'
+        shader_attribute: ''
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.0, 0.0, 0.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            displacement:
+                type: ArnoldShadingNode
+                shader_type: 'range'
+                path: '<node.node_group.path>/texture_<..key>__<option.time_tag>_AND_NOD'
+                #
+                shader_parameters:
+                    input_min: 0.5
+                    output_max: 0.1
+                #
+                shader_hints:
+                    # basic
+                    input_min: '{"page": "displacement basic", "label": "zero", "dstPage": "<option.unique_name>.displacement basic", "dstName": "<option.unique_name>__displacement_basic__zero"}'
+                    output_max: '{"page": "displacement basic", "label": "strength", "dstPage": "<option.unique_name>.displacement basic", "dstName": "<option.unique_name>__displacement_basic__strength"}'
+                #
+                connections:
+                    - '<..mode_switch.path>.out'
+                    - '<.path>.input'
+                    #
+                    - '<node.node_group.path>.inputs.geometry.displacement_zero'
+                    -  '<.path>.input_min'
+                    #
+                    - '<node.node_group.path>.inputs.geometry.displacement_strength'
+                    -  '<.path>.output_max'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.displacement.path>.out'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<.node_graph.displacement.path>.out'
+            - '<node.node_group.path>.outputs.arnold_shader.arnold_displacement'
+    # coat
+    #   weight, default is 0.0
+    coat_weight:
+        group: 'coat'
+        tag: 'coat_weight'
+        shader_attribute: 'coat'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.0, 0.0, 0.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   color, default is (1.0, 1.0, 1.0, 1.0)
+    coat_color:
+        group: 'coat'
+        tag: 'coat_color'
+        shader_attribute: 'coat_color'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [1.0, 1.0, 1.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   roughness, default is 0.1
+    coat_roughness:
+        group: 'coat'
+        tag: 'coat_roughness'
+        shader_attribute: 'coat_roughness'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.1, 0.1, 0.1, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   ior, default is 1.5
+    coat_ior:
+        group: 'coat'
+        tag: 'coat_ior'
+        shader_attribute: 'coat_IOR'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [1.5, 1.5, 1.5, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    # other
+    #   ambient_occlusion, default is (1.0, 1.0, 1.0, 1.0)
+    ambocc:
+        group: 'other'
+        tag: 'ambocc'
+        shader_attribute: 'base_color'
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.8, 0.8, 0.8, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+            #
+            diffuse_and_ambocc:
+                type: ArnoldShadingNode
+                shader_type: 'layer_rgba'
+                path: '<node.node_group.path>/<...tag>_<..key>__<option.time_tag>_AND_NOD'
+                #
+                shader_parameters:
+                    # overwrite
+                    operation1: '0'
+                    # multiply
+                    operation2: '23'
+                    mix2: 1.0
+                #
+                shader_hints:
+                    # basic
+                    mix2: '{"page": "ambocc basic", "label": "strength", "dstPage": "<option.unique_name>.ambocc basic", "dstName": "<option.unique_name>__ambocc_basic__strength"}'
+                #
+                connections:
+                    # connection from node_graph
+                    #   diffuse_color
+                    - '<arnold_texture.diffuse_color.node_graph.mode_switch.path>.out'
+                    - '<.path>.input1'
+                    #   ambocc
+                    - '<arnold_texture.ambocc.node_graph.mode_switch.path>.out'
+                    - '<.path>.input2'
+                    # connection from node_group
+                    - '<node.node_group.path>.inputs.<...group>.mix2'
+                    -  '<.path>.mix2'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+            #
+            - '<.node_graph.diffuse_and_ambocc.path>.out'
+            - '<node.node_group.path>.outputs.<.group>.diffuse_and_ambocc'
+            # connection to shader
+            - '<node.node_group.path>.outputs.<.group>.diffuse_and_ambocc'
+            - '<node.arnold_surface_shader.path>.<.shader_attribute>'
+    #   mask, default is (0.0, 0.0, 0.0, 1.0)
+    mask:
+        group: 'other'
+        tag: 'mask'
+        shader_attribute: ''
+        #
+        node_graph:
+            image:
+                $: '....base_node.node_graph.image'
+                #
+                shader_parameters:
+                    filename: '{texture}'
+                    ignore_missing_textures: True
+                    missing_texture_color: [0.0, 0.0, 0.0, 1.0]
+            #
+            image_dot: '$...base_node.node_graph.image_dot'
+            # use uv-map transform
+            uv_map: '$...base_node.node_graph.uv_map'
+            # use tri-planar when no uv-map
+            triplanar: '$...base_node.node_graph.triplanar'
+            #
+            mode_switch: '$...base_node.node_graph.mode_switch'
+            #
+            output_dot: '$...base_node.node_graph.output_dot'
+        #
+        connections:
+            # connection to node_group
+            - '<.node_graph.output_dot.path>.output'
+            - '<node.node_group.path>.outputs.<.group>.<.tag>'
+#   usd
+usd_texture:
+    base_node:
+        tag: ''
+        node_graph:
+            image:
+                type: 'UsdShadingNode'
+                shader_type: 'UsdUVTexture'
+                path: '<node.node_group.path>/<...tag>__<..key>__<option.time_tag>_USD_NOD'
+                #
+                shader_parameters:
+                    file: '{texture}'
+    # diffuse
+    diffuse_color:
+        tag: 'diffuse_color'
+        node_graph:
+            image: '$...base_node.node_graph.image'
+        #
+        connections:
+            # connect uv transform
+            - '<node.usd_uv_transform.path>.result'
+            - '<.node_graph.image.path>.st'
+            #
+            - '<.node_graph.image.path>.rgb'
+            - '<node.usd_shader.path>.diffuseColor'
+    #   convert to "diffuse_color"
+    albedo: '$.diffuse_color'
+    #
+    specular_roughness:
+        tag: 'specular_roughness'
+        node_graph:
+            image: '$...base_node.node_graph.image'
+        #
+        connections:
+            # connect uv transform
+            - '<node.usd_uv_transform.path>.result'
+            - '<.node_graph.image.path>.st'
+            #
+            - '<.node_graph.image.path>.rgb'
+            - '<node.usd_shader.path>.roughness'

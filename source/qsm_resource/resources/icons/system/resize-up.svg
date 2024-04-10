@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1"
+	 id="layer1" inkscape:version="0.48.2 r9819" sodipodi:docname="black.svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32 32"
+	 style="enable-background:new 0 0 32 32;" xml:space="preserve">
+<style type="text/css">
+	.st0{display:none;fill:#FFFFFF;}
+	.st1{fill:#FFFFFF;}
+</style>
+<rect class="st0" width="32" height="32"/>
+<rect id="s3" x="14" y="7" class="st1" width="4" height="8"/>
+<g id="s2" inkscape:connector-curvature="0" sodipodi:nodetypes="cccc">
+	<polygon points="10.5,9.5 16,2.2 21.5,9.5 	"/>
+	<path class="st1" d="M16,3l4.5,6h-9L16,3 M16,1.3l-0.8,1.1l-4.5,6L9.5,10h2h9h2l-1.2-1.6l-4.5-6L16,1.3L16,1.3z"/>
+</g>
+<g id="s1">
+	<rect x="9.5" y="12.5" width="13" height="3"/>
+	<path class="st1" d="M22,13v2H10v-2H22 M23,12h-1H10H9v1v2v1h1h12h1v-1v-2V12L23,12z"/>
+</g>
+<rect id="s0" x="15" y="7" width="2" height="8"/>
+</svg>

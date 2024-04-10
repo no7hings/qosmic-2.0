@@ -1,0 +1,83 @@
+# ******************************************************************************************************************** #
+dcc-data:
+    dcc-extend:
+        # renderable
+        renderable_location: '{root}'
+        renderable:
+            model:
+                high: '{root}/hi'
+                low: '{root}/lo'
+            groom: '{root}/hair'
+            character_effect: ''
+            effect: ''
+            rig: ''
+            surface: '{root}/look'
+            light: ''
+            plant: '{root}/plant'
+            misc: ''
+        # auxiliary
+        auxiliary_location: '{root}/shape'
+        auxiliary:
+            model: ''
+            groom: '{root}/shape/grm_shapegrp'
+            character_effect: '{root}/shape/cfx_shapegrp'
+            effect: '{root}/shape/efx_shapegrp'
+            rig: '{root}/shape/rig_shapegrp'
+            surface: '{root}/shape/srf_shapegrp'
+            light: '{root}/shape/lgt_shapegrp'
+            plant: ''
+            misc: '{root}/shape/misc'
+    #
+    usd:
+        pathsep: '/'
+        geometry_location: '/'
+        #
+        root_name: 'master'
+        root: '/master'
+        camera_root: '/camera_grp'
+        camera_root_name: 'camera_grp'
+    #
+    maya:
+        pathsep: '|'
+        geometry_location: '/'
+        #
+        root_name: 'master'
+        root: '/master'
+        camera_root: '/camera_grp'
+        camera_root_name: 'camera_grp'
+    #
+    houdini:
+        pathsep: '/'
+        geometry_location: '/'
+        #
+        root_name: 'master'
+        root: '/master'
+        camera_root: '/camera_grp'
+        camera_root_name: 'camera_grp'
+    #
+    katana:
+        pathsep: '/'
+        geometry_location: '/root/world/geo'
+        #
+        root_name: 'master'
+        root: '/master'
+        camera_root: '/camera_grp'
+        camera_root_name: 'camera_grp'
+    #
+    clarisse:
+        pathsep: '/'
+        geometry_location: '/'
+        #
+        root_name: 'master'
+        root: '/master'
+        camera_root: '/camera_grp'
+        camera_root_name: 'camera_grp'
+    #
+    nuke:
+        pathsep: '/'
+        geometry_location: '/'
+        #
+        root_name: 'master'
+        root: '/master'
+        camera_root: '/camera_grp'
+        camera_root_name: 'camera_grp'

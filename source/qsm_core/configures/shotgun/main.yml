@@ -1,0 +1,5 @@
+connection:
+    url:  'https://shotgun.nikkigames.cn/'
+    script:  'td-connect'
+    code: 'yaoe^lFfopx4roxqueavcwzhg'
+    ca_certs:  '/l/packages/pg/prod/pgtk/9.9.9/certs/cacerts.txt'

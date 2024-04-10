@@ -1,0 +1,53 @@
+#usda 1.0
+(
+    defaultPrim = "{{ dcc.root_name }}"
+    metersPerUnit = 0.01
+    upAxis = "Y"
+)
+
+def "{{ dcc.root_name }}" (
+    prepend references = [
+        @{{ geometries.hi }}@,
+        @{{ geometries.hair }}@,
+        @{{ geometries.shape }}@,
+        @{{ geometries.aux }}@,
+        @{{ geometries.proxy }}@,
+        @{{ geometries.xgen }}@
+    ]
+)
+{
+    over "hi" (
+        kind = "subcomponent"
+    )
+    {
+        uniform token purpose = "render"
+        asset userProperties:pgOpIn:proxy:fileName = @{{ geometries.proxy }}@
+    }
+
+    over "hair" (
+        kind = "subcomponent"
+    )
+    {
+    }
+
+    over "shape" (
+        active = false
+        kind = "subcomponent"
+    )
+    {
+    }
+
+    over "aux" (
+        active = true
+        kind = "subcomponent"
+    )
+    {
+    }
+
+    over "proxy" (
+        kind = "subcomponent"
+    )
+    {
+        uniform token purpose = "proxy"
+    }
+}

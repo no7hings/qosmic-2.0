@@ -1,0 +1,335 @@
+tx:
+    # diffuse
+    diffuse-weight:
+        type: float
+        name-patterns:
+            - '*.diffuse_weight.*'
+            - '*.diff_int.*'
+        color-space: Raw
+
+    diffuse-color:
+        type: color3
+        name-patterns:
+            - '*.diffuse_color.*'
+            #
+            - '*.diff_clr.*'
+            #
+            - '*_Diffuse.*'
+            - '*_Diff.*'
+            # for cg6
+            - '*_dif_*'
+            - '*_difB_*'
+        color-space: auto
+
+    diffuse-roughness:
+        type: float
+        name-patterns:
+            - '*.diffuse_roughness.*'
+            #
+            - '*.rough.*'
+            #
+            - '*_Roughness.*'
+        color-space: Raw
+    # albedo
+    albedo:
+        type: color3
+        name-patterns:
+            - '*.albedo.*'
+            - '*_albedo_*'
+        color-space: auto
+    # glossy-ness
+    glossiness-weight:
+        type: float
+        name-patterns:
+            # for cg6
+            - '*_gls_*'
+        color-space: Raw
+
+    glossiness-color:
+        type: color3
+        name-patterns:
+            - '*_Glossiness.*'
+        color-space: auto
+    # specular
+    specular-weight:
+        type: float
+        name-patterns:
+            - '*.spec_int.*'
+            # for cg6
+            - '*_spe_*'
+        color-space: Raw
+
+    specular-color:
+        type: color3
+        name-patterns:
+            - '*.spec_clr.*'
+            - '*_SPEC.*'
+        color-space: auto
+
+    specular-roughness:
+        type: float
+        name-patterns:
+            - '*.rough.*'
+            - '*_Roughness.*'
+            # for quixel
+            - '*.roughness.*'
+        color-space: Raw
+
+    specular-ior:
+        type: float
+        name-patterns: []
+        color-space: Raw
+
+    specular-anisotropy:
+        type: float
+        name-patterns: []
+        color-space: Raw
+
+    specular-rotation:
+        type: float
+        name-patterns: []
+        color-space: Raw
+    # metal-ness
+    metalness:
+        type: float
+        name-patterns:
+            - '*.metal.*'
+            # for cg6
+            - '*_met_*'
+        color-space: Raw
+    #
+    transmission-weight:
+        type: float
+        name-patterns:
+            - '*.tran_int.*'
+        color-space: Raw
+
+    transmission-color:
+        type: color3
+        name-patterns:
+            - '*.tran_clr.*'
+        color-space: auto
+
+    transmission-depth:
+        type: float
+        name-patterns:
+            - '*.tran_dep.*'
+        color-space: Raw
+
+    transmission-scatter:
+        type: color3
+        name-patterns:
+            - '*.tran_sct.*'
+        color-space: auto
+
+    transmission-scatter-anisotropy:
+        type: float
+        name-patterns: []
+        color-space: Raw
+
+    transmission-dispersion:
+        type: float
+        name-patterns: []
+        color-space: Raw
+
+    transmission-extra-roughness:
+        type: float
+        name-patterns: []
+        color-space: Raw
+
+    transmit-aovs:
+        type: boolean
+        name-patterns: []
+        color-space: Raw
+    #
+    subsurface-weight:
+        type: float
+        name-patterns:
+            - '*.sss_int.*'
+        color-space: Raw
+
+    subsurface-color:
+        type: color3
+        name-patterns:
+            - '*.sss_clr.*'
+        color-space: auto
+
+    subsurface-radius:
+        type: float
+        name-patterns:
+            - '*.sss_rdu.*'
+        color-space: Raw
+
+    subsurface-scale:
+        type: float
+        name-patterns:
+            - '*.sss_scl.*'
+        color-space: Raw
+
+    subsurface-anisotropy:
+        type: float
+        name-patterns: []
+        color-space: Raw
+
+    subsurface-type:
+        type: string
+        name-patterns: []
+        color-space: Raw
+    #
+    sheen-weight:
+        type: float
+        name-patterns: []
+        color-space: Raw
+
+    sheen-color:
+        type: color3
+        name-patterns: []
+        color-space: auto
+
+    sheen-roughness:
+        type: float
+        name-patterns: []
+        color-space: Raw
+    #
+    thin-walled:
+        type: boolean
+        name-patterns: []
+        color-space: Raw
+    #
+    normal:
+        type: vector3
+        name-patterns:
+            - '*_nor_*'
+            - '*_NORM.*'
+            # for quixel
+            - '*.normal.*'
+        color-space: Raw
+
+    tangent:
+        type: vector3
+        name-patterns: []
+        color-space: Raw
+    #
+    bump:
+        type: float
+        name-patterns:
+            - '*.bump.*'
+            # for cg6
+            - '*_bmp_*'
+        color-space: Raw
+    #
+    coat-weight:
+        type: float
+        name-patterns: []
+        color-space: Raw
+
+    coat-color:
+        type: color3
+        name-patterns: []
+        color-space: auto
+
+    coat-roughness:
+        type: float
+        name-patterns: []
+        color-space: Raw
+
+    coat-ior:
+        type: float
+        name-patterns: []
+        color-space: Raw
+
+    coat-anisotropy:
+        type: float
+        name-patterns: []
+        color-space: Raw
+
+    coat-rotation:
+        type: float
+        name-patterns: []
+        color-space: Raw
+
+    coat-normal:
+        type: vector3
+        name-patterns: []
+        color-space: Raw
+
+    coat-affect-color:
+        type: float
+        name-patterns: []
+        color-space: Raw
+
+    coat-affect-roughness:
+        type: float
+        name-patterns: []
+        color-space: Raw
+    #
+    thin-film-thickness:
+        type: float
+        name-patterns: []
+        color-space: Raw
+
+    thin-film-ior:
+        type: float
+        name-patterns: []
+        color-space: Raw
+    #
+    emission-weight:
+        type: float
+        name-patterns: []
+        color-space: Raw
+
+    emission-color:
+        type: color3
+        name-patterns:
+            - '*.emissive.*'
+        color-space: auto
+    #
+    opacity:
+        type: color3
+        name-patterns:
+            - '*.opacity*'
+            # for cg6
+            - '*_opa_*'
+        color-space: Raw
+    #
+    caustics:
+        type: boolean
+        name-patterns: []
+        color-space: Raw
+
+    internal-reflections:
+        type: boolean
+        name-patterns: []
+        color-space: Raw
+
+    exit-to-background:
+        type: boolean
+        name-patterns: []
+        color-space: Raw
+    #
+    indirect-diffuse:
+        type: float
+        name-patterns: []
+        color-space: Raw
+
+    indirect-specular:
+        type: float
+        name-patterns: []
+        color-space: Raw
+    #
+    displacement:
+        type: float
+        name-patterns:
+            - '*.disp.*'
+            - '*_disp.*'
+            - '*.z_disp.*'
+            # for quixel
+            - '*.displacement.*'
+        color-space: Raw
+    #
+    mask:
+        type: vector3
+        name-patterns:
+            - '*.mask.*'
+            - '*_mask.*'
+        color-space: Raw

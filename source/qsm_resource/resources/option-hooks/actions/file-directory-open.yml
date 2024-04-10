@@ -1,0 +1,15 @@
+option:
+    type: action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'storage'
+        #
+        name: 'open file-directory'
+        icon_name: 'file/open-folder'
+#
+hook_option:
+    script:
+        file: ''

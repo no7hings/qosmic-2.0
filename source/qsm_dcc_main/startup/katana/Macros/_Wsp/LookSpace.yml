@@ -1,0 +1,480 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'look_space'
+    type_abr: 'lok_spc'
+    create_type: 'LookSpace_Wsp'
+    description:
+        |-
+        Look Space
+        - include all look per variant
+    #
+    variant_key: 'look'
+    #
+    auto_color: False
+    #
+    color_use_variant: True
+    #
+    layout_gui: False
+    #
+    color_hsv:
+        h: 270
+        s: .25
+        v: .25
+    #
+    color:
+        r: 0
+        g: 0
+        b: 0
+    #
+    size:
+        w_s: 320
+        h_s: 80
+        #
+        w: 1800
+        h: 960
+    #
+    position:
+        x_start: =-<option.size.w>/2-<option.size.w_s>/2
+        y_start: =<option.size.h>/2+<option.size.h_s>
+#
+main:
+    type: Group
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.join_upstream'
+    output: '<.path>.output'
+    #
+    attributes:
+        ns_pin: 1.0
+        ns_offsetX: =<option.size.w>/2+320
+        ns_offsetY: =<option.size.h>/2+72
+        #
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports:
+        - 'original'
+        - 'join_upstream'
+        - 'join_other'
+    #
+    output_ports:
+        - 'output'
+    #
+    ports:
+        # basic
+        type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        # variant
+        variant/key:
+            widget: enumerate
+            value: ['geometry', 'look', 'camera', 'light', 'quality', 'layer']
+            default: 'look'
+            tool_tip: '...'
+            lock: True
+
+        variant/register:
+            widget: button
+            value: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpWspSpace(node).register_variable()'
+            tool_tip: '...'
+        # extra
+        extra/default_name:
+            widget: capsule_strings
+            value: ['default']
+            default: ['default']
+            tool_tip: '...'
+
+        extra/add_default:
+            widget: button
+            value: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpWspSpace(node).add_default()'
+            tool_tip: '...'
+
+        extra/customize_name:
+            widget: string
+            value: ''
+            tool_tip: '...'
+
+        extra/add_customize:
+            widget: button
+            value: 'import lxkatana.scripts as ktn_scripts; ktn_scripts.ScpWspSpace(node).add_customize()'
+            tool_tip: '...'
+        # option
+        option/geometry_root:
+            widget: path
+            value: '/root/world/geo/master'
+            tool_tip: '...'
+            lock: True
+
+        option/material_root:
+            widget: path
+            value: '/root/materials'
+            tool_tip: '...'
+            lock: True
+        # record
+        record/upstream_merge:
+            widget: node
+            value: '<node.upstream_merge.name>'
+            tool_tip: '...'
+            lock: True
+
+        record/backdrop:
+            widget: node
+            value: '<node.main__backdrop.name>'
+            tool_tip: '...'
+            lock: True
+
+        record/material_merge:
+            widget: node
+            value: '<node.material_merge.name>'
+            tool_tip: '...'
+            lock: True
+
+        record/output:
+            widget: node
+            value: '<node.output.name>'
+            tool_tip: '...'
+            lock: True
+
+        record/variant_register:
+            widget: node
+            value: '<node.variant_register.name>'
+            tool_tip: '...'
+            lock: True
+
+        record/variant_properties_opt:
+            widget: node
+            value: '<node.variant_properties_opt.name>'
+            tool_tip: '...'
+            lock: True
+#
+node:
+    # original dot
+    original_dot_1:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        attributes:
+            x: =-(<option.size.w>/4+<option.size.w>/8)
+            y: =<option.size.h>+<option.size.h_s>
+        #
+        connections:
+            # input
+            - '<main.path>.original'
+            - '<.input>'
+    #
+    original_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        attributes:
+            x: =-(<option.size.w>/4+<option.size.w>/8)
+            y: =<option.size.h>/2+<option.size.h_s>
+        #
+        connections:
+            - '<..original_dot_1.output>'
+            - '<.input>'
+    # join upstream dot
+    join_upstream_dot_1:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        attributes:
+            x: =-(<option.size.w>/4+<option.size.w>/8-<option.size.w>/8)
+            y: =<option.size.h>+<option.size.h_s>
+        #
+        connections:
+            # input
+            - '<main.path>.join_upstream'
+            - '<.input>'
+
+    join_upstream_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        attributes:
+            x: =-(<option.size.w>/4+<option.size.w>/8-<option.size.w>/8)
+            y: =<option.size.h>/2+<option.size.h_s>
+        #
+        connections:
+            - '<..join_upstream_dot_1.output>'
+            - '<.input>'
+    # join other dot
+    join_other_dot_0:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        attributes:
+            x: =-(<option.size.w>/4+<option.size.w>/8-<option.size.w>/8*2)
+            y: =<option.size.h>+<option.size.h_s>
+        #
+        connections:
+            # input
+            - '<main.path>.join_other'
+            - '<.input>'
+
+    join_other_dot:
+        type: Dot
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.output'
+        #
+        attributes:
+            x: =-(<option.size.w>/4+<option.size.w>/8-<option.size.w>/8*2)
+            y: =<option.size.h>/2+<option.size.h_s>
+        #
+        connections:
+            - '<..join_other_dot_0.output>'
+            - '<.input>'
+    # merge
+    material_merge:
+        tag: 'MRG'
+        type: Merge
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        input_ports: []
+        #
+        attributes:
+            x: =<option.size.w>/4
+            y: =<option.size.h>/2+<option.size.h_s>*2
+            #
+            ns_colorr: 0.25
+            ns_colorg: 0.375
+            ns_colorb: 0.25
+    #
+    upstream_merge:
+        tag: 'UMG'
+        type: UpstreamMerge_Wsp
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        input_ports:
+            - 'join_upstream'
+            - 'join_other'
+            - 'join_current'
+        #
+        attributes:
+            x: =<option.size.w>/4
+            y: =<option.size.h>/2
+        #
+        connections:
+            # join upstream
+            - '<..join_upstream_dot.output>'
+            - '<.path>.join_upstream'
+            # join other
+            - '<..join_other_dot.output>'
+            - '<.path>.join_other'
+            # join current
+            - '<..material_merge.output>'
+            - '<.path>.join_current'
+    # backdrop
+    main__backdrop:
+        tag: 'BDP'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: Backdrop
+        name: '<option.type_abr>__<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        attributes:
+            ns_text: '<option.description>'
+            ns_fontScale: 3
+            #
+            x: =-(<.ns_sizeX>/2)
+            y: =<option.size.h>/4+<option.size.h>/2+120
+            ns_sizeX: =<option.size.w>/2
+            ns_sizeY: =<option.size.h>/2
+            #
+            ns_colorr: <option.color.r>
+            ns_colorg: <option.color.g>
+            ns_colorb: <option.color.b>
+            #
+            ns_stickyLock: 1
+    #
+    material__backdrop:
+        tag: 'BDP'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: Backdrop
+        name: '<option.type_abr>__<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        attributes:
+            ns_text:
+                |-
+                Material Area
+                - for material work
+            ns_fontScale: 3
+            x: =<.ns_sizeX>/2
+            y: =<option.size.h>/4+<option.size.h>/2+120
+            ns_sizeX: =<option.size.w>/2
+            ns_sizeY: =<option.size.h>/2
+            #
+            ns_colorr: 0.25
+            ns_colorg: 0.375
+            ns_colorb: 0.25
+            #
+            ns_stickyLock: 1
+    #
+    assign__backdrop:
+        tag: 'BDP'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: Backdrop
+        name: '<option.type_abr>__<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        attributes:
+            ns_text:
+                |-
+                Assign Area
+                - for geometry properties assign and material assign work
+            ns_fontScale: 3
+            x: =<.ns_sizeX>/2
+            y: =<option.size.h>/4+120
+            ns_sizeX: =<option.size.w>/2
+            ns_sizeY: =<option.size.h>/2
+            #
+            ns_colorr: 0.25
+            ns_colorg: 0.25
+            ns_colorb: 0.375
+            #
+            ns_stickyLock: 1
+    #
+    output__backdrop:
+        tag: 'BDP'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: Backdrop
+        name: '<option.type_abr>__<.variant>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        attributes:
+            ns_text:
+                |-
+                Look Output Area
+                - for look file bake
+            ns_fontScale: 3
+            x: =-(<.ns_sizeX>/2)
+            y: =<option.size.h>/4+120
+            ns_sizeX: =<option.size.w>/2
+            ns_sizeY: =<option.size.h>/2
+            #
+            ns_colorr: .375
+            ns_colorg: .25
+            ns_colorb: .375
+            #
+            ns_stickyLock: 1
+    #
+    output__variant_resolve:
+        tag: 'VRS'
+        variant:
+            |-
+            <..key % str(x).split('__')[0]>
+        type: VariantResolve_Wsp
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.output'
+        #
+        attributes:
+            x: =-(<option.size.w>/4)
+            y: =<option.size.h_s>*3
+        #
+        port_hints:
+            parameters/keys: {options: ['variant_0'], displayText:['Geometry']}
+            parameters/variant/value_0: {options: ['asset'], displayText:['Asset']}
+        #
+        parameters:
+            parameters/keys: 'variant_0'
+            parameters/variant/key_0: 'geometry'
+            parameters/variant/value_0: 'asset'
+        #
+        connections:
+            - '<..original_dot.output>'
+            - '<.path>.input'
+    #
+    output:
+        tag: 'LFB'
+        type: LookFileBake
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        attributes:
+            x: =-(<option.size.w>/4)
+            y: =<option.size.h_s>*2
+        #
+        expressions:
+            rootLocations/i0: 'getParent().option.geometry_root'
+        #
+        connections:
+            - '<..output__variant_resolve.output>'
+            - '<.path>.orig'
+    # variant register
+    variant_register:
+        tag: 'VRT'
+        type: VariantRegister_Wsp
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        output: '<.path>.out'
+        #
+        attributes:
+            x: =<option.size.w>/4
+            y: =<option.size.h_s>*2
+        #
+        expressions:
+            user/variant/key: 'getParent().variant.key'
+    # variant properties opt
+    variant_properties_opt:
+        tag: 'VPO'
+        type: VariantProperties_Opt
+        name: '<option.type_abr>__<.tag>'
+        path: '<main.path>/<.name>'
+        input: '<.path>.i0'
+        output: '<.path>.out'
+        #
+        attributes:
+            x: 0
+            y: =<option.size.h_s>
+        #
+        expressions:
+            user/data_1/i0:
+                |-
+                '{}.space'.format(getParent().variant.key)
+            user/data_1/i1: 'getParent().getNodeName()'
+        #
+        connections:
+            - '<..variant_register.output>'
+            - '<.input>'
+            # output
+            - '<.output>'
+            - '<main.output>'

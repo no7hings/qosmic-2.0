@@ -1,0 +1,244 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'render_properties_opt'
+    type_abr: 'rdr_prt_opt'
+    create_type: 'RenderProperties_Opt'
+    description:
+        |-
+        for render properties operator
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .5
+        g: .125
+        b: .125
+#
+main:
+    type: OpScript
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.i0'
+    output: '<.path>.out'
+    #
+    clear_start: 'user'
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        # builtin
+        user/option/builtin/enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        user/option/builtin/renderer:
+            widget: enumerate
+            value: ['arnold']
+            tool_tip: '...'
+
+        user/option/builtin/camera:
+            widget: path
+            value: '/root/world/cam/renderCamera/defaultCamera/defaultCameraLeft/defaultCameraLeftShape'
+            tool_tip: '...'
+
+        user/option/builtin/resolution:
+            widget: resolution
+            value: '2048x2048'
+            tool_tip: '...'
+
+        user/option/builtin/adjust_screen_window:
+            widget: enumerate
+            value: ['No adjustment', 'Adjust width to match resolution', 'Adjust height to match resolution']
+            default: 'Adjust height to match resolution'
+            tool_tip: '...'
+
+        user/properties/builtin_enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        user/properties/builtin:
+            widget: script
+            value: ''
+            tool_tip: '...'
+
+        user/properties/arnold_enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        user/properties/arnold:
+            widget: script
+            value: ''
+            tool_tip: '...'
+
+        user/output/variants:
+            widget: script
+            value:
+                |-
+                geometry=asset
+                camera=asset_free
+                look=default
+                light=asset_standard
+                quality=custom
+                layer=master
+            tool_tip: '...'
+
+        user/output/builtin/image_enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        user/output/builtin/image_pattern:
+            widget: file
+            value: '/temp/{geometry}.{camera}.{look}.{light}.{quality}.{layer}/{aov}.####.exr'
+            tool_tip: '...'
+
+        user/output/arnold/stats_file_enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        user/output/arnold/stats_file_pattern:
+            widget: file
+            value: '/temp/{geometry}.{camera}.{look}.{light}.{quality}.{layer}/stats.####.json'
+            tool_tip: '...'
+
+        user/output/arnold/profile_file_enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        user/output/arnold/profile_file_pattern:
+            widget: file
+            value: '/temp/{geometry}.{camera}.{look}.{light}.{quality}.{layer}/profile.####.json'
+            tool_tip: '...'
+    #
+    parameters:
+        CEL: '/root'
+        script/lua:
+            |-
+            local m = require('wsp_op_script')
+
+            function get_variant_mapper(atr_name)
+                local mapper = {}
+                local override_atr=Interface.GetOpArg(atr_name)
+                local raw = override_atr:getValue()
+                if (raw ~= nil) then
+                    local raw_ = pystring.split(raw, '\n')
+                    for i, i_s in ipairs(raw_) do
+                        if (i_s ~= '') then
+                            local i_s_ = pystring.split(i_s, '=')
+                            local i_key = pystring.rstrip(pystring.lstrip(i_s_[1]))
+                            local i_value = pystring.rstrip(pystring.lstrip(i_s_[2]))
+                            local i_env_key = string.match(i_value, '$(%w+.*)')
+                            if (i_env_key ~= nil) then
+                                i_value = os.getenv(i_env_key)
+                            end
+                            mapper[i_key] = i_value
+                        end
+                    end
+                end
+                return mapper
+            end
+            
+            function pattern_format_fnc(string, new_variant_mapper)
+                string = string.gsub(string, '{(%w+.%w+)}', function (s) return new_variant_mapper[s] end)
+                string = string.gsub(string, '####', function (s) return new_variant_mapper[s] end)
+                return string
+            end
+            
+            function update_dict_fnc(dic_0, dic_1)
+                local dic_2 = {}
+                for i_key, i_value in pairs(dic_0) do
+                    dic_2[i_key] = i_value
+                end
+                for i_key, i_value in pairs(dic_1) do
+                    dic_2[i_key] = i_value
+                end
+                return dic_2
+            end
+            
+            function set_output_image(image_pattern, variant_mapper)
+                local path_0 = image_pattern:getValue()
+                local port_base = Interface.GetAttr('renderSettings.outputs')
+                if (port_base ~= nil) then
+                    local c = port_base:getNumberOfChildren()
+                    for i=0, c-1 do
+                        local i_render_pass_port = port_base:getChildByIndex(i)
+                        local i_aov_name = port_base:getChildName(i)
+                        local i_variant_mapper = {
+                            ['aov']=i_aov_name
+                        }
+                        local i_new_dic = update_dict_fnc(variant_mapper, i_variant_mapper)
+                        local i_output_port_path = 'renderSettings.outputs'..'.'..i_aov_name..'.'..'locationSettings.renderLocation'
+                        local i_output_port = Interface.GetAttr(i_output_port_path)
+                        local i_value = pattern_format_fnc(path_0, i_new_dic)
+                        if (i_output_port ~= nil) then
+                            local i_value = pattern_format_fnc(path_0, i_new_dic)
+                            Interface.SetAttr(i_output_port_path, StringAttribute(i_value))
+                        end
+                    end
+                end
+            end
+            
+            function set_arnold_output_file(atr_path, file_pattern, variant_mapper)
+                local path_0 = file_pattern:getValue()
+                local path_1 = pattern_format_fnc(path_0, variant_mapper)
+                Interface.SetAttr(atr_path, StringAttribute(path_1))
+            end
+            
+            function main()
+                if (Interface.GetOpArg('user.option.builtin.enable'):getValue() == 1) then
+                    Interface.SetAttr('renderSettings.renderer', Interface.GetOpArg('user.option.builtin.renderer'))
+                    Interface.SetAttr('renderSettings.cameraName', Interface.GetOpArg('user.option.builtin.camera'))
+                    Interface.SetAttr('renderSettings.resolution', Interface.GetOpArg('user.option.builtin.resolution'))
+                    Interface.SetAttr('renderSettings.adjustScreenWindow', Interface.GetOpArg('user.option.builtin.adjust_screen_window'))
+                end
+
+                if (Interface.GetOpArg('user.properties.builtin_enable'):getValue() == 1) then
+                    m.override_properties('renderSettings', 'user.properties.builtin')
+                end
+            
+                if (Interface.GetOpArg('user.properties.arnold_enable'):getValue() == 1) then
+                    m.override_properties('arnoldGlobalStatements', 'user.properties.arnold')
+                end
+            
+                if (Interface.GetOpArg('user.output.builtin.image_enable'):getValue() == 1) then
+                    local variant_mapper = get_variant_mapper('user.output.variants')
+                    set_output_image(Interface.GetOpArg('user.output.builtin.image_pattern'), variant_mapper)
+                end
+                
+                if (Interface.GetOpArg('user.output.arnold.stats_file_enable'):getValue() == 1) then
+                    local variant_mapper = get_variant_mapper('user.output.variants')
+                    set_arnold_output_file('arnoldGlobalStatements.statsFile', Interface.GetOpArg('user.output.arnold.stats_file_pattern'), variant_mapper)
+                end
+            
+                if (Interface.GetOpArg('user.output.arnold.profile_file_enable'):getValue() == 1) then
+                    local variant_mapper = get_variant_mapper('user.output.variants')
+                    set_arnold_output_file('arnoldGlobalStatements.profileFile', Interface.GetOpArg('user.output.arnold.profile_file_pattern'), variant_mapper)
+                end
+            end
+            
+            main()

@@ -1,0 +1,16 @@
+option:
+    type: 'dcc-tool'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Switch Color-space Auto'
+        group_name: 'Texture(s)'
+        #
+        icon_name: 'application/python'
+        tool_tip: 'switch color-space to aces-cg auto for all "file" node'
+        #
+        size: [480, 240]
+#
+rsv-match-condition: ''

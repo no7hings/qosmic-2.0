@@ -1,0 +1,81 @@
+<args format="1.0">
+    <help>
+    build by lynxi
+    </help>
+    <page name="osl noise fractal">
+        <param name="octaves" constant="True" slider="True" slidermin="1" slidermax="8">
+            <help>
+            </help>
+        </param>
+        <param name="distortion" constant="True" slider="True" slidermin="0" slidermax="10">
+            <help>
+            </help>
+        </param>
+        <param name="value" constant="True">
+            <help>
+            </help>
+        </param>
+        <param name="gain" constant="True" slider="True" slidermin="0" slidermax="1">
+            <help>
+            </help>
+        </param>
+        <param name="lacunarity" constant="True" slider="True" slidermin="1" slidermax="5">
+            <help>
+            </help>
+        </param>
+        <param name="rotation">
+            <help>
+            </help>
+        </param>
+        <param name="offset">
+            <help>
+            </help>
+        </param>
+        <param name="scale">
+            <help>
+            </help>
+        </param>
+        <param name="coord_space" constant="True" widget="mapper">
+            <hintdict name="options">
+                <int value="0" name="world"/>
+                <int value="1" name="object"/>
+                <int value="2" name="Pref"/>
+                <int value="3" name="uv"/>
+            </hintdict>
+            <help>
+            </help>
+        </param>
+        <param name="position">
+            <help>
+            </help>
+        </param>
+        <param name="frame" constant="True">
+            <help>
+            </help>
+        </param>
+        <param name="color1">
+            <help>
+            </help>
+        </param>
+        <param name="color2">
+            <help>
+            </help>
+        </param>
+        <param name="mode" constant="True" widget="mapper">
+            <hintdict name="options">
+                <int value="0" name="scalar"/>
+                <int value="1" name="vector"/>
+            </hintdict>
+            <help>
+            </help>
+        </param>
+        <param name="turbulent_enable" constant="True" widget="checkBox">
+            <help>
+            </help>
+        </param>
+        <param name="clamp_enable" constant="True" widget="checkBox">
+            <help>
+            </help>
+        </param>
+    </page>
+</args>

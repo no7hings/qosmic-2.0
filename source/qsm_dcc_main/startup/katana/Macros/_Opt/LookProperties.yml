@@ -1,0 +1,93 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'look_properties_opt'
+    type_abr: 'lok_prt_opt'
+    create_type: 'LookProperties_Opt'
+    description:
+        |-
+        for look properties operator
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .5
+        g: .125
+        b: .125
+#
+main:
+    type: OpScript
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.i0'
+    output: '<.path>.out'
+    #
+    clear_start: 'user'
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        #
+        user/enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+        #
+        user/material:
+            widget: path
+            value: ''
+            tool_tip: '...'
+        #
+        user/geometry/properties:
+            widget: script
+            value: ''
+            tool_tip: '...'
+        #
+        user/geometry/visibilities:
+            widget: script
+            value: ''
+            tool_tip: '...'
+    #
+    parameters:
+        CEL:
+            |-
+            /root/world/geo/master//*{attr("type") == "subdmesh" or attr("type") == "renderer procedural"}
+        script/lua:
+            |-
+            local m = require('wsp_op_script')
+            
+            function material_assign_fnc(material)
+                if (material ~= '') then
+                    Interface.SetAttr('materialAssign', StringAttribute(material))
+                end
+            end
+            
+            function main()
+                if (Interface.GetOpArg('user.enable'):getValue() == 1) then
+                    local geometry_type = Interface.GetAttr('type'):getValue()
+                    local material = Interface.GetOpArg('user.material'):getValue()
+                    material_assign_fnc(material)
+                    m.override_properties('arnoldStatements', 'user.geometry.properties')
+                end
+            end
+            
+            main()

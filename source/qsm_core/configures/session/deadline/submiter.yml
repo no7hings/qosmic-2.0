@@ -1,0 +1,93 @@
+option:
+    batch_name: ''
+    #
+    type: ''
+    name: ''
+    group: ''
+    engine: ''
+    hook: ''
+    #
+    user: ''
+    time_tag: ''
+    #
+    extra:
+        platform: ''
+    #
+    deadline:
+        batch_name: '[<option.type>][<option.time_tag>]'
+        job_name: '[<option.type>][<option.engine>][<option.hook>]'
+        #
+        output_directory: ''
+        output_file: ''
+        #
+        group: ''
+        #
+        pool: ''
+        secondary_pool: ''
+        #
+        command: ''
+#
+output:
+    info:
+        Plugin: "Rocket"
+        #
+        BatchName: <option.deadline.batch_name>
+        Name: <option.deadline.job_name>
+        #
+        Frame: "0"
+        Department: ''
+        ChunkSize: "1"
+        Priority: 50
+        Pool: <option.deadline.pool>
+        SecondaryPool: <option.deadline.secondary_pool>
+        #
+        Group: <option.deadline.group>
+        #
+        Project: ''
+        #
+        OutputDirectory0: <option.deadline.output_directory>
+        OutputFilename0: <option.deadline.output_file>
+        #
+        UserName: <option.user>
+        MachineLimit: 10
+        #
+        Comment: ''
+        #
+        Whitelist: ''
+        #
+        PreTaskScript: ''
+        PostTaskScript: ''
+        PreJobScript: ''
+        PostJobScript: ''
+        #
+        OnJobComplete: Nothing
+        #
+        OnTaskTimeout: Notify
+        #
+        JobDependencies: ''
+        #
+        StartupDirectory: <option.deadline.output_directory>
+        #
+        ResumeOnCompleteDependencies: False
+        ResumeOnFailedDependencies: False
+        #
+        OverrideTaskFailureDetection: True
+        FailureDetectionTaskErrors: 2
+        #
+        EnableAutoTimeout: False
+        #
+        ExtraInfo0: <option.extra.platform>
+        ExtraInfo1: ''
+        ExtraInfo2: ''
+        ExtraInfo3: ''
+        ExtraInfo4: ''
+        ExtraInfo5: ''
+        ExtraInfo6: ''
+        ExtraInfo7: ''
+    plug:
+        Arguments: <option.deadline.command>
+        Shell: "default"
+        ShellExecute: True
+        Executable: ''
+        Software: ''
+        ErrorCatch: "job-kill"

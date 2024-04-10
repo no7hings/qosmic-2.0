@@ -1,0 +1,91 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.12.0
+# options: -o /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.oso
+shader osl_string_to_int
+param	string	input	"red"		%meta{string,widget,"string"}  %read{4,15} %write{2147483647,-1}
+param	string	input_mapper	"red=0,green=1,blue=2"		%meta{string,widget,"string"}  %read{7,7} %write{2147483647,-1}
+param	int	output_default	0		%meta{int,min,0} %meta{int,max,100} %meta{string,page,"extra"}  %read{2147483647,-1} %write{2147483647,-1}
+param	int	output_maximum	20		%meta{int,min,0} %meta{int,max,100} %meta{string,page,"extra"}  %read{2147483647,-1} %write{2147483647,-1}
+oparam	int	out_int	0		%read{2147483647,-1} %write{10,23}
+local	int	___337_out_default	%read{23,23} %write{1,1}
+local	string	___337_sep	%read{2147483647,-1} %write{2,2}
+local	int	___337_c	%read{10,22} %write{3,3}
+local	string[20]	___338_output_args	%read{10,22} %write{7,7}
+local	int	___339_i	%read{10,22} %write{9,22}
+local	string	___340_i_str	%read{10,22} %write{10,22}
+local	string[2]	___340_i_args	%read{10,22} %write{10,22}
+local	string	___340_i_key	%read{10,22} %write{10,22}
+local	string	___341_i_value	%read{10,22} %write{10,22}
+local	int	___341_i_output	%read{10,22} %write{10,22}
+const	string	$const1	"get_index"		%read{0,0} %write{2147483647,-1}
+const	int	$const2	0		%read{1,14} %write{2147483647,-1}
+const	string	$const3	","		%read{2,7} %write{2147483647,-1}
+const	int	$const4	20		%read{3,3} %write{2147483647,-1}
+temp	int	$tmp1	%read{5,5} %write{4,4}
+temp	int	$tmp2	%read{6,6} %write{5,5}
+temp	int	$tmp3	%read{2147483647,-1} %write{7,7}
+temp	int	$tmp4	%read{10,22} %write{10,22}
+temp	int	$tmp5	%read{8,22} %write{9,22}
+temp	int	$tmp6	%read{2147483647,-1} %write{10,22}
+const	string	$const5	"="		%read{13,13} %write{2147483647,-1}
+temp	int	$tmp7	%read{10,22} %write{10,22}
+const	int	$const6	1		%read{17,22} %write{2147483647,-1}
+temp	int	$tmp8	%read{2147483647,-1} %write{10,22}
+code ___main___
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl:38
+#     out_int = get_index(
+	functioncall	$const1 24 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl"} %line{38} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl:9
+#     int out_default = 0;
+	assign		___337_out_default $const2 	%line{9} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl:10
+#     string sep = ",";
+	assign		___337_sep $const3 	%line{10} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl:11
+#     int c = 20;
+	assign		___337_c $const4 	%line{11} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl:12
+#     if (strlen(input) > 0) {
+	strlen		$tmp1 input 	%line{12} %argrw{"wr"}
+	gt		$tmp2 $tmp1 $const2 	%argrw{"wrr"}
+	if		$tmp2 23 23 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl:14
+#         split(input_mapper, output_args, ",");
+	split		$tmp3 input_mapper ___338_output_args $const3 	%line{14} %argrw{"wrwr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl:15
+#         for (int i = 0; i < c; i++) {
+	for		$tmp5 10 12 21 23 	%line{15} %argrw{"r"}
+	assign		___339_i $const2 	%argrw{"wr"}
+	lt		$tmp4 ___339_i ___337_c 	%argrw{"wrr"}
+	neq		$tmp5 $tmp4 $const2 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl:16
+#             string i_str = output_args[i];
+	aref		___340_i_str ___338_output_args ___339_i 	%line{16} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl:18
+#                 split(i_str, i_args, "=");
+	split		$tmp6 ___340_i_str ___340_i_args $const5 	%line{18} %argrw{"wrwr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl:19
+#                 string i_key = i_args[0];
+	aref		___340_i_key ___340_i_args $const2 	%line{19} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl:20
+#                 if (i_key == input) {
+	eq		$tmp7 ___340_i_key input 	%line{20} %argrw{"wrr"}
+	if		$tmp7 21 21 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl:21
+#                     string i_value = i_args[1];
+	aref		___341_i_value ___340_i_args $const6 	%line{21} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl:22
+#                     int i_output = stoi(i_value);
+	stoi		___341_i_output ___341_i_value 	%line{22} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl:23
+#                     return i_output;
+	assign		out_int ___341_i_output 	%line{23} %argrw{"wr"}
+	return
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl:15
+#         for (int i = 0; i < c; i++) {
+	assign		$tmp8 ___339_i 	%line{15} %argrw{"wr"}
+	add		___339_i ___339_i $const6 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_string_to_int.osl:27
+#     return out_default;
+	assign		out_int ___337_out_default 	%line{27} %argrw{"wr"}
+	end

@@ -1,0 +1,55 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Create USD by FBX Auto'
+        icon_name: 'application/python'
+        #
+        size: [720, 720]
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        database: ''
+        database_configure: ''
+        database_configure_extend: ''
+        #
+        entity_type: ''
+        entity: ''
+        #
+        keyword: ''
+#
+build:
+    content:
+        |-
+        1. press "execute" to continue
+    node:
+        options:
+            files:
+                widget: file_list
+                value: []
+                enable: True
+                height: 320
+                tool_tip: '...'
+            #
+            scale:
+                widget: float
+                value: 0.1
+                enable: True
+                tool_tip: '...'
+            #
+            use_update_mode:
+                widget: boolean
+                value: True
+                enable: True
+                tool_tip: 'create use update mode'
+            #
+            execute:
+                widget: sub_process_button
+                value: ''
+                tool_tip: [ 'press to convert checked "fbx" to "usd"' ]

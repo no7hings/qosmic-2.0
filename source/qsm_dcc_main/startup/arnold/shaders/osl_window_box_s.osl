@@ -1,0 +1,325 @@
+#include <stdosl.h>
+
+
+string resolver_filename_form_environ (
+    string in_string,
+)
+{
+    string keys[1] = {"[QSM_PROJECT_ROOT]"};
+    string values[1] = {"/l/prod"};
+    int c = arraylength(keys);
+    for (int i = 0; i < c; i++) {
+        string i_key = keys[i];
+        string i_value = values[i];
+        int i_match = startswith(in_string, i_key);
+        if (i_match > 0) {
+            int i_start = strlen(i_key);
+            string i_string_0 = substr(in_string, i_start);
+            string i_out_string = concat(i_value, i_string_0);
+            warning("resolver texture from environ: %s >> %s", in_string, i_out_string);
+            return i_out_string;
+        }
+    }
+    return in_string;
+}
+
+color wb(
+    int space,
+    string filename,
+    int texture_flip,
+    int texture_flop,
+    float depth,
+    //
+    float overscan_left,
+    float overscan_right,
+    float overscan_top,
+    float overscan_bottom,
+    //
+    float contract_back,
+    //
+    float rotation_x,
+    float rotation_y,
+    float rotation_z,
+    int curtains_enable,
+    int middle_enable,
+    float middle_depth,
+    float middle_offset_x,
+    float middle_offset_y,
+    float uv_offset_x,
+    float uv_offset_y,
+)
+{
+    // user controls remapping
+    float depth_0 = clamp(depth, 0.01, 100.0);
+    // overscan
+    float overscan_left_0 = 1-clamp(overscan_left, 0, 0.9);
+    float overscan_right_0 = 1-clamp(overscan_right, 0, 0.9);
+    float overscan_top_0 = 1-clamp(overscan_top, 0, 0.9);
+    float overscan_bottom_0 = 1-clamp(overscan_bottom, 0, 0.9);
+    // contract
+    float contract_back_0 = 1-clamp(contract_back, 0, 0.9);
+    // middle
+    float middle_depth_0 = clamp(middle_depth, 0.01, depth_0-0.01);
+    float middle_offset_x_0 = middle_offset_x*-(texture_flop*2-1)*0.1;
+    float middle_offset_y_0 = middle_offset_y*-(texture_flip*2-1)*0.1;
+    //global variables & remapping
+    // x, z, y
+    vector obj_I = transform("object", I);
+
+    vector axis_x = vector(1, 0, 0);
+    vector axis_y = vector(0, 1, 0);
+    vector axis_z = vector(0, 0, 1);
+
+    color top_right_mult = color(overscan_right_0, overscan_top_0, 1);
+    color left_bottom_mult = color(overscan_left_0, overscan_bottom_0, 1);
+    color left_bottom_add = color(1-overscan_left_0, 1-overscan_bottom_0, 0);
+
+    color back_mult = color(contract_back_0, 1, 1);
+    // 0, x
+    if (space == 0){
+        obj_I = vector(-obj_I[2], obj_I[1], obj_I[0]);
+    }
+    // 1, -x
+    else if (space == 1){
+        obj_I = vector(obj_I[2], obj_I[1], -obj_I[0]);
+    }
+    // 2, y
+    else if (space == 2){
+        obj_I = vector(-obj_I[0], obj_I[2], obj_I[1]);
+    }
+    // 3, -y
+    else if (space == 3){
+      obj_I = vector(-obj_I[0], -obj_I[2], -obj_I[1]);
+    }
+    // 4, z
+    else if (space == 4){
+        obj_I = vector(obj_I[0], obj_I[1], obj_I[2]);
+    }
+    // 5, -z
+    else if (space == 5){
+        obj_I = vector(-obj_I[0], obj_I[1], -obj_I[2]);
+    }
+    else {
+        obj_I = vector(obj_I[0], -obj_I[2], obj_I[1]);
+    }
+    // overscan
+    obj_I = obj_I*top_right_mult*left_bottom_mult/back_mult;
+
+//    obj_P[0] = obj_P[0]/.25;
+//    obj_I[0] = obj_I[0]/.25-.25;
+    // rotation
+    obj_I = rotate(obj_I, radians(rotation_x), axis_x);
+    obj_I = rotate(obj_I, radians(rotation_y), axis_y);
+    obj_I = rotate(obj_I, radians(rotation_z), axis_z);
+
+    color obj_P_orig = color(u, v, 0.5);
+    // uv offset
+    obj_P_orig[0] = obj_P_orig[0] - uv_offset_x;
+    obj_P_orig[1] = obj_P_orig[1] - uv_offset_y;
+    // overscan
+    color obj_P = obj_P_orig*top_right_mult*left_bottom_mult+left_bottom_add;
+
+    vector sections = step(0, obj_I);
+    color base_depth = (obj_P-sections)/(-obj_I*depth_0);
+    color mid_ground_depth = (obj_P-sections)/(-obj_I*middle_depth_0);
+    color base_back = (obj_P-sections)/(-obj_I);
+    color base_width = base_depth*depth_0;
+
+    color base_depth_x = (base_depth[1]*obj_I+obj_P+1);
+    color base_depth_y = (base_depth[0]*obj_I+obj_P+1);
+    color base_width_x = (base_width[1]*obj_I+obj_P+1);
+    color base_width_y = (base_width[0]*obj_I+obj_P+1);
+
+    float h_u = base_depth_y[2]-0.5;
+    float v_u = base_width_x[0]-1;
+    float h_v = base_width_y[1]-1;
+    float v_v = base_depth_x[2]-0.5;
+    // index
+    color top_index = color(1.0/3.0, 2.0/3.0, 0);
+    color bottom_index = color(1.0/3.0, 0, 0);
+    color left_index = color(0.0, 1.0/3.0, 0);
+    color right_index = color(2.0/3.0, 1.0/3.0, 0);
+    color back_index = color(1.0/3.0, 1.0/3.0, 0);
+    color front_index = color(1.0/3.0, 1.0/3.0, 0);
+    // left right
+    float left_right_mask = step(0, h_u)*step(0,1-max(h_v, 1-h_v));
+    color left_right_uv = color(h_u, h_v, 0) / 3;
+    color right_uv = (left_right_uv+right_index)*left_right_mask*sections[0];
+    color left_uv = (left_right_uv+left_index)*left_right_mask*(1-sections[0]);
+    left_uv[0] = (1.0/3.0-left_uv[0])*left_right_mask*(1-sections[0]);
+    // top bottom
+    float top_bottom_mask = step(0, v_v)*step(0,1-max(v_u, 1-v_u));
+    color top_bottom_uv = color(v_u, v_v, 0)/3;
+    color top_uv = (top_bottom_uv+top_index)*top_bottom_mask*sections[1];
+    color bottom_uv = (top_bottom_uv+bottom_index)*top_bottom_mask*(1-sections[1]);
+    bottom_uv[1] = (1.0/3.0-bottom_uv[1])*top_bottom_mask*(1-sections[1]);
+    // back
+    color back_uv = ((base_back[2]*obj_I+(obj_P/2)/(depth_0))*(depth_0*2)/3+back_index)*(1-max(step(0,h_u), step(0,v_v)));
+
+    color room_uv = top_uv+bottom_uv+right_uv+left_uv+back_uv;
+
+    color middle_uv = (1.0/3.0-(base_back[2]*obj_I+obj_P/(middle_depth_0*2))*(middle_depth_0*2)/3);
+    color front_uv = obj_P_orig*front_index;
+
+    // flip
+    if (texture_flip > 0){
+        middle_uv[1] = -middle_uv[1]+1.0/3.0;
+        front_uv[1] = -front_uv[1]+1.0/3.0;
+    }else
+        room_uv[1] = 1-room_uv[1];
+        middle_uv[1] = middle_uv[1];
+        front_uv[1] = 1-front_uv[1];
+    // middle mask
+    float middle_mask = step(0, middle_uv[1]*3*(1-middle_uv[1]*3))*step(0, middle_uv[0]*(1.0/3.0-middle_uv[0]));
+    middle_uv = (color(middle_offset_x_0, middle_offset_y_0, 0)+middle_uv)*middle_mask;
+    // flop
+    if (texture_flop > 0){
+        room_uv[0] = 1-room_uv[0];
+        middle_uv[0] = middle_uv[0];
+        front_uv[0] = -front_uv[0]+1.0/3.0;
+    }else
+        middle_uv[0] = 1.0/3.0-middle_uv[0];
+
+    color room_rgb = texture(filename, room_uv[0], room_uv[1]);
+
+    color final_rgb;
+
+    final_rgb = room_rgb;
+
+    // middle switch
+    if (middle_enable > 0){
+        float mid_ground_a;
+        color mid_ground_rgb = texture(filename, middle_uv[0], middle_uv[1], "alpha", mid_ground_a);
+        final_rgb = mix(room_rgb, mid_ground_rgb, mid_ground_a);
+    }
+
+    // front switch
+    if (curtains_enable > 0){
+        float curtains_a;
+        color curtains_rgb = texture(filename, front_uv[0], front_uv[1], "alpha", curtains_a);
+        final_rgb = mix(final_rgb, curtains_rgb, curtains_a);
+    }
+    return final_rgb;
+}
+
+shader osl_window_box_s (
+    //
+    string filename = "" [[ string widget = "filename", string page = "texture" ]],
+    int udim_maximum = 1002 [[ int min = 1001, int max = 1100, string page = "texture" ]],
+    int texture_flip = 0 [[ string widget = "boolean", string page = "texture" ]],
+    int texture_flop = 0 [[ string widget = "boolean", string page = "texture" ]],
+    // x=0, -x=1, y=2, -y=3, z=4, -z=5
+    int space = 0 [[ string widget = "enumerate", string options = "x|-x|y|-y|z|-z", string page = "basic" ]],
+    // rotation adjust
+    float rotation_x = 0.0 [[ float min = -90.0, float max = 90.0, string page = "basic" ]],
+    float rotation_y = 0.0 [[ float min = -90.0, float max = 90.0, string page = "basic" ]],
+    float rotation_z = 0.0 [[ float min = -90.0, float max = 90.0, string page = "basic" ]],
+    // extra
+    float depth = 1 [[ float min = 0.01, float max = 100, string page = "extra" ]],
+    float overscan_left = 0 [[ float min = 0.0, float max = 0.9, string page = "extra" ]],
+    float overscan_right = 0 [[ float min = 0.0, float max = 0.9, string page = "extra" ]],
+    float overscan_top = 0 [[ float min = 0.0, float max = 0.9, string page = "extra" ]],
+    float overscan_bottom = 0 [[ float min = 0.0, float max = 0.9, string page = "extra" ]],
+    float contract_back = 0 [[ float min = 0.0, float max = 0.9, string page = "extra" ]],
+    //
+    int curtains_enable = 1 [[ string widget = "boolean", string page = "extra" ]],
+    int middle_enable = 1 [[ string widget = "boolean", string page = "extra" ]],
+    float middle_depth = 0.5 [[ float min = 0.01, float max = 100, string page = "extra" ]],
+    float middle_offset_x = 0 [[string page = "extra"]],
+    float middle_offset_y = 0 [[string page = "extra"]],
+
+    output color out_rgb = 0.0,
+) {
+    // add use udim
+    color final_rgb = 0.0;
+    int udim_index = 1001;
+    // check is udim
+    string filename_new = resolver_filename_form_environ(filename);
+    int is_udim = regex_search(filename_new, "<udim>");
+    if (is_udim > 0) {
+        // maximum search
+        int c = udim_maximum - 1000;
+        point uv = point(u, v, 0.0);
+        for (int i = 0; i < c; i++) {
+            float i_uv_offset_x = (udim_index-1001)%10;
+            float i_uv_offset_y = ((udim_index-1001)-i_uv_offset_x)/10;
+            //float uv_y_hundreds = ( i_uv_offset_y / 10 );
+            string i_udim_str = format("%d", udim_index);
+            string i_args[2];
+            split(filename_new, i_args, "<udim>");
+            string i_file = concat(i_args[0], i_udim_str, i_args[1]);
+            // check exists
+            int i_e;
+            gettextureinfo(i_file, "exists", i_e);
+            if (i_e > 0) {
+                float i_x_next = (i_uv_offset_x+1);
+                float i_y_next = (i_uv_offset_y+1);
+
+                if (((uv[0] >= i_uv_offset_x)&&(uv[0] <= i_x_next))&&((uv[1] >= i_uv_offset_y)&&(uv[1] <= i_y_next))){
+                    color i_rgb = wb(
+                        space,
+                        i_file,
+                        texture_flip,
+                        texture_flop,
+                        depth,
+                        overscan_left,
+                        overscan_right,
+                        overscan_top,
+                        overscan_bottom,
+                        contract_back,
+                        rotation_x,
+                        rotation_y,
+                        rotation_z,
+                        curtains_enable,
+                        middle_enable,
+                        middle_depth,
+                        middle_offset_x,
+                        middle_offset_y,
+                        i_uv_offset_x,
+                        i_uv_offset_y
+                    );
+                    final_rgb += i_rgb;
+                }
+            }
+            else {
+                warning(
+                    "%s, is non-exists", i_file
+                );
+            }
+            udim_index += 1;
+        }
+    }
+    else {
+        float uv_offset_x = 0;
+        float uv_offset_y = 0;
+        int e;
+        gettextureinfo(filename_new, "exists", e);
+        if (e > 0) {
+            final_rgb = wb(
+                space,
+                filename_new,
+                texture_flip,
+                texture_flop,
+                depth,
+                overscan_left,
+                overscan_right,
+                overscan_top,
+                overscan_bottom,
+                contract_back,
+                rotation_x,
+                rotation_y,
+                rotation_z,
+                curtains_enable,
+                middle_enable,
+                middle_depth,
+                middle_offset_x,
+                middle_offset_y,
+                uv_offset_x,
+                uv_offset_y
+            );
+        }
+    }
+
+    out_rgb = final_rgb;
+
+}

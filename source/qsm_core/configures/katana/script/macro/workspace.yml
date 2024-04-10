@@ -1,0 +1,196 @@
+option:
+    path: ''
+    root: ''
+    time_tag: ''
+    #
+    position:
+        x: 0
+        y: 0
+    #
+    size:
+        w_s: 240
+        h_s: 320
+    #
+    keys: ['geometry', 'look', 'camera', 'light', 'quality', 'layer']
+#
+build:
+    # geometry
+    geometry:
+        default:
+            main:
+                index_x: -1
+                index_y: 5
+                tag: 'geometry_space'
+                type: GeometrySpace_Wsp
+                name: '<.tag>__<option.time_tag>'
+                path: '<option.root>/<.name>'
+                input: '<.path>.join_upstream'
+                output: '<.path>.output'
+                #
+                attributes:
+                    x: =<option.position.x>+<option.size.w_s>/2*<..index_x>
+                    y: =<option.position.y>+<option.size.h_s>*<..index_y>
+                    ns_bubbleZoom: 1.0
+        #
+        user:
+            main:
+                $: '...default.main'
+                type: GeometrySpace_Wsp_Usr
+    # look
+    look:
+        default:
+            main:
+                index_x: 1
+                index_y: 4
+                tag: 'look_space'
+                type: LookSpace_Wsp
+                name: '<.tag>__<option.time_tag>'
+                path: '<option.root>/<.name>'
+                input: '<.path>.join_upstream'
+                output: '<.path>.output'
+                #
+                attributes:
+                    x: =<option.position.x>+<option.size.w_s>/2*<..index_x>
+                    y: =<option.position.y>+<option.size.h_s>*<..index_y>
+                    ns_bubbleZoom: 1.0
+                #
+                post_connections:
+                    - '{geometry}.output'
+                    - '{look}.original'
+        #
+        user:
+            main:
+                $: '...default.main'
+                type: LookSpace_Wsp_Usr
+    #
+    camera:
+        default:
+            main:
+                index_x: -1
+                index_y: 4
+                tag: 'camera_space'
+                type: CameraSpace_Wsp
+                name: '<.tag>__<option.time_tag>'
+                path: '<option.root>/<.name>'
+                input: '<.path>.join_upstream'
+                output: '<.path>.output'
+                #
+                attributes:
+                    x: =<option.position.x>+<option.size.w_s>/2*<..index_x>
+                    y: =<option.position.y>+<option.size.h_s>*<..index_y>
+                    ns_bubbleZoom: 1.0
+        #
+        user:
+            main:
+                $: '...default.main'
+                type: CameraSpace_Wsp_Usr
+    #
+    light:
+        default:
+            main:
+                index_x: -1
+                index_y: 3
+                tag: 'light_space'
+                type: LightSpace_Wsp
+                name: '<.tag>__<option.time_tag>'
+                path: '<option.root>/<.name>'
+                input: '<.path>.join_upstream'
+                output: '<.path>.output'
+                #
+                attributes:
+                    x: =<option.position.x>+<option.size.w_s>/2*<..index_x>
+                    y: =<option.position.y>+<option.size.h_s>*<..index_y>
+                    ns_bubbleZoom: 1.0
+        #
+        user:
+            main:
+                $: '...default.main'
+                type: LightSpace_Wsp_Usr
+    #
+    quality:
+        default:
+            main:
+                index_x: -1
+                index_y: 2
+                tag: 'quality_space'
+                type: QualitySpace_Wsp
+                name: '<.tag>__<option.time_tag>'
+                path: '<option.root>/<.name>'
+                input: '<.path>.join_upstream'
+                output: '<.path>.output'
+                #
+                attributes:
+                    x: =<option.position.x>+<option.size.w_s>/2*<..index_x>
+                    y: =<option.position.y>+<option.size.h_s>*<..index_y>
+        #
+        user:
+            main:
+                $: '...default.main'
+                type: QualitySpace_Wsp_Usr
+    #
+    layer:
+        default:
+            main:
+                index_x: -1
+                index_y: 1
+                tag: 'layer_space'
+                type: LayerSpace_Wsp
+                name: '<.tag>__<option.time_tag>'
+                path: '<option.root>/<.name>'
+                input: '<.path>.join_upstream'
+                output: '<.path>.output'
+                #
+                attributes:
+                    x: =<option.position.x>+<option.size.w_s>/2*<..index_x>
+                    y: =<option.position.y>+<option.size.h_s>*<..index_y>
+        #
+        user:
+            main:
+                $: '...default.main'
+                type: LayerSpace_Wsp_Usr
+#
+node:
+    render_layer:
+        index_x: -1
+        index_y: 1
+        tag: 'render_layer'
+        type: RenderLayer_Wsp
+        name: '<.tag>__<option.time_tag>'
+        path: '<option.root>/<.name>'
+        input: '<.path>.join_upstream'
+        output: '<.path>.output'
+        #
+        attributes:
+            x: =<option.position.x>+<option.size.w_s>/2*<..index_x>
+            y: =<option.position.y>+<option.size.h_s>*<..index_y>
+#
+preset:
+    default:
+        parameters:
+            workspace/keys: 'geometry, look, camera, light, quality, layer'
+            workspace/spaces/geometry: 'default'
+            workspace/spaces/camera: 'default'
+            workspace/spaces/look: 'default'
+            workspace/spaces/light: 'default'
+            workspace/spaces/quality: 'default'
+            workspace/spaces/layer: 'default'
+    #
+    utility:
+        parameters:
+            workspace/keys: 'geometry, look, camera, light, quality, layer'
+            workspace/spaces/geometry: 'utility'
+            workspace/spaces/camera: 'utility'
+            workspace/spaces/look: 'utility'
+            workspace/spaces/light: 'utility'
+            workspace/spaces/quality: 'utility'
+            workspace/spaces/layer: 'utility'
+    #
+    user:
+        parameters:
+            workspace/keys: 'geometry, look, camera, light'
+            workspace/spaces/geometry: 'user'
+            workspace/spaces/camera: 'user'
+            workspace/spaces/look: 'user'
+            workspace/spaces/light: 'user'
+            workspace/spaces/quality: 'user'
+            workspace/spaces/layer: 'user'

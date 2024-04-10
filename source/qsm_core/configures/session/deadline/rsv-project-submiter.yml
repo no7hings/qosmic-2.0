@@ -1,0 +1,115 @@
+option:
+    # from user definition
+    batch_name: ''
+    #
+    type: ''
+    # use file name
+    name: ''
+    # use file name
+    group: ''
+    engine: ''
+    hook: ''
+    #
+    user: ''
+    time_tag: ''
+    #
+    extra:
+        platform: ''
+        application: ''
+        #
+        project: ''
+        #
+        root: ''
+        workspace: ''
+        role: ''
+        asset: ''
+        #
+        sequence: ''
+        shot: ''
+        #
+        step: ''
+        task: ''
+        version: ''
+    #
+    deadline:
+        batch_name: '[<option.extra.project>][<option.batch_name>][<option.group>][<option.time_tag>]'
+        job_name: '[<option.extra.project>][<option.name>][<option.hook>]'
+        #
+        output_directory: ''
+        output_file: ''
+        #
+        priority: 50
+        #
+        group: ''
+        #
+        pool: ''
+        secondary_pool: ''
+        #
+        machine_limit: 10
+        #
+        command: ''
+#
+output:
+    info:
+        Plugin: "Rocket"
+        #
+        BatchName: <option.deadline.batch_name>
+        Name: <option.deadline.job_name>
+        #
+        Frame: "0"
+        Department: <option.extra.step>
+        ChunkSize: "1"
+        Priority: <option.deadline.priority>
+        Pool: <option.deadline.pool>
+        SecondaryPool: <option.deadline.secondary_pool>
+        #
+        Group: <option.deadline.group>
+        #
+        Project: <option.extra.project>
+        #
+        OutputDirectory0: <option.deadline.output_directory>
+        OutputFilename0: <option.deadline.output_file>
+        #
+        UserName: <option.user>
+        MachineLimit: <option.deadline.machine_limit>
+        #
+        Comment: ''
+        #
+        Whitelist: ''
+        #
+        PreTaskScript: ''
+        PostTaskScript: ''
+        PreJobScript: ''
+        PostJobScript: ''
+        #
+        OnJobComplete: Nothing
+        #
+        OnTaskTimeout: Notify
+        #
+        JobDependencies: ''
+        #
+        StartupDirectory: <option.deadline.output_directory>
+        #
+        ResumeOnCompleteDependencies: False
+        ResumeOnFailedDependencies: False
+        #
+        OverrideTaskFailureDetection: True
+        FailureDetectionTaskErrors: 2
+        #
+        EnableAutoTimeout: False
+        #
+        ExtraInfo0: <option.extra.platform>
+        ExtraInfo1: <option.extra.project>
+        ExtraInfo2: <option.extra.workspace>
+        ExtraInfo3: <option.extra.asset | option.extra.shot>
+        ExtraInfo4: <option.extra.step>
+        ExtraInfo5: <option.extra.task>
+        ExtraInfo6: <option.extra.version>
+        ExtraInfo7: <option.extra.application>
+    plug:
+        Arguments: <option.deadline.command>
+        Shell: "default"
+        ShellExecute: True
+        Executable: ''
+        Software: ''
+        ErrorCatch: "job-kill"

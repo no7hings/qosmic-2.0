@@ -1,0 +1,32 @@
+dcc:
+    root:
+        name: 'master'
+        location: '/master'
+#
+elements: []
+#    - {
+#        name: 'hi',
+#        location: '/master/mod/hi',
+#        file: 'geo/hi.usd'
+#    }
+#    - {
+#        name: 'lo',
+#        location: '/master/mod/lo',
+#        file: 'geo/lo.usd'
+#    }
+#    - {
+#        name: 'hair',
+#        location: '/master/hair',
+#        file: 'geo/hair.usd'
+#    }
+#    - {
+#        name: 'plant',
+#        location: '/master/plant',
+#        file: 'geo/plant.usd'
+#    }
+#    - {
+#        name: 'light',
+#        location: '/master/light',
+#        file: 'geo/light.usd'
+#    }
+

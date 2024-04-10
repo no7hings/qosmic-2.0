@@ -1,0 +1,133 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'variant_properties_opt'
+    type_abr: 'vrn_prt_opt'
+    create_type: 'VariantProperties_Opt'
+    description:
+        |-
+        for variant properties oprator
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .5
+        g: .125
+        b: .125
+#
+main:
+    type: OpScript
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.i0'
+    output: '<.path>.out'
+    #
+    clear_start: 'user'
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        #
+        user/data_1:
+            widget: string2
+            label: ' '
+            value: [ '', '' ]
+            tool_tip: '...'
+            lock: True
+        #
+        user/data_2:
+            widget: string2
+            label: ' '
+            value: [ '', '' ]
+            tool_tip: '...'
+            lock: True
+        #
+        user/data_3:
+            widget: string2
+            label: ' '
+            value: [ '', '' ]
+            tool_tip: '...'
+            lock: True
+        #
+        user/data_4:
+            widget: string2
+            label: ' '
+            value: ['', '']
+            tool_tip: '...'
+            lock: True
+        #
+        user/data_5:
+            widget: string2
+            label: ' '
+            value: ['', '']
+            tool_tip: '...'
+            lock: True
+        #
+        user/data_6:
+            widget: string2
+            label: ' '
+            value: ['', '']
+            tool_tip: '...'
+            lock: True
+        #
+        user/data_7:
+            widget: string2
+            label: ' '
+            value: ['', '']
+            tool_tip: '...'
+            lock: True
+        #
+        user/data_8:
+            widget: string2
+            label: ' '
+            value: ['', '']
+            tool_tip: '...'
+            lock: True
+        #
+        user/data_9:
+            widget: string2
+            label: ' '
+            value: ['', '']
+            tool_tip: '...'
+            lock: True
+        #
+        user/data_10:
+            widget: string2
+            label: ' '
+            value: ['', '']
+            tool_tip: '...'
+            lock: True
+    #
+    parameters:
+        CEL: '/root'
+        script/lua:
+            |-
+            local m = require('wsp_op_script')
+
+            local location = Interface.GetInputLocationPath()
+            local user_attribute = Interface.GetOpArg('user')
+
+            function main()
+                m.register_by_data(m.get_data_for_register(location, user_attribute))
+            end
+
+            main()

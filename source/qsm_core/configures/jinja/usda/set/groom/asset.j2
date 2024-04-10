@@ -1,0 +1,35 @@
+#usda 1.0
+(
+    defaultPrim = "{{ dcc.root_name }}"
+    metersPerUnit = 0.01
+    upAxis = "Y"
+)
+
+over "{{ dcc.root_name }}" (
+    assetInfo = {
+        asset identifier = @{{ asset }}.usda@
+        string project = "{{ project }}"
+        string role = "{{ role }}"
+        string asset = "{{ asset }}"
+        string step = "{{ step }}"
+        string task = "{{ task }}"
+        string version = "{{ version }}"
+    }
+    kind = "component"
+    prepend references = [
+        @{{ usdas.material }}@,
+    ]
+    variants = {
+        string uv = "{{ look.passes[0] }}"
+    }
+    prepend variantSets="uv"
+    payload = @{{ usdas.payload }}@
+)
+{
+    variantSet "uv" = {
+        "None" (){}
+        "default" (
+            payload = @uv_map.usd@
+        ){}
+       }
+}

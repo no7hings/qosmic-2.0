@@ -1,0 +1,56 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'utility_materials'
+    type_abr: 'utl_mtl'
+    create_type: 'UtilityMaterials_Wsp'
+    description:
+        |-
+        for material
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .5
+        g: .5
+        b: .5
+#
+main:
+    # create from self
+    type: UtilityMaterials_Wsp
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    output: '<.path>.out'
+    #
+    clear_start: 'user'
+    #
+    clear_ports: True
+    clear_children: False
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        # extra
+        user/extra/texture_directory:
+            widget: file
+            value: '/texture_directory'
+            tool_tip: '...'

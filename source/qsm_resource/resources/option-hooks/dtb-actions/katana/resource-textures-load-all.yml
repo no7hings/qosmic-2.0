@@ -1,0 +1,42 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-katana'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Load All Textures'
+        icon_name: 'application/python'
+        #
+        size: [720, 720]
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        database: ''
+        database_configure: ''
+        database_configure_extend: ''
+        #
+        entity_type: ''
+        entity: ''
+        #
+        keyword: ''
+#
+build:
+    content:
+        |-
+        1. check one or more in "files"
+            a. check or uncheck item in "textures" when it need to create
+            b. press "deduplication" to remove duplication textures by "format priority"
+        2. check or uncheck "with_acescg_exr" and "with_acescg_tx"
+        3. press "create acescg textures" to continue
+    node:
+        options:
+            directory:
+                widget: directory
+                open_or_save: open
+                value: ''
+                lock: True
+                tool_tip: '...'

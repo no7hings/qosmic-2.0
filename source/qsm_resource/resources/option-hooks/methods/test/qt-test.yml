@@ -1,0 +1,35 @@
+option:
+    type: method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Texture-tx Convert'
+        icon_name: 'application/python'
+#
+hook_option:
+    engine: 'qosmic-python'
+    #
+    script:
+        directory: ''
+        output_directory: ''
+
+        below_enable: False
+
+        force_enable: False
+
+        ext_includes: ['.exr']
+
+        target_ext: '.tx'
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

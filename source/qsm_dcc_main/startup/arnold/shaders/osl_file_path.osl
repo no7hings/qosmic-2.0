@@ -1,0 +1,12 @@
+#include <stdosl.h>
+
+shader osl_file_path(
+    string filename = "" [[ string widget = "filename" ]],
+    int udim_enable = 0 [[ int min = 0, int max = 1, string widget = "boolean" ]],
+    int sequence_enable = 0 [[ int min = 0, int max = 1, string widget = "boolean" ]],
+    output string out_string = "",
+)
+{
+    string file_path = filename;
+    out_string = file_path;
+}

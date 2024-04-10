@@ -1,0 +1,30 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Export to Clarisse'
+        icon_name: 'application/clarisse'
+        #
+        size: [720, 720]
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        database: ''
+        database_configure: ''
+        database_configure_extend: ''
+        #
+        entity_type: ''
+        entity: ''
+        #
+        keyword: ''
+        #
+        resource: ''
+        #
+        file_type: ''
+        file: ''

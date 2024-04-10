@@ -1,0 +1,38 @@
+# storage-configure for cg-project
+# ******************************************************************************************************************** #
+# pattern-rule:
+#     keyword: str(pattern)
+#     if <keyword> in value auto resolve to final value
+# ******************************************************************************************************************** #
+# <root>
+project-root-windows-dir: 'l:/prod'
+project-root-linux-dir: '/l/prod'
+#
+project-root_primary-windows-dir: 'l:/prod'
+project-root_primary-linux-dir: '/l/prod'
+#
+project-root_secondary-windows-dir: 't:/prod'
+project-root_secondary-linux-dir: '/t/prod'
+#
+asset-geometry-dir: <asset-release-version-dir>/cache
+#
+asset-look-ass-dir: <asset-cache-dir>/ass
+#
+shot-maya-scene-file: <shot-maya-scene-dir>/<shot-name>.<step-name>.<task-name>.<version-name>.ma
+shot-maya-scene-src-file: <shot-maya-scene-src-dir>/<shot-name>.<step-name>.<task-name>.<version-name>.ma
+#
+shot-houdini-scene-src-file: <shot-houdini-scene-src-dir>/<shot-name>.<step-name>.<task-name>.<version-name>.hip
+shot-houdini-scene-file: <shot-houdini-scene-dir>/<shot-name>.<step-name>.<task-name>.<version-name>.hip
+#
+shot-katana-scene-src-file: <shot-katana-scene-src-dir>/<shot-name>.<step-name>.<task-name>.<version-name>.katana
+shot-katana-scene-file: <shot-katana-scene-dir>/<shot-name>.<step-name>.<task-name>.<version-name>.katana
+#
+shot-temporary-maya-scene-src-file: <shot-temporary-maya-scene-src-dir>/<shot-name>.<step-name>.<task-name>.<version-name>.ma
+shot-temporary-maya-scene-file: <shot-temporary-maya-scene-dir>/<shot-name>.<step-name>.<task-name>.<version-name>.ma
+#
+shot-temporary-houdini-scene-src-file: <shot-temporary-houdini-scene-src-dir>/<shot-name>.<step-name>.<task-name>.<version-name>.hip
+shot-temporary-houdini-scene-file: <shot-temporary-houdini-scene-dir>/<shot-name>.<step-name>.<task-name>.<version-name>.hip
+#
+shot-temporary-katana-scene-src-file: <shot-temporary-katana-scene-src-dir>/<shot-name>.<step-name>.<task-name>.<version-name>.katana
+shot-temporary-katana-scene-file: <shot-temporary-katana-scene-dir>/<shot-name>.<step-name>.<task-name>.<version-name>.katana
+

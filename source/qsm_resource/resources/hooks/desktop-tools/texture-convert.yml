@@ -1,0 +1,134 @@
+option:
+    type: 'tool-panel'
+    # config used system
+    systems:
+        - 'linux-python'
+        #
+        - '*-maya'
+        - '*-houdini'
+        - '*-katana'
+    #
+    gui:
+        name: 'Texture Converter'
+        group_name: 'Tool(s)'
+        #
+        icon_name: 'window/texture'
+        icon_sub_name: 'application/python'
+        tool_tip: 'use for texture batch convert to ".tx"'
+        #
+        size: [960, 480]
+#
+hook_option:
+    rez:
+        extend_packages: ['usd', 'arnold', 'arnold_usd', 'aces']
+
+build:
+    node:
+        options:
+            directory:
+                widget: directory
+                open_or_save: open
+                history_key: 'tool-panels.texture-converter.directory-open'
+#                pull_history_latest: True
+                value: ''
+                tool_tip: '...'
+
+            match_pattern:
+                widget: string
+                value: ''
+                tool_tip: '...'
+                enable: True
+
+            match_format:
+                widget: string
+                value: 'exr, tif, tga, jpg, png'
+                tool_tip: '...'
+                enable: True
+
+            below_enable:
+                widget: boolean
+                value: False
+                tool_tip: 'when is checked, show all matching image below directory'
+
+            by_format/directory:
+                widget: directory
+                open_or_save: save
+                history_key: 'tool-panels.texture-converter.target.directory-save'
+#                pull_history_latest: True
+                value: ''
+                tool_tip: 'choose a target directory for execute'
+
+            by_format/extension:
+                widget: enumerate
+                value: ['.tx', '.jpg', '.png']
+                default: '.tx'
+                tool_tip: 'choose a target extension for execute'
+                enable: True
+
+            by_format/width:
+                widget: enumerate
+                value: ['512', '1024', '2048', '4096', 'keep-original']
+                default: 'keep-original'
+                tool_tip: 'do not support for ".tx"'
+                enable: True
+
+            by_format/copy_same_ext:
+                widget: boolean
+                value: False
+                tool_tip: '...'
+
+            by_format/force_enable:
+                widget: boolean
+                value: False
+                tool_tip: 'execute target extension what ever target extension "exists" or "non-changed"'
+
+            by_format/execute:
+                widget: 'sub_process_button'
+                value:
+                tool_tip: 'execute target extension use thread'
+                join_to_next: True
+
+            by_format/create_use_deadline:
+                widget: button
+                value:
+                tool_tip: 'execute convert format to target extension use deadline'
+
+            by_color_space/directory:
+                widget: directory
+                open_or_save: save
+                history_key: 'tool-panels.texture-converter.by_color_space.directory-save'
+#                pull_history_latest: True
+                value: ''
+                tool_tip: 'choose a target directory for execute'
+
+            by_color_space/color_space:
+                widget: enumerate
+                value: [ 'auto', 'sRGB', 'linear', 'Raw' ]
+                default: 'auto'
+                tool_tip: [
+                    'choose a target color-space for execute',
+                    'sRGB: Utility - sRGB - Texture',
+                    'linear: Utility - Linear - sRGB',
+                    'Raw: Utility - Raw',
+                ]
+                enable: True
+
+            by_color_space/extension:
+                widget: enumerate
+                value: [ '.exr' ]
+                default: '.exr'
+                tool_tip: 'choose a target extension for execute'
+                enable: True
+
+            by_color_space/copy_same_ext:
+                widget: boolean
+                value: False
+                tool_tip: '...'
+
+            by_color_space/execute:
+                widget: 'sub_process_button'
+                value:
+                tool_tip: 'execute convert color-space to ACES use thread'
+    #
+    node_collapse:
+        options: ['by_color_space']

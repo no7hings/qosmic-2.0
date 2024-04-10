@@ -1,0 +1,131 @@
+# ******************************************************************************************************************** #
+# scheme
+schemes:
+    framework: new
+    storage: rpc
+# workspaces
+workspaces:
+    work: team
+    source: team
+    user: work
+    release: shared
+    temporary: cache
+# roles
+roles:
+    character: chr
+    prop: prp
+    environment: env
+    light: lgt
+    light_rig: lgt
+    scenery: scn
+    vision_effect: vfx
+    workspace: wsp
+    plant: flg
+    #
+    camera: cam
+    #
+    exploration: exp
+    assembly: asb
+    #
+    other: oth
+# step
+#   project
+project_steps:
+    surface: srf
+#   asset
+asset_steps:
+    concept: cpt
+    paint: pnt
+    #
+    sketch: skt
+    #
+    reference: ref
+    #
+    model: mod
+    groom: grm
+    effect: efx
+    character_effect: cfx
+    rig: rig
+    surface: srf
+    #
+    camera: cam
+    animation: ani
+    light: lgt
+    light_rig: lgtrig
+    #
+    plant: plt
+    #
+    digital_environment: dem
+    digital_matte_paint: dmp
+    #
+    set_dressing: set
+    #
+    archive: archive
+#   sequence
+sequence_steps:
+    concept: cpt
+    storyboard: stb
+    #
+    sound: sound
+    previs: previs
+    #
+    edit: edt
+    #
+    light: lgt
+    light_rig: lgtrig
+    #
+    set_dressing: set
+#   shot
+shot_steps:
+    concept: cpt
+    storyboard: stb
+    #
+    reference: ref
+    #
+    sound: sound
+    previs: previs
+    #
+    edit: edt
+    #
+    camera: cam
+    rough_layout: rlo
+    animation: ani
+    final_layout: flo
+    effect: efx
+    character_effext: cfx
+    #
+    light: lgt
+    light_rig: lgtrig
+    #
+    digital_matte_paint: dmp
+    composition: cmp
+    #
+    set_dressing: set
+# step extra
+asset_steps_extra: []
+#
+sequence_steps_extra: []
+#
+shot_steps_extra: []
+# task
+#   project
+project_tasks:
+    template: template
+#   asset
+asset_tasks:
+    model: modeling
+    model_dynamic: mod_dynamic
+    groom: grooming
+    rig: rigging
+    effect: effect
+    surface: surfacing
+    surface_prv: srf_anishading
+    surface_cfx: srf_cfxshading
+    light: lighting
+    light_rig: light_rig
+    camera: camera
+#   sequence
+sequence_tasks: {}
+#   shot
+shot_tasks:
+    animation: animation

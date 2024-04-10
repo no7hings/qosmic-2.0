@@ -1,0 +1,958 @@
+# storage-rule for cg-project
+# ******************************************************************************************************************** #
+# pattern-rule:
+#     keyword: str(pattern)
+#     if <keyword> in value auto resolve to final value
+# ******************************************************************************************************************** #
+#
+key: basic
+projects-include: []
+# <key>
+root-path: '{root}'
+#
+project-name: '{project}'
+workspace-name: '{workspace}'
+# asset
+role-name: '{role}'
+asset-name: '{asset}'
+# sequence and shot
+sequence-name: '{sequence}'
+shot-name: '{shot}'
+#
+step-name: '{step}'
+task-name: '{task}'
+task_extra-name: '{task_extra}'
+version-name: '{version}'
+version_extra-name: '{version_extra}'
+#
+customize-name: '{customize}'
+#
+any-key: '{any}'
+#
+user-name: '{user}'
+artist-name: '{artist}'
+#
+time-tag: '{time}'
+# extend
+act-name: '{act}'
+var-name: '{var}'
+lod-level: '{lod}'
+xgen-name: '{xgen}'
+texture-name: '{texture}'
+format-name: '{format}'
+app-name: '{app}'
+#   variables
+camera: '{camera}'
+layer: '{layer}'
+light-pass: '{light_pass}'
+look-pass: '{look_pass}'
+quality: '{quality}'
+render-pass: '{render_pass}'
+#
+variant: '{variant}'
+#
+asset-shot-name: '{asset_shot}'
+shot-asset-name: '{shot_asset}'
+#
+variant-fnmatch-patterns:
+    role: '[a-z][a-z][a-z]'
+    sequence: '[a-z][0-9][0-9]'
+    step: '[a-z][a-z][a-z]*'
+    version: '[a-z][0-9][0-9][0-9]*'
+    version_extra: '[0-9][0-9][0-9]*'
+    look_pass: '[A-Za-z]*'
+    shot: '[a-z][0-9][0-9][0-9][0-9][0-9]'
+#
+extent-var-keys:
+    - var
+    - xgen
+    - ext
+    - app
+    - look_pass
+    - asset_shot
+# <root>
+root-choices:
+    - root_primary
+    - root_secondary
+# <root>
+project-root-dir: <root-path>
+project-root-windows-dir: None
+project-root-linux-dir: None
+# <project>
+project-root_primary-dir: '{root_primary}'
+project-root_primary-windows-dir: None
+project-root_primary-linux-dir: None
+# effect ============================================================================================================= #
+project-root_secondary-dir: '{root_secondary}'
+project-root_secondary-windows-dir: None
+project-root_secondary-linux-dir: None
+# project
+project-dir: <project-root-dir>/<project-name>
+project-workspace-dir: <project-dir>/<workspace-name>
+#   step
+project-source-step-dir: <project-dir>/<step-name>
+project-user-step-dir: <project-dir>/<step-name>
+project-release-step-dir: <project-dir>/<step-name>
+project-temporary-step-dir: <project-dir>/<step-name>
+#   step search patterns
+project-step-search-patterns:
+    source: <project-source-step-dir>
+    user: <project-user-step-dir>
+    release: <project-release-step-dir>
+#   task
+project-source-task-dir: <project-source-step-dir>/<task-name>
+project-user-task-dir: <project-user-step-dir>/<task-name>
+project-release-task-dir: <project-release-step-dir>/<task-name>
+project-temporary-task-dir: <project-temporary-step-dir>/<task-name>
+#   task search patterns
+project-task-search-patterns:
+    source: <project-source-task-dir>
+    user: <project-user-task-dir>
+    release: <project-release-task-dir>
+#   version name
+project-version-name: <project-name>.<step-name>.<task-name>.<version-name>
+#   area
+project-source-area-dir: <project-source-task-dir>
+project-user-area-dir: <project-user-task-dir>
+#   maya
+#       source
+project-source-maya-dir: <project-source-area-dir>/maya
+project-source-maya-scene-src-dir: <project-source-maya-dir>/scenes
+project-source-maya-scene-src-file: <project-source-maya-scene-src-dir>/<project-version-name>.ma
+#       user
+project-user-maya-dir: <project-user-area-dir>/maya
+project-user-maya-scene-src-dir: <project-user-maya-dir>/scenes
+project-user-maya-scene-src-file: <project-user-maya-scene-src-dir>/<project-version-name>.ma
+#   katana
+#       source
+project-source-katana-dir: <project-source-area-dir>/katana
+project-source-katana-scene-src-dir: <project-source-katana-dir>
+project-source-katana-scene-src-file: <project-source-katana-scene-src-dir>/<project-version-name>.katana
+#       user
+project-user-katana-dir: <project-user-area-dir>/katana
+project-user-katana-scene-src-dir: <project-user-katana-dir>
+project-user-katana-scene-src-file: <project-user-katana-scene-src-dir>/<project-version-name>.katana
+# asset area
+asset-area-dir: <project-workspace-dir>/assets
+# asset group
+role-dir: <asset-area-dir>/<role-name>
+# asset
+asset-dir: <role-dir>/<asset-name>
+#   step
+asset-source-step-dir: <asset-dir>/<step-name>
+asset-user-step-dir: <asset-dir>/<step-name>
+asset-release-step-dir: <asset-dir>/<step-name>
+asset-temporary-step-dir: <asset-dir>/<step-name>
+#   step search pattern
+asset-step-search-patterns:
+    source: <asset-source-step-dir>
+    user: <asset-user-step-dir>
+    release: <asset-release-step-dir>
+#   task
+asset-source-task-dir: <asset-source-step-dir>/<task-name>
+asset-user-task-dir: <asset-user-step-dir>/<task-name>/user.<artist-name>
+asset-release-task-dir: <asset-release-step-dir>/<task-name>
+asset-temporary-task-dir: <asset-temporary-step-dir>/<task-name>
+#   task search patterns
+asset-task-search-patterns:
+    source: <asset-source-task-dir>
+    user: <asset-user-task-dir>
+    release: <asset-release-task-dir>
+#   version name
+asset-version-name: <asset-name>.<step-name>.<task-name>.<version-name>
+asset-version_extra-name: <asset-name>.<step-name>.<task-name>.<task_extra-name>.<version-name>_<version_extra-name>
+asset-no-version-name: <asset-name>.<step-name>.<task-name>
+asset-task-version-look-pass-name: <asset-name>.<step-name>.<task-name>.<look-pass>.<version-name>
+#   version
+asset-source-version-dir: <asset-source-task-dir>/<asset-version-name>
+asset-user-version-dir: <asset-user-task-dir>/<asset-version-name>
+asset-release-version-dir: <asset-release-task-dir>/<asset-version-name>
+asset-release-no-version-dir: <asset-release-task-dir>/<asset-no-version-name>
+asset-temporary-version-dir: <asset-temporary-task-dir>/<asset-version-name>
+asset-temporary-no-version-dir: <asset-temporary-task-dir>/<asset-no-version-name>
+# area
+asset-source-area-dir: <asset-source-task-dir>
+asset-user-area-dir: <asset-user-task-dir>
+#   maya
+#       source
+asset-source-maya-dir: <asset-source-area-dir>/maya
+asset-source-maya-scene-src-dir: <asset-source-maya-dir>/scenes
+asset-source-maya-scene-src-file: <asset-source-maya-scene-src-dir>/<asset-version-name>.ma
+asset-source-maya-tmp-dir: <asset-source-maya-dir>/temporary/<artist-name>
+asset-source-maya-scene-tmp-file: <asset-source-maya-tmp-dir>/<asset-version-name>.<time-tag>.ma
+#       xgen, todo: need set to shared area?
+asset-source-maya-xgen-cache-main-dir: <asset-source-maya-dir>/xgen
+asset-source-maya-xgen-cache-dir: <asset-source-maya-dir>/<variant>/<version-name>/xgen
+asset-source-maya-xgen-file: <asset-source-maya-dir>/<asset-version-name>__<xgen-name>.xgen
+#       ass
+asset-source-maya-ass-dir: <asset-source-maya-dir>/<variant>/<version-name>/ass
+asset-source-maya-ass-file: <asset-source-maya-ass-dir>/all.ass
+#       user
+asset-user-maya-dir: <asset-user-area-dir>/maya
+asset-user-maya-scene-src-dir: <asset-user-maya-dir>/scenes
+asset-user-maya-scene-src-file: <asset-user-maya-scene-src-dir>/<asset-version-name>.ma
+#   houdini
+#       source
+asset-source-houdini-dir: <asset-source-area-dir>/houdini
+asset-source-houdini-scene-src-dir: <asset-source-houdini-dir>
+asset-source-houdini-scene-src-file: <asset-source-houdini-dir>/<asset-version-name>.hip
+asset-source-houdini-tmp-dir: <asset-source-houdini-dir>/temporary/<artist-name>
+asset-source-houdini-scene-tmp-file: <asset-source-houdini-tmp-dir>/<asset-version-name>.hip
+#       user
+asset-user-houdini-dir: <asset-user-area-dir>/houdini
+asset-user-houdini-scene-src-dir: <asset-user-houdini-dir>
+asset-user-houdini-scene-src-file: <asset-user-houdini-dir>/<asset-version-name>.hip
+#   katana
+#       source
+asset-source-katana-dir: <asset-source-area-dir>/katana
+asset-source-katana-scene-src-dir: <asset-source-katana-dir>
+asset-source-katana-scene-src-file: <asset-source-katana-dir>/<asset-version-name>.katana
+asset-source-katana-tmp-dir: <asset-source-katana-dir>/temporary/<artist-name>
+asset-source-katana-scene-tmp-file: <asset-source-katana-tmp-dir>/<asset-version-name>.katana
+#       user
+asset-user-katana-dir: <asset-user-area-dir>/katana
+asset-user-katana-scene-src-dir: <asset-user-katana-dir>
+asset-user-katana-scene-src-file: <asset-user-katana-dir>/<asset-version-name>.katana
+
+asset-user-katana-render-dir: <asset-user-katana-dir>/render
+asset-user-katana-render-layer-dir: <asset-user-katana-render-dir>/<asset-version-name>
+#   clarisse
+#       source
+asset-source-clarisse-dir: <asset-source-area-dir>/clarisse
+asset-source-clarisse-scene-src-dir: <asset-source-clarisse-dir>
+asset-source-clarisse-scene-src-file: <asset-source-clarisse-scene-src-dir>/<asset-version-name>.project
+asset-source-clarisse-tmp-dir: <asset-source-clarisse-dir>/temporary/<artist-name>
+asset-source-clarisse-scene-tmp-file: <asset-source-clarisse-tmp-dir>/<asset-version-name>.project
+#       user
+asset-user-clarisse-dir: <asset-user-area-dir>/clarisse
+asset-user-clarisse-scene-src-dir: <asset-user-clarisse-dir>
+asset-user-clarisse-scene-src-file: <asset-user-clarisse-scene-src-dir>/<asset-version-name>.project
+#   nuke
+#       source
+asset-source-nuke-dir: <asset-source-area-dir>/nuke
+asset-source-nuke-scene-src-dir: <asset-source-nuke-dir>
+asset-source-nuke-scene-src-file: <asset-source-nuke-scene-src-dir>/<asset-version-name>.nk
+asset-source-nuke-tmp-dir: <asset-source-nuke-dir>/temporary/<artist-name>
+asset-source-nuke-scene-tmp-file: <asset-source-nuke-tmp-dir>/<asset-version-name>.nk
+        # user
+asset-user-nuke-dir: <asset-user-area-dir>/nuke
+asset-user-nuke-scene-src-dir: <asset-user-nuke-dir>
+asset-user-nuke-scene-src-file: <asset-user-nuke-scene-src-dir>/<asset-version-name>.nk
+#
+asset-user-app-render-image-dir: <asset-user-area-dir>/render/<app-name>/<asset-version-name>
+# extend area ******************************************************************************************************** #
+asset-source-extend-dir: <asset-source-task-dir>
+#   zbrush
+asset-source-zbrush-dir: <asset-source-extend-dir>/zb
+asset-source-zbrush-scene-src-dir: <asset-source-zbrush-dir>/<variant>/<version-name>
+asset-source-zbrush-scene-src-file: <asset-source-zbrush-scene-src-dir>/<asset-version-name>.spp
+#   substance painter
+asset-source-sp-dir: <asset-source-extend-dir>/sp
+asset-source-sp-scene-src-dir: <asset-source-sp-dir>/<variant>/<version-name>
+asset-source-sp-scene-src-file: <asset-source-sp-scene-src-dir>/<asset-version-name>.spp
+#   geometry
+asset-source-geometry-dir: <asset-source-extend-dir>/geometry
+#       abc
+asset-source-cache-abc-dir: <asset-source-geometry-dir>/abc/<version-name>
+asset-source-geometry-abc-var-file: <asset-source-cache-abc-dir>/<var-name>.abc
+#       usd
+asset-source-cache-usd-dir: <asset-source-geometry-dir>/usd/<version-name>
+asset-source-geometry-usd-var-dir: <asset-source-cache-usd-dir>/geo
+asset-source-geometry-usd-var-file: <asset-source-geometry-usd-var-dir>/<var-name>.usd
+#   geometry branch
+asset-source-geometry-usd-renderable-file: <asset-source-cache-usd-dir>/renderable.usda
+asset-source-geometry-usd-auxiliary-file: <asset-source-cache-usd-dir>/auxiliary.usda
+asset-source-geometry-usd-payload-file: <asset-source-cache-usd-dir>/payload.usda
+asset-source-geometry-usd-uv_map-file: <asset-source-cache-usd-dir>/uv_map.usda
+#
+asset-source-geometry-usd-main-file: <asset-source-cache-usd-dir>/main.usda
+# todo: remove hi, lo, shape, temp
+asset-source-geometry-usd-hi-file: <asset-source-geometry-usd-var-dir>/hi.usd
+asset-source-geometry-usd-lo-file: <asset-source-geometry-usd-var-dir>/lo.usd
+asset-source-geometry-usd-shape-file: <asset-source-geometry-usd-var-dir>/shape.usd
+asset-source-geometry-usd-temp-file: <asset-source-geometry-usd-var-dir>/temp.usd
+asset-source-geometry-uv_map-usd-file: <asset-source-geometry-usd-var-dir>/uv_map.usd
+#
+asset-source-geometry-extra-usd-dir: <asset-source-cache-usd-dir>/geo_extra
+asset-source-geometry-user_property-usd-file: <asset-source-geometry-extra-usd-dir>/user_property.usd
+#       xml
+asset-source-geometry-xml-dir: <asset-source-geometry-dir>/xml/<version-name>
+asset-source-geometry-info-xml-file: <asset-source-geometry-xml-dir>/<var-name>.info.xml
+#   look
+asset-source-look-dir: <asset-source-extend-dir>/look
+#       arnold ass
+asset-source-look-ass-dir: <asset-source-look-dir>/ass/<version-name>
+asset-source-look-ass-file: <asset-source-look-ass-dir>/default.ass
+asset-source-look-ass-sub-file: <asset-source-look-ass-dir>/<look-pass>.ass
+#       materialx
+asset-source-look-mtx-dir: <asset-source-look-dir>/mtx/<version-name>
+asset-source-look-mtx-file: <asset-source-look-mtx-dir>/default.mtlx
+#       look file
+asset-source-look-klf-dir: <asset-source-look-dir>/klf/<version-name>
+asset-source-look-klf-file: <asset-source-look-klf-dir>/all.klf
+asset-source-look-klf-extra-file: <asset-source-look-klf-dir>/all.json
+#       yaml
+asset-source-look-yml-dir: <asset-source-look-dir>/yml/<version-name>
+asset-source-look-yml-file: <asset-source-look-yml-dir>/default.yml
+#   texture
+asset-source-texture-dir: <asset-source-extend-dir>/texture/<variant>
+#
+asset-source-texture-version-dir: <asset-source-extend-dir>/texture/<variant>/<version-name>
+asset-source-texture-src-dir: <asset-source-texture-version-dir>/src
+asset-source-texture-tx-dir: <asset-source-texture-version-dir>/tx
+#   set
+asset-source-set-dir: <asset-source-extend-dir>/set
+#       usd
+asset-source-set-usd-dir: <asset-source-set-dir>/usd/<version-name>
+#
+asset-source-asset-set-usd-file: <asset-source-set-usd-dir>/<asset-name>.usda
+asset-source-shot-set-usd-file: <asset-source-set-usd-dir>/<asset-shot-name>.usda
+#
+asset-source-components-set-usd-dir: <asset-source-set-dir>/components-usd/<version-name>
+asset-source-components-set-usd-file: <asset-source-components-set-usd-dir>/<asset-name>.usda
+#
+asset-source-component-usd-dir: <asset-source-set-usd-dir>
+# cache
+asset-source-cache-dir: <asset-source-extend-dir>/cache
+#
+asset-source-render-dir: <asset-source-extend-dir>/render/<artist-name>
+# release **************************************************************************************************************
+# <asset-preview>
+asset-preview-dir: <asset-release-version-dir>/preview
+asset-preview-file: <asset-preview-dir>/<asset-version-name>.mov
+asset-preview-mov-file: <asset-preview-dir>/<asset-version-name>.mov
+# <asset-review>
+asset-review-dir: <asset-release-version-dir>/review
+asset-review-file: <asset-review-dir>/<asset-version-name>.mov
+asset-review-mov-file: <asset-review-dir>/<asset-version-name>.mov
+# <asset-render>
+asset-render-dir: <asset-release-version-dir>/render
+asset-render-set-usd-file: <asset-release-version-dir>/render/set/<asset-name>.usda
+#
+asset-render-output-dir: <asset-release-version-dir>/render/output
+asset-render-output-sub-dir: <asset-release-version-dir>/render/output/<look-pass>
+asset-render-maya-output-dir: <asset-render-dir>/maya/output
+asset-render-maya-scene-file: <asset-render-dir>/katana/<asset-name>.ma
+asset-render-katana-output-dir: <asset-render-dir>/katana/output
+asset-render-katana-output-sub-dir: <asset-render-dir>/katana/output/<look-pass>
+asset-render-katana-scene-file: <asset-render-dir>/katana/<asset-name>.katana
+asset-render-mov-sub-file: <asset-render-dir>/mov/<asset-task-version-look-pass-name>.mov
+asset-render-jpg-sub-file: <asset-render-dir>/jpg/<asset-task-version-look-pass-name>.jpg
+#
+asset-image-dir: <asset-release-version-dir>/image
+# scene
+asset-scene-src-dir: <asset-release-version-dir>/scene
+#   maya
+asset-maya-scene-dir: <asset-release-version-dir>/maya
+asset-maya-scene-file: <asset-maya-scene-dir>/<asset-name>.ma
+asset-maya-scene-src-dir: <asset-scene-src-dir>
+asset-maya-scene-src-file: <asset-maya-scene-src-dir>/<asset-name>.ma
+# <asset-houdini-scene>
+asset-houdini-scene-dir: <asset-release-version-dir>/houdini
+asset-houdini-scene-file: <asset-houdini-scene-dir>/<asset-name>.hip
+asset-houdini-scene-src-dir: <asset-scene-src-dir>
+asset-houdini-scene-src-file: <asset-houdini-scene-src-dir>/<asset-name>.hip
+# <asset-katana-scene>
+asset-katana-scene-dir: <asset-release-version-dir>/katana
+asset-katana-scene-file: <asset-katana-scene-dir>/<asset-name>.katana
+asset-katana-scene-src-dir: <asset-scene-src-dir>
+asset-katana-scene-src-file: <asset-katana-scene-src-dir>/<asset-name>.katana
+#
+asset-nuke-scene-dir: <asset-release-version-dir>/nuke
+asset-nuke-scene-file: <asset-nuke-scene-dir>/<asset-name>.nk
+asset-nuke-scene-src-dir: <asset-scene-src-dir>
+asset-nuke-scene-src-file: <asset-nuke-scene-src-dir>/<asset-name>.nk
+#
+asset-clarisse-scene-dir: <asset-release-version-dir>/clarisse
+asset-clarisse-scene-file: <asset-clarisse-scene-dir>/<asset-name>.project
+asset-clarisse-scene-src-dir: <asset-scene-src-dir>
+asset-clarisse-scene-src-file: <asset-clarisse-scene-src-dir>/<asset-name>.project
+#
+asset-katana-render-output-dir: <asset-render-dir>/katana-images
+asset-katana-render-image-file: <asset-katana-render-output-dir>/main/<camera>.<layer>.<light-pass>.<look-pass>.<quality>/<render-pass>.####.exr
+asset-katana-render-video-mov-file: <asset-katana-render-output-dir>/main/<camera>.<layer>.<light-pass>.<look-pass>.<quality>.mov
+asset-katana-render-image-png-file: <asset-katana-render-output-dir>/main/<camera>.<layer>.<light-pass>.<look-pass>.<quality>.png
+#
+asset-katana-render-video-all-mov-file: <asset-katana-render-output-dir>/main/all.mov
+#
+asset-maya-xgen-dir: <asset-release-version-dir>/maya
+asset-maya-xgen-file: <asset-maya-xgen-dir>/<asset-name>__<xgen-name>.xgen
+
+asset-light-dir: <asset-release-version-dir>/light
+asset-light-live_group-file: <asset-light-dir>/<asset-name>.livegroup
+#
+asset-live_group-dir: <asset-release-version-dir>/livegroup
+asset-live_group-file: <asset-live_group-dir>/<asset-name>.livegroup
+#
+asset-light-ass-file: <asset-release-version-dir>/ass/<asset-name>.ass
+#
+asset-scene-xgen-dir: <asset-scene-src-dir>
+asset-scene-xgen-file: <asset-scene-xgen-dir>/<asset-name>__<xgen-name>.xgen
+# cache
+asset-cache-dir: <asset-release-version-dir>/cache
+# <asset-geometry>
+asset-geometry-dir: <asset-release-version-dir>/cache
+# <asset-geometry-abc>
+asset-cache-abc-dir: <asset-cache-dir>/abc
+asset-geometry-abc-var-dir: <asset-cache-abc-dir>/geo
+asset-geometry-abc-var-file: <asset-geometry-abc-var-dir>/<var-name>.abc
+asset-geometry-abc-hi-file: <asset-geometry-abc-var-dir>/hi.abc
+asset-geometry-abc-lo-file: <asset-geometry-abc-var-dir>/lo.abc
+#
+asset-geometry-proxy-abc-var-file: <asset-geometry-abc-var-dir>/proxy_<var-name>.abc
+# <asset-proxy>
+asset-proxy-dir: <asset-release-version-dir>/proxy
+# <asset-proxy-gpu>
+asset-proxy-gpu-dir: <asset-proxy-dir>/gpu
+asset-proxy-gpu-sub-act-file: <asset-proxy-gpu-dir>/<look-pass>/<act-name>.abc
+asset-proxy-gpu-sub-act-lod-file: <asset-proxy-gpu-dir>/<look-pass>/<act-name>.lod<lod-level>.abc
+#
+asset-proxy-ass-dir: <asset-proxy-dir>/ass
+asset-proxy-ass-sub-act-file: <asset-proxy-ass-dir>/<look-pass>/<act-name>.ass
+asset-proxy-ass-sub-act-lod-file: <asset-proxy-ass-dir>/<look-pass>/<act-name>.lod<lod-level>.ass
+#
+asset-proxy-jpg-sub-dir: <asset-proxy-dir>/jpg
+asset-proxy-jpg-sub-file: <asset-proxy-jpg-sub-dir>/<look-pass>.jpg
+#
+asset-proxy-xarc-dir: <asset-proxy-dir>/xarc
+asset-proxy-xarc-sub-act-file: <asset-proxy-xarc-dir>/<look-pass>/<act-name>.xarc
+#
+asset-geometry-abc-hi-dyn-file: <asset-cache-abc-dir>/dynamic.abc
+# cache
+asset-cache-usd-dir: <asset-cache-dir>/usd
+#   var
+asset-geometry-usd-var-dir: <asset-cache-dir>/usd/geo
+asset-geometry-usd-var-file: <asset-geometry-usd-var-dir>/<var-name>.usd
+#   branch
+asset-geometry-usd-renderable-file: <asset-cache-usd-dir>/renderable.usda
+asset-geometry-usd-auxiliary-file: <asset-cache-usd-dir>/auxiliary.usda
+asset-geometry-usd-payload-file: <asset-cache-usd-dir>/payload.usda
+asset-geometry-usd-uv_map-file: <asset-cache-usd-dir>/uv_map.usda
+#
+asset-geometry-usd-hi-file: <asset-geometry-usd-var-dir>/hi.usd
+asset-geometry-usd-lo-file: <asset-geometry-usd-var-dir>/lo.usd
+asset-geometry-usd-shape-file: <asset-geometry-usd-var-dir>/shape.usd
+asset-geometry-usd-temp-file: <asset-geometry-usd-var-dir>/temp.usd
+#
+asset-geometry-proxy-usd-var-file: <asset-geometry-usd-var-dir>/proxy_<var-name>.usd
+#
+asset-geometry-uv_map-usd-file: <asset-cache-usd-dir>/uv_map.usd
+asset-geometry-uv_map-usd-var-file: <asset-cache-usd-dir>/uv_map.<var-name>.usd
+#
+asset-geometry-extra-usd-dir: <asset-cache-usd-dir>/geo_extra
+asset-geometry-user_property-usd-file: <asset-geometry-extra-usd-dir>/user_property.usd
+# <asset-geometry-ass>
+asset-geometry-ass-dir: <asset-cache-dir>/ass
+asset-geometry-ass-file: <asset-geometry-ass-dir>/<var-name>.ass
+#
+asset-geometry-xgen-dir: <asset-release-version-dir>/maya
+asset-geometry-xgen-file: <asset-release-version-dir>/maya/<asset-name>__<xgen-name>.xgen
+asset-geometry-xgen-glow-dir: <asset-release-version-dir>/maya
+asset-geometry-xgen-grow-mesh-file: <asset-release-version-dir>/maya/<asset-name>__<xgen-name>.abc
+#
+asset-geometry-xgen-collection-dir: <asset-release-version-dir>/cache/xgen/collections
+asset-geometry-xgen-data-dir: <asset-geometry-xgen-collection-dir>/<xgen-name>
+#
+asset-xgen-usd-dir: <asset-release-version-dir>/cache/usd
+asset-xgen-usd-file: <asset-xgen-usd-dir>/xgen.usda
+#
+asset-metadata-dir: <asset-release-version-dir>/metadata
+asset-geometry-xml-topo-file: <asset-metadata-dir>/<var-name>.topo.xml
+asset-geometry-xml-topo-hi-file: <asset-metadata-dir>/hi.topo.xml
+asset-deadline-job-file: <asset-metadata-dir>/deadline.job.yml
+asset-metadata-look-yml-file: <asset-metadata-dir>/<asset-name>.look.yml
+#
+asset-scene-info-file: <asset-metadata-dir>/<asset-name>.info.yml
+# validation
+asset-validation-info-file: <asset-metadata-dir>/info/<asset-name>.validation.info
+#
+asset-camera-dir: <asset-release-version-dir>/camera
+asset-camera-main-abc-file: <asset-camera-dir>/abc/main.abc
+asset-camera-main-usd-file: <asset-camera-dir>/usd/main.usd
+#
+asset-camera-abc-file: <asset-camera-dir>/abc/main.abc
+asset-camera-usd-file: <asset-camera-dir>/usd/main.usd
+#
+asset-camera-persp-yml-file: <asset-camera-dir>/yml/persp.yml
+asset-camera-persp-abc-file: <asset-camera-dir>/abc/persp.abc
+# <asset-hair>
+asset-hair-dir: <asset-release-version-dir>/cache
+# <asset-hair-xgen>
+asset-hair-xgen-dir: <asset-hair-dir>/xgen
+asset-hair-xgen-file: <asset-release-version-dir>/maya/<asset-name>__<xgen-name>.xgen
+# <asset-look>
+asset-cache-ass-dir: <asset-cache-dir>/ass
+# <asset-look-ass>
+asset-look-ass-dir: <asset-cache-dir>/ass
+asset-look-ass-file: <asset-look-ass-dir>/<asset-name>.ass
+asset-look-ass-sub-file: <asset-look-ass-dir>/<asset-name>.<look-pass>.ass
+#
+asset-look-ass-app-file: <asset-look-ass-dir>/<app-name>/<asset-name>.ass
+asset-look-ass-app-sub-file: <asset-look-ass-dir>/<app-name>/<asset-name>.<look-pass>.ass
+# <asset-look-mtlx>
+asset-look-dir: <asset-release-version-dir>/look
+#
+asset-look-mtlx-dir: <asset-look-dir>/mtlx
+asset-look-mtlx-file: <asset-look-mtlx-dir>/<asset-name>.mtlx
+# <asset-look-assign>
+asset-look-assign-yml-dir: <asset-look-dir>/assign.yml
+asset-look-assign-yml-file: <asset-look-assign-yml-dir>/<asset-name>.assign.yml
+# <asset-look-hda>
+asset-look-hda-dir: <asset-look-dir>/hda
+asset-look-hda-file: <asset-look-hda-dir>/<asset-name>.hda
+# <asset-look-klf>
+asset-look-klf-dir: <asset-look-dir>/klf
+asset-look-klf-file: <asset-look-klf-dir>/<asset-name>.klf
+# <asset-look-json>
+asset-look-json-dir: <asset-look-dir>/json
+asset-look-klf-extra-file: <asset-look-klf-dir>/<asset-name>.json
+# <asset-look-yml>
+asset-look-yml-dir: <asset-look-dir>/yml
+asset-look-yml-file: <asset-look-yml-dir>/<asset-name>.yml
+# <asset-look-hda>
+asset-texture-base-dir: <asset-release-task-dir>/texture
+asset-texture-dir: <asset-release-version-dir>/texture
+# <asset-usd>
+asset-usd-dir: <asset-release-version-dir>/cache/usd
+asset-component-usd-dir: <asset-usd-dir>
+#
+asset-component-registry-usd-file: <asset-component-usd-dir>/registry.usda
+asset-component-usd-file: <asset-component-usd-dir>/<asset-name>.usda
+#
+asset-usd-look-file: <asset-component-usd-dir>/shading.usda
+asset-usd-look-properties-usd-file: <asset-component-usd-dir>/look/<look-pass>.properties.usda
+asset-usd-geometry-uv_map-file: <asset-component-usd-dir>/uv_map.usd
+# <asset-usd-model>
+asset-usd-model-dir: <asset-release-version-dir>/cache/usd
+asset-usd-model-registry-file: <asset-usd-model-dir>/registry.usda
+asset-usd-model-file: <asset-usd-model-dir>/<asset-name>.usda
+#
+asset-usd-model-hi-file: <asset-usd-model-dir>/geo/hi.usd
+asset-usd-model-lo-file: <asset-usd-model-dir>/geo/lo.usd
+# <asset-usd-surface>
+asset-usd-surface-dir: <asset-release-version-dir>/cache/usd
+asset-usd-surface-registry-file: <asset-usd-surface-dir>/registry.usda
+asset-usd-surface-file: <asset-usd-surface-dir>/<asset-name>.usda
+#
+asset-usd-surface-look-file: <asset-usd-surface-dir>/shading.usda
+asset-usd-surface-uv_map-file: <asset-usd-surface-dir>/uv_map.usd
+# <asset-usd-groom>
+asset-usd-groom-dir: <asset-release-version-dir>/cache/usd
+asset-usd-groom-registry-file: <asset-usd-groom-dir>/registry.usda
+asset-usd-groom-file: <asset-usd-groom-dir>/<asset-name>.usda
+# <asset-set-usd>
+asset-set-dir: <asset-release-no-version-dir>/cache
+asset-set-usd-dir: <asset-set-dir>/usd
+asset-set-dress-usd-file: <asset-set-usd-dir>/<asset-name>.usda
+#
+asset-asset-set-usd-file: <asset-release-version-dir>/set/usd/<asset-name>.usda
+asset-shot-set-usd-file: <asset-release-version-dir>/set/usd/<asset-shot-name>.usda
+#
+asset-shot-dir: <asset-release-version-dir>/shot/<asset-shot-name>
+#
+asset-shot-scene-src-dir: <asset-shot-dir>/scene/src
+asset-shot-maya-scene-src-file: <asset-shot-scene-src-dir>/<asset-shot-name>.ma
+#
+asset-shot-scene-dir: <asset-shot-dir>/scene
+asset-shot-maya-scene-file: <asset-shot-scene-dir>/<asset-shot-name>.ma
+#
+asset-shot-cache-dir: <asset-shot-dir>/cache
+asset-shot_asset-component-dir: <asset-shot-cache-dir>/<shot-asset-name>
+asset-shot_asset-component-usd-dir: <asset-shot_asset-component-dir>/usd
+asset-shot_asset-component-registry-usd-file: <asset-shot_asset-component-usd-dir>/registry.usda
+#
+asset-shot_asset-geometry-usd-var-dir: <asset-shot_asset-component-usd-dir>/geo
+asset-shot_asset-geometry-usd-var-file: <asset-shot_asset-geometry-usd-var-dir>/<var-name>.usd
+#
+asset-shot-set-dir: <asset-shot-dir>/manifest
+asset-shot-set-usd-dir: <asset-shot-set-dir>/usd
+asset-shot-set-scenegraph-usd-file: <asset-shot-set-usd-dir>/scenegraph.usda
+asset-shot-set-cache-usd-file: <asset-shot-set-usd-dir>/cache.usda
+asset-new-registry-json-file: <asset-release-version-dir>/data.json
+# asset temporary ==================================================================================================== #
+asset-temporary-review-dir: <asset-temporary-version-dir>/review
+asset-temporary-review-mov-file: <asset-temporary-review-dir>/<asset-version-name>.mov
+#
+asset-temporary-preview-dir: <asset-temporary-version-dir>/preview
+asset-temporary-preview-mov-file: <asset-temporary-preview-dir>/<asset-version-name>.mov
+#
+asset-temporary-render-dir: <asset-temporary-version-dir>/render
+asset-temporary-set-dir: <asset-temporary-version-dir>/set
+asset-temporary-metadata-dir: <asset-temporary-version-dir>/metadata
+#
+asset-temporary-scene-src-dir: <asset-temporary-version-dir>/scene
+#
+asset-temporary-render-info-yaml-file: <asset-temporary-metadata-dir>/render-info.yml
+# validation
+asset-temporary-validation-info-file: <asset-temporary-metadata-dir>/info/<asset-name>.validation.info
+#
+asset-temporary-maya-scene-src-dir: <asset-temporary-version-dir>/scene
+asset-temporary-maya-scene-src-file: <asset-temporary-maya-scene-src-dir>/<asset-name>.ma
+asset-temporary-maya-scene-dir: <asset-temporary-version-dir>/maya
+asset-temporary-maya-scene-file: <asset-temporary-maya-scene-dir>/<asset-name>.ma
+asset-temporary-maya-render-output-dir: <asset-temporary-render-dir>/maya-images
+#
+asset-temporary-houdini-scene-src-dir: <asset-temporary-version-dir>/scene
+asset-temporary-houdini-scene-src-file: <asset-temporary-houdini-scene-src-dir>/<asset-name>.hip
+asset-temporary-houdini-scene-dir: <asset-temporary-version-dir>/houdini
+asset-temporary-houdini-scene-file: <asset-temporary-houdini-scene-dir>/<asset-name>.hip
+asset-temporary-houdini-render-output-dir: <asset-temporary-render-dir>/houdini-images
+#
+asset-temporary-katana-scene-src-dir: <asset-temporary-version-dir>/scene
+asset-temporary-katana-scene-src-file: <asset-temporary-katana-scene-src-dir>/<asset-name>.katana
+asset-temporary-katana-scene-dir: <asset-temporary-version-dir>/katana
+asset-temporary-katana-scene-file: <asset-temporary-katana-scene-dir>/<asset-name>.katana
+asset-temporary-katana-render-output-dir: <asset-temporary-render-dir>/katana-images
+asset-temporary-katana-render-image-file: <asset-temporary-katana-render-output-dir>/main/<camera>.<layer>.<light-pass>.<look-pass>.<quality>/<render-pass>.####.exr
+asset-temporary-katana-render-video-mov-file: <asset-temporary-katana-render-output-dir>/main/<camera>.<layer>.<light-pass>.<look-pass>.<quality>.mov
+asset-temporary-katana-render-video-png-file: <asset-temporary-katana-render-output-dir>/main/<camera>.<layer>.<light-pass>.<look-pass>.<quality>.png
+#
+asset-temporary-katana-render-video-all-mov-file: <asset-temporary-katana-render-output-dir>/main/all.mov
+#
+asset-temporary-nuke-scene-src-dir: <asset-temporary-version-dir>/scene
+asset-temporary-nuke-scene-src-file: <asset-temporary-nuke-scene-src-dir>/<asset-name>.nk
+asset-temporary-nuke-scene-dir: <asset-temporary-version-dir>/nuke
+asset-temporary-nuke-scene-file: <asset-temporary-nuke-scene-dir>/<asset-name>.nk
+asset-temporary-nuke-render-output-dir: <asset-temporary-render-dir>/nuke-images
+#
+asset-temporary-clarisse-scene-src-dir: <asset-temporary-version-dir>/scene
+asset-temporary-clarisse-scene-src-file: <asset-temporary-clarisse-scene-src-dir>/<asset-name>.project
+asset-temporary-clarisse-scene-dir: <asset-temporary-version-dir>/clarisse
+asset-temporary-clarisse-scene-file: <asset-temporary-clarisse-scene-dir>/<asset-name>.project
+#
+asset-temporary-asset-set-usd-file: <asset-temporary-set-dir>/usd/<asset-name>.usda
+asset-temporary-shot-set-usd-file: <asset-temporary-set-dir>/usd/<asset-shot-name>.usda
+# geometry
+asset-temporary-geometry-dir: <asset-temporary-version-dir>/cache
+# geometry usd
+asset-temporary-cache-usd-dir: <asset-temporary-geometry-dir>/usd
+asset-temporary-geometry-usd-var-dir: <asset-temporary-cache-usd-dir>/geo
+asset-temporary-geometry-usd-var-file: <asset-temporary-geometry-usd-var-dir>/<var-name>.usd
+#   geometry branch
+asset-temporary-geometry-usd-renderable-file: <asset-temporary-cache-usd-dir>/renderable.usda
+asset-temporary-geometry-usd-auxiliary-file: <asset-temporary-cache-usd-dir>/auxiliary.usda
+asset-temporary-geometry-usd-payload-file: <asset-temporary-cache-usd-dir>/payload.usda
+asset-temporary-geometry-usd-uv_map-file: <asset-temporary-cache-usd-dir>/uv_map.usda
+#
+asset-temporary-geometry-proxy-usd-var-file: <asset-temporary-geometry-usd-var-dir>/proxy_<var-name>.usd
+# geometry abc
+asset-temporary-cache-abc-dir: <asset-temporary-geometry-dir>/abc
+asset-temporary-geometry-abc-var-dir: <asset-temporary-cache-abc-dir>/geo
+asset-temporary-geometry-abc-var-file: <asset-temporary-geometry-abc-var-dir>/<var-name>.abc
+#
+asset-temporary-geometry-proxy-abc-var-file: <asset-temporary-geometry-abc-var-dir>/proxy_<var-name>.abc
+#
+asset-temporary-xgen-usd-dir: <asset-temporary-version-dir>/cache/usd
+asset-temporary-xgen-usd-file: <asset-temporary-xgen-usd-dir>/xgen.usda
+#
+asset-temporary-geometry-uv_map-usd-file: <asset-temporary-cache-usd-dir>/uv_map.usd
+asset-temporary-geometry-extra-usd-dir: <asset-temporary-cache-usd-dir>/geo_extra
+asset-temporary-geometry-user_property-usd-file: <asset-temporary-geometry-extra-usd-dir>/user_property.usd
+#
+asset-temporary-usd-dir: <asset-temporary-version-dir>/cache/usd
+asset-temporary-component-usd-dir: <asset-temporary-usd-dir>
+#
+asset-temporary-component-usd-file: <asset-temporary-component-usd-dir>/<asset-name>.usda
+asset-temporary-component-registry-usd-file: <asset-temporary-component-usd-dir>/registry.usda
+#
+asset-temporary-texture-base-dir: <asset-temporary-task-dir>/texture
+asset-temporary-texture-dir: <asset-temporary-version-dir>/texture
+#
+asset-temporary-look-dir: <asset-temporary-version-dir>/look
+asset-temporary-look-klf-file: <asset-temporary-look-dir>/klf/<asset-name>.klf
+asset-temporary-look-klf-extra-file: <asset-temporary-look-dir>/klf/<asset-name>.json
+#
+asset-temporary-look-yml-dir: <asset-temporary-look-dir>/yml
+asset-temporary-look-yml-file: <asset-temporary-look-yml-dir>/<asset-name>.yml
+#
+asset-temporary-look-ass-file: <asset-temporary-look-dir>/ass/<asset-name>.ass
+asset-temporary-look-ass-sub-file: <asset-temporary-look-dir>/ass/<asset-name>.<look-pass>.ass
+#
+asset-temporary-geometry-xgen-glow-dir: <asset-temporary-version-dir>/maya
+asset-temporary-geometry-xgen-collection-dir: <asset-temporary-version-dir>/cache/xgen/collections
+# output shot
+asset-temporary-shot-dir: <asset-temporary-version-dir>/shot/<asset-shot-name>
+asset-temporary-shot-scene-src-dir: <asset-temporary-shot-dir>/scene/src
+asset-temporary-shot-maya-scene-src-file: <asset-temporary-shot-scene-src-dir>/<asset-shot-name>.ma
+#
+asset-temporary-shot-scene-dir: <asset-temporary-shot-dir>/scene
+asset-temporary-shot-maya-scene-file: <asset-temporary-shot-scene-dir>/<asset-shot-name>.ma
+#
+asset-temporary-shot-cache-dir: <asset-temporary-shot-dir>/cache
+asset-temporary-shot_asset-component-dir: <asset-temporary-shot-cache-dir>/<shot-asset-name>
+asset-temporary-shot_asset-component-usd-dir: <asset-temporary-shot_asset-component-dir>/usd
+asset-temporary-shot_asset-component-registry-usd-file: <asset-temporary-shot_asset-component-usd-dir>/registry.usda
+#
+asset-temporary-shot_asset-geometry-usd-var-dir: <asset-temporary-shot_asset-component-usd-dir>/geo
+asset-temporary-shot_asset-geometry-usd-var-file: <asset-temporary-shot_asset-geometry-usd-var-dir>/<var-name>.usd
+#
+asset-temporary-shot-set-dir: <asset-temporary-shot-dir>/manifest
+asset-temporary-shot-set-usd-dir: <asset-temporary-shot-set-dir>/usd
+asset-temporary-shot-set-scenegraph-usd-file: <asset-temporary-shot-set-usd-dir>/scenegraph.usda
+asset-temporary-shot-set-cache-usd-file: <asset-temporary-shot-set-usd-dir>/cache.usda
+# ==================================================================================================================== #
+project-effect-dir: <project-root-dir>/<project-name>
+project-effect-workspace-dir: <project-effect-dir>/<workspace-name>
+#
+asset-effect-dir: <project-effect-workspace-dir>/assets/<role-name>/<asset-name>
+asset-step-effect-dir: <asset-effect-dir>/<step-name>
+asset-task-effect-dir: <asset-step-effect-dir>/<task-name>
+asset-task-effect-version-dir: <asset-task-effect-dir>/<asset-version-name>
+asset-task-effect-no-version-dir: <asset-task-effect-dir>/<asset-no-version-name>
+# <asset-usd-effect>
+asset-usd-effect-dir: <asset-task-effect-version-dir>/cache
+asset-usd-effect-registry-file: <asset-usd-effect-dir>/registry.usda
+asset-usd-effect-file: <asset-usd-effect-dir>/<asset-name>.usda
+#
+asset-usd-effect-manifest-dir: <asset-task-effect-version-dir>/manifest/usd
+asset-usd-effect-manifest-registry-file: <asset-usd-effect-manifest-dir>/registry.usda
+asset-usd-effect-manifest-file: <asset-usd-effect-manifest-dir>/<asset-name>.usda
+# <sequence and shot> ================================================================================================ #
+shot-area-dir: <project-workspace-dir>/shots
+sequence-dir: <shot-area-dir>/<sequence-name>
+# sequence
+#   step
+sequence-source-step-dir: <sequence-dir>/<step-name>
+sequence-user-step-dir: <sequence-dir>/<step-name>
+sequence-release-step-dir: <sequence-dir>/<step-name>
+sequence-temporary-step-dir: <sequence-dir>/<step-name>
+#   step search patterns
+sequence-step-search-patterns:
+    source: <sequence-source-step-dir>
+    user: <sequence-user-step-dir>
+    release: <sequence-release-step-dir>
+#   task
+sequence-source-task-dir: <sequence-source-step-dir>/<task-name>
+sequence-user-task-dir: <sequence-user-step-dir>/<task-name>
+sequence-release-task-dir: <sequence-release-step-dir>/<task-name>
+sequence-temporary-task-dir: <sequence-temporary-step-dir>/<task-name>
+#   task search patterns
+sequence-task-search-patterns:
+    source: <sequence-source-task-dir>
+    user: <sequence-user-task-dir>
+    release: <sequence-release-task-dir>
+#
+shot-dir: <sequence-dir>/<shot-name>
+# <shot-step>
+shot-source-step-dir: <shot-dir>/<step-name>
+shot-user-step-dir: <shot-dir>/<step-name>
+shot-release-step-dir: <shot-dir>/<step-name>
+shot-temporary-step-dir: <shot-dir>/<step-name>
+#
+shot-step-search-patterns:
+    source: <shot-source-step-dir>
+    user: <shot-user-step-dir>
+    release: <shot-release-step-dir>
+# <shot-task>
+shot-source-task-dir: <shot-source-step-dir>/<task-name>
+shot-user-task-dir: <shot-user-step-dir>/<task-name>/user.<artist-name>
+shot-release-task-dir: <shot-release-step-dir>/<task-name>
+shot-temporary-task-dir: <shot-temporary-step-dir>/<task-name>
+#
+shot-task-search-patterns:
+    source: <shot-source-task-dir>
+    user: <shot-user-task-dir>
+    release: <shot-release-task-dir>
+# <shot-version>
+shot-version-name: <shot-name>.<step-name>.<task-name>.<version-name>
+shot-version_extra-name: <shot-name>.<step-name>.<task-name>.<task_extra-name>.<version-name>_<version_extra-name>
+shot-no-version-name: <shot-name>.<step-name>.<task-name>
+#
+shot-source-version-dir: <shot-source-task-dir>/<shot-version-name>
+shot-release-version-dir: <shot-release-task-dir>/<shot-version-name>
+shot-release-no-version-dir: <shot-release-task-dir>/<shot-no-version-name>
+shot-temporary-version-dir: <shot-temporary-task-dir>/<shot-version-name>
+shot-temporary-no-version-dir: <shot-temporary-task-dir>/<shot-no-version-name>
+# maya
+#   source
+shot-source-maya-dir: <shot-source-task-dir>/maya
+shot-source-maya-scene-src-dir: <shot-source-maya-dir>/scenes
+shot-source-maya-scene-src-file: <shot-source-maya-scene-src-dir>/<shot-version-name>.ma
+#   user
+shot-user-maya-dir: <shot-user-task-dir>/maya
+shot-user-maya-scene-src-dir: <shot-user-maya-dir>/scenes
+shot-user-maya-scene-src-file: <shot-user-maya-scene-src-dir>/<shot-version-name>.ma
+# houdini
+#   source
+shot-source-houdini-dir: <shot-source-task-dir>/houdini
+shot-source-houdini-scene-src-dir: <shot-source-houdini-dir>
+shot-source-houdini-scene-src-file: <shot-source-houdini-scene-src-dir>/<shot-version-name>.hip
+#   user
+shot-user-houdini-dir: <shot-user-task-dir>/houdini
+shot-user-houdini-scene-src-dir: <shot-user-houdini-dir>
+shot-user-houdini-scene-src-file: <shot-user-houdini-scene-src-dir>/<shot-version-name>.hip
+# katana
+#   source
+shot-source-katana-dir: <shot-source-task-dir>/katana
+shot-source-katana-scene-src-dir: <shot-source-katana-dir>
+shot-source-katana-scene-src-file: <shot-source-katana-scene-src-dir>/<shot-version-name>.katana
+#   user
+shot-user-katana-dir: <shot-user-task-dir>/katana
+shot-user-katana-scene-src-dir: <shot-user-katana-dir>
+shot-user-katana-scene-src-file: <shot-user-katana-scene-src-dir>/<shot-version-name>.katana
+# clarisse
+#   source
+shot-source-clarisse-dir: <shot-source-task-dir>/clarisse
+shot-source-clarisse-scene-src-dir: <shot-source-clarisse-dir>
+shot-source-clarisse-scene-src-file: <shot-source-clarisse-scene-src-dir>/<shot-version-name>.project
+#   user
+shot-user-clarisse-dir: <shot-user-task-dir>/clarisse
+shot-user-clarisse-scene-src-dir: <shot-user-clarisse-dir>
+shot-user-clarisse-scene-src-file: <shot-user-clarisse-scene-src-dir>/<shot-version-name>.project
+# nuke
+#   source
+shot-source-nuke-dir: <shot-source-task-dir>/nuke
+shot-source-nuke-scene-src-dir: <shot-source-nuke-dir>
+shot-source-nuke-scene-src-file: <shot-source-nuke-scene-src-dir>/<shot-version-name>.nk
+#   source
+shot-user-nuke-dir: <shot-user-task-dir>/nuke
+shot-user-nuke-scene-src-dir: <shot-user-nuke-dir>
+shot-user-nuke-scene-src-file: <shot-user-nuke-scene-src-dir>/<shot-version-name>.nk
+# preview
+shot-preview-dir: <shot-release-version-dir>/preview
+shot-preview-file: <shot-preview-dir>/<shot-version-name>.mov
+shot-preview-mov-file: <shot-preview-dir>/<shot-version-name>.mov
+# review
+shot-review-dir: <shot-release-version-dir>/review
+shot-review-file: <shot-review-dir>/<shot-version-name>.mov
+shot-review-mov-file: <shot-review-dir>/<shot-version-name>.mov
+#
+shot-image-dir: <shot-release-version-dir>/image
+# scene
+shot-scene-src-dir: <shot-release-version-dir>/scene
+#   maya
+shot-maya-scene-dir: <shot-release-version-dir>/maya
+shot-maya-scene-file: <shot-maya-scene-dir>/<shot-name>.ma
+shot-maya-scene-src-dir: <shot-scene-src-dir>
+shot-maya-scene-src-file: <shot-maya-scene-src-dir>/<shot-name>.ma
+#
+shot-houdini-scene-dir: <shot-release-version-dir>/houdini
+shot-houdini-scene-file: <shot-houdini-scene-dir>/<shot-name>.hip
+shot-houdini-scene-src-dir: <shot-scene-src-dir>
+shot-houdini-scene-src-file: <shot-houdini-scene-src-dir>/<shot-name>.hip
+#
+shot-katana-scene-dir: <shot-release-version-dir>/katana
+shot-katana-scene-file: <shot-katana-scene-dir>/<shot-name>.katana
+shot-katana-scene-src-dir: <shot-scene-src-dir>
+shot-katana-scene-src-file: <shot-katana-scene-src-dir>/<shot-name>.katana
+#
+shot-nuke-scene-dir: <shot-release-version-dir>/nuke
+shot-nuke-scene-file: <shot-nuke-scene-dir>/<shot-name>.nk
+shot-nuke-scene-src-dir: <shot-scene-src-dir>
+shot-nuke-scene-src-file: <shot-nuke-scene-src-dir>/<shot-name>.nk
+#
+shot-camera-dir: <shot-release-version-dir>/camera
+shot-camera-abc-file: <shot-camera-dir>/cache/abc/<shot-name>_cam.abc
+shot-camera-usd-file: <shot-camera-dir>/cache/usd/<shot-name>_cam.usda
+#
+shot-manifest-dir: <shot-release-version-dir>/manifest
+#
+shot-manifest-usd-dir: <shot-manifest-dir>/usd
+shot-manifest-scenegraph-usd-file: <shot-manifest-usd-dir>/scenegraph.usda
+#
+shot-set-dir: <shot-release-no-version-dir>/manifest
+shot-set-usd-dir: <shot-set-dir>/usd
+shot-set-dress-usd-file: <shot-set-usd-dir>/<shot-name>.usda
+# <shot-usd>
+shot-component-usd-dir: <shot-release-version-dir>/manifest/usd
+shot-component-usd-file: <shot-component-usd-dir>/<shot-name>.usda
+# shot output ===================================================================================+==================== #
+#
+shot-temporary-render-dir: <shot-temporary-version-dir>/render
+#
+shot-temporary-maya-scene-src-dir: <shot-temporary-version-dir>/scene
+shot-temporary-maya-scene-src-file: <shot-temporary-maya-scene-src-dir>/<shot-name>.ma
+shot-temporary-maya-scene-dir: <shot-temporary-version-dir>/maya
+shot-temporary-maya-scene-file: <shot-temporary-maya-scene-dir>/<shot-name>.ma
+shot-temporary-maya-render-output-dir: <shot-temporary-render-dir>/maya-images
+#
+shot-temporary-houdini-scene-src-dir: <shot-temporary-version-dir>/scene
+shot-temporary-houdini-scene-src-file: <shot-temporary-houdini-scene-src-dir>/<shot-name>.hip
+shot-temporary-houdini-scene-dir: <shot-temporary-version-dir>/houdini
+shot-temporary-houdini-scene-file: <shot-temporary-houdini-scene-dir>/<shot-name>.hip
+shot-temporary-houdini-render-output-dir: <shot-temporary-render-dir>/houdini-images
+#
+shot-temporary-katana-scene-src-dir: <shot-temporary-version-dir>/scene
+shot-temporary-katana-scene-src-file: <shot-temporary-katana-scene-src-dir>/<shot-name>.katana
+shot-temporary-katana-scene-dir: <shot-temporary-version-dir>/katana
+shot-temporary-katana-scene-file: <shot-temporary-katana-scene-dir>/<shot-name>.katana
+shot-temporary-katana-render-output-dir: <shot-temporary-render-dir>/katana-images
+#
+shot-temporary-katana-render-video-mov-file: <shot-temporary-task-dir>/render_images/<shot-version-name>.mov
+# <shot-usd>
+shot-temporary-component-usd-dir: <shot-temporary-version-dir>/manifest/usd
+shot-temporary-component-usd-file: <shot-temporary-component-usd-dir>/<shot-name>.usda
+# ******************************************************************************************************************** #
+# include-rule:
+#     key: list(str(variant), ...)
+# ******************************************************************************************************************** #
+include-key-main:
+    - root
+    - project
+    - workspace
+    - asset
+    - shot
+    - step
+    - task
+    - var
+# <workspace>
+inculde-workspace:
+    # source
+    - work
+    # product
+    - publish
+    # temporary
+    - output
+# <role>
+include-role:
+    # camera
+    - cam
+    # character
+    - chr
+    # prop
+    - prp
+    # environment
+    - env
+    #
+    - flg
+    # effect
+    - efx
+    # vision effect
+    - vfx
+    # other
+    - oth
+# <step>
+include-asset-step:
+    # art
+    - art
+    # camera
+    - cam
+    # model
+    - mod
+    # surface
+    - srf
+    # rig
+    - rig
+    # groom
+    - grm
+    # character-effect
+    - cfx
+    # effect
+    - efx
+    # animation
+    - ani
+    # light
+    - lgt
+    # set
+    - set
+    # environment
+    - env
+#
+include-asset-step-extra:
+    - '{step}_qc'
+    - '{step}_tech'
+#
+root-step-choice:
+    source: {}
+    release: { efx: 'root_secondary' }
+    temporary: { efx: 'root_secondary' }

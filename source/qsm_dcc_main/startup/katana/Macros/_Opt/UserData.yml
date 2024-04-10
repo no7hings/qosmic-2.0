@@ -1,0 +1,153 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'user_data_opt'
+    type_abr: 'usr_dta_opt'
+    create_type: 'UserData_Opt'
+    description:
+        |-
+        for attribute operator
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .5
+        g: .125
+        b: .125
+#
+main:
+    type: OpScript
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.i0'
+    output: '<.path>.out'
+    #
+    clear_start: 'user'
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        #
+        user/enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+        # copy
+        user/copy/enable:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        user/copy/root:
+            widget: path
+            value: '/root/world/geo/master'
+            tool_tip: '...'
+
+        user/copy/from:
+            widget: string
+            value: 'userProperties'
+            tool_tip: '...'
+
+        user/copy/to:
+            widget: string
+            value: 'geometry.arbitrary'
+            tool_tip: '...'
+
+        user/copy/pattern:
+            widget: string
+            value: 'pg_*'
+            tool_tip: '...'
+    #
+    parameters:
+        CEL:
+            |-
+            /root/world/geo/master//*{attr("type") == "subdmesh" or attr("type") == "renderer procedural"}
+        script/lua:
+            |-
+            
+            function get_match_attributes(copy_from_path_string, pattern)
+                local dict = {}
+                local re_pattern = string.gsub(pattern, '*', '.*')
+                local from_atr = Interface.GetAttr(copy_from_path_string)
+                if from_atr ~= nil then
+                    if Attribute.IsGroup(from_atr) then
+                        local c = from_atr:getNumberOfChildren()
+                        for i=0, c-1 do
+                            local i_atr = from_atr:getChildByIndex(i)
+                            local i_key = from_atr:getChildName(i)
+                            local i_match = string.match(i_key, re_pattern)
+                            if i_match ~= nil then
+                                dict[i_key] = i_atr
+                            end
+                        end
+                    end
+                end
+                return dict
+            end
+            
+            function copy_main()
+                local copy_from_path_string = Interface.GetOpArg('user.copy.from'):getValue()
+                local copy_to_path_string = Interface.GetOpArg('user.copy.to'):getValue()
+                local pattern = Interface.GetOpArg('user.copy.pattern'):getValue()
+            
+                local atrs = get_match_attributes(copy_from_path_string, pattern)
+                local to_atr = Interface.GetAttr(copy_to_path_string)
+                if to_atr ~= nil then
+                    if Attribute.IsGroup(to_atr) then
+                        for k, v in pairs(atrs) do
+                            local i_atr_scope_key = copy_to_path_string..'.'..k..'.scope'
+                            local i_atr_type_key = copy_to_path_string..'.'..k..'.InputType'
+                            local i_atr_value_key = copy_to_path_string..'.'..k..'.value'
+                            local i_scope = StringAttribute('primitive')
+                            local i_type = StringAttribute('string')
+                            if Attribute.IsString(v) then
+                                i_type = StringAttribute('string')
+                            elseif Attribute.IsInt(v) then
+                                i_type = StringAttribute('int')
+                            elseif Attribute.IsFloat(v) then
+                                i_type = StringAttribute('float')
+                            elseif Attribute.IsDouble(v) then
+                                i_type = StringAttribute('float')
+                            else
+                                i_type = StringAttribute('string')
+                            end
+                            local i_value = v
+                            Interface.SetAttr(i_atr_scope_key, i_scope)
+                            Interface.SetAttr(i_atr_type_key, i_type)
+                            Interface.SetAttr(i_atr_value_key, v)
+                        end
+                    end
+                end
+            end
+            
+            function main()
+                if (Interface.GetOpArg('user.enable'):getValue() == 1) then
+                    if (Interface.GetOpArg('user.copy.enable'):getValue() == 1) then
+                        copy_main()
+                    end
+                end
+            end
+            
+            main()
+            
+
+

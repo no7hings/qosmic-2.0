@@ -1,0 +1,46 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Export to Clarisse Auto'
+        icon_name: 'application/clarisse'
+        #
+        size: [480, 240]
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        database: ''
+        database_configure: ''
+        database_configure_extend: ''
+        #
+        entity_type: ''
+        entity: ''
+        #
+        keyword: ''
+#
+build:
+    content:
+        |-
+        1. press "Apply and Close" to continue
+    node:
+        options:
+            port:
+                widget: integer
+                value: 55000
+                enable: True
+                tool_tip: '...'
+                history_key: 'tool-panels.clarisse-socket-connection.port'
+                pull_history_latest: True
+
+            file_type:
+                widget: capsule_string
+                value: ['ABC', 'USD', 'FBX', 'TX', 'HDRI']
+                default: 'USD'
+                enable: True
+                tool_tip: '...'

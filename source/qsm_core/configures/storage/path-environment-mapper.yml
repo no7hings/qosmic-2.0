@@ -1,0 +1,22 @@
+windows:
+    QSM_PROJECT_ROOT:
+        - 'z:/projects'
+        - 'Z:/projects'
+
+    QSM_CACHE_ROOT:
+        - 'z:/caches'
+        - 'Z:/caches'
+
+    QSM_LIBRARY_ROOT:
+        - 'z:/libraries'
+        - 'Z:/libraries'
+
+linux:
+    QSM_PROJECT_ROOT:
+        - '/production/projects'
+    
+    QSM_CACHE_ROOT:
+        - '/production/caches'
+
+    QSM_LIBRARY_ROOT:
+        - '/production/libraries'

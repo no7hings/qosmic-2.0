@@ -1,0 +1,320 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'property_set_opt'
+    type_abr: 'prt_set_opt'
+    create_type: 'PropertySet_Opt'
+    description:
+        |-
+        Set property
+    variant_key: ''
+    #
+    auto_color: False
+    #
+    color:
+        r: .5
+        g: .125
+        b: .125
+#
+main:
+    type: OpScript
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.i0'
+    output: '<.path>.out'
+    #
+    clear_start: 'user'
+    #
+    attributes:
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    input_ports: []
+    #
+    output_ports: []
+    #
+    ports:
+        # basic
+        user/type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+
+        user/enable:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+
+        user/script_visible:
+            widget: boolean
+            value: False
+            tool_tip: '...'
+
+        user/setting/attribute:
+            widget: string
+            value: 'geometry.arbitrary.ist_*.scope'
+            tool_tip: '...'
+
+        user/setting/value:
+            widget: string
+            value: 'point'
+            tool_tip: '...'
+
+    port_hints:
+        script: {
+            conditionalVisOps: {"conditionalVisOp": "equalTo", conditionalVisPath: "../user/script_visible", conditionalVisValue: 1}
+        }
+        user: {label: 'parameters'}
+
+    parameters:
+        CEL: '/root/world/geo/master//*{attr("type") == "usd point instancer"}'
+        script/lua:
+            |-
+
+            function rcs_fnc(all_atr_ss, ss, atr_p_s, index, maximum)
+                if index <= maximum then
+                    local s = ss[index]
+                    if s ~= '' then
+                        local atr_s = s
+                        if atr_p_s ~= nil then
+                            atr_s = atr_p_s..'.'..s
+                        end
+                        if index == maximum then
+                            if (pystring.find(s, '*') == -1) then
+                                table.insert(all_atr_ss, atr_s)
+                            else
+                                local atr_ss = filter_fnc(atr_p_s, s)
+                                for i, i_atr_s in ipairs(atr_ss) do
+                                    table.insert(all_atr_ss, i_atr_s)
+                                end
+                            end
+                        else
+                            if (pystring.find(s, '*') == -1) then
+                                rcs_fnc(all_atr_ss, ss, atr_s, index+1, maximum)
+                            else
+                                local atr_ss = filter_fnc(atr_p_s, s)
+                                for i, i_atr_s in ipairs(atr_ss) do
+                                    rcs_fnc(all_atr_ss, ss, i_atr_s, index+1, maximum)
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+            
+            function filter_fnc(atr_s, p)
+                local all_atr_ss = {}
+                local atr = Interface.GetGlobalAttr(atr_s)
+                local c = atr:getNumberOfChildren()
+                local re_p = string.gsub(p, '*', '.*')
+                for j=0, c-1 do
+                    local i_s = atr:getChildName(j)
+                    local i_match = string.match(i_s, re_p)
+                    if i_match ~= nil then
+                        local i_atr_s = atr_s..'.'..i_s
+                        table.insert(all_atr_ss, i_atr_s)
+                    end
+                end
+                return all_atr_ss
+            end
+            
+            function loop_fnc(p)
+                if p ~= '' then
+                    local all_atr_ss = {}
+                    local ss = pystring.split(p, '.')
+                    local m = table.getn(ss)
+                    rcs_fnc(all_atr_ss, ss, nil, 1, m)
+                    return all_atr_ss
+                end
+                return {}
+            end
+            
+            function to_numbers(value_str, count)
+                local numbers = {}
+                local ss = pystring.split(value_str, ',')
+                for i=0, count-1 do
+                    local i_s = ss[i+1]
+                    if i_s ~= nil then
+                        local i_m_s = string.match(i_s, '$(.*)')
+                        if i_m_s ~= nil then
+                            local i_atr_s = i_m_s
+                            local i_atr_ss = pystring.split(i_atr_s, '.')
+                            local i_atr_ss_0 = {}
+                            for j=0, #i_atr_ss do
+                                if j > 1 then
+                                    i_atr_ss_0[j-1] = i_atr_ss[j]
+                                end
+                            end
+                            local i_node_path = i_atr_ss[1]
+                            local i_port_path = pystring.join('.', i_atr_ss_0)
+                            local i_value = Interface.GetAttr(i_port_path, i_node_path)
+                            numbers[i+1] = 0
+                        else
+                            numbers[i+1] = tonumber(i_s)
+                        end
+                    else
+                        numbers[i+1] = 0
+                    end
+                end
+                return numbers
+            end
+            
+            function to_strings(value_str, count)
+                local strings = {}
+                local ss = pystring.split(value_str, ',')
+                for i=0, count-1 do
+                    local i_s = ss[i+1]
+                    if i_s ~= nil then
+                        strings[i+1] = tostring(value_str)
+                    else
+                        strings[i+1] = ''
+                    end
+                end
+            end
+            
+            function set_as_tuple(atr, atr_s, value_str, count)
+                if (Attribute.IsInt(atr)) then
+                    local value = to_numbers(value_str, count)
+                    Interface.SetAttr(atr_s, IntAttribute(value, count))
+                elseif (Attribute.IsFloat(atr)) then
+                    local value = to_numbers(value_str, count)
+                    Interface.SetAttr(atr_s, FloatAttribute(value, count))
+                elseif (Attribute.IsDouble(atr)) then
+                    local value = to_numbers(value_str, count)
+                    Interface.SetAttr(atr_s, DoubleAttribute(value, count))
+                elseif (Attribute.IsString(atr)) then
+                    local value = to_strings(value_str)
+                    Interface.SetAttr(atr_s, StringAttribute(value, count))
+                end
+            end
+            
+            function set_as_constant(atr, atr_s, value_str)
+                if (Attribute.IsInt(atr)) then
+                    local value = tonumber(value_str)
+                    Interface.SetAttr(atr_s, IntAttribute(value))
+                elseif (Attribute.IsFloat(atr)) then
+                    local value = tonumber(value_str)
+                    Interface.SetAttr(atr_s, FloatAttribute(value))
+                elseif (Attribute.IsDouble(atr)) then
+                    local value = tonumber(value_str)
+                    Interface.SetAttr(atr_s, DoubleAttribute(value))
+                elseif (Attribute.IsString(atr)) then
+                    local value = tostring(value_str)
+                    Interface.SetAttr(atr_s, StringAttribute(value))
+                end
+            end
+            
+            
+            function unfold_value_str(value_str)
+                local ss = {string.match(value_str, '(/.-)%.(.*)')}
+                if table.getn(ss) == 2 then
+                    local node_path = ss[1]
+                    local atr_s = ss[2]
+                    local atr = Interface.GetAttr(atr_s, node_path)
+                    if atr ~= nil then
+                        local t_c = atr:getTupleSize()
+                        if t_c > 1 then
+                            local c = atr:getNumberOfTuples()
+                            local value = atr:getNearestSample(0)
+                            return tostring(value[1])
+                        else
+                            local c = atr:getNumberOfValues()
+                            local values_new = atr:getNearestSample(0)
+                            return tostring(values_new[1])
+                        end
+                    else
+                        local element_args = get_element_args(atr_s)
+                        if element_args ~= nil then
+                            local atr_s_new = element_args[1]
+                            -- try to reference attribute
+                            local atr_new = Interface.GetGlobalAttr(atr_s_new, node_path)
+                            if atr_new ~= nil then
+                                local t_c_new = atr_new:getTupleSize()
+                                local c_new = atr_new:getNumberOfValues()
+                                if t_c_new > 1 or c_new > 1 then
+                                    local index = tonumber(element_args[2])
+                                    local values_new = atr_new:getNearestSample(0)
+                                    return tostring(values_new[index+1])
+                                end
+                            end
+                        end
+                    end
+                end
+                return value_str
+            end
+            
+            function get_element_args(atr_s)
+                local ss = {string.match(atr_s, '(.*)%.i(%d)')}
+                if table.getn(ss) == 2 then
+                    return ss
+                end
+            end
+            
+            function set_as_element(atr, atr_s, value_str, count, index)
+                local values_old = atr:getNearestSample(0)
+                if (Attribute.IsInt(atr)) then
+                    local value = tonumber(value_str)
+                    values_old[index] = value
+                    Interface.SetAttr(atr_s, IntAttribute(values_old, count))
+                elseif (Attribute.IsFloat(atr)) then
+                    local value = tonumber(value_str)
+                    values_old[index] = value
+                    Interface.SetAttr(atr_s, FloatAttribute(values_old, count))
+                elseif (Attribute.IsDouble(atr)) then
+                    local value = tonumber(value_str)
+                    values_old[index] = value
+                    Interface.SetAttr(atr_s, DoubleAttribute(values_old, count))
+                elseif (Attribute.IsString(atr)) then
+                    local value = tostring(value_str)
+                    values_old[index] = value
+                    Interface.SetAttr(atr_s, StringAttribute(values_old, count))
+                end
+            end
+            
+            function set_fnc(atr_ss, value_str)
+                local value_str = unfold_value_str(value_str)
+                for i, i_atr_s in ipairs(atr_ss) do
+                    local i_atr = Interface.GetGlobalAttr(i_atr_s)
+                    if i_atr ~= nil then
+                        local i_t_c = i_atr:getTupleSize()
+                        if i_t_c > 1 then
+                            set_as_tuple(i_atr, i_atr_s, value_str, i_t_c)
+                        else
+                            set_as_constant(i_atr, i_atr_s, value_str)
+                        end
+                    else
+                        -- check match element style, ect. test.i0
+                        local i_element_args = get_element_args(i_atr_s)
+                        if i_element_args ~= nil then
+                            local i_atr_s_new = i_element_args[1]
+                            local i_atr_new = Interface.GetGlobalAttr(i_atr_s_new)
+                            if i_atr_new ~= nil then
+                                local i_c_t_new = i_atr_new:getTupleSize()
+                                -- check is tuple
+                                if i_c_t_new > 1 then
+                                    local i_index = tonumber(i_element_args[2])
+                                    set_as_element(i_atr_new, i_atr_s_new, value_str, i_c_t_new, i_index+1)
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+            
+            function main()
+                if (Interface.GetOpArg('user.enable'):getValue() == 1) then
+                    local atr_p = Interface.GetOpArg('user.setting.attribute'):getValue()
+                    local value = Interface.GetOpArg('user.setting.value'):getValue()
+                    local atr_ss = loop_fnc(atr_p)
+                    set_fnc(atr_ss, value)
+                end
+            end
+            
+            main()

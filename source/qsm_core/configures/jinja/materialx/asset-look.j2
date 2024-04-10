@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+{{ '%s<materialx version="%s">%s' | format('', option.version, option.linesep) }}
+{#- node-def -#}
+{%- if option.hyperlink -%}
+    {{ '%s<xi:include href="%s" />%s' | format(option.indent*1*' ', option.hyperlink, option.linesep) }}
+{%- endif -%}
+{#- looks -#}
+{%- if looks -%}
+    {{ '%s<!-- looks -->%s' | format(option.indent*1*' ', option.linesep) }}
+    {%- for look_name, look in looks.iteritems() -%}
+        {{ '%s<look name="%s">%s' | format(option.indent*1*' ', look_name, option.linesep) }}
+        {#- look-material-assigns start -#}
+        {%- if look.material_assigns -%}
+            {{ '%s<!-- material-assigns -->%s' | format(option.indent*2*' ', option.linesep) }}
+            {%- for assign_name, assign in look.material_assigns.iteritems() -%}
+                {{ '%s<materialassign name="%s" material="%s" geom="%s" />%s' | format(option.indent*2*' ', assign_name, assign.material, assign.geometries | join(','), option.linesep) }}
+            {%- endfor -%}
+        {%- endif -%}
+        {#- look-property-set-assigns -#}
+        {%- if look.property_set_assigns -%}
+            {{ '%s<!-- property-set-assigns -->%s' | format(option.indent*2*' ', option.linesep) }}
+            {%- for assign_name, assign in look.property_set_assigns.iteritems() -%}
+                {{ '%s<propertysetassign name="%s" propertyset="%s" geom="%s" />%s' | format(option.indent*2*' ', assign_name, assign.property_set, assign.geometries | join(','), option.linesep) }}
+            {%- endfor -%}
+        {%- endif %}
+        {#- look-visibilities -#}
+        {%- if look.visibilities -%}
+            {{ '%s<!-- visibilities -->%s' | format(option.indent*2*' ', option.linesep) }}
+            {%- for visibility_name, visibility in look.visibilities.iteritems() -%}
+                {{ '%s<visibility name="%s" vistype="%s" visible="%s" geom="%s" />%s' | format(option.indent*2*' ', visibility_name, visibility.type, visibility.value, visibility.geometries | join(','), option.linesep) }}
+            {%- endfor -%}
+        {%- endif -%}
+        {{ '%s</look>%s' | format(option.indent*1*' ', option.linesep) }}
+        {#- look-materials -#}
+        {%- if look.materials -%}
+            {{ '%s<!-- materials -->%s' | format(option.indent*1*' ', option.linesep) }}
+            {%- for material_name, material in look.materials.iteritems() -%}
+                {{ '%s<material name="%s">%s' | format(option.indent*1*' ', material_name, option.linesep) }}
+                {#- material-shaders -#}
+                {%- if material.shaders -%}
+                    {%- for shader_name, shader in material.shaders.iteritems() -%}
+                        {%- if shader -%}
+                            {%- if shader.inputs -%}
+                                {{ '%s<shaderref name="%s" node="%s" context="%s">%s' | format(option.indent*2*' ', shader_name, shader.obj_type, shader.context, option.linesep) }}
+                                {%- for input_name, input in shader.inputs.iteritems() -%}
+                                    {{ '%s<bindinput name="%s" type="%s" value="%s" />%s' | format(option.indent*3*' ', input_name, input.type, input.value, option.linesep) }}
+                                {%- endfor -%}
+                                {{ '%s</shaderref>%s' | format(option.indent*2*' ', option.linesep) }}
+                            {%- else -%}
+                                {{ '%s<shaderref name="%s" node="%s" context="%s" />%s' | format(option.indent*2*' ', shader_name, shader.obj_type, shader.context, option.linesep) }}
+                            {%- endif -%}
+                        {%- endif -%}
+                    {%- endfor -%}
+                {%- endif -%}
+                {{ '%s</material>%s' | format(option.indent*1*' ', option.linesep) }}
+                {#- material-node-graphs -#}
+                {%- if material.node_graphs -%}
+                    {%- for node_graph_name, node_graph in material.node_graphs.iteritems() -%}
+                        {%- if node_graph.nodes -%}
+                            {{ '%s<nodegraph name="%s">%s' | format(option.indent*1*' ', node_graph_name, option.linesep) }}
+                            {%- for node_name, node in node_graph.nodes.iteritems() -%}
+                                {%- if node.inputs -%}
+                                    {{ '%s<%s name="%s" type="%s">%s' | format(option.indent*2*' ', node.obj_type, node_name, node.type, option.linesep) }}
+                                    {% for input_name, input in node.inputs.items() -%}
+                                    {%- endfor -%}
+                                {%- else -%}
+                                {{ '%s<%s name="%s" type="%s" />%s' | format(option.indent*2*' ', node.obj_type, node_name, node.type, option.linesep) }}
+                                {%- endif -%}
+                            {%- endfor -%}
+                            {{ '%s</nodegraph>%s' | format(option.indent*1*' ', option.linesep) }}
+                        {%- endif -%}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endif %}
+        {#- look-property-sets -#}
+        {%- if look.property_sets -%}
+            {{ '%s<!-- property-sets -->%s' | format(option.indent*1*' ', option.linesep) }}
+            {%- for property_set_name, properties in look.property_sets.iteritems() -%}
+                {{ '%s<propertyset name="%s">%s' | format(option.indent*1*' ', property_set_name, option.linesep) }}
+                {%- if properties -%}
+                    {%- for property_name, property in properties.iteritems() -%}
+                        {{ '%s<property name="%s" type="%s" value="%s" />%s' | format(option.indent*2*' ', property_name, property.type, property.value, option.linesep) }}
+                    {%- endfor -%}
+                {%- endif -%}
+                {{ '%s</propertyset>%s' | format(option.indent*1*' ', option.linesep) }}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif -%}
+</materialx>

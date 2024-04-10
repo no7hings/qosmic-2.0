@@ -1,0 +1,35 @@
+[console_scripts]
+_rez-complete = rez.cli._entry_points:run_rez_complete
+_rez_fwd = rez.cli._entry_points:run_rez_fwd
+rez = rez.cli._entry_points:run_rez
+rez-benchmark = rez.cli._entry_points:run_rez_benchmark
+rez-bind = rez.cli._entry_points:run_rez_bind
+rez-build = rez.cli._entry_points:run_rez_build
+rez-bundle = rez.cli._entry_points:run_rez_bundle
+rez-config = rez.cli._entry_points:run_rez_config
+rez-context = rez.cli._entry_points:run_rez_context
+rez-cp = rez.cli._entry_points:run_rez_cp
+rez-depends = rez.cli._entry_points:run_rez_depends
+rez-diff = rez.cli._entry_points:run_rez_diff
+rez-env = rez.cli._entry_points:run_rez_env
+rez-gui = rez.cli._entry_points:run_rez_gui
+rez-help = rez.cli._entry_points:run_rez_help
+rez-interpret = rez.cli._entry_points:run_rez_interpret
+rez-memcache = rez.cli._entry_points:run_rez_memcache
+rez-mv = rez.cli._entry_points:run_rez_mv
+rez-pip = rez.cli._entry_points:run_rez_pip
+rez-pkg-cache = rez.cli._entry_points:run_rez_pkg_cache
+rez-pkg-ignore = rez.cli._entry_points:run_rez_pkg_ignore
+rez-plugins = rez.cli._entry_points:run_rez_plugins
+rez-python = rez.cli._entry_points:run_rez_python
+rez-release = rez.cli._entry_points:run_rez_release
+rez-rm = rez.cli._entry_points:run_rez_rm
+rez-search = rez.cli._entry_points:run_rez_search
+rez-selftest = rez.cli._entry_points:run_rez_selftest
+rez-status = rez.cli._entry_points:run_rez_status
+rez-suite = rez.cli._entry_points:run_rez_suite
+rez-test = rez.cli._entry_points:run_rez_test
+rez-view = rez.cli._entry_points:run_rez_view
+rez-yaml2py = rez.cli._entry_points:run_rez_yaml2py
+rezolve = rez.cli._entry_points:run_rezolve
+

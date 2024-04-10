@@ -1,0 +1,24 @@
+option:
+    type: action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'movie'
+        #
+        name: 'upload movie to shotgun'
+        icon_name: 'application/shotgun'
+#
+hook_option:
+    script:
+        file: ''
+
+build:
+    node:
+        options:
+            user/description:
+                widget: script
+                value: ''
+                enable: True
+                tool_tip: '...'

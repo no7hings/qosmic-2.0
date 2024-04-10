@@ -1,0 +1,41 @@
+project: ''
+role: ''
+asset: ''
+step: ''
+task: ''
+version: ''
+asset_shot: ''
+shot_asset: ''
+#
+dcc:
+    root: /master
+    root_name: master
+#
+look:
+    passes:
+        - 'default'
+    #
+    properties:
+        - 'default'
+#
+option:
+    indent: 4
+    linesep: "\n"
+
+usd:
+    presets:
+        up_axis: Y
+        linear_unit: 0.01
+#
+geometries:
+    hi: 'geo/hi.usd'
+    shape: 'geo/shape.usd'
+    hair: 'geo/hair.usd'
+    aux: 'geo/aux.usd'
+    proxy: 'geo/proxy.usd'
+    xgen: '../xgen/xgen.usda'
+#
+usdas:
+    payload: 'payload.usda'
+    registry: 'registry.usda'
+    asset: '<shot_asset>.usda'

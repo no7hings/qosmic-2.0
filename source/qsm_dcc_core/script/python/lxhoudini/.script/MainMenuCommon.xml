@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mainMenu>
+    <menuBar>
+        <subMenu id="tool_menu_0">
+            <label>TD-tool(s)</label>
+            <insertBefore>help_menu</insertBefore>
+            <subMenu id="loader">
+                <label>Loader(s)</label>
+                <scriptItem id="asset_loader">
+                    <label>Asset Loader</label>
+                    <scriptCode><![CDATA[import lxsession.commands as ssn_commands; ssn_commands.execute_hook("rsv-panels/asset-loader")]]></scriptCode>
+                </scriptItem>
+            </subMenu>
+            <separatorItem />
+            <scriptItem id="package_reloader">
+                <label>Package-reloader</label>
+                <scriptCode><![CDATA[import lxhoudini;lxhoudini.Packages.set_reload()]]></scriptCode>
+            </scriptItem>
+        </subMenu>
+    </menuBar>
+</mainMenu>

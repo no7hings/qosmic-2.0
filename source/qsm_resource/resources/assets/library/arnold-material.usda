@@ -1,0 +1,114 @@
+#usda 1.0
+(
+    defaultPrim = ""
+    doc = """
+        https://openusd.org/release/spec_usdpreviewsurface.html
+    """
+    metersPerUnit = 0.01
+    upAxis = "Y"
+)
+
+def "materials"
+{
+    def Material "mtl_arnold"
+    {
+        token outputs:arnold:displacement.connect = </materials/mtl_arnold/sdr_displacement.outputs:displacement>
+        token outputs:arnold:surface.connect = </materials/mtl_arnold/sdr_surface.outputs:surface>
+
+        def Shader "sdr_surface"
+        {
+            uniform token info:id = "arnold:standard_surface"
+            color3f inputs:base_color = (0.8, 0.8, 0.8)
+            prepend color3f inputs:base_color.connect = </materials/mtl_arnold/txr_diffuse_color.outputs:out>
+            float inputs:diffuse_roughness = 1
+            string inputs:name = "sdr_surface"
+            vector3f inputs:normal = (0, 0, 0)
+            prepend vector3f inputs:normal.connect = </materials/mtl_arnold/sdr_normal.outputs:out>
+            float inputs:specular_roughness = 0.2
+            prepend float inputs:specular_roughness.connect = </materials/mtl_arnold/txr_specular_roughness.outputs:r>
+            token outputs:surface
+        }
+
+        def Shader "txr_diffuse_color"
+        {
+            uniform token info:id = "arnold:image"
+            string inputs:color_space = ""
+            asset inputs:filename = @txr/albedo.jpg@
+            color4f inputs:missing_texture_color = (0, 0, 0, 1)
+            string inputs:name = "txr_diffuse_color"
+            color4f outputs:out
+        }
+
+        def Shader "txr_specular_roughness"
+        {
+            uniform token info:id = "arnold:image"
+            string inputs:color_space = ""
+            asset inputs:filename = @txr/roughness.jpg@
+            color4f inputs:missing_texture_color = (0, 0, 0, 1)
+            string inputs:name = "txr_specular_roughness"
+            float outputs:r
+        }
+
+        def Shader "txr_ambocc"
+        {
+            uniform token info:id = "arnold:image"
+            string inputs:color_space = ""
+            asset inputs:filename = @txr/ao.jpg@
+            color4f inputs:missing_texture_color = (1, 1, 1, 1)
+            string inputs:name = "txr_ambocc"
+            float outputs:r
+        }
+
+        def Shader "txr_opacity"
+        {
+            uniform token info:id = "arnold:image"
+            string inputs:color_space = ""
+            asset inputs:filename = @txr/opacity.jpg@
+            color4f inputs:missing_texture_color = (1, 1, 1, 1)
+            string inputs:name = "txr_opacity"
+            float outputs:r
+        }
+
+        def Shader "sdr_normal"
+        {
+            uniform token info:id = "arnold:normal_map"
+            vector3f inputs:input = (0, 0, 0)
+            prepend vector3f inputs:input.connect = </materials/mtl_arnold/txr_normal.outputs:out>
+            string inputs:name = "sdr_normal"
+            vector3f outputs:out
+        }
+
+        def Shader "txr_normal"
+        {
+            uniform token info:id = "arnold:image"
+            string inputs:color_space = ""
+            asset inputs:filename = @txr/normal.jpg@
+            color4f inputs:missing_texture_color = (0.5, 0.5, 1, 1)
+            string inputs:name = "txr_normal"
+            color4f outputs:out
+        }
+
+        def Shader "sdr_displacement"
+        {
+            uniform token info:id = "arnold:range"
+            color3f inputs:input = (0, 0, 0)
+            prepend color3f inputs:input.connect = </materials/mtl_arnold/txr_displacement.outputs:out>
+            string inputs:name = "sdr_displacement"
+            float inputs:output_max = 0.1
+            token outputs:displacement
+        }
+
+        def Shader "txr_displacement"
+        {
+            uniform token info:id = "arnold:image"
+            string inputs:color_space = ""
+            asset inputs:filename = @txr/displacement.jpg@
+            color4f inputs:missing_texture_color = (0, 0, 0, 1)
+            string inputs:name = "txr_displacement"
+            color4f outputs:out
+        }
+
+    }
+
+}
+

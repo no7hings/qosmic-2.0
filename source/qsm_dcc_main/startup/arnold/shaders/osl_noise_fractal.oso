@@ -1,0 +1,593 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.12.0
+# options: -o /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.oso
+shader osl_noise_fractal
+param	int	octaves	8		%meta{int,min,1} %meta{int,max,8}  %read{184,184} %write{2147483647,-1}
+param	float	distortion	0		%meta{float,min,0} %meta{float,max,10}  %read{186,189} %write{2147483647,-1}
+param	float	value	0		%read{180,180} %write{2147483647,-1}
+param	float	gain	0.600000024		%meta{float,min,0} %meta{float,max,1}  %read{200,200} %write{2147483647,-1}
+param	float	lacunarity	2		%meta{float,min,1} %meta{float,max,5}  %read{199,199} %write{2147483647,-1}
+param	vector	rotation	0 0 0		%read{20,126} %write{2147483647,-1}
+param	vector	offset	0 0 0		%read{18,18} %write{2147483647,-1}
+param	vector	scale	1 1 1		%read{19,19} %write{2147483647,-1}
+param	int	coord_space	0		%meta{string,widget,"enumerate"} %meta{string,options,"world|object|Pref|uv"}  %read{6,15} %write{2147483647,-1}
+param	vector	position	0 0 0		%read{3,5} %write{2147483647,-1}
+param	float	frame	0		%read{188,196} %write{2147483647,-1}
+param	color	color1	0 0 0		%read{210,210} %write{2147483647,-1}
+param	color	color2	1 1 1		%read{210,210} %write{2147483647,-1}
+param	int	mode	0		%meta{string,widget,"enumerate"} %meta{string,options,"scalar|vector"}  %read{191,191} %write{2147483647,-1}
+param	int	turbulent_enable	0		%meta{int,min,0} %meta{int,max,1} %meta{string,widget,"boolean"}  %read{204,204} %write{2147483647,-1}
+param	int	clamp_enable	1		%meta{int,min,0} %meta{int,max,1} %meta{string,widget,"boolean"}  %read{206,206} %write{2147483647,-1}
+oparam	color	out_rgb	0 0 0		%read{2147483647,-1} %write{210,210}
+global	point	P	%read{0,14} %write{2147483647,-1}
+global	float	u	%read{17,17} %write{2147483647,-1}
+global	float	v	%read{17,17} %write{2147483647,-1}
+local	vector	___257_axis	%read{28,134} %write{25,129}
+local	float	___257_cosang	%read{27,172} %write{26,130}
+local	float	___257_sinang	%read{38,167} %write{26,130}
+local	float	___257_cosang1	%read{37,166} %write{27,131}
+local	float	___257_x	%read{31,167} %write{28,132}
+local	float	___257_y	%read{36,165} %write{29,133}
+local	float	___257_z	%read{38,170} %write{30,134}
+local	matrix	___257_M	%read{72,176} %write{70,174}
+local	vector	___337_m_x	%read{184,202} %write{179,202}
+local	color	___337_value	%read{184,203} %write{180,202}
+local	float	___337_amplitud	%read{184,202} %write{181,202}
+local	int	___338_i	%read{184,202} %write{183,202}
+local	vector	___341_noise_3d	%read{184,202} %write{184,202}
+local	float	___342_noise_1d	%read{184,202} %write{184,202}
+local	point	pp	%read{18,179} %write{0,177}
+local	vector	pref	%read{10,10} %write{1,8}
+local	color	resout	%read{205,210} %write{2,209}
+const	vector	$const1	0 0 0		%read{1,20} %write{2147483647,-1}
+const	color	$const2	0 0 0		%read{2,209} %write{2147483647,-1}
+temp	int	$tmp1	%read{4,4} %write{3,3}
+const	int	$const3	2		%read{6,134} %write{2147483647,-1}
+temp	int	$tmp2	%read{7,7} %write{6,6}
+temp	int	$tmp3	%read{9,9} %write{8,8}
+const	string	$const4	"Pref"		%read{8,8} %write{2147483647,-1}
+const	int	$const5	1		%read{11,202} %write{2147483647,-1}
+temp	int	$tmp4	%read{12,12} %write{11,11}
+const	string	$const6	"object"		%read{14,14} %write{2147483647,-1}
+const	string	$const7	"transform"		%read{13,13} %write{2147483647,-1}
+const	string	$const8	"common"		%read{14,14} %write{2147483647,-1}
+const	int	$const9	3		%read{15,15} %write{2147483647,-1}
+temp	int	$tmp5	%read{16,16} %write{15,15}
+const	int	$const10	0		%read{22,186} %write{2147483647,-1}
+const	float	$const11	0		%read{17,174} %write{2147483647,-1}
+temp	int	$tmp7	%read{21,21} %write{20,20}
+temp	float	$tmp8	%read{26,26} %write{22,22}
+const	point	$const12	0 0 0		%read{24,177} %write{2147483647,-1}
+const	point	$const13	1 0 0		%read{24,24} %write{2147483647,-1}
+const	string	$const14	"rotate"		%read{23,127} %write{2147483647,-1}
+temp	vector	$tmp11	%read{25,25} %write{24,24}
+const	float	$const15	1		%read{27,174} %write{2147483647,-1}
+temp	float	$tmp12	%read{35,35} %write{31,31}
+temp	float	$tmp13	%read{33,33} %write{32,32}
+temp	float	$tmp14	%read{34,34} %write{33,33}
+temp	float	$tmp15	%read{35,35} %write{34,34}
+temp	float	$tmp16	%read{70,70} %write{35,35}
+temp	float	$tmp17	%read{37,37} %write{36,36}
+temp	float	$tmp18	%read{39,39} %write{37,37}
+temp	float	$tmp19	%read{39,39} %write{38,38}
+temp	float	$tmp20	%read{70,70} %write{39,39}
+temp	float	$tmp21	%read{41,41} %write{40,40}
+temp	float	$tmp22	%read{43,43} %write{41,41}
+temp	float	$tmp23	%read{43,43} %write{42,42}
+temp	float	$tmp24	%read{70,70} %write{43,43}
+temp	float	$tmp25	%read{45,45} %write{44,44}
+temp	float	$tmp26	%read{47,47} %write{45,45}
+temp	float	$tmp27	%read{47,47} %write{46,46}
+temp	float	$tmp28	%read{70,70} %write{47,47}
+temp	float	$tmp29	%read{52,52} %write{48,48}
+temp	float	$tmp30	%read{50,50} %write{49,49}
+temp	float	$tmp31	%read{51,51} %write{50,50}
+temp	float	$tmp32	%read{52,52} %write{51,51}
+temp	float	$tmp33	%read{70,70} %write{52,52}
+temp	float	$tmp34	%read{54,54} %write{53,53}
+temp	float	$tmp35	%read{56,56} %write{54,54}
+temp	float	$tmp36	%read{56,56} %write{55,55}
+temp	float	$tmp37	%read{70,70} %write{56,56}
+temp	float	$tmp38	%read{58,58} %write{57,57}
+temp	float	$tmp39	%read{60,60} %write{58,58}
+temp	float	$tmp40	%read{60,60} %write{59,59}
+temp	float	$tmp41	%read{70,70} %write{60,60}
+temp	float	$tmp42	%read{62,62} %write{61,61}
+temp	float	$tmp43	%read{64,64} %write{62,62}
+temp	float	$tmp44	%read{64,64} %write{63,63}
+temp	float	$tmp45	%read{70,70} %write{64,64}
+temp	float	$tmp46	%read{69,69} %write{65,65}
+temp	float	$tmp47	%read{67,67} %write{66,66}
+temp	float	$tmp48	%read{68,68} %write{67,67}
+temp	float	$tmp49	%read{69,69} %write{68,68}
+temp	float	$tmp50	%read{70,70} %write{69,69}
+temp	vector	$tmp51	%read{73,73} %write{72,72}
+temp	vector	$tmp52	%read{72,72} %write{71,71}
+temp	float	$tmp53	%read{78,78} %write{74,74}
+const	point	$const16	0 1 0		%read{76,76} %write{2147483647,-1}
+temp	vector	$tmp56	%read{77,77} %write{76,76}
+temp	float	$tmp57	%read{87,87} %write{83,83}
+temp	float	$tmp58	%read{85,85} %write{84,84}
+temp	float	$tmp59	%read{86,86} %write{85,85}
+temp	float	$tmp60	%read{87,87} %write{86,86}
+temp	float	$tmp61	%read{122,122} %write{87,87}
+temp	float	$tmp62	%read{89,89} %write{88,88}
+temp	float	$tmp63	%read{91,91} %write{89,89}
+temp	float	$tmp64	%read{91,91} %write{90,90}
+temp	float	$tmp65	%read{122,122} %write{91,91}
+temp	float	$tmp66	%read{93,93} %write{92,92}
+temp	float	$tmp67	%read{95,95} %write{93,93}
+temp	float	$tmp68	%read{95,95} %write{94,94}
+temp	float	$tmp69	%read{122,122} %write{95,95}
+temp	float	$tmp70	%read{97,97} %write{96,96}
+temp	float	$tmp71	%read{99,99} %write{97,97}
+temp	float	$tmp72	%read{99,99} %write{98,98}
+temp	float	$tmp73	%read{122,122} %write{99,99}
+temp	float	$tmp74	%read{104,104} %write{100,100}
+temp	float	$tmp75	%read{102,102} %write{101,101}
+temp	float	$tmp76	%read{103,103} %write{102,102}
+temp	float	$tmp77	%read{104,104} %write{103,103}
+temp	float	$tmp78	%read{122,122} %write{104,104}
+temp	float	$tmp79	%read{106,106} %write{105,105}
+temp	float	$tmp80	%read{108,108} %write{106,106}
+temp	float	$tmp81	%read{108,108} %write{107,107}
+temp	float	$tmp82	%read{122,122} %write{108,108}
+temp	float	$tmp83	%read{110,110} %write{109,109}
+temp	float	$tmp84	%read{112,112} %write{110,110}
+temp	float	$tmp85	%read{112,112} %write{111,111}
+temp	float	$tmp86	%read{122,122} %write{112,112}
+temp	float	$tmp87	%read{114,114} %write{113,113}
+temp	float	$tmp88	%read{116,116} %write{114,114}
+temp	float	$tmp89	%read{116,116} %write{115,115}
+temp	float	$tmp90	%read{122,122} %write{116,116}
+temp	float	$tmp91	%read{121,121} %write{117,117}
+temp	float	$tmp92	%read{119,119} %write{118,118}
+temp	float	$tmp93	%read{120,120} %write{119,119}
+temp	float	$tmp94	%read{121,121} %write{120,120}
+temp	float	$tmp95	%read{122,122} %write{121,121}
+temp	vector	$tmp96	%read{125,125} %write{124,124}
+temp	vector	$tmp97	%read{124,124} %write{123,123}
+temp	float	$tmp98	%read{130,130} %write{126,126}
+const	point	$const17	0 0 1		%read{128,128} %write{2147483647,-1}
+temp	vector	$tmp101	%read{129,129} %write{128,128}
+temp	float	$tmp102	%read{139,139} %write{135,135}
+temp	float	$tmp103	%read{137,137} %write{136,136}
+temp	float	$tmp104	%read{138,138} %write{137,137}
+temp	float	$tmp105	%read{139,139} %write{138,138}
+temp	float	$tmp106	%read{174,174} %write{139,139}
+temp	float	$tmp107	%read{141,141} %write{140,140}
+temp	float	$tmp108	%read{143,143} %write{141,141}
+temp	float	$tmp109	%read{143,143} %write{142,142}
+temp	float	$tmp110	%read{174,174} %write{143,143}
+temp	float	$tmp111	%read{145,145} %write{144,144}
+temp	float	$tmp112	%read{147,147} %write{145,145}
+temp	float	$tmp113	%read{147,147} %write{146,146}
+temp	float	$tmp114	%read{174,174} %write{147,147}
+temp	float	$tmp115	%read{149,149} %write{148,148}
+temp	float	$tmp116	%read{151,151} %write{149,149}
+temp	float	$tmp117	%read{151,151} %write{150,150}
+temp	float	$tmp118	%read{174,174} %write{151,151}
+temp	float	$tmp119	%read{156,156} %write{152,152}
+temp	float	$tmp120	%read{154,154} %write{153,153}
+temp	float	$tmp121	%read{155,155} %write{154,154}
+temp	float	$tmp122	%read{156,156} %write{155,155}
+temp	float	$tmp123	%read{174,174} %write{156,156}
+temp	float	$tmp124	%read{158,158} %write{157,157}
+temp	float	$tmp125	%read{160,160} %write{158,158}
+temp	float	$tmp126	%read{160,160} %write{159,159}
+temp	float	$tmp127	%read{174,174} %write{160,160}
+temp	float	$tmp128	%read{162,162} %write{161,161}
+temp	float	$tmp129	%read{164,164} %write{162,162}
+temp	float	$tmp130	%read{164,164} %write{163,163}
+temp	float	$tmp131	%read{174,174} %write{164,164}
+temp	float	$tmp132	%read{166,166} %write{165,165}
+temp	float	$tmp133	%read{168,168} %write{166,166}
+temp	float	$tmp134	%read{168,168} %write{167,167}
+temp	float	$tmp135	%read{174,174} %write{168,168}
+temp	float	$tmp136	%read{173,173} %write{169,169}
+temp	float	$tmp137	%read{171,171} %write{170,170}
+temp	float	$tmp138	%read{172,172} %write{171,171}
+temp	float	$tmp139	%read{173,173} %write{172,172}
+temp	float	$tmp140	%read{174,174} %write{173,173}
+temp	vector	$tmp141	%read{177,177} %write{176,176}
+temp	vector	$tmp142	%read{176,176} %write{175,175}
+const	string	$const18	"fbm"		%read{178,178} %write{2147483647,-1}
+const	float	$const19	0.667999983		%read{181,181} %write{2147483647,-1}
+temp	int	$tmp143	%read{184,202} %write{184,202}
+temp	int	$tmp144	%read{182,202} %write{183,202}
+temp	int	$tmp145	%read{184,202} %write{184,202}
+temp	vector	$tmp146	%read{184,202} %write{184,202}
+const	string	$const20	"perlin"		%read{188,196} %write{2147483647,-1}
+temp	vector	$tmp147	%read{184,202} %write{184,202}
+temp	int	$tmp148	%read{184,202} %write{184,202}
+temp	vector	$tmp149	%read{184,202} %write{184,202}
+temp	float	$tmp150	%read{184,202} %write{184,202}
+temp	int	$tmp151	%read{2147483647,-1} %write{184,202}
+const	color	$const21	1 1 1		%read{208,208} %write{2147483647,-1}
+const	string	$const22	"clamp"		%read{207,207} %write{2147483647,-1}
+temp	color	$tmp154	%read{209,209} %write{208,208}
+code ___main___
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:51
+#     point pp = P;
+	assign		pp P 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl"} %line{51} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:52
+#     vector pref = vector(0.0);
+	assign		pref $const1 	%line{52} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:53
+#     color resout = color(0);
+	assign		resout $const2 	%line{53} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:55
+#     if (isconnected(position)){
+	isconnected	$tmp1 position 	%line{55} %argrw{"wr"}
+	if		$tmp1 6 18 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:56
+#         pp = position;
+	assign		pp position 	%line{56} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:58
+#     else if (coord_space == 2){
+	eq		$tmp2 coord_space $const3 	%line{58} %argrw{"wrr"}
+	if		$tmp2 11 18 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:59
+#         if (getattribute("Pref", pref)){
+	getattribute	$tmp3 $const4 pref 	%line{59} %argrw{"wrw"}
+	if		$tmp3 11 11 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:60
+#             pp = pref;
+	assign		pp pref 	%line{60} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:63
+#     else if (coord_space == 1){
+	eq		$tmp4 coord_space $const5 	%line{63} %argrw{"wrr"}
+	if		$tmp4 15 18 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:64
+#         pp = transform("object", P);
+	functioncall	$const7 15 	%line{64} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:263
+# point  transform (string to, point p)  { return transform("common",to,p); }
+	transform	pp $const8 $const6 P 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{263} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:66
+#     else if (coord_space == 3){
+	eq		$tmp5 coord_space $const9 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl"} %line{66} %argrw{"wrr"}
+	if		$tmp5 18 18 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:67
+#         pp = vector(u, v, 0);
+	vector		pp u v $const11 	%line{67} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:70
+#     pp += offset;
+	add		pp pp offset 	%line{70} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:71
+#     pp *= scale;
+	mul		pp pp scale 	%line{71} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:72
+#     if (rotation != vector(0,0,0)){
+	neq		$tmp7 rotation $const1 	%line{72} %argrw{"wrr"}
+	if		$tmp7 178 178 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:73
+#         pp = rotate(pp,rotation[0],point(0,0,0), point(1,0,0));
+	compref		$tmp8 rotation $const10 	%line{73} %argrw{"wrr"}
+	functioncall	$const14 74 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:270
+#     vector axis = normalize (b - a);
+	sub		$tmp11 $const13 $const12 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{270} %argrw{"wrr"}
+	normalize	___257_axis $tmp11 	%argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:272
+#     sincos (angle, sinang, cosang);
+	sincos		$tmp8 ___257_sinang ___257_cosang 	%line{272} %argrw{"rww"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:273
+#     float cosang1 = 1.0 - cosang;
+	sub		___257_cosang1 $const15 ___257_cosang 	%line{273} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:274
+#     float x = axis[0], y = axis[1], z = axis[2];
+	compref		___257_x ___257_axis $const10 	%line{274} %argrw{"wrr"}
+	compref		___257_y ___257_axis $const5 	%argrw{"wrr"}
+	compref		___257_z ___257_axis $const3 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	mul		$tmp12 ___257_x ___257_x 	%line{275} %argrw{"wrr"}
+	mul		$tmp13 ___257_x ___257_x 	%argrw{"wrr"}
+	sub		$tmp14 $const15 $tmp13 	%argrw{"wrr"}
+	mul		$tmp15 $tmp14 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp16 $tmp12 $tmp15 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:276
+#                        x * y * cosang1 + z * sinang,
+	mul		$tmp17 ___257_x ___257_y 	%line{276} %argrw{"wrr"}
+	mul		$tmp18 $tmp17 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp19 ___257_z ___257_sinang 	%argrw{"wrr"}
+	add		$tmp20 $tmp18 $tmp19 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:277
+#                        x * z * cosang1 - y * sinang,
+	mul		$tmp21 ___257_x ___257_z 	%line{277} %argrw{"wrr"}
+	mul		$tmp22 $tmp21 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp23 ___257_y ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp24 $tmp22 $tmp23 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:279
+#                        x * y * cosang1 - z * sinang,
+	mul		$tmp25 ___257_x ___257_y 	%line{279} %argrw{"wrr"}
+	mul		$tmp26 $tmp25 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp27 ___257_z ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp28 $tmp26 $tmp27 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:280
+#                        y * y + (1.0 - y * y) * cosang,
+	mul		$tmp29 ___257_y ___257_y 	%line{280} %argrw{"wrr"}
+	mul		$tmp30 ___257_y ___257_y 	%argrw{"wrr"}
+	sub		$tmp31 $const15 $tmp30 	%argrw{"wrr"}
+	mul		$tmp32 $tmp31 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp33 $tmp29 $tmp32 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:281
+#                        y * z * cosang1 + x * sinang,
+	mul		$tmp34 ___257_y ___257_z 	%line{281} %argrw{"wrr"}
+	mul		$tmp35 $tmp34 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp36 ___257_x ___257_sinang 	%argrw{"wrr"}
+	add		$tmp37 $tmp35 $tmp36 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:283
+#                        x * z * cosang1 + y * sinang,
+	mul		$tmp38 ___257_x ___257_z 	%line{283} %argrw{"wrr"}
+	mul		$tmp39 $tmp38 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp40 ___257_y ___257_sinang 	%argrw{"wrr"}
+	add		$tmp41 $tmp39 $tmp40 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:284
+#                        y * z * cosang1 - x * sinang,
+	mul		$tmp42 ___257_y ___257_z 	%line{284} %argrw{"wrr"}
+	mul		$tmp43 $tmp42 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp44 ___257_x ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp45 $tmp43 $tmp44 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:285
+#                        z * z + (1.0 - z * z) * cosang,
+	mul		$tmp46 ___257_z ___257_z 	%line{285} %argrw{"wrr"}
+	mul		$tmp47 ___257_z ___257_z 	%argrw{"wrr"}
+	sub		$tmp48 $const15 $tmp47 	%argrw{"wrr"}
+	mul		$tmp49 $tmp48 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp50 $tmp46 $tmp49 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	matrix		___257_M $tmp16 $tmp20 $tmp24 $const11 $tmp28 $tmp33 $tmp37 $const11 $tmp41 $tmp45 $tmp50 $const11 $const11 $const11 $const11 $const15 	%line{275} %argrw{"wrrrrrrrrrrrrrrrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:288
+#     return transform (M, p-a) + a;
+	sub		$tmp52 pp $const12 	%line{288} %argrw{"wrr"}
+	transformv	$tmp51 ___257_M $tmp52 	%argrw{"wrr"}
+	add		pp $tmp51 $const12 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:74
+#         pp = rotate(pp,rotation[1],point(0,0,0), point(0,1,0));
+	compref		$tmp53 rotation $const5 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl"} %line{74} %argrw{"wrr"}
+	functioncall	$const14 126 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:270
+#     vector axis = normalize (b - a);
+	sub		$tmp56 $const16 $const12 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{270} %argrw{"wrr"}
+	normalize	___257_axis $tmp56 	%argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:272
+#     sincos (angle, sinang, cosang);
+	sincos		$tmp53 ___257_sinang ___257_cosang 	%line{272} %argrw{"rww"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:273
+#     float cosang1 = 1.0 - cosang;
+	sub		___257_cosang1 $const15 ___257_cosang 	%line{273} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:274
+#     float x = axis[0], y = axis[1], z = axis[2];
+	compref		___257_x ___257_axis $const10 	%line{274} %argrw{"wrr"}
+	compref		___257_y ___257_axis $const5 	%argrw{"wrr"}
+	compref		___257_z ___257_axis $const3 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	mul		$tmp57 ___257_x ___257_x 	%line{275} %argrw{"wrr"}
+	mul		$tmp58 ___257_x ___257_x 	%argrw{"wrr"}
+	sub		$tmp59 $const15 $tmp58 	%argrw{"wrr"}
+	mul		$tmp60 $tmp59 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp61 $tmp57 $tmp60 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:276
+#                        x * y * cosang1 + z * sinang,
+	mul		$tmp62 ___257_x ___257_y 	%line{276} %argrw{"wrr"}
+	mul		$tmp63 $tmp62 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp64 ___257_z ___257_sinang 	%argrw{"wrr"}
+	add		$tmp65 $tmp63 $tmp64 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:277
+#                        x * z * cosang1 - y * sinang,
+	mul		$tmp66 ___257_x ___257_z 	%line{277} %argrw{"wrr"}
+	mul		$tmp67 $tmp66 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp68 ___257_y ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp69 $tmp67 $tmp68 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:279
+#                        x * y * cosang1 - z * sinang,
+	mul		$tmp70 ___257_x ___257_y 	%line{279} %argrw{"wrr"}
+	mul		$tmp71 $tmp70 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp72 ___257_z ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp73 $tmp71 $tmp72 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:280
+#                        y * y + (1.0 - y * y) * cosang,
+	mul		$tmp74 ___257_y ___257_y 	%line{280} %argrw{"wrr"}
+	mul		$tmp75 ___257_y ___257_y 	%argrw{"wrr"}
+	sub		$tmp76 $const15 $tmp75 	%argrw{"wrr"}
+	mul		$tmp77 $tmp76 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp78 $tmp74 $tmp77 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:281
+#                        y * z * cosang1 + x * sinang,
+	mul		$tmp79 ___257_y ___257_z 	%line{281} %argrw{"wrr"}
+	mul		$tmp80 $tmp79 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp81 ___257_x ___257_sinang 	%argrw{"wrr"}
+	add		$tmp82 $tmp80 $tmp81 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:283
+#                        x * z * cosang1 + y * sinang,
+	mul		$tmp83 ___257_x ___257_z 	%line{283} %argrw{"wrr"}
+	mul		$tmp84 $tmp83 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp85 ___257_y ___257_sinang 	%argrw{"wrr"}
+	add		$tmp86 $tmp84 $tmp85 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:284
+#                        y * z * cosang1 - x * sinang,
+	mul		$tmp87 ___257_y ___257_z 	%line{284} %argrw{"wrr"}
+	mul		$tmp88 $tmp87 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp89 ___257_x ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp90 $tmp88 $tmp89 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:285
+#                        z * z + (1.0 - z * z) * cosang,
+	mul		$tmp91 ___257_z ___257_z 	%line{285} %argrw{"wrr"}
+	mul		$tmp92 ___257_z ___257_z 	%argrw{"wrr"}
+	sub		$tmp93 $const15 $tmp92 	%argrw{"wrr"}
+	mul		$tmp94 $tmp93 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp95 $tmp91 $tmp94 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	matrix		___257_M $tmp61 $tmp65 $tmp69 $const11 $tmp73 $tmp78 $tmp82 $const11 $tmp86 $tmp90 $tmp95 $const11 $const11 $const11 $const11 $const15 	%line{275} %argrw{"wrrrrrrrrrrrrrrrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:288
+#     return transform (M, p-a) + a;
+	sub		$tmp97 pp $const12 	%line{288} %argrw{"wrr"}
+	transformv	$tmp96 ___257_M $tmp97 	%argrw{"wrr"}
+	add		pp $tmp96 $const12 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:75
+#         pp = rotate(pp,rotation[2],point(0,0,0), point(0,0,1));
+	compref		$tmp98 rotation $const3 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl"} %line{75} %argrw{"wrr"}
+	functioncall	$const14 178 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:270
+#     vector axis = normalize (b - a);
+	sub		$tmp101 $const17 $const12 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{270} %argrw{"wrr"}
+	normalize	___257_axis $tmp101 	%argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:272
+#     sincos (angle, sinang, cosang);
+	sincos		$tmp98 ___257_sinang ___257_cosang 	%line{272} %argrw{"rww"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:273
+#     float cosang1 = 1.0 - cosang;
+	sub		___257_cosang1 $const15 ___257_cosang 	%line{273} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:274
+#     float x = axis[0], y = axis[1], z = axis[2];
+	compref		___257_x ___257_axis $const10 	%line{274} %argrw{"wrr"}
+	compref		___257_y ___257_axis $const5 	%argrw{"wrr"}
+	compref		___257_z ___257_axis $const3 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	mul		$tmp102 ___257_x ___257_x 	%line{275} %argrw{"wrr"}
+	mul		$tmp103 ___257_x ___257_x 	%argrw{"wrr"}
+	sub		$tmp104 $const15 $tmp103 	%argrw{"wrr"}
+	mul		$tmp105 $tmp104 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp106 $tmp102 $tmp105 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:276
+#                        x * y * cosang1 + z * sinang,
+	mul		$tmp107 ___257_x ___257_y 	%line{276} %argrw{"wrr"}
+	mul		$tmp108 $tmp107 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp109 ___257_z ___257_sinang 	%argrw{"wrr"}
+	add		$tmp110 $tmp108 $tmp109 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:277
+#                        x * z * cosang1 - y * sinang,
+	mul		$tmp111 ___257_x ___257_z 	%line{277} %argrw{"wrr"}
+	mul		$tmp112 $tmp111 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp113 ___257_y ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp114 $tmp112 $tmp113 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:279
+#                        x * y * cosang1 - z * sinang,
+	mul		$tmp115 ___257_x ___257_y 	%line{279} %argrw{"wrr"}
+	mul		$tmp116 $tmp115 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp117 ___257_z ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp118 $tmp116 $tmp117 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:280
+#                        y * y + (1.0 - y * y) * cosang,
+	mul		$tmp119 ___257_y ___257_y 	%line{280} %argrw{"wrr"}
+	mul		$tmp120 ___257_y ___257_y 	%argrw{"wrr"}
+	sub		$tmp121 $const15 $tmp120 	%argrw{"wrr"}
+	mul		$tmp122 $tmp121 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp123 $tmp119 $tmp122 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:281
+#                        y * z * cosang1 + x * sinang,
+	mul		$tmp124 ___257_y ___257_z 	%line{281} %argrw{"wrr"}
+	mul		$tmp125 $tmp124 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp126 ___257_x ___257_sinang 	%argrw{"wrr"}
+	add		$tmp127 $tmp125 $tmp126 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:283
+#                        x * z * cosang1 + y * sinang,
+	mul		$tmp128 ___257_x ___257_z 	%line{283} %argrw{"wrr"}
+	mul		$tmp129 $tmp128 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp130 ___257_y ___257_sinang 	%argrw{"wrr"}
+	add		$tmp131 $tmp129 $tmp130 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:284
+#                        y * z * cosang1 - x * sinang,
+	mul		$tmp132 ___257_y ___257_z 	%line{284} %argrw{"wrr"}
+	mul		$tmp133 $tmp132 ___257_cosang1 	%argrw{"wrr"}
+	mul		$tmp134 ___257_x ___257_sinang 	%argrw{"wrr"}
+	sub		$tmp135 $tmp133 $tmp134 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:285
+#                        z * z + (1.0 - z * z) * cosang,
+	mul		$tmp136 ___257_z ___257_z 	%line{285} %argrw{"wrr"}
+	mul		$tmp137 ___257_z ___257_z 	%argrw{"wrr"}
+	sub		$tmp138 $const15 $tmp137 	%argrw{"wrr"}
+	mul		$tmp139 $tmp138 ___257_cosang 	%argrw{"wrr"}
+	add		$tmp140 $tmp136 $tmp139 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:275
+#     matrix M = matrix (x * x + (1.0 - x * x) * cosang,
+	matrix		___257_M $tmp106 $tmp110 $tmp114 $const11 $tmp118 $tmp123 $tmp127 $const11 $tmp131 $tmp135 $tmp140 $const11 $const11 $const11 $const11 $const15 	%line{275} %argrw{"wrrrrrrrrrrrrrrrr"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:288
+#     return transform (M, p-a) + a;
+	sub		$tmp142 pp $const12 	%line{288} %argrw{"wrr"}
+	transformv	$tmp141 ___257_M $tmp142 	%argrw{"wrr"}
+	add		pp $tmp141 $const12 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:82
+#     resout = fbm(pp, value, octaves, lacunarity, gain, distortion, frame, mode);
+	functioncall	$const18 204 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl"} %line{82} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:3
+#     vector m_x = x;
+	assign		___337_m_x pp 	%line{3} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:4
+#     color value = v1;
+	assign		___337_value value 	%line{4} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:5
+#     float amplitud = 0.668;
+	assign		___337_amplitud $const19 	%line{5} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:9
+#     for (int i = 0; i < octaves; i++) {
+	for		$tmp144 184 186 201 203 	%line{9} %argrw{"r"}
+	assign		___338_i $const10 	%argrw{"wr"}
+	lt		$tmp143 ___338_i octaves 	%argrw{"wrr"}
+	neq		$tmp144 $tmp143 $const10 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:10
+#         if (distortion != 0){
+	neq		$tmp145 distortion $const10 	%line{10} %argrw{"wrr"}
+	if		$tmp145 191 191 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:11
+#             m_x += distortion*noise("perlin",m_x, frame);
+	noise		$tmp146 $const20 ___337_m_x frame 	%line{11} %argrw{"wrrr"}
+	mul		$tmp147 distortion $tmp146 	%argrw{"wrr"}
+	add		___337_m_x ___337_m_x $tmp147 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:13
+#         if (mode == 1){
+	eq		$tmp148 mode $const5 	%line{13} %argrw{"wrr"}
+	if		$tmp148 196 199 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:14
+#             vector noise_3d = noise("perlin",m_x, frame);
+	noise		___341_noise_3d $const20 ___337_m_x frame 	%line{14} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:15
+#             value += amplitud * noise_3d;
+	mul		$tmp149 ___337_amplitud ___341_noise_3d 	%line{15} %argrw{"wrr"}
+	add		___337_value ___337_value $tmp149 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:17
+#             float noise_1d = noise("perlin",m_x, frame);
+	noise		___342_noise_1d $const20 ___337_m_x frame 	%line{17} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:18
+#             value += amplitud * noise_1d;
+	mul		$tmp150 ___337_amplitud ___342_noise_1d 	%line{18} %argrw{"wrr"}
+	add		___337_value ___337_value $tmp150 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:20
+#         m_x *= lacunarity;
+	mul		___337_m_x ___337_m_x lacunarity 	%line{20} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:21
+#         amplitud *= gain;
+	mul		___337_amplitud ___337_amplitud gain 	%line{21} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:9
+#     for (int i = 0; i < octaves; i++) {
+	assign		$tmp151 ___338_i 	%line{9} %argrw{"wr"}
+	add		___338_i ___338_i $const5 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:23
+#     return value;
+	assign		resout ___337_value 	%line{23} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:84
+#     if (turbulent_enable){
+	if		turbulent_enable 206 206 	%line{84} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:85
+#         resout = abs(resout);
+	abs		resout resout 	%line{85} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:88
+#     if(clamp_enable){
+	if		clamp_enable 210 210 	%line{88} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:89
+#         resout = clamp(resout,color(0),color(1));
+	functioncall	$const22 210 	%line{89} %argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:140
+# color  clamp (color x, color minval, color maxval) { return max(min(x,maxval),minval); }
+	min		$tmp154 resout $const21 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{140} %argrw{"wrr"}
+	max		resout $tmp154 $const2 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl:92
+# 	out_rgb = mix(color1,color2,resout);
+	mix		out_rgb color1 color2 resout 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_noise_fractal.osl"} %line{92} %argrw{"wrrr"}
+	end

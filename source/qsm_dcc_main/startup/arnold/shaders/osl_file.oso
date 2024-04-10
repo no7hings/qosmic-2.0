@@ -1,0 +1,200 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.12.0
+# options: -o /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.oso
+shader osl_file
+param	int	space	0		%meta{string,widget,"enumerate"} %meta{string,options,"x|-x|y|-y|z|-z"} %meta{string,page,"extra"}  %read{2147483647,-1} %write{2147483647,-1}
+param	string	filename	""		%meta{string,widget,"filename"} %meta{string,page,"basic"}  %read{2,65} %write{2147483647,-1}
+param	int	udim_maximum	1010		%meta{int,min,1001} %meta{int,max,1100} %meta{string,page,"basic"}  %read{5,5} %write{2147483647,-1}
+oparam	color	out_rgb	0 0 0		%read{2147483647,-1} %write{66,66}
+global	float	u	%read{6,65} %write{2147483647,-1} %derivs
+global	float	v	%read{6,64} %write{2147483647,-1} %derivs
+local	color	final_rgb	%read{9,66} %write{0,65}
+local	int	udim_index	%read{9,63} %write{1,63} %derivs
+local	int	is_udim	%read{3,3} %write{2,2}
+local	int	___337_c	%read{9,63} %write{5,5}
+local	point	___337_uv	%read{9,63} %write{6,6} %derivs
+local	int	___338_i	%read{9,63} %write{8,63}
+local	float	___339_i_uv_offset_x	%read{9,63} %write{9,63} %derivs
+local	float	___339_i_uv_offset_y	%read{9,63} %write{9,63} %derivs
+local	string	___339_i_udim_str	%read{9,63} %write{9,63}
+local	string[2]	___339_i_args	%read{9,63} %write{9,63}
+local	string	___339_i_file	%read{9,63} %write{9,63}
+local	int	___339_e	%read{9,63} %write{9,63}
+local	float	___340_i_coord_x	%read{9,63} %write{9,63} %derivs
+local	float	___340_i_coord_y	%read{9,63} %write{9,63} %derivs
+local	float	___340_i_x_next	%read{9,63} %write{9,63}
+local	float	___340_i_y_next	%read{9,63} %write{9,63}
+local	color	___341_i_rgb	%read{9,63} %write{9,63}
+const	float	$const1	0		%read{0,6} %write{2147483647,-1}
+const	int	$const2	1001		%read{1,14} %write{2147483647,-1}
+const	string	$const3	"<udim>"		%read{2,19} %write{2147483647,-1}
+const	int	$const4	0		%read{3,53} %write{2147483647,-1}
+temp	int	$tmp1	%read{4,4} %write{3,3}
+const	int	$const5	1000		%read{5,5} %write{2147483647,-1}
+temp	int	$tmp2	%read{9,63} %write{9,63}
+temp	int	$tmp3	%read{7,63} %write{8,63}
+temp	int	$tmp4	%read{9,63} %write{9,63} %derivs
+const	int	$const6	10		%read{12,12} %write{2147483647,-1}
+temp	int	$tmp5	%read{9,63} %write{9,63} %derivs
+temp	int	$tmp6	%read{9,63} %write{9,63} %derivs
+temp	float	$tmp7	%read{9,63} %write{9,63} %derivs
+temp	float	$tmp8	%read{9,63} %write{9,63} %derivs
+const	float	$const7	10		%read{17,17} %write{2147483647,-1}
+const	string	$const8	"%d"		%read{18,18} %write{2147483647,-1}
+temp	int	$tmp9	%read{2147483647,-1} %write{9,63}
+temp	string	$tmp10	%read{9,63} %write{9,63}
+const	int	$const9	1		%read{21,63} %write{2147483647,-1}
+temp	string	$tmp11	%read{9,63} %write{9,63}
+const	string	$const10	"concat"		%read{22,22} %write{2147483647,-1}
+temp	string	$tmp12	%read{9,63} %write{9,63}
+temp	int	$tmp13	%read{2147483647,-1} %write{9,63}
+const	string	$const11	"exists"		%read{25,25} %write{2147483647,-1}
+temp	int	$tmp14	%read{9,63} %write{9,63}
+const	float	$const12	1		%read{30,64} %write{2147483647,-1}
+temp	float	$tmp15	%read{9,63} %write{9,63}
+temp	int	$tmp16	%read{9,63} %write{9,63}
+temp	int	$tmp17	%read{9,63} %write{9,63}
+temp	float	$tmp18	%read{9,63} %write{9,63}
+temp	int	$tmp19	%read{9,63} %write{9,63}
+temp	int	$tmp20	%read{9,63} %write{9,63}
+temp	int	$tmp21	%read{9,63} %write{9,63}
+temp	float	$tmp22	%read{9,63} %write{9,63}
+temp	int	$tmp23	%read{9,63} %write{9,63}
+temp	int	$tmp24	%read{9,63} %write{9,63}
+temp	float	$tmp25	%read{9,63} %write{9,63}
+temp	int	$tmp26	%read{9,63} %write{9,63}
+temp	int	$tmp27	%read{9,63} %write{9,63}
+temp	int	$tmp28	%read{9,63} %write{9,63}
+temp	float	$tmp29	%read{9,63} %write{9,63} %derivs
+temp	float	$tmp30	%read{9,63} %write{9,63} %derivs
+temp	float	$tmp31	%read{9,63} %write{9,63} %derivs
+const	string	$const13	"%s, is non-exists"		%read{60,60} %write{2147483647,-1}
+temp	int	$tmp32	%read{2147483647,-1} %write{9,63}
+temp	float	$tmp33	%read{65,65} %write{64,64} %derivs
+code ___main___
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:10
+#     color final_rgb = 0.0;
+	assign		final_rgb $const1 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl"} %line{10} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:11
+#     int udim_index = 1001;
+	assign		udim_index $const2 	%line{11} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:13
+#     int is_udim = regex_search(filename, "<udim>");
+	regex_search	is_udim filename $const3 	%line{13} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:14
+#     if (is_udim > 0) {
+	gt		$tmp1 is_udim $const4 	%line{14} %argrw{"wrr"}
+	if		$tmp1 64 66 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:16
+#         int c = udim_maximum - 1000;
+	sub		___337_c udim_maximum $const5 	%line{16} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:17
+#         point uv = point(u, v, 0.0);
+	point		___337_uv u v $const1 	%line{17} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:18
+#         for (int i = 0; i < c; i++) {
+	for		$tmp3 9 11 62 64 	%line{18} %argrw{"r"}
+	assign		___338_i $const4 	%argrw{"wr"}
+	lt		$tmp2 ___338_i ___337_c 	%argrw{"wrr"}
+	neq		$tmp3 $tmp2 $const4 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:19
+#             float i_uv_offset_x = (udim_index-1001)%10;
+	sub		$tmp4 udim_index $const2 	%line{19} %argrw{"wrr"}
+	mod		$tmp5 $tmp4 $const6 	%argrw{"wrr"}
+	assign		___339_i_uv_offset_x $tmp5 	%argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:20
+#             float i_uv_offset_y = ((udim_index-1001)-i_uv_offset_x)/10;
+	sub		$tmp6 udim_index $const2 	%line{20} %argrw{"wrr"}
+	assign		$tmp8 $tmp6 	%argrw{"wr"}
+	sub		$tmp7 $tmp8 ___339_i_uv_offset_x 	%argrw{"wrr"}
+	div		___339_i_uv_offset_y $tmp7 $const7 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:22
+#             string i_udim_str = format("%d", udim_index);
+	format		___339_i_udim_str $const8 udim_index 	%line{22} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:24
+#             split(filename, i_args, "<udim>");
+	split		$tmp9 filename ___339_i_args $const3 	%line{24} %argrw{"wrwr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:25
+#             string i_file = concat(i_args[0], i_udim_str, i_args[1]);
+	aref		$tmp10 ___339_i_args $const4 	%line{25} %argrw{"wrr"}
+	aref		$tmp11 ___339_i_args $const9 	%argrw{"wrr"}
+	functioncall	$const10 25 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:433
+#     return concat(concat(a,b), c);
+	concat		$tmp12 $tmp10 ___339_i_udim_str 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{433} %argrw{"wrr"}
+	concat		___339_i_file $tmp12 $tmp11 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:28
+#             gettextureinfo(i_file, "exists", e);
+	gettextureinfo	$tmp13 ___339_i_file $const11 ___339_e 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl"} %line{28} %argrw{"wrrw"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:29
+#             if (e > 0) {
+	gt		$tmp14 ___339_e $const4 	%line{29} %argrw{"wrr"}
+	if		$tmp14 60 61 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:30
+#                 float i_coord_x = 0;
+	assign		___340_i_coord_x $const4 	%line{30} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:31
+#                 float i_coord_y = 0;
+	assign		___340_i_coord_y $const4 	%line{31} %argrw{"wr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:33
+#                 float i_x_next = (i_uv_offset_x + 1);
+	add		___340_i_x_next ___339_i_uv_offset_x $const12 	%line{33} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:34
+#                 float i_y_next = (i_uv_offset_y + 1);
+	add		___340_i_y_next ___339_i_uv_offset_y $const12 	%line{34} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:36
+#                 if (((uv[0] >= i_uv_offset_x)&&(uv[0] <= i_x_next))&&((uv[1] >= i_uv_offset_y)&&(uv[1] <= i_y_next))){
+	compref		$tmp15 ___337_uv $const4 	%line{36} %argrw{"wrr"}
+	ge		$tmp16 $tmp15 ___339_i_uv_offset_x 	%argrw{"wrr"}
+	neq		$tmp17 $tmp16 $const4 	%argrw{"wrr"}
+	if		$tmp17 40 40 	%argrw{"r"}
+	compref		$tmp18 ___337_uv $const4 	%argrw{"wrr"}
+	le		$tmp19 $tmp18 ___340_i_x_next 	%argrw{"wrr"}
+	neq		$tmp20 $tmp19 $const4 	%argrw{"wrr"}
+	assign		$tmp17 $tmp20 	%argrw{"wr"}
+	neq		$tmp21 $tmp17 $const4 	%argrw{"wrr"}
+	if		$tmp21 52 52 	%argrw{"r"}
+	compref		$tmp22 ___337_uv $const9 	%argrw{"wrr"}
+	ge		$tmp23 $tmp22 ___339_i_uv_offset_y 	%argrw{"wrr"}
+	neq		$tmp24 $tmp23 $const4 	%argrw{"wrr"}
+	if		$tmp24 50 50 	%argrw{"r"}
+	compref		$tmp25 ___337_uv $const9 	%argrw{"wrr"}
+	le		$tmp26 $tmp25 ___340_i_y_next 	%argrw{"wrr"}
+	neq		$tmp27 $tmp26 $const4 	%argrw{"wrr"}
+	assign		$tmp24 $tmp27 	%argrw{"wr"}
+	neq		$tmp28 $tmp24 $const4 	%argrw{"wrr"}
+	assign		$tmp21 $tmp28 	%argrw{"wr"}
+	if		$tmp21 60 60 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:37
+#                     i_coord_x = uv[0]-i_uv_offset_x;
+	compref		$tmp29 ___337_uv $const4 	%line{37} %argrw{"wrr"}
+	sub		___340_i_coord_x $tmp29 ___339_i_uv_offset_x 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:38
+#                     i_coord_y = uv[1]-i_uv_offset_y;
+	compref		$tmp30 ___337_uv $const9 	%line{38} %argrw{"wrr"}
+	sub		___340_i_coord_y $tmp30 ___339_i_uv_offset_y 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:39
+#                     color i_rgb = texture(i_file, i_coord_x, 1-i_coord_y);
+	sub		$tmp31 $const12 ___340_i_coord_y 	%line{39} %argrw{"wrr"}
+	texture		___341_i_rgb ___339_i_file ___340_i_coord_x $tmp31 	%argrw{"wrrr"} %argderivs{2,3}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:40
+#                     final_rgb += i_rgb;
+	add		final_rgb final_rgb ___341_i_rgb 	%line{40} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:44
+#                 warning(
+	warning		$const13 ___339_i_file 	%line{44} %argrw{"rr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:48
+#             udim_index += 1;
+	add		udim_index udim_index $const9 	%line{48} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:18
+#         for (int i = 0; i < c; i++) {
+	assign		$tmp32 ___338_i 	%line{18} %argrw{"wr"}
+	add		___338_i ___338_i $const9 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:52
+#         final_rgb = texture(filename, u, 1-v);
+	sub		$tmp33 $const12 v 	%line{52} %argrw{"wrr"}
+	texture		final_rgb filename u $tmp33 	%argrw{"wrrr"} %argderivs{2,3}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_file.osl:55
+#     out_rgb = final_rgb;
+	assign		out_rgb final_rgb 	%line{55} %argrw{"wr"}
+	end

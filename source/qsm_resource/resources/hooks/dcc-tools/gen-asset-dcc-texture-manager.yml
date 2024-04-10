@@ -1,0 +1,180 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+        - '*-katana'
+    #
+    gui:
+        name: 'Texture Manager ( Asset )'
+        group_name: 'Texture(s)'
+        #
+        icon_name: 'window/texture'
+        tool_tip:
+            - 'Manager asset texture from "LookFileBake" per pass'
+            - '...'
+        #
+        size: [960, 720]
+#
+rsv-match-condition: 'branch=asset'
+
+build:
+    node:
+        options:
+            scheme:
+                widget: capsule_string
+                value: ['assignment', 'all']
+                default: 'assignment'
+                tool_tip: [
+                    'all scheme will find all from "dcc.node" at all look pass',
+                    'when scheme is "Assignment", find all assigning image from location all below',
+                    'when scheme is "All", find all image',
+                ]
+                enable: True
+
+            validation_enable:
+                widget: boolean
+                value: True
+                tool_tip: 'when is checked, refresh validation info, etc. tx exists, repath status, ...'
+                enable: True
+
+            dcc/node:
+                widget: enumerate
+                value: []
+                tool_tip: 'select a "LookFileBake" Node'
+                enable: True
+
+            dcc/location:
+                widget: string
+                value: '/master'
+                tool_tip: 'define a location for texture node search'
+                enable: True
+
+            target/extension:
+                widget: enumerate
+                value: ['.tx']
+                current: '.tx'
+                tool_tip: 'choose a target extension for create'
+                enable: True
+
+            target/create_force_enable:
+                widget: boolean
+                value: False
+                tool_tip: 'create target extension what ever target extension "exists" or "non-changed"'
+
+            target/create_target:
+                widget: 'sub_process_button'
+                value:
+                tool_tip: 'create target extension use thread'
+
+            target/repath_to_source:
+                widget: validator_button
+                value:
+                tool_tip: 'press to repath texture to source extension'
+                join_to_next: True
+
+            target/repath_to_target:
+                widget: validator_button
+                value:
+                tool_tip: 'press to repath texture to target extension'
+
+            extra/search:
+                widget: button
+                value:
+                tool_tip: 'press to execute "search" with dialog'
+                option_enable: True
+                join_to_next: True
+
+            extra/collection:
+                widget: button
+                value:
+                tool_tip: 'press to execute "collection" with dialog'
+                option_enable: True
+
+        extra_search:
+            directory:
+                widget: directory
+                open_or_save: open
+                history_key: 'tool-panels.texture-manager-search.directory-open'
+                pull_history_latest: True
+                value: ''
+                tool_tip: 'entry or choose a directory for searching'
+
+            below_enable:
+                widget: boolean
+                value: False
+                tool_tip: 'if checked, search all texture in the directory tree'
+
+            ignore_exists:
+                widget: boolean
+                value: False
+                tool_tip: 'if checked, do nothing when texture is exists'
+
+            ignore_name_case:
+                widget: boolean
+                value: False
+                tool_tip: 'if checked, search texture ignore name case, etc. "/root/Name.1001.exr" same to "/root/name.1001.exr"'
+
+            ignore_ext_case:
+                widget: boolean
+                value: False
+                tool_tip: 'if checked, search texture ignore name case, etc. "/root/name.1001.exr" same to "/root/name.1001.EXR"'
+
+            ignore_ext:
+                widget: boolean
+                value: False
+                tool_tip: 'if checked, search texture ignore extension, etc. "/root/name.1001.exr" same to "/root/name.1001.jpg"'
+
+        extra_collection:
+            directory:
+                widget: directory
+                open_or_save: save
+                history_key: 'tool-panels.texture-manager-collection.directory-save'
+                pull_history_latest: True
+                value: ''
+                tool_tip: 'entry or choose a directory for collection execute'
+
+            scheme:
+                widget: enumerate
+                value: ['default', 'separate']
+                current: 'separate'
+                tool_tip: [
+                    'choose a scheme',
+                    'default: texture source and target in one directory',
+                    'separate: texture source and in "{directory}/src", "{directory}/{target_format}" as separate',
+                ]
+                enable: True
+
+            target_extension:
+                widget: enumerate
+                value: ['.tx']
+                tool_tip: 'choose a target extension'
+                enable: True
+
+            mode:
+                widget: enumerate
+                value: ['copy', 'link']
+                current: 'copy'
+                tool_tip: 'choose a collection mode'
+                enable: True
+
+            replace_enable:
+                widget: boolean
+                value: False
+                tool_tip: 'if checked, replace exists'
+
+            copy_or_link_enable:
+                widget: boolean
+                value: True
+                tool_tip: 'if checked, copy or link texture'
+                join_to_next: True
+
+            repath_enable:
+                widget: boolean
+                value: False
+                tool_tip: 'if checked, repath texture'
+
+    node_collapse:
+        options: [
+            'dcc'
+        ]

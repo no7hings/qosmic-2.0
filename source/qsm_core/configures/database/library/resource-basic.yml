@@ -1,0 +1,322 @@
+option:
+    # base
+    basic:
+        # default options for all entity types
+        default_basic_entity_type_options:
+            id: { type: 'integer', args: [ 'primary key', 'autoincrement', 'not null', 'unique' ] }
+            #
+            enable: { type: 'boolean', args: [ 'not null', 'default 1' ] }
+            status: { type: 'string', args: [ 'not null', 'default "normal"' ] }
+            # create time
+            ctime: { type: 'timestamp', args: [ 'default CURRENT_TIMESTAMP' ] }
+            # modify time
+            mtime: { type: 'timestamp', args: [ 'default CURRENT_TIMESTAMP' ] }
+            #
+            entity_category: { type: 'string', args: ['not null'] }
+            entity_type: { type: 'string', args: ['not null'] }
+            #
+            kind: { type: 'string' }
+            #
+            matadata: { type: 'json' }
+            #
+            namespace: { type: 'string' }
+            # key
+            path: { type: 'string', args: [ 'not null', 'unique' ] }
+    # definition for all entity types
+    basic_types:
+        bsc_prim:
+            options:
+                name: { type: 'string', args: ['not null'] }
+                group: { type: 'string', args: ['not null'] }
+                # icon show in GUI
+                gui_name: { type: 'string' }
+                #
+                gui_icon_name: { type: 'string', args: [ 'default "database/object"' ] }
+                gui_description: { type: 'string' }
+                gui_status: { type: 'string' }
+        #
+        bsc_assign:
+            options:
+                node: { type: 'string', args: [ 'not null' ] }
+                value: { type: 'string', args: [ 'not null' ] }
+        #
+        bsc_port:
+            options:
+                node: { type: 'string', args: [ 'not null' ] }
+                port: { type: 'string', args: [ 'not null' ] }
+                value: { type: 'json', args: [ 'not null' ] }
+        #
+        bsc_connection:
+            options:
+                # override GUI icon name and use default
+                gui_icon_name: { type: 'string', args: [ 'default "database/tag"' ] }
+                #
+                source: { type: 'string', args: [ 'not null' ] }
+                target: { type: 'string', args: [ 'not null' ] }
+    #
+    entity_categories:
+        dtb_type:
+            basic_type: 'bsc_prim'
+            #
+            options_over:
+                gui_icon_name: { type: 'string', args: [ 'default "database/objects"' ] }
+        #
+        dtb_tag:
+            basic_type: 'bsc_prim'
+            #
+            options_over:
+                gui_icon_name: { type: 'string', args: [ 'default "database/tag"' ] }
+        #
+        dtb_node:
+            basic_type: 'bsc_prim'
+        #
+        dtb_port:
+            basic_type: 'bsc_port'
+        #
+        dtb_assign:
+            basic_type: 'bsc_assign'
+        #
+        dtb_connection:
+            basic_type: 'bsc_connection'
+    #
+    entities:
+        # resource-tag
+        # resource-primary-semantic-tag
+        /color:
+            entity_type: 'tag_group'
+            options: {kind: 'resource-semantic-tag-group', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'tag'
+                options: {kind: 'resource-primary-semantic-tag', group: '<....key>'}
+                names: ['black', 'brown', 'blue', 'gray', 'green', 'orange', 'pink', 'purple', 'red', 'tan', 'white', 'yellow', 'other']
+        #
+        /environment:
+            entity_type: 'tag_group'
+            options: {kind: 'resource-semantic-tag-group', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'tag'
+                options: {kind: 'resource-primary-semantic-tag', group: '<....key>'}
+                names: ['ancient', 'desert', 'forest', 'freshwater', 'grassland', 'industrial', 'medieval', 'other']
+        #
+        /state:
+            entity_type: 'tag_group'
+            options: {kind: 'resource-semantic-tag-group', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'tag'
+                options: {kind: 'resource-primary-semantic-tag', group: '<....key>'}
+                names: ['old', 'new', 'damaged', 'other']
+        # resource-semantic-tag
+        /orientation:
+            entity_type: 'tag_group'
+            options: {kind: 'resource-semantic-tag-group', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'tag'
+                options: {kind: 'resource-secondary-semantic-tag', group: '<....key>'}
+                names: []
+        #
+        /descriptive:
+            entity_type: 'tag_group'
+            options: {kind: 'resource-semantic-tag-group', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'tag'
+                options: {kind: 'resource-secondary-semantic-tag', group: '<....key>'}
+                names: []
+        #
+        /theme:
+            entity_type: 'tag_group'
+            options: {kind: 'resource-semantic-tag-group', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'tag'
+                options: {kind: 'resource-secondary-semantic-tag', group: '<....key>'}
+                names: []
+        # property tag
+        /resolution:
+            entity_type: 'tag_group'
+            options: {kind: 'resource-property-tag-group', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'tag'
+                options: {kind: 'resource-primary-semantic-tag', group: '<....key>'}
+                names: []
+        # resource-user-tag
+        /favorite:
+            entity_type: 'tag_group'
+            options: {kind: 'resource-user-tag-group', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'tag'
+                options: {kind: 'resource-user-tag', group: '<....key>'}
+                names: []
+        # resource-file-tag
+        /texture:
+            entity_type: 'tag_group'
+            options: {kind: 'resource-storage-tag-group', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'tag'
+                options: {kind: 'resource-file-tag', group: '<....key>'}
+                names: ['albedo', 'ao', 'bump', 'cavity', 'displacement', 'gloss', 'normal', 'roughness', 'specular', 'translucency']
+        #
+        /geometry:
+            entity_type: 'tag_group'
+            options: {kind: 'resource-storage-tag-group', gui_icon_name: 'database/group'}
+            children:
+                entity_type: 'tag'
+                options: {kind: 'resource-file-tag', group: '<....key>'}
+                names: ['fbx', 'abc', 'usd']
+    #
+    tag_group_includes: [
+        '/color', '/environment', '/state', '/orientation', '/descriptive', '/theme',
+        '/resolution',
+        '/favorite',
+        '/texture', '/geometry'
+    ]
+#
+patterns:
+    root-dir: '{root}'
+    #
+    database-file: '<.root-dir>/.database/sqlite.db'
+    #
+    resource-dir: '<.root-dir>/all/{category_group}/{resource}'
+    #
+    version-dir: '<.resource-dir>/{version}'
+    # image
+    image-dir: '<.version-dir>/image'
+    image-preview-png-file: '<.image-dir>/preview.png'
+    # quixel
+    quixel-dir: '<.version-dir>/quixel'
+    quixel-metadata-dir: '<.quixel-dir>/metadata'
+    quixel-metadata-json-file: '<.quixel-metadata-dir>/{resource}.json'
+    quixel-image-dir: '<.quixel-dir>/image'
+    quixel-image-png-file: '<.quixel-image-dir>/{resource}.png'
+    #
+    quixel-texture-dir: '<.quixel-dir>/texture'
+    quixel-geometry-dir: '<.quixel-dir>/geometry'
+    # texture
+    texture-dir: '<.version-dir>/texture'
+    texture-original-dir: '<.texture-dir>/original'
+    texture-original-src-dir: '<.texture-original-dir>/src'
+    texture-original-src-file: '<.texture-original-src-dir>/{resource}.{texture_type_tag}.{format}'
+    texture-original-src-lod-file: '<.texture-original-src-dir>/{resource}.{texture_type_tag}.lod_{lod_level.zfill(2)}.{format}'
+    #
+    texture-original-extra-src-file: '<.texture-original-src-dir>/{resource}.{key_extra}.{texture_type_tag}.{format}'
+    #
+    texture-acescg-dir: '<.texture-dir>/acescg'
+    texture-acescg-src-dir: '<.texture-acescg-dir>/src'
+    texture-acescg-src-file: '<.texture-acescg-src-dir>/{resource}.{texture_type_tag}.{format}'
+    texture-acescg-src-exr-file: '<.texture-acescg-src-dir>/{resource}.{texture_type_tag}.exr'
+    texture-acescg-tx-dir: '<.texture-acescg-dir>/tx'
+    texture-acescg-tx-file: '<.texture-acescg-tx-dir>/{resource}.{texture_type_tag}.tx'
+    #
+    texture-source-dir: '<.texture-dir>/source'
+    #
+    texture-json-dir: '<.texture-dir>/json'
+    texture-json-search-file: '<.texture-json-dir>/{resource}.search.json'
+    # hdri
+    hdri-dir: '<.version-dir>/hdri'
+    hdri-original-dir: '<.hdri-dir>/original'
+    #   src
+    hdri-original-src-dir: '<.hdri-original-dir>/src'
+    hdri-original-src-file: '<.hdri-original-src-dir>/{resource}.{format}'
+    #   jpg
+    hdri-original-jpg-dir: '<.hdri-original-dir>/jpg'
+    hdri-original-jpg-file: '<.hdri-original-jpg-dir>/{resource}.jpg'
+    #   tx
+    hdri-acescg-tx-dir: '<.hdri-acescg-dir>/tx'
+    hdri-acescg-tx-file: '<.hdri-acescg-tx-dir>/{resource}.tx'
+    #
+    hdri-acescg-dir: '<.hdri-dir>/acescg'
+    hdri-acescg-src-dir: '<.hdri-acescg-dir>/src'
+    hdri-acescg-src-file: '<.hdri-acescg-src-dir>/{resource}.{format}'
+    # geometry
+    geometry-dir: '<.version-dir>/geometry'
+    geometry-fbx-dir: '<.geometry-dir>/fbx'
+    geometry-fbx-file: '<.geometry-fbx-dir>/{resource}.fbx'
+    geometry-fbx-lod-file: '<.geometry-fbx-dir>/{resource}.lod_{lod_level.zfill(2)}.fbx'
+    #
+    geometry-fbx-var-file: '<.geometry-fbx-dir>/{resource}.var_{var_index.zfill(2)}.fbx'
+    geometry-fbx-var-lod-file: '<.geometry-fbx-dir>/{resource}.var_{var_index.zfill(2)}.lod_{lod_level.zfill(2)}.fbx'
+    #
+    geometry-abc-dir: '<.geometry-dir>/abc'
+    geometry-abc-file: '<.geometry-abc-dir>/{resource}.abc'
+    geometry-usd-dir: '<.geometry-dir>/usd'
+    geometry-usd-file: '<.geometry-usd-dir>/{resource}.usd'
+    # scene
+    scene-dir: '<.version-dir>/scene'
+    scene-maya-dir: '<.scene-dir>/maya'
+    scene-maya-file: '<.scene-maya-dir>/{resource}.ma'
+    scene-maya-src-dir: '<.scene-dir>/maya/source'
+    scene-maya-src-file: '<.scene-maya-src-dir>/{resource}.ma'
+    # proxy
+    proxy-dir: '<.version-dir>/proxy'
+    proxy-ass-dir: '<.proxy-dir>/ass'
+    proxy-ass-file: '<.proxy-ass-dir>/{resource}.ass'
+    # look
+    look-dir: '<.version-dir>/look'
+    look-preview-json-file: '<.look-dir>/json/{resource}.preview.json'
+    look-preview-usd-file: '<.look-dir>/usd/{resource}.preview.usda'
+#
+storages:
+    # texture
+    texture_original_src_directory:
+        kind: directory
+        keyword: 'texture-original-src-dir'
+
+    texture_acescg_src_directory:
+        kind: directory
+        keyword: 'texture-acescg-src-dir'
+
+    texture_acescg_tx_directory:
+        kind: directory
+        keyword: 'texture-acescg-tx-dir'
+
+    texture_source_directory:
+        kind: directory
+        keyword: 'texture-source-dir'
+    # hdri
+    hdri_original_src_directory:
+        kind: directory
+        keyword: 'hdri-original-src-dir'
+
+    hdri_original_jpg_directory:
+        kind: directory
+        keyword: 'hdri-original-jpg-dir'
+
+    hdri_acescg_src_directory:
+        kind: directory
+        keyword: 'hdri-acescg-src-dir'
+
+    hdri_acescg_tx_directory:
+        kind: directory
+        keyword: 'hdri-acescg-tx-dir'
+    # geometry
+    geometry_fbx_directory:
+        kind: directory
+        keyword: 'geometry-fbx-dir'
+
+    geometry_abc_directory:
+        kind: directory
+        keyword: 'geometry-abc-dir'
+
+    geometry_usd_directory:
+        kind: directory
+        keyword: 'geometry-usd-dir'
+    # scene
+    scene_maya_directory:
+        kind: directory
+        keyword: 'scene-maya-dir'
+    #
+    scene_maya_src_directory:
+        kind: directory
+        keyword: 'scene-maya-src-dir'
+    # proxy
+    proxy_ass_directory:
+        kind: directory
+        keyword: 'proxy-ass-dir'
+#
+category_groups:
+    - '/surface'
+    - '/imperfection'
+    - '/displacement'
+    - '/texture'
+    - '/atlas'
+    - '/asset'
+    - '/plant'
+    - '/hdri'

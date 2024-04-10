@@ -1,0 +1,141 @@
+option:
+    type: tool-panel
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'Library(s)'
+        #
+        name: 'Resource Library'
+        icon_name: 'application/resource_library'
+        icon_sub_name: 'application/python'
+        #
+        tool_tip: '...'
+        #
+        size: [1280, 960]
+        item_frame_size: [142, 142]
+        item_icon_frame_size: [20, 20]
+        item_icon_size: [20, 20]
+#
+hook_option:
+    rez:
+        extend_packages: ['qsm_main', 'usd', 'opengl', 'maya_pyside2', 'python27']
+#
+build:
+    node:
+        options:
+            usd/source_file:
+                widget: enumerate
+                value: ['None']
+                tool_tip: '...'
+
+            usd/target_file:
+                widget: enumerate
+                value: ['None']
+                tool_tip: '...'
+
+            usd/location:
+                widget: string
+                value: '/master/hi'
+                tool_tip: '...'
+
+            refresh:
+                widget: button
+                value: ''
+                tool_tip: '...'
+#
+window-actions:
+    tool:
+        option-hooks:
+            - 'dtb-tools/rsc-add-any-by-quixel'
+            - 'dtb-tools/rsc-add-any'
+#
+entity-actions:
+    #
+    category_group:
+        option-hooks:
+            - 'dtb-actions/category-add'
+    #
+    category:
+        option-hooks:
+            - 'dtb-actions/type-add'
+    #
+    type:
+        option-hooks:
+            - 'dtb-actions/resource-add'
+    #
+    resource:
+        option-hooks:
+            # resource
+            - 'dtb-actions/location-open': {
+                gui_parent: '/Open Folder', gui_name: 'for Resource'
+            }
+            # scene
+            -  'dtb-actions/resource-scene-src-to-scene-batch': {
+                gui_parent: '/Create', gui_name: 'Scene by Source Auto'
+            }
+            # geometry
+            - 'dtb-actions/resource-scene-to-geometry-batch': {
+                gui_parent: '/Create', gui_name: 'Geometry by Scene Auto'
+            }
+            - 'dtb-actions/resource-fbx-to-usd-convert-batch': {
+                gui_parent: '/Create', gui_name: 'Geometry USD by FBX Auto'
+            }
+            # look
+            - 'dtb-actions/resource-scene-to-look-batch': {
+                gui_parent: '/Create', gui_name: 'Look by Scene Auto'
+            }
+            # proxy
+            - 'dtb-actions/resource-scene-to-proxy-batch': {
+                gui_parent: '/Create', gui_name: 'Proxy by Scene Auto'
+            }
+            # texture
+            - 'dtb-actions/resource-texture-create-batch': {
+                gui_parent: '/Create', gui_name: 'Texture as ACEScg Auto'
+            }
+            # hdri
+            - 'dtb-actions/resource-hdri-create-batch': {
+                gui_parent: '/Create', gui_name: 'HDRI as ACEScg Auto'
+            }
+            # export
+            -   'dtb-actions/resource-export-for-maya-batch': {
+                gui_parent: '/Export', gui_name: 'to Maya Auto'
+            }
+            -   'dtb-actions/resource-export-for-clarisse-batch': {
+                gui_parent: '/Export', gui_name: 'to Clarisse Auto'
+            }
+    #
+    version:
+        option-hooks:
+            # resource
+            - 'dtb-actions/location-open': {
+                gui_parent: '/Open Folder', gui_name: 'for Latest Version'
+            }
+    #
+    storage:
+        option-hooks: []
+
+    storage-directory:
+        option-hooks:
+            - 'dtb-actions/directory-add-files': {
+                gui_parent: '/Add', gui_name: 'Files'
+            }
+
+    storage-file:
+        option-hooks:
+            - 'dtb-actions/file-export-for-maya': {
+                gui_parent: '/Export', gui_name: 'to Maya'
+            }
+            - 'dtb-actions/file-export-for-clarisse': {
+                gui_parent: '/Export', gui_name: 'to Clarisse'
+            }
+#
+entity-extra-actions:
+    storage-directory:
+        /texture/acescg/src:
+            option-hooks:
+                - 'dtb-actions/extra/storage-acescg-txs-create'
+#
+entity-extra-callbacks: {}
+

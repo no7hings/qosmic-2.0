@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#5F5F5F;}
+	.st1{fill:#878787;}
+	.st2{fill:#676767;}
+	.st3{fill:#A7A7A7;}
+	.st4{fill:#4B4B4B;}
+	.st5{fill:#FFFFFF;}
+	.st6{fill:#BFBFBF;}
+	.st7{fill:#9F9F9F;}
+	.st8{fill:#7F7F7F;}
+	.st9{display:none;fill:#FFFFFF;}
+</style>
+<g>
+	<polygon class="st0" points="58,7 58,5 54,5 54,2 17,2 16,2 14,4 11,7 9,9 6,12 6,58 10,58 10,60 14,60 14,62 60,62 62,60 62,7 	
+		"/>
+	<path class="st0" d="M60,64H14c-1.1,0-2-0.9-2-2h-2c-1.1,0-2-0.9-2-2H6c-1.1,0-2-0.9-2-2V12c0-0.5,0.2-1,0.6-1.4l10-10
+		C15,0.2,15.5,0,16,0h38c1.1,0,2,0.9,2,2v1h2c1.1,0,2,0.9,2,2h2c1.1,0,2,0.9,2,2v53c0,0.5-0.2,1-0.6,1.4l-2,2C61,63.8,60.5,64,60,64
+		z M16,60h43.2l0.8-0.8V9h-2c-1.1,0-2-0.9-2-2h-2c-1.1,0-2-0.9-2-2V4H16.8L8,12.8V56h2c1.1,0,2,0.9,2,2h2C15.1,58,16,58.9,16,60z"/>
+</g>
+<g>
+	<g>
+		<polygon class="st1" points="60,62 60,9 22,9 14,17 14,62 		"/>
+		<polygon class="st2" points="60,9 62,7 62,60 60,62 		"/>
+		<polygon class="st3" points="22,9 24,7 62,7 60,9 		"/>
+		<polygon class="st4" points="60,9 59,10 59,61 15,61 14,62 60,62 		"/>
+	</g>
+	<g>
+		<polygon class="st1" points="56,60 56,7 18,7 10,15 10,60 		"/>
+		<polygon class="st2" points="56,7 58,5 58,58 56,60 		"/>
+		<polygon class="st3" points="18,7 20,5 58,5 56,7 		"/>
+		<polygon class="st4" points="56,7 55,8 55,59 11,59 10,60 56,60 		"/>
+	</g>
+	<g>
+		<polygon class="st1" points="52,58 52,4 14,4 6,12 6,58 		"/>
+		<polygon class="st2" points="52,4 54,2 54,56 52,58 		"/>
+		<polygon class="st3" points="14,4 16,2 54,2 52,4 		"/>
+		<polygon class="st4" points="52,4 51,5 51,57 7,57 6,58 52,58 		"/>
+		<polygon class="st4" points="52,4 51,5 51,57 7,57 6,58 52,58 		"/>
+	</g>
+	<polygon class="st5" points="52,4 51,5 14,5 7,12 7,57 6,58 6,12 16,2 17,2 15,4 	"/>
+	<polygon class="st6" points="49,55 9,55 9,9 11,7 49,7 	"/>
+	<polygon class="st7" points="48,54 10,54 48,16 	"/>
+	<polygon class="st8" points="10,21 26,37 10,53 	"/>
+	<polygon class="st5" points="14,12 6,12 14,4 	"/>
+</g>
+<rect x="10" y="19" class="st9" width="40" height="30"/>
+</svg>

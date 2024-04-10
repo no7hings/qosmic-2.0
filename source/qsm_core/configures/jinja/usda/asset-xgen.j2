@@ -1,0 +1,38 @@
+#usda 1.0
+(
+    defaultPrim = "{{ asset.root_name }}"
+    metersPerUnit = 0.01
+    upAxis = "Y"
+)
+
+over Xform "{{ asset.root_name }}" (
+    kind = "component"
+)
+{
+    def Xform "{{ asset.xgen.root_name }}" (
+        kind = "subcomponent"
+    )
+    {
+        {% for i_collection_name, i_collection_raw in asset.xgen.collections.iteritems() -%}
+        def Xform "{{ i_collection_name }}"
+        {
+            asset userProperties:pgOpIn:xgen:opArgs:xgen_file = @{{ i_collection_raw.file }}@
+            string userProperties:pgOpIn:xgen:opType = "ArnoldXGen"
+            string[] userProperties:pgOpIn:xgen:descriptions = [
+            {%- for j_description_name in i_collection_raw.description_names -%}
+                {%- if not loop.last %}
+                "{{ j_description_name }}",
+                {%- else %}
+                "{{ j_description_name }}"
+                {%- endif %}
+            {%- endfor %}
+            ]
+            float[] userProperties:pgOpIn:xgen:opArgs:samples = [0]
+            {%- for j_description_name in i_collection_raw.description_names %}
+            float userProperties:pgOpIn:xgen:description:{{ j_description_name }}:min_pixel_width = 0.1
+            {%- endfor %}
+        }
+        {% endfor %}
+    }
+}
+

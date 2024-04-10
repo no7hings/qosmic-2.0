@@ -1,0 +1,138 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.12.0
+# options: -o /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.oso
+shader osl_color_correct
+param	color	input	1 1 1		%read{0,0} %write{2147483647,-1}
+param	color	rgb_over	0 0 0		%read{1,1} %write{2147483647,-1}
+param	float	rgb_over_scale	1		%meta{float,min,0} %meta{float,max,1}  %read{6,10} %write{2147483647,-1}
+param	float	h_offset	0.5		%meta{float,min,0} %meta{float,max,1}  %read{14,14} %write{2147483647,-1}
+param	float	s_offset	0.5		%meta{float,min,0} %meta{float,max,1}  %read{26,26} %write{2147483647,-1}
+param	float	v_offset	0.5		%meta{float,min,0} %meta{float,max,1}  %read{33,33} %write{2147483647,-1}
+param	float	offset_scale	1		%meta{float,min,0} %meta{float,max,1}  %read{16,34} %write{2147483647,-1}
+oparam	color	out_rgb	0 0 0		%read{2147483647,-1} %write{41,41}
+local	color	hsv_in	%read{5,13} %write{0,0}
+local	color	hsv_over	%read{2,4} %write{1,1}
+local	float	h_over	%read{9,9} %write{2,2}
+local	float	s_over	%read{2147483647,-1} %write{3,3}
+local	float	v_over	%read{6,9} %write{4,4}
+local	float	h_out_1	%read{15,15} %write{11,11}
+local	float	s_out_1	%read{29,29} %write{12,12}
+local	float	v_out_1	%read{36,36} %write{13,13}
+local	float	h_out_2	%read{40,40} %write{25,25}
+local	float	s_out_2	%read{40,40} %write{32,32}
+local	float	v_out_2	%read{40,40} %write{39,39}
+local	color	out_rgb_2	%read{41,41} %write{40,40}
+const	string	$const1	"rgb"		%read{0,1} %write{2147483647,-1}
+const	string	$const2	"hsv"		%read{0,40} %write{2147483647,-1}
+const	int	$const3	0		%read{2,5} %write{2147483647,-1}
+const	int	$const4	1		%read{3,12} %write{2147483647,-1}
+const	int	$const5	2		%read{4,13} %write{2147483647,-1}
+temp	float	$tmp1	%read{8,8} %write{5,5}
+temp	float	$tmp2	%read{7,7} %write{6,6}
+temp	float	$tmp3	%read{8,8} %write{7,7}
+const	float	$const6	1		%read{7,38} %write{2147483647,-1}
+temp	float	$tmp4	%read{11,11} %write{8,8}
+temp	float	$tmp5	%read{10,10} %write{9,9}
+temp	float	$tmp6	%read{11,11} %write{10,10}
+temp	float	$tmp7	%read{22,22} %write{21,21}
+temp	int	$tmp8	%read{19,19} %write{18,18}
+const	float	$const7	0.5		%read{14,33} %write{2147483647,-1}
+temp	float	$tmp9	%read{15,15} %write{14,14}
+temp	float	$tmp10	%read{16,16} %write{15,15}
+temp	float	$tmp11	%read{17,17} %write{16,16}
+const	int	$const8	100		%read{19,19} %write{2147483647,-1}
+temp	float	$tmp12	%read{18,18} %write{17,17}
+const	float	$const9	100		%read{17,22} %write{2147483647,-1}
+temp	int	$tmp13	%read{20,20} %write{19,19}
+temp	float	$tmp14	%read{21,21} %write{20,20}
+temp	float	$tmp15	%read{24,24} %write{22,22}
+const	float	$const10	0		%read{25,39} %write{2147483647,-1}
+const	string	$const11	"clamp"		%read{23,37} %write{2147483647,-1}
+temp	float	$tmp16	%read{25,25} %write{24,24}
+temp	float	$tmp17	%read{27,27} %write{26,26}
+temp	float	$tmp18	%read{28,28} %write{27,27}
+temp	float	$tmp19	%read{29,29} %write{28,28}
+const	float	$const12	2		%read{28,35} %write{2147483647,-1}
+temp	float	$tmp20	%read{31,31} %write{29,29}
+temp	float	$tmp21	%read{32,32} %write{31,31}
+temp	float	$tmp22	%read{34,34} %write{33,33}
+temp	float	$tmp23	%read{35,35} %write{34,34}
+temp	float	$tmp24	%read{36,36} %write{35,35}
+temp	float	$tmp25	%read{38,38} %write{36,36}
+temp	float	$tmp26	%read{39,39} %write{38,38}
+code ___main___
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl:14
+#     color hsv_in = transformc("rgb", "hsv", input);
+	transformc	hsv_in $const1 $const2 input 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl"} %line{14} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl:16
+#     color hsv_over = transformc("rgb", "hsv", rgb_over);
+	transformc	hsv_over $const1 $const2 rgb_over 	%line{16} %argrw{"wrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl:17
+#     float h_over = hsv_over[0];
+	compref		h_over hsv_over $const3 	%line{17} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl:18
+#     float s_over = hsv_over[1];
+	compref		s_over hsv_over $const4 	%line{18} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl:19
+#     float v_over = hsv_over[2];
+	compref		v_over hsv_over $const5 	%line{19} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl:21
+#     float h_out_1 = hsv_in[0]*(1-v_over*rgb_over_scale) + h_over*v_over*rgb_over_scale;
+	compref		$tmp1 hsv_in $const3 	%line{21} %argrw{"wrr"}
+	mul		$tmp2 v_over rgb_over_scale 	%argrw{"wrr"}
+	sub		$tmp3 $const6 $tmp2 	%argrw{"wrr"}
+	mul		$tmp4 $tmp1 $tmp3 	%argrw{"wrr"}
+	mul		$tmp5 h_over v_over 	%argrw{"wrr"}
+	mul		$tmp6 $tmp5 rgb_over_scale 	%argrw{"wrr"}
+	add		h_out_1 $tmp4 $tmp6 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl:22
+#     float s_out_1 = hsv_in[1];
+	compref		s_out_1 hsv_in $const4 	%line{22} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl:23
+#     float v_out_1 = hsv_in[2];
+	compref		v_out_1 hsv_in $const5 	%line{23} %argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl:25
+#     float h_out_2 = clamp(float(int((h_out_1+(h_offset-0.5))*offset_scale*100)%100)/100.0, 0.0, 1.0);
+	sub		$tmp9 h_offset $const7 	%line{25} %argrw{"wrr"}
+	add		$tmp10 h_out_1 $tmp9 	%argrw{"wrr"}
+	mul		$tmp11 $tmp10 offset_scale 	%argrw{"wrr"}
+	mul		$tmp12 $tmp11 $const9 	%argrw{"wrr"}
+	assign		$tmp8 $tmp12 	%argrw{"wr"}
+	mod		$tmp13 $tmp8 $const8 	%argrw{"wrr"}
+	assign		$tmp14 $tmp13 	%argrw{"wr"}
+	assign		$tmp7 $tmp14 	%argrw{"wr"}
+	div		$tmp15 $tmp7 $const9 	%argrw{"wrr"}
+	functioncall	$const11 26 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp16 $tmp15 $const6 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		h_out_2 $tmp16 $const10 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl:26
+#     float s_out_2 = clamp((s_out_1+(s_offset-0.5)*offset_scale*2), 0.0, 1.0);
+	sub		$tmp17 s_offset $const7 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl"} %line{26} %argrw{"wrr"}
+	mul		$tmp18 $tmp17 offset_scale 	%argrw{"wrr"}
+	mul		$tmp19 $tmp18 $const12 	%argrw{"wrr"}
+	add		$tmp20 s_out_1 $tmp19 	%argrw{"wrr"}
+	functioncall	$const11 33 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp21 $tmp20 $const6 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		s_out_2 $tmp21 $const10 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl:27
+#     float v_out_2 = clamp((v_out_1+(v_offset-0.5)*offset_scale*2), 0.0, 1.0);
+	sub		$tmp22 v_offset $const7 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl"} %line{27} %argrw{"wrr"}
+	mul		$tmp23 $tmp22 offset_scale 	%argrw{"wrr"}
+	mul		$tmp24 $tmp23 $const12 	%argrw{"wrr"}
+	add		$tmp25 v_out_1 $tmp24 	%argrw{"wrr"}
+	functioncall	$const11 40 	%argrw{"r"}
+# /data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h:141
+# float  clamp (float x, float minval, float maxval) { return max(min(x,maxval),minval); }
+	min		$tmp26 $tmp25 $const6 	%filename{"/data/e/myworkspace/td/lynxi/workspace/resource/linux/arnold/osl/include/stdosl.h"} %line{141} %argrw{"wrr"}
+	max		v_out_2 $tmp26 $const10 	%argrw{"wrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl:28
+#     color out_rgb_2 = color("hsv", h_out_2, s_out_2, v_out_2);
+	color		out_rgb_2 $const2 h_out_2 s_out_2 v_out_2 	%filename{"/data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl"} %line{28} %argrw{"wrrrr"}
+# /data/e/myworkspace/td/lynxi/script/python/.setup/arnold/shaders/osl_color_correct.osl:29
+#     out_rgb = out_rgb_2;
+	assign		out_rgb out_rgb_2 	%line{29} %argrw{"wr"}
+	end

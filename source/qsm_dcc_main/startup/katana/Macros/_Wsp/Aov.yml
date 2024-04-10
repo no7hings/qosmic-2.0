@@ -1,0 +1,158 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'aov'
+    type_abr: 'aov'
+    create_type: 'Aov_Wsp'
+    description:
+        |-
+        node for aov
+    #
+    auto_color: False
+    #
+    color_use_type: True
+    #
+    color:
+        r: 0
+        g: 0
+        b: 0
+    #
+    size:
+        w: 480
+        h: 240
+#
+main:
+    # create from self
+    type: Aov_Wsp
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    input: '<.path>.input'
+    output: '<.path>.output'
+    #
+    attributes:
+        ns_offsetX: 480
+        ns_offsetY: 120
+        #
+        ns_colorr: <option.color.r>
+        ns_colorg: <option.color.g>
+        ns_colorb: <option.color.b>
+        ns_linkColorR: <option.color.r>
+        ns_linkColorG: <option.color.g>
+        ns_linkColorB: <option.color.b>
+        #
+        comment: '<option.description>'
+    #
+    clear_children: False
+    #
+    input_ports:
+        - input
+    #
+    output_ports:
+        - output
+    #
+    ports:
+        # basic
+        type:
+            widget: string
+            value: '<option.create_type>'
+            tool_tip: '...'
+            lock: True
+        #
+        option/enable:
+            widget: boolean
+            value: True
+            tool_tip: '...'
+        #
+        option/type:
+            widget: enumerate
+            value: ['BYTE', 'INT', 'UINT', 'BOOL', 'FLOAT', 'RGB', 'RGBA', 'VECTOR', 'VECTOR2', 'STRING', 'POINTER', 'NODE', 'ARRAY', 'MATRIX']
+            default: 'RGBA'
+            tool_tip: '...'
+        #
+        option/name:
+            widget: string
+            value: 'primary'
+            tool_tip: '...'
+        #
+        option/channel:
+            widget: string
+            value: 'primary'
+            tool_tip: '...'
+            lock: True
+        #
+        option/output_type:
+            widget: enumerate
+            value: ['file', 'local']
+            tool_tip: '...'
+        #
+        option/output_directory:
+            widget: file
+            value: '/temp'
+            tool_tip: '...'
+    #
+    expressions:
+        option/channel: 'option.name'
+#
+node:
+    channel_define:
+        type: ArnoldOutputChannelDefine
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.in'
+        output: '<.path>.out'
+        #
+        parameters:
+            nodes/driverParameters/append/enable: 1
+            nodes/driverParameters/append/value: 1
+        #
+        expressions:
+            name: 'getParent().option.name'
+            channel: 'getParent().option.name'
+        #
+        connections:
+            # input
+            - '<main.input>'
+            - '<.input>'
+    #
+    output_define:
+        type: RenderOutputDefine
+        path: '<main.path>/<option.type_abr>__<..key>'
+        input: '<.path>.input'
+        output: '<.path>.out'
+        #
+        parameters:
+            args/renderSettings/outputs/outputName/rendererSettings/channel/enable: 1
+            args/renderSettings/outputs/outputName/locationType/enable: 1
+            args/renderSettings/outputs/outputName/locationSettings/renderLocation/enable: 1
+        #
+        expressions:
+            outputName: 'getParent().option.name'
+            args/renderSettings/outputs/outputName/rendererSettings/channel/value: 'getParent().option.name'
+            args/renderSettings/outputs/outputName/locationType/value: 'getParent().option.output_type'
+            args/renderSettings/outputs/outputName/locationSettings/renderLocation/value: 'getParent().option.output'
+        #
+        connections:
+            - '<..channel_define.output>'
+            - '<.input>'
+    #   abc enable
+    asset_abc_enable:
+        type: Switch
+        path: '<main.path>/<option.type_abr>__<..key>'
+        output: '<.path>.output'
+        #
+        input_ports:
+            - 'off'
+            - 'on'
+        #
+        expressions:
+            in: '1 if getParent().option.enable else 0'
+        #
+        connections:
+            # off
+            - '<main.input>'
+            - '<.path>.off'
+            # on
+            - '<..output_define.output>'
+            - '<.path>.on'
+            # output
+            - '<.output>'
+            - '<main.output>'

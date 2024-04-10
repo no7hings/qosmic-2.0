@@ -1,0 +1,29 @@
+option:
+    root: '/rootNode'
+    category: 'workspace'
+    type: 'material'
+    type_abr: 'mtl'
+    create_type: 'Material_Wsp_Usr'
+    description:
+        |-
+        for upstream merge
+    variant_key: ''
+    #
+    auto_color: False
+#
+main:
+    # create from self
+    type: Material_Wsp_Usr
+    name: '<option.type>'
+    path: '<option.root>/<.name>'
+    output: '<.path>.out'
+    #
+    clear_ports: False
+    clear_children: False
+    #
+    attributes:
+        comment: '<option.description>'
+    #
+    parameters:
+        # basic
+        user/type: '<option.create_type>'

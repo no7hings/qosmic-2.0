@@ -1,0 +1,41 @@
+#include <stdosl.h>
+
+
+int get_index(
+    string input,
+    string input_mapper
+)
+{
+    int out_default = 0;
+    string sep = ",";
+    int c = 20;
+    if (strlen(input) > 0) {
+        string output_args[20];
+        split(input_mapper, output_args, ",");
+        for (int i = 0; i < c; i++) {
+            string i_str = output_args[i];
+            string i_args[2];
+                split(i_str, i_args, "=");
+                string i_key = i_args[0];
+                if (i_key == input) {
+                    string i_value = i_args[1];
+                    int i_output = stoi(i_value);
+                    return i_output;
+                }
+        }
+    }
+    return out_default;
+}
+
+shader osl_string_to_int(
+    string input = "red" [[ string widget = "string" ]],
+    string input_mapper = "red=0,green=1,blue=2" [[ string widget = "string" ]],
+    int output_default = 0 [[ int min = 0, int max = 100, string page = "extra" ]],
+    int output_maximum = 20 [[ int min = 0, int max = 100, string page = "extra" ]],
+    output int out_int = 0,
+)
+{
+    out_int = get_index(
+        input, input_mapper
+    );
+}
