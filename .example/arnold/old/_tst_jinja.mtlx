@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<materialx version="1.36">
+    <xi:include href="materialx/arnold/nodedefs.mtlx" />
+    <!-- looks -->
+    <look name="default">
+        <!-- material-assigns -->
+        <materialassign name="/default/mesh/material_1" material="/default/mesh/material_1" geom="/mesh_1Shape,/mesh_2Shape" />
+        <materialassign name="/default/mesh/material_0" material="/default/mesh/material_0" geom="/mesh_1Shape,/mesh_2Shape" />
+        <!-- property-set-assigns -->
+        <propertysetassign name="/default/mesh/property_set_0" propertyset="/default/mesh/property_set_0" geom="/mesh1Shape" />
+        <!-- visibilities -->
+        <visibility name="/default/mesh/visibility_0" vistype="camera" visible="true" geom="/mesh1Shape" />
+    </look>
+    <!-- materials -->
+    <material name="/default/mesh/material_0">
+        <shaderref name="/default/shader_0" node="standard_surface" context="surfaceshader" />
+    </material>
+    <nodegraph name="/default/shader_0">
+    </nodegraph>
+    <!-- property-sets -->
+    <propertyset name="/default/mesh/property_set_0">
+        <property name="smoothing" type="boolean" value="true" />
+    </propertyset>
+</materialx>

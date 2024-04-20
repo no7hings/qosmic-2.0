@@ -1,0 +1,10 @@
+image:
+    size: [2048, 2048]
+    background: [0, 0, 0, 0]
+#
+draw:
+    text:
+        content: {location: '/master/shape', aov: 'ass_density'}
+        size: 48
+        weight: 75
+        color: [0, 0, 0, 255]

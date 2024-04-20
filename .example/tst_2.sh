@@ -1,0 +1,1 @@
+diff /l/prod/cjd/work/assets/chr/nn_gongshifu/srf/td_test/maya/scenes/nn_gongshifu.srf.td-test.v001__nn_gongshifu_hair_collection.xgen /l/prod/cjd/publish/assets/chr/nn_gongshifu/grm/groom/nn_gongshifu.grm.groom.v030/maya/nn_gongshifu__nn_gongshifu_hair_collection.xgen

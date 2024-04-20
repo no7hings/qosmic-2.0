@@ -1,0 +1,11 @@
+//Maya Preference 2019 (Release 1)
+//
+//
+filePathEditor -registerType "aiImage.filename" -typeLabel "Image" ;
+filePathEditor -registerType "aiPhotometricLight.aiFilename" -typeLabel "IES" ;
+filePathEditor -registerType "aiStandIn.dso" -typeLabel "Standin" ;
+filePathEditor -registerType "aiVolume.filename" -typeLabel "VDB" ;
+filePathEditor -registerType "audio.filename" -typeLabel "Audio" ;
+filePathEditor -registerType "file" -typeLabel "Texture" ;
+filePathEditor -registerType "imagePlane.imageName" -typeLabel "Image Plane" ;
+filePathEditor -registerType "reference" -typeLabel "Reference" ;
