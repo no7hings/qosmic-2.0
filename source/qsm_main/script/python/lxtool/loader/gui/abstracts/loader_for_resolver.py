@@ -62,7 +62,7 @@ class _GuiEntityOpt(
 
     def gui_add_root(self):
         path = '/'
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             prx_item = self._prx_tree_view.create_item(
                 self.ROOT_NAME,
                 icon=gui_core.GuiIcon.get('database/all'),
@@ -78,7 +78,7 @@ class _GuiEntityOpt(
         name = obj.name
         path = obj.path
         type_name = obj.type
-        if self.gui_get_is_exists(path) is True:
+        if self.gui_is_exists(path) is True:
             prx_item = self.gui_get(path)
             return False, prx_item
         else:
@@ -150,7 +150,7 @@ class _GuiEntityOpt(
             ancestors.reverse()
             for i in ancestors:
                 i_path = i.get_path()
-                if self.gui_get_is_exists(i_path) is False:
+                if self.gui_is_exists(i_path) is False:
                     self.gui_add(i, use_show_thread=True)
         #
         return self.gui_add(obj, use_show_thread=True)
@@ -344,7 +344,7 @@ class _GuiTaskOpt(
             )
 
         path = rsv_task.get_path()
-        if self.gui_get_is_exists(path) is True:
+        if self.gui_is_exists(path) is True:
             return self.gui_get(path)
 
         valid = self.__get_is_valid(rsv_task)
@@ -615,7 +615,7 @@ class _GuiFileOpt(
             prx_item_widget.refresh_widget_force()
 
         path = file_path = file_opt.get_path()
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             prx_item_widget = self._prx_list_view.create_item()
 
             self.gui_register(path, prx_item_widget)

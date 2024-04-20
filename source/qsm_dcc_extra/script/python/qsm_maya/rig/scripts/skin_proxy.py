@@ -50,7 +50,7 @@ class AdvSkinProxyGenerate(object):
 
     CACHE_ROOT = '|__SKIN_PROXY__'
 
-    CACHE_NAME = 'skin_proxy_dgc'
+    CACHE_NAME = qsm_rig_core.RigConfigure.SkinProxyCacheName
 
     @classmethod
     def _create_group(cls, path):
@@ -350,7 +350,7 @@ class AdvSkinProxyGenerate(object):
     def hide_source_geometry_root(self, location):
         geometry_roots = self._adv_query.main_query.get('geometry_root')
         if geometry_roots:
-            layer_name = '{}_geometry_hide'.format(self._namespace)
+            layer_name = '{}_skin_proxy_hide'.format(self._namespace)
             layer_path = cmds.createDisplayLayer(name=layer_name, number=1, empty=True)
             cmds.editDisplayLayerMembers(layer_path, *geometry_roots)
             cmds.setAttr(layer_path + '.visibility', False)
@@ -714,9 +714,12 @@ class AdvSkinProxyGenerate(object):
                 )
                 self.connect_cache_constrains(cache_location, namespace)
 
-                self.hide_source_geometry_root(cache_location)
+                self.auto_hide(cache_location)
 
                 cmds.parent(cache_location, self.CACHE_ROOT)
+
+    def auto_hide(self, location):
+        self.hide_source_geometry_root(location)
 
     def generate_args(self):
         file_path = qsm_mya_ast_core.NamespaceQuery().get_file(self._namespace)

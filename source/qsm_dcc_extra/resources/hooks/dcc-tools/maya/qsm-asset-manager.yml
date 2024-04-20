@@ -14,7 +14,7 @@ option:
             - 'Manager asset, etc. rig, assembly'
             - '...'
         #
-        size: [720, 480]
+        size: [720, 720]
 #
 rsv-match-condition: 'branch=asset'
 
@@ -23,33 +23,48 @@ build:
         rig_options:
             selection_scheme:
                 widget: capsule_string
-                value: ['root', 'geometry', 'deformation', 'motion', 'skin_proxy', 'dynamic_gpu']
+                value: ['root', 'geometry', 'deformation', 'motion']
                 default: 'motion'
                 tool_tip: '...'
 
-            load_skin_proxy:
+            skin_proxy/load_skin_proxy:
                 widget: sub_process_button
                 value:
                 tool_tip:
                     |-
                     press to load skin proxy auto.
                     点击自动加载低模。
+                join_to_next: True
+
+            skin_proxy/remove_skin_proxy:
+                widget: button
+                value: ''
+                icon: 'application/python'
+                tool_tip: '...'
 
             dynamic_gpu/frame_scheme:
                 widget: capsule_string
-                value: ['render_settings', 'time_slider', 'start_to_end']
+                value: ['render_settings', 'time_slider', 'frame_range']
                 default: 'time_slider'
                 tool_tip: '...'
 
-            dynamic_gpu/start_to_end:
+            dynamic_gpu/frame_range:
                 widget: integer2
                 value: [0, 24]
                 tool_tip: '...'
+                lock: True
 
-            load_dynamic_gpu:
+            dynamic_gpu/load_dynamic_gpu:
                 widget: sub_process_button
-                value:
+                value: ''
                 tool_tip:
                     |-
                     press to load dynamic GPU auto.
                     点击自动加载动态GPU。
+                join_to_next: True
+
+            dynamic_gpu/remove_dynamic_gpu:
+                widget: button
+                value: ''
+                icon: 'application/python'
+                tool_tip: '...'

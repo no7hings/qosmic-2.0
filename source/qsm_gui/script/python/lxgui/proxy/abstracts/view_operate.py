@@ -47,7 +47,7 @@ class AbsGuiPrxTreeViewOpt(object):
         self._prx_tree_view.set_clear()
         self._keys.clear()
 
-    def gui_get_is_exists(self, path):
+    def gui_is_exists(self, path):
         return self._item_dict.get(path) is not None
 
     def gui_get(self, path):
@@ -102,7 +102,7 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
         self.__pull_expand_cache()
 
         path = directory_path[len(self._root):]
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             path_opt = bsc_core.PthNodeOpt(path)
             prx_item = self._prx_tree_view.create_item(
                 path_opt.get_name(),
@@ -128,7 +128,7 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
     def gui_add_one(self, directory_opt):
         directory_path = directory_opt.get_path()
         path = directory_path[len(self._root):]
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             path_opt = bsc_core.PthNodeOpt(path)
             #
             parent_gui = self.gui_get(path_opt.get_parent_path())
@@ -267,7 +267,7 @@ class AbsGuiTreeViewAsTagOpt(AbsGuiPrxTreeViewOpt):
     def gui_get_tag(self, path):
         return self._tag_item_dict[path]
 
-    def gui_get_is_exists(self, path):
+    def gui_is_exists(self, path):
         return path in self._tag_item_dict
 
     def gui_register_group(self, path, prx_item):
@@ -322,7 +322,7 @@ class AbsGuiTreeViewAsTagOpt(AbsGuiPrxTreeViewOpt):
         return self.gui_get_group(path)
 
     def gui_add_tag_by_path(self, path):
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             path_opt = bsc_core.PthNodeOpt(path)
             parent_path = path_opt.get_parent_path()
             parent_prx_item = self.gui_get_group(parent_path)
@@ -407,7 +407,7 @@ class AbsGuiPrxListViewOpt(object):
         self._prx_list_view.set_clear()
         self._keys.clear()
 
-    def gui_get_is_exists(self, path):
+    def gui_is_exists(self, path):
         return self._item_dict.get(path) is not None
 
     def gui_get(self, path):

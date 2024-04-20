@@ -22,7 +22,7 @@ def get_hook_args(key, search_paths=None):
             'dcc-tool',
             'kit-panel',
             'tool-panel', 'kit-panel',
-            'dcc-tool-panel', 'dcc-menu',
+            'dcc-tool-panel', 'dcc-menu', 'dcc-action',
             'rsv-tool-panel', 'rsv-loader', 'rsv-publisher'
         }:
             session = bsc_session.GenerSession(

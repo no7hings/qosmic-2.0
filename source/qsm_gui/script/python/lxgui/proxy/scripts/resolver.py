@@ -48,7 +48,7 @@ class GuiPrxScpForResolver(object):
         self._item_dict = self._tree_view._item_dict
         self._keys = set()
 
-    def gui_get_is_exists(self, path):
+    def gui_is_exists(self, path):
         return self._item_dict.get(path) is not None
 
     def gui_get(self, path):
@@ -64,7 +64,7 @@ class GuiPrxScpForResolver(object):
 
     def gui_add_root(self):
         path = '/'
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             prx_item = self._tree_view.create_item(
                 self.ROOT_NAME,
                 icon=gui_core.GuiIcon.get('database/all'),
@@ -80,7 +80,7 @@ class GuiPrxScpForResolver(object):
         name = obj.name
         path = obj.path
         type_name = obj.type
-        if self.gui_get_is_exists(path) is True:
+        if self.gui_is_exists(path) is True:
             prx_item = self.gui_get(path)
             return False, prx_item
         else:
@@ -169,7 +169,7 @@ class GuiPrxScpForResolver(object):
             ancestors.reverse()
             for i in ancestors:
                 i_path = i.get_path()
-                if self.gui_get_is_exists(i_path) is False:
+                if self.gui_is_exists(i_path) is False:
                     self.gui_add(i, use_show_thread=True)
         #
         return self.gui_add(obj, use_show_thread=True)

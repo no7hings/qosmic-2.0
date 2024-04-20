@@ -15,7 +15,7 @@ import qsm_maya.asset.core as qsm_mya_ast_core
 class DynamicGpuCacheGenerate(object):
     CACHE_ROOT = '|__DYNAMIC_GPU__'
 
-    CACHE_NAME = 'dynamic_gpu_dgc'
+    CACHE_NAME = qsm_rig_core.RigConfigure.DynamicGpuCacheName
 
     @classmethod
     def _export_gpu_frame(cls, location, gpu_file_path, start_frame, end_frame, with_material=False):
@@ -182,14 +182,6 @@ class DynamicGpuCacheGenerate(object):
             )
             cmds.setAttr(self.CACHE_ROOT+'.iconName', 'folder-closed.png', type='string')
 
-    def hide_source_root(self, cache_location):
-        layer_name = '{}_hide'.format(self._namespace)
-        layer_path = cmds.createDisplayLayer(name=layer_name, number=1, empty=True)
-        cmds.editDisplayLayerMembers(layer_path, self._root)
-        cmds.setAttr(layer_path + '.visibility', False)
-
-        cmds.container(cache_location, edit=1, force=1, addNode=[layer_path])
-
     def export_source(self, file_path):
         if self._root is not None:
             bsc_core.StgBaseMtd.create_directory(
@@ -227,12 +219,23 @@ class DynamicGpuCacheGenerate(object):
                 cmds.setAttr(
                     '{}.qsm_cache'.format(cache_location), cache_location, type='string'
                 )
-                self.hide_source_root(cache_location)
+                self.auto_hide(cache_location)
                 
                 cmds.parent(cache_location, self.CACHE_ROOT)
 
-    def test(self):
-        pass
+    def auto_hide(self, cache_location):
+        layer_name = '{}_dynamic_gpu_hide'.format(self._namespace)
+        layer_path = cmds.createDisplayLayer(name=layer_name, number=1, empty=True)
+        cmds.editDisplayLayerMembers(layer_path, self._root)
+        cmds.setAttr(layer_path + '.visibility', False)
+
+        cmds.container(cache_location, edit=1, force=1, addNode=[layer_path])
+
+        skin_proxy_cache_locations = cmds.ls(
+            '{}:{}'.format(self._namespace, qsm_rig_core.RigConfigure.SkinProxyCacheName), long=1
+        )
+        if skin_proxy_cache_locations:
+            cmds.editDisplayLayerMembers(layer_path, *skin_proxy_cache_locations)
 
     def generate_args(self, directory_path):
         file_path = '{}/source.ma'.format(directory_path)
@@ -247,6 +250,9 @@ class DynamicGpuCacheGenerate(object):
             )
         )
         return cmd, file_path, cache_file_path, start_frame, end_frame
+
+    def test(self):
+        pass
 
 
 class DynamicGpuCacheProcess(object):

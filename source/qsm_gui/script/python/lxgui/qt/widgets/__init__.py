@@ -35,6 +35,8 @@ from .input_for_guide import *
 
 from .input_for_filter import *
 
+from .input_for_path import *
+
 from .item_for_list import *
 
 from .item_for_tree import *

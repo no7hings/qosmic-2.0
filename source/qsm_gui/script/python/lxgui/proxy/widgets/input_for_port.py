@@ -1205,6 +1205,9 @@ class PrxInputAsPressButton(_AbsPrxInput):
     def set_option_enable(self, boolean):
         self._qt_input_widget._set_option_click_enable_(boolean)
 
+    def set_icon_by_file(self, file_path):
+        self._qt_input_widget._set_icon_file_path_(file_path)
+
 
 #   sub process button
 class PrxInputAsSubProcessButton(_AbsPrxInput):
@@ -1341,6 +1344,11 @@ class PrxInputAsTuple(_AbsPrxInput):
 
     def connect_input_changed_to(self, fnc):
         self._qt_input_widget._connect_input_entry_value_changed_to_(fnc)
+
+    def set_locked(self, boolean):
+        self._qt_input_widget._set_entry_enable_(
+            not boolean
+        )
 
 
 #   integer2, 3, ...

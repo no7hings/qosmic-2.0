@@ -167,7 +167,7 @@ class _GuiTypeOpt(
 
     def gui_add_root(self):
         path = '/'
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             prx_item = self._prx_tree_view.create_item(
                 self.ROOT_NAME,
                 icon=gui_core.GuiIcon.get('database/all'),
@@ -191,7 +191,7 @@ class _GuiTypeOpt(
 
     def gui_add_category_group(self, dtb_entity):
         path = dtb_entity.path
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             parent_gui = self.gui_get(dtb_entity.group)
             prx_item = parent_gui.add_child(
                 dtb_entity.gui_name,
@@ -258,7 +258,7 @@ class _GuiTypeOpt(
                 )
 
         path = dtb_entity.path
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             parent_gui = self.gui_get(dtb_entity.group)
             prx_item = parent_gui.add_child(
                 dtb_entity.gui_name,
@@ -356,7 +356,7 @@ class _GuiTypeOpt(
 
     def gui_add_one(self, dtb_entity):
         path = dtb_entity.path
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             parent_gui = self.gui_get(dtb_entity.group)
 
             gui_name = dtb_entity.gui_name
@@ -507,7 +507,7 @@ class _GuiTagOpt(
 
     def gui_add(self, dtb_entity):
         path = dtb_entity.path
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             parent_path = dtb_entity.group
             parent_gui = self.gui_get_group(parent_path)
             parent_gui.set_status(parent_gui.ValidationStatus.Normal)
@@ -802,7 +802,7 @@ class _GuiResourceOpt(
             )
 
         path = dtb_resource.path
-        if self.gui_get_is_exists(path) is True:
+        if self.gui_is_exists(path) is True:
             return self.gui_get(path)
 
         self._keys.add(dtb_resource.gui_name)
@@ -1013,7 +1013,7 @@ class _GuiDirectoryOpt(
 
     def gui_add_root(self, name):
         path = '/'
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             prx_item = self._prx_tree_view.create_item(
                 name,
                 icon=gui_core.GuiIcon.get('database/all'),
@@ -1025,7 +1025,7 @@ class _GuiDirectoryOpt(
         return False, self.gui_get(path)
 
     def gui_add_group(self, file_type):
-        if self.gui_get_is_exists(file_type) is False:
+        if self.gui_is_exists(file_type) is False:
             path_opt = bsc_core.PthNodeOpt(file_type)
             #
             parent_gui = self.gui_get(path_opt.get_parent_path())
@@ -1078,7 +1078,7 @@ class _GuiDirectoryOpt(
             #
             prx_item_widget.set_tool_tip(_location)
 
-        if self.gui_get_is_exists(file_type) is False:
+        if self.gui_is_exists(file_type) is False:
             path_opt = bsc_core.PthNodeOpt(file_type)
             #
             parent_gui = self.gui_get(path_opt.get_parent_path())
@@ -1219,7 +1219,7 @@ class _GuiFileOpt(
             )
             _prx_item_widget.refresh_widget_force()
 
-        if self.gui_get_is_exists(file_path) is False:
+        if self.gui_is_exists(file_path) is False:
             file_opt = bsc_storage.StgFileOpt(file_path)
             prx_item_widget = self._prx_list_view.create_item()
             self._item_dict[file_path] = prx_item_widget

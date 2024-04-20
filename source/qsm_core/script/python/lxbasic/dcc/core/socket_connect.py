@@ -33,7 +33,7 @@ class SocketConnectForMaya(_AbsSocketConnect):
     PORT = 13291
 
     @classmethod
-    def create_connection(cls, port):
+    def create_connection(cls, port=None):
         # noinspection PyUnresolvedReferences
         import maya.cmds as cmds
 

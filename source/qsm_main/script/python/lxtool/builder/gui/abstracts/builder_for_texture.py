@@ -23,7 +23,7 @@ class _GuiTextureOpt(gui_prx_abstracts.AbsGuiPrxTreeViewOpt):
 
     def gui_add_root(self):
         path = '/'
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             prx_item = self._prx_tree_view.create_item(
                 self.ROOT_NAME,
                 icon=gui_core.GuiIcon.get('database/all'),
@@ -37,7 +37,7 @@ class _GuiTextureOpt(gui_prx_abstracts.AbsGuiPrxTreeViewOpt):
         return False, self.gui_get(path)
 
     def gui_add_group(self, path):
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             path_opt = bsc_core.PthNodeOpt(path)
             parent_gui = self.gui_get(path_opt.get_parent_path())
             gui_name = bsc_core.RawStrUnderlineOpt(path_opt.get_name()).to_prettify()
@@ -59,7 +59,7 @@ class _GuiTextureOpt(gui_prx_abstracts.AbsGuiPrxTreeViewOpt):
         return self.gui_get(path)
 
     def gui_add_one(self, path, file_opt):
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             path_opt = bsc_core.PthNodeOpt(path)
             parent_gui = self.gui_get(path_opt.get_parent_path())
             prx_item = parent_gui.add_child(

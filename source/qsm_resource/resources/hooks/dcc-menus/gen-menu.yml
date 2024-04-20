@@ -19,7 +19,9 @@ hooks:
     # general
     - 'dcc-tools/gen-tool-kit': {gui_parent: '/General'}
     - 'dcc-tools/gen-asset-dcc-texture-manager': {gui_parent: '/General'}
+    # maya
     - 'dcc-tools/maya/scene-clearner': {gui_parent: '/General'}
+    - 'dcc-actions/maya/create-socket-connection': {gui_parent: '/General'}
     # lib
     - 'desktop-tools/resource-library': {gui_parent: '/Asset', gui_icon_name: 'window/loader'}
 #

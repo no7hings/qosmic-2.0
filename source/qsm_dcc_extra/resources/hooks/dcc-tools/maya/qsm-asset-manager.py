@@ -16,6 +16,8 @@ import lxgui.proxy.scripts as gui_prx_scripts
 
 import lxgui.proxy.abstracts as gui_prx_abstracts
 
+import qsm_maya.general.core as qsm_mya_gnl_core
+
 import qsm_maya.asset.core as qsm_mya_ast_core
 
 import qsm_maya.rig.core as qsm_mya_rig_core
@@ -23,6 +25,8 @@ import qsm_maya.rig.core as qsm_mya_rig_core
 import qsm_maya.rig.scripts as qsm_mya_rig_scripts
 
 import qsm_maya.assembly.scripts as qsm_mya_asb_scripts
+
+import qsm_gui.proxy.widgets as qsm_prx_widgets
 
 
 class CreateMtd(object):
@@ -146,10 +150,12 @@ class _GuiRigOpt(
 
         self._item_dict = self._prx_tree_view._item_dict
 
+        self._rigs_query = qsm_mya_rig_core.RigsQuery()
+
     def restore(self):
         self._prx_tree_view.set_clear()
 
-    def gui_get_is_exists(self, path):
+    def gui_is_exists(self, path):
         return self._item_dict.get(path) is not None
 
     def gui_get(self, path):
@@ -160,7 +166,7 @@ class _GuiRigOpt(
 
     def gui_add_root(self):
         path = '/'
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             prx_item = self._prx_tree_view.create_item(
                 self.ROOT_NAME,
                 icon=gui_core.GuiIcon.get('database/all'),
@@ -188,7 +194,7 @@ class _GuiRigOpt(
             )
 
         path = path_opt.path
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             create_kwargs = dict(
                 name='loading ...',
                 filter_key=path,
@@ -219,13 +225,11 @@ class _GuiRigOpt(
                 gui_core.GuiIcon.get('database/object')
             )
             prx_item.set_tool_tip(
-                (
-                    'path: {}\n'
-                ).format(path_opt.get_path())
+                '\n'.join(['{}: {}'.format(_k, _v) for _k, _v in rig.variants.items()])
             )
 
         path = rig.path
-        if self.gui_get_is_exists(path) is False:
+        if self.gui_is_exists(path) is False:
             path_opt = rig.path_opt
             create_kwargs = dict(
                 name='loading ...',
@@ -267,7 +271,7 @@ class _GuiRigOpt(
         if ancestors:
             ancestors.reverse()
             for i_path_opt in ancestors:
-                if self.gui_get_is_exists(i_path_opt.path) is False:
+                if self.gui_is_exists(i_path_opt.path) is False:
                     i_is_create, i_prx_item = self.gui_add_group(i_path_opt)
                     if i_is_create is True:
                         i_prx_item.set_expanded(True)
@@ -277,8 +281,7 @@ class _GuiRigOpt(
     def gui_add_all(self):
         self.gui_add_root()
 
-        rigs_query = qsm_mya_rig_core.RigsQuery()
-        for i_rig in rigs_query.get_all():
+        for i_rig in self._rigs_query.get_all():
             self.gui_add_one(i_rig)
 
     def get_current_obj(self):
@@ -295,29 +298,35 @@ class _GuiRigOpt(
                 list_.append(i_rig)
         return list_
 
+    def gui_get_items_selected(self, paths):
+        return [self.gui_get(i) for i in paths if self.gui_is_exists(i)]
+    
+    def gui_do_selected(self, paths):
+        if paths:
+            prx_items = self.gui_get_items_selected(paths)
+            self._prx_tree_view.select_items(prx_items)
+        else:
+            self._prx_tree_view.clear_selection()
+    
 
 class PnlAssetManager(prx_widgets.PrxSessionWindow):
 
-    def __do_dcc_selection_by_rig_selection(self):
-        rigs = self._gui_rig_opt.get_selected_rigs()
-        paths = []
-        if rigs:
-            scheme = self._rig_options_node.get('selection_scheme')
-            if scheme == 'root':
-                paths = [i.get_root() for i in rigs]
-            elif scheme == 'geometry':
-                paths = [i.get_geometry_location() for i in rigs]
-            elif scheme == 'motion':
-                paths = [i.get_motion_location() for i in rigs]
-            elif scheme == 'deformation':
-                paths = [i.get_deformation_location() for i in rigs]
+    RIG_SELECTION_SCRIPT_JOB_NAME = 'asset_manager_rig_selection'
 
-        if paths:
-            cmds.select(paths)
-        else:
-            cmds.select(clear=1)
+    def dcc_do_selection_by_rig_selection(self):
+        if self._rig_prx_tree_view.has_focus():
+            rigs = self._gui_rig_opt.get_selected_rigs()
+            paths = []
+            if rigs:
+                scheme = self._rig_options_node.get('selection_scheme')
+                paths = [i.get_location_for_selection(scheme) for i in rigs]
 
-    def __do_gui_refresh_by_rig_tag_checking(self):
+            if paths:
+                cmds.select([i for i in paths if i])
+            else:
+                cmds.select(clear=1)
+
+    def gui_do_refresh_by_rig_tag_checking(self):
         filter_data_src = self._gui_rig_tag_opt.generate_semantic_tag_filter_data_src()
         qt_view = self._rig_prx_tree_view._qt_view
         qt_view._set_view_semantic_tag_filter_data_src_(filter_data_src)
@@ -327,8 +336,49 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
         qt_view._refresh_view_items_visible_by_any_filter_()
         qt_view._refresh_viewport_showable_auto_()
 
+    def gui_do_refresh_by_dcc_selection(self):
+        namespaces = qsm_mya_gnl_core.Namespaces.get_roots_by_selection()
+        if namespaces:
+            paths = ['/{}'.format(i) for i in namespaces]
+        else:
+            paths = []
+
+        self._gui_rig_opt.gui_do_selected(paths)
+
+    def gui_do_refresh_by_frame_scheme_changing(self):
+        frame_scheme = self.get_frame_scheme()
+        if frame_scheme == 'frame_range':
+            self._rig_frame_range_port.set_locked(False)
+        else:
+            self._rig_frame_range_port.set_locked(True)
+
+    def gui_do_refresh_by_dcc_frame_changing(self):
+        frame_scheme = self.get_frame_scheme()
+        if frame_scheme != 'frame_range':
+            frame_range = qsm_mya_gnl_core.Scene.get_frame_range()
+            self._rig_frame_range_port.set(frame_range)
+
+    def get_frame_scheme(self):
+        return self._rig_options_node.get('dynamic_gpu.frame_scheme')
+
     def __init__(self, session, *args, **kwargs):
         super(PnlAssetManager, self).__init__(session, *args, **kwargs)
+
+    def _register_rig_selection_script_job(self):
+        self._rig_selection_script_job = qsm_mya_gnl_core.ScriptJob(
+            self.RIG_SELECTION_SCRIPT_JOB_NAME
+        )
+        self._rig_selection_script_job.register(
+            self.gui_do_refresh_by_dcc_selection,
+            self._rig_selection_script_job.EventTypes.SelectionChanged
+        )
+        self._rig_selection_script_job.register(
+            self.gui_do_refresh_by_dcc_frame_changing,
+            self._rig_selection_script_job.EventTypes.FrameRangeChanged
+        )
+
+    def _destroy_rig_selection_script_job(self):
+        self._rig_selection_script_job.destroy()
 
     def set_all_setup(self):
         self._skin_proxy_load_args_array = []
@@ -344,6 +394,9 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
             name='rig',
             icon_name_text='rig',
         )
+
+        self._prx_asset_input = qsm_prx_widgets.PrxInputForAsset()
+        s_a_0.add_widget(self._prx_asset_input)
 
         h_s_0 = prx_widgets.PrxHSplitter()
         s_a_0.add_widget(h_s_0)
@@ -364,14 +417,14 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
         h_s_0.set_fixed_size_at(0, 240)
         # h_s_0.set_contract_left_or_top_at(0)
         self._rig_prx_tree_view.connect_item_select_changed_to(
-            self.__do_dcc_selection_by_rig_selection
+            self.dcc_do_selection_by_rig_selection
         )
 
         self._gui_rig_tag_opt = _GuiRigTagOpt(self, self._session, self._rig_tag_tree_view)
         self._gui_rig_opt = _GuiRigOpt(self, self._session, self._rig_prx_tree_view)
 
         self._rig_tag_tree_view.connect_item_check_changed_to(
-            self.__do_gui_refresh_by_rig_tag_checking
+            self.gui_do_refresh_by_rig_tag_checking
         )
         #
         self._rig_options_node = prx_widgets.PrxNode('options')
@@ -380,19 +433,29 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
             self._session.configure.get('build.node.rig_options'),
         )
 
-        self._load_skin_proxy_button = self._rig_options_node.get_port('load_skin_proxy')
+        self._load_skin_proxy_button = self._rig_options_node.get_port('skin_proxy.load_skin_proxy')
         self._load_skin_proxy_button.set(self.load_skin_proxies_by_selection)
         self._load_skin_proxy_button.set_finished_connect_to(self.load_skin_proxies)
 
-        self._load_dynamic_gpu_button = self._rig_options_node.get_port('load_dynamic_gpu')
+        self._load_dynamic_gpu_button = self._rig_options_node.get_port('dynamic_gpu.load_dynamic_gpu')
         self._load_dynamic_gpu_button.set(self.load_dynamic_gpus_bt_selection)
         self._load_dynamic_gpu_button.set_finished_connect_to(self.load_dynamic_gpus)
 
         self._rig_options_node.get_port('selection_scheme').connect_input_changed_to(
-            self.__do_dcc_selection_by_rig_selection
+            self.dcc_do_selection_by_rig_selection
         )
+        self._rig_options_node.get_port('dynamic_gpu.frame_scheme').connect_input_changed_to(
+            self.gui_do_refresh_by_frame_scheme_changing
+        )
+        self._rig_frame_range_port = self._rig_options_node.get_port('dynamic_gpu.frame_range')
 
         self.gui_refresh_all()
+
+        self._register_rig_selection_script_job()
+        self.gui_do_refresh_by_dcc_frame_changing()
+        self.gui_do_refresh_by_dcc_selection()
+
+        self.connect_window_close_to(self._destroy_rig_selection_script_job)
 
     def gui_refresh_all(self):
         self._gui_rig_tag_opt.restore()
@@ -411,12 +474,11 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
                     )
 
     def load_skin_proxies_by_selection(self):
-        paths = cmds.ls(selection=1, long=1)
-        if paths:
+        namespaces = qsm_mya_gnl_core.Namespaces.get_roots_by_selection()
+        if namespaces:
             self._skin_proxy_load_args_array = []
             create_cmds = []
             namespace_query = qsm_mya_ast_core.NamespaceQuery()
-            namespaces = namespace_query.find_namespaces(paths)
             valid_namespaces = namespace_query.to_valid_namespaces(namespaces)
             if valid_namespaces:
                 for i_namespace in valid_namespaces:
@@ -442,12 +504,11 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
                     )
 
     def load_dynamic_gpus_bt_selection(self):
-        paths = cmds.ls(selection=1, long=1)
-        if paths:
+        namespaces = qsm_mya_gnl_core.Namespaces.get_roots_by_selection()
+        if namespaces:
             self._dynamic_gpu_load_args_array = []
             create_cmds = []
             namespace_query = qsm_mya_ast_core.NamespaceQuery()
-            namespaces = namespace_query.find_namespaces(paths)
             valid_namespaces = namespace_query.to_valid_namespaces(namespaces)
             if valid_namespaces:
                 with self.gui_progressing(maximum=len(valid_namespaces), label='processing dynamic gpus') as g_p:

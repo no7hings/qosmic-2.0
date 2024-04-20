@@ -712,6 +712,11 @@ class PrxPortAsButton(_AbsPrxPortBase):
     def set_option_enable(self, boolean):
         self._prx_port_input.set_option_enable(boolean)
 
+    def set_icon(self, icon_key):
+        self._prx_port_input.set_icon_by_file(
+            gui_core.GuiIcon.get(icon_key)
+        )
+
     def set_status(self, status):
         self.get_input_widget()._set_status_(status)
 
@@ -1649,6 +1654,10 @@ class PrxNode(gui_prx_abstracts.AbsPrxWidget):
             else:
                 port.set(value_)
 
+            lock = option.get('lock') or False
+            if lock is True:
+                port.set_locked(True)
+
         elif widget_ in {'float'}:
             port = PrxPortAsFloat(
                 port_path,
@@ -1933,6 +1942,9 @@ class PrxNode(gui_prx_abstracts.AbsPrxWidget):
             port.set(value_)
             if 'option_enable' in option:
                 port.set_option_enable(option['option_enable'])
+
+            if 'icon' in option:
+                port.set_icon(option['icon'])
 
         elif widget_ in {'check_button'}:
             port = PrxPortAsCheckButton(

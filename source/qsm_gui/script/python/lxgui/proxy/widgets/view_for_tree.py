@@ -194,6 +194,7 @@ class PrxTreeView(
                     'loading {}'.format('.'*(self._loading_show_index%5))
                 )
             #
+            # noinspection PyArgumentList
             gui_qt_core.QtWidgets.QApplication.instance().processEvents(
                 gui_qt_core.QtCore.QEventLoop.ExcludeUserInputEvents
             )
@@ -259,11 +260,22 @@ class PrxTreeView(
         if _:
             return _.gui_proxy
 
-    def set_item_selected(self, item_prx, exclusive=False):
+    def set_item_selected(self, prx_item, exclusive=False):
         if exclusive is True:
-            self.view.setCurrentItem(item_prx.widget)
+            self.view.setCurrentItem(prx_item.widget)
         else:
-            self.view.setItemSelected(item_prx.widget, True)
+            self.view.setItemSelected(prx_item.widget, True)
+
+    def clear_selection(self):
+        self._qt_view.clearSelection()
+
+    def select_items(self, prx_items):
+        self._qt_view.clearSelection()
+        for i_prx_item in prx_items:
+            self._qt_view.setItemSelected(i_prx_item.widget, True)
+
+    def has_focus(self):
+        return self._qt_view.hasFocus()
 
     def create_item(self, *args, **kwargs):
         return self._add_item_(
@@ -330,15 +342,15 @@ class PrxTreeView(
         return False, False
 
     @classmethod
-    def _generate_item_keyword_filter_tgt_args_(cls, item_prx, texts):
+    def _generate_item_keyword_filter_tgt_args_(cls, prx_item, texts):
         if texts:
             keyword = texts[0]
             keyword = keyword.lower()
-            keyword_filter_keys_tgt = item_prx.get_keyword_filter_keys_tgt() or []
+            keyword_filter_keys_tgt = prx_item.get_keyword_filter_keys_tgt() or []
             if keyword_filter_keys_tgt:
                 context = '+'.join([i.decode('utf-8') for i in keyword_filter_keys_tgt if i])
             else:
-                context = '+'.join([i.decode('utf-8') for i in item_prx.get_names() if i])
+                context = '+'.join([i.decode('utf-8') for i in prx_item.get_names() if i])
             #
             context = context.lower()
             if '*' in keyword:
