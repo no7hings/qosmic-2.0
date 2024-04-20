@@ -1,0 +1,20 @@
+option:
+    type: unit
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'check'
+        #
+        name: 'Open Geometry Comparer'
+        icon_name: 'window/geometry-comparer'
+#
+variants: {}
+#
+resolver:
+    rsv_unit:
+        keyword: 'asset-geometry-usd-var-file'
+        version: latest
+
+    step_includes: ['mod', 'rig', 'grm', 'srf']

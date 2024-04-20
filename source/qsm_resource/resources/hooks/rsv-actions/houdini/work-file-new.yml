@@ -1,0 +1,26 @@
+option:
+    type: task
+    #
+    systems:
+        - '*-houdini'
+    #
+    gui:
+        group_name: scene
+        #
+        name: 'New Work Houdini File'
+        icon_name: 'application/houdini'
+#
+variants:
+    project: ''
+    branch: ''
+    #
+    role: ''
+    asset: ''
+    #
+    sequence: ''
+    shot: ''
+    #
+    step: ''
+    task: ''
+    #
+    application: ''

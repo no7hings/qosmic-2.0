@@ -1,0 +1,186 @@
+option:
+    type: 'rsv-tool-panel'
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        name: 'Publish ( General )'
+        group_name: 'Tool(s)'
+        #
+        icon_name: 'application/publish'
+        icon_sub_name: 'application/python'
+        #
+        size: [480, 720]
+        #
+        tool_tip:
+            |-
+            tool-panel for general publish
+        #
+        content:
+            |-
+            ...
+#
+rsv-match-condition: 'branch=asset&workspace_key=source+user'
+
+build:
+    node:
+        options:
+            resource_type:
+                widget: capsule_string
+                value: ['project', 'asset', 'sequence', 'shot']
+                default: 'asset'
+                tool_tip: '...'
+                enable: True
+
+            shotgun/project:
+                widget: shotgun_entity_choose
+                value: ''
+                tool_tip: 'choose a project'
+                enable: True
+
+            shotgun/resource:
+                widget: shotgun_entity_choose
+                label: 'asset'
+                value: ''
+                tool_tip: 'choose a "asset / sequence / shot"'
+                enable: True
+                visible_condition: {
+                    operator: 'match_one', port: 'resource_type', value: ['asset', 'sequence', 'shot']
+                }
+
+            shotgun/task:
+                widget: shotgun_entity_choose
+                value: ''
+                tool_tip: 'choose a task'
+                enable: True
+
+            extra:
+                widget: group
+                collapse: True
+
+            extra/new_task:
+                widget: button
+                value: ''
+                tool_tip: '...'
+
+        publish_options:
+            #
+            version_type:
+                widget: capsule_string
+                value: ['daily', 'check', 'downstream']
+                default: 'daily'
+                tool_tip: 'choose a version type'
+                enable: True
+
+            version_scheme:
+                widget: capsule_string
+                value: [
+                    'new',
+                    'latest',
+                    # 'customize'
+                ]
+                default: 'new'
+                tool_tip: '...'
+                enable: True
+            #
+            version_directory:
+                widget: directory
+                open_or_save: save
+                value: ''
+                tool_tip: '...'
+                enable: True
+
+            description:
+                widget: script
+                value: ''
+                tool_tip: 'entry note'
+                enable: True
+
+            review:
+                widget: medias
+                value: ''
+                tool_tip: 'choose many files or make many snapshot for review'
+                history_key: 'tool-panels.general-publisher.medias-open'
+                ext_includes: ['.jpg', '.png', '.exr', '.tx', '.mov', '.mp4', '.avi']
+                enable: True
+
+            notice:
+                widget: shotgun_entities_choose
+                #
+                value: ''
+                tool_tip: 'choose many user'
+                enable: True
+
+            extra:
+                widget: group
+                collapse: True
+
+            extra/scene:
+                widget: files
+                value: ''
+                tool_tip: 'choose many scene files'
+                history_key: 'tool-panels.general-publisher.scenes-open'
+                ext_includes: ['.ma', '.katana']
+                enable: True
+
+            extra/image:
+                widget: files
+                value: ''
+                tool_tip: 'choose many image files'
+                history_key: 'tool-panels.general-publisher.image-open'
+                ext_includes: ['.jpg', '.png', '.exr', '.tx']
+                enable: True
+            #
+            process:
+                widget: group
+                collapse: True
+
+            process/settings/with_scene:
+                widget: boolean
+                value: False
+                tool_tip: '...'
+                enable: True
+
+            process/settings/with_render_texture:
+                widget: boolean
+                value: False
+                tool_tip: '...'
+                enable: True
+
+            process/settings/with_preview_texture:
+                widget: boolean
+                value: False
+                tool_tip: '...'
+                enable: True
+                exclusive_set: ['process.settings.with_render_texture', 'process.settings.with_preview_texture']
+
+            process/settings/with_look_yml:
+                widget: boolean
+                value: False
+                tool_tip: '...'
+                enable: True
+
+            process/settings/with_camera_abc:
+                widget: boolean
+                value: False
+                tool_tip: '...'
+                enable: True
+
+            process/settings/with_camera_usd:
+                widget: boolean
+                value: False
+                tool_tip: '...'
+                enable: True
+
+        #
+        publish_content:
+            |-
+            1. choose a version type in "version type";
+                a). default is "daily"
+            2. entry description in "description";
+            3. choose one or more image or movie file or make a snapshot in "review";
+                a). support formats: "jpg", "png", "tx", "exr", "mov", "mp4", "avi"
+            4. choose one or more user in "notice";
+            5. configure in "process";
+            6. press "publish" to continue.

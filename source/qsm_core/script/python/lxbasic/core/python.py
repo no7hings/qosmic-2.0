@@ -315,3 +315,18 @@ class PyReloader(object):
 
     def test_(self):
         pass
+
+
+class PyReloader2(object):
+    def __init__(self, *args):
+        _ = args[0]
+        if isinstance(_, six.string_types):
+            self._module_names = [_]
+        elif isinstance(_, (tuple, list)):
+            self._module_names = _
+
+    def do_reload(self):
+        for i_k, i_v in sys.modules.items():
+            for j_name in self._module_names:
+                if i_k.startswith(j_name):
+                    del sys.modules[i_k]

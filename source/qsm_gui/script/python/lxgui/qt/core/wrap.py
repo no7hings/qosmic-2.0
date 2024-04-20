@@ -10,12 +10,14 @@ import importlib as _importlib
 import lxbasic.log as _log_core
 
 QT_LOAD_INDEX = None
+QtSide = None
 
 __pyqt5 = _pkgutil.find_loader('PyQt5')
 if __pyqt5 is not None:
     QT_LOAD_INDEX = 0
     # noinspection PyUnresolvedReferences
-    from PyQt5 import QtGui, QtCore, QtWidgets, QtSvg, QtOpenGL
+    from PyQt5 import QtGui, QtCore, QtWidgets, QtSvg
+    _sys.modules['QtSide'] = _sys.modules['PyQt5']
     _log_core.Log.trace_method_result(
         'qt wrap', 'load form "PyQt5"'
     )
@@ -24,7 +26,8 @@ else:
     if __pyside2 is not None:
         QT_LOAD_INDEX = 1
         # noinspection PyUnresolvedReferences
-        from PySide2 import QtGui, QtCore, QtWidgets, QtSvg, QtOpenGL
+        from PySide2 import QtGui, QtCore, QtWidgets, QtSvg
+        _sys.modules['QtSide'] = _sys.modules['PySide2']
         _log_core.Log.trace_method_result(
             'qt wrap', 'load form "PySide2"'
         )

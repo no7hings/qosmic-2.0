@@ -1,0 +1,55 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+        - '*-katana'
+    #
+    gui:
+        name: 'Asset Manager'
+        group_name: 'Asset(s)'
+        #
+        icon_name: 'application/resource_library'
+        tool_tip:
+            - 'Manager asset, etc. rig, assembly'
+            - '...'
+        #
+        size: [720, 480]
+#
+rsv-match-condition: 'branch=asset'
+
+build:
+    node:
+        rig_options:
+            selection_scheme:
+                widget: capsule_string
+                value: ['root', 'geometry', 'deformation', 'motion', 'skin_proxy', 'dynamic_gpu']
+                default: 'motion'
+                tool_tip: '...'
+
+            load_skin_proxy:
+                widget: sub_process_button
+                value:
+                tool_tip:
+                    |-
+                    press to load skin proxy auto.
+                    点击自动加载低模。
+
+            dynamic_gpu/frame_scheme:
+                widget: capsule_string
+                value: ['render_settings', 'time_slider', 'start_to_end']
+                default: 'time_slider'
+                tool_tip: '...'
+
+            dynamic_gpu/start_to_end:
+                widget: integer2
+                value: [0, 24]
+                tool_tip: '...'
+
+            load_dynamic_gpu:
+                widget: sub_process_button
+                value:
+                tool_tip:
+                    |-
+                    press to load dynamic GPU auto.
+                    点击自动加载动态GPU。

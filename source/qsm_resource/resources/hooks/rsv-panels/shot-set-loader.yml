@@ -1,0 +1,36 @@
+option:
+    #
+    type: 'rsv-tool-panel'
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        name: 'Shot-set Loader'
+        group_name: 'Loader(s)'
+        icon_name: ''
+        #
+        size: [1280, 960]
+        item_frame_size: [220, 150]
+    #
+    packages:
+        - 'lxdcc'
+#
+resolver:
+    filter: 'branch=shot&workspace=publish&step=set'
+    #
+    task_unit:
+        keywords:
+            - '{branch}-component-usd-file'
+            - '{branch}-set-dress-usd-file'
+#
+actions:
+    task: ''
+    task_unit:
+        hooks:
+            - 'rsv-actions/usd/set-file-open'
+            - 'rsv-actions/review-file-open'
+            # directory
+            - 'rsv-actions/source-task-directory-open': {gui_parent: '/Open Task Directory', gui_name: 'Work'}
+            - 'rsv-actions/release-task-directory-open': {gui_parent: '/Open Task Directory', gui_name: 'Publish'}
+            - 'rsv-actions/temporary-task-directory-open': {gui_parent: '/Open Task Directory', gui_name: 'Output'}

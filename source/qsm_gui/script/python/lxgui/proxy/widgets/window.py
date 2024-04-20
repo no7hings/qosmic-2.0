@@ -484,11 +484,11 @@ class PrxMonitorWindow(
         super(PrxMonitorWindow, self).__init__(*args, **kwargs)
         if kwargs.get('parent'):
             self.widget.setWindowFlags(
-                gui_qt_core.QtCore.Qt.Tool|gui_qt_core.QtCore.Qt.WindowStaysOnTopHint
+                gui_qt_core.QtCore.Qt.Tool | gui_qt_core.QtCore.Qt.WindowStaysOnTopHint
             )
         else:
             self.widget.setWindowFlags(
-                gui_qt_core.QtCore.Qt.Window|gui_qt_core.QtCore.Qt.WindowStaysOnTopHint
+                gui_qt_core.QtCore.Qt.Window | gui_qt_core.QtCore.Qt.WindowStaysOnTopHint
             )
         self.widget.setWindowModality(
             gui_qt_core.QtCore.Qt.WindowModal

@@ -1,0 +1,38 @@
+option:
+    type: unit
+    #
+    systems:
+        - '*-python'
+        - '*-maya'
+        - '*-houdini'
+        - '*-katana'
+    #
+    gui:
+        group_name: review
+        #
+        name: 'Open Render MOV File'
+        icon_name: 'application/rv'
+#
+variants:
+    project: ''
+    branch: ''
+    #
+    role: ''
+    asset: ''
+    #
+    sequence: ''
+    shot: ''
+    #
+    step: ''
+    task: ''
+    #
+    application: ''
+#
+resolver:
+    rsv_unit:
+        keyword: '{branch}-render-mov-sub-file'
+        version: latest
+        #
+        variants_extend:
+            look_pass: 'default'
+

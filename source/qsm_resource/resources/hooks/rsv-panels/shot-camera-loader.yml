@@ -1,0 +1,37 @@
+option:
+    #
+    type: 'rsv-tool-panel'
+    #
+    systems:
+        - '*-python'
+        #
+        - '*-maya'
+        - '*-houdini'
+        - '*-katana'
+    #
+    gui:
+        name: 'Shot-camera Loader'
+        group_name: 'Loader(s)'
+        icon_name: ''
+        #
+        size: [1280, 960]
+        item_frame_size: [220, 150]
+    #
+    packages:
+        - 'lxdcc'
+#
+resolver:
+    filter: 'branch=shot&workspace=publish&step=rlo+ani+flo'
+    #
+    task_unit:
+        keywords:
+            - '{branch}-camera-abc-file'
+#
+actions:
+    task: ''
+    task_unit:
+        hooks:
+            - 'rsv-actions/shot/maya/camera-load'
+            - 'rsv-actions/shot/katana/camera-load'
+            #
+            - 'rsv-actions/review-file-open'

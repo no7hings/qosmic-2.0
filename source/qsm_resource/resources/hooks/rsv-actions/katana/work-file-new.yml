@@ -1,0 +1,26 @@
+option:
+    type: task
+    #
+    systems:
+        - '*-katana'
+    #
+    gui:
+        group_name: scene
+        #
+        name: 'New Work Katana File'
+        icon_name: 'application/katana'
+#
+variants:
+    project: ''
+    branch: ''
+    #
+    role: ''
+    asset: ''
+    #
+    sequence: ''
+    shot: ''
+    #
+    step: ''
+    task: ''
+    #
+    application: ''

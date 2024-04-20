@@ -13,6 +13,8 @@ from ...qt import core as gui_qt_core
 # qt widgets
 from ...qt.widgets import base as gui_qt_wgt_base
 
+from ...qt.widgets import button as gui_qt_wgt_button
+
 from ...qt.widgets import entry as gui_qt_wgt_entry
 
 from ...qt.widgets import view_for_tree as gui_qt_wgt_view_for_tree
@@ -51,8 +53,6 @@ class PrxTreeView(
         self._prx_top_tool_bar.set_left_alignment()
         self._qt_layout_0.addWidget(self._prx_top_tool_bar.widget)
         self._prx_top_tool_bar.set_border_radius(1)
-        self._prx_filer_bar_0 = gui_prx_wdt_utility.PrxFilterBar()
-        self._prx_top_tool_bar.add_widget(self._prx_filer_bar_0)
         #
         self._loading_index = 0
         self._loading_show_index = 0
@@ -81,6 +81,31 @@ class PrxTreeView(
         self._filter_completion_cache = None
         self._loading_item_prxes = []
         self._view_keyword_filter_occurrence_index_current = 0
+        # check
+        self._prx_check_tool_box = self.create_top_tool_box('check', True, False, 0)
+        #
+        self._check_all_button = gui_qt_wgt_button.QtIconPressButton()
+        self._check_all_button._set_name_text_('check all')
+        self._check_all_button._set_icon_file_path_(gui_core.GuiIcon.get('all_checked'))
+        self._prx_check_tool_box.add_widget(self._check_all_button)
+        self._check_all_button.press_clicked.connect(self.__do_check_all_visible_items)
+        self._check_all_button._set_tool_tip_text_(
+            '"LMB-click" for checked all visible items'
+        )
+        #
+        self._uncheck_all_button = gui_qt_wgt_button.QtIconPressButton()
+        self._uncheck_all_button._set_icon_file_path_(gui_core.GuiIcon.get('all_unchecked'))
+        self._uncheck_all_button._set_name_text_('uncheck all')
+        self._prx_check_tool_box.add_widget(self._uncheck_all_button)
+        self._uncheck_all_button.press_clicked.connect(self.__do_uncheck_all_visible_items)
+        self._uncheck_all_button._set_tool_tip_text_(
+            '"LMB-click" for unchecked all visible items'
+        )
+
+        self._prx_filter_tool_box = self.create_top_tool_box('filter', True, True, 1)
+
+        self._prx_filer_bar_0 = gui_prx_wdt_utility.PrxFilterBar()
+        self._prx_filter_tool_box.add_widget(self._prx_filer_bar_0)
         #
         self._prx_filter_bar = self._prx_filer_bar_0
         self._prx_filter_bar.set_completion_gain_fnc(
@@ -102,6 +127,27 @@ class PrxTreeView(
         self._prx_filter_bar._qt_widget.occurrence_next_press_clicked.connect(
             self._qt_view._do_keyword_filter_occurrence_to_next_
         )
+
+    def create_top_tool_box(self, name, expanded=True, visible=True, size_mode=0, insert_args=None):
+        tool_box = gui_prx_wdt_utility.PrxHToolBox()
+        if isinstance(insert_args, int):
+            self._prx_top_tool_bar.insert_widget_at(insert_args, tool_box)
+        else:
+            self._prx_top_tool_bar.add_widget(tool_box)
+        tool_box.set_name(name)
+        tool_box.set_expanded(expanded)
+        tool_box.set_visible(visible)
+        tool_box.set_size_mode(size_mode)
+        return tool_box
+
+    def get_check_tool_box(self):
+        return self._prx_check_tool_box
+
+    def __do_check_all_visible_items(self):
+        self._qt_view._set_all_items_checked_(True)
+
+    def __do_uncheck_all_visible_items(self):
+        self._qt_view._set_all_items_checked_(False)
 
     def __keyword_filter_cbk(self):
         self._qt_view._set_view_keyword_filter_data_src_(

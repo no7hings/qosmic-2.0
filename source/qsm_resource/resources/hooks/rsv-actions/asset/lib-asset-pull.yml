@@ -1,0 +1,28 @@
+option:
+    type: asset
+    #
+    systems:
+        - '*-python'
+        - '*-maya'
+        - '*-houdini'
+        - '*-katana'
+    #
+    gui:
+        group_name: 'lib'
+        #
+        name: 'Pull Asset from "LIB" to any project'
+#
+variants:
+    project: ''
+    branch: ''
+    #
+    role: ''
+    asset: ''
+    #
+    sequence: ''
+    shot: ''
+    #
+    step: ''
+    task: ''
+    #
+    application: ''

@@ -1,0 +1,856 @@
+option:
+    namespace: ''
+
+main:
+    geometry_root: '<option.namespace>:Geometry'
+    deformation_root: '<option.namespace>:DeformationSystem'
+    motion_root: '<option.namespace>:MotionSystem'
+
+skeleton:
+    root:
+        M: '<option.namespace>:Root_M'
+
+    root_part:
+        M: '<option.namespace>:RootPart*_M'
+
+    spine:
+        a:
+            M: '<option.namespace>:RootPart1_M'
+
+        b:
+            M: '<option.namespace>:Spine1_M'
+
+    spine_part:
+        M: '<option.namespace>:Spine1Part*_M'
+
+    chest:
+        M: '<option.namespace>:Chest_M'
+
+    neck:
+        M: '<option.namespace>:Neck_M'
+
+    neck_part:
+        M: '<option.namespace>:NeckPart*_M'
+
+    head:
+        M: '<option.namespace>:Head_M'
+
+    head_end:
+        M: '<option.namespace>:HeadEnd_M'
+
+    scapula:
+        L: '<option.namespace>:Scapula_L'
+        R: '<option.namespace>:Scapula_R'
+
+    shoulder:
+        L: '<option.namespace>:Shoulder_L'
+        R: '<option.namespace>:Shoulder_R'
+
+    shoulder_part:
+        L: '<option.namespace>:ShoulderPart*_L'
+        R: '<option.namespace>:ShoulderPart*_R'
+
+    elbow:
+        L: '<option.namespace>:Elbow_L'
+        R: '<option.namespace>:Elbow_R'
+
+    elbow_part:
+        L: '<option.namespace>:ElbowPart*_L'
+        R: '<option.namespace>:ElbowPart*_R'
+
+    wrist:
+        L: '<option.namespace>:Wrist_L'
+        R: '<option.namespace>:Wrist_R'
+
+    finger:
+        thumb:
+            a:
+                L: '<option.namespace>:ThumbFinger1_L'
+                R: '<option.namespace>:ThumbFinger1_R'
+            b:
+                L: '<option.namespace>:ThumbFinger2_L'
+                R: '<option.namespace>:ThumbFinger2_R'
+            c:
+                L: '<option.namespace>:ThumbFinger3_L'
+                R: '<option.namespace>:ThumbFinger3_R'
+
+        index:
+            a:
+                L: '<option.namespace>:IndexFinger1_L'
+                R: '<option.namespace>:IndexFinger1_R'
+
+            b:
+                L: '<option.namespace>:IndexFinger2_L'
+                R: '<option.namespace>:IndexFinger2_R'
+
+            c:
+                L: '<option.namespace>:IndexFinger3_L'
+                R: '<option.namespace>:IndexFinger3_R'
+
+        middle:
+            a:
+                L: '<option.namespace>:MiddleFinger1_L'
+                R: '<option.namespace>:MiddleFinger1_R'
+
+            b:
+                L: '<option.namespace>:MiddleFinger2_L'
+                R: '<option.namespace>:MiddleFinger2_R'
+
+            c:
+                L: '<option.namespace>:MiddleFinger3_L'
+                R: '<option.namespace>:MiddleFinger3_R'
+
+        ring:
+            a:
+                L: '<option.namespace>:RingFinger1_L'
+                R: '<option.namespace>:RingFinger1_R'
+
+            b:
+                L: '<option.namespace>:RingFinger2_L'
+                R: '<option.namespace>:RingFinger2_R'
+
+            c:
+                L: '<option.namespace>:RingFinger3_L'
+                R: '<option.namespace>:RingFinger3_R'
+
+        pinky:
+            a:
+                L: '<option.namespace>:PinkyFinger1_L'
+                R: '<option.namespace>:PinkyFinger1_R'
+
+            b:
+                L: '<option.namespace>:PinkyFinger2_L'
+                R: '<option.namespace>:PinkyFinger2_R'
+
+            c:
+                L: '<option.namespace>:PinkyFinger3_L'
+                R: '<option.namespace>:PinkyFinger3_R'
+
+    finger_end:
+        thumb:
+            L: '<option.namespace>:ThumbFinger4_L'
+            R: '<option.namespace>:ThumbFinger4_R'
+
+        index:
+            L: '<option.namespace>:IndexFinger4_L'
+            R: '<option.namespace>:IndexFinger4_R'
+
+        middle:
+            L: '<option.namespace>:MiddleFinger4_L'
+            R: '<option.namespace>:MiddleFinger4_R'
+
+        ring:
+            L: '<option.namespace>:RingFinger4_L'
+            R: '<option.namespace>:RingFinger4_R'
+
+        pinky:
+            L: '<option.namespace>:PinkyFinger4_L'
+            R: '<option.namespace>:PinkyFinger4_R'
+
+    hip:
+        L: '<option.namespace>:Hip_L'
+        R: '<option.namespace>:Hip_R'
+
+    hip_part:
+        L: '<option.namespace>:HipPart*_L'
+        R: '<option.namespace>:HipPart*_R'
+
+    knee:
+        L: '<option.namespace>:Knee_L'
+        R: '<option.namespace>:Knee_R'
+
+    knee_part:
+        L: '<option.namespace>:KneePart*_L'
+        R: '<option.namespace>:KneePart*_R'
+
+    ankle:
+        L: '<option.namespace>:Ankle_L'
+        R: '<option.namespace>:Ankle_R'
+
+    toes:
+        L: '<option.namespace>:Toes_L'
+        R: '<option.namespace>:Toes_R'
+
+    toes_end:
+        L: '<option.namespace>:ToesEnd_L'
+        R: '<option.namespace>:ToesEnd_R'
+
+skeleton_new:
+    root:
+        M: '<option.namespace>:Root_M'
+
+    root_part:
+        M: '<option.namespace>:RootPart*_M'
+
+    spine:
+        a:
+            M: '<option.namespace>:Spine1_M'
+
+        b:
+            M: '<option.namespace>:Spine2_M'
+
+    spine_part:
+        M: '<option.namespace>:Spine1Part*_M'
+
+    chest:
+        M: '<option.namespace>:Chest_M'
+
+    neck:
+        M: '<option.namespace>:Neck_M'
+
+    neck_part:
+        M: '<option.namespace>:NeckPart*_M'
+
+    head:
+        M: '<option.namespace>:Head_M'
+
+    head_end:
+        M: '<option.namespace>:HeadEnd_M'
+
+    scapula:
+        L: '<option.namespace>:Scapula_L'
+        R: '<option.namespace>:Scapula_R'
+
+    shoulder:
+        L: '<option.namespace>:Shoulder_L'
+        R: '<option.namespace>:Shoulder_R'
+
+    shoulder_part:
+        L: '<option.namespace>:ShoulderPart*_L'
+        R: '<option.namespace>:ShoulderPart*_R'
+
+    elbow:
+        L: '<option.namespace>:Elbow_L'
+        R: '<option.namespace>:Elbow_R'
+
+    elbow_part:
+        L: '<option.namespace>:ElbowPart*_L'
+        R: '<option.namespace>:ElbowPart*_R'
+
+    wrist:
+        L: '<option.namespace>:Wrist_L'
+        R: '<option.namespace>:Wrist_R'
+
+    finger:
+        thumb:
+            a:
+                L: '<option.namespace>:ThumbFinger1_L'
+                R: '<option.namespace>:ThumbFinger1_R'
+            b:
+                L: '<option.namespace>:ThumbFinger2_L'
+                R: '<option.namespace>:ThumbFinger2_R'
+            c:
+                L: '<option.namespace>:ThumbFinger3_L'
+                R: '<option.namespace>:ThumbFinger3_R'
+
+        index:
+            a:
+                L: '<option.namespace>:IndexFinger1_L'
+                R: '<option.namespace>:IndexFinger1_R'
+
+            b:
+                L: '<option.namespace>:IndexFinger2_L'
+                R: '<option.namespace>:IndexFinger2_R'
+
+            c:
+                L: '<option.namespace>:IndexFinger3_L'
+                R: '<option.namespace>:IndexFinger3_R'
+
+        middle:
+            a:
+                L: '<option.namespace>:MiddleFinger1_L'
+                R: '<option.namespace>:MiddleFinger1_R'
+
+            b:
+                L: '<option.namespace>:MiddleFinger2_L'
+                R: '<option.namespace>:MiddleFinger2_R'
+
+            c:
+                L: '<option.namespace>:MiddleFinger3_L'
+                R: '<option.namespace>:MiddleFinger3_R'
+
+        ring:
+            a:
+                L: '<option.namespace>:RingFinger1_L'
+                R: '<option.namespace>:RingFinger1_R'
+
+            b:
+                L: '<option.namespace>:RingFinger2_L'
+                R: '<option.namespace>:RingFinger2_R'
+
+            c:
+                L: '<option.namespace>:RingFinger3_L'
+                R: '<option.namespace>:RingFinger3_R'
+
+        pinky:
+            a:
+                L: '<option.namespace>:PinkyFinger1_L'
+                R: '<option.namespace>:PinkyFinger1_R'
+
+            b:
+                L: '<option.namespace>:PinkyFinger2_L'
+                R: '<option.namespace>:PinkyFinger2_R'
+
+            c:
+                L: '<option.namespace>:PinkyFinger3_L'
+                R: '<option.namespace>:PinkyFinger3_R'
+
+    finger_end:
+        thumb:
+            L: '<option.namespace>:ThumbFinger4_L'
+            R: '<option.namespace>:ThumbFinger4_R'
+
+        index:
+            L: '<option.namespace>:IndexFinger4_L'
+            R: '<option.namespace>:IndexFinger4_R'
+
+        middle:
+            L: '<option.namespace>:MiddleFinger4_L'
+            R: '<option.namespace>:MiddleFinger4_R'
+
+        ring:
+            L: '<option.namespace>:RingFinger4_L'
+            R: '<option.namespace>:RingFinger4_R'
+
+        pinky:
+            L: '<option.namespace>:PinkyFinger4_L'
+            R: '<option.namespace>:PinkyFinger4_R'
+
+    hip:
+        L: '<option.namespace>:Hip_L'
+        R: '<option.namespace>:Hip_R'
+
+    hip_part:
+        L: '<option.namespace>:HipPart*_L'
+        R: '<option.namespace>:HipPart*_R'
+
+    knee:
+        L: '<option.namespace>:Knee_L'
+        R: '<option.namespace>:Knee_R'
+
+    knee_part:
+        L: '<option.namespace>:KneePart*_L'
+        R: '<option.namespace>:KneePart*_R'
+
+    ankle:
+        L: '<option.namespace>:Ankle_L'
+        R: '<option.namespace>:Ankle_R'
+
+    toes:
+        L: '<option.namespace>:Toes_L'
+        R: '<option.namespace>:Toes_R'
+
+    toes_end:
+        L: '<option.namespace>:ToesEnd_L'
+        R: '<option.namespace>:ToesEnd_R'
+
+rotation:
+    root:
+        M: [90, 90, 90]
+
+    root_part:
+        M: [90, 90, 90]
+
+    spine:
+        a:
+            M: [90, 90, 90]
+
+        b:
+            M: [90, 90, 90]
+
+    spine_part:
+        M: [90, 90, 90]
+
+    chest:
+        M: [90, 90, 90]
+
+    neck:
+        M: [0, 90, 0]
+
+    neck_part:
+        M: [0, 90, 0]
+
+    head:
+        M: [0, 90, 0]
+
+    head_end:
+        M: [0, 90, 0]
+
+    scapula:
+        L: [-90, 90, 90]
+        R: [0, 90, 0]
+
+    shoulder:
+        L: [-90, 90, 90]
+        R: [0, 90, 0]
+
+    shoulder_part:
+        L: [-90, 90, 90]
+        R: [0, 90, 0]
+
+    elbow:
+        L: [-90, 90, 90]
+        R: [0, 90, 0]
+
+    elbow_part:
+        L: [-90, 90, 90]
+        R: [0, 90, 0]
+
+    wrist:
+        L: [-90, 90, 90]
+        R: [0, 90, 0]
+
+    finger:
+        thumb:
+            a:
+                L: [-90, 0, 90]
+                R: [90, 0, 90]
+
+            b:
+                L: [-90, 0, 90]
+                R: [90, 0, 90]
+
+            c:
+                L: [-90, 0, 90]
+                R: [90, 0, 90]
+
+        index:
+            a:
+                L: [-90, 90, 90]
+                R: [0, 90, 0]
+
+            b:
+                L: [-90, 90, 90]
+                R: [0, 90, 0]
+
+            c:
+                L: [-90, 90, 90]
+                R: [0, 90, 0]
+
+        middle:
+            a:
+                L: [-90, 90, 90]
+                R: [0, 90, 0]
+
+            b:
+                L: [-90, 90, 90]
+                R: [0, 90, 0]
+
+            c:
+                L: [-90, 90, 90]
+                R: [0, 90, 0]
+
+        ring:
+            a:
+                L: [-90, 90, 90]
+                R: [0, 90, 0]
+
+            b:
+                L: [-90, 90, 90]
+                R: [0, 90, 0]
+
+            c:
+                L: [-90, 90, 90]
+                R: [0, 90, 0]
+
+        pinky:
+            a:
+                L: [-90, 90, 90]
+                R: [0, 90, 0]
+
+            b:
+                L: [-90, 90, 90]
+                R: [0, 90, 0]
+
+            c:
+                L: [-90, 90, 90]
+                R: [0, 90, 0]
+
+    finger_end:
+        thumb:
+            L: [-90, 0, 90]
+            R: [90, 0, 90]
+
+        index:
+            L: [-90, 90, 90]
+            R: [0, 90, 0]
+
+        middle:
+            L: [-90, 90, 90]
+            R: [0, 90, 0]
+
+        ring:
+            L: [-90, 90, 90]
+            R: [0, 90, 0]
+
+        pinky:
+            L: [-90, 90, 90]
+            R: [0, 90, 0]
+
+    hip:
+        L: [-90, 90, 90]
+        R: [0, 90, 0]
+
+    hip_part:
+        L: [-90, 90, 90]
+        R: [0, 90, 0]
+
+    knee:
+        L: [90, 90, -90]
+        R: [0, 90, 0]
+
+    knee_part:
+        L: [90, 90, -90]
+        R: [0, 90, 0]
+
+    ankle:
+        L: [90, 90, 0]
+        R: [-90, 90, 0]
+
+    toes:
+        L: [-90, 90, 90]
+        R: [0, 90, 0]
+
+    toes_end:
+        L: [-90, 90, 90]
+        R: [0, 90, 0]
+
+distance:
+    root:
+        M: 'spine.a.M'
+
+    spine:
+        a:
+            M: 'spine.b.M'
+
+        b:
+            M: 'chest.M'
+
+    chest:
+        M: 'neck.M'
+
+    neck:
+        M: 'head.M'
+
+    head:
+        M: 'head_end.M'
+
+    scapula:
+        L: 'shoulder.L'
+        R: 'shoulder.R'
+
+    shoulder:
+        L: 'elbow.L'
+        R: 'elbow.R'
+
+    elbow:
+        L: 'wrist.L'
+        R: 'wrist.R'
+
+    wrist:
+        L: 'finger.middle.a.L'
+        R: 'finger.middle.a.R'
+
+    finger:
+        thumb:
+            a:
+                L: 'finger.thumb.b.L'
+                R: 'finger.thumb.b.R'
+            b:
+                L: 'finger.thumb.c.L'
+                R: 'finger.thumb.c.R'
+            c:
+                L: 'finger_end.thumb.L'
+                R: 'finger_end.thumb.R'
+
+        index:
+            a:
+                L: 'finger.index.b.L'
+                R: 'finger.index.b.R'
+
+            b:
+                L: 'finger.index.c.L'
+                R: 'finger.index.c.R'
+
+            c:
+                L: 'finger_end.index.L'
+                R: 'finger_end.index.R'
+
+        middle:
+            a:
+                L: 'finger.middle.b.L'
+                R: 'finger.middle.b.R'
+
+            b:
+                L: 'finger.middle.c.L'
+                R: 'finger.middle.c.R'
+
+            c:
+                L: 'finger_end.middle.L'
+                R: 'finger_end.middle.R'
+
+        ring:
+            a:
+                L: 'finger.ring.b.L'
+                R: 'finger.ring.b.R'
+
+            b:
+                L: 'finger.ring.c.L'
+                R: 'finger.ring.c.R'
+
+            c:
+                L: 'finger_end.ring.L'
+                R: 'finger_end.ring.R'
+
+        pinky:
+            a:
+                L: 'finger.pinky.b.L'
+                R: 'finger.pinky.b.R'
+
+            b:
+                L: 'finger.pinky.c.L'
+                R: 'finger.pinky.c.R'
+
+            c:
+                L: 'finger_end.pinky.L'
+                R: 'finger_end.pinky.R'
+
+    hip:
+        L: 'knee.L'
+        R: 'knee.R'
+
+    knee:
+        L: 'ankle.L'
+        R: 'ankle.R'
+
+    ankle:
+        L: 'toes.L'
+        R: 'toes.R'
+
+    toes:
+        L: 'toes_end.L'
+        R: 'toes_end.R'
+
+geometry:
+    root:
+        M: 'root_M_geo'
+
+    spine:
+        a:
+            M: 'spine_a_M_geo'
+
+        b:
+            M: 'spine_b_M_geo'
+
+    chest:
+        M: 'chest_M_geo'
+
+    neck:
+        M: 'neck_M_geo'
+
+    head:
+        M: 'head_M_geo'
+
+    scapula:
+        L: 'scapula_L_geo'
+        R: 'scapula_R_geo'
+
+    shoulder:
+        L: 'shoulder_L_geo'
+        R: 'shoulder_R_geo'
+
+    elbow:
+        L: 'elbow_L_geo'
+        R: 'elbow_R_geo'
+
+    wrist:
+        L: 'wrist_L_geo'
+        R: 'wrist_R_geo'
+
+    finger:
+        thumb:
+            a:
+                L: 'finger_thumb_a_L_geo'
+                R: 'finger_thumb_a_R_geo'
+            b:
+                L: 'finger_thumb_b_L_geo'
+                R: 'finger_thumb_b_R_geo'
+            c:
+                L: 'finger_thumb_c_L_geo'
+                R: 'finger_thumb_c_R_geo'
+
+        index:
+            a:
+                L: 'finger_index_a_L_geo'
+                R: 'finger_index_a_R_geo'
+            b:
+                L: 'finger_index_b_L_geo'
+                R: 'finger_index_b_R_geo'
+            c:
+                L: 'finger_index_c_L_geo'
+                R: 'finger_index_c_R_geo'
+
+        middle:
+            a:
+                L: 'finger_middle_a_L_geo'
+                R: 'finger_middle_a_R_geo'
+            b:
+                L: 'finger_middle_b_L_geo'
+                R: 'finger_middle_b_R_geo'
+            c:
+                L: 'finger_middle_c_L_geo'
+                R: 'finger_middle_c_R_geo'
+
+        ring:
+            a:
+                L: 'finger_ring_a_L_geo'
+                R: 'finger_ring_a_R_geo'
+            b:
+                L: 'finger_ring_b_L_geo'
+                R: 'finger_ring_b_R_geo'
+            c:
+                L: 'finger_ring_c_L_geo'
+                R: 'finger_ring_c_R_geo'
+
+        pinky:
+            a:
+                L: 'finger_pinky_a_L_geo'
+                R: 'finger_pinky_a_R_geo'
+            b:
+                L: 'finger_pinky_b_L_geo'
+                R: 'finger_pinky_b_R_geo'
+            c:
+                L: 'finger_pinky_c_L_geo'
+                R: 'finger_pinky_c_R_geo'
+
+    hip:
+        L: 'hip_L_geo'
+        R: 'hip_R_geo'
+
+    knee:
+        L: 'knee_L_geo'
+        R: 'knee_R_geo'
+
+    ankle:
+        L: 'ankle_L_geo'
+        R: 'ankle_R_geo'
+
+    toes:
+        L: 'toes_L_geo'
+        R: 'toes_R_geo'
+
+geometry_new:
+    root:
+        M: 'Mesh_Root_M'
+
+    spine:
+        a:
+            M: 'Mesh_Spine1_M'
+
+        b:
+            M: 'Mesh_Spine2_M'
+
+    chest:
+        M: 'Mesh_Chest_M'
+
+    neck:
+        M: 'Mesh_Neck_M'
+
+    head:
+        M: 'Mesh_Head_M'
+
+    scapula:
+        L: 'Mesh_Scapula_L'
+        R: 'Mesh_Scapula_R'
+
+    shoulder:
+        L: 'Mesh_Shoulder_L'
+        R: 'Mesh_Shoulder_R'
+
+    elbow:
+        L: 'Mesh_Elbow_L'
+        R: 'Mesh_Elbow_R'
+
+    wrist:
+        L: 'Mesh_Wrist_L'
+        R: 'Mesh_Wrist_R'
+
+    finger:
+        thumb:
+            a:
+                L: 'Mesh_ThumbFinger1_L'
+                R: 'Mesh_ThumbFinger1_R'
+            b:
+                L: 'Mesh_ThumbFinger2_L'
+                R: 'Mesh_ThumbFinger2_R'
+            c:
+                L: 'Mesh_ThumbFinger3_L'
+                R: 'Mesh_ThumbFinger3_R'
+
+        index:
+            a:
+                L: 'Mesh_IndexFinger1_L'
+                R: 'Mesh_IndexFinger1_R'
+
+            b:
+                L: 'Mesh_IndexFinger2_L'
+                R: 'Mesh_IndexFinger2_R'
+
+            c:
+                L: 'Mesh_IndexFinger3_L'
+                R: 'Mesh_IndexFinger3_R'
+
+        middle:
+            a:
+                L: 'Mesh_MiddleFinger1_L'
+                R: 'Mesh_MiddleFinger1_R'
+
+            b:
+                L: 'Mesh_MiddleFinger2_L'
+                R: 'Mesh_MiddleFinger2_R'
+
+            c:
+                L: 'Mesh_MiddleFinger3_L'
+                R: 'Mesh_MiddleFinger3_R'
+
+        ring:
+            a:
+                L: 'Mesh_RingFinger1_L'
+                R: 'Mesh_RingFinger1_R'
+
+            b:
+                L: 'Mesh_RingFinger2_L'
+                R: 'Mesh_RingFinger2_R'
+
+            c:
+                L: 'Mesh_RingFinger3_L'
+                R: 'Mesh_RingFinger3_R'
+
+        pinky:
+            a:
+                L: 'Mesh_PinkyFinger1_L'
+                R: 'Mesh_PinkyFinger1_R'
+
+            b:
+                L: 'Mesh_PinkyFinger2_L'
+                R: 'Mesh_PinkyFinger2_R'
+
+            c:
+                L: 'Mesh_PinkyFinger3_L'
+                R: 'Mesh_PinkyFinger3_R'
+
+    hip:
+        L: 'Mesh_Hip_L'
+        R: 'Mesh_Hip_R'
+
+    knee:
+        L: 'Mesh_Knee_L'
+        R: 'Mesh_Knee_R'
+
+    ankle:
+        L: 'Mesh_Ankle_L'
+        R: 'Mesh_Ankle_R'
+
+    toes:
+        L: 'Mesh_Toes_L'
+        R: 'Mesh_Toes_R'

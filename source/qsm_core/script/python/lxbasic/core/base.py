@@ -62,6 +62,16 @@ class SysApplicationMtd(object):
         return False
 
     @classmethod
+    def get_maya_version(cls):
+        string = ''
+        if cls.get_is_maya():
+            # noinspection PyUnresolvedReferences
+            import maya.cmds as cmds
+            # Str <Maya Version>
+            string = str(cmds.about(apiVersion=1))[:4]
+        return string
+
+    @classmethod
     def get_is_houdini(cls):
         _ = os.environ.get('HIP')
         if _:

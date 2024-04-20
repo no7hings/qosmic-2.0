@@ -1,0 +1,31 @@
+option:
+    type: unit
+    #
+    systems:
+        - '*-maya'
+    #
+    gui:
+        group_name: proxy
+        #
+        name: 'Load Camera'
+        icon_name: 'file/abc'
+#
+variants:
+    project: ''
+    branch: ''
+    #
+    role: ''
+    asset: ''
+    #
+    sequence: ''
+    shot: ''
+    #
+    step: ''
+    task: ''
+    #
+    application: ''
+#
+resolver:
+    rsv_unit:
+        keyword: '{branch}-camera-abc-file'
+        version: latest

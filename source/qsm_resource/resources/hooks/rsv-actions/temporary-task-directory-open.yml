@@ -1,0 +1,31 @@
+option:
+    type: unit
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: directory
+        #
+        name: 'Open Task Temporary Directory'
+        icon_name: 'file/open-folder'
+#
+variants:
+    project: ''
+    branch: ''
+    #
+    role: ''
+    asset: ''
+    #
+    sequence: ''
+    shot: ''
+    #
+    step: ''
+    task: ''
+    #
+    application: ''
+#
+resolver:
+    rsv_unit:
+        keyword: '{branch}-temporary-task-dir'
+        version: latest

@@ -14,6 +14,8 @@ option:
 hooks:
     # asset
     # shot
+    # test
+    - 'dcc-tools/maya/qsm-asset-manager': {gui_parent: '/Test'}
     # general
     - 'dcc-tools/gen-tool-kit': {gui_parent: '/General'}
     - 'dcc-tools/gen-asset-dcc-texture-manager': {gui_parent: '/General'}

@@ -1,0 +1,68 @@
+option:
+    #
+    type: 'rsv-tool-panel'
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        name: 'Asset Loader'
+        group_name: 'Loader(s)'
+        icon_name: ''
+        #
+        size: [1280, 960]
+        item_frame_size: [200, 176]
+    #
+    packages:
+        - 'lxdcc'
+#
+resolver:
+    filter: 'branch=asset&workspace=work'
+    #
+    application_filter:
+        'python': 'branch=asset&workspace=work'
+        'maya': 'branch=asset&workspace=work&step=mod+srf+rig+grm+cam'
+        'houdini': 'branch=asset&workspace=work&step=mod+srf'
+        'katana': 'branch=asset&workspace=work&step=mod+srf'
+    #
+    task_unit:
+        keywords:
+            - '{branch}-source-maya-scene-src-file': {systems: ['*-python', '*-maya']}
+            - '{branch}-source-houdini-scene-src-file': {systems: ['*-python', '*-houdini']}
+            - '{branch}-source-katana-scene-src-file': {systems: ['*-python', '*-katana']}
+            - '{branch}-source-nuke-scene-src-file': {systems: ['*-python', '*-nuke']}
+#
+actions:
+    asset:
+        hooks:
+            - 'rsv-actions/asset/maya/scene-build'
+    task:
+        hooks:
+            # in dcc
+            - 'rsv-actions/maya/work-file-new'
+            - 'rsv-actions/houdini/work-file-new'
+            - 'rsv-actions/katana/work-file-new'
+            - 'rsv-actions/katana/work-surface-file-new'
+            #
+            - 'rsv-actions/review-file-upload'
+    #
+    task_unit:
+        hooks:
+            # scene
+            - 'rsv-actions/source-maya-file-open'
+            - 'rsv-actions/source-katana-file-open'
+            # scene
+            - 'rsv-actions/maya/work-file-open'
+            - 'rsv-actions/houdini/work-file-open'
+            - 'rsv-actions/katana/work-file-open'
+            # usd
+            - 'rsv-actions/usd/component-file-open'
+            # review
+            - 'rsv-actions/review-file-open'
+            # render
+            - 'rsv-actions/asset/maya/render-submitter'
+            - 'rsv-actions/asset/katana/render-submitter'
+            # directory
+            - 'rsv-actions/source-task-directory-open': {gui_parent: '/Open Task Directory', gui_name: 'Work'}
+            - 'rsv-actions/release-task-directory-open': {gui_parent: '/Open Task Directory', gui_name: 'Publish'}
+            - 'rsv-actions/temporary-task-directory-open': {gui_parent: '/Open Task Directory', gui_name: 'Output'}

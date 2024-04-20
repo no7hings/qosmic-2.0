@@ -1,0 +1,30 @@
+option:
+    type: task
+    #
+    systems:
+        - '*-python'
+        - '*-maya'
+        - '*-houdini'
+        - '*-katana'
+    #
+    gui:
+        group_name: review
+        #
+        name: 'Upload Review File'
+        icon_name: 'application/rv'
+#
+variants:
+    project: ''
+    branch: ''
+    #
+    role: ''
+    asset: ''
+    #
+    sequence: ''
+    shot: ''
+    #
+    step: ''
+    task: ''
+    #
+    application: ''
+

@@ -1,0 +1,15 @@
+option:
+    type: asset
+    #
+    systems:
+        - '*-python'
+        - '*-maya'
+        - '*-houdini'
+        - '*-katana'
+    #
+    gui:
+        group_name: 'create or publish'
+        #
+        name: 'Create or Publish Asset Camera'
+        #
+        icon_name: 'application/python'

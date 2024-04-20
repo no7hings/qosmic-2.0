@@ -1,0 +1,41 @@
+option:
+    #
+    type: 'rsv-tool-panel'
+    #
+    systems:
+        - '*-python'
+        #
+        - '*-maya'
+        - '*-houdini'
+        - '*-katana'
+    #
+    gui:
+        name: 'Lib Asset Loader'
+        group_name: 'Loader(s)'
+        icon_name: ''
+        #
+        size: [1280, 960]
+        item_frame_size: [220, 176]
+    #
+    packages:
+        - 'lxdcc'
+#
+resolver:
+    filter: 'project=lib&branch=asset&workspace=work&role=chr+flg+prp+env&step=mod+srf+rig+grm'
+    #
+    task_unit:
+        keywords:
+            - '{branch}-source-maya-scene-src-file'
+            - '{branch}-source-houdini-scene-src-file'
+            - '{branch}-source-katana-scene-src-file'
+            - '{branch}-source-nuke-scene-src-file'
+#
+actions:
+    task: ''
+    task_unit:
+        hooks:
+            - 'rsv-actions/maya/work-file-open'
+            - 'rsv-actions/houdini/work-file-open'
+            - 'rsv-actions/katana/work-file-open'
+            #
+            - 'rsv-actions/review-file-open'

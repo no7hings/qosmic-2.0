@@ -11,7 +11,7 @@ from . import base as bsc_stg_base
 
 
 class StgTmpBaseMtd(object):
-    ROOT = '/l/temp'
+    ROOT = bsc_cor_environ.EnvBaseMtd.get_temporary_root()
 
     @classmethod
     def get_user_directory(cls, tag):

@@ -1,0 +1,32 @@
+option:
+    type: unit
+    #
+    systems:
+        - '*-maya'
+    #
+    gui:
+        group_name: proxy-xarc
+        #
+        name: 'Import Proxy-xarc File'
+        icon_name: 'file/xarc'
+#
+variants:
+    project: ''
+    branch: ''
+    #
+    role: ''
+    asset: ''
+    #
+    sequence: ''
+    shot: ''
+    #
+    step: ''
+    task: ''
+    #
+    application: ''
+#
+resolver:
+    rsv_unit:
+        keyword: '{branch}-proxy-xarc-sub-act-file'
+        version: latest
+        variants_extend: {'look_pass': 'default', 'act': 'static'}

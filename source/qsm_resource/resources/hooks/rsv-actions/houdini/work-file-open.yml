@@ -1,0 +1,31 @@
+option:
+    type: unit
+    #
+    systems:
+        - '*-houdini'
+    #
+    gui:
+        group_name: scene
+        #
+        name: 'Open Work Houdini File'
+        icon_name: 'application/houdini'
+#
+variants:
+    project: ''
+    branch: ''
+    #
+    role: ''
+    asset: ''
+    #
+    sequence: ''
+    shot: ''
+    #
+    step: ''
+    task: ''
+    #
+    application: ''
+#
+resolver:
+    rsv_unit:
+        keyword: '{branch}-source-houdini-scene-src-file'
+        version: latest

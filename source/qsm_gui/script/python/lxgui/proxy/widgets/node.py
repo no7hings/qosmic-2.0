@@ -499,12 +499,12 @@ class PrxPortAsFrames(PrxPortAsConstant):
 
 
 #   integer
-class PrxPortInteger(PrxPortAsConstant):
+class PrxPortForInteger(PrxPortAsConstant):
     ENTRY_TYPE = 'integer'
     PRX_PORT_INPUT_CLS = gui_prx_wgt_input_for_port.PrxInputAsInteger
 
     def __init__(self, *args, **kwargs):
-        super(PrxPortInteger, self).__init__(*args, **kwargs)
+        super(PrxPortForInteger, self).__init__(*args, **kwargs)
 
 
 #   boolean
@@ -1083,7 +1083,7 @@ class PrxNodeOld(gui_prx_abstracts.AbsPrxWidget):
     LABEL_WIDTH = 160
     PORT_CLS_DICT = dict(
         string=PrxPortAsString,
-        interge=PrxPortInteger,
+        interge=PrxPortForInteger,
         float=PrxPortAsFloat,
         button=PrxPortAsButton,
         enumerate=PrxPortAsConstantChoose
@@ -1436,7 +1436,7 @@ class PrxNode(gui_prx_abstracts.AbsPrxWidget):
     PORT_STACK_CLS = PrxNodePortStack
     PORT_CLS_DICT = dict(
         string=PrxPortAsString,
-        interge=PrxPortInteger,
+        interge=PrxPortForInteger,
         float=PrxPortAsFloat,
         button=PrxPortAsButton,
         enumerate=PrxPortAsConstantChoose
@@ -1612,13 +1612,33 @@ class PrxNode(gui_prx_abstracts.AbsPrxWidget):
             port.set_default(value_)
 
         elif widget_ in {'integer'}:
-            port = PrxPortInteger(
+            port = PrxPortForInteger(
                 port_path,
                 node_widget=self.widget
             )
             history_key_ = option.get('history_key')
             if history_key_:
                 port.set_history_key(history_key_)
+
+            port.set_default(value_)
+
+            pull_history_latest = option.get('pull_history_latest')
+            if pull_history_latest is True:
+                if port.pull_history_latest() is False:
+                    port.set(value_)
+            else:
+                port.set(value_)
+        
+        elif widget_ in {'integer2'}:
+            port = PrxPortForIntegerTuple(
+                port_path,
+                node_widget=self.widget
+            )
+            history_key_ = option.get('history_key')
+            if history_key_:
+                port.set_history_key(history_key_)
+
+            port.set_value_size(2)
 
             port.set_default(value_)
 

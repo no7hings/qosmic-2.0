@@ -35,9 +35,12 @@ class _GuiPageQuery(object):
         )
         self.__page_keys_department = []
 
+        self.__user_current = bsc_core.SysBaseMtd.get_user_name()
         self.__all_page_keys_user = kit_core.KitDesktopHook.find_all_page_keys_at(
             kit_core.KitDesktopHook.PageKey.Users
         )
+        if self.__user_current not in self.__all_page_keys_user:
+            self.__all_page_keys_user.append(self.__user_current)
         self.__page_keys_user = []
 
         self.__all_page_keys = self.__all_page_keys_default+self.__all_page_keys_department+self.__all_page_keys_user
@@ -63,13 +66,13 @@ class _GuiPageQuery(object):
         elif page_key in self.__page_keys_user:
             self.__page_keys_user.remove(page_key)
 
-    def get_default_waiting(self):
+    def get_defaults_waiting(self):
         return [i for i in self.__all_page_keys_default if i not in self.__page_keys_default]
 
-    def get_department_waiting(self):
+    def get_departments_waiting(self):
         return [i for i in self.__all_page_keys_department if i not in self.__page_keys_department]
 
-    def get_user_waiting(self):
+    def get_users_waiting(self):
         return [i for i in self.__all_page_keys_user if i not in self.__page_keys_user]
 
     def get_all_keys(self):
@@ -145,7 +148,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
     KEY_TOOL_GROUP_ORDER = 'tool-desktop.tool_group_order'
     KEY_TOOL_ORDER = 'tool-desktop.tool_order'
 
-    KEY = 'app kit'
+    KEY = 'desktop kit'
 
     def __init__(self, *args, **kwargs):
         super(AbsToolKitForDesktop, self).__init__(*args, **kwargs)
@@ -255,7 +258,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
         list_ = []
         # default
 
-        for i_page_key in self.__gui_page_query.get_default_waiting():
+        for i_page_key in self.__gui_page_query.get_defaults_waiting():
             list_.append(
                 (
                     i_page_key, 'tag', functools.partial(
@@ -267,7 +270,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
             list_.append(())
         # department
         sub_list = []
-        for i_page_key in self.__gui_page_query.get_department_waiting():
+        for i_page_key in self.__gui_page_query.get_departments_waiting():
             i_name = i_page_key.split('/')[-1]
             sub_list.append(
                 (
@@ -284,7 +287,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
         )
         # user
         sub_list = []
-        for i_page_key in self.__gui_page_query.get_user_waiting():
+        for i_page_key in self.__gui_page_query.get_users_waiting():
             i_name = i_page_key.split('/')[-1]
             sub_list.append(
                 (

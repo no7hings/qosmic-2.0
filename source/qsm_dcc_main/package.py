@@ -17,6 +17,7 @@ requires = [
     'qsm_dcc_core',
     'qsm_dcc_gui',
     'qsm_dcc_resource',
+    'qsm_dcc_extra',
 ]
 
 
@@ -28,7 +29,7 @@ def commands():
     # maya
     env.PYTHONPATH.append('{root}/startup/maya/scripts')
     # houdini-setup
-    env.HOUDINI_PATH.append('{root}/startup/houdini:&')
+    env.HOUDINI_PATH.append('{root}/startup/houdini;&')
     # katana-setup
     env.KATANA_RESOURCES.append('{root}/startup/katana')
     # arnold-setup

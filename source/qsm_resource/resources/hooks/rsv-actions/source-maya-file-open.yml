@@ -1,0 +1,32 @@
+option:
+    type: unit
+    #
+    systems:
+        - '*-python'
+    #
+    gui:
+        group_name: scene
+        #
+        name: 'Open Source Maya File'
+        icon_name: 'application/maya'
+#
+variants:
+    project: ''
+    branch: ''
+    #
+    role: ''
+    asset: ''
+    #
+    sequence: ''
+    shot: ''
+    #
+    step: ''
+    task: ''
+    #
+    application: ''
+#
+resolver:
+    rsv_unit:
+        keyword: '{branch}-source-maya-scene-src-file'
+        version: latest
+

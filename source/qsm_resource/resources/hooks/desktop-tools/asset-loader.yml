@@ -1,0 +1,102 @@
+option:
+    #
+    type: 'rsv-tool-panel'
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        name: 'Asset Task Loader'
+        group_name: 'Loader(s)'
+        icon_name: 'application/loader'
+        icon_sub_name: 'application/python'
+        #
+        tool_tip: 'Asset Manager Tool'
+        #
+        size: [1280, 960]
+        item_frame_size: [142, 142]
+    #
+    packages:
+        - 'lxdcc'
+#
+hook_option:
+    rez:
+        extend_packages: ['usd', 'arnold', 'arnold_usd', 'aces']
+#
+resolver:
+    filter: 'branch=asset'
+    #
+    application_filter:
+        python: 'branch=asset&step=cpt+mod+srf+grm+rig+env+cam+lgt'
+        maya: 'branch=asset&step=mod+srf+grm+rig+env+cam+lgt'
+        houdini: 'branch=asset&step=mod+srf'
+        katana: 'branch=asset&step=mod+srf+lgt'
+        clarisse: 'branch=asset&step=mod+srf+env'
+    #
+    task_unit:
+        keywords:
+            - '{branch}-preview-file': { systems: ['*-*'], hidden: True }
+            - '{branch}-review-file': { systems: ['*-*'], hidden: True }
+            #
+            - '{branch}-source-maya-scene-src-file': { systems: ['*-python', '*-maya'] }
+            - '{branch}-user-maya-scene-src-file': { systems: ['*-python', '*-maya'], hidden: True }
+            - '{branch}-maya-scene-src-file': { systems: ['*-python', '*-maya'] }
+            #
+            - '{branch}-source-houdini-scene-src-file': { systems: ['*-python', '*-houdini'] }
+            - '{branch}-user-houdini-scene-src-file': { systems: ['*-python', '*-houdini'], hidden: True }
+            - '{branch}-houdini-scene-src-file': { systems: ['*-python', '*-houdini'], hidden: True }
+            #
+            - '{branch}-source-katana-scene-src-file': { systems: ['*-python', '*-katana'] }
+            - '{branch}-user-katana-scene-src-file': { systems: ['*-python', '*-katana'], hidden: True }
+            #
+            - '{branch}-source-nuke-scene-src-file': { systems: ['*-python', '*-nuke'] }
+            - '{branch}-user-nuke-scene-src-file': { systems: ['*-python', '*-nuke'], hidden: True }
+            - '{branch}-source-clarisse-scene-src-file': { systems: ['*-python', '*-clarisse'] }
+            - '{branch}-user-clarisse-scene-src-file': { systems: ['*-python', '*-clarisse'], hidden: True }
+    #
+    filters:
+        camera: 'branch=asset&step=cam'
+        model: 'branch=asset&step=mod'
+        groom: 'branch=asset&step=grm'
+        rig: 'branch=asset&step=rig'
+        surface: 'branch=asset&step=srf'
+        #
+        all: 'branch=asset&workspace_key=source'
+        #
+        auto: ''
+#
+actions:
+    asset:
+        hooks:
+            - 'rsv-actions/python/asset-maya-build': {gui_parent: '/Run Method', gui_name: 'for Build Scene'}
+            - 'rsv-actions/python/asset-camera-create-or-publish': {gui_parent: '/Run Method', gui_name: 'for Create or Publish Asset Camera'}
+    task:
+        hooks:
+            # in dcc
+            - 'rsv-actions/maya/work-file-new'
+            - 'rsv-actions/houdini/work-file-new'
+            - 'rsv-actions/katana/work-file-new'
+            - 'rsv-actions/katana/work-surface-file-new'
+            #
+            - 'rsv-actions/review-file-upload'
+    #
+    task_unit:
+        hooks:
+            # dcc
+            - 'rsv-actions/maya/work-file-open'
+            - 'rsv-actions/houdini/work-file-open'
+            - 'rsv-actions/katana/work-file-open'
+            # directory
+            - 'rsv-actions/source-task-directory-open': {gui_parent: '/Open Directory', gui_name: 'Source'}
+            - 'rsv-actions/user-task-directory-open': {gui_parent: '/Open Directory', gui_name: 'User'}
+            - 'rsv-actions/release-task-directory-open': {gui_parent: '/Open Directory', gui_name: 'Release'}
+            - 'rsv-actions/temporary-task-directory-open': {gui_parent: '/Open Directory', gui_name: 'Temporary'}
+            # usd
+            - 'rsv-actions/usd/component-file-open'
+            # review
+            - 'rsv-actions/review-file-open'
+            # render submitter
+            - 'rsv-actions/asset/maya/render-submitter': {gui_name: 'Open PG Render (maya)'}
+            - 'rsv-actions/asset/katana/render-submitter': {gui_name: 'Open PG Render (katana)'}
+            # comparer
+            - 'rsv-actions/asset/python/geometry-comparer': {gui_parent: '/Open Extra', gui_name: 'Geometry comparer'}

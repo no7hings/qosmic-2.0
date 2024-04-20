@@ -256,6 +256,8 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
             option['exportSelected'] = True
         else:
             option['exportAll'] = True
+
+        bsc_storage.StgFileOpt(file_path).create_directory()
         results = cmds.file(file_path, **option)
         if 'exportSelected' in option:
             if _selected_paths:

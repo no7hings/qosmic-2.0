@@ -1,0 +1,33 @@
+option:
+    type: unit
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'render'
+        #
+        name: 'Open Render Submitter'
+        icon_name: 'window/render'
+#
+variants:
+    project: ''
+    branch: ''
+    #
+    role: ''
+    asset: ''
+    #
+    sequence: ''
+    shot: ''
+    #
+    step: ''
+    task: ''
+    #
+    application: ''
+#
+resolver:
+    rsv_unit:
+        keyword: '{branch}-source-katana-scene-src-file'
+        version: latest
+
+    step_includes: ['srf']

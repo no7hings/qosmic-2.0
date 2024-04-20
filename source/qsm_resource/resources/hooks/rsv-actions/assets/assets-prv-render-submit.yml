@@ -1,0 +1,10 @@
+option:
+    type: asset
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'batcher'
+        #
+        name: 'Submit Asset(s) Preview Render'

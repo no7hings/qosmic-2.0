@@ -1,0 +1,12 @@
+option:
+    type: asset
+    #
+    systems:
+        - '*-maya'
+    #
+    gui:
+        group_name: 'build'
+        #
+        name: 'Build Asset'
+        #
+        icon_name: 'application/python'

@@ -1,0 +1,44 @@
+option:
+    #
+    type: 'rsv-tool-panel'
+    #
+    systems:
+        - '*-python'
+        #
+        - '*-maya'
+        - '*-houdini'
+        - '*-katana'
+    #
+    gui:
+        name: 'Asset-proxy Loader'
+        group_name: 'Loader(s)'
+        icon_name: ''
+        #
+        size: [1280, 960]
+        item_frame_size: [220, 176]
+    #
+    packages:
+        - 'lxdcc'
+#
+resolver:
+    filter: 'branch=asset&workspace=publish&step=mod+srf'
+    #
+    task_unit:
+        keywords:
+            - 'asset-look-ass-file'
+            - 'asset-proxy-xarc-sub-act-file': {variants_extend: {'look_pass': 'default', 'act': 'static'}}
+#
+actions:
+    task: ''
+    task_unit:
+        hooks:
+            - 'rsv-actions/maya/work-file-open'
+            - 'rsv-actions/houdini/work-file-open'
+            - 'rsv-actions/katana/work-file-open'
+            #
+            - 'rsv-actions/asset/maya/proxy-load'
+            - 'rsv-actions/asset/maya/proxy-seq-load'
+            #
+            - 'rsv-actions/asset/maya/proxy-xarc-load'
+            #
+            - 'rsv-actions/review-file-open'

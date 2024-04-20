@@ -102,6 +102,7 @@ class TrdCommandPool(threading.Thread):
 
     @property
     def completed(self):
+        # index, results
         return self.__completed_signal
 
     @property
@@ -281,7 +282,7 @@ class TrdCommand(threading.Thread):
             stderr=subprocess.STDOUT,
             startupinfo=bsc_cor_process.PrcBaseMtd.NO_WINDOW
         )
-        #
+
         while True:
             next_line = s_p.stdout.readline()
             #
@@ -312,7 +313,7 @@ class TrdCommand(threading.Thread):
             self.__set_logging(
                 log
             )
-        #
+
         retcode = s_p.poll()
         if retcode:
             self.__set_status_update(self.Status.Failed)

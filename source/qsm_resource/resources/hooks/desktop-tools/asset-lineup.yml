@@ -1,0 +1,58 @@
+option:
+    type: tool-panel
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'Tool(s)'
+        #
+        name: 'Asset Lineup'
+        icon_name: 'window/character'
+        icon_sub_name: 'application/python'
+
+        size: [ 1280, 960 ]
+
+resolver:
+    filter: 'branch=asset&role=chr+prp+env'
+
+actions:
+    asset:
+        hooks:
+            - 'rsv-actions/assets/assets-prv-render-submit': {gui_parent: '/Run Batch Method', gui_name: 'for Preview Render Submit'}
+
+build:
+    node:
+        options:
+            project:
+                widget: project
+                value: 'cgm'
+                tool_tip: '...'
+
+            refresh:
+                widget: button
+                value: ''
+                tool_tip: '...'
+
+            graph/reload:
+                widget: button
+                value: ''
+                tool_tip: '...'
+
+            output/file:
+                widget: file
+                open_or_save: save
+                ext_filter: 'All Image File (*.png *.jpg *.jpeg)'
+                value: ''
+                tool_tip: '...'
+
+            output/save:
+                widget: button
+                value: ''
+                tool_tip: '...'
+#
+hook_option:
+    script:
+        project: ''
+    rez:
+        extend_packages: ['usd', 'arnold', 'arnold_usd', 'aces']

@@ -8,7 +8,7 @@ class MayaProcess(object):
         cmds = [
             'rez-env qsm_dcc_main maya-2019 usd-20.11',
             (
-                r'-- maya -batch -command '
+                r'-- mayabatch -command '
                 r'"python('
                 r'\"import lxsession.commands as ssn_commands;'
                 r'ssn_commands.execute_option_hook(option=\\\"{hook_option}\\\")\")"'
@@ -24,7 +24,7 @@ class MayaProcess(object):
         # ).get_command(
         #     args_execute=[
         #         (
-        #             r'-- maya -batch -command '
+        #             r'-- mayabatch -command '
         #             r'"python('
         #             r'\"importlib=__import__(\\\"importlib\\\");'
         #             r'ssn_commands=importlib.import_module(\\\"lxsession.commands\\\");'

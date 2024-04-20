@@ -1,0 +1,31 @@
+option:
+    type: unit
+    #
+    systems:
+        - '*-maya'
+    #
+    gui:
+        group_name: proxy
+        #
+        name: 'Import Proxy Sequence File'
+        icon_name: 'file/ass'
+#
+variants:
+    project: ''
+    branch: ''
+    #
+    role: ''
+    asset: ''
+    #
+    sequence: ''
+    shot: ''
+    #
+    step: ''
+    task: ''
+    #
+    application: ''
+#
+resolver:
+    rsv_unit:
+        keyword: '{branch}-look-ass-file'
+        version: latest

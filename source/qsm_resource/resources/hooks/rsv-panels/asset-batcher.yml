@@ -1,0 +1,77 @@
+option:
+    #
+    type: 'rsv-tool-panel'
+    #
+    systems:
+        - '*-python'
+        #
+        - '*-maya'
+        - '*-houdini'
+        - '*-katana'
+    #
+    gui:
+        name: 'Asset Batcher'
+        group_name: 'Batcher(s)'
+        icon_name: ''
+        #
+        size: [1280, 960]
+        item_frame_size: [220, 176]
+    #
+    packages:
+        - 'lxdcc'
+#
+resolver:
+    filter: 'branch=asset&workspace=work'
+    #
+    application_filter:
+        'python': 'branch=asset&workspace=work'
+        'maya': 'branch=asset&workspace=work&step=mod+srf+rig+grm'
+        'houdini': 'branch=asset&workspace=work&step=mod+srf'
+        'katana': 'branch=asset&workspace=work&step=mod+srf'
+    #
+    task_unit:
+        keywords:
+            - '{branch}-maya-scene-file'
+            - '{branch}-houdini-scene-file'
+            - '{branch}-katana-scene-file'
+            - '{branch}-nuke-scene-file'
+#
+actions:
+    asset:
+        hooks:
+            # custom
+            - 'rsv-actions/asset/maya/scene-build'
+            # lib
+            - 'rsv-actions/asset/lib-asset-push'
+            - 'rsv-actions/asset/lib-asset-pull'
+            # lib-batch
+            - 'rsv-actions/assets/lib-assets-push'
+            - 'rsv-actions/assets/lib-assets-pull'
+            # render
+            - 'rsv-actions/asset/asset-surface-katana-render'
+            # publish
+            - 'rsv-actions/asset/asset-surface-publish'
+            - 'rsv-actions/assets/assets-surface-publish'
+    task:
+        hooks:
+            - 'rsv-actions/maya/work-file-new'
+            - 'rsv-actions/houdini/work-file-new'
+            - 'rsv-actions/katana/work-file-new'
+            - 'rsv-actions/katana/work-surface-file-new'
+    #
+    task_unit:
+        hooks:
+            # scene
+            - 'rsv-actions/source-maya-file-open'
+            - 'rsv-actions/source-katana-file-open'
+            # scene
+            - 'rsv-actions/maya/work-file-open'
+            - 'rsv-actions/houdini/work-file-open'
+            - 'rsv-actions/katana/work-file-open'
+            # review
+            - 'rsv-actions/review-file-open'
+            - 'rsv-actions/render-mov-file-open'
+            # directory
+            - 'rsv-actions/source-task-directory-open': {gui_parent: '/Open Task Directory', gui_name: 'Work'}
+            - 'rsv-actions/release-task-directory-open': {gui_parent: '/Open Task Directory', gui_name: 'Publish'}
+            - 'rsv-actions/temporary-task-directory-open': {gui_parent: '/Open Task Directory', gui_name: 'Output'}

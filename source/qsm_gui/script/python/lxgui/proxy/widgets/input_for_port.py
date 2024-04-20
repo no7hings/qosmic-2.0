@@ -1797,6 +1797,7 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
         self._prx_input.set_resize_target(self.widget)
         self._prx_input.set_resize_enable(True)
         self._prx_input.set_resize_minimum(82)
+        self._prx_input.get_check_tool_box().set_visible(True)
         #
         self._prx_input.connect_refresh_action_for(self.refresh)
         #

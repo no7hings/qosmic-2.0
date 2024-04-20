@@ -34,7 +34,6 @@ import lxgui.proxy.scripts as gui_prx_scripts
 
 class AbsRenderSubmitterDef(object):
     OPTION_HOOK_KEY = None
-    TD_ENABLE = True
 
     def _set_render_submitter_def_init_(self, hook_option):
         if hook_option is not None:

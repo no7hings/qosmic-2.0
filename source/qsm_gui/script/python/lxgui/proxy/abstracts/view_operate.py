@@ -310,8 +310,8 @@ class AbsGuiTreeViewAsTagOpt(AbsGuiPrxTreeViewOpt):
             self.gui_register_group(path, prx_item)
 
             prx_item.set_tool_tip(path)
-
             prx_item.set_checked(False)
+            prx_item.set_expanded(True)
             if self.GROUP_SCHEME == self.GroupScheme.Disable:
                 prx_item.set_enable(False)
                 prx_item.set_status(prx_item.ValidationStatus.Disable)
@@ -347,7 +347,16 @@ class AbsGuiTreeViewAsTagOpt(AbsGuiPrxTreeViewOpt):
             return prx_item
         return self.gui_get_tag(path)
 
-    def gui_register_tag_by_path(self, tag_path, path):
+    def gui_register_tag_by_path(self, tag_path, path, auto_create_ancestors=False):
+        if auto_create_ancestors is True:
+            path_opt = bsc_core.PthNodeOpt(tag_path)
+            ancestors = path_opt.get_ancestors()
+            ancestors.reverse()
+            for i_path_opt in ancestors:
+                i_path = i_path_opt.path
+                if self.gui_get_group_is_exists(i_path) is False:
+                    self.gui_add_group_by_path(i_path)
+
         prx_item = self.gui_add_tag_by_path(tag_path)
 
         self._count_tag_dict.setdefault(tag_path, set()).add(path)

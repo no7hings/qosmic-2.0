@@ -1,0 +1,40 @@
+option:
+    type: 'tool-panel'
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        name: 'PG Dependencies'
+        group_name: 'Tool(s)'
+        #
+        icon_name: 'application/python'
+        #
+        size: [1280, 960]
+        #
+        tool_tip: '...'
+#
+hook_option:
+    script:
+        file: ''
+
+build:
+    node:
+        options:
+            file:
+                widget: file
+                open_or_save: open
+                history_key: 'tool-panels.pg-dependencies.file-open'
+                pull_history_latest: True
+                value: ''
+                tool_tip: '...'
+                enable: True
+
+            refresh:
+                widget: button
+                value: ''
+                tool_tip: '...'
+    #
+    node_collapse:
+        options: [
+        ]

@@ -1,0 +1,78 @@
+option:
+    #
+    type: 'rsv-tool-panel'
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        name: 'Shot Loader'
+        group_name: 'Loader(s)'
+        icon_name: ''
+        icon_sub_name: 'application/python'
+        tool_tip: 'Shot Manager Tool'
+        #
+        size: [1280, 960]
+        item_frame_size: [220, 150]
+    #
+    packages:
+        - 'lxdcc'
+#
+resolver:
+    filter: 'branch=shot&workspace=work'
+    #
+    application_filter:
+        'python': 'branch=shot&step=stb+plt+rlo+flo+ani+cfx+rig+lgt+dmt+efx'
+        'maya': 'branch=shot&step=plt+rlo+flo+ani+cfx+rig+lgt+dmt'
+        'houdini': 'branch=shot&step=cfx+efx'
+        'katana': 'branch=shot&workspace=work'
+    #
+    task_unit:
+        keywords:
+            - '{branch}-preview-file'
+            - '{branch}-review-file'
+            - '{branch}-source-maya-scene-src-file': {systems: ['*-python', '*-maya']}
+            - '{branch}-source-houdini-scene-src-file': {systems: ['*-python', '*-houdini']}
+            - '{branch}-source-katana-scene-src-file': {systems: ['*-python', '*-katana']}
+            - '{branch}-source-nuke-scene-src-file': {systems: ['*-python', '*-nuke']}
+            #
+            - '{branch}-component-usd-file': {systems: ['*-python']}
+            - '{branch}-temporary-component-usd-file': {systems: ['*-python']}
+    filters:
+        layout: 'branch=shot&step=rlo'
+        animation: 'branch=shot&step=rlo+ani+flo'
+        simulation: 'branch=shot&step=cfx'
+        effect: 'branch=shot&step=efx'
+        light: 'branch=shot&step=lgt'
+        all: 'branch=shot&workspace=work'
+        auto: ''
+#
+actions:
+    task:
+        hooks:
+            - 'rsv-actions/maya/work-file-new'
+            - 'rsv-actions/houdini/work-file-new'
+            - 'rsv-actions/katana/work-file-new'
+            #
+            - 'rsv-actions/review-file-upload'
+    task_unit:
+        hooks:
+            # scene
+            - 'rsv-actions/source-maya-file-open'
+            - 'rsv-actions/source-katana-file-open'
+            # scene
+            - 'rsv-actions/maya/work-file-open'
+            - 'rsv-actions/houdini/work-file-open'
+            - 'rsv-actions/katana/work-file-open'
+            # usd
+            - 'rsv-actions/usd/set-file-open'
+            # review
+            - 'rsv-actions/review-file-open'
+            # render
+            - 'rsv-actions/shot/maya/render-submitter': {gui_name: 'Open PG Render (maya)'}
+            - 'rsv-actions/shot/houdini/render-submitter': {gui_name: 'Open PG Render (houdini)'}
+            - 'rsv-actions/shot/katana/render-submitter': {gui_name: 'Open PG Render (katana)'}
+            # directory
+            - 'rsv-actions/source-task-directory-open': {gui_parent: '/Open Task Directory', gui_name: 'Work'}
+            - 'rsv-actions/release-task-directory-open': {gui_parent: '/Open Task Directory', gui_name: 'Publish'}
+            - 'rsv-actions/temporary-task-directory-open': {gui_parent: '/Open Task Directory', gui_name: 'Output'}

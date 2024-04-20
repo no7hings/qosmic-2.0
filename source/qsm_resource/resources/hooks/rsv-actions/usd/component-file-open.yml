@@ -1,0 +1,32 @@
+option:
+    type: unit
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'usd-viewer'
+        #
+        name: 'Open Usd Component'
+        icon_name: 'application/usd'
+#
+variants:
+    project: ''
+    branch: ''
+    #
+    role: ''
+    asset: ''
+    #
+    sequence: ''
+    shot: ''
+    #
+    step: ''
+    task: ''
+    #
+    application: ''
+#
+resolver:
+    rsv_unit:
+        keyword: '{branch}-component-usd-file'
+        version: latest
+

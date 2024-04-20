@@ -1,0 +1,175 @@
+option:
+    type: 'rsv-tool-panel'
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        name: 'Surface Publisher'
+        group_name: 'Tool(s)'
+        #
+        icon_name: 'application/publish'
+        icon_sub_name: 'application/python'
+        #
+        size: [720, 720]
+        #
+        tool_tip:
+            |-
+            tool-panel for surface publish
+        #
+        content:
+            |-
+            1. press "validation" and wait process execute, all "warning" and "error" will be list in "result" tree view
+#
+rsv-match-condition: 'branch=asset&workspace_key=source+user&step=srf'
+#
+hook_option:
+    rez:
+        extend_packages: ['usd', 'arnold', 'arnold_usd', 'aces']
+#
+build:
+    node:
+        validation_options:
+            resolver/scene_file:
+                widget: file
+                open_or_save: open
+                history_key: 'tool-panels.asset-publisher.file-open'
+                pull_history_latest: False
+                value: ''
+                tool_tip: '...'
+                enable: True
+
+            resolver/load:
+                widget: button
+                value:
+                tool_tip: '...'
+
+            validation/ignore_shotgun_check:
+                widget: boolean
+                value: False
+                tool_tip: 'if checked, ignore all shotgun check'
+                enable: True
+
+            validation/ignore_scene_check:
+                widget: boolean
+                value: False
+                tool_tip: 'if checked, ignore all scene check'
+                enable: True
+
+            validation/ignore_geometry_check:
+                widget: boolean
+                value: False
+                tool_tip: 'if checked, ignore all geometry check'
+                enable: True
+
+            validation/ignore_geometry_topology_check:
+                widget: boolean
+                value: False
+                tool_tip: 'if checked, ignore all geometry topology check'
+                enable: True
+
+            validation/ignore_look_check:
+                widget: boolean
+                value: False
+                tool_tip: 'if checked, ignore all look check'
+                enable: True
+
+            validation/ignore_texture_check:
+                widget: boolean
+                value: False
+                tool_tip: 'if checked, ignore all texture check'
+                enable: True
+
+            validation/ignore_texture_workspace_check:
+                widget: boolean
+                value: True
+                tool_tip: 'if checked, ignore all texture workspace check'
+                enable: True
+
+            validation/ignore_all:
+                widget: button
+                value:
+                tool_tip: '...'
+                join_to_next: True
+
+            validation/ignore_clear:
+                widget: button
+                value:
+                tool_tip: '...'
+
+            publish/ignore_validation_error:
+                widget: boolean
+                value: False
+                tool_tip: 'if checked, ignore all validation error'
+                enable: True
+        #
+        publish_options:
+            version_type:
+                widget: capsule_string
+                value: ['check', 'downstream']
+                default: 'downstream'
+                tool_tip: 'choose a version type'
+                enable: True
+
+            description:
+                widget: script
+                value: ''
+                tool_tip: 'entry note'
+                enable: True
+
+            review:
+                widget: medias
+                value: ''
+                tool_tip: 'choose many files or make many snapshot for review'
+                history_key: 'tool-panels.asset-publisher.medias-open'
+                ext_includes: ['.jpg', '.png', '.exr', '.tx', '.mov', '.mp4', '.avi']
+                enable: True
+
+            notice:
+                widget: shotgun_entities_choose
+                # option for shotgun entities
+                shotgun_entity_kwargs: {entity_type: 'HumanUser', filters:[['sg_studio', 'is', 'CG'], ['sg_status_list', 'is', 'act']], fields: ['name', 'email', 'sg_nickname']}
+                keyword_filter_fields: ['name', 'email', 'sg_nickname']
+                tag_filter_fields: ['department']
+                #
+                value: ''
+                tool_tip: 'choose many user'
+                enable: True
+            #
+            process:
+                widget: group
+                collapse: True
+            #
+            process/settings/with_workspace_texture_lock:
+                widget: boolean
+                value: False
+                enable: True
+                tool_tip: 'if checked, lock all used texture directories when it is matched "texture workspace" rule'
+            #
+            process/deadline/scheme:
+                widget: enumerate
+                value: ['default', 'localhost']
+                current: 'default'
+                enable: True
+                tool_tip: ['default: use default configure', 'localhost: use yourself machine run process']
+            #
+            process/deadline/priority:
+                widget: float
+                value: 50
+                enable: True
+                tool_tip: '...'
+        #
+        publish_content:
+            |-
+            1. choose a version type in "version type";
+                a). default is "downstream"
+            2. entry description in "description";
+            3. choose one or more image or movie file or make a snapshot in "review";
+                a). support formats: "jpg", "png", "tx", "exr", "mov", "mp4", "avi"
+            4. choose one or more user in "notice";
+            5. configure in "process";
+            6. press "publish" to continue.
+    #
+    node_collapse:
+        options: [
+        ]
