@@ -1,0 +1,13 @@
+option:
+    type: 'dcc-action'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Create Socket Connection'
+        group_name: ''
+        #
+        icon_name: 'application/python'
+        tool_tip: ''
+
