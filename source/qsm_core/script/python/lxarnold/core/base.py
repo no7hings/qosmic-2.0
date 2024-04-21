@@ -11,7 +11,7 @@ import lxbasic.core as bsc_core
 # arnold
 from .wrap import *
 
-from . import configure as and_cor_configure
+from . import configure as _configure
 
 if bsc_core.SysBaseMtd.get_is_windows():
     # noinspection PyUnresolvedReferences
@@ -80,12 +80,12 @@ class AndTypeOpt(object):
         return self.and_instance == ai.AI_TYPE_ARRAY
 
     def get_dcc_type_args(self, is_array):
-        dcc_type_name = and_cor_configure.AndTypes.get_name(self.and_instance)
+        dcc_type_name = _configure.AndTypes.get_name(self.and_instance)
         dcc_category_name = unr_core.UnrType.get_category_name(dcc_type_name, is_array)
         return dcc_category_name, dcc_type_name
 
     def get_dcc_channel_names(self):
-        dcc_type_name = and_cor_configure.AndTypes.get_name(self.and_instance)
+        dcc_type_name = _configure.AndTypes.get_name(self.and_instance)
         return unr_core.UnrType.get_channel_names(dcc_type_name)
 
 
@@ -187,8 +187,8 @@ class AndPortOpt(object):
         and_type = self.type
         and_port = self.and_instance
         and_port_name = self.port_name
-        if and_type in and_cor_configure.AndBase.AR_VALUE_FNC_DICT:
-            fnc = and_cor_configure.AndBase.AR_VALUE_FNC_DICT[and_type]
+        if and_type in _configure.AndBase.AR_VALUE_FNC_DICT:
+            fnc = _configure.AndBase.AR_VALUE_FNC_DICT[and_type]
             if fnc is not None:
                 raw = fnc(and_obj, and_port_name)
                 return self._set_raw_convert_to_dcc_style_(and_type, and_port, raw)
@@ -197,9 +197,9 @@ class AndPortOpt(object):
         and_port = self.and_instance
         #
         and_exact_type = self.exact_type
-        if and_exact_type in and_cor_configure.AndBase.AR_ARRAY_VALUE_FNC_DICT:
+        if and_exact_type in _configure.AndBase.AR_ARRAY_VALUE_FNC_DICT:
             lis = []
-            fnc = and_cor_configure.AndBase.AR_ARRAY_VALUE_FNC_DICT[and_exact_type]
+            fnc = _configure.AndBase.AR_ARRAY_VALUE_FNC_DICT[and_exact_type]
             and_array = self.get_array()
             and_array_element_count = AndArrayOpt(and_array).get_element_count()
             for and_array_element_index in range(and_array_element_count):
@@ -220,17 +220,17 @@ class AndPortOpt(object):
     def _get_default_constant_raw_(self):
         and_type = self.type
         and_port = self.and_instance
-        if and_type in and_cor_configure.AndBase.AR_DEFAULT_VALUE_FNC_DICT:
-            fnc = and_cor_configure.AndBase.AR_DEFAULT_VALUE_FNC_DICT[and_type]
+        if and_type in _configure.AndBase.AR_DEFAULT_VALUE_FNC_DICT:
+            fnc = _configure.AndBase.AR_DEFAULT_VALUE_FNC_DICT[and_type]
             raw = fnc(and_port)
             return self._set_raw_convert_to_dcc_style_(and_type, and_port, raw)
 
     def _get_default_array_raw_(self):
         and_port = self.and_instance
         and_exact_type = self.exact_type
-        if and_exact_type in and_cor_configure.AndBase.AR_ARRAY_VALUE_FNC_DICT:
+        if and_exact_type in _configure.AndBase.AR_ARRAY_VALUE_FNC_DICT:
             lis = []
-            fnc = and_cor_configure.AndBase.AR_ARRAY_VALUE_FNC_DICT[and_exact_type]
+            fnc = _configure.AndBase.AR_ARRAY_VALUE_FNC_DICT[and_exact_type]
             ar_array_default = ai.AiParamGetDefault(and_port).contents.ARRAY.contents
             and_array_element_count = ai.AiArrayGetNumElements(ar_array_default)
             for and_array_element_index in range(and_array_element_count):
@@ -430,7 +430,7 @@ class AndNodeOpt(object):
             and_output_port_index_value = and_output_port_index.value
             and_type = source_and_obj_mtd.output_type
             #
-            dcc_obj_output_name = and_cor_configure.AndNodes.get_output_name(and_type)
+            dcc_obj_output_name = _configure.AndNodes.get_output_name(and_type)
             # port-connection / element-connection
             if and_output_port_index_value == -1:
                 dcc_source_port_args = (dcc_obj_output_name,)
@@ -442,7 +442,7 @@ class AndNodeOpt(object):
 
     def get_dcc_output_port_name(self):
         output_type = self.output_type
-        return and_cor_configure.AndNodes.get_output_name(output_type)
+        return _configure.AndNodes.get_output_name(output_type)
 
     def get_input_ports(self):
         input_dict = {}
@@ -470,10 +470,10 @@ class AndShapeOpt(AndNodeOpt):
 
     def get_surface_shader_objs(self):
         and_obj_type_name = self.type_name
-        if and_obj_type_name in [and_cor_configure.AndNodeTypes.AND_MESH_NAME, and_cor_configure.AndNodeTypes.AND_CURVE_NAME]:
+        if and_obj_type_name in [_configure.AndNodeTypes.AND_MESH_NAME, _configure.AndNodeTypes.AND_CURVE_NAME]:
             shader_names = self.get_port_mtd('shader').get() or []
             return [AndUniverseOpt(self.universe).get_obj(i) for i in shader_names]
-        elif and_obj_type_name in [and_cor_configure.AndNodeTypes.AND_XGEN_NAME]:
+        elif and_obj_type_name in [_configure.AndNodeTypes.AND_XGEN_NAME]:
             shader_names = AndPortOptForCustomize(self.and_instance, self.get_customize_port('xgen_shader')).get() or []
             if shader_names:
                 return [AndUniverseOpt(self.universe).get_obj(i) for i in shader_names]
@@ -483,10 +483,10 @@ class AndShapeOpt(AndNodeOpt):
 
     def get_displacement_shader_objs(self):
         and_obj_type_name = self.type_name
-        if and_obj_type_name in [and_cor_configure.AndNodeTypes.AND_MESH_NAME, and_cor_configure.AndNodeTypes.AND_CURVE_NAME]:
+        if and_obj_type_name in [_configure.AndNodeTypes.AND_MESH_NAME, _configure.AndNodeTypes.AND_CURVE_NAME]:
             shader_names = self.get_port_mtd('disp_map').get() or []
             return [AndUniverseOpt(self.universe).get_obj(i) for i in shader_names]
-        elif and_obj_type_name in [and_cor_configure.AndNodeTypes.AND_XGEN_NAME]:
+        elif and_obj_type_name in [_configure.AndNodeTypes.AND_XGEN_NAME]:
             shader_names = AndPortOptForCustomize(self.and_instance, self.get_customize_port('xgen_disp_map')).get() or []
             if shader_names:
                 return [AndUniverseOpt(self.universe).get_obj(i) for i in shader_names]
@@ -508,17 +508,17 @@ class AndShapeOpt(AndNodeOpt):
 
     @classmethod
     def _set_visibility_unpack_(cls, raw):
-        ar_rays = and_cor_configure.AndVisibilities.AR_RAY_ALL
+        ar_rays = _configure.AndVisibilities.AR_RAY_ALL
         dic = {}
         for v in ar_rays:
-            n = and_cor_configure.AndVisibilities.get_name(v)
+            n = _configure.AndVisibilities.get_name(v)
             dic[n] = True
         comp = ai.AI_RAY_ALL
         if raw < comp:
             for v in reversed([v for v in ar_rays]):
                 comp &= ~v
                 if raw <= comp:
-                    n = and_cor_configure.AndVisibilities.get_name(v)
+                    n = _configure.AndVisibilities.get_name(v)
                     dic[n] = False
                 else:
                     comp += v

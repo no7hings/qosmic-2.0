@@ -9,7 +9,7 @@ import threading
 
 import json
 
-from . import base as bsc_ddl_base
+from . import base as _base
 
 
 class DdlContent(object):
@@ -27,7 +27,7 @@ class DdlContent(object):
         return self._raw
 
     def get_stouts(self):
-        return bsc_ddl_base.DdlLog(self._raw).get_stouts()
+        return _base.DdlLog(self._raw).get_stouts()
 
     def __str__(self):
         return '{}(id="{}", index={})'.format(
@@ -59,7 +59,7 @@ class DdlLogQuery(AbsDdlObj):
     DDL_PROPERTIES_CLS = bsc_content.Properties
     DDL_PROPERTY_CLS = bsc_content.Property
 
-    CON = bsc_ddl_base.DdlBase.generate_connection()
+    CON = _base.DdlBase.generate_connection()
 
     def __init__(self, obj, index, raw):
         self._obj = obj
@@ -84,7 +84,7 @@ class DdlTaskQuery(AbsDdlObj):
     DDL_CONTENT_CLS = DdlContent
     DDL_LOG_CLS = DdlLogQuery
 
-    CON = bsc_ddl_base.DdlBase.generate_connection()
+    CON = _base.DdlBase.generate_connection()
 
     def __init__(self, job, index, raw):
         self._job = job
@@ -167,7 +167,7 @@ class DdlJobQuery(AbsDdlObj):
     #
     TASK_CLS = DdlTaskQuery
 
-    CON = bsc_ddl_base.DdlBase.generate_connection()
+    CON = _base.DdlBase.generate_connection()
 
     def __init__(self, job_id):
         self._job_id = job_id

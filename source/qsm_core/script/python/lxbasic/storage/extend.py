@@ -7,7 +7,7 @@ from lxbasic.core import raw as bsc_cor_raw
 
 from lxbasic.core import environ as bsc_cor_environ
 
-from . import base as bsc_stg_base
+from . import base as _base
 
 
 class StgTmpBaseMtd(object):
@@ -144,14 +144,14 @@ class DccTempCacheMtd(object):
     @classmethod
     def get_value(cls, key, category):
         file_path = cls._to_file_path(key, category)
-        gzip_file = bsc_stg_base.StgGzipFileOpt(file_path, '.yml')
+        gzip_file = _base.StgGzipFileOpt(file_path, '.yml')
         if gzip_file.get_is_exists() is True:
             return gzip_file.set_read()
 
     @classmethod
     def set_value(cls, key, value, force, category):
         file_path = cls._to_file_path(key, category)
-        gzip_file = bsc_stg_base.StgGzipFileOpt(file_path, '.yml')
+        gzip_file = _base.StgGzipFileOpt(file_path, '.yml')
         if gzip_file.get_is_exists() is False or force is True:
             gzip_file.set_write(value)
             return True

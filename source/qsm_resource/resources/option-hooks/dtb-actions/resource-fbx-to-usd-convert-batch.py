@@ -91,11 +91,11 @@ def main(session):
         base_variants = dict(root=dtb_opt.get_stg_root())
         #
         geometry_fbx_directory_p = dtb_opt.get_pattern(keyword='geometry-fbx-dir')
-        geometry_fbx_directory_p_o = bsc_core.PtnParseOpt(geometry_fbx_directory_p)
+        geometry_fbx_directory_p_o = bsc_core.PtnStgParseOpt(geometry_fbx_directory_p)
         geometry_fbx_directory_p_o.update_variants(**base_variants)
         #
         geometry_usd_directory_p = dtb_opt.get_pattern(keyword='geometry-usd-dir')
-        geometry_usd_directory_p_o = bsc_core.PtnParseOpt(geometry_usd_directory_p)
+        geometry_usd_directory_p_o = bsc_core.PtnStgParseOpt(geometry_usd_directory_p)
         geometry_usd_directory_p_o.update_variants(**base_variants)
         #
         window = session.get_window()

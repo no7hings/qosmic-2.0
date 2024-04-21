@@ -1502,6 +1502,7 @@ class StgFileOpt(StgPathOpt):
         if os.path.exists(self.path):
             if self.get_ext() in {'.json'}:
                 with open(self.path) as j:
+                    # noinspection PyTypeChecker
                     raw = json.load(j, object_pairs_hook=collections.OrderedDict)
                     j.close()
                     return raw
@@ -1732,7 +1733,7 @@ class StgRarFileOpt(StgFileOpt):
                 r.extractall(directory_path)
 
 
-class StgPathPermissionDefaultMtd(object):
+class StgPermissionDefaultMtd(object):
     @classmethod
     def create_directory(cls, path, mode):
         StgPathMtd.create_directory(path)
@@ -1788,7 +1789,7 @@ class StgPathPermissionDefaultMtd(object):
         )
 
 
-class StgPathPermissionNewMtd(StgPathPermissionDefaultMtd):
+class StgPermissionNewMtd(StgPermissionDefaultMtd):
     @classmethod
     def create_directory(cls, path, mode):
         StgRpcMtd.create_directory(path)
@@ -1870,8 +1871,8 @@ class StgPathPermissionNewMtd(StgPathPermissionDefaultMtd):
 
     @classmethod
     def copy_to_file(cls, file_path_src, file_path_tgt, replace=False):
-        if StgPathPermissionBaseMtd.get_scheme(file_path_src) == 'default':
-            StgPathPermissionDefaultMtd.copy_to_file(file_path_src, file_path_tgt)
+        if StgPermissionBaseMtd.get_scheme(file_path_src) == 'default':
+            StgPermissionDefaultMtd.copy_to_file(file_path_src, file_path_tgt)
             cls.change_owner(file_path_tgt)
             cls.change_mode(file_path_tgt, '775')
         else:
@@ -1880,7 +1881,7 @@ class StgPathPermissionNewMtd(StgPathPermissionDefaultMtd):
             )
 
 
-class StgPathPermissionBaseMtd(object):
+class StgPermissionBaseMtd(object):
     SCHEME_MAPPER = dict(
         windows={
             'default': ['l:', 'L:'],
@@ -1895,8 +1896,8 @@ class StgPathPermissionBaseMtd(object):
         i: k for k, v in SCHEME_MAPPER[bsc_cor_base.SysBaseMtd.get_platform()].items() for i in v
     }
     METHOD_DICT = dict(
-        default=StgPathPermissionDefaultMtd,
-        new=StgPathPermissionNewMtd
+        default=StgPermissionDefaultMtd,
+        new=StgPermissionNewMtd
     )
 
     @classmethod
@@ -1923,10 +1924,10 @@ class StgPathPermissionBaseMtd(object):
     @classmethod
     def get_method(cls, path):
         """
-print StgPathPermissionBaseMtd.get_method(
+print StgPermissionBaseMtd.get_method(
     '/l/prod'
 )
-print StgPathPermissionBaseMtd.get_method(
+print StgPermissionBaseMtd.get_method(
     '/production/shows'
 )
         :param path:
@@ -1935,73 +1936,73 @@ print StgPathPermissionBaseMtd.get_method(
         return cls.METHOD_DICT[cls.get_scheme(path)]
 
 
-class StgPathPermissionMtd(object):
+class StgPermissionMtd(object):
     def __init__(self, path):
         self._path = path
 
     @classmethod
     def create_directory(cls, path, mode='775'):
-        StgPathPermissionBaseMtd.get_method(
+        StgPermissionBaseMtd.get_method(
             path
         ).create_directory(path, mode)
 
     @classmethod
     def change_owner(cls, path, user='artist', group='artists'):
-        StgPathPermissionBaseMtd.get_method(
+        StgPermissionBaseMtd.get_method(
             path
         ).change_owner(path, user, group)
 
     @classmethod
     def change_mode(cls, path, mode):
-        StgPathPermissionBaseMtd.get_method(
+        StgPermissionBaseMtd.get_method(
             path
         ).change_mode(path, mode)
 
     @classmethod
     def lock(cls, path):
-        StgPathPermissionBaseMtd.get_method(
+        StgPermissionBaseMtd.get_method(
             path
         ).lock(path)
 
     @classmethod
     def unlock(cls, path):
-        StgPathPermissionBaseMtd.get_method(
+        StgPermissionBaseMtd.get_method(
             path
         ).unlock(path)
 
     @classmethod
     def delete(cls, path):
-        StgPathPermissionBaseMtd.get_method(
+        StgPermissionBaseMtd.get_method(
             path
         ).delete(path)
 
     @classmethod
     def lock_all_directories(cls, path):
-        StgPathPermissionBaseMtd.get_method(
+        StgPermissionBaseMtd.get_method(
             path
         ).lock_all_directories(path)
 
     @classmethod
     def unlock_all_directories(cls, path):
-        StgPathPermissionBaseMtd.get_method(
+        StgPermissionBaseMtd.get_method(
             path
         ).unlock_all_directories(path)
 
     @classmethod
     def lock_all_files(cls, path):
-        StgPathPermissionBaseMtd.get_method(
+        StgPermissionBaseMtd.get_method(
             path
         ).lock_all_files(path)
 
     @classmethod
     def unlock_all_files(cls, path):
-        StgPathPermissionBaseMtd.get_method(
+        StgPermissionBaseMtd.get_method(
             path
         ).unlock_all_files(path)
 
     @classmethod
     def copy_to_file(cls, file_path_src, file_path_tgt, replace=False):
-        StgPathPermissionBaseMtd.get_method(
+        StgPermissionBaseMtd.get_method(
             file_path_tgt
         ).copy_to_file(file_path_src, file_path_tgt, replace)
 

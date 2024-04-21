@@ -88,7 +88,7 @@ class TxrMethodForBuild(_AbsTxrBase):
         file_opt = bsc_storage.StgFileOpt(file_path)
         if file_opt.get_is_exists():
             file_name, p = self._generate_match_args(file_opt)
-            p_opt = bsc_core.PtnParseOpt(p)
+            p_opt = bsc_core.PtnStgParseOpt(p)
             variants = p_opt.get_variants(file_name)
             return variants['name'], self._generate_texture_data(
                 file_opt.get_directory_path(),
@@ -101,7 +101,7 @@ class TxrMethodForBuild(_AbsTxrBase):
         file_opt = bsc_storage.StgFileOpt(file_path)
         if file_opt.get_is_exists():
             file_name, p = self._generate_match_args(file_opt)
-            p_opt = bsc_core.PtnParseOpt(p)
+            p_opt = bsc_core.PtnStgParseOpt(p)
             variants = p_opt.get_variants(file_name)
             return variants['name'], variants['type'], '{}/{}'.format(file_opt.get_directory_path(), file_name)
 

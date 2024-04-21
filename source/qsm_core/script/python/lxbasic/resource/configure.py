@@ -1,10 +1,10 @@
 # coding:utf-8
 import lxbasic.content as bsc_content
 # resource
-from . import base as rsc_cor_base
+from . import base as _base
 
 
-class RscExtendConfigure(rsc_cor_base.AbsResource):
+class RscExtendConfigure(_base.AbsResource):
     """
 print RscConfigure.get_yaml('database/library/resource-basic')
     """

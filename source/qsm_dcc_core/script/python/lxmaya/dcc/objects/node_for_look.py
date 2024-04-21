@@ -10,14 +10,14 @@ from ... import core as mya_core
 
 from ... import abstracts as mya_abstracts
 # maya dcc objects
-from . import utility as mya_dcc_obj_utility
+from . import utility as _utility
 
-from . import node_for_dag as mya_dcc_obj_node_for_dag
+from . import node_for_dag as _node_for_dag
 
 
 class Material(mya_abstracts.AbsMyaNode):
-    DCC_PORT_CLS = mya_dcc_obj_utility.Port
-    DCC_CONNECTION_CLS = mya_dcc_obj_utility.Connection
+    DCC_PORT_CLS = _utility.Port
+    DCC_CONNECTION_CLS = _utility.Connection
     #
     SHADING_NODE_TYPES = ['mesh', 'pgYetiMaya', 'nurbsHair']
     OBJ_TYPE = 'shadingEngine'
@@ -56,14 +56,14 @@ class Material(mya_abstracts.AbsMyaNode):
                 # Object Group
                 show_type = cmds.ls(i_arg, showType=1)[1]
                 if show_type in self.SHADING_NODE_TYPES:
-                    list_.append(mya_dcc_obj_node_for_dag.Shape(i_arg))
+                    list_.append(_node_for_dag.Shape(i_arg))
                 elif show_type == 'float3':
                     # check component is whole
                     i_path, i_comp_name = i_arg.split('.')
                     face_count = cmds.polyEvaluate(i_path, face=1)
                     whole_obj_cmp_name = 'f[0:{}]'.format(face_count-1)
                     if i_comp_name == whole_obj_cmp_name:
-                        list_.append(mya_dcc_obj_node_for_dag.Shape(i_path))
+                        list_.append(_node_for_dag.Shape(i_path))
         return list_
 
     def set_create(self, type_name):
@@ -78,8 +78,8 @@ class Material(mya_abstracts.AbsMyaNode):
 
 
 class Shader(mya_abstracts.AbsMyaNode):
-    DCC_PORT_CLS = mya_dcc_obj_utility.Port
-    DCC_CONNECTION_CLS = mya_dcc_obj_utility.Connection
+    DCC_PORT_CLS = _utility.Port
+    DCC_CONNECTION_CLS = _utility.Connection
     #
     CATEGORY_DICT = {}
 

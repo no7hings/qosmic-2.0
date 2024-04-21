@@ -1260,10 +1260,10 @@ class AbsRsvTask(AbsRsvEntity):
         # version use new for create
         directory_path = rsv_unit.get_result(version='new')
 
-        bsc_storage.StgPathPermissionMtd.create_directory(
+        bsc_storage.StgPermissionMtd.create_directory(
             directory_path
         )
-        # bsc_storage.StgPathPermissionMtd.change_owner(
+        # bsc_storage.StgPermissionMtd.change_owner(
         #
         # )
 
@@ -1660,7 +1660,7 @@ class AbsRsvConfigureExtraDef(AbsRsvBaseDef):
         return self._patterns_dict[keyword]
 
     def get_pattern_opt(self, keyword):
-        return bsc_core.PtnParseOpt(
+        return bsc_core.PtnStgParseOpt(
             self.get_pattern(keyword)
         )
 
@@ -3008,7 +3008,7 @@ class AbsRsvProject(
 
         p = create_kwargs['pattern']
 
-        p_o = bsc_core.PtnParseOpt(
+        p_o = bsc_core.PtnStgParseOpt(
             p
         ).update_variants_to(
             **create_kwargs
@@ -3016,7 +3016,7 @@ class AbsRsvProject(
         if not p_o.get_keys():
             stg_path = p_o.get_value()
             if bsc_storage.StgFileMtd.get_is_exists(stg_path) is False:
-                bsc_storage.StgPathPermissionMtd.create_directory(
+                bsc_storage.StgPermissionMtd.create_directory(
                     stg_path
                 )
 
@@ -3034,15 +3034,15 @@ class AbsRsvProject(
         variants_over['workspace'] = workspace
 
         ptn = self.get_pattern(keyword)
-        ptn_opt = bsc_core.PtnParseOpt(ptn)
-        ptn_opt.set_update(**variants_over)
+        ptn_opt = bsc_core.PtnStgParseOpt(ptn)
+        ptn_opt.update_variants(**variants_over)
         if not ptn_opt.get_keys():
             directory_path = ptn_opt.get_value()
             if bsc_storage.StgPathMtd.get_is_exists(directory_path) is False:
-                bsc_storage.StgPathPermissionMtd.create_directory(
+                bsc_storage.StgPermissionMtd.create_directory(
                     directory_path, mode='755'
                 )
-                bsc_storage.StgPathPermissionMtd.change_owner(
+                bsc_storage.StgPermissionMtd.change_owner(
                     directory_path, user=user, group='artists'
                 )
 

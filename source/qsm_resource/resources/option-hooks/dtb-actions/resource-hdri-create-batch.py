@@ -45,12 +45,12 @@ def main(session):
                     _i_hdri_acescg_src_directory_path = hdri_acescg_src_directory_p_o.update_variants_to(
                         **_i_variants
                     ).get_value()
-                    bsc_storage.StgPathPermissionMtd.create_directory(_i_hdri_acescg_src_directory_path)
+                    bsc_storage.StgPermissionMtd.create_directory(_i_hdri_acescg_src_directory_path)
                     #
                     _i_hdri_acescg_tx_directory_path = hdri_acescg_tx_directory_p_o.update_variants_to(
                         **_i_variants
                     ).get_value()
-                    bsc_storage.StgPathPermissionMtd.create_directory(_i_hdri_acescg_tx_directory_path)
+                    bsc_storage.StgPermissionMtd.create_directory(_i_hdri_acescg_tx_directory_path)
                     #
                     _i_hdri_original_jpg_file_path = '{}/{}.jpg'.format(
                         _i_hdri_original_jpg_directory_path, _i_hdri_original_src_file_opt.name_base
@@ -134,19 +134,19 @@ def main(session):
         base_variants = dict(root=dtb_opt.get_stg_root())
         #
         hdri_original_src_directory_p = dtb_opt.get_pattern(keyword='hdri-original-src-dir')
-        hdri_original_src_directory_p_o = bsc_core.PtnParseOpt(hdri_original_src_directory_p)
+        hdri_original_src_directory_p_o = bsc_core.PtnStgParseOpt(hdri_original_src_directory_p)
         hdri_original_src_directory_p_o.update_variants(**base_variants)
         #
         hdri_original_jpg_directory_p = dtb_opt.get_pattern(keyword='hdri-original-jpg-dir')
-        hdri_original_jpg_directory_p_o = bsc_core.PtnParseOpt(hdri_original_jpg_directory_p)
+        hdri_original_jpg_directory_p_o = bsc_core.PtnStgParseOpt(hdri_original_jpg_directory_p)
         hdri_original_jpg_directory_p_o.update_variants(**base_variants)
         #
         hdri_acescg_src_directory_p = dtb_opt.get_pattern(keyword='hdri-acescg-src-dir')
-        hdri_acescg_src_directory_p_o = bsc_core.PtnParseOpt(hdri_acescg_src_directory_p)
+        hdri_acescg_src_directory_p_o = bsc_core.PtnStgParseOpt(hdri_acescg_src_directory_p)
         hdri_acescg_src_directory_p_o.update_variants(**base_variants)
         #
         hdri_acescg_tx_directory_p = dtb_opt.get_pattern(keyword='hdri-acescg-tx-dir')
-        hdri_acescg_tx_directory_p_o = bsc_core.PtnParseOpt(hdri_acescg_tx_directory_p)
+        hdri_acescg_tx_directory_p_o = bsc_core.PtnStgParseOpt(hdri_acescg_tx_directory_p)
         hdri_acescg_tx_directory_p_o.update_variants(**base_variants)
         #
         w = gui_core.GuiDialog.create(

@@ -116,7 +116,7 @@ def main(session):
         base_variants = dict(root=dtb_opt.get_stg_root())
         #
         geometry_abc_file_p = dtb_opt.get_pattern(keyword='geometry-abc-file')
-        geometry_abc_file_p_o = bsc_core.PtnParseOpt(geometry_abc_file_p)
+        geometry_abc_file_p_o = bsc_core.PtnStgParseOpt(geometry_abc_file_p)
         geometry_abc_file_p_o.update_variants(**base_variants)
         #
         window = session.get_window()

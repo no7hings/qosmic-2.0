@@ -1284,7 +1284,7 @@ class _GuiUsdStageViewOpt(_GuiBaseOpt):
 
     def get_variants(self, dtb_version):
         p = self._dtb_opt.get_pattern(keyword='version-dir')
-        p_o = bsc_core.PtnParseOpt(p)
+        p_o = bsc_core.PtnStgParseOpt(p)
         version_stg_path = self._dtb_opt.get_property(
             dtb_version.path, 'location'
         )
@@ -1292,7 +1292,7 @@ class _GuiUsdStageViewOpt(_GuiBaseOpt):
 
     def get_look_preview_usd_file(self, variants):
         p = self._dtb_opt.get_pattern(keyword='look-preview-usd-file')
-        p_o = bsc_core.PtnParseOpt(p)
+        p_o = bsc_core.PtnStgParseOpt(p)
         path = p_o.update_variants_to(**variants).get_value()
         if bsc_storage.StgPathMtd.get_is_exists(path):
             return path
@@ -1300,7 +1300,7 @@ class _GuiUsdStageViewOpt(_GuiBaseOpt):
 
     def get_geometry_usd_file(self, variants):
         p = self._dtb_opt.get_pattern(keyword='geometry-usd-file')
-        p_o = bsc_core.PtnParseOpt(p)
+        p_o = bsc_core.PtnStgParseOpt(p)
         path = p_o.update_variants_to(**variants).get_value()
         if bsc_storage.StgPathMtd.get_is_exists(path):
             return path

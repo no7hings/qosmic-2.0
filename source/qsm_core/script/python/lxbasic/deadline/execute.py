@@ -5,7 +5,7 @@ import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
-from . import base as bsc_ddl_base
+from . import base as _base
 
 
 class AbsDdlSubmiter(object):
@@ -111,7 +111,7 @@ class AbsDdlSubmiter(object):
 
 
 class DdlSubmiter(AbsDdlSubmiter):
-    CON = bsc_ddl_base.DdlBase.generate_connection()
+    CON = _base.DdlBase.generate_connection()
     CONFIGURE_FILE_PATH = bsc_resource.RscExtendConfigure.get_yaml('session/deadline/submiter')
 
     def __init__(self, *args, **kwargs):
@@ -119,7 +119,7 @@ class DdlSubmiter(AbsDdlSubmiter):
 
 
 class DdlSubmiterForRsvProject(AbsDdlSubmiter):
-    CON = bsc_ddl_base.DdlBase.generate_connection()
+    CON = _base.DdlBase.generate_connection()
     CONFIGURE_FILE_PATH = bsc_resource.RscExtendConfigure.get_yaml('session/deadline/rsv-project-submiter')
 
     def __init__(self, *args, **kwargs):
@@ -127,7 +127,7 @@ class DdlSubmiterForRsvProject(AbsDdlSubmiter):
 
 
 class DdlSubmiterForRsvTask(AbsDdlSubmiter):
-    CON = bsc_ddl_base.DdlBase.generate_connection()
+    CON = _base.DdlBase.generate_connection()
     CONFIGURE_FILE_PATH = bsc_resource.RscExtendConfigure.get_yaml('session/deadline/rsv-task-submiter')
 
     def __init__(self, *args, **kwargs):

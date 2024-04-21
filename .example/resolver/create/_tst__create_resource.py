@@ -55,7 +55,7 @@ for i in [
 
     dict_[i] = i_file_path
 
-    # bsc_storage.StgPathPermissionMtd.create_directory(
+    # bsc_storage.StgPermissionMtd.create_directory(
     #     i_file_opt.get_directory_path()
     # )
 

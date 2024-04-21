@@ -7,9 +7,9 @@ from lxbasic.core import process as bsc_cor_process
 
 from lxbasic.core import execute as bsc_cor_execute
 
-from . import base as bsc_stg_base
+from . import base as _base
 
-from . import extend as bsc_stg_extend
+from . import extend as _extend
 
 
 class VdoFileOpt(object):
@@ -21,7 +21,7 @@ class VdoFileOpt(object):
         return self._file_path
 
     def get_thumbnail_file_path(self, ext='.jpg'):
-        return bsc_stg_extend.StgTmpThumbnailMtd.get_file_path_(self._file_path, ext=ext)
+        return _extend.StgTmpThumbnailMtd.get_file_path_(self._file_path, ext=ext)
 
     def generate_thumbnail(self, width=128, ext='.jpg', block=False):
         thumbnail_file_path = self.get_thumbnail_file_path(ext=ext)
@@ -72,7 +72,7 @@ class VdoFileOpt(object):
         pass
 
     def set_mov_create_from(self, image_file_path, width=1024, fps=24, block=False):
-        if bsc_stg_base.StgPathMtd(self._file_path).get_is_exists() is False:
+        if _base.StgPathMtd(self._file_path).get_is_exists() is False:
             cmd_args = [
                 bsc_cor_execute.ExcBaseMtd.ffmpeg(),
                 '-i "{}"'.format(image_file_path),

@@ -9,6 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_dcc_main/script/python" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_gui/script/python" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_main/script/python" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/source/qsm_hook/script/python" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -11,7 +11,7 @@ from lxbasic.core import pattern as bsc_cor_pattern
 
 from lxbasic.core import process as bsc_cor_process
 
-from . import base as bsc_stg_base
+from . import base as _base
 
 
 class PkgContextNew(object):
@@ -61,7 +61,7 @@ class PkgContextNew(object):
     def get_user_package_roots(self):
         list_ = []
         for i_p in self.USER_ROOT_PATTERNS.get(self._platform) or []:
-            i_p_opt = bsc_cor_pattern.PtnParseOpt(
+            i_p_opt = bsc_cor_pattern.PtnStgParseOpt(
                 i_p
             )
             i_p_opt.update_variants(**self._variants)
@@ -73,7 +73,7 @@ class PkgContextNew(object):
     def get_pre_release_package_roots(self):
         list_ = []
         for i_p in self.PRE_RELEASE_PATTERNS.get(self._platform) or []:
-            i_p_opt = bsc_cor_pattern.PtnParseOpt(
+            i_p_opt = bsc_cor_pattern.PtnStgParseOpt(
                 i_p
             )
             i_p_opt.update_variants(**self._variants)
@@ -85,7 +85,7 @@ class PkgContextNew(object):
     def get_release_package_roots(self):
         list_ = []
         for i_p in self.RELEASE_PATTERNS.get(self._platform) or []:
-            i_p_opt = bsc_cor_pattern.PtnParseOpt(
+            i_p_opt = bsc_cor_pattern.PtnStgParseOpt(
                 i_p
             )
             i_p_opt.update_variants(**self._variants)
@@ -149,18 +149,18 @@ class PkgContextNew(object):
             package_roots += pre_release_package_roots
         package_file_patterns = self._get_package_file_patterns()
         for i_index, i_package_root in enumerate(package_roots):
-            if bsc_stg_base.StgPathMtd.get_is_exists(i_package_root):
+            if _base.StgPathMtd.get_is_exists(i_package_root):
                 i_variants = dict(
                     root=i_package_root,
                     package_name=package_name
                 )
                 for j_p in package_file_patterns:
-                    j_p_opt = bsc_cor_pattern.PtnParseOpt(j_p)
+                    j_p_opt = bsc_cor_pattern.PtnStgParseOpt(j_p)
                     j_p_opt.update_variants(**i_variants)
                     j_results = j_p_opt.get_exists_results()
                     if j_results:
                         for k_package_file in j_results:
-                            k_package_directory = bsc_stg_base.StgFileMtd.get_directory(k_package_file)
+                            k_package_directory = _base.StgFileMtd.get_directory(k_package_file)
                             k_package_variants = j_p_opt.get_variants(k_package_file)
                             if 'version' not in k_package_variants:
                                 continue
@@ -192,18 +192,18 @@ class PkgContextNew(object):
             package_file_patterns = self._get_package_file_patterns()
             #
             for i_index, i_package_root in enumerate(package_roots):
-                if bsc_stg_base.StgPathMtd.get_is_exists(i_package_root):
+                if _base.StgPathMtd.get_is_exists(i_package_root):
                     i_variants = dict(
                         root=i_package_root,
                         package_name=package_name
                     )
                     for j_p in package_file_patterns:
-                        j_p_opt = bsc_cor_pattern.PtnParseOpt(j_p)
+                        j_p_opt = bsc_cor_pattern.PtnStgParseOpt(j_p)
                         j_p_opt.update_variants(**i_variants)
                         j_results = j_p_opt.get_exists_results()
                         if j_results:
                             for k_package_file in j_results:
-                                k_package_directory = bsc_stg_base.StgFileMtd.get_directory(k_package_file)
+                                k_package_directory = _base.StgFileMtd.get_directory(k_package_file)
                                 k_package_variants = j_p_opt.get_variants(k_package_file)
                                 if 'version' not in k_package_variants:
                                     continue

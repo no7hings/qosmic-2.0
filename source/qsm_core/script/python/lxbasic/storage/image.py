@@ -17,9 +17,9 @@ from lxbasic.core import process as bsc_cor_process
 
 from lxbasic.core import execute as bsc_cor_execute
 
-from . import base as bsc_stg_base
+from . import base as _base
 
-from . import extend as bsc_stg_extend
+from . import extend as _extend
 
 
 class ImgOiioMtd(object):
@@ -198,7 +198,7 @@ class ImgOiioMtd(object):
             input=bsc_cor_raw.auto_encode(file_path_src),
             output=bsc_cor_raw.auto_encode(file_path_tgt),
             time_mark=bsc_cor_time.TimestampMtd.to_string(
-                cls.TIME_MARK_PATTERN, bsc_stg_base.StgFileOpt(file_path_src).get_modify_timestamp()
+                cls.TIME_MARK_PATTERN, _base.StgFileOpt(file_path_src).get_modify_timestamp()
             )
         )
         cmd_args = [
@@ -216,7 +216,7 @@ class ImgOiioMtd(object):
 
     @classmethod
     def generate_create_cmd_as_ext_tgt(cls, file_path, ext, directory_path=None, width=None):
-        file_path_opt_src = bsc_stg_base.StgFileOpt(file_path)
+        file_path_opt_src = _base.StgFileOpt(file_path)
         file_path_tgt_opt = file_path_opt_src.set_ext_repath_to(ext)
         if file_path_opt_src.get_is_file() is True:
             file_path_tgt_opt.create_directory()
@@ -253,8 +253,8 @@ class ImgOiioMtd(object):
 
     @classmethod
     def generate_create_cmd_as_ext_tgt_(cls, file_path_src, file_path_tgt, use_update_mode):
-        file_path_opt_src = bsc_stg_base.StgFileOpt(file_path_src)
-        file_path_opt_tgt = bsc_stg_base.StgFileOpt(file_path_tgt)
+        file_path_opt_src = _base.StgFileOpt(file_path_src)
+        file_path_opt_tgt = _base.StgFileOpt(file_path_tgt)
         if use_update_mode is True:
             if os.path.isfile(file_path_tgt) is True:
                 if file_path_opt_src.get_timestamp_is_same_to(file_path_tgt) is True:
@@ -588,9 +588,9 @@ class ImgOiioOpt(object):
     type = property(get_type)
 
     def convert_to(self, file_path_tgt):
-        file_opt_src = bsc_stg_base.StgFileOpt(self._file_path)
+        file_opt_src = _base.StgFileOpt(self._file_path)
         if file_opt_src.get_is_file() is True:
-            file_opt_tgt = bsc_stg_base.StgFileOpt(file_path_tgt)
+            file_opt_tgt = _base.StgFileOpt(file_path_tgt)
             _ext_tgt = file_opt_tgt.get_ext()
             time_mark = bsc_cor_time.TimestampMtd.to_string(
                 self.TIME_MARK_PATTERN, file_opt_src.get_modify_timestamp()
@@ -641,7 +641,7 @@ class ImgOiioOptForThumbnail(object):
     @classmethod
     def _create_background(cls, width, background_rgba=(0, 0, 0, 255)):
         force = False
-        file_path = bsc_stg_extend.StgTmpThumbnailMtd.get_file_path_(
+        file_path = _extend.StgTmpThumbnailMtd.get_file_path_(
             'background-{}'.format('-'.join(map(str, background_rgba))), width, '.png'
         )
         directory_path = os.path.dirname(file_path)
@@ -661,10 +661,10 @@ class ImgOiioOptForThumbnail(object):
 
     def __init__(self, file_path):
         self._file_path = file_path
-        self._file_path_opt = bsc_stg_base.StgFileOpt(self._file_path)
+        self._file_path_opt = _base.StgFileOpt(self._file_path)
 
     def get_thumbnail_file_path_(self, width=128, ext='.jpg'):
-        return bsc_stg_extend.StgTmpThumbnailMtd.get_file_path_(self._file_path, width, ext)
+        return _extend.StgTmpThumbnailMtd.get_file_path_(self._file_path, width, ext)
 
     def generate_thumbnail(self, width=128, ext='.jpg'):
         file_path_ = self.get_thumbnail_file_path_(width, ext)
@@ -750,7 +750,7 @@ class ImgOiioOptForThumbnail(object):
                 os.makedirs(directory_path)
             #
             time_mark = bsc_cor_time.TimestampMtd.to_string(
-                self.TIME_MARK_PATTERN, bsc_stg_base.StgFileOpt(file_path).get_modify_timestamp()
+                self.TIME_MARK_PATTERN, _base.StgFileOpt(file_path).get_modify_timestamp()
             )
             cmd_args = [
                 bsc_cor_execute.ExcBaseMtd.oiiotool(),
@@ -773,9 +773,9 @@ class ImgOiioOptForThumbnail(object):
                 return s_p
 
     def convert_to(self, file_path_tgt):
-        file_opt_src = bsc_stg_base.StgFileOpt(self._file_path)
+        file_opt_src = _base.StgFileOpt(self._file_path)
         if file_opt_src.get_is_file() is True:
-            file_opt_tgt = bsc_stg_base.StgFileOpt(file_path_tgt)
+            file_opt_tgt = _base.StgFileOpt(file_path_tgt)
             _ext_tgt = file_opt_tgt.get_ext()
             time_mark = bsc_cor_time.TimestampMtd.to_string(
                 self.TIME_MARK_PATTERN, file_opt_src.get_modify_timestamp()

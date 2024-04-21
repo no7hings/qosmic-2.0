@@ -7,7 +7,7 @@ import lxbasic.content as bsc_content
 # universe
 from .. import core as unr_core
 
-from . import base as unr_abs_base
+from . import base as _base
 
 
 # <obj-universe>
@@ -329,7 +329,7 @@ class AbsObjUniverseBaseDef(object):
 
 
 class AbsObjUniverse(
-    unr_abs_base.AbsObjBaseDef,
+    _base.AbsObjBaseDef,
     AbsObjUniverseBaseDef
 ):
     def __init__(self):

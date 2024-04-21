@@ -5,10 +5,10 @@ import lxbasic.log as bsc_log
 
 import lxbasic.content as bsc_content
 # resource
-from . import base as rsc_cor_base
+from . import base as _base
 
 
-class RscTool(rsc_cor_base.AbsResource):
+class RscTool(_base.AbsResource):
     CACHE = {}
     ENVIRON_KEY = 'QSM_TOOLS'
 

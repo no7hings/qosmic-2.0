@@ -5,7 +5,7 @@ import lxbasic.resource as bsc_resource
 
 from lxbasic.core import base as bsc_cor_base
 
-from . import base as bsc_stg_base
+from . import base as _base
 
 
 class StgPathMapper(object):
@@ -25,7 +25,7 @@ class StgPathMapper(object):
     def __generate_mapper(cls):
         if cls.MAPPER is None:
             cls.MAPPER = bsc_cor_base.StgPathMapDict(
-                bsc_stg_base.StgFileOpt(
+                _base.StgFileOpt(
                     bsc_resource.RscExtendConfigure.get_yaml('storage/path-mapper')
                 ).set_read()
             )
@@ -37,14 +37,14 @@ class StgPathMapper(object):
                 return cls.map_to_windows(path)
             elif cls.get_platform_is_linux():
                 return cls.map_to_linux(path)
-            return bsc_stg_base.StgPathOpt(path).__str__()
+            return _base.StgPathOpt(path).__str__()
         return path
 
     @classmethod
     def map_to_windows(cls, path):
         cls.__generate_mapper()
         # clear first
-        path = bsc_stg_base.StgPathOpt(path).__str__()
+        path = _base.StgPathOpt(path).__str__()
         if bsc_cor_base.StgBaseMtd.get_path_is_linux(path):
             mapper_dict = cls.MAPPER._windows_dict
             for i_root_src, i_root_tgt in mapper_dict.items():
@@ -66,7 +66,7 @@ print Path.map_to_linux(
         """
         cls.__generate_mapper()
         # clear first
-        path = bsc_stg_base.StgPathOpt(path).__str__()
+        path = _base.StgPathOpt(path).__str__()
         if bsc_cor_base.StgBaseMtd.get_path_is_windows(path):
             mapper_dict = cls.MAPPER._linux_dict
             for i_root_src, i_root_tgt in mapper_dict.items():
@@ -85,7 +85,7 @@ class StgEnvPathMapper(object):
     def __generate_mapper(cls):
         if cls.MAPPER is None:
             cls.MAPPER = bsc_cor_base.StgEnvPathMapDict(
-                bsc_stg_base.StgFileOpt(
+                _base.StgFileOpt(
                     bsc_resource.RscExtendConfigure.get_yaml('storage/path-environment-mapper')
                 ).set_read()
             )
@@ -110,7 +110,7 @@ class StgEnvPathMapper(object):
         :return:
         """
         cls.__generate_mapper()
-        path = bsc_stg_base.StgPathOpt(path).__str__()
+        path = _base.StgPathOpt(path).__str__()
         mapper_dict = cls.MAPPER._env_dict
         for i_env_key, i_root in mapper_dict.items():
             i_string = pattern.replace('KEY', i_env_key)
@@ -140,7 +140,7 @@ class StgEnvPathMapper(object):
         :return:
         """
         cls.__generate_mapper()
-        path = bsc_stg_base.StgPathOpt(path).__str__()
+        path = _base.StgPathOpt(path).__str__()
         mapper_dict = cls.MAPPER._path_dict
         for i_root, i_env_key in mapper_dict.items():
             i_string = pattern.replace('KEY', i_env_key)

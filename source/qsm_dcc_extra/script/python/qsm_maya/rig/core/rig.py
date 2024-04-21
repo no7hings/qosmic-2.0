@@ -94,7 +94,7 @@ class RigsQuery(object):
     DAG_PTN = '/{namespace}'
 
     def __init__(self):
-        self._pth = bsc_core.PtnParseOpt(
+        self._pth = bsc_core.PtnStgParseOpt(
             self.STG_PTN
         )
         self._cache_dict = {}

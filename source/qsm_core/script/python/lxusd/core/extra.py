@@ -19,7 +19,7 @@ import lxuniverse.core as unr_core
 # usd
 from .wrap import *
 
-from . import configure as usd_cor_configure
+from . import configure as _configure
 
 
 class UsdBasic(object):
@@ -208,17 +208,17 @@ class UsdStageOpt(UsdBasic):
 
     def set_root_create(self, root, override=False):
         dag_path_comps = bsc_core.PthNodeMtd.get_dag_component_paths(
-            root, pathsep=usd_cor_configure.UsdNodes.PATHSEP
+            root, pathsep=_configure.UsdNodes.PATHSEP
         )
         if dag_path_comps:
             dag_path_comps.reverse()
         #
         for i_path in dag_path_comps:
-            if i_path != usd_cor_configure.UsdNodes.PATHSEP:
+            if i_path != _configure.UsdNodes.PATHSEP:
                 if override is True:
                     self.set_obj_create_as_override(i_path)
                 else:
-                    self._usd_stage.DefinePrim(i_path, usd_cor_configure.UsdNodeTypes.Xform)
+                    self._usd_stage.DefinePrim(i_path, _configure.UsdNodeTypes.Xform)
         #
         default_prim_path = self._usd_stage.GetPrimAtPath(dag_path_comps[-1])
         self._usd_stage.SetDefaultPrim(default_prim_path)
@@ -408,7 +408,7 @@ class UsdStageOpt(UsdBasic):
             if i_usd_prim.IsValid():
                 i_b_box = b_box_cache.ComputeWorldBound(i_usd_prim)
                 if i_usd_prim.GetTypeName() in [
-                    usd_cor_configure.UsdNodeTypes.Mesh
+                    _configure.UsdNodeTypes.Mesh
                 ]:
                     i_range = i_b_box.GetRange()
                     i_radius = bsc_core.RawBBoxMtd.get_radius(
@@ -457,14 +457,14 @@ class UsdStageOpt(UsdBasic):
         usd_location = self._usd_stage.GetPseudoRoot()
         #
         dag_path_comps = bsc_core.PthNodeMtd.get_dag_component_paths(
-            location_target, pathsep=usd_cor_configure.UsdNodes.PATHSEP
+            location_target, pathsep=_configure.UsdNodes.PATHSEP
         )
         if dag_path_comps:
             dag_path_comps.reverse()
         #
         for i in dag_path_comps:
-            if i != usd_cor_configure.UsdNodes.PATHSEP:
-                usd_location = self._usd_stage.DefinePrim(i, usd_cor_configure.UsdNodeTypes.Xform)
+            if i != _configure.UsdNodes.PATHSEP:
+                usd_location = self._usd_stage.DefinePrim(i, _configure.UsdNodeTypes.Xform)
         #
         usd_location.GetReferences().AddReference(file_path, location_source)
 
@@ -510,20 +510,20 @@ class UsdFileWriteOpt(object):
 
     def set_location_add(self, location):
         dag_path_comps = bsc_core.PthNodeMtd.get_dag_component_paths(
-            location, pathsep=usd_cor_configure.UsdNodes.PATHSEP
+            location, pathsep=_configure.UsdNodes.PATHSEP
         )
         if dag_path_comps:
             dag_path_comps.reverse()
         #
         for i in dag_path_comps:
-            if i != usd_cor_configure.UsdNodes.PATHSEP:
+            if i != _configure.UsdNodes.PATHSEP:
                 self.set_obj_add(i)
         #
         default_prim_path = self._usd_stage.GetPrimAtPath(dag_path_comps[1])
         self._usd_stage.SetDefaultPrim(default_prim_path)
 
     def set_obj_add(self, path):
-        self._usd_stage.DefinePrim(path, usd_cor_configure.UsdNodeTypes.Xform)
+        self._usd_stage.DefinePrim(path, _configure.UsdNodeTypes.Xform)
 
     def set_save(self):
         file_opt = bsc_storage.StgFileOpt(self._file_path)
@@ -726,7 +726,7 @@ class UsdPrimOpt(object):
         else:
             raise TypeError()
         #
-        usd_type = usd_cor_configure.UsdTypes.MAPPER[dcc_type_name]
+        usd_type = _configure.UsdTypes.MAPPER[dcc_type_name]
         p = usd_fnc.CreatePrimvar(
             key,
             usd_type
@@ -817,8 +817,8 @@ class UsdDataMapper(object):
 
     def to_usd_args(self):
         key = self._dcc_type.category.name, self._dcc_type.name
-        if key in usd_cor_configure.UsdTypes.MAPPER:
-            usd_type = usd_cor_configure.UsdTypes.MAPPER[key]
+        if key in _configure.UsdTypes.MAPPER:
+            usd_type = _configure.UsdTypes.MAPPER[key]
             return usd_type, None
         return None, None
 
@@ -909,8 +909,8 @@ class UsdGeometryOpt(UsdPrimOpt):
     def create_customize_port_(self, port_path, type_path, dcc_value):
         category_name, type_name = type_path.split(unr_core.UnrType.PATHSEP)
         key = category_name, type_name
-        if key in usd_cor_configure.UsdTypes.MAPPER:
-            usd_type = usd_cor_configure.UsdTypes.MAPPER[key]
+        if key in _configure.UsdTypes.MAPPER:
+            usd_type = _configure.UsdTypes.MAPPER[key]
             p = self._usd_fnc.CreatePrimvar(
                 port_path,
                 usd_type
@@ -920,8 +920,8 @@ class UsdGeometryOpt(UsdPrimOpt):
     def create_customize_port_as_face_color(self, port_path, type_path, usd_value):
         category_name, type_name = type_path.split(unr_core.UnrType.PATHSEP)
         key = category_name, type_name
-        if key in usd_cor_configure.UsdTypes.MAPPER:
-            usd_type = usd_cor_configure.UsdTypes.MAPPER[key]
+        if key in _configure.UsdTypes.MAPPER:
+            usd_type = _configure.UsdTypes.MAPPER[key]
             p = self._usd_fnc.CreatePrimvar(
                 port_path,
                 usd_type,

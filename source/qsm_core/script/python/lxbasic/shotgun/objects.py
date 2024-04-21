@@ -13,9 +13,9 @@ import lxbasic.storage as bsc_storage
 
 import lxbasic.extra.methods as bsc_etr_methods
 
-from . import configure as bsc_stg_configure
+from . import configure as _configure
 
-from . import base as bsc_stg_base
+from . import base as _base
 
 
 class StgEntityQuery(object):
@@ -143,7 +143,7 @@ class StgEntityQuery(object):
 
 class StgConnector(object):
     TASK_DATA_CACHE = dict()
-    StgEntityTypes = bsc_stg_configure.StgEntityTypes
+    StgEntityTypes = _configure.StgEntityTypes
     #
     STG_ENTITY_QUERY_CLS = StgEntityQuery
     #
@@ -158,7 +158,7 @@ class StgConnector(object):
     }
 
     def __init__(self, **kwargs):
-        self._stg_instance = bsc_stg_base.StgBase().generate_connection()
+        self._stg_instance = _base.StgBase().generate_connection()
 
     @property
     def shotgun(self):
@@ -193,7 +193,7 @@ class StgConnector(object):
 
     def get_stg_projects(self):
         return self._stg_instance.find(
-            entity_type=bsc_stg_configure.StgEntityTypes.Project,
+            entity_type=_configure.StgEntityTypes.Project,
             filters=[]
         ) or []
 
@@ -207,7 +207,7 @@ class StgConnector(object):
         """
         project = kwargs['project']
         return self._stg_instance.find_one(
-            entity_type=bsc_stg_configure.StgEntityTypes.Project,
+            entity_type=_configure.StgEntityTypes.Project,
             filters=[
                 ['name', 'is', str(project).upper()]
             ]
@@ -612,7 +612,7 @@ class StgConnector(object):
         task = kwargs['task']
         version = kwargs['version']
         #
-        version_code = bsc_core.PtnParseOpt(self.VERSION_NAME_PATTERN).update_variants_to(
+        version_code = bsc_core.PtnStgParseOpt(self.VERSION_NAME_PATTERN).update_variants_to(
             resource=kwargs[branch],
             step=step,
             task=task,
@@ -660,7 +660,7 @@ class StgConnector(object):
         task = kwargs['task']
         version = kwargs['version']
         #
-        name = bsc_core.PtnParseOpt(self.VERSION_NAME_PATTERN).update_variants_to(
+        name = bsc_core.PtnStgParseOpt(self.VERSION_NAME_PATTERN).update_variants_to(
             resource=kwargs[branch],
             step=step,
             task=task,

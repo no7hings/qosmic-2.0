@@ -99,11 +99,11 @@ def main(session):
         base_variants = dict(root=dtb_opt.get_stg_root())
         #
         scene_maya_directory_p = dtb_opt.get_pattern(keyword='scene-maya-dir')
-        scene_maya_directory_p_o = bsc_core.PtnParseOpt(scene_maya_directory_p)
+        scene_maya_directory_p_o = bsc_core.PtnStgParseOpt(scene_maya_directory_p)
         scene_maya_directory_p_o.update_variants(**base_variants)
         #
         proxy_ass_directory_p = dtb_opt.get_pattern(keyword='proxy-ass-dir')
-        proxy_ass_directory_p_o = bsc_core.PtnParseOpt(proxy_ass_directory_p)
+        proxy_ass_directory_p_o = bsc_core.PtnStgParseOpt(proxy_ass_directory_p)
         proxy_ass_directory_p_o.update_variants(**base_variants)
         #
         window = session.get_window()

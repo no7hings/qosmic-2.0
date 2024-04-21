@@ -9,12 +9,12 @@ from ... import core as mya_core
 
 from ... import abstracts as mya_abstracts
 
-from . import utility as mya_dcc_obj_utility
+from . import utility as _utility
 
-from . import node as mya_dcc_obj_node
+from . import node as _node
 
 
-class Group(mya_dcc_obj_node.Node):
+class Group(_node.Node):
     def __init__(self, path):
         super(Group, self).__init__(path)
 
@@ -47,7 +47,7 @@ class Group(mya_dcc_obj_node.Node):
         return self.__class__(child_path)
 
 
-class Transform(mya_dcc_obj_node.Node):
+class Transform(_node.Node):
     DEFAULT_MATRIX = [
         1.0, .0, .0, .0,
         .0, 1.0, .0, .0,
@@ -114,7 +114,7 @@ class Shape(
     mya_abstracts.AbsMyaNode,
     mya_abstracts.AbsMyaShapeDef
 ):
-    DCC_PORT_CLS = mya_dcc_obj_utility.Port
+    DCC_PORT_CLS = _utility.Port
     TRANSFORM_CLS = Transform
 
     def __init__(self, path):
@@ -191,8 +191,8 @@ class Camera(Shape):
 
 
 class Light(Shape):
-    DCC_PORT_CLS = mya_dcc_obj_utility.Port
-    DCC_CONNECTION_CLS = mya_dcc_obj_utility.Connection
+    DCC_PORT_CLS = _utility.Port
+    DCC_CONNECTION_CLS = _utility.Connection
 
     def __init__(self, path):
         super(Light, self).__init__(path)

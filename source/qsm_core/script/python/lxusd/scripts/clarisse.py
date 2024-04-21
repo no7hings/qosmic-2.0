@@ -50,7 +50,7 @@ class UsdScpForClarisseCleanup(object):
                     self.__mesh_process(i_prim)
                     marks.append(i_prim_opt.get_parent_path())
 
-                # g_p.set_update()
+                g_p.do_update()
 
     def __instancer_process(self, instancer_prim):
         instancer_opt = usd_core.UsdInstancerOpt(instancer_prim)

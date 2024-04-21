@@ -19,13 +19,13 @@ from ... import abstracts as mya_abstracts
 # maya dcc objects
 from . import node as mya_dcc_obj_node
 
-from . import node_for_dag as mya_dcc_obj_node_for_dag
+from . import node_for_dag as _node_for_dag
 
-from . import node_for_xgen as mya_dcc_obj_node_for_xgen
+from . import node_for_xgen as _node_for_xgen
 
-from . import node_for_arnold as mya_dcc_obj_node_for_arnold
+from . import node_for_arnold as _node_for_arnold
 
-from . import node_for_look as mya_dcc_obj_node_for_look
+from . import node_for_look as _node_for_look
 
 
 class Nodes(object):
@@ -44,7 +44,7 @@ class Nodes(object):
 class Sets(mya_abstracts.AbsMyaNodes):
     DCC_TYPES_INCLUDE = ['objectSet']
     DCC_PATHS_EXCLUDE = ['defaultLightSet', 'defaultObjectSet']
-    DCC_NODE_CLS = mya_dcc_obj_node_for_dag.Shape
+    DCC_NODE_CLS = _node_for_dag.Shape
 
     def __init__(self, *args):
         super(Sets, self).__init__(*args)
@@ -53,7 +53,7 @@ class Sets(mya_abstracts.AbsMyaNodes):
 class Cameras(mya_abstracts.AbsMyaNodes):
     DCC_TYPES_INCLUDE = ['camera']
     DCC_PATHS_EXCLUDE = ['|persp|perspShape', '|top|topShape', '|front|frontShape', '|side|sideShape']
-    DCC_NODE_CLS = mya_dcc_obj_node_for_dag.Shape
+    DCC_NODE_CLS = _node_for_dag.Shape
 
     def __init__(self, *args):
         super(Cameras, self).__init__(*args)
@@ -159,7 +159,7 @@ class Materials(mya_abstracts.AbsMyaNodes):
         'defaultLightSet',
         'defaultObjectSet'
     ]
-    DCC_NODE_CLS = mya_dcc_obj_node_for_look.Material
+    DCC_NODE_CLS = _node_for_look.Material
 
     def __init__(self, *args):
         super(Materials, self).__init__(*args)
@@ -182,10 +182,10 @@ class AbsFileReferences(object):
         'aiImage': mya_dcc_obj_node.TextureReference,
         'reference': mya_dcc_obj_node.Reference,
         #
-        'xgmPalette': mya_dcc_obj_node_for_xgen.XgnPalette,
-        'xgmDescription': mya_dcc_obj_node_for_xgen.XgnDescription,
+        'xgmPalette': _node_for_xgen.XgnPalette,
+        'xgmDescription': _node_for_xgen.XgnDescription,
         #
-        'aiMaterialx': mya_dcc_obj_node_for_arnold.AndMaterialx,
+        'aiMaterialx': _node_for_arnold.AndMaterialx,
         #
         'osl_file_path': mya_dcc_obj_node.TextureReference,
         'osl_window_box': mya_dcc_obj_node.TextureReference,
@@ -516,7 +516,7 @@ class TextureReferences(AbsFileReferences):
 class XgenPalettes(mya_abstracts.AbsMyaNodes):
     DCC_TYPES_INCLUDE = ['xgmPalette']
     DCC_PATHS_EXCLUDE = []
-    DCC_NODE_CLS = mya_dcc_obj_node_for_xgen.XgnPalette
+    DCC_NODE_CLS = _node_for_xgen.XgnPalette
 
     def __init__(self):
         super(XgenPalettes, self).__init__(XgenPalettes)
@@ -525,7 +525,7 @@ class XgenPalettes(mya_abstracts.AbsMyaNodes):
 class XgenDescriptions(mya_abstracts.AbsMyaNodes):
     DCC_TYPES_INCLUDE = ['xgmDescription']
     DCC_PATHS_EXCLUDE = []
-    DCC_NODE_CLS = mya_dcc_obj_node_for_xgen.XgnDescription
+    DCC_NODE_CLS = _node_for_xgen.XgnDescription
 
     def __init__(self):
         super(XgenDescriptions, self).__init__(XgenPalettes)

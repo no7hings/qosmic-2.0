@@ -145,7 +145,7 @@ class ScpResourcesAddFor3dPlant(object):
         variants = {'directory': directory_path_src}
         #
         resource_p = '{directory}/{name}_{var}/{name}_{var}_{number}_Model_{lod}'
-        resource_p_opt = bsc_core.PtnParseOpt(resource_p)
+        resource_p_opt = bsc_core.PtnStgParseOpt(resource_p)
         resource_p_opt.update_variants(**variants)
         #
         matches = resource_p_opt.get_matches(sort=True)
@@ -190,7 +190,7 @@ class ScpResourcesAddFor3dPlant(object):
 
         preview_p = '{directory}/{name}_{var}/{name}_{var}_{number}_Model_{lod}/{name}_{var}_{number}_Model_{lod}.jpg'
         # preview
-        preview_p_opt = bsc_core.PtnParseOpt(preview_p)
+        preview_p_opt = bsc_core.PtnStgParseOpt(preview_p)
         preview_p_opt.update_variants(**variants)
         preview_file_paths_src = preview_p_opt.get_match_results()
         if preview_file_paths_src:
@@ -201,7 +201,7 @@ class ScpResourcesAddFor3dPlant(object):
             )
         # scene
         scene_p = '{directory}/{name}_{var}/{name}_{var}_{number}_Model_{lod}/{name}_{var}_{number}_Model_{lod}_Shader_Ar_Static.ma'
-        scene_p_opt = bsc_core.PtnParseOpt(scene_p)
+        scene_p_opt = bsc_core.PtnStgParseOpt(scene_p)
         scene_p_opt.update_variants(**variants)
         scene_file_paths_src = scene_p_opt.get_match_results()
         if scene_file_paths_src:

@@ -7,7 +7,7 @@ import lxbasic.dcc.core as bsc_dcc_core
 
 import lxbasic.content as bsc_content
 
-from . import base as bsc_fnc_abs_base
+from . import base as _base
 
 
 class AbsFncMatcherForDccMesh(object):
@@ -326,7 +326,7 @@ class AbsFncRepairerForUsdMesh(object):
             )
 
 
-class AbsFncComparerForUsdGeometry(bsc_fnc_abs_base.AbsFncOptionBase):
+class AbsFncComparerForUsdGeometry(_base.AbsFncOptionBase):
     KEY = 'geometry comparer'
     OPTION = dict(
         file_src='',
@@ -440,7 +440,7 @@ class AbsFncComparerForUsdGeometry(bsc_fnc_abs_base.AbsFncOptionBase):
         return results
 
 
-class AbsFncComparerForDccGeometry(bsc_fnc_abs_base.AbsFncOptionBase):
+class AbsFncComparerForDccGeometry(_base.AbsFncOptionBase):
     OPTION = dict(
         file='',
         location='',

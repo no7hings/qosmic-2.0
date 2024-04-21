@@ -7,10 +7,10 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-from . import base as bsc_fnc_abs_base
+from . import base as _base
 
 
-class AbsFncImporterForLookYmlDcc(bsc_fnc_abs_base.AbsFncOptionBase):
+class AbsFncImporterForLookYmlDcc(_base.AbsFncOptionBase):
     OPTION = dict(
         file='',
         root='',

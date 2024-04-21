@@ -2,6 +2,6 @@
 import lxbasic.storage as bsc_storage
 
 
-bsc_storage.StgPathPermissionMtd.change_owner(
+bsc_storage.StgPermissionMtd.change_owner(
     '/production/shows/nsa_dev/assets/chr/nikki_rnd/user/team.srf'
 )

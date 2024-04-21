@@ -40,12 +40,12 @@ def main(session):
                     _i_texture_acescg_src_directory_path = texture_acescg_src_directory_pattern_opt.update_variants_to(
                         **_i_variants
                     ).get_value()
-                    bsc_storage.StgPathPermissionMtd.create_directory(_i_texture_acescg_src_directory_path)
+                    bsc_storage.StgPermissionMtd.create_directory(_i_texture_acescg_src_directory_path)
                     #
                     _i_texture_acescg_tx_directory_path = texture_acescg_tx_directory_pattern_opt.update_variants_to(
                         **_i_variants
                     ).get_value()
-                    bsc_storage.StgPathPermissionMtd.create_directory(_i_texture_acescg_tx_directory_path)
+                    bsc_storage.StgPermissionMtd.create_directory(_i_texture_acescg_tx_directory_path)
                     #
                     _i_texture_acescg_src_exr_file_path = '{}/{}.exr'.format(
                         _i_texture_acescg_src_directory_path, _i_texture_original_src_file_opt.name_base
@@ -117,15 +117,15 @@ def main(session):
         base_variants = dict(root=dtb_opt.get_stg_root())
         #
         texture_original_src_directory_p = dtb_opt.get_pattern(keyword='texture-original-src-dir')
-        texture_original_src_directory_p_o = bsc_core.PtnParseOpt(texture_original_src_directory_p)
+        texture_original_src_directory_p_o = bsc_core.PtnStgParseOpt(texture_original_src_directory_p)
         texture_original_src_directory_p_o.update_variants(**base_variants)
         #
         texture_acescg_src_directory_pattern = dtb_opt.get_pattern(keyword='texture-acescg-src-dir')
-        texture_acescg_src_directory_pattern_opt = bsc_core.PtnParseOpt(texture_acescg_src_directory_pattern)
+        texture_acescg_src_directory_pattern_opt = bsc_core.PtnStgParseOpt(texture_acescg_src_directory_pattern)
         texture_acescg_src_directory_pattern_opt.update_variants(**base_variants)
         #
         texture_acescg_tx_directory_pattern = dtb_opt.get_pattern(keyword='texture-acescg-tx-dir')
-        texture_acescg_tx_directory_pattern_opt = bsc_core.PtnParseOpt(texture_acescg_tx_directory_pattern)
+        texture_acescg_tx_directory_pattern_opt = bsc_core.PtnStgParseOpt(texture_acescg_tx_directory_pattern)
         texture_acescg_tx_directory_pattern_opt.update_variants(**base_variants)
         #
         w = gui_core.GuiDialog.create(

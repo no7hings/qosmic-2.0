@@ -7,7 +7,7 @@ from lxbasic.core import process as bsc_cor_process
 
 from lxbasic.core import execute as bsc_cor_execute
 
-from . import base as bsc_stg_base
+from . import base as _base
 
 
 class OslFileMtd(object):
@@ -18,7 +18,7 @@ class OslFileMtd(object):
 
     @classmethod
     def compile(cls, file_path):
-        file_opt = bsc_stg_base.StgFileOpt(file_path)
+        file_opt = _base.StgFileOpt(file_path)
         compile_file_path = '{}.oso'.format(file_opt.path_base)
         #
         cmd_args = [
@@ -31,7 +31,7 @@ class OslFileMtd(object):
     def get_info(cls, file_path):
         dic = collections.OrderedDict()
         #
-        file_opt = bsc_stg_base.StgFileOpt(file_path)
+        file_opt = _base.StgFileOpt(file_path)
         compile_file_path = '{}.oso'.format(file_opt.path_base)
         #
         cmd_args = [

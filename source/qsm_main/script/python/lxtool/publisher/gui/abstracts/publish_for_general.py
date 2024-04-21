@@ -39,7 +39,7 @@ class _PublishOptForGeneral(object):
     def create_or_unlock_version_directory_fnc(self):
         directory_path = self._options.get('version_directory')
         if bsc_storage.StgDirectoryOpt(directory_path).get_is_exists() is False:
-            bsc_storage.StgPathPermissionMtd.create_directory(
+            bsc_storage.StgPermissionMtd.create_directory(
                 directory_path
             )
 
@@ -74,7 +74,7 @@ class _PublishOptForGeneral(object):
                 version=version
             )
             #
-            bsc_storage.StgPathPermissionMtd.copy_to_file(
+            bsc_storage.StgPermissionMtd.copy_to_file(
                 movie_file_path, review_file_path
             )
             self._review_mov_file_path = movie_file_path
@@ -131,7 +131,7 @@ class _PublishOptForGeneral(object):
                             i_ext, []
                         ).append(i_file_path)
                         if i_file_opt.get_is_readable() is False:
-                            bsc_storage.StgPathPermissionMtd.unlock(i_file_path)
+                            bsc_storage.StgPermissionMtd.unlock(i_file_path)
                         #
                         i_file_opt.copy_to_file(
                             i_scene_src_file_path_tgt
@@ -157,7 +157,7 @@ class _PublishOptForGeneral(object):
                             image_directory_path, j_file_opt.get_name()
                         )
                         if j_file_opt.get_is_readable() is False:
-                            bsc_storage.StgPathPermissionMtd.unlock(j_file_path)
+                            bsc_storage.StgPermissionMtd.unlock(j_file_path)
                         #
                         j_file_opt.copy_to_file(
                             j_file_path_tgt
@@ -421,7 +421,7 @@ class AbsPnlPublisherForGeneral(prx_widgets.PrxSessionWindow):
                 **kwargs
             )
             if bsc_storage.StgPathMtd.get_is_exists(task_directory_path) is False:
-                bsc_storage.StgPathPermissionMtd.create_directory(
+                bsc_storage.StgPermissionMtd.create_directory(
                     task_directory_path
                 )
 

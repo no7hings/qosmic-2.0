@@ -15,7 +15,7 @@ import platform
 
 import getpass
 
-from . import bridge as log_bridge
+from . import bridge as _bridge
 
 
 class LogBase(object):
@@ -201,8 +201,8 @@ class Log(object):
             sys.stdout.write(
                 log+'\n'
             )
-            if log_bridge.BRG_FNC_LOG_GUI_TRACE_ENABLE is True:
-                log_bridge.BRG_FNC_LOG_GUI_TRACE_RESULT(log)
+            if _bridge.BRG_FNC_LOG_GUI_TRACE_ENABLE is True:
+                _bridge.BRG_FNC_LOG_GUI_TRACE_RESULT(log)
             return log
 
     @classmethod
@@ -213,8 +213,8 @@ class Log(object):
             sys.stdout.write(
                 log+'\n'
             )
-            if log_bridge.BRG_FNC_LOG_GUI_TRACE_ENABLE is True:
-                log_bridge.BRG_FNC_LOG_GUI_TRACE_WARNING(log)
+            if _bridge.BRG_FNC_LOG_GUI_TRACE_ENABLE is True:
+                _bridge.BRG_FNC_LOG_GUI_TRACE_WARNING(log)
             return log
 
     @classmethod
@@ -225,8 +225,8 @@ class Log(object):
             sys.stderr.write(
                 log+'\n'
             )
-            if log_bridge.BRG_FNC_LOG_GUI_TRACE_ENABLE is True:
-                log_bridge.BRG_FNC_LOG_GUI_TRACE_ERROR(log)
+            if _bridge.BRG_FNC_LOG_GUI_TRACE_ENABLE is True:
+                _bridge.BRG_FNC_LOG_GUI_TRACE_ERROR(log)
             return log
 
     @classmethod
@@ -423,9 +423,9 @@ class LogProcessContext(object):
             self.__label,
             'process is started, total is {}'.format(self.__maximum)
         )
-        if log_bridge.BRG_FNC_LOG_GUI_PROCESS_ENABLE is True:
-            if isinstance(log_bridge.BRG_FNC_LOG_GUI_PROCESS_CREATE, (types.FunctionType, types.MethodType)):
-                self.__gui_ps = log_bridge.BRG_FNC_LOG_GUI_PROCESS_CREATE(maximum, label=label)
+        if _bridge.BRG_FNC_LOG_GUI_PROCESS_ENABLE is True:
+            if isinstance(_bridge.BRG_FNC_LOG_GUI_PROCESS_CREATE, (types.FunctionType, types.MethodType)):
+                self.__gui_ps = _bridge.BRG_FNC_LOG_GUI_PROCESS_CREATE(maximum, label=label)
             else:
                 raise RuntimeError()
         else:
@@ -533,9 +533,9 @@ class LogException(object):
 
     @staticmethod
     def __gui_trace():
-        if log_bridge.BRG_FNC_LOG_GUI_EXCEPTION_ENABLE is True:
-            if isinstance(log_bridge.BRG_FNC_LOG_GUI_EXCEPTION_TRACE, (types.FunctionType, types.MethodType)):
-                log_bridge.BRG_FNC_LOG_GUI_EXCEPTION_TRACE()
+        if _bridge.BRG_FNC_LOG_GUI_EXCEPTION_ENABLE is True:
+            if isinstance(_bridge.BRG_FNC_LOG_GUI_EXCEPTION_TRACE, (types.FunctionType, types.MethodType)):
+                _bridge.BRG_FNC_LOG_GUI_EXCEPTION_TRACE()
 
     @classmethod
     def trace(cls):
@@ -544,22 +544,4 @@ class LogException(object):
 
 
 if __name__ == '__main__':
-    # print(Log.get('Test'))
-    # print(Log.get(u'测试'))
-    # print(Log.get_result(u'测试'))
-    #
-    # Log.result('Test')
-    # Log.result(u'测试 0')
-    # #
-    # Log.trace_result(u'测试 1')
-    # Log.trace_warning(u'测试 2')
-    # Log.trace_error(u'测试 3')
-    # Log.debug('Test')
-    #
-    # Log.trace_method_error(u'测试', u'测试')
-    #
-    # _c = 120
-    # with LogProcessContext.create_as_bar(maximum=_c, label='test') as l_p:
-    #     for _i in range(_c):
-    #         l_p.set_update()
     print LogBase.get_user_debug_directory('qt')

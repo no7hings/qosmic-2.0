@@ -412,7 +412,7 @@ class ScpResourcesAddByQuixel(object):
                 quixel_directory_path_tgt
             )
             # lod texture
-            i_lod_pattern_opt_src = bsc_core.PtnParseOpt(
+            i_lod_pattern_opt_src = bsc_core.PtnStgParseOpt(
                 '{}/{}'.format(directory_path_src, cls.TEXTURE_LOD_PATTERN),
                 variants=dict(texture_key='*', texture_size_tag='[0-9]')
             )
@@ -438,7 +438,7 @@ class ScpResourcesAddByQuixel(object):
                     )
             # texture
             else:
-                pattern_opt_src = bsc_core.PtnParseOpt(
+                pattern_opt_src = bsc_core.PtnStgParseOpt(
                     '{}/{}'.format(directory_path_src, cls.TEXTURE_PATTERN),
                     variants=dict(texture_key='*', texture_size_tag='[0-9]')
                 )
@@ -540,7 +540,7 @@ class ScpResourcesAddByQuixel(object):
                 )
                 i_file_paths_src = bsc_storage.StgDirectoryOpt(i_directory_path_extra).get_file_paths()
                 if i_file_paths_src:
-                    i_pattern_opt_extra_src = bsc_core.PtnParseOpt(
+                    i_pattern_opt_extra_src = bsc_core.PtnStgParseOpt(
                         '{}/{}'.format(i_directory_path_extra, cls.TEXTURE_EXTRA_PATTERN),
                         variants=dict(texture_key='*', texture_size_tag='[0-9]')
                     )
@@ -656,7 +656,7 @@ class ScpResourcesAddByQuixel(object):
                 quixel_directory_path_tgt
             )
             #
-            i_lod_pattern_opt_src = bsc_core.PtnParseOpt(
+            i_lod_pattern_opt_src = bsc_core.PtnStgParseOpt(
                 '{}/{}'.format(directory_path_src, cls.GEOMETRY_LOD_PATTERN)
             )
             if i_lod_pattern_opt_src.get_is_matched(i_file_path_src) is True:
@@ -762,7 +762,7 @@ class ScpResourcesAddByQuixel(object):
                 )
                 i_file_paths_src = bsc_storage.StgDirectoryOpt(i_directory_path_extra).get_file_paths()
                 if i_file_paths_src:
-                    i_var_pattern_opt_extra_src = bsc_core.PtnParseOpt(
+                    i_var_pattern_opt_extra_src = bsc_core.PtnStgParseOpt(
                         '{}/{}'.format(i_directory_path_extra, cls.GEOMETRY_VAR_LOD_PATTERN)
                     )
                     for j_file_path_src in i_file_paths_src:

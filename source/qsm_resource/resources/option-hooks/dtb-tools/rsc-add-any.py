@@ -423,7 +423,7 @@ class PnlRscTextureAddTool(prx_widgets.PrxSessionWindow):
     def get_matches_by_patterns(cls, pattern_string, variants):
         patterns = map(lambda x: str(x).strip(), pattern_string.split(','))
         for i_pattern in patterns:
-            i_pattern_opt = bsc_core.PtnParseOpt(i_pattern)
+            i_pattern_opt = bsc_core.PtnStgParseOpt(i_pattern)
             i_pattern_opt.update_variants(**variants)
             i_matches = i_pattern_opt.get_matches(sort=True)
             if i_matches:
@@ -507,7 +507,7 @@ class PnlRscTextureAddTool(prx_widgets.PrxSessionWindow):
                     i_file_type = ['file', 'directory'][bsc_storage.StgPathMtd.get_is_directory(i_file_path)]
                     if i_file_type not in include_file_types:
                         continue
-                    i_resource_n_p_o = bsc_core.PtnParseOpt(name_pattern)
+                    i_resource_n_p_o = bsc_core.PtnStgParseOpt(name_pattern)
                     i_resource_n_p_o.update_variants(**i_file_variants)
                     if not i_resource_n_p_o.get_keys():
                         if self._options.get('resource.reduce_name') is True:

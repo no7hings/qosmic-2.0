@@ -86,7 +86,7 @@ class AbsStgDirectory(
                 return
             else:
                 if os.path.islink(directory_tgt.path) is True:
-                    bsc_storage.StgPathPermissionMtd.unlock(directory_tgt.path)
+                    bsc_storage.StgPermissionMtd.unlock(directory_tgt.path)
                     os.remove(directory_tgt.path)
                     bsc_log.Log.trace_method_result(
                         'path-link-remove',
@@ -483,7 +483,7 @@ class AbsStgFile(
                 # unlock when is not writeable
                 file_opt_copy_log = bsc_storage.StgFileOpt(file_path_copy_log)
                 if file_opt_copy_log.get_is_writable() is False:
-                    bsc_storage.StgPathPermissionMtd.unlock(file_path_copy_log)
+                    bsc_storage.StgPermissionMtd.unlock(file_path_copy_log)
                 file_opt_copy_log.append(copy_log)
             #
             file_tgt = self.__class__(file_path_tgt)
@@ -502,7 +502,7 @@ class AbsStgFile(
                         # unlock when is not writeable
                         file_opt_link_log = bsc_storage.StgFileOpt(file_path_link_log)
                         if file_opt_link_log.get_is_writable() is False:
-                            bsc_storage.StgPathPermissionMtd.unlock(file_path_link_log)
+                            bsc_storage.StgPermissionMtd.unlock(file_path_link_log)
                         file_opt_link_log.append(link_log)
                         return True, link_log
                 else:
@@ -522,7 +522,7 @@ class AbsStgFile(
                 # unlock when is not writeable
                 file_opt_link_log = bsc_storage.StgFileOpt(file_path_link_log)
                 if file_opt_link_log.get_is_writable() is False:
-                    bsc_storage.StgPathPermissionMtd.unlock(file_path_link_log)
+                    bsc_storage.StgPermissionMtd.unlock(file_path_link_log)
                 file_opt_link_log.append(link_log)
                 return True, link_log
         else:

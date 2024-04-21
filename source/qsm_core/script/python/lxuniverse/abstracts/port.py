@@ -5,7 +5,7 @@ import lxbasic.content as bsc_content
 # universe
 from .. import core as unr_core
 
-from . import base as unr_abs_base
+from . import base as _base
 
 
 # port/def
@@ -675,7 +675,7 @@ class AbsPort(
     # <port-value>
     AbsPortValueExtraDef,
     # <obj-gui>
-    unr_abs_base.AbsGuiExtraDef,
+    _base.AbsGuiExtraDef,
 ):
     def __init__(self, obj, type_path, port_path, port_assign):
         self._init_port_base_def_(

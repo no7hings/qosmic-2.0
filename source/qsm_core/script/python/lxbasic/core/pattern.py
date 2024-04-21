@@ -283,12 +283,12 @@ class PtnFnmatchMtd(object):
 class AbsPtnParseOpt(object):
     def __init__(self, p, variants=None):
         self._pattern_origin = p
-        self._variants = {}
         self._pattern = p
-
+        
+        self._variants = {}
         self._variants_default = variants or {}
 
-        self._fnmatch_pattern_origin = PtnParseMtd.get_as_fnmatch(
+        self._pattern_fnmatch_origin = PtnParseMtd.get_as_fnmatch(
             self._pattern_origin, self._variants_default
         )
         self._pattern_fnmatch = PtnParseMtd.get_as_fnmatch(
@@ -300,12 +300,12 @@ class AbsPtnParseOpt(object):
 
     pattern = property(get_pattern)
 
-    def get_fnmatch_pattern(self):
+    def get_pattern_for_fnmatch(self):
         return PtnParseMtd.get_as_fnmatch(
             self._pattern, self._variants_default
         )
 
-    fnmatch_pattern = property(get_fnmatch_pattern)
+    pattern_for_fnmatch = property(get_pattern_for_fnmatch)
 
     def get_keys(self):
         return PtnParseMtd.get_keys(
@@ -316,17 +316,6 @@ class AbsPtnParseOpt(object):
 
     def get_value(self):
         return self._pattern
-
-    def set_update(self, **kwargs):
-        keys = self.get_keys()
-        for k, v in kwargs.items():
-            if k in keys:
-                self._variants[k] = v
-        #
-        self._pattern = PtnParseMtd.update_variants(self._pattern, **kwargs)
-        self._pattern_fnmatch = PtnParseMtd.get_as_fnmatch(
-            self._pattern, self._variants_default
-        )
 
     def update_variants(self, **kwargs):
         keys = self.get_keys()
@@ -365,9 +354,14 @@ class AbsPtnParseOpt(object):
         return self._variants
 
 
-class PtnParseOpt(AbsPtnParseOpt):
+class PthDccParseOpt(AbsPtnParseOpt):
     def __init__(self, p, variants=None):
-        super(PtnParseOpt, self).__init__(p, variants)
+        super(PthDccParseOpt, self).__init__(p, variants)
+
+
+class PtnStgParseOpt(AbsPtnParseOpt):
+    def __init__(self, p, variants=None):
+        super(PtnStgParseOpt, self).__init__(p, variants)
 
     def get_matches(self, sort=False):
         list_ = []
@@ -403,11 +397,6 @@ class PtnParseOpt(AbsPtnParseOpt):
             [result], self._pattern_fnmatch
         )
 
-    def _get_exists_results_(self):
-        return PtnBaseMtd.glob_fnc(
-            self._pattern_fnmatch
-        )
-
     def get_exists_results(self, **kwargs):
         p = self.update_variants_to(**kwargs)
         return PtnBaseMtd.glob_fnc(p._pattern_fnmatch)
@@ -422,8 +411,8 @@ class PtnParseOpt(AbsPtnParseOpt):
             paths = _raw.RawTextsOpt(paths).sort_by_number()
         return paths
 
-    def set_default_variants(self, key, value):
-        self._variants_default[key] = value
+    def update_default_variants(self, **kwargs):
+        self._variants_default.update(kwargs)
 
     def get_latest_version(self, version_key):
         ms = self.get_matches(sort=True)
@@ -453,5 +442,5 @@ class PtnDocParseOpt(AbsPtnParseOpt):
     def get_matched_lines(self, lines):
         return fnmatch.filter(
             lines,
-            self.get_fnmatch_pattern()
+            self.get_pattern_for_fnmatch()
         )

@@ -94,10 +94,10 @@ class _LinePattern(object):
 
     parse_pattern = property(get_parse_pattern)
 
-    def get_fnmatch_pattern(self):
+    def get_pattern_for_fnmatch(self):
         return self._pattern_fnmatch
 
-    fnmatch_pattern = property(get_fnmatch_pattern)
+    pattern_for_fnmatch = property(get_pattern_for_fnmatch)
 
 
 class _AbsDotFile(object):
@@ -114,7 +114,7 @@ class _AbsDotFile(object):
             list_ = []
             pattern_0 = cls.LINE_PATTERN_CLS(pattern)
             lines = fnmatch.filter(
-                lines, pattern_0.fnmatch_pattern
+                lines, pattern_0.pattern_for_fnmatch
             )
             for l_line in lines:
                 i_p = parse.parse(
@@ -170,7 +170,7 @@ class DotXgenOpt(_AbsDotFile):
         )
         pattern_0 = self.LINE_PATTERN_CLS('{obj_type}\n{port_lines}\n')
         lines = fnmatch.filter(
-            self.lines, pattern_0.fnmatch_pattern
+            self.lines, pattern_0.pattern_for_fnmatch
         )
         for i_line in lines:
             p = parse.parse(
@@ -450,7 +450,7 @@ class DotMaOptOld(_AbsDotFile):
             'file -rdi {a} -ns "{namespace}" -rfn "{obj}"{b}-typ{c}"{file_type}"{d}"{file}"{r}'
         )
         lines = fnmatch.filter(
-            self.lines, pattern.fnmatch_pattern
+            self.lines, pattern.pattern_for_fnmatch
         )
         for i_line in lines:
             p = parse.parse(
@@ -465,7 +465,7 @@ class DotMaOptOld(_AbsDotFile):
         list_ = []
         pattern_0 = self.LINE_PATTERN_CLS('createNode {obj_type} -n "{obj_name}"{r}')
         lines = fnmatch.filter(
-            self.lines, pattern_0.fnmatch_pattern
+            self.lines, pattern_0.pattern_for_fnmatch
         )
         for i_line in lines:
             p = parse.parse(
@@ -512,14 +512,14 @@ class DotMaOptOld(_AbsDotFile):
     def _get_is_port_(cls, line):
         pattern_0 = cls.LINE_PATTERN_CLS('{l}setAttr{r}')
         results = fnmatch.filter(
-            [line], pattern_0.fnmatch_pattern
+            [line], pattern_0.pattern_for_fnmatch
         )
         if results:
             return True
         #
         pattern_1 = cls.LINE_PATTERN_CLS('{l}addAttr{r}')
         results = fnmatch.filter(
-            [line], pattern_1.fnmatch_pattern
+            [line], pattern_1.pattern_for_fnmatch
         )
         if results:
             return True
@@ -529,7 +529,7 @@ class DotMaOptOld(_AbsDotFile):
     def _get_obj_port_raw_(cls, line):
         pattern_0 = cls.LINE_PATTERN_CLS('{l}setAttr ".{port_name}" -type "{port_type}"{m}"{port_raw}";{r}')
         results = fnmatch.filter(
-            [line], pattern_0.fnmatch_pattern
+            [line], pattern_0.pattern_for_fnmatch
         )
         if results:
             p = parse.parse(
@@ -540,7 +540,7 @@ class DotMaOptOld(_AbsDotFile):
                 return variant
         pattern_1 = cls.LINE_PATTERN_CLS('{l}setAttr ".{port_name}" {port_raw};{r}')
         results = fnmatch.filter(
-            [line], pattern_1.fnmatch_pattern
+            [line], pattern_1.pattern_for_fnmatch
         )
         if results:
             p = parse.parse(
@@ -552,7 +552,7 @@ class DotMaOptOld(_AbsDotFile):
                 return variant
         pattern_2 = cls.LINE_PATTERN_CLS('{l}addAttr {m0} -ln "{port_name}" -dt "{port_type}";{r}')
         results = fnmatch.filter(
-            [line], pattern_2.fnmatch_pattern
+            [line], pattern_2.pattern_for_fnmatch
         )
         if results:
             p = parse.parse(
@@ -567,7 +567,7 @@ class DotMaOptOld(_AbsDotFile):
     def _get_obj_uuid_raw_(cls, line):
         pattern = cls.LINE_PATTERN_CLS('{l}rename -uuid "{raw}"{r}')
         results = fnmatch.filter(
-            [line], pattern.fnmatch_pattern
+            [line], pattern.pattern_for_fnmatch
         )
         if results:
             result = results[0]
@@ -903,7 +903,7 @@ class DotMaOpt(_AbsDotFile):
             'file -rdi {a} -ns "{namespace}" -rfn "{obj}"{b}-typ{c}"{file_type}"{d}"{file}"{r}'
         )
         lines = fnmatch.filter(
-            self.lines, pattern.fnmatch_pattern
+            self.lines, pattern.pattern_for_fnmatch
         )
         for line in lines:
             p = parse.parse(
@@ -1055,7 +1055,7 @@ class DotMaOpt(_AbsDotFile):
         #
         obj_matcher = self.LINE_PATTERN_CLS('createNode {obj_type} -n "{obj_name}";\n')
         lines = fnmatch.filter(
-            self._lines, obj_matcher.fnmatch_pattern
+            self._lines, obj_matcher.pattern_for_fnmatch
         )
         for i_line in lines:
             i_properties = collections.OrderedDict()
@@ -1074,7 +1074,7 @@ class DotMaOpt(_AbsDotFile):
                 i_obj_path = i_obj_name
                 i_obj_parent_name = None
                 if fnmatch.filter(
-                    [i_obj_name], i_name_ptn.fnmatch_pattern
+                    [i_obj_name], i_name_ptn.pattern_for_fnmatch
                 ):
                     i_name_p = parse.parse(
                         i_name_ptn.parse_pattern, i_obj_name
@@ -1102,7 +1102,7 @@ class DotMaOpt(_AbsDotFile):
     def _get_uuid_by_line(self, line):
         pattern = self.LINE_PATTERN_CLS('{l}rename -uid "{unique_id}";\n')
         results = fnmatch.filter(
-            [line], pattern.fnmatch_pattern
+            [line], pattern.pattern_for_fnmatch
         )
         if results:
             result = results[0]
@@ -1174,7 +1174,7 @@ class DotMaOpt(_AbsDotFile):
         for i in matchers:
             matcher, data_type, data = i
             results = fnmatch.filter(
-                [line], matcher.fnmatch_pattern
+                [line], matcher.pattern_for_fnmatch
             )
             if results:
                 p = parse.parse(
@@ -1266,7 +1266,7 @@ class DotMaOpt(_AbsDotFile):
                 ),
             ]:
                 results = fnmatch.filter(
-                    [line], matcher.fnmatch_pattern
+                    [line], matcher.pattern_for_fnmatch
                 )
                 if results:
                     result = results[0]
@@ -1297,7 +1297,7 @@ class DotAssOpt(_AbsDotFile):
                 '{l}filename "{file_path}"\n'
             )
             results = fnmatch.filter(
-                self._lines, matcher.fnmatch_pattern
+                self._lines, matcher.pattern_for_fnmatch
             )
             if results:
                 for i_line in results:
@@ -1363,7 +1363,7 @@ class DotUsdaOpt(_AbsDotFile):
         m_0 = self.LINE_PATTERN_CLS('    startTimeCode = {value}\n')
         m_1 = self.LINE_PATTERN_CLS('    endTimeCode = {value}\n')
         results_0 = fnmatch.filter(
-            self._lines, m_0.fnmatch_pattern
+            self._lines, m_0.pattern_for_fnmatch
         )
         start_frame = 0
         if results_0:
@@ -1374,7 +1374,7 @@ class DotUsdaOpt(_AbsDotFile):
                 start_frame = int(p_0['value'])
 
         results_1 = fnmatch.filter(
-            self._lines, m_1.fnmatch_pattern
+            self._lines, m_1.pattern_for_fnmatch
         )
         end_frame = 0
         if results_1:

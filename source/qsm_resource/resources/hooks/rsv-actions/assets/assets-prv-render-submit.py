@@ -25,7 +25,7 @@ def main(session):
                 )
             )
             #
-            ssn_commands.set_option_hook_execute_by_deadline(
+            ssn_commands.execute_option_hook_by_deadline(
                 option=_i_option_opt.to_string()
             )
 

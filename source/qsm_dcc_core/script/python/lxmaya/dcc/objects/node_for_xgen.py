@@ -3,13 +3,13 @@ import lxbasic.dcc.objects as bsc_dcc_objects
 # maya
 from ... import abstracts as mya_abstracts
 # maya dcc objects
-from . import utility as mya_dcc_obj_utility
+from . import utility as _utility
 
-from . import node_for_dag as mya_dcc_obj_node_for_dag
+from . import node_for_dag as _node_for_dag
 
 
 class XgnPalette(mya_abstracts.AbsMyaNodeForFileReference):
-    DCC_PORT_CLS = mya_dcc_obj_utility.Port
+    DCC_PORT_CLS = _utility.Port
     STG_FILE_CLS = bsc_dcc_objects.StgFile
 
     def __init__(self, path, file_path=None):
@@ -23,9 +23,9 @@ class XgnDescription(
     mya_abstracts.AbsMyaNodeForFileReference,
     mya_abstracts.AbsMyaShapeDef,
 ):
-    DCC_PORT_CLS = mya_dcc_obj_utility.Port
+    DCC_PORT_CLS = _utility.Port
     STG_FILE_CLS = bsc_dcc_objects.StgFile
-    TRANSFORM_CLS = mya_dcc_obj_node_for_dag.Transform
+    TRANSFORM_CLS = _node_for_dag.Transform
 
     def __init__(self, path, file_path=None):
         super(XgnDescription, self).__init__(

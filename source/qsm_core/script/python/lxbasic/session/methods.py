@@ -3,7 +3,7 @@ import functools
 
 import lxbasic.resource as bsc_resource
 
-from . import base as bsc_ssn_base
+from . import base as _base
 
 
 class Hook(object):
@@ -17,13 +17,13 @@ class Hook(object):
             if hook_type in {
                 'python-script', 'shell-script'
             }:
-                session = bsc_ssn_base.CommandSession(
+                session = _base.CommandSession(
                     type=hook_type,
                     hook=hook_key,
                     configure=hook_configure
                 )
             else:
-                session = bsc_ssn_base.GenerSession(
+                session = _base.GenerSession(
                     type=hook_type,
                     hook=hook_key,
                     configure=hook_configure

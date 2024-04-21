@@ -1852,13 +1852,13 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
 
     def __item_show_deferred_fnc(self, prx_item, scheme, use_as_tree=True):
         def rpc_lock_folder_fnc_():
-            bsc_storage.StgPathPermissionMtd.change_mode(path, mode='555')
+            bsc_storage.StgPermissionMtd.change_mode(path, mode='555')
             prx_item.set_status(
                 prx_item.ValidationStatus.Locked
             )
 
         def rpc_unlock_folder_fnc_():
-            bsc_storage.StgPathPermissionMtd.change_mode(path, mode='775')
+            bsc_storage.StgPermissionMtd.change_mode(path, mode='775')
             prx_item.set_status(
                 prx_item.ValidationStatus.Normal
             )
@@ -1867,7 +1867,7 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
             file_paths = bsc_storage.StgDirectoryOpt(path).get_all_file_paths()
             with bsc_log.LogProcessContext.create(maximum=len(file_paths), label='rpc unlock files (555)') as g_p:
                 for i_file_path in file_paths:
-                    bsc_storage.StgPathPermissionMtd.change_mode(i_file_path, mode='555')
+                    bsc_storage.StgPermissionMtd.change_mode(i_file_path, mode='555')
                     g_p.do_update()
 
                 prx_item.set_status(
@@ -1879,7 +1879,7 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
             with bsc_log.LogProcessContext.create(maximum=len(file_paths), label='rpc unlock files (775)') as g_p:
                 for i_file_path in file_paths:
                     i_file_opt = bsc_storage.StgFileOpt(i_file_path)
-                    bsc_storage.StgPathPermissionMtd.change_mode(i_file_path, mode='775')
+                    bsc_storage.StgPermissionMtd.change_mode(i_file_path, mode='775')
                     g_p.do_update()
 
                 prx_item.set_status(

@@ -21,7 +21,7 @@ import lxbasic.core as bsc_core
 # universe
 from .. import core as unr_core
 
-from . import base as unr_abs_base
+from . import base as _base
 
 
 # obj/type/def
@@ -738,7 +738,7 @@ class AbsObjAttributesExtraDef(object):
 # <obj>
 class AbsObj(
     # base
-    unr_abs_base.AbsObjBaseDef,
+    _base.AbsObjBaseDef,
     # type
     AbsObjTypeExtraDef,
     # path
@@ -752,7 +752,7 @@ class AbsObj(
     AbsObjPropertiesExtraDef,
     AbsObjAttributesExtraDef,
     # gui
-    unr_abs_base.AbsGuiExtraDef,
+    _base.AbsGuiExtraDef,
 ):
     """
     abstract for <obj>
@@ -948,7 +948,7 @@ class AbsObjStgExtraDef(object):
 
 
 class AbsStgDirectory(
-    unr_abs_base.AbsObjBaseDef,
+    _base.AbsObjBaseDef,
     AbsObjDagExtraDef,
     AbsObjStgExtraDef
 ):
@@ -1083,7 +1083,7 @@ class AbsStgDirectory(
 
 
 class AbsStgFile(
-    unr_abs_base.AbsObjBaseDef,
+    _base.AbsObjBaseDef,
     AbsObjDagExtraDef,
     AbsObjStgExtraDef
 ):
@@ -1295,7 +1295,7 @@ class AbsStgFile(
                             'relation="{}" >> "{}"'.format(self.path, file_path_tgt)
                         )
                     else:
-                        bsc_storage.StgPathPermissionMtd.unlock(
+                        bsc_storage.StgPermissionMtd.unlock(
                             self.path
                         )
                         shutil.copy2(self.path, file_path_tgt)

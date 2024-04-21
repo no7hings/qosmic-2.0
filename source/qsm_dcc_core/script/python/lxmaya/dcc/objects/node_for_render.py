@@ -4,7 +4,7 @@ from ...core.wrap import *
 
 from ... import abstracts as mya_abstracts
 # maya dcc objects
-from . import node as mya_dcc_obj_node
+from . import node as _node
 
 
 class RenderOption(object):
@@ -31,7 +31,7 @@ class RenderOption(object):
     RENDER_GLOBALS = 'defaultRenderGlobals'
 
     def __init__(self):
-        self._render_globals = mya_dcc_obj_node.Node(self.RENDER_GLOBALS)
+        self._render_globals = _node.Node(self.RENDER_GLOBALS)
 
     @classmethod
     def set_animation_enable(cls, boolean):
@@ -104,7 +104,7 @@ class AndRenderOption(object):
     ]
 
     def __init__(self):
-        self._options_obj = mya_dcc_obj_node.Node(self.AND_OPTIONS)
+        self._options_obj = _node.Node(self.AND_OPTIONS)
 
     @classmethod
     def set_image_format(cls, image_format):
@@ -117,7 +117,7 @@ class AndRenderOption(object):
     @classmethod
     def get(cls):
         for i in [cls.AND_OPTIONS]:
-            obj = mya_dcc_obj_node.Node(i)
+            obj = _node.Node(i)
             obj_ports_opt = mya_abstracts.ObjPortsOpt(obj.path)
             port_names = obj_ports_opt.get_port_names()
             for port_name in port_names:

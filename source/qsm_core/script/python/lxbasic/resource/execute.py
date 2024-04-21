@@ -1,6 +1,6 @@
 # coding:utf-8
 # resource
-from . import base as rsc_cor_base
+from . import base as _base
 
 import platform
 
@@ -11,7 +11,7 @@ class RscExtendExe(object):
     @classmethod
     def get(cls, key):
         platform_key = platform.system().lower()
-        result = rsc_cor_base.ExtendResource.get(
+        result = _base.ExtendResource.get(
             '{}/{}/{}'.format(cls.BRANCH, platform_key, key)
         )
         if result is not None:

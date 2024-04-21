@@ -46,12 +46,12 @@ class ScpResourcesAddForSurface(object):
             texture_type_tag
             ):
         file_opt = bsc_storage.StgFileOpt(file_path)
-        file_name_p_opt = bsc_core.PtnParseOpt(
+        file_name_p_opt = bsc_core.PtnStgParseOpt(
             file_name_pattern
         )
         var = file_name_p_opt.get_variants(file_opt.get_name_base())
         if var:
-            resource_name_p_opt = bsc_core.PtnParseOpt(resource_name_pattern)
+            resource_name_p_opt = bsc_core.PtnStgParseOpt(resource_name_pattern)
             resource_name_p_opt.update_variants(**var)
             if not resource_name_p_opt.get_keys():
                 resource_name = resource_name_p_opt.get_value()

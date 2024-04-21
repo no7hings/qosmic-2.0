@@ -7,18 +7,18 @@ import lxbasic.texture as bsc_texture
 # arnold
 from .wrap import *
 
-from . import base as and_cor_base
+from . import base as _base
 
 
 class AndImageOpt(object):
     @classmethod
     def _get_info(cls, file_path):
         _f = bsc_core.auto_encode(file_path)
-        width, height = and_cor_base.AndImage.get_resolution(_f) or (0, 0)
+        width, height = _base.AndImage.get_resolution(_f) or (0, 0)
         dic = dict(
             bit=cls._get_bit(_f) or 0,
             type=cls._get_type(_f),
-            channel_count=and_cor_base.AndImage.get_channel_count(_f),
+            channel_count=_base.AndImage.get_channel_count(_f),
             width=width,
             height=height
         )
@@ -26,15 +26,15 @@ class AndImageOpt(object):
 
     @staticmethod
     def _get_bit(file_path):
-        return and_cor_base.AndImage.get_bit(file_path)
+        return _base.AndImage.get_bit(file_path)
 
     @staticmethod
     def _get_type(file_path):
-        return and_cor_base.AndImage.get_type(file_path)
+        return _base.AndImage.get_type(file_path)
 
     @staticmethod
     def _get_channel_count(file_path):
-        return and_cor_base.AndImage.get_channel_count(file_path)
+        return _base.AndImage.get_channel_count(file_path)
 
     @classmethod
     def _get_is_srgb(cls, file_path):

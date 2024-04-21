@@ -7,7 +7,7 @@ import lxbasic.storage as bsc_storage
 
 import lxsession.core as ssn_core
 
-from lxgeneral.rsv import utl_rsv_obj_abstract
+from qsm_hook_general.rsv import utl_rsv_obj_abstract
 
 from lxshotgun.rsv.scripts import _stg_rsv_obj_utility
 
@@ -208,10 +208,10 @@ class RsvShotgunHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
         directory_path = directory_rsv_unit.get_result(
             version=version
         )
-        bsc_storage.StgPathPermissionMtd.lock_all_directories(
+        bsc_storage.StgPermissionMtd.lock_all_directories(
             directory_path
         )
-        bsc_storage.StgPathPermissionMtd.lock_all_files(
+        bsc_storage.StgPermissionMtd.lock_all_files(
             directory_path
         )
 

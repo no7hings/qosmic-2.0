@@ -5,7 +5,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.content as bsc_content
 # resource
-from . import base as rsc_cor_base
+from . import base as _base
 
 
 class RscHook(object):
@@ -13,24 +13,24 @@ class RscHook(object):
 
     @classmethod
     def get_yaml(cls, key, search_paths=None):
-        return rsc_cor_base.ExtendResource.get(
+        return _base.ExtendResource.get(
             '{}/{}.yml'.format(cls.BRANCH, key), search_paths
         )
 
     @classmethod
     def get_python(cls, key, search_paths=None):
-        return rsc_cor_base.ExtendResource.get(
+        return _base.ExtendResource.get(
             '{}/{}.py'.format(cls.BRANCH, key), search_paths
         )
 
     @classmethod
     def get_shell(cls, key, search_paths=None):
         if platform.system() == 'Linux':
-            return rsc_cor_base.ExtendResource.get(
+            return _base.ExtendResource.get(
                 '{}.sh'.format(key), search_paths
             )
         elif platform.system() == 'Windows':
-            return rsc_cor_base.ExtendResource.get(
+            return _base.ExtendResource.get(
                 '{}.bat'.format(key)
             )
 

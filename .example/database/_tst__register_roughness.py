@@ -16,7 +16,7 @@ if __name__ == '__main__':
 
     p = '/production/library/resource/all/imperfection/{resource_name}/v0001/texture/original/src/{resource_name}.mask.jpg'
 
-    p_o = bsc_core.PtnParseOpt(p)
+    p_o = bsc_core.PtnStgParseOpt(p)
     for i in p_o.get_matches():
         i_f_src = i['result']
         i_f_o_src = bsc_storage.StgFileOpt(i_f_src)

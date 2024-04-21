@@ -9,9 +9,9 @@ from ...core.wrap import *
 
 from ... import core as mya_core
 # maya dcc objects
-from . import utility as mya_dcc_obj_utility
+from . import utility as _utility
 
-from . import node_for_dag as mya_dcc_obj_node_for_dag
+from . import node_for_dag as _node_for_dag
 
 
 class MeshComponent(bsc_dcc_abstracts.AbsGuiExtraDef):
@@ -103,9 +103,9 @@ class Component(bsc_dcc_abstracts.AbsGuiExtraDef):
         return self.__str__()
 
 
-class Mesh(mya_dcc_obj_node_for_dag.Shape):
+class Mesh(_node_for_dag.Shape):
     COMPONENT_CLS = MeshComponent
-    DCC_PORT_CLS = mya_dcc_obj_utility.Port
+    DCC_PORT_CLS = _utility.Port
 
     def __init__(self, path):
         super(Mesh, self).__init__(path)
@@ -424,29 +424,29 @@ class Mesh(mya_dcc_obj_node_for_dag.Shape):
         self.get_port('visibility').set(boolean)
 
 
-class Curve(mya_dcc_obj_node_for_dag.Shape):
-    DCC_PORT_CLS = mya_dcc_obj_utility.Port
+class Curve(_node_for_dag.Shape):
+    DCC_PORT_CLS = _utility.Port
 
     def __init__(self, path):
         super(Curve, self).__init__(path)
 
 
-class Geometry(mya_dcc_obj_node_for_dag.Shape):
-    DCC_PORT_CLS = mya_dcc_obj_utility.Port
+class Geometry(_node_for_dag.Shape):
+    DCC_PORT_CLS = _utility.Port
 
     def __init__(self, path):
         super(Geometry, self).__init__(path)
 
 
-class XgenPalette(mya_dcc_obj_node_for_dag.Shape):
-    DCC_PORT_CLS = mya_dcc_obj_utility.Port
+class XgenPalette(_node_for_dag.Shape):
+    DCC_PORT_CLS = _utility.Port
 
     def __init__(self, path):
         super(XgenPalette, self).__init__(path)
 
 
-class XgenSplineGuide(mya_dcc_obj_node_for_dag.Shape):
-    DCC_PORT_CLS = mya_dcc_obj_utility.Port
+class XgenSplineGuide(_node_for_dag.Shape):
+    DCC_PORT_CLS = _utility.Port
 
     def __init__(self, path):
         super(XgenSplineGuide, self).__init__(path)

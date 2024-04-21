@@ -35,7 +35,7 @@ def main(session):
         base_variants = dict(root=dtb_opt.get_stg_root())
         #
         proxy_ass_file_p = dtb_opt.get_pattern(keyword='proxy-ass-file')
-        proxy_ass_file_p_o = bsc_core.PtnParseOpt(proxy_ass_file_p)
+        proxy_ass_file_p_o = bsc_core.PtnStgParseOpt(proxy_ass_file_p)
         proxy_ass_file_p_o.update_variants(**base_variants)
         #
         window = session.get_window()

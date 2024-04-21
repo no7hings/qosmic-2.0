@@ -5,14 +5,14 @@ import lxuniverse.core as unr_core
 # usd
 from .wrap import *
 
-from . import configure as usd_cor_configure
+from . import configure as _configure
 
 
 class UsdTypeMtd(object):
     @classmethod
     def get(cls, key):
-        if key in usd_cor_configure.UsdTypes.MAPPER:
-            return usd_cor_configure.UsdTypes.MAPPER[key]
+        if key in _configure.UsdTypes.MAPPER:
+            return _configure.UsdTypes.MAPPER[key]
 
 
 class UsdPrimQuery(object):

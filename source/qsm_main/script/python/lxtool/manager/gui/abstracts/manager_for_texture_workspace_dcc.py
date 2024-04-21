@@ -19,7 +19,7 @@ import lxresolver.core as rsv_core
 
 import lxgui.core as gui_core
 
-import lxgeneral.rsv.objects as utl_rsv_objects
+import qsm_hook_general.rsv.objects as gnl_rsv_objects
 
 
 class _GuiCmdForNewVersion(object):
@@ -221,7 +221,7 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
         self._dcc_objs = []
 
     def _set_texture_workspace_update_(self):
-        self._rsv_workspace_texture_opt = utl_rsv_objects.RsvAssetTextureOpt(self._rsv_task)
+        self._rsv_workspace_texture_opt = gnl_rsv_objects.RsvAssetTextureOpt(self._rsv_task)
         current_variant = 'main'
         self._rsv_workspace_texture_opt.set_current_variant(current_variant)
         if self._set_workspace_check_(current_variant) is True:
@@ -307,7 +307,7 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
                     maximum=len(unlocked_directory_paths), label='lock version directory'
                 ) as g_p:
                     for _i in unlocked_directory_paths:
-                        bsc_storage.StgPathPermissionMtd.lock(_i)
+                        bsc_storage.StgPermissionMtd.lock(_i)
                         g_p.do_update()
             #
             time.sleep(2)

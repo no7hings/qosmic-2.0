@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxmaya.ssn.objects as mya_ssn_objects
+import qsm_hook_maya.ssn.objects as mya_ssn_objects
 
 app = mya_ssn_objects.SsnRsvApplication()
 

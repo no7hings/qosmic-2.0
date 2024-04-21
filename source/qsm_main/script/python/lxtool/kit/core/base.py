@@ -190,7 +190,7 @@ class KitDesktopHookAddOpt(object):
         windows_shell_script = self._options.get('script.windows')
         linux_shell_script = self._options.get('script.linux')
 
-        bsc_storage.StgPathPermissionMtd.create_directory(
+        bsc_storage.StgPermissionMtd.create_directory(
             bsc_storage.StgFileMtd.get_directory(configure_file_path)
         )
 
