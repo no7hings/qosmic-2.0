@@ -1,0 +1,36 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'rv'
+        #
+        name: 'Video Composite'
+        icon_name: 'application/python'
+#
+hook_option:
+    engine: 'python'
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        with_video_mov: False
+        #
+        composite_use_katana_video_all_mov: False
+        #
+        layers: []
+        render_passes: []
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

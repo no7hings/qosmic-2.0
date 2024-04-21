@@ -1,0 +1,16 @@
+option:
+    type: tool-panel
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'asset'
+        #
+        name: 'Asset Camera Create or Publish'
+        icon_name: 'application/python'
+#
+hook_option:
+    script:
+        project: ''
+        asset: ''

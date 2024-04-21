@@ -1,0 +1,82 @@
+option:
+    type: rsv-task-batcher
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Any Export Build'
+        icon_name: 'application/python'
+#
+hook_option:
+    engine: python
+    #
+    script:
+        # scheme: asset-maya-publish / asset-maya-create-and-publish
+        choice_scheme: 'asset-maya-publish'
+        version_scheme: 'new'
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        # settings for any export
+        with_scene: False
+        #
+        with_render_texture: False
+        with_preview_texture: False
+        with_look_yml: False
+        #
+        camera_main_frame_range: [1, 124]
+        #
+        with_camera_abc: False
+        with_camera_usd: False
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []
+#
+option_hooks:
+    # create shotgun task and version
+    - 'rsv-task-methods/asset/shotgun/gen-shotgun-create': {
+        choice_scheme_includes: [
+            'asset-*-publish',
+        ],
+        dependencies: [
+            '../maya/gen-any-export',
+            '../katana/gen-any-export',
+        ],
+        inherit_keys: [
+            'extra_key',
+            #
+            'version_type',
+            'movie_file',
+            'description',
+        ],
+        create_shotgun_task: True,
+        create_shotgun_version: True,
+    }
+    # version extra
+    - 'rsv-task-methods/asset/python/gen-version-extra': {
+        choice_scheme_includes: [
+            'asset-*-publish',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+        ],
+        #
+        with_shotgun_dependency: True,
+        with_shotgun_file: True,
+        #
+        with_new_registry_json: True,
+        with_new_dependency: True,
+        #
+        with_version_link: True,
+        with_version_lock: True,
+    }

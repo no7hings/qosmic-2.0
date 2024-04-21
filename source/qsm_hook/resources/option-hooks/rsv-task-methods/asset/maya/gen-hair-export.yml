@@ -1,0 +1,36 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: maya
+        #
+        name: 'General Hair Export'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: maya
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        open_file: True
+        save_file: False
+        #
+        with_hair_xgen: False
+        #
+        with_hair_xgen_usd: False
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

@@ -1,0 +1,314 @@
+option:
+    type: rsv-task-batcher
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'maya'
+        #
+        name: 'General Surface Export'
+        icon_name: 'application/python'
+#
+hook_option:
+    engine: python
+    #
+    script:
+        # scheme
+        choice_scheme: 'asset-maya-publish'
+        version_scheme: 'new'
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        extra_key: ''
+        # shotgun
+        version_type: ''
+        movie_file: ''
+        description: ''
+        # validation
+        validation_info_file: ''
+        #
+        with_workspace_texture_lock: False
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []
+#
+option_hooks:
+    # gen > create shot gun task fist
+    - 'rsv-task-methods/asset/shotgun/gen-shotgun-create': {
+        choice_scheme_includes: [
+            'asset-*-publish',
+        ],
+        inherit_keys: [
+            'extra_key',
+            #
+            'version_type',
+            'movie_file',
+            'description',
+            #
+            'validation_info_file',
+        ],
+        create_shotgun_task: True,
+        create_shotgun_version: True,
+        #
+        with_review_mov: True,
+        with_validation_info: True,
+    }
+    # for maya scheme
+    # maya > maya scene export
+    - 'rsv-task-methods/asset/maya/gen-scene-export': {
+        choice_scheme_includes: [
+            'asset-maya-*',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+        ],
+        #
+        with_texture_tx: True,
+        with_scene: True,
+        #
+        with_snapshot_preview: True,
+        create_review_link: True,
+    }
+    # maya > maya geometry export
+    - 'rsv-task-methods/asset/maya/gen-geometry-export': {
+        choice_scheme_includes: [
+            'asset-maya-*',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+        ],
+        with_geometry_usd: True,
+        with_geometry_uv_map_usd: True,
+    }
+    # maya > maya look export
+    - 'rsv-task-methods/asset/maya/gen-look-export': {
+        choice_scheme_includes: [
+            'asset-maya-*',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+            #
+            '../maya/gen-scene-export',
+        ],
+        #
+        with_texture_tx: True,
+        #
+        with_look_ass: True,
+        with_look_yml: True,
+    }
+    # maya > maya proxy export
+    - 'rsv-task-methods/asset/maya/gen-proxy-export': {
+        choice_scheme_includes: [
+            'asset-maya-publish',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+        ],
+        with_proxy_xarc: True,
+    }
+    # for katana scheme
+    # katana > katana scene export
+    - 'rsv-task-methods/asset/katana/gen-scene-export': {
+        choice_scheme_includes: [
+            'asset-katana-*',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+        ],
+        inherit_keys: [
+            'with_workspace_texture_lock'
+        ],
+        #
+        with_texture_tx: True,
+        with_scene: True,
+    }
+    # katana > katana geometry export
+    - 'rsv-task-methods/asset/katana/gen-geometry-export': {
+        choice_scheme_includes: [
+            'asset-katana-*',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+        ],
+        #
+        with_geometry_usd: True,
+        with_geometry_uv_map_usd: True,
+    }
+    # katana > katana look export
+    - 'rsv-task-methods/asset/katana/gen-look-export': {
+        choice_scheme_includes: [
+            'asset-katana-*',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+            #
+            '../katana/gen-scene-export',
+        ],
+        #
+        with_texture_tx: True,
+        #
+        with_look_ass: True,
+        with_look_klf: True,
+    }
+    # for maya to katana scheme
+    # maya to katana > katana scene create
+    - 'rsv-task-methods/asset/katana/gen-scene-create': {
+        choice_scheme_includes: [
+            'asset-maya-*',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+            #
+            '../maya/gen-geometry-export',
+            '../maya/gen-look-export',
+            #
+            '../usd/gen-usd-create',
+        ],
+        create_scene_src: True,
+        with_scene_link: True,
+    }
+    # maya to katana > katana look export
+    - 'rsv-task-methods/asset/katana/gen-look-export': {
+        choice_scheme_includes: [
+            'asset-maya-*',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+            #
+            '../katana/gen-scene-create',
+        ],
+        #
+        with_look_klf: True,
+    }
+    # for katana to maya scheme
+    # katana to maya > maya scene create
+    - 'rsv-task-methods/asset/maya/gen-scene-create': {
+        choice_scheme_includes: [
+            'asset-katana-*',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+            #
+            '../katana/gen-look-export',
+            #
+            '../usd/gen-usd-create',
+        ],
+        #
+        create_scene_src: True,
+        #
+        with_scene_link: True,
+        #
+        with_build: True,
+        # sub kwargs for build
+        with_model_geometry: True,
+        with_model_dynamic: True,
+        with_groom_geometry: True,
+        #
+        with_surface_geometry_uv_map: True,
+        with_surface_look: True,
+        #
+        geometry_var_names: [ 'hi' ],
+    }
+    # katana to maya > maya look export
+    - 'rsv-task-methods/asset/maya/gen-look-export': {
+        choice_scheme_includes: [
+            'asset-katana-*',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+            #
+            '../maya/gen-scene-create',
+        ],
+        #
+        with_look_ass: True,
+        with_proxy_ass: True,
+    }
+    # katana to maya > maya proxy export
+    - 'rsv-task-methods/asset/maya/gen-proxy-export': {
+        choice_scheme_includes: [
+            'asset-katana-publish',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+            #
+            '../maya/gen-scene-create',
+        ],
+        with_proxy_xarc: True,
+    }
+    # gen > usd create
+    - 'rsv-task-methods/asset/usd/gen-usd-create': {
+        choice_scheme_includes: [
+            'asset-*-*',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+            # maya
+            '../maya/gen-geometry-export',
+            '../maya/gen-look-export',
+            # katana
+            '../katana/gen-geometry-export',
+            '../katana/gen-look-export',
+        ],
+        with_geometry_display_color_usd: False,
+        with_geometry_user_property_usd: False,
+        with_component_usd: True,
+    }
+    # gen, publish > geometry import
+    - 'rsv-task-methods/asset/maya/gen-geometry-import': {
+        choice_scheme_includes: [
+            'asset-*-publish',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+            #
+            '../usd/gen-usd-create',
+        ],
+        with_geometry_uv_map: True,
+        target_task_args: [
+            ['mod', 'modeling'],
+        ],
+    }
+    # gen > shotgun
+    - 'rsv-task-methods/asset/python/gen-version-extra': {
+        choice_scheme_includes: [
+            'asset-*-publish',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+            # maya
+            '../maya/gen-scene-export',
+            '../maya/gen-geometry-export',
+            '../maya/gen-look-export',
+            # katana
+            '../katana/gen-scene-export',
+            '../katana/gen-geometry-export',
+            '../katana/gen-look-export',
+            # usd
+            '../usd/gen-usd-create',
+        ],
+        inherit_keys: [
+            'extra_key',
+            #
+            'version_type',
+            'movie_file',
+            'description',
+        ],
+        #
+        with_shotgun_dependency: True,
+        with_shotgun_file: True,
+        #
+        with_new_registry_json: True,
+        with_new_dependency: True,
+        #
+        with_version_link: True,
+        with_version_lock: True,
+    }

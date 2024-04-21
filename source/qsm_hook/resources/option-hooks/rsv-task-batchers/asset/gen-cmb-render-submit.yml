@@ -1,0 +1,283 @@
+option:
+    type: rsv-task-batcher
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'render'
+        #
+        name: 'General Combination Render Submit'
+        icon_name: 'application/python'
+#
+hook_option:
+    engine: python
+    #
+    script:
+        # scheme
+        choice_scheme: 'asset-model-maya-output'
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        cameras: ['full_body']
+        layers: ['master']
+        light_passes: ['all']
+        look_passes: ['plastic']
+        qualities: ['low']
+        #
+        shot: ''
+        shot_asset: ''
+        # asset
+        cache_asset_frames: [1001]
+        render_asset_frames: [1001]
+        render_asset_frame_step: 1.0
+        # shot
+        cache_shot_frames: [1001]
+        render_shot_frames: [1001]
+        render_shot_frame_step: 1.0
+        #
+        render_arnold_aov_enable: True
+        #
+        render_override_enable: False
+        render_override_percent: 100%
+        #
+        render_arnold_override_enable: False
+        render_arnold_override_aa_sample: 6
+        #
+        light_pass_override_enable: False
+        light_pass_override_scheme: 'light_rig'
+        #
+        light_pass_all: ''
+        light_pass_add_1: ''
+        light_pass_add_2: ''
+        #
+        usd_version_enable: True
+        usd_version_override_enable: True
+        usd_reverse_face_vertex_enable: True
+        #
+        deadline_priority: 50
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+        #
+        error_limit: 1
+    #
+    rez:
+        extend_packages: []
+#
+option_hooks:
+    # list, item is option-hook-key
+    # maya scene export
+    - 'rsv-task-methods/asset/maya/gen-scene-export': {
+        choice_scheme_includes: [
+            'asset-*-maya-output',
+        ],
+        with_texture_tx: True,
+        with_scene: True,
+    }
+    # maya shot-scene export
+    - 'rsv-task-methods/asset/maya/gen-shot-scene-export': {
+        choice_scheme_includes: [
+            'asset-rig-maya-output',
+        ],
+        inherit_keys: [
+            'shot',
+            'shot_asset',
+        ],
+        dependencies: [
+            '../maya/gen-scene-export',
+        ],
+        copy_shot_scene_src: True,
+        with_shot_scene: True,
+    }
+    # maya geometry export
+    - 'rsv-task-methods/asset/maya/gen-geometry-export': {
+        choice_scheme_includes: [
+            'asset-*-maya-output',
+        ],
+        with_geometry_usd: True,
+        with_geometry_uv_map_usd: True,
+    }
+    # maya shot geometry export for rig
+    - 'rsv-task-methods/asset/maya/gen-shot-geometry-export': {
+        choice_scheme_includes: [
+            'asset-rig-maya-output',
+        ],
+        inherit_keys: [
+            'shot',
+            'shot_asset',
+            'cache_shot_frames',
+        ],
+        dependencies: [
+            '../maya/gen-shot-scene-export',
+        ],
+        with_shot_geometry_usd: True,
+    }
+    # maya look export
+    - 'rsv-task-methods/asset/maya/gen-look-export': {
+        choice_scheme_includes: [
+            'asset-*-maya-output',
+        ],
+        with_texture_tx: True,
+        with_look_ass: True,
+    }
+    # maya hair export for groom
+    - 'rsv-task-methods/asset/maya/gen-hair-export': {
+        choice_scheme_includes: [
+            'asset-groom-maya-output',
+        ],
+        dependencies: [
+            '../maya/gen-scene-export',
+        ],
+        with_hair_xgen: True,
+        with_hair_xgen_usd: True,
+    }
+    # maya shot hair export for rig
+    - 'rsv-task-methods/asset/maya/gen-shot-hair-export': {
+        choice_scheme_includes: [
+            'asset-rig-maya-output',
+        ],
+        inherit_keys: [
+            'shot',
+            'shot_asset',
+            'cache_shot_frames',
+        ],
+        dependencies: [
+            '../maya/gen-shot-scene-export',
+        ],
+        with_shot_hair_xgen: True,
+        with_shot_hair_xgen_usd: True,
+    }
+    # katana geometry export
+    - 'rsv-task-methods/asset/katana/gen-geometry-export': {
+        choice_scheme_includes: [
+            'asset-*-katana-output',
+        ],
+        with_geometry_usd: True,
+        with_geometry_uv_map_usd: True,
+    }
+    # katana look export
+    - 'rsv-task-methods/asset/katana/gen-look-export': {
+        choice_scheme_includes: [
+            'asset-*-katana-output',
+        ],
+        with_texture_tx: True,
+        with_look_ass: True,
+        with_look_klf: True,
+    }
+    # usd for asset
+    - 'rsv-task-methods/asset/usd/gen-usd-create': {
+        choice_scheme_includes: [
+            'asset-*-*-output',
+        ],
+        dependencies: [
+            # maya
+            '../maya/gen-scene-export',
+            '../maya/gen-geometry-export',
+            '../maya/gen-hair-export',
+            '../maya/gen-look-export',
+            # katana
+            '../katana/gen-geometry-export',
+            '../katana/gen-look-export',
+        ],
+        with_component_usd: True,
+    }
+    # usd for shot
+    - 'rsv-task-methods/asset/usd/gen-shot-usd-create': {
+        choice_scheme_includes: [
+            'asset-rig-maya-output',
+        ],
+        inherit_keys: [
+            'shot',
+            'shot_asset',
+            'cache_shot_frames',
+        ],
+        dependencies: [
+            # maya
+            '../maya/gen-shot-scene-export',
+            '../maya/gen-shot-geometry-export',
+            '../maya/gen-shot-hair-export',
+            # usd
+            '../usd/gen-usd-create',
+        ],
+        #
+        with_shot_asset_component_usd: True,
+        with_shot_set_usd: True,
+    }
+    # create render scene-file
+    - 'rsv-task-methods/asset/katana/cmb-render-scene-create': {
+        dependencies: [
+            # usd
+            '../usd/gen-usd-create',
+            '../usd/gen-shot-usd-create',
+        ],
+        inherit_keys: [
+            'cameras', 'layers', 'light_passes', 'look_passes', 'qualities',
+            'shot', 'shot_asset',
+            'render_file', 'render_output_directory',
+            #
+            'render_asset_frames',
+            'render_asset_frame_step',
+            'render_shot_frames',
+            'render_shot_frame_step',
+            #
+            'render_arnold_aov_enable',
+            #
+            'render_override_enable',
+            'render_override_percent',
+            #
+            'render_arnold_override_enable',
+            'render_arnold_override_aa_sample',
+            #
+            'light_pass_override_enable',
+            'light_pass_override_scheme',
+            #
+            'light_pass_all',
+            'light_pass_add_1',
+            'light_pass_add_2',
+            #
+            'usd_version_enable',
+            'usd_version_override_enable',
+            'usd_reverse_face_vertex_enable',
+            #
+            'deadline_priority',
+        ],
+        #
+        create_scene: True,
+    }
+    # create render
+    - 'rsv-task-methods/asset/katana/cmb-render-create': {
+        dependencies: [
+            '../katana/cmb-render-scene-create',
+        ],
+        inherit_keys: [
+            'cameras', 'layers', 'light_passes', 'look_passes', 'qualities',
+            'shot', 'shot_asset',
+            'render_file', 'render_output_directory',
+            #
+            'render_asset_frames',
+            'render_asset_frame_step',
+            'render_shot_frames',
+            'render_shot_frame_step',
+            #
+            'render_arnold_aov_enable',
+            #
+            'render_override_enable',
+            'render_override_percent',
+            #
+            'render_arnold_override_enable',
+            'render_arnold_override_aa_sample',
+            #
+            'deadline_priority',
+        ],
+        #
+        with_render: True,
+        render_use_scene: True,
+        #
+        with_video_convert: True,
+    }

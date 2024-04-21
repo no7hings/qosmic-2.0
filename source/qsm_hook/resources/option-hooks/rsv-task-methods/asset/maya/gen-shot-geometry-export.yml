@@ -1,0 +1,39 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: maya
+        #
+        name: 'General Geometry Export'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: maya
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        open_file: True
+        save_file: False
+        # extra
+        shot: ''
+        shot_asset: ''
+        # export geometry usd
+        with_shot_geometry_usd: False
+        #
+        with_shot_geometry_abc: False
+    #
+    deadline:
+        # deadline-group default is "subprocess"
+        group: subprogress
+        # pool
+        pool: subprogress
+    #
+    rez:
+        extend_packages: []

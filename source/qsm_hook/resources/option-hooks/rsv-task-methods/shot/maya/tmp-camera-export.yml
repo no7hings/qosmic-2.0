@@ -1,0 +1,41 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: maya
+        #
+        name: 'Temp Camera Export'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: maya
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        open_file: True
+        save_file: False
+        # extra
+        # export geometry usd
+        with_camera_scene: False
+        #
+        with_camera_abc: False
+        with_camera_usd: False
+        #
+        cache_frames: [1001]
+        cache_frame_samples: [-0.5, 0, 0.5]
+    #
+    deadline:
+        # deadline-group default is "subprocess"
+        group: all
+        # pool
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

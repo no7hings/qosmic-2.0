@@ -1,0 +1,40 @@
+option:
+    type: rsv-task-batcher
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'maya'
+        #
+        name: 'Surface Export'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: python
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []
+#
+option_hooks:
+    # maya method(s)
+    # create shotgun version first.
+    - 'rsv-task-methods/asset/shotgun/shotgun-create'
+    # katana method(s)
+    - 'rsv-task-methods/asset/katana/scene-export': {dependencies: ['../shotgun/shotgun-create']}
+    #
+    - 'rsv-task-methods/asset/katana/look-export': {dependencies: ['../shotgun/shotgun-create']}
+    #
+    - 'rsv-task-methods/asset/katana/render-scene-create': {dependencies: ['../usd/usd-create']}

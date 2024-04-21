@@ -1,0 +1,49 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: maya
+        #
+        name: ' General Scene Create  '
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: maya
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        open_file: True
+        save_file: False
+        # extra
+        #   main key, create use build method
+        create_scene_src: False
+        #   build option
+        with_scene: False
+        with_scene_link: False
+        #
+        with_build: False
+        #
+        with_model_geometry: False
+        with_model_dynamic: False
+        with_groom_geomtry: False
+        #
+        with_surface_geometry_uv_map: False
+        with_surface_look: False
+        # this option is removed
+        geometry_var_names: []
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

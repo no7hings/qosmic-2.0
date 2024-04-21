@@ -1,0 +1,34 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: maya
+        #
+        name: ' General Proxy Export'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: maya
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        open_file: True
+        save_file: False
+        # extra
+        with_proxy_xarc: False
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

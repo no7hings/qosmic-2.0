@@ -1,0 +1,43 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: maya
+        #
+        name: 'General Camera Export'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: maya
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        open_file: True
+        save_file: False
+        # extra
+        camera_main_frame_range: [1, 124]
+        # main camera alembic
+        with_camera_main_abc: False
+        with_camera_front_abc: False
+        #
+        with_camera_customize_abc: False
+        #
+        create_camera_persp_abc: False
+        #
+        create_camera_front_abc: False
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

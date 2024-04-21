@@ -1,0 +1,42 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: maya
+        #
+        name: 'Look Export'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: maya
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        open_file: True
+        save_file: False
+        # collection texture / texture-tx
+        # either "with_texture" or "with_texture_tx"
+        with_texture: False
+        with_texture_tx: True
+        #
+        with_look_ass: True
+        #
+        with_look_yml: False
+        #
+        with_look_properties_usd: False
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

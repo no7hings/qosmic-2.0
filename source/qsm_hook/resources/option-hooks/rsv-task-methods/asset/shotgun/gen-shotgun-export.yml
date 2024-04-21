@@ -1,0 +1,43 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: shotgun
+        #
+        name: 'Shotgun Export'
+        icon_name: 'application/shotgun'
+#
+hook_option:
+    engine: shotgun
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        with_shotgun_dependency: False
+        with_shotgun_file: False
+        #
+        with_version_link: False
+        with_version_lock: False
+        #
+        with_new_registry_json: False
+        with_new_dependency: False
+        #
+        todo: ''
+        version_type: ''
+        movie_file: ''
+        description: ''
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

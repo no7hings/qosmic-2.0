@@ -1,0 +1,32 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'render'
+        #
+        name: 'Temp Effect Render Export'
+        icon_name: 'application/python'
+#
+hook_option:
+    engine: maya-python
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        # extra
+    #
+    deadline:
+        # deadline-group default is "subprocess"
+        group: all
+        # pool
+        pool: emergency
+        #
+        error_limit: 1
+    #
+    rez:
+        extend_packages: []

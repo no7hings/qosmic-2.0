@@ -1,0 +1,146 @@
+option:
+    type: rsv-task-batcher
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'render'
+        #
+        name: 'Temp Render Submit'
+        icon_name: 'application/python'
+#
+hook_option:
+    engine: python
+    #
+    script:
+        # scheme
+        choice_scheme: 'shot-animation-maya-output'
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        cameras: ['shot']
+        layers: ['master']
+        light_passes: ['all']
+        look_passes: ['default']
+        qualities: ['low']
+        #
+        cache_frames: [1001]
+        cache_frame_samples: [-0.5, 0, 0.5]
+        #
+        render_frames: [1001]
+        render_frame_step: 1
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+        #
+        error_limit: 1
+    #
+    rez:
+        extend_packages: []
+#
+option_hooks:
+    - 'rsv-task-methods/shot/maya/tmp-scene-export': {
+        choice_scheme_includes: ['shot-animation-maya-output'],
+        with_scene: True,
+    }
+    #
+    - 'rsv-task-methods/shot/maya/tmp-camera-export': {
+        choice_scheme_includes: [ 'shot-animation-maya-output' ],
+        dependencies: ['../maya/tmp-scene-export'],
+        inherit_keys: ['cache_frames', 'cache_frame_samples'],
+        with_camera_usd: True,
+    }
+    #
+    - 'rsv-task-methods/shot/maya/tmp-cache-export': {
+        choice_scheme_includes: [ 'shot-animation-maya-output' ],
+        dependencies: ['../maya/tmp-scene-export'],
+        inherit_keys: ['cache_frames', 'cache_frame_samples'],
+        with_geometry_usd: True,
+        with_component_usd: True,
+        with_override_usd: True,
+    }
+    #
+    - 'rsv-task-methods/shot/tmp-render-create': {
+        choice_scheme_includes: [ 'shot-animation-maya-output'],
+        dependencies: ['./maya/tmp-scene-export', './maya/tmp-camera-export', './maya/tmp-cache-export'],
+        inherit_keys: [
+            'choice_scheme',
+            #
+            'cache_workspace',
+            'cache_cfx_scheme',
+            #
+            'render_look',
+            'render_frames',
+            'render_frame_step',
+            'render_chunk',
+            'render_motion_enable',
+            'render_instance_enable',
+            'render_arnold_aa_sample',
+            'render_bokeh_enable',
+            'render_background_enable',
+            'render_arnold_aa_sample',
+            #
+            'user_upload_shotgun_enable',
+            'user_tech_review_enable',
+            'user_description',
+        ]
+    }
+    # for character effect
+    - 'rsv-task-methods/shot/tmp-cfx-render-create': {
+        choice_scheme_includes: ['shot-character_effect-*-custom' ],
+        dependencies: ['./maya/tmp-scene-export', './maya/tmp-camera-export', './maya/tmp-cache-export'],
+        inherit_keys: [
+            'choice_scheme',
+            #
+            'cache_workspace',
+            'cache_cfx_scheme',
+            #
+            'render_look',
+            'render_frames',
+            'render_frame_step',
+            'render_chunk',
+            'render_motion_enable',
+            'render_instance_enable',
+            'render_arnold_aa_sample',
+            'render_bokeh_enable',
+            'render_background_enable',
+            'render_arnold_aa_sample',
+            #
+            'user_upload_shotgun_enable',
+            'user_tech_review_enable',
+            'user_description',
+        ]
+    }
+    # for effect
+    - 'rsv-task-methods/shot/tmp-efx-render-create': {
+        choice_scheme_includes: ['shot-effect-*-custom'],
+        dependencies: ['./maya/tmp-scene-export', './maya/tmp-camera-export', './maya/tmp-cache-export'],
+        inherit_keys: [
+            'usd_effect_components',
+            #
+            'choice_scheme',
+            #
+            'cache_workspace',
+            #
+            'render_look',
+            'render_frames',
+            'render_frame_step',
+            'render_chunk',
+            'render_motion_enable',
+            'render_instance_enable',
+            'render_arnold_aa_sample',
+            'render_bokeh_enable',
+            'render_background_enable',
+            'render_arnold_aa_sample',
+            #
+            'user_upload_shotgun_enable',
+            'user_tech_review_enable',
+            'user_description',
+        ]
+    }

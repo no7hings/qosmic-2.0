@@ -1,0 +1,45 @@
+option:
+    type: rsv-project-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: ''
+        #
+        name: ''
+        icon_name: ''
+#
+hook_option:
+    engine: katana-render-new
+    #
+    script:
+        batch_name: 'katana-render'
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        katana_version: ''
+        # file use for render
+        render_file: ''
+        #
+        render_output_directory: ''
+        #
+        render_frames: []
+        #
+        render_node: ''
+        #
+        option_hook_key_extend: []
+        option_hook_key_over: []
+    #
+    deadline:
+        job_context: render
+        job_software: katana
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

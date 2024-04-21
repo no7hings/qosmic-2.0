@@ -1,0 +1,46 @@
+option:
+    type: tool-panel
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'asset'
+        #
+        name: 'Asset Geometry Comparer'
+        icon_name: 'application/python'
+        #
+        size: [960, 720]
+#
+hook_option:
+    script:
+        project: ''
+        asset: ''
+        step: ''
+        task: ''
+        #
+        source_step: 'mod'
+        source_task: 'modeling'
+
+build:
+    node:
+        options:
+            usd/source_file:
+                widget: enumerate
+                value: ['None']
+                tool_tip: '...'
+
+            usd/target_file:
+                widget: enumerate
+                value: ['None']
+                tool_tip: '...'
+
+            usd/location:
+                widget: string
+                value: '/master/hi'
+                tool_tip: '...'
+
+            refresh:
+                widget: button
+                value: ''
+                tool_tip: '...'

@@ -1,0 +1,40 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: shotgun
+        #
+        name: 'Shotgun Export'
+        icon_name: 'application/shotgun'
+#
+hook_option:
+    engine: shotgun
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        # auto create shotgun task if task is non-exists do create
+        create_shotgun_qc_task: False
+        #
+        create_shotgun_qc_version: False
+        #
+        with_qc_review_mov: False
+        #
+        review_use_katana_video_all_mov: False
+        #
+        version_type: 'daily'
+        description: ''
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

@@ -1,0 +1,78 @@
+option:
+    type: tool-panel
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'asset'
+        #
+        name: 'Asset Build'
+        icon_name: 'application/python'
+#
+hook_option:
+    script:
+        project: ''
+        asset: ''
+
+build:
+    node:
+        options:
+            build_options/with_model_geometry:
+                widget: boolean
+                value: True
+                tool_tip: [ 'import "model geometry" from "USD" if it is checked' ]
+
+            build_options/with_groom_geometry:
+                widget: boolean
+                value: True
+                tool_tip: [ 'import "groom geometry" ( xgen ) from "xgen", "Alembic" if it is checked' ]
+                join_to_next: True
+
+            build_options/with_groom_grow_geometry:
+                widget: boolean
+                value: True
+                tool_tip: [ 'import "groom geometry" ( xgen-glow ) from "abc" if it is checked' ]
+
+            build_options/with_surface_geometry_uv_map:
+                widget: boolean
+                value: True
+                tool_tip: [ 'import "surface geometry uv-map" from "USD" if it is checked' ]
+                join_to_next: True
+
+            build_options/with_surface_look:
+                widget: boolean
+                value: True
+                tool_tip: [ 'import "surface look" ( material, properties, visibility, assign ) from "ASS" if it is checked' ]
+
+            build_options/with_camera:
+                widget: boolean
+                value: True
+                tool_tip: [ 'import "camera" from "abc" if it is checked' ]
+                join_to_next: True
+
+            build_options/with_light:
+                widget: boolean
+                value: True
+                tool_tip: [ 'import "light" from "ass" if it is checked' ]
+
+            build_options/save_scene:
+                widget: boolean
+                value: True
+                tool_tip: [ 'auto save scene to "temporary" if it is checked' ]
+
+            check_all:
+                widget: button
+                value: True
+                tool_tip: '...'
+                join_to_next: True
+
+            check_clear:
+                widget: button
+                value: True
+                tool_tip: '...'
+
+            render/resolution:
+                widget: float2
+                value: [2048, 2048]
+                tool_tip: [ 'set render resolution' ]

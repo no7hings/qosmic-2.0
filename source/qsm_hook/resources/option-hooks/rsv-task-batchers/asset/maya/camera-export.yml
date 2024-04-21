@@ -1,0 +1,39 @@
+option:
+    type: rsv-task-batcher
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'maya'
+        #
+        name: 'Camera Export'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: python
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []
+#
+option_hooks:
+    # create shotgun task fist
+    - 'rsv-task-methods/asset/shotgun/shotgun-create'
+    # camera
+    - 'rsv-task-methods/asset/maya/camera-export': {
+        dependencies: [
+            '../shotgun/shotgun-create'
+        ]
+    }

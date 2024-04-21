@@ -1,0 +1,36 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: test
+        #
+        name: 'Test'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: maya
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        open_file: True
+        save_file: False
+        #
+        test_0: True
+        test_1: True
+        test_2: True
+    #
+    deadline:
+        # need render, do not use subprocess
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

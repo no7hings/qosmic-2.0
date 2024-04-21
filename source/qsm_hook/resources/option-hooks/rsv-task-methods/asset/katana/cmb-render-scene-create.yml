@@ -1,0 +1,60 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'katana'
+        #
+        name: 'Katana Combination Render Scene Create'
+        icon_name: 'application/katana'
+#
+hook_option:
+    engine: katana
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        render_file: ''
+        #
+        choice_scheme: ''
+        #
+        front_camera_scheme: 'lineup'
+        #
+        cameras: []
+        layers: []
+        light_passes: []
+        look_passes: []
+        qualities: []
+        #
+        shot: ''
+        shot_asset: ''
+        #
+        render_asset_frames: []
+        render_shot_frames: []
+        render_output_directory: ''
+        #
+        light_pass_override_enable: False
+        light_pass_override_scheme: 'light_rig'
+        #
+        usd_version_enable: True
+        usd_version_override_enable: True
+        usd_reverse_face_vertex_enable: True
+        #
+        create_scene_src: False
+        create_scene: False
+        # link scene to scene-src
+        with_scene_link: False
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

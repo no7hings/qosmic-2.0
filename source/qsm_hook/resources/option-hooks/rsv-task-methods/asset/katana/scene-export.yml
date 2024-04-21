@@ -1,0 +1,40 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'katana'
+        #
+        name: 'Scene Export'
+        icon_name: 'application/katana'
+#
+hook_option:
+    engine: katana
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        open_file: True
+        save_file: False
+        # if enable use exists data create new scene-src file
+        create_scene_src: False
+        # collection texture / texture-tx
+        # either "with_texture" or "with_texture_tx"
+        with_texture: False
+        with_texture_tx: True
+        # export scene file
+        with_scene: True
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

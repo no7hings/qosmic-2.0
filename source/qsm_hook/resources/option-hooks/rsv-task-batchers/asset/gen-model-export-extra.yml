@@ -1,0 +1,203 @@
+option:
+    type: rsv-task-batcher
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'maya'
+        #
+        name: 'General Model Export(Extra)'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: python
+    #
+    script:
+        # scheme, etc. {branch}-{application}-{tag}
+        choice_scheme: 'asset-maya-publish'
+        version_scheme: 'new'
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        movie_file: ''
+        description: ''
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []
+#
+option_hooks:
+    # maya scene export
+    - 'rsv-task-methods/asset/maya/gen-scene-export': {
+        choice_scheme_includes: [
+            'asset-maya-*',
+        ],
+        dependencies: [],
+        #
+        with_texture_tx: True,
+        with_scene: True,
+        #
+        with_snapshot_preview: True,
+    }
+    # maya geometry usd export TODO: update to new hook
+    - 'rsv-task-methods/asset/maya/gen-geometry-usd-export': {
+        choice_scheme_includes: [
+            'asset-maya-*',
+        ],
+        dependencies: [],
+        with_geometry_usd: True,
+    }
+    # maya geometry export
+    - 'rsv-task-methods/asset/maya/gen-geometry-export': {
+        choice_scheme_includes: [
+            'asset-maya-*',
+        ],
+        dependencies: [
+            '../maya/gen-geometry-usd-export',
+        ],
+        with_geometry_uv_map_usd: True,
+    }
+    # maya geometry export extra
+    - 'rsv-task-methods/asset/maya/gen-geometry-export-extra': {
+        choice_scheme_includes: [
+            'asset-maya-publish',
+        ],
+        dependencies: [],
+    }
+    # maya look export
+    - 'rsv-task-methods/asset/maya/gen-look-export': {
+        choice_scheme_includes: [
+            'asset-maya-publish',
+        ],
+        dependencies: [
+            '../maya/gen-scene-export',
+        ],
+        with_texture_tx: True,
+        with_look_ass: True,
+    }
+    # maya proxy export
+    - 'rsv-task-methods/asset/maya/gen-proxy-export': {
+        choice_scheme_includes: [
+            'asset-maya-publish',
+        ],
+        dependencies: [
+            '../maya/gen-scene-export',
+        ],
+        with_proxy_xarc: True,
+    }
+    # houdini geometry proxy usd create
+    - 'rsv-task-methods/asset/houdini/gen-geometry-proxy-create': {
+        choice_scheme_includes: [
+            'asset-maya-publish',
+        ],
+        dependencies: [
+            '../maya/gen-geometry-usd-export',
+        ],
+        with_geometry_proxy_usd: True,
+        with_geometry_proxy_abc: True,
+    }
+    # usd create
+    - 'rsv-task-methods/asset/usd/gen-usd-create': {
+        choice_scheme_includes: [
+            'asset-maya-*',
+        ],
+        dependencies: [
+            '../maya/gen-geometry-usd-export',
+            '../maya/gen-geometry-export',
+            '../houdini/gen-geometry-proxy-create',
+            '../maya/gen-look-export',
+        ],
+        with_geometry_display_color_usd: True,
+        with_geometry_user_property_usd: True,
+        with_component_usd: True,
+    }
+    # for maya to katana convert ( for katana look )
+    # katana scene create
+    - 'rsv-task-methods/asset/katana/gen-scene-create': {
+        choice_scheme_includes: [
+            'asset-maya-publish',
+        ],
+        dependencies: [
+            '../usd/gen-usd-create',
+        ],
+        create_scene_src: True,
+    }
+    # katana look export
+    - 'rsv-task-methods/asset/katana/gen-look-export': {
+        choice_scheme_includes: [
+            'asset-maya-publish',
+        ],
+        dependencies: [
+            '../katana/gen-scene-create',
+        ],
+        with_look_klf: True,
+    }
+    # for preview render
+    # create scene-file for render
+    - 'rsv-task-methods/asset/katana/gen-prv-render-scene-create': {
+        choice_scheme_includes: [
+            'asset-maya-*',
+        ],
+        dependencies: [
+            '../usd/gen-usd-create',
+        ],
+        #
+        front_camera_scheme: 'assess',
+        #
+        cameras: [ 'front' ],
+        layers: [ 'high', 'shape' ],
+        light_passes: [ 'all' ],
+        look_passes: [ 'assess' ],
+        qualities: [ 'custom' ],
+        # light-pass
+        light_pass_override_enable: True,
+        light_pass_override_scheme: 'custom',
+        #
+        render_arnold_override_enable: True,
+        render_arnold_override_aa_sample: 6,
+        #
+        render_arnold_aov_enable: True,
+        # usd
+        usd_version_enable: True,
+        usd_version_override_enable: True,
+        usd_reverse_face_vertex_enable: True,
+        #
+        create_scene: True,
+    }
+    # create render
+    - 'rsv-task-methods/asset/katana/gen-prv-render-create': {
+        choice_scheme_includes: [
+            'asset-maya-*',
+        ],
+        dependencies: [
+            '../katana/gen-prv-render-scene-create',
+        ],
+        #
+        cameras: [ 'front' ],
+        layers: [ 'high', 'shape' ],
+        light_passes: [ 'all' ],
+        look_passes: [ 'assess' ],
+        qualities: [ 'custom' ],
+        #
+        render_passes: ['primary', 'ass_asset_color', 'ass_group_color', 'ass_object_color', 'ass_shell_color', 'ass_wire'],
+        #
+        layer_from_geometry_variant: True,
+        #
+        render_asset_frames: '1001-1120',
+        render_asset_frame_step: 15,
+        #
+        with_render: True,
+        render_use_scene: True,
+        #
+        with_video_composite: True,
+        #
+        with_shotgun_qc_export: True,
+    }

@@ -1,0 +1,39 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'rv'
+        #
+        name: 'Movie Convert'
+        icon_name: 'application/python'
+#
+hook_option:
+    engine: 'python'
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        image_file: ''
+        movie_file: ''
+        #
+        lut_directory: '/l/packages/pg/third_party/ocio/aces/1.0.3/baked/maya/sRGB_for_ACEScg_Maya.csp'
+        start_frame: 0
+        end_frame: 0
+        #
+        option_hook_key_extend: []
+        option_hook_key_over: []
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

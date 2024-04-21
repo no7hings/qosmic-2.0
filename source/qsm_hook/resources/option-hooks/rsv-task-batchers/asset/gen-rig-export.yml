@@ -1,0 +1,127 @@
+option:
+    type: rsv-task-batcher
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'maya'
+        #
+        name: 'Model Export'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: python
+    #
+    script:
+        choice_scheme: 'asset-maya-publish'
+        version_scheme: 'new'
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        ext_extras: ['qdraw']
+        #
+        extra_key: ''
+        # shotgun
+        version_type: ''
+        movie_file: ''
+        description: ''
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []
+#
+option_hooks:
+    # gen > create shot gun task fist
+    - 'rsv-task-methods/asset/shotgun/gen-shotgun-create': {
+        choice_scheme_includes: [
+            'asset-*-publish',
+        ],
+        inherit_keys: [
+            'extra_key',
+            #
+            'version_type',
+            'movie_file',
+            'description',
+        ],
+        create_shotgun_task: True,
+        create_shotgun_version: True,
+        #
+        with_review_mov: True,
+    }
+    # maya scene export
+    - 'rsv-task-methods/asset/maya/gen-scene-export': {
+        choice_scheme_includes: [
+            'asset-maya-*',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+        ],
+        inherit_keys: ['ext_extras'],
+        #
+        refresh_root_property: True,
+        with_texture: True,
+        with_scene: True,
+        #
+        with_snapshot_preview: True,
+        create_review_link: True,
+    }
+    # maya geometry export
+    - 'rsv-task-methods/asset/maya/gen-geometry-export': {
+        choice_scheme_includes: [
+            'asset-maya-*',
+        ],
+        dependencies: [
+            '../shotgun/gen-shotgun-create',
+        ],
+        #
+        with_geometry_usd: True,
+        with_geometry_uv_map_usd: True,
+        #
+        with_geometry_abc: True,
+    }
+    # create usd
+    - 'rsv-task-methods/asset/usd/gen-usd-create': {
+        choice_scheme_includes: [
+            'asset-maya-*',
+        ],
+        dependencies: [
+            # shotgun
+            '../shotgun/gen-shotgun-create',
+            # maya
+            '../maya/gen-geometry-export',
+            '../maya/gen-look-export',
+        ],
+        with_component_usd: True,
+    }
+    # create shotgun
+    - 'rsv-task-methods/asset/python/gen-version-extra': {
+        choice_scheme_includes: [
+            'asset-*-publish',
+        ],
+        dependencies: [
+            # shotgun
+            '../shotgun/gen-shotgun-create',
+            # maya
+            '../maya/gen-scene-export',
+            '../maya/geometry-export',
+            # usd
+            '../usd/gen-usd-create',
+        ],
+        #
+        with_shotgun_dependency: True,
+        with_shotgun_file: True,
+        #
+        with_new_registry_json: True,
+        with_new_dependency: True,
+        #
+        with_version_link: True,
+        with_version_lock: True,
+    }

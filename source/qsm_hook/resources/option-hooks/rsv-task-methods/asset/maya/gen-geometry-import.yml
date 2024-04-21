@@ -1,0 +1,39 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: maya
+        #
+        name: 'General Geometry Import'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: maya
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        open_file: True
+        save_file: False
+        # extra
+        # import geometry from usd
+        with_geometry_uv_map: False
+        # save changed scene
+        with_scene: False
+        #
+        target_task_args: ''
+ #
+    deadline:
+        # deadline-group default is "subprocess"
+        group: subprogress
+        # pool
+        pool: subprogress
+    #
+    rez:
+        extend_packages: []

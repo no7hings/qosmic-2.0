@@ -1,0 +1,36 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Image Convert'
+        icon_name: 'application/python'
+#
+hook_option:
+    engine: 'python'
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        image_file: ''
+        #
+        output_image_file: ''
+
+        option_hook_key_extend: []
+        option_hook_key_over: []
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

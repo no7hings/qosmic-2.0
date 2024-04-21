@@ -1,0 +1,64 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Katana Render Create'
+        icon_name: 'application/python'
+#
+hook_option:
+    engine: python
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        cameras: []
+        layers: []
+        light_passes: []
+        look_passes: []
+        qualities: []
+        #
+        shot: ''
+        shot_asset: ''
+        #
+        render_asset_frames: []
+        render_asset_frame_step: 1.0
+        render_shot_frames: []
+        render_shot_frame_step: 1.0
+        render_output_directory: ''
+        # render
+        with_render: False
+        #
+        render_use_scene: False
+        render_use_scene_src: False
+        # convert
+        with_video_convert: False
+        with_image_convert: False
+        # composite video from render image
+        with_video_composite: False
+        # create shotgun qc version as current step and task
+        with_shotgun_qc_export: False
+        # review
+        convert_image_exts: ['.png']
+        #
+        render_passes: ['primary', 'ass_asset_color', 'ass_group_color', 'ass_object_color', 'ass_shell_color', 'ass_wire']
+        #
+        layer_from_geometry_variant: False
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+        #
+        error_limit: 1
+    #
+    rez:
+        extend_packages: []

@@ -1,0 +1,62 @@
+option:
+    type: rsv-task-batcher
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'maya'
+        #
+        name: 'General Surface Preview Export'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: python
+    #
+    script:
+        # scheme
+        choice_scheme: 'asset-maya-publish'
+        version_scheme: 'new'
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []
+#
+option_hooks:
+    # create scene src first
+    - 'rsv-task-methods/asset/maya/gen-scene-create': {
+        choice_scheme_includes: [
+            'asset-*-create-and-publish',
+        ],
+        create_scene_src: True,
+        #
+        with_build: True,
+        with_model_geometry: True,
+        with_surface_look: True,
+        with_surface_geometry_uv_map: True,
+        #
+        geometry_var_names: [ 'hi' ],
+    }
+    # bake
+    - 'rsv-task-methods/asset/maya/gen-texture-bake-create': {
+        choice_scheme_includes: [
+            'asset-*-create-and-publish',
+        ],
+        dependencies: [
+            '../maya/gen-scene-create',
+        ],
+        with_texture_bake: True,
+        #
+        bake_resolution: 1024,
+        # link scene to work scene src
+        with_work_scene_src_link: True
+    }

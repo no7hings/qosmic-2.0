@@ -1,0 +1,60 @@
+option:
+    type: rsv-task-batcher
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'maya'
+        #
+        name: 'Model Export'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: python
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        description: ''
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []
+#
+option_hooks:
+    # create shot gun task fist
+    - 'rsv-task-methods/asset/shotgun/shotgun-create'
+    - 'rsv-task-methods/asset/maya/scene-export': {
+        dependencies: ['rsv-task-methods/asset/shotgun/shotgun-create'],
+        create_review_link: True,
+        with_texture: True,
+    }
+    - 'rsv-task-methods/asset/maya/geometry-export': {
+        dependencies: ['rsv-task-methods/asset/shotgun/shotgun-create'],
+    }
+    # create usd
+    - 'rsv-task-methods/asset/usd/gen-usd-create': {
+        dependencies: ['rsv-task-methods/asset/shotgun/shotgun-create', 'rsv-task-methods/asset/maya/geometry-export', 'rsv-task-methods/asset/maya/look-export'],
+        with_component_usd: True,
+    }
+    # create shotgun
+    - 'rsv-task-methods/asset/shotgun/shotgun-export': {
+        dependencies: [
+            'rsv-task-methods/asset/shotgun/shotgun-create',
+            'rsv-task-methods/asset/maya/scene-export',
+            'rsv-task-methods/asset/maya/geometry-export',
+            'rsv-task-methods/asset/usd/gen-usd-create'
+        ],
+        inherit_keys: [
+            'description'
+        ]
+    }

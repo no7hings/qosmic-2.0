@@ -1,0 +1,56 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: maya
+        #
+        name: 'Asset Recycles to Work'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: maya
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        open_file: True
+        save_file: False
+        # extra
+        # maya
+        recycles_maya_files: []
+        # xgen
+        recycles_xgen_cache_directories: []
+        # other
+        recycles_sp_files: []
+        recycles_zb_files: []
+        # texture
+        recycles_texture_directories: []
+        # enable/maya
+        recycles_maya_enable: False
+        # enable/xgen
+        recycles_xgen_enable: False
+        # enable/other
+        recycles_sp_enable: False
+        recycles_zb_enable: False
+        # enable/texture
+        recycles_texture_enable: False
+        # enable/maya repath
+        repath_maya_xgen_enable: False
+        repath_maya_texture_enable: False
+        #
+        convert_maya_to_katana_enable: False
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

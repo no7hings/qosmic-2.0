@@ -1,0 +1,39 @@
+option:
+    type: rsv-project-method
+    #
+    systems:
+        - '*-katana'
+    #
+    gui:
+        group_name: ''
+        #
+        name: ''
+        icon_name: ''
+#
+hook_option:
+    engine: katana
+    #
+    script:
+        batch_name: 'katana-render'
+        #
+        batch_file: ''
+        #
+        file: ''
+        #
+        katana_version: ''
+        #
+        render_file: ''
+        render_nodes: []
+        default_render_version: ''
+        default_render_frames: ''
+        #
+        auto_convert_mov: False
+    #
+    deadline:
+        # deadline-group default is "subprocess"
+        group: subprogress
+        # pool
+        pool: subprogress
+    #
+    rez:
+        extend_packages: []

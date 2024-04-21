@@ -1,0 +1,41 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: maya
+        #
+        name: 'Geometry Export'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: maya
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        open_file: True
+        save_file: False
+        # extra
+        # export geometry usd
+        with_geometry_usd: True
+        # export geometry uv-map usd
+        with_geometry_uv_map_usd: True
+        # link geometry uv-map to latest model-geometry
+        with_geometry_uv_map_usd_link: False
+        #
+        with_geometry_abc: True
+    #
+    deadline:
+        # deadline-group default is "subprocess"
+        group: subprogress
+        # pool
+        pool: subprogress
+    #
+    rez:
+        extend_packages: []

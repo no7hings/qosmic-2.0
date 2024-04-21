@@ -1,0 +1,33 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: shotgun
+        #
+        name: 'Shotgun Create'
+        icon_name: 'application/shotgun'
+#
+hook_option:
+    engine: shotgun
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        # auto create shotgun task if task is non-exists do create
+        create_shotgun_task: True
+        #
+        create_shotgun_version: True
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

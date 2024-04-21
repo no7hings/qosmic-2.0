@@ -1,0 +1,46 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'katana'
+        #
+        name: 'General Look Export'
+        icon_name: 'application/katana'
+#
+hook_option:
+    engine: katana
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        open_file: True
+        save_file: False
+        #
+        reload_set_usd: False
+        # collection texture / texture-tx
+        # either "with_texture" or "with_texture_tx"
+        with_texture: False
+        with_texture_src: False
+        with_texture_tx: False
+        #
+        with_look_ass: False
+        with_look_ass_dynamic_override_uv_maps: False
+        #
+        with_proxy_ass: False
+        #
+        with_look_klf: False
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []

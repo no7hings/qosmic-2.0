@@ -1,0 +1,146 @@
+option:
+    type: rsv-task-batcher
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'render'
+        #
+        name: 'General Preview Render Submit'
+        icon_name: 'application/python'
+#
+hook_option:
+    engine: python
+    #
+    script:
+        # scheme
+        choice_scheme: 'asset-model-maya-output'
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        front_camera_scheme: 'lineup'
+        #
+        cameras: ['front']
+        layers: ['master']
+        light_passes: ['all']
+        look_passes: ['plastic']
+        qualities: ['custom']
+        #
+        shot: ''
+        shot_asset: ''
+        # asset
+        cache_asset_frames: [1001]
+        render_asset_frames: [1001]
+        render_asset_frame_step: 1.0
+        # shot
+        cache_shot_frames: [1001]
+        render_shot_frames: [1001]
+        render_shot_frame_step: 1.0
+        #
+        render_arnold_aov_enable: False
+        #
+        render_override_enable: False
+        render_override_percent: 100%
+        #
+        render_arnold_override_enable: False
+        render_arnold_override_aa_sample: 6
+        #
+        light_pass_override_enable: True
+        light_pass_override_scheme: 'custom'
+        #
+        light_pass_all: ''
+        light_pass_add_1: ''
+        light_pass_add_2: ''
+        #
+        look_pass_default: ''
+        look_pass_custom_1: ''
+        look_pass_custom_2: ''
+        # usd
+        usd_version_enable: False
+        usd_version_override_enable: False
+        usd_reverse_face_vertex_enable: True
+        #
+        deadline_priority: 50
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+        #
+        error_limit: 1
+    #
+    rez:
+        extend_packages: []
+#
+option_hooks:
+    # create render scene-file
+    - 'rsv-task-methods/asset/katana/gen-prv-render-scene-create': {
+        inherit_keys: [
+            'cameras', 'layers', 'light_passes', 'look_passes', 'qualities',
+            'shot', 'shot_asset',
+            #
+            'render_asset_frames',
+            'render_asset_frame_step',
+            'render_shot_frames',
+            'render_shot_frame_step',
+            #
+            'render_arnold_aov_enable',
+            #
+            'render_override_enable',
+            'render_override_percent',
+            #
+            'render_arnold_override_enable',
+            'render_arnold_override_aa_sample',
+            #
+            'light_pass_override_enable',
+            'light_pass_override_scheme',
+            #
+            'light_pass_all',
+            'light_pass_add_1',
+            'light_pass_add_2',
+            #
+            'usd_version_enable',
+            'usd_version_override_enable',
+            'usd_reverse_face_vertex_enable',
+            #
+            'deadline_priority',
+        ],
+        #
+        create_scene: True,
+        with_scene_src_link: True,
+    }
+    # create render
+    - 'rsv-task-methods/asset/katana/gen-prv-render-create': {
+        dependencies: [
+            '../katana/gen-prv-render-scene-create',
+        ],
+        inherit_keys: [
+            'cameras', 'layers', 'light_passes', 'look_passes', 'qualities',
+            'shot', 'shot_asset',
+            #
+            'render_asset_frames',
+            'render_asset_frame_step',
+            'render_shot_frames',
+            'render_shot_frame_step',
+            #
+            'render_arnold_aov_enable',
+            #
+            'render_override_enable',
+            'render_override_percent',
+            #
+            'render_arnold_override_enable',
+            'render_arnold_override_aa_sample',
+            #
+            'deadline_priority',
+        ],
+        #
+        with_render: True,
+        render_use_scene: True,
+        #
+        with_image_convert: True,
+        convert_image_exts: ['.png'],
+    }

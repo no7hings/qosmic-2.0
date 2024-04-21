@@ -1,0 +1,34 @@
+option:
+    type: rsv-task-method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: usd
+        #
+        name: 'General USD Create'
+        icon_name: 'application/maya'
+#
+hook_option:
+    engine: usd
+    #
+    script:
+        # scene file-path
+        batch_file: ''
+        #
+        file: ''
+        #
+        with_geometry_display_color_usd: False
+        with_geometry_user_property_usd: False
+        #
+        with_component_usd: False
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: emergency
+    #
+    rez:
+        extend_packages: []
