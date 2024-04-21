@@ -3,7 +3,7 @@ import fnmatch
 
 import re
 
-from . import raw as bsc_cor_raw
+from . import raw as _raw
 
 
 class PthNodeMtd(object):
@@ -315,7 +315,7 @@ class PthNodeOpt(object):
         return namespacesep.join(_[:-1])
 
     def get_color_from_name(self, count=1000, maximum=255, offset=0, seed=0):
-        return bsc_cor_raw.RawColorMtd.get_color_from_string(
+        return _raw.RawColorMtd.get_color_from_string(
             self.get_name(), count=count, maximum=maximum, offset=offset, seed=seed
         )
 
@@ -333,14 +333,14 @@ class PthNodeOpt(object):
         return p
 
     def get_rgb(self, maximum=255):
-        return bsc_cor_raw.RawTextOpt(
+        return _raw.RawTextOpt(
             self.get_name()
         ).to_rgb__(maximum=maximum, s_p=50, v_p=100)
 
     def get_plant_rgb(self, maximum=255):
         for k, v in self.PLANT_HSV_MAPPER.items():
             if fnmatch.filter([self.__path_text], '*{}*'.format(k)):
-                return bsc_cor_raw.RawColorMtd.hsv2rgb(
+                return _raw.RawColorMtd.hsv2rgb(
                     v[0], v[1], v[2], maximum
                 )
         return 0.25, 0.75, 0.5

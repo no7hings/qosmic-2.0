@@ -7,7 +7,7 @@ import collections
 
 import re
 
-from . import raw as bsc_cor_raw
+from . import raw as _raw
 
 
 class ArgDictStringMtd(object):
@@ -113,7 +113,7 @@ class ArgDictStringOpt(object):
                     if _:
                         if str(_).isdigit():
                             return int(_)
-                        elif bsc_cor_raw.RawTextOpt(_).get_is_float():
+                        elif _raw.RawTextOpt(_).get_is_float():
                             return int(float(_))
                         return 0
                     return 0
@@ -127,7 +127,7 @@ class ArgDictStringOpt(object):
                     if _:
                         if str(_).isdigit():
                             return float(_)
-                        elif bsc_cor_raw.RawTextOpt(_).get_is_float():
+                        elif _raw.RawTextOpt(_).get_is_float():
                             return float(_)
                         return 0.0
                     return 0.0

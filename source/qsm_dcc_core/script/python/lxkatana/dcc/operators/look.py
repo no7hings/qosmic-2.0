@@ -5,7 +5,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.dcc.abstracts as bsc_dcc_abstracts
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 
 class AndShaderOpt(bsc_dcc_abstracts.AbsNodeOpt):
@@ -66,7 +66,7 @@ class AndShaderOpt(bsc_dcc_abstracts.AbsNodeOpt):
         #     print source_obj.get_properties()
 
     def get_properties(self):
-        properties = ctt_core.Properties(self)
+        properties = bsc_content.Properties(self)
         properties.set(
             'type', self.get_type_name(),
         )
@@ -83,7 +83,7 @@ class AndShaderOpt(bsc_dcc_abstracts.AbsNodeOpt):
         return self._obj.get_port('parameters').get_children()
 
     def get_attributes(self):
-        attributes = ctt_core.Properties(self)
+        attributes = bsc_content.Properties(self)
         ports = self.get_ports()
         for port in ports:
             enable_port = port.get_child('enable')

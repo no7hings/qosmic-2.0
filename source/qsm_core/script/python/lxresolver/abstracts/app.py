@@ -5,7 +5,7 @@ import threading
 
 import functools
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -227,7 +227,7 @@ class AbsRsvAppDefault(AbsRsvAppDef):
                     **dict(project=self._project, application=self._application)
                 )
             )
-            configure = ctt_core.Content(value=configure_file_path)
+            configure = bsc_content.Content(value=configure_file_path)
             keys = configure.get_all_leaf_keys()
             for i_key in keys:
                 i_args = configure.get(i_key)

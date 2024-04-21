@@ -3,7 +3,7 @@ import six
 
 import time
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -94,7 +94,7 @@ class KtnSGNodeOpt(object):
                     print _i_p
                     print dir(_i_p)
 
-        ps = ctt_core.Properties(self)
+        ps = bsc_content.Properties(self)
         tvl = self._traversal
         if tvl.valid():
             attrs = tvl.getLocationData().getAttrs()

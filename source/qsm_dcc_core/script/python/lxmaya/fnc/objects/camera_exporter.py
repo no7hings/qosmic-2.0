@@ -1,7 +1,7 @@
 # coding:utf-8
 import collections
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -27,7 +27,7 @@ class FncExporterForCameraYml(
     def __init__(self, option):
         super(FncExporterForCameraYml, self).__init__(option)
         #
-        self._raw = ctt_core.Content(
+        self._raw = bsc_content.Content(
             value=collections.OrderedDict()
         )
 

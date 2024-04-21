@@ -1,5 +1,5 @@
 # coding:utf-8
-from lxutil.rsv import utl_rsv_obj_abstract
+from lxgeneral.rsv import utl_rsv_obj_abstract
 
 
 class RsvDccTextureHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
@@ -55,7 +55,7 @@ class RsvDccTextureHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
         ).execute()
 
     def do_lock_asset_texture_workspace(self):
-        import lxutil.rsv.objects as utl_rsv_objects
+        import lxgeneral.rsv.objects as utl_rsv_objects
 
         import lxkatana.core as ktn_core
 

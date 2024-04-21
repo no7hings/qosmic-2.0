@@ -5,9 +5,9 @@ import collections
 
 import six
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxbasic.log as bsc_log
 
@@ -29,7 +29,7 @@ from ..dcc import objects as ktn_dcc_objects
 class ScpMacro(object):
     def __init__(self, file_path):
         self._file_path = file_path
-        self._cfg = ctt_core.Content(value=self._file_path)
+        self._cfg = bsc_content.Content(value=self._file_path)
         self._cfg.set('option.unique_name', bsc_core.TimeExtraMtd.generate_time_tag_36_(multiply=100).lower())
         #
         color_hsv = self._cfg.get('option.color_hsv')
@@ -464,7 +464,7 @@ class AbsWsp(object):
 
     def load_preset(self):
         key = self._obj_opt.get('preset.name')
-        c = ctt_core.Content(value=self.PRESET_DICT)
+        c = bsc_content.Content(value=self.PRESET_DICT)
         self._obj_opt.set_parameters_by_data(
             c.get('{}.parameters'.format(key)) or {}
         )
@@ -1066,7 +1066,7 @@ class ScpWspGeometry(AbsWsp):
 
     def __init__(self, *args, **kwargs):
         super(ScpWspGeometry, self).__init__(*args, **kwargs)
-        self._cfg = ctt_core.Content(value=self.CFG_YAML)
+        self._cfg = bsc_content.Content(value=self.CFG_YAML)
         self.PRESET_DICT = self._cfg.get('preset')
 
 
@@ -1509,7 +1509,7 @@ class ScpWspWorkspace(AbsWsp):
 
     def __init__(self, *args, **kwargs):
         super(ScpWspWorkspace, self).__init__(*args, **kwargs)
-        self._cfg = ctt_core.Content(value=self.CFG_YAML)
+        self._cfg = bsc_content.Content(value=self.CFG_YAML)
 
         self._cfg.set(
             'option.path', self._obj_opt.get_path(),

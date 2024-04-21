@@ -1,12 +1,12 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 
-print ctt_core.ContentUtil.filter(
+print bsc_content.ContentUtil.filter(
     ['abc', 'adc'], 'ab*'
 )
 
-print ctt_core.ContentUtil.filter(
+print bsc_content.ContentUtil.filter(
     ['abc', 'adc'], 'ab*'
 )
 

@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -30,7 +30,7 @@ class SceneOpt(bsc_dcc_abstracts.AbsSceneOpt):
                 file_path, 'mesh-comparer-{}'.format(self._namespace)
             )
             return self._get_mesh_data_content_(self._stage, file_path, yml_file_path)
-        return ctt_core.Content(value={})
+        return bsc_content.Content(value={})
 
     @classmethod
     def _get_mesh_data_content_(cls, stage, file_path, yml_file_path):
@@ -41,9 +41,9 @@ class SceneOpt(bsc_dcc_abstracts.AbsSceneOpt):
                     'geometry-comparer data read',
                     'cache="{}", source="{}"'.format(yml_file_path, file_path)
                 )
-                return ctt_core.Content(value=yml_file_path)
+                return bsc_content.Content(value=yml_file_path)
         #
-        content_0 = ctt_core.Content(value={})
+        content_0 = bsc_content.Content(value={})
         c = len([i for i in stage.TraverseAll()])
         if c:
             with bsc_log.LogProcessContext.create(maximum=c, label='gain geometry-comparer data') as g_p:

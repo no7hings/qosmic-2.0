@@ -6,7 +6,7 @@ if __name__ == '__main__':
 
     import lxbasic.storage as bsc_storage
 
-    import lxresource as bsc_resource
+    import lxbasic.resource as bsc_resource
 
     data = bsc_storage.StgFileOpt(
         '/production/library/resource/all/3d_plant_proxy/tree_a001_rsc/v0001/look/json/tree_a001_rsc.preview.json'

@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.storage as bsc_storage
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 key_name = 'uv_map'
 

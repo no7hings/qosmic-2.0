@@ -1,7 +1,7 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxbasic.log as bsc_log
 
@@ -615,7 +615,7 @@ class AbsKtnObj(bsc_dcc_abstracts.AbsDccNode):
         return lis
 
     def get_attributes(self):
-        attributes = ctt_core.Properties(self)
+        attributes = bsc_content.Properties(self)
         ports = self.get_leaf_ports()
         for port in ports:
             attributes.set(

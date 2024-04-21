@@ -3,7 +3,7 @@ import six
 
 import collections
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 # universe
 from .. import core as unr_core
 
@@ -285,7 +285,7 @@ class AbsObjUniverseBaseDef(object):
         pass
 
     def get_as_dict(self):
-        content = ctt_core.Content()
+        content = bsc_content.Content()
         for i_obj in self.get_objs():
             i_key = i_obj.path
             #
@@ -315,7 +315,7 @@ class AbsObjUniverseBaseDef(object):
             return [i for i in self.get_objs() if not i.get_target_connections()]
 
     def to_properties(self):
-        p = ctt_core.Properties(self)
+        p = bsc_content.Properties(self)
         for i_obj in self.get_objs():
             p.set(
                 i_obj.path, i_obj.to_properties().get_value()

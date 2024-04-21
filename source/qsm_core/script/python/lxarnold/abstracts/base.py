@@ -1,9 +1,9 @@
 # coding:utf-8
 import copy
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -104,7 +104,7 @@ class AbsObjScene(
         #
         self._platform = bsc_core.SysPlatformMtd.get_current()
 
-        self._node_configure = ctt_core.Content(
+        self._node_configure = bsc_content.Content(
             value=bsc_resource.RscExtendConfigure.get_yaml('arnold/node')
         )
         self._node_configure.do_flatten()

@@ -3,7 +3,7 @@ import sys
 
 import os
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxuniverse.core as unr_core
 

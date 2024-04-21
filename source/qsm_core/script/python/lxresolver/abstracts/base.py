@@ -21,9 +21,9 @@ import copy
 
 import threading
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxbasic.log as bsc_log
 
@@ -141,7 +141,7 @@ class RsvConfigureOpt(object):
         return rcs_fnc_(value)
 
     def get_content_as_unfold(self, key):
-        c = ctt_core.Content(value=collections.OrderedDict())
+        c = bsc_content.Content(value=collections.OrderedDict())
         keys = self.get_keys('{}.*'.format(key))
         for i_key in keys:
             i_value = self.get_as_unfold(i_key)
@@ -151,7 +151,7 @@ class RsvConfigureOpt(object):
 
     def get_as_unfold(self, key):
         keys_all = self.get_all_keys()
-        return ctt_core.ContentUtil.unfold_fnc(
+        return bsc_content.ContentUtil.unfold_fnc(
             key, keys_all, self._keys_exclude, self.get
         )
 
@@ -1719,9 +1719,9 @@ class AbsRsvProject(
         #
         self._root_dict = collections.OrderedDict()
         self._root_step_choice = None
-        self._root_configure = ctt_core.Content(value=collections.OrderedDict())
+        self._root_configure = bsc_content.Content(value=collections.OrderedDict())
         #
-        self._static_variant_configure = ctt_core.Content(value=collections.OrderedDict())
+        self._static_variant_configure = bsc_content.Content(value=collections.OrderedDict())
         #
         self._rsv_matcher = self._generate_rsv_matcher(
             self._pattern,
@@ -1732,7 +1732,7 @@ class AbsRsvProject(
         raw.update(project_raw)
         self._setup_rsv_configure(raw)
         #
-        self._configure = ctt_core.Content(value=self._raw)
+        self._configure = bsc_content.Content(value=self._raw)
         self._root_choices = self._configure.get('root-choices')
         self._root_step_choice = self._configure.get_as_content(
             'root-step-choice'
@@ -2838,7 +2838,7 @@ class AbsRsvProject(
 
     # app
     def get_rsv_app(self, application):
-        configure = ctt_core.Content(value=self.get_package_data())
+        configure = bsc_content.Content(value=self.get_package_data())
         scheme = configure.get('scheme')
         if scheme == 'default':
             return self.RSV_APP_DEFAULT_CLS(
@@ -2867,7 +2867,7 @@ class AbsRsvProject(
             'dcc-data.{}'.format(application)
         )
         extend_data = self._raw_opt.get('dcc-data.dcc-extend') or {}
-        extend_c = ctt_core.Content(value=extend_data)
+        extend_c = bsc_content.Content(value=extend_data)
         for i_k in extend_c.get_all_leaf_keys():
             i_v = extend_c.get(i_k)
             main_data.set(
@@ -2875,7 +2875,7 @@ class AbsRsvProject(
             )
         extend_data_over = self._raw_opt.get('dcc-data.{}-extend'.format(application)) or {}
         if extend_data_over:
-            extend_data_over_c = ctt_core.Content(value=extend_data_over)
+            extend_data_over_c = bsc_content.Content(value=extend_data_over)
             for i_k in extend_data_over_c.get_all_leaf_keys():
                 i_v = extend_data_over_c.get(i_k)
                 main_data.set(

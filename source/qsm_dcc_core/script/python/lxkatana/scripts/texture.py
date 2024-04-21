@@ -3,9 +3,9 @@ import six
 
 import threading
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxbasic.core as bsc_core
 
@@ -117,7 +117,7 @@ class ScpTextureBuildCommand(object):
             )
 
     def __init__(self, texture_name, texture_assign):
-        self._cfg = ctt_core.Content(
+        self._cfg = bsc_content.Content(
             value=bsc_resource.RscExtendConfigure.get_yaml('katana/node-graph/texture')
         )
         self._cfg.set(

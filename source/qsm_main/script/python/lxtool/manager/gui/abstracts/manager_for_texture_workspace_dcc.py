@@ -19,7 +19,7 @@ import lxresolver.core as rsv_core
 
 import lxgui.core as gui_core
 
-import lxutil.rsv.objects as utl_rsv_objects
+import lxgeneral.rsv.objects as utl_rsv_objects
 
 
 class _GuiCmdForNewVersion(object):

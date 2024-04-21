@@ -13,7 +13,7 @@ import six
 
 from contextlib import contextmanager
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.core as bsc_core
 
@@ -2142,7 +2142,7 @@ class AbsQtChooseExtraDef(object):
 
     # noinspection PyUnusedLocal
     def _choose_value_completion_gain_fnc_(self, *args, **kwargs):
-        return ctt_core.ContentUtil.filter(
+        return bsc_content.ContentUtil.filter(
             self._choose_values, '*{}*'.format(
                 bsc_core.auto_encode((args[0]))
             )

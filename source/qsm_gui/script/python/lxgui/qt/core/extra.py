@@ -5,7 +5,7 @@ import types
 
 import six
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.core as bsc_core
 # gui
@@ -203,7 +203,7 @@ class GuiQtMenuOpt(object):
         self._item_dic = {
             '/': self._root_menu
         }
-        if isinstance(content, ctt_core.AbsContent):
+        if isinstance(content, bsc_content.AbsContent):
             keys = content.get_keys(regex='*.properties')
             for i_key in keys:
                 i_atr_path_opt = bsc_core.PthAttributeOpt(i_key)

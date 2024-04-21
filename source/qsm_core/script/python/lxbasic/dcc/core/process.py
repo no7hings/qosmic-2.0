@@ -40,7 +40,7 @@ class MayaProcess(object):
 class PythonProcess(object):
     @classmethod
     def generate_command(cls, option):
-        import lxresource as bsc_resource
+        import lxbasic.resource as bsc_resource
 
         import lxbasic.storage as bsc_storage
 

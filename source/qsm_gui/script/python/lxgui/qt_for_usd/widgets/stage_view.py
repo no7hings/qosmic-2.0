@@ -3,7 +3,7 @@ import functools
 
 import six
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxbasic.log as bsc_log
 

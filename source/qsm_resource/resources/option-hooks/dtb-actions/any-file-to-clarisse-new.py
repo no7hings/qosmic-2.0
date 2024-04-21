@@ -8,7 +8,7 @@ def main(session):
     port = option_opt.get_as_integer('port')
 
     cmd = '''
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 import lxbasic.core as bsc_core
 file_path = bsc_resource.ExtendResource.get('scripts/any-file-to-clarisse.py')
 bsc_core.ExcExtraMtd.execute_python_file(

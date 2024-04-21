@@ -11,7 +11,7 @@ import shutil
 
 import subprocess
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -697,7 +697,7 @@ class AbsObjPropertiesExtraDef(object):
     PROPERTIES_CLS = None
 
     def _init_obj_properties_extra_def_(self):
-        self._obj_properties = ctt_core.Properties(
+        self._obj_properties = bsc_content.Properties(
             self
         )
 
@@ -824,7 +824,7 @@ class AbsObj(
         )
 
     def to_properties(self):
-        p = ctt_core.Properties(self)
+        p = bsc_content.Properties(self)
         p.set(
             'type', self.type_path
         )

@@ -3,7 +3,7 @@ import os
 
 import functools
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -123,14 +123,14 @@ class _GuiQuery(object):
 
     def delete_all_below(self, key):
         all_keys = self.__dict.keys()
-        keys = ctt_core.ContentUtil.filter(
+        keys = bsc_content.ContentUtil.filter(
             all_keys, '{}/*'.format(key)
         ) or []
         for i in keys:
             self.__dict.pop(i)
 
         all_keys = self.__tool_name_dict.keys()
-        keys = ctt_core.ContentUtil.filter(
+        keys = bsc_content.ContentUtil.filter(
             all_keys, '{}/*'.format(key)
         )
         for i in keys:

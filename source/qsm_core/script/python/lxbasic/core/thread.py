@@ -9,9 +9,9 @@ import subprocess
 
 import functools
 
-from . import configure as bsc_cor_configure
+from . import configure as _configure
 
-from . import process as bsc_cor_process
+from . import process as _process
 
 
 class TrdFnc(threading.Thread):
@@ -53,7 +53,7 @@ class TrdCommandPool(threading.Thread):
     EVENT = threading.Event()
     LOCK = threading.Lock()
     #
-    Status = bsc_cor_configure.BscStatus
+    Status = _configure.BscStatus
 
     def __init__(self, cmd, index=0):
         threading.Thread.__init__(self)
@@ -123,7 +123,7 @@ class TrdCommandPool(threading.Thread):
             if isinstance(self._cmd, six.string_types):
                 return_dict = {}
                 return_dicts.append(return_dict)
-                bsc_cor_process.PrcBaseMtd.execute_as_block(
+                _process.PrcBaseMtd.execute_as_block(
                     self._cmd, clear_environ='auto', return_dict=return_dict
                 )
                 status = self.Status.Completed
@@ -132,7 +132,7 @@ class TrdCommandPool(threading.Thread):
                 for i_cmd in self._cmd:
                     i_return_dict = {}
                     return_dicts.append(i_return_dict)
-                    bsc_cor_process.PrcBaseMtd.execute_as_block(
+                    _process.PrcBaseMtd.execute_as_block(
                         i_cmd, clear_environ='auto', return_dict=i_return_dict
                     )
                 status = self.Status.Completed
@@ -197,7 +197,7 @@ class TrdCommandPool(threading.Thread):
 
 
 class TrdCommand(threading.Thread):
-    Status = bsc_cor_configure.BscStatus
+    Status = _configure.BscStatus
 
     def __init__(self, cmd):
         threading.Thread.__init__(self)
@@ -280,7 +280,7 @@ class TrdCommand(threading.Thread):
             universal_newlines=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            startupinfo=bsc_cor_process.PrcBaseMtd.NO_WINDOW
+            startupinfo=_process.PrcBaseMtd.NO_WINDOW
         )
 
         while True:
@@ -334,7 +334,7 @@ class TrdMethod(threading.Thread):
     EVENT = threading.Event()
     LOCK = threading.Lock()
     #
-    Status = bsc_cor_configure.BscStatus
+    Status = _configure.BscStatus
 
     def __init__(self, fnc, index, *args, **kwargs):
         threading.Thread.__init__(self)
@@ -748,7 +748,7 @@ class TrdGainStack(object):
 
 
 class TrdProcessMonitor(object):
-    Status = bsc_cor_configure.BscStatus
+    Status = _configure.BscStatus
 
     def __init__(self, process):
         self._process = process

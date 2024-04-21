@@ -7,7 +7,7 @@ class Setup(object):
 
     def run(self):
         print 'lx-dcc menu setup: is started'
-        import lxresource as bsc_resource
+        import lxbasic.resource as bsc_resource
 
         import lxclarisse.startup as crs_startup
 

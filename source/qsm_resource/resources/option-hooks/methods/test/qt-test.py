@@ -6,10 +6,10 @@ def main(session):
 
     import lxgui.qt.core as gui_qt_core
 
-    import lxcontent.core as ctt_core
+    import lxbasic.content as bsc_content
 
     app = gui_qt_core.QtWidgets.QApplication(sys.argv)
-    d = ctt_core.Content(
+    d = bsc_content.Content(
         value='/l/temp/td/dongchangbao/qt_test/_tst__draw_data.yml'
     )
     gui_qt_core.QtPixmapDrawer.get_image_by_data(d, '/l/temp/td/dongchangbao/qt_test/test_1.png')

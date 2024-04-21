@@ -1,5 +1,5 @@
 # coding:utf-8
-from lxutil.rsv import utl_rsv_obj_abstract
+from lxgeneral.rsv import utl_rsv_obj_abstract
 
 
 # noinspection PyUnusedLocal
@@ -127,7 +127,7 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
 
         import lxbasic.dcc.objects as bsc_dcc_objects
 
-        import lxutil.rsv.objects as utl_rsv_objects
+        import lxgeneral.rsv.objects as utl_rsv_objects
 
         rsv_project = self._rsv_task.get_rsv_project()
 

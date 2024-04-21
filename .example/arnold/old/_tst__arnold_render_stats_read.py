@@ -1,12 +1,12 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.core as bsc_core
 
 f = '/l/prod/cjd/publish/assets/chr/qunzhongnv_b/srf/surfacing/qunzhongnv_b.srf.surfacing.v014/render/output/default.stats.0001.json'
 # f = '/data/f/cjd__wuhu__debug/katana/stats_2.json'
 
-c = ctt_core.Content(value=f)
+c = bsc_content.Content(value=f)
 
 ks = []
 s = {}

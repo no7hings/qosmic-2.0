@@ -3,13 +3,13 @@ import six
 
 
 def get_menu_content_by_hooks(hooks):
-    import lxcontent.core as ctt_core
+    import lxbasic.content as bsc_content
 
     import lxbasic.core as bsc_core
 
     from . import hook as ssn_cmd_hook
 
-    d_ = ctt_core.Dict()
+    d_ = bsc_content.Dict()
     for i_hook in hooks:
         if isinstance(i_hook, six.string_types):
             i_hook_key = i_hook
@@ -82,13 +82,13 @@ def get_menu_content_by_hooks(hooks):
 
 
 def get_menu_content_by_hook_options(hook_options):
-    import lxcontent.core as ctt_core
+    import lxbasic.content as bsc_content
 
     import lxbasic.core as bsc_core
 
     from . import hook as ssn_cmd_hook
 
-    d_ = ctt_core.Dict()
+    d_ = bsc_content.Dict()
     for i_hook_option in hook_options:
         i_hook_args = ssn_cmd_hook.get_option_hook_args(i_hook_option)
         if i_hook_args:
@@ -158,13 +158,13 @@ def get_menu_content_by_hook_options(hook_options):
 
 
 def get_menu_content_by_hook_options_(hook_options):
-    import lxcontent.core as ctt_core
+    import lxbasic.content as bsc_content
 
     import lxbasic.core as bsc_core
 
     from . import hook as ssn_cmd_hook
 
-    d_ = ctt_core.Dict()
+    d_ = bsc_content.Dict()
     for i_key in hook_options:
         if isinstance(i_key, six.string_types):
             i_hook_option = i_key

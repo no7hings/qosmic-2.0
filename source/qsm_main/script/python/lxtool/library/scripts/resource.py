@@ -3,7 +3,7 @@ import copy
 
 import glob
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -84,7 +84,7 @@ class ScpResourcesAddByQuixel(object):
     @classmethod
     def _check_resource_exists(cls, file_path):
         quixel_json_file_opt = bsc_storage.StgFileOpt(file_path)
-        json_content = ctt_core.Content(
+        json_content = bsc_content.Content(
             value=file_path
         )
 
@@ -119,7 +119,7 @@ class ScpResourcesAddByQuixel(object):
             'json="{}"'.format(file_path)
         )
         quixel_json_file_opt = bsc_storage.StgFileOpt(file_path)
-        json_content = ctt_core.Content(
+        json_content = bsc_content.Content(
             value=file_path
         )
         directory_path_src = quixel_json_file_opt.directory_path

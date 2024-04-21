@@ -1,7 +1,7 @@
 # coding:utf-8
 import collections
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 

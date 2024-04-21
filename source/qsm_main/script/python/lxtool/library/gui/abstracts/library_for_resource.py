@@ -9,9 +9,9 @@ import collections
 
 import functools
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -1516,7 +1516,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
         self._type_guide_bar.connect_user_text_press_accepted_to(self.gui_guide_press_cbk)
 
         self._dtb_cfg_file_path = bsc_resource.RscExtendConfigure.get_yaml('database/library/resource-basic')
-        self._dtb_cfg = ctt_core.Content(value=self._dtb_cfg_file_path)
+        self._dtb_cfg = bsc_content.Content(value=self._dtb_cfg_file_path)
 
         self._dtb_superclass_paths = self._dtb_cfg.get('category_groups')
 

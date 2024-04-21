@@ -1,7 +1,7 @@
 # coding:utf-8
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -13,7 +13,7 @@ class AbsDdlSubmiter(object):
     CONFIGURE_FILE_PATH = None
 
     def __init__(self):
-        self._configure = ctt_core.Content(value=self.CONFIGURE_FILE_PATH)
+        self._configure = bsc_content.Content(value=self.CONFIGURE_FILE_PATH)
         #
         self._option = self._configure.get_as_content('option')
         #
@@ -57,7 +57,7 @@ class AbsDdlSubmiter(object):
 
     def set_job_info_extra(self, raw):
         if isinstance(raw, dict):
-            content = ctt_core.Content(value=raw)
+            content = bsc_content.Content(value=raw)
             for seq, k in enumerate(content.get_all_leaf_keys()):
                 self.job_info.set(
                     'ExtraInfoKeyValue{}'.format(seq),

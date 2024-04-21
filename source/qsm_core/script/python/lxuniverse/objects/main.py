@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 # universe
 from .. import core as unr_core
 
@@ -117,7 +117,7 @@ class Obj(unr_abstracts.AbsObj):
     DCC_PORT_CLS = Port
     PORT_STACK_CLS = unr_obj_stack.PrxPortStack
     #
-    PROPERTIES_CLS = ctt_core.Properties
+    PROPERTIES_CLS = bsc_content.Properties
     ATTRIBUTES_CLS = Attributes
 
     def __init__(self, type_, path):

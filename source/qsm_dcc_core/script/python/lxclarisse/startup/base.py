@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 # clarisse
 from ..core.wrap import *
 
@@ -45,7 +45,7 @@ class MenuBuild(object):
     def _create_by_yaml_(cls, file_path):
         import lxgui.core as gui_core
 
-        c = ctt_core.Content(
+        c = bsc_content.Content(
             value=file_path
         )
 

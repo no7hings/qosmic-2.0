@@ -19,9 +19,9 @@ import functools
 
 import lxbasic.log as bsc_log
 
-from . import base as bsc_cor_base
+from . import base as _base
 
-from . import environ as bsc_cor_environ
+from . import environ as _environ
 
 
 class PrcBaseMtd(object):
@@ -93,7 +93,7 @@ class PrcBaseMtd(object):
         if environs_extend:
             environs_old = dict(os.environ)
             environs = {str(k): str(v) for k, v in environs_old.items()}
-            env_opt = bsc_cor_environ.EnvContentOpt(environs)
+            env_opt = _environ.EnvContentOpt(environs)
             for k, v in environs_extend.items():
                 if isinstance(v, six.string_types):
                     env_opt.set(
@@ -374,9 +374,9 @@ class PrcBaseMtd(object):
 
     @classmethod
     def execute_with_result(cls, cmd, **kwargs):
-        if bsc_cor_base.SysBaseMtd.get_is_windows():
+        if _base.SysBaseMtd.get_is_windows():
             cls.execute_with_result_in_windows(cmd, **kwargs)
-        elif bsc_cor_base.SysBaseMtd.get_is_linux():
+        elif _base.SysBaseMtd.get_is_linux():
             cls.execute_with_result_in_linux(cmd, **kwargs)
 
     @classmethod

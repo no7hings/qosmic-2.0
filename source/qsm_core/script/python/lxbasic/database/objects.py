@@ -5,9 +5,9 @@ import copy
 
 import six
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxbasic.log as bsc_log
 
@@ -17,7 +17,7 @@ import lxbasic.storage as bsc_storage
 
 import lxbasic.texture as bsc_texture
 
-from . import base as bsc_dtb_base
+from . import base as _base
 
 
 class DtbBaseOpt(object):
@@ -158,7 +158,7 @@ class DtbBaseOpt(object):
         )
         self._dtb_file_opt.create_directory()
 
-        self._dtb_opt = bsc_dtb_base.DtbSqlConnectionOpt.create_from_database(
+        self._dtb_opt = _base.DtbSqlConnectionOpt.create_from_database(
             self._dtb_file_opt.get_path()
         )
 
@@ -305,13 +305,13 @@ class DtbOptForResource(DtbBaseOpt):
     def __init__(self, configure_file, configure_file_extend=None, disable_new_connection=False):
         self._dtb_cfg_file_path = configure_file
         self._dtb_cfg_file_path_extend = configure_file_extend
-        self._dtb_cfg_opt = ctt_core.Content(value=configure_file)
+        self._dtb_cfg_opt = bsc_content.Content(value=configure_file)
         if configure_file_extend is not None:
             if bsc_storage.StgFileOpt(configure_file_extend).get_is_file() is False:
                 raise RuntimeError()
             #
             self._dtb_cfg_opt.update_from_content(
-                ctt_core.Content(value=configure_file_extend)
+                bsc_content.Content(value=configure_file_extend)
             )
 
         self._dtb_cfg_opt.do_flatten()
@@ -824,7 +824,7 @@ class DtbOptForResource(DtbBaseOpt):
 
     def find_resource_paths_by_category(self, *args):
         _ = args[0]
-        if isinstance(_, dict):
+        if isinstance(_, _base.DtbDict):
             path = _.path
         elif isinstance(_, six.string_types):
             path = _
@@ -843,7 +843,7 @@ class DtbOptForResource(DtbBaseOpt):
 
     def find_resources_by_category(self, *args):
         _ = args[0]
-        if isinstance(_, dict):
+        if isinstance(_, _base.DtbDict):
             path = _.path
         elif isinstance(_, six.string_types):
             path = _

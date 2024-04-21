@@ -7,7 +7,7 @@ import lxbasic.storage as bsc_storage
 
 import lxsession.core as ssn_core
 
-from lxutil.rsv import utl_rsv_obj_abstract
+from lxgeneral.rsv import utl_rsv_obj_abstract
 
 from lxshotgun.rsv.scripts import _stg_rsv_obj_utility
 

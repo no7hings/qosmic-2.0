@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -56,8 +56,8 @@ class AbsDdlObj(object):
 
 
 class DdlLogQuery(AbsDdlObj):
-    DDL_PROPERTIES_CLS = ctt_core.Properties
-    DDL_PROPERTY_CLS = ctt_core.Property
+    DDL_PROPERTIES_CLS = bsc_content.Properties
+    DDL_PROPERTY_CLS = bsc_content.Property
 
     CON = bsc_ddl_base.DdlBase.generate_connection()
 
@@ -78,8 +78,8 @@ class DdlLogQuery(AbsDdlObj):
 
 
 class DdlTaskQuery(AbsDdlObj):
-    DDL_PROPERTIES_CLS = ctt_core.Properties
-    DDL_PROPERTY_CLS = ctt_core.Property
+    DDL_PROPERTIES_CLS = bsc_content.Properties
+    DDL_PROPERTY_CLS = bsc_content.Property
     #
     DDL_CONTENT_CLS = DdlContent
     DDL_LOG_CLS = DdlLogQuery
@@ -159,8 +159,8 @@ class DdlTaskQuery(AbsDdlObj):
 
 
 class DdlJobQuery(AbsDdlObj):
-    DDL_PROPERTIES_CLS = ctt_core.Properties
-    DDL_PROPERTY_CLS = ctt_core.Property
+    DDL_PROPERTIES_CLS = bsc_content.Properties
+    DDL_PROPERTY_CLS = bsc_content.Property
     #
     DDL_CONTENT_CLS = DdlContent
     DDL_LOG_CLS = DdlLogQuery

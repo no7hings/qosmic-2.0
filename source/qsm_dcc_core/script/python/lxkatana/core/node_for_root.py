@@ -1,9 +1,9 @@
 # coding:utf-8
 import collections
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxgui.core as gui_core
 # katana
@@ -75,7 +75,7 @@ class VariablesSetting(object):
 
 class WorkspaceSetting(object):
     def __init__(self):
-        self._cfg = ctt_core.Content(
+        self._cfg = bsc_content.Content(
             value=bsc_resource.RscExtendConfigure.get_yaml(
                 'katana/script/scene'
             )

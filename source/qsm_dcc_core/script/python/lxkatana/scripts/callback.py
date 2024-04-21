@@ -1,7 +1,7 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxbasic.log as bsc_log
 
@@ -14,7 +14,7 @@ class ScpCbkEnvironment(object):
     KEY = 'workspace environment'
 
     def __init__(self):
-        self._cfg = ctt_core.Content(
+        self._cfg = bsc_content.Content(
             value=bsc_resource.RscExtendConfigure.get_yaml(
                 'katana/script/scene'
             )

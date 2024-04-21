@@ -21,7 +21,7 @@ class Setup(object):
 
     @classmethod
     def build_lua(cls):
-        import lxresource as bsc_resource
+        import lxbasic.resource as bsc_resource
 
         import lxbasic.core as bsc_core
 

@@ -9,7 +9,7 @@ import hashlib
 
 import lxuniverse.abstracts as unr_abstracts
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxbasic.log as bsc_log
 

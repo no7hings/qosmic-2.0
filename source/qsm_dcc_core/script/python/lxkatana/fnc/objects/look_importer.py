@@ -1,7 +1,7 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxbasic.log as bsc_log
 
@@ -150,7 +150,7 @@ class FncImporterForLookAssOld(bsc_fnc_abstracts.AbsFncOptionBase):
         self._pass_name = self.get('look_pass')
         self._material_root = self.get('material_root')
         #
-        self._convert_configure = ctt_core.Content(
+        self._convert_configure = bsc_content.Content(
             value=bsc_resource.RscExtendConfigure.get_yaml('arnold/convert')
         )
         self._convert_configure.do_flatten()

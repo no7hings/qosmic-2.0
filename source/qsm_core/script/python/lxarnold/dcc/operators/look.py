@@ -1,9 +1,9 @@
 # coding:utf-8
 import collections
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 
 class AbsLookOpt(object):
@@ -22,12 +22,12 @@ class ShapeLookOpt(AbsLookOpt):
     def __init__(self, *args):
         super(ShapeLookOpt, self).__init__(*args)
 
-        self._node_configure = ctt_core.Content(
+        self._node_configure = bsc_content.Content(
             value=bsc_resource.RscExtendConfigure.get_yaml('arnold/node')
         )
         self._node_configure.do_flatten()
 
-        self._convert_configure = ctt_core.Content(
+        self._convert_configure = bsc_content.Content(
             value=bsc_resource.RscExtendConfigure.get_yaml('arnold/convert')
         )
         self._convert_configure.do_flatten()

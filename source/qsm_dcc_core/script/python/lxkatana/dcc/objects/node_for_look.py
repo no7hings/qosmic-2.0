@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -67,7 +67,7 @@ class AndShader(ktn_abstracts.AbsKtnObj):
         #     print source_obj.get_shader_properties()
 
     def get_shader_properties(self):
-        properties = ctt_core.Properties(self)
+        properties = bsc_content.Properties(self)
         properties.set(
             'type', self.get_shader_type_name(),
         )
@@ -84,7 +84,7 @@ class AndShader(ktn_abstracts.AbsKtnObj):
         return self.get_port('parameters').get_children()
 
     def get_shader_attributes(self):
-        attributes = ctt_core.Properties(self)
+        attributes = bsc_content.Properties(self)
         ports = self.get_shader_ports()
         for port in ports:
             port_name = port.port_name

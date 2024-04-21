@@ -31,7 +31,7 @@ import zipfile
 
 import lxbasic.log as bsc_log
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 from lxbasic.core import base as bsc_cor_base
 
@@ -1507,7 +1507,7 @@ class StgFileOpt(StgPathOpt):
                     return raw
             elif self.get_ext() in {'.yml'}:
                 with open(self.path) as y:
-                    raw = ctt_core.ContentYamlBase.load(y)
+                    raw = bsc_content.ContentYamlBase.load(y)
                     y.close()
                     return raw
             else:
@@ -1533,7 +1533,7 @@ class StgFileOpt(StgPathOpt):
                 )
         elif self.ext in {'.yml'}:
             with open(self.path, 'w') as y:
-                ctt_core.ContentYamlBase.dump(
+                bsc_content.ContentYamlBase.dump(
                     raw,
                     y,
                     indent=4,
@@ -1655,7 +1655,7 @@ class StgGzipFileOpt(StgFileOpt):
                     fileobj=open(self.path, 'rb')
             ) as g:
                 if self.get_ext() in {'.yml'}:
-                    raw = ctt_core.ContentYamlBase.load(g)
+                    raw = bsc_content.ContentYamlBase.load(g)
                     g.close()
                     return raw
 
@@ -1670,7 +1670,7 @@ class StgGzipFileOpt(StgFileOpt):
                 fileobj=open(self.path, 'wb')
         ) as g:
             if self.get_ext() in ['.yml']:
-                ctt_core.ContentYamlBase.dump(
+                bsc_content.ContentYamlBase.dump(
                     raw,
                     g,
                     indent=4,

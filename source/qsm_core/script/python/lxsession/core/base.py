@@ -1,13 +1,13 @@
 # coding:utf-8
 import fnmatch
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 
 class SsnUtil(object):
@@ -50,7 +50,7 @@ class SsnHookEngineMtd(object):
     def _generate_content(cls):
         if cls.CONTENT is not None:
             return cls.CONTENT
-        cls.CONTENT = ctt_core.Content(
+        cls.CONTENT = bsc_content.Content(
             value=bsc_resource.RscExtendConfigure.get_yaml('session/hook-engine')
         )
         cls.CONTENT.do_flatten()

@@ -3,7 +3,7 @@ import six
 
 import collections
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.core as bsc_core
 # gui
@@ -81,7 +81,7 @@ class GuiPrxScpForTreeTagFilter(object):
         #
         self._prx_tree_item_cls = prx_tree_item_cls
         #
-        self._filter_content = ctt_core.Content(
+        self._filter_content = bsc_content.Content(
             value=collections.OrderedDict()
         )
         #
@@ -111,7 +111,7 @@ class GuiPrxScpForTreeTagFilter(object):
     def restore_all(self):
         self._prx_tree_view_src.restore_all()
         #
-        self._filter_content = ctt_core.Content(
+        self._filter_content = bsc_content.Content(
             value=collections.OrderedDict()
         )
         self._dcc_obj_dict = {}
@@ -257,7 +257,7 @@ class GuiPrxScpForTreeTagFilter(object):
 
     def register(self, prx_item_tgt, keys, dcc_obj=None, expand_depth=1):
         for i_key in keys:
-            i_path = ctt_core.ContentUtil.key_path_to_dag_path(i_key)
+            i_path = bsc_content.ContentUtil.key_path_to_dag_path(i_key)
             #
             prx_item_tgt.set_tag_filter_tgt_mode(gui_core.GuiTagFilterMode.MatchAll)
             prx_item_tgt.set_tag_filter_tgt_key_add(

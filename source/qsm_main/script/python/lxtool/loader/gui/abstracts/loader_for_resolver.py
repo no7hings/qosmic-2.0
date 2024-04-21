@@ -7,7 +7,7 @@ import collections
 
 import functools
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -1275,7 +1275,7 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
 
     @classmethod
     def _get_menu_content_by_hook_keys_(cls, session_dict, hooks, *args, **kwargs):
-        content = ctt_core.Dict()
+        content = bsc_content.Dict()
         for i_hook in hooks:
             if isinstance(i_hook, six.string_types):
                 i_hook_key = i_hook
@@ -1372,7 +1372,7 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
                 python_file = bsc_storage.StgFileOpt(python_file_path)
                 yaml_file = bsc_storage.StgFileOpt(yaml_file_path)
                 if python_file.get_is_exists() is True and yaml_file.get_is_exists() is True:
-                    configure = ctt_core.Content(value=yaml_file.path)
+                    configure = bsc_content.Content(value=yaml_file.path)
                     type_name = configure.get('option.type')
                     if type_name is not None:
                         kwargs['configure'] = configure

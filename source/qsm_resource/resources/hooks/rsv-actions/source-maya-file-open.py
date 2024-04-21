@@ -4,7 +4,7 @@
 def main(session):
     import lxresolver.core as rsv_core
 
-    import lxutil.rsv.operators as utl_rsv_operators
+    import lxgeneral.rsv.operators as utl_rsv_operators
 
     file_path = session.rsv_unit.get_result(
         version='latest'

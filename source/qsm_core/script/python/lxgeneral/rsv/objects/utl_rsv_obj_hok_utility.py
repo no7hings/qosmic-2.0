@@ -5,7 +5,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-from lxutil.rsv import utl_rsv_obj_abstract
+from lxgeneral.rsv import utl_rsv_obj_abstract
 
 
 class RsvUtilityOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):

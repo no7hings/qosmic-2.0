@@ -1,9 +1,9 @@
 # coding:utf-8
 import functools
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxbasic.core as bsc_core
 
@@ -158,7 +158,7 @@ class KitDesktopHookAddOpt(object):
         default_configue_file_path = bsc_resource.RscExtendConfigure.get(
             'session/default-hook-configure.yml'
         )
-        c = ctt_core.Content(value=default_configue_file_path)
+        c = bsc_content.Content(value=default_configue_file_path)
 
         type_ = self._options.get('type')
         c.set('option.type', type_)

@@ -1,5 +1,5 @@
 # coding:utf-8
-from lxutil.rsv import utl_rsv_obj_abstract
+from lxgeneral.rsv import utl_rsv_obj_abstract
 
 
 class RsvDccLookHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):

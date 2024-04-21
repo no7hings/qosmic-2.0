@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxutil.ssn.abstracts as utl_ssn_abstracts
+import lxgeneral.ssn.abstracts as utl_ssn_abstracts
 
 import lxmaya.dcc.objects as mya_dcc_objects
 

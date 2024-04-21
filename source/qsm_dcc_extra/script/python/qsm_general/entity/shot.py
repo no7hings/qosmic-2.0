@@ -1,14 +1,14 @@
 # coding:utf-8
 from . import base as _base
 
-from . import step as _step
+from . import task as _task
 
 
 class Shot(_base.AbsEntity):
     Type = _base.EntityTypes.Shot
     VariantKey = _base.VariantKeys.Sequence
 
-    StepQueryClass = _step.StepQuery
+    TaskQueryClass = _task.TaskQuery
 
     def __init__(self, *args, **kwargs):
         super(Shot, self).__init__(*args, **kwargs)

@@ -9,7 +9,7 @@ import os
 
 import lxbasic.log as bsc_log
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxbasic.core as bsc_core
 

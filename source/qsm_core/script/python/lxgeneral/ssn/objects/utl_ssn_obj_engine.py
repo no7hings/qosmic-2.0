@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
-import lxutil.ssn.abstracts as utl_ssn_abstracts
+import lxgeneral.ssn.abstracts as utl_ssn_abstracts
 
 
 class SsnRsvApplication(utl_ssn_abstracts.AbsSsnRsvApplication):

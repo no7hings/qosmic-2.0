@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -211,7 +211,7 @@ mya_scripts.ScpLibraryLook.create_user_datas()
             'normal': (get_texture_file_path_fnc_, 'normalCamera')
         }
 
-        c = ctt_core.Content()
+        c = bsc_content.Content()
 
         bsc_storage.StgDirectoryOpt(texture_directory_path).set_create()
 
@@ -268,7 +268,7 @@ mya_scripts.ScpLibraryLook.create_user_datas()
             'diffuse': (self.collection_texture_fnc, 'baseColor'),
         }
 
-        c = ctt_core.Content()
+        c = bsc_content.Content()
 
         materials = self.get_all_materials()
         for seq, i_material in enumerate(materials):

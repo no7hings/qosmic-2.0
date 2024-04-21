@@ -5,7 +5,7 @@ import re
 
 import parse
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 
 class DdlBase(object):

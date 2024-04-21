@@ -1,7 +1,7 @@
 # coding:utf-8
 import collections
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 # katana
 from ...core.wrap import *
 
@@ -13,7 +13,7 @@ class LookContent(object):
 
     def __init__(self, root, look='default'):
         self._hou_root = hou.node(root)
-        self._raw_content = ctt_core.Properties(None, collections.OrderedDict())
+        self._raw_content = bsc_content.Properties(None, collections.OrderedDict())
         self._look = look
         self._set_run_()
 

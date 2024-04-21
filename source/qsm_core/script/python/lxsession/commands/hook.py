@@ -9,12 +9,12 @@ def get_hook_args(key, search_paths=None):
 
     import lxsession.core as ssn_core
 
-    import lxcontent.core as ctt_core
+    import lxbasic.content as bsc_content
 
     yaml_file_path = ssn_core.SsnHookFileMtd.get_yaml(key, search_paths)
     if yaml_file_path:
         yaml_file_opt = bsc_storage.StgFileOpt(yaml_file_path)
-        configure = ctt_core.Content(value=yaml_file_opt.path)
+        configure = bsc_content.Content(value=yaml_file_opt.path)
         type_name = configure.get('option.type')
         if type_name in {
             'application',
@@ -82,7 +82,7 @@ def get_option_hook_args(option, search_paths=None):
 
     import lxbasic.session as bsc_session
 
-    import lxcontent.core as ctt_core
+    import lxbasic.content as bsc_content
 
     import lxsession.core as ssn_core
 
@@ -98,7 +98,7 @@ def get_option_hook_args(option, search_paths=None):
         python_file_opt = bsc_storage.StgFileOpt(python_file_path)
         yaml_file_opt = bsc_storage.StgFileOpt(yaml_file_path)
         if python_file_opt.get_is_exists() is True and yaml_file_opt.get_is_exists() is True:
-            configure = ctt_core.Content(value=yaml_file_opt.path)
+            configure = bsc_content.Content(value=yaml_file_opt.path)
             type_name = configure.get('option.type')
             #
             session = None
@@ -188,7 +188,7 @@ def get_option_hook_configure(option):
 
     import lxbasic.storage as bsc_storage
 
-    import lxcontent.core as ctt_core
+    import lxbasic.content as bsc_content
 
     import lxsession.core as ssn_core
 
@@ -200,7 +200,7 @@ def get_option_hook_configure(option):
     if yaml_file_path:
         yaml_file_opt = bsc_storage.StgFileOpt(yaml_file_path)
         if yaml_file_opt.get_is_exists() is True:
-            return ctt_core.Content(value=yaml_file_opt.path)
+            return bsc_content.Content(value=yaml_file_opt.path)
 
 
 def execute_option_hook(option):

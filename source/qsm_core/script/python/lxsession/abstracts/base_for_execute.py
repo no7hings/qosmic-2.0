@@ -1,7 +1,7 @@
 # coding:utf-8
 import locale
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -292,7 +292,7 @@ class AbsRsvProjectMethodHookExecutor(AbsHookExecutor):
             )
             if deadline_configure_file_path:
                 if bsc_storage.StgPathMtd.get_is_exists(deadline_configure_file_path):
-                    deadline_configure = ctt_core.Content(value=deadline_configure_file_path)
+                    deadline_configure = bsc_content.Content(value=deadline_configure_file_path)
             job_name = session.get_ddl_job_name()
             return self._submit_deadline_job_(
                 session, job_name, rsv_properties.value, deadline_configure
@@ -328,7 +328,7 @@ class AbsRsvTaskMethodHookExecutor(AbsHookExecutor):
             )
             if deadline_configure_file_path:
                 if bsc_storage.StgPathMtd.get_is_exists(deadline_configure_file_path):
-                    deadline_configure = ctt_core.Content(value=deadline_configure_file_path)
+                    deadline_configure = bsc_content.Content(value=deadline_configure_file_path)
             #
             job_name = session._get_rsv_task_version_(rsv_scene_properties)
             return self._submit_deadline_job_(

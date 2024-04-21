@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -33,7 +33,7 @@ class AbsFncImporterForLookYmlDcc(bsc_fnc_abs_base.AbsFncOptionBase):
             self._time_tag = bsc_core.TimestampOpt(
                 bsc_storage.StgFileOpt(file_path).get_modify_timestamp()
                 ).get_as_tag_36()
-            self._raw = ctt_core.Content(
+            self._raw = bsc_content.Content(
                 value=self.get('file')
             )
         else:

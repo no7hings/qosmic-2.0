@@ -33,7 +33,7 @@ import socket
 
 import collections
 
-from . import configure as bsc_cor_configure
+from . import configure as _configure
 
 
 class SysPlatformMtd(object):
@@ -48,9 +48,9 @@ class SysPlatformMtd(object):
     @staticmethod
     def get_current():
         if platform.system() == 'Windows':
-            return bsc_cor_configure.BscPlatform.Windows
+            return _configure.BscPlatform.Windows
         elif platform.system() == 'Linux':
-            return bsc_cor_configure.BscPlatform.Linux
+            return _configure.BscPlatform.Linux
 
 
 class SysApplicationMtd(object):
@@ -119,15 +119,15 @@ class SysApplicationMtd(object):
     @classmethod
     def get_current(cls):
         for i_fnc, i_app in [
-            (cls.get_is_maya, bsc_cor_configure.BscApplication.Maya),
-            (cls.get_is_houdini, bsc_cor_configure.BscApplication.Houdini),
-            (cls.get_is_katana, bsc_cor_configure.BscApplication.Katana),
-            (cls.get_is_clarisse, bsc_cor_configure.BscApplication.Clarisse),
-            (cls.get_is_lynxi, bsc_cor_configure.BscApplication.Lynxi)
+            (cls.get_is_maya, _configure.BscApplication.Maya),
+            (cls.get_is_houdini, _configure.BscApplication.Houdini),
+            (cls.get_is_katana, _configure.BscApplication.Katana),
+            (cls.get_is_clarisse, _configure.BscApplication.Clarisse),
+            (cls.get_is_lynxi, _configure.BscApplication.Lynxi)
         ]:
             if i_fnc() is True:
                 return i_app
-        return bsc_cor_configure.BscApplication.Python
+        return _configure.BscApplication.Python
 
     @classmethod
     def test(cls):
@@ -137,8 +137,8 @@ class SysApplicationMtd(object):
 
 
 class SysBaseMtd(object):
-    Platform = bsc_cor_configure.BscPlatform
-    Application = bsc_cor_configure.BscApplication
+    Platform = _configure.BscPlatform
+    Application = _configure.BscApplication
 
     TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
     TIME_FORMAT_EXACT = '%Y-%m-%d %H:%M:%S.%f'
@@ -251,7 +251,7 @@ class SysBaseMtd(object):
         lis = []
         for i_system_key in system_keys:
             i_results = fnmatch.filter(
-                bsc_cor_configure.BscSystem.All, i_system_key
+                _configure.BscSystem.All, i_system_key
             ) or []
             for j_system in i_results:
                 if j_system not in lis:

@@ -5,7 +5,7 @@ import time
 
 import lxbasic.log as bsc_log
 
-from . import base as bsc_cor_base
+from . import base as _base
 
 
 class MdfBaseMtd(object):
@@ -16,7 +16,7 @@ class MdfBaseMtd(object):
             try:
                 return fnc(*args, **kw)
             except Exception:
-                bsc_cor_base.ExceptionMtd.set_print()
+                _base.ExceptionMtd.set_print()
 
         return fnc_
 
@@ -29,11 +29,11 @@ class MdfBaseMtd(object):
                 fnc.__module__,
                 fnc.__name__,
                 time.strftime(
-                    bsc_cor_base.SysBaseMtd.TIME_FORMAT,
+                    _base.SysBaseMtd.TIME_FORMAT,
                     time.localtime(start_timestamp)
                 )
             )
-            bsc_cor_base.SysBaseMtd.trace(message)
+            _base.SysBaseMtd.trace(message)
 
             _fnc = fnc(*args, **kwargs)
 
@@ -42,12 +42,12 @@ class MdfBaseMtd(object):
                 fnc.__module__,
                 fnc.__name__,
                 time.strftime(
-                    bsc_cor_base.SysBaseMtd.TIME_FORMAT,
+                    _base.SysBaseMtd.TIME_FORMAT,
                     time.localtime(end_timestamp)
                 ),
                 (end_timestamp-start_timestamp)
             )
-            bsc_cor_base.SysBaseMtd.trace(message)
+            _base.SysBaseMtd.trace(message)
             return _fnc
 
         return fnc_
@@ -89,7 +89,7 @@ class MdfBaseMtd(object):
                         fnc_path
                     )
                 )
-                bsc_cor_base.ExceptionMtd.set_print()
+                _base.ExceptionMtd.set_print()
 
         return fnc_
 
@@ -138,7 +138,7 @@ class MdfBaseMtd(object):
                         fnc_path
                     )
                 )
-                bsc_cor_base.ExceptionMtd.set_print()
+                _base.ExceptionMtd.set_print()
 
         return fnc_
 

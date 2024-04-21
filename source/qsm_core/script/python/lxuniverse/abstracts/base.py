@@ -3,7 +3,7 @@ import six
 
 import fnmatch
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.storage as bsc_storage
 # universe
@@ -638,7 +638,7 @@ class AbsValue(object):
         }
 
     def to_properties(self):
-        p = ctt_core.Properties(self)
+        p = bsc_content.Properties(self)
         p.set(
             'category', self.category_name
         )

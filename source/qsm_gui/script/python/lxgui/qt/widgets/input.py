@@ -347,6 +347,9 @@ class QtInputAsBubbleWithChoose(
 
     gui_qt_abstracts.AbsQtInputChooseExtraDef,
 ):
+    def _refresh_choose_index_(self):
+        pass
+
     QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsBubble
 
     QT_POPUP_CHOOSE_CLS = gui_qt_wgt_popup.QtPopupAsChoose
@@ -415,6 +418,9 @@ class QtInputAsContent(
     gui_qt_wgt_entry.QtEntryFrame,
     gui_qt_abstracts.AbsQtInputBaseDef,
 ):
+    def _pull_history_(self, *args, **kwargs):
+        pass
+
     QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsContent
 
     entry_value_changed = qt_signal()
@@ -548,6 +554,12 @@ class QtInputAsList(
     #   choose
     gui_qt_abstracts.AbsQtInputChooseExtraDef,
 ):
+    def _refresh_choose_index_(self):
+        pass
+
+    def _pull_history_(self, *args, **kwargs):
+        pass
+
     QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsList
     #
     QT_POPUP_CHOOSE_CLS = gui_qt_wgt_popup.QtPopupAsChoose
@@ -701,6 +713,12 @@ class QtInputAsListWithChoose(
     #   choose
     gui_qt_abstracts.AbsQtInputChooseExtraDef,
 ):
+    def _refresh_choose_index_(self):
+        pass
+
+    def _pull_history_(self, *args, **kwargs):
+        pass
+
     QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsList
     QT_POPUP_CHOOSE_CLS = gui_qt_wgt_popup.QtPopupAsChoose
     #
@@ -846,6 +864,18 @@ class QtInputAsRgba(
 
     gui_qt_abstracts.AbsQtValueDefaultExtraDef,
 ):
+    def _bridge_choose_get_popup_texts_(self):
+        pass
+
+    def _bridge_choose_get_popup_texts_current_(self):
+        pass
+
+    def _refresh_choose_index_(self):
+        pass
+
+    def _pull_history_(self, *args, **kwargs):
+        pass
+
     QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsConstant
 
     QT_POPUP_CHOOSE_CLS = gui_qt_wgt_popup.QtPopupAsChooseForRgba
@@ -975,6 +1005,12 @@ class QtInputAsIcon(
     gui_qt_abstracts.AbsQtActionForHoverDef,
     gui_qt_abstracts.AbsQtActionForPressDef,
 ):
+    def _pull_history_(self, *args, **kwargs):
+        pass
+
+    def _refresh_choose_index_(self):
+        pass
+
     QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsConstant
 
     QT_POPUP_CHOOSE_CLS = gui_qt_wgt_popup.QtPopupAsChooseForIcon

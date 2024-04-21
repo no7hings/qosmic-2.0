@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 d = {
     'option': {
@@ -10,7 +10,7 @@ d = {
     'x': '=(<option.x> + 2)*5'
 }
 
-c = ctt_core.Content(None, d)
+c = bsc_content.Content(None, d)
 c.set('asset_name', 'cc')
 c.do_flatten()
 

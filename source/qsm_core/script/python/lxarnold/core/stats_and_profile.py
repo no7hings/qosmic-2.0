@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.core as bsc_core
 
@@ -8,7 +8,7 @@ class StatsFileOpt(object):
     def __init__(self, obj):
         self._obj = obj
 
-        self._content = ctt_core.Content(
+        self._content = bsc_content.Content(
             value=self._obj.path
         )
 
@@ -184,7 +184,7 @@ class ProfileFileOpt(object):
     def __init__(self, obj):
         self._obj = obj
 
-        self._content = ctt_core.Content(
+        self._content = bsc_content.Content(
             value=self._obj.path
         )
 

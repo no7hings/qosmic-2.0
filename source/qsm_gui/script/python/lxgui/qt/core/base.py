@@ -5,7 +5,7 @@ import six
 
 import sys
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.core as bsc_core
 
@@ -23,7 +23,7 @@ class GuiQtStyle(object):
     def _generate_content(cls):
         if cls.CONTENT is not None:
             return cls.CONTENT
-        cls.CONTENT = ctt_core.Content(
+        cls.CONTENT = bsc_content.Content(
             value='{}/qt-style.yml'.format(gui_core.GuiBase.DATA_ROOT)
         )
         cls.CONTENT.set(

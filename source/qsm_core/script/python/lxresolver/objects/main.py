@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxuniverse.objects as unv_objects
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 # resolver
 from .. import abstracts as rsv_abstracts
 
@@ -21,7 +21,7 @@ class RsvPattern(rsv_abstracts.AbsRsvPattern):
 
 
 class RsvMatcher(rsv_abstracts.AbsRsvMatcher):
-    PROPERTIES_CLS = ctt_core.Properties
+    PROPERTIES_CLS = bsc_content.Properties
     #
     RSV_PATTERN_CLS = RsvPattern
     #
@@ -34,7 +34,7 @@ class RsvMatcher(rsv_abstracts.AbsRsvMatcher):
 class RsvUnit(rsv_abstracts.AbsRsvUnit):
     PATHSEP = '/'
     #
-    PROPERTIES_CLS = ctt_core.Properties
+    PROPERTIES_CLS = bsc_content.Properties
 
     def __init__(self, *args, **kwargs):
         super(RsvUnit, self).__init__(*args, **kwargs)
@@ -43,7 +43,7 @@ class RsvUnit(rsv_abstracts.AbsRsvUnit):
 class RsvResourceGroup(rsv_abstracts.AbsRsvResourceGroup):
     PATHSEP = '/'
     #
-    PROPERTIES_CLS = ctt_core.Properties
+    PROPERTIES_CLS = bsc_content.Properties
 
     def __init__(self, *args, **kwargs):
         super(RsvResourceGroup, self).__init__(*args, **kwargs)
@@ -52,7 +52,7 @@ class RsvResourceGroup(rsv_abstracts.AbsRsvResourceGroup):
 class RsvResource(rsv_abstracts.AbsRsvResource):
     PATHSEP = '/'
     #
-    PROPERTIES_CLS = ctt_core.Properties
+    PROPERTIES_CLS = bsc_content.Properties
 
     def __init__(self, *args, **kwargs):
         super(RsvResource, self).__init__(*args, **kwargs)
@@ -61,7 +61,7 @@ class RsvResource(rsv_abstracts.AbsRsvResource):
 class RsvStep(rsv_abstracts.AbsRsvStep):
     PATHSEP = '/'
     #
-    PROPERTIES_CLS = ctt_core.Properties
+    PROPERTIES_CLS = bsc_content.Properties
 
     def __init__(self, *args, **kwargs):
         super(RsvStep, self).__init__(*args, **kwargs)
@@ -70,7 +70,7 @@ class RsvStep(rsv_abstracts.AbsRsvStep):
 class RsvTask(rsv_abstracts.AbsRsvTask):
     PATHSEP = '/'
     #
-    PROPERTIES_CLS = ctt_core.Properties
+    PROPERTIES_CLS = bsc_content.Properties
 
     def __init__(self, *args, **kwargs):
         super(RsvTask, self).__init__(*args, **kwargs)
@@ -79,7 +79,7 @@ class RsvTask(rsv_abstracts.AbsRsvTask):
 class RsvTaskVersion(rsv_abstracts.AbsRsvTaskVersion):
     PATHSEP = '/'
     #
-    PROPERTIES_CLS = ctt_core.Properties
+    PROPERTIES_CLS = bsc_content.Properties
 
     def __init__(self, *args, **kwargs):
         super(RsvTaskVersion, self).__init__(*args, **kwargs)
@@ -88,7 +88,7 @@ class RsvTaskVersion(rsv_abstracts.AbsRsvTaskVersion):
 class RsvUnitVersion(rsv_abstracts.AbsRsvUnitVersion):
     PATHSEP = '/'
     #
-    PROPERTIES_CLS = ctt_core.Properties
+    PROPERTIES_CLS = bsc_content.Properties
 
     def __init__(self, *args, **kwargs):
         super(RsvUnitVersion, self).__init__(*args, **kwargs)
@@ -97,7 +97,7 @@ class RsvUnitVersion(rsv_abstracts.AbsRsvUnitVersion):
 class RsvProject(rsv_abstracts.AbsRsvProject):
     PATHSEP = '/'
     #
-    PROPERTIES_CLS = ctt_core.Properties
+    PROPERTIES_CLS = bsc_content.Properties
     #
     RSV_MATCHER_CLS = RsvMatcher
     RSV_PATTERN_CLS = RsvPattern

@@ -3,7 +3,7 @@ import sys
 
 import os
 
-from . import base as bsc_cor_base
+from . import base as _base
 
 
 class EnvBaseMtd(object):
@@ -60,7 +60,7 @@ class EnvBaseMtd(object):
 
     @classmethod
     def get_qt_thread_enable(cls):
-        if bsc_cor_base.SysApplicationMtd.get_is_maya():
+        if _base.SysApplicationMtd.get_is_maya():
             return False
         return True
 

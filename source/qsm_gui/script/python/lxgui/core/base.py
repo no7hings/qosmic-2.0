@@ -15,9 +15,9 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 # gui
 from . import configure as gui_cor_configure
 
@@ -308,7 +308,7 @@ class GuiHistory(object):
     MAXIMUM = 20
 
     FILE_PATH = GuiUtil.get_user_history_cache_file()
-    CONTENT_CACHE = ctt_core.ContentCache(FILE_PATH)
+    CONTENT_CACHE = bsc_content.ContentCache(FILE_PATH)
 
     @classmethod
     def __generate_content_cache(cls):
@@ -381,10 +381,10 @@ class GuiThumbnailCache(object):
     MAXIMUM = 20
 
     FILE_PATH = GuiUtil.get_user_history_cache_file()
-    CONTENT_CACHE = ctt_core.ContentCache(FILE_PATH)
+    CONTENT_CACHE = bsc_content.ContentCache(FILE_PATH)
 
     def __init__(self, file_path):
-        self.__content_cache = ctt_core.ContentCache(file_path)
+        self.__content_cache = bsc_content.ContentCache(file_path)
 
     def pull(self, key):
         c = self.__content_cache.generate()

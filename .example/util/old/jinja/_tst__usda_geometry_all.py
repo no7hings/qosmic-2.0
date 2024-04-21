@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxbasic.storage as bsc_storage
 

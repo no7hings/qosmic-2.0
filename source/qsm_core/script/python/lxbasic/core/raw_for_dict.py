@@ -3,9 +3,9 @@ import json
 
 import collections
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
-from . import raw as bsc_cor_raw
+from . import raw as _raw
 
 
 class DictMtd(object):
@@ -20,7 +20,7 @@ class DictMtd(object):
 
     @classmethod
     def to_string_as_yaml_style(cls, dict_):
-        return ctt_core.ContentYamlBase.dump(
+        return bsc_content.ContentYamlBase.dump(
             dict_,
             indent=4,
             default_flow_style=False
@@ -39,7 +39,7 @@ class DictMtd(object):
     def sort_string_key_to(cls, dict_):
         dict_1 = collections.OrderedDict()
         keys = dict_.keys()
-        keys = bsc_cor_raw.RawTextsMtd.sort_by_number(keys)
+        keys = _raw.RawTextsMtd.sort_by_number(keys)
         for i_key in keys:
             dict_1[i_key] = dict_[i_key]
         return dict_1

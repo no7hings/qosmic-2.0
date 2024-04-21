@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.log as bsc_log
 
-from lxutil.rsv import utl_rsv_obj_abstract
+from lxgeneral.rsv import utl_rsv_obj_abstract
 
 
 # noinspection PyUnusedLocal

@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 # qt
 from ..core.wrap import *
 
@@ -155,7 +155,7 @@ class QtEntryExtendAsPath(QtWidgets.QWidget):
     def _get_matched_next_name_texts_(self, keyword):
         name_texts = self._get_next_name_texts_()
         if name_texts:
-            return ctt_core.ContentUtil.filter(
+            return bsc_content.ContentUtil.filter(
                 name_texts, '*{}*'.format(keyword)
             )
         return []

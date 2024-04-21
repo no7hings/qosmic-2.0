@@ -1,7 +1,7 @@
 # coding:utf-8
 import functools
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 from . import base as bsc_ssn_base
 

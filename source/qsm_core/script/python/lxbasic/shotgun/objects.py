@@ -3,7 +3,7 @@ import six
 
 import collections
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -189,7 +189,7 @@ class StgConnector(object):
             entity_type=stg_type, field_name=key
         )
         if isinstance(_, dict):
-            return ctt_core.Content(value=_)
+            return bsc_content.Content(value=_)
 
     def get_stg_projects(self):
         return self._stg_instance.find(

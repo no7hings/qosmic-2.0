@@ -317,7 +317,7 @@ def lib_scene_to_proxy_fnc(option_opt):
 def lib_scene_to_look_fnc(option_opt):
     import lxbasic.storage as bsc_storage
 
-    import lxresource as bsc_resource
+    import lxbasic.resource as bsc_resource
 
     import lxmaya.dcc.objects as mya_dcc_objects
 

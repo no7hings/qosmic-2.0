@@ -7,7 +7,7 @@ import sys
 
 import six
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -2598,7 +2598,7 @@ class NGMacro(object):
     def create_by_configure_file(self, file_path, clear_start=None):
         NGNodeOpt(self._ktn_obj).clear_ports(clear_start)
         #
-        configure = ctt_core.Content(value=file_path)
+        configure = bsc_content.Content(value=file_path)
         input_ports = configure.get('input_ports') or []
         #
         NGNodeOpt(self._ktn_obj).set_color(
@@ -2624,7 +2624,7 @@ class NGMacro(object):
         else:
             ktn_op_scripts = NGNodeOpt(self._ktn_obj).get_children(type_includes=['OpScript'])
         for i_ktn_op_script in ktn_op_scripts:
-            configure = ctt_core.Content(value=file_path)
+            configure = bsc_content.Content(value=file_path)
             parameters = configure.get('parameters') or {}
             NGNodeOpt(i_ktn_op_script).clear_ports('user')
             for k, v in parameters.items():
@@ -2638,7 +2638,7 @@ class NGMacro(object):
     def set_sub_op_script_create_by_configure_file(self, file_path, key, paths):
         ktn_op_scripts = [NodegraphAPI.GetNode(i) for i in paths]
         for i_ktn_op_script in ktn_op_scripts:
-            configure = ctt_core.Content(value=file_path)
+            configure = bsc_content.Content(value=file_path)
             parameters = configure.get('op_script.{}.parameters'.format(key)) or {}
             NGNodeOpt(i_ktn_op_script).clear_ports('user')
             for k, v in parameters.items():

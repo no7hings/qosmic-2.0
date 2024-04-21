@@ -3,9 +3,9 @@ import six
 
 import collections
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxbasic.log as bsc_log
 
@@ -19,7 +19,7 @@ import lxbasic.fnc.abstracts as bsc_fnc_abstracts
 
 import lxresolver.core as rsv_core
 
-from lxutil.rsv import utl_rsv_obj_abstract
+from lxgeneral.rsv import utl_rsv_obj_abstract
 
 
 class RsvUsdAssetSetCreator(object):
@@ -95,7 +95,7 @@ class RsvUsdAssetSetCreator(object):
                 file_opt.set_write(dict_)
                 return dict_
             return {}
-        return ctt_core.Content(value={})
+        return bsc_content.Content(value={})
 
     @classmethod
     def _get_shot_asset_dict(cls, rsv_asset, rsv_shot):
@@ -374,7 +374,7 @@ class RsvUsdAssetSetCreator(object):
                     return dict_
                 return {}
         else:
-            return ctt_core.Content(value={})
+            return bsc_content.Content(value={})
 
     @classmethod
     def _get_shot_usd_set_dress_variant_dict(cls, rsv_shot):
@@ -385,7 +385,7 @@ class RsvUsdAssetSetCreator(object):
     def _get_usd_file_variant_dict(cls, usd_file_path):
         import lxusd.core as usd_core
 
-        c = ctt_core.Content(value=collections.OrderedDict())
+        c = bsc_content.Content(value=collections.OrderedDict())
         usd_stage_opt = usd_core.UsdStageOpt(usd_file_path)
         usd_prim_opt = usd_core.UsdPrimOpt(usd_stage_opt.get_obj('/master'))
         if usd_file_path:
@@ -420,7 +420,7 @@ class RsvUsdAssetSetCreator(object):
     def _get_usd_variant_dict(cls, rsv_asset, rsv_scene_properties, asset_usd_file_path):
         import lxusd.core as usd_core
 
-        c = ctt_core.Content(value=collections.OrderedDict())
+        c = bsc_content.Content(value=collections.OrderedDict())
         step_cur = rsv_scene_properties.get('step')
         cur_key = cls.STEP_MAPPER[step_cur]
         usd_stage_opt = usd_core.UsdStageOpt(asset_usd_file_path)
@@ -742,7 +742,7 @@ class RsvUsdAssetSet(object):
         if not usd_variant_dict:
             return {}
 
-        c = ctt_core.Dict()
+        c = bsc_content.Dict()
 
         keys = [
             'model',
@@ -821,7 +821,7 @@ class RsvUsdAssetSet(object):
 
         postfix = '_component_main'
 
-        c = ctt_core.Dict()
+        c = bsc_content.Dict()
 
         usd_stage_opt = usd_core.UsdStageOpt(usd_file_path)
         usd_prim_opt = usd_core.UsdPrimOpt(usd_stage_opt.get_obj('/master'))

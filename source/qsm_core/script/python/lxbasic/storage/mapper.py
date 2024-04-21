@@ -1,7 +1,7 @@
 # coding:utf-8
 import platform
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 from lxbasic.core import base as bsc_cor_base
 

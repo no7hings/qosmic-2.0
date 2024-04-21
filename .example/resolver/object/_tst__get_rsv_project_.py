@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.extra.methods as bsc_etr_methods
 
@@ -18,7 +18,7 @@ print m.EtrBase.get_app_execute_mapper(p)
 
 f = m.EtrBase.get_deadline_configure_file(p)
 
-deadline_configure = ctt_core.Content(value=f)
+deadline_configure = bsc_content.Content(value=f)
 
 deadline_job_context = 'render'
 

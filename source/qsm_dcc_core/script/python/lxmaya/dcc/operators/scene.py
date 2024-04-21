@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -35,7 +35,7 @@ class SceneOpt(bsc_dcc_abstracts.AbsSceneOpt):
             yml_file_path = bsc_storage.StgTmpYamlMtd.get_file_path(file_path, 'mesh-comparer')
             yml_file = bsc_storage.StgFileOpt(yml_file_path)
             if yml_file.get_is_exists() is False:
-                content_0 = ctt_core.Content(value={})
+                content_0 = bsc_content.Content(value={})
                 content_0.set('file', file_path)
                 dcc_objs = self._stage.get_objs()
                 if dcc_objs:
@@ -65,14 +65,14 @@ class SceneOpt(bsc_dcc_abstracts.AbsSceneOpt):
                                 content_0.set('points_uuids.{}'.format(dcc_path), points_uuid)
                 #
                 return content_0
-            return ctt_core.Content(value=yml_file_path)
-        return ctt_core.Content(value={})
+            return bsc_content.Content(value=yml_file_path)
+        return bsc_content.Content(value={})
 
     def get_mesh_comparer_data(self, file_path):
         if file_path:
             yml_file_path = bsc_storage.StgTmpYamlMtd.get_file_path(file_path, 'mesh-comparer')
             return self._get_mesh_data_content_(self._stage, file_path, yml_file_path)
-        return ctt_core.Content(value={})
+        return bsc_content.Content(value={})
 
     @classmethod
     def _get_mesh_data_content_(cls, stage, file_path, yml_file_path):
@@ -82,9 +82,9 @@ class SceneOpt(bsc_dcc_abstracts.AbsSceneOpt):
 
         yml_file = bsc_storage.StgFileOpt(yml_file_path)
         if yml_file.get_is_exists() is True:
-            return ctt_core.Content(value=yml_file_path)
+            return bsc_content.Content(value=yml_file_path)
 
-        content_0 = ctt_core.Content(value={})
+        content_0 = bsc_content.Content(value={})
         dcc_objs = stage.get_objs()
         if dcc_objs:
             with bsc_log.LogProcessContext.create(maximum=len(dcc_objs), label='gain build comparer-data') as g_p:

@@ -3,9 +3,9 @@ import collections
 
 import copy
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxbasic.log as bsc_log
 
@@ -55,7 +55,7 @@ class ScpLookAssImport(object):
             bsc_storage.StgFileOpt(self._file_path).get_modify_timestamp()
             ).get_as_tag_36()
 
-        self._convert_configure = ctt_core.Content(
+        self._convert_configure = bsc_content.Content(
             value=bsc_resource.RscExtendConfigure.get_yaml('arnold/convert')
         )
         self._convert_configure.do_flatten()

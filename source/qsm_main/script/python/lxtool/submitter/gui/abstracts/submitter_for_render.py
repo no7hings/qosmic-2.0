@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -295,7 +295,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
     def set_scheme_save(self):
         filter_dict = self._prx_dcc_obj_tree_view_tag_filter_opt.get_filter_dict()
         # print filter_dict
-        ctt_core.Content(value=filter_dict).print_as_yaml_style()
+        bsc_content.Content(value=filter_dict).print_as_yaml_style()
 
     # options
     def set_options_refresh(self):
@@ -843,7 +843,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                     )
 
     def _get_usd_dict_(self):
-        c = ctt_core.Content(value={})
+        c = bsc_content.Content(value={})
         c.set('usd_reverse_face_vertex_enable', self._usd_prx_node.get('debuggers.reverse_face_vertex_enable'))
         return c.get_value()
 
@@ -897,7 +897,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
         #
         dic = {}
         filter_dic = self._prx_dcc_obj_tree_view_tag_filter_opt.get_filter_dict()
-        c = ctt_core.Content(value=filter_dic)
+        c = bsc_content.Content(value=filter_dic)
         for i in self._variable_keys:
             update_fnc(i)
         return dic
@@ -1445,12 +1445,12 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
         pass
 
     def _get_usd_dict_(self):
-        c = ctt_core.Content(value={})
+        c = bsc_content.Content(value={})
         c.set('usd_effect_components', [i.name for i in self._usd_prx_node.get('components.effect')])
         return c.get_value()
 
     def _get_settings_dict_(self):
-        c = ctt_core.Content(value={})
+        c = bsc_content.Content(value={})
         #
         c.set('render_look', self._settings_prx_node.get('render.look'))
         frames = self._settings_prx_node.get('render.frames')

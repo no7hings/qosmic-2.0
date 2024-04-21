@@ -1,7 +1,7 @@
 # coding:utf-8
 import six
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 # universe
 from .. import core as unr_core
 
@@ -700,7 +700,7 @@ class AbsPort(
         return False
 
     def to_properties(self):
-        p = ctt_core.Properties(self)
+        p = bsc_content.Properties(self)
         p.set(
             'type', self.type_path
         )

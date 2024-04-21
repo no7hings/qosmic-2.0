@@ -5,11 +5,11 @@ import math
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import qsm_maya.asset.core as qsm_mya_ast_core
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import qsm_maya.rig.core as qsm_rig_core
 
@@ -381,7 +381,7 @@ class AdvSkinProxyGenerate(object):
 
         leaf_keys = self._adv_query.skeleton_query.get_all_leaf_keys()
         for i_main_key in self.MAIN_KEYS:
-            i_keys = ctt_core.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
+            i_keys = bsc_content.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
             for j_key in i_keys:
                 j_key_path = j_key.replace('.', '_')
                 j_group_path = '{}|{}_grp'.format(location, j_key_path)
@@ -405,7 +405,7 @@ class AdvSkinProxyGenerate(object):
     def match_resource_positions(self, location):
         leaf_keys = self._adv_query.skeleton_query.get_all_leaf_keys()
         for i_main_key in self.MAIN_KEYS:
-            i_keys = ctt_core.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
+            i_keys = bsc_content.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
             for j_key in i_keys:
                 j_skeleton_paths = self._adv_query.skeleton_query.get(j_key)
                 if not j_skeleton_paths:
@@ -435,7 +435,7 @@ class AdvSkinProxyGenerate(object):
 
         leaf_keys = self._adv_query.skeleton_query.get_all_leaf_keys()
         for i_main_key in self.MAIN_KEYS:
-            i_keys = ctt_core.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
+            i_keys = bsc_content.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
             for j_key in i_keys:
                 j_skeleton_paths = self._adv_query.skeleton_query.get(j_key)
                 if not j_skeleton_paths:
@@ -476,7 +476,7 @@ class AdvSkinProxyGenerate(object):
 
         leaf_keys = self._adv_query.skeleton_query.get_all_leaf_keys()
         for i_main_key in self.MAIN_KEYS:
-            i_keys = ctt_core.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
+            i_keys = bsc_content.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
             for j_key in i_keys:
                 j_skeleton_paths = self._adv_query.skeleton_query.get(j_key)
                 if not j_skeleton_paths:
@@ -539,7 +539,7 @@ class AdvSkinProxyGenerate(object):
         cmds.scaleConstraint(root_skeleton_paths[0], location)
         leaf_keys = self._adv_query.skeleton_query.get_all_leaf_keys()
         for i_main_key in self.MAIN_KEYS:
-            i_keys = ctt_core.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
+            i_keys = bsc_content.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
             for j_key in i_keys:
                 j_skeleton_paths = self._adv_query.skeleton_query.get(j_key)
                 if not j_skeleton_paths:
@@ -621,7 +621,7 @@ class AdvSkinProxyGenerate(object):
 
         leaf_keys = self._adv_query.skeleton_query.get_all_leaf_keys()
         for i_main_key in self.MAIN_KEYS:
-            i_keys = ctt_core.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
+            i_keys = bsc_content.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
             for j_key in i_keys:
                 j_skeleton_paths = self._adv_query.skeleton_query.get(j_key)
                 if not j_skeleton_paths:
@@ -656,7 +656,7 @@ class AdvSkinProxyGenerate(object):
 
         leaf_keys = self._adv_query.skeleton_query.get_all_leaf_keys()
         for i_main_key in self.MAIN_KEYS:
-            i_keys = ctt_core.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
+            i_keys = bsc_content.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
             for j_key in i_keys:
                 j_skeleton_paths = self._adv_query.skeleton_query.get(j_key)
                 if not j_skeleton_paths:
@@ -685,7 +685,7 @@ class AdvSkinProxyGenerate(object):
 
         leaf_keys = self._adv_query.skeleton_query.get_all_leaf_keys()
         for i_main_key in self.MAIN_KEYS:
-            i_keys = ctt_core.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
+            i_keys = bsc_content.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
             for j_key in i_keys:
                 j_skeleton_paths = self._adv_query.skeleton_query.get(j_key)
                 if not j_skeleton_paths:

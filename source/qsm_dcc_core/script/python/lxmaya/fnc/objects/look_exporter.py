@@ -5,7 +5,7 @@ import collections
 
 import glob
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -687,7 +687,7 @@ class FncExporterForLookYml(bsc_fnc_abstracts.AbsFncOptionBase):
     def execute(self):
         file_path = self.get('file')
 
-        self._raw = ctt_core.Content(
+        self._raw = bsc_content.Content(
             value=collections.OrderedDict()
         )
 

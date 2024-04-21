@@ -3,9 +3,9 @@ import fnmatch
 
 import re
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 import lxbasic.log as bsc_log
 
@@ -67,7 +67,7 @@ class AssetWorkspaceOld(object):
             return configure
 
     def set_configure_create(self, pass_name='default'):
-        configure = ctt_core.Content(value=self.CONFIGURE_FILE_PATH)
+        configure = bsc_content.Content(value=self.CONFIGURE_FILE_PATH)
         configure.set('option.look_pass', pass_name)
         self._look_configure_dict[pass_name] = configure
         return configure

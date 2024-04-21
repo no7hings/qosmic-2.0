@@ -3,7 +3,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 key_name = 'payload'
 

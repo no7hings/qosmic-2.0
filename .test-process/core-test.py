@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxresource as bsc_resource
+import lxbasic.resource as bsc_resource
 
 print bsc_resource.RscExtendIcon.find_all_keys()
 

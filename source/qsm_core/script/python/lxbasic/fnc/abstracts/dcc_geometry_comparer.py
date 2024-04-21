@@ -5,7 +5,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.dcc.core as bsc_dcc_core
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 from . import base as bsc_fnc_abs_base
 
@@ -13,7 +13,7 @@ from . import base as bsc_fnc_abs_base
 class AbsFncMatcherForDccMesh(object):
     FNC_DCC_MESH_CLS = None
     # cache for exchanged
-    DCC_CACHE_SRC = ctt_core.Content(value=dict())
+    DCC_CACHE_SRC = bsc_content.Content(value=dict())
 
     @classmethod
     def _push_geometry_cache(cls, path_src, path_tgt):
@@ -511,7 +511,7 @@ class AbsFncComparerForDccGeometry(bsc_fnc_abs_base.AbsFncOptionBase):
         self._dcc_scene_src = usd_dcc_objects.Scene()
         self._dcc_universe_src = self._dcc_scene_src.universe
         self._dcc_stage_opt_src = usd_dcc_operators.SceneOpt(self._dcc_scene_src.usd_stage, self.DCC_NAMESPACE)
-        self._dcc_comparer_data_src = ctt_core.Content(
+        self._dcc_comparer_data_src = bsc_content.Content(
             value={}
         )
         #
@@ -526,7 +526,7 @@ class AbsFncComparerForDccGeometry(bsc_fnc_abs_base.AbsFncOptionBase):
         self._dcc_scene_tgt = usd_dcc_objects.Scene()
         self._dcc_universe_tgt = self._dcc_scene_tgt.universe
         self._dcc_stage_opt_tgt = usd_dcc_operators.SceneOpt(self._dcc_scene_tgt.usd_stage, self.DCC_NAMESPACE)
-        self._dcc_comparer_data_tgt = ctt_core.Content(
+        self._dcc_comparer_data_tgt = bsc_content.Content(
             value={}
         )
         #

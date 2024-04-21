@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -378,7 +378,7 @@ class AbsSsnOptionMethod(
         )
         main_key = hook_option_opt.get('option_hook_key')
         f = self.get_batch_file_path()
-        c = ctt_core.Content(value=f)
+        c = bsc_content.Content(value=f)
         #
         dependent_option_hook_keys = hook_option_opt.get(
             'dependencies', as_array=True
@@ -400,7 +400,7 @@ class AbsSsnOptionMethod(
         )
         option_hook_key = hook_option_opt.get('option_hook_key')
         f = self.get_batch_file_path()
-        c = ctt_core.Content(value=f)
+        c = bsc_content.Content(value=f)
         #
         keys = [option_hook_key]
         option_hook_key_extend = hook_option_opt.get('option_hook_key_extend', as_array=True)
@@ -419,7 +419,7 @@ class AbsSsnOptionMethod(
         )
         option_hook_key = hook_option_opt.get('option_hook_key')
         f = self.get_batch_file_path()
-        c = ctt_core.Content(value=f)
+        c = bsc_content.Content(value=f)
         #
         keys = [option_hook_key]
         option_hook_key_extend = hook_option_opt.get('option_hook_key_extend', as_array=True)
@@ -783,7 +783,7 @@ class AbsSsnRsvTaskOptionMethod(
         )
         option_hook_key = hook_option_opt.get('option_hook_key')
         f = self.get_batch_file_path()
-        c = ctt_core.Content(value=f)
+        c = bsc_content.Content(value=f)
         #
         keys = [option_hook_key]
         option_hook_key_extend = hook_option_opt.get('option_hook_key_extend', as_array=True)
@@ -807,7 +807,7 @@ class AbsSsnRsvTaskOptionMethod(
         )
         option_hook_key = hook_option_opt.get('option_hook_key')
         f = self.get_batch_file_path()
-        c = ctt_core.Content(value=f)
+        c = bsc_content.Content(value=f)
         #
         keys = [option_hook_key]
         option_hook_key_extend = hook_option_opt.get('option_hook_key_extend', as_array=True)
@@ -845,7 +845,7 @@ class AbsSsnRsvTaskOptionMethod(
         )
         main_key = hook_option_opt.get('option_hook_key')
         f = self.get_batch_file_path()
-        c = ctt_core.Content(value=f)
+        c = bsc_content.Content(value=f)
         #
         dependent_option_hook_keys = hook_option_opt.get(
             'dependencies', as_array=True

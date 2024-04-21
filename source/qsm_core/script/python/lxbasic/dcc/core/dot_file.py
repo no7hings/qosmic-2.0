@@ -15,7 +15,7 @@ import uuid
 
 import os
 
-import lxcontent.core as ctt_core
+import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
@@ -374,7 +374,7 @@ class DotXgenOpt(_AbsDotFile):
         )
 
     def get_description_properties(self):
-        d = ctt_core.Dict()
+        d = bsc_content.Dict()
         bsc_log.Log.trace_method_result(
             'file parse is started', 'file="{}"'.format(
                 self._file_path
@@ -633,7 +633,7 @@ class DotMaOptOld(_AbsDotFile):
 class DotMtlxOptOld(_AbsDotFile):
     SEP = '\n'
     LINE_PATTERN_CLS = _LinePattern
-    PROPERTIES_CLS = ctt_core.Properties
+    PROPERTIES_CLS = bsc_content.Properties
 
     def __init__(self, file_path):
         super(DotMtlxOptOld, self).__init__(file_path)
@@ -691,7 +691,7 @@ class DotMtlxOptOld(_AbsDotFile):
 class DotOslOptOld(_AbsDotFile):
     SEP = '\n'
     LINE_PATTERN_CLS = _LinePattern
-    PROPERTIES_CLS = ctt_core.Properties
+    PROPERTIES_CLS = bsc_content.Properties
 
     def __init__(self, file_path):
         super(DotOslOptOld, self).__init__(file_path)

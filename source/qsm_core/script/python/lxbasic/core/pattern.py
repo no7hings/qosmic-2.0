@@ -7,9 +7,9 @@ import fnmatch
 
 import parse
 
-from . import base as bsc_cor_base
+from . import base as _base
 
-from . import raw as bsc_cor_raw
+from . import raw as _raw
 
 
 class PtnBaseMtd(object):
@@ -19,7 +19,7 @@ class PtnBaseMtd(object):
             p_str
         )
         if _:
-            if bsc_cor_base.SysBaseMtd.get_is_windows():
+            if _base.SysBaseMtd.get_is_windows():
                 _ = map(lambda x: x.replace('\\', '/'), _)
             return _
         return []
@@ -345,11 +345,11 @@ class AbsPtnParseOpt(object):
         )
 
     def get_variants(self, result):
-        if bsc_cor_base.SysBaseMtd.get_is_linux():
+        if _base.SysBaseMtd.get_is_linux():
             i_p = parse.parse(
                 self._pattern, result, case_sensitive=True
             )
-        elif bsc_cor_base.SysBaseMtd.get_is_windows():
+        elif _base.SysBaseMtd.get_is_windows():
             i_p = parse.parse(
                 self._pattern, result, case_sensitive=False
             )
@@ -377,7 +377,7 @@ class PtnParseOpt(AbsPtnParseOpt):
             )
         )
         if sort is True:
-            paths = bsc_cor_raw.RawTextsOpt(paths).sort_by_number()
+            paths = _raw.RawTextsOpt(paths).sort_by_number()
         #
         if self.get_keys():
             for i_path in paths:
@@ -419,7 +419,7 @@ class PtnParseOpt(AbsPtnParseOpt):
             )
         )
         if sort is True:
-            paths = bsc_cor_raw.RawTextsOpt(paths).sort_by_number()
+            paths = _raw.RawTextsOpt(paths).sort_by_number()
         return paths
 
     def set_default_variants(self, key, value):
