@@ -744,7 +744,7 @@ class PrxPressItem(gui_prx_abstracts.AbsPrxWidget):
     def set_finished_at(self, index, status):
         self.widget.rate_finished_at.emit(index, status)
 
-    def set_initialization(self, count, status=gui_core.GuiStatus.Started):
+    def initialization(self, count, status=gui_core.GuiStatus.Started):
         self.widget._initialization_sub_process_(count, status)
 
 
@@ -917,13 +917,13 @@ class PrxScreenshotFrame(
     def set_start(self):
         self._qt_widget._start_screenshot_()
 
-    def set_started_connect_to(self, fnc):
+    def connect_started_to(self, fnc):
         self._qt_widget.screenshot_started.connect(fnc)
 
-    def set_finished_connect_to(self, fnc):
+    def connect_finished_to(self, fnc):
         self._qt_widget.screenshot_finished.connect(fnc)
 
-    def set_accepted_connect_to(self, fnc):
+    def connect_accepted_to(self, fnc):
         self._qt_widget.screenshot_accepted.connect(fnc)
 
     @classmethod

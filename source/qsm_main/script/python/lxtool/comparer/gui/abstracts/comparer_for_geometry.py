@@ -55,7 +55,7 @@ class AbsDccComparerOpt(object):
         #
         prx_item_src = transform_prx_item_src.add_child(
             name=[dcc_obj_src.name, description, dcc_path_dag_opt_tgt.name],
-            icon=gui_core.GuiIcon.get('obj/mesh'),
+            icon=gui_core.GuiIcon.get('node/mesh'),
             tool_tip=[path_src, description, path_tgt],
         )
         prx_item_src.set_status(
@@ -78,7 +78,7 @@ class AbsDccComparerOpt(object):
 
         prx_item = self._result_tree_view.create_item(
             name=path_dag_opt.name,
-            icon=gui_core.GuiIcon.get('obj/transform'),
+            icon=gui_core.GuiIcon.get('node/transform'),
             tool_tip=path,
         )
         prx_item.set_expanded(True)
@@ -94,7 +94,7 @@ class AbsDccComparerOpt(object):
 
         prx_item = parent_prx_item.add_child(
             name=path_dag_opt.name,
-            icon=gui_core.GuiIcon.get('obj/transform'),
+            icon=gui_core.GuiIcon.get('node/transform'),
             tool_tip=path,
         )
         prx_item.set_expanded(True)
@@ -112,7 +112,7 @@ class AbsDccComparerOpt(object):
 
         prx_item = parent_prx_item.add_child(
             name=name,
-            icon=gui_core.GuiIcon.get('obj/transform'),
+            icon=gui_core.GuiIcon.get('node/transform'),
             tool_tip=path,
         )
         prx_item.set_expanded(True)

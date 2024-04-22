@@ -1,6 +1,8 @@
 # coding:utf-8
 from .scene import *
 
+from .camera import *
+
 from .reference import *
 
 from .namespace import *

@@ -314,6 +314,7 @@ class AbsQtStatusBaseDef(object):
 class AbsQtSubProcessBaseDef(object):
     def _init_sub_process_base_def_(self):
         self._sub_process_is_enable = False
+        self._sub_process_is_started = False
         #
         self._sub_process_statuses = []
 
@@ -346,6 +347,7 @@ class AbsQtSubProcessBaseDef(object):
     def _initialization_sub_process_(self, count, status):
         if count > 0:
             self._sub_process_is_enable = True
+            self._sub_process_is_started = True
             self._sub_process_statuses = [status]*count
             color, hover_color = AbsQtStatusBaseDef._get_background_rgba_args_by_status_(status)
             self._sub_process_status_colors = [color]*count
@@ -388,6 +390,7 @@ class AbsQtSubProcessBaseDef(object):
 
     def _restore_sub_process_(self):
         self._sub_process_is_enable = False
+        self._sub_process_is_started = False
         self._sub_process_statuses = []
         self._sub_process_status_colors = []
         self._hover_sub_process_status_colors = []
@@ -395,14 +398,14 @@ class AbsQtSubProcessBaseDef(object):
 
         self._sub_process_status_text = ''
 
-    def _set_sub_process_finished_at_(self, index, status):
+    def _finish_sub_process_at_(self, index, status):
         self._sub_process_finished_results[index] = True
         #
-        self._update_sub_process_finished_()
+        self._update_sub_process_by_finish_()
         #
         self._refresh_widget_draw_()
 
-    def _update_sub_process_finished_(self):
+    def _update_sub_process_by_finish_(self):
         self._sub_process_finished_value = sum(self._sub_process_finished_results)
         self._sub_process_finished_maximum = len(self._sub_process_finished_results)
         #
@@ -451,6 +454,9 @@ class AbsQtSubProcessBaseDef(object):
 
     def _get_sub_process_is_enable_(self):
         return self._sub_process_is_enable
+
+    def _get_sub_process_is_started_(self):
+        return self._sub_process_is_started
 
 
 class AbsQtValidatorBaseDef(object):
@@ -2028,6 +2034,7 @@ class AbsQtThreadBaseDef(object):
         self._thread_load_index = 0
 
         self._thread_running_timer = QtCore.QTimer()
+        # noinspection PyUnresolvedReferences
         self._thread_running_timer.timeout.connect(self._refresh_thread_draw_)
 
         self.__thread_exists = None
@@ -2561,10 +2568,10 @@ class AbsQtItemFilterDef(object):
         return self._item_tag_filter_mode
 
     # tag filter source
-    def _set_item_tag_filter_keys_src_add_(self, key):
+    def _add_item_tag_filter_keys_src_(self, key):
         self._item_tag_filter_keys_src.add(key)
 
-    def _set_item_tag_filter_keys_src_update_(self, keys):
+    def _update_item_tag_filter_keys_src_(self, keys):
         self._item_tag_filter_keys_src.update(set(keys))
 
     def _get_item_tag_filter_keys_src_(self):

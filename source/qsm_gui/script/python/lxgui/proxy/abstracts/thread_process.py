@@ -66,7 +66,7 @@ class AbsQtThreadProcessBase(object):
             c = len(cmds)
 
             button.set_status(bsc_core.TrdCommandPool.Status.Started)
-            button.set_initialization(c, bsc_core.TrdCommandPool.Status.Started)
+            button.initialization(c, bsc_core.TrdCommandPool.Status.Started)
 
             q_t = gui_qt_core.QtMethodThread(self._window.widget)
             q_t.append_method(

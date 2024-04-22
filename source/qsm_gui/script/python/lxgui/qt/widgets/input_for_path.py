@@ -71,7 +71,7 @@ class QtInputAsPath(
         self._init_input_completion_extra_def_(self)
         self._init_input_history_extra_def_(self)
 
-        self.__buffer_fnc = lambda x: {}
+        self._buffer_fnc = lambda x: {}
         self.__buffer_cache = {}
 
         self._build_input_entry_()
@@ -120,15 +120,18 @@ class QtInputAsPath(
         self.user_input_value_change_accepted = self._entry_extend_widget.user_entry_value_change_accepted
 
     def _set_buffer_fnc_(self, fnc):
-        self.__buffer_fnc = fnc
+        self._buffer_fnc = fnc
 
     def _update_next_cbk_(self, path):
+        """
+        buffer fnc always use thread
+        """
         def cache_fnc_():
             _key = path.to_string()
             if _key in self.__buffer_cache:
                 return [self._index_thread_batch, self.__buffer_cache[_key]]
 
-            _data = self.__buffer_fnc(path)
+            _data = self._buffer_fnc(path)
             self.__buffer_cache[_key] = _data
             return [self._index_thread_batch, _data]
 
@@ -140,7 +143,7 @@ class QtInputAsPath(
 
             if _dict:
                 self._entry_extend_widget._set_next_name_texts_(
-                    _dict.get('names') or []
+                    _dict.get('name_texts') or []
                 )
                 self._set_choose_popup_item_image_url_dict_(
                     _dict.get('image_url_dict') or {}
@@ -150,6 +153,19 @@ class QtInputAsPath(
                 )
                 self._set_choose_popup_item_tag_filter_dict_(
                     _dict.get('tag_filter_dict') or {}
+                )
+            else:
+                self._entry_extend_widget._set_next_name_texts_(
+                    []
+                )
+                self._set_choose_popup_item_image_url_dict_(
+                    {}
+                )
+                self._set_choose_popup_item_keyword_filter_dict_(
+                    {}
+                )
+                self._set_choose_popup_item_tag_filter_dict_(
+                    {}
                 )
 
         def post_fnc_():

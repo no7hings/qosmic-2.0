@@ -313,7 +313,7 @@ class PrxTreeItem(
         self._qt_widget._set_expanded_(boolean, ancestors)
 
     # expand
-    def set_expand(self, ancestors=False):
+    def do_expand(self, ancestors=False):
         self._qt_widget.setExpanded(True)
         if ancestors is True:
             [i.widget.setExpanded(True) for i in self.get_ancestors()]
@@ -331,12 +331,12 @@ class PrxTreeItem(
         [i.widget.setExpanded(True) for i in self.get_ancestors()]
 
     def set_expand_branch(self):
-        self.set_expand()
+        self.do_expand()
         descendants = self.get_descendants()
-        [i.set_expand() for i in descendants]
+        [i.do_expand() for i in descendants]
 
     def set_expand_branch_by_condition(self, condition_fnc, conditions):
-        self.set_expand()
+        self.do_expand()
         match_prx_items = []
         descendants = self.get_descendants()
         for i in descendants:

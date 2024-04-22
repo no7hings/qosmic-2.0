@@ -97,7 +97,6 @@ class AbsPrxToolGroup(gui_prx_abstracts.AbsPrxWidget):
             qt_widget = widget.widget
         #
         if qt_widget != self.widget:
-            #
             self._layout.addWidget(qt_widget)
 
     def set_layout_alignment_to_top(self):

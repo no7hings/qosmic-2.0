@@ -2026,7 +2026,7 @@ class _QtNGTree(
             item._set_icon_file_path_(icon_file_path)
         else:
             item._set_icon_file_path_(
-                gui_core.GuiIcon.get('obj/group')
+                gui_core.GuiIcon.get('node/group')
             )
 
         tool_tip = obj.properties.get('gui.tool_tip')

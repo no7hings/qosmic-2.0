@@ -487,10 +487,10 @@ class PrxInputAsMediasOpen(PrxInputAsFilesOpen):
     def __dot_screenshot_create(self):
         active_window = gui_qt_core.GuiQtUtil.get_qt_active_window()
         w = gui_prx_wdt_utility.PrxScreenshotFrame()
-        w.set_started_connect_to(active_window.hide)
+        w.connect_started_to(active_window.hide)
         w.set_start()
-        w.set_accepted_connect_to(self.__do_screenshot_save)
-        w.set_finished_connect_to(active_window.show)
+        w.connect_accepted_to(self.__do_screenshot_save)
+        w.connect_finished_to(active_window.show)
 
 
 # any array
@@ -1249,6 +1249,8 @@ class PrxInputAsSubProcessButton(_AbsPrxInput):
             functools.partial(self.__exec_fnc, fnc)
         )
 
+    def set_icon_by_file(self, file_path):
+        self._qt_input_widget._set_icon_file_path_(file_path)
 
 #   validation button
 class PrxInputAsValidationButton(_AbsPrxInput):
@@ -1312,6 +1314,9 @@ class PrxInputAsCapsule(_AbsPrxInput):
 
     def connect_input_changed_to(self, fnc):
         self._qt_input_widget.input_value_changed.connect(fnc)
+
+    def connect_user_input_changed_to(self, fnc):
+        self._qt_input_widget.user_input_value_changed.connect(fnc)
 
 
 # any2, any3

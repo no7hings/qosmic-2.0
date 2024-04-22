@@ -206,6 +206,9 @@ class PrxTreeView(
     def get_top_tool_bar(self):
         return self._prx_top_tool_bar
 
+    def hide_top_tool_bar(self):
+        self._prx_top_tool_bar.set_visible(False)
+
     def set_scroll_to_select_item(self):
         selection_items = self.view.selectedItems()
         if selection_items:

@@ -10,6 +10,8 @@ from ...qt.widgets import base as gui_qt_wgt_base
 from ...qt.widgets import utility as gui_qt_wgt_utility
 
 from ...qt.widgets import input as gui_qt_wgt_input
+
+from ...qt.widgets import input_for_path as gui_qt_wgt_input_for_path
 # proxy abstracts
 from .. import abstracts as gui_prx_abstracts
 
@@ -66,37 +68,37 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
             self.__update_branch
         )
 
-        self.__qt_task_input = gui_qt_wgt_input.QtInputAsPath()
-        l_0.addWidget(self.__qt_task_input)
+        self._qt_path_input = gui_qt_wgt_input_for_path.QtInputAsPath()
+        l_0.addWidget(self._qt_path_input)
 
-        self.__qt_task_input._set_buffer_fnc_(
-            self.__buffer_fnc
+        self._qt_path_input._set_buffer_fnc_(
+            self._buffer_fnc
         )
 
-        self.__qt_task_input._set_value_('/')
-        self.__qt_task_input._set_choose_popup_auto_resize_enable_(False)
-        self.__qt_task_input._set_choose_popup_tag_filter_enable_(True)
-        self.__qt_task_input._set_choose_popup_keyword_filter_enable_(True)
+        self._qt_path_input._set_value_('/')
+        self._qt_path_input._set_choose_popup_auto_resize_enable_(False)
+        self._qt_path_input._set_choose_popup_tag_filter_enable_(True)
+        self._qt_path_input._set_choose_popup_keyword_filter_enable_(True)
 
-        self.__qt_task_input._set_choose_popup_item_size_(40, 40)
+        self._qt_path_input._set_choose_popup_item_size_(40, 40)
 
-        self.__qt_task_input._setup_()
+        self._qt_path_input._setup_()
 
-        self.__qt_task_input.input_value_change_accepted.connect(self.__update_task)
-        self.__qt_task_input.user_input_entry_finished.connect(self.__accept_result)
+        self._qt_path_input.input_value_change_accepted.connect(self.__update_task)
+        self._qt_path_input.user_input_entry_finished.connect(self.__accept_result)
 
         self.__qt_scheme_input._set_value_(self.Schemes.AssetTask)
 
         self.__qt_scheme_input._set_history_key_('gui.shotgun-branch')
         self.__qt_scheme_input._pull_history_latest_()
 
-        self.__qt_task_input._set_history_key_('gui.input-path-{}'.format(self.__scheme))
-        self.__qt_task_input._pull_history_latest_()
+        self._qt_path_input._set_history_key_('gui.input-path-{}'.format(self.__scheme))
+        self._qt_path_input._pull_history_latest_()
 
-        self.__qt_task_input._create_widget_shortcut_action_(
+        self._qt_path_input._create_widget_shortcut_action_(
             self.__to_next_scheme, 'Alt+Right'
         )
-        self.__qt_task_input._create_widget_shortcut_action_(
+        self._qt_path_input._create_widget_shortcut_action_(
             self.__to_previous_scheme, 'Alt+Left'
         )
 
@@ -107,10 +109,10 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
         self.__qt_scheme_input._get_entry_widget_()._to_previous_()
 
     def set_focus_in(self):
-        self.__qt_task_input._set_input_entry_focus_in_()
+        self._qt_path_input._set_input_entry_focus_in_()
 
     def has_focus(self):
-        return self.__qt_task_input._get_input_entry_has_focus_()
+        return self._qt_path_input._get_input_entry_has_focus_()
 
     def connect_result_to(self, fnc):
         self.__signals.dict_accepted.connect(fnc)
@@ -120,11 +122,11 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
 
     def __update_branch(self, text):
         if text != self.__scheme:
-            path_text = self.__qt_task_input._get_value_()
+            path_text = self._qt_path_input._get_value_()
             path = bsc_core.PthNodeOpt(path_text)
 
             self.__scheme = text
-            self.__qt_task_input._restore_buffer_cache_()
+            self._qt_path_input._restore_buffer_cache_()
 
             self.__resource_type = None
             if self.__scheme == self.Schemes.AssetTask:
@@ -134,19 +136,19 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
             elif self.__scheme == self.Schemes.ShotTask:
                 self.__resource_type = 'shot'
 
-            self.__qt_task_input._set_history_key_('gui.input-path-{}'.format(self.__scheme))
-            if self.__qt_task_input._pull_history_latest_() is False:
+            self._qt_path_input._set_history_key_('gui.input-path-{}'.format(self.__scheme))
+            if self._qt_path_input._pull_history_latest_() is False:
                 cs = path.get_components()
                 cs.reverse()
                 d = len(cs)
                 if d > 1:
-                    self.__qt_task_input._set_value_(cs[1].to_string())
+                    self._qt_path_input._set_value_(cs[1].to_string())
 
-            path_text_cur = self.__qt_task_input._get_value_()
+            path_text_cur = self._qt_path_input._get_value_()
             if path_text_cur == path_text:
-                self.__qt_task_input._update_next_()
+                self._qt_path_input._update_next_()
 
-    def __cache_projects(self):
+    def _cache_projects(self):
         self.__project_dict = {}
         (
             self.__project_dict, name_texts, image_url_dict, keyword_filter_dict, tag_filter_dict
@@ -165,7 +167,7 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
         )
         return self.__project_dict, name_texts, image_url_dict, keyword_filter_dict, tag_filter_dict
 
-    def __cache_resources(self, project):
+    def _cache_resources(self, project):
         self.__resource_type = None
         if self.__scheme == self.Schemes.AssetTask:
             self.__resource_type = 'asset'
@@ -201,7 +203,7 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
         )
         return self.__resource_dict, name_texts, image_url_dict, keyword_filter_dict, tag_filter_dict
 
-    def __cache_project_tasks(self, project):
+    def _cache_project_tasks(self, project):
         kw = {
             'project': project,
         }
@@ -221,7 +223,7 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
         )
         return self.__task_dict, name_texts, image_url_dict, keyword_filter_dict, tag_filter_dict
 
-    def __cache_resource_tasks(self, project, resource):
+    def _cache_resource_tasks(self, project, resource):
         kw = {
             'project': project,
             self.__resource_type: resource
@@ -322,7 +324,7 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
 
             self.__accept_tip()
 
-    def __buffer_fnc(self, path):
+    def _buffer_fnc(self, path):
         dict_ = {}
 
         cs = path.get_components()
@@ -331,17 +333,17 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
         if d == 1:
             (
                 entity_dict, name_texts, image_url_dict, keyword_filter_dict, tag_filter_dict
-            ) = self.__cache_projects()
+            ) = self._cache_projects()
         elif d == 2:
             project = cs[1].get_name()
             if self.__scheme == self.Schemes.ProjectTask:
                 (
                     entity_dict, name_texts, image_url_dict, keyword_filter_dict, tag_filter_dict
-                ) = self.__cache_project_tasks(project)
+                ) = self._cache_project_tasks(project)
             else:
                 (
                     entity_dict, name_texts, image_url_dict, keyword_filter_dict, tag_filter_dict
-                ) = self.__cache_resources(project)
+                ) = self._cache_resources(project)
         elif d == 3:
             if self.__scheme == self.Schemes.ProjectTask:
                 entity_dict = {}
@@ -354,7 +356,7 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
                 resource = cs[2].get_name()
                 (
                     entity_dict, name_texts, image_url_dict, keyword_filter_dict, tag_filter_dict
-                ) = self.__cache_resource_tasks(project, resource)
+                ) = self._cache_resource_tasks(project, resource)
         else:
             entity_dict = {}
             name_texts = []
@@ -363,7 +365,7 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
             tag_filter_dict = {}
 
         dict_['query_dict'] = entity_dict
-        dict_['names'] = name_texts
+        dict_['name_texts'] = name_texts
         dict_['image_url_dict'] = image_url_dict
         dict_['keyword_filter_dict'] = keyword_filter_dict
         dict_['tag_filter_dict'] = tag_filter_dict
@@ -372,7 +374,7 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
 
     def __accept_result(self):
         self.__update_task(
-            self.__qt_task_input._get_value_()
+            self._qt_path_input._get_value_()
         )
         dict_ = self.__result_dict
         if dict_:
@@ -432,4 +434,4 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
         else:
             raise RuntimeError()
 
-        self.__qt_task_input._set_value_(peth_text)
+        self._qt_path_input._set_value_(peth_text)

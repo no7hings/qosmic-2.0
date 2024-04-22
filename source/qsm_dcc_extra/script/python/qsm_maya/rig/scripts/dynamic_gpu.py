@@ -7,6 +7,8 @@ import lxbasic.core as bsc_core
 
 import lxmaya.dcc.objects as mya_dcc_objects
 
+import qsm_maya.core as qsm_mya_core
+
 import qsm_maya.rig.core as qsm_rig_core
 
 import qsm_maya.asset.core as qsm_mya_ast_core
@@ -167,7 +169,7 @@ class DynamicGpuCacheGenerate(object):
 
     def __init__(self, namespace):
         self._namespace = namespace
-        self._namespace_query = qsm_mya_ast_core.NamespaceQuery()
+        self._namespace_query = qsm_mya_core.NamespaceQuery()
         self._rig = qsm_rig_core.Rig(self._namespace)
         self._root = self._rig.get_root()
         self._geometry_location = self._rig.get_geometry_location()
@@ -237,10 +239,19 @@ class DynamicGpuCacheGenerate(object):
         if skin_proxy_cache_locations:
             cmds.editDisplayLayerMembers(layer_path, *skin_proxy_cache_locations)
 
+    def do_remove(self):
+        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME))
+        if _:
+            cmds.delete(_[0])
+
+    def is_exists(self):
+        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME))
+        return not not _
+
     def generate_args(self, directory_path):
         file_path = '{}/source.ma'.format(directory_path)
         cache_file_path = '{}/gpu.ma'.format(directory_path)
-        start_frame, end_frame = qsm_mya_ast_core.SceneQuery.get_frame_range()
+        start_frame, end_frame = qsm_mya_core.Scene.get_frame_range()
         cmd = qsm_mya_ast_core.MayaCacheProcess.generate_command(
             'method=dynamic-gpu-cache-generate&file={}&cache_file={}&namespace={}&start_frame={}&end_frame={}'.format(
                 file_path,

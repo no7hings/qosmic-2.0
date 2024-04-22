@@ -14,7 +14,7 @@ class TestWindow(utl_prx_widgets.PrxBaseWindow):
         self.add_widget(button)
         button.set_name('test')
         # button.set_status(button.ProcessStatus.Started)
-        button.set_initialization(100, button.ProcessStatus.Started)
+        button.initialization(100, button.ProcessStatus.Started)
         button.set_status_at(0, button.ProcessStatus.Running)
         button.set_status_at(5, button.ProcessStatus.Running)
 

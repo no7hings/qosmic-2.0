@@ -616,7 +616,7 @@ class _AbsQtPopupAsChoose(
                         i_item_widget._set_icon_name_text_(i_tag)
                         i_item_widget._set_tool_tip_text_(i_tag)
                         #
-                        i_item_widget._set_item_tag_filter_keys_src_add_(i_tag)
+                        i_item_widget._add_item_tag_filter_keys_src_(i_tag)
 
                 press_pos = self._get_popup_pos_from_(self._get_entry_frame_widget_())
                 width, height = self._get_popup_size_from_(self._get_entry_frame_widget_())

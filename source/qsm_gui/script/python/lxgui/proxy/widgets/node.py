@@ -769,7 +769,7 @@ class PrxSubProcessPort(_AbsPrxPortBase):
     def set_statuses(self, statuses):
         self.get_input_widget()._set_sub_process_statuses_(statuses)
 
-    def set_initialization(self, count, status=gui_core.GuiStatus.Started):
+    def initialization(self, count, status=gui_core.GuiStatus.Started):
         self.get_input_widget()._initialization_sub_process_(count, status)
 
     def restore_all(self):
@@ -783,7 +783,7 @@ class PrxSubProcessPort(_AbsPrxPortBase):
         widget = self.get_input_widget()
         widget.rate_finished_at.emit(index, status)
 
-    def set_finished_connect_to(self, fnc):
+    def connect_finished_to(self, fnc):
         widget = self.get_input_widget()
         widget._connect_sub_process_finished_to_(fnc)
 
@@ -794,8 +794,16 @@ class PrxSubProcessPort(_AbsPrxPortBase):
         self._is_stopped = boolean
         # self.restore_all()
 
+    def get_is_started(self):
+        return self.get_input_widget()._get_sub_process_is_started_()
+
     def get_is_stopped(self):
         return self._is_stopped
+
+    def set_icon(self, icon_key):
+        self._prx_port_input.set_icon_by_file(
+            gui_core.GuiIcon.get(icon_key)
+        )
 
 
 class PrxValidatorPort(_AbsPrxPortBase):
@@ -1962,6 +1970,8 @@ class PrxNode(gui_prx_abstracts.AbsPrxWidget):
                 node_widget=self.widget
             )
             port.set(value_)
+            if 'icon' in option:
+                port.set_icon(option['icon'])
         elif widget_ in {'validator_button'}:
             port = PrxValidatorPort(
                 port_path,

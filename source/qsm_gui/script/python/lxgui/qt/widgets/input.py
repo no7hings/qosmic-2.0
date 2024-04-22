@@ -320,6 +320,7 @@ class QtInputAsCapsule(
         entry_layout.addWidget(self._entry_widget)
 
         self.input_value_changed = self._entry_widget.value_changed
+        self.user_input_value_changed = self._entry_widget.user_value_changed
 
     def _set_value_options_(self, values):
         self._entry_widget._set_value_options_(values)

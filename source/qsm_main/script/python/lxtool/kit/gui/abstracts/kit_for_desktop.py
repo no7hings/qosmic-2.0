@@ -217,7 +217,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
         self.__gui_build_copy_layer()
         self.gui_build_filter()
 
-        self.gui_refresh_all()
+        self.do_gui_refresh_all()
 
         self.__tab_view.set_current_by_key(
             gui_core.GuiHistory.get_one(self.KEY_TAB_KEY_CURRENT)
@@ -420,7 +420,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
             if f:
                 tool.save_main_icon_to_file(f)
 
-    def gui_refresh_all(self):
+    def do_gui_refresh_all(self):
         self.__hook_dict = {}
         self.__option_hook_dict = {}
 

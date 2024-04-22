@@ -465,7 +465,7 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
             c = len(self._create_data)
 
             button.set_status(button.Status.Started)
-            button.set_initialization(c, button.Status.Started)
+            button.initialization(c, button.Status.Started)
 
             t = gui_qt_core.QtMethodThread(self.widget)
             t.append_method(

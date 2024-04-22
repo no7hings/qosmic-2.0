@@ -162,6 +162,9 @@ class QtPressButton(
     #
     gui_qt_abstracts.AbsQtItemLayoutBaseDef,
 ):
+    def _refresh_widget_all_(self):
+        pass
+
     clicked = qt_signal()
     checked = qt_signal()
     toggled = qt_signal(bool)
@@ -233,11 +236,12 @@ class QtPressButton(
             self._set_sub_process_status_at_
         )
         self.rate_finished_at.connect(
-            self._set_sub_process_finished_at_
+            self._finish_sub_process_at_
         )
 
         self._sub_process_timer = QtCore.QTimer(self)
 
+        # noinspection PyUnresolvedReferences
         self._sub_process_timer.timeout.connect(
             self._refresh_sub_process_draw_
         )
@@ -344,8 +348,8 @@ class QtPressButton(
             )
             self._sub_process_timer.start(100)
 
-    def _set_sub_process_finished_at_(self, index, status):
-        super(QtPressButton, self)._set_sub_process_finished_at_(index, status)
+    def _finish_sub_process_at_(self, index, status):
+        super(QtPressButton, self)._finish_sub_process_at_(index, status)
         # check is finished
         if self._get_sub_process_is_finished_() is True:
             if self.Status.Failed in self._sub_process_statuses:
@@ -356,6 +360,8 @@ class QtPressButton(
                 self._set_status_(
                     self.Status.Completed
                 )
+            self._sub_process_is_started = False
+            # when finish send emit
             self.rate_finished.emit()
 
             self._sub_process_timer.stop()

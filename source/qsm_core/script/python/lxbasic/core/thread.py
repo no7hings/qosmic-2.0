@@ -183,6 +183,14 @@ class TrdCommandPool(threading.Thread):
         t.start()
         return t
 
+    @staticmethod
+    def generate(cmd, index=0):
+        TrdCommandPool.LOCK.acquire()
+        t = TrdCommandPool(cmd, index)
+        TrdCommandPool.STACK.append(t)
+        TrdCommandPool.LOCK.release()
+        return t
+
     def get_status(self):
         return self._status
 

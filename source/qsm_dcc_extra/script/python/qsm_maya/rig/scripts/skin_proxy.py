@@ -7,15 +7,17 @@ import maya.cmds as cmds
 
 import lxbasic.content as bsc_content
 
-import qsm_maya.asset.core as qsm_mya_ast_core
-
 import lxbasic.resource as bsc_resource
-
-import qsm_maya.rig.core as qsm_rig_core
 
 import lxbasic.core as bsc_core
 
 import lxmaya.dcc.objects as mya_dcc_objects
+
+import qsm_maya.core as qsm_mya_core
+
+import qsm_maya.asset.core as qsm_mya_ast_core
+
+import qsm_maya.rig.core as qsm_rig_core
 
 
 class AdvSkinProxyGenerate(object):
@@ -521,7 +523,7 @@ class AdvSkinProxyGenerate(object):
         cmds.setAttr(location + '.blackBox', 1, lock=1)
 
         if cache_file_path is None:
-            file_path = qsm_mya_ast_core.NamespaceQuery().get_file(self._namespace)
+            file_path = qsm_mya_core.NamespaceQuery().get_file(self._namespace)
             cache_file_path = qsm_mya_ast_core.AssetCache.get_skin_proxy_file(
                 file_path
             )
@@ -721,8 +723,17 @@ class AdvSkinProxyGenerate(object):
     def auto_hide(self, location):
         self.hide_source_geometry_root(location)
 
+    def do_remove(self):
+        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME))
+        if _:
+            cmds.delete(_[0])
+
+    def is_exists(self):
+        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME))
+        return not not _
+
     def generate_args(self):
-        file_path = qsm_mya_ast_core.NamespaceQuery().get_file(self._namespace)
+        file_path = qsm_mya_core.NamespaceQuery().get_file(self._namespace)
         cache_file_path = qsm_mya_ast_core.AssetCache.get_skin_proxy_file(
             file_path
         )

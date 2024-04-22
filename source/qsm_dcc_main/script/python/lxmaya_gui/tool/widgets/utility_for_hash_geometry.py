@@ -87,7 +87,7 @@ class PnlHashGeometry(utl_gui_abstracts.AbsPnlForHashGeometryDcc):
             port.set_name(
                 'Unify Geometry by Select(s) [ {} ]'.format(status)
             )
-            mya_dcc_objects.Scene.set_message_show(
+            mya_dcc_objects.Scene.show_message(
                 'Unify Geometry by Select(s)',
                 status
             )
@@ -126,7 +126,7 @@ class PnlHashGeometry(utl_gui_abstracts.AbsPnlForHashGeometryDcc):
             port.set_name(
                 'Assign Geometry UV-map By Select(s) [ {} ]'.format(status)
             )
-            mya_dcc_objects.Scene.set_message_show(
+            mya_dcc_objects.Scene.show_message(
                 'Assign Geometry UV-map By Select(s)',
                 status
             )

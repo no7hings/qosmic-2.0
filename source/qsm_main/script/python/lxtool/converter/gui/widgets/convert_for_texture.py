@@ -93,7 +93,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
             'by_format.create_use_deadline', self.set_target_format_use_deadline_run
         )
         #
-        self._options_prx_node.get_port('by_format.execute').set_finished_connect_to(
+        self._options_prx_node.get_port('by_format.execute').connect_finished_to(
             self._set_gui_textures_validator_
         )
         #
@@ -383,7 +383,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
             c = len(self._target_format_create_data)
 
             button.set_status(button.Status.Started)
-            button.set_initialization(c, button.Status.Started)
+            button.initialization(c, button.Status.Started)
 
             t = gui_qt_core.QtMethodThread(self.widget)
             t.append_method(
@@ -585,7 +585,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
             c = len(self._target_color_space_create_data)
 
             button.set_status(button.Status.Started)
-            button.set_initialization(c, button.Status.Started)
+            button.initialization(c, button.Status.Started)
 
             t = gui_qt_core.QtMethodThread(self.widget)
             t.append_method(

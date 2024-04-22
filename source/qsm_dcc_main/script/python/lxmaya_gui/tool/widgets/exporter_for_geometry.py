@@ -127,9 +127,9 @@ class PnlExporterForAssetGeometry(prx_widgets.PrxSessionToolWindow):
                     '{}.{}'.format(i_branch_key, j_leaf)
                 )
                 if i_branch_key == 'renderable':
-                    j_obj = bsc_dcc_objects.Node(j_leaf_location, type_name=i_branch_key, icon_name='obj/renderable')
+                    j_obj = bsc_dcc_objects.Node(j_leaf_location, type_name=i_branch_key, icon_name='node/renderable')
                 elif i_branch_key == 'auxiliary':
-                    j_obj = bsc_dcc_objects.Node(j_leaf_location, type_name=i_branch_key, icon_name='obj/non-renderable')
+                    j_obj = bsc_dcc_objects.Node(j_leaf_location, type_name=i_branch_key, icon_name='node/non-renderable')
                 else:
                     raise RuntimeError()
                 #

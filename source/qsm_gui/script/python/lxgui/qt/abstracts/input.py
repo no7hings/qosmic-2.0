@@ -15,6 +15,9 @@ class AbsQtInputBaseDef(
     gui_qt_abs_base.AbsQtValueValidationExtraDef,
     gui_qt_abs_base.AbsQtValueHistoryExtraDef,
 ):
+    def _pull_history_(self, *args, **kwargs):
+        pass
+
     user_key_tab_pressed = qt_signal()
     #
     input_value_changed = qt_signal()
@@ -111,6 +114,9 @@ class AbsQtInputAsComponentsBaseDef(
     gui_qt_abs_base.AbsQtValueValidationExtraDef,
     gui_qt_abs_base.AbsQtValueHistoryExtraDef,
 ):
+    def _pull_history_(self, *args, **kwargs):
+        pass
+
     def _init_input_as_components_base_def_(self, widget):
         self._init_value_base_def_(widget)
         self._init_value_default_extra_def_(widget)
@@ -166,6 +172,9 @@ class AbsQtInputAsComponentsBaseDef(
 
 #   other, etc. rgba, icon, ...
 class AbsQtInputAsOtherBaseDef(AbsQtInputBaseDef):
+    def _pull_history_(self, *args, **kwargs):
+        pass
+
     def _init_input_as_other_base_def_(self, widget):
         self._init_input_base_def_(widget)
 
@@ -182,6 +191,9 @@ class AbsQtInputAsOtherBaseDef(AbsQtInputBaseDef):
 class AbsQtInputChooseExtraDef(
     gui_qt_abs_base.AbsQtChooseExtraDef
 ):
+    def _refresh_choose_index_(self):
+        pass
+
     QT_POPUP_CHOOSE_CLS = None
 
     def _get_entry_widget_(self):

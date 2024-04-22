@@ -12,7 +12,9 @@ class Root(_base.AbsEntity):
         _base.EntityTypes.Project: _project.ProjectQuery
     }
 
-    def __init__(self, root='X:'):
+    ROOT = None
+
+    def __init__(self, root=None):
         self._root_entity_stack = _base.NodeStack()
         super(Root, self).__init__(
             self, '/', dict(root=root)
@@ -29,8 +31,19 @@ class Root(_base.AbsEntity):
     def project(self, name):
         return self.get_next_entity(name, _base.EntityTypes.Project)
 
-    def get_one(self, entity_type, filters):
+    def get_entity(self, path):
+        return self._root_entity_stack.get(path)
+
+    def find_one(self, entity_type, filters):
         pass
 
-    def get_all(self, entity_type, filters):
+    def find_all(self, entity_type, filters):
         pass
+
+    @classmethod
+    def generate(cls):
+        if cls.ROOT is not None:
+            return cls.ROOT
+        _ = cls(root='X:')
+        cls.ROOT = _
+        return _

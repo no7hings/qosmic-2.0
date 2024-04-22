@@ -860,7 +860,7 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
         return int(start_frame), int(end_frame)
 
     @classmethod
-    def set_message_show(cls, message, keyword, position='topCenter', fade=1, drag_kill=0, alpha=.5):
+    def show_message(cls, message, keyword, position='topCenter', fade=1, drag_kill=0, alpha=.5):
         # topLeft topCenter topRight
         # midLeft midCenter midCenterTop midCenterBot midRight
         # botLeft botCenter botRight

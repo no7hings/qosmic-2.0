@@ -27,9 +27,34 @@ build:
                 default: 'motion'
                 tool_tip: '...'
 
+            scene/camera:
+                widget: enumerate
+                value: ['None']
+                tool_tip: '...'
+
+            scene/fps:
+                widget: capsule_string
+                value: ['24_fps', '30_fps']
+                default: '24_fps'
+                tool_tip: '...'
+                lock: True
+
+            scene/frame_scheme:
+                widget: capsule_string
+                value: ['render_settings', 'time_slider', 'frame_range']
+                default: 'time_slider'
+                tool_tip: '...'
+
+            scene/frame_range:
+                widget: integer2
+                value: [0, 24]
+                tool_tip: '...'
+                lock: True
+
             skin_proxy/load_skin_proxy:
                 widget: sub_process_button
-                value:
+                value: ''
+                icon: 'tool/maya/create-container'
                 tool_tip:
                     |-
                     press to load skin proxy auto.
@@ -39,24 +64,13 @@ build:
             skin_proxy/remove_skin_proxy:
                 widget: button
                 value: ''
-                icon: 'application/python'
+                icon: 'tool/maya/delete'
                 tool_tip: '...'
-
-            dynamic_gpu/frame_scheme:
-                widget: capsule_string
-                value: ['render_settings', 'time_slider', 'frame_range']
-                default: 'time_slider'
-                tool_tip: '...'
-
-            dynamic_gpu/frame_range:
-                widget: integer2
-                value: [0, 24]
-                tool_tip: '...'
-                lock: True
 
             dynamic_gpu/load_dynamic_gpu:
                 widget: sub_process_button
                 value: ''
+                icon: 'tool/maya/create-container'
                 tool_tip:
                     |-
                     press to load dynamic GPU auto.
@@ -66,5 +80,5 @@ build:
             dynamic_gpu/remove_dynamic_gpu:
                 widget: button
                 value: ''
-                icon: 'application/python'
+                icon: 'tool/maya/delete'
                 tool_tip: '...'

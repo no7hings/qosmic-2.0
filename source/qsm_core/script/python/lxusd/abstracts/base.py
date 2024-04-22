@@ -122,7 +122,7 @@ class AbsUsdObjScene(unr_abstracts.AbsObjScene):
             import lxgui.qt.core as gui_qt_core
 
             if obj_type_name == usd_core.UsdNodeTypes.Xform:
-                _obj.set_gui_attribute('icon', gui_qt_core.GuiQtIcon.generate_by_name('obj/group'))
+                _obj.set_gui_attribute('icon', gui_qt_core.GuiQtIcon.generate_by_name('node/group'))
             elif obj_type_name == usd_core.UsdNodeTypes.Mesh:
-                _obj.set_gui_attribute('icon', gui_qt_core.GuiQtIcon.generate_by_name('obj/mesh'))
+                _obj.set_gui_attribute('icon', gui_qt_core.GuiQtIcon.generate_by_name('node/mesh'))
         return _obj

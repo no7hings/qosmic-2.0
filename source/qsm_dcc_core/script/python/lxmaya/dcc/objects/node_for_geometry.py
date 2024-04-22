@@ -49,7 +49,7 @@ class MeshComponent(bsc_dcc_abstracts.AbsGuiExtraDef):
 
     @property
     def icon(self):
-        return gui_core.GuiIcon.get('obj/{}'.format(self.get_type()))
+        return gui_core.GuiIcon.get('node/{}'.format(self.get_type()))
 
     def __str__(self):
         return '{}(type="{}", path="{}")'.format(
@@ -90,7 +90,7 @@ class Component(bsc_dcc_abstracts.AbsGuiExtraDef):
 
     @property
     def icon(self):
-        return gui_core.GuiIcon.get('obj/{}'.format(self.type))
+        return gui_core.GuiIcon.get('node/{}'.format(self.type))
 
     def __str__(self):
         return '{}(type="{}", path="{}")'.format(
