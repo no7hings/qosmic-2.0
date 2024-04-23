@@ -88,9 +88,9 @@ class RigsQuery(object):
         )
         self._cache_dict = collections.OrderedDict()
 
-        self._cache_all()
+        self.do_update()
 
-    def _cache_all(self):
+    def do_update(self):
         _ = qsm_mya_core.References.get_all()
         for i_path in _:
             i_file_path = qsm_mya_core.Reference.get_file_path(i_path)

@@ -19,7 +19,7 @@ import lxbasic.fnc.abstracts as bsc_fnc_abstracts
 
 import lxresolver.core as rsv_core
 
-from qsm_hook_general.rsv import utl_rsv_obj_abstract
+from qsm_prc_general.rsv import utl_rsv_obj_abstract
 
 
 class RsvUsdAssetSetCreator(object):

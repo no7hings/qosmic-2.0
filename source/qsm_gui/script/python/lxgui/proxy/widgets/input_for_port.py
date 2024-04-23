@@ -71,7 +71,7 @@ class _AbsPrxInput(gui_prx_abstracts.AbsPrxWidget):
     def set(self, *args, **kwargs):
         raise NotImplementedError()
 
-    def set_option(self, *args, **kwargs):
+    def set_options(self, *args, **kwargs):
         pass
 
     def set_default(self, *args, **kwargs):
@@ -622,12 +622,12 @@ class PrxInputAsShotgunEntityWithChoose(_AbsPrxInput):
         self._qt_input_widget._clear_input_()
 
     def set_shotgun_entity_kwargs(
-        self,
-        shotgun_entity_kwargs,
-        name_field=None,
-        image_field=None,
-        keyword_filter_fields=None,
-        tag_filter_fields=None
+            self,
+            shotgun_entity_kwargs,
+            name_field=None,
+            image_field=None,
+            keyword_filter_fields=None,
+            tag_filter_fields=None
     ):
         def post_fnc_():
             pass
@@ -732,12 +732,12 @@ class PrxInputAsShotgunEntitiesWithChoose(_AbsPrxInput):
         self._qt_input_widget._set_clear_()
 
     def set_shotgun_entity_kwargs(
-        self,
-        shotgun_entity_kwargs,
-        name_field=None,
-        image_field=None,
-        keyword_filter_fields=None,
-        tag_filter_fields=None
+            self,
+            shotgun_entity_kwargs,
+            name_field=None,
+            image_field=None,
+            keyword_filter_fields=None,
+            tag_filter_fields=None
     ):
         def post_fnc_():
             pass
@@ -954,7 +954,7 @@ class PrxInputAsConstantWithChoose(_AbsPrxInput):
         elif isinstance(_, (int, float)):
             self._qt_input_widget._set_choose_value_by_index_(int(_))
 
-    def set_option(self, *args, **kwargs):
+    def set_options(self, *args, **kwargs):
         self._qt_input_widget._set_choose_values_(args[0])
 
     def set_icon_file_as_value(self, value, file_path):
@@ -1252,6 +1252,7 @@ class PrxInputAsSubProcessButton(_AbsPrxInput):
     def set_icon_by_file(self, file_path):
         self._qt_input_widget._set_icon_file_path_(file_path)
 
+
 #   validation button
 class PrxInputAsValidationButton(_AbsPrxInput):
     QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
@@ -1307,9 +1308,9 @@ class PrxInputAsCapsule(_AbsPrxInput):
     def get_is_default(self):
         return self._qt_input_widget._get_value_is_default_()
 
-    def set_option(self, *args, **kwargs):
+    def set_options(self, *args, **kwargs):
         self._qt_input_widget._set_value_options_(
-            args[0]
+            *args, **kwargs
         )
 
     def connect_input_changed_to(self, fnc):

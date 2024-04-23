@@ -40,7 +40,7 @@ build:
 
             file_type:
                 widget: capsule_string
-                value: ['ABC', 'USD', 'FBX', 'TX', 'HDRI']
+                options: ['ABC', 'USD', 'FBX', 'TX', 'HDRI']
                 default: 'USD'
                 enable: True
                 tool_tip: '...'

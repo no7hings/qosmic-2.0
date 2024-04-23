@@ -98,7 +98,7 @@ class AbsPrxDialogWindow(
         self._central_layout.addWidget(self._top_toolbar.widget)
         self._top_toolbar.set_expanded(True)
         #
-        self._modal_button = gui_prx_wdt_utility.PrxEnableItem()
+        self._modal_button = gui_prx_wdt_utility.PrxToggleButton()
         self._top_toolbar.add_widget(self._modal_button)
         self._modal_button.set_icon_name('window-modal')
         self._modal_button.set_checked(True)

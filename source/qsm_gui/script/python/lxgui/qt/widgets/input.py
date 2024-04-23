@@ -23,6 +23,8 @@ from ..widgets import button as gui_qt_wgt_button
 
 from ..widgets import entry as gui_qt_wgt_entry
 
+from ..widgets import entry_for_capsule as gui_qt_wgt_entry_for_capsule
+
 from ..widgets import entry_extend as gui_qt_wgt_entry_extend
 
 from ..widgets import popup as gui_qt_wgt_popup
@@ -295,7 +297,7 @@ class QtInputAsCapsule(
     def _pull_history_(self, *args, **kwargs):
         pass
 
-    QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsCapsule
+    QT_ENTRY_CLS = gui_qt_wgt_entry_for_capsule.QtEntryAsCapsule
 
     def __init__(self, *args, **kwargs):
         super(QtInputAsCapsule, self).__init__(*args, **kwargs)
@@ -322,7 +324,7 @@ class QtInputAsCapsule(
         self.input_value_changed = self._entry_widget.value_changed
         self.user_input_value_changed = self._entry_widget.user_value_changed
 
-    def _set_value_options_(self, values):
+    def _set_value_options_(self, values, labels=None):
         self._entry_widget._set_value_options_(values)
 
     def _set_value_by_index_(self, index):
@@ -473,7 +475,7 @@ class QtInputAsContent(
         self._input_button_layout.setContentsMargins(2, 0, 0, 0)
         self._input_button_layout.setSpacing(2)
         #
-        self._open_in_external_editor_button = gui_qt_wgt_button.QtIconEnableButton()
+        self._open_in_external_editor_button = gui_qt_wgt_button.QtIconToggleButton()
         self._input_button_layout.addWidget(self._open_in_external_editor_button)
         self._open_in_external_editor_button._set_icon_file_path_(
             gui_core.GuiIcon.get('application/sublime-text')

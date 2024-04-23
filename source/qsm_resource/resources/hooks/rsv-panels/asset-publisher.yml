@@ -102,7 +102,7 @@ build:
         publish_options:
             version_type:
                 widget: capsule_string
-                value: ['check', 'downstream']
+                options: ['check', 'downstream']
                 default: 'downstream'
                 tool_tip: 'choose a version type'
                 enable: True
@@ -145,7 +145,7 @@ build:
             process/deadline/scheme:
                 widget: enumerate
                 value: ['default', 'localhost']
-                current: 'default'
+                default: 'default'
                 enable: True
                 tool_tip: ['default: use default configure', 'localhost: use yourself machine run process']
             #

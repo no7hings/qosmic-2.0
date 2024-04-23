@@ -17,7 +17,7 @@ def set_reload(modules=None):
             [
                 'lxbasic', 'lxsession', 'lxwrap', 'lxuniverse', 'lxresolver', 'lxarnold',
                 'lxusd',
-                'lxgeneral', 'lxgui', 'lxtool',
+                'lxgui', 'lxtool',
                 'lxshotgun',
                 'lxkatana', 'lxkatana_gui'
             ]

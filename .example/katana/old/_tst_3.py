@@ -5,7 +5,6 @@ p = bsc_core.PyReloader(
     [
         'lxuniverse', 'lxresolver',
         'lxarnold',
-        'lxgeneral',
         'lxkatana', 'lxkatana_gui'
     ]
 )

@@ -1350,10 +1350,11 @@ class AbsQtValueBaseDef(object):
         return self._value
 
     # value for choose
-    def _set_value_options_(self, values):
-        if values != self._value_options:
-            self._value_options = values
-            return True
+    def _set_value_options_(self, values, labels=None):
+        if isinstance(values, list):
+            if values != self._value_options:
+                self._value_options = values
+                return True
         return False
 
     def _set_value_by_index_(self, index):

@@ -23,7 +23,7 @@ build:
         options:
             scheme:
                 widget: capsule_string
-                value: ['assignment', 'all']
+                options: ['assignment', 'all']
                 default: 'assignment'
                 tool_tip: [
                     'all scheme will find all from "dcc.node" at all look pass',
@@ -53,7 +53,7 @@ build:
             target/extension:
                 widget: enumerate
                 value: ['.tx']
-                current: '.tx'
+                default: '.tx'
                 tool_tip: 'choose a target extension for create'
                 enable: True
 
@@ -137,7 +137,7 @@ build:
             scheme:
                 widget: enumerate
                 value: ['default', 'separate']
-                current: 'separate'
+                default: 'separate'
                 tool_tip: [
                     'choose a scheme',
                     'default: texture source and target in one directory',
@@ -154,7 +154,7 @@ build:
             mode:
                 widget: enumerate
                 value: ['copy', 'link']
-                current: 'copy'
+                default: 'copy'
                 tool_tip: 'choose a collection mode'
                 enable: True
 

@@ -103,6 +103,17 @@ class GuiUtil(object):
             cls.get_user_directory()
         )
 
+    @classmethod
+    def get_language(cls):
+        return bsc_core.EnvBaseMtd.get_ui_language()
+
+    @classmethod
+    def choice_label(cls, language, variants):
+        if language == 'chs':
+            if 'label_chs' in variants:
+                return variants['label_chs']
+        return variants['label']
+
 
 class GuiXml(object):
     @classmethod

@@ -6,6 +6,8 @@ import lxbasic.log as bsc_log
 import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
+
+from ... import core as gui_core
 # qt
 from ...qt import core as gui_qt_core
 # qt widgets
@@ -54,6 +56,8 @@ class PrxBaseWindow(
 
     # noinspection PyUnusedLocal
     def _init_base_window_def_(self, *args, **kwargs):
+        self._language = gui_core.GuiUtil.get_language()
+
         self.set_log_file_path(bsc_storage.StgUserMtd.get_user_log_directory())
 
         self._log_file_path = None

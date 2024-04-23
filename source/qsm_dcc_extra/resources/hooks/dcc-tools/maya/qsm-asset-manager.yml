@@ -19,66 +19,105 @@ option:
 rsv-match-condition: 'branch=asset'
 
 build:
-    node:
-        rig_options:
-            selection_scheme:
-                widget: capsule_string
-                value: ['root', 'geometry', 'deformation', 'motion']
-                default: 'motion'
-                tool_tip: '...'
+    options:
+        rig:
+            label: 'options'
+            label_chs: '选项'
+            parameters:
+                selection_scheme:
+                    widget: capsule_string
+                    label_chs: '选择方案'
+                    options: ['root', 'geometry', 'deformation', 'motion']
+                    default: 'motion'
+                    tool_tip: '...'
 
-            scene/camera:
-                widget: enumerate
-                value: ['None']
-                tool_tip: '...'
+                scene:
+                    widget: group
+                    label_chs: '场景'
 
-            scene/fps:
-                widget: capsule_string
-                value: ['24_fps', '30_fps']
-                default: '24_fps'
-                tool_tip: '...'
-                lock: True
+                scene/camera:
+                    widget: enumerate
+                    label_chs: '相机'
+                    value: ['None']
+                    tool_tip: '...'
 
-            scene/frame_scheme:
-                widget: capsule_string
-                value: ['render_settings', 'time_slider', 'frame_range']
-                default: 'time_slider'
-                tool_tip: '...'
+                scene/fps:
+                    widget: capsule_string
+                    label_chs: '帧率'
+                    options: ['24_fps', '30_fps']
+                    default: '24_fps'
+                    tool_tip: '...'
+                    lock: True
 
-            scene/frame_range:
-                widget: integer2
-                value: [0, 24]
-                tool_tip: '...'
-                lock: True
+                scene/frame_scheme:
+                    widget: capsule_string
+                    label_chs: '帧方案'
+                    options: ['render_settings', 'time_slider', 'frame_range']
+                    labels_chs: ['渲染设置', '时间轴', '帧范围']
+                    default: 'time_slider'
+                    tool_tip: '...'
 
-            skin_proxy/load_skin_proxy:
-                widget: sub_process_button
-                value: ''
-                icon: 'tool/maya/create-container'
-                tool_tip:
-                    |-
-                    press to load skin proxy auto.
-                    点击自动加载低模。
-                join_to_next: True
+                scene/frame_range:
+                    widget: integer2
+                    label_chs: '帧范围'
+                    value: [0, 24]
+                    tool_tip: '...'
+                    lock: True
 
-            skin_proxy/remove_skin_proxy:
-                widget: button
-                value: ''
-                icon: 'tool/maya/delete'
-                tool_tip: '...'
+                skin_proxy:
+                    widget: group
+                    label_chs: '简模代理'
 
-            dynamic_gpu/load_dynamic_gpu:
-                widget: sub_process_button
-                value: ''
-                icon: 'tool/maya/create-container'
-                tool_tip:
-                    |-
-                    press to load dynamic GPU auto.
-                    点击自动加载动态GPU。
-                join_to_next: True
+                skin_proxy/load_skin_proxy:
+                    widget: sub_process_button
+                    label_chs: '加载简模代理'
+                    value: ''
+                    icon: 'tool/maya/create-container'
+                    tool_tip:
+                        |-
+                        press to load skin proxy auto.
+                    tool_tip_chs:
+                        |-
+                        点击自动加载简模代理。
+                    join_to_next: True
 
-            dynamic_gpu/remove_dynamic_gpu:
-                widget: button
-                value: ''
-                icon: 'tool/maya/delete'
-                tool_tip: '...'
+                skin_proxy/remove_skin_proxy:
+                    widget: button
+                    label_chs: '移除简模代理'
+                    value: ''
+                    icon: 'tool/maya/delete'
+                    tool_tip: '...'
+
+                dynamic_gpu:
+                    widget: group
+                    label_chs: '动态GPU'
+
+                dynamic_gpu/load_dynamic_gpu:
+                    widget: sub_process_button
+                    label_chs: '加载动态GPU'
+                    value: ''
+                    icon: 'tool/maya/create-container'
+                    tool_tip:
+                        |-
+                        press to load dynamic GPU auto.
+                    tool_tip_chs:
+                        |-
+                        点击自动加载动态GPU。
+                    join_to_next: True
+
+                dynamic_gpu/remove_dynamic_gpu:
+                    widget: button
+                    label_chs: '移除动态GPU'
+                    value: ''
+                    icon: 'tool/maya/delete'
+                    tool_tip: '...'
+
+    buttons:
+        reference:
+            label: 'reference'
+            label_chs: '引用'
+
+    tabs:
+        rig:
+            label: 'rig'
+            label_chs: '绑定'

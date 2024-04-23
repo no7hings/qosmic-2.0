@@ -68,7 +68,7 @@ import lxsession.commands as ssn_commands; ssn_commands.execute_hook("dcc-tools/
 
         tools = []
         for i_key, i_w_p, i_h_p in self._percent_args:
-            i_b = prx_widgets.PrxEnableItem()
+            i_b = prx_widgets.PrxToggleButton()
             self._switch_tool_box.add_widget(i_b)
             i_b.set_icon_name('tool/icon-{}'.format(i_key))
             if i_w_p == self._w_p:

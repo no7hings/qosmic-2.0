@@ -196,6 +196,7 @@ class ScriptJob(object):
 
     def __init__(self, name):
         self._window_name = '{}_script_job_window'.format(name)
+        self.destroy()
 
     def register(self, method, event_type):
         if not cmds.window(self._window_name, exists=1):
@@ -208,5 +209,8 @@ class ScriptJob(object):
             cmds.scriptJob(parent=self._window_name, event=[event_type, method])
 
     def destroy(self):
+        # noinspection PyUnresolvedReferences
+        import maya.cmds as cmds
+
         if cmds.window(self._window_name, exists=1):
             cmds.deleteUI(self._window_name)

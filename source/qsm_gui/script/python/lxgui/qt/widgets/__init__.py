@@ -17,6 +17,8 @@ from .split import *
 
 from .entry import *
 
+from .entry_for_capsule import *
+
 from .entry_extend import *
 
 from .popup import *

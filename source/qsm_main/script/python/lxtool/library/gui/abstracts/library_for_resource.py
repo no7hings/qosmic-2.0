@@ -1682,7 +1682,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
             ('shader', False, 'shader-node-graph'),
             ('material', True, 'material-node-graph')
         ]:
-            i_tool = prx_widgets.PrxEnableItem()
+            i_tool = prx_widgets.PrxToggleButton()
             tools.append(i_tool.widget)
             self._copy_tool_box.add_widget(i_tool)
             i_tool._qt_widget._set_exclusive_widgets_(tools)

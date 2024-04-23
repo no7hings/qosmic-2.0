@@ -28,6 +28,9 @@ class QtCheckButton(
     #
     gui_qt_abstracts.AbsQtValueDefaultExtraDef,
 ):
+    def _refresh_widget_all_(self):
+        pass
+
     def __init__(self, *args, **kwargs):
         super(QtCheckButton, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -551,7 +554,7 @@ class QtPressButton(
             #
             if self._get_sub_process_is_enable_() is True:
                 name_text = '{} - {}'.format(
-                    self._name_text, self._get_sub_process_status_text_()
+                    bsc_core.auto_encode(self._name_text), self._get_sub_process_status_text_()
                 )
             #
             painter._draw_text_by_rect_(
@@ -1067,7 +1070,7 @@ class QtIconMenuButton(
                 )
 
 
-class QtIconEnableButton(
+class QtIconToggleButton(
     QtWidgets.QWidget,
     gui_qt_abstracts.AbsQtWidgetBaseDef,
     gui_qt_abstracts.AbsQtFrameBaseDef,
@@ -1081,10 +1084,13 @@ class QtIconEnableButton(
     #
     gui_qt_abstracts.AbsQtValueDefaultExtraDef,
 ):
+    def _refresh_widget_all_(self):
+        pass
+
     QT_MENU_CLS = gui_qt_wgt_utility.QtMenu
 
     def __init__(self, *args, **kwargs):
-        super(QtIconEnableButton, self).__init__(*args, **kwargs)
+        super(QtIconToggleButton, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         qt_palette = gui_qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
@@ -1245,14 +1251,14 @@ class QtIconEnableButton(
         return self._get_is_checked_()
 
     def _set_menu_data_(self, data):
-        super(QtIconEnableButton, self)._set_menu_data_(data)
+        super(QtIconToggleButton, self)._set_menu_data_(data)
         self._icon_state_draw_is_enable = True
         self._icon_state_file_path = gui_core.GuiIcon.get(
             'state/popup'
         )
 
     def _set_menu_data_generate_fnc_(self, fnc):
-        super(QtIconEnableButton, self)._set_menu_data_generate_fnc_(fnc)
+        super(QtIconToggleButton, self)._set_menu_data_generate_fnc_(fnc)
         #
         self._icon_state_draw_is_enable = True
         self._icon_state_file_path = gui_core.GuiIcon.get(

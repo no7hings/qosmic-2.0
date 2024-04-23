@@ -29,7 +29,7 @@ import qsm_maya.rig.scripts as qsm_mya_rig_scripts
 import qsm_gui.proxy.widgets as qsm_prx_widgets
 
 
-class CreateMtd(object):
+class _GuiProcessOpt(object):
     def __init__(self, window):
         self._window = window
 
@@ -151,31 +151,31 @@ class _GuiRigOpt(
         'asset',
     ]
 
-    def _gui_add_reference_tools(self):
+    def _gui_build_reference_tools(self):
         for i in [
             (
-                'remove-reference',
-                'tool/maya/remove-reference',
-                '"LMB-click" to remove selected rigs',
-                self.do_dcc_remove_rigs
+                    'remove-rig',
+                    'tool/maya/remove-reference',
+                    '"LMB-click" to remove selected rigs',
+                    self.do_dcc_remove_rigs
             ),
             (
-                'duplicate-reference',
-                'tool/maya/duplicate-reference',
-                '"LMB-click" to duplicate selected rigs',
-                self.do_dcc_duplicate_rigs
+                    'duplicate-rig',
+                    'tool/maya/duplicate-reference',
+                    '"LMB-click" to duplicate selected rigs',
+                    self.do_dcc_duplicate_rigs
             ),
             (
-                'reload-reference',
-                'tool/maya/reload-reference',
-                '"LMB-click" to reload selected rigs',
-                self.do_dcc_reload_rigs
+                    'reload-rig',
+                    'tool/maya/reload-reference',
+                    '"LMB-click" to reload selected rigs',
+                    self.do_dcc_reload_rigs
             ),
             (
-                'unload-reference',
-                'tool/maya/unload-reference',
-                '"LMB-click" to unload selected rigs',
-                self.do_dcc_unload_rigs
+                    'unload-rig',
+                    'tool/maya/unload-reference',
+                    '"LMB-click" to unload selected rigs',
+                    self.do_dcc_unload_rigs
             ),
         ]:
             i_key, i_icon_name, i_tool_tip, i_fnc = i
@@ -185,15 +185,68 @@ class _GuiRigOpt(
             i_tool.set_icon_name(i_icon_name)
             i_tool.set_tool_tip(i_tool_tip)
             i_tool.connect_press_clicked_to(i_fnc)
+            self._tool_dict[i_key] = i_tool
 
+    def _gui_build_isolate_select_tools(self):
+        for i in [
+            (
+                    'isolate-select-rig',
+                    'tool/isolate-select',
+                    '"LMB-click" to turn "on" or "off" isolate select mode',
+                    self.do_dcc_isolate_select_rigs
+            )
+        ]:
+            i_key, i_icon_name, i_tool_tip, i_fnc = i
+            i_tool = prx_widgets.PrxToggleButton()
+            self._prx_isolate_select_tool_box.add_widget(i_tool)
+            i_tool.set_name(i_key)
+            i_tool.set_icon_name(i_icon_name)
+            i_tool.set_tool_tip(i_tool_tip)
+            i_tool.connect_check_toggled_to(i_fnc)
+            self._tool_dict[i_key] = i_tool
+
+        for i in [
+            (
+                    'isolate-select-add-rig',
+                    'tool/isolate-select-add',
+                    '"LMB-click" to add rigs to isolate select',
+                    self.do_dcc_isolate_select_add_rigs
+            ),
+            (
+                    'isolate-select-remove-rig',
+                    'tool/isolate-select-remove',
+                    '"LMB-click" to remove rigs to isolate select',
+                    self.do_dcc_isolate_select_remove_rigs
+            )
+        ]:
+            i_key, i_icon_name, i_tool_tip, i_fnc = i
+            i_tool = prx_widgets.PrxIconPressButton()
+            self._prx_isolate_select_tool_box.add_widget(i_tool)
+            i_tool.set_name(i_key)
+            i_tool.set_icon_name(i_icon_name)
+            i_tool.set_tool_tip(i_tool_tip)
+            i_tool.connect_press_clicked_to(i_fnc)
+            self._tool_dict[i_key] = i_tool
+
+    # reference
     def do_dcc_remove_rigs(self):
-        _ = self._prx_tree_view.get_selected_items()
-        for i in _:
-            i_rig = i.get_gui_dcc_obj(self.NAMESPACE)
-            i_reference_node = i_rig.reference_node
-            i_reference_node.do_remove()
+        w = gui_core.GuiDialog.create(
+            label=self._session.gui_name,
+            sub_label='remove-rig',
+            content='press "Yes" to remove selected rigs',
+            status=gui_core.GuiDialog.ValidationStatus.Warning,
+            parent=self._window.widget
+        )
 
-        self._window.do_gui_refresh_all()
+        result = w.get_result()
+        if result is True:
+            _ = self._prx_tree_view.get_selected_items()
+            for i in _:
+                i_rig = i.get_gui_dcc_obj(self.NAMESPACE)
+                i_reference_node = i_rig.reference_node
+                i_reference_node.do_remove()
+
+            self._window.do_gui_refresh_all()
 
     def do_dcc_duplicate_rigs(self):
         _ = self._prx_tree_view.get_selected_items()
@@ -210,7 +263,7 @@ class _GuiRigOpt(
             i_rig = i.get_gui_dcc_obj(self.NAMESPACE)
             i_reference_node = i_rig.reference_node
             i_reference_node.do_reload()
-            
+
         self._window.do_gui_refresh_all()
 
     def do_dcc_unload_rigs(self):
@@ -222,6 +275,46 @@ class _GuiRigOpt(
 
         self._window.do_gui_refresh_all()
 
+    # isolate select
+    def do_dcc_isolate_select_rigs(self, boolean):
+        panel_current = qsm_mya_core.ViewPanels.get_current_name()
+        isolate_select_opt = qsm_mya_core.ViewPanelIsolateSelectOpt(panel_current)
+        isolate_select_opt.set_enable(boolean)
+        if boolean is True:
+            _ = self._prx_tree_view.get_selected_items()
+            for i in _:
+                i_rig = i.get_gui_dcc_obj(self.NAMESPACE)
+                i_reference_node = i_rig.reference_node
+                i_root = i_reference_node.get_root()
+                isolate_select_opt.add_node(i_root)
+
+    def do_dcc_isolate_select_add_rigs(self):
+        panel_current = qsm_mya_core.ViewPanels.get_current_name()
+        isolate_select_opt = qsm_mya_core.ViewPanelIsolateSelectOpt(panel_current)
+        _ = self._prx_tree_view.get_selected_items()
+        for i in _:
+            i_rig = i.get_gui_dcc_obj(self.NAMESPACE)
+            i_reference_node = i_rig.reference_node
+            i_root = i_reference_node.get_root()
+            isolate_select_opt.add_node(i_root)
+
+    def do_dcc_isolate_select_remove_rigs(self):
+        panel_current = qsm_mya_core.ViewPanels.get_current_name()
+        isolate_select_opt = qsm_mya_core.ViewPanelIsolateSelectOpt(panel_current)
+        _ = self._prx_tree_view.get_selected_items()
+        for i in _:
+            i_rig = i.get_gui_dcc_obj(self.NAMESPACE)
+            i_reference_node = i_rig.reference_node
+            i_root = i_reference_node.get_root()
+            isolate_select_opt.remove_node(i_root)
+
+    #
+    def do_gui_refresh_tools(self):
+        panel_current = qsm_mya_core.ViewPanels.get_current_name()
+        isolate_select_opt = qsm_mya_core.ViewPanelIsolateSelectOpt(panel_current)
+        self._tool_dict['isolate-select-rig'].set_checked(isolate_select_opt.is_enable())
+
+    #
     def do_dcc_remove_skin_proxy(self):
         _ = self._prx_tree_view.get_selected_items()
         for i in _:
@@ -238,6 +331,30 @@ class _GuiRigOpt(
                 i_rig.namespace
             ).do_remove()
 
+    # selection
+    def do_dcc_select_rigs(self):
+        if self._prx_tree_view.has_focus() is True:
+            rigs = self.get_selected_rigs()
+            paths = []
+            if rigs:
+                scheme = self._window._rig_options_node.get('selection_scheme')
+                paths = [i.get_location_for_selection(scheme) for i in rigs]
+
+            if paths:
+                cmds.select([i for i in paths if i])
+            else:
+                cmds.select(clear=1)
+
+    def do_gui_select_rigs(self):
+        if self._prx_tree_view.has_focus() is False:
+            namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+            if namespaces:
+                paths = ['/{}'.format(i) for i in namespaces]
+            else:
+                paths = []
+
+            self.do_gui_selected(paths)
+
     def __init__(self, window, session, prx_tree_view):
         super(_GuiRigOpt, self).__init__(window, session)
         self._prx_tree_view = prx_tree_view
@@ -246,13 +363,18 @@ class _GuiRigOpt(
             self._window.get_definition_window_size()[0] * (2.0 / 3.0) - 48
         )
         self._prx_tree_view.connect_item_select_changed_to(
-            self._window.do_dcc_selection_by_rig_selection
+            self.do_dcc_select_rigs
         )
         self._prx_tree_view.get_top_tool_bar().set_expanded(True)
         self._prx_reference_tool_box = self._prx_tree_view.create_top_tool_box(
             'reference', insert_args=1
         )
-        self._gui_add_reference_tools()
+        self._prx_isolate_select_tool_box = self._prx_tree_view.create_top_tool_box(
+            'isolate-select', insert_args=1
+        )
+        self._tool_dict = {}
+        self._gui_build_reference_tools()
+        self._gui_build_isolate_select_tools()
 
         self._item_dict = self._prx_tree_view._item_dict
 
@@ -440,7 +562,7 @@ class _GuiRigOpt(
             self._prx_tree_view.select_items(prx_items)
         else:
             self._prx_tree_view.clear_selection()
-    
+
 
 class _GuiRigReferenceOpt(
     _GuiBaseOpt
@@ -459,7 +581,11 @@ class _GuiRigReferenceOpt(
 
         self._reference_button = qt_widgets.QtPressButton()
         self._prx_input_for_asset.add_widget(self._reference_button)
-        self._reference_button._set_name_text_('reference')
+        self._reference_button._set_name_text_(
+            gui_core.GuiUtil.choice_label(
+                self._window._language, self._session.configure.get('build.buttons.reference')
+            )
+        )
         self._reference_button.setMaximumWidth(64)
         self._reference_button.setMinimumWidth(64)
         self._reference_button.press_clicked.connect(self.do_dcc_reference_rig)
@@ -501,19 +627,6 @@ class _GuiRigReferenceOpt(
 class PnlAssetManager(prx_widgets.PrxSessionWindow):
     RIG_SELECTION_SCRIPT_JOB_NAME = 'asset_manager_rig_selection'
 
-    def do_dcc_selection_by_rig_selection(self):
-        if self._rig_prx_tree_view.has_focus():
-            rigs = self._gui_rig_opt.get_selected_rigs()
-            paths = []
-            if rigs:
-                scheme = self._rig_options_node.get('selection_scheme')
-                paths = [i.get_location_for_selection(scheme) for i in rigs]
-
-            if paths:
-                cmds.select([i for i in paths if i])
-            else:
-                cmds.select(clear=1)
-
     def do_gui_refresh_by_rig_tag_checking(self):
         filter_data_src = self._gui_rig_tag_opt.generate_semantic_tag_filter_data_src()
         qt_view = self._rig_prx_tree_view._qt_view
@@ -523,15 +636,6 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
         )
         qt_view._refresh_view_items_visible_by_any_filter_()
         qt_view._refresh_viewport_showable_auto_()
-
-    def do_gui_refresh_by_dcc_selection(self):
-        namespaces = qsm_mya_core.Namespaces.get_roots_by_selection()
-        if namespaces:
-            paths = ['/{}'.format(i) for i in namespaces]
-        else:
-            paths = []
-
-        self._gui_rig_opt.do_gui_selected(paths)
 
     def do_gui_refresh_by_camera_changing(self):
         cameras = qsm_mya_core.Cameras.get_all()
@@ -567,6 +671,9 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
             frame_range = qsm_mya_core.Scene.get_frame_range()
             self._rig_frame_range_port.set(frame_range)
 
+    def do_gui_refresh_by_window_active_changing(self):
+        self._gui_rig_opt.do_gui_refresh_tools()
+
     def get_rig_frame_scheme(self):
         return self._rig_options_node.get('scene.frame_scheme')
 
@@ -578,7 +685,7 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
             self.RIG_SELECTION_SCRIPT_JOB_NAME
         )
         self._rig_selection_script_job.register(
-            self.do_gui_refresh_by_dcc_selection,
+            self._gui_rig_opt.do_gui_select_rigs,
             self._rig_selection_script_job.EventTypes.SelectionChanged
         )
         self._rig_selection_script_job.register(
@@ -604,7 +711,9 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
         s_a_0 = prx_widgets.PrxVScrollArea()
         self._tab_view.add_widget(
             s_a_0,
-            name='rig',
+            name=gui_core.GuiUtil.choice_label(
+                self._language, self._session.configure.get('build.tabs.rig')
+            ),
             icon_name_text='rig',
         )
 
@@ -640,10 +749,14 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
             self, self._session, self._prx_rig_input_for_asset
         )
         #
-        self._rig_options_node = prx_widgets.PrxNode('options')
+        self._rig_options_node = prx_widgets.PrxNode(
+            gui_core.GuiUtil.choice_label(
+                self._language, self._session.configure.get('build.options.rig')
+            )
+        )
         s_a_0.add_widget(self._rig_options_node)
         self._rig_options_node.create_ports_by_data(
-            self._session.configure.get('build.node.rig_options'),
+            self._session.configure.get('build.options.rig.parameters'),
         )
 
         self._load_skin_proxy_button = self._rig_options_node.get_port('skin_proxy.load_skin_proxy')
@@ -659,7 +772,7 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
         self._rig_options_node.set('dynamic_gpu.remove_dynamic_gpu', self._gui_rig_opt.do_dcc_remove_dynamic_gpu)
 
         self._rig_options_node.get_port('selection_scheme').connect_input_changed_to(
-            self.do_dcc_selection_by_rig_selection
+            self._gui_rig_opt.do_dcc_select_rigs
         )
         self._rig_options_node.get_port('scene.frame_scheme').connect_input_changed_to(
             self.do_gui_refresh_by_frame_scheme_changing
@@ -670,13 +783,14 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
 
         self.do_gui_refresh_all()
 
-        self._register_rig_selection_script_job()
-
         self.do_gui_refresh_by_camera_changing()
         self.do_gui_refresh_by_fps_changing()
         self.do_gui_refresh_by_dcc_frame_changing()
-        self.do_gui_refresh_by_dcc_selection()
+        self._gui_rig_opt.do_gui_select_rigs()
 
+        self._register_rig_selection_script_job()
+
+        self.connect_window_activate_changed_to(self.do_gui_refresh_by_window_active_changing)
         self.connect_window_close_to(self._destroy_rig_selection_script_job)
 
     def do_gui_refresh_all(self):
@@ -697,26 +811,27 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
 
     def do_dcc_load_skin_proxies_by_selection(self):
         if self._load_skin_proxy_button.get_is_started() is False:
-            namespaces = qsm_mya_core.Namespaces.get_roots_by_selection()
+            namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
             if namespaces:
                 self._skin_proxy_load_args_array = []
                 create_cmds = []
-                namespace_query = qsm_mya_core.NamespaceQuery()
-                valid_namespaces = namespace_query.to_valid_namespaces(namespaces)
+                reference_namespace_query = qsm_mya_core.ReferenceNamespaceQuery()
+                valid_namespaces = reference_namespace_query.to_valid_namespaces(namespaces)
                 if valid_namespaces:
                     with self.gui_progressing(maximum=len(valid_namespaces), label='processing skin proxies') as g_p:
                         for i_namespace in valid_namespaces:
                             g_p.do_update()
                             i_generate = qsm_mya_rig_scripts.AdvSkinProxyGenerate(i_namespace)
                             if i_generate.is_exists() is False:
-                                i_cmd, i_cache_file = qsm_mya_rig_scripts.AdvSkinProxyGenerate(i_namespace).generate_args()
+                                i_cmd, i_cache_file = qsm_mya_rig_scripts.AdvSkinProxyGenerate(
+                                    i_namespace).generate_args()
                                 if i_cmd is not None:
                                     create_cmds.append(i_cmd)
 
                                 self._skin_proxy_load_args_array.append((i_namespace, i_cache_file))
 
                 if create_cmds:
-                    mtd = CreateMtd(self)
+                    mtd = _GuiProcessOpt(self)
                     mtd.execute(self._load_skin_proxy_button, create_cmds)
                 else:
                     self.load_skin_proxies()
@@ -732,12 +847,12 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
 
     def do_dcc_load_dynamic_gpus_bt_selection(self):
         if self._load_dynamic_gpu_button.get_is_started() is False:
-            namespaces = qsm_mya_core.Namespaces.get_roots_by_selection()
+            namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
             if namespaces:
                 self._dynamic_gpu_load_args_array = []
                 create_cmds = []
-                namespace_query = qsm_mya_core.NamespaceQuery()
-                valid_namespaces = namespace_query.to_valid_namespaces(namespaces)
+                reference_namespace_query = qsm_mya_core.ReferenceNamespaceQuery()
+                valid_namespaces = reference_namespace_query.to_valid_namespaces(namespaces)
                 if valid_namespaces:
                     with self.gui_progressing(maximum=len(valid_namespaces), label='processing dynamic gpus') as g_p:
                         for i_namespace in valid_namespaces:
@@ -759,8 +874,7 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
                                     (i_namespace, i_cache_file, i_start_frame, i_end_frame))
 
                 if create_cmds:
-                    mtd = CreateMtd(self)
+                    mtd = _GuiProcessOpt(self)
                     mtd.execute(self._load_dynamic_gpu_button, create_cmds)
                 else:
                     self.load_dynamic_gpus()
-

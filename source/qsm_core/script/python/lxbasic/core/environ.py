@@ -7,6 +7,7 @@ from . import base as _base
 
 
 class EnvBaseMtd(object):
+    UI_LANGUAGE_KEY = 'QSM_UI_LANGUAGE'
     DEPLOY_ROOT_KEY = 'QSM_DEPLOY_ROOT'
 
     PROJECT_ROOT_KEY = 'QSM_PROJECT_ROOT'
@@ -131,29 +132,9 @@ class EnvBaseMtd(object):
     def get_database_root(cls):
         return '{}/database'.format(cls.get_cache_root())
 
-
-class EnvContentOpt(object):
-    def __init__(self, environs):
-        self.__raw = environs
-
-    def set(self, key, value):
-        self.__raw[key] = value
-
-    def append(self, key, value):
-        if key in self.__raw:
-            v = self.__raw[key]
-            if value not in v:
-                self.__raw[key] += os.pathsep+value
-        else:
-            self.__raw[key] = value
-
-    def prepend(self, key, value):
-        if key in self.__raw:
-            v = self.__raw[key]
-            if value not in v:
-                self.__raw[key] = value+os.pathsep+self.__raw[key]
-        else:
-            self.__raw[key] = value
+    @classmethod
+    def get_ui_language(cls):
+        return cls.get(cls.UI_LANGUAGE_KEY)
 
 
 class EnvExtraMtd(EnvBaseMtd):
@@ -192,3 +173,27 @@ class EnvExtraMtd(EnvBaseMtd):
             cls.set(cls.TD_ENABLE_KEY, cls.TRUE)
         else:
             cls.set(cls.TD_ENABLE_KEY, cls.FALSE)
+
+
+class EnvContentOpt(object):
+    def __init__(self, environs):
+        self.__raw = environs
+
+    def set(self, key, value):
+        self.__raw[key] = value
+
+    def append(self, key, value):
+        if key in self.__raw:
+            v = self.__raw[key]
+            if value not in v:
+                self.__raw[key] += os.pathsep+value
+        else:
+            self.__raw[key] = value
+
+    def prepend(self, key, value):
+        if key in self.__raw:
+            v = self.__raw[key]
+            if value not in v:
+                self.__raw[key] = value+os.pathsep+self.__raw[key]
+        else:
+            self.__raw[key] = value

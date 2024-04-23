@@ -1415,7 +1415,7 @@ if QT_USD_FLAG is True:
                     ('camera-mask', False, self._usd_set_camera_mask_enable_, self._usd_get_camera_mask_menu_data_)
                 ]
             ):
-                i_button = gui_qt_wgt_button.QtIconEnableButton()
+                i_button = gui_qt_wgt_button.QtIconToggleButton()
                 i_button._set_name_text_(i_key)
                 i_button._set_tool_tip_text_(
                     '"LMB-click" to toggle "{0}"\n"RMB-click" for show more action'.format(i_key)
@@ -1444,7 +1444,7 @@ if QT_USD_FLAG is True:
                     ('light', None, True, self._usd_model.set_lights_enable, self._usd_get_light_menu_data_),
                 ]
             ):
-                i_button = gui_qt_wgt_button.QtIconEnableButton()
+                i_button = gui_qt_wgt_button.QtIconToggleButton()
                 i_button._set_name_text_(i_key)
                 i_button._set_tool_tip_text_(
                     '"LMB-click" to toggle "{0}"\n"RMB-click" for show more action'.format(i_key)
@@ -1470,7 +1470,7 @@ if QT_USD_FLAG is True:
                      self._usd_get_color_space_menu_data_),
                 ]
             ):
-                i_button = gui_qt_wgt_button.QtIconEnableButton()
+                i_button = gui_qt_wgt_button.QtIconToggleButton()
                 i_button._set_name_text_(i_key)
                 i_button._set_tool_tip_text_('"LMB-click" to toggle "{0}"\n"RMB-click" to switch "{0}"'.format(i_key))
                 i_button._set_icon_file_path_(
@@ -1643,11 +1643,11 @@ if QT_USD_FLAG is True:
             tool_box._set_name_text_('isolate select')
             #
             for i_index, (i_key, i_mode) in enumerate(
-                    [
-                        ('isolate-select', None),
-                    ]
+                [
+                    ('isolate-select', None),
+                ]
             ):
-                i_button = gui_qt_wgt_button.QtIconEnableButton()
+                i_button = gui_qt_wgt_button.QtIconToggleButton()
                 i_button._set_name_text_(i_key)
                 i_button._set_tool_tip_text_('"LMB-click" to "{}"'.format(i_key))
                 i_button._set_icon_file_path_(
@@ -1678,7 +1678,7 @@ if QT_USD_FLAG is True:
                 ('smooth-shaded', Usdviewq.common.RenderModes.SMOOTH_SHADED),
                 ('flat-shaded', Usdviewq.common.RenderModes.FLAT_SHADED)
             ]:
-                i_button = gui_qt_wgt_button.QtIconEnableButton()
+                i_button = gui_qt_wgt_button.QtIconToggleButton()
                 i_button._set_name_text_(i_key)
                 i_button._set_tool_tip_text_('"LMB-click" for switch render mode to "{}"'.format(i_key))
                 i_button._set_icon_file_path_(
@@ -1707,7 +1707,7 @@ if QT_USD_FLAG is True:
                     ('cull-backfaces', 'enable', False, self._usd_set_cull_enable_, self._usd_get_cull_menu_data_),
                 ]
             ):
-                i_button = gui_qt_wgt_button.QtIconEnableButton()
+                i_button = gui_qt_wgt_button.QtIconToggleButton()
                 i_button._set_name_text_(i_key)
                 i_button._set_tool_tip_text_(
                     '"LMB-click" to toggle "{0}"\n"RMB-click" to switch "{0}" mode'.format(i_key)

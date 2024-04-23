@@ -19,7 +19,7 @@ import lxresolver.core as rsv_core
 
 import lxgui.core as gui_core
 
-import qsm_hook_general.rsv.objects as gnl_rsv_objects
+import qsm_prc_general.rsv.objects as gnl_rsv_objects
 
 
 class _GuiCmdForNewVersion(object):

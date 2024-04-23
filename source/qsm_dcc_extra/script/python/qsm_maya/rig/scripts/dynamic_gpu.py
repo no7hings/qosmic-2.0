@@ -169,7 +169,7 @@ class DynamicGpuCacheGenerate(object):
 
     def __init__(self, namespace):
         self._namespace = namespace
-        self._namespace_query = qsm_mya_core.NamespaceQuery()
+        self._reference_namespace_query = qsm_mya_core.ReferenceNamespaceQuery()
         self._rig = qsm_rig_core.Rig(self._namespace)
         self._root = self._rig.get_root()
         self._geometry_location = self._rig.get_geometry_location()

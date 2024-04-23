@@ -52,7 +52,7 @@ build:
             #
             includes:
                 widget: capsule_strings
-                value: ['image', 'texture', 'hdri', 'geometry', 'cache']
+                options: ['image', 'texture', 'hdri', 'geometry', 'cache']
                 default: []
                 enable: True
             #
@@ -94,7 +94,7 @@ build:
 
             resource/includes:
                 widget: capsule_strings
-                value: ['file', 'directory']
+                options: ['file', 'directory']
                 default: ['directory']
                 enable: True
 

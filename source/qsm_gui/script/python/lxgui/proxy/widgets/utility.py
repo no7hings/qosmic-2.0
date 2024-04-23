@@ -763,11 +763,11 @@ class PrxCheckItem(gui_prx_abstracts.AbsPrxWidget):
         )
 
 
-class PrxEnableItem(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_button.QtIconEnableButton
+class PrxToggleButton(gui_prx_abstracts.AbsPrxWidget):
+    QT_WIDGET_CLS = gui_qt_wgt_button.QtIconToggleButton
 
     def __init__(self, *args, **kwargs):
-        super(PrxEnableItem, self).__init__(*args, **kwargs)
+        super(PrxToggleButton, self).__init__(*args, **kwargs)
         self._qt_widget._set_size_(20, 20)
 
     def set_name(self, text):
@@ -792,6 +792,9 @@ class PrxEnableItem(gui_prx_abstracts.AbsPrxWidget):
 
     def connect_check_clicked_to(self, fnc):
         self._qt_widget.check_clicked.connect(fnc)
+
+    def connect_check_toggled_to(self, fnc):
+        self._qt_widget.check_toggled.connect(fnc)
 
     def connect_user_check_clicked_to(self, fnc):
         self._qt_widget.user_check_clicked.connect(fnc)

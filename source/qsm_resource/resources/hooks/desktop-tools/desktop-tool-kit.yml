@@ -46,7 +46,7 @@ build:
         create_options:
             type:
                 widget: capsule_string
-                value: ['python-script', 'shell-script']
+                options: ['python-script', 'shell-script']
                 default: 'python-script'
                 tool_tip: '...'
                 enable: True
@@ -67,7 +67,7 @@ build:
             #
             systems:
                 widget: capsule_strings
-                value: ['windows', 'linux']
+                options: ['windows', 'linux']
                 default: ['windows']
                 tool_tip: '...'
                 enable: True
@@ -162,7 +162,7 @@ build:
         modify_options:
             type:
                 widget: capsule_string
-                value: ['python-script', 'shell-script']
+                options: ['python-script', 'shell-script']
                 default: 'python-script'
                 tool_tip: '...'
                 enable: True
@@ -176,7 +176,7 @@ build:
             #
             systems:
                 widget: capsule_strings
-                value: ['windows', 'linux']
+                options: ['windows', 'linux']
                 default: ['windows']
                 tool_tip: '...'
                 enable: True
@@ -277,7 +277,7 @@ build:
         copy_options:
             type:
                 widget: capsule_string
-                value: ['python-script', 'shell-script']
+                options: ['python-script', 'shell-script']
                 default: 'python-script'
                 tool_tip: '...'
                 enable: True
@@ -290,7 +290,7 @@ build:
             #
             systems:
                 widget: capsule_strings
-                value: ['windows', 'linux']
+                options: ['windows', 'linux']
                 default: ['windows']
                 tool_tip: '...'
                 enable: True

@@ -28,7 +28,7 @@ build:
         options:
             resource_type:
                 widget: capsule_string
-                value: ['project', 'asset', 'sequence', 'shot']
+                options: ['project', 'asset', 'sequence', 'shot']
                 default: 'asset'
                 tool_tip: '...'
                 enable: True
@@ -68,14 +68,14 @@ build:
             #
             version_type:
                 widget: capsule_string
-                value: ['daily', 'check', 'downstream']
+                options: ['daily', 'check', 'downstream']
                 default: 'daily'
                 tool_tip: 'choose a version type'
                 enable: True
 
             version_scheme:
                 widget: capsule_string
-                value: [
+                options: [
                     'new',
                     'latest',
                     # 'customize'

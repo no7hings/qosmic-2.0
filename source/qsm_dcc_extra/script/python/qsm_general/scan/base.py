@@ -203,9 +203,9 @@ class AbsEntityQuery(object):
         self._cache_dict = {}
         self._entity_variant_key = self.EntityClass.VariantKey
 
-        self.update()
+        self.do_update()
 
-    def update(self):
+    def do_update(self):
         matches = self._stg_ptn_opt_for_scan.get_matches(sort=True)
         for i_variants in matches:
             self.register(i_variants)
@@ -313,9 +313,9 @@ class AbsTaskQuery(object):
 
         self._cache_dict = {}
         self._entity_variant_key = self.EntityClass.VariantKey
-        self.update()
+        self.do_update()
 
-    def update(self):
+    def do_update(self):
         matches = self._stg_ptn_opt_for_scan.get_matches(sort=True)
         for i_variants in matches:
             self.register(i_variants)

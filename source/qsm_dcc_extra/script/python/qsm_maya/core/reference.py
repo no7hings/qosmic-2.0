@@ -7,6 +7,8 @@ from . import base as _base
 
 from . import scene as _scene
 
+from . import namespace as _namespace
+
 
 class Reference(object):
     @classmethod
@@ -85,6 +87,11 @@ class ReferenceNode(_base.AbsNode):
     def __init__(self, *args, **kwargs):
         super(ReferenceNode, self).__init__(*args, **kwargs)
 
+    def get_root(self):
+        _ = cmds.ls('|{}:*'.format(self.get_namespace()), long=1)
+        if _:
+            return _[0]
+
     def get_namespace(self):
         return Reference.get_namespace(self._path)
 
@@ -111,10 +118,37 @@ class ReferenceNodeQuery(object):
     def __init__(self):
         self._cache_dict = collections.OrderedDict()
 
-        self._cache_all()
+        self.do_update()
 
-    def _cache_all(self):
+    def do_update(self):
         _ = References.get_all()
         for i_path in _:
-            i_node = ReferenceNode()
+            i_node = ReferenceNode(i_path)
             self._cache_dict[i_path] = i_node
+
+
+class ReferenceNamespaceQuery(object):
+
+    def __init__(self):
+        self._cache_dict = dict()
+        self.do_update()
+
+    def do_update(self):
+        _ = References.get_all_loaded()
+        for i in _:
+            i_namespace = Reference.get_namespace(i)
+            self._cache_dict[i_namespace] = i
+
+    def get_file(self, namespace, extend=True):
+        if namespace in self._cache_dict:
+            path = self._cache_dict[namespace]
+            return Reference.get_file_path(path, extend)
+
+    def to_valid_namespaces(self, namespaces):
+        list_ = []
+        for i_namespace in namespaces:
+            if _namespace.Namespace.get_is_exists(i_namespace):
+                i_file_path = self.get_file(i_namespace)
+                if i_file_path:
+                    list_.append(i_namespace)
+        return list_

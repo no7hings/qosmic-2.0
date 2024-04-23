@@ -523,7 +523,7 @@ class AdvSkinProxyGenerate(object):
         cmds.setAttr(location + '.blackBox', 1, lock=1)
 
         if cache_file_path is None:
-            file_path = qsm_mya_core.NamespaceQuery().get_file(self._namespace)
+            file_path = qsm_mya_core.ReferenceNamespaceQuery().get_file(self._namespace)
             cache_file_path = qsm_mya_ast_core.AssetCache.get_skin_proxy_file(
                 file_path
             )
@@ -733,7 +733,7 @@ class AdvSkinProxyGenerate(object):
         return not not _
 
     def generate_args(self):
-        file_path = qsm_mya_core.NamespaceQuery().get_file(self._namespace)
+        file_path = qsm_mya_core.ReferenceNamespaceQuery().get_file(self._namespace)
         cache_file_path = qsm_mya_ast_core.AssetCache.get_skin_proxy_file(
             file_path
         )

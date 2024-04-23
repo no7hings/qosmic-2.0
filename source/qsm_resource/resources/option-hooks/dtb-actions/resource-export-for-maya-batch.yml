@@ -32,7 +32,7 @@ build:
         options:
             file_type:
                 widget: capsule_string
-                value: ['ASS', 'ABC', 'USD', 'FBX', 'TX', 'HDRI']
+                options: ['ASS', 'ABC', 'USD', 'FBX', 'TX', 'HDRI']
                 default: 'ASS'
                 enable: True
                 tool_tip: '...'

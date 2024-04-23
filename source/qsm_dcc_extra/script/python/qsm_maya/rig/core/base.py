@@ -36,9 +36,9 @@ class AdvQuery(object):
         else:
             self._geometry_query = bsc_content.Dict(value=ctt.get('geometry'))
 
-        self._cache_all()
+        self.do_update()
 
-    def _cache_all(self):
+    def do_update(self):
         keys = self._main_ctt.get_all_leaf_keys()
         for i_key in keys:
             i_value = self._main_ctt.get(i_key)
