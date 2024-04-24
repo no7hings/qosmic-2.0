@@ -1,7 +1,43 @@
 # coding:utf-8
 import copy
 
+import parse
+
 import lxbasic.core as bsc_core
+
+
+class PtnStgParseOpt(bsc_core.PtnStgParseOpt):
+    def __init__(self, p, variants=None):
+        super(PtnStgParseOpt, self).__init__(p, variants)
+
+    def get_matches(self, sort=False):
+        list_ = []
+        paths = bsc_core.ScanGlob.glob(
+            bsc_core.PtnParseMtd.get_as_fnmatch(
+                self._pattern, self._variants_default
+            )
+        )
+        if sort is True:
+            paths = bsc_core.RawTextsOpt(paths).sort_by_number()
+        #
+        if self.get_keys():
+            for i_path in paths:
+                i_p = parse.parse(
+                    self._pattern, i_path, case_sensitive=True
+                )
+                if i_p:
+                    i_r = i_p.named
+                    if i_r:
+                        i_r.update(self._variants)
+                        i_r['result'] = i_path
+                        i_r['pattern'] = self._pattern_origin
+                        list_.append(i_r)
+        else:
+            for i_path in paths:
+                i_r = dict(result=i_path)
+                i_r.update(self._variants)
+                list_.append(i_r)
+        return list_
 
 
 class Properties(dict):
@@ -66,6 +102,10 @@ class EntityNodePatterns(object):
     ShotTask = '/{project}/{sequence}_{shot}/{task}'
 
 
+class AssetRoles(object):
+    Character = None
+
+
 class EntityTasks(object):
     Concept = 'Design'
     Model = 'Maya'
@@ -114,6 +154,7 @@ class AbsEntity(object):
         self._path = path
         self._path_opt = bsc_core.PthNodeOpt(self._path)
         self._name = self._path_opt.get_name()
+        self._variants = variants
         self._properties = Properties()
         self._properties.update(variants)
         # for k, v in variants.items():
@@ -150,30 +191,39 @@ class AbsEntity(object):
     def properties(self):
         return self._properties
 
-    def _generate_next_entity_query(self, entity_type):
+    def _generate_next_entity_query(self, entity_type, variants_extend=None):
         if entity_type in self._next_entity_query_cache_dict:
-            return self._next_entity_query_cache_dict[entity_type]
-        variants = copy.copy(self._properties)
+            _ = self._next_entity_query_cache_dict[entity_type]
+            if variants_extend is not None:
+                _.do_update(variants_extend)
+            return _
+        variants = copy.copy(self._variants)
         _ = self.NextEntityQueryClassDict[entity_type](self._root, variants)
+        _.do_update(variants_extend)
         self._next_entity_query_cache_dict[entity_type] = _
         return _
 
-    def get_next_entities(self, entity_type=None):
-        _ = self._generate_next_entity_query(entity_type)
+    def get_next_entities(self, entity_type, variants_extend=None):
+        _ = self._generate_next_entity_query(entity_type, variants_extend)
         return _.get_all()
 
     def get_next_entity(self, name, entity_type):
         _ = self._generate_next_entity_query(entity_type)
         return _.get(name)
 
-    def _generate_step_query(self):
+    def _generate_step_query(self, variants_extend=None):
         if self._step_query_cache is not None:
             return self._step_query_cache
-        variants = copy.copy(self._properties)
+        variants = copy.copy(self._variants)
         _ = self.TaskQueryClass(self, variants)
+        _.do_update(variants_extend)
         self._step_query_cache = _
         return _
-    
+
+    @classmethod
+    def _validation_fnc(cls, variants):
+        return True
+
     @property
     def tasks(self):
         _ = self._generate_step_query()
@@ -203,19 +253,31 @@ class AbsEntityQuery(object):
         self._cache_dict = {}
         self._entity_variant_key = self.EntityClass.VariantKey
 
-        self.do_update()
-
-    def do_update(self):
-        matches = self._stg_ptn_opt_for_scan.get_matches(sort=True)
-        for i_variants in matches:
-            self.register(i_variants)
+    def do_update(self, variants_extend=None):
+        if variants_extend:
+            for k, v in variants_extend.items():
+                for j in v:
+                    j_pth_opt = bsc_core.PtnStgParseOpt(
+                        EntityScanPatterns.__dict__[self.EntityClass.Type]
+                    )
+                    j_variants = copy.copy(self._variants)
+                    j_variants[k] = j
+                    j_pth_opt.update_variants(**j_variants)
+                    j_matchers = j_pth_opt.get_matches(sort=True)
+                    for k_variant in j_matchers:
+                        self.register(k_variant)
+        else:
+            matches = self._stg_ptn_opt_for_scan.get_matches(sort=True)
+            for i_variants in matches:
+                self.register(i_variants)
 
     def register(self, variants):
-        path = self._dcc_ptn_opt.update_variants_to(**variants).get_value()
-        entity = self.EntityClass(self._root, path, variants)
-        self._root_entity_stack.register(path, entity)
-        self._cache_dict[path] = entity
-        return entity
+        if self.EntityClass._validation_fnc(variants) is True:
+            path = self._dcc_ptn_opt.update_variants_to(**variants).get_value()
+            entity = self.EntityClass(self._root, path, variants)
+            self._root_entity_stack.register(path, entity)
+            self._cache_dict[path] = entity
+            return entity
 
     def to_entity_path(self, name):
         variants = copy.copy(self._variants)
@@ -256,6 +318,8 @@ class AbsTask(object):
         self._path = path
         self._path_opt = bsc_core.PthNodeOpt(self._path)
         self._name = self._path_opt.get_name()
+
+        self._variants = variants
         self._properties = Properties()
         self._properties.update(variants)
 
@@ -289,7 +353,7 @@ class AbsTask(object):
     
     def find_result(self, p):
         p_opt = bsc_core.PtnStgParseOpt(p)
-        _ = p_opt.get_exists_results(**self._properties)
+        _ = p_opt.get_exists_results(**self._variants)
         if _:
             return _[0]
 
@@ -313,9 +377,9 @@ class AbsTaskQuery(object):
 
         self._cache_dict = {}
         self._entity_variant_key = self.EntityClass.VariantKey
-        self.do_update()
+        pass
 
-    def do_update(self):
+    def do_update(self, variants_extend=None):
         matches = self._stg_ptn_opt_for_scan.get_matches(sort=True)
         for i_variants in matches:
             self.register(i_variants)

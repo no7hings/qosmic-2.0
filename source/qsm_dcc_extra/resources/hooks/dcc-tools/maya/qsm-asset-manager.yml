@@ -124,7 +124,7 @@ build:
                 animation_transfer/force:
                     widget: boolean
                     label_chs: '强制'
-                    value: True
+                    value: False
                     tool_tip: '...'
 
                 animation_transfer/frame_offset:

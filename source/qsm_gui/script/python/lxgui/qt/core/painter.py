@@ -277,7 +277,7 @@ class QtPainter(QtGui.QPainter):
             self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
             self._set_background_color_(act_bkg_color)
             action_rect = QtCore.QRect(
-                frm_x+f_h*1.5, f_y+f_h-act_h-1, frm_w-f_h*3-icn_w, act_h
+                frm_x+8, f_y+f_h-act_h, frm_w-16-icn_w, act_h
             )
             self.drawRoundedRect(action_rect, act_h/2, act_h/2, QtCore.Qt.AbsoluteSize)
         # text
@@ -430,7 +430,7 @@ class QtPainter(QtGui.QPainter):
             self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
             self._set_background_color_(act_bkg_color)
             action_rect = QtCore.QRect(
-                frm_x+f_h*1.5, f_y+f_h-act_h-1, frm_w-f_h*3-icn_w, act_h
+                frm_x+8, f_y+f_h-act_h, frm_w-16, act_h
             )
             self.drawRoundedRect(action_rect, act_h/2, act_h/2, QtCore.Qt.AbsoluteSize)
         # text

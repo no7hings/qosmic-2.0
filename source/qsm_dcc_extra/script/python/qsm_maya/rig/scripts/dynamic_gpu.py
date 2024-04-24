@@ -248,10 +248,10 @@ class DynamicGpuCacheGenerate(object):
         _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME), long=1)
         return not not _
 
-    def generate_args(self, directory_path):
+    def generate_args(self, directory_path, start_frame, end_frame):
         file_path = '{}/source.ma'.format(directory_path)
         cache_file_path = '{}/gpu.ma'.format(directory_path)
-        start_frame, end_frame = qsm_mya_core.Scene.get_frame_range()
+        # start_frame, end_frame = qsm_mya_core.Scene.get_frame_range()
         cmd = qsm_mya_ast_core.MayaCacheProcess.generate_command(
             'method=dynamic-gpu-cache-generate&file={}&cache_file={}&namespace={}&start_frame={}&end_frame={}'.format(
                 file_path,

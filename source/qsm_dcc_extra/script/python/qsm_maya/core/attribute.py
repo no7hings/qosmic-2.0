@@ -47,7 +47,11 @@ class Attribute(object):
             sourceFromDestination=1
         )
         if atr_path_src:
-            cmds.disconnectAttr(atr_path_src, atr_path_dst)
+            path_src = atr_path_src.split('.')[0]
+            if not cmds.referenceQuery(path_src, isNodeReferenced=1):
+                cmds.disconnectAttr(atr_path_src, atr_path_dst)
+                return True
+        return False
 
     @classmethod
     def find_source_node(cls, path, atr_name, node_type):

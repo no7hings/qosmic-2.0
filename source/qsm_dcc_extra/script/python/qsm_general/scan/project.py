@@ -24,6 +24,9 @@ class Project(_base.AbsEntity):
 
     def __init__(self, *args, **kwargs):
         super(Project, self).__init__(*args, **kwargs)
+
+    def find_assets(self, variants_extend):
+        return self.get_next_entities(_base.EntityTypes.Asset, variants_extend)
     
     @property
     def assets(self):

@@ -899,6 +899,7 @@ class QtPopupAsCompletion(
     def eventFilter(self, *args):
         widget, event = args
         if widget == self._entry_widget:
+            # print event.type()
             if event.type() == QtCore.QEvent.FocusOut:
                 self._do_popup_close_()
             elif event.type() == QtCore.QEvent.KeyPress:
@@ -937,8 +938,10 @@ class QtPopupAsCompletion(
             return
         input_widget = self.parent()
         self._popup_view._set_clear_()
-        values = input_widget._generate_completion_texts_()
-        if values:
+        _ = input_widget._generate_completion_texts_()
+        if _:
+            values = _[:25]
+            values.sort()
             has_match = False
             text_current = self._entry_widget._get_value_()
             for index, i_text in enumerate(values):

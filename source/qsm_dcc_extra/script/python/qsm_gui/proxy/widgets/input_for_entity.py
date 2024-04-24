@@ -45,7 +45,7 @@ class PrxInputForAsset(prx_abstracts.AbsPrxWidget):
         # self._qt_path_input.input_value_change_accepted.connect(self._update_fnc)
         # self._qt_path_input.user_input_entry_finished.connect(self._update_fnc_1)
 
-        self._cache_entities()
+        self._qt_path_input._run_fnc_use_thread_(self._cache_entities)
 
     def _cache_projects(self):
         name_texts = []
@@ -71,7 +71,8 @@ class PrxInputForAsset(prx_abstracts.AbsPrxWidget):
 
         project = self._scan_root.get_entity(path_opt.to_string())
         if project is not None:
-            for i_asset in project.assets:
+            assets = project.find_assets(dict(role=['chr', 'prp']))
+            for i_asset in assets:
                 i_name = i_asset.name
                 name_texts.append(i_asset.name)
 
@@ -109,7 +110,7 @@ class PrxInputForAsset(prx_abstracts.AbsPrxWidget):
                 projects = self._scan_root.projects
             elif i_d == 2:
                 project = self._scan_root.get_entity(i.get_path())
-                assets = project.assets
+                assets = project.find_assets(dict(role=['chr', 'prp']))
 
     def add_widget(self, widget):
         if isinstance(widget, gui_qt_core.QtCore.QObject):
@@ -127,7 +128,6 @@ class PrxInputForAsset(prx_abstracts.AbsPrxWidget):
 
     def get_entity(self, path):
         return self._scan_root.get_entity(path)
-
 
     def get_path(self):
         return self._qt_path_input._get_value_()

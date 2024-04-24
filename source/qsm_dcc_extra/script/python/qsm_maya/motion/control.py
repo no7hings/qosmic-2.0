@@ -25,7 +25,9 @@ class ControlOpt(object):
                 return
         if qsm_mya_core.Attribute.has_source(path, atr_name) is True:
             if force is True:
-                qsm_mya_core.Attribute.break_source(path, atr_name)
+                result = qsm_mya_core.Attribute.break_source(path, atr_name)
+                if result is False:
+                    return
             else:
                 return
         value_dst = qsm_mya_core.Attribute.get_value(path, atr_name)

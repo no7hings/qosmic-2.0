@@ -932,6 +932,7 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
                 adv_rig_query = self._gui_rig_opt.get_adv_rig_query()
                 valid_namespaces = adv_rig_query.to_valid_namespaces(namespaces)
                 if valid_namespaces:
+                    start_frame, end_frame = self._rig_utility_options_node.get('scene.frame_range')
                     with self.gui_progressing(maximum=len(valid_namespaces), label='processing dynamic gpus') as g_p:
                         for i_namespace in valid_namespaces:
                             g_p.do_update()
@@ -942,8 +943,7 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
                                     user_name=bsc_core.SysBaseMtd.get_user_name()
                                 )
                                 i_cmd, i_file_path, i_cache_file, i_start_frame, i_end_frame = \
-                                    i_generate.generate_args(i_directory_path)
-
+                                    i_generate.generate_args(i_directory_path, start_frame, end_frame)
                                 i_generate.export_source(i_file_path)
 
                                 create_cmds.append(i_cmd)

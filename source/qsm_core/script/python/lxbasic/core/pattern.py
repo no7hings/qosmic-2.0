@@ -7,9 +7,74 @@ import fnmatch
 
 import parse
 
+import os
+
+import scandir
+
 from . import base as _base
 
 from . import raw as _raw
+
+
+class ScanGlob(object):
+    @classmethod
+    def auto_decode(cls, path):
+        _ = path.decode('gbk')
+        return _.encode('utf-8')
+
+    @classmethod
+    def san_next(cls, path):
+        list_ = []
+        path = cls.auto_decode(path)
+        for i in scandir.scandir(path):
+            if i.is_dir():
+                list_.append(i.path.replace('\\', '/'))
+        return list_
+
+    @classmethod
+    def glob(cls, regex):
+        def _rcs_fnc(path_, depth_, is_root=False):
+            _depth = depth_+1
+            if _depth <= depth_maximum:
+                _filter_name = filter_names[_depth]
+                if is_root is True:
+                    _filter_path = '{}{}'.format(path_, _filter_name)
+                else:
+                    _filter_path = '{}/{}'.format(
+                        path_, _filter_name
+                    )
+
+                if '*' not in _filter_path:
+                    if os.path.exists(_filter_path):
+                        _filter_child_paths = [_filter_path]
+                    else:
+                        _filter_child_paths = []
+                else:
+                    if path_ in cache_dict:
+                        _child_paths = cache_dict[path_]
+                    else:
+                        _child_paths = cls.san_next(path_)
+                        cache_dict[path_] = _child_paths
+                    _filter_child_paths = fnmatch.filter(
+                        _child_paths, _filter_path
+                    )
+
+                if _filter_child_paths:
+                    for _i_filter_child_path in _filter_child_paths:
+                        if _depth == depth_maximum:
+                            list_.append(_i_filter_child_path)
+                        _rcs_fnc(_i_filter_child_path, _depth)
+
+        #
+        cache_dict = {}
+        list_ = []
+        #
+        filter_names = regex.split('/')
+        depth_maximum = len(filter_names)-1
+
+        root = filter_names[0]+'/'
+        _rcs_fnc(root, 0, is_root=True)
+        return list_
 
 
 class PtnBaseMtd(object):

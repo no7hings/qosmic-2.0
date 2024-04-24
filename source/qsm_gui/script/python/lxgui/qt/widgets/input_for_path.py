@@ -174,12 +174,15 @@ class QtInputAsPath(
         self._index_thread_batch += 1
 
         # thread only use when widget is show
-        if self.isVisible() is True:
-            self._entry_extend_widget._do_next_wait_start_()
-            self._run_build_use_thread_(cache_fnc_, build_fnc_, post_fnc_)
-        else:
-            build_fnc_(cache_fnc_())
-            post_fnc_()
+        # if self.isVisible() is True:
+        #     self._entry_extend_widget._do_next_wait_start_()
+        #     self._run_build_use_thread_(cache_fnc_, build_fnc_, post_fnc_)
+        # else:
+        #     build_fnc_(cache_fnc_())
+        #     post_fnc_()
+        # todo: always use thread
+        self._entry_extend_widget._do_next_wait_start_()
+        self._run_build_use_thread_(cache_fnc_, build_fnc_, post_fnc_)
 
     def _update_next_(self):
         self._entry_extend_widget._update_next_()
