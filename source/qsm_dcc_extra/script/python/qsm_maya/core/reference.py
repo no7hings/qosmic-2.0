@@ -31,7 +31,7 @@ class Reference(object):
         return cmds.referenceQuery(path, namespace=1, shortName=1)
 
     @classmethod
-    def get_is_reference_node(cls, path):
+    def get_is_from_reference(cls, path):
         return cmds.referenceQuery(path, isNodeReferenced=1)
 
     @classmethod
@@ -66,7 +66,7 @@ class References(object):
         list_ = []
         _ = [i for i in cmds.ls(type='reference', long=1) or [] if i not in cls.NODE_EXCLUDE]
         for i in _:
-            if not Reference.get_is_reference_node(i):
+            if not Reference.get_is_from_reference(i):
                 if Reference.get_is_loaded(i):
                     list_.append(i)
         return list_
@@ -76,16 +76,16 @@ class References(object):
         list_ = []
         _ = [i for i in cmds.ls(type='reference', long=1) or [] if i not in cls.NODE_EXCLUDE]
         for i in _:
-            if not Reference.get_is_reference_node(i):
+            if not Reference.get_is_from_reference(i):
                 list_.append(i)
         return list_
 
 
-class ReferenceNode(_base.AbsNode):
+class ReferenceOpt(_base.AbsNodeOpt):
     Type = 'reference'
 
     def __init__(self, *args, **kwargs):
-        super(ReferenceNode, self).__init__(*args, **kwargs)
+        super(ReferenceOpt, self).__init__(*args, **kwargs)
 
     def get_root(self):
         _ = cmds.ls('|{}:*'.format(self.get_namespace()), long=1)
@@ -114,7 +114,7 @@ class ReferenceNode(_base.AbsNode):
         Reference.unload(self._path)
 
 
-class ReferenceNodeQuery(object):
+class ReferenceQuery(object):
     def __init__(self):
         self._cache_dict = collections.OrderedDict()
 
@@ -123,8 +123,8 @@ class ReferenceNodeQuery(object):
     def do_update(self):
         _ = References.get_all()
         for i_path in _:
-            i_node = ReferenceNode(i_path)
-            self._cache_dict[i_path] = i_node
+            i_opt = ReferenceOpt(i_path)
+            self._cache_dict[i_path] = i_opt
 
 
 class ReferenceNamespaceQuery(object):

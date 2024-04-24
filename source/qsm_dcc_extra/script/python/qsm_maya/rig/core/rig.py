@@ -8,15 +8,18 @@ import lxbasic.core as bsc_core
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.asset.core as qsm_mya_ast_core
+
+class AdvOptions(object):
+    Geometry = 'Geometry'
 
 
-class Rig(object):
+class AdvRigOpt(object):
     def __init__(self, namespace):
         self.namespace = namespace
 
     def __str__(self):
-        return 'Rig(path="{}")'.format(
+        return 'AdvRigOpt(path="{}")'.format(
+            self.__class__.__name__,
             self.__dict__['path']
         )
 
@@ -30,7 +33,7 @@ class Rig(object):
         if _:
             return _[0]
 
-    def get_motion_location(self):
+    def get_animation_location(self):
         _ = cmds.ls('{}:MotionSystem'.format(self.namespace), long=1)
         if _:
             return _[0]
@@ -72,12 +75,12 @@ class Rig(object):
         elif scheme == 'geometry':
             return self.get_geometry_location()
         elif scheme == 'motion':
-            return self.get_motion_location()
+            return self.get_animation_location()
         elif scheme == 'deformation':
             return self.get_deformation_location()
 
 
-class RigsQuery(object):
+class AdvRigQuery(object):
     STG_PTN = 'X:/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
 
     DAG_PTN = '/{namespace}'
@@ -96,17 +99,20 @@ class RigsQuery(object):
             i_file_path = qsm_mya_core.Reference.get_file_path(i_path)
             if self._pth.get_is_matched(i_file_path) is True:
                 i_namespace = cmds.referenceQuery(i_path, namespace=1, shortName=1)
-                i_reference_node = qsm_mya_core.ReferenceNode(i_path)
+                i_reference_opt = qsm_mya_core.ReferenceOpt(i_path)
                 i_variants = self._pth.get_variants(i_file_path)
-                i_rig = Rig(i_namespace)
-                i_rig.reference_node = i_reference_node
+                i_rig_opt = AdvRigOpt(i_namespace)
+                i_rig_opt.reference_opt = i_reference_opt
                 i_kwargs = copy.copy(i_variants)
                 i_kwargs['namespace'] = i_namespace
                 i_path = '/{}'.format(i_namespace)
-                i_rig.path = i_path
-                i_rig.path_opt = bsc_core.PthNodeOpt(i_path)
-                i_rig.variants = i_variants
-                self._cache_dict[i_path] = i_rig
+                i_rig_opt.path = i_path
+                i_rig_opt.path_opt = bsc_core.PthNodeOpt(i_path)
+                i_rig_opt.variants = i_variants
+                self._cache_dict[i_namespace] = i_rig_opt
 
     def get_all(self):
         return self._cache_dict.values()
+
+    def to_valid_namespaces(self, namespaces):
+        return [i for i in namespaces if i in self._cache_dict]

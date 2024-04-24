@@ -170,7 +170,7 @@ class DynamicGpuCacheGenerate(object):
     def __init__(self, namespace):
         self._namespace = namespace
         self._reference_namespace_query = qsm_mya_core.ReferenceNamespaceQuery()
-        self._rig = qsm_rig_core.Rig(self._namespace)
+        self._rig = qsm_rig_core.AdvRigOpt(self._namespace)
         self._root = self._rig.get_root()
         self._geometry_location = self._rig.get_geometry_location()
 
@@ -240,12 +240,12 @@ class DynamicGpuCacheGenerate(object):
             cmds.editDisplayLayerMembers(layer_path, *skin_proxy_cache_locations)
 
     def do_remove(self):
-        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME))
+        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME), long=1)
         if _:
             cmds.delete(_[0])
 
     def is_exists(self):
-        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME))
+        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME), long=1)
         return not not _
 
     def generate_args(self, directory_path):

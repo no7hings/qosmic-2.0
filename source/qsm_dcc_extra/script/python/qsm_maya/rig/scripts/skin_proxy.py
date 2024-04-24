@@ -724,12 +724,12 @@ class AdvSkinProxyGenerate(object):
         self.hide_source_geometry_root(location)
 
     def do_remove(self):
-        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME))
+        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME), long=1)
         if _:
             cmds.delete(_[0])
 
     def is_exists(self):
-        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME))
+        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME), long=1)
         return not not _
 
     def generate_args(self):

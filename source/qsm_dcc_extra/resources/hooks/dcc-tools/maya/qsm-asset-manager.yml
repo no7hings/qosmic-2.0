@@ -20,14 +20,15 @@ rsv-match-condition: 'branch=asset'
 
 build:
     options:
-        rig:
-            label: 'options'
-            label_chs: '选项'
+        rig_utility:
+            label: 'skin proxy & dynamic GPU'
+            label_chs: '简模代理 & 动态GPU'
             parameters:
                 selection_scheme:
                     widget: capsule_string
                     label_chs: '选择方案'
                     options: ['root', 'geometry', 'deformation', 'motion']
+                    labels_chs: ['根组', '模型', '骨骼', '控制器']
                     default: 'motion'
                     tool_tip: '...'
 
@@ -112,12 +113,48 @@ build:
                     icon: 'tool/maya/delete'
                     tool_tip: '...'
 
+        rig_extend:
+            label: 'motion'
+            label_chs: '运动'
+            parameters:
+                animation_transfer:
+                    widget: group
+                    label_chs: '动画传递'
+
+                animation_transfer/force:
+                    widget: boolean
+                    label_chs: '强制'
+                    value: True
+                    tool_tip: '...'
+
+                animation_transfer/frame_offset:
+                    widget: integer
+                    label_chs: '帧偏移'
+                    value: 0
+                    tool_tip: '...'
+
+                animation_transfer/transfer:
+                    widget: button
+                    label_chs: '传递'
+                    value: ''
+                    icon: 'tool/maya/transfer-motion'
+                    tool_tip: '...'
+
     buttons:
         reference:
-            label: 'reference'
+            label: 'Reference'
             label_chs: '引用'
 
     tabs:
         rig:
-            label: 'rig'
+            label: 'Rig'
             label_chs: '绑定'
+
+    tag-groups:
+        utility:
+            label: 'Utility'
+            label_chs: '通用'
+
+        extend:
+            label: 'Extend'
+            label_chs: '扩展'

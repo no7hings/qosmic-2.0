@@ -3,8 +3,6 @@
 import maya.cmds as cmds
 
 
-
-
 class Cameras(object):
     @classmethod
     def get_all(cls):

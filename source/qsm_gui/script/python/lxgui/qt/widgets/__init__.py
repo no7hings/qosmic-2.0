@@ -29,6 +29,8 @@ from .head import *
 
 from .container import *
 
+from .container_for_tab import *
+
 from .input import *
 
 from .input_for_storage import *

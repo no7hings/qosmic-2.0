@@ -27,10 +27,10 @@ class AbsQtItemsDef(object):
 
         self._tab_item_stack = gui_qt_core.GuiQtModForTabItemStack(self)
         self._index_hover = None
-        self._item_index_pressed = None
+        self._index_press = None
         self._item_index_dragged = None
 
-        self._index_press = None
+        self._index_press_tmp = None
         self._index_drag_child_polish_start = None
         self._index_drag_child_polish = None
 
@@ -77,6 +77,7 @@ class QtTabView(
         t_w, t_h = self._tab_w, self._tab_h
         c_t_f_x, c_t_f_y = x, y
         c_t_f_w, c_t_f_h = w, t_h
+
         self._tab_bar_draw_rect.setRect(
             x, y, w, t_h-1
         )
@@ -345,16 +346,16 @@ class QtTabView(
             elif event.type() == QtCore.QEvent.Resize:
                 self._refresh_widget_all_()
             elif event.type() == QtCore.QEvent.MouseButtonPress:
-                self._index_press = self._compute_press_index_loc_(
+                self._index_press_tmp = self._compute_press_index_loc_(
                     event.pos()
                 )
                 self._press_point = event.pos()
                 if event.button() == QtCore.Qt.LeftButton:
-                    if self._index_press is not None:
+                    if self._index_press_tmp is not None:
                         self._set_action_flag_(self.ActionFlag.Press)
-                        self._set_item_pressed_at_(self._index_press)
+                        self._update_item_index_pressed_(self._index_press_tmp)
                 elif event.button() == QtCore.Qt.RightButton:
-                    if self._index_press is not None:
+                    if self._index_press_tmp is not None:
                         self._popup_menu_()
                 elif event.button() == QtCore.Qt.MidButton:
                     pass
@@ -366,7 +367,7 @@ class QtTabView(
                     if self._drag_is_enable is True:
                         # check "DragPress" when flag is match "Press"
                         if self._get_action_flag_is_match_(self.ActionFlag.Press):
-                            if self._index_press is not None:
+                            if self._index_press_tmp is not None:
                                 self._drag_press_point = self._press_point
                                 self._set_action_flag_(self.ActionFlag.DragPress)
                         elif self._get_action_flag_is_match_(self.ActionFlag.DragPress):
@@ -396,7 +397,7 @@ class QtTabView(
                 else:
                     event.ignore()
 
-                self._index_press = None
+                self._index_press_tmp = None
                 self._index_hover = None
                 self._clear_all_action_flags_()
                 self._refresh_widget_all_()
@@ -416,7 +417,7 @@ class QtTabView(
             self._tab_bar_draw_rect,
             virtual_items=self._tab_item_stack.get_all_items(),
             index_hover=self._index_hover,
-            index_pressed=self._index_press,
+            index_pressed=self._index_press_tmp,
             index_current=self._get_current_index_(),
         )
         #
@@ -474,9 +475,9 @@ class QtTabView(
         self._index_hover = None
         self._refresh_widget_draw_()
 
-    def _set_item_pressed_at_(self, index):
-        if index != self._item_index_pressed:
-            self._item_index_pressed = index
+    def _update_item_index_pressed_(self, index):
+        if index != self._index_press:
+            self._index_press = index
 
             self._refresh_widget_all_()
 
@@ -487,13 +488,13 @@ class QtTabView(
             self._refresh_widget_all_()
 
     def _switch_current_to_(self, index):
-        self._item_index_pressed = None
+        self._index_press = None
         self.__layer_stack._switch_current_to_(index)
         self._refresh_widget_all_()
 
-    def _set_current_index_(self, index):
-        self._item_index_pressed = None
-        self.__layer_stack._set_current_index_(index)
+    def _update_index_current_(self, index):
+        self._index_press = None
+        self.__layer_stack._update_index_current_(index)
         self._refresh_widget_all_()
 
     def _get_current_index_(self):
@@ -545,15 +546,16 @@ class QtTabView(
                     '"RMB-click" to show more actions for this page',
                 ]
             )
+            # noinspection PyArgumentList
             QtWidgets.QToolTip.showText(
                 QtGui.QCursor.pos(), css, self
             )
 
     # noinspection PyUnusedLocal
     def _do_press_release_(self, event):
-        if self._index_press is not None:
+        if self._index_press_tmp is not None:
             self._switch_current_to_(
-                self._index_press
+                self._index_press_tmp
             )
 
     def _do_hover_move_(self, event):
@@ -573,12 +575,12 @@ class QtTabView(
         x, y = p_d.x(), p_d.y()
         # enable when mouse moved more than 10 pixel
         if abs(x) > 10:
-            self._index_drag_child_polish_start = self._index_press
-            self._index_drag_child_polish = self._index_press
+            self._index_drag_child_polish_start = self._index_press_tmp
+            self._index_drag_child_polish = self._index_press_tmp
             self._set_action_flag_(self.ActionFlag.DragChildPolish)
             # when drag is not current, set to current first
-            if self._index_press != self._get_current_index_():
-                self._set_current_index_(self._index_press)
+            if self._index_press_tmp != self._get_current_index_():
+                self._update_index_current_(self._index_press_tmp)
 
     def _do_drag_child_polish_(self, event):
         p = event.pos()
@@ -641,9 +643,9 @@ class QtTabView(
         return self._tab_item_stack.get_name_at(index)
 
     def _tab_item_menu_gain_fnc_(self):
-        if self._index_press is not None:
+        if self._index_press_tmp is not None:
             return [
-                ('close tab', 'cancel', functools.partial(self._delete_widget_at_, self._index_press)),
+                ('close tab', 'cancel', functools.partial(self._delete_widget_at_, self._index_press_tmp)),
                 ('close other tabs', 'cancel', None)
             ]
         return []

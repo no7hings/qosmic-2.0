@@ -1,8 +1,12 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
+import lxgui
+
+lxgui.do_reload()
+
 bsc_core.PyReloader2(
-    ['qsm_maya']
+    ['qsm_maya', 'qsm_dcc', 'qsm_general', 'qsm_gui', 'lxgui']
 ).do_reload()
 
 import lxsession.commands as ssn_commands

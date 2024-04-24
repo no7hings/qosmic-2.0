@@ -2,7 +2,7 @@
 import lxbasic.core as bsc_core
 
 
-class AbsNode(object):
+class AbsNodeOpt(object):
     Type = None
 
     def __init__(self, path):

@@ -22,6 +22,12 @@ class Namespace(object):
     def get_is_exists(cls, namespace):
         return cmds.namespace(exists=namespace)
 
+    @classmethod
+    def find_root(cls, namespace):
+        _ = cmds.ls('|{}:*'.format(namespace, long=1))
+        if _:
+            return _[0]
+
 
 class Namespaces(object):
     @classmethod
@@ -31,8 +37,10 @@ class Namespaces(object):
         for i_path in paths:
             i_namespace = Namespace.extract_from_path(i_path)
             if i_namespace:
-                list_.append(i_namespace)
-        return list(set(list_))
+                # must keep order
+                if i_namespace not in list_:
+                    list_.append(i_namespace)
+        return list_
 
     @classmethod
     def extract_roots_from_selection(cls):
@@ -41,8 +49,10 @@ class Namespaces(object):
         for i_path in paths:
             i_namespace = Namespace.extract_root_from_path(i_path)
             if i_namespace:
-                list_.append(i_namespace)
-        return list(set(list_))
+                # must keep order
+                if i_namespace not in list_:
+                    list_.append(i_namespace)
+        return list_
 
     @classmethod
     def extract_from_paths(cls, paths):
@@ -50,6 +60,8 @@ class Namespaces(object):
         for i_path in paths:
             i_namespace = Namespace.extract_from_path(i_path)
             if i_namespace:
-                list_.append(i_namespace)
-        return list(set(list_))
+                # must keep order
+                if i_namespace not in list_:
+                    list_.append(i_namespace)
+        return list_
 

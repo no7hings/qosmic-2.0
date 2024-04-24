@@ -152,7 +152,7 @@ class QtLayerStack(QtWidgets.QWidget):
         self.__widgets = []
         self.__count = 0
 
-        self.__index_current = 0
+        self._index_current = 0
         self.__index_pre = None
         self.__index_swap = None
 
@@ -245,7 +245,7 @@ class QtLayerStack(QtWidgets.QWidget):
                 i_widget.setGeometry(
                     x, y, w, h
                 )
-                if i_index == self.__index_current:
+                if i_index == self._index_current:
                     i_widget.show()
                 else:
                     i_widget.hide()
@@ -298,8 +298,8 @@ class QtLayerStack(QtWidgets.QWidget):
         #
         if 'switch_to' in kwargs:
             if kwargs['switch_to'] is True:
-                index_pre = self.__index_current
-                self.__index_current = index
+                index_pre = self._index_current
+                self._index_current = index
                 if index == 0:
                     self._swap_current_between_(index, index, 'new')
                 else:
@@ -310,30 +310,30 @@ class QtLayerStack(QtWidgets.QWidget):
     def _switch_current_to_(self, index):
         if index < self.__count:
             self.__do_swap_stop()
-            if index != self.__index_current:
-                if self.__index_current is not None:
-                    self.__index_pre = self.__index_current
+            if index != self._index_current:
+                if self._index_current is not None:
+                    self.__index_pre = self._index_current
                 if self.__index_pre is not None:
                     # do swap
-                    self.__index_current = index
-                    self._swap_current_between_(self.__index_pre, self.__index_current, 'switch')
+                    self._index_current = index
+                    self._swap_current_between_(self.__index_pre, self._index_current, 'switch')
                 else:
-                    self.__index_current = index
+                    self._index_current = index
                     self._refresh_widget_all_()
 
                 self.current_changed.emit()
 
-    def _set_current_index_(self, index):
-        self.__index_current = index
+    def _update_index_current_(self, index):
+        self._index_current = index
         self._refresh_widget_all_()
 
     def _get_current_index_(self):
-        return self.__index_current
+        return self._index_current
 
     def _set_current_widget_(self, widget):
         if widget in self.__widgets:
             index = self.__widgets.index(widget)
-            self._set_current_index_(index)
+            self._update_index_current_(index)
 
     def _switch_current_widget_to_(self, widget):
         if widget in self.__widgets:
@@ -391,7 +391,7 @@ class QtLayerStack(QtWidgets.QWidget):
             else:
                 index_next = index-1
 
-            if index == self.__index_current:
+            if index == self._index_current:
                 if index == index_next == 0:
                     self._swap_current_between_(index, index_next, 'delete_latest')
                 else:
@@ -403,12 +403,12 @@ class QtLayerStack(QtWidgets.QWidget):
             self.__count -= 1
             # update index maximum
             index_maximum = self.__count-1
-            if self.__index_current > index_maximum:
-                self.__index_current = index_maximum
+            if self._index_current > index_maximum:
+                self._index_current = index_maximum
 
     def _insert_widget_between_(self, index_0, index_1):
         widget_0 = self.__widgets[index_0]
         self.__widgets.pop(index_0)
         self.__widgets.insert(index_1, widget_0)
 
-        self._set_current_index_(index_1)
+        self._update_index_current_(index_1)

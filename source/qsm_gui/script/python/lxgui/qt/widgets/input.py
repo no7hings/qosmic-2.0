@@ -116,7 +116,7 @@ class QtInputAsConstantWithChoose(
                     maximum = len(values)
                     value_cur = self._get_value_()
                     if value_cur in values:
-                        index_cur = values.index(value_cur)+1
+                        index_cur = values.index(value_cur) + 1
                         text = '{}/{}'.format(index_cur, maximum)
                     else:
                         text = str(maximum)
@@ -170,7 +170,8 @@ class QtInputAsConstantWithChoose(
         #
         self._input_button_widget = gui_qt_wgt_utility.QtLineWidget()
         self._input_button_widget._set_line_styles_(
-            [self._input_button_widget.Style.Null, self._input_button_widget.Style.Null, self._input_button_widget.Style.Solid,
+            [self._input_button_widget.Style.Null, self._input_button_widget.Style.Null,
+             self._input_button_widget.Style.Solid,
              self._input_button_widget.Style.Null]
         )
         entry_layout.addWidget(self._input_button_widget)
@@ -315,7 +316,7 @@ class QtInputAsCapsule(
         self._value_type = value_type
         #
         entry_layout = gui_qt_wgt_base.QtHBoxLayout(self)
-        entry_layout.setContentsMargins(*[1]*4)
+        entry_layout.setContentsMargins(*[1] * 4)
         entry_layout.setSpacing(4)
         #
         self._entry_widget = self.QT_ENTRY_CLS()
@@ -325,7 +326,7 @@ class QtInputAsCapsule(
         self.user_input_value_changed = self._entry_widget.user_value_changed
 
     def _set_value_options_(self, values, labels=None):
-        self._entry_widget._set_value_options_(values)
+        self._entry_widget._set_value_options_(values, labels)
 
     def _set_value_by_index_(self, index):
         self._entry_widget._set_value_by_index_(index)
@@ -380,7 +381,7 @@ class QtInputAsBubbleWithChoose(
         self._value_type = value_type
 
         entry_layout = gui_qt_wgt_base.QtHBoxLayout(self)
-        entry_layout.setContentsMargins(*[1]*4)
+        entry_layout.setContentsMargins(*[1] * 4)
         entry_layout.setSpacing(4)
 
         self._entry_widget = self.QT_ENTRY_CLS()
@@ -466,7 +467,8 @@ class QtInputAsContent(
         self._input_button_widget = gui_qt_wgt_utility.QtLineWidget()
         self._input_button_widget.hide()
         self._input_button_widget._set_line_styles_(
-            [self._input_button_widget.Style.Null, self._input_button_widget.Style.Null, self._input_button_widget.Style.Solid,
+            [self._input_button_widget.Style.Null, self._input_button_widget.Style.Null,
+             self._input_button_widget.Style.Solid,
              self._input_button_widget.Style.Null]
         )
         entry_layout.addWidget(self._input_button_widget)
@@ -479,7 +481,7 @@ class QtInputAsContent(
         self._input_button_layout.addWidget(self._open_in_external_editor_button)
         self._open_in_external_editor_button._set_icon_file_path_(
             gui_core.GuiIcon.get('application/sublime-text')
-            )
+        )
         self._open_in_external_editor_button._set_name_text_('open in external editor')
         self._open_in_external_editor_button._set_tool_tip_('"LMB-click" to open in external editor')
         self._open_in_external_editor_button.check_toggled.connect(self._start_open_in_external_editor_fnc_)
@@ -601,7 +603,8 @@ class QtInputAsList(
         #
         self._input_button_widget = gui_qt_wgt_utility.QtLineWidget()
         self._input_button_widget._set_line_styles_(
-            [self._input_button_widget.Style.Null, self._input_button_widget.Style.Null, self._input_button_widget.Style.Solid,
+            [self._input_button_widget.Style.Null, self._input_button_widget.Style.Null,
+             self._input_button_widget.Style.Solid,
              self._input_button_widget.Style.Null]
         )
         entry_layout.addWidget(self._input_button_widget)
@@ -759,7 +762,8 @@ class QtInputAsListWithChoose(
         #
         self._input_button_widget = gui_qt_wgt_utility.QtLineWidget()
         self._input_button_widget._set_line_styles_(
-            [self._input_button_widget.Style.Null, self._input_button_widget.Style.Null, self._input_button_widget.Style.Solid,
+            [self._input_button_widget.Style.Null, self._input_button_widget.Style.Null,
+             self._input_button_widget.Style.Solid,
              self._input_button_widget.Style.Null]
         )
         entry_layout.addWidget(self._input_button_widget)
@@ -894,7 +898,7 @@ class QtInputAsRgba(
             x, y, c_w, c_h
         )
         self._value_draw_rect.setRect(
-            x+(c_w-v_w)/2, y+(c_h-v_h)/2, v_w, v_h
+            x + (c_w - v_w) / 2, y + (c_h - v_h) / 2, v_w, v_h
         )
 
     def __init__(self, *args, **kwargs):
@@ -922,7 +926,7 @@ class QtInputAsRgba(
         self._entry_frame_widget = self
 
         entry_layout = gui_qt_wgt_base.QtHBoxLayout(self)
-        entry_layout.setContentsMargins(self._value_draw_width+2, 0, 0, 0)
+        entry_layout.setContentsMargins(self._value_draw_width + 2, 0, 0, 0)
         entry_layout.setSpacing(2)
 
         self._entry_widget = self.QT_ENTRY_CLS()
@@ -949,7 +953,7 @@ class QtInputAsRgba(
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
                     if self._get_action_flag_is_match_(
-                        self.ActionFlag.ChoosePress
+                            self.ActionFlag.ChoosePress
                     ) is True:
                         self.press_clicked.emit()
                         self._do_choose_popup_start_()
@@ -1029,7 +1033,7 @@ class QtInputAsIcon(
             x, y, c_w, c_h
         )
         self._value_draw_rect.setRect(
-            x+(c_w-v_w)/2, y+(c_h-v_h)/2, v_w, v_h
+            x + (c_w - v_w) / 2, y + (c_h - v_h) / 2, v_w, v_h
         )
 
     def __init__(self, *args, **kwargs):
@@ -1064,7 +1068,7 @@ class QtInputAsIcon(
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
                     if self._get_action_flag_is_match_(
-                        self.ActionFlag.ChoosePress
+                            self.ActionFlag.ChoosePress
                     ) is True:
                         self.press_clicked.emit()
                         self._do_choose_popup_start_()
@@ -1098,7 +1102,7 @@ class QtInputAsIcon(
         self._entry_frame_widget = self
 
         entry_layout = gui_qt_wgt_base.QtHBoxLayout(self)
-        entry_layout.setContentsMargins(self._value_draw_width+2, 0, 0, 0)
+        entry_layout.setContentsMargins(self._value_draw_width + 2, 0, 0, 0)
         entry_layout.setSpacing(2)
 
         self._entry_widget = self.QT_ENTRY_CLS()

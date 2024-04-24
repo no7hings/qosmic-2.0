@@ -707,20 +707,20 @@ class QtBubbleAsChoice(
                     ):
                         if i_seq == 0:
                             if x < h_y < i_y+c_h:
-                                self.__index_current = i_index
+                                self._index_current = i_index
                         elif i_seq == c-1:
                             if i_y < h_y < h:
-                                self.__index_current = i_index
+                                self._index_current = i_index
                         else:
                             if i_y < h_y < i_y+c_h:
-                                self.__index_current = i_index
+                                self._index_current = i_index
 
                     i_rect.setRect(i_x-2, i_y, i_t_w+4, c_h)
                 # clamp to viewport
                 if self.__y_hover < v_y:
-                    self.__index_current = self.__idx_all[0]
+                    self._index_current = self.__idx_all[0]
                 elif self.__y_hover > v_y+v_h:
-                    self.__index_current = self.__idx_all[-1]
+                    self._index_current = self.__idx_all[-1]
 
     def __init__(self, *args, **kwargs):
         super(QtBubbleAsChoice, self).__init__(*args, **kwargs)
@@ -750,7 +750,7 @@ class QtBubbleAsChoice(
 
         self.__y_hover = -1
 
-        self.__index_current = None
+        self._index_current = None
         self.__idx_maximum, self.__idx_minimum = None, 0
 
         self.__draw_data = []
@@ -830,7 +830,7 @@ class QtBubbleAsChoice(
                 for i_index in self.__idx_all:
                     i_text = self.__texts[i_index]
                     i_rect = self.__rects[i_index]
-                    if i_index != self.__index_current:
+                    if i_index != self._index_current:
                         i_x, i_y = i_rect.x(), i_rect.y()
                         i_w, i_h = i_rect.width(), i_rect.height()
                         painter._set_border_color_(127, 127, 127, alpha)
@@ -848,9 +848,9 @@ class QtBubbleAsChoice(
                             (239, 239, 239, alpha), (31, 63, 31, 127)
                         )
 
-                if self.__index_current is not None:
-                    text_cur = self.__texts[self.__index_current]
-                    rect_cur = self.__rects[self.__index_current]
+                if self._index_current is not None:
+                    text_cur = self.__texts[self._index_current]
+                    rect_cur = self.__rects[self._index_current]
 
                     h_c = self.__h_text_maximum+4
                     t_w_c, t_h_c = gui_qt_core.GuiQtFont.compute_size_2(
@@ -920,7 +920,7 @@ class QtBubbleAsChoice(
             self.__idx_maximum = len(self.__idx_all)-1
         else:
             self.__idx_maximum = None
-            self.__index_current = None
+            self._index_current = None
 
         self._refresh_widget_all_()
 
@@ -932,43 +932,43 @@ class QtBubbleAsChoice(
 
     def _do_previous_key_press_(self):
         if self.__idx_maximum is not None:
-            if self.__index_current is None:
-                self.__index_current = self.__idx_all[-1]
+            if self._index_current is None:
+                self._index_current = self.__idx_all[-1]
             else:
-                if self.__index_current not in self.__idx_all:
-                    self.__index_current = self.__idx_all[-1]
+                if self._index_current not in self.__idx_all:
+                    self._index_current = self.__idx_all[-1]
 
-                index_pre = self.__index_current
+                index_pre = self._index_current
                 idx = self.__idx_all.index(index_pre)
                 idx -= 1
                 idx = max(min(idx, self.__idx_maximum), self.__idx_minimum)
-                self.__index_current = self.__idx_all[idx]
+                self._index_current = self.__idx_all[idx]
 
             self._refresh_widget_draw_()
 
     def _do_next_key_press_(self):
         if self.__idx_maximum is not None:
-            if self.__index_current is None:
-                self.__index_current = self.__idx_all[0]
+            if self._index_current is None:
+                self._index_current = self.__idx_all[0]
             else:
-                if self.__index_current not in self.__idx_all:
-                    self.__index_current = self.__idx_all[0]
+                if self._index_current not in self.__idx_all:
+                    self._index_current = self.__idx_all[0]
 
-                index_pre = self.__index_current
+                index_pre = self._index_current
                 idx = self.__idx_all.index(index_pre)
                 idx += 1
                 idx = max(min(idx, self.__idx_maximum), self.__idx_minimum)
-                self.__index_current = self.__idx_all[idx]
+                self._index_current = self.__idx_all[idx]
 
             self._refresh_widget_draw_()
 
     def _do_accept_(self):
-        if self.__index_current is not None:
-            text = self.__texts[self.__index_current]
-            self.choice_index_accepted.emit(self.__index_current)
+        if self._index_current is not None:
+            text = self.__texts[self._index_current]
+            self.choice_index_accepted.emit(self._index_current)
             self.choice_text_accepted.emit(text)
             self.hide()
-            sys.stdout.write('you choose "{}" at {}\n'.format(text, self.__index_current))
+            sys.stdout.write('you choose "{}" at {}\n'.format(text, self._index_current))
             self.__is_active = False
         else:
             self._do_cancel_()
@@ -1075,7 +1075,7 @@ class QtBubbleAsChoose(
         self.__texts_draw = []
         self.__rects = []
 
-        self.__index_current = None
+        self._index_current = None
         self.__idx_maximum, self.__idx_minimum = None, 0
         self.__idx_all = []
 
@@ -1141,7 +1141,7 @@ class QtBubbleAsChoose(
                 i_text_draw = self.__texts_draw[i_index]
                 i_rect = self.__rects[i_index]
 
-                if i_index == self.__index_current:
+                if i_index == self._index_current:
                     painter._set_border_color_(gui_qt_core.QtColors.BubbleBorder)
                     painter._set_background_color_(gui_qt_core.QtColors.BubbleBackgroundHover)
                 else:
@@ -1159,52 +1159,52 @@ class QtBubbleAsChoose(
                 )
 
     def _do_hover_move_(self, p):
-        index_pre = self.__index_current
-        self.__index_current = None
+        index_pre = self._index_current
+        self._index_current = None
         if self.__rects:
             for i_index, i_rect in enumerate(self.__rects):
                 if i_rect.contains(p):
-                    self.__index_current = i_index
+                    self._index_current = i_index
                     break
 
-        if self.__index_current != index_pre:
+        if self._index_current != index_pre:
             self._refresh_widget_draw_()
 
     def _do_previous_key_press_(self):
         if self.__idx_maximum is not None:
-            if self.__index_current is None:
-                self.__index_current = self.__idx_all[-1]
+            if self._index_current is None:
+                self._index_current = self.__idx_all[-1]
             else:
-                if self.__index_current not in self.__idx_all:
-                    self.__index_current = self.__idx_all[-1]
+                if self._index_current not in self.__idx_all:
+                    self._index_current = self.__idx_all[-1]
 
-                index_pre = self.__index_current
+                index_pre = self._index_current
                 idx = self.__idx_all.index(index_pre)
                 idx -= 1
                 idx = max(min(idx, self.__idx_maximum), self.__idx_minimum)
-                self.__index_current = self.__idx_all[idx]
+                self._index_current = self.__idx_all[idx]
 
             self._refresh_widget_draw_()
 
     def _do_next_key_press_(self):
         if self.__idx_maximum is not None:
-            if self.__index_current is None:
-                self.__index_current = self.__idx_all[0]
+            if self._index_current is None:
+                self._index_current = self.__idx_all[0]
             else:
-                if self.__index_current not in self.__idx_all:
-                    self.__index_current = self.__idx_all[0]
+                if self._index_current not in self.__idx_all:
+                    self._index_current = self.__idx_all[0]
 
-                index_pre = self.__index_current
+                index_pre = self._index_current
                 idx = self.__idx_all.index(index_pre)
                 idx += 1
                 idx = max(min(idx, self.__idx_maximum), self.__idx_minimum)
-                self.__index_current = self.__idx_all[idx]
+                self._index_current = self.__idx_all[idx]
 
             self._refresh_widget_draw_()
 
     def _do_accept_(self):
-        if self.__index_current is not None:
-            text = self.__texts[self.__index_current]
+        if self._index_current is not None:
+            text = self.__texts[self._index_current]
             self.bubble_text_choose_accepted.emit(text)
             self.__result = text
             self._do_popup_close_()

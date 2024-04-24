@@ -1,6 +1,7 @@
 # coding:utf-8
 from __future__ import division
 
+import json
 import sys
 
 import os
@@ -672,6 +673,15 @@ class HashMtd(object):
     def get_hash_value(cls, raw, as_unique_id=False):
         s = hashlib.md5(
             str(raw)
+        ).hexdigest()
+        if as_unique_id is True:
+            return UuidMtd.generate_by_hash_value(s)
+        return s.upper()
+
+    @classmethod
+    def get_hash_key(cls, raw, as_unique_id=False):
+        s = hashlib.md5(
+            json.dumps(raw)
         ).hexdigest()
         if as_unique_id is True:
             return UuidMtd.generate_by_hash_value(s)

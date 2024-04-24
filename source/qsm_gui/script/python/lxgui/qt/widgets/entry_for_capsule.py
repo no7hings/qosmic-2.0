@@ -49,7 +49,7 @@ class QtEntryAsCapsule(
 
         self.__index_hover = None
         self.__index_pressed = None
-        self.__index_current = None
+        self._index_current = None
 
         self.__value_output = None
 
@@ -192,12 +192,12 @@ class QtEntryAsCapsule(
         values_all = self._get_value_options_()
         if self.__check_use_exclusive is True:
             idx = values_all.index(value)
-            self.__index_current = idx
+            self._index_current = idx
             self.__indices_checked = [True if i in [idx] else False for i in self.__indices]
         else:
             if value:
                 indices = [values_all.index(i) for i in value if i in values_all]
-                self.__index_current = indices[0]
+                self._index_current = indices[0]
                 self.__indices_checked = [True if i in indices else False for i in self.__indices]
 
         self._update_value_output_()
@@ -249,20 +249,20 @@ class QtEntryAsCapsule(
             return
         p = event.pos()
         x, y = p.x(), p.y()
-        index_pre = self.__index_current
+        index_pre = self._index_current
         index = int(x/self._capsule_per_width)
         if index in self.__indices:
-            self.__index_current = index
-            self.__index_pressed = self.__index_current
+            self._index_current = index
+            self.__index_pressed = self._index_current
             if self.__check_use_exclusive is True:
                 if index_pre is not None:
                     self.__indices_checked[index_pre] = False
-                self.__indices_checked[self.__index_current] = True
+                self.__indices_checked[self._index_current] = True
             else:
-                self.__indices_checked[self.__index_current] = not self.__indices_checked[
-                    self.__index_current]
+                self.__indices_checked[self._index_current] = not self.__indices_checked[
+                    self._index_current]
 
-            self._capsule_press_state = self.__indices_checked[self.__index_current]
+            self._capsule_press_state = self.__indices_checked[self._index_current]
 
             self._update_value_output_()
 
@@ -273,18 +273,18 @@ class QtEntryAsCapsule(
             return
         p = event.pos()
         x, y = p.x(), p.y()
-        index_pre = self.__index_current
+        index_pre = self._index_current
         index = int(x/self._capsule_per_width)
         if index in self.__indices:
-            self.__index_current = index
-            self.__index_pressed = self.__index_current
-            if index_pre != self.__index_current:
+            self._index_current = index
+            self.__index_pressed = self._index_current
+            if index_pre != self._index_current:
                 if self.__check_use_exclusive is True:
                     if index_pre is not None:
                         self.__indices_checked[index_pre] = False
-                    self.__indices_checked[self.__index_current] = True
+                    self.__indices_checked[self._index_current] = True
                 else:
-                    self.__indices_checked[self.__index_current] = self._capsule_press_state
+                    self.__indices_checked[self._index_current] = self._capsule_press_state
                 #
                 self._update_value_output_()
 

@@ -34,14 +34,14 @@ class QtPainter(QtGui.QPainter):
         self.setRenderHint(self.Antialiasing)
 
     def _draw_capsule_by_rects_(
-            self, rects, texts, checked_indices, index_hover, index_pressed, use_exclusive=False, is_enable=True
+        self, rects, texts, checked_indices, index_hover, index_pressed, use_exclusive=False, is_enable=True
     ):
         c = len(texts)
         self._set_antialiasing_(True)
         for i, i_text in enumerate(texts):
             i_rect = rects[i]
-            i_x, i_y = i_rect.x() + 1, i_rect.y()
-            i_w, i_h = i_rect.width() - 2, i_rect.height()
+            i_x, i_y = i_rect.x()+1, i_rect.y()
+            i_w, i_h = i_rect.width()-2, i_rect.height()
             i_is_pressed = i == index_pressed
             if i_is_pressed:
                 i_x += 2
@@ -55,7 +55,7 @@ class QtPainter(QtGui.QPainter):
             if use_exclusive is True:
                 i_border_radius = 3
             else:
-                i_border_radius = i_h / 2
+                i_border_radius = i_h/2
 
             i_is_hovered = i == index_hover
             i_is_checked = checked_indices[i]
@@ -64,7 +64,7 @@ class QtPainter(QtGui.QPainter):
                 self._set_border_color_(_color_and_brush.QtColors.CapsuleBorderChecked)
                 if use_exclusive is True:
                     i_background_color, i_font_color = _color_and_brush.QtBackgroundColors.Selected, \
-                                                       _color_and_brush.QtFontColors.Black
+                        _color_and_brush.QtFontColors.Black
                 else:
                     i_background_color, i_font_color = _base.GuiQtColor.generate_color_args_by_text(i_text)
                 self._set_background_color_(i_background_color)
@@ -99,18 +99,18 @@ class QtPainter(QtGui.QPainter):
                 else:
                     i_path_0 = QtGui.QPainterPath()
                     i_path_0.addRoundedRect(
-                        QtCore.QRectF(i_x, i_y, i_w - 2, i_h),
+                        QtCore.QRectF(i_x, i_y, i_w-2, i_h),
                         i_border_radius, i_border_radius, QtCore.Qt.AbsoluteSize
                     )
                     i_path_1 = QtGui.QPainterPath()
                     i_path_1.addRect(
-                        QtCore.QRectF(i_x + i_w / 2, i_y, i_w / 2, i_h)
+                        QtCore.QRectF(i_x+i_w/2, i_y, i_w/2, i_h)
                     )
                     self.drawPath(
-                        i_path_0 + i_path_1
+                        i_path_0+i_path_1
                     )
             # right
-            elif i == (c - 1):
+            elif i == (c-1):
                 if c > 1:
                     i_path_0 = QtGui.QPainterPath()
                     i_path_0.addRoundedRect(
@@ -119,10 +119,10 @@ class QtPainter(QtGui.QPainter):
                     )
                     i_path_1 = QtGui.QPainterPath()
                     i_path_1.addRect(
-                        QtCore.QRectF(i_x, i_y, i_w / 2, i_h)
+                        QtCore.QRectF(i_x, i_y, i_w/2, i_h)
                     )
                     self.drawPath(
-                        i_path_0 + i_path_1
+                        i_path_0+i_path_1
                     )
             # middle
             else:
@@ -135,7 +135,7 @@ class QtPainter(QtGui.QPainter):
             self._set_text_color_(i_font_color)
             # noinspection PyArgumentEqualDefault
             self.drawText(
-                i_new_rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+                i_new_rect, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 i_text
             )
 
@@ -173,9 +173,134 @@ class QtPainter(QtGui.QPainter):
         self._set_background_color_(color)
         self.drawRect(rect)
 
+    def _draw_virtual_buttons_(
+        self, frame_rect, virtual_items, index_hover, index_pressed,
+        index_current
+    ):
+        if virtual_items:
+            # draw current
+            for i_index, i_virtual_item in enumerate(virtual_items):
+                i_name_text = i_virtual_item.name_text
+                i_draw_rect = i_virtual_item.get_draw_rect()
+                i_icon_text = i_virtual_item.icon_text
+                i_is_hovered = i_index == index_hover
+                i_is_pressed = i_index == index_pressed
+                i_is_current = i_index == index_current
+                self._draw_virtual_button_at_(
+                    frame_rect, i_draw_rect, i_name_text, i_icon_text, i_is_hovered, i_is_pressed, i_is_current
+                )
+
+    def _draw_virtual_button_at_(
+        self, frame_rect, rect, text, icon_name_text, is_hovered, is_pressed, is_current
+    ):
+        f_x, f_y = frame_rect.x(), frame_rect.y()
+        f_w, f_h = frame_rect.width(), frame_rect.height()
+        a = 255
+
+        border_color = _color_and_brush.QtColors.TabGroupBorder
+
+        if is_current is True or is_hovered is True:
+            background_color = _color_and_brush.QtColors.TabGroupBackgroundCurrent
+            text_color = _color_and_brush.QtColors.Text
+        else:
+            background_color = _color_and_brush.QtColors.TabGroupBackground
+            text_color = _color_and_brush.QtColors.TextTemporary
+
+        x, y = rect.x(), rect.y()
+        w, h = rect.width(), rect.height()
+
+        if is_pressed is True:
+            offset = 2
+            x += offset
+            y += offset
+            w -= offset
+            h -= offset
+
+        if is_current is True:
+            frm_x, frm_y = x, y
+            frm_w, frm_h = w, h-1
+            border_width = 1
+            frame_coords = [
+                (f_x, frm_y+frm_h),
+                # bottom left, top left, top right, bottom right, ...
+                (frm_x, frm_y+frm_h), (frm_x, frm_y), (frm_x+frm_w, frm_y),
+                (frm_x+frm_w, frm_y+frm_h),
+                (f_w, frm_y+frm_h),
+            ]
+            font_size = 10
+        else:
+            frm_x, frm_y = x, y+4
+            frm_w, frm_h = w, h-6
+            border_width = 1
+            frame_coords = [
+                (frm_x, frm_y+frm_h), (frm_x, frm_y), (frm_x+frm_w, frm_y),
+                (frm_x+frm_w, frm_y+frm_h),
+            ]
+            font_size = 8
+
+        self._set_border_color_(border_color)
+        self._set_border_width_(border_width)
+        self._set_background_color_(background_color)
+
+        self._draw_path_by_coords_(frame_coords, antialiasing=False)
+        # icon
+        if icon_name_text is not None:
+            icn_w = 16
+            icon_coords = [
+                # bottom left, top left, top right, bottom right, ...
+                (frm_x+frm_w-icn_w, frm_y+frm_h), (frm_x+frm_w-frm_h-icn_w, frm_y+1),
+                (frm_x+frm_w-frm_h, frm_y+1),
+                (frm_x+frm_w-1, frm_y+frm_h),
+                (frm_x+frm_w-icn_w, frm_y+frm_h),
+            ]
+            i_r, i_g, i_b = bsc_core.RawTextOpt(icon_name_text).to_rgb_0(s_p=50, v_p=50)
+            self._set_border_width_(1)
+            self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
+            icn_bkg_color = QtGui.QColor(i_r, i_g, i_b, a)
+            if is_hovered is True:
+                self._set_background_color_(icn_bkg_color)
+            else:
+                self._set_background_color_(i_r, i_g, i_b)
+            self._draw_path_by_coords_(icon_coords)
+        else:
+            icn_w = 0
+
+        if is_pressed is True or is_hovered is True:
+            if is_pressed is True:
+                act_bkg_color = QtGui.QColor(*gui_core.GuiRgba.LightBlue)
+            elif is_hovered is True:
+                act_bkg_color = QtGui.QColor(*gui_core.GuiRgba.LightOrange)
+            else:
+                act_bkg_color = background_color
+
+            act_w, act_h = 32, 2
+            self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
+            self._set_background_color_(act_bkg_color)
+            action_rect = QtCore.QRect(
+                frm_x+f_h*1.5, f_y+f_h-act_h-1, frm_w-f_h*3-icn_w, act_h
+            )
+            self.drawRoundedRect(action_rect, act_h/2, act_h/2, QtCore.Qt.AbsoluteSize)
+        # text
+        if text is not None:
+            txt_rect = QtCore.QRect(
+                frm_x, frm_y, frm_w-icn_w, frm_h
+            )
+            text_option = QtCore.Qt.AlignCenter|QtCore.Qt.AlignVCenter
+            self._set_font_(
+                _base.GuiQtFont.generate(size=font_size, weight=75)
+            )
+
+            self._set_text_color_(text_color)
+
+            self.drawText(
+                txt_rect,
+                text_option,
+                text,
+            )
+
     def _draw_tab_buttons_by_rects_(
-            self, frame_rect, virtual_items, index_hover, index_pressed,
-            index_current
+        self, frame_rect, virtual_items, index_hover, index_pressed,
+        index_current
     ):
         self._draw_frame_by_rect_(
             rect=frame_rect,
@@ -211,11 +336,11 @@ class QtPainter(QtGui.QPainter):
             f_w, f_h = frame_rect.width(), frame_rect.height()
             self._set_border_color_(_color_and_brush.QtColors.TabBorderCurrent)
             self._set_border_width_(1)
-            frame_coords = [(f_x, f_y + f_h), (f_w, f_y + f_h)]
+            frame_coords = [(f_x, f_y+f_h), (f_w, f_y+f_h)]
             self._draw_path_by_coords_(frame_coords, antialiasing=False)
 
     def _draw_tab_button_at_(
-            self, frame_rect, rect, text, icon_name_text, is_hovered, is_pressed, is_current
+        self, frame_rect, rect, text, icon_name_text, is_hovered, is_pressed, is_current
     ):
         f_x, f_y = frame_rect.x(), frame_rect.y()
         f_w, f_h = frame_rect.width(), frame_rect.height()
@@ -246,23 +371,23 @@ class QtPainter(QtGui.QPainter):
         r = h
         if is_current is True:
             frm_x, frm_y = x, y
-            frm_w, frm_h = w + r, h - 1
+            frm_w, frm_h = w+r, h-1
             border_width = 1
             frame_coords = [
-                (f_x, frm_y + frm_h),
+                (f_x, frm_y+frm_h),
                 # bottom left, top left, top right, bottom right, ...
-                (frm_x, frm_y + frm_h), (frm_x + frm_h, frm_y), (frm_x + frm_w - frm_h, frm_y),
-                (frm_x + frm_w, frm_y + frm_h),
-                (f_w, frm_y + frm_h),
+                (frm_x, frm_y+frm_h), (frm_x+frm_h, frm_y), (frm_x+frm_w-frm_h, frm_y),
+                (frm_x+frm_w, frm_y+frm_h),
+                (f_w, frm_y+frm_h),
             ]
             font_size = 10
         else:
-            frm_x, frm_y = x, y + 4
-            frm_w, frm_h = w + r, h - 5
+            frm_x, frm_y = x, y+4
+            frm_w, frm_h = w+r, h-5
             border_width = 1
             frame_coords = [
-                (frm_x, frm_y + frm_h), (frm_x + frm_h, frm_y), (frm_x + frm_w - frm_h, frm_y),
-                (frm_x + frm_w, frm_y + frm_h),
+                (frm_x, frm_y+frm_h), (frm_x+frm_h, frm_y), (frm_x+frm_w-frm_h, frm_y),
+                (frm_x+frm_w, frm_y+frm_h),
             ]
             font_size = 8
 
@@ -276,10 +401,10 @@ class QtPainter(QtGui.QPainter):
             icn_w = 16
             icon_coords = [
                 # bottom left, top left, top right, bottom right, ...
-                (frm_x + frm_w - icn_w, frm_y + frm_h), (frm_x + frm_w - frm_h - icn_w, frm_y + 1),
-                (frm_x + frm_w - frm_h, frm_y + 1),
-                (frm_x + frm_w - 1, frm_y + frm_h),
-                (frm_x + frm_w - icn_w, frm_y + frm_h),
+                (frm_x+frm_w-icn_w, frm_y+frm_h), (frm_x+frm_w-frm_h-icn_w, frm_y+1),
+                (frm_x+frm_w-frm_h, frm_y+1),
+                (frm_x+frm_w-1, frm_y+frm_h),
+                (frm_x+frm_w-icn_w, frm_y+frm_h),
             ]
             i_r, i_g, i_b = bsc_core.RawTextOpt(icon_name_text).to_rgb_0(s_p=50, v_p=50)
             self._set_border_width_(1)
@@ -305,15 +430,15 @@ class QtPainter(QtGui.QPainter):
             self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
             self._set_background_color_(act_bkg_color)
             action_rect = QtCore.QRect(
-                frm_x + f_h * 1.5, f_y + f_h - act_h - 1, frm_w - f_h * 3 - icn_w, act_h
+                frm_x+f_h*1.5, f_y+f_h-act_h-1, frm_w-f_h*3-icn_w, act_h
             )
-            self.drawRoundedRect(action_rect, act_h / 2, act_h / 2, QtCore.Qt.AbsoluteSize)
+            self.drawRoundedRect(action_rect, act_h/2, act_h/2, QtCore.Qt.AbsoluteSize)
         # text
         if text is not None:
             txt_rect = QtCore.QRect(
-                frm_x, frm_y, frm_w - icn_w, frm_h
+                frm_x, frm_y, frm_w-icn_w, frm_h
             )
-            text_option = QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter
+            text_option = QtCore.Qt.AlignCenter|QtCore.Qt.AlignVCenter
             self._set_font_(
                 _base.GuiQtFont.generate(size=font_size, weight=75)
             )
@@ -329,26 +454,26 @@ class QtPainter(QtGui.QPainter):
     def _draw_frame_color_with_name_text_by_rect_(self, rect, text, offset):
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()
-        frm_x, frm_y = x + offset, y + offset
-        frm_w = frm_h = h - offset
-        bsc_w, bsc_h = w - offset, h - offset
+        frm_x, frm_y = x+offset, y+offset
+        frm_w = frm_h = h-offset
+        bsc_w, bsc_h = w-offset, h-offset
         coords = [
-            (frm_x + bsc_w - frm_w * 2, frm_y + frm_h), (frm_x + bsc_w - frm_w, frm_y), (frm_x + bsc_w, frm_y),
-            (frm_x + bsc_w, frm_y + frm_h)
+            (frm_x+bsc_w-frm_w*2, frm_y+frm_h), (frm_x+bsc_w-frm_w, frm_y), (frm_x+bsc_w, frm_y),
+            (frm_x+bsc_w, frm_y+frm_h)
         ]
         i_r, i_g, i_b = bsc_core.RawTextOpt(text).to_rgb_0(s_p=50, v_p=50)
         self._set_background_color_(i_r, i_g, i_b)
         self._draw_path_by_coords_(coords)
         #
         txt_rect = QtCore.QRect(
-            frm_x + bsc_w - frm_w - frm_w * .25, frm_y, frm_w, frm_h
+            frm_x+bsc_w-frm_w-frm_w*.25, frm_y, frm_w, frm_h
         )
         self._set_font_(
-            _base.GuiQtFont.generate(size=int(frm_h * .675), weight=75, italic=True)
+            _base.GuiQtFont.generate(size=int(frm_h*.675), weight=75, italic=True)
         )
-        self._set_text_color_(i_r * .75, i_g * .75, i_b * .75)
+        self._set_text_color_(i_r*.75, i_g*.75, i_b*.75)
         self.drawText(
-            txt_rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+            txt_rect, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             str(text[0]).upper()
         )
 
@@ -356,11 +481,11 @@ class QtPainter(QtGui.QPainter):
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()
         frm_r = 20
-        frm_w, frm_h = frm_r - offset, frm_r - offset
-        frm_x, frm_y = x + w - frm_r + offset, y + offset
+        frm_w, frm_h = frm_r-offset, frm_r-offset
+        frm_x, frm_y = x+w-frm_r+offset, y+offset
 
         coords = [
-            (frm_x, frm_y), (frm_x + frm_w, frm_y), (frm_x + frm_w, frm_y + frm_h),
+            (frm_x, frm_y), (frm_x+frm_w, frm_y), (frm_x+frm_w, frm_y+frm_h),
             (frm_x, frm_y),
         ]
         self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
@@ -368,22 +493,22 @@ class QtPainter(QtGui.QPainter):
         self._draw_path_by_coords_(coords)
 
         txt_r = 12
-        txt_w, txt_h = txt_r - offset, txt_r - offset
-        txt_x, txt_y = x + w - txt_r + offset - 2, y + offset + 2
+        txt_w, txt_h = txt_r-offset, txt_r-offset
+        txt_x, txt_y = x+w-txt_r+offset-2, y+offset+2
         txt_rect = QtCore.QRect(
             txt_x, txt_y, txt_w, txt_h
         )
         self._set_text_color_(_color_and_brush.QtFontColors.Dark)
         self._set_font_(
-            _base.GuiQtFont.generate(size=int(txt_r * .5) - offset, italic=True)
+            _base.GuiQtFont.generate(size=int(txt_r*.5)-offset, italic=True)
         )
         self.drawText(
-            txt_rect, QtCore.Qt.AlignRight | QtCore.Qt.AlignTop,
+            txt_rect, QtCore.Qt.AlignRight|QtCore.Qt.AlignTop,
             text
         )
 
     def _draw_popup_frame_(
-            self, rect, margin, side, shadow_radius, region, border_color, background_color, border_width=1
+        self, rect, margin, side, shadow_radius, region, border_color, background_color, border_width=1
     ):
         x, y = rect.x(), rect.y()
         #
@@ -391,28 +516,28 @@ class QtPainter(QtGui.QPainter):
         #
         _s = shadow_radius
         #
-        f_x, f_y = x + margin + side, y + margin + side
-        f_w, f_h = w - margin * 2 - _s - side * 2, h - margin * 2 - _s - side * 2
+        f_x, f_y = x+margin+side, y+margin+side
+        f_w, f_h = w-margin*2-_s-side*2, h-margin*2-_s-side*2
         # frame
         path1 = QtGui.QPainterPath()
         path1.addRect(QtCore.QRectF(f_x, f_y, f_w, f_h))
         path2 = QtGui.QPainterPath()
         # shadow
         path1_ = QtGui.QPainterPath()
-        path1_.addRect(QtCore.QRectF(f_x + _s - 1, f_y + _s - 1, f_w, f_h))
+        path1_.addRect(QtCore.QRectF(f_x+_s-1, f_y+_s-1, f_w, f_h))
         path2_ = QtGui.QPainterPath()
         #
-        x1, x2, x3 = f_x + margin, f_x + margin * 2, f_x + margin * 3
-        _x1, _x2, _x3 = f_x + f_w - margin * 3, f_x + f_w - margin * 2, f_x + f_w - margin
+        x1, x2, x3 = f_x+margin, f_x+margin*2, f_x+margin*3
+        _x1, _x2, _x3 = f_x+f_w-margin*3, f_x+f_w-margin*2, f_x+f_w-margin
         #
-        y1, y2, y3 = f_y + 1, f_y - margin + 1, f_y + 1
-        _y1, _y2, _y3 = f_y + f_h - 1, f_y + f_h + margin - 1, f_y + f_h - 1
+        y1, y2, y3 = f_y+1, f_y-margin+1, f_y+1
+        _y1, _y2, _y3 = f_y+f_h-1, f_y+f_h+margin-1, f_y+f_h-1
         if region == 0:
             path2.addPolygon(QtGui.QPolygonF([QtCore.QPointF(x1, y1), QtCore.QPointF(x2, y2), QtCore.QPointF(x3, y3)]))
             path2_.addPolygon(
                 QtGui.QPolygonF(
-                    [QtCore.QPointF(x1 + _s, y1 + _s), QtCore.QPointF(x2 + _s, y2 + _s),
-                     QtCore.QPointF(x3 + _s, y3 + _s)]
+                    [QtCore.QPointF(x1+_s, y1+_s), QtCore.QPointF(x2+_s, y2+_s),
+                     QtCore.QPointF(x3+_s, y3+_s)]
                 )
             )
         elif region == 1:
@@ -421,8 +546,8 @@ class QtPainter(QtGui.QPainter):
             )
             path2_.addPolygon(
                 QtGui.QPolygonF(
-                    [QtCore.QPointF(_x1 + _s, y1 + _s), QtCore.QPointF(_x2 + _s, y2 + _s),
-                     QtCore.QPointF(_x3 + _s, y3 + _s)]
+                    [QtCore.QPointF(_x1+_s, y1+_s), QtCore.QPointF(_x2+_s, y2+_s),
+                     QtCore.QPointF(_x3+_s, y3+_s)]
                 )
             )
         elif region == 2:
@@ -431,8 +556,8 @@ class QtPainter(QtGui.QPainter):
             )
             path2_.addPolygon(
                 QtGui.QPolygonF(
-                    [QtCore.QPointF(x1 + _s, _y1 + _s), QtCore.QPointF(x2 + _s, _y2 + _s),
-                     QtCore.QPointF(x3 + _s, _y3 + _s)]
+                    [QtCore.QPointF(x1+_s, _y1+_s), QtCore.QPointF(x2+_s, _y2+_s),
+                     QtCore.QPointF(x3+_s, _y3+_s)]
                 )
             )
         else:
@@ -441,20 +566,20 @@ class QtPainter(QtGui.QPainter):
             )
             path2_.addPolygon(
                 QtGui.QPolygonF(
-                    [QtCore.QPointF(_x1 + _s, _y1 + _s), QtCore.QPointF(_x2 + _s, _y2 + _s),
-                     QtCore.QPointF(_x3 + _s, _y3 + _s)]
+                    [QtCore.QPointF(_x1+_s, _y1+_s), QtCore.QPointF(_x2+_s, _y2+_s),
+                     QtCore.QPointF(_x3+_s, _y3+_s)]
                 )
             )
         #
         self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
         self._set_background_color_(_color_and_brush.QtBackgroundColors.Shadow)
-        shadow_path = path1_ + path2_
+        shadow_path = path1_+path2_
         self.drawPath(shadow_path)
         #
         self._set_border_color_(border_color)
         self._set_background_color_(background_color)
         self._set_border_width_(border_width)
-        frame_path = path1 + path2
+        frame_path = path1+path2
         self._set_antialiasing_(False)
         self.drawPath(frame_path)
 
@@ -531,8 +656,8 @@ class QtPainter(QtGui.QPainter):
     def _set_pixmap_draw_by_rect_(self, rect, pixmap, offset=0, enable=True):
         if offset != 0:
             rect_ = QtCore.QRect(
-                rect.x() + offset, rect.y() + offset,
-                rect.width() - offset, rect.height() - offset
+                rect.x()+offset, rect.y()+offset,
+                rect.width()-offset, rect.height()-offset
             )
         else:
             rect_ = rect
@@ -558,10 +683,10 @@ class QtPainter(QtGui.QPainter):
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()
         r = min(w, h)
-        frm_r = max(min(r * .5, 128), 32)
+        frm_r = max(min(r*.5, 128), 32)
         frm_w, frm_h = frm_r, frm_r
         rect = QtCore.QRect(
-            x + (w - frm_w) / 2, y + (h - frm_h) / 2, frm_w, frm_h
+            x+(w-frm_w)/2, y+(h-frm_h)/2, frm_w, frm_h
         )
         self._draw_icon_file_by_rect_(
             rect=rect, file_path=gui_core.GuiIcon.get(icon_name)
@@ -577,13 +702,13 @@ class QtPainter(QtGui.QPainter):
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()
         frm_w, frm_h = max(min(w, 200), 100), max(min(h, 40), 20)
-        frm_x, frm_y = x + (w - frm_w) / 2, y + (h - frm_h) / 2
+        frm_x, frm_y = x+(w-frm_w)/2, y+(h-frm_h)/2
         #
         f_w_t, f_h_t = self._get_font_test_size_(_base.GuiQtFont.generate(size=12, weight=75), text)
         txt_x, txt_y, txt_w, txt_h = bsc_core.RawSizeMtd.fit_to(
             (f_w_t, f_h_t), (frm_w, frm_h)
         )
-        text_size = txt_h / 2
+        text_size = txt_h/2
         text_font = _base.GuiQtFont.generate(size=text_size, weight=75)
         text_sub_font = _base.GuiQtFont.generate(size=10, weight=50, italic=True)
         t_w_n, t_h_n = self._get_font_test_size_(text_font, text)
@@ -595,7 +720,7 @@ class QtPainter(QtGui.QPainter):
         #
         if draw_drop_icon is True:
             icon_rect = QtCore.QRect(
-                x + (w - t_w_n) / 2 - txt_h / 2, frm_y + txt_y - txt_s_h, txt_h, txt_h
+                x+(w-t_w_n)/2-txt_h/2, frm_y+txt_y-txt_s_h, txt_h, txt_h
             )
             self._draw_icon_file_by_rect_(
                 rect=icon_rect, file_path=gui_core.GuiIcon.get(
@@ -603,27 +728,27 @@ class QtPainter(QtGui.QPainter):
                 )
             )
             text_rect = QtCore.QRect(
-                x + txt_h / 2, frm_y + txt_y - txt_s_h, w, txt_h
+                x+txt_h/2, frm_y+txt_y-txt_s_h, w, txt_h
             )
         else:
             text_rect = QtCore.QRect(
-                x, frm_y + txt_y, w, txt_h
+                x, frm_y+txt_y, w, txt_h
             )
         #
         self._set_font_(text_font)
         self.drawText(
             text_rect,
-            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+            QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             text
         )
         if text_sub:
             sub_text_rect = QtCore.QRect(
-                x, frm_y + txt_y + txt_h - txt_s_h, w, txt_s_h
+                x, frm_y+txt_y+txt_h-txt_s_h, w, txt_s_h
             )
             self._set_font_(text_sub_font)
             self.drawText(
                 sub_text_rect,
-                QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+                QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 text_sub
             )
 
@@ -632,8 +757,8 @@ class QtPainter(QtGui.QPainter):
         w, h = rect.width(), rect.height()
 
         rect_ = QtCore.QRect(
-            x + offset, y + offset,
-            w - offset, h - offset
+            x+offset, y+offset,
+            w-offset, h-offset
         )
 
         pixmap = icon.pixmap(w, h)
@@ -644,8 +769,8 @@ class QtPainter(QtGui.QPainter):
         self.device()
 
     def _draw_icon_file_by_rect_(
-            self, rect, file_path,
-            offset=0, frame_rect=None, is_hovered=False, hover_color=None, is_pressed=False
+        self, rect, file_path,
+        offset=0, frame_rect=None, is_hovered=False, hover_color=None, is_pressed=False
     ):
         if file_path:
             # draw frame rect
@@ -682,9 +807,9 @@ class QtPainter(QtGui.QPainter):
                 )
 
     def _draw_image_use_file_path_by_rect_(
-            self, rect, file_path,
-            offset=0, draw_frame=False, background_color=None, border_color=None, border_radius=0,
-            is_hovered=False, is_pressed=False,
+        self, rect, file_path,
+        offset=0, draw_frame=False, background_color=None, border_color=None, border_radius=0,
+        is_hovered=False, is_pressed=False,
     ):
         if file_path:
             if draw_frame is True:
@@ -715,8 +840,8 @@ class QtPainter(QtGui.QPainter):
 
     def _draw_pixmap_by_rect_(self, rect, pixmap, offset=0):
         rect_ = QtCore.QRect(
-            rect.x() + offset, rect.y() + offset,
-            rect.width() - offset, rect.height() - offset
+            rect.x()+offset, rect.y()+offset,
+            rect.width()-offset, rect.height()-offset
         )
         self.drawPixmap(
             rect_,
@@ -727,12 +852,12 @@ class QtPainter(QtGui.QPainter):
 
     def _draw_svg_by_rect_(self, rect, file_path, offset=0, is_hovered=False, hover_color=None, is_pressed=False):
         rect_ = QtCore.QRect(
-            rect.x() + offset, rect.y() + offset,
-            rect.width() - offset, rect.height() - offset
+            rect.x()+offset, rect.y()+offset,
+            rect.width()-offset, rect.height()-offset
         )
         rct_f = QtCore.QRectF(
-            rect.x() + offset, rect.y() + offset,
-            rect.width() - offset, rect.height() - offset
+            rect.x()+offset, rect.y()+offset,
+            rect.width()-offset, rect.height()-offset
         )
         svg_render = QtSvg.QSvgRenderer(file_path)
         svg_render.render(self, rct_f)
@@ -813,13 +938,13 @@ class QtPainter(QtGui.QPainter):
         image_new = QtGui.QImage(w, h, QtGui.QImage.Format_RGB32)
         image = pixmap.toImage()
         r, g, b, a = rgba
-        p_0, p_1 = (255 - alpha) / 255.0, alpha / 255.0
+        p_0, p_1 = (255-alpha)/255.0, alpha/255.0
         for i_x in range(w):
             for i_y in range(h):
                 i_c = image.pixelColor(i_x, i_y)
 
                 i_r, i_g, i_b, i_a = i_c.red(), i_c.green(), i_c.blue(), i_c.alpha()
-                i_g_c = QtGui.QColor(i_r * p_0 + r * p_1, i_g * p_0 + g * p_1, i_b * p_0 + b * p_1, i_a)
+                i_g_c = QtGui.QColor(i_r*p_0+r*p_1, i_g*p_0+g*p_1, i_b*p_0+b*p_1, i_a)
                 image_new.setPixel(i_x, i_y, i_g_c.rgba())
         #
         if QT_LOAD_INDEX == 0:
@@ -836,11 +961,11 @@ class QtPainter(QtGui.QPainter):
     def _get_pixmap_mask_(cls, pixmap):
         w, h = pixmap.width(), pixmap.height()
         image_new = QtGui.QImage(
-            w * 4, h * 4, QtGui.QImage.Format_ARGB32
+            w*4, h*4, QtGui.QImage.Format_ARGB32
         )
         image_new.fill(QtCore.Qt.black)
         painter = QtGui.QPainter(image_new)
-        painter.drawPixmap(QtCore.QRect(0, 0, w * 4, h * 4), pixmap)
+        painter.drawPixmap(QtCore.QRect(0, 0, w*4, h*4), pixmap)
         painter.end()
         image_new = image_new.scaled(
             pixmap.size(),
@@ -853,11 +978,11 @@ class QtPainter(QtGui.QPainter):
         return pixmap_mask
 
     def _draw_image_by_rect_(
-            self, rect, file_path, offset=0, is_hovered=False, hover_color=None, is_pressed=False, cache_resize=False
+        self, rect, file_path, offset=0, is_hovered=False, hover_color=None, is_pressed=False, cache_resize=False
     ):
         rect_ = QtCore.QRect(
-            rect.x() + offset, rect.y() + offset,
-            rect.width() - offset, rect.height() - offset
+            rect.x()+offset, rect.y()+offset,
+            rect.width()-offset, rect.height()-offset
         )
 
         image = _base.GuiQtCache.generate_qt_image(rect_, file_path, cache_resize)
@@ -885,8 +1010,8 @@ class QtPainter(QtGui.QPainter):
     def _draw_image_data_by_rect_(self, rect, image_data, offset=0, text=None):
         if offset != 0:
             rect_offset = QtCore.QRect(
-                rect.x() + offset, rect.y() + offset,
-                rect.width() - offset, rect.height() - offset
+                rect.x()+offset, rect.y()+offset,
+                rect.width()-offset, rect.height()-offset
             )
         else:
             rect_offset = rect
@@ -943,7 +1068,7 @@ class QtPainter(QtGui.QPainter):
 
         w, h = rect.width(), rect.height()
         r = min(w, h)
-        txt_size = int(r * .5)
+        txt_size = int(r*.5)
         #
         txt_size = max(txt_size, 1)
         #
@@ -960,7 +1085,7 @@ class QtPainter(QtGui.QPainter):
         self._set_text_color_(font_color)
         self.drawText(
             rect,
-            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+            QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             draw_text.capitalize()
         )
 
@@ -979,8 +1104,8 @@ class QtPainter(QtGui.QPainter):
         self._set_border_color_(_color_and_brush.QtFontColors.Basic)
         self.drawText(
             rect,
-            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
-            'loading .{}'.format('.' * int((loading_index / 10) % 3))
+            QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
+            'loading .{}'.format('.'*int((loading_index/10)%3))
         )
 
     def _draw_image_exr_by_rect_(self, rect, file_path, offset=0, is_hovered=False):
@@ -991,11 +1116,11 @@ class QtPainter(QtGui.QPainter):
 
     def _draw_image_mov_by_rect_(self, rect, file_path, offset=0):
         rect_ = QtCore.QRect(
-            rect.x() + offset, rect.y() + offset,
-            rect.width() - offset, rect.height() - offset
+            rect.x()+offset, rect.y()+offset,
+            rect.width()-offset, rect.height()-offset
         )
 
-        thumbnail_file_path = bsc_core.VdoFileOpt(file_path).generate_thumbnail()
+        thumbnail_file_path = bsc_storage.VdoFileOpt(file_path).generate_thumbnail()
 
         image = _base.GuiQtCache.generate_qt_image(
             rect_, thumbnail_file_path, cache_resize=True
@@ -1010,12 +1135,12 @@ class QtPainter(QtGui.QPainter):
         self.device()
 
     def _set_movie_play_button_draw_by_rect_(
-            self, rect, scale=1.0, offset=0, border_width=4, is_hovered=False, is_selected=False, is_actioned=False
+        self, rect, scale=1.0, offset=0, border_width=4, is_hovered=False, is_selected=False, is_actioned=False
     ):
         if offset != 0:
             rect_ = QtCore.QRect(
-                rect.x() + offset, rect.y() + offset,
-                rect.width() - offset, rect.height() - offset
+                rect.x()+offset, rect.y()+offset,
+                rect.width()-offset, rect.height()-offset
             )
         else:
             rect_ = rect
@@ -1026,10 +1151,10 @@ class QtPainter(QtGui.QPainter):
         width = rect_.width()
         height = rect_.height()
         #
-        r_ = height * scale
-        x_, y_ = (width - r_) / 2 + x, (height - r_) / 2 + y
+        r_ = height*scale
+        x_, y_ = (width-r_)/2+x, (height-r_)/2+y
         #
-        ellipse_rect = QtCore.QRect(x_ - 4, y_ - 4, r_ + 8, r_ + 8)
+        ellipse_rect = QtCore.QRect(x_-4, y_-4, r_+8, r_+8)
         coords = [
             gui_core.GuiEllipse2d.get_coord_at_angle(start=(x_, y_), radius=r_, angle=90),
             gui_core.GuiEllipse2d.get_coord_at_angle(start=(x_, y_), radius=r_, angle=210),
@@ -1061,20 +1186,20 @@ class QtPainter(QtGui.QPainter):
         self._set_background_color_(r, g, b, 255)
         #
         rect_ = QtCore.QRect(
-            rect.x() + offset, rect.y() + offset,
-            rect.width() - offset, rect.height() - offset
+            rect.x()+offset, rect.y()+offset,
+            rect.width()-offset, rect.height()-offset
         )
 
         self.drawRect(rect_)
 
     def _draw_image_use_text_by_rect_(
-            self, rect, text, border_color=None, background_color=None, font_color=None, offset=0, border_radius=0,
-            border_width=1, is_hovered=False, is_enable=True, is_pressed=False
+        self, rect, text, border_color=None, background_color=None, font_color=None, offset=0, border_radius=0,
+        border_width=1, is_hovered=False, is_enable=True, is_pressed=False
     ):
         if offset != 0:
             rect_offset = QtCore.QRect(
-                rect.x() + offset, rect.y() + offset,
-                rect.width() - offset, rect.height() - offset
+                rect.x()+offset, rect.y()+offset,
+                rect.width()-offset, rect.height()-offset
             )
         else:
             rect_offset = rect
@@ -1112,7 +1237,7 @@ class QtPainter(QtGui.QPainter):
         self._set_border_color_(border_color_)
         self._set_border_width_(border_width)
 
-        b_ = border_width / 2
+        b_ = border_width/2
         if border_radius > 0:
             self._set_antialiasing_()
             self.drawRoundedRect(
@@ -1140,8 +1265,8 @@ class QtPainter(QtGui.QPainter):
                 )
         elif border_radius == -1:
             self._set_antialiasing_()
-            border_radius = frame_rect.height() / 2
-            border_radius_ = b_ + border_radius
+            border_radius = frame_rect.height()/2
+            border_radius_ = b_+border_radius
             self.drawRoundedRect(
                 frame_rect,
                 border_radius_, border_radius_,
@@ -1182,13 +1307,13 @@ class QtPainter(QtGui.QPainter):
         if r >= 31:
             texts = bsc_core.RawTextMtd.find_words(text)
             if len(texts) > 1:
-                txt_size = int(r * .5)
-                text_draw = (texts[0][0] + texts[1][0]).upper()
+                txt_size = int(r*.5)
+                text_draw = (texts[0][0]+texts[1][0]).upper()
             else:
-                txt_size = int(r * .675)
+                txt_size = int(r*.675)
                 text_draw = text[:2].capitalize()
         else:
-            txt_size = int(r * .675)
+            txt_size = int(r*.675)
             text_draw = text[0].upper()
 
         txt_size = max(txt_size, 1)
@@ -1204,21 +1329,21 @@ class QtPainter(QtGui.QPainter):
 
         self.drawText(
             txt_rect,
-            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+            QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             text_draw
         )
 
     def _draw_styled_button_use_text_by_rect_(
-            self, rect, text, icon_style, background_color=None, offset=0,
-            is_hovered=False, is_enable=True, is_pressed=False
+        self, rect, text, icon_style, background_color=None, offset=0,
+        is_hovered=False, is_enable=True, is_pressed=False
     ):
         rect_ = QtCore.QRect(
-            rect.x() + offset, rect.y() + offset,
-            rect.width() - offset, rect.height() - offset
+            rect.x()+offset, rect.y()+offset,
+            rect.width()-offset, rect.height()-offset
         )
         rct_f = QtCore.QRectF(
-            rect.x() + offset, rect.y() + offset,
-            rect.width() - offset, rect.height() - offset
+            rect.x()+offset, rect.y()+offset,
+            rect.width()-offset, rect.height()-offset
         )
 
         x, y = rect_.x(), rect_.y()
@@ -1273,19 +1398,19 @@ class QtPainter(QtGui.QPainter):
         w_0, h_0 = 64.0, 64.0
         c_x, c_y = 10.0, 19.0
         c_w, c_h = 40.0, 30.0
-        x_1, y_1 = int(x_0 + c_x / w_0 * w), int(y_0 + c_y / h_0 * h)
-        w_1, h_1 = int(c_w / w_0 * w), int(c_h / h_0 * h)
+        x_1, y_1 = int(x_0+c_x/w_0*w), int(y_0+c_y/h_0*h)
+        w_1, h_1 = int(c_w/w_0*w), int(c_h/h_0*h)
 
         texts = bsc_core.RawTextMtd.find_words(text)
-        txt_size = (h_1 * 0.75)
+        txt_size = (h_1*0.75)
         if len(texts) > 1:
-            text_draw = (texts[0][0] + texts[1][0]).upper()
+            text_draw = (texts[0][0]+texts[1][0]).upper()
         else:
             text_draw = text[:2].capitalize()
 
         txt_rect = QtCore.QRect(
-            x_1 + offset, y_1 + offset,
-            w_1 - offset, h_1 - offset
+            x_1+offset, y_1+offset,
+            w_1-offset, h_1-offset
         )
 
         # print x_1, y_1, w_1, h_1
@@ -1299,7 +1424,7 @@ class QtPainter(QtGui.QPainter):
 
         self.drawText(
             txt_rect,
-            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+            QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             text_draw
         )
 
@@ -1315,8 +1440,8 @@ class QtPainter(QtGui.QPainter):
         )
 
     def _draw_frame_by_rect_(
-            self, rect, border_color, background_color, background_style=None, offset=0, border_radius=0,
-            border_width=1, border_style=None
+        self, rect, border_color, background_color, background_style=None, offset=0, border_radius=0,
+        border_width=1, border_style=None
     ):
         self._set_border_color_(border_color)
         self._set_background_color_(background_color)
@@ -1326,18 +1451,18 @@ class QtPainter(QtGui.QPainter):
         if background_style is not None:
             self._set_background_style_(background_style)
         #
-        b_ = border_width / 2
+        b_ = border_width/2
         if offset != 0:
-            offset_ = b_ + offset
+            offset_ = b_+offset
             rect_ = QtCore.QRect(
-                rect.x() + offset_, rect.y() + offset_,
-                rect.width() - offset_, rect.height() - offset_
+                rect.x()+offset_, rect.y()+offset_,
+                rect.width()-offset_, rect.height()-offset_
             )
         else:
             rect_ = rect
         #
         if border_radius > 0:
-            border_radius_ = b_ + border_radius
+            border_radius_ = b_+border_radius
             self._set_antialiasing_()
             self.drawRoundedRect(
                 rect_,
@@ -1345,8 +1470,8 @@ class QtPainter(QtGui.QPainter):
                 QtCore.Qt.AbsoluteSize
             )
         elif border_radius == -1:
-            border_radius = rect_.height() / 2
-            border_radius_ = b_ + border_radius
+            border_radius = rect_.height()/2
+            border_radius_ = b_+border_radius
             self._set_antialiasing_()
             self.drawRoundedRect(
                 rect_,
@@ -1371,10 +1496,10 @@ class QtPainter(QtGui.QPainter):
         p1, p2, p3, p4 = rect.topLeft(), rect.topRight(), rect.bottomRight(), rect.bottomLeft()
         (x1, y1), (x2, y2), (x3, y3), (x4, y4) = (p1.x(), p1.y()), (p2.x(), p2.y()), (p3.x(), p3.y()), (p4.x(), p4.y())
         point_coords = (
-            ((x1, y1 + l_), (x1, y1), (x1 + l_, y1)),
-            ((x2 - l_, y2), (x2, y2), (x2, y2 + l_)),
-            ((x3, y3 - l_), (x3, y3), (x3 - l_, y3)),
-            ((x4 + l_, y4), (x4, y4), (x4, y4 - l_))
+            ((x1, y1+l_), (x1, y1), (x1+l_, y1)),
+            ((x2-l_, y2), (x2, y2), (x2, y2+l_)),
+            ((x3, y3-l_), (x3, y3), (x3-l_, y3)),
+            ((x4+l_, y4), (x4, y4), (x4, y4-l_))
         )
         [self._draw_path_by_coords_(i) for i in point_coords]
 
@@ -1404,8 +1529,8 @@ class QtPainter(QtGui.QPainter):
         #
         if offset != 0:
             rect_ = QtCore.QRect(
-                rect.x() + offset, rect.y() + offset,
-                rect.width() - offset, rect.height() - offset
+                rect.x()+offset, rect.y()+offset,
+                rect.width()-offset, rect.height()-offset
             )
         else:
             rect_ = rect
@@ -1428,8 +1553,8 @@ class QtPainter(QtGui.QPainter):
         if colors:
             if offset != 0:
                 rect_offset = QtCore.QRect(
-                    rect.x() + offset, rect.y() + offset,
-                    rect.width() - offset, rect.height() - offset
+                    rect.x()+offset, rect.y()+offset,
+                    rect.width()-offset, rect.height()-offset
                 )
             else:
                 rect_offset = rect
@@ -1439,13 +1564,13 @@ class QtPainter(QtGui.QPainter):
             #
             gradient_color = QtGui.QLinearGradient(rect_offset.topLeft(), rect_offset.topRight())
             c = len(colors)
-            p = 1 / float(c)
+            p = 1/float(c)
             for seq, i_color in enumerate(colors):
-                _ = float(seq) / float(c)
+                _ = float(seq)/float(c)
                 i_index = max(min(_, 1), 0)
                 i_qt_color = _base.GuiQtColor.to_qt_color(i_color)
                 gradient_color.setColorAt(i_index, i_qt_color)
-                gradient_color.setColorAt(i_index + p * .9, i_qt_color)
+                gradient_color.setColorAt(i_index+p*.9, i_qt_color)
             #
             self._set_background_color_(gradient_color)
             #
@@ -1461,22 +1586,22 @@ class QtPainter(QtGui.QPainter):
     @classmethod
     def _get_alternating_color_(cls, rect, colors, width, time_offset=0, running=False):
         if running is True:
-            x_o = (time_offset % (width * 2))
+            x_o = (time_offset%(width*2))
         else:
             x_o = 0
         x, y = rect.x(), rect.y()
         gradient_color = QtGui.QLinearGradient(
-            QtCore.QPoint(x + x_o, y), QtCore.QPoint(x + width + x_o, y + width)
+            QtCore.QPoint(x+x_o, y), QtCore.QPoint(x+width+x_o, y+width)
         )
         gradient_color.setSpread(gradient_color.RepeatSpread)
         c = len(colors)
-        p = 1 / float(c)
+        p = 1/float(c)
         for seq, i_color in enumerate(colors):
-            _ = float(seq) / float(c)
+            _ = float(seq)/float(c)
             i_index = max(min(_, 1), 0)
             i_qt_color = _base.GuiQtColor.to_qt_color(i_color)
             gradient_color.setColorAt(i_index, i_qt_color)
-            gradient_color.setColorAt(i_index + p * .9, i_qt_color)
+            gradient_color.setColorAt(i_index+p*.9, i_qt_color)
         return gradient_color
 
     def _draw_alternating_frame_by_rect_(self, rect, colors, border_radius=0):
@@ -1494,7 +1619,7 @@ class QtPainter(QtGui.QPainter):
                 QtCore.Qt.AbsoluteSize
             )
         elif border_radius == -1:
-            border_radius = rect_offset.height() / 2
+            border_radius = rect_offset.height()/2
             self._set_antialiasing_()
             self.drawRoundedRect(
                 rect_offset,
@@ -1517,9 +1642,9 @@ class QtPainter(QtGui.QPainter):
 
         self._set_font_pixel_size_(20)
 
-        w_t, h_t = self.fontMetrics().width(text), self.fontMetrics().height() / 2
+        w_t, h_t = self.fontMetrics().width(text), self.fontMetrics().height()/2
 
-        w_f, h_f = w_t + 8, h_t + 8
+        w_f, h_f = w_t+8, h_t+8
 
         self._set_antialiasing_(False)
 
@@ -1530,7 +1655,7 @@ class QtPainter(QtGui.QPainter):
             _color_and_brush.QtColors.ToolTipBackground
         )
         rect_frame = QtCore.QRect(
-            x + (w - w_f) / 2, y + (h - h_f) / 2 - 1, w_f, h_f
+            x+(w-w_f)/2, y+(h-h_f)/2-1, w_f, h_f
         )
         self.drawRect(
             rect_frame
@@ -1540,26 +1665,26 @@ class QtPainter(QtGui.QPainter):
             _color_and_brush.QtColors.ToolTipText
         )
         rect_text = QtCore.QRect(
-            x + (w - w_t) / 2 - 2, y + (h - h_t) / 2 - 2, w_t + 4, h_t + 4
+            x+(w-w_t)/2-2, y+(h-h_t)/2-2, w_t+4, h_t+4
         )
         self.drawText(
             rect_text,
-            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+            QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             text
         )
 
     def _draw_alternating_colors_by_rect_(self, rect, colors, offset=0, border_radius=0, border_width=1, running=False):
         if offset != 0:
             rect_offset = QtCore.QRect(
-                rect.x() + offset, rect.y() + offset,
-                rect.width() - offset, rect.height() - offset
+                rect.x()+offset, rect.y()+offset,
+                rect.width()-offset, rect.height()-offset
             )
         else:
             rect_offset = rect
         #
         self._set_border_color_(colors[0])
         background_color = self._get_alternating_color_(
-            rect_offset, colors, 20, int(time.time() * 10), running
+            rect_offset, colors, 20, int(time.time()*10), running
         )
         #
         self._set_background_color_(background_color)
@@ -1572,7 +1697,7 @@ class QtPainter(QtGui.QPainter):
                 QtCore.Qt.AbsoluteSize
             )
         elif border_radius == -1:
-            border_radius = rect_offset.height() / 2
+            border_radius = rect_offset.height()/2
             self._set_antialiasing_()
             self.drawRoundedRect(
                 rect_offset,
@@ -1584,8 +1709,8 @@ class QtPainter(QtGui.QPainter):
             self.drawRect(rect_offset)
 
     def _draw_text_by_rect_(
-            self, rect, text, font_color=None, font=None, offset=0, text_option=None, word_warp=False, is_hovered=False,
-            is_selected=False
+        self, rect, text, font_color=None, font=None, offset=0, text_option=None, word_warp=False, is_hovered=False,
+        is_selected=False
     ):
         if font_color is not None:
             self._set_border_color_(font_color)
@@ -1597,8 +1722,8 @@ class QtPainter(QtGui.QPainter):
         #
         if offset != 0:
             rect_offset = QtCore.QRect(
-                rect.x() + offset, rect.y() + offset,
-                rect.width() - offset, rect.height() - offset
+                rect.x()+offset, rect.y()+offset,
+                rect.width()-offset, rect.height()-offset
             )
         else:
             rect_offset = rect
@@ -1606,7 +1731,7 @@ class QtPainter(QtGui.QPainter):
         if text_option is not None:
             text_option_ = text_option
         else:
-            text_option_ = QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter
+            text_option_ = QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter
         #
         if font is not None:
             self._set_font_(font)
@@ -1647,11 +1772,11 @@ class QtPainter(QtGui.QPainter):
         w, h = rect.width(), rect.height()
         self._set_font_option_(text_size, text_weight)
         ss = [self.fontMetrics().width(i) for i in text_dict.keys()]
-        text_height = int(text_size * 1.5)
-        text_spacing = int(text_size * .2)
-        txt_w = max(ss) + text_size / 2
+        text_height = int(text_size*1.5)
+        text_spacing = int(text_size*.2)
+        txt_w = max(ss)+text_size/2
         for seq, (k, v) in enumerate(text_dict.items()):
-            i_rect = QtCore.QRect(x, y + seq * (text_height + text_spacing), w, text_height)
+            i_rect = QtCore.QRect(x, y+seq*(text_height+text_spacing), w, text_height)
             self._set_text_draw_by_rect_use_key_value_(
                 rect=i_rect,
                 key_text=k,
@@ -1666,12 +1791,12 @@ class QtPainter(QtGui.QPainter):
         pass
 
     def _set_text_draw_by_rect_use_key_value_(
-            self, rect, key_text, value_text, key_text_width, key_text_size=8, value_text_size=8, key_text_weight=50,
-            value_text_weight=50, key_text_color=None, value_text_color=None, offset=0, is_hovered=False,
-            is_selected=False
+        self, rect, key_text, value_text, key_text_width, key_text_size=8, value_text_size=8, key_text_weight=50,
+        value_text_weight=50, key_text_color=None, value_text_color=None, offset=0, is_hovered=False,
+        is_selected=False
     ):
-        x, y = rect.x() + offset, rect.y() + offset
-        w, h = rect.width() - offset, rect.height() - offset
+        x, y = rect.x()+offset, rect.y()+offset
+        w, h = rect.width()-offset, rect.height()-offset
         if w > 0 and h > 0:
             if key_text_color is not None:
                 key_color_ = key_text_color
@@ -1694,7 +1819,7 @@ class QtPainter(QtGui.QPainter):
             key_text_rect = QtCore.QRect(
                 x, y, key_text_width, h
             )
-            key_text_option = QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter
+            key_text_option = QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter
             key_text_font = _base.QtFonts.NameKey
             key_text_font.setPointSize(key_text_size)
             key_text_font.setWeight(key_text_weight)
@@ -1706,9 +1831,9 @@ class QtPainter(QtGui.QPainter):
             )
             # sep
             sep_text_rect = QtCore.QRect(
-                x + key_text_width, y, sep_text_width, h
+                x+key_text_width, y, sep_text_width, h
             )
-            sep_text_option = QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter
+            sep_text_option = QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter
             self.drawText(
                 sep_text_rect,
                 sep_text_option,
@@ -1717,10 +1842,10 @@ class QtPainter(QtGui.QPainter):
             # value
             self._set_text_color_(value_color_)
             value_text_rect_f = QtCore.QRectF(
-                x + key_text_width + sep_text_width, y, w - sep_text_width - key_text_width, h
+                x+key_text_width+sep_text_width, y, w-sep_text_width-key_text_width, h
             )
             qt_value_text_option = QtGui.QTextOption()
-            qt_value_text_option.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+            qt_value_text_option.setAlignment(QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
             qt_value_text_option.setUseDesignMetrics(True)
             value_text_ = self.fontMetrics().elidedText(
                 value_text,
@@ -1739,14 +1864,14 @@ class QtPainter(QtGui.QPainter):
             )
 
     def set_button_draw(
-            self, rect, background_color, border_color, border_radius=4, border_width=1, border_style='solid'
+        self, rect, background_color, border_color, border_radius=4, border_width=1, border_style='solid'
     ):
         self._set_background_color_(background_color)
         self._set_border_color_(border_color)
         #
         p0, p1, p2, p3 = rect.topLeft(), rect.bottomLeft(), rect.bottomRight(), rect.topRight()
         w, h = rect.width(), rect.height()
-        cx, cy = p0.x() + w / 2, p0.y() + h / 2
+        cx, cy = p0.x()+w/2, p0.y()+h/2
         #
         angles = []
         for p in [p0, p1, p2, p3]:
@@ -1757,10 +1882,10 @@ class QtPainter(QtGui.QPainter):
             angles.append(a)
         #
         br, bb, bg, ba = border_color.red(), border_color.green(), border_color.blue(), border_color.alpha()
-        br0, bb0, bg0, ba0 = min(br * 1.25, 255), min(bb * 1.25, 255), min(bg * 1.25, 255), ba
-        br1, bb1, bg1, ba1 = min(br * 1.5, 255), min(bb * 1.5, 255), min(bg * 1.5, 255), ba
-        br3, bb3, bg3, ba3 = min(br * .875, 255), min(bb * .875, 255), min(bg * .875, 255), ba
-        br4, bb4, bg4, ba4 = min(br * .725, 255), min(bb * .725, 255), min(bg * .725, 255), ba
+        br0, bb0, bg0, ba0 = min(br*1.25, 255), min(bb*1.25, 255), min(bg*1.25, 255), ba
+        br1, bb1, bg1, ba1 = min(br*1.5, 255), min(bb*1.5, 255), min(bg*1.5, 255), ba
+        br3, bb3, bg3, ba3 = min(br*.875, 255), min(bb*.875, 255), min(bg*.875, 255), ba
+        br4, bb4, bg4, ba4 = min(br*.725, 255), min(bb*.725, 255), min(bg*.725, 255), ba
         self.setBorderRgba((0, 0, 0, 0))
         if border_style == 'solid':
             self._set_border_color_(border_color)
@@ -1779,16 +1904,16 @@ class QtPainter(QtGui.QPainter):
             color = QtGui.QConicalGradient(cx, cy, a)
             color.setColorAt(0, QtGui.QColor(br0, bb0, bg0, ba0))
             for seq, a in enumerate(angles):
-                p = float(a) / float(360)
+                p = float(a)/float(360)
                 if seq == 0:
                     color.setColorAt(p, QtGui.QColor(br1, bb1, bg1, ba1))
                 elif seq == 1:
-                    color.setColorAt(p - .0125, QtGui.QColor(br1, bb1, bg1, ba1))
+                    color.setColorAt(p-.0125, QtGui.QColor(br1, bb1, bg1, ba1))
                     color.setColorAt(p, QtGui.QColor(br4, bb4, bg4, ba4))
                 elif seq == 2:
                     color.setColorAt(p, QtGui.QColor(br4, bb4, bg4, ba4))
                 elif seq == 3:
-                    color.setColorAt(p - .0125, QtGui.QColor(br3, bb3, bg3, ba3))
+                    color.setColorAt(p-.0125, QtGui.QColor(br3, bb3, bg3, ba3))
                     color.setColorAt(p, QtGui.QColor(br0, bb0, bg0, ba0))
             color.setColorAt(1, QtGui.QColor(br0, bb0, bg0, ba0))
             #
@@ -1796,11 +1921,11 @@ class QtPainter(QtGui.QPainter):
             self.setBrush(brush)
             self.drawRoundedRect(rect, border_radius, border_radius, QtCore.Qt.AbsoluteSize)
         #
-        rect_ = QtCore.QRect(p0.x() + border_width, p0.y() + border_width, w - border_width * 2, h - border_width * 2)
+        rect_ = QtCore.QRect(p0.x()+border_width, p0.y()+border_width, w-border_width*2, h-border_width*2)
         self._set_background_color_(background_color)
         self.drawRoundedRect(
             rect_,
-            border_radius - border_width, border_radius - border_width,
+            border_radius-border_width, border_radius-border_width,
             QtCore.Qt.AbsoluteSize
         )
 
@@ -1824,7 +1949,7 @@ class QtPainter(QtGui.QPainter):
 
     @classmethod
     def _get_item_background_color_by_rect_(
-            cls, rect, is_hovered=False, is_selected=False, is_actioned=False, default_background_color=None
+        cls, rect, is_hovered=False, is_selected=False, is_actioned=False, default_background_color=None
     ):
         conditions = [is_hovered, is_selected]
         if conditions == [False, False]:
@@ -1858,8 +1983,8 @@ class QtPainter(QtGui.QPainter):
 
     @classmethod
     def _get_frame_background_color_by_rect_(
-            cls, rect, check_is_hovered=False, is_checked=False, press_is_hovered=False, is_pressed=False,
-            is_selected=False, delete_is_hovered=False
+        cls, rect, check_is_hovered=False, is_checked=False, press_is_hovered=False, is_pressed=False,
+        is_selected=False, delete_is_hovered=False
     ):
         conditions = [check_is_hovered, is_checked, press_is_hovered, is_pressed, is_selected]
         if True not in conditions:
@@ -1922,7 +2047,7 @@ class QtPainter(QtGui.QPainter):
                 (1, _color_and_brush.QtBackgroundColors.DeleteHovered)
             ]
         #
-        for i_args in check_args + select_args + press_args + delete_args:
+        for i_args in check_args+select_args+press_args+delete_args:
             i_index, i_color = i_args
             color.setColorAt(i_index, i_color)
         return color
@@ -1970,8 +2095,8 @@ class QtPainter(QtGui.QPainter):
                 self.drawText(i_text_point, i_text)
 
     def _set_histogram_draw_(
-            self, rect, value_array, value_scale, value_offset, label, grid_scale, grid_size, grid_offset, translate,
-            current_index, mode
+        self, rect, value_array, value_scale, value_offset, label, grid_scale, grid_size, grid_offset, translate,
+        current_index, mode
     ):
         maximum = max(value_array)
         spacing = 2
@@ -1988,25 +2113,25 @@ class QtPainter(QtGui.QPainter):
             value_scale_x, value_scale_y = value_scale
             #
             grid_w, grid_h = grid_size
-            column_w = grid_w / grid_scale_x
+            column_w = grid_w/grid_scale_x
             #
-            minimum_h = grid_w / grid_scale_y
+            minimum_h = grid_w/grid_scale_y
             #
             current_x, current_y = None, None
             for i_index, i_value in enumerate(value_array):
-                i_color_percent = float(i_value) / float(maximum)
+                i_color_percent = float(i_value)/float(maximum)
                 #
-                i_r, i_g, i_b = bsc_core.RawColorMtd.hsv2rgb(140 * i_color_percent, 1, 1)
+                i_r, i_g, i_b = bsc_core.RawColorMtd.hsv2rgb(140*i_color_percent, 1, 1)
                 #
                 self._set_background_color_(i_r, i_g, i_b, 255)
                 self._set_border_color_(i_r, i_g, i_b, 255)
                 #
-                i_value_percent = float(i_value) / float(value_scale_y)
-                i_pos_x = pos_x + column_w * i_index + grid_offset_x + translate_x + 1
-                i_pos_y = (height - minimum_h * i_value_percent * grid_scale_y - grid_offset_y + translate_y)
+                i_value_percent = float(i_value)/float(value_scale_y)
+                i_pos_x = pos_x+column_w*i_index+grid_offset_x+translate_x+1
+                i_pos_y = (height-minimum_h*i_value_percent*grid_scale_y-grid_offset_y+translate_y)
                 # filter visible
                 if grid_offset_x <= i_pos_x <= width:
-                    i_w, i_h = column_w - spacing, (minimum_h * i_value_percent) * grid_scale_y
+                    i_w, i_h = column_w-spacing, (minimum_h*i_value_percent)*grid_scale_y
                     i_rect = QtCore.QRect(
                         i_pos_x, i_pos_y,
                         i_w, i_h
@@ -2014,22 +2139,22 @@ class QtPainter(QtGui.QPainter):
                     self.drawRect(i_rect)
                     #
                     if i_index == current_index:
-                        current_x = i_index + value_offset_x
-                        current_y = i_value + value_offset_y
+                        current_x = i_index+value_offset_x
+                        current_y = i_value+value_offset_y
                         #
                         self._set_background_color_(0, 0, 0, 0)
                         self._set_border_color_(223, 223, 223, 255)
                         #
                         selection_rect = QtCore.QRect(
                             i_pos_x, 0,
-                            column_w - 2, height - grid_offset_y
+                            column_w-2, height-grid_offset_y
                         )
                         #
                         self.drawRect(selection_rect)
             #
             if current_x is not None and current_y is not None:
                 current_label_rect = QtCore.QRect(
-                    grid_offset_x + 8, 0 + 8,
+                    grid_offset_x+8, 0+8,
                     width, height
                 )
                 #
@@ -2038,7 +2163,7 @@ class QtPainter(QtGui.QPainter):
                 #
                 self.drawText(
                     current_label_rect,
-                    QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop,
+                    QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop,
                     '{2} ( {0} )\r\n{3} ( {1} )'.format(
                         label_x, label_y,
                         current_x,
@@ -2058,13 +2183,13 @@ class QtPainter(QtGui.QPainter):
         #
         def get_lines_h_fnc_():
             lis = []
-            for i_y in range(height / grid_h):
+            for i_y in range(height/grid_h):
                 pox_x_1, pox_x_2 = grid_offset_x, width
                 #
                 if axis_dir_y == -1:
-                    pos_y_1 = pos_y_2 = height - grid_h * (i_y - index_y) - translate_y + grid_offset_y
+                    pos_y_1 = pos_y_2 = height-grid_h*(i_y-index_y)-translate_y+grid_offset_y
                 else:
-                    pos_y_1 = pos_y_2 = grid_h * (i_y - index_y) + translate_y + grid_offset_y
+                    pos_y_1 = pos_y_2 = grid_h*(i_y-index_y)+translate_y+grid_offset_y
                 #
                 lis.append(
                     (QtCore.QPointF(pox_x_1, pos_y_1), QtCore.QPointF(pox_x_2, pos_y_2))
@@ -2074,11 +2199,11 @@ class QtPainter(QtGui.QPainter):
         #
         def get_lines_v_fnc_():
             lis = []
-            for i_x in range(width / grid_h):
+            for i_x in range(width/grid_h):
                 if axis_dir_x == -1:
-                    pox_x_1 = pox_x_2 = width - grid_w * (i_x - index_x) - translate_x + grid_offset_x
+                    pox_x_1 = pox_x_2 = width-grid_w*(i_x-index_x)-translate_x+grid_offset_x
                 else:
-                    pox_x_1 = pox_x_2 = grid_w * (i_x - index_x) + translate_x + grid_offset_x
+                    pox_x_1 = pox_x_2 = grid_w*(i_x-index_x)+translate_x+grid_offset_x
                 #
                 pos_y_1, pos_y_2 = height, grid_offset_y
                 #
@@ -2095,8 +2220,8 @@ class QtPainter(QtGui.QPainter):
         #
         translate_x, translate_y = translate
         grid_offset_x, grid_offset_y = grid_offset
-        index_x = translate_x / grid_w
-        index_y = translate_y / grid_w
+        index_x = translate_x/grid_w
+        index_y = translate_y/grid_w
         #
         lines_h, lines_v = get_lines_h_fnc_(), get_lines_v_fnc_()
         #
@@ -2107,13 +2232,13 @@ class QtPainter(QtGui.QPainter):
         set_branch_draw_fnc_(lines_v, index_x, grid_scale_x)
 
     def _set_grid_mark_draw_(
-            self, rect, axis_dir, grid_size, translate, grid_offset, grid_scale, grid_value_offset, grid_border_color,
-            grid_value_show_mode
+        self, rect, axis_dir, grid_size, translate, grid_offset, grid_scale, grid_value_offset, grid_border_color,
+        grid_value_show_mode
     ):
         def set_branch_draw_fnc_(points, axis_index, scale, value_offset):
             for seq, i_point in enumerate(points):
-                if (seq - axis_index) % 5 == 0:
-                    value = (seq - axis_index) / scale + value_offset
+                if (seq-axis_index)%5 == 0:
+                    value = (seq-axis_index)/scale+value_offset
                     text = bsc_core.RawIntegerMtd.get_prettify_(
                         value,
                         grid_value_show_mode
@@ -2125,11 +2250,11 @@ class QtPainter(QtGui.QPainter):
         #
         def get_h_points():
             lis = []
-            for i_x in range(width / grid_w):
+            for i_x in range(width/grid_w):
                 if axis_dir_x == -1:
-                    i_p_x = width - grid_w * (i_x - index_x) - translate_x + grid_offset_x
+                    i_p_x = width-grid_w*(i_x-index_x)-translate_x+grid_offset_x
                 else:
-                    i_p_x = grid_w * (i_x - index_x) + translate_x + grid_offset_x
+                    i_p_x = grid_w*(i_x-index_x)+translate_x+grid_offset_x
                 #
                 if axis_dir_y == -1:
                     i_p_y = height
@@ -2145,16 +2270,16 @@ class QtPainter(QtGui.QPainter):
         #
         def get_v_points():
             lis = []
-            for i_y in range(height / grid_h):
+            for i_y in range(height/grid_h):
                 if axis_dir_x == -1:
-                    i_p_x = width - text_h
+                    i_p_x = width-text_h
                 else:
                     i_p_x = 0
                 #
                 if axis_dir_y == -1:
-                    i_p_y = height - grid_h * (i_y - index_y) - translate_y + grid_offset_y
+                    i_p_y = height-grid_h*(i_y-index_y)-translate_y+grid_offset_y
                 else:
-                    i_p_y = grid_h * (i_y - index_y) + translate_y + grid_offset_y
+                    i_p_y = grid_h*(i_y-index_y)+translate_y+grid_offset_y
                 #
                 lis.append(
                     QtCore.QPointF(i_p_x, i_p_y)
@@ -2171,8 +2296,8 @@ class QtPainter(QtGui.QPainter):
         grid_offset_x, grid_offset_y = grid_offset
         value_scale_x, value_scale_y = grid_scale
         value_offset_x, value_offset_y = grid_value_offset
-        index_x = translate_x / grid_w
-        index_y = translate_y / grid_h
+        index_x = translate_x/grid_w
+        index_y = translate_y/grid_h
         #
         self._set_border_color_(grid_border_color)
         self._set_font_(_base.GuiQtFont.generate(size=6))
@@ -2195,11 +2320,11 @@ class QtPainter(QtGui.QPainter):
         grid_axis_lock_x, grid_axis_lock_y = grid_axis_lock
         if grid_axis_lock_y:
             if axis_dir_y == -1:
-                h_y_0 = height - grid_offset_y - 1
+                h_y_0 = height-grid_offset_y-1
             else:
                 h_y_0 = 0
         else:
-            h_y_0 = height - grid_offset_y - translate_y - 1
+            h_y_0 = height-grid_offset_y-translate_y-1
         #
         points_h = (
             QtCore.QPointF(grid_offset_x, h_y_0),
@@ -2207,13 +2332,13 @@ class QtPainter(QtGui.QPainter):
         )
         #
         if grid_axis_lock_x:
-            v_x_0 = 0 + grid_offset_x
+            v_x_0 = 0+grid_offset_x
         else:
-            v_x_0 = grid_offset_x + translate_x
+            v_x_0 = grid_offset_x+translate_x
         #
         points_v = (
             QtCore.QPointF(v_x_0, -grid_offset_y),
-            QtCore.QPointF(v_x_0, height - grid_offset_y))
+            QtCore.QPointF(v_x_0, height-grid_offset_y))
 
         #
         border_color_x, border_color_y = grid_border_colors
@@ -2233,8 +2358,8 @@ class QtPainter(QtGui.QPainter):
         self.drawRect(rect)
 
     def _set_node_frame_draw_by_rect_(
-            self, rect, offset=0, border_radius=0, border_width=1, is_hovered=False, is_selected=False,
-            is_actioned=False
+        self, rect, offset=0, border_radius=0, border_width=1, is_hovered=False, is_selected=False,
+        is_actioned=False
     ):
         conditions = [is_hovered, is_selected]
         if conditions == [False, False]:
@@ -2263,26 +2388,26 @@ class QtPainter(QtGui.QPainter):
         self.setPen(pen)
         self.setBrush(QtGui.QBrush(_color_and_brush.QtBorderColors.Transparent))
 
-        b_ = border_width / 2
+        b_ = border_width/2
         if offset != 0:
-            offset_ = b_ + offset
+            offset_ = b_+offset
             rect_ = QtCore.QRect(
-                rect.x() + offset_, rect.y() + offset_,
-                rect.width() - offset_, rect.height() - offset_
+                rect.x()+offset_, rect.y()+offset_,
+                rect.width()-offset_, rect.height()-offset_
             )
         else:
             rect_ = rect
         #
         if border_radius > 0:
-            border_radius_ = b_ + border_radius
+            border_radius_ = b_+border_radius
             self.drawRoundedRect(
                 rect_,
                 border_radius_, border_radius_,
                 QtCore.Qt.AbsoluteSize
             )
         elif border_radius == -1:
-            border_radius = rect_.height() / 2
-            border_radius_ = b_ + border_radius
+            border_radius = rect_.height()/2
+            border_radius_ = b_+border_radius
             self.drawRoundedRect(
                 rect_,
                 border_radius_, border_radius_,
@@ -2304,7 +2429,7 @@ class QtPainter(QtGui.QPainter):
         path_1 = QtGui.QPainterPath()
         path_1.addRect(rect_f_1)
 
-        path_2 = path_0 - path_1
+        path_2 = path_0-path_1
 
         self._set_background_color_(background_color)
         self._set_border_color_(border_color)
@@ -2359,12 +2484,12 @@ class QtNGPainter(QtPainter):
         self._set_border_width_(border_width)
         self._set_background_color_(63, 255, 127, 255)
         #
-        b_ = border_width / 2
+        b_ = border_width/2
         if offset != 0:
-            offset_ = b_ + offset
+            offset_ = b_+offset
             rect_ = QtCore.QRect(
-                rect.x() + offset_, rect.y() + offset_,
-                rect.width() - offset_, rect.height() - offset_
+                rect.x()+offset_, rect.y()+offset_,
+                rect.width()-offset_, rect.height()-offset_
             )
         else:
             rect_ = rect
@@ -2376,12 +2501,12 @@ class QtNGPainter(QtPainter):
         self._set_border_width_(border_width)
         self._set_background_color_(255, 63, 31, 255)
         #
-        b_ = border_width / 2
+        b_ = border_width/2
         if offset != 0:
-            offset_ = b_ + offset
+            offset_ = b_+offset
             rect_ = QtCore.QRect(
-                rect.x() + offset_, rect.y() + offset_,
-                rect.width() - offset_, rect.height() - offset_
+                rect.x()+offset_, rect.y()+offset_,
+                rect.width()-offset_, rect.height()-offset_
             )
         else:
             rect_ = rect
@@ -2417,19 +2542,19 @@ class QtNGPainter(QtPainter):
                     self._set_border_color_(63, 63, 63, 255)
                 self._set_border_width_(border_width)
                 self._set_background_color_(0, 0, 0, 0)
-                i_p_0, i_p_1 = QtCore.QPoint(x, y + i * h / c), QtCore.QPoint(x + w, y + i * h / c)
+                i_p_0, i_p_1 = QtCore.QPoint(x, y+i*h/c), QtCore.QPoint(x+w, y+i*h/c)
                 self.drawLine(i_p_0, i_p_1)
 
     def _set_ng_node_frame_head_draw_(
-            self, rect, border_color, border_width, border_radius, is_hovered=False, is_selected=False,
-            is_actioned=False
+        self, rect, border_color, border_width, border_radius, is_hovered=False, is_selected=False,
+        is_actioned=False
     ):
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()
         x_0, y_0 = x, y
-        w_0, h_0 = w, h - border_radius - border_width
-        x_1, y_1 = x, y + border_radius + border_width
-        w_1, h_1 = w, h - border_radius - border_width
+        w_0, h_0 = w, h-border_radius-border_width
+        x_1, y_1 = x, y+border_radius+border_width
+        w_1, h_1 = w, h-border_radius-border_width
         self._set_border_color_(border_color)
         self._set_border_width_(border_width)
         self._set_border_join_(QtCore.Qt.MiterJoin)
@@ -2447,15 +2572,15 @@ class QtNGPainter(QtPainter):
         path_1.addRect(
             QtCore.QRectF(x_1, y_1, w_1, h_1)
         )
-        self.drawPath(path_0 + path_1)
+        self.drawPath(path_0+path_1)
 
     def _set_ng_node_frame_body_draw_(self, rect, border_color, border_width, border_radius):
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()
         x_0, y_0 = x, y
-        w_0, h_0 = w, h - border_radius - border_width
-        x_1, y_1 = x, y + border_radius + border_width
-        w_1, h_1 = w, h - border_radius - border_width
+        w_0, h_0 = w, h-border_radius-border_width
+        x_1, y_1 = x, y+border_radius+border_width
+        w_1, h_1 = w, h-border_radius-border_width
         self._set_border_color_(border_color)
         self._set_border_width_(border_width)
         self._set_border_join_(QtCore.Qt.MiterJoin)
@@ -2469,7 +2594,7 @@ class QtNGPainter(QtPainter):
             QtCore.QRectF(x_1, y_1, w_1, h_1),
             border_radius, border_radius, QtCore.Qt.AbsoluteSize
         )
-        self.drawPath(path_0 + path_1)
+        self.drawPath(path_0+path_1)
 
 
 class QtPixmapDrawer(object):
@@ -2492,14 +2617,14 @@ class QtPixmapDrawer(object):
         ]
         max_c = sum([i[1] for i in guide_data])
         border_rgb = 255, 255, 255
-        i_x_0, i_y_0 = 0, h - g_h
+        i_x_0, i_y_0 = 0, h-g_h
         for i in guide_data:
             i_text, i_c = i
             i_background_rgb = bsc_core.RawTextOpt(i_text).to_rgb()
             # background
-            i_p = i_c / float(max_c)
-            i_x_1, i_y_1 = int(i_x_0 + i_p * w), h - 1
-            i_g_w = w * i_p
+            i_p = i_c/float(max_c)
+            i_x_1, i_y_1 = int(i_x_0+i_p*w), h-1
+            i_g_w = w*i_p
             i_g_rect = QtCore.QRect(
                 i_x_0, i_y_0, i_g_w, g_h
             )
@@ -2510,7 +2635,7 @@ class QtPixmapDrawer(object):
                 i_g_rect
             )
 
-            painter._set_font_(_base.GuiQtFont.generate(g_h * .8))
+            painter._set_font_(_base.GuiQtFont.generate(g_h*.8))
 
             i_t_r, i_t_g, i_t_b = bsc_core.RawColorMtd.get_complementary_rgb(*i_background_rgb)
             i_t_a = QtGui.qGray(i_t_r, i_t_g, i_t_b)
@@ -2521,7 +2646,7 @@ class QtPixmapDrawer(object):
             #
             i_t_r__ = QtGui.QColor(i_t_r_, i_t_r_, i_t_r_)
 
-            i_text_option = QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter
+            i_text_option = QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter
 
             painter._set_border_color_(i_t_r__)
             painter.drawText(
@@ -2556,7 +2681,7 @@ class QtPixmapDrawer(object):
             text_size = data.get('draw.text.size')
             text_weight = data.get('draw.text.weight')
             font_color = data.get('draw.text.color')
-            txt_rect = QtCore.QRect(x + m, y + m, w, h / 2)
+            txt_rect = QtCore.QRect(x+m, y+m, w, h/2)
             if isinstance(text_content, dict):
                 painter._set_text_draw_by_rect_use_dict_(
                     txt_rect, text_content, text_size, text_weight, font_color

@@ -41,6 +41,10 @@ class QtColors(object):
     TabBorderCurrent = QtGui.QColor(87, 87, 87, 255)
     TabBackgroundCurrent = QtGui.QColor(63, 63, 63, 255)
 
+    TabGroupBorder = QtGui.QColor(87, 87, 87, 255)
+    TabGroupBackground = QtGui.QColor(47, 47, 47, 255)
+    TabGroupBackgroundCurrent = QtGui.QColor(63, 63, 63, 255)
+
     HeadBorder = QtGui.QColor(87, 87, 87, 255)
     HeadBackground = QtGui.QColor(83, 83, 83, 255)
 
