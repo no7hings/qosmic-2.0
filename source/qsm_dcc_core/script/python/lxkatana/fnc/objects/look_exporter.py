@@ -3,9 +3,9 @@ import six
 
 import lxbasic.log as bsc_log
 
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 import lxbasic.fnc.abstracts as bsc_fnc_abstracts
 # katana
@@ -54,7 +54,7 @@ class FncExporterForLookAss(bsc_fnc_abstracts.AbsFncOptionBase):
         return Configuration.get('KATANA_UI_MODE')
 
     def __set_file_export_(self, group_path, source_port, file_path, frame, camera_location):
-        file_obj = bsc_dcc_objects.StgFile(file_path)
+        file_obj = gnl_dcc_objects.StgFile(file_path)
         #
         file_obj.create_directory()
         #
@@ -124,14 +124,14 @@ class FncExporterForLookAss(bsc_fnc_abstracts.AbsFncOptionBase):
                     settings=rss
                 )
                 #
-                i_output_file = bsc_dcc_objects.StgFile(i_output_file_path)
+                i_output_file = gnl_dcc_objects.StgFile(i_output_file_path)
                 if i_output_file.get_is_exists() is True:
                     bsc_log.Log.trace_method_result(
                         'ass export',
                         'file="{}"'.format(i_output_file_path)
                     )
                     if self.get('texture_use_environ_map') is True:
-                        fr = bsc_dcc_core.DotAssOpt(i_output_file_path)
+                        fr = gnl_dcc_core.DotAssOpt(i_output_file_path)
                         fr.do_file_path_convert_to_env()
                         #
                         bsc_log.Log.trace_method_result(
@@ -149,14 +149,14 @@ class FncExporterForLookAss(bsc_fnc_abstracts.AbsFncOptionBase):
                 settings=rss
             )
             #
-            output_file = bsc_dcc_objects.StgFile(output_file_path)
+            output_file = gnl_dcc_objects.StgFile(output_file_path)
             if output_file.get_is_exists() is True:
                 bsc_log.Log.trace_method_result(
                     'ass export',
                     'file="{}"'.format(output_file_path)
                 )
                 if self.get('texture_use_environ_map') is True:
-                    fr = bsc_dcc_core.DotAssOpt(output_file_path)
+                    fr = gnl_dcc_core.DotAssOpt(output_file_path)
                     fr.do_file_path_convert_to_env()
                     #
                     bsc_log.Log.trace_method_result(
@@ -219,6 +219,6 @@ class FncExporterForLookKlfExtra(bsc_fnc_abstracts.AbsDccExporter):
                             dic[key] = expression
         #
         if dic:
-            bsc_dcc_objects.StgJson(
+            gnl_dcc_objects.StgJson(
                 self._file_path
             ).set_write(dic)

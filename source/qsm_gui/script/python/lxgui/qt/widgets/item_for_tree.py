@@ -529,7 +529,7 @@ class QtTreeWidgetItem(
                 else:
                     _ = ''
             else:
-                _ = bsc_core.auto_encode(text)
+                _ = bsc_core.auto_string(text)
             #
             self.setText(column, _)
             self.setFont(column, gui_qt_core.QtFonts.NameNormal)
@@ -552,7 +552,7 @@ class QtTreeWidgetItem(
 
     def _set_tool_tip_text_(self, text, column=0):
         if hasattr(self, 'setToolTip'):
-            text = bsc_core.auto_encode(text)
+            text = bsc_core.auto_string(text)
             #
             text = text.replace(' ', '&nbsp;')
             text = text.replace('<', '&lt;')
@@ -570,7 +570,7 @@ class QtTreeWidgetItem(
             else:
                 title_text = self._get_name_text_(column)
             #
-            title_text = bsc_core.auto_encode(title_text)
+            title_text = bsc_core.auto_string(title_text)
             #
             title_text = title_text.replace('<', '&lt;').replace('>', '&gt;')
             css += '<h3><p class="no_warp_and_center">{}</p></h3>\n'.format(title_text)

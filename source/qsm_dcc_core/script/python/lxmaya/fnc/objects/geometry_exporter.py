@@ -13,7 +13,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 import lxbasic.fnc.abstracts as bsc_fnc_abstracts
 
@@ -226,7 +226,7 @@ class FncExporterForGeometryAbc(object):
             self._get_file_(self._file_path)
         ]
         #
-        file_ = bsc_dcc_objects.StgFile(self._file_path)
+        file_ = gnl_dcc_objects.StgFile(self._file_path)
         directory_ = file_.directory
         if directory_.get_is_exists() is False:
             directory_.set_create()
@@ -309,7 +309,7 @@ class FncExporterForGeometryUsdOld(object):
         return cmds.file(file_path, **kwargs)
 
     def set_run(self):
-        os_file = bsc_dcc_objects.StgFile(self._file_path)
+        os_file = gnl_dcc_objects.StgFile(self._file_path)
         os_file.create_directory()
         #
         usd_option = self._get_usd_option_(self._option)

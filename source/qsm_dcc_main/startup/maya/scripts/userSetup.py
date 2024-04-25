@@ -83,7 +83,7 @@ class Setup(object):
     @classmethod
     def setup_workspace_gui(cls):
         def fnc_():
-            import lxbasic.dcc.scripts as bsd_dcc_scripts
+            import lxgeneral.dcc.scripts as bsd_dcc_scripts
 
             _fnc = bsd_dcc_scripts.ScpCbkGui().execute
             mya_core.CallbackOpt(_fnc, 'NewSceneOpened').register()

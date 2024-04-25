@@ -18,7 +18,7 @@ class W0(prx_widgets.PrxBaseWindow):
         self.add_widget(self._sub_label)
         self._sub_label.setFixedHeight(20)
         self._sub_label._set_name_draw_font_(gui_qt_core.QtFonts.SubTitle)
-        self._sub_label._set_name_text_option_to_align_center_()
+        self._sub_label._set_name_align_h_center_()
 
         self._ipt = prx_widgets.PrxInputAsStgTask()
         self.add_widget(self._ipt)

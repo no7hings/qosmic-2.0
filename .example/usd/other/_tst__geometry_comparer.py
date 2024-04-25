@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
 import lxusd.fnc.objects as usd_fnc_objects
 
@@ -11,12 +11,12 @@ print usd_fnc_objects.FncComparerForGeometry(
     )
 ).generate_results(
     check_status_includes=[
-        bsc_dcc_core.DccMeshCheckStatus.Addition,
-        bsc_dcc_core.DccMeshCheckStatus.Deletion,
+        gnl_dcc_core.DccMeshCheckStatus.Addition,
+        gnl_dcc_core.DccMeshCheckStatus.Deletion,
         #
-        bsc_dcc_core.DccMeshCheckStatus.PathChanged,
-        bsc_dcc_core.DccMeshCheckStatus.PathExchanged,
+        gnl_dcc_core.DccMeshCheckStatus.PathChanged,
+        gnl_dcc_core.DccMeshCheckStatus.PathExchanged,
         #
-        bsc_dcc_core.DccMeshCheckStatus.FaceVerticesChanged
+        gnl_dcc_core.DccMeshCheckStatus.FaceVerticesChanged
     ]
 )

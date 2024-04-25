@@ -96,7 +96,7 @@ def set_geometry_usd_export_(rsv_task, rsv_scene_properties, frame_range):
 
     import lxbasic.core as bsc_core
 
-    import lxbasic.dcc.objects as bsc_dcc_objects
+    import lxgeneral.dcc.objects as gnl_dcc_objects
     #
     workspace = rsv_scene_properties.get('workspace')
     version = rsv_scene_properties.get('version')
@@ -124,7 +124,7 @@ def set_geometry_usd_export_(rsv_task, rsv_scene_properties, frame_range):
     version_directory_path = version_directory_rsv_unit.get_result(version=version)
 
     test_directory_path = '/l/temp/shanshui/pg_repo/zero_test/ani_temp_tool/anim_farm'
-    test_directory = bsc_dcc_objects.StgDirectory(test_directory_path)
+    test_directory = gnl_dcc_objects.StgDirectory(test_directory_path)
     if test_directory.get_is_exists() is True:
         bsc_core.EnvBaseMtd.set_python_add(
             test_directory_path
@@ -154,7 +154,7 @@ def set_asset_geometry_abc_export(rsv_task, rsv_scene_properties, frame_range):
 
     import lxbasic.core as bsc_core
 
-    import lxbasic.dcc.objects as bsc_dcc_objects
+    import lxgeneral.dcc.objects as gnl_dcc_objects
     #
     workspace = rsv_scene_properties.get('workspace')
     version = rsv_scene_properties.get('version')
@@ -182,7 +182,7 @@ def set_asset_geometry_abc_export(rsv_task, rsv_scene_properties, frame_range):
     version_directory_path = version_directory_rsv_unit.get_result(version=version)
 
     test_directory_path = '/l/temp/shanshui/pg_repo/zero_test/ani_temp_tool/anim_farm'
-    test_directory = bsc_dcc_objects.StgDirectory(test_directory_path)
+    test_directory = gnl_dcc_objects.StgDirectory(test_directory_path)
     if test_directory.get_is_exists() is True:
         bsc_core.EnvBaseMtd.set_python_add(
             test_directory_path

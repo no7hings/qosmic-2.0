@@ -9,7 +9,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 import lxbasic.fnc.abstracts as bsc_fnc_abstracts
 
@@ -45,7 +45,7 @@ class FncExporterForScene(
         #
         ext_extras = self.get('ext_extras')
         #
-        os_file = bsc_dcc_objects.StgFile(file_path)
+        os_file = gnl_dcc_objects.StgFile(file_path)
         os_file.create_directory()
         #
         option = dict(
@@ -89,12 +89,12 @@ class FncExporterForScene(
             )
         #
         if ext_extras:
-            file_src = bsc_dcc_objects.StgFile(mya_dcc_objects.Scene.get_current_file_path())
-            file_tgt = bsc_dcc_objects.StgFile(file_path)
+            file_src = gnl_dcc_objects.StgFile(mya_dcc_objects.Scene.get_current_file_path())
+            file_tgt = gnl_dcc_objects.StgFile(file_path)
             for i_ext in ext_extras:
                 i_src = '{}.{}'.format(file_src.path_base, i_ext)
                 i_tgt = '{}.{}'.format(file_tgt.path_base, i_ext)
-                bsc_dcc_objects.StgFile(i_src).copy_to_file(i_tgt)
+                gnl_dcc_objects.StgFile(i_src).copy_to_file(i_tgt)
         #
         if self._results:
             for i in self._results:
@@ -145,7 +145,7 @@ class FncExporterForPreview(
         cls, file_path, root, use_default_material=False, frame=(0, 0), size=(1024, 1024), persp_view=True,
         default_material_color=None
     ):
-        output_file = bsc_dcc_objects.StgFile(file_path)
+        output_file = gnl_dcc_objects.StgFile(file_path)
         output_file_path_base = output_file.path_base
         ext = output_file.ext
         compression = ext[1:]
@@ -240,7 +240,7 @@ class FncExporterForPreview(
 
     @classmethod
     def _set_render_(cls, file_path, root, persp_view=True, size=(1024, 1024), frame=(0, 0)):
-        output_file = bsc_dcc_objects.StgFile(file_path)
+        output_file = gnl_dcc_objects.StgFile(file_path)
         output_file_path_base = output_file.path_base
         ext = output_file.ext
         compression = ext[1:]
@@ -329,7 +329,7 @@ class FncExporterForPreview(
             )
 
     def _set_snapshot_run_(self):
-        self._file_obj = bsc_dcc_objects.StgFile(self._file_path)
+        self._file_obj = gnl_dcc_objects.StgFile(self._file_path)
         file_path_base = self._file_obj.path_base
         #
         jpg_file_path = '{}.snapshot/image{}'.format(file_path_base, '.jpg')
@@ -341,7 +341,7 @@ class FncExporterForPreview(
             self._root,
             frame=frame
         )
-        jpg_seq_file = bsc_dcc_objects.StgFile(jpg_seq_file_path)
+        jpg_seq_file = gnl_dcc_objects.StgFile(jpg_seq_file_path)
         if self._option.get('convert_to_dot_mov') is True:
             if jpg_seq_file.get_exists_units():
                 bsc_storage.VdoFileOpt(
@@ -350,7 +350,7 @@ class FncExporterForPreview(
                     jpg_seq_file_path
                 )
         else:
-            jpg_seq_file = bsc_dcc_objects.StgFile(jpg_seq_file_path)
+            jpg_seq_file = gnl_dcc_objects.StgFile(jpg_seq_file_path)
             exist_files = jpg_seq_file.get_exists_units()
             if exist_files:
                 jpg_seq_file.get_exists_units()[0].copy_to_file(
@@ -360,7 +360,7 @@ class FncExporterForPreview(
         self._results = [mov_file_path]
 
     def _set_render_run_(self):
-        self._file_obj = bsc_dcc_objects.StgFile(self._file_path)
+        self._file_obj = gnl_dcc_objects.StgFile(self._file_path)
         file_path_base = self._file_obj.path_base
         #
         jpg_file_path = '{}.render/image{}'.format(file_path_base, '.exr')
@@ -371,7 +371,7 @@ class FncExporterForPreview(
             jpg_file_path,
             self._mya_root_dag_path.path
         )
-        jpg_seq_file = bsc_dcc_objects.StgFile(jpg_seq_file_path)
+        jpg_seq_file = gnl_dcc_objects.StgFile(jpg_seq_file_path)
         if self._option.get('convert_to_dot_mov') is True:
             if jpg_seq_file.get_exists_units():
                 bsc_storage.VdoFileOpt(

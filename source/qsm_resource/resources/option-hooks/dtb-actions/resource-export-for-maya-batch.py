@@ -6,9 +6,9 @@ import lxgui.core as gui_core
 
 def main(session):
     def yes_fnc_():
-        import lxbasic.dcc.core as bsc_dcc_core
+        import lxgeneral.dcc.core as gnl_dcc_core
 
-        s_c = bsc_dcc_core.SocketConnectForMaya()
+        s_c = gnl_dcc_core.SocketConnectForMaya()
         if s_c.get_is_valid():
             print 'AAA'
 

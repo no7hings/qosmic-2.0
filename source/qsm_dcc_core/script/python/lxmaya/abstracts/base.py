@@ -5,7 +5,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.dcc.abstracts as bsc_dcc_abstracts
+import lxgeneral.dcc.abstracts as gnl_dcc_abstracts
 
 from ..core.wrap import *
 
@@ -32,7 +32,7 @@ class ObjPortsOpt(object):
         return lis
 
 
-class AbsMyaPort(bsc_dcc_abstracts.AbsDccPort):
+class AbsMyaPort(gnl_dcc_abstracts.AbsDccPort):
     PATHSEP = mya_core.MyaUtil.PORT_PATHSEP
     KEY = 'port'
 
@@ -395,7 +395,7 @@ class AbsMyaPort(bsc_dcc_abstracts.AbsDccPort):
         )
 
 
-class AbsMyaNodeConnection(bsc_dcc_abstracts.AbsDccNodeConnection):
+class AbsMyaNodeConnection(gnl_dcc_abstracts.AbsDccNodeConnection):
     def __init__(self, source, target):
         super(AbsMyaNodeConnection, self).__init__(source, target)
 
@@ -438,7 +438,7 @@ class AbsMaUuidDef(object):
 
 # noinspection PyUnusedLocal
 class AbsMyaNode(
-    bsc_dcc_abstracts.AbsDccNode,
+    gnl_dcc_abstracts.AbsDccNode,
     AbsMaUuidDef
 ):
     KEY = 'maya node'
@@ -803,7 +803,7 @@ class AbsMyaNode(
 
 class AbsMyaNodeForFileReference(
     AbsMyaNode,
-    bsc_dcc_abstracts.AbsDccNodeFileReferenceDef
+    gnl_dcc_abstracts.AbsDccNodeFileReferenceDef
 ):
     def __init__(self, path, file_path=None):
         super(AbsMyaNodeForFileReference, self).__init__(path)
@@ -811,7 +811,7 @@ class AbsMyaNodeForFileReference(
         self._init_dcc_node_file_reference_def_(file_path)
 
 
-class AbsMyaNodes(bsc_dcc_abstracts.AbsDccNodes):
+class AbsMyaNodes(gnl_dcc_abstracts.AbsDccNodes):
     def __init__(self, *args):
         super(AbsMyaNodes, self).__init__(*args)
 

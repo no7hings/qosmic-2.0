@@ -7,7 +7,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
 from .. import abstracts as bsc_fnc_abstracts
 
@@ -131,7 +131,7 @@ class FncExporterForDotXgenUsda(
                 i_xgen_collection_name = self._get_xgen_collection_name(
                     i_xgen_collection_file_path
                 )
-                i_dot_xgen_file_reader = bsc_dcc_core.DotXgenOpt(
+                i_dot_xgen_file_reader = gnl_dcc_core.DotXgenOpt(
                     i_xgen_collection_file_path
                 )
                 i_xgen_description_properties = i_dot_xgen_file_reader.get_description_properties()

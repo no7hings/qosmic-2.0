@@ -796,7 +796,7 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
         # directory tree view
         self._directory_prx_view = prx_widgets.PrxTreeView()
         directory_layout.addWidget(self._directory_prx_view.get_widget())
-        self._directory_prx_view.set_header_view_create(
+        self._directory_prx_view.create_header_view(
             [('directory', 1)]
         )
         self._directory_prx_view.connect_item_select_changed_to(
@@ -856,13 +856,13 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
         self._options_prx_node = prx_widgets.PrxNode('options')
         self._left_v_s.add_widget(self._options_prx_node)
         #
-        self._entity_prx_view.set_header_view_create(
+        self._entity_prx_view.create_header_view(
             [('name', 3)],
             320-48
         )
         self._entity_prx_view.set_selection_use_single()
         #
-        self._tag_prx_view.set_header_view_create(
+        self._tag_prx_view.create_header_view(
             [('name', 3), ('count', 1)],
             320-48
         )

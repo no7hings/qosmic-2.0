@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 # katana
 from ... import abstracts as ktn_abstracts
 # katana dcc
@@ -9,7 +9,7 @@ from . import node as ktn_dcc_obj_node
 class FileReference(ktn_abstracts.AbsKtnFileReferenceObj):
     DCC_PORT_CLS = ktn_dcc_obj_node.Port
     DCC_CONNECTION_CLS = ktn_dcc_obj_node.Connection
-    STG_FILE_CLS = bsc_dcc_objects.StgFile
+    STG_FILE_CLS = gnl_dcc_objects.StgFile
 
     def __init__(self, path):
         super(FileReference, self).__init__(path)
@@ -18,7 +18,7 @@ class FileReference(ktn_abstracts.AbsKtnFileReferenceObj):
 class TextureReference(ktn_abstracts.AbsKtnFileReferenceObj):
     DCC_PORT_CLS = ktn_dcc_obj_node.Port
     DCC_CONNECTION_CLS = ktn_dcc_obj_node.Connection
-    STG_FILE_CLS = bsc_dcc_objects.StgTexture
+    STG_FILE_CLS = gnl_dcc_objects.StgTexture
 
     def __init__(self, path):
         super(TextureReference, self).__init__(path)

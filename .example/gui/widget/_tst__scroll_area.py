@@ -11,7 +11,7 @@ class W(prx_widgets.PrxBaseWindow):
         wgt = qt_widgets.QtWidget()
         self.add_widget(wgt)
         lot = qt_widgets.QtVBoxLayout(wgt)
-        lot._set_align_as_top_()
+        lot._set_align_top_()
 
         h_s = qt_widgets.QtHScrollBox()
         lot.addWidget(h_s)

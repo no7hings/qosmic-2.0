@@ -3,7 +3,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.dcc.abstracts as bsc_dcc_abstracts
+import lxgeneral.dcc.abstracts as gnl_dcc_abstracts
 # usd
 from ...core.wrap import *
 
@@ -65,7 +65,7 @@ class TransformOpt(AbsUsdOptDef):
 
 class MeshOpt(
     AbsUsdOptDef,
-    bsc_dcc_abstracts.AbsMeshOptDef
+    gnl_dcc_abstracts.AbsMeshOptDef
 ):
     def __init__(self, *args, **kwargs):
         super(MeshOpt, self).__init__(*args, **kwargs)
@@ -321,7 +321,7 @@ class MeshOpt(
 
 class NurbsCurveOpt(
     AbsUsdOptDef,
-    bsc_dcc_abstracts.AbsCurveOptDef
+    gnl_dcc_abstracts.AbsCurveOptDef
 ):
     def __init__(self, *args, **kwargs):
         super(NurbsCurveOpt, self).__init__(*args, **kwargs)
@@ -412,7 +412,7 @@ class NurbsCurveOpt(
 
 class BasisCurveOpt(
     AbsUsdOptDef,
-    bsc_dcc_abstracts.AbsCurveOptDef
+    gnl_dcc_abstracts.AbsCurveOptDef
 ):
     def __init__(self, *args, **kwargs):
         super(BasisCurveOpt, self).__init__(*args, **kwargs)

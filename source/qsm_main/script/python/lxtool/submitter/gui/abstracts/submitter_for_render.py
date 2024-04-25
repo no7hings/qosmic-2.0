@@ -9,7 +9,7 @@ import lxbasic.storage as bsc_storage
 
 import lxbasic.shotgun as bsc_shotgun
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 import lxuniverse.objects as unr_objects
 
@@ -161,7 +161,7 @@ class AbsPnlSubmitterForRenderBase(
         self._set_obj_viewer_build_()
 
     def _set_obj_viewer_build_(self):
-        self._filter_tree_viewer_0.set_header_view_create(
+        self._filter_tree_viewer_0.create_header_view(
             [('name', 3), ('count', 1)],
             self.get_definition_window_size()[0]*(1.0/5.0)-24
         )
@@ -580,7 +580,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
             i_file_path = i_rsv_unit.get_result(version='latest')
             if i_file_path:
                 i_rsv_properties = i_rsv_unit.generate_properties_by_result(i_file_path)
-                i_rsv_unit_file = bsc_dcc_objects.StgFile(i_file_path)
+                i_rsv_unit_file = gnl_dcc_objects.StgFile(i_file_path)
                 i_pixmap = gui_qt_core.GuiQtPixmap.get_by_file_ext_with_tag(
                     i_rsv_unit_file.ext,
                     tag=i_rsv_properties.get('workspace'),
@@ -1162,7 +1162,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
             i_file_path = i_rsv_unit.get_result(version='latest')
             if i_file_path:
                 i_rsv_properties = i_rsv_unit.generate_properties_by_result(i_file_path)
-                i_rsv_unit_file = bsc_dcc_objects.StgFile(i_file_path)
+                i_rsv_unit_file = gnl_dcc_objects.StgFile(i_file_path)
                 i_pixmap = gui_qt_core.GuiQtPixmap.get_by_file_ext_with_tag(
                     i_rsv_unit_file.ext,
                     tag=i_rsv_properties.get('workspace'),

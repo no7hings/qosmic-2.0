@@ -7,7 +7,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 import lxgui.proxy.widgets as prx_widgets
 
@@ -53,7 +53,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
         #
         self._prx_tree_view_for_filter = prx_widgets.PrxTreeView()
         self._prx_tree_view_for_filter.set_selection_use_single()
-        self._prx_tree_view_for_filter.set_header_view_create(
+        self._prx_tree_view_for_filter.create_header_view(
             [('name', 3)],
             self.get_definition_window_size()[0]*(2.0/6.0)-32
         )
@@ -61,7 +61,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
         #
         self._tree_view = prx_widgets.PrxTreeView()
         h_s_0.add_widget(self._tree_view)
-        self._tree_view.set_header_view_create(
+        self._tree_view.create_header_view(
             [('name', 4), ('color-space', 2), ('description', 2)],
             self.get_definition_window_size()[0]*(3.0/4.0)-32
         )
@@ -206,7 +206,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                     #
                     i_descriptions = []
 
-                    i_directory_args_dpt = bsc_dcc_objects.StgTexture.get_directory_args_dpt_as_default_fnc(
+                    i_directory_args_dpt = gnl_dcc_objects.StgTexture.get_directory_args_dpt_as_default_fnc(
                         i_texture_any, ext_tgt
                         )
                     if i_directory_args_dpt:
@@ -293,7 +293,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                     if i_texture_any.get_is_readable() is False:
                         continue
                     #
-                    i_directory_args_dpt = bsc_dcc_objects.StgTexture.get_directory_args_dpt_as_default_fnc(
+                    i_directory_args_dpt = gnl_dcc_objects.StgTexture.get_directory_args_dpt_as_default_fnc(
                         i_texture_any, ext_tgt
                         )
                     if i_directory_args_dpt:
@@ -350,7 +350,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                     i_output_directory_path
                 )
 
-                i_cmd = bsc_dcc_objects.StgTexture._get_unit_tx_create_cmd_by_src_force_(
+                i_cmd = gnl_dcc_objects.StgTexture._get_unit_tx_create_cmd_by_src_force_(
                     i_file_path,
                     search_directory_path=i_output_directory_path,
                 )
@@ -450,7 +450,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
 
                     i_texture_prx_item = i_texture_any.get_obj_gui()
 
-                    i_directory_args_dpt = bsc_dcc_objects.StgTexture.get_directory_args_dpt_as_default_fnc(
+                    i_directory_args_dpt = gnl_dcc_objects.StgTexture.get_directory_args_dpt_as_default_fnc(
                         i_texture_any, ext_tgt
                         )
                     if i_directory_args_dpt:
@@ -505,7 +505,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
 
                     i_texture_prx_item = i_texture_any.get_obj_gui()
 
-                    i_directory_args_dpt = bsc_dcc_objects.StgTexture.get_directory_args_dpt_as_default_fnc(
+                    i_directory_args_dpt = gnl_dcc_objects.StgTexture.get_directory_args_dpt_as_default_fnc(
                         i_texture_any, ext_tgt
                         )
                     if i_directory_args_dpt:
@@ -643,16 +643,16 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
 
                     i_texture_prx_item = i_texture_any.get_obj_gui()
 
-                    i_directory_args_dpt = bsc_dcc_objects.StgTexture.get_directory_args_dpt_fnc(
+                    i_directory_args_dpt = gnl_dcc_objects.StgTexture.get_directory_args_dpt_fnc(
                         i_texture_any, target_extension
                     )
 
                     if scheme == 'default':
-                        i_directory_args_dst = bsc_dcc_objects.StgTexture.get_directory_args_dst_as_default_fnc(
+                        i_directory_args_dst = gnl_dcc_objects.StgTexture.get_directory_args_dst_as_default_fnc(
                             i_texture_any, target_extension, directory
                         )
                     elif scheme == 'separate':
-                        i_directory_args_dst = bsc_dcc_objects.StgTexture.get_directory_args_dst_as_separate_fnc(
+                        i_directory_args_dst = gnl_dcc_objects.StgTexture.get_directory_args_dst_as_separate_fnc(
                             i_texture_any, target_extension, directory
                         )
                     else:

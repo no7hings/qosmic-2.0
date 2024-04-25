@@ -3,7 +3,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 import lxbasic.fnc.abstracts as bsc_fnc_abstracts
 # maya
@@ -55,7 +55,7 @@ class FncExporterForProxyGpu(bsc_fnc_abstracts.AbsFncOptionBase):
         start_frame, end_frame = mya_dcc_objects.Scene.get_frame_range(frame)
         o = mya_core.CmdMeshesOpt(mya_location)
         #
-        file_ = bsc_dcc_objects.StgFile(file_path)
+        file_ = gnl_dcc_objects.StgFile(file_path)
         #
         file_.create_directory()
         #

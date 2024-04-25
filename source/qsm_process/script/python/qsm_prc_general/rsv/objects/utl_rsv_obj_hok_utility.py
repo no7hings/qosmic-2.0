@@ -296,7 +296,7 @@ class RsvRecyclerHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             )
 
     def set_maya_texture_repath(self):
-        import lxbasic.dcc.scripts as bsc_dcc_scripts
+        import lxgeneral.dcc.scripts as gnl_dcc_scripts
 
         import lxmaya.dcc.objects as mya_dcc_objects
 
@@ -317,7 +317,7 @@ class RsvRecyclerHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             version=version, variants_extend=dict(variant=variant)
         )
         if directory_path_tgt:
-            bsc_dcc_scripts.ScpDccTextures(
+            gnl_dcc_scripts.ScpDccTextures(
                 mya_dcc_objects.TextureReferences(
                     option=dict(
                         with_reference=False
@@ -334,7 +334,7 @@ class RsvRecyclerHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                 'texture directory is not found'
             )
         #
-        bsc_dcc_scripts.ScpDccTextures(
+        gnl_dcc_scripts.ScpDccTextures(
             mya_dcc_objects.TextureReferences(
                 option=dict(
                     with_reference=False

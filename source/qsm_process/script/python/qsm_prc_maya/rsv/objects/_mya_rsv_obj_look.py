@@ -11,7 +11,7 @@ class RsvDccLookHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
 
         import lxbasic.core as bsc_core
 
-        import lxbasic.dcc.objects as bsc_dcc_objects
+        import lxgeneral.dcc.objects as gnl_dcc_objects
 
         import lxmaya.fnc.objects as mya_fnc_objects
 
@@ -60,7 +60,7 @@ class RsvDccLookHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                         version=version, variants_extend=dict(look_pass=i_look_pass_name)
                     )
                 # main-file(s)
-                i_look_ass_file = bsc_dcc_objects.StgFile(i_look_ass_file_path)
+                i_look_ass_file = gnl_dcc_objects.StgFile(i_look_ass_file_path)
                 if i_look_ass_file.get_is_exists() is False or force is True:
                     mya_fnc_objects.FncExporterForLookAss(
                         option=dict(

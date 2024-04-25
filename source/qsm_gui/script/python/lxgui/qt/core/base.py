@@ -229,14 +229,14 @@ class GuiQtUtil(object):
             '<style>.no_wrap{white-space:nowrap;}</style>\n'
             '<style>.no_warp_and_center{white-space:nowrap;text-align: center;}</style>\n'
         )
-        title = bsc_core.auto_encode(title)
+        title = bsc_core.auto_string(title)
         title = title.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
         css += '<h3><p class="no_warp_and_center">{}</p></h3>\n'.format(title)
 
         if content:
             # add split line
             css += '<p><hr></p>\n'
-            text = bsc_core.auto_encode(content)
+            text = bsc_core.auto_string(content)
             if isinstance(text, six.string_types):
                 texts = text.split('\n')
             elif isinstance(text, (tuple, list)):
@@ -245,7 +245,7 @@ class GuiQtUtil(object):
                 raise RuntimeError()
             #
             for i_text in texts:
-                i_text = bsc_core.auto_encode(i_text)
+                i_text = bsc_core.auto_string(i_text)
                 i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
                 i_text = cls.generate_tool_tip_action_css(i_text)
                 css += '<p class="no_wrap">{}</p>\n'.format(i_text)

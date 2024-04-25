@@ -3,7 +3,7 @@ import fnmatch
 
 import lxbasic.log as bsc_log
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 # maya
 from ...core.wrap import *
 
@@ -81,7 +81,7 @@ class DisplayLayer(mya_abstracts.AbsMyaNode):
 
 class Reference(mya_abstracts.AbsMyaNodeForFileReference):
     DCC_PORT_CLS = mya_dcc_obj_utility.Port
-    STG_FILE_CLS = bsc_dcc_objects.StgFile
+    STG_FILE_CLS = gnl_dcc_objects.StgFile
 
     def __init__(self, path):
         super(Reference, self).__init__(self._to_full_path(path))
@@ -121,7 +121,7 @@ class Reference(mya_abstracts.AbsMyaNodeForFileReference):
         return _
 
     def get_file(self):
-        return bsc_dcc_objects.StgFile(self.get_file_path())
+        return gnl_dcc_objects.StgFile(self.get_file_path())
 
     def get_namespace_path(self):
         return cmds.referenceQuery(self.name, namespace=1)
@@ -156,7 +156,7 @@ class Reference(mya_abstracts.AbsMyaNodeForFileReference):
 
 class FileReference(mya_abstracts.AbsMyaNodeForFileReference):
     DCC_PORT_CLS = mya_dcc_obj_utility.Port
-    STG_FILE_CLS = bsc_dcc_objects.StgFile
+    STG_FILE_CLS = gnl_dcc_objects.StgFile
 
     def __init__(self, path, file_path=None):
         super(FileReference, self).__init__(self._to_full_path(path))
@@ -165,7 +165,7 @@ class FileReference(mya_abstracts.AbsMyaNodeForFileReference):
 
 class TextureReference(mya_abstracts.AbsMyaNodeForFileReference):
     DCC_PORT_CLS = mya_dcc_obj_utility.Port
-    STG_FILE_CLS = bsc_dcc_objects.StgTexture
+    STG_FILE_CLS = gnl_dcc_objects.StgTexture
 
     def __init__(self, path, file_path=None):
         super(TextureReference, self).__init__(self._to_full_path(path), file_path)
@@ -185,7 +185,7 @@ class TextureReference(mya_abstracts.AbsMyaNodeForFileReference):
 
 class Alembic(mya_abstracts.AbsMyaNodeForFileReference):
     DCC_PORT_CLS = mya_dcc_obj_utility.Port
-    STG_FILE_CLS = bsc_dcc_objects.StgFile
+    STG_FILE_CLS = gnl_dcc_objects.StgFile
 
     def __init__(self, path):
         super(Alembic, self).__init__(path)

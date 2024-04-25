@@ -2,11 +2,11 @@
 
 
 def main(session):
-    import lxbasic.dcc.scripts as bsc_dcc_scripts
+    import lxgeneral.dcc.scripts as gnl_dcc_scripts
     # noinspection PyShadowingNames
     import lxmaya.dcc.objects as mya_dcc_objects
     #
-    bsc_dcc_scripts.ScpDccTextures(
+    gnl_dcc_scripts.ScpDccTextures(
         mya_dcc_objects.TextureReferences(
             option=dict(with_reference=True)
         )

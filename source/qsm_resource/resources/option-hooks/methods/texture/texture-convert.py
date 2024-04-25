@@ -5,9 +5,9 @@ def main(session):
     def setup_fnc_():
         import lxbasic.storage as bsc_storage
 
-        import lxbasic.dcc.core as bsc_dcc_core
+        import lxgeneral.dcc.core as gnl_dcc_core
 
-        bsc_dcc_core.OcioSetup(
+        gnl_dcc_core.OcioSetup(
             bsc_storage.StgPathMapper.map_to_current(
                 '/l/packages/pg/third_party/ocio/aces/1.2'
             )
@@ -22,14 +22,14 @@ def main(session):
         ).set_run()
 
     def execute_fnc_(directory_path_, output_directory_path_):
-        directory = bsc_dcc_objects.StgDirectory(directory_path_)
+        directory = gnl_dcc_objects.StgDirectory(directory_path_)
         if directory.get_is_exists() is True:
             if below_enable is True:
                 file_paths = directory.get_all_file_paths(ext_includes=ext_includes)
             else:
                 file_paths = directory.get_file_paths(ext_includes=ext_includes)
             #
-            bsc_dcc_objects.StgDirectory(
+            gnl_dcc_objects.StgDirectory(
                 output_directory_path_
             ).set_create()
             #
@@ -38,12 +38,12 @@ def main(session):
             ) as l_p:
                 for i_file_path in file_paths:
                     l_p.do_update()
-                    if bsc_dcc_objects.StgTexture._get_unit_is_exists_as_tgt_ext_by_src_(
+                    if gnl_dcc_objects.StgTexture._get_unit_is_exists_as_tgt_ext_by_src_(
                             i_file_path,
                             target_ext,
                             output_directory_path_
                     ) is False or force_enable is True:
-                        i_cmd = bsc_dcc_objects.StgTexture._get_unit_create_cmd_as_ext_tgt_by_src_force_(
+                        i_cmd = gnl_dcc_objects.StgTexture._get_unit_create_cmd_as_ext_tgt_by_src_force_(
                             i_file_path,
                             target_ext,
                             output_directory_path_,
@@ -64,7 +64,7 @@ def main(session):
 
     import lxbasic.core as bsc_core
 
-    import lxbasic.dcc.objects as bsc_dcc_objects
+    import lxgeneral.dcc.objects as gnl_dcc_objects
 
     hook_option_opt = session.option_opt
 

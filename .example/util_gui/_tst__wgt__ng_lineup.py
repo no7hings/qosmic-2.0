@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxgui.proxy.widgets as prx_widgets
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 import lxuniverse.objects as unr_objects
 
@@ -26,10 +26,10 @@ class W(prx_widgets.PrxBaseWindow):
         r.create_output_port(
             t, 'output'
         )
-        d = bsc_dcc_objects.StgDirectory('/l/temp/td/dongchangbao/lineup-test')
+        d = gnl_dcc_objects.StgDirectory('/l/temp/td/dongchangbao/lineup-test')
 
         for i in d.get_all_file_paths():
-            i_f = bsc_dcc_objects.StgFile(i)
+            i_f = gnl_dcc_objects.StgFile(i)
             i_n = o_t.create_obj(
                 '/{}'.format(i_f.name_base)
             )

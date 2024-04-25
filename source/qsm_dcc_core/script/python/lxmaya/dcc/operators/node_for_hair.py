@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
-import lxbasic.dcc.abstracts as bsc_dcc_abstracts
+import lxgeneral.dcc.abstracts as gnl_dcc_abstracts
 
 import lxuniverse.core as unr_core
 # maya
@@ -10,7 +10,7 @@ from ...core.wrap import *
 from ... import core as mya_core
 
 
-class XgenDescriptionOpt(bsc_dcc_abstracts.AbsNodeOpt):
+class XgenDescriptionOpt(gnl_dcc_abstracts.AbsNodeOpt):
     def __init__(self, *args, **kwargs):
         super(XgenDescriptionOpt, self).__init__(*args, **kwargs)
 
@@ -58,7 +58,7 @@ class XgenDescriptionOpt(bsc_dcc_abstracts.AbsNodeOpt):
         return counts, points, widths
 
 
-class XgenSplineGuideOpt(bsc_dcc_abstracts.AbsNodeOpt):
+class XgenSplineGuideOpt(gnl_dcc_abstracts.AbsNodeOpt):
     def __init__(self, *args, **kwargs):
         super(XgenSplineGuideOpt, self).__init__(*args, **kwargs)
 

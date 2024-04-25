@@ -49,7 +49,7 @@ class AbsPnlSubmitterForAssetRenderDcc(prx_widgets.PrxSessionWindow):
 
         self._prx_tree_view_for_filter = prx_widgets.PrxTreeView()
         h_s_0.add_widget(self._prx_tree_view_for_filter)
-        self._prx_tree_view_for_filter.set_header_view_create(
+        self._prx_tree_view_for_filter.create_header_view(
             [('name', 3)],
             self.get_definition_window_size()[0]*(1.0/3.0)-32
         )

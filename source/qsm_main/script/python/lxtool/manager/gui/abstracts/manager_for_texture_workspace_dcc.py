@@ -11,7 +11,7 @@ import lxgui.proxy.widgets as prx_widgets
 
 import lxgui.qt.core as gui_qt_core
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 import lxsession.commands as ssn_commands
 
@@ -55,7 +55,7 @@ class _GuiCmdForNewVersion(object):
 
     @classmethod
     def _pull_texture_as_link(cls, w, directory_path_src, directory_path_tgt):
-        file_paths_src = bsc_storage.StgDirectoryMtd.get_file_paths__(
+        file_paths_src = bsc_storage.StgDirectoryMtd.get_file_paths(
             directory_path_src
         )
         if file_paths_src:
@@ -63,7 +63,7 @@ class _GuiCmdForNewVersion(object):
                 for i_file_path in file_paths_src:
                     g_p.do_update()
 
-                    i_texture_src = bsc_dcc_objects.StgTexture(
+                    i_texture_src = gnl_dcc_objects.StgTexture(
                         i_file_path
                     )
 
@@ -388,13 +388,13 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
                 g_p.do_update()
 
     def _set_tx_create_data_update_at_(self, directory_path_src, directory_path_tgt, force_enable=False, ext_tgt='.tx'):
-        file_paths_src = bsc_storage.StgDirectoryMtd.get_file_paths__(
+        file_paths_src = bsc_storage.StgDirectoryMtd.get_file_paths(
             directory_path_src
         )
         if file_paths_src:
             with bsc_log.LogProcessContext.create(maximum=len(file_paths_src), label='texture-tx create running') as g_p:
                 for i_file_path in file_paths_src:
-                    i_texture_src = bsc_dcc_objects.StgTexture(
+                    i_texture_src = gnl_dcc_objects.StgTexture(
                         i_file_path
                     )
                     if i_texture_src.ext != ext_tgt:
@@ -429,7 +429,7 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
 
                 # print i_file_path, i_output_directory_path
 
-                i_cmd = bsc_dcc_objects.StgTexture._get_unit_tx_create_cmd_by_src_force_(
+                i_cmd = gnl_dcc_objects.StgTexture._get_unit_tx_create_cmd_by_src_force_(
                     i_file_path,
                     search_directory_path=i_output_directory_path,
                 )

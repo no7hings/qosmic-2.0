@@ -3,7 +3,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.texture as bsc_texture
+import lxgeneral.texture as gnl_texture
 # gui
 import lxgui.core as gui_core
 
@@ -137,7 +137,7 @@ class AbsPnlBuilderForTexture(prx_widgets.PrxSessionWindow):
         self._prx_tree_view = prx_widgets.PrxTreeView()
         s.add_widget(self._prx_tree_view)
 
-        self._prx_tree_view.set_header_view_create(
+        self._prx_tree_view.create_header_view(
             [('name', 4)],
             self.get_definition_window_size()[0]-32
         )
@@ -186,7 +186,7 @@ class AbsPnlBuilderForTexture(prx_widgets.PrxSessionWindow):
         self._gui_texture_opt.restore()
         self._gui_texture_opt.gui_add_root()
         if bsc_storage.StgPathMtd.get_is_file(f):
-            m = bsc_texture.TxrMethodForBuild.generate_instance()
+            m = gnl_texture.TxrMethodForBuild.generate_instance()
             texture_args = m.generate_all_texture_args(f)
             if texture_args:
                 self._texture_name, texture_data = texture_args

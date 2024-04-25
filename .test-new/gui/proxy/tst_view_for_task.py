@@ -11,16 +11,15 @@ class W(prx_widgets.PrxBaseWindow):
         wgt = qt_widgets.QtWidget()
         self.add_widget(wgt)
         lot = qt_widgets.QtVBoxLayout(wgt)
-        lot._set_align_as_top_()
+        lot._set_align_top_()
 
-        c = prx_widgets.PrxHTabGroup()
+        c = prx_widgets.PrxViewForTask()
         lot.addWidget(c.widget)
 
-        t_0 = prx_widgets.PrxTreeView()
-        c.add_widget(t_0, name='TEST-0')
+        c.set_title('QSM_TST.sam.mod.modeling')
 
-        t_1 = prx_widgets.PrxTreeView()
-        c.add_widget(t_1, name='TEST-1')
+        c.set_root('Z:/projects/QSM_TST/assets/chr/sam/work/user.nothings/mod.modeling')
+        # c.set_root('X:/QSM_TST/Assets')
 
 
 if __name__ == '__main__':

@@ -1443,7 +1443,7 @@ class PrxInputAsResolverEntity(_AbsPrxInputExtra):
         super(PrxInputAsResolverEntity, self).__init__(*args, **kwargs)
         self.widget.setMaximumHeight(160)
         self.widget.setMinimumHeight(160)
-        self._prx_input.set_header_view_create(
+        self._prx_input.create_header_view(
             [('name', 2), ('update', 1)],
             320
         )
@@ -1608,7 +1608,7 @@ class PrxInputAsNodes(_AbsPrxInputExtra):
         super(PrxInputAsNodes, self).__init__(*args, **kwargs)
         self.widget.setMaximumHeight(162)
         self.widget.setMinimumHeight(162)
-        self._prx_input.set_header_view_create(
+        self._prx_input.create_header_view(
             [('name', 1)],
             320
         )
@@ -1802,7 +1802,7 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
     def __init__(self, *args, **kwargs):
         super(PrxInputAsFiles, self).__init__(*args, **kwargs)
         self._qt_widget.setFixedHeight(162)
-        self._prx_input.set_header_view_create(
+        self._prx_input.create_header_view(
             [('name', 3), ('update', 1)],
             480
         )

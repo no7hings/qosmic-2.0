@@ -20,7 +20,7 @@ class PrxInputForAsset(prx_abstracts.AbsPrxWidget):
 
         self._qt_layout_0 = qt_widgets.QtHBoxLayout(self.get_widget())
         self._qt_layout_0.setContentsMargins(*[0]*4)
-        # self._qt_layout_0._set_align_as_top_()
+        # self._qt_layout_0._set_align_top_()
         self._qt_path_input = qt_widgets.QtInputAsPath()
         self._qt_layout_0.addWidget(self._qt_path_input)
 

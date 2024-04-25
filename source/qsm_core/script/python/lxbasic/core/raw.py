@@ -18,9 +18,15 @@ import collections
 import itertools
 
 
-def auto_encode(text):
+def auto_string(text):
     if isinstance(text, six.text_type):
         return text.encode('utf-8')
+    return text
+
+
+def auto_unicode(text):
+    if not isinstance(text, six.text_type):
+        return text.decode('utf-8')
     return text
 
 
@@ -852,7 +858,7 @@ class RawStrUnderlineMtd(object):
     @classmethod
     def find_words(cls, string):
         if isinstance(string, six.text_type):
-            string = auto_encode(string)
+            string = auto_string(string)
         return re.findall(r'([A-Za-z]+)', string)
 
 

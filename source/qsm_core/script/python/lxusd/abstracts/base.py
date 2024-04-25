@@ -3,7 +3,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
 import lxuniverse.core as unr_core
 
@@ -118,7 +118,7 @@ class AbsUsdObjScene(unr_abstracts.AbsObjScene):
         #
         _obj = obj_type.create_obj(obj_path)
         _obj._usd_obj = usd_prim
-        if bsc_dcc_core.DccUtil.get_is_ui_mode() is True:
+        if gnl_dcc_core.DccUtil.get_is_ui_mode() is True:
             import lxgui.qt.core as gui_qt_core
 
             if obj_type_name == usd_core.UsdNodeTypes.Xform:

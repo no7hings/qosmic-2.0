@@ -21,7 +21,7 @@ option:
 #
 hook_option:
     rez:
-        extend_packages: ['usd', 'arnold', 'arnold_usd', 'aces']
+        extend_packages: ['qsm_main', 'usd', 'opengl', 'maya_pyside2', 'python27']
 #
 resolver:
     filter: 'branch=asset'

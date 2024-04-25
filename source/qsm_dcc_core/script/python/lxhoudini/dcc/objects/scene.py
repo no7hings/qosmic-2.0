@@ -9,9 +9,9 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.dcc.abstracts as bsc_dcc_abstracts
+import lxgeneral.dcc.abstracts as gnl_dcc_abstracts
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 import lxuniverse.objects as unv_objects
 
@@ -31,8 +31,8 @@ __all__ = [
 
 
 # noinspection RegExpSimplifiable,PyUnusedLocal
-class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
-    FILE_CLS = bsc_dcc_objects.StgFile
+class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
+    FILE_CLS = gnl_dcc_objects.StgFile
     UNIVERSE_CLS = unv_objects.ObjUniverse
 
     def __init__(self):
@@ -95,7 +95,7 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
             #
             hou.hipFile.clear(suppress_save_prompt=True)
             #
-            f = bsc_dcc_objects.StgFile(file_path)
+            f = gnl_dcc_objects.StgFile(file_path)
             f.create_directory()
             #
             pos_method_run_fnc_()
@@ -106,7 +106,7 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
         def no_fnc_():
             hou.hipFile.clear(suppress_save_prompt=True)
             #
-            f = bsc_dcc_objects.StgFile(file_path)
+            f = gnl_dcc_objects.StgFile(file_path)
             f.create_directory()
             #
             pos_method_run_fnc_()

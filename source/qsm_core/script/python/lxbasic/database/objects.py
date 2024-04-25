@@ -15,7 +15,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.texture as bsc_texture
+import lxgeneral.texture as gnl_texture
 
 from . import base as _base
 
@@ -937,7 +937,7 @@ class DtbNodeOptForRscVersion(object):
         texture_paths = directory_opt.get_file_paths(ext_includes=['.jpg'])
         if texture_paths:
             texture_path = texture_paths[0]
-            m = bsc_texture.TxrMethodForBuild.generate_instance()
+            m = gnl_texture.TxrMethodForBuild.generate_instance()
             return m.generate_all_texture_args(texture_path)
 
     def get_texture_preview_assigns(self):

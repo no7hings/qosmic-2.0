@@ -3,7 +3,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
 import lxbasic.storage as bsc_storage
 
@@ -43,7 +43,7 @@ def main(session):
                             continue
                     #
                     self.append_cmd(
-                        bsc_dcc_core.MayaProcess.generate_command(
+                        gnl_dcc_core.MayaProcess.generate_command(
                             'method=fbx-to-usd&fbx={}&usd={}&use_update_mode={}'.format(
                                 _i_fbx_file_path,
                                 _i_usd_file_path,

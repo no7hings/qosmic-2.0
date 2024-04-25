@@ -1,7 +1,7 @@
 # coding:utf-8
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
-d = bsc_dcc_core.DotMaOptOld(
+d = gnl_dcc_core.DotMaOptOld(
         '/data/f/test_sequence/butterfly_a.ma'
     )
 

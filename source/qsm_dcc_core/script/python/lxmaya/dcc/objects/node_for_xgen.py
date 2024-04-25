@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 # maya
 from ... import abstracts as mya_abstracts
 # maya dcc objects
@@ -10,7 +10,7 @@ from . import node_for_dag as _node_for_dag
 
 class XgnPalette(mya_abstracts.AbsMyaNodeForFileReference):
     DCC_PORT_CLS = _utility.Port
-    STG_FILE_CLS = bsc_dcc_objects.StgFile
+    STG_FILE_CLS = gnl_dcc_objects.StgFile
 
     def __init__(self, path, file_path=None):
         super(XgnPalette, self).__init__(
@@ -24,7 +24,7 @@ class XgnDescription(
     mya_abstracts.AbsMyaShapeDef,
 ):
     DCC_PORT_CLS = _utility.Port
-    STG_FILE_CLS = bsc_dcc_objects.StgFile
+    STG_FILE_CLS = gnl_dcc_objects.StgFile
     TRANSFORM_CLS = _node_for_dag.Transform
 
     def __init__(self, path, file_path=None):

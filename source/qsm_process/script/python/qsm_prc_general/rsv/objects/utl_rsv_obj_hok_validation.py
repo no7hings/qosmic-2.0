@@ -13,7 +13,7 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
 
         import lxbasic.core as bsc_core
 
-        import lxbasic.dcc.objects as bsc_dcc_objects
+        import lxgeneral.dcc.objects as gnl_dcc_objects
 
         check_dict = {}
         with bsc_log.LogProcessContext.create(maximum=len(dcc_objs), label='check texture') as g_p:
@@ -30,7 +30,7 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                     file_paths_0, file_paths_1, file_paths_2, file_paths_3, file_paths_4, file_paths_5
                 ]
                 for j_port_path, j_file_path in i_obj.reference_raw.items():
-                    j_texture = bsc_dcc_objects.StgTexture(j_file_path)
+                    j_texture = gnl_dcc_objects.StgTexture(j_file_path)
                     j_texture_tiles = j_texture.get_exists_units()
                     if j_file_path in check_dict:
                         j_check_results = check_dict[j_file_path]
@@ -125,7 +125,7 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
 
         import lxbasic.storage as bsc_storage
 
-        import lxbasic.dcc.objects as bsc_dcc_objects
+        import lxgeneral.dcc.objects as gnl_dcc_objects
 
         import qsm_prc_general.rsv.objects as gnl_rsv_objects
 
@@ -157,7 +157,7 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                     i_file_paths_0, i_file_paths_1
                 ]
                 for j_port_path, j_file_path in i_obj.reference_raw.items():
-                    j_texture = bsc_dcc_objects.StgTexture(j_file_path)
+                    j_texture = gnl_dcc_objects.StgTexture(j_file_path)
                     j_texture_tiles = j_texture.get_exists_units()
                     if j_file_path in check_dict:
                         j_check_results = check_dict[j_file_path]
@@ -380,7 +380,7 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
     def execute_maya_geometry_topology_check(self, validation_checker):
         import lxbasic.core as bsc_core
 
-        import lxbasic.dcc.core as bsc_dcc_core
+        import lxgeneral.dcc.core as gnl_dcc_core
 
         import lxmaya.dcc.objects as mya_dcc_objects
 
@@ -431,13 +431,13 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             model_file_path
         )
         warning_es = [
-            bsc_dcc_core.DccMeshCheckStatus.Addition,
-            bsc_dcc_core.DccMeshCheckStatus.Deletion,
-            bsc_dcc_core.DccMeshCheckStatus.PathChanged,
+            gnl_dcc_core.DccMeshCheckStatus.Addition,
+            gnl_dcc_core.DccMeshCheckStatus.Deletion,
+            gnl_dcc_core.DccMeshCheckStatus.PathChanged,
         ]
         error_es = [
-            bsc_dcc_core.DccMeshCheckStatus.PathExchanged,
-            bsc_dcc_core.DccMeshCheckStatus.FaceVerticesChanged,
+            gnl_dcc_core.DccMeshCheckStatus.PathExchanged,
+            gnl_dcc_core.DccMeshCheckStatus.FaceVerticesChanged,
         ]
         results = fnc_geometry_comparer.generate_results()
         for i_src_gmt_path, i_tgt_gmt_path, i_description in results:
@@ -748,7 +748,7 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                             )
 
     def execute_katana_geometry_topology_check(self, validation_checker):
-        import lxbasic.dcc.core as bsc_dcc_core
+        import lxgeneral.dcc.core as gnl_dcc_core
 
         import lxkatana.core as ktn_core
 
@@ -826,13 +826,13 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                 )
             )
             warning_es = [
-                bsc_dcc_core.DccMeshCheckStatus.Addition,
-                bsc_dcc_core.DccMeshCheckStatus.Deletion,
-                bsc_dcc_core.DccMeshCheckStatus.PathChanged,
-                bsc_dcc_core.DccMeshCheckStatus.PathExchanged,
+                gnl_dcc_core.DccMeshCheckStatus.Addition,
+                gnl_dcc_core.DccMeshCheckStatus.Deletion,
+                gnl_dcc_core.DccMeshCheckStatus.PathChanged,
+                gnl_dcc_core.DccMeshCheckStatus.PathExchanged,
             ]
             error_es = [
-                bsc_dcc_core.DccMeshCheckStatus.FaceVerticesChanged,
+                gnl_dcc_core.DccMeshCheckStatus.FaceVerticesChanged,
             ]
             results = fnc_geometry_comparer.generate_results()
             for i_src_gmt_path, i_tgt_gmt_path, i_description in results:

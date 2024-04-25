@@ -11,9 +11,9 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
-import lxbasic.dcc.abstracts as bsc_dcc_abstracts
+import lxgeneral.dcc.abstracts as gnl_dcc_abstracts
 
 import lxuniverse.core as unr_core
 # maya
@@ -42,7 +42,7 @@ class AbsOm2FncDef(object):
 
 
 # noinspection PyUnusedLocal
-class TransformOpt(bsc_dcc_abstracts.AbsNodeOpt):
+class TransformOpt(gnl_dcc_abstracts.AbsNodeOpt):
     def __init__(self, *args, **kwargs):
         super(TransformOpt, self).__init__(*args, **kwargs)
 
@@ -103,8 +103,8 @@ class TransformOpt(bsc_dcc_abstracts.AbsNodeOpt):
 
 # noinspection PyUnusedLocal
 class MeshOpt(
-    bsc_dcc_abstracts.AbsNodeOpt,
-    bsc_dcc_abstracts.AbsMeshOptDef,
+    gnl_dcc_abstracts.AbsNodeOpt,
+    gnl_dcc_abstracts.AbsMeshOptDef,
     AbsOm2FncDef
 ):
     COMPONENT_PATHSEP = '.'
@@ -568,12 +568,12 @@ class MeshOpt(
     def mark_uuids(self):
         # use transform
         dic = {}
-        port = self._obj.transform.get_port(bsc_dcc_core.DccPort.GEOMETRY_UUIDS)
+        port = self._obj.transform.get_port(gnl_dcc_core.DccPort.GEOMETRY_UUIDS)
         if port.get_is_exists() is False:
             port.set_create(raw_type='string')
         #
-        dic[bsc_dcc_core.DccMeshData.FaceVertices] = self.get_face_vertices_as_uuid()
-        dic[bsc_dcc_core.DccMeshData.Points] = self.get_points_as_uuid()
+        dic[gnl_dcc_core.DccMeshData.FaceVertices] = self.get_face_vertices_as_uuid()
+        dic[gnl_dcc_core.DccMeshData.Points] = self.get_points_as_uuid()
 
         port.set(json.dumps(dic))
 
@@ -630,7 +630,7 @@ class MeshOpt(
 
 
 class MeshChecker(
-    bsc_dcc_abstracts.AbsNodeOpt
+    gnl_dcc_abstracts.AbsNodeOpt
 ):
     def __init__(self, *args, **kwargs):
         super(MeshChecker, self).__init__(*args, **kwargs)
@@ -661,7 +661,7 @@ class MeshChecker(
 
 # noinspection PyUnusedLocal
 class NurbsCurveOpt(
-    bsc_dcc_abstracts.AbsNodeOpt,
+    gnl_dcc_abstracts.AbsNodeOpt,
     AbsOm2FncDef,
 ):
     def __init__(self, *args):
@@ -714,7 +714,7 @@ class NurbsCurveOpt(
 
 
 class Om2SurfaceOpt(
-    bsc_dcc_abstracts.AbsNodeOpt,
+    gnl_dcc_abstracts.AbsNodeOpt,
     AbsOm2FncDef,
 ):
     def __init__(self, *args):

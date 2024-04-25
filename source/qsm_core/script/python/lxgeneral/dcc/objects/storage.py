@@ -7,15 +7,15 @@ import lxbasic.log as bsc_log
 
 import lxbasic.storage as bsc_storage
 
-from .. import abstracts as bsc_dcc_abstracts
+from .. import abstracts as gnl_dcc_abstracts
 
 
-class StgDirectory(bsc_dcc_abstracts.AbsStgDirectory):
+class StgDirectory(gnl_dcc_abstracts.AbsStgDirectory):
     def __init__(self, path):
         super(StgDirectory, self).__init__(path)
 
 
-class StgFile(bsc_dcc_abstracts.AbsStgFile):
+class StgFile(gnl_dcc_abstracts.AbsStgFile):
     STG_DIRECTORY_CLS = StgDirectory
 
     def __init__(self, path):
@@ -46,7 +46,7 @@ class StgFile(bsc_dcc_abstracts.AbsStgFile):
 StgDirectory.STG_FILE_CLS = StgFile
 
 
-class StgFileForMultiply(bsc_dcc_abstracts.AbsStgFile):
+class StgFileForMultiply(gnl_dcc_abstracts.AbsStgFile):
     STG_DIRECTORY_CLS = StgDirectory
     RE_MULTIPLY_PATTERNS = [r'.*?(\$F.*?)[\.]']
 
@@ -72,7 +72,7 @@ class StgFileForMultiply(bsc_dcc_abstracts.AbsStgFile):
             return new_file_path
 
 
-class StgJson(bsc_dcc_abstracts.AbsStgFile):
+class StgJson(gnl_dcc_abstracts.AbsStgFile):
     STG_DIRECTORY_CLS = StgDirectory
 
     def __init__(self, path):
@@ -91,7 +91,7 @@ class StgJson(bsc_dcc_abstracts.AbsStgFile):
         ).set_write(raw)
 
 
-class StgYaml(bsc_dcc_abstracts.AbsStgFile):
+class StgYaml(gnl_dcc_abstracts.AbsStgFile):
     STG_DIRECTORY_CLS = StgDirectory
 
     def __init__(self, path):
@@ -108,7 +108,7 @@ class StgYaml(bsc_dcc_abstracts.AbsStgFile):
         ).set_write(raw)
 
 
-class StgTexture(bsc_dcc_abstracts.AbsStgTexture):
+class StgTexture(gnl_dcc_abstracts.AbsStgTexture):
     STG_DIRECTORY_CLS = StgDirectory
     RE_SEQUENCE_PATTERN = r'.*?(####).*?'
 

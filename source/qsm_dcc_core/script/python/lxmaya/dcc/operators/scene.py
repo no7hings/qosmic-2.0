@@ -7,13 +7,13 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.abstracts as bsc_dcc_abstracts
+import lxgeneral.dcc.abstracts as gnl_dcc_abstracts
 # maya
 from ... import core as mya_core
 
 
 # noinspection PyUnusedLocal
-class SceneOpt(bsc_dcc_abstracts.AbsSceneOpt):
+class SceneOpt(gnl_dcc_abstracts.AbsSceneOpt):
     def __init__(self, *args, **kwargs):
         """
         stage is universe

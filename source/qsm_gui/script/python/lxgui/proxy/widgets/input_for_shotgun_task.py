@@ -57,7 +57,7 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
 
         l_0 = gui_qt_wgt_base.QtHBoxLayout(self.get_widget())
         l_0.setContentsMargins(*[0]*4)
-        l_0._set_align_as_top_()
+        l_0._set_align_top_()
 
         self.__qt_scheme_input = gui_qt_wgt_input.QtInputAsBubbleWithChoose()
         l_0.addWidget(self.__qt_scheme_input)

@@ -6,7 +6,7 @@ def main(session):
 
     import lxbasic.core as bsc_core
     #
-    import lxbasic.dcc.objects as bsc_dcc_objects
+    import lxgeneral.dcc.objects as gnl_dcc_objects
     #
     import qsm_prc_general.ssn.objects as gnl_ssn_objects
     #
@@ -15,7 +15,7 @@ def main(session):
     option_opt = session.option_opt
 
     file_path = option_opt.get('file')
-    file_ = bsc_dcc_objects.StgFile(file_path)
+    file_ = gnl_dcc_objects.StgFile(file_path)
     if file_.get_is_exists() is False:
         raise IOError(
             bsc_log.Log.trace_method_error(

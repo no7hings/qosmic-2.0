@@ -41,7 +41,7 @@ def do_export_asset_scene(rsv_task, rsv_scene_properties):
 
     import lxbasic.core as bsc_core
 
-    import lxbasic.dcc.objects as bsc_dcc_objects
+    import lxgeneral.dcc.objects as gnl_dcc_objects
 
     import lxmaya.dcc.objects as mya_dcc_objects
     #
@@ -64,7 +64,7 @@ def do_export_asset_scene(rsv_task, rsv_scene_properties):
     maya_scene_file_path = maya_scene_file_rsv_unit.get_result(version=version)
 
     test_directory_path = '/l/temp/shanshui/pg_repo/zero_test/ani_temp_tool/anim_farm'
-    test_directory = bsc_dcc_objects.StgDirectory(test_directory_path)
+    test_directory = gnl_dcc_objects.StgDirectory(test_directory_path)
     if test_directory.get_is_exists() is True:
         bsc_core.EnvBaseMtd.set_python_add(
             test_directory_path

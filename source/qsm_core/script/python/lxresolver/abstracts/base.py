@@ -7,8 +7,6 @@ import os
 
 import re
 
-import glob
-
 import platform
 
 import fnmatch
@@ -24,6 +22,8 @@ import threading
 import lxbasic.content as bsc_content
 
 import lxbasic.resource as bsc_resource
+
+import lxbasic.scan as bsc_scan
 
 import lxbasic.log as bsc_log
 
@@ -321,7 +321,7 @@ class AbsRsvPattern(object):
         if p is not None:
             enable, p_fnmatch = cls._pattern__get_fnmatch_args(p)
             if enable is True:
-                _ = glob.glob(p_fnmatch) or []
+                _ = bsc_scan.ScanGlob.glob(p_fnmatch) or []
                 if _:
                     # sort by number
                     _.sort(key=lambda x: bsc_core.RawTextMtd.to_number_embedded_args(x))
@@ -503,7 +503,7 @@ class AbsRsvMatcher(object):
         if pattern is not None:
             enable, glob_pattern = self.__generate_fnmatch_args(pattern)
             if enable is True:
-                _ = glob.glob(glob_pattern) or []
+                _ = bsc_scan.ScanGlob.glob(glob_pattern) or []
                 if _:
                     # sort by number
                     _.sort(key=lambda x: bsc_core.RawTextMtd.to_number_embedded_args(x))

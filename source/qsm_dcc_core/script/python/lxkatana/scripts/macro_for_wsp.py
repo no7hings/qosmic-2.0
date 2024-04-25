@@ -15,7 +15,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
 import lxgui.core as gui_core
 # katana
@@ -1906,7 +1906,7 @@ class ScpInstanceColorMap(object):
             w.set_window_show(exclusive=False)
 
             w.start(
-                bsc_dcc_core.PythonProcess.generate_command(
+                gnl_dcc_core.PythonProcess.generate_command(
                     'method=generator-grow-cache&grow_usd={}&image={}&uv_map_name={}&cache_usd={}'.format(
                         grow_usd_file_path, image_file_path, uv_map_name, cache_usd_file_path
                     )
@@ -1939,7 +1939,7 @@ class ScpInstanceColorMap(object):
             w.set_window_show(exclusive=False)
 
             w.start(
-                bsc_dcc_core.PythonProcess.generate_command(
+                gnl_dcc_core.PythonProcess.generate_command(
                     (
                         'method=generator-instance-cache'
                         '&grow_usd={}&instance_usd={}&image={}&uv_map_name={}&cache_usd={}&cache_json={}'

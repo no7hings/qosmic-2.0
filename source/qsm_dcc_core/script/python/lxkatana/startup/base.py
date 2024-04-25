@@ -74,7 +74,7 @@ class KatanaWorkspaceSetup(object):
         import lxkatana.core as ktn_core
 
         if ktn_core.KtnUtil.get_is_ui_mode():
-            import lxbasic.dcc.scripts as bsd_dcc_scripts
+            import lxgeneral.dcc.scripts as bsd_dcc_scripts
 
             fnc = bsd_dcc_scripts.ScpCbkGui().execute
             ktn_core.CallbackMtd.add_as_scene_new(fnc)

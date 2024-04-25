@@ -22,7 +22,7 @@ class QtHBoxLayout(QtWidgets.QHBoxLayout):
         self.setContentsMargins(*gui_core.GuiSize.LayoutDefaultContentsMargins)
         self.setSpacing(gui_core.GuiSize.LayoutDefaultSpacing)
 
-    def _set_align_as_top_(self):
+    def _set_align_top_(self):
         self.setAlignment(
             QtCore.Qt.AlignTop
         )
@@ -48,7 +48,7 @@ class QtHBoxLayout(QtWidgets.QHBoxLayout):
         layout = self
         c = layout.count()
         if c:
-            item = layout.itemAt(c-1)
+            item = layout.itemAt(c - 1)
             if item:
                 widget = item.widget()
                 widget.close()
@@ -72,14 +72,14 @@ class QtVBoxLayout(QtWidgets.QVBoxLayout):
         self.setContentsMargins(*gui_core.GuiSize.LayoutDefaultContentsMargins)
         self.setSpacing(gui_core.GuiSize.LayoutDefaultSpacing)
 
-    def _set_align_as_top_(self):
+    def _set_align_top_(self):
         self.setAlignment(
-            QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop
+            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop
         )
 
     def _set_align_bottom_(self):
         self.setAlignment(
-            QtCore.Qt.AlignHCenter|QtCore.Qt.AlignBottom
+            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignBottom
         )
 
     def _clear_all_widgets_(self):
@@ -118,8 +118,8 @@ class QtGridLayout(QtWidgets.QGridLayout):
 
         index = c
         #
-        column = index%d
-        row = int(index/d)
+        column = index % d
+        row = int(index / d)
         self.addWidget(widget, row, column, 1, 1)
 
 

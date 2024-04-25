@@ -5,14 +5,14 @@ import lxbasic.log as bsc_log
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.abstracts as bsc_dcc_abstracts
+import lxgeneral.dcc.abstracts as gnl_dcc_abstracts
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 # usd dcc
 from . import geometry as usd_dcc_opt_geometry
 
 
-class SceneOpt(bsc_dcc_abstracts.AbsSceneOpt):
+class SceneOpt(gnl_dcc_abstracts.AbsSceneOpt):
     def __init__(self, stage, namespace=None):
         self._stage = stage
         if namespace is not None:
@@ -34,7 +34,7 @@ class SceneOpt(bsc_dcc_abstracts.AbsSceneOpt):
 
     @classmethod
     def _get_mesh_data_content_(cls, stage, file_path, yml_file_path):
-        yml_file = bsc_dcc_objects.StgYaml(yml_file_path)
+        yml_file = gnl_dcc_objects.StgYaml(yml_file_path)
         if yml_file.get_is_exists() is True:
             if yml_file.set_read():
                 bsc_log.Log.trace_method_result(

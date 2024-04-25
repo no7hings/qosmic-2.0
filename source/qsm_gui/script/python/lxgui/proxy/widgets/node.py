@@ -216,7 +216,7 @@ class PrxNodePortGroup(_port.AbsPrxPortBaseDef):
             port_cur.set_main_widget(widget_cur)
             layout_cur = gui_qt_wgt_base.QtHBoxLayout(widget_cur)
             layout_cur.setContentsMargins(0, 0, 0, 0)
-            layout_cur._set_align_as_top_()
+            layout_cur._set_align_top_()
             port_cur._set_layout_(layout_cur)
             #
             cur_key_widget = gui_qt_wgt_utility.QtTranslucentWidget()
@@ -225,7 +225,7 @@ class PrxNodePortGroup(_port.AbsPrxPortBaseDef):
             layout_cur.addWidget(cur_key_widget)
             cur_key_layout = gui_qt_wgt_base.QtHBoxLayout(cur_key_widget)
             cur_key_layout.setContentsMargins(0, 0, 0, 0)
-            cur_key_layout._set_align_as_top_()
+            cur_key_layout._set_align_top_()
             # + key
             cur_key_layout.addWidget(port_cur._prx_port_enable._qt_widget)
             cur_key_layout.addWidget(port_cur._prx_port_label._qt_widget)
@@ -244,7 +244,7 @@ class PrxNodePortGroup(_port.AbsPrxPortBaseDef):
             layout_cur = gui_qt_wgt_base.QtHBoxLayout(widget_cur)
             layout_cur.setContentsMargins(0, 0, 0, 0)
             layout_cur.setSpacing(2)
-            layout_cur._set_align_as_top_()
+            layout_cur._set_align_top_()
             port_cur._set_layout_(layout_cur)
             key_widget_cur = gui_qt_wgt_utility.QtTranslucentWidget()
             # key_widget_cur.hide()
@@ -252,7 +252,7 @@ class PrxNodePortGroup(_port.AbsPrxPortBaseDef):
             layout_cur.addWidget(key_widget_cur)
             cur_key_layout = gui_qt_wgt_base.QtHBoxLayout(key_widget_cur)
             cur_key_layout.setContentsMargins(0, 0, 0, 0)
-            cur_key_layout._set_align_as_top_()
+            cur_key_layout._set_align_top_()
             # + key
             #   + enable
             cur_key_layout.addWidget(port_cur._prx_port_enable._qt_widget)

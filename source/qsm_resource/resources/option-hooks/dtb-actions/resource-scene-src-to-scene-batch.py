@@ -5,7 +5,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
 import lxbasic.database as bsc_database
 
@@ -42,7 +42,7 @@ def main(session):
                             continue
                     #
                     self.append_cmd(
-                        bsc_dcc_core.MayaProcess.generate_command(
+                        gnl_dcc_core.MayaProcess.generate_command(
                             bsc_core.ArgDictStringOpt(
                                 option=dict(
                                     method='scene-src-to-scene',

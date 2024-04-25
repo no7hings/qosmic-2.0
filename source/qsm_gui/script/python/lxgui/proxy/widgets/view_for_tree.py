@@ -318,7 +318,7 @@ class PrxTreeView(
     def set_all_items_collapse(self):
         self.view.collapseAll()
 
-    def set_header_view_create(self, data, max_width=0):
+    def create_header_view(self, data, max_width=0):
         self.view._set_view_header_(data, max_width)
 
     def set_tag_filter_all_keys_src(self, keys):

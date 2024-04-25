@@ -694,13 +694,6 @@ class QtThreadDef(object):
         return gui_qt_core.QtMethodThread(self)
 
 
-class QtTextLabel(
-    QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtNameBaseDef,
-):
-    pass
-
-
 class QtTextItem(
     QtWidgets.QWidget,
     gui_qt_abstracts.AbsQtNameBaseDef,

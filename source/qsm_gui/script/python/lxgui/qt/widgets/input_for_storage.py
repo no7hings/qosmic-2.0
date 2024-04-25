@@ -1,6 +1,10 @@
 # coding=utf-8
 import os
 
+import lxbasic.scan as bsc_scan
+
+import lxbasic.core as bsc_core
+
 import lxbasic.storage as bsc_storage
 # gui
 from ... import core as gui_core
@@ -302,7 +306,7 @@ class QtInputAsStorage(
         if value:
             path = bsc_storage.StgPathMtd.clear_pathsep_to(value)
             p = path + '*'
-            results = bsc_storage.StgPathMtd.glob_fnc(p)
+            results = bsc_scan.ScanGlob.glob(p)
             if self._storage_scheme in {self.StorageScheme.DirectoryOpen, self.StorageScheme.DirectorySave}:
                 return [i for i in results if os.path.isdir(i)]
             return results

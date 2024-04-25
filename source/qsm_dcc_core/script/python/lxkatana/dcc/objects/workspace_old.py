@@ -11,7 +11,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 # katana
 from ...core.wrap import *
 
@@ -885,7 +885,7 @@ class AssetWorkspaceOld(object):
             #
             dcc_obj.get_port('saveTo').set(file_path)
             #
-            os_file = bsc_dcc_objects.StgFile(file_path)
+            os_file = gnl_dcc_objects.StgFile(file_path)
             os_file.create_directory()
             dcc_obj.ktn_obj.WriteToLookFile(None, file_path)
             #
@@ -946,7 +946,7 @@ class AssetWorkspaceOld(object):
                                             break
         #
         if dict_:
-            bsc_dcc_objects.StgJson(
+            gnl_dcc_objects.StgJson(
                 file_path
             ).set_write(dict_)
 
@@ -1081,7 +1081,7 @@ class AssetWorkspaceOld(object):
         atr_path = '{}.userProperties.usd.variants.asset.surface.override.file'.format(asset_root)
         _ = self._get_stage_port_raw_(atr_path)
         if _:
-            f = bsc_dcc_objects.StgFile(_)
+            f = gnl_dcc_objects.StgFile(_)
             # TODO fix this bug
             if f.get_is_naming_match('hi.uv_map.usd'):
                 return '{}/hi.usd'.format(

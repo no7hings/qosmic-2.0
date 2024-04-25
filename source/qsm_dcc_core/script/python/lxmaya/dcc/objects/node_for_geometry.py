@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.log as bsc_log
 
-import lxbasic.dcc.abstracts as bsc_dcc_abstracts
+import lxgeneral.dcc.abstracts as gnl_dcc_abstracts
 
 import lxgui.core as gui_core
 # maya
@@ -14,7 +14,7 @@ from . import utility as _utility
 from . import node_for_dag as _node_for_dag
 
 
-class MeshComponent(bsc_dcc_abstracts.AbsGuiExtraDef):
+class MeshComponent(gnl_dcc_abstracts.AbsGuiExtraDef):
     PATHSEP = '.'
     TYPE_DICT = {
         'f': 'face',
@@ -62,7 +62,7 @@ class MeshComponent(bsc_dcc_abstracts.AbsGuiExtraDef):
         return self.__str__()
 
 
-class Component(bsc_dcc_abstracts.AbsGuiExtraDef):
+class Component(gnl_dcc_abstracts.AbsGuiExtraDef):
     PATHSEP = '.'
     TYPE_DICT = {
         'f': 'face',

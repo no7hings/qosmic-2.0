@@ -5,7 +5,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
 import lxbasic.database as bsc_database
 
@@ -51,7 +51,7 @@ def main(session):
                     _i_texture_search_json_file_path = _i_dtb_version_opt.get_file('texture-json-search-file')
 
                     self.append_cmd(
-                        bsc_dcc_core.MayaProcess.generate_command(
+                        gnl_dcc_core.MayaProcess.generate_command(
                             bsc_core.ArgDictStringOpt(
                                 option=dict(
                                     method='scene-to-look',

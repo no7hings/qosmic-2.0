@@ -19,11 +19,11 @@ root-step-choice:
     release: {}
     temporary: {}
 # <root>
-project-root-windows-dir: 'z:/shows'
-project-root-linux-dir: '/production/shows'
+project-root-windows-dir: 'Z:/projects'
+project-root-linux-dir: '/production/projects'
 #
-project-root_primary-windows-dir: 'z:/shows'
-project-root_primary-linux-dir: '/production/shows'
+project-root_primary-windows-dir: 'Z:/projects'
+project-root_primary-linux-dir: '/production/projects'
 #
 project-root_secondary-windows-dir: 't:/prod'
 project-root_secondary-linux-dir: '/t/prod'

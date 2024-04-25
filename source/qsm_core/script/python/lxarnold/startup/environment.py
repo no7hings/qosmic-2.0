@@ -11,10 +11,10 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.abstracts as bsc_dcc_abstracts
+import lxgeneral.dcc.abstracts as gnl_dcc_abstracts
 
 
-class AbsArnoldSetup(bsc_dcc_abstracts.AbsDccSetup):
+class AbsArnoldSetup(gnl_dcc_abstracts.AbsDccSetup):
     def __init__(self, root):
         super(AbsArnoldSetup, self).__init__(root)
 

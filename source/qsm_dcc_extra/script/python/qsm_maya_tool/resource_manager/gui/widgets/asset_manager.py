@@ -360,7 +360,7 @@ class _GuiRigOpt(
     def __init__(self, window, session, prx_tree_view):
         super(_GuiRigOpt, self).__init__(window, session)
         self._prx_tree_view = prx_tree_view
-        self._prx_tree_view.set_header_view_create(
+        self._prx_tree_view.create_header_view(
             [('name', 2), ('description', 2)],
             self._window.get_definition_window_size()[0] * (2.0 / 3.0) - 48
         )
@@ -776,7 +776,7 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
 
         self._rig_tag_tree_view = prx_widgets.PrxTreeView()
         h_s_0.add_widget(self._rig_tag_tree_view)
-        self._rig_tag_tree_view.set_header_view_create(
+        self._rig_tag_tree_view.create_header_view(
             [('name', 2)],
             self.get_definition_window_size()[0]
         )

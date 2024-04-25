@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.storage as bsc_storage
 
-import lxbasic.texture as bsc_texture
+import lxgeneral.texture as gnl_texture
 
 
 class ScpTextureResourceData(object):
@@ -20,7 +20,7 @@ class ScpTextureResourceData(object):
         texture_paths = directory_opt.get_file_paths(ext_includes=['.tx'])
         if texture_paths:
             texture_path = texture_paths[0]
-            m = bsc_texture.TxrMethodForBuild.generate_instance()
+            m = gnl_texture.TxrMethodForBuild.generate_instance()
             texture_args = m.generate_all_texture_args(texture_path)
             if texture_args:
                 texture_name, texture_data = texture_args

@@ -11,7 +11,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.texture as bsc_texture
+import lxgeneral.texture as gnl_texture
 # usd
 import lxusd.core as usd_core
 # gui
@@ -106,7 +106,7 @@ if QT_USD_FLAG is True:
             self._init_action_base_def_(self)
             self._init_thread_base_def_(self)
 
-            m = bsc_texture.TxrMethodForBuild.generate_instance()
+            m = gnl_texture.TxrMethodForBuild.generate_instance()
             self._texture_types = m.get_usd_includes()
             self._texture_type_mapper = m.get_usd_mapper()
 

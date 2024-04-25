@@ -1,14 +1,14 @@
 # coding:utf-8
 import lxbasic.log as bsc_log
 
-import lxbasic.dcc.abstracts as bsc_dcc_abstracts
+import lxgeneral.dcc.abstracts as gnl_dcc_abstracts
 # houdini
 from ..core.wrap import *
 
 from .. import core as hou_core
 
 
-class AbsHouPort(bsc_dcc_abstracts.AbsDccPort):
+class AbsHouPort(gnl_dcc_abstracts.AbsDccPort):
     PATHSEP = hou_core.HouUtil.PORT_PATHSEP
 
     def __init__(self, node, name, port_assign):
@@ -40,7 +40,7 @@ class AbsHouPort(bsc_dcc_abstracts.AbsDccPort):
             hou.parm(self.path).set(value)
 
 
-class AbsHouObj(bsc_dcc_abstracts.AbsDccNode):
+class AbsHouObj(gnl_dcc_abstracts.AbsDccNode):
     PATHSEP = '/'
 
     def __init__(self, path):
@@ -160,7 +160,7 @@ class AbsHouObj(bsc_dcc_abstracts.AbsDccNode):
 
 class AbsHouFileReferenceObj(
     AbsHouObj,
-    bsc_dcc_abstracts.AbsDccNodeFileReferenceDef
+    gnl_dcc_abstracts.AbsDccNodeFileReferenceDef
 ):
     def __init__(self, path, file_path=None):
         super(AbsHouFileReferenceObj, self).__init__(path)
@@ -168,7 +168,7 @@ class AbsHouFileReferenceObj(
         self._init_dcc_node_file_reference_def_(file_path)
 
 
-class AbsHouObjs(bsc_dcc_abstracts.AbsDccNodes):
+class AbsHouObjs(gnl_dcc_abstracts.AbsDccNodes):
     FILE_REFERENCE_FILE_PORT_PATHS_DICT = {}
 
     def __init__(self, *args):

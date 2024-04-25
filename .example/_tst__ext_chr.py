@@ -1,7 +1,7 @@
 # coding:utf-8
 import glob
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 d_p = '/l/projects/m1/data/layout_exteral_assets/chr'
 
@@ -9,7 +9,7 @@ f_p_s = '/l/projects/m1/data/layout_exteral_assets/chr/{old_name}/rig/rig_layout
 
 f_p_t = '/l/prod/cgm/work/assets/chr/{new_name}/{step}/{task}/maya/scenes/{new_name}.{step}.{task}.v001.ma'
 
-d = bsc_dcc_objects.StgDirectory(d_p)
+d = gnl_dcc_objects.StgDirectory(d_p)
 
 lis = []
 
@@ -51,7 +51,7 @@ for i in d.get_children():
             elif j_step == 'rig':
                 rs.append(j_f_t)
             # print i_f_s, j_f_t
-            # bsc_dcc_objects.StgFile(
+            # gnl_dcc_objects.StgFile(
             #     i_f_s
             # ).copy_to_file(
             #     j_f_t

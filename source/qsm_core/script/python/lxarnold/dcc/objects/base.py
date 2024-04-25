@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxuniverse.objects as unv_objects
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 # arnold
 from ...core.wrap import *
 
@@ -15,7 +15,7 @@ class Scene(and_abstracts.AbsObjScene):
             ai.AI_NODE_SHADER,
         ]
 
-    FILE_CLS = bsc_dcc_objects.StgFile
+    FILE_CLS = gnl_dcc_objects.StgFile
     UNIVERSE_CLS = unv_objects.ObjUniverse
 
     def __init__(self, option=None):

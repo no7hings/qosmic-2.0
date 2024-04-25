@@ -5,7 +5,7 @@ import glob
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 # maya
 from ...core.wrap import *
 
@@ -320,7 +320,7 @@ class Palette(XGenObj):
         return list_
 
     def get_description_files(self):
-        return [bsc_dcc_objects.StgFile(i) for i in self.get_description_file_paths()]
+        return [gnl_dcc_objects.StgFile(i) for i in self.get_description_file_paths()]
 
     def get_file_description_nodes(self):
         pass
@@ -401,7 +401,7 @@ class Module(Object):
 
 
 class Port(object):
-    STG_FILE_CLS = bsc_dcc_objects.StgFile
+    STG_FILE_CLS = gnl_dcc_objects.StgFile
 
     # noinspection PyUnusedLocal,PyShadowingBuiltins
     def __init__(self, name, platte=None, description=None, object=None):

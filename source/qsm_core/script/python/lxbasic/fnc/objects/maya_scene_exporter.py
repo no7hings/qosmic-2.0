@@ -1,7 +1,7 @@
 # coding:utf-8
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 from .. import abstracts as bsc_fnc_abstracts
 
@@ -24,10 +24,10 @@ class FncExporterForDotMaInfo(
         root = self.get('root')
 
         base, ext = os.path.splitext(file_path)
-        r = bsc_dcc_core.DotMaOpt(file_path)
+        r = gnl_dcc_core.DotMaOpt(file_path)
         _info = r.get_mesh_info(root=root)
 
-        bsc_dcc_objects.StgYaml('{}.info.yml'.format(base)).set_write(_info)
+        gnl_dcc_objects.StgYaml('{}.info.yml'.format(base)).set_write(_info)
 
 
 class FncExporterForDotMa(
@@ -47,7 +47,7 @@ class FncExporterForDotMa(
         file_path_src = self.get('file_path_src')
         file_path_tgt = self.get('file_path_tgt')
 
-        bsc_dcc_objects.StgFile(file_path_src).copy_to_file(file_path_tgt)
+        gnl_dcc_objects.StgFile(file_path_src).copy_to_file(file_path_tgt)
         # copy xgen files
         self._copy_scene_xgen_collection_files_to(
             file_path_src,

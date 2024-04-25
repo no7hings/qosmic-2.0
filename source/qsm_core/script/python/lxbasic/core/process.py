@@ -70,22 +70,49 @@ class PrcBaseMtd(object):
         text = text.decode('utf-8')
         text = text.replace(u'\u2018', "'").replace(u'\u2019', "'")
         sys.stderr.write(text.encode('utf-8'))
+    
+    @classmethod
+    def get_error_trace_fnc(cls):
+        if platform.system() == 'Windows':
+            return cls._windows_error_trace
+        elif platform.system() == 'Linux':
+            return cls._linux_error_trace
+        else:
+            raise RuntimeError()
 
     @classmethod
-    def _windows_decode(cls, text):
+    def _windows_decode_fnc(cls, text):
         return text.decode('gbk', 'ignore')
 
     @classmethod
-    def _linux_decode(cls, text):
+    def _linux_decode_fnc(cls, text):
         return text.decode('utf-8')
 
     @classmethod
-    def _windows_encode(cls, text):
+    def _windows_encode_fnc(cls, text):
         return text.encode('gbk')
 
     @classmethod
-    def _linux_encode(cls, text):
+    def _linux_encode_fnc(cls, text):
         return text.encode('utf-8')
+
+    @classmethod
+    def get_decode_fnc(cls):
+        if platform.system() == 'Windows':
+            return cls._windows_decode_fnc
+        elif platform.system() == 'Linux':
+            return cls._linux_decode_fnc
+        else:
+            raise RuntimeError()
+
+    @classmethod
+    def get_encode_fnc(cls):
+        if platform.system() == 'Windows':
+            return cls._windows_encode_fnc
+        elif platform.system() == 'Linux':
+            return cls._linux_encode_fnc
+        else:
+            raise RuntimeError()
 
     @classmethod
     def get_environs(cls, **kwargs):
@@ -226,7 +253,10 @@ class PrcBaseMtd(object):
         t_0.start()
 
     @classmethod
-    def execute(cls, cmd):
+    def execute(cls, cmd, ignore_return_code=None):
+        decode_fnc = cls.get_decode_fnc()
+        encode_fnc = cls.get_encode_fnc()
+
         s_p = subprocess.Popen(
             cmd,
             shell=True,
@@ -239,11 +269,17 @@ class PrcBaseMtd(object):
         #
         output, unused_err = s_p.communicate()
         if s_p.returncode != 0:
-            for i in output.decode('utf-8').splitlines():
-                sys.stderr.write(i+'\n')
+            if ignore_return_code is not None:
+                if s_p.returncode == ignore_return_code:
+                    return output.splitlines()
+            output = decode_fnc(output)
+            output_lines = output.splitlines()
+            for i in output_lines:
+                if i:
+                    sys.stdout.write(encode_fnc(i)+'\n')
             raise subprocess.CalledProcessError(s_p.returncode, cmd)
         s_p.wait()
-        return output.decode('utf-8').splitlines()
+        return output.splitlines()
 
     @classmethod
     def execute_with_result_in_windows(cls, cmd, **kwargs):
@@ -416,14 +452,8 @@ class PrcBaseMtd(object):
 
     @classmethod
     def execute_as_block(cls, cmd, **kwargs):
-        if platform.system() == 'Windows':
-            decode_fnc = cls._windows_decode
-            encode_fnc = cls._windows_encode
-        elif platform.system() == 'Linux':
-            decode_fnc = cls._linux_decode
-            encode_fnc = cls._linux_encode
-        else:
-            raise RuntimeError()
+        decode_fnc = cls.get_decode_fnc()
+        encode_fnc = cls.get_encode_fnc()
 
         clear_environ = kwargs.get('clear_environ', False)
         if clear_environ == 'auto':

@@ -9,7 +9,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 # maya
 from ...core.wrap import *
 
@@ -284,7 +284,7 @@ class AbsFileReferences(object):
             port = obj.get_port('fileTextureName')
             file_path = port.get()
             if file_path is not None:
-                file_ = bsc_dcc_objects.StgFile(file_path)
+                file_ = gnl_dcc_objects.StgFile(file_path)
                 # sequence
                 if obj.get('useFrameExtension'):
                     exists_file_paths = file_.get_exists_unit_paths()

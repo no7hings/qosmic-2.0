@@ -5,11 +5,11 @@
 #     if <keyword> in value auto resolve to final value
 # ******************************************************************************************************************** #
 # <root>
-project-root-windows-dir: 'l:/prod'
-project-root-linux-dir: '/l/prod'
+project-root-windows-dir: 'Z:/projects'
+project-root-linux-dir: '/production/projects'
 #
-project-root_primary-windows-dir: 'l:/prod'
-project-root_primary-linux-dir: '/l/prod'
+project-root_primary-windows-dir: 'Z:/projects'
+project-root_primary-linux-dir: '/production/projects'
 #
 project-root_secondary-windows-dir: 't:/prod'
 project-root_secondary-linux-dir: '/t/prod'

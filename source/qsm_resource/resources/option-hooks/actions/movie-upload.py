@@ -21,7 +21,7 @@ def main(session):
         )
         _qc_review_file_path = _qc_review_file_rsv_unit.get_result(version=_qc_version)
         #
-        bsc_dcc_objects.StgFile(file_path_).copy_to_file(_qc_review_file_path)
+        gnl_dcc_objects.StgFile(file_path_).copy_to_file(_qc_review_file_path)
         #
         _qc_stg_rsv_task_opt = stg_rsv_scripts.RsvStgTaskOpt(qc_rsv_task_)
         #
@@ -33,7 +33,7 @@ def main(session):
             description=options_kwargs['user.description']
         )
 
-    import lxbasic.dcc.objects as bsc_dcc_objects
+    import lxgeneral.dcc.objects as gnl_dcc_objects
 
     import lxgui.core as gui_core
 

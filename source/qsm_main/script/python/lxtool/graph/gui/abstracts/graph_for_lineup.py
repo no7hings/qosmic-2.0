@@ -67,7 +67,7 @@ class AbsPnlAssetLineup(prx_widgets.PrxSessionWindow):
 
         v_s.set_stretches([1, 1])
 
-        self._rsv_obj_tree_view_0.set_header_view_create(
+        self._rsv_obj_tree_view_0.create_header_view(
             [('name', 3)],
             self.get_definition_window_size()[0]*(1.0/4.0)-24
         )

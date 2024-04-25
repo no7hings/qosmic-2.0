@@ -1,9 +1,9 @@
 # coding:utf-8
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 
 def test():
-    t = bsc_dcc_objects.StgTexture(
+    t = gnl_dcc_objects.StgTexture(
         '/data/f/tx_create_debug/test_1/jiguang_cloth_mask.<udim>.%04d.tx'
         # '/data/f/tx_create_debug/test_1//jiguang_cloth_mask.1001.1001.tx'
     )

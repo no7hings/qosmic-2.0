@@ -7,7 +7,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 # houdini
 from ...core.wrap import *
 
@@ -159,7 +159,7 @@ class TextureReferences(AbsFileReferences):
 
 
 class References(object):
-    STG_FILE_CLS = bsc_dcc_objects.StgFile
+    STG_FILE_CLS = gnl_dcc_objects.StgFile
 
     def __init__(self, *args):
         pass

@@ -156,7 +156,7 @@ class RsvShotgunHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
         )
 
     def execute_version_link(self):
-        import lxbasic.dcc.objects as bsc_dcc_objects
+        import lxgeneral.dcc.objects as gnl_dcc_objects
 
         rsv_scene_properties = self._rsv_scene_properties
 
@@ -185,7 +185,7 @@ class RsvShotgunHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             version=version
         )
 
-        bsc_dcc_objects.StgDirectory(version_directory_path).link_to(
+        gnl_dcc_objects.StgDirectory(version_directory_path).link_to(
             no_version_directory_path, replace=True
         )
 

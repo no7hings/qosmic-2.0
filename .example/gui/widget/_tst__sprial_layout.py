@@ -17,7 +17,7 @@ class W(qt_widgets.QtMainWindow):
         wgt = qt_widgets.QtTranslucentWidget()
         self.setCentralWidget(wgt)
         lot = qt_widgets.QtVBoxLayout(wgt)
-        # lot._set_align_as_top_()
+        # lot._set_align_top_()
 
         button = qt_widgets.QtPressButton()
         lot.addWidget(button)

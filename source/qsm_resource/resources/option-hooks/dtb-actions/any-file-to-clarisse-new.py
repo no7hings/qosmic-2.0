@@ -2,7 +2,7 @@
 
 
 def main(session):
-    import lxbasic.dcc.core as bsc_dcc_core
+    import lxgeneral.dcc.core as gnl_dcc_core
 
     option_opt = session.option_opt
     port = option_opt.get_as_integer('port')
@@ -15,7 +15,7 @@ bsc_core.ExcExtraMtd.execute_python_file(
     file_path, options=dict(resource_location='{resource_location}', file='{file}')
 )
     '''.format(**dict(resource_location=option_opt.get('resource_location'), file=option_opt.get('file')))
-    bsc_dcc_core.SocketConnectForClarisse(port).run(cmd)
+    gnl_dcc_core.SocketConnectForClarisse(port).run(cmd)
 
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
 import lxbasic.content as bsc_content
 
@@ -61,8 +61,8 @@ class AbsFncMatcherForDccMesh(object):
         #
         output_path = path_tgt
         check_statuses = [
-            bsc_dcc_core.DccMeshCheckStatus.FaceVerticesChanged,
-            bsc_dcc_core.DccMeshCheckStatus.PointsChanged
+            gnl_dcc_core.DccMeshCheckStatus.FaceVerticesChanged,
+            gnl_dcc_core.DccMeshCheckStatus.PointsChanged
         ]
         #
         tgt_face_vertices_uuid_has_matched = self._src_face_vertices_uuid in self._tgt_face_vertices_uuids
@@ -84,7 +84,7 @@ class AbsFncMatcherForDccMesh(object):
             if uuid_matched_tgt_paths:
                 output_path = uuid_matched_tgt_paths[0]
                 check_statuses = [
-                    bsc_dcc_core.DccMeshCheckStatus.PathExchanged
+                    gnl_dcc_core.DccMeshCheckStatus.PathExchanged
                 ]
         elif tgt_uuid_has_matched_condition == (True, False):
             tgt_face_vertices_uuid = self._src_face_vertices_uuid
@@ -95,8 +95,8 @@ class AbsFncMatcherForDccMesh(object):
             if uuid_matched_tgt_paths:
                 output_path = uuid_matched_tgt_paths[0]
                 check_statuses = [
-                    bsc_dcc_core.DccMeshCheckStatus.PathExchanged,
-                    bsc_dcc_core.DccMeshCheckStatus.PointsChanged
+                    gnl_dcc_core.DccMeshCheckStatus.PathExchanged,
+                    gnl_dcc_core.DccMeshCheckStatus.PointsChanged
                 ]
         elif tgt_uuid_has_matched_condition == (False, True):
             tgt_points_uuid = self._src_points_uuid
@@ -107,14 +107,14 @@ class AbsFncMatcherForDccMesh(object):
             if uuid_matched_tgt_paths:
                 output_path = uuid_matched_tgt_paths[0]
                 check_statuses = [
-                    bsc_dcc_core.DccMeshCheckStatus.PathExchanged,
-                    bsc_dcc_core.DccMeshCheckStatus.FaceVerticesChanged
+                    gnl_dcc_core.DccMeshCheckStatus.PathExchanged,
+                    gnl_dcc_core.DccMeshCheckStatus.FaceVerticesChanged
                 ]
         elif tgt_uuid_has_matched_condition == (False, False):
             output_path = path_tgt
             check_statuses = [
-                bsc_dcc_core.DccMeshCheckStatus.FaceVerticesChanged,
-                bsc_dcc_core.DccMeshCheckStatus.PointsChanged
+                gnl_dcc_core.DccMeshCheckStatus.FaceVerticesChanged,
+                gnl_dcc_core.DccMeshCheckStatus.PointsChanged
             ]
         #
         self._push_geometry_cache(self._path_src, output_path)
@@ -123,7 +123,7 @@ class AbsFncMatcherForDccMesh(object):
 
     def __get_path_changed_(self):
         output_path = self._path_src
-        check_statuses = [bsc_dcc_core.DccMeshCheckStatus.Deletion]
+        check_statuses = [gnl_dcc_core.DccMeshCheckStatus.Deletion]
         #
         tgt_face_vertices_uuid_has_matched = self._src_face_vertices_uuid in self._tgt_face_vertices_uuids
         tgt_points_uuid_has_matched = self._src_points_uuid in self._tgt_points_uuids
@@ -146,7 +146,7 @@ class AbsFncMatcherForDccMesh(object):
             if uuid_matched_tgt_paths:
                 output_path = uuid_matched_tgt_paths[0]
                 check_statuses = [
-                    bsc_dcc_core.DccMeshCheckStatus.PathChanged
+                    gnl_dcc_core.DccMeshCheckStatus.PathChanged
                 ]
         elif tgt_uuid_has_matched_condition == (True, False):
             tgt_face_vertices_uuid = self._src_face_vertices_uuid
@@ -160,8 +160,8 @@ class AbsFncMatcherForDccMesh(object):
             if uuid_matched_tgt_paths:
                 output_path = uuid_matched_tgt_paths[0]
                 check_statuses = [
-                    bsc_dcc_core.DccMeshCheckStatus.PathChanged,
-                    bsc_dcc_core.DccMeshCheckStatus.PointsChanged
+                    gnl_dcc_core.DccMeshCheckStatus.PathChanged,
+                    gnl_dcc_core.DccMeshCheckStatus.PointsChanged
                 ]
         elif tgt_uuid_has_matched_condition == (False, True):
             tgt_points_uuid = self._src_points_uuid
@@ -175,12 +175,12 @@ class AbsFncMatcherForDccMesh(object):
             if uuid_matched_tgt_paths:
                 output_path = uuid_matched_tgt_paths[0]
                 check_statuses = [
-                    bsc_dcc_core.DccMeshCheckStatus.PathChanged,
-                    bsc_dcc_core.DccMeshCheckStatus.FaceVerticesChanged
+                    gnl_dcc_core.DccMeshCheckStatus.PathChanged,
+                    gnl_dcc_core.DccMeshCheckStatus.FaceVerticesChanged
                 ]
         elif tgt_uuid_has_matched_condition == (False, False):
             output_path = self._path_src
-            check_statuses = [bsc_dcc_core.DccMeshCheckStatus.Deletion]
+            check_statuses = [gnl_dcc_core.DccMeshCheckStatus.Deletion]
         return output_path, check_statuses
 
     def execute(self):
@@ -190,8 +190,8 @@ class AbsFncMatcherForDccMesh(object):
             #
             output_path = path_tgt
             check_statuses = [
-                bsc_dcc_core.DccMeshCheckStatus.FaceVerticesChanged,
-                bsc_dcc_core.DccMeshCheckStatus.PointsChanged
+                gnl_dcc_core.DccMeshCheckStatus.FaceVerticesChanged,
+                gnl_dcc_core.DccMeshCheckStatus.PointsChanged
             ]
             #
             tgt_face_vertices_uuid = self._tgt_data.get(
@@ -204,17 +204,17 @@ class AbsFncMatcherForDccMesh(object):
             tgt_match_condition = tgt_face_vertices_match, tgt_points_match
             #
             if tgt_match_condition == (True, True):
-                check_statuses = [bsc_dcc_core.DccMeshCheckStatus.NonChanged]
+                check_statuses = [gnl_dcc_core.DccMeshCheckStatus.NonChanged]
             elif tgt_match_condition == (True, False):
-                check_statuses = [bsc_dcc_core.DccMeshCheckStatus.PointsChanged]
+                check_statuses = [gnl_dcc_core.DccMeshCheckStatus.PointsChanged]
             elif tgt_match_condition == (False, True):
-                check_statuses = [bsc_dcc_core.DccMeshCheckStatus.FaceVerticesChanged]
+                check_statuses = [gnl_dcc_core.DccMeshCheckStatus.FaceVerticesChanged]
             elif tgt_match_condition == (False, False):
                 output_path, check_statuses = self.__get_path_exchanged_()
         else:
             output_path, check_statuses = self.__get_path_changed_()
         #
-        check_statuses.sort(key=bsc_dcc_core.DccMeshCheckStatus.All.index)
+        check_statuses.sort(key=gnl_dcc_core.DccMeshCheckStatus.All.index)
         return output_path, '+'.join(check_statuses)
 
 
@@ -239,41 +239,41 @@ class AbsFncRepairerForUsdMesh(object):
         # 1
         if self._check_statuses == '+'.join(
             [
-                bsc_dcc_core.DccMeshCheckStatus.FaceVerticesChanged,
-                bsc_dcc_core.DccMeshCheckStatus.PointsChanged
+                gnl_dcc_core.DccMeshCheckStatus.FaceVerticesChanged,
+                gnl_dcc_core.DccMeshCheckStatus.PointsChanged
             ]
         ):
             self.FNC_USD_MESH_CLS(self._usd_prim_src).do_replace()
         elif self._check_statuses == '+'.join(
             [
-                bsc_dcc_core.DccMeshCheckStatus.FaceVerticesChanged
+                gnl_dcc_core.DccMeshCheckStatus.FaceVerticesChanged
             ]
         ):
             self.FNC_USD_MESH_CLS(self._usd_prim_src).do_replace()
         elif self._check_statuses == '+'.join(
             [
-                bsc_dcc_core.DccMeshCheckStatus.PointsChanged
+                gnl_dcc_core.DccMeshCheckStatus.PointsChanged
             ]
         ):
             self.FNC_USD_MESH_CLS(self._usd_prim_src).set_points()
         # 2
         elif self._check_statuses == '+'.join(
             [
-                bsc_dcc_core.DccMeshCheckStatus.Deletion
+                gnl_dcc_core.DccMeshCheckStatus.Deletion
             ]
         ):
             self.FNC_USD_MESH_CLS(self._usd_prim_src).set_create()
         #
         elif self._check_statuses == '+'.join(
             [
-                bsc_dcc_core.DccMeshCheckStatus.PathChanged
+                gnl_dcc_core.DccMeshCheckStatus.PathChanged
             ]
         ):
             self.FNC_USD_MESH_CLS(self._usd_prim_src).do_repath_to(self._path_tgt)
         elif self._check_statuses == '+'.join(
             [
-                bsc_dcc_core.DccMeshCheckStatus.PathChanged,
-                bsc_dcc_core.DccMeshCheckStatus.FaceVerticesChanged
+                gnl_dcc_core.DccMeshCheckStatus.PathChanged,
+                gnl_dcc_core.DccMeshCheckStatus.FaceVerticesChanged
             ]
         ):
             self.FNC_USD_MESH_CLS(self._usd_prim_src).do_repath_to(self._path_tgt)
@@ -285,8 +285,8 @@ class AbsFncRepairerForUsdMesh(object):
             )
         elif self._check_statuses == '+'.join(
             [
-                bsc_dcc_core.DccMeshCheckStatus.PathChanged,
-                bsc_dcc_core.DccMeshCheckStatus.PointsChanged
+                gnl_dcc_core.DccMeshCheckStatus.PathChanged,
+                gnl_dcc_core.DccMeshCheckStatus.PointsChanged
             ]
         ):
             self.FNC_USD_MESH_CLS(self._usd_prim_src).do_repath_to(self._path_tgt)
@@ -294,7 +294,7 @@ class AbsFncRepairerForUsdMesh(object):
         # 3
         elif self._check_statuses == '+'.join(
             [
-                bsc_dcc_core.DccMeshCheckStatus.PathExchanged
+                gnl_dcc_core.DccMeshCheckStatus.PathExchanged
             ]
         ):
             geometry = AbsFncMatcherForDccMesh._pull_geometry_cache(self._path_src)
@@ -304,8 +304,8 @@ class AbsFncRepairerForUsdMesh(object):
             )
         elif self._check_statuses == '+'.join(
             [
-                bsc_dcc_core.DccMeshCheckStatus.PathExchanged,
-                bsc_dcc_core.DccMeshCheckStatus.PointsChanged
+                gnl_dcc_core.DccMeshCheckStatus.PathExchanged,
+                gnl_dcc_core.DccMeshCheckStatus.PointsChanged
             ]
         ):
             geometry = AbsFncMatcherForDccMesh._pull_geometry_cache(self._path_src)
@@ -315,8 +315,8 @@ class AbsFncRepairerForUsdMesh(object):
             )
         elif self._check_statuses == '+'.join(
             [
-                bsc_dcc_core.DccMeshCheckStatus.PathExchanged,
-                bsc_dcc_core.DccMeshCheckStatus.FaceVerticesChanged
+                gnl_dcc_core.DccMeshCheckStatus.PathExchanged,
+                gnl_dcc_core.DccMeshCheckStatus.FaceVerticesChanged
             ]
         ):
             geometry = AbsFncMatcherForDccMesh._pull_geometry_cache(self._path_src)
@@ -404,7 +404,7 @@ class AbsFncComparerForUsdGeometry(_base.AbsFncOptionBase):
         )
         for i_path_tgt in path_addition:
             self._comparer_results.append(
-                (i_path_tgt, i_path_tgt, bsc_dcc_core.DccMeshCheckStatus.Addition)
+                (i_path_tgt, i_path_tgt, gnl_dcc_core.DccMeshCheckStatus.Addition)
             )
 
     def __generate_results(self):
@@ -602,7 +602,7 @@ class AbsFncComparerForDccGeometry(_base.AbsFncOptionBase):
         else:
             if check_statuses == '+'.join(
                 [
-                    bsc_dcc_core.DccMeshCheckStatus.Addition
+                    gnl_dcc_core.DccMeshCheckStatus.Addition
                 ]
             ):
                 self.FNC_REPAIRER_FOR_USD_MESH_CLS.delete_fnc(path_tgt)
@@ -645,6 +645,6 @@ class AbsFncComparerForDccGeometry(_base.AbsFncOptionBase):
         geometry_paths_addition = list(set(dcc_geometry_paths_tgt)-set(dcc_geometry_paths_src)-set(dcc_geometry_paths))
         for i_geometry_path_tgt in geometry_paths_addition:
             list_.append(
-                (i_geometry_path_tgt, i_geometry_path_tgt, bsc_dcc_core.DccMeshCheckStatus.Addition)
+                (i_geometry_path_tgt, i_geometry_path_tgt, gnl_dcc_core.DccMeshCheckStatus.Addition)
             )
         return list_

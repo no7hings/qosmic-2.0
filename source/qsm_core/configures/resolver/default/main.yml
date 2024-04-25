@@ -3,4 +3,4 @@ inherit_key: 'basic'
 #
 key: default
 #
-projects-include: ['dft']
+projects-include: ['QSM_TST_DFT']

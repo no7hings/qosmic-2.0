@@ -3,7 +3,6 @@ option:
     # config used system
     systems:
         - '*-maya'
-        - '*-katana'
     #
     gui:
         name: 'Asset Manager'
@@ -11,7 +10,7 @@ option:
         #
         icon_name: 'application/resource_library'
         tool_tip:
-            - 'Manager asset, etc. rig, assembly'
+            - 'manager resource, etc. rig, assembly'
             - '...'
         #
         size: [720, 720]
@@ -147,8 +146,8 @@ build:
 
     tabs:
         rig:
-            label: 'Rig'
-            label_chs: '绑定'
+            label: 'Rig Resources'
+            label_chs: '绑定资源'
 
     tag-groups:
         utility:

@@ -11,6 +11,8 @@ import functools
 # basic
 import lxbasic.log as bsc_log
 
+import lxbasic.scan as bsc_scan
+
 import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
@@ -29,9 +31,9 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
 
     @classmethod
     def do_startup(cls):
-        import lxbasic.dcc.core as bsc_dcc_core
+        import lxgeneral.dcc.core as gnl_dcc_core
 
-        # bsc_dcc_core.OcioSetup(
+        # gnl_dcc_core.OcioSetup(
         #     bsc_storage.StgPathMapper.map_to_current(
         #         '/l/packages/pg/third_party/ocio/aces/1.2'
         #     )
@@ -68,7 +70,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
         #
         self._tree_view = prx_widgets.PrxTreeView()
         h_s.add_widget(self._tree_view)
-        self._tree_view.set_header_view_create(
+        self._tree_view.create_header_view(
             [('name', 4), ('color-space', 1), ('description', 1)],
             self.get_definition_window_size()[0]/2-32
         )
@@ -159,7 +161,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
             lis = [directory_path]
             if below_enable is True:
                 lis.extend(
-                    bsc_storage.StgDirectoryMtd.get_all_directory_paths__(directory_path)
+                    bsc_scan.ScanBase.get_all_directory_paths(directory_path)
                 )
             return lis
         return []
@@ -196,7 +198,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
             ts.set_start()
 
     def __gui_cache_files(self, directory_path, include_patterns, ext_includes):
-        file_paths = bsc_storage.StgDirectoryMtd.get_file_paths__(directory_path, ext_includes)
+        file_paths = bsc_storage.StgDirectoryMtd.get_file_paths(directory_path, ext_includes)
         dict_ = collections.OrderedDict()
         for i_file_path in file_paths:
             i_file_opt = bsc_storage.StgFileOpt(i_file_path)
@@ -206,10 +208,10 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
         return dict_.keys()
 
     def __gui_add_files(self, file_paths):
-        import lxbasic.dcc.objects as bsc_dcc_objects
+        import lxgeneral.dcc.objects as gnl_dcc_objects
 
         for i_k in file_paths:
-            i_texture_src = bsc_dcc_objects.StgTexture(i_k)
+            i_texture_src = gnl_dcc_objects.StgTexture(i_k)
 
             i_is_create, i_prx_item = self._tree_view_add_opt.gui_add_as(
                 i_texture_src,
@@ -331,14 +333,14 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
             button.set_status_at(index, status)
 
         def run_fnc_():
-            import lxbasic.dcc.objects as bsc_dcc_objects
+            import lxgeneral.dcc.objects as gnl_dcc_objects
 
             for i_index, (i_file_path_src, i_directory_path_tgt) in enumerate(self._target_format_create_data):
                 bsc_storage.StgPathMtd.create_directory(
                     i_directory_path_tgt
                 )
                 i_path_base, i_ext_src = os.path.splitext(i_file_path_src)
-                i_cmd = bsc_dcc_objects.StgTexture._get_unit_create_cmd_as_ext_tgt_by_src_force_(
+                i_cmd = gnl_dcc_objects.StgTexture._get_unit_create_cmd_as_ext_tgt_by_src_force_(
                     i_file_path_src,
                     ext_tgt=ext_tgt,
                     search_directory_path=i_directory_path_tgt,
@@ -485,7 +487,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
                     #
                     i_texture_tgt = i_texture_src.__class__(
                         '{}/{}{}'.format(
-                            directory_path_tgt, bsc_core.auto_encode(i_texture_src.name_base), ext_tgt
+                            directory_path_tgt, bsc_core.auto_string(i_texture_src.name_base), ext_tgt
                         )
                     )
                     if i_texture_src.path == i_texture_tgt.path:

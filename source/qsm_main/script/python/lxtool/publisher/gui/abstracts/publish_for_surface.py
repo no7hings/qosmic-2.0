@@ -9,7 +9,7 @@ import lxbasic.storage as bsc_storage
 
 import lxgui.proxy.widgets as prx_widgets
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 import lxgui.proxy.scripts as gui_prx_scripts
 
@@ -270,7 +270,7 @@ class AbsValidatorOpt(object):
         if file_path in self._item_dict:
             return self._item_dict[file_path]
         #
-        stg_file = bsc_dcc_objects.StgFile(file_path)
+        stg_file = gnl_dcc_objects.StgFile(file_path)
         name = stg_file.get_path_prettify_()
         prx_item = self._result_tree_view.create_item(
             name=name,
@@ -355,7 +355,7 @@ class AbsValidatorOpt(object):
         return prx_item
 
     def _get_file_(self, scene_prx_item, node_prx_item, file_path, description, status):
-        stg_file = bsc_dcc_objects.StgFile(file_path)
+        stg_file = gnl_dcc_objects.StgFile(file_path)
         prx_item = node_prx_item.add_child(
             name=[stg_file.get_path_prettify_(maximum=32), description],
             icon=stg_file.icon,
@@ -367,7 +367,7 @@ class AbsValidatorOpt(object):
         return prx_item
 
     def _get_directory_(self, scene_prx_item, node_prx_item, directory_path, description, status):
-        stg_directory = bsc_dcc_objects.StgDirectory(directory_path)
+        stg_directory = gnl_dcc_objects.StgDirectory(directory_path)
         prx_item = node_prx_item.add_child(
             name=[stg_directory.get_path_prettify_(maximum=32), description],
             icon=stg_directory.icon,
@@ -433,14 +433,14 @@ class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
 
         self._prx_tree_view_for_filter = prx_widgets.PrxTreeView()
         h_s_0.add_widget(self._prx_tree_view_for_filter)
-        self._prx_tree_view_for_filter.set_header_view_create(
+        self._prx_tree_view_for_filter.create_header_view(
             [('name', 3)],
             self.get_definition_window_size()[0]*(1.0/3.0)-32
         )
         #
         self._result_tree_view = prx_widgets.PrxTreeView()
         h_s_0.add_widget(self._result_tree_view)
-        self._result_tree_view.set_header_view_create(
+        self._result_tree_view.create_header_view(
             [('name', 4), ('description', 2)],
             self.get_definition_window_size()[0]*(2.0/3.0)-32
         )
@@ -570,7 +570,7 @@ class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
     def refresh_next_enable_fnc(self):
         self._validation_info_file = self._get_validation_info_file_path_()
         if self._validation_info_file is not None:
-            info = '\n'.join(map(bsc_core.auto_encode, self._get_validation_info_texts_()))
+            info = '\n'.join(map(bsc_core.auto_string, self._get_validation_info_texts_()))
             bsc_storage.StgFileOpt(
                 self._validation_info_file
             ).set_write(

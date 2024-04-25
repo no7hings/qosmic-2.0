@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
 
 cmd = """
@@ -18,4 +18,4 @@ o.reference_file_to(
 """
 
 
-bsc_dcc_core.SocketConnectForClarisse(port=55002).run(cmd)
+gnl_dcc_core.SocketConnectForClarisse(port=55002).run(cmd)

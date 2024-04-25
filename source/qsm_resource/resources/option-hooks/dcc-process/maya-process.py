@@ -88,7 +88,7 @@ def lib_scene_src_to_scene_fnc(option_opt):
 
     import lxbasic.storage as bsc_storage
 
-    import lxbasic.dcc.scripts as bsc_dcc_scripts
+    import lxgeneral.dcc.scripts as gnl_dcc_scripts
 
     import lxmaya.dcc.objects as mya_dcc_objects
 
@@ -142,7 +142,7 @@ def lib_scene_src_to_scene_fnc(option_opt):
         #
         texture_search_directory_path = '/production/library/resource/share/texture/plant-unorganized/tx'
         #
-        bsc_dcc_scripts.ScpDccTextures(
+        gnl_dcc_scripts.ScpDccTextures(
             mya_dcc_objects.TextureReferences(
                 option=dict(
                     with_reference=False

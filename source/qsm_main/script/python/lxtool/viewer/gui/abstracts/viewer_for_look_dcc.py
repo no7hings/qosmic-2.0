@@ -47,11 +47,11 @@ class AbsPnlViewerForShaderDcc(
         self._set_obj_tree_viewer_build_()
 
     def _set_obj_tree_viewer_build_(self):
-        self._filter_tree_viewer_0.set_header_view_create(
+        self._filter_tree_viewer_0.create_header_view(
             [('name', 3), ('count', 1)],
             self.get_definition_window_size()[0]*(1.0/3.0)-24
         )
-        self._obj_tree_viewer_0.set_header_view_create(
+        self._obj_tree_viewer_0.create_header_view(
             [('name', 4), ('type', 2)],
             self.get_definition_window_size()[0]*(2.0/3.0)-24
         )
@@ -180,12 +180,12 @@ class AbsPnlViewerForMaterialDcc(
         self._set_tree_viewer_build_()
 
     def _set_tree_viewer_build_(self):
-        self._filter_tree_viewer_0.set_header_view_create(
+        self._filter_tree_viewer_0.create_header_view(
             [('name', 3), ('count', 1)],
             self.get_definition_window_size()[0]*(1.0/3.0)-24
         )
         #
-        self._obj_tree_viewer_0.set_header_view_create(
+        self._obj_tree_viewer_0.create_header_view(
             [('name', 4), ('type', 2), ('description', 2)],
             self.get_definition_window_size()[0]*(2.0/3.0)-24
         )

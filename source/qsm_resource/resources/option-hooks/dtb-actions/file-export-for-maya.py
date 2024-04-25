@@ -2,7 +2,7 @@
 
 
 def main(session):
-    import lxbasic.dcc.core as bsc_dcc_core
+    import lxgeneral.dcc.core as gnl_dcc_core
     #
     window = session.get_window()
     dtb_opt = session.get_database_opt()
@@ -23,7 +23,7 @@ def main(session):
             file=file_path,
         )
         cmd = """import lxmaya.scripts as mya_scripts;mya_scripts.ScpMayaNetImport({}).execute()""".format(str(data))
-        bsc_dcc_core.SocketConnectForMaya().run(cmd)
+        gnl_dcc_core.SocketConnectForMaya().run(cmd)
 
 
 if __name__ == '__main__':

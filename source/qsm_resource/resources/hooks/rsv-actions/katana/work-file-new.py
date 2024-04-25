@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 import lxkatana.dcc.objects as ktn_dcc_objects
 
@@ -20,7 +20,7 @@ def main(session):
     file_path = rsv_unit.get_result(
         version='new'
     )
-    file_ = bsc_dcc_objects.StgFile(file_path)
+    file_ = gnl_dcc_objects.StgFile(file_path)
     if file_.get_is_exists() is False:
         ktn_dcc_objects.Scene.new_file_with_dialog(
             file_path,

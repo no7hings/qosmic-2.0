@@ -1,7 +1,7 @@
 # coding:utf-8
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 # maya
 from ... import abstracts as mya_abstracts
 
@@ -10,7 +10,7 @@ from . import utility as _utility
 
 class AndMaterialx(mya_abstracts.AbsMyaNodeForFileReference):
     DCC_PORT_CLS = _utility.Port
-    STG_FILE_CLS = bsc_dcc_objects.StgFile
+    STG_FILE_CLS = gnl_dcc_objects.StgFile
 
     def __init__(self, path):
         super(AndMaterialx, self).__init__(path)
@@ -21,7 +21,7 @@ class AndMaterialx(mya_abstracts.AbsMyaNodeForFileReference):
             lis.append(
                 self._create_stg_file_fnc(file_path, port_dcc_path)
             )
-            mtx_reader = bsc_dcc_core.DotMtlxOpt(file_path)
+            mtx_reader = gnl_dcc_core.DotMtlxOpt(file_path)
             for i in mtx_reader.texture_paths:
                 lis.append(
                     self._create_stg_file_fnc(i)

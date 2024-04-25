@@ -339,7 +339,7 @@ class QtListItemWidget(
         self._init_icons_base_def_(self)
         self._init_image_base_def_()
         self._init_names_base_def_(self)
-        self._set_name_text_option_to_align_center_top_()
+        self._set_name_align_h_center_top_()
         self._init_menu_base_def_(self)
         self._init_movie_base_def_()
         #

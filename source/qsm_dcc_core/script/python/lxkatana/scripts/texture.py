@@ -9,7 +9,7 @@ import lxbasic.resource as bsc_resource
 
 import lxbasic.core as bsc_core
 
-import lxbasic.texture as bsc_texture
+import lxgeneral.texture as gnl_texture
 # katana
 from .. import core as ktn_core
 
@@ -604,7 +604,7 @@ class ScpTextureBuildForPaste(object):
 
         self._scheme = scheme
         self._command = None
-        m = bsc_texture.TxrMethodForBuild.generate_instance()
+        m = gnl_texture.TxrMethodForBuild.generate_instance()
         all_texture_args = m.generate_all_texture_args(texture_path)
         if all_texture_args:
             texture_name, texture_data = all_texture_args
@@ -704,7 +704,7 @@ class ScpTextureBuildForPaste(object):
 
     @classmethod
     def create_one(cls, obj_opt, texture_path):
-        m = bsc_texture.TxrMethodForBuild.generate_instance()
+        m = gnl_texture.TxrMethodForBuild.generate_instance()
         texture_arg = m.generate_one_texture_args(texture_path)
         if texture_arg:
             texture_name, texture_type, texture_path_ = texture_arg

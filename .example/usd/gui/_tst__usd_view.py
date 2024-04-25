@@ -11,7 +11,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
 import lxgui.proxy.widgets as prx_widgets
 
@@ -40,7 +40,7 @@ class W(prx_widgets.PrxBaseWindow):
 
 
 if __name__ == '__main__':
-    bsc_dcc_core.OcioSetup(
+    gnl_dcc_core.OcioSetup(
         bsc_storage.StgPathMapper.map_to_current(
             '/job/PLE/bundle/thirdparty/aces/1.2'
         )

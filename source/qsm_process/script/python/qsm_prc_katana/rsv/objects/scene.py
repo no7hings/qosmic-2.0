@@ -278,7 +278,7 @@ class RsvDccSceneHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
     def do_link_asset_scene_src_(self):
         import lxbasic.storage as bsc_storage
 
-        import lxbasic.dcc.objects as bsc_dcc_objects
+        import lxgeneral.dcc.objects as gnl_dcc_objects
 
         rsv_scene_properties = self._rsv_scene_properties
         #
@@ -305,7 +305,7 @@ class RsvDccSceneHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
         scene_src_file_path = scene_src_file_rsv_unit.get_result(version=version)
         #
         if bsc_storage.StgPathMtd.get_is_exists(scene_src_file_path) is False:
-            bsc_dcc_objects.StgFile(
+            gnl_dcc_objects.StgFile(
                 scene_file_path
             ).link_to(
                 scene_src_file_path

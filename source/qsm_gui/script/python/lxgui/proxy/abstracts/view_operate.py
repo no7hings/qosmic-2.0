@@ -207,6 +207,163 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
         t.start()
 
 
+class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
+    def _init_tree_view_as_storage_opt_(self, prx_tree_view, namespace):
+        self._init_tree_view_opt_(prx_tree_view, namespace)
+
+        self._index_thread_batch = 0
+        self._root = None
+
+        self._cache_expand_all = dict()
+        self._cache_expand_current = dict()
+
+    def restore(self):
+        self.__push_expand_cache()
+
+        self._prx_tree_view.set_clear()
+        self._keys.clear()
+
+    def __push_expand_cache(self):
+        if self._root is not None:
+            if self._root not in self._cache_expand_all:
+                expand_dict = dict()
+                self._cache_expand_all[self._root] = expand_dict
+            else:
+                expand_dict = self._cache_expand_all[self._root]
+
+            for k, v in self._item_dict.items():
+                expand_dict[k] = v.get_is_expanded()
+
+    def __pull_expand_cache(self):
+        # load expand cache
+        if self._root in self._cache_expand_all:
+            self._cache_expand_current = self._cache_expand_all[self._root]
+
+    def gui_add_root(self, directory_opt):
+        directory_path = directory_opt.get_path()
+        self._root = directory_opt.get_parent_path()
+
+        self.__pull_expand_cache()
+
+        path = directory_path[len(self._root):]
+        if self.gui_is_exists(path) is False:
+            path_opt = bsc_core.PthNodeOpt(path)
+
+            prx_item = self._prx_tree_view.create_item(
+                path_opt.get_name(),
+                icon=gui_qt_core.GuiQtDcc.get_qt_folder_icon(use_system=True),
+            )
+            self.gui_register(path, prx_item)
+
+            prx_item.set_gui_dcc_obj(
+                directory_opt, self._namespace
+            )
+
+            prx_item.set_expanded(True)
+            prx_item.set_checked(False)
+            prx_item.set_gui_menu_raw(
+                [
+                    ('system',),
+                    ('open folder', 'file/open-folder', directory_opt.open_in_system)
+                ]
+            )
+            return True, prx_item
+        return False, self.gui_get(path)
+
+    def gui_add_one(self, stg_opt):
+        stg_path = stg_opt.get_path()
+        path = stg_path[len(self._root):]
+        if self.gui_is_exists(path) is False:
+            path_opt = bsc_core.PthNodeOpt(path)
+            #
+            parent_gui = self.gui_get(path_opt.get_parent_path())
+
+            time_txt = bsc_core.auto_string(
+                bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
+                    stg_opt.get_modify_timestamp(), language=1
+                )
+            )
+            #
+            if stg_opt.get_is_file():
+                icon = gui_qt_core.GuiQtDcc.get_qt_file_icon(stg_path)
+            else:
+                icon = gui_qt_core.GuiQtDcc.get_qt_folder_icon(use_system=True)
+
+            prx_item = parent_gui.add_child(
+                path_opt.name,
+                icon=icon,
+            )
+            prx_item.set_name(time_txt, 1)
+            self.gui_register(path, prx_item)
+            prx_item.set_tool_tip(path)
+            if path in self._cache_expand_current:
+                prx_item.set_expanded(self._cache_expand_current[path])
+
+            prx_item.set_gui_dcc_obj(
+                stg_opt, self._namespace
+            )
+
+            prx_item.set_checked(False)
+            prx_item.set_gui_menu_raw(
+                [
+                    ('system',),
+                    ('open folder', 'file/open-folder', stg_opt.open_in_system)
+                ]
+            )
+            if stg_opt.get_is_readable() is False:
+                prx_item.set_status(
+                    prx_item.ValidationStatus.Unreadable
+                )
+            elif stg_opt.get_is_writable() is False:
+                prx_item.set_status(
+                    prx_item.ValidationStatus.Unwritable
+                )
+            return prx_item
+        return self.gui_get(path)
+
+    def gui_add_all(self, root):
+        directory_opt = bsc_storage.StgDirectoryOpt(root)
+        # add root first
+        self.gui_add_root(
+            directory_opt
+        )
+        all_directories = directory_opt.get_all_directories()
+        for i_directory_opt in all_directories:
+            self.gui_add_one(i_directory_opt)
+
+    def gui_add_all_use_thread(self, root):
+        def cache_fnc_():
+            return [
+                self._index_thread_batch,
+                directory_opt.get_all()
+            ]
+
+        def build_fnc_(*args):
+            _index_thread_batch_current, _all_opts = args[0]
+            with self._prx_tree_view.gui_bustling():
+                for _i_opt in _all_opts:
+                    if _index_thread_batch_current != self._index_thread_batch:
+                        break
+                    self.gui_add_one(_i_opt)
+
+        def post_fnc_():
+            pass
+
+        self._index_thread_batch += 1
+
+        directory_opt = bsc_storage.StgDirectoryOpt(root)
+        self.gui_add_root(
+            directory_opt
+        )
+
+        t = gui_qt_core.QtBuildThread(self._prx_tree_view.get_widget())
+        t.set_cache_fnc(cache_fnc_)
+        t.cache_value_accepted.connect(build_fnc_)
+        t.run_finished.connect(post_fnc_)
+        #
+        t.start()
+
+
 class AbsGuiTreeViewAsTagOpt(AbsGuiPrxTreeViewOpt):
     ROOT_NAME = 'All'
 

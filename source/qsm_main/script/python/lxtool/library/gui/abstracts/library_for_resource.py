@@ -21,7 +21,7 @@ import lxbasic.storage as bsc_storage
 
 import lxbasic.database as bsc_database
 
-import lxbasic.texture as bsc_texture
+import lxgeneral.texture as gnl_texture
 
 import lxtool.library.scripts as lib_scripts
 
@@ -606,8 +606,8 @@ class _GuiResourceOpt(
         super(_GuiResourceOpt, self).__init__(window, session, database_opt)
         self._init_list_view_opt_(prx_list_view, self.DCC_NAMESPACE)
 
-        self._arnold_texture_types = bsc_texture.TxrMethodForBuild.generate_instance().get_arnold_includes()
-        self._arnold_texture_mapper = bsc_texture.TxrMethodForBuild.generate_instance().get_arnold_mapper()
+        self._arnold_texture_types = gnl_texture.TxrMethodForBuild.generate_instance().get_arnold_includes()
+        self._arnold_texture_mapper = gnl_texture.TxrMethodForBuild.generate_instance().get_arnold_mapper()
 
         self._today_tag = self._generate_today_tag()
 
@@ -1428,7 +1428,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
         self._type_prx_view.set_filter_entry_tip('fiter by type ...')
         # self._type_prx_view.get_top_tool_bar().set_expanded(True)
         self._type_prx_view.set_selection_use_single()
-        self._type_prx_view.set_header_view_create(
+        self._type_prx_view.create_header_view(
             [('type', 3), ('count', 1)],
             self.get_definition_window_size()[0]*(1.0/4.0)-48
         )
@@ -1443,7 +1443,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
         self._left_v_s.add_widget(self._tag_prx_view)
         self._tag_prx_view.set_filter_entry_tip('filter by tag ...')
         self._tag_prx_view.set_selection_disable()
-        self._tag_prx_view.set_header_view_create(
+        self._tag_prx_view.create_header_view(
             [('tag', 3), ('count', 1)],
             self.get_definition_window_size()[0]*(1.0/4.0)-48
         )
@@ -1485,7 +1485,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
         #
         self._directory_prx_view = prx_widgets.PrxTreeView()
         self._right_v_s.add_widget(self._directory_prx_view)
-        self._directory_prx_view.set_header_view_create(
+        self._directory_prx_view.create_header_view(
             [('directory', 1)]
         )
         #

@@ -17,7 +17,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.texture as bsc_texture
+import lxgeneral.texture as gnl_texture
 
 
 class AbsObjStgGuiExtraDef(object):
@@ -789,11 +789,11 @@ class AbsStgTexture(
 
     @classmethod
     def get_method_for_color_space_as_tx_convert(cls):
-        return bsc_texture.TxrMethodForColorSpaceAsTxConvert.generate_instance()
+        return gnl_texture.TxrMethodForColorSpaceAsTxConvert.generate_instance()
 
     @classmethod
     def get_method_for_color_space_as_aces(cls):
-        return bsc_texture.TxrMethodForColorSpaceAsAces.generate_instance()
+        return gnl_texture.TxrMethodForColorSpaceAsAces.generate_instance()
 
     def get_target_file_path_as_src(
         self, directory_path_dst, scheme='separate', target_extension='.tx', fix_name_blank=False
@@ -976,7 +976,7 @@ class AbsStgTexture(
 
     @classmethod
     def _get_unit_is_exists_as_tgt_ext_by_src_(cls, file_path_src, ext_tgt, search_directory_path=None):
-        file_path_src = bsc_core.auto_encode(file_path_src)
+        file_path_src = bsc_core.auto_string(file_path_src)
         name = os.path.basename(file_path_src)
         name_base, ext_any = os.path.splitext(name)
         directory_path = os.path.dirname(file_path_src)

@@ -9,7 +9,7 @@ class RsvDccLookHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
         super(RsvDccLookHookOpt, self).__init__(rsv_scene_properties, hook_option_opt)
 
     def do_export_asset_look_ass(self, force=False, texture_use_environ_map=True):
-        import lxbasic.dcc.objects as bsc_dcc_objects
+        import lxgeneral.dcc.objects as gnl_dcc_objects
 
         import lxkatana.core as ktn_core
 
@@ -51,7 +51,7 @@ class RsvDccLookHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                     version=version, variants_extend=dict(look_pass=i_look_pass_name)
                 )
             #
-            i_look_ass_file = bsc_dcc_objects.StgFile(i_look_ass_file_path)
+            i_look_ass_file = gnl_dcc_objects.StgFile(i_look_ass_file_path)
             if i_look_ass_file.get_is_exists() is False or force is True:
                 i_look_pass_source_node = s.get_look_pass_source_node(i_look_pass_name)
                 if i_look_pass_source_node is not None:

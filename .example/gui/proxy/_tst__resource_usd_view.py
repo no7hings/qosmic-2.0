@@ -13,7 +13,7 @@ import lxgui.proxy.core as gui_prx_core
 
 import lxbasic.database as bsc_database
 
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
 bsc_log.Log.TEST = True
 
@@ -103,7 +103,7 @@ class W(prx_widgets.PrxBaseWindow):
 
 if __name__ == '__main__':
 
-    bsc_dcc_core.OcioSetup(
+    gnl_dcc_core.OcioSetup(
         bsc_storage.StgPathMapper.map_to_current(
             '/job/PLE/bundle/thirdparty/aces/1.2'
         )

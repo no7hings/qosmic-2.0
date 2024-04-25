@@ -1,10 +1,10 @@
 # coding:utf-8
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.abstracts as bsc_dcc_abstracts
+import lxgeneral.dcc.abstracts as gnl_dcc_abstracts
 
 
-class UsdSetup(bsc_dcc_abstracts.AbsDccSetup):
+class UsdSetup(gnl_dcc_abstracts.AbsDccSetup):
     def __init__(self, root):
         super(UsdSetup, self).__init__(root)
 
@@ -32,7 +32,7 @@ class UsdSetup(bsc_dcc_abstracts.AbsDccSetup):
         )
 
 
-class UsdArnoldSetup(bsc_dcc_abstracts.AbsDccSetup):
+class UsdArnoldSetup(gnl_dcc_abstracts.AbsDccSetup):
     def __init__(self, root):
         super(UsdArnoldSetup, self).__init__(root)
 

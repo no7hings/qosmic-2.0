@@ -3,11 +3,11 @@ import lxbasic.resource as bsc_resource
 
 import lxuniverse.abstracts as unr_abstracts
 
-from .. import abstracts as bsc_dcc_abstracts
+from .. import abstracts as gnl_dcc_abstracts
 
 
 class Node(
-    bsc_dcc_abstracts.AbsDccBaseDef,
+    gnl_dcc_abstracts.AbsDccBaseDef,
     unr_abstracts.AbsObjDagExtraDef,
     unr_abstracts.AbsGuiExtraDef
 ):
@@ -57,7 +57,7 @@ class Node(
 
 
 class Component(
-    bsc_dcc_abstracts.AbsGuiExtraDef
+    gnl_dcc_abstracts.AbsGuiExtraDef
 ):
     PATHSEP = '.'
     TYPE_DICT = {

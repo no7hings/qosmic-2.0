@@ -790,7 +790,7 @@ class PrxListItemWidget(
         return self._qt_widget._get_name_texts_()
 
     def set_name_align_center_top(self):
-        self._qt_widget._set_name_text_option_to_align_center_top_()
+        self._qt_widget._set_name_align_h_center_top_()
 
     def set_name_frame_border_color(self, color):
         return self._qt_widget._set_name_frame_border_color_(color)

@@ -151,7 +151,7 @@ class QtEntryExtendAsPath(QtWidgets.QWidget):
     def _get_name_text_is_valid_(self, name_text):
         name_texts = self._get_next_name_texts_()
         if name_texts:
-            name_text = bsc_core.auto_encode(name_text)
+            name_text = bsc_core.auto_string(name_text)
             return name_text in name_texts
         return False
 

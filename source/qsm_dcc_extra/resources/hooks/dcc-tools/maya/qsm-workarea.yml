@@ -1,0 +1,16 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Workarea'
+        group_name: 'Asset(s)'
+        #
+        icon_name: 'application/resource_library'
+        tool_tip:
+            - 'for work file manager'
+            - '...'
+        #
+        size: [720, 720]

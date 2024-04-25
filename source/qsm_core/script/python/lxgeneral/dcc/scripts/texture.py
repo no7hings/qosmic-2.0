@@ -5,7 +5,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-from .. import objects as bsc_dcc_objects
+from .. import objects as gnl_dcc_objects
 
 
 class ScpDccTextures(object):
@@ -89,11 +89,11 @@ class ScpDccTextures(object):
             for i_dcc_obj in dcc_objs:
                 g_p.do_update()
                 for j_port_path, j_texture_path_tgt in i_dcc_obj.reference_raw.items():
-                    j_texture_src = bsc_dcc_objects.StgTexture(j_texture_path_tgt)
+                    j_texture_src = gnl_dcc_objects.StgTexture(j_texture_path_tgt)
                     j_result = search_opt.get_result(j_texture_src.path)
                     if j_result:
                         j_port = i_dcc_obj.get_port(j_port_path)
-                        tgt_texture_tgt = bsc_dcc_objects.StgTexture(j_result)
+                        tgt_texture_tgt = gnl_dcc_objects.StgTexture(j_result)
                         #
                         repath_queue.append(
                             (j_port, tgt_texture_tgt)
@@ -135,7 +135,7 @@ class ScpDccTextures(object):
             for i_obj in objs:
                 for j_port_path, j_file_path in i_obj.reference_raw.items():
                     j_port = i_obj.get_port(j_port_path)
-                    stg_texture = bsc_dcc_objects.StgTexture(j_file_path)
+                    stg_texture = gnl_dcc_objects.StgTexture(j_file_path)
                     if stg_texture.get_ext_is_tx():
                         o = stg_texture.get_tx_orig()
                         if o is not None:
@@ -154,7 +154,7 @@ class ScpDccTextures(object):
             for i_obj in objs:
                 for j_port_path, j_file_path in i_obj.reference_raw.items():
                     j_port = i_obj.get_port(j_port_path)
-                    i_texture = bsc_dcc_objects.StgTexture(j_file_path)
+                    i_texture = gnl_dcc_objects.StgTexture(j_file_path)
                     if i_texture.get_ext_is(ext_tgt):
                         o = i_texture.get_orig_as_tgt_ext(ext_tgt)
                         if o is not None:
@@ -170,7 +170,7 @@ class ScpDccTextures(object):
         if objs:
             for i_obj in objs:
                 for j_port_path, j_file_path in i_obj.reference_raw.items():
-                    stg_texture = bsc_dcc_objects.StgTexture(j_file_path)
+                    stg_texture = gnl_dcc_objects.StgTexture(j_file_path)
                     if target_platform is None:
                         tgt_stg_texture_path = bsc_storage.StgPathMapper.map_to_current(stg_texture.path)
                     elif target_platform == 'windows':
@@ -180,7 +180,7 @@ class ScpDccTextures(object):
                     else:
                         raise TypeError()
                     #
-                    tgt_stg_texture = bsc_dcc_objects.StgTexture(tgt_stg_texture_path)
+                    tgt_stg_texture = gnl_dcc_objects.StgTexture(tgt_stg_texture_path)
                     j_port = i_obj.get_port(j_port_path)
                     #
                     self._repath_fnc(j_port, tgt_stg_texture)

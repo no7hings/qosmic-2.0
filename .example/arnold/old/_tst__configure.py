@@ -1,7 +1,7 @@
 # coding:utf-8
-import lxbasic.texture as bsc_texture
+import lxgeneral.texture as gnl_texture
 
-# c = bsc_texture.TxrMethodForColorSpaceAsTxConvert.generate_instance()
+# c = gnl_texture.TxrMethodForColorSpaceAsTxConvert.generate_instance()
 #
 # print c.get_name_patterns()
 #
@@ -9,11 +9,11 @@ import lxbasic.texture as bsc_texture
 #
 # print c.get_tx_color_space_input('/production/library/resource/all/surface/mossy_ground_umkkfcolw/v0001/texture/acescg/src/mossy_ground_umkkfcolw.albedo.exr')
 #
-# c = bsc_texture.TxrMethodForColorSpaceAsAces.generate_instance()
+# c = gnl_texture.TxrMethodForColorSpaceAsAces.generate_instance()
 #
 # print c.get_ocio_file()
 
-m = bsc_texture.TxrMethodForBuild.generate_instance()
+m = gnl_texture.TxrMethodForBuild.generate_instance()
 
 for i in [
     '/data/e/workspace/lynxi/test/texture/mossy_ground_umkkfcolw.albedo.1001.0001.tx',

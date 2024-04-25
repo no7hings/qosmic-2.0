@@ -30,7 +30,7 @@ class PGDependencies(prx_widgets.PrxSessionWindow):
         self._viewer_group.add_widget(h_s)
         self._prx_tree_view_for_filter = prx_widgets.PrxTreeView()
         h_s.add_widget(self._prx_tree_view_for_filter)
-        self._prx_tree_view_for_filter.set_header_view_create(
+        self._prx_tree_view_for_filter.create_header_view(
             [('name', 3), ('count', 1)],
             self.get_definition_window_size()[0]*(1.0/4.0)-32
         )
@@ -102,7 +102,7 @@ class PGDependencies(prx_widgets.PrxSessionWindow):
             'task'
         ]
 
-        self._result_tree_view.set_header_view_create(
+        self._result_tree_view.create_header_view(
             [(i, 2) for i in self._filter_keys],
             self.get_definition_window_size()[0]*(3.0/4.0)-32
         )

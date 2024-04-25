@@ -13,7 +13,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 import lxbasic.fnc.abstracts as bsc_fnc_abstracts
 
@@ -1014,9 +1014,9 @@ class RsvUsdHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             i_usda_file_path = u'{}/{}'.format(
                 component_usd_directory_path, v
             )
-            i_file = bsc_dcc_objects.StgFile(i_usda_file_path)
+            i_file = gnl_dcc_objects.StgFile(i_usda_file_path)
             if i_file.get_is_exists() is False:
-                bsc_dcc_objects.StgFile(i_usda_file_path).set_write(
+                gnl_dcc_objects.StgFile(i_usda_file_path).set_write(
                     i_raw
                 )
 
@@ -1166,7 +1166,7 @@ class RsvUsdHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             ).set_run()
 
     def create_set_asset_component_usd(self):
-        import lxbasic.dcc.core as bsc_dcc_core
+        import lxgeneral.dcc.core as gnl_dcc_core
 
         import lxbasic.extra.methods as utl_etr_methods
 
@@ -1237,14 +1237,14 @@ class RsvUsdHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                 i_usda_file_path = '{}/{}'.format(
                     component_usd_directory_path, i_file_base
                 )
-                i_file = bsc_dcc_objects.StgFile(i_usda_file_path)
+                i_file = gnl_dcc_objects.StgFile(i_usda_file_path)
                 if i_file.get_is_exists() is False:
-                    bsc_dcc_objects.StgFile(i_usda_file_path).set_write(
+                    gnl_dcc_objects.StgFile(i_usda_file_path).set_write(
                         i_raw
                     )
                 else:
                     if i_replace is True:
-                        i_start_frame, i_end_frame = bsc_dcc_core.DotUsdaOpt(
+                        i_start_frame, i_end_frame = gnl_dcc_core.DotUsdaOpt(
                             i_usda_file_path
                         ).get_frame_range()
                         c.set('start_frame', i_start_frame)
@@ -1252,7 +1252,7 @@ class RsvUsdHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                         i_raw = t.render(
                             **c.value
                         )
-                        bsc_dcc_objects.StgFile(i_usda_file_path).set_write(
+                        gnl_dcc_objects.StgFile(i_usda_file_path).set_write(
                             i_raw
                         )
             #

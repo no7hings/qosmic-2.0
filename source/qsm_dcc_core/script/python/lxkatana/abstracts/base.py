@@ -7,7 +7,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.dcc.abstracts as bsc_dcc_abstracts
+import lxgeneral.dcc.abstracts as gnl_dcc_abstracts
 
 import lxuniverse.core as unr_core
 # katana
@@ -16,7 +16,7 @@ from ..core.wrap import *
 from .. import core as ktn_core
 
 
-class AbsKtnPort(bsc_dcc_abstracts.AbsDccPort):
+class AbsKtnPort(gnl_dcc_abstracts.AbsDccPort):
     PATHSEP = '.'
 
     def __init__(self, node, name, port_assign):
@@ -241,7 +241,7 @@ class AbsKtnPort(bsc_dcc_abstracts.AbsDccPort):
 
 
 # noinspection PyUnusedLocal
-class AbsKtnObj(bsc_dcc_abstracts.AbsDccNode):
+class AbsKtnObj(gnl_dcc_abstracts.AbsDccNode):
     PATHSEP = '/'
     DCC_CONNECTION_CLS = None
 
@@ -652,7 +652,7 @@ class AbsKtnObj(bsc_dcc_abstracts.AbsDccNode):
         return self._generate_ktn_obj().isBypassed()
 
 
-class AbsKtnObjs(bsc_dcc_abstracts.AbsDccNodes):
+class AbsKtnObjs(gnl_dcc_abstracts.AbsDccNodes):
     def __init__(self, *args):
         super(AbsKtnObjs, self).__init__(*args)
 
@@ -673,14 +673,14 @@ class AbsKtnObjs(bsc_dcc_abstracts.AbsDccNodes):
         return lis
 
 
-class AbsKtnObjConnection(bsc_dcc_abstracts.AbsDccNodeConnection):
+class AbsKtnObjConnection(gnl_dcc_abstracts.AbsDccNodeConnection):
     def __init__(self, source, target):
         super(AbsKtnObjConnection, self).__init__(source, target)
 
 
 class AbsKtnFileReferenceObj(
     AbsKtnObj,
-    bsc_dcc_abstracts.AbsDccNodeFileReferenceDef
+    gnl_dcc_abstracts.AbsDccNodeFileReferenceDef
 ):
     def __init__(self, path, file_path=None):
         super(AbsKtnFileReferenceObj, self).__init__(path)
@@ -688,7 +688,7 @@ class AbsKtnFileReferenceObj(
         self._init_dcc_node_file_reference_def_(file_path)
 
 
-class AbsSGKtnObj(bsc_dcc_abstracts.AbsDccNode):
+class AbsSGKtnObj(gnl_dcc_abstracts.AbsDccNode):
     def __init__(self, path):
         super(AbsSGKtnObj, self).__init__(path)
 

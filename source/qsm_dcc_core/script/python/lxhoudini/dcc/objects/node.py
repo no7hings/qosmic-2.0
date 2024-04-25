@@ -1,7 +1,7 @@
 # coding:utf-8
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 # houdini
 from ...core.wrap import *
 
@@ -22,7 +22,7 @@ class Node(hou_abstracts.AbsHouObj):
 
 class FileReference(hou_abstracts.AbsHouFileReferenceObj):
     DCC_PORT_CLS = Port
-    STG_FILE_CLS = bsc_dcc_objects.StgFile
+    STG_FILE_CLS = gnl_dcc_objects.StgFile
 
     def __init__(self, path, file_path=None):
         super(FileReference, self).__init__(path)
@@ -31,7 +31,7 @@ class FileReference(hou_abstracts.AbsHouFileReferenceObj):
 
 class ImageReference(hou_abstracts.AbsHouFileReferenceObj):
     DCC_PORT_CLS = Port
-    STG_FILE_CLS = bsc_dcc_objects.StgTexture
+    STG_FILE_CLS = gnl_dcc_objects.StgTexture
 
     def __init__(self, path, file_path=None):
         super(ImageReference, self).__init__(path, file_path)
@@ -96,7 +96,7 @@ class ArOperate(hou_abstracts.AbsHouObj):
 
 class ArMaterial(hou_abstracts.AbsHouFileReferenceObj):
     DCC_PORT_CLS = Port
-    STG_FILE_CLS = bsc_dcc_objects.StgTexture
+    STG_FILE_CLS = gnl_dcc_objects.StgTexture
 
     def __init__(self, path):
         super(ArMaterial, self).__init__(path)
@@ -104,7 +104,7 @@ class ArMaterial(hou_abstracts.AbsHouFileReferenceObj):
 
 class AndMaterialx(hou_abstracts.AbsHouFileReferenceObj):
     DCC_PORT_CLS = Port
-    STG_FILE_CLS = bsc_dcc_objects.StgTexture
+    STG_FILE_CLS = gnl_dcc_objects.StgTexture
 
     def __init__(self, path):
         super(AndMaterialx, self).__init__(path)
@@ -114,7 +114,7 @@ class AndMaterialx(hou_abstracts.AbsHouFileReferenceObj):
         if ports:
             port = ports[0]
             file_path = port.get()
-            return bsc_dcc_core.DotMtlxOpt(file_path).geometry_paths
+            return gnl_dcc_core.DotMtlxOpt(file_path).geometry_paths
         return []
 
     def get_texture_paths(self):
@@ -122,7 +122,7 @@ class AndMaterialx(hou_abstracts.AbsHouFileReferenceObj):
         if ports:
             port = ports[0]
             file_path = port.get()
-            return bsc_dcc_core.DotMtlxOpt(file_path).texture_paths
+            return gnl_dcc_core.DotMtlxOpt(file_path).texture_paths
         return []
 
     def get_textures(self):
@@ -134,7 +134,7 @@ class AndMaterialx(hou_abstracts.AbsHouFileReferenceObj):
             lis.append(
                 self._create_stg_file_fnc(file_path, port_dcc_path)
             )
-            mtx_reader = bsc_dcc_core.DotMtlxOpt(file_path)
+            mtx_reader = gnl_dcc_core.DotMtlxOpt(file_path)
             for i in mtx_reader.texture_paths:
                 lis.append(
                     self._create_stg_file_fnc(i)
@@ -144,7 +144,7 @@ class AndMaterialx(hou_abstracts.AbsHouFileReferenceObj):
 
 class Alembic(hou_abstracts.AbsHouFileReferenceObj):
     DCC_PORT_CLS = Port
-    STG_FILE_CLS = bsc_dcc_objects.StgFile
+    STG_FILE_CLS = gnl_dcc_objects.StgFile
     MATERIALX_CLS = AndMaterialx
 
     def __init__(self, path, file_path=None):
@@ -178,7 +178,7 @@ class Alembic(hou_abstracts.AbsHouFileReferenceObj):
 
 class AlembicArchive(hou_abstracts.AbsHouFileReferenceObj):
     DCC_PORT_CLS = Port
-    STG_FILE_CLS = bsc_dcc_objects.StgFile
+    STG_FILE_CLS = gnl_dcc_objects.StgFile
     MATERIALX_CLS = AndMaterialx
     CAMERA_CLS = Camera
 

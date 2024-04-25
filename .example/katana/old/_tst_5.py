@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 p = bsc_core.PyReloader(
     [
@@ -21,5 +21,5 @@ convert_list = []
 if texture_references:
     for obj in texture_references:
         for port_path, file_path in obj.reference_raw.items():
-            texture = bsc_dcc_objects.StgFile(file_path)
+            texture = gnl_dcc_objects.StgFile(file_path)
             print obj, port_path, file_path

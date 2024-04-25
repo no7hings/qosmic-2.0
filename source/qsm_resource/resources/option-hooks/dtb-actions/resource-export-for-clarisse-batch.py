@@ -74,13 +74,13 @@ class ScpImport(object):
 
 def main(session):
     def yes_fnc_():
-        import lxbasic.dcc.core as bsc_dcc_core
+        import lxgeneral.dcc.core as gnl_dcc_core
 
         _kwargs = o.to_dict()
         _file_type_key = o.get('file_type')
         _port = o.get('port')
 
-        if bsc_dcc_core.SocketConnectForClarisse(_port).get_is_valid() is True:
+        if gnl_dcc_core.SocketConnectForClarisse(_port).get_is_valid() is True:
             _file_type_path = file_type_path_mapper[_file_type_key]
             with w.gui_progressing(maximum=len(dtb_resources)) as g_p:
                 for _i_dtb_resource in dtb_resources:

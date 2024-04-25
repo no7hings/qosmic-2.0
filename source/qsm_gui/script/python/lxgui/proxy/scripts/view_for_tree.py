@@ -658,7 +658,7 @@ class GuiPrxScpForStorageTreeAdd(gui_prx_abstracts.AbsGuiPrxCacheDef):
                             )
                         )
                 #
-                name = '{} ({})'.format(bsc_core.auto_encode(name), len(file_tiles))
+                name = '{} ({})'.format(bsc_core.auto_string(name), len(file_tiles))
                 descriptions = [tool_tip_]
         #
         menu_raw = []

@@ -3,7 +3,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 
 class AbsFncExporterForDccTextureDef(object):
@@ -43,7 +43,7 @@ class AbsFncExporterForDccTextureDef(object):
                             continue
                         # map path to current platform
                         j_texture_path_dpt = bsc_storage.StgPathMapper.map_to_current(j_texture_path_dpt)
-                        j_texture_dpt = bsc_dcc_objects.StgTexture(j_texture_path_dpt)
+                        j_texture_dpt = gnl_dcc_objects.StgTexture(j_texture_path_dpt)
                         if j_texture_dpt.get_exists_unit_paths() is False:
                             bsc_log.Log.trace_method_warning(
                                 cls.KEY,
@@ -122,7 +122,7 @@ class AbsFncExporterForDccTextureDef(object):
                                 )
                                 continue
                             # do repath
-                            j_texture_dst = bsc_dcc_objects.StgTexture(j_texture_path_dst)
+                            j_texture_dst = gnl_dcc_objects.StgTexture(j_texture_path_dst)
                             if j_texture_dst.get_exists_units():
                                 # environ map
                                 if use_environ_map is True:
@@ -180,7 +180,7 @@ class AbsFncExporterForDccTextureDef(object):
                 for j_port_path, j_texture_path_dpt in i_dcc_obj.reference_raw.items():
                     # map path to current platform
                     j_texture_path_dpt = bsc_storage.StgPathMapper.map_to_current(j_texture_path_dpt)
-                    j_texture_dpt = bsc_dcc_objects.StgTexture(j_texture_path_dpt)
+                    j_texture_dpt = gnl_dcc_objects.StgTexture(j_texture_path_dpt)
                     if j_texture_dpt.get_exists_units() is False:
                         bsc_log.Log.trace_method_warning(
                             cls.KEY,
@@ -258,7 +258,7 @@ class AbsFncExporterForDccTextureDef(object):
                             continue
                         # do repath
                         #
-                        j_texture_dst = bsc_dcc_objects.StgTexture(j_texture_path_dst)
+                        j_texture_dst = gnl_dcc_objects.StgTexture(j_texture_path_dst)
                         if j_texture_dst.get_exists_units():
                             # environ map
                             if use_environ_map is True:

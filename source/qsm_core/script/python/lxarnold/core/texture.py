@@ -3,7 +3,7 @@ import os
 
 import lxbasic.core as bsc_core
 
-import lxbasic.texture as bsc_texture
+import lxgeneral.texture as gnl_texture
 # arnold
 from .wrap import *
 
@@ -13,7 +13,7 @@ from . import base as _base
 class AndImageOpt(object):
     @classmethod
     def _get_info(cls, file_path):
-        _f = bsc_core.auto_encode(file_path)
+        _f = bsc_core.auto_string(file_path)
         width, height = _base.AndImage.get_resolution(_f) or (0, 0)
         dic = dict(
             bit=cls._get_bit(_f) or 0,
@@ -171,11 +171,11 @@ class AndTextureOpt(AndImageOpt):
 
     @classmethod
     def get_method_for_color_space_as_aces(cls):
-        return bsc_texture.TxrMethodForColorSpaceAsAces.generate_instance()
+        return gnl_texture.TxrMethodForColorSpaceAsAces.generate_instance()
 
     @classmethod
     def get_method_for_color_space_as_tx_convert(cls):
-        return bsc_texture.TxrMethodForColorSpaceAsTxConvert.generate_instance()
+        return gnl_texture.TxrMethodForColorSpaceAsTxConvert.generate_instance()
 
     def get_is_srgb(self):
         return (
@@ -277,8 +277,8 @@ class AndTextureOpt(AndImageOpt):
     @classmethod
     def generate_format_convert_as_aces_command(cls, file_path_src, file_path_tgt, color_space_src, color_space_tgt):
         option = dict(
-            file_src=bsc_core.auto_encode(file_path_src),
-            file_tgt=bsc_core.auto_encode(file_path_tgt),
+            file_src=bsc_core.auto_string(file_path_src),
+            file_tgt=bsc_core.auto_string(file_path_tgt),
             color_space_src=color_space_src,
             color_space_tgt=color_space_tgt,
             format_tgt=os.path.splitext(file_path_tgt)[-1][1:],
@@ -314,8 +314,8 @@ class AndTextureOpt(AndImageOpt):
         cls, file_path_src, file_path_tgt, color_space_src, color_space_tgt, use_update_mode=True
     ):
         option = dict(
-            file_src=bsc_core.auto_encode(file_path_src),
-            file_tgt=bsc_core.auto_encode(file_path_tgt),
+            file_src=bsc_core.auto_string(file_path_src),
+            file_tgt=bsc_core.auto_string(file_path_tgt),
             color_space_src=color_space_src,
             color_space_tgt=color_space_tgt,
             format_tgt=os.path.splitext(file_path_tgt)[-1][1:],
@@ -364,8 +364,8 @@ class AndTextureOpt(AndImageOpt):
     ):
         cmd_args = [
             'maketx',
-            '"{}"'.format(bsc_core.auto_encode(file_path_src)),
-            '-o "{}"'.format(bsc_core.auto_encode(file_path_tgt)),
+            '"{}"'.format(bsc_core.auto_string(file_path_src)),
+            '-o "{}"'.format(bsc_core.auto_string(file_path_tgt)),
             '-v',
             '-u',
             '--unpremult',

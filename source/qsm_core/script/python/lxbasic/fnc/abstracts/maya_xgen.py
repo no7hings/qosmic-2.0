@@ -5,9 +5,9 @@ import glob
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 
 class AbsFncForDotXgenDef(object):
@@ -51,7 +51,7 @@ class AbsFncForDotXgenDef(object):
             i_xgen_collection_name = cls._get_xgen_collection_name(i_file_path_src)
             i_file_name_tgt = '{}__{}.xgen'.format(file_name_base_tgt, i_xgen_collection_name)
             i_xgen_collection_file_path_tgt = '{}/{}'.format(file_directory_path_tgt, i_file_name_tgt)
-            bsc_dcc_objects.StgFile(i_file_path_src).copy_to_file(i_xgen_collection_file_path_tgt)
+            gnl_dcc_objects.StgFile(i_file_path_src).copy_to_file(i_xgen_collection_file_path_tgt)
             #
             cls._repair_xgen_collection_file(i_xgen_collection_file_path_tgt)
             #
@@ -82,7 +82,7 @@ class AbsFncForDotXgenDef(object):
         xgen_collection_file_path,
         xgen_project_directory_path_tgt, xgen_collection_directory_path_tgt, xgen_collection_name
     ):
-        dot_xgen_file_reader = bsc_dcc_core.DotXgenOpt(xgen_collection_file_path)
+        dot_xgen_file_reader = gnl_dcc_core.DotXgenOpt(xgen_collection_file_path)
         dot_xgen_file_reader.repath_project_directory_to(xgen_project_directory_path_tgt)
         dot_xgen_file_reader.repath_collection_directory_to(
             xgen_collection_directory_path_tgt, xgen_collection_name
@@ -92,6 +92,6 @@ class AbsFncForDotXgenDef(object):
 
     @classmethod
     def _repair_xgen_collection_file(cls, xgen_collection_file_path):
-        i_dot_xgen_reader = bsc_dcc_core.DotXgenOpt(xgen_collection_file_path)
+        i_dot_xgen_reader = gnl_dcc_core.DotXgenOpt(xgen_collection_file_path)
         i_dot_xgen_reader.set_repair()
         i_dot_xgen_reader.set_save()

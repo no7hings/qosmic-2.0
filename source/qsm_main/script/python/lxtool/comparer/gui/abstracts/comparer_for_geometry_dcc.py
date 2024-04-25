@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.log as bsc_log
 
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
 import lxgui.core as gui_core
 
@@ -83,12 +83,12 @@ class AbsPnlComparerForAssetGeometryDcc(prx_widgets.PrxSessionWindow):
         self._set_tree_viewer_build_()
 
     def _set_tree_viewer_build_(self):
-        self._filter_tree_viewer_0.set_header_view_create(
+        self._filter_tree_viewer_0.create_header_view(
             [('name', 3), ('count', 1)],
             self.get_definition_window_size()[0]*(1.0/3.0)-24
         )
         #
-        self._obj_tree_viewer_0.set_header_view_create(
+        self._obj_tree_viewer_0.create_header_view(
             [('name', 4), ('type', 2), ('status', 2)],
             self.get_definition_window_size()[0]*(2.0/3.0)-24
         )
@@ -182,7 +182,7 @@ class AbsPnlComparerForAssetGeometryDcc(prx_widgets.PrxSessionWindow):
                         )
                         #
                         key = 'from-model'
-                        if i_check_statuses == bsc_dcc_core.DccMeshCheckStatus.NonChanged:
+                        if i_check_statuses == gnl_dcc_core.DccMeshCheckStatus.NonChanged:
                             i_mesh_prx_item_src.set_adopt_state()
                         else:
                             if i_tgt_geometry_path is not None:
@@ -211,8 +211,8 @@ class AbsPnlComparerForAssetGeometryDcc(prx_widgets.PrxSessionWindow):
                             i_mesh_prx_item_src.set_tool_tip(i_tgt_geometry_path, self.DESCRIPTION_INDEX)
         #
         sector_chart_data = []
-        for i_check_status in bsc_dcc_core.DccMeshCheckStatus.All:
-            if i_check_status != bsc_dcc_core.DccMeshCheckStatus.NonChanged:
+        for i_check_status in gnl_dcc_core.DccMeshCheckStatus.All:
+            if i_check_status != gnl_dcc_core.DccMeshCheckStatus.NonChanged:
                 if i_check_status in sector_chart_data_dict:
                     sector_chart_data.append(
                         (i_check_status, count, len(sector_chart_data_dict[i_check_status]))

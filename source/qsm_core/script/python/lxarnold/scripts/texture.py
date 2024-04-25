@@ -3,7 +3,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 
 class ScpTextureCreate(object):
@@ -58,7 +58,7 @@ class ScpTextureCreate(object):
 
     @classmethod
     def to_exr_as_acescg(cls, file_path_src, file_path_tgt, use_update_mode=True):
-        bsc_dcc_objects.StgTexture._create_unit_exr_as_acescg(
+        gnl_dcc_objects.StgTexture._create_unit_exr_as_acescg(
             file_path_src,
             file_path_tgt,
             use_update_mode=use_update_mode
@@ -82,7 +82,7 @@ class ScpTextureCreate(object):
 
     @classmethod
     def generate_jpg_create_cmd(cls, file_path_src, file_path_tgt, use_update_mode=True):
-        return bsc_dcc_objects.StgTexture._generate_unit_jpg_create_cmd(
+        return gnl_dcc_objects.StgTexture._generate_unit_jpg_create_cmd(
             file_path_src,
             file_path_tgt,
             use_update_mode=use_update_mode
@@ -90,7 +90,7 @@ class ScpTextureCreate(object):
 
     @classmethod
     def generate_exr_create_cmd_as_acescg(cls, file_path_src, file_path_tgt, use_update_mode=True):
-        return bsc_dcc_objects.StgTexture._generate_unit_exr_create_cmd_as_acescg(
+        return gnl_dcc_objects.StgTexture._generate_unit_exr_create_cmd_as_acescg(
             file_path_src,
             file_path_tgt,
             use_update_mode=use_update_mode
@@ -154,7 +154,7 @@ class ScpTextureCreate(object):
 
     @classmethod
     def to_tx_as_acescg(cls, file_path_src, file_path_tgt, use_update_mode=True):
-        bsc_dcc_objects.StgTexture._create_unit_tx_as_acescg(
+        gnl_dcc_objects.StgTexture._create_unit_tx_as_acescg(
             file_path_src,
             file_path_tgt,
             use_update_mode=use_update_mode
@@ -188,7 +188,7 @@ class ScpTextureCreate(object):
 
     @classmethod
     def generate_tx_create_cmd_as_acescg(cls, file_path_src, file_path_tgt, use_update_mode=True):
-        return bsc_dcc_objects.StgTexture._generate_unit_tx_create_cmd_as_acescg(
+        return gnl_dcc_objects.StgTexture._generate_unit_tx_create_cmd_as_acescg(
             file_path_src,
             file_path_tgt,
             use_update_mode=use_update_mode
@@ -216,7 +216,7 @@ if __name__ == '__main__':
     #     formats=['exr', 'tiff', 'png', 'jpg']
     # )
 
-    # bsc_dcc_objects.StgTexture._create_unit_tx_as_acescg(
+    # gnl_dcc_objects.StgTexture._create_unit_tx_as_acescg(
     #     '/l/resource/library/texture/all/surface/rough_concrete_sbqkmjp0/v0001/texture/acescg/src/rough_concrete_sbqkmjp0.albedo.exr',
     #     '/l/resource/library/texture/all/surface/rough_concrete_sbqkmjp0/v0001/texture/acescg/tx/rough_concrete_sbqkmjp0.albedo.tx',
     # )

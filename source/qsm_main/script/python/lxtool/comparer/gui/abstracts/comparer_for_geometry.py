@@ -3,7 +3,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 # gui
 import lxgui.core as gui_core
 
@@ -128,17 +128,17 @@ class AbsDccComparerOpt(object):
 
 class AbsPnlComparerForAssetGeometry(prx_widgets.PrxSessionWindow):
     ERROR_STATUS = [
-        bsc_dcc_core.DccMeshCheckStatus.Deletion,
-        bsc_dcc_core.DccMeshCheckStatus.Addition,
+        gnl_dcc_core.DccMeshCheckStatus.Deletion,
+        gnl_dcc_core.DccMeshCheckStatus.Addition,
         #
-        bsc_dcc_core.DccMeshCheckStatus.NameChanged,
-        bsc_dcc_core.DccMeshCheckStatus.PathChanged,
-        bsc_dcc_core.DccMeshCheckStatus.PathExchanged,
+        gnl_dcc_core.DccMeshCheckStatus.NameChanged,
+        gnl_dcc_core.DccMeshCheckStatus.PathChanged,
+        gnl_dcc_core.DccMeshCheckStatus.PathExchanged,
         #
-        bsc_dcc_core.DccMeshCheckStatus.FaceVerticesChanged,
+        gnl_dcc_core.DccMeshCheckStatus.FaceVerticesChanged,
     ]
     WARNING_STATUS = [
-        bsc_dcc_core.DccMeshCheckStatus.PointsChanged,
+        gnl_dcc_core.DccMeshCheckStatus.PointsChanged,
     ]
     DCC_COMPARER_OPT_CLS = None
 
@@ -157,7 +157,7 @@ class AbsPnlComparerForAssetGeometry(prx_widgets.PrxSessionWindow):
         h_s.add_widget(v_s)
         self._prx_tree_view_for_filter = prx_widgets.PrxTreeView()
         v_s.add_widget(self._prx_tree_view_for_filter)
-        self._prx_tree_view_for_filter.set_header_view_create(
+        self._prx_tree_view_for_filter.create_header_view(
             [('name', 2), ('count', 1)],
             self.get_definition_window_size()[0]*(1.0/3.0)-48
         )
@@ -166,7 +166,7 @@ class AbsPnlComparerForAssetGeometry(prx_widgets.PrxSessionWindow):
         v_s.add_widget(self._sector_chart)
         self._result_tree_view = prx_widgets.PrxTreeView()
         h_s.add_widget(self._result_tree_view)
-        self._result_tree_view.set_header_view_create(
+        self._result_tree_view.create_header_view(
             [('name', 2), ('description', 1), ('target', 1)],
             self.get_definition_window_size()[0]*(2.0/3.0)-48
         )
@@ -293,8 +293,8 @@ class AbsPnlComparerForAssetGeometry(prx_widgets.PrxSessionWindow):
                 g_p.do_update()
         #
         sector_chart_data = []
-        for i_check_status in bsc_dcc_core.DccMeshCheckStatus.All:
-            if i_check_status != bsc_dcc_core.DccMeshCheckStatus.NonChanged:
+        for i_check_status in gnl_dcc_core.DccMeshCheckStatus.All:
+            if i_check_status != gnl_dcc_core.DccMeshCheckStatus.NonChanged:
                 if i_check_status in sector_chart_data_dict:
                     sector_chart_data.append(
                         (i_check_status, count, len(sector_chart_data_dict[i_check_status]))

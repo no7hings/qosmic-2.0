@@ -3,12 +3,12 @@ import re
 
 import lxbasic.core as bsc_core
 
-import lxbasic.dcc.abstracts as bsc_dcc_abstracts
+import lxgeneral.dcc.abstracts as gnl_dcc_abstracts
 
 import lxbasic.content as bsc_content
 
 
-class AndShaderOpt(bsc_dcc_abstracts.AbsNodeOpt):
+class AndShaderOpt(gnl_dcc_abstracts.AbsNodeOpt):
     def __init__(self, *args, **kwargs):
         super(AndShaderOpt, self).__init__(*args, **kwargs)
         
@@ -116,7 +116,7 @@ class AndShaderOpt(bsc_dcc_abstracts.AbsNodeOpt):
         self._obj.get_output_port(and_port_path).set_disconnect()
 
 
-class MaterialOpt(bsc_dcc_abstracts.AbsNodeOpt):
+class MaterialOpt(gnl_dcc_abstracts.AbsNodeOpt):
     def __init__(self, *args, **kwargs):
         super(MaterialOpt, self).__init__(*args, **kwargs)
 
@@ -126,7 +126,7 @@ class MaterialOpt(bsc_dcc_abstracts.AbsNodeOpt):
         return '{}/{}'.format(location.rstrip('/'), name)
 
 
-class MaterialAssignOpt(bsc_dcc_abstracts.AbsNodeOpt):
+class MaterialAssignOpt(gnl_dcc_abstracts.AbsNodeOpt):
     def __init__(self, *args, **kwargs):
         super(MaterialAssignOpt, self).__init__(*args, **kwargs)
 
@@ -173,7 +173,7 @@ class MaterialAssignOpt(bsc_dcc_abstracts.AbsNodeOpt):
         cel_port.set(cel_value)
 
 
-class PropertiesAssignOpt(bsc_dcc_abstracts.AbsNodeOpt):
+class PropertiesAssignOpt(gnl_dcc_abstracts.AbsNodeOpt):
     def __init__(self, *args, **kwargs):
         super(PropertiesAssignOpt, self).__init__(*args, **kwargs)
 

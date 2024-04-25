@@ -2,8 +2,8 @@
 
 
 def main(session):
-    import qsm_tool.manager.gui.widgets as qsm_manager_gui_widgets
-    w = qsm_manager_gui_widgets.PnlAssetManager(session)
+    import qsm_maya_tool.resource_manager.gui.widgets as qsm_rsc_mng_gui_widgets
+    w = qsm_rsc_mng_gui_widgets.PnlAssetManager(session)
 
     w.set_window_show()
 

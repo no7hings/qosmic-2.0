@@ -13,6 +13,8 @@ import subprocess
 
 import lxbasic.content as bsc_content
 
+import lxbasic.scan as bsc_scan
+
 import lxbasic.log as bsc_log
 
 import lxbasic.storage as bsc_storage
@@ -969,7 +971,7 @@ class AbsStgDirectory(
         return self.__class__(path)
 
     def _get_child_paths_(self, path, includes=None):
-        return bsc_storage.StgDirectoryMtd.get_directory_paths__(
+        return bsc_scan.ScanBase.get_directory_paths(
             path
         )
 
@@ -1011,18 +1013,18 @@ class AbsStgDirectory(
         raise NotImplementedError()
 
     def get_child_file_paths(self):
-        return bsc_storage.StgDirectoryMtd.get_file_paths__(
+        return bsc_storage.StgDirectoryMtd.get_file_paths(
             self.path
         )
 
-    def set_copy_to(self, directory_path_tgt):
+    def copy_to(self, directory_path_tgt):
         if os.path.exists(directory_path_tgt) is False:
             shutil.copytree(
                 self.path, directory_path_tgt
             )
 
     def get_file_paths(self, ext_includes=None):
-        return bsc_storage.StgDirectoryMtd.get_file_paths__(
+        return bsc_storage.StgDirectoryMtd.get_file_paths(
             self.path, ext_includes
         )
 
@@ -1030,7 +1032,7 @@ class AbsStgDirectory(
         return [self.STG_FILE_CLS(i) for i in self.get_file_paths(ext_includes)]
 
     def get_all_file_paths(self, ext_includes=None):
-        return bsc_storage.StgDirectoryMtd.get_all_file_paths__(
+        return bsc_storage.StgDirectoryMtd.get_all_file_paths(
             self.path, ext_includes
         )
 
@@ -1207,7 +1209,7 @@ class AbsStgFile(
                 cmd = 'gio open "{}"'.format(self.directory.path)
                 subprocess.Popen(cmd, shell=True)
 
-    def set_copy_to(self, target_dir_path, ignore_structure=True):
+    def copy_to(self, target_dir_path, ignore_structure=True):
         if self.get_is_exists() is True:
             if isinstance(target_dir_path, six.string_types):
                 target_dir_path = [target_dir_path]
@@ -1341,7 +1343,7 @@ class AbsStgFile(
     def __str__(self):
         return '{}(path="{}")'.format(
             self.__class__.__name__,
-            bsc_core.auto_encode(self.get_path())
+            bsc_core.auto_string(self.get_path())
         )
 
     def __repr__(self):

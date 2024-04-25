@@ -13,9 +13,9 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.core as bsc_dcc_core
+import lxgeneral.dcc.core as gnl_dcc_core
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 import lxbasic.fnc.abstracts as bsc_fnc_abstracts
 
@@ -141,7 +141,7 @@ class FncExporterForLookAss(bsc_fnc_abstracts.AbsFncOptionBase):
                     for i in self._results:
                         l_p.do_update()
                         #
-                        fr = bsc_dcc_core.DotAssOpt(i)
+                        fr = gnl_dcc_core.DotAssOpt(i)
                         fr.do_file_path_convert_to_env()
             #
             bsc_log.Log.trace_method_result(
@@ -291,7 +291,7 @@ class TextureBaker(bsc_fnc_abstracts.AbsFncOptionBase):
         for i_key, i_pattern in patterns:
             i_texture_exr_paths = glob.glob(i_pattern) or []
             for j_texture_exr_path in i_texture_exr_paths:
-                j_texture_exr = bsc_dcc_objects.StgTexture(j_texture_exr_path)
+                j_texture_exr = gnl_dcc_objects.StgTexture(j_texture_exr_path)
                 j_texture_jpg = j_texture_exr.get_as_tgt_ext('.jpg')
                 #
                 dic.setdefault(
@@ -436,7 +436,7 @@ class TextureBaker(bsc_fnc_abstracts.AbsFncOptionBase):
         directory_path = self.get('directory')
         location_path = self.option.get('location')
         include_indices = self.get('include_indices')
-        directory = bsc_dcc_objects.StgDirectory(directory_path)
+        directory = gnl_dcc_objects.StgDirectory(directory_path)
         directory.set_create()
         #
         mya_hide_set = mya_dcc_objects.Set('look_preview_export_hide_set')
@@ -517,7 +517,7 @@ class TextureBaker(bsc_fnc_abstracts.AbsFncOptionBase):
     def set_convert_run(self):
         directory_path = self.get('directory')
         location_path = self.option.get('location')
-        directory = bsc_dcc_objects.StgDirectory(directory_path)
+        directory = gnl_dcc_objects.StgDirectory(directory_path)
 
         mya_group = mya_dcc_objects.Group(
             bsc_core.PthNodeOpt(location_path).translate_to('|').get_value()

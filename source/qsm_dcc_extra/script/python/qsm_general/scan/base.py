@@ -1,43 +1,7 @@
 # coding:utf-8
 import copy
 
-import parse
-
 import lxbasic.core as bsc_core
-
-
-class PtnStgParseOpt(bsc_core.PtnStgParseOpt):
-    def __init__(self, p, variants=None):
-        super(PtnStgParseOpt, self).__init__(p, variants)
-
-    def get_matches(self, sort=False):
-        list_ = []
-        paths = bsc_core.ScanGlob.glob(
-            bsc_core.PtnParseMtd.get_as_fnmatch(
-                self._pattern, self._variants_default
-            )
-        )
-        if sort is True:
-            paths = bsc_core.RawTextsOpt(paths).sort_by_number()
-        #
-        if self.get_keys():
-            for i_path in paths:
-                i_p = parse.parse(
-                    self._pattern, i_path, case_sensitive=True
-                )
-                if i_p:
-                    i_r = i_p.named
-                    if i_r:
-                        i_r.update(self._variants)
-                        i_r['result'] = i_path
-                        i_r['pattern'] = self._pattern_origin
-                        list_.append(i_r)
-        else:
-            for i_path in paths:
-                i_r = dict(result=i_path)
-                i_r.update(self._variants)
-                list_.append(i_r)
-        return list_
 
 
 class Properties(dict):

@@ -13,9 +13,9 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
-import lxbasic.dcc.abstracts as bsc_dcc_abstracts
+import lxgeneral.dcc.abstracts as gnl_dcc_abstracts
 
 import lxuniverse.core as unr_core
 
@@ -33,8 +33,8 @@ from . import node_for_dag as _mya_dcc_obj_node_for_dag
 
 
 class Namespace(
-    bsc_dcc_abstracts.AbsDccBaseDef,
-    bsc_dcc_abstracts.AbsGuiExtraDef,
+    gnl_dcc_abstracts.AbsDccBaseDef,
+    gnl_dcc_abstracts.AbsGuiExtraDef,
 ):
     PATHSEP = ':'
     Obj_CLS = _mya_dcc_obj_node.Node
@@ -84,8 +84,8 @@ class Namespace(
         )
 
 
-class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
-    FILE_CLS = bsc_dcc_objects.StgFile
+class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
+    FILE_CLS = gnl_dcc_objects.StgFile
     UNIVERSE_CLS = unv_objects.ObjUniverse
     #
     NAMESPACE_CLS = Namespace
@@ -285,7 +285,7 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
     @classmethod
     def set_file_path(cls, file_path, with_create_directory=False):
         if with_create_directory is True:
-            f = bsc_dcc_objects.StgFile(file_path)
+            f = gnl_dcc_objects.StgFile(file_path)
             f.create_directory()
         #
         cmds.file(rename=file_path)
@@ -293,7 +293,7 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
     @classmethod
     def set_file_path_as_project(cls, file_path, with_create_directory=False):
         cls.set_file_path(file_path, with_create_directory)
-        workspace_directory = bsc_dcc_objects.StgFile(file_path).directory.get_parent()
+        workspace_directory = gnl_dcc_objects.StgFile(file_path).directory.get_parent()
         cls.set_workspace_create(workspace_directory.path)
 
     # noinspection PyUnusedLocal
@@ -309,7 +309,7 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
             #
             cls.new_file()
             #
-            f = bsc_dcc_objects.StgFile(file_path)
+            f = gnl_dcc_objects.StgFile(file_path)
             f.create_directory()
             #
             pos_method_run_fnc_()
@@ -320,7 +320,7 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
         def no_fnc_():
             cls.new_file()
             #
-            f = bsc_dcc_objects.StgFile(file_path)
+            f = gnl_dcc_objects.StgFile(file_path)
             f.create_directory()
             #
             pos_method_run_fnc_()
@@ -379,12 +379,12 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
     @classmethod
     def set_file_open_as_project(cls, file_path):
         cls.open_file(file_path)
-        workspace_directory = bsc_dcc_objects.StgFile(file_path).directory.get_parent()
+        workspace_directory = gnl_dcc_objects.StgFile(file_path).directory.get_parent()
         cls.set_workspace_create(workspace_directory.path)
 
     @classmethod
     def save_to_file(cls, file_path):
-        file_obj = bsc_dcc_objects.StgFile(file_path)
+        file_obj = gnl_dcc_objects.StgFile(file_path)
         file_obj.create_directory()
         #
         cmds.file(rename=file_path)
@@ -419,7 +419,7 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
 
     @classmethod
     def reference_file_from(cls, file_path, namespace=None):
-        f = bsc_dcc_objects.StgFile(file_path)
+        f = gnl_dcc_objects.StgFile(file_path)
         if f.get_is_exists() is True:
             if namespace is None:
                 namespace = f.base
@@ -806,7 +806,7 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
             file_type_name
         )
         mel.eval(mel_cmd)
-        workspace_directory = bsc_dcc_objects.StgFile(file_path).directory.get_parent()
+        workspace_directory = gnl_dcc_objects.StgFile(file_path).directory.get_parent()
         cls.set_workspace_create(workspace_directory.path)
 
     # render

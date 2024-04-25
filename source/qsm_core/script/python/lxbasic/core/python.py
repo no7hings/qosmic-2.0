@@ -328,5 +328,9 @@ class PyReloader2(object):
     def do_reload(self):
         for i_k, i_v in sys.modules.items():
             for j_name in self._module_names:
-                if i_k.startswith(j_name):
-                    del sys.modules[i_k]
+                if '.' in i_k:
+                    if i_k.startswith('{}.'.format(j_name)):
+                        del sys.modules[i_k]
+                else:
+                    if i_k == j_name:
+                        del sys.modules[i_k]

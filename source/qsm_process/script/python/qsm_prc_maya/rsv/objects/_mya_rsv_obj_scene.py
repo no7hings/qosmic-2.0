@@ -7,7 +7,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
 import lxmaya.core as mya_core
 
@@ -116,11 +116,11 @@ class RsvDccSceneHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             keyword=keyword_0
         )
         scene_src_file_path = scene_src_file_rsv_unit.get_result(version=version)
-        orig_file = bsc_dcc_objects.StgFile(orig_file_path)
+        orig_file = gnl_dcc_objects.StgFile(orig_file_path)
         if orig_file.get_is_exists() is True:
             orig_file.copy_to_file(scene_src_file_path, replace=True)
             #
-            scene_src_file = bsc_dcc_objects.StgFile(scene_src_file_path)
+            scene_src_file = gnl_dcc_objects.StgFile(scene_src_file_path)
             if scene_src_file.get_is_exists() is True:
                 mya_dcc_objects.Scene.open_file(scene_src_file_path)
                 camera_location = camera_root
@@ -210,10 +210,10 @@ class RsvDccSceneHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             review_mov_file_path = review_mov_file_rsv_unit.get_result(
                 version=version
             )
-            preview_mov_file = bsc_dcc_objects.StgFile(
+            preview_mov_file = gnl_dcc_objects.StgFile(
                 preview_mov_file_path
             )
-            review_mov_file = bsc_dcc_objects.StgFile(review_mov_file_path)
+            review_mov_file = gnl_dcc_objects.StgFile(review_mov_file_path)
             if preview_mov_file.get_is_exists() is True:
                 if review_mov_file.get_is_exists() is False:
                     preview_mov_file.link_to(
@@ -536,7 +536,7 @@ class RsvDccSceneHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                     version='new'
                 )
                 #
-                bsc_dcc_objects.StgFile(
+                gnl_dcc_objects.StgFile(
                     scene_file_path
                 ).link_to(new_work_scene_src_file_path)
             else:
@@ -550,7 +550,7 @@ class RsvDccSceneHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             new_work_scene_src_file_path = work_scene_src_file_rsv_unit.get_result(
                 version='new'
             )
-            bsc_dcc_objects.StgFile(
+            gnl_dcc_objects.StgFile(
                 scene_file_path
             ).link_to(new_work_scene_src_file_path)
 
@@ -627,7 +627,7 @@ class RsvDccShotSceneHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             )
         )
         #
-        bsc_dcc_objects.StgFile(
+        gnl_dcc_objects.StgFile(
             shot_scene_file_path
         ).copy_to_file(
             asset_shot_scene_src_file_path

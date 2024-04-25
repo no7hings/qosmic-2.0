@@ -1,7 +1,7 @@
 # coding:utf-8
 
 def main(session):
-    import lxbasic.dcc.objects as bsc_dcc_objects
+    import lxgeneral.dcc.objects as gnl_dcc_objects
 
     variants_extend = session.rsv_unit_extend_variants
 
@@ -10,7 +10,7 @@ def main(session):
         variants_extend=variants_extend
     )
     if dir_path:
-        bsc_dcc_objects.StgDirectory(dir_path).set_open()
+        gnl_dcc_objects.StgDirectory(dir_path).set_open()
 
 
 if __name__ == '__main__':

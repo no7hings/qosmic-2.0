@@ -33,21 +33,25 @@ import lxbasic.log as bsc_log
 
 import lxbasic.content as bsc_content
 
-from lxbasic.core import base as bsc_cor_base
+from ..scan import base as _scan_base
 
-from lxbasic.core import raw as bsc_cor_raw
+from ..scan import glob_ as _scan_glob
 
-from lxbasic.core import raw_for_dict as bsc_cor_raw_for_dict
+from ..core import base as _cor_base
 
-from lxbasic.core import path as bsc_cor_path
+from ..core import raw as _cor_raw
 
-from lxbasic.core import pattern as bsc_cor_pattern
+from ..core import raw_for_dict as _cor_raw_for_dict
 
-from lxbasic.core import time_ as bsc_cor_time
+from ..core import path as _cor_path
 
-from lxbasic.core import process as bsc_cor_process
+from ..core import pattern as _cor_pattern
 
-from lxbasic.core import thread as bsc_cor_thread
+from ..core import time_ as _cor_time
+
+from ..core import process as _cor_process
+
+from ..core import thread as _cor_thread
 
 
 class StgRpcMtd(object):
@@ -65,7 +69,7 @@ class StgRpcMtd(object):
 
     @classmethod
     def create_directory(cls, directory_path, mode='775'):
-        units = bsc_cor_path.PthNodeMtd.get_dag_component_paths(directory_path)
+        units = _cor_path.PthNodeMtd.get_dag_component_paths(directory_path)
         units.reverse()
         list_ = []
         for i_path in units:
@@ -96,7 +100,7 @@ class StgRpcMtd(object):
                         )
                     )
                 #
-                if bsc_cor_base.SysBaseMtd.get_is_linux():
+                if _cor_base.SysBaseMtd.get_is_linux():
                     os.system('ls {} > /dev/null'.format(p))
                 #
                 time.sleep(1)
@@ -132,7 +136,7 @@ class StgRpcMtd(object):
                         )
                     )
                 #
-                if bsc_cor_base.SysBaseMtd.get_is_linux():
+                if _cor_base.SysBaseMtd.get_is_linux():
                     os.system('ls {} > /dev/null'.format(p))
                 #
                 time.sleep(1)
@@ -169,7 +173,7 @@ class StgRpcMtd(object):
                             'path="{}" is timeout, cost time {}s'.format(file_path_tgt, cost_time)
                         )
                     )
-                if bsc_cor_base.SysBaseMtd.get_is_linux():
+                if _cor_base.SysBaseMtd.get_is_linux():
                     os.system('ls {} > /dev/null'.format(p))
                 #
                 time.sleep(1)
@@ -196,7 +200,7 @@ class StgRpcMtd(object):
             clt = cls.get_client()
             clt.chmod(path, mode)
             #
-            if bsc_cor_base.SysBaseMtd.get_is_linux():
+            if _cor_base.SysBaseMtd.get_is_linux():
                 p = os.path.dirname(path)
                 os.system('ls {} > /dev/null'.format(p))
             #
@@ -212,7 +216,7 @@ class StgRpcMtd(object):
             clt = cls.get_client()
             clt.chown(path, user, group)
             p = os.path.dirname(path)
-            if bsc_cor_base.SysBaseMtd.get_is_linux():
+            if _cor_base.SysBaseMtd.get_is_linux():
                 os.system('ls {} > /dev/null'.format(p))
             bsc_log.Log.trace_method_result(
                 key,
@@ -431,7 +435,7 @@ class StgSshMtd(object):
 class StgSshOpt(object):
     def __init__(self, path):
         self._path = path
-        self._nas_path = bsc_cor_base.StgBaseMtd.set_map_to_nas(path)
+        self._nas_path = _cor_base.StgBaseMtd.set_map_to_nas(path)
 
     def remove_all_group(self):
         group_data = StgSshMtd._get_all_group_data_1_(self._nas_path)
@@ -505,9 +509,9 @@ class StgUserMtd(object):
 
     @classmethod
     def get_home(cls):
-        if bsc_cor_base.SysBaseMtd.get_is_windows():
+        if _cor_base.SysBaseMtd.get_is_windows():
             return cls.get_windows_home()
-        elif bsc_cor_base.SysBaseMtd.get_is_linux():
+        elif _cor_base.SysBaseMtd.get_is_linux():
             return cls.get_linux_home()
         else:
             raise SystemError()
@@ -527,50 +531,50 @@ class StgUserMtd(object):
 
     @classmethod
     def get_user_directory(cls):
-        if bsc_cor_base.SysBaseMtd.get_is_windows():
+        if _cor_base.SysBaseMtd.get_is_windows():
             return cls.get_windows_user_directory()
-        elif bsc_cor_base.SysBaseMtd.get_is_linux():
+        elif _cor_base.SysBaseMtd.get_is_linux():
             return cls.get_linux_user_directory()
         else:
             raise SystemError()
 
     @classmethod
     def get_user_temporary_directory(cls, create=False):
-        date_tag = bsc_cor_base.SysBaseMtd.get_date_tag()
+        date_tag = _cor_base.SysBaseMtd.get_date_tag()
         _ = '{}/temporary/{}'.format(
             cls.get_user_directory(), date_tag
         )
         if create:
-            bsc_cor_base.StgBaseMtd.create_directory(_)
+            _cor_base.StgBaseMtd.create_directory(_)
         return _
 
     @classmethod
     def get_user_debug_directory(cls, tag=None, create=False):
-        date_tag = bsc_cor_base.SysBaseMtd.get_date_tag()
+        date_tag = _cor_base.SysBaseMtd.get_date_tag()
         _ = '{}/debug/{}'.format(
             cls.get_user_directory(), date_tag
         )
         if tag is not None:
             _ = '{}/{}'.format(_, tag)
         if create:
-            bsc_cor_base.StgBaseMtd.create_directory(_)
+            _cor_base.StgBaseMtd.create_directory(_)
         return _
 
     @classmethod
     def get_user_batch_exception_directory(cls, tag, create=False):
-        date_tag = bsc_cor_base.SysBaseMtd.get_date_tag()
+        date_tag = _cor_base.SysBaseMtd.get_date_tag()
         _ = '{}/batch-exception-log/{}'.format(
             cls.get_user_directory(), date_tag
         )
         if tag is not None:
             _ = '{}/{}'.format(_, tag)
         if create:
-            bsc_cor_base.StgBaseMtd.create_directory(_)
+            _cor_base.StgBaseMtd.create_directory(_)
         return _
 
     @classmethod
     def get_user_log_directory(cls):
-        date_tag = bsc_cor_base.SysBaseMtd.get_date_tag()
+        date_tag = _cor_base.SysBaseMtd.get_date_tag()
         return '{}/log/{}.log'.format(
             cls.get_user_directory(), date_tag
         )
@@ -583,36 +587,36 @@ class StgUserMtd(object):
 
     @classmethod
     def get_user_session_directory(cls, create=False):
-        date_tag = bsc_cor_base.SysBaseMtd.get_date_tag()
+        date_tag = _cor_base.SysBaseMtd.get_date_tag()
         _ = '{}/.session/{}'.format(
             cls.get_user_directory(), date_tag
         )
         if create:
-            bsc_cor_base.StgBaseMtd.create_directory(_)
+            _cor_base.StgBaseMtd.create_directory(_)
         return _
 
     @classmethod
     def get_user_session_file(cls, unique_id=None):
         directory_path = cls.get_user_session_directory()
         if unique_id is None:
-            unique_id = bsc_cor_base.UuidMtd.generate_new()
+            unique_id = _cor_base.UuidMtd.generate_new()
         return '{}/{}.yml'.format(directory_path, unique_id)
 
 
 class StgSystem(object):
     @classmethod
     def open_directory(cls, path):
-        path = bsc_cor_raw.auto_encode(path)
-        if bsc_cor_base.SysBaseMtd.get_is_windows():
+        path = _cor_raw.auto_string(path)
+        if _cor_base.SysBaseMtd.get_is_windows():
             cmd = 'explorer "{}"'.format(path.replace('/', '\\'))
-        elif bsc_cor_base.SysBaseMtd.get_is_linux():
+        elif _cor_base.SysBaseMtd.get_is_linux():
             cmd = 'gio open "{}"'.format(path)
         else:
             raise SystemError()
 
         t_0 = threading.Thread(
             target=functools.partial(
-                bsc_cor_process.PrcBaseMtd.execute, cmd
+                _cor_process.PrcBaseMtd.execute, cmd, ignore_return_code=1
             )
         )
         t_0.setDaemon(True)
@@ -620,7 +624,7 @@ class StgSystem(object):
 
     @classmethod
     def open_directory_force(cls, path):
-        path = bsc_cor_raw.auto_encode(path)
+        path = _cor_raw.auto_string(path)
         if os.path.exists(path) is False:
             path = StgExtraMtd.get_exists_component(path)
 
@@ -628,16 +632,16 @@ class StgSystem(object):
 
     @classmethod
     def open_file(cls, path):
-        if bsc_cor_base.SysBaseMtd.get_is_windows():
+        if _cor_base.SysBaseMtd.get_is_windows():
             cmd = 'explorer /select,"{}"'.format(path.replace('/', '\\'))
-        elif bsc_cor_base.SysBaseMtd.get_is_linux():
+        elif _cor_base.SysBaseMtd.get_is_linux():
             cmd = 'nautilus "{}" --select'.format(path)
         else:
             raise SystemError()
 
         t_0 = threading.Thread(
             target=functools.partial(
-                bsc_cor_process.PrcBaseMtd.execute, cmd
+                _cor_process.PrcBaseMtd.execute, cmd, ignore_return_code=1
             )
         )
         t_0.setDaemon(True)
@@ -659,7 +663,7 @@ class StgSystem(object):
 class StgExtraMtd(object):
     @classmethod
     def get_exists_component(cls, path):
-        units = bsc_cor_path.PthNodeMtd.get_dag_component_paths(path)
+        units = _cor_path.PthNodeMtd.get_dag_component_paths(path)
         for i in units:
             if os.path.exists(i):
                 return i
@@ -669,12 +673,12 @@ class StgExtraMtd(object):
         _ = glob.glob(pattern) or []
         if _:
             # fix windows path
-            if bsc_cor_base.SysBaseMtd.get_is_windows():
+            if _cor_base.SysBaseMtd.get_is_windows():
                 _ = map(lambda x: x.replace('\\', '/'), _)
             if len(_) > 1:
                 # sort by number
                 if sort_by == 'number':
-                    _.sort(key=lambda x: bsc_cor_raw.RawTextMtd.to_number_embedded_args(x))
+                    _.sort(key=lambda x: _cor_raw.RawTextMtd.to_number_embedded_args(x))
         return _
 
     @classmethod
@@ -740,221 +744,38 @@ class StgPathLinkMtd(object):
                 os.symlink(src_rel_path, path_tgt)
 
 
-class StgPathMtd(bsc_cor_base.StgBaseMtd):
+class StgPathMtd(_cor_base.StgBaseMtd):
     @classmethod
     def get_parent(cls, path):
-        return bsc_cor_path.PthNodeMtd.get_dag_parent_path(
+        return _cor_path.PthNodeMtd.get_dag_parent_path(
             path
         )
 
 
 class StgDirectoryMtd(object):
+
     @classmethod
     def get_file_paths(cls, directory_path, ext_includes=None):
-        list_ = []
-        if os.path.isdir(directory_path):
-            results = os.listdir(directory_path) or []
-            for i_name in results:
-                i_path = '{}/{}'.format(directory_path, i_name)
-                if os.path.isfile(i_path):
-                    if isinstance(ext_includes, (tuple, list)):
-                        i_name_base, i_ext = os.path.splitext(i_name)
-                        if i_ext not in ext_includes:
-                            continue
-                    #
-                    list_.append(i_path)
-        if list_:
-            list_.sort()
-        return list_
-
-    @classmethod
-    def _get_file_paths(cls, directory_path, ext_includes=None):
-        import scandir
-
-        list_ = []
-        # make sure is a directory
-        if os.path.isdir(directory_path):
-            if StgPathMtd.get_is_readable(directory_path) is True:
-                for i in scandir.scandir(directory_path):
-                    if i.is_file():
-                        i_path = i.path
-                        if isinstance(ext_includes, (tuple, list)):
-                            i_base, i_ext = os.path.splitext(i_path)
-                            if i_ext not in ext_includes:
-                                continue
-                        #
-                        list_.append(i_path)
-            else:
-                bsc_log.Log.trace_error(
-                    'unreadable directory: "{}"'.format(
-                        directory_path
-                    )
-                )
-        if list_:
-            list_.sort()
-        return list_
-
-    @classmethod
-    def get_file_paths__(cls, directory_path, ext_includes=None):
-        if bsc_cor_base.SysBaseMtd.get_is_linux():
-            return cls._get_file_paths(directory_path, ext_includes)
-        else:
-            return cls.get_file_paths(directory_path, ext_includes)
+        return _scan_base.ScanBase.get_file_paths(directory_path, ext_includes)
 
     @classmethod
     def get_all_file_paths(cls, directory_path, ext_includes=None):
-        def rcs_fnc_(path_):
-            _results = os.listdir(path_) or []
-            for _i_name in _results:
-                _i_path = '{}/{}'.format(path_, _i_name)
-                if os.path.isfile(_i_path):
-                    if isinstance(ext_includes, (tuple, list)):
-                        _i_name_base, _i_ext = os.path.splitext(_i_name)
-                        if _i_ext not in ext_includes:
-                            continue
-                    #
-                    list_.append(_i_path)
-                elif os.path.isdir(_i_path):
-                    rcs_fnc_(_i_path)
-
-        list_ = []
-        if os.path.isdir(directory_path):
-            rcs_fnc_(directory_path)
-        if list_:
-            list_.sort()
-        return list_
-
-    @classmethod
-    def _get_all_file_paths(cls, directory_path, ext_includes=None):
-        def rcs_fnc_(path_):
-            if StgPathMtd.get_is_readable(path_) is True:
-                for _i in scandir.scandir(path_):
-                    _i_path = _i.path
-                    if _i.is_file():
-                        if isinstance(ext_includes, (tuple, list)):
-                            _i_base, _i_ext = os.path.splitext(_i_path)
-                            if _i_ext not in ext_includes:
-                                continue
-                        #
-                        list_.append(_i_path)
-                    elif _i.is_dir():
-                        rcs_fnc_(_i_path)
-            else:
-                bsc_log.Log.trace_error(
-                    'unreadable directory: "{}"'.format(
-                        path_
-                    )
-                )
-
-        import scandir
-
-        list_ = []
-        if os.path.isdir(directory_path):
-            rcs_fnc_(directory_path)
-        if list_:
-            list_.sort()
-        return list_
-
-    @classmethod
-    def get_all_file_paths__(cls, directory_path, ext_includes=None):
-        if bsc_cor_base.SysBaseMtd.get_is_linux():
-            return cls._get_all_file_paths(directory_path, ext_includes)
-        else:
-            return cls.get_all_file_paths(directory_path, ext_includes)
+        return _scan_base.ScanBase.get_all_file_paths(directory_path, ext_includes)
 
     @classmethod
     def get_directory_paths(cls, directory_path):
-        list_ = []
-        if os.path.isdir(directory_path):
-            results = os.listdir(directory_path) or []
-            # results.sort()
-            for i_name in results:
-                i_path = '{}/{}'.format(directory_path, i_name)
-                if os.path.isdir(i_path):
-                    list_.append(i_path)
-        return list_
-
-    @classmethod
-    def _get_directory_paths(cls, directory_path):
-        import scandir
-
-        list_ = []
-        if os.path.isdir(directory_path):
-            if StgPathMtd.get_is_readable(directory_path) is True:
-                for i in scandir.scandir(directory_path):
-                    if i.is_dir():
-                        list_.append(i.path)
-            else:
-                bsc_log.Log.trace_error(
-                    'unreadable directory: "{}"'.format(
-                        directory_path
-                    )
-                )
-        return list_
-
-    @classmethod
-    def get_directory_paths__(cls, directory_path):
-        if bsc_cor_base.SysBaseMtd.get_is_linux():
-            return cls._get_directory_paths(directory_path)
-        else:
-            return cls.get_directory_paths(directory_path)
+        return _scan_base.ScanBase.get_directory_paths(directory_path)
 
     @classmethod
     def get_all_directory_paths(cls, directory_path):
-        def rcs_fnc_(path_):
-            _results = os.listdir(path_) or []
-            for _i_name in _results:
-                _i_path = '{}/{}'.format(path_, _i_name)
-                if os.path.isdir(_i_path):
-                    list_.append(_i_path)
-                    rcs_fnc_(_i_path)
-
-        list_ = []
-        if os.path.isdir(directory_path):
-            rcs_fnc_(directory_path)
-        if list_:
-            list_.sort()
-        return list_
-
-    @classmethod
-    def _get_all_directory_paths(cls, directory_path):
-        def rcs_fnc_(path_):
-            if StgPathMtd.get_is_readable(path_) is True:
-                for _i in scandir.scandir(path_):
-                    if _i.is_dir():
-                        _i_path = _i.path
-                        list_.append(_i_path)
-                        rcs_fnc_(_i_path)
-            else:
-                bsc_log.Log.trace_error(
-                    'unreadable directory: "{}"'.format(
-                        path_
-                    )
-                )
-
-        # noinspection PyUnresolvedReferences
-        import scandir
-
-        list_ = []
-        if os.path.isdir(directory_path):
-            rcs_fnc_(directory_path)
-        if list_:
-            list_.sort()
-        return list_
-
-    @classmethod
-    def get_all_directory_paths__(cls, directory_path):
-        if bsc_cor_base.SysBaseMtd.get_is_linux():
-            return cls._get_all_directory_paths(directory_path)
-        else:
-            return cls.get_all_directory_paths(directory_path)
+        return _scan_base.ScanBase.get_all_directory_paths(directory_path)
 
     @classmethod
     def get_file_relative_path(cls, directory_path, file_path):
         return os.path.relpath(file_path, directory_path)
 
     @classmethod
-    def set_copy_to(cls, src_directory_path, directory_path_tgt, excludes=None):
+    def do_thread_copy(cls, src_directory_path, directory_path_tgt, excludes=None):
         def copy_fnc_(src_file_path_, tgt_file_path_):
             shutil.copy2(src_file_path_, tgt_file_path_)
             bsc_log.Log.trace_method_result(
@@ -964,7 +785,7 @@ class StgDirectoryMtd(object):
 
         #
         src_directory_path = src_directory_path
-        file_paths = cls.get_all_file_paths__(src_directory_path)
+        file_paths = _scan_base.ScanBase.get_all_file_paths(src_directory_path)
         #
         threads = []
         for i_src_file_path in file_paths:
@@ -986,7 +807,7 @@ class StgDirectoryMtd(object):
                 if os.path.exists(i_tgt_dir_path) is False:
                     os.makedirs(i_tgt_dir_path)
                 #
-                i_thread = bsc_cor_thread.TrdFnc(
+                i_thread = _cor_thread.TrdFnc(
                     copy_fnc_, i_src_file_path, i_tgt_file_path
                 )
                 threads.append(i_thread)
@@ -995,24 +816,15 @@ class StgDirectoryMtd(object):
         [i.join() for i in threads]
 
     @classmethod
-    def get_file_paths_by_pattern__(cls, directory_path, name_pattern):
-        path_pattern = '{}/{}'.format(directory_path, name_pattern)
-        return fnmatch.filter(
-            cls.get_file_paths__(directory_path), path_pattern
-        )
-
-    @classmethod
     def find_file_paths(cls, glob_pattern):
-        return fnmatch.filter(
-            cls.get_file_paths__(os.path.dirname(glob_pattern)), glob_pattern
-        )
+        return _scan_glob.ScanGlob.glob(glob_pattern)
 
 
 class StgDirectoryMtdForMultiply(object):
     @classmethod
     def get_all_multiply_file_dict(cls, directory_path, name_pattern):
-        dic = collections.OrderedDict()
-        _ = StgDirectoryMtd.get_all_file_paths__(directory_path)
+        dict_ = collections.OrderedDict()
+        _ = _scan_base.ScanBase.get_all_file_paths(directory_path)
         for i_file_path in _:
             i_opt = StgFileOpt(i_file_path)
             i_number_args = StgFileMtdForMultiply.get_number_args(
@@ -1027,10 +839,10 @@ class StgDirectoryMtdForMultiply(object):
                     i_key = '{}/{}'.format(
                         i_relative_path_dir_path, i_pattern
                     )
-                    dic.setdefault(
+                    dict_.setdefault(
                         i_key, []
                     ).append(i_numbers[0])
-        return dic
+        return dict_
 
 
 class StgFileMtd(object):
@@ -1052,18 +864,18 @@ class StgFileMtdForMultiply(object):
     methods using for multiply file
     etc. "/tmp/image.1001.exr" convert to "/tmp/image.####.exr"
     """
-    PATHSEP = bsc_cor_pattern.PtnMultiplyFileMtd.PATHSEP
+    PATHSEP = _cor_pattern.PtnMultiplyFileMtd.PATHSEP
     P = '[0-9]'
     CACHE = dict()
 
     @classmethod
     def get_number_args(cls, file_name, name_pattern):
         new_file_name = file_name
-        args = bsc_cor_pattern.PtnMultiplyFileMtd.get_args(
+        args = _cor_pattern.PtnMultiplyFileMtd.get_args(
             name_pattern
         )
         if args:
-            re_pattern = bsc_cor_pattern.PtnMultiplyFileMtd.to_re_style(name_pattern)
+            re_pattern = _cor_pattern.PtnMultiplyFileMtd.to_re_style(name_pattern)
             results = re.findall(re_pattern, file_name)
             if results:
                 if len(args) > 1:
@@ -1100,7 +912,7 @@ class StgFileMtdForMultiply(object):
             i_name_pattern = i_name_pattern.format(
                 **dict(format=file_opt.get_format())
             )
-            if bsc_cor_pattern.PtnMultiplyFileMtd.get_is_valid(i_name_pattern):
+            if _cor_pattern.PtnMultiplyFileMtd.get_is_valid(i_name_pattern):
                 i_number_args = StgFileMtdForMultiply.get_number_args(
                     file_opt.name, i_name_pattern
                 )
@@ -1116,7 +928,7 @@ class StgFileMtdForMultiply(object):
             return cls.CACHE[name_base]
         #
         name_base_new = name_base
-        for i_keyword, i_re_format, i_count in bsc_cor_pattern.PtnMultiplyFileMtd.RE_MULTIPLY_KEYS:
+        for i_keyword, i_re_format, i_count in _cor_pattern.PtnMultiplyFileMtd.RE_MULTIPLY_KEYS:
             i_results = re.finditer(i_re_format.format(i_keyword), name_base, re.IGNORECASE) or []
             for j_result in i_results:
                 j_start, j_end = j_result.span()
@@ -1151,9 +963,15 @@ class StgFileMtdForMultiply(object):
 class StgPathOpt(object):
     PATHSEP = '/'
 
+    @classmethod
+    def auto_string(cls, path):
+        if isinstance(path, six.text_type):
+            return path.encode('utf-8')
+        return path
+
     def __init__(self, path, cleanup=True):
         if cleanup is True:
-            self._path = bsc_cor_base.StgBaseMtd.clear_pathsep_to(path)
+            self._path = _cor_base.StgBaseMtd.clear_pathsep_to(path)
         else:
             self._path = path
         #
@@ -1202,10 +1020,10 @@ class StgPathOpt(object):
         return os.path.normcase(self._path)
 
     def get_is_windows(self):
-        return bsc_cor_base.StgBaseMtd.get_path_is_windows(self.get_path())
+        return _cor_base.StgBaseMtd.get_path_is_windows(self.get_path())
 
     def get_is_linux(self):
-        return bsc_cor_base.StgBaseMtd.get_path_is_linux(self.get_path())
+        return _cor_base.StgBaseMtd.get_path_is_linux(self.get_path())
 
     def get_is_exists(self):
         return os.path.exists(self.get_path())
@@ -1224,12 +1042,12 @@ class StgPathOpt(object):
         return os.stat(self._path).st_mtime
 
     def get_modify_time_tag(self):
-        return bsc_cor_time.TimestampOpt(
+        return _cor_time.TimestampOpt(
             self.get_modify_timestamp()
         ).get_as_tag()
 
     def get_user(self):
-        return bsc_cor_base.StgBaseMtd.get_user(self.get_path())
+        return _cor_base.StgBaseMtd.get_user(self.get_path())
 
     def get_access_timestamp(self):
         return os.stat(self._path).st_atime
@@ -1248,7 +1066,7 @@ class StgPathOpt(object):
         return os.access(self._path, os.W_OK)
 
     def map_to_current(self):
-        self._path = bsc_cor_base.StgBasePathMapMtd.map_to_current(self._path)
+        self._path = _cor_base.StgBasePathMapMtd.map_to_current(self._path)
         return self._path
 
     def set_modify_time(self, timestamp):
@@ -1256,18 +1074,18 @@ class StgPathOpt(object):
         try:
             os.utime(self.get_path(), (timestamp, timestamp))
         except Exception:
-            bsc_cor_base.ExceptionMtd.set_print()
+            _cor_base.ExceptionMtd.set_print()
             bsc_log.Log.trace_error(
                 'change modify time failed'
             )
 
     def get_component_paths(self):
-        return bsc_cor_path.PthNodeMtd.get_dag_component_paths(
+        return _cor_path.PthNodeMtd.get_dag_component_paths(
             path=self.get_path(), pathsep=self.PATHSEP
         )
 
     def get_parent_path(self):
-        return bsc_cor_path.PthNodeMtd.get_dag_parent_path(
+        return _cor_path.PthNodeMtd.get_dag_parent_path(
             path=self.get_path(), pathsep=self.PATHSEP
         )
 
@@ -1285,9 +1103,9 @@ class StgPathOpt(object):
         #
         _ = p.split(pathsep)
         if len(_) > 6:
-            if bsc_cor_base.StgBaseMtd.get_path_is_windows(p):
+            if _cor_base.StgBaseMtd.get_path_is_windows(p):
                 return six.u('{0}{2}...{2}{1}'.format(pathsep.join(_[:3]), pathsep.join(_[-3:]), pathsep))
-            elif bsc_cor_base.StgBaseMtd.get_path_is_linux(p):
+            elif _cor_base.StgBaseMtd.get_path_is_linux(p):
                 return six.u('{0}{2}...{2}{1}'.format(pathsep.join(_[:2]), pathsep.join(_[-3:]), pathsep))
             return p
         return p
@@ -1327,12 +1145,12 @@ class StgFileSearchOpt(object):
 
     def append_search_directory(self, directory_path, below_enable=False):
         if below_enable is True:
-            _ = StgDirectoryMtd.get_all_file_paths__(directory_path)
+            _ = _scan_base.ScanBase.get_all_file_paths(directory_path)
         else:
-            _ = StgDirectoryMtd.get_file_paths__(directory_path)
+            _ = StgDirectoryMtd.get_file_paths(directory_path)
 
         for i in _:
-            i_directory_path, i_name_base, i_ext = bsc_cor_base.StgBaseMtd.get_file_args(i)
+            i_directory_path, i_name_base, i_ext = _cor_base.StgBaseMtd.get_file_args(i)
             if self._ignore_name_case is True:
                 i_name_base = i_name_base.lower()
             if self._ignore_ext_case is True:
@@ -1348,12 +1166,12 @@ class StgFileSearchOpt(object):
         self._set_key_sort_()
 
     def _set_key_sort_(self):
-        self._search_dict = bsc_cor_raw_for_dict.DictMtd.sort_string_key_to(self._search_dict)
+        self._search_dict = _cor_raw_for_dict.DictMtd.sort_string_key_to(self._search_dict)
 
     def get_result(self, file_path_src):
         name_src = os.path.basename(file_path_src)
         name_base_src, ext_src = os.path.splitext(name_src)
-        name_base_pattern = bsc_cor_pattern.PtnMultiplyFileMtd.to_fnmatch_style(name_base_src)
+        name_base_pattern = _cor_pattern.PtnMultiplyFileMtd.to_fnmatch_style(name_base_src)
 
         if self._ignore_name_case is True:
             name_base_pattern = name_base_pattern.lower()
@@ -1385,16 +1203,22 @@ class StgDirectoryOpt(StgPathOpt):
     def __init__(self, path):
         super(StgDirectoryOpt, self).__init__(path)
 
+    def __str__(self):
+        return 'directory(path="{}")'.format(self.auto_string(self._path))
+
+    def __repr__(self):
+        return self.__str__()
+
     def create_dag_fnc(self, path):
         return self.__class__(path)
 
     def set_create(self):
-        bsc_cor_base.StgBaseMtd.create_directory(
+        _cor_base.StgBaseMtd.create_directory(
             self.path
         )
 
     def get_file_paths(self, ext_includes=None):
-        return StgDirectoryMtd.get_file_paths__(
+        return StgDirectoryMtd.get_file_paths(
             self.path, ext_includes
         )
 
@@ -1404,12 +1228,27 @@ class StgDirectoryOpt(StgPathOpt):
         )
 
     def get_all_file_paths(self, ext_includes=None):
-        return StgDirectoryMtd.get_all_file_paths__(
+        return _scan_base.ScanBase.get_all_file_paths(
             self.path, ext_includes
         )
 
+    def get_all_files(self, ext_includes=None):
+        return map(
+            StgFileOpt, self.get_all_file_paths(ext_includes)
+        )
+
+    def get_directory_paths(self):
+        return _scan_base.ScanBase.get_directory_paths(
+            self._path
+        )
+
+    def get_directories(self):
+        return map(
+            self.__class__, self.get_directory_paths()
+        )
+
     def get_all_directory_paths(self):
-        return StgDirectoryMtd.get_all_directory_paths__(
+        return _scan_base.ScanBase.get_all_directory_paths(
             self._path
         )
 
@@ -1418,13 +1257,18 @@ class StgDirectoryOpt(StgPathOpt):
             self.__class__, self.get_all_directory_paths()
         )
 
-    def get_child_names(self):
-        return os.listdir(self.get_path()) or []
-
-    def get_directory_paths(self):
-        return StgDirectoryMtd.get_directory_paths__(
+    def get_all_paths(self):
+        return _scan_base.ScanBase.get_all_paths(
             self._path
         )
+
+    def get_all(self):
+        return map(
+            lambda x: StgDirectoryOpt(x) if os.path.isdir(x) else StgFileOpt(x), self.get_all_paths()
+        )
+
+    def get_child_names(self):
+        return os.listdir(self.get_path()) or []
 
     def copy_to_directory(self, directory_path_tgt, replace=False):
         directory_path_src = self.path
@@ -1440,8 +1284,8 @@ class StgDirectoryOpt(StgPathOpt):
                 # create target directory first
                 i_file_opt_tgt.create_directory()
                 #
-                bsc_cor_thread.TrdMethod.set_wait()
-                bsc_cor_thread.TrdMethod.set_start(
+                _cor_thread.TrdMethod.set_wait()
+                _cor_thread.TrdMethod.set_start(
                     i_file_opt_src.copy_to_file, index,
                     i_file_path_tgt, replace=replace
                 )
@@ -1454,6 +1298,12 @@ class StgFileOpt(StgPathOpt):
     def __init__(self, file_path, file_type=None):
         super(StgFileOpt, self).__init__(file_path)
         self._file_type = file_type
+
+    def __str__(self):
+        return 'file(path="{}")'.format(self.auto_string(self._path))
+
+    def __repr__(self):
+        return self.__str__()
 
     def get_directory_path(self):
         return os.path.dirname(self.path)
@@ -1524,7 +1374,7 @@ class StgFileOpt(StgPathOpt):
             try:
                 os.makedirs(directory)
             except Exception:
-                bsc_cor_base.ExceptionMtd.set_print()
+                _cor_base.ExceptionMtd.set_print()
         if self.ext in {'.json'}:
             with open(self.path, 'w') as j:
                 json.dump(
@@ -1551,12 +1401,12 @@ class StgFileOpt(StgPathOpt):
 
     def append(self, text):
         with open(self.path, 'a+') as f:
-            text = bsc_cor_raw.auto_encode(text)
+            text = _cor_raw.auto_string(text)
             f.write('{}\n'.format(text))
             f.close()
 
     def create_directory(self):
-        bsc_cor_base.StgBaseMtd.create_directory(
+        _cor_base.StgBaseMtd.create_directory(
             self.get_directory_path()
         )
 
@@ -1569,7 +1419,7 @@ class StgFileOpt(StgPathOpt):
 
     def set_directory_repath_to_join_uuid(self, directory_path_tgt):
         directory_path_src = self.get_directory_path()
-        uuid_key = bsc_cor_base.UuidMtd.generate_by_text(directory_path_src)
+        uuid_key = _cor_base.UuidMtd.generate_by_text(directory_path_src)
         return self.__class__(
             u'{}/{}/{}'.format(
                 directory_path_tgt, uuid_key, self.get_name()
@@ -1604,7 +1454,7 @@ class StgFileOpt(StgPathOpt):
             try:
                 shutil.copy2(file_path_src, file_path_tgt)
             except Exception:
-                bsc_cor_base.ExceptionMtd.set_print()
+                _cor_base.ExceptionMtd.set_print()
 
     def copy_to_directory(self, directory_path_tgt, replace=False):
         file_path_tgt = u'{}/{}'.format(
@@ -1631,9 +1481,9 @@ class StgFileOpt(StgPathOpt):
 
     def get_tag_as_36(self):
         timestamp = self.get_modify_timestamp()
-        time_tag = bsc_cor_raw.RawIntegerOpt(int(timestamp*10)).set_encode_to_36()
+        time_tag = _cor_raw.RawIntegerOpt(int(timestamp*10)).set_encode_to_36()
         size = self.get_size()
-        size_tag = bsc_cor_raw.RawIntegerOpt(int(size)).set_encode_to_36()
+        size_tag = _cor_raw.RawIntegerOpt(int(size)).set_encode_to_36()
         return '{}{}'.format(time_tag, size_tag)
 
     @classmethod
@@ -1825,7 +1675,7 @@ class StgPermissionNewMtd(StgPermissionDefaultMtd):
         StgRpcMtd.change_mode(
             path, '555'
         )
-        ds = StgDirectoryMtd.get_all_directory_paths__(
+        ds = _scan_base.ScanBase.get_all_directory_paths(
             path
         )
         for i in ds:
@@ -1838,7 +1688,7 @@ class StgPermissionNewMtd(StgPermissionDefaultMtd):
         StgRpcMtd.change_mode(
             path, '775'
         )
-        ds = StgDirectoryMtd.get_all_directory_paths__(
+        ds = _scan_base.ScanBase.get_all_directory_paths(
             path
         )
         for i in ds:
@@ -1848,7 +1698,7 @@ class StgPermissionNewMtd(StgPermissionDefaultMtd):
 
     @classmethod
     def lock_all_files(cls, path):
-        fs = StgDirectoryMtd.get_all_file_paths__(
+        fs = _scan_base.ScanBase.get_all_file_paths(
             path
         )
         for i in fs:
@@ -1861,7 +1711,7 @@ class StgPermissionNewMtd(StgPermissionDefaultMtd):
         StgRpcMtd.change_mode(
             path, '775'
         )
-        ds = StgDirectoryMtd.get_all_file_paths__(
+        ds = _scan_base.ScanBase.get_all_file_paths(
             path
         )
         for i in ds:
@@ -1893,7 +1743,7 @@ class StgPermissionBaseMtd(object):
         }
     )
     MAP_DICT = {
-        i: k for k, v in SCHEME_MAPPER[bsc_cor_base.SysBaseMtd.get_platform()].items() for i in v
+        i: k for k, v in SCHEME_MAPPER[_cor_base.SysBaseMtd.get_platform()].items() for i in v
     }
     METHOD_DICT = dict(
         default=StgPermissionDefaultMtd,

@@ -5,9 +5,9 @@ import types
 
 import lxbasic.log as bsc_log
 
-import lxbasic.dcc.objects as bsc_dcc_objects
+import lxgeneral.dcc.objects as gnl_dcc_objects
 
-import lxbasic.dcc.abstracts as bsc_dcc_abstracts
+import lxgeneral.dcc.abstracts as gnl_dcc_abstracts
 
 import lxuniverse.core as unr_core
 
@@ -21,7 +21,7 @@ from ... import core as ktn_core
 
 
 # noinspection PyUnusedLocal
-class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
+class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
     @classmethod
     def get_current_file_path(cls):
         _ = NodegraphAPI.GetProjectFile()
@@ -34,7 +34,7 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
 
     @classmethod
     def open_file(cls, file_path):
-        file_obj = bsc_dcc_objects.StgFile(file_path)
+        file_obj = gnl_dcc_objects.StgFile(file_path)
         bsc_log.Log.trace_method_result(
             'katana-file open',
             'file="{}" is started'.format(file_path)
@@ -63,7 +63,7 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
 
     @classmethod
     def save_to_file(cls, file_path):
-        file_obj = bsc_dcc_objects.StgFile(file_path)
+        file_obj = gnl_dcc_objects.StgFile(file_path)
         file_obj.create_directory()
         bsc_log.Log.trace_method_result(
             'katana-file save-to',
@@ -79,7 +79,7 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
     def set_file_export_to(cls, file_path):
         # cls.save_file()
         src_file_path = cls.get_current_file_path()
-        src_file_obj = bsc_dcc_objects.StgFile(src_file_path)
+        src_file_obj = gnl_dcc_objects.StgFile(src_file_path)
         src_file_obj.copy_to_file(
             file_path, replace=True
         )
@@ -141,7 +141,7 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
         return lis
 
     #
-    FILE_CLS = bsc_dcc_objects.StgFile
+    FILE_CLS = gnl_dcc_objects.StgFile
     UNIVERSE_CLS = unv_objects.ObjUniverse
 
     def __init__(self, *args, **kwargs):
@@ -214,7 +214,7 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
             #
             cls.new_file()
             #
-            f = bsc_dcc_objects.StgFile(file_path)
+            f = gnl_dcc_objects.StgFile(file_path)
             f.create_directory()
             #
             pos_method_run_fnc_()
@@ -225,7 +225,7 @@ class Scene(bsc_dcc_abstracts.AbsDccNodeScene):
         def no_fnc_():
             cls.new_file()
             #
-            f = bsc_dcc_objects.StgFile(file_path)
+            f = gnl_dcc_objects.StgFile(file_path)
             f.create_directory()
             #
             pos_method_run_fnc_()

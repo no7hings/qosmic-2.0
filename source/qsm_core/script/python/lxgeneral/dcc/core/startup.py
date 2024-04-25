@@ -1,9 +1,9 @@
 # coding:utf-8
 import lxbasic.resource as bsc_resource
 
-from .. import abstracts as bsc_dcc_abstracts
+from .. import abstracts as gnl_dcc_abstracts
 
-from . import houdini_menu as bsc_dcc_core_houdini_menu
+from . import houdini_menu as gnl_dcc_core_houdini_menu
 
 
 class HoudiniSetupCreator(object):
@@ -41,7 +41,7 @@ class HoudiniSetupCreator(object):
                         _i_action.name = _i_name
                         _i_action.python_command = _i_command
 
-        self._menu_bar = bsc_dcc_core_houdini_menu.HouMenuXmlForMenuBar()
+        self._menu_bar = gnl_dcc_core_houdini_menu.HouMenuXmlForMenuBar()
 
         configure = bsc_resource.RscExtendConfigure.get_as_content('houdini/menu')
         create_menu_fnc_(configure, 0)
@@ -56,7 +56,7 @@ class HoudiniSetupCreator(object):
             f.write(raw)
 
 
-class OcioSetup(bsc_dcc_abstracts.AbsDccSetup):
+class OcioSetup(gnl_dcc_abstracts.AbsDccSetup):
     def __init__(self, root):
         super(OcioSetup, self).__init__(root)
 
