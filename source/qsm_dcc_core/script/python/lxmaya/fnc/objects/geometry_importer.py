@@ -13,7 +13,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 
 import lxusd.core as usd_core
 
@@ -30,7 +30,7 @@ from ...dcc import operators as mya_dcc_operators
 from . import base as mya_fnc_obj_base
 
 
-class FncImporterForGeometryUsd(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncImporterForGeometryUsd(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file='',
         location='',
@@ -208,7 +208,7 @@ class FncImporterForGeometryUsd(bsc_fnc_abstracts.AbsFncOptionBase):
                     g_p.do_update()
 
 
-class FncImporterForGeometryFbx(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncImporterForGeometryFbx(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file=''
     )
@@ -291,7 +291,7 @@ class FncImporterForGeometryUsdOld(object):
         )
 
 
-class FncImporterForGeometryAbc(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncImporterForGeometryAbc(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file='',
         location='',
@@ -359,8 +359,8 @@ class FncImporterForGeometryAbc(bsc_fnc_abstracts.AbsFncOptionBase):
 
 
 class FncImporterForGeometryXgen(
-    bsc_fnc_abstracts.AbsFncOptionBase,
-    bsc_fnc_abstracts.AbsFncForDotXgenDef
+    gnl_fnc_abstracts.AbsFncOptionBase,
+    gnl_fnc_abstracts.AbsFncForDotXgenDef
 ):
     OPTION = dict(
         xgen_collection_file='',
@@ -484,7 +484,7 @@ class FncImporterForDatabaseGeometry(object):
         self._set_uv_map_export_import_()
 
 
-class FncImporterForGeometryNew(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncImporterForGeometryNew(gnl_fnc_abstracts.AbsFncOptionBase):
     """
 # coding:utf-8
 import lxmaya

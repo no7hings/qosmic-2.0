@@ -5,9 +5,9 @@ import lxbasic.core as bsc_core
 
 import lxgeneral.dcc.objects as gnl_dcc_objects
 
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 
-import lxbasic.fnc.objects as bsc_fnc_objects
+import lxgeneral.fnc.objects as gnl_fnc_objects
 # maya
 from ... import core as mya_core
 # maya dcc
@@ -18,7 +18,7 @@ from ...dcc import xgn_objects as mya_dcc_xgn_objects
 from . import geometry_exporter as mya_fnc_obj_geometry_exporter
 
 
-class XgenExporter(bsc_fnc_abstracts.AbsFncOptionBase):
+class XgenExporter(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         xgen_project_directory='',
         xgen_collection_directory='',
@@ -78,7 +78,7 @@ class XgenExporter(bsc_fnc_abstracts.AbsFncOptionBase):
                 i_xgen_collection_directory_path_tgt
             )
             i_xgen_collection_file_path = i_xgen_palette_opt.get_file_path()
-            bsc_fnc_objects.FncExporterForDotXgen(
+            gnl_fnc_objects.FncExporterForDotXgen(
                 option=dict(
                     xgen_collection_file=i_xgen_collection_file_path,
                     xgen_project_directory=xgen_project_directory_path_tgt,
@@ -109,7 +109,7 @@ class XgenExporter(bsc_fnc_abstracts.AbsFncOptionBase):
             )
 
 
-class XgenUsdExporter(bsc_fnc_abstracts.AbsFncOptionBase):
+class XgenUsdExporter(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file='',
         location='',

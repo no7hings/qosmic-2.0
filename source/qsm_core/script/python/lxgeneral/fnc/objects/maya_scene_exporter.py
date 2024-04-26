@@ -3,11 +3,11 @@ import lxgeneral.dcc.core as gnl_dcc_core
 
 import lxgeneral.dcc.objects as gnl_dcc_objects
 
-from .. import abstracts as bsc_fnc_abstracts
+from .. import abstracts as gnl_fnc_abstracts
 
 
 class FncExporterForDotMaInfo(
-    bsc_fnc_abstracts.AbsFncOptionBase
+    gnl_fnc_abstracts.AbsFncOptionBase
 ):
     OPTION = dict(
         file_path=None,
@@ -31,8 +31,8 @@ class FncExporterForDotMaInfo(
 
 
 class FncExporterForDotMa(
-    bsc_fnc_abstracts.AbsFncOptionBase,
-    bsc_fnc_abstracts.AbsFncForDotXgenDef
+    gnl_fnc_abstracts.AbsFncOptionBase,
+    gnl_fnc_abstracts.AbsFncForDotXgenDef
 ):
     OPTION = dict(
         file_path_src=None,

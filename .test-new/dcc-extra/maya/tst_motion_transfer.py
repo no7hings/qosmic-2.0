@@ -6,7 +6,7 @@ import lxgui
 lxgui.do_reload()
 
 bsc_core.PyReloader2(
-    ['qsm_maya', 'qsm_dcc', 'qsm_general']
+    ['qsm_maya', 'qsm_general']
 ).do_reload()
 
 

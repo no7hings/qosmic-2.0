@@ -56,7 +56,7 @@ class RsvRecyclerHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                 )
 
     def set_maya_recycles(self):
-        import lxbasic.fnc.objects as bsc_fnc_objects
+        import lxgeneral.fnc.objects as gnl_fnc_objects
 
         import lxmaya.dcc.objects as mya_dcc_objects
 
@@ -80,7 +80,7 @@ class RsvRecyclerHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                     version=version
                 )
 
-                bsc_fnc_objects.FncExporterForDotMa(
+                gnl_fnc_objects.FncExporterForDotMa(
                     option=dict(
                         file_path_src=file_path_src,
                         file_path_tgt=file_path_tgt
@@ -226,7 +226,7 @@ class RsvRecyclerHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
 
     # maya
     def set_maya_xgen_repath(self):
-        import lxbasic.fnc.objects as bsc_fnc_objects
+        import lxgeneral.fnc.objects as gnl_fnc_objects
 
         import lxmaya.core as mya_core
 
@@ -279,7 +279,7 @@ class RsvRecyclerHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             else:
                 return False
 
-        e = bsc_fnc_objects.FncExporterForDotXgen
+        e = gnl_fnc_objects.FncExporterForDotXgen
 
         xgen_collection_file_paths = e._find_scene_xgen_collection_file_paths(
             maya_scene_file_path

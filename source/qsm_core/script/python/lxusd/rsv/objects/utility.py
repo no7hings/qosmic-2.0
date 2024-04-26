@@ -15,7 +15,7 @@ import lxbasic.storage as bsc_storage
 
 import lxgeneral.dcc.objects as gnl_dcc_objects
 
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 
 import lxresolver.core as rsv_core
 
@@ -869,7 +869,7 @@ class RsvUsdShotSetCreator(object):
         return paths
 
 
-class RsvTaskOverrideUsdCreator(bsc_fnc_abstracts.AbsFncOptionBase):
+class RsvTaskOverrideUsdCreator(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         var_names=['hi'],
         root='/master'

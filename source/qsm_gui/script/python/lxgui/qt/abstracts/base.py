@@ -19,11 +19,11 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
 from ..core.wrap import *
 
-from .. import core as gui_qt_core
+from .. import core as _gui_qt_core
 
 
 class AbsQtWidgetBaseDef(object):
@@ -201,10 +201,10 @@ class AbsQtMenuBaseDef(object):
 
 
 class AbsQtStatusBaseDef(object):
-    Status = gui_core.GuiStatus
-    ShowStatus = gui_core.GuiShowStatus
-    ValidationStatus = gui_core.GuiValidationStatus
-    Rgba = gui_core.GuiRgba
+    Status = _gui_core.GuiStatus
+    ShowStatus = _gui_core.GuiShowStatus
+    ValidationStatus = _gui_core.GuiValidationStatus
+    Rgba = _gui_core.GuiRgba
 
     @classmethod
     def _get_rgb_args_(cls, r, g, b, a):
@@ -279,10 +279,10 @@ class AbsQtStatusBaseDef(object):
         #
         self._is_status_enable = False
         #
-        self._status = gui_core.GuiStatus.Stopped
+        self._status = _gui_core.GuiStatus.Stopped
         #
-        self._status_color = gui_qt_core.QtBackgroundColors.Transparent
-        self._hover_status_color = gui_qt_core.QtBackgroundColors.Transparent
+        self._status_color = _gui_qt_core.QtBackgroundColors.Transparent
+        self._hover_status_color = _gui_qt_core.QtBackgroundColors.Transparent
         #
         self._status_rect = QtCore.QRect()
 
@@ -294,7 +294,7 @@ class AbsQtStatusBaseDef(object):
         #
         self._status = status
         #
-        if status in {gui_core.GuiStatus.Running}:
+        if status in {_gui_core.GuiStatus.Running}:
             self._widget.setCursor(QtCore.Qt.BusyCursor)
         else:
             self._widget.unsetCursor()
@@ -518,15 +518,15 @@ class AbsQtFrameBaseDef(object):
 
     def _init_frame_base_def_(self, widget):
         self._widget = widget
-        self._frame_border_color = gui_qt_core.QtBackgroundColors.Transparent
-        self._hovered_frame_border_color = gui_qt_core.QtBackgroundColors.Transparent
-        self._selected_frame_border_color = gui_qt_core.QtBackgroundColors.Transparent
-        self._actioned_frame_border_color = gui_qt_core.QtBackgroundColors.Transparent
+        self._frame_border_color = _gui_qt_core.QtBackgroundColors.Transparent
+        self._hovered_frame_border_color = _gui_qt_core.QtBackgroundColors.Transparent
+        self._selected_frame_border_color = _gui_qt_core.QtBackgroundColors.Transparent
+        self._actioned_frame_border_color = _gui_qt_core.QtBackgroundColors.Transparent
         #
-        self._frame_background_color = gui_qt_core.QtBackgroundColors.Transparent
-        self._hovered_frame_background_color = gui_qt_core.QtBackgroundColors.Transparent
-        self._selected_frame_background_color = gui_qt_core.QtBackgroundColors.Transparent
-        self._actioned_frame_background_color = gui_qt_core.QtBackgroundColors.Transparent
+        self._frame_background_color = _gui_qt_core.QtBackgroundColors.Transparent
+        self._hovered_frame_background_color = _gui_qt_core.QtBackgroundColors.Transparent
+        self._selected_frame_background_color = _gui_qt_core.QtBackgroundColors.Transparent
+        self._actioned_frame_background_color = _gui_qt_core.QtBackgroundColors.Transparent
         #
         self._frame_border_radius = 0
         #
@@ -546,11 +546,11 @@ class AbsQtFrameBaseDef(object):
         self._refresh_widget_all_()
 
     def _set_border_color_(self, color):
-        self._frame_border_color = gui_qt_core.GuiQtColor.to_qt_color(color)
+        self._frame_border_color = _gui_qt_core.GuiQtColor.to_qt_color(color)
         self._refresh_widget_draw_()
 
     def _set_background_color_(self, color):
-        self._frame_background_color = gui_qt_core.GuiQtColor.to_qt_color(color)
+        self._frame_background_color = _gui_qt_core.GuiQtColor.to_qt_color(color)
         self._refresh_widget_draw_()
 
     def _get_border_color_(self):
@@ -579,8 +579,8 @@ class AbsQtFrameBaseDef(object):
 
 
 class AbsQtResizeBaseDef(object):
-    ResizeOrientation = gui_core.GuiOrientation
-    ResizeAlignment = gui_core.GuiAlignment
+    ResizeOrientation = _gui_core.GuiOrientation
+    ResizeAlignment = _gui_core.GuiAlignment
 
     def _init_resize_base_def_(self, widget):
         self._widget = widget
@@ -593,7 +593,7 @@ class AbsQtResizeBaseDef(object):
         self._resize_action_rect = QtCore.QRect()
 
         self._resize_icon_file_paths = [
-            gui_core.GuiIcon.get('resize-left'), gui_core.GuiIcon.get('resize-right')
+            _gui_core.GuiIcon.get('resize-left'), _gui_core.GuiIcon.get('resize-right')
         ]
         self._resize_icon_file_path = self._resize_icon_file_paths[self._resize_alignment]
         #
@@ -1055,7 +1055,7 @@ class AbsQtIconBaseDef(object):
 
     def _set_icon_name_(self, icon_name):
         self._set_icon_file_path_(
-            gui_core.GuiIcon.get(icon_name)
+            _gui_core.GuiIcon.get(icon_name)
         )
 
     def _set_icon_sub_file_path_(self, file_path):
@@ -1068,12 +1068,12 @@ class AbsQtIconBaseDef(object):
 
     def _set_icon_sub_name_(self, icon_name):
         self._set_icon_sub_file_path_(
-            gui_core.GuiIcon.get(icon_name)
+            _gui_core.GuiIcon.get(icon_name)
         )
 
     def _set_icon_state_name_(self, icon_name):
         self._set_icon_state_file_path_(
-            gui_core.GuiIcon.get(icon_name)
+            _gui_core.GuiIcon.get(icon_name)
         )
 
     def _set_icon_state_file_path_(self, file_path):
@@ -1259,8 +1259,8 @@ class AbsQtIndexBaseDef(object):
         self._index_draw_enable = False
         self._index = 0
         self._index_text = None
-        self._index_text_color = gui_qt_core.QtFontColors.Dark
-        self._index_text_font = gui_qt_core.QtFonts.Index
+        self._index_text_color = _gui_qt_core.QtFontColors.Dark
+        self._index_text_font = _gui_qt_core.QtFonts.Index
         self._index_text_option = QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter
         #
         self._index_frame_rect = QtCore.QRect()
@@ -1411,7 +1411,7 @@ class AbsQtValueHistoryExtraDef(object):
 
     def _get_history_latest_(self):
         if self._history_key is not None:
-            return gui_core.GuiHistory.get_latest(self._history_key)
+            return _gui_core.GuiHistory.get_latest(self._history_key)
 
     def _pull_history_(self, *args, **kwargs):
         raise NotImplementedError()
@@ -1420,7 +1420,7 @@ class AbsQtValueHistoryExtraDef(object):
         if self._history_key is not None:
             if value:
                 if self._get_value_is_valid_(value) is True:
-                    gui_core.GuiHistory.append(
+                    _gui_core.GuiHistory.append(
                         self._history_key,
                         value
                     )
@@ -1429,7 +1429,7 @@ class AbsQtValueHistoryExtraDef(object):
 
     def _pull_history_latest_(self):
         if self._history_key is not None:
-            value = gui_core.GuiHistory.get_latest(self._history_key)
+            value = _gui_core.GuiHistory.get_latest(self._history_key)
             if value is not None:
                 self._pull_history_(value)
                 return True
@@ -1437,7 +1437,7 @@ class AbsQtValueHistoryExtraDef(object):
 
     def _refresh_history_(self):
         if self._history_key is not None:
-            values = gui_core.GuiHistory.get_all(
+            values = _gui_core.GuiHistory.get_all(
                 self._history_key
             )
             if values:
@@ -1456,7 +1456,7 @@ class AbsQtValueHistoryExtraDef(object):
 
 
 class AbsQtNameBaseDef(object):
-    AlignRegion = gui_core.GuiAlignRegion
+    AlignRegion = _gui_core.GuiAlignRegion
 
     def _init_name_base_def_(self, widget):
         self._widget = widget
@@ -1464,12 +1464,12 @@ class AbsQtNameBaseDef(object):
         self._name_enable = False
         self._name_text = None
         self._name_text_orig = None
-        self._name_draw_font = gui_qt_core.QtFonts.NameNormal
+        self._name_draw_font = _gui_qt_core.QtFonts.NameNormal
         #
         self._name_align = self.AlignRegion.Center
         #
-        self._name_color = gui_qt_core.QtFontColors.Basic
-        self._hover_name_color = gui_qt_core.QtFontColors.Light
+        self._name_color = _gui_qt_core.QtFontColors.Basic
+        self._hover_name_color = _gui_qt_core.QtFontColors.Light
         self._name_text_option = QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter
         #
         self._name_word_warp = True
@@ -1581,14 +1581,14 @@ class AbsQtNameBaseDef(object):
                 for i_text in texts:
                     i_text = bsc_core.auto_string(i_text)
                     i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
-                    i_text = gui_qt_core.GuiQtUtil.generate_tool_tip_action_css(i_text)
+                    i_text = _gui_qt_core.GuiQtUtil.generate_tool_tip_action_css(i_text)
                     css += '<p class="no_wrap">{}</p>\n'.format(i_text)
 
             if 'action_tip' in kwargs:
                 action_tip = kwargs['action_tip']
                 css += '<p><hr></p>\n'
                 action_tip = action_tip.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
-                action_tip = gui_qt_core.GuiQtUtil.generate_tool_tip_action_css(action_tip)
+                action_tip = _gui_qt_core.GuiQtUtil.generate_tool_tip_action_css(action_tip)
                 css += '<p class="no_wrap">{}</p>\n'.format(action_tip)
 
             css += '</body>\n</html>'
@@ -1766,7 +1766,7 @@ class AbsQtNamesBaseDef(AbsQtNameBaseDef):
                 for i_text in texts_extend:
                     i_text = bsc_core.auto_string(i_text)
                     i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
-                    i_text = gui_qt_core.GuiQtUtil.generate_tool_tip_action_css(i_text)
+                    i_text = _gui_qt_core.GuiQtUtil.generate_tool_tip_action_css(i_text)
                     css += '<p class="no_wrap">{}</p>\n'.format(i_text)
 
             css += '</body>\n</html>'
@@ -1986,7 +1986,7 @@ class AbsQtChartBaseDef(object):
         self._widget = widget
         self._chart_data = None
         self._chart_draw_data = None
-        self._chart_mode = gui_core.GuiSectorChartMode.Completion
+        self._chart_mode = _gui_core.GuiSectorChartMode.Completion
         #
         self._hover_flag = False
         self._hover_point = QtCore.QPoint()
@@ -2079,7 +2079,7 @@ class AbsQtThreadBaseDef(object):
 
     def _run_build_use_thread_(self, cache_fnc, build_fnc, post_fnc):
         if self._qt_thread_enable is True:
-            t = gui_qt_core.QtBuildThreadExtra(self._widget)
+            t = _gui_qt_core.QtBuildThreadExtra(self._widget)
             t.set_cache_fnc(cache_fnc)
             t.cache_value_accepted.connect(build_fnc)
             t.run_finished.connect(post_fnc)
@@ -2092,7 +2092,7 @@ class AbsQtThreadBaseDef(object):
 
     def _run_fnc_use_thread_(self, fnc):
         if self._qt_thread_enable is True:
-            t = gui_qt_core.QtMethodThread(self._widget)
+            t = _gui_qt_core.QtMethodThread(self._widget)
             t.append_method(fnc)
             t.start_accepted.connect(self._thread_start_accept_fnc_)
             t.finish_accepted.connect(self._thread_finish_accept_fnc_)
@@ -2109,8 +2109,8 @@ class AbsQtChooseExtraDef(object):
     def _init_choose_extra_def_(self, widget):
         self._widget = widget
 
-        self._choose_expand_icon_file_path = gui_core.GuiIcon.get('choose_expand')
-        self._choose_collapse_icon_file_path = gui_core.GuiIcon.get('choose_collapse')
+        self._choose_expand_icon_file_path = _gui_core.GuiIcon.get('choose_expand')
+        self._choose_collapse_icon_file_path = _gui_core.GuiIcon.get('choose_collapse')
         #
         self._choose_is_activated = False
 
@@ -2342,7 +2342,7 @@ class AbsQtGuideEntryDef(AbsQtGuideBaseDef):
 
     def _get_is_guide_choose_flag_(self):
         return self._get_action_flag_is_match_(
-            gui_core.GuiActionFlag.ChoosePress
+            _gui_core.GuiActionFlag.ChoosePress
         )
 
     def _restore_guide_(self):
@@ -2418,7 +2418,7 @@ class AbsQtBuildViewDef(object):
         pass
 
     def _setup_view_build_(self, view):
-        self._build_runnable_stack = gui_qt_core.QtBuildRunnableStack(
+        self._build_runnable_stack = _gui_qt_core.QtBuildRunnableStack(
             view
         )
 
@@ -2486,7 +2486,7 @@ class AbsQtViewScrollActionDef(object):
 
 
 class AbsQtItemFilterDef(object):
-    TagFilterMode = gui_core.GuiTagFilterMode
+    TagFilterMode = _gui_core.GuiTagFilterMode
 
     def _init_item_filter_extra_def_(self, widget):
         self._widget = widget
@@ -2820,12 +2820,12 @@ class AbsQtViewFilterExtraDef(object):
 
 
 class AbsQtStateDef(object):
-    ActionState = gui_core.GuiActionState
+    ActionState = _gui_core.GuiActionState
 
     def _set_state_def_init_(self):
-        self._state = gui_core.GuiState.NORMAL
+        self._state = _gui_core.GuiState.NORMAL
         self._state_draw_is_enable = False
-        self._state_color = gui_qt_core.QtBrushes.Text
+        self._state_color = _gui_qt_core.QtBrushes.Text
 
     # noinspection PyUnusedLocal
     def _set_state_(self, *args, **kwargs):
@@ -3014,7 +3014,7 @@ class AbsQtBuildBaseForItemDef(object):
 class AbsQtShowBaseForItemDef(
     AbsQtBuildBaseForItemDef
 ):
-    ShowStatus = gui_core.GuiShowStatus
+    ShowStatus = _gui_core.GuiShowStatus
 
     def _refresh_widget_all_(self, *args, **kwargs):
         raise NotImplementedError()
@@ -3246,7 +3246,7 @@ class AbsQtShowBaseForItemDef(
             item_widget = self._get_item_widget_()
             if item_widget is not None:
                 item_widget._set_image_file_path_(
-                    gui_core.GuiIcon.get('image_loading_failed_error')
+                    _gui_core.GuiIcon.get('image_loading_failed_error')
                 )
         #
         self._finish_item_show_image_loading_()
@@ -3399,7 +3399,7 @@ class AbsQtDeleteBaseDef(object):
         self._delete_icon_file_draw_size = 12, 12
         self._delete_is_pressed = False
         self._delete_is_hovered = False
-        self._delete_icon_file_path = gui_core.GuiIcon.get('delete')
+        self._delete_icon_file_path = _gui_core.GuiIcon.get('delete')
 
     def _set_delete_enable_(self, boolean):
         self._delete_is_enable = boolean
@@ -3445,7 +3445,7 @@ class AbsQtScreenshotBaseDef(AbsQtHelpBaseDef):
         Edit = 2
         Stopped = 3
 
-    RectRegion = gui_core.GuiRectRegion
+    RectRegion = _gui_core.GuiRectRegion
 
     CURSOR_MAPPER = {
         RectRegion.Unknown: QtCore.Qt.ArrowCursor,
@@ -3676,7 +3676,7 @@ class AbsQtScreenshotBaseDef(AbsQtHelpBaseDef):
         rect = QtCore.QRect(*geometry)
 
         if bsc_core.SysApplicationMtd.get_is_maya():
-            main_window = gui_qt_core.GuiQtMaya.get_qt_main_window()
+            main_window = _gui_qt_core.GuiQtMaya.get_qt_main_window()
             s = QtGui.QPixmap.grabWindow(
                 long(main_window.winId())
             )

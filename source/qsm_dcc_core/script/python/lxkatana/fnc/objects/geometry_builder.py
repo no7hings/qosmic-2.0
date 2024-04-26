@@ -5,7 +5,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 
 import lxresolver.core as rsv_core
 # katana
@@ -14,7 +14,7 @@ from ...dcc import objects as ktn_dcc_objects
 
 
 # todo: old method need remove
-class FncBuilderForAssetOld(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncBuilderForAssetOld(gnl_fnc_abstracts.AbsFncOptionBase):
     VAR_NAMES = ['hi', 'lo', 'shape']
     #
     OPTION = dict(

@@ -1,19 +1,19 @@
 # coding:utf-8
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 # katana
 from ... import core as ktn_core
 # katana dcc
 from ...dcc import operators as ktn_dcc_operators
 
 
-class FncMatcherForDccMesh(bsc_fnc_abstracts.AbsFncMatcherForDccMesh):
+class FncMatcherForDccMesh(gnl_fnc_abstracts.AbsFncMatcherForDccMesh):
     FNC_DCC_MESH_CLS = None
 
     def __init__(self, *args, **kwargs):
         super(FncMatcherForDccMesh, self).__init__(*args, **kwargs)
 
 
-class FncComparerForGeometry(bsc_fnc_abstracts.AbsFncComparerForDccGeometry):
+class FncComparerForGeometry(gnl_fnc_abstracts.AbsFncComparerForDccGeometry):
     DCC_SCENE_CLS = None
     DCC_SCENE_OPT_CLS = None
     #
@@ -46,12 +46,12 @@ class FncComparerForGeometry(bsc_fnc_abstracts.AbsFncComparerForDccGeometry):
 
             hash_key = bsc_core.UuidMtd.generate_by_file(usd_file_path)
             self._dcc_scene_tgt = usd_dcc_objects.Scene()
-            if hash_key in bsc_fnc_abstracts.AbsFncComparerForDccGeometry.CACHE:
-                self._dcc_scene_tgt = bsc_fnc_abstracts.AbsFncComparerForDccGeometry.CACHE[hash_key]
+            if hash_key in gnl_fnc_abstracts.AbsFncComparerForDccGeometry.CACHE:
+                self._dcc_scene_tgt = gnl_fnc_abstracts.AbsFncComparerForDccGeometry.CACHE[hash_key]
                 self._dcc_universe_tgt = self._dcc_scene_tgt.universe
             else:
                 self._dcc_scene_tgt.load_from_dot_usd(usd_file_path, location)
-                bsc_fnc_abstracts.AbsFncComparerForDccGeometry.CACHE[hash_key] = self._dcc_scene_tgt
+                gnl_fnc_abstracts.AbsFncComparerForDccGeometry.CACHE[hash_key] = self._dcc_scene_tgt
                 self._dcc_universe_tgt = self._dcc_scene_tgt.universe
 
             self._scene_usd_scene_opt = usd_dcc_operators.SceneOpt(self._dcc_scene_tgt.usd_stage, self.DCC_NAMESPACE)

@@ -35,7 +35,7 @@ class AsbGuiQtDccMenuSetup(object):
                 action_item.triggered.connect(lambda *args, **kwargs: cls.get_fnc(method))
 
     @classmethod
-    def set_menu_setup(cls, menu, menu_raw):
+    def setup_menu(cls, menu, menu_raw):
         if menu_raw:
             for i in menu_raw:
                 if i:
@@ -111,7 +111,7 @@ class AsbGuiQtDccMenuSetup(object):
         menu = cls.get_menu(name)
         if menu is not None:
             menu.clear()
-            cls.set_menu_setup(menu, menu_raw)
+            cls.setup_menu(menu, menu_raw)
 
     @classmethod
     def build_menu_by_content(cls, menu, menu_content):

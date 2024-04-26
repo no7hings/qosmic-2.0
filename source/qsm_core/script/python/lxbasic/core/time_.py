@@ -83,36 +83,53 @@ class TimePrettifyMtd(object):
     @classmethod
     def to_prettify_by_timetuple(cls, timetuple, language=0):
         year, month, day, hour, minute, second, week, count_day, is_dst = timetuple
-        cur_timetuple = time.localtime(time.time())
-        year_, month_, day_, hour_, minute_, second_, week_, count_day_, is_dst_ = cur_timetuple
+        timetuple_cur = time.localtime(time.time())
+        year_cur, month_cur, day_cur, hour_cur, minute_cur, second_cur, week_cur, count_day_cur, is_dst_cur = timetuple_cur
         #
         monday = day-week
-        monday_ = day_-week_
-        year_str = [u'{}年'.format(str(year).zfill(4)), str(year).zfill(4)][language]
-        month_str = cls.MONTH[int(month)-1][language]
-        day_str = [u'{}日'.format(str(day).zfill(2)), str(day).zfill(2)][language]
-        if cur_timetuple[:1] == timetuple[:1]:
-            if cur_timetuple[:2] == timetuple[:2]:
-                if monday_ == monday:
+        monday_cur = day_cur-week_cur
+        # same year
+        if timetuple_cur[:1] == timetuple[:1]:
+            # same month
+            if timetuple_cur[:2] == timetuple[:2]:
+                # same week
+                if monday_cur == monday:
                     week_str = u'{0}'.format(cls.WEEK[int(week)][language])
-                    if day_ == day:
+                    # same day
+                    if day_cur == day:
                         time_str = [
                             u'{}点{}分{}秒'.format(str(hour).zfill(2), str(minute).zfill(2), str(second).zfill(2)),
                             '{}:{}:{}'.format(str(hour).zfill(2), str(minute).zfill(2), str(second).zfill(2))
                         ][language]
                         return time_str
-                    elif day_ == day+1:
+                    elif day_cur == day+1:
                         sub_str = [u'昨天', 'Yesterday'][language]
                         return sub_str
                     return week_str
             #
+            month_str = cls.get_month(month, language)
+            day_str = cls.get_day(day, language)
             if language == 0:
                 return u'{}{}'.format(month_str, day_str)
             return '{} {}'.format(day_str, month_str)
         #
+        year_str = cls.get_year(year, language)
+        month_str = cls.get_month(month, language)
         if language == 0:
             return u'{}{}'.format(year_str, month_str)
         return '{} {}'.format(month_str, year_str)
+
+    @classmethod
+    def get_year(cls, year, language):
+        return [u'{}年'.format(str(year).zfill(4)), str(year).zfill(4)][language]
+
+    @classmethod
+    def get_month(cls, month, language):
+        return cls.MONTH[int(month)-1][language]
+
+    @classmethod
+    def get_day(cls, day, language):
+        return [u'{}日'.format(str(day).zfill(2)), str(day).zfill(2)][language]
 
     def time_tag2timestamp(self, time_tag):
         pass
@@ -133,6 +150,14 @@ class TimestampMtd(object):
             pattern,
             time.localtime(timestamp)
         )
+
+    @classmethod
+    def to_time_tuple(cls, timestamp):
+        return time.localtime(timestamp)
+    
+    @classmethod
+    def get_current_time_tuple(cls):
+        return time.localtime(time.time())
 
 
 class TimestampOpt(object):

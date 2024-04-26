@@ -194,7 +194,7 @@ class AbsSsnOptionExecuteDef(object):
 
     def set_execute_by_shell(self, block=False):
         executor = self.get_executor()
-        executor.set_run_with_shell(block)
+        executor.execute_with_shell(block)
 
     def get_shell_script_command(self):
         return self.get_executor().get_shell_command()
@@ -281,7 +281,7 @@ class AbsSsnShellExecuteDef(object):
         )
 
     def set_execute_by_shell(self, block=False):
-        self.get_executor().set_run_with_shell(block)
+        self.get_executor().execute_with_shell(block)
 
     def get_shell_script_command(self):
         return self.get_executor().get_shell_command()

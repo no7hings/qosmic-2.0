@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 # maya
 from ...core.wrap import *
 
@@ -13,8 +13,8 @@ from ...dcc import operators as mya_dcc_operators
 
 
 class FncExporterForRenderTexture(
-    bsc_fnc_abstracts.AbsFncExporterForDccTextureDef,
-    bsc_fnc_abstracts.AbsFncOptionBase,
+    gnl_fnc_abstracts.AbsFncExporterForDccTextureDef,
+    gnl_fnc_abstracts.AbsFncOptionBase,
 ):
     OPTION = dict(
         directory_base='',
@@ -71,8 +71,8 @@ class FncExporterForRenderTexture(
 
 
 class FncGeneralTextureExporter(
-    bsc_fnc_abstracts.AbsFncExporterForDccTextureDef,
-    bsc_fnc_abstracts.AbsFncOptionBase
+    gnl_fnc_abstracts.AbsFncExporterForDccTextureDef,
+    gnl_fnc_abstracts.AbsFncOptionBase
 ):
     OPTION = dict(
         directory='',

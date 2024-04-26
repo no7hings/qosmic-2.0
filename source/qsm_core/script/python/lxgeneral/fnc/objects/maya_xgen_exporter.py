@@ -9,11 +9,11 @@ import lxbasic.storage as bsc_storage
 
 import lxgeneral.dcc.core as gnl_dcc_core
 
-from .. import abstracts as bsc_fnc_abstracts
+from .. import abstracts as gnl_fnc_abstracts
 
 
 class FncExporterForDotXarc(
-    bsc_fnc_abstracts.AbsFncOptionBase
+    gnl_fnc_abstracts.AbsFncOptionBase
 ):
     OPTION = dict(
         file='',
@@ -65,8 +65,8 @@ class FncExporterForDotXarc(
 
 
 class FncExporterForDotXgen(
-    bsc_fnc_abstracts.AbsFncOptionBase,
-    bsc_fnc_abstracts.AbsFncForDotXgenDef
+    gnl_fnc_abstracts.AbsFncOptionBase,
+    gnl_fnc_abstracts.AbsFncForDotXgenDef
 ):
     OPTION = dict(
         # etc. {directory}/{scene}__{xgen}.xgen
@@ -99,8 +99,8 @@ class FncExporterForDotXgen(
 
 
 class FncExporterForDotXgenUsda(
-    bsc_fnc_abstracts.AbsFncOptionBase,
-    bsc_fnc_abstracts.AbsFncForDotXgenDef
+    gnl_fnc_abstracts.AbsFncOptionBase,
+    gnl_fnc_abstracts.AbsFncForDotXgenDef
 ):
     OPTION = dict(
         file='',

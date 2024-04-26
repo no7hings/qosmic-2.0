@@ -71,6 +71,10 @@ class QtListWidget(
 
         self._info = ''
 
+        self._drag_action_flag = False
+
+        self._selection_mode_mark = None
+
     def _do_wheel_(self, event):
         if self._action_control_flag is True:
             delta = event.angleDelta().y()
@@ -158,10 +162,23 @@ class QtListWidget(
                 if isinstance(parent, gui_qt_wgt_entry.QtEntryFrame):
                     parent._set_focused_(False)
                 self.focus_changed.emit()
+        # view port
         elif widget == self.viewport():
             if event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.buttons() == QtCore.Qt.LeftButton:
+                    # todo: to fix error rect selection when item is drag
+                    if self.itemAt(event.pos()):
+                        if self._selection_mode_mark is None:
+                            self._selection_mode_mark = self.selectionMode()
+                        self.setSelectionMode(self.SingleSelection)
+                    else:
+                        if self._selection_mode_mark is not None:
+                            self.setSelectionMode(self._selection_mode_mark)
+
                     self.pressed.emit()
+            elif event.type() == QtCore.QEvent.MouseMove:
+                if event.buttons() == QtCore.Qt.LeftButton:
+                    pass
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
                     self.press_released.emit()
@@ -177,6 +194,9 @@ class QtListWidget(
                 self._empty_icon_name
             )
         # super(QtListWidget, self).paintEvent(event)
+
+    def _set_drag_action_flag_(self, boolean):
+        self._drag_action_flag = True
 
     # noinspection PyUnusedLocal
     def _refresh_size_(self):

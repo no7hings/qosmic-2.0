@@ -5,7 +5,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 # maya
 from ...core.wrap import *
 
@@ -111,7 +111,7 @@ class GeometryAlembicBlender(object):
 
 
 # noinspection PyUnusedLocal
-class FncBuilderForAssetOld(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncBuilderForAssetOld(gnl_fnc_abstracts.AbsFncOptionBase):
     KEY = 'asset build'
     VAR_NAMES = ['hi', 'shape']
     #
@@ -576,7 +576,7 @@ class FncBuilderForAssetOld(bsc_fnc_abstracts.AbsFncOptionBase):
                     i_method(*i_args)
 
 
-class FncBuilderForAssetNew(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncBuilderForAssetNew(gnl_fnc_abstracts.AbsFncOptionBase):
     KEY = 'asset build'
     OPTION = dict(
         project='',

@@ -50,33 +50,42 @@ class PrcBaseMtd(object):
             raise RuntimeError()
 
     @classmethod
-    def _windows_trace(cls, text):
+    def _windows_stdout(cls, text):
         text = text.decode('gbk', 'ignore')
         sys.stdout.write(text.encode('gbk'))
 
     @classmethod
-    def _linux_trace(cls, text):
+    def _linux_stdout(cls, text):
         text = text.decode('utf-8')
         text = text.replace(u'\u2018', "'").replace(u'\u2019', "'")
         sys.stdout.write(text.encode('utf-8'))
-
+    
     @classmethod
-    def _windows_error_trace(cls, text):
+    def get_stdout_fnc(cls):
+        if platform.system() == 'Windows':
+            return cls._windows_stdout
+        elif platform.system() == 'Linux':
+            return cls._linux_stdout
+        else:
+            raise RuntimeError()
+    
+    @classmethod
+    def _windows_stderr(cls, text):
         text = text.decode('gbk', 'ignore')
         sys.stderr.write(text.encode('gbk'))
 
     @classmethod
-    def _linux_error_trace(cls, text):
+    def _linux_stderr(cls, text):
         text = text.decode('utf-8')
         text = text.replace(u'\u2018', "'").replace(u'\u2019', "'")
         sys.stderr.write(text.encode('utf-8'))
     
     @classmethod
-    def get_error_trace_fnc(cls):
+    def _get_stderr_fnc(cls):
         if platform.system() == 'Windows':
-            return cls._windows_error_trace
+            return cls._windows_stderr
         elif platform.system() == 'Linux':
-            return cls._linux_error_trace
+            return cls._linux_stderr
         else:
             raise RuntimeError()
 
@@ -182,12 +191,7 @@ class PrcBaseMtd(object):
 
     @classmethod
     def execute_as_trace(cls, cmd, **kwargs):
-        if platform.system() == 'Windows':
-            trace_fnc = cls._windows_trace
-        elif platform.system() == 'Linux':
-            trace_fnc = cls._linux_trace
-        else:
-            raise RuntimeError()
+        trace_fnc = cls.get_stdout_fnc()
 
         clear_environ = kwargs.get('clear_environ', False)
         if clear_environ == 'auto':
@@ -489,7 +493,7 @@ class PrcBaseMtd(object):
             output_lines = output.splitlines()
             for i in output_lines:
                 if i:
-                    sys.stdout.write(encode_fnc(i)+'\n')
+                    sys.stderr.write(encode_fnc(i)+'\n')
             return_dict['results'] = output_lines
             raise subprocess.CalledProcessError(s_p.returncode, cmd)
         #

@@ -7,7 +7,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 
 import lxarnold.core as and_core
 
@@ -23,7 +23,7 @@ from ...dcc import operators as ktn_dcc_operators
 
 
 # noinspection PyUnusedLocal
-class FncImporterForLookAssOld(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncImporterForLookAssOld(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file='',
         location='',
@@ -568,6 +568,6 @@ class FncImporterForLookAssOld(bsc_fnc_abstracts.AbsFncOptionBase):
             )
 
 
-class FncImporterForLookYml(bsc_fnc_abstracts.AbsFncImporterForLookYmlDcc):
+class FncImporterForLookYml(gnl_fnc_abstracts.AbsFncImporterForLookYmlDcc):
     def __init__(self, option):
         super(FncImporterForLookYml, self).__init__(option)

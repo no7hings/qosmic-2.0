@@ -7,10 +7,13 @@ from . import time_ as _time
 
 from . import scene_file as _scene_file
 
+from . import playblast as _playblast
+
 
 class Scene(
     _time.Time,
-    _scene_file.SceneFile
+    _scene_file.SceneFile,
+    _playblast.Playblast
 ):
     @classmethod
     def show_message(cls, message, keyword, position='topCenter', fade=1, drag_kill=0, alpha=.5):

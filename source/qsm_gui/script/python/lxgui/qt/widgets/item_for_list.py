@@ -412,7 +412,8 @@ class QtListItemWidget(
                             self._drag._set_drag_count_(len(selected_item_widgets))
                         else:
                             self._drag.setMimeData(self._generate_drag_mime_data_())
-                        #
+
+                        view._set_drag_action_flag_(True)
                         self._drag._do_drag_copy_(self._drag_point_offset)
                         self._drag.released.connect(self._drag_release_cbk_)
                 else:

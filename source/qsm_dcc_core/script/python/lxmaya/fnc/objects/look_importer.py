@@ -13,7 +13,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 # arnold
 import lxarnold.core as and_core
 
@@ -380,7 +380,7 @@ class AssImportFnc(object):
         geometry_dcc_obj_opt.assign_render_visibilities(mya_visibilities)
 
 
-class FncImporterForLookYml(bsc_fnc_abstracts.AbsFncImporterForLookYmlDcc):
+class FncImporterForLookYml(gnl_fnc_abstracts.AbsFncImporterForLookYmlDcc):
     PLUG_NAMES = ['mtoa']
 
     def __init__(self, option):
@@ -591,7 +591,7 @@ class FncImporterForLookYml(bsc_fnc_abstracts.AbsFncImporterForLookYmlDcc):
         )
 
 
-class FncLookAssImporterNew(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncLookAssImporterNew(gnl_fnc_abstracts.AbsFncOptionBase):
     PLUG_NAME = 'mtoa'
     #
     OPTION = dict(

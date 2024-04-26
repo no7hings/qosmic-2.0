@@ -7,14 +7,14 @@ import lxgeneral.dcc.core as gnl_dcc_core
 
 import lxgeneral.dcc.objects as gnl_dcc_objects
 
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 # katana
 from ...core.wrap import *
 # katana dcc
 from ...dcc import objects as ktn_dcc_objects
 
 
-class FncExporterForLookAss(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncExporterForLookAss(gnl_fnc_abstracts.AbsFncOptionBase):
     RENDER_MODE = 'previewRender'
     #
     OPTION = dict(
@@ -195,7 +195,7 @@ class FncExporterForLookAss(bsc_fnc_abstracts.AbsFncOptionBase):
                     )
 
 
-class FncExporterForLookKlfExtra(bsc_fnc_abstracts.AbsDccExporter):
+class FncExporterForLookKlfExtra(gnl_fnc_abstracts.AbsDccExporter):
     def __init__(self, file_path, root=None, option=None):
         super(FncExporterForLookKlfExtra, self).__init__(file_path, root, option)
 

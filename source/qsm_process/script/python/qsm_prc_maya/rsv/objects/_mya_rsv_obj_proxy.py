@@ -11,7 +11,7 @@ class RsvDccProxyHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
 
         import lxbasic.core as bsc_core
 
-        import lxbasic.fnc.objects as bsc_fnc_objects
+        import lxgeneral.fnc.objects as gnl_fnc_objects
 
         import lxmaya.dcc.objects as mya_dcc_objects
 
@@ -143,7 +143,7 @@ class RsvDccProxyHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                 )
                 i_xarc_option['file'] = i_proxy_xarc_sub_act_file_path
                 #
-                bsc_fnc_objects.FncExporterForDotXarc(
+                gnl_fnc_objects.FncExporterForDotXarc(
                     option=i_xarc_option
                 ).set_run()
         else:

@@ -5,7 +5,7 @@ import lxbasic.core as bsc_core
 
 import lxgeneral.dcc.objects as gnl_dcc_objects
 
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 # maya
 from ...core.wrap import *
 
@@ -16,7 +16,7 @@ from ...dcc import objects as mya_dcc_objects
 from . import look_exporter as mya_fnc_obj_look_exporter
 
 
-class FncExporterForProxyGpu(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncExporterForProxyGpu(gnl_fnc_abstracts.AbsFncOptionBase):
     # cmds.gpuCache(
     #     nodepathString,
     #     startTime=startFrame, endTime=endFrame,
@@ -81,7 +81,7 @@ class FncExporterForProxyGpu(bsc_fnc_abstracts.AbsFncOptionBase):
 
 
 # noinspection PyUnusedLocal
-class FncExporterForProxyAss(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncExporterForProxyAss(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file='',
         location='',

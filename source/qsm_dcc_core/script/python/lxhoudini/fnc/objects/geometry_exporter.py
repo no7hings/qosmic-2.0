@@ -1,8 +1,8 @@
 # coding:utf-8
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 
 
-class GeometryUsdImporter(bsc_fnc_abstracts.AbsFncOptionBase):
+class GeometryUsdImporter(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file='',
         root='',

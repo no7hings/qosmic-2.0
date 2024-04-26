@@ -11,9 +11,9 @@ import lxbasic.storage as bsc_storage
 
 import lxgeneral.dcc.objects as gnl_dcc_objects
 
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 
-import lxbasic.fnc.objects as bsc_fnc_objects
+import lxgeneral.fnc.objects as gnl_fnc_objects
 # maya
 from ...core.wrap import *
 
@@ -21,9 +21,11 @@ from ... import core as mya_core
 # maya dcc
 from ...dcc import objects as mya_dcc_objects
 
+from . import camera_exporter as _camera_exporter
+
 
 class FncExporterForScene(
-    bsc_fnc_abstracts.AbsFncOptionBase
+    gnl_fnc_abstracts.AbsFncOptionBase
 ):
     WITH_XGEN = 'with_xgen_collection'
     OPTION = dict(
@@ -83,7 +85,7 @@ class FncExporterForScene(
             self._results = [file_path]
         #
         if with_xgen_collection is True:
-            bsc_fnc_objects.FncExporterForDotMa._copy_scene_xgen_collection_files_to(
+            gnl_fnc_objects.FncExporterForDotMa._copy_scene_xgen_collection_files_to(
                 mya_dcc_objects.Scene.get_current_file_path(),
                 file_path
             )
@@ -117,7 +119,7 @@ class FncExporterForScene(
 
 # noinspection PyUnusedLocal
 class FncExporterForPreview(
-    bsc_fnc_abstracts.AbsFncOptionBase
+    gnl_fnc_abstracts.AbsFncOptionBase
 ):
     OPTION = dict(
         file='',
@@ -155,7 +157,7 @@ class FncExporterForPreview(
         cmds.window(preview_window, title='preview_export')
         image_width, image_height = size
         layout = cmds.paneLayout(width=image_width, height=image_height)
-        camera, camera_shape = FncExporterForCameraYml._set_camera_create_(root, persp_view)
+        camera, camera_shape = _camera_exporter.FncExporterForCameraYml._set_camera_create_(root, persp_view)
         preview_export_viewport = cmds.modelPanel(
             label='snapShotPanel',
             parent=layout,

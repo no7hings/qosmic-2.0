@@ -3,14 +3,14 @@ import enum
 
 import lxbasic.core as bsc_core
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
 from ..core.wrap import *
 
 
 class AbsQtActionBaseDef(object):
-    ActionFlag = gui_core.GuiActionFlag
-    ActionState = gui_core.GuiActionState
+    ActionFlag = _gui_core.GuiActionFlag
+    ActionState = _gui_core.GuiActionState
 
     def _init_action_base_def_(self, widget):
         self._widget = widget
@@ -112,7 +112,7 @@ class AbsQtActionBaseDef(object):
                     self.ActionFlag.NGNodePressMove
                 }:
                     p = QtGui.QPixmap(20, 20)
-                    p.load(gui_core.GuiIcon.get('system/track-move'))
+                    p.load(_gui_core.GuiIcon.get('system/track-move'))
                     self._widget.setCursor(
                         QtGui.QCursor(
                             p,
@@ -123,7 +123,7 @@ class AbsQtActionBaseDef(object):
                     self.ActionFlag.TrackCircle,
                 ]:
                     p = QtGui.QPixmap(20, 20)
-                    p.load(gui_core.GuiIcon.get('system/track-circle'))
+                    p.load(_gui_core.GuiIcon.get('system/track-circle'))
                     self._widget.setCursor(
                         QtGui.QCursor(
                             p,
@@ -138,7 +138,7 @@ class AbsQtActionBaseDef(object):
                 }:
                     self._widget.setCursor(
                         QtGui.QCursor(
-                            QtGui.QPixmap(gui_core.GuiIcon.get('system/resize-h'))
+                            QtGui.QPixmap(_gui_core.GuiIcon.get('system/resize-h'))
                         )
                     )
                 elif self._action_flag in {
@@ -148,7 +148,7 @@ class AbsQtActionBaseDef(object):
                 }:
                     self._widget.setCursor(
                         QtGui.QCursor(
-                            QtGui.QPixmap(gui_core.GuiIcon.get('system/resize-v'))
+                            QtGui.QPixmap(_gui_core.GuiIcon.get('system/resize-v'))
                         )
                     )
                 # resize
@@ -157,7 +157,7 @@ class AbsQtActionBaseDef(object):
                 }:
                     self._widget.setCursor(
                         QtGui.QCursor(
-                            QtGui.QPixmap(gui_core.GuiIcon.get('system/resize-left'))
+                            QtGui.QPixmap(_gui_core.GuiIcon.get('system/resize-left'))
                         )
                     )
                 elif self._action_flag in {
@@ -165,7 +165,7 @@ class AbsQtActionBaseDef(object):
                 }:
                     self._widget.setCursor(
                         QtGui.QCursor(
-                            QtGui.QPixmap(gui_core.GuiIcon.get('system/resize-right'))
+                            QtGui.QPixmap(_gui_core.GuiIcon.get('system/resize-right'))
                         )
                     )
                 elif self._action_flag in {
@@ -173,7 +173,7 @@ class AbsQtActionBaseDef(object):
                 }:
                     self._widget.setCursor(
                         QtGui.QCursor(
-                            QtGui.QPixmap(gui_core.GuiIcon.get('system/resize-up'))
+                            QtGui.QPixmap(_gui_core.GuiIcon.get('system/resize-up'))
                         )
                     )
                 elif self._action_flag in {
@@ -181,7 +181,7 @@ class AbsQtActionBaseDef(object):
                 }:
                     self._widget.setCursor(
                         QtGui.QCursor(
-                            QtGui.QPixmap(gui_core.GuiIcon.get('system/resize-down'))
+                            QtGui.QPixmap(_gui_core.GuiIcon.get('system/resize-down'))
                         )
                     )
                 # swap
@@ -190,7 +190,7 @@ class AbsQtActionBaseDef(object):
                 }:
                     self._widget.setCursor(
                         QtGui.QCursor(
-                            QtGui.QPixmap(gui_core.GuiIcon.get('system/swap-h'))
+                            QtGui.QPixmap(_gui_core.GuiIcon.get('system/swap-h'))
                         )
                     )
                 elif self._action_flag in {
@@ -198,7 +198,7 @@ class AbsQtActionBaseDef(object):
                 }:
                     self._widget.setCursor(
                         QtGui.QCursor(
-                            QtGui.QPixmap(gui_core.GuiIcon.get('system/swap-v'))
+                            QtGui.QPixmap(_gui_core.GuiIcon.get('system/swap-v'))
                         )
                     )
                 #
@@ -206,7 +206,7 @@ class AbsQtActionBaseDef(object):
                     self.ActionFlag.RectSelectMove,
                 }:
                     p = QtGui.QPixmap(20, 20)
-                    p.load(gui_core.GuiIcon.get('system/rect-select'))
+                    p.load(_gui_core.GuiIcon.get('system/rect-select'))
                     self._widget.setCursor(
                         QtGui.QCursor(
                             p,
@@ -300,7 +300,7 @@ class AbsQtActionForPressDef(object):
     #
     clicked = qt_signal()
     #
-    ActionFlag = gui_core.GuiActionFlag
+    ActionFlag = _gui_core.GuiActionFlag
 
     def _init_action_for_press_def_(self, widget):
         self._widget = widget
@@ -362,7 +362,7 @@ class AbsQtActionForCheckDef(object):
     check_changed_as_exclusive = qt_signal()
     check_swapped_as_exclusive = qt_signal()
     #
-    ActionFlag = gui_core.GuiActionFlag
+    ActionFlag = _gui_core.GuiActionFlag
 
     def _init_action_for_check_def_(self, widget):
         self._widget = widget
@@ -381,8 +381,8 @@ class AbsQtActionForCheckDef(object):
         self._check_icon_draw_percent = .8
         self._check_icon_draw_size = 16, 16
         #
-        self._check_icon_file_path_0 = gui_core.GuiIcon.get('box_unchecked')
-        self._check_icon_file_path_1 = gui_core.GuiIcon.get('box_checked')
+        self._check_icon_file_path_0 = _gui_core.GuiIcon.get('box_unchecked')
+        self._check_icon_file_path_1 = _gui_core.GuiIcon.get('box_checked')
         self._check_icon_file_path_current = self._check_icon_file_path_0
 
         self._check_is_enable = False
@@ -505,7 +505,7 @@ class AbsQtActionForExpandDef(object):
     EXPAND_TOP_TO_BOTTOM = 0
     EXPAND_BOTTOM_TO_TOP = 1
     #
-    ActionFlag = gui_core.GuiActionFlag
+    ActionFlag = _gui_core.GuiActionFlag
 
     def _init_action_for_expand_def_(self, widget):
         self._widget = widget
@@ -513,8 +513,8 @@ class AbsQtActionForExpandDef(object):
         self._is_expand_enable = False
         #
         self._expand_icon_file_path = None
-        self._expand_icon_file_path_0 = gui_core.GuiIcon.get('box_checked')
-        self._expand_icon_file_path_1 = gui_core.GuiIcon.get('box_unchecked')
+        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('box_checked')
+        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('box_unchecked')
         self._is_expanded = False
         #
         self._expand_frame_rect = QtCore.QRect()
@@ -557,7 +557,7 @@ class AbsQtActionForOptionPressDef(object):
         self._widget = widget
         #
         self._option_click_is_enable = False
-        self._option_icon_file_path = gui_core.GuiIcon.get('option')
+        self._option_icon_file_path = _gui_core.GuiIcon.get('option')
         #
         self._option_click_rect = QtCore.QRect()
         self._option_click_icon_rect = QtCore.QRect()

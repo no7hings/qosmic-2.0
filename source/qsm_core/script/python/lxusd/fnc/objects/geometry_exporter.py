@@ -5,7 +5,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 # usd
 from ...core.wrap import *
 
@@ -14,7 +14,7 @@ from ... import core as usd_core
 from ...dcc import operators as usd_dcc_operators
 
 
-class GeometryUvMapExporter(bsc_fnc_abstracts.AbsFncOptionBase):
+class GeometryUvMapExporter(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file_0=None,
         file_1=None,
@@ -103,7 +103,7 @@ class GeometryUvMapExporter(bsc_fnc_abstracts.AbsFncOptionBase):
         self.set_uv_map_export()
 
 
-class GeometryLookPropertyExporter(bsc_fnc_abstracts.AbsFncOptionBase):
+class GeometryLookPropertyExporter(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file='',
         location='',
@@ -222,7 +222,7 @@ class GeometryLookPropertyExporter(bsc_fnc_abstracts.AbsFncOptionBase):
         self._usd_stage_opt_tgt.export_to(self._file_path)
 
 
-class GeometryDisplayColorExporter(bsc_fnc_abstracts.AbsFncOptionBase):
+class GeometryDisplayColorExporter(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file='',
         location='',
@@ -325,7 +325,7 @@ class GeometryDisplayColorExporter(bsc_fnc_abstracts.AbsFncOptionBase):
         self._usd_stage_opt_tgt.export_to(self._file_path)
 
 
-class GeometryDebugger(bsc_fnc_abstracts.AbsFncOptionBase):
+class GeometryDebugger(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         input_file='',
         output_file='',
@@ -356,7 +356,7 @@ class GeometryDebugger(bsc_fnc_abstracts.AbsFncOptionBase):
                     print i_input_mesh_opt.get_face_vertex_indices()
 
 
-class FncGeometryExporter(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncGeometryExporter(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file='',
         location='',

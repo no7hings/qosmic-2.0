@@ -1,14 +1,14 @@
 # coding:utf-8
 from lxusd.core.wrap import *
 
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 
 import lxusd.core as usd_core
 # arnold
 from ...dcc import objects as and_dcc_objects
 
 
-class LookPropertiesUsdExporter(bsc_fnc_abstracts.AbsFncOptionBase):
+class LookPropertiesUsdExporter(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file='',
         root='',

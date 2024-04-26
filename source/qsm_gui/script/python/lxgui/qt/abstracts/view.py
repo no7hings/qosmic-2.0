@@ -259,6 +259,7 @@ class AbsQtListWidget(
 
     def _set_selection_use_multiply_(self):
         self.setSelectionMode(self.ExtendedSelection)
+        # self.setSelectionRectVisible(False)
 
     def _set_selection_use_single_(self):
         self.setSelectionMode(self.SingleSelection)

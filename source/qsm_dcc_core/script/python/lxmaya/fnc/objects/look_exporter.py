@@ -17,7 +17,7 @@ import lxgeneral.dcc.core as gnl_dcc_core
 
 import lxgeneral.dcc.objects as gnl_dcc_objects
 
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 
 import lxuniverse.core as unr_core
 
@@ -31,7 +31,7 @@ from ...dcc import operators as mya_dcc_operators
 
 
 # noinspection GrazieInspection
-class FncExporterForLookAss(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncExporterForLookAss(gnl_fnc_abstracts.AbsFncOptionBase):
     PLUG_NAME = 'mtoa'
     OPTION = dict(
         file='',
@@ -212,7 +212,7 @@ class FncExporterForLookMtlx(object):
         return self._results
 
 
-class TextureBaker(bsc_fnc_abstracts.AbsFncOptionBase):
+class TextureBaker(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         directory='',
         location='',
@@ -534,7 +534,7 @@ class TextureBaker(bsc_fnc_abstracts.AbsFncOptionBase):
                 self.convert_preview_shaders_fnc(directory, i_mya_mesh)
 
 
-class FncExporterForLookYml(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncExporterForLookYml(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file='',
         root='',

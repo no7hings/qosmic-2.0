@@ -1238,9 +1238,10 @@ class StgDirectoryOpt(StgPathOpt):
         )
 
     def get_directory_paths(self):
-        return _scan_base.ScanBase.get_directory_paths(
+        _ = _scan_base.ScanBase.get_directory_paths(
             self._path
         )
+        return _
 
     def get_directories(self):
         return map(

@@ -21,6 +21,7 @@ class QtDrag(QtGui.QDrag):
         self.installEventFilter(self)
         self._current_action = QtCore.Qt.IgnoreAction
         self.actionChanged.connect(self._update_action_)
+        self.targetChanged.connect(self._update_target_)
         self._drag_count = 1
 
     def _set_drag_count_(self, c):
@@ -90,14 +91,20 @@ class QtDrag(QtGui.QDrag):
     def _update_action_(self, *args, **kwargs):
         self._current_action = args[0]
 
+    def _update_target_(self, *args, **kwargs):
+        pass
+
     def _do_release_(self):
         if self._current_action in self.ACTION_MAPPER:
             self.released.emit(
                 (self.ACTION_MAPPER[self._current_action], self.mimeData())
             )
+        else:
+            pass
 
     def eventFilter(self, *args):
         widget, event = args
+        print widget, event
         if widget == self:
             if event.type() == QtCore.QEvent.DeferredDelete:
                 self._do_release_()

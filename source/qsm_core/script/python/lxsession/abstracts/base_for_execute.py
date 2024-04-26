@@ -13,8 +13,8 @@ import lxbasic.extra.methods as bsc_etr_methods
 
 
 class AbsHookExecutor(object):
-    SHELL_PATTERN = '-- lxhook-engine -o "{option}"'
-    DEADLINE_PATTERN = '-- lxhook-engine -o "{option}&start_index=<STARTFRAME>&end_index=<ENDFRAME>"'
+    SHELL_PATTERN = '-- qsm-hook-engine -o "{option}"'
+    DEADLINE_PATTERN = '-- qsm-hook-engine -o "{option}&start_index=<STARTFRAME>&end_index=<ENDFRAME>"'
     #
     SUBMITTER_CLS = None
 
@@ -223,7 +223,7 @@ class AbsHookExecutor(object):
                 )
         return self._ddl_submiter.get_job_result()
 
-    def set_run_with_shell(self, block=False):
+    def execute_with_shell(self, block=False):
         #
         environs_extend = {}
         #

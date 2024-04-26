@@ -1,11 +1,11 @@
 # coding:utf-8
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 # katana
 # katana dcc
 from ...dcc import objects as ktn_dcc_objects
 
 
-class FncExporterForScene(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncExporterForScene(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file=''
     )

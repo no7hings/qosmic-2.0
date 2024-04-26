@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 # katana
 from ... import core as ktn_core
 # katana dcc
@@ -9,8 +9,8 @@ from ...dcc import operators as ktn_dcc_operators
 
 
 class FncExporterForRenderTexture(
-    bsc_fnc_abstracts.AbsFncExporterForDccTextureDef,
-    bsc_fnc_abstracts.AbsFncOptionBase,
+    gnl_fnc_abstracts.AbsFncExporterForDccTextureDef,
+    gnl_fnc_abstracts.AbsFncOptionBase,
 ):
     FIX_NAME_BLANK = 'fix_name_blank'
     USE_TX = 'repath_to_target_force'

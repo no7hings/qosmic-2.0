@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.storage as bsc_storage
 
-import lxbasic.fnc.objects as bsc_fnc_objects
+import lxgeneral.fnc.objects as gnl_fnc_objects
 
 import lxresolver.core as rsv_core
 
@@ -104,7 +104,7 @@ class AbsSsnRsvApplication(object):
                     )
                     # when is '.ma', collection xgen
                     if application == 'maya':
-                        bsc_fnc_objects.FncExporterForDotMa(
+                        gnl_fnc_objects.FncExporterForDotMa(
                             option=dict(
                                 file_path_src=scene_src_file_path_src,
                                 file_path_tgt=scene_src_file_path_tgt
@@ -191,7 +191,7 @@ class AbsSsnRsvApplication(object):
                 if scene_src_file_opt_tgt.get_is_exists() is False:
                     scene_src_file_opt_src.copy_to_file(scene_src_file_path_tgt)
                     if application == 'maya':
-                        bsc_fnc_objects.FncExporterForDotMa(
+                        gnl_fnc_objects.FncExporterForDotMa(
                             option=dict(
                                 file_path_src=scene_src_file_path_src,
                                 file_path_tgt=scene_src_file_path_tgt

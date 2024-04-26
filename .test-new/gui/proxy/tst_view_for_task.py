@@ -3,6 +3,8 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.widgets as prx_widgets
 
+import qsm_gui.proxy.widgets as qsm_widgets
+
 
 class W(prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
@@ -13,13 +15,13 @@ class W(prx_widgets.PrxBaseWindow):
         lot = qt_widgets.QtVBoxLayout(wgt)
         lot._set_align_top_()
 
-        c = prx_widgets.PrxViewForTask()
+        c = qsm_widgets.PrxUnitForWorkarea()
         lot.addWidget(c.widget)
 
-        c.set_title('QSM_TST.sam.mod.modeling')
-
-        c.set_root('Z:/projects/QSM_TST/assets/chr/sam/work/user.nothings/mod.modeling')
-        # c.set_root('X:/QSM_TST/Assets')
+        # c.set_root('Z:/projects/QSM_TST/assets/chr/sam/workarea/user.nothings/rig.rigging')
+        c.setup(
+            dict(location='Z:/projects', entity='QSM_TST', step='dev', task='developing', ext='.ma')
+        )
 
 
 if __name__ == '__main__':
@@ -30,7 +32,7 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     #
     w = W()
-    w.set_definition_window_size((480, 480))
+    w.set_definition_window_size((720, 720))
     w.set_window_show()
     #
     sys.exit(app.exec_())

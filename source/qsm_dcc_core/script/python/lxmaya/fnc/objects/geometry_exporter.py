@@ -15,7 +15,7 @@ import lxbasic.storage as bsc_storage
 
 import lxgeneral.dcc.objects as gnl_dcc_objects
 
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 
 import lxusd.core as usd_core
 
@@ -430,7 +430,7 @@ class FncExporterForDatabaseGeometry(object):
         self._set_uv_map_export_run_()
 
 
-class FncExporterForCameraAbc(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncExporterForCameraAbc(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file='',
         location='',
@@ -470,7 +470,7 @@ class FncExporterForCameraAbc(bsc_fnc_abstracts.AbsFncOptionBase):
         ).set_run()
 
 
-class FncExporterForGeometryUsd(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncExporterForGeometryUsd(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file='',
         location='',
@@ -682,7 +682,7 @@ class FncExporterForGeometryUsd(bsc_fnc_abstracts.AbsFncOptionBase):
             )
 
 
-class FncExporterForGeometryUvMapUsd(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncExporterForGeometryUvMapUsd(gnl_fnc_abstracts.AbsFncOptionBase):
     OPTION = dict(
         file='',
         location='',
@@ -789,7 +789,7 @@ class FncExporterForGeometryUvMapUsd(bsc_fnc_abstracts.AbsFncOptionBase):
         ).set_run()
 
 
-class FncExporterForGeometryUsdNew(bsc_fnc_abstracts.AbsFncOptionBase):
+class FncExporterForGeometryUsdNew(gnl_fnc_abstracts.AbsFncOptionBase):
     KEY = 'geometry usd export'
     OPTION = dict(
         file='',

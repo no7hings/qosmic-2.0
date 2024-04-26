@@ -118,7 +118,7 @@ def set_hair_xgen_usd_export(rsv_task, rsv_scene_properties):
 
     import lxbasic.core as bsc_core
 
-    import lxbasic.fnc.objects as bsc_fnc_objects
+    import lxgeneral.fnc.objects as gnl_fnc_objects
 
     import lxmaya.dcc.objects as mya_dcc_objects
 
@@ -152,7 +152,7 @@ def set_hair_xgen_usd_export(rsv_task, rsv_scene_properties):
         maya_scene_file_rsv_unit = rsv_task.get_rsv_unit(keyword=keyword_0)
         maya_scene_file_path = maya_scene_file_rsv_unit.get_result(version=version)
 
-        bsc_fnc_objects.FncExporterForDotXgenUsda(
+        gnl_fnc_objects.FncExporterForDotXgenUsda(
             dict(
                 file=xgen_usd_file_path,
                 location=location,

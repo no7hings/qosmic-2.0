@@ -117,6 +117,15 @@ class GuiQtMaya(object):
         #     )
         pass
 
+    @classmethod
+    def save_snapshot(cls, file_path):
+        main_window = cls.get_qt_main_window()
+        s = QtGui.QPixmap.grabWindow(
+            long(main_window.winId())
+        )
+        rect = main_window.rect()
+        s.copy(rect).save(file_path)
+
 
 class GuiQtHoudini(object):
     @classmethod

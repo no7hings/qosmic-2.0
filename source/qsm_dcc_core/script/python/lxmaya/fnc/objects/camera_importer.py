@@ -3,7 +3,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.fnc.abstracts as bsc_fnc_abstracts
+import lxgeneral.fnc.abstracts as gnl_fnc_abstracts
 # maya
 from ...core.wrap import *
 
@@ -13,7 +13,7 @@ from ...dcc import objects as mya_dcc_objects
 
 
 class FncImporterForCameraAbc(
-    bsc_fnc_abstracts.AbsFncOptionBase
+    gnl_fnc_abstracts.AbsFncOptionBase
 ):
     OPTION = dict(
         file='',

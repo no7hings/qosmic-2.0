@@ -35,6 +35,8 @@ class ScanBase(object):
                     list_.append(
                         i_path
                     )
+        if list_:
+            list_.sort()
         return list_
 
     @classmethod

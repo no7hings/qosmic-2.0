@@ -13,6 +13,7 @@ requires = [
     'qsm_core',
     'qsm_gui',
     'qsm_resource',
+    'qsm_extra',
 ]
 
 
