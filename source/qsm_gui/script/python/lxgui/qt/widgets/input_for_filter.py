@@ -1,45 +1,47 @@
 # coding=utf-8
 import copy
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
-from ..core.wrap import *
+from ...qt.core.wrap import *
 
-from .. import abstracts as gui_qt_abstracts
+from ...qt import abstracts as _qt_abstracts
 # qt widgets
-from . import base as gui_qt_wgt_base
+from . import base as _base
 
-from . import utility as gui_qt_wgt_utility
+from . import utility as _utility
 
-from . import button as gui_qt_wgt_button
+from . import button as _button
 
-from . import resize as gui_qt_wgt_resize
+from . import resize as _resize
 
-from . import entry as gui_qt_wgt_entry
+from . import entry_frame as _entry_frame
 
-from . import popup as gui_qt_wgt_popup
+from . import entry as _entry
 
-from . import bubble as gui_qt_wgt_bubble
+from . import popup as _popup
+
+from . import bubble as _bubble
 
 
 class QtInputAsFilter(
     QtWidgets.QWidget,
 
-    gui_qt_abstracts.AbsQtInputBaseDef,
+    _qt_abstracts.AbsQtInputBaseDef,
 
-    gui_qt_abstracts.AbsQtInputCompletionExtraDef,
-    gui_qt_abstracts.AbsQtInputHistoryExtraDef,
+    _qt_abstracts.AbsQtInputCompletionExtraDef,
+    _qt_abstracts.AbsQtInputHistoryExtraDef,
 ):
     occurrence_previous_press_clicked = qt_signal()
     occurrence_next_press_clicked = qt_signal()
 
     occurrence_accepted = qt_signal(str)
 
-    QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsConstant
+    QT_ENTRY_CLS = _entry.QtEntryAsConstant
 
-    QT_COMPLETION_POPUP_CLS = gui_qt_wgt_popup.QtPopupAsCompletion
+    QT_COMPLETION_POPUP_CLS = _popup.QtPopupAsCompletion
 
-    QT_HISTORY_POPUP_CLS = gui_qt_wgt_popup.QtPopupAsHistory
+    QT_HISTORY_POPUP_CLS = _popup.QtPopupAsHistory
 
     def _refresh_widget_all_(self):
         self.update()
@@ -62,7 +64,7 @@ class QtInputAsFilter(
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
         )
-        qt_layout_0 = gui_qt_wgt_base.QtHBoxLayout(self)
+        qt_layout_0 = _base.QtHBoxLayout(self)
         qt_layout_0.setContentsMargins(*[0]*4)
         qt_layout_0.setSpacing(2)
         qt_layout_0.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter)
@@ -71,15 +73,15 @@ class QtInputAsFilter(
         #
         self._init_input_completion_extra_def_(self)
         #
-        self._result_label = gui_qt_wgt_utility.QtTextItem()
+        self._result_label = _utility.QtTextItem()
         # todo: fix result show bug
         # self._result_label.hide()
         qt_layout_0.addWidget(self._result_label)
         #
-        self._resize_handle = gui_qt_wgt_resize.QtHResizeHandle()
+        self._resize_handle = _resize.QtHResizeHandle()
         self._resize_handle._set_resize_icon_file_paths_(
             [
-                gui_core.GuiIcon.get('resize-handle-v'), gui_core.GuiIcon.get('resize-handle-v')
+                _gui_core.GuiIcon.get('resize-handle-v'), _gui_core.GuiIcon.get('resize-handle-v')
             ]
         )
         self._resize_handle._resize_frame_draw_size = 10, 20
@@ -88,7 +90,7 @@ class QtInputAsFilter(
         qt_layout_0.addWidget(self._resize_handle)
         self._resize_handle.setFixedWidth(8)
         #
-        self._entry_frame_widget = gui_qt_wgt_entry.QtEntryFrame()
+        self._entry_frame_widget = _entry_frame.QtEntryFrame()
         self._entry_frame_widget.setFixedWidth(200)
         self._entry_frame_widget.setFixedHeight(24)
         self._resize_handle._set_resize_target_(self._entry_frame_widget)
@@ -96,7 +98,7 @@ class QtInputAsFilter(
         #
         self._build_input_entry_(str)
         #
-        self._match_case_button = gui_qt_wgt_button.QtIconPressButton()
+        self._match_case_button = _button.QtIconPressButton()
         self._match_case_button.hide()
         qt_layout_0.addWidget(self._match_case_button)
         self._match_case_button.setFocusProxy(self._entry_widget)
@@ -104,7 +106,7 @@ class QtInputAsFilter(
         self._match_case_icon_names = 'match_case_off', 'match_case_on'
         self._is_match_case = False
         #
-        self._match_word_button = gui_qt_wgt_button.QtIconPressButton()
+        self._match_word_button = _button.QtIconPressButton()
         self._match_word_button.hide()
         qt_layout_0.addWidget(self._match_word_button)
         self._match_word_button.setFocusProxy(self._entry_widget)
@@ -112,22 +114,22 @@ class QtInputAsFilter(
         self._match_word_icon_names = 'match_word_off', 'match_word_on'
         self._is_match_word = False
         # occurrence
-        self._occurrence_previous_button = gui_qt_wgt_button.QtIconPressButton()
+        self._occurrence_previous_button = _button.QtIconPressButton()
         qt_layout_0.addWidget(self._occurrence_previous_button)
         self._occurrence_previous_button._set_name_text_('occurrence previous')
         self._occurrence_previous_button._set_icon_file_path_(
-            gui_core.GuiIcon.get('occurrence-previous-disable')
+            _gui_core.GuiIcon.get('occurrence-previous-disable')
         )
         self._occurrence_previous_button._set_tool_tip_text_('"LMB-click" to occurrence previous result')
         self._occurrence_previous_button.press_clicked.connect(
             self.occurrence_previous_press_clicked.emit
         )
         #
-        self._occurrence_next_button = gui_qt_wgt_button.QtIconPressButton()
+        self._occurrence_next_button = _button.QtIconPressButton()
         qt_layout_0.addWidget(self._occurrence_next_button)
         self._occurrence_next_button._set_name_text_('occurrence next')
         self._occurrence_next_button._set_icon_file_path_(
-            gui_core.GuiIcon.get('occurrence-next-disable')
+            _gui_core.GuiIcon.get('occurrence-next-disable')
         )
         self._occurrence_next_button._set_tool_tip_text_('"LMB-click" to occurrence next result')
         self._occurrence_next_button.press_clicked.connect(
@@ -144,20 +146,20 @@ class QtInputAsFilter(
 
     def _build_input_entry_(self, value_type):
         self._value_type = value_type
-        self._input_layout = gui_qt_wgt_base.QtHBoxLayout(self._entry_frame_widget)
+        self._input_layout = _base.QtHBoxLayout(self._entry_frame_widget)
         self._input_layout.setContentsMargins(2, 0, 2, 0)
         self._input_layout.setSpacing(0)
         #
-        self._header_button = gui_qt_wgt_button.QtIconPressButton()
+        self._header_button = _button.QtIconPressButton()
         self._header_button._set_icon_frame_draw_size_(18, 18)
         self._input_layout.addWidget(self._header_button)
         self._header_button._set_icon_file_path_(
-            gui_core.GuiIcon.get(
+            _gui_core.GuiIcon.get(
                 'search'
             )
         )
         #
-        self.__text_bubbles = gui_qt_wgt_bubble.QtTextBubbles()
+        self.__text_bubbles = _bubble.QtTextBubbles()
         self._input_layout.addWidget(self.__text_bubbles)
         #
         self._entry_widget = self.QT_ENTRY_CLS()
@@ -166,18 +168,18 @@ class QtInputAsFilter(
         self._entry_widget.entry_value_changed.connect(self._do_input_change_)
         self._entry_widget.user_entry_value_changed.connect(self._do_user_input_change_)
         #
-        self._entry_clear_button = gui_qt_wgt_button.QtIconPressButton()
+        self._entry_clear_button = _button.QtIconPressButton()
         self._input_layout.addWidget(self._entry_clear_button)
         self._entry_clear_button.hide()
         self._entry_clear_button._set_icon_file_path_(
-            gui_core.GuiIcon.get(
+            _gui_core.GuiIcon.get(
                 'entry_clear'
             )
         )
         self._entry_clear_button._icon_draw_percent = .6
         self._entry_clear_button.press_clicked.connect(self._do_user_clear_entry_)
         #
-        self._history_button = gui_qt_wgt_button.QtIconPressButton()
+        self._history_button = _button.QtIconPressButton()
         self._input_layout.addWidget(self._history_button)
         # completion
         self._build_input_completion_()
@@ -217,11 +219,11 @@ class QtInputAsFilter(
 
     def __refresh_filter_(self):
         self._match_case_button._set_icon_file_path_(
-            gui_core.GuiIcon.get(self._match_case_icon_names[self._is_match_case])
+            _gui_core.GuiIcon.get(self._match_case_icon_names[self._is_match_case])
         )
         #
         self._match_word_button._set_icon_file_path_(
-            gui_core.GuiIcon.get(self._match_word_icon_names[self._is_match_word])
+            _gui_core.GuiIcon.get(self._match_word_icon_names[self._is_match_word])
         )
 
     def _do_match_case_swap_(self):
@@ -249,17 +251,17 @@ class QtInputAsFilter(
     def _set_occurrence_buttons_enable_(self, boolean):
         if boolean is True:
             self._occurrence_previous_button._set_icon_file_path_(
-                gui_core.GuiIcon.get('occurrence-previous')
+                _gui_core.GuiIcon.get('occurrence-previous')
             )
             self._occurrence_next_button._set_icon_file_path_(
-                gui_core.GuiIcon.get('occurrence-next')
+                _gui_core.GuiIcon.get('occurrence-next')
             )
         else:
             self._occurrence_previous_button._set_icon_file_path_(
-                gui_core.GuiIcon.get('occurrence-previous-disable')
+                _gui_core.GuiIcon.get('occurrence-previous-disable')
             )
             self._occurrence_next_button._set_icon_file_path_(
-                gui_core.GuiIcon.get('occurrence-next-disable')
+                _gui_core.GuiIcon.get('occurrence-next-disable')
             )
 
     def _set_filter_tip_(self, text):

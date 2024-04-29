@@ -1,24 +1,24 @@
 # coding=utf-8
 # qt
-from ..core.wrap import *
+from ...qt.core.wrap import *
 
-from .. import abstracts as gui_qt_abstracts
+from ...qt import abstracts as _qt_abstracts
 # qt widgets
-from . import base as gui_qt_wgt_base
+from . import base as _base
 
-from . import utility as gui_qt_wgt_utility
+from . import utility as _utility
 
-from . import head as gui_qt_wgt_head
+from . import head as _head
 
-from . import drag as gui_qt_wgt_drag
+from . import drag as _drag
 
 
 class AbsQtToolGroup(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForDragDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForDragDef,
 
-    gui_qt_abstracts.AbsQtItemLayoutBaseDef,
+    _qt_abstracts.AbsQtItemLayoutBaseDef,
 ):
     QT_HEAD_HEIGHT = 22
 
@@ -36,7 +36,7 @@ class AbsQtToolGroup(
 
         self._init_item_layout_base_def_(self)
 
-        self.__base_layout = gui_qt_wgt_base.QtVBoxLayout(self)
+        self.__base_layout = _base.QtVBoxLayout(self)
         self.__base_layout.setAlignment(QtCore.Qt.AlignTop)
         self.__base_layout.setContentsMargins(0, 0, 0, 0)
         self.__base_layout.setSpacing(2)
@@ -47,9 +47,9 @@ class AbsQtToolGroup(
         self.__head.expand_toggled.connect(self._set_expanded_)
         self.__head._set_tool_tip_text_('"LMB-click" expand tool group')
 
-        self.__view = gui_qt_wgt_utility.QtTranslucentWidget()
+        self.__view = _utility.QtTranslucentWidget()
         self.__base_layout.addWidget(self.__view)
-        self.__layout = gui_qt_wgt_base.QtVBoxLayout(self.__view)
+        self.__layout = _base.QtVBoxLayout(self.__view)
         self.__layout.setContentsMargins(2, 0, 0, 0)
         self.__layout.setSpacing(2)
 
@@ -95,7 +95,7 @@ class AbsQtToolGroup(
 
     # noinspection PyUnusedLocal
     def _do_drag_move_(self, event):
-        self.__drag = gui_qt_wgt_drag.QtDrag(self.__head)
+        self.__drag = _drag.QtDrag(self.__head)
 
         item = self._get_layout_item_()
         if item:
@@ -164,14 +164,14 @@ class AbsQtToolGroup(
 
 
 class QtHToolGroupStyleA(AbsQtToolGroup):
-    QT_HEAD_CLS = gui_qt_wgt_head.QtHeadAsFrame
+    QT_HEAD_CLS = _head.QtHeadAsFrame
 
     def __init__(self, *args, **kwargs):
         super(QtHToolGroupStyleA, self).__init__(*args, **kwargs)
 
 
 class QtHToolGroupStyleB(AbsQtToolGroup):
-    QT_HEAD_CLS = gui_qt_wgt_head.QtHeadAsLine
+    QT_HEAD_CLS = _head.QtHeadAsLine
 
     def __init__(self, *args, **kwargs):
         super(QtHToolGroupStyleB, self).__init__(*args, **kwargs)
@@ -192,9 +192,9 @@ class AbsQtToolBox(QtWidgets.QWidget):
 
     def _build_widget_(self):
         if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
-            layout = gui_qt_wgt_base.QtHBoxLayout(self)
+            layout = _base.QtHBoxLayout(self)
         elif self.QT_ORIENTATION == QtCore.Qt.Vertical:
-            layout = gui_qt_wgt_base.QtVBoxLayout(self)
+            layout = _base.QtVBoxLayout(self)
         else:
             raise RuntimeError()
         layout.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
@@ -207,12 +207,12 @@ class AbsQtToolBox(QtWidgets.QWidget):
         self._head._set_tool_tip_text_('"LMB-click" to expand "on" / "off"')
         self._head.setFixedSize(self.QT_HEAD_W, self.QT_HEAD_H)
         #
-        self._container = gui_qt_wgt_utility.QtTranslucentWidget()
+        self._container = _utility.QtTranslucentWidget()
         layout.addWidget(self._container)
         if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
-            self._qt_layout = gui_qt_wgt_base.QtHBoxLayout(self._container)
+            self._qt_layout = _base.QtHBoxLayout(self._container)
         elif self.QT_ORIENTATION == QtCore.Qt.Vertical:
-            self._qt_layout = gui_qt_wgt_base.QtVBoxLayout(self._container)
+            self._qt_layout = _base.QtVBoxLayout(self._container)
         else:
             raise RuntimeError()
         self._qt_layout.setContentsMargins(*[0]*4)
@@ -260,7 +260,7 @@ class AbsQtToolBox(QtWidgets.QWidget):
 
 
 class QtHToolBox(AbsQtToolBox):
-    QT_HEAD_CLS = gui_qt_wgt_head.QtHExpandHead2
+    QT_HEAD_CLS = _head.QtHExpandHead2
     QT_ORIENTATION = QtCore.Qt.Horizontal
     QT_HEAD_W, QT_HEAD_H = 12, 24
 
@@ -269,7 +269,7 @@ class QtHToolBox(AbsQtToolBox):
 
 
 class QtVToolBox(AbsQtToolBox):
-    QT_HEAD_CLS = gui_qt_wgt_head.QtVExpandHead2
+    QT_HEAD_CLS = _head.QtVExpandHead2
     QT_ORIENTATION = QtCore.Qt.Vertical
     QT_HEAD_W, QT_HEAD_H = 24, 12
 

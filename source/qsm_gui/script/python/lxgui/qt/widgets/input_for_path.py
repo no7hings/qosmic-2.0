@@ -6,20 +6,20 @@ from ..core.wrap import *
 
 from .. import abstracts as gui_qt_abstracts
 # qt widgets
-from ..widgets import base as gui_qt_wgt_base
+from . import base as _base
 
-from ..widgets import button as gui_qt_wgt_button
+from . import button as _button
 
-from ..widgets import entry as gui_qt_wgt_entry
+from . import entry_frame as _entry_frame
 
-from ..widgets import entry_extend as gui_qt_wgt_entry_extend
+from . import entry_extend_for_path as _entry_extend_for_path
 
-from ..widgets import popup as gui_qt_wgt_popup
+from . import popup as _popup
 
 
 # path
 class QtInputAsPath(
-    gui_qt_wgt_entry.QtEntryFrame,
+    _entry_frame.QtEntryFrame,
     gui_qt_abstracts.AbsQtInputBaseDef,
     # extra
     #   choose
@@ -39,13 +39,13 @@ class QtInputAsPath(
 
     user_input_entry_finished = qt_signal()
 
-    QT_ENTRY_EXTEND_CLS = gui_qt_wgt_entry_extend.QtEntryExtendAsPath
+    QT_ENTRY_EXTEND_CLS = _entry_extend_for_path.QtEntryExtendAsPath
 
-    QT_COMPLETION_POPUP_CLS = gui_qt_wgt_popup.QtPopupAsCompletion
+    QT_COMPLETION_POPUP_CLS = _popup.QtPopupAsCompletion
 
-    QT_POPUP_CHOOSE_CLS = gui_qt_wgt_popup.QtPopupAsChoose
+    QT_POPUP_CHOOSE_CLS = _popup.QtPopupAsChoose
 
-    QT_HISTORY_POPUP_CLS = gui_qt_wgt_popup.QtPopupAsHistory
+    QT_HISTORY_POPUP_CLS = _popup.QtPopupAsHistory
 
     def _pull_history_(self, value):
         self._set_value_(value)
@@ -81,7 +81,7 @@ class QtInputAsPath(
     def _build_input_entry_(self):
         self._entry_frame_widget = self
 
-        entry_layout = gui_qt_wgt_base.QtHBoxLayout(self)
+        entry_layout = _base.QtHBoxLayout(self)
         entry_layout.setContentsMargins(2, 2, 2, 2)
         entry_layout.setSpacing(4)
 
@@ -92,7 +92,7 @@ class QtInputAsPath(
         self._entry_extend_widget.next_index_accepted.connect(self._update_next_cbk_)
         self.user_input_entry_finished = self._entry_widget.user_entry_finished
 
-        self._history_button = gui_qt_wgt_button.QtIconPressButton()
+        self._history_button = _button.QtIconPressButton()
         entry_layout.addWidget(self._history_button)
         # choose
         self._build_input_choose_()

@@ -1,24 +1,24 @@
 # coding=utf-8
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
-from ..core.wrap import *
+from ...qt.core.wrap import *
 
-from .. import core as gui_qt_core
+from ...qt import core as _qt_core
 
-from .. import abstracts as gui_qt_abstracts
+from ...qt import abstracts as _qt_abstracts
 # qt widgets
-from . import utility as gui_qt_wgt_utility
+from . import utility as _utility
 
-from . import entry as gui_qt_wgt_entry
+from . import entry_frame as _frame
 
 
 class QtTreeWidget(
-    gui_qt_abstracts.AbsQtTreeWidget
+    _qt_abstracts.AbsQtTreeWidget
 ):
-    PEN_LINE = QtGui.QPen(gui_qt_core.QtBackgroundColors.Basic, gui_core.GuiDpiScale.get(1))
-    PEN_BRANCH = QtGui.QPen(gui_qt_core.QtBackgroundColors.Button, gui_core.GuiDpiScale.get(1))
-    PEN_BRANCH_HIGHLIGHT = QtGui.QPen(gui_qt_core.QtBackgroundColors.Selected, gui_core.GuiDpiScale.get(1))
+    PEN_LINE = QtGui.QPen(_qt_core.QtBackgroundColors.Basic, _gui_core.GuiDpiScale.get(1))
+    PEN_BRANCH = QtGui.QPen(_qt_core.QtBackgroundColors.Button, _gui_core.GuiDpiScale.get(1))
+    PEN_BRANCH_HIGHLIGHT = QtGui.QPen(_qt_core.QtBackgroundColors.Selected, _gui_core.GuiDpiScale.get(1))
     cachedAncestors = None
     _is_expand_descendants = False
     #
@@ -35,7 +35,7 @@ class QtTreeWidget(
     item_expanded = qt_signal(object)
     item_extend_expanded = qt_signal(list)
     #
-    QT_MENU_CLS = gui_qt_wgt_utility.QtMenu
+    QT_MENU_CLS = _utility.QtMenu
 
     def __init__(self, *args, **kwargs):
         super(QtTreeWidget, self).__init__(*args, **kwargs)
@@ -58,9 +58,9 @@ class QtTreeWidget(
         # self.setSelectionBehavior(self.SelectRows)
         # self.setWordWrap(True)
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        self.setItemDelegate(gui_qt_wgt_utility.QtStyledItemDelegate())
+        self.setItemDelegate(_utility.QtStyledItemDelegate())
         self.setStyleSheet(
-            gui_qt_core.GuiQtStyle.get('QTreeView')
+            _qt_core.GuiQtStyle.get('QTreeView')
         )
         # header view
         self.header().setFixedHeight(16)
@@ -69,25 +69,25 @@ class QtTreeWidget(
         self.header().setSortIndicatorShown(True)
         self.header().setCascadingSectionResizes(True)
         # self.header().setResizeContentsPrecision(True)
-        self.header().setPalette(gui_qt_core.GuiQtDcc.generate_qt_palette())
+        self.header().setPalette(_qt_core.GuiQtDcc.generate_qt_palette())
         # self.header().setSectionResizeMode(self.header().ResizeToContents)
         self.header().setStyleSheet(
-            gui_qt_core.GuiQtStyle.get('QHeaderView')
+            _qt_core.GuiQtStyle.get('QHeaderView')
         )
-        self.header().setFont(gui_qt_core.QtFonts.NameNormal)
+        self.header().setFont(_qt_core.QtFonts.NameNormal)
         self.header().setAutoFillBackground(True)
         # noinspection PyUnresolvedReferences
         self.header().sortIndicatorChanged.connect(
             self._refresh_view_items_viewport_showable_by_sort_
         )
         self.setAlternatingRowColors(True)
-        qt_palette = gui_qt_core.GuiQtDcc.generate_qt_palette()
+        qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
         # self.setAutoFillBackground(True)
         #
         self.cachedAncestors = set()
         # font
-        self.setFont(gui_qt_core.QtFonts.NameNormal)
+        self.setFont(_qt_core.QtFonts.NameNormal)
         #
         self._selected_indices = []
         self._selected_indirect_indices = []
@@ -103,10 +103,10 @@ class QtTreeWidget(
         self._item_expand_method_dic = {}
         #
         self.verticalScrollBar().setStyleSheet(
-            gui_qt_core.GuiQtStyle.get('QScrollBar')
+            _qt_core.GuiQtStyle.get('QScrollBar')
         )
         self.horizontalScrollBar().setStyleSheet(
-            gui_qt_core.GuiQtStyle.get('QScrollBar')
+            _qt_core.GuiQtStyle.get('QScrollBar')
         )
 
         self._item_press_current = None
@@ -138,7 +138,7 @@ class QtTreeWidget(
         highlight = self.selectionModel().isSelected(index)
 
         # Line width
-        line_w = gui_core.GuiDpiScale.get(1)
+        line_w = _gui_core.GuiDpiScale.get(1)
 
         # Cell width
         cell_w = int(rect.width()/(level+1))
@@ -160,8 +160,8 @@ class QtTreeWidget(
         # Draw the branch indicator on the right most
         if self._get_item_has_visible_children_by_index_(index):
             # Branch icon properties
-            r_rect = gui_core.GuiDpiScale.get(4)
-            cross_margin = gui_core.GuiDpiScale.get(1)
+            r_rect = _gui_core.GuiDpiScale.get(4)
+            cross_margin = _gui_core.GuiDpiScale.get(1)
             # Is the row expanded ?
             is_expanded = self.isExpanded(index)
             # [+] and [-] are using different color when highlighted
@@ -219,7 +219,7 @@ class QtTreeWidget(
                 brush_old = painter.brush()
                 painter.setBrush(self.PEN_BRANCH_HIGHLIGHT.brush() if highlight else self.PEN_BRANCH.brush())
                 # A filled circle
-                circle_r = gui_core.GuiDpiScale.get(2)
+                circle_r = _gui_core.GuiDpiScale.get(2)
                 # painter.setPen(self.PEN_BRANCH_HIGHLIGHT if highlight else self.PEN_BRANCH)
                 painter.drawEllipse(
                     cx-circle_r,
@@ -266,7 +266,7 @@ class QtTreeWidget(
         #
         self._draw_for_check_and_select_(painter, option, index)
         #
-        gui_qt_core.GuiQtTreeWidget._set_item_row_draw_(painter, option, index)
+        _qt_core.GuiQtTreeWidget._set_item_row_draw_(painter, option, index)
 
     def keyPressEvent(self, event):
         # override space action
@@ -306,12 +306,12 @@ class QtTreeWidget(
             elif event.type() == QtCore.QEvent.FocusIn:
                 self._is_focused = True
                 parent = self.parent()
-                if isinstance(parent, gui_qt_wgt_entry.QtEntryFrame):
+                if isinstance(parent, _frame.QtEntryFrame):
                     parent._set_focused_(True)
             elif event.type() == QtCore.QEvent.FocusOut:
                 self._is_focused = False
                 parent = self.parent()
-                if isinstance(parent, gui_qt_wgt_entry.QtEntryFrame):
+                if isinstance(parent, _frame.QtEntryFrame):
                     parent._set_focused_(False)
             elif event.type() == QtCore.QEvent.Resize:
                 self._refresh_view_all_items_viewport_showable_()
@@ -325,7 +325,7 @@ class QtTreeWidget(
 
     def paintEvent(self, event):
         if not self.topLevelItemCount():
-            painter = gui_qt_core.QtPainter(self.viewport())
+            painter = _qt_core.QtPainter(self.viewport())
             painter._draw_empty_image_by_rect_(
                 self.rect(), self._empty_icon_name
             )
@@ -351,12 +351,12 @@ class QtTreeWidget(
         is_selected = False
         if index in self._selected_indices:
             painter.fillRect(
-                select_rect, gui_qt_core.QtBackgroundColors.ItemSelected
+                select_rect, _qt_core.QtBackgroundColors.ItemSelected
             )
             is_selected = True
         elif index in self._selected_indirect_indices:
             painter.fillRect(
-                select_rect, gui_qt_core.QtBackgroundColors.ItemSelectedIndirect
+                select_rect, _qt_core.QtBackgroundColors.ItemSelectedIndirect
             )
             is_selected = True
         if self._draw_for_check_state_enable is True:
@@ -374,7 +374,7 @@ class QtTreeWidget(
                         x, y, d_w, h
                     )
                 painter.fillRect(
-                    check_rect, gui_qt_core.QtBackgroundColors.Checked
+                    check_rect, _qt_core.QtBackgroundColors.Checked
                 )
 
     def _execute_item_pressed_(self, item, column):
@@ -476,7 +476,7 @@ class QtTreeWidget(
     def _set_selected_indirect_indices_update_(self):
         self._selected_indirect_indices = []
         for index in self._selected_indices:
-            all_parent_indices = gui_qt_core.GuiQtTreeWidget._get_index_ancestor_indices_(index)
+            all_parent_indices = _qt_core.GuiQtTreeWidget._get_index_ancestor_indices_(index)
             [
                 self._selected_indirect_indices.append(i)
                 for i in all_parent_indices if

@@ -1,19 +1,19 @@
 # coding=utf-8
 # qt
-from ..core.wrap import *
+from ...qt.core.wrap import *
 
-from .. import core as gui_qt_core
+from ...qt import core as _qt_core
 
-from .. import abstracts as gui_qt_abstracts
+from ...qt import abstracts as _qt_abstracts
 # qt widgets
-from . import utility as gui_qt_wgt_utility
+from . import utility as _utility
 
-from . import entry as gui_qt_wgt_entry
+from . import entry_frame as _entry_frame
 
 
 class QtListWidget(
-    gui_qt_abstracts.AbsQtListWidget,
-    gui_qt_abstracts.AbsQtMenuBaseDef,
+    _qt_abstracts.AbsQtListWidget,
+    _qt_abstracts.AbsQtMenuBaseDef,
 ):
     ctrl_f_key_pressed = qt_signal()
     f5_key_pressed = qt_signal()
@@ -22,12 +22,12 @@ class QtListWidget(
     focus_changed = qt_signal()
     #
     info_text_accepted = qt_signal(str)
-    QT_MENU_CLS = gui_qt_wgt_utility.QtMenu
+    QT_MENU_CLS = _utility.QtMenu
 
     def __init__(self, *args, **kwargs):
         super(QtListWidget, self).__init__(*args, **kwargs)
         self._init_menu_base_def_(self)
-        qt_palette = gui_qt_core.GuiQtDcc.generate_qt_palette()
+        qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
 
         self.setSelectionMode(self.SingleSelection)
@@ -157,13 +157,13 @@ class QtListWidget(
             elif event.type() == QtCore.QEvent.FocusIn:
                 self._is_focused = True
                 parent = self.parent()
-                if isinstance(parent, gui_qt_wgt_entry.QtEntryFrame):
+                if isinstance(parent, _entry_frame.QtEntryFrame):
                     parent._set_focused_(True)
                 self.focus_changed.emit()
             elif event.type() == QtCore.QEvent.FocusOut:
                 self._is_focused = False
                 parent = self.parent()
-                if isinstance(parent, gui_qt_wgt_entry.QtEntryFrame):
+                if isinstance(parent, _entry_frame.QtEntryFrame):
                     parent._set_focused_(False)
                 self.focus_changed.emit()
         # view port
@@ -190,7 +190,7 @@ class QtListWidget(
 
     def paintEvent(self, event):
         if not self.count():
-            painter = gui_qt_core.QtPainter(self.viewport())
+            painter = _qt_core.QtPainter(self.viewport())
             painter._draw_empty_image_by_rect_(
                 self.rect(),
                 self._empty_icon_name
@@ -351,7 +351,7 @@ class QtListWidget(
         view = self
         #
         index_cur = view._get_item_count_()
-        item = gui_qt_wgt_utility.QtListWidgetItem('', view)
+        item = _utility.QtListWidgetItem('', view)
         view.addItem(item)
         # debug for position error
         index = self.row(item)

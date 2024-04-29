@@ -616,14 +616,6 @@ class QtAction(QtWidgets.QAction):
         self.setFont(gui_qt_core.QtFonts.NameNormal)
 
 
-class QtLabel(QtWidgets.QLabel):
-    def __init__(self, *args, **kwargs):
-        super(QtLabel, self).__init__(*args, **kwargs)
-        self.setPalette(gui_qt_core.GuiQtDcc.generate_qt_palette())
-        #
-        self.setFont(gui_qt_core.QtFonts.NameNormal)
-
-
 class QtHScrollArea(QtWidgets.QScrollArea):
     def __init__(self, *args, **kwargs):
         super(QtHScrollArea, self).__init__(*args, **kwargs)

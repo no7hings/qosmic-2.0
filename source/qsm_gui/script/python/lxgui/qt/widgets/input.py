@@ -5,33 +5,35 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
-from ..core.wrap import *
+from ...qt.core.wrap import *
 
-from .. import core as gui_qt_core
+from ...qt import core as _qt_core
 
-from .. import abstracts as gui_qt_abstracts
+from ...qt import abstracts as _qt_abstracts
 # qt widgets
-from ..widgets import base as gui_qt_wgt_base
+from . import base as _base
 
-from ..widgets import utility as gui_qt_wgt_utility
+from . import utility as _utility
 
-from ..widgets import bubble as gui_qt_wgt_bubble
+from . import bubble as _bubble
 
-from ..widgets import button as gui_qt_wgt_button
+from . import button as _button
 
-from ..widgets import entry as gui_qt_wgt_entry
+from . import entry_frame as _entry_frame
 
-from ..widgets import popup as gui_qt_wgt_popup
+from . import entry as _entry
+
+from . import popup as _popup
 
 
 # input as any constant, etc. integer, float, string/text/name, ...
 class QtInputAsConstant(
-    gui_qt_wgt_entry.QtEntryFrame,
-    gui_qt_abstracts.AbsQtInputBaseDef,
+    _entry_frame.QtEntryFrame,
+    _qt_abstracts.AbsQtInputBaseDef,
 ):
-    QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsConstant
+    QT_ENTRY_CLS = _entry.QtEntryAsConstant
 
     entry_value_changed = qt_signal()
 
@@ -43,7 +45,7 @@ class QtInputAsConstant(
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
         )
-        self.setFixedHeight(gui_core.GuiSize.InputHeight)
+        self.setFixedHeight(_gui_core.GuiSize.InputHeight)
 
         self._init_input_base_def_(self)
 
@@ -54,7 +56,7 @@ class QtInputAsConstant(
 
         self._value_type = value_type
         #
-        entry_layout = gui_qt_wgt_base.QtHBoxLayout(self)
+        entry_layout = _base.QtHBoxLayout(self)
         entry_layout.setContentsMargins(2, 2, 2, 2)
         entry_layout.setSpacing(4)
         #
@@ -76,27 +78,27 @@ class QtInputAsConstant(
         self._entry_widget.setReadOnly(not boolean)
 
         self._frame_background_color = [
-            gui_qt_core.QtBackgroundColors.Basic, gui_qt_core.QtBackgroundColors.Dim
+            _qt_core.QtBackgroundColors.Basic, _qt_core.QtBackgroundColors.Dim
         ][boolean]
         self._refresh_widget_draw_()
 
 
 # input as any constant entry and choose, etc. enumerate, file open/save, directory open/save, ...
 class QtInputAsConstantWithChoose(
-    gui_qt_wgt_entry.QtEntryFrame,
-    gui_qt_abstracts.AbsQtInputBaseDef,
+    _entry_frame.QtEntryFrame,
+    _qt_abstracts.AbsQtInputBaseDef,
     # choose
-    gui_qt_abstracts.AbsQtInputChooseExtraDef,
+    _qt_abstracts.AbsQtInputChooseExtraDef,
     # completion
-    gui_qt_abstracts.AbsQtInputCompletionExtraDef,
+    _qt_abstracts.AbsQtInputCompletionExtraDef,
 ):
     def _pull_history_(self, *args, **kwargs):
         pass
 
-    QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsConstant
+    QT_ENTRY_CLS = _entry.QtEntryAsConstant
 
-    QT_POPUP_CHOOSE_CLS = gui_qt_wgt_popup.QtPopupAsChoose
-    QT_COMPLETION_POPUP_CLS = gui_qt_wgt_popup.QtPopupAsCompletion
+    QT_POPUP_CHOOSE_CLS = _popup.QtPopupAsChoose
+    QT_COMPLETION_POPUP_CLS = _popup.QtPopupAsCompletion
 
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_()
@@ -124,7 +126,7 @@ class QtInputAsConstantWithChoose(
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
         )
-        self.setFixedHeight(gui_core.GuiSize.InputHeight)
+        self.setFixedHeight(_gui_core.GuiSize.InputHeight)
 
         self._init_input_base_def_(self)
 
@@ -140,13 +142,13 @@ class QtInputAsConstantWithChoose(
 
         self._value_type = value_type
         #
-        main_layout = gui_qt_wgt_base.QtVBoxLayout(self)
+        main_layout = _base.QtVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
-        entry_widget = gui_qt_wgt_utility.QtTranslucentWidget()
+        entry_widget = _utility.QtTranslucentWidget()
         main_layout.addWidget(entry_widget)
         #
-        entry_layout = gui_qt_wgt_base.QtHBoxLayout(entry_widget)
+        entry_layout = _base.QtHBoxLayout(entry_widget)
         entry_layout.setContentsMargins(2, 2, 2, 2)
         entry_layout.setSpacing(0)
         # entry
@@ -160,24 +162,24 @@ class QtInputAsConstantWithChoose(
             self.user_key_tab_pressed.emit
         )
         #
-        self._input_info_bubble = gui_qt_wgt_bubble.QtInfoBubble()
+        self._input_info_bubble = _bubble.QtInfoBubble()
         self._input_info_bubble.hide()
         entry_layout.addWidget(self._input_info_bubble)
         #
-        self._input_button_widget = gui_qt_wgt_utility.QtLineWidget()
+        self._input_button_widget = _utility.QtLineWidget()
         self._input_button_widget._set_line_styles_(
             [self._input_button_widget.Style.Null, self._input_button_widget.Style.Null,
              self._input_button_widget.Style.Solid,
              self._input_button_widget.Style.Null]
         )
         entry_layout.addWidget(self._input_button_widget)
-        self._input_button_layout = gui_qt_wgt_base.QtHBoxLayout(self._input_button_widget)
+        self._input_button_layout = _base.QtHBoxLayout(self._input_button_widget)
         self._input_button_layout.setContentsMargins(2, 0, 0, 0)
         self._input_button_layout.setSpacing(2)
         #
-        self._input_button = gui_qt_wgt_button.QtIconPressButton()
+        self._input_button = _button.QtIconPressButton()
         self._input_button_layout.addWidget(self._input_button)
-        self._input_button._set_icon_file_path_(gui_core.GuiIcon.get('down'))
+        self._input_button._set_icon_file_path_(_gui_core.GuiIcon.get('down'))
         self._input_button._set_icon_frame_draw_size_(18, 18)
         self._input_button._set_name_text_('choose value')
         self._input_button._set_tool_tip_('"LMB-click" to choose value from popup view')
@@ -231,13 +233,13 @@ class QtInputAsConstantWithChoose(
         self._input_button_layout.addWidget(widget)
 
     def _create_input_button_(self, name_text, icon_name=None, sub_icon_name=None, tool_tip=None):
-        button = gui_qt_wgt_button.QtIconPressButton()
+        button = _button.QtIconPressButton()
         self._input_button_layout.addWidget(button)
         button._set_name_text_(name_text)
         if icon_name is not None:
-            button._set_icon_file_path_(gui_core.GuiIcon.get(icon_name))
+            button._set_icon_file_path_(_gui_core.GuiIcon.get(icon_name))
         if sub_icon_name is not None:
-            button._set_icon_sub_file_path_(gui_core.GuiIcon.get(sub_icon_name))
+            button._set_icon_sub_file_path_(_gui_core.GuiIcon.get(sub_icon_name))
         if tool_tip:
             button._set_tool_tip_(tool_tip)
         button._set_icon_frame_draw_size_(18, 18)
@@ -288,16 +290,16 @@ class QtInputAsConstantWithChoose(
 
 class QtInputAsBubbleWithChoose(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtInputBaseDef,
+    _qt_abstracts.AbsQtInputBaseDef,
 
-    gui_qt_abstracts.AbsQtInputChooseExtraDef,
+    _qt_abstracts.AbsQtInputChooseExtraDef,
 ):
     def _refresh_choose_index_(self):
         pass
 
-    QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsBubble
+    QT_ENTRY_CLS = _entry.QtEntryAsBubble
 
-    QT_POPUP_CHOOSE_CLS = gui_qt_wgt_popup.QtPopupAsChoose
+    QT_POPUP_CHOOSE_CLS = _popup.QtPopupAsChoose
 
     def _pull_history_(self, value):
         if value in self._choose_values:
@@ -309,7 +311,7 @@ class QtInputAsBubbleWithChoose(
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
         )
-        self.setFixedHeight(gui_core.GuiSize.InputHeight)
+        self.setFixedHeight(_gui_core.GuiSize.InputHeight)
 
         self._init_input_base_def_(self)
         self._init_input_choose_extra_def_(self)
@@ -321,7 +323,7 @@ class QtInputAsBubbleWithChoose(
 
         self._value_type = value_type
 
-        entry_layout = gui_qt_wgt_base.QtHBoxLayout(self)
+        entry_layout = _base.QtHBoxLayout(self)
         entry_layout.setContentsMargins(*[1] * 4)
         entry_layout.setSpacing(4)
 
@@ -360,13 +362,13 @@ class QtInputAsBubbleWithChoose(
 
 # input as any content, etc. script, xml, doc
 class QtInputAsContent(
-    gui_qt_wgt_entry.QtEntryFrame,
-    gui_qt_abstracts.AbsQtInputBaseDef,
+    _entry_frame.QtEntryFrame,
+    _qt_abstracts.AbsQtInputBaseDef,
 ):
     def _pull_history_(self, *args, **kwargs):
         pass
 
-    QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsContent
+    QT_ENTRY_CLS = _entry.QtEntryAsContent
 
     entry_value_changed = qt_signal()
 
@@ -382,21 +384,21 @@ class QtInputAsContent(
         #
         self._build_input_entry_(self._value_type)
 
-        # self._frame_background_color = gui_qt_core.QtBackgroundColors.Dark
+        # self._frame_background_color = _qt_core.QtBackgroundColors.Dark
 
     def _build_input_entry_(self, value_type):
         self._entry_frame_widget = self
 
         self._value_type = value_type
         #
-        main_layout = gui_qt_wgt_base.QtVBoxLayout(self)
+        main_layout = _base.QtVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
         #
-        entry_widget = gui_qt_wgt_utility.QtTranslucentWidget()
+        entry_widget = _utility.QtTranslucentWidget()
         main_layout.addWidget(entry_widget)
         #
-        entry_layout = gui_qt_wgt_base.QtHBoxLayout(entry_widget)
+        entry_layout = _base.QtHBoxLayout(entry_widget)
         entry_layout.setContentsMargins(2, 2, 2, 2)
         entry_layout.setSpacing(0)
         #
@@ -405,7 +407,7 @@ class QtInputAsContent(
         # self._entry_widget.setReadOnly(False)
         entry_layout.addWidget(self._entry_widget)
         #
-        self._input_button_widget = gui_qt_wgt_utility.QtLineWidget()
+        self._input_button_widget = _utility.QtLineWidget()
         self._input_button_widget.hide()
         self._input_button_widget._set_line_styles_(
             [self._input_button_widget.Style.Null, self._input_button_widget.Style.Null,
@@ -413,15 +415,15 @@ class QtInputAsContent(
              self._input_button_widget.Style.Null]
         )
         entry_layout.addWidget(self._input_button_widget)
-        self._input_button_layout = gui_qt_wgt_base.QtVBoxLayout(self._input_button_widget)
+        self._input_button_layout = _base.QtVBoxLayout(self._input_button_widget)
         self._input_button_layout._set_align_top_()
         self._input_button_layout.setContentsMargins(2, 0, 0, 0)
         self._input_button_layout.setSpacing(2)
         #
-        self._open_in_external_editor_button = gui_qt_wgt_button.QtIconToggleButton()
+        self._open_in_external_editor_button = _button.QtIconToggleButton()
         self._input_button_layout.addWidget(self._open_in_external_editor_button)
         self._open_in_external_editor_button._set_icon_file_path_(
-            gui_core.GuiIcon.get('application/sublime-text')
+            _gui_core.GuiIcon.get('application/sublime-text')
         )
         self._open_in_external_editor_button._set_name_text_('open in external editor')
         self._open_in_external_editor_button._set_tool_tip_('"LMB-click" to open in external editor')
@@ -480,7 +482,7 @@ class QtInputAsContent(
 
         self._entry_widget.setReadOnly(not boolean)
         # self._frame_background_color = [
-        #     gui_qt_core.QtBackgroundColors.Basic, gui_qt_core.QtBackgroundColors.Dim
+        #     _qt_core.QtBackgroundColors.Basic, _qt_core.QtBackgroundColors.Dim
         # ][boolean]
         # self._refresh_widget_draw_()
 
@@ -494,11 +496,11 @@ class QtInputAsContent(
 
 # input as any list
 class QtInputAsList(
-    gui_qt_wgt_entry.QtEntryFrame,
-    gui_qt_abstracts.AbsQtInputBaseDef,
+    _entry_frame.QtEntryFrame,
+    _qt_abstracts.AbsQtInputBaseDef,
     # extra
     #   choose
-    gui_qt_abstracts.AbsQtInputChooseExtraDef,
+    _qt_abstracts.AbsQtInputChooseExtraDef,
 ):
     def _refresh_choose_index_(self):
         pass
@@ -506,9 +508,9 @@ class QtInputAsList(
     def _pull_history_(self, *args, **kwargs):
         pass
 
-    QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsList
+    QT_ENTRY_CLS = _entry.QtEntryAsList
     #
-    QT_POPUP_CHOOSE_CLS = gui_qt_wgt_popup.QtPopupAsChoose
+    QT_POPUP_CHOOSE_CLS = _popup.QtPopupAsChoose
     #
     add_press_clicked = qt_signal()
 
@@ -527,14 +529,14 @@ class QtInputAsList(
 
         self._value_type = value_type
         #
-        main_layout = gui_qt_wgt_base.QtVBoxLayout(self)
+        main_layout = _base.QtVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
         #
-        entry_widget = gui_qt_wgt_utility.QtTranslucentWidget()
+        entry_widget = _utility.QtTranslucentWidget()
         main_layout.addWidget(entry_widget)
         #
-        entry_layout = gui_qt_wgt_base.QtHBoxLayout(entry_widget)
+        entry_layout = _base.QtHBoxLayout(entry_widget)
         entry_layout.setContentsMargins(2, 2, 2, 2)
         entry_layout.setSpacing(0)
         #
@@ -542,21 +544,21 @@ class QtInputAsList(
         entry_layout.addWidget(self._entry_widget)
         self._entry_widget._set_entry_frame_(self)
         #
-        self._input_button_widget = gui_qt_wgt_utility.QtLineWidget()
+        self._input_button_widget = _utility.QtLineWidget()
         self._input_button_widget._set_line_styles_(
             [self._input_button_widget.Style.Null, self._input_button_widget.Style.Null,
              self._input_button_widget.Style.Solid,
              self._input_button_widget.Style.Null]
         )
         entry_layout.addWidget(self._input_button_widget)
-        self._input_button_layout = gui_qt_wgt_base.QtVBoxLayout(self._input_button_widget)
+        self._input_button_layout = _base.QtVBoxLayout(self._input_button_widget)
         self._input_button_layout._set_align_top_()
         self._input_button_layout.setContentsMargins(2, 0, 0, 0)
         self._input_button_layout.setSpacing(2)
 
-        self._input_button = gui_qt_wgt_button.QtIconPressButton()
+        self._input_button = _button.QtIconPressButton()
         self._input_button_layout.addWidget(self._input_button)
-        self._input_button._set_icon_file_path_(gui_core.GuiIcon.get('file/file'))
+        self._input_button._set_icon_file_path_(_gui_core.GuiIcon.get('file/file'))
         self._input_button._set_icon_state_name_('state/popup')
         self._input_button._set_icon_frame_draw_size_(18, 18)
         self._input_button._set_name_text_('choose value')
@@ -612,13 +614,13 @@ class QtInputAsList(
         self._input_button_layout.addWidget(widget)
 
     def _create_input_button_(self, name_text, icon_name=None, sub_icon_name=None):
-        button = gui_qt_wgt_button.QtIconPressButton()
+        button = _button.QtIconPressButton()
         self._input_button_layout.addWidget(button)
         button._set_name_text_(name_text)
         if icon_name is not None:
-            button._set_icon_file_path_(gui_core.GuiIcon.get(icon_name))
+            button._set_icon_file_path_(_gui_core.GuiIcon.get(icon_name))
         if sub_icon_name is not None:
-            button._set_icon_sub_file_path_(gui_core.GuiIcon.get(sub_icon_name))
+            button._set_icon_sub_file_path_(_gui_core.GuiIcon.get(sub_icon_name))
         button._set_icon_frame_draw_size_(18, 18)
         return button
 
@@ -654,11 +656,11 @@ class QtInputAsList(
 
 # input as any list with choose
 class QtInputAsListWithChoose(
-    gui_qt_wgt_entry.QtEntryFrame,
-    gui_qt_abstracts.AbsQtInputBaseDef,
+    _entry_frame.QtEntryFrame,
+    _qt_abstracts.AbsQtInputBaseDef,
     # extra
     #   choose
-    gui_qt_abstracts.AbsQtInputChooseExtraDef,
+    _qt_abstracts.AbsQtInputChooseExtraDef,
 ):
     def _refresh_choose_index_(self):
         pass
@@ -666,8 +668,8 @@ class QtInputAsListWithChoose(
     def _pull_history_(self, *args, **kwargs):
         pass
 
-    QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsList
-    QT_POPUP_CHOOSE_CLS = gui_qt_wgt_popup.QtPopupAsChoose
+    QT_ENTRY_CLS = _entry.QtEntryAsList
+    QT_POPUP_CHOOSE_CLS = _popup.QtPopupAsChoose
     #
     add_press_clicked = qt_signal()
 
@@ -686,14 +688,14 @@ class QtInputAsListWithChoose(
 
         self._value_type = value_type
 
-        main_layout = gui_qt_wgt_base.QtVBoxLayout(self)
+        main_layout = _base.QtVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
 
-        entry_widget = gui_qt_wgt_utility.QtTranslucentWidget()
+        entry_widget = _utility.QtTranslucentWidget()
         main_layout.addWidget(entry_widget)
         #
-        entry_layout = gui_qt_wgt_base.QtHBoxLayout(entry_widget)
+        entry_layout = _base.QtHBoxLayout(entry_widget)
         entry_layout.setContentsMargins(2, 2, 2, 2)
         entry_layout.setSpacing(0)
         #
@@ -701,21 +703,21 @@ class QtInputAsListWithChoose(
         entry_layout.addWidget(self._entry_widget)
         self._entry_widget._set_entry_frame_(self)
         #
-        self._input_button_widget = gui_qt_wgt_utility.QtLineWidget()
+        self._input_button_widget = _utility.QtLineWidget()
         self._input_button_widget._set_line_styles_(
             [self._input_button_widget.Style.Null, self._input_button_widget.Style.Null,
              self._input_button_widget.Style.Solid,
              self._input_button_widget.Style.Null]
         )
         entry_layout.addWidget(self._input_button_widget)
-        self._input_button_layout = gui_qt_wgt_base.QtVBoxLayout(self._input_button_widget)
+        self._input_button_layout = _base.QtVBoxLayout(self._input_button_widget)
         self._input_button_layout._set_align_top_()
         self._input_button_layout.setContentsMargins(2, 0, 0, 0)
         self._input_button_layout.setSpacing(2)
 
-        self._input_button = gui_qt_wgt_button.QtIconPressButton()
+        self._input_button = _button.QtIconPressButton()
         self._input_button_layout.addWidget(self._input_button)
-        self._input_button._set_icon_file_path_(gui_core.GuiIcon.get('file/file'))
+        self._input_button._set_icon_file_path_(_gui_core.GuiIcon.get('file/file'))
         self._input_button._set_icon_state_name_('state/popup')
         self._input_button._set_icon_frame_draw_size_(18, 18)
         self._input_button._set_name_text_('choose value')
@@ -765,13 +767,13 @@ class QtInputAsListWithChoose(
         self._input_button_layout.addWidget(widget)
 
     def _create_input_button_(self, name_text, icon_name=None, sub_icon_name=None):
-        button = gui_qt_wgt_button.QtIconPressButton()
+        button = _button.QtIconPressButton()
         self._input_button_layout.addWidget(button)
         button._set_name_text_(name_text)
         if icon_name is not None:
-            button._set_icon_file_path_(gui_core.GuiIcon.get(icon_name))
+            button._set_icon_file_path_(_gui_core.GuiIcon.get(icon_name))
         if sub_icon_name is not None:
-            button._set_icon_sub_file_path_(gui_core.GuiIcon.get(sub_icon_name))
+            button._set_icon_sub_file_path_(_gui_core.GuiIcon.get(sub_icon_name))
         button._set_icon_frame_draw_size_(18, 18)
         return button
 
@@ -800,17 +802,17 @@ class QtInputAsListWithChoose(
 
 # rgba entry and choose
 class QtInputAsRgba(
-    gui_qt_wgt_entry.QtEntryFrame,
-    gui_qt_abstracts.AbsQtInputAsOtherBaseDef,
+    _entry_frame.QtEntryFrame,
+    _qt_abstracts.AbsQtInputAsOtherBaseDef,
     # extra
     #   choose
-    gui_qt_abstracts.AbsQtInputChooseExtraDef,
+    _qt_abstracts.AbsQtInputChooseExtraDef,
 
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForPressDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForHoverDef,
+    _qt_abstracts.AbsQtActionForPressDef,
 
-    gui_qt_abstracts.AbsQtValueDefaultExtraDef,
+    _qt_abstracts.AbsQtValueDefaultExtraDef,
 ):
     def _bridge_choose_get_popup_texts_(self):
         pass
@@ -824,9 +826,9 @@ class QtInputAsRgba(
     def _pull_history_(self, *args, **kwargs):
         pass
 
-    QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsConstant
+    QT_ENTRY_CLS = _entry.QtEntryAsConstant
 
-    QT_POPUP_CHOOSE_CLS = gui_qt_wgt_popup.QtPopupAsChooseForRgba
+    QT_POPUP_CHOOSE_CLS = _popup.QtPopupAsChooseForRgba
 
     def _refresh_widget_draw_geometry_(self):
         super(QtInputAsRgba, self)._refresh_widget_draw_geometry_()
@@ -847,7 +849,7 @@ class QtInputAsRgba(
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
         )
-        self.setFixedHeight(gui_core.GuiSize.InputHeight)
+        self.setFixedHeight(_gui_core.GuiSize.InputHeight)
 
         self._init_input_choose_extra_def_(self)
 
@@ -866,7 +868,7 @@ class QtInputAsRgba(
     def _build_input_entry_(self):
         self._entry_frame_widget = self
 
-        entry_layout = gui_qt_wgt_base.QtHBoxLayout(self)
+        entry_layout = _base.QtHBoxLayout(self)
         entry_layout.setContentsMargins(self._value_draw_width + 2, 0, 0, 0)
         entry_layout.setSpacing(2)
 
@@ -908,13 +910,13 @@ class QtInputAsRgba(
     def paintEvent(self, event):
         super(QtInputAsRgba, self).paintEvent(self)
         #
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
 
         rgba = self._get_value_()
         offset = self._get_action_offset_()
         painter._draw_frame_by_rect_(
             self._value_draw_rect,
-            border_color=gui_qt_core.QtBorderColors.Transparent,
+            border_color=_qt_core.QtBorderColors.Transparent,
             background_color=rgba,
             offset=offset
         )
@@ -943,15 +945,15 @@ class QtInputAsRgba(
 
 # icon entry and choose
 class QtInputAsIcon(
-    gui_qt_wgt_entry.QtEntryFrame,
-    gui_qt_abstracts.AbsQtInputAsOtherBaseDef,
+    _entry_frame.QtEntryFrame,
+    _qt_abstracts.AbsQtInputAsOtherBaseDef,
     # extra
     #   choose
-    gui_qt_abstracts.AbsQtInputChooseExtraDef,
+    _qt_abstracts.AbsQtInputChooseExtraDef,
 
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForPressDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForHoverDef,
+    _qt_abstracts.AbsQtActionForPressDef,
 ):
     def _pull_history_(self, *args, **kwargs):
         pass
@@ -959,9 +961,9 @@ class QtInputAsIcon(
     def _refresh_choose_index_(self):
         pass
 
-    QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsConstant
+    QT_ENTRY_CLS = _entry.QtEntryAsConstant
 
-    QT_POPUP_CHOOSE_CLS = gui_qt_wgt_popup.QtPopupAsChooseForIcon
+    QT_POPUP_CHOOSE_CLS = _popup.QtPopupAsChooseForIcon
 
     def _refresh_widget_draw_geometry_(self):
         super(QtInputAsIcon, self)._refresh_widget_draw_geometry_()
@@ -982,7 +984,7 @@ class QtInputAsIcon(
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
         )
-        self.setFixedHeight(gui_core.GuiSize.InputHeight)
+        self.setFixedHeight(_gui_core.GuiSize.InputHeight)
 
         self._init_input_as_other_base_def_(self)
         self._init_input_choose_extra_def_(self)
@@ -1023,13 +1025,13 @@ class QtInputAsIcon(
     def paintEvent(self, event):
         super(QtInputAsIcon, self).paintEvent(self)
         #
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
 
         icon_name = self._get_value_()
         if icon_name == '':
             icon_name = 'state-disable'
 
-        icon_file_path = gui_core.GuiIcon.get(icon_name)
+        icon_file_path = _gui_core.GuiIcon.get(icon_name)
         if icon_file_path:
             offset = self._get_action_offset_()
 
@@ -1042,7 +1044,7 @@ class QtInputAsIcon(
     def _build_input_entry_(self):
         self._entry_frame_widget = self
 
-        entry_layout = gui_qt_wgt_base.QtHBoxLayout(self)
+        entry_layout = _base.QtHBoxLayout(self)
         entry_layout.setContentsMargins(self._value_draw_width + 2, 0, 0, 0)
         entry_layout.setSpacing(2)
 
@@ -1086,13 +1088,13 @@ class QtInputAsIcon(
 
 # any tuple, etc. float2, float3, ...
 class QtInputAsTuple(
-    gui_qt_wgt_entry.QtEntryFrame,
-    gui_qt_abstracts.AbsQtInputAsComponentsBaseDef,
+    _entry_frame.QtEntryFrame,
+    _qt_abstracts.AbsQtInputAsComponentsBaseDef,
 ):
     def _pull_history_(self, *args, **kwargs):
         pass
 
-    QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsConstant
+    QT_ENTRY_CLS = _entry.QtEntryAsConstant
 
     entry_value_changed = qt_signal()
 
@@ -1101,11 +1103,11 @@ class QtInputAsTuple(
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
         )
-        self.setFixedHeight(gui_core.GuiSize.InputHeight)
+        self.setFixedHeight(_gui_core.GuiSize.InputHeight)
 
         self._init_input_as_components_base_def_(self)
         # create entry layout first
-        self._entry_layout = gui_qt_wgt_base.QtHBoxLayout(self)
+        self._entry_layout = _base.QtHBoxLayout(self)
         self._entry_layout.setContentsMargins(2, 2, 2, 2)
         self._entry_layout.setSpacing(8)
         self._build_input_entry_(2, self._value_type)
@@ -1116,14 +1118,14 @@ class QtInputAsTuple(
         self._value_type = value_type
         #
         if self._value_entries:
-            gui_qt_core.GuiQtLayout.clear_all_widgets(self._entry_layout)
+            _qt_core.GuiQtLayout.clear_all_widgets(self._entry_layout)
         #
         self._value_entries = []
         #
         self._set_entry_count_(value_size)
         if value_size:
             for i in range(value_size):
-                i_widget = gui_qt_wgt_entry.QtEntryAsConstant()
+                i_widget = _entry.QtEntryAsConstant()
                 i_widget._set_value_type_(self._value_type)
                 self._entry_layout.addWidget(i_widget)
                 self._value_entries.append(i_widget)

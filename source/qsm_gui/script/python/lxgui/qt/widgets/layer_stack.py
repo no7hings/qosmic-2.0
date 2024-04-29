@@ -150,7 +150,7 @@ class QtLayerStack(QtWidgets.QWidget):
         )
 
         self._widgets = []
-        self.__count = 0
+        self._item_count = 0
 
         self._index_current = 0
         self.__index_pre = None
@@ -294,7 +294,7 @@ class QtLayerStack(QtWidgets.QWidget):
         elif index > 0:
             widget.hide()
 
-        self.__count += 1
+        self._item_count += 1
         #
         if 'switch_to' in kwargs:
             if kwargs['switch_to'] is True:
@@ -308,7 +308,7 @@ class QtLayerStack(QtWidgets.QWidget):
         return index
 
     def _switch_current_to_(self, index):
-        if index < self.__count:
+        if index < self._item_count:
             self.__do_swap_stop()
             if index != self._index_current:
                 if self._index_current is not None:
@@ -383,7 +383,7 @@ class QtLayerStack(QtWidgets.QWidget):
             self._refresh_widget_all_()
 
     def _delete_widget_at_(self, index):
-        if index < self.__count:
+        if index < self._item_count:
             widget = self._widgets[index]
             # switch to next
             if index == 0:
@@ -400,9 +400,9 @@ class QtLayerStack(QtWidgets.QWidget):
             widget.close()
             widget.deleteLater()
             self._widgets.pop(index)
-            self.__count -= 1
+            self._item_count -= 1
             # update index maximum
-            index_maximum = self.__count-1
+            index_maximum = self._item_count-1
             if self._index_current > index_maximum:
                 self._index_current = index_maximum
 

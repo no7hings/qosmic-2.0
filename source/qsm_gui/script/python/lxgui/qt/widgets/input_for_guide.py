@@ -5,31 +5,33 @@ import fnmatch
 
 import lxbasic.core as bsc_core
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
-from ..core.wrap import *
+from ...qt.core.wrap import *
 
-from .. import core as gui_qt_core
+from ...qt import core as _qt_core
 
-from .. import abstracts as gui_qt_abstracts
+from ...qt import abstracts as _qt_abstracts
 # qt widgets
-from . import base as gui_qt_wgt_base
+from . import base as _base
 
-from . import button as gui_qt_wgt_button
+from . import button as _button
 
-from . import entry as gui_qt_wgt_entry
+from . import entry_frame as _entry_frame
 
-from . import popup as gui_qt_wgt_popup
+from . import entry as _entry
+
+from . import popup as _popup
 
 
 class QtGuideRect(
-    gui_qt_abstracts.AbsQtIconBaseDef,
-    gui_qt_abstracts.AbsQtTypeDef,
-    gui_qt_abstracts.AbsQtNameBaseDef,
-    gui_qt_abstracts.AbsQtPathBaseDef,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtIconBaseDef,
+    _qt_abstracts.AbsQtTypeDef,
+    _qt_abstracts.AbsQtNameBaseDef,
+    _qt_abstracts.AbsQtPathBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
     #
-    gui_qt_abstracts.AbsQtChooseExtraDef,
+    _qt_abstracts.AbsQtChooseExtraDef,
 ):
     def _refresh_widget_draw_(self):
         pass
@@ -59,30 +61,30 @@ class QtGuideRect(
 class QtEntryAsGuide(
     QtWidgets.QWidget,
 
-    gui_qt_abstracts.AbsQtNameBaseDef,
-    gui_qt_abstracts.AbsQtMenuBaseDef,
+    _qt_abstracts.AbsQtNameBaseDef,
+    _qt_abstracts.AbsQtMenuBaseDef,
 
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForPressDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForHoverDef,
+    _qt_abstracts.AbsQtActionForPressDef,
     #
-    gui_qt_abstracts.AbsQtDeleteBaseDef,
+    _qt_abstracts.AbsQtDeleteBaseDef,
     #
-    gui_qt_abstracts.AbsQtFocusDef,
-    gui_qt_abstracts.AbsQtEntryBaseDef,
+    _qt_abstracts.AbsQtFocusDef,
+    _qt_abstracts.AbsQtEntryBaseDef,
     #
-    gui_qt_abstracts.AbsQtGuideEntryDef,
+    _qt_abstracts.AbsQtGuideEntryDef,
 
-    gui_qt_abstracts.AbsQtEntryFrameExtraDef,
+    _qt_abstracts.AbsQtEntryFrameExtraDef,
 ):
     def _refresh_focus_draw_geometry_(self):
         pass
 
     QT_GUIDE_RECT_CLS = QtGuideRect
     #
-    QT_POPUP_GUIDE_CHOOSE_CLS = gui_qt_wgt_popup.QtPopupAsChooseForGuide
+    QT_POPUP_GUIDE_CHOOSE_CLS = _popup.QtPopupAsChooseForGuide
     #
-    QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsConstant
+    QT_ENTRY_CLS = _entry.QtEntryAsConstant
     #
     TYPE_FONT_SIZE = 10
     NAME_FONT_SIZE = 12
@@ -101,7 +103,7 @@ class QtEntryAsGuide(
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
         #
-        self.setFont(gui_qt_core.QtFonts.Large)
+        self.setFont(_qt_core.QtFonts.Large)
         #
         self.setMaximumHeight(22)
         self.setMinimumHeight(22)
@@ -114,7 +116,7 @@ class QtEntryAsGuide(
         self._init_entry_base_def_(self)
         self._init_focus_def_(self)
         #
-        self._choose_popup_item_icon_file_path = gui_core.GuiIcon.get('choose_close')
+        self._choose_popup_item_icon_file_path = _gui_core.GuiIcon.get('choose_close')
         #
         self._init_menu_base_def_(self)
         #
@@ -150,7 +152,7 @@ class QtEntryAsGuide(
             i_text_x = c_x
             i_text_w = 0
             if i_type_text:
-                i_type_w, _ = gui_qt_core.GuiQtFont.compute_size(self.TYPE_FONT_SIZE, i_type_text)
+                i_type_w, _ = _qt_core.GuiQtFont.compute_size(self.TYPE_FONT_SIZE, i_type_text)
                 i_type_w_ = i_type_w+spacing*2
                 i_text_w += i_type_w_
                 i_item._set_type_draw_rect_(
@@ -159,7 +161,7 @@ class QtEntryAsGuide(
             else:
                 i_type_w_ = 0
             #
-            i_name_w, _ = gui_qt_core.GuiQtFont.compute_size(self.NAME_FONT_SIZE, i_name_text)
+            i_name_w, _ = _qt_core.GuiQtFont.compute_size(self.NAME_FONT_SIZE, i_name_text)
             i_name_w_ = i_name_w+spacing*2
             i_text_w += i_name_w_
             #
@@ -259,12 +261,12 @@ class QtEntryAsGuide(
             elif event.type() == QtCore.QEvent.FocusIn:
                 self._is_focused = True
                 entry_frame = self._get_entry_frame_()
-                if isinstance(entry_frame, gui_qt_wgt_entry.QtEntryFrame):
+                if isinstance(entry_frame, _entry_frame.QtEntryFrame):
                     entry_frame._set_focused_(True)
             elif event.type() == QtCore.QEvent.FocusOut:
                 self._is_focused = False
                 entry_frame = self._get_entry_frame_()
-                if isinstance(entry_frame, gui_qt_wgt_entry.QtEntryFrame):
+                if isinstance(entry_frame, _entry_frame.QtEntryFrame):
                     entry_frame._set_focused_(False)
             #
             elif event.type() == QtCore.QEvent.KeyPress:
@@ -277,7 +279,7 @@ class QtEntryAsGuide(
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
 
         for i_index in self._get_guide_item_indices_():
             i_item = self._get_guide_item_at_(i_index)
@@ -294,7 +296,7 @@ class QtEntryAsGuide(
                 )
                 painter._draw_frame_by_rect_(
                     i_item._icon_frame_draw_rect,
-                    border_color=gui_qt_core.QtBackgroundColors.Transparent,
+                    border_color=_qt_core.QtBackgroundColors.Transparent,
                     background_color=background_color,
                     border_radius=3,
                     offset=i_icon_offset
@@ -308,7 +310,7 @@ class QtEntryAsGuide(
                 name_offset = [0, 2][self._get_action_flag_() is not None]
                 painter._draw_frame_by_rect_(
                     i_item._name_frame_draw_rect,
-                    border_color=gui_qt_core.QtBackgroundColors.Transparent,
+                    border_color=_qt_core.QtBackgroundColors.Transparent,
                     background_color=background_color,
                     border_radius=3,
                     offset=name_offset
@@ -326,7 +328,7 @@ class QtEntryAsGuide(
                 text=i_type_text,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 font_color=bsc_core.RawTextOpt(i_type_text).to_rgb_0(s_p=100, v_p=100),
-                font=gui_qt_core.GuiQtFont.generate(size=self.TYPE_FONT_SIZE, italic=True),
+                font=_qt_core.GuiQtFont.generate(size=self.TYPE_FONT_SIZE, italic=True),
                 offset=name_offset,
                 is_hovered=guide_is_hovered,
             )
@@ -336,7 +338,7 @@ class QtEntryAsGuide(
                 rect=i_item._name_draw_rect,
                 text=i_name_text,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
-                font=gui_qt_core.GuiQtFont.generate(size=self.NAME_FONT_SIZE),
+                font=_qt_core.GuiQtFont.generate(size=self.NAME_FONT_SIZE),
                 offset=name_offset,
                 is_hovered=guide_is_hovered,
             )
@@ -440,11 +442,11 @@ class QtEntryAsGuide(
 class QtInputAsGuide(
     QtWidgets.QWidget,
 
-    gui_qt_abstracts.AbsQtInputBaseDef,
-    gui_qt_abstracts.AbsQtInputCompletionExtraDef,
+    _qt_abstracts.AbsQtInputBaseDef,
+    _qt_abstracts.AbsQtInputCompletionExtraDef,
 ):
-    QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsConstant
-    QT_COMPLETION_POPUP_CLS = gui_qt_wgt_popup.QtPopupAsCompletion
+    QT_ENTRY_CLS = _entry.QtEntryAsConstant
+    QT_COMPLETION_POPUP_CLS = _popup.QtPopupAsCompletion
 
     FILTER_MAXIMUM = 50
 
@@ -466,23 +468,23 @@ class QtInputAsGuide(
     def _build_input_entry_(self, value_type):
         self._value_type = value_type
 
-        qt_layout_0 = gui_qt_wgt_base.QtHBoxLayout(self)
+        qt_layout_0 = _base.QtHBoxLayout(self)
         qt_layout_0.setContentsMargins(*[0]*4)
         qt_layout_0.setSpacing(0)
         qt_layout_0.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
 
-        self._entry_frame_widget = gui_qt_wgt_entry.QtEntryFrame()
+        self._entry_frame_widget = _entry_frame.QtEntryFrame()
         qt_layout_0.addWidget(self._entry_frame_widget)
 
         self._entry_frame_widget.setFixedHeight(24)
 
-        self._input_layout = gui_qt_wgt_base.QtHBoxLayout(self._entry_frame_widget)
+        self._input_layout = _base.QtHBoxLayout(self._entry_frame_widget)
         self._input_layout.setContentsMargins(2, 0, 2, 0)
         self._input_layout.setSpacing(2)
 
-        self._guide_tree_button = gui_qt_wgt_button.QtIconPressButton()
+        self._guide_tree_button = _button.QtIconPressButton()
         self._input_layout.addWidget(self._guide_tree_button)
-        self._guide_tree_button._set_icon_file_path_(gui_core.GuiIcon.get('tree'))
+        self._guide_tree_button._set_icon_file_path_(_gui_core.GuiIcon.get('tree'))
 
         self._guide_entry = QtEntryAsGuide()
         self._input_layout.addWidget(self._guide_entry)
@@ -498,7 +500,7 @@ class QtInputAsGuide(
         self._entry_widget.focus_out.connect(self._set_guide_entry_finish_)
         self._entry_widget.setMinimumHeight(22)
         self._entry_widget.setMaximumHeight(22)
-        self._entry_widget.setFont(gui_qt_core.QtFonts.Medium)
+        self._entry_widget.setFont(_qt_core.QtFonts.Medium)
         #
         self._build_input_completion_()
 

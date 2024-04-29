@@ -19,7 +19,7 @@ from .. import abstracts as gui_qt_abstracts
 # qt widgets
 from . import utility as gui_qt_wgt_utility
 
-from . import entry as gui_qt_wgt_entry
+from . import entry_frame as _entry_frame
 
 from . import item_for_tree as gui_qt_wgt_item_for_tree
 
@@ -1401,12 +1401,12 @@ class _QtNGGraph(
             elif event.type() == QtCore.QEvent.FocusIn:
                 self._is_focused = True
                 parent = self.parent()
-                if isinstance(parent, gui_qt_wgt_entry.QtEntryFrame):
+                if isinstance(parent, _entry_frame.QtEntryFrame):
                     parent._set_focused_(True)
             elif event.type() == QtCore.QEvent.FocusOut:
                 self._is_focused = False
                 parent = self.parent()
-                if isinstance(parent, gui_qt_wgt_entry.QtEntryFrame):
+                if isinstance(parent, _entry_frame.QtEntryFrame):
                     parent._set_focused_(False)
         return False
 

@@ -3,24 +3,24 @@ import six
 
 import lxbasic.core as bsc_core
 # qt
-from ..core.wrap import *
+from ...qt.core.wrap import *
 
-from .. import core as gui_qt_core
+from ...qt import core as _qt_core
 
-from .. import abstracts as gui_qt_abstracts
+from ...qt import abstracts as _qt_abstracts
 
 
 # base entry as capsule, can be select one and more
 class QtEntryAsCapsule(
     QtWidgets.QWidget,
 
-    gui_qt_abstracts.AbsQtNameBaseDef,
+    _qt_abstracts.AbsQtNameBaseDef,
 
-    gui_qt_abstracts.AbsQtEntryBaseDef,
+    _qt_abstracts.AbsQtEntryBaseDef,
 
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForPressDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForHoverDef,
+    _qt_abstracts.AbsQtActionForPressDef,
 ):
     value_changed = qt_signal()
     user_value_changed = qt_signal()
@@ -32,7 +32,7 @@ class QtEntryAsCapsule(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
         )
 
-        self.setFont(gui_qt_core.GuiQtFont.generate_2(size=12))
+        self.setFont(_qt_core.GuiQtFont.generate_2(size=12))
         self.setMouseTracking(True)
 
         self._init_name_base_def_(self)
@@ -126,7 +126,7 @@ class QtEntryAsCapsule(
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         if self.__texts_draw:
             painter._draw_capsule_by_rects_(
                 rects=self.__rects_frame,
@@ -149,7 +149,7 @@ class QtEntryAsCapsule(
                 title = value
 
             if self.__check_use_exclusive is True:
-                css = gui_qt_core.GuiQtUtil.generate_tool_tip_css(
+                css = _qt_core.GuiQtUtil.generate_tool_tip_css(
                     title,
                     content=tool_tip or 'N/a',
                     action_tip=[
@@ -157,7 +157,7 @@ class QtEntryAsCapsule(
                     ]
                 )
             else:
-                css = gui_qt_core.GuiQtUtil.generate_tool_tip_css(
+                css = _qt_core.GuiQtUtil.generate_tool_tip_css(
                     title,
                     content=tool_tip or 'N/a',
                     action_tip=[

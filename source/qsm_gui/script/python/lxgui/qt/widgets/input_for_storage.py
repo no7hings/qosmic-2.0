@@ -3,8 +3,6 @@ import os
 
 import lxbasic.scan as bsc_scan
 
-import lxbasic.core as bsc_core
-
 import lxbasic.storage as bsc_storage
 # gui
 from ... import core as gui_core
@@ -15,21 +13,23 @@ from .. import core as gui_qt_core
 
 from .. import abstracts as gui_qt_abstracts
 # qt widgets
-from . import base as gui_qt_wgt_base
+from . import base as _base
 
-from . import utility as gui_qt_wgt_utility
+from . import utility as _utility
 
-from . import bubble as gui_qt_wgt_bubble
+from . import bubble as _bubble
 
-from . import button as gui_qt_wgt_button
+from . import button as _button
 
-from . import entry as gui_qt_wgt_entry
+from . import entry_frame as _entry_frame
 
-from . import popup as gui_qt_wgt_popup
+from . import entry as _entry
+
+from . import popup as _popup
 
 
 class QtInputAsStorage(
-    gui_qt_wgt_entry.QtEntryFrame,
+    _entry_frame.QtEntryFrame,
     gui_qt_abstracts.AbsQtInputBaseDef,
     # extra
     #   completion
@@ -50,11 +50,11 @@ class QtInputAsStorage(
             DirectorySave
         ]
 
-    QT_ENTRY_CLS = gui_qt_wgt_entry.QtEntryAsConstant
+    QT_ENTRY_CLS = _entry.QtEntryAsConstant
 
-    QT_COMPLETION_POPUP_CLS = gui_qt_wgt_popup.QtPopupAsCompletion
+    QT_COMPLETION_POPUP_CLS = _popup.QtPopupAsCompletion
 
-    QT_HISTORY_POPUP_CLS = gui_qt_wgt_popup.QtPopupAsHistory
+    QT_HISTORY_POPUP_CLS = _popup.QtPopupAsHistory
 
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_()
@@ -237,17 +237,17 @@ class QtInputAsStorage(
         #
         self._entry_frame_widget = self
         #
-        main_layout = gui_qt_wgt_base.QtVBoxLayout(self)
+        main_layout = _base.QtVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
-        entry_widget = gui_qt_wgt_utility.QtTranslucentWidget()
+        entry_widget = _utility.QtTranslucentWidget()
         main_layout.addWidget(entry_widget)
         #
-        entry_layout = gui_qt_wgt_base.QtHBoxLayout(entry_widget)
+        entry_layout = _base.QtHBoxLayout(entry_widget)
         entry_layout.setContentsMargins(2, 2, 2, 2)
         entry_layout.setSpacing(0)
         #
-        self._head = gui_qt_wgt_button.QtIconPressButton()
+        self._head = _button.QtIconPressButton()
         entry_layout.addWidget(self._head)
         self._head._set_icon_file_path_(gui_core.GuiIcon.get('empty'))
         # entry
@@ -264,13 +264,13 @@ class QtInputAsStorage(
             self.user_key_tab_pressed.emit
         )
         #
-        self._input_info_bubble = gui_qt_wgt_bubble.QtInfoBubble()
+        self._input_info_bubble = _bubble.QtInfoBubble()
         self._input_info_bubble.hide()
         entry_layout.addWidget(self._input_info_bubble)
         self._input_info_bubble._set_size_mode_(self._input_info_bubble.SizeMode.Fixed)
         self._input_info_bubble.setFixedWidth(64)
         #
-        self._input_button_widget = gui_qt_wgt_utility.QtLineWidget()
+        self._input_button_widget = _utility.QtLineWidget()
         self._input_button_widget._set_line_styles_(
             [
                 self._input_button_widget.Style.Null,
@@ -280,11 +280,11 @@ class QtInputAsStorage(
             ]
         )
         entry_layout.addWidget(self._input_button_widget)
-        self._input_button_layout = gui_qt_wgt_base.QtHBoxLayout(self._input_button_widget)
+        self._input_button_layout = _base.QtHBoxLayout(self._input_button_widget)
         self._input_button_layout.setContentsMargins(2, 0, 0, 0)
         self._input_button_layout.setSpacing(2)
         #
-        self._input_button = gui_qt_wgt_button.QtIconPressButton()
+        self._input_button = _button.QtIconPressButton()
         self._input_button_layout.addWidget(self._input_button)
         self._input_button._set_icon_file_path_(gui_core.GuiIcon.get('file/file'))
         self._input_button._set_icon_frame_draw_size_(18, 18)
@@ -298,7 +298,7 @@ class QtInputAsStorage(
         )
         self._get_completion_popup_widget_()._set_popup_use_as_storage_(True)
         # history
-        self._history_button = gui_qt_wgt_button.QtIconPressButton()
+        self._history_button = _button.QtIconPressButton()
         self._input_button_layout.addWidget(self._history_button)
         self._build_input_history_(self._history_button)
 
@@ -337,7 +337,7 @@ class QtInputAsStorage(
         self._input_button_layout.addWidget(widget)
 
     def _create_input_button_(self, name_text, icon_name=None, sub_icon_name=None, tool_tip=None):
-        button = gui_qt_wgt_button.QtIconPressButton()
+        button = _button.QtIconPressButton()
         self._input_button_layout.addWidget(button)
         button._set_name_text_(name_text)
         if icon_name is not None:

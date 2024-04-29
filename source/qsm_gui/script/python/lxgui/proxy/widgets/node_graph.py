@@ -1,34 +1,34 @@
 # coding:utf-8
 # qt widgets
-from ...qt.widgets import base as gui_qt_wgt_base
+from ...qt.widgets import base as _qt_widget_base
 
-from ...qt.widgets import entry as gui_qt_wgt_entry
+from ...qt.widgets import entry_frame as _qt_widget_entry_frame
 
-from ...qt.widgets import node_graph as gui_qt_wgt_node_graph
+from ...qt.widgets import node_graph as _qt_widget_node_graph
 # proxy abstracts
-from .. import abstracts as gui_prx_abstracts
+from ...proxy import abstracts as _proxy_abstracts
 # proxy widgets
-from . import utility as gui_prx_wdt_utility
+from . import utility as _utility
 
-from . import container as gui_prx_wgt_container
+from . import container as _container
 
 
 class PrxNGGraph(
-    gui_prx_abstracts.AbsPrxWidget
+    _proxy_abstracts.AbsPrxWidget
 ):
-    QT_WIDGET_CLS = gui_qt_wgt_entry.QtEntryFrame
-    QT_VIEW_CLS = gui_qt_wgt_node_graph._QtNGGraph
+    QT_WIDGET_CLS = _qt_widget_entry_frame.QtEntryFrame
+    QT_VIEW_CLS = _qt_widget_node_graph._QtNGGraph
 
     def __init__(self, *args, **kwargs):
         super(PrxNGGraph, self).__init__(*args, **kwargs)
-        self._qt_layout_0 = gui_qt_wgt_base.QtVBoxLayout(self._qt_widget)
+        self._qt_layout_0 = _qt_widget_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout_0.setContentsMargins(2, 2, 2, 2)
         self._qt_layout_0.setSpacing(2)
-        self._prx_top_tool_bar = gui_prx_wgt_container.PrxHToolBar()
+        self._prx_top_tool_bar = _container.PrxHToolBar()
         self._qt_layout_0.addWidget(self._prx_top_tool_bar.widget)
         self._prx_top_tool_bar.set_border_radius(1)
         #
-        self._prx_filer_bar_0 = gui_prx_wdt_utility.PrxFilterBar()
+        self._prx_filer_bar_0 = _utility.PrxFilterBar()
         self._prx_top_tool_bar.add_widget(self._prx_filer_bar_0)
         # add custom menu
         self._qt_view = self.QT_VIEW_CLS()
@@ -55,21 +55,21 @@ class PrxNGGraph(
 
 
 class PrxNGTree(
-    gui_prx_abstracts.AbsPrxWidget
+    _proxy_abstracts.AbsPrxWidget
 ):
-    QT_WIDGET_CLS = gui_qt_wgt_entry.QtEntryFrame
-    QT_VIEW_CLS = gui_qt_wgt_node_graph._QtNGTree
+    QT_WIDGET_CLS = _qt_widget_entry_frame.QtEntryFrame
+    QT_VIEW_CLS = _qt_widget_node_graph._QtNGTree
 
     def __init__(self, *args, **kwargs):
         super(PrxNGTree, self).__init__(*args, **kwargs)
-        self._qt_layout_0 = gui_qt_wgt_base.QtVBoxLayout(self._qt_widget)
+        self._qt_layout_0 = _qt_widget_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout_0.setContentsMargins(4, 4, 4, 4)
         self._qt_layout_0.setSpacing(2)
-        self._prx_top_tool_bar = gui_prx_wgt_container.PrxHToolBar()
+        self._prx_top_tool_bar = _container.PrxHToolBar()
         self._qt_layout_0.addWidget(self._prx_top_tool_bar.widget)
         self._prx_top_tool_bar.set_border_radius(1)
         #
-        self._prx_filer_bar_0 = gui_prx_wdt_utility.PrxFilterBar()
+        self._prx_filer_bar_0 = _utility.PrxFilterBar()
         self._prx_top_tool_bar.add_widget(self._prx_filer_bar_0)
         # add custom menu
         self._qt_view = self.QT_VIEW_CLS()
@@ -89,21 +89,21 @@ class PrxNGTree(
 
 
 class PrxNGImageGraph(
-    gui_prx_abstracts.AbsPrxWidget
+    _proxy_abstracts.AbsPrxWidget
 ):
-    QT_WIDGET_CLS = gui_qt_wgt_entry.QtEntryFrame
-    QT_VIEW_CLS = gui_qt_wgt_node_graph._QtNGImageGraph
+    QT_WIDGET_CLS = _qt_widget_entry_frame.QtEntryFrame
+    QT_VIEW_CLS = _qt_widget_node_graph._QtNGImageGraph
 
     def __init__(self, *args, **kwargs):
         super(PrxNGImageGraph, self).__init__(*args, **kwargs)
-        self._qt_layout_0 = gui_qt_wgt_base.QtVBoxLayout(self._qt_widget)
+        self._qt_layout_0 = _qt_widget_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout_0.setContentsMargins(4, 4, 4, 4)
         self._qt_layout_0.setSpacing(2)
-        self._prx_top_tool_bar = gui_prx_wgt_container.PrxHToolBar()
+        self._prx_top_tool_bar = _container.PrxHToolBar()
         self._qt_layout_0.addWidget(self._prx_top_tool_bar.widget)
         self._prx_top_tool_bar.set_border_radius(1)
         #
-        self._prx_filer_bar_0 = gui_prx_wdt_utility.PrxFilterBar()
+        self._prx_filer_bar_0 = _utility.PrxFilterBar()
         self._prx_top_tool_bar.add_widget(self._prx_filer_bar_0)
         # add custom menu
         self._qt_view = self.QT_VIEW_CLS()

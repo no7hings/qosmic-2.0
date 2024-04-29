@@ -162,7 +162,7 @@ class QtBuildThreadStack(QtCore.QObject):
 
         self.__mutex = QtCore.QMutex()
         self.__maximum = 8
-        self.__count = 0
+        self._item_count = 0
 
     def generate_thread(self, cache_fnc, build_fnc, previous_fnc=None, post_fnc=None):
         thread = QtBuildThread(self._widget)
@@ -329,7 +329,7 @@ class QtBuildRunnableStack(QtCore.QObject):
 
         self.__mutex = QtCore.QMutex()
         self.__maximum = 8
-        self.__count = 0
+        self._item_count = 0
 
     def generate_thread(self, cache_fnc, build_fnc, post_fnc=None):
         runnable = QtBuildRunnable(self._pool)

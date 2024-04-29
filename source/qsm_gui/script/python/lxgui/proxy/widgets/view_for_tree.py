@@ -9,15 +9,15 @@ import lxbasic.core as bsc_core
 # gui
 from ... import core as gui_core
 # qt
-from ...qt import core as gui_qt_core
+from ...qt import core as _qt_core
 # qt widgets
-from ...qt.widgets import base as gui_qt_wgt_base
+from ...qt.widgets import base as _qt_widget_base
 
 from ...qt.widgets import button as gui_qt_wgt_button
 
-from ...qt.widgets import entry as gui_qt_wgt_entry
+from ...qt.widgets import entry_frame as _qt_widget_entry_frame
 
-from ...qt.widgets import view_for_tree as gui_qt_wgt_view_for_tree
+from ...qt.widgets import view_for_tree as _qt_widget_view_for_tree
 # proxy abstracts
 from .. import abstracts as gui_prx_abstracts
 # proxy widgets
@@ -39,14 +39,14 @@ class PrxTreeView(
     #
     gui_prx_abstracts.AbsPrxViewVisibleConnectionDef,
 ):
-    QT_WIDGET_CLS = gui_qt_wgt_entry.QtEntryFrame
-    QT_VIEW_CLS = gui_qt_wgt_view_for_tree.QtTreeWidget
+    QT_WIDGET_CLS = _qt_widget_entry_frame.QtEntryFrame
+    QT_VIEW_CLS = _qt_widget_view_for_tree.QtTreeWidget
     #
     FILTER_MAXIMUM = 50
 
     def __init__(self, *args, **kwargs):
         super(PrxTreeView, self).__init__(*args, **kwargs)
-        self._qt_layout_0 = gui_qt_wgt_base.QtVBoxLayout(self._qt_widget)
+        self._qt_layout_0 = _qt_widget_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout_0.setContentsMargins(4, 4, 4, 4)
         self._qt_layout_0.setSpacing(2)
         #
@@ -197,8 +197,8 @@ class PrxTreeView(
                 )
             #
             # noinspection PyArgumentList
-            gui_qt_core.QtWidgets.QApplication.instance().processEvents(
-                gui_qt_core.QtCore.QEventLoop.ExcludeUserInputEvents
+            _qt_core.QtWidgets.QApplication.instance().processEvents(
+                _qt_core.QtCore.QEventLoop.ExcludeUserInputEvents
             )
 
     def set_filter_start(self):
@@ -217,13 +217,13 @@ class PrxTreeView(
             self.view._scroll_view_to_item_top_(selection_items[-1])
 
     def set_selection_use_single(self):
-        self._qt_view.setSelectionMode(gui_qt_core.QtWidgets.QAbstractItemView.SingleSelection)
+        self._qt_view.setSelectionMode(_qt_core.QtWidgets.QAbstractItemView.SingleSelection)
 
     def set_selection_use_extend(self):
-        self._qt_view.setSelectionMode(gui_qt_core.QtWidgets.QAbstractItemView.ExtendedSelection)
+        self._qt_view.setSelectionMode(_qt_core.QtWidgets.QAbstractItemView.ExtendedSelection)
 
     def set_selection_disable(self):
-        self._qt_view.setSelectionMode(gui_qt_core.QtWidgets.QAbstractItemView.NoSelection)
+        self._qt_view.setSelectionMode(_qt_core.QtWidgets.QAbstractItemView.NoSelection)
 
     def set_size_policy_height_fixed_mode(self):
         self._qt_view._set_size_policy_height_fixed_mode_()

@@ -3,30 +3,30 @@ import os
 
 import lxbasic.core as bsc_core
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
-from ..core.wrap import *
+from ...qt.core.wrap import *
 
-from .. import core as gui_qt_core
+from ...qt import core as _qt_core
 
-from .. import abstracts as gui_qt_abstracts
+from ...qt import abstracts as _qt_abstracts
 # qt widgets
-from . import utility as gui_qt_wgt_utility
+from . import utility as _utility
 
-from . import drag as gui_qt_wgt_drag
+from . import drag as _drag
 
 
 class QtCheckButton(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
-    gui_qt_abstracts.AbsQtIconBaseDef,
-    gui_qt_abstracts.AbsQtNameBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtIconBaseDef,
+    _qt_abstracts.AbsQtNameBaseDef,
     #
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForCheckDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForHoverDef,
+    _qt_abstracts.AbsQtActionForCheckDef,
     #
-    gui_qt_abstracts.AbsQtValueDefaultExtraDef,
+    _qt_abstracts.AbsQtValueDefaultExtraDef,
 ):
     def _refresh_widget_all_(self):
         pass
@@ -34,9 +34,9 @@ class QtCheckButton(
     def __init__(self, *args, **kwargs):
         super(QtCheckButton, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        qt_palette = gui_qt_core.GuiQtDcc.generate_qt_palette()
+        qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
-        self.setFont(gui_qt_core.QtFonts.NameNormal)
+        self.setFont(_qt_core.QtFonts.NameNormal)
         #
         self.setMaximumHeight(20)
         self.setMinimumHeight(20)
@@ -58,7 +58,7 @@ class QtCheckButton(
         #
         self._refresh_check_draw_()
         #
-        self._set_name_draw_font_(gui_qt_core.QtFonts.Button)
+        self._set_name_draw_font_(_qt_core.QtFonts.Button)
 
     def _refresh_widget_draw_(self):
         self.update()
@@ -112,7 +112,7 @@ class QtCheckButton(
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         #
         self._refresh_widget_draw_geometry_()
         #
@@ -130,9 +130,9 @@ class QtCheckButton(
         if self._name_text is not None:
             name_text = self._name_text
             if self._action_is_enable is True:
-                text_color = [gui_qt_core.QtFontColors.Basic, gui_qt_core.QtFontColors.Light][self._is_hovered]
+                text_color = [_qt_core.QtFontColors.Basic, _qt_core.QtFontColors.Light][self._is_hovered]
             else:
-                text_color = gui_qt_core.QtColors.TextDisable
+                text_color = _qt_core.QtColors.TextDisable
             #
             painter._draw_text_by_rect_(
                 rect=self._name_draw_rect,
@@ -146,24 +146,24 @@ class QtCheckButton(
 
 class QtPressButton(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
-    gui_qt_abstracts.AbsQtStatusBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtStatusBaseDef,
     #
-    gui_qt_abstracts.AbsQtSubProcessBaseDef,
-    gui_qt_abstracts.AbsQtValidatorBaseDef,
+    _qt_abstracts.AbsQtSubProcessBaseDef,
+    _qt_abstracts.AbsQtValidatorBaseDef,
     #
-    gui_qt_abstracts.AbsQtIconBaseDef,
-    gui_qt_abstracts.AbsQtMenuBaseDef,
-    gui_qt_abstracts.AbsQtNameBaseDef,
-    gui_qt_abstracts.AbsQtProgressBaseDef,
+    _qt_abstracts.AbsQtIconBaseDef,
+    _qt_abstracts.AbsQtMenuBaseDef,
+    _qt_abstracts.AbsQtNameBaseDef,
+    _qt_abstracts.AbsQtProgressBaseDef,
     #
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForPressDef,
-    gui_qt_abstracts.AbsQtActionForCheckDef,
-    gui_qt_abstracts.AbsQtActionForOptionPressDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForHoverDef,
+    _qt_abstracts.AbsQtActionForPressDef,
+    _qt_abstracts.AbsQtActionForCheckDef,
+    _qt_abstracts.AbsQtActionForOptionPressDef,
     #
-    gui_qt_abstracts.AbsQtItemLayoutBaseDef,
+    _qt_abstracts.AbsQtItemLayoutBaseDef,
 ):
     def _refresh_widget_all_(self):
         pass
@@ -179,14 +179,14 @@ class QtPressButton(
     rate_finished_at = qt_signal(int, int)
     rate_finished = qt_signal()
     #
-    QT_MENU_CLS = gui_qt_wgt_utility.QtMenu
+    QT_MENU_CLS = _utility.QtMenu
 
     def __init__(self, *args, **kwargs):
         super(QtPressButton, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        qt_palette = gui_qt_core.GuiQtDcc.generate_qt_palette()
+        qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
-        self.setFont(gui_qt_core.QtFonts.NameNormal)
+        self.setFont(_qt_core.QtFonts.NameNormal)
         #
         self.setMaximumHeight(20)
         self.setMinimumHeight(20)
@@ -215,7 +215,7 @@ class QtPressButton(
         #
         self._refresh_check_draw_()
         #
-        self._set_name_draw_font_(gui_qt_core.QtFonts.Button)
+        self._set_name_draw_font_(_qt_core.QtFonts.Button)
         #
         r, g, b = 167, 167, 167
         h, s, v = bsc_core.RawColorMtd.rgb_to_hsv(r, g, b)
@@ -447,7 +447,7 @@ class QtPressButton(
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         self._refresh_widget_draw_geometry_()
         #
         offset = self._get_action_offset_()
@@ -456,8 +456,8 @@ class QtPressButton(
             bdr_color = [self._frame_border_color, self._hovered_frame_border_color][self._is_hovered]
             bkg_color = [self._frame_background_color, self._hovered_frame_background_color][self._is_hovered]
         else:
-            bdr_color = gui_qt_core.QtBorderColors.ButtonDisable
-            bkg_color = gui_qt_core.QtBackgroundColors.ButtonDisable
+            bdr_color = _qt_core.QtBorderColors.ButtonDisable
+            bkg_color = _qt_core.QtBackgroundColors.ButtonDisable
         #
         painter._draw_frame_by_rect_(
             rect=self._rect_frame_draw,
@@ -510,8 +510,8 @@ class QtPressButton(
         if self._get_progress_is_enable_() is True:
             painter._draw_frame_by_rect_(
                 rect=self._progress_rect,
-                border_color=gui_qt_core.QtBackgroundColors.Transparent,
-                background_color=gui_qt_core.QtColors.ProgressBackground,
+                border_color=_qt_core.QtBackgroundColors.Transparent,
+                background_color=_qt_core.QtColors.ProgressBackground,
                 border_radius=2,
                 offset=offset
             )
@@ -548,9 +548,9 @@ class QtPressButton(
         if self._name_text is not None:
             name_text = self._name_text
             if self._action_is_enable is True:
-                text_color = [gui_qt_core.QtFontColors.Basic, gui_qt_core.QtFontColors.Light][self._is_hovered]
+                text_color = [_qt_core.QtFontColors.Basic, _qt_core.QtFontColors.Light][self._is_hovered]
             else:
-                text_color = gui_qt_core.QtColors.TextDisable
+                text_color = _qt_core.QtColors.TextDisable
             #
             if self._get_sub_process_is_enable_() is True:
                 name_text = '{} - {}'.format(
@@ -576,28 +576,28 @@ class QtPressButton(
 
 class QtIconPressButton(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
-    gui_qt_abstracts.AbsQtNameBaseDef,
-    gui_qt_abstracts.AbsQtPathBaseDef,
-    gui_qt_abstracts.AbsQtIconBaseDef,
-    gui_qt_abstracts.AbsQtMenuBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtNameBaseDef,
+    _qt_abstracts.AbsQtPathBaseDef,
+    _qt_abstracts.AbsQtIconBaseDef,
+    _qt_abstracts.AbsQtMenuBaseDef,
     #
-    gui_qt_abstracts.AbsQtStatusBaseDef,
-    gui_qt_abstracts.AbsQtStateDef,
+    _qt_abstracts.AbsQtStatusBaseDef,
+    _qt_abstracts.AbsQtStateDef,
     #
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForPressDef,
-    gui_qt_abstracts.AbsQtActionForDragDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForHoverDef,
+    _qt_abstracts.AbsQtActionForPressDef,
+    _qt_abstracts.AbsQtActionForDragDef,
     #
-    gui_qt_abstracts.AbsQtThreadBaseDef,
+    _qt_abstracts.AbsQtThreadBaseDef,
     #
-    gui_qt_abstracts.AbsQtItemLayoutBaseDef,
+    _qt_abstracts.AbsQtItemLayoutBaseDef,
 ):
     clicked = qt_signal()
     press_db_clicked = qt_signal()
     #
-    QT_MENU_CLS = gui_qt_wgt_utility.QtMenu
+    QT_MENU_CLS = _utility.QtMenu
 
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_()
@@ -678,7 +678,7 @@ class QtIconPressButton(
     def __init__(self, *args, **kwargs):
         super(QtIconPressButton, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setFont(gui_qt_core.QtFonts.NameNormal)
+        self.setFont(_qt_core.QtFonts.NameNormal)
         self.setFixedSize(20, 20)
         self.installEventFilter(self)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
@@ -757,7 +757,7 @@ class QtIconPressButton(
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         self._refresh_widget_draw_geometry_()
         offset = self._get_action_offset_()
         is_pressed = self._get_action_flag_is_match_(
@@ -766,8 +766,8 @@ class QtIconPressButton(
         if self._get_action_flag_is_match_(self.ActionFlag.DragMove):
             painter._draw_frame_by_rect_(
                     rect=self._rect_frame_draw,
-                    border_color=gui_qt_core.QtBorderColors.Button,
-                    background_color=gui_qt_core.QtBackgroundColors.ItemSelected,
+                    border_color=_qt_core.QtBorderColors.Button,
+                    background_color=_qt_core.QtBackgroundColors.ItemSelected,
                 )
 
         if self._thread_draw_flag is True:
@@ -825,8 +825,8 @@ class QtIconPressButton(
                     is_hovered=self._is_hovered,
                     #
                     draw_frame=True,
-                    background_color=gui_qt_core.QtColors.SubIconBackground,
-                    border_color=gui_qt_core.QtColors.SubIconBorder,
+                    background_color=_qt_core.QtColors.SubIconBackground,
+                    border_color=_qt_core.QtColors.SubIconBorder,
                     border_radius=4
                 )
             #
@@ -842,14 +842,14 @@ class QtIconPressButton(
         if self._action_state in [self.ActionState.Disable]:
             painter._draw_icon_file_by_rect_(
                 self._action_state_rect,
-                gui_core.GuiIcon.get('state-disable')
+                _gui_core.GuiIcon.get('state-disable')
             )
         # text
         if self._name_text:
             painter._draw_text_by_rect_(
                 rect=self._name_draw_rect,
                 text=self._name_text,
-                font=gui_qt_core.QtFonts.Default,
+                font=_qt_core.QtFonts.Default,
                 text_option=QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop,
                 word_warp=self._name_word_warp,
                 offset=offset,
@@ -872,7 +872,7 @@ class QtIconPressButton(
 
     # noinspection PyUnusedLocal
     def _do_drag_move_(self, event):
-        self.__drag = gui_qt_wgt_drag.QtDrag(self)
+        self.__drag = _drag.QtDrag(self)
 
         item = self._get_layout_item_()
         if item is not None:
@@ -909,7 +909,7 @@ class QtIconPressButton(
         super(QtIconPressButton, self)._set_menu_data_(data)
         #
         self._icon_state_draw_is_enable = True
-        self._icon_state_file_path = gui_core.GuiIcon.get(
+        self._icon_state_file_path = _gui_core.GuiIcon.get(
             'state/popup'
         )
 
@@ -917,7 +917,7 @@ class QtIconPressButton(
         super(QtIconPressButton, self)._set_menu_data_generate_fnc_(fnc)
         #
         self._icon_state_draw_is_enable = True
-        self._icon_state_file_path = gui_core.GuiIcon.get(
+        self._icon_state_file_path = _gui_core.GuiIcon.get(
             'state/popup'
         )
 
@@ -925,7 +925,7 @@ class QtIconPressButton(
         w, h = size
         size = QtCore.QSize(w, h)
         pixmap = QtGui.QPixmap(size)
-        painter = gui_qt_core.QtPainter(pixmap)
+        painter = _qt_core.QtPainter(pixmap)
         pixmap.fill(QtGui.QColor(64, 64, 64, 255))
         rect = pixmap.rect()
 
@@ -990,15 +990,15 @@ class QtIconPressButton(
 
 class QtIconMenuButton(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtIconBaseDef,
-    gui_qt_abstracts.AbsQtNameBaseDef,
-    gui_qt_abstracts.AbsQtMenuBaseDef,
+    _qt_abstracts.AbsQtIconBaseDef,
+    _qt_abstracts.AbsQtNameBaseDef,
+    _qt_abstracts.AbsQtMenuBaseDef,
     #
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForPressDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForHoverDef,
+    _qt_abstracts.AbsQtActionForPressDef,
 ):
-    QT_MENU_CLS = gui_qt_wgt_utility.QtMenu
+    QT_MENU_CLS = _utility.QtMenu
 
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_()
@@ -1024,7 +1024,7 @@ class QtIconMenuButton(
     def __init__(self, *args, **kwargs):
         super(QtIconMenuButton, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setFont(gui_qt_core.QtFonts.NameNormal)
+        self.setFont(_qt_core.QtFonts.NameNormal)
         self.setFixedSize(20, 20)
         self.installEventFilter(self)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
@@ -1056,7 +1056,7 @@ class QtIconMenuButton(
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         offset = self._get_action_offset_()
         # icon
         if self._icon_is_enable is True:
@@ -1072,29 +1072,29 @@ class QtIconMenuButton(
 
 class QtIconToggleButton(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtWidgetBaseDef,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
-    gui_qt_abstracts.AbsQtIconBaseDef,
-    gui_qt_abstracts.AbsQtNameBaseDef,
-    gui_qt_abstracts.AbsQtMenuBaseDef,
+    _qt_abstracts.AbsQtWidgetBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtIconBaseDef,
+    _qt_abstracts.AbsQtNameBaseDef,
+    _qt_abstracts.AbsQtMenuBaseDef,
     #
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForCheckDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForHoverDef,
+    _qt_abstracts.AbsQtActionForCheckDef,
     #
-    gui_qt_abstracts.AbsQtValueDefaultExtraDef,
+    _qt_abstracts.AbsQtValueDefaultExtraDef,
 ):
     def _refresh_widget_all_(self):
         pass
 
-    QT_MENU_CLS = gui_qt_wgt_utility.QtMenu
+    QT_MENU_CLS = _utility.QtMenu
 
     def __init__(self, *args, **kwargs):
         super(QtIconToggleButton, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        qt_palette = gui_qt_core.GuiQtDcc.generate_qt_palette()
+        qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
-        self.setFont(gui_qt_core.QtFonts.NameNormal)
+        self.setFont(_qt_core.QtFonts.NameNormal)
         #
         self.setFixedSize(20, 20)
         #
@@ -1186,7 +1186,7 @@ class QtIconToggleButton(
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         #
         self._refresh_widget_draw_geometry_()
         #
@@ -1200,7 +1200,7 @@ class QtIconToggleButton(
         )
         painter._draw_frame_by_rect_(
             self._check_rect,
-            border_color=gui_qt_core.QtBorderColors.Transparent,
+            border_color=_qt_core.QtBorderColors.Transparent,
             background_color=background_color,
             border_radius=2,
             offset=offset
@@ -1241,8 +1241,8 @@ class QtIconToggleButton(
             painter._draw_text_by_rect_(
                 self._name_draw_rect,
                 self._name_text,
-                font=gui_qt_core.QtFonts.NameNormal,
-                font_color=gui_qt_core.QtFontColors.Basic,
+                font=_qt_core.QtFonts.NameNormal,
+                font_color=_qt_core.QtFontColors.Basic,
                 text_option=QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter,
                 offset=offset
             )
@@ -1253,7 +1253,7 @@ class QtIconToggleButton(
     def _set_menu_data_(self, data):
         super(QtIconToggleButton, self)._set_menu_data_(data)
         self._icon_state_draw_is_enable = True
-        self._icon_state_file_path = gui_core.GuiIcon.get(
+        self._icon_state_file_path = _gui_core.GuiIcon.get(
             'state/popup'
         )
 
@@ -1261,6 +1261,6 @@ class QtIconToggleButton(
         super(QtIconToggleButton, self)._set_menu_data_generate_fnc_(fnc)
         #
         self._icon_state_draw_is_enable = True
-        self._icon_state_file_path = gui_core.GuiIcon.get(
+        self._icon_state_file_path = _gui_core.GuiIcon.get(
             'state/popup'
         )

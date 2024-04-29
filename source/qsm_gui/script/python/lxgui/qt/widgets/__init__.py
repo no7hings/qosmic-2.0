@@ -15,11 +15,13 @@ from .resize import *
 
 from .split import *
 
+from .entry_frame import *
+
 from .entry import *
 
 from .entry_for_capsule import *
 
-from .entry_extend import *
+from .entry_extend_for_path import *
 
 from .popup import *
 

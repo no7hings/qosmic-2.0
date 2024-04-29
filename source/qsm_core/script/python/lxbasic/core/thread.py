@@ -744,7 +744,7 @@ class TrdGainStack(object):
         self.run_finished = TrdGainSignal()
 
         self.__fncs = []
-        self.__count = 0
+        self._item_count = 0
         self.__count_finish = 0
         self.__result_dict = {}
 
@@ -758,7 +758,7 @@ class TrdGainStack(object):
         self.__fncs.append(fnc)
         self.__data.append(None)
         self.__result_dict[index] = False
-        self.__count += 1
+        self._item_count += 1
 
     def __gain_fnc(self, thread, index):
         self.__data[index] = thread.get_data()
@@ -766,7 +766,7 @@ class TrdGainStack(object):
 
         self.__count_finish += 1
 
-        if self.__count_finish == self.__count:
+        if self.__count_finish == self._item_count:
             self.run_finished.send_emit()
 
     def start(self):

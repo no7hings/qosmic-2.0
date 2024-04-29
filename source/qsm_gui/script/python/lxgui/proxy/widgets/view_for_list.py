@@ -13,15 +13,15 @@ import lxbasic.storage as bsc_storage
 # gui
 from ... import core as gui_core
 # qt widgets
-from ...qt.widgets import base as gui_qt_wgt_base
+from ...qt.widgets import base as _qt_widget_base
 
-from ...qt.widgets import button as gui_qt_wgt_button
+from ...qt.widgets import button as _qt_widget_button
 
-from ...qt.widgets import entry as gui_qt_wgt_entry
+from ...qt.widgets import entry_frame as _qt_widget_entry_frame
 
-from ...qt.widgets import chart as gui_qt_wgt_chart
+from ...qt.widgets import chart as _qt_widget_chart
 
-from ...qt.widgets import view_for_list as gui_qt_wgt_view_for_list
+from ...qt.widgets import view_for_list as _qt_widget_view_for_list
 # proxy abstracts
 from .. import abstracts as gui_prx_abstracts
 # proxy widgets
@@ -42,14 +42,14 @@ class PrxListView(
     #
     gui_prx_abstracts.AbsPrxViewVisibleConnectionDef,
 ):
-    QT_WIDGET_CLS = gui_qt_wgt_entry.QtEntryFrame
-    QT_VIEW_CLS = gui_qt_wgt_view_for_list.QtListWidget
+    QT_WIDGET_CLS = _qt_widget_entry_frame.QtEntryFrame
+    QT_VIEW_CLS = _qt_widget_view_for_list.QtListWidget
     #
     FILTER_MAXIMUM = 50
 
     def __init__(self, *args, **kwargs):
         super(PrxListView, self).__init__(*args, **kwargs)
-        self._qt_layout_0 = gui_qt_wgt_base.QtVBoxLayout(self._qt_widget)
+        self._qt_layout_0 = _qt_widget_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout_0.setContentsMargins(4, 4, 4, 4)
         self._qt_layout_0.setSpacing(2)
         #
@@ -61,7 +61,7 @@ class PrxListView(
         # check
         self._prx_check_tool_box = self.create_top_tool_box('check', True, False, 0)
         #
-        self._check_all_button = gui_qt_wgt_button.QtIconPressButton()
+        self._check_all_button = _qt_widget_button.QtIconPressButton()
         self._check_all_button._set_name_text_('check all')
         self._check_all_button._set_icon_file_path_(gui_core.GuiIcon.get('all_checked'))
         self._prx_check_tool_box.add_widget(self._check_all_button)
@@ -70,7 +70,7 @@ class PrxListView(
             '"LMB-click" for checked all visible items'
         )
         #
-        self._uncheck_all_button = gui_qt_wgt_button.QtIconPressButton()
+        self._uncheck_all_button = _qt_widget_button.QtIconPressButton()
         self._uncheck_all_button._set_icon_file_path_(gui_core.GuiIcon.get('all_unchecked'))
         self._uncheck_all_button._set_name_text_('uncheck all')
         self._prx_check_tool_box.add_widget(self._uncheck_all_button)
@@ -81,7 +81,7 @@ class PrxListView(
         # mode switch
         self._prx_mode_switch_tool_box = self.create_top_tool_box('mode', True, True, 0)
         #
-        self._view_mode_swap_button = gui_qt_wgt_button.QtIconPressButton()
+        self._view_mode_swap_button = _qt_widget_button.QtIconPressButton()
         self._prx_mode_switch_tool_box.add_widget(self._view_mode_swap_button)
         self._view_mode_swap_button._set_name_text_('icon mode')
         self._view_mode_swap_button._set_icon_file_path_(gui_core.GuiIcon.get('tool/icon-mode'))
@@ -105,7 +105,7 @@ class PrxListView(
         self._set_prx_view_def_init_(self._qt_view)
         self._qt_view._set_sort_enable_(True)
         #
-        self._qt_info_chart = gui_qt_wgt_chart.QtChartAsInfo()
+        self._qt_info_chart = _qt_widget_chart.QtChartAsInfo()
         self._qt_info_chart.hide()
         self._qt_layout_0.addWidget(self._qt_info_chart)
         self._qt_view.info_text_accepted.connect(

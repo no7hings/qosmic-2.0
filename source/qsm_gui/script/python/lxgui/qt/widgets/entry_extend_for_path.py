@@ -17,15 +17,15 @@ from . import bubble as gui_qt_wgt_bubble
 class _PathAcceptCmd(QtWidgets.QUndoCommand):
     def __init__(self, widget, path_old, path_new):
         super(_PathAcceptCmd, self).__init__()
-        self.__widget = widget
+        self._widget = widget
         self.__path_old = path_old
         self.__path_new = path_new
 
     def undo(self):
-        self.__widget._accept_auto_(self.__path_old, self.__path_new)
+        self._widget._accept_auto_(self.__path_old, self.__path_new)
 
     def redo(self):
-        self.__widget._accept_auto_(self.__path_new, self.__path_old)
+        self._widget._accept_auto_(self.__path_new, self.__path_old)
 
 
 #   widget
@@ -40,7 +40,7 @@ class QtEntryExtendAsPath(QtWidgets.QWidget):
 
     BUBBLE_CLS = gui_qt_wgt_bubble.QtPathBubble
 
-    def __build_undo_stack(self):
+    def _build_undo_stack(self):
         # undo
         self._undo_stack = QtWidgets.QUndoStack()
 
@@ -49,20 +49,20 @@ class QtEntryExtendAsPath(QtWidgets.QWidget):
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
 
-        self.__lot = QtWidgets.QHBoxLayout(self)
-        self.__lot.setContentsMargins(*[0]*4)
-        self.__lot.setSpacing(2)
-        self.__lot.setAlignment(QtCore.Qt.AlignLeft)
+        self._lot = QtWidgets.QHBoxLayout(self)
+        self._lot.setContentsMargins(*[0]*4)
+        self._lot.setSpacing(2)
+        self._lot.setAlignment(QtCore.Qt.AlignLeft)
 
-        self.__path_bubble = self.BUBBLE_CLS()
-        self.__lot.addWidget(self.__path_bubble)
-        self.next_press_clicked = self.__path_bubble.next_press_clicked
+        self._path_bubble = self.BUBBLE_CLS()
+        self._lot.addWidget(self._path_bubble)
+        self.next_press_clicked = self._path_bubble.next_press_clicked
 
-        self.__path_bubble.component_press_clicked.connect(self._choose_at_)
-        self.__path_bubble.component_press_db_clicked.connect(self._enter_at_)
+        self._path_bubble.component_press_clicked.connect(self._choose_at_)
+        self._path_bubble.component_press_db_clicked.connect(self._enter_at_)
 
         self._entry_widget = gui_qt_wgt_entry.QtEntryAsConstant()
-        self.__lot.addWidget(self._entry_widget)
+        self._lot.addWidget(self._entry_widget)
         self._entry_widget.setFocusPolicy(QtCore.Qt.ClickFocus)
         self._entry_widget.setFont(gui_qt_core.GuiQtFont.generate_2(size=12))
         # reg = QtCore.QRegExp(r'^[a-zA-Z][a-zA-Z0-9_]+$')
@@ -71,9 +71,9 @@ class QtEntryExtendAsPath(QtWidgets.QWidget):
         self._entry_widget.setValidator(validator)
         self.setFocusProxy(self._entry_widget)
 
-        self.__build_undo_stack()
+        self._build_undo_stack()
 
-        self.__next_name_texts = []
+        self._next_name_texts = []
 
         self._entry_widget.setToolTip(
             gui_qt_core.GuiQtUtil.generate_tool_tip_css(
@@ -117,21 +117,21 @@ class QtEntryExtendAsPath(QtWidgets.QWidget):
     def _enter_next_(self, name_text):
         if name_text:
             if self._get_name_text_is_valid_(name_text) is True:
-                path_old = self.__path_bubble._get_path_()
+                path_old = self._path_bubble._get_path_()
                 path_new = path_old.generate_child(name_text)
                 self._undo_stack.push(_PathAcceptCmd(self, path_old, path_new))
                 return True
         return False
 
     def _enter_at_(self, index):
-        path = self.__path_bubble._get_component_at_(index)
+        path = self._path_bubble._get_component_at_(index)
         if path.get_is_root() is False:
             path_old = self._get_path_()
             path_new = path.get_parent()
             self._undo_stack.push(_PathAcceptCmd(self, path_old, path_new))
 
     def _choose_at_(self, index):
-        path = self.__path_bubble._get_component_at_(index)
+        path = self._path_bubble._get_component_at_(index)
         if path.get_is_root() is False:
             pass
 
@@ -141,7 +141,7 @@ class QtEntryExtendAsPath(QtWidgets.QWidget):
     def _do_key_backspace_press_(self):
         _ = self._entry_widget.text()
         if not _:
-            path_old = self.__path_bubble._get_path_()
+            path_old = self._path_bubble._get_path_()
             if path_old.get_is_root() is False:
                 path_new = path_old.get_parent()
                 self._undo_stack.push(_PathAcceptCmd(self, path_old, path_new))
@@ -164,20 +164,20 @@ class QtEntryExtendAsPath(QtWidgets.QWidget):
         return []
 
     def _get_next_name_texts_(self):
-        return self.__next_name_texts
+        return self._next_name_texts
 
     def _set_next_name_texts_(self, texts):
-        self.__next_name_texts = texts
+        self._next_name_texts = texts
         self._update_next_enable_()
 
     def _do_next_wait_start_(self):
-        self.__next_name_texts = []
-        self.__path_bubble._start_next_wait_()
+        self._next_name_texts = []
+        self._path_bubble._start_next_wait_()
         # self._update_next_enable_()
 
     def _do_next_wait_end_(self):
         self._update_next_enable_()
-        self.__path_bubble._end_next_wait_()
+        self._path_bubble._end_next_wait_()
 
     def _accept_auto_(self, path_0, path_1):
         path_text_0, path_text_1 = path_0.to_string(), path_1.to_string()
@@ -186,7 +186,7 @@ class QtEntryExtendAsPath(QtWidgets.QWidget):
         self.entry_value_changed.emit()
         self.entry_value_change_accepted.emit(path_text_0)
         # update bubble
-        self.__path_bubble._set_path_text_(path_text_0)
+        self._path_bubble._set_path_text_(path_text_0)
         # send user emit
         self.user_entry_value_change_accepted.emit(path_text_0)
         # update entry
@@ -210,7 +210,7 @@ class QtEntryExtendAsPath(QtWidgets.QWidget):
         self._update_next_enable_()
 
     def _update_next_enable_(self):
-        self.__path_bubble._set_next_enable_(not not self._get_next_name_texts_())
+        self._path_bubble._set_next_enable_(not not self._get_next_name_texts_())
 
     def _set_path_text_(self, path_text):
         if path_text:
@@ -218,17 +218,17 @@ class QtEntryExtendAsPath(QtWidgets.QWidget):
                 self.entry_value_changed.emit()
                 self.entry_value_change_accepted.emit(path_text)
                 # update bubble
-                self.__path_bubble._set_path_text_(path_text)
+                self._path_bubble._set_path_text_(path_text)
                 # update entry
                 self._entry_widget.clear()
                 # update next what ever value is changed
                 self._update_next_()
 
     def _get_path_text_(self):
-        return self.__path_bubble._get_path_text_()
+        return self._path_bubble._get_path_text_()
 
     def _get_path_(self):
-        return self.__path_bubble._get_path_()
+        return self._path_bubble._get_path_()
 
     def _backward_(self):
         self.__component_texts.remove(self.__component_texts[-1])

@@ -1,18 +1,18 @@
 # coding=utf-8
 # qt
-from ..core.wrap import *
+from ...qt.core.wrap import *
 
-from .. import core as gui_qt_core
+from ...qt import core as _qt_core
 
-from .. import abstracts as gui_qt_abstracts
+from ...qt import abstracts as _qt_abstracts
 
 
 class QtHTabGroup(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtWidgetBaseDef,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtWidgetBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
 
-    gui_qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionBaseDef,
 ):
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_(self.rect())
@@ -96,7 +96,7 @@ class QtHTabGroup(
 
         self._init_action_base_def_(self)
 
-        self._tab_item_stack = gui_qt_core.GuiQtModForTabItemStack(self)
+        self._tab_item_stack = _qt_core.GuiQtModForTabItemStack(self)
 
         self._tab_view_margins = 2, 2, 2, 2
         self._tab_w, self._tab_h = 24, 24
@@ -112,7 +112,7 @@ class QtHTabGroup(
         self._index_press = None
         self._index_hover = None
 
-        self._layout = gui_qt_core.QtHBoxLayout(self)
+        self._layout = _qt_core.QtHBoxLayout(self)
 
         self.installEventFilter(self)
 
@@ -165,7 +165,7 @@ class QtHTabGroup(
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         painter._draw_virtual_buttons_(
             self._tab_bar_draw_rect,
             virtual_items=self._tab_item_stack.get_all_items(),
@@ -229,7 +229,7 @@ class QtHTabGroup(
                 title = 'N/a'
                 tool_tip = 'N/a'
 
-            css = gui_qt_core.GuiQtUtil.generate_tool_tip_css(
+            css = _qt_core.GuiQtUtil.generate_tool_tip_css(
                 title,
                 content=tool_tip,
                 action_tip=[
