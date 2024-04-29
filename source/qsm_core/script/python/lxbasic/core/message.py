@@ -1,5 +1,6 @@
 # coding:utf-8
-import lxbasic.log as bsc_log
+# log
+from .. import log as _bsc_log
 
 
 class MsgBaseMtd(object):
@@ -57,7 +58,7 @@ class MsgBaseMtd(object):
         session = cls.get_session()
         response = session.post(url, data=message_data, files=None)
         result = response.json()
-        bsc_log.Log.trace_method_result(
+        _bsc_log.Log.trace_method_result(
             'send mail',
             'result is "{}"'.format(result.get('message') or 'fail')
         )
@@ -84,7 +85,7 @@ class MsgBaseMtd(object):
         session = cls.get_session()
         response = session.post(url, data=message_data, files=None)
         result = response.json()
-        bsc_log.Log.trace_method_result(
+        _bsc_log.Log.trace_method_result(
             'send mail',
             'result is "{}"'.format(result.get('message') or 'fail')
         )

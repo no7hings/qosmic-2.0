@@ -1,8 +1,9 @@
 # coding:utf-8
-import lxbasic.resource as bsc_resource
-
-import lxbasic.log as bsc_log
-
+# resource
+from .. import resource as _bsc_resource
+# log
+from .. import log as _bsc_log
+# core
 from . import base as _base
 
 from . import environ as _environ
@@ -18,13 +19,13 @@ class ExcBaseMtd(object):
             _ = _environ.EnvBaseMtd.find_execute(name)
             if _:
                 return name
-            return bsc_resource.RscExtendExe.get(name)
+            return _bsc_resource.RscExtendExe.get(name)
         elif _base.SysBaseMtd.get_is_linux():
             name = 'oiiotool'
             _ = _environ.EnvBaseMtd.find_execute(name)
             if _:
                 return name
-            return bsc_resource.RscExtendExe.get(name)
+            return _bsc_resource.RscExtendExe.get(name)
 
     @classmethod
     def oslc(cls):
@@ -33,13 +34,13 @@ class ExcBaseMtd(object):
             _ = _environ.EnvBaseMtd.find_execute(name)
             if _:
                 return name
-            return bsc_resource.RscExtendExe.get(name)
+            return _bsc_resource.RscExtendExe.get(name)
         elif _base.SysBaseMtd.get_is_linux():
             name = 'oslc'
             _ = _environ.EnvBaseMtd.find_execute(name)
             if _:
                 return name
-            return bsc_resource.RscExtendExe.get(name)
+            return _bsc_resource.RscExtendExe.get(name)
 
     @classmethod
     def oslinfo(cls):
@@ -48,13 +49,13 @@ class ExcBaseMtd(object):
             _ = _environ.EnvBaseMtd.find_execute(name)
             if _:
                 return name
-            return bsc_resource.RscExtendExe.get(name)
+            return _bsc_resource.RscExtendExe.get(name)
         elif _base.SysBaseMtd.get_is_linux():
             name = 'oslinfo'
             _ = _environ.EnvBaseMtd.find_execute(name)
             if _:
                 return name
-            return bsc_resource.RscExtendExe.get(name)
+            return _bsc_resource.RscExtendExe.get(name)
 
     @classmethod
     def ffmpeg(cls):
@@ -63,13 +64,13 @@ class ExcBaseMtd(object):
             _ = _environ.EnvBaseMtd.find_execute(name)
             if _:
                 return name
-            return bsc_resource.RscExtendExe.get(name)
+            return _bsc_resource.RscExtendExe.get(name)
         elif _base.SysBaseMtd.get_is_linux():
             name = 'ffmpeg'
             _ = _environ.EnvBaseMtd.find_execute(name)
             if _:
                 return name
-            return bsc_resource.RscExtendExe.get(name)
+            return _bsc_resource.RscExtendExe.get(name)
 
 
 class ExcExtraMtd(object):
@@ -79,14 +80,14 @@ class ExcExtraMtd(object):
         # with open(file_path, 'r') as f:
         #     exec (f.read())
         # use for python 2
-        bsc_log.Log.trace_method_result(
+        _bsc_log.Log.trace_method_result(
             'option-hook', 'start for : "{}"'.format(
                 file_path
             )
         )
         kwargs['__name__'] = '__main__'
         execfile(file_path, kwargs)
-        bsc_log.Log.trace_method_result(
+        _bsc_log.Log.trace_method_result(
             'option-hook', 'complete for: "{}"'.format(
                 file_path
             )
@@ -100,7 +101,7 @@ class ExcExtraMtd(object):
 
     @staticmethod
     def execute_shell_file_use_terminal(file_path, **kwargs):
-        bsc_log.Log.trace_method_result(
+        _bsc_log.Log.trace_method_result(
             'option-hook', 'start for : "{}"'.format(
                 file_path
             )
@@ -118,7 +119,7 @@ class ExcExtraMtd(object):
             _process.PrcBaseMtd.execute_as_trace(
                 ' '.join(cmds)
             )
-        bsc_log.Log.trace_method_result(
+        _bsc_log.Log.trace_method_result(
             'option-hook', 'complete for: "{}"'.format(
                 file_path
             )

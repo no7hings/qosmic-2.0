@@ -16,9 +16,9 @@ import re
 import threading
 
 import functools
-
-import lxbasic.log as bsc_log
-
+# log
+from .. import log as _bsc_log
+# core
 from . import base as _base
 
 from . import environ as _environ
@@ -135,7 +135,7 @@ class PrcBaseMtd(object):
                     env_opt.set(
                         k, v
                     )
-                    bsc_log.Log.trace_method_result(
+                    _bsc_log.Log.trace_method_result(
                         'sub-process',
                         'environ set: "{}"="{}"'.format(k, v)
                     )
@@ -145,7 +145,7 @@ class PrcBaseMtd(object):
                         env_opt.set(
                             k, v
                         )
-                        bsc_log.Log.trace_method_result(
+                        _bsc_log.Log.trace_method_result(
                             'sub-process',
                             'environ set: "{}"="{}"'.format(k, v)
                         )
@@ -153,7 +153,7 @@ class PrcBaseMtd(object):
                         env_opt.append(
                             k, i_v
                         )
-                        bsc_log.Log.trace_method_result(
+                        _bsc_log.Log.trace_method_result(
                             'sub-process',
                             'environ append: "{}"="{}"'.format(k, i_v)
                         )
@@ -161,7 +161,7 @@ class PrcBaseMtd(object):
                         env_opt.prepend(
                             k, i_v
                         )
-                        bsc_log.Log.trace_method_result(
+                        _bsc_log.Log.trace_method_result(
                             'sub-process',
                             'environ prepend: "{}"="{}"'.format(k, i_v)
                         )

@@ -12,8 +12,8 @@ import importlib
 import types
 
 import imp
-
-import lxbasic.log as bsc_log
+# log
+from .. import log as _bsc_log
 
 
 class PyModule(object):
@@ -120,7 +120,7 @@ class PyModule(object):
                 # noinspection PyUnresolvedReferences
                 imp.reload(module)
                 #
-                bsc_log.Log.trace_method_result(
+                _bsc_log.Log.trace_method_result(
                     'python reload', 'module="{}", file="{}"'.format(
                         self.name, self.file
                     )

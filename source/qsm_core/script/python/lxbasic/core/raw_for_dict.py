@@ -2,9 +2,9 @@
 import json
 
 import collections
-
-import lxbasic.content as bsc_content
-
+# content
+from .. import content as _bsc_content
+# core
 from . import raw as _raw
 
 
@@ -20,7 +20,7 @@ class DictMtd(object):
 
     @classmethod
     def to_string_as_yaml_style(cls, dict_):
-        return bsc_content.ContentYamlBase.dump(
+        return _bsc_content.ContentYamlBase.dump(
             dict_,
             indent=4,
             default_flow_style=False

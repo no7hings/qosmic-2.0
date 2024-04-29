@@ -1,8 +1,8 @@
 # coding:utf-8
 import os
 
-import lxbasic.log as bsc_log
-
+from .. import log as _bsc_log
+# core
 from . import base as _base
 
 
@@ -33,6 +33,6 @@ class UrlMtd(object):
                 url, new=1
             )
         else:
-            bsc_log.Log.get_method_error(
+            _bsc_log.Log.get_method_error(
                 'url method', 'chrome is not found'
             )

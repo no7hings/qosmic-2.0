@@ -2,9 +2,9 @@
 import types
 
 import time
-
-import lxbasic.log as bsc_log
-
+# log
+from .. import log as _bsc_log
+# core
 from . import base as _base
 
 
@@ -67,7 +67,7 @@ class MdfBaseMtd(object):
                 raise TypeError()
             # noinspection PyBroadException
             try:
-                bsc_log.Log.trace_method_result(
+                _bsc_log.Log.trace_method_result(
                     'fnc run',
                     'fnc="{}" is started'.format(
                         fnc_path
@@ -76,14 +76,14 @@ class MdfBaseMtd(object):
                 #
                 _result = fnc(*args, **kwargs)
                 #
-                bsc_log.Log.trace_method_result(
+                _bsc_log.Log.trace_method_result(
                     'fnc run',
                     'fnc="{}" is completed'.format(
                         fnc_path
                     )
                 )
             except Exception:
-                bsc_log.Log.trace_method_error(
+                _bsc_log.Log.trace_method_error(
                     'fnc run',
                     'fnc="{}" is error'.format(
                         fnc_path
@@ -108,7 +108,7 @@ class MdfBaseMtd(object):
                 raise TypeError()
             # noinspection PyBroadException
             try:
-                bsc_log.Log.trace_method_result(
+                _bsc_log.Log.trace_method_result(
                     'fnc run',
                     'fnc="{}" is started'.format(
                         fnc_path
@@ -118,21 +118,21 @@ class MdfBaseMtd(object):
                 _result = fnc(*args, **kwargs)
                 #
                 if _result is True:
-                    bsc_log.Log.trace_method_result(
+                    _bsc_log.Log.trace_method_result(
                         'fnc run',
                         'fnc="{}" is completed'.format(
                             fnc_path
                         )
                     )
                 else:
-                    bsc_log.Log.trace_method_warning(
+                    _bsc_log.Log.trace_method_warning(
                         'fnc run',
                         'fnc="{}" is failed'.format(
                             fnc_path
                         )
                     )
             except Exception:
-                bsc_log.Log.trace_method_error(
+                _bsc_log.Log.trace_method_error(
                     'fnc run',
                     'fnc="{}" is error'.format(
                         fnc_path
@@ -151,7 +151,7 @@ class MdfBaseMtd(object):
                 return _fnc
             except Exception:
                 import lxbasic.core as bsc_core
-                bsc_log.LogException.trace()
+                _bsc_log.LogException.trace()
                 raise
 
         return fnc_
