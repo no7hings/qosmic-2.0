@@ -17,6 +17,8 @@ from .container import *
 
 from .container_for_tab import *
 
+from .container_for_box import *
+
 from .view_for_tree import *
 
 from .view_for_list import *

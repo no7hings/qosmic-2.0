@@ -149,7 +149,7 @@ class QtLayerStack(QtWidgets.QWidget):
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
         )
 
-        self.__widgets = []
+        self._widgets = []
         self.__count = 0
 
         self._index_current = 0
@@ -241,7 +241,7 @@ class QtLayerStack(QtWidgets.QWidget):
                     c_x, c_y, w_d, c_h
                 )
         else:
-            for i_index, i_widget in enumerate(self.__widgets):
+            for i_index, i_widget in enumerate(self._widgets):
                 i_widget.setGeometry(
                     x, y, w, h
                 )
@@ -287,8 +287,8 @@ class QtLayerStack(QtWidgets.QWidget):
     # noinspection PyUnusedLocal
     def _add_widget_(self, widget, *args, **kwargs):
         widget.setParent(self)
-        index = len(self.__widgets)
-        self.__widgets.append(widget)
+        index = len(self._widgets)
+        self._widgets.append(widget)
         if index == 0:
             self._refresh_widget_all_()
         elif index > 0:
@@ -331,13 +331,13 @@ class QtLayerStack(QtWidgets.QWidget):
         return self._index_current
 
     def _set_current_widget_(self, widget):
-        if widget in self.__widgets:
-            index = self.__widgets.index(widget)
+        if widget in self._widgets:
+            index = self._widgets.index(widget)
             self._update_index_current_(index)
 
     def _switch_current_widget_to_(self, widget):
-        if widget in self.__widgets:
-            index = self.__widgets.index(widget)
+        if widget in self._widgets:
+            index = self._widgets.index(widget)
             self._switch_current_to_(index)
 
     def _swap_current_between_(self, index_0, index_1, mode):
@@ -349,7 +349,7 @@ class QtLayerStack(QtWidgets.QWidget):
         self.__swap_mode = mode
         # x, y = 0, 0
         w, h = self.width(), self.height()
-        wgt_0, wgt_1 = self.__widgets[index_0], self.__widgets[index_1]
+        wgt_0, wgt_1 = self._widgets[index_0], self._widgets[index_1]
         # wgt_0.setGeometry(x, y, w, h)
         self.__swap_pixmap_0, self.__swap_pixmap_1 = QtGui.QPixmap(w, h), QtGui.QPixmap(w, h)
         self.__swap_pixmap_0.fill(gui_qt_core.QtBackgroundColors.Basic)
@@ -384,7 +384,7 @@ class QtLayerStack(QtWidgets.QWidget):
 
     def _delete_widget_at_(self, index):
         if index < self.__count:
-            widget = self.__widgets[index]
+            widget = self._widgets[index]
             # switch to next
             if index == 0:
                 index_next = 0
@@ -399,7 +399,7 @@ class QtLayerStack(QtWidgets.QWidget):
 
             widget.close()
             widget.deleteLater()
-            self.__widgets.pop(index)
+            self._widgets.pop(index)
             self.__count -= 1
             # update index maximum
             index_maximum = self.__count-1
@@ -407,8 +407,8 @@ class QtLayerStack(QtWidgets.QWidget):
                 self._index_current = index_maximum
 
     def _insert_widget_between_(self, index_0, index_1):
-        widget_0 = self.__widgets[index_0]
-        self.__widgets.pop(index_0)
-        self.__widgets.insert(index_1, widget_0)
+        widget_0 = self._widgets[index_0]
+        self._widgets.pop(index_0)
+        self._widgets.insert(index_1, widget_0)
 
         self._update_index_current_(index_1)

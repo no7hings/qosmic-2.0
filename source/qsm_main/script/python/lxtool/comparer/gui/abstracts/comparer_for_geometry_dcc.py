@@ -51,7 +51,7 @@ class AbsPnlComparerForAssetGeometryDcc(prx_widgets.PrxSessionWindow):
         self._set_viewer_groups_build_()
         self._set_configure_groups_build_()
         #
-        self._update_geometry_from_model_item = prx_widgets.PrxPressItem()
+        self._update_geometry_from_model_item = prx_widgets.PrxPressButton()
         self._update_geometry_from_model_item.set_name('update geometry from source')
         self._update_geometry_from_model_item.set_icon_name('application/python')
         self._update_geometry_from_model_item.set_tool_tip(

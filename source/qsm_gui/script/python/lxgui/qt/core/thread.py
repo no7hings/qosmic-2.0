@@ -93,7 +93,7 @@ class QtBuildThread(QtCore.QThread):
     #
     status_changed = qt_signal(int)
     #
-    Status = gui_core.GuiStatus
+    Status = gui_core.GuiProcessStatus
 
     def __init__(self, *args, **kwargs):
         super(QtBuildThread, self).__init__(*args, **kwargs)
@@ -147,7 +147,7 @@ class QtBuildThreadStack(QtCore.QObject):
     run_started = qt_signal()
     run_finished = qt_signal()
     run_resulted = qt_signal(list)
-    Status = gui_core.GuiStatus
+    Status = gui_core.GuiProcessStatus
 
     def __init__(self, *args, **kwargs):
         super(QtBuildThreadStack, self).__init__(*args, **kwargs)
@@ -256,7 +256,7 @@ class QtBuildRunnableSignals(QtCore.QObject):
 
 
 class QtBuildRunnable(QtCore.QRunnable):
-    Status = gui_core.GuiStatus
+    Status = gui_core.GuiProcessStatus
 
     def __init__(self, pool):
         super(QtBuildRunnable, self).__init__()

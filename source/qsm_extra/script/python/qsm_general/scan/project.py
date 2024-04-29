@@ -15,12 +15,12 @@ class Project(_base.AbsEntity):
     VariantKey = _base.VariantKeys.Project
 
     NextEntityQueryClassDict = {
-        _base.EntityTypes.Asset: _asset.AssetQuery,
-        _base.EntityTypes.Sequence: _sequence.SequenceQuery,
-        _base.EntityTypes.Shot: _shot.ShotQuery,
+        _base.EntityTypes.Asset: _asset.AssetsCache,
+        _base.EntityTypes.Sequence: _sequence.SequencesCache,
+        _base.EntityTypes.Shot: _shot.ShotsCache,
     }
 
-    TaskQueryClass = _task.TaskQuery
+    TaskQueryClass = _task.TasksCache
 
     def __init__(self, *args, **kwargs):
         super(Project, self).__init__(*args, **kwargs)
@@ -44,9 +44,9 @@ class Project(_base.AbsEntity):
         return self.get_next_entities(_base.EntityTypes.Shot)
 
 
-class ProjectQuery(_base.AbsEntityQuery):
+class ProjectsCache(_base.AbsEntitiesCache):
     EntityClass = Project
 
     def __init__(self, *args, **kwargs):
-        super(ProjectQuery, self).__init__(*args, **kwargs)
+        super(ProjectsCache, self).__init__(*args, **kwargs)
 

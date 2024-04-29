@@ -1494,6 +1494,16 @@ class StgFileOpt(StgPathOpt):
     def get_is_exists(self):
         return self.get_is_file()
 
+    def repath_to(self, new_path):
+        os.rename(
+            self.get_path(), new_path
+        )
+
+    def do_delete(self):
+        os.remove(
+            self.get_path()
+        )
+
 
 # compress
 class StgGzipFileOpt(StgFileOpt):

@@ -178,7 +178,7 @@ class _QtProcessingThread(QtCore.QThread):
 
     KEY = 'thread processing'
 
-    Status = gui_core.GuiStatus
+    Status = gui_core.GuiProcessStatus
 
     def __init__(self, *args, **kwargs):
         super(_QtProcessingThread, self).__init__(*args, **kwargs)
@@ -306,7 +306,7 @@ class QtProcessingBar(QtWidgets.QWidget):
     update_logging = qt_signal(str)
     update_status = qt_signal(int)
 
-    Status = gui_core.GuiStatus
+    Status = gui_core.GuiProcessStatus
     Rgba = gui_core.GuiRgba
 
     def _refresh_widget_all_(self):

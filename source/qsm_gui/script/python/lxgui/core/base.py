@@ -108,11 +108,18 @@ class GuiUtil(object):
         return bsc_core.EnvBaseMtd.get_ui_language()
 
     @classmethod
-    def choice_label(cls, language, variants):
+    def choice_name(cls, language, variants):
         if language == 'chs':
-            if 'label_chs' in variants:
-                return variants['label_chs']
-        return variants['label']
+            if 'name_chs' in variants:
+                return variants['name_chs']
+        return variants['name']
+
+    @classmethod
+    def choice_tool_tip(cls, language, variants):
+        if language == 'chs':
+            if 'tool_tip_chs' in variants:
+                return variants['tool_tip_chs']
+        return variants['tool_tip']
 
 
 class GuiXml(object):

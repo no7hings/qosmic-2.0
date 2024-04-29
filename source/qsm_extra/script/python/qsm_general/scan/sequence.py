@@ -8,14 +8,14 @@ class Sequence(_base.AbsEntity):
     Type = _base.EntityTypes.Sequence
     VariantKey = _base.VariantKeys.Sequence
 
-    TaskQueryClass = _task.TaskQuery
+    TaskQueryClass = _task.TasksCache
 
     def __init__(self, *args, **kwargs):
         super(Sequence, self).__init__(*args, **kwargs)
 
 
-class SequenceQuery(_base.AbsEntityQuery):
+class SequencesCache(_base.AbsEntitiesCache):
     EntityClass = Sequence
 
     def __init__(self, *args, **kwargs):
-        super(SequenceQuery, self).__init__(*args, **kwargs)
+        super(SequencesCache, self).__init__(*args, **kwargs)

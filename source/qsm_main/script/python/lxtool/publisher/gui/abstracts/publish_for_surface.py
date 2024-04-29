@@ -467,14 +467,14 @@ class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
             }
         )
 
-        self._validation_button = prx_widgets.PrxPressItem()
+        self._validation_button = prx_widgets.PrxPressButton()
         self._validation_button.set_name('validation')
         self.add_button(
             self._validation_button
         )
         self._validation_button.connect_press_clicked_to(self.execute_validation)
 
-        self._next_button = prx_widgets.PrxPressItem()
+        self._next_button = prx_widgets.PrxPressButton()
         self._next_button.set_name('next')
         self.add_button(
             self._next_button
@@ -525,7 +525,7 @@ class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
         layer_widget.add_widget(tool_bar)
         tool_bar.set_expanded(True)
 
-        self._publish_button = prx_widgets.PrxPressItem()
+        self._publish_button = prx_widgets.PrxPressButton()
         tool_bar.add_widget(self._publish_button)
         self._publish_button.set_name('publish')
         self._publish_button.connect_press_clicked_to(

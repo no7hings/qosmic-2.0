@@ -52,6 +52,10 @@ class QtListWidget(
         self._item_icon_size = 16, 16
         self._item_icon_frame_draw_enable = False
 
+        self._item_list_mode_auto_size = False
+        self._item_image_frame_size = 108, 124
+        self._item_image_size = 112, 128
+
         self._item_name_frame_size = 16, 16
         self._item_name_size = 12, 12
         self._item_name_frame_draw_enable = False
@@ -167,11 +171,9 @@ class QtListWidget(
             if event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.buttons() == QtCore.Qt.LeftButton:
                     # todo: to fix error rect selection when item is drag
-                    if self.itemAt(event.pos()):
-                        if self._selection_mode_mark is None:
-                            self._selection_mode_mark = self.selectionMode()
-                        self.setSelectionMode(self.SingleSelection)
-                    else:
+                    # when is drag set to single selection mode
+                    # when not press at item reset selection mode
+                    if self.itemAt(event.pos()) is None:
                         if self._selection_mode_mark is not None:
                             self.setSelectionMode(self._selection_mode_mark)
 
@@ -194,6 +196,12 @@ class QtListWidget(
                 self._empty_icon_name
             )
         # super(QtListWidget, self).paintEvent(event)
+
+    def _update_drag_action_(self):
+        # when is drag set to single selection mode
+        if self._selection_mode_mark is None:
+            self._selection_mode_mark = self.selectionMode()
+        self.setSelectionMode(self.SingleSelection)
 
     def _set_drag_action_flag_(self, boolean):
         self._drag_action_flag = True
@@ -233,11 +241,24 @@ class QtListWidget(
             )
             return w, h
 
-    #
     def _set_item_frame_size_(self, w, h):
         self._item_frame_size = w, h
+        self._update_grid_size_(w, h)
+
+    def _update_grid_size_(self, w, h):
         _w, _h = w+self._item_side*2, h+self._item_side*2
         self._set_grid_size_(_w, _h)
+
+    def _set_grid_mode_(self):
+        self.setViewMode(self.IconMode)
+        self._update_grid_size_(*self._item_frame_size)
+        self._update_by_item_mode_change_()
+
+    def _set_list_mode_(self):
+        self.setViewMode(self.ListMode)
+        if self._item_list_mode_auto_size is True:
+            self._update_grid_size_(*self._item_image_frame_size)
+        self._update_by_item_mode_change_()
 
     def _set_item_size_basic_(self, w, h):
         self._item_frame_size_basic = w, h
@@ -254,6 +275,19 @@ class QtListWidget(
 
     def _set_item_icon_frame_draw_enable_(self, boolean):
         self._item_icon_frame_draw_enable = boolean
+
+    def _set_item_image_frame_size_(self, w, h):
+        self._item_list_mode_auto_size = True
+        self._item_image_frame_size = w, h
+
+    def _get_item_image_frame_size_(self):
+        return self._item_image_frame_size
+
+    def _get_item_list_mode_auto_size_(self):
+        return self._item_list_mode_auto_size
+
+    def _set_item_image_size_(self, w, h):
+        self._item_image_size = w, h
 
     def _set_item_name_frame_size_(self, w, h):
         self._item_name_frame_size = w, h

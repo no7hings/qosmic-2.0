@@ -34,6 +34,13 @@ class SceneFile(object):
             )
 
     @classmethod
+    def get_current_file_path(cls):
+        """
+        :return: str(path)
+        """
+        return cmds.file(query=1, expandName=1)
+
+    @classmethod
     def import_file(cls, file_path, namespace=':'):
         if os.path.isfile(file_path) is True:
             return cmds.file(

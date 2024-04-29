@@ -257,7 +257,7 @@ class GuiRgba(object):
     ]
 
 
-class GuiStatus(enum.IntEnum):
+class GuiProcessStatus(enum.IntEnum):
     Unknown = 0
     Started = 1
     Running = 2

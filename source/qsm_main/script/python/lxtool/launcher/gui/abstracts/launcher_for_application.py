@@ -37,7 +37,7 @@ class AbsPnlLauncherForApplication(prx_widgets.PrxSessionWindow):
         self.add_widget(self.__tip)
         self.__tip.set_focus_enable(False)
 
-        self.__next_button = prx_widgets.PrxPressItem()
+        self.__next_button = prx_widgets.PrxPressButton()
         self.__next_button.set_name('next')
         self.add_button(
             self.__next_button

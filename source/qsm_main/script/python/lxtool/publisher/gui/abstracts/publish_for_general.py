@@ -258,7 +258,7 @@ class AbsPnlPublisherForGeneral(prx_widgets.PrxSessionWindow):
         sa_1.add_widget(self.__tip)
         self.__tip.set_focus_enable(False)
 
-        self.__next_button = prx_widgets.PrxPressItem()
+        self.__next_button = prx_widgets.PrxPressButton()
         self.__next_button.set_name('next')
         self.add_button(self.__next_button)
         self.__next_button.connect_press_clicked_to(self.__do_next)
@@ -293,7 +293,7 @@ class AbsPnlPublisherForGeneral(prx_widgets.PrxSessionWindow):
         layer_widget.add_widget(tool_bar)
         tool_bar.set_expanded(True)
 
-        self._publish_button = prx_widgets.PrxPressItem()
+        self._publish_button = prx_widgets.PrxPressButton()
         tool_bar.add_widget(self._publish_button)
         self._publish_button.set_name('publish')
         self._publish_button.connect_press_clicked_to(

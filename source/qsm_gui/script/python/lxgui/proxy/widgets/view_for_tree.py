@@ -21,11 +21,13 @@ from ...qt.widgets import view_for_tree as gui_qt_wgt_view_for_tree
 # proxy abstracts
 from .. import abstracts as gui_prx_abstracts
 # proxy widgets
-from . import utility as gui_prx_wdt_utility
+from . import utility as _utility
 
-from . import item as gui_prx_wgt_item
+from . import item as _item
 
-from . import container as gui_prx_wgt_container
+from . import container as _container
+
+from . import container_for_box as _container_for_box
 
 
 class PrxTreeView(
@@ -33,7 +35,7 @@ class PrxTreeView(
     gui_prx_abstracts.AbsPrxViewDef,
     #
     gui_prx_abstracts.AbsPrxViewFilterTagDef,
-    gui_prx_wgt_item.AbsPrxTreeDef,
+    _item.AbsPrxTreeDef,
     #
     gui_prx_abstracts.AbsPrxViewVisibleConnectionDef,
 ):
@@ -48,9 +50,9 @@ class PrxTreeView(
         self._qt_layout_0.setContentsMargins(4, 4, 4, 4)
         self._qt_layout_0.setSpacing(2)
         #
-        self._prx_top_tool_bar = gui_prx_wgt_container.PrxHToolBar()
+        self._prx_top_tool_bar = _container.PrxHToolBar()
         self._prx_top_tool_bar.set_name('top')
-        self._prx_top_tool_bar.set_left_alignment()
+        self._prx_top_tool_bar.set_align_left()
         self._qt_layout_0.addWidget(self._prx_top_tool_bar.widget)
         self._prx_top_tool_bar.set_border_radius(1)
         #
@@ -104,7 +106,7 @@ class PrxTreeView(
 
         self._prx_filter_tool_box = self.create_top_tool_box('filter', True, True, 1)
 
-        self._prx_filer_bar_0 = gui_prx_wdt_utility.PrxFilterBar()
+        self._prx_filer_bar_0 = _utility.PrxFilterBar()
         self._prx_filter_tool_box.add_widget(self._prx_filer_bar_0)
         #
         self._prx_filter_bar = self._prx_filer_bar_0
@@ -129,7 +131,7 @@ class PrxTreeView(
         )
 
     def create_top_tool_box(self, name, expanded=True, visible=True, size_mode=0, insert_args=None):
-        tool_box = gui_prx_wdt_utility.PrxHToolBox()
+        tool_box = _container_for_box.PrxHToolBox()
         if isinstance(insert_args, int):
             self._prx_top_tool_bar.insert_widget_at(insert_args, tool_box)
         else:

@@ -1181,7 +1181,7 @@ class QtEntryAsBubble(
     def _get_value_(self):
         return self._value
 
-    def _set_value_options_(self, values, labels=None):
+    def _set_value_options_(self, values, names=None):
         if super(QtEntryAsBubble, self)._set_value_options_(values) is True:
             self.__texts_draw = map(
                 lambda x: x.capitalize() if isinstance(x, six.string_types) else str(x).capitalize(), values
@@ -1420,3 +1420,6 @@ class QtEntryFrame(
 
     def _set_tip_draw_enable_(self, boolean):
         self._tip_draw_enable = boolean
+
+    def _set_visible_(self, boolean):
+        self.setVisible(boolean)

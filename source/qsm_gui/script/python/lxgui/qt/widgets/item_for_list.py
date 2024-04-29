@@ -308,7 +308,11 @@ class QtListItemWidget(
         image_bsc_w, image_bsc_h = -spc_frm, 0
         if self._get_has_image_() is True:
             image_x_, image_y_ = x+(icon_bsc_w+spc_frm), y
+
             image_bsc_w, image_bsc_h = h, h
+            if self._get_view_()._get_item_list_mode_auto_size_() is True:
+                image_bsc_w, image_bsc_h = self._get_view_()._get_item_image_frame_size_()
+
             self._image_frame_rect.setRect(
                 c_x+spc_frm, image_y_, image_bsc_w, image_bsc_h
             )
@@ -413,7 +417,7 @@ class QtListItemWidget(
                         else:
                             self._drag.setMimeData(self._generate_drag_mime_data_())
 
-                        view._set_drag_action_flag_(True)
+                        view._update_drag_action_()
                         self._drag._do_drag_copy_(self._drag_point_offset)
                         self._drag.released.connect(self._drag_release_cbk_)
                 else:

@@ -532,21 +532,21 @@ class PrxSessionToolWindow(PrxSessionWindow):
         self.close_window_later()
 
     def _setup_ssn_tool_(self):
-        self._ssn_tool_apply_and_close_button = gui_prx_wdt_utility.PrxPressItem()
+        self._ssn_tool_apply_and_close_button = gui_prx_wdt_utility.PrxPressButton()
         self.add_button(self._ssn_tool_apply_and_close_button)
         self._ssn_tool_apply_and_close_button.set_name('Apply and Close')
         self._ssn_tool_apply_and_close_button.connect_press_clicked_to(
             self.apply_and_close_fnc
         )
 
-        self._ssn_tool_apply_button = gui_prx_wdt_utility.PrxPressItem()
+        self._ssn_tool_apply_button = gui_prx_wdt_utility.PrxPressButton()
         self.add_button(self._ssn_tool_apply_button)
         self._ssn_tool_apply_button.set_name('Apply')
         self._ssn_tool_apply_button.connect_press_clicked_to(
             self.apply_fnc
         )
 
-        self._ssn_tool_close_button = gui_prx_wdt_utility.PrxPressItem()
+        self._ssn_tool_close_button = gui_prx_wdt_utility.PrxPressButton()
         self.add_button(self._ssn_tool_close_button)
         self._ssn_tool_close_button.set_name('Close')
         self._ssn_tool_close_button.connect_press_clicked_to(

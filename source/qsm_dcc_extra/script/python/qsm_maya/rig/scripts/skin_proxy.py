@@ -320,6 +320,8 @@ class AdvSkinProxyGenerate(object):
     def __init__(self, namespace):
         self._namespace = namespace
         self._adv_query = qsm_rig_core.AdvQuery(namespace)
+        self._rig = qsm_rig_core.AdvRigOpt(self._namespace)
+        self._root = self._rig.get_root()
 
     def create_cache_root_auto(self):
         if cmds.objExists(self.CACHE_ROOT) is False:
@@ -731,6 +733,9 @@ class AdvSkinProxyGenerate(object):
     def is_exists(self):
         _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME), long=1)
         return not not _
+
+    def is_rig_exists(self):
+        return self._rig.is_exists()
 
     def generate_args(self):
         file_path = qsm_mya_core.ReferenceNamespaceQuery().get_file(self._namespace)

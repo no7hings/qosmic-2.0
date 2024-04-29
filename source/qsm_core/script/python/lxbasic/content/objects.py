@@ -441,3 +441,11 @@ class ContentCache(object):
             value=self.__file_path
         )
         return self.__content
+
+
+class NodeProperties(dict):
+    def __init__(self, *args, **kwargs):
+        super(NodeProperties, self).__init__(*args, **kwargs)
+
+    def __getattr__(self, item):
+        return self.__getitem__(item)  # = self[item]

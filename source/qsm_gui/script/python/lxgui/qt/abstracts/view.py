@@ -134,8 +134,8 @@ class AbsQtTreeWidget(
             self.headerItem().setForeground(index, QtGui.QBrush(QtGui.QColor(255, 255, 255, 255)))
             self.headerItem().setFont(index, gui_qt_core.QtFonts.NameNormal)
             # todo: in katana will make text display error, PyQt?
-            if QT_LOAD_INDEX == 1:
-                self.headerItem().setIcon(index, icon)
+            # if QT_LOAD_INDEX == 1:
+            self.headerItem().setIcon(index, icon)
 
     def _get_view_h_scroll_bar_(self):
         return self.horizontalScrollBar()

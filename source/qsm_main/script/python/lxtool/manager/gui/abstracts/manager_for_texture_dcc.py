@@ -125,7 +125,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
             }
         )
 
-        self._refresh_button = prx_widgets.PrxPressItem()
+        self._refresh_button = prx_widgets.PrxPressButton()
         self.add_button(self._refresh_button)
         self._refresh_button.set_name('refresh')
         self._refresh_button.connect_press_clicked_to(self.refresh_gui_fnc)

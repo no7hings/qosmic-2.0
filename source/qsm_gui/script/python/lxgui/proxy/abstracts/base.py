@@ -35,8 +35,8 @@ class AbsPrx(object):
     #
     PRX_CATEGORY = 'dialog_window'
     #
-    Status = gui_core.GuiStatus
-    ProcessStatus = gui_core.GuiStatus
+    Status = gui_core.GuiProcessStatus
+    ProcessStatus = gui_core.GuiProcessStatus
     ShowStatus = gui_core.GuiShowStatus
     ValidationStatus = gui_core.GuiValidationStatus
 

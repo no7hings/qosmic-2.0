@@ -145,7 +145,7 @@ class SysBaseMtd(object):
     TIME_FORMAT_EXACT = '%Y-%m-%d %H:%M:%S.%f'
     #
     TIME_TAG_FORMAT = '%Y_%m%d_%H%M_%S_%f'
-    DATA_TAG_FORMAT = '%Y_%m%d'
+    DATE_TAG_FORMAT = '%Y_%m%d'
 
     @classmethod
     def get_time(cls, exact=False):
@@ -185,7 +185,7 @@ class SysBaseMtd(object):
     def get_date_tag(cls):
         timestamp = time.time()
         return time.strftime(
-            cls.DATA_TAG_FORMAT,
+            cls.DATE_TAG_FORMAT,
             time.localtime(timestamp)
         )
 

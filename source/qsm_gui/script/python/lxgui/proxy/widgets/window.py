@@ -143,7 +143,7 @@ class AbsPrxDialogWindow(
         qt_spacer_0 = gui_qt_wgt_utility._QtSpacer()
         self._input_button_layout.addWidget(qt_spacer_0)
         #
-        self._yes_button = gui_prx_wdt_utility.PrxPressItem()
+        self._yes_button = gui_prx_wdt_utility.PrxPressButton()
         # self._yes_button.set_visible(False)
         self._input_button_layout.addWidget(self._yes_button.widget)
         self._yes_button.set_name('Yes')
@@ -151,7 +151,7 @@ class AbsPrxDialogWindow(
         self._yes_button.set_width(self.BUTTON_WIDTH)
         self._yes_button.connect_press_clicked_to(self.do_yes)
         #
-        self._no_button = gui_prx_wdt_utility.PrxPressItem()
+        self._no_button = gui_prx_wdt_utility.PrxPressButton()
         # self._no_button.set_visible(False)
         self._input_button_layout.addWidget(self._no_button.widget)
         self._no_button.set_name('No')
@@ -159,7 +159,7 @@ class AbsPrxDialogWindow(
         self._no_button.set_width(self.BUTTON_WIDTH)
         self._no_button.connect_press_clicked_to(self.do_no)
         #
-        self._cancel_button = gui_prx_wdt_utility.PrxPressItem()
+        self._cancel_button = gui_prx_wdt_utility.PrxPressButton()
         # self._cancel_button.set_visible(False)
         self._input_button_layout.addWidget(self._cancel_button.widget)
         self._cancel_button.set_name('Cancel')
@@ -167,7 +167,7 @@ class AbsPrxDialogWindow(
         self._cancel_button.set_width(self.BUTTON_WIDTH)
         self._cancel_button.connect_press_clicked_to(self.do_cancel)
         #
-        # self._close_button = gui_prx_wdt_utility.PrxPressItem()
+        # self._close_button = gui_prx_wdt_utility.PrxPressButton()
         # self._close_button.set_visible(False)
         # self._input_button_layout.addWidget(self._close_button.widget)
         # self._close_button.set_name('Close')
@@ -507,7 +507,7 @@ class PrxMonitorWindow(
         #
         self._input_button_layout = gui_qt_wgt_base.QtHBoxLayout(qt_widget_1)
         #
-        self._status_button = gui_prx_wdt_utility.PrxPressItem()
+        self._status_button = gui_prx_wdt_utility.PrxPressButton()
         self._input_button_layout.addWidget(self._status_button.widget)
         self._status_button.set_name('process')
         self._status_button.set_icon_by_name('process')
@@ -565,7 +565,7 @@ class PrxProcessingWindow(
         self._bottom_toolbar = gui_prx_wgt_container.PrxHToolBar()
         self._central_layout.addWidget(self._bottom_toolbar.widget)
         self._bottom_toolbar.set_expanded(True)
-        self._bottom_toolbar.set_right_alignment()
+        self._bottom_toolbar.set_align_right()
 
         self.connect_window_close_to(self.kill_processing)
 

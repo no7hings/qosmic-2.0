@@ -8,14 +8,14 @@ class Shot(_base.AbsEntity):
     Type = _base.EntityTypes.Shot
     VariantKey = _base.VariantKeys.Sequence
 
-    TaskQueryClass = _task.TaskQuery
+    TaskQueryClass = _task.TasksCache
 
     def __init__(self, *args, **kwargs):
         super(Shot, self).__init__(*args, **kwargs)
 
 
-class ShotQuery(_base.AbsEntityQuery):
+class ShotsCache(_base.AbsEntitiesCache):
     EntityClass = Shot
 
     def __init__(self, *args, **kwargs):
-        super(ShotQuery, self).__init__(*args, **kwargs)
+        super(ShotsCache, self).__init__(*args, **kwargs)

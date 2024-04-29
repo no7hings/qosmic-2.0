@@ -1274,9 +1274,9 @@ class QtChartAsSequence(
             )
             #
             if self._chart_index_lost_array:
-                self._status = gui_core.GuiStatus.Error
+                self._status = gui_core.GuiProcessStatus.Error
             else:
-                self._status = gui_core.GuiStatus.Completed
+                self._status = gui_core.GuiProcessStatus.Completed
             #
             self.setToolTip(
                 (

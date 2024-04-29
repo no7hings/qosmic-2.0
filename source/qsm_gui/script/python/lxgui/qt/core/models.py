@@ -11,6 +11,7 @@ class GuiQtModForTabItem(object):
         self.__key_text = None
         self.__name_text = None
         self._icon_text = None
+        self._tool_tip = 'N/a'
         self.__rect = QtCore.QRect()
         self.__draw_rect = QtCore.QRect()
         self._popup_rect = QtCore.QRect()
@@ -43,6 +44,14 @@ class GuiQtModForTabItem(object):
         return self._icon_text
 
     icon_text = property(get_icon_text)
+
+    def set_tool_tip(self, tool_tip):
+        self._tool_tip = tool_tip
+
+    def get_tool_tip(self):
+        return self._tool_tip
+
+    tool_tip = property(get_tool_tip)
 
     def get_rect(self):
         return self.__rect
@@ -117,6 +126,11 @@ class GuiQtModForTabItemStack(object):
         item = self.get_item_at(index)
         if item:
             return item.get_name()
+
+    def get_tool_tip_at(self, index):
+        item = self.get_item_at(index)
+        if item:
+            return item.get_tool_tip()
 
     def get_key_at(self, index):
         item = self.get_item_at(index)

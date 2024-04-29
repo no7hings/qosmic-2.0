@@ -142,6 +142,7 @@ class QtEntryAsCapsule(
     def _do_show_tool_tip_(self, event):
         if self.__index_hover is not None:
             value = self._get_value_options_()[self.__index_hover]
+            tool_tip = self._get_tool_tip_text_()
             if not isinstance(value, six.string_types):
                 title = str(value)
             else:
@@ -150,14 +151,16 @@ class QtEntryAsCapsule(
             if self.__check_use_exclusive is True:
                 css = gui_qt_core.GuiQtUtil.generate_tool_tip_css(
                     title,
-                    [
+                    content=tool_tip or 'N/a',
+                    action_tip=[
                         '"LMB-click" to switch to this item',
                     ]
                 )
             else:
                 css = gui_qt_core.GuiQtUtil.generate_tool_tip_css(
                     title,
-                    [
+                    content=tool_tip or 'N/a',
+                    action_tip=[
                         '"LMB-click" to check this item on',
                     ]
                 )
@@ -165,7 +168,7 @@ class QtEntryAsCapsule(
                 QtGui.QCursor.pos(), css, self
             )
 
-    def _set_value_options_(self, values, labels=None):
+    def _set_value_options_(self, values, names=None):
         if super(QtEntryAsCapsule, self)._set_value_options_(values) is True:
             c = len(values)
             self.__indices = range(c)
@@ -173,8 +176,8 @@ class QtEntryAsCapsule(
             self.__rects_frame = []
             self.__indices_checked = []
             for i_index in self.__indices:
-                if labels:
-                    i_label = labels[i_index]
+                if names:
+                    i_label = names[i_index]
                 else:
                     i_label = bsc_core.RawTextMtd.to_prettify(values[i_index], capitalize=True)
                 self.__texts_draw.append(i_label)
@@ -297,3 +300,6 @@ class QtEntryAsCapsule(
     def _set_entry_enable_(self, boolean):
         super(QtEntryAsCapsule, self)._set_entry_enable_(boolean)
         self._set_action_enable_(boolean)
+
+    def _set_tool_tip_(self, text, **kwargs):
+        self._tool_tip_text = text

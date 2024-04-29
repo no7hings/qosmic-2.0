@@ -18,7 +18,7 @@ class W(prx_widgets.PrxBaseWindow):
         g.set_item_size(96, 20)
 
         for i in range(10):
-            i_item = prx_widgets.PrxPressItem()
+            i_item = prx_widgets.PrxPressButton()
             i_item.set_name(str(i).zfill(4))
             g.add_widget(i_item)
 
@@ -30,7 +30,7 @@ class W(prx_widgets.PrxBaseWindow):
         g.set_item_size(200, 20)
 
         for i in range(10):
-            i_item = prx_widgets.PrxPressItem()
+            i_item = prx_widgets.PrxPressButton()
             i_item.set_name(str(i).zfill(4))
             g.add_widget(i_item)
 

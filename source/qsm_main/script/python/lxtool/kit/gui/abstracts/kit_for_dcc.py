@@ -24,7 +24,7 @@ import lxsession.commands as ssn_commands; ssn_commands.execute_hook("dcc-tools/
         self._top_prx_tool_bar = prx_widgets.PrxHToolBar()
         self.add_widget(self._top_prx_tool_bar)
         self._top_prx_tool_bar.set_expanded(True)
-        self._top_prx_tool_bar.set_left_alignment()
+        self._top_prx_tool_bar.set_align_left()
 
         self._switch_tool_box = prx_widgets.PrxHToolBox()
         self._top_prx_tool_bar.add_widget(self._switch_tool_box)
@@ -171,7 +171,7 @@ import lxsession.commands as ssn_commands; ssn_commands.execute_hook("dcc-tools/
                 icon_name = gui_configure.get('icon_name')
                 tool_tip_ = gui_configure.get('tool_tip') or ''
 
-                press_item = prx_widgets.PrxPressItem()
+                press_item = prx_widgets.PrxPressButton()
                 grid_layout_widget.add_widget(press_item)
                 press_item.set_name(name)
                 if icon_name:

@@ -9,7 +9,7 @@ class Root(_base.AbsEntity):
     VariantKey = 'root'
 
     NextEntityQueryClassDict = {
-        _base.EntityTypes.Project: _project.ProjectQuery
+        _base.EntityTypes.Project: _project.ProjectsCache
     }
 
     ROOT = None

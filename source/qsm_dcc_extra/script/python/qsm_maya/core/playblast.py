@@ -2,15 +2,20 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+import lxbasic.storage as bsc_storage
+
 
 class Playblast(object):
     @classmethod
-    def save_snapshot(cls, file_path, size):
-        cmds.playblast(
-            startTime=1,
-            endTime=1,
+    def make_snapshot(cls, file_path, frame, size):
+        file_opt = bsc_storage.StgFileOpt(file_path)
+        if file_opt.get_is_exists() is True:
+            file_opt.do_delete()
+        result = cmds.playblast(
+            startTime=frame,
+            endTime=frame,
             format='image',
-            filename='Z:/projects/QSM_TST/workarea/dev.developing/resource_manager/.snapshot/test',
+            filename=file_opt.get_path_base(),
             sequenceTime=0,
             clearCache=1,
             viewer=0,
@@ -18,7 +23,10 @@ class Playblast(object):
             offScreen=0,
             framePadding=4,
             percent=100,
-            compression='jpg',
+            compression=file_opt.get_format(),
             quality=100,
-            widthHeight=(480, 320),
+            widthHeight=size,
         )
+        results = bsc_storage.StgFileMtdForMultiply.get_exists_unit_paths(result)
+        if results:
+            bsc_storage.StgFileOpt(results[0]).repath_to(file_path)

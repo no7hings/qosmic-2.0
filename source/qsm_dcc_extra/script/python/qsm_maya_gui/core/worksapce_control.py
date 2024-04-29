@@ -62,8 +62,10 @@ class WorkspaceControlOpt(object):
                 initialWidth=width, initialHeight=height,
                 widthProperty='free', heightProperty='free'
             )
+        return self
 
     def to_qt_widget(self):
+        # noinspection PyUnresolvedReferences
         from PySide2 import QtWidgets
 
         # noinspection PyUnresolvedReferences
@@ -79,3 +81,39 @@ class WorkspaceControlOpt(object):
         widget = self.to_qt_widget()
         if widget is not None:
             return widget.layout()
+
+    @classmethod
+    def _test(cls):
+        # noinspection PyUnresolvedReferences
+        from maya import cmds, mel, OpenMayaUI
+        # noinspection PyUnresolvedReferences
+        from shiboken2 import wrapInstance, getCppPointer
+        # noinspection PyUnresolvedReferences
+        from PySide2 import QtWidgets
+
+        width, height = 400, 400
+        control_name = 'lynxi_tool'
+        control_label = 'Lynxi Tool'
+        if cmds.workspaceControl(control_name, query=1, exists=1):
+            cmds.workspaceControl(
+                control_name, edit=1, visible=1, restore=1,
+                initialWidth=width,
+                minimumWidth=height
+            )
+        else:
+            LEcomponent = mel.eval(r'getUIComponentDockControl("Channel Box / Layer Editor", false);')
+            cmds.workspaceControl(
+                control_name,
+                label=control_label, tabToControl=(LEcomponent, -1),
+                initialWidth=width, initialHeight=height,
+                widthProperty='free', heightProperty='free'
+            )
+            parentPtr = OpenMayaUI.MQtUtil.getCurrentParent()
+            parentWidget = wrapInstance(parentPtr, QtWidgets.QWidget)
+            import qsm_gui.proxy.widgets as qsm_prx_widgets
+            p = qsm_prx_widgets.PrxUnitForWorkarea()
+            p.widget.setParent(parentWidget)
+            OpenMayaUI.MQtUtil.addWidgetToMayaLayout(
+                long(getCppPointer(p.widget)[0]), long(parentPtr)
+            )
+        pass

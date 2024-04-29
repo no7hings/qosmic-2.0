@@ -23,6 +23,9 @@ class AdvRigOpt(object):
             self.__dict__['path']
         )
 
+    def is_exists(self):
+        return not not self.get_root()
+
     def get_root(self):
         _ = cmds.ls('|{}:*'.format(self.namespace), long=1)
         if _:

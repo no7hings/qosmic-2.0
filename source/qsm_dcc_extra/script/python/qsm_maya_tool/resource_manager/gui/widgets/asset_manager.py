@@ -587,7 +587,12 @@ class _GuiRigReferenceOpt(
         self._reference_button = qt_widgets.QtPressButton()
         self._prx_input_for_asset.add_widget(self._reference_button)
         self._reference_button._set_name_text_(
-            gui_core.GuiUtil.choice_label(
+            gui_core.GuiUtil.choice_name(
+                self._window._language, self._session.configure.get('build.buttons.reference')
+            )
+        )
+        self._reference_button._set_tool_tip_text_(
+            gui_core.GuiUtil.choice_tool_tip(
                 self._window._language, self._session.configure.get('build.buttons.reference')
             )
         )
@@ -761,10 +766,12 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
         s_a_0 = prx_widgets.PrxVScrollArea()
         self._tab_view.add_widget(
             s_a_0,
-            name=gui_core.GuiUtil.choice_label(
+            name=gui_core.GuiUtil.choice_name(
                 self._language, self._session.configure.get('build.tabs.rig')
             ),
-            icon_name_text='rig',
+            tool_tip=gui_core.GuiUtil.choice_tool_tip(
+                self._language, self._session.configure.get('build.tabs.rig')
+            )
         )
 
         # rig reference
@@ -804,13 +811,16 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
         )
         # rig utility
         self._rig_utility_options_node = prx_widgets.PrxNode(
-            gui_core.GuiUtil.choice_label(
+            gui_core.GuiUtil.choice_name(
                 self._language, self._session.configure.get('build.options.rig_utility')
             )
         )
         self._prx_rig_tab_group.add_widget(
             self._rig_utility_options_node,
-            name=gui_core.GuiUtil.choice_label(
+            name=gui_core.GuiUtil.choice_name(
+                self._language, self._session.configure.get('build.tag-groups.utility')
+            ),
+            tool_tip=gui_core.GuiUtil.choice_tool_tip(
                 self._language, self._session.configure.get('build.tag-groups.utility')
             )
         )
@@ -841,13 +851,16 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
         self._rig_frame_range_port = self._rig_utility_options_node.get_port('scene.frame_range')
         # rig motion
         self._rig_motion_options_node = prx_widgets.PrxNode(
-            gui_core.GuiUtil.choice_label(
+            gui_core.GuiUtil.choice_name(
                 self._language, self._session.configure.get('build.options.rig_extend')
             )
         )
         self._prx_rig_tab_group.add_widget(
             self._rig_motion_options_node,
-            name=gui_core.GuiUtil.choice_label(
+            name=gui_core.GuiUtil.choice_name(
+                self._language, self._session.configure.get('build.tag-groups.extend')
+            ),
+            tool_tip=gui_core.GuiUtil.choice_tool_tip(
                 self._language, self._session.configure.get('build.tag-groups.extend')
             )
         )
@@ -881,9 +894,9 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
             with self.gui_progressing(maximum=len(self._skin_proxy_load_args_array), label='load skin proxies') as g_p:
                 for i_namespace, i_cache_file in self._skin_proxy_load_args_array:
                     g_p.do_update()
-                    qsm_mya_rig_scripts.AdvSkinProxyGenerate(i_namespace).load_cache(
-                        i_cache_file
-                    )
+                    i_generate = qsm_mya_rig_scripts.AdvSkinProxyGenerate(i_namespace)
+                    if i_generate.is_rig_exists() is True:
+                        i_generate.load_cache(i_cache_file)
 
     def do_dcc_load_skin_proxies_by_selection(self):
         if self._load_skin_proxy_button.get_is_started() is False:
@@ -918,9 +931,11 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
             with self.gui_progressing(maximum=len(self._skin_proxy_load_args_array), label='load dynamic gpus') as g_p:
                 for i_namespace, i_cache_file, i_start_frame, i_end_frame in self._dynamic_gpu_load_args_array:
                     g_p.do_update()
-                    qsm_mya_rig_scripts.DynamicGpuCacheGenerate(i_namespace).load_cache(
-                        i_cache_file
-                    )
+                    i_generate = qsm_mya_rig_scripts.DynamicGpuCacheGenerate(i_namespace)
+                    if i_generate.is_rig_exists() is True:
+                        qsm_mya_rig_scripts.DynamicGpuCacheGenerate(i_namespace).load_cache(
+                            i_cache_file
+                        )
 
     def do_dcc_load_dynamic_gpus_bt_selection(self):
         if self._load_dynamic_gpu_button.get_is_started() is False:

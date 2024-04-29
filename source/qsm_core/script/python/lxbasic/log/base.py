@@ -20,7 +20,7 @@ from . import bridge as _bridge
 
 class LogBase(object):
     LOG_ROOT_KEY = 'QSM_LOG_ROOT'
-    DATA_TAG_FORMAT = '%Y_%m%d'
+    DATE_TAG_FORMAT = '%Y_%m%d'
 
     @staticmethod
     def auto_string(text):
@@ -50,7 +50,7 @@ class LogBase(object):
     def get_date_tag(cls):
         timestamp = time.time()
         return time.strftime(
-            cls.DATA_TAG_FORMAT,
+            cls.DATE_TAG_FORMAT,
             time.localtime(timestamp)
         )
 
@@ -133,7 +133,7 @@ class Log(object):
 
     TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
-    DATA_TAG_FORMAT = '%Y_%m%d'
+    DATE_TAG_FORMAT = '%Y_%m%d'
 
     DEBUG = False
     TEST = False

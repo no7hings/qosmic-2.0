@@ -12,7 +12,7 @@ class W(prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
 
-        b = prx_widgets.PrxPressItem()
+        b = prx_widgets.PrxPressButton()
         self.add_button(b)
         b.set_name('Test')
 

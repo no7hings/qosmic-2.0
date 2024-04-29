@@ -252,10 +252,18 @@ class GuiQtUtil(object):
 
         if 'action_tip' in kwargs:
             action_tip = kwargs['action_tip']
+            if isinstance(action_tip, six.string_types):
+                texts = action_tip.split('\n')
+            elif isinstance(action_tip, (tuple, list)):
+                texts = action_tip
+            else:
+                raise RuntimeError()
             css += '<p><hr></p>\n'
-            action_tip = action_tip.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
-            action_tip = cls.generate_tool_tip_action_css(action_tip)
-            css += '<p class="no_wrap">{}</p>\n'.format(action_tip)
+            for i_text in texts:
+                i_text = bsc_core.auto_string(i_text)
+                i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
+                i_text = cls.generate_tool_tip_action_css(i_text)
+                css += '<p class="no_wrap">{}</p>\n'.format(i_text)
 
         css += '</body>\n</html>'
         return css

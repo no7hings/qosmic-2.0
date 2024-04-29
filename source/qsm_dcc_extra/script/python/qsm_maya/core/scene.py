@@ -3,6 +3,8 @@ import os
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+import lxbasic.storage as bsc_storage
+
 from . import time_ as _time
 
 from . import scene_file as _scene_file
@@ -28,3 +30,12 @@ class Scene(
             dragKill=drag_kill,
             alpha=alpha
         )
+
+    @classmethod
+    def make_snapshot_auto(cls):
+        file_path = cls.get_current_file_path()
+        file_opt = bsc_storage.StgFileOpt(file_path)
+        directory_path = file_opt.get_directory_path()
+        name_base = file_opt.get_name_base()
+        image_file_path = '{}/.snapshot/{}.jpg'.format(directory_path, name_base)
+        cls.make_snapshot(image_file_path, cls.get_current_frame(), (480, 240))

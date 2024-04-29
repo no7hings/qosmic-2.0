@@ -47,6 +47,9 @@ class QtTreeWidgetItem(
         self._get_view_().update()
 
     ValidationStatus = gui_core.GuiValidationStatus
+    ProcessStatus = gui_core.GuiProcessStatus
+
+    Rgba = gui_core.GuiRgba
 
     def __init__(self, *args, **kwargs):
         super(QtTreeWidgetItem, self).__init__(*args, **kwargs)
@@ -282,6 +285,33 @@ class QtTreeWidgetItem(
         elif status in {self.ValidationStatus.Locked, self.ValidationStatus.Unwritable}:
             color = gui_qt_core.QtColors.TextLock
             font.setItalic(True)
+        else:
+            raise TypeError()
+
+        self.setFont(column, font)
+        if column == 0:
+            c = self.treeWidget().columnCount()
+            for i in range(c):
+                self.setForeground(i, QtGui.QBrush(color))
+        else:
+            self.setForeground(column, QtGui.QBrush(color))
+
+    def _set_process_status_(self, status, column=0):
+        font = gui_qt_core.GuiQtFont.generate(size=8)
+        if status in {self.ProcessStatus.Unknown}:
+            color = gui_qt_core.QtColors.Text
+        elif status in {self.ProcessStatus.Waiting}:
+            color = QtGui.QColor(*self.Rgba.Orange)
+        elif status in {self.ProcessStatus.Started, self.ProcessStatus.Running}:
+            color = QtGui.QColor(*self.Rgba.Blue)
+        elif status in {self.ProcessStatus.Suspended}:
+            color = QtGui.QColor(*self.Rgba.Yellow)
+        elif status in {self.ProcessStatus.Failed, self.ProcessStatus.Error, self.ProcessStatus.Killed}:
+            color = QtGui.QColor(*self.Rgba.Red)
+        elif status in {self.ProcessStatus.Completed, self.ProcessStatus.Finished}:
+            color = QtGui.QColor(*self.Rgba.Green)
+        elif status in {self.ProcessStatus.Stopped}:
+            color = QtGui.QColor(*self.Rgba.DarkGray)
         else:
             raise TypeError()
 

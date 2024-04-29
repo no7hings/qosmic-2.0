@@ -9,7 +9,7 @@ from . import raw as _raw
 class TimeExtraMtd(object):
     TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
     TIME_TAG_FORMAT = '%Y_%m%d_%H%M_%S_%f'
-    DATA_TAG_FORMAT = '%Y_%m%d'
+    DATE_TAG_FORMAT = '%Y_%m%d'
 
     @classmethod
     def generate_time_tag_36(cls, multiply=1):
@@ -51,7 +51,7 @@ class TimePrettifyMtd(object):
     ]
 
     @classmethod
-    def to_prettify_by_timestamp(cls, timestamp, language=0):
+    def to_prettify_by_timestamp(cls, timestamp, language=1):
         if isinstance(timestamp, float):
             return cls.to_prettify_by_timetuple(
                 time.localtime(timestamp),
@@ -59,7 +59,7 @@ class TimePrettifyMtd(object):
             )
 
     @classmethod
-    def to_prettify_by_time_tag(cls, time_tag, language=0):
+    def to_prettify_by_time_tag(cls, time_tag, language=1):
         year = int(time_tag[:4])
         month = int(time_tag[5:7])
         day = int(time_tag[7:9])
@@ -81,7 +81,7 @@ class TimePrettifyMtd(object):
             )
 
     @classmethod
-    def to_prettify_by_timetuple(cls, timetuple, language=0):
+    def to_prettify_by_timetuple(cls, timetuple, language=1):
         year, month, day, hour, minute, second, week, count_day, is_dst = timetuple
         timetuple_cur = time.localtime(time.time())
         year_cur, month_cur, day_cur, hour_cur, minute_cur, second_cur, week_cur, count_day_cur, is_dst_cur = timetuple_cur
@@ -98,13 +98,10 @@ class TimePrettifyMtd(object):
                     # same day
                     if day_cur == day:
                         time_str = [
-                            u'{}点{}分{}秒'.format(str(hour).zfill(2), str(minute).zfill(2), str(second).zfill(2)),
-                            '{}:{}:{}'.format(str(hour).zfill(2), str(minute).zfill(2), str(second).zfill(2))
+                            u'今天{}点{}分{}秒'.format(str(hour).zfill(2), str(minute).zfill(2), str(second).zfill(2)),
+                            'today {}:{}:{}'.format(str(hour).zfill(2), str(minute).zfill(2), str(second).zfill(2))
                         ][language]
                         return time_str
-                    elif day_cur == day+1:
-                        sub_str = [u'昨天', 'Yesterday'][language]
-                        return sub_str
                     return week_str
             #
             month_str = cls.get_month(month, language)
@@ -114,10 +111,7 @@ class TimePrettifyMtd(object):
             return '{} {}'.format(day_str, month_str)
         #
         year_str = cls.get_year(year, language)
-        month_str = cls.get_month(month, language)
-        if language == 0:
-            return u'{}{}'.format(year_str, month_str)
-        return '{} {}'.format(month_str, year_str)
+        return year_str
 
     @classmethod
     def get_year(cls, year, language):

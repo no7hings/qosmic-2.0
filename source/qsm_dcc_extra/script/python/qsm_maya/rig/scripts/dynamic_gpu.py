@@ -248,6 +248,9 @@ class DynamicGpuCacheGenerate(object):
         _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME), long=1)
         return not not _
 
+    def is_rig_exists(self):
+        return self._rig.is_exists()
+
     def generate_args(self, directory_path, start_frame, end_frame):
         file_path = '{}/source.ma'.format(directory_path)
         cache_file_path = '{}/gpu.ma'.format(directory_path)

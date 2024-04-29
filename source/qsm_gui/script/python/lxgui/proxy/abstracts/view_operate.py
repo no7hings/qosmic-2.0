@@ -29,6 +29,8 @@ class AbsGuiPrxTreeViewOpt(object):
         self._item_dict = self._prx_tree_view._item_dict
         self._keys = set()
 
+        self._index_thread_batch = 0
+
         self._namespace = namespace
 
     def register_occurrence(self, key, path):

@@ -20,57 +20,71 @@ rsv-match-condition: 'branch=asset'
 build:
     options:
         rig_utility:
-            label: 'skin proxy & dynamic GPU'
-            label_chs: '简模代理 & 动态GPU'
+            name: 'skin proxy & dynamic GPU'
+            name_chs: '简模代理 & 动态GPU'
             parameters:
                 selection_scheme:
                     widget: capsule_string
-                    label_chs: '选择方案'
+                    name_chs: '选择方案'
                     options: ['root', 'geometry', 'deformation', 'motion']
-                    labels_chs: ['根组', '模型', '骨骼', '控制器']
+                    names_chs: ['根组', '模型', '骨骼', '控制器']
                     default: 'motion'
-                    tool_tip: '...'
+                    tool_tip: 'choose a selection scheme'
+                    tool_tip_chs:
+                        |-
+                        设置一个选择方案
+                            根组：选择整个绑定组
+                            模型：选中模型组
+                            骨骼：选择骨骼组
+                            控制器：选中控制器组
 
                 scene:
                     widget: group
-                    label_chs: '场景'
+                    name_chs: '场景'
 
                 scene/camera:
                     widget: enumerate
-                    label_chs: '相机'
+                    name_chs: '相机'
                     value: ['None']
                     tool_tip: '...'
 
                 scene/fps:
                     widget: capsule_string
-                    label_chs: '帧率'
+                    name_chs: '帧率'
                     options: ['24_fps', '30_fps']
                     default: '24_fps'
-                    tool_tip: '...'
+                    tool_tip: 'show scene FPS'
+                    tool_tip_chs: '显示当前场景的帧率'
                     lock: True
 
                 scene/frame_scheme:
                     widget: capsule_string
-                    label_chs: '帧方案'
+                    name_chs: '帧方案'
                     options: ['render_settings', 'time_slider', 'frame_range']
-                    labels_chs: ['渲染设置', '时间轴', '帧范围']
+                    names_chs: ['渲染设置', '时间轴', '帧范围']
                     default: 'time_slider'
-                    tool_tip: '...'
+                    tool_tip: 'choose a frame scheme'
+                    tool_tip_chs:
+                        |-
+                        设置一个帧方案:
+                            渲染设置：从渲染自动设置读取帧范围
+                            时间轴：从时间轴自动读取帧范围
+                            帧范围：在帧范围中输入
 
                 scene/frame_range:
                     widget: integer2
-                    label_chs: '帧范围'
+                    name_chs: '帧范围'
                     value: [0, 24]
                     tool_tip: '...'
                     lock: True
 
                 skin_proxy:
                     widget: group
-                    label_chs: '简模代理'
+                    name_chs: '简模代理'
 
                 skin_proxy/load_skin_proxy:
                     widget: sub_process_button
-                    label_chs: '加载简模代理'
+                    name_chs: '加载简模代理'
                     value: ''
                     icon: 'tool/maya/create-container'
                     tool_tip:
@@ -83,18 +97,18 @@ build:
 
                 skin_proxy/remove_skin_proxy:
                     widget: button
-                    label_chs: '移除简模代理'
+                    name_chs: '移除简模代理'
                     value: ''
                     icon: 'tool/maya/delete'
                     tool_tip: '...'
 
                 dynamic_gpu:
                     widget: group
-                    label_chs: '动态GPU'
+                    name_chs: '动态GPU'
 
                 dynamic_gpu/load_dynamic_gpu:
                     widget: sub_process_button
-                    label_chs: '加载动态GPU'
+                    name_chs: '加载动态GPU'
                     value: ''
                     icon: 'tool/maya/create-container'
                     tool_tip:
@@ -107,53 +121,71 @@ build:
 
                 dynamic_gpu/remove_dynamic_gpu:
                     widget: button
-                    label_chs: '移除动态GPU'
+                    name_chs: '移除动态GPU'
                     value: ''
                     icon: 'tool/maya/delete'
                     tool_tip: '...'
 
         rig_extend:
-            label: 'motion'
-            label_chs: '运动'
+            name: 'motion'
+            name_chs: '运动'
             parameters:
                 animation_transfer:
                     widget: group
-                    label_chs: '动画传递'
+                    name_chs: '动画传递'
 
                 animation_transfer/force:
                     widget: boolean
-                    label_chs: '强制'
+                    name_chs: '强制'
                     value: False
                     tool_tip: '...'
 
                 animation_transfer/frame_offset:
                     widget: integer
-                    label_chs: '帧偏移'
+                    name_chs: '帧偏移'
                     value: 0
                     tool_tip: '...'
 
                 animation_transfer/transfer:
                     widget: button
-                    label_chs: '传递'
+                    name_chs: '传递'
                     value: ''
                     icon: 'tool/maya/transfer-motion'
                     tool_tip: '...'
 
     buttons:
         reference:
-            label: 'Reference'
-            label_chs: '引用'
+            name: 'Reference'
+            name_chs: '引用'
+
+            tool_tip:
+                |-
+                Press reference current asset's rig
+            tool_tip_chs:
+                |-
+                点击引用当前资产的绑定
+                    按钮为灰色，代表当前资产无绑定文件
+                    前面的数字框可以输入引用数量，鼠标滚轮可以快速增加或减少数量
 
     tabs:
         rig:
-            label: 'Rig Resources'
-            label_chs: '绑定资源'
+            name: 'Rig Resources'
+            name_chs: '绑定资源'
+
+            tool_tip: 'Include all tools for rig'
+            tool_tip_chs: '包含所有跟绑定相关的工具'
 
     tag-groups:
         utility:
-            label: 'Utility'
-            label_chs: '通用'
+            name: 'Utility'
+            name_chs: '通用'
+
+            tool_tip: 'Include all tool for rig as utility, etc. skin proxy, dynamic GPU'
+            tool_tip_chs: '包含所有跟绑定相关的通用工具, 如：建模代理，动态GPU等'
 
         extend:
-            label: 'Extend'
-            label_chs: '扩展'
+            name: 'Extend'
+            name_chs: '扩展'
+
+            tool_tip: 'Include all tool for rig as extend, etc. animation transfer'
+            tool_tip_chs: '包含所有跟绑定相关的扩展工具，如：动画传递等'

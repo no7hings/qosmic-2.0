@@ -343,12 +343,12 @@ class PnlRscTextureAddTool(prx_widgets.PrxSessionWindow):
         h_s.add_widget(self._node_prx_tree_view)
         h_s.set_fixed_size_at(0, 480)
 
-        self._match_button = prx_widgets.PrxPressItem()
+        self._match_button = prx_widgets.PrxPressButton()
         self._match_button.set_name('match')
         self.add_button(self._match_button)
         self._match_button.connect_press_clicked_to(self.gui_refresh)
 
-        self._add_button = prx_widgets.PrxPressItem()
+        self._add_button = prx_widgets.PrxPressButton()
         self._add_button.set_name('add')
         self.add_button(self._add_button)
         self._add_button.connect_press_clicked_to(self.apply_fnc)

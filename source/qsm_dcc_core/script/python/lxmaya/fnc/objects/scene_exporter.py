@@ -247,7 +247,7 @@ class FncExporterForPreview(
         ext = output_file.ext
         compression = ext[1:]
         image_width, image_height = size
-        camera, camera_shape = FncExporterForCameraYml._set_camera_create_(root, persp_view)
+        camera, camera_shape = _camera_exporter.FncExporterForCameraYml._set_camera_create_(root, persp_view)
         #
         render_option = mya_dcc_objects.RenderOption()
         start_frame, end_frame = frame

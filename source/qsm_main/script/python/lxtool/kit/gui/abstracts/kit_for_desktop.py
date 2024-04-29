@@ -325,7 +325,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
         tool_bar = prx_widgets.PrxHToolBar()
         layer_widget.add_widget(tool_bar.widget)
         tool_bar.set_expanded(True)
-        button = prx_widgets.PrxPressItem()
+        button = prx_widgets.PrxPressButton()
         tool_bar.add_widget(button)
         button.set_name('Apply')
         button.connect_press_clicked_to(
@@ -352,7 +352,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
         tool_bar = prx_widgets.PrxHToolBar()
         layer_widget.add_widget(tool_bar.widget)
         tool_bar.set_expanded(True)
-        button = prx_widgets.PrxPressItem()
+        button = prx_widgets.PrxPressButton()
         tool_bar.add_widget(button)
         button.set_name('Apply')
         button.connect_press_clicked_to(
@@ -379,7 +379,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
         tool_bar = prx_widgets.PrxHToolBar()
         layer_widget.add_widget(tool_bar.widget)
         tool_bar.set_expanded(True)
-        button = prx_widgets.PrxPressItem()
+        button = prx_widgets.PrxPressButton()
         tool_bar.add_widget(button)
         button.set_name('Apply')
         button.connect_press_clicked_to(
@@ -488,7 +488,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
         top_tool_bar = prx_widgets.PrxHToolBar()
         l_0.addWidget(top_tool_bar._qt_widget)
         top_tool_bar.set_expanded(True)
-        top_tool_bar.set_left_alignment()
+        top_tool_bar.set_align_left()
 
         if tool_data:
             tool_box = prx_widgets.PrxHToolBoxNew()

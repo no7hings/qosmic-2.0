@@ -1389,7 +1389,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
         v_qt_layout.addWidget(self._top_tool_bar._qt_widget)
         self._top_tool_bar.set_name('guide')
         self._top_tool_bar.set_expanded(True)
-        self._top_tool_bar.set_left_alignment()
+        self._top_tool_bar.set_align_left()
         #   guide
         self._guide_tool_box = prx_widgets.PrxHToolBox()
         self._top_tool_bar.add_widget(self._guide_tool_box)

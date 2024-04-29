@@ -198,7 +198,7 @@ class AbsEntity(object):
         return _.get(name)
 
 
-class AbsEntityQuery(object):
+class AbsEntitiesCache(object):
     EntityClass = None
 
     def __init__(self, root, variants):

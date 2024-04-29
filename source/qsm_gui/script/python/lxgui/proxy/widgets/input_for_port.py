@@ -25,6 +25,8 @@ from ...qt.widgets import button as gui_qt_wgt_button
 
 from ...qt.widgets import input as gui_qt_wgt_input
 
+from ...qt.widgets import input_for_capsule as gui_qt_wgt_input_for_capsule
+
 from ...qt.widgets import input_for_storage as gui_qt_wgt_input_for_storage
 # proxy abstracts
 from .. import abstracts as gui_prx_abstracts
@@ -1281,7 +1283,7 @@ class PrxInputAsValidationButton(_AbsPrxInput):
 #   capsule
 class PrxInputAsCapsule(_AbsPrxInput):
     QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input.QtInputAsCapsule
+    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input_for_capsule.QtInputAsCapsule
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsCapsule, self).__init__(*args, **kwargs)

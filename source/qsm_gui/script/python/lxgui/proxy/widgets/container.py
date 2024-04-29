@@ -12,6 +12,8 @@ from ...qt.widgets import scroll as gui_qt_wgt_scroll
 # proxy abstracts
 from .. import abstracts as gui_prx_abstracts
 
+from . import container_for_box as _container_for_box
+
 
 class AbsPrxToolGroup(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_wgt_utility.QtLine
@@ -219,6 +221,18 @@ class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
         self._qt_view.setVisible(self.get_is_expanded())
         self._qt_head._refresh_expand_()
 
+    def create_tool_box(self, name, expanded=True, visible=True, size_mode=0, insert_args=None):
+        tool_box = _container_for_box.PrxHToolBox()
+        if isinstance(insert_args, int):
+            self.insert_widget_at(insert_args, tool_box)
+        else:
+            self.add_widget(tool_box)
+        tool_box.set_name(name)
+        tool_box.set_expanded(expanded)
+        tool_box.set_visible(visible)
+        tool_box.set_size_mode(size_mode)
+        return tool_box
+
     def set_name(self, name):
         self._qt_head._set_name_text_(
             'tool bar for "{}"'.format(name)
@@ -266,13 +280,13 @@ class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
     def set_bottom_direction(self):
         self._qt_head._set_expand_direction_(self._qt_head.ExpandDirection.BottomToTop)
 
-    def set_alignment_center(self):
+    def set_align_center(self):
         self._qt_layout_0.setAlignment(gui_qt_core.QtCore.Qt.AlignHCenter)
 
-    def set_left_alignment(self):
+    def set_align_left(self):
         self._qt_layout_0.setAlignment(gui_qt_core.QtCore.Qt.AlignLeft)
 
-    def set_right_alignment(self):
+    def set_align_right(self):
         self._qt_layout_0.setAlignment(gui_qt_core.QtCore.Qt.AlignRight)
 
     def set_border_radius(self, radius):

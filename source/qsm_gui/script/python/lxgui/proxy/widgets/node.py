@@ -517,8 +517,8 @@ class PrxNode(gui_prx_abstracts.AbsPrxWidget):
         ui_language = gui_core.GuiUtil.get_language()
         #
         if ui_language == 'chs':
-            if 'label_chs' in variants:
-                label_ = variants['label_chs']
+            if 'name_chs' in variants:
+                label_ = variants['name_chs']
             if 'tool_tip_chs' in variants:
                 tool_tip_ = variants['tool_tip_chs']
         #
@@ -711,11 +711,11 @@ class PrxNode(gui_prx_abstracts.AbsPrxWidget):
             )
             #
             value_options = variants.get('options')
-            value_labels = variants.get('labels')
+            value_names = variants.get('labels')
             if ui_language == 'chs':
-                if 'labels_chs' in variants:
-                    value_labels = variants['labels_chs']
-            port.set_options(value_options, value_labels)
+                if 'names_chs' in variants:
+                    value_names = variants['names_chs']
+            port.set_options(value_options, value_names)
             #
             value_default = variants.get('default')
             if value_default is not None:
@@ -734,11 +734,11 @@ class PrxNode(gui_prx_abstracts.AbsPrxWidget):
                 node_widget=self.widget
             )
             value_options = variants.get('options')
-            value_labels = variants.get('labels')
+            value_names = variants.get('labels')
             if ui_language == 'chs':
-                if 'labels_chs' in variants:
-                    value_labels = variants['labels_chs']
-            port.set_options(value_options, value_labels)
+                if 'names_chs' in variants:
+                    value_names = variants['names_chs']
+            port.set_options(value_options, value_names)
             #
             value_default = variants.get('default')
             if value_default is not None:

@@ -25,11 +25,13 @@ from ...qt.widgets import view_for_list as gui_qt_wgt_view_for_list
 # proxy abstracts
 from .. import abstracts as gui_prx_abstracts
 # proxy widgets
-from . import utility as gui_prx_wdt_utility
+from . import utility as _utility
 
-from . import item as gui_prx_wgt_item
+from . import item as _item
 
-from . import container as gui_prx_wgt_container
+from . import container as _container
+
+from . import container_for_box as _container_for_box
 
 
 class PrxListView(
@@ -51,9 +53,9 @@ class PrxListView(
         self._qt_layout_0.setContentsMargins(4, 4, 4, 4)
         self._qt_layout_0.setSpacing(2)
         #
-        self._prx_top_tool_bar = gui_prx_wgt_container.PrxHToolBar()
+        self._prx_top_tool_bar = _container.PrxHToolBar()
         self._prx_top_tool_bar.set_name('top')
-        self._prx_top_tool_bar.set_left_alignment()
+        self._prx_top_tool_bar.set_align_left()
         self._qt_layout_0.addWidget(self._prx_top_tool_bar.widget)
         self._prx_top_tool_bar.set_border_radius(1)
         # check
@@ -95,7 +97,7 @@ class PrxListView(
         # filter
         self._prx_filter_tool_box = self.create_top_tool_box('filter', True, True, 1)
         #
-        self._prx_filer_bar_0 = gui_prx_wdt_utility.PrxFilterBar()
+        self._prx_filer_bar_0 = _utility.PrxFilterBar()
         self._prx_filter_tool_box.add_widget(self._prx_filer_bar_0)
         # add custom menu
         self._qt_view = self.QT_VIEW_CLS()
@@ -143,7 +145,7 @@ class PrxListView(
         self._prx_top_tool_bar.set_visible(False)
 
     def create_top_tool_box(self, name, expanded=True, visible=True, size_mode=0, insert_args=None):
-        tool_box = gui_prx_wdt_utility.PrxHToolBox()
+        tool_box = _container_for_box.PrxHToolBox()
         if isinstance(insert_args, int):
             self._prx_top_tool_bar.insert_widget_at(insert_args, tool_box)
         else:
@@ -189,6 +191,9 @@ class PrxListView(
     def get_check_tool_box(self):
         return self._prx_check_tool_box
 
+    def get_mode_switch_tool_box(self):
+        return self._prx_mode_switch_tool_box
+
     def get_scale_switch_tool_box(self):
         return self._prx_scale_switch_tool_box
 
@@ -203,7 +208,7 @@ class PrxListView(
         for i_key, i_enable, i_scale in [
             ('small', False, .75), ('medium', True, 1.0), ('large', False, 1.25), ('super', False, 1.5)
         ]:
-            i_tool = gui_prx_wdt_utility.PrxToggleButton()
+            i_tool = _utility.PrxToggleButton()
             self._prx_scale_switch_tool_box.add_widget(i_tool)
             # i_tool._qt_widget._set_size_(24, 24)
             # i_tool._qt_widget._set_icon_frame_draw_size_(24, 24)
@@ -228,7 +233,7 @@ class PrxListView(
         for i_key, i_mode in [
             ('number', 0), ('name', 1)
         ]:
-            i_tool = gui_prx_wdt_utility.PrxToggleButton()
+            i_tool = _utility.PrxToggleButton()
             self._prx_sort_switch_tool_box.add_widget(i_tool)
             # i_tool._qt_widget._set_size_(24, 24)
             # i_tool._qt_widget._set_icon_frame_draw_size_(24, 24)
@@ -305,6 +310,10 @@ class PrxListView(
         self._qt_view._set_item_name_frame_size_(w, h)
         self._qt_view._set_item_name_size_(w-4, h-4)
 
+    def set_item_image_frame_size(self, w, h):
+        self._qt_view._set_item_image_frame_size_(w, h)
+        self._qt_view._set_item_image_size_(w-4, h-4)
+
     def set_item_name_size(self, w, h):
         self._qt_view._set_item_name_size_(w, h)
 
@@ -318,14 +327,14 @@ class PrxListView(
         self.view._set_item_image_frame_draw_enable_(boolean)
 
     def create_item(self, *args, **kwargs):
-        prx_item_widget = gui_prx_wgt_item.PrxListItemWidget()
+        prx_item_widget = _item.PrxListItemWidget()
         prx_item_widget.set_view(self)
         self.view._add_item_widget_(prx_item_widget.widget, **kwargs)
         return prx_item_widget
 
     # noinspection PyUnusedLocal
     def create_item_widget(self, *args, **kwargs):
-        prx_item_widget = gui_prx_wgt_item.PrxListItemWidget()
+        prx_item_widget = _item.PrxListItemWidget()
         prx_item_widget.set_view(self)
         self.view._add_item_widget_(prx_item_widget.widget, **kwargs)
         return prx_item_widget

@@ -185,6 +185,8 @@ class QtHTabGroup(
             tab_item.set_name(kwargs['name'])
         if 'icon_name_text' in kwargs:
             tab_item.set_icon_text(kwargs['name'])
+        if 'tool_tip' in kwargs:
+            tab_item.set_tool_tip(kwargs['tool_tip'])
 
         self._refresh_widget_all_()
 
@@ -222,12 +224,15 @@ class QtHTabGroup(
             key = self._tab_item_stack.get_key_at(self._index_hover)
             if key is None:
                 title = self._tab_item_stack.get_name_at(self._index_hover)
+                tool_tip = self._tab_item_stack.get_tool_tip_at(self._index_hover)
             else:
-                title = key
+                title = 'N/a'
+                tool_tip = 'N/a'
 
             css = gui_qt_core.GuiQtUtil.generate_tool_tip_css(
                 title,
-                [
+                content=tool_tip,
+                action_tip=[
                     '"LMB-click" to show this page',
                     '"MMB-wheel" to scroll to other page',
                     '"RMB-click" to show more actions for this page',

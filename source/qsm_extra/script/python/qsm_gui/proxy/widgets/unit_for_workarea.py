@@ -1,5 +1,9 @@
 # coding:utf-8
+import collections
+
 import copy
+
+import lxbasic.content as bsc_content
 
 import lxbasic.core as bsc_core
 
@@ -38,7 +42,7 @@ class _GuiDirectoryOpt(
             '{location}/{entity}/workarea/{step}.{task}'
         )
         self._file_ptn_opt = bsc_core.PtnStgParseOpt(
-            '{location}/{entity}/workarea/{step}.{task}/{task_extra}/{entity}.{step}.{task}.{task_extra}.{version}{ext}'
+            '{location}/{entity}/workarea/{step}.{task}/{task_extra}/{entity}.{step}.{task}.{task_extra}.v{version}{ext}'
         )
 
         self._index_thread_batch = 0
@@ -146,6 +150,7 @@ class _GuiDirectoryOpt(
     def gui_add_next_directories(self, directory_path):
         directory_opt = bsc_storage.StgDirectoryOpt(directory_path)
         directory_opts = directory_opt.get_directories()
+        # sort result
         directory_opts.sort(key=lambda x: bsc_core.RawTextMtd.to_number_embedded_args(x.path))
         for i_directory_opt in directory_opts:
             self.gui_add_directory(i_directory_opt)
@@ -210,10 +215,13 @@ class _GuiDirectoryOpt(
 
             ptn_opt = self._file_ptn_opt.update_variants_to(**variants)
             matches = ptn_opt.get_matches()
+            matches.reverse()
             if matches:
                 for i_variants in matches:
                     i_file_path = i_variants['result']
+                    i_properties = bsc_content.NodeProperties(i_variants)
                     i_file_opt = bsc_storage.StgFileOpt(i_file_path)
+                    i_file_opt.properties = i_properties
                     list_.append(i_file_opt)
 
         return list_
@@ -227,13 +235,15 @@ class _GuiFileOpt(
         super(_GuiFileOpt, self).__init__(window, session)
         self._init_list_view_as_file_opt_(prx_list_view, self.DCC_NAMESPACE)
         
-        self._file_frame_size = 120, 125
-        self._item_name_frame_size = 120, 45
-        self._prx_list_view.set_item_frame_size_basic(*self._file_frame_size)
+        self._item_frame_size = 210, 137
+        self._item_image_frame_size = 210, 105
+        self._item_name_frame_size = 16, 16
+        self._prx_list_view.set_item_frame_size_basic(*self._item_frame_size)
+        self._prx_list_view.set_item_image_frame_size(*self._item_image_frame_size)
         self._prx_list_view.set_item_name_frame_size(*self._item_name_frame_size)
         self._prx_list_view.set_item_icon_frame_draw_enable(False)
         self._prx_list_view.set_item_name_frame_draw_enable(False)
-        self._prx_list_view.set_item_names_draw_range([None, 1])
+        self._prx_list_view.set_item_names_draw_range([None, 2])
         self._prx_list_view.set_item_image_frame_draw_enable(False)
         self._prx_list_view.set_selection_use_multiply()
 
@@ -250,7 +260,13 @@ class _GuiFileOpt(
             def open_folder_fnc():
                 bsc_storage.StgFileOpt(file_path).open_in_system()
 
+            _name_dict = collections.OrderedDict()
             _location = file_opt.get_path()
+
+            _name_dict['version'] = file_opt.properties.version
+            _name_dict['time'] = bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
+                file_opt.get_modify_timestamp(), language=1
+            )
 
             _menu_data = [
                 (),
@@ -258,18 +274,19 @@ class _GuiFileOpt(
                 ('Open Folder', 'file/open-folder', open_folder_fnc)
             ]
             return [
-                prx_item_widget, _location, _menu_data
+                prx_item_widget, _location, _name_dict, _menu_data,
             ]
 
         def build_fnc_(*args):
-            _prx_item_widget, _location, _menu_data = args[0]
-            if file_opt.get_ext() in ['.jpg', '.png', '.exr', '.hdr', '.tx']:
-                image_file_path, image_sp_cmd = bsc_storage.ImgOiioOptForThumbnail(file_path).generate_thumbnail_create_args(
-                    width=128, ext='.jpg'
+            _prx_item_widget, _location, _name_dict, _menu_data = args[0]
+            _image_path = self.find_image(file_opt)
+            if _image_path is not None:
+                _thumbnail_file_path, _image_shell_script = bsc_storage.ImgOiioOptForThumbnail(_image_path).generate_thumbnail_create_args(
+                    width=240, ext='.jpg'
                 )
-                prx_item_widget.set_image(image_file_path)
-                if image_sp_cmd is not None:
-                    prx_item_widget.set_image_show_args(image_file_path, image_sp_cmd)
+                prx_item_widget.set_image(_thumbnail_file_path)
+                if _image_shell_script is not None:
+                    prx_item_widget.set_image_show_args(_thumbnail_file_path, _image_shell_script)
             else:
                 file_icon = gui_qt_core.GuiQtDcc.get_qt_file_icon(file_path)
                 if file_icon:
@@ -277,13 +294,13 @@ class _GuiFileOpt(
                     prx_item_widget.set_image(
                         pixmap
                     )
-
+            _prx_item_widget.set_name_dict(_name_dict)
             if _menu_data:
                 _prx_item_widget.set_menu_data(
                     _menu_data
                 )
             _prx_item_widget.set_tool_tip(
-                _location
+                file_path
             )
             _prx_item_widget.refresh_widget_force()
 
@@ -291,12 +308,15 @@ class _GuiFileOpt(
         file_name = file_opt.name
 
         if self.gui_is_exists(file_path) is False:
-            file_opt = bsc_storage.StgFileOpt(file_path)
             prx_item_widget = self._prx_list_view.create_item()
             self._item_dict[file_path] = prx_item_widget
-            prx_item_widget.set_names([file_name])
+            version = file_opt.properties.version
+            # prx_item_widget.set_names([version])
             prx_item_widget.set_drag_enable(True)
             prx_item_widget.set_drag_urls([file_opt.get_path()])
+            prx_item_widget.get_item()._update_item_keyword_filter_keys_tgt_(
+                [file_opt.name]
+            )
             prx_item_widget.set_show_fnc(
                 cache_fnc_, build_fnc_
             )
@@ -306,8 +326,12 @@ class _GuiFileOpt(
             return prx_item_widget
         return self.gui_get(file_path)
 
-    def get_image(self, file_opt):
-        pass
+    def find_image(self, file_opt):
+        directory_path = file_opt.get_directory_path()
+        file_name_base = file_opt.get_name_base()
+        image_file_path = '{}/.snapshot/{}.jpg'.format(directory_path, file_name_base)
+        if bsc_storage.StgPathMtd.get_is_file(image_file_path):
+            return image_file_path
 
 
 class PrxUnitForWorkarea(prx_abstracts.AbsPrxWidget):
@@ -320,6 +344,15 @@ class PrxUnitForWorkarea(prx_abstracts.AbsPrxWidget):
             for i_file_opt in file_opts:
                 self._gui_file_opt.gui_add_file(i_file_opt)
 
+    def do_save(self):
+        pass
+
+    def do_save_to(self):
+        pass
+
+    def do_save_new(self):
+        pass
+
     def __init__(self, *args, **kwargs):
         super(PrxUnitForWorkarea, self).__init__(*args, **kwargs)
 
@@ -328,6 +361,8 @@ class PrxUnitForWorkarea(prx_abstracts.AbsPrxWidget):
             gui_qt_core.QtWidgets.QSizePolicy.Expanding
         )
         qt_lot = qt_widgets.QtVBoxLayout(self.widget)
+        qt_lot.setContentsMargins(*[0]*4)
+        qt_lot.setSpacing(2)
         # qt_lot._set_align_top_()
         # label
         self._qt_title_label = qt_widgets.QtTextItem()
@@ -355,7 +390,33 @@ class PrxUnitForWorkarea(prx_abstracts.AbsPrxWidget):
 
         self._gui_file_opt = _GuiFileOpt(self, None, self._file_prx_list_view)
 
-        prx_spt_h.set_fixed_size_at(0, 240)
+        prx_spt_h.set_fixed_size_at(0, 200)
+
+        self._bottom_prx_tool_bar = prx_widgets.PrxHToolBar()
+        qt_lot.addWidget(self._bottom_prx_tool_bar._qt_widget)
+        self._bottom_prx_tool_bar.set_expanded(True)
+        self._bottom_prx_tool_bar.set_align_right()
+
+        self._save_prx_button = prx_widgets.PrxPressButton()
+        self._bottom_prx_tool_bar.add_widget(self._save_prx_button)
+        self._save_prx_button.set_name('Save')
+        self._save_prx_button.set_icon_name('tool/save')
+        self._save_prx_button.set_width(96)
+        self._save_prx_button.connect_press_clicked_to(self.do_save)
+
+        self._save_to_prx_button = prx_widgets.PrxPressButton()
+        self._bottom_prx_tool_bar.add_widget(self._save_to_prx_button)
+        self._save_to_prx_button.set_name('Save to')
+        self._save_to_prx_button.set_icon_name('tool/save-to')
+        self._save_to_prx_button.set_width(96)
+        self._save_to_prx_button.connect_press_clicked_to(self.do_save_to)
+
+        self._save_new_prx_button = prx_widgets.PrxPressButton()
+        self._bottom_prx_tool_bar.add_widget(self._save_new_prx_button)
+        self._save_new_prx_button.set_name('Save New')
+        self._save_new_prx_button.set_icon_name('tool/save-new')
+        self._save_new_prx_button.set_width(96)
+        self._save_new_prx_button.connect_press_clicked_to(self.do_save_new)
 
         self._variants = dict()
         self._title_ptn = '{entity}.{step}.{task}'

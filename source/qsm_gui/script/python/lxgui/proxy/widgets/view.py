@@ -58,6 +58,9 @@ class PrxHSplitter(gui_prx_abstracts.AbsPrxWidget):
     def install_full_size_shortcut(self):
         self._qt_widget._install_full_size_shortcut_()
 
+    def set_visible_at(self, index, boolean):
+        self._qt_widget._set_visible_at_(index, boolean)
+
 
 class PrxVSplitter(PrxHSplitter):
     QT_WIDGET_CLS = gui_qt_wgt_split.QtVSplitter

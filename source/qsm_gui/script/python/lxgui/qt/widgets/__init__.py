@@ -33,6 +33,8 @@ from .container_for_tab import *
 
 from .input import *
 
+from .input_for_capsule import *
+
 from .input_for_storage import *
 
 from .input_for_guide import *

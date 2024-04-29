@@ -488,6 +488,9 @@ class PrxTreeItem(
     def get_status(self, column=0):
         return self._qt_widget._get_status_(column)
 
+    def set_process_status(self, status):
+        self._qt_widget._set_process_status_(status)
+
     def get_view(self):
         qt_tree_view = self._qt_widget.treeWidget()
         return qt_tree_view.gui_proxy

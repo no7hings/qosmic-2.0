@@ -201,7 +201,7 @@ class AbsQtMenuBaseDef(object):
 
 
 class AbsQtStatusBaseDef(object):
-    Status = _gui_core.GuiStatus
+    Status = _gui_core.GuiProcessStatus
     ShowStatus = _gui_core.GuiShowStatus
     ValidationStatus = _gui_core.GuiValidationStatus
     Rgba = _gui_core.GuiRgba
@@ -279,7 +279,7 @@ class AbsQtStatusBaseDef(object):
         #
         self._is_status_enable = False
         #
-        self._status = _gui_core.GuiStatus.Stopped
+        self._status = _gui_core.GuiProcessStatus.Stopped
         #
         self._status_color = _gui_qt_core.QtBackgroundColors.Transparent
         self._hover_status_color = _gui_qt_core.QtBackgroundColors.Transparent
@@ -294,7 +294,7 @@ class AbsQtStatusBaseDef(object):
         #
         self._status = status
         #
-        if status in {_gui_core.GuiStatus.Running}:
+        if status in {_gui_core.GuiProcessStatus.Running}:
             self._widget.setCursor(QtCore.Qt.BusyCursor)
         else:
             self._widget.unsetCursor()
@@ -1350,7 +1350,7 @@ class AbsQtValueBaseDef(object):
         return self._value
 
     # value for choose
-    def _set_value_options_(self, values, labels=None):
+    def _set_value_options_(self, values, names=None):
         if isinstance(values, list):
             if values != self._value_options:
                 self._value_options = values
@@ -1540,10 +1540,12 @@ class AbsQtNameBaseDef(object):
 
     def _set_tool_tip_(self, raw, **kwargs):
         if raw is not None:
-            if isinstance(raw, (tuple, list)):
-                _ = '\n'.join(raw)
-            elif isinstance(raw, six.string_types):
+            if isinstance(raw, six.string_types):
                 _ = raw
+            elif isinstance(raw, (tuple, list)):
+                _ = '\n'.join(raw)
+            elif isinstance(raw, dict):
+                _ = '\n'.join(['{}={}'.format(k, v) for k, v in raw.items()])
             else:
                 raise TypeError()
             #
@@ -1595,6 +1597,9 @@ class AbsQtNameBaseDef(object):
             # noinspection PyCallingNonCallable
             # self._tool_tip_text = css
             self.setToolTip(css)
+
+    def _get_tool_tip_text_(self):
+        return self._tool_tip_text
 
     def _set_name_font_size_(self, size):
         font = self._widget.font()
@@ -2529,7 +2534,7 @@ class AbsQtItemFilterDef(object):
                 if self._get_name_texts_():
                     return [i for i in self._get_name_texts_() if i]
             if hasattr(self, '_get_name_text_'):
-                return [self._get_name_text_()]
+                return [self._get_name_text_() or 'unknown']
         return []
 
     def _get_keyword_filter_keys_auto_use_cache_(self):

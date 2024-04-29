@@ -32,7 +32,7 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     #
     w = W()
-    w.set_definition_window_size((720, 720))
+    w.set_definition_window_size((500, 720))
     w.set_window_show()
     #
     sys.exit(app.exec_())

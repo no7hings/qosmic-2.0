@@ -20,8 +20,8 @@ from . import input_for_port as _input_for_port
 class AbsPrxPortBaseDef(object):
     ENTRY_TYPE = 'custom'
 
-    Status = gui_core.GuiStatus
-    ProcessStatus = gui_core.GuiStatus
+    Status = gui_core.GuiProcessStatus
+    ProcessStatus = gui_core.GuiProcessStatus
     ShowStatus = gui_core.GuiShowStatus
     ValidationStatus = gui_core.GuiValidationStatus
 
@@ -332,8 +332,8 @@ class _AbsPrxPortBase(AbsPrxPortBaseDef):
         if default is not None:
             self.set(default)
 
-    def set_options(self, values, labels=None):
-        self._prx_port_input.set_options(values, labels)
+    def set_options(self, values, names=None):
+        self._prx_port_input.set_options(values, names)
 
     def set_tool_tip(self, *args, **kwargs):
         kwargs['name'] = 'entry as "{}"'.format(
@@ -758,7 +758,7 @@ class PrxSubProcessPort(_AbsPrxPortBase):
     def set_statuses(self, statuses):
         self.get_input_widget()._set_sub_process_statuses_(statuses)
 
-    def initialization(self, count, status=gui_core.GuiStatus.Started):
+    def initialization(self, count, status=gui_core.GuiProcessStatus.Started):
         self.get_input_widget()._initialization_sub_process_(count, status)
 
     def restore_all(self):

@@ -117,7 +117,7 @@ class AbsPnlBuilderForTexture(prx_widgets.PrxSessionWindow):
             self._session.configure.get('build.node.main_content')
         )
 
-        self.__next_button = prx_widgets.PrxPressItem()
+        self.__next_button = prx_widgets.PrxPressButton()
         self.__next_button.set_name('next')
         self.add_button(self.__next_button)
         self.__next_button.connect_press_clicked_to(self.__do_next)
@@ -149,7 +149,7 @@ class AbsPnlBuilderForTexture(prx_widgets.PrxSessionWindow):
         tool_bar = prx_widgets.PrxHToolBar()
         layer_widget.add_widget(tool_bar.widget)
         tool_bar.set_expanded(True)
-        button = prx_widgets.PrxPressItem()
+        button = prx_widgets.PrxPressButton()
         tool_bar.add_widget(button)
         button.set_name('Apply')
         button.connect_press_clicked_to(
