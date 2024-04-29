@@ -31,17 +31,17 @@ class QtTextBubble(
         self.update()
 
     def _refresh_widget_draw_geometry_(self):
-        if self.__text:
+        if self._text:
             x, y = 0, 0
             w, h = self.width(), self.height()
             dlt_w, dlt_h = h, h
 
-            w_t, h_t = self.fontMetrics().width(self.__text), self.fontMetrics().height()/2
+            w_t, h_t = self.fontMetrics().width(self._text), self.fontMetrics().height()/2
             # print h_t, h_t_
             s_t = (h-h_t)/2
-            self.__radius_border = s_t
+            self._radius_border = s_t
             # fit to max size
-            w_t = min(w_t, self.__w_maximum_text)
+            w_t = min(w_t, self._w_maximum_text)
             w_t_1 = w_t+s_t
             w_c = w_t_1+dlt_w
             self.setFixedWidth(w_c)
@@ -81,11 +81,11 @@ class QtTextBubble(
         self.__delete_is_hovered = False
 
         self.__w_text, self.__h_text = 0, 16
-        self.__w_maximum_text = 64
+        self._w_maximum_text = 64
         self.__h_delete = 20
         self.__w_side = 2
         self.__text_spacing = 2
-        self.__text = None
+        self._text = None
         self.__rect_text_draw = QtCore.QRect()
         self.__rect_delete = QtCore.QRect()
         self.__rect_delete_draw = QtCore.QRect()
@@ -137,18 +137,18 @@ class QtTextBubble(
 
     def paintEvent(self, event):
         painter = gui_qt_core.QtPainter(self)
-        if self.__text is not None:
+        if self._text is not None:
             offset = self._get_action_offset_()
             painter._draw_frame_by_rect_(
                 rect=self.__rect_frame_draw,
                 border_color=gui_qt_core.QtBorderColors.Transparent,
                 background_color=[gui_qt_core.QtColors.BubbleBackground, gui_qt_core.QtColors.BubbleBackgroundHover][self.__is_hovered],
-                border_radius=self.__radius_border,
+                border_radius=self._radius_border,
                 offset=offset
             )
             painter._draw_text_by_rect_(
                 rect=self.__rect_text_draw,
-                text=self.__text,
+                text=self._text,
                 font_color=gui_qt_core.QtColors.ToolTipText,
                 font=self.font(),
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
@@ -163,12 +163,12 @@ class QtTextBubble(
             )
 
     def _set_text_(self, text):
-        self.__text = text
-        self.setToolTip(self.__text)
+        self._text = text
+        self.setToolTip(self._text)
         self._refresh_widget_all_()
 
     def _get_text_(self):
-        return self.__text
+        return self._text
 
     def _do_hover_move_(self, event):
         p = event.pos()
@@ -195,15 +195,15 @@ class QtInfoBubble(
         self.update()
 
     def _refresh_widget_draw_geometry_(self):
-        if self.__text:
+        if self._text:
             w, h = self.width(), self.height()
 
-            self.setFont(gui_qt_core.GuiQtFont.generate_2(size=h*self.__text_percent))
+            self.setFont(gui_qt_core.GuiQtFont.generate_2(size=h*self._text_draw_percent))
 
-            w_t, h_t = self.fontMetrics().width(self.__text), self.fontMetrics().height()/2
+            w_t, h_t = self.fontMetrics().width(self._text), self.fontMetrics().height()/2
             s_t = (h-h_t)/2
 
-            self.__radius_border = s_t
+            self._radius_border = s_t
 
             w_c = w_t+s_t*2
 
@@ -213,7 +213,7 @@ class QtInfoBubble(
             x_0, y_0 = 0, 0
             w_0, h_0 = self.width(), self.height()
             w_f, h_f = w_0, h_0
-            self.__rect.setRect(
+            self._text_draw_rect.setRect(
                 x_0, y_0, w_f, h_f
             )
 
@@ -223,15 +223,14 @@ class QtInfoBubble(
             QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding
         )
 
-        self.__text = None
-        self.__rect = QtCore.QRect()
-        self.__margins = 2, 2, 2, 2
+        self._text = None
+        self._text_draw_rect = QtCore.QRect()
 
-        self.__text_percent = 0.5
+        self._text_draw_percent = 0.5
 
         self.__size_mode = self.SizeMode.Auto
 
-        self.__radius_border = 0
+        self._radius_border = 0
 
         self.installEventFilter(self)
 
@@ -245,10 +244,10 @@ class QtInfoBubble(
 
     def paintEvent(self, event):
         painter = gui_qt_core.QtPainter(self)
-        if self.__text:
+        if self._text:
             painter._draw_text_by_rect_(
-                rect=self.__rect,
-                text=self.__text,
+                rect=self._text_draw_rect,
+                text=self._text,
                 font_color=gui_qt_core.QtColors.TextTemporary,
                 font=self.font(),
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
@@ -258,7 +257,7 @@ class QtInfoBubble(
         self.__size_mode = mode
 
     def _set_text_(self, text):
-        self.__text = text
+        self._text = text
         self._refresh_widget_all_()
 
 

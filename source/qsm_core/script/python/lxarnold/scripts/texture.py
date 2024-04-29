@@ -47,7 +47,7 @@ class ScpTextureCreate(object):
             i_file_opt_src = bsc_storage.StgFileOpt(i_file_path_src)
             i_file_path_tgt = '{}/{}.exr'.format(directory_path_tgt, i_file_opt_src.name_base)
 
-            bsc_core.TrdFunction.set_wait()
+            bsc_core.TrdFunction.do_pool_wait()
             bsc_core.TrdFunction.set_start(
                 cls.to_exr_as_acescg, i_index,
                 # args
@@ -143,7 +143,7 @@ class ScpTextureCreate(object):
             i_file_opt_src = bsc_storage.StgFileOpt(i_file_path_src)
             i_file_path_tgt = '{}/{}.tx'.format(directory_path_tgt, i_file_opt_src.name_base)
 
-            bsc_core.TrdFunction.set_wait()
+            bsc_core.TrdFunction.do_pool_wait()
             bsc_core.TrdFunction.set_start(
                 cls.to_tx_as_acescg, i_index,
                 # args

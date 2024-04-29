@@ -42,6 +42,7 @@ class QtTreeWidget(
         self.setIndentation(20)
         self.setAutoFillBackground(True)
         self.setSortingEnabled(True)
+        # disable sort at 0
         self.sortByColumn(1, QtCore.Qt.AscendingOrder)
         self.setDragEnabled(True)
         self.setDefaultDropAction(QtCore.Qt.MoveAction)
@@ -79,7 +80,7 @@ class QtTreeWidget(
         self.header().sortIndicatorChanged.connect(
             self._refresh_view_items_viewport_showable_by_sort_
         )
-        # self.setAlternatingRowColors(True)
+        self.setAlternatingRowColors(True)
         qt_palette = gui_qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
         # self.setAutoFillBackground(True)

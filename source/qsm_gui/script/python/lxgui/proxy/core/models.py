@@ -72,7 +72,7 @@ class GuiPrxModForProgress(object):
         return self._depth
 
     #
-    def set_start(self):
+    def do_start(self):
         pass
 
     def do_update(self, *args, **kwargs):

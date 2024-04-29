@@ -800,7 +800,7 @@ class PrxScreenshotFrame(
         main_window = gui_qt_core.GuiQtDcc.get_qt_active_window()
         super(PrxScreenshotFrame, self).__init__(main_window, *args, **kwargs)
 
-    def set_start(self):
+    def do_start(self):
         self._qt_widget._start_screenshot_()
 
     def connect_started_to(self, fnc):

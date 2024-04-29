@@ -492,14 +492,15 @@ class PrcBaseMtd(object):
             output = decode_fnc(output)
             output_lines = output.splitlines()
             for i in output_lines:
+                # may be empty
                 if i:
                     sys.stderr.write(encode_fnc(i)+'\n')
             return_dict['results'] = output_lines
             raise subprocess.CalledProcessError(s_p.returncode, cmd)
         #
         s_p.wait()
-        return_dict['results'] = output.splitlines()
-        return output.splitlines()
+        return_dict['results'] = output
+        return output
 
     @classmethod
     def execute_use_thread(cls, cmd):

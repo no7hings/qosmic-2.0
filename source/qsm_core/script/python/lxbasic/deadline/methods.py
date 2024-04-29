@@ -433,7 +433,7 @@ class DdlJobMonitor(object):
     def get_job_status(self):
         return self._job_status
 
-    def set_start(self):
+    def do_start(self):
         self.__set_logging_(u'job id is "{}"'.format(self._job_id))
         self.__set_logging_(u'job is started')
         #

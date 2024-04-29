@@ -54,7 +54,7 @@ with bsc_log.LogProcessContext.create_as_bar(maximum=len(file_paths), label='tes
             search_directory_path=output_directory_path,
         )
         if i_cmd:
-            bsc_core.TrdCommandPool.set_wait()
+            bsc_core.TrdCommandPool.do_pool_wait()
             i_t = bsc_core.TrdCommandPool.set_start(i_cmd, index=i_index)
             i_t.finished.connect_to(
                 finished_fnc_

@@ -66,7 +66,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
             self.get_definition_window_size()[0]*(3.0/4.0)-32
         )
         h_s_0.set_fixed_size_at(0, 240)
-        h_s_0.set_contract_left_or_top_at(0)
+        h_s_0.swap_contract_left_or_top_at(0)
         #
         self._texture_add_opt = gui_prx_scripts.GuiPrxScpForStorageTreeAdd(
             prx_tree_view=self._tree_view,
@@ -358,7 +358,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                     break
                 #
                 if i_cmd:
-                    bsc_core.TrdCommandPool.set_wait()
+                    bsc_core.TrdCommandPool.do_pool_wait()
                     i_t = bsc_core.TrdCommandPool.set_start(i_cmd, i_index)
                     i_t.status_changed.connect_to(status_update_at_fnc_)
                     i_t.finished.connect_to(finished_fnc_)

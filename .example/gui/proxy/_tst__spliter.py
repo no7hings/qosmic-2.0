@@ -34,8 +34,8 @@ class W(prx_widgets.PrxBaseWindow):
         h_s.set_fixed_size_at(0, 320)
         h_s.set_fixed_size_at(2, 320)
 
-        # h_s.set_contract_left_or_top_at(0)
-        h_s.set_contract_right_or_bottom_at(2)
+        # h_s.swap_contract_left_or_top_at(0)
+        h_s.swap_contract_right_or_bottom_at(2)
 
     def test(self):
         pass

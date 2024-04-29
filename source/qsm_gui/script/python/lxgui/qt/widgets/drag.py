@@ -104,7 +104,6 @@ class QtDrag(QtGui.QDrag):
 
     def eventFilter(self, *args):
         widget, event = args
-        print widget, event
         if widget == self:
             if event.type() == QtCore.QEvent.DeferredDelete:
                 self._do_release_()

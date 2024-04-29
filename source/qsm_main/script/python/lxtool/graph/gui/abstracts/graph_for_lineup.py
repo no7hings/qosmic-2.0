@@ -153,7 +153,7 @@ class AbsPnlAssetLineup(prx_widgets.PrxSessionWindow):
                     ),
                     self._set_gui_add_rsv_entities_
                 )
-            ts.set_start()
+            ts.do_start()
         else:
             with bsc_log.LogProcessContext.create(maximum=len(rsv_tags), label='gui-add for entity') as g_p:
                 for i_rsv_tag in rsv_tags:

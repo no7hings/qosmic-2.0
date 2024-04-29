@@ -769,6 +769,70 @@ class QtTextItem(
             )
 
 
+class QtInfoLabel(
+    QtWidgets.QWidget,
+):
+
+    def _refresh_widget_all_(self):
+        self._refresh_widget_draw_geometry_()
+        self._refresh_widget_draw_()
+
+    def _refresh_widget_draw_(self):
+        self.update()
+
+    def _refresh_widget_draw_geometry_(self):
+        x, y = 0, 0
+        w, h = self.width(), self.height()
+
+        w_t, h_t = gui_qt_core.GuiQtFont.compute_size_2(h*.725, self._text)
+
+        self.setFixedWidth(w_t)
+
+        self._text_draw_rect.setRect(
+            x, y, w_t, h
+        )
+
+    def __init__(self, *args, **kwargs):
+        super(QtInfoLabel, self).__init__(*args, **kwargs)
+        #
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.setSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding
+        )
+
+        self._text = ''
+        self._text_draw_rect = QtCore.QRect()
+
+        self.setFont(gui_qt_core.QtFonts.NameNormal)
+
+        self.setFixedHeight(20)
+
+        self.installEventFilter(self)
+
+    def eventFilter(self, *args):
+        widget, event = args
+        if widget == self:
+            if event.type() == QtCore.QEvent.Resize:
+                self._refresh_widget_all_()
+        return False
+
+    def paintEvent(self, event):
+        painter = gui_qt_core.QtPainter(self)
+        if self._text:
+            painter._draw_text_by_rect_(
+                rect=self._text_draw_rect,
+                text=self._text,
+                font_color=gui_qt_core.QtColors.Text,
+                font=self.font(),
+                text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
+            )
+
+    def _set_info_(self, text):
+        self._text = text
+        self._refresh_widget_all_()
+
+
 class QtMainWindow(
     QtWidgets.QMainWindow,
     #

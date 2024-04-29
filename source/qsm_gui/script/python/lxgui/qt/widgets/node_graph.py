@@ -2052,7 +2052,6 @@ class _QtNGTree(
             items = self._get_items_selected_()
             for i in items:
                 obj = i._ng_node_obj
-                print obj.get_gui_ng_graph_node()
         else:
             pass
 

@@ -1285,7 +1285,7 @@ class StgDirectoryOpt(StgPathOpt):
                 # create target directory first
                 i_file_opt_tgt.create_directory()
                 #
-                _cor_thread.TrdMethod.set_wait()
+                _cor_thread.TrdMethod.do_pool_wait()
                 _cor_thread.TrdMethod.set_start(
                     i_file_opt_src.copy_to_file, index,
                     i_file_path_tgt, replace=replace

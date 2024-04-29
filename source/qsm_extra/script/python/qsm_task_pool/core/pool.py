@@ -4,27 +4,25 @@ from . import base as _base
 from . import task as _task
 
 
-class Connection(object):
-    CONNECTION = None
+class Pool(object):
+    CACHE = None
 
     @classmethod
     def generate(cls):
-        if cls.CONNECTION is not None:
-            return _base.Util.CONNECTION
+        if cls.CACHE is not None:
+            return _base.Util.CACHE
         _ = cls(
             'Z:/caches/database/prc-task/{}'.format(
                 _base.Util.get_user_name()
             )
         )
-        _base.Util.CONNECTION = _
+        _base.Util.CACHE = _
         return _
 
     def __init__(self, location):
         self._location = location
 
-        self._date_tag_cur = _base.Util.get_date_tag()
-
-        self._tasks_index_cur = _task.TasksIndex(self, self._date_tag_cur)
+        self._tasks_cache = _task.TasksCache(self)
 
     def __str__(self):
         return '{}(location="{}")'.format(
@@ -37,15 +35,24 @@ class Connection(object):
     @property
     def location(self):
         return self._location
+    
+    def do_update(self):
+        return self._tasks_cache.do_update()
+
+    def get_task_ids(self):
+        return self._tasks_cache.get_task_ids()
+
+    def find_tasks(self, task_ids):
+        return self._tasks_cache.find_tasks(task_ids)
 
     def get_tasks(self):
-        return self._tasks_index_cur.get_tasks()
+        return self._tasks_cache.get_tasks()
 
-    def get_task(self, task_id):
-        return self._tasks_index_cur.get_task(task_id)
+    def find_task(self, task_id):
+        return self._tasks_cache.find_task(task_id)
 
     def new_task(self, batch_name, name, cmd_script):
-        return self._tasks_index_cur.new_task(
+        return self._tasks_cache.new_task(
             batch_name, name, cmd_script
         )
 

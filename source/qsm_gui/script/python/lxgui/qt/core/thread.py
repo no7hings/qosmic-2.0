@@ -208,7 +208,7 @@ class QtBuildThreadStack(QtCore.QObject):
             # release
             del self._threads[seq]
 
-    def set_start(self):
+    def do_start(self):
         self._status = self.Status.Running
         self.run_started.emit()
         c_t = None
@@ -305,7 +305,7 @@ class QtBuildRunnable(QtCore.QRunnable):
         else:
             self._build_signals.run_finished.emit()
 
-    def set_start(self):
+    def do_start(self):
         self._pool.start(self)
 
 
@@ -357,7 +357,7 @@ class QtBuildRunnableStack(QtCore.QObject):
     def do_kill(self):
         [i.do_kill() for i in self._threads]
 
-    def set_start(self):
+    def do_start(self):
         self.run_started.emit()
         c_t = None
         for i_t in self._threads:
@@ -366,7 +366,7 @@ class QtBuildRunnableStack(QtCore.QObject):
             )
             #
             if c_t is None:
-                i_t.set_start()
+                i_t.do_start()
             else:
                 c_t._build_signals.cache_finished.connect(i_t.set_start)
             #

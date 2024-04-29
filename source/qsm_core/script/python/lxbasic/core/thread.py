@@ -49,73 +49,87 @@ class TrdSignal(object):
 class TrdCommandPool(threading.Thread):
     STACK = []
     # MAXIMUM = int(CPU_COUNT*.75)
-    MAXIMUM = 8
+    MAXIMUM = 5
     EVENT = threading.Event()
     LOCK = threading.Lock()
     #
     Status = _configure.BscStatus
+
+    def _do_update_status(self, status):
+        self._status = status
+        if self._is_killed is False:
+            self._signal_status_changed.send_emit(
+                self._index, status
+            )
+
+    def _do_completed(self, results):
+        if self._is_killed is False:
+            self._signal_completed.send_emit(
+                self._index, results
+            )
+
+    def _do_failed(self, results):
+        if self._is_killed is False:
+            self._signal_failed.send_emit(
+                self._index, results
+            )
+
+    def _do_started(self):
+        if self._is_killed is False:
+            self._signal_started.send_emit(
+                self._index
+            )
+
+    def _do_finished(self, status, results):
+        if self._is_killed is False:
+            self._signal_finished.send_emit(
+                self._index, status, results
+            )
 
     def __init__(self, cmd, index=0):
         threading.Thread.__init__(self)
         self._cmd = cmd
         self._index = index
 
-        self._status = self.Status.Started
+        self._is_killed = False
+        
+        self._signal_status_changed = TrdSignal(object, int)
+        self._signal_completed = TrdSignal(object, list)
+        self._signal_failed = TrdSignal(object, list)
+        self._signal_started = TrdSignal(object)
+        self._signal_finished = TrdSignal(object, int, list)
 
-        self.__status_changed_signal = TrdSignal(int, int)
-        self.__completed_signal = TrdSignal(int, list)
-        self.__failed_signal = TrdSignal(int, list)
-        self.__finished_signal = TrdSignal(int, int, list)
-
-        self._is_kill = False
+        self._status = self.Status.Unknown
 
         self._options = {}
 
-    def __set_status_update(self, status):
-        self._status = status
-        if self._is_kill is False:
-            self.__status_changed_signal.send_emit(
-                self._index, status
-            )
-
-    def __set_completed(self, results):
-        if self._is_kill is False:
-            self.__completed_signal.send_emit(
-                self._index, results
-            )
-
-    def __set_failed(self, results):
-        if self._is_kill is False:
-            self.__failed_signal.send_emit(
-                self._index, results
-            )
-
-    def __set_finished(self, status, results):
-        if self._is_kill is False:
-            self.__finished_signal.send_emit(
-                self._index, status, results
-            )
-
     @property
     def status_changed(self):
-        return self.__status_changed_signal
+        return self._signal_status_changed
 
     @property
     def completed(self):
         # index, results
-        return self.__completed_signal
+        return self._signal_completed
 
     @property
     def failed(self):
-        return self.__failed_signal
+        return self._signal_failed
+
+    @property
+    def started(self):
+        return self._signal_started
 
     @property
     def finished(self):
-        return self.__finished_signal
+        return self._signal_finished
 
     def run(self):
-        self.__set_status_update(self.Status.Running)
-        #
+        if self._is_killed is True:
+            return
+
+        self._do_update_status(self.Status.Running)
+
         status = self.Status.Running
         return_dicts = []
         try:
@@ -136,6 +150,8 @@ class TrdCommandPool(threading.Thread):
                         i_cmd, clear_environ='auto', return_dict=i_return_dict
                     )
                 status = self.Status.Completed
+            else:
+                status = self.Status.Unknown
         except subprocess.CalledProcessError:
             status = self.Status.Failed
         finally:
@@ -150,25 +166,29 @@ class TrdCommandPool(threading.Thread):
             results = []
             for i_return_dict in return_dicts:
                 if 'results' in i_return_dict:
-                    results.extend(i_return_dict['results'])
+                    i_results = i_return_dict['results']
+                    if isinstance(i_results, list):
+                        results.extend(i_results)
+                    elif isinstance(i_results, six.string_types):
+                        results.append(i_results)
 
-            self.__set_status_update(status)
+            self._do_update_status(status)
             if status == self.Status.Completed:
-                self.__set_completed(results)
+                self._do_completed(results)
             elif status == self.Status.Failed:
-                self.__set_failed(results)
+                self._do_failed(results)
             #
-            self.__set_finished(self._status, results)
+            self._do_finished(self._status, results)
 
     @staticmethod
-    def get_is_busy():
+    def is_busy():
         return len(TrdCommandPool.STACK) >= TrdCommandPool.MAXIMUM
 
     @staticmethod
-    def set_wait():
+    def do_pool_wait():
         TrdCommandPool.LOCK.acquire()
         # lock
-        if len(TrdCommandPool.STACK) >= TrdCommandPool.MAXIMUM:
+        if TrdCommandPool.is_busy() is True:
             TrdCommandPool.LOCK.release()
             TrdCommandPool.EVENT.wait()
         else:
@@ -195,13 +215,28 @@ class TrdCommandPool(threading.Thread):
         return self._status
 
     def do_kill(self):
-        self.__set_status_update(
+        self._do_update_status(
             self.Status.Killed
         )
-        self._is_kill = True
+        self._is_killed = True
 
     def do_quit(self):
         pass
+
+    def do_wait(self):
+        self._do_update_status(self.Status.Waiting)
+        self.do_pool_wait()
+
+    def do_wait_for_start(self):
+        self.do_wait()
+        self._do_started()
+        self._do_update_status(self.Status.Started)
+        self.start()
+
+    def do_start(self):
+        self._do_started()
+        self._do_update_status(self.Status.Started)
+        self.start()
 
 
 class TrdCommand(threading.Thread):
@@ -216,31 +251,31 @@ class TrdCommand(threading.Thread):
         self.__is_killed = False
         self.__is_stopped = False
         #
-        self.__status_changed_signal = TrdSignal(int)
+        self._signal_status_changed = TrdSignal(int)
         self._logging_signal = TrdSignal(str)
         #
-        self.__completed_signal = TrdSignal(tuple)
-        self.__failed_signal = TrdSignal(tuple)
-        self.__finished_signal = TrdSignal(tuple)
+        self._signal_completed = TrdSignal(tuple)
+        self._signal_failed = TrdSignal(tuple)
+        self._signal_finished = TrdSignal(tuple)
 
-    def __set_status_update(self, status):
+    def _do_update_status(self, status):
         self._status = status
-        self.__status_changed_signal.send_emit(
+        self._signal_status_changed.send_emit(
             status
         )
 
-    def __set_completed(self, results):
-        self.__completed_signal.send_emit(
+    def _do_completed(self, results):
+        self._signal_completed.send_emit(
             (self._status, ''.join(results))
         )
 
-    def __set_failed(self, results):
-        self.__failed_signal.send_emit(
+    def _do_failed(self, results):
+        self._signal_failed.send_emit(
             (self._status, ''.join(results))
         )
 
-    def __set_finished(self, results):
-        self.__finished_signal.send_emit(
+    def _do_finished(self, results):
+        self._signal_finished.send_emit(
             (self._status, ''.join(results))
         )
 
@@ -251,19 +286,19 @@ class TrdCommand(threading.Thread):
 
     @property
     def status_changed(self):
-        return self.__status_changed_signal
+        return self._signal_status_changed
 
     @property
     def completed(self):
-        return self.__completed_signal
+        return self._signal_completed
 
     @property
     def failed(self):
-        return self.__failed_signal
+        return self._signal_failed
 
     @property
     def finished(self):
-        return self.__finished_signal
+        return self._signal_finished
 
     @property
     def logging(self):
@@ -279,7 +314,7 @@ class TrdCommand(threading.Thread):
         self.__is_killed = True
 
     def run(self):
-        self.__set_status_update(self.Status.Running)
+        self._do_update_status(self.Status.Running)
         results = []
         s_p = subprocess.Popen(
             self._cmd,
@@ -306,16 +341,16 @@ class TrdCommand(threading.Thread):
             #
             if self.__is_stopped is True:
                 s_p.kill()
-                self.__set_failed(results)
-                self.__set_finished(results)
+                self._do_failed(results)
+                self._do_finished(results)
                 return False
             if self.__is_killed is True:
                 s_p.kill()
                 self.__set_logging('process is killed')
-                self.__set_status_update(self.Status.Killed)
+                self._do_update_status(self.Status.Killed)
                 #
-                self.__set_failed(results)
-                self.__set_finished(results)
+                self._do_failed(results)
+                self._do_finished(results)
                 return False
             #
             self.__set_logging(
@@ -324,15 +359,15 @@ class TrdCommand(threading.Thread):
 
         retcode = s_p.poll()
         if retcode:
-            self.__set_status_update(self.Status.Failed)
-            self.__set_failed(results)
-            self.__set_finished(results)
+            self._do_update_status(self.Status.Failed)
+            self._do_failed(results)
+            self._do_finished(results)
             return False
         #
         s_p.stdout.close()
-        self.__set_status_update(self.Status.Completed)
-        self.__set_completed(results)
-        self.__set_finished(results)
+        self._do_update_status(self.Status.Completed)
+        self._do_completed(results)
+        self._do_finished(results)
         return True
 
 
@@ -354,40 +389,40 @@ class TrdMethod(threading.Thread):
 
         self._status = self.Status.Started
 
-        self.__status_changed_signal = TrdSignal(int, int)
-        self.__completed_signal = TrdSignal(int, list)
-        self.__failed_signal = TrdSignal(int, list)
-        self.__finished_signal = TrdSignal(int, int, list)
+        self._signal_status_changed = TrdSignal(int, int)
+        self._signal_completed = TrdSignal(int, list)
+        self._signal_failed = TrdSignal(int, list)
+        self._signal_finished = TrdSignal(int, int, list)
 
     @property
     def status_changed(self):
-        return self.__status_changed_signal
+        return self._signal_status_changed
 
     @property
     def completed(self):
-        return self.__completed_signal
+        return self._signal_completed
 
     @property
     def failed(self):
-        return self.__failed_signal
+        return self._signal_failed
 
     @property
     def finished(self):
-        return self.__finished_signal
+        return self._signal_finished
 
     def run(self):
-        self.__set_status_update(self.Status.Running)
+        self._do_update_status(self.Status.Running)
         results = []
         try:
             results = self._fnc(*self._args, **self._kwargs) or []
-            self.__set_status_update(self.Status.Completed)
-            self.__set_completed(results)
+            self._do_update_status(self.Status.Completed)
+            self._do_completed(results)
         except subprocess.CalledProcessError as _exc:
             # o = exc.output
             # s = exc.returncode
             results = []
-            self.__set_status_update(self.Status.Failed)
-            self.__set_failed(results)
+            self._do_update_status(self.Status.Failed)
+            self._do_failed(results)
         finally:
             TrdMethod.LOCK.acquire()
             TrdMethod.STACK.remove(self)
@@ -398,14 +433,14 @@ class TrdMethod(threading.Thread):
 
             TrdMethod.LOCK.release()
 
-            self.__set_finished(self._status, results)
+            self._do_finished(self._status, results)
 
     @staticmethod
-    def get_is_busy():
+    def is_busy():
         return len(TrdMethod.STACK) >= TrdMethod.MAXIMUM
 
     @staticmethod
-    def set_wait():
+    def do_pool_wait():
         TrdMethod.LOCK.acquire()
         # lock
         if len(TrdMethod.STACK) >= TrdMethod.MAXIMUM:
@@ -423,24 +458,24 @@ class TrdMethod(threading.Thread):
         t.start()
         return t
 
-    def __set_completed(self, results):
-        self.__completed_signal.send_emit(
+    def _do_completed(self, results):
+        self._signal_completed.send_emit(
             self._index, results
         )
 
-    def __set_failed(self, results):
-        self.__failed_signal.send_emit(
+    def _do_failed(self, results):
+        self._signal_failed.send_emit(
             self._index, results
         )
 
-    def __set_finished(self, status, results):
-        self.__finished_signal.send_emit(
+    def _do_finished(self, status, results):
+        self._signal_finished.send_emit(
             self._index, status, results
         )
 
-    def __set_status_update(self, status):
+    def _do_update_status(self, status):
         self._status = status
-        self.__status_changed_signal.send_emit(
+        self._signal_status_changed.send_emit(
             self._index, status
         )
 
@@ -463,13 +498,13 @@ class TrdFncsChainPool(object):
             self._fnc = fnc
 
             self.__started_signal = TrdSignal()
-            self.__finished_signal = TrdSignal()
-            self.__failed_signal = TrdSignal(str)
+            self._signal_finished = TrdSignal()
+            self._signal_failed = TrdSignal(str)
 
-            self._is_kill = False
+            self._is_killed = False
 
         def run(self):
-            if self._is_kill is True:
+            if self._is_killed is True:
                 return
 
             self.__started()
@@ -485,7 +520,7 @@ class TrdFncsChainPool(object):
                 self.__finished()
 
         def __started(self):
-            if self._is_kill is True:
+            if self._is_killed is True:
                 return
 
             self.__started_signal.send_emit()
@@ -494,21 +529,21 @@ class TrdFncsChainPool(object):
             self.__started_signal.connect_to(fnc)
 
         def __finished(self):
-            if self._is_kill is True:
+            if self._is_killed is True:
                 return
 
-            self.__finished_signal.send_emit()
+            self._signal_finished.send_emit()
 
         def connect_finished_to(self, fnc):
-            self.__finished_signal.connect_to(fnc)
+            self._signal_finished.connect_to(fnc)
 
         def __failed(self, text):
-            if self._is_kill is True:
+            if self._is_killed is True:
                 return
-            self.__failed_signal.send_emit(text)
+            self._signal_failed.send_emit(text)
 
         def connect_failed_to(self, fnc):
-            self.__failed_signal.connect_to(fnc)
+            self._signal_failed.connect_to(fnc)
 
         @classmethod
         def start_loop(cls, threads):
@@ -521,7 +556,7 @@ class TrdFncsChainPool(object):
             threads[0].start()
 
         def do_kill(self):
-            self._is_kill = True
+            self._is_killed = True
 
     def __init__(self):
         self._threads = []
@@ -572,8 +607,8 @@ class TrdFncProcessing(threading.Thread):
         threading.Thread.__init__(self)
         self.__is_killed = False
         self.__started_signal = TrdSignal(object)
-        self.__finished_signal = TrdSignal()
-        self.__failed_signal = TrdSignal(str)
+        self._signal_finished = TrdSignal()
+        self._signal_failed = TrdSignal(str)
         self.__start_processing_signal = TrdSignal(int)
         self.__update_processing_signal = TrdSignal()
         self.__update_logging_signal = TrdSignal(str)
@@ -587,20 +622,20 @@ class TrdFncProcessing(threading.Thread):
         self.__started_signal.send_emit()
 
     def connect_finished_to(self, fnc):
-        self.__finished_signal.connect_to(fnc)
+        self._signal_finished.connect_to(fnc)
 
     def __finished(self):
         if self.__is_killed is True:
             return
-        self.__finished_signal.send_emit()
+        self._signal_finished.send_emit()
 
     def connect_failed_to(self, fnc):
-        self.__failed_signal.connect_to(fnc)
+        self._signal_failed.connect_to(fnc)
 
     def __failed(self, text):
         if self.__is_killed is True:
             return
-        self.__failed_signal.send_emit(text)
+        self._signal_failed.send_emit(text)
 
     def connect_start_processing_to(self, fnc):
         self.__start_processing_signal.connect_to(fnc)
@@ -992,7 +1027,7 @@ class TrdProcessMonitor(object):
     def get_running_time_maximum(self):
         return self._running_time_maximum
 
-    def set_start(self):
+    def do_start(self):
         self.__set_started_()
         self.__set_status_changed_()
 

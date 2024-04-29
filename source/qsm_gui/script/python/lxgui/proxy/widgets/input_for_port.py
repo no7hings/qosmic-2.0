@@ -490,7 +490,7 @@ class PrxInputAsMediasOpen(PrxInputAsFilesOpen):
         active_window = gui_qt_core.GuiQtUtil.get_qt_active_window()
         w = gui_prx_wdt_utility.PrxScreenshotFrame()
         w.connect_started_to(active_window.hide)
-        w.set_start()
+        w.do_start()
         w.connect_accepted_to(self.__do_screenshot_save)
         w.connect_finished_to(active_window.show)
 

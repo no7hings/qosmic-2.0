@@ -437,7 +437,7 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
                     break
                 #
                 if i_cmd:
-                    bsc_core.TrdCommandPool.set_wait()
+                    bsc_core.TrdCommandPool.do_pool_wait()
                     i_t = bsc_core.TrdCommandPool.set_start(i_cmd, i_index)
                     i_t.status_changed.connect_to(status_update_at_fnc_)
                     i_t.finished.connect_to(finished_fnc_)

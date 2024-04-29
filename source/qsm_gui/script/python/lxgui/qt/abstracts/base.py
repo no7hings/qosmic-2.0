@@ -215,32 +215,34 @@ class AbsQtStatusBaseDef(object):
     @classmethod
     def _get_background_rgba_args_by_status_(cls, status):
         if status in {cls.Status.Started}:
-            return cls._get_rgb_args_(*cls.Rgba.Transparent)
-        elif status in {cls.Status.Failed, cls.Status.Error, cls.Status.Killed}:
-            return cls._get_rgb_args_(*cls.Rgba.Red)
+            return cls._get_rgb_args_(*cls.Rgba.DarkBlue)
+        elif status in {cls.Status.Running}:
+            return cls._get_rgb_args_(*cls.Rgba.Blue)
         elif status in {cls.Status.Waiting}:
             return cls._get_rgb_args_(*cls.Rgba.Orange)
         elif status in {cls.Status.Suspended}:
             return cls._get_rgb_args_(*cls.Rgba.Yellow)
-        elif status in {cls.Status.Running}:
-            return cls._get_rgb_args_(*cls.Rgba.Blue)
+        elif status in {cls.Status.Failed, cls.Status.Error, cls.Status.Killed}:
+            return cls._get_rgb_args_(*cls.Rgba.Red)
         elif status in {cls.Status.Completed}:
             return cls._get_rgb_args_(*cls.Rgba.Green)
         return cls._get_rgb_args_(*cls.Rgba.Transparent)
 
     @classmethod
     def _get_rgba_args_by_status_(cls, status):
-        if status in {cls.Status.Waiting}:
-            return cls._get_rgb_args_(*cls.Rgba.Orange)
-        elif status in {cls.Status.Started}:
+        if status in {cls.Status.Started}:
+            return cls._get_rgb_args_(*cls.Rgba.DarkBlue)
+        elif status in {cls.Status.Running}:
             return cls._get_rgb_args_(*cls.Rgba.Blue)
-        elif status in {cls.Status.Killed}:
+        elif status in {cls.Status.Waiting}:
+            return cls._get_rgb_args_(*cls.Rgba.Orange)
+        elif status in {cls.Status.Suspended}:
             return cls._get_rgb_args_(*cls.Rgba.Yellow)
-        elif status in {cls.Status.Failed}:
+        elif status in {cls.Status.Failed, cls.Status.Error, cls.Status.Killed}:
             return cls._get_rgb_args_(*cls.Rgba.Red)
         elif status in {cls.Status.Completed}:
             return cls._get_rgb_args_(*cls.Rgba.Green)
-        return cls._get_rgb_args_(*cls.Rgba.Orange)
+        return cls._get_rgb_args_(*cls.Rgba.Transparent)
 
     @classmethod
     def _get_text_rgba_args_by_validator_status_(cls, status):
@@ -3135,7 +3137,7 @@ class AbsQtShowBaseForItemDef(
                     self._item_show_build_fnc,
                     self._finish_item_show_
                 )
-                self._item_show_runnable.set_start()
+                self._item_show_runnable.do_start()
             else:
                 self._item_show_build_fnc(
                     self._item_show_cache_fnc()
@@ -3231,7 +3233,7 @@ class AbsQtShowBaseForItemDef(
                     self._item_show_image_build_fnc,
                     self._finish_item_show_image_
                 )
-                self._item_show_image_runnable.set_start()
+                self._item_show_image_runnable.do_start()
             else:
                 self._item_show_image_build_fnc(
                     self._item_show_image_cache_fnc()

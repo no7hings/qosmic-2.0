@@ -195,7 +195,7 @@ class _GuiEntityOpt(
                     build_fnc=self.gui_build_fnc_for_resources
                 )
             #
-            ts.set_start()
+            ts.do_start()
             #
             self._window.connect_window_close_to(quit_fnc_)
         else:
@@ -567,7 +567,7 @@ class _GuiFileOpt(
     def __init__(self, window, session, resolver, prx_list_view):
         super(_GuiFileOpt, self).__init__(window, session, resolver)
         self._init_list_view_as_file_opt_(prx_list_view, self.DCC_NAMESPACE)
-    
+
     def gui_add(self, file_opt):
         def cache_fnc_():
             def copy_path_fnc_():
@@ -590,7 +590,8 @@ class _GuiFileOpt(
         def build_fnc_(*args):
             _location, _menu_data = args[0]
             if file_opt.get_ext() in ['.jpg', '.png', '.exr', '.tx']:
-                image_file_path, image_sp_cmd = bsc_storage.ImgOiioOptForThumbnail(file_path).generate_thumbnail_create_args(
+                image_file_path, image_sp_cmd = bsc_storage.ImgOiioOptForThumbnail(
+                    file_path).generate_thumbnail_create_args(
                     width=128, ext='.jpg'
                 )
                 prx_item_widget.set_image(image_file_path)
@@ -821,7 +822,7 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
         self._main_h_s.set_fixed_size_at(0, 320)
         self._main_h_s.set_fixed_size_at(2, 320)
         if bsc_core.SysApplicationMtd.get_is_dcc():
-            self._main_h_s.set_contract_right_or_bottom_at(2)
+            self._main_h_s.swap_contract_right_or_bottom_at(2)
 
         self._right_v_s.set_fixed_size_at(0, 320)
 
@@ -907,7 +908,7 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
         )
 
     def restore_variants(self):
-        self.__running_threads_stacks = []
+        self._running_threads_stacks = []
         self._index_thread_batch = 0
         self.__resource_count = 0
 
@@ -1066,10 +1067,10 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
         return []
 
     def __restore_thread_stack_(self):
-        if self.__running_threads_stacks:
-            [i.do_kill() for i in self.__running_threads_stacks]
+        if self._running_threads_stacks:
+            [i.do_kill() for i in self._running_threads_stacks]
         #
-        self.__running_threads_stacks = []
+        self._running_threads_stacks = []
 
     # refresh tasks by resource
     def _do_gui_refresh_for_tasks_by_resource_expand_changed(self, rsv_resource):
@@ -1141,17 +1142,17 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
         #
         if self._qt_thread_enable is True:
             ts = gui_qt_core.QtBuildThreadStack(self.widget)
-            self.__running_threads_stacks.append(ts)
+            self._running_threads_stacks.append(ts)
             ts.run_finished.connect(post_fnc_)
             for i_rsv_entities in rsv_entities_map:
                 ts.register(
                     functools.partial(
                         self.__batch_gui_cache_fnc_for_tasks_and_units_by_entities_, i_rsv_entities, thread_stack_index
-                        ),
+                    ),
                     self.__batch_gui_build_fnc_for_tasks_and_units_
                 )
             #
-            ts.set_start()
+            ts.do_start()
             #
             self.connect_window_close_to(quit_fnc_)
         else:
@@ -1191,17 +1192,17 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
 
         if self._qt_thread_enable is True:
             ts = gui_qt_core.QtBuildThreadStack(self.widget)
-            self.__running_threads_stacks.append(ts)
+            self._running_threads_stacks.append(ts)
             ts.run_finished.connect(post_fnc_)
             for i_rsv_entities in rsv_entities_map:
                 ts.register(
                     functools.partial(
                         self.__gui_cache_fnc_for_tasks_and_units_by_entities_, i_rsv_entities, thread_stack_index
-                        ),
+                    ),
                     self.__gui_build_fnc_for_tasks_and_units_
                 )
             #
-            ts.set_start()
+            ts.do_start()
             #
             self.connect_window_close_to(quit_fnc_)
         else:

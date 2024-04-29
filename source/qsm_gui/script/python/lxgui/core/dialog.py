@@ -207,7 +207,7 @@ class GuiMonitorForDeadline(object):
         j_m.logging.connect_to(w.set_logging)
         j_m.task_status_changed_at.connect_to(w.set_status_at)
         j_m.task_finished_at.connect_to(w.set_finished_at)
-        j_m.set_start()
+        j_m.do_start()
 
         w.connect_window_close_to(j_m.set_stop)
 

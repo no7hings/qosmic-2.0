@@ -48,13 +48,11 @@ class _GuiProcessOpt(object):
             self._ts = []
 
             for _i_index, _i_cmd in enumerate(cmds):
-                bsc_core.TrdCommandPool.set_wait()
-                #
                 _i_t = bsc_core.TrdCommandPool.generate(_i_cmd, _i_index)
                 self._ts.append(_i_t)
                 _i_t.status_changed.connect_to(status_changed_fnc_)
                 _i_t.finished.connect_to(finished_fnc_)
-                _i_t.start()
+                _i_t.do_wait_for_start()
 
         def quit_fnc_():
             button.set_stopped()
@@ -774,9 +772,12 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
             )
         )
 
+        self._top_prx_tool_bar = prx_widgets.PrxHToolBar()
+        s_a_0.add_widget(self._top_prx_tool_bar)
+        self._top_prx_tool_bar.set_expanded(True)
         # rig reference
         self._prx_rig_input_for_asset = qsm_prx_widgets.PrxInputForAsset()
-        s_a_0.add_widget(self._prx_rig_input_for_asset)
+        self._top_prx_tool_bar.add_widget(self._prx_rig_input_for_asset)
 
         h_s_0 = prx_widgets.PrxHSplitter()
         s_a_0.add_widget(h_s_0)
@@ -794,7 +795,8 @@ class PnlAssetManager(prx_widgets.PrxSessionWindow):
         self._rig_prx_tree_view = prx_widgets.PrxTreeView()
         h_s_0.add_widget(self._rig_prx_tree_view)
         h_s_0.set_fixed_size_at(0, 240)
-        # h_s_0.set_contract_left_or_top_at(0)
+        h_s_0.swap_contract_left_or_top_at(0)
+        # h_s_0.swap_contract_left_or_top_at(0)
 
         self._gui_rig_tag_opt = _GuiRigTagOpt(self, self._session, self._rig_tag_tree_view)
         self._gui_rig_opt = _GuiRigOpt(self, self._session, self._rig_prx_tree_view)

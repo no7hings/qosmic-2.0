@@ -26,7 +26,7 @@ class BscStatus(enum.IntEnum):
     @classmethod
     def to_mapper(cls):
         return {
-            int(i): str(i).split('.')[-1] for i in [
+            int(i): str(i).split('.')[-1].lower() for i in [
                 cls.Unknown, cls.Started, cls.Running, cls.Waiting,
                 cls.Completed, cls.Suspended, cls.Failed, cls.Stopped,
                 cls.Error, cls.Killed, cls.Finished

@@ -49,7 +49,7 @@ for i_seq, i_prim in enumerate(prim_opt.get_children()):
     #         'method=cache-hierarchy&location={}&file={}'.format(i_path, j_file_path)
     #     )
     #
-    #     bsc_core.TrdCommandPool.set_wait()
+    #     bsc_core.TrdCommandPool.do_pool_wait()
     #     #
     #     i_t = bsc_core.TrdCommandPool.set_start(j_cmd, i_seq)
     #     #

@@ -219,6 +219,9 @@ class PrxTreeView(
     def set_selection_use_single(self):
         self._qt_view.setSelectionMode(gui_qt_core.QtWidgets.QAbstractItemView.SingleSelection)
 
+    def set_selection_use_extend(self):
+        self._qt_view.setSelectionMode(gui_qt_core.QtWidgets.QAbstractItemView.ExtendedSelection)
+
     def set_selection_disable(self):
         self._qt_view.setSelectionMode(gui_qt_core.QtWidgets.QAbstractItemView.NoSelection)
 
@@ -285,6 +288,12 @@ class PrxTreeView(
     def create_item(self, *args, **kwargs):
         return self._add_item_(
             self.view.addTopLevelItem,
+            *args, **kwargs
+        )
+    
+    def prepend_item(self, *args, **kwargs):
+        return self._add_item_(
+            lambda x: self.view.insertTopLevelItem(0, x),
             *args, **kwargs
         )
 

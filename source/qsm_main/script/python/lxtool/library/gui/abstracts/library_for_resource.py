@@ -1508,7 +1508,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
         self._main_h_s.set_fixed_size_at(0, 320)
         self._main_h_s.set_fixed_size_at(2, 320)
         if bsc_core.SysApplicationMtd.get_is_dcc():
-            self._main_h_s.set_contract_right_or_bottom_at(2)
+            self._main_h_s.swap_contract_right_or_bottom_at(2)
         #
         self._right_v_s.set_fixed_size_at(0, 320)
         #
@@ -1568,7 +1568,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
             return ssn_commands.get_menu_content_by_hook_options(options)
 
     def restore_variants(self):
-        self.__running_threads_stacks = None
+        self._running_threads_stacks = None
 
         self._index_thread_batch = 0
 
@@ -1715,10 +1715,10 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
         return []
 
     def __restore_thread_stack(self):
-        if self.__running_threads_stacks:
-            [i.do_kill() for i in self.__running_threads_stacks]
+        if self._running_threads_stacks:
+            [i.do_kill() for i in self._running_threads_stacks]
         #
-        self.__running_threads_stacks = []
+        self._running_threads_stacks = []
 
     def gui_refresh_fnc(self):
         self._gui_type_opt.restore()
@@ -1779,7 +1779,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
                         build_fnc=self._gui_type_opt.gui_build_fnc_for_types
                     )
             #
-            ts.set_start()
+            ts.do_start()
             #
             self.connect_window_close_to(quit_fnc_)
         else:
@@ -1850,7 +1850,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
         )
         if self._qt_thread_enable is True:
             ts = gui_qt_core.QtBuildThreadStack(self.widget)
-            self.__running_threads_stacks.append(ts)
+            self._running_threads_stacks.append(ts)
             ts.run_finished.connect(post_fnc_)
             with self.gui_bustling():
                 for i_dtb_types in dtb_types_map:
@@ -1861,7 +1861,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
                         build_fnc=self.__batch_gui_build_fnc_for_resources
                     )
             #
-            ts.set_start()
+            ts.do_start()
             #
             self.connect_window_close_to(quit_fnc_)
         else:
@@ -1906,7 +1906,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
         )
         if self._qt_thread_enable is True:
             ts = gui_qt_core.QtBuildThreadStack(self.widget)
-            self.__running_threads_stacks.append(ts)
+            self._running_threads_stacks.append(ts)
             ts.run_finished.connect(post_fnc_)
             for i_dtb_type_assigns in dtb_type_assigns_map:
                 ts.register(
@@ -1916,7 +1916,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
                     build_fnc=self.__gui_build_fnc_for_resources
                 )
             #
-            ts.set_start()
+            ts.do_start()
             #
             self.connect_window_close_to(quit_fnc_)
         else:

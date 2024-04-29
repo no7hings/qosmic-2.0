@@ -84,6 +84,8 @@ class QtTreeWidgetItem(
 
         self._status = self.ValidationStatus.Normal
 
+        self._process_status = self.ProcessStatus.Unknown
+
         self._signals.drag_move.connect(
             self._do_drag_move_
         )
@@ -297,12 +299,15 @@ class QtTreeWidgetItem(
             self.setForeground(column, QtGui.QBrush(color))
 
     def _set_process_status_(self, status, column=0):
+        self._process_status = status
         font = gui_qt_core.GuiQtFont.generate(size=8)
         if status in {self.ProcessStatus.Unknown}:
             color = gui_qt_core.QtColors.Text
         elif status in {self.ProcessStatus.Waiting}:
             color = QtGui.QColor(*self.Rgba.Orange)
-        elif status in {self.ProcessStatus.Started, self.ProcessStatus.Running}:
+        elif status in {self.ProcessStatus.Started}:
+            color = QtGui.QColor(*self.Rgba.DarkBlue)
+        elif status in {self.ProcessStatus.Running}:
             color = QtGui.QColor(*self.Rgba.Blue)
         elif status in {self.ProcessStatus.Suspended}:
             color = QtGui.QColor(*self.Rgba.Yellow)
@@ -322,6 +327,22 @@ class QtTreeWidgetItem(
                 self.setForeground(i, QtGui.QBrush(color))
         else:
             self.setForeground(column, QtGui.QBrush(color))
+
+    def _get_process_status_(self):
+        return self._process_status
+
+    def _get_process_status_from_children_(self):
+        status = []
+        children = self._get_children_()
+        for i in children:
+            i_status = i._get_process_status_()
+            status.append(i_status)
+            if i_status == self.ProcessStatus.Failed:
+                return self.ProcessStatus.Failed
+        c = len(children)
+        if status == [self.ProcessStatus.Completed]*c:
+            return self.ProcessStatus.Completed
+        return self.ProcessStatus.Unknown
 
     def _update_wgt_icon_(self, status, column=0):
         if column == 0:

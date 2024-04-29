@@ -247,6 +247,12 @@ class PrxTreeItem(
             *args, **kwargs
         )
 
+    def prepend_child(self, *args, **kwargs):
+        return self._add_item_(
+            lambda x: self._qt_widget.insertChild(0, x),
+            *args, **kwargs
+        )
+
     def clear_children(self):
         self._qt_widget.takeChildren()
 
@@ -490,6 +496,12 @@ class PrxTreeItem(
 
     def set_process_status(self, status):
         self._qt_widget._set_process_status_(status)
+
+    def get_process_status(self):
+        return self._qt_widget._get_process_status_()
+
+    def get_process_status_args_from_children(self):
+        return self._qt_widget._get_process_status_from_children_()
 
     def get_view(self):
         qt_tree_view = self._qt_widget.treeWidget()

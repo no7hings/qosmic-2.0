@@ -50,7 +50,7 @@ def main(session):
                             width
                         )
                         if i_cmd:
-                            bsc_core.TrdCommandPool.set_wait()
+                            bsc_core.TrdCommandPool.do_pool_wait()
                             bsc_core.TrdCommandPool.set_start(i_cmd)
         else:
             raise RuntimeError(

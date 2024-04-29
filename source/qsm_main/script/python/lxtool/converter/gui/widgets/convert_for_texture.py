@@ -195,7 +195,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
                     ),
                     self.__gui_add_files
                 )
-            ts.set_start()
+            ts.do_start()
 
     def __gui_cache_files(self, directory_path, include_patterns, ext_includes):
         file_paths = bsc_storage.StgDirectoryMtd.get_file_paths(directory_path, ext_includes)
@@ -350,7 +350,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
                     break
                 #
                 if i_cmd:
-                    bsc_core.TrdCommandPool.set_wait()
+                    bsc_core.TrdCommandPool.do_pool_wait()
                     #
                     i_t = bsc_core.TrdCommandPool.set_start(i_cmd, i_index)
                     i_t.status_changed.connect_to(status_update_at_fnc_)
@@ -552,7 +552,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
                     break
                 #
                 if i_cmd:
-                    bsc_core.TrdCommandPool.set_wait()
+                    bsc_core.TrdCommandPool.do_pool_wait()
                     #
                     i_t = bsc_core.TrdCommandPool.set_start(i_cmd, i_index)
                     i_t.status_changed.connect_to(status_update_at_fnc_)

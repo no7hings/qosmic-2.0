@@ -44,7 +44,7 @@ class AbsQtThreadProcessBase(object):
             self._ts = []
             #
             for _i_index, _i_cmd in enumerate(self._cmds):
-                bsc_core.TrdCommandPool.set_wait()
+                bsc_core.TrdCommandPool.do_pool_wait()
                 #
                 _i_t = bsc_core.TrdCommandPool.set_start(_i_cmd, _i_index)
                 self._ts.append(_i_t)

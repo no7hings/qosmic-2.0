@@ -62,7 +62,7 @@ class AbsPnlSubmitterForAssetRenderDcc(prx_widgets.PrxSessionWindow):
         self._result_list_view.set_view_list_mode()
         h_s_0.add_widget(self._result_list_view)
         h_s_0.set_fixed_size_at(0, 240)
-        h_s_0.set_contract_left_or_top_at(0)
+        h_s_0.swap_contract_left_or_top_at(0)
         self._result_list_view.set_item_frame_size_basic(*self._item_frame_size)
         self._result_list_view.set_item_icon_frame_size(*self._item_icon_frame_size)
         self._result_list_view.set_item_icon_size(*self._item_icon_size)

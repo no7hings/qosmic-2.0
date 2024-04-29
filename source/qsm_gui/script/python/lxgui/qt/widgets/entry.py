@@ -1030,10 +1030,10 @@ class QtEntryAsBubble(
             else:
                 text = self.__text
 
-            s_t, w_t, w_c, h_c = gui_qt_core.GuiQtText.generate_draw_args(self, text, self.__w_maximum_text)
+            s_t, w_t, w_c, h_c = gui_qt_core.GuiQtText.generate_draw_args(self, text, self._w_maximum_text)
             self.setFixedWidth(w_c)
 
-            self.__radius_border = s_t
+            self._radius_border = s_t
 
             x, y = 0, 0
 
@@ -1066,9 +1066,9 @@ class QtEntryAsBubble(
 
         self.__is_hovered = False
 
-        self.__radius_border = 0
+        self._radius_border = 0
 
-        self.__w_maximum_text = 96
+        self._w_maximum_text = 96
 
         self.__w_mark = None
 
@@ -1144,7 +1144,7 @@ class QtEntryAsBubble(
 
             painter.drawRoundedRect(
                 rect_frame,
-                self.__radius_border, self.__radius_border,
+                self._radius_border, self._radius_border,
                 QtCore.Qt.AbsoluteSize
             )
 

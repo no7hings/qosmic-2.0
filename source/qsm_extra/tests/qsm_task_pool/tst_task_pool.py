@@ -1,8 +1,7 @@
 # coding:utf-8
-import qsm_prc_task.core as prc_task_core
+import qsm_task_pool.core as prc_task_core
 
-
-c = prc_task_core.Connection.generate()
+c = prc_task_core.Pool.generate()
 
 for i in range(5):
     c.new_task(

@@ -34,11 +34,11 @@ class PrxHSplitter(gui_prx_abstracts.AbsPrxWidget):
     def set_widget_hide_at(self, index):
         self._qt_widget._set_widget_hide_at_(index)
 
-    def set_contract_left_or_top_at(self, index, size=None):
-        self._qt_widget._set_contract_left_or_top_at_(index, size)
+    def swap_contract_left_or_top_at(self, index, size=None):
+        self._qt_widget._swap_contract_left_or_top_at_(index, size)
 
-    def set_contract_right_or_bottom_at(self, index, size=None):
-        self._qt_widget._set_contract_right_or_bottom_at_(index, size)
+    def swap_contract_right_or_bottom_at(self, index, size=None):
+        self._qt_widget._swap_contract_right_or_bottom_at_(index, size)
 
     def get_is_contracted_at(self, index):
         return self._qt_widget._get_is_contracted_at_(index)
@@ -58,8 +58,8 @@ class PrxHSplitter(gui_prx_abstracts.AbsPrxWidget):
     def install_full_size_shortcut(self):
         self._qt_widget._install_full_size_shortcut_()
 
-    def set_visible_at(self, index, boolean):
-        self._qt_widget._set_visible_at_(index, boolean)
+    def set_contract_enable(self, boolean):
+        self._qt_widget._set_contract_enable_(boolean)
 
 
 class PrxVSplitter(PrxHSplitter):

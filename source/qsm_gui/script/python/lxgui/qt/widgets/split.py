@@ -25,6 +25,11 @@ class _AbsQtSplitterHandle(
 ):
     QT_ORIENTATION = None
 
+
+    def _refresh_widget_all_(self):
+        self._refresh_widget_draw_geometry_()
+        self._refresh_widget_draw_()
+
     def _refresh_widget_draw_(self):
         self.update()
 
@@ -139,6 +144,8 @@ class _AbsQtSplitterHandle(
         self._index = 0
         #
         self._splitter_press_pos = 0, 0
+
+        self._contract_enable = True
         #
         self._contract_l_rect = QtCore.QRect()
         self._contract_l_draw_rect = QtCore.QRect()
@@ -197,33 +204,44 @@ class _AbsQtSplitterHandle(
             elif event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.buttons() == QtCore.Qt.LeftButton:
                     p = event.pos()
-                    if self._contract_l_rect.contains(p):
-                        if self._get_orientation_() == QtCore.Qt.Horizontal:
-                            self._set_action_flag_(
-                                [self.ActionFlag.ResizeLeft, self.ActionFlag.ResizeRight][self._is_contract_l]
-                            )
-                        elif self._get_orientation_() == QtCore.Qt.Vertical:
-                            self._set_action_flag_(
-                                [self.ActionFlag.ResizeUp, self.ActionFlag.ResizeDown][self._is_contract_l]
-                            )
-                    elif self._contract_r_rect.contains(p):
-                        if self._get_orientation_() == QtCore.Qt.Horizontal:
-                            self._set_action_flag_(
-                                [self.ActionFlag.ResizeRight, self.ActionFlag.ResizeLeft][self._is_contract_r]
-                            )
-                        elif self._get_orientation_() == QtCore.Qt.Vertical:
-                            self._set_action_flag_(
-                                [self.ActionFlag.ResizeDown, self.ActionFlag.ResizeUp][self._is_contract_r]
-                            )
-                    elif self._swap_rect.contains(p):
-                        if self._get_orientation_() == QtCore.Qt.Horizontal:
-                            self._set_action_flag_(
-                                self.ActionFlag.SwapH
-                            )
-                        elif self._get_orientation_() == QtCore.Qt.Vertical:
-                            self._set_action_flag_(
-                                self.ActionFlag.SwapV
-                            )
+                    if self._contract_enable is True:
+                        if self._contract_l_rect.contains(p):
+                            if self._get_orientation_() == QtCore.Qt.Horizontal:
+                                self._set_action_flag_(
+                                    [self.ActionFlag.ResizeLeft, self.ActionFlag.ResizeRight][self._is_contract_l]
+                                )
+                            elif self._get_orientation_() == QtCore.Qt.Vertical:
+                                self._set_action_flag_(
+                                    [self.ActionFlag.ResizeUp, self.ActionFlag.ResizeDown][self._is_contract_l]
+                                )
+                        elif self._contract_r_rect.contains(p):
+                            if self._get_orientation_() == QtCore.Qt.Horizontal:
+                                self._set_action_flag_(
+                                    [self.ActionFlag.ResizeRight, self.ActionFlag.ResizeLeft][self._is_contract_r]
+                                )
+                            elif self._get_orientation_() == QtCore.Qt.Vertical:
+                                self._set_action_flag_(
+                                    [self.ActionFlag.ResizeDown, self.ActionFlag.ResizeUp][self._is_contract_r]
+                                )
+                        elif self._swap_rect.contains(p):
+                            if self._get_orientation_() == QtCore.Qt.Horizontal:
+                                self._set_action_flag_(
+                                    self.ActionFlag.SwapH
+                                )
+                            elif self._get_orientation_() == QtCore.Qt.Vertical:
+                                self._set_action_flag_(
+                                    self.ActionFlag.SwapV
+                                )
+                        else:
+                            if self._get_orientation_() == QtCore.Qt.Horizontal:
+                                self._set_action_flag_(
+                                    self.ActionFlag.SplitHPress
+                                )
+                            elif self._get_orientation_() == QtCore.Qt.Vertical:
+                                self._set_action_flag_(
+                                    self.ActionFlag.SplitVPress
+                                )
+                            self._do_split_press_move_start_(event)
                     else:
                         if self._get_orientation_() == QtCore.Qt.Horizontal:
                             self._set_action_flag_(
@@ -239,51 +257,67 @@ class _AbsQtSplitterHandle(
                 # hove move
                 if event.buttons() == QtCore.Qt.NoButton:
                     p = event.pos()
-                    if self._contract_l_rect.contains(p):
-                        if self._get_orientation_() == QtCore.Qt.Horizontal:
-                            self._set_action_flag_(
-                                [self.ActionFlag.ResizeLeft, self.ActionFlag.ResizeRight][self._is_contract_l]
-                            )
-                            self._set_tool_tip_text_(
-                                '"LMB-click" to contract widget to {}'.format(['left', 'right'][self._is_contract_l])
-                            )
-                        elif self._get_orientation_() == QtCore.Qt.Vertical:
-                            self._set_action_flag_(
-                                [self.ActionFlag.ResizeUp, self.ActionFlag.ResizeDown][self._is_contract_l]
-                            )
-                            self._set_tool_tip_text_(
-                                '"LMB-click" to contract widget to {}'.format(['up', 'down'][self._is_contract_l])
-                            )
-                    elif self._contract_r_rect.contains(p):
-                        if self._get_orientation_() == QtCore.Qt.Horizontal:
-                            self._set_action_flag_(
-                                [self.ActionFlag.ResizeRight, self.ActionFlag.ResizeLeft][self._is_contract_r]
-                            )
-                            self._set_tool_tip_text_(
-                                '"LMB-click" to contract widget to {}'.format(['right', 'left'][self._is_contract_l])
-                            )
-                        elif self._get_orientation_() == QtCore.Qt.Vertical:
-                            self._set_action_flag_(
-                                [self.ActionFlag.ResizeDown, self.ActionFlag.ResizeUp][self._is_contract_r]
-                            )
-                            self._set_tool_tip_text_(
-                                '"LMB-click" to contract widget to {}'.format(['down', 'up'][self._is_contract_l])
-                            )
-                    elif self._swap_rect.contains(p):
-                        if self._get_orientation_() == QtCore.Qt.Horizontal:
-                            self._set_action_flag_(
-                                self.ActionFlag.SwapH
-                            )
-                            self._set_tool_tip_text_(
-                                '"LMB-click" to swap widgets left to right'
-                            )
-                        elif self._get_orientation_() == QtCore.Qt.Vertical:
-                            self._set_action_flag_(
-                                self.ActionFlag.SwapV
-                            )
-                            self._set_tool_tip_text_(
-                                '"LMB-click" to swap widgets up to down'
-                            )
+                    if self._contract_enable is True:
+                        if self._contract_l_rect.contains(p):
+                            if self._get_orientation_() == QtCore.Qt.Horizontal:
+                                self._set_action_flag_(
+                                    [self.ActionFlag.ResizeLeft, self.ActionFlag.ResizeRight][self._is_contract_l]
+                                )
+                                self._set_tool_tip_text_(
+                                    '"LMB-click" to contract widget to {}'.format(['left', 'right'][self._is_contract_l])
+                                )
+                            elif self._get_orientation_() == QtCore.Qt.Vertical:
+                                self._set_action_flag_(
+                                    [self.ActionFlag.ResizeUp, self.ActionFlag.ResizeDown][self._is_contract_l]
+                                )
+                                self._set_tool_tip_text_(
+                                    '"LMB-click" to contract widget to {}'.format(['up', 'down'][self._is_contract_l])
+                                )
+                        elif self._contract_r_rect.contains(p):
+                            if self._get_orientation_() == QtCore.Qt.Horizontal:
+                                self._set_action_flag_(
+                                    [self.ActionFlag.ResizeRight, self.ActionFlag.ResizeLeft][self._is_contract_r]
+                                )
+                                self._set_tool_tip_text_(
+                                    '"LMB-click" to contract widget to {}'.format(['right', 'left'][self._is_contract_l])
+                                )
+                            elif self._get_orientation_() == QtCore.Qt.Vertical:
+                                self._set_action_flag_(
+                                    [self.ActionFlag.ResizeDown, self.ActionFlag.ResizeUp][self._is_contract_r]
+                                )
+                                self._set_tool_tip_text_(
+                                    '"LMB-click" to contract widget to {}'.format(['down', 'up'][self._is_contract_l])
+                                )
+                        elif self._swap_rect.contains(p):
+                            if self._get_orientation_() == QtCore.Qt.Horizontal:
+                                self._set_action_flag_(
+                                    self.ActionFlag.SwapH
+                                )
+                                self._set_tool_tip_text_(
+                                    '"LMB-click" to swap widgets left to right'
+                                )
+                            elif self._get_orientation_() == QtCore.Qt.Vertical:
+                                self._set_action_flag_(
+                                    self.ActionFlag.SwapV
+                                )
+                                self._set_tool_tip_text_(
+                                    '"LMB-click" to swap widgets up to down'
+                                )
+                        else:
+                            if self._get_orientation_() == QtCore.Qt.Horizontal:
+                                self._set_action_flag_(
+                                    self.ActionFlag.SplitHHover
+                                )
+                                self._set_tool_tip_text_(
+                                    '"LMB-move" to adjust widgets size between left and right'
+                                )
+                            elif self._get_orientation_() == QtCore.Qt.Vertical:
+                                self._set_action_flag_(
+                                    self.ActionFlag.SplitVHover
+                                )
+                                self._set_tool_tip_text_(
+                                    '"LMB-move" to adjust widgets size between up and down'
+                                )
                     else:
                         if self._get_orientation_() == QtCore.Qt.Horizontal:
                             self._set_action_flag_(
@@ -308,20 +342,23 @@ class _AbsQtSplitterHandle(
                 else:
                     pass
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
-                # resize
-                if self._get_action_flag_is_match_(
-                        self.ActionFlag.ResizeLeft, self.ActionFlag.ResizeUp
-                ):
-                    self._execute_contract_left_or_top_()
-                elif self._get_action_flag_is_match_(
-                        self.ActionFlag.ResizeRight, self.ActionFlag.ResizeDown
-                ):
-                    self._execute_contract_right_or_bottom_()
-                # swap
-                elif self._get_action_flag_is_match_(
-                        self.ActionFlag.SwapH, self.ActionFlag.SwapV
-                ):
-                    self._execute_swap_()
+                if self._contract_enable is True:
+                    # resize
+                    if self._get_action_flag_is_match_(
+                            self.ActionFlag.ResizeLeft, self.ActionFlag.ResizeUp
+                    ):
+                        self._do_swap_contract_left_or_top_()
+                    elif self._get_action_flag_is_match_(
+                            self.ActionFlag.ResizeRight, self.ActionFlag.ResizeDown
+                    ):
+                        self._do_swap_contract_right_or_bottom_()
+                    # swap
+                    elif self._get_action_flag_is_match_(
+                            self.ActionFlag.SwapH, self.ActionFlag.SwapV
+                    ):
+                        self._do_swap_()
+                    else:
+                        self._do_split_press_move_stop_(event)
                 else:
                     self._do_split_press_move_stop_(event)
                 self._clear_all_action_flags_()
@@ -364,65 +401,70 @@ class _AbsQtSplitterHandle(
                 file_path=self._resize_icon_file_path,
                 offset=offset,
             )
-        # contract
-        c_c = self._is_contract_l, self._is_contract_r
-        if c_c == (False, False):
+        if self._contract_enable is True:
+            # contract
+            c_c = self._is_contract_l, self._is_contract_r
+            if c_c == (False, False):
+                painter._draw_icon_file_by_rect_(
+                    rect=self._contract_l_draw_rect,
+                    file_path=self._contract_l_draw_icon_file_path,
+                    is_hovered=self._action_flag in {
+                        self.ActionFlag.ResizeLeft, self.ActionFlag.ResizeUp,
+                    }
+                )
+                painter._draw_icon_file_by_rect_(
+                    rect=self._contract_r_draw_rect,
+                    file_path=self._contract_r_draw_icon_file_path,
+                    is_hovered=self._action_flag in {
+                        self.ActionFlag.ResizeRight, self.ActionFlag.ResizeDown,
+                    }
+                )
+            elif c_c == (True, False):
+                painter._draw_icon_file_by_rect_(
+                    rect=self._contract_l_draw_rect,
+                    file_path=self._contract_r_draw_icon_file_path,
+                    is_hovered=self._action_flag in {
+                        self.ActionFlag.ResizeRight, self.ActionFlag.ResizeDown,
+                    }
+                )
+                painter._draw_icon_file_by_rect_(
+                    rect=self._contract_r_draw_rect,
+                    file_path=self._contract_r_draw_icon_file_path,
+                    is_hovered=self._action_flag in {
+                        self.ActionFlag.ResizeRight, self.ActionFlag.ResizeDown,
+                    }
+                )
+            elif c_c == (False, True):
+                painter._draw_icon_file_by_rect_(
+                    rect=self._contract_l_draw_rect,
+                    file_path=self._contract_l_draw_icon_file_path,
+                    is_hovered=self._action_flag in {
+                        self.ActionFlag.ResizeLeft, self.ActionFlag.ResizeUp,
+                    }
+                )
+                painter._draw_icon_file_by_rect_(
+                    rect=self._contract_r_draw_rect,
+                    file_path=self._contract_l_draw_icon_file_path,
+                    is_hovered=self._action_flag in {
+                        self.ActionFlag.ResizeLeft, self.ActionFlag.ResizeUp,
+                    }
+                )
+            # swap
             painter._draw_icon_file_by_rect_(
-                rect=self._contract_l_draw_rect,
-                file_path=self._contract_l_draw_icon_file_path,
+                rect=self._swap_draw_rect,
+                file_path=self._swap_icon_file_path,
                 is_hovered=self._action_flag in {
-                    self.ActionFlag.ResizeLeft, self.ActionFlag.ResizeUp,
+                    self.ActionFlag.SwapH, self.ActionFlag.SwapV
                 }
             )
-            painter._draw_icon_file_by_rect_(
-                rect=self._contract_r_draw_rect,
-                file_path=self._contract_r_draw_icon_file_path,
-                is_hovered=self._action_flag in {
-                    self.ActionFlag.ResizeRight, self.ActionFlag.ResizeDown,
-                }
-            )
-        elif c_c == (True, False):
-            painter._draw_icon_file_by_rect_(
-                rect=self._contract_l_draw_rect,
-                file_path=self._contract_r_draw_icon_file_path,
-                is_hovered=self._action_flag in {
-                    self.ActionFlag.ResizeRight, self.ActionFlag.ResizeDown,
-                }
-            )
-            painter._draw_icon_file_by_rect_(
-                rect=self._contract_r_draw_rect,
-                file_path=self._contract_r_draw_icon_file_path,
-                is_hovered=self._action_flag in {
-                    self.ActionFlag.ResizeRight, self.ActionFlag.ResizeDown,
-                }
-            )
-        elif c_c == (False, True):
-            painter._draw_icon_file_by_rect_(
-                rect=self._contract_l_draw_rect,
-                file_path=self._contract_l_draw_icon_file_path,
-                is_hovered=self._action_flag in {
-                    self.ActionFlag.ResizeLeft, self.ActionFlag.ResizeUp,
-                }
-            )
-            painter._draw_icon_file_by_rect_(
-                rect=self._contract_r_draw_rect,
-                file_path=self._contract_l_draw_icon_file_path,
-                is_hovered=self._action_flag in {
-                    self.ActionFlag.ResizeLeft, self.ActionFlag.ResizeUp,
-                }
-            )
-        # swap
-        painter._draw_icon_file_by_rect_(
-            rect=self._swap_draw_rect,
-            file_path=self._swap_icon_file_path,
-            is_hovered=self._action_flag in {
-                self.ActionFlag.SwapH, self.ActionFlag.SwapV
-            }
-        )
 
-    def _execute_contract_left_or_top_(self, size_mark=None):
+    def _set_contract_enable_(self, boolean):
+        self._contract_enable = boolean
+        self._refresh_widget_all_()
+
+    def _do_swap_contract_left_or_top_(self, size_mark=None):
         if self._is_contract_r is True:
-            self._execute_contract_right_or_bottom_()
+            self._do_swap_contract_right_or_bottom_()
         else:
             splitter = self._get_splitter_()
             index_l = splitter._get_handle_index_(self)-1
@@ -457,9 +499,9 @@ class _AbsQtSplitterHandle(
         #
         self._refresh_widget_draw_()
 
-    def _execute_contract_right_or_bottom_(self, size_mark=None):
+    def _do_swap_contract_right_or_bottom_(self, size_mark=None):
         if self._is_contract_l is True:
-            self._execute_contract_left_or_top_()
+            self._do_swap_contract_left_or_top_()
         else:
             splitter = self._get_splitter_()
             index_l = splitter._get_handle_index_(self)-1
@@ -493,14 +535,11 @@ class _AbsQtSplitterHandle(
         #
         self._refresh_widget_draw_()
 
-    def _execute_swap_(self):
+    def _do_swap_(self):
         splitter = self._get_splitter_()
         index_l = splitter._get_handle_index_(self)-1
         index_r = splitter._get_handle_index_(self)
         splitter._update_by_swap_((index_l, index_r))
-
-    def _refresh_widget_all_(self):
-        pass
 
     def _get_orientation_(self):
         return self.QT_ORIENTATION
@@ -857,6 +896,41 @@ class _AbsQtSplitter(QtWidgets.QWidget):
         #
         self._full_size_flag = False
 
+    def eventFilter(self, *args):
+        widget, event = args
+        if widget == self:
+            if event.type() == QtCore.QEvent.Resize:
+                self._refresh_widget_all_()
+                self._update_all_widgets_visible_()
+        return False
+
+    def paintEvent(self, event):
+        painter = gui_qt_core.QtPainter(self)
+        if self._is_split_moving:
+            for i_index in self._indices_moving:
+                i_is_contracted = self._is_contracted_dict[i_index]
+                if i_is_contracted is False:
+                    i_widget_rect = self._widget_rects[i_index]
+
+                    painter._draw_frame_by_rect_(
+                        rect=i_widget_rect,
+                        background_color=gui_qt_core.QtBackgroundColors.Transparent,
+                        border_color=gui_qt_core.QtBorderColors.SplitMoving,
+                        border_width=2,
+                        border_radius=1
+                    )
+
+                    painter._draw_alternating_frame_by_rect_(
+                        rect=i_widget_rect,
+                        colors=((31, 31, 31, 255), (35, 35, 35, 255)),
+                        border_radius=1
+                    )
+
+                    painter._draw_size_bubble_by_rect_(
+                        rect=i_widget_rect,
+                        orientation=self.QT_ORIENTATION
+                    )
+
     def _install_full_size_shortcut_(self):
         action = QtWidgets.QAction(self)
         action.triggered.connect(
@@ -924,40 +998,9 @@ class _AbsQtSplitter(QtWidgets.QWidget):
             if i_rect.contains(p):
                 return i_index
 
-    def eventFilter(self, *args):
-        widget, event = args
-        if widget == self:
-            if event.type() == QtCore.QEvent.Resize:
-                self._refresh_widget_all_()
-                self._update_all_widgets_visible_()
-        return False
-
-    def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
-        if self._is_split_moving:
-            for i_index in self._indices_moving:
-                i_is_contracted = self._is_contracted_dict[i_index]
-                if i_is_contracted is False:
-                    i_widget_rect = self._widget_rects[i_index]
-
-                    painter._draw_frame_by_rect_(
-                        rect=i_widget_rect,
-                        background_color=gui_qt_core.QtBackgroundColors.Transparent,
-                        border_color=gui_qt_core.QtBorderColors.SplitMoving,
-                        border_width=2,
-                        border_radius=1
-                    )
-
-                    painter._draw_alternating_frame_by_rect_(
-                        rect=i_widget_rect,
-                        colors=((31, 31, 31, 255), (35, 35, 35, 255)),
-                        border_radius=1
-                    )
-
-                    painter._draw_size_bubble_by_rect_(
-                        rect=i_widget_rect,
-                        orientation=self.QT_ORIENTATION
-                    )
+    def _set_contract_enable_(self, boolean):
+        for i in self._handles:
+            i._set_contract_enable_(boolean)
 
     def _set_window_(self, widget):
         self._window = widget
@@ -1049,17 +1092,17 @@ class _AbsQtSplitter(QtWidgets.QWidget):
 
     def _set_widget_hide_at_(self, index):
         handle = self._get_handle_at_(index+1)
-        handle._execute_contract_left_or_top_()
+        handle._do_swap_contract_left_or_top_()
 
-    def _set_contract_left_or_top_at_(self, index, size=None):
+    def _swap_contract_left_or_top_at_(self, index, size=None):
         self._is_contracted_dict[index] = True
         handle = self._get_handle_at_(index+1)
-        handle._execute_contract_left_or_top_(size)
+        handle._do_swap_contract_left_or_top_(size)
 
-    def _set_contract_right_or_bottom_at_(self, index, size=None):
+    def _swap_contract_right_or_bottom_at_(self, index, size=None):
         self._is_contracted_dict[index] = True
         handle = self._get_handle_at_(index)
-        handle._execute_contract_right_or_bottom_(size)
+        handle._do_swap_contract_right_or_bottom_(size)
 
     def _get_is_contracted_at_(self, index):
         return self._is_contracted_dict[index]
@@ -1089,11 +1132,6 @@ class _AbsQtSplitter(QtWidgets.QWidget):
 
     def _get_handle_index_(self, handle):
         return self._handles.index(handle)
-
-    def _set_visible_at_(self, index, boolean):
-        self._hide_dict[index] = boolean
-        print self._get_handle_at_(0)._set_visible_(boolean)
-        print self._get_widget_at_(0)._set_visible_(boolean)
 
 
 class QtHSplitter(_AbsQtSplitter):

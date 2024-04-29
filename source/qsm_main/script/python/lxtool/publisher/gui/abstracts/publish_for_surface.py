@@ -445,7 +445,7 @@ class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
             self.get_definition_window_size()[0]*(2.0/3.0)-32
         )
         h_s_0.set_fixed_size_at(0, 240)
-        h_s_0.set_contract_left_or_top_at(0)
+        h_s_0.swap_contract_left_or_top_at(0)
 
         self._tree_view_opt = self.DCC_VALIDATOR_OPT_CLS(
             self._prx_tree_view_for_filter, self._result_tree_view
