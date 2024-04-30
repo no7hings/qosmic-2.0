@@ -21,9 +21,27 @@ class W(prx_widgets.PrxBaseWindow):
         lot.addWidget(c.widget)
 
         # c.set_root('Z:/projects/QSM_TST/assets/chr/sam/workarea/user.nothings/rig.rigging')
+        # c.setup(
+        #     dict(
+        #         location='Z:/projects',
+        #         entity='QSM_TST',
+        #         step='dev',
+        #         task='developing',
+        #         ext='.ma',
+        #         artist='nothings',
+        #     )
+        # )
         c.setup(
-            dict(location='Z:/projects', entity='QSM_TST', step='dev', task='developing', ext='.ma')
+            dict(
+                location='Z:/projects/QSM_TST/assets/chr',
+                entity='sam',
+                step='rig',
+                task='rigging',
+                ext='.ma',
+                artist='nothings',
+            )
         )
+
 
 
 if __name__ == '__main__':

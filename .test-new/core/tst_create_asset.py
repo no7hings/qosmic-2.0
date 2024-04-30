@@ -13,8 +13,21 @@ d = bsc_storage.StgFileOpt(
 #         j_dir = 'Z:/projects/QSM_TST_DFT/work/assets/chr/{}/{}'.format(i.lower(), j)
 #         bsc_storage.StgDirectoryOpt(j_dir).set_create()
 
-for i in d['prp']:
+# for i in d['prp']:
+#
+#     for j in ['mod/modeling', 'srf/surfacing', 'rig/rigging']:
+#         j_dir = 'Z:/projects/QSM_TST_DFT/work/assets/prp/{}/{}'.format(i.lower(), j)
+#         bsc_storage.StgDirectoryOpt(j_dir).set_create()
 
-    for j in ['mod/modeling', 'srf/surfacing', 'rig/rigging']:
-        j_dir = 'Z:/projects/QSM_TST_DFT/work/assets/prp/{}/{}'.format(i.lower(), j)
-        bsc_storage.StgDirectoryOpt(j_dir).set_create()
+# for i in d['chr']:
+#
+#     for j in ['Rig/Final']:
+#         j_dir = 'X:/QSM_TST/Assets/chr/{}/{}'.format(i.lower(), j)
+#         print j_dir
+#         bsc_storage.StgDirectoryOpt(j_dir).set_create()
+
+# for i in d['prp']:
+#
+#     for j in ['Rig/Final']:
+#         j_dir = 'X:/QSM_TST/Assets/prp/{}/{}'.format(i.lower(), j)
+#         bsc_storage.StgDirectoryOpt(j_dir).set_create()

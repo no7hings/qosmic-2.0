@@ -45,7 +45,8 @@ class PrxInputForAsset(prx_abstracts.AbsPrxWidget):
         # self._qt_path_input.input_value_change_accepted.connect(self._update_fnc)
         # self._qt_path_input.user_input_entry_finished.connect(self._update_fnc_1)
 
-        self._qt_path_input._run_fnc_use_thread_(self._cache_entities)
+        # self._qt_path_input._run_fnc_use_thread_(self._cache_entities)
+        self._cache_entities()
 
     def _cache_projects(self):
         name_texts = []

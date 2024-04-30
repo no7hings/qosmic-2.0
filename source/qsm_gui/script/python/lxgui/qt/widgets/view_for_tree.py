@@ -527,8 +527,11 @@ class QtTreeWidget(
         else:
             self._selected_indices = []
             self._selected_indirect_indices = []
-        #
-        self.update()
+        # todo: use update() error in maya 2017?
+        try:
+            self.update()
+        except Exception:
+            pass
 
     def _set_item_changed_update_(self, item, column=0):
         pass

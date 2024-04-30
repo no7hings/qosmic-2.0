@@ -667,6 +667,9 @@ class PrxToggleButton(gui_prx_abstracts.AbsPrxWidget):
     def set_checked(self, boolean):
         self._qt_widget._set_checked_(boolean)
 
+    def get_is_checked(self):
+        return self._qt_widget._get_is_checked_()
+
     def execute_swap_check(self):
         self._qt_widget._execute_check_swap_()
 
@@ -681,6 +684,9 @@ class PrxToggleButton(gui_prx_abstracts.AbsPrxWidget):
 
     def connect_user_check_clicked_to(self, fnc):
         self._qt_widget.user_check_clicked.connect(fnc)
+
+    def connect_user_check_toggled_to(self, fnc):
+        self._qt_widget.user_check_toggled.connect(fnc)
 
     def connect_check_clicked_as_exclusive_to(self, fnc):
         self._qt_widget.user_check_clicked_as_exclusive.connect(fnc)

@@ -391,7 +391,7 @@ class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
         self._rsv_task = None
         self._notice_user_names = []
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         self._check_key_map = {
             'validation.ignore_shotgun_check': 'with_shotgun_check',
             #

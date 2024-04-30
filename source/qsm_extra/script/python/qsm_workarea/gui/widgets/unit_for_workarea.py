@@ -1,7 +1,7 @@
 # coding:utf-8
-import qsm_gui.proxy.widgets as qsm_prx_widgets
+from ...gui import abstracts as _gui_abstracts
 
 
-class PrxUnitForWorkarea(qsm_prx_widgets.PrxUnitForWorkarea):
+class PrxUnitForWorkarea(_gui_abstracts.AbsPrxUnitForWorkarea):
     def __init__(self, *args, **kwargs):
         super(PrxUnitForWorkarea, self).__init__(*args, **kwargs)

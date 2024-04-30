@@ -20,7 +20,6 @@ requires = [
 def commands():
     # root
     env.QSM_MAIN_BASE = '{root}'
-    env.PATH.append('{root}/script/bin')
     # python
     env.PYTHONPATH.append('{root}/script/python')
 

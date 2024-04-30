@@ -99,7 +99,7 @@ class AbsPnlBuilderForTexture(prx_widgets.PrxSessionWindow):
     def restore_variants(self):
         self._texture_name = None
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         sa_1 = prx_widgets.PrxVScrollArea()
         self.add_widget(sa_1)
 

@@ -1,3 +1,3 @@
 # coding:utf-8
-from .task_monitor import *
+from .panel_for_task_monitor import *
 

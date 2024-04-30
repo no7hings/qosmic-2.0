@@ -142,7 +142,7 @@ class AbsPnlComparerForAssetGeometry(prx_widgets.PrxSessionWindow):
     ]
     DCC_COMPARER_OPT_CLS = None
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         s = prx_widgets.PrxVScrollArea()
         self.add_widget(s)
 

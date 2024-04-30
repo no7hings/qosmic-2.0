@@ -20,7 +20,7 @@ import lxsession.commands as ssn_commands; ssn_commands.execute_hook("dcc-tools/
     def __init__(self, session, *args, **kwargs):
         super(AbsToolKitForDcc, self).__init__(session, *args, **kwargs)
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         self._top_prx_tool_bar = prx_widgets.PrxHToolBar()
         self.add_widget(self._top_prx_tool_bar)
         self._top_prx_tool_bar.set_expanded(True)

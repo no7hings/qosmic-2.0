@@ -192,7 +192,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
 
         self.__page_name_mapper = self._session.configure.get('build.page_name_mapper') or {}
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         menu = self.create_menu('extra')
         menu.set_menu_data(
             [

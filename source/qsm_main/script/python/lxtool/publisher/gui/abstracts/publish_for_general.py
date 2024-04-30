@@ -245,7 +245,7 @@ class AbsPnlPublisherForGeneral(prx_widgets.PrxSessionWindow):
         self._step_mapper = dict()
         self._version_properties = None
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         sa_1 = prx_widgets.PrxVScrollArea()
         self.add_widget(sa_1)
 

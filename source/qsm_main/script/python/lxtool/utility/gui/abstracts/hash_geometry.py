@@ -12,7 +12,7 @@ class AbsPnlForHashGeometryDcc(
     def __init__(self, session, *args, **kwargs):
         super(AbsPnlForHashGeometryDcc, self).__init__(session, *args, **kwargs)
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         self._set_panel_build_()
 
     def _set_panel_build_(self):

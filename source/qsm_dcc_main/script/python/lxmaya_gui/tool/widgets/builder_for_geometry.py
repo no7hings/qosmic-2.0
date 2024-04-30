@@ -6,7 +6,7 @@ class PnlBuilderForAssetGeometry(prx_widgets.PrxSessionToolWindow):
     def __init__(self, session, *args, **kwargs):
         super(PnlBuilderForAssetGeometry, self).__init__(session, *args, **kwargs)
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         s = prx_widgets.PrxVScrollArea()
         self.add_widget(s)
         self._options_prx_node = prx_widgets.PrxNode('options')

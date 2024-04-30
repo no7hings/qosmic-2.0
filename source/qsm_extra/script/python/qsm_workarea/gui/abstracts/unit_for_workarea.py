@@ -1,8 +1,6 @@
 # coding:utf-8
 import collections
 
-import copy
-
 import lxbasic.content as bsc_content
 
 import lxbasic.core as bsc_core
@@ -35,14 +33,14 @@ class _GuiDirectoryOpt(
     def __init__(self, window, session, prx_tree_view):
         super(_GuiDirectoryOpt, self).__init__(window, session)
         self._init_tree_view_opt_(prx_tree_view, self.DCC_NAMESPACE)
-        
+
         self._variants = dict()
 
         self._directory_ptn_opt = bsc_core.PtnStgParseOpt(
-            '{location}/{entity}/workarea/{step}.{task}'
+            '{location}/{entity}/workarea/user.{artist}/{step}.{task}'
         )
         self._file_ptn_opt = bsc_core.PtnStgParseOpt(
-            '{location}/{entity}/workarea/{step}.{task}/{task_extra}/{entity}.{step}.{task}.{task_extra}.v{version}{ext}'
+            '{location}/{entity}/workarea/user.{artist}/{step}.{task}/{task_extra}/{entity}.{step}.{task}.{task_extra}.v{version}{ext}'
         )
 
         self._index_thread_batch = 0
@@ -205,7 +203,7 @@ class _GuiDirectoryOpt(
 
             self.gui_add_root(root)
             self.gui_add_next_directories_use_thread(root)
-    
+
     def get_file_opts(self):
         list_ = []
         directory_opt = self.gui_get_current_directory()
@@ -225,18 +223,27 @@ class _GuiDirectoryOpt(
                     list_.append(i_file_opt)
 
         return list_
-    
+
 
 class _GuiFileOpt(
     _GuiBaseOpt,
     prx_abstracts.AbsGuiPrxListViewAsFileOpt
 ):
+
+    @classmethod
+    def find_image(cls, file_opt):
+        directory_path = file_opt.get_directory_path()
+        file_name_base = file_opt.get_name_base()
+        image_file_path = '{}/.snapshot/{}.jpg'.format(directory_path, file_name_base)
+        if bsc_storage.StgPathMtd.get_is_file(image_file_path):
+            return image_file_path
+
     def __init__(self, window, session, prx_list_view):
         super(_GuiFileOpt, self).__init__(window, session)
         self._init_list_view_as_file_opt_(prx_list_view, self.DCC_NAMESPACE)
-        
-        self._item_frame_size = 210, 137
-        self._item_image_frame_size = 210, 105
+
+        self._item_frame_size = 200, 100+16*2
+        self._item_image_frame_size = 200, 100
         self._item_name_frame_size = 16, 16
         self._prx_list_view.set_item_frame_size_basic(*self._item_frame_size)
         self._prx_list_view.set_item_image_frame_size(*self._item_image_frame_size)
@@ -281,7 +288,8 @@ class _GuiFileOpt(
             _prx_item_widget, _location, _name_dict, _menu_data = args[0]
             _image_path = self.find_image(file_opt)
             if _image_path is not None:
-                _thumbnail_file_path, _image_shell_script = bsc_storage.ImgOiioOptForThumbnail(_image_path).generate_thumbnail_create_args(
+                _thumbnail_file_path, _image_shell_script = bsc_storage.ImgOiioOptForThumbnail(
+                    _image_path).generate_thumbnail_create_args(
                     width=240, ext='.jpg'
                 )
                 prx_item_widget.set_image(_thumbnail_file_path)
@@ -326,15 +334,8 @@ class _GuiFileOpt(
             return prx_item_widget
         return self.gui_get(file_path)
 
-    def find_image(self, file_opt):
-        directory_path = file_opt.get_directory_path()
-        file_name_base = file_opt.get_name_base()
-        image_file_path = '{}/.snapshot/{}.jpg'.format(directory_path, file_name_base)
-        if bsc_storage.StgPathMtd.get_is_file(image_file_path):
-            return image_file_path
 
-
-class PrxUnitForWorkarea(prx_abstracts.AbsPrxWidget):
+class AbsPrxUnitForWorkarea(prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = qt_widgets.QtTranslucentWidget
 
     def do_gui_refresh_files(self):
@@ -354,7 +355,7 @@ class PrxUnitForWorkarea(prx_abstracts.AbsPrxWidget):
         pass
 
     def __init__(self, *args, **kwargs):
-        super(PrxUnitForWorkarea, self).__init__(*args, **kwargs)
+        super(AbsPrxUnitForWorkarea, self).__init__(*args, **kwargs)
 
         self._qt_widget.setSizePolicy(
             gui_qt_core.QtWidgets.QSizePolicy.Expanding,
@@ -425,7 +426,7 @@ class PrxUnitForWorkarea(prx_abstracts.AbsPrxWidget):
         self._variants = variants
         self.set_title(self._title_ptn.format(**self._variants))
         self._gui_directory_opt.gui_setup(variants)
-    
+
     def get_variants(self):
         return self._variants
 

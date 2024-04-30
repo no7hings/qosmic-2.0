@@ -3339,8 +3339,11 @@ class AbsQtShowForViewDef(object):
             if i_item.isHidden() is False:
                 if self._get_view_item_viewport_showable_(i_item) is True:
                     i_item._set_item_viewport_visible_(True)
-
-        self._widget.update()
+        # todo: use update() error in maya 2017?
+        try:
+            self._widget.update()
+        except Exception:
+            pass
 
     def _refresh_viewport_showable_auto_(self):
         self._refresh_view_all_items_viewport_showable_(

@@ -290,7 +290,7 @@ class PnlTaskMonitor(prx_widgets.PrxSessionWindow):
 
     def _gui_add_main_tools(self):
         for i in [
-            ('filter', 'tool/filter', '', self.gui_filter_visible)
+            ('filter', 'tool/filter', '', self.gui_filter_update_visible)
         ]:
             i_key, i_icon_name, i_tool_tip, i_fnc = i
             i_tool = prx_widgets.PrxToggleButton()
@@ -334,10 +334,10 @@ class PnlTaskMonitor(prx_widgets.PrxSessionWindow):
             ', '.join(texts)
         )
 
-    def gui_filter_visible(self, boolean):
-        self._prx_h_spliter.swap_contract_left_or_top_at(0)
+    def gui_filter_update_visible(self, boolean):
+        self._prx_h_splitter.swap_contract_left_or_top_at(0)
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         self._gui_add_task_log_layer()
 
         self._task_pool = _task_core.Pool.generate()
@@ -364,22 +364,22 @@ class PnlTaskMonitor(prx_widgets.PrxSessionWindow):
             '0 total'
         )
 
-        self._prx_h_spliter = prx_widgets.PrxHSplitter()
-        sca.add_widget(self._prx_h_spliter)
+        self._prx_h_splitter = prx_widgets.PrxHSplitter()
+        sca.add_widget(self._prx_h_splitter)
 
         self._task_filter_prx_tree_view = prx_widgets.PrxTreeView()
-        self._prx_h_spliter.add_widget(self._task_filter_prx_tree_view)
+        self._prx_h_splitter.add_widget(self._task_filter_prx_tree_view)
 
         self._task_prx_tree_view = prx_widgets.PrxTreeView()
-        self._prx_h_spliter.add_widget(self._task_prx_tree_view)
+        self._prx_h_splitter.add_widget(self._task_prx_tree_view)
         self._gui_task_opt = _GuiTaskOpt(
             self, self._session, self._task_pool,
             self._task_prx_tree_view
         )
 
-        self._prx_h_spliter.set_fixed_size_at(0, 240)
-        self._prx_h_spliter.swap_contract_left_or_top_at(0)
-        self._prx_h_spliter.set_contract_enable(False)
+        self._prx_h_splitter.set_fixed_size_at(0, 240)
+        self._prx_h_splitter.swap_contract_left_or_top_at(0)
+        self._prx_h_splitter.set_contract_enable(False)
 
         self.gui_refresh_all()
 

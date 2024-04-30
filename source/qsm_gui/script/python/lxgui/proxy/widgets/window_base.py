@@ -52,11 +52,11 @@ class PrxBaseWindow(
 
     def __init__(self, *args, **kwargs):
         super(PrxBaseWindow, self).__init__(*args, **kwargs)
+
         self._init_base_window_def_(*args, **kwargs)
 
     # noinspection PyUnusedLocal
     def _init_base_window_def_(self, *args, **kwargs):
-        self._language = gui_core.GuiUtil.get_language()
 
         self.set_log_file_path(bsc_storage.StgUserMtd.get_user_log_directory())
 
@@ -81,16 +81,23 @@ class PrxBaseWindow(
         )
 
     def _gui_build_(self):
+        self._language = gui_core.GuiUtil.get_language()
         self._window_loading_flag = False
         # menu bar
         self._qt_menu_bar_0 = gui_qt_wgt_utility.QtMenuBar()
         self._qt_widget.setMenuBar(self._qt_menu_bar_0)
         self.__show_menu = gui_prx_wdt_utility.PrxMenu(self._qt_menu_bar_0)
-        self.__show_menu.set_name('show')
+        if self._language == 'chs':
+            self.__show_menu.set_name('显示')
+        else:
+            self.__show_menu.set_name('show')
         self._qt_menu_bar_0.addMenu(self.__show_menu.widget)
 
         self.__debug_menu = gui_prx_wdt_utility.PrxMenu(self._qt_menu_bar_0)
-        self.__debug_menu.set_name('debugger')
+        if self._language == 'chs':
+            self.__debug_menu.set_name('调试器')
+        else:
+            self.__debug_menu.set_name('debugger')
         self._qt_menu_bar_0.addMenu(self.__debug_menu.widget)
         #
         self._qt_central_widget = gui_qt_wgt_utility.QtTranslucentWidget()
@@ -464,22 +471,29 @@ class PrxSessionWindow(PrxBaseWindow):
         self._session = args[0]
         self._session.set_prx_window(self)
         self._session.reload_configure()
+        ui_name = self._session.gui_configure.get('name')
+        if self._language == 'chs':
+            ui_name_chs = self._session.gui_configure.get('name_chs')
+            if ui_name_chs:
+                ui_name = ui_name_chs
+
+        ui_name = bsc_core.auto_string(ui_name)
         if self._session.get_is_td_enable() is True:
             self.set_window_title(
                 '[ALPHA] {} - {}'.format(
-                    self._session.gui_configure.get('name'), str(self._session.application).capitalize()
+                    ui_name, str(self._session.application).capitalize()
                 )
             )
         elif self._session.get_is_beta_enable() is True:
             self.set_window_title(
                 '[BETA] {} - {}'.format(
-                    self._session.gui_configure.get('name'), str(self._session.application).capitalize()
+                    ui_name, str(self._session.application).capitalize()
                 )
             )
         else:
             self.set_window_title(
                 '{} - {}'.format(
-                    self._session.gui_configure.get('name'), str(self._session.application).capitalize()
+                    ui_name, str(self._session.application).capitalize()
                 )
             )
 
@@ -495,7 +509,7 @@ class PrxSessionWindow(PrxBaseWindow):
 
     def _setup_fnc_(self):
         self.restore_variants()
-        self.set_all_setup()
+        self.gui_setup_window()
 
     def _set_collapse_update_(self, collapse_dict):
         for i_k, i_v in collapse_dict.items():
@@ -507,7 +521,7 @@ class PrxSessionWindow(PrxBaseWindow):
     def restore_variants(self):
         pass
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         raise NotImplementedError()
 
 
@@ -519,7 +533,7 @@ class PrxSessionToolWindow(PrxSessionWindow):
         self.restore_variants()
         #
         self._setup_ssn_tool_()
-        self.set_all_setup()
+        self.gui_setup_window()
 
     def apply_fnc(self):
         raise NotImplementedError()
@@ -554,5 +568,5 @@ class PrxSessionToolWindow(PrxSessionWindow):
         )
         self._log_tool_bar.set_visible(False)
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         raise NotImplementedError()

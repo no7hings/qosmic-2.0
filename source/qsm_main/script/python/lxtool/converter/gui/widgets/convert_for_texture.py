@@ -49,7 +49,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
     def __init__(self, session, *args, **kwargs):
         super(PnlTextureConverter, self).__init__(session, *args, **kwargs)
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         s_0 = prx_widgets.PrxVScrollArea()
         self.add_widget(s_0)
         h_s = prx_widgets.PrxHSplitter()

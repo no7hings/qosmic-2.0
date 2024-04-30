@@ -301,7 +301,7 @@ class PnlRscTextureAddTool(prx_widgets.PrxSessionWindow):
                 g_p.do_update()
                 ScpRscAddAnyOpt(self, self._options, i_unr_resource).execute()
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         s_0 = prx_widgets.PrxVScrollArea()
         self.add_widget(s_0)
         h_s = prx_widgets.PrxHSplitter()

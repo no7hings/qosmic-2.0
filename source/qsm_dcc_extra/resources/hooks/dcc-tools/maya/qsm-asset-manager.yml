@@ -5,7 +5,8 @@ option:
         - '*-maya'
     #
     gui:
-        name: 'Asset Manager'
+        name: 'Resource Manager'
+        name_chs: '资源管理'
         group_name: 'Asset(s)'
         #
         icon_name: 'application/resource_library'
@@ -174,6 +175,14 @@ build:
 
             tool_tip: 'Include all tools for rig'
             tool_tip_chs: '包含所有跟绑定相关的工具'
+
+        assembly:
+            name: 'Assembly Resource'
+            name_chs: '组装资源'
+
+            tool_tip: 'Include all tools for assembly'
+            tool_tip_chs: '包含所有跟组装相关的工具'
+
 
     tag-groups:
         utility:

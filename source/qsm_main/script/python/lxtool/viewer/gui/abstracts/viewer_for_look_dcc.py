@@ -20,7 +20,7 @@ class AbsPnlViewerForShaderDcc(
     def __init__(self, session, *args, **kwargs):
         super(AbsPnlViewerForShaderDcc, self).__init__(session, *args, **kwargs)
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         self._set_panel_build_()
         self.refresh_all_fnc()
 
@@ -149,7 +149,7 @@ class AbsPnlViewerForMaterialDcc(
     def __init__(self, session, *args, **kwargs):
         super(AbsPnlViewerForMaterialDcc, self).__init__(session, *args, **kwargs)
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         self._set_panel_build_()
         self.post_setup_fnc()
         self.refresh_all_fnc()

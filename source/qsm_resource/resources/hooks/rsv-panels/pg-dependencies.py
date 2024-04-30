@@ -16,7 +16,7 @@ class PGDependencies(prx_widgets.PrxSessionWindow):
     def __init__(self, session, *args, **kwargs):
         super(PGDependencies, self).__init__(session, *args, **kwargs)
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         self._gui_data = []
         self._target_format_create_data = []
         self._target_color_space_create_data = []

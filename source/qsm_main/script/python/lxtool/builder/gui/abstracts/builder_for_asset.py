@@ -11,7 +11,7 @@ class AbsPnlBuilderForAsset(prx_widgets.PrxSessionToolWindow):
     def __init__(self, session, *args, **kwargs):
         super(AbsPnlBuilderForAsset, self).__init__(session, *args, **kwargs)
 
-    def set_all_setup(self):
+    def gui_setup_window(self):
         self._hook_build_configure = self._session.configure.get_as_content('build')
         self._set_group_0_build_()
 
