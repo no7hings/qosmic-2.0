@@ -151,8 +151,41 @@ build:
                     widget: button
                     name_chs: '传递'
                     value: ''
-                    icon: 'tool/maya/transfer-motion'
-                    tool_tip: '...'
+                    icon: 'tool/maya/transfer-animation'
+                    tool_tip:
+                        |-
+                        press to transfer animation
+                    tool_tip_chs:
+                        |-
+                        点击传递动画：
+                            先选中源物体，再选中目标物体
+                            可选中任意部件
+
+                animation_transfer/copy:
+                    widget: button
+                    name_chs: '复制'
+                    value: ''
+                    icon: 'tool/maya/copy'
+                    tool_tip:
+                        |-
+                        press to copy animation
+                    join_to_next: True
+                    tool_tip_chs:
+                        |-
+                        点击复制动画。
+
+                animation_transfer/paste:
+                    widget: button
+                    name_chs: '粘贴'
+                    value: ''
+                    icon: 'tool/maya/paste'
+                    tool_tip:
+                        |-
+                        press to paste animation
+                    tool_tip_chs:
+                        |-
+                        点击粘贴动画。
+
 
     buttons:
         reference:

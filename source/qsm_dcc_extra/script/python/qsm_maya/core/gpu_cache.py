@@ -9,11 +9,8 @@ from . import time_ as _time
 
 
 class GpuCache(object):
-    """
-gpuCache -startTime 1 -endTime 1 -optimize -optimizationThreshold 40000 -writeMaterials -dataFormat ogawa -directory "X:/QSM_TST/Assets/prp/test_gpu_assembly/Maya/Final/tmp/gpu" -fileName "test" -saveMultipleFiles false pCube1 pSphere1;
-    """
     @classmethod
-    def to_mel_script(cls, gpu_file_path, location, frame=None, with_material=False):
+    def to_mel_script(cls, gpu_file_path, location, frame=None):
         directory_path = os.path.dirname(gpu_file_path)
         file_name = os.path.splitext(os.path.basename(gpu_file_path))[0]
         start_frame, end_frame = _time.Time.to_frame_range(frame)
@@ -28,17 +25,17 @@ gpuCache -startTime 1 -endTime 1 -optimize -optimizationThreshold 40000 -writeMa
             ' -saveMultipleFiles false {location};'
         ).format(
             start_frame=start_frame, end_frame=end_frame,
+            data_format='ogawa',
             directory_path=directory_path, file_name=file_name,
             location=location
         )
 
     @classmethod
-    def export_frame_(cls, gpu_file_path, location, frame=None, with_material=False):
+    def export_frame_(cls, gpu_file_path, location, frame=None):
         mel_script = cls.to_mel_script(
-            gpu_file_path, location, frame, with_material
+            gpu_file_path, location, frame
         )
-        print mel_script
-        # mel.eval(mel_script)
+        mel.eval(mel_script)
 
     @classmethod
     def export_frame(cls, gpu_file_path, location, frame=None, with_material=False):

@@ -67,3 +67,8 @@ class AdvMotionOpt(object):
 
     def export_animations_to(self, file_path):
         bsc_storage.StgFileOpt(file_path).set_write(self.get_animations())
+
+    def import_animations_from(self, file_path, **kwargs):
+        self.apply_animations(
+            bsc_storage.StgFileOpt(file_path).set_read(), **kwargs
+        )

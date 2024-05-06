@@ -8,19 +8,18 @@ import lxgui.proxy.widgets as prx_widgets
 
 from . import unit_for_rig_resource as _unit_for_rig_resource
 
+from . import unit_for_assembly_resource as _unit_for_assembly_resource
+
 
 class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
     def __init__(self, session, *args, **kwargs):
         super(PrxPnlResourceManager, self).__init__(session, *args, **kwargs)
 
     def gui_setup_window(self):
-        self._skin_proxy_load_args_array = []
-        self._dynamic_gpu_load_args_array = []
-
         self.set_main_style_mode(1)
         self._tab_view = prx_widgets.PrxTabView()
         self.add_widget(self._tab_view)
-
+        # rig
         rig_prx_sca = prx_widgets.PrxVScrollArea()
         self._tab_view.add_widget(
             rig_prx_sca,
@@ -37,7 +36,7 @@ class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
             self, self._session
         )
         rig_prx_sca.add_widget(self._rig_prx_unit)
-
+        # assembly
         assembly_prx_sca = prx_widgets.PrxVScrollArea()
         self._tab_view.add_widget(
             assembly_prx_sca,
@@ -49,6 +48,11 @@ class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
                 self._language, self._session.configure.get('build.tabs.assembly')
             )
         )
+
+        # self._assembly_prx_unit = _unit_for_assembly_resource.PrxUnitForAssemblyResource(
+        #     self, self._session
+        # )
+        # assembly_prx_sca.add_widget(self._assembly_prx_unit)
 
         self.connect_refresh_action_for(
             self.do_gui_refresh_all

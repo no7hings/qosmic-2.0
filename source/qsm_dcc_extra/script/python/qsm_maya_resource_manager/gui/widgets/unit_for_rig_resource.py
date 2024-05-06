@@ -610,10 +610,57 @@ class _GuiRigMotionOpt(
         super(_GuiRigMotionOpt, self).__init__(window, unit, session)
 
         self._prx_options_node = prx_options_node
+
         self._prx_options_node.get_port(
             'animation_transfer.transfer'
         ).set(
             self.do_dcc_transfer_animation
+        )
+        self._prx_options_node.get_port(
+            'animation_transfer.copy'
+        ).set(
+            self.do_dcc_copy_animation
+        )
+        self._prx_options_node.get_port(
+            'animation_transfer.paste'
+        ).set(
+            self.do_dcc_paste_animation
+        )
+
+    def do_dcc_copy_animation(self):
+        file_path = qsm_mya_ast_core.AssetCache.generate_animation_file(
+            bsc_core.SysBaseMtd.get_user_name()
+        )
+        namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+        if not namespaces:
+            return
+        adv_rig_query = self._unit._gui_rig_opt.get_adv_rig_query()
+        valid_namespaces = adv_rig_query.to_valid_namespaces(namespaces)
+        if not valid_namespaces:
+            return
+        namespace = valid_namespaces[0]
+        qsm_mya_motion.AdvMotionOpt(namespace).export_animations_to(
+            file_path
+        )
+
+    def do_dcc_paste_animation(self):
+        file_path = qsm_mya_ast_core.AssetCache.generate_animation_file(
+            bsc_core.SysBaseMtd.get_user_name()
+        )
+        if bsc_storage.StgPathMtd.get_is_file(file_path) is False:
+            return
+        namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+        if not namespaces:
+            return
+        adv_rig_query = self._unit._gui_rig_opt.get_adv_rig_query()
+        valid_namespaces = adv_rig_query.to_valid_namespaces(namespaces)
+        if not valid_namespaces:
+            return
+        namespace = valid_namespaces[0]
+        force = self._prx_options_node.get('animation_transfer.force')
+        frame_offset = self._prx_options_node.get('animation_transfer.frame_offset')
+        qsm_mya_motion.AdvMotionOpt(namespace).import_animations_from(
+            file_path, frame_offset=frame_offset, force=force
         )
 
     def do_dcc_transfer_animation(self):
@@ -651,14 +698,14 @@ class _GuiRigMotionOpt(
 class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = qt_widgets.QtTranslucentWidget
 
-    RIG_SELECTION_SCRIPT_JOB_NAME = 'asset_manager_rig_selection'
+    SCRIPT_JOB_NAME = 'resource_manager_for_rig'
 
     def do_gui_refresh_by_rig_tag_checking(self):
         filter_data_src = self._gui_rig_tag_opt.generate_semantic_tag_filter_data_src()
-        qt_view = self._rig_prx_tree_view._qt_view
+        qt_view = self._resource_prx_tree_view._qt_view
         qt_view._set_view_semantic_tag_filter_data_src_(filter_data_src)
         qt_view._set_view_keyword_filter_data_src_(
-            self._rig_prx_tree_view.filter_bar.get_keywords()
+            self._resource_prx_tree_view.filter_bar.get_keywords()
         )
         qt_view._refresh_view_items_visible_by_any_filter_()
         qt_view._refresh_viewport_showable_auto_()
@@ -703,16 +750,16 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
     def get_rig_frame_scheme(self):
         return self._rig_utility_options_node.get('scene.frame_scheme')
 
-    def gui_rig_filter_update_visible(self, boolean):
-        self._rig_prx_h_splitter.swap_contract_left_or_top_at(0)
+    def _gui_filter_update_visible(self, boolean):
+        self._prx_h_splitter.swap_contract_left_or_top_at(0)
 
-    def _gui_add_rig_main_tools(self):
+    def _gui_add_main_tools(self):
         for i in [
-            ('filter', 'tool/filter', '', self.gui_rig_filter_update_visible)
+            ('filter', 'tool/filter', '', self._gui_filter_update_visible)
         ]:
             i_key, i_icon_name, i_tool_tip, i_fnc = i
             i_tool = prx_widgets.PrxToggleButton()
-            self._rig_main_prx_tool_box.add_widget(i_tool)
+            self._main_prx_tool_box.add_widget(i_tool)
             i_tool.set_name(i_key)
             i_tool.set_icon_name(i_icon_name)
             i_tool.set_tool_tip(i_tool_tip)
@@ -727,7 +774,7 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
 
     def _register_rig_selection_script_job(self):
         self._rig_selection_script_job = qsm_mya_core.ScriptJob(
-            self.RIG_SELECTION_SCRIPT_JOB_NAME
+            self.SCRIPT_JOB_NAME
         )
         self._rig_selection_script_job.register(
             self._gui_rig_opt.do_gui_select_rigs,
@@ -746,6 +793,9 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
         self._rig_selection_script_job.destroy()
 
     def gui_setup_unit(self):
+        self._skin_proxy_load_args_array = []
+        self._dynamic_gpu_load_args_array = []
+
         self._qt_widget.setSizePolicy(
             gui_qt_core.QtWidgets.QSizePolicy.Expanding,
             gui_qt_core.QtWidgets.QSizePolicy.Expanding
@@ -754,50 +804,47 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
         qt_lot.setContentsMargins(*[0]*4)
         qt_lot.setSpacing(2)
 
-        self._skin_proxy_load_args_array = []
-        self._dynamic_gpu_load_args_array = []
-
-        self._rig_top_prx_tool_bar = prx_widgets.PrxHToolBar()
-        qt_lot.addWidget(self._rig_top_prx_tool_bar.widget)
-        self._rig_top_prx_tool_bar.set_align_left()
-        self._rig_top_prx_tool_bar.set_expanded(True)
-        # rig main tool
-        self._rig_main_prx_tool_box = self._rig_top_prx_tool_bar.create_tool_box(
+        self._top_prx_tool_bar = prx_widgets.PrxHToolBar()
+        qt_lot.addWidget(self._top_prx_tool_bar.widget)
+        self._top_prx_tool_bar.set_align_left()
+        self._top_prx_tool_bar.set_expanded(True)
+        # main tool box
+        self._main_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'main'
         )
-        self._gui_add_rig_main_tools()
-        # rig reference tool
-        self._rig_reference_tool_box = self._rig_top_prx_tool_bar.create_tool_box(
+        self._gui_add_main_tools()
+        # reference tool
+        self._reference_tool_box = self._top_prx_tool_bar.create_tool_box(
             'reference', size_mode=1
         )
-        # rig reference
-        self._prx_rig_input_for_asset = qsm_prx_widgets.PrxInputForAsset()
-        self._rig_reference_tool_box.add_widget(self._prx_rig_input_for_asset)
+        # reference
+        self._prx_input_for_asset = qsm_prx_widgets.PrxInputForRig()
+        self._reference_tool_box.add_widget(self._prx_input_for_asset)
 
-        self._rig_prx_h_splitter = prx_widgets.PrxHSplitter()
-        qt_lot.addWidget(self._rig_prx_h_splitter.widget)
+        self._prx_h_splitter = prx_widgets.PrxHSplitter()
+        qt_lot.addWidget(self._prx_h_splitter.widget)
 
-        self._rig_tag_tree_view = prx_widgets.PrxTreeView()
-        self._rig_prx_h_splitter.add_widget(self._rig_tag_tree_view)
-        self._rig_tag_tree_view.create_header_view(
+        self._tag_tree_view = prx_widgets.PrxTreeView()
+        self._prx_h_splitter.add_widget(self._tag_tree_view)
+        self._tag_tree_view.create_header_view(
             [('name', 2)],
             self._window.get_definition_window_size()[0]
         )
 
-        self._rig_prx_tree_view = prx_widgets.PrxTreeView()
-        self._rig_prx_h_splitter.add_widget(self._rig_prx_tree_view)
-        self._rig_prx_h_splitter.set_fixed_size_at(0, 240)
-        self._rig_prx_h_splitter.swap_contract_left_or_top_at(0)
-        self._rig_prx_h_splitter.set_contract_enable(False)
+        self._resource_prx_tree_view = prx_widgets.PrxTreeView()
+        self._prx_h_splitter.add_widget(self._resource_prx_tree_view)
+        self._prx_h_splitter.set_fixed_size_at(0, 240)
+        self._prx_h_splitter.swap_contract_left_or_top_at(0)
+        self._prx_h_splitter.set_contract_enable(False)
 
         self._gui_rig_tag_opt = _GuiRigTagOpt(
-            self._window, self, self._session, self._rig_tag_tree_view
+            self._window, self, self._session, self._tag_tree_view
         )
         self._gui_rig_opt = _GuiRigOpt(
-            self._window, self, self._session, self._rig_prx_tree_view
+            self._window, self, self._session, self._resource_prx_tree_view
         )
 
-        self._rig_tag_tree_view.connect_item_check_changed_to(
+        self._tag_tree_view.connect_item_check_changed_to(
             self.do_gui_refresh_by_rig_tag_checking
         )
 
@@ -805,9 +852,9 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
         qt_lot.addWidget(self._prx_rig_tab_group.widget)
 
         self._gui_rig_reference_opt = _GuiRigReferenceOpt(
-            self._window, self, self._session, self._prx_rig_input_for_asset
+            self._window, self, self._session, self._prx_input_for_asset
         )
-        # rig utility
+        # utility
         self._rig_utility_options_node = prx_widgets.PrxNode(
             gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.options.rig_utility')

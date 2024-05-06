@@ -12,11 +12,13 @@ import lxgui.proxy.abstracts as prx_abstracts
 import qsm_general.scan as qsm_gnl_scan
 
 
-class PrxInputForAsset(prx_abstracts.AbsPrxWidget):
+class PrxInputForRig(prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = qt_widgets.QtTranslucentWidget
 
+    HISTORY_KEY = 'gui.input-entity-path-asset'
+
     def __init__(self, *args, **kwargs):
-        super(PrxInputForAsset, self).__init__(*args, **kwargs)
+        super(PrxInputForRig, self).__init__(*args, **kwargs)
 
         self._qt_layout_0 = qt_widgets.QtHBoxLayout(self.get_widget())
         self._qt_layout_0.setContentsMargins(*[0]*4)
@@ -39,7 +41,7 @@ class PrxInputForAsset(prx_abstracts.AbsPrxWidget):
 
         self._qt_path_input._setup_()
 
-        self._qt_path_input._set_history_key_('gui.input-entity-path-asset')
+        self._qt_path_input._set_history_key_(self.HISTORY_KEY)
         self._qt_path_input._pull_history_latest_()
 
         # self._qt_path_input.input_value_change_accepted.connect(self._update_fnc)
@@ -132,3 +134,10 @@ class PrxInputForAsset(prx_abstracts.AbsPrxWidget):
 
     def get_path(self):
         return self._qt_path_input._get_value_()
+
+
+class PrxInputForAssembly(PrxInputForRig):
+    HISTORY_KEY = 'gui.input-entity-path-assembly'
+
+    def __init__(self, *args, **kwargs):
+        super(PrxInputForAssembly, self).__init__(*args, **kwargs)

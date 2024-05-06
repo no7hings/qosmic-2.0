@@ -31,6 +31,15 @@ class AssetCache(object):
         )
 
     @classmethod
+    def generate_animation_file(cls, user_name):
+        root = bsc_core.EnvBaseMtd.get_temporary_root()
+        key = bsc_core.UuidMtd.BASIC
+        region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
+        return '{}/.asset-cache/animation/{}/{}/{}.json'.format(
+            root, user_name, region, key
+        )
+
+    @classmethod
     def generate_unit_assembly_file(cls, file_path):
         root = bsc_core.EnvBaseMtd.get_temporary_root()
         key = cls.get_key(file_path)
