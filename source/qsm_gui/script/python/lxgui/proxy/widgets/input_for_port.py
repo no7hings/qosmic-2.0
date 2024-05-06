@@ -439,7 +439,7 @@ class PrxInputAsFilesOpen(PrxInputAsStorageArray):
             # s = files, filter
             values = s[0]
             if values:
-                values = bsc_storage.StgFileMtdForMultiply.merge_to(
+                values = bsc_storage.StgFileMtdForTiles.merge_to(
                     values,
                     ['*.<udim>.####.*', '*.####.*']
                 )
@@ -452,7 +452,7 @@ class PrxInputAsFilesOpen(PrxInputAsStorageArray):
                 ext = os.path.splitext(value)[-1]
                 if ext not in self._ext_includes:
                     return False
-            return bsc_storage.StgFileMtdForMultiply.get_is_exists(value)
+            return bsc_storage.StgFileMtdForTiles.get_is_exists(value)
         return False
 
 

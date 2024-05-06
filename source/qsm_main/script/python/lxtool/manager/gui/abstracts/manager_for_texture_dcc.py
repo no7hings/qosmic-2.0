@@ -545,7 +545,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
             return False
 
     def execute_search_process(
-        self, window, textures, directory, below_enable, ignore_exists, ignore_name_case, ignore_ext_case,
+        self, window, textures, directory, recursion_enable, ignore_exists, ignore_name_case, ignore_ext_case,
         ignore_ext
     ):
         if directory:
@@ -554,7 +554,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                 ignore_ext_case=ignore_name_case,
                 ignore_ext=ignore_ext
             )
-            search_opt.append_search_directory(directory, below_enable)
+            search_opt.append_search_directory(directory, recursion_enable)
             with window.gui_progressing(maximum=len(textures)) as p:
                 for i_texture_any in self._texture_add_opt.get_checked_files():
                     p.do_update()

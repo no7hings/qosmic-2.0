@@ -43,7 +43,7 @@ class PthNodeMtd(object):
         :return:
         """
         dag_args = cls.get_dag_args(path, pathsep)
-        # windows file-path-root etc: "D:/directory"
+        # windows file-path-root etc. "D:/directory"
         if ':' in dag_args[0]:
             if len(dag_args) == 1:
                 return None
@@ -75,9 +75,9 @@ class PthNodeMtd(object):
                 if _parent_path:
                     _rcs_fnc(lis_, _parent_path)
 
-        lis = []
-        _rcs_fnc(lis, path)
-        return lis
+        list_ = []
+        _rcs_fnc(list_, path)
+        return list_
 
     @classmethod
     def get_dag_name_with_namespace_clear(cls, name, namespacesep=':'):
@@ -86,10 +86,10 @@ class PthNodeMtd(object):
     @classmethod
     def get_dag_path_with_namespace_clear(cls, path, pathsep='/', namespacesep=':'):
         dag_args = cls.get_dag_args(path, pathsep)
-        lis = []
+        list_ = []
         for i in dag_args:
-            lis.append(cls.get_dag_name_with_namespace_clear(i, namespacesep))
-        return cls.get_dag_path(lis, pathsep)
+            list_.append(cls.get_dag_name_with_namespace_clear(i, namespacesep))
+        return cls.get_dag_path(list_, pathsep)
 
     @classmethod
     def get_dag_path_lstrip(cls, path, lstrip=None):
@@ -119,13 +119,21 @@ class PthNodeMtd(object):
 
     @classmethod
     def find_dag_child_paths(cls, path, paths, pathsep='/'):
-        lis = []
+        list_ = []
         # etc. r'/shl/chr/test_0/[^/]*'
+        # check is root
         if path == pathsep:
-            ptn = r'{1}[^{1}]*'.format(path, pathsep)
+            # when pathsep is "|" need escape
+            if pathsep == '|':
+                ptn = r'\{1}[^\{1}]*'.format(path, pathsep)
+            else:
+                ptn = r'{1}[^{1}]*'.format(path, pathsep)
         else:
-            ptn = r'{0}{1}[^{1}]*'.format(path, pathsep)
-        #
+            if pathsep == '|':
+                ptn = r'{0}\{1}[^\{1}]*'.format(path, pathsep)
+            else:
+                ptn = r'{0}{1}[^{1}]*'.format(path, pathsep)
+
         for i_path in paths:
             if i_path != pathsep:
                 _ = re.match(
@@ -133,8 +141,8 @@ class PthNodeMtd(object):
                 )
                 if _ is not None:
                     if _.group() == i_path:
-                        lis.append(i_path)
-        return lis
+                        list_.append(i_path)
+        return list_
 
     @classmethod
     def find_dag_child_names(cls, path, paths, pathsep='/'):
@@ -450,9 +458,9 @@ class PthPortMtd(object):
                 if _parent_path:
                     _rcs_fnc(lis_, _parent_path)
 
-        lis = []
-        _rcs_fnc(lis, path)
-        return lis
+        list_ = []
+        _rcs_fnc(list_, path)
+        return list_
 
 
 class PthPortOpt(object):

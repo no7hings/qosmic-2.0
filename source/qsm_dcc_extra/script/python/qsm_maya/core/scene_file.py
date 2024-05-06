@@ -3,6 +3,8 @@ import os
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+import lxbasic.storage as bsc_storage
+
 
 class SceneFile(object):
     FILE_TYPE_ASCII = 'mayaAscii'
@@ -16,7 +18,7 @@ class SceneFile(object):
     }
 
     @classmethod
-    def _get_file_type_name_(cls, file_path):
+    def get_file_type(cls, file_path):
         ext = os.path.splitext(file_path)[-1]
         return cls.FILE_TYPE_DICT.get(ext, cls.FILE_TYPE_ASCII)
 
@@ -30,7 +32,7 @@ class SceneFile(object):
                 mergeNamespacesOnClash=0,
                 namespace=namespace,
                 options='v=0;',
-                type=cls._get_file_type_name_(file_path)
+                type=cls.get_file_type(file_path)
             )
 
     @classmethod
@@ -47,8 +49,39 @@ class SceneFile(object):
                 file_path,
                 i=True,
                 options='v=0;',
-                type=cls._get_file_type_name_(file_path),
+                type=cls.get_file_type(file_path),
                 ra=True,
                 mergeNamespacesOnClash=True,
+                returnNewNodes=True,
                 namespace=namespace,
             )
+    
+    @classmethod
+    def export_file(cls, file_path, location=None):
+        option = dict(
+            type=cls.get_file_type(file_path),
+            options='v=0;',
+            force=True,
+            defaultExtensions=True,
+            preserveReferences=False,
+        )
+        _selected_paths = []
+        if location is not None:
+            _selected_paths = cmds.ls(selection=1, long=1) or []
+            cmds.select(location)
+            option['exportSelected'] = True
+        else:
+            option['exportAll'] = True
+
+        bsc_storage.StgFileOpt(file_path).create_directory()
+        results = cmds.file(file_path, **option)
+        if 'exportSelected' in option:
+            if _selected_paths:
+                cmds.select(_selected_paths)
+            else:
+                cmds.select(clear=1)
+        return results
+
+    @classmethod
+    def new(cls):
+        cmds.file(new=1, force=1)

@@ -679,7 +679,7 @@ class HashMtd(object):
         return s.upper()
 
     @classmethod
-    def get_hash_key(cls, raw, as_unique_id=False):
+    def to_hash_key(cls, raw, as_unique_id=False):
         s = hashlib.md5(
             json.dumps(raw)
         ).hexdigest()

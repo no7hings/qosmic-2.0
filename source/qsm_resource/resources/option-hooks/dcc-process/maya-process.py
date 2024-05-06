@@ -152,7 +152,7 @@ def lib_scene_src_to_scene_fnc(option_opt):
             [
                 texture_search_directory_path
             ],
-            below_enable=True
+            recursion_enable=True
         )
         # split mesh
         if split_mesh is True:

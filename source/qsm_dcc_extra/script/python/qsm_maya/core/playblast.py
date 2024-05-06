@@ -27,6 +27,6 @@ class Playblast(object):
             quality=100,
             widthHeight=size,
         )
-        results = bsc_storage.StgFileMtdForMultiply.get_exists_unit_paths(result)
+        results = bsc_storage.StgFileMtdForTiles.get_exists_unit_paths(result)
         if results:
             bsc_storage.StgFileOpt(results[0]).repath_to(file_path)

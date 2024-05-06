@@ -24,7 +24,7 @@ def main(session):
     def execute_fnc_(directory_path_, output_directory_path_):
         directory = gnl_dcc_objects.StgDirectory(directory_path_)
         if directory.get_is_exists() is True:
-            if below_enable is True:
+            if recursion_enable is True:
                 file_paths = directory.get_all_file_paths(ext_includes=ext_includes)
             else:
                 file_paths = directory.get_file_paths(ext_includes=ext_includes)
@@ -76,7 +76,7 @@ def main(session):
     directory_paths = hook_option_opt.get_as_array('directories')
     output_directory_paths = hook_option_opt.get_as_array('output_directories')
 
-    below_enable = hook_option_opt.get_as_boolean('below_enable')
+    recursion_enable = hook_option_opt.get_as_boolean('recursion_enable')
     force_enable = hook_option_opt.get_as_boolean('force_enable')
 
     ext_includes = hook_option_opt.get_as_array('ext_includes')

@@ -15,8 +15,16 @@ class Attribute(object):
         return cmds.getAttr(cls.to_atr_path(path, atr_name))
 
     @classmethod
+    def get_as_string(cls, path, atr_name):
+        return cmds.getAttr(cls.to_atr_path(path, atr_name), asString=True) or ''
+
+    @classmethod
     def set_value(cls, path, atr_name, value):
         cmds.setAttr(cls.to_atr_path(path, atr_name), value)
+
+    @classmethod
+    def set_as_string(cls, path, atr_name, value):
+        cmds.setAttr(cls.to_atr_path(path, atr_name), value, type='string')
 
     @classmethod
     def is_lock(cls, path, atr_name):

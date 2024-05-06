@@ -487,7 +487,6 @@ class AbsMyaNode(
     def _update_path_(self):
         if self.get_unique_id():
             _ = cmds.ls(self.get_unique_id(), long=1)
-            print _
             if _:
                 self._path = _[0]
 

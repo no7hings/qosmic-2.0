@@ -13,29 +13,30 @@ class AssetCache(object):
         return bsc_core.UuidMtd.generate_by_file(file_path)
 
     @classmethod
-    def get_skin_proxy_file(cls, file_path):
-        directory_path = bsc_core.EnvBaseMtd.get_temporary_root()
+    def generate_skin_proxy_file(cls, file_path):
+        root = bsc_core.EnvBaseMtd.get_temporary_root()
         key = cls.get_key(file_path)
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
-        return '{}/.asset-cache/skin-proxy/{}/{}{}'.format(
-            directory_path, region, key, '.ma'
+        return '{}/.asset-cache/skin-proxy/{}/{}.ma'.format(
+            root, region, key
         )
 
     @classmethod
-    def get_dynamic_gpu_directory(cls, user_name):
-        directory_path = bsc_core.EnvBaseMtd.get_temporary_root()
+    def generate_dynamic_gpu_directory(cls, user_name):
+        root = bsc_core.EnvBaseMtd.get_temporary_root()
         key = bsc_core.UuidMtd.generate_new()
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
         return '{}/.asset-cache/dynamic-gpu/{}/{}/{}'.format(
-            directory_path, user_name, region, key
+            root, user_name, region, key
         )
 
     @classmethod
-    def get_dynamic_gpu(cls, file_path):
-        directory_path = bsc_core.EnvBaseMtd.get_temporary_root()
+    def generate_unit_assembly_file(cls, file_path):
+        root = bsc_core.EnvBaseMtd.get_temporary_root()
         key = cls.get_key(file_path)
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
-        return '{}/.asset-cache/dynamic-gpu/{}/{}/gpu.{}'.format(
-            directory_path, region, key, '.abc'
+        return '{}/.asset-cache/unit-assembly/{}/{}/AD.ma'.format(
+            root, region, key
         )
+
 

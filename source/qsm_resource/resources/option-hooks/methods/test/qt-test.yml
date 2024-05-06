@@ -17,7 +17,7 @@ hook_option:
         directory: ''
         output_directory: ''
 
-        below_enable: False
+        recursion_enable: False
 
         force_enable: False
 

@@ -966,7 +966,7 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
 
                             i_generate = qsm_mya_rig_scripts.DynamicGpuCacheGenerate(i_namespace)
                             if i_generate.is_exists() is False:
-                                i_directory_path = qsm_mya_ast_core.AssetCache.get_dynamic_gpu_directory(
+                                i_directory_path = qsm_mya_ast_core.AssetCache.generate_dynamic_gpu_directory(
                                     user_name=bsc_core.SysBaseMtd.get_user_name()
                                 )
                                 i_cmd, i_file_path, i_cache_file, i_start_frame, i_end_frame = \

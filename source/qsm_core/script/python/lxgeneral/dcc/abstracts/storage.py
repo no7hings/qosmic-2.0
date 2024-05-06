@@ -379,7 +379,7 @@ class AbsStgFile(
 
     @classmethod
     def get_exists_unit_paths_fnc(cls, file_path):
-        return bsc_storage.StgFileMtdForMultiply.get_exists_unit_paths(file_path)
+        return bsc_storage.StgFileMtdForTiles.get_exists_unit_paths(file_path)
 
     def get_exists_unit_paths(self):
         return self.get_exists_unit_paths_fnc(self.path)

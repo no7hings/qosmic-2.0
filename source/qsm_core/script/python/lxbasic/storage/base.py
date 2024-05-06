@@ -827,7 +827,7 @@ class StgDirectoryMtdForMultiply(object):
         _ = _scan_base.ScanBase.get_all_file_paths(directory_path)
         for i_file_path in _:
             i_opt = StgFileOpt(i_file_path)
-            i_number_args = StgFileMtdForMultiply.get_number_args(
+            i_number_args = StgFileMtdForTiles.get_number_args(
                 i_opt.name, name_pattern
             )
             if i_number_args:
@@ -859,23 +859,23 @@ class StgFileMtd(object):
         return os.path.splitext(file_path)[-1]
 
 
-class StgFileMtdForMultiply(object):
+class StgFileMtdForTiles(object):
     """
     methods using for multiply file
     etc. "/tmp/image.1001.exr" convert to "/tmp/image.####.exr"
     """
-    PATHSEP = _cor_pattern.PtnMultiplyFileMtd.PATHSEP
+    PATHSEP = _cor_pattern.PtnFileTilesMtd.PATHSEP
     P = '[0-9]'
     CACHE = dict()
 
     @classmethod
     def get_number_args(cls, file_name, name_pattern):
         new_file_name = file_name
-        args = _cor_pattern.PtnMultiplyFileMtd.get_args(
+        args = _cor_pattern.PtnFileTilesMtd.get_args(
             name_pattern
         )
         if args:
-            re_pattern = _cor_pattern.PtnMultiplyFileMtd.to_re_style(name_pattern)
+            re_pattern = _cor_pattern.PtnFileTilesMtd.to_re_style(name_pattern)
             results = re.findall(re_pattern, file_name)
             if results:
                 if len(args) > 1:
@@ -912,8 +912,8 @@ class StgFileMtdForMultiply(object):
             i_name_pattern = i_name_pattern.format(
                 **dict(format=file_opt.get_format())
             )
-            if _cor_pattern.PtnMultiplyFileMtd.get_is_valid(i_name_pattern):
-                i_number_args = StgFileMtdForMultiply.get_number_args(
+            if _cor_pattern.PtnFileTilesMtd.get_is_valid(i_name_pattern):
+                i_number_args = StgFileMtdForTiles.get_number_args(
                     file_opt.name, i_name_pattern
                 )
                 if i_number_args:
@@ -928,7 +928,7 @@ class StgFileMtdForMultiply(object):
             return cls.CACHE[name_base]
         #
         name_base_new = name_base
-        for i_keyword, i_re_format, i_count in _cor_pattern.PtnMultiplyFileMtd.RE_MULTIPLY_KEYS:
+        for i_keyword, i_re_format, i_count in _cor_pattern.PtnFileTilesMtd.RE_MULTIPLY_KEYS:
             i_results = re.finditer(i_re_format.format(i_keyword), name_base, re.IGNORECASE) or []
             for j_result in i_results:
                 j_start, j_end = j_result.span()
@@ -1132,10 +1132,10 @@ class StgFileSearchOpt(object):
         self._ignore_ext = ignore_ext
         self._search_dict = collections.OrderedDict()
 
-    def set_search_directories(self, directory_paths, below_enable=False):
+    def set_search_directories(self, directory_paths, recursion_enable=False):
         self._search_dict = collections.OrderedDict()
         for i in directory_paths:
-            self.append_search_directory(i, below_enable=below_enable)
+            self.append_search_directory(i, recursion_enable=recursion_enable)
             bsc_log.Log.trace_method_result(
                 self.KEY,
                 'append search directory: "{}"'.format(i)
@@ -1143,8 +1143,8 @@ class StgFileSearchOpt(object):
         #
         self._set_key_sort_()
 
-    def append_search_directory(self, directory_path, below_enable=False):
-        if below_enable is True:
+    def append_search_directory(self, directory_path, recursion_enable=False):
+        if recursion_enable is True:
             _ = _scan_base.ScanBase.get_all_file_paths(directory_path)
         else:
             _ = StgDirectoryMtd.get_file_paths(directory_path)
@@ -1171,7 +1171,7 @@ class StgFileSearchOpt(object):
     def get_result(self, file_path_src):
         name_src = os.path.basename(file_path_src)
         name_base_src, ext_src = os.path.splitext(name_src)
-        name_base_pattern = _cor_pattern.PtnMultiplyFileMtd.to_fnmatch_style(name_base_src)
+        name_base_pattern = _cor_pattern.PtnFileTilesMtd.to_fnmatch_style(name_base_src)
 
         if self._ignore_name_case is True:
             name_base_pattern = name_base_pattern.lower()

@@ -71,7 +71,7 @@ class ScpDccTextures(object):
             'attribute="{}", file="{}"'.format(port.path, stg_texture.path)
         )
 
-    def auto_search_from(self, directory_paths_tgt, below_enable=False):
+    def auto_search_from(self, directory_paths_tgt, recursion_enable=False):
         dcc_objs = self._objs
 
         repath_queue = []
@@ -81,7 +81,7 @@ class ScpDccTextures(object):
             ignore_ext_case=True,
             ignore_ext=True
         )
-        search_opt.set_search_directories(directory_paths_tgt, below_enable=below_enable)
+        search_opt.set_search_directories(directory_paths_tgt, recursion_enable=recursion_enable)
         if dcc_objs:
             g_p = bsc_log.LogProcessContext(
                 maximum=len(dcc_objs)

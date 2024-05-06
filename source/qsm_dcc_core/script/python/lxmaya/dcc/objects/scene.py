@@ -207,24 +207,24 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
         return cmds.currentTime(query=1)
 
     @classmethod
-    def set_frame_range(cls, star_frame, end_frame):
-        cmds.playbackOptions(minTime=star_frame), cmds.playbackOptions(animationStartTime=int(star_frame)-5)
+    def set_frame_range(cls, start_frame, end_frame):
+        cmds.playbackOptions(minTime=start_frame), cmds.playbackOptions(animationStartTime=int(start_frame)-5)
         cmds.playbackOptions(maxTime=end_frame), cmds.playbackOptions(animationEndTime=int(end_frame)+5)
         #
-        cls.set_current_frame(star_frame)
+        cls.set_current_frame(start_frame)
 
     @classmethod
     def get_frame_range(cls, frame=None):
         if isinstance(frame, (tuple, list)):
-            star_frame, end_frame = frame
+            start_frame, end_frame = frame
         elif isinstance(frame, (int, float)):
-            star_frame = end_frame = frame
+            start_frame = end_frame = frame
         else:
-            star_frame = end_frame = cls.get_current_frame()
-        return float(star_frame), float(end_frame)
+            start_frame = end_frame = cls.get_current_frame()
+        return float(start_frame), float(end_frame)
 
     @classmethod
-    def _get_file_type_name_(cls, file_path):
+    def get_file_type(cls, file_path):
         ext = os.path.splitext(file_path)[-1]
         return cls.FILE_TYPE_DICT.get(ext, cls.FILE_TYPE_ASCII)
 
@@ -234,7 +234,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
             file_path,
             i=True,
             options='v=0;',
-            type=cls._get_file_type_name_(file_path),
+            type=cls.get_file_type(file_path),
             ra=True,
             mergeNamespacesOnClash=True,
             namespace=namespace,
@@ -243,7 +243,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
     @classmethod
     def export_to_file(cls, file_path, root=None):
         option = dict(
-            type=cls._get_file_type_name_(file_path),
+            type=cls.get_file_type(file_path),
             options='v=0;',
             force=True,
             defaultExtensions=True,
@@ -369,7 +369,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
                 open=1,
                 options='v=0;',
                 force=1,
-                type=cls._get_file_type_name_(file_path)
+                type=cls.get_file_type(file_path)
             )
         bsc_log.Log.trace_method_result(
             'scene open',
@@ -392,7 +392,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
             save=1,
             options='v=0;',
             force=1,
-            type=cls._get_file_type_name_(file_path)
+            type=cls.get_file_type(file_path)
         )
         bsc_log.Log.trace_method_result(
             'scene save',
@@ -406,7 +406,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
             save=1,
             options='v=0;',
             force=1,
-            type=cls._get_file_type_name_(file_path)
+            type=cls.get_file_type(file_path)
         )
         bsc_log.Log.trace_method_result(
             'scene save',
@@ -435,7 +435,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
                 mergeNamespacesOnClash=0,
                 namespace=namespace,
                 options='v=0;',
-                type=cls._get_file_type_name_(file_path)
+                type=cls.get_file_type(file_path)
             )
 
     @classmethod
@@ -800,7 +800,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
 
     @classmethod
     def set_file_open_with_dialog(cls, file_path):
-        file_type_name = cls._get_file_type_name_(file_path)
+        file_type_name = cls.get_file_type(file_path)
         mel_cmd = 'openRecentFile("{}", "{}");'.format(
             file_path,
             file_type_name
@@ -844,13 +844,13 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
         return int(width), int(height)
 
     @classmethod
-    def set_render_frame_range(cls, star_frame=None, end_frame=None):
-        if not star_frame:
-            star_frame = int(cmds.playbackOptions(query=1, minTime=1))
+    def set_render_frame_range(cls, start_frame=None, end_frame=None):
+        if not start_frame:
+            start_frame = int(cmds.playbackOptions(query=1, minTime=1))
         if not end_frame:
             end_frame = int(cmds.playbackOptions(query=1, maxTime=1))
         #
-        cmds.setAttr(cls.RENDER_ATTR_DICT['start_frame'], star_frame)
+        cmds.setAttr(cls.RENDER_ATTR_DICT['start_frame'], start_frame)
         cmds.setAttr(cls.RENDER_ATTR_DICT['end_frame'], end_frame)
 
     @classmethod

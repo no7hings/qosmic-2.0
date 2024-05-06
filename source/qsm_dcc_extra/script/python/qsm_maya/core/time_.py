@@ -43,13 +43,23 @@ class Time(object):
         start_frame = cmds.playbackOptions(query=1, minTime=1)
         end_frame = cmds.playbackOptions(query=1, maxTime=1)
         return int(start_frame), int(end_frame)
+    
+    @classmethod
+    def to_frame_range(cls, frame=None):
+        if isinstance(frame, (tuple, list)):
+            start_frame, end_frame = frame
+        elif isinstance(frame, (int, float)):
+            start_frame = end_frame = frame
+        else:
+            start_frame = end_frame = cls.get_current_frame()
+        return int(start_frame), int(end_frame)
 
     @classmethod
-    def set_frame_range(cls, star_frame, end_frame):
-        cmds.playbackOptions(minTime=star_frame), cmds.playbackOptions(animationStartTime=int(star_frame)-5)
+    def set_frame_range(cls, start_frame, end_frame):
+        cmds.playbackOptions(minTime=start_frame), cmds.playbackOptions(animationStartTime=int(start_frame)-5)
         cmds.playbackOptions(maxTime=end_frame), cmds.playbackOptions(animationEndTime=int(end_frame)+5)
         #
-        cls.set_current_frame(star_frame)
+        cls.set_current_frame(start_frame)
 
     @classmethod
     def set_current_frame(cls, frame):

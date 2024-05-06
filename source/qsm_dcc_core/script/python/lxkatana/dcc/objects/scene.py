@@ -103,24 +103,24 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
     @classmethod
     def get_frame_range(cls, frame=None):
         if isinstance(frame, (tuple, list)):
-            star_frame, end_frame = frame
+            start_frame, end_frame = frame
         elif isinstance(frame, (int, float)):
-            star_frame = end_frame = frame
+            start_frame = end_frame = frame
         else:
-            star_frame = end_frame = cls.get_current_frame()
-        return star_frame, end_frame
+            start_frame = end_frame = cls.get_current_frame()
+        return start_frame, end_frame
 
     @classmethod
     def set_frame_range(cls, *args):
         if len(args) == 2:
-            star_frame, end_frame = args
+            start_frame, end_frame = args
         elif len(args) == 1:
-            star_frame = end_frame = args
+            start_frame = end_frame = args
         else:
             raise TypeError()
         #
-        NodegraphAPI.GetRootNode().getParameter('inTime').setValue(star_frame, 0)
-        NodegraphAPI.GetRootNode().getParameter('workingInTime').setValue(star_frame, 0)
+        NodegraphAPI.GetRootNode().getParameter('inTime').setValue(start_frame, 0)
+        NodegraphAPI.GetRootNode().getParameter('workingInTime').setValue(start_frame, 0)
         NodegraphAPI.GetRootNode().getParameter('outTime').setValue(end_frame, 0)
         NodegraphAPI.GetRootNode().getParameter('workingOutTime').setValue(end_frame, 0)
 

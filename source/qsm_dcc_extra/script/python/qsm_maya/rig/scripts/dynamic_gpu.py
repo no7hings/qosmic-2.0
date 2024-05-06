@@ -301,7 +301,7 @@ class DynamicGpuCacheProcess(object):
 
     @classmethod
     def test(cls):
-        directory_path = qsm_mya_ast_core.AssetCache.get_dynamic_gpu_directory(
+        directory_path = qsm_mya_ast_core.AssetCache.generate_dynamic_gpu_directory(
             user_name=bsc_core.SysBaseMtd.get_user_name()
         )
         file_path = '{}/source.ma'.format(directory_path)

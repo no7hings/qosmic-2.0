@@ -51,7 +51,7 @@ class FncExporterForScene(
         os_file.create_directory()
         #
         option = dict(
-            type=mya_dcc_objects.Scene._get_file_type_name_(file_path),
+            type=mya_dcc_objects.Scene.get_file_type(file_path),
             options='v=0;',
             force=True,
             defaultExtensions=True,

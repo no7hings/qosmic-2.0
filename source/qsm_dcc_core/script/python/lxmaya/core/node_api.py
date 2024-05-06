@@ -10,34 +10,34 @@ class Om2Base(object):
     DEFAULT_MAP_NAME = 'map1'
 
     @classmethod
-    def _get_om2_dag_path_(cls, path):
+    def to_om2_dag_path(cls, path):
         return om2.MGlobal.getSelectionListByName(path).getDagPath(0)
 
     @classmethod
     def _get_om2_dag_obj_(cls, path):
-        return om2.MFnDagNode(cls._get_om2_dag_path_(path)).object()
+        return om2.MFnDagNode(cls.to_om2_dag_path(path)).object()
 
     @classmethod
     def _get_om2_transform_(cls, path=None):
         if path:
-            return om2.MFnTransform(cls._get_om2_dag_path_(path))
+            return om2.MFnTransform(cls.to_om2_dag_path(path))
         return om2.MFnTransform()
 
     @classmethod
-    def _get_om2_mesh_fnc_(cls, path):
-        return om2.MFnMesh(cls._get_om2_dag_path_(path))
+    def to_om2_mesh_fnc(cls, path):
+        return om2.MFnMesh(cls.to_om2_dag_path(path))
 
     @classmethod
     def _get_om2_nurbs_curve_fnc_(cls, path):
-        return om2.MFnNurbsCurve(cls._get_om2_dag_path_(path))
+        return om2.MFnNurbsCurve(cls.to_om2_dag_path(path))
 
     @classmethod
     def _get_om2_nurbs_surface_fnc_(cls, path):
-        return om2.MFnNurbsSurface(cls._get_om2_dag_path_(path))
+        return om2.MFnNurbsSurface(cls.to_om2_dag_path(path))
 
     @classmethod
     def _get_om2_dag_node_fnc_(cls, path):
-        return om2.MFnDagNode(cls._get_om2_dag_path_(path))
+        return om2.MFnDagNode(cls.to_om2_dag_path(path))
 
     @classmethod
     def _get_om2_obj_(cls, name):
@@ -85,7 +85,7 @@ class Om2Base(object):
         return map(float, om2_float_array)
 
     @classmethod
-    def _to_point_(cls, om2_point, round_count=None):
+    def to_point(cls, om2_point, round_count=None):
         x, y, z = om2_point.x, om2_point.y, om2_point.z
         if isinstance(round_count, int):
             return round(x, round_count), round(y, round_count), round(z, round_count)
@@ -93,7 +93,7 @@ class Om2Base(object):
 
     @classmethod
     def to_point_array(cls, om2_point_array, round_count=None):
-        return map(lambda x: cls._to_point_(x, round_count=round_count), om2_point_array)
+        return map(lambda x: cls.to_point(x, round_count=round_count), om2_point_array)
 
     @classmethod
     def _get_float_vector_(cls, om2_float_vector):
@@ -451,7 +451,7 @@ class Om2CurveOpt(object):
 # noinspection PyUnusedLocal
 class Om2MeshOpt(object):
     def __init__(self, path):
-        self._om2_obj_fnc = Om2Base._get_om2_mesh_fnc_(path)
+        self._om2_obj_fnc = Om2Base.to_om2_mesh_fnc(path)
 
     def get_name(self):
         return self._om2_obj_fnc.name()
@@ -506,7 +506,7 @@ class Om2MeshOpt(object):
         )
 
     def get_point_at(self, vertex_index):
-        return Om2Base._to_point_(
+        return Om2Base.to_point(
             self._om2_obj_fnc.getPoint(vertex_index),
         )
 
@@ -1199,7 +1199,7 @@ class Om2SurfaceOpt(object):
                     (0, 1), (v_p_max, v_p_min), v_percent
                 )
                 lis.append(
-                    Om2Base._to_point_(
+                    Om2Base.to_point(
                         self._om2_obj_fnc.getPointAtParam(u_p, v_p, 4)
                     )
                 )

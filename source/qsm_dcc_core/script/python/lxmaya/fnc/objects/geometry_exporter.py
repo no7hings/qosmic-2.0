@@ -78,16 +78,16 @@ class FncExporterForGeometryAbc(object):
     PLUG_NAME = 'AbcExport'
 
     def __init__(
-            self,
-            file_path,
-            root=None,
-            frame=None,
-            step=None,
-            attribute=None,
-            attribute_prefix=None,
-            option=None,
-            data_format=None
-        ):
+        self,
+        file_path,
+        root=None,
+        frame=None,
+        step=None,
+        attribute=None,
+        attribute_prefix=None,
+        option=None,
+        data_format=None
+    ):
         self._file_path = file_path
         #
         self._root = self._get_location_(root)
@@ -138,8 +138,8 @@ class FncExporterForGeometryAbc(object):
         return '-{0} {1}'.format(cls.DATA_FORMAT, cls.OGAWA)
 
     @classmethod
-    def _get_frame_(cls, star_frame, end_frame):
-        return '-{0} {1} {2}'.format(cls.FRAME_RANGE, star_frame, end_frame)
+    def _get_frame_(cls, start_frame, end_frame):
+        return '-{0} {1} {2}'.format(cls.FRAME_RANGE, start_frame, end_frame)
 
     @classmethod
     def _get_step_(cls, step):
@@ -412,9 +412,9 @@ class FncExporterForDatabaseGeometry(object):
                         uv_maps = mesh_opt.get_uv_maps()
                         key = mesh_opt.get_face_vertices_as_uuid()
                         if bsc_storage.DccTempCacheMtdForGeometryUv.set_value(
-                                key=key,
-                                value=uv_maps,
-                                force=self._option['force']
+                            key=key,
+                            value=uv_maps,
+                            force=self._option['force']
                         ) is True:
                             bsc_log.Log.trace_method_result(
                                 '{}'.format(self.__class__.__name__),

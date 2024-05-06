@@ -870,7 +870,7 @@ class QtEntryAsList(
                             values.append(i_value)
                     #
                     if self._entry_use_as_file_multiply is True:
-                        values = bsc_storage.StgFileMtdForMultiply.merge_to(
+                        values = bsc_storage.StgFileMtdForTiles.merge_to(
                             values,
                             ['*.<udim>.####.*', '*.####.*']
                         )

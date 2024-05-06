@@ -28,6 +28,10 @@ class Namespace(object):
         if _:
             return _[0]
 
+    @classmethod
+    def rename(cls, namespace, new_namespace):
+        cmds.namespace(rename=[namespace, new_namespace], parent=':')
+
 
 class Namespaces(object):
     @classmethod

@@ -135,8 +135,8 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
 
     @classmethod
     def _set_file_args_update_1_(cls, file_dict, file_opt, name_pattern):
-        if bsc_core.PtnMultiplyFileMtd.get_is_valid(name_pattern):
-            match_args = bsc_storage.StgFileMtdForMultiply.get_number_args(
+        if bsc_core.PtnFileTilesMtd.get_is_valid(name_pattern):
+            match_args = bsc_storage.StgFileMtdForTiles.get_number_args(
                 file_opt.name, name_pattern
             )
             if match_args:
@@ -156,10 +156,10 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
         return False
 
     @classmethod
-    def _get_directory_paths_(cls, directory_path, below_enable):
+    def _get_directory_paths_(cls, directory_path, recursion_enable):
         if directory_path:
             lis = [directory_path]
-            if below_enable is True:
+            if recursion_enable is True:
                 lis.extend(
                     bsc_scan.ScanBase.get_all_directory_paths(directory_path)
                 )
@@ -171,7 +171,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
             pass
 
         directory_path = self._options_prx_node.get('directory')
-        below_enable = self._options_prx_node.get('below_enable')
+        recursion_enable = self._options_prx_node.get('recursion_enable')
         output_directory_path = self._options_prx_node.get('by_format.directory')
         match_patterns = self._options_prx_node.get('match_pattern')
         match_formats = self._options_prx_node.get('match_format')
@@ -179,7 +179,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
         ext_includes = map(lambda x: '.'+x, map(lambda x: x.rstrip().lstrip(), match_formats.split(',')))
         include_patterns = map(lambda x: x.rstrip().lstrip(), match_patterns.split(','))
 
-        directory_paths = self._get_directory_paths_(directory_path, below_enable)
+        directory_paths = self._get_directory_paths_(directory_path, recursion_enable)
         self._tree_view_add_opt.restore_all()
 
         if directory_paths:

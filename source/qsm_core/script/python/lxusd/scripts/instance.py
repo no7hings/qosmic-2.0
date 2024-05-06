@@ -13,7 +13,7 @@ class ScpInstance(object):
         self._grow_usd_file_path = grow_usd_file_path
         self._instance_usd_file_path = instance_usd_file_path
 
-    def get_hash_key(self):
+    def to_hash_key(self):
         pass
 
     @classmethod

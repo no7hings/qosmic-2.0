@@ -114,7 +114,7 @@ class MeshOpt(
         self._set_om2_fnc_def_init_()
 
     def get_om2_fnc(self):
-        return mya_core.Om2Base._get_om2_mesh_fnc_(self.obj.path)
+        return mya_core.Om2Base.to_om2_mesh_fnc(self.obj.path)
 
     def set_create(self, face_vertices, points, uv_map_coords=None, normal_maps=None, color_maps=None):
         transform_path = self._obj.transform.path
@@ -133,7 +133,7 @@ class MeshOpt(
                 #
                 om2_obj.setName(shape_name)
                 #
-                _om2_obj = mya_core.Om2Base._get_om2_mesh_fnc_(shape_path)
+                _om2_obj = mya_core.Om2Base.to_om2_mesh_fnc(shape_path)
                 #
                 bsc_log.Log.trace_method_result(
                     'mesh-obj-create',
@@ -211,7 +211,7 @@ class MeshOpt(
         return mya_core.Om2Base.to_point_array(self.om2_obj.getPoints())
 
     def set_points(self, points):
-        om2_obj = mya_core.Om2Base._get_om2_mesh_fnc_(self._obj.transform.path)
+        om2_obj = mya_core.Om2Base.to_om2_mesh_fnc(self._obj.transform.path)
         om2_obj.setPoints(mya_core.Om2Base._to_om2_point_array_(points))
         om2_obj.updateSurface()
 
@@ -636,7 +636,7 @@ class MeshChecker(
         super(MeshChecker, self).__init__(*args, **kwargs)
 
     def get_om2_fnc(self):
-        return mya_core.Om2Base._get_om2_mesh_fnc_(self.obj.path)
+        return mya_core.Om2Base.to_om2_mesh_fnc(self.obj.path)
 
     @property
     def om2_obj(self):

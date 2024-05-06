@@ -100,7 +100,7 @@ build:
                 value: ''
                 tool_tip: 'entry or choose a directory for searching'
 
-            below_enable:
+            recursion_enable:
                 widget: boolean
                 value: False
                 tool_tip: 'if checked, search all texture in the directory tree'

@@ -20,7 +20,7 @@ hook_option:
         directories: []
         output_directories: []
 
-        below_enable: False
+        recursion_enable: False
 
         force_enable: False
 

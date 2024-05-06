@@ -27,7 +27,7 @@ class PtnBaseMtd(object):
         return []
 
 
-class PtnMultiplyFileMtd(object):
+class PtnFileTilesMtd(object):
     RE_UDIM_KEYS = [
         (r'<udim>', r'{}', 4),
     ]
@@ -76,7 +76,7 @@ class PtnMultiplyFileMtd(object):
     @classmethod
     def to_re_style(cls, pattern):
         pattern_ = pattern
-        args = PtnMultiplyFileMtd.get_args(pattern)
+        args = PtnFileTilesMtd.get_args(pattern)
         for i, (i_key, i_count) in enumerate(args):
             pattern_ = pattern_.replace(
                 i_key, r'[PATTERN-PLACEHOLDER-{}]'.format(i), 1

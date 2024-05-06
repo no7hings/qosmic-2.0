@@ -45,7 +45,7 @@ build:
                 tool_tip: '...'
                 enable: True
 
-            below_enable:
+            recursion_enable:
                 widget: boolean
                 value: False
                 tool_tip: 'when is checked, show all matching image below directory'
