@@ -13,7 +13,7 @@ class GpuCache(object):
     def to_mel_script(cls, gpu_file_path, location, frame=None):
         directory_path = os.path.dirname(gpu_file_path)
         file_name = os.path.splitext(os.path.basename(gpu_file_path))[0]
-        start_frame, end_frame = _time.Time.to_frame_range(frame)
+        start_frame, end_frame = _time.Frame.to_frame_range(frame)
         if isinstance(location, (tuple, list)):
             location = ' '.join(location)
         return (
@@ -41,7 +41,7 @@ class GpuCache(object):
     def export_frame(cls, gpu_file_path, location, frame=None, with_material=False):
         cmds.loadPlugin('gpuCache', quiet=1)
         if cmds.objExists(location):
-            start_frame, end_frame = _time.Time.to_frame_range(frame)
+            start_frame, end_frame = _time.Frame.to_frame_range(frame)
 
             directory_path = os.path.dirname(gpu_file_path)
             file_name = os.path.splitext(os.path.basename(gpu_file_path))[0]
@@ -57,7 +57,7 @@ class GpuCache(object):
 
     @classmethod
     def export_sequence(cls, gpu_file_path, location, frame, with_material=False):
-        start_frame, end_frame = _time.Time.to_frame_range(frame)
+        start_frame, end_frame = _time.Frame.to_frame_range(frame)
 
         frame_range = range(start_frame, end_frame+1)
         seq_range = range(end_frame-start_frame+1)

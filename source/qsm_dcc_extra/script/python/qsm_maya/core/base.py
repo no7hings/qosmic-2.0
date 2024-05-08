@@ -2,6 +2,10 @@
 import lxbasic.core as bsc_core
 
 
+class Om2Base(object):
+    pass
+
+
 class AbsNodeOpt(object):
     Type = None
 

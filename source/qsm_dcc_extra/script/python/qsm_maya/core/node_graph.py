@@ -21,12 +21,19 @@ class NodeGraph(object):
         _ = []
         _rcs_fnc(path)
         if type_includes:
-            return [i for i in _ if _node.Node.get_type(i) in type_includes]
+            return [
+                x for x in
+                _
+                if _node.Node.get_type(x) in type_includes
+            ]
         return _
     
     @classmethod
     def get_source_nodes(cls, path, type_includes=None):
         _ = cmds.listConnections(path, destination=0, source=1) or []
         if type_includes:
-            return [i for i in _ if _node.Node.get_type(i) in type_includes]
+            return [
+                x for x in
+                _
+                if _node.Node.get_type(x) in type_includes]
         return _

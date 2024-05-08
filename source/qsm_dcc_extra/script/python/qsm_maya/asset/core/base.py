@@ -44,7 +44,7 @@ class AssetCache(object):
         root = bsc_core.EnvBaseMtd.get_temporary_root()
         key = cls.get_key(file_path)
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
-        return '{}/.asset-cache/unit-assembly/{}/{}/AD.ma'.format(
+        return '{}/.asset-cache/unit-assembly/{}/{}/source.ma'.format(
             root, region, key
         )
 

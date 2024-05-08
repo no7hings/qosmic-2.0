@@ -8,6 +8,7 @@ class Node(object):
         Transform = 'transform'
         Mesh = 'mesh'
         GPU = 'gpuCache'
+        AssemblyReference = 'assemblyReference'
 
     @classmethod
     def get_type(cls, path):
@@ -26,6 +27,10 @@ class Node(object):
         return cls.get_type(path) == cls.Types.GPU
 
     @classmethod
+    def is_assembly_reference(cls, path):
+        return cls.get_type(path) == cls.Types.AssemblyReference
+
+    @classmethod
     def is_exists(cls, path):
         return cmds.objExists(path)
 
@@ -36,3 +41,7 @@ class Node(object):
     @classmethod
     def delete(cls, path):
         cmds.delete(path)
+
+    @classmethod
+    def rename(cls, path, new_name):
+        return cmds.rename(path, new_name)

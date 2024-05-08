@@ -8,7 +8,7 @@ from . import attribute as _attribute
 class Transform(object):
 
     @classmethod
-    def reset_transformation(cls, path, with_visibility=False):
+    def zero_transformations(cls, path, with_visibility=False):
         dict_ = dict(
             translate=(0.0, 0.0, 0.0),
             rotate=(0.0, 0.0, 0.0),
@@ -22,6 +22,14 @@ class Transform(object):
 
         if with_visibility:
             cmds.setAttr(path+'.visibility', 1)
+
+    @classmethod
+    def freeze_transformations(cls, path):
+        cmds.makeIdentity(path, apply=1, translate=1, rotate=1, scale=1)
+
+    @classmethod
+    def reset_transformations(cls, path):
+        cmds.makeIdentity(path, apply=0, translate=1, rotate=1, scale=1)
 
     @classmethod
     def get_shape_path(cls, path):

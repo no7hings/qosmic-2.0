@@ -581,7 +581,7 @@ class _GuiRigReferenceOpt(
             file_opt = bsc_storage.StgFileOpt(self._rig_file_path)
             count = self._count_input._get_value_()
             for i in range(count):
-                qsm_mya_core.Scene.reference_file(
+                qsm_mya_core.SceneFile.reference_file(
                     self._rig_file_path,
                     namespace=file_opt.name_base
                 )
@@ -712,7 +712,7 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
 
     def do_gui_refresh_by_camera_changing(self):
         cameras = qsm_mya_core.Cameras.get_all()
-        active_camera = qsm_mya_core.Cameras.get_active_camera()
+        active_camera = qsm_mya_core.Camera.get_active()
         self._rig_camera_port.set(
             cameras
         )
@@ -724,7 +724,7 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
         pass
 
     def do_gui_refresh_by_fps_changing(self):
-        fps = qsm_mya_core.Scene.get_fps()
+        fps = qsm_mya_core.Frame.get_fps()
         self._rig_fps_port.set(fps)
 
     def do_gui_refresh_by_frame_scheme_changing(self):
@@ -738,10 +738,10 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
     def do_gui_refresh_by_dcc_frame_changing(self):
         frame_scheme = self.get_rig_frame_scheme()
         if frame_scheme == 'render_settings':
-            frame_range = qsm_mya_core.Scene.get_render_frame_range()
+            frame_range = qsm_mya_core.RenderSettings.get_frame_range()
             self._rig_frame_range_port.set(frame_range)
         elif frame_scheme == 'time_slider':
-            frame_range = qsm_mya_core.Scene.get_frame_range()
+            frame_range = qsm_mya_core.Frame.get_frame_range()
             self._rig_frame_range_port.set(frame_range)
 
     def do_gui_refresh_by_window_active_changing(self):

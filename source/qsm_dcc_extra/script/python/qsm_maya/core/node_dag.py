@@ -7,7 +7,7 @@ import lxbasic.core as bsc_core
 from . import node as _node
 
 
-class NodeDag(object):
+class NodeDag(_node.Node):
     PATHSEP = '|'
 
     @classmethod
@@ -53,3 +53,26 @@ class NodeDag(object):
     @classmethod
     def find_siblings(cls, path, type_includes):
         return cmds.ls(path, type=type_includes, dag=1, long=1) or []
+
+    @classmethod
+    def rename(cls, path, new_name):
+        _ = cmds.rename(path, new_name)
+        if _:
+            return cls.to_path(_)
+
+
+class NodeDisplay(object):
+    @classmethod
+    def set_outliner_color(cls, path, r, g, b):
+        cmds.setAttr(path+'.useOutlinerColor', 1)
+        cmds.setAttr(path+'.outlinerColor', r, g, b)
+
+
+class NodeDrawOverride(object):
+    @classmethod
+    def set_enable(cls, path, boolean):
+        cmds.setAttr(path+'.overrideEnabled', boolean)
+
+    @classmethod
+    def set_visible(cls, path, boolean):
+        cmds.setAttr(path+'.overrideVisibility', boolean)

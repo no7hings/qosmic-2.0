@@ -1,10 +1,9 @@
 # coding:utf-8
-import os
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
 
-class Time(object):
+class Frame(object):
     RENDER_ATTR_DICT = {
         'renderer': 'defaultRenderGlobals.currentRenderer',
         'imagePrefix': 'defaultRenderGlobals.imageFilePrefix',
@@ -59,10 +58,10 @@ class Time(object):
         cmds.playbackOptions(minTime=start_frame), cmds.playbackOptions(animationStartTime=int(start_frame)-5)
         cmds.playbackOptions(maxTime=end_frame), cmds.playbackOptions(animationEndTime=int(end_frame)+5)
         #
-        cls.set_current_frame(start_frame)
+        cls.set_current(start_frame)
 
     @classmethod
-    def set_current_frame(cls, frame):
+    def set_current(cls, frame):
         cmds.currentTime(frame)
 
     @classmethod

@@ -11,13 +11,11 @@ import lxbasic.resource as bsc_resource
 
 import lxbasic.core as bsc_core
 
-import lxmaya.dcc.objects as mya_dcc_objects
+from ... import core as _mya_core
 
-import qsm_maya.core as qsm_mya_core
+from ...asset import core as _ast_core
 
-import qsm_maya.asset.core as qsm_mya_ast_core
-
-import qsm_maya.rig.core as qsm_rig_core
+from ...rig import core as _rig_core
 
 
 class AdvSkinProxyGenerate(object):
@@ -52,7 +50,7 @@ class AdvSkinProxyGenerate(object):
 
     CACHE_ROOT = '|__SKIN_PROXY__'
 
-    CACHE_NAME = qsm_rig_core.RigConfigure.SkinProxyCacheName
+    CACHE_NAME = _rig_core.RigConfigure.SkinProxyCacheName
 
     @classmethod
     def _create_group(cls, path):
@@ -319,8 +317,8 @@ class AdvSkinProxyGenerate(object):
 
     def __init__(self, namespace):
         self._namespace = namespace
-        self._adv_query = qsm_rig_core.AdvQuery(namespace)
-        self._rig = qsm_rig_core.AdvRigOpt(self._namespace)
+        self._adv_query = _rig_core.AdvQuery(namespace)
+        self._rig = _rig_core.AdvRigOpt(self._namespace)
         self._root = self._rig.get_root()
 
     def create_cache_root_auto(self):
@@ -473,7 +471,7 @@ class AdvSkinProxyGenerate(object):
 
     def create_resource_geometries(self, location):
         if cmds.objExists(self.PROXY_GEOMETRY_GROUP_PATH) is False:
-            if qsm_rig_core.SCHEME == 'new':
+            if _rig_core.SCHEME == 'new':
                 self._import_file(bsc_resource.ExtendResource.get('rig/skin_proxy_geometry_new.ma'))
             else:
                 self._import_file(bsc_resource.ExtendResource.get('rig/skin_proxy_geometry.ma'))
@@ -511,7 +509,7 @@ class AdvSkinProxyGenerate(object):
     def create_cache(self, cache_file_path=None):
         location = '|{}'.format(self.CACHE_NAME)
         if cmds.objExists(location) is False:
-            if qsm_rig_core.SCHEME == 'new':
+            if _rig_core.SCHEME == 'new':
                 self._import_file(
                     bsc_resource.ExtendResource.get('rig/skin_proxy_new.ma')
                 )
@@ -525,8 +523,8 @@ class AdvSkinProxyGenerate(object):
         cmds.setAttr(location + '.blackBox', 1, lock=1)
 
         if cache_file_path is None:
-            file_path = qsm_mya_core.ReferenceNamespaceQuery().get_file(self._namespace)
-            cache_file_path = qsm_mya_ast_core.AssetCache.generate_skin_proxy_file(
+            file_path = _mya_core.ReferenceNamespacesCache().get_file(self._namespace)
+            cache_file_path = _ast_core.AssetCache.generate_skin_proxy_file(
                 file_path
             )
 
@@ -534,7 +532,7 @@ class AdvSkinProxyGenerate(object):
             os.path.dirname(cache_file_path)
         )
 
-        mya_dcc_objects.Scene.export_to_file(
+        _mya_core.SceneFile.export_file(
             cache_file_path, location
         )
 
@@ -738,12 +736,12 @@ class AdvSkinProxyGenerate(object):
         return self._rig.is_exists()
 
     def generate_args(self):
-        file_path = qsm_mya_core.ReferenceNamespaceQuery().get_file(self._namespace)
-        cache_file_path = qsm_mya_ast_core.AssetCache.generate_skin_proxy_file(
+        file_path = _mya_core.ReferenceNamespacesCache().get_file(self._namespace)
+        cache_file_path = _ast_core.AssetCache.generate_skin_proxy_file(
             file_path
         )
         if os.path.isfile(cache_file_path) is False:
-            cmd = qsm_mya_ast_core.MayaCacheProcess.generate_command(
+            cmd = _ast_core.MayaCacheProcess.generate_command(
                 'method=skin-proxy-cache-generate&file={}&cache_file={}'.format(
                     file_path,
                     cache_file_path,
@@ -763,10 +761,8 @@ class AdvSkinProxyProcess(object):
 
     def execute(self):
         namespace = 'skin_proxy'
-        mya_dcc_objects.Scene.new_file()
-        mya_dcc_objects.Scene.reference_file_from(
-            self._file_path, namespace=namespace
-        )
+        _mya_core.SceneFile.new()
+        _mya_core.SceneFile.reference_file(self._file_path, namespace=namespace)
         AdvSkinProxyGenerate(namespace).create_cache(
             self._cache_file_path
         )

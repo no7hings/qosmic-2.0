@@ -1,7 +1,17 @@
 # coding:utf-8
+from .selection import *
+
+from .render import *
+
 from .node import *
 
+from .expression import *
+
+from .constraint import *
+
 from .node_dag import *
+
+from .container import *
 
 from .transform import *
 
@@ -10,6 +20,8 @@ from .time_ import *
 from .scene_file import *
 
 from .viewport import *
+
+from .reference import *
 
 from .scene import *
 
@@ -32,6 +44,8 @@ from .keyframe import *
 from .assembly import *
 
 from .file_reference import *
+
+from .shader import *
 
 from .material import *
 

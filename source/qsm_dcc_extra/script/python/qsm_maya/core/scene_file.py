@@ -85,3 +85,21 @@ class SceneFile(object):
     @classmethod
     def new(cls):
         cmds.file(new=1, force=1)
+
+    @classmethod
+    def open(cls, file_path, ignore_format=True):
+        if ignore_format is True:
+            cmds.file(
+                file_path,
+                open=1,
+                options='v=0;',
+                force=1,
+            )
+        else:
+            cmds.file(
+                file_path,
+                open=1,
+                options='v=0;',
+                force=1,
+                type=cls.get_file_type(file_path)
+            )

@@ -1,0 +1,834 @@
+    class MFnCamera(MFnDagNode)
+     |  Function set for cameras.
+     |
+     |  Method resolution order:
+     |      MFnCamera
+     |      MFnDagNode
+     |      MFnDependencyNode
+     |      MFnBase
+     |      __builtin__.object
+     |
+     |  Methods defined here:
+     |
+     |  __init__(...)
+     |      x.__init__(...) initializes x; see help(type(x)) for signature
+     |
+     |  aspectRatio(...)
+     |      aspectRatio() -> float
+     |
+     |      Returns the aspect ratio for the camera.
+     |
+     |  centerOfInterestPoint(...)
+     |      centerOfInterestPoint(space=kObject) -> MPoint
+     |
+     |      Returns the center of interest point for the camera.
+     |
+     |      * space (int) - Specifies the coordinate system for this operation
+     |
+     |  computeDepthOfField(...)
+     |      computeDepthOfField(nearLimit=None) -> self
+     |
+     |      Compute the depth of field
+     |
+     |      * nearLimit (float) - the near limit
+     |
+     |  copyViewFrom(...)
+     |      copyViewFrom(otherCamera) -> self
+     |
+     |      Copy the camera settings related to the perspective from the given camera view.
+     |
+     |      This method will only work when the world space information for the camera is available, i.e. when the function set has been initialized with a DAG path.
+     |
+     |      * otherCamera (MDagPath) - Camera to copy view from
+     |
+     |  create(...)
+     |      create(parent=None) -> MObject
+     |
+     |      Creates a perspective camera. A parent can be specified for the new camera, otherwise a transform is created.
+     |
+     |      The camera is positioned at (0, 0, 0), its center of interest at (0, 0, -1), which implies that the view-direction is pointing in the direction of the negative z-axis, and its up-direction along the positive Y axis.
+     |
+     |      * parent (MObject) - The parent of the new camera
+     |
+     |  eyePoint(...)
+     |      eyePoint(space=kObject) -> MPoint
+     |
+     |      Returns the eye point for the camera.
+     |
+     |      * space (int) - Specifies the coordinate system for this operation
+     |
+     |  getAspectRatioLimits(...)
+     |      getAspectRatioLimits() -> (float, float)
+     |
+     |      Returns the minimum and maximum aspect ratio limits for the camera.
+     |
+     |  getFilmApertureLimits(...)
+     |      getFilmApertureLimits() -> (float, float)
+     |
+     |      Returns the maximum and minimum film aperture limits for the camera.
+     |
+     |  getFilmFrustum(...)
+     |      getFilmFrustum(distance, applyPanZoom=False) -> (float, float, float, float)
+     |
+     |      Returns the film frustum for the camera (horizontal size, vertical size, horizontal offset and vertical offset). The frustum defines the projective transformation.
+     |
+     |      * distance (float) - Specifies the focal length
+     |      * applyPanZoom (bool) - specifies whether to apply 2D pan/zoom
+     |
+     |  getFilmFrustumCorners(...)
+     |      getFilmFrustumCorners(distance, applyPanZoom=False) -> MPointArray
+     |
+     |      Returns the film frustum for the camera. The frustum defines the projective transformation.
+     |
+     |       element 0 is the bottom left
+     |       element 1 is the top left
+     |       element 2 is the top right
+     |       element 3 is the bottom right
+     |
+     |      * distance (float) - Specifies the focal length
+     |      * applyPanZoom (bool) - specifies whether to apply 2D pan/zoom
+     |
+     |  getFocalLengthLimits(...)
+     |      getFocalLengthLimits() -> (float, float)
+     |
+     |      Returns the maximum and minimum focal length limits for the camera.
+     |
+     |  getPortFieldOfView(...)
+     |      getPortFieldOfView(int, int) -> (float, float)
+     |
+     |      Returns the horizontal and vertical field of view in radians from the given viewport width and height.
+     |
+     |      * width (int) - width of viewport
+     |      * height (int) - height of viewport
+     |
+     |  getRenderingFrustum(...)
+     |      getRenderingFrustum(windowAspect) -> (float, float, float, float)
+     |
+     |      Returns the rendering frustum (left, right, bottom and top) for the camera.
+     |      This is the frustum that the maya renderer uses.
+     |
+     |      * windowAspect (float) - windowAspect
+     |
+     |  getViewParameters(...)
+     |      getViewParameters(windowAspect, applyOverscan=False, applySqueeze=False, applyPanZoom=False) -> (float, float, float, float)
+     |
+     |      Returns the intermediate viewing frustum (apertureX, apertureY, offsetX and offsetY) parameters for the camera. The aperture and offset are used by getViewingFrustum() and getRenderingFrustum() to compute the extent (left, right, top, bottom) of the frustum in the following manner:
+     |
+     |       left = focal_to_near * (-0.5*apertureX + offsetX)
+     |       right = focal_to_near * (0.5*apertureX + offsetX)
+     |       bottom = focal_to_near * (-0.5*apertureY + offsetY)
+     |       top = focal_to_near * (0.5*apertureY + offsetY)
+     |
+     |      Here, focal_to_near is equal to cameraScale if the camera is orthographic, or it is equal to ((nearClippingPlane / (focalLength * MM_TO_INCH)) * cameraScale) where MM_TO_INCH equals 0.03937.
+     |
+     |      * windowAspect (float) - windowAspect
+     |      * applyOverscan (bool) - specifies whether to apply overscan
+     |      * applySqueeze (bool) - specifies whether to apply the lens squeeze ratio of the camera
+     |      * applyPanZoom (bool) - specifies whether to apply 2D pan/zoom
+     |
+     |  getViewingFrustum(...)
+     |      getViewingFrustum(windowAspect, applyOverscan=False, applySqueeze=False, applyPanZoom=False) -> (float, float, float, float)
+     |
+     |      Returns the viewing frustum (left, right, bottom and top) for the camera.
+     |
+     |      * windowAspect (float) - windowAspect
+     |      * applyOverscan (bool) - specifies whether to apply overscan
+     |      * applySqueeze (bool) - specifies whether to apply the lens squeeze ratio of the camera
+     |      * applyPanZoom (bool) - specifies whether to apply 2D pan/zoom
+     |
+     |  hasSamePerspective(...)
+     |      hasSamePerspective(otherCamera) -> bool
+     |
+     |      Returns True if the camera has same perspective settings as the given camera.
+     |
+     |      This method will only work when the world space information for the camera is available, i.e. when the function set has been initialized with a DAG path.
+     |
+     |      * otherCamera (MDagPath) - Camera to compare perspective with
+     |
+     |  horizontalFieldOfView(...)
+     |      horizontalFieldOfView() -> float
+     |
+     |      Returns the horizontal field of view for the camera.
+     |
+     |  isOrtho(...)
+     |      isOrtho() -> bool
+     |
+     |      Returns True if the camera is in orthographic mode.
+     |
+     |  postProjectionMatrix(...)
+     |      postProjectionMatrix(context=None) -> MFloatMatrix
+     |
+     |      Returns the post projection matrix used to compute film roll on the film back plane.
+     |
+     |      * context (MDGContext) - DG time-context to specify time of evaluation
+     |
+     |  projectionMatrix(...)
+     |      projectionMatrix(context=None) -> MFloatMatrix
+     |
+     |      Returns the orthographic or perspective projection matrix for the camera.
+     |      The projection matrix that maya's software renderer uses is almost identical to the OpenGL projection matrix. The difference is that maya uses a left hand coordinate system and so the entries [2][2] and [3][2] are negated.
+     |
+     |      * context (MDGContext) - DG time-context to specify time of evaluation
+     |
+     |  rightDirection(...)
+     |      rightDirection(space=kObject) -> MVector
+     |
+     |      Returns the right direction vector for the camera.
+     |
+     |      * space (int) - Specifies the coordinate system for this operation
+     |
+     |  set(...)
+     |      set(wsEyeLocation, wsViewDirection, wsUpDirection, horizFieldOfView, aspectRatio) -> self
+     |
+     |      Convenience routine to set the camera viewing parameters. The specified values should be in world space where applicable.
+     |
+     |      This method will only work when the world space information for the camera is available, i.e. when the function set has been initialized with a DAG path.
+     |
+     |      * wsEyeLocation (MPoint) - Eye location to set in world space
+     |      * wsViewDirection (MVector) - View direction to set in world space
+     |      * wsUpDirection (MVector) - Up direction to set in world space
+     |      * horizFieldOfView (float) - The horizontal field of view to set
+     |      * aspectRatio (float) - The aspect ratio to set
+     |
+     |  setAspectRatio(...)
+     |      setAspectRatio(aspectRatio) -> self
+     |
+     |      Set the aspect ratio of the View.  The aspect ratio is expressed as width/height.  This also modifies the entity's scale transformation to reflect the new aspect ratio.
+     |
+     |      * aspectRatio (float) - The aspect ratio to be set
+     |
+     |  setCenterOfInterestPoint(...)
+     |      setCenterOfInterestPoint(centerOfInterest, space=kObject) -> self
+     |
+     |      Positions the center-of-interest of the camera keeping the eye-point fixed in space. This method changed the orientation and translation of the camera's transform attributes as well as the center-of-interest distance.
+     |
+     |      This method will only work when the world space information for the camera is available, i.e. when the function set has been initialized with a DAG path.
+     |
+     |      * centerOfInterest (MPoint) - Center of interest point to be set
+     |      * space (int) - Specifies the coordinate system for this operation
+     |
+     |  setEyePoint(...)
+     |      setEyePoint(eyeLocation, space=kObject) -> self
+     |
+     |      Positions the eye-point of the camera keeping the center of interest fixed in space. This method changed the orientation and translation of the camera's transform attributes as well as the center-of-interest distance.
+     |
+     |      This method will only work when the world space information for the camera is available, i.e. when the function set has been initialized with a DAG path.
+     |
+     |      * eyeLocation (MPoint) - The eye location to set
+     |      * space (int) - Specifies the coordinate system for this operation
+     |
+     |  setHorizontalFieldOfView(...)
+     |      setHorizontalFieldOfView(fov) -> self
+     |
+     |      Sets the horizontal field of view for the camera.
+     |
+     |      * fov (float) - The horizontal field of view value to be set
+     |
+     |  setIsOrtho(...)
+     |      setIsOrtho(orthoState, useDist=None) -> self
+     |
+     |      Switch the camera in and out of orthographic mode.  When the switch happens, the camera has to calculate a new fov or ortho width, each of which is based on the other and a set distance.  The caller can specify the distance; otherwise the center of interest is used.
+     |
+     |      * orthoState (bool) - If True then the camera will be orthographic
+     |      * useDist (float) - distance to use.
+     |
+     |  setNearFarClippingPlanes(...)
+     |      setNearFarClippingPlanes(near, far) -> self
+     |
+     |      Set the distances to the Near and Far Clipping Planes.
+     |
+     |      * near (float) - The near clipping plane value to be set
+     |      * far (float) - The far clipping plane value to be set
+     |
+     |  setVerticalFieldOfView(...)
+     |      setVerticalFieldOfView(fov) -> self
+     |
+     |      Sets the vertical field of view for the camera.
+     |
+     |      * fov (float) - The vertical field of view value to be set
+     |
+     |  upDirection(...)
+     |      upDirection(space=kObject) -> MVector
+     |
+     |      Returns the up direction vector for the camera.
+     |
+     |      * space (int) - Specifies the coordinate system for this operation
+     |
+     |  verticalFieldOfView(...)
+     |      verticalFieldOfView() -> float
+     |
+     |      Returns the vertical field of view for the camera.
+     |
+     |  viewDirection(...)
+     |      viewDirection(space=kObject) -> MVector
+     |
+     |      Returns the view direction for the camera
+     |
+     |      * space (int) - Specifies the coordinate system for this operation
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  cameraScale
+     |      The camera scale.
+     |
+     |  centerOfInterest
+     |      The linear distance from the camera's eye point to the center of interest.
+     |
+     |  fStop
+     |      The f-stop value for the camera.
+     |
+     |  farClippingPlane
+     |      The distance to the far clipping plane.
+     |
+     |  farFocusDistance
+     |      The farthest distance within the well-focus region
+     |
+     |  filmFit
+     |      How the digital image is to be fitted to the film back.
+     |      Valid values:
+     |      * kFillFilmFit           The system calculates both horizontal and vertical fits and then applies the one that makes the digital image larger than the film back.
+     |      * kHorizontalFilmFit     The digital image is made to fit the film back exactly in the horizontal direction. This then gives each pixel a horizontal size = (film back width) / (horizontal resolution). The pixel height is then = (pixel width) / (pixel aspect ratio). Now that the pixel has a size, resolution gives us a complete image. That image will match the film back exactly in width. It will almost never match in height, either being too tall or too short. By playing with the numbers you can get it pretty close though.
+     |      * kVerticalFilmFit       The same idea as horizontal fit, only applied vertically. Thus the digital image will match the film back exactly in height, but miss in width.
+     |      * kOverscanFilmFit       Over-scanning the film gate in the camera view allows us to choreograph action outside of the frustum from within the camera view without having to resort to a dolly or zoom. This feature is also essential for animating image planes.
+     |
+     |  filmFitOffset
+     |      The film fit offset for the camera.
+     |
+     |  filmRollOrder
+     |      The order in which the film back rotation is applied with respect to the pivot point.
+     |      Valid values:
+     |      * kRotateTranslate      The film back is first rotated before it is translated by the pivot value.
+     |      * kTranslateRotate      The film back is translated by the pivot before it is rotated.
+     |
+     |  filmRollValue
+     |      The film roll value for film back.
+     |
+     |  filmTranslateH
+     |      The horizontal film translate value.  This value corresponds to the normalized viewport.
+     |
+     |  filmTranslateV
+     |      The vertical film translate value. This value corresponds to the normalized viewport, [-1,1].
+     |
+     |  focalLength
+     |      The focal length for the camera.
+     |      This is the distance along the lens axis between the lens and the film plane when "focal distance" is infinitely large. This is an optical property of the lens. Specified in millimeters.
+     |
+     |  focusDistance
+     |      The focus distance for the camera. This value sets the focus at a certain distance in front of the camera.
+     |
+     |  horizontalFilmAperture
+     |      The horizontal film aperture for the camera.
+     |
+     |  horizontalFilmOffset
+     |      The horizontal offset of the film. Unit used is inches.
+     |
+     |  horizontalPan
+     |      The camera 2D horizontal pan value. Unit is inches.
+     |
+     |  horizontalRollPivot
+     |      The horizontal roll pivot for film back roll.
+     |
+     |  horizontalShake
+     |      The horizontal offset of the film due to the shake attribute. Unit used is inches.
+     |
+     |  isClippingPlanes
+     |      Whether or not manual clipping planes are activated.
+     |
+     |  isDepthOfField
+     |      Whether or not the depth of field calculation is performed for the camera.
+     |
+     |  isDisplayFilmGate
+     |      Whether or not the film gate icons are displayed when looking through the camera.
+     |
+     |  isDisplayGateMask
+     |      Whether or not the film gate is displayed shaded.
+     |
+     |  isMotionBlur
+     |      Wheter or not motion blur is on/off for the camera.
+     |
+     |  isVerticalLock
+     |      Determines if vertical lock is turned on for the camera.
+     |
+     |  lensSqueezeRatio
+     |      The lens squeeze ratio for the camera
+     |
+     |  nearClippingPlane
+     |      The distance to the near clipping plane.
+     |
+     |  nearFocusDistance
+     |      The nearest distance within the well-focus region
+     |
+     |  orthoWidth
+     |      The orthographic projection width.
+     |
+     |  overscan
+     |      The percent of overscan for this camera.
+     |
+     |  panZoomEnabled
+     |      The toggle value for the camera 2D pan/zoom enabled attribute.
+     |      If this attribute is False, the 2D pan/zoom values are ignored by the camera.
+     |
+     |  postScale
+     |      The post projection matrix's post-scale value.
+     |
+     |  preScale
+     |      The post projection matrix's pre-scale value.
+     |
+     |  renderPanZoom
+     |      The toggle value for the camera render 2D pan/zoom attribute.
+     |      If this attribute is False, the 2D pan/zoom values will not affect the output render.
+     |
+     |  shakeEnabled
+     |      The toggle value for the camera shake enabled attribute.
+     |      If this attribute is False, the horizontalShake and verticalShake values are ignored by the camera.
+     |
+     |  shakeOverscan
+     |      The camera shake overscan value. Unit is a multiplier to the film aperture.
+     |
+     |  shakeOverscanEnabled
+     |      The toggle value for the camera shake overscan attribute.
+     |      If this attribute is False, the shakeOverscan value is ignored by the camera.
+     |
+     |  shutterAngle
+     |      The shutter angle which is one of the variables used to compute motion blur. The shutter angle is specified in radians.
+     |
+     |  stereoHIT
+     |      The camera stereo horizontal image translation (stereo HIT) value.  Unit is inches.
+     |
+     |  stereoHITEnabled
+     |      The toggle value for the stereo HIT enabled attribute.
+     |      If this attribute is False, the stereoHIT value is ignored by the camera.
+     |
+     |  tumblePivot
+     |      The tumble pivot value for the camera. The pivot value will be in world space coordinates unless usePivotAsLocalSpace is True in which case the pivot is a relative offset.
+     |
+     |  usePivotAsLocalSpace
+     |      The local axis tumble setting for this camera.True if using local space tumbling for this camera, or False if using the current global tumble setting in Maya.
+     |
+     |  verticalFilmAperture
+     |      The vertical film aperture for the camera.
+     |
+     |  verticalFilmOffset
+     |      The vertical offset of the film. Unit used is inches.
+     |
+     |  verticalPan
+     |      The camera 2D vertical pan value. Unit is inches.
+     |
+     |  verticalRollPivot
+     |      The vertical roll pivot for film back roll.
+     |
+     |  verticalShake
+     |      The vertical film-based camera shake value. Unit used is inches.
+     |
+     |  zoom
+     |      The camera 2D zoom value, which is the percent over the film viewable frustum to display
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |
+     |  __new__ = <built-in method __new__ of type object>
+     |      T.__new__(S, ...) -> a new object with type S, a subtype of T
+     |
+     |  kFillFilmFit = 0
+     |
+     |  kHorizontalFilmFit = 1
+     |
+     |  kInvalid = 4
+     |
+     |  kOverscanFilmFit = 3
+     |
+     |  kRotateTranslate = 0
+     |
+     |  kTranslateRotate = 1
+     |
+     |  kVerticalFilmFit = 2
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from MFnDagNode:
+     |
+     |  addChild(...)
+     |      addChild(node, index=kNextPos, keepExistingParents=False) -> self
+     |
+     |      Makes a node a child of this one.
+     |
+     |  child(...)
+     |      child(index) -> MObject
+     |
+     |      Returns the specified child of this node.
+     |
+     |  childCount(...)
+     |      childCount() -> int
+     |
+     |      Returns the number of nodes which are children of this one.
+     |
+     |  dagPath(...)
+     |      dagPath() -> MDagPath
+     |
+     |      Returns the DAG path to which this function set is attached. Raises a TypeError if the function set is attached to an MObject rather than a path.
+     |
+     |  dagRoot(...)
+     |      dagRoot() -> MObject
+     |
+     |      Returns the root node of the first path leading to this node.
+     |
+     |  duplicate(...)
+     |      duplicate(instance=False, instanceLeaf=False) -> MObject
+     |
+     |      Duplicates the DAG hierarchy rooted at the current node.
+     |
+     |  fullPathName(...)
+     |      fullPathName() -> string
+     |
+     |      Returns the full path of the attached object, from the root of the DAG on down.
+     |
+     |  getAllPaths(...)
+     |      getAllPaths() -> MDagPathArray
+     |
+     |      Returns all of the DAG paths which lead to the object to which this function set is attached.
+     |
+     |  getConnectedSetsAndMembers(...)
+     |      getConnectedSetsAndMembers(instance, renderableSetsOnly) -> (MObjectArray, MObjectArray)
+     |
+     |      Returns a tuple containing an array of sets and an array of the
+     |      components of the DAG object which are in those sets. If the entire object is in a set, then the corresponding entry in the comps array will have no elements in it.
+     |
+     |  getPath(...)
+     |      getPath() -> MDagPath
+     |
+     |      Returns the DAG path to which this function set is attached, or the first path to the node if the function set is attached to an MObject.
+     |
+     |  hasChild(...)
+     |      hasChild(node) -> bool
+     |
+     |      Returns True if the specified node is a child of this one.
+     |
+     |  hasParent(...)
+     |      hasParent(node) -> bool
+     |
+     |      Returns True if the specified node is a parent of this one.
+     |
+     |  instanceCount(...)
+     |      instanceCount(indirect) -> int
+     |
+     |      Returns the number of instances for this node.
+     |
+     |  isChildOf(...)
+     |      isChildOf(node) -> bool
+     |
+     |      Returns True if the specified node is a parent of this one.
+     |
+     |  isInstanced(...)
+     |      isInstanced(indirect=True) -> bool
+     |
+     |      Returns True if this node is instanced.
+     |
+     |  isInstancedAttribute(...)
+     |      isInstancedAttribute(attr) -> bool
+     |
+     |      Returns True if the specified attribute is an instanced attribute of this node.
+     |
+     |  isParentOf(...)
+     |      isParentOf(node) -> bool
+     |
+     |      Returns True if the specified node is a child of this one.
+     |
+     |  parent(...)
+     |      parent(index) -> MObject
+     |
+     |      Returns the specified parent of this node.
+     |
+     |  parentCount(...)
+     |      parentCount() -> int
+     |
+     |      Returns the number of parents this node has.
+     |
+     |  partialPathName(...)
+     |      partialPathName() -> string
+     |
+     |      Returns the minimum path string necessary to uniquely identify the attached object.
+     |
+     |  removeChild(...)
+     |      removeChild(node) -> self
+     |
+     |      Removes the child, specified by MObject, reparenting it under the world.
+     |
+     |  removeChildAt(...)
+     |      removeChildAt(index) -> self
+     |
+     |      Removes the child, specified by index, reparenting it under the world.
+     |
+     |  setObject(...)
+     |      setObject(MObject or MDagPath) -> self
+     |
+     |      Attaches the function set to the specified node or DAG path.
+     |
+     |  transformationMatrix(...)
+     |      transformationMatrix() -> MMatrix
+     |
+     |      Returns the object space transformation matrix for this DAG node.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from MFnDagNode:
+     |
+     |  boundingBox
+     |      Node's bounding box, in object space.
+     |
+     |  inModel
+     |      True if the node has been added to the model.
+     |
+     |  inUnderWorld
+     |      True if this node is in the underworld of another node (e.g. a curve on surface is in the underworld of the surface).
+     |
+     |  isInstanceable
+     |      True if instancing is allowed for this node.
+     |
+     |  isIntermediateObject
+     |      True if this node is just an intermediate in part of a larger calculation (e.g. input to a deformer).
+     |
+     |  objectColor
+     |      Index from 0 to 7 indicating the color in which the node is to be drawn when inactive, assuming that it is drawable.
+     |
+     |  objectColorRGB
+     |      RGB value indicating the color in which the node is to be drawn when inactive, assuming that it is drawable.
+     |
+     |  objectColorType
+     |      Determines whether the default color, indexed object color, orRGB object color is used for this object.
+     |
+     |  useObjectColor
+     |      If True then the node will be drawn using its 'objectColor', otherwise it will be drawn using Maya's default color. Thismethod is deprecated, use objectColorType instead.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from MFnDagNode:
+     |
+     |  kNextPos = 255
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from MFnDependencyNode:
+     |
+     |  absoluteName(...)
+     |      Returns the absolute name of this node.  The absolute name of a node is the full namespace path starting at (and including) the root namespace, down to (and including) the node itself.  Regardless of relative name mode, absoluteName() will always return a full namespace path prefixed with a leading colon (the root namespace).
+     |
+     |  addAttribute(...)
+     |      Adds a new dynamic attribute to the node.
+     |
+     |  addExternalContentForFileAttr(...)
+     |      Adds content info to the specified table from a file path attribute.
+     |
+     |  affectsAnimation(...)
+     |      Returns true if the changes to the node may affect animation.
+     |
+     |  attribute(...)
+     |      Returns an attribute of the node, given either its index or name.
+     |
+     |  attributeClass(...)
+     |      Returns the class of the specified attribute.
+     |
+     |  attributeCount(...)
+     |      Returns the number of attributes on the node.
+     |
+     |  canBeWritten(...)
+     |      Returns true if the node will be written to file.
+     |
+     |  dgCallbackIds(...)
+     |      Returns DG timing information for a specific callback type, broken down by callbackId.
+     |
+     |  dgCallbacks(...)
+     |      Returns DG timing information broken down by callback type.
+     |
+     |  dgTimer(...)
+     |      Returns a specific DG timer metric for a given timer type.
+     |
+     |  dgTimerOff(...)
+     |      Turns DG timing off for this node.
+     |
+     |  dgTimerOn(...)
+     |      Turns DG timing on for this node.
+     |
+     |  dgTimerQueryState(...)
+     |      Returns the current DG timer state for this node.
+     |
+     |  dgTimerReset(...)
+     |      Resets all DG timers for this node.
+     |
+     |  findAlias(...)
+     |      Returns the attribute which has the given alias.
+     |
+     |  findPlug(...)
+     |      Returns a plug for the given attribute.
+     |
+     |  getAffectedAttributes(...)
+     |      Returns all of the attributes which are affected by the specified attribute.
+     |
+     |  getAffectingAttributes(...)
+     |      Returns all of the attributes which affect the specified attribute.
+     |
+     |  getAliasAttr(...)
+     |      Returns the node's alias attribute, which is a special attribute used to store information about the node's attribute aliases.
+     |
+     |  getAliasList(...)
+     |      Returns all of the node's attribute aliases.
+     |
+     |  getConnections(...)
+     |      Returns all the plugs which are connected to attributes of this node.
+     |
+     |  getExternalContent(...)
+     |      Gets the external content (files) that this node depends on.
+     |
+     |  hasAttribute(...)
+     |      Returns True if the node has an attribute with the given name.
+     |
+     |  hasUniqueName(...)
+     |      Returns True if the node's name is unique.
+     |
+     |  isFlagSet(...)
+     |      Returns the state of the specified node flag.
+     |
+     |  isNewAttribute(...)
+     |      Returns True if the specified attribute was added in the current scene, and not by by one of its referenced files.
+     |
+     |  isTrackingEdits(...)
+     |      Returns True if the node is referenced or in an assembly that is tracking edits.
+     |
+     |  name(...)
+     |      Returns the node's name.
+     |
+     |  plugsAlias(...)
+     |      Returns the alias for a plug's attribute.
+     |
+     |  removeAttribute(...)
+     |      Removes a dynamic attribute from the node.
+     |
+     |  reorderedAttribute(...)
+     |      Returns one of the node's attribute, based on the order in which they are written to file.
+     |
+     |  setAffectsAnimation(...)
+     |      Specifies that modifications to a node could potentially affect the animation.
+     |
+     |  setAlias(...)
+     |      Adds or removes an attribute alias.
+     |
+     |  setDoNotWrite(...)
+     |      Used to prevent the node from being written to file.
+     |
+     |  setExternalContent(...)
+     |      Changes the location of external content.
+     |
+     |  setExternalContentForFileAttr(...)
+     |      Sets content info in the specified attribute from the table.
+     |
+     |  setFlag(...)
+     |      Sets the state of the specified node flag.
+     |
+     |  setName(...)
+     |      Sets the node's name.
+     |
+     |  setUuid(...)
+     |      Sets the node's UUID.
+     |
+     |  userNode(...)
+     |      Returns the MPxNode object for a plugin node.
+     |
+     |  uuid(...)
+     |      Returns the node's UUID.
+     |
+     |  ----------------------------------------------------------------------
+     |  Static methods inherited from MFnDependencyNode:
+     |
+     |  allocateFlag(...)
+     |      Allocates a flag on all nodes for use by the named plugin and returns the flag's index.
+     |
+     |  classification(...)
+     |      Returns the classification string for the named node type.
+     |
+     |  deallocateAllFlags(...)
+     |      Deallocates all node flags which are currently allocated to the named plugin.
+     |
+     |  deallocateFlag(...)
+     |      Deallocates the specified node flag, which was previously allocated by the named plugin using allocateFlag().
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from MFnDependencyNode:
+     |
+     |  isDefaultNode
+     |      True if this is a default node, created automatically by Maya.
+     |
+     |  isFromReferencedFile
+     |      True if the node is from a referenced file, False if the node is part of the main scene.
+     |
+     |  isLocked
+     |      True if the node is locked against changes.
+     |
+     |  isShared
+     |      True if the node is shared.
+     |
+     |  namespace
+     |      Name of the namespace which contains the node.
+     |
+     |  pluginName
+     |      Name of the plugin which registered the node type, if any.
+     |
+     |  typeId
+     |      MTypeId for the node's type.
+     |
+     |  typeName
+     |      Name of the node's type.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from MFnDependencyNode:
+     |
+     |  kExtensionAttr = 3
+     |
+     |  kInvalidAttr = 4
+     |
+     |  kLocalDynamicAttr = 1
+     |
+     |  kNormalAttr = 2
+     |
+     |  kTimerInvalidState = 3
+     |
+     |  kTimerMetric_callback = 0
+     |
+     |  kTimerMetric_callbackNotViaAPI = 6
+     |
+     |  kTimerMetric_callbackViaAPI = 5
+     |
+     |  kTimerMetric_compute = 1
+     |
+     |  kTimerMetric_computeDuringCallback = 7
+     |
+     |  kTimerMetric_computeNotDuringCallback = 8
+     |
+     |  kTimerMetric_dirty = 2
+     |
+     |  kTimerMetric_draw = 3
+     |
+     |  kTimerMetric_fetch = 4
+     |
+     |  kTimerMetrics = 9
+     |
+     |  kTimerOff = 0
+     |
+     |  kTimerOn = 1
+     |
+     |  kTimerType_count = 2
+     |
+     |  kTimerType_inclusive = 1
+     |
+     |  kTimerType_self = 0
+     |
+     |  kTimerTypes = 3
+     |
+     |  kTimerUninitialized = 2
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from MFnBase:
+     |
+     |  hasObj(...)
+     |      Returns True if the function set is compatible with the specified Maya object.
+     |
+     |  object(...)
+     |      Returns a reference to the object to which the function set is currently attached, or MObject.kNullObj if none.
+     |
+     |  type(...)
+     |      Returns the type of the function set.

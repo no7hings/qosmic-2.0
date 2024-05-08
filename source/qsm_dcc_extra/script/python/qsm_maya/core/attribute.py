@@ -23,6 +23,10 @@ class Attribute(object):
         cmds.setAttr(cls.to_atr_path(path, atr_name), value)
 
     @classmethod
+    def set_as_tuple(cls, path, atr_name, value):
+        cmds.setAttr(cls.to_atr_path(path, atr_name), *value, clamp=1)
+
+    @classmethod
     def set_as_string(cls, path, atr_name, value):
         cmds.setAttr(cls.to_atr_path(path, atr_name), value, type='string')
 
@@ -68,6 +72,20 @@ class Attribute(object):
         ) or []
         if _:
             return _[0]
+
+    @classmethod
+    def add_as_string(cls, path, atr_name, default=None):
+        if cls.is_exists(path, atr_name) is False:
+            cmds.addAttr(path, longName=atr_name, dataType='string')
+            if default is not None:
+                cls.set_as_string(path, atr_name, default)
+
+    @classmethod
+    def add_as_boolean(cls, path, atr_name, default=None):
+        if cls.is_exists(path, atr_name) is False:
+            cmds.addAttr(path, longName=atr_name, attributeType='bool', keyable=1)
+            if default is not None:
+                cls.set_value(path, atr_name, default)
 
 
 class Attributes(object):

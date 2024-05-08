@@ -7,6 +7,8 @@ from . import base as _base
 
 from . import scene as _scene
 
+from . import scene_file as _scene_file
+
 from . import namespace as _namespace
 
 
@@ -20,7 +22,7 @@ class Reference(object):
             return False
 
     @classmethod
-    def get_file_path(cls, path, extend=True):
+    def get_file(cls, path, extend=True):
         _ = cmds.referenceQuery(path, filename=1)
         if extend is True:
             return cmds.referenceQuery(path, filename=1, withoutCopyNumber=1)
@@ -44,7 +46,7 @@ class Reference(object):
     def duplicate(cls, path):
         namespace = cmds.referenceQuery(path, namespace=1, shortName=1)
         file_path = cmds.referenceQuery(path, filename=1)
-        _scene.Scene.reference_file(file_path, namespace)
+        _scene_file.SceneFile.reference_file(file_path, namespace)
 
     @classmethod
     def reload(cls, path):
@@ -95,8 +97,8 @@ class ReferenceOpt(_base.AbsNodeOpt):
     def get_namespace(self):
         return Reference.get_namespace(self._path)
 
-    def get_file_path(self):
-        return Reference.get_file_path(self._path)
+    def get_file(self):
+        return Reference.get_file(self._path)
 
     def is_loaded(self):
         return Reference.get_is_loaded(self._path)
@@ -127,7 +129,7 @@ class ReferenceQuery(object):
             self._cache_dict[i_path] = i_opt
 
 
-class ReferenceNamespaceQuery(object):
+class ReferenceNamespacesCache(object):
 
     def __init__(self):
         self._cache_dict = dict()
@@ -142,7 +144,7 @@ class ReferenceNamespaceQuery(object):
     def get_file(self, namespace, extend=True):
         if namespace in self._cache_dict:
             path = self._cache_dict[namespace]
-            return Reference.get_file_path(path, extend)
+            return Reference.get_file(path, extend)
 
     def to_valid_namespaces(self, namespaces):
         list_ = []

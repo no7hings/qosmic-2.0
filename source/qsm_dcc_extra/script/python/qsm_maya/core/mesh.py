@@ -6,6 +6,10 @@ import maya.api.OpenMaya as om2
 
 import lxbasic.core as bsc_core
 
+import lxbasic.storage as bsc_storage
+
+import lxmaya.core as mya_core
+
 from . import node as _node
 
 from . import node_dag as _node_dag
@@ -80,8 +84,60 @@ class MeshOpt(_shape.ShapeOpt):
             self._om2_obj_fnc.getPoints(),
             round_count
         )
-    
+
+    def get_uv_map_names(self):
+        """
+        :return:
+            list(
+                str(uv_map_name),
+                ...
+            )
+        """
+        return self._om2_obj_fnc.getUVSetNames()
+
+    def get_uv_maps(self):
+        dict_ = {}
+        om2_fnc = self._om2_obj_fnc
+        uv_map_names = self.get_uv_map_names()
+        # check first map name is default
+        if mya_core.Om2Base.DEFAULT_MAP_NAME not in uv_map_names:
+            om2_fnc.copyUVSet(uv_map_names[0], mya_core.Om2Base.DEFAULT_MAP_NAME)
+            uv_map_names = self.get_uv_map_names()
+        if uv_map_names:
+            for uv_map_name in uv_map_names:
+                uv_face_vertex_counts, uv_face_vertex_indices = om2_fnc.getAssignedUVs(uv_map_name)
+                coords = self.get_uv_map_coords(uv_map_name)
+                dict_[uv_map_name] = (
+                    mya_core.Om2Base.to_integer_array(uv_face_vertex_counts),
+                    mya_core.Om2Base.to_integer_array(uv_face_vertex_indices),
+                    coords
+                )
+        return dict_
+
+    def get_uv_map_coords(self, uv_map_name):
+        """
+        :param uv_map_name: str(uv_map_name)
+        :return:
+            list(
+                tuple(float(u), float(v)),
+                ...
+            )
+        """
+        us, vs = self._om2_obj_fnc.getUVs(uv_map_name)
+        coords = zip(us, vs)
+        return coords
+
     def to_hash(self):
         face_vertices = self.get_face_vertices()
         points = self.get_points()
         return bsc_core.HashMtd.to_hash_key((face_vertices, points), as_unique_id=True)
+
+    def save_as_json(self, file_path):
+        data = dict(
+            face_vertices=self.get_face_vertices(),
+            points=self.get_points(),
+            uv_maps=self.get_uv_maps()
+        )
+        bsc_storage.StgFileOpt(file_path).set_write(
+            data
+        )

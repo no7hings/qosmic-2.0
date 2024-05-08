@@ -99,7 +99,7 @@ class AdvRigQuery(object):
     def do_update(self):
         _ = qsm_mya_core.References.get_all()
         for i_path in _:
-            i_file_path = qsm_mya_core.Reference.get_file_path(i_path)
+            i_file_path = qsm_mya_core.Reference.get_file(i_path)
             if self._pth.get_is_matched(i_file_path) is True:
                 i_namespace = cmds.referenceQuery(i_path, namespace=1, shortName=1)
                 i_reference_opt = qsm_mya_core.ReferenceOpt(i_path)

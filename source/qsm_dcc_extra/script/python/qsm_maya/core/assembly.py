@@ -6,6 +6,8 @@ from . import node_dag as _node_dag
 
 from . import namespace as _namespace
 
+from . import attribute as _attribute
+
 
 class AssemblyDefinition(object):
     NODE_TYPE = 'assemblyDefinition'
@@ -59,10 +61,14 @@ class AssemblyReference(object):
         name = location.split('|')[-1]
         result = cmds.assembly(name=name, type=cls.NODE_TYPE)
         path_new = _node_dag.NodeDag.parent_to(result, parent_path)
-        cmds.setAttr(path_new+'.definition', ad_file_path, type='string')
+        _attribute.Attribute.set_as_string(path_new, 'definition', ad_file_path)
         if namespace is not None:
             cls.rename_namespace(path_new, namespace)
         return path_new
+
+    @classmethod
+    def get_file(cls, path):
+        return _attribute.Attribute.get_as_string(path, 'definition')
 
     @classmethod
     def get_namespace(cls, path):

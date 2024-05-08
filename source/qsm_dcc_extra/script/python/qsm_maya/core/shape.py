@@ -11,6 +11,12 @@ from . import node as _node
 from . import node_dag as _node_dag
 
 
+class Shape(object):
+    @classmethod
+    def get_transform(cls, path):
+        return cmds.listRelatives(path, parent=1, fullPath=1)
+
+
 class ShapeOpt(object):
     def __init__(self, shape_path):
         self._shape_path = shape_path

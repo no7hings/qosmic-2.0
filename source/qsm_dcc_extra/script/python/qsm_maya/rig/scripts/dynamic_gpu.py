@@ -5,11 +5,9 @@ import maya.cmds as cmds
 
 import lxbasic.core as bsc_core
 
-import lxmaya.dcc.objects as mya_dcc_objects
+from ... import core as _mya_core
 
-import qsm_maya.core as qsm_mya_core
-
-import qsm_maya.rig.core as qsm_rig_core
+from ...rig import core as _rig_core
 
 import qsm_maya.asset.core as qsm_mya_ast_core
 
@@ -17,7 +15,7 @@ import qsm_maya.asset.core as qsm_mya_ast_core
 class DynamicGpuCacheGenerate(object):
     CACHE_ROOT = '|__DYNAMIC_GPU__'
 
-    CACHE_NAME = qsm_rig_core.RigConfigure.DynamicGpuCacheName
+    CACHE_NAME = _rig_core.RigConfigure.DynamicGpuCacheName
 
     @classmethod
     def _export_gpu_frame(cls, location, gpu_file_path, start_frame, end_frame, with_material=False):
@@ -169,8 +167,8 @@ class DynamicGpuCacheGenerate(object):
 
     def __init__(self, namespace):
         self._namespace = namespace
-        self._reference_namespace_query = qsm_mya_core.ReferenceNamespaceQuery()
-        self._rig = qsm_rig_core.AdvRigOpt(self._namespace)
+        self._reference_namespace_query = _mya_core.ReferenceNamespacesCache()
+        self._rig = _rig_core.AdvRigOpt(self._namespace)
         self._root = self._rig.get_root()
         self._geometry_location = self._rig.get_geometry_location()
 
@@ -189,7 +187,7 @@ class DynamicGpuCacheGenerate(object):
             bsc_core.StgBaseMtd.create_directory(
                 os.path.dirname(file_path)
             )
-            mya_dcc_objects.Scene.export_to_file(
+            _mya_core.SceneFile.export_file(
                 file_path, self._root
             )
 
@@ -203,7 +201,7 @@ class DynamicGpuCacheGenerate(object):
         self._build_cache(
             cache_path, gpu_file_path, start_frame, end_frame
         )
-        mya_dcc_objects.Scene.export_to_file(
+        _mya_core.SceneFile.export_file(
             cache_file_path, cache_path
         )
 
@@ -234,7 +232,7 @@ class DynamicGpuCacheGenerate(object):
         cmds.container(cache_location, edit=1, force=1, addNode=[layer_path])
 
         skin_proxy_cache_locations = cmds.ls(
-            '{}:{}'.format(self._namespace, qsm_rig_core.RigConfigure.SkinProxyCacheName), long=1
+            '{}:{}'.format(self._namespace, _rig_core.RigConfigure.SkinProxyCacheName), long=1
         )
         if skin_proxy_cache_locations:
             cmds.editDisplayLayerMembers(layer_path, *skin_proxy_cache_locations)
@@ -254,7 +252,6 @@ class DynamicGpuCacheGenerate(object):
     def generate_args(self, directory_path, start_frame, end_frame):
         file_path = '{}/source.ma'.format(directory_path)
         cache_file_path = '{}/gpu.ma'.format(directory_path)
-        # start_frame, end_frame = qsm_mya_core.Scene.get_frame_range()
         cmd = qsm_mya_ast_core.MayaCacheProcess.generate_command(
             'method=dynamic-gpu-cache-generate&file={}&cache_file={}&namespace={}&start_frame={}&end_frame={}'.format(
                 file_path,
@@ -282,11 +279,11 @@ class DynamicGpuCacheProcess(object):
         self._namespace = namespace
 
     def execute(self):
-        mya_dcc_objects.Scene.new_file()
+        _mya_core.SceneFile.new()
         if os.path.isfile(self._file_path) is False:
             raise RuntimeError()
 
-        mya_dcc_objects.Scene.open_file(self._file_path)
+        _mya_core.SceneFile.open(self._file_path)
 
         generate = DynamicGpuCacheGenerate(self._namespace)
         geometry_location = generate.get_geometry_location()

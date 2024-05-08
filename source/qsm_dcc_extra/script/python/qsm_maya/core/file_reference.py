@@ -31,7 +31,7 @@ class FileReferences(object):
         pass
 
     @classmethod
-    def get_file_path(cls, path, atr_name):
+    def get_file(cls, path, atr_name):
         node_type = _node.Node.get_type(path)
         file_path = _attribute.Attribute.get_as_string(path, atr_name)
         if node_type == 'file':
@@ -95,6 +95,6 @@ class FileReferences(object):
             i_atr_names = cls.QUERY[i_node_type]
 
             for j_atr_name in i_atr_names:
-                j_file_path = cls.get_file_path(i_path, j_atr_name)
+                j_file_path = cls.get_file(i_path, j_atr_name)
                 j_file_path_new = search_opt.get_result(j_file_path)
                 cls.set_file_path(i_path, j_atr_name, j_file_path_new)
