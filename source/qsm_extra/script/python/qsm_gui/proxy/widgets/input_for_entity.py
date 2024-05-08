@@ -11,6 +11,8 @@ import lxgui.proxy.abstracts as prx_abstracts
 
 import qsm_general.scan as qsm_gnl_scan
 
+import qsm_general.core as qsm_gnl_core
+
 
 class PrxInputForRig(prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = qt_widgets.QtTranslucentWidget
@@ -74,7 +76,12 @@ class PrxInputForRig(prx_abstracts.AbsPrxWidget):
 
         project = self._scan_root.get_entity(path_opt.to_string())
         if project is not None:
-            assets = project.find_assets(dict(role=['chr', 'prp']))
+            if qsm_gnl_core.QSM_SCHEME == 'new':
+                role_mask = ['CHA', 'PROP']
+            else:
+                role_mask = ['chr', 'prp']
+
+            assets = project.find_assets(dict(role=role_mask))
             for i_asset in assets:
                 i_name = i_asset.name
                 name_texts.append(i_asset.name)
@@ -110,10 +117,15 @@ class PrxInputForRig(prx_abstracts.AbsPrxWidget):
         for i in cs:
             i_d = i.get_depth()
             if i_d == 1:
-                projects = self._scan_root.projects
+                _projects = self._scan_root.projects
             elif i_d == 2:
+                if qsm_gnl_core.QSM_SCHEME == 'new':
+                    role_mask = ['CHA', 'PROP']
+                else:
+                    role_mask = ['chr', 'prp']
+
                 project = self._scan_root.get_entity(i.get_path())
-                assets = project.find_assets(dict(role=['chr', 'prp']))
+                _assets = project.find_assets(dict(role=role_mask))
 
     def add_widget(self, widget):
         if isinstance(widget, gui_qt_core.QtCore.QObject):

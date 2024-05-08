@@ -87,6 +87,13 @@ class Attribute(object):
             if default is not None:
                 cls.set_value(path, atr_name, default)
 
+    @classmethod
+    def add_as_integer(cls, path, atr_name, default=None):
+        if cls.is_exists(path, atr_name) is False:
+            cmds.addAttr(path, longName=atr_name, attributeType='long', keyable=1)
+            if default is not None:
+                cls.set_value(path, atr_name, default)
+
 
 class Attributes(object):
 

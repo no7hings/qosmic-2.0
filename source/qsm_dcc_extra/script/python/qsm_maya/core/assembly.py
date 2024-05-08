@@ -78,3 +78,13 @@ class AssemblyReference(object):
     def rename_namespace(cls, path, namespace_new):
         namespace = cls.get_namespace(path)
         _namespace.Namespace.rename(namespace, namespace_new)
+
+    @classmethod
+    def set_active(cls, path, rep_name):
+        cmds.assembly(
+            path + '.representations', edit=1, active=rep_name
+        )
+
+    @classmethod
+    def get_active(cls, path):
+        return cmds.assembly(path, query=1, active=1) or 'None'

@@ -11,6 +11,8 @@ import lxbasic.resource as bsc_resource
 
 import lxbasic.core as bsc_core
 
+import qsm_general.core as qsm_gnl_core
+
 from ... import core as _mya_core
 
 from ...asset import core as _ast_core
@@ -471,7 +473,7 @@ class AdvSkinProxyGenerate(object):
 
     def create_resource_geometries(self, location):
         if cmds.objExists(self.PROXY_GEOMETRY_GROUP_PATH) is False:
-            if _rig_core.SCHEME == 'new':
+            if qsm_gnl_core.QSM_SCHEME == 'new':
                 self._import_file(bsc_resource.ExtendResource.get('rig/skin_proxy_geometry_new.ma'))
             else:
                 self._import_file(bsc_resource.ExtendResource.get('rig/skin_proxy_geometry.ma'))
@@ -509,7 +511,7 @@ class AdvSkinProxyGenerate(object):
     def create_cache(self, cache_file_path=None):
         location = '|{}'.format(self.CACHE_NAME)
         if cmds.objExists(location) is False:
-            if _rig_core.SCHEME == 'new':
+            if qsm_gnl_core.QSM_SCHEME == 'new':
                 self._import_file(
                     bsc_resource.ExtendResource.get('rig/skin_proxy_new.ma')
                 )

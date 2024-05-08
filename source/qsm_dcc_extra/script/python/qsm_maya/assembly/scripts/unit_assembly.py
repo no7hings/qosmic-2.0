@@ -2,6 +2,8 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+import lxbasic.log as bsc_log
+
 import lxbasic.core as bsc_core
 
 import lxbasic.resource as bsc_resource
@@ -89,8 +91,17 @@ class UnitAssemblyProcess(object):
 
             for i_seq in range(2):
                 i_level = i_seq+1
-                shape_path_copy = _mya_core.Transform.get_shape_path(transform_path_new)
-                _mya_core.MeshReduce.reduce_off(shape_path_copy, 50)
+                shape_path_new = _mya_core.Transform.get_shape_path(transform_path_new)
+                # todo: may be mesh had lamina or non-manifold
+                # noinspection PyBroadException
+                try:
+                    _mya_core.MeshReduce.reduce_off(shape_path_new, 50)
+                except Exception:
+                    bsc_log.Log.trace_method_error(
+                        'mesh reduce', 'mesh "{}" had lamina or non-manifold faces or vertices'.format(
+                            shape_path_new
+                        )
+                    )
                 # gpu
                 i_gpu_file_path_lod = '{}/gpu.lod{}.abc'.format(
                     unit_directory_path, i_level
@@ -166,9 +177,16 @@ class UnitAssemblyProcess(object):
     def execute(self):
         _mya_core.SceneFile.new()
 
-        location = '|{}'.format(UnitAssemblyGenerate.CACHE_NAME)
+        container = '|{}'.format(UnitAssemblyGenerate.CACHE_NAME)
 
-        _mya_core.Container.create_as_default(location)
+        _mya_core.Container.create_as_default(container)
+        cmds.setAttr(container+'.blackBox', 1, lock=1)
+        _mya_core.Attribute.add_as_string(
+            container, 'qsm_file', self._file_path
+        )
+        _mya_core.Attribute.add_as_string(
+            container, 'qsm_cache', self._cache_file_path
+        )
 
         paths = _mya_core.SceneFile.import_file(
             self._file_path
@@ -180,21 +198,24 @@ class UnitAssemblyProcess(object):
             [self._directory_path]
         )
         # create assembly
-        for i_path in paths:
-            if _mya_core.Node.is_mesh(i_path) is True:
-                self.mesh_prc(i_path)
-            elif _mya_core.Node.is_gpu(i_path) is True:
-                self.gpu_prc(i_path)
+        with bsc_log.LogProcessContext.create(maximum=len(paths), label='unit assembly process') as g_p:
+            for i_path in paths:
+                if _mya_core.Node.is_mesh(i_path) is True:
+                    self.mesh_prc(i_path)
+                elif _mya_core.Node.is_gpu(i_path) is True:
+                    self.gpu_prc(i_path)
+
+                g_p.do_update()
         # export assembly
         exists_roots = [i for i in roots if _mya_core.Node.is_exists(i)]
 
         for i_root in exists_roots:
             _mya_core.NodeDag.parent_to(
-                i_root, location
+                i_root, container
             )
 
         _mya_core.SceneFile.export_file(
-            self._cache_file_path, location
+            self._cache_file_path, container
         )
 
 
@@ -236,6 +257,7 @@ class UnitAssemblyCameraMask(object):
         _mya_core.Attribute.add_as_boolean(
             path, 'qsm_camera_frustum_enable'
         )
+        cmds.setAttr(path+'.blackBox', 1, lock=1)
         return path
 
     def pre_execute(self, unit_paths):
@@ -341,10 +363,11 @@ class UnitAssemblyCameraMask(object):
 
     def execute(self):
         container = self.create_container()
-        start_frame, end_frame = _mya_core.Frame.get_frame_range()
+
         unit_paths = _asb_core.UnitAssemblyQuery.get_all_units()
         self.pre_execute(unit_paths)
 
+        start_frame, end_frame = _mya_core.Frame.get_frame_range()
         frames = range(start_frame, end_frame+1)
 
         for i_frame in frames:
@@ -367,3 +390,235 @@ class UnitAssemblyCameraMask(object):
         self.create_camera_frustum(container)
 
 
+class DynamicCameraMask(object):
+    CONTAINER_NAME = 'camera_mask_dgc'
+
+    CAMERA_FRUSTUM = '|__CAMERA_FRUSTUM__'
+
+    def __init__(self, camera=None):
+        if camera is None:
+            self._camera_path = _mya_core.Camera.get_active()
+        else:
+            self._camera_path = _mya_core.NodeDag.to_path(camera)
+
+    def create_camera_frustum(self, container):
+        _mya_core.SceneFile.import_file(
+            bsc_resource.ExtendResource.get('rig/camera_frustum.ma')
+        )
+        transform_path = _mya_core.Shape.get_transform(self._camera_path)
+        name = self._camera_path.split('|')[-1]
+        frustum_name = '{}_fst'.format(name)
+        eps_name = '{}_eps'.format(name)
+        frustum_transform_path = _mya_core.NodeDag.rename(
+            self.CAMERA_FRUSTUM, frustum_name
+        )
+        eps_script = (
+            '$f = {camera}.focalLength;\n'
+            '$fbw = {camera}.horizontalFilmAperture*25.4;\n'
+            '$w = defaultResolution.width;\n'
+            '$h = defaultResolution.height;\n'
+            '{box}.scaleZ = {camera}.farClipPlane*.1;\n'
+            '{box}.scaleX = $fbw/$f*{box}.scaleZ;\n'
+            '{box}.scaleY = $fbw/$f*{box}.scaleZ*(($h*1.0)/($w*1.0));'
+        ).format(
+            camera=self._camera_path, box=frustum_transform_path
+        )
+        _mya_core.ParentConstraint.create(transform_path, frustum_transform_path)
+        _mya_core.Expression.create(
+            eps_name, eps_script, frustum_transform_path
+        )
+        material = _mya_core.Material.create(
+            'test_mtl'
+        )
+        shader = _mya_core.Shader.create(
+            'test_sdr', 'surfaceShader'
+        )
+        _mya_core.Material.assign_surface_shader(
+            material, shader
+        )
+        _mya_core.Material.assign_to(
+            material, frustum_transform_path
+        )
+
+        _mya_core.Attribute.set_as_tuple(
+            shader, 'outTransparency', (.975, .975, .975)
+        )
+        _mya_core.Attribute.set_as_tuple(
+            shader, 'outColor', (1, 0.25, 0)
+        )
+
+        _mya_core.Connection.create(
+            container+'.qsm_camera_frustum_enable', frustum_transform_path+'.visibility'
+        )
+
+        _mya_core.Container.add_dag_nodes(container, [frustum_transform_path])
+        _mya_core.Container.add_nodes(container, [eps_name])
+
+    def get_units_at_frame(self, frame):
+        _mya_core.Frame.set_current(frame)
+
+        mask_nodes = _mya_core.Camera.generate_mask_nodes(
+            self._camera_path
+        )
+
+        mask_unit_paths = []
+        for i_path in mask_nodes:
+            i_unit_path = _asb_core.UnitAssemblyQuery.find_unit(i_path)
+            if i_unit_path is None:
+                continue
+            mask_unit_paths.append(i_unit_path)
+
+        return mask_unit_paths
+
+    def create_container(self):
+        path = '|{}'.format(self.CONTAINER_NAME)
+        _mya_core.Container.create_as_expression(
+            path
+        )
+        _mya_core.Attribute.add_as_boolean(
+            path, 'qsm_camera_mask_enable'
+        )
+        _mya_core.Attribute.add_as_boolean(
+            path, 'qsm_camera_frustum_enable'
+        )
+        cmds.setAttr(path+'.blackBox', 1, lock=1)
+        return path
+
+    def pre_execute(self, unit_paths, container):
+        nodes = []
+        for i_idx, i_unit_path in enumerate(unit_paths):
+            _mya_core.NodeDrawOverride.set_enable(
+                i_unit_path, True
+            )
+            i_name = i_unit_path.split('|')[-1].replace(':', '__')
+            i_sum_name = '{}_sum'.format(i_name)
+            _mya_core.Node.create(
+                i_sum_name, 'plusMinusAverage'
+            )
+            nodes.append(i_sum_name)
+
+        _mya_core.Container.add_nodes(container, nodes)
+
+    def to_expression_name(self, unit_path):
+        unit_name = unit_path.split('|')[-1]
+        return '{}_eps'.format(unit_name.replace(':', '__'))
+
+    def post_execute(self, unit_paths, container):
+        for i_unit_path in unit_paths:
+            i_name = i_unit_path.split('|')[-1].replace(':', '__')
+            i_sum_name = '{}_sum'.format(i_name)
+            _mya_core.Connection.create(
+                i_sum_name+'.output1D', i_unit_path+'.overrideVisibility'
+            )
+
+        # _mya_core.Attribute.set_value(
+        #     container, 'qsm_camera_mask_enable', True
+        # )
+
+    def execute(self):
+        """
+string $carType[3] = {"Porsche", "Ferrari", "BMW"};
+string $car;
+for ($car in $carType) {
+	print("I want a new ");
+	print($car + ".\n");
+}
+        """
+        container = self.create_container()
+
+        all_unit_paths = _asb_core.UnitAssemblyQuery.get_all_units()
+        self.pre_execute(all_unit_paths, container)
+
+        start_frame, end_frame = _mya_core.Frame.get_frame_range()
+        frames = range(start_frame, end_frame+1)
+
+        nodes = []
+
+        tuc = _mya_core.Node.create(
+            'camera_mask_tuc', 'timeToUnitConversion'
+        )
+        _mya_core.Attribute.set_value(
+            tuc, 'conversionFactor', 0.004
+        )
+        _mya_core.Connection.create(
+            'time1.outTime', tuc+'.input'
+        )
+        nodes.append(tuc)
+
+        for i_seq, i_frame in enumerate(frames):
+            i_unit_paths = self.get_units_at_frame(i_frame)
+
+            i_cdt_name = 'camera_mask_cdt_{}'.format(i_frame)
+            _mya_core.Node.create(
+                i_cdt_name, 'condition'
+            )
+            cmds.setAttr('{}.firstTerm'.format(i_cdt_name), i_frame)
+            cmds.connectAttr(tuc+'.output', i_cdt_name+'.secondTerm')
+            cmds.setAttr('{}.colorIfTrueR'.format(i_cdt_name), 1.0)
+            cmds.setAttr('{}.colorIfFalseR'.format(i_cdt_name), 0.0)
+            nodes.append(i_cdt_name)
+            for j_unit_path in i_unit_paths:
+                j_name = j_unit_path.split('|')[-1].replace(':', '__')
+                j_sum_name = '{}_sum'.format(j_name)
+                _mya_core.Connection.create(
+                    i_cdt_name+'.outColor.outColorR', j_sum_name+'.input1D[{}]'.format(i_seq)
+                )
+        _mya_core.Container.add_nodes(container, nodes)
+
+        self.post_execute(all_unit_paths, container)
+        self.create_camera_frustum(container)
+
+
+class CameraMask(object):
+    LAYER_NAME = 'CAMERA_MASK_LAYER'
+
+    def __init__(self, camera=None, frame=None):
+        if camera is None:
+            self._camera_path = _mya_core.Camera.get_active()
+        else:
+            self._camera_path = _mya_core.NodeDag.to_path(camera)
+
+        self._frame = frame
+
+    def get_units_at_frame(self, frame):
+        _mya_core.Frame.set_current(frame)
+
+        mask_nodes = _mya_core.Camera.generate_mask_nodes(
+            self._camera_path
+        )
+
+        mask_unit_paths = []
+        for i_path in mask_nodes:
+            i_unit_path = _asb_core.UnitAssemblyQuery.find_unit(i_path)
+            if i_unit_path is None:
+                continue
+            mask_unit_paths.append(i_unit_path)
+
+        return mask_unit_paths
+
+    def restore(self):
+        if _mya_core.Node.is_exists(self.LAYER_NAME):
+            _mya_core.Node.delete(
+                self.LAYER_NAME
+            )
+
+    def execute(self):
+        self.restore()
+
+        mask_unit_paths = set()
+        start_frame, end_frame = _mya_core.Frame.to_frame_range(self._frame)
+        frames = range(start_frame, end_frame+1)
+        all_unit_paths = _asb_core.UnitAssemblyQuery.get_all_units()
+
+        for i_frame in frames:
+            i_unit_paths = self.get_units_at_frame(i_frame)
+            mask_unit_paths.update(set(i_unit_paths))
+
+        hide_unit_paths = list(set(all_unit_paths) - set(mask_unit_paths))
+
+        if hide_unit_paths:
+            layer = _mya_core.DisplayLayer.create(
+                self.LAYER_NAME
+            )
+            _mya_core.DisplayLayer.add_nodes(layer, hide_unit_paths)
+            _mya_core.DisplayLayer.set_visible(layer, False)

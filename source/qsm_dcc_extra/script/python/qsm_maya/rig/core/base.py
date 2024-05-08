@@ -6,7 +6,7 @@ import lxbasic.content as bsc_content
 
 import lxbasic.resource as bsc_resource
 
-SCHEME = 'default'
+import qsm_general.core as qsm_gnl_core
 
 
 class AdvQuery(object):
@@ -21,7 +21,7 @@ class AdvQuery(object):
         self._main_ctt = bsc_content.Dict(value=ctt.get('main'))
         self._main_query = bsc_content.Dict()
 
-        if SCHEME == 'new':
+        if qsm_gnl_core.QSM_SCHEME == 'new':
             self._skeleton_ctt = bsc_content.Dict(value=ctt.get('skeleton_new'))
         else:
             self._skeleton_ctt = bsc_content.Dict(value=ctt.get('skeleton'))
@@ -31,7 +31,7 @@ class AdvQuery(object):
         self._rotation_query = bsc_content.Dict()
 
         self._distance_query = bsc_content.Dict(value=ctt.get('distance'))
-        if SCHEME == 'new':
+        if qsm_gnl_core.QSM_SCHEME == 'new':
             self._geometry_query = bsc_content.Dict(value=ctt.get('geometry_new'))
         else:
             self._geometry_query = bsc_content.Dict(value=ctt.get('geometry'))

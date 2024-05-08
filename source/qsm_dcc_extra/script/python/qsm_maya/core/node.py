@@ -11,6 +11,14 @@ class Node(object):
         AssemblyReference = 'assemblyReference'
 
     @classmethod
+    def create(cls, name, type_name):
+        if cmds.objExists(name) is True:
+            return name
+        return cmds.createNode(
+            type_name, name=name, skipSelect=1
+        )
+
+    @classmethod
     def get_type(cls, path):
         return cmds.nodeType(path)
 

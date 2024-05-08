@@ -12,7 +12,9 @@ class NodeDag(_node.Node):
 
     @classmethod
     def to_path(cls, name):
-        return cmds.ls(name, long=1)[0]
+        _ = cmds.ls(name, long=1)
+        if _:
+            return _[0]
 
     @classmethod
     def to_world(cls, path):

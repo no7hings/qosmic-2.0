@@ -22,3 +22,8 @@ class Expression(object):
         cmds.setAttr(
             name+'.expression', script, type='string'
         )
+
+    @classmethod
+    def generate_name(cls, path):
+        name = path.split('|')[-1]
+        return '{}_eps'.format(name.replace(':', '__'))
