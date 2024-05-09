@@ -7,6 +7,6 @@ bsc_core.PyReloader2(
 
 import qsm_maya.assembly.scripts as qsm_mya_asb_scripts
 
-qsm_mya_asb_scripts.DynamicCameraMask(
-    'perspShape1'
-).execute()
+qsm_mya_asb_scripts.MeshBoxGenerate.generate_by_group(
+    ''
+)

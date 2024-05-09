@@ -7,6 +7,8 @@ import maya.mel as mel
 
 from . import time_ as _time
 
+from . import node_dag as _node_dag
+
 
 class GpuCache(object):
     @classmethod
@@ -66,3 +68,11 @@ class GpuCache(object):
             i_frame_seq = i_seq+1
             i_gpu_file_path = ('.'+str(i_frame_seq).zfill(4)).join(os.path.splitext(gpu_file_path))
             cls.export_frame(location, i_gpu_file_path, i_frame, with_material)
+
+    @classmethod
+    def create(cls, file_path, location):
+        name = location.split('|')[-1]
+        shape_name = '{}Shape'.format(name)
+        _ = cmds.createNode('gpuCache', name=shape_name, parent=location, skipSelect=1)
+        cmds.setAttr(_+'.cacheFileName', file_path, type='string')
+        return _node_dag.NodeDag.to_path(_)

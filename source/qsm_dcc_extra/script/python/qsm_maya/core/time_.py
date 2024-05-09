@@ -54,6 +54,16 @@ class Frame(object):
         return int(start_frame), int(end_frame)
 
     @classmethod
+    def to_frame_range_(cls, frame=None):
+        if isinstance(frame, (tuple, list)):
+            start_frame, end_frame = frame
+        elif isinstance(frame, (int, float)):
+            start_frame = end_frame = frame
+        else:
+            start_frame, end_frame = cls.get_frame_range()
+        return int(start_frame), int(end_frame)
+
+    @classmethod
     def set_frame_range(cls, start_frame, end_frame):
         cmds.playbackOptions(minTime=start_frame), cmds.playbackOptions(animationStartTime=int(start_frame)-5)
         cmds.playbackOptions(maxTime=end_frame), cmds.playbackOptions(animationEndTime=int(end_frame)+5)

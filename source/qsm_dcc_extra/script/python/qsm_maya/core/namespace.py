@@ -32,6 +32,15 @@ class Namespace(object):
     def rename(cls, namespace, new_namespace):
         cmds.namespace(rename=[namespace, new_namespace], parent=':')
 
+    @classmethod
+    def get_nodes(cls, namespace):
+        return cmds.namespaceInfo(namespace, listOnlyDependencyNodes=1, dagPath=1) or []
+
+    @classmethod
+    def find_nodes(cls, namespace, type_includes):
+        _ = cls.get_nodes(namespace)
+        return [x for x in _ if cmds.nodeType(x) in type_includes]
+
 
 class Namespaces(object):
     @classmethod

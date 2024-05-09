@@ -11,6 +11,16 @@ class NodeDag(_node.Node):
     PATHSEP = '|'
 
     @classmethod
+    def create(cls, path, type_name):
+        parent_path = '|'.join(path.split('|')[:-1])
+        name = path.split('|')[-1]
+        if parent_path:
+            _ = cmds.createNode(type_name, name=name, parent=parent_path, skipSelect=1)
+        else:
+            _ = cmds.createNode(type_name, name=name, skipSelect=1)
+        return cls.to_path(_)
+
+    @classmethod
     def to_path(cls, name):
         _ = cmds.ls(name, long=1)
         if _:
