@@ -2,7 +2,7 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-from . import node_dag as _node_dag
+from . import node_for_dag as _node_dag
 
 
 class Container(object):
@@ -12,7 +12,7 @@ class Container(object):
             return path
         name = path.split('|')[-1]
         _ = cmds.container(type='dagContainer', name=name)
-        return _node_dag.NodeDag.to_path(_)
+        return _node_dag.DagNode.to_path(_)
 
     @classmethod
     def create_as_expression(cls, path):

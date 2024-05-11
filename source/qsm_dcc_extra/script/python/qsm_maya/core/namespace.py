@@ -41,6 +41,28 @@ class Namespace(object):
         _ = cls.get_nodes(namespace)
         return [x for x in _ if cmds.nodeType(x) in type_includes]
 
+    # include instanced
+    @classmethod
+    def get_all_nodes(cls, namespace):
+        list_ = []
+        _ = cmds.namespaceInfo(namespace, listOnlyDependencyNodes=1, dagPath=1) or []
+        for i_path in _:
+            i_parents = cmds.listRelatives(i_path, fullPath=1, allParents=1) or []
+            if len(i_parents) > 1:
+                i_name = i_path.split('|')[-1]
+                for j_path in i_parents:
+                    j_path_shape = '{}|{}'.format(j_path, i_name)
+                    list_.append(j_path_shape)
+            else:
+                list_.append(i_path)
+        return list_
+
+    # include instanced
+    @classmethod
+    def find_all_nodes(cls, namespace, type_includes):
+        _ = cls.get_all_nodes(namespace)
+        return [x for x in _ if cmds.nodeType(x) in type_includes]
+
 
 class Namespaces(object):
     @classmethod

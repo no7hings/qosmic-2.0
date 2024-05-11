@@ -2,7 +2,7 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-from . import node_dag as _node_dag
+from . import node_for_dag as _node_dag
 
 from . import namespace as _namespace
 
@@ -60,7 +60,7 @@ class AssemblyReference(object):
         parent_path = '|'.join(location.split('|')[:-1])
         name = location.split('|')[-1]
         result = cmds.assembly(name=name, type=cls.NODE_TYPE)
-        path_new = _node_dag.NodeDag.parent_to(result, parent_path)
+        path_new = _node_dag.DagNode.parent_to(result, parent_path)
         _attribute.Attribute.set_as_string(path_new, 'definition', ad_file_path)
         if namespace is not None:
             cls.rename_namespace(path_new, namespace)

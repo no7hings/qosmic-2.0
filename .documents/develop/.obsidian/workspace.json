@@ -1,0 +1,215 @@
+{
+  "main": {
+    "id": "fa1cc2d16d648429",
+    "type": "split",
+    "children": [
+      {
+        "id": "72021400cb54b98c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8be9ffb74a28cce3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "开发日程/任务/元素组装（Unit Assembly）.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "d388259c9d1d41ec",
+    "type": "split",
+    "children": [
+      {
+        "id": "a86c8e4c838939c5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8f2ca1bd910eda9a",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "15555a3b0fd2386a",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "0b680bf91f70f7b5",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 316.5
+  },
+  "right": {
+    "id": "079848c8f8affc0b",
+    "type": "split",
+    "children": [
+      {
+        "id": "58552b2cacd9ad36",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "59200ea94756b34e",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "开发日程/任务/元素组装（Unit Assembly）.md",
+                "collapseAll": true,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "8967e03988495bd9",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "开发日程/任务/元素组装（Unit Assembly）.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "85c06e5986e00937",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "f65c8f7658305415",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "开发日程/任务/元素组装（Unit Assembly）.md"
+              }
+            }
+          },
+          {
+            "id": "7a829ae5cd9e8f78",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              }
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "horizontal",
+    "width": 387.5,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "3d-graph:3D Graph": false,
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false
+    }
+  },
+  "active": "8be9ffb74a28cce3",
+  "lastOpenFiles": [
+    "开发日程/任务/简模代理（Skin Proxy）.md",
+    "开发日程/任务/规划和搭建流程框架.md",
+    "开发日程/汇报/资源管理工具（Resource Manager）.md",
+    "常见问题/文件路径.md",
+    "常见问题/maya/batch.md",
+    "常见问题/命令行/windows.md",
+    "开发日程/工具说明/资源管理工具（Resource Manager）.md",
+    "技术文档/组件与模块/依赖关系.canvas",
+    "技术文档/组件与模块/环境变量.md",
+    "技术文档/总览.canvas",
+    "技术文档/组件与模块/组件/基础/qsm_gui.md",
+    "技术文档/组件与模块/组件/基础/qsm_extra.md",
+    "技术文档/组件与模块/组件/基础/qsm_core.md",
+    "技术文档/组件与模块/存储结构（Storage Hierarchy）.md",
+    "技术文档/流程规划.md",
+    "2024-05-11.md",
+    "开发日程/工具说明/images/rig-resource-reference-tool.png",
+    "开发日程/工具说明/images/rig-resource-filter-view.png",
+    "开发日程/工具说明/images/rig-resource-filter-button.png",
+    "开发日程/工具说明/images/rig-resource-dynamic-gpu.png",
+    "开发日程/工具说明/images/rig-resource.png",
+    "开发日程/工具说明/images/rig-resource-skin-proxy.png",
+    "开发日程/汇报/images/process-task-button-completed.png",
+    "开发日程/汇报/images/dynamic-gpu.png",
+    "开发日程/汇报",
+    "随记/Maya性能优化.md",
+    "随记/标签分类.md",
+    "随记/插件和工具为什么不推荐安装在本地.md",
+    "开发日程/任务/元素组装（Unit Assembly）.md",
+    "开发日程/汇报/images/resource-manager-rig-extend.png",
+    "开发日程/任务/images/process-task-button-running.png",
+    "开发日程/任务/动态GPU（Dynamic GPU）.md",
+    "开发日程/汇报/images",
+    "开发日程/工具说明/images/resource-manager/rig",
+    "开发日程/工具说明/images/resource-manager",
+    "开发日程/工具说明/images",
+    "开发日程/工具说明",
+    "开发日程/任务/Maya性能优化/未命名.md",
+    "开发日程/任务/Maya性能优化/绑定（Rig）.md",
+    "开发日程/任务/Maya性能优化",
+    "开发日程/看板.md",
+    "开发日程/日程.md",
+    "技术文档/REZ.md",
+    "2024-04-13.md",
+    "2024-04-14.md",
+    "常见问题/maya",
+    "随记.7z",
+    "技术文档.7z",
+    "Untitled.canvas"
+  ]
+}

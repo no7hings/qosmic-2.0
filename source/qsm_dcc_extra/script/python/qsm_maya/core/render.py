@@ -53,3 +53,11 @@ class RenderSettings(object):
         width = cmds.getAttr(cls.RENDER_ATTR_DICT['width'])
         height = cmds.getAttr(cls.RENDER_ATTR_DICT['height'])
         return int(width), int(height)
+
+
+class HardwareRenderSettings(object):
+    @classmethod
+    def open_gpu_instancing(cls):
+        cmds.setAttr(
+            'hardwareRenderingGlobals.hwInstancing', 1
+        )

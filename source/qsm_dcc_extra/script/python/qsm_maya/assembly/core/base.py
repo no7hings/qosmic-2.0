@@ -54,7 +54,7 @@ class UnitAssemblyQuery(object):
         path_opt = bsc_core.PthNodeOpt(path)
         paths = path_opt.get_ancestor_paths()
         for i_path in paths:
-            if i_path != _mya_core.NodeDag.PATHSEP:
+            if i_path != _mya_core.DagNode.PATHSEP:
                 if _mya_core.Node.is_assembly_reference(i_path) is True:
                     return i_path
 
@@ -82,7 +82,7 @@ class AsbGroupOpt(object):
         path_opt = bsc_core.PthNodeOpt(path)
         paths = path_opt.get_ancestor_paths()
         for i_path in paths:
-            if i_path != _mya_core.NodeDag.PATHSEP:
+            if i_path != _mya_core.DagNode.PATHSEP:
                 if _mya_core.Node.is_assembly_reference(i_path) is True:
                     if i_path != self._path:
                         return i_path

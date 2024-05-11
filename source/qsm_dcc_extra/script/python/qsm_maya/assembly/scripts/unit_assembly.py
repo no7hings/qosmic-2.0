@@ -26,7 +26,7 @@ class UnitAssemblyGenerate(object):
 
 class UnitAssemblyProcess(object):
 
-    def __init__(self, file_path, cache_file_path=None):
+    def __init__(self, file_path, cache_file_path=None, gpu_unpack=True):
         self._file_path = file_path
 
         self._directory_path = bsc_storage.StgFileOpt(
@@ -44,6 +44,8 @@ class UnitAssemblyProcess(object):
             self._cache_file_path
         ).directory_path
 
+        self._gpu_unpack = gpu_unpack
+
     def mesh_prc(self, shape_path):
         mesh_opt = _mya_core.MeshOpt(shape_path)
         hash_key = mesh_opt.to_hash()
@@ -60,10 +62,10 @@ class UnitAssemblyProcess(object):
         if bsc_storage.StgPathMtd.get_is_file(ad_file_path) is False:
             file_dict = {}
 
-            transform_path_copy = _mya_core.NodeDag.copy_to_world(transform_path)
+            transform_path_copy = _mya_core.DagNode.copy_to_world(transform_path)
 
             transform_new_name = '{}_mesh'.format(transform_name)
-            transform_path_new = _mya_core.NodeDag.rename(transform_path_copy, transform_new_name)
+            transform_path_new = _mya_core.DagNode.rename(transform_path_copy, transform_new_name)
 
             ad_path = '|{}_AD'.format(transform_name)
 
@@ -153,22 +155,21 @@ class UnitAssemblyProcess(object):
         )
         shape_opt = _mya_core.ShapeOpt(shape_path)
         transform_path = shape_opt.transform_path
-        transform_name = shape_opt.transform_name
         if bsc_storage.StgPathMtd.get_is_file(gpu_file_path):
             paths = _mya_core.SceneFile.import_file(
                 gpu_file_path
             )
 
-            roots = _mya_core.NodeDag.find_roots(paths)
+            roots = _mya_core.DagNode.find_roots(paths)
 
             _mya_core.Transform.delete_all_shapes(transform_path)
 
             if roots:
                 for i_path in roots:
                     if _mya_core.Node.is_transform(i_path):
-                        _mya_core.NodeDag.parent_to(i_path, transform_path)
+                        _mya_core.DagNode.parent_to(i_path, transform_path)
 
-        mesh_paths = _mya_core.NodeDag.find_siblings(
+        mesh_paths = _mya_core.DagNode.find_siblings(
             transform_path, ['mesh']
         )
         for i_path in mesh_paths:
@@ -181,10 +182,10 @@ class UnitAssemblyProcess(object):
 
         _mya_core.Container.create_as_default(container)
         cmds.setAttr(container+'.blackBox', 1, lock=1)
-        _mya_core.Attribute.add_as_string(
+        _mya_core.Attribute.create_as_string(
             container, 'qsm_file', self._file_path
         )
-        _mya_core.Attribute.add_as_string(
+        _mya_core.Attribute.create_as_string(
             container, 'qsm_cache', self._cache_file_path
         )
 
@@ -192,7 +193,7 @@ class UnitAssemblyProcess(object):
             self._file_path
         )
         # assembly
-        roots = _mya_core.NodeDag.find_roots(paths)
+        roots = _mya_core.DagNode.find_roots(paths)
         # find lost reference first
         _mya_core.FileReferences.search_all_from(
             [self._directory_path]
@@ -203,14 +204,15 @@ class UnitAssemblyProcess(object):
                 if _mya_core.Node.is_mesh(i_path) is True:
                     self.mesh_prc(i_path)
                 elif _mya_core.Node.is_gpu(i_path) is True:
-                    self.gpu_prc(i_path)
+                    if self._gpu_unpack is True:
+                        self.gpu_prc(i_path)
 
                 g_p.do_update()
         # export assembly
         exists_roots = [i for i in roots if _mya_core.Node.is_exists(i)]
-        exists_roots.reverse()
+
         for i_root in exists_roots:
-            _mya_core.NodeDag.parent_to(
+            _mya_core.DagNode.parent_to(
                 i_root, container
             )
 
@@ -227,7 +229,7 @@ class GpuInstanceGenerate(object):
 
 
 class GpuInstanceProcess(object):
-    def __init__(self, file_path, cache_file_path=None):
+    def __init__(self, file_path, cache_file_path=None, gpu_unpack=True, auto_instance=True):
         self._file_path = file_path
 
         self._directory_path = bsc_storage.StgFileOpt(
@@ -245,54 +247,137 @@ class GpuInstanceProcess(object):
             self._cache_file_path
         ).directory_path
 
+        self._hash_dict = {}
+
+        self._gpu_unpack = gpu_unpack
+        self._auto_instance = auto_instance
+
     def mesh_prc(self, shape_path):
         mesh_opt = _mya_core.MeshOpt(shape_path)
-        hash_key = mesh_opt.to_hash()
+
         transform_path = mesh_opt.transform_path
         transform_name = mesh_opt.transform_name
 
+        hash_key = mesh_opt.to_hash()
         unit_directory_path = '{}/unit/{}'.format(
             self._cache_directory_path, hash_key
         )
         gpu_file_path = '{}/gpu.abc'.format(
             unit_directory_path
         )
-        # export gpu
-        if bsc_storage.StgPathMtd.get_is_file(gpu_file_path) is False:
-            transform_path_copy = _mya_core.NodeDag.copy_to_world(transform_path)
-            transform_new_name = '{}_mesh'.format(transform_name)
-            transform_path_new = _mya_core.NodeDag.rename(transform_path_copy, transform_new_name)
-            _mya_core.Transform.zero_transformations(transform_path_new)
-            # gpu
-            _mya_core.GpuCache.export_frame(
-                gpu_file_path, transform_path_new
-            )
-            _mya_core.Node.delete(transform_path_new)
-
-        _mya_core.Transform.delete_all_shapes(transform_path)
-
-        # gpu_transform = '{}|{}_gpu'.format(transform_path, transform_name)
-        #
-        # _mya_core.NodeDag.create(gpu_transform, 'transform')
-
-        _mya_core.GpuCache.create(
-            gpu_file_path, transform_path
+        mesh_file_path = '{}/mesh.ma'.format(
+            unit_directory_path
         )
+        #
+        _mya_core.Attribute.create_as_string(
+            transform_path, 'qsm_gpu', gpu_file_path
+        )
+        _mya_core.Attribute.create_as_string(
+            transform_path, 'qsm_mesh', mesh_file_path
+        )
+        if hash_key not in self._hash_dict:
+            # export gpu
+            if bsc_storage.StgPathMtd.get_is_file(gpu_file_path) is False:
+                transform_path_copy = _mya_core.DagNode.copy_to_world(transform_path)
+                transform_new_name = '{}_mesh'.format(transform_name)
+                transform_path_new = _mya_core.DagNode.rename(transform_path_copy, transform_new_name)
+                _mya_core.Transform.zero_transformations(transform_path_new)
+                # gpu
+                _mya_core.GpuCache.export_frame(
+                    gpu_file_path, transform_path_new
+                )
+                # mesh
+                _mya_core.SceneFile.export_file(
+                    mesh_file_path, transform_path_new
+                )
+                _mya_core.Node.delete(transform_path_new)
+            #
+            if _mya_core.Shape.is_instanced(shape_path):
+                instanced_transform_paths = _mya_core.Shape.get_instanced_transforms(shape_path)
+                for i_transform_path in instanced_transform_paths:
+                    i_shape_path = _mya_core.Transform.get_shape_path(i_transform_path)
+                    _mya_core.Shape.remove_instanced(i_shape_path)
+                    _mya_core.Transform.delete_all_shapes(i_transform_path)
+                #
+                gpu_path = _mya_core.GpuCache.create(
+                    gpu_file_path, transform_path
+                )
+                self._hash_dict[hash_key] = gpu_path
+                for i_transform_path in instanced_transform_paths:
+                    if i_transform_path != transform_path:
+                        _mya_core.Shape.instance_to(
+                            gpu_path, i_transform_path
+                        )
+            else:
+                _mya_core.Transform.delete_all_shapes(transform_path)
+                # create gpu shape
+                gpu_path = _mya_core.GpuCache.create(
+                    gpu_file_path, transform_path
+                )
+                self._hash_dict[hash_key] = gpu_path
+        else:
+            _mya_core.Transform.delete_all_shapes(transform_path)
+            # instance gpu shape
+            gpu_path = self._hash_dict[hash_key]
+            _mya_core.Shape.instance_to(
+                gpu_path, transform_path
+            )
 
     def gpu_prc(self, shape_path):
-        pass
+        gpu_file_path = _mya_core.Attribute.get_as_string(
+            shape_path, 'cacheFileName'
+        )
+        shape_opt = _mya_core.ShapeOpt(shape_path)
+        transform_path = shape_opt.transform_path
+        _mya_core.Attribute.create_as_boolean(
+            transform_path, 'qsm_gpu_expand', False
+        )
+        expand_group_path = '{}|gpu_expand_grp'.format(transform_path)
+        _mya_core.Group.create(expand_group_path)
+        if bsc_storage.StgPathMtd.get_is_file(gpu_file_path):
+            paths = _mya_core.SceneFile.import_file(
+                gpu_file_path
+            )
+
+            roots = _mya_core.DagNode.find_roots(paths)
+
+            _mya_core.Transform.hide_all_shapes(transform_path)
+
+            if roots:
+                for i_path in roots:
+                    if _mya_core.Node.is_transform(i_path):
+                        # _mya_core.Connection.create(
+                        #    transform_path+'.qsm_gpu_expand', i_path+'.overrideVisibility'
+                        # )
+                        # _mya_core.NodeDrawOverride.set_enable(i_path, True)
+                        #
+                        meshes = _mya_core.Group.find_siblings(i_path, ['mesh'])
+                        for j_shape_path in meshes:
+                            j_transform_path = _mya_core.Shape.get_transform(j_shape_path)
+                            _mya_core.DagNode.parent_to(j_transform_path, expand_group_path)
+
+                        if _mya_core.Node.is_exists(i_path):
+                            _mya_core.Node.delete(i_path)
+
+        mesh_paths = _mya_core.DagNode.find_siblings(
+            transform_path, ['mesh']
+        )
+        for i_path in mesh_paths:
+            self.mesh_prc(i_path)
 
     def execute(self):
+        self._hash_dict = {}
+
         _mya_core.SceneFile.new()
 
         container = '|{}'.format(GpuInstanceGenerate.CACHE_NAME)
 
         _mya_core.Container.create_as_default(container)
-        cmds.setAttr(container+'.blackBox', 1, lock=1)
-        _mya_core.Attribute.add_as_string(
+        # cmds.setAttr(container+'.blackBox', 1, lock=1)
+        _mya_core.Attribute.create_as_string(
             container, 'qsm_file', self._file_path
         )
-        _mya_core.Attribute.add_as_string(
+        _mya_core.Attribute.create_as_string(
             container, 'qsm_cache', self._cache_file_path
         )
 
@@ -300,7 +385,7 @@ class GpuInstanceProcess(object):
             self._file_path
         )
         # assembly
-        roots = _mya_core.NodeDag.find_roots(paths)
+        roots = _mya_core.DagNode.find_roots(paths)
         # find lost reference first
         _mya_core.FileReferences.search_all_from(
             [self._directory_path]
@@ -311,14 +396,15 @@ class GpuInstanceProcess(object):
                 if _mya_core.Node.is_mesh(i_path) is True:
                     self.mesh_prc(i_path)
                 elif _mya_core.Node.is_gpu(i_path) is True:
-                    self.gpu_prc(i_path)
+                    if self._gpu_unpack is True:
+                        self.gpu_prc(i_path)
 
                 g_p.do_update()
         # export assembly
         exists_roots = [i for i in roots if _mya_core.Node.is_exists(i)]
-        exists_roots.reverse()
+
         for i_root in exists_roots:
-            _mya_core.NodeDag.parent_to(
+            _mya_core.DagNode.parent_to(
                 i_root, container
             )
 
@@ -336,7 +422,7 @@ class DynamicCameraMask(object):
         if camera is None:
             self._camera_path = _mya_core.Camera.get_active()
         else:
-            self._camera_path = _mya_core.NodeDag.to_path(camera)
+            self._camera_path = _mya_core.DagNode.to_path(camera)
 
         if not self._camera_path:
             raise RuntimeError()
@@ -355,7 +441,7 @@ class DynamicCameraMask(object):
         name = self._camera_path.split('|')[-1]
         frustum_name = '{}_fst'.format(name)
         eps_name = '{}_eps'.format(name)
-        frustum_transform_path = _mya_core.NodeDag.rename(
+        frustum_transform_path = _mya_core.DagNode.rename(
             self.CAMERA_FRUSTUM, frustum_name
         )
         eps_script = (
@@ -430,10 +516,10 @@ class DynamicCameraMask(object):
         _mya_core.Container.create_as_expression(
             path
         )
-        _mya_core.Attribute.add_as_boolean(
+        _mya_core.Attribute.create_as_boolean(
             path, 'qsm_camera_mask_enable'
         )
-        _mya_core.Attribute.add_as_boolean(
+        _mya_core.Attribute.create_as_boolean(
             path, 'qsm_camera_frustum_enable'
         )
         cmds.setAttr(path+'.blackBox', 1, lock=1)
@@ -476,7 +562,7 @@ class DynamicCameraMask(object):
         all_units = _asb_core.UnitAssemblyQuery.get_all_units()
         self.pre_execute(all_units, container)
 
-        start_frame, end_frame = _mya_core.Frame.to_frame_range_(self._frame)
+        start_frame, end_frame = _mya_core.Frame.auto_range(self._frame)
         frames = range(start_frame, end_frame+1)
 
         nodes = []
@@ -531,21 +617,38 @@ class DynamicCameraMask(object):
             )
             self._node_cache[i_shape_path] = i_sum_name
 
-    def nodes_post_prc(self):
+    def nodes_post_prc(self, container):
         for i_shape_path, v in self._node_cache.items():
-            _mya_core.Connection.create(
-                v+'.output1D', i_shape_path+'.visibility'
-            )
+
+            if _mya_core.Reference.get_is_from_reference(i_shape_path) is True:
+                _mya_core.Connection.create(
+                    v+'.output1D', i_shape_path+'.visibility'
+                )
+            else:
+                i_transform_path = _mya_core.Shape.get_transform(i_shape_path)
+                _mya_core.NodeDrawOverride.set_enable(
+                    i_transform_path, True
+                )
+                _mya_core.Connection.create(
+                    v+'.output1D', i_transform_path+'.overrideVisibility'
+                )
+                _mya_core.Connection.create(
+                    container+'.qsm_camera_mask_enable', i_transform_path+'.overrideEnabled'
+                )
+
+        _mya_core.Attribute.set_value(
+            container, 'qsm_camera_mask_enable', True
+        )
 
     def execute_for(self, namespace):
         container = self.create_container(namespace)
 
-        start_frame, end_frame = _mya_core.Frame.to_frame_range_(self._frame)
+        start_frame, end_frame = _mya_core.Frame.auto_range(self._frame)
         frames = range(start_frame, end_frame+1)
 
         self._node_cache = {}
 
-        all_shapes = _mya_core.Namespace.find_nodes(namespace, type_includes=['mesh', 'gpuCache'])
+        all_shapes = _mya_core.Namespace.find_all_nodes(namespace, type_includes=['mesh', 'gpuCache'])
         self.nodes_pre_prc(all_shapes, namespace)
 
         nodes = []
@@ -583,17 +686,18 @@ class DynamicCameraMask(object):
 
         _mya_core.Container.add_nodes(container, list(set(nodes)))
 
-        self.nodes_post_prc()
+        self.nodes_post_prc(container)
+        self.create_camera_frustum(container)
 
 
 class CameraMask(object):
-    LAYER_NAME = 'CAMERA_MASK_LAYER'
+    LAYER_NAME = 'camera_mask_hide'
 
     def __init__(self, camera=None, frame=None):
         if camera is None:
             self._camera_path = _mya_core.Camera.get_active()
         else:
-            self._camera_path = _mya_core.NodeDag.to_path(camera)
+            self._camera_path = _mya_core.DagNode.to_path(camera)
 
         self._frame = frame
 
@@ -623,7 +727,7 @@ class CameraMask(object):
         self.restore()
 
         mask_unit_paths = set()
-        start_frame, end_frame = _mya_core.Frame.to_frame_range_(self._frame)
+        start_frame, end_frame = _mya_core.Frame.auto_range(self._frame)
         frames = range(start_frame, end_frame+1)
         all_units = _asb_core.UnitAssemblyQuery.get_all_units()
 
@@ -638,4 +742,42 @@ class CameraMask(object):
                 self.LAYER_NAME
             )
             _mya_core.DisplayLayer.add_nodes(layer, hide_unit_paths)
+            _mya_core.DisplayLayer.set_visible(layer, False)
+
+    def restore_for(self, namespace):
+        pass
+
+    def find_nodes_at_frame(self, frame):
+        _mya_core.Frame.set_current(frame)
+
+        return _mya_core.Camera.generate_mask_nodes(
+            self._camera_path, type_includes=['mesh', 'gpuCache']
+        )
+
+    def create_layer(self, namespace=None):
+        if namespace is not None:
+            layer_name = '{}:{}'.format(namespace, self.LAYER_NAME)
+        else:
+            layer_name = self.LAYER_NAME
+        layer = _mya_core.DisplayLayer.create(
+            layer_name
+        )
+        return layer
+
+    def execute_for(self, namespace):
+        layer = self.create_layer(namespace)
+
+        mask_nodes = set()
+        start_frame, end_frame = _mya_core.Frame.auto_range(self._frame)
+        frames = range(start_frame, end_frame+1)
+        all_nodes = _mya_core.Namespace.find_all_nodes(namespace, type_includes=['mesh', 'gpuCache'])
+
+        for i_frame in frames:
+            i_nodes = self.find_nodes_at_frame(i_frame)
+            mask_nodes.update(set(i_nodes))
+
+        hide_nodes = list(set(all_nodes)-set(mask_nodes))
+
+        if hide_nodes:
+            _mya_core.DisplayLayer.add_nodes(layer, [_mya_core.Shape.get_transform(x) for x in hide_nodes])
             _mya_core.DisplayLayer.set_visible(layer, False)

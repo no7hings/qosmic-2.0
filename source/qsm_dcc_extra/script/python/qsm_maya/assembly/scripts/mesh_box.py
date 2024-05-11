@@ -159,3 +159,7 @@ class MeshBoxGenerate(object):
             location_dst_name = location_dst.split('|')[-1]
             cmds.group(empty=1, name=location_dst_name)
             cmds.parent(box_paths, location_dst)
+
+    @classmethod
+    def test(cls):
+        pass

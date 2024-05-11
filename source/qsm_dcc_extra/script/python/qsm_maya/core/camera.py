@@ -28,7 +28,7 @@ class Camera(object):
         return dag_path
 
     @classmethod
-    def generate_mask_nodes(cls, path):
+    def generate_mask_nodes(cls, path, type_includes=None):
         list_ = []
         tvl = om_ui.MDrawTraversal()
         om_path = cls.to_om_dag_path(path)
@@ -43,6 +43,9 @@ class Camera(object):
             i_shape_path = i_shape_dag_path.fullPathName()
             if _nod.Node.is_exists(i_shape_path) is True:
                 list_.append(i_shape_path)
+
+        if type_includes is not None:
+            return [x for x in list_ if cmds.nodeType(x) in type_includes]
         return list_
 
     @classmethod

@@ -4,6 +4,8 @@ import maya.cmds as cmds
 
 from . import attribute as _attribute
 
+from . import node as _node
+
 
 class Transform(object):
 
@@ -42,3 +44,25 @@ class Transform(object):
         _ = cmds.listRelatives(path, children=1, shapes=1, fullPath=1)
         for i in _:
             cmds.delete(i)
+
+    @classmethod
+    def hide_all_shapes(cls, path):
+        _ = cmds.listRelatives(path, children=1, shapes=1, fullPath=1)
+        for i in _:
+            cmds.setAttr(i+'.visibility', 0)
+
+    @classmethod
+    def get_world_extent(cls, path):
+        _x, _y, _z, x, y, z = cmds.xform(path, boundingBox=1, worldSpace=1, query=1)
+        return (_x, _y, _z), (x, y, z)
+
+    @classmethod
+    def get_world_center(cls, path):
+        _x, _y, _z, x, y, z = cmds.xform(path, boundingBox=1, worldSpace=1, query=1)
+        return (_x+x)/2, (_y+y)/2, (_z+z)/2
+
+
+class TransformOpt(object):
+    def __init__(self, transform_path):
+        self._transform_path = transform_path
+        self._uuid = _node.Node.get_uuid(self._transform_path)

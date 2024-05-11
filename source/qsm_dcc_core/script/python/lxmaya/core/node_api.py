@@ -14,12 +14,16 @@ class Om2Base(object):
         return om2.MGlobal.getSelectionListByName(path).getDagPath(0)
 
     @classmethod
-    def _get_om2_dag_obj_(cls, path):
+    def to_om2_dag_node(cls, path):
         return om2.MFnDagNode(cls.to_om2_dag_path(path)).object()
 
     @classmethod
-    def _get_om2_transform_(cls, path=None):
-        if path:
+    def to_om2_dag_node_fnc(cls, path):
+        return om2.MFnDagNode(cls.to_om2_dag_path(path))
+
+    @classmethod
+    def to_om2_om2_transform_fnc(cls, path=None):
+        if path is not None:
             return om2.MFnTransform(cls.to_om2_dag_path(path))
         return om2.MFnTransform()
 
@@ -259,7 +263,7 @@ class Om2Base(object):
             cmds.spaceLocator(name='test_{}_loc'.format(seq), position=point)
 
     @classmethod
-    def _get_center_point_(cls, point_0, point_1):
+    def get_om2_point_center(cls, point_0, point_1):
         x, y, z = (point_0.x+point_1.x)/2, (point_0.y+point_1.y)/2, (point_0.z+point_1.z)/2
         return om2.MPoint(x, y, z)
 
@@ -290,7 +294,7 @@ class Om2CurveCreator(object):
         # if cmds.objExists(path) is False:
         #     cmds.createNode('transform', name=path)
         self._obj_path = path
-        self._om2_obj_fnc = Om2Base._get_om2_dag_obj_(path)
+        self._om2_obj_fnc = Om2Base.to_om2_dag_node(path)
 
     @classmethod
     def _to_om2_point_array_(cls, point_array):
@@ -344,7 +348,7 @@ class Om2CurveCreator(object):
             knots, degree, form,
             False,
             True,
-            parent=Om2Base._get_om2_dag_obj_('|{}'.format(self._obj_path))
+            parent=Om2Base.to_om2_dag_node('|{}'.format(self._obj_path))
         )
 
     def set_create_by_raw(self, raw):
@@ -355,7 +359,7 @@ class Om2CurveCreator(object):
             knots, degree, form,
             False,
             True,
-            parent=Om2Base._get_om2_dag_obj_(self._obj_path)
+            parent=Om2Base.to_om2_dag_node(self._obj_path)
         )
 
 
@@ -444,7 +448,7 @@ class Om2CurveOpt(object):
         Om2Base._set_om2_curve_create_(
             Om2Base._to_om2_point_array_(points),
             knots, degree, form,
-            parent=Om2Base._get_om2_dag_obj_(transform)
+            parent=Om2Base.to_om2_dag_node(transform)
         )
 
 
@@ -565,7 +569,7 @@ class Om2MeshOpt(object):
         om2_fnc.create(
             Om2Base._to_om2_point_array_(points),
             face_vertex_counts, face_vertex_indices,
-            parent=Om2Base._get_om2_dag_obj_(transform)
+            parent=Om2Base.to_om2_dag_node(transform)
         )
         bsc_log.Log.debug('start assign uv map')
         if isinstance(uv_coords_maps, dict):
@@ -926,7 +930,7 @@ class MeshToSurfaceConverter(object):
         self._rotation = 1
 
     @classmethod
-    def _get_center_point_(cls, point_0, point_1):
+    def get_om2_point_center(cls, point_0, point_1):
         x, y, z = (point_0.x+point_1.x)/2, (point_0.y+point_1.y)/2, (point_0.z+point_1.z)/2
         return om2.MPoint(x, y, z)
 
@@ -1109,11 +1113,11 @@ class MeshToSurfaceConverter(object):
             u_point = self._mesh_points[u_vertex_index]
             if u_index == 0:
                 next_u_point = self._mesh_points[u_vertex_indices[u_index+1]]
-                center_u_point = self._get_center_point_(u_point, next_u_point)
+                center_u_point = self.get_om2_point_center(u_point, next_u_point)
                 u_points.extend([u_point, center_u_point])
             elif u_index == u_count-1:
                 pre_u_point = self._mesh_points[u_vertex_indices[u_index-1]]
-                center_u_point = self._get_center_point_(pre_u_point, u_point)
+                center_u_point = self.get_om2_point_center(pre_u_point, u_point)
                 u_points.extend([center_u_point, u_point])
             else:
                 u_points.append(u_point)
@@ -1130,20 +1134,20 @@ class MeshToSurfaceConverter(object):
             #
             u_point_0 = self._mesh_points[u_vertex_index_0]
             u_point_1 = self._mesh_points[u_vertex_index_1]
-            u_point = self._get_center_point_(u_point_0, u_point_1)
+            u_point = self.get_om2_point_center(u_point_0, u_point_1)
             if u_index == 0:
                 next_u_point_0 = self._mesh_points[u_vertex_indices_0[u_index+1]]
                 next_u_point_1 = self._mesh_points[u_vertex_indices_1[u_index+1]]
-                center_u_point_0 = self._get_center_point_(u_point_0, next_u_point_0)
-                center_u_point_1 = self._get_center_point_(u_point_1, next_u_point_1)
-                center_u_point = self._get_center_point_(center_u_point_0, center_u_point_1)
+                center_u_point_0 = self.get_om2_point_center(u_point_0, next_u_point_0)
+                center_u_point_1 = self.get_om2_point_center(u_point_1, next_u_point_1)
+                center_u_point = self.get_om2_point_center(center_u_point_0, center_u_point_1)
                 u_points.extend([u_point, center_u_point])
             elif u_index == u_count-1:
                 pre_u_point_0 = self._mesh_points[u_vertex_indices_0[u_index-1]]
                 pre_u_point_1 = self._mesh_points[u_vertex_indices_1[u_index-1]]
-                center_u_point_0 = self._get_center_point_(pre_u_point_0, u_point_0)
-                center_u_point_1 = self._get_center_point_(pre_u_point_1, u_point_1)
-                center_u_point = self._get_center_point_(center_u_point_0, center_u_point_1)
+                center_u_point_0 = self.get_om2_point_center(pre_u_point_0, u_point_0)
+                center_u_point_1 = self.get_om2_point_center(pre_u_point_1, u_point_1)
+                center_u_point = self.get_om2_point_center(center_u_point_0, center_u_point_1)
                 u_points.extend([center_u_point, u_point])
             else:
                 u_points.append(u_point)
@@ -1385,5 +1389,5 @@ class Om2SurfaceOpt(object):
             u_degree, v_degree,
             u_form, v_form,
             True,
-            parent=Om2Base._get_om2_dag_obj_(transform)
+            parent=Om2Base.to_om2_dag_node(transform)
         )

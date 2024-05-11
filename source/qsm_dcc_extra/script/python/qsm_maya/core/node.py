@@ -19,37 +19,50 @@ class Node(object):
         )
 
     @classmethod
-    def get_type(cls, path):
-        return cmds.nodeType(path)
+    def get_type(cls, name):
+        return cmds.nodeType(name)
 
     @classmethod
-    def is_transform(cls, path):
-        return cls.get_type(path) == cls.Types.Transform
+    def is_transform(cls, name):
+        return cls.get_type(name) == cls.Types.Transform
 
     @classmethod
-    def is_mesh(cls, path):
-        return cls.get_type(path) == cls.Types.Mesh
+    def is_mesh(cls, name):
+        return cls.get_type(name) == cls.Types.Mesh
 
     @classmethod
-    def is_gpu(cls, path):
-        return cls.get_type(path) == cls.Types.GPU
+    def is_gpu(cls, name):
+        return cls.get_type(name) == cls.Types.GPU
 
     @classmethod
-    def is_assembly_reference(cls, path):
-        return cls.get_type(path) == cls.Types.AssemblyReference
+    def is_assembly_reference(cls, name):
+        return cls.get_type(name) == cls.Types.AssemblyReference
 
     @classmethod
-    def is_exists(cls, path):
-        return cmds.objExists(path)
+    def is_exists(cls, name):
+        return cmds.objExists(name)
 
     @classmethod
-    def get_uuid(cls, path):
-        return cmds.ls(path, uuid=1)[0]
+    def get_uuid(cls, name):
+        return cmds.ls(name, uuid=1)[0]
 
     @classmethod
-    def delete(cls, path):
-        cmds.delete(path)
+    def delete(cls, name):
+        cmds.delete(name)
 
     @classmethod
-    def rename(cls, path, new_name):
-        return cmds.rename(path, new_name)
+    def rename(cls, name, new_name):
+        return cmds.rename(name, new_name)
+
+
+class NodeOpt(object):
+    def __init__(self, name):
+        self._name = name
+
+    @property
+    def type(self):
+        return Node.get_type(self._name)
+
+    @property
+    def name(self):
+        return self._name

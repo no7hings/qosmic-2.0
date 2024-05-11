@@ -54,7 +54,7 @@ class Frame(object):
         return int(start_frame), int(end_frame)
 
     @classmethod
-    def to_frame_range_(cls, frame=None):
+    def auto_range(cls, frame=None):
         if isinstance(frame, (tuple, list)):
             start_frame, end_frame = frame
         elif isinstance(frame, (int, float)):

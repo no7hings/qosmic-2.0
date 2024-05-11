@@ -51,7 +51,7 @@ class TransformOpt(gnl_dcc_abstracts.AbsNodeOpt):
         return self.get_om2_fnc()
 
     def get_om2_fnc(self):
-        return mya_core.Om2Base._get_om2_transform_(self.obj.path)
+        return mya_core.Om2Base.to_om2_om2_transform_fnc(self.obj.path)
 
     def set_create(self, matrix=None):
         if self.obj.get_is_exists() is False:
@@ -61,9 +61,9 @@ class TransformOpt(gnl_dcc_abstracts.AbsNodeOpt):
             name = path_opt.get_name()
             if parent_path != mya_core.MyaUtil.OBJ_PATHSEP:
                 if cmds.objExists(parent_path) is True:
-                    om2_obj = mya_core.Om2Base._get_om2_transform_()
+                    om2_obj = mya_core.Om2Base.to_om2_om2_transform_fnc()
                     om2_obj.create(
-                        mya_core.Om2Base._get_om2_dag_obj_(parent_path)
+                        mya_core.Om2Base.to_om2_dag_node(parent_path)
                     )
                     om2_obj.setName(name)
                     #
@@ -73,7 +73,7 @@ class TransformOpt(gnl_dcc_abstracts.AbsNodeOpt):
                     )
                     return True
             else:
-                om2_obj = mya_core.Om2Base._get_om2_transform_()
+                om2_obj = mya_core.Om2Base.to_om2_om2_transform_fnc()
                 om2_obj.create()
                 #
                 om2_obj.setName(name)
@@ -128,7 +128,7 @@ class MeshOpt(
                 om2_obj.create(
                     mya_core.Om2Base._to_om2_point_array_(points),
                     face_vertex_counts, face_vertex_indices,
-                    parent=mya_core.Om2Base._get_om2_dag_obj_(transform_path)
+                    parent=mya_core.Om2Base.to_om2_dag_node(transform_path)
                 )
                 #
                 om2_obj.setName(shape_name)

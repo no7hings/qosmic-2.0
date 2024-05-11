@@ -1,0 +1,25 @@
+{
+  "settings": {
+    "token": "",
+    "customUi": {
+      "global": {
+        "checklists": true,
+        "comments": true,
+        "description": true,
+        "labels": true,
+        "list": true,
+        "title": true
+      }
+    },
+    "selectedBoards": [],
+    "openToSide": "right",
+    "newCardPosition": "top",
+    "movedCardPosition": "top",
+    "verboseLogging": false,
+    "prepopulateTitle": false,
+    "openInDesktop": false
+  },
+  "version": "2.2.0",
+  "firstRun": false,
+  "connectedCards": {}
+}

@@ -33,10 +33,10 @@ import qsm_maya.motion as qsm_mya_motion
 import qsm_gui.proxy.widgets as qsm_prx_widgets
 
 
-class PrxUnitForAssemblyResource(prx_abstracts.AbsPrxWidget):
+class PrxUnitForSceneryResource(prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = qt_widgets.QtTranslucentWidget
 
-    SCRIPT_JOB_NAME = 'resource_manager_for_assembly'
+    SCRIPT_JOB_NAME = 'resource_manager_for_scenery'
 
     def _gui_filter_update_visible(self, boolean):
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
@@ -54,7 +54,7 @@ class PrxUnitForAssemblyResource(prx_abstracts.AbsPrxWidget):
             i_tool.connect_check_toggled_to(i_fnc)
 
     def __init__(self, window, session, *args, **kwargs):
-        super(PrxUnitForAssemblyResource, self).__init__(*args, **kwargs)
+        super(PrxUnitForSceneryResource, self).__init__(*args, **kwargs)
         self._window = window
         self._session = session
 

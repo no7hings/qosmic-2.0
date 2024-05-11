@@ -63,6 +63,8 @@ class FileReferences(object):
 
     @classmethod
     def set_file_path(cls, path, atr_name, file_path):
+        if file_path is None:
+            return
         node_type = _node.Node.get_type(path)
         if node_type == 'file':
             stg_file = bsc_storage.StgFileOpt(file_path)

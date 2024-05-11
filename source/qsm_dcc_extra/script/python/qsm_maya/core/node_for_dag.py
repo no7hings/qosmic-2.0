@@ -1,13 +1,15 @@
 # coding:utf-8
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
+# noinspection PyUnresolvedReferences
+import maya.api.OpenMaya as om2
 
 import lxbasic.core as bsc_core
 
 from . import node as _node
 
 
-class NodeDag(_node.Node):
+class DagNode(_node.Node):
     PATHSEP = '|'
 
     @classmethod
@@ -21,10 +23,24 @@ class NodeDag(_node.Node):
         return cls.to_path(_)
 
     @classmethod
+    def path_to_name(cls, path):
+        return path.split(cls.PATHSEP)[-1]
+
+    @classmethod
     def to_path(cls, name):
         _ = cmds.ls(name, long=1)
-        if _:
-            return _[0]
+        if not _:
+            raise RuntimeError()
+        return _[0]
+
+    @classmethod
+    def get_parent(cls, path):
+        return '|'.join(path.split('|')[:-1])
+
+    @classmethod
+    def is_instanced(cls, path):
+        dag_node = om2.MFnDagNode(om2.MGlobal.getSelectionListByName(path).getDagPath(0))
+        return dag_node.isInstanced()
 
     @classmethod
     def to_world(cls, path):
@@ -71,6 +87,31 @@ class NodeDag(_node.Node):
         _ = cmds.rename(path, new_name)
         if _:
             return cls.to_path(_)
+
+
+class DagNodeOpt(_node.NodeOpt):
+    def __init__(self, path):
+        self._path = DagNode.to_path(path)
+        print self._path
+        self._name = DagNode.path_to_name(self._path)
+        self._uuid = _node.Node.get_uuid(self._path)
+        super(DagNodeOpt, self).__init__(self._name)
+
+    @property
+    def type(self):
+        return _node.Node.get_type(self._path)
+
+    @property
+    def path(self):
+        return self._path
+
+    def update_path(self):
+        if self._uuid:
+            _ = cmds.ls(self._uuid, long=1)
+            if _:
+                self._path = _[0]
+            else:
+                raise RuntimeError()
 
 
 class NodeDisplay(object):
