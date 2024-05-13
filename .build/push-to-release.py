@@ -71,7 +71,6 @@ class Main(object):
         options_0['version'] = '*'
 
         p = cls.PACKAGE_RELEASE.format(**options_0)
-        print p
         _results = glob.glob(p)
         if not _results:
             return '0.0.1'

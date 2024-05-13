@@ -1,0 +1,457 @@
+# coding:utf-8
+# noinspection PyUnresolvedReferences
+import maya.cmds as cmds
+
+import lxgui.core as gui_core
+
+import lxgui.proxy.abstracts as gui_prx_abstracts
+
+import lxgui.proxy.widgets as prx_widgets
+
+import qsm_maya.core as qsm_mya_core
+
+
+class GuiBaseOpt(object):
+    DCC_NAMESPACE = 'rig'
+
+    def __init__(self, window, unit, session):
+        self._window = window
+        self._unit = unit
+        self._session = session
+
+
+class GuiResourceTagOpt(
+    GuiBaseOpt,
+    gui_prx_abstracts.AbsGuiTreeViewAsTagOpt
+):
+    GROUP_SCHEME = gui_prx_abstracts.AbsGuiTreeViewAsTagOpt.GroupScheme.Hide
+
+    def __init__(self, window, unit, session, prx_tree_view):
+        super(GuiResourceTagOpt, self).__init__(window, unit, session)
+        self._init_tree_view_as_tag_opt_(prx_tree_view, self.DCC_NAMESPACE)
+
+        self._index_thread_batch = 0
+
+
+class GuiResourceOpt(
+    GuiBaseOpt
+):
+    ROOT_NAME = 'Tags'
+
+    NAMESPACE = 'tag'
+
+    TAG_KEYS_INCLUDE = [
+        'project',
+        'role',
+        'asset',
+    ]
+    
+    RESOURCES_QUERY_CLS = None
+
+    RESOURCE_SCHEME = None
+
+    def _gui_build_reference_tools(self):
+        for i in [
+            (
+                'remove-resource',
+                'tool/maya/remove-reference',
+                '"LMB-click" to remove selected rigs',
+                self.do_dcc_remove_resources
+            ),
+            (
+                'duplicate-resource',
+                'tool/maya/duplicate-reference',
+                '"LMB-click" to duplicate selected rigs',
+                self.do_dcc_duplicate_resources
+            ),
+            (
+                'reload-resource',
+                'tool/maya/reload-reference',
+                '"LMB-click" to reload selected rigs',
+                self.do_dcc_reload_resources
+            ),
+            (
+                'unload-resource',
+                'tool/maya/unload-reference',
+                '"LMB-click" to unload selected rigs',
+                self.do_dcc_unload_resources
+            ),
+        ]:
+            i_key, i_icon_name, i_tool_tip, i_fnc = i
+            i_tool = prx_widgets.PrxIconPressButton()
+            self._prx_reference_tool_box.add_widget(i_tool)
+            i_tool.set_name(i_key)
+            i_tool.set_icon_name(i_icon_name)
+            i_tool.set_tool_tip(i_tool_tip)
+            i_tool.connect_press_clicked_to(i_fnc)
+            self._tool_dict[i_key] = i_tool
+
+    def _gui_build_isolate_select_tools(self):
+        for i in [
+            (
+                'isolate-select-resource',
+                'tool/isolate-select',
+                '"LMB-click" to turn "on" or "off" isolate select mode',
+                self.do_dcc_isolate_select_resources
+            )
+        ]:
+            i_key, i_icon_name, i_tool_tip, i_fnc = i
+            i_tool = prx_widgets.PrxToggleButton()
+            self._prx_isolate_select_tool_box.add_widget(i_tool)
+            i_tool.set_name(i_key)
+            i_tool.set_icon_name(i_icon_name)
+            i_tool.set_tool_tip(i_tool_tip)
+            i_tool.connect_check_toggled_to(i_fnc)
+            self._tool_dict[i_key] = i_tool
+
+        for i in [
+            (
+                'isolate-select-add-resource',
+                'tool/isolate-select-add',
+                '"LMB-click" to add rigs to isolate select',
+                self.do_dcc_isolate_select_add_resources
+            ),
+            (
+                'isolate-select-remove-resource',
+                'tool/isolate-select-remove',
+                '"LMB-click" to remove rigs to isolate select',
+                self.do_dcc_isolate_select_remove_resources
+            )
+        ]:
+            i_key, i_icon_name, i_tool_tip, i_fnc = i
+            i_tool = prx_widgets.PrxIconPressButton()
+            self._prx_isolate_select_tool_box.add_widget(i_tool)
+            i_tool.set_name(i_key)
+            i_tool.set_icon_name(i_icon_name)
+            i_tool.set_tool_tip(i_tool_tip)
+            i_tool.connect_press_clicked_to(i_fnc)
+            self._tool_dict[i_key] = i_tool
+
+    # reference
+    def do_dcc_remove_resources(self):
+        w = gui_core.GuiDialog.create(
+            label=self._session.gui_name,
+            sub_label='remove-resource',
+            content='do you want remove selected rigs?\n, press "Yes" to continue',
+            status=gui_core.GuiDialog.ValidationStatus.Warning,
+            parent=self._window.widget
+        )
+
+        result = w.get_result()
+        if result is True:
+            _ = self._prx_tree_view.get_selected_items()
+            for i in _:
+                i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
+                i_reference_opt = i_resource.reference_opt
+                i_reference_opt.do_remove()
+
+            self._unit.do_gui_refresh_all()
+
+    def do_dcc_duplicate_resources(self):
+        _ = self._prx_tree_view.get_selected_items()
+        for i in _:
+            i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
+            i_reference_opt = i_resource.reference_opt
+            i_reference_opt.do_duplicate()
+
+        self._unit.do_gui_refresh_all()
+
+    def do_dcc_reload_resources(self):
+        _ = self._prx_tree_view.get_selected_items()
+        for i in _:
+            i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
+            i_reference_opt = i_resource.reference_opt
+            i_reference_opt.do_reload()
+
+        self._unit.do_gui_refresh_all()
+
+    def do_dcc_unload_resources(self):
+        _ = self._prx_tree_view.get_selected_items()
+        for i in _:
+            i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
+            i_reference_opt = i_resource.reference_opt
+            i_reference_opt.do_unload()
+
+        self._unit.do_gui_refresh_all()
+
+    # isolate select
+    def do_dcc_isolate_select_resources(self, boolean):
+        panel_current = qsm_mya_core.ViewPanels.get_current_name()
+        isolate_select_opt = qsm_mya_core.ViewPanelIsolateSelectOpt(panel_current)
+        isolate_select_opt.set_enable(boolean)
+        if boolean is True:
+            _ = self._prx_tree_view.get_selected_items()
+            for i in _:
+                i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
+                i_reference_opt = i_resource.reference_opt
+                i_roots = i_reference_opt.get_roots()
+                isolate_select_opt.add_nodes(i_roots)
+
+    def do_dcc_isolate_select_add_resources(self):
+        panel_current = qsm_mya_core.ViewPanels.get_current_name()
+        isolate_select_opt = qsm_mya_core.ViewPanelIsolateSelectOpt(panel_current)
+        _ = self._prx_tree_view.get_selected_items()
+        for i in _:
+            i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
+            i_reference_opt = i_resource.reference_opt
+            i_root = i_reference_opt.get_root()
+            isolate_select_opt.add_node(i_root)
+
+    def do_dcc_isolate_select_remove_resources(self):
+        panel_current = qsm_mya_core.ViewPanels.get_current_name()
+        isolate_select_opt = qsm_mya_core.ViewPanelIsolateSelectOpt(panel_current)
+        _ = self._prx_tree_view.get_selected_items()
+        for i in _:
+            i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
+            i_reference_opt = i_resource.reference_opt
+            i_root = i_reference_opt.get_root()
+            isolate_select_opt.remove_node(i_root)
+
+    def do_gui_refresh_tools(self):
+        panel_current = qsm_mya_core.ViewPanels.get_current_name()
+        if self._window.window_is_active():
+            isolate_tool = self._tool_dict['isolate-select-resource']
+            isolate_select_opt = qsm_mya_core.ViewPanelIsolateSelectOpt(panel_current)
+            is_checked = isolate_tool.get_is_checked()
+            is_enable = isolate_select_opt.is_enable()
+            if is_checked != is_enable:
+                isolate_tool.set_checked(is_enable)
+
+    # selection
+    def do_dcc_select_resources(self):
+        if self._prx_tree_view.has_focus() is True:
+            resources = self.gui_get_selected_resources()
+            paths = []
+            if resources:
+                scheme = self._unit._utility_options_node.get('selection_scheme')
+                paths = []
+                [paths.extend(x.find_nodes_by_scheme(scheme)) for x in resources]
+            if paths:
+                cmds.select([x for x in paths if x])
+            else:
+                cmds.select(clear=1)
+
+    def do_gui_select_resources(self):
+        if self._prx_tree_view.has_focus() is False:
+            namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+            if namespaces:
+                paths = ['/{}'.format(i) for i in namespaces]
+            else:
+                paths = []
+
+            self.do_gui_selected(paths)
+
+    def __init__(self, window, unit, session, prx_tree_view):
+        super(GuiResourceOpt, self).__init__(window, unit, session)
+        self._prx_tree_view = prx_tree_view
+        self._prx_tree_view.create_header_view(
+            [('name', 2), ('description', 2)],
+            self._window.get_definition_window_size()[0]*(2.0/3.0)-48
+        )
+        self._prx_tree_view.connect_item_select_changed_to(
+            self.do_dcc_select_resources
+        )
+        self._prx_tree_view.get_top_tool_bar().set_expanded(True)
+
+        self._tool_dict = {}
+        if self.RESOURCE_SCHEME == 'reference':
+            self._prx_reference_tool_box = self._prx_tree_view.create_top_tool_box(
+                'reference', insert_args=1
+            )
+            self._gui_build_reference_tools()
+
+        self._prx_isolate_select_tool_box = self._prx_tree_view.create_top_tool_box(
+            'isolate-select', insert_args=1
+        )
+        self._gui_build_isolate_select_tools()
+
+        self._item_dict = self._prx_tree_view._item_dict
+
+        self._resources_query = self.RESOURCES_QUERY_CLS()
+
+    def restore(self):
+        self._prx_tree_view.set_clear()
+        # self._resources_query = qsm_mya_rig_core.AdvRigsQuery()
+
+    def gui_is_exists(self, path):
+        return self._item_dict.get(path) is not None
+
+    def gui_get(self, path):
+        return self._item_dict[path]
+
+    def gui_register(self, path, prx_item):
+        self._item_dict[path] = prx_item
+
+    def gui_add_root(self):
+        path = '/'
+        if self.gui_is_exists(path) is False:
+            prx_item = self._prx_tree_view.create_item(
+                self.ROOT_NAME,
+                icon=gui_core.GuiIcon.get('database/all'),
+            )
+
+            self.gui_register(path, prx_item)
+
+            prx_item.set_expanded(True)
+            # prx_item.set_checked(True)
+            return True, prx_item
+        return False, self.gui_get(path)
+
+    def gui_add_group(self, path_opt):
+        def build_fnc_():
+            prx_item.set_name(
+                path_opt.get_name()
+            )
+            prx_item.set_icon_by_file(
+                gui_core.GuiIcon.get('database/group')
+            )
+            prx_item.set_tool_tip(
+                (
+                    'path: {}\n'
+                ).format(path_opt.get_path())
+            )
+
+        path = path_opt.path
+        if self.gui_is_exists(path) is False:
+            create_kwargs = dict(
+                name='loading ...',
+                filter_key=path,
+            )
+            parent = path_opt.get_parent()
+            if parent is not None:
+                prx_item_parent = self.gui_get(parent.path)
+                prx_item = prx_item_parent.add_child(
+                    **create_kwargs
+                )
+            else:
+                prx_item = self._prx_tree_view.create_item(
+                    **create_kwargs
+                )
+            #
+            # prx_item.set_checked(True)
+            self.gui_register(path, prx_item)
+            prx_item.set_show_build_fnc(build_fnc_)
+            return True, prx_item
+        return False, self.gui_get(path)
+
+    def gui_add_resource(self, rig):
+        def build_fnc_():
+            prx_item.set_name(
+                path_opt.get_name()
+            )
+            _reference_node = rig.reference_opt
+            _semantic_tag_filter_data = {}
+            _tag_group_key = '/status'
+            if _reference_node.is_loaded():
+                prx_item.set_icon_by_file(
+                    gui_core.GuiIcon.get('node/maya/reference')
+                )
+                _semantic_tag_filter_data.setdefault(
+                    _tag_group_key, set()
+                ).add('/status/loaded')
+                self._unit._gui_resource_tag_opt.gui_register_tag_by_path(
+                    '/status/loaded', path, auto_create_ancestors=True
+                )
+            else:
+                prx_item.set_icon_by_file(
+                    gui_core.GuiIcon.get('node/maya/reference-unloaded')
+                )
+                _semantic_tag_filter_data.setdefault(
+                    _tag_group_key, set()
+                ).add('/status/unloaded')
+                self._unit._gui_resource_tag_opt.gui_register_tag_by_path(
+                    '/status/unloaded', path, auto_create_ancestors=True
+                )
+
+            prx_item.get_item()._update_item_semantic_tag_filter_keys_tgt_(_semantic_tag_filter_data)
+            prx_item.set_tool_tip(
+                '\n'.join(['{}: {}'.format(_k, _v) for _k, _v in rig.variants.items()])
+            )
+
+        path = rig.path
+        if self.gui_is_exists(path) is False:
+            path_opt = rig.path_opt
+            create_kwargs = dict(
+                name='loading ...',
+                filter_key=path,
+            )
+            parent = path_opt.get_parent()
+            if parent is not None:
+                prx_item_parent = self.gui_get(parent.path)
+                prx_item = prx_item_parent.add_child(
+                    **create_kwargs
+                )
+            else:
+                prx_item = self._prx_tree_view.create_item(
+                    **create_kwargs
+                )
+
+            # prx_item.set_checked(True)
+            self.gui_register(path, prx_item)
+            variants = rig.variants
+            semantic_tag_filter_data = {}
+            for i in self.TAG_KEYS_INCLUDE:
+                if i in variants:
+                    i_v = variants[i]
+                    i_tag_group = '/{}'.format(i)
+                    i_tag_path = '/{}/{}'.format(i, i_v)
+                    semantic_tag_filter_data.setdefault(
+                        i_tag_group, set()
+                    ).add(i_tag_path)
+                    self._unit._gui_resource_tag_opt.gui_register_tag_by_path(
+                        i_tag_path, path, auto_create_ancestors=True
+                    )
+
+            prx_item.get_item()._update_item_semantic_tag_filter_keys_tgt_(semantic_tag_filter_data)
+            prx_item.set_gui_dcc_obj(
+                rig, namespace=self.NAMESPACE
+            )
+            prx_item.set_show_build_fnc(build_fnc_)
+            return True, prx_item
+        return False, self.gui_get(path)
+
+    def gui_add_one(self, rig):
+        ancestors = rig.path_opt.get_ancestors()
+        if ancestors:
+            ancestors.reverse()
+            for i_path_opt in ancestors:
+                if self.gui_is_exists(i_path_opt.path) is False:
+                    i_is_create, i_prx_item = self.gui_add_group(i_path_opt)
+                    if i_is_create is True:
+                        i_prx_item.set_expanded(True)
+        #
+        self.gui_add_resource(rig)
+
+    def gui_add_all(self):
+        self.gui_add_root()
+        resources = self._resources_query.get_all()
+        for i_resource in resources:
+            self.gui_add_one(i_resource)
+
+    def get_current_obj(self):
+        _ = self._prx_tree_view.get_selected_items()
+        if _:
+            return _[-1].get_gui_dcc_obj(self.NAMESPACE)
+
+    def gui_get_selected_resources(self):
+        list_ = []
+        _ = self._prx_tree_view.get_selected_items()
+        for i in _:
+            i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
+            if i_resource is not None:
+                list_.append(i_resource)
+        return list_
+
+    def gui_get_items_selected(self, paths):
+        return [self.gui_get(i) for i in paths if self.gui_is_exists(i)]
+
+    def do_gui_selected(self, paths):
+        if paths:
+            prx_items = self.gui_get_items_selected(paths)
+            self._prx_tree_view.select_items(prx_items)
+        else:
+            self._prx_tree_view.clear_selection()
+
+    def get_resources_query(self):
+        return self._resources_query
+

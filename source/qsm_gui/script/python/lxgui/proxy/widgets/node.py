@@ -511,7 +511,7 @@ class PrxNode(gui_prx_abstracts.AbsPrxWidget):
 
     def create_port_by_data(self, port_path, variants):
         widget_ = variants['widget']
-        label_ = variants.get('label')
+        label_ = variants.get('label') or variants.get('name')
         tool_tip_ = variants.get('tool_tip')
         #
         ui_language = gui_core.GuiUtil.get_language()

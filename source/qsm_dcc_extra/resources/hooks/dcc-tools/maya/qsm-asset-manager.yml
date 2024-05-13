@@ -14,7 +14,7 @@ option:
             - 'manager resource, etc. rig, assembly'
             - '...'
         #
-        size: [720, 720]
+        size: [560, 720]
 #
 rsv-match-condition: 'branch=asset'
 
@@ -61,15 +61,14 @@ build:
                 scene/frame_scheme:
                     widget: capsule_string
                     name_chs: '帧方案'
-                    options: ['render_settings', 'time_slider', 'frame_range']
+                    options: ['time_slider', 'frame_range']
                     names_chs: ['渲染设置', '时间轴', '帧范围']
                     default: 'time_slider'
                     tool_tip: 'choose a frame scheme'
                     tool_tip_chs:
                         |-
                         设置一个帧方案:
-                            渲染设置：从渲染自动设置读取帧范围
-                            时间轴：从时间轴自动读取帧范围
+                            时间轴：自动读取帧范围
                             帧范围：在帧范围中输入
 
                 scene/frame_range:
@@ -83,8 +82,9 @@ build:
                     widget: group
                     name_chs: '简模代理'
 
-                skin_proxy/load_skin_proxy:
+                skin_proxy/load:
                     widget: sub_process_button
+                    name: 'Load Skin Proxy'
                     name_chs: '加载简模代理'
                     value: ''
                     icon: 'tool/maya/create-container'
@@ -96,8 +96,9 @@ build:
                         点击自动加载简模代理。
                     join_to_next: True
 
-                skin_proxy/remove_skin_proxy:
+                skin_proxy/remove:
                     widget: button
+                    name: 'Remove Skin Proxy'
                     name_chs: '移除简模代理'
                     value: ''
                     icon: 'tool/maya/delete'
@@ -107,8 +108,9 @@ build:
                     widget: group
                     name_chs: '动态GPU'
 
-                dynamic_gpu/load_dynamic_gpu:
+                dynamic_gpu/load:
                     widget: sub_process_button
+                    name: 'Load Dynamic GPU'
                     name_chs: '加载动态GPU'
                     value: ''
                     icon: 'tool/maya/create-container'
@@ -120,8 +122,9 @@ build:
                         点击自动加载动态GPU。
                     join_to_next: True
 
-                dynamic_gpu/remove_dynamic_gpu:
+                dynamic_gpu/remove:
                     widget: button
+                    name: 'Remove Dynamic GPU'
                     name_chs: '移除动态GPU'
                     value: ''
                     icon: 'tool/maya/delete'
@@ -161,6 +164,7 @@ build:
                             先选中源物体，再选中目标物体
                             可选中任意部件
 
+
                 animation_transfer/copy:
                     widget: button
                     name_chs: '复制'
@@ -174,6 +178,7 @@ build:
                         |-
                         点击复制动画。
 
+
                 animation_transfer/paste:
                     widget: button
                     name_chs: '粘贴'
@@ -186,7 +191,161 @@ build:
                         |-
                         点击粘贴动画。
 
+        scenery_utility:
+            name: 'unit assembly & camera mask'
+            name_chs: '元素组装 & 相机遮罩'
+            parameters:
+                selection_scheme:
+                    widget: capsule_string
+                    name_chs: '选择方案'
+                    options: ['geometry', 'none']
+                    names_chs: ['模型', '不选']
+                    default: 'none'
+                    tool_tip: 'choose a selection scheme'
+                    tool_tip_chs:
+                        |-
+                        设置一个选择方案
+                            几何物体：选择所有模型
+                            不选：不选择任何物体
 
+                scene:
+                    widget: group
+                    name_chs: '场景'
+
+                scene/camera:
+                    widget: enumerate
+                    name_chs: '相机'
+                    value: ['None']
+                    tool_tip: '...'
+
+                scene/frame_scheme:
+                    widget: capsule_string
+                    name_chs: '帧方案'
+                    options: ['time_slider', 'frame_range']
+                    names_chs: ['时间轴', '帧范围']
+                    default: 'time_slider'
+                    tool_tip: 'choose a frame scheme'
+                    tool_tip_chs:
+                        |-
+                        设置一个帧方案:
+                            当前帧: 使用当前帧
+                            时间轴：自动读取帧范围
+                            帧范围：在帧范围中输入
+
+                scene/frame_range:
+                    widget: integer2
+                    name_chs: '帧范围'
+                    value: [0, 24]
+                    tool_tip: '...'
+                    lock: True
+
+                unit_assembly:
+                    widget: group
+                    name_chs: '元素组装'
+
+                unit_assembly/load:
+                    widget: sub_process_button
+                    name: 'Load Unit Assembly'
+                    name_chs: '加载元素组装'
+                    value: ''
+                    icon: 'tool/maya/create-container'
+                    tool_tip:
+                        |-
+                        press to load unit assembly auto.
+                    tool_tip_chs:
+                        |-
+                        点击自动加载元素组装。
+                    join_to_next: True
+
+                unit_assembly/remove:
+                    widget: button
+                    name: 'Remove Unit Assembly'
+                    name_chs: '移除元素组装'
+                    value: ''
+                    icon: 'tool/maya/delete'
+                    tool_tip: '...'
+
+                camera_mask:
+                    widget: group
+                    name_chs: '相机遮罩'
+
+                camera_mask/create_camera_mask:
+                    widget: button
+                    name_chs: '创建相机遮罩'
+                    value: ''
+                    icon: 'tool/maya/camera-mask'
+                    tool_tip: '...'
+                    join_to_next: True
+
+                camera_mask/create_dynamic_camera_mask:
+                    widget: button
+                    name_chs: '创建动态相机遮罩'
+                    value: ''
+                    icon: 'tool/maya/camera-mask'
+                    tool_tip: '...'
+
+                camera_mask/remove_camera_mask:
+                    widget: button
+                    name_chs: '移除相机遮罩'
+                    value: ''
+                    icon: 'tool/maya/delete'
+                    tool_tip: '...'
+
+        assembly_utility:
+            name: 'assembly switch'
+            name_chs: '元素切换'
+            parameters:
+                gpu:
+                    widget: button
+                    name: 'GPU'
+                    name_chs: 'GPU'
+                    value: ''
+                    icon: 'tool/maya/switch-to-gpu'
+                    tool_tip: '...'
+                    join_to_next: True
+
+                gpu_lod_01:
+                    widget: button
+                    name: 'GPU-LOD01'
+                    name_chs: 'GPU-LOD01'
+                    value: ''
+                    icon: 'tool/maya/switch-to-gpu'
+                    tool_tip: '...'
+                    join_to_next: True
+
+                gpu_lod_02:
+                    widget: button
+                    name: 'GPU-LOD02'
+                    name_chs: 'GPU-LOD02'
+                    value: ''
+                    icon: 'tool/maya/switch-to-gpu'
+                    tool_tip: '...'
+
+                mesh:
+                    widget: button
+                    name: 'Mesh'
+                    name_chs: '模型'
+                    value: ''
+                    icon: 'tool/maya/switch-to-mesh'
+                    tool_tip: '...'
+                    join_to_next: True
+
+                mesh_lod_01:
+                    widget: button
+                    name: 'Mesh-LOD01'
+                    name_chs: '模型-LOD01'
+                    value: ''
+                    icon: 'tool/maya/switch-to-mesh'
+                    tool_tip: '...'
+                    join_to_next: True
+
+                mesh_lod_02:
+                    widget: button
+                    name: 'Mesh-LOD02'
+                    name_chs: '模型-LOD02'
+                    value: ''
+                    icon: 'tool/maya/switch-to-mesh'
+                    tool_tip: '...'
     buttons:
         reference:
             name: 'Reference'
@@ -216,18 +375,38 @@ build:
             tool_tip: 'Include all tools for scenery'
             tool_tip_chs: '包含所有跟场景相关的工具'
 
+        assembly:
+            name: 'Assembly Resource'
+            name_chs: '组装资源'
+
+            tool_tip: 'Include all tools for assembly'
+            tool_tip_chs: '包含所有跟组装相关的工具'
 
     tag-groups:
-        utility:
+        rig_utility:
             name: 'Utility'
             name_chs: '通用'
 
             tool_tip: 'Include all tool for rig as utility, etc. skin proxy, dynamic GPU'
             tool_tip_chs: '包含所有跟绑定相关的通用工具, 如：建模代理，动态GPU等'
 
-        extend:
+        rig_extend:
             name: 'Extend'
             name_chs: '扩展'
 
             tool_tip: 'Include all tool for rig as extend, etc. animation transfer'
             tool_tip_chs: '包含所有跟绑定相关的扩展工具，如：动画传递等'
+
+        scenery_utility:
+            name: 'Utility'
+            name_chs: '通用'
+
+            tool_tip: 'Include all tool for rig as utility, etc. unit assembly, camera mask'
+            tool_tip_chs: '包含所有跟场景相关的通用工具, 如：元素组装，相机遮罩等'
+
+        assembly_utility:
+            name: 'Utility'
+            name_chs: '通用'
+
+            tool_tip: 'Include all tool for rig as utility, etc. assembly switch'
+            tool_tip_chs: '包含所有跟组装相关的通用工具, 如：组装切换等'

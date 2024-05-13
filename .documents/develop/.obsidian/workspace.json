@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "72021400cb54b98c",
+        "id": "b684a71a07901d41",
         "type": "tabs",
         "children": [
           {
-            "id": "8be9ffb74a28cce3",
+            "id": "5c76f3adffc885bd",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "开发日程/任务/元素组装（Unit Assembly）.md",
+                "file": "开发日程/汇报/资源管理工具（Resource Manager）.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "开发日程/任务/元素组装（Unit Assembly）.md",
+                "file": "开发日程/汇报/资源管理工具（Resource Manager）.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "开发日程/任务/元素组装（Unit Assembly）.md",
+                "file": "开发日程/汇报/资源管理工具（Resource Manager）.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "开发日程/任务/元素组装（Unit Assembly）.md"
+                "file": "开发日程/汇报/资源管理工具（Resource Manager）.md"
               }
             }
           },
@@ -160,15 +160,24 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "8be9ffb74a28cce3",
+  "active": "5c76f3adffc885bd",
   "lastOpenFiles": [
+    "开发日程/工具说明/资源管理工具（Resource Manager）.md",
+    "开发日程/工具说明/images/rig-resource-reference-tool.png",
+    "开发日程/汇报/资源管理工具（Resource Manager）.md",
+    "开发日程/汇报/images/skin-proxy.png",
+    "开发日程/汇报/images/rig.png",
+    "开发日程/汇报/images/dynamic-gpu.png",
+    "开发日程/汇报/images/process-task-button-completed.png",
+    "开发日程/汇报/images/process-task-button-waiting.png",
+    "开发日程/汇报/images/resource-manager-rig-extend.png",
+    "开发日程/汇报/images/resource-manager.png",
+    "开发日程/任务/元素组装（Unit Assembly）.md",
     "开发日程/任务/简模代理（Skin Proxy）.md",
     "开发日程/任务/规划和搭建流程框架.md",
-    "开发日程/汇报/资源管理工具（Resource Manager）.md",
     "常见问题/文件路径.md",
     "常见问题/maya/batch.md",
     "常见问题/命令行/windows.md",
-    "开发日程/工具说明/资源管理工具（Resource Manager）.md",
     "技术文档/组件与模块/依赖关系.canvas",
     "技术文档/组件与模块/环境变量.md",
     "技术文档/总览.canvas",
@@ -178,21 +187,12 @@
     "技术文档/组件与模块/存储结构（Storage Hierarchy）.md",
     "技术文档/流程规划.md",
     "2024-05-11.md",
-    "开发日程/工具说明/images/rig-resource-reference-tool.png",
     "开发日程/工具说明/images/rig-resource-filter-view.png",
     "开发日程/工具说明/images/rig-resource-filter-button.png",
-    "开发日程/工具说明/images/rig-resource-dynamic-gpu.png",
-    "开发日程/工具说明/images/rig-resource.png",
-    "开发日程/工具说明/images/rig-resource-skin-proxy.png",
-    "开发日程/汇报/images/process-task-button-completed.png",
-    "开发日程/汇报/images/dynamic-gpu.png",
     "开发日程/汇报",
     "随记/Maya性能优化.md",
     "随记/标签分类.md",
     "随记/插件和工具为什么不推荐安装在本地.md",
-    "开发日程/任务/元素组装（Unit Assembly）.md",
-    "开发日程/汇报/images/resource-manager-rig-extend.png",
-    "开发日程/任务/images/process-task-button-running.png",
     "开发日程/任务/动态GPU（Dynamic GPU）.md",
     "开发日程/汇报/images",
     "开发日程/工具说明/images/resource-manager/rig",
@@ -206,7 +206,6 @@
     "开发日程/日程.md",
     "技术文档/REZ.md",
     "2024-04-13.md",
-    "2024-04-14.md",
     "常见问题/maya",
     "随记.7z",
     "技术文档.7z",

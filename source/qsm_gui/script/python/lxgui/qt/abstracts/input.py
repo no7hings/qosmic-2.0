@@ -328,6 +328,8 @@ class AbsQtInputCompletionExtraDef(object):
 class AbsQtInputHistoryExtraDef(object):
     QT_HISTORY_POPUP_CLS = None
 
+    user_history_pull_accepted = qt_signal(str)
+
     def _get_entry_widget_(self):
         raise NotImplementedError()
 

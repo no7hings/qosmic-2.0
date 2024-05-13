@@ -19,6 +19,9 @@ class PrxInputForRig(prx_abstracts.AbsPrxWidget):
 
     HISTORY_KEY = 'gui.input-entity-path-asset'
 
+    ROLE_MASK = ['chr', 'prp']
+    ROLE_MASK_NEW = ['CHA', 'PROP']
+
     def __init__(self, *args, **kwargs):
         super(PrxInputForRig, self).__init__(*args, **kwargs)
 
@@ -45,11 +48,8 @@ class PrxInputForRig(prx_abstracts.AbsPrxWidget):
 
         self._qt_path_input._set_history_key_(self.HISTORY_KEY)
         self._qt_path_input._pull_history_latest_()
+        self._qt_path_input.user_history_pull_accepted.connect(self._pull_history_fnc)
 
-        # self._qt_path_input.input_value_change_accepted.connect(self._update_fnc)
-        # self._qt_path_input.user_input_entry_finished.connect(self._update_fnc_1)
-
-        # self._qt_path_input._run_fnc_use_thread_(self._cache_entities)
         self._cache_entities()
 
     def _cache_projects(self):
@@ -77,9 +77,9 @@ class PrxInputForRig(prx_abstracts.AbsPrxWidget):
         project = self._scan_root.get_entity(path_opt.to_string())
         if project is not None:
             if qsm_gnl_core.QSM_SCHEME == 'new':
-                role_mask = ['CHA', 'PROP']
+                role_mask = self.ROLE_MASK_NEW
             else:
-                role_mask = ['chr', 'prp']
+                role_mask = self.ROLE_MASK
 
             assets = project.find_assets(dict(role=role_mask))
             for i_asset in assets:
@@ -93,6 +93,11 @@ class PrxInputForRig(prx_abstracts.AbsPrxWidget):
             name_texts=name_texts,
             tag_filter_dict=tag_filter_dict,
             keyword_filter_dict=keyword_filter_dict
+        )
+
+    def _pull_history_fnc(self, path):
+        self._buffer_fnc(
+            bsc_core.PthNodeOpt(path)
         )
 
     def _buffer_fnc(self, path_opt):
@@ -120,9 +125,9 @@ class PrxInputForRig(prx_abstracts.AbsPrxWidget):
                 _projects = self._scan_root.projects
             elif i_d == 2:
                 if qsm_gnl_core.QSM_SCHEME == 'new':
-                    role_mask = ['CHA', 'PROP']
+                    role_mask = self.ROLE_MASK_NEW
                 else:
-                    role_mask = ['chr', 'prp']
+                    role_mask = self.ROLE_MASK
 
                 project = self._scan_root.get_entity(i.get_path())
                 _assets = project.find_assets(dict(role=role_mask))
@@ -148,8 +153,11 @@ class PrxInputForRig(prx_abstracts.AbsPrxWidget):
         return self._qt_path_input._get_value_()
 
 
-class PrxInputForAssembly(PrxInputForRig):
+class PrxInputForScenery(PrxInputForRig):
     HISTORY_KEY = 'gui.input-entity-path-assembly'
 
+    ROLE_MASK = ['scn']
+    ROLE_MASK_NEW = ['SCE']
+
     def __init__(self, *args, **kwargs):
-        super(PrxInputForAssembly, self).__init__(*args, **kwargs)
+        super(PrxInputForScenery, self).__init__(*args, **kwargs)

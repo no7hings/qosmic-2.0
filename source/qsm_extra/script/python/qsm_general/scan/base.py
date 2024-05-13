@@ -79,6 +79,7 @@ class EntityTasks(object):
 
 class ResultPatterns(object):
     RigFile = '{root}/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
+    ModelFIle = '{root}/{project}/Assets/{role}/{asset}/Maya/Final/{asset}.ma'
 
 
 class NodeStack(object):
@@ -169,6 +170,8 @@ class AbsEntity(object):
 
     def get_next_entities(self, entity_type, variants_extend=None):
         _ = self._generate_next_entity_query(entity_type, variants_extend)
+        if variants_extend is not None:
+            return _.find_all(variants_extend)
         return _.get_all()
 
     def get_next_entity(self, name, entity_type):
@@ -250,6 +253,20 @@ class AbsEntitiesCache(object):
 
     def get_all(self):
         return self._cache_dict.values()
+
+    def find_all(self, variants_extend):
+        list_ = []
+        _ = self.get_all()
+        for i in _:
+            i_enables = []
+            for j_k, j_v in variants_extend.items():
+                if i.properties.get(j_k) in j_v:
+                    i_enables.append(True)
+                else:
+                    i_enables.append(False)
+            if sum(i_enables) == len(i_enables):
+                list_.append(i)
+        return list_
 
     def get(self, name):
         path = self.to_entity_path(name)

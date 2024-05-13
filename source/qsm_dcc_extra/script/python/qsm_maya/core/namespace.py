@@ -43,10 +43,14 @@ class Namespace(object):
 
     # include instanced
     @classmethod
-    def get_all_nodes(cls, namespace):
+    def get_all_dag_nodes(cls, namespace):
         list_ = []
         _ = cmds.namespaceInfo(namespace, listOnlyDependencyNodes=1, dagPath=1) or []
-        for i_path in _:
+        for i_name in _:
+            i_path = cmds.ls(i_name, long=1)[0]
+            if not i_path.startswith('|'):
+                continue
+
             i_parents = cmds.listRelatives(i_path, fullPath=1, allParents=1) or []
             if len(i_parents) > 1:
                 i_name = i_path.split('|')[-1]
@@ -59,8 +63,8 @@ class Namespace(object):
 
     # include instanced
     @classmethod
-    def find_all_nodes(cls, namespace, type_includes):
-        _ = cls.get_all_nodes(namespace)
+    def find_all_dag_nodes(cls, namespace, type_includes):
+        _ = cls.get_all_dag_nodes(namespace)
         return [x for x in _ if cmds.nodeType(x) in type_includes]
 
 

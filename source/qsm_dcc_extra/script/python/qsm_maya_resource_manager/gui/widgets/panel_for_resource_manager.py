@@ -2,13 +2,17 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+import lxbasic.resource as bsc_resource
+
 import lxgui.core as gui_core
 
 import lxgui.proxy.widgets as prx_widgets
 
 from . import unit_for_rig_resource as _unit_for_rig_resource
 
-from . import unit_for_scenery_resource as _unit_for_assembly_resource
+from . import unit_for_scenery_resource as _unit_for_scenery_resource
+
+from . import unit_for_assembly_resource as _unit_for_assembly_resource
 
 
 class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
@@ -36,10 +40,10 @@ class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
             self, self._session
         )
         rig_prx_sca.add_widget(self._rig_prx_unit)
-        # assembly
-        assembly_prx_sca = prx_widgets.PrxVScrollArea()
+        # scenery
+        scenery_prx_sca = prx_widgets.PrxVScrollArea()
         self._tab_view.add_widget(
-            assembly_prx_sca,
+            scenery_prx_sca,
             key='scenery',
             name=gui_core.GuiUtil.choice_name(
                 self._language, self._session.configure.get('build.tabs.scenery')
@@ -49,16 +53,54 @@ class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
             )
         )
 
-        # self._assembly_prx_unit = _unit_for_assembly_resource.PrxUnitForSceneryResource(
-        #     self, self._session
-        # )
-        # assembly_prx_sca.add_widget(self._assembly_prx_unit)
+        self._scenery_prx_unit = _unit_for_scenery_resource.PrxUnitForSceneryResource(
+            self, self._session
+        )
+        scenery_prx_sca.add_widget(self._scenery_prx_unit)
+
+        self.connect_refresh_action_for(
+            self.do_gui_refresh_all
+        )
+        # assembly
+        assembly_prx_sca = prx_widgets.PrxVScrollArea()
+        self._tab_view.add_widget(
+            assembly_prx_sca,
+            key='assembly',
+            name=gui_core.GuiUtil.choice_name(
+                self._language, self._session.configure.get('build.tabs.assembly')
+            ),
+            tool_tip=gui_core.GuiUtil.choice_tool_tip(
+                self._language, self._session.configure.get('build.tabs.assembly')
+            )
+        )
+
+        self._assembly_prx_unit = _unit_for_assembly_resource.PrxUnitForAssemblyResource(
+            self, self._session
+        )
+        assembly_prx_sca.add_widget(self._assembly_prx_unit)
 
         self.connect_refresh_action_for(
             self.do_gui_refresh_all
         )
 
+        self._tab_view.set_current_changed_connect_to(
+            self.do_gui_refresh_all
+        )
+        self._tab_view.set_current_by_key('scenery')
+
     def do_gui_refresh_all(self):
         key = self._tab_view.get_current_key()
         if key == 'rig':
-            self._rig_prx_unit.do_gui_refresh_all()
+            self._rig_prx_unit.do_gui_refresh_all_auto()
+        elif key == 'scenery':
+            self._scenery_prx_unit.do_gui_refresh_all_auto()
+        elif key == 'assembly':
+            self._scenery_prx_unit.do_gui_refresh_all_auto()
+
+    def show_help(self):
+        import os
+        os.startfile(
+            bsc_resource.ExtendResource.get(
+                'docs/resource-manager.pdf'
+            )
+        )

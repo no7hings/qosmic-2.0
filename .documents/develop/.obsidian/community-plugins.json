@@ -6,5 +6,6 @@
   "dataview",
   "markdown-attributes",
   "better-export-pdf",
-  "canvas2document"
+  "canvas2document",
+  "floating-toc"
 ]

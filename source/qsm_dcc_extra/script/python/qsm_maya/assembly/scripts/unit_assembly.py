@@ -648,7 +648,7 @@ class DynamicCameraMask(object):
 
         self._node_cache = {}
 
-        all_shapes = _mya_core.Namespace.find_all_nodes(namespace, type_includes=['mesh', 'gpuCache'])
+        all_shapes = _mya_core.Namespace.find_all_dag_nodes(namespace, type_includes=['mesh', 'gpuCache'])
         self.nodes_pre_prc(all_shapes, namespace)
 
         nodes = []
@@ -770,7 +770,7 @@ class CameraMask(object):
         mask_nodes = set()
         start_frame, end_frame = _mya_core.Frame.auto_range(self._frame)
         frames = range(start_frame, end_frame+1)
-        all_nodes = _mya_core.Namespace.find_all_nodes(namespace, type_includes=['mesh', 'gpuCache'])
+        all_nodes = _mya_core.Namespace.find_all_dag_nodes(namespace, type_includes=['mesh', 'gpuCache'])
 
         for i_frame in frames:
             i_nodes = self.find_nodes_at_frame(i_frame)

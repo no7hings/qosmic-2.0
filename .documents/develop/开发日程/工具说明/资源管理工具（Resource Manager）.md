@@ -11,9 +11,8 @@
 
 ![[rig-resource-tool-bar.png]]
 #### 筛选工具（Filter Tool）
-> 点击筛选按钮会弹出筛选视图。当文件中绑定资源过多的时候，筛选工具可以帮助快速筛选资源，勾选控件前面的复选框可筛选出符合条件的资源。
+> 点击筛选按钮![[rig-resource-filter-button.png]]会弹出筛选视图。当文件中绑定资源过多的时候，筛选工具可以帮助快速筛选资源，勾选控件前面的复选框可筛选出符合条件的资源。
 
-![[rig-resource-filter-button.png]]
 ![[rig-resource-filter-view.png]]
 #### 引用工具（Reference Tool）
 > 主要用于快速引用绑定资源，输入关键词会自动补全，如果输入资源有绑定文件，引用按钮会自动亮起。点击引用加入需要的绑定，支持一次导入多个绑定。
@@ -21,16 +20,19 @@
 ![[rig-resource-reference-tool.png]]
 ### 资源视图（Resource View）
 > 用于显示当前文件中可用的绑定资源，可与Maya的视窗交互（在maya中选中任意绑定的任意部件，资源视图中的对应绑定资源变回高亮，反之亦然），下方的选择方案可设置选择的模式；
-> 集成了maya的单独显示的部分功能，可快速单独显示/加选/减选某个绑定资源；
-> 集成了maya的引用编辑器的部分工具，可快速移除/复制/加载/卸载绑定资源。
 
 ![[rig-resource-view.png]]
 ![[rig-resource-view-scheme.png]]
+#### 单独显示工具（Isolate Tool）
+>maya的单独显示，单独显示/加选/减选某个绑定资源；
+
+#### 引用编辑工具（Reference Edit Tool）
+>maya的引用编辑，移除/复制/加载/卸载绑定资源。
 ### 工具箱（Tool Kit）
 >工具箱目前有两个页面：通用和扩展，后续会根据需求增加别的页面
 >所有的按钮和输入框都有鼠标提示（如没有，后续会陆续补充）
 
-#### 通用工具集(Utility Tools)
+#### 通用工具集（Utility Tools）
 > 目前主要包含简模代理和动态GPU两个功能
 
 ![[rig-resource-utility-tools.png]]
@@ -40,7 +42,7 @@
 >	会根据绑定资源自动生成缓存，如缓存已存在会直接使用缓存，不会重复生成。
 
 ![[rig-resource-skin-proxy.png]]
-#### 动态GPU（Dynamic GPU）
+##### 动态GPU（Dynamic GPU）
 > 点击“加载动态GPU”，可将当前绑定的动画显示为不可交互的GPU：
 > 	此操作与简模代理类似，但是每次都会生成一套新的缓存
 

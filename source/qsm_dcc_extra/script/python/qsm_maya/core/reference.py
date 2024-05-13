@@ -30,7 +30,11 @@ class Reference(object):
 
     @classmethod
     def get_namespace(cls, path):
-        return cmds.referenceQuery(path, namespace=1, shortName=1)
+        # noinspection PyBroadException
+        try:
+            return cmds.referenceQuery(path, namespace=1, shortName=1)
+        except Exception:
+            return None
 
     @classmethod
     def get_is_from_reference(cls, path):
@@ -93,6 +97,9 @@ class ReferenceOpt(_base.AbsNodeOpt):
         _ = cmds.ls('|{}:*'.format(self.get_namespace()), long=1)
         if _:
             return _[0]
+
+    def get_roots(self):
+        return cmds.ls('|{}:*'.format(self.get_namespace()), long=1) or []
 
     def get_namespace(self):
         return Reference.get_namespace(self._path)

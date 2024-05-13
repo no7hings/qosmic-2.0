@@ -31,7 +31,6 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
             self._gui_scroll.set_w_or_h(w)
             self._gui_scroll.set_abs_w_or_h(abs_w)
             self._gui_scroll.update()
-
             if self._gui_scroll.get_is_valid():
                 value_scroll = self._gui_scroll.get_value()
 
@@ -74,10 +73,11 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
                 self._scroll_button_frame.hide()
                 self._scroll_previous_button.hide()
                 self._scroll_next_button.hide()
-
                 self._viewport.setGeometry(
                     x, y, abs_w, h
                 )
+                # self._layout.update()
+
         elif self.QT_ORIENTATION == QtCore.Qt.Vertical:
             v_h = self._viewport.layout().minimumSize().height()
             abs_h = max(h, v_h)

@@ -49,6 +49,7 @@ class QtInputAsPath(
 
     def _pull_history_(self, value):
         self._set_value_(value)
+        self.user_history_pull_accepted.emit(value)
 
     def _refresh_history_extend_(self):
         self._history_button.show()
