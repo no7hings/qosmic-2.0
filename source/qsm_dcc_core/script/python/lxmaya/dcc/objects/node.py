@@ -86,7 +86,7 @@ class Reference(mya_abstracts.AbsMyaNodeForFileReference):
     def __init__(self, path):
         super(Reference, self).__init__(self._to_full_path(path))
 
-    def get_is_loaded(self):
+    def is_loaded(self):
         # noinspection PyBroadException
         try:
             return cmds.referenceQuery(self.name, isLoaded=1)

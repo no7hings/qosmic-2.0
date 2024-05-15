@@ -1192,7 +1192,7 @@ class PrxInputAsPressButton(_AbsPrxInput):
         exec script
 
     def set(self, raw=None, **kwargs):
-        if isinstance(raw, (types.MethodType, types.FunctionType)):
+        if isinstance(raw, (types.MethodType, types.FunctionType, functools.partial, types.LambdaType)):
             self._qt_input_widget.press_clicked.connect(
                 functools.partial(self.__exec_fnc, raw)
             )

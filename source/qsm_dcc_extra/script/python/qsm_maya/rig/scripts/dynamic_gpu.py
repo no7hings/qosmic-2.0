@@ -11,6 +11,74 @@ from ...rig import core as _rig_core
 
 import qsm_maya.asset.core as qsm_mya_ast_core
 
+from ...resource import core as _rsc_core
+
+
+class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
+    CACHE_NAME = _rig_core.RigConfigure.DynamicGpuCacheName
+
+    CACHE_ROOT = '|__DYNAMIC_GPU__'
+
+    def __init__(self, *args, **kwargs):
+        super(DynamicGpuCacheOpt, self).__init__(*args, **kwargs)
+
+        self._root = self._resource.get_root()
+
+    def export_source(self, file_path):
+        if self._root is not None:
+            bsc_core.StgBaseMtd.create_directory(
+                os.path.dirname(file_path)
+            )
+            _mya_core.SceneFile.export_file(
+                file_path, self._root
+            )
+
+    def load_cache(self, cache_file_path):
+        self.create_cache_root_auto()
+
+        cache_location_new = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
+        cache_location = '|{}:{}'.format(self._namespace, self.CACHE_NAME)
+        if cmds.objExists(cache_location) is False and cmds.objExists(cache_location_new) is False:
+            if os.path.isfile(cache_file_path) is True:
+                _mya_core.SceneFile.import_file(
+                    cache_file_path, namespace=self._namespace
+                )
+                cmds.setAttr(
+                    '{}.qsm_cache'.format(cache_location), cache_location, type='string'
+                )
+                cmds.parent(cache_location, self.CACHE_ROOT)
+
+                self.hide_resource_auto()
+
+    def hide_resource_auto(self):
+        cache_location = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
+
+        layer_name = '{}_dynamic_gpu_hide'.format(self._namespace)
+        layer_path = cmds.createDisplayLayer(name=layer_name, number=1, empty=True)
+        cmds.editDisplayLayerMembers(layer_path, self._root)
+        cmds.setAttr(layer_path+'.visibility', False)
+
+        cmds.container(cache_location, edit=1, force=1, addNode=[layer_path])
+
+        skin_proxy_cache_locations = cmds.ls(
+            '{}:{}'.format(self._namespace, _rig_core.RigConfigure.SkinProxyCacheName), long=1
+        )
+        if skin_proxy_cache_locations:
+            cmds.editDisplayLayerMembers(layer_path, *skin_proxy_cache_locations)
+
+    def generate_args(self, directory_path, start_frame, end_frame):
+        file_path = '{}/source.ma'.format(directory_path)
+        cache_file_path = '{}/gpu.ma'.format(directory_path)
+        cmd = qsm_mya_ast_core.MayaCacheProcess.generate_command(
+            'method=dynamic-gpu-cache-generate&file={}&cache_file={}&namespace={}&start_frame={}&end_frame={}'.format(
+                file_path,
+                cache_file_path,
+                self._namespace,
+                start_frame, end_frame
+            )
+        )
+        return cmd, file_path, cache_file_path
+
 
 class DynamicGpuCacheGenerate(object):
     CACHE_ROOT = '|__DYNAMIC_GPU__'
@@ -168,9 +236,9 @@ class DynamicGpuCacheGenerate(object):
     def __init__(self, namespace):
         self._namespace = namespace
         self._reference_namespace_query = _mya_core.ReferenceNamespacesCache()
-        self._rig = _rig_core.AdvRigOpt(self._namespace)
-        self._root = self._rig.get_root()
-        self._geometry_location = self._rig.get_geometry_location()
+        self._resource = _rig_core.AdvRig(self._namespace)
+        self._root = self._resource.get_root()
+        self._geometry_location = self._resource.get_geometry_location()
 
     def get_geometry_location(self):
         return self._geometry_location
@@ -204,63 +272,6 @@ class DynamicGpuCacheGenerate(object):
         _mya_core.SceneFile.export_file(
             cache_file_path, cache_path
         )
-
-    def load_cache(self, cache_file_path):
-        self.create_cache_root_auto()
-
-        namespace = self._namespace
-        cache_location_new = '{}|{}:{}'.format(self.CACHE_ROOT, namespace, self.CACHE_NAME)
-        cache_location = '|{}:{}'.format(namespace, self.CACHE_NAME)
-        if cmds.objExists(cache_location) is False and cmds.objExists(cache_location_new) is False:
-            if os.path.isfile(cache_file_path) is True:
-                self._import_file(
-                    cache_file_path, namespace=namespace
-                )
-                cmds.setAttr(
-                    '{}.qsm_cache'.format(cache_location), cache_location, type='string'
-                )
-                self.auto_hide(cache_location)
-                
-                cmds.parent(cache_location, self.CACHE_ROOT)
-
-    def auto_hide(self, cache_location):
-        layer_name = '{}_dynamic_gpu_hide'.format(self._namespace)
-        layer_path = cmds.createDisplayLayer(name=layer_name, number=1, empty=True)
-        cmds.editDisplayLayerMembers(layer_path, self._root)
-        cmds.setAttr(layer_path + '.visibility', False)
-
-        cmds.container(cache_location, edit=1, force=1, addNode=[layer_path])
-
-        skin_proxy_cache_locations = cmds.ls(
-            '{}:{}'.format(self._namespace, _rig_core.RigConfigure.SkinProxyCacheName), long=1
-        )
-        if skin_proxy_cache_locations:
-            cmds.editDisplayLayerMembers(layer_path, *skin_proxy_cache_locations)
-
-    def do_remove(self):
-        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME), long=1)
-        if _:
-            cmds.delete(_[0])
-
-    def is_exists(self):
-        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME), long=1)
-        return not not _
-
-    def is_rig_exists(self):
-        return self._rig.is_exists()
-
-    def generate_args(self, directory_path, start_frame, end_frame):
-        file_path = '{}/source.ma'.format(directory_path)
-        cache_file_path = '{}/gpu.ma'.format(directory_path)
-        cmd = qsm_mya_ast_core.MayaCacheProcess.generate_command(
-            'method=dynamic-gpu-cache-generate&file={}&cache_file={}&namespace={}&start_frame={}&end_frame={}'.format(
-                file_path,
-                cache_file_path,
-                self._namespace,
-                start_frame, end_frame
-            )
-        )
-        return cmd, file_path, cache_file_path, start_frame, end_frame
 
     def test(self):
         pass

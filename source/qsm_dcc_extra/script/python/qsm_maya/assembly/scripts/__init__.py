@@ -3,8 +3,6 @@ from .locator_box import *
 
 from .mesh_box import *
 
-from .unit_assembly import *
-
 from .grid_space import *
 
 

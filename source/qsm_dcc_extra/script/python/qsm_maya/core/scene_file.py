@@ -44,17 +44,51 @@ class SceneFile(object):
 
     @classmethod
     def import_file(cls, file_path, namespace=':'):
-        if os.path.isfile(file_path) is True:
-            return cmds.file(
-                file_path,
-                i=True,
-                options='v=0;',
-                type=cls.get_file_type(file_path),
-                ra=True,
-                mergeNamespacesOnClash=True,
-                returnNewNodes=True,
-                namespace=namespace,
-            )
+        """
+    Set/query the currently set file options. file options are used while saving a maya file. Two file option flags supported in current file command are v and p.
+    v(verbose) indicates whether long or short attribute names and command flags names are used when saving the file. Used by both maya ascii and maya binary file formats.
+    It only can be 0 or 1.
+    Setting v=1 indicates that long attribute names and command flag names will be used. By default, or by setting v=0, short attribute names will be used.
+    p(precision) defines the maya file IO's precision when saving the file. Only used by maya ascii file format.
+    It is an integer value. The default value is 17.
+    The option format is "flag1=XXX;flag2=XXX".Maya uses the last v and p as the final result.
+    Note:
+    1. Use a semicolon(";") to separate several flags. 2. No blank space(" ") in option string.
+        """
+        if os.path.isfile(file_path) is False:
+            raise RuntimeError()
+
+        return cmds.file(
+            file_path,
+            i=1,
+            options='v=0;',
+            type=cls.get_file_type(file_path),
+            ra=1,
+            mergeNamespacesOnClash=1,
+            returnNewNodes=1,
+            namespace=namespace,
+        )
+
+    @classmethod
+    def import_container_file(cls, file_path, namespace=':'):
+        """
+file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash false -namespace "gpu" -options "v=1;"  -pr  -importFrameRate true  -importTimeRange "override" "Z:/caches/temporary/.asset-cache/unit-assembly/10E/B0768C98-5DF4-3D31-AA9D-AAE3BF84651E/gpu.ma";
+        """
+        if os.path.isfile(file_path) is False:
+            raise RuntimeError()
+
+        return cmds.file(
+            file_path,
+            i=1,
+            type=cls.get_file_type(file_path),
+            ignoreVersion=1,
+            ra=1,
+            mergeNamespacesOnClash=1,
+            namespace=namespace,
+            # todo: why v=1???, pr=1?
+            options='v=1;',
+            pr=1,
+        )
     
     @classmethod
     def export_file(cls, file_path, location=None):

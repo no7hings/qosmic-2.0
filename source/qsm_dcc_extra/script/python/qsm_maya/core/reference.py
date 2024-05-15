@@ -14,7 +14,7 @@ from . import namespace as _namespace
 
 class Reference(object):
     @classmethod
-    def get_is_loaded(cls, path):
+    def is_loaded(cls, path):
         # noinspection PyBroadException
         try:
             return cmds.referenceQuery(path, isLoaded=1)
@@ -73,7 +73,7 @@ class References(object):
         _ = [i for i in cmds.ls(type='reference', long=1) or [] if i not in cls.NODE_EXCLUDE]
         for i in _:
             if not Reference.get_is_from_reference(i):
-                if Reference.get_is_loaded(i):
+                if Reference.is_loaded(i):
                     list_.append(i)
         return list_
 
@@ -108,7 +108,7 @@ class ReferenceOpt(_base.AbsNodeOpt):
         return Reference.get_file(self._path)
 
     def is_loaded(self):
-        return Reference.get_is_loaded(self._path)
+        return Reference.is_loaded(self._path)
 
     def do_remove(self):
         Reference.remove(self._path)
@@ -156,7 +156,7 @@ class ReferenceNamespacesCache(object):
     def to_valid_namespaces(self, namespaces):
         list_ = []
         for i_namespace in namespaces:
-            if _namespace.Namespace.get_is_exists(i_namespace):
+            if _namespace.Namespace.is_exists(i_namespace):
                 i_file_path = self.get_file(i_namespace)
                 if i_file_path:
                     list_.append(i_namespace)

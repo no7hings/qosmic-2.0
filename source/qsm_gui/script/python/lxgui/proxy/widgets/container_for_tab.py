@@ -13,11 +13,11 @@ from ...qt.widgets import scroll as gui_qt_wgt_scroll
 from .. import abstracts as gui_prx_abstracts
 
 
-class PrxHTabGroup(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_container_for_tab.QtHTabGroup
+class PrxHToolTabGroup(gui_prx_abstracts.AbsPrxWidget):
+    QT_WIDGET_CLS = gui_qt_wgt_container_for_tab.QtHTabToolGroup
 
     def __init__(self, *args, **kwargs):
-        super(PrxHTabGroup, self).__init__(*args, **kwargs)
+        super(PrxHToolTabGroup, self).__init__(*args, **kwargs)
 
     def add_widget(self, widget, *args, **kwargs):
         if isinstance(widget, gui_qt_core.QtCore.QObject):
@@ -26,3 +26,12 @@ class PrxHTabGroup(gui_prx_abstracts.AbsPrxWidget):
             qt_widget = widget.widget
         #
         self._qt_widget._add_widget_(qt_widget, *args, **kwargs)
+
+    def get_current_name(self):
+        return self._qt_widget._get_current_name_text_()
+
+    def get_current_key(self):
+        return self._qt_widget._get_current_key_text_()
+
+    def connect_current_changed_to(self, fnc):
+        self._qt_widget.current_changed.connect(fnc)

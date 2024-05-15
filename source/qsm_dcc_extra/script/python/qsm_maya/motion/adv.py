@@ -28,6 +28,11 @@ class AdvMotionOpt(object):
         if _:
             return _[0]
 
+    def find_controls(self):
+        _ = self.find_control_set()
+        if _:
+            return cmds.sets(_, query=1) or []
+
     def find_control(self, control_key):
         _ = cmds.ls('{}:{}'.format(self._namespace, control_key), long=1)
         if _:

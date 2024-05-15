@@ -1,4 +1,5 @@
 # coding:utf-8
+import math
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
@@ -60,6 +61,12 @@ class Transform(object):
     def get_world_center(cls, path):
         _x, _y, _z, x, y, z = cmds.xform(path, boundingBox=1, worldSpace=1, query=1)
         return (_x+x)/2, (_y+y)/2, (_z+z)/2
+
+    @classmethod
+    def compute_distance(cls, p_0, p_1):
+        x, y, z = p_0
+        x_dst, y_dst, z_dst = p_1
+        return math.sqrt((x-x_dst)**2+(y-y_dst)**2+(z-z_dst)**2)
 
 
 class TransformOpt(object):

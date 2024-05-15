@@ -19,7 +19,7 @@ class Namespace(object):
         return path.split('|')[-1].split(':')[0]
 
     @classmethod
-    def get_is_exists(cls, namespace):
+    def is_exists(cls, namespace):
         return cmds.namespace(exists=namespace)
 
     @classmethod
@@ -27,6 +27,10 @@ class Namespace(object):
         _ = cmds.ls('|{}:*'.format(namespace, long=1))
         if _:
             return _[0]
+
+    @classmethod
+    def find_roots(cls, namespace):
+        return cmds.ls('|{}:*'.format(namespace, long=1)) or []
 
     @classmethod
     def rename(cls, namespace, new_namespace):
@@ -64,8 +68,7 @@ class Namespace(object):
     # include instanced
     @classmethod
     def find_all_dag_nodes(cls, namespace, type_includes):
-        _ = cls.get_all_dag_nodes(namespace)
-        return [x for x in _ if cmds.nodeType(x) in type_includes]
+        return [x for x in cls.get_all_dag_nodes(namespace) if cmds.nodeType(x) in type_includes]
 
 
 class Namespaces(object):

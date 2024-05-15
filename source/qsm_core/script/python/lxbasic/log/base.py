@@ -440,15 +440,15 @@ class LogProcessContext(object):
     # noinspection PyUnusedLocal
     def __update_trace(self, *args, **kwargs):
         self.__value += 1
-        cur_timestamp = LogBase.get_timestamp()
-        cost_timestamp = cur_timestamp-self._pre_timestamp
-        self._pre_timestamp = cur_timestamp
-        #
         percent = float(self.__value)/float(self.__maximum)
         # trace when value is integer
         p = '%3d'%(int(percent*100))
-        # if self._p != p:
-        #     self._p = p
+        if self._p == p:
+            return
+
+        cur_timestamp = LogBase.get_timestamp()
+        cost_timestamp = cur_timestamp-self._pre_timestamp
+        self._pre_timestamp = cur_timestamp
         if self.__use_as_bar is True:
             Log.trace_method_result(
                 '{}'.format(self.__label),

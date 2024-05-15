@@ -137,7 +137,7 @@ class References(mya_abstracts.AbsMyaNodes):
         """
         dict_ = {}
         for i_obj in self.get_custom_nodes():
-            if i_obj.get_is_loaded() is True:
+            if i_obj.is_loaded() is True:
                 i_obj_paths = i_obj.get_content_obj_paths()
                 if i_obj_paths:
                     i_namespace = i_obj.get_namespace()

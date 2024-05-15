@@ -214,6 +214,7 @@ class AbsQtStatusBaseDef(object):
 
     @classmethod
     def _get_background_rgba_args_by_status_(cls, status):
+        # process
         if status in {cls.Status.Started}:
             return cls._get_rgb_args_(*cls.Rgba.DarkBlue)
         elif status in {cls.Status.Running}:
@@ -226,6 +227,11 @@ class AbsQtStatusBaseDef(object):
             return cls._get_rgb_args_(*cls.Rgba.Red)
         elif status in {cls.Status.Completed}:
             return cls._get_rgb_args_(*cls.Rgba.Green)
+        # validation
+        elif status in {cls.ValidationStatus.Active}:
+            return cls._get_rgb_args_(*cls.Rgba.DarkBlue)
+        elif status in {cls.ValidationStatus.Disable}:
+            return cls._get_rgb_args_(*cls.Rgba.DarkGray)
         return cls._get_rgb_args_(*cls.Rgba.Transparent)
 
     @classmethod
@@ -1468,6 +1474,9 @@ class AbsQtNameBaseDef(object):
         self._name_text_orig = None
         self._name_draw_font = _gui_qt_core.QtFonts.NameNormal
         #
+        self._sub_name_enable = False
+        self._sub_name_text = None
+        #
         self._name_align = self.AlignRegion.Center
         #
         self._name_color = _gui_qt_core.QtFontColors.Basic
@@ -1482,6 +1491,7 @@ class AbsQtNameBaseDef(object):
         self._name_draw_size = 16, 16
         self._name_frame_draw_rect = QtCore.QRect()
         self._name_draw_rect = QtCore.QRect()
+        self._sub_name_draw_rect = QtCore.QRect()
 
         self._tool_tip_text = None
 
@@ -1509,6 +1519,10 @@ class AbsQtNameBaseDef(object):
     def _get_name_text_(self):
         if self._name_enable is True:
             return self._name_text
+
+    def _set_sub_name_text_(self, text):
+        self._sub_name_enable = True
+        self._sub_name_text = text
 
     def _get_name_text_option_(self):
         return self._name_text_option

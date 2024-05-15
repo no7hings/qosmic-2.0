@@ -132,6 +132,9 @@ class PrxInputForRig(prx_abstracts.AbsPrxWidget):
                 project = self._scan_root.get_entity(i.get_path())
                 _assets = project.find_assets(dict(role=role_mask))
 
+    def do_update(self):
+        self._cache_entities()
+
     def add_widget(self, widget):
         if isinstance(widget, gui_qt_core.QtCore.QObject):
             self._qt_layout_0.addWidget(widget)

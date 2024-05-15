@@ -23,8 +23,17 @@ class DagNode(_node.Node):
         return cls.to_path(_)
 
     @classmethod
-    def path_to_name(cls, path):
-        return path.split(cls.PATHSEP)[-1]
+    def create_transform(cls, path):
+        return cls.create(path, 'transform')
+
+    @classmethod
+    def to_name(cls, path_or_name):
+        return path_or_name.split(cls.PATHSEP)[-1]
+    
+    @classmethod
+    def to_namespace(cls, path_or_name):
+        name = cls.to_name(path_or_name)
+        return ':'.join(name.split(':')[:-1])
 
     @classmethod
     def to_path(cls, name):
@@ -92,8 +101,7 @@ class DagNode(_node.Node):
 class DagNodeOpt(_node.NodeOpt):
     def __init__(self, path):
         self._path = DagNode.to_path(path)
-        print self._path
-        self._name = DagNode.path_to_name(self._path)
+        self._name = DagNode.to_name(self._path)
         self._uuid = _node.Node.get_uuid(self._path)
         super(DagNodeOpt, self).__init__(self._name)
 
@@ -129,3 +137,8 @@ class NodeDrawOverride(object):
     @classmethod
     def set_visible(cls, path, boolean):
         cmds.setAttr(path+'.overrideVisibility', boolean)
+
+    @classmethod
+    def set_color(cls, path, rgb):
+        cmds.setAttr(path+'.overrideRGBColors', 1)
+        cmds.setAttr(path+'.overrideColorRGB', *rgb)

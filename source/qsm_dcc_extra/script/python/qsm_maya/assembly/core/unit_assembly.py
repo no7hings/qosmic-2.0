@@ -7,7 +7,7 @@ import lxbasic.core as bsc_core
 from ... import core as _mya_core
 
 
-class UnitAssemblyQuery(object):
+class UnitAssembliesQuery(object):
     class Keys(object):
         GPU = 'GPU'
         GPU_LOD = 'GPU-LOD{}'

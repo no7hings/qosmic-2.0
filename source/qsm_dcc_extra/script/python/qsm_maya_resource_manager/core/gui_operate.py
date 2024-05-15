@@ -48,7 +48,10 @@ class GuiResourceOpt(
     
     RESOURCES_QUERY_CLS = None
 
-    RESOURCE_SCHEME = None
+    TOOL_INCLUDES = [
+        'isolate-select',
+        'reference',
+    ]
 
     def _gui_build_reference_tools(self):
         for i in [
@@ -80,47 +83,6 @@ class GuiResourceOpt(
             i_key, i_icon_name, i_tool_tip, i_fnc = i
             i_tool = prx_widgets.PrxIconPressButton()
             self._prx_reference_tool_box.add_widget(i_tool)
-            i_tool.set_name(i_key)
-            i_tool.set_icon_name(i_icon_name)
-            i_tool.set_tool_tip(i_tool_tip)
-            i_tool.connect_press_clicked_to(i_fnc)
-            self._tool_dict[i_key] = i_tool
-
-    def _gui_build_isolate_select_tools(self):
-        for i in [
-            (
-                'isolate-select-resource',
-                'tool/isolate-select',
-                '"LMB-click" to turn "on" or "off" isolate select mode',
-                self.do_dcc_isolate_select_resources
-            )
-        ]:
-            i_key, i_icon_name, i_tool_tip, i_fnc = i
-            i_tool = prx_widgets.PrxToggleButton()
-            self._prx_isolate_select_tool_box.add_widget(i_tool)
-            i_tool.set_name(i_key)
-            i_tool.set_icon_name(i_icon_name)
-            i_tool.set_tool_tip(i_tool_tip)
-            i_tool.connect_check_toggled_to(i_fnc)
-            self._tool_dict[i_key] = i_tool
-
-        for i in [
-            (
-                'isolate-select-add-resource',
-                'tool/isolate-select-add',
-                '"LMB-click" to add rigs to isolate select',
-                self.do_dcc_isolate_select_add_resources
-            ),
-            (
-                'isolate-select-remove-resource',
-                'tool/isolate-select-remove',
-                '"LMB-click" to remove rigs to isolate select',
-                self.do_dcc_isolate_select_remove_resources
-            )
-        ]:
-            i_key, i_icon_name, i_tool_tip, i_fnc = i
-            i_tool = prx_widgets.PrxIconPressButton()
-            self._prx_isolate_select_tool_box.add_widget(i_tool)
             i_tool.set_name(i_key)
             i_tool.set_icon_name(i_icon_name)
             i_tool.set_tool_tip(i_tool_tip)
@@ -163,7 +125,7 @@ class GuiResourceOpt(
             i_reference_opt = i_resource.reference_opt
             i_reference_opt.do_reload()
 
-        self._unit.do_gui_refresh_all()
+        self._unit.do_gui_refresh_all(force=True)
 
     def do_dcc_unload_resources(self):
         _ = self._prx_tree_view.get_selected_items()
@@ -172,9 +134,50 @@ class GuiResourceOpt(
             i_reference_opt = i_resource.reference_opt
             i_reference_opt.do_unload()
 
-        self._unit.do_gui_refresh_all()
+        self._unit.do_gui_refresh_all(force=True)
 
     # isolate select
+    def _gui_build_isolate_select_tools(self):
+        for i in [
+            (
+                'isolate-select-resource',
+                'tool/isolate-select',
+                '"LMB-click" to turn "on" or "off" isolate select mode',
+                self.do_dcc_isolate_select_resources
+            )
+        ]:
+            i_key, i_icon_name, i_tool_tip, i_fnc = i
+            i_tool = prx_widgets.PrxToggleButton()
+            self._prx_isolate_select_tool_box.add_widget(i_tool)
+            i_tool.set_name(i_key)
+            i_tool.set_icon_name(i_icon_name)
+            i_tool.set_tool_tip(i_tool_tip)
+            i_tool.connect_check_toggled_to(i_fnc)
+            self._tool_dict[i_key] = i_tool
+
+        for i in [
+            (
+                'isolate-select-add-resource',
+                'tool/isolate-select-add',
+                '"LMB-click" to add rigs to isolate select',
+                self.do_dcc_isolate_select_add_resources
+            ),
+            (
+                'isolate-select-remove-resource',
+                'tool/isolate-select-remove',
+                '"LMB-click" to remove rigs to isolate select',
+                self.do_dcc_isolate_select_remove_resources
+            )
+        ]:
+            i_key, i_icon_name, i_tool_tip, i_fnc = i
+            i_tool = prx_widgets.PrxIconPressButton()
+            self._prx_isolate_select_tool_box.add_widget(i_tool)
+            i_tool.set_name(i_key)
+            i_tool.set_icon_name(i_icon_name)
+            i_tool.set_tool_tip(i_tool_tip)
+            i_tool.connect_press_clicked_to(i_fnc)
+            self._tool_dict[i_key] = i_tool
+
     def do_dcc_isolate_select_resources(self, boolean):
         panel_current = qsm_mya_core.ViewPanels.get_current_name()
         isolate_select_opt = qsm_mya_core.ViewPanelIsolateSelectOpt(panel_current)
@@ -194,8 +197,8 @@ class GuiResourceOpt(
         for i in _:
             i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
             i_reference_opt = i_resource.reference_opt
-            i_root = i_reference_opt.get_root()
-            isolate_select_opt.add_node(i_root)
+            i_roots = i_reference_opt.get_roots()
+            isolate_select_opt.add_nodes(i_roots)
 
     def do_dcc_isolate_select_remove_resources(self):
         panel_current = qsm_mya_core.ViewPanels.get_current_name()
@@ -204,8 +207,8 @@ class GuiResourceOpt(
         for i in _:
             i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
             i_reference_opt = i_resource.reference_opt
-            i_root = i_reference_opt.get_root()
-            isolate_select_opt.remove_node(i_root)
+            i_roots = i_reference_opt.get_roots()
+            isolate_select_opt.remove_nodes(i_roots)
 
     def do_gui_refresh_tools(self):
         panel_current = qsm_mya_core.ViewPanels.get_current_name()
@@ -231,7 +234,7 @@ class GuiResourceOpt(
             else:
                 cmds.select(clear=1)
 
-    def do_gui_select_resources(self):
+    def do_gui_refresh_by_dcc_selection(self):
         if self._prx_tree_view.has_focus() is False:
             namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
             if namespaces:
@@ -245,8 +248,8 @@ class GuiResourceOpt(
         super(GuiResourceOpt, self).__init__(window, unit, session)
         self._prx_tree_view = prx_tree_view
         self._prx_tree_view.create_header_view(
-            [('name', 2), ('description', 2)],
-            self._window.get_definition_window_size()[0]*(2.0/3.0)-48
+            [('name', 2), ('description', 1)],
+            self._window.get_definition_window_size()[0]-48
         )
         self._prx_tree_view.connect_item_select_changed_to(
             self.do_dcc_select_resources
@@ -254,16 +257,17 @@ class GuiResourceOpt(
         self._prx_tree_view.get_top_tool_bar().set_expanded(True)
 
         self._tool_dict = {}
-        if self.RESOURCE_SCHEME == 'reference':
+        if 'reference' in self.TOOL_INCLUDES:
             self._prx_reference_tool_box = self._prx_tree_view.create_top_tool_box(
                 'reference', insert_args=1
             )
             self._gui_build_reference_tools()
 
-        self._prx_isolate_select_tool_box = self._prx_tree_view.create_top_tool_box(
-            'isolate-select', insert_args=1
-        )
-        self._gui_build_isolate_select_tools()
+        if 'isolate-select' in self.TOOL_INCLUDES:
+            self._prx_isolate_select_tool_box = self._prx_tree_view.create_top_tool_box(
+                'isolate-select', insert_args=1
+            )
+            self._gui_build_isolate_select_tools()
 
         self._item_dict = self._prx_tree_view._item_dict
 
@@ -271,7 +275,6 @@ class GuiResourceOpt(
 
     def restore(self):
         self._prx_tree_view.set_clear()
-        # self._resources_query = qsm_mya_rig_core.AdvRigsQuery()
 
     def gui_is_exists(self, path):
         return self._item_dict.get(path) is not None
@@ -334,12 +337,12 @@ class GuiResourceOpt(
             return True, prx_item
         return False, self.gui_get(path)
 
-    def gui_add_resource(self, rig):
+    def gui_add_resource(self, resource):
         def build_fnc_():
             prx_item.set_name(
                 path_opt.get_name()
             )
-            _reference_node = rig.reference_opt
+            _reference_node = resource.reference_opt
             _semantic_tag_filter_data = {}
             _tag_group_key = '/status'
             if _reference_node.is_loaded():
@@ -365,12 +368,12 @@ class GuiResourceOpt(
 
             prx_item.get_item()._update_item_semantic_tag_filter_keys_tgt_(_semantic_tag_filter_data)
             prx_item.set_tool_tip(
-                '\n'.join(['{}: {}'.format(_k, _v) for _k, _v in rig.variants.items()])
+                '\n'.join(['{}: {}'.format(_k, _v) for _k, _v in resource.variants.items()])
             )
 
-        path = rig.path
+        path = resource.path
         if self.gui_is_exists(path) is False:
-            path_opt = rig.path_opt
+            path_opt = resource.path_opt
             create_kwargs = dict(
                 name='loading ...',
                 filter_key=path,
@@ -388,7 +391,7 @@ class GuiResourceOpt(
 
             # prx_item.set_checked(True)
             self.gui_register(path, prx_item)
-            variants = rig.variants
+            variants = resource.variants
             semantic_tag_filter_data = {}
             for i in self.TAG_KEYS_INCLUDE:
                 if i in variants:
@@ -404,14 +407,14 @@ class GuiResourceOpt(
 
             prx_item.get_item()._update_item_semantic_tag_filter_keys_tgt_(semantic_tag_filter_data)
             prx_item.set_gui_dcc_obj(
-                rig, namespace=self.NAMESPACE
+                resource, namespace=self.NAMESPACE
             )
             prx_item.set_show_build_fnc(build_fnc_)
             return True, prx_item
         return False, self.gui_get(path)
 
-    def gui_add_one(self, rig):
-        ancestors = rig.path_opt.get_ancestors()
+    def gui_add_one(self, resource):
+        ancestors = resource.path_opt.get_ancestors()
         if ancestors:
             ancestors.reverse()
             for i_path_opt in ancestors:
@@ -420,7 +423,7 @@ class GuiResourceOpt(
                     if i_is_create is True:
                         i_prx_item.set_expanded(True)
         #
-        self.gui_add_resource(rig)
+        self.gui_add_resource(resource)
 
     def gui_add_all(self):
         self.gui_add_root()

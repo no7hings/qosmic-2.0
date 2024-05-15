@@ -10,21 +10,54 @@ import lxbasic.core as bsc_core
 from ... import core as _mya_core
 
 
-class ResourceOpt(object):
+class Resource(object):
     def __init__(self, namespace):
-        self.namespace = namespace
-        self.reference = None
-
-    @property
-    def reference_opt(self):
-        return _mya_core.ReferenceOpt(self.reference)
+        self._namespace = namespace
+        self._node = None
+        self._file_path = None
+        self._path = None
+        self._path_opt = None
+        self._variants = None
 
     def __str__(self):
         return '{}(path="{}")'.format(
-            self.__class__.__name__,
-            self.__dict__['path']
+            self.__class__.__name__, self._path
         )
-    
+
+    def __repr__(self):
+        return self.__str__()
+
+    @property
+    def reference(self):
+        return self._node
+
+    @property
+    def reference_opt(self):
+        return _mya_core.ReferenceOpt(self._node)
+
+    @property
+    def file(self):
+        return self._file_path
+
+    @property
+    def namespace(self):
+        return self._namespace
+
+    @property
+    def path(self):
+        return self._path
+
+    @property
+    def path_opt(self):
+        return self._path_opt
+
+    @property
+    def variants(self):
+        return self._variants
+
+    def is_exists(self):
+        return _mya_core.Namespace.is_exists(self._namespace)
+
     def find_nodes_by_scheme(self, scheme):
         raise NotImplementedError()
 
@@ -34,7 +67,7 @@ class ResourcesQuery(object):
 
     DAG_PTN = '/{namespace}'
 
-    RESOURCE_CLS = ResourceOpt
+    RESOURCE_CLS = Resource
 
     def __init__(self):
         self._pth = bsc_core.PtnStgParseOpt(
@@ -46,7 +79,7 @@ class ResourcesQuery(object):
         # self.do_update()
 
     def do_update(self):
-        data = self.get_reference_data()
+        data = self.get_data()
         hash_key = bsc_core.HashMtd.to_hash_key(data)
         if self._cache_hash_key is None:
             self.do_update_by(data)
@@ -60,27 +93,29 @@ class ResourcesQuery(object):
         return False
 
     def do_update_by(self, data):
-        self._cache_dict = collections.OrderedDict()
-        for i_namespace, (i_reference, i_file_path, i_variants) in data.items():
-            i_resource_opt = self.RESOURCE_CLS(i_namespace)
-            i_resource_opt.reference = i_reference
+        self._cache_dict.clear()
+        for i_namespace, (i_node_path, i_is_loaded, i_file_path, i_variants) in data.items():
+            i_resource = self.RESOURCE_CLS(i_namespace)
+            i_resource._node = i_node_path
+            i_resource._file_path = i_file_path
             i_kwargs = copy.copy(i_variants)
             i_kwargs['namespace'] = i_namespace
             i_path_virtual = self.DAG_PTN.format(**i_kwargs)
-            i_resource_opt.path = i_path_virtual
-            i_resource_opt.path_opt = bsc_core.PthNodeOpt(i_path_virtual)
-            i_resource_opt.variants = i_variants
-            self._cache_dict[i_namespace] = i_resource_opt
+            i_resource._path = i_path_virtual
+            i_resource._path_opt = bsc_core.PthNodeOpt(i_path_virtual)
+            i_resource._variants = i_variants
+            self._cache_dict[i_namespace] = i_resource
 
-    def get_reference_data(self):
+    def get_data(self):
         dict_ = {}
         _ = _mya_core.References.get_all()
         for i_path in _:
             i_file_path = _mya_core.Reference.get_file(i_path)
             if self._pth.get_is_matched(i_file_path) is True:
-                i_namespace = cmds.referenceQuery(i_path, namespace=1, shortName=1)
+                i_namespace = _mya_core.Reference.get_namespace(i_path)
+                i_is_loaded = _mya_core.Reference.is_loaded(i_path)
                 i_variants = self._pth.get_variants(i_file_path)
-                dict_[i_namespace] = i_path, i_file_path, i_variants
+                dict_[i_namespace] = i_path, i_is_loaded, i_file_path, i_variants
         return dict_
 
     def get_all(self):
@@ -88,3 +123,43 @@ class ResourcesQuery(object):
 
     def to_valid_namespaces(self, namespaces):
         return [i for i in namespaces if i in self._cache_dict]
+
+
+class ResourceScriptOpt(object):
+    CACHE_NAME = None
+
+    CACHE_ROOT = None
+
+    def __init__(self, resource):
+        self._resource = resource
+        self._namespace = resource.namespace
+
+    def is_exists(self):
+        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME), long=1)
+        return not not _
+
+    def is_resource_exists(self):
+        return self._resource.is_exists()
+
+    def remove_cache(self):
+        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME), long=1)
+        if _:
+            cmds.delete(_[0])
+
+    def create_cache_root_auto(self):
+        if cmds.objExists(self.CACHE_ROOT) is False:
+            name = self.CACHE_ROOT.split('|')[-1]
+            # cmds.container(type='dagContainer', name=name)
+            cmds.createNode(
+                'dagContainer', name=name, shared=1, skipSelect=1
+            )
+            cmds.setAttr(self.CACHE_ROOT+'.iconName', 'folder-closed.png', type='string')
+
+    def load_cache(self, cache_file_path):
+        raise NotImplementedError()
+
+    def hide_resource_auto(self):
+        raise NotImplementedError()
+
+    def generate_args(self, *args, **kwargs):
+        raise NotImplementedError()

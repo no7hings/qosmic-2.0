@@ -709,6 +709,9 @@ class PrxPortAsButton(_AbsPrxPortBase):
     def set_status(self, status):
         self.get_input_widget()._set_status_(status)
 
+    def set_sub_name(self, text):
+        self.get_input_widget()._set_sub_name_text_(text)
+
     def set_locked(self, boolean):
         self.get_input_widget()._set_action_enable_(not boolean)
 

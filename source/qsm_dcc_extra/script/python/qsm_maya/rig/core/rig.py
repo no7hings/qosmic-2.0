@@ -5,18 +5,15 @@ import maya.cmds as cmds
 from ...resource import core as _rsc_core
 
 
-class AdvRigOpt(_rsc_core.ResourceOpt):
+class AdvRig(_rsc_core.Resource):
     def __init__(self, *args, **kwargs):
-        super(AdvRigOpt, self).__init__(*args, **kwargs)
+        super(AdvRig, self).__init__(*args, **kwargs)
 
     def __str__(self):
         return '{}(path="{}")'.format(
             self.__class__.__name__,
             self.__dict__['path']
         )
-
-    def is_exists(self):
-        return not not self.get_root()
 
     def get_root(self):
         _ = cmds.ls('|{}:*'.format(self.namespace), long=1)
@@ -78,7 +75,7 @@ class AdvRigOpt(_rsc_core.ResourceOpt):
 class AdvRigsQuery(_rsc_core.ResourcesQuery):
     STG_PTN = 'X:/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
 
-    RESOURCE_CLS = AdvRigOpt
+    RESOURCE_CLS = AdvRig
 
     def __init__(self):
         super(AdvRigsQuery, self).__init__()

@@ -95,7 +95,7 @@ class PrxTabView(gui_prx_abstracts.AbsPrxWidget):
     def get_all_page_keys(self):
         return self._qt_widget._get_all_page_key_texts_()
 
-    def set_current_changed_connect_to(self, fnc):
+    def connect_current_changed_to(self, fnc):
         self._qt_widget.current_changed.connect(fnc)
 
     def set_current_by_name(self, name):

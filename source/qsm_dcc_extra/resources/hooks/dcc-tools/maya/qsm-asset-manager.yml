@@ -21,7 +21,7 @@ rsv-match-condition: 'branch=asset'
 build:
     options:
         rig_utility:
-            name: 'skin proxy & dynamic GPU'
+            name: 'Skin Proxy & Dynamic GPU'
             name_chs: '简模代理 & 动态GPU'
             parameters:
                 selection_scheme:
@@ -39,17 +39,18 @@ build:
                             骨骼：选择骨骼组
                             控制器：选中控制器组
 
-                scene:
+                setting:
                     widget: group
-                    name_chs: '场景'
+                    name: 'Setting'
+                    name_chs: '设置'
 
-                scene/camera:
+                setting/camera:
                     widget: enumerate
                     name_chs: '相机'
                     value: ['None']
                     tool_tip: '...'
 
-                scene/fps:
+                setting/fps:
                     widget: capsule_string
                     name_chs: '帧率'
                     options: ['24_fps', '30_fps']
@@ -58,7 +59,7 @@ build:
                     tool_tip_chs: '显示当前场景的帧率'
                     lock: True
 
-                scene/frame_scheme:
+                setting/frame_scheme:
                     widget: capsule_string
                     name_chs: '帧方案'
                     options: ['time_slider', 'frame_range']
@@ -71,7 +72,7 @@ build:
                             时间轴：自动读取帧范围
                             帧范围：在帧范围中输入
 
-                scene/frame_range:
+                setting/frame_range:
                     widget: integer2
                     name_chs: '帧范围'
                     value: [0, 24]
@@ -130,10 +131,30 @@ build:
                     icon: 'tool/maya/delete'
                     tool_tip: '...'
 
-        rig_extend:
-            name: 'motion'
+        rig_motion:
+            name: 'Motion'
             name_chs: '运动'
             parameters:
+                control:
+                    widget: group
+                    name: 'Control'
+                    name_chs: '控制器'
+
+                control/enable_playback_visible:
+                    widget: button
+                    name: 'Enable Control Playback Visible'
+                    name_chs: '打开控制器播放可见'
+                    icon: 'tool/show'
+                    tool_tip: '...'
+                    join_to_next: True
+
+                control/disable_playback_visible:
+                    widget: button
+                    name: 'Disable Control Playback Visible'
+                    name_chs: '关闭控制器播放课件'
+                    icon: 'tool/hide'
+                    tool_tip: '...'
+
                 animation_transfer:
                     widget: group
                     name_chs: '动画传递'
@@ -164,7 +185,6 @@ build:
                             先选中源物体，再选中目标物体
                             可选中任意部件
 
-
                 animation_transfer/copy:
                     widget: button
                     name_chs: '复制'
@@ -177,7 +197,6 @@ build:
                     tool_tip_chs:
                         |-
                         点击复制动画。
-
 
                 animation_transfer/paste:
                     widget: button
@@ -192,55 +211,26 @@ build:
                         点击粘贴动画。
 
         scenery_utility:
-            name: 'unit assembly & camera mask'
-            name_chs: '元素组装 & 相机遮罩'
+            name: 'Unit Assembly & GPU Instance'
+            name_chs: '元素组装 & GPU实例'
             parameters:
                 selection_scheme:
                     widget: capsule_string
                     name_chs: '选择方案'
-                    options: ['geometry', 'none']
-                    names_chs: ['模型', '不选']
-                    default: 'none'
+                    options: ['root', 'geometry', 'none']
+                    names_chs: ['根组', '模型', '不选']
+                    default: 'root'
                     tool_tip: 'choose a selection scheme'
                     tool_tip_chs:
                         |-
                         设置一个选择方案
+                            根组：选择所有根组
                             几何物体：选择所有模型
                             不选：不选择任何物体
 
-                scene:
-                    widget: group
-                    name_chs: '场景'
-
-                scene/camera:
-                    widget: enumerate
-                    name_chs: '相机'
-                    value: ['None']
-                    tool_tip: '...'
-
-                scene/frame_scheme:
-                    widget: capsule_string
-                    name_chs: '帧方案'
-                    options: ['time_slider', 'frame_range']
-                    names_chs: ['时间轴', '帧范围']
-                    default: 'time_slider'
-                    tool_tip: 'choose a frame scheme'
-                    tool_tip_chs:
-                        |-
-                        设置一个帧方案:
-                            当前帧: 使用当前帧
-                            时间轴：自动读取帧范围
-                            帧范围：在帧范围中输入
-
-                scene/frame_range:
-                    widget: integer2
-                    name_chs: '帧范围'
-                    value: [0, 24]
-                    tool_tip: '...'
-                    lock: True
-
                 unit_assembly:
                     widget: group
+                    name: 'Unit Assembly'
                     name_chs: '元素组装'
 
                 unit_assembly/load:
@@ -265,37 +255,48 @@ build:
                     icon: 'tool/maya/delete'
                     tool_tip: '...'
 
-                camera_mask:
+                gpu_instance:
                     widget: group
-                    name_chs: '相机遮罩'
+                    name: 'GPU Instance'
+                    name_chs: 'GPU实例'
 
-                camera_mask/create_camera_mask:
-                    widget: button
-                    name_chs: '创建相机遮罩'
+                gpu_instance/load:
+                    widget: sub_process_button
+                    name: 'Load GPU Instance'
+                    name_chs: '加载GPU实例'
                     value: ''
-                    icon: 'tool/maya/camera-mask'
-                    tool_tip: '...'
+                    icon: 'tool/maya/create-container'
+                    tool_tip:
+                        |-
+                        press to load unit assembly auto.
+                    tool_tip_chs:
+                        |-
+                        点击自动加载元素组装。
                     join_to_next: True
 
-                camera_mask/create_dynamic_camera_mask:
+                gpu_instance/remove:
                     widget: button
-                    name_chs: '创建动态相机遮罩'
-                    value: ''
-                    icon: 'tool/maya/camera-mask'
-                    tool_tip: '...'
-
-                camera_mask/remove_camera_mask:
-                    widget: button
-                    name_chs: '移除相机遮罩'
+                    name: 'Remove GPU Instance'
+                    name_chs: '移除GPU实例'
                     value: ''
                     icon: 'tool/maya/delete'
                     tool_tip: '...'
 
-        assembly_utility:
-            name: 'assembly switch'
-            name_chs: '元素切换'
+        scenery_assembly:
+            name: 'Switch & Selection'
+            name_chs: '切换 & 选择'
             parameters:
-                gpu:
+                switch:
+                    widget: group
+                    name: 'Switch'
+                    name_chs: '切换'
+
+                switch/unit_assembly:
+                    widget: group
+                    name: 'Unit Assembly'
+                    name_chs: '元素组装'
+
+                switch/unit_assembly/gpu:
                     widget: button
                     name: 'GPU'
                     name_chs: 'GPU'
@@ -304,7 +305,7 @@ build:
                     tool_tip: '...'
                     join_to_next: True
 
-                gpu_lod_01:
+                switch/unit_assembly/gpu_lod1:
                     widget: button
                     name: 'GPU-LOD01'
                     name_chs: 'GPU-LOD01'
@@ -313,7 +314,7 @@ build:
                     tool_tip: '...'
                     join_to_next: True
 
-                gpu_lod_02:
+                switch/unit_assembly/gpu_lod2:
                     widget: button
                     name: 'GPU-LOD02'
                     name_chs: 'GPU-LOD02'
@@ -321,7 +322,7 @@ build:
                     icon: 'tool/maya/switch-to-gpu'
                     tool_tip: '...'
 
-                mesh:
+                switch/unit_assembly/mesh:
                     widget: button
                     name: 'Mesh'
                     name_chs: '模型'
@@ -330,7 +331,7 @@ build:
                     tool_tip: '...'
                     join_to_next: True
 
-                mesh_lod_01:
+                switch/unit_assembly/mesh_lod1:
                     widget: button
                     name: 'Mesh-LOD01'
                     name_chs: '模型-LOD01'
@@ -339,13 +340,179 @@ build:
                     tool_tip: '...'
                     join_to_next: True
 
-                mesh_lod_02:
+                switch/unit_assembly/mesh_lod2:
                     widget: button
                     name: 'Mesh-LOD02'
                     name_chs: '模型-LOD02'
                     value: ''
                     icon: 'tool/maya/switch-to-mesh'
                     tool_tip: '...'
+
+                switch/gpu_instance:
+                    widget: group
+                    name:  'GPU Instance'
+                    name_chs: 'GPU实例'
+
+                switch/gpu_instance/gpu:
+                    widget: button
+                    name: 'GPU'
+                    name_chs: 'GPU'
+                    value: ''
+                    icon: 'tool/maya/switch-to-gpu'
+                    tool_tip: '...'
+                    join_to_next: True
+
+                switch/gpu_instance/gpu_lod1:
+                    widget: button
+                    name: 'GPU-LOD01'
+                    name_chs: 'GPU-LOD01'
+                    value: ''
+                    icon: 'tool/maya/switch-to-gpu'
+                    tool_tip: '...'
+                    join_to_next: True
+
+                switch/gpu_instance/gpu_lod2:
+                    widget: button
+                    name: 'GPU-LOD02'
+                    name_chs: 'GPU-LOD02'
+                    value: ''
+                    icon: 'tool/maya/switch-to-gpu'
+                    tool_tip: '...'
+
+                import:
+                    widget: group
+                    name: 'Import'
+                    name_chs: '导入'
+
+                import/mesh:
+                    widget: button
+                    name: 'Import Mesh'
+                    name_chs: '导入模型'
+                    value: ''
+                    icon: 'tool/maya/import'
+                    tool_tip: '...'
+
+                selection:
+                    widget: group
+                    name_chs: '选择'
+
+                selection/by_camera:
+                    widget: button
+                    name: 'Select by Camera'
+                    name_chs: '通过相机选择'
+                    value: ''
+                    icon: 'tool/maya/select'
+                    tool_tip: '...'
+
+        scenery_camera:
+            name: 'Camera Frustum & Camera Mask'
+            name_chs: '相机视体 & 相机遮罩'
+            parameters:
+                setting:
+                    widget: group
+                    name: 'Setting'
+                    name_chs: '设置'
+
+                setting/camera:
+                    widget: enumerate
+                    name: 'Camera'
+                    name_chs: '相机'
+                    value: ['None']
+                    tool_tip: '...'
+
+                setting/frame_scheme:
+                    widget: capsule_string
+                    name_chs: '帧方案'
+                    options: ['time_slider', 'frame_range']
+                    names_chs: ['时间轴', '帧范围']
+                    default: 'time_slider'
+                    tool_tip: 'choose a frame scheme'
+                    tool_tip_chs:
+                        |-
+                        设置一个帧方案:
+                            当前帧: 使用当前帧
+                            时间轴：自动读取帧范围
+                            帧范围：在帧范围中输入
+
+                setting/frame_range:
+                    widget: integer2
+                    name_chs: '帧范围'
+                    value: [0, 24]
+                    tool_tip: '...'
+                    lock: True
+
+                camera_view_frustum:
+                    widget: group
+                    name: 'Camera View Frustum'
+                    name_chs: '相机视体'
+
+                camera_view_frustum/create:
+                    widget: button
+                    name: 'Create Camera View Frustum'
+                    name_chs: '创建相机视体'
+                    value: ''
+                    icon: 'tool/maya/create-camera-view-frustum'
+                    tool_tip: '...'
+                    join_to_next: True
+
+                camera_view_frustum/remove:
+                    widget: button
+                    name: 'Remove Camera View Frustum'
+                    name_chs: '移除相机视体'
+                    value: ''
+                    icon: 'tool/maya/delete'
+                    tool_tip: '...'
+
+                camera_mask:
+                    widget: group
+                    name: 'Camera Mask'
+                    name_chs: '相机遮罩'
+
+                camera_mask/create_dynamic:
+                    widget: button
+                    name: 'Create Camera Mask (Dynamic)'
+                    name_chs: '创建相机遮罩（动态）'
+                    value: ''
+                    icon: 'tool/maya/create-camera-mask'
+                    tool_tip: '...'
+                    join_to_next: True
+
+                camera_mask/create:
+                    widget: button
+                    name: 'Create Camera Mask'
+                    name_chs: '创建相机遮罩'
+                    value: ''
+                    icon: 'tool/maya/create-camera-mask'
+                    tool_tip: '...'
+
+                camera_mask/remove_all:
+                    widget: button
+                    name: 'Remove All Camera Mask'
+                    name_chs: '移除所有相机遮罩'
+                    value: ''
+                    icon: 'tool/maya/delete'
+                    tool_tip: '...'
+
+                camera_lod_switch:
+                    widget: group
+                    name: 'Camera LOD'
+                    name_chs: '相机LOD'
+
+                camera_lod_switch/distance_range:
+                    widget: integer2
+                    name: 'Distance Range'
+                    name_chs: '距离范围'
+                    value: [2500, 5000]
+                    tool_tip: '...'
+
+                camera_lod_switch/create:
+                    widget: button
+                    name: 'Switch by Camera Distance'
+                    name_chs: '通过相机距离切换LOD'
+                    value: ''
+                    icon: 'tool/maya/create-camera-lod'
+                    tool_tip: '...'
+
     buttons:
         reference:
             name: 'Reference'
@@ -388,7 +555,7 @@ build:
             name_chs: '通用'
 
             tool_tip: 'Include all tool for rig as utility, etc. skin proxy, dynamic GPU'
-            tool_tip_chs: '包含所有跟绑定相关的通用工具, 如：建模代理，动态GPU等'
+            tool_tip_chs: '包含所有跟绑定相关的通用工具, 如：生成建模代理，生成动态GPU等'
 
         rig_extend:
             name: 'Extend'
@@ -402,11 +569,18 @@ build:
             name_chs: '通用'
 
             tool_tip: 'Include all tool for rig as utility, etc. unit assembly, camera mask'
-            tool_tip_chs: '包含所有跟场景相关的通用工具, 如：元素组装，相机遮罩等'
+            tool_tip_chs: '包含所有跟场景相关的通用工具, 如：生成元素组装，生成GPU实例'
 
-        assembly_utility:
-            name: 'Utility'
-            name_chs: '通用'
+        scenery_assembly:
+            name: 'Assembly'
+            name_chs: '组装'
 
-            tool_tip: 'Include all tool for rig as utility, etc. assembly switch'
-            tool_tip_chs: '包含所有跟组装相关的通用工具, 如：组装切换等'
+            tool_tip: 'Include all tool for scenery as assembly, etc. assembly switch'
+            tool_tip_chs: '包含所有跟场景相关的组装工具, 如：组装切换等'
+
+        scenery_extend:
+            name: 'Extend'
+            name_chs: '扩展'
+
+            tool_tip: 'Include all tool for scenery as extend, etc. animation transfer'
+            tool_tip_chs: '包含所有跟场景相关的扩展工具，如：相机遮罩等'

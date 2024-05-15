@@ -33,3 +33,11 @@ class Container(object):
     @classmethod
     def add_dag_nodes(cls, path, nodes):
         return [cmds.parent(x, path, relative=1)[0] for x in nodes]
+
+    @classmethod
+    def get_all_nodes(cls, path):
+        return cmds.container(path, query=1, nodeList=1)
+
+    @classmethod
+    def find_all_nodes(cls, path, type_includes):
+        return [x for x in cls.get_all_nodes(path) if cmds.nodeType(x) in type_includes]

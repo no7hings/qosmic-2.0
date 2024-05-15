@@ -35,3 +35,24 @@ class Scene(object):
         name_base = file_opt.get_name_base()
         image_file_path = '{}/.snapshot/{}.jpg'.format(directory_path, name_base)
         _playblast.Playblast.make_snapshot(image_file_path, _time.Frame.get_current_frame(), (480, 240))
+
+    # include instanced
+    @classmethod
+    def find_all_dag_nodes(cls, type_includes):
+        list_ = []
+        _ = cmds.ls(type=type_includes, long=1) or []
+        for i_name in _:
+            i_path = cmds.ls(i_name, long=1)[0]
+            if not i_path.startswith('|'):
+                continue
+
+            i_parents = cmds.listRelatives(i_path, fullPath=1, allParents=1) or []
+            if len(i_parents) > 1:
+                i_name = i_path.split('|')[-1]
+                for j_path in i_parents:
+                    j_path_shape = '{}|{}'.format(j_path, i_name)
+                    list_.append(j_path_shape)
+            else:
+                list_.append(i_path)
+
+        return list_

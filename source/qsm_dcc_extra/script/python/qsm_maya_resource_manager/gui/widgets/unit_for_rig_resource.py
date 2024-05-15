@@ -16,8 +16,6 @@ import lxgui.proxy.abstracts as prx_abstracts
 
 import lxgui.proxy.widgets as prx_widgets
 
-import lxgui.proxy.abstracts as gui_prx_abstracts
-
 import qsm_general.scan as qsm_gnl_scan
 
 import qsm_maya.core as qsm_mya_core
@@ -44,26 +42,121 @@ class _GuiResourceOpt(
 
     RESOURCES_QUERY_CLS = qsm_mya_rig_core.AdvRigsQuery
 
-    RESOURCE_SCHEME = 'reference'
+    TOOL_INCLUDES = [
+        'isolate-select',
+        'reference',
+    ]
+    
+    # skin proxy
+    def do_dcc_load_skin_proxies(self):
+        if self._skin_proxy_load_args_array:
+            with self._window.gui_progressing(
+                maximum=len(self._skin_proxy_load_args_array), label='load skin proxies'
+            ) as g_p:
+                for i_opt, i_cache_file in self._skin_proxy_load_args_array:
+                    g_p.do_update()
+                    if i_opt.is_resource_exists() is True:
+                        i_opt.load_cache(i_cache_file)
 
-    def do_dcc_remove_skin_proxy(self):
-        _ = self._prx_tree_view.get_selected_items()
-        for i in _:
-            i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
-            qsm_mya_rig_scripts.AdvSkinProxyGenerate(
-                i_resource.namespace
-            ).do_remove()
+    def do_dcc_do_dcc_load_skin_proxies_by_selection(self):
+        if self._unit._load_skin_proxy_button.get_is_started() is False:
+            resources = self.gui_get_selected_resources()
+            if resources:
+                self._skin_proxy_load_args_array = []
+                create_cmds = []
 
-    def do_dcc_remove_dynamic_gpu(self):
-        _ = self._prx_tree_view.get_selected_items()
-        for i in _:
-            i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
-            qsm_mya_rig_scripts.DynamicGpuCacheGenerate(
-                i_resource.namespace
-            ).do_remove()
+                with self._window.gui_progressing(
+                    maximum=len(resources), label='processing skin proxies'
+                ) as g_p:
+                    for i_resource in resources:
+                        if i_resource.reference_opt.is_loaded() is False:
+                            continue
+
+                        i_opt = qsm_mya_rig_scripts.SkinProxyOpt(i_resource)
+                        if i_opt.is_exists() is False:
+                            i_cmd, i_cache_file = i_opt.generate_args()
+                            if i_cmd is not None:
+                                create_cmds.append(i_cmd)
+
+                            self._skin_proxy_load_args_array.append(
+                                (i_opt, i_cache_file)
+                            )
+
+                        g_p.do_update()
+
+                if create_cmds:
+                    mtd = _rsc_mng_core.GuiProcessOpt(self._window, self)
+                    mtd.execute(self._unit._load_skin_proxy_button, create_cmds)
+                else:
+                    self.do_dcc_load_skin_proxies()
+
+    def do_dcc_remove_skin_proxies(self):
+        resources = self.gui_get_selected_resources()
+        if resources:
+            for i_resource in resources:
+                i_opt = qsm_mya_rig_scripts.SkinProxyOpt(i_resource)
+                i_opt.remove_cache()
+    
+    # dynamic gpu
+    def do_dcc_load_dynamic_gpus(self):
+        if self._dynamic_gpu_load_args_array:
+            with self._window.gui_progressing(
+                maximum=len(self._dynamic_gpu_load_args_array), label='load dynamic gpus'
+            ) as g_p:
+                for i_opt, i_cache_file in self._dynamic_gpu_load_args_array:
+                    g_p.do_update()
+                    if i_opt.is_resource_exists() is True:
+                        i_opt.load_cache(i_cache_file)
+
+    def do_dcc_do_dcc_load_dynamic_gpus_bt_selection(self):
+        if self._unit._load_dynamic_gpu_button.get_is_started() is False:
+            resources = self.gui_get_selected_resources()
+            if resources:
+                self._dynamic_gpu_load_args_array = []
+                create_cmds = []
+
+                start_frame, end_frame = self._unit._utility_options_node.get('setting.frame_range')
+                with self._window.gui_progressing(
+                    maximum=len(resources), label='processing dynamic gpus'
+                ) as g_p:
+                    for i_resource in resources:
+                        if i_resource.reference_opt.is_loaded() is False:
+                            continue
+
+                        i_opt = qsm_mya_rig_scripts.DynamicGpuCacheOpt(i_resource)
+                        if i_opt.is_exists() is False:
+                            i_directory_path = qsm_mya_ast_core.AssetCache.generate_dynamic_gpu_directory(
+                                user_name=bsc_core.SysBaseMtd.get_user_name()
+                            )
+                            i_cmd, i_file_path, i_cache_file = i_opt.generate_args(
+                                i_directory_path, start_frame, end_frame
+                            )
+
+                            i_opt.export_source(i_file_path)
+
+                            create_cmds.append(i_cmd)
+
+                            self._dynamic_gpu_load_args_array.append(
+                                (i_opt, i_cache_file))
+                        g_p.do_update()
+
+                if create_cmds:
+                    mtd = _rsc_mng_core.GuiProcessOpt(self._window, self)
+                    mtd.execute(self._unit._load_dynamic_gpu_button, create_cmds)
+                else:
+                    self.do_dcc_load_dynamic_gpus()
+
+    def do_dcc_remove_dynamic_gpus(self):
+        resources = self.gui_get_selected_resources()
+        if resources:
+            for i_resource in resources:
+                i_opt = qsm_mya_rig_scripts.DynamicGpuCacheOpt(i_resource)
+                i_opt.remove_cache()
 
     def __init__(self, window, unit, session, prx_tree_view):
         super(_GuiResourceOpt, self).__init__(window, unit, session, prx_tree_view)
+        self._skin_proxy_load_args_array = []
+        self._dynamic_gpu_load_args_array = []
 
 
 class _GuiReferenceOpt(
@@ -131,13 +224,24 @@ class _GuiReferenceOpt(
                         self._reference_button._set_action_enable_(True)
 
 
-class _GuiRigMotionOpt(
+class _GuiMotionOpt(
     _rsc_mng_core.GuiBaseOpt
 ):
     def __init__(self, window, unit, session, prx_options_node):
-        super(_GuiRigMotionOpt, self).__init__(window, unit, session)
+        super(_GuiMotionOpt, self).__init__(window, unit, session)
 
         self._prx_options_node = prx_options_node
+
+        self._prx_options_node.get_port(
+            'control.enable_playback_visible'
+        ).set(
+            self.do_dcc_enable_control_playback_visible
+        )
+        self._prx_options_node.get_port(
+            'control.disable_playback_visible'
+        ).set(
+            self.do_dcc_disable_control_playback_visible
+        )
 
         self._prx_options_node.get_port(
             'animation_transfer.transfer'
@@ -222,13 +326,33 @@ class _GuiRigMotionOpt(
                     namespace_dst, frame_offset=frame_offset, force=force
                 )
 
+    def do_dcc_enable_control_playback_visible(self):
+        resources = self._unit._gui_resource_opt.gui_get_selected_resources()
+        if resources:
+            for i_resource in resources:
+                if i_resource.is_exists() is False:
+                    continue
+                i_namespace = i_resource.namespace
+                i_controls = qsm_mya_motion.AdvMotionOpt(i_namespace).find_controls()
+                [qsm_mya_core.Attribute.set_value(x, 'hideOnPlayback', 0) for x in i_controls]
+
+    def do_dcc_disable_control_playback_visible(self):
+        resources = self._unit._gui_resource_opt.gui_get_selected_resources()
+        if resources:
+            for i_resource in resources:
+                if i_resource.is_exists() is False:
+                    continue
+                i_namespace = i_resource.namespace
+                i_controls = qsm_mya_motion.AdvMotionOpt(i_namespace).find_controls()
+                [qsm_mya_core.Attribute.set_value(x, 'hideOnPlayback', 1) for x in i_controls]
+
 
 class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = qt_widgets.QtTranslucentWidget
 
     SCRIPT_JOB_NAME = 'resource_manager_for_rig'
 
-    def do_gui_refresh_by_rig_tag_checking(self):
+    def do_gui_refresh_by_resource_tag_checking(self):
         filter_data_src = self._gui_resource_tag_opt.generate_semantic_tag_filter_data_src()
         qt_view = self._resource_prx_tree_view._qt_view
         qt_view._set_view_semantic_tag_filter_data_src_(filter_data_src)
@@ -273,7 +397,7 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
         self._gui_resource_opt.do_gui_refresh_tools()
 
     def get_frame_scheme(self):
-        return self._utility_options_node.get('scene.frame_scheme')
+        return self._utility_options_node.get('setting.frame_scheme')
 
     def _gui_filter_update_visible(self, boolean):
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
@@ -302,7 +426,7 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
             self.SCRIPT_JOB_NAME
         )
         self._script_job.register(
-            self._gui_resource_opt.do_gui_select_resources,
+            self._gui_resource_opt.do_gui_refresh_by_dcc_selection,
             self._script_job.EventTypes.SelectionChanged
         )
         self._script_job.register(
@@ -318,7 +442,6 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
         self._script_job.destroy()
 
     def gui_setup_unit(self):
-        self._skin_proxy_load_args_array = []
         self._dynamic_gpu_load_args_array = []
 
         self._qt_widget.setSizePolicy(
@@ -374,11 +497,11 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
         )
 
         self._resource_tag_tree_view.connect_item_check_changed_to(
-            self.do_gui_refresh_by_rig_tag_checking
+            self.do_gui_refresh_by_resource_tag_checking
         )
 
-        self._prx_tab_group = prx_widgets.PrxHTabGroup()
-        qt_lot.addWidget(self._prx_tab_group.widget)
+        self._prx_tool_tab_group = prx_widgets.PrxHToolTabGroup()
+        qt_lot.addWidget(self._prx_tool_tab_group.widget)
 
         # utility
         self._utility_options_node = prx_widgets.PrxNode(
@@ -389,7 +512,7 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
         self._utility_options_node.create_ports_by_data(
             self._session.configure.get('build.options.rig_utility.parameters'),
         )
-        self._prx_tab_group.add_widget(
+        self._prx_tool_tab_group.add_widget(
             self._utility_options_node,
             name=gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.tag-groups.rig_utility')
@@ -400,37 +523,40 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
         )
 
         self._load_skin_proxy_button = self._utility_options_node.get_port('skin_proxy.load')
-        self._load_skin_proxy_button.set(self.do_dcc_load_skin_proxies_by_selection)
-        self._load_skin_proxy_button.connect_finished_to(self.load_skin_proxies)
+        self._load_skin_proxy_button.set(self._gui_resource_opt.do_dcc_do_dcc_load_skin_proxies_by_selection)
+        self._load_skin_proxy_button.connect_finished_to(self._gui_resource_opt.do_dcc_load_skin_proxies)
 
         self._utility_options_node.set(
-            'skin_proxy.remove', self._gui_resource_opt.do_dcc_remove_skin_proxy
+            'skin_proxy.remove', self._gui_resource_opt.do_dcc_remove_skin_proxies
         )
 
         self._load_dynamic_gpu_button = self._utility_options_node.get_port('dynamic_gpu.load')
-        self._load_dynamic_gpu_button.set(self.do_dcc_load_dynamic_gpus_bt_selection)
-        self._load_dynamic_gpu_button.connect_finished_to(self.load_dynamic_gpus)
+        self._load_dynamic_gpu_button.set(self._gui_resource_opt.do_dcc_do_dcc_load_dynamic_gpus_bt_selection)
+        self._load_dynamic_gpu_button.connect_finished_to(self._gui_resource_opt.do_dcc_load_dynamic_gpus)
 
         self._utility_options_node.set(
-            'dynamic_gpu.remove', self._gui_resource_opt.do_dcc_remove_dynamic_gpu
+            'dynamic_gpu.remove', self._gui_resource_opt.do_dcc_remove_dynamic_gpus
         )
 
         self._utility_options_node.get_port('selection_scheme').connect_input_changed_to(
             self._gui_resource_opt.do_dcc_select_resources
         )
-        self._utility_options_node.get_port('scene.frame_scheme').connect_input_changed_to(
+        self._utility_options_node.get_port('setting.frame_scheme').connect_input_changed_to(
             self.do_gui_refresh_by_frame_scheme_changing
         )
-        self._camera_port = self._utility_options_node.get_port('scene.camera')
-        self._fps_port = self._utility_options_node.get_port('scene.fps')
-        self._frame_range_port = self._utility_options_node.get_port('scene.frame_range')
-        # rig motion
+        self._camera_port = self._utility_options_node.get_port('setting.camera')
+        self._fps_port = self._utility_options_node.get_port('setting.fps')
+        self._frame_range_port = self._utility_options_node.get_port('setting.frame_range')
+        # extend
         self._rig_motion_options_node = prx_widgets.PrxNode(
             gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.options.rig_extend')
+                self._window._language, self._session.configure.get('build.options.rig_motion')
             )
         )
-        self._prx_tab_group.add_widget(
+        self._rig_motion_options_node.create_ports_by_data(
+            self._session.configure.get('build.options.rig_motion.parameters'),
+        )
+        self._prx_tool_tab_group.add_widget(
             self._rig_motion_options_node,
             name=gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.tag-groups.rig_extend')
@@ -439,133 +565,31 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
                 self._window._language, self._session.configure.get('build.tag-groups.rig_extend')
             )
         )
-        self._rig_motion_options_node.create_ports_by_data(
-            self._session.configure.get('build.options.rig_extend.parameters'),
-        )
 
-        self._rig_motion_opt = _GuiRigMotionOpt(
+        self._rig_motion_opt = _GuiMotionOpt(
             self._window, self, self._session, self._rig_motion_options_node
         )
 
         self.do_gui_refresh_by_camera_changing()
         self.do_gui_refresh_by_fps_changing()
         self.do_gui_refresh_by_dcc_frame_changing()
-        self._gui_resource_opt.do_gui_select_resources()
+        self._gui_resource_opt.do_gui_refresh_by_dcc_selection()
+        self._gui_resource_opt.do_gui_refresh_tools()
 
         self._register_all_script_jobs()
 
         self._window.connect_window_activate_changed_to(self.do_gui_refresh_by_window_active_changing)
         self._window.connect_window_close_to(self._destroy_all_script_jobs)
 
-    def do_gui_refresh_all(self):
+    def do_gui_refresh_all(self, force=False):
         self._top_prx_tool_bar.do_gui_refresh()
-
-        self._gui_resource_tag_opt.restore()
-        self._gui_resource_tag_opt.gui_add_root()
-
-        self._gui_resource_opt.restore()
-        self._gui_resource_opt.gui_add_all()
-    
-    def do_gui_refresh_all_auto(self):
-        self._top_prx_tool_bar.do_gui_refresh()
-        
         is_changed = self._gui_resource_opt.get_resources_query().do_update()
-        if is_changed is True:
+        if is_changed is True or force is True:
             self._gui_resource_tag_opt.restore()
             self._gui_resource_tag_opt.gui_add_root()
 
             self._gui_resource_opt.restore()
             self._gui_resource_opt.gui_add_all()
+            
+        self._gui_resource_opt.do_gui_refresh_by_dcc_selection()
 
-    def load_skin_proxies(self):
-        if self._skin_proxy_load_args_array:
-            with self._window.gui_progressing(
-                maximum=len(self._skin_proxy_load_args_array), label='load skin proxies'
-            ) as g_p:
-                for i_namespace, i_cache_file in self._skin_proxy_load_args_array:
-                    g_p.do_update()
-                    i_generate = qsm_mya_rig_scripts.AdvSkinProxyGenerate(i_namespace)
-                    if i_generate.is_rig_exists() is True:
-                        i_generate.load_cache(i_cache_file)
-
-    def do_dcc_load_skin_proxies_by_selection(self):
-        if self._load_skin_proxy_button.get_is_started() is False:
-            namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
-            if namespaces:
-                self._skin_proxy_load_args_array = []
-                create_cmds = []
-
-                resources_query = self._gui_resource_opt.get_resources_query()
-                valid_namespaces = resources_query.to_valid_namespaces(namespaces)
-                if valid_namespaces:
-                    with self._window.gui_progressing(
-                        maximum=len(valid_namespaces), label='processing skin proxies'
-                    ) as g_p:
-                        for i_namespace in valid_namespaces:
-                            i_generate = qsm_mya_rig_scripts.AdvSkinProxyGenerate(i_namespace)
-                            if i_generate.is_exists() is False:
-                                i_cmd, i_cache_file = qsm_mya_rig_scripts.AdvSkinProxyGenerate(
-                                    i_namespace).generate_args()
-                                if i_cmd is not None:
-                                    create_cmds.append(i_cmd)
-
-                                self._skin_proxy_load_args_array.append((i_namespace, i_cache_file))
-
-                            g_p.do_update()
-
-                if create_cmds:
-
-                    mtd = _rsc_mng_core.GuiProcessOpt(self._window, self)
-                    mtd.execute(self._load_skin_proxy_button, create_cmds)
-                else:
-                    self.load_skin_proxies()
-
-    def load_dynamic_gpus(self):
-        if self._dynamic_gpu_load_args_array:
-            with self._window.gui_progressing(
-                maximum=len(self._skin_proxy_load_args_array), label='load dynamic gpus'
-            ) as g_p:
-                for i_namespace, i_cache_file, i_start_frame, i_end_frame in self._dynamic_gpu_load_args_array:
-                    g_p.do_update()
-                    i_generate = qsm_mya_rig_scripts.DynamicGpuCacheGenerate(i_namespace)
-                    if i_generate.is_rig_exists() is True:
-                        qsm_mya_rig_scripts.DynamicGpuCacheGenerate(i_namespace).load_cache(
-                            i_cache_file
-                        )
-
-    def do_dcc_load_dynamic_gpus_bt_selection(self):
-        if self._load_dynamic_gpu_button.get_is_started() is False:
-            namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
-            if namespaces:
-                self._dynamic_gpu_load_args_array = []
-                create_cmds = []
-
-                resources_query = self._gui_resource_opt.get_resources_query()
-                valid_namespaces = resources_query.to_valid_namespaces(namespaces)
-                if valid_namespaces:
-                    start_frame, end_frame = self._utility_options_node.get('scene.frame_range')
-                    with self._window.gui_progressing(
-                        maximum=len(valid_namespaces), label='processing dynamic gpus'
-                    ) as g_p:
-                        for i_namespace in valid_namespaces:
-                            g_p.do_update()
-
-                            i_generate = qsm_mya_rig_scripts.DynamicGpuCacheGenerate(i_namespace)
-                            if i_generate.is_exists() is False:
-                                i_directory_path = qsm_mya_ast_core.AssetCache.generate_dynamic_gpu_directory(
-                                    user_name=bsc_core.SysBaseMtd.get_user_name()
-                                )
-                                i_cmd, i_file_path, i_cache_file, i_start_frame, i_end_frame = \
-                                    i_generate.generate_args(i_directory_path, start_frame, end_frame)
-                                i_generate.export_source(i_file_path)
-
-                                create_cmds.append(i_cmd)
-
-                                self._dynamic_gpu_load_args_array.append(
-                                    (i_namespace, i_cache_file, i_start_frame, i_end_frame))
-
-                if create_cmds:
-                    mtd = _rsc_mng_core.GuiProcessOpt(self._window, self)
-                    mtd.execute(self._load_dynamic_gpu_button, create_cmds)
-                else:
-                    self.load_dynamic_gpus()

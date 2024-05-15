@@ -187,3 +187,6 @@ class MeshOpt(_shape.ShapeOpt):
             colors, face_indices
         )
         self._om2_obj_fnc.updateSurface()
+
+    def get_face_count(self):
+        return self._om2_obj_fnc.numPolygons

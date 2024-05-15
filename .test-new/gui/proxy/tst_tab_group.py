@@ -13,7 +13,7 @@ class W(prx_widgets.PrxBaseWindow):
         lot = qt_widgets.QtVBoxLayout(wgt)
         lot._set_align_top_()
 
-        c = prx_widgets.PrxHTabGroup()
+        c = prx_widgets.PrxHToolTabGroup()
         lot.addWidget(c.widget)
 
         t_0 = prx_widgets.PrxTreeView()

@@ -274,7 +274,7 @@ class QtPressButton(
         c_w, c_h = w, h
         #
         c_icn_x, c_icn_y = x, y
-        c_icn_w, c_icn_h = w, h
+        c_name_w, c_name_h = w, h
         #
         if check_enable is True:
             self._check_rect.setRect(
@@ -284,7 +284,7 @@ class QtPressButton(
                 c_icn_x+(icn_frm_w-i_f_w)/2, c_icn_y+(icn_frm_h-i_f_h)/2, i_f_w, i_f_h
             )
             c_icn_x += icn_frm_h
-            c_icn_w -= icn_frm_w
+            c_name_w -= icn_frm_w
             c_x += icn_frm_h
             c_w -= icn_frm_w
         #
@@ -299,7 +299,7 @@ class QtPressButton(
                 c_icn_x+(icn_frm_w-i_n_w)/2, c_icn_y+(icn_frm_h-i_n_h)/2, i_n_w, i_n_h
             )
             c_icn_x += icn_frm_h
-            c_icn_w -= icn_frm_w
+            c_name_w -= icn_frm_w
         # option
         if self._get_option_click_is_enable_() is True:
             self._option_click_rect.setRect(
@@ -308,7 +308,7 @@ class QtPressButton(
             self._option_click_icon_rect.setRect(
                 (w-icn_frm_w)+(icn_frm_w-i_f_w)/2, y+(icn_frm_h-i_f_h)/2, i_f_w, i_f_h
             )
-            c_icn_w -= icn_frm_w
+            c_name_w -= icn_frm_w
             c_w -= icn_frm_w
         #
         self._rect_frame_draw.setRect(
@@ -318,7 +318,10 @@ class QtPressButton(
             c_x, c_y, c_w, c_h
         )
         self._name_draw_rect.setRect(
-            c_icn_x, c_icn_y, c_icn_w, c_icn_h
+            c_icn_x, c_icn_y, c_name_w, c_name_h
+        )
+        self._sub_name_draw_rect.setRect(
+            c_icn_x, c_icn_y, c_name_w-8, c_name_h
         )
         # progress
         if progress_enable is True:
@@ -458,7 +461,7 @@ class QtPressButton(
         else:
             bdr_color = _qt_core.QtBorderColors.ButtonDisable
             bkg_color = _qt_core.QtBackgroundColors.ButtonDisable
-        #
+
         painter._draw_frame_by_rect_(
             rect=self._rect_frame_draw,
             border_color=bdr_color,
@@ -467,15 +470,15 @@ class QtPressButton(
             offset=offset
         )
         # status
-        if self._get_status_is_enable_() is True:
-            # noinspection PyUnusedLocal
-            status_rgba = [self._status_color, self._hover_status_color][self._is_hovered]
-            # painter._set_status_draw_by_rect_(
-            #     self._status_rect,
-            #     color=status_rgba,
-            #     border_radius=4,
-            #     offset=offset
-            # )
+        if self._get_status_is_enable_() is True and self._get_sub_process_is_enable_() is False:
+            bkg_color = [self._status_color, self._hover_status_color][self._is_hovered]
+            painter._draw_frame_by_rect_(
+                rect=self._rect_frame_draw,
+                border_color=bdr_color,
+                background_color=bkg_color,
+                border_radius=4,
+                offset=offset
+            )
         # sub process
         if self._get_sub_process_is_enable_() is True:
             status_rgba = [self._status_color, self._hover_status_color][self._is_hovered]
@@ -563,6 +566,15 @@ class QtPressButton(
                 font_color=text_color,
                 font=self._name_draw_font,
                 offset=offset
+            )
+        if self._sub_name_text is not None:
+            painter._draw_text_by_rect_(
+                self._sub_name_draw_rect,
+                text=self._sub_name_text,
+                text_option=QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter,
+                font_color=_qt_core.QtColors.TextTemporary,
+                font=self._name_draw_font,
+                offset=offset,
             )
         # option
         if self._get_option_click_is_enable_() is True:

@@ -7,13 +7,15 @@ from ...qt import core as _qt_core
 from ...qt import abstracts as _qt_abstracts
 
 
-class QtHTabGroup(
+class QtHTabToolGroup(
     QtWidgets.QWidget,
     _qt_abstracts.AbsQtWidgetBaseDef,
     _qt_abstracts.AbsQtFrameBaseDef,
 
     _qt_abstracts.AbsQtActionBaseDef,
 ):
+    current_changed = qt_signal()
+
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_(self.rect())
         self._refresh_widget_draw_()
@@ -83,7 +85,7 @@ class QtHTabGroup(
         )
 
     def __init__(self, *args, **kwargs):
-        super(QtHTabGroup, self).__init__(*args, **kwargs)
+        super(QtHTabToolGroup, self).__init__(*args, **kwargs)
 
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setMouseTracking(True)
@@ -191,8 +193,10 @@ class QtHTabGroup(
         self._refresh_widget_all_()
 
     def _update_index_current_(self, index):
-        self._index_current = index
-        self._refresh_widget_all_()
+        if index != self._index_current:
+            self._index_current = index
+            self.current_changed.emit()
+            self._refresh_widget_all_()
 
     def _get_current_index_(self):
         return self._index_current
@@ -262,3 +266,13 @@ class QtHTabGroup(
 
     def _do_wheel_(self, event):
         pass
+
+    def _get_current_name_text_(self):
+        return self._tab_item_stack.get_name_at(
+            self._get_current_index_()
+        )
+
+    def _get_current_key_text_(self):
+        return self._tab_item_stack.get_key_at(
+            self._get_current_index_()
+        )

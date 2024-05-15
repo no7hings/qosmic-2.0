@@ -5,8 +5,8 @@ bsc_core.PyReloader2(
     ['qsm_maya', 'qsm_general', 'lxbasic']
 ).do_reload()
 
-import qsm_maya.assembly.scripts as qsm_mya_asb_scripts
+import qsm_maya.scenery.scripts as qsm_mya_scn_scripts
 
-qsm_mya_asb_scripts.DynamicCameraMask(
+qsm_mya_scn_scripts.DynamicCameraMask(
     'perspShape1'
-).execute()
+).execute_for_all()

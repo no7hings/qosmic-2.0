@@ -19,6 +19,12 @@ class Node(object):
         )
 
     @classmethod
+    def create_condition(cls, name):
+        return cls.create(
+            name, 'condition'
+        )
+
+    @classmethod
     def get_type(cls, name):
         return cmds.nodeType(name)
 

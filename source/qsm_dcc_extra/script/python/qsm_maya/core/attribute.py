@@ -35,6 +35,12 @@ class Attribute(object):
         return cmds.getAttr(cls.to_atr_path(path, atr_name), lock=1)
 
     @classmethod
+    def set_visible(cls, path, boolean):
+        cmds.setAttr(
+            cls.to_atr_path(path, 'visibility'), boolean
+        )
+
+    @classmethod
     def is_exists(cls, path, atr_name):
         return cmds.objExists(
             cls.to_atr_path(path, atr_name)
@@ -66,9 +72,37 @@ class Attribute(object):
         return False
 
     @classmethod
-    def find_source_node(cls, path, atr_name, node_type):
+    def find_source_node(cls, path, atr_name, node_type=None):
+        kwargs = dict(
+            destination=0, source=1
+        )
+        if node_type is not None:
+            kwargs['type'] = node_type
+
         _ = cmds.listConnections(
-            cls.to_atr_path(path, atr_name), destination=0, source=1, type=node_type
+            cls.to_atr_path(path, atr_name), **kwargs
+        ) or []
+        if _:
+            return _[0]
+
+    @classmethod
+    def find_target_node(cls, path, atr_name, node_type=None):
+        kwargs = dict(
+            destination=1, source=0
+        )
+        if node_type is not None:
+            kwargs['type'] = node_type
+
+        _ = cmds.listConnections(
+            cls.to_atr_path(path, atr_name), **kwargs
+        ) or []
+        if _:
+            return _[0]
+
+    @classmethod
+    def find_target(cls, path, atr_name):
+        _ = cmds.listConnections(
+            cls.to_atr_path(path, atr_name), destination=1, source=0, plugs=1
         ) or []
         if _:
             return _[0]
@@ -91,6 +125,15 @@ class Attribute(object):
     def create_as_integer(cls, path, atr_name, default=None):
         if cls.is_exists(path, atr_name) is False:
             cmds.addAttr(path, longName=atr_name, attributeType='long', keyable=1)
+            if default is not None:
+                cls.set_value(path, atr_name, default)
+
+    @classmethod
+    def create_as_enumerate(cls, path, atr_name, options, default=None):
+        if cls.is_exists(path, atr_name) is False:
+            cmds.addAttr(
+                path, longName=atr_name, attributeType='enum', enumName=':'.join(options), keyable=1
+            )
             if default is not None:
                 cls.set_value(path, atr_name, default)
 

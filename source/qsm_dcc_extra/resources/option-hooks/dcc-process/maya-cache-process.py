@@ -25,6 +25,28 @@ def dynamic_gpu_generate_fnc(option_opt):
     ).execute()
 
 
+def unit_assembly_generate_fnc(option_opt):
+    file_path = option_opt.get('file')
+    cache_file_path = option_opt.get('cache_file')
+
+    import qsm_maya.scenery.scripts as qsm_mya_scn_scripts
+
+    qsm_mya_scn_scripts.UnitAssemblyProcess(
+        file_path, cache_file_path
+    ).execute()
+
+
+def gpu_instance_generate_fnc(option_opt):
+    file_path = option_opt.get('file')
+    cache_file_path = option_opt.get('cache_file')
+
+    import qsm_maya.scenery.scripts as qsm_mya_scn_scripts
+
+    qsm_mya_scn_scripts.GpuInstanceProcess(
+        file_path, cache_file_path
+    ).execute()
+
+
 def main(session):
     # noinspection PyUnresolvedReferences
     from maya import cmds
@@ -36,6 +58,10 @@ def main(session):
         skin_proxy_generate_fnc(option_opt)
     elif key == 'dynamic-gpu-cache-generate':
         dynamic_gpu_generate_fnc(option_opt)
+    elif key == 'unit-assembly-cache-generate':
+        unit_assembly_generate_fnc(option_opt)
+    elif key == 'gpu-instance-cache-generate':
+        gpu_instance_generate_fnc(option_opt)
 
 
 if __name__ == '__main__':

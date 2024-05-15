@@ -19,6 +19,84 @@ from ...asset import core as _ast_core
 
 from ...rig import core as _rig_core
 
+from ...resource import core as _rsc_core
+
+
+class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
+    CACHE_NAME = _rig_core.RigConfigure.SkinProxyCacheName
+
+    CACHE_ROOT = '|__SKIN_PROXY__'
+
+    def __init__(self, *args, **kwargs):
+        super(SkinProxyOpt, self).__init__(*args, **kwargs)
+
+        self._adv_query = _rig_core.AdvQuery(self._namespace)
+
+    def connect_cache_constrains(self, location, namespace):
+        root_skeleton_paths = self._adv_query.skeleton_query.get('root.M')
+        scale_constrains = AdvSkinProxyGenerate._get_scale_constrains(location)
+
+        AdvSkinProxyGenerate._connect_scale_constrain(root_skeleton_paths[0], scale_constrains[0])
+
+        leaf_keys = self._adv_query.skeleton_query.get_all_leaf_keys()
+        for i_main_key in AdvSkinProxyGenerate.MAIN_KEYS:
+            i_keys = bsc_content.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
+            for j_key in i_keys:
+                j_skeleton_paths = self._adv_query.skeleton_query.get(j_key)
+                if not j_skeleton_paths:
+                    continue
+
+                j_key_path = j_key.replace('.', '_')
+                j_group_path = '{}|{}:{}_grp'.format(location, namespace, j_key_path)
+
+                j_constrains = AdvSkinProxyGenerate._get_parent_constrains(j_group_path)
+                if not j_constrains:
+                    continue
+
+                AdvSkinProxyGenerate._connect_parent_constrain(j_skeleton_paths[0], j_constrains[0])
+
+    def load_cache(self, cache_file_path):
+        self.create_cache_root_auto()
+
+        cache_location_new = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
+        cache_location = '|{}:{}'.format(self._namespace, self.CACHE_NAME)
+        if cmds.objExists(cache_location) is False and cmds.objExists(cache_location_new) is False:
+            if os.path.isfile(cache_file_path) is True:
+                _mya_core.SceneFile.import_file(
+                    cache_file_path, namespace=self._namespace
+                )
+                self.connect_cache_constrains(cache_location, self._namespace)
+
+                cmds.parent(cache_location, self.CACHE_ROOT)
+
+                self.hide_resource_auto()
+
+    def hide_resource_auto(self):
+        cache_location = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
+        geometry_roots = self._adv_query.main_query.get('geometry_root')
+        if geometry_roots:
+            layer_name = '{}_skin_proxy_hide'.format(self._namespace)
+            layer_path = cmds.createDisplayLayer(name=layer_name, number=1, empty=True)
+            cmds.editDisplayLayerMembers(layer_path, *geometry_roots)
+            cmds.setAttr(layer_path+'.visibility', False)
+
+            cmds.container(cache_location, edit=1, force=1, addNode=[layer_path])
+
+    def generate_args(self):
+        file_path = self._resource.file
+        cache_file_path = _ast_core.AssetCache.generate_skin_proxy_file(
+            file_path
+        )
+        if os.path.isfile(cache_file_path) is False:
+            cmd = _ast_core.MayaCacheProcess.generate_command(
+                'method=skin-proxy-cache-generate&file={}&cache_file={}'.format(
+                    file_path,
+                    cache_file_path,
+                )
+            )
+            return cmd, cache_file_path
+        return None, cache_file_path
+
 
 class AdvSkinProxyGenerate(object):
     MAIN_KEYS = [
@@ -41,10 +119,6 @@ class AdvSkinProxyGenerate(object):
         'ankle',
         'toes',
         'toes_end',
-    ]
-
-    ERROR_KEYS = [
-        ''
     ]
 
     PROXY_CONTROL_PATH = '|__skin_proxy_control__'
@@ -320,8 +394,6 @@ class AdvSkinProxyGenerate(object):
     def __init__(self, namespace):
         self._namespace = namespace
         self._adv_query = _rig_core.AdvQuery(namespace)
-        self._rig = _rig_core.AdvRigOpt(self._namespace)
-        self._root = self._rig.get_root()
 
     def create_cache_root_auto(self):
         if cmds.objExists(self.CACHE_ROOT) is False:
@@ -651,106 +723,6 @@ class AdvSkinProxyGenerate(object):
 
                 cmds.setAttr('{}.qsm_scale'.format(j_control_path), scale)
                 cmds.setAttr('{}.scaleZ'.format(j_control_path), j_scale)
-
-    def load_cache_constrains(self, namespace=None):
-        if namespace is not None:
-            root_path = '|{}:{}'.format(namespace, self.CACHE_NAME)
-        else:
-            root_path = '|{}'.format(self.CACHE_NAME)
-
-        leaf_keys = self._adv_query.skeleton_query.get_all_leaf_keys()
-        for i_main_key in self.MAIN_KEYS:
-            i_keys = bsc_content.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
-            for j_key in i_keys:
-                j_skeleton_paths = self._adv_query.skeleton_query.get(j_key)
-                if not j_skeleton_paths:
-                    continue
-
-                j_key_path = j_key.replace('.', '_')
-                if namespace is not None:
-                    j_group_path = '{}|{}:{}_grp'.format(root_path, namespace, j_key_path)
-                else:
-                    j_group_path = '{}|{}_grp'.format(root_path, j_key_path)
-
-                j_skeleton_path = j_skeleton_paths[0]
-                if not self._get_parent_constrains(j_group_path):
-                    j_constraints = cmds.parentConstraint(j_skeleton_path, j_group_path)
-                    self._load_target_offset(
-                        j_constraints[0],
-                        cmds.getAttr('{}.qsm_offset_translate'.format(j_group_path))[0],
-                        cmds.getAttr('{}.qsm_offset_rotate'.format(j_group_path))[0]
-                    )
-
-    def connect_cache_constrains(self, location, namespace):
-        root_skeleton_paths = self._adv_query.skeleton_query.get('root.M')
-        scale_constrains = self._get_scale_constrains(location)
-
-        self._connect_scale_constrain(root_skeleton_paths[0], scale_constrains[0])
-
-        leaf_keys = self._adv_query.skeleton_query.get_all_leaf_keys()
-        for i_main_key in self.MAIN_KEYS:
-            i_keys = bsc_content.ContentUtil.filter(leaf_keys, '{}.*'.format(i_main_key))
-            for j_key in i_keys:
-                j_skeleton_paths = self._adv_query.skeleton_query.get(j_key)
-                if not j_skeleton_paths:
-                    continue
-
-                j_key_path = j_key.replace('.', '_')
-                j_group_path = '{}|{}:{}_grp'.format(location, namespace, j_key_path)
-
-                j_constrains = self._get_parent_constrains(j_group_path)
-                if not j_constrains:
-                    continue
-
-                self._connect_parent_constrain(j_skeleton_paths[0], j_constrains[0])
-
-    def load_cache(self, cache_file_path):
-        self.create_cache_root_auto()
-
-        namespace = self._namespace
-
-        cache_location_new = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
-        cache_location = '|{}:{}'.format(namespace, self.CACHE_NAME)
-        if cmds.objExists(cache_location) is False and cmds.objExists(cache_location_new) is False:
-            if os.path.isfile(cache_file_path) is True:
-                self._import_file(
-                    cache_file_path, namespace=namespace
-                )
-                self.connect_cache_constrains(cache_location, namespace)
-
-                self.auto_hide(cache_location)
-
-                cmds.parent(cache_location, self.CACHE_ROOT)
-
-    def auto_hide(self, location):
-        self.hide_source_geometry_root(location)
-
-    def do_remove(self):
-        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME), long=1)
-        if _:
-            cmds.delete(_[0])
-
-    def is_exists(self):
-        _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME), long=1)
-        return not not _
-
-    def is_rig_exists(self):
-        return self._rig.is_exists()
-
-    def generate_args(self):
-        file_path = _mya_core.ReferenceNamespacesCache().get_file(self._namespace)
-        cache_file_path = _ast_core.AssetCache.generate_skin_proxy_file(
-            file_path
-        )
-        if os.path.isfile(cache_file_path) is False:
-            cmd = _ast_core.MayaCacheProcess.generate_command(
-                'method=skin-proxy-cache-generate&file={}&cache_file={}'.format(
-                    file_path,
-                    cache_file_path,
-                )
-            )
-            return cmd, cache_file_path
-        return None, cache_file_path
 
     def test(self):
         pass
