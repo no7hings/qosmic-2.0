@@ -624,7 +624,7 @@ class MeshOpt(
         om2_obj = self.get_om2_fnc()
         om2_obj.renameUVSet(uv_map_name, new_uv_map_name)
 
-    def get_face_count(self):
+    def get_face_number(self):
         om2_obj = self.get_om2_fnc()
         return om2_obj.numPolygons
 

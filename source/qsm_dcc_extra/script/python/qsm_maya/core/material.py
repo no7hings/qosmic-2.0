@@ -33,10 +33,10 @@ class Material(object):
     @classmethod
     def assign_surface_shader(cls, path, shader):
         _connection.Connection.create(
-            _attribute.Attribute.to_atr_path(
+            _attribute.NodeAttribute.to_atr_path(
                 shader, 'outColor'
             ),
-            _attribute.Attribute.to_atr_path(
+            _attribute.NodeAttribute.to_atr_path(
                 path, 'surfaceShader'
             )
         )

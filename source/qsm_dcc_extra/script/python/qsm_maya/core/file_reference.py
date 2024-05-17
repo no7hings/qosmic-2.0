@@ -33,7 +33,7 @@ class FileReferences(object):
     @classmethod
     def get_file(cls, path, atr_name):
         node_type = _node.Node.get_type(path)
-        file_path = _attribute.Attribute.get_as_string(path, atr_name)
+        file_path = _attribute.NodeAttribute.get_as_string(path, atr_name)
         if node_type == 'file':
             file_name = os.path.splitext(os.path.basename(file_path))[0]
             # udim
@@ -42,7 +42,7 @@ class FileReferences(object):
             if udim_results:
                 return file_path
 
-            tile_mode = _attribute.Attribute.get_value(path, 'uvTilingMode')
+            tile_mode = _attribute.NodeAttribute.get_value(path, 'uvTilingMode')
             if tile_mode == 3:
                 results = re.findall(r'[0-9][0-9][0-9][0-9]', file_name)
                 if results:
@@ -53,7 +53,7 @@ class FileReferences(object):
             if sequence_results:
                 return file_path
             #
-            sequence_enable = _attribute.Attribute.get_value(path, 'useFrameExtension')
+            sequence_enable = _attribute.NodeAttribute.get_value(path, 'useFrameExtension')
             if sequence_enable:
                 results = re.findall(r'[0-9]{3,4}', file_name)
                 if results:
@@ -73,15 +73,15 @@ class FileReferences(object):
                     file_path
                 )
                 # sequence
-                if _attribute.Attribute.get_value(path, 'useFrameExtension'):
-                    _attribute.Attribute.set_as_string(path, atr_name, unit_paths[0])
+                if _attribute.NodeAttribute.get_value(path, 'useFrameExtension'):
+                    _attribute.NodeAttribute.set_as_string(path, atr_name, unit_paths[0])
                 # udim
-                elif _attribute.Attribute.get_value(path, 'uvTilingMode') == 3:
-                    _attribute.Attribute.set_as_string(path, atr_name, unit_paths[0])
+                elif _attribute.NodeAttribute.get_value(path, 'uvTilingMode') == 3:
+                    _attribute.NodeAttribute.set_as_string(path, atr_name, unit_paths[0])
             else:
-                _attribute.Attribute.set_as_string(path, atr_name, file_path)
+                _attribute.NodeAttribute.set_as_string(path, atr_name, file_path)
         else:
-            _attribute.Attribute.set_as_string(path, atr_name, file_path)
+            _attribute.NodeAttribute.set_as_string(path, atr_name, file_path)
 
     @classmethod
     def search_all_from(cls, directory_paths):

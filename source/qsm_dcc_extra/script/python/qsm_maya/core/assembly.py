@@ -60,15 +60,15 @@ class AssemblyReference(object):
         parent_path = '|'.join(location.split('|')[:-1])
         name = location.split('|')[-1]
         result = cmds.assembly(name=name, type=cls.NODE_TYPE)
-        path_new = _node_dag.DagNode.parent_to(result, parent_path)
-        _attribute.Attribute.set_as_string(path_new, 'definition', ad_file_path)
+        path_new = _node_dag.DagNode.parent_to(result, parent_path, relative=True)
+        _attribute.NodeAttribute.set_as_string(path_new, 'definition', ad_file_path)
         if namespace is not None:
             cls.rename_namespace(path_new, namespace)
         return path_new
 
     @classmethod
     def get_file(cls, path):
-        return _attribute.Attribute.get_as_string(path, 'definition')
+        return _attribute.NodeAttribute.get_as_string(path, 'definition')
 
     @classmethod
     def get_namespace(cls, path):

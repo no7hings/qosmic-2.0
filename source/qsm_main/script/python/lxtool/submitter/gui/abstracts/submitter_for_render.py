@@ -121,10 +121,10 @@ class AbsPnlSubmitterForRenderBase(
         v_splitter_0.add_widget(qt_scroll_area_0)
         qt_layout_0 = qt_scroll_area_0._layout
         #
-        self._schemes_prx_node = prx_widgets.PrxNode('schemes')
+        self._schemes_prx_node = prx_widgets.PrxOptionsNode('schemes')
         qt_layout_0.addWidget(self._schemes_prx_node.widget)
         #
-        self._options_prx_node = prx_widgets.PrxNode('options')
+        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
         qt_layout_0.addWidget(self._options_prx_node.widget)
         #
         prx_expanded_group_0 = prx_widgets.PrxHToolGroup()
@@ -147,13 +147,13 @@ class AbsPnlSubmitterForRenderBase(
         qt_layout_1 = qt_scroll_area_1._layout
         h_splitter_0.add_widget(qt_scroll_area_1)
         #
-        self._usd_prx_node = prx_widgets.PrxNode('usd')
+        self._usd_prx_node = prx_widgets.PrxOptionsNode('usd')
         qt_layout_1.addWidget(self._usd_prx_node.widget)
         #
-        self._variables_prx_node = prx_widgets.PrxNode('variables')
+        self._variables_prx_node = prx_widgets.PrxOptionsNode('variables')
         qt_layout_1.addWidget(self._variables_prx_node.widget)
         #
-        self._settings_prx_node = prx_widgets.PrxNode('settings')
+        self._settings_prx_node = prx_widgets.PrxOptionsNode('settings')
         qt_layout_1.addWidget(self._settings_prx_node.widget)
         #
         h_splitter_0.set_stretches([1, 2, 1])

@@ -854,7 +854,7 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
         self._task_prx_view = prx_widgets.PrxListView()
         self._main_h_s.add_widget(self._task_prx_view)
 
-        self._options_prx_node = prx_widgets.PrxNode('options')
+        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
         self._left_v_s.add_widget(self._options_prx_node)
         #
         self._entity_prx_view.create_header_view(

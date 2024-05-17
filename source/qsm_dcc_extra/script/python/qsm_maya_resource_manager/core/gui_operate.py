@@ -226,7 +226,7 @@ class GuiResourceOpt(
             resources = self.gui_get_selected_resources()
             paths = []
             if resources:
-                scheme = self._unit._utility_options_node.get('selection_scheme')
+                scheme = self._unit._utility_prx_options_node.get('selection_scheme')
                 paths = []
                 [paths.extend(x.find_nodes_by_scheme(scheme)) for x in resources]
             if paths:

@@ -29,6 +29,13 @@ class Camera(object):
 
     @classmethod
     def generate_mask_nodes(cls, path, type_includes=None):
+        def filter_fnc_(path_):
+            if type_includes is None:
+                return True
+            if cmds.nodeType(path_) in type_includes:
+                return True
+            return False
+
         list_ = []
         tvl = om_ui.MDrawTraversal()
         om_path = cls.to_om_dag_path(path)
@@ -42,10 +49,9 @@ class Camera(object):
             tvl.itemPath(i, i_shape_dag_path)
             i_shape_path = i_shape_dag_path.fullPathName()
             if _nod.Node.is_exists(i_shape_path) is True:
-                list_.append(i_shape_path)
+                if filter_fnc_(i_shape_path) is True:
+                    list_.append(i_shape_path)
 
-        if type_includes is not None:
-            return [x for x in list_ if cmds.nodeType(x) in type_includes]
         return list_
 
     @classmethod
@@ -61,7 +67,7 @@ class Camera(object):
 
     @classmethod
     def get_focal_length(cls, path):
-        return _atr.Attribute.get_value(
+        return _atr.NodeAttribute.get_value(
             path, 'focalLength'
         )
 

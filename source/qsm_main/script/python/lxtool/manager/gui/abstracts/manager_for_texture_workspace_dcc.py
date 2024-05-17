@@ -162,17 +162,17 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
 
     def gui_setup_window(self):
         self.set_main_style_mode(1)
-        self._tab_view = prx_widgets.PrxTabView()
-        self.add_widget(self._tab_view)
+        self._prx_tab_view = prx_widgets.PrxTabView()
+        self.add_widget(self._prx_tab_view)
 
         s_0 = prx_widgets.PrxVScrollArea()
-        self._tab_view.add_widget(
+        self._prx_tab_view.add_widget(
             s_0,
             name='workspace',
             icon_name_text='workspace',
         )
 
-        self._options_prx_node = prx_widgets.PrxNode('options')
+        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
         s_0.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.options'),

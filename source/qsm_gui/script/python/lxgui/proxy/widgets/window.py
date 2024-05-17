@@ -122,7 +122,7 @@ class AbsPrxDialogWindow(
         self._customize_layout = gui_qt_wgt_base.QtVBoxLayout(self._customize_widget)
         self._customize_layout.setAlignment(gui_qt_core.QtCore.Qt.AlignTop)
         # option
-        self._options_prx_node = gui_prx_wdt_node.PrxNode('options')
+        self._options_prx_node = gui_prx_wdt_node.PrxOptionsNode('options')
         self._customize_layout.addWidget(self._options_prx_node.widget)
         self._options_prx_node.set_hide()
         # tip

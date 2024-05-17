@@ -12,7 +12,7 @@ from ... import core as _mya_core
 from . import base as _base
 
 
-class UnitAssembly(object):
+class UnitAssemblyOpt(object):
     IMPORT_ROOT = '|__UNIT_ASSEMBLY_IMPORT__'
 
     @classmethod
@@ -24,7 +24,7 @@ class UnitAssembly(object):
     @classmethod
     def create_import_location(cls, namespace):
         root = cls.create_import_root()
-        location = '{}|{}_grp'.format(root, namespace)
+        location = '{}|{}_MESH_GRP'.format(root, namespace)
         return _mya_core.Group.create(
             location
         )
@@ -42,6 +42,11 @@ class UnitAssembly(object):
 
     def __repr__(self):
         return self.__str__()
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self._node == other._node
+        return False
 
     def is_exists(self):
         return _mya_core.Node.is_exists(self._node)
@@ -64,9 +69,25 @@ class UnitAssembly(object):
         )
 
     def set_active(self, key):
-        _mya_core.AssemblyReference.set_active(
-            self._node, key
-        )
+        file_path = _mya_core.AssemblyReference.get_file(self._node)
+        file_opt = bsc_storage.StgFileOpt(file_path)
+        if file_opt.get_is_file() is True:
+            if key.startswith(_base.Assembly.Keys.GPU):
+                file_path_new = '{}/{}.abc'.format(
+                    file_opt.directory_path, key
+                )
+                if bsc_storage.StgPathMtd.get_is_file(file_path_new) is True:
+                    _mya_core.AssemblyReference.set_active(
+                        self._node, key
+                    )
+            elif key.startswith(_base.Assembly.Keys.Mesh):
+                file_path_new = '{}/{}.ma'.format(
+                    file_opt.directory_path, key
+                )
+                if bsc_storage.StgPathMtd.get_is_file(file_path_new) is True:
+                    _mya_core.AssemblyReference.set_active(
+                        self._node, key
+                    )
 
     def do_import_mesh(self):
         file_path = _mya_core.AssemblyReference.get_file(self._node)
@@ -84,14 +105,19 @@ class UnitAssembly(object):
                 i_path_new = _mya_core.DagNode.parent_to(
                     i, import_location
                 )
-                _mya_core.ParentConstraint.create(
-                    self._node, i_path_new
+
+                _mya_core.Node.delete(
+                    _mya_core.ParentConstraint.create(
+                        self._node, i_path_new
+                    )
                 )
-                _mya_core.ScaleConstraint.create(
-                    self._node, i_path_new
+                _mya_core.Node.delete(
+                    _mya_core.ScaleConstraint.create(
+                        self._node, i_path_new
+                    )
                 )
 
-            _mya_core.Attribute.set_visible(
+            _mya_core.NodeAttribute.set_visible(
                 self._node, False
             )
 
@@ -136,34 +162,40 @@ class UnitAssembliesQuery(object):
             for j_seq, j_path in enumerate(i_v):
                 j_name = j_path.split('|')[-1]
                 j_path_virtual = '/{}/{}_{}'.format(i_k, j_name, j_seq)
-                j_resource = UnitAssembly(j_path)
-                j_resource._path = j_path_virtual
-                j_resource._path_opt = bsc_core.PthNodeOpt(j_path_virtual)
-                self._cache_dict[j_path_virtual] = j_resource
+                j_opt = UnitAssemblyOpt(j_path)
+                j_opt._path = j_path_virtual
+                j_opt._path_opt = bsc_core.PthNodeOpt(j_path_virtual)
+                self._cache_dict[j_path_virtual] = j_opt
 
-                self._path_query[j_path] = j_resource
+                self._path_query[j_path] = j_opt
 
     def get_all(self):
         return self._cache_dict.values()
 
-    def find_one(self, path):
-        if path in self._path_query:
-            return self._path_query[path]
-
     def to_mapper(self, paths):
         dict_ = {}
         for i_path in paths:
-            i_resource = self.find_one(i_path)
-            if i_resource is not None:
-                if i_resource.is_exists() is False:
-                    continue
-                i_active = i_resource.get_active()
-                if i_active is None:
-                    continue
+            i_result = self.find_one(i_path)
+            if i_result is not None:
+                i_active = UnitAssemblyOpt(i_result).get_active()
                 dict_.setdefault(
-                    i_active, []
-                ).append(i_resource)
+                    i_active, set()
+                ).add(i_result)
         return dict_
+
+    @classmethod
+    def find_one(cls, path):
+        if _mya_core.Node.is_assembly_reference(path):
+            _ = path
+        else:
+            _ = _base.Assembly.find_assembly_reference(path)
+            if _ is None:
+                return
+
+        if _mya_core.NodeAttribute.get_is_value(
+            _, 'qsm_type', _base.Assembly.Types.UnitAssembly
+        ) is True:
+            return _
 
     @classmethod
     def get_data(cls):
@@ -171,9 +203,9 @@ class UnitAssembliesQuery(object):
         _ = cmds.ls(type='assemblyReference', long=1) or []
         for i_path in _:
             if cmds.objExists(i_path+'.qsm_type') is True:
-                i_qsm_type = _mya_core.Attribute.get_as_string(i_path, 'qsm_type')
+                i_qsm_type = _mya_core.NodeAttribute.get_as_string(i_path, 'qsm_type')
                 if i_qsm_type == 'unit_assembly':
-                    i_qsm_hash_key = _mya_core.Attribute.get_as_string(i_path, 'qsm_hash_key')
+                    i_qsm_hash_key = _mya_core.NodeAttribute.get_as_string(i_path, 'qsm_hash_key')
                     dict_.setdefault(
                         i_qsm_hash_key, []
                     ).append(i_path)

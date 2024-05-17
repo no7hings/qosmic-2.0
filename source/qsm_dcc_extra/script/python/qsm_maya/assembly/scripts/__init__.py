@@ -3,6 +3,5 @@ from .locator_box import *
 
 from .mesh_box import *
 
-from .grid_space import *
 
 

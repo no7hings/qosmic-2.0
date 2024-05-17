@@ -272,7 +272,7 @@ class AbsPnlPublisherForGeneral(prx_widgets.PrxSessionWindow):
         layer_widget = self.create_layer_widget('publish', 'Publish')
         sa_2 = prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(sa_2)
-        self._publish_options_prx_node = prx_widgets.PrxNode('options')
+        self._publish_options_prx_node = prx_widgets.PrxOptionsNode('options')
         sa_2.add_widget(self._publish_options_prx_node)
         self._publish_options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.publish_options')

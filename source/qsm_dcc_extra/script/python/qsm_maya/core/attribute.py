@@ -3,7 +3,7 @@
 import maya.cmds as cmds
 
 
-class Attribute(object):
+class NodeAttribute(object):
     @classmethod
     def to_atr_path(cls, path, atr_name=None):
         if atr_name is None:
@@ -13,6 +13,14 @@ class Attribute(object):
     @classmethod
     def get_value(cls, path, atr_name):
         return cmds.getAttr(cls.to_atr_path(path, atr_name))
+
+    @classmethod
+    def get_is_value(cls, path, atr_name, value):
+        if cls.is_exists(path, atr_name):
+            _ = cls.get_value(path, atr_name)
+            if value == _:
+                return True
+        return False
 
     @classmethod
     def get_as_string(cls, path, atr_name):
@@ -72,7 +80,47 @@ class Attribute(object):
         return False
 
     @classmethod
-    def find_source_node(cls, path, atr_name, node_type=None):
+    def get_source(cls, path, atr_name):
+        _ = cmds.listConnections(
+            cls.to_atr_path(path, atr_name), destination=0, source=1, plugs=1
+        )
+        if _:
+            return _[0]
+
+    @classmethod
+    def get_targets(cls, path, atr_name):
+        return cmds.listConnections(
+            cls.to_atr_path(path, atr_name), destination=1, source=0, plugs=1
+        ) or []
+
+    @classmethod
+    def get_all_sources(cls, path):
+        list_ = []
+        _ = cmds.listConnections(path, destination=0, source=1, connections=1, plugs=1) or []
+        # ["source-atr-path", "target-atr-path", ...]
+        for seq, i in enumerate(_):
+            if seq % 2:
+                source_atr_path = i
+                target_atr_path = _[seq - 1]
+                #
+                list_.append((source_atr_path, target_atr_path))
+        return list_
+
+    @classmethod
+    def get_all_targets(cls, path):
+        lis = []
+        _ = cmds.listConnections(path, destination=1, source=0, connections=1, plugs=1) or []
+        # ["source-atr-path", "target-atr-path", ...]
+        for seq, i in enumerate(_):
+            if seq%2:
+                source_atr_path = _[seq-1]
+                target_atr_path = i
+                #
+                lis.append((source_atr_path, target_atr_path))
+        return lis
+
+    @classmethod
+    def get_source_node(cls, path, atr_name, node_type=None):
         kwargs = dict(
             destination=0, source=1
         )
@@ -86,26 +134,16 @@ class Attribute(object):
             return _[0]
 
     @classmethod
-    def find_target_node(cls, path, atr_name, node_type=None):
+    def get_target_nodes(cls, path, atr_name, node_type=None):
         kwargs = dict(
             destination=1, source=0
         )
         if node_type is not None:
             kwargs['type'] = node_type
 
-        _ = cmds.listConnections(
+        return cmds.listConnections(
             cls.to_atr_path(path, atr_name), **kwargs
         ) or []
-        if _:
-            return _[0]
-
-    @classmethod
-    def find_target(cls, path, atr_name):
-        _ = cmds.listConnections(
-            cls.to_atr_path(path, atr_name), destination=1, source=0, plugs=1
-        ) or []
-        if _:
-            return _[0]
 
     @classmethod
     def create_as_string(cls, path, atr_name, default=None):
@@ -138,7 +176,7 @@ class Attribute(object):
                 cls.set_value(path, atr_name, default)
 
 
-class Attributes(object):
+class NodeAttributes(object):
 
     @classmethod
     def get_all_keyable_names(cls, path):

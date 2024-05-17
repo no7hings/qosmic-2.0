@@ -1,5 +1,12 @@
 # coding:utf-8
+# noinspection PyUnresolvedReferences
+import maya.cmds as cmds
+
 import lxbasic.core as bsc_core
+
+import lxbasic.storage as bsc_storage
+
+from ...assembly import core as _asb_core
 
 from ... import core as _mya_core
 
@@ -29,14 +36,95 @@ class Assembly(object):
             GPU_LOD_2,
         ]
 
-    @classmethod
-    def find(cls, path):
-        if _mya_core.Node.is_transform(path):
-            return None
+    class Types(object):
+        UnitAssembly = 'unit_assembly'
+        GpuInstance = 'gpu_instance'
 
-        path_opt = bsc_core.PthNodeOpt(path)
+    FACE_COUNT_MAXIMUM = 50000
+
+    DIMENSION_MINIMUM = 1000
+
+    @classmethod
+    def find_assembly_reference(cls, path):
+        _0 = _mya_core.NodeAttribute.get_target_nodes(
+            path, 'message', 'hyperLayout'
+        )
+        if _0:
+            _1 = _mya_core.NodeAttribute.get_target_nodes(
+                _0[0], 'message', 'assemblyReference'
+            )
+            if _1:
+                return _1[0]
+
+    @classmethod
+    def find_any_by_shape(cls, shape_path, depth_maximum=3):
+        path_opt = bsc_core.PthNodeOpt(shape_path)
         paths = path_opt.get_ancestor_paths()
-        for i_path in paths[:3]:
+        for i_path in paths[:depth_maximum]:
             if i_path != _mya_core.DagNode.PATHSEP:
-                if _mya_core.Attribute.is_exists(i_path, 'qsm_type') is True:
+                if _mya_core.NodeAttribute.is_exists(i_path, 'qsm_type') is True:
                     return i_path
+
+
+class MeshInstance(object):
+    def __init__(self, material=False):
+        self._material = material
+        self._hash_key_dict = {}
+
+    def execute(self):
+        shape_paths = cmds.ls(type='mesh', noIntermediate=1, long=1)
+        for i_shape_path in shape_paths:
+            self.mesh_prc(i_shape_path)
+
+    def mesh_prc(self, shape_path):
+        mesh_opt = _mya_core.MeshOpt(shape_path)
+        hash_key = mesh_opt.to_hash()
+        if self._material is True:
+            hash_key_1 = mesh_opt.get_material_assign_as_hash_key()
+            hash_key = hash_key+hash_key_1
+
+        if hash_key not in self._hash_key_dict:
+            self._hash_key_dict[hash_key] = shape_path
+        else:
+            shape_path_src = self._hash_key_dict[hash_key]
+            transform_path = mesh_opt.transform_path
+            _mya_core.Transform.delete_all_shapes(transform_path)
+            _mya_core.Shape.instance_to(
+                shape_path_src, transform_path
+            )
+
+
+class GpuImport(object):
+    def __init__(self):
+        pass
+
+    def execute(self):
+        shape_paths = cmds.ls(type='gpuCache', long=1)
+        for i_shape_path in shape_paths:
+            self.gpu_prc(i_shape_path)
+
+    def gpu_prc(self, shape_path):
+        gpu_file_path = _mya_core.NodeAttribute.get_as_string(
+            shape_path, 'cacheFileName'
+        )
+        shape_opt = _mya_core.ShapeOpt(shape_path)
+        transform_path = shape_opt.transform_path
+        if bsc_storage.StgPathMtd.get_is_file(gpu_file_path):
+            paths = _mya_core.SceneFile.import_file(
+                gpu_file_path
+            )
+
+            roots = _mya_core.DagNode.find_roots(paths)
+
+            _mya_core.Transform.delete_all_shapes(transform_path)
+
+            if roots:
+                for i_path in roots:
+                    if _mya_core.Node.is_transform(i_path):
+                        i_shape_paths = _mya_core.Group.find_siblings(i_path, ['mesh'])
+                        for j_shape_path in i_shape_paths:
+                            j_transform_path = _mya_core.Shape.get_transform(j_shape_path)
+                            _mya_core.DagNode.parent_to(j_transform_path, transform_path, relative=True)
+
+                        if _mya_core.Node.is_exists(i_path):
+                            _mya_core.Node.delete(i_path)

@@ -19,6 +19,8 @@ from .. import core as _scn_core
 
 from ...resource import core as _rsc_core
 
+from ...assembly import core as _asb_core
+
 
 class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
     CACHE_NAME = 'unit_assembly_dgc'
@@ -84,10 +86,92 @@ class UnitAssemblyProcess(object):
 
         self._gpu_unpack = gpu_unpack
 
+    def grid_mesh_prc(self):
+        paths = _mya_core.Scene.find_all_dag_nodes(['mesh'])
+        nodes = []
+        list_for_grid = []
+        for i_shape_path in paths:
+            if _mya_core.Node.is_mesh(i_shape_path) is True:
+                i_mesh_opt = _mya_core.MeshOpt(i_shape_path)
+                i_w, i_h, i_d = i_mesh_opt.get_dimension()
+                i_s = max(i_w, i_h, i_d)
+                if i_s < _scn_core.Assembly.DIMENSION_MINIMUM:
+                    list_for_grid.append(i_shape_path)
+
+        if list_for_grid:
+            mapper = _asb_core.GridSpace(list_for_grid, _scn_core.Assembly.DIMENSION_MINIMUM).generate()
+            keys = mapper.keys()
+            keys.sort()
+            for i_seq, i_key in enumerate(keys):
+                i_hash_key = bsc_core.HashMtd.to_hash_key(i_key)
+                i_directory_path = '{}/region/{}'.format(
+                    self._cache_directory_path, i_hash_key
+                )
+                i_gpu_file_path = '{}/gpu.abc'.format(
+                    i_directory_path
+                )
+                i_mesh_file_path = '{}/mesh.ma'.format(
+                    i_directory_path
+                )
+                i_ad_file_path = '{}/AD.ma'.format(
+                    i_directory_path
+                )
+                i_group_path = '|region_{}_GRP'.format(i_seq)
+                i_group_path_new = _mya_core.Group.create(i_group_path)
+                i_shape_paths = mapper[i_key]
+                for j_shape_path in i_shape_paths:
+                    j_transform_path = _mya_core.Shape.get_transform(j_shape_path)
+                    _mya_core.Group.add(i_group_path_new, j_transform_path)
+                # export to gpu and mesh
+                i_children = _mya_core.Group.get_children(i_group_path_new)
+                _mya_core.GpuCache.export_frame_(
+                    i_gpu_file_path, i_children
+                )
+                _mya_core.SceneFile.export_file(
+                    i_mesh_file_path, i_children
+                )
+                _mya_core.Node.delete(i_group_path_new)
+                # create AD
+                i_ad_path = '|region_{}_AD'.format(i_seq)
+                # ad
+                _mya_core.AssemblyDefinition.create(
+                    i_ad_path
+                )
+                _mya_core.AssemblyDefinition.add_cache(
+                    i_ad_path, i_gpu_file_path, 'gpu'
+                )
+                _mya_core.AssemblyDefinition.add_scene(
+                    i_ad_path, i_mesh_file_path, 'mesh'
+                )
+                _mya_core.SceneFile.export_file(
+                    i_ad_file_path, i_ad_path
+                )
+
+                _mya_core.Node.delete(i_ad_path)
+                i_ar_path = '|region_{}_AR'.format(i_seq)
+                i_ar_path_new = _mya_core.AssemblyReference.create(
+                    i_ad_file_path, i_ar_path
+                )
+                _mya_core.NodeAttribute.create_as_string(
+                    i_ar_path_new, 'qsm_type', 'unit_assembly'
+                )
+                _mya_core.NodeAttribute.create_as_string(
+                    i_ar_path_new, 'qsm_hash_key', i_hash_key
+                )
+                _mya_core.NodeDrawOverride.set_enable(
+                    i_ar_path_new, True
+                )
+                _mya_core.NodeDrawOverride.set_color(
+                    i_ar_path_new, (1.0, .5, .25)
+                )
+                nodes.append(i_ar_path_new)
+
+        return nodes
+
     def mesh_prc(self, shape_path):
         mesh_opt = _mya_core.MeshOpt(shape_path)
-        face_count = mesh_opt.get_face_count()
-        if face_count < 50000:
+        face_count = mesh_opt.get_face_number()
+        if face_count < _scn_core.Assembly.FACE_COUNT_MAXIMUM:
             return
 
         hash_key = mesh_opt.to_hash()
@@ -97,7 +181,7 @@ class UnitAssemblyProcess(object):
         unit_directory_path = '{}/unit/{}'.format(
             self._cache_directory_path, hash_key
         )
-        ad_file_path = '{}/unit.AD.ma'.format(
+        ad_file_path = '{}/AD.ma'.format(
             unit_directory_path
         )
 
@@ -194,10 +278,10 @@ class UnitAssemblyProcess(object):
         ar_path_new = _mya_core.AssemblyReference.create(
             ad_file_path, ar_path
         )
-        _mya_core.Attribute.create_as_string(
+        _mya_core.NodeAttribute.create_as_string(
             ar_path_new, 'qsm_type', 'unit_assembly'
         )
-        _mya_core.Attribute.create_as_string(
+        _mya_core.NodeAttribute.create_as_string(
             ar_path_new, 'qsm_hash_key', hash_key
         )
         _mya_core.NodeDrawOverride.set_enable(
@@ -207,73 +291,51 @@ class UnitAssemblyProcess(object):
             ar_path_new, (1.0, .5, .25)
         )
 
-    def gpu_prc(self, shape_path):
-        gpu_file_path = _mya_core.Attribute.get_as_string(
-            shape_path, 'cacheFileName'
-        )
-        shape_opt = _mya_core.ShapeOpt(shape_path)
-        transform_path = shape_opt.transform_path
-        if bsc_storage.StgPathMtd.get_is_file(gpu_file_path):
-            paths = _mya_core.SceneFile.import_file(
-                gpu_file_path
-            )
-
-            roots = _mya_core.DagNode.find_roots(paths)
-
-            _mya_core.Transform.delete_all_shapes(transform_path)
-
-            if roots:
-                for i_path in roots:
-                    if _mya_core.Node.is_transform(i_path):
-                        _mya_core.DagNode.parent_to(i_path, transform_path)
-
-        mesh_paths = _mya_core.DagNode.find_siblings(
-            transform_path, ['mesh']
-        )
-        for i_path in mesh_paths:
-            self.mesh_prc(i_path)
-
     def execute(self):
         _mya_core.SceneFile.new()
 
         container = '|{}'.format(UnitAssemblyOpt.CACHE_NAME)
 
         _mya_core.Container.create_as_default(container)
-        cmds.setAttr(container+'.blackBox', 1, lock=1)
-        _mya_core.Attribute.create_as_string(
+        _mya_core.NodeAttribute.create_as_string(
             container, 'qsm_file', self._file_path
         )
-        _mya_core.Attribute.create_as_string(
+        _mya_core.NodeAttribute.create_as_string(
             container, 'qsm_cache', self._cache_file_path
         )
 
-        paths = _mya_core.SceneFile.import_file(
+        import_paths = _mya_core.SceneFile.import_file(
             self._file_path
         )
-        # assembly
-        roots = _mya_core.DagNode.find_roots(paths)
+        all_roots = _mya_core.DagNode.find_roots(import_paths)
         # find lost reference first
         _mya_core.FileReferences.search_all_from(
             [self._directory_path]
         )
-        # create assembly
-        with bsc_log.LogProcessContext.create(maximum=len(paths), label='unit assembly process') as g_p:
-            for i_path in paths:
-                if _mya_core.Node.is_mesh(i_path) is True:
-                    self.mesh_prc(i_path)
-                elif _mya_core.Node.is_gpu(i_path) is True:
-                    if self._gpu_unpack is True:
-                        self.gpu_prc(i_path)
-
+        # repair all instanced
+        _mya_core.Scene.remove_all_instanced(type_includes=['mesh', 'gpuCache'])
+        # import all gpu
+        _scn_core.GpuImport().execute()
+        # process
+        mesh_paths = _mya_core.Scene.find_all_dag_nodes(type_includes=['mesh'])
+        count = len(mesh_paths)
+        with bsc_log.LogProcessContext.create(maximum=len(mesh_paths), label='unit assembly process') as g_p:
+            for i_path in mesh_paths:
+                self.mesh_prc(i_path)
                 g_p.do_update()
-        # export assembly
-        exists_roots = [i for i in roots if _mya_core.Node.is_exists(i)]
-
-        for i_root in exists_roots:
-            _mya_core.DagNode.parent_to(
-                i_root, container
-            )
+        #
+        grid_paths = self.grid_mesh_prc()
+        if grid_paths:
+            _mya_core.Container.add_dag_nodes(container, grid_paths)
+        # instance all mesh
+        _scn_core.MeshInstance(material=True).execute()
+        # remove unused groups
+        _mya_core.Scene.remove_all_empty_groups()
+        # collection roots
+        exists_roots = [i for i in all_roots if _mya_core.Node.is_exists(i)]
+        _mya_core.Container.add_dag_nodes(container, exists_roots)
 
         _mya_core.SceneFile.export_file(
             self._cache_file_path, container
         )
+

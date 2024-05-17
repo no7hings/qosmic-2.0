@@ -28,7 +28,7 @@ class TestWindow(prx_widgets.PrxBaseWindow):
         tool = prx_widgets.PrxFilterBar()
         tool_group_1.add_widget(tool)
         # r = rsv_core.RsvBase.generate_root()
-        # n = prx_widgets.PrxNode('root')
+        # n = prx_widgets.PrxOptionsNode('root')
         # self.add_widget(n)
         # assets = r.get_rsv_resources(
         #     project='cgm', branch='asset'

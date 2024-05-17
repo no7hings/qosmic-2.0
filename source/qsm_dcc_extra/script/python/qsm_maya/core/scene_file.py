@@ -99,9 +99,9 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
             defaultExtensions=True,
             preserveReferences=False,
         )
-        _selected_paths = []
+        selected_mark = []
         if location is not None:
-            _selected_paths = cmds.ls(selection=1, long=1) or []
+            selected_mark = cmds.ls(selection=1, long=1) or []
             cmds.select(location)
             option['exportSelected'] = True
         else:
@@ -110,8 +110,8 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
         bsc_storage.StgFileOpt(file_path).create_directory()
         results = cmds.file(file_path, **option)
         if 'exportSelected' in option:
-            if _selected_paths:
-                cmds.select(_selected_paths)
+            if selected_mark:
+                cmds.select(selected_mark)
             else:
                 cmds.select(clear=1)
         return results

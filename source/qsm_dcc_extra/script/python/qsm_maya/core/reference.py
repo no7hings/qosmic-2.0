@@ -23,10 +23,14 @@ class Reference(object):
 
     @classmethod
     def get_file(cls, path, extend=True):
-        _ = cmds.referenceQuery(path, filename=1)
-        if extend is True:
-            return cmds.referenceQuery(path, filename=1, withoutCopyNumber=1)
-        return _
+        # noinspection PyBroadException
+        try:
+            _ = cmds.referenceQuery(path, filename=1)
+            if extend is True:
+                return cmds.referenceQuery(path, filename=1, withoutCopyNumber=1)
+            return _
+        except Exception:
+            return None
 
     @classmethod
     def get_namespace(cls, path):
@@ -37,7 +41,7 @@ class Reference(object):
             return None
 
     @classmethod
-    def get_is_from_reference(cls, path):
+    def is_from_reference(cls, path):
         return cmds.referenceQuery(path, isNodeReferenced=1)
 
     @classmethod
@@ -72,7 +76,7 @@ class References(object):
         list_ = []
         _ = [i for i in cmds.ls(type='reference', long=1) or [] if i not in cls.NODE_EXCLUDE]
         for i in _:
-            if not Reference.get_is_from_reference(i):
+            if not Reference.is_from_reference(i):
                 if Reference.is_loaded(i):
                     list_.append(i)
         return list_
@@ -82,7 +86,7 @@ class References(object):
         list_ = []
         _ = [i for i in cmds.ls(type='reference', long=1) or [] if i not in cls.NODE_EXCLUDE]
         for i in _:
-            if not Reference.get_is_from_reference(i):
+            if not Reference.is_from_reference(i):
                 list_.append(i)
         return list_
 

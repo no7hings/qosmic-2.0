@@ -42,7 +42,7 @@ class TestWindow(prx_widgets.PrxBaseWindow):
         ]:
             i_s = prx_widgets.PrxVScrollArea()
             tab_view.add_widget(i_s, name=i)
-            i_n = prx_widgets.PrxNode(i)
+            i_n = prx_widgets.PrxOptionsNode(i)
             i_s.add_widget(i_n)
             i_n.create_ports_by_data(
                 c.get(i)

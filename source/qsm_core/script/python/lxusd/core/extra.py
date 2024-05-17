@@ -1197,7 +1197,7 @@ class AbsUsdMeshOptDef(UsdGeometryOpt):
     def get_path(self):
         return self._usd_prim.GetPath().pathString
 
-    def get_face_count(self):
+    def get_face_number(self):
         usd_mesh = self._usd_fnc
         return usd_mesh.GetFaceCount()
 
@@ -1374,7 +1374,7 @@ class UsdMeshOpt(UsdGeometryOpt):
     def get_path(self):
         return self._usd_prim.GetPath().pathString
 
-    def get_face_count(self):
+    def get_face_number(self):
         usd_mesh = self._usd_fnc
         return usd_mesh.GetFaceCount()
 

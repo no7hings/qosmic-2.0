@@ -103,7 +103,7 @@ class AbsPnlBuilderForTexture(prx_widgets.PrxSessionWindow):
         sa_1 = prx_widgets.PrxVScrollArea()
         self.add_widget(sa_1)
 
-        self._options_prx_node = prx_widgets.PrxNode('options')
+        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
         sa_1.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.main_options'),

@@ -387,12 +387,12 @@ class PrxNodePortStack(unr_abstracts.AbsObjStack):
         return obj.get_port_path()
 
 
-class PrxNode(gui_prx_abstracts.AbsPrxWidget):
+class PrxOptionsNode(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
     PORT_STACK_CLS = PrxNodePortStack
 
     def __init__(self, path, *args, **kwargs):
-        super(PrxNode, self).__init__(*args, **kwargs)
+        super(PrxOptionsNode, self).__init__(*args, **kwargs)
         self._path_dag_opt = bsc_core.PthNodeOpt(path)
         # debug: do not set minimum height
         # self._qt_widget.setMinimumHeight(24)

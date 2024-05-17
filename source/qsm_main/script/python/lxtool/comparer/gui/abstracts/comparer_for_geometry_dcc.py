@@ -120,7 +120,7 @@ class AbsPnlComparerForAssetGeometryDcc(prx_widgets.PrxSessionWindow):
         )
 
     def _set_configure_groups_build_(self):
-        self._options_prx_node = prx_widgets.PrxNode(
+        self._options_prx_node = prx_widgets.PrxOptionsNode(
             'options'
         )
         self.add_widget(self._options_prx_node)

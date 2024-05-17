@@ -82,7 +82,7 @@ class AbsPnlSubmitterForAssetRenderDcc(prx_widgets.PrxSessionWindow):
             self.gui_refresh_all_render_nodes
         )
 
-        self._options_prx_node = prx_widgets.PrxNode('options')
+        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
         sa_0.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.options'),

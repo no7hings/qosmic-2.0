@@ -175,7 +175,7 @@ class AbsPnlComparerForAssetGeometry(prx_widgets.PrxSessionWindow):
             self._prx_tree_view_for_filter, self._result_tree_view
         )
         #
-        self._options_prx_node = prx_widgets.PrxNode('options')
+        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
         s.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.options'),

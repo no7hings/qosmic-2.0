@@ -7,8 +7,14 @@ from . import attribute as _attribute
 
 from . import node as _node
 
+from . import node_for_dag as _node_for_dag
 
-class Transform(object):
+
+class Transform(_node_for_dag.DagNode):
+
+    @classmethod
+    def create(cls, path, *args, **kwargs):
+        return super(Transform, cls).create(path, 'transform')
 
     @classmethod
     def zero_transformations(cls, path, with_visibility=False):
@@ -18,8 +24,8 @@ class Transform(object):
             scale=(1.0, 1.0, 1.0)
         )
         for k, v in dict_.items():
-            if _attribute.Attribute.is_lock(path, k) is True:
-                _attribute.Attribute.unlock(path, k)
+            if _attribute.NodeAttribute.is_lock(path, k) is True:
+                _attribute.NodeAttribute.unlock(path, k)
 
             cmds.setAttr('{}.{}'.format(path, k), *v)
 

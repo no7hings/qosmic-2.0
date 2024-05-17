@@ -131,6 +131,60 @@ build:
                     icon: 'tool/maya/delete'
                     tool_tip: '...'
 
+        rig_switch:
+            name: 'Switch & Selection'
+            name_chs: '切换 & 选择'
+
+            parameters:
+                switch:
+                    widget: group
+                    name: 'Switch'
+                    name_chs: '切换'
+
+                switch/skin_proxy:
+                    widget: group
+                    name: 'Skin Proxy'
+                    name_chs: '简模代理'
+
+                switch/skin_proxy/enable:
+                    widget: button
+                    name: 'Enable Skin Proxy'
+                    name_chs: '启用简模代理'
+                    value: ''
+                    icon: 'tool/show'
+                    tool_tip: '...'
+                    join_to_next: True
+
+                switch/skin_proxy/disable:
+                    widget: button
+                    name: 'Disable Skin Proxy'
+                    name_chs: '关闭简模代理'
+                    value: ''
+                    icon: 'tool/hide'
+                    tool_tip: '...'
+
+                switch/dynamic_gpu:
+                    widget: group
+                    name: 'Dynamic GPU'
+                    name_chs: '动态GPU'
+
+                switch/dynamic_gpu/enable:
+                    widget: button
+                    name: 'Enable Dynamic GPU'
+                    name_chs: '启用动态GPU'
+                    value: ''
+                    icon: 'tool/show'
+                    tool_tip: '...'
+                    join_to_next: True
+
+                switch/dynamic_gpu/disable:
+                    widget: button
+                    name: 'Disable Dynamic GPU'
+                    name_chs: '关闭动态GPU'
+                    value: ''
+                    icon: 'tool/hide'
+                    tool_tip: '...'
+
         rig_motion:
             name: 'Motion'
             name_chs: '运动'
@@ -143,7 +197,7 @@ build:
                 control/enable_playback_visible:
                     widget: button
                     name: 'Enable Control Playback Visible'
-                    name_chs: '打开控制器播放可见'
+                    name_chs: '启用控制器播放可见'
                     icon: 'tool/show'
                     tool_tip: '...'
                     join_to_next: True
@@ -171,9 +225,9 @@ build:
                     value: 0
                     tool_tip: '...'
 
-                animation_transfer/transfer:
+                animation_transfer/transfer_all:
                     widget: button
-                    name_chs: '传递'
+                    name_chs: '传递所有'
                     value: ''
                     icon: 'tool/maya/transfer-animation'
                     tool_tip:
@@ -185,9 +239,9 @@ build:
                             先选中源物体，再选中目标物体
                             可选中任意部件
 
-                animation_transfer/copy:
+                animation_transfer/copy_all:
                     widget: button
-                    name_chs: '复制'
+                    name_chs: '复制所有'
                     value: ''
                     icon: 'tool/maya/copy'
                     tool_tip:
@@ -198,9 +252,9 @@ build:
                         |-
                         点击复制动画。
 
-                animation_transfer/paste:
+                animation_transfer/paste_all:
                     widget: button
-                    name_chs: '粘贴'
+                    name_chs: '粘贴所有'
                     value: ''
                     icon: 'tool/maya/paste'
                     tool_tip:
@@ -282,7 +336,7 @@ build:
                     icon: 'tool/maya/delete'
                     tool_tip: '...'
 
-        scenery_assembly:
+        scenery_switch:
             name: 'Switch & Selection'
             name_chs: '切换 & 选择'
             parameters:
@@ -350,7 +404,7 @@ build:
 
                 switch/gpu_instance:
                     widget: group
-                    name:  'GPU Instance'
+                    name: 'GPU Instance'
                     name_chs: 'GPU实例'
 
                 switch/gpu_instance/gpu:
@@ -391,6 +445,11 @@ build:
                     value: ''
                     icon: 'tool/maya/import'
                     tool_tip: '...'
+
+                convert:
+                    widget: group
+                    name: 'Convert'
+                    name_chs: '转化'
 
                 selection:
                     widget: group
@@ -502,7 +561,7 @@ build:
                     widget: integer2
                     name: 'Distance Range'
                     name_chs: '距离范围'
-                    value: [2500, 5000]
+                    value: [1000, 1500]
                     tool_tip: '...'
 
                 camera_lod_switch/create:
@@ -542,13 +601,6 @@ build:
             tool_tip: 'Include all tools for scenery'
             tool_tip_chs: '包含所有跟场景相关的工具'
 
-        assembly:
-            name: 'Assembly Resource'
-            name_chs: '组装资源'
-
-            tool_tip: 'Include all tools for assembly'
-            tool_tip_chs: '包含所有跟组装相关的工具'
-
     tag-groups:
         rig_utility:
             name: 'Utility'
@@ -556,6 +608,13 @@ build:
 
             tool_tip: 'Include all tool for rig as utility, etc. skin proxy, dynamic GPU'
             tool_tip_chs: '包含所有跟绑定相关的通用工具, 如：生成建模代理，生成动态GPU等'
+
+        rig_switch:
+            name: 'Switch'
+            name_chs: '切换'
+
+            tool_tip: 'Include all tool for rig switch'
+            tool_tip_chs: '包含所有跟场景相关的组装工具'
 
         rig_extend:
             name: 'Extend'
@@ -571,12 +630,12 @@ build:
             tool_tip: 'Include all tool for rig as utility, etc. unit assembly, camera mask'
             tool_tip_chs: '包含所有跟场景相关的通用工具, 如：生成元素组装，生成GPU实例'
 
-        scenery_assembly:
-            name: 'Assembly'
-            name_chs: '组装'
+        scenery_switch:
+            name: 'Switch'
+            name_chs: '切换'
 
-            tool_tip: 'Include all tool for scenery as assembly, etc. assembly switch'
-            tool_tip_chs: '包含所有跟场景相关的组装工具, 如：组装切换等'
+            tool_tip: 'Include all tool for scenery switch'
+            tool_tip_chs: '包含所有跟场景相关的切换工具'
 
         scenery_extend:
             name: 'Extend'

@@ -143,7 +143,7 @@ class _GuiQuery(object):
 # noinspection PyUnusedLocal
 class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
     KEY_TAB_KEYS = 'tool-desktop.page_keys'
-    KEY_TAB_KEY_CURRENT = 'tool-desktop.page_key_current'
+    HST_TAB_KEY_CURRENT = 'tool-desktop.page_key_current'
 
     KEY_TOOL_GROUP_ORDER = 'tool-desktop.tool_group_order'
     KEY_TOOL_ORDER = 'tool-desktop.tool_order'
@@ -169,11 +169,11 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
         )
 
     def __close_fnc(self):
-        page_keys = self.__tab_view.get_all_page_keys()
+        page_keys = self._prx_tab_view.get_all_page_keys()
         gui_core.GuiHistory.set_one(self.KEY_TAB_KEYS, page_keys)
 
-        page_key_current = self.__tab_view.get_current_key()
-        gui_core.GuiHistory.set_one(self.KEY_TAB_KEY_CURRENT, page_key_current)
+        page_key_current = self._prx_tab_view.get_current_key()
+        gui_core.GuiHistory.set_one(self.HST_TAB_KEY_CURRENT, page_key_current)
 
         tool_group_order_dict = gui_core.GuiHistory.get_one(self.KEY_TOOL_GROUP_ORDER) or {}
         for i_page_key in page_keys:
@@ -201,12 +201,12 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
         )
 
         self.set_main_style_mode(1)
-        self.__tab_view = prx_widgets.PrxTabView()
-        self.add_widget(self.__tab_view)
-        self.__tab_view.set_drag_enable(True)
-        self.__tab_view.set_add_enable(True)
-        self.__tab_view.set_add_menu_data_gain_fnc(self.tab_add_menu_gain_fnc)
-        self.__tab_view.connect_delete_accepted_to(self.gui_tab_page_delete_fnc)
+        self._prx_tab_view = prx_widgets.PrxTabView()
+        self.add_widget(self._prx_tab_view)
+        self._prx_tab_view.set_drag_enable(True)
+        self._prx_tab_view.set_add_enable(True)
+        self._prx_tab_view.set_add_menu_data_gain_fnc(self.tab_add_menu_gain_fnc)
+        self._prx_tab_view.connect_delete_accepted_to(self.gui_tab_page_delete_fnc)
 
         self.__bubbles_filter = qt_widgets.QtBubbleAsChoice(self._qt_widget)
         self.__bubbles_filter._setup_()
@@ -219,8 +219,8 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
 
         self.do_gui_refresh_all()
 
-        self.__tab_view.set_current_by_key(
-            gui_core.GuiHistory.get_one(self.KEY_TAB_KEY_CURRENT)
+        self._prx_tab_view.set_current_by_key(
+            gui_core.GuiHistory.get_one(self.HST_TAB_KEY_CURRENT)
         )
 
         self.connect_refresh_action_for(
@@ -309,7 +309,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
         layer_widget = self.create_layer_widget('create_layer', 'Create')
         s = prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(s)
-        self._create_option_prx_node = prx_widgets.PrxNode('options')
+        self._create_option_prx_node = prx_widgets.PrxOptionsNode('options')
         self._create_option_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.create_options')
         )
@@ -336,7 +336,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
         layer_widget = self.create_layer_widget('modify_layer', 'Modify')
         s = prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(s)
-        self._modify_option_prx_node = prx_widgets.PrxNode('options')
+        self._modify_option_prx_node = prx_widgets.PrxOptionsNode('options')
         self._modify_option_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.modify_options'),
         )
@@ -363,7 +363,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
         layer_widget = self.create_layer_widget('copy_layer', 'Copy')
         s = prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(s)
-        self._copy_option_prx_node = prx_widgets.PrxNode('options')
+        self._copy_option_prx_node = prx_widgets.PrxOptionsNode('options')
         self._copy_option_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.copy_options'),
         )
@@ -472,7 +472,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
         if name in self.__page_name_mapper:
             name = self.__page_name_mapper[page_name]
 
-        self.__tab_view.add_widget(
+        self._prx_tab_view.add_widget(
             scroll_area,
             key=page_name,
             name=name,
@@ -577,7 +577,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
                 )
 
     def gui_sort_all_tool_group_order(self):
-        for i in self.__tab_view.get_all_page_keys():
+        for i in self._prx_tab_view.get_all_page_keys():
             self.gui_sort_tool_group_order_at(i)
 
     def gui_sort_tool_group_order_at(self, page_name):
@@ -823,7 +823,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
                 )
 
     def refresh_current_group(self):
-        self.gui_refresh_group(self.__tab_view.get_current_key())
+        self.gui_refresh_group(self._prx_tab_view.get_current_key())
 
     @gui_core.GuiModifier.run_with_exception_catch
     def __debug_run(self, fnc):

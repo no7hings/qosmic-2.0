@@ -46,7 +46,7 @@ class PnlUsdFormatConvert(prx_widgets.PrxSessionToolWindow):
         s_1 = prx_widgets.PrxVScrollArea()
         h_s.add_widget(s_1)
         #
-        self._options_prx_node = prx_widgets.PrxNode('options')
+        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
         s_1.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.options'),

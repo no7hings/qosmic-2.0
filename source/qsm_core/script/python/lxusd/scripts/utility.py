@@ -117,7 +117,7 @@ class UsdMeshSubdiv(object):
             self._option.update(option)
 
     @classmethod
-    def _get_face_count_tuple_(cls, face_counts):
+    def _get_face_number_tuple_(cls, face_counts):
         list_ = []
         keys = list(set(face_counts))
         keys.sort()
@@ -136,7 +136,7 @@ class UsdMeshSubdiv(object):
 
         return face_count_tuple__
 
-    def _get_face_count_dict_(self, usd_stage, root_prefix):
+    def _get_face_number_dict_(self, usd_stage, root_prefix):
         dict_ = {}
         # usd_stage.Flatten()
         for i_usd_prim in usd_stage.TraverseAll():
@@ -148,7 +148,7 @@ class UsdMeshSubdiv(object):
                     i_counts = a.Get(0)
                 else:
                     i_counts = a.Get()
-                dict_[root_prefix+i_path] = self._get_face_count_tuple_(list(i_counts))
+                dict_[root_prefix+i_path] = self._get_face_number_tuple_(list(i_counts))
         return dict_
 
     def _get_subdiv_dict_(self, dict_src, dict_tgt):
@@ -180,10 +180,10 @@ class UsdMeshSubdiv(object):
         )
         self._root_tgt_prefix = self._option.get('root_prefix_tgt')
 
-        dict_src = self._get_face_count_dict_(
+        dict_src = self._get_face_number_dict_(
             self._stage_src._usd_stage, self._root_src_prefix
         )
-        dict_tgt = self._get_face_count_dict_(
+        dict_tgt = self._get_face_number_dict_(
             self._stage_tgt._usd_stage, self._root_tgt_prefix
         )
 

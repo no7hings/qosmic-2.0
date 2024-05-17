@@ -33,6 +33,16 @@ class AdvMotionOpt(object):
         if _:
             return cmds.sets(_, query=1) or []
 
+    def find_face_control_set(self):
+        _ = cmds.ls('{}:FaceControlSet'.format(self._namespace), long=1)
+        if _:
+            return _[0]
+
+    def find_face_controls(self):
+        _ = self.find_face_control_set()
+        if _:
+            return cmds.sets(_, query=1) or []
+
     def find_control(self, control_key):
         _ = cmds.ls('{}:{}'.format(self._namespace, control_key), long=1)
         if _:

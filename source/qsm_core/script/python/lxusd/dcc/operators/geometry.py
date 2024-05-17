@@ -268,7 +268,7 @@ class MeshOpt(
         _ = self.get_face_vertex_indices()
         return max(_)+1
 
-    def get_face_count(self):
+    def get_face_number(self):
         usd_mesh = self.usd_mesh
         return usd_mesh.GetFaceCount()
 

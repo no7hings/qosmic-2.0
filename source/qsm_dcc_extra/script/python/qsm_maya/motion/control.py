@@ -13,43 +13,43 @@ class ControlOpt(object):
     @classmethod
     def apply_value(cls, path, atr_data, force=False):
         atr_name, value = atr_data
-        if qsm_mya_core.Attribute.is_exists(path, atr_name) is False:
+        if qsm_mya_core.NodeAttribute.is_exists(path, atr_name) is False:
             return
-        if qsm_mya_core.Attribute.is_lock(path, atr_name) is True:
+        if qsm_mya_core.NodeAttribute.is_lock(path, atr_name) is True:
             # when node is from reference, ignore
-            if qsm_mya_core.Reference.get_is_from_reference(path) is True:
+            if qsm_mya_core.Reference.is_from_reference(path) is True:
                 return
             if force is True:
-                qsm_mya_core.Attribute.unlock(path, atr_name)
+                qsm_mya_core.NodeAttribute.unlock(path, atr_name)
             else:
                 return
-        if qsm_mya_core.Attribute.has_source(path, atr_name) is True:
+        if qsm_mya_core.NodeAttribute.has_source(path, atr_name) is True:
             if force is True:
-                result = qsm_mya_core.Attribute.break_source(path, atr_name)
+                result = qsm_mya_core.NodeAttribute.break_source(path, atr_name)
                 if result is False:
                     return
             else:
                 return
-        value_dst = qsm_mya_core.Attribute.get_value(path, atr_name)
+        value_dst = qsm_mya_core.NodeAttribute.get_value(path, atr_name)
         if value != value_dst:
-            qsm_mya_core.Attribute.set_value(path, atr_name, value)
+            qsm_mya_core.NodeAttribute.set_value(path, atr_name, value)
 
     @classmethod
     def apply_curve(cls, path, atr_data, frame_offset=0, force=False):
         atr_name, curve_type, infinities, curve_points = atr_data
-        if qsm_mya_core.Attribute.is_exists(path, atr_name) is False:
+        if qsm_mya_core.NodeAttribute.is_exists(path, atr_name) is False:
             return
-        if qsm_mya_core.Attribute.is_lock(path, atr_name) is True:
+        if qsm_mya_core.NodeAttribute.is_lock(path, atr_name) is True:
             # when node is from reference, ignore
-            if qsm_mya_core.Reference.get_is_from_reference(path) is True:
+            if qsm_mya_core.Reference.is_from_reference(path) is True:
                 return
             if force is True:
-                qsm_mya_core.Attribute.unlock(path, atr_name)
+                qsm_mya_core.NodeAttribute.unlock(path, atr_name)
             else:
                 return
-        if qsm_mya_core.Attribute.has_source(path, atr_name) is True:
+        if qsm_mya_core.NodeAttribute.has_source(path, atr_name) is True:
             if force is True:
-                qsm_mya_core.Attribute.break_source(path, atr_name)
+                qsm_mya_core.NodeAttribute.break_source(path, atr_name)
             else:
                 return
 
@@ -65,10 +65,10 @@ class ControlOpt(object):
 
         qsm_mya_core.AnimationCurveOpt(path, atr_name).set_points(curve_points, frame_offset=frame_offset)
 
-        qsm_mya_core.Attribute.set_value(
+        qsm_mya_core.NodeAttribute.set_value(
             curve_name_new, 'preInfinity', infinities[0]
         )
-        qsm_mya_core.Attribute.set_value(
+        qsm_mya_core.NodeAttribute.set_value(
             curve_name_new, 'postInfinity', infinities[0]
         )
 
@@ -77,18 +77,18 @@ class ControlOpt(object):
 
     def get_animation(self):
         list_ = []
-        for i_atr_name in qsm_mya_core.Attributes.get_all_keyable_names(self._path):
-            i_curve_name = qsm_mya_core.Attribute.find_source_node(self._path, i_atr_name, 'animCurve')
+        for i_atr_name in qsm_mya_core.NodeAttributes.get_all_keyable_names(self._path):
+            i_curve_name = qsm_mya_core.NodeAttribute.get_source_node(self._path, i_atr_name, 'animCurve')
             if i_curve_name is not None:
                 i_curve_type = cmds.nodeType(i_curve_name)
                 i_infinities = [
-                    qsm_mya_core.Attribute.get_value(i_curve_name, 'preInfinity'),
-                    qsm_mya_core.Attribute.get_value(i_curve_name, 'postInfinity')
+                    qsm_mya_core.NodeAttribute.get_value(i_curve_name, 'preInfinity'),
+                    qsm_mya_core.NodeAttribute.get_value(i_curve_name, 'postInfinity')
                 ]
                 i_curve_points = qsm_mya_core.AnimationCurveOpt(self._path, i_atr_name).get_points()
                 list_.append((i_atr_name, i_curve_type, i_infinities, i_curve_points))
             else:
-                i_value = qsm_mya_core.Attribute.get_value(self._path, i_atr_name)
+                i_value = qsm_mya_core.NodeAttribute.get_value(self._path, i_atr_name)
                 list_.append((i_atr_name, i_value))
         return list_
 

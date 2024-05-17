@@ -224,7 +224,7 @@ class AbsPnlViewerForMaterialDcc(
         )
 
     def _set_configure_groups_build_(self):
-        self._options_prx_node = prx_widgets.PrxNode('options')
+        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
         self.add_widget(self._options_prx_node)
         #
         self._options_prx_node.create_ports_by_data(

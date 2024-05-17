@@ -70,10 +70,11 @@ class DagNode(_node.Node):
             return cls.to_world(cls.to_path(results[0]))
 
     @classmethod
-    def parent_to(cls, path, parent_path):
+    def parent_to(cls, path, parent_path, relative=False):
         if not parent_path:
             return path
-        results = cmds.parent(path, parent_path, relative=1)
+
+        results = cmds.parent(path, parent_path, relative=relative)
         if results:
             return cls.to_path(results[0])
 
@@ -127,6 +128,14 @@ class NodeDisplay(object):
     def set_outliner_color(cls, path, r, g, b):
         cmds.setAttr(path+'.useOutlinerColor', 1)
         cmds.setAttr(path+'.outlinerColor', r, g, b)
+
+    @classmethod
+    def is_visible(cls, path):
+        return bool(
+            cmds.getAttr(
+                path+'.visibility'
+            )
+        )
 
 
 class NodeDrawOverride(object):

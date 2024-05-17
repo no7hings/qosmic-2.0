@@ -31,8 +31,8 @@ class Container(object):
         cmds.container(path, edit=1, force=1, addNode=nodes)
 
     @classmethod
-    def add_dag_nodes(cls, path, nodes):
-        return [cmds.parent(x, path, relative=1)[0] for x in nodes]
+    def add_dag_nodes(cls, path, nodes, relative=False):
+        return [cmds.parent(x, path, relative=relative)[0] for x in nodes]
 
     @classmethod
     def get_all_nodes(cls, path):

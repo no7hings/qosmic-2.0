@@ -1,4 +1,5 @@
 # coding:utf-8
+import functools
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
@@ -115,7 +116,7 @@ class _GuiResourceOpt(
                 self._dynamic_gpu_load_args_array = []
                 create_cmds = []
 
-                start_frame, end_frame = self._unit._utility_options_node.get('setting.frame_range')
+                start_frame, end_frame = self._unit._utility_prx_options_node.get('setting.frame_range')
                 with self._window.gui_progressing(
                     maximum=len(resources), label='processing dynamic gpus'
                 ) as g_p:
@@ -224,6 +225,116 @@ class _GuiReferenceOpt(
                         self._reference_button._set_action_enable_(True)
 
 
+class _GuiSwitchOpt(
+    _rsc_mng_core.GuiBaseOpt
+):
+
+    def do_dcc_skin_proxy_switch_to(self, key):
+        pass
+
+    def do_dcc_dynamic_gpu_switch_to(self, key):
+        pass
+
+    def __init__(self, window, unit, session, prx_options_node):
+        super(_GuiSwitchOpt, self).__init__(window, unit, session)
+
+        self._prx_options_node = prx_options_node
+
+        self._keys = ['enable', 'disable']
+
+        self._skin_proxy_button_dict = {}
+        self._skin_proxy_dict = {}
+
+        for i_key in self._keys:
+            i_b = self._prx_options_node.get_port(
+                'skin_proxy.{}'.format(i_key)
+            )
+            i_b.set(
+                functools.partial(self.do_dcc_skin_proxy_switch_to, i_key)
+            )
+            self._skin_proxy_button_dict[i_key] = i_b
+
+        self._dynamic_gpu_button_dict = {}
+        self._dynamic_gpu_dict = {}
+
+        for i_key in self._keys:
+            i_b = self._prx_options_node.get_port(
+                'dynamic_gpu.{}'.format(i_key)
+            )
+            i_b.set(
+                functools.partial(self.do_dcc_dynamic_gpu_switch_to, i_key)
+            )
+            self._dynamic_gpu_button_dict[i_key] = i_b
+
+    def do_gui_refresh_buttons(self):
+        namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+        resources = [self._unit._gui_resource_opt.get_resources_query().get(x) for x in namespaces]
+        self.do_gui_refresh_buttons_for_skin_proxy(resources)
+        self.do_gui_refresh_buttons_for_dynamic_gpu(resources)
+
+    def do_gui_refresh_buttons_for_skin_proxy(self, resources):
+        for k, i_b in self._skin_proxy_button_dict.items():
+            i_b.set_status(
+                i_b.ValidationStatus.Disable
+            )
+            i_b.set_sub_name(None)
+
+        self._skin_proxy_dict = {}
+        for i_resource in resources:
+            i_path = i_resource.get_skin_proxy_location()
+            if i_path is not None:
+                if qsm_mya_core.NodeDisplay.is_visible(i_path) is True:
+                    self._skin_proxy_dict.setdefault(
+                        'enable', []
+                    ).append(i_resource)
+                else:
+                    self._skin_proxy_dict.setdefault(
+                        'disable', []
+                    ).append(i_resource)
+
+        for k, v in self._skin_proxy_dict.items():
+            if k in self._skin_proxy_button_dict:
+                i_c = len(v)
+                i_b = self._skin_proxy_button_dict[k]
+                i_b.set_status(
+                    i_b.ValidationStatus.Enable
+                )
+                i_b.set_sub_name('({})'.format(i_c))
+
+    def do_gui_refresh_buttons_for_dynamic_gpu(self, resources):
+        for k, i_b in self._dynamic_gpu_button_dict.items():
+            i_b.set_status(
+                i_b.ValidationStatus.Disable
+            )
+            i_b.set_sub_name(None)
+
+        self._dynamic_gpu_dict = {}
+        for i_resource in resources:
+            i_path = i_resource.get_dynamic_gpu_location()
+            if i_path is not None:
+                if qsm_mya_core.NodeDisplay.is_visible(i_path) is True:
+                    self._dynamic_gpu_dict.setdefault(
+                        'enable', []
+                    ).append(i_resource)
+                else:
+                    self._dynamic_gpu_dict.setdefault(
+                        'disable', []
+                    ).append(i_resource)
+
+        for k, v in self._dynamic_gpu_dict.items():
+            if k in self._dynamic_gpu_button_dict:
+                i_c = len(v)
+                i_b = self._dynamic_gpu_button_dict[k]
+                i_b.set_status(
+                    i_b.ValidationStatus.Enable
+                )
+                i_b.set_sub_name('({})'.format(i_c))
+
+    def do_gui_refresh_by_dcc_selection(self):
+        if self._unit.gui_get_current_tool_tab_key() == 'switch':
+            self.do_gui_refresh_buttons()
+
+
 class _GuiMotionOpt(
     _rsc_mng_core.GuiBaseOpt
 ):
@@ -244,17 +355,17 @@ class _GuiMotionOpt(
         )
 
         self._prx_options_node.get_port(
-            'animation_transfer.transfer'
+            'animation_transfer.transfer_all'
         ).set(
             self.do_dcc_transfer_animation
         )
         self._prx_options_node.get_port(
-            'animation_transfer.copy'
+            'animation_transfer.copy_all'
         ).set(
             self.do_dcc_copy_animation
         )
         self._prx_options_node.get_port(
-            'animation_transfer.paste'
+            'animation_transfer.paste_all'
         ).set(
             self.do_dcc_paste_animation
         )
@@ -334,7 +445,7 @@ class _GuiMotionOpt(
                     continue
                 i_namespace = i_resource.namespace
                 i_controls = qsm_mya_motion.AdvMotionOpt(i_namespace).find_controls()
-                [qsm_mya_core.Attribute.set_value(x, 'hideOnPlayback', 0) for x in i_controls]
+                [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 0) for x in i_controls]
 
     def do_dcc_disable_control_playback_visible(self):
         resources = self._unit._gui_resource_opt.gui_get_selected_resources()
@@ -344,7 +455,7 @@ class _GuiMotionOpt(
                     continue
                 i_namespace = i_resource.namespace
                 i_controls = qsm_mya_motion.AdvMotionOpt(i_namespace).find_controls()
-                [qsm_mya_core.Attribute.set_value(x, 'hideOnPlayback', 1) for x in i_controls]
+                [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 1) for x in i_controls]
 
 
 class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
@@ -397,7 +508,7 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
         self._gui_resource_opt.do_gui_refresh_tools()
 
     def get_frame_scheme(self):
-        return self._utility_options_node.get('setting.frame_scheme')
+        return self._utility_prx_options_node.get('setting.frame_scheme')
 
     def _gui_filter_update_visible(self, boolean):
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
@@ -426,7 +537,10 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
             self.SCRIPT_JOB_NAME
         )
         self._script_job.register(
-            self._gui_resource_opt.do_gui_refresh_by_dcc_selection,
+            [
+                self._gui_resource_opt.do_gui_refresh_by_dcc_selection,
+                self._gui_switch_opt.do_gui_refresh_by_dcc_selection,
+            ],
             self._script_job.EventTypes.SelectionChanged
         )
         self._script_job.register(
@@ -502,18 +616,18 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
 
         self._prx_tool_tab_group = prx_widgets.PrxHToolTabGroup()
         qt_lot.addWidget(self._prx_tool_tab_group.widget)
-
         # utility
-        self._utility_options_node = prx_widgets.PrxNode(
+        self._utility_prx_options_node = prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.options.rig_utility')
             )
         )
-        self._utility_options_node.create_ports_by_data(
+        self._utility_prx_options_node.create_ports_by_data(
             self._session.configure.get('build.options.rig_utility.parameters'),
         )
         self._prx_tool_tab_group.add_widget(
-            self._utility_options_node,
+            self._utility_prx_options_node,
+            key='utility',
             name=gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.tag-groups.rig_utility')
             ),
@@ -522,42 +636,65 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
             )
         )
 
-        self._load_skin_proxy_button = self._utility_options_node.get_port('skin_proxy.load')
+        self._load_skin_proxy_button = self._utility_prx_options_node.get_port('skin_proxy.load')
         self._load_skin_proxy_button.set(self._gui_resource_opt.do_dcc_do_dcc_load_skin_proxies_by_selection)
         self._load_skin_proxy_button.connect_finished_to(self._gui_resource_opt.do_dcc_load_skin_proxies)
 
-        self._utility_options_node.set(
+        self._utility_prx_options_node.set(
             'skin_proxy.remove', self._gui_resource_opt.do_dcc_remove_skin_proxies
         )
 
-        self._load_dynamic_gpu_button = self._utility_options_node.get_port('dynamic_gpu.load')
+        self._load_dynamic_gpu_button = self._utility_prx_options_node.get_port('dynamic_gpu.load')
         self._load_dynamic_gpu_button.set(self._gui_resource_opt.do_dcc_do_dcc_load_dynamic_gpus_bt_selection)
         self._load_dynamic_gpu_button.connect_finished_to(self._gui_resource_opt.do_dcc_load_dynamic_gpus)
 
-        self._utility_options_node.set(
+        self._utility_prx_options_node.set(
             'dynamic_gpu.remove', self._gui_resource_opt.do_dcc_remove_dynamic_gpus
         )
 
-        self._utility_options_node.get_port('selection_scheme').connect_input_changed_to(
+        self._utility_prx_options_node.get_port('selection_scheme').connect_input_changed_to(
             self._gui_resource_opt.do_dcc_select_resources
         )
-        self._utility_options_node.get_port('setting.frame_scheme').connect_input_changed_to(
+        self._utility_prx_options_node.get_port('setting.frame_scheme').connect_input_changed_to(
             self.do_gui_refresh_by_frame_scheme_changing
         )
-        self._camera_port = self._utility_options_node.get_port('setting.camera')
-        self._fps_port = self._utility_options_node.get_port('setting.fps')
-        self._frame_range_port = self._utility_options_node.get_port('setting.frame_range')
+        self._camera_port = self._utility_prx_options_node.get_port('setting.camera')
+        self._fps_port = self._utility_prx_options_node.get_port('setting.fps')
+        self._frame_range_port = self._utility_prx_options_node.get_port('setting.frame_range')
+        # switch
+        self._switch_prx_options_node = prx_widgets.PrxOptionsNode(
+            gui_core.GuiUtil.choice_name(
+                self._window._language, self._session.configure.get('build.options.rig_switch')
+            )
+        )
+        self._switch_prx_options_node.create_ports_by_data(
+            self._session.configure.get('build.options.rig_switch.parameters'),
+        )
+        self._prx_tool_tab_group.add_widget(
+            self._switch_prx_options_node,
+            key='switch',
+            name=gui_core.GuiUtil.choice_name(
+                self._window._language, self._session.configure.get('build.tag-groups.rig_switch')
+            ),
+            tool_tip=gui_core.GuiUtil.choice_tool_tip(
+                self._window._language, self._session.configure.get('build.tag-groups.rig_switch')
+            )
+        )
+        self._gui_switch_opt = _GuiSwitchOpt(
+            self._window, self, self._session, self._switch_prx_options_node
+        )
         # extend
-        self._rig_motion_options_node = prx_widgets.PrxNode(
+        self._extend_prx_options_node = prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.options.rig_motion')
             )
         )
-        self._rig_motion_options_node.create_ports_by_data(
+        self._extend_prx_options_node.create_ports_by_data(
             self._session.configure.get('build.options.rig_motion.parameters'),
         )
         self._prx_tool_tab_group.add_widget(
-            self._rig_motion_options_node,
+            self._extend_prx_options_node,
+            key='extend',
             name=gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.tag-groups.rig_extend')
             ),
@@ -567,14 +704,12 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
         )
 
         self._rig_motion_opt = _GuiMotionOpt(
-            self._window, self, self._session, self._rig_motion_options_node
+            self._window, self, self._session, self._extend_prx_options_node
         )
 
         self.do_gui_refresh_by_camera_changing()
         self.do_gui_refresh_by_fps_changing()
         self.do_gui_refresh_by_dcc_frame_changing()
-        self._gui_resource_opt.do_gui_refresh_by_dcc_selection()
-        self._gui_resource_opt.do_gui_refresh_tools()
 
         self._register_all_script_jobs()
 
@@ -592,4 +727,12 @@ class PrxUnitForRigResource(prx_abstracts.AbsPrxWidget):
             self._gui_resource_opt.gui_add_all()
             
         self._gui_resource_opt.do_gui_refresh_by_dcc_selection()
+        self._gui_resource_opt.do_gui_refresh_tools()
 
+        self.do_gui_refresh_tabs()
+
+    def gui_get_current_tool_tab_key(self):
+        return self._prx_tool_tab_group.get_current_key()
+
+    def do_gui_refresh_tabs(self):
+        self._gui_switch_opt.do_gui_refresh_by_dcc_selection()

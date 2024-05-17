@@ -291,6 +291,7 @@ class GuiValidationStatus(enum.IntEnum):
     Ignore = 0x24
     Locked = 0x25
     Active = 0x26
+    Enable = Active
     Disable = 0x27
     Unreadable = 0x28
     Unwritable = 0x29

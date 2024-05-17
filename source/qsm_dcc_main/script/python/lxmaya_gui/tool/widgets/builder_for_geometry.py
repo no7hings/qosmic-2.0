@@ -9,7 +9,7 @@ class PnlBuilderForAssetGeometry(prx_widgets.PrxSessionToolWindow):
     def gui_setup_window(self):
         s = prx_widgets.PrxVScrollArea()
         self.add_widget(s)
-        self._options_prx_node = prx_widgets.PrxNode('options')
+        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
         s.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.options'),

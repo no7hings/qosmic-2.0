@@ -4,8 +4,6 @@ import functools
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-import lxbasic.core as bsc_core
-
 import lxbasic.storage as bsc_storage
 
 import lxgui.core as gui_core
@@ -18,13 +16,9 @@ import lxgui.proxy.abstracts as prx_abstracts
 
 import lxgui.proxy.widgets as prx_widgets
 
-import lxgui.proxy.abstracts as gui_prx_abstracts
-
 import qsm_general.scan as qsm_gnl_scan
 
 import qsm_maya.core as qsm_mya_core
-
-import qsm_maya.asset.core as qsm_mya_ast_core
 
 import qsm_maya.scenery.core as qsm_mya_scn_core
 
@@ -61,7 +55,7 @@ class _GuiResourceOpt(
                     g_p.do_update()
 
             self._unit.do_gui_refresh_all(force=True)
-            self._unit._gui_assembly_opt.do_dcc_update()
+            self._unit._gui_switch_opt.do_dcc_update()
 
     def do_dcc_do_dcc_load_unit_assemblies_by_selection(self):
         if self._unit._load_unit_assembly_button.get_is_started() is False:
@@ -121,7 +115,7 @@ class _GuiResourceOpt(
                     g_p.do_update()
 
             self._unit.do_gui_refresh_all(force=True)
-            self._unit._gui_assembly_opt.do_dcc_update()
+            self._unit._gui_switch_opt.do_dcc_update()
 
     def do_dcc_do_dcc_load_gpu_instances_by_selection(self):
         if self._unit._load_gpu_instance_button.get_is_started() is False:
@@ -243,61 +237,66 @@ class _GuiReferenceOpt(
         self._prx_input_for_asset.do_update()
 
 
-class _GuiAssemblyOpt(
+class _GuiSwitchOpt(
     _rsc_mng_core.GuiBaseOpt
 ):
 
     def do_dcc_unit_assembly_switch_to(self, key):
-        if self._unit_assembly_resources:
-            if len(self._unit_assembly_resources) > 100:
+        if self._unit_assembly_paths:
+            if len(self._unit_assembly_paths) > 100:
                 with self._window.gui_progressing(
-                    maximum=len(self._unit_assembly_resources), label='switch unit assembly'
+                    maximum=len(self._unit_assembly_paths), label='switch unit assembly'
                 ) as g_p:
-                    for i in self._unit_assembly_resources:
-                        i.set_active(key)
+                    for i in self._unit_assembly_paths:
+                        qsm_mya_scn_core.UnitAssemblyOpt(i).set_active(key)
                         g_p.do_update()
             else:
-                [x.set_active(key) for x in self._unit_assembly_resources]
+                [qsm_mya_scn_core.UnitAssemblyOpt(x).set_active(key) for x in self._unit_assembly_paths]
             # fixme: repair selection?
             qsm_mya_core.Selection.set(
-                [x.node for x in self._unit_assembly_resources]
+                [x for x in self._unit_assembly_paths]
             )
 
             self.do_gui_refresh_buttons()
 
     def do_dcc_gpu_instance_switch_to(self, key):
-        if self._gpu_instance_resources:
-            [x.set_active(key) for x in self._gpu_instance_resources]
+        if self._gpu_instance_paths:
+            if len(self._unit_assembly_paths) > 100:
+                with self._window.gui_progressing(
+                    maximum=len(self._gpu_instance_paths), label='switch unit assembly'
+                ) as g_p:
+                    for i in self._unit_assembly_paths:
+                        qsm_mya_scn_core.GpuInstanceOpt(i).set_active(key)
+                        g_p.do_update()
+            else:
+                [qsm_mya_scn_core.GpuInstanceOpt(x).set_active(key) for x in self._gpu_instance_paths]
 
             self.do_gui_refresh_buttons()
 
     def do_dcc_import_mesh(self):
-        if self._unit_assembly_resources:
-            [x.do_import_mesh() for x in self._unit_assembly_resources]
-        if self._gpu_instance_resources:
-            [x.do_import_mesh() for x in self._gpu_instance_resources]
+        if self._unit_assembly_paths:
+            [qsm_mya_scn_core.UnitAssemblyOpt(x).do_import_mesh() for x in self._unit_assembly_paths]
+        if self._gpu_instance_paths:
+            [qsm_mya_scn_core.GpuInstanceOpt(x).do_import_mesh() for x in self._gpu_instance_paths]
 
     def do_dcc_select_by_camera(self):
         camera = qsm_mya_core.Camera.get_active()
         qsm_mya_scn_scripts.CameraSelection(camera).execute()
 
     def do_dcc_update(self):
-        self._unit_assemblies_query.do_update()
-        self._gpu_instances_query.do_update()
+        pass
 
     def __init__(self, window, unit, session, prx_options_node):
-        super(_GuiAssemblyOpt, self).__init__(window, unit, session)
+        super(_GuiSwitchOpt, self).__init__(window, unit, session)
         self._prx_options_node = prx_options_node
 
         self._unit_assemblies_query = qsm_mya_scn_core.UnitAssembliesQuery()
-        self._unit_assemblies_query.do_update()
         self._gpu_instances_query = qsm_mya_scn_core.GpuInstancesQuery()
-        self._gpu_instances_query.do_update()
 
         self._unit_assembly_button_dict = {}
-        self._unit_assembly_resources = []
+        self._unit_assembly_paths = []
         self._gpu_instance_button_dict = {}
-        self._gpu_instance_resources = []
+        self._gpu_instance_paths = []
 
         for i_key in qsm_mya_scn_core.Assembly.Keys.All:
             i_b = self._prx_options_node.get_port(
@@ -326,11 +325,11 @@ class _GuiAssemblyOpt(
 
     def do_gui_refresh_buttons(self):
         _ = cmds.ls(selection=1, long=1) or []
-        self.do_gui_refresh_unit_assembly(_)
-        self.do_gui_refresh_gpu_instance(_)
+        self.do_gui_refresh_buttons_for_unit_assembly(_)
+        self.do_gui_refresh_buttons_for_gpu_instance(_)
 
-    def do_gui_refresh_unit_assembly(self, paths):
-        self._unit_assembly_resources = []
+    def do_gui_refresh_buttons_for_unit_assembly(self, paths):
+        self._unit_assembly_paths = []
 
         for k, i_b in self._unit_assembly_button_dict.items():
             i_b.set_status(
@@ -344,12 +343,12 @@ class _GuiAssemblyOpt(
                 if k in self._unit_assembly_button_dict:
                     i_c = len(v)
                     i_b = self._unit_assembly_button_dict[k]
-                    i_b.set_status(i_b.ValidationStatus.Active)
+                    i_b.set_status(i_b.ValidationStatus.Enable)
                     i_b.set_sub_name('({})'.format(i_c))
-                    self._unit_assembly_resources.extend(v)
+                    self._unit_assembly_paths.extend(v)
 
-    def do_gui_refresh_gpu_instance(self, paths):
-        self._gpu_instance_resources = []
+    def do_gui_refresh_buttons_for_gpu_instance(self, paths):
+        self._gpu_instance_paths = []
 
         for k, i_b in self._gpu_instance_button_dict.items():
             i_b.set_status(
@@ -363,12 +362,12 @@ class _GuiAssemblyOpt(
                 if k in self._gpu_instance_button_dict:
                     i_c = len(v)
                     i_b = self._gpu_instance_button_dict[k]
-                    i_b.set_status(i_b.ValidationStatus.Active)
+                    i_b.set_status(i_b.ValidationStatus.Enable)
                     i_b.set_sub_name('({})'.format(i_c))
-                    self._gpu_instance_resources.extend(v)
+                    self._gpu_instance_paths.extend(v)
 
     def do_gui_refresh_by_dcc_selection(self):
-        if self._unit.gui_get_current_tool_tab_key() == 'assembly':
+        if self._unit.gui_get_current_tool_tab_key() == 'switch':
             self.do_gui_refresh_buttons()
 
 
@@ -507,7 +506,7 @@ class PrxUnitForSceneryResource(prx_abstracts.AbsPrxWidget):
         self._script_job.register(
             [
                 self._gui_resource_opt.do_gui_refresh_by_dcc_selection,
-                self._gui_assembly_opt.do_gui_refresh_by_dcc_selection,
+                self._gui_switch_opt.do_gui_refresh_by_dcc_selection,
             ],
             self._script_job.EventTypes.SelectionChanged
         )
@@ -604,16 +603,16 @@ class PrxUnitForSceneryResource(prx_abstracts.AbsPrxWidget):
         self._prx_tool_tab_group = prx_widgets.PrxHToolTabGroup()
         qt_lot.addWidget(self._prx_tool_tab_group.widget)
         # utility
-        self._utility_options_node = prx_widgets.PrxNode(
+        self._utility_prx_options_node = prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.options.scenery_utility')
             )
         )
-        self._utility_options_node.create_ports_by_data(
+        self._utility_prx_options_node.create_ports_by_data(
             self._session.configure.get('build.options.scenery_utility.parameters'),
         )
         self._prx_tool_tab_group.add_widget(
-            self._utility_options_node,
+            self._utility_prx_options_node,
             key='utility',
             name=gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.tag-groups.scenery_utility')
@@ -623,47 +622,47 @@ class PrxUnitForSceneryResource(prx_abstracts.AbsPrxWidget):
             )
         )
 
-        self._load_unit_assembly_button = self._utility_options_node.get_port('unit_assembly.load')
+        self._load_unit_assembly_button = self._utility_prx_options_node.get_port('unit_assembly.load')
         self._load_unit_assembly_button.set(self._gui_resource_opt.do_dcc_do_dcc_load_unit_assemblies_by_selection)
         self._load_unit_assembly_button.connect_finished_to(self._gui_resource_opt.do_dcc_load_unit_assemblies)
-        self._utility_options_node.set(
+        self._utility_prx_options_node.set(
             'unit_assembly.remove', self._gui_resource_opt.do_dcc_remove_unit_assemblies
         )
 
-        self._load_gpu_instance_button = self._utility_options_node.get_port('gpu_instance.load')
+        self._load_gpu_instance_button = self._utility_prx_options_node.get_port('gpu_instance.load')
         self._load_gpu_instance_button.set(self._gui_resource_opt.do_dcc_do_dcc_load_gpu_instances_by_selection)
         self._load_gpu_instance_button.connect_finished_to(self._gui_resource_opt.do_dcc_load_gpu_instances)
-        self._utility_options_node.set(
+        self._utility_prx_options_node.set(
             'gpu_instance.remove', self._gui_resource_opt.do_dcc_remove_gpu_instances
         )
 
-        self._utility_options_node.get_port('selection_scheme').connect_input_changed_to(
+        self._utility_prx_options_node.get_port('selection_scheme').connect_input_changed_to(
             self._gui_resource_opt.do_dcc_select_resources
         )
-        # assembly
-        self._gui_switch_options_node = prx_widgets.PrxNode(
+        # switch
+        self._switch_prx_options_node = prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.options.scenery_assembly')
+                self._window._language, self._session.configure.get('build.options.scenery_switch')
             )
         )
-        self._gui_switch_options_node.create_ports_by_data(
-            self._session.configure.get('build.options.scenery_assembly.parameters'),
+        self._switch_prx_options_node.create_ports_by_data(
+            self._session.configure.get('build.options.scenery_switch.parameters'),
         )
         self._prx_tool_tab_group.add_widget(
-            self._gui_switch_options_node,
-            key='assembly',
+            self._switch_prx_options_node,
+            key='switch',
             name=gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.tag-groups.scenery_assembly')
+                self._window._language, self._session.configure.get('build.tag-groups.scenery_switch')
             ),
             tool_tip=gui_core.GuiUtil.choice_tool_tip(
-                self._window._language, self._session.configure.get('build.tag-groups.scenery_assembly')
+                self._window._language, self._session.configure.get('build.tag-groups.scenery_switch')
             )
         )
-        self._gui_assembly_opt = _GuiAssemblyOpt(
-            self._window, self, self._session, self._gui_switch_options_node
+        self._gui_switch_opt = _GuiSwitchOpt(
+            self._window, self, self._session, self._switch_prx_options_node
         )
         # extend
-        self._camera_options_node = prx_widgets.PrxNode(
+        self._camera_options_node = prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.options.scenery_camera')
             )
@@ -687,9 +686,7 @@ class PrxUnitForSceneryResource(prx_abstracts.AbsPrxWidget):
 
         self._gui_camera_opt.do_gui_refresh_by_camera_changing()
         self._gui_camera_opt.do_gui_refresh_by_dcc_frame_changing()
-        self._gui_resource_opt.do_gui_refresh_by_dcc_selection()
-        self._gui_resource_opt.do_gui_refresh_tools()
-        
+
         self._register_all_script_jobs()
 
         self._window.connect_window_activate_changed_to(self.do_gui_refresh_by_window_active_changing)
@@ -707,6 +704,7 @@ class PrxUnitForSceneryResource(prx_abstracts.AbsPrxWidget):
             self._gui_resource_opt.gui_add_all()
 
         self._gui_resource_opt.do_gui_refresh_by_dcc_selection()
+        self._gui_resource_opt.do_gui_refresh_tools()
 
         self.do_gui_refresh_tabs()
 
@@ -714,6 +712,4 @@ class PrxUnitForSceneryResource(prx_abstracts.AbsPrxWidget):
         return self._prx_tool_tab_group.get_current_key()
 
     def do_gui_refresh_tabs(self):
-        key = self._prx_tool_tab_group.get_current_key()
-        if key == 'assembly':
-            self._gui_assembly_opt.do_gui_refresh_by_dcc_selection()
+        self._gui_switch_opt.do_gui_refresh_by_dcc_selection()

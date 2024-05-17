@@ -1,4 +1,5 @@
 # coding:utf-8
+import math
 import random
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
@@ -16,11 +17,13 @@ class GridSpace(object):
         for i_shape_path in self._paths:
             i_transform_path = _mya_core.Shape.get_transform(i_shape_path)
             i_x, i_y, i_z = _mya_core.Transform.get_world_center(i_transform_path)
-            i_x_region = int(i_x/self._grid_size)
-            i_y_region = int(i_y/self._grid_size)
-            i_z_region = int(i_z/self._grid_size)
+            i_x_region = int(i_x//self._grid_size)
+            i_y_region = 0
+            i_z_region = int(i_z//self._grid_size)
+            i_key = (i_x_region, i_y_region, i_z_region)
+            # print i_key, (i_x, i_y, i_z), i_shape_path
             dict_.setdefault(
-                (i_x_region, i_y_region, i_z_region), []
+                i_key, []
             ).append(i_shape_path)
 
         return dict_

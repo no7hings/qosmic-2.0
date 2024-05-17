@@ -16,6 +16,31 @@ from ... import core as _mya_core
 from ...scenery import core as _scn_core
 
 
+class _FilterCache(object):
+    def __init__(self):
+        self._cache_dict = {}
+    
+    def generate(self, shape_paths):
+        nodes = set()
+        for i_shape_path in shape_paths:
+            if i_shape_path in self._cache_dict:
+                nodes.add(self._cache_dict[i_shape_path])
+            else:
+                i_path_new = self.filter_fnc(i_shape_path)
+                self._cache_dict[i_shape_path] = i_path_new
+                nodes.add(i_path_new)
+        return list(nodes)
+    
+    @classmethod
+    def filter_fnc(cls, shape_path):
+        if cmds.nodeType(shape_path) == 'mesh':
+            assembly_path = _scn_core.Assembly.find_assembly_reference(shape_path)
+            if assembly_path is not None:
+                return assembly_path
+            return shape_path
+        return shape_path
+
+
 class CameraViewFrustum(object):
     CONTAINER_NAME = 'camera_view_frustum_dgc'
 
@@ -76,7 +101,7 @@ class CameraViewFrustum(object):
         _mya_core.Expression.create(
             eps_name, eps_script, frustum_transform_path
         )
-        _mya_core.Container.add_dag_nodes(container, [frustum_transform_path])
+        _mya_core.Container.add_dag_nodes(container, [frustum_transform_path], relative=True)
         _mya_core.Container.add_nodes(container, [eps_name])
 
 
@@ -95,19 +120,19 @@ class DynamicCameraMask(object):
         self._frame = frame
         self._frame_range = _mya_core.Frame.auto_range(self._frame)
 
-        self._node_cache = {}
+        self._node_dict = {}
+        self._filter_cache = _FilterCache()
 
     @classmethod
     def restore(cls):
         atr_paths = []
         path = '|{}'.format(cls.CONTAINER_NAME)
         if _mya_core.DagNode.is_exists(path):
-            _mya_core.Attribute.set_value(path, 'qsm_camera_mask_enable', 0)
             nodes = _mya_core.Container.find_all_nodes(path, type_includes=['plusMinusAverage'])
             for i in nodes:
-                i_target = _mya_core.Attribute.find_target(i, 'output1D')
-                if i_target:
-                    atr_paths.append(i_target)
+                i_targets = _mya_core.NodeAttribute.get_targets(i, 'output1D')
+                if i_targets:
+                    atr_paths.extend(i_targets)
             _mya_core.DagNode.delete(path)
 
         for i in atr_paths:
@@ -118,107 +143,57 @@ class DynamicCameraMask(object):
         _mya_core.Container.create_as_expression(
             path
         )
-        _mya_core.Attribute.create_as_boolean(
-            path, 'qsm_camera_mask_enable'
-        )
-        _mya_core.Attribute.create_as_integer(
+        _mya_core.NodeAttribute.create_as_integer(
             path, 'qsm_start_fame', self._frame_range[0]
         )
-        _mya_core.Attribute.create_as_integer(
+        _mya_core.NodeAttribute.create_as_integer(
             path, 'qsm_end_fame', self._frame_range[1]
         )
         cmds.setAttr(path+'.hiddenInOutliner', 1)
         cmds.setAttr(path+'.blackBox', 1, lock=1)
         return path
 
-    def find_nodes_at_frame(self, frame):
+    def generate_mask_nodes_at_frame(self, frame):
         _mya_core.Frame.set_current(frame)
 
         results = _mya_core.Camera.generate_mask_nodes(
-            self._camera_path
+            self._camera_path, type_includes=['mesh', 'gpuCache']
         )
         return results
 
-    def nodes_pre_prc(self, all_shapes):
-        for i_index, i_shape_path in enumerate(all_shapes):
+    def nodes_pre_prc(self, all_paths):
+        for i_index, i_shape_path in enumerate(all_paths):
+            # ignore deformed mesh
+            if _mya_core.DagNode.is_mesh(i_shape_path) is True:
+                if _mya_core.Mesh.is_deformed(i_shape_path) is True:
+                    continue
+
             i_sum_name = 'camera_mask_{}_sum'.format(i_index)
             _mya_core.Node.create(
                 i_sum_name, 'plusMinusAverage'
             )
-            self._node_cache[i_shape_path] = i_sum_name
+            self._node_dict[i_shape_path] = i_sum_name
 
     def nodes_post_prc(self, container):
-        for i_shape_path, v in self._node_cache.items():
-
-            if _mya_core.Reference.get_is_from_reference(i_shape_path) is True:
+        for i_any_path, v in self._node_dict.items():
+            if _mya_core.Reference.is_from_reference(i_any_path) is True:
                 _mya_core.Connection.create(
-                    v+'.output1D', i_shape_path+'.visibility'
+                    v+'.output1D', i_any_path+'.visibility'
                 )
             else:
-                i_transform_path = _mya_core.Shape.get_transform(i_shape_path)
-                _mya_core.NodeDrawOverride.set_enable(
-                    i_transform_path, True
-                )
-                _mya_core.Connection.create(
-                    v+'.output1D', i_transform_path+'.overrideVisibility'
-                )
-                _mya_core.Connection.create(
-                    container+'.qsm_camera_mask_enable', i_transform_path+'.overrideEnabled'
-                )
-
-        _mya_core.Attribute.set_value(
-            container, 'qsm_camera_mask_enable', True
-        )
-
-    def execute_for(self, namespace):
-        self.restore()
-
-        container = self.create_container()
-
-        start_frame, end_frame = self._frame_range
-        frames = range(start_frame, end_frame+1)
-
-        self._node_cache = {}
-
-        all_shapes = _mya_core.Namespace.find_all_dag_nodes(namespace, type_includes=['mesh', 'gpuCache'])
-        self.nodes_pre_prc(all_shapes)
-
-        nodes = []
-
-        tuc = _mya_core.Node.create(
-            'camera_mask_tuc', 'timeToUnitConversion'
-        )
-        _mya_core.Attribute.set_value(
-            tuc, 'conversionFactor', 0.004
-        )
-        _mya_core.Connection.create(
-            'time1.outTime', tuc+'.input'
-        )
-        nodes.append(tuc)
-
-        for i_seq, i_frame in enumerate(frames):
-            i_cdt_name = '{}:camera_mask_{}_cdt'.format(namespace, i_frame)
-            _mya_core.Node.create(
-                i_cdt_name, 'condition'
-            )
-            cmds.setAttr('{}.firstTerm'.format(i_cdt_name), i_frame)
-            cmds.connectAttr(tuc+'.output', i_cdt_name+'.secondTerm')
-            cmds.setAttr('{}.colorIfTrueR'.format(i_cdt_name), 1.0)
-            cmds.setAttr('{}.colorIfFalseR'.format(i_cdt_name), 0.0)
-            nodes.append(i_cdt_name)
-
-            i_nodes = self.find_nodes_at_frame(i_frame)
-            for j_path in i_nodes:
-                if j_path in self._node_cache:
-                    j_sum_name = self._node_cache[j_path]
-                    nodes.append(j_sum_name)
+                if _mya_core.Node.is_assembly_reference(i_any_path):
                     _mya_core.Connection.create(
-                        i_cdt_name+'.outColor.outColorR', j_sum_name+'.input1D[{}]'.format(i_seq)
+                        v+'.output1D', i_any_path+'.visibility'
                     )
+                else:
+                    i_transform_path = _mya_core.Shape.get_transform(i_any_path)
 
-        _mya_core.Container.add_nodes(container, list(set(nodes)))
-
-        self.nodes_post_prc(container)
+                    _mya_core.NodeDrawOverride.set_enable(
+                        i_transform_path, True
+                    )
+                    _mya_core.Connection.create(
+                        v+'.output1D', i_transform_path+'.overrideVisibility'
+                    )
 
     @_mya_core.Undo.execute
     def execute_for_all(self):
@@ -231,17 +206,18 @@ class DynamicCameraMask(object):
         start_frame, end_frame = _mya_core.Frame.auto_range(self._frame)
         frames = range(start_frame, end_frame+1)
 
-        self._node_cache = {}
+        self._node_dict = {}
 
-        all_shapes = _mya_core.Scene.find_all_dag_nodes(type_includes=['mesh', 'gpuCache'])
-        self.nodes_pre_prc(all_shapes)
+        all_paths = _mya_core.Scene.find_all_dag_nodes(type_includes=['mesh', 'gpuCache'])
+        all_path_new = self._filter_cache.generate(all_paths)
+        self.nodes_pre_prc(all_path_new)
 
         nodes = []
 
         tuc = _mya_core.Node.create(
             'camera_mask_tuc', 'timeToUnitConversion'
         )
-        _mya_core.Attribute.set_value(
+        _mya_core.NodeAttribute.set_value(
             tuc, 'conversionFactor', 0.004
         )
         _mya_core.Connection.create(
@@ -260,10 +236,11 @@ class DynamicCameraMask(object):
             cmds.setAttr('{}.colorIfFalseR'.format(i_cdt_name), 0.0)
             nodes.append(i_cdt_name)
 
-            i_nodes = self.find_nodes_at_frame(i_frame)
-            for j_path in i_nodes:
-                if j_path in self._node_cache:
-                    j_sum_name = self._node_cache[j_path]
+            i_mask_nodes = self.generate_mask_nodes_at_frame(i_frame)
+            i_mask_nodes_new = self._filter_cache.generate(i_mask_nodes)
+            for j_shape_path in i_mask_nodes_new:
+                if j_shape_path in self._node_dict:
+                    j_sum_name = self._node_dict[j_shape_path]
                     nodes.append(j_sum_name)
                     _mya_core.Connection.create(
                         i_cdt_name+'.outColor.outColorR', j_sum_name+'.input1D[{}]'.format(i_seq)
@@ -286,6 +263,8 @@ class CameraMask(object):
         self._frame = frame
         self._frame_range = _mya_core.Frame.auto_range(self._frame)
 
+        self._filter_cache = _FilterCache()
+
     @classmethod
     def restore(cls):
         if _mya_core.Node.is_exists(cls.LAYER_NAME):
@@ -300,30 +279,21 @@ class CameraMask(object):
         )
         return layer
 
-    def find_nodes_at_frame(self, frame):
+    def generate_mask_nodes_at_frame(self, frame):
         _mya_core.Frame.set_current(frame)
 
-        return _mya_core.Camera.generate_mask_nodes(
+        results = _mya_core.Camera.generate_mask_nodes(
             self._camera_path, type_includes=['mesh', 'gpuCache']
         )
+        list_ = []
+        for i_path in results:
+            if _mya_core.DagNode.is_mesh(i_path):
+                if _mya_core.Mesh.is_deformed(i_path) is False:
+                    list_.append(i_path)
+            else:
+                list_.append(i_path)
 
-    def execute_for(self, namespace):
-        layer = self.create_layer()
-
-        mask_nodes = set()
-        start_frame, end_frame = _mya_core.Frame.auto_range(self._frame)
-        frames = range(start_frame, end_frame+1)
-        all_nodes = _mya_core.Namespace.find_all_dag_nodes(namespace, type_includes=['mesh', 'gpuCache'])
-
-        for i_frame in frames:
-            i_nodes = self.find_nodes_at_frame(i_frame)
-            mask_nodes.update(set(i_nodes))
-
-        hide_nodes = list(set(all_nodes)-set(mask_nodes))
-
-        if hide_nodes:
-            _mya_core.DisplayLayer.add_nodes(layer, [_mya_core.Shape.get_transform(x) for x in hide_nodes])
-            _mya_core.DisplayLayer.set_visible(layer, False)
+        return list_
 
     @_mya_core.Undo.execute
     def execute_for_all(self):
@@ -333,19 +303,24 @@ class CameraMask(object):
 
         layer = self.create_layer()
 
-        mask_nodes = set()
+        mask_paths = set()
         start_frame, end_frame = self._frame_range
         frames = range(start_frame, end_frame+1)
-        all_nodes = _mya_core.Scene.find_all_dag_nodes(type_includes=['mesh', 'gpuCache'])
+
+        self._filter_cache = _FilterCache()
+
+        all_paths = _mya_core.Scene.find_all_dag_nodes(type_includes=['mesh', 'gpuCache'])
+        all_path_new = self._filter_cache.generate(all_paths)
 
         for i_frame in frames:
-            i_nodes = self.find_nodes_at_frame(i_frame)
-            mask_nodes.update(set(i_nodes))
+            i_mask_paths = self.generate_mask_nodes_at_frame(i_frame)
+            mask_paths.update(set(i_mask_paths))
 
-        hide_nodes = list(set(all_nodes)-set(mask_nodes))
+        mask_paths_new = self._filter_cache.generate(mask_paths)
+        hide_paths = list(set(all_path_new)-set(mask_paths_new))
 
-        if hide_nodes:
-            _mya_core.DisplayLayer.add_nodes(layer, [_mya_core.Shape.get_transform(x) for x in hide_nodes])
+        if hide_paths:
+            _mya_core.DisplayLayer.add_nodes(layer, [_mya_core.Shape.get_transform(x) for x in hide_paths])
             _mya_core.DisplayLayer.set_visible(layer, False)
 
 
@@ -357,12 +332,12 @@ class CameraSelection(object):
             self._camera_path = _mya_core.DagNode.to_path(camera)
 
     def execute(self):
-        nodes = _mya_core.Camera.generate_mask_nodes(
+        shape_paths = _mya_core.Camera.generate_mask_nodes(
             self._camera_path, type_includes=['mesh', 'gpuCache']
         )
         list_ = []
-        for i in nodes:
-            i_result = _scn_core.Assembly.find(i)
+        for i in shape_paths:
+            i_result = _scn_core.Assembly.find_any_by_shape(i)
             if i_result is not None:
                 list_.append(i_result)
 
@@ -379,15 +354,15 @@ class CameraLodSwitch(object):
         self._frame = frame
         self._frame_range = _mya_core.Frame.auto_range(self._frame)
 
-    def find_nodes_at_frame(self, frame):
+    def generate_mask_nodes_at_frame(self, frame):
         _mya_core.Frame.set_current(frame)
 
-        nodes = _mya_core.Camera.generate_mask_nodes(
+        shape_paths = _mya_core.Camera.generate_mask_nodes(
             self._camera_path, type_includes=['mesh', 'gpuCache']
         )
         list_ = []
-        for i in nodes:
-            i_result = _scn_core.Assembly.find(i)
+        for i in shape_paths:
+            i_result = _scn_core.Assembly.find_any_by_shape(i)
             if i_result is not None:
                 list_.append(i_result)
         return list_
@@ -398,9 +373,9 @@ class CameraLodSwitch(object):
         start_frame, end_frame = self._frame_range
         frames = range(start_frame, end_frame+1)
         for i_frame in frames:
-            i_nodes = self.find_nodes_at_frame(i_frame)
+            i_mask_paths = self.generate_mask_nodes_at_frame(i_frame)
             i_camera_point = _mya_core.Transform.get_world_center(camera_transform)
-            for j_node in i_nodes:
+            for j_node in i_mask_paths:
                 j_node_point = _mya_core.Transform.get_world_center(j_node)
                 j_distance = _mya_core.Transform.compute_distance(i_camera_point, j_node_point)
 
@@ -420,15 +395,15 @@ class CameraLodSwitch(object):
                 i_lod = 2
 
             lod_dict[k] = i_lod
-            i_qsm_type = _mya_core.Attribute.get_value(
+            i_qsm_type = _mya_core.NodeAttribute.get_value(
                 k, 'qsm_type'
             )
             if i_qsm_type == 'unit_assembly':
-                i_resource = _scn_core.UnitAssembly(k)
-                i_resource.set_lod(i_lod)
+                i_opt = _scn_core.UnitAssemblyOpt(k)
+                i_opt.set_lod(i_lod)
             elif i_qsm_type == 'gpu_instance':
-                i_resource = _scn_core.GpuInstance(k)
-                i_resource.set_lod(i_lod)
+                i_opt = _scn_core.GpuInstanceOpt(k)
+                i_opt.set_lod(i_lod)
 
 
 

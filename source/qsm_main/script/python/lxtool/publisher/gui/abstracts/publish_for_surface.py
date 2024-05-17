@@ -406,18 +406,18 @@ class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
             'validation.ignore_texture_workspace_check': 'with_texture_workspace_check',
         }
         self.set_main_style_mode(1)
-        self._tab_view = prx_widgets.PrxTabView()
-        self.add_widget(self._tab_view)
+        self._prx_tab_view = prx_widgets.PrxTabView()
+        self.add_widget(self._prx_tab_view)
 
         sa_0 = prx_widgets.PrxVScrollArea()
-        self._tab_view.add_widget(
+        self._prx_tab_view.add_widget(
             sa_0,
             name='Validation',
             icon_name_text='Validation',
         )
 
         sa_1 = prx_widgets.PrxVScrollArea()
-        self._tab_view.add_widget(
+        self._prx_tab_view.add_widget(
             sa_1,
             name='Configure',
             icon_name_text='Configure',
@@ -451,7 +451,7 @@ class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
             self._prx_tree_view_for_filter, self._result_tree_view
         )
 
-        self._cfg_options_prx_node = prx_widgets.PrxNode('options')
+        self._cfg_options_prx_node = prx_widgets.PrxOptionsNode('options')
         sa_1.add_widget(self._cfg_options_prx_node)
         self._cfg_options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.validation_options'),
@@ -508,7 +508,7 @@ class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
         layer_widget = self.create_layer_widget('publish', 'Publish')
         sa_2 = prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(sa_2)
-        self._publish_options_prx_node = prx_widgets.PrxNode('options')
+        self._publish_options_prx_node = prx_widgets.PrxOptionsNode('options')
         sa_2.add_widget(self._publish_options_prx_node)
         self._publish_options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.publish_options')

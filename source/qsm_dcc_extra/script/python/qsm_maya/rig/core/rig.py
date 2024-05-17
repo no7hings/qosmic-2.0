@@ -9,12 +9,6 @@ class AdvRig(_rsc_core.Resource):
     def __init__(self, *args, **kwargs):
         super(AdvRig, self).__init__(*args, **kwargs)
 
-    def __str__(self):
-        return '{}(path="{}")'.format(
-            self.__class__.__name__,
-            self.__dict__['path']
-        )
-
     def get_root(self):
         _ = cmds.ls('|{}:*'.format(self.namespace), long=1)
         if _:

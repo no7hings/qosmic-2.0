@@ -45,7 +45,7 @@ class PGDependencies(prx_widgets.PrxSessionWindow):
             prx_tree_item_cls=prx_widgets.PrxObjTreeItem
         )
         #
-        self._options_prx_node = prx_widgets.PrxNode('options')
+        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
         self.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.options'),

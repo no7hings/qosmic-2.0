@@ -111,6 +111,8 @@ class ResourcesQuery(object):
         _ = _mya_core.References.get_all()
         for i_path in _:
             i_file_path = _mya_core.Reference.get_file(i_path)
+            if i_file_path is None:
+                continue
             if self._pth.get_is_matched(i_file_path) is True:
                 i_namespace = _mya_core.Reference.get_namespace(i_path)
                 i_is_loaded = _mya_core.Reference.is_loaded(i_path)
@@ -120,6 +122,10 @@ class ResourcesQuery(object):
 
     def get_all(self):
         return self._cache_dict.values()
+
+    def get(self, namespace):
+        if namespace in self._cache_dict:
+            return self._cache_dict[namespace]
 
     def to_valid_namespaces(self, namespaces):
         return [i for i in namespaces if i in self._cache_dict]

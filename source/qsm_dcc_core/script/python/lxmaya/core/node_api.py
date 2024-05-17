@@ -499,7 +499,7 @@ class Om2MeshOpt(object):
         om2_fnc = self._om2_obj_fnc
         om2_fnc.deleteVertex(vertex_index)
 
-    def get_face_count(self):
+    def get_face_number(self):
         om2_fnc = self._om2_obj_fnc
         return om2_fnc.numPolygons
 

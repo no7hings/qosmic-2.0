@@ -10,17 +10,27 @@ import lxbasic.storage as bsc_storage
 
 import lxmaya.core as mya_core
 
-from . import node as _node
-
-from . import node_for_dag as _node_dag
-
 from . import shape as _shape
+
+from . import transform as _transform
+
+from . import attribute as _attribute
 
 
 class Mesh(_shape.Shape):
     @classmethod
     def get_shell_number(cls, path):
         return cmds.polyEvaluate(path, shell=1)
+
+    @classmethod
+    def get_face_number(cls, path):
+        return cmds.polyEvaluate(path, face=1)
+
+    @classmethod
+    def is_deformed(cls, path):
+        return _attribute.NodeAttribute.has_source(
+            path, 'inMesh'
+        )
 
 
 class MeshOpt(_shape.ShapeOpt):
@@ -188,5 +198,50 @@ class MeshOpt(_shape.ShapeOpt):
         )
         self._om2_obj_fnc.updateSurface()
 
-    def get_face_count(self):
+    def get_face_number(self):
         return self._om2_obj_fnc.numPolygons
+
+    def get_world_extent(self):
+        return _transform.Transform.get_world_extent(
+            _shape.Shape.get_transform(self.shape_path)
+        )
+
+    def get_dimension(self):
+        (_x, _y, _z), (x, y, z) = self.get_world_extent()
+        return x-_x, y-_y, z-_z
+
+    def get_material_paths(self):
+        return cmds.listConnections(
+            self.shape_path, destination=1, source=0, type=mya_core.MyaNodeTypes.Material
+        ) or []
+
+    def get_material_assign_map(self):
+        dict_ = {}
+        transform_path = self.transform_path
+        shape_path = self.shape_path
+        material_paths = self.get_material_paths()
+        if material_paths:
+            for i_material_path in material_paths:
+                i_results = cmds.sets(i_material_path, query=1)
+                if i_results:
+                    i_element_paths = cmds.ls(i_results, leaf=1, noIntermediate=1, long=1) or []
+                    for j_element_path in i_element_paths:
+                        j_show_type = cmds.ls(j_element_path, showType=1)[1]
+                        j_value = i_material_path
+                        j_key = None
+                        if j_show_type in [mya_core.MyaNodeTypes.Mesh]:
+                            if j_element_path == shape_path:
+                                j_key = 'all'
+                        elif j_show_type == 'float3':
+                            if j_element_path.startswith(transform_path):
+                                comp_name = j_element_path.split('.')[-1]
+                                j_key = comp_name
+                        #
+                        if j_key is not None:
+                            dict_[j_key] = j_value
+        return dict_
+
+    def get_material_assign_as_hash_key(self):
+        return bsc_core.HashMtd.to_hash_key(
+            self.get_material_assign_map(), as_unique_id=True
+        )
