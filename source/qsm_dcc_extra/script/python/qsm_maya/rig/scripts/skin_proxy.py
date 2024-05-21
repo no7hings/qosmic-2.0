@@ -32,6 +32,28 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
 
         self._adv_query = _rig_core.AdvQuery(self._namespace)
 
+    def find_head_geometries(self):
+        return cmds.ls(
+            '{}:head_M_geo_copyShape'.format(self._namespace), type='mesh', noIntermediate=1, long=1
+        ) or []
+
+    def find_rig_head_geometries(self):
+        set_ = set()
+        for i_key in [
+            'Head_M',
+            'EyeJoint_R',
+            'EyeJoint_L',
+            'EyeBrow*'
+        ]:
+            i_joint = self._resource.get_joint(i_key)
+            if i_joint is None:
+                continue
+            i_meshes = _rig_core.Joint.find_influenced_meshes(i_joint)
+            if i_meshes:
+                set_.update(i_meshes)
+
+        return list(set_)
+
     def connect_cache_constrains(self, location, namespace):
         root_skeleton_paths = self._adv_query.skeleton_query.get('root.M')
         scale_constrains = AdvSkinProxyGenerate._get_scale_constrains(location)
@@ -55,7 +77,7 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
 
                 AdvSkinProxyGenerate._connect_parent_constrain(j_skeleton_paths[0], j_constrains[0])
 
-    def load_cache(self, cache_file_path):
+    def load_cache(self, cache_file_path, keep_head=False):
         self.create_cache_root_auto()
 
         cache_location_new = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
@@ -69,15 +91,25 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
 
                 cmds.parent(cache_location, self.CACHE_ROOT)
 
-                self.hide_resource_auto()
+                self.hide_resource_auto(keep_head=keep_head)
 
-    def hide_resource_auto(self):
+    def hide_resource_auto(self, keep_head=False):
         cache_location = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
-        geometry_roots = self._adv_query.main_query.get('geometry_root')
-        if geometry_roots:
+        mesh_paths_for_hide = self._resource.get_all_meshes()
+        if mesh_paths_for_hide:
+            if keep_head is True:
+                head_geometries = self.find_head_geometries()
+                print head_geometries
+                if head_geometries:
+                    mesh_paths_for_hide.extend(head_geometries)
+
+                rig_head_geometry = self.find_rig_head_geometries()
+                if rig_head_geometry:
+                    [mesh_paths_for_hide.remove(x) for x in rig_head_geometry if x in mesh_paths_for_hide]
+
             layer_name = '{}_skin_proxy_hide'.format(self._namespace)
             layer_path = cmds.createDisplayLayer(name=layer_name, number=1, empty=True)
-            cmds.editDisplayLayerMembers(layer_path, *geometry_roots)
+            cmds.editDisplayLayerMembers(layer_path, *mesh_paths_for_hide)
             cmds.setAttr(layer_path+'.visibility', False)
 
             cmds.container(cache_location, edit=1, force=1, addNode=[layer_path])
@@ -545,7 +577,7 @@ class AdvSkinProxyGenerate(object):
 
     def create_resource_geometries(self, location):
         if cmds.objExists(self.PROXY_GEOMETRY_GROUP_PATH) is False:
-            if qsm_gnl_core.QSM_SCHEME == 'new':
+            if qsm_gnl_core.scheme_is_new():
                 self._import_file(bsc_resource.ExtendResource.get('rig/skin_proxy_geometry_new.ma'))
             else:
                 self._import_file(bsc_resource.ExtendResource.get('rig/skin_proxy_geometry.ma'))
@@ -583,7 +615,7 @@ class AdvSkinProxyGenerate(object):
     def create_cache(self, cache_file_path=None):
         location = '|{}'.format(self.CACHE_NAME)
         if cmds.objExists(location) is False:
-            if qsm_gnl_core.QSM_SCHEME == 'new':
+            if qsm_gnl_core.scheme_is_new():
                 self._import_file(
                     bsc_resource.ExtendResource.get('rig/skin_proxy_new.ma')
                 )

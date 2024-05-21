@@ -63,7 +63,7 @@ class PnlBuilderForAssetLook(prx_widgets.PrxSessionToolWindow):
                 parent=self.widget
             )
             #
-            self.close_window_later()
+            self.do_close_window_later()
 
     def import_look_render_fnc(self):
         import lxmaya.fnc.objects as mya_fnc_objects

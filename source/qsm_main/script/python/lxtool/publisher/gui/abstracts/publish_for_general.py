@@ -356,7 +356,7 @@ class AbsPnlPublisherForGeneral(prx_widgets.PrxSessionWindow):
                 #
                 no_visible=False, cancel_visible=False
             )
-            self.close_window_later()
+            self.do_close_window_later()
             return
 
         task_id = bsc_core.EnvBaseMtd.get(

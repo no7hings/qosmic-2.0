@@ -569,8 +569,8 @@ class PrxTreeItem(
     def set_show_build_fnc(self, method):
         self._qt_widget._set_item_show_build_fnc_(method)
 
-    def connect_press_db_clicked_to(self, fnc):
-        self._qt_widget._signals.press_db_clicked.connect(fnc)
+    def connect_press_dbl_clicked_to(self, fnc):
+        self._qt_widget._signals.press_dbl_clicked.connect(fnc)
 
     def set_drag_enable(self, boolean):
         self._qt_widget._set_drag_enable_(boolean)
@@ -882,11 +882,11 @@ class PrxListItemWidget(
     def connect_press_clicked_to(self, fnc):
         self._qt_widget.press_clicked.connect(fnc)
 
-    def connect_press_db_clicked_to(self, fnc):
-        self._qt_widget.press_db_clicked.connect(fnc)
+    def connect_press_dbl_clicked_to(self, fnc):
+        self._qt_widget.press_dbl_clicked.connect(fnc)
 
-    def set_press_db_clicked_method_add_(self, fnc):
-        self._qt_widget._set_action_press_db_clicked_method_add_(fnc)
+    def set_press_dbl_clicked_method_add_(self, fnc):
+        self._qt_widget._set_action_press_dbl_clicked_method_add_(fnc)
 
     def set_check_enable(self, boolean):
         self._qt_widget._set_check_enable_(boolean)

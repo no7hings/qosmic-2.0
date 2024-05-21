@@ -2,15 +2,17 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+import lxbasic.core as bsc_core
+
 import lxbasic.resource as bsc_resource
 
 import lxgui.core as gui_core
 
 import lxgui.proxy.widgets as prx_widgets
 
-from . import unit_for_rig_resource as _unit_for_rig_resource
+from . import page_for_rig as _unit_for_rig_resource
 
-from . import unit_for_scenery_resource as _unit_for_scenery_resource
+from . import page_for_scenery as _unit_for_scenery_resource
 
 
 class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
@@ -36,7 +38,7 @@ class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
             )
         )
 
-        self._rig_prx_unit = _unit_for_rig_resource.PrxUnitForRigResource(
+        self._rig_prx_unit = _unit_for_rig_resource.PrxPageForRigResource(
             self, self._session
         )
         rig_prx_sca.add_widget(self._rig_prx_unit)
@@ -53,7 +55,7 @@ class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
             )
         )
 
-        self._scenery_prx_unit = _unit_for_scenery_resource.PrxUnitForSceneryResource(
+        self._scenery_prx_unit = _unit_for_scenery_resource.PrxPageForSceneryResource(
             self, self._session
         )
         scenery_prx_sca.add_widget(self._scenery_prx_unit)
@@ -88,8 +90,29 @@ class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
 
     def show_help(self):
         import os
-        os.startfile(
-            bsc_resource.ExtendResource.get(
-                'docs/resource-manager.pdf'
+
+        _0 = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
+        if os.path.isfile(_0):
+            cmd_script = '"{}" "{}"'.format(
+                _0,
+                bsc_resource.ExtendResource.get(
+                    'docs/resource-manager.pdf'
+                )
             )
-        )
+
+            bsc_core.PrcBaseMtd.execute_use_thread(
+                cmd_script
+            )
+        else:
+            _1 = 'C:/Program Files (x86)/Adobe/Reader 11.0/Reader/AcroRd32.exe'
+            if os.path.isfile(_1):
+                cmd_script = '"{}" "{}"'.format(
+                    _1,
+                    bsc_resource.ExtendResource.get(
+                        'docs/resource-manager.pdf'
+                    )
+                )
+
+                bsc_core.PrcBaseMtd.execute_use_thread(
+                    cmd_script
+                )

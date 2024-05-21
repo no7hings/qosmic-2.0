@@ -230,7 +230,7 @@ class QtEntryAsGuide(
                 self._refresh_widget_draw_()
             elif event.type() == QtCore.QEvent.MouseButtonDblClick:
                 if event.button() == QtCore.Qt.LeftButton:
-                    self.press_db_clicked.emit()
+                    self.press_dbl_clicked.emit()
                 elif event.button() == QtCore.Qt.RightButton:
                     pass
                 self._refresh_widget_draw_()

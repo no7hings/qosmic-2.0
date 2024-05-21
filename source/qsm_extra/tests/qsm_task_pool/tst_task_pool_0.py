@@ -3,8 +3,8 @@ import lxbasic.core as bsc_core
 
 import qsm_task_pool.core as prc_task_core
 
-c = prc_task_core.Pool.generate()
-c.do_update()
+p = prc_task_core.Pool.generate()
+p.do_update()
 
 time_tag = bsc_core.SysBaseMtd.get_time_tag()
 
@@ -24,8 +24,8 @@ for i_index, i_cmd in enumerate(
         # r'rez-env maya-2019 -- mayabatch -command "python(\"print \\\"J\\\"\")"',
     ]
 ):
-    i_task = c.new_task(
-        batch_name='[dynamic-gpu-cache-generate][{}]'.format(time_tag),
+    i_task = p.new_task(
+        group='[dynamic-gpu-cache-generate][{}]'.format(time_tag),
         name='[dynamic-gpu-cache-generate][max][1-32]'.format(i_index),
         cmd_script=i_cmd,
     )

@@ -221,12 +221,12 @@ class GuiResourceOpt(
                 isolate_tool.set_checked(is_enable)
 
     # selection
-    def do_dcc_select_resources(self):
+    def do_dcc_refresh_resources_selection(self):
         if self._prx_tree_view.has_focus() is True:
             resources = self.gui_get_selected_resources()
             paths = []
             if resources:
-                scheme = self._unit._utility_prx_options_node.get('selection_scheme')
+                scheme = self._unit._gui_utility_opt.gui_get_selection_scheme()
                 paths = []
                 [paths.extend(x.find_nodes_by_scheme(scheme)) for x in resources]
             if paths:
@@ -252,7 +252,7 @@ class GuiResourceOpt(
             self._window.get_definition_window_size()[0]-48
         )
         self._prx_tree_view.connect_item_select_changed_to(
-            self.do_dcc_select_resources
+            self.do_dcc_refresh_resources_selection
         )
         self._prx_tree_view.get_top_tool_bar().set_expanded(True)
 
@@ -458,3 +458,11 @@ class GuiResourceOpt(
     def get_resources_query(self):
         return self._resources_query
 
+    def do_gui_select_all_resources(self):
+        list_ = []
+        for k, v in self._item_dict.items():
+            i_resource = v.get_gui_dcc_obj(self.NAMESPACE)
+            if i_resource is not None:
+                list_.append(v)
+
+        self._prx_tree_view.select_items(list_)

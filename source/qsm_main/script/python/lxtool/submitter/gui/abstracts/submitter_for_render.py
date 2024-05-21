@@ -284,7 +284,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                             ),
                         status=gui_core.GuiDialog.ValidationStatus.Error,
                         #
-                        yes_label='Close', yes_method=self.close_window_later,
+                        yes_label='Close', yes_method=self.do_close_window_later,
                         #
                         no_visible=False, cancel_visible=False,
                         use_exec=False,
@@ -539,7 +539,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                 ).to_string()
             )
             #
-            prx_item_widget.connect_press_db_clicked_to(
+            prx_item_widget.connect_press_dbl_clicked_to(
                 execute_fnc
             )
             #
@@ -1127,7 +1127,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
                 ).to_string()
             )
             #
-            prx_item_widget.connect_press_db_clicked_to(
+            prx_item_widget.connect_press_dbl_clicked_to(
                 execute_fnc
             )
             #

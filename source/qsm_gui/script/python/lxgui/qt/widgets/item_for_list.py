@@ -463,11 +463,11 @@ class QtListItemWidget(
                     self._clear_all_action_flags_()
                     return True
                 elif self._get_action_flag_is_match_(self.ActionFlag.CheckDbClick):
-                    self.check_db_clicked.emit()
+                    self.check_dbl_clicked.emit()
                 elif self._get_action_flag_is_match_(self.ActionFlag.Press):
                     self.press_clicked.emit()
                 elif self._get_action_flag_is_match_(self.ActionFlag.PressDbClick):
-                    self.press_db_clicked.emit()
+                    self.press_dbl_clicked.emit()
                 #
                 self._clear_all_action_flags_()
             #

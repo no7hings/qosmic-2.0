@@ -10,13 +10,15 @@ import importlib as _importlib
 import lxbasic.log as _log_core
 
 QT_LOAD_INDEX = None
+QT_LOAD_FLAG = None
 QtSide = None
 
 __pyqt5 = _pkgutil.find_loader('PyQt5')
 if __pyqt5 is not None:
     QT_LOAD_INDEX = 0
+    QT_LOAD_FLAG = 'pyqt'
     # noinspection PyUnresolvedReferences
-    from PyQt5 import QtGui, QtCore, QtWidgets, QtSvg
+    from PyQt5 import QtGui, QtCore, QtWidgets, QtSvg, QtWebSockets
     _sys.modules['QtSide'] = _sys.modules['PyQt5']
     _log_core.Log.trace_method_result(
         'qt wrap', 'load form "PyQt5"'
@@ -25,6 +27,7 @@ else:
     __pyside2 = _pkgutil.find_loader('PySide2')
     if __pyside2 is not None:
         QT_LOAD_INDEX = 1
+        QT_LOAD_FLAG = 'pyside'
         # noinspection PyUnresolvedReferences
         from PySide2 import QtGui, QtCore, QtWidgets, QtSvg
         _sys.modules['QtSide'] = _sys.modules['PySide2']
@@ -74,6 +77,11 @@ load_dic = {
         ("sip", "isdeleted"),
         ("shiboken2", "isValid"),
         ("PySide2.shiboken2", "isValid")
+    ],
+    'qt_slot': [
+        ("PyQt5.QtCore", "pyqtSlot"),
+        ("PySide2.QtCore", "Slot"),
+        ("PySide2.QtCore", "Slot")
     ]
 }
 
@@ -108,6 +116,12 @@ class __Loader(object):
 
 
 def qt_signal(*args):
+    # noinspection PyUnresolvedReferences
+    module_name, method_name = load_dic[_sys._getframe().f_code.co_name][QT_LOAD_INDEX]
+    return __Loader(module_name).get_method(method_name)(*args)
+
+
+def qt_slot(*args):
     # noinspection PyUnresolvedReferences
     module_name, method_name = load_dic[_sys._getframe().f_code.co_name][QT_LOAD_INDEX]
     return __Loader(module_name).get_method(method_name)(*args)

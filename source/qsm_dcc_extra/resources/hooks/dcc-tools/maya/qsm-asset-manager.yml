@@ -27,9 +27,9 @@ build:
                 selection_scheme:
                     widget: capsule_string
                     name_chs: '选择方案'
-                    options: ['root', 'geometry', 'deformation', 'motion']
-                    names_chs: ['根组', '模型', '骨骼', '控制器']
-                    default: 'motion'
+                    options: ['root', 'geometry_root', 'deformation_root', 'motion_root', 'main_control']
+                    names_chs: ['根组', '模型组', '骨骼组', '控制器组', '主控制器']
+                    default: 'main_control'
                     tool_tip: 'choose a selection scheme'
                     tool_tip_chs:
                         |-
@@ -82,6 +82,13 @@ build:
                 skin_proxy:
                     widget: group
                     name_chs: '简模代理'
+
+                skin_proxy/keep_head:
+                    widget: boolean
+                    name: 'Keep Head'
+                    name_chs: '保留脑袋'
+                    value: True
+                    tool_tip: '...'
 
                 skin_proxy/load:
                     widget: sub_process_button
@@ -185,6 +192,27 @@ build:
                     icon: 'tool/hide'
                     tool_tip: '...'
 
+                selection:
+                    widget: group
+                    name_chs: '选择'
+
+                selection/all:
+                    widget: button
+                    name: 'Select All'
+                    name_chs: '选择所有'
+                    value: ''
+                    icon: 'tool/maya/select'
+                    tool_tip: '...'
+                    join_to_next: True
+
+#                selection/camera_visible:
+#                    widget: button
+#                    name: 'Select Camera Visible'
+#                    name_chs: '选择相机可见'
+#                    value: ''
+#                    icon: 'tool/maya/select'
+#                    tool_tip: '...'
+
         rig_motion:
             name: 'Motion'
             name_chs: '运动'
@@ -205,7 +233,7 @@ build:
                 control/disable_playback_visible:
                     widget: button
                     name: 'Disable Control Playback Visible'
-                    name_chs: '关闭控制器播放课件'
+                    name_chs: '关闭控制器播放可见'
                     icon: 'tool/hide'
                     tool_tip: '...'
 
@@ -272,7 +300,7 @@ build:
                     widget: capsule_string
                     name_chs: '选择方案'
                     options: ['root', 'geometry', 'none']
-                    names_chs: ['根组', '模型', '不选']
+                    names_chs: ['根组', '模型组', '不选']
                     default: 'root'
                     tool_tip: 'choose a selection scheme'
                     tool_tip_chs:
@@ -455,10 +483,10 @@ build:
                     widget: group
                     name_chs: '选择'
 
-                selection/by_camera:
+                selection/camera_visible:
                     widget: button
-                    name: 'Select by Camera'
-                    name_chs: '通过相机选择'
+                    name: 'Select Camera Visible'
+                    name_chs: '选择相机可见'
                     value: ''
                     icon: 'tool/maya/select'
                     tool_tip: '...'
@@ -603,43 +631,43 @@ build:
 
     tag-groups:
         rig_utility:
-            name: 'Utility'
-            name_chs: '通用'
+            name: 'Rig Utility'
+            name_chs: '绑定通用'
 
             tool_tip: 'Include all tool for rig as utility, etc. skin proxy, dynamic GPU'
             tool_tip_chs: '包含所有跟绑定相关的通用工具, 如：生成建模代理，生成动态GPU等'
 
         rig_switch:
-            name: 'Switch'
-            name_chs: '切换'
+            name: 'Rig Switch'
+            name_chs: '绑定切换'
 
             tool_tip: 'Include all tool for rig switch'
             tool_tip_chs: '包含所有跟场景相关的组装工具'
 
         rig_extend:
-            name: 'Extend'
-            name_chs: '扩展'
+            name: 'Rig Extend'
+            name_chs: '绑定扩展'
 
             tool_tip: 'Include all tool for rig as extend, etc. animation transfer'
             tool_tip_chs: '包含所有跟绑定相关的扩展工具，如：动画传递等'
 
         scenery_utility:
-            name: 'Utility'
-            name_chs: '通用'
+            name: 'Scenery Utility'
+            name_chs: '场景通用'
 
             tool_tip: 'Include all tool for rig as utility, etc. unit assembly, camera mask'
             tool_tip_chs: '包含所有跟场景相关的通用工具, 如：生成元素组装，生成GPU实例'
 
         scenery_switch:
-            name: 'Switch'
-            name_chs: '切换'
+            name: 'Scenery Switch'
+            name_chs: '场景切换'
 
             tool_tip: 'Include all tool for scenery switch'
             tool_tip_chs: '包含所有跟场景相关的切换工具'
 
         scenery_extend:
-            name: 'Extend'
-            name_chs: '扩展'
+            name: 'Scenery Extend'
+            name_chs: '场景扩展'
 
             tool_tip: 'Include all tool for scenery as extend, etc. animation transfer'
             tool_tip_chs: '包含所有跟场景相关的扩展工具，如：相机遮罩等'

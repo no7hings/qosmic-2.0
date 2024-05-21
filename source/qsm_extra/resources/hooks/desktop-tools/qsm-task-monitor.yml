@@ -13,4 +13,4 @@ option:
             - 'for task monitor'
             - '...'
         #
-        size: [960, 960]
+        size: [720, 720]

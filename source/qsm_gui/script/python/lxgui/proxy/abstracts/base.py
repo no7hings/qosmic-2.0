@@ -199,7 +199,7 @@ class AbsPrxWaitingDef(object):
         #
         self._auto_stop_timer = gui_qt_core.QtCore.QTimer(self.widget)
         #
-        self.widget._set_size_changed_connect_to_(self._refresh_waiting_draw_)
+        self.widget._connect_size_changed_to_(self._refresh_waiting_draw_)
 
     def start_waiting(self, auto_stop_time=None):
         self.widget.setCursor(gui_qt_core.QtCore.Qt.BusyCursor)
@@ -260,8 +260,6 @@ class AbsPrxWindow(AbsPrx):
         )
         #
         self._window_title = None
-
-        self._close_methods = []
         #
         self._status = self.ValidationStatus.Normal
 
@@ -303,22 +301,17 @@ class AbsPrxWindow(AbsPrx):
         #
         gui_qt_core.GuiQtUtil.show_qt_window(self._qt_widget, pos, size)
 
-    def set_close_method(self, method):
-        self._close_methods.append(method)
-
-    def connect_window_close_to(self, method):
-        self._close_methods.append(method)
+    def connect_window_close_to(self, fnc):
+        self._qt_widget._connect_window_close_to_(fnc)
 
     def set_window_close(self):
-        for i in self._close_methods:
-            i()
-        #
-        self._qt_widget.close()
-        self._qt_widget.deleteLater()
+        self._qt_widget._do_window_close_()
+    
+    def set_window_ask_for_close_enable(self, boolean):
+        self._qt_widget._set_window_ask_for_close_enable_(boolean)
 
-    def close_window_later(self, delay_time=1000):
-        self._qt_widget.hide()
-        self._qt_widget._close_later_(delay_time)
+    def do_close_window_later(self, delay_time=1000):
+        self._qt_widget._do_window_close_later_(delay_time)
 
     def set_window_title(self, *args):
         text = args[0]
@@ -426,7 +419,7 @@ class AbsPrxProgressingDef(object):
         self._qt_progressing_char = self.QT_PROGRESSING_CHART_CLS(self.widget)
         self._qt_progressing_char.hide()
 
-        self.widget._set_size_changed_connect_to_(self._refresh_progressing_draw_)
+        self.widget._connect_size_changed_to_(self._refresh_progressing_draw_)
 
         self._current_progress = None
 

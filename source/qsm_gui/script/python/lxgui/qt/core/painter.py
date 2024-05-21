@@ -21,7 +21,7 @@ class QtPainterPath(QtGui.QPainterPath):
         super(QtPainterPath, self).__init__(*args)
         self.setFillRule(QtCore.Qt.WindingFill)
 
-    def _set_points_add_(self, points):
+    def _add_points_(self, points):
         points_ = [QtCore.QPointF(x, y) for x, y in points]
         self.addPolygon(QtGui.QPolygonF(points_))
 
@@ -156,7 +156,7 @@ class QtPainter(QtGui.QPainter):
         self._set_background_color_(color)
         self.drawRect(rect)
 
-    def _draw_tab_right_tool_box_by_rect_(self, rect):
+    def _draw_tab_right_tool_box_by_rect_(self, rect, background_color):
         color = QtGui.QLinearGradient(
             rect.topLeft(), rect.topRight()
         )
@@ -164,10 +164,10 @@ class QtPainter(QtGui.QPainter):
             0, _color_and_brush.QtBackgroundColors.Transparent
         )
         color.setColorAt(
-            0.05, _color_and_brush.QtBackgroundColors.Dark
+            0.05, background_color
         )
         color.setColorAt(
-            1, _color_and_brush.QtBackgroundColors.Dark
+            1, background_color
         )
         self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
         self._set_background_color_(color)
@@ -1173,7 +1173,7 @@ class QtPainter(QtGui.QPainter):
 
     def _draw_path_by_coords_(self, coords, antialiasing=True):
         path = QtPainterPath()
-        path._set_points_add_(coords)
+        path._add_points_(coords)
         self._set_antialiasing_(antialiasing)
         self.drawPath(path)
         return path

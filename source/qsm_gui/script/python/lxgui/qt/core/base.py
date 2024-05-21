@@ -19,7 +19,7 @@ from . import color_and_brush as _color_and_brush
 
 
 class GuiQtUtil(object):
-    WINDOW_KEY = 'lynxi_window'
+    WINDOW_KEY = 'QSM_WINDOW_FLAG'
 
     @classmethod
     def add_qt_fonts(cls, fonts):
@@ -101,6 +101,7 @@ class GuiQtUtil(object):
 
     @staticmethod
     def get_qt_widget_is_deleted(qt_widget):
+        # noinspection PyUnresolvedReferences
         import shiboken2
         return shiboken2.isValid(qt_widget)
 
@@ -164,10 +165,10 @@ class GuiQtUtil(object):
         vl, vt, vr, vb = 0, 0, 0, 0
         w_1, h_1 = w_0 + sum([wl, vl, wr, vr]), h_0 + sum([wt, vt, wb, vb])
 
-        p = widget.parent()
-        if p:
-            w_p, w_h = p.width(), p.height()
-            x_p, y_p = p.pos().x(), p.pos().y()
+        prt = widget.parent()
+        if prt:
+            w_p, w_h = prt.width(), prt.height()
+            x_p, y_p = prt.pos().x(), prt.pos().y()
         else:
             desktop_rect = GuiQtUtil.get_qt_desktop_current_rect()
             w_p, w_h = desktop_rect.width(), desktop_rect.height()
@@ -180,7 +181,7 @@ class GuiQtUtil(object):
         if pos is not None:
             x, y = pos[0] + x_p, pos[1] + y_p
         else:
-            x, y = (w_p - w_1) / 2 + x_p, (w_h - h_1) / 2 + y_p
+            x, y = (w_p - w_1)/2 + x_p, (w_h - h_1)/2 + y_p
         #
         widget.setGeometry(
             max(x, 0), max(y, 0), w_1, h_1
@@ -200,13 +201,15 @@ class GuiQtUtil(object):
     def create_app(cls):
         app = QtWidgets.QApplication(sys.argv)
         app.setPalette(cls.generate_qt_palette(tool_tip=True))
+        cls.add_qt_fonts(gui_core.GuiFont.get_all())
+        app.setFont(GuiQtFont.generate())
         return app
 
     @classmethod
     def generate_tool_tip_action_css(cls, content):
         content = content.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
         for i_keys, i_icon_name in [
-            (['"LMB-click"', '"LMB-db-click"'], 'mouse/LMB-click'),
+            (['"LMB-click"', '"LMB-dbl-click"'], 'mouse/LMB-click'),
             (['"LMB-move"'], 'mouse/LMB-move'),
             (['"RMB-click"'], 'mouse/RMB-click'),
             (['"MMB-wheel"'], 'mouse/MMB-wheel')
@@ -222,7 +225,7 @@ class GuiQtUtil(object):
         return content
 
     @classmethod
-    def generate_tool_tip_css(cls, title, content, **kwargs):
+    def generate_tool_tip_css(cls, title, content=None, **kwargs):
         css = (
             '<html>\n'
             '<body>\n'

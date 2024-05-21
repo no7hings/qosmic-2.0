@@ -381,7 +381,7 @@ class QtItemSignals(
     #
     pressed = qt_signal(object, int)
     #
-    press_db_clicked = qt_signal(object, int)
+    press_dbl_clicked = qt_signal(object, int)
     press_clicked = qt_signal(object, int)
     #
     check_clicked = qt_signal(object, int)

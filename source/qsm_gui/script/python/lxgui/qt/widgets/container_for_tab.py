@@ -1,10 +1,13 @@
 # coding=utf-8
+from ... import core as _gui_core
 # qt
 from ...qt.core.wrap import *
 
 from ...qt import core as _qt_core
 
 from ...qt import abstracts as _qt_abstracts
+
+from . import button as _qt_wgt_button
 
 
 class QtHTabToolGroup(
@@ -40,8 +43,13 @@ class QtHTabToolGroup(
             m_l, t_h+m_t, m_r, m_b
         )
 
+        scroll_w = w
         c_x, c_y = x, y
 
+        btn_f_w, btn_f_h = t_h, t_h
+        btn_w, btn_h = 20, 20
+
+        scroll_abs_w = 0
         tab_items = self._tab_item_stack.get_all_items()
         if tab_items:
             for i_index, i_tab_item in enumerate(tab_items):
@@ -55,8 +63,56 @@ class QtHTabToolGroup(
                 # compute tab width
                 i_t_w = i_text_width+t_h*2
                 self._item_width_dict[i_index] = i_t_w
+                scroll_abs_w += i_t_w
+            # update scroll model
+            self._gui_scroll.set_w_or_h(scroll_w)
+            self._gui_scroll.set_abs_w_or_h(scroll_abs_w+btn_f_w*3)
+            self._gui_scroll.update()
 
-            scroll_value = 0
+            if self._gui_scroll.get_is_valid():
+                btn_w_1, btn_h_1 = btn_w/2, btn_h
+                btn_f_w_r = btn_f_w*2
+                c_x_1, c_y_1 = w-btn_f_w_r, y
+                c_x_1 = max(c_x_1, btn_f_w_r)
+                self._tab_right_tool_box_rect.setRect(
+                    c_x_1, c_y_1, btn_f_w_r, btn_f_h
+                )
+                self._tab_right_tool_box_draw_rect.setRect(
+                    c_x_1, c_y_1, btn_f_w_r, btn_f_h-1
+                )
+                #
+                self._tab_scroll_previous_button.show()
+                self._tab_scroll_previous_button.setGeometry(
+                    c_x_1+(btn_f_w-btn_w)/2, c_y_1+(btn_f_h-btn_h_1)/2, btn_w_1, btn_h_1
+                )
+
+                if self._gui_scroll.get_is_minimum():
+                    self._tab_scroll_previous_button._set_icon_file_path_(self._icons_0[1])
+                else:
+                    self._tab_scroll_previous_button._set_icon_file_path_(self._icons_0[0])
+
+                self._tab_scroll_next_button.show()
+                self._tab_scroll_next_button.setGeometry(
+                    c_x_1+(btn_f_w-btn_w)/2+btn_w_1, c_y_1+(btn_f_h-btn_h_1)/2, btn_w_1, btn_h_1
+                )
+
+                if self._gui_scroll.get_is_maximum():
+                    self._tab_scroll_next_button._set_icon_file_path_(self._icons_1[1])
+                else:
+                    self._tab_scroll_next_button._set_icon_file_path_(self._icons_1[0])
+
+                self._tab_choose_button.show()
+                self._tab_choose_button.setGeometry(
+                    c_x_1+btn_f_w+(btn_f_w-btn_w)/2, c_y_1+(btn_f_h-btn_h)/2, btn_w, btn_h
+                )
+
+                c_t_f_w -= btn_f_w_r
+            else:
+                self._tab_scroll_previous_button.hide()
+                self._tab_scroll_next_button.hide()
+                self._tab_choose_button.hide()
+
+            scroll_value = self._gui_scroll.get_value()
             widths = self._item_width_dict.values()
             for i_index, i_tab_item in enumerate(tab_items):
                 i_rect = i_tab_item.get_rect()
@@ -84,6 +140,20 @@ class QtHTabToolGroup(
             c_t_f_x, c_t_f_y, c_t_f_w, c_t_f_h
         )
 
+    def _do_scroll_to_(self, index):
+        item = self._tab_item_stack.get_item_at(index)
+        if item:
+            x = item.get_rect().x()
+            self._gui_scroll.accept_value(x-24)
+
+    def _do_scroll_previous_(self):
+        if self._gui_scroll.step_to_previous():
+            self._refresh_widget_all_()
+
+    def _do_scroll_next_(self):
+        if self._gui_scroll.step_to_next():
+            self._refresh_widget_all_()
+
     def __init__(self, *args, **kwargs):
         super(QtHTabToolGroup, self).__init__(*args, **kwargs)
 
@@ -105,6 +175,45 @@ class QtHTabToolGroup(
 
         self._tab_bar_rect = QtCore.QRect()
         self._tab_bar_draw_rect = QtCore.QRect()
+
+        self._tab_right_tool_box_rect = QtCore.QRect()
+        self._tab_right_tool_box_draw_rect = QtCore.QRect()
+        
+        self._icons_0 = [
+            _gui_core.GuiIcon.get('window_base/scroll-left'),
+            _gui_core.GuiIcon.get('window_base/scroll-left-disable')
+        ]
+        self._icons_1 = [
+            _gui_core.GuiIcon.get('window_base/scroll-right'),
+            _gui_core.GuiIcon.get('window_base/scroll-right-disable')
+        ]
+
+        self._tab_scroll_previous_button = _qt_wgt_button.QtIconPressButton(self)
+        self._tab_scroll_previous_button.hide()
+        self._tab_scroll_previous_button._set_icon_geometry_mode_(
+            _qt_wgt_button.QtIconPressButton.IconGeometryMode.Auto
+        )
+        self._tab_scroll_previous_button.setFixedSize(10, 20)
+        self._tab_scroll_previous_button._set_icon_file_path_(self._icons_0[0])
+        self._tab_scroll_previous_button.press_clicked.connect(self._do_scroll_previous_)
+
+        self._tab_scroll_next_button = _qt_wgt_button.QtIconPressButton(self)
+        self._tab_scroll_next_button.hide()
+        self._tab_scroll_next_button._set_icon_geometry_mode_(
+            _qt_wgt_button.QtIconPressButton.IconGeometryMode.Auto
+        )
+        self._tab_scroll_next_button.setFixedSize(10, 20)
+        self._tab_scroll_next_button._set_icon_file_path_(self._icons_1[0])
+        self._tab_scroll_next_button.press_clicked.connect(self._do_scroll_next_)
+
+        self._tab_choose_button = _qt_wgt_button.QtIconMenuButton(self)
+        self._tab_choose_button.hide()
+        self._tab_choose_button._set_icon_file_path_(
+            _gui_core.GuiIcon.get('tab/tab-choose')
+        )
+
+        self._gui_scroll = _qt_core.GuiQtModForScroll()
+        self._gui_scroll.set_step(64)
 
         self._item_width_dict = {}
 
@@ -175,6 +284,12 @@ class QtHTabToolGroup(
             index_pressed=self._index_press,
             index_current=self._get_current_index_(),
         )
+
+        if self._gui_scroll.get_is_valid():
+            painter._draw_tab_right_tool_box_by_rect_(
+                rect=self._tab_right_tool_box_draw_rect,
+                background_color=_qt_core.QtBackgroundColors.Basic
+            )
 
     def _add_widget_(self, widget, *args, **kwargs):
         # widget.setParent(self)

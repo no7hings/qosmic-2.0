@@ -450,7 +450,7 @@ class AbsQtNGSbjDef(object):
         return self._ng_sbj_graph._get_action_flag_is_match_(*args)
 
     def _get_ng_sbj_mdf_flags_is_include_(self, flag):
-        return self._ng_sbj_graph._get_action_mdf_flags_is_include_(flag)
+        return self._ng_sbj_graph._is_action_mdf_flags_include_(flag)
 
     def _get_ng_sbj_mdf_flags_(self):
         return self._ng_sbj_graph._get_action_mdf_flags_()

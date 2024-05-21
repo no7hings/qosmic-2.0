@@ -161,10 +161,10 @@ class ResourceScriptOpt(object):
             )
             cmds.setAttr(self.CACHE_ROOT+'.iconName', 'folder-closed.png', type='string')
 
-    def load_cache(self, cache_file_path):
+    def load_cache(self, *args, **kwargs):
         raise NotImplementedError()
 
-    def hide_resource_auto(self):
+    def hide_resource_auto(self, *args, **kwargs):
         raise NotImplementedError()
 
     def generate_args(self, *args, **kwargs):

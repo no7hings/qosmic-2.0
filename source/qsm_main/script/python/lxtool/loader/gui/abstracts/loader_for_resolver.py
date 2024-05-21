@@ -458,7 +458,7 @@ class _GuiTaskOpt(
         #
         if image_args is not None:
             image_file_path, image_sp_cmd, movie_file_path, execute_fnc = image_args
-            prx_item_widget.connect_press_db_clicked_to(execute_fnc)
+            prx_item_widget.connect_press_dbl_clicked_to(execute_fnc)
             prx_item_widget.set_image(image_file_path)
             prx_item_widget.set_movie_enable(True)
             if image_sp_cmd is not None:

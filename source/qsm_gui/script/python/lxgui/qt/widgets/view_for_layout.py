@@ -470,7 +470,7 @@ class QtToolGroupVLayoutWidget(
                 self._do_drag_enter_(event)
             elif event.type() == QtCore.QEvent.DragMove:
                 if self._get_action_flag_is_match_(
-                        self.ActionFlag.DragChildPolish
+                    self.ActionFlag.DragChildPolish
                 ):
                     self._do_drag_child_polish_(event)
             elif event.type() == QtCore.QEvent.DragLeave:

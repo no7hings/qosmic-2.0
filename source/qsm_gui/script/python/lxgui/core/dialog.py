@@ -220,7 +220,7 @@ class GuiMonitorForCommand(object):
         # noinspection PyUnusedLocal
         def completed_fnc_(*args):
             w.set_status(w.ValidationStatus.Correct)
-            w.close_window_later()
+            w.do_close_window_later()
 
         # noinspection PyUnusedLocal
         def failed_fnc_(*args):

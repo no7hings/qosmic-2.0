@@ -13,11 +13,11 @@ from ...qt.widgets import scroll as gui_qt_wgt_scroll
 from .. import abstracts as gui_prx_abstracts
 
 
-class PrxHToolTabGroup(gui_prx_abstracts.AbsPrxWidget):
+class PrxHTabBox(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_wgt_container_for_tab.QtHTabToolGroup
 
     def __init__(self, *args, **kwargs):
-        super(PrxHToolTabGroup, self).__init__(*args, **kwargs)
+        super(PrxHTabBox, self).__init__(*args, **kwargs)
 
     def add_widget(self, widget, *args, **kwargs):
         if isinstance(widget, gui_qt_core.QtCore.QObject):

@@ -37,7 +37,7 @@ class QtChartAsRgbaChoose(
                         x, y, side_count, radius_sub-1, side=0
                     )
                     _i_color_path = _qt_core.QtPainterPath()
-                    _i_color_path._set_points_add_(_i_sub_points)
+                    _i_color_path._add_points_(_i_sub_points)
                     #
                     angle = _gui_core.GuiChat.get_angle_by_coord(x, y, pos_x, pos_y)
                     length = _gui_core.GuiChat.get_length_by_coord(x, y, pos_x, pos_y)
@@ -89,7 +89,7 @@ class QtChartAsRgbaChoose(
             pos_x, pos_y, side_count, radius_main, radius_sub/2
         )
         color_path_main = _qt_core.QtPainterPath()
-        color_path_main._set_points_add_(points_main)
+        color_path_main._add_points_(points_main)
         #
         x_count = int(count*.75)
         y_count = int(count*.75)
@@ -119,15 +119,8 @@ class QtChartAsRgbaChoose(
         self.installEventFilter(self)
 
         self.setSizePolicy(
-            QtWidgets.QSizePolicy.Expanding,
-            QtWidgets.QSizePolicy.Expanding
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
         )
-
-        self.setSizePolicy(
-            QtWidgets.QSizePolicy.Expanding,
-            QtWidgets.QSizePolicy.Expanding
-        )
-
         self._init_widget_base_def_(self)
         self._init_action_base_def_(self)
         self._init_chart_base_def_(self)

@@ -3,6 +3,11 @@ from .configure import *
 
 from .base import *
 
-from .rig import *
+from .adv import *
+
+from .skeleton import *
+
+from .deform import *
+
 
 

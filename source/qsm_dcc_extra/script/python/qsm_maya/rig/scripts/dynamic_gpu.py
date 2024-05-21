@@ -238,9 +238,9 @@ class DynamicGpuCacheGenerate(object):
         self._reference_namespace_query = _mya_core.ReferenceNamespacesCache()
         self._resource = _rig_core.AdvRig(self._namespace)
         self._root = self._resource.get_root()
-        self._geometry_location = self._resource.get_geometry_location()
+        self._geometry_location = self._resource.get_geometry_root()
 
-    def get_geometry_location(self):
+    def get_geometry_root(self):
         return self._geometry_location
 
     def create_cache_root_auto(self):
@@ -297,7 +297,7 @@ class DynamicGpuCacheProcess(object):
         _mya_core.SceneFile.open(self._file_path)
 
         generate = DynamicGpuCacheGenerate(self._namespace)
-        geometry_location = generate.get_geometry_location()
+        geometry_location = generate.get_geometry_root()
         generate._clear_display_layers(geometry_location)
 
         generate.export_gpu(

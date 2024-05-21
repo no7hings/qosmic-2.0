@@ -79,8 +79,8 @@ class _GuiTaskOpt(
         return True, prx_item
 
     def gui_add_prc_batch(self, prc_task):
-        batch_name = prc_task.batch_name
-        path = '/{}'.format(batch_name)
+        group = prc_task.group
+        path = '/{}'.format(group)
         if self.gui_is_exists(path):
             return False, self.gui_get(path)
 
@@ -88,7 +88,7 @@ class _GuiTaskOpt(
         parent_gui = self.gui_get(path_opt.get_parent_path())
 
         prx_item = parent_gui.prepend_child(
-            name=batch_name,
+            name=group,
             icon=gui_core.GuiIcon.get('database/group'),
         )
         # prx_item.set_expanded(True)
@@ -97,8 +97,8 @@ class _GuiTaskOpt(
         return True, prx_item
 
     def gui_add_prc_task(self, prc_task):
-        batch_name = prc_task.batch_name
-        path = '/{}/{}'.format(batch_name, prc_task.task_id)
+        group = prc_task.group
+        path = '/{}/{}'.format(group, prc_task.task_id)
         if self.gui_is_exists(path) is True:
             return False, self.gui_get(path)
 

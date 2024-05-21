@@ -15,7 +15,7 @@ from . import base as _base
 class Task(object):
     class PropertyKeys(object):
         ID = 'id'
-        BatchName = 'batch_name'
+        Group = 'group'
         Name = 'name'
         Time = 'time'
         UtcTime = 'utc_time'
@@ -68,15 +68,15 @@ class Task(object):
         return self._json_content.get('properties.name')
 
     @property
-    def batch_name(self):
-        return self._json_content.get('properties.batch_name')
+    def group(self):
+        return self._json_content.get('properties.group')
 
     @property
     def content(self):
         return self._json_content
 
     @classmethod
-    def create(cls, tasks_index, task_id, batch_name, name, cmd_script, time, utc_time):
+    def create(cls, tasks_index, task_id, group, name, cmd_script, time, utc_time):
         location = '{}/{}.task'.format(
             tasks_index.location, task_id
         )
@@ -90,7 +90,7 @@ class Task(object):
                 {
                     'properties': {
                         cls.PropertyKeys.ID: task_id,
-                        cls.PropertyKeys.BatchName: batch_name,
+                        cls.PropertyKeys.Group: group,
                         cls.PropertyKeys.Name: name,
 
                         cls.PropertyKeys.Time: time,
@@ -164,6 +164,9 @@ class Task(object):
         def _started_fnc(task):
             task.refresh_start_time()
 
+        def _completed_fnc(task, results):
+            print task
+
         def _finished_fnc(task, status, results):
             task.refresh_finish_time()
             task.save_log(results)
@@ -172,6 +175,7 @@ class Task(object):
         self._thread = bsc_core.TrdCommandPool.generate(cmd_script, self)
         self._thread.status_changed.connect_to(_status_changed_fnc)
         self._thread.started.connect_to(_started_fnc)
+        self._thread.completed.connect_to(_completed_fnc)
         self._thread.finished.connect_to(_finished_fnc)
         self._thread.do_wait_for_start()
 
@@ -239,11 +243,11 @@ class TasksCache(object):
         self._task_dict[task_id] = task
         self._task_ids_new.append(task_id)
 
-    def new_task(self, batch_name, name, cmd_script):
+    def new_task(self, group, name, cmd_script):
         task_id = _base.Util.new_uuid()
         time = _base.Util.get_time()
         utc_time = _base.Util.get_utc_time()
-        task = Task.create(self, task_id, batch_name, name, cmd_script, time, utc_time)
+        task = Task.create(self, task_id, group, name, cmd_script, time, utc_time)
         index = len(self.get_task_ids())
         self._json_content.set(
             'tasks.{}'.format(task_id),

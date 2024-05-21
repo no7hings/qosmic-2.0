@@ -131,7 +131,7 @@ class QtFileDialog(QtWidgets.QFileDialog):
 
 class QtSystemTrayIcon(QtWidgets.QSystemTrayIcon):
     press_clicked = qt_signal()
-    press_db_clicked = qt_signal()
+    press_dbl_clicked = qt_signal()
     press_toggled = qt_signal(bool)
 
     def __init__(self, *args, **kwargs):
@@ -143,25 +143,28 @@ class QtSystemTrayIcon(QtWidgets.QSystemTrayIcon):
         #
         self._window = self.parent()
         self._set_quit_action_add_(menu)
+
         self.activated.connect(self._set_window_show_normal_)
 
     def _set_window_show_normal_(self, *args):
         r = args[0]
-        # if r == self.Trigger:
-        #     # print 'AAA'
-        #     # if self._window.isVisible():
-        #     #     self._window.hide()
-        #     # else:
-        #     #     self._window.show()
-        #     if self._window.isMinimized():
-        #         self._window.showNormal()
-        #     else:
-        #         self._window.showMinimized()
-        if r == self.DoubleClick:
-            if self._window.isVisible():
-                self._window.hide()
+        if r == self.Trigger:
+            # print 'AAA'
+            # if self._window.isVisible():
+            #     self._window.hide()
+            # else:
+            #     self._window.show()
+            if self._window.isMinimized():
+                self._window.showNormal()
+                self._window.raise_()
+                self._window.activateWindow()
             else:
-                self._window.show()
+                self._window.showMinimized()
+        # if r == self.DoubleClick:
+        #     if self._window.isVisible():
+        #         self._window.hide()
+        #     else:
+        #         self._window.show()
 
     def _set_quit_action_add_(self, menu):
         widget_action = QtWidgetAction(menu)

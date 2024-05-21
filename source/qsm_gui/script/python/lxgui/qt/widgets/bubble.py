@@ -336,7 +336,7 @@ class QtPathBubble(
 
     next_press_clicked = qt_signal()
     component_press_clicked = qt_signal(int)
-    component_press_db_clicked = qt_signal(int)
+    component_press_dbl_clicked = qt_signal(int)
 
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_()
@@ -451,7 +451,7 @@ class QtPathBubble(
                         self.component_press_clicked.emit(self.__component_index_pressed)
                         self.__component_index_pressed = None
                     elif self._get_action_flag_is_match_(self.ActionFlag.ComponentDbClick):
-                        self.component_press_db_clicked.emit(self.__component_index_pressed)
+                        self.component_press_dbl_clicked.emit(self.__component_index_pressed)
                         self.__component_index_pressed = None
                     elif self._get_action_flag_is_match_(self.ActionFlag.NextPress):
                         self.next_press_clicked.emit()

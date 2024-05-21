@@ -59,7 +59,7 @@ class QtEntryExtendAsPath(QtWidgets.QWidget):
         self.next_press_clicked = self._path_bubble.next_press_clicked
 
         self._path_bubble.component_press_clicked.connect(self._choose_at_)
-        self._path_bubble.component_press_db_clicked.connect(self._enter_at_)
+        self._path_bubble.component_press_dbl_clicked.connect(self._enter_at_)
 
         self._entry_widget = gui_qt_wgt_entry.QtEntryAsConstant()
         self._lot.addWidget(self._entry_widget)

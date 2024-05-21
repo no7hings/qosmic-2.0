@@ -905,7 +905,7 @@ class AssetWorkspaceOld(object):
             )
 
     def set_look_klf_extra_export(self, file_path):
-        location = self.get_geometry_location()
+        location = self.get_geometry_root()
         #
         dcc_shaders = self.get_all_dcc_geometry_shaders_by_location(location)
         #
@@ -988,7 +988,7 @@ class AssetWorkspaceOld(object):
                                 'export.execute'
                             )
 
-    def get_geometry_location(self):
+    def get_geometry_root(self):
         configure = self.get_configure()
         geometry_settings = self.get_main_node('geometry_settings')
         if geometry_settings.get_is_exists() is True and geometry_settings.get_is_bypassed() is False:

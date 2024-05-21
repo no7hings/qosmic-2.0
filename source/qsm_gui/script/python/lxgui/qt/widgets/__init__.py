@@ -5,6 +5,8 @@ from .bubble import *
 
 from .utility import *
 
+from .window_base import *
+
 from .status import *
 
 from .drag import *

@@ -15,5 +15,5 @@ def process_fnc_(w_):
 
 
 w = gui_prx_core.GuiProxyUtil.show_window_proxy_auto(
-    prx_widgets.PrxProcessingWindow, process_fnc=process_fnc_, show_kwargs=dict(exclusive=False)
+    prx_widgets.PrxProcessingWindow, window_process_fnc=process_fnc_, show_kwargs=dict(exclusive=False)
 )

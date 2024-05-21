@@ -10,39 +10,72 @@ from ...qt import core as gui_qt_core
 
 class GuiProxyUtil(object):
 
-    @staticmethod
-    def show_window_proxy_auto(window_proxy_cls, show_kwargs=None, process_fnc=None, **kwargs):
+    @classmethod
+    def show_window_proxy_auto(
+        cls, prx_window_cls, show_kwargs=None, window_process_fnc=None,
+        window_unique_name=None, window_ask_for_close=False,
+        **window_kwargs
+    ):
         exists_app = gui_qt_core.GuiQtUtil.get_exists_app()
+        is_running = None
+        shared_memory_key = None
         if exists_app is None:
+            # check show window as unique
+            if window_unique_name is not None:
+                if gui_qt_core.QT_LOAD_FLAG == 'pyqt':
+                    shared_memory_key = window_unique_name
+                    shared_memory = gui_qt_core.QtCore.QSharedMemory(shared_memory_key)
+
+                    if shared_memory.attach():
+                        is_running = True
+                    else:
+                        shared_memory.create(1)
+                        is_running = False
+
+            if is_running is True:
+                import win32gui
+
+                import win32con
+
+                hwnd = win32gui.FindWindow(None, window_unique_name)
+                if hwnd:
+                    # if not win32gui.IsWindowVisible(hwnd):
+                    #     # win32gui.ShowWindow(hwnd, win32con.SW_SHOW)
+                    #     win32gui.ShowWindow(hwnd, win32con.SW_SHOWNORMAL)
+                    #     print 'CCC'
+                    # # if win32gui.IsIconic(hwnd) or not win32gui.IsWindowVisible(hwnd):
+                    # #     win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
+                    # else:
+                    win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
+                    win32gui.SetForegroundWindow(hwnd)
+                return
+
             app = gui_qt_core.GuiQtUtil.create_app()
 
-            bsc_log.Log.trace_method_result('application', 'add fonts')
-            gui_qt_core.GuiQtUtil.add_qt_fonts(
-                gui_core.GuiFont.get_all()
-            )
-
-            app.setFont(gui_qt_core.GuiQtFont.generate())
-
-            prx_window = window_proxy_cls(**kwargs)
+            prx_window = prx_window_cls(**window_kwargs)
             prx_window.set_main_window_geometry(gui_qt_core.GuiQtDcc.get_qt_main_window_geometry_args())
+            if window_ask_for_close is True:
+                prx_window.set_window_ask_for_close_enable(window_ask_for_close)
 
-            window = prx_window.widget
-            system_tray_icon = gui_qt_core.QtSystemTrayIcon(window)
-            system_tray_icon.setIcon(window.windowIcon())
-            system_tray_icon.show()
-            window._set_window_system_tray_icon_(system_tray_icon)
+            # create system tray icon
+            if window_unique_name is not None:
+                qt_window = prx_window.widget
+                qt_system_tray_icon = gui_qt_core.QtSystemTrayIcon(qt_window)
+                qt_system_tray_icon.setIcon(qt_window.windowIcon())
+                qt_system_tray_icon.show()
+                qt_window._set_window_system_tray_icon_(qt_system_tray_icon)
 
             if isinstance(show_kwargs, dict):
                 prx_window.set_window_show(**show_kwargs)
             else:
                 prx_window.set_window_show()
 
-            if process_fnc is not None:
-                process_fnc(prx_window)
+            if window_process_fnc is not None:
+                window_process_fnc(prx_window)
 
             gui_qt_core.GuiQtDcc.exit_app(app)
         else:
-            prx_window = window_proxy_cls(**kwargs)
+            prx_window = prx_window_cls(**window_kwargs)
             prx_window.set_main_window_geometry(gui_qt_core.GuiQtDcc.get_qt_main_window_geometry_args())
 
             if isinstance(show_kwargs, dict):
@@ -50,8 +83,8 @@ class GuiProxyUtil(object):
             else:
                 prx_window.set_window_show()
 
-            if process_fnc is not None:
-                process_fnc(prx_window)
+            if window_process_fnc is not None:
+                window_process_fnc(prx_window)
 
             if gui_qt_core.GuiQtDcc.get_is_clarisse():
                 gui_qt_core.GuiQtDcc.exit_app(exists_app)

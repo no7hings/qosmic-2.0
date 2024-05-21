@@ -3,19 +3,19 @@ import functools
 
 import lxbasic.core as bsc_core
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
 from ..core.wrap import *
 
-from .. import core as gui_qt_core
+from .. import core as _qt_core
 
-from .. import abstracts as gui_qt_abstracts
+from .. import abstracts as _qt_abstracts
 # qt widgets
-from . import utility as gui_qt_wgt_utility
+from . import utility as _qt_wgt_utility
 
-from . import button as gui_qt_wgt_button
+from . import button as _qt_wgt_button
 
-from . import layer_stack as gui_qt_wgt_layer_stack
+from . import layer_stack as _qt_wgt_layer_stack
 
 
 class AbsQtItemsDef(object):
@@ -25,7 +25,7 @@ class AbsQtItemsDef(object):
     def _init_items_base_def_(self, widget):
         self._widget = widget
 
-        self._tab_item_stack = gui_qt_core.GuiQtModForTabItemStack(self)
+        self._tab_item_stack = _qt_core.GuiQtModForTabItemStack(self)
         self._index_hover = None
         self._index_press = None
         self._item_index_dragged = None
@@ -46,18 +46,18 @@ class AbsQtItemsDef(object):
 class QtTabView(
     QtWidgets.QWidget,
     AbsQtItemsDef,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
-    gui_qt_abstracts.AbsQtWidgetBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtWidgetBaseDef,
     #
-    gui_qt_abstracts.AbsQtMenuBaseDef,
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForDragDef,
+    _qt_abstracts.AbsQtMenuBaseDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForDragDef,
 ):
     current_changed = qt_signal()
 
     tab_delete_accepted = qt_signal(str)
 
-    QT_MENU_CLS = gui_qt_wgt_utility.QtMenu
+    QT_MENU_CLS = _qt_wgt_utility.QtMenu
 
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_(self.rect())
@@ -261,50 +261,50 @@ class QtTabView(
         self._tab_right_tool_box_draw_rect = QtCore.QRect()
 
         self._tab_add_is_enable = False
-        self._tab_add_button = gui_qt_wgt_button.QtIconMenuButton(self)
+        self._tab_add_button = _qt_wgt_button.QtIconMenuButton(self)
         self._tab_add_button.hide()
         self._tab_add_button._set_icon_file_path_(
-            gui_core.GuiIcon.get('tab/tab-add')
+            _gui_core.GuiIcon.get('tab/tab-add')
         )
 
         self._icons_0 = [
-            gui_core.GuiIcon.get('window_base/scroll-left'),
-            gui_core.GuiIcon.get('window_base/scroll-left-disable')
+            _gui_core.GuiIcon.get('window_base/scroll-left'),
+            _gui_core.GuiIcon.get('window_base/scroll-left-disable')
         ]
         self._icons_1 = [
-            gui_core.GuiIcon.get('window_base/scroll-right'),
-            gui_core.GuiIcon.get('window_base/scroll-right-disable')
+            _gui_core.GuiIcon.get('window_base/scroll-right'),
+            _gui_core.GuiIcon.get('window_base/scroll-right-disable')
         ]
 
-        self._tab_scroll_previous_button = gui_qt_wgt_button.QtIconPressButton(self)
+        self._tab_scroll_previous_button = _qt_wgt_button.QtIconPressButton(self)
         self._tab_scroll_previous_button.hide()
         self._tab_scroll_previous_button._set_icon_geometry_mode_(
-            gui_qt_wgt_button.QtIconPressButton.IconGeometryMode.Auto
+            _qt_wgt_button.QtIconPressButton.IconGeometryMode.Auto
         )
         self._tab_scroll_previous_button.setFixedSize(10, 20)
         self._tab_scroll_previous_button._set_icon_file_path_(self._icons_0[0])
         self._tab_scroll_previous_button.press_clicked.connect(self._do_scroll_previous_)
 
-        self._tab_scroll_next_button = gui_qt_wgt_button.QtIconPressButton(self)
+        self._tab_scroll_next_button = _qt_wgt_button.QtIconPressButton(self)
         self._tab_scroll_next_button.hide()
         self._tab_scroll_next_button._set_icon_geometry_mode_(
-            gui_qt_wgt_button.QtIconPressButton.IconGeometryMode.Auto
+            _qt_wgt_button.QtIconPressButton.IconGeometryMode.Auto
         )
         self._tab_scroll_next_button.setFixedSize(10, 20)
         self._tab_scroll_next_button._set_icon_file_path_(self._icons_1[0])
         self._tab_scroll_next_button.press_clicked.connect(self._do_scroll_next_)
 
-        self._tab_choose_button = gui_qt_wgt_button.QtIconMenuButton(self)
+        self._tab_choose_button = _qt_wgt_button.QtIconMenuButton(self)
         self._tab_choose_button.hide()
         self._tab_choose_button._set_icon_file_path_(
-            gui_core.GuiIcon.get('tab/tab-choose')
+            _gui_core.GuiIcon.get('tab/tab-choose')
         )
 
         self._tab_menu_is_enable = False
-        self._tab_menu_button = gui_qt_wgt_button.QtIconMenuButton(self)
+        self._tab_menu_button = _qt_wgt_button.QtIconMenuButton(self)
         self._tab_menu_button.hide()
         self._tab_menu_button._set_icon_file_path_(
-            gui_core.GuiIcon.get('tab/tab-menu-v')
+            _gui_core.GuiIcon.get('tab/tab-menu-v')
         )
 
         self._tab_view_margins = 2, 2, 2, 2
@@ -312,16 +312,16 @@ class QtTabView(
         self._tab_w, self._tab_h = 48, 24
 
         self.setFont(
-            gui_qt_core.GuiQtFont.generate(size=10)
+            _qt_core.GuiQtFont.generate(size=10)
         )
 
-        self._gui_scroll = gui_qt_core.GuiQtModForScroll()
+        self._gui_scroll = _qt_core.GuiQtModForScroll()
         self._gui_scroll.set_step(64)
         self._set_menu_data_generate_fnc_(
             self._tab_item_menu_gain_fnc_
         )
 
-        self.__layer_stack = gui_qt_wgt_layer_stack.QtLayerStack(self)
+        self.__layer_stack = _qt_wgt_layer_stack.QtLayerStack(self)
         self.__layer_stack.installEventFilter(self)
         # use layer stack signal
         self.__layer_stack.current_changed.connect(self.current_changed.emit)
@@ -412,7 +412,7 @@ class QtTabView(
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         painter._draw_tab_buttons_by_rects_(
             self._tab_bar_draw_rect,
             virtual_items=self._tab_item_stack.get_all_items(),
@@ -428,7 +428,8 @@ class QtTabView(
         #
         if self._gui_scroll.get_is_valid():
             painter._draw_tab_right_tool_box_by_rect_(
-                rect=self._tab_right_tool_box_draw_rect
+                rect=self._tab_right_tool_box_draw_rect,
+                background_color=_qt_core.QtBackgroundColors.Dark
             )
 
     def _delete_widget_at_(self, index):
@@ -542,7 +543,7 @@ class QtTabView(
                 title = 'N/a'
                 tool_tip = 'N/a'
 
-            css = gui_qt_core.GuiQtUtil.generate_tool_tip_css(
+            css = _qt_core.GuiQtUtil.generate_tool_tip_css(
                 title,
                 content=tool_tip,
                 action_tip=[

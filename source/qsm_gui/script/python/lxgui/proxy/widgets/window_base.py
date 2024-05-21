@@ -15,6 +15,8 @@ from ...qt.widgets import base as gui_qt_wgt_base
 
 from ...qt.widgets import utility as gui_qt_wgt_utility
 
+from ... qt.widgets import window_base as _qt_window_base
+
 from ...qt.widgets import chart as gui_qt_wgt_chart
 
 from ...qt.widgets import layer_stack as gui_qt_wgt_layer_stack
@@ -39,7 +41,7 @@ class PrxBaseWindow(
     PRX_CATEGORY = 'tool_window'
     PRX_TYPE = 'tool_window'
 
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtMainWindow
+    QT_WIDGET_CLS = _qt_window_base.QtWindowBase
 
     PRX_LAYER_CLS = gui_prx_wdt_utility.PrxLayer
     QT_LAYER_STACK_CLS = gui_qt_wgt_layer_stack.QtLayerStack
@@ -477,25 +479,9 @@ class PrxSessionWindow(PrxBaseWindow):
             if ui_name_chs:
                 ui_name = ui_name_chs
 
-        ui_name = bsc_core.auto_string(ui_name)
-        if self._session.get_is_td_enable() is True:
-            self.set_window_title(
-                '[ALPHA] {} - {}'.format(
-                    ui_name, str(self._session.application).capitalize()
-                )
-            )
-        elif self._session.get_is_beta_enable() is True:
-            self.set_window_title(
-                '[BETA] {} - {}'.format(
-                    ui_name, str(self._session.application).capitalize()
-                )
-            )
-        else:
-            self.set_window_title(
-                '{} - {}'.format(
-                    ui_name, str(self._session.application).capitalize()
-                )
-            )
+        self.set_window_title(
+            self._session.get_gui_window_name()
+        )
 
         if self._session.gui_configure.get('icon_name'):
             self.set_window_icon_by_name(self._session.gui_configure.get('icon_name'))
@@ -540,10 +526,10 @@ class PrxSessionToolWindow(PrxSessionWindow):
 
     def apply_and_close_fnc(self):
         self.apply_fnc()
-        self.close_window_later()
+        self.do_close_window_later()
 
     def close_fnc(self):
-        self.close_window_later()
+        self.do_close_window_later()
 
     def _setup_ssn_tool_(self):
         self._ssn_tool_apply_and_close_button = gui_prx_wdt_utility.PrxPressButton()

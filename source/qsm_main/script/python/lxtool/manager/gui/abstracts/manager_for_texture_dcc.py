@@ -174,7 +174,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                                 use_show_thread=True
                             )
                             if j_is_create is True:
-                                j_file_prx_item.connect_press_db_clicked_to(
+                                j_file_prx_item.connect_press_dbl_clicked_to(
                                     self._show_image_detail
                                 )
                             # create relevant node as a child, node may be more than one

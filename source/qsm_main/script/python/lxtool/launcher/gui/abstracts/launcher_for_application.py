@@ -96,7 +96,7 @@ class AbsPnlLauncherForApplication(prx_widgets.PrxSessionWindow):
             bsc_core.ExcExtraMtd.execute_shell_script_use_terminal(
                 '"{}"'.format(cmd), **dict(title='{}-{}'.format(self.__get_application(), bsc_core.SysBaseMtd.get_time_tag()))
             )
-            self.close_window_later()
+            self.do_close_window_later()
 
     def __do_next(self):
         self.__do_accept(self.__input.get_result())
@@ -111,4 +111,4 @@ class AbsPnlLauncherForApplication(prx_widgets.PrxSessionWindow):
 
     def __do_cancel(self):
         if self.__input.has_focus() is False:
-            self.close_window_later()
+            self.do_close_window_later()

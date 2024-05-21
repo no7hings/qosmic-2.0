@@ -47,14 +47,14 @@ class W0(prx_widgets.PrxBaseWindow):
 
     def _do_accept(self, dict_):
         if dict_:
-            self.close_window_later()
+            self.do_close_window_later()
 
     def _do_tip_trace(self, text):
         self._tip.set_content(text)
 
     def __do_cancel(self):
         if self._ipt.has_focus() is False:
-            self.close_window_later()
+            self.do_close_window_later()
 
 
 if __name__ == '__main__':

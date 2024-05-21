@@ -21,6 +21,8 @@ from ...qt.widgets import item as gui_qt_wgt_item
 
 from ...qt.widgets import input as gui_qt_wgt_input
 
+from ...qt.widgets import window_base as _qt_window_base
+
 from ...qt.widgets import window as gui_qt_wgt_window
 # proxy abstracts
 from .. import abstracts as gui_prx_abstracts
@@ -260,7 +262,7 @@ class PrxRightExpandedGroup(PrxLeftExpandedGroup):
 
 
 class Window(gui_prx_abstracts.AbsPrxWindow):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtMainWindow
+    QT_WIDGET_CLS = _qt_window_base.QtWindowBase
 
     def __init__(self, *args, **kwargs):
         super(Window, self).__init__(*args, **kwargs)
@@ -533,8 +535,8 @@ class PrxIconPressButton(gui_prx_abstracts.AbsPrxWidget):
     def set_menu_content(self, content):
         self._qt_widget._set_menu_content_(content)
 
-    def connect_press_db_clicked_to(self, fnc):
-        self._qt_widget.press_db_clicked.connect(fnc)
+    def connect_press_dbl_clicked_to(self, fnc):
+        self._qt_widget.press_dbl_clicked.connect(fnc)
 
     def set_drag_enable(self, boolean):
         self._qt_widget._set_drag_enable_(boolean)
@@ -791,7 +793,7 @@ class PrxWindow(
 class PrxWindowNew(
     gui_prx_abstracts.AbsPrxWindow,
 ):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtMainWindow
+    QT_WIDGET_CLS = _qt_window_base.QtWindowBase
 
     def __init__(self, *args, **kwargs):
         super(PrxWindowNew, self).__init__(*args, **kwargs)

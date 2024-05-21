@@ -137,6 +137,12 @@ class NodeDisplay(object):
             )
         )
 
+    @classmethod
+    def set_visible(cls, path, boolean):
+        cmds.setAttr(
+            path+'.visibility', boolean
+        )
+
 
 class NodeDrawOverride(object):
     @classmethod

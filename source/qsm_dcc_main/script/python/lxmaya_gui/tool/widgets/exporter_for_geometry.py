@@ -72,7 +72,7 @@ class PnlExporterForAssetGeometry(prx_widgets.PrxSessionToolWindow):
                 parent=self.widget
             )
             #
-            self.close_window_later()
+            self.do_close_window_later()
 
     def export_renderable_fnc_(self):
         file_path = self._options_prx_node.get('usd.file')

@@ -168,7 +168,7 @@ class AbsPnlBuilderForTexture(prx_widgets.PrxSessionWindow):
                     node_path, texture_name, texture_assign
                 ).accept()
 
-        self.close_window_later()
+        self.do_close_window_later()
 
     def __gui_refresh_next_button(self):
         f = self._options_prx_node.get('file')

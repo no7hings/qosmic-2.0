@@ -59,6 +59,11 @@ class _QtWindow(
             border_color=self._frame_border_color
         )
 
+    # def closeEvent(self, event):
+    #     d = QtWidgets.QDialog(self)
+    #     print 'AAAA'
+    #     super(_QtWindow, self).closeEvent(event)
+
 
 class _QtFramelessWindow(
     QtWidgets.QWidget

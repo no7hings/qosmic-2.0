@@ -187,6 +187,20 @@ class AbsSsnGener(
 
     user = property(get_user)
 
+    def get_gui_window_name(self):
+        if self.get_is_td_enable() is True:
+            return '[ALPHA] {} - {}'.format(
+                    self.get_gui_name(), str(self.application).capitalize()
+                )
+        elif self.get_is_beta_enable() is True:
+            return '[BETA] {} - {}'.format(
+                    self.get_gui_name(), str(self.application).capitalize()
+                )
+        return '{} - {}'.format(
+                self.get_gui_name(), str(self.application).capitalize()
+            )
+
+
     @property
     def system(self):
         return self._system

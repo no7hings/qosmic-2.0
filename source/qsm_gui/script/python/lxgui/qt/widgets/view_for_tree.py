@@ -116,7 +116,7 @@ class QtTreeWidget(
             self._execute_item_pressed_
         )
         self.itemDoubleClicked.connect(
-            self._send_item_db_clicked_emit_
+            self._send_item_dbl_clicked_emit_
         )
         self.itemClicked.connect(
             self._send_item_clicked_emit_
@@ -387,8 +387,8 @@ class QtTreeWidget(
         item._signals.press_clicked.emit(item, column)
 
     @classmethod
-    def _send_item_db_clicked_emit_(cls, item, column):
-        item._signals.press_db_clicked.emit(item, column)
+    def _send_item_dbl_clicked_emit_(cls, item, column):
+        item._signals.press_dbl_clicked.emit(item, column)
 
     def _set_size_policy_height_fixed_mode_(self):
         self.setSizePolicy(

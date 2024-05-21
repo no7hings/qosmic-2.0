@@ -147,6 +147,7 @@ class QtCheckButton(
 class QtPressButton(
     QtWidgets.QWidget,
     _qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtVisibleDef,
     _qt_abstracts.AbsQtStatusBaseDef,
     #
     _qt_abstracts.AbsQtSubProcessBaseDef,
@@ -196,6 +197,7 @@ class QtPressButton(
         self.setFocusPolicy(QtCore.Qt.NoFocus)
         #
         self._init_frame_base_def_(self)
+        self._init_visible_base_def_(self)
         self._init_status_base_def_(self)
         self._init_sub_process_base_def_()
         self._init_validator_base_def_(self)
@@ -607,7 +609,7 @@ class QtIconPressButton(
     _qt_abstracts.AbsQtItemLayoutBaseDef,
 ):
     clicked = qt_signal()
-    press_db_clicked = qt_signal()
+    press_dbl_clicked = qt_signal()
     #
     QT_MENU_CLS = _utility.QtMenu
 
@@ -740,7 +742,7 @@ class QtIconPressButton(
                 elif event.type() == QtCore.QEvent.MouseButtonRelease:
                     if event.button() == QtCore.Qt.LeftButton:
                         if self._get_action_flag_is_match_(self.ActionFlag.PressDbClick):
-                            self.press_db_clicked.emit()
+                            self.press_dbl_clicked.emit()
                         elif self._get_action_flag_is_match_(self.ActionFlag.Press):
                             p = event.pos()
                             if self._icon_state_draw_is_enable:

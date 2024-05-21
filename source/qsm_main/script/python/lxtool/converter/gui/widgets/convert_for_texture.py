@@ -219,7 +219,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
                 use_show_thread=True
             )
             if i_is_create is True:
-                i_prx_item.connect_press_db_clicked_to(
+                i_prx_item.connect_press_dbl_clicked_to(
                     self._show_image_detail
                 )
 

@@ -13,6 +13,8 @@ import lxbasic.storage as bsc_storage
 
 import lxgui.core as gui_core
 
+import lxgui.qt.core as gui_qt_core
+
 import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.widgets as prx_widgets
@@ -587,6 +589,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
             tool_group_layout._sort_widgets_by_name_texts_(names)
 
     def gui_build(self):
+        self._web_socket_server = gui_qt_core.QtWebSocketServer(self._qt_widget)
         # self.gui_build_all_for_builtin()
         self.gui_build_all_for_customize()
 
@@ -848,7 +851,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
                 self.__gui_query.register(tool_path, prx_tool)
                 grid_layout_widget.add_widget(prx_tool)
                 session.set_gui(prx_tool._qt_widget)
-                prx_tool.connect_press_db_clicked_to(functools.partial(self.__debug_run, execute_fnc))
+                prx_tool.connect_press_dbl_clicked_to(functools.partial(self.__debug_run, execute_fnc))
                 prx_tool.set_drag_enable(True)
                 name = gui_configure.get('name')
                 name_index = self.__gui_query.register_tool_name(page_name, group_sub_name, name, tool_path)
@@ -878,7 +881,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
 
                 prx_tool.set_tool_tip(
                     tool_tip,
-                    action_tip='"LMB-db-click" to open tool'
+                    action_tip='"LMB-dbl-click" to open tool'
                 )
                 prx_tool.set_drag_and_drop_scheme('tool-desktop-tool')
             return prx_tool
@@ -901,7 +904,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
                 self.__gui_query.register(tool_path, prx_tool)
                 grid_layout_widget.add_widget(prx_tool)
                 session.set_gui(prx_tool._qt_widget)
-                prx_tool.connect_press_db_clicked_to(functools.partial(self.__debug_run, execute_fnc))
+                prx_tool.connect_press_dbl_clicked_to(functools.partial(self.__debug_run, execute_fnc))
                 prx_tool.set_drag_enable(True)
                 name = gui_configure.get('name')
                 prx_tool.set_name(name)
@@ -920,6 +923,6 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
 
                 prx_tool.set_tool_tip(
                     tool_tip,
-                    action_tip='"LMB-db-click" to open tool'
+                    action_tip='"LMB-dbl-click" to open tool'
                 )
             return prx_tool

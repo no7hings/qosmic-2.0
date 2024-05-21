@@ -596,7 +596,7 @@ class StgUserMtd(object):
         return _
 
     @classmethod
-    def get_user_session_file(cls, unique_id=None):
+    def get_user_hook_file(cls, unique_id=None):
         directory_path = cls.get_user_session_directory()
         if unique_id is None:
             unique_id = _cor_base.UuidMtd.generate_new()

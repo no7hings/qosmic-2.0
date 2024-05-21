@@ -19,7 +19,8 @@ option:
         - 'lxdcc'
 #
 hook_option:
-    rez: {}
+    rez:
+        extend_packages: ['qsm_main', 'pyqt5']
 #
 app:
     hooks: []

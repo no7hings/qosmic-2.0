@@ -586,6 +586,10 @@ class AbsQtFrameBaseDef(object):
         self._frame_border_radius = radius
 
 
+    def _set_width_(self, value):
+        self._widget.setFixedWidth(value)
+
+
 class AbsQtResizeBaseDef(object):
     ResizeOrientation = _gui_core.GuiOrientation
     ResizeAlignment = _gui_core.GuiAlignment
@@ -2199,7 +2203,7 @@ class AbsQtActionForEntryDef(object):
 
 class AbsQtGuideBaseDef(object):
     guide_press_clicked = qt_signal()
-    guide_press_db_clicked = qt_signal()
+    guide_press_dbl_clicked = qt_signal()
     #
     guide_text_accepted = qt_signal(str)
     guide_text_choose_accepted = qt_signal(str)

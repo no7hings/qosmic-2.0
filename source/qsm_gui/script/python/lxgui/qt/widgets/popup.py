@@ -940,8 +940,8 @@ class QtPopupAsCompletion(
         self._popup_view._set_clear_()
         _ = input_widget._generate_completion_texts_()
         if _:
+            _.sort()
             values = _[:25]
-            values.sort()
             has_match = False
             text_current = self._entry_widget._get_value_()
             for index, i_text in enumerate(values):

@@ -7,3 +7,25 @@ class Connection(object):
     @classmethod
     def create(cls, atr_path_src, atr_path_dst):
         cmds.connectAttr(atr_path_src, atr_path_dst, force=1)
+
+
+class NodeConnection(object):
+    @classmethod
+    def find_all_target_nodes(cls, path, type_name):
+        return list(
+            set(
+                cmds.listConnections(
+                    path, destination=1, source=0, type=type_name
+                ) or []
+            )
+        )
+
+    @classmethod
+    def find_all_source_nodes(cls, path, type_name):
+        return list(
+            set(
+                cmds.listConnections(
+                    path, destination=0, source=1, type=type_name
+                ) or []
+            )
+        )

@@ -187,7 +187,7 @@ class QtEntryFrame(
         self._set_focused_(True)
         self.entry_focus_in.emit()
 
-    def set_focus_out_(self):
+    def _set_focus_out_(self):
         self._set_focused_(False)
         self.entry_focus_out.emit()
 

@@ -22,9 +22,9 @@ class SsnHookMtd(object):
 
         unique_id = bsc_core.UuidMtd.generate_new()
 
-        hook_yml_file_path = bsc_storage.StgUserMtd.get_user_session_file(unique_id=unique_id)
+        hook_file_path = bsc_storage.StgUserMtd.get_user_hook_file(unique_id=unique_id)
 
-        bsc_storage.StgFileOpt(hook_yml_file_path).set_write(
+        bsc_storage.StgFileOpt(hook_file_path).set_write(
             dict(
                 user=bsc_core.SysBaseMtd.get_user_name(),
                 tiame=bsc_core.SysBaseMtd.get_time(),

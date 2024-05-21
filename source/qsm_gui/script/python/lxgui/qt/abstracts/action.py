@@ -231,12 +231,9 @@ class AbsQtActionBaseDef(object):
         self._widget.update()
 
     def _get_action_flag_is_match_(self, *args):
-        if isinstance(args, int):
-            return self._action_flag == args[0]
-        elif isinstance(args, (tuple, list)):
-            return self._action_flag in args
+        return self._action_flag in args
 
-    def _get_action_mdf_flags_is_include_(self, flag):
+    def _is_action_mdf_flags_include_(self, flag):
         return flag in self._action_mdf_flags
 
     def _get_action_mdf_flags_(self):
@@ -295,7 +292,7 @@ class AbsQtActionForHoverDef(object):
 class AbsQtActionForPressDef(object):
     pressed = qt_signal()
     press_clicked = qt_signal()
-    press_db_clicked = qt_signal()
+    press_dbl_clicked = qt_signal()
     press_toggled = qt_signal(bool)
     #
     clicked = qt_signal()
@@ -313,7 +310,7 @@ class AbsQtActionForPressDef(object):
         self._press_action_rect = QtCore.QRect()
         self._press_point = QtCore.QPoint()
 
-        self._action_press_db_clicked_methods = []
+        self._action_press_dbl_clicked_methods = []
 
     def _get_press_point_(self):
         return self._press_point
@@ -340,20 +337,20 @@ class AbsQtActionForPressDef(object):
         return self._is_pressed
 
     def _set_action_press_db_click_emit_send_(self):
-        self.press_db_clicked.emit()
+        self.press_dbl_clicked.emit()
 
     def _get_action_press_flag_is_click_(self):
         return self._get_action_flag_is_match_(
             self.ActionFlag.Press
         )
 
-    def _set_action_press_db_clicked_method_add_(self, fnc):
-        self._action_press_db_clicked_methods.append(fnc)
+    def _set_action_press_dbl_clicked_method_add_(self, fnc):
+        self._action_press_dbl_clicked_methods.append(fnc)
 
 
 class AbsQtActionForCheckDef(object):
     check_clicked = qt_signal()
-    check_db_clicked = qt_signal()
+    check_dbl_clicked = qt_signal()
     check_toggled = qt_signal(bool)
     user_check_clicked = qt_signal()
     user_check_toggled = qt_signal(bool)
