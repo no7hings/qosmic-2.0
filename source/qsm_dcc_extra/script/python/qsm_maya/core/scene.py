@@ -14,6 +14,11 @@ from . import playblast as _playblast
 
 
 class Scene(object):
+
+    @staticmethod
+    def get_is_ui_mode():
+        return not cmds.about(batch=1)
+
     @classmethod
     def show_message(cls, message, keyword, position='topCenter', fade=1, drag_kill=0, alpha=.5):
         # topLeft topCenter topRight
@@ -79,3 +84,29 @@ class Scene(object):
     @classmethod
     def remove_all_empty_groups(cls):
         mel.eval('source cleanUpScene;deleteEmptyGroups;')
+
+    @classmethod
+    def set_background_color(cls, rgb):
+        cmds.displayRGBColor('background', *rgb)
+        cmds.displayRGBColor('backgroundTop', *rgb)
+        cmds.displayRGBColor('backgroundBottom', *rgb)
+
+    @classmethod
+    def clear_all_hud(cls):
+        for i in cmds.headsUpDisplay(listHeadsUpDisplays=1) or []:
+            cmds.headsUpDisplay(i, remove=1)
+
+    @classmethod
+    def hide_all_hud(cls):
+        for i in cmds.headsUpDisplay(listHeadsUpDisplays=1) or []:
+            cmds.headsUpDisplay(i, edit=1, visible=0)
+
+    @classmethod
+    def clear_unknown_nodes(cls):
+        _ = cmds.ls(type='unknown', long=1) or []
+        if _:
+            for i in _:
+                if cmds.objExists(i) is True:
+                    if cmds.referenceQuery(i, isNodeReferenced=1) is False:
+                        cmds.lockNode(i, lock=0)
+                        cmds.delete(i)

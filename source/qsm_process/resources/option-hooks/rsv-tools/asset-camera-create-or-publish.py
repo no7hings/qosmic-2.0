@@ -87,9 +87,9 @@ def main(session):
                         session.gui_name,
                         content=(
                             u'publish "Asset Camera" for "{}"\n'
-                            u'press "Yes" to continue...'
+                            u'press "Ok" to continue...'
                         ).format(asset),
-                        yes_method=lambda *args, **kwargs: publish_fnc_(camera_work_scene_src_file_path),
+                        ok_method=lambda *args, **kwargs: publish_fnc_(camera_work_scene_src_file_path),
                         use_exec=False
                     )
                 else:
@@ -110,9 +110,9 @@ def main(session):
                             session.gui_name,
                             content=(
                                 u'create and publish "Asset Camera" for "{}"\n'
-                                u'press "Yes" to continue...'
+                                u'press "Ok" to continue...'
                             ).format(asset),
-                            yes_method=lambda *args, **kwargs: create_and_publish_fnc_(camera_work_scene_src_file_path),
+                            ok_method=lambda *args, **kwargs: create_and_publish_fnc_(camera_work_scene_src_file_path),
                             use_exec=False
                         )
                     else:
@@ -130,7 +130,7 @@ def main(session):
             content=content,
             status=gui_core.GuiDialog.ValidationStatus.Error,
             #
-            yes_label='Close',
+            ok_label='Close',
             #
             no_visible=False, cancel_visible=False,
             use_exec=False

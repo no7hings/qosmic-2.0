@@ -69,7 +69,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
     def generate_args(self, directory_path, start_frame, end_frame):
         file_path = '{}/source.ma'.format(directory_path)
         cache_file_path = '{}/gpu.ma'.format(directory_path)
-        cmd = qsm_mya_ast_core.MayaCacheProcess.generate_command(
+        cmd_script = qsm_mya_ast_core.MayaCacheProcess.generate_command(
             'method=dynamic-gpu-cache-generate&file={}&cache_file={}&namespace={}&start_frame={}&end_frame={}'.format(
                 file_path,
                 cache_file_path,
@@ -77,7 +77,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
                 start_frame, end_frame
             )
         )
-        return cmd, file_path, cache_file_path
+        return cmd_script, file_path, cache_file_path
 
 
 class DynamicGpuCacheGenerate(object):
@@ -145,10 +145,8 @@ class DynamicGpuCacheGenerate(object):
         cmds.addAttr(location, longName='qsm_index', attributeType='long', keyable=1)
         cmds.addAttr(location, longName='qsm_frame', attributeType='long', keyable=1)
         cmds.connectAttr('time1.outTime', location+'.qsm_frame')
-        cmds.addAttr(location, longName='qsm_speed', attributeType='double', min=1, max=100, keyable=1)
-        cmds.setAttr(location+'.qsm_speed', 1)
-        cmds.addAttr(location, longName='qsm_offset', attributeType='long', min=-frame_count, max=frame_count, keyable=1)
-        cmds.setAttr(location+'.qsm_offset', -start_frame)
+        _mya_core.NodeAttribute.create_as_float(location, 'qsm_speed', 1.0)
+        _mya_core.NodeAttribute.create_as_integer(location, 'qsm_offset', -start_frame)
 
         cmds.addAttr(location, longName='qsm_cache', dataType='string')
         # expression
@@ -306,15 +304,6 @@ class DynamicGpuCacheProcess(object):
         generate.create_cache(
             self._cache_file_path, self._gpu_file_path, self._start_frame, self._end_frame
         )
-
-    @classmethod
-    def test(cls):
-        directory_path = qsm_mya_ast_core.AssetCache.generate_dynamic_gpu_directory(
-            user_name=bsc_core.SysBaseMtd.get_user_name()
-        )
-        file_path = '{}/source.ma'.format(directory_path)
-        cache_file_path = '{}/gpu.abc'.format(directory_path)
-        print file_path, cache_file_path
 
 
 if __name__ == '__main__':

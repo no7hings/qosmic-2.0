@@ -1,4 +1,6 @@
 # coding:utf-8
+import sys
+
 import lxbasic.log as bsc_log
 
 from lxbasic.log import bridge as log_bridge
@@ -17,8 +19,7 @@ class GuiProxyUtil(object):
         **window_kwargs
     ):
         exists_app = gui_qt_core.GuiQtUtil.get_exists_app()
-        is_running = None
-        shared_memory_key = None
+        is_window_running = None
         if exists_app is None:
             # check show window as unique
             if window_unique_name is not None:
@@ -27,28 +28,33 @@ class GuiProxyUtil(object):
                     shared_memory = gui_qt_core.QtCore.QSharedMemory(shared_memory_key)
 
                     if shared_memory.attach():
-                        is_running = True
+                        is_window_running = True
                     else:
                         shared_memory.create(1)
-                        is_running = False
+                        is_window_running = False
 
-            if is_running is True:
+            if is_window_running is True:
                 import win32gui
 
                 import win32con
 
+                from ...qt.widgets import window_base as _qt_wgt_window_base
+
+                app = gui_qt_core.GuiQtUtil.create_app()
+
+                w = _qt_wgt_window_base.QtMessageBox()
+                w._set_message_(
+                    'Window "{}" is exists, press "Ok" show it, or close it and retry.'.format(window_unique_name)
+                )
+                w._show_buttons_(w.Buttons.Ok)
+                w._do_exec_()
+
                 hwnd = win32gui.FindWindow(None, window_unique_name)
                 if hwnd:
-                    # if not win32gui.IsWindowVisible(hwnd):
-                    #     # win32gui.ShowWindow(hwnd, win32con.SW_SHOW)
-                    #     win32gui.ShowWindow(hwnd, win32con.SW_SHOWNORMAL)
-                    #     print 'CCC'
-                    # # if win32gui.IsIconic(hwnd) or not win32gui.IsWindowVisible(hwnd):
-                    # #     win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
-                    # else:
                     win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
                     win32gui.SetForegroundWindow(hwnd)
-                return
+
+                sys.exit(0)
 
             app = gui_qt_core.GuiQtUtil.create_app()
 

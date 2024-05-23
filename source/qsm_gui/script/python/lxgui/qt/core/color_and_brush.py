@@ -29,7 +29,7 @@ class QtColors(object):
     CapsuleBorderHover = QtGui.QColor(*gui_core.GuiRgba.LightOrange)
     CapsuleBorderActioned = QtGui.QColor(*gui_core.GuiRgba.LightBlue)
     CapsuleBackground = QtGui.QColor(47, 47, 47, 255)
-    CapsuleBackgroundDisable = QtGui.QColor(63, 63, 63, 255)
+    CapsuleBackgroundDisable = QtGui.QColor(55, 55, 55, 255)
 
     SubIconBorder = QtGui.QColor(207, 207, 207, 255)
     SubIconBackground = QtGui.QColor(127, 127, 127, 255)

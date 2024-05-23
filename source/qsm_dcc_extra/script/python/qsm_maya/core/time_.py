@@ -85,6 +85,10 @@ class Frame(object):
             return cls.FPS_QUERY_DICT[_]
 
     @classmethod
+    def get_fps_(cls):
+        return cmds.currentUnit(query=1, time=1)
+
+    @classmethod
     def set_fps(cls, fps):
         if fps in cls.FPS_DICT:
             cmds.currentUnit(time=cls.FPS_DICT[fps])

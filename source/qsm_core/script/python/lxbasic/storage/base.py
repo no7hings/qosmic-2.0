@@ -1294,6 +1294,15 @@ class StgDirectoryOpt(StgPathOpt):
     def get_is_exists(self):
         return self.get_is_directory()
 
+    def do_delete(self):
+        path = self.get_path()
+        if os.path.isdir(path):
+            for i_location, _, i_file_names in os.walk(path, topdown=0):
+                for j_name in i_file_names:
+                    j_file_path = os.path.join(i_location, j_name).replace('\\', '/')
+                    os.remove(j_file_path)
+                os.removedirs(i_location)
+
 
 class StgFileOpt(StgPathOpt):
     def __init__(self, file_path, file_type=None):

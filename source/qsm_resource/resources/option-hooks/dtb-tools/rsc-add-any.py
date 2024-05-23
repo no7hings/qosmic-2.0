@@ -292,7 +292,7 @@ class PnlRscTextureAddTool(prx_widgets.PrxSessionWindow):
                 content='check one or more node and retry',
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False
             )

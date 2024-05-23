@@ -62,6 +62,7 @@ class ScanBase(object):
     def get_file_paths(cls, location, ext_includes=None):
         location = cls.auto_unicode(location)
         list_ = []
+        print location
         # make sure is a directory
         if os.path.isdir(location):
             for i in cls.scan_fnc(location):

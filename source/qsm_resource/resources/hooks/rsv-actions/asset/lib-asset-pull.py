@@ -1,8 +1,8 @@
 # coding:utf-8
 
 def main(session):
-    def yes_method_0():
-        def yes_method_1():
+    def ok_method_0():
+        def ok_method_1():
             raise RuntimeError('this method is removed')
         #
         _kwargs = w.get_options_as_kwargs()
@@ -23,14 +23,14 @@ def main(session):
                 ).format(
                     _asset_tgt
                 ),
-                yes_method=yes_method_1,
-                yes_label='Override',
+                ok_method=ok_method_1,
+                ok_label='Override',
                 no_label='Don\'t Override',
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 use_exec=False
             )
         else:
-            yes_method_1()
+            ok_method_1()
 
     def get_projects():
         lis = []
@@ -64,11 +64,11 @@ def main(session):
             content=(
                 'asset:\n'
                 '"{}"\n'
-                'select a project and press "Yes" to continue...'.format(
+                'select a project and press "Ok" to continue...'.format(
                     asset_src
                 )
             ),
-            yes_method=yes_method_0,
+            ok_method=ok_method_0,
             show=False,
             use_exec=False
         )

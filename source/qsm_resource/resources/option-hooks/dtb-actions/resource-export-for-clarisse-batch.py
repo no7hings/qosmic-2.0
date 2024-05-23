@@ -73,7 +73,7 @@ class ScpImport(object):
 
 
 def main(session):
-    def yes_fnc_():
+    def ok_fnc_():
         import lxgeneral.dcc.core as gnl_dcc_core
 
         _kwargs = o.to_dict()
@@ -104,7 +104,7 @@ def main(session):
             content='check or select one or more items and retry',
             status=gui_core.GuiDialog.ValidationStatus.Warning,
             #
-            yes_label='Close',
+            ok_label='Close',
             #
             no_visible=False, cancel_visible=False
         )
@@ -128,9 +128,9 @@ def main(session):
             #
             options_configure=session.configure.get('build.node.options'),
             #
-            yes_method=yes_fnc_,
-            yes_label='Apply and Close',
-            yes_visible=True,
+            ok_method=ok_fnc_,
+            ok_label='Apply and Close',
+            ok_visible=True,
             no_visible=False,
             #
             cancel_label='Close',

@@ -93,10 +93,10 @@ class AbsPrxPortBaseDef(object):
 
     group_path = property(get_group_path)
 
-    def get_label(self):
+    def get_gui_name(self):
         return self._label
 
-    label = property(get_label)
+    label = property(get_gui_name)
 
     def get_is_top_level(self):
         return bsc_core.PthPortOpt(
@@ -261,7 +261,7 @@ class _AbsPrxPortBase(AbsPrxPortBaseDef):
         if group:
             group.update_children_name_width()
 
-    def set_label(self, text):
+    def set_gui_name(self, text):
         if text:
             self.set_name(text)
             self._label = text

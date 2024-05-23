@@ -622,7 +622,7 @@ class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
                 content=u'\n'.join(contents),
                 status=gui_core.GuiDialog.ValidationStatus.Error,
                 #
-                yes_label='Close', yes_method=self.set_window_close,
+                ok_label='Close', ok_method=self.set_window_close,
                 #
                 no_visible=False, cancel_visible=False,
                 #

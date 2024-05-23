@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "开发日程/任务/元素组装（Unit Assembly）.md",
+                "file": "开发日程/汇报/进程任务管理工具（Prc-Task Manager）.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "开发日程/任务/元素组装（Unit Assembly）.md",
+                "file": "开发日程/汇报/进程任务管理工具（Prc-Task Manager）.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "开发日程/任务/元素组装（Unit Assembly）.md",
+                "file": "开发日程/汇报/进程任务管理工具（Prc-Task Manager）.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "开发日程/任务/元素组装（Unit Assembly）.md"
+                "file": "开发日程/汇报/进程任务管理工具（Prc-Task Manager）.md"
               }
             }
           },
@@ -162,15 +162,20 @@
   },
   "active": "5c76f3adffc885bd",
   "lastOpenFiles": [
-    "随记/标签分类.md",
-    "随记/Maya性能优化.md",
-    "随记/插件和工具为什么不推荐安装在本地.md",
-    "随记/Python包安装.md",
-    "开发日程/任务/动画复制.md",
-    "开发日程/任务/进程任务池（Prc-task Pool）.md",
-    "开发日程/任务/规划和搭建流程框架.md",
+    "开发日程/汇报/资源管理工具（Resource Manager）.md",
+    "开发日程/汇报/images/Pasted image 20240523103725.png",
     "开发日程/任务/简模代理（Skin Proxy）.md",
+    "开发日程/任务/规划和搭建流程框架.md",
+    "开发日程/任务/动画复制.md",
+    "开发日程/汇报/images/Pasted image 20240523120517.png",
+    "开发日程/汇报/进程任务管理工具（Prc-Task Manager）.md",
     "开发日程/任务/元素组装（Unit Assembly）.md",
+    "开发日程/任务/images",
+    "随记/Mayabatch.md",
+    "随记/插件和工具为什么不推荐安装在本地.md",
+    "随记/Maya性能优化.md",
+    "随记/标签分类.md",
+    "随记/Python包安装.md",
     "开发日程/工具说明/资源管理工具（Resource Manager）.md",
     "开发日程/工具说明/images/rig-resource-dynamic-gpu.png",
     "开发日程/工具说明/images/Pasted image 20240520110258.png",
@@ -180,9 +185,6 @@
     "开发日程/工具说明/images/Pasted image 20240520112621.png",
     "开发日程/工具说明/images/Pasted image 20240520112340.png",
     "开发日程/工具说明/images/Pasted image 20240520112221.png",
-    "开发日程/工具说明/images/Pasted image 20240520112213.png",
-    "开发日程/工具说明/images/Pasted image 20240520112127.png",
-    "开发日程/汇报/资源管理工具（Resource Manager）.md",
     "resource-manager-rig.png.md",
     "常见问题/文件路径.md",
     "常见问题/maya/batch.md",
@@ -204,12 +206,9 @@
     "开发日程/工具说明/images",
     "开发日程/工具说明",
     "开发日程/任务/Maya性能优化/未命名.md",
-    "开发日程/任务/Maya性能优化/绑定（Rig）.md",
     "开发日程/任务/Maya性能优化",
-    "开发日程/看板.md",
     "常见问题/maya",
     "随记.7z",
-    "技术文档.7z",
     "Untitled.canvas"
   ]
 }

@@ -9,6 +9,8 @@ import os
 
 import time
 
+import re
+
 
 class Main(object):
     TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -111,6 +113,17 @@ class Main(object):
         )
 
     @classmethod
+    def to_number_embedded_args(cls, text):
+        pieces = re.compile(r'(\d+)').split(text)
+        pieces[1::2] = map(int, pieces[1::2])
+        return pieces
+
+    @classmethod
+    def sort_by_number(cls, texts):
+        texts.sort(key=lambda x: cls.to_number_embedded_args(x))
+        return texts
+
+    @classmethod
     def get_version_latest(cls, options):
         options_0 = copy.copy(options)
         options_0['version'] = '*'
@@ -121,7 +134,7 @@ class Main(object):
         if not _results:
             return None
 
-        _results.sort()
+        _results = cls.sort_by_number(_results)
 
         result = _results[-1]
         result = result.replace('\\', '/')

@@ -93,7 +93,7 @@ class UnitForRigReference(
                     self._resource_file_path,
                     namespace=file_opt.name_base
                 )
-            self._unit.do_gui_refresh_all()
+            self._page.do_gui_refresh_all()
 
     def do_gui_refresh_resource(self, path):
         self._resource_file_path = None
@@ -127,11 +127,11 @@ class UnitForRigUtilityToolSet(
                     if i_opt.is_resource_exists() is True:
                         i_opt.load_cache(i_cache_file, keep_head=keep_head)
 
-        self._unit._gui_resource_opt.do_gui_refresh_by_dcc_selection()
+        self._page._gui_resource_opt.do_gui_refresh_by_dcc_selection()
 
     def do_dcc_do_dcc_load_skin_proxies_by_selection(self):
         if self._load_skin_proxy_button.get_is_started() is False:
-            resources = self._unit._gui_resource_opt.gui_get_selected_resources()
+            resources = self._page._gui_resource_opt.gui_get_selected_resources()
             if resources:
                 self._skin_proxy_load_args_array = []
                 create_cmds = []
@@ -162,13 +162,13 @@ class UnitForRigUtilityToolSet(
                     self.do_dcc_load_skin_proxies()
 
     def do_dcc_remove_skin_proxies(self):
-        resources = self._unit._gui_resource_opt.gui_get_selected_resources()
+        resources = self._page._gui_resource_opt.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
                 i_opt = qsm_mya_rig_scripts.SkinProxyOpt(i_resource)
                 i_opt.remove_cache()
 
-        self._unit._gui_resource_opt.do_gui_refresh_by_dcc_selection()
+        self._page._gui_resource_opt.do_gui_refresh_by_dcc_selection()
 
     # dynamic gpu
     def do_dcc_load_dynamic_gpus(self):
@@ -183,7 +183,7 @@ class UnitForRigUtilityToolSet(
 
     def do_dcc_do_dcc_load_dynamic_gpus_bt_selection(self):
         if self._load_dynamic_gpu_button.get_is_started() is False:
-            resources = self._unit._gui_resource_opt.gui_get_selected_resources()
+            resources = self._page._gui_resource_opt.gui_get_selected_resources()
             if resources:
                 self._dynamic_gpu_load_args_array = []
                 create_cmds = []
@@ -220,7 +220,7 @@ class UnitForRigUtilityToolSet(
                     self.do_dcc_load_dynamic_gpus()
 
     def do_dcc_remove_dynamic_gpus(self):
-        resources = self._unit._gui_resource_opt.gui_get_selected_resources()
+        resources = self._page._gui_resource_opt.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
                 i_opt = qsm_mya_rig_scripts.DynamicGpuCacheOpt(i_resource)
@@ -268,7 +268,7 @@ class UnitForRigUtilityToolSet(
         self._prx_options_node.create_ports_by_data(
             self._session.configure.get('build.options.rig_utility.parameters'),
         )
-        self._unit.gui_get_tool_tab_box().add_widget(
+        self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='utility',
             name=gui_core.GuiUtil.choice_name(
@@ -296,7 +296,7 @@ class UnitForRigUtilityToolSet(
         )
 
         self._prx_options_node.get_port('selection_scheme').connect_input_changed_to(
-            self._unit._gui_resource_opt.do_dcc_refresh_resources_selection
+            self._page._gui_resource_opt.do_dcc_refresh_resources_selection
         )
         self._prx_options_node.get_port('setting.frame_scheme').connect_input_changed_to(
             self.do_gui_refresh_by_frame_scheme_changing
@@ -352,7 +352,7 @@ class UnitForRigSwitchToolSet(
         self._prx_options_node.create_ports_by_data(
             self._session.configure.get('build.options.rig_switch.parameters'),
         )
-        self._unit.gui_get_tool_tab_box().add_widget(
+        self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='switch',
             name=gui_core.GuiUtil.choice_name(
@@ -395,7 +395,7 @@ class UnitForRigSwitchToolSet(
 
     def do_gui_refresh_buttons(self):
         namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
-        resources = [self._unit._gui_resource_opt.get_resources_query().get(x) for x in namespaces]
+        resources = [self._page._gui_resource_opt.get_resources_query().get(x) for x in namespaces]
         self.do_gui_refresh_buttons_for_skin_proxy(resources)
         self.do_gui_refresh_buttons_for_dynamic_gpu(resources)
 
@@ -458,11 +458,11 @@ class UnitForRigSwitchToolSet(
                 i_b.set_sub_name('({})'.format(i_c))
 
     def do_gui_refresh_by_dcc_selection(self):
-        if self._unit.gui_get_current_tool_tab_key() == 'switch':
+        if self._page.gui_get_current_tool_tab_key() == 'switch':
             self.do_gui_refresh_buttons()
 
     def do_gui_selection_all_resources(self):
-        self._unit._gui_resource_opt.do_gui_select_all_resources()
+        self._page._gui_resource_opt.do_gui_select_all_resources()
 
 
 class UnitForRigExtendToolSet(
@@ -479,7 +479,7 @@ class UnitForRigExtendToolSet(
         self._prx_options_node.create_ports_by_data(
             self._session.configure.get('build.options.rig_motion.parameters'),
         )
-        self._unit.gui_get_tool_tab_box().add_widget(
+        self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='extend',
             name=gui_core.GuiUtil.choice_name(
@@ -524,7 +524,7 @@ class UnitForRigExtendToolSet(
         namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
         if not namespaces:
             return
-        adv_rig_query = self._unit._gui_resource_opt.get_resources_query()
+        adv_rig_query = self._page._gui_resource_opt.get_resources_query()
         valid_namespaces = adv_rig_query.to_valid_namespaces(namespaces)
         if not valid_namespaces:
             return
@@ -542,7 +542,7 @@ class UnitForRigExtendToolSet(
         namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
         if not namespaces:
             return
-        adv_rig_query = self._unit._gui_resource_opt.get_resources_query()
+        adv_rig_query = self._page._gui_resource_opt.get_resources_query()
         valid_namespaces = adv_rig_query.to_valid_namespaces(namespaces)
         if not valid_namespaces:
             return
@@ -559,7 +559,7 @@ class UnitForRigExtendToolSet(
         if namespaces:
             self._dynamic_gpu_load_args_array = []
 
-            adv_rig_query = self._unit._gui_resource_opt.get_resources_query()
+            adv_rig_query = self._page._gui_resource_opt.get_resources_query()
             valid_namespaces = adv_rig_query.to_valid_namespaces(namespaces)
             if len(valid_namespaces) >= 2:
                 namespace_src = valid_namespaces[-2]
@@ -569,7 +569,7 @@ class UnitForRigExtendToolSet(
             w = gui_core.GuiDialog.create(
                 label=self._session.gui_name,
                 sub_label='transfer-animation',
-                content='do you want transfer animation from "{}" to "{}"?,\n press "Yes" to continue'.format(
+                content='do you want transfer animation from "{}" to "{}"?,\n press "Ok" to continue'.format(
                     namespace_src, namespace_dst
                 ),
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
@@ -585,7 +585,7 @@ class UnitForRigExtendToolSet(
                 )
 
     def do_dcc_enable_control_playback_visible(self):
-        resources = self._unit._gui_resource_opt.gui_get_selected_resources()
+        resources = self._page._gui_resource_opt.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
                 if i_resource.is_exists() is False:
@@ -595,7 +595,7 @@ class UnitForRigExtendToolSet(
                 [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 0) for x in i_controls]
 
     def do_dcc_disable_control_playback_visible(self):
-        resources = self._unit._gui_resource_opt.gui_get_selected_resources()
+        resources = self._page._gui_resource_opt.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
                 if i_resource.is_exists() is False:

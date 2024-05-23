@@ -52,13 +52,13 @@ class GpuInstanceOpt(_rsc_core.ResourceScriptOpt):
             file_path
         )
         if os.path.isfile(cache_file_path) is False:
-            cmd = _ast_core.MayaCacheProcess.generate_command(
+            cmd_script = _ast_core.MayaCacheProcess.generate_command(
                 'method=gpu-instance-cache-generate&file={}&cache_file={}'.format(
                     file_path,
                     cache_file_path,
                 )
             )
-            return cmd, cache_file_path
+            return cmd_script, cache_file_path
         return None, cache_file_path
 
 
@@ -130,28 +130,29 @@ class GpuInstanceProcess(object):
                 i_directory_path = '{}/region/{}'.format(
                     self._cache_directory_path, i_hash_key
                 )
-                i_gpu_file_path = '{}/gpu.abc'.format(
-                    i_directory_path
-                )
-
-                i_mesh_file_path = '{}/mesh.ma'.format(
-                    i_directory_path
-                )
                 i_group_path = '|region_{}_GRP'.format(i_seq)
                 i_group_path_new = _mya_core.Group.create(i_group_path)
                 i_shape_paths = mapper[i_key]
                 for j_shape_path in i_shape_paths:
                     j_transform_path = _mya_core.Shape.get_transform(j_shape_path)
                     _mya_core.Group.add(i_group_path_new, j_transform_path)
-                # export to gpu and mesh
-                i_children = _mya_core.Group.get_children(i_group_path_new)
-                _mya_core.GpuCache.export_frame_(
-                    i_gpu_file_path, i_children
+
+                i_gpu_file_path = '{}/gpu.abc'.format(
+                    i_directory_path
                 )
-                _mya_core.SceneFile.export_file(
-                    i_mesh_file_path, i_children
-                )
-                _mya_core.Node.delete(i_group_path_new)
+                if bsc_storage.StgFileOpt(i_gpu_file_path).get_is_file() is False:
+                    i_mesh_file_path = '{}/mesh.ma'.format(
+                        i_directory_path
+                    )
+                    # export to gpu and mesh
+                    i_children = _mya_core.Group.get_children(i_group_path_new)
+                    _mya_core.GpuCache.export_frame_(
+                        i_gpu_file_path, i_children
+                    )
+                    _mya_core.SceneFile.export_file(
+                        i_mesh_file_path, i_children
+                    )
+                    _mya_core.Node.delete(i_group_path_new)
                 # create GPU
                 i_gpu_transform_path = '|region_{}_GPU'.format(i_seq)
                 i_gpu_transform_path_new = _mya_core.Transform.create(i_gpu_transform_path)
@@ -300,6 +301,7 @@ class GpuInstanceProcess(object):
         import_paths = _mya_core.SceneFile.import_file(
             self._file_path
         )
+        _mya_core.Scene.clear_unknown_nodes()
         all_roots = _mya_core.DagNode.find_roots(import_paths)
         # find lost reference first
         _mya_core.FileReferences.search_all_from(
@@ -320,7 +322,7 @@ class GpuInstanceProcess(object):
         if grid_paths:
             _mya_core.Container.add_dag_nodes(container, grid_paths)
         # instance all mesh
-        _scn_core.MeshInstance().execute()
+        # _scn_core.MeshInstance().execute()
         # remove unused groups
         _mya_core.Scene.remove_all_empty_groups()
         # collection roots

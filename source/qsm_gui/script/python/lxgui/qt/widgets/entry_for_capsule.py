@@ -76,11 +76,15 @@ class QtEntryAsCapsule(
         w, h = self.width(), self.height()
         #
         if self.__texts_draw:
+            c = len(self.__texts_draw)
+            w_a = w/c
             h_t = self.fontMetrics().height()
             s_t = (h-h_t)/2
             w_t = int(max([self.fontMetrics().width(i) for i in self.__texts_draw]))
             c = len(self.__texts_draw)
-            self._capsule_per_width = w_t+(w_t%2)+s_t*2
+            w_m = w_t+(w_t%2)+s_t*2
+            # width use minimum of average or maximum each
+            self._capsule_per_width = min(w_a, w_m)
             for i_index in range(c):
                 i_x, i_y = x+i_index*self._capsule_per_width, y
                 i_w, i_h = self._capsule_per_width, h
@@ -164,6 +168,7 @@ class QtEntryAsCapsule(
                         '"LMB-click" to check this item on',
                     ]
                 )
+            # noinspection PyArgumentList
             QtWidgets.QToolTip.showText(
                 QtGui.QCursor.pos(), css, self
             )

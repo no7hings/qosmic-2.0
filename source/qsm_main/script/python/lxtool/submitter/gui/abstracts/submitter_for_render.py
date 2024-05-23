@@ -284,7 +284,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                             ),
                         status=gui_core.GuiDialog.ValidationStatus.Error,
                         #
-                        yes_label='Close', yes_method=self.do_close_window_later,
+                        ok_label='Close', ok_method=self.do_close_window_later,
                         #
                         no_visible=False, cancel_visible=False,
                         use_exec=False,
@@ -348,7 +348,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                 content='step="{}" is not available, please call for TD get more help'.format(step),
                 status=gui_core.GuiDialog.ValidationStatus.Error,
                 #
-                yes_label='Close', yes_method=self.set_window_close,
+                ok_label='Close', ok_method=self.set_window_close,
                 #
                 no_visible=False, cancel_visible=False,
                 use_exec=False
@@ -815,7 +815,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                 content='light-rig(s) is not found, please call for TD get more help',
                 status=gui_core.GuiDialog.ValidationStatus.Error,
                 #
-                yes_label='Close', yes_method=self.set_window_close,
+                ok_label='Close', ok_method=self.set_window_close,
                 #
                 no_visible=False, cancel_visible=False,
             )
@@ -983,7 +983,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                     ),
                 status=gui_core.GuiDialog.ValidationStatus.Correct,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 use_exec=False
@@ -1011,7 +1011,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                             ),
                         status=gui_core.GuiDialog.ValidationStatus.Correct,
                         #
-                        yes_label='Close',
+                        ok_label='Close',
                         #
                         no_visible=False, cancel_visible=False,
                         use_exec=False
@@ -1024,7 +1024,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                             ),
                         status=gui_core.GuiDialog.ValidationStatus.Error,
                         #
-                        yes_label='Close',
+                        ok_label='Close',
                         #
                         no_visible=False, cancel_visible=False,
                         use_exec=False
@@ -1037,7 +1037,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                     ),
                 status=gui_core.GuiDialog.ValidationStatus.Error,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 use_exec=False
@@ -1527,7 +1527,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
                     content='{} is submit completed'.format(self._file_path),
                     status=gui_core.GuiDialog.ValidationStatus.Correct,
                     #
-                    yes_label='Close',
+                    ok_label='Close',
                     #
                     no_visible=False, cancel_visible=False,
                     use_exec=False
@@ -1538,7 +1538,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
                     content='file="{}" is already submitted or scene changed is not be save'.format(self._file_path),
                     status=gui_core.GuiDialog.ValidationStatus.Error,
                     #
-                    yes_label='Close',
+                    ok_label='Close',
                     #
                     no_visible=False, cancel_visible=False,
                     use_exec=False

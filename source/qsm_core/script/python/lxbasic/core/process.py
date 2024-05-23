@@ -35,14 +35,14 @@ class PrcBaseMtd(object):
     ENVIRON_MARK = copy.copy(os.environ)
 
     @classmethod
-    def _cmd_cleanup(cls, cmd):
+    def _cmd_cleanup(cls, cmd_script):
         if platform.system() == 'Windows':
-            parts = re.split(r'(".*?"|&&)', cmd)
+            parts = re.split(r'(".*?"|&&)', cmd_script)
             for i in range(0, len(parts), 2):
                 parts[i] = re.sub(r'&', '^&', parts[i])
             return ''.join(parts)
         elif platform.system() == 'Linux':
-            parts = re.split(r'(".*?"|&&)', cmd)
+            parts = re.split(r'(".*?"|&&)', cmd_script)
             for i in range(0, len(parts), 2):
                 parts[i] = re.sub(r'&', r'\&', parts[i])
             return ''.join(parts)
@@ -175,7 +175,7 @@ class PrcBaseMtd(object):
         return environs
 
     @classmethod
-    def check_command_clear_environ(cls, cmd):
+    def check_command_clear_environ(cls, cmd_script):
         # todo, read form configure?
 
         # ps = [
@@ -183,23 +183,23 @@ class PrcBaseMtd(object):
         #     r'(.*)/windows/paper\s(.*)'
         # ]
         #
-        # # print 'command is', cmd
+        # # print 'command is', cmd_script
         # for i_p in ps:
-        #     if re.search(i_p, cmd) is not None:
+        #     if re.search(i_p, cmd_script) is not None:
         #         return True
         return False
 
     @classmethod
-    def execute_as_trace(cls, cmd, **kwargs):
+    def execute_as_trace(cls, cmd_script, **kwargs):
         trace_fnc = cls.get_stdout_fnc()
 
         clear_environ = kwargs.get('clear_environ', False)
         if clear_environ == 'auto':
-            clear_environ = cls.check_command_clear_environ(cmd)
+            clear_environ = cls.check_command_clear_environ(cmd_script)
         #
         if clear_environ is True:
             s_p = subprocess.Popen(
-                cmd,
+                cmd_script,
                 shell=True,
                 # close_fds=True,
                 universal_newlines=True,
@@ -213,7 +213,7 @@ class PrcBaseMtd(object):
             if environs_extend:
                 environs = cls.get_environs(**kwargs)
                 s_p = subprocess.Popen(
-                    cmd,
+                    cmd_script,
                     shell=True,
                     # close_fds=True,
                     universal_newlines=True,
@@ -224,7 +224,7 @@ class PrcBaseMtd(object):
                 )
             else:
                 s_p = subprocess.Popen(
-                    cmd,
+                    cmd_script,
                     shell=True,
                     # close_fds=True,
                     universal_newlines=True,
@@ -237,32 +237,33 @@ class PrcBaseMtd(object):
             return_line = s_p.stdout.readline()
             if return_line == '' and s_p.poll() is not None:
                 break
+            # noinspection PyArgumentList
             trace_fnc(return_line)
 
         retcode = s_p.poll()
         if retcode:
-            raise subprocess.CalledProcessError(retcode, cmd)
+            raise subprocess.CalledProcessError(retcode, cmd_script)
 
         s_p.stdout.close()
 
     @classmethod
-    def execute_as_trace_use_thread(cls, cmd, **kwargs):
+    def execute_as_trace_use_thread(cls, cmd_script, **kwargs):
         t_0 = threading.Thread(
             target=functools.partial(
                 cls.execute_as_trace,
-                cmd=cmd,
+                cmd_script=cmd_script,
                 **kwargs
             )
         )
         t_0.start()
 
     @classmethod
-    def execute(cls, cmd, ignore_return_code=None):
+    def execute(cls, cmd_script, ignore_return_code=None):
         decode_fnc = cls.get_decode_fnc()
         encode_fnc = cls.get_encode_fnc()
 
         s_p = subprocess.Popen(
-            cmd,
+            cmd_script,
             shell=True,
             # close_fds=True,
             universal_newlines=True,
@@ -276,26 +277,28 @@ class PrcBaseMtd(object):
             if ignore_return_code is not None:
                 if s_p.returncode == ignore_return_code:
                     return output.splitlines()
+            # noinspection PyArgumentList
             output = decode_fnc(output)
             output_lines = output.splitlines()
             for i in output_lines:
                 if i:
+                    # noinspection PyArgumentList
                     sys.stdout.write(encode_fnc(i)+'\n')
-            raise subprocess.CalledProcessError(s_p.returncode, cmd)
+            raise subprocess.CalledProcessError(s_p.returncode, cmd_script)
         s_p.wait()
         return output.splitlines()
 
     @classmethod
-    def execute_with_result_in_windows(cls, cmd, **kwargs):
-        cmd = re.sub(r'(?<!&)&(?!&)', '^&', cmd)
+    def execute_with_result_in_windows(cls, cmd_script, **kwargs):
+        cmd_script = re.sub(r'(?<!&)&(?!&)', '^&', cmd_script)
 
         clear_environ = kwargs.get('clear_environ', False)
         if clear_environ == 'auto':
-            clear_environ = cls.check_command_clear_environ(cmd)
+            clear_environ = cls.check_command_clear_environ(cmd_script)
 
         if clear_environ is True:
             s_p = subprocess.Popen(
-                cmd,
+                cmd_script,
                 shell=True,
                 # close_fds=True,
                 universal_newlines=True,
@@ -309,7 +312,7 @@ class PrcBaseMtd(object):
             if environs_extend:
                 environs = cls.get_environs(**kwargs)
                 s_p = subprocess.Popen(
-                    cmd,
+                    cmd_script,
                     shell=True,
                     # close_fds=True,
                     universal_newlines=True,
@@ -320,7 +323,7 @@ class PrcBaseMtd(object):
                 )
             else:
                 s_p = subprocess.Popen(
-                    cmd,
+                    cmd_script,
                     shell=True,
                     # close_fds=True,
                     universal_newlines=True,
@@ -345,19 +348,19 @@ class PrcBaseMtd(object):
 
         retcode = s_p.poll()
         if retcode:
-            raise subprocess.CalledProcessError(retcode, cmd)
+            raise subprocess.CalledProcessError(retcode, cmd_script)
 
         s_p.stdout.close()
 
     @classmethod
-    def execute_with_result_in_linux(cls, cmd, **kwargs):
+    def execute_with_result_in_linux(cls, cmd_script, **kwargs):
         clear_environ = kwargs.get('clear_environ', False)
         if clear_environ == 'auto':
-            clear_environ = cls.check_command_clear_environ(cmd)
+            clear_environ = cls.check_command_clear_environ(cmd_script)
 
         if clear_environ is True:
             s_p = subprocess.Popen(
-                cmd,
+                cmd_script,
                 shell=True,
                 # close_fds=True,
                 universal_newlines=True,
@@ -371,7 +374,7 @@ class PrcBaseMtd(object):
             if environs_extend:
                 environs = cls.get_environs(**kwargs)
                 s_p = subprocess.Popen(
-                    cmd,
+                    cmd_script,
                     shell=True,
                     # close_fds=True,
                     universal_newlines=True,
@@ -382,7 +385,7 @@ class PrcBaseMtd(object):
                 )
             else:
                 s_p = subprocess.Popen(
-                    cmd,
+                    cmd_script,
                     shell=True,
                     # close_fds=True,
                     universal_newlines=True,
@@ -408,21 +411,21 @@ class PrcBaseMtd(object):
 
         retcode = s_p.poll()
         if retcode:
-            raise subprocess.CalledProcessError(retcode, cmd)
+            raise subprocess.CalledProcessError(retcode, cmd_script)
 
         s_p.stdout.close()
 
     @classmethod
-    def execute_with_result(cls, cmd, **kwargs):
+    def execute_with_result(cls, cmd_script, **kwargs):
         if _base.SysBaseMtd.get_is_windows():
-            cls.execute_with_result_in_windows(cmd, **kwargs)
+            cls.execute_with_result_in_windows(cmd_script, **kwargs)
         elif _base.SysBaseMtd.get_is_linux():
-            cls.execute_with_result_in_linux(cmd, **kwargs)
+            cls.execute_with_result_in_linux(cmd_script, **kwargs)
 
     @classmethod
-    def set_run(cls, cmd):
+    def set_run(cls, cmd_script):
         _sp = subprocess.Popen(
-            cmd,
+            cmd_script,
             shell=True,
             universal_newlines=True,
             stdout=subprocess.PIPE,
@@ -432,11 +435,11 @@ class PrcBaseMtd(object):
         return _sp
 
     @classmethod
-    def set_run_with_result_use_thread(cls, cmd, **kwargs):
+    def set_run_with_result_use_thread(cls, cmd_script, **kwargs):
         t_0 = threading.Thread(
             target=functools.partial(
                 cls.execute_with_result,
-                cmd=cmd,
+                cmd_script=cmd_script,
                 **kwargs
             )
         )
@@ -444,29 +447,29 @@ class PrcBaseMtd(object):
         # t_0.join()
 
     @classmethod
-    def execute_with_result_use_thread(cls, cmd, **kwargs):
+    def execute_with_result_use_thread(cls, cmd_script, **kwargs):
         t_0 = threading.Thread(
             target=functools.partial(
                 cls.execute_with_result,
-                cmd=cmd,
+                cmd_script=cmd_script,
                 **kwargs
             )
         )
         t_0.start()
 
     @classmethod
-    def execute_as_block(cls, cmd, **kwargs):
+    def execute_as_block(cls, cmd_script, **kwargs):
         decode_fnc = cls.get_decode_fnc()
         encode_fnc = cls.get_encode_fnc()
 
         clear_environ = kwargs.get('clear_environ', False)
         if clear_environ == 'auto':
-            clear_environ = cls.check_command_clear_environ(cmd)
+            clear_environ = cls.check_command_clear_environ(cmd_script)
         #
         return_dict = kwargs.get('return_dict', {})
         if clear_environ is True:
             s_p = subprocess.Popen(
-                cmd,
+                cmd_script,
                 shell=True,
                 # close_fds=True,
                 universal_newlines=True,
@@ -477,7 +480,7 @@ class PrcBaseMtd(object):
             )
         else:
             s_p = subprocess.Popen(
-                cmd,
+                cmd_script,
                 shell=True,
                 # close_fds=True,
                 universal_newlines=True,
@@ -489,25 +492,27 @@ class PrcBaseMtd(object):
         output, unused_err = s_p.communicate()
         #
         if s_p.returncode != 0:
+            # noinspection PyArgumentList
             output = decode_fnc(output)
             output_lines = output.splitlines()
             for i in output_lines:
                 # may be empty
                 if i:
+                    # noinspection PyArgumentList
                     sys.stderr.write(encode_fnc(i)+'\n')
             return_dict['results'] = output_lines
-            raise subprocess.CalledProcessError(s_p.returncode, cmd)
+            raise subprocess.CalledProcessError(s_p.returncode, cmd_script)
         #
         s_p.wait()
         return_dict['results'] = output
         return output
 
     @classmethod
-    def execute_use_thread(cls, cmd):
+    def execute_use_thread(cls, cmd_script):
         t_0 = threading.Thread(
             target=functools.partial(
                 cls.execute,
-                cmd=cmd
+                cmd_script=cmd_script
             )
         )
         t_0.start()

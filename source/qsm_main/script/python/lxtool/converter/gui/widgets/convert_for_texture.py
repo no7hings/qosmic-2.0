@@ -314,7 +314,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
                 content=u'\n'.join(contents),
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 #
@@ -406,7 +406,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
                 content=u'\n'.join(contents),
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 #
@@ -518,7 +518,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
                 content=u'\n'.join(contents),
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 #
@@ -608,7 +608,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
                 content=u'\n'.join(contents),
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 #
@@ -644,7 +644,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
             self._session.gui_name,
             window_size=(512, 512),
             #
-            yes_visible=False, no_visible=False,
+            ok_visible=False, no_visible=False,
             tip_visible=False,
             show=False,
             #

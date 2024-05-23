@@ -10,9 +10,14 @@ from . import base as _base
 
 class Hook(object):
     @classmethod
-    def execute(cls, group, name, cmd_script):
+    def new_task(cls, group, name, cmd_script, completion_notice=None):
+        user_name = bsc_core.SysBaseMtd.get_user_name()
+        time_tag = bsc_core.SysBaseMtd.get_time_tag()
 
-        unique_id = bsc_core.UuidMtd.generate_new()
+        unique_id = _base.HookBase.get_key(
+            user=user_name,
+            time=time_tag
+        )
         hook_file_path = _base.HookBase.get_file_path(uuid=unique_id)
 
         bsc_storage.StgFileOpt(hook_file_path).set_write(
@@ -20,13 +25,15 @@ class Hook(object):
                 group=group,
                 name=name,
                 cmd_script=cmd_script,
+                #
                 user=bsc_core.SysBaseMtd.get_user_name(),
-                tiame=bsc_core.SysBaseMtd.get_time(exact=True),
+                time=time_tag,
+                completion_notice=completion_notice
             )
         )
 
         _ = urllib.urlopen(
-            'http://{host}:{port}/hook?uuid={uuid}'.format(
+            'http://{host}:{port}/task?uuid={uuid}'.format(
                 **dict(
                     host=_base.HookBase.HOST,
                     port=_base.HookBase.PORT,

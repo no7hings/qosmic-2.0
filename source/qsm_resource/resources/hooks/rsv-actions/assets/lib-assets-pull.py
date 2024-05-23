@@ -4,7 +4,7 @@ def main(session):
     def get_asset_tgt(asset_src_):
         return asset_src_
 
-    def yes_method_0():
+    def ok_method_0():
         raise RuntimeError('this method is removed')
 
     #
@@ -55,13 +55,13 @@ def main(session):
                 content=(
                     '{} asset(s) is checked:\n'
                     '{}\n'
-                    'select a project and press "Yes" to continue...'.format(
+                    'select a project and press "Ok" to continue...'.format(
                         len(assets_src),
                         ',\n'.join(map(lambda x: '"{}"'.format(x), assets_src))
                     )
                 ),
                 window_size=window_size,
-                yes_method=yes_method_0,
+                ok_method=ok_method_0,
                 show=False,
                 use_exec=False
             )

@@ -953,20 +953,22 @@ Subtitle options:
 
     @classmethod
     def get_ffmpeg_source(cls):
-        return '/l/packages/pg/prod/ffmpeg/4.2.2/platform-linux/bin/ffmpeg'
+        return 'Y:/deploy/rez-packages/external/ffmpeg/6.0/platform-windows/bin/ffmpeg.exe'
 
     @classmethod
     def get_ffprobe_source(cls):
-        return '/l/packages/pg/prod/ffmpeg/4.2.2/platform-linux/bin/ffprobe'
+        return 'Y:/deploy/rez-packages/external/ffmpeg/6.0/platform-windows/bin/ffprobe.exe'
 
     @classmethod
-    def create_image_cache(cls, input_file_path, output_file_path, frame_range, frame_step):
+    def create_image_cache(cls, input_file_path, frame_range, frame_step):
         data = map(
             lambda x: 'file \'{}\''.format(x), cls.completion_image_cache(input_file_path, frame_range, frame_step)
         )
-        cache_directory_path = os.path.dirname(output_file_path)
-        cache_name_base = os.path.splitext(os.path.basename(output_file_path))[0]
-        cache_f = '{}/{}.{}.files'.format(cache_directory_path, cache_name_base, '{}-{}'.format(*frame_range))
+        cache_directory_path = os.path.dirname(input_file_path)
+        cache_name_base = os.path.splitext(os.path.basename(input_file_path))[0].replace(
+            '####', '{}-{}'.format(*frame_range)
+        )
+        cache_f = '{}/{}.files'.format(cache_directory_path, cache_name_base)
         with open(cache_f, 'w') as f:
             f.write('\n'.join(data))
         return cache_f
@@ -1028,7 +1030,6 @@ Subtitle options:
             bin=cls.get_ffmpeg_source(),
             input=cls.create_image_cache(
                 kwargs.pop('input'),
-                kwargs['output'],
                 frame_range=(start_frame, end_frame),
                 frame_step=kwargs.get('frame_step')
             ),
@@ -1036,7 +1037,7 @@ Subtitle options:
         )
 
     @classmethod
-    def create_vedio_cache(cls, input_file_paths, output_file_path):
+    def create_video_cache(cls, input_file_paths, output_file_path):
         data = map(
             lambda x: 'file \'{}\''.format(x), input_file_paths
         )
@@ -1048,9 +1049,9 @@ Subtitle options:
         return cache_f
 
     @classmethod
-    def get_vedio_concat_command(cls, **kwargs):
+    def get_video_concat_command(cls, **kwargs):
         input_ = kwargs.pop('input')
-        kwargs['input'] = cls.create_vedio_cache(input_, kwargs.get('output'))
+        kwargs['input'] = cls.create_video_cache(input_, kwargs.get('output'))
         return (
             '{bin}'
             ' -f concat -safe 0 -i "{input}"'

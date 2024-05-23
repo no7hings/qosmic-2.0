@@ -56,7 +56,7 @@ class PnlBuilderForAssetLook(prx_widgets.PrxSessionToolWindow):
                 content='open a task scene file and retry',
                 status=gui_core.GuiDialog.ValidationStatus.Error,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 #

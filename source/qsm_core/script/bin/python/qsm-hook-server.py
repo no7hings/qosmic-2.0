@@ -5,11 +5,13 @@ import sys
 
 import getopt
 
-from flask import Flask
+import multiprocessing
+
+from PyQt5 import QtCore, QtWidgets
 
 argv = sys.argv
 
-app = Flask(__name__)
+IS_STARTED = False
 
 
 def main():
@@ -38,78 +40,53 @@ def __print_help():
     sys.stdout.write(
         '***** qsm-hook-server *****\n'
         '\n'
-        #
         '-h or --help: show help\n'
+        '-o or --option: set run with option\n'
+        'start sever: -o start=true\n'
     )
 
 
 def __execute_with_option(option):
     import lxbasic.core as bsc_core
-    #
+
     option_opt = bsc_core.ArgDictStringOpt(option)
-    #
-    if option_opt.get('start_server') or False is True:
-        __start_server()
+    # start server
+    if option_opt.get_as_boolean('start') or False is True:
+        print('abc')
+        if IS_STARTED is False:
+            __start_server()
+
+
+class MainWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(MainWindow, self).__init__()
+        self.setWindowTitle("PyQt and Flask")
+        self.setGeometry(100, 100, 600, 400)
+        self.label = QtWidgets.QLabel("Flask and PyQt Running", self)
+        self.label.setGeometry(50, 50, 500, 50)
+
+    def display_error(self, error_message):
+        print(error_message)
+        # self.label.setText("Error: {error_message}".format(error_message=error_message))
 
 
 def __start_server():
-    import lxsession.core as ssn_core
+    def server_quit():
+        server_process.terminate()
+        server_process.join()
 
-    app.run(
-        host="0.0.0.0",
-        debug=1,
-        port=ssn_core.SsnUtil.PORT
-    )
+    import qsm_hook.core as qsm_hok_core
 
+    app = QtWidgets.QApplication(sys.argv)
+    main_window = MainWindow()
+    main_window.show()
 
-@app.route("/cmd-run")
-def set_cmd_run():
-    import functools
+    server_process = qsm_hok_core.start_server_process()
 
-    import threading
+    # noinspection PyUnresolvedReferences
+    app.aboutToQuit.connect(server_quit)
+    sys.exit(app.exec_())
 
-    from flask import request
-
-    import lxbasic.log as bsc_log
-
-    import lxbasic.core as bsc_core
-
-    import lxbasic.storage as bsc_storage
-
-    import lxsession.core as ssn_core
-
-    kwargs = request.args
-
-    unique_id = kwargs.get('uuid')
-    if unique_id:
-        hook_yml_file_path = ssn_core.SsnHookServerMtd.get_file_path(unique_id=unique_id)
-        hook_yml_file = bsc_storage.StgFileOpt(hook_yml_file_path)
-        if hook_yml_file.get_is_exists() is True:
-            raw = hook_yml_file.set_read()
-            if raw:
-                cmd = raw.get('cmd')
-                if cmd:
-                    bsc_log.Log.trace_method_result(
-                        'hook run',
-                        'key="{}"'.format(unique_id)
-                    )
-                    t = threading.Thread(
-                        target=functools.partial(
-                            bsc_core.PrcBaseMtd.set_run, cmd=cmd
-                        )
-                    )
-                    #
-                    t.start()
-        else:
-            bsc_log.Log.trace_method_warning(
-                'hook run',
-                'key="{}" is non-exists'.format(hook_yml_file_path)
-            )
-    return ''
-
-
-# if __name__ == '__main__':
-#     app.run(host="0.0.0.0", debug=1, port=9527)
 
 if __name__ == '__main__':
     main()

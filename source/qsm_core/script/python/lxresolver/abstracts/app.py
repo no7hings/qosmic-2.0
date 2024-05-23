@@ -159,38 +159,38 @@ class AbsRsvAppDef(object):
         raise NotImplementedError()
 
     def execute_command(self, args_execute=None, args_extend=None, packages_extend=None, **sub_progress_kwargs):
-        cmd = self.get_command(
+        cmd_script = self.get_command(
             args_execute=args_execute,
             args_extend=args_extend,
             packages_extend=packages_extend
         )
-        if cmd:
+        if cmd_script:
             bsc_log.Log.trace_method_result(
                 'execute app',
-                'command=`{}` is started'.format(cmd)
+                'command=`{}` is started'.format(cmd_script)
             )
             bsc_core.PrcBaseMtd.execute_with_result(
-                cmd,
+                cmd_script,
                 **sub_progress_kwargs
             )
 
     @classmethod
-    def execute_with_result(cls, command, **sub_progress_kwargs):
+    def execute_with_result(cls, cmd_script, **sub_progress_kwargs):
         bsc_log.Log.trace_method_result(
             'execute app',
-            'command=`{}` is started'.format(command)
+            'command=`{}` is started'.format(cmd_script)
         )
         bsc_core.PrcBaseMtd.execute_with_result(
-            command,
+            cmd_script,
             **sub_progress_kwargs
         )
 
     @classmethod
-    def execute_with_result_use_thread(cls, command, **sub_progress_kwargs):
+    def execute_with_result_use_thread(cls, cmd_script, **sub_progress_kwargs):
         t_0 = threading.Thread(
             target=functools.partial(
                 cls.execute_with_result,
-                cmd=command,
+                cmd_script=cmd_script,
                 **sub_progress_kwargs
             )
         )

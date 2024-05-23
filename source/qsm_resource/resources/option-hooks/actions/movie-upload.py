@@ -2,7 +2,7 @@
 
 
 def main(session):
-    def yes_fnc(qc_rsv_task_, file_path_):
+    def ok_fnc_(qc_rsv_task_, file_path_):
         import lxbasic.core as bsc_core
 
         import lxshotgun.rsv.scripts as stg_rsv_scripts
@@ -54,10 +54,10 @@ def main(session):
         if qc_rsv_task is not None:
             window = gui_core.GuiDialog.create(
                 session.gui_name,
-                content=u'upload "{}" to shotgun qc\nentry user description and press "Yes" to continue'.format(file_path),
+                content=u'upload "{}" to shotgun qc\nentry user description and press "Ok" to continue'.format(file_path),
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_method=lambda *args: yes_fnc(qc_rsv_task, file_path),
+                ok_method=lambda *args: ok_fnc_(qc_rsv_task, file_path),
                 use_exec=False,
                 options_configure=session.configure.get('build.node.options'),
                 window_size=(480, 480)
@@ -68,7 +68,7 @@ def main(session):
                 content='"qc task" is non-exists, call for TD get more help',
                 status=gui_core.GuiDialog.ValidationStatus.Error,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 use_exec=False

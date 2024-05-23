@@ -352,7 +352,7 @@ class AbsPnlPublisherForGeneral(prx_widgets.PrxSessionWindow):
                 content='user "{}" is not available'.format(self._user_name),
                 status=gui_core.GuiDialog.ValidationStatus.Error,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False
             )
@@ -437,7 +437,7 @@ class AbsPnlPublisherForGeneral(prx_widgets.PrxSessionWindow):
                     content='project is not available',
                     status=gui_core.GuiDialog.ValidationStatus.Warning,
                     #
-                    yes_label='Close',
+                    ok_label='Close',
                     #
                     no_visible=False, cancel_visible=False
                 )
@@ -453,9 +453,9 @@ class AbsPnlPublisherForGeneral(prx_widgets.PrxSessionWindow):
             if self._rsv_task is None:
                 w = gui_core.GuiDialog.create(
                     self.session.gui_name,
-                    content='task directory is non-exists, press "Yes" to create and continue',
+                    content='task directory is non-exists, press "Ok" to create and continue',
                     status=gui_core.GuiDialog.ValidationStatus.Warning,
-                    yes_method=self.create_task_directory,
+                    ok_method=self.create_task_directory,
                     # do not use thread
                     # use_thread=False
                 )

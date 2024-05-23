@@ -15,8 +15,8 @@ def dynamic_gpu_generate_fnc(option_opt):
     file_path = option_opt.get('file')
     cache_file_path = option_opt.get('cache_file')
     namespace = option_opt.get('namespace')
-    start_frame = int(option_opt.get('start_frame'))
-    end_frame = int(option_opt.get('end_frame'))
+    start_frame = option_opt.get_as_integer('start_frame')
+    end_frame = option_opt.get_as_integer('end_frame')
 
     import qsm_maya.rig.scripts as qsm_mya_rig_scripts
 
@@ -47,6 +47,21 @@ def gpu_instance_generate_fnc(option_opt):
     ).execute()
 
 
+def playblast_fnc(option_opt):
+    file_path = option_opt.get('file')
+    camera_path = option_opt.get('camera')
+    start_frame = option_opt.get_as_integer('start_frame')
+    end_frame = option_opt.get_as_integer('end_frame')
+    width = option_opt.get_as_integer('width')
+    height = option_opt.get_as_integer('height')
+
+    import qsm_maya.preview.scripts as qsm_mya_prv_scripts
+
+    qsm_mya_prv_scripts.PlayblastProcess(
+        file_path, camera_path, start_frame, end_frame, width, height
+    ).execute()
+
+
 def main(session):
     # noinspection PyUnresolvedReferences
     from maya import cmds
@@ -62,6 +77,8 @@ def main(session):
         unit_assembly_generate_fnc(option_opt)
     elif key == 'gpu-instance-cache-generate':
         gpu_instance_generate_fnc(option_opt)
+    elif key == 'playblast':
+        playblast_fnc(option_opt)
 
 
 if __name__ == '__main__':

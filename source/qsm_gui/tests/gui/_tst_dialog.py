@@ -11,6 +11,9 @@ class W(prx_widgets.PrxBaseWindow):
         super(W, self).__init__(*args, **kwargs)
 
         self._d = qt_widgets.QtMessageBox(self._qt_widget)
+        self._d._show_buttons_(
+            self._d.Buttons.All
+        )
 
 
 if __name__ == '__main__':
@@ -23,6 +26,6 @@ if __name__ == '__main__':
     w = W()
     w.set_definition_window_size((480, 480))
     w.set_window_show()
-    w._d._do_window_show_()
+    w._d._do_show_()
     #
     sys.exit(app.exec_())

@@ -83,13 +83,13 @@ class ArgDictStringOpt(object):
     @classmethod
     def _set_value_convert_by_string_(cls, value_string):
         if isinstance(value_string, six.string_types):
-            if value_string in ['None']:
+            if value_string in {'None'}:
                 return None
-            elif value_string in ['True', 'False']:
+            elif value_string in {'True', 'False'}:
                 return eval(value_string)
-            elif value_string in ['true', 'false']:
+            elif value_string in {'true', 'false'}:
                 return [True, False][['true', 'false'].index(value_string)]
-            elif value_string in ['()', '[]', '{}']:
+            elif value_string in {'()', '[]', '{}'}:
                 return eval(value_string)
             elif '+' in value_string:
                 return value_string.split('+')
@@ -132,6 +132,7 @@ class ArgDictStringOpt(object):
                         return 0.0
                     return 0.0
                 return 0.0
+            #
             if as_array is True:
                 if isinstance(_, (tuple, list)):
                     return _

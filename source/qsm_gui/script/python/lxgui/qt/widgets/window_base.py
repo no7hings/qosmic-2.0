@@ -1,7 +1,11 @@
 # coding=utf-8
 # qt
 import copy
+import enum
+
 import sys
+
+import lxbasic.web as bsc_web
 
 from ..core.wrap import *
 
@@ -32,24 +36,24 @@ class AbsQtShortcutBaseDef(object):
 
     def _create_widget_shortcut_action_for_(self, fnc, shortcut):
         act = QtWidgets.QAction(self)
+        # noinspection PyUnresolvedReferences
         act.triggered.connect(fnc)
         act.setShortcut(QtGui.QKeySequence(shortcut))
         act.setShortcutContext(QtCore.Qt.WidgetWithChildrenShortcut)
         self._widget.addAction(act)
 
 
-class AbsQtWindowBaseDef(object):
-
+class AbsQtMainWindowDef(object):
     window_close_accepted = qt_signal(object)
 
     def _init_window_base_def_(self, widget):
         self._widget = widget
         self._window_close_fncs = []
-        
+
         self._window_ask_for_close = False
 
         self._definition_window_size = 240, 120
-        
+
         self._window_close_flag = False
 
         self._window_auto_close_flag = None
@@ -114,6 +118,7 @@ class AbsQtWindowBaseDef(object):
             self._widget, pos, size, use_exec
         )
 
+
     def _set_icon_name_text_(self, text):
         self._widget.setWindowIcon(
             _qt_core.GuiQtIcon.generate_by_text(text)
@@ -131,7 +136,7 @@ class QtDialogBase(
     _qt_abstracts.AbsQtStatusBaseDef,
     #
     _utility.QtThreadDef,
-    AbsQtWindowBaseDef,
+    AbsQtMainWindowDef,
     AbsQtShortcutBaseDef
 ):
     size_changed = qt_signal()
@@ -156,6 +161,8 @@ class QtDialogBase(
 
         self._result = False
 
+        self._verbose = False
+
     def _refresh_widget_draw_(self):
         self.update()
 
@@ -174,26 +181,23 @@ class QtDialogBase(
         self._do_window_close_()
         event.accept()
 
-    def _do_yes_(self):
-        sys.stdout.write('you choose yes\n')
+    def _do_ok_(self):
+        if self._verbose is True:
+            sys.stdout.write('you choose ok\n')
         self._result = True
-        # mark close
-        self._window_close_flag = True
         # todo: accept not trigger close event?
         self.accept()
 
     def _do_no_(self):
-        sys.stdout.write('you choose no\n')
+        if self._verbose is True:
+            sys.stdout.write('you choose no\n')
         self._result = False
-        # mark close
-        self._window_close_flag = True
         self.reject()
 
     def _do_cancel_(self):
-        sys.stdout.write('you choose cancel\n')
+        if self._verbose is True:
+            sys.stdout.write('you choose cancel\n')
         self._result = False
-        # mark close
-        self._window_close_flag = True
         self.reject()
 
     def _get_result_(self):
@@ -201,80 +205,107 @@ class QtDialogBase(
 
     def _connect_size_changed_to_(self, fnc):
         self.size_changed.connect(fnc)
-
+        
 
 class QtDialogWindow(QtDialogBase):
     def __init__(self, *args, **kwargs):
         super(QtDialogWindow, self).__init__(*args, **kwargs)
-        self.setWindowFlags(
-            QtCore.Qt.Window
-            # |QtCore.Qt.WindowStaysOnTopHint
-        )
+        self.setWindowFlags(QtCore.Qt.Dialog)
         self.setWindowModality(QtCore.Qt.ApplicationModal)
 
 
-class QtDialogBox(QtDialogBase):
+class QtMessageBase(QtDialogBase):
     BUTTON_WIDTH = 32
     DEFAULT_SIZE = (240, 120)
 
+    class Buttons(enum.IntEnum):
+        Ok = 0
+        No = 1
+        Cancel = 2
+
+        All = -1
+
     def __init__(self, *args, **kwargs):
-        super(QtDialogBox, self).__init__(*args, **kwargs)
-        self.setWindowFlags(
-            QtCore.Qt.Dialog
-            # |QtCore.Qt.WindowStaysOnTopHint
-        )
-        self.setWindowModality(QtCore.Qt.ApplicationModal)
+        super(QtMessageBase, self).__init__(*args, **kwargs)
 
         self._gui_build_()
+        
+        self._ok_python_script = None
+        self._no_python_script = None
+        self._cancel_python_script = None
+
+    def _do_ok_(self):
+        if self._verbose is True:
+            sys.stdout.write('you choose Ok\n')
+        self._result = True
+        #
+        self._execute_python_script_(self._ok_python_script)
+        # mark close
+        self._do_window_close_()
+        # todo: accept not trigger close event?
+        self.accept()
+
+    def _do_no_(self):
+        if self._verbose is True:
+            sys.stdout.write('you choose no\n')
+        self._result = False
+        # mark close
+        self._do_window_close_()
+        self.reject()
+
+    def _do_cancel_(self):
+        if self._verbose is True:
+            sys.stdout.write('you choose cancel\n')
+        self._result = False
+        # mark close
+        self._do_window_close_()
+        self.reject()
 
     def _gui_build_(self):
         self._set_icon_name_('log')
 
-        layout = _base.QtVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
+        lot = _base.QtVBoxLayout(self)
+        lot.setContentsMargins(0, 0, 0, 0)
         self._central_widget = _utility.QtWidget()
-        layout.addWidget(self._central_widget)
+        lot.addWidget(self._central_widget)
         self._central_layout = _base.QtVBoxLayout(self._central_widget)
         self._central_layout.setContentsMargins(*[4]*4)
 
-        s = _utility.QtVScrollArea()
-        self._central_layout.addWidget(s)
+        sca = _utility.QtVScrollArea()
+        self._central_layout.addWidget(sca)
         self._message_input = _message_input.QtInputAsContent()
-        s._add_widget_(self._message_input)
+        sca._add_widget_(self._message_input)
         self._message_input._set_entry_enable_(False)
 
-        self._bottom_wgt = _utility.QtWidget()
-        self._bottom_wgt.setFixedHeight(24)
-        s._add_widget_(self._bottom_wgt)
+        self._wgt_bottom = _utility.QtWidget()
+        self._wgt_bottom.setFixedHeight(24)
+        sca._add_widget_(self._wgt_bottom)
 
-        lot = _base.QtHBoxLayout(self._bottom_wgt)
+        lot_bottom = _base.QtHBoxLayout(self._wgt_bottom)
 
         self._info_label = _utility.QtInfoLabel()
-        lot.addWidget(self._info_label)
+        lot_bottom.addWidget(self._info_label)
 
         qt_spacer_0 = _utility._QtSpacer()
-        lot.addWidget(qt_spacer_0)
+        lot_bottom.addWidget(qt_spacer_0)
         #
-        self._yes_button = _button.QtPressButton()
-        self._yes_button._set_visible_(False)
-        lot.addWidget(self._yes_button)
-        self._yes_button._set_name_text_('Yes')
-        self._yes_button._set_width_(self.BUTTON_WIDTH)
-        self._yes_button.press_clicked.connect(self._do_yes_)
+        self._ok_button = _button.QtPressButton()
+        self._ok_button._set_visible_(False)
+        lot_bottom.addWidget(self._ok_button)
+        self._set_ok_name_('Ok')
+        self._ok_button.press_clicked.connect(self._do_ok_)
         #
         self._no_button = _button.QtPressButton()
         self._no_button._set_visible_(False)
-        lot.addWidget(self._no_button)
-        self._no_button._set_name_text_('No')
-        self._no_button._set_width_(self.BUTTON_WIDTH)
+        lot_bottom.addWidget(self._no_button)
+        self._set_no_name_('No')
         self._no_button.press_clicked.connect(self._do_no_)
         #
-        self._cancel_button_ = _button.QtPressButton()
-        self._cancel_button_._set_visible_(False)
-        lot.addWidget(self._cancel_button_)
-        self._cancel_button_._set_name_text_('Cancel')
-        self._cancel_button_._set_width_(self.BUTTON_WIDTH)
-        self._cancel_button_.press_clicked.connect(self._do_no_)
+        self._cancel_button = _button.QtPressButton()
+        self._cancel_button._set_visible_(False)
+        lot_bottom.addWidget(self._cancel_button)
+        self._set_cancel_name_('Cancel')
+        self._cancel_button.press_clicked.connect(self._do_no_)
 
         self._message_input.entry_focus_changed.connect(
             self._do_window_cancel_auto_close_
@@ -287,7 +318,7 @@ class QtDialogBox(QtDialogBase):
         self._info_label._set_info_(text)
 
     def _do_window_auto_close_later_(self, delay_time):
-        super(QtDialogBox, self)._do_window_auto_close_later_(delay_time)
+        super(QtMessageBase, self)._do_window_auto_close_later_(delay_time)
         self._do_window_auto_close_countdown_(delay_time)
 
     def _do_window_auto_close_countdown_(self, delay_time):
@@ -312,43 +343,95 @@ class QtDialogBox(QtDialogBase):
     def _set_message_(self, text):
         self._message_input._set_value_(text)
 
-    def _set_yes_visible_(self, boolean):
-        self._yes_button._set_visible_(boolean)
+    def _set_ok_visible_(self, boolean):
+        self._ok_button._set_visible_(boolean)
+
+    def _set_ok_name_(self, text):
+        self._ok_button._set_name_text_(text)
+        self._ok_button._fix_width_to_name_()
+
+    def _set_ok_python_script_(self, script):
+        self._ok_python_script = script
+
+    @staticmethod
+    def _execute_python_script_(script):
+        if script is not None:
+            # noinspection PyBroadException
+            try:
+                exec script
+            except Exception:
+                pass
 
     def _set_no_visible_(self, boolean):
         self._no_button._set_visible_(boolean)
+    
+    def _set_no_name_(self, text):
+        self._no_button._set_name_text_(text)
+        self._no_button._fix_width_to_name_()
+    
+    def _set_no_python_script_(self, script):
+        self._no_python_script = script
 
     def _set_cancel_visible_(self, boolean):
-        self._cancel_button_._set_visible_(boolean)
+        self._cancel_button._set_visible_(boolean)
+        
+    def _set_cancel_name_(self, text):
+        self._cancel_button._set_name_text_(text)
+        self._cancel_button._fix_width_to_name_()
+
+    def _set_cancel_python_script_(self, script):
+        self._cancel_python_script = script
 
     def _do_show_(self):
         self._do_window_show_(
             size=self.DEFAULT_SIZE
         )
 
+    def _show_buttons_(self, *args):
+        for i in args:
+            if i == self.Buttons.Ok:
+                self._set_ok_visible_(True)
+            elif i == self.Buttons.No:
+                self._set_no_visible_(True)
+            elif i == self.Buttons.Cancel:
+                self._set_cancel_visible_(True)
+            elif i == self.Buttons.All:
+                self._set_ok_visible_(True)
+                self._set_no_visible_(True)
+                self._set_cancel_visible_(True)
+
     def _do_exec_(self):
         self._do_window_show_(
             size=self.DEFAULT_SIZE, use_exec=True
         )
 
+    def _set_status_(self, status):
+        self._central_widget._set_status_(status)
 
-class QtMessageBox(QtDialogBox):
+
+class QtMessageBox(QtMessageBase):
     def __init__(self, *args, **kwargs):
         super(QtMessageBox, self).__init__(*args, **kwargs)
+        self.setWindowFlags(QtCore.Qt.Dialog)
+        self.setWindowModality(QtCore.Qt.ApplicationModal)
+
+
+class QtNoticeBox(QtMessageBase):
+    def __init__(self, *args, **kwargs):
+        super(QtNoticeBox, self).__init__(*args, **kwargs)
         self.setWindowFlags(
-            QtCore.Qt.Dialog
-            |QtCore.Qt.WindowStaysOnTopHint
+            QtCore.Qt.Dialog | QtCore.Qt.WindowStaysOnTopHint
         )
         self._widget.setWindowModality(
             QtCore.Qt.NonModal
         )
 
 
-class AbsMessageBaseDef(object):
-    def _init_message_base_def_(self, widget):
+class AbsNoticeBaseDef(object):
+    def _init_notice_base_def_(self, widget):
         self._widget = widget
 
-        self._message_windows = []
+        self._notice_widgets = []
 
         rect = _qt_core.GuiQtUtil.get_qt_desktop_primary_rect()
 
@@ -363,51 +446,75 @@ class AbsMessageBaseDef(object):
             self._h_i+28, self._w_i
         )
 
-    def _update_message_window_close_(self, window):
-        if window in self._message_windows:
-            self._message_windows.remove(window)
+    def _notice_close_fnc_(self, widget):
+        if widget in self._notice_widgets:
+            self._notice_widgets.remove(widget)
 
-    def _get_message_window_geometry_(self):
-        c = len(self._message_windows)
+    def _get_notice_window_geometry_(self):
+        c = len(self._notice_widgets)
         self._layout_model.set_count(c)
         self._layout_model.update()
         x_0, y_0, w_0, h_0 = self._layout_model.get_geometry_at(c-1)
         x, y = self._w_d-self._w_i-y_0, self._h_d-self._h_i-x_0
         return x, y, self._w_i, self._h_i
 
-    def _do_message_window_show_(self, window):
-        window.show()
-        window.setGeometry(
-            *self._get_message_window_geometry_()
+    def _notice_show_fnc_(self, widget):
+        widget.show()
+        widget.setGeometry(
+            *self._get_notice_window_geometry_()
         )
         delay_time = 5000
-        window._do_window_auto_close_later_(delay_time)
+        widget._do_window_auto_close_later_(delay_time)
 
-    def _do_message_window_close_all_(self):
+    def _do_notice_close_all_(self):
         # list maybe dynamic
-        s = copy.copy(self._message_windows)
+        s = copy.copy(self._notice_widgets)
         for i_window in s:
             if i_window._window_close_flag is False:
                 i_window._do_window_close_()
 
-    def _show_message_(self, text):
-        w = QtMessageBox()
+    def _show_notice_(self, text):
+        wgt = QtNoticeBox()
         # append first
-        self._message_windows.append(w)
-        w._set_yes_visible_(True)
-        w._set_no_visible_(True)
+        self._notice_widgets.append(wgt)
+        wgt._set_ok_visible_(True)
+        wgt._set_no_visible_(True)
 
-        w.window_close_accepted.connect(
-            self._update_message_window_close_
+        wgt.window_close_accepted.connect(
+            self._notice_close_fnc_
         )
+        wgt._set_title_('Notice')
+        options = bsc_web.UrlOptions.to_dict(text)
+        if options:
+            title = options.get('title')
+            if title:
+                wgt._set_title_(title)
 
-        w._set_title_('Message')
-        w._set_message_(text)
+            message = options.get('message')
+            if message:
+                wgt._set_message_(message)
 
-        self._do_message_window_show_(w)
+            status = options.get('status')
+            if status:
+                if status == 'error':
+                    wgt._set_status_(
+                        wgt.ValidationStatus.Error
+                    )
+                elif status == 'warning':
+                    wgt._set_status_(
+                        wgt.ValidationStatus.Warning
+                    )
+            
+            ok_python_script = options.get('ok_python_script')
+            if ok_python_script:
+                wgt._set_ok_python_script_(ok_python_script)
+        else:
+            wgt._set_message_(text)
+
+        self._notice_show_fnc_(wgt)
 
 
-class QtWindowBase(
+class QtMainWindow(
     QtWidgets.QMainWindow,
     #
     _qt_abstracts.AbsQtBusyBaseDef,
@@ -416,9 +523,9 @@ class QtWindowBase(
     _qt_abstracts.AbsQtThreadBaseDef,
     #
     _utility.QtThreadDef,
-    AbsQtWindowBaseDef,
+    AbsQtMainWindowDef,
     AbsQtShortcutBaseDef,
-    AbsMessageBaseDef
+    AbsNoticeBaseDef
 ):
     close_clicked = qt_signal()
     key_escape_pressed = qt_signal()
@@ -427,7 +534,7 @@ class QtWindowBase(
     window_activate_changed = qt_signal()
 
     window_loading_finished = qt_signal()
-    
+
     QSM_WINDOW_FLAG = True
 
     def _refresh_widget_draw_(self):
@@ -445,7 +552,7 @@ class QtWindowBase(
         )
 
     def __init__(self, *args, **kwargs):
-        super(QtWindowBase, self).__init__(*args, **kwargs)
+        super(QtMainWindow, self).__init__(*args, **kwargs)
         self.setWindowFlags(QtCore.Qt.Window)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         # todo: do not use WA_TranslucentBackground mode, GL bug
@@ -465,7 +572,7 @@ class QtWindowBase(
         self._init_thread_base_def_(self)
         self._init_window_base_def_(self)
         self._init_shortcut_base_def_(self)
-        self._init_message_base_def_(self)
+        self._init_notice_base_def_(self)
         #
         self.setStyleSheet(
             _qt_core.GuiQtStyle.get('QMainWindow')
@@ -479,7 +586,7 @@ class QtWindowBase(
         self.installEventFilter(self)
 
         self._connect_window_close_to_(
-            self._do_message_window_close_all_
+            self._do_notice_close_all_
         )
 
     def eventFilter(self, *args):
@@ -517,9 +624,9 @@ class QtWindowBase(
 
     def closeEvent(self, event):
         if self._window_ask_for_close is True:
-            w = QtDialogBox(self)
+            w = QtMessageBox(self)
             w._set_title_('Close Window')
-            w._set_yes_visible_(True)
+            w._set_ok_visible_(True)
             w._set_no_visible_(True)
             w._set_message_('Are you sure you want to close the window?')
             w._do_exec_()

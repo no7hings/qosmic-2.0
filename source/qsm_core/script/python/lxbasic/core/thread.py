@@ -266,17 +266,17 @@ class TrdCommand(threading.Thread):
 
     def _do_completed(self, results):
         self._signal_completed.send_emit(
-            (self._status, ''.join(results))
+            (self._status, results)
         )
 
     def _do_failed(self, results):
         self._signal_failed.send_emit(
-            (self._status, ''.join(results))
+            (self._status, results)
         )
 
     def _do_finished(self, results):
         self._signal_finished.send_emit(
-            (self._status, ''.join(results))
+            (self._status, results)
         )
 
     def __set_logging(self, text):

@@ -133,10 +133,17 @@ class QtPainter(QtGui.QPainter):
             #
             self._set_font_(_base.QtFonts.Label)
             self._set_text_color_(i_font_color)
+
+            i_text_elided = self.fontMetrics().elidedText(
+                i_text,
+                QtCore.Qt.ElideMiddle,
+                i_new_rect.width()-4,
+                QtCore.Qt.TextShowMnemonic
+            )
             # noinspection PyArgumentEqualDefault
             self.drawText(
-                i_new_rect, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
-                i_text
+                i_new_rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+                i_text_elided
             )
 
     def _draw_tab_left_tool_box_by_rect_(self, rect):
@@ -285,7 +292,7 @@ class QtPainter(QtGui.QPainter):
             txt_rect = QtCore.QRect(
                 frm_x, frm_y, frm_w-icn_w, frm_h
             )
-            text_option = QtCore.Qt.AlignCenter|QtCore.Qt.AlignVCenter
+            text_option = QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter
             self._set_font_(
                 _base.GuiQtFont.generate(size=font_size, weight=75)
             )
@@ -438,7 +445,7 @@ class QtPainter(QtGui.QPainter):
             txt_rect = QtCore.QRect(
                 frm_x, frm_y, frm_w-icn_w, frm_h
             )
-            text_option = QtCore.Qt.AlignCenter|QtCore.Qt.AlignVCenter
+            text_option = QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter
             self._set_font_(
                 _base.GuiQtFont.generate(size=font_size, weight=75)
             )
@@ -473,7 +480,7 @@ class QtPainter(QtGui.QPainter):
         )
         self._set_text_color_(i_r*.75, i_g*.75, i_b*.75)
         self.drawText(
-            txt_rect, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
+            txt_rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
             str(text[0]).upper()
         )
 
@@ -503,7 +510,7 @@ class QtPainter(QtGui.QPainter):
             _base.GuiQtFont.generate(size=int(txt_r*.5)-offset, italic=True)
         )
         self.drawText(
-            txt_rect, QtCore.Qt.AlignRight|QtCore.Qt.AlignTop,
+            txt_rect, QtCore.Qt.AlignRight | QtCore.Qt.AlignTop,
             text
         )
 
@@ -738,7 +745,7 @@ class QtPainter(QtGui.QPainter):
         self._set_font_(text_font)
         self.drawText(
             text_rect,
-            QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
+            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
             text
         )
         if text_sub:
@@ -748,7 +755,7 @@ class QtPainter(QtGui.QPainter):
             self._set_font_(text_sub_font)
             self.drawText(
                 sub_text_rect,
-                QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
+                QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
                 text_sub
             )
 
@@ -1085,7 +1092,7 @@ class QtPainter(QtGui.QPainter):
         self._set_text_color_(font_color)
         self.drawText(
             rect,
-            QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
+            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
             draw_text.capitalize()
         )
 
@@ -1104,7 +1111,7 @@ class QtPainter(QtGui.QPainter):
         self._set_border_color_(_color_and_brush.QtFontColors.Basic)
         self.drawText(
             rect,
-            QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
+            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
             'loading .{}'.format('.'*int((loading_index/10)%3))
         )
 
@@ -1329,7 +1336,7 @@ class QtPainter(QtGui.QPainter):
 
         self.drawText(
             txt_rect,
-            QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
+            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
             text_draw
         )
 
@@ -1424,7 +1431,7 @@ class QtPainter(QtGui.QPainter):
 
         self.drawText(
             txt_rect,
-            QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
+            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
             text_draw
         )
 
@@ -1669,7 +1676,7 @@ class QtPainter(QtGui.QPainter):
         )
         self.drawText(
             rect_text,
-            QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
+            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
             text
         )
 
@@ -1731,7 +1738,7 @@ class QtPainter(QtGui.QPainter):
         if text_option is not None:
             text_option_ = text_option
         else:
-            text_option_ = QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter
+            text_option_ = QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter
         #
         if font is not None:
             self._set_font_(font)
@@ -1819,7 +1826,7 @@ class QtPainter(QtGui.QPainter):
             key_text_rect = QtCore.QRect(
                 x, y, key_text_width, h
             )
-            key_text_option = QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter
+            key_text_option = QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter
             key_text_font = _base.QtFonts.NameKey
             key_text_font.setPointSize(key_text_size)
             key_text_font.setWeight(key_text_weight)
@@ -1833,7 +1840,7 @@ class QtPainter(QtGui.QPainter):
             sep_text_rect = QtCore.QRect(
                 x+key_text_width, y, sep_text_width, h
             )
-            sep_text_option = QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter
+            sep_text_option = QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter
             self.drawText(
                 sep_text_rect,
                 sep_text_option,
@@ -1845,7 +1852,7 @@ class QtPainter(QtGui.QPainter):
                 x+key_text_width+sep_text_width, y, w-sep_text_width-key_text_width, h
             )
             qt_value_text_option = QtGui.QTextOption()
-            qt_value_text_option.setAlignment(QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+            qt_value_text_option.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
             qt_value_text_option.setUseDesignMetrics(True)
             value_text_ = self.fontMetrics().elidedText(
                 value_text,
@@ -2163,7 +2170,7 @@ class QtPainter(QtGui.QPainter):
                 #
                 self.drawText(
                     current_label_rect,
-                    QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop,
+                    QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop,
                     '{2} ( {0} )\r\n{3} ( {1} )'.format(
                         label_x, label_y,
                         current_x,
@@ -2646,7 +2653,7 @@ class QtPixmapDrawer(object):
             #
             i_t_r__ = QtGui.QColor(i_t_r_, i_t_r_, i_t_r_)
 
-            i_text_option = QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter
+            i_text_option = QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter
 
             painter._set_border_color_(i_t_r__)
             painter.drawText(

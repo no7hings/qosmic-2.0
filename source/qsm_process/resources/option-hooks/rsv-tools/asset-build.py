@@ -55,9 +55,9 @@ def main(session):
     if rsv_entity:
         w = gui_core.GuiDialog.create(
             session.gui_name,
-            content=u'build "{}"\npress "Yes" to continue'.format(asset),
+            content=u'build "{}"\npress "Ok" to continue'.format(asset),
             #
-            yes_method=lambda *args, **kwargs: build_fnc_(project, asset),
+            ok_method=lambda *args, **kwargs: build_fnc_(project, asset),
             #
             options_configure=session.configure.get('build.node.options'),
             window_size=(480, 480),
@@ -76,7 +76,7 @@ def main(session):
             content=content,
             status=gui_core.GuiDialog.ValidationStatus.Error,
             #
-            yes_label='Close',
+            ok_label='Close',
             #
             no_visible=False, cancel_visible=False,
             use_exec=False

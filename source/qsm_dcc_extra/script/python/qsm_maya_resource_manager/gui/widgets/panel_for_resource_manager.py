@@ -38,10 +38,10 @@ class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
             )
         )
 
-        self._rig_prx_unit = _unit_for_rig_resource.PrxPageForRigResource(
+        self._rig_prx_page = _unit_for_rig_resource.PrxPageForRigResource(
             self, self._session
         )
-        rig_prx_sca.add_widget(self._rig_prx_unit)
+        rig_prx_sca.add_widget(self._rig_prx_page)
         # scenery
         scenery_prx_sca = prx_widgets.PrxVScrollArea()
         self._prx_tab_view.add_widget(
@@ -55,10 +55,10 @@ class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
             )
         )
 
-        self._scenery_prx_unit = _unit_for_scenery_resource.PrxPageForSceneryResource(
+        self._scenery_prx_page = _unit_for_scenery_resource.PrxPageForSceneryResource(
             self, self._session
         )
-        scenery_prx_sca.add_widget(self._scenery_prx_unit)
+        scenery_prx_sca.add_widget(self._scenery_prx_page)
 
         self.connect_refresh_action_for(
             lambda: self.do_gui_refresh_all(True)
@@ -80,9 +80,9 @@ class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
     def do_gui_refresh_all(self, force=False):
         key = self._prx_tab_view.get_current_key()
         if key == 'rig':
-            self._rig_prx_unit.do_gui_refresh_all(force)
+            self._rig_prx_page.do_gui_refresh_all(force)
         elif key == 'scenery':
-            self._scenery_prx_unit.do_gui_refresh_all(force)
+            self._scenery_prx_page.do_gui_refresh_all(force)
 
     def gui_close_fnc(self):
         page_key_current = self._prx_tab_view.get_current_key()

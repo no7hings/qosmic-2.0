@@ -4,6 +4,53 @@ import os
 import maya.cmds as cmds
 
 
+class ViewPanel(object):
+    @classmethod
+    def _set_viewport_shader_display_mode_(cls, name):
+        cmds.modelEditor(
+            name,
+            edit=1,
+            useDefaultMaterial=0,
+            displayAppearance='smoothShaded',
+            displayTextures=0,
+            displayLights='default',
+            shadows=0
+        )
+
+    @classmethod
+    def _set_viewport_texture_display_mode_(cls, name):
+        cmds.modelEditor(
+            name,
+            edit=1,
+            useDefaultMaterial=0,
+            displayAppearance='smoothShaded',
+            displayTextures=1,
+            displayLights='default',
+            shadows=0
+        )
+
+    @classmethod
+    def _set_viewport_light_display_mode_(cls, name):
+        cmds.modelEditor(
+            name,
+            edit=1,
+            useDefaultMaterial=0,
+            displayAppearance='smoothShaded',
+            displayTextures=1,
+            displayLights='all',
+            shadows=1
+        )
+
+    @classmethod
+    def set_display_mode(cls, name, display_mode):
+        if display_mode == 5:
+            cls._set_viewport_shader_display_mode_(name)
+        elif display_mode == 6:
+            cls._set_viewport_texture_display_mode_(name)
+        elif display_mode == 7:
+            cls._set_viewport_light_display_mode_(name)
+
+
 class ViewPanels(object):
     @classmethod
     def get_all_names(cls):

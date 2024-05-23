@@ -175,7 +175,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
 
     @classmethod
     def set_file_open_with_dialog(cls, file_path):
-        def yes_fnc_():
+        def ok_fnc_():
             cls.save_file()
             cls.open_file(file_path)
 
@@ -191,10 +191,10 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
             ),
             window_size=(480, 160),
             #
-            yes_method=yes_fnc_,
+            ok_method=ok_fnc_,
             no_method=no_fnc_,
             #
-            yes_label='Save',
+            ok_label='Save',
             no_label='Don\'t save'
         )
 
@@ -209,7 +209,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
                 post_method(file_path)
 
         #
-        def yes_fnc_():
+        def ok_fnc_():
             cls.save_file()
             #
             cls.new_file()
@@ -241,10 +241,10 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
                 ),
                 window_size=(480, 160),
                 #
-                yes_method=yes_fnc_,
+                ok_method=ok_fnc_,
                 no_method=no_fnc_,
                 #
-                yes_label='Save and new',
+                ok_label='Save and new',
                 no_label='Don\'t save and new'
             )
         else:
@@ -252,7 +252,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
 
     @classmethod
     def save_file_with_dialog(cls):
-        def yes_fnc_():
+        def ok_fnc_():
             cls.save_file()
 
         #
@@ -271,10 +271,10 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 window_size=(480, 160),
                 #
-                yes_method=yes_fnc_,
+                ok_method=ok_fnc_,
                 no_method=no_fnc_,
                 #
-                yes_label='Save',
+                ok_label='Save',
                 no_label='Don\'t save'
             )
 

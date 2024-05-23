@@ -217,7 +217,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
         return list_
 
     def submit_to_farm(self):
-        def yes_fnc_():
+        def ok_fnc_():
             default_render_version = self._options_prx_node.get('render.version')
             default_render_frames = self._options_prx_node.get('render.frames')
             #
@@ -269,7 +269,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
                 window_size=(480, 160),
                 no_visible=False,
                 #
-                yes_label='Ignore',
+                ok_label='Ignore',
                 parent=self.widget,
                 #
                 use_thread=False,
@@ -286,7 +286,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
                 ),
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 window_size=(480, 160),
-                yes_visible=False,
+                ok_visible=False,
                 no_visible=False,
                 parent=self.widget,
             )
@@ -303,9 +303,9 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
                 ',\n'.join(['    "{}"'.format(i) for i in render_nodes])
             ),
             #
-            yes_label='Confirm',
+            ok_label='Confirm',
             #
-            yes_method=yes_fnc_,
+            ok_method=ok_fnc_,
             #
             no_visible=False,
             show=False,
@@ -318,7 +318,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
             #
             use_window_modality=False
         )
-        w.set_yes_completed_notify_enable(True)
+        w.set_ok_completed_notify_enable(True)
 
         w.connect_window_close_to(
             self.widget.show

@@ -4,7 +4,7 @@ import lxgui.core as gui_core
 import lxgui.proxy.widgets as prx_widgets
 
 
-def yes_method():
+def ok_method():
     import time
     w.set_content('stated')
     print 'AAA'
@@ -29,7 +29,7 @@ if __name__ == '__main__':
             w = gui_core.GuiDialog.create(
                 label='label',
                 sub_label='sub label',
-                yes_method=yes_method,
+                ok_method=ok_method,
                 use_exec=False,
                 options_configure={
                     'user/description/test': {

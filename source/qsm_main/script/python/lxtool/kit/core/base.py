@@ -69,7 +69,7 @@ class KitDesktopHook(object):
                 content='tools root is not found.',
                 status=gui_core.GuiDialog.ValidationStatus.Error,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 #
@@ -150,7 +150,7 @@ class KitDesktopHookAddOpt(object):
                     self._session.gui_name,
                     content='name "{}" is exists, entry a new name to continue'.format(name),
                     status=gui_core.GuiDialog.ValidationStatus.Warning,
-                    yes_visible=False,
+                    ok_visible=False,
                     no_visible=False,
                 )
                 return
@@ -200,7 +200,7 @@ class KitDesktopHookAddOpt(object):
                     self._session.gui_name,
                     content='python script is empty, entry script to continue',
                     status=gui_core.GuiDialog.ValidationStatus.Warning,
-                    yes_visible=False,
+                    ok_visible=False,
                     no_visible=False,
                 )
                 return
@@ -214,7 +214,7 @@ class KitDesktopHookAddOpt(object):
                     self._session.gui_name,
                     content='shell script is empty, entry script to continue',
                     status=gui_core.GuiDialog.ValidationStatus.Warning,
-                    yes_visible=False,
+                    ok_visible=False,
                     no_visible=False,
                 )
                 return

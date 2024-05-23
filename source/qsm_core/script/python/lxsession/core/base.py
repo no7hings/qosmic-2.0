@@ -15,34 +15,6 @@ class SsnUtil(object):
     PORT = 9527
 
 
-class SsnHookMtd(object):
-    @classmethod
-    def set_cmd_run(cls, cmd):
-        import urllib
-
-        unique_id = bsc_core.UuidMtd.generate_new()
-
-        hook_file_path = bsc_storage.StgUserMtd.get_user_hook_file(unique_id=unique_id)
-
-        bsc_storage.StgFileOpt(hook_file_path).set_write(
-            dict(
-                user=bsc_core.SysBaseMtd.get_user_name(),
-                tiame=bsc_core.SysBaseMtd.get_time(),
-                cmd=cmd,
-            )
-        )
-
-        urllib.urlopen(
-            'http://{host}:{port}/cmd-run?uuid={uuid}'.format(
-                **dict(
-                    host=SsnUtil.HOST,
-                    port=SsnUtil.PORT,
-                    uuid=unique_id
-                )
-            )
-        )
-
-
 class SsnHookEngineMtd(object):
     CONTENT = None
 

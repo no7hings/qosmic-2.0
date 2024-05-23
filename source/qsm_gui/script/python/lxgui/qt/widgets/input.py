@@ -77,9 +77,10 @@ class QtInputAsConstant(
 
         self._entry_widget.setReadOnly(not boolean)
 
-        self._frame_background_color = [
-            _qt_core.QtBackgroundColors.Basic, _qt_core.QtBackgroundColors.Dim
-        ][boolean]
+        # self._frame_background_color = [
+        #     _qt_core.QtBackgroundColors.Basic, _qt_core.QtBackgroundColors.Dim
+        # ][boolean]
+        self._update_background_color_by_locked_(boolean)
         self._refresh_widget_draw_()
 
 
@@ -481,10 +482,12 @@ class QtInputAsContent(
         super(QtInputAsContent, self)._set_entry_enable_(boolean)
 
         self._entry_widget.setReadOnly(not boolean)
+        # fixme: not use?
         # self._frame_background_color = [
-        #     _qt_core.QtBackgroundColors.Basic, _qt_core.QtBackgroundColors.Dim
+        #     _qt_core.QtBackgroundColors.Dark, _qt_core.QtBackgroundColors.Dim
         # ][boolean]
-        # self._refresh_widget_draw_()
+        self._update_background_color_by_locked_(boolean)
+        self._refresh_widget_draw_()
 
     def _set_input_entry_drop_enable_(self, boolean):
         super(QtInputAsContent, self)._set_input_entry_drop_enable_(boolean)

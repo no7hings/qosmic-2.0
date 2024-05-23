@@ -14,9 +14,9 @@ import qsm_maya.core as qsm_mya_core
 class GuiBaseOpt(object):
     DCC_NAMESPACE = 'rig'
 
-    def __init__(self, window, unit, session):
+    def __init__(self, window, page, session):
         self._window = window
-        self._unit = unit
+        self._page = page
         self._session = session
 
 
@@ -26,8 +26,8 @@ class GuiResourceTagOpt(
 ):
     GROUP_SCHEME = gui_prx_abstracts.AbsGuiTreeViewAsTagOpt.GroupScheme.Hide
 
-    def __init__(self, window, unit, session, prx_tree_view):
-        super(GuiResourceTagOpt, self).__init__(window, unit, session)
+    def __init__(self, window, page, session, prx_tree_view):
+        super(GuiResourceTagOpt, self).__init__(window, page, session)
         self._init_tree_view_as_tag_opt_(prx_tree_view, self.DCC_NAMESPACE)
 
         self._index_thread_batch = 0
@@ -94,7 +94,7 @@ class GuiResourceOpt(
         w = gui_core.GuiDialog.create(
             label=self._session.gui_name,
             sub_label='remove-resource',
-            content='do you want remove selected rigs?\n, press "Yes" to continue',
+            content='do you want remove selected rigs?\n, press "Ok" to continue',
             status=gui_core.GuiDialog.ValidationStatus.Warning,
             parent=self._window.widget
         )
@@ -107,7 +107,7 @@ class GuiResourceOpt(
                 i_reference_opt = i_resource.reference_opt
                 i_reference_opt.do_remove()
 
-            self._unit.do_gui_refresh_all()
+            self._page.do_gui_refresh_all()
 
     def do_dcc_duplicate_resources(self):
         _ = self._prx_tree_view.get_selected_items()
@@ -116,7 +116,7 @@ class GuiResourceOpt(
             i_reference_opt = i_resource.reference_opt
             i_reference_opt.do_duplicate()
 
-        self._unit.do_gui_refresh_all()
+        self._page.do_gui_refresh_all()
 
     def do_dcc_reload_resources(self):
         _ = self._prx_tree_view.get_selected_items()
@@ -125,7 +125,7 @@ class GuiResourceOpt(
             i_reference_opt = i_resource.reference_opt
             i_reference_opt.do_reload()
 
-        self._unit.do_gui_refresh_all(force=True)
+        self._page.do_gui_refresh_all(force=True)
 
     def do_dcc_unload_resources(self):
         _ = self._prx_tree_view.get_selected_items()
@@ -134,7 +134,7 @@ class GuiResourceOpt(
             i_reference_opt = i_resource.reference_opt
             i_reference_opt.do_unload()
 
-        self._unit.do_gui_refresh_all(force=True)
+        self._page.do_gui_refresh_all(force=True)
 
     # isolate select
     def _gui_build_isolate_select_tools(self):
@@ -226,7 +226,7 @@ class GuiResourceOpt(
             resources = self.gui_get_selected_resources()
             paths = []
             if resources:
-                scheme = self._unit._gui_utility_opt.gui_get_selection_scheme()
+                scheme = self._page._gui_utility_opt.gui_get_selection_scheme()
                 paths = []
                 [paths.extend(x.find_nodes_by_scheme(scheme)) for x in resources]
             if paths:
@@ -244,8 +244,8 @@ class GuiResourceOpt(
 
             self.do_gui_selected(paths)
 
-    def __init__(self, window, unit, session, prx_tree_view):
-        super(GuiResourceOpt, self).__init__(window, unit, session)
+    def __init__(self, window, page, session, prx_tree_view):
+        super(GuiResourceOpt, self).__init__(window, page, session)
         self._prx_tree_view = prx_tree_view
         self._prx_tree_view.create_header_view(
             [('name', 2), ('description', 1)],
@@ -352,7 +352,7 @@ class GuiResourceOpt(
                 _semantic_tag_filter_data.setdefault(
                     _tag_group_key, set()
                 ).add('/status/loaded')
-                self._unit._gui_resource_tag_opt.gui_register_tag_by_path(
+                self._page._gui_resource_tag_opt.gui_register_tag_by_path(
                     '/status/loaded', path, auto_create_ancestors=True
                 )
             else:
@@ -362,7 +362,7 @@ class GuiResourceOpt(
                 _semantic_tag_filter_data.setdefault(
                     _tag_group_key, set()
                 ).add('/status/unloaded')
-                self._unit._gui_resource_tag_opt.gui_register_tag_by_path(
+                self._page._gui_resource_tag_opt.gui_register_tag_by_path(
                     '/status/unloaded', path, auto_create_ancestors=True
                 )
 
@@ -401,7 +401,7 @@ class GuiResourceOpt(
                     semantic_tag_filter_data.setdefault(
                         i_tag_group, set()
                     ).add(i_tag_path)
-                    self._unit._gui_resource_tag_opt.gui_register_tag_by_path(
+                    self._page._gui_resource_tag_opt.gui_register_tag_by_path(
                         i_tag_path, path, auto_create_ancestors=True
                     )
 

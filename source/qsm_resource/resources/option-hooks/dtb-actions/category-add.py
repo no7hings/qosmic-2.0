@@ -2,7 +2,7 @@
 
 
 def main(session):
-    def yes_fnc_():
+    def ok_fnc_():
         pass
 
     import lxgui.core as gui_core
@@ -26,9 +26,9 @@ def main(session):
             #
             # options_configure=session.configure.get('build.node.options'),
             #
-            yes_label='Confirm',
+            ok_label='Confirm',
             #
-            yes_method=yes_fnc_,
+            ok_method=ok_fnc_,
             #
             no_visible=False,
             # show=False,

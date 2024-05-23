@@ -12,9 +12,9 @@ class W(prx_widgets.PrxBaseWindow):
 
         self._d = gui_qt_core.QtWebSocketServer(self._qt_widget)
 
-        self._qt_widget._show_message_(
+        self._qt_widget._show_notice_(
             # 'playblast is completed do you want to play it?'
-            '拍屏结束了，是否播放文件'
+            'status=error&message=%E6%8B%8D%E5%B1%8F%E7%BB%93%E6%9D%9F%E4%BA%86&command=abc&title=%E9%80%9A%E7%9F%A5'
         )
 
 

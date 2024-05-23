@@ -159,6 +159,13 @@ class QtEntryFrame(
         painter._set_border_width_(w_bdr)
         for i_rect in self._frame_draw_rects:
             painter.drawRect(i_rect)
+        #
+        if self._is_status_enable is True:
+            for i_rect in self._frame_draw_rects:
+                painter._set_background_color_(
+                    self._status_color
+                )
+                painter.drawRect(i_rect)
 
     # resize
     def _get_resize_handle_(self):
@@ -175,7 +182,7 @@ class QtEntryFrame(
 
     def _update_background_color_by_locked_(self, boolean):
         self._frame_background_color = [
-            _qt_core.QtBackgroundColors.Basic, _qt_core.QtBackgroundColors.Dim
+            _qt_core.QtBackgroundColors.Dark, _qt_core.QtBackgroundColors.Dim
         ][boolean]
 
     def _set_focused_(self, boolean):

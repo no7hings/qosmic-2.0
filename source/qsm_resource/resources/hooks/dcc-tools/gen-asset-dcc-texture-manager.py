@@ -22,7 +22,7 @@ def main(session):
             content=content,
             status=gui_core.GuiDialog.ValidationStatus.Error,
             #
-            yes_label='Close',
+            ok_label='Close',
             #
             no_visible=False, cancel_visible=False
         )

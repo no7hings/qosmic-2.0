@@ -288,6 +288,7 @@ class AbsSsnGener(
             bsc_core.PrcBaseMtd.execute_as_trace_use_thread(
                 ' '.join(cmds)
             )
+
         bsc_log.Log.trace_method_result(
             'option-hook', 'complete for: "{}"'.format(
                 file_path

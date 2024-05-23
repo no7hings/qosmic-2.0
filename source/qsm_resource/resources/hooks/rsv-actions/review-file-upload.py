@@ -9,7 +9,7 @@ class UploadReview(prx_widgets.PrxBaseWindow):
         super(UploadReview, self).__init__(*args, **kwargs)
 
 
-def yes_method():
+def ok_method():
     w = UploadReview()
     w.set_window_show()
 
@@ -34,7 +34,7 @@ def main(session):
         content = (
             'upload review to\n'
             'version: "{asset}.{step}.{task}.{version}"\n'
-            'press "Yes" to continue...'
+            'press "Ok" to continue...'
         ).format(
             **kwargs
         )
@@ -42,7 +42,7 @@ def main(session):
         content = (
             'upload review to\n'
             'version: "{shot}.{step}.{task}.{version}"\n'
-            'press "Yes" to continue...'
+            'press "Ok" to continue...'
         ).format(
             **kwargs
         )
@@ -52,7 +52,7 @@ def main(session):
     w = gui_core.GuiDialog.create(
         window_title,
         content=content,
-        yes_method=yes_method,
+        ok_method=ok_method,
         window_size=(480, 320),
         use_exec=False
     )

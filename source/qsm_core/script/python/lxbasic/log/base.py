@@ -15,12 +15,16 @@ import platform
 
 import getpass
 
+import datetime
+
 from . import bridge as _bridge
 
 
 class LogBase(object):
     LOG_ROOT_KEY = 'QSM_LOG_ROOT'
     DATE_TAG_FORMAT = '%Y_%m%d'
+
+    TIME_TAG_FORMAT = '%Y_%m%d_%H%M_%S_%f'
 
     @staticmethod
     def auto_string(text):
@@ -52,6 +56,12 @@ class LogBase(object):
         return time.strftime(
             cls.DATE_TAG_FORMAT,
             time.localtime(timestamp)
+        )
+
+    @classmethod
+    def get_time_tag(cls):
+        return datetime.datetime.now().strftime(
+            cls.TIME_TAG_FORMAT
         )
 
     @classmethod
@@ -114,6 +124,13 @@ class LogBase(object):
             if os.path.exists(_) is False:
                 os.makedirs(_)
         return _
+
+    @classmethod
+    def get_user_debug_file(cls, tag, create=False):
+        directory_path = cls.get_user_debug_directory(tag, create=create)
+        return '{}/{}.log'.format(
+            directory_path, cls.get_time_tag()
+        )
 
 
 class Log(object):

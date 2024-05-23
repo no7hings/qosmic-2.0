@@ -60,7 +60,7 @@ class QtWidget(
                 frame_rect,
                 border_color=border_color,
                 background_color=(0, 0, 0, 0),
-                border_width=2,
+                border_width=4,
             )
 
 

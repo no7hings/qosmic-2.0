@@ -72,7 +72,7 @@ class VdoFileOpt(object):
         pass
 
     def set_mov_create_from(self, image_file_path, width=1024, fps=24, block=False):
-        if _base.StgPathMtd(self._file_path).get_is_exists() is False:
+        if _base.StgPathMtd.get_is_exists(self._file_path) is False:
             cmd_args = [
                 bsc_cor_execute.ExcBaseMtd.ffmpeg(),
                 '-i "{}"'.format(image_file_path),

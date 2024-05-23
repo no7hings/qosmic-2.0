@@ -58,7 +58,7 @@ class AbsPrxDialogWindow(
             gui_qt_core.QtCore.Qt.WindowModal
         )
         self._use_thread = True
-        self._notify_when_yes_completed = False
+        self._notify_when_ok_completed = False
 
         self._completed_content = 'process is completed, press "Close" to continue'
 
@@ -70,8 +70,8 @@ class AbsPrxDialogWindow(
     def _set_modality_swap_(self):
         pass
 
-    def set_yes_completed_notify_enable(self, boolean):
-        self._notify_when_yes_completed = boolean
+    def set_ok_completed_notify_enable(self, boolean):
+        self._notify_when_ok_completed = boolean
 
     def _set_central_layout_create_(self):
         self._central_widget = _qt_wgt_utility.QtWidget()
@@ -145,13 +145,13 @@ class AbsPrxDialogWindow(
         qt_spacer_0 = _qt_wgt_utility._QtSpacer()
         self._input_button_layout.addWidget(qt_spacer_0)
         #
-        self._yes_button = gui_prx_wdt_utility.PrxPressButton()
-        # self._yes_button.set_visible(False)
-        self._input_button_layout.addWidget(self._yes_button.widget)
-        self._yes_button.set_name('Yes')
-        self._yes_button.set_icon_name('dialog/yes')
-        self._yes_button.set_width(self.BUTTON_WIDTH)
-        self._yes_button.connect_press_clicked_to(self.do_yes)
+        self._ok_button = gui_prx_wdt_utility.PrxPressButton()
+        # self._ok_button.set_visible(False)
+        self._input_button_layout.addWidget(self._ok_button.widget)
+        self._ok_button.set_name('Yes')
+        self._ok_button.set_icon_name('dialog/yes')
+        self._ok_button.set_width(self.BUTTON_WIDTH)
+        self._ok_button.connect_press_clicked_to(self.do_yes)
         #
         self._no_button = gui_prx_wdt_utility.PrxPressButton()
         # self._no_button.set_visible(False)
@@ -176,7 +176,7 @@ class AbsPrxDialogWindow(
         # self._close_button.set_icon_by_name('close')
         # self._close_button.set_width(self.BUTTON_WIDTH)
         #
-        self._yes_methods = []
+        self._ok_methods = []
         self._no_methods = []
         self._cancel_methods = []
         #
@@ -192,9 +192,9 @@ class AbsPrxDialogWindow(
 
     def _set_completed_(self, scheme):
         if scheme == 'yes':
-            if self._notify_when_yes_completed is True:
+            if self._notify_when_ok_completed is True:
                 self._options_prx_node.set_visible(False)
-                self.set_yes_visible(False)
+                self.set_ok_visible(False)
                 self.set_cancel_visible(False)
                 self.set_content(self._completed_content)
                 self.set_status(self.ValidationStatus.Correct)
@@ -204,7 +204,7 @@ class AbsPrxDialogWindow(
 
     def _set_failed_(self, log):
         self._options_prx_node.set_visible(False)
-        self.set_yes_visible(False)
+        self.set_ok_visible(False)
         self.set_cancel_visible(False)
         self.set_content(log)
         self.set_status(self.ValidationStatus.Error)
@@ -242,7 +242,7 @@ class AbsPrxDialogWindow(
     def do_yes(self):
         self._result = True
         self._kwargs = self.get_options_as_kwargs()
-        self._execute_methods_(self._yes_methods, scheme='yes')
+        self._execute_methods_(self._ok_methods, scheme='yes')
 
     def do_cancel(self):
         self._result = False
@@ -255,16 +255,16 @@ class AbsPrxDialogWindow(
     def get_kwargs(self):
         return self._kwargs
 
-    def set_yes_visible(self, boolean):
-        self._yes_button.set_visible(boolean)
+    def set_ok_visible(self, boolean):
+        self._ok_button.set_visible(boolean)
 
-    def set_yes_label(self, text):
-        self._yes_button.set_name(text)
-        # self._yes_button.set_icon_by_name(text)
+    def set_ok_label(self, text):
+        self._ok_button.set_name(text)
+        # self._ok_button.set_icon_by_name(text)
 
     # noinspection PyUnusedLocal
-    def connect_yes_to(self, method, args=None):
-        self._yes_methods.append(method)
+    def connect_ok_to(self, method, args=None):
+        self._ok_methods.append(method)
 
     def set_no_visible(self, boolean):
         self._no_button.set_visible(boolean)
@@ -343,7 +343,7 @@ class AbsPrxDialogWindow(
 
 
 class PrxDialogWindow0(AbsPrxDialogWindow):
-    QT_WIDGET_CLS = _qt_window_base.QtWindowBase
+    QT_WIDGET_CLS = _qt_window_base.QtMainWindow
 
     def __init__(self, *args, **kwargs):
         super(PrxDialogWindow0, self).__init__(*args, **kwargs)
@@ -403,10 +403,10 @@ class PrxDialogWindow1(AbsPrxDialogWindow):
     def do_yes(self):
         self._result = True
         self._kwargs = self.get_options_as_kwargs()
-        for i in self._yes_methods:
+        for i in self._ok_methods:
             i()
         #
-        self._qt_widget._do_yes_()
+        self._qt_widget._do_ok_()
 
     def do_no(self):
         self._result = False
@@ -449,7 +449,7 @@ class PrxTipWindow(PrxDialogWindow0):
 
     def do_yes(self):
         self._result = True
-        for i in self._yes_methods:
+        for i in self._ok_methods:
             i()
         self.do_close_window_later()
 
@@ -474,7 +474,7 @@ class PrxMonitorWindow(
 ):
     ValidationStatus = gui_core.GuiValidationStatus
     #
-    QT_WIDGET_CLS = _qt_window_base.QtWindowBase
+    QT_WIDGET_CLS = _qt_window_base.QtMainWindow
     #
     QT_WAITING_CHART_CLS = _qt_wgt_chart.QtChartAsWaiting
     QT_PROGRESSING_CHART_CLS = _qt_wgt_chart.QtChartAsProgressing
@@ -534,7 +534,7 @@ class PrxProcessingWindow(
     gui_prx_abstracts.AbsPrxWindow,
     gui_prx_abstracts.AbsPrxProgressingDef,
 ):
-    QT_WIDGET_CLS = _qt_window_base.QtWindowBase
+    QT_WIDGET_CLS = _qt_window_base.QtMainWindow
 
     def __init__(self, *args, **kwargs):
         super(PrxProcessingWindow, self).__init__(*args, **kwargs)

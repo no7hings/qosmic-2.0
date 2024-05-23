@@ -169,7 +169,7 @@ class PrxNodePortGroup(_port.AbsPrxPortBaseDef):
         self._prx_widget = _container.PrxHToolGroup()
         self._prx_widget.set_height_match_to_minimum()
         self._qt_widget = self._prx_widget.widget
-        self._prx_widget.set_name(self.get_label())
+        self._prx_widget.set_name(self.get_gui_name())
         self._prx_widget.set_expanded(True)
         self._port_layout = self._prx_widget._layout
         self._port_layout.setContentsMargins(8, 0, 0, 0)
@@ -179,12 +179,12 @@ class PrxNodePortGroup(_port.AbsPrxPortBaseDef):
         # default use -1
         self._label_width_maximum = -1
 
-    def get_label(self):
+    def get_gui_name(self):
         if self.get_is_pseudo_root():
             return self.get_node().get_path()
         return self._label
 
-    def set_label(self, text):
+    def set_gui_name(self, text):
         self._prx_widget.set_name(text)
 
     def create_child_group(self, name):
@@ -206,7 +206,7 @@ class PrxNodePortGroup(_port.AbsPrxPortBaseDef):
 
     def add_child(self, port):
         port_cur = port
-        join_next_pre, port_pre = self._get_pre_child_args_()
+        join_next_pre, port_pre = self._get_pre_child_args()
         join_next_cur = port_cur._get_join_next_flag()
         #
         condition = join_next_pre, join_next_cur
@@ -299,7 +299,7 @@ class PrxNodePortGroup(_port.AbsPrxPortBaseDef):
         self.update_children_name_width()
         return port
 
-    def _get_pre_child_args_(self):
+    def _get_pre_child_args(self):
         ports = self._port_stack.get_objects()
         if ports:
             port_pre = ports[-1]
@@ -525,7 +525,7 @@ class PrxOptionsNode(gui_prx_abstracts.AbsPrxWidget):
         if widget_ in {'group'}:
             group = self._create_group_by_path(port_path)
             if label_:
-                group.set_label(label_)
+                group.set_gui_name(label_)
             #
             expand = variants.get('expand') or False
             group.set_expanded(expand)
@@ -1006,7 +1006,7 @@ class PrxOptionsNode(gui_prx_abstracts.AbsPrxWidget):
         #
         port.ENTRY_TYPE = widget_
         port.set_key(key_)
-        port.set_label(label_)
+        port.set_gui_name(label_)
         port.set_use_enable(enable_)
         port.set_tool_tip(tool_tip_ or '...')
         port._set_join_to_next_flag(join_to_next_)

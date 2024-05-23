@@ -232,6 +232,9 @@ class AbsQtStatusBaseDef(object):
             return cls._get_rgb_args_(*cls.Rgba.DarkBlue)
         elif status in {cls.ValidationStatus.Disable}:
             return cls._get_rgb_args_(*cls.Rgba.DarkGray)
+        #
+        elif status in {cls.ValidationStatus.Error}:
+            return cls._get_rgb_args_(*cls.Rgba.DarkRed)
         return cls._get_rgb_args_(*cls.Rgba.Transparent)
 
     @classmethod
@@ -420,8 +423,8 @@ class AbsQtSubProcessBaseDef(object):
         self._sub_process_timestamp_costed = bsc_core.SysBaseMtd.get_timestamp()-self._sub_process_timestamp_started
         if self._sub_process_finished_value > 1:
             self._sub_process_finished_timestamp_estimated = (
-                self._sub_process_timestamp_costed/self._sub_process_finished_value
-            )*self._sub_process_finished_maximum
+                                                                 self._sub_process_timestamp_costed/self._sub_process_finished_value
+                                                             )*self._sub_process_finished_maximum
         else:
             self._sub_process_finished_timestamp_estimated = 0
 
@@ -504,7 +507,7 @@ class AbsQtValidatorBaseDef(object):
             for i_status in statuses:
                 i_color, i_hover_color = AbsQtStatusBaseDef._get_rgba_args_by_validator_status_(
                     i_status
-                    )
+                )
                 self._validator_status_colors.append(i_color)
                 self._hover_validator_status_colors.append(i_hover_color)
         else:
@@ -584,7 +587,6 @@ class AbsQtFrameBaseDef(object):
 
     def _set_frame_border_radius_(self, radius):
         self._frame_border_radius = radius
-
 
     def _set_width_(self, value):
         self._widget.setFixedWidth(value)
@@ -1273,7 +1275,7 @@ class AbsQtIndexBaseDef(object):
         self._index_text = None
         self._index_text_color = _gui_qt_core.QtFontColors.Dark
         self._index_text_font = _gui_qt_core.QtFonts.Index
-        self._index_text_option = QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter
+        self._index_text_option = QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter
         #
         self._index_frame_rect = QtCore.QRect()
         self._index_rect = QtCore.QRect()
@@ -1485,7 +1487,7 @@ class AbsQtNameBaseDef(object):
         #
         self._name_color = _gui_qt_core.QtFontColors.Basic
         self._hover_name_color = _gui_qt_core.QtFontColors.Light
-        self._name_text_option = QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter
+        self._name_text_option = QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
         #
         self._name_word_warp = True
         #
@@ -1520,6 +1522,12 @@ class AbsQtNameBaseDef(object):
         #
         self._widget.update()
 
+    def _fix_width_to_name_(self):
+        w = _gui_qt_core.GuiQtText.get_draw_width(
+            self._widget, self._name_text
+        )
+        self._widget.setFixedWidth(w+16)
+
     def _get_name_text_(self):
         if self._name_enable is True:
             return self._name_text
@@ -1535,11 +1543,11 @@ class AbsQtNameBaseDef(object):
         self._name_text_option = option
 
     def _set_name_align_h_center_(self):
-        self._name_text_option = QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter
+        self._name_text_option = QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter
         self._widget.update()
 
     def _set_name_align_h_center_top_(self):
-        self._name_text_option = QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop
+        self._name_text_option = QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop
         self._widget.update()
 
     def _set_name_width_(self, w):
@@ -1975,10 +1983,10 @@ class AbsQtImageBaseDef(object):
 
     def _get_has_image_(self):
         return (
-                self._image_file_path is not None or
-                self._image_sub_file_path is not None or
-                self._image_text is not None or
-                self._image_pixmap is not None
+            self._image_file_path is not None or
+            self._image_sub_file_path is not None or
+            self._image_text is not None or
+            self._image_pixmap is not None
         )
 
     def _set_image_frame_draw_enable_(self, boolean):

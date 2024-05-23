@@ -1,19 +1,39 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
+import lxbasic.log as bsc_log
+
+import lxbasic.storage as bsc_storage
+
 import lxgui.qt.core as gui_qt_core
 
 
 class GuiProcessOpt(object):
     def __init__(self, window, unit):
         self._window = window
-        self._unit = unit
+        self._page = unit
 
         self._ts = []
 
     def execute(self, button, cmds):
-        def finished_fnc_(index, status, results):
+        def finished_fnc_(index, status, result):
             button.set_finished_at(index, status)
+
+        def failed_fnc_(index, results):
+            file_path = bsc_log.LogBase.get_user_debug_file(
+                'process', create=True
+            )
+            if isinstance(results, (tuple, list)):
+                raw = '\n'.join(results)
+            else:
+                raw = results
+
+            raw = raw.decode('utf-8')
+            raw = raw.encode('gbk')
+
+            bsc_storage.StgFileOpt(
+                file_path
+            ).set_write(raw)
 
         def status_changed_fnc_(index, status):
             button.set_status_at(index, status)
@@ -25,6 +45,7 @@ class GuiProcessOpt(object):
                 _i_t = bsc_core.TrdCommandPool.generate(_i_cmd, _i_index)
                 _i_t.status_changed.connect_to(status_changed_fnc_)
                 _i_t.finished.connect_to(finished_fnc_)
+                _i_t.failed.connect_to(failed_fnc_)
                 self._ts.append(_i_t)
 
             [x.do_wait_for_start() for x in self._ts]

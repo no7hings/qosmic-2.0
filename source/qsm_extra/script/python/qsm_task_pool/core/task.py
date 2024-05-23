@@ -1,11 +1,11 @@
 # coding:utf-8
 import os
 
-import uuid
-
 import lxbasic.content as bsc_content
 
 import lxbasic.core as bsc_core
+
+import lxbasic.web as bsc_web
 
 import lxbasic.storage as bsc_storage
 
@@ -113,6 +113,17 @@ class Task(object):
             )
         return cls(tasks_index, task_id)
 
+    def set_completion_notice(self, options):
+        self._json_content.set(
+            'completion_notice', options
+        )
+        self.accept()
+
+    def get_completion_notice(self):
+        return self._json_content.get(
+            'completion_notice'
+        )
+
     def do_update(self):
         self._json_content.reload()
 
@@ -165,7 +176,15 @@ class Task(object):
             task.refresh_start_time()
 
         def _completed_fnc(task, results):
-            print task
+            _completion_notice = task.get_completion_notice()
+            if _completion_notice:
+                # noinspection PyBroadException
+                try:
+                    skt = bsc_web.WebSocket()
+                    if skt.connect() is True:
+                        skt.send(_completion_notice)
+                except Exception:
+                    bsc_core.ExceptionMtd.print_stack()
 
         def _finished_fnc(task, status, results):
             task.refresh_finish_time()
@@ -243,11 +262,13 @@ class TasksCache(object):
         self._task_dict[task_id] = task
         self._task_ids_new.append(task_id)
 
-    def new_task(self, group, name, cmd_script):
+    def new_task(self, group, name, cmd_script, completion_notice=None):
         task_id = _base.Util.new_uuid()
         time = _base.Util.get_time()
         utc_time = _base.Util.get_utc_time()
         task = Task.create(self, task_id, group, name, cmd_script, time, utc_time)
+        if completion_notice is not None:
+            task.set_completion_notice(completion_notice)
         index = len(self.get_task_ids())
         self._json_content.set(
             'tasks.{}'.format(task_id),

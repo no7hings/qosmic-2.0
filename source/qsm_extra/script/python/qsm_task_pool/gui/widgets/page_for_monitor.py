@@ -19,8 +19,9 @@ from ... import core as _task_core
 class _GuiBaseOpt(object):
     DCC_NAMESPACE = 'task'
 
-    def __init__(self, window, session):
+    def __init__(self, window, page, session):
         self._window = window
+        self._page = page
         self._session = session
 
 
@@ -29,14 +30,14 @@ class _GuiTaskOpt(
     prx_abstracts.AbsGuiPrxTreeViewOpt
 ):
     CYCLE_MSEC = 5000
-    
-    BATCH_NAMESPACE = 'batch'
+
+    GROUP_NAMESPACE = 'batch'
     TASK_NAMESPACE = 'task'
 
     THREAD_STEP = 16
 
-    def __init__(self, window, session, task_pool, prx_tree_view):
-        super(_GuiTaskOpt, self).__init__(window, session)
+    def __init__(self, window, page, session, task_pool, prx_tree_view):
+        super(_GuiTaskOpt, self).__init__(window, page, session)
         self._init_tree_view_opt_(prx_tree_view, self.DCC_NAMESPACE)
 
         self._prx_tree_view.create_header_view(
@@ -92,7 +93,7 @@ class _GuiTaskOpt(
             icon=gui_core.GuiIcon.get('database/group'),
         )
         # prx_item.set_expanded(True)
-        prx_item.set_gui_dcc_obj(path_opt, self.BATCH_NAMESPACE)
+        prx_item.set_gui_dcc_obj(path_opt, self.GROUP_NAMESPACE)
         self.gui_register(path, prx_item)
         return True, prx_item
 
@@ -127,7 +128,7 @@ class _GuiTaskOpt(
         prx_item.set_gui_menu_raw(
             [
                 ('custom',),
-                ('show task log', 'log', lambda: self._window.gui_show_task_log(prc_task))
+                ('show task log', 'log', lambda: self._page.gui_show_task_log(prc_task))
             ]
         )
         prx_item.set_process_status(status)
@@ -245,14 +246,14 @@ class _GuiTaskOpt(
                         'total', []
                     ).append(i_task_id)
 
-                i_batch_name = i_prx_item.get_gui_dcc_obj(self.BATCH_NAMESPACE)
+                i_batch_name = i_prx_item.get_gui_dcc_obj(self.GROUP_NAMESPACE)
                 if i_batch_name is not None:
                     i_status = i_prx_item.get_process_status_args_from_children()
                     i_status_name = self._status_name_mapper[i_status]
                     i_prx_item.set_process_status(i_status)
                     # i_prx_item.set_name(i_status_name, 2)
 
-            self._window.gui_refresh_task_info(self._status_dict)
+            self._page.gui_refresh_task_info(self._status_dict)
 
             self._refresh_is_finished = True
 
@@ -284,9 +285,15 @@ class _GuiTaskOpt(
         t.start()
 
 
-class PnlTaskMonitor(prx_widgets.PrxSessionWindow):
-    def __init__(self, session, *args, **kwargs):
-        super(PnlTaskMonitor, self).__init__(session, *args, **kwargs)
+class PrxPageForMonitor(prx_abstracts.AbsPrxWidget):
+    QT_WIDGET_CLS = qt_widgets.QtTranslucentWidget
+
+    def __init__(self, window, session, *args, **kwargs):
+        super(PrxPageForMonitor, self).__init__(*args, **kwargs)
+        self._window = window
+        self._session = session
+
+        self.gui_setup_unit()
 
     def _gui_add_main_tools(self):
         for i in [
@@ -301,7 +308,7 @@ class PnlTaskMonitor(prx_widgets.PrxSessionWindow):
             i_tool.connect_check_toggled_to(i_fnc)
 
     def _gui_add_task_log_layer(self):
-        layer_widget = self.create_layer_widget('task_log', 'Task Log')
+        layer_widget = self._window.create_layer_widget('task_log', 'Task Log')
         prx_sca = prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(prx_sca)
 
@@ -309,7 +316,7 @@ class PnlTaskMonitor(prx_widgets.PrxSessionWindow):
         prx_sca.add_widget(self._task_log_prx_text_browser)
 
     def gui_show_task_log(self, prc_task):
-        self.switch_current_layer_to('task_log')
+        self._window.switch_current_layer_to('task_log')
         log = prc_task.read_log()
         if log:
             self._task_log_prx_text_browser.set_content(
@@ -337,16 +344,21 @@ class PnlTaskMonitor(prx_widgets.PrxSessionWindow):
     def gui_filter_update_visible(self, boolean):
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
 
-    def gui_setup_window(self):
-        self._gui_add_task_log_layer()
-
+    def gui_setup_unit(self):
         self._task_pool = _task_core.Pool.generate()
 
-        sca = prx_widgets.PrxVScrollArea()
-        self.add_widget(sca)
+        self._gui_add_task_log_layer()
+
+        self._qt_widget.setSizePolicy(
+            gui_qt_core.QtWidgets.QSizePolicy.Expanding,
+            gui_qt_core.QtWidgets.QSizePolicy.Expanding
+        )
+        qt_lot = qt_widgets.QtVBoxLayout(self._qt_widget)
+        qt_lot.setContentsMargins(*[0]*4)
+        qt_lot.setSpacing(2)
 
         self._top_prx_tool_bar = prx_widgets.PrxHToolBar()
-        sca.add_widget(self._top_prx_tool_bar)
+        qt_lot.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_expanded(True)
         self._top_prx_tool_bar.set_align_left()
 
@@ -365,7 +377,7 @@ class PnlTaskMonitor(prx_widgets.PrxSessionWindow):
         )
 
         self._prx_h_splitter = prx_widgets.PrxHSplitter()
-        sca.add_widget(self._prx_h_splitter)
+        qt_lot.addWidget(self._prx_h_splitter.widget)
 
         self._task_filter_prx_tree_view = prx_widgets.PrxTreeView()
         self._prx_h_splitter.add_widget(self._task_filter_prx_tree_view)
@@ -373,7 +385,7 @@ class PnlTaskMonitor(prx_widgets.PrxSessionWindow):
         self._task_prx_tree_view = prx_widgets.PrxTreeView()
         self._prx_h_splitter.add_widget(self._task_prx_tree_view)
         self._gui_task_opt = _GuiTaskOpt(
-            self, self._session, self._task_pool,
+            self._window, self, self._session, self._task_pool,
             self._task_prx_tree_view
         )
 
@@ -381,11 +393,6 @@ class PnlTaskMonitor(prx_widgets.PrxSessionWindow):
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
         self._prx_h_splitter.set_contract_enable(False)
 
-        self.gui_refresh_all()
-
-        self.connect_refresh_action_for(self._gui_task_opt.gui_refresh_tasks_all)
-
-    def gui_refresh_all(self):
+    def do_gui_refresh_all(self, force=False):
         self._gui_task_opt.restore()
-
         self._gui_task_opt.gui_add_prc_tasks_batch()

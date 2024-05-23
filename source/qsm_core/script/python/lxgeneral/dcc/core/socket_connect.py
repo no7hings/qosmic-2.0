@@ -59,7 +59,7 @@ class SocketConnectForMaya(_AbsSocketConnect):
                 content='Connection to Maya is Failed',
                 status=gui_core.GuiDialog.ValidationStatus.Error,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False
             )
@@ -141,7 +141,7 @@ class SocketConnectForClarisse(_AbsSocketConnect):
                 content='Connection to Clarisse is Failed',
                 status=gui_core.GuiDialog.ValidationStatus.Error,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False
             )

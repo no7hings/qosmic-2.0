@@ -10,7 +10,7 @@ import lxgui.qt.widgets as qt_widgets
 import lxbasic.core as bsc_core
 
 
-class W(qt_widgets.QtWindowBase):
+class W(qt_widgets.QtMainWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
 

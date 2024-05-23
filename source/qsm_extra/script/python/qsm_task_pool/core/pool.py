@@ -51,9 +51,9 @@ class Pool(object):
     def find_task(self, task_id):
         return self._tasks_cache.find_task(task_id)
 
-    def new_task(self, group, name, cmd_script):
+    def new_task(self, group, name, cmd_script, completion_notice=None):
         return self._tasks_cache.new_task(
-            group, name, cmd_script
+            group, name, cmd_script, completion_notice
         )
 
     def update_task_status(self, task_id, status):

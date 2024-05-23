@@ -398,7 +398,7 @@ class AbsPnlAssetLineup(prx_widgets.PrxSessionWindow):
                 content='"{}" save is completed'.format(file_path),
                 status=gui_core.GuiDialog.ValidationStatus.Correct,
                 #
-                yes_label='Open Folder', yes_method=bsc_storage.StgPathOpt(file_path).open_in_system,
+                ok_label='Open Folder', ok_method=bsc_storage.StgPathOpt(file_path).open_in_system,
                 no_label='Close',
                 #
                 cancel_visible=False
@@ -409,7 +409,7 @@ class AbsPnlAssetLineup(prx_widgets.PrxSessionWindow):
                 content='enter a file name',
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False
             )

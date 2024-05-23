@@ -178,7 +178,7 @@ class WorkspaceSetting(object):
             opts = self.get_look_output_node_opts()
             if opts:
                 if len(opts) > 1:
-                    def yes_fnc_():
+                    def ok_fnc_():
                         _n = o.get('dcc.node')
                         self.set_current_look_output(_n)
 
@@ -193,9 +193,9 @@ class WorkspaceSetting(object):
                         status=gui_core.GuiDialog.ValidationStatus.Warning,
                         options_configure=self._cfg.get('main.look.dialog_options'),
                         #
-                        yes_method=yes_fnc_,
+                        ok_method=ok_fnc_,
                         #
-                        yes_label='Confirm',
+                        ok_label='Confirm',
                         #
                         no_visible=False, cancel_visible=False,
                         show=False,
@@ -224,7 +224,7 @@ class WorkspaceSetting(object):
             if opts:
                 if len(opts) > 1:
                     if ktn_cor_base.KtnUtil.get_is_ui_mode():
-                        def yes_fnc_():
+                        def ok_fnc_():
                             _n = o.get('dcc.node')
                             self.set_current_look_output(_n)
 
@@ -239,9 +239,9 @@ class WorkspaceSetting(object):
                             status=gui_core.GuiDialog.ValidationStatus.Warning,
                             options_configure=self._cfg.get('main.look.dialog_options'),
                             #
-                            yes_method=yes_fnc_,
+                            ok_method=ok_fnc_,
                             #
-                            yes_label='Confirm',
+                            ok_label='Confirm',
                             #
                             no_visible=False, cancel_visible=False,
                             show=False,

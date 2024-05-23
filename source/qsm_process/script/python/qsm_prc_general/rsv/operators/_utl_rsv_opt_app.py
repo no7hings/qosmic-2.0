@@ -16,25 +16,25 @@ class AbsRsvAppOpt(object):
         self._rsv_project = rsv_app._rsv_project
 
     @classmethod
-    def _execute_command_(cls, cmd, **sub_progress_kwargs):
+    def _execute_command_(cls, cmd_script, **sub_progress_kwargs):
         bsc_log.Log.trace_method_result(
             'sub-process',
-            'command=`{}` is started'.format(cmd.decode('utf-8'))
+            'command=`{}` is started'.format(cmd_script.decode('utf-8'))
         )
         bsc_core.PrcBaseMtd.execute_with_result(
-            cmd, **sub_progress_kwargs
+            cmd_script, **sub_progress_kwargs
         )
         bsc_log.Log.trace_method_result(
             'sub-process',
-            'command=`{}` is completed'.format(cmd.decode('utf-8'))
+            'command=`{}` is completed'.format(cmd_script.decode('utf-8'))
         )
 
     @classmethod
-    def _execute_command_use_thread_(cls, cmd, **sub_progress_kwargs):
+    def _execute_command_use_thread_(cls, cmd_script, **sub_progress_kwargs):
         t_0 = threading.Thread(
             target=functools.partial(
                 cls._execute_command_,
-                cmd=cmd,
+                cmd_script=cmd_script,
                 **sub_progress_kwargs
             )
         )
@@ -67,19 +67,19 @@ class RsvMayaOpt(AbsRsvAppOpt):
         super(RsvMayaOpt, self).__init__(*args, **kwargs)
 
     def open(self):
-        cmd = self._rsv_app.get_command(
+        cmd_script = self._rsv_app.get_command(
             args_execute=[
                 '-- maya',
             ],
             packages_extend=self.get_packages_extend()
         )
         self._execute_command_use_thread_(
-            cmd,
+            cmd_script,
             environs_extend=self.get_environs_extend()
         )
 
     def open_file(self, file_path):
-        cmd = self._rsv_app.get_command(
+        cmd_script = self._rsv_app.get_command(
             args_execute=[
                 '-- maya',
                 r'-command "python(\"import lxmaya.dcc.objects as mya_dcc_objects; mya_dcc_objects.Scene.set_file_open_as_project(\\\"{}\\\")\")"'.format(
@@ -89,7 +89,7 @@ class RsvMayaOpt(AbsRsvAppOpt):
             packages_extend=self.get_packages_extend()
         )
         self._execute_command_use_thread_(
-            cmd,
+            cmd_script,
             environs_extend=self.get_environs_extend()
         )
 
@@ -99,14 +99,14 @@ class RsvHoudiniOpt(AbsRsvAppOpt):
         super(RsvHoudiniOpt, self).__init__(*args, **kwargs)
 
     def open(self):
-        cmd = self._rsv_app.get_command(
+        cmd_script = self._rsv_app.get_command(
             args_execute=[
                 '-- houdini',
             ],
             packages_extend=self.get_packages_extend()
         )
         self._execute_command_use_thread_(
-            cmd,
+            cmd_script,
             environs_extend=self.get_environs_extend()
         )
 
@@ -119,19 +119,19 @@ class RsvKatanaOpt(AbsRsvAppOpt):
         super(RsvKatanaOpt, self).__init__(*args, **kwargs)
 
     def open(self):
-        cmd = self._rsv_app.get_command(
+        cmd_script = self._rsv_app.get_command(
             args_execute=[
                 '-- katana',
             ],
             packages_extend=self.get_packages_extend()
         )
         self._execute_command_use_thread_(
-            cmd,
+            cmd_script,
             environs_extend=self.get_environs_extend()
         )
 
     def open_file(self, file_path):
-        cmd = self._rsv_app.get_command(
+        cmd_script = self._rsv_app.get_command(
             args_execute=[
                 '-- katana',
                 '"{}"'.format(
@@ -141,6 +141,6 @@ class RsvKatanaOpt(AbsRsvAppOpt):
             packages_extend=self.get_packages_extend()
         )
         self._execute_command_use_thread_(
-            cmd,
+            cmd_script,
             environs_extend=self.get_environs_extend()
         )

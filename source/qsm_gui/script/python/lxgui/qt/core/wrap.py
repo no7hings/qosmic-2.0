@@ -29,7 +29,7 @@ else:
         QT_LOAD_INDEX = 1
         QT_LOAD_FLAG = 'pyside'
         # noinspection PyUnresolvedReferences
-        from PySide2 import QtGui, QtCore, QtWidgets, QtSvg
+        from PySide2 import QtGui, QtCore, QtWidgets, QtSvg, QtWebSockets
         _sys.modules['QtSide'] = _sys.modules['PySide2']
         _log_core.Log.trace_method_result(
             'qt wrap', 'load form "PySide2"'

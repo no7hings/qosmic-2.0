@@ -328,7 +328,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                 content=u'\n'.join(contents),
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 #
@@ -412,7 +412,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                 content=u'\n'.join(contents),
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 #
@@ -484,7 +484,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                 content=u'\n'.join(contents),
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 #
@@ -536,7 +536,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                 content=u'\n'.join(contents),
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 #
@@ -585,7 +585,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
         contents = []
         textures = self._texture_add_opt.get_checked_files()
         if textures:
-            def yes_fnc_():
+            def ok_fnc_():
                 self.execute_search_process(w, textures, **w.get_options_as_kwargs())
 
             w = gui_core.GuiDialog.create(
@@ -596,9 +596,9 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                 #
                 options_configure=self._session.configure.get('build.node.extra_search'),
                 #
-                yes_label='Confirm',
+                ok_label='Confirm',
                 #
-                yes_method=yes_fnc_,
+                ok_method=ok_fnc_,
                 #
                 no_visible=False,
                 show=False,
@@ -618,7 +618,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                 content=u'\n'.join(contents),
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 #
@@ -704,7 +704,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
         contents = []
         textures = self._texture_add_opt.get_checked_files()
         if textures:
-            def yes_fnc_():
+            def ok_fnc_():
                 self.execute_collection_process(w, textures, **w.get_options_as_kwargs())
 
             #
@@ -716,9 +716,9 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                 #
                 options_configure=self._session.configure.get('build.node.extra_collection'),
                 #
-                yes_label='Confirm',
+                ok_label='Confirm',
                 #
-                yes_method=yes_fnc_,
+                ok_method=ok_fnc_,
                 #
                 no_visible=False,
                 show=False,
@@ -738,7 +738,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                 content=u'\n'.join(contents),
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 #
@@ -752,7 +752,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
             self._session.gui_name,
             window_size=(512, 512),
             #
-            yes_visible=False, no_visible=False,
+            ok_visible=False, no_visible=False,
             tip_visible=False,
             show=False,
             #

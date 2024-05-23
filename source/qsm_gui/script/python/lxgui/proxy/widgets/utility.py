@@ -262,7 +262,7 @@ class PrxRightExpandedGroup(PrxLeftExpandedGroup):
 
 
 class Window(gui_prx_abstracts.AbsPrxWindow):
-    QT_WIDGET_CLS = _qt_window_base.QtWindowBase
+    QT_WIDGET_CLS = _qt_window_base.QtMainWindow
 
     def __init__(self, *args, **kwargs):
         super(Window, self).__init__(*args, **kwargs)
@@ -450,7 +450,7 @@ class PrxTextBrowser(gui_prx_abstracts.AbsPrxWidget):
         return self._qt_entry_widget.toPlainText()
 
     def set_status(self, status):
-        self.widget._set_status_(status)
+        self._qt_widget._set_status_(status)
 
     def set_focus_enable(self, boolean):
         self._qt_entry_widget._set_entry_focus_enable_(boolean)
@@ -793,7 +793,7 @@ class PrxWindow(
 class PrxWindowNew(
     gui_prx_abstracts.AbsPrxWindow,
 ):
-    QT_WIDGET_CLS = _qt_window_base.QtWindowBase
+    QT_WIDGET_CLS = _qt_window_base.QtMainWindow
 
     def __init__(self, *args, **kwargs):
         super(PrxWindowNew, self).__init__(*args, **kwargs)

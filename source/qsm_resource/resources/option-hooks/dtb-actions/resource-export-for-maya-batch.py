@@ -5,7 +5,7 @@ import lxgui.core as gui_core
 
 
 def main(session):
-    def yes_fnc_():
+    def ok_fnc_():
         import lxgeneral.dcc.core as gnl_dcc_core
 
         s_c = gnl_dcc_core.SocketConnectForMaya()
@@ -23,7 +23,7 @@ def main(session):
             content='check or select one or more items and retry',
             status=gui_core.GuiDialog.ValidationStatus.Warning,
             #
-            yes_label='Close',
+            ok_label='Close',
             #
             no_visible=False, cancel_visible=False
         )
@@ -47,7 +47,7 @@ def main(session):
             #
             options_configure=session.configure.get('build.node.options'),
             #
-            yes_visible=False,
+            ok_visible=False,
             no_visible=False,
             #
             cancel_label='Close',
@@ -64,7 +64,7 @@ def main(session):
 
         o = w.get_options_node()
         button = o.get_port('execute')
-        button.set(yes_fnc_)
+        button.set(ok_fnc_)
 
         w.set_window_show()
 

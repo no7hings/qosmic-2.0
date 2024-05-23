@@ -99,7 +99,7 @@ def main(session):
             content='check or select one or more items and retry',
             status=gui_core.GuiDialog.ValidationStatus.Warning,
             #
-            yes_label='Close',
+            ok_label='Close',
             #
             no_visible=False, cancel_visible=False
         )
@@ -117,7 +117,7 @@ def main(session):
             #
             options_configure=session.configure.get('build.node.options'),
             #
-            yes_visible=False,
+            ok_visible=False,
             no_visible=False,
             #
             cancel_label='Close',

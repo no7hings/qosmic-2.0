@@ -2,7 +2,7 @@
 
 
 def main(session):
-    def yes_method():
+    def ok_method():
         for i in assets:
             _i_rsv_task = rsv_project.get_rsv_task(
                 asset=i, step='mod', task='modeling'
@@ -70,11 +70,11 @@ def main(session):
             content=(
                 'submit selected asset(s) preview render:\n'
                 '{}\n'
-                'press "Yes" to continue...'
+                'press "Ok" to continue...'
             ).format(
                 ',\n'.join(map(lambda x: '"{}"'.format(x), assets))
             ),
-            yes_method=yes_method
+            ok_method=ok_method
         )
     else:
         gui_core.GuiDialog.create(

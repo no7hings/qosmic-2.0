@@ -72,8 +72,7 @@ class _GuiCmdForNewVersion(object):
                     )
 
     def show_dialog(self):
-        def yes_fnc_():
-            pass
+        def ok_fnc_():
             _directory_paths = v_p_0.get_all(check_only=True)
             if _directory_paths:
                 # pull last version first
@@ -117,9 +116,9 @@ class _GuiCmdForNewVersion(object):
             #
             options_configure=self._session.configure.get('build.node.new_version'),
             #
-            yes_label='Apply and Close',
+            ok_label='Apply and Close',
             #
-            yes_method=yes_fnc_,
+            ok_method=ok_fnc_,
             #
             no_visible=False,
             show=False,
@@ -259,7 +258,7 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
                 )
 
     def _set_workspace_check_(self, current_variant):
-        def yes_fnc_():
+        def ok_fnc_():
             self._rsv_workspace_texture_opt.set_version_create_at(
                 current_variant, 'new'
             )
@@ -279,9 +278,9 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
                 ),
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Apply and Close',
+                ok_label='Apply and Close',
                 #
-                yes_method=yes_fnc_,
+                ok_method=ok_fnc_,
                 #
                 no_visible=False,
                 # show=False,
@@ -301,7 +300,7 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
         ).show_dialog()
 
     def _set_wsp_all_version_lock_(self):
-        def yes_fnc_():
+        def ok_fnc_():
             if unlocked_directory_paths:
                 with bsc_log.LogProcessContext.create(
                     maximum=len(unlocked_directory_paths), label='lock version directory'
@@ -330,9 +329,9 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
                 #
                 options_configure=self._session.configure.get('build.node.lock_all_version'),
                 #
-                yes_label='Apply and Close',
+                ok_label='Apply and Close',
                 #
-                yes_method=yes_fnc_,
+                ok_method=ok_fnc_,
                 #
                 no_visible=False,
                 show=False,
@@ -352,7 +351,7 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
                 content=u'all texture directories(used and matched "texture workspace" rule) is locked',
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 #
@@ -491,7 +490,7 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
                 content=u'\n'.join(contents),
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 #
@@ -524,7 +523,7 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
                 content='non-directory(s) for create',
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 #
@@ -570,7 +569,7 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
                 content='non-directory(s) for create',
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 #
-                yes_label='Close',
+                ok_label='Close',
                 #
                 no_visible=False, cancel_visible=False,
                 #

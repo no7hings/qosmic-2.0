@@ -2,7 +2,7 @@
 
 
 def main(session):
-    def yes_fnc_():
+    def ok_fnc_():
         _quixel_json_files = o.get('quixel_json_files')
         with w.gui_progressing(maximum=len(_quixel_json_files)) as _g_p:
             _scp = lib_scripts.ScpResourcesAddByQuixel()
@@ -50,8 +50,8 @@ def main(session):
             #
             options_configure=session.configure.get('build.node.options'),
             #
-            # yes_label='Confirm',
-            yes_visible=False,
+            # ok_label='Confirm',
+            ok_visible=False,
             no_visible=False,
             cancel_label='Close',
             #
@@ -69,7 +69,7 @@ def main(session):
         o = w.get_options_node()
 
         o.get_port('show_all_quixel_json_files').set(show_quixel_json_files_fnc_)
-        o.get_port('add_resources').set(yes_fnc_)
+        o.get_port('add_resources').set(ok_fnc_)
 
         w.set_window_show()
 

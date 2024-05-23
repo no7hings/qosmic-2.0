@@ -255,7 +255,7 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
 
     # maya
     def execute_maya_scene_check(self, validation_checker):
-        def yes_fnc_():
+        def ok_fnc_():
             mya_dcc_objects.Scene.save_file()
 
         import lxbasic.core as bsc_core
@@ -288,9 +288,9 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                     ),
                     window_size=(480, 160),
                     #
-                    yes_method=yes_fnc_,
+                    ok_method=ok_fnc_,
                     #
-                    yes_label='Save',
+                    ok_label='Save',
                     no_label='Don\'t save',
                     #
                     status=gui_core.GuiDialog.ValidationStatus.Warning,
@@ -613,7 +613,7 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
 
     # katana
     def execute_katana_scene_check(self, validation_checker):
-        def yes_fnc_():
+        def ok_fnc_():
             ktn_dcc_objects.Scene.save_file()
 
         import lxgui.core as gui_core
@@ -659,9 +659,9 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                     ),
                     window_size=(480, 160),
                     #
-                    yes_method=yes_fnc_,
+                    ok_method=ok_fnc_,
                     #
-                    yes_label='Save',
+                    ok_label='Save',
                     no_label='Don\'t save',
                     #
                     status=gui_core.GuiDialog.ValidationStatus.Warning,

@@ -1,11 +1,17 @@
 # coding:utf-8
-import lxgui.qt.core as gui_qt_core
+import lxbasic.web as bsc_web
 
-if gui_qt_core.WebSocketConnection.check_is_exists() is True:
+skt = bsc_web.WebSocket()
+
+if skt.connect() is True:
     for i in range(2):
-        # gui_qt_core.WebSocketConnection().send(
-        #     'python("print \\\"{}\\\"")'.format(i)
-        # )
-        gui_qt_core.WebSocketConnection().send(
-            '拍屏结束了，是否播放文件: {}'.format(i)
+        i_options = dict(
+            title='通知',
+            message='拍屏结束了, 是否打开视频',
+            ok_python_script='import os; os.startfile("Z:/temeporaries/dongchangbao/rig-test/test.mov")',
+            status='normal'
+        )
+
+        skt.send(
+            i_options
         )

@@ -41,7 +41,7 @@ class PrxBaseWindow(
     PRX_CATEGORY = 'tool_window'
     PRX_TYPE = 'tool_window'
 
-    QT_WIDGET_CLS = _qt_window_base.QtWindowBase
+    QT_WIDGET_CLS = _qt_window_base.QtMainWindow
 
     PRX_LAYER_CLS = gui_prx_wdt_utility.PrxLayer
     QT_LAYER_STACK_CLS = gui_qt_wgt_layer_stack.QtLayerStack

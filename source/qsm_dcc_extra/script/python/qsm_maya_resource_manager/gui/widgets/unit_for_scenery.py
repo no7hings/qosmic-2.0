@@ -89,7 +89,7 @@ class UnitForSceneryReference(
                     self._resource_file_path,
                     namespace=file_opt.name_base
                 )
-            self._unit.do_gui_refresh_all()
+            self._page.do_gui_refresh_all()
 
     def do_gui_refresh_resource(self, path):
         self._resource_file_path = None
@@ -125,12 +125,12 @@ class UnitForSceneryUtilityToolSet(
                         i_opt.load_cache(i_cache_file)
                     g_p.do_update()
 
-            self._unit.do_gui_refresh_all(force=True)
-            self._unit._gui_switch_opt.do_dcc_update()
+            self._page.do_gui_refresh_all(force=True)
+            self._page._gui_switch_opt.do_dcc_update()
 
     def do_dcc_do_dcc_load_unit_assemblies_by_selection(self):
-        if self._unit._load_unit_assembly_button.get_is_started() is False:
-            resources = self._unit.gui_get_selected_resources()
+        if self._load_unit_assembly_button.get_is_started() is False:
+            resources = self._page._gui_resource_opt.gui_get_selected_resources()
             if resources:
                 self._unit_assembly_load_args_array = []
                 create_cmds = []
@@ -153,17 +153,17 @@ class UnitForSceneryUtilityToolSet(
 
                 if create_cmds:
                     mtd = _rsc_mng_core.GuiProcessOpt(self._window, self)
-                    mtd.execute(self._unit._load_unit_assembly_button, create_cmds)
+                    mtd.execute(self._load_unit_assembly_button, create_cmds)
                 else:
                     self.do_dcc_load_unit_assemblies()
 
     def do_dcc_remove_unit_assemblies(self):
-        resources = self._unit.gui_get_selected_resources()
+        resources = self._page._gui_resource_opt.gui_get_selected_resources()
         if resources:
             w = gui_core.GuiDialog.create(
                 label=self._session.gui_name,
                 sub_label='Remove Unit Assembly',
-                content='do you remove "Unit Assembly"?,\n press "Yes" to continue',
+                content='do you remove "Unit Assembly"?,\n press "Ok" to continue',
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 parent=self._window.widget
             )
@@ -185,12 +185,12 @@ class UnitForSceneryUtilityToolSet(
                         i_opt.load_cache(i_cache_file)
                     g_p.do_update()
 
-            self._unit.do_gui_refresh_all(force=True)
-            self._unit._gui_switch_opt.do_dcc_update()
+            self._page.do_gui_refresh_all(force=True)
+            self._page._gui_switch_opt.do_dcc_update()
 
     def do_dcc_do_dcc_load_gpu_instances_by_selection(self):
-        if self._unit._load_gpu_instance_button.get_is_started() is False:
-            resources = self._unit.gui_get_selected_resources()
+        if self._load_gpu_instance_button.get_is_started() is False:
+            resources = self._page._gui_resource_opt.gui_get_selected_resources()
             if resources:
                 self._gpu_instance_load_args_array = []
                 create_cmds = []
@@ -213,17 +213,17 @@ class UnitForSceneryUtilityToolSet(
 
                 if create_cmds:
                     mtd = _rsc_mng_core.GuiProcessOpt(self._window, self)
-                    mtd.execute(self._unit._load_gpu_instance_button, create_cmds)
+                    mtd.execute(self._load_gpu_instance_button, create_cmds)
                 else:
                     self.do_dcc_load_gpu_instances()
 
     def do_dcc_remove_gpu_instances(self):
-        resources = self._unit.gui_get_selected_resources()
+        resources = self._page._gui_resource_opt.gui_get_selected_resources()
         if resources:
             w = gui_core.GuiDialog.create(
                 label=self._session.gui_name,
                 sub_label='Remove GPU Instance',
-                content='do you remove "GPU Instance"?,\n press "Yes" to continue',
+                content='do you remove "GPU Instance"?,\n press "Ok" to continue',
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
                 parent=self._window.widget
             )
@@ -245,7 +245,7 @@ class UnitForSceneryUtilityToolSet(
         self._prx_options_node.create_ports_by_data(
             self._session.configure.get('build.options.scenery_utility.parameters'),
         )
-        self._unit.gui_get_tool_tab_box().add_widget(
+        self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='utility',
             name=gui_core.GuiUtil.choice_name(
@@ -271,7 +271,7 @@ class UnitForSceneryUtilityToolSet(
         )
 
         self._prx_options_node.get_port('selection_scheme').connect_input_changed_to(
-            self._unit._gui_resource_opt.do_dcc_refresh_resources_selection
+            self._page._gui_resource_opt.do_dcc_refresh_resources_selection
         )
 
     def gui_get_selection_scheme(self):
@@ -337,7 +337,7 @@ class UnitForScenerySwitchToolSet(
         self._prx_options_node.create_ports_by_data(
             self._session.configure.get('build.options.scenery_switch.parameters'),
         )
-        self._unit.gui_get_tool_tab_box().add_widget(
+        self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='switch',
             name=gui_core.GuiUtil.choice_name(
@@ -425,7 +425,7 @@ class UnitForScenerySwitchToolSet(
                     self._gpu_instance_paths.extend(v)
 
     def do_gui_refresh_by_dcc_selection(self):
-        if self._unit.gui_get_current_tool_tab_key() == 'switch':
+        if self._page.gui_get_current_tool_tab_key() == 'switch':
             self.do_gui_refresh_buttons()
 
 
@@ -467,7 +467,7 @@ class UnitForSceneryExtendToolSet(
         self._prx_options_node.create_ports_by_data(
             self._session.configure.get('build.options.scenery_camera.parameters'),
         )
-        self._unit.gui_get_tool_tab_box().add_widget(
+        self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='extend',
             name=gui_core.GuiUtil.choice_name(

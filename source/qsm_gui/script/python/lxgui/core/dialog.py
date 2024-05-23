@@ -16,9 +16,9 @@ class GuiDialog(object):
         content=None,
         content_text_size=10,
         window_size=(480, 160),
-        yes_method=None,
-        yes_label=None,
-        yes_visible=True,
+        ok_method=None,
+        ok_label=None,
+        ok_visible=True,
         #
         no_method=None,
         no_label=None,
@@ -62,11 +62,11 @@ class GuiDialog(object):
         #
         w.set_content_font_size(content_text_size)
         w.set_definition_window_size(window_size)
-        if yes_label is not None:
-            w.set_yes_label(yes_label)
-        if yes_method is not None:
-            w.connect_yes_to(yes_method)
-        w.set_yes_visible(yes_visible)
+        if ok_label is not None:
+            w.set_ok_label(ok_label)
+        if ok_method is not None:
+            w.connect_ok_to(ok_method)
+        w.set_ok_visible(ok_visible)
         #
         if no_label is not None:
             w.set_no_label(no_label)

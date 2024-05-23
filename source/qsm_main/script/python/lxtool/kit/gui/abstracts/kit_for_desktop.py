@@ -165,7 +165,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
                 ['{} = {}'.format(k, v) for k, v in bsc_core.DictMtd.sort_key_to(os.environ).items()]
             ),
             window_size=(960, 480),
-            yes_visible=False,
+            ok_visible=False,
             no_visible=False,
             cancel_label='Close'
         )
@@ -652,7 +652,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
             self._session.gui_name,
             content='you are no permission for page "{}"'.format(page_name),
             status=gui_core.GuiDialog.ValidationStatus.Warning,
-            yes_visible=False,
+            ok_visible=False,
             no_visible=False,
         )
         return False
@@ -662,7 +662,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
             self._session.gui_name,
             content='you are no editing permission (either create and modify) for page "{}"'.format(page_name),
             status=gui_core.GuiDialog.ValidationStatus.Warning,
-            yes_visible=False,
+            ok_visible=False,
             no_visible=False,
         )
         return False
