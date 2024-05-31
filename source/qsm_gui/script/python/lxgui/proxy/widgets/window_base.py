@@ -20,7 +20,7 @@ from ... qt.widgets import window_base as _qt_window_base
 from ...qt.widgets import chart as gui_qt_wgt_chart
 
 from ...qt.widgets import layer_stack as gui_qt_wgt_layer_stack
-# proxy core
+# proxy process
 from .. import core as gui_prx_core
 # proxy abstracts
 from .. import abstracts as gui_prx_abstracts
@@ -418,7 +418,10 @@ class PrxBaseWindow(
         self._qt_widget._run_build_use_thread_(
             cache_fnc, build_fnc, post_fnc
         )
-
+    
+    def exec_message(self, *args, **kwargs):
+        self._qt_widget._exec_message_(*args, **kwargs)
+        
 
 class PrxSessionWindow(PrxBaseWindow):
     PRX_TYPE = 'session_window'
@@ -473,11 +476,6 @@ class PrxSessionWindow(PrxBaseWindow):
         self._session = args[0]
         self._session.set_prx_window(self)
         self._session.reload_configure()
-        ui_name = self._session.gui_configure.get('name')
-        if self._language == 'chs':
-            ui_name_chs = self._session.gui_configure.get('name_chs')
-            if ui_name_chs:
-                ui_name = ui_name_chs
 
         self.set_window_title(
             self._session.get_gui_window_name()

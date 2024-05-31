@@ -5,6 +5,8 @@ from .base import *
 
 from .thread import *
 
+from .thread_worker import *
+
 from .python import *
 
 from .raw import *

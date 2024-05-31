@@ -24,6 +24,7 @@ class GuiQtUtil(object):
     @classmethod
     def add_qt_fonts(cls, fonts):
         for i_font in fonts:
+            # noinspection PyArgumentList
             QtGui.QFontDatabase.addApplicationFont(
                 i_font
             )
@@ -51,22 +52,26 @@ class GuiQtUtil(object):
         palette.setColor(palette.All, palette.AlternateBase, _color_and_brush.QtBackgroundColors.Dark)
         # tool-tip
         if tool_tip is True:
+            # noinspection PyArgumentList
             p = QtWidgets.QToolTip.palette()
             p.setColor(palette.All, p.ToolTipBase, _color_and_brush.QtBackgroundColors.ToolTip)
             p.setColor(palette.All, palette.ToolTipText, _color_and_brush.QtFontColors.ToolTip)
-            #
+            # noinspection PyArgumentList
             QtWidgets.QToolTip.setPalette(p)
+            # noinspection PyArgumentList
             QtWidgets.QToolTip.setFont(QtFonts.Description)
         #
         return palette
 
     @classmethod
     def set_text_to_clipboard(cls, text):
+        # noinspection PyArgumentList
         QtWidgets.QApplication.clipboard().setText(text)
 
     @staticmethod
     def find_all_qt_widgets_by_class(widget_class):
         list_ = []
+        # noinspection PyArgumentList
         qt_widgets = QtWidgets.QApplication.topLevelWidgets()
         if qt_widgets:
             for i_qt_widget in qt_widgets:
@@ -77,6 +82,7 @@ class GuiQtUtil(object):
     @classmethod
     def find_all_valid_qt_windows(cls):
         list_ = []
+        # noinspection PyArgumentList
         qt_widgets = QtWidgets.QApplication.topLevelWidgets()
         for i in qt_widgets:
             if hasattr(i, cls.WINDOW_KEY):
@@ -86,6 +92,7 @@ class GuiQtUtil(object):
     @classmethod
     def find_all_valid_and_visible_qt_windows(cls):
         list_ = []
+        # noinspection PyArgumentList
         qt_widgets = QtWidgets.QApplication.topLevelWidgets()
         for i in qt_widgets:
             if hasattr(i, cls.WINDOW_KEY):
@@ -107,6 +114,7 @@ class GuiQtUtil(object):
 
     @staticmethod
     def get_qt_active_window():
+        # noinspection PyArgumentList
         return QtWidgets.QApplication.activeWindow()
 
     @staticmethod
@@ -129,10 +137,12 @@ class GuiQtUtil(object):
     @staticmethod
     def get_qt_desktop_current_rect(*args):
         desktop = QtWidgets.QApplication.desktop(*args)
+        # noinspection PyArgumentList
         return desktop.availableGeometry(QtGui.QCursor.pos())
 
     @staticmethod
     def get_qt_cursor_point():
+        # noinspection PyArgumentList
         return QtGui.QCursor.pos()
 
     @staticmethod
@@ -145,11 +155,13 @@ class GuiQtUtil(object):
 
     @staticmethod
     def copy_text_to_clipboard(text):
+        # noinspection PyArgumentList
         clipboard = QtWidgets.QApplication.clipboard()
         clipboard.setText(text)
 
     @staticmethod
     def get_text_from_clipboard():
+        # noinspection PyArgumentList
         return QtWidgets.QApplication.clipboard().text()
 
     @staticmethod
@@ -195,6 +207,7 @@ class GuiQtUtil(object):
 
     @staticmethod
     def get_exists_app():
+        # noinspection PyArgumentList
         return QtWidgets.QApplication.instance()
 
     @classmethod
@@ -206,23 +219,23 @@ class GuiQtUtil(object):
         return app
 
     @classmethod
-    def generate_tool_tip_action_css(cls, content):
-        content = content.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
+    def generate_tool_tip_action_css(cls, text):
+        text = text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
         for i_keys, i_icon_name in [
             (['"LMB-click"', '"LMB-dbl-click"'], 'mouse/LMB-click'),
-            (['"LMB-move"'], 'mouse/LMB-move'),
+            (['"LMB-move"'], 'mouse/LMB-click'),
             (['"RMB-click"'], 'mouse/RMB-click'),
             (['"MMB-wheel"'], 'mouse/MMB-wheel')
         ]:
             for j_key in i_keys:
-                content = content.replace(
+                text = text.replace(
                     j_key,
                     '<img src="{}">\n{}'.format(
                         gui_core.GuiIcon.get(i_icon_name),
                         j_key
                     )
                 )
-        return content
+        return text
 
     @classmethod
     def generate_tool_tip_css(cls, title, content=None, **kwargs):
@@ -271,11 +284,13 @@ class GuiQtUtil(object):
         css += '</body>\n</html>'
         return css
 
+    # noinspection PyArgumentList
     @classmethod
     @contextlib.contextmanager
     def gui_bustling(cls):
         QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.BusyCursor)
         yield
+        # noinspection PyArgumentList
         QtWidgets.QApplication.restoreOverrideCursor()
 
 
@@ -345,6 +360,7 @@ class GuiQtIcon(object):
 
     @classmethod
     def generate_by_name(cls, icon_name):
+        # noinspection PyArgumentList
         if QtWidgets.QApplication.instance() is not None:
             return cls.create_by_icon_name(icon_name)
 
@@ -799,6 +815,7 @@ class GuiQtLayout(object):
 class GuiQtApplicationOpt(object):
     def __init__(self, app=None):
         if app is None:
+            # noinspection PyArgumentList
             self._instance = QtWidgets.QApplication.instance()
         else:
             self._instance = None

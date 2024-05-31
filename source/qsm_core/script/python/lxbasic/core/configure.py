@@ -10,7 +10,7 @@ class BscColorSpaces(object):
     RAW = 'raw'
 
 
-class BscStatus(enum.IntEnum):
+class BasProcessStatus(enum.IntEnum):
     Unknown = 0
     Started = 1
     Running = 2

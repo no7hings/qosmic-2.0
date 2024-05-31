@@ -150,7 +150,7 @@ class AbsPrxToolGroup(gui_prx_abstracts.AbsPrxWidget):
 
 
 class PrxHToolGroup(AbsPrxToolGroup):
-    QT_HEAD_CLS = gui_qt_wgt_head.QtHeadAsFrame
+    QT_HEAD_CLS = gui_qt_wgt_head.QtHeadStyleA
 
     QT_HEAD_HEIGHT = 22
 
@@ -159,7 +159,7 @@ class PrxHToolGroup(AbsPrxToolGroup):
 
 
 class PrxHToolGroupNew(AbsPrxToolGroup):
-    QT_HEAD_CLS = gui_qt_wgt_head.QtHeadAsLine
+    QT_HEAD_CLS = gui_qt_wgt_head.QtHeadStyleB
 
     QT_HEAD_HEIGHT = 20
 

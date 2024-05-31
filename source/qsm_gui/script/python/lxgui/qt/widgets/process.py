@@ -128,10 +128,10 @@ class _SubProcess(object):
 
     def __read_fd(self, process, thread, master_fd):
         while True:
-            retcode = process.poll()
-            if retcode is not None:
+            rtc = process.poll()
+            if rtc is not None:
                 bsc_log.Log.trace_method_result(
-                    self.KEY, 'is killed, return code is {}'.format(retcode)
+                    self.KEY, 'is killed, return code is {}'.format(rtc)
                 )
                 self.__exit_flag.set()
                 break
@@ -153,12 +153,12 @@ class _SubProcess(object):
         t.setDaemon(True)
         t.start()
 
-        retcode = self.__proc.wait()
-        if retcode:
-            raise subprocess.CalledProcessError(retcode, self.__cmd)
+        rtc = self.__proc.wait()
+        if rtc:
+            raise subprocess.CalledProcessError(rtc, self.__cmd)
 
         bsc_log.Log.trace_method_result(
-            self.KEY, 'is finished, return code is {}'.format(retcode)
+            self.KEY, 'is finished, return code is {}'.format(rtc)
         )
 
     def kill(self):

@@ -9,7 +9,9 @@ from ... import core as _mya_core
 
 from ...rig import core as _rig_core
 
-import qsm_maya.asset.core as qsm_mya_ast_core
+from ... asset import core as _ast_core
+
+from ... import motion as _motion
 
 from ...resource import core as _rsc_core
 
@@ -30,8 +32,24 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
                 os.path.dirname(file_path)
             )
             _mya_core.SceneFile.export_file(
-                file_path, self._root
+                file_path, self._root, keep_reference=True
             )
+
+    def export_motion(self):
+        if self._root is not None:
+            motion = _motion.AdvMotionOpt(self._namespace).get_animations()
+            key = bsc_core.HashMtd.to_hash_key(motion)
+            directory_path = _ast_core.AssetCache.generate_dynamic_gpu_directory(
+                user_name=bsc_core.SysBaseMtd.get_user_name(), key=key
+            )
+            motion_file_path = '{}/motion.json'.format(directory_path)
+            cache_file_path = '{}/gpu.ma'.format(directory_path)
+            if os.path.isfile(motion_file_path) is False:
+                _motion.AdvMotionOpt(self._namespace).export_animations_to(
+                    motion_file_path
+                )
+                return True, motion_file_path, cache_file_path
+            return False, motion_file_path, cache_file_path
 
     def load_cache(self, cache_file_path):
         self.create_cache_root_auto()
@@ -66,18 +84,50 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
         if skin_proxy_cache_locations:
             cmds.editDisplayLayerMembers(layer_path, *skin_proxy_cache_locations)
 
-    def generate_args(self, directory_path, start_frame, end_frame):
-        file_path = '{}/source.ma'.format(directory_path)
-        cache_file_path = '{}/gpu.ma'.format(directory_path)
-        cmd_script = qsm_mya_ast_core.MayaCacheProcess.generate_command(
-            'method=dynamic-gpu-cache-generate&file={}&cache_file={}&namespace={}&start_frame={}&end_frame={}'.format(
-                file_path,
-                cache_file_path,
-                self._namespace,
-                start_frame, end_frame
+    def generate_args(self, directory_path, start_frame, end_frame, use_motion=False):
+        # remove first
+        self._resource.remove_skin_proxy()
+        if use_motion is True:
+            create_flag, motion_file_path, cache_file_path = self.export_motion()
+            if create_flag is True:
+                rig_file_path = self._resource.file
+                cmd_script = _ast_core.MayaCacheProcess.generate_command(
+                    (
+                        'method=dynamic-gpu-cache-generate'
+                        '&file={file}&cache_file={cache_file}&namespace={namespace}'
+                        '&start_frame={start_frame}&end_frame={end_frame}'
+                        '&motion_file={motion_file}&use_motion=True'
+                    ).format(
+                        file=rig_file_path,
+                        cache_file=cache_file_path,
+                        namespace=self._namespace,
+                        start_frame=start_frame, end_frame=end_frame,
+                        motion_file=motion_file_path
+                    )
+                )
+                return cmd_script, cache_file_path
+            return None, cache_file_path
+        else:
+            directory_path = _ast_core.AssetCache.generate_dynamic_gpu_directory(
+                user_name=bsc_core.SysBaseMtd.get_user_name()
             )
-        )
-        return cmd_script, file_path, cache_file_path
+            source_file_path = '{}/source.ma'.format(directory_path)
+            self.export_source(source_file_path)
+            cache_file_path = '{}/gpu.ma'.format(directory_path)
+            cmd_script = _ast_core.MayaCacheProcess.generate_command(
+                (
+                    'method=dynamic-gpu-cache-generate'
+                    '&file={file}&cache_file={cache_file}&namespace={namespace}'
+                    '&start_frame={start_frame}&end_frame={end_frame}'
+                    '&use_motion=False'
+                ).format(
+                    file=source_file_path,
+                    cache_file=cache_file_path,
+                    namespace=self._namespace,
+                    start_frame=start_frame, end_frame=end_frame,
+                )
+            )
+            return cmd_script, cache_file_path
 
 
 class DynamicGpuCacheGenerate(object):
@@ -276,23 +326,32 @@ class DynamicGpuCacheGenerate(object):
 
 
 class DynamicGpuCacheProcess(object):
-    def __init__(self, file_path, cache_file_path, namespace, start_frame, end_frame):
+    def __init__(self, file_path, cache_file_path, namespace, start_frame, end_frame, motion_file, use_motion):
         self._file_path = file_path
         file_base = os.path.splitext(cache_file_path)[0]
         self._gpu_file_path = '{}.abc'.format(file_base)
         self._cache_file_path = cache_file_path
 
+        self._namespace = namespace
+
         self._start_frame = start_frame
         self._end_frame = end_frame
 
-        self._namespace = namespace
+        self._motion_file = motion_file
+        self._use_motion = use_motion
 
     def execute(self):
         _mya_core.SceneFile.new()
         if os.path.isfile(self._file_path) is False:
             raise RuntimeError()
 
-        _mya_core.SceneFile.open(self._file_path)
+        if self._use_motion is False:
+            _mya_core.SceneFile.open(self._file_path)
+        else:
+            _mya_core.SceneFile.reference_file(self._file_path, namespace=self._namespace)
+            _motion.AdvMotionOpt(self._namespace).import_animations_from(
+                self._motion_file, force=True
+            )
 
         generate = DynamicGpuCacheGenerate(self._namespace)
         geometry_location = generate.get_geometry_root()

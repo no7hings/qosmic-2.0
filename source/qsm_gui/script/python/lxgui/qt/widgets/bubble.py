@@ -8,7 +8,7 @@ import lxbasic.core as bsc_core
 from ... import core as gui_core
 # qt
 from ...qt.core.wrap import *
-# qt core
+# qt process
 from ...qt import core as _qt_core
 # qt abstracts
 from ...qt import abstracts as _qt_abstracts

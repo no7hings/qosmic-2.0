@@ -122,14 +122,14 @@ class QtInputAsStorage(
             self._input_info_bubble._set_text_(self._ext_filter)
         elif scheme == self.StorageScheme.FileSave:
             self._input_button._set_icon_file_path_(gui_core.GuiIcon.get('file/file'))
-            self._input_button._set_icon_sub_name_('action/save')
+            # self._input_button._set_icon_sub_name_('action/save')
             self._input_info_bubble.show()
             self._input_info_bubble._set_text_(self._ext_filter)
         elif scheme == self.StorageScheme.DirectoryOpen:
             self._input_button._set_icon_file_path_(gui_core.GuiIcon.get('file/folder'))
         elif scheme == self.StorageScheme.DirectorySave:
             self._input_button._set_icon_file_path_(gui_core.GuiIcon.get('file/folder'))
-            self._input_button._set_icon_sub_name_('action/save')
+            # self._input_button._set_icon_sub_name_('action/save')
         else:
             raise RuntimeError()
 

@@ -11,7 +11,7 @@ import urllib
 
 import six
 
-from contextlib import contextmanager
+import contextlib
 
 import lxbasic.content as bsc_content
 
@@ -43,7 +43,7 @@ class AbsQtBusyBaseDef(object):
     def _init_busy_base_def_(self, widget):
         self._widget = widget
 
-    @contextmanager
+    @contextlib.contextmanager
     def _gui_bustling_(self):
         self._widget.setCursor(QtCore.Qt.BusyCursor)
         yield self
@@ -216,14 +216,14 @@ class AbsQtStatusBaseDef(object):
     def _get_background_rgba_args_by_status_(cls, status):
         # process
         if status in {cls.Status.Started}:
-            return cls._get_rgb_args_(*cls.Rgba.DarkBlue)
+            return cls._get_rgb_args_(*cls.Rgba.BabyBlue)
         elif status in {cls.Status.Running}:
             return cls._get_rgb_args_(*cls.Rgba.Blue)
         elif status in {cls.Status.Waiting}:
             return cls._get_rgb_args_(*cls.Rgba.Orange)
         elif status in {cls.Status.Suspended}:
             return cls._get_rgb_args_(*cls.Rgba.Yellow)
-        elif status in {cls.Status.Failed, cls.Status.Error, cls.Status.Killed}:
+        elif status in {cls.Status.Failed, cls.Status.Killed, cls.Status.Error}:
             return cls._get_rgb_args_(*cls.Rgba.Red)
         elif status in {cls.Status.Completed}:
             return cls._get_rgb_args_(*cls.Rgba.Green)
@@ -1432,7 +1432,7 @@ class AbsQtValueHistoryExtraDef(object):
 
     def _push_history_(self, value):
         if self._history_key is not None:
-            if value:
+            if value is not None:
                 if self._get_value_is_valid_(value) is True:
                     _gui_core.GuiHistory.append(
                         self._history_key,
@@ -2539,10 +2539,12 @@ class AbsQtItemFilterDef(object):
         self._item_keyword_filter_keys_tgt_cache = None
 
     def _set_item_keyword_filter_keys_tgt_(self, keys):
+        def to_string_fnc_(x_):
+            if isinstance(x_, six.string_types):
+                return bsc_core.auto_string(x_)
+            return str(x_)
+        keys = map(lambda x: to_string_fnc_(x), keys)
         self._item_keyword_filter_keys_tgt = set(keys)
-
-    def _add_item_keyword_filter_key_tgt_(self, key):
-        self._item_keyword_filter_keys_tgt.add(key)
 
     def _update_item_keyword_filter_keys_tgt_(self, keys):
         self._item_keyword_filter_keys_tgt.update(set(keys))

@@ -4,7 +4,7 @@ import json
 import collections
 # content
 from .. import content as _bsc_content
-# core
+# process
 from . import raw as _raw
 
 

@@ -7,6 +7,8 @@ import maya.cmds as cmds
 
 import lxbasic.core as bsc_core
 
+import lxbasic.log as bsc_log
+
 from ... import core as _mya_core
 
 
@@ -63,6 +65,8 @@ class Resource(object):
 
 
 class ResourcesQuery(object):
+    KEY = 'resource query'
+
     STG_PTN = 'X:/{project}/Assets/{role}/{asset}/Maya/Final/{asset}.ma'
 
     DAG_PTN = '/{namespace}'
@@ -77,6 +81,15 @@ class ResourcesQuery(object):
         self._cache_dict = collections.OrderedDict()
 
         # self.do_update()
+
+    def __str__(self):
+        return '{}({})'.format(
+            self.__class__.__name__,
+            self._cache_dict.values()
+        )
+
+    def __repr__(self):
+        return self.__str__()
 
     def do_update(self):
         data = self.get_data()
@@ -110,12 +123,15 @@ class ResourcesQuery(object):
         dict_ = {}
         _ = _mya_core.References.get_all()
         for i_path in _:
-            i_file_path = _mya_core.Reference.get_file(i_path)
-            if i_file_path is None:
-                continue
+            i_args = _mya_core.Reference.get_args(i_path)
+            if i_args is None:
+                bsc_log.Log.trace_warning(
+                    'invalid reference: "{}"'.format(i_path)
+                )
+
+            i_file_path, i_namespace, i_is_loaded = i_args
+            # check file path
             if self._pth.get_is_matched(i_file_path) is True:
-                i_namespace = _mya_core.Reference.get_namespace(i_path)
-                i_is_loaded = _mya_core.Reference.is_loaded(i_path)
                 i_variants = self._pth.get_variants(i_file_path)
                 dict_[i_namespace] = i_path, i_is_loaded, i_file_path, i_variants
         return dict_
@@ -139,6 +155,7 @@ class ResourceScriptOpt(object):
     def __init__(self, resource):
         self._resource = resource
         self._namespace = resource.namespace
+        self._file_path = resource.file
 
     def is_exists(self):
         _ = cmds.ls('{}:{}'.format(self._namespace, self.CACHE_NAME), long=1)

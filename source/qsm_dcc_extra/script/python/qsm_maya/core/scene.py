@@ -35,7 +35,7 @@ class Scene(object):
 
     @classmethod
     def make_snapshot_auto(cls):
-        file_path = _scene_file.SceneFile.get_current_file_path()
+        file_path = _scene_file.SceneFile.get_current()
         file_opt = bsc_storage.StgFileOpt(file_path)
         directory_path = file_opt.get_directory_path()
         name_base = file_opt.get_name_base()

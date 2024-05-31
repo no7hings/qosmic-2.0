@@ -208,14 +208,111 @@ class AbsQtHead(
         self._refresh_widget_draw_()
 
 
-class QtHeadAsFrame(AbsQtHead):
+class QtHeadStyleA(AbsQtHead):
     def __init__(self, *args, **kwargs):
-        super(QtHeadAsFrame, self).__init__(*args, **kwargs)
+        super(QtHeadStyleA, self).__init__(*args, **kwargs)
 
 
-class QtHeadAsLine(AbsQtHead):
+class QtHeadStyleB(AbsQtHead):
     def __init__(self, *args, **kwargs):
-        super(QtHeadAsLine, self).__init__(*args, **kwargs)
+        super(QtHeadStyleB, self).__init__(*args, **kwargs)
+
+    def _refresh_widget_draw_geometry_(self):
+        x, y = 0, 0
+        c_x, c_y = x, y
+        w, h = self.width(), self.height()
+        spacing = 2
+        #
+        self._set_frame_draw_rect_(
+            c_x+1, c_y+1, w-2, h-2
+        )
+        frm_w = frm_h = h
+        icn_frm_w, icn_frm_h = self._icon_frame_draw_size
+        icn_frm_m_w, icn_frm_m_h = (frm_w-icn_frm_w)/2, (frm_h-icn_frm_h)/2
+        icn_w, icn_h = icn_frm_w*self._icon_draw_percent, icn_frm_h*self._icon_draw_percent
+
+        if self._icon_sub_file_path is not None:
+            frm_x, frm_y = c_x+(frm_w-icn_frm_w)/2, c_y+(frm_h-icn_frm_h)/2
+            sub_icn_w, sub_icn_h = icn_frm_w*self._icon_sub_draw_percent, icn_frm_h*self._icon_sub_draw_percent
+            self._set_icon_file_draw_rect_(
+                c_x+icn_frm_m_w, c_y+icn_frm_m_h, icn_w, icn_h
+            )
+            self._set_sub_icon_file_draw_rect_(
+                frm_x+frm_w-sub_icn_w-icn_frm_m_w, frm_y+frm_h-sub_icn_h-icn_frm_m_h, sub_icn_w, sub_icn_h
+            )
+        else:
+            self._set_icon_file_draw_rect_(
+                c_x+(frm_w-icn_w)/2, c_y+(frm_h-icn_h)/2, icn_w, icn_h
+            )
+        #
+        c_x += icn_frm_w+spacing
+        #
+        if self._name_text:
+            t_w = self._get_name_text_draw_width_(self._name_text)+8
+            self._set_name_draw_rect_(
+                c_x, c_y, t_w, frm_h
+            )
+            c_x += t_w
+        #
+        if self._is_expanded is True:
+            self._line_draw_points[0].setX(x)
+            self._line_draw_points[0].setY(y+h-1)
+            self._line_draw_points[1].setX(w)
+            self._line_draw_points[1].setY(y+h-1)
+        else:
+            self._line_draw_points[0].setX(c_x)
+            self._line_draw_points[0].setY(c_y+h/2)
+            self._line_draw_points[1].setX(w)
+            self._line_draw_points[1].setY(c_y+h/2)
+
+    def paintEvent(self, event):
+        painter = gui_qt_core.QtPainter(self)
+        #
+        self._refresh_widget_draw_geometry_()
+        #
+        offset = self._get_action_offset_()
+
+        bkg_color = gui_qt_core.QtColors.HeadBackground
+
+        painter._draw_line_by_points_(
+            point_0=self._line_draw_points[0], point_1=self._line_draw_points[1],
+            border_color=bkg_color,
+            # border_width=1
+        )
+        # name-icon
+        if self._icon_name_is_enable is True:
+            if self._icon_text is not None:
+                painter._draw_frame_color_with_name_text_by_rect_(
+                    rect=self._rect_frame_draw,
+                    text=self._icon_text,
+                    offset=offset,
+                )
+        # file-icon
+        painter._draw_icon_file_by_rect_(
+            self._icon_draw_rect,
+            self._icon_file_path,
+            offset=offset,
+            is_hovered=self._is_hovered
+        )
+        # text
+        if self._name_text is not None:
+            text_color = [gui_qt_core.QtColors.HeadText, gui_qt_core.QtColors.HeadTextHover][self._is_hovered]
+            painter._draw_text_by_rect_(
+                rect=self._name_draw_rect,
+                text=self._name_text,
+                font=self._name_draw_font,
+                font_color=text_color,
+                text_option=QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter,
+                offset=offset
+            )
+
+
+class QtHeadStyleC(AbsQtHead):
+    def __init__(self, *args, **kwargs):
+        super(QtHeadStyleC, self).__init__(*args, **kwargs)
+
+        self._expand_icon_file_path_0 = gui_core.GuiIcon.get('choose_expand')
+        self._expand_icon_file_path_1 = gui_core.GuiIcon.get('choose_collapse')
 
     def _refresh_widget_draw_geometry_(self):
         x, y = 0, 0

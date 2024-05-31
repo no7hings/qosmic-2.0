@@ -115,6 +115,9 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
             cmds.container(cache_location, edit=1, force=1, addNode=[layer_path])
 
     def generate_args(self):
+        # remove first
+        self._resource.remove_dynamic_gpu()
+
         file_path = self._resource.file
         cache_file_path = _ast_core.AssetCache.generate_skin_proxy_file(
             file_path

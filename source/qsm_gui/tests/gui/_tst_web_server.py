@@ -10,7 +10,10 @@ class W(prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
 
-        self._d = gui_qt_core.QtWebSocketServer(self._qt_widget)
+        self._d = gui_qt_core.QtWebServerForNotice(self._qt_widget)
+        self._d._start_(
+            'localhost', 12306
+        )
 
         self._qt_widget._show_notice_(
             # 'playblast is completed do you want to play it?'

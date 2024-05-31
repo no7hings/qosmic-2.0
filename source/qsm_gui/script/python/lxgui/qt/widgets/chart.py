@@ -1339,7 +1339,6 @@ class QtChartAsSequence(
                 self.update()
         return False
 
-    #
     def paintEvent(self, event):
         pos_x, pos_y = 0, 0
         width, height = self.width(), self.height()

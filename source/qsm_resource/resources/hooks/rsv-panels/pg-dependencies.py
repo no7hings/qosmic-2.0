@@ -111,7 +111,7 @@ class PGDependencies(prx_widgets.PrxSessionWindow):
         for i in self._get_data_():
             key = '&'.join(['{}={}'.format(*j) for j in i])
             names = [j[1] for j in i]
-            filter_tags = ['.'.join([bsc_core.SPathMtd.set_quote_to(k) for k in j]) for j in i]
+            filter_tags = ['.'.join([bsc_core.SPathMtd.quote_to(k) for k in j]) for j in i]
             self._add_item_(key, names, filter_tags)
 
         # self._filter_tree_view_opt.set_filter_statistic()

@@ -9,7 +9,7 @@ def main(session):
     gui_prx_core.GuiProxyUtil.show_window_proxy_auto(
         kit_gui_widgets.DesktopToolKit,
         window_unique_name=session.get_gui_window_name(),
-        window_ask_for_close=True,
+        # window_ask_for_close=True,
         session=session
     )
 

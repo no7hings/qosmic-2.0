@@ -13,7 +13,7 @@ from ... import core as gui_core
 # qt
 from .wrap import *
 
-from . import base as gui_qt_cor_base
+from . import base as _base
 
 
 class QtHBoxLayout(QtWidgets.QHBoxLayout):
@@ -125,8 +125,9 @@ class QtGridLayout(QtWidgets.QGridLayout):
 
 class QtFileDialog(QtWidgets.QFileDialog):
     def __init__(self, *args, **kwargs):
+        # noinspection PyArgumentList
         super(QtFileDialog, self).__init__(*args, **kwargs)
-        self.setPalette(gui_qt_cor_base.GuiQtUtil.generate_qt_palette())
+        self.setPalette(_base.GuiQtUtil.generate_qt_palette())
 
 
 class QtSystemTrayIcon(QtWidgets.QSystemTrayIcon):
@@ -135,8 +136,16 @@ class QtSystemTrayIcon(QtWidgets.QSystemTrayIcon):
     press_toggled = qt_signal(bool)
 
     def __init__(self, *args, **kwargs):
+        # noinspection PyArgumentList
         super(QtSystemTrayIcon, self).__init__(*args, **kwargs)
+        
         menu = QtWidgets.QMenu()
+        # self.setPalette(_base.GuiQtDcc.generate_qt_palette())
+        menu.setAutoFillBackground(True)
+        menu.setFont(_base.QtFonts.NameNormal)
+        menu.setStyleSheet(
+            _base.GuiQtStyle.get('QMenu')
+        )
         self.setContextMenu(
             menu
         )
@@ -144,6 +153,7 @@ class QtSystemTrayIcon(QtWidgets.QSystemTrayIcon):
         self._window = self.parent()
         self._set_quit_action_add_(menu)
 
+        # noinspection PyUnresolvedReferences
         self.activated.connect(self._set_window_show_normal_)
 
     def _set_window_show_normal_(self, *args):
@@ -168,10 +178,11 @@ class QtSystemTrayIcon(QtWidgets.QSystemTrayIcon):
 
     def _set_quit_action_add_(self, menu):
         widget_action = QtWidgetAction(menu)
-        widget_action.setFont(gui_qt_cor_base.QtFonts.NameNormal)
+        widget_action.setFont(_base.QtFonts.NameNormal)
         widget_action.setText('quit')
-        widget_action.setIcon(gui_qt_cor_base.GuiQtIcon.create_by_icon_name('window/close'))
+        widget_action.setIcon(_base.GuiQtIcon.create_by_icon_name('window/close'))
         menu.addAction(widget_action)
+        # noinspection PyUnresolvedReferences
         widget_action.triggered.connect(
             self._window.close
         )
@@ -180,7 +191,7 @@ class QtSystemTrayIcon(QtWidgets.QSystemTrayIcon):
 class QtWidgetAction(QtWidgets.QWidgetAction):
     def __init__(self, *args, **kwargs):
         super(QtWidgetAction, self).__init__(*args, **kwargs)
-        self.setFont(gui_qt_cor_base.QtFonts.NameNormal)
+        self.setFont(_base.QtFonts.NameNormal)
 
 
 class GuiQtMenuOpt(object):
@@ -239,10 +250,10 @@ class GuiQtMenuOpt(object):
         name = path_opt.name
         widget_action = QtWidgetAction(menu)
         menu.addAction(widget_action)
-        widget_action.setFont(gui_qt_cor_base.QtFonts.NameNormal)
+        widget_action.setFont(_base.QtFonts.NameNormal)
         widget_action.setText(name)
         widget_action.setIcon(
-            gui_qt_cor_base.GuiQtIcon.create_by_icon_name('file/folder')
+            _base.GuiQtIcon.create_by_icon_name('file/folder')
         )
         sub_menu = menu.__class__(menu)
         sub_menu.setTearOffEnabled(True)
@@ -254,13 +265,13 @@ class GuiQtMenuOpt(object):
     def add_separator_fnc(cls, menu, content):
         name = content.get('name')
         s = menu.addSeparator()
-        s.setFont(gui_qt_cor_base.QtFonts.MenuSeparator)
+        s.setFont(_base.QtFonts.MenuSeparator)
         s.setText(name)
         return s
 
     def add_action_fnc(self, menu, content):
         def set_disable_fnc_(widget_action_):
-            widget_action_.setFont(gui_qt_cor_base.QtFonts.NameDisable)
+            widget_action_.setFont(_base.QtFonts.NameDisable)
             widget_action_.setDisabled(True)
 
         #
@@ -269,16 +280,16 @@ class GuiQtMenuOpt(object):
         executable_fnc = content.get('executable_fnc')
         execute_fnc = content.get('execute_fnc')
         widget_action = QtWidgetAction(menu)
-        widget_action.setFont(gui_qt_cor_base.QtFonts.NameNormal)
+        widget_action.setFont(_base.QtFonts.NameNormal)
         widget_action.setText(name)
         menu.addAction(widget_action)
         if icon_name:
             widget_action.setIcon(
-                gui_qt_cor_base.GuiQtIcon.create_by_icon_name(icon_name)
+                _base.GuiQtIcon.create_by_icon_name(icon_name)
             )
         else:
             widget_action.setIcon(
-                gui_qt_cor_base.GuiQtIcon.generate_by_text(name, background_color=(64, 64, 64))
+                _base.GuiQtIcon.generate_by_text(name, background_color=(64, 64, 64))
             )
         #
         if isinstance(executable_fnc, (bool, int)):
@@ -292,11 +303,13 @@ class GuiQtMenuOpt(object):
         #
         if isinstance(execute_fnc, (types.FunctionType, types.MethodType, functools.partial, types.LambdaType)):
             fnc = execute_fnc
+            # noinspection PyUnresolvedReferences
             widget_action.triggered.connect(
                 fnc
             )
         elif isinstance(execute_fnc, six.string_types):
             cmd = execute_fnc
+            # noinspection PyUnresolvedReferences
             widget_action.triggered.connect(
                 lambda *args, **kwargs: self._set_cmd_debug_run_(cmd)
             )
@@ -306,6 +319,7 @@ class GuiQtMenuOpt(object):
 class GuiQtApplicationOpt(object):
     def __init__(self, app=None):
         if app is None:
+            # noinspection PyArgumentList
             self._instance = QtWidgets.QApplication.instance()
         else:
             self._instance = None

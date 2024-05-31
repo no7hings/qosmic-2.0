@@ -289,7 +289,7 @@ class DdlSignal(object):
 
 
 class DdlJobMonitor(object):
-    Status = bsc_core.BscStatus
+    Status = bsc_core.BasProcessStatus
     # Unknown = 0
     # Active = 1
     # Suspended = 2

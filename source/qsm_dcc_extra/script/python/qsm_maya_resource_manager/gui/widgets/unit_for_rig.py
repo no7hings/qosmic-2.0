@@ -189,6 +189,7 @@ class UnitForRigUtilityToolSet(
                 create_cmds = []
 
                 start_frame, end_frame = self._prx_options_node.get('setting.frame_range')
+                use_motion = self._prx_options_node.get('dynamic_gpu.use_motion')
                 with self._window.gui_progressing(
                     maximum=len(resources), label='processing dynamic gpus'
                 ) as g_p:
@@ -201,13 +202,11 @@ class UnitForRigUtilityToolSet(
                             i_directory_path = qsm_mya_ast_core.AssetCache.generate_dynamic_gpu_directory(
                                 user_name=bsc_core.SysBaseMtd.get_user_name()
                             )
-                            i_cmd, i_file_path, i_cache_file = i_opt.generate_args(
-                                i_directory_path, start_frame, end_frame
+                            i_cmd, i_cache_file = i_opt.generate_args(
+                                i_directory_path, start_frame, end_frame, use_motion=use_motion
                             )
-
-                            i_opt.export_source(i_file_path)
-
-                            create_cmds.append(i_cmd)
+                            if i_cmd is not None:
+                                create_cmds.append(i_cmd)
 
                             self._dynamic_gpu_load_args_array.append(
                                 (i_opt, i_cache_file))

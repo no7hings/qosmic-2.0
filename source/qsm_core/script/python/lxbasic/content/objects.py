@@ -11,6 +11,8 @@ import collections
 
 import json
 
+import hashlib
+
 from . import base as _base
 
 
@@ -362,6 +364,12 @@ class AbsContent(object):
         return self.__class__(
             self.__key, copy.deepcopy(self.__value, memo)
         )
+
+    def __hash__(self):
+        s = hashlib.md5(
+            json.dumps(self.__value)
+        ).hexdigest()
+        return s.upper()
 
     def items(self):
         return self.__value.items()

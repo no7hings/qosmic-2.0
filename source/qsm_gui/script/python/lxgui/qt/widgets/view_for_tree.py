@@ -49,7 +49,8 @@ class QtTreeWidget(
         self.setVerticalScrollMode(self.ScrollPerItem)
         # self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollMode(self.ScrollPerItem)
-        self.setAllColumnsShowFocus(True)
+        # self.setAllColumnsShowFocus(True)
+        self.setAlternatingRowColors(True)
         self.setUniformRowHeights(True)
         self.setExpandsOnDoubleClick(False)
         self.setEditTriggers(self.NoEditTriggers)
@@ -80,7 +81,6 @@ class QtTreeWidget(
         self.header().sortIndicatorChanged.connect(
             self._refresh_view_items_viewport_showable_by_sort_
         )
-        self.setAlternatingRowColors(True)
         qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
         # self.setAutoFillBackground(True)

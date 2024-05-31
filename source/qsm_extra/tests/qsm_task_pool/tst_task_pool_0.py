@@ -1,9 +1,9 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
-import qsm_task_pool.core as prc_task_core
+import qsm_task.core as qsm_tsk_core
 
-p = prc_task_core.Pool.generate()
+p = qsm_tsk_core.TaskPool.generate()
 p.do_update()
 
 time_tag = bsc_core.SysBaseMtd.get_time_tag()

@@ -4,7 +4,7 @@ import types
 import time
 # log
 from .. import log as _bsc_log
-# core
+# process
 from . import base as _base
 
 

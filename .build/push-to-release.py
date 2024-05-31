@@ -1,6 +1,8 @@
 # coding:utf-8
 import copy
 
+import re
+
 import glob
 
 import os
@@ -66,6 +68,17 @@ class Main(object):
             )
 
     @classmethod
+    def to_number_embedded_args(cls, text):
+        pieces = re.compile(r'(\d+)').split(text)
+        pieces[1::2] = map(int, pieces[1::2])
+        return pieces
+
+    @classmethod
+    def sort_by_number(cls, texts):
+        texts.sort(key=lambda x: cls.to_number_embedded_args(x))
+        return texts
+
+    @classmethod
     def get_version_new(cls, options):
         options_0 = copy.copy(options)
         options_0['version'] = '*'
@@ -75,7 +88,7 @@ class Main(object):
         if not _results:
             return '0.0.1'
 
-        _results.sort()
+        _results = cls.sort_by_number(_results)
 
         result = _results[-1]
         result = result.replace('\\', '/')

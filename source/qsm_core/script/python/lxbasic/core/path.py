@@ -2,7 +2,7 @@
 import fnmatch
 
 import re
-# core
+# process
 from . import raw as _raw
 
 

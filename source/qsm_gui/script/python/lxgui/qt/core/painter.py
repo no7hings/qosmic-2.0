@@ -63,10 +63,13 @@ class QtPainter(QtGui.QPainter):
                 i_border_width = 1
                 self._set_border_color_(_color_and_brush.QtColors.CapsuleBorderChecked)
                 if use_exclusive is True:
-                    i_background_color, i_font_color = _color_and_brush.QtBackgroundColors.Selected, \
-                        _color_and_brush.QtFontColors.Black
+                    i_background_color, i_font_color = (
+                        gui_core.GuiRgba.DarkBlue,
+                        gui_core.GuiRgba.Black
+                    )
                 else:
                     i_background_color, i_font_color = _base.GuiQtColor.generate_color_args_by_text(i_text)
+
                 self._set_background_color_(i_background_color)
             else:
                 i_border_width = 1

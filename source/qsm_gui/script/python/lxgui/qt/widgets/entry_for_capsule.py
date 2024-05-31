@@ -80,7 +80,7 @@ class QtEntryAsCapsule(
             w_a = w/c
             h_t = self.fontMetrics().height()
             s_t = (h-h_t)/2
-            w_t = int(max([self.fontMetrics().width(i) for i in self.__texts_draw]))
+            w_t = int(max([self.fontMetrics().width(i)+8 for i in self.__texts_draw]))
             c = len(self.__texts_draw)
             w_m = w_t+(w_t%2)+s_t*2
             # width use minimum of average or maximum each

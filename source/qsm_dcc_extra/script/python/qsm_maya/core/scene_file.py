@@ -18,25 +18,34 @@ class SceneFile(object):
     }
 
     @classmethod
+    def get_namespace(cls, file_path):
+        # noinspection PyBroadException
+        try:
+            return cmds.file(file_path, q=True, namespace=True)
+        except Exception:
+            return None
+
+    @classmethod
     def get_file_type(cls, file_path):
         ext = os.path.splitext(file_path)[-1]
         return cls.FILE_TYPE_DICT.get(ext, cls.FILE_TYPE_ASCII)
 
     @classmethod
     def reference_file(cls, file_path, namespace=':'):
-        if os.path.isfile(file_path) is True:
-            return cmds.file(
-                file_path,
-                ignoreVersion=1,
-                reference=1,
-                mergeNamespacesOnClash=0,
-                namespace=namespace,
-                options='v=0;',
-                type=cls.get_file_type(file_path)
-            )
+        if os.path.isfile(file_path) is False:
+            return None
+        return cmds.file(
+            file_path,
+            ignoreVersion=1,
+            reference=1,
+            mergeNamespacesOnClash=0,
+            namespace=namespace,
+            options='v=0;',
+            type=cls.get_file_type(file_path)
+        )
 
     @classmethod
-    def get_current_file_path(cls):
+    def get_current(cls):
         """
         :return: str(path)
         """
@@ -91,13 +100,14 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
         )
     
     @classmethod
-    def export_file(cls, file_path, location=None):
+    def export_file(cls, file_path, location=None, keep_reference=False):
         option = dict(
             type=cls.get_file_type(file_path),
             options='v=0;',
             force=True,
             defaultExtensions=True,
-            preserveReferences=False,
+            # keep reference
+            preserveReferences=keep_reference,
         )
         selected_mark = []
         if location is not None:

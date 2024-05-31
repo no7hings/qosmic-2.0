@@ -18,7 +18,7 @@ import threading
 import functools
 # log
 from .. import log as _bsc_log
-# core
+# process
 from . import base as _base
 
 from . import environ as _environ

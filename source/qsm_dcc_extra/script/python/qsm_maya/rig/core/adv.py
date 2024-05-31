@@ -10,6 +10,8 @@ from ...resource import core as _rsc_core
 class AdvRig(_rsc_core.Resource):
     def __init__(self, *args, **kwargs):
         super(AdvRig, self).__init__(*args, **kwargs)
+        
+        self._switch_result = {}
 
     def get_root(self):
         _ = cmds.ls('|{}:*'.format(self.namespace), long=1)
@@ -63,6 +65,9 @@ class AdvRig(_rsc_core.Resource):
 
     def set_skin_proxy_enable(self, boolean):
         location = self.get_skin_proxy_location()
+        if location is None:
+            return False
+
         layers = _mya_core.Container.find_all_nodes(
             location, ['displayLayer']
         )
@@ -72,11 +77,26 @@ class AdvRig(_rsc_core.Resource):
         if layers:
             for i in layers:
                 _mya_core.DisplayLayer.set_visible(i, not boolean)
+        return True
+
+    def remove_skin_proxy(self):
+        location = self.get_skin_proxy_location()
+        if location is None:
+            return False
+        _mya_core.Node.delete(location)
+        return True
 
     def get_dynamic_gpu_location(self):
         _ = cmds.ls('{}:dynamic_gpu_dgc'.format(self.namespace), long=1)
         if _:
             return _[0]
+
+    def get_dynamic_gpu_exists(self):
+        _ = self.get_dynamic_gpu_location()
+        if _:
+            if cmds.objExists(_) is True:
+                return True
+        return False
 
     def get_dynamic_gpu_is_enable(self):
         _ = self.get_dynamic_gpu_location()
@@ -86,6 +106,9 @@ class AdvRig(_rsc_core.Resource):
 
     def set_dynamic_gpu_enable(self, boolean):
         location = self.get_dynamic_gpu_location()
+        if location is None:
+            return False
+
         layers = _mya_core.Container.find_all_nodes(
             location, ['displayLayer']
         )
@@ -96,12 +119,14 @@ class AdvRig(_rsc_core.Resource):
             for i in layers:
                 _mya_core.DisplayLayer.set_visible(i, not boolean)
 
-    def get_dynamic_gpu_exists(self):
-        _ = self.get_dynamic_gpu_location()
-        if _:
-            if cmds.objExists(_) is True:
-                return True
-        return False
+        return True
+
+    def remove_dynamic_gpu(self):
+        location = self.get_dynamic_gpu_location()
+        if location is None:
+            return False
+        _mya_core.Node.delete(location)
+        return True
 
     def find_nodes_by_scheme(self, scheme):
         if self.get_dynamic_gpu_is_enable() is True:
@@ -122,6 +147,25 @@ class AdvRig(_rsc_core.Resource):
         _ = cmds.ls('{}:{}'.format(self.namespace, name), long=1)
         if _:
             return _[0]
+
+    def switch_to_original(self):
+        self._switch_result = {}
+        if self.get_skin_proxy_is_enable() is True:
+            self._switch_result['skin_proxy'] = True
+            self.set_skin_proxy_enable(False)
+
+        if self.get_dynamic_gpu_is_enable():
+            self._switch_result['dynamic_gpu'] = True
+            self.set_dynamic_gpu_enable(False)
+
+        return self._switch_result
+
+    def switch_to_cache(self):
+        for k, v in self._switch_result.items():
+            if k == 'skin_proxy':
+                self.set_skin_proxy_enable(True)
+            elif k == 'dynamic_gpu':
+                self.set_dynamic_gpu_enable(True)
 
 
 class AdvRigsQuery(_rsc_core.ResourcesQuery):

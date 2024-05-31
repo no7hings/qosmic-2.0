@@ -681,6 +681,7 @@ class QtVScrollArea(QtWidgets.QScrollArea):
         self._layout.addWidget(widget)
 
 
+
 class QtThreadDef(object):
     def _set_thread_def_init_(self):
         pass

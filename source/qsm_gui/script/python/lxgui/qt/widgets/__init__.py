@@ -61,9 +61,13 @@ from .view_for_tree import *
 
 from .view_for_tab import *
 
+from .view_for_history import *
+
 from .scroll import *
 
 from .chart import *
+
+from .chart_for_process import *
 
 from .node_graph import *
 

@@ -2,7 +2,7 @@
 import os
 
 from .. import log as _bsc_log
-# core
+# process
 from . import base as _base
 
 

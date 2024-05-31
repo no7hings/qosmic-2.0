@@ -41,6 +41,28 @@ class Reference(object):
             return None
 
     @classmethod
+    def get_file_args(cls, path):
+        # noinspection PyBroadException
+        try:
+            return (
+                cmds.referenceQuery(path, filename=1),
+                cmds.referenceQuery(path, filename=1, withoutCopyNumber=1)
+            )
+        except Exception:
+            return None
+
+    @classmethod
+    def get_args(cls, path):
+        file_args = cls.get_file_args(path)
+        if file_args is not None:
+            # debug: when reference is unload, use cmd.file command to find namespace instance
+            namespace = _scene_file.SceneFile.get_namespace(file_args[0])
+            is_loaded = cls.is_loaded(path)
+            if namespace is not None:
+                return file_args[1], namespace, is_loaded
+        return None
+
+    @classmethod
     def is_from_reference(cls, path):
         return cmds.referenceQuery(path, isNodeReferenced=1)
 

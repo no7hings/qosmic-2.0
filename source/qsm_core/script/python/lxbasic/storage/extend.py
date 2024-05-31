@@ -74,7 +74,7 @@ class StgTmpUsdMtd(object):
         return bsc_cor_base.UuidMtd.generate_by_files(file_paths)
 
     @classmethod
-    def generate_file_path(cls, file_paths):
+    def generate_movie_file_path(cls, file_paths):
         directory_path = bsc_cor_environ.EnvBaseMtd.get_temporary_root()
         key = cls.generate_key(file_paths)
         region = StgTmpBaseMtd.get_save_region(key)

@@ -2,7 +2,7 @@
 import time
 
 import datetime
-# core
+# process
 from . import raw as _raw
 
 
@@ -12,11 +12,11 @@ class TimeExtraMtd(object):
     DATE_TAG_FORMAT = '%Y_%m%d'
 
     @classmethod
-    def generate_time_tag_36(cls, multiply=1):
+    def generate_time_tag_36(cls, multiply=1.0):
         return _raw.RawIntegerOpt(int(time.time()*multiply)).set_encode_to_36()
 
     @classmethod
-    def generate_time_tag_36_(cls, multiply=1):
+    def generate_time_tag_36_(cls, multiply=1.0):
         s = time.time()
         y = time.localtime().tm_year
         m = time.localtime().tm_mon
@@ -148,7 +148,7 @@ class TimestampMtd(object):
     @classmethod
     def to_time_tuple(cls, timestamp):
         return time.localtime(timestamp)
-    
+
     @classmethod
     def get_current_time_tuple(cls):
         return time.localtime(time.time())
@@ -192,3 +192,48 @@ class TimestampOpt(object):
 
     def to_prettify(self, language):
         return TimePrettifyMtd.to_prettify_by_timestamp(self._timestamp, language)
+
+
+class DateTime(object):
+    @classmethod
+    def to_period(cls, input_time_str, language='en_us'):
+        input_time = datetime.datetime.strptime(input_time_str, '%Y-%m-%d %H:%M:%S')
+
+        now = datetime.datetime.now()
+
+        today = now.date()
+
+        yesterday = today-datetime.timedelta(days=1)
+
+        now_weekday = now.weekday()
+
+        start_of_week = today-datetime.timedelta(days=now_weekday)
+
+        start_of_last_week = start_of_week-datetime.timedelta(days=7)
+        end_of_last_week = start_of_week-datetime.timedelta(days=1)
+
+        start_of_month = today.replace(day=1)
+
+        start_of_year = today.replace(month=1, day=1)
+
+        weekdays_chs = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+        weekdays_en = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+        if input_time.date() == today:
+            return "今天" if language == 'chs' else "Today"
+        elif input_time.date() == yesterday:
+            return "昨天" if language == 'chs' else "Yesterday"
+        elif start_of_week <= input_time.date() < today:
+            weekday_str = weekdays_chs[input_time.weekday()] if language == 'chs' else weekdays_en[
+                input_time.weekday()]
+            return weekday_str
+        elif start_of_last_week <= input_time.date() <= end_of_last_week:
+            return "上周" if language == 'chs' else "Last week"
+        elif start_of_month <= input_time.date() < start_of_week:
+            return "本月早些时候" if language == 'chs' else "Earlier this month"
+        elif start_of_year <= input_time.date() < start_of_month:
+            month_str = input_time.strftime('%Y年%m月' if language == 'chs' else '%B %Y')
+            return month_str
+        else:
+            year_str = "{}年".format(input_time.year) if language == 'chs' else str(input_time.year)
+            return year_str

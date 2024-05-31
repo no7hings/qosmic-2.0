@@ -11,9 +11,7 @@ class W(prx_widgets.PrxBaseWindow):
         super(W, self).__init__(*args, **kwargs)
 
         self._d = qt_widgets.QtMessageBox(self._qt_widget)
-        self._d._show_buttons_(
-            self._d.Buttons.All
-        )
+        self._d._set_buttons_(True, True, '忽略')
 
 
 if __name__ == '__main__':

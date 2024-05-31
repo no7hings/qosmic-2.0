@@ -540,8 +540,8 @@ class QtTabView(
                 title = self._get_page_name_text_at_(self._index_hover)
                 tool_tip = self._get_page_tool_tip_text_at_(self._index_hover)
             else:
-                title = 'N/a'
-                tool_tip = 'N/a'
+                title = self._get_page_name_text_at_(self._index_hover)
+                tool_tip = self._get_page_tool_tip_text_at_(self._index_hover)
 
             css = _qt_core.GuiQtUtil.generate_tool_tip_css(
                 title,

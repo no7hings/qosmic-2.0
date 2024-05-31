@@ -28,7 +28,7 @@ build:
             scheme:
                 widget: enumerate
                 value: [ 'custom', 'quixel' ]
-                current_index: 0
+                default_index: 0
                 enable: True
                 tool_tip: [ 'choose a scheme' ]
 

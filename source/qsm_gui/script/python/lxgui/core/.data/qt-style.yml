@@ -12,8 +12,8 @@ option:
         color-light-hover: '103, 103, 103, 255'
         color-white: '223, 223, 223, 255'
         #
-        color-hovered: '255, 179, 47, 255'
-        color-selected: '79, 95, 151, 255'
+        color-hovered: '159, 95, 63, 255'
+        color-selected: '63, 95, 159, 255'
         color-checked: '255, 95, 159, 255'
         color-pressed: '95, 255, 159, 255'
         color-actioned: '95, 255, 159, 255'
@@ -175,18 +175,15 @@ widget:
             border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
         }
         QTreeView::item:hover{
-            background: rgba(<option.background.color-transparent>);
-            color: rgba(<option.font.color-item-hovered>); 
+            background: rgba(<option.background.color-hovered>);
             border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
         }
         QTreeView::item:selected{
-            background: rgba(<option.background.color-transparent>);
-            color: rgba(<option.font.color-item-selected>); 
+            background: rgba(<option.background.color-selected>);
             border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
         }
         QTreeView::item:selected:hover{
-            background: rgba(<option.background.color-transparent>);
-            color: rgba(<option.font.color-item-hovered>); 
+            background: rgba(<option.background.color-hovered>);
             border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
         }
         QTreeView::branch:open:has-children:has-siblings{

@@ -390,9 +390,9 @@ import lxkatana
 
 lxkatana.set_reload()
 
-import lxbasic.core as bsc_core
+import lxbasic.process as bsc_core
 
-import lxkatana.core as ktn_core
+import lxkatana.process as ktn_core
 
 import lxbasic.database as bsc_database
 
@@ -486,9 +486,9 @@ import lxkatana
 
 lxkatana.set_reload()
 
-import lxbasic.core as bsc_core
+import lxbasic.process as bsc_core
 
-import lxkatana.core as ktn_core
+import lxkatana.process as ktn_core
 
 import lxbasic.database as bsc_database
 

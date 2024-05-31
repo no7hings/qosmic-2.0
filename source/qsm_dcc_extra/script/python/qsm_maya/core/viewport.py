@@ -42,6 +42,18 @@ class ViewPanel(object):
         )
 
     @classmethod
+    def set_render_mode(cls, name, texture_enable=True, light_enable=True, shadow_enable=True):
+        cmds.modelEditor(
+            name,
+            edit=1,
+            useDefaultMaterial=0,
+            displayAppearance='smoothShaded',
+            displayTextures=texture_enable,
+            displayLights='all' if light_enable is True else 'default',
+            shadows=shadow_enable
+        )
+
+    @classmethod
     def set_display_mode(cls, name, display_mode):
         if display_mode == 5:
             cls._set_viewport_shader_display_mode_(name)

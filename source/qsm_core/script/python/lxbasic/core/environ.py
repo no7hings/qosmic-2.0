@@ -2,7 +2,7 @@
 import sys
 
 import os
-# core
+# process
 from . import base as _base
 
 
@@ -134,7 +134,7 @@ class EnvBaseMtd(object):
 
     @classmethod
     def get_ui_language(cls):
-        return cls.get(cls.UI_LANGUAGE_KEY)
+        return cls.get(cls.UI_LANGUAGE_KEY) or 'en_us'
 
 
 class EnvExtraMtd(EnvBaseMtd):

@@ -1,10 +1,10 @@
 # coding:utf-8
-import qsm_task_pool.core as prc_task_core
+import qsm_task.core as qsm_tsk_core
 
-p = prc_task_core.Pool.generate()
+p = qsm_tsk_core.TaskPool.generate()
 
 for i in range(5):
-    p.new_task(
+    p.new_entity(
         group='[dynamic-gpu-cache-generate][2024-04-28-20:00]',
         name='[dynamic-gpu-cache-generate][max][1-32]'.format(i),
         cmd_script=r'rez-env maya-2019 -- mayabatch -command "python(\"print \\\"A\\\"\")"',

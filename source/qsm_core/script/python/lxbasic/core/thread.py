@@ -8,7 +8,7 @@ import threading
 import subprocess
 
 import functools
-# core
+# process
 from . import configure as _configure
 
 from . import process as _process
@@ -50,10 +50,11 @@ class TrdCommandPool(threading.Thread):
     STACK = []
     # MAXIMUM = int(CPU_COUNT*.75)
     MAXIMUM = 5
+    VALUE = 0
     EVENT = threading.Event()
     LOCK = threading.Lock()
     #
-    Status = _configure.BscStatus
+    Status = _configure.BasProcessStatus
 
     def _do_update_status(self, status):
         self._status = status
@@ -155,14 +156,6 @@ class TrdCommandPool(threading.Thread):
         except subprocess.CalledProcessError:
             status = self.Status.Failed
         finally:
-            TrdCommandPool.LOCK.acquire()
-            TrdCommandPool.STACK.remove(self)
-            # unlock
-            if len(TrdCommandPool.STACK) < TrdCommandPool.MAXIMUM:
-                TrdCommandPool.EVENT.set()
-                TrdCommandPool.EVENT.clear()
-            TrdCommandPool.LOCK.release()
-
             results = []
             for i_return_dict in return_dicts:
                 if 'results' in i_return_dict:
@@ -179,6 +172,15 @@ class TrdCommandPool(threading.Thread):
                 self._do_failed(results)
             #
             self._do_finished(self._status, results)
+
+            TrdCommandPool.LOCK.acquire()
+            TrdCommandPool.STACK.remove(self)
+            # unlock
+            if len(TrdCommandPool.STACK) < TrdCommandPool.MAXIMUM:
+                TrdCommandPool.EVENT.set()
+                TrdCommandPool.EVENT.clear()
+
+            TrdCommandPool.LOCK.release()
 
     @staticmethod
     def is_busy():
@@ -240,7 +242,7 @@ class TrdCommandPool(threading.Thread):
 
 
 class TrdCommand(threading.Thread):
-    Status = _configure.BscStatus
+    Status = _configure.BasProcessStatus
 
     def __init__(self, cmd):
         threading.Thread.__init__(self)
@@ -377,7 +379,7 @@ class TrdMethod(threading.Thread):
     EVENT = threading.Event()
     LOCK = threading.Lock()
     #
-    Status = _configure.BscStatus
+    Status = _configure.BasProcessStatus
 
     def __init__(self, fnc, index, *args, **kwargs):
         threading.Thread.__init__(self)
@@ -791,7 +793,7 @@ class TrdGainStack(object):
 
 
 class TrdProcessMonitor(object):
-    Status = _configure.BscStatus
+    Status = _configure.BasProcessStatus
 
     def __init__(self, process):
         self._process = process

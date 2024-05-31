@@ -3,12 +3,10 @@ import six
 
 import lxbasic.log as bsc_log
 
-import lxbasic.web as bsc_web
-
 from ..core.wrap import *
 
 
-class QtWebSocketServer(QtCore.QObject):
+class QtWebServerForNotice(QtCore.QObject):
     KEY = 'web socket server'
 
     @staticmethod
@@ -22,15 +20,17 @@ class QtWebSocketServer(QtCore.QObject):
         pass
 
     def __init__(self, *args, **kwargs):
-        super(QtWebSocketServer, self).__init__(*args, **kwargs)
-        
-        self._name = bsc_web.WebSocketBase.NAME
-        self._host = bsc_web.WebSocketBase.HOST
-        self._port = bsc_web.WebSocketBase.PORT
+        super(QtWebServerForNotice, self).__init__(*args, **kwargs)
+
+        self._name = 'Qosmic Web Server'
 
         self._verbose = False
 
         self._window = self.parent()
+
+    def _start_(self, host, port):
+        self._host = host
+        self._port = port
 
         self._web_server = QtWebSockets.QWebSocketServer(
             self._name, QtWebSockets.QWebSocketServer.NonSecureMode
@@ -40,7 +40,7 @@ class QtWebSocketServer(QtCore.QObject):
         if self._web_server.listen(port=self._port):
             bsc_log.Log.trace_method_result(
                 self.KEY, 'start for "{}"'.format(
-                    self._port
+                    port
                 )
             )
 
@@ -49,7 +49,7 @@ class QtWebSocketServer(QtCore.QObject):
         self._sockets = []
 
     @qt_slot(str)
-    def _do_trace_(self, text):
+    def _do_process_(self, text):
         text = self.auto_string(text)
         self._window._show_notice_(text)
         for i in self._sockets:
@@ -63,7 +63,7 @@ class QtWebSocketServer(QtCore.QObject):
     @qt_slot()
     def _do_new_connection_(self):
         skt = self._web_server.nextPendingConnection()
-        skt.textMessageReceived.connect(self._do_trace_)
+        skt.textMessageReceived.connect(self._do_process_)
         skt.disconnected.connect(self._do_disconnected_)
         self._sockets.append(skt)
         if self._verbose is True:

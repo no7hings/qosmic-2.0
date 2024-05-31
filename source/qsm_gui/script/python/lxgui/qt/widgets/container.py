@@ -47,11 +47,11 @@ class AbsQtToolGroup(
         self.__head.expand_toggled.connect(self._set_expanded_)
         self.__head._set_tool_tip_text_('"LMB-click" expand tool group')
 
-        self.__view = _utility.QtTranslucentWidget()
-        self.__base_layout.addWidget(self.__view)
-        self.__layout = _base.QtVBoxLayout(self.__view)
-        self.__layout.setContentsMargins(2, 0, 0, 0)
-        self.__layout.setSpacing(2)
+        self._view_widget = _utility.QtTranslucentWidget()
+        self.__base_layout.addWidget(self._view_widget)
+        self._view_layout = _base.QtVBoxLayout(self._view_widget)
+        self._view_layout.setContentsMargins(2, 0, 0, 0)
+        self._view_layout.setSpacing(2)
 
         self._refresh_expand_()
 
@@ -124,7 +124,7 @@ class AbsQtToolGroup(
 
     def _refresh_expand_(self):
         boolean = self._get_is_expanded_()
-        self.__view.setVisible(
+        self._view_widget.setVisible(
             boolean
         )
         if boolean is True:
@@ -133,7 +133,21 @@ class AbsQtToolGroup(
             self.__head._set_tool_tip_text_('"LMB-click" expand tool group')
 
     def _add_widget_(self, widget):
-        self.__layout.addWidget(widget)
+        self._view_layout.addWidget(widget)
+
+    def _prepend_widget_(self, widget):
+        self._view_layout.insertWidget(0, widget)
+
+    def _get_widgets_(self):
+        list_ = []
+        lot = self._view_layout
+        c = lot.count()
+        for i_idx in range(c):
+            i_item = lot.itemAt(i_idx)
+            if i_item is not None:
+                i_widget = i_item.widget()
+                list_.append(i_widget)
+        return list_
 
     def _set_name_text_(self, text):
         self.__head._set_name_text_(text)
@@ -156,25 +170,32 @@ class AbsQtToolGroup(
 
     def _start_drag_mode_(self):
         if self._get_is_expanded_() is True:
-            self.__view.hide()
+            self._view_widget.hide()
 
     def _end_drag_mode_(self):
         if self._get_is_expanded_() is True:
-            self.__view.show()
+            self._view_widget.show()
 
 
 class QtHToolGroupStyleA(AbsQtToolGroup):
-    QT_HEAD_CLS = _head.QtHeadAsFrame
+    QT_HEAD_CLS = _head.QtHeadStyleA
 
     def __init__(self, *args, **kwargs):
         super(QtHToolGroupStyleA, self).__init__(*args, **kwargs)
 
 
 class QtHToolGroupStyleB(AbsQtToolGroup):
-    QT_HEAD_CLS = _head.QtHeadAsLine
+    QT_HEAD_CLS = _head.QtHeadStyleB
 
     def __init__(self, *args, **kwargs):
         super(QtHToolGroupStyleB, self).__init__(*args, **kwargs)
+
+
+class QtHToolGroupStyleC(AbsQtToolGroup):
+    QT_HEAD_CLS = _head.QtHeadStyleC
+
+    def __init__(self, *args, **kwargs):
+        super(QtHToolGroupStyleC, self).__init__(*args, **kwargs)
 
 
 class AbsQtToolBox(QtWidgets.QWidget):

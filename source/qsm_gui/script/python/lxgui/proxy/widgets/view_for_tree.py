@@ -68,7 +68,7 @@ class PrxTreeView(
         #     self._prx_filer_bar_0._qt_widget._entry_widget
         # )
         #
-        self._set_prx_tree_def_init_()
+        self._init_prx_tree_def_()
         self._qt_view.ctrl_f_key_pressed.connect(
             self.set_filter_start
         )

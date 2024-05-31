@@ -28,8 +28,9 @@ build:
                     widget: capsule_string
                     name_chs: '选择方案'
                     options: ['root', 'geometry_root', 'deformation_root', 'motion_root', 'main_control']
-                    names_chs: ['根组', '模型组', '骨骼组', '控制器组', '主控制器']
+                    option_names_chs: ['根组', '模型组', '骨骼组', '控制器组', '主控制器']
                     default: 'main_control'
+                    enable: True
                     tool_tip: 'choose a selection scheme'
                     tool_tip_chs:
                         |-
@@ -63,8 +64,9 @@ build:
                     widget: capsule_string
                     name_chs: '帧方案'
                     options: ['time_slider', 'frame_range']
-                    names_chs: ['渲染设置', '时间轴', '帧范围']
+                    option_names_chs: ['时间轴', '帧范围']
                     default: 'time_slider'
+                    enable: True
                     tool_tip: 'choose a frame scheme'
                     tool_tip_chs:
                         |-
@@ -88,6 +90,7 @@ build:
                     name: 'Keep Head'
                     name_chs: '保留脑袋'
                     value: True
+                    enable: True
                     tool_tip: '...'
 
                 skin_proxy/load:
@@ -115,6 +118,14 @@ build:
                 dynamic_gpu:
                     widget: group
                     name_chs: '动态GPU'
+
+                dynamic_gpu/use_motion:
+                    widget: boolean
+                    name: 'Use Motion'
+                    name_chs: '使用动作'
+                    value: True
+                    enable: True
+                    tool_tip: '...'
 
                 dynamic_gpu/load:
                     widget: sub_process_button
@@ -245,12 +256,14 @@ build:
                     widget: boolean
                     name_chs: '强制'
                     value: False
+                    enable: True
                     tool_tip: '...'
 
                 animation_transfer/frame_offset:
                     widget: integer
                     name_chs: '帧偏移'
                     value: 0
+                    enable: True
                     tool_tip: '...'
 
                 animation_transfer/transfer_all:
@@ -300,8 +313,9 @@ build:
                     widget: capsule_string
                     name_chs: '选择方案'
                     options: ['root', 'geometry', 'none']
-                    names_chs: ['根组', '模型组', '不选']
+                    option_names_chs: ['根组', '模型组', '不选']
                     default: 'root'
+                    enable: True
                     tool_tip: 'choose a selection scheme'
                     tool_tip_chs:
                         |-
@@ -511,8 +525,9 @@ build:
                     widget: capsule_string
                     name_chs: '帧方案'
                     options: ['time_slider', 'frame_range']
-                    names_chs: ['时间轴', '帧范围']
+                    option_names_chs: ['时间轴', '帧范围']
                     default: 'time_slider'
+                    enable: True
                     tool_tip: 'choose a frame scheme'
                     tool_tip_chs:
                         |-

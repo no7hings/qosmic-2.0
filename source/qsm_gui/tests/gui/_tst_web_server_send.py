@@ -1,7 +1,11 @@
 # coding:utf-8
 import lxbasic.web as bsc_web
 
-skt = bsc_web.WebSocket()
+import qsm_task.process as qsm_tsk_process
+
+skt = bsc_web.WebSocket(
+    qsm_tsk_process.NoticeWebServerBase.HOST, qsm_tsk_process.NoticeWebServerBase.PORT
+)
 
 if skt.connect() is True:
     for i in range(2):

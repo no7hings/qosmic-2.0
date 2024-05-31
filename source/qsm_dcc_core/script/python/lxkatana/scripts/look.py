@@ -532,7 +532,7 @@ class ScpLookMaterialImport(object):
 import lxkatana
 lxkatana.set_reload()
 
-import lxkatana.core as ktn_core
+import lxkatana.process as ktn_core
 
 import lxkatana.scripts as ktn_scripts
 

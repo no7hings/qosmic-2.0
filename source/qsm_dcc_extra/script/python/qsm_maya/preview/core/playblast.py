@@ -1,4 +1,8 @@
 # coding:utf-8
+import os
+
+import six
+
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 # noinspection PyUnresolvedReferences
@@ -15,7 +19,7 @@ from . import hud as _hud
 
 class RenderSettings(object):
     @classmethod
-    def setup(cls, camera, display_mode):
+    def setup(cls, camera, display_mode, texture_enable, light_enable, shadow_enable):
         if _mya_core.Scene.get_is_ui_mode():
             pass
         else:
@@ -29,7 +33,9 @@ class RenderSettings(object):
             # cmds.setAttr('hardwareRenderingGlobals.ssaoEnable', 1)
             cmds.setAttr('hardwareRenderingGlobals.hwInstancing', 1)
 
-            _mya_core.HardwareRenderSettings.set_display_mode(display_mode)
+            # _mya_core.HardwareRenderSettings.set_display_mode(display_mode)
+            if texture_enable is True:
+                _mya_core.HardwareRenderSettings.set_render_mode(texture_enable, light_enable, shadow_enable)
             # set filter
             # cmds.setAttr(
             #     'hardwareRenderingGlobals.objectTypeFilterValueArray',
@@ -54,7 +60,7 @@ class RenderSettings(object):
 
 
 class Window(object):
-    WINDOW_NAME = 'preview_window_0'
+    WINDOW_NAME = 'preview_window_2'
 
     @classmethod
     def setup_camera(cls, camera, display_resolution, display_safe_title):
@@ -74,16 +80,16 @@ class Window(object):
         cmds.setAttr(camera+'.displayGateMaskColor', 0, 0, 0, type='double3')
 
     @classmethod
-    def setup_for_view(cls, view_panel, use_default_material, show_hud):
+    def setup_for_view(cls, view_panel, use_default_material, hud_enable):
         rdr = 'vp2Renderer'
 
-        cmds.modelEditor(view_panel, edit=1, rendererName=rdr, rom='myOverride')
+        # cmds.modelEditor(view_panel, edit=1, rendererName=rdr, rom='myOverride')
 
         cmds.modelEditor(
             view_panel,
             edit=1,
             activeView=1,
-            useDefaultMaterial=use_default_material,
+            # useDefaultMaterial=use_default_material,
             wireframeOnShaded=0,
             fogging=0,
             dl='default',
@@ -91,7 +97,7 @@ class Window(object):
             allObjects=0,
             manipulators=0,
             grid=0,
-            hud=show_hud,
+            hud=hud_enable,
             sel=0
         )
 
@@ -112,25 +118,43 @@ class Window(object):
         )
 
     @classmethod
-    def create(cls, camera, width, height, display_mode, use_default_material, show_hud):
+    def create(
+        cls, camera, width, height, display_mode, use_default_material, show_hud, show_window,
+        texture_enable, light_enable, shadow_enable,
+        hud_enable
+    ):
         window = _mya_core.Window.create_force(cls.WINDOW_NAME, (width, height))
-        _mya_core.Window.show(window)
+        if show_window is True:
+            _mya_core.Window.show(window)
 
         layout = cmds.paneLayout(width=width, height=height, parent=window)
+        view_panel_name = cls.WINDOW_NAME+'_view_panel'
+
+        if cmds.modelPanel(
+            view_panel_name, query=1, exists=1
+        ):
+            cmds.deleteUI(view_panel_name, panel=1)
 
         view_panel = cmds.modelPanel(
+            view_panel_name,
             label=cls.WINDOW_NAME+'_view_panel',
             parent=layout,
             menuBarVisible=1,
             modelEditor=1,
-            camera=camera
+            camera=camera,
         )
-        _mya_core.ViewPanel.set_display_mode(view_panel, display_mode)
-        # _mya_core.Scene.set_background_color((.25, .25, .25))
         cls.setup_for_view(
             view_panel,
-            use_default_material=use_default_material, show_hud=show_hud
+            use_default_material=use_default_material, hud_enable=hud_enable
         )
+        # set latest
+        _mya_core.ViewPanel.set_render_mode(view_panel, texture_enable, light_enable, shadow_enable)
+        # if show_hud is True:
+        #     cls.setup_camera(
+        #         camera,
+        #         display_resolution=1, display_safe_title=0
+        #     )
+        # else:
         cls.setup_camera(
             camera,
             display_resolution=0, display_safe_title=0
@@ -143,13 +167,21 @@ class Window(object):
 
 class Playblast(object):
     @classmethod
-    def create_window(cls, camera, width, height, display_mode, show_hud):
+    def create_window(
+        cls, camera, width, height, display_mode, show_hud, show_window,
+        texture_enable, light_enable, shadow_enable, hud_enable
+    ):
         Window.create(
             camera=camera,
             width=width, height=height,
             display_mode=display_mode,
             use_default_material=0,
-            show_hud=show_hud
+            show_hud=show_hud,
+            show_window=show_window,
+            texture_enable=texture_enable,
+            light_enable=light_enable,
+            shadow_enable=shadow_enable,
+            hud_enable=hud_enable
         )
 
     @classmethod
@@ -159,12 +191,15 @@ class Playblast(object):
         _hud.HUD.create(camera)
 
     @classmethod
-    def render_setting_prc(cls, camera, display_mode):
-        RenderSettings.setup(camera, display_mode)
+    def render_setting_prc(cls, camera, display_mode, texture_enable, light_enable, shadow_enable):
+        RenderSettings.setup(
+            camera, display_mode,
+            texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable
+        )
 
     @classmethod
-    def image_prc(cls, file_path, width, height, start_frame, end_frame, show_hud, percent, quality):
-        file_opt = bsc_storage.StgFileOpt(file_path)
+    def image_prc(cls, image_file_path, width, height, start_frame, end_frame, hud_enable, percent, quality):
+        file_opt = bsc_storage.StgFileOpt(image_file_path)
         file_path_base = file_opt.path_base
         compression = 'jpg'
 
@@ -176,7 +211,7 @@ class Playblast(object):
             sequenceTime=0,
             clearCache=1,
             viewer=0,
-            showOrnaments=show_hud,
+            showOrnaments=hud_enable,
             offScreen=1,
             offScreenViewportUpdate=1,
             framePadding=4,
@@ -208,44 +243,101 @@ class Playblast(object):
     @classmethod
     def execute(
         cls,
-        file_path,
+        movie_file_path,
         camera='|persp|perspShape',
-        frame=None, resolution=(1280, 720),
-        display_mode=6, show_hud=False,
-        percent=100, quality=100, fps=24
+        frame=None, frame_step=1, resolution=(1280, 720),
+        display_mode=6, show_hud=False, show_window=False,
+        percent=100, quality=100, fps=24,
+        texture_enable=False, light_enable=False, shadow_enable=False,
+        hud_enable=False, play_enable=False,
     ):
         if resolution is None:
             resolution = _mya_core.RenderSettings.get_resolution()
 
         w, h = resolution
-        # if show_hud is True:
-        #     h += 60
+        # if _mya_core.Scene.get_is_ui_mode():
+        #     if show_hud is True:
+        #         h += 60
 
         cls.create_window(
-            camera=camera, width=w, height=h, display_mode=display_mode, show_hud=show_hud
+            camera=camera, width=480, height=320, display_mode=display_mode, show_hud=show_hud, show_window=show_window,
+            texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable,
+            hud_enable=hud_enable
         )
-        cls.hud_prc(camera)
+        if show_hud is True:
+            cls.hud_prc(camera)
 
-        cls.render_setting_prc(camera, display_mode)
+        cls.render_setting_prc(
+            camera, display_mode,
+            texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable
+        )
 
-        file_opt = bsc_storage.StgFileOpt(file_path)
+        file_opt = bsc_storage.StgFileOpt(movie_file_path)
         file_path_base = file_opt.path_base
-        image_directory_path = '{}.images'.format(file_path_base)
-        image_file_path = '{}/image.jpg'.format(image_directory_path)
+
+        directory_path_tmp = '{}/{}'.format(
+            bsc_storage.StgUserMtd.get_user_temporary_directory(),
+            bsc_core.UuidMtd.generate_new()
+        )
+        bsc_storage.StgPathMtd.create_directory(directory_path_tmp)
+        # directory_path_tmp = '{}.images'.format(file_path_base)
+        image_file_path_tmp = '{}/image.jpg'.format(directory_path_tmp)
+        movie_file_path_tmp = '{}/movie.mov'.format(directory_path_tmp)
 
         start_frame, end_frame = _mya_core.Frame.auto_range(frame)
+        if frame_step > 1:
+            frames = bsc_core.RawFrameRangeMtd.get(
+                (start_frame, end_frame), frame_step
+            )
+            for i_frame in frames:
+                _mya_core.Frame.set_current(i_frame)
+                cls.image_prc(
+                    image_file_path=image_file_path_tmp, start_frame=i_frame, end_frame=i_frame,
+                    width=w, height=h, hud_enable=hud_enable,
+                    percent=percent, quality=quality
+                )
+        else:
+            cls.image_prc(
+                image_file_path=image_file_path_tmp, start_frame=start_frame, end_frame=end_frame,
+                width=w, height=h, hud_enable=hud_enable,
+                percent=percent, quality=quality
+            )
 
-        cls.image_prc(
-            file_path=image_file_path, start_frame=start_frame, end_frame=end_frame,
-            width=w, height=h, show_hud=show_hud,
-            percent=percent, quality=quality
-        )
         cls.movie_prc(
-            image_file_path=image_file_path, movie_file_path=file_path, start_frame=start_frame, end_frame=end_frame,
-            fps=fps
+            image_file_path=image_file_path_tmp,
+            movie_file_path=movie_file_path_tmp,
+            start_frame=start_frame, end_frame=end_frame, fps=fps
         )
-        # clear image
-        # bsc_storage.StgDirectoryOpt(image_directory_path).do_delete()
         # close window
-        # Window.close()
+        Window.close()
+        # copy to source
+        bsc_storage.StgFileOpt(movie_file_path_tmp).copy_to_file(
+            movie_file_path, replace=True
+        )
+        # clear temp
+        bsc_storage.StgDirectoryOpt(directory_path_tmp).do_delete()
 
+        if play_enable is True:
+            os.startfile(
+                movie_file_path
+            )
+
+    @classmethod
+    def generate_movie_file_path(cls, directory_path=None, update_scheme='new_version'):
+        scene_file_path = _mya_core.SceneFile.get_current()
+        file_opt = bsc_storage.StgFileOpt(scene_file_path)
+
+        if directory_path is not None:
+            if os.path.isdir(directory_path) is False:
+                return None
+            ptn = six.u(
+                '{}/{}.v{{version}}.mov'
+            ).format(
+                bsc_core.auto_unicode(directory_path), bsc_core.auto_unicode(file_opt.name_base)
+            )
+            return bsc_core.PtnVersionPath.generate_as_new_version(ptn)
+        else:
+            ptn = six.u(
+                '{}.v{{version}}.mov'
+            ).format(bsc_core.auto_unicode(file_opt.path_base))
+            return bsc_core.PtnVersionPath.generate_as_new_version(ptn)

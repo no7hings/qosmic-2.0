@@ -304,17 +304,15 @@ class QtTreeWidgetItem(
         if status in {self.ProcessStatus.Unknown}:
             color = gui_qt_core.QtColors.Text
         elif status in {self.ProcessStatus.Waiting}:
-            color = QtGui.QColor(*self.Rgba.Orange)
-        elif status in {self.ProcessStatus.Started}:
-            color = QtGui.QColor(*self.Rgba.DarkBlue)
-        elif status in {self.ProcessStatus.Running}:
-            color = QtGui.QColor(*self.Rgba.Blue)
+            color = QtGui.QColor(*self.Rgba.LightOrange)
+        elif status in {self.ProcessStatus.Started, self.ProcessStatus.Running}:
+            color = QtGui.QColor(*self.Rgba.LightBlue)
         elif status in {self.ProcessStatus.Suspended}:
-            color = QtGui.QColor(*self.Rgba.Yellow)
+            color = QtGui.QColor(*self.Rgba.LightYellow)
         elif status in {self.ProcessStatus.Failed, self.ProcessStatus.Error, self.ProcessStatus.Killed}:
-            color = QtGui.QColor(*self.Rgba.Red)
+            color = QtGui.QColor(*self.Rgba.LightRed)
         elif status in {self.ProcessStatus.Completed, self.ProcessStatus.Finished}:
-            color = QtGui.QColor(*self.Rgba.Green)
+            color = QtGui.QColor(*self.Rgba.LightGreen)
         elif status in {self.ProcessStatus.Stopped}:
             color = QtGui.QColor(*self.Rgba.DarkGray)
         else:
@@ -672,6 +670,11 @@ class QtTreeWidgetItem(
 
     def _set_current_(self):
         self.treeWidget().setCurrentItem(self)
+
+    def _do_delete_(self):
+        if self.parent():
+            index = self.parent().indexOfChild(self)
+            self.parent().takeChild(index)
 
     def __str__(self):
         return '{}(names="{}")'.format(

@@ -5,11 +5,11 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt widgets
-from ...qt.widgets import base as gui_qt_wgt_base
+from ...qt.widgets import base as _qt_wgt_base
 
-from ...qt.widgets import utility as gui_qt_wgt_utility
+from ...qt.widgets import utility as _qt_wgt_utility
 # proxy widgets
 from . import port_base as _port_base
 
@@ -20,10 +20,10 @@ from . import input_for_port as _input_for_port
 class AbsPrxPortBaseDef(object):
     ENTRY_TYPE = 'custom'
 
-    Status = gui_core.GuiProcessStatus
-    ProcessStatus = gui_core.GuiProcessStatus
-    ShowStatus = gui_core.GuiShowStatus
-    ValidationStatus = gui_core.GuiValidationStatus
+    Status = _gui_core.GuiProcessStatus
+    ProcessStatus = _gui_core.GuiProcessStatus
+    ShowStatus = _gui_core.GuiShowStatus
+    ValidationStatus = _gui_core.GuiValidationStatus
 
     def _init_prx_port_def_(self, category, port_path, label=None):
         self._prx_node = None
@@ -386,8 +386,8 @@ class _AbsPrxPortBase(AbsPrxPortBaseDef):
         if self._custom_widget is not None:
             return self._custom_widget
         else:
-            widget = gui_qt_wgt_utility.QtTranslucentWidget()
-            layout = gui_qt_wgt_base.QtHBoxLayout(widget)
+            widget = _qt_wgt_utility.QtTranslucentWidget()
+            layout = _qt_wgt_base.QtHBoxLayout(widget)
             label = self.label_widget
             label.set_width(label_width)
             layout.addWidget(label.widget)
@@ -418,8 +418,8 @@ class _AbsPrxPortBase(AbsPrxPortBaseDef):
             i_qt_widget = i_port._prx_port_input._qt_input_widget
             # use radio icon
             i_qt_widget._set_check_icon_file_paths_(
-                gui_core.GuiIcon.get('radio_unchecked'),
-                gui_core.GuiIcon.get('radio_checked')
+                _gui_core.GuiIcon.get('radio_unchecked'),
+                _gui_core.GuiIcon.get('radio_checked')
             )
             i_qt_widget.user_check_clicked.connect(
                 functools.partial(
@@ -601,6 +601,9 @@ class PrxPortAsConstantChoose(_AbsPrxPortBase):
     def get_enumerate_strings(self):
         return self._prx_port_input.get_enumerate_strings()
 
+    def set_options(self, values, *args, **kwargs):
+        self._prx_port_input._qt_input_widget._set_choose_values_(values)
+
     def set_icon_file_as_value(self, value, file_path):
         self._prx_port_input.set_icon_file_as_value(value, file_path)
 
@@ -703,7 +706,7 @@ class PrxPortAsButton(_AbsPrxPortBase):
 
     def set_icon(self, icon_key):
         self._prx_port_input.set_icon_by_file(
-            gui_core.GuiIcon.get(icon_key)
+            _gui_core.GuiIcon.get(icon_key)
         )
 
     def set_status(self, status):
@@ -761,7 +764,7 @@ class PrxSubProcessPort(_AbsPrxPortBase):
     def set_statuses(self, statuses):
         self.get_input_widget()._set_sub_process_statuses_(statuses)
 
-    def initialization(self, count, status=gui_core.GuiProcessStatus.Started):
+    def initialization(self, count, status=_gui_core.GuiProcessStatus.Waiting):
         self.get_input_widget()._initialization_sub_process_(count, status)
 
     def restore_all(self):
@@ -794,7 +797,7 @@ class PrxSubProcessPort(_AbsPrxPortBase):
 
     def set_icon(self, icon_key):
         self._prx_port_input.set_icon_by_file(
-            gui_core.GuiIcon.get(icon_key)
+            _gui_core.GuiIcon.get(icon_key)
         )
 
 

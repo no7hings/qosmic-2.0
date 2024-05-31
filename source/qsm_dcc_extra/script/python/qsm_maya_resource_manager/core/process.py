@@ -42,7 +42,7 @@ class GuiProcessOpt(object):
             self._ts = []
 
             for _i_index, _i_cmd in enumerate(cmds):
-                _i_t = bsc_core.TrdCommandPool.generate(_i_cmd, _i_index)
+                _i_t = bsc_core.ThreadWorker.generate(_i_cmd, _i_index)
                 _i_t.status_changed.connect_to(status_changed_fnc_)
                 _i_t.finished.connect_to(finished_fnc_)
                 _i_t.failed.connect_to(failed_fnc_)
@@ -64,8 +64,8 @@ class GuiProcessOpt(object):
 
             c = len(cmds)
 
-            button.set_status(bsc_core.TrdCommandPool.Status.Started)
-            button.initialization(c, bsc_core.TrdCommandPool.Status.Started)
+            button.set_status(bsc_core.ThreadWorker.Status.Started)
+            button.initialization(c, bsc_core.ThreadWorker.Status.Started)
 
             q_t = gui_qt_core.QtMethodThread(self._window.widget)
             q_t.append_method(

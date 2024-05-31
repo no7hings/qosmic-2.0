@@ -8,7 +8,7 @@ import fnmatch
 import parse
 # scan
 from ..scan import glob_ as _scan_glob
-# core
+# process
 from . import base as _base
 
 from . import raw as _raw
@@ -446,3 +446,45 @@ class PtnDocParseOpt(AbsPtnParseOpt):
             lines,
             self.get_pattern_for_fnmatch()
         )
+
+
+class PtnVersionPath(object):
+    @classmethod
+    def to_number_embedded_args(cls, text):
+        pieces = re.compile(r'(\d+)').split(text)
+        pieces[1::2] = map(int, pieces[1::2])
+        return pieces
+    
+    @classmethod
+    def sort_by_number(cls, texts):
+        texts.sort(key=lambda x: cls.to_number_embedded_args(x))
+        return texts
+    
+    @classmethod
+    def get_version_latest(cls, ptn, padding=3):
+        ptn_glob = ptn.replace('{version}', '[0-9]'*padding)
+
+        _results = glob.glob(ptn_glob)
+        if not _results:
+            return None
+
+        _results = cls.sort_by_number(_results)
+
+        result = _results[-1]
+        result = result.replace('\\', '/')
+        return int(parse.parse(ptn, result)['version'])
+    
+    @classmethod
+    def generate_as_new_version(cls, ptn, padding=3):
+        version_latest = cls.get_version_latest(ptn)
+        if version_latest is None:
+            version_latest = 1
+        else:
+            version_latest += 1
+        return ptn.format(version=str(int(version_latest)).zfill(padding))
+
+    @classmethod
+    def generate_as_latest_version(cls, ptn, padding=3):
+        version_latest = cls.get_version_latest(ptn)
+        if version_latest is not None:
+            return ptn.format(version=str(int(version_latest)).zfill(padding))

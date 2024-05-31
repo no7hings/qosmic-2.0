@@ -15,15 +15,7 @@ from . import url as _url
 
 
 class WebSocketBase(object):
-    NAME = 'Qosmic Web Server'
     LOCALHOST = 'localhost'
-    HOST = 'localhost'
-    PORT = 12306
-
-
-class DesktopMessage(object):
-    HOST = 'localhost'
-    PORT = 12306
 
 
 class WebSocket(object):
@@ -117,21 +109,20 @@ class WebSocket(object):
 
         sock.sendall(bytes(frame_header)+text)
 
-    @classmethod
-    def is_valid(cls):
+    def __init__(self, host, port):
+        self._host = host
+        self._port = port
+
+        self._skt = None
+
+    def is_valid(self):
         # noinspection PyBroadException
         try:
             skt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            skt.connect((WebSocketBase.HOST, WebSocketBase.PORT))
+            skt.connect((self._host, self._port))
             return True
         except Exception:
             return False
-
-    def __init__(self):
-        self._host = WebSocketBase.HOST
-        self._port = WebSocketBase.PORT
-
-        self._skt = None
 
     def close(self):
         if self._skt is not None:

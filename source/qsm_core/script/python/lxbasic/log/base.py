@@ -138,9 +138,9 @@ class Log(object):
 
     FILE_SYSTEM_CODING = sys.getfilesystemencoding()
 
-    sys.stdout.write(
-        'logger is initialization, default coding is "{}"'.format(DEFAULT_CODING)+'\n'
-    )
+    # sys.stdout.write(
+    #     'logger is initialization, default coding is "{}"'.format(DEFAULT_CODING)+'\n'
+    # )
 
     ENABLE = True
 

@@ -203,8 +203,8 @@ class AbsValidatorOpt(object):
 
                 i_filter_key = '.'.join(
                     [
-                        bsc_core.SPathMtd.set_quote_to(i_group_name),
-                        bsc_core.SPathMtd.set_quote_to(i_description)
+                        bsc_core.SPathMtd.quote_to(i_group_name),
+                        bsc_core.SPathMtd.quote_to(i_description)
                     ]
                 )
 

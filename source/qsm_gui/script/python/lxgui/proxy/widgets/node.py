@@ -7,18 +7,18 @@ import lxbasic.core as bsc_core
 
 import lxuniverse.abstracts as unr_abstracts
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
-from ...qt import core as gui_qt_core
+from ...qt import core as _qt_core
 # qt widgets
-from ...qt.widgets import base as gui_qt_wgt_base
+from ...qt.widgets import base as _qt_wgt_base
 
-from ...qt.widgets import utility as gui_qt_wgt_utility
+from ...qt.widgets import utility as _qt_wgt_utility
 
-from ...qt.widgets import split as gui_qt_wgt_split
+from ...qt.widgets import split as _qt_wgt_split
 # proxy abstracts
-from .. import abstracts as gui_prx_abstracts
-
+from .. import abstracts as _prx_abstracts
+# proxy widgets
 from . import container as _container
 
 from . import port as _port
@@ -33,8 +33,8 @@ class PrxPortStack(unr_abstracts.AbsObjStack):
         return obj.name
 
 
-class PrxNodeOld(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
+class PrxNodeOld(_prx_abstracts.AbsPrxWidget):
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
     PORT_STACK_CLS = PrxPortStack
     LABEL_WIDTH = 160
     PORT_CLS_DICT = dict(
@@ -51,25 +51,25 @@ class PrxNodeOld(gui_prx_abstracts.AbsPrxWidget):
 
     def __init__(self, *args, **kwargs):
         super(PrxNodeOld, self).__init__(*args, **kwargs)
-        qt_layout_0 = gui_qt_wgt_base.QtHBoxLayout(self.widget)
+        qt_layout_0 = _qt_wgt_base.QtHBoxLayout(self.widget)
         qt_layout_0.setContentsMargins(*[0]*4)
         #
-        qt_splitter_0 = gui_qt_wgt_split.QtHSplitterOld()
+        qt_splitter_0 = _qt_wgt_split.QtHSplitterOld()
         qt_layout_0.addWidget(qt_splitter_0)
         #
-        self._qt_label_widget = gui_qt_wgt_utility.QtTranslucentWidget()
+        self._qt_label_widget = _qt_wgt_utility.QtTranslucentWidget()
         # self._qt_label_widget.setMaximumWidth(self.LABEL_WIDTH)
         self._name_width = 160
         self._qt_label_widget.setFixedWidth(self._name_width)
         qt_splitter_0.addWidget(self._qt_label_widget)
-        self._qt_label_layout = gui_qt_wgt_base.QtVBoxLayout(self._qt_label_widget)
-        self._qt_label_layout.setAlignment(gui_qt_core.QtCore.Qt.AlignTop)
+        self._qt_label_layout = _qt_wgt_base.QtVBoxLayout(self._qt_label_widget)
+        self._qt_label_layout.setAlignment(_qt_core.QtCore.Qt.AlignTop)
         self._qt_label_layout.setContentsMargins(2, 0, 2, 0)
         #
-        qt_entry_widget = gui_qt_wgt_utility.QtTranslucentWidget()
+        qt_entry_widget = _qt_wgt_utility.QtTranslucentWidget()
         qt_splitter_0.addWidget(qt_entry_widget)
-        self._qt_entry_layout = gui_qt_wgt_base.QtVBoxLayout(qt_entry_widget)
-        self._qt_entry_layout.setAlignment(gui_qt_core.QtCore.Qt.AlignTop)
+        self._qt_entry_layout = _qt_wgt_base.QtVBoxLayout(qt_entry_widget)
+        self._qt_entry_layout.setAlignment(_qt_core.QtCore.Qt.AlignTop)
         self._qt_entry_layout.setContentsMargins(2, 0, 2, 0)
 
         self._port_stack = self.PORT_STACK_CLS()
@@ -108,11 +108,11 @@ class PrxNodeOld(gui_prx_abstracts.AbsPrxWidget):
                     port_cur.label_widget.widget
                 )
                 #
-                enter_widget_cur = gui_qt_wgt_utility.QtTranslucentWidget()
+                enter_widget_cur = _qt_wgt_utility.QtTranslucentWidget()
                 self._qt_entry_layout.addWidget(
                     enter_widget_cur
                 )
-                enter_layout_cur = gui_qt_wgt_base.QtHBoxLayout(enter_widget_cur)
+                enter_layout_cur = _qt_wgt_base.QtHBoxLayout(enter_widget_cur)
                 enter_layout_cur.setContentsMargins(0, 0, 0, 0)
                 enter_layout_cur.setSpacing(2)
                 enter_layout_cur.addWidget(
@@ -157,7 +157,7 @@ class PrxNodeOld(gui_prx_abstracts.AbsPrxWidget):
 
 class PrxNodePortGroup(_port.AbsPrxPortBaseDef):
     ENTRY_TYPE = 'group'
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
     PORT_STACK_CLS = PrxPortStack
 
     def __init__(self, port_path, node, is_pseudo_root=False):
@@ -211,19 +211,19 @@ class PrxNodePortGroup(_port.AbsPrxPortBaseDef):
         #
         condition = join_next_pre, join_next_cur
         if condition == (False, False):
-            widget_cur = gui_qt_wgt_utility.QtTranslucentWidget()
+            widget_cur = _qt_wgt_utility.QtTranslucentWidget()
             self._port_layout.addWidget(widget_cur)
             port_cur.set_main_widget(widget_cur)
-            layout_cur = gui_qt_wgt_base.QtHBoxLayout(widget_cur)
+            layout_cur = _qt_wgt_base.QtHBoxLayout(widget_cur)
             layout_cur.setContentsMargins(0, 0, 0, 0)
             layout_cur._set_align_top_()
             port_cur._set_layout_(layout_cur)
             #
-            cur_key_widget = gui_qt_wgt_utility.QtTranslucentWidget()
+            cur_key_widget = _qt_wgt_utility.QtTranslucentWidget()
             cur_key_widget.hide()
             port_cur._set_key_widget_(cur_key_widget)
             layout_cur.addWidget(cur_key_widget)
-            cur_key_layout = gui_qt_wgt_base.QtHBoxLayout(cur_key_widget)
+            cur_key_layout = _qt_wgt_base.QtHBoxLayout(cur_key_widget)
             cur_key_layout.setContentsMargins(0, 0, 0, 0)
             cur_key_layout._set_align_top_()
             # + key
@@ -238,19 +238,19 @@ class PrxNodePortGroup(_port.AbsPrxPortBaseDef):
                 cur_key_widget.show()
         # pre is not join and current join to next
         elif condition == (False, True):
-            widget_cur = gui_qt_wgt_utility.QtTranslucentWidget()
+            widget_cur = _qt_wgt_utility.QtTranslucentWidget()
             self._port_layout.addWidget(widget_cur)
             port_cur.set_main_widget(widget_cur)
-            layout_cur = gui_qt_wgt_base.QtHBoxLayout(widget_cur)
+            layout_cur = _qt_wgt_base.QtHBoxLayout(widget_cur)
             layout_cur.setContentsMargins(0, 0, 0, 0)
             layout_cur.setSpacing(2)
             layout_cur._set_align_top_()
             port_cur._set_layout_(layout_cur)
-            key_widget_cur = gui_qt_wgt_utility.QtTranslucentWidget()
+            key_widget_cur = _qt_wgt_utility.QtTranslucentWidget()
             # key_widget_cur.hide()
             port_cur._set_key_widget_(key_widget_cur)
             layout_cur.addWidget(key_widget_cur)
-            cur_key_layout = gui_qt_wgt_base.QtHBoxLayout(key_widget_cur)
+            cur_key_layout = _qt_wgt_base.QtHBoxLayout(key_widget_cur)
             cur_key_layout.setContentsMargins(0, 0, 0, 0)
             cur_key_layout._set_align_top_()
             # + key
@@ -387,17 +387,17 @@ class PrxNodePortStack(unr_abstracts.AbsObjStack):
         return obj.get_port_path()
 
 
-class PrxOptionsNode(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
+class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
     PORT_STACK_CLS = PrxNodePortStack
 
-    def __init__(self, path, *args, **kwargs):
+    def __init__(self, path_or_name, *args, **kwargs):
         super(PrxOptionsNode, self).__init__(*args, **kwargs)
-        self._path_dag_opt = bsc_core.PthNodeOpt(path)
+        self._path_dag_opt = bsc_core.PthNodeOpt(path_or_name)
         # debug: do not set minimum height
         # self._qt_widget.setMinimumHeight(24)
         #
-        qt_layout_0 = gui_qt_wgt_base.QtVBoxLayout(self._qt_widget)
+        qt_layout_0 = _qt_wgt_base.QtVBoxLayout(self._qt_widget)
         qt_layout_0.setContentsMargins(*[0]*4)
         qt_layout_0.setSpacing(0)
 
@@ -514,7 +514,7 @@ class PrxOptionsNode(gui_prx_abstracts.AbsPrxWidget):
         label_ = variants.get('label') or variants.get('name')
         tool_tip_ = variants.get('tool_tip')
         #
-        ui_language = gui_core.GuiUtil.get_language()
+        ui_language = _gui_core.GuiUtil.get_language()
         #
         if ui_language == 'chs':
             if 'name_chs' in variants:
@@ -652,45 +652,74 @@ class PrxOptionsNode(gui_prx_abstracts.AbsPrxWidget):
             )
             port.set(value_)
             port.set_default(value_)
-        #
+        # bool
         elif widget_ in {'boolean'}:
             port = _port.PrxPortAsBoolean(
                 port_path,
                 node_widget=self.widget
             )
-            port.set(value_)
+            history_key_ = variants.get('history_key')
+            if history_key_:
+                port.set_history_key(history_key_)
+
             port.set_default(value_)
+
+            pull_history_latest = variants.get('pull_history_latest')
+            if pull_history_latest is True:
+                if port.pull_history_latest() is False:
+                    port.set(value_)
+            else:
+                port.set(value_)
 
         elif widget_ in {'enumerate'}:
             port = _port.PrxPortAsConstantChoose(
                 port_path,
                 node_widget=self.widget
             )
-            port.set(value_)
-            #
-            default_ = variants.get('default')
-            current_index_ = variants.get('current_index') or variants.get('default_index')
-            if default_ is not None:
-                port.set(default_)
-                port.set_default(default_)
-            elif current_index_ is not None:
-                port.set(current_index_)
-                port.set_default(current_index_)
+            if 'options' in variants:
+                options_ = variants['options']
             else:
-                if value_:
-                    port.set(value_[0])
-                    port.set_default(value_[0])
-                    # port.set(value_[-1])
-                    # port.set_default(value_[-1])
+                if isinstance(value_, (tuple, list)):
+                    options_ = value_
+                else:
+                    options_ = []
+            port.set_options(options_)
+
+            history_key_ = variants.get('history_key')
+            if history_key_:
+                port.set_history_key(history_key_)
+
+            default__ = None
+            default_ = variants.get('default')
+            default_index = variants.get('default_index')
+            if default_ is not None:
+                default__ = default_
+            elif default_index is not None:
+                default__ = options_[default_]
+            else:
+                if options_:
+                    default__ = options_[0]
+
+            if default_ is not None:
+                port.set_default(default__)
+
+            pull_history_latest = variants.get('pull_history_latest')
+            if pull_history_latest is True:
+                if port.pull_history_latest() is False:
+                    if default_ is not None:
+                        port.set(default_)
+            else:
+                if default_ is not None:
+                    port.set(default_)
 
         elif widget_ in {'icon'}:
             all_application_icon = variants.get('all_application_icon')
             if all_application_icon is True:
-                value_ = gui_core.GuiIcon.find_all_keys_at('application')
+                value_ = _gui_core.GuiIcon.find_all_keys_at('application')
                 value_.insert(0, '')
             all_tool_base_icon = variants.get('all_tool_base_icon')
             if all_tool_base_icon is True:
-                value_ = gui_core.GuiIcon.find_all_keys_at('tool_style')
+                value_ = _gui_core.GuiIcon.find_all_keys_at('tool_style')
                 value_.insert(0, '')
 
             port = _port.PrxPortAsIconChoose(
@@ -713,8 +742,8 @@ class PrxOptionsNode(gui_prx_abstracts.AbsPrxWidget):
             value_options = variants.get('options')
             value_names = variants.get('labels')
             if ui_language == 'chs':
-                if 'names_chs' in variants:
-                    value_names = variants['names_chs']
+                if 'option_names_chs' in variants:
+                    value_names = variants['option_names_chs']
             port.set_options(value_options, value_names)
             #
             value_default = variants.get('default')
@@ -736,8 +765,8 @@ class PrxOptionsNode(gui_prx_abstracts.AbsPrxWidget):
             value_options = variants.get('options')
             value_names = variants.get('labels')
             if ui_language == 'chs':
-                if 'names_chs' in variants:
-                    value_names = variants['names_chs']
+                if 'option_names_chs' in variants:
+                    value_names = variants['option_names_chs']
             port.set_options(value_options, value_names)
             #
             value_default = variants.get('default')
@@ -1063,6 +1092,12 @@ class PrxOptionsNode(gui_prx_abstracts.AbsPrxWidget):
     def set_reset(self):
         for i in self.get_ports():
             i.set_reset()
+
+    def set_dict(self, dict_):
+        for k, v in dict_.items():
+            i_port = self.get_port(k)
+            if i_port is not None:
+                i_port.set(v)
 
     def get_enumerate_strings(self, key):
         port = self.get_port(key)

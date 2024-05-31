@@ -16,7 +16,7 @@ import lxbasic.database as bsc_database
 
 class ScpResourcesAddByQuixel(object):
     """
-    import lxbasic.core as bsc_core
+    import lxbasic.process as bsc_core
 
     import lxbasic.database as bsc_database
     scp = ScpResourcesAddByQuixel()

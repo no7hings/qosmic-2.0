@@ -93,8 +93,8 @@ class QtInputAsConstantWithChoose(
     # completion
     _qt_abstracts.AbsQtInputCompletionExtraDef,
 ):
-    def _pull_history_(self, *args, **kwargs):
-        pass
+    def _pull_history_(self, value):
+        self._set_value_(value)
 
     QT_ENTRY_CLS = _entry.QtEntryAsConstant
 
@@ -135,6 +135,10 @@ class QtInputAsConstantWithChoose(
         self._init_input_completion_extra_def_(self)
 
         self._build_input_entry_(self._value_type)
+
+        self.user_input_choose_value_accepted.connect(
+            self._push_history_
+        )
 
         self.installEventFilter(self)
 
@@ -192,11 +196,17 @@ class QtInputAsConstantWithChoose(
         # completion
         self._build_input_completion_()
         self.user_input_completion_value_accepted.connect(self._set_value_)
-        #
         self._set_input_completion_buffer_fnc_(
             self._choose_value_completion_gain_fnc_
         )
-
+        # connect completion to choose
+        self._completion_popup_widget.user_popup_finished.connect(
+            self.input_choose_changed.emit
+        )
+        self._completion_popup_widget.user_popup_finished.connect(
+            self.user_input_choose_changed.emit
+        )
+        #
         self._entry_widget.entry_value_changed.connect(self._refresh_choose_index_)
 
     def _set_entry_enable_(self, boolean):

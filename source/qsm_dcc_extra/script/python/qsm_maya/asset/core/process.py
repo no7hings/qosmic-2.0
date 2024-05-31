@@ -1,4 +1,8 @@
 # coding:utf-8
+import six
+
+import lxbasic.web as bsc_web
+
 import lxbasic.core as bsc_core
 
 
@@ -9,6 +13,7 @@ class MayaCacheProcess(object):
             maya_version = bsc_core.SysApplicationMtd.get_maya_version()
         else:
             maya_version = '2019'
+        # do not use unicode
         # windows
         cmd_scripts = [
             'rez-env maya-{} qsm_dcc_main'.format(maya_version),

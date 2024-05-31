@@ -20,7 +20,7 @@ import lxkatana
 
 lxkatana.set_reload()
 
-import lxkatana.core as ktn_core
+import lxkatana.process as ktn_core
 
 import lxkatana.dcc.operators as ktn_dcc_operators
 

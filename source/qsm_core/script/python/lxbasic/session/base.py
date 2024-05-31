@@ -42,6 +42,15 @@ class AbsSsnConfigureBaseDef(object):
             'group_name'
         )
 
+    def get_gui_name_(self, language='en_us'):
+        if language == 'chs':
+            _ = self._gui_configure.get('name_chs')
+            if _:
+                return _
+        return self._gui_configure.get(
+            'name'
+        )
+
     def get_gui_name(self):
         return self._gui_configure.get(
             'name'
@@ -188,18 +197,20 @@ class AbsSsnGener(
     user = property(get_user)
 
     def get_gui_window_name(self):
+        language = bsc_core.EnvExtraMtd.get_ui_language()
+        gui_name = self.get_gui_name_(language)
+        gui_name = bsc_core.auto_string(gui_name)
         if self.get_is_td_enable() is True:
             return '[ALPHA] {} - {}'.format(
-                    self.get_gui_name(), str(self.application).capitalize()
+                    gui_name, str(self.application).capitalize()
                 )
         elif self.get_is_beta_enable() is True:
             return '[BETA] {} - {}'.format(
-                    self.get_gui_name(), str(self.application).capitalize()
+                    gui_name, str(self.application).capitalize()
                 )
         return '{} - {}'.format(
-                self.get_gui_name(), str(self.application).capitalize()
+                gui_name, str(self.application).capitalize()
             )
-
 
     @property
     def system(self):

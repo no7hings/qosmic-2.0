@@ -27,38 +27,10 @@ class QtCheckButton(
     _qt_abstracts.AbsQtActionForCheckDef,
     #
     _qt_abstracts.AbsQtValueDefaultExtraDef,
+    _qt_abstracts.AbsQtValueHistoryExtraDef
 ):
     def _refresh_widget_all_(self):
         pass
-
-    def __init__(self, *args, **kwargs):
-        super(QtCheckButton, self).__init__(*args, **kwargs)
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
-        self.setPalette(qt_palette)
-        self.setFont(_qt_core.QtFonts.NameNormal)
-        #
-        self.setMaximumHeight(20)
-        self.setMinimumHeight(20)
-        #
-        self.installEventFilter(self)
-        #
-        self.setFocusPolicy(QtCore.Qt.NoFocus)
-        #
-        self._init_frame_base_def_(self)
-        self._init_icon_base_def_(self)
-        self._init_name_base_def_(self)
-        #
-        self._init_action_for_hover_def_(self)
-        self._init_action_base_def_(self)
-        self._init_action_for_check_def_(self)
-        self._set_check_enable_(True)
-        #
-        self._init_value_default_extra_def_(self)
-        #
-        self._refresh_check_draw_()
-        #
-        self._set_name_draw_font_(_qt_core.QtFonts.Button)
 
     def _refresh_widget_draw_(self):
         self.update()
@@ -85,8 +57,51 @@ class QtCheckButton(
             x, y, w-x, h
         )
 
+    def __init__(self, *args, **kwargs):
+        super(QtCheckButton, self).__init__(*args, **kwargs)
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
+        self.setPalette(qt_palette)
+        self.setFont(_qt_core.QtFonts.NameNormal)
+        #
+        self.setMaximumHeight(20)
+        self.setMinimumHeight(20)
+        #
+        self.installEventFilter(self)
+        #
+        self.setFocusPolicy(QtCore.Qt.NoFocus)
+        #
+        self._init_frame_base_def_(self)
+        self._init_icon_base_def_(self)
+        self._init_name_base_def_(self)
+        #
+        self._init_action_for_hover_def_(self)
+        self._init_action_base_def_(self)
+        self._init_action_for_check_def_(self)
+        self._set_check_enable_(True)
+        #
+        self._init_value_default_extra_def_(self)
+        self._init_value_history_base_def_(self)
+        #
+        self._refresh_check_draw_()
+        #
+        self._set_name_draw_font_(_qt_core.QtFonts.Button)
+
+        self.user_check_toggled.connect(self._push_history_)
+
+    def _get_value_is_valid_(self, value):
+        if isinstance(value, bool):
+            return True
+        return False
+
+    def _pull_history_(self, value):
+        self._set_checked_(value)
+
     def _get_value_(self):
         return self._get_is_checked_()
+
+    def _set_value_(self, value):
+        self._set_checked_(value)
 
     def eventFilter(self, *args):
         widget, event = args
@@ -352,7 +367,7 @@ class QtPressButton(
         super(QtPressButton, self)._initialization_sub_process_(count, status)
         if count > 0:
             self._set_status_(
-                self.Status.Started
+                self.Status.Running
             )
             self._sub_process_timer.start(100)
 
@@ -483,14 +498,17 @@ class QtPressButton(
             )
         # sub process
         if self._get_sub_process_is_enable_() is True:
-            status_rgba = [self._status_color, self._hover_status_color][self._is_hovered]
-            status_rgba_array = [self._sub_process_status_colors, self._hover_sub_process_status_colors][
-                self._is_hovered]
+            status_rgba = [
+                self._status_color, self._hover_status_color
+            ][self._is_hovered]
+            sub_status_rgba_array = [
+                self._sub_process_status_colors, self._hover_sub_process_status_colors
+            ][self._is_hovered]
             #
             r, g, b, a = status_rgba
             painter._draw_alternating_colors_by_rect_(
                 rect=self._rect_frame_draw,
-                colors=((r, g, b, 63), (0, 0, 0, 0)),
+                colors=((r, g, b, 127), (0, 0, 0, 0)),
                 offset=offset,
                 border_radius=4,
                 running=not self._get_sub_process_is_finished_()
@@ -498,16 +516,18 @@ class QtPressButton(
             #
             painter._draw_process_statuses_by_rect_(
                 rect=self._sub_process_status_rect,
-                colors=status_rgba_array,
+                colors=sub_status_rgba_array,
                 offset=offset,
                 border_radius=1,
             )
         # validator
         elif self._get_validator_is_enable_() is True:
-            status_rgba_array = [self._validator_status_colors, self._hover_validator_status_colors][self._is_hovered]
+            sub_status_rgba_array = [
+                self._validator_status_colors, self._hover_validator_status_colors
+            ][self._is_hovered]
             painter._draw_process_statuses_by_rect_(
                 self._validator_status_rect,
-                colors=status_rgba_array,
+                colors=sub_status_rgba_array,
                 offset=offset,
                 border_radius=1,
             )

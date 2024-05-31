@@ -5,6 +5,8 @@ import enum
 
 import sys
 
+import six
+
 import lxbasic.web as bsc_web
 
 from ..core.wrap import *
@@ -98,10 +100,12 @@ class AbsQtMainWindowDef(object):
             if self._window_close_fncs:
                 for i in self._window_close_fncs:
                     i()
-            #
+
+            self.window_close_accepted.emit(self)
+
             self._widget.close()
             self._widget.deleteLater()
-            self.window_close_accepted.emit(self)
+
             self._window_close_flag = True
 
     def _set_window_ask_for_close_enable_(self, boolean):
@@ -140,6 +144,8 @@ class QtDialogBase(
     AbsQtShortcutBaseDef
 ):
     size_changed = qt_signal()
+
+    key_escape_pressed = qt_signal()
 
     def __init__(self, *args, **kwargs):
         super(QtDialogBase, self).__init__(*args, **kwargs)
@@ -387,18 +393,19 @@ class QtMessageBase(QtDialogBase):
             size=self.DEFAULT_SIZE
         )
 
-    def _show_buttons_(self, *args):
-        for i in args:
-            if i == self.Buttons.Ok:
-                self._set_ok_visible_(True)
-            elif i == self.Buttons.No:
-                self._set_no_visible_(True)
-            elif i == self.Buttons.Cancel:
-                self._set_cancel_visible_(True)
-            elif i == self.Buttons.All:
-                self._set_ok_visible_(True)
-                self._set_no_visible_(True)
-                self._set_cancel_visible_(True)
+    def _set_buttons_(self, *args):
+        buttons = [
+            self._ok_button,
+            self._no_button,
+            self._cancel_button
+        ]
+        for i_idx, i_arg in enumerate(args):
+            if i_arg:
+                i_button = buttons[i_idx]
+                i_button._set_visible_(True)
+                if isinstance(i_arg, six.string_types):
+                    i_button._set_name_text_(i_arg)
+                    self._cancel_button._fix_width_to_name_()
 
     def _do_exec_(self):
         self._do_window_show_(
@@ -477,8 +484,7 @@ class AbsNoticeBaseDef(object):
         wgt = QtNoticeBox()
         # append first
         self._notice_widgets.append(wgt)
-        wgt._set_ok_visible_(True)
-        wgt._set_no_visible_(True)
+        wgt._set_buttons_(True, True)
 
         wgt.window_close_accepted.connect(
             self._notice_close_fnc_
@@ -638,6 +644,14 @@ class QtMainWindow(
         else:
             self._do_window_close_()
             event.accept()
+
+    def _exec_message_(self, message):
+        w = QtMessageBox(self)
+        w._set_title_('Message')
+        w._set_ok_visible_(True)
+        w._set_no_visible_(True)
+        w._set_message_(message)
+        w._do_exec_()
 
     def _set_icon_name_text_(self, text):
         self.setWindowIcon(

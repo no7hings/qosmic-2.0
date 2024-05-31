@@ -72,8 +72,16 @@ class HardwareRenderSettings(object):
         )
 
     @classmethod
-    def set_render_mode(cls, mode):
-        pass
+    def set_render_mode(cls, texture_enable, light_enable, shadow_enable):
+        if texture_enable is True:
+            cmds.setAttr('hardwareRenderingGlobals.renderMode', 4)
+        else:
+            cmds.setAttr('hardwareRenderingGlobals.renderMode', 1)
+
+        if light_enable is True:
+            cmds.setAttr('hardwareRenderingGlobals.lightingMode', 1)
+        else:
+            cmds.setAttr('hardwareRenderingGlobals.lightingMode', 0)
 
     @classmethod
     def set_display_mode(cls, display_mode):

@@ -34,7 +34,7 @@ import glob
 import socket
 
 import collections
-# core
+# process
 from . import configure as _configure
 
 
@@ -1085,7 +1085,7 @@ class SPathMtd(object):
     RE_ASCII = re.compile('([\x00-\x7f]+)')
 
     @classmethod
-    def set_quote_to(cls, s, safe=''):
+    def quote_to(cls, s, safe=''):
         # fastpath
         if not s:
             if s is None:
@@ -1109,7 +1109,7 @@ class SPathMtd(object):
         return isinstance(x, unicode)
 
     @classmethod
-    def set_unquote_to(cls, s):
+    def unquote_to(cls, s):
         """unquote('abc%20def') -> 'abc def'."""
         if cls._get_is_unicode(s):
             if '%' not in s:
@@ -1118,7 +1118,7 @@ class SPathMtd(object):
             res = [bits[0]]
             append = res.append
             for i in range(1, len(bits), 2):
-                append(cls.set_unquote_to(str(bits[i])).decode('latin1'))
+                append(cls.unquote_to(str(bits[i])).decode('latin1'))
                 append(bits[i+1])
             return ''.join(res)
 

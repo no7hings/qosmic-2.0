@@ -7,7 +7,7 @@ cmd = """
 
 # lxclarisse.set_reload()
 
-import lxclarisse.core as crs_core
+import lxclarisse.process as crs_core
 
 o = crs_core.StageOpt()
 

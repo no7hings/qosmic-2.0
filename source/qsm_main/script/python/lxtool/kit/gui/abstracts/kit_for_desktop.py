@@ -589,7 +589,6 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
             tool_group_layout._sort_widgets_by_name_texts_(names)
 
     def gui_build(self):
-        self._web_socket_server = gui_qt_core.QtWebSocketServer(self._qt_widget)
         # self.gui_build_all_for_builtin()
         self.gui_build_all_for_customize()
 

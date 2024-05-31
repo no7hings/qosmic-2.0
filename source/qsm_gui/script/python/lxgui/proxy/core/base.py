@@ -43,10 +43,11 @@ class GuiProxyUtil(object):
                 app = gui_qt_core.GuiQtUtil.create_app()
 
                 w = _qt_wgt_window_base.QtMessageBox()
+
                 w._set_message_(
                     'Window "{}" is exists, press "Ok" show it, or close it and retry.'.format(window_unique_name)
                 )
-                w._show_buttons_(w.Buttons.Ok)
+                w._set_buttons_(True)
                 w._do_exec_()
 
                 hwnd = win32gui.FindWindow(None, window_unique_name)
@@ -83,6 +84,8 @@ class GuiProxyUtil(object):
         else:
             prx_window = prx_window_cls(**window_kwargs)
             prx_window.set_main_window_geometry(gui_qt_core.GuiQtDcc.get_qt_main_window_geometry_args())
+            if window_ask_for_close is True:
+                prx_window.set_window_ask_for_close_enable(window_ask_for_close)
 
             if isinstance(show_kwargs, dict):
                 prx_window.set_window_show(**show_kwargs)

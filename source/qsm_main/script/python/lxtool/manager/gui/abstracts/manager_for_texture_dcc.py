@@ -266,11 +266,11 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                         j_dcc_obj_prx_item.set_name(j_color_space, 1)
                         if i_descriptions:
                             self._gui_tag_filter_opt.register(
-                                j_dcc_obj_prx_item, [bsc_core.SPathMtd.set_quote_to(i) for i in i_descriptions]
+                                j_dcc_obj_prx_item, [bsc_core.SPathMtd.quote_to(i) for i in i_descriptions]
                             )
                         else:
                             self._gui_tag_filter_opt.register(
-                                j_dcc_obj_prx_item, [bsc_core.SPathMtd.set_quote_to(i) for i in ['N/a']]
+                                j_dcc_obj_prx_item, [bsc_core.SPathMtd.quote_to(i) for i in ['N/a']]
                             )
 
         repath_src_port.set_statuses(

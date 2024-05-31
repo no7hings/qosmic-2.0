@@ -629,8 +629,11 @@ class PrxPressButton(gui_prx_abstracts.AbsPrxWidget):
     def set_finished_at(self, index, status):
         self.widget.rate_finished_at.emit(index, status)
 
-    def initialization(self, count, status=gui_core.GuiProcessStatus.Started):
+    def initialization(self, count, status=gui_core.GuiProcessStatus.Waiting):
         self.widget._initialization_sub_process_(count, status)
+
+    def set_stopped(self, boolean=True):
+        self._is_stopped = boolean
 
 
 class PrxCheckItem(gui_prx_abstracts.AbsPrxWidget):

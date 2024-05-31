@@ -241,6 +241,7 @@ class GuiRgba(object):
     LightGray = 159, 159, 159, 255
 
     Light = 223, 223, 223, 255
+    Basic = 63, 63, 63, 255
     Dark = 55, 55, 55, 255
     Dim = 47, 47, 47, 255
     Transparent = 0, 0, 0, 0

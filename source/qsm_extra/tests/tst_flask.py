@@ -30,14 +30,14 @@ class MainWindow(QMainWindow):
         # self.label.setText(f"Error: {error_message}")
 
 
-def start_server_process():
+def start_server_use_process():
     flask_process = multiprocessing.Process(target=run_flask)
     flask_process.start()
     return flask_process
 
 
 def main():
-    flask_process = start_server_process()
+    flask_process = start_server_use_process()
 
     app = QApplication(sys.argv)
     main_window = MainWindow()

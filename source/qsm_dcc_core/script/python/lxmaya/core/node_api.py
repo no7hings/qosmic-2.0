@@ -788,7 +788,7 @@ import lxmaya
 
 lxmaya.set_reload()
 
-import lxmaya.core as mya_core
+import lxmaya.process as mya_core
 
 print mya_core.Om2MeshOpt(
     'mesh_001Shape'

@@ -1,0 +1,50 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Process-Task Manager'
+        group_name: 'General(s)'
+        #
+        icon_name: 'application/task_manager'
+        tool_tip:
+            - 'for task monitor'
+            - '...'
+        #
+        size: [480, 720]
+
+build:
+    task_properties:
+        parameters:
+            id:
+                widget: string
+                value: ''
+                lock: True
+
+            host_name:
+                widget: string
+                value: ''
+                lock: True
+
+            user_name:
+                widget: string
+                value: ''
+                lock: True
+
+            group:
+                widget: string
+                value: ''
+
+            name:
+                widget: string
+                value: ''
+
+            cmd_script:
+                widget: script
+                value: ''
+
+            completed_notice:
+                widget: script
+                value: ''

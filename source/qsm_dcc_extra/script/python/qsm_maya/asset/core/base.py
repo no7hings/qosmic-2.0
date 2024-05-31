@@ -22,9 +22,10 @@ class AssetCache(object):
         )
 
     @classmethod
-    def generate_dynamic_gpu_directory(cls, user_name):
+    def generate_dynamic_gpu_directory(cls, user_name, key=None):
         root = bsc_core.EnvBaseMtd.get_temporary_root()
-        key = bsc_core.UuidMtd.generate_new()
+        if key is None:
+            key = bsc_core.UuidMtd.generate_new()
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
         return '{}/.asset-cache/dynamic-gpu/{}/{}/{}'.format(
             root, user_name, region, key
