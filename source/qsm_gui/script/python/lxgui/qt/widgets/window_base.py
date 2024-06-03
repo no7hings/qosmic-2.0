@@ -1,6 +1,7 @@
 # coding=utf-8
 # qt
 import copy
+
 import enum
 
 import sys
@@ -8,6 +9,8 @@ import sys
 import six
 
 import lxbasic.web as bsc_web
+
+import lxbasic.core as bsc_core
 
 from ..core.wrap import *
 
@@ -363,10 +366,12 @@ class QtMessageBase(QtDialogBase):
     def _execute_python_script_(script):
         if script is not None:
             # noinspection PyBroadException
+            script = 'import os; os.startfile("Z:/temeporaries/dongchangbao/playblast_tool/test.export.v004.mov".decode("utf-8"))'
             try:
                 exec script
             except Exception:
-                pass
+                import traceback
+                traceback.print_exc()
 
     def _set_no_visible_(self, boolean):
         self._no_button._set_visible_(boolean)

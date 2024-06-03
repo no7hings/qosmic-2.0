@@ -17,7 +17,7 @@ class W(prx_widgets.PrxBaseWindow):
 
         self._qt_widget._show_notice_(
             # 'playblast is completed do you want to play it?'
-            'status=error&message=%E6%8B%8D%E5%B1%8F%E7%BB%93%E6%9D%9F%E4%BA%86&command=abc&title=%E9%80%9A%E7%9F%A5'
+            'status=normal&message=%E6%8B%8D%E5%B1%8F%E7%BB%93%E6%9D%9F%E4%BA%86%2C+%E6%98%AF%E5%90%A6%E6%89%93%E5%BC%80%E8%A7%86%E9%A2%91%3F&ok_python_script=import+os%3B+os.startfile%28%22Z%3A%2Ftemeporaries%2Fdongchangbao%2Fplayblast_tool%2F%E8%91%A3%E6%98%8C%E5%AE%9D%2Ftest.export.v010.mov%22%29&title=%E9%80%9A%E7%9F%A5'
         )
 
 

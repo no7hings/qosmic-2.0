@@ -118,7 +118,7 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
 
             prx_item.set_expanded(True)
             prx_item.set_checked(False)
-            prx_item.set_gui_menu_raw(
+            prx_item.set_gui_menu_data(
                 [
                     ('system',),
                     ('open folder', 'file/open-folder', directory_opt.open_in_system)
@@ -149,7 +149,7 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
             )
 
             prx_item.set_checked(False)
-            prx_item.set_gui_menu_raw(
+            prx_item.set_gui_menu_data(
                 [
                     ('system',),
                     ('open folder', 'file/open-folder', directory_opt.open_in_system)
@@ -263,7 +263,7 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
 
             prx_item.set_expanded(True)
             prx_item.set_checked(False)
-            prx_item.set_gui_menu_raw(
+            prx_item.set_gui_menu_data(
                 [
                     ('system',),
                     ('open folder', 'file/open-folder', directory_opt.open_in_system)
@@ -306,7 +306,7 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
             )
 
             prx_item.set_checked(False)
-            prx_item.set_gui_menu_raw(
+            prx_item.set_gui_menu_data(
                 [
                     ('system',),
                     ('open folder', 'file/open-folder', stg_opt.open_in_system)

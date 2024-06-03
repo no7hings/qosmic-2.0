@@ -388,18 +388,18 @@ class AbsGuiExtraDef(object):
     def get_gui_ng_tree_node(self):
         return self.get_gui_attribute('gui_ng_tree_node')
 
-    def set_gui_menu_raw(self, raw):
+    def set_gui_menu_data(self, raw):
         self.set_gui_attribute('gui_menu', raw)
 
     def set_gui_menu_raw_append(self, raw):
         pre_raw = self.get_gui_attribute('gui_menu') or []
         pre_raw.append(raw)
-        self.set_gui_menu_raw(pre_raw)
+        self.set_gui_menu_data(pre_raw)
 
     def set_gui_menu_raw_extend(self, raw):
         pre_raw = self.get_gui_attribute('gui_menu') or []
         pre_raw.extend(raw)
-        self.set_gui_menu_raw(pre_raw)
+        self.set_gui_menu_data(pre_raw)
 
     def get_gui_menu_raw(self):
         return self.get_gui_attribute('gui_menu')

@@ -779,3 +779,15 @@ h3.setting-heading-compact {
 .datepicker-other-month.datepicker-picked {
   color: white;
 }
+
+.card-board-card[data-tags~=waiting] .card-board-card-highlight-area {
+  background-color: orange;
+}
+
+.card-board-card[data-tags~=processing] .card-board-card-highlight-area {
+  background-color: blue;
+}
+
+.card-board-card[data-tags~=testing] .card-board-card-highlight-area {
+  background-color: green;
+}

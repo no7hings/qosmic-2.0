@@ -79,7 +79,7 @@ class _GuiHistoryOpt(
         time_text = entity.get('time')
         group_name = bsc_core.DateTime.to_period(
             time_text,
-            # 'chs'
+            self._window._language
         )
         qt_item = self._qt_history_view._prepend_item_(
             entity.id, group_name, entity.get('name')

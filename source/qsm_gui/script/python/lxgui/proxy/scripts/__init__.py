@@ -3,7 +3,7 @@ from .resolver import *
 
 from .view_for_tree import *
 
-from .gui_process import *
+from .gui_thread_worker import *
 
 
 

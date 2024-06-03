@@ -11,6 +11,8 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.widgets as prx_widgets
 
+import lxgui.proxy.scripts as gui_prx_scripts
+
 import qsm_general.scan as qsm_gnl_scan
 
 import qsm_maya.core as qsm_mya_core
@@ -156,7 +158,7 @@ class UnitForRigUtilityToolSet(
                         g_p.do_update()
 
                 if create_cmds:
-                    mtd = _rsc_mng_core.GuiProcessOpt(self._window, self)
+                    mtd = gui_prx_scripts.GuiThreadWorker(self._window)
                     mtd.execute(self._load_skin_proxy_button, create_cmds)
                 else:
                     self.do_dcc_load_skin_proxies()
@@ -213,7 +215,7 @@ class UnitForRigUtilityToolSet(
                         g_p.do_update()
 
                 if create_cmds:
-                    mtd = _rsc_mng_core.GuiProcessOpt(self._window, self)
+                    mtd = gui_prx_scripts.GuiThreadWorker(self._window)
                     mtd.execute(self._load_dynamic_gpu_button, create_cmds)
                 else:
                     self.do_dcc_load_dynamic_gpus()

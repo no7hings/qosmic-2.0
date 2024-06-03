@@ -1,5 +1,6 @@
 # coding:utf-8
 
+
 def skin_proxy_generate_fnc(option_opt):
     file_path = option_opt.get('file')
     cache_file_path = option_opt.get('cache_file')
@@ -49,29 +50,43 @@ def gpu_instance_generate_fnc(option_opt):
     ).execute()
 
 
-def playblast_fnc(option_opt):
-    file_path = option_opt.get('file')
-    movie_file_path = option_opt.get('movie')
-    camera_path = option_opt.get('camera')
-    start_frame = option_opt.get_as_integer('start_frame')
-    end_frame = option_opt.get_as_integer('end_frame')
-    frame_step = option_opt.get_as_integer('frame_step') or 1.0
-    width = option_opt.get_as_integer('width')
-    height = option_opt.get_as_integer('height')
-    texture_enable = option_opt.get_as_boolean('texture_enable')
-    light_enable = option_opt.get_as_boolean('light_enable')
-    shadow_enable = option_opt.get_as_boolean('shadow_enable')
-
-    import lxbasic.web as bsc_web
+def playblast_fnc(method, option_opt):
+    import qsm_general.core as qsm_gnl_core
 
     import qsm_maya.preview.scripts as qsm_mya_prv_scripts
 
+    option_dict = qsm_gnl_core.MayaCacheProcess.to_option_dict(
+        method, option_opt.to_string()
+    )
+
+    file_path = option_dict.get('file')
+    movie_file_path = option_dict.get('movie')
+    camera_path = option_dict.get('camera')
+    start_frame = option_dict.get('start_frame')
+    end_frame = option_dict.get('end_frame')
+    frame_step = option_dict.get('frame_step') or 1.0
+    width = option_dict.get('width')
+    height = option_dict.get('height')
+    texture_enable = option_dict.get('texture_enable')
+    light_enable = option_dict.get('light_enable')
+    shadow_enable = option_dict.get('shadow_enable')
+
     qsm_mya_prv_scripts.PlayblastProcess(
-        bsc_web.UrlValue.unquote(file_path),
-        bsc_web.UrlValue.unquote(movie_file_path),
+        file_path,
+        movie_file_path,
         camera_path, start_frame, end_frame, frame_step, width, height,
         texture_enable, light_enable, shadow_enable
     ).execute()
+
+
+def test_unicode(method, option_opt):
+    import qsm_general.core as qsm_gnl_core
+
+    option_dict = qsm_gnl_core.MayaCacheProcess.to_option_dict(
+        method, option_opt.to_string()
+    )
+
+    print option_dict, 'AAA'
 
 
 def main(session):
@@ -80,17 +95,20 @@ def main(session):
     cmds.stackTrace(state=1)
     #
     option_opt = session.get_option_opt()
-    key = option_opt.get('method')
-    if key == 'skin-proxy-cache-generate':
+    method = option_opt.get('method')
+    if method == 'skin-proxy-cache-generate':
         skin_proxy_generate_fnc(option_opt)
-    elif key == 'dynamic-gpu-cache-generate':
+    elif method == 'dynamic-gpu-cache-generate':
         dynamic_gpu_generate_fnc(option_opt)
-    elif key == 'unit-assembly-cache-generate':
+    elif method == 'unit-assembly-cache-generate':
         unit_assembly_generate_fnc(option_opt)
-    elif key == 'gpu-instance-cache-generate':
+    elif method == 'gpu-instance-cache-generate':
         gpu_instance_generate_fnc(option_opt)
-    elif key == 'playblast':
-        playblast_fnc(option_opt)
+    elif method == 'playblast':
+        playblast_fnc(method, option_opt)
+    # test
+    elif method == 'test-unicode':
+        test_unicode(method, option_opt)
 
 
 if __name__ == '__main__':

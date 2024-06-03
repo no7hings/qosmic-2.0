@@ -101,7 +101,7 @@ class AbsPrxTreeDef(object):
             pass
         #
         if menu is not None:
-            item_prx.set_gui_menu_raw(menu)
+            item_prx.set_gui_menu_data(menu)
         #
         add_method(item_prx.widget)
         item_prx.widget._connect_item_show_()
@@ -279,7 +279,7 @@ class PrxTreeItem(
     def get_gui_menu_raw(self):
         return self._qt_widget._get_menu_data_()
 
-    def set_gui_menu_raw(self, raw):
+    def set_gui_menu_data(self, raw):
         self._qt_widget._set_menu_data_(raw)
 
     def set_gui_menu_raw_append(self, raw):
@@ -738,7 +738,7 @@ class PrxListItemWidget(
 
     item = property(get_item)
 
-    def set_gui_menu_raw(self, raw):
+    def set_gui_menu_data(self, raw):
         self._qt_widget._set_menu_data_(raw)
 
     def set_index(self, index):

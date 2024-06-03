@@ -228,7 +228,7 @@ class PrxTreeView(
     def set_size_policy_height_fixed_mode(self):
         self._qt_view._set_size_policy_height_fixed_mode_()
 
-    def set_gui_menu_raw(self, data):
+    def set_gui_menu_data(self, data):
         self._qt_view._set_menu_data_(data)
 
     def get_gui_menu_raw(self):

@@ -111,8 +111,18 @@ class _GuiTaskOpt(
         super(_GuiTaskOpt, self).__init__(window, page, session)
         self._init_tree_view_opt_(prx_tree_view, self.DCC_NAMESPACE)
 
-        self._prx_tree_view.create_header_view(
-            [
+        if self._window._language == 'chs':
+            header_data = [
+                ('名字', 4),
+                ('状态', 2),
+                ('进度', 2),
+                ('发布时间', 2),
+                ('开始时间', 2),
+                ('结束时间', 2),
+                ('索引', 2),
+            ]
+        else:
+            header_data = [
                 ('name', 4),
                 ('status', 2),
                 ('progress', 2),
@@ -120,9 +130,9 @@ class _GuiTaskOpt(
                 ('start time', 2),
                 ('finish time', 2),
                 ('index', 2),
-            ],
-            1280-32
-        )
+            ]
+
+        self._prx_tree_view.create_header_view(header_data, 1280-32)
         self._prx_tree_view.set_selection_use_extend()
         self._prx_tree_view._qt_view.header().setSortIndicatorShown(True)
 
@@ -225,8 +235,18 @@ class _GuiTaskOpt(
                 str(entity.get('index'))
             ]
         )
-        prx_item.set_gui_menu_raw(
-            [
+        if self._window._language == 'chs':
+            menu_data = [
+                ('custom',),
+                ('显示任务日志', 'log', lambda: self.do_gui_show_task_log(entity)),
+                ('打开输出文件夹', 'file/folder', lambda: self.do_open_output_directory(entity)),
+                ('extra',),
+                ('重新提交任务', 'tool/maya/requeue-task', self.do_requeue_tasks),
+                ('停止任务', 'tool/maya/stop-task', self.do_stop_tasks),
+                ('移动任务到回收站', 'trash', self.do_delete_tasks),
+            ]
+        else:
+            menu_data = [
                 ('custom',),
                 ('show task log', 'log', lambda: self.do_gui_show_task_log(entity)),
                 ('open output directory', 'file/folder', lambda: self.do_open_output_directory(entity)),
@@ -235,6 +255,9 @@ class _GuiTaskOpt(
                 ('stop tasks', 'tool/maya/stop-task', self.do_stop_tasks),
                 ('send tasks to trash', 'trash', self.do_delete_tasks),
             ]
+
+        prx_item.set_gui_menu_data(
+            menu_data
         )
         if self._startup_flag is True:
             if status == entity.Status.Waiting:
@@ -526,7 +549,11 @@ class PrxPageForMonitor(prx_abstracts.AbsPrxWidget):
     def gui_refresh_task_info(self, status_dict):
         texts = []
         keys = [
-            'total', 'running', 'suspended', 'completed', 'failed'
+            'total',
+            'running',
+            # 'suspended',
+            'completed', 
+            'failed'
         ]
         for i_key in keys:
             if i_key in status_dict:

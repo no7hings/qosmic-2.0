@@ -48,3 +48,12 @@ build:
             completed_notice:
                 widget: script
                 value: ''
+
+    tabs:
+        task:
+            name: 'Task'
+            name_chs: '任务'
+
+        notice:
+            name: 'Notice'
+            name_chs: '通知'

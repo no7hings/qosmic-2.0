@@ -1,0 +1,9 @@
+{
+	"nodes":[
+		{"id":"885546f078d10378","type":"file","file":"技术文档/Qosmic/组件与模块/组件/基础/qsm_core.md","x":-1880,"y":-600,"width":400,"height":400},
+		{"id":"af1a69637a7bcdfd","type":"file","file":"技术文档/Qosmic/组件与模块/组件/基础/qsm_gui.md","x":-1400,"y":-600,"width":400,"height":400}
+	],
+	"edges":[
+		{"id":"6c34b4bc15f74772","fromNode":"885546f078d10378","fromSide":"right","toNode":"af1a69637a7bcdfd","toSide":"left"}
+	]
+}

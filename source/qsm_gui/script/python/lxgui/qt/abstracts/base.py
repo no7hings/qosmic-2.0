@@ -38,6 +38,10 @@ class AbsQtWidgetBaseDef(object):
     def _set_size_(self, w, h):
         self._widget.setFixedSize(QtCore.QSize(w, h))
 
+    @classmethod
+    def _get_language_(cls):
+        return bsc_core.EnvBaseMtd.get_ui_language()
+
 
 class AbsQtBusyBaseDef(object):
     def _init_busy_base_def_(self, widget):

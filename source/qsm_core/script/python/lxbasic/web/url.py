@@ -27,6 +27,7 @@ class UrlValue(object):
         if not isinstance(path, six.text_type):
             return path.decode('utf-8')
         return path
+
     @classmethod
     def auto_string(cls, path):
         if isinstance(path, six.text_type):

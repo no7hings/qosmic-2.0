@@ -682,7 +682,7 @@ class GuiPrxScpForStorageTreeAdd(gui_prx_abstracts.AbsGuiPrxCacheDef):
                 ('unlock', None, None),
             ]
         )
-        prx_item.set_gui_menu_raw(menu_raw)
+        prx_item.set_gui_menu_data(menu_raw)
         prx_item.set_menu_content(obj.get_gui_menu_content())
         #
         if obj.get_is_root() is False:
@@ -790,7 +790,7 @@ class GuiPrxScpForTextureTreeAdd(GuiPrxScpForStorageTreeAdd):
                 ('Collapse branch', None, prx_item.set_collapse_branch),
             ]
         )
-        prx_item.set_gui_menu_raw(menu_raw)
+        prx_item.set_gui_menu_data(menu_raw)
         prx_item.set_menu_content(obj.get_gui_menu_content())
         #
         if obj.get_is_exists() is False:
@@ -869,7 +869,7 @@ class GuiPrxScpForTreeAdd1(object):
         prx_item.set_name(obj_name)
         prx_item.set_tool_tip(obj_path)
 
-        prx_item.set_gui_menu_raw(menu_raw)
+        prx_item.set_gui_menu_data(menu_raw)
 
     def gui_add(self, obj, prx_item_parent, name_use_path_prettify):
         if name_use_path_prettify is True:

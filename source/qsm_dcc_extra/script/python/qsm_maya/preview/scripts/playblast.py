@@ -7,6 +7,8 @@ import lxbasic.web as bsc_web
 
 import lxbasic.storage as bsc_storage
 
+import qsm_general.core as qsm_gnl_core
+
 from ... import core as _mya_core
 
 from ...asset import core as _ast_core
@@ -35,27 +37,38 @@ class PlayblastOpt(object):
         )
         file_opt = bsc_storage.StgFileOpt(file_path)
 
-        # _mya_core.SceneFile.export_file(
-        #     file_path, keep_reference=True
-        # )
+        _mya_core.SceneFile.export_file(
+            file_path, keep_reference=True
+        )
         start_frame, end_frame = frame
         width, height = resolution
         movie_file_path = six.u('{}.mov').format(bsc_core.auto_unicode(file_opt.path_base))
-        cmd_script = _ast_core.MayaCacheProcess.generate_command(
-            (
-                'method=playblast&file={file}&movie={movie}&camera={camera}'
-                '&start_frame={start_frame}&end_frame={end_frame}&frame_step={frame_step}'
-                '&width={width}&height={height}'
-                '&texture_enable={texture_enable}&light_enable={light_enable}&shadow_enable={shadow_enable}'
-            ).format(
-                file=bsc_web.UrlValue.quote(file_path),
-                movie=bsc_web.UrlValue.quote(movie_file_path),
+        cmd_script = qsm_gnl_core.MayaCacheProcess.generate_cmd_script_by_option_dict(
+            'playblast',
+            dict(
+                file=file_path,
+                movie=movie_file_path,
                 camera=camera_path,
                 start_frame=start_frame, end_frame=end_frame, frame_step=frame_step,
                 width=width, height=height,
                 texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable
             )
         )
+        # cmd_script = _ast_core.MayaCacheProcess.generate_command(
+        #     (
+        #         'method=playblast&file={file}&movie={movie}&camera={camera}'
+        #         '&start_frame={start_frame}&end_frame={end_frame}&frame_step={frame_step}'
+        #         '&width={width}&height={height}'
+        #         '&texture_enable={texture_enable}&light_enable={light_enable}&shadow_enable={shadow_enable}'
+        #     ).format(
+        #         file=bsc_web.UrlValue.quote(file_path),
+        #         movie=bsc_web.UrlValue.quote(movie_file_path),
+        #         camera=camera_path,
+        #         start_frame=start_frame, end_frame=end_frame, frame_step=frame_step,
+        #         width=width, height=height,
+        #         texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable
+        #     )
+        # )
         task_name = '[playblast][{}][{}][{}]'.format(
             file_opt.name, '{}x{}'.format(width, height), '{}-{}'.format(start_frame, end_frame)
         )
@@ -79,6 +92,7 @@ class PlayblastProcess(object):
         self._shadow_enable = shadow_enable
 
     def execute(self):
+        # print self._file_path
         file_opt = bsc_storage.StgFileOpt(self._file_path)
         if file_opt.get_is_file():
             _mya_core.SceneFile.open(self._file_path)
@@ -90,12 +104,12 @@ class PlayblastProcess(object):
             for i in q.get_all():
                 i.switch_to_original()
 
-            movie_file_path = '{}.mov'.format(file_opt.get_path_base())
-
             _prv_core.Playblast.execute(
-                movie_file_path=movie_file_path,
+                movie_file_path=self._movie_file_path,
                 camera=self._camera,
                 frame=(self._start_frame, self._end_frame), frame_step=self._frame_step,
                 resolution=(self._width, self._height),
                 texture_enable=self._texture_enable, light_enable=self._light_enable, shadow_enable=self._shadow_enable
             )
+        else:
+            raise RuntimeError()

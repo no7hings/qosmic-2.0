@@ -142,14 +142,14 @@ class PrxPageForRigResource(prx_abstracts.AbsPrxWidget):
             self._output_directory_port.set_locked(True)
             self._output_file_port.set_locked(False)
 
-    def get_camera_path(self):
+    def gui_get_camera_path(self):
         scheme = self._camera_scheme_port.get()
         if scheme == 'auto':
             return qsm_mya_core.Camera.get_active()
         elif scheme == 'camera_path':
             return self._camera_path_port.get()
 
-    def get_file_path(self):
+    def gui_get_file_path(self):
         save_scheme = self._output_save_scheme_port.get()
         update_scheme = self._output_save_scheme_port
         if save_scheme == 'auto':
@@ -167,11 +167,11 @@ class PrxPageForRigResource(prx_abstracts.AbsPrxWidget):
             return self._output_file_port.get()
 
     def do_dcc_playblast(self):
-        move_file_path = self.get_file_path()
+        move_file_path = self.gui_get_file_path()
         if move_file_path is None:
             return
 
-        camera_path = self.get_camera_path()
+        camera_path = self.gui_get_camera_path()
         if camera_path is None:
             return
 
@@ -228,11 +228,11 @@ class PrxPageForRigResource(prx_abstracts.AbsPrxWidget):
         import qsm_task.process as qsm_tsk_process
 
         if qsm_tsk_process.TaskProcessClient.get_server_status():
-            move_file_path = self.get_file_path()
+            move_file_path = self.gui_get_file_path()
             if move_file_path is None:
                 raise RuntimeError()
 
-            camera_path = self.get_camera_path()
+            camera_path = self.gui_get_camera_path()
             if camera_path is None:
                 raise RuntimeError()
 
@@ -266,12 +266,13 @@ class PrxPageForRigResource(prx_abstracts.AbsPrxWidget):
                 icon_name='application/maya',
                 file=file_path,
                 output_file=bsc_core.auto_unicode(movie_file_path),
-                # use string
+                # must use string
                 completed_notice=bsc_web.UrlOptions.to_string(
                     dict(
                         title='通知',
                         message='拍屏结束了, 是否打开视频?',
-                        ok_python_script='import os; os.startfile("{}")'.format(
+                        # todo? exec must use unicode
+                        ok_python_script='import os; os.startfile("{}".decode("utf-8"))'.format(
                             bsc_core.auto_string(movie_file_path)
                         ),
                         status='normal'

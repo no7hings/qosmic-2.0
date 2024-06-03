@@ -141,7 +141,7 @@ class _GuiEntityOpt(
                 ('Collapse branch', None, prx_item.set_collapse_branch),
             ]
         )
-        prx_item.set_gui_menu_raw(menu_raw)
+        prx_item.set_gui_menu_data(menu_raw)
         prx_item.set_menu_content(obj.get_gui_menu_content())
 
     def gui_add_one(self, obj):

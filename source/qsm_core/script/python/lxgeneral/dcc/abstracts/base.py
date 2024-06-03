@@ -23,7 +23,7 @@ class AbsGuiExtraDef(object):
     def icon(self):
         raise NotImplementedError()
 
-    def set_gui_menu_raw(self, data):
+    def set_gui_menu_data(self, data):
         self._gui_menu_raw = data
 
     def get_gui_menu_raw(self):

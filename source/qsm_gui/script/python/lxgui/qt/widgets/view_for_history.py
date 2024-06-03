@@ -1,5 +1,7 @@
 # coding=utf-8
 import os
+
+import lxbasic.core as bsc_core
 # gui
 from ... import core as _gui_core
 # qt
@@ -18,7 +20,10 @@ from . import button as _button
 from . import container as _container
 
 
-class QtItemForHistoryEntity(QtWidgets.QWidget):
+class QtItemForHistoryEntity(
+    _qt_abstracts.AbsQtWidgetBaseDef,
+    QtWidgets.QWidget
+):
     HEIGHT = 96
 
     LEFT_WIDTH = 32
@@ -179,6 +184,8 @@ class QtItemForHistoryEntity(QtWidgets.QWidget):
 
         self.setFixedHeight(self.HEIGHT)
 
+        self._init_widget_base_def_(self)
+
         self._group_widget = None
         
         self._key_text = None
@@ -216,12 +223,18 @@ class QtItemForHistoryEntity(QtWidgets.QWidget):
         self._menu_button = _button.QtIconMenuButton(self)
         self._menu_button._set_icon_name_('tab/tab-menu-v')
 
-        self._menu_button._set_menu_data_(
-            [
-                ('show in folder', 'file/open-folder', self._open_folder_fnc_),
-                ('send to trash', 'trash', self._delete_fnc_)
+        if self._get_language_() == 'chs':
+            menu_data = [
+                ('在文件夹中显示', 'file/open-folder', self._open_folder_fnc_),
+                ('移动到回收站', 'trash', self._delete_fnc_)
             ]
-        )
+        else:
+            menu_data = [
+                ('Show in folder', 'file/open-folder', self._open_folder_fnc_),
+                ('Send to trash', 'trash', self._delete_fnc_)
+            ]
+
+        self._menu_button._set_menu_data_(menu_data)
 
         self._menu_button_s = 20
 
@@ -394,7 +407,7 @@ class QtItemForHistoryEntity(QtWidgets.QWidget):
         self._open_associate_fnc_ = fnc
 
     def _set_file_path_(self, path):
-        self._file_path = path
+        self._file_path = bsc_core.auto_unicode(path)
         self._file_icon = _qt_core.GuiQtDcc.get_qt_file_icon(self._file_path)
 
     def _set_group_widget_(self, widget):

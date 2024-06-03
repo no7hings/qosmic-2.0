@@ -565,7 +565,6 @@ class _QtNGConnection(
             path.cubicTo(c1, c2, p_1)
             path.lineTo(p_1)
             path.cubicTo(c2, c1, p_0)
-
         #
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()

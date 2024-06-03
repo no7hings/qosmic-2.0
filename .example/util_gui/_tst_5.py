@@ -21,7 +21,7 @@ class TestWindow(prx_widgets.PrxBaseWindow):
             item_prx.set_icon_by_file('application/maya')
             item_prx.set_name(str(i).zfill(9))
             # item_prx.set_icon_by_name('asset')
-            item_prx.set_gui_menu_raw(
+            item_prx.set_gui_menu_data(
                 [
                     ('Open folder', 'file/open-folder', None),
                 ]

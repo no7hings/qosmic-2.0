@@ -65,7 +65,7 @@ class QtPainter(QtGui.QPainter):
                 if use_exclusive is True:
                     i_background_color, i_font_color = (
                         gui_core.GuiRgba.DarkBlue,
-                        gui_core.GuiRgba.Black
+                        gui_core.GuiRgba.LightBlack
                     )
                 else:
                     i_background_color, i_font_color = _base.GuiQtColor.generate_color_args_by_text(i_text)

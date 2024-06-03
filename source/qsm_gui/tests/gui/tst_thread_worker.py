@@ -23,7 +23,7 @@ class W(prx_widgets.PrxBaseWindow):
             r'rez-env python27 -- python -c "import time; time.sleep(5); print \"{}\""'.format(x) for x in range(15)
         ]
 
-        mtd = prx_scripts.GuiProcessOpt(self)
+        mtd = prx_scripts.GuiThreadWorker(self)
         mtd.execute(self._d, create_cmds)
 
 

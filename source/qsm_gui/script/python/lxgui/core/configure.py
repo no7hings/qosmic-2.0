@@ -234,7 +234,9 @@ class GuiRgba(object):
     Violet = 127, 0, 255, 255
 
     White = 255, 255, 255, 255
+
     Black = 0, 0, 0, 255
+    LightBlack = 31, 31, 31, 255
 
     Gray = 127, 127, 127, 255
     DarkGray = 95, 95, 95, 255

@@ -1525,7 +1525,7 @@ class PrxInputAsResolverEntity(_AbsPrxInputExtra):
             if bsc_storage.StgPathOpt(result).get_is_file():
                 prx_item.set_icon_by_file(gui_core.GuiIcon.get_by_file(result))
         #
-        prx_item.set_gui_menu_raw(menu_raw)
+        prx_item.set_gui_menu_data(menu_raw)
         prx_item.set_menu_content(obj.get_gui_menu_content())
 
     def __add_item_as_tree(self, obj):
@@ -1690,7 +1690,7 @@ class PrxInputAsNodes(_AbsPrxInputExtra):
                 ]
             )
         #
-        prx_item.set_gui_menu_raw(menu_raw)
+        prx_item.set_gui_menu_data(menu_raw)
         prx_item.set_menu_content(obj.get_gui_menu_content())
         #
         # self._prx_input.set_loading_update()
@@ -1956,7 +1956,7 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
                 ]
             )
         #
-        prx_item.set_gui_menu_raw(menu_raw)
+        prx_item.set_gui_menu_data(menu_raw)
         #
         if obj.get_is_exists() is False:
             prx_item.set_status(

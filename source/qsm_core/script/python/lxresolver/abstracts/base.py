@@ -643,7 +643,7 @@ class AbsRsvEntity(
             self._rsv_properties.value
         )
         if self.type_name in self.VariantTypes.Trunks:
-            self.set_gui_menu_raw(
+            self.set_gui_menu_data(
                 [
                     ('{}-directory'.format(self.type_name),),
                     ('Open Directory', 'file/open-folder',
@@ -651,7 +651,7 @@ class AbsRsvEntity(
                 ]
             )
         elif self.type_name in self.VariantTypes.Branches:
-            self.set_gui_menu_raw(
+            self.set_gui_menu_data(
                 [
                     [
                         'Open Directory', 'file/open-folder',
@@ -1013,7 +1013,7 @@ class AbsRsvUnit(AbsRsvEntity):
 class AbsRsvUnitVersion(AbsRsvEntity):
     def __init__(self, *args, **kwargs):
         super(AbsRsvUnitVersion, self).__init__(*args, **kwargs)
-        self.set_gui_menu_raw(
+        self.set_gui_menu_data(
             [
                 ('{}-directory'.format(self.type_name),),
                 ('Open Directory', 'file/folder', (True, self._open_source_directory, False)),

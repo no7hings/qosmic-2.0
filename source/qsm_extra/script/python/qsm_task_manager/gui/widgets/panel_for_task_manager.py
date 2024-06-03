@@ -3,6 +3,8 @@ import lxbasic.log as bsc_log
 
 import lxgui.proxy.widgets as prx_widgets
 
+import lxgui.core as gui_core
+
 import lxgui.qt.core as gui_qt_core
 
 import qsm_task.process as qsm_tsk_process
@@ -34,8 +36,10 @@ class PrxPanelForTaskManager(prx_widgets.PrxSessionWindow):
 
         self._prx_tab_view.add_widget(
             monitor_sca,
-            key='monitor',
-            name='Monitor',
+            key='task',
+            name=gui_core.GuiUtil.choice_name(
+                self._language, self._session.configure.get('build.tabs.task')
+            ),
             tool_tip='...'
         )
         
@@ -50,7 +54,9 @@ class PrxPanelForTaskManager(prx_widgets.PrxSessionWindow):
         self._prx_tab_view.add_widget(
             notice_sca,
             key='notice',
-            name='Notice',
+            name=gui_core.GuiUtil.choice_name(
+                self._language, self._session.configure.get('build.tabs.notice')
+            ),
             tool_tip='...'
         )
 
@@ -74,7 +80,7 @@ class PrxPanelForTaskManager(prx_widgets.PrxSessionWindow):
 
     def gui_refresh_all(self, force=False):
         key = self._prx_tab_view.get_current_key()
-        if key == 'monitor':
+        if key == 'task':
             self._monitor_prx_page.do_gui_refresh_all(force)
         elif key == 'notice':
             self._notice_prx_page.do_gui_refresh_all(force)

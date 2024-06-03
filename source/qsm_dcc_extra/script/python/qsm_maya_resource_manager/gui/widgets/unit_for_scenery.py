@@ -11,6 +11,8 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.widgets as prx_widgets
 
+import lxgui.proxy.scripts as gui_prx_scripts
+
 import qsm_general.scan as qsm_gnl_scan
 
 import qsm_maya.core as qsm_mya_core
@@ -152,7 +154,7 @@ class UnitForSceneryUtilityToolSet(
                         g_p.do_update()
 
                 if create_cmds:
-                    mtd = _rsc_mng_core.GuiProcessOpt(self._window, self)
+                    mtd = gui_prx_scripts.GuiThreadWorker(self._window)
                     mtd.execute(self._load_unit_assembly_button, create_cmds)
                 else:
                     self.do_dcc_load_unit_assemblies()
@@ -212,7 +214,7 @@ class UnitForSceneryUtilityToolSet(
                         g_p.do_update()
 
                 if create_cmds:
-                    mtd = _rsc_mng_core.GuiProcessOpt(self._window, self)
+                    mtd = gui_prx_scripts.GuiThreadWorker(self._window)
                     mtd.execute(self._load_gpu_instance_button, create_cmds)
                 else:
                     self.do_dcc_load_gpu_instances()

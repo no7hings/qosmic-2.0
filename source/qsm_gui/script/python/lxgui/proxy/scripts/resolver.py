@@ -160,7 +160,7 @@ class GuiPrxScpForResolver(object):
                 # ]
             ]
         )
-        prx_item.set_gui_menu_raw(menu_raw)
+        prx_item.set_gui_menu_data(menu_raw)
         prx_item.set_menu_content(obj.get_gui_menu_content())
 
     def gui_add_as_tree(self, obj):
