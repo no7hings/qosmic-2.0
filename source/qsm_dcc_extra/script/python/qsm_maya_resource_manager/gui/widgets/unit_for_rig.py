@@ -490,32 +490,31 @@ class UnitForRigExtendToolSet(
                 self._window._language, self._session.configure.get('build.tag-groups.rig_extend')
             )
         )
+        # control
+        self._prx_options_node.set(
+            'control.enable_playback_visible', self.do_dcc_enable_control_playback_visible
+        )
+        self._prx_options_node.set(
+            'control.disable_playback_visible', self.do_dcc_disable_control_playback_visible
+        )
+        # transformation
+        self._prx_options_node.set(
+            'transformation.create_transformation_locator', self.do_dcc_create_transformation_locator
+        )
 
-        self._prx_options_node.get_port(
-            'control.enable_playback_visible'
-        ).set(
-            self.do_dcc_enable_control_playback_visible
-        )
-        self._prx_options_node.get_port(
-            'control.disable_playback_visible'
-        ).set(
-            self.do_dcc_disable_control_playback_visible
+        self._prx_options_node.set(
+            'transformation.remove_transformation_locator', self.do_dcc_remove_transformation_locator
         )
 
-        self._prx_options_node.get_port(
-            'animation_transfer.transfer_all'
-        ).set(
-            self.do_dcc_transfer_animation
+        # animation transfer
+        self._prx_options_node.set(
+            'animation_transfer.transfer_all', self.do_dcc_transfer_animation
         )
-        self._prx_options_node.get_port(
-            'animation_transfer.copy_all'
-        ).set(
-            self.do_dcc_copy_animation
+        self._prx_options_node.set(
+            'animation_transfer.copy_all', self.do_dcc_copy_animation
         )
-        self._prx_options_node.get_port(
-            'animation_transfer.paste_all'
-        ).set(
-            self.do_dcc_paste_animation
+        self._prx_options_node.set(
+            'animation_transfer.paste_all', self.do_dcc_paste_animation
         )
 
     def do_dcc_copy_animation(self):
@@ -604,3 +603,15 @@ class UnitForRigExtendToolSet(
                 i_namespace = i_resource.namespace
                 i_controls = qsm_mya_motion.AdvMotionOpt(i_namespace).find_controls()
                 [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 1) for x in i_controls]
+
+    def do_dcc_create_transformation_locator(self):
+        resources = self._page._gui_resource_opt.gui_get_selected_resources()
+        if resources:
+            namespaces = [x.namespace for x in resources]
+            qsm_mya_rig_scripts.TransformationLocatorOpt(namespaces).create_transformation_locators()
+
+    def do_dcc_remove_transformation_locator(self):
+        resources = self._page._gui_resource_opt.gui_get_selected_resources()
+        if resources:
+            namespaces = [x.namespace for x in resources]
+            qsm_mya_rig_scripts.TransformationLocatorOpt(namespaces).remove_transformation_locators()

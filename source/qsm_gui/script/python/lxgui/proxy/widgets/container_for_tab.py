@@ -35,3 +35,12 @@ class PrxHTabBox(gui_prx_abstracts.AbsPrxWidget):
 
     def connect_current_changed_to(self, fnc):
         self._qt_widget.current_changed.connect(fnc)
+
+    def set_history_key(self, key):
+        self._qt_widget._set_history_key_(key)
+
+    def load_history(self):
+        self._qt_widget._load_history_()
+
+    def save_history(self):
+        self._qt_widget._save_history_()

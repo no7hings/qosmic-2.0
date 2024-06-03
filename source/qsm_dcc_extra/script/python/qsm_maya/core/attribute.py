@@ -120,9 +120,9 @@ class NodeAttribute(object):
         return lis
 
     @classmethod
-    def get_source_node(cls, path, atr_name, node_type=None):
+    def get_source_node(cls, path, atr_name, node_type=None, skip_conversion_nodes=0):
         kwargs = dict(
-            destination=0, source=1
+            destination=0, source=1, skipConversionNodes=skip_conversion_nodes
         )
         if node_type is not None:
             kwargs['type'] = node_type

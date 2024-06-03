@@ -248,6 +248,28 @@ build:
                     icon: 'tool/hide'
                     tool_tip: '...'
 
+                transformation:
+                    widget: group
+                    name: 'Transformation'
+                    name_chs: '变换'
+
+                transformation/create_transformation_locator:
+                    widget: button
+                    name: 'Create Transformation Locator'
+                    name_chs: '创建变换定位器（Locator）'
+                    icon: 'tool/maya/move'
+                    join_to_next: True
+                    tool_tip:
+                        |-
+                        创建一个定位器（Locator）用于移动带动画的绑定
+
+                transformation/remove_transformation_locator:
+                    widget: button
+                    name: 'Remove Transformation Locator'
+                    name_chs: '移除变换定位器（Locator）'
+                    icon: 'tool/maya/delete'
+                    tool_tip: '...'
+
                 animation_transfer:
                     widget: group
                     name_chs: '动画传递'

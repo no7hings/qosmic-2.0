@@ -52,6 +52,8 @@ class QtTabView(
     _qt_abstracts.AbsQtMenuBaseDef,
     _qt_abstracts.AbsQtActionBaseDef,
     _qt_abstracts.AbsQtActionForDragDef,
+    
+    _qt_abstracts.AbsQtHistoryBaseDef,
 ):
     current_changed = qt_signal()
 
@@ -234,6 +236,16 @@ class QtTabView(
             c_t_f_x, c_t_f_y, c_t_f_w, c_t_f_h
         )
 
+    def _load_history_(self):
+        self._set_current_key_text_(
+            self._get_history_value_()
+        )
+
+    def _save_history_(self):
+        self._set_history_value_(
+            self._get_current_key_text_()
+        )
+
     def __init__(self, *args, **kwargs):
         super(QtTabView, self).__init__(*args, **kwargs)
         self.installEventFilter(self)
@@ -252,6 +264,8 @@ class QtTabView(
 
         self._init_action_base_def_(self)
         self._init_action_for_drag_def_(self)
+        
+        self._init_history_base_def_(self)
 
         self._tab_bar_rect = QtCore.QRect()
         self._tab_bar_draw_rect = QtCore.QRect()
@@ -503,14 +517,14 @@ class QtTabView(
     def _get_current_index_(self):
         return self.__layer_stack._get_current_index_()
 
-    def _set_item_current_by_name_text_(self, text):
+    def _set_current_name_text_(self, text):
         index = self._tab_item_stack.get_index_by_name(
             text
         )
         if index is not None:
             self._switch_current_to_(index)
 
-    def _set_item_current_by_key_text_(self, text):
+    def _set_current_key_text_(self, text):
         index = self._tab_item_stack.get_index_by_key(
             text
         )

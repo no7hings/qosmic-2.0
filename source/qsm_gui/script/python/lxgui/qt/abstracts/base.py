@@ -1384,6 +1384,38 @@ class AbsQtValueBaseDef(object):
         return self._value_options
 
 
+class AbsQtHistoryBaseDef(object):
+    def _init_history_base_def_(self, widget):
+        self._widget = widget
+
+        self._history_key = None
+
+    def _set_history_key_(self, key):
+        self._history_key = key
+        self._refresh_history_()
+
+    def _get_history_key_(self):
+        return self._history_key
+
+    def _refresh_history_(self):
+        if self._history_key is not None:
+            self._load_history_()
+
+    def _get_history_value_(self):
+        if self._history_key is not None:
+            return _gui_core.GuiHistory.get_one(self._history_key)
+
+    def _set_history_value_(self, value):
+        if self._history_key is not None:
+            _gui_core.GuiHistory.set_one(self._history_key, value)
+
+    def _load_history_(self):
+        raise NotImplementedError()
+
+    def _save_history_(self):
+        raise NotImplementedError()
+
+
 class AbsQtValueValidationExtraDef(object):
     def _init_value_validation_extra_def_(self, widget):
         self._widget = widget
@@ -1848,7 +1880,7 @@ class AbsQtProgressBaseDef(object):
     def _set_progress_run_(self):
         self._refresh_widget_draw_geometry_()
         self._refresh_widget_draw_()
-        #
+        # noinspection PyArgumentList
         QtWidgets.QApplication.instance().processEvents(
             QtCore.QEventLoop.ExcludeUserInputEvents
         )

@@ -99,10 +99,10 @@ class PrxTabView(gui_prx_abstracts.AbsPrxWidget):
         self._qt_widget.current_changed.connect(fnc)
 
     def set_current_by_name(self, name):
-        self._qt_widget._set_item_current_by_name_text_(name)
+        self._qt_widget._set_current_name_text_(name)
 
     def set_current_by_key(self, key):
-        self._qt_widget._set_item_current_by_key_text_(key)
+        self._qt_widget._set_current_key_text_(key)
 
     def set_add_enable(self, boolean):
         self._qt_widget._set_tab_add_enable_(boolean)
@@ -121,6 +121,15 @@ class PrxTabView(gui_prx_abstracts.AbsPrxWidget):
 
     def set_drag_enable(self, boolean):
         self._qt_widget._set_drag_enable_(boolean)
+
+    def set_history_key(self, key):
+        self._qt_widget._set_history_key_(key)
+
+    def load_history(self):
+        self._qt_widget._load_history_()
+
+    def save_history(self):
+        self._qt_widget._save_history_()
 
 
 class PrxToolGridLayoutWidget(gui_prx_abstracts.AbsPrxWidget):

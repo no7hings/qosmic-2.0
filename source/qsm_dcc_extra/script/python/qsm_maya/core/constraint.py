@@ -5,8 +5,9 @@ import maya.cmds as cmds
 
 class ParentConstraint(object):
     @classmethod
-    def create(cls, parent_path, child_path):
-        return cmds.parentConstraint(parent_path, child_path)[0]
+    def create(cls, parent_path, child_path, maintain_offset=0):
+        # parentConstraint -mo -weight 1
+        return cmds.parentConstraint(parent_path, child_path, maintainOffset=maintain_offset)[0]
 
     @classmethod
     def get_all(cls, path):

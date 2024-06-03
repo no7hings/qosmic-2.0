@@ -23,6 +23,13 @@ class DagNode(_node.Node):
         return cls.to_path(_)
 
     @classmethod
+    def create_locator(cls, path):
+        parent_path = '|'.join(path.split('|')[:-1])
+        name = path.split('|')[-1]
+        _ = cmds.spaceLocator(name=name, position=(0, 0, 0))
+        return cls.parent_to(_[0], parent_path)
+
+    @classmethod
     def create_transform(cls, path):
         return cls.create(path, 'transform')
 
@@ -44,6 +51,10 @@ class DagNode(_node.Node):
 
     @classmethod
     def get_parent(cls, path):
+        return '|'.join(path.split('|')[:-1])
+
+    @classmethod
+    def to_parent_path(cls, path):
         return '|'.join(path.split('|')[:-1])
 
     @classmethod
@@ -154,6 +165,7 @@ class NodeDrawOverride(object):
         cmds.setAttr(path+'.overrideVisibility', boolean)
 
     @classmethod
-    def set_color(cls, path, rgb):
+    def set_color(cls, path, rgb, enable=True):
+        cls.set_enable(path, enable)
         cmds.setAttr(path+'.overrideRGBColors', 1)
         cmds.setAttr(path+'.overrideColorRGB', *rgb)

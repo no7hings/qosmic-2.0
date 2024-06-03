@@ -158,6 +158,9 @@ class PrxPageForRigResource(prx_abstracts.AbsPrxWidget):
         self._window.connect_window_activate_changed_to(self.do_gui_refresh_by_window_active_changing)
         self._window.connect_window_close_to(self._do_dcc_destroy_all_script_jobs)
         self._tool_prx_tab_box.connect_current_changed_to(self.do_gui_refresh_tabs)
+
+        self._tool_prx_tab_box.set_history_key('resource-manager.rig_page_key_current')
+        self._tool_prx_tab_box.load_history()
     
     def gui_get_tool_tab_box(self):
         return self._tool_prx_tab_box

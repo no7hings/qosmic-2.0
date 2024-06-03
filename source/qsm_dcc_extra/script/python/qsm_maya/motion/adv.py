@@ -1,5 +1,4 @@
 # coding:utf-8
-import json
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
@@ -7,7 +6,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import qsm_maya.core as qsm_mya_core
+from .. import core as _mya_core
 
 from . import control as _control
 
@@ -21,7 +20,7 @@ class AdvMotionOpt(object):
     def __init__(self, namespace):
         self._namespace = namespace
 
-        self._root = qsm_mya_core.Namespace
+        self._root = _mya_core.Namespace
 
     def find_control_set(self):
         _ = cmds.ls('{}:ControlSet'.format(self._namespace), long=1)
@@ -47,6 +46,9 @@ class AdvMotionOpt(object):
         _ = cmds.ls('{}:{}'.format(self._namespace, control_key), long=1)
         if _:
             return _[0]
+
+    def find_main_control(self):
+        return self.find_control('Main')
 
     def get_animations(self):
         dict_ = {}
@@ -87,3 +89,49 @@ class AdvMotionOpt(object):
         self.apply_animations(
             bsc_storage.StgFileOpt(file_path).set_read(), **kwargs
         )
+
+    def create_transformation_locator(self, location=None):
+        main_control = self.find_main_control()
+        if main_control is None:
+            return
+
+        name = _mya_core.DagNode.to_name(main_control)
+
+        locator_name = '{}_loc'.format(name)
+        if location is not None:
+            locator_path = '{}|{}'.format(location, locator_name)
+        else:
+            locator_path = '|{}'.format(locator_name)
+
+        if cmds.objExists(locator_path) is False:
+            locator_path = _mya_core.DagNode.create_locator(locator_path)
+            w, h, d = _mya_core.Transform.get_dimension(main_control)
+            locator_shape = _mya_core.Transform.get_shape_path(
+                locator_path
+            )
+            _mya_core.NodeAttribute.set_as_tuple(
+                locator_shape, 'localScale', (w/2, 0, d/2)
+            )
+            _mya_core.NodeDrawOverride.set_color(
+                locator_path, (1.0, .0, .0)
+            )
+            _mya_core.NodeAttribute.create_as_string(
+                locator_path, 'qsm_mark', 'move_locator'
+            )
+
+            _mya_core.ParentConstraint.create(
+                main_control, locator_path
+            )
+            _mya_core.ParentConstraint.clear_all(locator_path)
+
+            _control.ControlOpt(main_control).create_transformation_locator(
+                locator_path
+            )
+
+    def remove_transformation_locator(self):
+        main_control = self.find_main_control()
+        if main_control is None:
+            return
+
+        _control.ControlOpt(main_control).remove_transformation_locator()
+

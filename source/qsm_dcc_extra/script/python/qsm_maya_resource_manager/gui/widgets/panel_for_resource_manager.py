@@ -16,8 +16,6 @@ from . import page_for_scenery as _unit_for_scenery_resource
 
 
 class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
-    HST_TAB_KEY_CURRENT = 'resource-manager.page_key_current'
-
     def __init__(self, session, *args, **kwargs):
         super(PrxPnlResourceManager, self).__init__(session, *args, **kwargs)
 
@@ -67,9 +65,8 @@ class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
         self._prx_tab_view.connect_current_changed_to(
             self.do_gui_refresh_all
         )
-        self._prx_tab_view.set_current_by_key(
-            gui_core.GuiHistory.get_one(self.HST_TAB_KEY_CURRENT)
-        )
+        self._prx_tab_view.set_history_key('resource-manager.page_key_current')
+        self._prx_tab_view.load_history()
 
         self.connect_window_close_to(
             self.gui_close_fnc
@@ -85,8 +82,9 @@ class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
             self._scenery_prx_page.do_gui_refresh_all(force)
 
     def gui_close_fnc(self):
-        page_key_current = self._prx_tab_view.get_current_key()
-        gui_core.GuiHistory.set_one(self.HST_TAB_KEY_CURRENT, page_key_current)
+        self._prx_tab_view.save_history()
+        self._rig_prx_page._tool_prx_tab_box.save_history()
+        self._scenery_prx_page._tool_prx_tab_box.save_history()
 
     def show_help(self):
         import os

@@ -16,6 +16,8 @@ class QtHTabToolGroup(
     _qt_abstracts.AbsQtFrameBaseDef,
 
     _qt_abstracts.AbsQtActionBaseDef,
+
+    _qt_abstracts.AbsQtHistoryBaseDef,
 ):
     current_changed = qt_signal()
 
@@ -154,6 +156,16 @@ class QtHTabToolGroup(
         if self._gui_scroll.step_to_next():
             self._refresh_widget_all_()
 
+    def _load_history_(self):
+        self._set_current_key_text_(
+            self._get_history_value_()
+        )
+
+    def _save_history_(self):
+        self._set_history_value_(
+            self._get_current_key_text_()
+        )
+
     def __init__(self, *args, **kwargs):
         super(QtHTabToolGroup, self).__init__(*args, **kwargs)
 
@@ -167,6 +179,8 @@ class QtHTabToolGroup(
         self._init_frame_base_def_(self)
 
         self._init_action_base_def_(self)
+
+        self._init_history_base_def_(self)
 
         self._tab_item_stack = _qt_core.GuiQtModForTabItemStack(self)
 
@@ -387,7 +401,22 @@ class QtHTabToolGroup(
             self._get_current_index_()
         )
 
+    def _set_current_name_text_(self, text):
+        index = self._tab_item_stack.get_index_by_name(
+            text
+        )
+        if index is not None:
+            self._switch_current_to_(index)
+
     def _get_current_key_text_(self):
         return self._tab_item_stack.get_key_at(
             self._get_current_index_()
         )
+
+    def _set_current_key_text_(self, text):
+        index = self._tab_item_stack.get_index_by_key(
+            text
+        )
+        if index is not None:
+            self._switch_current_to_(index)
+

@@ -7,11 +7,13 @@ from . import node_for_dag as _node_dag
 
 class Container(object):
     @classmethod
-    def create(cls, path):
-        if cmds.objExists(path):
-            return path
-        name = path.split('|')[-1]
+    def create(cls, path_or_name, icon=None):
+        if cmds.objExists(path_or_name):
+            return _node_dag.DagNode.to_path(path_or_name)
+        name = path_or_name.split('|')[-1]
         _ = cmds.container(type='dagContainer', name=name)
+        if icon is not None:
+            cmds.setAttr(_+'.iconName', icon, type='string')
         return _node_dag.DagNode.to_path(_)
 
     @classmethod

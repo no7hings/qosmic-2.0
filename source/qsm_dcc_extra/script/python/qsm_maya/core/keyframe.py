@@ -14,7 +14,7 @@ class AnimationCurveOpt(object):
         self._path = path
         self._atr_name = atr_name
 
-    def get_indices(self):
+    def get_index_count(self):
         return cmds.keyframe(
             self._path,
             query=True,
@@ -33,7 +33,7 @@ class AnimationCurveOpt(object):
         if _:
             return _[0]
 
-    def set_value_at(self, time, value):
+    def set_value_at_time(self, time, value):
         cmds.setKeyframe(
             self._path,
             attribute=self._atr_name,
@@ -96,9 +96,9 @@ class AnimationCurveOpt(object):
             )
 
     def get_points(self):
-        indices = self.get_indices()
+        index_count = self.get_index_count()
         list_ = []
-        for i_index in range(indices):
+        for i_index in range(index_count):
             i_time = self.get_time_at(i_index)
             i_value = self.get_value_at(i_index)
             i_tangent = self.get_tangent_at(i_index)
@@ -108,12 +108,20 @@ class AnimationCurveOpt(object):
     def set_points(self, points, frame_offset=0):
         for i in points:
             i_time, i_value, i_tangent = i
-            self.set_value_at(i_time+frame_offset, i_value)
+            self.set_value_at_time(i_time+frame_offset, i_value)
             self.set_tangent_at(i_time+frame_offset, i_tangent)
+
+    def offset_all_values(self, offset_value):
+        index_count = self.get_index_count()
+        for i_index in range(index_count):
+            i_time = self.get_time_at(i_index)
+            i_value = self.get_value_at(i_index)
+            i_value_new = i_value+offset_value
+            self.set_value_at_time(i_time, i_value_new)
 
 
 class Keyframes(object):
 
     @classmethod
-    def get_all(cls, path, attrName):
+    def get_all(cls, path, atr_name):
         pass

@@ -64,6 +64,11 @@ class Transform(_node_for_dag.DagNode):
         return (_x, _y, _z), (x, y, z)
 
     @classmethod
+    def get_dimension(cls, path):
+        (_x, _y, _z), (x, y, z) = cls.get_world_extent(path)
+        return x-_x, y-_y, z-_z
+
+    @classmethod
     def get_world_center(cls, path):
         _x, _y, _z, x, y, z = cmds.xform(path, boundingBox=1, worldSpace=1, query=1)
         return (_x+x)/2, (_y+y)/2, (_z+z)/2
