@@ -290,7 +290,7 @@ class RsvStgTaskOpt(object):
                     **dict(
                         id=stg_version_query.get('id'),
                         user=user,
-                        time=bsc_core.SysBaseMtd.get_time(),
+                        time=bsc_core.BscSystem.get_time(),
                         version_type=version_type,
                         folder=version_directory_path,
                         review=movie_file or 'N/a',

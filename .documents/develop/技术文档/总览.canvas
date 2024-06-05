@@ -1,7 +1,7 @@
 {
 	"nodes":[
 		{"id":"4de5f528f5f833e2","type":"file","file":"技术文档/Qosmic/环境变量（Environment）.md","x":-660,"y":-500,"width":400,"height":400},
-		{"id":"478ba8d784ecb1ea","x":-660,"y":-60,"width":400,"height":400,"type":"file","file":"技术文档/Qosmic/存储结构（Storage Hierarchy）.md"}
+		{"id":"478ba8d784ecb1ea","type":"file","file":"技术文档/Qosmic/存储结构（Storage Hierarchy）.md","x":-660,"y":0,"width":400,"height":400}
 	],
 	"edges":[]
 }

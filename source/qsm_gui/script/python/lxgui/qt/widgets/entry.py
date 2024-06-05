@@ -15,6 +15,8 @@ from . import utility as _utility
 
 from . import entry_frame as _entry_frame
 
+from . import item_for_list as _item_for_list
+
 
 # entry as constant, etc. float, integer, string, ...
 class QtEntryAsConstant(
@@ -966,11 +968,11 @@ class QtEntryAsList(
         item_widget._set_value_(value)
         item_widget._set_delete_enable_(True)
         item_widget.delete_press_clicked.connect(delete_fnc_)
-        item = _utility.QtListWidgetItem()
+        item = _item_for_list.QtListWidgetItem()
         w, h = self._grid_size
         item.setSizeHint(QtCore.QSize(w, h))
         self.addItem(item)
-        item._connect_item_show_()
+        item._initialize_item_show_()
         self.setItemWidget(item, item_widget)
         item._set_item_show_fnc_(
             cache_fnc_, build_fnc_

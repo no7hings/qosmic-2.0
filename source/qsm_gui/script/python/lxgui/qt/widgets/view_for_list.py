@@ -8,6 +8,8 @@ from ...qt import abstracts as _qt_abstracts
 # qt widgets
 from . import utility as _utility
 
+from . import item_for_list as _item_for_list
+
 from . import entry_frame as _entry_frame
 
 
@@ -64,6 +66,8 @@ class QtListWidget(
         self._item_scale_percent = 1.0
 
         self._item_image_frame_draw_enable = False
+
+        self._item_image_draw_as_full = False
 
         self._set_grid_mode_()
 
@@ -304,6 +308,9 @@ class QtListWidget(
     def _set_item_image_frame_draw_enable_(self, boolean):
         self._item_image_frame_draw_enable = boolean
 
+    def _set_item_image_draw_as_full_(self, boolean):
+        self._item_image_draw_as_full = boolean
+
     def _get_item_count_(self):
         return self.count()
 
@@ -351,7 +358,7 @@ class QtListWidget(
         view = self
         #
         index_cur = view._get_item_count_()
-        item = _utility.QtListWidgetItem('', view)
+        item = _item_for_list.QtListWidgetItem('', view)
         view.addItem(item)
         # debug for position error
         index = self.row(item)
@@ -366,7 +373,7 @@ class QtListWidget(
         item_widget.user_check_toggled.connect(
             item._update_checked_from_user_
         )
-        item._connect_item_show_()
+        item._initialize_item_show_()
         item.setText(str(index_cur).zfill(4))
         # set view and item first
         item_widget._set_view_(view)
@@ -404,13 +411,61 @@ class QtListWidget(
         item_widget._set_name_frame_draw_enable_(
             self._item_name_frame_draw_enable
         )
+        item_widget._set_image_draw_as_full_(
+            self._item_image_draw_as_full
+        )
         #
         item_widget._set_image_frame_draw_enable_(
             self._item_image_frame_draw_enable
         )
 
-    def _set_item_create_(self):
-        pass
+    def _create_item_(self, *args, **kwargs):
+        view = self
+        #
+        index_cur = view._get_item_count_()
+        item = _item_for_list.QtListWidgetItem('', view)
+        view.addItem(item)
+        # debug for position error
+        index = self.row(item)
+        if index > 0:
+            item.setHidden(True)
+            item.setHidden(False)
+
+        item.setSizeHint(QtCore.QSize(*self._grid_size))
+        item.setText(str(index_cur).zfill(4))
+
+        item._set_sort_number_key_(index)
+        item._initialize_item_show_()
+        return item
+
+    def _connect_item_widget_(self, item, item_widget, *args, **kwargs):
+        view = self
+
+        index = self.row(item)
+
+        view.setItemWidget(item, item_widget)
+        item.gui_proxy = item_widget.gui_proxy
+
+        item_widget.user_check_toggled.connect(item._update_checked_from_user_)
+        # set view and item first
+        item_widget._set_view_(view)
+        item_widget._set_item_(item)
+        # and set other below
+        item_widget._set_index_(index)
+        #
+        item_widget._set_frame_size_(
+            *self._item_frame_size
+        )
+        item_widget._set_frame_draw_enable_(self._item_frame_draw_enable)
+        item_widget._set_icon_frame_draw_size_(*self._item_icon_frame_size)
+        item_widget._set_icon_size_(*self._item_icon_size)
+        item_widget._set_icon_frame_draw_enable_(self._item_icon_frame_draw_enable)
+        item_widget._set_name_frame_size_(*self._item_name_frame_size)
+        item_widget._set_names_draw_range_(self._item_names_draw_range)
+        item_widget._set_name_size_(*self._item_name_size)
+        item_widget._set_name_frame_draw_enable_(self._item_name_frame_draw_enable)
+        item_widget._set_image_draw_as_full_(self._item_image_draw_as_full)
+        item_widget._set_image_frame_draw_enable_(self._item_image_frame_draw_enable)
 
     def _set_clear_(self):
         for i in self._get_all_items_():

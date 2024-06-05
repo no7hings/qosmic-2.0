@@ -307,7 +307,7 @@ class FncImporterForGeometryAbc(gnl_fnc_abstracts.AbsFncOptionBase):
     def execute(self):
         cmds.loadPlugin(self.PLUG_NAME, quiet=1)
         #
-        namespace_temporary = 'alembic_import_{}'.format(bsc_core.SysBaseMtd.get_time_tag())
+        namespace_temporary = 'alembic_import_{}'.format(bsc_core.BscSystem.get_time_tag())
         file_path = self.get('file')
         location = self.get('location')
         root = bsc_core.PthNodeOpt(location).translate_to(

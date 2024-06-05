@@ -33,7 +33,7 @@ class FncImporterForCameraAbc(
         file_path = self.get('file')
         location = self.get('location')
         #
-        namespace_temporary = 'alembic_import_{}'.format(bsc_core.SysBaseMtd.get_time_tag())
+        namespace_temporary = 'alembic_import_{}'.format(bsc_core.BscSystem.get_time_tag())
         mya_location = bsc_core.PthNodeOpt(location).translate_to(
             self.OBJ_PATHSEP
         ).get_value()

@@ -125,6 +125,10 @@ class DagNodeOpt(_node.NodeOpt):
     def path(self):
         return self._path
 
+    @property
+    def name_or_path(self):
+        return self._path
+
     def update_path(self):
         if self._uuid:
             _ = cmds.ls(self._uuid, long=1)

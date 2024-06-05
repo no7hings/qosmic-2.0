@@ -13,7 +13,7 @@ import lxbasic.storage as bsc_storage
 
 import lxuniverse.objects as unr_objects
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.core as gui_core
 
@@ -28,8 +28,8 @@ import lxsession.objects as ssn_objects
 import lxresolver.core as rsv_core
 
 
-class AbsPnlAssetLineup(prx_widgets.PrxSessionWindow):
-    DCC_NAMESPACE = 'resolver'
+class AbsPnlAssetLineup(gui_prx_widgets.PrxSessionWindow):
+    GUI_NAMESPACE = 'resolver'
 
     def __init__(self, *args, **kwargs):
         super(AbsPnlAssetLineup, self).__init__(*args, **kwargs)
@@ -46,16 +46,16 @@ class AbsPnlAssetLineup(prx_widgets.PrxSessionWindow):
         self._set_tool_panel_setup_()
 
     def _set_tool_panel_setup_(self):
-        h_s = prx_widgets.PrxHSplitter()
+        h_s = gui_prx_widgets.PrxHSplitter()
         self.add_widget(h_s)
-        v_s = prx_widgets.PrxVSplitter()
+        v_s = gui_prx_widgets.PrxVSplitter()
         h_s.add_widget(v_s)
-        self._rsv_obj_tree_view_0 = prx_widgets.PrxTreeView()
+        self._rsv_obj_tree_view_0 = gui_prx_widgets.PrxTreeView()
         v_s.add_widget(self._rsv_obj_tree_view_0)
 
-        s = prx_widgets.PrxVScrollArea()
+        s = gui_prx_widgets.PrxVScrollArea()
         v_s.add_widget(s)
-        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         s.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._hook_build_configure.get('node.options')
@@ -76,10 +76,10 @@ class AbsPnlAssetLineup(prx_widgets.PrxSessionWindow):
         self._prx_dcc_obj_tree_view_add_opt = gui_prx_scripts.GuiPrxScpForResolver(
             self._resolver,
             prx_tree_view=self._rsv_obj_tree_view_0,
-            prx_tree_item_cls=prx_widgets.PrxObjTreeItem,
+            prx_tree_item_cls=gui_prx_widgets.PrxObjTreeItem,
         )
         #
-        self._node_graph = prx_widgets.PrxNGImageGraph()
+        self._node_graph = gui_prx_widgets.PrxNGImageGraph()
         h_s.add_widget(self._node_graph)
 
         h_s.set_stretches([1, 3])
@@ -123,7 +123,7 @@ class AbsPnlAssetLineup(prx_widgets.PrxSessionWindow):
 
     def _set_add_rsv_entities_(self, rsv_project):
         def post_fnc_():
-            self._end_timestamp = bsc_core.SysBaseMtd.get_timestamp()
+            self._end_timestamp = bsc_core.BscSystem.get_timestamp()
 
             bsc_log.Log.trace_method_result(
                 'load asset/shot from "{}"'.format(
@@ -138,7 +138,7 @@ class AbsPnlAssetLineup(prx_widgets.PrxSessionWindow):
             self._set_graph_reload_()
 
         self._count = 0
-        self._start_timestamp = bsc_core.SysBaseMtd.get_timestamp()
+        self._start_timestamp = bsc_core.BscSystem.get_timestamp()
         #
         rsv_tags = rsv_project.get_rsv_resource_groups(**self._rsv_filter_opt.value)
         #
@@ -251,7 +251,7 @@ class AbsPnlAssetLineup(prx_widgets.PrxSessionWindow):
         if self._image_dict:
             for k, v in self._image_dict.items():
                 i_prx_item = self._rsv_obj_tree_view_0.get_item_by_key(k)
-                i_rsv_entity = i_prx_item.get_gui_dcc_obj(namespace=self.DCC_NAMESPACE)
+                i_rsv_entity = i_prx_item.get_gui_dcc_obj(namespace=self.GUI_NAMESPACE)
                 if i_prx_item.get_is_checked() is True:
                     i_n = self._u_asset_type.create_obj(
                         '/{}'.format(

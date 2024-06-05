@@ -83,7 +83,7 @@ class GuiGLUsdData(object):
                 self.__build_mesh(i_prim)
         bsc_log.Log.test_end('build stage')
 
-        self._hash_key = bsc_core.HashMtd.get_hash_value(self._vertices, as_unique_id=True)
+        self._hash_key = bsc_core.BscHash.get_hash_value(self._vertices, as_unique_id=True)
         self._image_file_path = '{}/{}.png'.format(self._cache_directory_path, self._hash_key)
 
         return bsc_storage.StgFileOpt(self._image_file_path).get_is_exists()

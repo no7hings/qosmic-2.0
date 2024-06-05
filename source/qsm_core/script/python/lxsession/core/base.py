@@ -53,11 +53,11 @@ class SsnHookFileMtd(object):
 
     @classmethod
     def get_shell(cls, key, search_paths=None):
-        if bsc_core.SysPlatformMtd.get_is_linux():
+        if bsc_core.BasPlatform.get_is_linux():
             return bsc_resource.ExtendResource.get(
                 '{}/{}.sh'.format(cls.BRANCH, key), search_paths
             )
-        elif bsc_core.SysPlatformMtd.get_is_windows():
+        elif bsc_core.BasPlatform.get_is_windows():
             return bsc_resource.ExtendResource.get(
                 '{}/{}.bat'.format(cls.BRANCH, key), search_paths
             )
@@ -120,7 +120,7 @@ class SsnHookFileMtd(object):
 
     @classmethod
     def set_extra_data_save(cls, raw):
-        key = bsc_core.UuidMtd.generate_new()
+        key = bsc_core.BscUuid.generate_new()
         file_path = cls.get_extra_file(key)
         bsc_storage.StgFileOpt(file_path).set_write(raw)
         return key
@@ -138,8 +138,8 @@ class SsnOptionHookFileMtd(SsnHookFileMtd):
 class SsnHookServerMtd(object):
     @classmethod
     def get_key(cls, **kwargs):
-        return bsc_core.UuidMtd.generate_by_text(
-            bsc_core.ArgDictStringMtd.to_string(**kwargs)
+        return bsc_core.BscUuid.generate_by_text(
+            bsc_core.ArgDictString.to_string(**kwargs)
         )
 
     @classmethod

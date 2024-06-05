@@ -38,7 +38,7 @@ import collections
 from . import configure as _configure
 
 
-class SysPlatformMtd(object):
+class BasPlatform(object):
     @staticmethod
     def get_is_linux():
         return platform.system() == 'Linux'
@@ -55,7 +55,7 @@ class SysPlatformMtd(object):
             return _configure.BscPlatform.Linux
 
 
-class SysApplicationMtd(object):
+class BasApplication(object):
     @classmethod
     def get_is_maya(cls):
         _ = os.environ.get('MAYA_APP_DIR')
@@ -138,7 +138,7 @@ class SysApplicationMtd(object):
         ).strip()
 
 
-class SysBaseMtd(object):
+class BscSystem(object):
     Platform = _configure.BscPlatform
     Application = _configure.BscApplication
 
@@ -220,7 +220,7 @@ class SysBaseMtd(object):
     #
     @classmethod
     def get_application(cls):
-        return SysApplicationMtd.get_current()
+        return BasApplication.get_current()
 
     #
     @classmethod
@@ -301,7 +301,7 @@ class SysBaseMtd(object):
         return sys.stderr.write(text+'\n')
 
 
-class StgBaseMtd(object):
+class BscStorage(object):
     PATHSEP = '/'
 
     @staticmethod
@@ -345,7 +345,7 @@ class StgBaseMtd(object):
     @classmethod
     def set_map_to_nas(cls, path):
         path = cls.clear_pathsep_to(path)
-        if StgBaseMtd.get_path_is_linux(path):
+        if BscStorage.get_path_is_linux(path):
             src_root = path[:2]
             if src_root == '/l':
                 _ = '/ifs/data/cgdata'+path[len(src_root):]
@@ -432,7 +432,7 @@ class StgBaseMtd(object):
         if os.path.exists(path) is True:
             s = os.stat(path)
             uid = s.st_uid
-            if StgBaseMtd.get_platform_is_linux():
+            if BscStorage.get_platform_is_linux():
                 import pwd
 
                 try:
@@ -448,7 +448,7 @@ class StgBaseMtd(object):
         if os.path.exists(path) is True:
             stat_info = os.stat(path)
             gid = stat_info.st_gid
-            if StgBaseMtd.get_platform_is_linux():
+            if BscStorage.get_platform_is_linux():
                 import grp
 
                 group_name = grp.getgrgid(gid)[0]
@@ -547,9 +547,9 @@ class StgBaseMtd(object):
 class StgPathMapDict(object):
     def __init__(self, raw):
         self._raw = raw
-        if StgBaseMtd.get_platform_is_windows() is True:
+        if BscStorage.get_platform_is_windows() is True:
             p = 'windows'
-        elif StgBaseMtd.get_platform_is_linux() is True:
+        elif BscStorage.get_platform_is_linux() is True:
             p = 'linux'
         else:
             raise TypeError()
@@ -577,9 +577,9 @@ class StgPathMapDict(object):
 class StgEnvPathMapDict(object):
     def __init__(self, raw):
         self._raw = raw
-        if StgBaseMtd.get_platform_is_windows() is True:
+        if BscStorage.get_platform_is_windows() is True:
             p = 'windows'
-        elif StgBaseMtd.get_platform_is_linux() is True:
+        elif BscStorage.get_platform_is_linux() is True:
             p = 'linux'
         else:
             raise TypeError()
@@ -615,18 +615,18 @@ class StgBasePathMapMtd(object):
     @classmethod
     def map_to_current(cls, path):
         if path is not None:
-            if StgBaseMtd.get_platform_is_windows():
+            if BscStorage.get_platform_is_windows():
                 return cls.map_to_windows(path)
-            elif StgBaseMtd.get_platform_is_linux():
+            elif BscStorage.get_platform_is_linux():
                 return cls.map_to_linux(path)
-            return StgBaseMtd.clear_pathsep_to(path)
+            return BscStorage.clear_pathsep_to(path)
         return path
 
     @classmethod
     def map_to_windows(cls, path):
         # clear first
-        path = StgBaseMtd.clear_pathsep_to(path)
-        if StgBaseMtd.get_path_is_linux(path):
+        path = BscStorage.clear_pathsep_to(path)
+        if BscStorage.get_path_is_linux(path):
             mapper_dict = cls.MAPPER._windows_dict
             for i_root_src, i_root_tgt in mapper_dict.items():
                 if path == i_root_src:
@@ -646,8 +646,8 @@ class StgBasePathMapMtd(object):
         :return:
         """
         # clear first
-        path = StgBaseMtd.clear_pathsep_to(path)
-        if StgBaseMtd.get_path_is_windows(path):
+        path = BscStorage.clear_pathsep_to(path)
+        if BscStorage.get_path_is_windows(path):
             mapper_dict = cls.MAPPER._linux_dict
             for i_root_src, i_root_tgt in mapper_dict.items():
                 if path == i_root_src:
@@ -658,7 +658,7 @@ class StgBasePathMapMtd(object):
         return path
 
 
-class HashMtd(object):
+class BscHash(object):
     @classmethod
     def get_pack_format(cls, max_value):
         o = 'q'
@@ -676,7 +676,7 @@ class HashMtd(object):
             str(raw)
         ).hexdigest()
         if as_unique_id is True:
-            return UuidMtd.generate_by_hash_value(s)
+            return BscUuid.generate_by_hash_value(s)
         return s.upper()
 
     @classmethod
@@ -685,7 +685,7 @@ class HashMtd(object):
             json.dumps(raw)
         ).hexdigest()
         if as_unique_id is True:
-            return UuidMtd.generate_by_hash_value(s)
+            return BscUuid.generate_by_hash_value(s)
         return s.upper()
 
     @classmethod
@@ -697,11 +697,11 @@ class HashMtd(object):
             struct.pack('%s%s'%(len(pack_array), cls.get_pack_format(max(pack_array))), *pack_array)
         ).hexdigest()
         if as_unique_id is True:
-            return UuidMtd.generate_by_hash_value(s)
+            return BscUuid.generate_by_hash_value(s)
         return s.upper()
 
 
-class UuidMtd(object):
+class BscUuid(object):
     BASIC = '4908BDB4-911F-3DCE-904E-96E4792E75F1'
     VERSION = 3.0
 
@@ -754,7 +754,7 @@ class UuidMtd(object):
         ).upper()
 
 
-class ExceptionMtd(object):
+class BscException(object):
     @classmethod
     def set_print(cls):
         import traceback
@@ -826,7 +826,7 @@ class ExceptionMtd(object):
         return '\n'.join(exc_texts)
 
 
-class FfmpegMtd(object):
+class BscFfmpeg(object):
     """
 ffmpeg version 4.2.2 Copyright (c) 2000-2019 the FFmpeg developers
   built with gcc 4.8.5 (GCC) 20150623 (Red Hat 4.8.5-39)
@@ -1004,7 +1004,7 @@ Subtitle options:
     @classmethod
     def get_image_concat_command(cls, **kwargs):
         """
-    cmd = FfmpegMtd.get_image_concat_command(
+    cmd = BscFfmpeg.get_image_concat_command(
         input='/data/e/workspace/lynxi/test/maya/software-render/render/09/test/image/cam_full_body.####.jpg',
         output='/data/e/workspace/lynxi/test/maya/software-render/render/09/test/cam_full_body.mov',
         fps=24

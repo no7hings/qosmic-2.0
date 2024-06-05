@@ -22,7 +22,7 @@ def main(session):
 
     import lxgui.core as gui_core
 
-    import lxgui.proxy.widgets as prx_widgets
+    import lxgui.proxy.widgets as gui_prx_widgets
 
     import lxresolver.core as rsv_core
 
@@ -68,7 +68,7 @@ def main(session):
             w.set_options_group_enable()
             #
             p = w._options_prx_node.add_port(
-                prx_widgets.PrxPortAsConstantChoose(
+                gui_prx_widgets.PrxPortAsConstantChoose(
                     'project', 'Project'
                 )
             )

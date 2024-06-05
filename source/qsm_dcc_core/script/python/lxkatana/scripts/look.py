@@ -115,7 +115,7 @@ class ScpLookAssImport(object):
 
     def _get_material_name_(self, and_geometry_opt):
         materials = and_geometry_opt.get_material_assigns()
-        hash_key = bsc_core.HashMtd.get_hash_value(
+        hash_key = bsc_core.BscHash.get_hash_value(
             materials, as_unique_id=True
         )
         if hash_key in self._material_hash_cache:
@@ -129,7 +129,7 @@ class ScpLookAssImport(object):
         properties = and_geometry_opt.get_properties()
         visibilities = and_geometry_opt.get_visibilities()
         properties.update(visibilities)
-        hash_key = bsc_core.HashMtd.get_hash_value(
+        hash_key = bsc_core.BscHash.get_hash_value(
             properties, as_unique_id=True
         )
         if hash_key in self._geometry_properties_hash_cache:

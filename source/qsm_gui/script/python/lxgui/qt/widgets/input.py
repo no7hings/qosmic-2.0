@@ -448,7 +448,7 @@ class QtInputAsContent(
 
     def _get_tmp_text_file_path_(self):
         return six.u('{}/editor/untitled-{}{}').format(
-            bsc_core.SysBaseMtd.get_home_directory(),
+            bsc_core.BscSystem.get_home_directory(),
             bsc_core.TimeExtraMtd.generate_time_tag_36(),
             self._external_editor_ext
         )

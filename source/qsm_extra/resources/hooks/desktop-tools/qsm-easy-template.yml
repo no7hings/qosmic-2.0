@@ -1,0 +1,28 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Easy Template'
+        name_chs: '简单模版'
+        group_name: 'General(s)'
+        #
+        icon_name: 'tool/maya/attribute-edit'
+        tool_tip:
+            |-
+            For manager node template.
+        #
+        tool_tip_chs:
+            |-
+            用于管理节点模版。
+        #
+        size: [960, 720]
+        item_frame_size: [142, 142]
+        item_icon_frame_size: [20, 20]
+        item_icon_size: [20, 20]
+
+
+build:
+    options: {}

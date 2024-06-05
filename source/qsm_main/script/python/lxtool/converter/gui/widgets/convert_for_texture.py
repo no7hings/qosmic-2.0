@@ -21,12 +21,12 @@ import lxgui.core as gui_core
 
 import lxgui.qt.core as gui_qt_core
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.proxy.scripts as gui_prx_scripts
 
 
-class PnlTextureConverter(prx_widgets.PrxSessionWindow):
+class PnlTextureConverter(gui_prx_widgets.PrxSessionWindow):
     NAMESPACE = 'storage'
 
     @classmethod
@@ -50,9 +50,9 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
         super(PnlTextureConverter, self).__init__(session, *args, **kwargs)
 
     def gui_setup_window(self):
-        s_0 = prx_widgets.PrxVScrollArea()
+        s_0 = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(s_0)
-        h_s = prx_widgets.PrxHSplitter()
+        h_s = gui_prx_widgets.PrxHSplitter()
         h_s.install_full_size_shortcut()
         s_0.add_widget(h_s)
         #
@@ -60,15 +60,15 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
         self._target_format_create_data = []
         self._target_color_space_create_data = []
         #
-        s_1 = prx_widgets.PrxVScrollArea()
+        s_1 = gui_prx_widgets.PrxVScrollArea()
         h_s.add_widget(s_1)
-        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         s_1.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.options'),
         )
         #
-        self._tree_view = prx_widgets.PrxTreeView()
+        self._tree_view = gui_prx_widgets.PrxTreeView()
         h_s.add_widget(self._tree_view)
         self._tree_view.create_header_view(
             [('name', 4), ('color-space', 1), ('description', 1)],
@@ -76,7 +76,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
         )
         self._tree_view_add_opt = gui_prx_scripts.GuiPrxScpForStorageTreeAdd(
             self._tree_view,
-            prx_tree_item_cls=prx_widgets.PrxStgObjTreeItem,
+            prx_tree_item_cls=gui_prx_widgets.PrxStgObjTreeItem,
         )
         #
         h_s.set_fixed_size_at(0, 480)
@@ -112,7 +112,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
             self.refresh_gui_fnc
         )
 
-        self._refresh_button = prx_widgets.PrxPressButton()
+        self._refresh_button = gui_prx_widgets.PrxPressButton()
         self.add_button(self._refresh_button)
         self._refresh_button.set_name('refresh')
         self._refresh_button.connect_press_clicked_to(self.refresh_gui_fnc)
@@ -651,7 +651,7 @@ class PnlTextureConverter(prx_widgets.PrxSessionWindow):
             parent=self.widget
         )
 
-        v = prx_widgets.PrxImageView()
+        v = gui_prx_widgets.PrxImageView()
         w.add_customize_widget(v)
 
         v.set_textures([texture])

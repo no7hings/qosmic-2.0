@@ -163,7 +163,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
     @classmethod
     def get_default_file_path(cls):
         # /home/dongchangbao/untitled.hip
-        user_directory_path = bsc_core.SysBaseMtd.get_home_directory()
+        user_directory_path = bsc_core.BscSystem.get_home_directory()
         return '{}/untitled.hip'.format(user_directory_path)
 
     @classmethod

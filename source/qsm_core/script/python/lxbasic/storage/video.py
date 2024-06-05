@@ -100,7 +100,7 @@ class VdoFileOpt(object):
                 image_file=image_file_path,
                 lut_directory='/l/packages/pg/third_party/ocio/aces/1.0.3/baked/maya/sRGB_for_ACEScg_Maya.csp',
                 start_frame=start_frame,
-                user=bsc_cor_base.SysBaseMtd.get_user_name()
+                user=bsc_cor_base.BscSystem.get_user_name()
             )
         )
         bsc_cor_process.PrcBaseMtd.execute_with_result(

@@ -3,14 +3,14 @@ import lxbasic.core as bsc_core
 
 import lxgui.core as gui_core
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.proxy.core as gui_prx_core
 
 import lxgui.proxy.scripts as gui_prx_scripts
 
 
-class PGDependencies(prx_widgets.PrxSessionWindow):
+class PGDependencies(gui_prx_widgets.PrxSessionWindow):
     NAMESPACE = 'storage'
 
     def __init__(self, session, *args, **kwargs):
@@ -21,31 +21,31 @@ class PGDependencies(prx_widgets.PrxSessionWindow):
         self._target_format_create_data = []
         self._target_color_space_create_data = []
         #
-        self._viewer_group = prx_widgets.PrxHToolGroup()
+        self._viewer_group = gui_prx_widgets.PrxHToolGroup()
         self.add_widget(self._viewer_group)
         self._viewer_group.set_name('dependencies')
         self._viewer_group.set_expanded(True)
         #
-        h_s = prx_widgets.PrxHSplitter()
+        h_s = gui_prx_widgets.PrxHSplitter()
         self._viewer_group.add_widget(h_s)
-        self._prx_tree_view_for_filter = prx_widgets.PrxTreeView()
+        self._prx_tree_view_for_filter = gui_prx_widgets.PrxTreeView()
         h_s.add_widget(self._prx_tree_view_for_filter)
         self._prx_tree_view_for_filter.create_header_view(
             [('name', 3), ('count', 1)],
             self.get_definition_window_size()[0]*(1.0/4.0)-32
         )
         #
-        self._result_tree_view = prx_widgets.PrxTreeView()
+        self._result_tree_view = gui_prx_widgets.PrxTreeView()
         h_s.add_widget(self._result_tree_view)
         h_s.set_stretches([1, 3])
         #
         self._filter_tree_view_opt = gui_prx_scripts.GuiPrxScpForTreeTagFilter(
             prx_tree_view_src=self._prx_tree_view_for_filter,
             prx_tree_view_tgt=self._result_tree_view,
-            prx_tree_item_cls=prx_widgets.PrxObjTreeItem
+            prx_tree_item_cls=gui_prx_widgets.PrxObjTreeItem
         )
         #
-        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         self.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.options'),

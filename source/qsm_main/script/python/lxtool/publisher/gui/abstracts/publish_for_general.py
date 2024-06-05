@@ -7,7 +7,7 @@ import lxbasic.storage as bsc_storage
 
 import lxresolver.core as rsv_core
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.core as gui_core
 
@@ -167,7 +167,7 @@ class _PublishOptForGeneral(object):
         file_path = self.get_scene_src_file_path()
         #
         extra_data = dict(
-            user=bsc_core.SysBaseMtd.get_user_name(),
+            user=bsc_core.BscSystem.get_user_name(),
             #
             version_type=self._options['version_type'],
             version_status='pub',
@@ -230,7 +230,7 @@ class _PublishOptForGeneral(object):
         )
 
 
-class AbsPnlPublisherForGeneral(prx_widgets.PrxSessionWindow):
+class AbsPnlPublisherForGeneral(gui_prx_widgets.PrxSessionWindow):
     def __init__(self, session, *args, **kwargs):
         super(AbsPnlPublisherForGeneral, self).__init__(session, *args, **kwargs)
 
@@ -246,19 +246,19 @@ class AbsPnlPublisherForGeneral(prx_widgets.PrxSessionWindow):
         self._version_properties = None
 
     def gui_setup_window(self):
-        sa_1 = prx_widgets.PrxVScrollArea()
+        sa_1 = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(sa_1)
 
-        self.__input = prx_widgets.PrxInputAsStgTask()
+        self.__input = gui_prx_widgets.PrxInputAsStgTask()
         sa_1.add_widget(self.__input)
 
         self.__input.set_focus_in()
 
-        self.__tip = prx_widgets.PrxTextBrowser()
+        self.__tip = gui_prx_widgets.PrxTextBrowser()
         sa_1.add_widget(self.__tip)
         self.__tip.set_focus_enable(False)
 
-        self.__next_button = prx_widgets.PrxPressButton()
+        self.__next_button = gui_prx_widgets.PrxPressButton()
         self.__next_button.set_name('next')
         self.add_button(self.__next_button)
         self.__next_button.connect_press_clicked_to(self.__do_next)
@@ -270,9 +270,9 @@ class AbsPnlPublisherForGeneral(prx_widgets.PrxSessionWindow):
         self.__input.setup()
         # publish
         layer_widget = self.create_layer_widget('publish', 'Publish')
-        sa_2 = prx_widgets.PrxVScrollArea()
+        sa_2 = gui_prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(sa_2)
-        self._publish_options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._publish_options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         sa_2.add_widget(self._publish_options_prx_node)
         self._publish_options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.publish_options')
@@ -282,18 +282,18 @@ class AbsPnlPublisherForGeneral(prx_widgets.PrxSessionWindow):
             self.refresh_publish_version_directory
         )
 
-        self._publish_tip = prx_widgets.PrxTextBrowser()
+        self._publish_tip = gui_prx_widgets.PrxTextBrowser()
         sa_2.add_widget(self._publish_tip)
         self._publish_tip.set_content(
             self._session.configure.get('build.node.publish_content')
         )
         self._publish_tip.set_font_size(12)
 
-        tool_bar = prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolBar()
         layer_widget.add_widget(tool_bar)
         tool_bar.set_expanded(True)
 
-        self._publish_button = prx_widgets.PrxPressButton()
+        self._publish_button = gui_prx_widgets.PrxPressButton()
         tool_bar.add_widget(self._publish_button)
         self._publish_button.set_name('publish')
         self._publish_button.connect_press_clicked_to(
@@ -344,7 +344,7 @@ class AbsPnlPublisherForGeneral(prx_widgets.PrxSessionWindow):
         import lxbasic.shotgun as bsc_shotgun
 
         self._stg_connector = bsc_shotgun.StgConnector()
-        self._user_name = bsc_core.SysBaseMtd.get_user_name()
+        self._user_name = bsc_core.BscSystem.get_user_name()
         self.__stg_user = self._stg_connector.get_stg_user(user=self._user_name)
         if not self.__stg_user:
             gui_core.GuiDialog.create(
@@ -516,15 +516,15 @@ class AbsPnlPublisherForGeneral(prx_widgets.PrxSessionWindow):
         )
 
     def refresh_publish_scene(self):
-        if bsc_core.SysApplicationMtd.get_is_dcc():
-            if bsc_core.SysApplicationMtd.get_is_maya():
+        if bsc_core.BasApplication.get_is_dcc():
+            if bsc_core.BasApplication.get_is_maya():
                 import lxmaya.dcc.objects as mya_dcc_objects
 
                 self._publish_options_prx_node.set(
                     'extra.scene', [mya_dcc_objects.Scene.get_current_file_path()]
 
                 )
-            elif bsc_core.SysApplicationMtd.get_is_katana():
+            elif bsc_core.BasApplication.get_is_katana():
                 import lxkatana.dcc.objects as ktn_dcc_objects
 
                 self._publish_options_prx_node.set(

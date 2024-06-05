@@ -5,14 +5,14 @@ from lxgui.qt.core.wrap import *
 
 import lxbasic.storage as bsc_storage
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
-class W(prx_widgets.PrxBaseWindow):
+class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
 
-        b = prx_widgets.PrxPressButton()
+        b = gui_prx_widgets.PrxPressButton()
         self.add_button(b)
         b.set_name('Test')
 

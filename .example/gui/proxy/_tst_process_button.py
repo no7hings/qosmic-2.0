@@ -1,16 +1,16 @@
 # coding:utf-8
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxresolver.core as rsv_core
 
 
-class TestWindow(prx_widgets.PrxBaseWindow):
+class TestWindow(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(TestWindow, self).__init__(*args, **kwargs)
         self._test_()
 
     def _test_(self):
-        button = prx_widgets.PrxPressButton()
+        button = gui_prx_widgets.PrxPressButton()
         self.add_widget(button)
         button.set_name('test')
         # button.set_status(button.ProcessStatus.Started)

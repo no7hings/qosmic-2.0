@@ -112,7 +112,7 @@ class EtrBase(bsc_etr_abstracts.AbsEtrBase):
     @classmethod
     def get_app_execute_mapper(cls, rsv_project):
         dict_ = {}
-        platform = bsc_core.SysBaseMtd.get_platform()
+        platform = bsc_core.BscSystem.get_platform()
         package_data = rsv_project.get_package_data()
         cfg_file_path = package_data['application-configure-file'][platform]
         cfg_file_path = bsc_core.PtnParseMtd.update_variants(cfg_file_path, project=rsv_project.get_name())
@@ -137,14 +137,14 @@ class EtrBase(bsc_etr_abstracts.AbsEtrBase):
 
     @classmethod
     def get_application_configure_file(cls, rsv_project):
-        platform = bsc_core.SysBaseMtd.get_platform()
+        platform = bsc_core.BscSystem.get_platform()
         package_data = rsv_project.get_package_data()
         cfg_file_path = package_data['application-configure-file'][platform]
         return bsc_core.PtnParseMtd.update_variants(cfg_file_path, project=rsv_project.get_name())
 
     @classmethod
     def get_deadline_configure_file(cls, rsv_project):
-        platform = bsc_core.SysBaseMtd.get_platform()
+        platform = bsc_core.BscSystem.get_platform()
         package_data = rsv_project.get_package_data()
         cfg_file_path = package_data['deadline-configure-file'][platform]
         return bsc_core.PtnParseMtd.update_variants(cfg_file_path, project=rsv_project.get_name())

@@ -1,10 +1,10 @@
 # coding:utf-8
 import lxgui.core as gui_core
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
-class W(prx_widgets.PrxBaseWindow):
+class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
         #
@@ -15,15 +15,15 @@ class W(prx_widgets.PrxBaseWindow):
              ('face', 53489.937469401586, 16456), ('edge', 106979.87493880317, 33328),
              ('vertex', 53768.530893721385, 16842)]
         #
-        h_s = prx_widgets.PrxHSplitter()
+        h_s = gui_prx_widgets.PrxHSplitter()
         self.add_widget(h_s)
 
-        v_s = prx_widgets.PrxVSplitter()
+        v_s = gui_prx_widgets.PrxVSplitter()
         h_s.add_widget(v_s)
 
-        t = prx_widgets.PrxTreeView()
+        t = gui_prx_widgets.PrxTreeView()
         h_s.add_widget(t)
-        s_c = prx_widgets.PrxSectorChart()
+        s_c = gui_prx_widgets.PrxSectorChart()
         v_s.add_widget(
             s_c
         )
@@ -37,7 +37,7 @@ class W(prx_widgets.PrxBaseWindow):
             a, gui_core.GuiSectorChartMode.Error
         )
         #
-        r_c = prx_widgets.PrxRadarChart()
+        r_c = gui_prx_widgets.PrxRadarChart()
         v_s.add_widget(
             r_c
         )

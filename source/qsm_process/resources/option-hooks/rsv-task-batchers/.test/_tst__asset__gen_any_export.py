@@ -3,7 +3,7 @@ import lxbasic.core as bsc_core
 
 import lxsession.commands as ssn_commands
 
-user = bsc_core.SysBaseMtd.get_user_name()
+user = bsc_core.BscSystem.get_user_name()
 
 j_option_opt = bsc_core.ArgDictStringOpt(
     option=dict(

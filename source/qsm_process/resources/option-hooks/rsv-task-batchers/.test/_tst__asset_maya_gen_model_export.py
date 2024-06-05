@@ -3,15 +3,15 @@ import lxbasic.core as bsc_core
 
 import lxsession.commands as ssn_commands
 
-user = bsc_core.SysBaseMtd.get_user_name()
+user = bsc_core.BscSystem.get_user_name()
 
 option_opt = bsc_core.ArgDictStringOpt(
     option=dict(
         option_hook_key='rsv-task-batchers/asset/gen-model-export',
         #
         file='/l/prod/cgm/work/assets/chr/queen_white/mod/modeling/maya/scenes/queen_white.mod.modeling.v001.ma',
-        user=bsc_core.SysBaseMtd.get_user_name(),
-        host=bsc_core.SysBaseMtd.get_host(),
+        user=bsc_core.BscSystem.get_user_name(),
+        host=bsc_core.BscSystem.get_host(),
         #
         # choice_scheme='asset-maya-output',
         choice_scheme='asset-maya-publish',

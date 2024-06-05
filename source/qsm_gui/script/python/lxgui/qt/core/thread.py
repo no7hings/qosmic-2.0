@@ -65,8 +65,8 @@ class QtMethodThread(QtCore.QThread):
             #
             self.completed.emit()
         except Exception:
-            bsc_core.ExceptionMtd.set_print()
-            self.failed.emit(bsc_core.ExceptionMtd.get_stack_())
+            bsc_core.BscException.set_print()
+            self.failed.emit(bsc_core.BscException.get_stack_())
         finally:
             self.run_finished.emit()
             self.finish_accepted.emit(self)
@@ -135,7 +135,7 @@ class QtBuildThread(QtCore.QThread):
                 self.run_failed.emit()
                 self.set_status(self.Status.Failed)
                 print 'thread failed'
-                bsc_core.ExceptionMtd.print_stack()
+                bsc_core.BscException.print_stack()
             #
             finally:
                 self.run_finished.emit()
@@ -298,7 +298,7 @@ class QtBuildRunnable(QtCore.QRunnable):
                 self._build_signals.run_failed.emit()
                 self.set_status(self.Status.Failed)
                 print 'runnable failed'
-                print bsc_core.ExceptionMtd.get_stack_()
+                print bsc_core.BscException.get_stack_()
             #
             finally:
                 self._build_signals.run_finished.emit()

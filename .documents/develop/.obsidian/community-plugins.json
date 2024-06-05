@@ -1,5 +1,4 @@
 [
-  "3d-graph",
   "obsidian-mind-map",
   "markdown-tree",
   "dataview",
@@ -8,5 +7,6 @@
   "canvas2document",
   "floating-toc",
   "card-board",
-  "mermaid-tools"
+  "mermaid-tools",
+  "obsidian-tasks-plugin"
 ]

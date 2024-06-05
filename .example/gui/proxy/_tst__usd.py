@@ -17,7 +17,7 @@ import lxbasic.storage as bsc_storage
 
 import lxgeneral.dcc.core as gnl_dcc_core
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.proxy.core as gui_prx_core
 
@@ -26,16 +26,16 @@ import lxbasic.database as bsc_database
 bsc_log.Log.TEST = True
 
 
-class W(prx_widgets.PrxBaseWindow):
+class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
         img_w, img_h = 515, 515
         self.set_definition_window_size([img_w+36, img_h+54])
 
-        s = prx_widgets.PrxHSplitter()
+        s = gui_prx_widgets.PrxHSplitter()
         self.add_widget(s)
 
-        self._usd_stage_view = prx_widgets.PrxUsdStageView()
+        self._usd_stage_view = gui_prx_widgets.PrxUsdStageView()
         s.add_widget(self._usd_stage_view)
 
         self._main_dir = '/data/e/workspace/lynxi-py3/test/tensor-flow/resource/data'

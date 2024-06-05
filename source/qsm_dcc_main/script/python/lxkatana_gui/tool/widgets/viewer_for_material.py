@@ -20,7 +20,7 @@ class PnlViewerForMaterialDcc(vwr_gui_abstracts.AbsPnlViewerForMaterialDcc):
     DCC_SELECTION_CLS = ktn_dcc_objects.Selection
     DCC_STAGE_SELECTION_CLS = ktn_core.KtnSGSelectionOpt
     #
-    DCC_NAMESPACE = 'dcc'
+    GUI_NAMESPACE = 'dcc'
     #
     DCC_GEOMETRY_TYPES = [
         'subdmesh',

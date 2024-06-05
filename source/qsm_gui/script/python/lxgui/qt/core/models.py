@@ -401,7 +401,7 @@ class GuiQtModForLayoutItemStack(object):
     DRAG_AND_DROP_CACHE = None
 
     def __init__(self, widget):
-        self.__key_text = bsc_core.UuidMtd.generate_new()
+        self.__key_text = bsc_core.BscUuid.generate_new()
 
         self._widget = widget
         self._items = []

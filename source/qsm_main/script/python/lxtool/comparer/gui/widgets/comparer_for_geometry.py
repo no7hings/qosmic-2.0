@@ -5,7 +5,7 @@ from .. import abstracts as cpr_gui_abstracts
 
 
 class ComparerOpt(cpr_gui_abstracts.AbsDccComparerOpt):
-    DCC_NAMESPACE = 'lynxi'
+    GUI_NAMESPACE = 'lynxi'
     DCC_NODE_CLS = gnl_dcc_objects.Node
     DCC_COMPONENT_CLS = gnl_dcc_objects.Component
     DCC_SELECTION_CLS = None

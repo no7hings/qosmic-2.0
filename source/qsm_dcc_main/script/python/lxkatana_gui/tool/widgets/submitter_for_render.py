@@ -28,7 +28,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
     lxkatana.set_reload()
     import lxsession.commands as ssn_commands; ssn_commands.execute_hook("dcc-tool-panels/katana/asset-render-submitter")
     """
-    DCC_NAMESPACE = 'katana'
+    GUI_NAMESPACE = 'katana'
 
     def __init__(self, *args, **kwargs):
         super(PnlSubmitterForRenderDcc, self).__init__(*args, **kwargs)
@@ -53,7 +53,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
         prx_items = self._result_list_view.get_selected_items()
         for i_prx_item in prx_items:
             i_render_node_opt = i_prx_item.get_gui_dcc_obj(
-                namespace=self.DCC_NAMESPACE
+                namespace=self.GUI_NAMESPACE
             )
             if i_render_node_opt is not None:
                 i_render_layer_opt = self._to_render_layer(i_render_node_opt)
@@ -90,7 +90,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
 
     def _gui_refresh_render_node_(self, prx_item_widget):
         render_node_opt = prx_item_widget.get_gui_dcc_obj(
-            namespace=self.DCC_NAMESPACE
+            namespace=self.GUI_NAMESPACE
         )
 
         if render_node_opt.get_is_bypassed(ancestors=True) is True:
@@ -191,10 +191,10 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
                 prx_item_widget
             )
 
-        prx_item_widget = self._result_list_view.create_item()
+        prx_item_widget = self._result_list_view.create_item_widget()
         # print path, semantic_tag_filter_data
         prx_item_widget.set_gui_dcc_obj(
-            render_node_opt, namespace=self.DCC_NAMESPACE
+            render_node_opt, namespace=self.GUI_NAMESPACE
         )
         prx_item_widget.set_keyword_filter_keys_tgt(
             {render_node_opt.get_name()}
@@ -209,7 +209,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
         for i_prx_item in prx_items:
             if i_prx_item.get_is_checked() is True and i_prx_item.get_is_visible() is True:
                 i_render_node_opt = i_prx_item.get_gui_dcc_obj(
-                    namespace=self.DCC_NAMESPACE
+                    namespace=self.GUI_NAMESPACE
                 )
                 if i_render_node_opt is not None:
                     if i_render_node_opt.get_is_bypassed(ancestors=True) is False:

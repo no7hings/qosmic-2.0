@@ -347,7 +347,7 @@ class AbsFncComparerForUsdGeometry(_base.AbsFncOptionBase):
 
             import lxusd.dcc.operators as usd_dcc_operators
 
-            hash_key = bsc_core.UuidMtd.generate_by_file(file_path)
+            hash_key = bsc_core.BscUuid.generate_by_file(file_path)
 
             if hash_key in cls.CACHE:
                 return cls.CACHE[hash_key]
@@ -456,7 +456,7 @@ class AbsFncComparerForDccGeometry(_base.AbsFncOptionBase):
     CACHE = dict()
 
     RSV_KEYWORD = 'asset-geometry-usd-payload-file'
-    DCC_NAMESPACE = 'usd'
+    GUI_NAMESPACE = 'usd'
 
     def __init__(self, option):
         super(AbsFncComparerForDccGeometry, self).__init__(option)
@@ -510,7 +510,7 @@ class AbsFncComparerForDccGeometry(_base.AbsFncOptionBase):
         #
         self._dcc_scene_src = usd_dcc_objects.Scene()
         self._dcc_universe_src = self._dcc_scene_src.universe
-        self._dcc_stage_opt_src = usd_dcc_operators.SceneOpt(self._dcc_scene_src.usd_stage, self.DCC_NAMESPACE)
+        self._dcc_stage_opt_src = usd_dcc_operators.SceneOpt(self._dcc_scene_src.usd_stage, self.GUI_NAMESPACE)
         self._dcc_comparer_data_src = bsc_content.Content(
             value={}
         )
@@ -525,7 +525,7 @@ class AbsFncComparerForDccGeometry(_base.AbsFncOptionBase):
         #
         self._dcc_scene_tgt = usd_dcc_objects.Scene()
         self._dcc_universe_tgt = self._dcc_scene_tgt.universe
-        self._dcc_stage_opt_tgt = usd_dcc_operators.SceneOpt(self._dcc_scene_tgt.usd_stage, self.DCC_NAMESPACE)
+        self._dcc_stage_opt_tgt = usd_dcc_operators.SceneOpt(self._dcc_scene_tgt.usd_stage, self.GUI_NAMESPACE)
         self._dcc_comparer_data_tgt = bsc_content.Content(
             value={}
         )
@@ -540,7 +540,7 @@ class AbsFncComparerForDccGeometry(_base.AbsFncOptionBase):
         #
         usd_file_path = self._source_file_path
         if usd_file_path is not None:
-            hash_key = bsc_core.UuidMtd.generate_by_file(usd_file_path)
+            hash_key = bsc_core.BscUuid.generate_by_file(usd_file_path)
             if hash_key in AbsFncComparerForDccGeometry.CACHE:
                 self._dcc_scene_src = AbsFncComparerForDccGeometry.CACHE[hash_key]
                 self._dcc_universe_src = self._dcc_scene_src.universe
@@ -554,7 +554,7 @@ class AbsFncComparerForDccGeometry(_base.AbsFncOptionBase):
                 AbsFncComparerForDccGeometry.CACHE[hash_key] = self._dcc_scene_src
                 self._dcc_universe_src = self._dcc_scene_src.universe
             #
-            self._dcc_stage_opt_src = usd_dcc_operators.SceneOpt(self._dcc_scene_src.usd_stage, self.DCC_NAMESPACE)
+            self._dcc_stage_opt_src = usd_dcc_operators.SceneOpt(self._dcc_scene_src.usd_stage, self.GUI_NAMESPACE)
             self._dcc_comparer_data_src = self._dcc_stage_opt_src.get_mesh_comparer_data(
                 usd_file_path
             )

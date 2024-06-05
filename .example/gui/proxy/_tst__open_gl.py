@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.log as bsc_log
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.proxy.core as gui_prx_core
 
@@ -16,7 +16,7 @@ import lxgeneral.dcc.core as gnl_dcc_core
 bsc_log.Log.TEST = True
 
 
-class W(prx_widgets.PrxBaseWindow):
+class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
 

@@ -1,11 +1,11 @@
 # coding:utf-8
 import lxgui.qt.widgets as qt_widgets
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
 class AbsPnlForHashGeometryDcc(
-    prx_widgets.PrxSessionWindow
+    gui_prx_widgets.PrxSessionWindow
 ):
     CONFIGURE_FILE_PATH = 'utility/panel/database-geometry-manager'
 
@@ -22,7 +22,7 @@ class AbsPnlForHashGeometryDcc(
         self._set_hash_uv_group_build_()
 
     def _set_utility_group_build_(self):
-        expand_box_0 = prx_widgets.PrxHToolGroup()
+        expand_box_0 = gui_prx_widgets.PrxHToolGroup()
         expand_box_0.set_name('Utility')
         expand_box_0.set_size_mode(1)
         expand_box_0.set_expanded(True)
@@ -30,11 +30,11 @@ class AbsPnlForHashGeometryDcc(
         qt_widget_0 = qt_widgets.QtWidget()
         expand_box_0.add_widget(qt_widget_0)
         qt_layout_0 = qt_widgets.QtVBoxLayout(qt_widget_0)
-        self._utility_node_prx = prx_widgets.PrxNodeOld()
+        self._utility_node_prx = gui_prx_widgets.PrxNodeOld()
         qt_layout_0.addWidget(self._utility_node_prx.widget)
         #
         _port = self._utility_node_prx.add_port(
-            prx_widgets.PrxPortAsFileSave('save_usd_file', 'Save USD-file')
+            gui_prx_widgets.PrxPortAsFileSave('save_usd_file', 'Save USD-file')
         )
         _port.set_ext_filter('All USD File (*.usd *.usda)')
         _port.set_tool_tip(
@@ -44,7 +44,7 @@ class AbsPnlForHashGeometryDcc(
         )
         #
         _port = self._utility_node_prx.add_port(
-            prx_widgets.PrxPortAsButton('export_select_to_usd_file', 'Export Select(s) to USD-file')
+            gui_prx_widgets.PrxPortAsButton('export_select_to_usd_file', 'Export Select(s) to USD-file')
         )
         _port.set_tool_tip(
             [
@@ -54,7 +54,7 @@ class AbsPnlForHashGeometryDcc(
         _port.set(self._set_usd_file_export_)
         #
         _port = self._utility_node_prx.add_port(
-            prx_widgets.PrxPortAsFileOpen('open_usd_file', 'Open USD-file')
+            gui_prx_widgets.PrxPortAsFileOpen('open_usd_file', 'Open USD-file')
         )
         _port.set_ext_filter('All USD File (*.usd *.usda)')
         _port.set_tool_tip(
@@ -64,7 +64,7 @@ class AbsPnlForHashGeometryDcc(
         )
         #
         _port = self._utility_node_prx.add_port(
-            prx_widgets.PrxPortAsButton('import_from_usd_file', 'Import from USD-file')
+            gui_prx_widgets.PrxPortAsButton('import_from_usd_file', 'Import from USD-file')
         )
         _port.set_tool_tip(
             [
@@ -74,7 +74,7 @@ class AbsPnlForHashGeometryDcc(
         _port.set(self._set_usd_file_import_)
 
     def _set_database_export_group_build_(self):
-        expand_box_0 = prx_widgets.PrxHToolGroup()
+        expand_box_0 = gui_prx_widgets.PrxHToolGroup()
         expand_box_0.set_name('Database Export')
         expand_box_0.set_size_mode(1)
         expand_box_0.set_expanded(True)
@@ -82,11 +82,11 @@ class AbsPnlForHashGeometryDcc(
         qt_widget_0 = qt_widgets.QtWidget()
         expand_box_0.add_widget(qt_widget_0)
         qt_layout_0 = qt_widgets.QtVBoxLayout(qt_widget_0)
-        self._database_export_node_prx = prx_widgets.PrxNodeOld()
+        self._database_export_node_prx = gui_prx_widgets.PrxNodeOld()
         qt_layout_0.addWidget(self._database_export_node_prx.widget)
         #
         _port = self._database_export_node_prx.add_port(
-            prx_widgets.PrxPortAsBoolean('export_uv_map_force', 'Export UV-map(s) Force')
+            gui_prx_widgets.PrxPortAsBoolean('export_uv_map_force', 'Export UV-map(s) Force')
         )
         _port.set_tool_tip(
             [
@@ -94,7 +94,7 @@ class AbsPnlForHashGeometryDcc(
             ]
         )
         _port = self._database_export_node_prx.add_port(
-            prx_widgets.PrxPortAsButton(
+            gui_prx_widgets.PrxPortAsButton(
                 'export_uv_map_to_database_from_select', 'Export Database UV-map(s) from Select(s)'
                 )
         )
@@ -106,7 +106,7 @@ class AbsPnlForHashGeometryDcc(
         _port.set(self._set_database_uv_map_export_)
 
     def _set_database_import_group_build_(self):
-        expand_box_0 = prx_widgets.PrxHToolGroup()
+        expand_box_0 = gui_prx_widgets.PrxHToolGroup()
         expand_box_0.set_name('Database Import')
         expand_box_0.set_size_mode(1)
         expand_box_0.set_expanded(True)
@@ -114,11 +114,11 @@ class AbsPnlForHashGeometryDcc(
         qt_widget_0 = qt_widgets.QtWidget()
         expand_box_0.add_widget(qt_widget_0)
         qt_layout_0 = qt_widgets.QtVBoxLayout(qt_widget_0)
-        self._database_import_node_prx = prx_widgets.PrxNodeOld()
+        self._database_import_node_prx = gui_prx_widgets.PrxNodeOld()
         qt_layout_0.addWidget(self._database_import_node_prx.widget)
         #
         _port = self._database_import_node_prx.add_port(
-            prx_widgets.PrxPortAsButton('import_database_uv_map_to_select', 'Import Database UV-map(s) to Select(s)')
+            gui_prx_widgets.PrxPortAsButton('import_database_uv_map_to_select', 'Import Database UV-map(s) to Select(s)')
         )
         _port.set_tool_tip(
             [
@@ -128,7 +128,7 @@ class AbsPnlForHashGeometryDcc(
         _port.set(self._set_database_uv_map_import_)
 
     def _set_hash_uv_group_build_(self):
-        expand_box_0 = prx_widgets.PrxHToolGroup()
+        expand_box_0 = gui_prx_widgets.PrxHToolGroup()
         expand_box_0.set_name('Database Extend')
         expand_box_0.set_size_mode(1)
         expand_box_0.set_expanded(True)
@@ -136,11 +136,11 @@ class AbsPnlForHashGeometryDcc(
         qt_widget_0 = qt_widgets.QtWidget()
         expand_box_0.add_widget(qt_widget_0)
         qt_layout_0 = qt_widgets.QtVBoxLayout(qt_widget_0)
-        self._hash_uv_node_prx = prx_widgets.PrxNodeOld()
+        self._hash_uv_node_prx = gui_prx_widgets.PrxNodeOld()
         qt_layout_0.addWidget(self._hash_uv_node_prx.widget)
         #
         _port = self._hash_uv_node_prx.add_port(
-            prx_widgets.PrxSubProcessPort('geometry_unify', 'Unify Geometry by Select(s)')
+            gui_prx_widgets.PrxSubProcessPort('geometry_unify', 'Unify Geometry by Select(s)')
         )
         _port.set(self._set_geometry_unify_run_)
         _port.set_menu_data(
@@ -153,7 +153,7 @@ class AbsPnlForHashGeometryDcc(
         self.connect_window_close_to(self._set_geometry_unify_ddl_job_stop_)
         #
         _port = self._hash_uv_node_prx.add_port(
-            prx_widgets.PrxSubProcessPort('geometry_uv_map_assign', 'Assign Geometry UV-map By Select(s)')
+            gui_prx_widgets.PrxSubProcessPort('geometry_uv_map_assign', 'Assign Geometry UV-map By Select(s)')
         )
         _port.set(self._set_geometry_uv_map_assign_run_)
         _port.set_menu_data(

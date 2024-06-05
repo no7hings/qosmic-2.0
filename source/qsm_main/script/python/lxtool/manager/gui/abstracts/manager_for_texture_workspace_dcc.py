@@ -7,7 +7,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.qt.core as gui_qt_core
 
@@ -18,8 +18,6 @@ import lxsession.commands as ssn_commands
 import lxresolver.core as rsv_core
 
 import lxgui.core as gui_core
-
-import qsm_prc_general.rsv.objects as gnl_rsv_objects
 
 
 class _GuiCmdForNewVersion(object):
@@ -141,8 +139,8 @@ class _GuiCmdForNewVersion(object):
 
 
 # noinspection PyUnusedLocal
-class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
-    DCC_NAMESPACE = None
+class AbsPnlManagerForTextureSpaceDcc(gui_prx_widgets.PrxSessionWindow):
+    GUI_NAMESPACE = None
     DCC_SELECTION_CLS = None
     TEXTURE_WORKSPACE_CLS = None
 
@@ -161,17 +159,17 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
 
     def gui_setup_window(self):
         self.set_main_style_mode(1)
-        self._prx_tab_view = prx_widgets.PrxTabView()
+        self._prx_tab_view = gui_prx_widgets.PrxTabView()
         self.add_widget(self._prx_tab_view)
 
-        s_0 = prx_widgets.PrxVScrollArea()
+        s_0 = gui_prx_widgets.PrxVScrollArea()
         self._prx_tab_view.add_widget(
             s_0,
             name='workspace',
             icon_name_text='workspace',
         )
 
-        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         s_0.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.options'),
@@ -220,6 +218,8 @@ class AbsPnlManagerForTextureSpaceDcc(prx_widgets.PrxSessionWindow):
         self._dcc_objs = []
 
     def _set_texture_workspace_update_(self):
+        import qsm_prc_general.rsv.objects as gnl_rsv_objects
+
         self._rsv_workspace_texture_opt = gnl_rsv_objects.RsvAssetTextureOpt(self._rsv_task)
         current_variant = 'main'
         self._rsv_workspace_texture_opt.set_current_variant(current_variant)

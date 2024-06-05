@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.log as bsc_log
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.core as gui_core
 
@@ -16,7 +16,7 @@ from . import page_for_monitor as _page_for_monitor
 from . import page_for_notice as _page_for_notice
 
 
-class PrxPanelForTaskManager(prx_widgets.PrxSessionWindow):
+class PrxPanelForTaskManager(gui_prx_widgets.PrxSessionWindow):
     SERVER_FLAG = True
 
     def __init__(self, session, *args, **kwargs):
@@ -28,10 +28,10 @@ class PrxPanelForTaskManager(prx_widgets.PrxSessionWindow):
             self.start_web_socket_server()
             self.start_task_server()
 
-        self._prx_tab_view = prx_widgets.PrxTabView()
+        self._prx_tab_view = gui_prx_widgets.PrxTabView()
         self.add_widget(self._prx_tab_view)
 
-        monitor_sca = prx_widgets.PrxVScrollArea()
+        monitor_sca = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(monitor_sca)
 
         self._prx_tab_view.add_widget(
@@ -48,7 +48,7 @@ class PrxPanelForTaskManager(prx_widgets.PrxSessionWindow):
         )
         monitor_sca.add_widget(self._monitor_prx_page)
 
-        notice_sca = prx_widgets.PrxVScrollArea()
+        notice_sca = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(notice_sca)
 
         self._prx_tab_view.add_widget(

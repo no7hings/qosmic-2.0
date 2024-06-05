@@ -193,6 +193,9 @@ class Main(object):
         if cls.MARK_KEY in os.environ:
             return
 
+        cls.log(
+            'startup maya from server'
+        )
         variants = dict(
             deploy_root=cls.DEPLOY_ROOT,
             root_release=cls.ROOT_RELEASE
@@ -223,12 +226,18 @@ class Main(object):
 
         os.environ[cls.MARK_KEY] = 'TRUE'
 
+    @classmethod
+    def create_shelves(cls):
+        def fnc_():
+            import qsm_maya.gui as qsm_mya_gui
+            qsm_mya_gui.MainShelf().create()
+
+        # noinspection PyUnresolvedReferences
+        from maya import cmds
+
+        cmds.evalDeferred(fnc_)
+
 
 if __name__ == '__main__':
     Main.execute()
-
-
-
-
-
-
+    Main.create_shelves()

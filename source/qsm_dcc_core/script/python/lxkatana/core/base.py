@@ -132,7 +132,7 @@ class Modifier(object):
             except Exception:
                 import lxbasic.core as bsc_core
 
-                bsc_core.ExceptionMtd.set_print()
+                bsc_core.BscException.set_print()
             #
             finally:
                 Utils.UndoStack.CloseGroup()
@@ -153,7 +153,7 @@ class Modifier(object):
                     bsc_log.LogException.trace()
                 else:
                     import lxbasic.core as bsc_core
-                    bsc_core.ExceptionMtd.set_print()
+                    bsc_core.BscException.set_print()
                 raise
             #
             finally:

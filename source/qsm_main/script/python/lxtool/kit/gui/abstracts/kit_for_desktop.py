@@ -17,7 +17,7 @@ import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.widgets as qt_widgets
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 # kit
 from ... import core as kit_core
 
@@ -37,7 +37,7 @@ class _GuiPageQuery(object):
         )
         self.__page_keys_department = []
 
-        self.__user_current = bsc_core.SysBaseMtd.get_user_name()
+        self.__user_current = bsc_core.BscSystem.get_user_name()
         self.__all_page_keys_user = kit_core.KitDesktopHook.find_all_page_keys_at(
             kit_core.KitDesktopHook.PageKey.Users
         )
@@ -143,7 +143,7 @@ class _GuiQuery(object):
 
 
 # noinspection PyUnusedLocal
-class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
+class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
     KEY_TAB_KEYS = 'tool-desktop.page_keys'
     HST_TAB_KEY_CURRENT = 'tool-desktop.page_key_current'
 
@@ -203,7 +203,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
         )
 
         self.set_main_style_mode(1)
-        self._prx_tab_view = prx_widgets.PrxTabView()
+        self._prx_tab_view = gui_prx_widgets.PrxTabView()
         self.add_widget(self._prx_tab_view)
         self._prx_tab_view.set_drag_enable(True)
         self._prx_tab_view.set_add_enable(True)
@@ -309,25 +309,25 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
 
     def __gui_build_create_layer(self):
         layer_widget = self.create_layer_widget('create_layer', 'Create')
-        s = prx_widgets.PrxVScrollArea()
+        s = gui_prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(s)
-        self._create_option_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._create_option_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         self._create_option_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.create_options')
         )
         s.add_widget(self._create_option_prx_node.widget)
 
-        text_browser = prx_widgets.PrxTextBrowser()
+        text_browser = gui_prx_widgets.PrxTextBrowser()
         s.add_widget(text_browser)
         text_browser.set_content(
             self._session.configure.get('build.node.create_content')
         )
         text_browser.set_font_size(12)
         #
-        tool_bar = prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolBar()
         layer_widget.add_widget(tool_bar.widget)
         tool_bar.set_expanded(True)
-        button = prx_widgets.PrxPressButton()
+        button = gui_prx_widgets.PrxPressButton()
         tool_bar.add_widget(button)
         button.set_name('Apply')
         button.connect_press_clicked_to(
@@ -336,25 +336,25 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
 
     def __gui_build_modify_layer(self):
         layer_widget = self.create_layer_widget('modify_layer', 'Modify')
-        s = prx_widgets.PrxVScrollArea()
+        s = gui_prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(s)
-        self._modify_option_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._modify_option_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         self._modify_option_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.modify_options'),
         )
         s.add_widget(self._modify_option_prx_node.widget)
 
-        text_browser = prx_widgets.PrxTextBrowser()
+        text_browser = gui_prx_widgets.PrxTextBrowser()
         s.add_widget(text_browser)
         text_browser.set_content(
             self._session.configure.get('build.node.modify_content')
         )
         text_browser.set_font_size(12)
         #
-        tool_bar = prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolBar()
         layer_widget.add_widget(tool_bar.widget)
         tool_bar.set_expanded(True)
-        button = prx_widgets.PrxPressButton()
+        button = gui_prx_widgets.PrxPressButton()
         tool_bar.add_widget(button)
         button.set_name('Apply')
         button.connect_press_clicked_to(
@@ -363,25 +363,25 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
 
     def __gui_build_copy_layer(self):
         layer_widget = self.create_layer_widget('copy_layer', 'Copy')
-        s = prx_widgets.PrxVScrollArea()
+        s = gui_prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(s)
-        self._copy_option_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._copy_option_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         self._copy_option_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.copy_options'),
         )
         s.add_widget(self._copy_option_prx_node.widget)
 
-        text_browser = prx_widgets.PrxTextBrowser()
+        text_browser = gui_prx_widgets.PrxTextBrowser()
         s.add_widget(text_browser)
         text_browser.set_content(
             self._session.configure.get('build.node.copy_content')
         )
         text_browser.set_font_size(12)
         #
-        tool_bar = prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolBar()
         layer_widget.add_widget(tool_bar.widget)
         tool_bar.set_expanded(True)
-        button = prx_widgets.PrxPressButton()
+        button = gui_prx_widgets.PrxPressButton()
         tool_bar.add_widget(button)
         button.set_name('Apply')
         button.connect_press_clicked_to(
@@ -414,7 +414,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
 
     def __save_main_icon_to_file(self, page_name, group_sub_name, session):
         tool_path = '/{}/{}/{}'.format(
-            page_name, group_sub_name, bsc_core.UuidMtd.generate_by_text(session.get_hook())
+            page_name, group_sub_name, bsc_core.BscUuid.generate_by_text(session.get_hook())
         )
         if self.__gui_query.get_is_exists(tool_path):
             tool = self.__gui_query.get(tool_path)
@@ -468,7 +468,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
         if self.__gui_query.get_is_exists(gui_path) is True:
             return self.__gui_query.get(gui_path)
 
-        scroll_area = prx_widgets.PrxVScrollArea()
+        scroll_area = gui_prx_widgets.PrxVScrollArea()
 
         name = page_name.split('/')[-1]
         if name in self.__page_name_mapper:
@@ -487,18 +487,18 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
         l_0 = qt_widgets.QtVBoxLayout(w_0)
         l_0.setContentsMargins(0, 0, 0, 0)
 
-        top_tool_bar = prx_widgets.PrxHToolBar()
+        top_tool_bar = gui_prx_widgets.PrxHToolBar()
         l_0.addWidget(top_tool_bar._qt_widget)
         top_tool_bar.set_expanded(True)
         top_tool_bar.set_align_left()
 
         if tool_data:
-            tool_box = prx_widgets.PrxHToolBoxNew()
+            tool_box = gui_prx_widgets.PrxHToolBoxNew()
             top_tool_bar.add_widget(tool_box)
             tool_box.set_expanded(True)
             for i_data in tool_data:
                 i_name, i_icon_name, i_tool_tip, i_fnc = i_data
-                i_tool = prx_widgets.PrxIconPressButton()
+                i_tool = gui_prx_widgets.PrxIconPressButton()
                 tool_box.add_widget(i_tool)
                 i_tool.set_name(i_name)
                 i_tool.set_icon_name(i_icon_name)
@@ -527,7 +527,7 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
             qt_tool_group._set_expanded_(True)
             qt_tool_group._set_drag_enable_(True)
 
-            grid_layout_widget = prx_widgets.PrxToolGridLayoutWidget()
+            grid_layout_widget = gui_prx_widgets.PrxToolGridLayoutWidget()
             qt_tool_group._add_widget_(grid_layout_widget._qt_widget)
             grid_layout_widget.set_drop_enable(True)
             grid_layout_widget.set_path(gui_path)
@@ -840,13 +840,13 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
             )
 
             tool_path = '/{}/{}/{}'.format(
-                page_name, group_sub_name, bsc_core.UuidMtd.generate_by_text(session.get_hook())
+                page_name, group_sub_name, bsc_core.BscUuid.generate_by_text(session.get_hook())
             )
 
             if self.__gui_query.get_is_exists(tool_path) is True:
                 prx_tool = self.__gui_query.get(tool_path)
             else:
-                prx_tool = prx_widgets.PrxIconPressButton()
+                prx_tool = gui_prx_widgets.PrxIconPressButton()
                 self.__gui_query.register(tool_path, prx_tool)
                 grid_layout_widget.add_widget(prx_tool)
                 session.set_gui(prx_tool._qt_widget)
@@ -894,12 +894,12 @@ class AbsToolKitForDesktop(prx_widgets.PrxSessionWindow):
             )
 
             tool_path = '/{}/{}/{}'.format(
-                page_name, group_sub_name, bsc_core.UuidMtd.generate_by_text(session.get_hook())
+                page_name, group_sub_name, bsc_core.BscUuid.generate_by_text(session.get_hook())
             )
             if self.__gui_query.get_is_exists(tool_path) is True:
                 prx_tool = self.__gui_query.get(tool_path)
             else:
-                prx_tool = prx_widgets.PrxIconPressButton()
+                prx_tool = gui_prx_widgets.PrxIconPressButton()
                 self.__gui_query.register(tool_path, prx_tool)
                 grid_layout_widget.add_widget(prx_tool)
                 session.set_gui(prx_tool._qt_widget)

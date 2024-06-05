@@ -3,7 +3,7 @@ import lxgeneral.dcc.core as gnl_dcc_core
 
 import lxgui.proxy.core as gui_prx_core
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
 def process_fnc_(w_):
@@ -15,5 +15,5 @@ def process_fnc_(w_):
 
 
 w = gui_prx_core.GuiProxyUtil.show_window_proxy_auto(
-    prx_widgets.PrxProcessingWindow, window_process_fnc=process_fnc_, show_kwargs=dict(exclusive=False)
+    gui_prx_widgets.PrxProcessingWindow, window_process_fnc=process_fnc_, show_kwargs=dict(exclusive=False)
 )

@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxgui.core as gui_core
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
 def ok_method():
@@ -22,7 +22,7 @@ if __name__ == '__main__':
     from PySide2 import QtWidgets
     #
     app = QtWidgets.QApplication(sys.argv)
-    w = prx_widgets.PrxBaseWindow()
+    w = gui_prx_widgets.PrxBaseWindow()
     w.set_window_show()
     for i in range(20):
         if i == 10:

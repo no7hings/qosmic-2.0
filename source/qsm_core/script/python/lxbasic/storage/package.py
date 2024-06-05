@@ -41,10 +41,10 @@ class PkgContextNew(object):
 
     @classmethod
     def get_bin_source(cls):
-        return cls.BIN_SOURCE[bsc_cor_base.SysPlatformMtd.get_current()]
+        return cls.BIN_SOURCE[bsc_cor_base.BasPlatform.get_current()]
 
     def __init__(self, *args):
-        self._platform = bsc_cor_base.SysPlatformMtd.get_current()
+        self._platform = bsc_cor_base.BasPlatform.get_current()
         self._bin_source = self.get_bin_source()
         if args:
             self._args = args[0]
@@ -52,7 +52,7 @@ class PkgContextNew(object):
             self._args = None
 
         self._variants = dict(
-            home=bsc_cor_base.SysBaseMtd.get_home_directory(),
+            home=bsc_cor_base.BscSystem.get_home_directory(),
             platfrom=self._platform,
         )
 
@@ -268,9 +268,9 @@ class PkgContextNew(object):
     def convert_args_execute(cls, args_execute=None):
         if isinstance(args_execute, (set, tuple, list)):
             # replace first argument to "--join-cmd", etc. "-- maya", "-c maya" to "--join-cmd maya"
-            if bsc_cor_base.SysBaseMtd.get_is_linux():
+            if bsc_cor_base.BscSystem.get_is_linux():
                 j_key = '--join-cmd'
-            elif bsc_cor_base.SysBaseMtd.get_is_windows():
+            elif bsc_cor_base.BscSystem.get_is_windows():
                 j_key = '&&'
             else:
                 raise SystemError()

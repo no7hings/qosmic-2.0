@@ -7,10 +7,10 @@ import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.widgets as qt_widgets
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
-class W0(prx_widgets.PrxBaseWindow):
+class W0(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W0, self).__init__(*args, **kwargs)
 
@@ -20,7 +20,7 @@ class W0(prx_widgets.PrxBaseWindow):
         self._sub_label._set_name_draw_font_(gui_qt_core.QtFonts.SubTitle)
         self._sub_label._set_name_align_h_center_()
 
-        self._ipt = prx_widgets.PrxInputAsStgTask()
+        self._ipt = gui_prx_widgets.PrxInputAsStgTask()
         self.add_widget(self._ipt)
 
         self._ipt.set_focus_in()
@@ -29,7 +29,7 @@ class W0(prx_widgets.PrxBaseWindow):
             self.__do_cancel
         )
 
-        self._tip = prx_widgets.PrxTextBrowser()
+        self._tip = gui_prx_widgets.PrxTextBrowser()
         self.add_widget(self._tip)
         self._tip.set_focus_enable(False)
 

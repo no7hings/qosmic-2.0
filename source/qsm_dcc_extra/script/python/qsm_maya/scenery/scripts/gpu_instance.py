@@ -126,7 +126,7 @@ class GpuInstanceProcess(object):
             keys = mapper.keys()
             keys.sort()
             for i_seq, i_key in enumerate(keys):
-                i_hash_key = bsc_core.HashMtd.to_hash_key(i_key)
+                i_hash_key = bsc_core.BscHash.to_hash_key(i_key)
                 i_directory_path = '{}/region/{}'.format(
                     self._cache_directory_path, i_hash_key
                 )

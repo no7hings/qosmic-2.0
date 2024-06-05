@@ -6,7 +6,7 @@ import qsm_task.core as qsm_tsk_core
 p = qsm_tsk_core.TaskPool.generate()
 p.do_update()
 
-time_tag = bsc_core.SysBaseMtd.get_time_tag()
+time_tag = bsc_core.BscSystem.get_time_tag()
 
 tasks = []
 

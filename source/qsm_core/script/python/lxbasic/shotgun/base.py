@@ -37,7 +37,7 @@ class StgBase(object):
             )
             return _
         except Exception:
-            bsc_core.ExceptionMtd.print_stack()
+            bsc_core.BscException.print_stack()
             return None
 
     @staticmethod

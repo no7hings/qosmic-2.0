@@ -58,7 +58,7 @@ class KitDesktopHook(object):
     @classmethod
     def get_current_user_group_key(cls):
         return '{}/{}'.format(
-            cls.PageKey.Users, bsc_core.SysBaseMtd.get_user_name()
+            cls.PageKey.Users, bsc_core.BscSystem.get_user_name()
         )
 
     @classmethod

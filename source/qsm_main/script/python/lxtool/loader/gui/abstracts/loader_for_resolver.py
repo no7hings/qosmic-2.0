@@ -35,11 +35,11 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.abstracts as gui_prx_abstracts
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
 class _GuiBaseOpt(object):
-    DCC_NAMESPACE = 'resolver'
+    GUI_NAMESPACE = 'resolver'
 
     def __init__(self, window, session, resolver):
         self._window = window
@@ -57,7 +57,7 @@ class _GuiEntityOpt(
     def __init__(self, window, session, resolver, prx_tree_view):
         super(_GuiEntityOpt, self).__init__(window, session, resolver)
         self._init_tree_view_opt_(
-            prx_tree_view, self.DCC_NAMESPACE
+            prx_tree_view, self.GUI_NAMESPACE
         )
 
     def gui_add_root(self):
@@ -68,7 +68,7 @@ class _GuiEntityOpt(
                 icon=gui_core.GuiIcon.get('database/all'),
             )
             self.gui_register(path, prx_item)
-            prx_item.set_gui_dcc_obj(self._resolver, namespace=self.DCC_NAMESPACE)
+            prx_item.set_gui_dcc_obj(self._resolver, namespace=self.GUI_NAMESPACE)
             prx_item.set_expanded(True)
             prx_item.set_checked(False)
             return True, prx_item
@@ -103,7 +103,7 @@ class _GuiEntityOpt(
                 [type_name, name]
             )
             obj.set_obj_gui(prx_item)
-            prx_item.set_gui_dcc_obj(obj, namespace=self.DCC_NAMESPACE)
+            prx_item.set_gui_dcc_obj(obj, namespace=self.GUI_NAMESPACE)
             self.gui_register(path, prx_item)
             #
             if use_show_thread is True:
@@ -118,7 +118,7 @@ class _GuiEntityOpt(
             return True, prx_item
 
     def gui_show_deferred_fnc(self, prx_item):
-        obj = prx_item.get_gui_dcc_obj(namespace=self.DCC_NAMESPACE)
+        obj = prx_item.get_gui_dcc_obj(namespace=self.GUI_NAMESPACE)
         obj_type_name = obj.type_name
         name = obj.name
         #
@@ -165,7 +165,7 @@ class _GuiEntityOpt(
 
     def gui_add_for_all_resources(self, rsv_project):
         def post_fnc_():
-            self._end_timestamp = bsc_core.SysBaseMtd.get_timestamp()
+            self._end_timestamp = bsc_core.BscSystem.get_timestamp()
             #
             bsc_log.Log.trace_method_result(
                 'load asset/shot from "{}"'.format(
@@ -182,7 +182,7 @@ class _GuiEntityOpt(
 
         #
         self.__resource_count = 0
-        self._start_timestamp = bsc_core.SysBaseMtd.get_timestamp()
+        self._start_timestamp = bsc_core.BscSystem.get_timestamp()
         #
         rsv_resource_groups = rsv_project.get_rsv_resource_groups(**self._window._rsv_filter_opt.value)
         #
@@ -283,7 +283,7 @@ class _GuiTagOpt(
 
     def __init__(self, window, session, resolver, prx_tree_view):
         super(_GuiTagOpt, self).__init__(window, session, resolver)
-        self._init_tree_view_as_tag_opt_(prx_tree_view, self.DCC_NAMESPACE)
+        self._init_tree_view_as_tag_opt_(prx_tree_view, self.GUI_NAMESPACE)
 
         self._index_thread_batch = 0
 
@@ -334,7 +334,7 @@ class _GuiTaskOpt(
     def __init__(self, window, session, resolver, prx_list_view):
         super(_GuiTaskOpt, self).__init__(window, session, resolver)
         self._init_list_view_opt_(
-            prx_list_view, self.DCC_NAMESPACE
+            prx_list_view, self.GUI_NAMESPACE
         )
 
     def gui_add_one(self, rsv_task):
@@ -368,7 +368,7 @@ class _GuiTaskOpt(
             prx_item_widget.set_index_draw_enable(True)
             prx_item_widget.set_check_enable(True)
             prx_item_widget.set_gui_dcc_obj(
-                rsv_task, namespace=self.DCC_NAMESPACE
+                rsv_task, namespace=self.GUI_NAMESPACE
             )
             prx_item_widget.set_gui_attribute('path', rsv_task.get_path())
             prx_item_widget.set_name(rsv_task.get_path())
@@ -487,7 +487,7 @@ class _GuiTaskOpt(
     def get_current_rsv_task(self):
         _ = self._prx_list_view.get_selected_items()
         if _:
-            return _[-1].get_gui_dcc_obj(self.DCC_NAMESPACE)
+            return _[-1].get_gui_dcc_obj(self.GUI_NAMESPACE)
 
 
 class _GuiGuideOpt(_GuiBaseOpt):
@@ -549,12 +549,12 @@ class _GuiDirectoryOpt(
     gui_prx_abstracts.AbsGuiPrxTreeViewAsDirectoryOpt
 ):
     ROOT_NAME = 'All'
-    DCC_NAMESPACE = 'resolver'
+    GUI_NAMESPACE = 'resolver'
 
     def __init__(self, window, session, resolver, prx_tree_view):
         super(_GuiDirectoryOpt, self).__init__(window, session, resolver)
         self._init_tree_view_as_directory_opt_(
-            prx_tree_view, self.DCC_NAMESPACE
+            prx_tree_view, self.GUI_NAMESPACE
         )
 
         self._index_thread_batch = 0
@@ -566,7 +566,7 @@ class _GuiFileOpt(
 ):
     def __init__(self, window, session, resolver, prx_list_view):
         super(_GuiFileOpt, self).__init__(window, session, resolver)
-        self._init_list_view_as_file_opt_(prx_list_view, self.DCC_NAMESPACE)
+        self._init_list_view_as_file_opt_(prx_list_view, self.GUI_NAMESPACE)
 
     def gui_add(self, file_opt):
         def cache_fnc_():
@@ -617,7 +617,7 @@ class _GuiFileOpt(
 
         path = file_path = file_opt.get_path()
         if self.gui_is_exists(path) is False:
-            prx_item_widget = self._prx_list_view.create_item()
+            prx_item_widget = self._prx_list_view.create_item_widget()
 
             self.gui_register(path, prx_item_widget)
 
@@ -629,7 +629,7 @@ class _GuiFileOpt(
                 cache_fnc_, build_fnc_
             )
             prx_item_widget.set_gui_dcc_obj(
-                file_opt, namespace=self.DCC_NAMESPACE
+                file_opt, namespace=self.GUI_NAMESPACE
             )
             return prx_item_widget
         return self.gui_get(path)
@@ -717,8 +717,8 @@ class _GuiUsdStageViewOpt(_GuiBaseOpt):
 
 
 # noinspection PyUnusedLocal
-class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
-    DCC_NAMESPACE = 'resolver'
+class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
+    GUI_NAMESPACE = 'resolver'
     ITEM_ICON_FRAME_SIZE = 20, 20
     ITEM_ICON_SIZE = 20, 20
 
@@ -746,16 +746,16 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
         v_qt_layout = qt_widgets.QtVBoxLayout(v_qt_widget)
         v_qt_layout.setContentsMargins(0, 0, 0, 0)
         # top
-        self._top_tool_bar = prx_widgets.PrxHToolBar()
-        v_qt_layout.addWidget(self._top_tool_bar._qt_widget)
-        self._top_tool_bar.set_expanded(True)
+        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        v_qt_layout.addWidget(self._top_prx_tool_bar._qt_widget)
+        self._top_prx_tool_bar.set_expanded(True)
         #   guide
-        self._guide_tool_box = prx_widgets.PrxHToolBox()
-        self._top_tool_bar.add_widget(self._guide_tool_box)
+        self._guide_tool_box = gui_prx_widgets.PrxHToolBox()
+        self._top_prx_tool_bar.add_widget(self._guide_tool_box)
         self._guide_tool_box.set_expanded(True)
         self._guide_tool_box.set_size_mode(1)
         #
-        self._task_guide_bar = prx_widgets.PrxGuideBar()
+        self._task_guide_bar = gui_prx_widgets.PrxGuideBar()
         self._guide_tool_box.add_widget(self._task_guide_bar)
         #
         h_qt_widget = qt_widgets.QtWidget()
@@ -763,23 +763,23 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
         h_qt_layout = qt_widgets.QtHBoxLayout(h_qt_widget)
         h_qt_layout.setContentsMargins(0, 0, 0, 0)
         #
-        h_scroll_area = prx_widgets.PrxHScrollArea()
+        h_scroll_area = gui_prx_widgets.PrxHScrollArea()
         h_qt_layout.addWidget(h_scroll_area._qt_widget)
         # main
-        self._main_h_s = prx_widgets.PrxHSplitter()
+        self._main_h_s = gui_prx_widgets.PrxHSplitter()
         h_scroll_area.add_widget(self._main_h_s)
         self._main_h_s.install_full_size_shortcut()
         # left
-        self._left_v_s = prx_widgets.PrxVSplitter()
+        self._left_v_s = gui_prx_widgets.PrxVSplitter()
         self._main_h_s.add_widget(self._left_v_s)
         #
         self.__gui_build_main()
         self.__setup_gui_options_()
         # right
-        self._right_v_s = prx_widgets.PrxVSplitter()
+        self._right_v_s = gui_prx_widgets.PrxVSplitter()
         self._main_h_s.add_widget(self._right_v_s)
         # usd
-        self._usd_stage_prx_view = prx_widgets.PrxUsdStageView()
+        self._usd_stage_prx_view = gui_prx_widgets.PrxUsdStageView()
 
         self._right_v_s.add_widget(self._usd_stage_prx_view)
         #
@@ -795,7 +795,7 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
             self.__do_gui_refresh_for_directories
         )
         # directory tree view
-        self._directory_prx_view = prx_widgets.PrxTreeView()
+        self._directory_prx_view = gui_prx_widgets.PrxTreeView()
         directory_layout.addWidget(self._directory_prx_view.get_widget())
         self._directory_prx_view.create_header_view(
             [('directory', 1)]
@@ -804,7 +804,7 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
             self.__do_gui_refresh_for_files
         )
         # file
-        self._file_prx_view = prx_widgets.PrxListView()
+        self._file_prx_view = gui_prx_widgets.PrxListView()
         self._right_v_s.add_widget(self._file_prx_view)
         self._file_frame_size = 80, 124
         self._item_name_frame_size = 80, 44
@@ -821,7 +821,7 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
         #
         self._main_h_s.set_fixed_size_at(0, 320)
         self._main_h_s.set_fixed_size_at(2, 320)
-        if bsc_core.SysApplicationMtd.get_is_dcc():
+        if bsc_core.BasApplication.get_is_dcc():
             self._main_h_s.swap_contract_right_or_bottom_at(2)
 
         self._right_v_s.set_fixed_size_at(0, 320)
@@ -840,21 +840,21 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
         self.refresh_all()
 
     def __gui_build_main(self):
-        self._entity_prx_view = prx_widgets.PrxTreeView()
+        self._entity_prx_view = gui_prx_widgets.PrxTreeView()
         self._left_v_s.add_widget(self._entity_prx_view)
 
         self._entity_prx_view.set_filter_entry_tip('fiter by resource ...')
         #
-        self._tag_prx_view = prx_widgets.PrxTreeView()
+        self._tag_prx_view = gui_prx_widgets.PrxTreeView()
         self._left_v_s.add_widget(self._tag_prx_view)
         self._tag_prx_view.connect_item_check_changed_to(
             self.__do_gui_refresh_for_resources_by_tag_checking
         )
         #
-        self._task_prx_view = prx_widgets.PrxListView()
+        self._task_prx_view = gui_prx_widgets.PrxListView()
         self._main_h_s.add_widget(self._task_prx_view)
 
-        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         self._left_v_s.add_widget(self._options_prx_node)
         #
         self._entity_prx_view.create_header_view(
@@ -1026,7 +1026,7 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
         self._rsv_project_names = [i.get_name() for i in self._rsv_projects]
         #
         _port = self._options_prx_node.add_port(
-            prx_widgets.PrxPortAsConstantChoose('filter')
+            gui_prx_widgets.PrxPortAsConstantChoose('filter')
         )
         self._rsv_filters_dict = self._hook_configure.get('resolver.filters')
         if self._rsv_filters_dict is not None:
@@ -1110,13 +1110,13 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
 
         self._index_thread_batch += 1
 
-        self._start_timestamp = bsc_core.SysBaseMtd.get_timestamp()
+        self._start_timestamp = bsc_core.BscSystem.get_timestamp()
 
         self._gui_task_opt.restore()
         self._gui_tag_opt.reset()
         if tree_item_prxes:
             tree_item_prx = tree_item_prxes[-1]
-            rsv_entity = tree_item_prx.get_gui_dcc_obj(self.DCC_NAMESPACE)
+            rsv_entity = tree_item_prx.get_gui_dcc_obj(self.GUI_NAMESPACE)
             if rsv_entity is not None:
                 obj_type_name = rsv_entity.type_name
                 if obj_type_name in [
@@ -1253,7 +1253,7 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
                     j_hidden = j_raw.get('hidden') or False
                     j_system_keys = j_raw.get('systems') or []
                     if j_system_keys:
-                        if bsc_core.SysBaseMtd.get_is_matched(j_system_keys):
+                        if bsc_core.BscSystem.get_is_matched(j_system_keys):
                             list_.append((j_keyword, j_hidden))
                     else:
                         list_.append((j_keyword, j_hidden))
@@ -1261,7 +1261,7 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
 
     @classmethod
     def _get_current_application_(cls):
-        return bsc_core.SysApplicationMtd.get_current()
+        return bsc_core.BasApplication.get_current()
 
     @classmethod
     def _get_current_project_(cls):
@@ -1270,7 +1270,7 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
     def _get_resolver_application_filter_(self):
         _ = self._hook_configure.get('resolver.application_filter') or {}
         for k, v in _.items():
-            if bsc_core.SysBaseMtd.get_is_matched(['*-{}'.format(k)]):
+            if bsc_core.BscSystem.get_is_matched(['*-{}'.format(k)]):
                 return v
         return self._hook_configure.get('resolver.filter')
 
@@ -1436,7 +1436,7 @@ class AbsPnlLoaderForRsvTask(prx_widgets.PrxSessionWindow):
             rsv_task = self._gui_task_opt.get_current_obj()
             if rsv_task is not None:
                 if workspace_key == self._rsv_project.WorkspaceKeys.User:
-                    variant_extend = dict(artist=bsc_core.SysBaseMtd.get_user_name())
+                    variant_extend = dict(artist=bsc_core.BscSystem.get_user_name())
                 else:
                     variant_extend = dict()
 

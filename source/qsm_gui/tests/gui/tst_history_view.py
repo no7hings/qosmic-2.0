@@ -1,14 +1,14 @@
 # coding:utf-8
 import lxgui.qt.widgets as qt_widgets
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxbasic.core as bsc_core
 
 import lxgui.qt.core as gui_qt_core
 
 
-class W(prx_widgets.PrxBaseWindow):
+class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
 

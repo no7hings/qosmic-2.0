@@ -1,1 +1,1 @@
->Rig Move Tool
+>加入[[资源管理工具（Resource Manager）]]

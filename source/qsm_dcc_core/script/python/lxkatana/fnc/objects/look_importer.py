@@ -225,8 +225,8 @@ class FncImporterForLookAssOld(gnl_fnc_abstracts.AbsFncOptionBase):
             ('lx_file', self._file_path),
             ('lx_look_pass', pass_name),
             ('lx_obj', and_path),
-            ('lx_user', bsc_core.SysBaseMtd.get_user_name()),
-            ('lx_time', bsc_core.SysBaseMtd.get_time())
+            ('lx_user', bsc_core.BscSystem.get_user_name()),
+            ('lx_time', bsc_core.BscSystem.get_time())
         ]
         #
         for k, v in tags:

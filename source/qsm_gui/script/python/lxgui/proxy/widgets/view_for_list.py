@@ -269,10 +269,10 @@ class PrxListView(
     def __swap_view_mode(self):
         self._qt_view._swap_view_mode_()
         self._view_mode_swap_button._set_name_text_(
-            ['list mode', 'icon mode'][self.view._get_is_grid_mode_()]
+            ['list mode', 'icon mode'][self._qt_view._get_is_grid_mode_()]
         )
         self._view_mode_swap_button._set_icon_file_path_(
-            gui_core.GuiIcon.get(['tool/list-mode', 'tool/icon-mode'][self.view._get_is_grid_mode_()])
+            gui_core.GuiIcon.get(['tool/list-mode', 'tool/icon-mode'][self._qt_view._get_is_grid_mode_()])
         )
 
     def __do_check_all_visible_items(self):
@@ -324,19 +324,32 @@ class PrxListView(
         self._qt_view._set_item_names_draw_range_(range_)
 
     def set_item_image_frame_draw_enable(self, boolean):
-        self.view._set_item_image_frame_draw_enable_(boolean)
+        self._qt_view._set_item_image_frame_draw_enable_(boolean)
+
+    def set_item_image_draw_as_full(self, boolean):
+        self._qt_view._set_item_image_draw_as_full_(boolean)
 
     def create_item(self, *args, **kwargs):
         prx_item_widget = _item.PrxListItemWidget()
         prx_item_widget.set_view(self)
-        self.view._add_item_widget_(prx_item_widget.widget, **kwargs)
+        self._qt_view._add_item_widget_(prx_item_widget.widget, **kwargs)
+        return prx_item_widget
+
+    def create_item_(self, *args, **kwargs):
+        return self._qt_view._create_item_(*args, **kwargs)
+
+    def create_item_widget_(self, qt_item, *args, **kwargs):
+        prx_item_widget = _item.PrxListItemWidget()
+        prx_item_widget.set_view(self)
+        qt_item_widget = prx_item_widget._qt_widget
+        self._qt_view._connect_item_widget_(qt_item, qt_item_widget, *args, **kwargs)
         return prx_item_widget
 
     # noinspection PyUnusedLocal
     def create_item_widget(self, *args, **kwargs):
         prx_item_widget = _item.PrxListItemWidget()
         prx_item_widget.set_view(self)
-        self.view._add_item_widget_(prx_item_widget.widget, **kwargs)
+        self._qt_view._add_item_widget_(prx_item_widget.widget, **kwargs)
         return prx_item_widget
 
     def set_visible_tgt_raw_clear(self):
@@ -369,16 +382,16 @@ class PrxListView(
         self._qt_view._set_clear_()
 
     def _get_all_items_(self):
-        return self.view._get_all_items_()
+        return self._qt_view._get_all_items_()
 
     def get_all_items(self):
-        return [i._get_item_widget_().gui_proxy for i in self.view._get_all_items_()]
+        return [i._get_item_widget_().gui_proxy for i in self._qt_view._get_all_items_()]
 
     def get_all_item_widgets(self):
-        return [i._get_item_widget_().gui_proxy for i in self.view._get_all_items_()]
+        return [i._get_item_widget_().gui_proxy for i in self._qt_view._get_all_items_()]
 
     def set_loading_update(self):
-        self.view._set_loading_update_()
+        self._qt_view._set_loading_update_()
 
     def connect_refresh_action_for(self, fnc):
         self._qt_view.f5_key_pressed.connect(fnc)
@@ -425,7 +438,7 @@ class PrxListView(
         self._qt_view._set_selection_use_single_()
 
     def get_selected_item_widgets(self):
-        return [self._qt_view._get_item_widget_(i).gui_proxy for i in self.view.selectedItems()]
+        return [self._qt_view._get_item_widget_(i).gui_proxy for i in self._qt_view.selectedItems()]
 
     def connect_press_released_to(self, fnc):
         self._qt_view.press_released.connect(fnc)
@@ -442,7 +455,7 @@ class PrxImageView(PrxListView):
     def set_textures(self, textures):
         for i_texture in textures:
             for j_texture_unit in i_texture.get_exists_units():
-                self._add_texture(self.create_item(), j_texture_unit)
+                self._add_texture(self.create_item_widget(), j_texture_unit)
 
     def _add_texture(self, prx_item, texture_unit):
         def cache_fnc_():

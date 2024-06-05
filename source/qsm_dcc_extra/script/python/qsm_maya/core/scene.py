@@ -4,6 +4,8 @@ import maya.cmds as cmds
 # noinspection PyUnresolvedReferences
 import maya.mel as mel
 
+import lxbasic.core as bsc_core
+
 import lxbasic.storage as bsc_storage
 
 from . import time_ as _time
@@ -18,6 +20,10 @@ class Scene(object):
     @staticmethod
     def get_is_ui_mode():
         return not cmds.about(batch=1)
+
+    @classmethod
+    def get_ui_language(cls):
+        return bsc_core.EnvBaseMtd.get('MAYA_UI_LANGUAGE') or 'en_US'
 
     @classmethod
     def show_message(cls, message, keyword, position='topCenter', fade=1, drag_kill=0, alpha=.5):

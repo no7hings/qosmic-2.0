@@ -45,7 +45,7 @@ class StgPathMapper(object):
         cls.__generate_mapper()
         # clear first
         path = _base.StgPathOpt(path).__str__()
-        if bsc_cor_base.StgBaseMtd.get_path_is_linux(path):
+        if bsc_cor_base.BscStorage.get_path_is_linux(path):
             mapper_dict = cls.MAPPER._windows_dict
             for i_root_src, i_root_tgt in mapper_dict.items():
                 if path == i_root_src:
@@ -67,7 +67,7 @@ print Path.map_to_linux(
         cls.__generate_mapper()
         # clear first
         path = _base.StgPathOpt(path).__str__()
-        if bsc_cor_base.StgBaseMtd.get_path_is_windows(path):
+        if bsc_cor_base.BscStorage.get_path_is_windows(path):
             mapper_dict = cls.MAPPER._linux_dict
             for i_root_src, i_root_tgt in mapper_dict.items():
                 if path == i_root_src:

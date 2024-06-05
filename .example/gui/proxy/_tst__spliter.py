@@ -1,30 +1,30 @@
 # coding:utf-8
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
-class W(prx_widgets.PrxBaseWindow):
+class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
-        s = prx_widgets.PrxVScrollArea()
+        s = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(s)
-        h_s = prx_widgets.PrxHSplitter()
+        h_s = gui_prx_widgets.PrxHSplitter()
         s.add_widget(h_s)
 
-        v_s_0 = prx_widgets.PrxVSplitter()
+        v_s_0 = gui_prx_widgets.PrxVSplitter()
         h_s.add_widget(v_s_0)
 
-        t_0 = prx_widgets.PrxTreeView()
+        t_0 = gui_prx_widgets.PrxTreeView()
         h_s.add_widget(t_0)
-        t_1 = prx_widgets.PrxTreeView()
+        t_1 = gui_prx_widgets.PrxTreeView()
         v_s_0.add_widget(
             t_1
         )
-        t_2 = prx_widgets.PrxTreeView()
+        t_2 = gui_prx_widgets.PrxTreeView()
         v_s_0.add_widget(
             t_2
         )
 
-        v_s_1 = prx_widgets.PrxVSplitter()
+        v_s_1 = gui_prx_widgets.PrxVSplitter()
         h_s.add_widget(
             v_s_1
         )

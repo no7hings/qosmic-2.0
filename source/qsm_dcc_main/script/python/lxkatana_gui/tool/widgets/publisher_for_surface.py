@@ -5,7 +5,7 @@ import lxkatana.dcc.objects as ktn_dcc_objects
 
 
 class ValidatorOpt(pbs_gui_abstracts.AbsValidatorOpt):
-    DCC_NAMESPACE = 'katana'
+    GUI_NAMESPACE = 'katana'
     DCC_NODE_CLS = ktn_dcc_objects.Node
     DCC_SELECTION_CLS = ktn_dcc_objects.Selection
     DCC_PATHSEP = '/'

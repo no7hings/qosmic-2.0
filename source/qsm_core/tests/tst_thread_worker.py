@@ -8,7 +8,7 @@ import qsm_task.process as qsm_tsk_process
 
 ts = []
 
-time_tag = bsc_core.SysBaseMtd.get_time_tag()
+time_tag = bsc_core.BscSystem.get_time_tag()
 for i_index in range(15):
     i_cmd_script = r'rez-env python27 -- python -c "import time; time.sleep(5); print \"{}\""'.format(i_index)
     i_t = bsc_core.ThreadWorker.generate(i_cmd_script, i_index)

@@ -13,7 +13,7 @@ class GuiPrxModForProgress(object):
         self._value = 0
         self._label = label
         # time
-        self._timestamp_started = bsc_core.SysBaseMtd.get_timestamp()
+        self._timestamp_started = bsc_core.BscSystem.get_timestamp()
         self._timestamp_costed = 0
         #
         self._timestamp_estimated = 0
@@ -88,7 +88,7 @@ class GuiPrxModForProgress(object):
                 if map_value != self._map_value:
                     self._map_value = map_value
                     #
-                    self._timestamp_costed = bsc_core.SysBaseMtd.get_timestamp()-self._timestamp_started
+                    self._timestamp_costed = bsc_core.BscSystem.get_timestamp()-self._timestamp_started
                     if self._value > 1:
                         self._timestamp_estimated = (self._timestamp_costed/(self._value-1))*self._maximum
                     else:

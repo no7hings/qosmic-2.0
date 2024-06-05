@@ -34,10 +34,10 @@ class XgenDescriptionOpt(gnl_dcc_abstracts.AbsNodeOpt):
         return raw
 
     def get_path_as_uuid(self, lstrip=None):
-        return bsc_core.HashMtd.get_hash_value(self.get_path(lstrip), as_unique_id=True)
+        return bsc_core.BscHash.get_hash_value(self.get_path(lstrip), as_unique_id=True)
 
     def get_name_as_uuid(self):
-        return bsc_core.HashMtd.get_hash_value(self.get_name(), as_unique_id=True)
+        return bsc_core.BscHash.get_hash_value(self.get_name(), as_unique_id=True)
 
     def get_usd_basis_curve_data(self):
         guides = cmds.ls(

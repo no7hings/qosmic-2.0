@@ -31,7 +31,7 @@ class AbsHookExecutor(object):
 
         name = session.get_type()
         return self._submit_deadline_job_(
-            session, name, dict(platform=bsc_core.SysBaseMtd.get_platform())
+            session, name, dict(platform=bsc_core.BscSystem.get_platform())
         )
 
     def _submit_deadline_job_(self, session, name, option_extra_variants, deadline_configure=None):
@@ -182,7 +182,7 @@ class AbsHookExecutor(object):
                 'Group', 'td'
             )
             self._ddl_submiter.job_info.set(
-                'Whitelist', bsc_core.SysBaseMtd.get_host()
+                'Whitelist', bsc_core.BscSystem.get_host()
             )
         # when "localhost" is discard, override deadline pool and group options
         localhost_enable = hook_option_opt.get('localhost_enable') or False
@@ -197,7 +197,7 @@ class AbsHookExecutor(object):
                 'Group', 'artist'
             )
             self._ddl_submiter.job_info.set(
-                'Whitelist', bsc_core.SysBaseMtd.get_host()
+                'Whitelist', bsc_core.BscSystem.get_host()
             )
         #
         exists_ddl_job_id = session.find_ddl_job_id(hook_option)

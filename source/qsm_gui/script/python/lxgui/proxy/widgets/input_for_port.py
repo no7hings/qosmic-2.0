@@ -475,7 +475,7 @@ class PrxInputAsMediasOpen(PrxInputAsFilesOpen):
 
     @staticmethod
     def __get_screenshot_temporary_file_path():
-        d = bsc_core.SysBaseMtd.get_home_directory()
+        d = bsc_core.BscSystem.get_home_directory()
         return six.u('{}/screenshot/untitled-{}.jpg').format(d, bsc_core.TimeExtraMtd.generate_time_tag_36())
 
     def __do_screenshot_save(self, g):

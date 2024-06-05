@@ -772,7 +772,7 @@ class Om2MeshOpt(object):
             bsc_log.Log.trace_error(
                 'assign uv expression: path is "{}", uv map name is "{}"'.format(self.get_path(), uv_map_name)
             )
-            bsc_core.ExceptionMtd.set_print()
+            bsc_core.BscException.set_print()
 
     def assign_uv_maps(self, maps):
         if 'map1' not in maps:

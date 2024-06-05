@@ -2,7 +2,7 @@
 from datetime import datetime, timedelta
 
 
-def determine_time_period(input_time_str, language='en_us'):
+def determine_time_period(input_time_str, language='en_US'):
     # 将输入的时间字符串转换为datetime对象
     input_time = datetime.strptime(input_time_str, '%Y-%m-%d %H:%M:%S')
 
@@ -53,9 +53,9 @@ print determine_time_period("2024-05-10 10:00:00", "chs")  # 本月早些时候
 print determine_time_period("2024-03-30 10:00:00", "chs")  # 2024年03月
 print determine_time_period("2023-12-30 10:00:00", "chs")  # 2023年
 
-print determine_time_period("2024-05-29 10:00:00", "en_us")  # Today
-print determine_time_period("2024-05-25 10:00:00", "en_us")  # Earlier this week
-print determine_time_period("2024-05-21 10:00:00", "en_us")  # Last week
-print determine_time_period("2024-05-10 10:00:00", "en_us")  # Earlier this month
-print determine_time_period("2024-03-30 10:00:00", "en_us")  # March 2024
-print determine_time_period("2023-12-30 10:00:00", "en_us")  # 2023
+print determine_time_period("2024-05-29 10:00:00", "en_US")  # Today
+print determine_time_period("2024-05-25 10:00:00", "en_US")  # Earlier this week
+print determine_time_period("2024-05-21 10:00:00", "en_US")  # Last week
+print determine_time_period("2024-05-10 10:00:00", "en_US")  # Earlier this month
+print determine_time_period("2024-03-30 10:00:00", "en_US")  # March 2024
+print determine_time_period("2023-12-30 10:00:00", "en_US")  # 2023

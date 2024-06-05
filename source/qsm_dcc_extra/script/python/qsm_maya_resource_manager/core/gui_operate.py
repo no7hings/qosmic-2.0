@@ -6,13 +6,13 @@ import lxgui.core as gui_core
 
 import lxgui.proxy.abstracts as gui_prx_abstracts
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
 
 class GuiBaseOpt(object):
-    DCC_NAMESPACE = 'rig'
+    GUI_NAMESPACE = 'rig'
 
     def __init__(self, window, page, session):
         self._window = window
@@ -28,7 +28,7 @@ class GuiResourceTagOpt(
 
     def __init__(self, window, page, session, prx_tree_view):
         super(GuiResourceTagOpt, self).__init__(window, page, session)
-        self._init_tree_view_as_tag_opt_(prx_tree_view, self.DCC_NAMESPACE)
+        self._init_tree_view_as_tag_opt_(prx_tree_view, self.GUI_NAMESPACE)
 
         self._index_thread_batch = 0
 
@@ -81,7 +81,7 @@ class GuiResourceOpt(
             ),
         ]:
             i_key, i_icon_name, i_tool_tip, i_fnc = i
-            i_tool = prx_widgets.PrxIconPressButton()
+            i_tool = gui_prx_widgets.PrxIconPressButton()
             self._prx_reference_tool_box.add_widget(i_tool)
             i_tool.set_name(i_key)
             i_tool.set_icon_name(i_icon_name)
@@ -147,7 +147,7 @@ class GuiResourceOpt(
             )
         ]:
             i_key, i_icon_name, i_tool_tip, i_fnc = i
-            i_tool = prx_widgets.PrxToggleButton()
+            i_tool = gui_prx_widgets.PrxToggleButton()
             self._prx_isolate_select_tool_box.add_widget(i_tool)
             i_tool.set_name(i_key)
             i_tool.set_icon_name(i_icon_name)
@@ -170,7 +170,7 @@ class GuiResourceOpt(
             )
         ]:
             i_key, i_icon_name, i_tool_tip, i_fnc = i
-            i_tool = prx_widgets.PrxIconPressButton()
+            i_tool = gui_prx_widgets.PrxIconPressButton()
             self._prx_isolate_select_tool_box.add_widget(i_tool)
             i_tool.set_name(i_key)
             i_tool.set_icon_name(i_icon_name)

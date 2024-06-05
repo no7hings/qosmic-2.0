@@ -245,12 +245,12 @@ class MeshOpt(
 
     def get_face_vertices_as_uuid(self):
         raw = self.get_face_vertices()
-        return bsc_core.HashMtd.get_hash_value(raw, as_unique_id=True)
+        return bsc_core.BscHash.get_hash_value(raw, as_unique_id=True)
 
     def get_uv_map_face_vertices_as_uuid(self, uv_map_name='st'):
         uv_face_vertex_counts, uv_face_vertex_indices, uv_map_coords = self.get_uv_map(uv_map_name)
         raw = (uv_face_vertex_counts, uv_face_vertex_indices)
-        return bsc_core.HashMtd.get_hash_value(raw, as_unique_id=True)
+        return bsc_core.BscHash.get_hash_value(raw, as_unique_id=True)
 
     def get_points_as_uuid(self, ordered=False, round_count=4):
         raw = self.get_points()
@@ -258,11 +258,11 @@ class MeshOpt(
             raw.sort()
         #
         raw = bsc_core.RawPointArrayOpt(raw).round_to(round_count)
-        return bsc_core.HashMtd.get_hash_value(raw, as_unique_id=True)
+        return bsc_core.BscHash.get_hash_value(raw, as_unique_id=True)
 
     def get_uv_maps_as_uuid(self, uv_map_name='st'):
         raw = self.get_uv_maps(uv_map_name)
-        return bsc_core.HashMtd.get_hash_value(raw, as_unique_id=True)
+        return bsc_core.BscHash.get_hash_value(raw, as_unique_id=True)
 
     def get_vertex_count(self):
         _ = self.get_face_vertex_indices()

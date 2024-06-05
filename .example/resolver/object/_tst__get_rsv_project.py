@@ -11,12 +11,12 @@ p = r.get_rsv_project(
 
 
 def post_fnc():
-    t_e = bsc_core.SysBaseMtd.get_timestamp()
+    t_e = bsc_core.BscSystem.get_timestamp()
     print 'Cost', t_e - t_s
     # print r.get_data()
 
 
-t_s = bsc_core.SysBaseMtd.get_timestamp()
+t_s = bsc_core.BscSystem.get_timestamp()
 r = bsc_core.TrdGainStack()
 r.run_finished.connect_to(post_fnc)
 for i_rsv_group in p.get_rsv_resource_groups(

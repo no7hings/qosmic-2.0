@@ -641,7 +641,7 @@ class AdvSkinProxyGenerate(object):
                 file_path
             )
 
-        bsc_core.StgBaseMtd.create_directory(
+        bsc_core.BscStorage.create_directory(
             os.path.dirname(cache_file_path)
         )
 

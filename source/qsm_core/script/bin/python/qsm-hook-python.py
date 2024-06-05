@@ -59,10 +59,10 @@ def __execute_with_option(option):
     option_opt = bsc_core.ArgDictStringOpt(option)
     #
     bsc_core.EnvBaseMtd.set(
-        'hook_start_m', str(bsc_core.SysBaseMtd.get_minute())
+        'hook_start_m', str(bsc_core.BscSystem.get_minute())
     )
     bsc_core.EnvBaseMtd.set(
-        'hook_start_s', str(bsc_core.SysBaseMtd.get_second())
+        'hook_start_s', str(bsc_core.BscSystem.get_second())
     )
     # do not use thread, there will be run with subprocess, run with thread use "qsm-hook-command"
     option_hook_key = option_opt.get('option_hook_key')

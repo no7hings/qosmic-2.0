@@ -93,7 +93,6 @@ class CmdAtrQueryOpt(object):
 
     type = property(get_type)
 
-    #
     def get_is_exists(self):
         return cmds.attributeQuery(
             self.port_path,
@@ -306,7 +305,7 @@ class CmdPortQueryOpt(object):
             **self.__get_query_kwargs_(obj_path, shortName=True)
         )
 
-    def get_ui_name(self, obj_path=None):
+    def get_gui_name(self, obj_path=None):
         return cmds.attributeQuery(
             self.__get_query_key_(),
             **self.__get_query_kwargs_(obj_path, niceName=True)
@@ -342,9 +341,9 @@ class CmdObjQueryOpt(object):
 
     @classmethod
     def _set_cleanup_to_(cls, lis):
-        lis_ = list(filter(None, set(lis)))
-        lis_.sort(key=lis.index)
-        return lis_
+        list_ = list(filter(None, set(lis)))
+        list_.sort(key=lis.index)
+        return list_
 
     def get_port_query_is_exists(self, port_query_path):
         return cmds.attributeQuery(
@@ -1016,7 +1015,7 @@ class CmdObjOpt(object):
             try:
                 i_port.set_default()
             except Exception:
-                bsc_core.ExceptionMtd.set_print()
+                bsc_core.BscException.set_print()
 
     def set(self, key, value):
         self.get_port(key).set(value)
@@ -1105,7 +1104,7 @@ class CmdShapeOpt(CmdObjOpt):
                 try:
                     cmds.sets(self.get_path(), forceElement=path)
                 except Exception:
-                    bsc_core.ExceptionMtd.set_print()
+                    bsc_core.BscException.set_print()
 
     def get_render_properties(self, renderer='arnold'):
         properties = {}
@@ -1301,7 +1300,7 @@ class CmdMeshesOpt(object):
 class CmdUndoStack(object):
     def __init__(self, key=None):
         if key is None:
-            key = bsc_core.UuidMtd.generate_new()
+            key = bsc_core.BscUuid.generate_new()
         #
         self._key = key
 

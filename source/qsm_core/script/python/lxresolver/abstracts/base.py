@@ -711,7 +711,7 @@ class AbsRsvEntity(
         kwargs = copy.copy(self.properties.value)
         kwargs['workspace'] = self.rsv_project.get_workspace_user()
         kwargs['workspace_key'] = self.WorkspaceKeys.User
-        kwargs['artist'] = bsc_core.SysBaseMtd.get_user_name()
+        kwargs['artist'] = bsc_core.BscSystem.get_user_name()
         p = self._get_valid_rsv_pattern(**kwargs)
         return AbsRsvPattern._pattern__update_to(p, **kwargs)
 
@@ -1147,9 +1147,9 @@ class AbsRsvTask(AbsRsvEntity):
                 task_unit_properties = rsv_task_unit.generate_properties_by_result(file_path, override_variants)
                 if task_unit_properties:
                     task_unit_properties.set('application', i_application)
-                    task_unit_properties.set('user', bsc_core.SysBaseMtd.get_user_name())
-                    task_unit_properties.set('time', bsc_core.SysBaseMtd.get_time())
-                    task_unit_properties.set('time_tag', bsc_core.SysBaseMtd.get_time_tag())
+                    task_unit_properties.set('user', bsc_core.BscSystem.get_user_name())
+                    task_unit_properties.set('time', bsc_core.BscSystem.get_time())
+                    task_unit_properties.set('time_tag', bsc_core.BscSystem.get_time_tag())
                     for i_file_path_key in file_path_keys:
                         task_unit_properties.set(i_file_path_key, file_path)
                     #
@@ -1197,8 +1197,8 @@ class AbsRsvTask(AbsRsvEntity):
                             j_rsv_scene_properties.set('application', i_application)
                             #
                             j_rsv_scene_properties.set('extra.file', file_path)
-                            j_rsv_scene_properties.set('extra.user', bsc_core.SysBaseMtd.get_user_name())
-                            j_rsv_scene_properties.set('extra.time_tag', bsc_core.SysBaseMtd.get_time_tag())
+                            j_rsv_scene_properties.set('extra.user', bsc_core.BscSystem.get_user_name())
+                            j_rsv_scene_properties.set('extra.time_tag', bsc_core.BscSystem.get_time_tag())
                             #
                             j_rsv_scene_properties.set(
                                 'dcc', self._rsv_project.get_dcc_data(i_application).get_value()
@@ -1246,7 +1246,7 @@ class AbsRsvTask(AbsRsvEntity):
             self, self.properties.get_value_as_copy()
         )
         properties.set(
-            'user', bsc_core.SysBaseMtd.get_user_name()
+            'user', bsc_core.BscSystem.get_user_name()
         )
         return properties
 
@@ -2645,7 +2645,7 @@ class AbsRsvProject(
         keyword = self._completion_keyword(kwargs_over)
         kwargs_over['keyword'] = keyword
         if 'platform' not in kwargs_over:
-            kwargs_over['platform'] = bsc_core.SysBaseMtd.get_platform()
+            kwargs_over['platform'] = bsc_core.BscSystem.get_platform()
         #
         if 'version' not in kwargs_over:
             kwargs_over['version'] = rsv_core.RsvVersion.LATEST
@@ -3024,7 +3024,7 @@ class AbsRsvProject(
         branch = self._guess_entity_type_force(**task_data)
         variants_over = copy.copy(task_data)
 
-        user = bsc_core.SysBaseMtd.get_user_name()
+        user = bsc_core.BscSystem.get_user_name()
         variants_over['artist'] = user
         keyword = '{branch}-user-task-dir'.format(branch=branch)
 

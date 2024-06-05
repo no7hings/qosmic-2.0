@@ -102,7 +102,7 @@ class AbsObjScene(
         self._shader_name_dict = {}
         self._index_dict = {}
         #
-        self._platform = bsc_core.SysPlatformMtd.get_current()
+        self._platform = bsc_core.BasPlatform.get_current()
 
         self._node_configure = bsc_content.Content(
             value=bsc_resource.RscExtendConfigure.get_yaml('arnold/node')

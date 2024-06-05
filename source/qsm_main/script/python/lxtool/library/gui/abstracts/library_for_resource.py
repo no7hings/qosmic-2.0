@@ -35,13 +35,13 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.abstracts as gui_prx_abstracts
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxsession.commands as ssn_commands
 
 
 class _GuiBaseOpt(object):
-    DCC_NAMESPACE = 'database'
+    GUI_NAMESPACE = 'database'
 
     @staticmethod
     def _generate_today_tag():
@@ -160,7 +160,7 @@ class _GuiTypeOpt(
     def __init__(self, window, session, database_opt, prx_tree_view):
         super(_GuiTypeOpt, self).__init__(window, session, database_opt)
         self._init_tree_view_opt_(
-            prx_tree_view, self.DCC_NAMESPACE
+            prx_tree_view, self.GUI_NAMESPACE
         )
 
         self._today_tag = self._generate_today_tag()
@@ -227,7 +227,7 @@ class _GuiTypeOpt(
                     ('value', 'startswith', dtb_entity.path),
                 ]
             )
-
+            # clean duplicate
             _dtb_assigns = {i.node: i for i in _dtb_assigns}.values()
 
             return [_dtb_assigns]
@@ -421,7 +421,7 @@ class _GuiTagOpt(
 
     def __init__(self, window, session, database_opt, prx_tree_view):
         super(_GuiTagOpt, self).__init__(window, session, database_opt)
-        self._init_tree_view_as_tag_opt_(prx_tree_view, self.DCC_NAMESPACE)
+        self._init_tree_view_as_tag_opt_(prx_tree_view, self.GUI_NAMESPACE)
         #
         self._tag_group_kinds = [
             self._dtb_opt.Kinds.ResourceSemanticTagGroup,
@@ -491,7 +491,7 @@ class _GuiTagOpt(
 
             self.gui_register_group(path, prx_item)
 
-            prx_item.set_gui_dcc_obj(dtb_entity, namespace=self.DCC_NAMESPACE)
+            prx_item.set_gui_dcc_obj(dtb_entity, namespace=self.GUI_NAMESPACE)
             #
             prx_item.set_status(prx_item.ValidationStatus.Disable)
             #
@@ -520,7 +520,7 @@ class _GuiTagOpt(
 
             self.gui_register_tag(path, prx_item)
 
-            prx_item.set_gui_dcc_obj(dtb_entity, namespace=self.DCC_NAMESPACE)
+            prx_item.set_gui_dcc_obj(dtb_entity, namespace=self.GUI_NAMESPACE)
 
             prx_item.set_tool_tip(dtb_entity.to_string())
 
@@ -604,7 +604,7 @@ class _GuiResourceOpt(
 
     def __init__(self, window, session, database_opt, prx_list_view):
         super(_GuiResourceOpt, self).__init__(window, session, database_opt)
-        self._init_list_view_opt_(prx_list_view, self.DCC_NAMESPACE)
+        self._init_list_view_opt_(prx_list_view, self.GUI_NAMESPACE)
 
         self._arnold_texture_types = gnl_texture.TxrMethodForBuild.generate_instance().get_arnold_includes()
         self._arnold_texture_mapper = gnl_texture.TxrMethodForBuild.generate_instance().get_arnold_mapper()
@@ -807,7 +807,7 @@ class _GuiResourceOpt(
 
         self._keys.add(dtb_resource.gui_name)
 
-        prx_item_widget = self._prx_list_view.create_item()
+        prx_item_widget = self._prx_list_view.create_item_widget()
         self.gui_register(path, prx_item_widget)
 
         prx_item_widget.get_item()._update_item_semantic_tag_filter_keys_tgt_(semantic_tag_filter_data)
@@ -816,7 +816,7 @@ class _GuiResourceOpt(
             [dtb_resource.name, dtb_resource.gui_name]
         )
         prx_item_widget.set_gui_dcc_obj(
-            dtb_resource, namespace=self.DCC_NAMESPACE
+            dtb_resource, namespace=self.GUI_NAMESPACE
         )
         prx_item_widget.set_name(dtb_resource.gui_name)
         prx_item_widget.set_sort_name_key(dtb_resource.gui_name)
@@ -865,7 +865,7 @@ class _GuiResourceOpt(
         list_ = []
         _ = self._prx_list_view.get_checked_item_widgets()
         for i in _:
-            i_dtb_resource = i.get_gui_dcc_obj(self.DCC_NAMESPACE)
+            i_dtb_resource = i.get_gui_dcc_obj(self.GUI_NAMESPACE)
             list_.append(i_dtb_resource)
         return list_
 
@@ -873,7 +873,7 @@ class _GuiResourceOpt(
         list_ = []
         _ = self._prx_list_view.get_selected_item_widgets()
         for i in _:
-            i_dtb_resource = i.get_gui_dcc_obj(self.DCC_NAMESPACE)
+            i_dtb_resource = i.get_gui_dcc_obj(self.GUI_NAMESPACE)
             list_.append(i_dtb_resource)
         return list_
 
@@ -925,7 +925,7 @@ class _GuiResourceOpt(
     def get_current_obj(self):
         _ = self._prx_list_view.get_selected_items()
         if _:
-            return _[-1].get_gui_dcc_obj(self.DCC_NAMESPACE)
+            return _[-1].get_gui_dcc_obj(self.GUI_NAMESPACE)
 
 
 class _GuiDirectoryOpt(
@@ -933,12 +933,12 @@ class _GuiDirectoryOpt(
     gui_prx_abstracts.AbsGuiPrxTreeViewOpt
 ):
     ROOT_NAME = 'All'
-    DCC_NAMESPACE = 'database'
+    GUI_NAMESPACE = 'database'
 
     def __init__(self, window, session, database_opt, prx_tree_view):
         super(_GuiDirectoryOpt, self).__init__(window, session, database_opt)
         self._init_tree_view_opt_(
-            prx_tree_view, self.DCC_NAMESPACE
+            prx_tree_view, self.GUI_NAMESPACE
         )
 
         self._index_thread_batch = 1
@@ -1089,7 +1089,7 @@ class _GuiDirectoryOpt(
             )
             self._item_dict[file_type] = prx_item_widget
             prx_item_widget.set_gui_dcc_obj(
-                dtb_directory, namespace=self.DCC_NAMESPACE
+                dtb_directory, namespace=self.GUI_NAMESPACE
             )
             prx_item_widget.set_checked(False)
             location = self._dtb_opt.get_property(dtb_directory.path, 'location')
@@ -1111,18 +1111,18 @@ class _GuiDirectoryOpt(
     def get_current_obj(self):
         _ = self._prx_tree_view.get_selected_items()
         if _:
-            return _[-1].get_gui_dcc_obj(self.DCC_NAMESPACE)
+            return _[-1].get_gui_dcc_obj(self.GUI_NAMESPACE)
 
 
 class _GuiFileOpt(
     _GuiBaseOpt,
     gui_prx_abstracts.AbsGuiPrxListViewAsFileOpt
 ):
-    DCC_NAMESPACE = 'database'
+    GUI_NAMESPACE = 'database'
 
     def __init__(self, window, session, database_opt, prx_list_view):
         super(_GuiFileOpt, self).__init__(window, session, database_opt)
-        self._init_list_view_as_file_opt_(prx_list_view, self.DCC_NAMESPACE)
+        self._init_list_view_as_file_opt_(prx_list_view, self.GUI_NAMESPACE)
 
         self._prx_list_view.connect_press_released_to(self.do_copy_to_clipboard_by_selection)
 
@@ -1131,7 +1131,7 @@ class _GuiFileOpt(
         images = []
         for seq, i_prx_item_widget in enumerate(selected_item_widgets):
             i_file_opt = i_prx_item_widget.get_gui_dcc_obj(
-                self.DCC_NAMESPACE
+                self.GUI_NAMESPACE
             )
             if i_file_opt is not None:
                 i_name_base = i_file_opt.get_name_base()
@@ -1221,7 +1221,7 @@ class _GuiFileOpt(
 
         if self.gui_is_exists(file_path) is False:
             file_opt = bsc_storage.StgFileOpt(file_path)
-            prx_item_widget = self._prx_list_view.create_item()
+            prx_item_widget = self._prx_list_view.create_item_widget()
             self._item_dict[file_path] = prx_item_widget
             prx_item_widget.set_names([file_name])
             prx_item_widget.set_drag_enable(True)
@@ -1230,7 +1230,7 @@ class _GuiFileOpt(
                 cache_fnc_, build_fnc_
             )
             prx_item_widget.set_gui_dcc_obj(
-                file_opt, namespace=self.DCC_NAMESPACE
+                file_opt, namespace=self.GUI_NAMESPACE
             )
             return prx_item_widget
         return self.gui_get(file_path)
@@ -1367,8 +1367,8 @@ class _GuiUsdStageViewOpt(_GuiBaseOpt):
         self._usd_stage_view.refresh_usd_view_draw()
 
 
-class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
-    DCC_NAMESPACE = 'database'
+class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
+    GUI_NAMESPACE = 'database'
     THREAD_STEP = 8
     FILTER_MAXIMUM = 50
     HISTORY_KEY = 'gui.resource-library'
@@ -1385,27 +1385,27 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
         v_qt_layout = qt_widgets.QtVBoxLayout(v_qt_widget)
         v_qt_layout.setContentsMargins(0, 0, 0, 0)
         # top
-        self._top_tool_bar = prx_widgets.PrxHToolBar()
-        v_qt_layout.addWidget(self._top_tool_bar._qt_widget)
-        self._top_tool_bar.set_name('guide')
-        self._top_tool_bar.set_expanded(True)
-        self._top_tool_bar.set_align_left()
+        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        v_qt_layout.addWidget(self._top_prx_tool_bar._qt_widget)
+        self._top_prx_tool_bar.set_name('guide')
+        self._top_prx_tool_bar.set_expanded(True)
+        self._top_prx_tool_bar.set_align_left()
         #   guide
-        self._guide_tool_box = prx_widgets.PrxHToolBox()
-        self._top_tool_bar.add_widget(self._guide_tool_box)
+        self._guide_tool_box = gui_prx_widgets.PrxHToolBox()
+        self._top_prx_tool_bar.add_widget(self._guide_tool_box)
         self._guide_tool_box.set_expanded(True)
         self._guide_tool_box.set_size_mode(1)
         #
-        self._type_guide_bar = prx_widgets.PrxGuideBar()
+        self._type_guide_bar = gui_prx_widgets.PrxGuideBar()
         self._guide_tool_box.add_widget(self._type_guide_bar)
         self._type_guide_bar.set_name('guide for type')
         #   tag
-        self._tag_tool_box = prx_widgets.PrxHToolBox()
-        self._top_tool_bar.add_widget(self._tag_tool_box)
+        self._tag_tool_box = gui_prx_widgets.PrxHToolBox()
+        self._top_prx_tool_bar.add_widget(self._tag_tool_box)
         # self._tag_tool_box.set_expanded(True)
         self._tag_tool_box.set_size_mode(1)
         #
-        self._tag_bar = prx_widgets.PrxTagBar()
+        self._tag_bar = gui_prx_widgets.PrxTagBar()
         self._tag_tool_box.add_widget(self._tag_bar)
         #
         h_qt_widget = qt_widgets.QtWidget()
@@ -1413,17 +1413,17 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
         h_qt_layout = qt_widgets.QtHBoxLayout(h_qt_widget)
         h_qt_layout.setContentsMargins(0, 0, 0, 0)
         #
-        h_scroll_area = prx_widgets.PrxHScrollArea()
+        h_scroll_area = gui_prx_widgets.PrxHScrollArea()
         h_qt_layout.addWidget(h_scroll_area._qt_widget)
         # main
-        self._main_h_s = prx_widgets.PrxHSplitter()
+        self._main_h_s = gui_prx_widgets.PrxHSplitter()
         h_scroll_area.add_widget(self._main_h_s)
         self._main_h_s.install_full_size_shortcut()
         # left
-        self._left_v_s = prx_widgets.PrxVSplitter()
+        self._left_v_s = gui_prx_widgets.PrxVSplitter()
         self._main_h_s.add_widget(self._left_v_s)
         #
-        self._type_prx_view = prx_widgets.PrxTreeView()
+        self._type_prx_view = gui_prx_widgets.PrxTreeView()
         self._left_v_s.add_widget(self._type_prx_view)
         self._type_prx_view.set_filter_entry_tip('fiter by type ...')
         # self._type_prx_view.get_top_tool_bar().set_expanded(True)
@@ -1439,7 +1439,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
             self.__gui_dtb_type_completion_gain_fnc_
         )
         #
-        self._tag_prx_view = prx_widgets.PrxTreeView()
+        self._tag_prx_view = gui_prx_widgets.PrxTreeView()
         self._left_v_s.add_widget(self._tag_prx_view)
         self._tag_prx_view.set_filter_entry_tip('filter by tag ...')
         self._tag_prx_view.set_selection_disable()
@@ -1453,7 +1453,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
         #
         self._left_v_s.set_fixed_size_at(1, 320)
         #
-        self._resource_prx_view = prx_widgets.PrxListView()
+        self._resource_prx_view = gui_prx_widgets.PrxListView()
         self._main_h_s.add_widget(self._resource_prx_view._qt_widget)
         # self._resource_prx_view.set_selection_use_multiply()
         self._resource_prx_view.get_check_tool_box().set_visible(True)
@@ -1476,14 +1476,14 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
             self.__execute_gui_refresh_for_resources_by_type_selection
         )
         #
-        self._right_v_s = prx_widgets.PrxVSplitter()
+        self._right_v_s = gui_prx_widgets.PrxVSplitter()
         self._main_h_s.add_widget(self._right_v_s)
 
-        self._usd_stage_prx_view = prx_widgets.PrxUsdStageView()
+        self._usd_stage_prx_view = gui_prx_widgets.PrxUsdStageView()
 
         self._right_v_s.add_widget(self._usd_stage_prx_view)
         #
-        self._directory_prx_view = prx_widgets.PrxTreeView()
+        self._directory_prx_view = gui_prx_widgets.PrxTreeView()
         self._right_v_s.add_widget(self._directory_prx_view)
         self._directory_prx_view.create_header_view(
             [('directory', 1)]
@@ -1493,7 +1493,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
             self.__do_gui_refresh_for_files
         )
         #
-        self._file_prx_view = prx_widgets.PrxListView()
+        self._file_prx_view = gui_prx_widgets.PrxListView()
         self._right_v_s.add_widget(self._file_prx_view)
         self._file_frame_size = 80, 124
         self._item_name_frame_size = 80, 44
@@ -1507,7 +1507,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
         #
         self._main_h_s.set_fixed_size_at(0, 320)
         self._main_h_s.set_fixed_size_at(2, 320)
-        if bsc_core.SysApplicationMtd.get_is_dcc():
+        if bsc_core.BasApplication.get_is_dcc():
             self._main_h_s.swap_contract_right_or_bottom_at(2)
         #
         self._right_v_s.set_fixed_size_at(0, 320)
@@ -1667,7 +1667,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
         current_item = self._resource_prx_view.get_current_item()
         if current_item:
             dtb_resource = current_item.get_gui_dcc_obj(
-                namespace=_GuiResourceOpt.DCC_NAMESPACE
+                namespace=_GuiResourceOpt.GUI_NAMESPACE
             )
             if dtb_resource:
                 self._gui_resource_opt.copy_to_clipboard_from(dtb_resource)
@@ -1682,7 +1682,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
             ('shader', False, 'shader-node-graph'),
             ('material', True, 'material-node-graph')
         ]:
-            i_tool = prx_widgets.PrxToggleButton()
+            i_tool = gui_prx_widgets.PrxToggleButton()
             tools.append(i_tool.widget)
             self._copy_tool_box.add_widget(i_tool)
             i_tool._qt_widget._set_exclusive_widgets_(tools)
@@ -1741,7 +1741,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
     # build for types
     def __gui_add_for_all_types(self):
         def post_fnc_():
-            self._end_timestamp = bsc_core.SysBaseMtd.get_timestamp()
+            self._end_timestamp = bsc_core.BscSystem.get_timestamp()
             #
             bsc_log.Log.trace_method_result(
                 'load all types',
@@ -1754,7 +1754,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
         def quit_fnc_():
             ts.do_quit()
 
-        self.__start_timestamp = bsc_core.SysBaseMtd.get_timestamp()
+        self.__start_timestamp = bsc_core.BscSystem.get_timestamp()
 
         dtb_categories = self._dtb_opt.get_entities(
             entity_type=self._dtb_opt.EntityTypes.Category,
@@ -1818,7 +1818,7 @@ class AbsPnlLibraryForResource(prx_widgets.PrxSessionWindow):
         #
         if entity_prx_items:
             entity_prx_item = entity_prx_items[-1]
-            dtb_entity = entity_prx_item.get_gui_dcc_obj(self.DCC_NAMESPACE)
+            dtb_entity = entity_prx_item.get_gui_dcc_obj(self.GUI_NAMESPACE)
             if dtb_entity is not None:
                 dtb_types = []
                 if dtb_entity.entity_category == self._dtb_opt.EntityCategories.Type:

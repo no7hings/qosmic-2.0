@@ -997,9 +997,9 @@ class ScpComponentLayout(AbsWsp):
         force = True
 
         file_paths = ['test']
-        cache_file_name = bsc_core.UuidMtd.generate_by_files(file_paths)
+        cache_file_name = bsc_core.BscUuid.generate_by_files(file_paths)
         cache_json_directory_path = bsc_storage.StgTmpBaseMtd.get_cache_directory('json-cache')
-        cache_json_file_path = '{}/{}.json'.format(cache_json_directory_path, bsc_core.UuidMtd.generate_new())
+        cache_json_file_path = '{}/{}.json'.format(cache_json_directory_path, bsc_core.BscUuid.generate_new())
 
         if bsc_storage.StgFileOpt(cache_json_file_path).get_is_exists() is False or force is True:
             paths = ktn_core.CEL(
@@ -1891,7 +1891,7 @@ class ScpInstanceColorMap(object):
         grow_usd_file_path = self.get_grow_usd_file_path()
         image_file_path = self.get_grow_image_file_path()
         uv_map_name = self.get_grow_map_name()
-        cache_file_name = bsc_core.UuidMtd.generate_by_files(
+        cache_file_name = bsc_core.BscUuid.generate_by_files(
             [grow_usd_file_path]+bsc_storage.StgTextureMtd.get_unit_paths(image_file_path),
             [uv_map_name]
         )
@@ -1899,9 +1899,9 @@ class ScpInstanceColorMap(object):
         cache_usd_file_path = '{}/{}.usd'.format(cache_usd_directory_path, cache_file_name)
         self._obj_opt.set('parameters.grow.cache.usd', cache_usd_file_path)
         if bsc_storage.StgPathMtd.get_is_exists(cache_usd_file_path) is False or force is True:
-            import lxgui.proxy.widgets as prx_widgets
+            import lxgui.proxy.widgets as gui_prx_widgets
 
-            w = prx_widgets.PrxProcessingWindow()
+            w = gui_prx_widgets.PrxProcessingWindow()
             w.set_window_title('Generator Grow Cache')
             w.set_window_show(exclusive=False)
 
@@ -1921,7 +1921,7 @@ class ScpInstanceColorMap(object):
         instance_usd_file_path = self.get_instance_usd_file_path()
         image_file_path = self.get_grow_image_file_path()
         uv_map_name = self.get_grow_map_name()
-        cache_file_name = bsc_core.UuidMtd.generate_by_files(
+        cache_file_name = bsc_core.BscUuid.generate_by_files(
             [grow_usd_file_path, instance_usd_file_path]+bsc_storage.StgTextureMtd.get_unit_paths(image_file_path),
             [uv_map_name]
         )
@@ -1932,9 +1932,9 @@ class ScpInstanceColorMap(object):
         cache_json_file_path = '{}/{}.json'.format(cache_json_directory_path, cache_file_name)
         self._obj_opt.set('parameters.instance.cache.json', cache_json_file_path)
         if bsc_storage.StgPathMtd.get_is_exists(cache_usd_file_path) is False or force is True:
-            import lxgui.proxy.widgets as prx_widgets
+            import lxgui.proxy.widgets as gui_prx_widgets
 
-            w = prx_widgets.PrxProcessingWindow()
+            w = gui_prx_widgets.PrxProcessingWindow()
             w.set_window_title('Generator Instance Cache')
             w.set_window_show(exclusive=False)
 

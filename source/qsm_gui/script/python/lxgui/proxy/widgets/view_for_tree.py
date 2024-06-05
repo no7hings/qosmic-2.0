@@ -290,6 +290,12 @@ class PrxTreeView(
             self.view.addTopLevelItem,
             *args, **kwargs
         )
+
+    def add_child(self, *args, **kwargs):
+        return self._add_item_(
+            self.view.addTopLevelItem,
+            *args, **kwargs
+        )
     
     def prepend_item(self, *args, **kwargs):
         return self._add_item_(

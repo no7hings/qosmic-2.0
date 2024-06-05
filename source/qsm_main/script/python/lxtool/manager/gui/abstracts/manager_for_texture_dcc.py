@@ -9,7 +9,7 @@ import lxbasic.storage as bsc_storage
 
 import lxgeneral.dcc.objects as gnl_dcc_objects
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.core as gui_core
 
@@ -19,8 +19,8 @@ import lxgui.proxy.scripts as gui_prx_scripts
 
 
 # noinspection PyUnusedLocal
-class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
-    DCC_NAMESPACE = None
+class AbsPnlManagerForAssetTextureDcc(gui_prx_widgets.PrxSessionWindow):
+    GUI_NAMESPACE = None
     DCC_SELECTION_CLS = None
 
     def __init__(self, session, *args, **kwargs):
@@ -34,24 +34,24 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
 
     def gui_setup_window(self):
         self.set_main_style_mode(1)
-        self._prx_tab_view = prx_widgets.PrxTabView()
+        self._prx_tab_view = gui_prx_widgets.PrxTabView()
         self.add_widget(self._prx_tab_view)
 
-        s_a_0 = prx_widgets.PrxVScrollArea()
+        s_a_0 = gui_prx_widgets.PrxVScrollArea()
         self._prx_tab_view.add_widget(
             s_a_0,
             name='dcc',
             icon_name_text='dcc',
         )
 
-        e_p_0 = prx_widgets.PrxHToolGroup()
+        e_p_0 = gui_prx_widgets.PrxHToolGroup()
         s_a_0.add_widget(e_p_0)
-        h_s_0 = prx_widgets.PrxHSplitter()
+        h_s_0 = gui_prx_widgets.PrxHSplitter()
         e_p_0.add_widget(h_s_0)
         e_p_0.set_name('textures')
         e_p_0.set_expanded(True)
         #
-        self._prx_tree_view_for_filter = prx_widgets.PrxTreeView()
+        self._prx_tree_view_for_filter = gui_prx_widgets.PrxTreeView()
         self._prx_tree_view_for_filter.set_selection_use_single()
         self._prx_tree_view_for_filter.create_header_view(
             [('name', 3)],
@@ -59,7 +59,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
         )
         h_s_0.add_widget(self._prx_tree_view_for_filter)
         #
-        self._tree_view = prx_widgets.PrxTreeView()
+        self._tree_view = gui_prx_widgets.PrxTreeView()
         h_s_0.add_widget(self._tree_view)
         self._tree_view.create_header_view(
             [('name', 4), ('color-space', 2), ('description', 2)],
@@ -70,18 +70,18 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
         #
         self._texture_add_opt = gui_prx_scripts.GuiPrxScpForStorageTreeAdd(
             prx_tree_view=self._tree_view,
-            prx_tree_item_cls=prx_widgets.PrxStgObjTreeItem,
+            prx_tree_item_cls=gui_prx_widgets.PrxStgObjTreeItem,
         )
         self._dcc_add_opt = gui_prx_scripts.GuiPrxScpForTreeAdd(
             prx_tree_view=self._tree_view,
-            prx_tree_item_cls=prx_widgets.PrxDccObjTreeItem,
-            dcc_namespace=self.DCC_NAMESPACE
+            prx_tree_item_cls=gui_prx_widgets.PrxDccObjTreeItem,
+            dcc_namespace=self.GUI_NAMESPACE
         )
         #
         self._tree_view_selection_opt = gui_prx_scripts.GuiPrxScpForTreeSelection(
             prx_tree_view=self._tree_view,
             dcc_selection_cls=self.DCC_SELECTION_CLS,
-            dcc_namespace=self.DCC_NAMESPACE
+            dcc_namespace=self.GUI_NAMESPACE
         )
         self._tree_view.connect_item_select_changed_to(
             self._tree_view_selection_opt.set_select
@@ -90,11 +90,11 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
         self._gui_tag_filter_opt = gui_prx_scripts.GuiPrxScpForTreeTagFilter(
             prx_tree_view_src=self._prx_tree_view_for_filter,
             prx_tree_view_tgt=self._tree_view,
-            prx_tree_item_cls=prx_widgets.PrxObjTreeItem
+            prx_tree_item_cls=gui_prx_widgets.PrxObjTreeItem
         )
         self.connect_refresh_action_for(self.refresh_gui_fnc)
         #
-        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         s_a_0.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.options'),
@@ -125,7 +125,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
             }
         )
 
-        self._refresh_button = prx_widgets.PrxPressButton()
+        self._refresh_button = gui_prx_widgets.PrxPressButton()
         self.add_button(self._refresh_button)
         self._refresh_button.set_name('refresh')
         self._refresh_button.connect_press_clicked_to(self.refresh_gui_fnc)
@@ -260,7 +260,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                     i_dcc_obj_prx_items = i_texture_prx_item.get_children()
                     for j_dcc_obj_prx_item in i_dcc_obj_prx_items:
                         j_dcc_obj = j_dcc_obj_prx_item.get_gui_dcc_obj(
-                            namespace=self.DCC_NAMESPACE
+                            namespace=self.GUI_NAMESPACE
                         )
                         j_color_space = j_dcc_obj.get_color_space()
                         j_dcc_obj_prx_item.set_name(j_color_space, 1)
@@ -464,7 +464,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                                 for j_dcc_obj_prx_item in i_dcc_obj_prx_items:
                                     if j_dcc_obj_prx_item.get_is_checked() is True:
                                         j_dcc_obj = j_dcc_obj_prx_item.get_gui_dcc_obj(
-                                            namespace=self.DCC_NAMESPACE
+                                            namespace=self.GUI_NAMESPACE
                                         )
                                         #
                                         self._dcc_texture_references.repath_fnc(
@@ -517,7 +517,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                             i_port_path = i_texture_any.get_relevant_dcc_port_path()
                             for j_dcc_obj_prx_item in i_dcc_obj_prx_items:
                                 if j_dcc_obj_prx_item.get_is_checked() is True:
-                                    j_dcc_obj = j_dcc_obj_prx_item.get_gui_dcc_obj(namespace=self.DCC_NAMESPACE)
+                                    j_dcc_obj = j_dcc_obj_prx_item.get_gui_dcc_obj(namespace=self.GUI_NAMESPACE)
                                     #
                                     self._dcc_texture_references.repath_fnc(
                                         j_dcc_obj, i_port_path, i_texture_tgt.path
@@ -573,7 +573,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                         i_port_path = i_texture_any.get_relevant_dcc_port_path()
                         for j_dcc_obj_prx_item in i_dcc_obj_prx_items:
                             if j_dcc_obj_prx_item.get_is_checked() is True:
-                                j_dcc_obj = j_dcc_obj_prx_item.get_gui_dcc_obj(namespace=self.DCC_NAMESPACE)
+                                j_dcc_obj = j_dcc_obj_prx_item.get_gui_dcc_obj(namespace=self.GUI_NAMESPACE)
 
                                 self._dcc_texture_references.repath_fnc(
                                     j_dcc_obj, i_port_path, i_result
@@ -681,7 +681,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
                             i_port_path = i_texture_any.get_relevant_dcc_port_path()
                             for j_dcc_obj_prx_item in i_dcc_obj_prx_items:
                                 if j_dcc_obj_prx_item.get_is_checked() is True:
-                                    j_dcc_obj = j_dcc_obj_prx_item.get_gui_dcc_obj(namespace=self.DCC_NAMESPACE)
+                                    j_dcc_obj = j_dcc_obj_prx_item.get_gui_dcc_obj(namespace=self.GUI_NAMESPACE)
                                     #
                                     if i_texture_any == i_texture_src:
                                         i_texture_any_dst = i_texture_src.get_target_file(
@@ -759,7 +759,7 @@ class AbsPnlManagerForAssetTextureDcc(prx_widgets.PrxSessionWindow):
             parent=self.widget
         )
 
-        v = prx_widgets.PrxImageView()
+        v = gui_prx_widgets.PrxImageView()
         w.add_customize_widget(v)
 
         v.set_textures([texture])

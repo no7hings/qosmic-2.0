@@ -14,13 +14,13 @@ from . import process as _process
 class ExcBaseMtd(object):
     @classmethod
     def oiiotool(cls):
-        if _base.SysBaseMtd.get_is_windows():
+        if _base.BscSystem.get_is_windows():
             name = 'oiiotool.exe'
             _ = _environ.EnvBaseMtd.find_execute(name)
             if _:
                 return name
             return _bsc_resource.RscExtendExe.get(name)
-        elif _base.SysBaseMtd.get_is_linux():
+        elif _base.BscSystem.get_is_linux():
             name = 'oiiotool'
             _ = _environ.EnvBaseMtd.find_execute(name)
             if _:
@@ -29,13 +29,13 @@ class ExcBaseMtd(object):
 
     @classmethod
     def oslc(cls):
-        if _base.SysBaseMtd.get_is_windows():
+        if _base.BscSystem.get_is_windows():
             name = 'oslc.exe'
             _ = _environ.EnvBaseMtd.find_execute(name)
             if _:
                 return name
             return _bsc_resource.RscExtendExe.get(name)
-        elif _base.SysBaseMtd.get_is_linux():
+        elif _base.BscSystem.get_is_linux():
             name = 'oslc'
             _ = _environ.EnvBaseMtd.find_execute(name)
             if _:
@@ -44,13 +44,13 @@ class ExcBaseMtd(object):
 
     @classmethod
     def oslinfo(cls):
-        if _base.SysBaseMtd.get_is_windows():
+        if _base.BscSystem.get_is_windows():
             name = 'oslinfo.exe'
             _ = _environ.EnvBaseMtd.find_execute(name)
             if _:
                 return name
             return _bsc_resource.RscExtendExe.get(name)
-        elif _base.SysBaseMtd.get_is_linux():
+        elif _base.BscSystem.get_is_linux():
             name = 'oslinfo'
             _ = _environ.EnvBaseMtd.find_execute(name)
             if _:
@@ -59,13 +59,13 @@ class ExcBaseMtd(object):
 
     @classmethod
     def ffmpeg(cls):
-        if _base.SysBaseMtd.get_is_windows():
+        if _base.BscSystem.get_is_windows():
             name = 'ffmpeg.exe'
             _ = _environ.EnvBaseMtd.find_execute(name)
             if _:
                 return name
             return _bsc_resource.RscExtendExe.get(name)
-        elif _base.SysBaseMtd.get_is_linux():
+        elif _base.BscSystem.get_is_linux():
             name = 'ffmpeg'
             _ = _environ.EnvBaseMtd.find_execute(name)
             if _:
@@ -106,7 +106,7 @@ class ExcExtraMtd(object):
                 file_path
             )
         )
-        if _base.SysPlatformMtd.get_is_linux():
+        if _base.BasPlatform.get_is_linux():
             cmds = [
                 'gnome-terminal', '-t', kwargs.get('title') or 'untitled',
                 '-e "bash -l {}"'.format(file_path)
@@ -114,7 +114,7 @@ class ExcExtraMtd(object):
             _process.PrcBaseMtd.execute_as_trace(
                 ' '.join(cmds)
             )
-        elif _base.SysPlatformMtd.get_is_windows():
+        elif _base.BasPlatform.get_is_windows():
             cmds = ['start', 'cmd', '/k', file_path]
             _process.PrcBaseMtd.execute_as_trace(
                 ' '.join(cmds)
@@ -127,7 +127,7 @@ class ExcExtraMtd(object):
 
     @staticmethod
     def execute_shell_script_use_terminal(cmd, **kwargs):
-        if _base.SysPlatformMtd.get_is_linux():
+        if _base.BasPlatform.get_is_linux():
             cmds = [
                 'gnome-terminal',
                 '-t', kwargs.get('title') or 'untitled',
@@ -136,7 +136,7 @@ class ExcExtraMtd(object):
             _process.PrcBaseMtd.execute_as_trace(
                 ' '.join(cmds)
             )
-        elif _base.SysPlatformMtd.get_is_windows():
+        elif _base.BasPlatform.get_is_windows():
             cmds = ['start', 'cmd', '/k', cmd]
             _process.PrcBaseMtd.execute_as_trace(
                 ' '.join(cmds)

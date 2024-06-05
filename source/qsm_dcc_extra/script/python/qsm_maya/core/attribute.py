@@ -188,3 +188,4 @@ class NodeAttributes(object):
     @classmethod
     def get_all_keyable_names(cls, path):
         return cmds.listAttr(path, keyable=1)
+

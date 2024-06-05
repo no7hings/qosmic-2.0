@@ -13,7 +13,7 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.abstracts as prx_abstracts
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_task.core as qsm_task_core
 
@@ -23,7 +23,7 @@ import qsm_task.process.server as qsm_tsk_prc_server
 
 
 class _GuiBaseOpt(object):
-    DCC_NAMESPACE = 'task'
+    GUI_NAMESPACE = 'task'
 
     def __init__(self, window, page, session):
         self._window = window
@@ -109,7 +109,7 @@ class _GuiTaskOpt(
     
     def __init__(self, window, page, session, task_pool, prx_tree_view):
         super(_GuiTaskOpt, self).__init__(window, page, session)
-        self._init_tree_view_opt_(prx_tree_view, self.DCC_NAMESPACE)
+        self._init_tree_view_opt_(prx_tree_view, self.GUI_NAMESPACE)
 
         if self._window._language == 'chs':
             header_data = [
@@ -509,7 +509,7 @@ class PrxPageForMonitor(prx_abstracts.AbsPrxWidget):
             ('filter', 'tool/filter', '', self.gui_filter_update_visible)
         ]:
             i_key, i_icon_name, i_tool_tip, i_fnc = i
-            i_tool = prx_widgets.PrxToggleButton()
+            i_tool = gui_prx_widgets.PrxToggleButton()
             self._main_prx_tool_box.add_widget(i_tool)
             i_tool.set_name(i_key)
             i_tool.set_icon_name(i_icon_name)
@@ -518,27 +518,27 @@ class PrxPageForMonitor(prx_abstracts.AbsPrxWidget):
 
     def _gui_add_task_log_layer(self):
         layer_widget = self._window.create_layer_widget('task_log', 'Task Log')
-        prx_sca = prx_widgets.PrxVScrollArea()
+        prx_sca = gui_prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(prx_sca)
 
-        self._task_log_prx_text_browser = prx_widgets.PrxTextBrowser()
+        self._task_log_prx_text_browser = gui_prx_widgets.PrxTextBrowser()
         prx_sca.add_widget(self._task_log_prx_text_browser)
 
     def _gui_add_task_properties_layer(self):
         layer_widget = self._window.create_layer_widget('task_properties', 'Task Properties')
-        prx_sca = prx_widgets.PrxVScrollArea()
+        prx_sca = gui_prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(prx_sca)
 
-        self._task_properties_prx_options_node = prx_widgets.PrxOptionsNode('Options')
+        self._task_properties_prx_options_node = gui_prx_widgets.PrxOptionsNode('Options')
         prx_sca.add_widget(self._task_properties_prx_options_node)
         self._task_properties_prx_options_node.create_ports_by_data(
             self._session.configure.get('build.task_properties.parameters'),
         )
         #
-        tool_bar = prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolBar()
         layer_widget.add_widget(tool_bar.widget)
         tool_bar.set_expanded(True)
-        button = prx_widgets.PrxPressButton()
+        button = gui_prx_widgets.PrxPressButton()
         tool_bar.add_widget(button)
         button.set_name('Save')
         button.set_enable(False)
@@ -583,7 +583,7 @@ class PrxPageForMonitor(prx_abstracts.AbsPrxWidget):
         qt_lot.setContentsMargins(*[0]*4)
         qt_lot.setSpacing(2)
 
-        self._top_prx_tool_bar = prx_widgets.PrxHToolBar()
+        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
         qt_lot.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_expanded(True)
         self._top_prx_tool_bar.set_align_left()
@@ -608,13 +608,13 @@ class PrxPageForMonitor(prx_abstracts.AbsPrxWidget):
             qsm_tsk_prc_server.TaskProcessWorker.MAXIMUM_INITIAL
         )
 
-        self._prx_h_splitter = prx_widgets.PrxHSplitter()
+        self._prx_h_splitter = gui_prx_widgets.PrxHSplitter()
         qt_lot.addWidget(self._prx_h_splitter.widget)
 
-        self._task_filter_prx_tree_view = prx_widgets.PrxTreeView()
+        self._task_filter_prx_tree_view = gui_prx_widgets.PrxTreeView()
         self._prx_h_splitter.add_widget(self._task_filter_prx_tree_view)
 
-        self._task_prx_tree_view = prx_widgets.PrxTreeView()
+        self._task_prx_tree_view = gui_prx_widgets.PrxTreeView()
         self._prx_h_splitter.add_widget(self._task_prx_tree_view)
         self._gui_entity_opt = _GuiTaskOpt(
             self._window, self, self._session, self._entity_pool,

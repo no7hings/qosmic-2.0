@@ -2,10 +2,10 @@
 # gui
 import lxgui.proxy.core as gui_prx_core
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
-class AbsPnlBuilderForAsset(prx_widgets.PrxSessionToolWindow):
+class AbsPnlBuilderForAsset(gui_prx_widgets.PrxSessionToolWindow):
     CONFIGURE_FILE_PATH = 'utility/panel/asset-builder'
 
     def __init__(self, session, *args, **kwargs):
@@ -19,7 +19,7 @@ class AbsPnlBuilderForAsset(prx_widgets.PrxSessionToolWindow):
         self.refresh_all_fnc()
 
     def _set_group_0_build_(self):
-        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         self.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._hook_build_configure.get('node.options')

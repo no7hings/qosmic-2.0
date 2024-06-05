@@ -8,23 +8,23 @@ import lxbasic.resource as bsc_resource
 
 import lxgui.core as gui_core
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 from . import page_for_rig as _unit_for_rig_resource
 
 from . import page_for_scenery as _unit_for_scenery_resource
 
 
-class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
+class PrxPnlResourceManager(gui_prx_widgets.PrxSessionWindow):
     def __init__(self, session, *args, **kwargs):
         super(PrxPnlResourceManager, self).__init__(session, *args, **kwargs)
 
     def gui_setup_window(self):
         self.set_main_style_mode(1)
-        self._prx_tab_view = prx_widgets.PrxTabView()
+        self._prx_tab_view = gui_prx_widgets.PrxTabView()
         self.add_widget(self._prx_tab_view)
         # rig
-        rig_prx_sca = prx_widgets.PrxVScrollArea()
+        rig_prx_sca = gui_prx_widgets.PrxVScrollArea()
         self._prx_tab_view.add_widget(
             rig_prx_sca,
             key='rig',
@@ -41,7 +41,7 @@ class PrxPnlResourceManager(prx_widgets.PrxSessionWindow):
         )
         rig_prx_sca.add_widget(self._rig_prx_page)
         # scenery
-        scenery_prx_sca = prx_widgets.PrxVScrollArea()
+        scenery_prx_sca = gui_prx_widgets.PrxVScrollArea()
         self._prx_tab_view.add_widget(
             scenery_prx_sca,
             key='scenery',

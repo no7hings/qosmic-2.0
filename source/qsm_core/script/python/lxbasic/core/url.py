@@ -17,9 +17,9 @@ class UrlMtd(object):
 
     @classmethod
     def open_in_chrome(cls, url):
-        if _base.SysBaseMtd.get_is_linux():
+        if _base.BscSystem.get_is_linux():
             bin_paths = cls.LINUX_BIN_PATHS
-        elif _base.SysBaseMtd.get_is_windows():
+        elif _base.BscSystem.get_is_windows():
             bin_paths = cls.WINDOWS_BIN_PATHS
         else:
             raise SystemError()

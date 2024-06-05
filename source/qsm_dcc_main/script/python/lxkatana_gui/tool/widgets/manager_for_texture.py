@@ -10,7 +10,7 @@ import lxtool.manager.gui.abstracts as mng_gui_abstracts
 
 class PnlManagerForTextureSpaceDcc(mng_gui_abstracts.AbsPnlManagerForTextureSpaceDcc):
     DCC_SELECTION_CLS = ktn_dcc_objects.Selection
-    DCC_NAMESPACE = 'katana'
+    GUI_NAMESPACE = 'katana'
 
     def __init__(self, session, *args, **kwargs):
         super(PnlManagerForTextureSpaceDcc, self).__init__(session, *args, **kwargs)
@@ -47,7 +47,7 @@ class PnlManagerForAssetTextureDcc(mng_gui_abstracts.AbsPnlManagerForAssetTextur
     import lxsession.commands as ssn_commands; ssn_commands.execute_hook("dcc-tool-panels/gen-asset-dcc-texture-manager")
     """
     DCC_SELECTION_CLS = ktn_dcc_objects.Selection
-    DCC_NAMESPACE = 'maya'
+    GUI_NAMESPACE = 'maya'
 
     def __init__(self, *args, **kwargs):
         super(PnlManagerForAssetTextureDcc, self).__init__(*args, **kwargs)

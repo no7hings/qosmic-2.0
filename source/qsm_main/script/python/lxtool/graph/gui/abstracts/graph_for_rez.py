@@ -5,12 +5,12 @@ import lxbasic.storage as bsc_storage
 
 import lxuniverse.objects as unr_objects
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.qt.core as gui_qt_core
 
 
-class AbsRezGraph(prx_widgets.PrxBaseWindow):
+class AbsRezGraph(gui_prx_widgets.PrxBaseWindow):
     OPTION_HOOK_KEY = None
 
     def __init__(self, hook_option, *args, **kwargs):
@@ -56,11 +56,11 @@ class AbsRezGraph(prx_widgets.PrxBaseWindow):
             )
 
     def _set_tool_panel_setup_(self):
-        h_s = prx_widgets.PrxHSplitter()
+        h_s = gui_prx_widgets.PrxHSplitter()
         self.add_widget(h_s)
-        self._node_tree = prx_widgets.PrxNGTree()
+        self._node_tree = gui_prx_widgets.PrxNGTree()
         h_s.add_widget(self._node_tree)
-        self._node_graph = prx_widgets.PrxNGGraph()
+        self._node_graph = gui_prx_widgets.PrxNGGraph()
         h_s.add_widget(self._node_graph)
 
         h_s.set_stretches([1, 3])

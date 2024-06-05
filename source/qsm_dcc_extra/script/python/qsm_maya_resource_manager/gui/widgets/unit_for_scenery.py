@@ -9,7 +9,7 @@ import lxgui.core as gui_core
 
 import lxgui.qt.widgets as qt_widgets
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.proxy.scripts as gui_prx_scripts
 
@@ -239,7 +239,7 @@ class UnitForSceneryUtilityToolSet(
     def __init__(self, window, unit, session):
         super(UnitForSceneryUtilityToolSet, self).__init__(window, unit, session)
 
-        self._prx_options_node = prx_widgets.PrxOptionsNode(
+        self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.options.scenery_utility')
             )
@@ -331,7 +331,7 @@ class UnitForScenerySwitchToolSet(
 
     def __init__(self, window, unit, session):
         super(UnitForScenerySwitchToolSet, self).__init__(window, unit, session)
-        self._prx_options_node = prx_widgets.PrxOptionsNode(
+        self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.options.scenery_switch')
             )
@@ -461,7 +461,7 @@ class UnitForSceneryExtendToolSet(
 
     def __init__(self, window, unit, session):
         super(UnitForSceneryExtendToolSet, self).__init__(window, unit, session)
-        self._prx_options_node = prx_widgets.PrxOptionsNode(
+        self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.options.scenery_camera')
             )

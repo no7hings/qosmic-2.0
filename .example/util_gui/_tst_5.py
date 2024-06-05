@@ -2,17 +2,17 @@
 
 from lxgui.proxy.widgets import utility, node, view
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 from lxgui.qt.widgets import chart, view
 
 
-class TestWindow(prx_widgets.PrxBaseWindow):
+class TestWindow(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(TestWindow, self).__init__(*args, **kwargs)
 
     def _test_(self):
-        wdt = prx_widgets.PrxListView()
+        wdt = gui_prx_widgets.PrxListView()
         wdt.set_clear()
         self.add_widget(wdt)
         for i in range(50):

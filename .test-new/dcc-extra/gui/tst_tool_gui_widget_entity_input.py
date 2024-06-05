@@ -7,12 +7,12 @@ import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.widgets as qt_widgets
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_gui.proxy.widgets as qsm_proxy_widgets
 
 
-class W0(prx_widgets.PrxBaseWindow):
+class W0(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W0, self).__init__(*args, **kwargs)
 

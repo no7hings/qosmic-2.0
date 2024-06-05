@@ -11,7 +11,7 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.abstracts as prx_abstracts
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
@@ -22,7 +22,7 @@ import qsm_maya.preview.core as qsm_mya_prv_core
 import qsm_maya.preview.scripts as qsm_mya_prv_script
 
 
-class PrxPageForRigResource(prx_abstracts.AbsPrxWidget):
+class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = qt_widgets.QtTranslucentWidget
 
     RESOLUTION_PRESET_MAPPER = {
@@ -58,7 +58,7 @@ class PrxPageForRigResource(prx_abstracts.AbsPrxWidget):
         self._script_job.destroy()
     
     def __init__(self, window, session, *args, **kwargs):
-        super(PrxPageForRigResource, self).__init__(*args, **kwargs)
+        super(PrxPageForPlayblast, self).__init__(*args, **kwargs)
         self._window = window
         self._session = session
 
@@ -289,10 +289,10 @@ class PrxPageForRigResource(prx_abstracts.AbsPrxWidget):
         qt_lot.setContentsMargins(*[0]*4)
         qt_lot.setSpacing(2)
 
-        prx_sca = prx_widgets.PrxVScrollArea()
+        prx_sca = gui_prx_widgets.PrxVScrollArea()
         qt_lot.addWidget(prx_sca.widget)
 
-        self._prx_options_node = prx_widgets.PrxOptionsNode(
+        self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.options.playblast')
             )
@@ -331,11 +331,11 @@ class PrxPageForRigResource(prx_abstracts.AbsPrxWidget):
 
         self._do_gui_refresh_output_by_save_scheme()
 
-        tool_bar = prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolBar()
         qt_lot.addWidget(tool_bar.widget)
         tool_bar.set_expanded(True)
 
-        self._playblast_button = prx_widgets.PrxPressButton()
+        self._playblast_button = gui_prx_widgets.PrxPressButton()
         tool_bar.add_widget(self._playblast_button)
         self._playblast_button.set_name(
             gui_core.GuiUtil.choice_name(
@@ -344,7 +344,7 @@ class PrxPageForRigResource(prx_abstracts.AbsPrxWidget):
         )
         self._playblast_button.connect_press_clicked_to(self.do_dcc_playblast)
 
-        self._playblast_backstage_button = prx_widgets.PrxPressButton()
+        self._playblast_backstage_button = gui_prx_widgets.PrxPressButton()
         tool_bar.add_widget(self._playblast_backstage_button)
         self._playblast_backstage_button.set_name(
             gui_core.GuiUtil.choice_name(

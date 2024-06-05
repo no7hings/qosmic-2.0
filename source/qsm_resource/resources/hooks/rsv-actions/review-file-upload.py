@@ -1,10 +1,10 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
-class UploadReview(prx_widgets.PrxBaseWindow):
+class UploadReview(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(UploadReview, self).__init__(*args, **kwargs)
 

@@ -1,19 +1,19 @@
 # coding:utf-8
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.qt.widgets as qt_widgets
 
 import lxresolver.core as rsv_core
 
 
-class TestWindow(prx_widgets.PrxBaseWindow):
+class TestWindow(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(TestWindow, self).__init__(*args, **kwargs)
         self._test_()
 
     def _test_(self):
-        n = prx_widgets.PrxTabView()
+        n = gui_prx_widgets.PrxTabView()
         n.set_drag_enable(True)
         self.set_main_style_mode(1)
         self.add_widget(n)

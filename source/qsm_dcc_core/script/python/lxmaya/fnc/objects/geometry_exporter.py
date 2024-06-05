@@ -734,7 +734,7 @@ class FncExporterForGeometryUvMapUsd(gnl_fnc_abstracts.AbsFncOptionBase):
         return '{}/{}.usd'.format(
             user_directory_path,
             bsc_core.TimestampOpt(
-                bsc_core.SysBaseMtd.get_timestamp()
+                bsc_core.BscSystem.get_timestamp()
             ).get_as_tag_36()
         )
 

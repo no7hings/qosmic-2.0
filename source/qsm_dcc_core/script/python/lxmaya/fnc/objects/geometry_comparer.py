@@ -30,7 +30,7 @@ class FncComparerForGeometry(gnl_fnc_abstracts.AbsFncComparerForDccGeometry):
     FNC_REPAIRER_FOR_USD_MESH_CLS = FncRepairerForUsdMesh
 
     RSV_KEYWORD = 'asset-geometry-usd-payload-file'
-    DCC_NAMESPACE = 'maya'
+    GUI_NAMESPACE = 'maya'
 
     def __init__(self, *args, **kwargs):
         super(FncComparerForGeometry, self).__init__(*args, **kwargs)

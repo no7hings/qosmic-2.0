@@ -7,10 +7,10 @@ import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.widgets as qt_widgets
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
-class AbsPnlLauncherForApplication(prx_widgets.PrxSessionWindow):
+class AbsPnlLauncherForApplication(gui_prx_widgets.PrxSessionWindow):
     KEY = 'launcher'
 
     def __init__(self, session, *args, **kwargs):
@@ -24,7 +24,7 @@ class AbsPnlLauncherForApplication(prx_widgets.PrxSessionWindow):
         self._sub_label._set_name_draw_font_(gui_qt_core.QtFonts.SubTitle)
         self._sub_label._set_name_align_h_center_()
 
-        self.__input = prx_widgets.PrxInputAsStgTask()
+        self.__input = gui_prx_widgets.PrxInputAsStgTask()
         self.add_widget(self.__input)
 
         self.__input.set_focus_in()
@@ -33,11 +33,11 @@ class AbsPnlLauncherForApplication(prx_widgets.PrxSessionWindow):
             self.__do_cancel
         )
 
-        self.__tip = prx_widgets.PrxTextBrowser()
+        self.__tip = gui_prx_widgets.PrxTextBrowser()
         self.add_widget(self.__tip)
         self.__tip.set_focus_enable(False)
 
-        self.__next_button = prx_widgets.PrxPressButton()
+        self.__next_button = gui_prx_widgets.PrxPressButton()
         self.__next_button.set_name('next')
         self.add_button(
             self.__next_button
@@ -70,7 +70,7 @@ class AbsPnlLauncherForApplication(prx_widgets.PrxSessionWindow):
             option_opt.set('application', self.__get_application())
             option = option_opt.to_string()
 
-            if bsc_core.SysBaseMtd.get_is_linux():
+            if bsc_core.BscSystem.get_is_linux():
                 cmd = bsc_storage.PkgContextNew(
                     ' '.join(['lxdcc'])
                 ).get_command(
@@ -80,7 +80,7 @@ class AbsPnlLauncherForApplication(prx_widgets.PrxSessionWindow):
                         )
                     ],
                 )
-            elif bsc_core.SysBaseMtd.get_is_windows():
+            elif bsc_core.BscSystem.get_is_windows():
                 cmd = bsc_storage.PkgContextNew(
                     ' '.join(['lxdcc'])
                 ).get_command(
@@ -94,7 +94,7 @@ class AbsPnlLauncherForApplication(prx_widgets.PrxSessionWindow):
                 raise RuntimeError()
 
             bsc_core.ExcExtraMtd.execute_shell_script_use_terminal(
-                '"{}"'.format(cmd), **dict(title='{}-{}'.format(self.__get_application(), bsc_core.SysBaseMtd.get_time_tag()))
+                '"{}"'.format(cmd), **dict(title='{}-{}'.format(self.__get_application(), bsc_core.BscSystem.get_time_tag()))
             )
             self.do_close_window_later()
 

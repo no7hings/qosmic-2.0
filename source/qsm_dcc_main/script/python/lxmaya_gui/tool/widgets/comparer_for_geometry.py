@@ -12,7 +12,7 @@ class PnlComparerForAssetGeometryDcc(cpr_gui_abstracts.AbsPnlComparerForAssetGeo
     FNC_COMPARER_FOR_DCC_GEOMETRY = mya_fnc_objects.FncComparerForGeometry
 
     DCC_SELECTION_CLS = mya_dcc_objects.Selection
-    DCC_NAMESPACE = 'usd'
+    GUI_NAMESPACE = 'usd'
     DCC_PATHSEP = '|'
 
     DCC_LOCATION = '/master/mod/hi'

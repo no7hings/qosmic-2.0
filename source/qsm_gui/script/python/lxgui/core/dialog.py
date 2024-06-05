@@ -42,12 +42,12 @@ class GuiDialog(object):
         #
         use_window_modality=True
     ):
-        from ..proxy import widgets as prx_widgets
+        from ..proxy import widgets as gui_prx_widgets
 
         if use_exec is True:
-            w = prx_widgets.PrxDialogWindow1(parent=parent)
+            w = gui_prx_widgets.PrxDialogWindow1(parent=parent)
         else:
-            w = prx_widgets.PrxDialogWindow0(parent=parent)
+            w = gui_prx_widgets.PrxDialogWindow0(parent=parent)
         #
         w.set_window_modality(use_window_modality)
         #
@@ -192,9 +192,9 @@ class GuiMonitorForDeadline(object):
     def set_create(cls, label, job_id, parent=None):
         import lxbasic.deadline as bsc_deadline
 
-        from ..proxy import widgets as prx_widgets
+        from ..proxy import widgets as gui_prx_widgets
 
-        w = prx_widgets.PrxMonitorWindow(parent=parent)
+        w = gui_prx_widgets.PrxMonitorWindow(parent=parent)
         w.set_window_title(
             '{}({})'.format(
                 label, job_id
@@ -232,9 +232,9 @@ class GuiMonitorForCommand(object):
 
         from ..qt import core as gui_qt_core
 
-        from ..proxy import widgets as prx_widgets
+        from ..proxy import widgets as gui_prx_widgets
 
-        w = prx_widgets.PrxMonitorWindow(parent=parent)
+        w = gui_prx_widgets.PrxMonitorWindow(parent=parent)
         w.set_window_title(label)
         #
         status_button = w.get_status_button()

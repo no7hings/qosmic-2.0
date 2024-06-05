@@ -1,0 +1,159 @@
+entities:
+    types:
+        /:
+            category: 'group'
+            type: 'root'
+            gui_name: 'All'
+            gui_name_chs: '所有'
+
+            gui_icon_name: 'database/all'
+
+        /node:
+            category: 'group'
+            type: 'group'
+            gui_name_chs: '节点'
+
+            gui_icon_name: 'database/groups'
+
+        /node/deformers:
+            category: 'group'
+            type: 'group'
+            gui_name_chs: '变形器'
+
+            gui_icon_name: 'database/group'
+
+        /node/deformers/bend:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '弯曲'
+
+        /node/deformers/flare:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '扩张'
+
+        /node/deformers/sine:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '正弦'
+
+        /node/deformers/squash:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '挤压'
+
+        /node/deformers/twist:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '扭曲'
+
+        /node/deformers/wave:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '波浪'
+
+        /node/cfx:
+            category: 'group'
+            type: 'group'
+            gui_name_chs: 'CFX'
+
+            gui_icon_name: 'database/group'
+
+        /node/cfx/n_hair:
+            category: 'node'
+            type: 'node'
+            gui_name: 'nHair'
+            gui_name_chs: 'nHair'
+
+        /node/cfx/n_cloth:
+            category: 'node'
+            type: 'node'
+            gui_name: 'nCloth'
+            gui_name_chs: 'nCloth'
+
+    tags:
+        /:
+            category: 'group'
+            type: 'root'
+            gui_name: 'All'
+            gui_name_chs: '所有'
+
+            gui_icon_name: 'database/all'
+
+        /speeds:
+            category: 'group'
+            type: 'group'
+            gui_name_chs: '速度'
+
+            gui_icon_name: 'database/group'
+
+        /speeds/slow:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '缓慢'
+
+        /speeds/fast:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '快速'
+
+        /softness:
+            category: 'group'
+            type: 'group'
+            gui_name_chs: '柔软度'
+
+            gui_icon_name: 'database/group'
+
+        /softness/pliable:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '柔韧'
+
+        /softness/moderate:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '适中'
+
+        /softness/soft:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '柔软'
+
+        /parts:
+            category: 'group'
+            type: 'group'
+            gui_name_chs: '部件'
+
+            gui_icon_name: 'database/group'
+
+        /parts/hair:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '头发'
+
+        /parts/ribbon:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '飘带'
+
+        /material:
+            category: 'group'
+            type: 'group'
+            gui_name_chs: '材料'
+
+            gui_icon_name: 'database/group'
+
+        /material/leather:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '皮革'
+
+        /material/cloth:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '布料'
+
+        /material/silk:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '布料'

@@ -9,7 +9,7 @@ import lxgui.core as gui_core
 
 import lxgui.qt.widgets as qt_widgets
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.proxy.scripts as gui_prx_scripts
 
@@ -202,7 +202,7 @@ class UnitForRigUtilityToolSet(
                         i_opt = qsm_mya_rig_scripts.DynamicGpuCacheOpt(i_resource)
                         if i_opt.is_exists() is False:
                             i_directory_path = qsm_mya_ast_core.AssetCache.generate_dynamic_gpu_directory(
-                                user_name=bsc_core.SysBaseMtd.get_user_name()
+                                user_name=bsc_core.BscSystem.get_user_name()
                             )
                             i_cmd, i_cache_file = i_opt.generate_args(
                                 i_directory_path, start_frame, end_frame, use_motion=use_motion
@@ -261,7 +261,7 @@ class UnitForRigUtilityToolSet(
     def __init__(self, window, unit, session):
         super(UnitForRigUtilityToolSet, self).__init__(window, unit, session)
 
-        self._prx_options_node = prx_widgets.PrxOptionsNode(
+        self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.options.rig_utility')
             )
@@ -345,7 +345,7 @@ class UnitForRigSwitchToolSet(
 
     def __init__(self, window, unit, session):
         super(UnitForRigSwitchToolSet, self).__init__(window, unit, session)
-        self._prx_options_node = prx_widgets.PrxOptionsNode(
+        self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.options.rig_switch')
             )
@@ -472,7 +472,7 @@ class UnitForRigExtendToolSet(
     def __init__(self, window, unit, session):
         super(UnitForRigExtendToolSet, self).__init__(window, unit, session)
 
-        self._prx_options_node = prx_widgets.PrxOptionsNode(
+        self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
                 self._window._language, self._session.configure.get('build.options.rig_motion')
             )
@@ -519,7 +519,7 @@ class UnitForRigExtendToolSet(
 
     def do_dcc_copy_animation(self):
         file_path = qsm_mya_ast_core.AssetCache.generate_animation_file(
-            bsc_core.SysBaseMtd.get_user_name()
+            bsc_core.BscSystem.get_user_name()
         )
         namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
         if not namespaces:
@@ -535,7 +535,7 @@ class UnitForRigExtendToolSet(
 
     def do_dcc_paste_animation(self):
         file_path = qsm_mya_ast_core.AssetCache.generate_animation_file(
-            bsc_core.SysBaseMtd.get_user_name()
+            bsc_core.BscSystem.get_user_name()
         )
         if bsc_storage.StgPathMtd.get_is_file(file_path) is False:
             return

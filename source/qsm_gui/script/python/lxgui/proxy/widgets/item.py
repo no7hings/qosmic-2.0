@@ -104,7 +104,7 @@ class AbsPrxTreeDef(object):
             item_prx.set_gui_menu_data(menu)
         #
         add_method(item_prx.widget)
-        item_prx.widget._connect_item_show_()
+        item_prx.widget._initialize_item_show_()
         #
         if 'filter_key' in kwargs:
             _filter_key = kwargs['filter_key']

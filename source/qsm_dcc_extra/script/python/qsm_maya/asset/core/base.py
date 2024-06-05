@@ -10,7 +10,7 @@ import lxbasic.storage as bsc_storage
 class AssetCache(object):
     @classmethod
     def get_key(cls, file_path):
-        return bsc_core.UuidMtd.generate_by_file(file_path)
+        return bsc_core.BscUuid.generate_by_file(file_path)
 
     @classmethod
     def generate_skin_proxy_file(cls, file_path):
@@ -25,7 +25,7 @@ class AssetCache(object):
     def generate_dynamic_gpu_directory(cls, user_name, key=None):
         root = bsc_core.EnvBaseMtd.get_temporary_root()
         if key is None:
-            key = bsc_core.UuidMtd.generate_new()
+            key = bsc_core.BscUuid.generate_new()
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
         return '{}/.asset-cache/dynamic-gpu/{}/{}/{}'.format(
             root, user_name, region, key
@@ -34,7 +34,7 @@ class AssetCache(object):
     @classmethod
     def generate_animation_file(cls, user_name):
         root = bsc_core.EnvBaseMtd.get_temporary_root()
-        key = bsc_core.UuidMtd.BASIC
+        key = bsc_core.BscUuid.BASIC
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
         return '{}/.asset-cache/animation/{}/{}/{}.json'.format(
             root, user_name, region, key

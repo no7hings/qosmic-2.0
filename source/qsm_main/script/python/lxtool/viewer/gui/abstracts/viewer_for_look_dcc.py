@@ -1,5 +1,5 @@
 # coding:utf-8
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxbasic.log as bsc_log
 
@@ -9,13 +9,13 @@ import lxgui.proxy.scripts as gui_prx_scripts
 
 
 class AbsPnlViewerForShaderDcc(
-    prx_widgets.PrxSessionWindow
+    gui_prx_widgets.PrxSessionWindow
 ):
     DCC_MATERIALS_CLS = None
     DCC_SHADER_CLS = None
     #
     DCC_SELECTION_CLS = None
-    DCC_NAMESPACE = None
+    GUI_NAMESPACE = None
 
     def __init__(self, session, *args, **kwargs):
         super(AbsPnlViewerForShaderDcc, self).__init__(session, *args, **kwargs)
@@ -32,15 +32,15 @@ class AbsPnlViewerForShaderDcc(
         # self._set_configure_groups_build_()
 
     def _set_viewer_groups_build_(self):
-        expand_box_0 = prx_widgets.PrxHToolGroup()
+        expand_box_0 = gui_prx_widgets.PrxHToolGroup()
         expand_box_0.set_name('viewers')
         expand_box_0.set_expanded(True)
         self.add_widget(expand_box_0)
-        h_splitter_0 = prx_widgets.PrxHSplitter()
+        h_splitter_0 = gui_prx_widgets.PrxHSplitter()
         expand_box_0.add_widget(h_splitter_0)
-        self._filter_tree_viewer_0 = prx_widgets.PrxTreeView()
+        self._filter_tree_viewer_0 = gui_prx_widgets.PrxTreeView()
         h_splitter_0.add_widget(self._filter_tree_viewer_0)
-        self._obj_tree_viewer_0 = prx_widgets.PrxTreeView()
+        self._obj_tree_viewer_0 = gui_prx_widgets.PrxTreeView()
         h_splitter_0.add_widget(self._obj_tree_viewer_0)
         h_splitter_0.set_stretches([1, 2])
         #
@@ -58,14 +58,14 @@ class AbsPnlViewerForShaderDcc(
         #
         self._prx_dcc_obj_tree_view_add_opt = gui_prx_scripts.GuiPrxScpForTreeAdd(
             prx_tree_view=self._obj_tree_viewer_0,
-            prx_tree_item_cls=prx_widgets.PrxObjTreeItem,
-            dcc_namespace=self.DCC_NAMESPACE
+            prx_tree_item_cls=gui_prx_widgets.PrxObjTreeItem,
+            dcc_namespace=self.GUI_NAMESPACE
         )
         #
         self._prx_dcc_obj_tree_view_selection_opt = gui_prx_scripts.GuiPrxScpForTreeSelection(
             prx_tree_view=self._obj_tree_viewer_0,
             dcc_selection_cls=self.DCC_SELECTION_CLS,
-            dcc_namespace=self.DCC_NAMESPACE
+            dcc_namespace=self.GUI_NAMESPACE
         )
         self._obj_tree_viewer_0.connect_item_select_changed_to(
             self._prx_dcc_obj_tree_view_selection_opt.set_select
@@ -73,13 +73,13 @@ class AbsPnlViewerForShaderDcc(
         #
         self._prx_dcc_obj_tree_view_gain_opt = gui_prx_scripts.GuiPrxScpForTreeGain(
             prx_tree_view=self._obj_tree_viewer_0,
-            dcc_namespace=self.DCC_NAMESPACE
+            dcc_namespace=self.GUI_NAMESPACE
         )
         #
         self._prx_dcc_obj_tree_view_tag_filter_opt = gui_prx_scripts.GuiPrxScpForTreeTagFilter(
             prx_tree_view_src=self._filter_tree_viewer_0,
             prx_tree_view_tgt=self._obj_tree_viewer_0,
-            prx_tree_item_cls=prx_widgets.PrxObjTreeItem
+            prx_tree_item_cls=gui_prx_widgets.PrxObjTreeItem
         )
 
     def refresh_all_fnc(self):
@@ -124,14 +124,14 @@ class AbsPnlViewerForShaderDcc(
 
 
 class AbsPnlViewerForMaterialDcc(
-    prx_widgets.PrxSessionWindow
+    gui_prx_widgets.PrxSessionWindow
 ):
     DCC_NODE_CLS = None
     DCC_SHAPE_OBJ_CLS = None
     #
     DCC_SCENE_CLS = None
     DCC_SCENE_OPT_CLS = None
-    DCC_NAMESPACE = None
+    GUI_NAMESPACE = None
     #
     DCC_SELECTION_CLS = None
     DCC_STAGE_SELECTION_CLS = None
@@ -165,15 +165,15 @@ class AbsPnlViewerForMaterialDcc(
         self.refresh_all_fnc()
 
     def _set_viewer_groups_build_(self):
-        expand_box_0 = prx_widgets.PrxHToolGroup()
+        expand_box_0 = gui_prx_widgets.PrxHToolGroup()
         expand_box_0.set_name('viewers')
         expand_box_0.set_expanded(True)
         self.add_widget(expand_box_0)
-        h_splitter_0 = prx_widgets.PrxHSplitter()
+        h_splitter_0 = gui_prx_widgets.PrxHSplitter()
         expand_box_0.add_widget(h_splitter_0)
-        self._filter_tree_viewer_0 = prx_widgets.PrxTreeView()
+        self._filter_tree_viewer_0 = gui_prx_widgets.PrxTreeView()
         h_splitter_0.add_widget(self._filter_tree_viewer_0)
-        self._obj_tree_viewer_0 = prx_widgets.PrxTreeView()
+        self._obj_tree_viewer_0 = gui_prx_widgets.PrxTreeView()
         h_splitter_0.add_widget(self._obj_tree_viewer_0)
         h_splitter_0.set_stretches([1, 2])
         #
@@ -192,14 +192,14 @@ class AbsPnlViewerForMaterialDcc(
         #
         self._prx_dcc_obj_tree_view_add_opt = gui_prx_scripts.GuiPrxScpForTreeAdd1(
             prx_tree_view=self._obj_tree_viewer_0,
-            prx_tree_item_cls=prx_widgets.PrxObjTreeItem,
-            dcc_namespace=self.DCC_NAMESPACE
+            prx_tree_item_cls=gui_prx_widgets.PrxObjTreeItem,
+            dcc_namespace=self.GUI_NAMESPACE
         )
         #
         self._prx_dcc_obj_tree_view_selection_opt = gui_prx_scripts.GuiPrxScpForTreeSelection(
             prx_tree_view=self._obj_tree_viewer_0,
             dcc_selection_cls=self.DCC_STAGE_SELECTION_CLS,
-            dcc_namespace=self.DCC_NAMESPACE
+            dcc_namespace=self.GUI_NAMESPACE
         )
         self._obj_tree_viewer_0.connect_item_select_changed_to(
             self._prx_dcc_obj_tree_view_selection_opt.set_select
@@ -207,24 +207,24 @@ class AbsPnlViewerForMaterialDcc(
         #
         self._prx_dcc_obj_tree_view_gain_opt = gui_prx_scripts.GuiPrxScpForTreeGain(
             prx_tree_view=self._obj_tree_viewer_0,
-            dcc_namespace=self.DCC_NAMESPACE
+            dcc_namespace=self.GUI_NAMESPACE
         )
         #
         self._prx_dcc_obj_tree_view_tag_filter_opt = gui_prx_scripts.GuiPrxScpForTreeTagFilter(
             prx_tree_view_src=self._filter_tree_viewer_0,
             prx_tree_view_tgt=self._obj_tree_viewer_0,
-            prx_tree_item_cls=prx_widgets.PrxObjTreeItem
+            prx_tree_item_cls=gui_prx_widgets.PrxObjTreeItem
         )
         self._prx_dcc_obj_tree_view_tag_filter_opt.set_dcc_selection_args(
             dcc_selection_cls=self.DCC_SELECTION_CLS,
-            dcc_namespace=self.DCC_NAMESPACE
+            dcc_namespace=self.GUI_NAMESPACE
         )
         self._filter_tree_viewer_0.connect_item_select_changed_to(
             self._prx_dcc_obj_tree_view_tag_filter_opt.set_select
         )
 
     def _set_configure_groups_build_(self):
-        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         self.add_widget(self._options_prx_node)
         #
         self._options_prx_node.create_ports_by_data(

@@ -417,9 +417,9 @@ class PrcBaseMtd(object):
 
     @classmethod
     def execute_with_result(cls, cmd_script, **kwargs):
-        if _base.SysBaseMtd.get_is_windows():
+        if _base.BscSystem.get_is_windows():
             cls.execute_with_result_in_windows(cmd_script, **kwargs)
-        elif _base.SysBaseMtd.get_is_linux():
+        elif _base.BscSystem.get_is_linux():
             cls.execute_with_result_in_linux(cmd_script, **kwargs)
 
     @classmethod

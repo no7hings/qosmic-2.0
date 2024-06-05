@@ -1090,7 +1090,7 @@ class StgConnector(object):
 
     @classmethod
     def get_current_stg_user(cls):
-        return StgConnector().get_stg_user(user=bsc_core.SysBaseMtd.get_user_name())
+        return StgConnector().get_stg_user(user=bsc_core.BscSystem.get_user_name())
 
     @classmethod
     def generate_stg_filter_keys(cls, stg_obj, fields):

@@ -25,7 +25,7 @@ class AbsRsvAppDef(object):
         self._rsv_project = rsv_project
         #
         self._project = rsv_project.get_name()
-        self._platform = bsc_core.SysBaseMtd.get_platform()
+        self._platform = bsc_core.BscSystem.get_platform()
         #
         if application == 'python':
             self._application = 'maya'
@@ -45,7 +45,7 @@ class AbsRsvAppDef(object):
         self._configure = configure
         #
         self._variants = dict(
-            home=bsc_core.SysBaseMtd.get_home_directory(),
+            home=bsc_core.BscSystem.get_home_directory(),
             project=self._project,
             platfrom=self._platform,
             application=self._application
@@ -112,7 +112,7 @@ class AbsRsvAppDef(object):
         return self._configure.get('package-file-patterns') or []
 
     def _get_configure_root_patterns(self):
-        platform = bsc_core.SysBaseMtd.get_platform()
+        platform = bsc_core.BscSystem.get_platform()
         return self._configure.get('configure-root-patterns.{}'.format(platform)) or []
 
     def _get_configure_file_patterns(self):

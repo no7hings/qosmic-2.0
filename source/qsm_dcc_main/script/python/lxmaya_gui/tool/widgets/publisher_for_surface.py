@@ -5,7 +5,7 @@ import lxmaya.dcc.objects as mya_dcc_objects
 
 
 class ValidatorOpt(pbs_gui_abstracts.AbsValidatorOpt):
-    DCC_NAMESPACE = 'maya'
+    GUI_NAMESPACE = 'maya'
     DCC_NODE_CLS = mya_dcc_objects.Node
     DCC_COMPONENT_CLS = mya_dcc_objects.Component
     DCC_SELECTION_CLS = mya_dcc_objects.Selection

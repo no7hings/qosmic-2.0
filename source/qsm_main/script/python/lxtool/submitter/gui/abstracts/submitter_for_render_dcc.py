@@ -1,11 +1,11 @@
 # coding:utf-8
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.proxy.abstracts as gui_prx_abstracts
 
 
 class _GuiBaseOpt(object):
-    DCC_NAMESPACE = 'render submitter'
+    GUI_NAMESPACE = 'render submitter'
 
     def __init__(self, window, session):
         self._window = window
@@ -20,13 +20,13 @@ class _GuiTagOpt(
 
     def __init__(self, window, session, prx_tree_view):
         super(_GuiTagOpt, self).__init__(window, session)
-        self._init_tree_view_as_tag_opt_(prx_tree_view, self.DCC_NAMESPACE)
+        self._init_tree_view_as_tag_opt_(prx_tree_view, self.GUI_NAMESPACE)
 
         self._index_thread_batch = 0
 
 
-class AbsPnlSubmitterForAssetRenderDcc(prx_widgets.PrxSessionWindow):
-    DCC_NAMESPACE = None
+class AbsPnlSubmitterForAssetRenderDcc(gui_prx_widgets.PrxSessionWindow):
+    GUI_NAMESPACE = None
 
     def __init__(self, session, *args, **kwargs):
         super(AbsPnlSubmitterForAssetRenderDcc, self).__init__(session, *args, **kwargs)
@@ -36,18 +36,18 @@ class AbsPnlSubmitterForAssetRenderDcc(prx_widgets.PrxSessionWindow):
         self._item_icon_frame_size = self._session.gui_configure.get('item_icon_frame_size')
         self._item_icon_size = self._session.gui_configure.get('item_icon_size')
 
-        sa_0 = prx_widgets.PrxVScrollArea()
+        sa_0 = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(sa_0)
 
-        ep_0 = prx_widgets.PrxHToolGroup()
+        ep_0 = gui_prx_widgets.PrxHToolGroup()
         sa_0.add_widget(ep_0)
         ep_0.set_expanded(True)
         ep_0.set_name('render nodes')
 
-        h_s_0 = prx_widgets.PrxHSplitter()
+        h_s_0 = gui_prx_widgets.PrxHSplitter()
         ep_0.add_widget(h_s_0)
 
-        self._prx_tree_view_for_filter = prx_widgets.PrxTreeView()
+        self._prx_tree_view_for_filter = gui_prx_widgets.PrxTreeView()
         h_s_0.add_widget(self._prx_tree_view_for_filter)
         self._prx_tree_view_for_filter.create_header_view(
             [('name', 3)],
@@ -58,7 +58,7 @@ class AbsPnlSubmitterForAssetRenderDcc(prx_widgets.PrxSessionWindow):
             self, self._session, self._prx_tree_view_for_filter
         )
 
-        self._result_list_view = prx_widgets.PrxListView()
+        self._result_list_view = gui_prx_widgets.PrxListView()
         self._result_list_view.set_view_list_mode()
         h_s_0.add_widget(self._result_list_view)
         h_s_0.set_fixed_size_at(0, 240)
@@ -82,7 +82,7 @@ class AbsPnlSubmitterForAssetRenderDcc(prx_widgets.PrxSessionWindow):
             self.gui_refresh_all_render_nodes
         )
 
-        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         sa_0.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.options'),

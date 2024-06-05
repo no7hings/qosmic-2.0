@@ -13,7 +13,7 @@ from .wrap import *
 
 from . import configure as _configure
 
-if bsc_core.SysBaseMtd.get_is_windows():
+if bsc_core.BscSystem.get_is_windows():
     # noinspection PyUnresolvedReferences
     NO_WINDOW = subprocess.STARTUPINFO()
     NO_WINDOW.dwFlags |= subprocess.STARTF_USESHOWWINDOW

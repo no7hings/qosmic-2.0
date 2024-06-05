@@ -14,7 +14,7 @@ class Undo(object):
                 _method = fnc(*args, **kwargs)
                 return _method
             except Exception:
-                bsc_core.ExceptionMtd.set_print()
+                bsc_core.BscException.set_print()
             #
             finally:
                 cmds.undoInfo(closeChunk=1, undoName=fnc.__name__)

@@ -9,17 +9,17 @@ import lxgui.core as gui_core
 
 import lxgui.proxy.abstracts as gui_prx_abstracts
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
 class _GuiTextureOpt(gui_prx_abstracts.AbsGuiPrxTreeViewOpt):
-    DCC_NAMESPACE = 'texture'
+    GUI_NAMESPACE = 'texture'
     DCC_GROUP_NAMESPACE = 'texture_type'
 
     def __init__(self, window, session, prx_tree_view):
         self._window = window
         self._session = session
-        self._init_tree_view_opt_(prx_tree_view, self.DCC_NAMESPACE)
+        self._init_tree_view_opt_(prx_tree_view, self.GUI_NAMESPACE)
 
     def gui_add_root(self):
         path = '/'
@@ -69,7 +69,7 @@ class _GuiTextureOpt(gui_prx_abstracts.AbsGuiPrxTreeViewOpt):
 
             self.gui_register(path, prx_item)
             prx_item.set_gui_dcc_obj(
-                file_opt, self.DCC_NAMESPACE
+                file_opt, self.GUI_NAMESPACE
             )
 
             prx_item.set_tool_tip(file_opt.get_path())
@@ -87,12 +87,12 @@ class _GuiTextureOpt(gui_prx_abstracts.AbsGuiPrxTreeViewOpt):
                 i_items_checked = [i for i in i_v.get_children() if i.get_is_checked()]
                 if i_items_checked:
                     i_item = i_items_checked[0]
-                    i_file_opt = i_item.get_gui_dcc_obj(self.DCC_NAMESPACE)
+                    i_file_opt = i_item.get_gui_dcc_obj(self.GUI_NAMESPACE)
                     dict_[i_texture_type] = i_file_opt.get_path()
         return dict_
 
 
-class AbsPnlBuilderForTexture(prx_widgets.PrxSessionWindow):
+class AbsPnlBuilderForTexture(gui_prx_widgets.PrxSessionWindow):
     def __init__(self, session, *args, **kwargs):
         super(AbsPnlBuilderForTexture, self).__init__(session, *args, **kwargs)
 
@@ -100,16 +100,16 @@ class AbsPnlBuilderForTexture(prx_widgets.PrxSessionWindow):
         self._texture_name = None
 
     def gui_setup_window(self):
-        sa_1 = prx_widgets.PrxVScrollArea()
+        sa_1 = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(sa_1)
 
-        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         sa_1.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.main_options'),
         )
 
-        self.__tip = prx_widgets.PrxTextBrowser()
+        self.__tip = gui_prx_widgets.PrxTextBrowser()
         sa_1.add_widget(self.__tip)
         self.__tip.set_focus_enable(False)
 
@@ -117,7 +117,7 @@ class AbsPnlBuilderForTexture(prx_widgets.PrxSessionWindow):
             self._session.configure.get('build.node.main_content')
         )
 
-        self.__next_button = prx_widgets.PrxPressButton()
+        self.__next_button = gui_prx_widgets.PrxPressButton()
         self.__next_button.set_name('next')
         self.add_button(self.__next_button)
         self.__next_button.connect_press_clicked_to(self.__do_next)
@@ -131,10 +131,10 @@ class AbsPnlBuilderForTexture(prx_widgets.PrxSessionWindow):
 
     def __gui_build_create_layer(self):
         layer_widget = self.create_layer_widget('create_layer', 'Create')
-        s = prx_widgets.PrxVScrollArea()
+        s = gui_prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(s)
 
-        self._prx_tree_view = prx_widgets.PrxTreeView()
+        self._prx_tree_view = gui_prx_widgets.PrxTreeView()
         s.add_widget(self._prx_tree_view)
 
         self._prx_tree_view.create_header_view(
@@ -146,10 +146,10 @@ class AbsPnlBuilderForTexture(prx_widgets.PrxSessionWindow):
             self, self._session, self._prx_tree_view
         )
 
-        tool_bar = prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolBar()
         layer_widget.add_widget(tool_bar.widget)
         tool_bar.set_expanded(True)
-        button = prx_widgets.PrxPressButton()
+        button = gui_prx_widgets.PrxPressButton()
         tool_bar.add_widget(button)
         button.set_name('Apply')
         button.connect_press_clicked_to(
@@ -161,7 +161,7 @@ class AbsPnlBuilderForTexture(prx_widgets.PrxSessionWindow):
         if texture_assign:
             texture_name = self._texture_name
             node_path = self._options_prx_node.get('node')
-            if bsc_core.SysApplicationMtd.get_is_katana():
+            if bsc_core.BasApplication.get_is_katana():
                 import lxkatana.scripts as ktn_scripts
 
                 ktn_scripts.ScpTextureBuildForCreate(

@@ -134,7 +134,7 @@ class GpuInstancesQuery(object):
 
     def do_update(self):
         data = self.get_data()
-        hash_key = bsc_core.HashMtd.to_hash_key(data)
+        hash_key = bsc_core.BscHash.to_hash_key(data)
         if self._cache_hash_key is None:
             self.do_update_by(data)
             self._cache_hash_key = hash_key

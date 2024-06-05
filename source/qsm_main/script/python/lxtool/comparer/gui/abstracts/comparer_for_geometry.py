@@ -7,7 +7,7 @@ import lxgeneral.dcc.core as gnl_dcc_core
 # gui
 import lxgui.core as gui_core
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.proxy.scripts as gui_prx_scripts
 # resolver
@@ -15,7 +15,7 @@ import lxresolver.core as rsv_core
 
 
 class AbsDccComparerOpt(object):
-    DCC_NAMESPACE = None
+    GUI_NAMESPACE = None
     DCC_NODE_CLS = None
     DCC_COMPONENT_CLS = None
     DCC_SELECTION_CLS = None
@@ -33,7 +33,7 @@ class AbsDccComparerOpt(object):
         self._filter_opt = gui_prx_scripts.GuiPrxScpForTreeTagFilter(
             prx_tree_view_src=self._prx_tree_view_for_filter,
             prx_tree_view_tgt=self._result_tree_view,
-            prx_tree_item_cls=prx_widgets.PrxObjTreeItem
+            prx_tree_item_cls=gui_prx_widgets.PrxObjTreeItem
         )
 
     def restore_all(self):
@@ -63,7 +63,7 @@ class AbsDccComparerOpt(object):
         )
         self._item_dict[path_src] = prx_item_src
         prx_item_src.set_gui_dcc_obj(
-            dcc_obj_src, self.DCC_NAMESPACE
+            dcc_obj_src, self.GUI_NAMESPACE
         )
 
         self._filter_opt.register(
@@ -126,7 +126,7 @@ class AbsDccComparerOpt(object):
         pass
 
 
-class AbsPnlComparerForAssetGeometry(prx_widgets.PrxSessionWindow):
+class AbsPnlComparerForAssetGeometry(gui_prx_widgets.PrxSessionWindow):
     ERROR_STATUS = [
         gnl_dcc_core.DccMeshCheckStatus.Deletion,
         gnl_dcc_core.DccMeshCheckStatus.Addition,
@@ -143,28 +143,28 @@ class AbsPnlComparerForAssetGeometry(prx_widgets.PrxSessionWindow):
     DCC_COMPARER_OPT_CLS = None
 
     def gui_setup_window(self):
-        s = prx_widgets.PrxVScrollArea()
+        s = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(s)
 
-        e_g = prx_widgets.PrxHToolGroup()
+        e_g = gui_prx_widgets.PrxHToolGroup()
         s.add_widget(e_g)
         e_g.set_name('viewers')
         e_g.set_expanded(True)
 
-        h_s = prx_widgets.PrxHSplitter()
+        h_s = gui_prx_widgets.PrxHSplitter()
         e_g.add_widget(h_s)
-        v_s = prx_widgets.PrxVSplitter()
+        v_s = gui_prx_widgets.PrxVSplitter()
         h_s.add_widget(v_s)
-        self._prx_tree_view_for_filter = prx_widgets.PrxTreeView()
+        self._prx_tree_view_for_filter = gui_prx_widgets.PrxTreeView()
         v_s.add_widget(self._prx_tree_view_for_filter)
         self._prx_tree_view_for_filter.create_header_view(
             [('name', 2), ('count', 1)],
             self.get_definition_window_size()[0]*(1.0/3.0)-48
         )
         #
-        self._sector_chart = prx_widgets.PrxSectorChart()
+        self._sector_chart = gui_prx_widgets.PrxSectorChart()
         v_s.add_widget(self._sector_chart)
-        self._result_tree_view = prx_widgets.PrxTreeView()
+        self._result_tree_view = gui_prx_widgets.PrxTreeView()
         h_s.add_widget(self._result_tree_view)
         self._result_tree_view.create_header_view(
             [('name', 2), ('description', 1), ('target', 1)],
@@ -175,7 +175,7 @@ class AbsPnlComparerForAssetGeometry(prx_widgets.PrxSessionWindow):
             self._prx_tree_view_for_filter, self._result_tree_view
         )
         #
-        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         s.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.options'),

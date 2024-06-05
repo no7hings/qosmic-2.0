@@ -22,7 +22,7 @@ class GuiPrxScpForRsvTask(object):
         def build_fnc_(data_):
             self._set_show_deferred_(data_)
 
-        prx_item = self._prx_list_view.create_item()
+        prx_item = self._prx_list_view.create_item_widget()
         prx_item.set_gui_dcc_obj(
             rsv_task, namespace=self._namespace
         )
@@ -37,7 +37,7 @@ class GuiPrxScpForRsvTask(object):
 
 
 class GuiPrxScpForResolver(object):
-    DCC_NAMESPACE = 'resolver'
+    GUI_NAMESPACE = 'resolver'
     ROOT_NAME = 'All'
 
     def __init__(self, resolver, prx_tree_view, prx_tree_item_cls):
@@ -70,7 +70,7 @@ class GuiPrxScpForResolver(object):
                 icon=gui_core.GuiIcon.get('database/all'),
             )
             self.gui_register(path, prx_item)
-            prx_item.set_gui_dcc_obj(self._resolver, namespace=self.DCC_NAMESPACE)
+            prx_item.set_gui_dcc_obj(self._resolver, namespace=self.GUI_NAMESPACE)
             prx_item.set_expanded(True)
             prx_item.set_checked(False)
             return True, prx_item
@@ -106,7 +106,7 @@ class GuiPrxScpForResolver(object):
                 [type_name, name]
             )
             obj.set_obj_gui(prx_item)
-            prx_item.set_gui_dcc_obj(obj, namespace=self.DCC_NAMESPACE)
+            prx_item.set_gui_dcc_obj(obj, namespace=self.GUI_NAMESPACE)
             self.gui_register(path, prx_item)
             #
             if use_show_thread is True:
@@ -127,7 +127,7 @@ class GuiPrxScpForResolver(object):
             return type_name
 
         #
-        obj = prx_item.get_gui_dcc_obj(namespace=self.DCC_NAMESPACE)
+        obj = prx_item.get_gui_dcc_obj(namespace=self.GUI_NAMESPACE)
         obj_type_name = obj.type_name
         name = obj.name
         #

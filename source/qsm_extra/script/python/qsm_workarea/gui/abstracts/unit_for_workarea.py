@@ -13,13 +13,13 @@ import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.widgets as qt_widgets
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.proxy.abstracts as prx_abstracts
 
 
 class _GuiBaseOpt(object):
-    DCC_NAMESPACE = 'storage'
+    GUI_NAMESPACE = 'storage'
 
     def __init__(self, window, session):
         self._window = window
@@ -32,7 +32,7 @@ class _GuiDirectoryOpt(
 ):
     def __init__(self, window, session, prx_tree_view):
         super(_GuiDirectoryOpt, self).__init__(window, session)
-        self._init_tree_view_opt_(prx_tree_view, self.DCC_NAMESPACE)
+        self._init_tree_view_opt_(prx_tree_view, self.GUI_NAMESPACE)
 
         self._variants = dict()
 
@@ -187,7 +187,7 @@ class _GuiDirectoryOpt(
     def gui_get_current_directory(self):
         _ = self._prx_tree_view.get_current_item()
         if _:
-            directory_opt = _.get_gui_dcc_obj(self.DCC_NAMESPACE)
+            directory_opt = _.get_gui_dcc_obj(self.GUI_NAMESPACE)
             if directory_opt != self._root_opt:
                 return directory_opt
 
@@ -240,7 +240,7 @@ class _GuiFileOpt(
 
     def __init__(self, window, session, prx_list_view):
         super(_GuiFileOpt, self).__init__(window, session)
-        self._init_list_view_as_file_opt_(prx_list_view, self.DCC_NAMESPACE)
+        self._init_list_view_as_file_opt_(prx_list_view, self.GUI_NAMESPACE)
 
         self._item_frame_size = 200, 100+16*2
         self._item_image_frame_size = 200, 100
@@ -316,7 +316,7 @@ class _GuiFileOpt(
         file_name = file_opt.name
 
         if self.gui_is_exists(file_path) is False:
-            prx_item_widget = self._prx_list_view.create_item()
+            prx_item_widget = self._prx_list_view.create_item_widget()
             self._item_dict[file_path] = prx_item_widget
             version = file_opt.properties.version
             # prx_item_widget.set_names([version])
@@ -329,7 +329,7 @@ class _GuiFileOpt(
                 cache_fnc_, build_fnc_
             )
             prx_item_widget.set_gui_dcc_obj(
-                file_opt, namespace=self.DCC_NAMESPACE
+                file_opt, namespace=self.GUI_NAMESPACE
             )
             return prx_item_widget
         return self.gui_get(file_path)
@@ -371,13 +371,13 @@ class AbsPrxUnitForWorkarea(prx_abstracts.AbsPrxWidget):
         self._qt_title_label._set_name_align_h_center_()
         self._qt_title_label.setFixedHeight(20)
         #
-        prx_sca = prx_widgets.PrxVScrollArea()
+        prx_sca = gui_prx_widgets.PrxVScrollArea()
         qt_lot.addWidget(prx_sca._qt_widget)
 
-        prx_spt_h = prx_widgets.PrxHSplitter()
+        prx_spt_h = gui_prx_widgets.PrxHSplitter()
         prx_sca.add_widget(prx_spt_h)
 
-        self._directory_prx_tree_view = prx_widgets.PrxTreeView()
+        self._directory_prx_tree_view = gui_prx_widgets.PrxTreeView()
         prx_spt_h.add_widget(self._directory_prx_tree_view)
 
         self._root = None
@@ -386,33 +386,33 @@ class AbsPrxUnitForWorkarea(prx_abstracts.AbsPrxWidget):
         self._directory_prx_tree_view.connect_item_select_changed_to(self.do_gui_refresh_files)
 
         # self._prx_version_file_view = PrxViewForFile()
-        self._file_prx_list_view = prx_widgets.PrxListView()
+        self._file_prx_list_view = gui_prx_widgets.PrxListView()
         prx_spt_h.add_widget(self._file_prx_list_view)
 
         self._gui_file_opt = _GuiFileOpt(self, None, self._file_prx_list_view)
 
         prx_spt_h.set_fixed_size_at(0, 200)
 
-        self._bottom_prx_tool_bar = prx_widgets.PrxHToolBar()
+        self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
         qt_lot.addWidget(self._bottom_prx_tool_bar._qt_widget)
         self._bottom_prx_tool_bar.set_expanded(True)
         self._bottom_prx_tool_bar.set_align_right()
 
-        self._save_prx_button = prx_widgets.PrxPressButton()
+        self._save_prx_button = gui_prx_widgets.PrxPressButton()
         self._bottom_prx_tool_bar.add_widget(self._save_prx_button)
         self._save_prx_button.set_name('Save')
         self._save_prx_button.set_icon_name('tool/save')
         self._save_prx_button.set_width(96)
         self._save_prx_button.connect_press_clicked_to(self.do_save)
 
-        self._save_to_prx_button = prx_widgets.PrxPressButton()
+        self._save_to_prx_button = gui_prx_widgets.PrxPressButton()
         self._bottom_prx_tool_bar.add_widget(self._save_to_prx_button)
         self._save_to_prx_button.set_name('Save to')
         self._save_to_prx_button.set_icon_name('tool/save-to')
         self._save_to_prx_button.set_width(96)
         self._save_to_prx_button.connect_press_clicked_to(self.do_save_to)
 
-        self._save_new_prx_button = prx_widgets.PrxPressButton()
+        self._save_new_prx_button = gui_prx_widgets.PrxPressButton()
         self._bottom_prx_tool_bar.add_widget(self._save_new_prx_button)
         self._save_new_prx_button.set_name('Save New')
         self._save_new_prx_button.set_icon_name('tool/save-new')

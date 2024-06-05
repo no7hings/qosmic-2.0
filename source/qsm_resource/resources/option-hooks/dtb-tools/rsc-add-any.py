@@ -9,7 +9,7 @@ import lxbasic.storage as bsc_storage
 
 import lxgui.core as gui_core
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxbasic.database as bsc_database
 
@@ -260,7 +260,7 @@ class ScpRscAddAnyOpt(object):
                 )
 
 
-class PnlRscTextureAddTool(prx_widgets.PrxSessionWindow):
+class PnlRscTextureAddTool(gui_prx_widgets.PrxSessionWindow):
     IMAGE_KEYS = [
         'preview'
     ]
@@ -302,21 +302,21 @@ class PnlRscTextureAddTool(prx_widgets.PrxSessionWindow):
                 ScpRscAddAnyOpt(self, self._options, i_unr_resource).execute()
 
     def gui_setup_window(self):
-        s_0 = prx_widgets.PrxVScrollArea()
+        s_0 = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(s_0)
-        h_s = prx_widgets.PrxHSplitter()
+        h_s = gui_prx_widgets.PrxHSplitter()
         s_0.add_widget(h_s)
         #
-        s_1 = prx_widgets.PrxVScrollArea()
+        s_1 = gui_prx_widgets.PrxVScrollArea()
         h_s.add_widget(s_1)
         #
-        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         s_1.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.options'),
         )
         #
-        self._tip_text_browser = prx_widgets.PrxTextBrowser()
+        self._tip_text_browser = gui_prx_widgets.PrxTextBrowser()
         s_1.add_widget(self._tip_text_browser)
         self._tip_text_browser.set_font_size(12)
         self._tip_text_browser.set_content(
@@ -339,16 +339,16 @@ class PnlRscTextureAddTool(prx_widgets.PrxSessionWindow):
         self._options_prx_node.set('scheme.name', self._session.configure.get_key_names_at('build.schemes'))
         self._options_prx_node.set('scheme.load', self.load_scheme_cbk)
         #
-        self._node_prx_tree_view = prx_widgets.PrxNGTree()
+        self._node_prx_tree_view = gui_prx_widgets.PrxNGTree()
         h_s.add_widget(self._node_prx_tree_view)
         h_s.set_fixed_size_at(0, 480)
 
-        self._match_button = prx_widgets.PrxPressButton()
+        self._match_button = gui_prx_widgets.PrxPressButton()
         self._match_button.set_name('match')
         self.add_button(self._match_button)
         self._match_button.connect_press_clicked_to(self.gui_refresh)
 
-        self._add_button = prx_widgets.PrxPressButton()
+        self._add_button = gui_prx_widgets.PrxPressButton()
         self._add_button.set_name('add')
         self.add_button(self._add_button)
         self._add_button.connect_press_clicked_to(self.apply_fnc)

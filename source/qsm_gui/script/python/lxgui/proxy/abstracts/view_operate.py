@@ -53,7 +53,9 @@ class AbsGuiPrxTreeViewOpt(object):
         return self._item_dict.get(path) is not None
 
     def gui_get(self, path):
-        return self._item_dict[path]
+        if path:
+            return self._item_dict[path]
+        return self._prx_tree_view
 
     def gui_register(self, path, prx_item):
         self._item_dict[path] = prx_item

@@ -9,43 +9,176 @@ from ... import core as gui_core
 # qt
 from ..core.wrap import *
 
-from .. import core as gui_qt_core
+from .. import core as _qt_core
 
-from .. import abstracts as gui_qt_abstracts
+from .. import abstracts as _qt_abstracts
 # qt widgets
-from . import utility as gui_qt_wgt_utility
+from . import utility as _utility
 
-from . import drag as gui_qt_wgt_drag
+from . import drag as _drag
+
+
+class QtListWidgetItem(
+    QtWidgets.QListWidgetItem,
+    #
+    _qt_abstracts.AbsQtNamesBaseDef,
+    _qt_abstracts.AbsQtMenuBaseDef,
+    #
+    _qt_abstracts.AbsQtItemFilterDef,
+    #
+    _qt_abstracts.AbsQtStateDef,
+    #
+    _qt_abstracts.AbsQtDagDef,
+    _qt_abstracts.AbsQtVisibleDef,
+    #
+    _qt_abstracts.AbsQtShowBaseForVirtualItemDef,
+    _qt_abstracts.AbsQtItemVisibleConnectionDef,
+):
+    def update(self):
+        pass
+
+    def _refresh_widget_all_(self, *args, **kwargs):
+        item_widget = self._get_item_widget_()
+        if item_widget is not None:
+            item_widget._refresh_widget_all_(*args, **kwargs)
+
+    def _refresh_widget_draw_(self):
+        item_widget = self._get_item_widget_()
+        if item_widget is not None:
+            item_widget._refresh_widget_draw_()
+
+    def __init__(self, *args, **kwargs):
+        super(QtListWidgetItem, self).__init__(*args, **kwargs)
+        self.setFlags(
+            QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsEnabled
+        )
+        self._init_names_base_def_(self)
+        self._init_menu_base_def_(self)
+        self._init_show_base_for_virtual_item_def_(self)
+        #
+        self._visible_tgt_key = None
+        self._init_item_filter_extra_def_(self)
+        #
+        self._set_state_def_init_()
+        #
+        self._set_dag_def_init_()
+        self._init_visible_base_def_(self)
+        #
+        self._set_item_visible_connection_def_init_()
+
+        self._signals = _qt_core.QtItemSignals()
+
+        self._is_checked = False
+
+        self._sort_name_key = ''
+        self._sort_number_key = 0
+
+    def setData(self, role, value):
+        if role == QtCore.Qt.CheckStateRole:
+            pass
+        #
+        super(QtListWidgetItem, self).setData(role, value)
+
+    def _set_checked_(self, boolean):
+        self._is_checked = boolean
+        #
+        self._signals.check_clicked.emit(self, 0)
+        self._signals.check_toggled.emit(self, 0, boolean)
+
+    def _update_checked_from_user_(self, boolean):
+        self._set_checked_(boolean)
+        self.listWidget().item_checked.emit(self, 0)
+
+    def _get_is_checked_(self):
+        return self._is_checked
+
+    def _get_item_is_hidden_(self):
+        return self.isHidden()
+
+    def _set_item_widget_(self, widget):
+        list_widget = self.listWidget()
+        list_widget.setItemWidget(self, widget)
+
+    def _get_item_widget_(self):
+        list_widget = self.listWidget()
+        return list_widget.itemWidget(self)
+
+    def _set_visible_tgt_key_(self, key):
+        self._visible_tgt_key = key
+
+    def _get_visible_tgt_key_(self):
+        return self._visible_tgt_key
+
+    def _initialize_item_show_(self):
+        self._setup_item_show_(self.listWidget())
+
+    # def _get_keyword_filter_keys_tgt_(self):
+    #     item_widget = self._get_item_widget_()
+    #     if item_widget is not None:
+    #         item_widget._get_name_texts_()
+    #     return []
+    # show
+    def _set_view_(self, widget):
+        self._list_widget = widget
+
+    def _get_view_(self):
+        return self.listWidget()
+
+    def _get_item_is_viewport_showable_(self):
+        item = self
+        view = self.listWidget()
+        #
+        self._checkout_item_show_loading_()
+        return view._get_view_item_viewport_showable_(item)
+
+    def _set_item_widget_visible_(self, boolean):
+        item_widget = self._get_item_widget_()
+        if item_widget is not None:
+            self._get_item_widget_().setVisible(boolean)
+
+    def _set_sort_number_key_(self, value):
+        self._sort_number_key = str(value).zfill(4)
+
+        if self._get_view_()._get_sort_mode_() == gui_core.GuiSortMode.Number:
+            self.setText(self._sort_number_key)
+
+    def _set_sort_name_key_(self, value):
+        if isinstance(value, six.text_type):
+            value = value.encode('utf-8')
+        self._sort_name_key = value
+
+        if self._get_view_()._get_sort_mode_() == gui_core.GuiSortMode.Name:
+            self.setText(self._sort_name_key)
 
 
 class QtListItemWidget(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtWidgetBaseDef,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
-    gui_qt_abstracts.AbsQtTypeDef,
-    gui_qt_abstracts.AbsQtIndexBaseDef,
-    gui_qt_abstracts.AbsQtImageBaseDef,
-    gui_qt_abstracts.AbsQtMovieBaseDef,
+    _qt_abstracts.AbsQtWidgetBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtTypeDef,
+    _qt_abstracts.AbsQtIndexBaseDef,
+    _qt_abstracts.AbsQtImageBaseDef,
+    _qt_abstracts.AbsQtMovieBaseDef,
     #
-    gui_qt_abstracts.AbsQtMenuBaseDef,
+    _qt_abstracts.AbsQtMenuBaseDef,
     #
-    gui_qt_abstracts.AbsQtIconBaseDef,
-    gui_qt_abstracts.AbsQtIconsBaseDef,
-    gui_qt_abstracts.AbsQtNamesBaseDef,
+    _qt_abstracts.AbsQtIconBaseDef,
+    _qt_abstracts.AbsQtIconsBaseDef,
+    _qt_abstracts.AbsQtNamesBaseDef,
     #
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForCheckDef,
-    gui_qt_abstracts.AbsQtActionForPressDef,
-    gui_qt_abstracts.AbsQtPressSelectExtraDef,
-    gui_qt_abstracts.AbsQtActionForDragDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForHoverDef,
+    _qt_abstracts.AbsQtActionForCheckDef,
+    _qt_abstracts.AbsQtActionForPressDef,
+    _qt_abstracts.AbsQtPressSelectExtraDef,
+    _qt_abstracts.AbsQtActionForDragDef,
     #
-    gui_qt_abstracts.AbsQtStateDef,
-    gui_qt_abstracts.AbsQtStatusBaseDef,
+    _qt_abstracts.AbsQtStateDef,
+    _qt_abstracts.AbsQtStatusBaseDef,
     #
-    gui_qt_abstracts.AbsQtItemMovieActionDef,
+    _qt_abstracts.AbsQtItemMovieActionDef,
     #
-    gui_qt_abstracts.AbsQtItemWidgetExtra,
+    _qt_abstracts.AbsQtItemWidgetExtra,
 ):
     viewport_show = qt_signal()
     viewport_hide = qt_signal()
@@ -53,7 +186,7 @@ class QtListItemWidget(
     drag_pressed = qt_signal(tuple)
     drag_released = qt_signal(tuple)
     #
-    QT_MENU_CLS = gui_qt_wgt_utility.QtMenu
+    QT_MENU_CLS = _utility.QtMenu
 
     def _refresh_widget_all_(self, *args, **kwargs):
         self._refresh_widget_draw_geometry_()
@@ -69,7 +202,6 @@ class QtListItemWidget(
 
     def _refresh_widget_draw_geometry_(self):
         self._refresh_widget_frame_draw_geometries_()
-        #
         self._refresh_widget_icon_draw_geometries_()
         self._refresh_widget_image_draw_geometries_()
         self._refresh_widget_name_draw_geometries_()
@@ -244,10 +376,11 @@ class QtListItemWidget(
                 name_x_, name_y_,
                 name_bsc_w, name_bsc_h
             )
+        else:
+            pass
         # icon
         icon_bsc_w, icon_bsc_h = -frm_s, 0
         if self._get_has_icons_() is True or self._check_is_enable is True:
-            #
             icn_frm_w, icn_frm_h = self._icon_frame_draw_size
             icn_x_, icn_y_ = x, y
             # add when check is enable
@@ -376,14 +509,11 @@ class QtListItemWidget(
         #
         self._frame_size = 128, 128
         #
-        self._frame_background_color = gui_qt_core.QtBackgroundColors.Light
+        self._frame_background_color = _qt_core.QtBackgroundColors.Light
         #
         self._is_viewport_show_enable = True
         #
-        self.setFont(gui_qt_core.QtFonts.Default)
-
-        self._sort_name_key = ''
-        self._sort_number_key = 0
+        self.setFont(_qt_core.QtFonts.Default)
 
         self._drag = None
 
@@ -406,7 +536,7 @@ class QtListItemWidget(
                     if self._drag_is_enable is True:
                         self._set_action_flag_(self.ActionFlag.DragMove)
                         #
-                        self._drag = gui_qt_wgt_drag.QtDrag(self)
+                        self._drag = _drag.QtDrag(self)
                         view = self._get_view_()
                         if view._get_is_multiply_selection_() is True:
                             selected_item_widgets = view._get_selected_item_widgets_()
@@ -482,7 +612,7 @@ class QtListItemWidget(
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         #
         x, y = 0, 0
         w, h = self.width(), self.height()
@@ -512,7 +642,7 @@ class QtListItemWidget(
             else:
                 bdr_color = bdr_color_
         else:
-            bdr_color = gui_qt_core.QtBackgroundColors.Transparent
+            bdr_color = _qt_core.QtBackgroundColors.Transparent
         #
         item = self._get_item_()
         if item._item_show_status in {item.ShowStatus.Loading, item.ShowStatus.Waiting}:
@@ -521,11 +651,11 @@ class QtListItemWidget(
                 item._item_show_loading_index
             )
         # else:
-        if self._icon_frame_draw_enable is True:
+        if self._icon_frame_draw_enable is True or self._frame_draw_is_enable is True:
             painter._draw_frame_by_rect_(
                 rect=shadow_rect,
-                border_color=gui_qt_core.QtBorderColors.Transparent,
-                background_color=gui_qt_core.QtBackgroundColors.Shadow,
+                border_color=_qt_core.QtBorderColors.Transparent,
+                background_color=_qt_core.QtBackgroundColors.Shadow,
                 offset=4
             )
         # base
@@ -536,12 +666,20 @@ class QtListItemWidget(
             border_radius=0,
             offset=offset,
         )
+        if self._frame_draw_is_enable is True:
+            painter._draw_frame_by_rect_(
+                rect=self._rect_frame_draw,
+                border_color=_qt_core.QtBorderColors.Transparent,
+                background_color=self._frame_background_color,
+                border_radius=0,
+                offset=offset,
+            )
         # icon frame
         if self._icon_frame_draw_enable is True:
             if self._get_has_icons_() or self._check_is_enable is True:
                 painter._draw_frame_by_rect_(
                     self._icon_frame_draw_rect,
-                    border_color=gui_qt_core.QtBorderColors.Transparent,
+                    border_color=_qt_core.QtBorderColors.Transparent,
                     background_color=self._frame_background_color,
                     offset=offset
                 )
@@ -550,7 +688,7 @@ class QtListItemWidget(
             if self._get_has_names_():
                 painter._draw_frame_by_rect_(
                     self._name_frame_draw_rect,
-                    border_color=gui_qt_core.QtBorderColors.Transparent,
+                    border_color=_qt_core.QtBorderColors.Transparent,
                     background_color=self._frame_background_color,
                     offset=offset
                 )
@@ -559,10 +697,48 @@ class QtListItemWidget(
             if self._get_has_image_():
                 painter._draw_frame_by_rect_(
                     self._image_frame_rect,
-                    border_color=gui_qt_core.QtBorderColors.Transparent,
+                    border_color=_qt_core.QtBorderColors.Transparent,
                     background_color=self._frame_background_color,
                     offset=offset
                 )
+        # image
+        if self._get_has_image_() is True:
+            if self._image_pixmap:
+                painter._draw_pixmap_by_rect_(
+                    rect=self._image_draw_rect,
+                    pixmap=self._image_pixmap,
+                    offset=offset,
+                )
+            # draw by image file
+            elif self._image_file_path:
+                painter._draw_image_use_file_path_by_rect_(
+                    rect=self._image_draw_rect,
+                    file_path=self._image_file_path,
+                    offset=offset
+                )
+            # draw image by text
+            elif self._image_text:
+                painter._draw_image_use_text_by_rect_(
+                    rect=self._image_draw_rect,
+                    text=self._image_text,
+                    border_radius=4,
+                    offset=offset,
+                    border_color=_qt_core.QtBorderColors.Icon,
+                    border_width=2
+                )
+            #
+            if self._image_sub_file_path:
+                painter._draw_image_use_file_path_by_rect_(
+                    rect=self._image_sub_draw_rect,
+                    file_path=self._image_sub_file_path,
+                    offset=offset,
+                    #
+                    draw_frame=True,
+                    background_color=_qt_core.QtBorderColors.Icon,
+                    border_color=_qt_core.QtBorderColors.Icon,
+                    border_radius=4
+                )
+            #
         # check icon
         if self._check_is_enable is True:
             painter._draw_icon_file_by_rect_(
@@ -609,13 +785,13 @@ class QtListItemWidget(
                 text_option = self._name_text_option
                 name_text_dict = self._get_name_text_dict_()
                 if name_text_dict:
-                    painter.setFont(gui_qt_core.QtFonts.Default)
-                    key_text_width = gui_qt_core.GuiQtText.get_draw_width_maximum(
+                    painter.setFont(_qt_core.QtFonts.Default)
+                    key_text_width = _qt_core.GuiQtText.get_draw_width_maximum(
                         painter, self._name_text_dict.keys()
                     )
                     if self._list_widget._get_is_grid_mode_():
                         if self._names_draw_range is not None:
-                            key_text_width = gui_qt_core.GuiQtText.get_draw_width_maximum(
+                            key_text_width = _qt_core.GuiQtText.get_draw_width_maximum(
                                 painter,
                                 self._name_text_dict.keys()[self._names_draw_range[0]:self._names_draw_range[1]]
                             )
@@ -635,51 +811,13 @@ class QtListItemWidget(
                         painter._draw_text_by_rect_(
                             rect=self._get_name_rect_at_(i_name_index),
                             text=self._get_name_text_at_(i_name_index),
-                            font=gui_qt_core.QtFonts.Default,
+                            font=_qt_core.QtFonts.Default,
                             text_option=text_option,
                             word_warp=self._name_word_warp,
                             offset=offset,
                             is_hovered=self._is_hovered,
                             is_selected=self._is_selected
                         )
-        # image
-        if self._get_has_image_() is True:
-            if self._image_pixmap:
-                painter._draw_pixmap_by_rect_(
-                    rect=self._image_draw_rect,
-                    pixmap=self._image_pixmap,
-                    offset=offset,
-                )
-            # draw by image file
-            elif self._image_file_path:
-                painter._draw_image_use_file_path_by_rect_(
-                    rect=self._image_draw_rect,
-                    file_path=self._image_file_path,
-                    offset=offset
-                )
-            # draw image by text
-            elif self._image_text:
-                painter._draw_image_use_text_by_rect_(
-                    rect=self._image_draw_rect,
-                    text=self._image_text,
-                    border_radius=4,
-                    offset=offset,
-                    border_color=gui_qt_core.QtBorderColors.Icon,
-                    border_width=2
-                )
-            #
-            if self._image_sub_file_path:
-                painter._draw_image_use_file_path_by_rect_(
-                    rect=self._image_sub_draw_rect,
-                    file_path=self._image_sub_file_path,
-                    offset=offset,
-                    #
-                    draw_frame=True,
-                    background_color=gui_qt_core.QtBorderColors.Icon,
-                    border_color=gui_qt_core.QtBorderColors.Icon,
-                    border_radius=4
-                )
-            #
         # play button
         if self._get_play_draw_is_enable_() is True:
             painter._set_movie_play_button_draw_by_rect_(
@@ -706,6 +844,7 @@ class QtListItemWidget(
     @classmethod
     def _create_mine_data_(cls, urls):
         mime_data = QtCore.QMimeData()
+        # noinspection PyArgumentList
         mime_data.setUrls(
             [QtCore.QUrl.fromLocalFile(i) for i in urls]
         )
@@ -774,17 +913,10 @@ class QtListItemWidget(
         return self._list_widget
 
     def _set_sort_number_key_(self, value):
-        self._sort_number_key = value
-        if self._get_view_()._get_sort_mode_() == gui_core.GuiSortMode.Number:
-            self._get_item_().setText(str(value).zfill(4))
+        self._get_item_()._set_sort_number_key_(value)
 
     def _set_sort_name_key_(self, value):
-        self._sort_name_key = value
-        if self._get_view_()._get_sort_mode_() == gui_core.GuiSortMode.Name:
-            if isinstance(value, six.text_type):
-                value = value.encode('utf-8')
-            #
-            self._get_item_().setText(str(value))
+        self._get_item_()._set_sort_name_key_(value)
 
     def __str__(self):
         return '{}(names={})'.format(

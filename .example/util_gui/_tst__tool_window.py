@@ -5,7 +5,7 @@ import time
 
 import lxbasic.log as bsc_log
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 if __name__ == '__main__':
     import sys
@@ -13,7 +13,7 @@ if __name__ == '__main__':
     from PySide2 import QtWidgets
     #
     app = QtWidgets.QApplication(sys.argv)
-    w = prx_widgets.PrxBaseWindow()
+    w = gui_prx_widgets.PrxBaseWindow()
     w.set_window_show()
 
     c_0 = 5

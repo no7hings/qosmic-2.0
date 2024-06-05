@@ -7,7 +7,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgeneral.dcc.objects as gnl_dcc_objects
 
@@ -48,7 +48,7 @@ class _PublishOptForSurface(object):
         version_type = self._options['version_type']
         scene_file_path = self._scene_file_path
 
-        user = bsc_core.SysBaseMtd.get_user_name()
+        user = bsc_core.BscSystem.get_user_name()
 
         extra_data = dict(
             user=user,
@@ -96,7 +96,7 @@ class _PublishOptForSurface(object):
             )
         )
 
-        if bsc_core.SysApplicationMtd.get_is_katana():
+        if bsc_core.BasApplication.get_is_katana():
             import lxkatana.core as ktn_core
             option_opt.set('katana_version', ktn_core.KtnUtil.get_katana_version())
 
@@ -123,7 +123,7 @@ class _PublishOptForSurface(object):
 
 
 class AbsValidatorOpt(object):
-    DCC_NAMESPACE = None
+    GUI_NAMESPACE = None
     DCC_NODE_CLS = None
     DCC_COMPONENT_CLS = None
     DCC_SELECTION_CLS = None
@@ -141,14 +141,14 @@ class AbsValidatorOpt(object):
         self._filter_opt = gui_prx_scripts.GuiPrxScpForTreeTagFilter(
             prx_tree_view_src=self._prx_tree_view_for_filter,
             prx_tree_view_tgt=self._result_tree_view,
-            prx_tree_item_cls=prx_widgets.PrxObjTreeItem
+            prx_tree_item_cls=gui_prx_widgets.PrxObjTreeItem
         )
 
     def set_select(self):
         gui_prx_scripts.GuiPrxScpForTreeSelection.select_fnc(
             prx_tree_view=self._result_tree_view,
             dcc_selection_cls=self.DCC_SELECTION_CLS,
-            dcc_namespace=self.DCC_NAMESPACE
+            dcc_namespace=self.GUI_NAMESPACE
         )
 
     def set_results_at(self, rsv_scene_properties, results):
@@ -331,7 +331,7 @@ class AbsValidatorOpt(object):
         prx_item.set_checked(False)
         prx_item.set_status(status)
         prx_item.set_gui_dcc_obj(
-            dcc_obj, self.DCC_NAMESPACE
+            dcc_obj, self.GUI_NAMESPACE
         )
         return prx_item
 
@@ -350,7 +350,7 @@ class AbsValidatorOpt(object):
         prx_item.set_checked(False)
         prx_item.set_status(status)
         prx_item.set_gui_dcc_obj(
-            dcc_obj, self.DCC_NAMESPACE
+            dcc_obj, self.GUI_NAMESPACE
         )
         return prx_item
 
@@ -379,7 +379,7 @@ class AbsValidatorOpt(object):
         return prx_item
 
 
-class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
+class AbsPnlPublisherForSurface(gui_prx_widgets.PrxSessionWindow):
     DCC_VALIDATOR_OPT_CLS = None
 
     def __init__(self, session, *args, **kwargs):
@@ -406,39 +406,39 @@ class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
             'validation.ignore_texture_workspace_check': 'with_texture_workspace_check',
         }
         self.set_main_style_mode(1)
-        self._prx_tab_view = prx_widgets.PrxTabView()
+        self._prx_tab_view = gui_prx_widgets.PrxTabView()
         self.add_widget(self._prx_tab_view)
 
-        sa_0 = prx_widgets.PrxVScrollArea()
+        sa_0 = gui_prx_widgets.PrxVScrollArea()
         self._prx_tab_view.add_widget(
             sa_0,
             name='Validation',
             icon_name_text='Validation',
         )
 
-        sa_1 = prx_widgets.PrxVScrollArea()
+        sa_1 = gui_prx_widgets.PrxVScrollArea()
         self._prx_tab_view.add_widget(
             sa_1,
             name='Configure',
             icon_name_text='Configure',
         )
 
-        ep_0 = prx_widgets.PrxHToolGroup()
+        ep_0 = gui_prx_widgets.PrxHToolGroup()
         sa_0.add_widget(ep_0)
         ep_0.set_expanded(True)
         ep_0.set_name('check results')
 
-        h_s_0 = prx_widgets.PrxHSplitter()
+        h_s_0 = gui_prx_widgets.PrxHSplitter()
         ep_0.add_widget(h_s_0)
 
-        self._prx_tree_view_for_filter = prx_widgets.PrxTreeView()
+        self._prx_tree_view_for_filter = gui_prx_widgets.PrxTreeView()
         h_s_0.add_widget(self._prx_tree_view_for_filter)
         self._prx_tree_view_for_filter.create_header_view(
             [('name', 3)],
             self.get_definition_window_size()[0]*(1.0/3.0)-32
         )
         #
-        self._result_tree_view = prx_widgets.PrxTreeView()
+        self._result_tree_view = gui_prx_widgets.PrxTreeView()
         h_s_0.add_widget(self._result_tree_view)
         self._result_tree_view.create_header_view(
             [('name', 4), ('description', 2)],
@@ -451,7 +451,7 @@ class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
             self._prx_tree_view_for_filter, self._result_tree_view
         )
 
-        self._cfg_options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._cfg_options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         sa_1.add_widget(self._cfg_options_prx_node)
         self._cfg_options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.validation_options'),
@@ -467,14 +467,14 @@ class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
             }
         )
 
-        self._validation_button = prx_widgets.PrxPressButton()
+        self._validation_button = gui_prx_widgets.PrxPressButton()
         self._validation_button.set_name('validation')
         self.add_button(
             self._validation_button
         )
         self._validation_button.connect_press_clicked_to(self.execute_validation)
 
-        self._next_button = prx_widgets.PrxPressButton()
+        self._next_button = gui_prx_widgets.PrxPressButton()
         self._next_button.set_name('next')
         self.add_button(
             self._next_button
@@ -506,26 +506,26 @@ class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
         )
         # publish
         layer_widget = self.create_layer_widget('publish', 'Publish')
-        sa_2 = prx_widgets.PrxVScrollArea()
+        sa_2 = gui_prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(sa_2)
-        self._publish_options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._publish_options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         sa_2.add_widget(self._publish_options_prx_node)
         self._publish_options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.publish_options')
         )
 
-        self._publish_tip = prx_widgets.PrxTextBrowser()
+        self._publish_tip = gui_prx_widgets.PrxTextBrowser()
         sa_2.add_widget(self._publish_tip)
         self._publish_tip.set_content(
             self._session.configure.get('build.node.publish_content')
         )
         self._publish_tip.set_font_size(12)
 
-        tool_bar = prx_widgets.PrxHToolBar()
+        tool_bar = gui_prx_widgets.PrxHToolBar()
         layer_widget.add_widget(tool_bar)
         tool_bar.set_expanded(True)
 
-        self._publish_button = prx_widgets.PrxPressButton()
+        self._publish_button = gui_prx_widgets.PrxPressButton()
         tool_bar.add_widget(self._publish_button)
         self._publish_button.set_name('publish')
         self._publish_button.connect_press_clicked_to(
@@ -582,9 +582,9 @@ class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
 
     def set_refresh_all(self):
         contents = []
-        application = bsc_core.SysBaseMtd.get_application()
+        application = bsc_core.BscSystem.get_application()
         #
-        if bsc_core.SysApplicationMtd.get_is_dcc():
+        if bsc_core.BasApplication.get_is_dcc():
             self._scene_file_path = self._get_dcc_scene_file_path_()
             self._cfg_options_prx_node.set(
                 'resolver.scene_file', self._scene_file_path
@@ -654,10 +654,10 @@ class AbsPnlPublisherForSurface(prx_widgets.PrxSessionWindow):
         if self._rsv_scene_properties:
             self._validation_check_options = {v: not self._cfg_options_prx_node.get(k) for k, v in
                                               self._check_key_map.items()}
-            if bsc_core.SysApplicationMtd.get_is_dcc():
-                if bsc_core.SysApplicationMtd.get_is_katana():
+            if bsc_core.BasApplication.get_is_dcc():
+                if bsc_core.BasApplication.get_is_katana():
                     self._set_katana_validation_in_execute_()
-                elif bsc_core.SysApplicationMtd.get_is_maya():
+                elif bsc_core.BasApplication.get_is_maya():
                     self._set_maya_validation_in_dcc_()
             else:
                 application = self._rsv_scene_properties.get('application')

@@ -196,7 +196,7 @@ class TimestampOpt(object):
 
 class DateTime(object):
     @classmethod
-    def to_period(cls, input_time_str, language='en_us'):
+    def to_period(cls, input_time_str, language='en_US'):
         input_time = datetime.datetime.strptime(input_time_str, '%Y-%m-%d %H:%M:%S')
 
         now = datetime.datetime.now()

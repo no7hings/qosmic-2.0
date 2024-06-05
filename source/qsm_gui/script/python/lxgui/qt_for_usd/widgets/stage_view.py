@@ -1560,7 +1560,7 @@ if QT_USD_FLAG is True:
             return []
 
         def _usd_do_snapshot_(self):
-            d = bsc_core.SysBaseMtd.get_home_directory()
+            d = bsc_core.BscSystem.get_home_directory()
             file_path = six.u('{}/snapshot/untitled-{}.png').format(d, bsc_core.TimeExtraMtd.generate_time_tag_36())
             bsc_storage.StgFileOpt(file_path).create_directory()
             self._usd_save_snapshot_to_(file_path)

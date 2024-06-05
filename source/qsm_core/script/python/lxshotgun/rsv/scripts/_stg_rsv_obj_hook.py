@@ -427,7 +427,7 @@ class RsvShotgunHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
     @classmethod
     def get_new_registry_info_data_fnc(cls, user, time_cost=0):
         return dict(
-            date=bsc_core.SysBaseMtd.get_time(exact=True),
+            date=bsc_core.BscSystem.get_time(exact=True),
             user=user,
             db_id=69018,
             db_name='production',

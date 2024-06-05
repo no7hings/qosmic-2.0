@@ -13,7 +13,7 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.abstracts as prx_abstracts
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_task.core as qsm_task_core
 
@@ -21,7 +21,7 @@ import qsm_task.process as qsm_tsk_process
 
 
 class _GuiBaseOpt(object):
-    DCC_NAMESPACE = 'task'
+    GUI_NAMESPACE = 'task'
 
     def __init__(self, window, page, session):
         self._window = window
@@ -42,7 +42,7 @@ class _GuiHistoryOpt(
 
         self._refresh_finish_flag = True
 
-        self._date_tag = bsc_core.SysBaseMtd.get_date_tag()
+        self._date_tag = bsc_core.BscSystem.get_date_tag()
 
         self._qt_history_view = qt_widgets.QtViewForHistoryEntity()
 
@@ -203,7 +203,7 @@ class _GuiHistoryOpt(
         if self._refresh_finish_flag is True:
             self._refresh_finish_flag = False
 
-            date_tag = bsc_core.SysBaseMtd.get_date_tag()
+            date_tag = bsc_core.BscSystem.get_date_tag()
             if date_tag != self._date_tag:
                 bsc_log.Log.trace_result(
                     'date is change, refresh force'
@@ -259,7 +259,7 @@ class PrxPageForNotice(prx_abstracts.AbsPrxWidget):
         self._main_layout.setContentsMargins(*[0]*4)
         self._main_layout.setSpacing(2)
 
-        self._top_prx_tool_bar = prx_widgets.PrxHToolBar()
+        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
         self._main_layout.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_expanded(True)
         self._top_prx_tool_bar.set_align_left()

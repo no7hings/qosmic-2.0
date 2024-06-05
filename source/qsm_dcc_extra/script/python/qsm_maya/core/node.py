@@ -2,6 +2,8 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+from . import node_query as _node_query
+
 
 class Node(object):
     class Types(object):
@@ -9,6 +11,7 @@ class Node(object):
         Mesh = 'mesh'
         GPU = 'gpuCache'
         AssemblyReference = 'assemblyReference'
+        Material = 'shadingEngine'
 
     @classmethod
     def create(cls, name, type_name):
@@ -64,6 +67,9 @@ class Node(object):
 class NodeOpt(object):
     def __init__(self, name):
         self._name = name
+        self._name_or_path = name
+        
+        self._node_query = None
 
     @property
     def type(self):
@@ -71,4 +77,8 @@ class NodeOpt(object):
 
     @property
     def name(self):
+        return self._name
+    
+    @property
+    def name_or_path(self):
         return self._name

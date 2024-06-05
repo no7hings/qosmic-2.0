@@ -7,8 +7,8 @@ import lxbasic.core as bsc_core
 class MayaCacheProcess(object):
     @classmethod
     def generate_command(cls, option):
-        if bsc_core.SysApplicationMtd.get_is_maya():
-            maya_version = bsc_core.SysApplicationMtd.get_maya_version()
+        if bsc_core.BasApplication.get_is_maya():
+            maya_version = bsc_core.BasApplication.get_maya_version()
         else:
             maya_version = '2019'
         # do not use unicode
@@ -28,7 +28,7 @@ class MayaCacheProcess(object):
 
     @classmethod
     def to_option(cls, method, option_dict):
-        key = bsc_core.HashMtd.to_hash_key(option_dict)
+        key = bsc_core.BscHash.to_hash_key(option_dict)
         file_path = cls.to_option_file_path(key)
         bsc_storage.StgFileOpt(file_path).set_write(option_dict)
         return 'method={}&method_option={}'.format(method, key)
@@ -36,7 +36,7 @@ class MayaCacheProcess(object):
     @classmethod
     def to_option_file_path(cls, key):
         root = bsc_core.EnvBaseMtd.get_temporary_root()
-        user_name = bsc_core.SysBaseMtd.get_user_name()
+        user_name = bsc_core.BscSystem.get_user_name()
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
         return '{}/.method-option/{}/{}/{}.json'.format(
             root, user_name, region, key

@@ -21,7 +21,7 @@ class FncComparerForGeometry(gnl_fnc_abstracts.AbsFncComparerForDccGeometry):
     FNC_REPAIRER_FOR_USD_MESH_CLS = None
     #
     RSV_KEYWORD = 'asset-geometry-usd-payload-file'
-    DCC_NAMESPACE = 'usd'
+    GUI_NAMESPACE = 'usd'
 
     def __init__(self, *args):
         super(FncComparerForGeometry, self).__init__(*args)
@@ -44,7 +44,7 @@ class FncComparerForGeometry(gnl_fnc_abstracts.AbsFncComparerForDccGeometry):
         if usd_file_path is not None:
             location = self._location
 
-            hash_key = bsc_core.UuidMtd.generate_by_file(usd_file_path)
+            hash_key = bsc_core.BscUuid.generate_by_file(usd_file_path)
             self._dcc_scene_tgt = usd_dcc_objects.Scene()
             if hash_key in gnl_fnc_abstracts.AbsFncComparerForDccGeometry.CACHE:
                 self._dcc_scene_tgt = gnl_fnc_abstracts.AbsFncComparerForDccGeometry.CACHE[hash_key]
@@ -54,7 +54,7 @@ class FncComparerForGeometry(gnl_fnc_abstracts.AbsFncComparerForDccGeometry):
                 gnl_fnc_abstracts.AbsFncComparerForDccGeometry.CACHE[hash_key] = self._dcc_scene_tgt
                 self._dcc_universe_tgt = self._dcc_scene_tgt.universe
 
-            self._scene_usd_scene_opt = usd_dcc_operators.SceneOpt(self._dcc_scene_tgt.usd_stage, self.DCC_NAMESPACE)
+            self._scene_usd_scene_opt = usd_dcc_operators.SceneOpt(self._dcc_scene_tgt.usd_stage, self.GUI_NAMESPACE)
             self._dcc_comparer_data_tgt = self._scene_usd_scene_opt.get_mesh_comparer_data(usd_file_path)
             self._dcc_geometries_tgt = []
             mesh_type = self._dcc_universe_tgt.get_obj_type('Mesh')

@@ -5,14 +5,14 @@ import lxgeneral.dcc.core as gnl_dcc_core
 
 import lxgui.core as gui_core
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.proxy.scripts as gui_prx_scripts
 
 import lxresolver.core as rsv_core
 
 
-class AbsPnlComparerForAssetGeometryDcc(prx_widgets.PrxSessionWindow):
+class AbsPnlComparerForAssetGeometryDcc(gui_prx_widgets.PrxSessionWindow):
     PANEL_KEY = 'asset_comparer'
     #
     DCC_NODE_CLS = None
@@ -25,7 +25,7 @@ class AbsPnlComparerForAssetGeometryDcc(prx_widgets.PrxSessionWindow):
     #
     USD_NAMESPACE = 'usd'
     #
-    DCC_NAMESPACE = None
+    GUI_NAMESPACE = None
     DCC_PATHSEP = None
     #
     RSV_KEYWORD = 'asset-geometry-usd-payload-file'
@@ -51,7 +51,7 @@ class AbsPnlComparerForAssetGeometryDcc(prx_widgets.PrxSessionWindow):
         self._set_viewer_groups_build_()
         self._set_configure_groups_build_()
         #
-        self._update_geometry_from_model_item = prx_widgets.PrxPressButton()
+        self._update_geometry_from_model_item = gui_prx_widgets.PrxPressButton()
         self._update_geometry_from_model_item.set_name('update geometry from source')
         self._update_geometry_from_model_item.set_icon_name('application/python')
         self._update_geometry_from_model_item.set_tool_tip(
@@ -63,20 +63,20 @@ class AbsPnlComparerForAssetGeometryDcc(prx_widgets.PrxSessionWindow):
         self._update_geometry_from_model_item.connect_press_clicked_to(self.import_fnc)
 
     def _set_viewer_groups_build_(self):
-        expand_box_0 = prx_widgets.PrxHToolGroup()
+        expand_box_0 = gui_prx_widgets.PrxHToolGroup()
         expand_box_0.set_name('Viewer(s)')
         expand_box_0.set_expanded(True)
         self.add_widget(expand_box_0)
-        h_splitter_0 = prx_widgets.PrxHSplitter()
-        v_splitter_0 = prx_widgets.PrxVSplitter()
+        h_splitter_0 = gui_prx_widgets.PrxHSplitter()
+        v_splitter_0 = gui_prx_widgets.PrxVSplitter()
         h_splitter_0.add_widget(v_splitter_0)
         expand_box_0.add_widget(h_splitter_0)
-        self._filter_tree_viewer_0 = prx_widgets.PrxTreeView()
+        self._filter_tree_viewer_0 = gui_prx_widgets.PrxTreeView()
         v_splitter_0.add_widget(self._filter_tree_viewer_0)
-        self._sector_chart = prx_widgets.PrxSectorChart()
+        self._sector_chart = gui_prx_widgets.PrxSectorChart()
         v_splitter_0.add_widget(self._sector_chart)
         #
-        self._obj_tree_viewer_0 = prx_widgets.PrxTreeView()
+        self._obj_tree_viewer_0 = gui_prx_widgets.PrxTreeView()
         h_splitter_0.add_widget(self._obj_tree_viewer_0)
         h_splitter_0.set_stretches([1, 2])
         #
@@ -95,8 +95,8 @@ class AbsPnlComparerForAssetGeometryDcc(prx_widgets.PrxSessionWindow):
         #
         self._prx_usd_mesh_tree_view_add_opt = gui_prx_scripts.GuiPrxScpForUsdTreeAdd(
             prx_tree_view=self._obj_tree_viewer_0,
-            prx_tree_item_cls=prx_widgets.PrxDccObjTreeItem,
-            dcc_namespace=self.DCC_NAMESPACE,
+            prx_tree_item_cls=gui_prx_widgets.PrxDccObjTreeItem,
+            dcc_namespace=self.GUI_NAMESPACE,
             dcc_pathsep=self.DCC_PATHSEP,
             dcc_node_class=self.DCC_NODE_CLS,
             dcc_geometry_location=self.DCC_LOCATION_FOR_GEOMETRY,
@@ -105,7 +105,7 @@ class AbsPnlComparerForAssetGeometryDcc(prx_widgets.PrxSessionWindow):
         self._prx_dcc_obj_tree_view_selection_opt = gui_prx_scripts.GuiPrxScpForTreeSelection(
             prx_tree_view=self._obj_tree_viewer_0,
             dcc_selection_cls=self.DCC_SELECTION_CLS,
-            dcc_namespace=self.DCC_NAMESPACE,
+            dcc_namespace=self.GUI_NAMESPACE,
             dcc_geometry_location=self.DCC_LOCATION_FOR_GEOMETRY,
             dcc_pathsep=self.DCC_PATHSEP
         )
@@ -116,11 +116,11 @@ class AbsPnlComparerForAssetGeometryDcc(prx_widgets.PrxSessionWindow):
         self._prx_dcc_obj_tree_view_tag_filter_opt = gui_prx_scripts.GuiPrxScpForTreeTagFilter(
             prx_tree_view_src=self._filter_tree_viewer_0,
             prx_tree_view_tgt=self._obj_tree_viewer_0,
-            prx_tree_item_cls=prx_widgets.PrxObjTreeItem
+            prx_tree_item_cls=gui_prx_widgets.PrxObjTreeItem
         )
 
     def _set_configure_groups_build_(self):
-        self._options_prx_node = prx_widgets.PrxOptionsNode(
+        self._options_prx_node = gui_prx_widgets.PrxOptionsNode(
             'options'
         )
         self.add_widget(self._options_prx_node)

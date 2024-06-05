@@ -78,8 +78,8 @@ class AdvMotionOpt(object):
         )
 
     def get_animations_uuid(self):
-        return bsc_core.UuidMtd.generate_by_hash_value(
-            bsc_core.HashMtd.to_hash_key(self.get_animations())
+        return bsc_core.BscUuid.generate_by_hash_value(
+            bsc_core.BscHash.to_hash_key(self.get_animations())
         )
 
     def export_animations_to(self, file_path):

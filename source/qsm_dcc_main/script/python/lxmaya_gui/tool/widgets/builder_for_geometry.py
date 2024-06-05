@@ -1,25 +1,25 @@
 # coding:utf-8
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
-class PnlBuilderForAssetGeometry(prx_widgets.PrxSessionToolWindow):
+class PnlBuilderForAssetGeometry(gui_prx_widgets.PrxSessionToolWindow):
     def __init__(self, session, *args, **kwargs):
         super(PnlBuilderForAssetGeometry, self).__init__(session, *args, **kwargs)
 
     def gui_setup_window(self):
-        s = prx_widgets.PrxVScrollArea()
+        s = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(s)
-        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         s.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.options'),
         )
         # tip
-        self._tip_group = prx_widgets.PrxHToolGroup()
+        self._tip_group = gui_prx_widgets.PrxHToolGroup()
         s.add_widget(self._tip_group)
         self._tip_group.set_expanded(True)
         self._tip_group.set_name('tips')
-        self._tip_text_browser = prx_widgets.PrxTextBrowser()
+        self._tip_text_browser = gui_prx_widgets.PrxTextBrowser()
         self._tip_group.add_widget(self._tip_text_browser)
 
         self.post_setup_fnc()

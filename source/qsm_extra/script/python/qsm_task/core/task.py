@@ -170,7 +170,7 @@ class Task(_base.AbsEntity):
                     if skt.connect() is True:
                         skt.send(_completed_notice)
                 except Exception:
-                    bsc_core.ExceptionMtd.print_stack()
+                    bsc_core.BscException.print_stack()
 
         def _finished_fnc(task, status, results):
             task.refresh_finish()

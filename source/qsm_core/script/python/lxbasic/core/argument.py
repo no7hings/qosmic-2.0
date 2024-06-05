@@ -10,7 +10,7 @@ import re
 from . import raw as _raw
 
 
-class ArgDictStringMtd(object):
+class ArgDictString(object):
     ARGUMENT_SEP = '&'
 
     @classmethod
@@ -189,7 +189,7 @@ class ArgDictStringOpt(object):
         return self.to_string()
 
     def to_string(self):
-        return ArgDictStringMtd.to_string(
+        return ArgDictString.to_string(
             **self.__dict
         )
 

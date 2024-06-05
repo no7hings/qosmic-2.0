@@ -35,7 +35,7 @@ class HUD(object):
 
     @classmethod
     def get_user(cls):
-        return bsc_core.SysBaseMtd.get_user_name()
+        return bsc_core.BscSystem.get_user_name()
 
     @classmethod
     def get_frame(cls):
@@ -142,7 +142,7 @@ class HUD(object):
                 blockSize='small',
                 label='date: ',
                 labelWidth=64,
-                command=lambda: bsc_core.SysBaseMtd.get_time(),
+                command=lambda: bsc_core.BscSystem.get_time(),
                 attachToRefresh=1
             )
         }

@@ -7,14 +7,14 @@ import lxbasic.storage as bsc_storage
 
 import fnmatch
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 y_f = '{}.yml'.format(os.path.splitext(__file__)[0])
 
 c = bsc_storage.StgFileOpt(y_f).set_read()
 
 
-class TestWindow(prx_widgets.PrxBaseWindow):
+class TestWindow(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(TestWindow, self).__init__(*args, **kwargs)
         self.set_definition_window_size([720, 720])
@@ -29,7 +29,7 @@ class TestWindow(prx_widgets.PrxBaseWindow):
         )
 
     def _test_(self):
-        tab_view = prx_widgets.PrxTabView()
+        tab_view = gui_prx_widgets.PrxTabView()
         self.add_widget(tab_view)
         self.set_main_style_mode(1)
         for i in [
@@ -40,9 +40,9 @@ class TestWindow(prx_widgets.PrxBaseWindow):
             'storage',
             'storages',
         ]:
-            i_s = prx_widgets.PrxVScrollArea()
+            i_s = gui_prx_widgets.PrxVScrollArea()
             tab_view.add_widget(i_s, name=i)
-            i_n = prx_widgets.PrxOptionsNode(i)
+            i_n = gui_prx_widgets.PrxOptionsNode(i)
             i_s.add_widget(i_n)
             i_n.create_ports_by_data(
                 c.get(i)

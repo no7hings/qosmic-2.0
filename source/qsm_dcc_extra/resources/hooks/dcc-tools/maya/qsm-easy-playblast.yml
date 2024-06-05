@@ -9,10 +9,14 @@ option:
         name_chs: '简单拍屏'
         group_name: 'General(s)'
         #
-        icon_name: 'tool/maya/playblast'
+        icon_name: 'application/playblast'
         tool_tip:
-            - 'manager resource, etc. rig, assembly'
-            - '...'
+            |-
+            Playblast tool as simplify.
+        #
+        tool_tip_chs:
+            |-
+            简化的拍屏工具。
         #
         size: [480, 720]
 

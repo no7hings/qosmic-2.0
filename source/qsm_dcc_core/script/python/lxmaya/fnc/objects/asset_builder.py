@@ -406,7 +406,7 @@ class FncBuilderForAssetOld(gnl_fnc_abstracts.AbsFncOptionBase):
         #
         if with_camera is True:
             if rsv_task is not None:
-                dcc_data = rsv_task.get_rsv_project().get_dcc_data(application=bsc_core.SysApplicationMtd.get_current())
+                dcc_data = rsv_task.get_rsv_project().get_dcc_data(application=bsc_core.BasApplication.get_current())
                 location = dcc_data.get('camera_root')
                 camera_main_abc_file_rsv_unit = rsv_task.get_rsv_unit(keyword='asset-camera-main-abc-file')
                 camera_main_abc_file_path = camera_main_abc_file_rsv_unit.get_result(version='latest')
@@ -442,7 +442,7 @@ class FncBuilderForAssetOld(gnl_fnc_abstracts.AbsFncOptionBase):
             if rsv_asset is not None:
                 user_directory_path = bsc_storage.StgTmpBaseMtd.get_user_directory('builder')
                 file_path = '{}/{}.ma'.format(
-                    user_directory_path, '-'.join(rsv_asset.path.split('/')[1:]+[bsc_core.SysBaseMtd.get_time_tag()])
+                    user_directory_path, '-'.join(rsv_asset.path.split('/')[1:]+[bsc_core.BscSystem.get_time_tag()])
                     )
 
                 mya_dcc_objects.Scene.save_to_file(file_path)

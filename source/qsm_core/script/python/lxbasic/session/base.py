@@ -7,6 +7,8 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
+import lxbasic.resource as bsc_resource
+
 import lxbasic.storage as bsc_storage
 
 import lxbasic.extra.methods as bsc_etr_methods
@@ -42,13 +44,22 @@ class AbsSsnConfigureBaseDef(object):
             'group_name'
         )
 
-    def get_gui_name_(self, language='en_us'):
+    def get_gui_name_(self, language='en_US'):
         if language == 'chs':
             _ = self._gui_configure.get('name_chs')
             if _:
                 return _
         return self._gui_configure.get(
             'name'
+        )
+
+    def get_gui_tool_tip_(self, language='en_US'):
+        if language == 'chs':
+            _ = self._gui_configure.get('tool_tip_chs')
+            if _:
+                return _
+        return self._gui_configure.get(
+            'tool_tip'
         )
 
     def get_gui_name(self):
@@ -62,6 +73,12 @@ class AbsSsnConfigureBaseDef(object):
     def gui_icon_name(self):
         return self._gui_configure.get(
             'icon_name'
+        )
+
+    @property
+    def gui_icon_file(self):
+        return bsc_resource.RscExtendIcon.get(
+            self.gui_icon_name
         )
 
     def get_is_visible(self):
@@ -120,12 +137,12 @@ class AbsSsnGener(
         #
         self._configure.do_flatten()
         #
-        self._user = bsc_core.SysBaseMtd.get_user_name()
-        self._host = bsc_core.SysBaseMtd.get_host()
-        self._platform = bsc_core.SysBaseMtd.get_platform()
-        self._application = bsc_core.SysBaseMtd.get_application()
-        self._system = bsc_core.SysBaseMtd.get_current()
-        self._system_includes = bsc_core.SysBaseMtd.get_system_includes(
+        self._user = bsc_core.BscSystem.get_user_name()
+        self._host = bsc_core.BscSystem.get_host()
+        self._platform = bsc_core.BscSystem.get_platform()
+        self._application = bsc_core.BscSystem.get_application()
+        self._system = bsc_core.BscSystem.get_current()
+        self._system_includes = bsc_core.BscSystem.get_system_includes(
             self._configure.get(
                 'option.systems'
             ) or []
@@ -282,18 +299,18 @@ class AbsSsnGener(
             )
         )
         session = kwargs['session']
-        if bsc_core.SysPlatformMtd.get_is_linux():
+        if bsc_core.BasPlatform.get_is_linux():
             cmds = [
                 'gnome-terminal',
                 '-t "{}-{}"'.format(
-                    session.get_name(), bsc_core.SysBaseMtd.get_time_tag()
+                    session.get_name(), bsc_core.BscSystem.get_time_tag()
                 ),
                 '-e "bash -l {}"'.format(file_path)
             ]
             bsc_core.PrcBaseMtd.execute_as_trace_use_thread(
                 ' '.join(cmds)
             )
-        elif bsc_core.SysPlatformMtd.get_is_windows():
+        elif bsc_core.BasPlatform.get_is_windows():
             # when process finish use /c for auto close terminal, /k not
             cmds = ['start', 'cmd', '/c', file_path]
             bsc_core.PrcBaseMtd.execute_as_trace_use_thread(
@@ -309,18 +326,18 @@ class AbsSsnGener(
     @staticmethod
     def execute_shell_script_use_terminal(cmd, **kwargs):
         session = kwargs['session']
-        if bsc_core.SysPlatformMtd.get_is_linux():
+        if bsc_core.BasPlatform.get_is_linux():
             cmds = [
                 'gnome-terminal',
                 '-t "{}-{}"'.format(
-                    session.get_name(), bsc_core.SysBaseMtd.get_time_tag()
+                    session.get_name(), bsc_core.BscSystem.get_time_tag()
                 ),
                 '--', 'bash', '-l', '-c', cmd
             ]
             bsc_core.PrcBaseMtd.execute_as_trace_use_thread(
                 ' '.join(cmds)
             )
-        elif bsc_core.SysPlatformMtd.get_is_windows():
+        elif bsc_core.BasPlatform.get_is_windows():
             cmds = ['start', 'cmd', '/c', cmd]
             bsc_core.PrcBaseMtd.execute_as_trace_use_thread(
                 ' '.join(cmds)
@@ -353,7 +370,7 @@ class AbsSsnGener(
             bsc_core.PrcBaseMtd.execute_use_thread(cmd)
 
     def get_is_system_matched(self, system_key):
-        return self.system in bsc_core.SysBaseMtd.get_system_includes([system_key])
+        return self.system in bsc_core.BscSystem.get_system_includes([system_key])
 
     @classmethod
     def _get_choice_scheme_matched_(cls, choice_scheme, choice_scheme_includes):

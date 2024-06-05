@@ -5,11 +5,11 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.abstracts as prx_abstracts
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_gui.proxy.widgets as qsm_prx_widgets
+import qsm_gui.proxy.widgets as qsm_gui_prx_widgets
 
 from ... import core as _rsc_mng_core
 
@@ -42,7 +42,7 @@ class PrxPageForRigResource(prx_abstracts.AbsPrxWidget):
             ('filter', 'tool/filter', '', self._gui_filter_update_visible)
         ]:
             i_key, i_icon_name, i_tool_tip, i_fnc = i
-            i_tool = prx_widgets.PrxToggleButton()
+            i_tool = gui_prx_widgets.PrxToggleButton()
             self._main_prx_tool_box.add_widget(i_tool)
             i_tool.set_name(i_key)
             i_tool.set_icon_name(i_icon_name)
@@ -90,7 +90,7 @@ class PrxPageForRigResource(prx_abstracts.AbsPrxWidget):
         qt_lot.setContentsMargins(*[0]*4)
         qt_lot.setSpacing(2)
 
-        self._top_prx_tool_bar = prx_widgets.PrxHToolBar()
+        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
         qt_lot.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)
@@ -104,24 +104,24 @@ class PrxPageForRigResource(prx_abstracts.AbsPrxWidget):
             'reference', size_mode=1
         )
         # reference
-        self._prx_input_for_asset = qsm_prx_widgets.PrxInputForRig()
+        self._prx_input_for_asset = qsm_gui_prx_widgets.PrxInputForRig()
         self._reference_tool_box.add_widget(self._prx_input_for_asset)
 
         self._gui_reference_opt = _unit_for_rig.UnitForRigReference(
             self._window, self, self._session, self._prx_input_for_asset
         )
 
-        self._prx_h_splitter = prx_widgets.PrxHSplitter()
+        self._prx_h_splitter = gui_prx_widgets.PrxHSplitter()
         qt_lot.addWidget(self._prx_h_splitter.widget)
 
-        self._resource_tag_tree_view = prx_widgets.PrxTreeView()
+        self._resource_tag_tree_view = gui_prx_widgets.PrxTreeView()
         self._prx_h_splitter.add_widget(self._resource_tag_tree_view)
         self._resource_tag_tree_view.create_header_view(
             [('name', 2)],
             self._window.get_definition_window_size()[0]
         )
 
-        self._resource_prx_tree_view = prx_widgets.PrxTreeView()
+        self._resource_prx_tree_view = gui_prx_widgets.PrxTreeView()
         self._prx_h_splitter.add_widget(self._resource_prx_tree_view)
         self._prx_h_splitter.set_fixed_size_at(0, 240)
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
@@ -138,7 +138,7 @@ class PrxPageForRigResource(prx_abstracts.AbsPrxWidget):
             self.do_gui_refresh_by_resource_tag_checking
         )
 
-        self._tool_prx_tab_box = prx_widgets.PrxHTabBox()
+        self._tool_prx_tab_box = gui_prx_widgets.PrxHTabBox()
         qt_lot.addWidget(self._tool_prx_tab_box.widget)
         # utility
         self._gui_utility_opt = _unit_for_rig.UnitForRigUtilityToolSet(

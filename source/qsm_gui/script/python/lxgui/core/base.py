@@ -80,7 +80,7 @@ class GuiUtil(object):
     @classmethod
     def get_linux_user_directory(cls):
         return '{}/.qosmic'.format(
-            os.environ.get('HOME', '/home/{}'.format(bsc_core.SysBaseMtd.get_user_name()))
+            os.environ.get('HOME', '/home/{}'.format(bsc_core.BscSystem.get_user_name()))
         )
 
     @classmethod

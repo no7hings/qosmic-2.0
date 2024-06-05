@@ -94,6 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "开发相关/开发进度/通用/后台任务管理工具.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -110,6 +111,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "开发相关/开发进度/通用/后台任务管理工具.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -131,7 +133,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "开发相关/开发进度/通用/后台任务管理工具.md"
+              }
             }
           },
           {
@@ -151,7 +155,9 @@
             "type": "leaf",
             "state": {
               "type": "file-properties",
-              "state": {}
+              "state": {
+                "file": "开发相关/开发进度/通用/后台任务管理工具.md"
+              }
             }
           },
           {
@@ -180,7 +186,6 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "3d-graph:3D Graph": false,
       "switcher:打开快速切换": false,
       "graph:查看关系图谱": false,
       "canvas:新建白板": false,
@@ -193,39 +198,41 @@
   },
   "active": "eb6e8f805e177b18",
   "lastOpenFiles": [
+    "开发相关/开发进度/maya/节点参数模版工具.md",
+    "开发相关/开发任务/maya/解算相关/节点图模版工具（Node Graph Template Tool）.md",
+    "开发相关/开发进度/maya/节点图模版工具.md",
     "开发相关/开发进度/通用/后台任务管理工具.md",
+    "开发相关/开发进度/优化.md",
+    "开发相关/开发进度/maya/绑定移动工具.md",
+    "文档/sqlite.md",
+    "文档",
+    "开发相关/开发进度/通用/农场解算发布工具.md",
+    "开发相关/开发进度/通用/农场插件.md",
+    "开发相关/开发进度/BUG.md",
+    "开发相关/开发进度/maya/动作复制工具.md",
+    "开发相关/开发进度/maya/简易拍屏工具.md",
+    "开发相关/开发进度/maya/场景显示优化工具.md",
+    "开发相关/开发进度/maya/绑定显示优化工具.md",
+    "开发相关/开发任务/通用/农场相关/农场解算发布工具（Deadline Simulation Summit Tool）.md",
+    "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
+    "开发相关/开发计划/总览.md",
+    "随记/插件和工具为什么不推荐安装在本地.md",
     "技术文档/总览.canvas",
-    "技术文档/Qosmic/存储结构（Storage Hierarchy）.md",
-    "技术文档/Qosmic/环境变量（Environment）.md",
-    "技术文档/Qosmic.md",
-    "技术文档/Qosmic",
-    "技术文档/Qosmic/组件与模块/依赖关系.canvas",
-    "技术文档/工具说明/资源管理工具.md",
-    "技术文档/工具说明/images/Pasted image 20240520110227.png",
-    "技术文档/工具说明/images/Pasted image 20240520110258.png",
+    "开发相关/开发计划/四月-五月.md",
     "随记/python/Python包安装.md",
-    "随记/python",
     "随记/gantt view.md",
     "随记/利用标签进行分类.md",
-    "开发相关/开发计划/总览.md",
+    "未命名.canvas",
+    "常见问题/maya/batch.md",
+    "技术文档/Qosmic/组件与模块/组件/软件/qsm_dcc_resource.md",
     "开发相关/开发计划/六月-七月.md",
-    "开发相关/开发计划/四月-五月.md",
-    "开发相关/开发文档/后台任务管理工具（Process Task Manager）.md",
     "开发相关/开发文档/资源管理工具（Resource Manager）.md",
-    "随记/插件和工具为什么不推荐安装在本地.md",
-    "随记/maya/Mayabatch.md",
-    "开发相关/开发进度/maya/绑定显示优化工具.md",
-    "随记/maya/Maya性能优化.md",
+    "技术文档/Qosmic",
+    "技术文档/Qosmic/组件与模块/依赖关系.canvas",
+    "技术文档/工具说明/images/Pasted image 20240520110227.png",
+    "技术文档/工具说明/images/Pasted image 20240520110258.png",
+    "随记/python",
     "随记/maya",
-    "开发相关/开发进度/maya/节点图模版工具.md",
-    "开发相关/开发进度/maya/动作复制工具.md",
-    "开发相关/开发进度/maya/场景显示优化工具.md",
-    "开发相关/开发进度/maya/绑定移动工具.md",
-    "开发相关/开发进度/maya/简易拍屏工具.md",
-    "开发相关/开发进度/maya/节点参数模版工具.md",
-    "开发相关/开发任务/maya/其他/绑定移动工具（Rig Move Tool）.md",
-    "开发相关/开发进度/通用/农场插件.md",
-    "开发相关/开发进度/通用/农场解算发布工具.md",
     "开发相关/开发任务/maya/相机相关",
     "开发相关/开发任务/通用/流程相关",
     "ViewFrustum.svg.png",
@@ -233,7 +240,6 @@
     "开发相关/开发任务/通用",
     "开发相关/开发任务/maya",
     "开发相关/开发任务/maya/解算相关",
-    "开发相关/开发任务/maya/其他",
     "开发相关/开发文档/images/Pasted image 20240523103725.png",
     "开发相关/开发文档/images/Pasted image 20240523120517.png",
     "技术文档/工具说明/images/rig-resource-dynamic-gpu.png",

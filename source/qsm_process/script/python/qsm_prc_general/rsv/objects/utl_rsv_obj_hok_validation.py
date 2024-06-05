@@ -53,10 +53,10 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                             if bsc_core.RawTextOpt(j_file_path).get_is_contain_space() is True:
                                 j_check_results[4] = False
                             # todo, need then?
-                            # if bsc_core.SysBaseMtd.get_is_linux():
+                            # if bsc_core.BscSystem.get_is_linux():
                             #     if not j_texture.path.startswith('/l'):
                             #         j_check_results[5] = False
-                            # elif bsc_core.SysBaseMtd.get_is_windows():
+                            # elif bsc_core.BscSystem.get_is_windows():
                             #     if not j_texture.path.lower().startswith('l:'):
                             #         j_check_results[5] = False
                     #

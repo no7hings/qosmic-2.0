@@ -2,27 +2,7 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-
-class ShaderCategory(object):
-    CACHE = {}
-
-    @classmethod
-    def create_cache(cls):
-        if not cls.CACHE:
-            # custom
-            for i_category in ['shader', 'texture', 'light', 'utility']:
-                for j_type in cmds.listNodeTypes(i_category) or []:
-                    cls.CACHE[j_type] = i_category
-
-    @classmethod
-    def get(cls, type_name, default='unknown'):
-        cls.create_cache()
-        return cls.CACHE.get(type_name, default)
-
-    @classmethod
-    def is_shader_type(cls, type_name):
-        cls.create_cache()
-        return type_name in cls.CACHE
+from . import node_category as _node_category
 
 
 class Shader(object):
@@ -30,7 +10,7 @@ class Shader(object):
     def create(cls, name, type_name):
         if cmds.objExists(name) is True:
             return name
-        category = ShaderCategory.get(type_name, 'utility')
+        category = _node_category.ShaderCategory.get(type_name, 'utility')
         kwargs = dict(
             name=name,
             skipSelect=1

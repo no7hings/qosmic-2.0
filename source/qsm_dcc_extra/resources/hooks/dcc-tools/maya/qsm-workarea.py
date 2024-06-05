@@ -96,7 +96,7 @@ def createDockControl():
 def main(session):
     import lxgui.qt.core as gui_qt_core
 
-    import lxgui.proxy.widgets as prx_widgets
+    import lxgui.proxy.widgets as gui_prx_widgets
 
     import qsm_maya_gui.core as qsm_mya_gui_core
 

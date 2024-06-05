@@ -15,7 +15,7 @@ class PnlComparerForAssetGeometryDcc(cpr_gui_abstracts.AbsPnlComparerForAssetGeo
     #
     DCC_SELECTION_CLS = ktn_core.KtnSGSelectionOpt
     #
-    DCC_NAMESPACE = 'usd'
+    GUI_NAMESPACE = 'usd'
     DCC_PATHSEP = None
     #
     DCC_LOCATION = '/master/hi'

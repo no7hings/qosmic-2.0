@@ -13,13 +13,15 @@ from .. import core as gui_qt_core
 
 from .. import abstracts as gui_qt_abstracts
 # qt widgets
-from ..widgets import utility as gui_qt_wgt_utility
+from . import utility as _utility
 
-from ..widgets import button as gui_qt_wgt_button
+from . import button as _button
 
-from ..widgets import chart as gui_qt_wgt_chart
+from . import chart as _chart
 
-from ..widgets import entry as gui_qt_wgt_entry
+from . import entry as _entry
+
+from . import item_for_list as _item_for_list
 
 
 # use for popup
@@ -202,7 +204,7 @@ class _AbsQtPopupAsChoose(
         self._w_popup_item, self._h_popup_item = 20, 20
         self._popup_tag_filter_item_width, self._popup_tag_filter_item_height = 20, 20
 
-        self.__popup_cancel_button = gui_qt_wgt_button.QtIconPressButton(self)
+        self.__popup_cancel_button = _button.QtIconPressButton(self)
         self.__popup_cancel_button._set_name_text_('cancel popup')
         self.__popup_cancel_button._set_icon_file_path_(gui_core.GuiIcon.get('cancel'))
         self.__popup_cancel_button._set_icon_frame_draw_size_(18, 18)
@@ -212,7 +214,7 @@ class _AbsQtPopupAsChoose(
         self.__popup_cancel_button.press_clicked.connect(self._do_popup_close_)
         #
         self._popup_item_multiply_is_enable = False
-        self._popup_all_checked_button = gui_qt_wgt_button.QtIconPressButton(self)
+        self._popup_all_checked_button = _button.QtIconPressButton(self)
         self._popup_all_checked_button.hide()
         self._popup_all_checked_button._set_icon_file_path_(gui_core.GuiIcon.get('all_checked'))
         self._popup_all_checked_button._set_icon_frame_draw_size_(18, 18)
@@ -221,7 +223,7 @@ class _AbsQtPopupAsChoose(
         )
         self._popup_all_checked_button.press_clicked.connect(self._execute_popup_all_checked_)
         #
-        self._popup_all_unchecked_button = gui_qt_wgt_button.QtIconPressButton(self)
+        self._popup_all_unchecked_button = _button.QtIconPressButton(self)
         self._popup_all_unchecked_button.hide()
         self._popup_all_unchecked_button._set_icon_file_path_(gui_core.GuiIcon.get('all_unchecked'))
         self._popup_all_unchecked_button._set_icon_frame_draw_size_(18, 18)
@@ -231,7 +233,7 @@ class _AbsQtPopupAsChoose(
         self._popup_all_unchecked_button.press_clicked.connect(self._execute_popup_all_unchecked_)
         # keyword filter
         self._popup_item_keyword_filter_is_enable = False
-        self._popup_keyword_filter_entry = gui_qt_wgt_entry.QtEntryAsConstant(self)
+        self._popup_keyword_filter_entry = _entry.QtEntryAsConstant(self)
         self._popup_keyword_filter_entry.hide()
         self._popup_keyword_filter_entry._set_entry_enable_(True)
         self._popup_keyword_filter_entry.setAlignment(
@@ -533,13 +535,13 @@ class _AbsQtPopupAsChoose(
                 #
                 values_cur = self._get_popup_values_current_()
                 for index, i_value in enumerate(values):
-                    i_item_widget = gui_qt_wgt_utility._QtHItem()
-                    i_item = gui_qt_wgt_utility.QtListWidgetItem()
+                    i_item_widget = _utility._QtHItem()
+                    i_item = _item_for_list.QtListWidgetItem()
                     i_item.setSizeHint(QtCore.QSize(self._w_popup_item, self._h_popup_item))
 
                     self._popup_view.addItem(i_item)
                     self._popup_view.setItemWidget(i_item, i_item_widget)
-                    i_item._connect_item_show_()
+                    i_item._initialize_item_show_()
 
                     i_item_widget._set_name_text_(i_value)
                     i_item_widget._set_tool_tip_('"LMB-click" to choose')
@@ -602,15 +604,15 @@ class _AbsQtPopupAsChoose(
                         tags.remove(self.TAG_ALL)
                         tags.insert(0, self.TAG_ALL)
                     for i_tag in tags:
-                        i_item_widget = gui_qt_wgt_utility._QtHItem()
-                        i_item = gui_qt_wgt_utility.QtListWidgetItem()
+                        i_item_widget = _utility._QtHItem()
+                        i_item = _item_for_list.QtListWidgetItem()
                         i_item.setSizeHint(
                             QtCore.QSize(self._popup_tag_filter_item_width, self._popup_tag_filter_item_height)
                         )
                         #
                         self._popup_tag_filter_view.addItem(i_item)
                         self._popup_tag_filter_view.setItemWidget(i_item, i_item_widget)
-                        i_item._connect_item_show_()
+                        i_item._initialize_item_show_()
                         #
                         i_item_widget._set_name_text_(i_tag)
                         i_item_widget._set_icon_name_text_(i_tag)
@@ -837,7 +839,7 @@ class QtPopupAsCompletion(
         self._init_frame_base_def_(self)
         self._init_popup_base_def_(self)
         #
-        self.__popup_cancel_button = gui_qt_wgt_button.QtIconPressButton(self)
+        self.__popup_cancel_button = _button.QtIconPressButton(self)
         self.__popup_cancel_button._set_name_text_('cancel popup')
         self.__popup_cancel_button._set_icon_file_path_(gui_core.GuiIcon.get('cancel'))
         self.__popup_cancel_button._set_icon_frame_draw_size_(18, 18)
@@ -945,15 +947,15 @@ class QtPopupAsCompletion(
             has_match = False
             text_current = self._entry_widget._get_value_()
             for index, i_text in enumerate(values):
-                i_item_widget = gui_qt_wgt_utility._QtHItem()
-                i_item = gui_qt_wgt_utility.QtListWidgetItem()
+                i_item_widget = _utility._QtHItem()
+                i_item = _item_for_list.QtListWidgetItem()
                 i_item.setSizeHint(
                     QtCore.QSize(self._w_popup_item, self._h_popup_item)
                 )
                 #
                 self._popup_view.addItem(i_item)
                 self._popup_view.setItemWidget(i_item, i_item_widget)
-                i_item._connect_item_show_()
+                i_item._initialize_item_show_()
                 #
                 i_item_widget._set_name_text_(i_text)
                 i_item_widget._set_index_(index)
@@ -1028,7 +1030,7 @@ class QtPopupAsChooseForGuide(
         self._init_frame_base_def_(self)
         self._init_popup_base_def_(self)
         #
-        self._popup_keyword_filter_entry = gui_qt_wgt_entry.QtEntryAsConstant(self)
+        self._popup_keyword_filter_entry = _entry.QtEntryAsConstant(self)
         self._popup_keyword_filter_entry.hide()
         self._popup_keyword_filter_entry._set_entry_enable_(True)
         self._popup_keyword_filter_entry.setAlignment(
@@ -1038,7 +1040,7 @@ class QtPopupAsChooseForGuide(
             self._do_popup_filter_
         )
         #
-        self.__popup_cancel_button = gui_qt_wgt_button.QtIconPressButton(self)
+        self.__popup_cancel_button = _button.QtIconPressButton(self)
         self.__popup_cancel_button._set_name_text_('close popup')
         self.__popup_cancel_button._set_icon_file_path_(gui_core.GuiIcon.get('close'))
         self.__popup_cancel_button._set_icon_hover_color_(gui_qt_core.QtBackgroundColors.DeleteHovered)
@@ -1199,13 +1201,13 @@ class QtPopupAsChooseForGuide(
             #
             text_current = input_widget._get_guide_name_text_at_(index)
             for seq, i_text in enumerate(values):
-                i_item_widget = gui_qt_wgt_utility._QtHItem()
-                i_item = gui_qt_wgt_utility.QtListWidgetItem()
+                i_item_widget = _utility._QtHItem()
+                i_item = _item_for_list.QtListWidgetItem()
                 i_item.setSizeHint(QtCore.QSize(self._w_popup_item, self._h_popup_item))
                 #
                 self._popup_view.addItem(i_item)
                 self._popup_view.setItemWidget(i_item, i_item_widget)
-                i_item._connect_item_show_()
+                i_item._initialize_item_show_()
                 i_item._update_item_keyword_filter_keys_tgt_([i_text])
                 #
                 if i_text:
@@ -1323,11 +1325,11 @@ class QtPopupAsChooseForRgba(
         self._selected_frame_border_color = gui_qt_core.QtBackgroundColors.Selected
         self._frame_background_color = gui_qt_core.QtBackgroundColors.Dark
 
-        self._popup_view = gui_qt_wgt_chart.QtChartAsRgbaChoose(self)
+        self._popup_view = _chart.QtChartAsRgbaChoose(self)
         self._popup_view.setFocusPolicy(QtCore.Qt.ClickFocus)
         self._popup_view.installEventFilter(self)
 
-        self._save_chart_button = gui_qt_wgt_button.QtIconPressButton(self)
+        self._save_chart_button = _button.QtIconPressButton(self)
         self._save_chart_button._set_icon_name_('tool/file-save')
         self._save_chart_button.press_clicked.connect(self._save_chart_)
 
@@ -1396,7 +1398,7 @@ class QtPopupAsChooseForRgba(
         self._set_popup_activated_(False)
 
     def _save_chart_(self):
-        d = bsc_core.SysBaseMtd.get_home_directory()
+        d = bsc_core.BscSystem.get_home_directory()
         file_path = six.u('{}/screenshot/untitled-{}.jpg').format(d, bsc_core.TimeExtraMtd.generate_time_tag_36())
 
         w, h = self.width(), self.height()

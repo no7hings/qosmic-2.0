@@ -19,8 +19,8 @@ class StgTmpBaseMtd(object):
             '{root}/temporary/{tag}/{date_tag}-{user}'.format(
                 **dict(
                     root=cls.ROOT,
-                    date_tag=bsc_cor_base.SysBaseMtd.get_date_tag(),
-                    user=bsc_cor_base.SysBaseMtd.get_user_name(),
+                    date_tag=bsc_cor_base.BscSystem.get_date_tag(),
+                    user=bsc_cor_base.BscSystem.get_user_name(),
                     tag=tag
                 )
             )
@@ -32,7 +32,7 @@ class StgTmpBaseMtd(object):
             '{root}/temporary/{tag}/{user}'.format(
                 **dict(
                     root=cls.ROOT,
-                    user=bsc_cor_base.SysBaseMtd.get_user_name(),
+                    user=bsc_cor_base.BscSystem.get_user_name(),
                     tag=tag
                 )
             )
@@ -47,7 +47,7 @@ class StgTmpBaseMtd(object):
 class StgTmpThumbnailMtd(object):
     @classmethod
     def get_key(cls, file_path):
-        return bsc_cor_base.UuidMtd.generate_by_file(file_path)
+        return bsc_cor_base.BscUuid.generate_by_file(file_path)
 
     @classmethod
     def get_file_path_(cls, file_path, width=128, ext='.jpg'):
@@ -71,7 +71,7 @@ class StgTmpThumbnailMtd(object):
 class StgTmpUsdMtd(object):
     @classmethod
     def generate_key(cls, file_paths):
-        return bsc_cor_base.UuidMtd.generate_by_files(file_paths)
+        return bsc_cor_base.BscUuid.generate_by_files(file_paths)
 
     @classmethod
     def generate_movie_file_path(cls, file_paths):
@@ -86,7 +86,7 @@ class StgTmpUsdMtd(object):
 class StgTmpYamlMtd(object):
     @classmethod
     def get_key(cls, file_path):
-        return bsc_cor_base.UuidMtd.generate_by_file(file_path)
+        return bsc_cor_base.BscUuid.generate_by_file(file_path)
 
     @classmethod
     def get_file_path(cls, file_path, tag='untitled'):
@@ -101,7 +101,7 @@ class StgTmpYamlMtd(object):
 class StgTmpTextMtd(object):
     @classmethod
     def get_key(cls, file_path):
-        return bsc_cor_base.UuidMtd.generate_by_file(file_path)
+        return bsc_cor_base.BscUuid.generate_by_file(file_path)
 
     @classmethod
     def get_file_path(cls, file_path, tag='untitled'):
@@ -116,7 +116,7 @@ class StgTmpTextMtd(object):
 class StgTmpInfoMtd(object):
     @classmethod
     def get_key(cls, file_path):
-        return bsc_cor_base.UuidMtd.generate_by_file(file_path)
+        return bsc_cor_base.BscUuid.generate_by_file(file_path)
 
     @classmethod
     def get_file_path(cls, file_path, tag='untitled'):
@@ -137,7 +137,7 @@ class DccTempCacheMtd(object):
 
     @classmethod
     def get_key(cls, data):
-        return bsc_cor_base.HashMtd.get_hash_value(
+        return bsc_cor_base.BscHash.get_hash_value(
             data, as_unique_id=True
         )
 

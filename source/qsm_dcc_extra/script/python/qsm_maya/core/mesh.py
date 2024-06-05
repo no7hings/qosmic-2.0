@@ -120,7 +120,7 @@ class MeshOpt(_shape.ShapeOpt):
     def to_hash(self):
         face_vertices = self.get_face_vertices()
         points = self.get_points()
-        return bsc_core.HashMtd.to_hash_key((face_vertices, points), as_unique_id=True)
+        return bsc_core.BscHash.to_hash_key((face_vertices, points), as_unique_id=True)
 
     def save_as_json(self, file_path):
         data = dict(
@@ -242,6 +242,6 @@ class MeshOpt(_shape.ShapeOpt):
         return dict_
 
     def get_material_assign_as_hash_key(self):
-        return bsc_core.HashMtd.to_hash_key(
+        return bsc_core.BscHash.to_hash_key(
             self.get_material_assign_map(), as_unique_id=True
         )

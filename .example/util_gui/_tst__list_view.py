@@ -5,10 +5,10 @@ import lxbasic.core as bsc_core
 
 import lxgui.qt.core as gui_qt_core
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
-class TestWindow(prx_widgets.PrxBaseWindow):
+class TestWindow(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(TestWindow, self).__init__(*args, **kwargs)
 
@@ -54,7 +54,7 @@ class TestWindow(prx_widgets.PrxBaseWindow):
                 # prx_item_widget.set_image_loading_start()
                 prx_item_widget.refresh_widget_force()
 
-            prx_item_widget = self._prx_list_view.create_item()
+            prx_item_widget = self._prx_list_view.create_item_widget()
             prx_item_widget.set_show_build_fnc(show_fnc_)
             prx_item_widget.set_check_enable(True)
             prx_item_widget.set_drag_enable(True)
@@ -87,7 +87,7 @@ class TestWindow(prx_widgets.PrxBaseWindow):
                 self._drag_released_fnc_
             )
         #
-        self._prx_list_view = prx_widgets.PrxListView()
+        self._prx_list_view = gui_prx_widgets.PrxListView()
         self._prx_list_view.get_top_tool_bar().set_expanded(True)
         self._prx_list_view.set_selection_use_multiply()
         # self._prx_list_view.set_drag_enable(True)

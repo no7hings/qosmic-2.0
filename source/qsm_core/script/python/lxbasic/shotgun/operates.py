@@ -17,10 +17,10 @@ class ImgOiioOptForThumbnail(object):
     def __init__(self, obj):
         self._obj = obj
         #
-        if bsc_core.SysBaseMtd.get_is_windows():
+        if bsc_core.BscSystem.get_is_windows():
             self._rv_io_path = 'C:/Program Files/Shotgun/*/bin/rvio_hw.exe'
             self._rv_ls_path = 'C:/Program Files/Shotgun/*/bin/rvls.exe'
-        elif bsc_core.SysBaseMtd.get_is_linux():
+        elif bsc_core.BscSystem.get_is_linux():
             self._rv_io_path = '/opt/rv/bin/rvio'
             self._rv_ls_path = '/opt/rv/bin/rvls'
         else:
@@ -89,10 +89,10 @@ class StgImageOpt(object):
     def __init__(self, obj):
         self._obj = obj
         #
-        if bsc_core.SysBaseMtd.get_is_windows():
+        if bsc_core.BscSystem.get_is_windows():
             self._rv_io_path = 'C:/Program Files/Shotgun/*/bin/rvio_hw.exe'
             self._rv_ls_path = 'C:/Program Files/Shotgun/*/bin/rvls.exe'
-        elif bsc_core.SysBaseMtd.get_is_linux():
+        elif bsc_core.BscSystem.get_is_linux():
             self._rv_io_path = '/opt/rv/bin/rvio'
             self._rv_ls_path = '/opt/rv/bin/rvls'
         else:

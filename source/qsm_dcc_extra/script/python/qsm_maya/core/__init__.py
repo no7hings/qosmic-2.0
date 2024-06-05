@@ -7,6 +7,10 @@ from .display_layer import *
 
 from .render import *
 
+from .node_category import *
+
+from .node_query import *
+
 from .node import *
 
 from .expression import *
@@ -64,6 +68,13 @@ from .mesh import *
 from .gpu_cache import *
 
 from .window import *
+
+from .shelf import *
+
+from .port_extra import *
+
+from .node_extra import *
+
 
 
 

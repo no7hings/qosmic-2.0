@@ -1,8 +1,8 @@
 # coding:utf-8
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
-class AbsPrxPnlWorkarea(prx_widgets.PrxSessionWindow):
+class AbsPrxPnlWorkarea(gui_prx_widgets.PrxSessionWindow):
     def __init__(self, session, *args, **kwargs):
         super(AbsPrxPnlWorkarea, self).__init__(session, *args, **kwargs)
 

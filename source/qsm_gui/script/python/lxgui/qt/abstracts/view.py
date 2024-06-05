@@ -4,28 +4,30 @@ from ... import core as gui_core
 # qt
 from ..core.wrap import *
 
-from .. import core as gui_qt_core
+from .. import core as _qt_core
 
-from . import base as gui_qt_abs_base
+from . import base as _base
+
+from . import show as _show
 
 
 class AbsQtTreeWidget(
     QtWidgets.QTreeWidget,
     #
-    gui_qt_abs_base.AbsQtEmptyBaseDef,
+    _base.AbsQtEmptyBaseDef,
     #
-    gui_qt_abs_base.AbsQtMenuBaseDef,
+    _base.AbsQtMenuBaseDef,
     #
-    gui_qt_abs_base.AbsQtViewFilterExtraDef,
+    _base.AbsQtViewFilterExtraDef,
     #
-    gui_qt_abs_base.AbsQtViewStateDef,
-    gui_qt_abs_base.AbsQtViewVisibleConnectionDef,
+    _base.AbsQtViewStateDef,
+    _base.AbsQtViewVisibleConnectionDef,
     #
-    gui_qt_abs_base.AbsQtViewScrollActionDef,
-    gui_qt_abs_base.AbsQtBuildViewDef,
-    gui_qt_abs_base.AbsQtShowForViewDef,
+    _base.AbsQtViewScrollActionDef,
+    _base.AbsQtBuildViewDef,
+    _show.AbsQtShowBaseForViewDef,
     #
-    gui_qt_abs_base.AbsQtBusyBaseDef,
+    _base.AbsQtBusyBaseDef,
 ):
     def __init__(self, *args, **kwargs):
         super(AbsQtTreeWidget, self).__init__(*args, **kwargs)
@@ -49,10 +51,10 @@ class AbsQtTreeWidget(
         self._init_view_build_extra_def_()
         self._setup_view_build_(self)
 
-        self._init_show_for_view_def_(self)
+        self._init_show_base_for_view_def_(self)
         #
         self._init_busy_base_def_(self)
-        self.setFont(gui_qt_core.QtFonts.Default)
+        self.setFont(_qt_core.QtFonts.Default)
         #
         self.customContextMenuRequested.connect(
             self._popup_menu_cbk_
@@ -130,9 +132,9 @@ class AbsQtTreeWidget(
                 QtGui.QIcon.On
             )
             #
-            self.headerItem().setBackground(index, gui_qt_core.QtBrushes.Background)
+            self.headerItem().setBackground(index, _qt_core.QtBrushes.Background)
             self.headerItem().setForeground(index, QtGui.QBrush(QtGui.QColor(255, 255, 255, 255)))
-            self.headerItem().setFont(index, gui_qt_core.QtFonts.NameNormal)
+            self.headerItem().setFont(index, _qt_core.QtFonts.NameNormal)
             # todo: in katana will make text display error, PyQt?
             # if QT_LOAD_INDEX == 1:
             self.headerItem().setIcon(index, icon)
@@ -183,17 +185,17 @@ class AbsQtTreeWidget(
 class AbsQtListWidget(
     QtWidgets.QListWidget,
     #
-    gui_qt_abs_base.AbsQtEmptyBaseDef,
+    _base.AbsQtEmptyBaseDef,
     #
-    gui_qt_abs_base.AbsQtViewSelectActionDef,
-    gui_qt_abs_base.AbsQtViewScrollActionDef,
+    _base.AbsQtViewSelectActionDef,
+    _base.AbsQtViewScrollActionDef,
     #
-    gui_qt_abs_base.AbsQtViewFilterExtraDef,
-    gui_qt_abs_base.AbsQtViewStateDef,
-    gui_qt_abs_base.AbsQtViewVisibleConnectionDef,
-    gui_qt_abs_base.AbsQtBuildViewDef,
-    gui_qt_abs_base.AbsQtShowForViewDef,
-    gui_qt_abs_base.AbsQtBusyBaseDef,
+    _base.AbsQtViewFilterExtraDef,
+    _base.AbsQtViewStateDef,
+    _base.AbsQtViewVisibleConnectionDef,
+    _base.AbsQtBuildViewDef,
+    _show.AbsQtShowBaseForViewDef,
+    _base.AbsQtBusyBaseDef,
 ):
     SortMode = gui_core.GuiSortMode
     SortOrder = gui_core.GuiSortOrder
@@ -236,20 +238,20 @@ class AbsQtListWidget(
         self._item_rects = []
         #
         self.setStyleSheet(
-            gui_qt_core.GuiQtStyle.get('QListView')
+            _qt_core.GuiQtStyle.get('QListView')
         )
         #
         self.verticalScrollBar().setStyleSheet(
-            gui_qt_core.GuiQtStyle.get('QScrollBar')
+            _qt_core.GuiQtStyle.get('QScrollBar')
         )
         self.horizontalScrollBar().setStyleSheet(
-            gui_qt_core.GuiQtStyle.get('QScrollBar')
+            _qt_core.GuiQtStyle.get('QScrollBar')
         )
         #
         self._init_view_build_extra_def_()
         self._setup_view_build_(self)
 
-        self._init_show_for_view_def_(self)
+        self._init_show_base_for_view_def_(self)
         self._init_busy_base_def_(self)
 
         self._sort_mode = self.SortMode.Number
@@ -287,17 +289,13 @@ class AbsQtListWidget(
         if self._sort_mode == self.SortMode.Number:
             items = [self.item(i) for i in range(self.count())]
             for i_item in items:
-                i_item_widget = self.itemWidget(i_item)
-                i_index = str(i_item_widget._sort_number_key).zfill(4)
-                i_item.setText(i_index)
+                i_item.setText(i_item._sort_number_key)
             #
             self._refresh_sort_()
         elif self._sort_mode == self.SortMode.Name:
             items = [self.item(i) for i in range(self.count())]
             for i_item in items:
-                i_item_widget = self.itemWidget(i_item)
-                i_name = str(i_item_widget._sort_name_key).lower()
-                i_item.setText(i_name)
+                i_item.setText(i_item._sort_name_key)
             #
             self._refresh_sort_()
 

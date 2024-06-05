@@ -3,10 +3,10 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
-class PnlUsdFormatConvert(prx_widgets.PrxSessionToolWindow):
+class PnlUsdFormatConvert(gui_prx_widgets.PrxSessionToolWindow):
     IMAGE_KEYS = [
         'preview'
     ]
@@ -38,21 +38,21 @@ class PnlUsdFormatConvert(prx_widgets.PrxSessionToolWindow):
             )
 
     def gui_setup_window(self):
-        s_0 = prx_widgets.PrxVScrollArea()
+        s_0 = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(s_0)
-        h_s = prx_widgets.PrxHSplitter()
+        h_s = gui_prx_widgets.PrxHSplitter()
         s_0.add_widget(h_s)
         #
-        s_1 = prx_widgets.PrxVScrollArea()
+        s_1 = gui_prx_widgets.PrxVScrollArea()
         h_s.add_widget(s_1)
         #
-        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         s_1.add_widget(self._options_prx_node)
         self._options_prx_node.create_ports_by_data(
             self._session.configure.get('build.node.options'),
         )
         #
-        self._tip_text_browser = prx_widgets.PrxTextBrowser()
+        self._tip_text_browser = gui_prx_widgets.PrxTextBrowser()
         s_1.add_widget(self._tip_text_browser)
         self._tip_text_browser.set_font_size(12)
         self._tip_text_browser.set_content(

@@ -61,7 +61,7 @@ class EnvBaseMtd(object):
 
     @classmethod
     def get_qt_thread_enable(cls):
-        if _base.SysApplicationMtd.get_is_maya():
+        if _base.BasApplication.get_is_maya():
             return False
         return True
 
@@ -134,7 +134,7 @@ class EnvBaseMtd(object):
 
     @classmethod
     def get_ui_language(cls):
-        return cls.get(cls.UI_LANGUAGE_KEY) or 'en_us'
+        return cls.get(cls.UI_LANGUAGE_KEY) or 'en_US'
 
 
 class EnvExtraMtd(EnvBaseMtd):

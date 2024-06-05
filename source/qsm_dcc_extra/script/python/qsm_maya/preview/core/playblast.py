@@ -228,7 +228,7 @@ class Playblast(object):
 
         image_file_path_ = '{}.####.jpg'.format(image_file_path_base)
 
-        cmd_script = bsc_core.FfmpegMtd.get_image_concat_command(
+        cmd_script = bsc_core.BscFfmpeg.get_image_concat_command(
             input=image_file_path_,
             output=movie_file_path,
             start_frame=start_frame,
@@ -277,7 +277,7 @@ class Playblast(object):
 
         directory_path_tmp = '{}/{}'.format(
             bsc_storage.StgUserMtd.get_user_temporary_directory(),
-            bsc_core.UuidMtd.generate_new()
+            bsc_core.BscUuid.generate_new()
         )
         bsc_storage.StgPathMtd.create_directory(directory_path_tmp)
         # directory_path_tmp = '{}.images'.format(file_path_base)

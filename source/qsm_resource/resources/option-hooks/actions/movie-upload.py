@@ -29,7 +29,7 @@ def main(session):
             version=_qc_version,
             version_type='daily',
             movie_file=_qc_review_file_path,
-            user=bsc_core.SysBaseMtd.get_user_name(),
+            user=bsc_core.BscSystem.get_user_name(),
             description=options_kwargs['user.description']
         )
 

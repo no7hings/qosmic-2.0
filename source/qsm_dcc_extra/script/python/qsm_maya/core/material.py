@@ -45,3 +45,73 @@ class Material(object):
     def assign_to(cls, path, geometry_path):
         cmds.sets(geometry_path, forceElement=path)
 
+
+class MaterialLightLink(object):
+    OBJ_NAME_0 = 'renderPartition'
+    OBJ_NAME_1 = 'lightLinker1'
+    OBJ_NAME_2 = 'defaultLightSet'
+
+    @classmethod
+    def create(cls, path):
+        def get_connection_index_():
+            for i in range(5000):
+                if (
+                    get_is_partition_connected_at_(i)
+                    and get_is_obj_link_connected_at_(i)
+                    and get_is_obj_shadow_link_connected_at_(i)
+                    and get_is_light_link_connected_at_(i)
+                    and get_is_light_shadow_link_connected_at_(i)
+                ):
+                    return i
+
+        def get_is_connected_(connection):
+            boolean = False
+            if cmds.objExists(connection):
+                if not cmds.connectionInfo(connection, isDestination=1):
+                    boolean = True
+            return boolean
+
+        def get_is_partition_connected_at_(index):
+            connection = cls.OBJ_NAME_0+'.sets[%s]' % index
+            return get_is_connected_(connection)
+
+        def get_is_obj_link_connected_at_(index):
+            connection = cls.OBJ_NAME_1+'.link[%s].object' % index
+            return get_is_connected_(connection)
+
+        def get_is_obj_shadow_link_connected_at_(index):
+            connection = cls.OBJ_NAME_1+'.shadowLink[%s].shadowObject' % index
+            return get_is_connected_(connection)
+
+        def get_is_light_link_connected_at_(index):
+            connection = cls.OBJ_NAME_1+'.link[%s].light' % index
+            return get_is_connected_(connection)
+
+        def get_is_light_shadow_link_connected_at_(index):
+            connection = cls.OBJ_NAME_1+'.shadowLink[%s].shadowLight' % index
+            return get_is_connected_(connection)
+
+        def main_fnc_():
+            index = get_connection_index_()
+            if index:
+                # Debug ( Repeat )
+                if not cmds.connectionInfo(path+'.partition', isSource=1):
+                    cmds.connectAttr(path+'.partition', cls.OBJ_NAME_0+'.sets[%s]'%index)
+                    cmds.connectAttr(
+                        path+'.message',
+                        cls.OBJ_NAME_1+'.link[%s].object'%index
+                    )
+                    cmds.connectAttr(
+                        path+'.message',
+                        cls.OBJ_NAME_1+'.shadowLink[%s].shadowObject'%index
+                    )
+                    cmds.connectAttr(
+                        cls.OBJ_NAME_2+'.message',
+                        cls.OBJ_NAME_1+'.link[%s].light'%index
+                    )
+                    cmds.connectAttr(
+                        cls.OBJ_NAME_2+'.message',
+                        cls.OBJ_NAME_1+'.shadowLink[%s].shadowLight'%index
+                    )
+
+        main_fnc_()

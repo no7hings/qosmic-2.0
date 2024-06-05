@@ -426,7 +426,7 @@ class MeshOpt(
                     u'obj="{}"; uv-map-name="{}"'.format(self.obj.path, uv_map_name)
                 )
         except Exception:
-            bsc_core.ExceptionMtd.set_print()
+            bsc_core.BscException.set_print()
             bsc_log.Log.trace_method_error(
                 'mesh uv-map assign',
                 'obj="{}"'.format(self.obj.path)
@@ -536,34 +536,34 @@ class MeshOpt(
         return raw
 
     def get_path_as_uuid(self, lstrip=None):
-        return bsc_core.HashMtd.get_hash_value(self.get_path(lstrip), as_unique_id=True)
+        return bsc_core.BscHash.get_hash_value(self.get_path(lstrip), as_unique_id=True)
 
     def get_name_as_uuid(self):
-        return bsc_core.HashMtd.get_hash_value(self.get_name(), as_unique_id=True)
+        return bsc_core.BscHash.get_hash_value(self.get_name(), as_unique_id=True)
 
     def get_points_as_uuid(self, ordered=False, round_count=4):
         raw = self.get_points()
         if ordered is True:
             raw.sort()
         raw = bsc_core.RawPointArrayOpt(raw).round_to(round_count)
-        return bsc_core.HashMtd.get_hash_value(raw, as_unique_id=True)
+        return bsc_core.BscHash.get_hash_value(raw, as_unique_id=True)
 
     def get_face_vertices_as_uuid(self):
         raw = self.get_face_vertices()
-        return bsc_core.HashMtd.get_hash_value(raw, as_unique_id=True)
+        return bsc_core.BscHash.get_hash_value(raw, as_unique_id=True)
 
     def get_geometry_as_uuid(self):
         face_vertices = self.get_face_vertices()
         points = self.get_points()
-        return bsc_core.HashMtd.get_hash_value((face_vertices, points), as_unique_id=True)
+        return bsc_core.BscHash.get_hash_value((face_vertices, points), as_unique_id=True)
 
     def get_uv_map_face_vertices_as_uuid(self, uv_map_name='map1'):
         uv_map = self.get_uv_map(uv_map_name)
         if uv_map:
             uv_face_vertex_counts, uv_face_vertex_indices, uv_map_coords = uv_map
             raw = uv_face_vertex_counts, uv_face_vertex_indices
-            return bsc_core.HashMtd.get_hash_value(raw, as_unique_id=True)
-        return bsc_core.UuidMtd.generate_new()
+            return bsc_core.BscHash.get_hash_value(raw, as_unique_id=True)
+        return bsc_core.BscUuid.generate_new()
 
     def mark_uuids(self):
         # use transform
@@ -682,7 +682,7 @@ class NurbsCurveOpt(
 
     def get_knots_as_uuid(self):
         raw = self.get_knots()
-        return bsc_core.HashMtd.get_hash_value(raw, as_unique_id=True)
+        return bsc_core.BscHash.get_hash_value(raw, as_unique_id=True)
 
     def get_points(self):
         return mya_core.Om2CurveOpt(

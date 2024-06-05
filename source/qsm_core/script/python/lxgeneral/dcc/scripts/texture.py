@@ -56,7 +56,7 @@ class ScpDccTextures(object):
 
     @bsc_core.MdfBaseMtd.run_as_ignore
     def _repath_post_fnc(self):
-        if bsc_core.SysApplicationMtd.get_is_maya():
+        if bsc_core.BasApplication.get_is_maya():
             import lxmaya.scripts as mya_scripts
 
             mya_scripts.ScpTexture._repair_texture_tiles()

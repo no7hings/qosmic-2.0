@@ -5,9 +5,9 @@ import lxbasic.web as bsc_web
 
 import qsm_task.process as qsm_tsk_process
 
-time_tag = bsc_core.SysBaseMtd.get_time_tag()
+time_tag = bsc_core.BscSystem.get_time_tag()
 
-bsc_core.SysBaseMtd.get_time_tag()
+bsc_core.BscSystem.get_time_tag()
 
 print qsm_tsk_process.TaskProcessClient.get_server_status()
 

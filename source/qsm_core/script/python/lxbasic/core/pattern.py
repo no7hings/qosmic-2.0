@@ -21,7 +21,7 @@ class PtnBaseMtd(object):
             p_str
         )
         if _:
-            if _base.SysBaseMtd.get_is_windows():
+            if _base.BscSystem.get_is_windows():
                 _ = map(lambda x: x.replace('\\', '/'), _)
             return _
         return []
@@ -336,11 +336,11 @@ class AbsPtnParseOpt(object):
         )
 
     def get_variants(self, result):
-        if _base.SysBaseMtd.get_is_linux():
+        if _base.BscSystem.get_is_linux():
             i_p = parse.parse(
                 self._pattern, result, case_sensitive=True
             )
-        elif _base.SysBaseMtd.get_is_windows():
+        elif _base.BscSystem.get_is_windows():
             i_p = parse.parse(
                 self._pattern, result, case_sensitive=False
             )

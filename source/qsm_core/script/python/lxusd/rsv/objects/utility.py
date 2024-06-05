@@ -90,7 +90,7 @@ class RsvUsdAssetSetCreator(object):
             file_opt = bsc_storage.StgFileOpt(yml_file_path)
             if file_opt.get_is_exists() is True:
                 return file_opt.set_read()
-            if bsc_core.SysBaseMtd.get_is_linux():
+            if bsc_core.BscSystem.get_is_linux():
                 dict_ = cls._get_shot_asset_dict(rsv_asset, rsv_shot)
                 file_opt.set_write(dict_)
                 return dict_
@@ -368,7 +368,7 @@ class RsvUsdAssetSetCreator(object):
             if file_opt.get_is_exists() is True:
                 return file_opt.set_read()
             else:
-                if bsc_core.SysBaseMtd.get_is_linux():
+                if bsc_core.BscSystem.get_is_linux():
                     dict_ = cls._get_asset_usd_set_dress_variant_dict(rsv_asset)
                     file_opt.set_write(dict_)
                     return dict_

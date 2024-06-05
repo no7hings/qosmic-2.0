@@ -1,14 +1,14 @@
 # coding:utf-8
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxuniverse.objects as unr_objects
 
 
-class W(prx_widgets.PrxBaseWindow):
+class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
         #
-        c = prx_widgets.PrxNGGraph()
+        c = gui_prx_widgets.PrxNGGraph()
         self.add_widget(c)
         u = unr_objects.ObjUniverse()
 

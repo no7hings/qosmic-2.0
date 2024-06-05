@@ -27,7 +27,7 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.core as gui_prx_core
 
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.proxy.scripts as gui_prx_scripts
 
@@ -71,7 +71,7 @@ class AbsRenderSubmitterDef(object):
 
 
 class AbsPnlSubmitterForRenderBase(
-    prx_widgets.PrxBaseWindow,
+    gui_prx_widgets.PrxBaseWindow,
     AbsRenderSubmitterDef,
 ):
     ITEM_ICON_FRAME_SIZE = 26, 26
@@ -112,48 +112,48 @@ class AbsPnlSubmitterForRenderBase(
         self._set_viewer_groups_build_()
 
     def _set_viewer_groups_build_(self):
-        h_splitter_0 = prx_widgets.PrxHSplitter()
+        h_splitter_0 = gui_prx_widgets.PrxHSplitter()
         self.add_widget(h_splitter_0)
         #
-        v_splitter_0 = prx_widgets.PrxVSplitter()
+        v_splitter_0 = gui_prx_widgets.PrxVSplitter()
         h_splitter_0.add_widget(v_splitter_0)
         qt_scroll_area_0 = qt_widgets.QtVScrollArea()
         v_splitter_0.add_widget(qt_scroll_area_0)
         qt_layout_0 = qt_scroll_area_0._layout
         #
-        self._schemes_prx_node = prx_widgets.PrxOptionsNode('schemes')
+        self._schemes_prx_node = gui_prx_widgets.PrxOptionsNode('schemes')
         qt_layout_0.addWidget(self._schemes_prx_node.widget)
         #
-        self._options_prx_node = prx_widgets.PrxOptionsNode('options')
+        self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         qt_layout_0.addWidget(self._options_prx_node.widget)
         #
-        prx_expanded_group_0 = prx_widgets.PrxHToolGroup()
+        prx_expanded_group_0 = gui_prx_widgets.PrxHToolGroup()
         v_splitter_0.add_widget(prx_expanded_group_0)
         prx_expanded_group_0.set_name('combinations')
         prx_expanded_group_0.set_expanded(True)
         #
-        self._filter_tree_viewer_0 = prx_widgets.PrxTreeView()
+        self._filter_tree_viewer_0 = gui_prx_widgets.PrxTreeView()
         prx_expanded_group_0.add_widget(self._filter_tree_viewer_0)
         v_splitter_0.set_stretches([2, 1])
         #
-        prx_expanded_group_1 = prx_widgets.PrxHToolGroup()
+        prx_expanded_group_1 = gui_prx_widgets.PrxHToolGroup()
         h_splitter_0.add_widget(prx_expanded_group_1)
         prx_expanded_group_1.set_expanded(True)
         prx_expanded_group_1.set_name('renderers')
-        self._rsv_renderer_list_view = prx_widgets.PrxListView()
+        self._rsv_renderer_list_view = gui_prx_widgets.PrxListView()
         prx_expanded_group_1.add_widget(self._rsv_renderer_list_view)
 
         qt_scroll_area_1 = qt_widgets.QtVScrollArea()
         qt_layout_1 = qt_scroll_area_1._layout
         h_splitter_0.add_widget(qt_scroll_area_1)
         #
-        self._usd_prx_node = prx_widgets.PrxOptionsNode('usd')
+        self._usd_prx_node = gui_prx_widgets.PrxOptionsNode('usd')
         qt_layout_1.addWidget(self._usd_prx_node.widget)
         #
-        self._variables_prx_node = prx_widgets.PrxOptionsNode('variables')
+        self._variables_prx_node = gui_prx_widgets.PrxOptionsNode('variables')
         qt_layout_1.addWidget(self._variables_prx_node.widget)
         #
-        self._settings_prx_node = prx_widgets.PrxOptionsNode('settings')
+        self._settings_prx_node = gui_prx_widgets.PrxOptionsNode('settings')
         qt_layout_1.addWidget(self._settings_prx_node.widget)
         #
         h_splitter_0.set_stretches([1, 2, 1])
@@ -170,7 +170,7 @@ class AbsPnlSubmitterForRenderBase(
         self._prx_dcc_obj_tree_view_tag_filter_opt = gui_prx_scripts.GuiPrxScpForTreeTagFilter(
             prx_tree_view_src=self._filter_tree_viewer_0,
             prx_tree_view_tgt=self._rsv_renderer_list_view,
-            prx_tree_item_cls=prx_widgets.PrxObjTreeItem
+            prx_tree_item_cls=gui_prx_widgets.PrxObjTreeItem
         )
 
         self._rsv_renderer_list_view.set_item_frame_size_basic(
@@ -750,7 +750,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
             )
 
         #
-        rsv_unit_prx_item = self._rsv_renderer_list_view.create_item()
+        rsv_unit_prx_item = self._rsv_renderer_list_view.create_item_widget()
         keys = []
         for j_key in self._variable_keys:
             keys.append(
@@ -965,7 +965,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                     option_hook_key='rsv-task-batchers/asset/maya/camera-export',
                     #
                     file=camera_work_maya_scene_scr_file_path,
-                    user=bsc_core.SysBaseMtd.get_user_name(),
+                    user=bsc_core.BscSystem.get_user_name(),
                     #
                     # td_enable=True,
                     rez_beta=True,
@@ -997,7 +997,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
             hook_option_dic = self._get_hook_option_dic_()
             if hook_option_dic:
                 if self.get_file_is_changed() is True:
-                    hook_option_dic['user'] = bsc_core.SysBaseMtd.get_user_name()
+                    hook_option_dic['user'] = bsc_core.BscSystem.get_user_name()
                     hook_option_dic['option_hook_key'] = 'rsv-task-batchers/asset/gen-cmb-render-submit'
                     option_opt = bsc_core.ArgDictStringOpt(hook_option_dic)
                     #
@@ -1357,7 +1357,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
             post_fnc_()
 
     def set_usd_refresh(self):
-        if bsc_core.SysBaseMtd.get_is_linux():
+        if bsc_core.BscSystem.get_is_linux():
             output_component_usd_file_path = self._output_component_usd_file_unit.get_result('latest')
             if output_component_usd_file_path:
                 paths = self._rsv_entity_set_usd_creator.get_effect_component_paths(output_component_usd_file_path)
@@ -1432,7 +1432,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
         )
         for i_seq, i_variants in enumerate(combinations):
             # print i_seq, i_variants
-            i_prx_item = self._rsv_renderer_list_view.create_item()
+            i_prx_item = self._rsv_renderer_list_view.create_item_widget()
             set_thread_create_fnc_(i_prx_item, i_variants)
             for j_key in self._variable_keys:
                 self._prx_dcc_obj_tree_view_tag_filter_opt.set_tgt_item_tag_update(
@@ -1513,7 +1513,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
         hook_option_dic = self._get_hook_option_dic_()
         if hook_option_dic:
             if self.get_file_is_changed() is True:
-                hook_option_dic['user'] = bsc_core.SysBaseMtd.get_user_name()
+                hook_option_dic['user'] = bsc_core.BscSystem.get_user_name()
                 hook_option_dic['option_hook_key'] = 'rsv-task-batchers/shot/tmp-render-submit'
                 #
                 option_opt = bsc_core.ArgDictStringOpt(hook_option_dic)

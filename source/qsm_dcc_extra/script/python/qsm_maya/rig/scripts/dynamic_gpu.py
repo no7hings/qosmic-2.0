@@ -28,7 +28,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
 
     def export_source(self, file_path):
         if self._root is not None:
-            bsc_core.StgBaseMtd.create_directory(
+            bsc_core.BscStorage.create_directory(
                 os.path.dirname(file_path)
             )
             _mya_core.SceneFile.export_file(
@@ -38,9 +38,9 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
     def export_motion(self):
         if self._root is not None:
             motion = _motion.AdvMotionOpt(self._namespace).get_animations()
-            key = bsc_core.HashMtd.to_hash_key(motion)
+            key = bsc_core.BscHash.to_hash_key(motion)
             directory_path = _ast_core.AssetCache.generate_dynamic_gpu_directory(
-                user_name=bsc_core.SysBaseMtd.get_user_name(), key=key
+                user_name=bsc_core.BscSystem.get_user_name(), key=key
             )
             motion_file_path = '{}/motion.json'.format(directory_path)
             cache_file_path = '{}/gpu.ma'.format(directory_path)
@@ -109,7 +109,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
             return None, cache_file_path
         else:
             directory_path = _ast_core.AssetCache.generate_dynamic_gpu_directory(
-                user_name=bsc_core.SysBaseMtd.get_user_name()
+                user_name=bsc_core.BscSystem.get_user_name()
             )
             source_file_path = '{}/source.ma'.format(directory_path)
             self.export_source(source_file_path)
@@ -300,7 +300,7 @@ class DynamicGpuCacheGenerate(object):
 
     def export_source(self, file_path):
         if self._root is not None:
-            bsc_core.StgBaseMtd.create_directory(
+            bsc_core.BscStorage.create_directory(
                 os.path.dirname(file_path)
             )
             _mya_core.SceneFile.export_file(

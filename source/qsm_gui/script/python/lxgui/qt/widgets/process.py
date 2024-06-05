@@ -392,13 +392,13 @@ class QtProcessingBar(QtWidgets.QWidget):
 
     def _generate_thread_(self):
         self.__trd = _QtProcessingThread(self)
-        self.__start_timestamp = bsc_core.SysBaseMtd.get_timestamp()
+        self.__start_timestamp = bsc_core.BscSystem.get_timestamp()
         self.__process_timer.start(100)
         return self.__trd
 
     def _get_cost_timestamp_(self):
         if self.__finish_timestamp is None:
-            return bsc_core.SysBaseMtd.get_timestamp()-self.__start_timestamp
+            return bsc_core.BscSystem.get_timestamp()-self.__start_timestamp
         return self.__finish_timestamp-self.__start_timestamp
 
     def _start_(self):
@@ -454,7 +454,7 @@ class QtProcessingBar(QtWidgets.QWidget):
         self.__is_finished = self._get_is_finished_()
 
         if self.__is_finished is True:
-            self.__finish_timestamp = bsc_core.SysBaseMtd.get_timestamp()
+            self.__finish_timestamp = bsc_core.BscSystem.get_timestamp()
 
         self._refresh_widget_draw_()
 

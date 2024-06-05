@@ -5,10 +5,10 @@ import lxbasic.log as bsc_log
 
 import lxsession.commands as ssn_commands
 # gui
-import lxgui.proxy.widgets as prx_widgets
+import lxgui.proxy.widgets as gui_prx_widgets
 
 
-class AbsToolKitForDcc(prx_widgets.PrxSessionWindow):
+class AbsToolKitForDcc(gui_prx_widgets.PrxSessionWindow):
     """
 # coding:utf-8
 import lxkatana
@@ -21,22 +21,22 @@ import lxsession.commands as ssn_commands; ssn_commands.execute_hook("dcc-tools/
         super(AbsToolKitForDcc, self).__init__(session, *args, **kwargs)
 
     def gui_setup_window(self):
-        self._top_prx_tool_bar = prx_widgets.PrxHToolBar()
+        self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
         self.add_widget(self._top_prx_tool_bar)
         self._top_prx_tool_bar.set_expanded(True)
         self._top_prx_tool_bar.set_align_left()
 
-        self._switch_tool_box = prx_widgets.PrxHToolBox()
+        self._switch_tool_box = gui_prx_widgets.PrxHToolBox()
         self._top_prx_tool_bar.add_widget(self._switch_tool_box)
         self._switch_tool_box.set_expanded(True)
 
-        self._filter_tool_box = prx_widgets.PrxHToolBox()
+        self._filter_tool_box = gui_prx_widgets.PrxHToolBox()
         self._top_prx_tool_bar.add_widget(self._filter_tool_box)
 
-        self._filter_bar = prx_widgets.PrxFilterBar()
+        self._filter_bar = gui_prx_widgets.PrxFilterBar()
         self._filter_tool_box.add_widget(self._filter_bar)
 
-        self._scroll_bar = prx_widgets.PrxVScrollArea()
+        self._scroll_bar = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(self._scroll_bar)
 
         self._w_p, self._h_p = .5, .25
@@ -68,7 +68,7 @@ import lxsession.commands as ssn_commands; ssn_commands.execute_hook("dcc-tools/
 
         tools = []
         for i_key, i_w_p, i_h_p in self._percent_args:
-            i_b = prx_widgets.PrxToggleButton()
+            i_b = gui_prx_widgets.PrxToggleButton()
             self._switch_tool_box.add_widget(i_b)
             i_b.set_icon_name('tool/icon-{}'.format(i_key))
             if i_w_p == self._w_p:
@@ -96,12 +96,12 @@ import lxsession.commands as ssn_commands; ssn_commands.execute_hook("dcc-tools/
     def gui_get_view_args(self, group_name):
         group_path = '/{}'.format(group_name)
         if group_path not in self._view_dict:
-            tool_group = prx_widgets.PrxHToolGroupNew()
+            tool_group = gui_prx_widgets.PrxHToolGroupNew()
             self._scroll_bar.add_widget(tool_group)
             tool_group.set_expanded(True)
             tool_group.set_name(group_name)
             #
-            grid_layout_widget = prx_widgets.PrxToolGridLayoutWidget()
+            grid_layout_widget = gui_prx_widgets.PrxToolGridLayoutWidget()
             grid_layout_widget.set_path(group_path)
             self._view_dict[group_path] = grid_layout_widget
             tool_group.add_widget(grid_layout_widget)
@@ -171,7 +171,7 @@ import lxsession.commands as ssn_commands; ssn_commands.execute_hook("dcc-tools/
                 icon_name = gui_configure.get('icon_name')
                 tool_tip_ = gui_configure.get('tool_tip') or ''
 
-                press_item = prx_widgets.PrxPressButton()
+                press_item = gui_prx_widgets.PrxPressButton()
                 grid_layout_widget.add_widget(press_item)
                 press_item.set_name(name)
                 if icon_name:

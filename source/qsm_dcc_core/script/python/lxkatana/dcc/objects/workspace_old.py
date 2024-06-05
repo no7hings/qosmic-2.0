@@ -1160,7 +1160,7 @@ class AssetWorkspaceOld(object):
 
     def get_ng_material_group_path_use_hash(self, and_geometry_opt, pass_name='default'):
         materials = and_geometry_opt.get_material_assigns()
-        hash_key = bsc_core.HashMtd.get_hash_value(
+        hash_key = bsc_core.BscHash.get_hash_value(
             materials, as_unique_id=True
         )
         if hash_key in self._material_group_hash_stack:
@@ -1218,7 +1218,7 @@ class AssetWorkspaceOld(object):
     # material
     def get_ng_material_path_use_hash(self, and_geometry_opt, pass_name='default'):
         materials = and_geometry_opt.get_material_assigns()
-        hash_key = bsc_core.HashMtd.get_hash_value(
+        hash_key = bsc_core.BscHash.get_hash_value(
             materials, as_unique_id=True
         )
         if hash_key in self._material_hash_stack:
@@ -1331,7 +1331,7 @@ class AssetWorkspaceOld(object):
     #
     def get_ng_material_assign_path_use_hash(self, and_geometry_opt, pass_name='default'):
         materials = and_geometry_opt.get_material_assigns()
-        hash_key = bsc_core.HashMtd.get_hash_value(
+        hash_key = bsc_core.BscHash.get_hash_value(
             materials, as_unique_id=True
         )
         if hash_key in self._material_assign_hash_stack:
@@ -1441,7 +1441,7 @@ class AssetWorkspaceOld(object):
         properties = and_geometry_opt.get_properties()
         visibilities = and_geometry_opt.get_visibilities()
         properties.update(visibilities)
-        hash_key = bsc_core.HashMtd.get_hash_value(
+        hash_key = bsc_core.BscHash.get_hash_value(
             properties, as_unique_id=True
         )
         if hash_key in self._property_assign_hash_stack:

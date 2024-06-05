@@ -6,7 +6,7 @@ import lxmaya.dcc.objects as mya_dcc_objects
 
 class PnlManagerForAssetTextureDcc(mng_gui_abstracts.AbsPnlManagerForAssetTextureDcc):
     DCC_SELECTION_CLS = mya_dcc_objects.Selection
-    DCC_NAMESPACE = 'maya'
+    GUI_NAMESPACE = 'maya'
 
     def __init__(self, *args, **kwargs):
         super(PnlManagerForAssetTextureDcc, self).__init__(*args, **kwargs)

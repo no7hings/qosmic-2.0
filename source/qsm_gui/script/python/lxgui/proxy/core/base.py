@@ -230,13 +230,13 @@ class GuiProxyException(object):
 
     @classmethod
     def _generate_window_(cls):
-        from .. import widgets as prx_widgets
+        from .. import widgets as gui_prx_widgets
 
         _0 = GuiProxyUtil.find_widget_proxy_by_category(['exception_window'])
         if _0:
             return _0[0]
 
-        _1 = prx_widgets.PrxWindowForException()
+        _1 = gui_prx_widgets.PrxWindowForException()
 
         _1.set_window_title('Exception')
         _1.set_definition_window_size((640, 320))
