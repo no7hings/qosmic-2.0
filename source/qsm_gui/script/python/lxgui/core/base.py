@@ -133,8 +133,8 @@ class GuiXml(object):
         return '#dfdfdf'
 
     @classmethod
-    def get_text(cls, text, font_color=gui_cor_configure.GuiXmlColor.White, font_family='Arial', font_size=8):
-        html_color = cls.get_color(font_color)
+    def get_text(cls, text, text_color=gui_cor_configure.GuiXmlColor.White, font_family='Arial', font_size=8):
+        html_color = cls.get_color(text_color)
         #
         text = text.replace(' ', '&nbsp;')
         text = text.replace('<', '&lt;')
@@ -149,7 +149,7 @@ class GuiXml(object):
 <html>
     <head>
         <style>
-            p.s{{line-height: 100%; font-family: '{font_family}'; font-size: {font_size}pt; color: {font_color}; word-spacing: normal;}}
+            p.s{{line-height: 100%; font-family: '{font_family}'; font-size: {font_size}pt; color: {text_color}; word-spacing: normal;}}
         </style>
     </head>
     <body>
@@ -160,7 +160,7 @@ class GuiXml(object):
             **dict(
                 font_family=font_family,
                 font_size=font_size,
-                font_color=html_color,
+                text_color=html_color,
                 raw=raw
             )
         )

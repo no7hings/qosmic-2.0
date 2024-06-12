@@ -126,10 +126,10 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
             render_output_directory_path = render_layer_scp.get_render_output_directory(default_render_version)
             name_dict['output-directory'] = render_output_directory_path
             #
-            latest_render_output_image_file_path = render_layer_scp.get_latest_render_output_image()
-            if latest_render_output_image_file_path is not None:
+            latest_render_output_image_path = render_layer_scp.get_latest_render_output_image()
+            if latest_render_output_image_path is not None:
                 file_paths = bsc_storage.StgFileMtdForTiles.get_exists_unit_paths(
-                    latest_render_output_image_file_path
+                    latest_render_output_image_path
                 )
                 if file_paths:
                     file_path = file_paths[0]

@@ -85,7 +85,7 @@ class _GuiDirectoryOpt(
         self.__pull_expand_cache()
 
         path = directory_path[len(self._root):]
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             path_opt = bsc_core.PthNodeOpt(path)
             prx_item = self._prx_tree_view.create_item(
                 path_opt.get_name(),
@@ -105,15 +105,15 @@ class _GuiDirectoryOpt(
                 ]
             )
             return True, prx_item
-        return False, self.gui_get(path)
+        return False, self.gui_get_one(path)
 
     def gui_add_directory(self, directory_opt):
         directory_path = directory_opt.get_path()
         path = directory_path[len(self._root):]
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             path_opt = bsc_core.PthNodeOpt(path)
             #
-            parent_gui = self.gui_get(path_opt.get_parent_path())
+            parent_gui = self.gui_get_one(path_opt.get_parent_path())
             #
             prx_item = parent_gui.add_child(
                 path_opt.name,
@@ -143,7 +143,7 @@ class _GuiDirectoryOpt(
                     prx_item.ValidationStatus.Unwritable
                 )
             return prx_item
-        return self.gui_get(path)
+        return self.gui_get_one(path)
 
     def gui_add_next_directories(self, directory_path):
         directory_opt = bsc_storage.StgDirectoryOpt(directory_path)
@@ -248,7 +248,6 @@ class _GuiFileOpt(
         self._prx_list_view.set_item_frame_size_basic(*self._item_frame_size)
         self._prx_list_view.set_item_image_frame_size(*self._item_image_frame_size)
         self._prx_list_view.set_item_name_frame_size(*self._item_name_frame_size)
-        self._prx_list_view.set_item_icon_frame_draw_enable(False)
         self._prx_list_view.set_item_name_frame_draw_enable(False)
         self._prx_list_view.set_item_names_draw_range([None, 2])
         self._prx_list_view.set_item_image_frame_draw_enable(False)
@@ -315,7 +314,7 @@ class _GuiFileOpt(
         file_path = file_opt.path
         file_name = file_opt.name
 
-        if self.gui_is_exists(file_path) is False:
+        if self.gui_check_exists(file_path) is False:
             prx_item_widget = self._prx_list_view.create_item_widget()
             self._item_dict[file_path] = prx_item_widget
             version = file_opt.properties.version
@@ -332,7 +331,7 @@ class _GuiFileOpt(
                 file_opt, namespace=self.GUI_NAMESPACE
             )
             return prx_item_widget
-        return self.gui_get(file_path)
+        return self.gui_get_one(file_path)
 
 
 class AbsPrxUnitForWorkarea(prx_abstracts.AbsPrxWidget):

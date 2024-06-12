@@ -1,17 +1,17 @@
 # PyQt5 Video player
 #!/usr/bin/env python
 
-from PySide2.QtCore import QDir, Qt, QUrl
-from PySide2.QtMultimedia import QMediaContent, QMediaPlayer
-from PySide2.QtMultimediaWidgets import QVideoWidget
-from PySide2.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QLabel,
+from PyQt5.QtCore import QDir, Qt, QUrl
+from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
+from PyQt5.QtMultimediaWidgets import QVideoWidget
+from PyQt5.QtWidgets import (QApplication, QFileDialog, QHBoxLayout, QLabel,
         QPushButton, QSizePolicy, QSlider, QStyle, QVBoxLayout, QWidget)
-from PySide2.QtWidgets import QMainWindow,QWidget, QPushButton, QAction
-from PySide2.QtGui import QIcon
+from PyQt5.QtWidgets import QMainWindow,QWidget, QPushButton, QAction, QWidget
+from PyQt5.QtGui import QIcon
 import sys
 
 
-class TestVideoPlayer(QtWidgets.QWidget):
+class TestVideoPlayer(QWidget):
     def __init__(self, *args, **kwargs):
         super(TestVideoPlayer, self).__init__(*args, **kwargs)
 

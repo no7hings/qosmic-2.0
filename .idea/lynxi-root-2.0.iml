@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$/../pipeline-root/startup" />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_core/script/python" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_dcc_core/script/python" isTestSource="false" />
@@ -11,7 +12,6 @@
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_main/script/python" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_process/script/python" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_extra/script/python" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/source/qsm_lib/bin/windows-python-2.7.18/Lib/site-packages" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_lib" />
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_dcc_extra/resources/rig" />
       <excludeFolder url="file://$MODULE_DIR$/.documents" />

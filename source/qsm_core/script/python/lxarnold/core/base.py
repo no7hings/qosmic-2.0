@@ -155,7 +155,7 @@ class AndPortOpt(object):
     def get_type_is_array(self):
         return self.type == ai.AI_TYPE_ARRAY
 
-    def get_is_enumerate_type(self):
+    def is_enumerate_type(self):
         return self.type == ai.AI_TYPE_ENUM
 
     def get_enumerate_strings(self):

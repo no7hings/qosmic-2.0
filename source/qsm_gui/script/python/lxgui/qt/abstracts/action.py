@@ -255,6 +255,7 @@ class AbsQtActionBaseDef(object):
 
     def _create_widget_shortcut_action_(self, fnc, shortcut):
         action = QtWidgets.QAction(self._widget)
+        # noinspection PyUnresolvedReferences
         action.triggered.connect(fnc)
         action.setShortcut(QtGui.QKeySequence(shortcut))
         action.setShortcutContext(QtCore.Qt.WidgetWithChildrenShortcut)
@@ -267,19 +268,19 @@ class AbsQtActionForHoverDef(object):
         #
         self._is_hovered = False
 
-    def _set_action_hovered_(self, boolean):
+    def _set_hovered_(self, boolean):
         self._is_hovered = boolean
         #
         self._widget.update()
 
-    def _get_is_hovered_(self):
+    def _is_hovered_(self):
         return self._is_hovered
 
     def _execute_action_hover_by_filter_(self, event):
         if event.type() == QtCore.QEvent.Enter:
-            self._set_action_hovered_(True)
+            self._set_hovered_(True)
         elif event.type() == QtCore.QEvent.Leave:
-            self._set_action_hovered_(False)
+            self._set_hovered_(False)
 
     def _clear_hover_(self):
         self._is_hovered = False
@@ -367,7 +368,7 @@ class AbsQtActionForCheckDef(object):
         self._check_action_is_enable = False
         #
         self._is_checked = False
-        self._check_rect = QtCore.QRect()
+        self._check_frame_rect = QtCore.QRect()
         self._check_icon_frame_draw_rect = QtCore.QRect()
         self._check_icon_draw_rect = QtCore.QRect()
         self._check_is_pressed = False
@@ -406,41 +407,44 @@ class AbsQtActionForCheckDef(object):
         return self._check_is_enable
 
     def _set_checked_(self, boolean):
-        self._is_checked = boolean
-        self.check_clicked.emit()
-        self.check_toggled.emit(boolean)
-        self._refresh_check_draw_()
+        if self._is_checked != boolean:
+            self._is_checked = boolean
+            self.check_clicked.emit()
+            self.check_toggled.emit(boolean)
+            self._refresh_check_()
 
     def _set_exclusive_widgets_(self, widgets):
         self._check_exclusive_widgets = widgets
 
-    def _get_is_checked_(self):
+    def _is_checked_(self):
         return self._is_checked
 
-    def _execute_check_swap_(self):
+    def _swap_check_(self):
         if self._check_exclusive_widgets:
             self._update_check_exclusive_()
         else:
             self._set_checked_(not self._is_checked)
-        #
-        self._refresh_check_draw_()
 
     def _update_check_exclusive_(self):
         if self._check_exclusive_widgets:
             for i in self._check_exclusive_widgets:
                 if i == self:
-                    value_pre = self._get_is_checked_()
+                    value_pre = self._is_checked_()
                     self._set_checked_(True)
                     if value_pre is not True:
                         self.check_changed_as_exclusive.emit()
                     else:
                         self.check_swapped_as_exclusive.emit()
-                    #
                     self.user_check_clicked_as_exclusive.emit()
                 else:
                     i._set_checked_(False)
 
-    def _refresh_check_draw_(self):
+    def _update_check_icon_file_(self):
+        self._check_icon_file_path_current = [
+            self._check_icon_file_path_0, self._check_icon_file_path_1
+        ][self._is_checked]
+
+    def _refresh_check_(self):
         self._check_icon_file_path_current = [
             self._check_icon_file_path_0, self._check_icon_file_path_1
         ][self._is_checked]
@@ -453,7 +457,7 @@ class AbsQtActionForCheckDef(object):
         )
 
     def _set_check_action_rect_(self, x, y, w, h):
-        self._check_rect.setRect(
+        self._check_frame_rect.setRect(
             x, y, w, h
         )
 
@@ -462,8 +466,8 @@ class AbsQtActionForCheckDef(object):
             x, y, w, h
         )
 
-    def _send_check_emit_(self):
-        self._execute_check_swap_()
+    def _swap_user_check_action_(self):
+        self._swap_check_()
         #
         self.user_check_clicked.emit()
         self.user_check_toggled.emit(self._is_checked)
@@ -472,17 +476,17 @@ class AbsQtActionForCheckDef(object):
         self.check_clicked.connect(fnc)
 
     def _do_check_press_(self, event):
-        self._execute_check_swap_()
+        self._swap_check_()
 
     def _set_check_icon_file_paths_(self, file_path_0, file_path_1):
         self._check_icon_file_path_0 = file_path_0
         self._check_icon_file_path_1 = file_path_1
-        self._refresh_check_draw_()
+        self._refresh_check_()
 
     def _get_action_check_is_valid_(self, event):
         if self._check_action_is_enable is True:
             p = event.pos()
-            return self._check_rect.contains(p)
+            return self._check_frame_rect.contains(p)
         return False
 
 
@@ -495,7 +499,6 @@ class AbsQtActionForExpandDef(object):
         RightToLeft = 0
         LeftToRight = 1
 
-    #
     expand_clicked = qt_signal()
     expand_toggled = qt_signal(bool)
     #
@@ -508,16 +511,22 @@ class AbsQtActionForExpandDef(object):
         self._widget = widget
         #
         self._is_expand_enable = False
-        #
-        self._expand_icon_file_path = None
-        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('box_checked')
-        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('box_unchecked')
         self._is_expanded = False
+        self._expand_is_hovered = False
+
+        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('expandclose')
+        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('expandopen')
+        self._expand_icon_file_path_current = self._expand_icon_file_path_0
         #
         self._expand_frame_rect = QtCore.QRect()
         self._expand_icon_draw_rect = QtCore.QRect()
         #
         self._expand_direction = self.ExpandDirection.TopToBottom
+
+    def _update_expand_icon_file_(self):
+        self._expand_icon_file_path_current = [
+            self._expand_icon_file_path_0, self._expand_icon_file_path_1
+        ][self._is_expanded]
 
     def _set_expanded_(self, boolean):
         self._is_expanded = boolean

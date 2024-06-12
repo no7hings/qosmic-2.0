@@ -19,6 +19,9 @@ if __pyqt5 is not None:
     QT_LOAD_FLAG = 'pyqt'
     # noinspection PyUnresolvedReferences
     from PyQt5 import QtGui, QtCore, QtWidgets, QtSvg, QtWebSockets
+    # noinspection PyUnresolvedReferences
+    from PyQt5 import QtMultimedia
+
     _sys.modules['QtSide'] = _sys.modules['PyQt5']
     _log_core.Log.trace_method_result(
         'qt wrap', 'load form "PyQt5"'
@@ -30,6 +33,9 @@ else:
         QT_LOAD_FLAG = 'pyside'
         # noinspection PyUnresolvedReferences
         from PySide2 import QtGui, QtCore, QtWidgets, QtSvg, QtWebSockets
+        # noinspection PyUnresolvedReferences
+        from PySide2 import QtMultimedia
+
         _sys.modules['QtSide'] = _sys.modules['PySide2']
         _log_core.Log.trace_method_result(
             'qt wrap', 'load form "PySide2"'

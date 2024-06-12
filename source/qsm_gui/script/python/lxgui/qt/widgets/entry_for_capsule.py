@@ -32,7 +32,7 @@ class QtEntryAsCapsule(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
         )
 
-        self.setFont(_qt_core.GuiQtFont.generate_2(size=12))
+        self.setFont(_qt_core.QtFont.generate_2(size=12))
         self.setMouseTracking(True)
 
         self._init_name_base_def_(self)

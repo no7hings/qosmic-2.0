@@ -485,8 +485,8 @@ class QtProcessingBar(QtWidgets.QWidget):
         painter._draw_text_by_rect_(
             rect=self.__text_draw_rect,
             text=self.__draw_percent_text,
-            font=gui_qt_core.GuiQtFont.generate(size=10, italic=True),
-            font_color=gui_qt_core.QtFontColors.Light,
+            font=gui_qt_core.QtFont.generate(size=10, italic=True),
+            text_color=gui_qt_core.QtFontColors.Light,
             text_option=QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter,
         )
 
@@ -495,8 +495,8 @@ class QtProcessingBar(QtWidgets.QWidget):
         painter._draw_text_by_rect_(
             rect=self.__text_draw_rect,
             text=self.__draw_time_text,
-            font=gui_qt_core.GuiQtFont.generate(size=10, italic=True),
-            font_color=gui_qt_core.QtFontColors.Light,
+            font=gui_qt_core.QtFont.generate(size=10, italic=True),
+            text_color=gui_qt_core.QtFontColors.Light,
             text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
         )
 

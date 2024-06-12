@@ -808,7 +808,7 @@ class GuiPrxScpForTextureTreeAdd(GuiPrxScpForStorageTreeAdd):
                 else:
                     prx_item.set_status(prx_item.ValidationStatus.Warning)
         #
-        # self._prx_tree_view.set_loading_update()
+        # self._prx_tree_view.process_event()
 
 
 # noinspection PyUnusedLocal

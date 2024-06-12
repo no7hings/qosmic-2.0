@@ -23,7 +23,7 @@ class _GuiTextureOpt(gui_prx_abstracts.AbsGuiPrxTreeViewOpt):
 
     def gui_add_root(self):
         path = '/'
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             prx_item = self._prx_tree_view.create_item(
                 self.ROOT_NAME,
                 icon=gui_core.GuiIcon.get('database/all'),
@@ -34,12 +34,12 @@ class _GuiTextureOpt(gui_prx_abstracts.AbsGuiPrxTreeViewOpt):
             prx_item.set_expanded(True)
             prx_item.set_checked(True)
             return True, prx_item
-        return False, self.gui_get(path)
+        return False, self.gui_get_one(path)
 
     def gui_add_group(self, path):
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             path_opt = bsc_core.PthNodeOpt(path)
-            parent_gui = self.gui_get(path_opt.get_parent_path())
+            parent_gui = self.gui_get_one(path_opt.get_parent_path())
             gui_name = bsc_core.RawStrUnderlineOpt(path_opt.get_name()).to_prettify()
             prx_item = parent_gui.add_child(
                 gui_name,
@@ -56,12 +56,12 @@ class _GuiTextureOpt(gui_prx_abstracts.AbsGuiPrxTreeViewOpt):
             prx_item.set_expanded(True)
             prx_item.set_checked(True)
             return prx_item
-        return self.gui_get(path)
+        return self.gui_get_one(path)
 
     def gui_add_one(self, path, file_opt):
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             path_opt = bsc_core.PthNodeOpt(path)
-            parent_gui = self.gui_get(path_opt.get_parent_path())
+            parent_gui = self.gui_get_one(path_opt.get_parent_path())
             prx_item = parent_gui.add_child(
                 path_opt.get_name(),
                 icon=gui_core.GuiIcon.get('database/object'),
@@ -76,7 +76,7 @@ class _GuiTextureOpt(gui_prx_abstracts.AbsGuiPrxTreeViewOpt):
 
             prx_item.set_checked(True)
             return prx_item
-        return self.gui_get(path)
+        return self.gui_get_one(path)
 
     def get_texture_assign(self):
         dict_ = {}

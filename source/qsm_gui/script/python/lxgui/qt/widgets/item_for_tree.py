@@ -270,7 +270,7 @@ class QtTreeWidgetItem(
         self._update_wgt_icon_(status=self._status)
 
     def _set_name_status_(self, status, column=0):
-        font = gui_qt_core.GuiQtFont.generate(size=8)
+        font = gui_qt_core.QtFont.generate(size=8)
         if status == self.ValidationStatus.Normal:
             color = gui_qt_core.QtColors.Text
         elif status in {self.ValidationStatus.Correct, self.ValidationStatus.New}:
@@ -300,7 +300,7 @@ class QtTreeWidgetItem(
 
     def _set_process_status_(self, status, column=0):
         self._process_status = status
-        font = gui_qt_core.GuiQtFont.generate(size=8)
+        font = gui_qt_core.QtFont.generate(size=8)
         if status in {self.ProcessStatus.Unknown}:
             color = gui_qt_core.QtColors.Text
         elif status in {self.ProcessStatus.Waiting}:
@@ -310,7 +310,7 @@ class QtTreeWidgetItem(
         elif status in {self.ProcessStatus.Suspended}:
             color = QtGui.QColor(*self.Rgba.LightYellow)
         elif status in {self.ProcessStatus.Failed, self.ProcessStatus.Error, self.ProcessStatus.Killed}:
-            color = QtGui.QColor(*self.Rgba.LightRed)
+            color = QtGui.QColor(*self.Rgba.LightTorchRed)
         elif status in {self.ProcessStatus.Completed, self.ProcessStatus.Finished}:
             color = QtGui.QColor(*self.Rgba.LightGreen)
         elif status in {self.ProcessStatus.Stopped}:

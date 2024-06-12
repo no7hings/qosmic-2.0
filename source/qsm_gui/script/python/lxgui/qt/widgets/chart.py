@@ -570,8 +570,8 @@ class QtChartAsInfo(
             painter._draw_text_by_rect_(
                 rect=self.rect(),
                 text=self._info_text,
-                font=_qt_core.GuiQtFont.generate(size=10, italic=True),
-                font_color=_qt_core.QtFontColors.ToolTip,
+                font=_qt_core.QtFont.generate(size=10, italic=True),
+                text_color=_qt_core.QtFontColors.ToolTip,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             )
 
@@ -1359,8 +1359,8 @@ class QtChartAsSequence(
             name_rect = QtCore.QRect(
                 pos_x+side, pos_y+side, name_w, height-side*2
             )
-            painter._set_font_(_qt_core.GuiQtFont.generate(size=10))
-            painter._set_border_color_(self._name_color)
+            painter._set_font_(_qt_core.QtFont.generate(size=10))
+            painter._set_border_color_(self._name_draw_color)
             if self._hover_flag is True:
                 if name_rect.contains(self._hover_point):
                     painter._set_border_color_(self._hover_name_color)

@@ -167,7 +167,7 @@ class _GuiTypeOpt(
 
     def gui_add_root(self):
         path = '/'
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             prx_item = self._prx_tree_view.create_item(
                 self.ROOT_NAME,
                 icon=gui_core.GuiIcon.get('database/all'),
@@ -176,7 +176,7 @@ class _GuiTypeOpt(
             prx_item.set_expanded(True)
             prx_item.set_checked(False)
             return True, prx_item
-        return False, self.gui_get(path)
+        return False, self.gui_get_one(path)
 
     def gui_add_all_category_groups(self):
         dtb_category_groups = self._dtb_opt.get_entities(
@@ -191,8 +191,8 @@ class _GuiTypeOpt(
 
     def gui_add_category_group(self, dtb_entity):
         path = dtb_entity.path
-        if self.gui_is_exists(path) is False:
-            parent_gui = self.gui_get(dtb_entity.group)
+        if self.gui_check_exists(path) is False:
+            parent_gui = self.gui_get_one(dtb_entity.group)
             prx_item = parent_gui.add_child(
                 dtb_entity.gui_name,
                 icon=gui_core.GuiIcon.get(dtb_entity.gui_icon_name),
@@ -212,7 +212,7 @@ class _GuiTypeOpt(
             prx_item.set_expanded(True)
             prx_item.set_checked(False)
             return prx_item
-        return self.gui_get(path)
+        return self.gui_get_one(path)
 
     def gui_add_all_categories(self):
         pass
@@ -258,8 +258,8 @@ class _GuiTypeOpt(
                 )
 
         path = dtb_entity.path
-        if self.gui_is_exists(path) is False:
-            parent_gui = self.gui_get(dtb_entity.group)
+        if self.gui_check_exists(path) is False:
+            parent_gui = self.gui_get_one(dtb_entity.group)
             prx_item = parent_gui.add_child(
                 dtb_entity.gui_name,
                 icon=gui_core.GuiIcon.get(dtb_entity.gui_icon_name),
@@ -286,7 +286,7 @@ class _GuiTypeOpt(
                 cache_fnc_, build_fnc_
             )
             return prx_item
-        return self.gui_get(path)
+        return self.gui_get_one(path)
 
     def refresh_by_category_expanded(self, prx_item):
         child_prx_items = prx_item.get_children()
@@ -356,8 +356,8 @@ class _GuiTypeOpt(
 
     def gui_add_one(self, dtb_entity):
         path = dtb_entity.path
-        if self.gui_is_exists(path) is False:
-            parent_gui = self.gui_get(dtb_entity.group)
+        if self.gui_check_exists(path) is False:
+            parent_gui = self.gui_get_one(dtb_entity.group)
 
             gui_name = dtb_entity.gui_name
             prx_item = parent_gui.add_child(
@@ -379,7 +379,7 @@ class _GuiTypeOpt(
             #
             prx_item.set_checked(False)
             return prx_item
-        return self.gui_get(path)
+        return self.gui_get_one(path)
 
     # for type
     def gui_cache_fnc_for_types_by_categories(self, dtb_categories):
@@ -507,7 +507,7 @@ class _GuiTagOpt(
 
     def gui_add(self, dtb_entity):
         path = dtb_entity.path
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             parent_path = dtb_entity.group
             parent_gui = self.gui_get_group(parent_path)
             parent_gui.set_status(parent_gui.ValidationStatus.Normal)
@@ -530,7 +530,7 @@ class _GuiTagOpt(
 
             prx_item.set_name('0', 1)
             return prx_item
-        return self.gui_get(path)
+        return self.gui_get_one(path)
 
     def register_count(self, dtb_resource_path, dtb_tag_arg):
         if isinstance(dtb_tag_arg, six.string_types):
@@ -685,14 +685,14 @@ class _GuiResourceOpt(
             ''
         )
 
-    def __gui_cache_fnc(self, dtb_resource, cache_image_enable):
+    def __gui_cache_fnc(self, dtb_resource, cache_image_flag):
         key = dtb_resource.path
 
         if key in self.__class__.CACHE:
             return self.__class__.CACHE[key]
 
         image_args = None
-        if cache_image_enable is True:
+        if cache_image_flag is True:
             dtb_version_port = self._dtb_opt.get_entity(
                 entity_type=self._dtb_opt.EntityTypes.Attribute,
                 filters=[
@@ -802,8 +802,8 @@ class _GuiResourceOpt(
             )
 
         path = dtb_resource.path
-        if self.gui_is_exists(path) is True:
-            return self.gui_get(path)
+        if self.gui_check_exists(path) is True:
+            return self.gui_get_one(path)
 
         self._keys.add(dtb_resource.gui_name)
 
@@ -833,7 +833,7 @@ class _GuiResourceOpt(
             functools.partial(self.__gui_menu_content_generate_fnc, dtb_resource)
         )
         prx_item_widget.set_check_enable(True)
-        prx_item_widget.set_index_draw_enable(True)
+        prx_item_widget.set_index_draw_flag(True)
         name_dict = collections.OrderedDict()
         name_dict['resource'] = dtb_resource.gui_name
         name_dict['ctime'] = bsc_core.TimePrettifyMtd.to_prettify_by_timetuple(
@@ -849,14 +849,14 @@ class _GuiResourceOpt(
         )
         image_file_path = self._window._gui_thumbnail_cache.pull(path)
         if image_file_path is not None:
-            cache_image_enable = False
+            cache_image_flag = False
             image_file_path = bsc_storage.StgPathMapper.map_to_current(image_file_path)
             prx_item_widget.set_image(image_file_path)
         else:
-            cache_image_enable = True
+            cache_image_flag = True
 
         prx_item_widget.set_show_fnc(
-            functools.partial(self.__gui_cache_fnc, dtb_resource, cache_image_enable),
+            functools.partial(self.__gui_cache_fnc, dtb_resource, cache_image_flag),
             build_fnc_
         )
         return prx_item_widget
@@ -1013,7 +1013,7 @@ class _GuiDirectoryOpt(
 
     def gui_add_root(self, name):
         path = '/'
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             prx_item = self._prx_tree_view.create_item(
                 name,
                 icon=gui_core.GuiIcon.get('database/all'),
@@ -1022,13 +1022,13 @@ class _GuiDirectoryOpt(
             prx_item.set_expanded(True)
             prx_item.set_checked(False)
             return True, prx_item
-        return False, self.gui_get(path)
+        return False, self.gui_get_one(path)
 
     def gui_add_group(self, file_type):
-        if self.gui_is_exists(file_type) is False:
+        if self.gui_check_exists(file_type) is False:
             path_opt = bsc_core.PthNodeOpt(file_type)
             #
-            parent_gui = self.gui_get(path_opt.get_parent_path())
+            parent_gui = self.gui_get_one(path_opt.get_parent_path())
             #
             prx_item = parent_gui.add_child(
                 path_opt.name,
@@ -1039,7 +1039,7 @@ class _GuiDirectoryOpt(
             # prx_item.set_expanded(True)
             prx_item.set_checked(False)
             return prx_item
-        return self.gui_get(file_type)
+        return self.gui_get_one(file_type)
 
     def gui_add(self, dtb_resource, dtb_directory, file_type, is_current=False):
         def cache_fnc_():
@@ -1078,10 +1078,10 @@ class _GuiDirectoryOpt(
             #
             prx_item_widget.set_tool_tip(_location)
 
-        if self.gui_is_exists(file_type) is False:
+        if self.gui_check_exists(file_type) is False:
             path_opt = bsc_core.PthNodeOpt(file_type)
             #
-            parent_gui = self.gui_get(path_opt.get_parent_path())
+            parent_gui = self.gui_get_one(path_opt.get_parent_path())
             #
             prx_item_widget = parent_gui.add_child(
                 path_opt.name,
@@ -1106,7 +1106,7 @@ class _GuiDirectoryOpt(
             if is_current is True:
                 prx_item_widget.set_selected(True)
             return prx_item_widget
-        return self.gui_get(file_type)
+        return self.gui_get_one(file_type)
 
     def get_current_obj(self):
         _ = self._prx_tree_view.get_selected_items()
@@ -1219,7 +1219,7 @@ class _GuiFileOpt(
             )
             _prx_item_widget.refresh_widget_force()
 
-        if self.gui_is_exists(file_path) is False:
+        if self.gui_check_exists(file_path) is False:
             file_opt = bsc_storage.StgFileOpt(file_path)
             prx_item_widget = self._prx_list_view.create_item_widget()
             self._item_dict[file_path] = prx_item_widget
@@ -1233,7 +1233,7 @@ class _GuiFileOpt(
                 file_opt, namespace=self.GUI_NAMESPACE
             )
             return prx_item_widget
-        return self.gui_get(file_path)
+        return self.gui_get_one(file_path)
 
 
 class _GuiGuideOpt(_GuiBaseOpt):
@@ -1346,7 +1346,7 @@ class _GuiUsdStageViewOpt(_GuiBaseOpt):
 
         self._index_thread_batch += 1
 
-        self._usd_stage_view.run_as_thread(
+        self._usd_stage_view.run_build_extra_use_thread(
             functools.partial(self.__gui_cache_fnc, dtb_version, use_as_imperfection, use_as_hdri),
             build_fnc_,
             post_fnc_
@@ -1465,7 +1465,6 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         self._resource_prx_view.set_item_frame_size_basic(*self._item_frame_size)
         self._resource_prx_view.set_item_icon_frame_size(*self._item_icon_frame_size)
         self._resource_prx_view.set_item_icon_size(*self._item_icon_size)
-        self._resource_prx_view.set_item_icon_frame_draw_enable(True)
         self._resource_prx_view.set_item_name_frame_draw_enable(True)
         self._resource_prx_view.set_item_names_draw_range([None, 1])
         self._resource_prx_view.set_item_image_frame_draw_enable(True)
@@ -1499,7 +1498,6 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         self._item_name_frame_size = 80, 44
         self._file_prx_view.set_item_frame_size_basic(*self._file_frame_size)
         self._file_prx_view.set_item_name_frame_size(*self._item_name_frame_size)
-        self._file_prx_view.set_item_icon_frame_draw_enable(False)
         self._file_prx_view.set_item_name_frame_draw_enable(False)
         self._file_prx_view.set_item_names_draw_range([None, 1])
         self._file_prx_view.set_item_image_frame_draw_enable(False)

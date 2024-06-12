@@ -42,7 +42,7 @@ class _QtStatusItem(
         self._init_action_base_def_(self)
         self._init_action_for_check_def_(self)
         #
-        self._refresh_check_draw_()
+        self._refresh_check_()
 
     def _refresh_widget_draw_(self):
         self.update()
@@ -66,7 +66,7 @@ class _QtStatusItem(
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
                     if self._get_action_flag_() == self.ActionFlag.CheckPress:
-                        self._send_check_emit_()
+                        self._swap_user_check_action_()
                 #
                 self._clear_all_action_flags_()
         return False
@@ -77,9 +77,9 @@ class _QtStatusItem(
         self._refresh_widget_draw_geometry_()
         #
         offset = self._get_action_offset_()
-        is_hovered = self._get_is_hovered_()
+        is_hovered = self._is_hovered_()
         #
-        if self._get_is_checked_():
+        if self._is_checked_():
             background_color = [gui_qt_core.QtColors.Yellow, gui_qt_core.QtColors.BackgroundHover][is_hovered]
             painter._draw_image_use_text_by_rect_(
                 rect=self._icon_color_draw_rect,
@@ -132,8 +132,8 @@ class _QtHContractItem(
         self._init_action_for_expand_def_(self)
         #
         self._is_expanded = False
-        self._expand_icon_file_path_0 = gui_core.GuiIcon.get('contract_v_l')
-        self._expand_icon_file_path_1 = gui_core.GuiIcon.get('contract_v_r')
+        self._expand_icon_file_path_0 = gui_core.GuiIcon.get('contract_v_r')
+        self._expand_icon_file_path_1 = gui_core.GuiIcon.get('contract_v_l')
 
         self._expand_sub_icon_file_path_0 = None
         self._expand_sub_icon_file_path_1 = None
@@ -147,7 +147,7 @@ class _QtHContractItem(
         color = bsc_core.RawColorMtd.hsv2rgb(h, s*.75, v*.75)
         hover_color = r, g, b
         #
-        self._name_color = color
+        self._name_draw_color = color
         self._hover_name_color = hover_color
         #
         r, g, b = 135, 135, 135
@@ -173,11 +173,11 @@ class _QtHContractItem(
 
     def _set_expand_direction_(self, direction):
         if direction == self.CollapseDirection.RightToLeft:
-            self._expand_icon_file_path_0 = gui_core.GuiIcon.get('contract_v_l')
-            self._expand_icon_file_path_1 = gui_core.GuiIcon.get('contract_v_r')
-        elif direction == self.CollapseDirection.LeftToRight:
             self._expand_icon_file_path_0 = gui_core.GuiIcon.get('contract_v_r')
             self._expand_icon_file_path_1 = gui_core.GuiIcon.get('contract_v_l')
+        elif direction == self.CollapseDirection.LeftToRight:
+            self._expand_icon_file_path_0 = gui_core.GuiIcon.get('contract_v_l')
+            self._expand_icon_file_path_1 = gui_core.GuiIcon.get('contract_v_r')
         #
         self._refresh_expand_()
 
@@ -195,13 +195,13 @@ class _QtHContractItem(
         )
 
     def _set_expand_icon_file_path_(self, icon_file_path_0, icon_file_path_1):
-        self._expand_icon_file_path_0 = icon_file_path_0
-        self._expand_icon_file_path_1 = icon_file_path_1
+        self._expand_icon_file_path_1 = icon_file_path_0
+        self._expand_icon_file_path_0 = icon_file_path_1
         self._refresh_expand_()
 
     def _set_expand_icon_names_(self, icon_name_0, icon_name_1):
-        self._expand_icon_file_path_0 = gui_core.GuiIcon.get(icon_name_0)
-        self._expand_icon_file_path_1 = gui_core.GuiIcon.get(icon_name_1)
+        self._expand_icon_file_path_1 = gui_core.GuiIcon.get(icon_name_0)
+        self._expand_icon_file_path_0 = gui_core.GuiIcon.get(icon_name_1)
         self._refresh_expand_()
 
     def _set_expand_sub_icon_names_(self, icon_name_0, icon_name_1):
@@ -248,13 +248,13 @@ class _QtHContractItem(
 
     def _refresh_expand_(self):
         self._set_icon_file_path_(
-            [self._expand_icon_file_path_1, self._expand_icon_file_path_0][self._is_expanded]
+            [self._expand_icon_file_path_0, self._expand_icon_file_path_1][self._is_expanded]
         )
         self._set_icon_sub_file_path_(
             [self._expand_sub_icon_file_path_1, self._expand_sub_icon_file_path_0][self._is_expanded]
         )
         #
-        self._set_action_hovered_(False)
+        self._set_hovered_(False)
         self._refresh_widget_draw_()
 
 

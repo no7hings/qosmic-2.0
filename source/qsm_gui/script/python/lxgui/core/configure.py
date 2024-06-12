@@ -158,7 +158,7 @@ class GuiSectorChartMode(enum.IntEnum):
 
 
 class GuiXmlColor(object):
-    Red = 0x00
+    TorchRed = 0x00
     Yellow = 0x01
     Orange = 0x02
     Green = 0x03
@@ -182,7 +182,7 @@ class GuiXmlColor(object):
     ]
 
     Dict = {
-        Red: All[0],
+        TorchRed: All[0],
         Yellow: All[1],
         Orange: All[2],
         Green: All[3],
@@ -197,9 +197,13 @@ class GuiXmlColor(object):
 class GuiRgba(object):
     # 63+48=111
     # 127+48=175
-    Red = 255, 0, 63, 255
-    DarkRed = 159, 0, 63, 255
-    LightRed = 255, 47, 111, 255
+    Red = 255, 0, 0, 255
+    DarkRed = 159, 0, 0, 255
+    LightRed = 255, 47, 47, 255
+
+    TorchRed = 255, 0, 63, 255
+    DarkTorchRed = 159, 0, 63, 255
+    LightTorchRed = 255, 47, 111, 255
 
     Brown = 255, 63, 63, 255
 
@@ -228,19 +232,20 @@ class GuiRgba(object):
     LightPurple = 175, 175, 255, 255
 
     Pink = 255, 127, 127, 255
-    DarkPink = 159, 95, 79, 255
+    DarkPink = 159, 95, 95, 255
     LightPink = 255, 175, 175, 255
 
     Violet = 127, 0, 255, 255
 
     White = 255, 255, 255, 255
-
-    Black = 0, 0, 0, 255
-    LightBlack = 31, 31, 31, 255
+    DarkWhite = 223, 223, 223, 255
 
     Gray = 127, 127, 127, 255
     DarkGray = 95, 95, 95, 255
     LightGray = 159, 159, 159, 255
+
+    Black = 0, 0, 0, 255
+    LightBlack = 31, 31, 31, 255
 
     Light = 223, 223, 223, 255
     Basic = 63, 63, 63, 255
@@ -249,7 +254,7 @@ class GuiRgba(object):
     Transparent = 0, 0, 0, 0
 
     All = [
-        Red, DarkRed, LightRed,
+        TorchRed, DarkTorchRed, LightTorchRed,
         LightOrange, Orange, DarkOrange,
         LightYellow, Yellow, DarkYellow,
         LightGreen, Green, DarkGreen,

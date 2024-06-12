@@ -92,7 +92,7 @@ def main(session):
 
             i_render_file_path = hook_option_opt.get('render_file')
 
-            i_image_file_path = '{}/main/{}/beauty.####.exr'.format(
+            i_image_path = '{}/main/{}/beauty.####.exr'.format(
                 i_render_output_directory_path, i_variable_name
             )
             i_movie_file_path = '{}/main/{}.mov'.format(
@@ -138,7 +138,7 @@ def main(session):
                         user=i_user, time_tag=i_time_tag,
                         td_enable=i_td_enable, rez_beta=i_rez_beta,
                         #
-                        image_file=i_image_file_path,
+                        image_file=i_image_path,
                         movie_file=i_movie_file_path,
                         #
                         start_frame=i_render_frames_[0],

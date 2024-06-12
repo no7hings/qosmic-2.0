@@ -728,7 +728,7 @@ class PrxPortAsCheckButton(PrxPortAsButton):
         self.get_input_widget()._set_checked_(boolean)
 
     def get_is_checked(self):
-        return self.get_input_widget()._get_is_checked_()
+        return self.get_input_widget()._is_checked_()
 
     def execute(self):
         self.get_input_widget()._execute_()
@@ -971,8 +971,8 @@ class PrxPortAsShotgunEntity(_AbsPrxPortBase):
     def set_shotgun_entity_kwargs(self, *args, **kwargs):
         self._prx_port_input.set_shotgun_entity_kwargs(*args, **kwargs)
 
-    def run_as_thread(self, cache_fnc, build_fnc, post_fnc):
-        self._prx_port_input.run_as_thread(
+    def run_build_extra_use_thread(self, cache_fnc, build_fnc, post_fnc):
+        self._prx_port_input.run_build_extra_use_thread(
             cache_fnc, build_fnc, post_fnc
         )
 
@@ -997,8 +997,8 @@ class PrxPortAsShotgunEntities(_AbsPrxPortBase):
     def set_shotgun_entity_kwargs(self, *args, **kwargs):
         self._prx_port_input.set_shotgun_entity_kwargs(*args, **kwargs)
 
-    def run_as_thread(self, cache_fnc, build_fnc, post_fnc):
-        self._prx_port_input.run_as_thread(
+    def run_build_extra_use_thread(self, cache_fnc, build_fnc, post_fnc):
+        self._prx_port_input.run_build_extra_use_thread(
             cache_fnc, build_fnc, post_fnc
         )
 

@@ -176,7 +176,6 @@ class AbsPnlSubmitterForRenderBase(
         self._rsv_renderer_list_view.set_item_frame_size_basic(
             *self._hook_gui_configure.get('item_frame_size')
         )
-        self._rsv_renderer_list_view.set_item_icon_frame_draw_enable(True)
         self._rsv_renderer_list_view.set_item_name_frame_draw_enable(True)
         self._rsv_renderer_list_view.set_item_image_frame_draw_enable(True)
         #

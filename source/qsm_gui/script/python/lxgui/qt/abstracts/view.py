@@ -10,6 +10,8 @@ from . import base as _base
 
 from . import show as _show
 
+from . import thread_worker as _thread_worker
+
 
 class AbsQtTreeWidget(
     QtWidgets.QTreeWidget,
@@ -24,10 +26,11 @@ class AbsQtTreeWidget(
     _base.AbsQtViewVisibleConnectionDef,
     #
     _base.AbsQtViewScrollActionDef,
-    _base.AbsQtBuildViewDef,
     _show.AbsQtShowBaseForViewDef,
     #
     _base.AbsQtBusyBaseDef,
+
+    _thread_worker.AbsQtThreadWorkerExtraDef,
 ):
     def __init__(self, *args, **kwargs):
         super(AbsQtTreeWidget, self).__init__(*args, **kwargs)
@@ -44,21 +47,17 @@ class AbsQtTreeWidget(
 
         self._set_view_scroll_action_def_init_()
         # noinspection PyUnresolvedReferences
-        self._get_view_v_scroll_bar_().valueChanged.connect(
-            self._refresh_viewport_showable_by_scroll_
-        )
-        #
-        self._init_view_build_extra_def_()
-        self._setup_view_build_(self)
+        self._get_view_v_scroll_bar_().valueChanged.connect(self._refresh_viewport_showable_by_scroll_)
 
         self._init_show_base_for_view_def_(self)
         #
         self._init_busy_base_def_(self)
+        self._init_thread_worker_extra_def_(self)
+
         self.setFont(_qt_core.QtFonts.Default)
         #
-        self.customContextMenuRequested.connect(
-            self._popup_menu_cbk_
-        )
+        # noinspection PyUnresolvedReferences
+        self.customContextMenuRequested.connect(self._popup_menu_cbk_)
 
     def _get_all_items_(self, column=0):
         def _rcs_fnc(index_):
@@ -154,6 +153,7 @@ class AbsQtTreeWidget(
         pass
 
     # noinspection PyUnusedLocal
+    @qt_slot()
     def _popup_menu_cbk_(self, *args):
         indices = self.selectedIndexes()
         if indices:
@@ -193,9 +193,11 @@ class AbsQtListWidget(
     _base.AbsQtViewFilterExtraDef,
     _base.AbsQtViewStateDef,
     _base.AbsQtViewVisibleConnectionDef,
-    _base.AbsQtBuildViewDef,
+
     _show.AbsQtShowBaseForViewDef,
     _base.AbsQtBusyBaseDef,
+
+    _thread_worker.AbsQtThreadWorkerExtraDef,
 ):
     SortMode = gui_core.GuiSortMode
     SortOrder = gui_core.GuiSortOrder
@@ -224,8 +226,10 @@ class AbsQtListWidget(
         self._set_view_state_def_init_()
         self._set_view_visible_connection_def_init_()
         #
-        self.itemSelectionChanged.connect(self._view_item_select_cbk)
-        self.itemSelectionChanged.connect(self._view_item_widget_select_cbk)
+        # noinspection PyUnresolvedReferences
+        self.itemSelectionChanged.connect(self._item_select_cbk_)
+        # noinspection PyUnresolvedReferences
+        self.itemSelectionChanged.connect(self._item_widget_select_cbk_)
         # noinspection PyUnresolvedReferences
         self._get_view_v_scroll_bar_().valueChanged.connect(
             self._refresh_viewport_showable_by_scroll_
@@ -247,12 +251,11 @@ class AbsQtListWidget(
         self.horizontalScrollBar().setStyleSheet(
             _qt_core.GuiQtStyle.get('QScrollBar')
         )
-        #
-        self._init_view_build_extra_def_()
-        self._setup_view_build_(self)
 
         self._init_show_base_for_view_def_(self)
         self._init_busy_base_def_(self)
+
+        self._init_thread_worker_extra_def_(self)
 
         self._sort_mode = self.SortMode.Number
         self._sort_order = self.SortOrder.Ascend
@@ -346,12 +349,15 @@ class AbsQtListWidget(
             return item_widgets[-1]
 
     def _get_checked_item_widgets_(self):
-        return [i for i in self._get_all_item_widgets_() if i._get_is_checked_() is True]
+        return [i for i in self._get_all_item_widgets_() if i._is_checked_() is True]
 
-    def _view_item_select_cbk(self):
+    @qt_slot()
+    def _item_select_cbk_(self):
         pass
 
-    def _view_item_widget_select_cbk(self):
+    @qt_slot()
+    def _item_widget_select_cbk_(self):
+        # unselect pre
         if self._pre_selected_items:
             [self._set_item_widget_selected_(i, False) for i in self._pre_selected_items]
         #
@@ -410,7 +416,7 @@ class AbsQtListWidget(
         return self.count()
 
     def _get_all_item_widgets_(self):
-        return [self.itemWidget(self.item(i)) for i in range(self.count())]
+        return filter(None, [self.itemWidget(self.item(i)) for i in range(self.count())])
 
     def _get_all_visible_items_(self):
         return [i for i in self._get_all_items_() if i.isHidden() is False]
@@ -419,7 +425,7 @@ class AbsQtListWidget(
         return len(self._get_all_visible_items_())
 
     def _get_all_visible_item_widgets_(self):
-        return [self.itemWidget(i) for i in self._get_all_visible_items_()]
+        return filter(None, [self.itemWidget(i) for i in self._get_all_visible_items_()])
 
     def _get_selected_visible_items_(self):
         return [i for i in self.selectedItems() if i.isHidden() is False]
@@ -437,7 +443,8 @@ class AbsQtListWidget(
         return [self.indexFromItem(i) for i in self._get_all_visible_items_() if i.isHidden() is False]
 
     @staticmethod
-    def _set_loading_update_():
+    def _process_event_():
+        # noinspection PyArgumentList
         QtWidgets.QApplication.instance().processEvents(
             QtCore.QEventLoop.ExcludeUserInputEvents
         )
@@ -448,6 +455,7 @@ class AbsQtListWidget(
             i._stop_item_show_all_()
         #
         self._pre_selected_items = []
+        self._pre_hovered_items = []
         #
         self.clear()
 

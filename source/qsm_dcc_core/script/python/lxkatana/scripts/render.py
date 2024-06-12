@@ -279,12 +279,12 @@ class ScpRenderBuild(object):
                     else:
                         i_render_frames_string = default_render_frames
                     #
-                    i_render_output_image_file_path = ktn_core.KtnStageOpt(
+                    i_render_output_image_path = ktn_core.KtnStageOpt(
                         i_render_node_opt._ktn_obj
                     ).get(
                         '/root.renderSettings.outputs.primary.locationSettings.renderLocation'
                     )
-                    if i_render_output_image_file_path is None:
+                    if i_render_output_image_path is None:
                         raise RuntimeError(
                             bsc_log.Log.trace_method_error(
                                 'aov layer "primary" is not found'
@@ -292,7 +292,7 @@ class ScpRenderBuild(object):
                         )
                     #
                     i_render_output_directory_path = bsc_storage.StgFileOpt(
-                        i_render_output_image_file_path
+                        i_render_output_image_path
                     ).get_directory_path()
                     i_render_output_directory_opt = bsc_storage.StgDirectoryOpt(
                         i_render_output_directory_path
@@ -349,7 +349,7 @@ class ScpRenderBuild(object):
                                 user=user, time_tag=time_tag,
                                 td_enable=td_enable, rez_beta=rez_beta,
                                 #
-                                image_file=i_render_output_image_file_path,
+                                image_file=i_render_output_image_path,
                                 video_file=i_vedio_file_path,
                                 #
                                 render_output_directory=i_render_output_directory_path,

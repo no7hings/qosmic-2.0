@@ -14,14 +14,24 @@ from .. import core as _mya_core
 class MainShelf(object):
     KEY = 'qosmic shelf'
 
-    SHELF_NAME = 'QSM'
+    SHELF_NAME = 'Lazy Tool'
+
+    SHELF_NAME_CHS = bsc_core.auto_unicode('懒人工具')
+    
+    SHELF_KEY = 'Lazy_Tool'
+
+    OLD_SHELF_NAMES = [
+        'QSM',
+        SHELF_KEY,
+        SHELF_NAME_CHS
+    ]
 
     DATA = [
         (
             'general',
             [
                 'dcc-tools/maya/qsm-asset-manager',
-                'dcc-tools/maya/qsm-easy-playblast'
+                'dcc-tools/maya/qsm-lazy-playblast'
             ]
         )
     ]
@@ -34,13 +44,22 @@ class MainShelf(object):
             self.KEY, 'create'
         )
         language = bsc_core.EnvBaseMtd.get_ui_language()
-        if _mya_core.Shelf.is_exists(self.SHELF_NAME) is True:
-            _mya_core.Shelf.delete(self.SHELF_NAME)
-        # create shelf
-        _mya_core.Shelf.create(self.SHELF_NAME)
+
+        # delete old
+        for i in self.OLD_SHELF_NAMES:
+            _mya_core.Shelf.is_exists(i)
+            _mya_core.Shelf.delete(i)
+        # create new
+        if bsc_core.EnvBaseMtd.get_ui_language() == 'chs':
+            shelf_name = self.SHELF_NAME_CHS
+        else:
+            shelf_name = self.SHELF_NAME
+
+        shelf = _mya_core.Shelf.create(shelf_name)
+
         for i_sep, i_keys in self.DATA:
             _mya_core.Shelf.create_separator(
-                self.SHELF_NAME,
+                shelf,
                 annotation=i_sep
             )
             for j_key in i_keys:
@@ -52,7 +71,7 @@ class MainShelf(object):
                     j_image = j_session.gui_icon_file
                     j_cmd_script = 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("{}")'.format(j_key)
                     _mya_core.Shelf.create_button(
-                        self.SHELF_NAME,
+                        shelf,
                         label=j_label,
                         image=j_image,
                         annotation=j_tool_tip,

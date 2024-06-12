@@ -485,9 +485,6 @@ class QtInputAsContent(
         else:
             self._input_button_widget.hide()
 
-    def _set_resize_enable_(self, boolean):
-        self._resize_handle.setVisible(boolean)
-
     def _set_entry_enable_(self, boolean):
         super(QtInputAsContent, self)._set_entry_enable_(boolean)
 

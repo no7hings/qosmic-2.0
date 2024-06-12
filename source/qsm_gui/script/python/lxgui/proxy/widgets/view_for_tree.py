@@ -50,15 +50,15 @@ class PrxTreeView(
         self._qt_layout_0.setContentsMargins(4, 4, 4, 4)
         self._qt_layout_0.setSpacing(2)
         #
-        self._prx_top_tool_bar = _container.PrxHToolBar()
-        self._prx_top_tool_bar.set_name('top')
-        self._prx_top_tool_bar.set_align_left()
-        self._qt_layout_0.addWidget(self._prx_top_tool_bar.widget)
-        self._prx_top_tool_bar.set_border_radius(1)
+        self._top_prx_tool_bar = _container.PrxHToolBar()
+        self._top_prx_tool_bar.set_name('top')
+        self._top_prx_tool_bar.set_align_left()
+        self._qt_layout_0.addWidget(self._top_prx_tool_bar.widget)
+        self._top_prx_tool_bar.set_border_radius(1)
         #
         self._loading_index = 0
         self._loading_show_index = 0
-        # add custom menu
+        #
         self._qt_view = self.QT_VIEW_CLS()
         self._qt_view.setMinimumHeight(42)
         self._qt_view.setMaximumHeight(166667)
@@ -80,7 +80,7 @@ class PrxTreeView(
         self._item_dict = collections.OrderedDict()
         self._cache_expand = dict()
         self._cache_check = dict()
-        self._filter_completion_cache = None
+        self._keyword_filter_completion_cache = None
         self._loading_item_prxes = []
         self._view_keyword_filter_occurrence_index_current = 0
         # check
@@ -111,9 +111,9 @@ class PrxTreeView(
         #
         self._prx_filter_bar = self._prx_filer_bar_0
         self._prx_filter_bar.set_completion_gain_fnc(
-            self.__keyword_filter_completion_gain_fnc
+            self._view_keyword_filter_completion_gain_fnc
         )
-        self._keyword_filter_item_prxes = []
+        self._keyword_filter_prx_items = []
 
         self._qt_view._set_view_keyword_filter_bar_(self._prx_filter_bar._qt_widget)
         self._prx_filter_bar._qt_widget.input_value_changed.connect(
@@ -130,12 +130,15 @@ class PrxTreeView(
             self._qt_view._do_keyword_filter_occurrence_to_next_
         )
 
+    def generate_thread(self, cache_fnc, build_fnc, previous_fnc=None, post_fnc=None):
+        self._qt_view._generate_thread_(cache_fnc, build_fnc, previous_fnc=previous_fnc, post_fnc=post_fnc)
+
     def create_top_tool_box(self, name, expanded=True, visible=True, size_mode=0, insert_args=None):
         tool_box = _container_for_box.PrxHToolBox()
         if isinstance(insert_args, int):
-            self._prx_top_tool_bar.insert_widget_at(insert_args, tool_box)
+            self._top_prx_tool_bar.insert_widget_at(insert_args, tool_box)
         else:
-            self._prx_top_tool_bar.add_widget(tool_box)
+            self._top_prx_tool_bar.add_widget(tool_box)
         tool_box.set_name(name)
         tool_box.set_expanded(expanded)
         tool_box.set_visible(visible)
@@ -156,7 +159,9 @@ class PrxTreeView(
             self._prx_filter_bar.get_keywords()
         )
         self._qt_view._refresh_view_items_visible_by_any_filter_()
-        self._prx_filter_bar._qt_widget._set_occurrence_buttons_enable_(self._qt_view._has_keyword_filter_results_())
+        self._prx_filter_bar._qt_widget._set_occurrence_buttons_enable_(
+            self._qt_view._has_keyword_filter_results_()
+        )
         self._qt_view._refresh_viewport_showable_auto_()
 
     def set_resize_enable(self, boolean):
@@ -187,7 +192,7 @@ class PrxTreeView(
         if item_prx in self._loading_item_prxes:
             self._loading_item_prxes.remove(item_prx)
 
-    def set_loading_update(self):
+    def process_event(self):
         self._loading_index += 1
         if self._loading_index%15 == 0:
             self._loading_show_index += 1
@@ -202,14 +207,14 @@ class PrxTreeView(
             )
 
     def set_filter_start(self):
-        self._prx_top_tool_bar.set_expanded(True)
+        self._top_prx_tool_bar.set_expanded(True)
         self._prx_filer_bar_0.set_entry_focus(True)
 
     def get_top_tool_bar(self):
-        return self._prx_top_tool_bar
+        return self._top_prx_tool_bar
 
     def hide_top_tool_bar(self):
-        self._prx_top_tool_bar.set_visible(False)
+        self._top_prx_tool_bar.set_visible(False)
 
     def set_scroll_to_select_item(self):
         selection_items = self.view.selectedItems()
@@ -306,19 +311,21 @@ class PrxTreeView(
     def set_clear(self):
         self.view._set_clear_()
         self._item_dict.clear()
-        self._filter_completion_cache = None
+        self._keyword_filter_completion_cache = None
         self._loading_item_prxes = []
 
     def restore_all(self):
         self.set_clear()
 
     def connect_item_select_changed_to(self, fnc):
+        # noinspection PyUnresolvedReferences
         self.view.itemSelectionChanged.connect(fnc)
 
     def connect_item_check_changed_to(self, fnc):
         self.view.item_check_changed.connect(fnc)
 
     def connect_choose_changed_to(self, fnc):
+        # noinspection PyUnresolvedReferences
         self.view.itemChanged.connect(fnc)
 
     def connect_item_expand_to(self, prx_item, fnc, time=0):
@@ -432,25 +439,21 @@ class PrxTreeView(
         self._prx_filter_bar.set_completion_gain_fnc(fnc)
 
     # noinspection PyUnusedLocal
-    def __keyword_filter_completion_gain_fnc(self, *args, **kwargs):
+    def _view_keyword_filter_completion_gain_fnc(self, *args, **kwargs):
         keyword = args[0]
         if keyword:
-            if self._filter_completion_cache is None:
-                # cache fist
-                self._filter_completion_cache = list(
+            if self._keyword_filter_completion_cache is None:
+                self._keyword_filter_completion_cache = list(
                     set(
-                        map(
-                            lambda x: x.lower(),
-                            [
-                                j for i in self._qt_view._get_all_items_()
-                                for j in i._generate_keyword_filter_keys_()
-                            ]
-                        )
+                        [
+                            j for i in self._qt_view._get_all_items_() for j in
+                            i._generate_keyword_filter_keys_()
+                        ]
                     )
                 )
-            #
-            _ = fnmatch.filter(
-                self._filter_completion_cache, six.u('*{}*').format(keyword)
+
+            _ = bsc_core.PtnFnmatchMtd.filter(
+                self._keyword_filter_completion_cache, six.u('*{}*').format(keyword)
             )
             return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_MAXIMUM]
         return []

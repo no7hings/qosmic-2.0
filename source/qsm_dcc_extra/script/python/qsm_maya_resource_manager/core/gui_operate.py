@@ -276,10 +276,10 @@ class GuiResourceOpt(
     def restore(self):
         self._prx_tree_view.set_clear()
 
-    def gui_is_exists(self, path):
+    def gui_check_exists(self, path):
         return self._item_dict.get(path) is not None
 
-    def gui_get(self, path):
+    def gui_get_one(self, path):
         return self._item_dict[path]
 
     def gui_register(self, path, prx_item):
@@ -287,7 +287,7 @@ class GuiResourceOpt(
 
     def gui_add_root(self):
         path = '/'
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             prx_item = self._prx_tree_view.create_item(
                 self.ROOT_NAME,
                 icon=gui_core.GuiIcon.get('database/all'),
@@ -298,7 +298,7 @@ class GuiResourceOpt(
             prx_item.set_expanded(True)
             # prx_item.set_checked(True)
             return True, prx_item
-        return False, self.gui_get(path)
+        return False, self.gui_get_one(path)
 
     def gui_add_group(self, path_opt):
         def build_fnc_():
@@ -315,14 +315,14 @@ class GuiResourceOpt(
             )
 
         path = path_opt.path
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             create_kwargs = dict(
                 name='loading ...',
                 filter_key=path,
             )
             parent = path_opt.get_parent()
             if parent is not None:
-                prx_item_parent = self.gui_get(parent.path)
+                prx_item_parent = self.gui_get_one(parent.path)
                 prx_item = prx_item_parent.add_child(
                     **create_kwargs
                 )
@@ -335,7 +335,7 @@ class GuiResourceOpt(
             self.gui_register(path, prx_item)
             prx_item.set_show_build_fnc(build_fnc_)
             return True, prx_item
-        return False, self.gui_get(path)
+        return False, self.gui_get_one(path)
 
     def gui_add_resource(self, resource):
         def build_fnc_():
@@ -372,7 +372,7 @@ class GuiResourceOpt(
             )
 
         path = resource.path
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             path_opt = resource.path_opt
             create_kwargs = dict(
                 name='loading ...',
@@ -380,7 +380,7 @@ class GuiResourceOpt(
             )
             parent = path_opt.get_parent()
             if parent is not None:
-                prx_item_parent = self.gui_get(parent.path)
+                prx_item_parent = self.gui_get_one(parent.path)
                 prx_item = prx_item_parent.add_child(
                     **create_kwargs
                 )
@@ -411,14 +411,14 @@ class GuiResourceOpt(
             )
             prx_item.set_show_build_fnc(build_fnc_)
             return True, prx_item
-        return False, self.gui_get(path)
+        return False, self.gui_get_one(path)
 
     def gui_add_one(self, resource):
         ancestors = resource.path_opt.get_ancestors()
         if ancestors:
             ancestors.reverse()
             for i_path_opt in ancestors:
-                if self.gui_is_exists(i_path_opt.path) is False:
+                if self.gui_check_exists(i_path_opt.path) is False:
                     i_is_create, i_prx_item = self.gui_add_group(i_path_opt)
                     if i_is_create is True:
                         i_prx_item.set_expanded(True)
@@ -446,7 +446,7 @@ class GuiResourceOpt(
         return list_
 
     def gui_get_items_selected(self, paths):
-        return [self.gui_get(i) for i in paths if self.gui_is_exists(i)]
+        return [self.gui_get_one(i) for i in paths if self.gui_check_exists(i)]
 
     def do_gui_selected(self, paths):
         if paths:

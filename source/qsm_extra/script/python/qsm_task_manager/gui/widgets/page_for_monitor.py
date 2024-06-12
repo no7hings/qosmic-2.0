@@ -161,8 +161,8 @@ class _GuiTaskOpt(
 
     def gui_add_root(self):
         path = '/'
-        if self.gui_is_exists(path) is True:
-            return False, self.gui_get(path)
+        if self.gui_check_exists(path) is True:
+            return False, self.gui_get_one(path)
 
         prx_item = self._prx_tree_view.prepend_item(
             self.ROOT_NAME,
@@ -178,14 +178,14 @@ class _GuiTaskOpt(
     def gui_add_prc_group(self, entity):
         group = entity.get('group')
         if group is None:
-            return False, self.gui_get('/')
+            return False, self.gui_get_one('/')
 
         path = '/{}'.format(group)
-        if self.gui_is_exists(path):
-            return False, self.gui_get(path)
+        if self.gui_check_exists(path):
+            return False, self.gui_get_one(path)
 
         path_opt = bsc_core.PthNodeOpt(path)
-        parent_gui = self.gui_get(path_opt.get_parent_path())
+        parent_gui = self.gui_get_one(path_opt.get_parent_path())
 
         prx_item = parent_gui.prepend_child(
             name=group,
@@ -204,8 +204,8 @@ class _GuiTaskOpt(
         else:
             path = '/{}/{}'.format(group, task_id)
 
-        if self.gui_is_exists(path) is True:
-            return False, self.gui_get(path)
+        if self.gui_check_exists(path) is True:
+            return False, self.gui_get_one(path)
 
         content = entity.content
 

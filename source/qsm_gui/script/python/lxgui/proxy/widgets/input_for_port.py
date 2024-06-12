@@ -429,6 +429,7 @@ class PrxInputAsFilesOpen(PrxInputAsStorageArray):
     def open_with_dialog_fnc(self):
         f = gui_qt_core.QtWidgets.QFileDialog()
         # options |= f.DontUseNativeDialog
+        # noinspection PyArgumentList
         s = f.getOpenFileNames(
             self.widget,
             'Open Files',
@@ -462,7 +463,7 @@ class PrxInputAsMediasOpen(PrxInputAsFilesOpen):
         super(PrxInputAsMediasOpen, self).__init__(*args, **kwargs)
         self._create_button = gui_prx_wdt_utility.PrxIconPressButton()
         self._qt_input_widget._add_input_button_(self._create_button.widget)
-        self._create_button.connect_press_clicked_to(self.__dot_screenshot_create)
+        self._create_button.connect_press_clicked_to(self._do_screenshot)
         self._create_button.set_name('create file')
         self._create_button.set_icon_name('camera')
         self._create_button.set_icon_sub_name('action/add')
@@ -474,24 +475,24 @@ class PrxInputAsMediasOpen(PrxInputAsFilesOpen):
         )
 
     @staticmethod
-    def __get_screenshot_temporary_file_path():
+    def _get_screenshot_file_path():
         d = bsc_core.BscSystem.get_home_directory()
         return six.u('{}/screenshot/untitled-{}.jpg').format(d, bsc_core.TimeExtraMtd.generate_time_tag_36())
 
-    def __do_screenshot_save(self, g):
-        f = self.__get_screenshot_temporary_file_path()
+    def _do_screenshot_save(self, g):
+        f = self._get_screenshot_file_path()
         gui_prx_wdt_utility.PrxScreenshotFrame.save_to(
             g, f
         )
         self.append(f)
         self.update_history()
 
-    def __dot_screenshot_create(self):
+    def _do_screenshot(self):
         active_window = gui_qt_core.GuiQtUtil.get_qt_active_window()
         w = gui_prx_wdt_utility.PrxScreenshotFrame()
         w.connect_started_to(active_window.hide)
         w.do_start()
-        w.connect_accepted_to(self.__do_screenshot_save)
+        w.connect_accepted_to(self._do_screenshot_save)
         w.connect_finished_to(active_window.show)
 
 
@@ -653,7 +654,7 @@ class PrxInputAsShotgunEntityWithChoose(_AbsPrxInput):
             self._qt_input_widget._set_choose_popup_item_keyword_filter_dict_(keyword_filter_dict)
             self._qt_input_widget._set_choose_popup_item_tag_filter_dict_(tag_filter_dict)
 
-        self._qt_input_widget._run_build_use_thread_(
+        self._qt_input_widget._run_build_extra_use_thread_(
             cache_fnc_, build_fnc_, post_fnc_
         )
 
@@ -678,8 +679,8 @@ class PrxInputAsShotgunEntityWithChoose(_AbsPrxInput):
     def set_focus_in(self):
         self._qt_input_widget._set_input_entry_focus_in_()
 
-    def run_as_thread(self, cache_fnc, build_fnc, post_fnc):
-        self._qt_input_widget._run_build_use_thread_(
+    def run_build_extra_use_thread(self, cache_fnc, build_fnc, post_fnc):
+        self._qt_input_widget._run_build_extra_use_thread_(
             cache_fnc, build_fnc, post_fnc
         )
 
@@ -762,12 +763,12 @@ class PrxInputAsShotgunEntitiesWithChoose(_AbsPrxInput):
             self._qt_input_widget._set_choose_popup_item_keyword_filter_dict_(keyword_filter_dict)
             self._qt_input_widget._set_choose_popup_item_tag_filter_dict_(tag_filter_dict)
 
-        self._qt_input_widget._run_build_use_thread_(
+        self._qt_input_widget._run_build_extra_use_thread_(
             cache_fnc_, build_fnc_, post_fnc_
         )
 
-    def run_as_thread(self, cache_fnc, build_fnc, post_fnc):
-        self._qt_input_widget._run_build_use_thread_(
+    def run_build_extra_use_thread(self, cache_fnc, build_fnc, post_fnc):
+        self._qt_input_widget._run_build_extra_use_thread_(
             cache_fnc, build_fnc, post_fnc
         )
 
@@ -1146,7 +1147,7 @@ class PrxInputAsBoolean(_AbsPrxInput):
         super(PrxInputAsBoolean, self).__init__(*args, **kwargs)
 
     def get(self):
-        return self._qt_input_widget._get_is_checked_()
+        return self._qt_input_widget._is_checked_()
 
     def set(self, raw=None, **kwargs):
         self._qt_input_widget._set_checked_(raw)
@@ -1693,7 +1694,7 @@ class PrxInputAsNodes(_AbsPrxInputExtra):
         prx_item.set_gui_menu_data(menu_raw)
         prx_item.set_menu_content(obj.get_gui_menu_content())
         #
-        # self._prx_input.set_loading_update()
+        # self._prx_input.process_event()
 
     def __add_item_as_tree(self, obj):
         ancestors = obj.get_ancestors()

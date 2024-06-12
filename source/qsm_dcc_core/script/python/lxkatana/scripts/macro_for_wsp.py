@@ -365,7 +365,7 @@ class ScpMacro(object):
         if layout_gui is True:
             self._obj_opt.gui_layout_node_graph(size=(240, 40))
 
-    def get_is_changed(self):
+    def is_changed(self):
         yaml_file_opt = bsc_storage.StgFileOpt(self._file_path)
         yaml_timestamp = yaml_file_opt.get_modify_timestamp()
         macro_file_path = '{}.macro'.format(yaml_file_opt.path_base)
@@ -1875,7 +1875,7 @@ class ScpInstanceColorMap(object):
     def get_instance_usd_file_path(self):
         return self._obj_opt.get('parameters.instance.usd')
 
-    def get_grow_image_file_path(self):
+    def get_grow_image_path(self):
         return self._obj_opt.get('parameters.grow.image')
 
     def get_grow_map_name(self):
@@ -1889,7 +1889,7 @@ class ScpInstanceColorMap(object):
         force = bool(self._obj_opt.get('parameters.grow.force'))
 
         grow_usd_file_path = self.get_grow_usd_file_path()
-        image_file_path = self.get_grow_image_file_path()
+        image_file_path = self.get_grow_image_path()
         uv_map_name = self.get_grow_map_name()
         cache_file_name = bsc_core.BscUuid.generate_by_files(
             [grow_usd_file_path]+bsc_storage.StgTextureMtd.get_unit_paths(image_file_path),
@@ -1919,7 +1919,7 @@ class ScpInstanceColorMap(object):
 
         grow_usd_file_path = self.get_grow_usd_file_path()
         instance_usd_file_path = self.get_instance_usd_file_path()
-        image_file_path = self.get_grow_image_file_path()
+        image_file_path = self.get_grow_image_path()
         uv_map_name = self.get_grow_map_name()
         cache_file_name = bsc_core.BscUuid.generate_by_files(
             [grow_usd_file_path, instance_usd_file_path]+bsc_storage.StgTextureMtd.get_unit_paths(image_file_path),

@@ -17,7 +17,7 @@ def main(session):
 
         resource_path = dtb_resource.path
         gui_resource_opt = window.get_gui_resource_opt()
-        prx_item = gui_resource_opt.gui_get(resource_path)
+        prx_item = gui_resource_opt.gui_get_one(resource_path)
 
         mime_data = prx_item.get_drag_mime_data()
 

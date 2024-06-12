@@ -53,11 +53,11 @@ class PrxListView(
         self._qt_layout_0.setContentsMargins(4, 4, 4, 4)
         self._qt_layout_0.setSpacing(2)
         #
-        self._prx_top_tool_bar = _container.PrxHToolBar()
-        self._prx_top_tool_bar.set_name('top')
-        self._prx_top_tool_bar.set_align_left()
-        self._qt_layout_0.addWidget(self._prx_top_tool_bar.widget)
-        self._prx_top_tool_bar.set_border_radius(1)
+        self._top_prx_tool_bar = _container.PrxHToolBar()
+        self._top_prx_tool_bar.set_name('top')
+        self._top_prx_tool_bar.set_align_left()
+        self._qt_layout_0.addWidget(self._top_prx_tool_bar.widget)
+        self._top_prx_tool_bar.set_border_radius(1)
         # check
         self._prx_check_tool_box = self.create_top_tool_box('check', True, False, 0)
         #
@@ -65,7 +65,7 @@ class PrxListView(
         self._check_all_button._set_name_text_('check all')
         self._check_all_button._set_icon_file_path_(gui_core.GuiIcon.get('all_checked'))
         self._prx_check_tool_box.add_widget(self._check_all_button)
-        self._check_all_button.press_clicked.connect(self.__do_check_all_visible_items)
+        self._check_all_button.press_clicked.connect(self._do_check_all_visible_items)
         self._check_all_button._set_tool_tip_text_(
             '"LMB-click" for checked all visible items'
         )
@@ -74,7 +74,7 @@ class PrxListView(
         self._uncheck_all_button._set_icon_file_path_(gui_core.GuiIcon.get('all_unchecked'))
         self._uncheck_all_button._set_name_text_('uncheck all')
         self._prx_check_tool_box.add_widget(self._uncheck_all_button)
-        self._uncheck_all_button.press_clicked.connect(self.__do_uncheck_all_visible_items)
+        self._uncheck_all_button.press_clicked.connect(self._do_uncheck_all_visible_items)
         self._uncheck_all_button._set_tool_tip_text_(
             '"LMB-click" for unchecked all visible items'
         )
@@ -116,7 +116,7 @@ class PrxListView(
         self._qt_view._set_view_keyword_filter_bar_(self._prx_filter_bar._qt_widget)
 
         self._item_dict = collections.OrderedDict()
-        self._filter_completion_cache = None
+        self._keyword_filter_completion_cache = None
 
         self.__add_scale_switch_tools()
         self.__add_sort_mode_switch_tools()
@@ -131,7 +131,7 @@ class PrxListView(
         self._prx_filter_bar._qt_widget.occurrence_next_press_clicked.connect(
             self._qt_view._do_keyword_filter_occurrence_to_next_
         )
-        self._prx_filter_bar._qt_widget._set_input_completion_buffer_fnc_(self.__keyword_filter_completion_gain_fnc)
+        self._prx_filter_bar._qt_widget._set_input_completion_buffer_fnc_(self._view_keyword_filter_completion_gain_fnc)
 
     @property
     def view(self):
@@ -141,15 +141,21 @@ class PrxListView(
     def filter_bar(self):
         return self._prx_filter_bar
 
+    def generate_thread(self, cache_fnc, build_fnc, previous_fnc=None, post_fnc=None):
+        self._qt_view._generate_thread_(cache_fnc, build_fnc, previous_fnc=previous_fnc, post_fnc=post_fnc)
+
     def hide_top_tool_bar(self):
-        self._prx_top_tool_bar.set_visible(False)
+        self._top_prx_tool_bar.set_visible(False)
+
+    def set_item_event_override_flag(self, boolean):
+        self._qt_view._set_item_event_override_flag_(boolean)
 
     def create_top_tool_box(self, name, expanded=True, visible=True, size_mode=0, insert_args=None):
         tool_box = _container_for_box.PrxHToolBox()
         if isinstance(insert_args, int):
-            self._prx_top_tool_bar.insert_widget_at(insert_args, tool_box)
+            self._top_prx_tool_bar.insert_widget_at(insert_args, tool_box)
         else:
-            self._prx_top_tool_bar.add_widget(tool_box)
+            self._top_prx_tool_bar.add_widget(tool_box)
         tool_box.set_name(name)
         tool_box.set_expanded(expanded)
         tool_box.set_visible(visible)
@@ -157,25 +163,21 @@ class PrxListView(
         return tool_box
 
     # noinspection PyUnusedLocal
-    def __keyword_filter_completion_gain_fnc(self, *args, **kwargs):
+    def _view_keyword_filter_completion_gain_fnc(self, *args, **kwargs):
         keyword = args[0]
         if keyword:
-            # cache fist
-            if self._filter_completion_cache is None:
-                self._filter_completion_cache = list(
+            if self._keyword_filter_completion_cache is None:
+                self._keyword_filter_completion_cache = list(
                     set(
-                        map(
-                            lambda x: x.lower(),
-                            [
-                                j for i in self._qt_view._get_all_items_() for j in
-                                i._generate_keyword_filter_keys_()
-                            ]
-                        )
+                        [
+                            j for i in self._qt_view._get_all_items_() for j in
+                            i._generate_keyword_filter_keys_()
+                        ]
                     )
                 )
-            #
-            _ = fnmatch.filter(
-                self._filter_completion_cache, six.u('*{}*').format(keyword)
+
+            _ = bsc_core.PtnFnmatchMtd.filter(
+                self._keyword_filter_completion_cache, six.u('*{}*').format(keyword)
             )
             return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_MAXIMUM]
         return []
@@ -275,10 +277,10 @@ class PrxListView(
             gui_core.GuiIcon.get(['tool/list-mode', 'tool/icon-mode'][self._qt_view._get_is_grid_mode_()])
         )
 
-    def __do_check_all_visible_items(self):
+    def _do_check_all_visible_items(self):
         self._qt_view._set_all_visible_item_widgets_checked_(True)
 
-    def __do_uncheck_all_visible_items(self):
+    def _do_uncheck_all_visible_items(self):
         self._qt_view._set_all_visible_item_widgets_checked_(False)
 
     def set_view_list_mode(self):
@@ -303,9 +305,6 @@ class PrxListView(
     def set_item_icon_size(self, w, h):
         self._qt_view._set_item_icon_size_(w, h)
 
-    def set_item_icon_frame_draw_enable(self, boolean):
-        self._qt_view._set_item_icon_frame_draw_enable_(boolean)
-
     def set_item_name_frame_size(self, w, h):
         self._qt_view._set_item_name_frame_size_(w, h)
         self._qt_view._set_item_name_size_(w-4, h-4)
@@ -326,9 +325,6 @@ class PrxListView(
     def set_item_image_frame_draw_enable(self, boolean):
         self._qt_view._set_item_image_frame_draw_enable_(boolean)
 
-    def set_item_image_draw_as_full(self, boolean):
-        self._qt_view._set_item_image_draw_as_full_(boolean)
-
     def create_item(self, *args, **kwargs):
         prx_item_widget = _item.PrxListItemWidget()
         prx_item_widget.set_view(self)
@@ -344,6 +340,9 @@ class PrxListView(
         qt_item_widget = prx_item_widget._qt_widget
         self._qt_view._connect_item_widget_(qt_item, qt_item_widget, *args, **kwargs)
         return prx_item_widget
+
+    def assign_item_widget(self, qt_item, qt_item_widget, *args, **kwargs):
+        self._qt_view._assign_item_widget_(qt_item, qt_item_widget, *args, **kwargs)
 
     # noinspection PyUnusedLocal
     def create_item_widget(self, *args, **kwargs):
@@ -378,7 +377,7 @@ class PrxListView(
 
     def set_clear(self):
         self._item_dict.clear()
-        self._filter_completion_cache = None
+        self._keyword_filter_completion_cache = None
         self._qt_view._set_clear_()
 
     def _get_all_items_(self):
@@ -390,8 +389,8 @@ class PrxListView(
     def get_all_item_widgets(self):
         return [i._get_item_widget_().gui_proxy for i in self._qt_view._get_all_items_()]
 
-    def set_loading_update(self):
-        self._qt_view._set_loading_update_()
+    def process_event(self):
+        self._qt_view._process_event_()
 
     def connect_refresh_action_for(self, fnc):
         self._qt_view.f5_key_pressed.connect(fnc)
@@ -409,7 +408,7 @@ class PrxListView(
         return self._qt_view._gui_bustling_()
 
     def get_top_tool_bar(self):
-        return self._prx_top_tool_bar
+        return self._top_prx_tool_bar
 
     def refresh_viewport_showable_auto(self):
         self._qt_view._refresh_viewport_showable_auto_()
@@ -443,12 +442,14 @@ class PrxListView(
     def connect_press_released_to(self, fnc):
         self._qt_view.press_released.connect(fnc)
 
+    def refresh_check_info(self):
+        self._qt_view._refresh_check_info_()
+
 
 class PrxImageView(PrxListView):
     def __init__(self, *args, **kwargs):
         super(PrxImageView, self).__init__(*args, **kwargs)
         self.set_item_frame_size(128, 128+48)
-        self.set_item_icon_frame_draw_enable(True)
         self.set_item_name_frame_draw_enable(True)
         self.set_item_image_frame_draw_enable(True)
 

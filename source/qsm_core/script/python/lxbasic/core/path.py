@@ -219,36 +219,36 @@ class PthNodeOpt(object):
     )
 
     def __init__(self, path):
-        self.__pathsep = path[0]
-        self.__path_text = path
+        self._pathsep = path[0]
+        self._path_text = path
 
     def get_pathsep(self):
-        return self.__pathsep
+        return self._pathsep
 
     pathsep = property(get_pathsep)
 
     def get_path(self):
-        return self.__path_text
+        return self._path_text
 
     path = property(get_path)
 
     def get_name(self):
         return PthNodeMtd.get_dag_name(
-            path=self.__path_text, pathsep=self.__pathsep
+            path=self._path_text, pathsep=self._pathsep
         )
 
     name = property(get_name)
 
     def set_name(self, name):
-        self.__path_text = self.get_path_as_new_name(name)
+        self._path_text = self.get_path_as_new_name(name)
 
     def get_path_as_new_name(self, name):
         parent = self.get_parent_path()
-        if parent == self.__pathsep:
-            return self.__pathsep.join(
+        if parent == self._pathsep:
+            return self._pathsep.join(
                 ['', name]
             )
-        return self.__pathsep.join(
+        return self._pathsep.join(
             [self.get_parent_path(), name]
         )
 
@@ -258,7 +258,7 @@ class PthNodeOpt(object):
         )
 
     def get_value(self):
-        return self.__path_text
+        return self._path_text
 
     value = property(get_value)
 
@@ -270,12 +270,12 @@ class PthNodeOpt(object):
 
     def get_parent_path(self):
         return PthNodeMtd.get_dag_parent_path(
-            path=self.__path_text, pathsep=self.__pathsep
+            path=self._path_text, pathsep=self._pathsep
         )
 
     def parent_to_path(self, path):
         # noinspection PyAugmentAssignment
-        self.__path_text = path+self.__path_text
+        self._path_text = path+self._path_text
 
     def get_ancestor_paths(self):
         return self.get_component_paths()[1:]
@@ -292,7 +292,7 @@ class PthNodeOpt(object):
 
     def get_component_paths(self):
         return PthNodeMtd.get_dag_component_paths(
-            path=self.__path_text, pathsep=self.__pathsep
+            path=self._path_text, pathsep=self._pathsep
         )
 
     def get_components(self):
@@ -347,38 +347,41 @@ class PthNodeOpt(object):
 
     def get_plant_rgb(self, maximum=255):
         for k, v in self.PLANT_HSV_MAPPER.items():
-            if fnmatch.filter([self.__path_text], '*{}*'.format(k)):
+            if fnmatch.filter([self._path_text], '*{}*'.format(k)):
                 return _raw.RawColorMtd.hsv2rgb(
                     v[0], v[1], v[2], maximum
                 )
         return 0.25, 0.75, 0.5
+    
+    def is_match_pattern(self, p):
+        return not not fnmatch.filter([self._path_text], p)
 
     def generate_child(self, name):
         return self.__class__(
             PthNodeMtd.get_dag_child_path(
-                self.__path_text, name, pathsep=self.__pathsep
+                self._path_text, name, pathsep=self._pathsep
             )
         )
 
     def get_depth(self):
         return len(
             PthNodeMtd.get_dag_args(
-                self.__path_text,
-                pathsep=self.__pathsep
+                self._path_text,
+                pathsep=self._pathsep
             )
         )
 
     def __str__(self):
-        return self.__path_text
+        return self._path_text
 
     def __repr__(self):
         return self.__str__()
 
     def to_string(self):
-        return self.__path_text
+        return self._path_text
 
     def to_dcc_path(self):
-        return re.sub(r'/(\d+)([^/]+)', lambda x: '/_{}{}'.format(x.group(1), x.group(2)), self.__path_text)
+        return re.sub(r'/(\d+)([^/]+)', lambda x: '/_{}{}'.format(x.group(1), x.group(2)), self._path_text)
 
     def to_dcc(self):
         return self.__class__(
@@ -466,22 +469,22 @@ class PthPortMtd(object):
 class PthPortOpt(object):
 
     def __init__(self, path, pathsep='.'):
-        self.__path_text = path
-        self.__pathsep = pathsep
+        self._path_text = path
+        self._pathsep = pathsep
 
     def get_pathsep(self):
-        return self.__pathsep
+        return self._pathsep
 
     pathsep = property(get_pathsep)
 
     def get_path(self):
-        return self.__path_text
+        return self._path_text
 
     path = property(get_path)
 
     def get_name(self):
         return PthPortMtd.get_dag_name(
-            path=self.__path_text, pathsep=self.__pathsep
+            path=self._path_text, pathsep=self._pathsep
         )
 
     def get_is_top_level(self):
@@ -489,7 +492,7 @@ class PthPortOpt(object):
 
     def get_component_paths(self):
         return PthPortMtd.get_dag_component_paths(
-            path=self.__path_text, pathsep=self.__pathsep
+            path=self._path_text, pathsep=self._pathsep
         )
 
     def get_components(self):
@@ -497,7 +500,7 @@ class PthPortOpt(object):
 
     def get_parent_path(self):
         return PthPortMtd.get_dag_parent_path(
-            path=self.__path_text, pathsep=self.__pathsep
+            path=self._path_text, pathsep=self._pathsep
         )
 
     def get_parent(self):
@@ -511,10 +514,10 @@ class PthPortOpt(object):
         return self.get_component_paths()[1:]
 
     def to_string(self):
-        return self.__path_text
+        return self._path_text
 
     def __str__(self):
-        return self.__path_text
+        return self._path_text
 
     def __repr__(self):
         return self.__str__()

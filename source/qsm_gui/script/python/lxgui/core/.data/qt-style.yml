@@ -12,15 +12,15 @@ option:
         color-light-hover: '103, 103, 103, 255'
         color-white: '223, 223, 223, 255'
         #
-        color-hovered: '159, 95, 63, 255'
-        color-selected: '63, 95, 159, 255'
+        color-hovered: '255, 175, 111, 255'
+        color-selected: '111, 175, 255, 255'
         color-checked: '255, 95, 159, 255'
         color-pressed: '95, 255, 159, 255'
         color-actioned: '95, 255, 159, 255'
         #
-        color-item-selected: '79, 95, 151, 255'
-        color-item-selected-indirect: '39, 79, 127, 255'
-        color-item-hovered: '255, 179, 47, 255'
+        color-item-selected: '111, 175, 255, 255'
+        color-item-selected-indirect: '63, 95, 159, 255'
+        color-item-hovered: '255, 175, 111, 255'
         #
         color-item-loading: '31, 31, 31, 63'
         #
@@ -115,7 +115,7 @@ widget:
     QScrollArea:
         |-
         QScrollArea{
-            background: rgba(<option.background.color-basic>); 
+            background: rgba(<option.background.color-transparent>); 
             color: rgba(<option.font.color-basic>);
             border: none;
         }
@@ -177,14 +177,17 @@ widget:
         QTreeView::item:hover{
             background: rgba(<option.background.color-hovered>);
             border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+            color: rgba(<option.font.color-hovered>); 
         }
         QTreeView::item:selected{
             background: rgba(<option.background.color-selected>);
             border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+            color: rgba(<option.font.color-selected>); 
         }
         QTreeView::item:selected:hover{
             background: rgba(<option.background.color-hovered>);
             border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+            color: rgba(<option.font.color-hovered>); 
         }
         QTreeView::branch:open:has-children:has-siblings{
             border-image: none; image: url(<option.icon-file.expand>);

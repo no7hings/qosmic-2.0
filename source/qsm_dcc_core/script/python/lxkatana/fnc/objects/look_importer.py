@@ -104,7 +104,7 @@ class FncImporterForLookAssOld(gnl_fnc_abstracts.AbsFncOptionBase):
                     i_raw = value_type_convert_dict[i_dcc_port_name](i_raw)
                 else:
                     if i_value_dcc_port.type == 'number':
-                        if i_and_port.get_is_enumerate():
+                        if i_and_port.is_enumerate():
                             i_raw = i_and_port.get_as_index()
                 #
                 if i_raw is not None:
@@ -137,7 +137,7 @@ class FncImporterForLookAssOld(gnl_fnc_abstracts.AbsFncOptionBase):
             if i_value_dcc_port.get_is_exists() is True:
                 i_raw = i_and_port.get()
                 if i_value_dcc_port.type == 'number':
-                    if i_and_port.get_is_enumerate():
+                    if i_and_port.is_enumerate():
                         i_raw = i_and_port.get_as_index()
                 if i_raw is not None:
                     i_value_dcc_port.set(i_raw)
@@ -423,7 +423,7 @@ class FncImporterForLookAssOld(gnl_fnc_abstracts.AbsFncOptionBase):
                         dcc_obj._set_ramp_value_update_(dcc_port_key, i_raw)
                     else:
                         value = i_raw
-                        if i_and_port.get_is_enumerate():
+                        if i_and_port.is_enumerate():
                             ktn_type = i_value_dcc_port.type
                             if ktn_type == 'string':
                                 value = str(i_and_port.get_as_index())

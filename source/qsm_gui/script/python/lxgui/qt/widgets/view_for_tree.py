@@ -10,11 +10,11 @@ from ...qt import abstracts as _qt_abstracts
 # qt widgets
 from . import utility as _utility
 
-from . import entry_frame as _frame
+from . import entry_frame as _entry_frame
 
 
 class QtTreeWidget(
-    _qt_abstracts.AbsQtTreeWidget
+    _qt_abstracts.AbsQtTreeWidget,
 ):
     PEN_LINE = QtGui.QPen(_qt_core.QtBackgroundColors.Basic, _gui_core.GuiDpiScale.get(1))
     PEN_BRANCH = QtGui.QPen(_qt_core.QtBackgroundColors.Button, _gui_core.GuiDpiScale.get(1))
@@ -92,9 +92,11 @@ class QtTreeWidget(
         self._selected_indices = []
         self._selected_indirect_indices = []
         #
+        # noinspection PyUnresolvedReferences
         self.expanded.connect(self._set_item_action_expand_execute_at_)
+        # noinspection PyUnresolvedReferences
         self.collapsed.connect(self._set_item_action_collapse_execute_at_)
-        #
+        # noinspection PyUnresolvedReferences
         self.itemSelectionChanged.connect(self._set_item_selected_update_)
         # self.itemChanged.connect(self._set_item_changed_update_)
         #
@@ -111,16 +113,12 @@ class QtTreeWidget(
 
         self._item_press_current = None
         self._item_press_index = 0
-
-        self.itemPressed.connect(
-            self._execute_item_pressed_
-        )
-        self.itemDoubleClicked.connect(
-            self._send_item_dbl_clicked_emit_
-        )
-        self.itemClicked.connect(
-            self._send_item_clicked_emit_
-        )
+        # noinspection PyUnresolvedReferences
+        self.itemPressed.connect(self._execute_item_pressed_)
+        # noinspection PyUnresolvedReferences
+        self.itemDoubleClicked.connect(self._send_item_dbl_clicked_emit_)
+        # noinspection PyUnresolvedReferences
+        self.itemClicked.connect(self._send_item_clicked_emit_)
 
         self._draw_for_check_state_enable = True
 
@@ -276,6 +274,7 @@ class QtTreeWidget(
             super(QtTreeWidget, self).keyPressEvent(event)
 
     def mousePressEvent(self, event):
+        # noinspection PyArgumentList
         if QtWidgets.QApplication.keyboardModifiers() == QtCore.Qt.ShiftModifier:
             self._is_expand_descendants = True
         #
@@ -306,15 +305,15 @@ class QtTreeWidget(
             elif event.type() == QtCore.QEvent.FocusIn:
                 self._is_focused = True
                 parent = self.parent()
-                if isinstance(parent, _frame.QtEntryFrame):
+                if isinstance(parent, _entry_frame.QtEntryFrame):
                     parent._set_focused_(True)
             elif event.type() == QtCore.QEvent.FocusOut:
                 self._is_focused = False
                 parent = self.parent()
-                if isinstance(parent, _frame.QtEntryFrame):
+                if isinstance(parent, _entry_frame.QtEntryFrame):
                     parent._set_focused_(False)
             elif event.type() == QtCore.QEvent.Resize:
-                self._refresh_view_all_items_viewport_showable_()
+                self._refresh_all_items_viewport_showable_()
         return False
 
     def mouseReleaseEvent(self, event):
@@ -377,16 +376,19 @@ class QtTreeWidget(
                     check_rect, _qt_core.QtBackgroundColors.Checked
                 )
 
+    @qt_slot(object, int)
     def _execute_item_pressed_(self, item, column):
         self._item_press_current = item
         self._item_press_index = column
         item._signals.pressed.emit(item, column)
 
     @classmethod
+    @qt_slot(object, int)
     def _send_item_clicked_emit_(cls, item, column):
         item._signals.press_clicked.emit(item, column)
 
     @classmethod
+    @qt_slot(object, int)
     def _send_item_dbl_clicked_emit_(cls, item, column):
         item._signals.press_dbl_clicked.emit(item, column)
 
@@ -505,12 +507,14 @@ class QtTreeWidget(
                 elif match_flags == [True, True]:
                     qt_match_flags = QtCore.Qt.MatchRecursive|QtCore.Qt.MatchExactly
                 #
+                # noinspection PyArgumentList
                 items = self.findItems(
                     keyword,
                     qt_match_flags,
                     column=i_column
                 )
                 for j_item in items:
+                    # noinspection PyArgumentList
                     j_index = self.indexFromItem(j_item, column=i_column)
                     j_id = j_index.internalId()
                     if j_id not in ids:
@@ -690,7 +694,7 @@ class QtTreeWidget(
 
     # noinspection PyUnusedLocal
     def _refresh_view_items_viewport_showable_by_sort_(self, *args, **kwargs):
-        self._refresh_view_all_items_viewport_showable_()
+        self._refresh_all_items_viewport_showable_()
 
     def _expand_items_by_depth_(self, depth):
         items = self._get_items_by_depth_(depth)

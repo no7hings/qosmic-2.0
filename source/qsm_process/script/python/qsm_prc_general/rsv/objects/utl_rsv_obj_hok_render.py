@@ -142,7 +142,7 @@ class RsvDccRenderHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                 if i_render_ddl_job_id:
                     render_ddl_job_ids.append(i_render_ddl_job_id)
                     if with_video_convert is True:
-                        i_image_file_path_src = '{}/main/{}/beauty.####.exr'.format(
+                        i_image_path_src = '{}/main/{}/beauty.####.exr'.format(
                             render_output_directory_path, i_variable_name
                         )
                         i_movie_file_path_tgt = '{}/main/{}.mov'.format(
@@ -158,7 +158,7 @@ class RsvDccRenderHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                                 user=user, time_tag=time_tag,
                                 td_enable=td_enable, rez_beta=rez_beta,
                                 #
-                                image_file=i_image_file_path_src,
+                                image_file=i_image_path_src,
                                 movie_file=i_movie_file_path_tgt,
                                 #
                                 start_frame=i_render_frames_[0],
@@ -174,12 +174,12 @@ class RsvDccRenderHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                         )
                     #
                     if with_image_convert is True:
-                        i_image_file_path_src = '{}/main/{}/beauty.{}.exr'.format(
+                        i_image_path_src = '{}/main/{}/beauty.{}.exr'.format(
                             render_output_directory_path,
                             i_variable_name,
                             str(i_render_frames_[0]).zfill(4)
                         )
-                        i_image_file_path_tgt = '{}/main/{}.png'.format(
+                        i_image_path_tgt = '{}/main/{}.png'.format(
                             render_output_directory_path, i_variable_name
                         )
                         i_movie_convert_hook_option_opt = bsc_core.ArgDictStringOpt(
@@ -191,8 +191,8 @@ class RsvDccRenderHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                                 user=user, time_tag=time_tag,
                                 td_enable=td_enable, rez_beta=rez_beta,
                                 #
-                                image_file=i_image_file_path_src,
-                                output_image_file=i_image_file_path_tgt,
+                                image_file=i_image_path_src,
+                                output_image_file=i_image_path_tgt,
                                 #
                                 option_hook_key_extend=[i_key_extend],
                                 dependencies=[option_hook_key],

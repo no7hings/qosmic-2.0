@@ -96,7 +96,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
             dtb_opt, dtb_version
         )
 
-        self._usd_stage_view.run_as_thread(
+        self._usd_stage_view.run_build_extra_use_thread(
             cache_fnc_, build_fnc_, post_fnc_
         )
 

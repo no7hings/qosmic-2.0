@@ -1,0 +1,183 @@
+constant:
+    enumerate:
+        widget: enumerate
+        value: ['A', 'Aa', 'B', 'Bb', 'C', 'Cc']
+        default: 'B'
+        tool_tip: '...'
+        enable: True
+
+    boolean:
+        widget: boolean
+        value: True
+        tool_tip: '...'
+        enable: True
+
+    integer:
+        widget: integer
+        value: 1
+        tool_tip: '...'
+        enable: True
+        history_key: 'test.input-integer'
+        pull_history_latest: True
+
+    float:
+        widget: float
+        value: 1
+        tool_tip: '...'
+        enable: True
+
+    icon:
+        widget: icon
+        value: ['', 'application/katana', 'application/maya']
+        all_application_icon: True
+        default: ''
+        tool_tip: '...'
+        enable: True
+    #    lock: True
+
+    script:
+        widget: script
+        value: ''
+        tool_tip: '...'
+        enable: True
+
+    capsule_string:
+        widget: capsule_string
+        value: ['project', 'sequence', 'asset', 'shot']
+        default: 'sequence'
+        enable: True
+    #    lock: True
+        tool_tip: '...'
+
+tuple:
+    tuple/tuple/float2:
+        widget: float2
+        value: [1.0, 2.0]
+        tool_tip: '...'
+        enable: True
+
+    test/test/float3:
+        widget: float3
+        value: [1, 2, 3]
+        tool_tip: '...'
+        enable: True
+
+    rgba:
+        widget: rgba
+        value: [255, 255, 255, 255]
+        tool_tip: '...'
+        enable: True
+    #    lock: True
+
+array:
+    array/capsule_strings:
+        widget: capsule_strings
+        value: ['project', 'sequence', 'asset', 'shot']
+        default: ['sequence', 'asset']
+        enable: True
+
+    array/values_choose:
+        widget: values_choose
+        value: ['A', 'B']
+        tool_tip: '...'
+        history_key: 'test.values'
+        ext_filter: 'All Media File (*.jpg *.png *.exr)'
+        enable: True
+
+shotgun:
+    entity/shotgun_entity_choose:
+        widget: shotgun_entity_choose
+        # option for shotgun entities
+        shotgun_entity_kwargs: {entity_type: 'HumanUser', filters: [['sg_studio', 'is', 'CG'], ['sg_status_list', 'is', 'act']], fields: ['name', 'email', 'sg_nickname']}
+        keyword_filter_fields: ['name', 'email', 'sg_nickname']
+        tag_filter_fields: ['department']
+        #
+        value: ''
+        tool_tip: '...'
+        enable: True
+
+    entities/shotgun_entities_choose:
+        widget: shotgun_entities_choose
+        # option for shotgun entities
+        shotgun_entity_kwargs: {entity_type: 'HumanUser', filters: [['sg_studio', 'is', 'CG'], ['sg_status_list', 'is', 'act']], fields: ['name', 'email', 'sg_nickname']}
+        keyword_filter_fields: ['name', 'email', 'sg_nickname']
+        tag_filter_fields: ['department']
+        #
+        value: []
+        tool_tip: '...'
+        enable: True
+
+storage:
+    directory/open:
+        widget: directory
+        open_or_save: open
+        history_key: 'test.directory-open'
+        pull_history_latest: True
+        value: ''
+        tool_tip: '...'
+        lock: True
+        enable: True
+
+    directory/save:
+        widget: directory
+        open_or_save: save
+        history_key: 'test.directory-save'
+        pull_history_latest: True
+        value: ''
+        tool_tip: '...'
+        enable: True
+
+    file/open:
+        widget: file
+        open_or_save: open
+        history_key: 'test.file-open'
+        pull_history_latest: True
+        ext_filter: 'All File (*.usd *.usda)'
+        value: ''
+        tool_tip: '...'
+        enable: True
+
+    file/save:
+        widget: file
+        open_or_save: save
+        history_key: 'test.file-save'
+        pull_history_latest: True
+        ext_filter: 'All File (*.json)'
+        value: ''
+        tool_tip: '...'
+        enable: True
+
+storages:
+    json_files:
+        widget: files
+        value: ''
+        tool_tip: '...'
+        ext_includes: ['.json']
+        enable: True
+#        height: 240
+
+    directories:
+        widget: directories
+        value: ''
+        tool_tip: '...'
+        enable: True
+
+    medias:
+        widget: medias
+        value: ''
+        tool_tip: '...'
+        history_key: 'test.medias-open'
+        ext_filter: 'All Media File (*.jpg *.png *.exr)'
+        enable: True
+
+    file_list:
+        widget: file_list
+        value: []
+        enable: True
+        tool_tip: '...'
+
+    file_tree:
+        widget: file_tree
+        value: []
+        enable: True
+        tool_tip: '...'

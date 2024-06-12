@@ -83,7 +83,7 @@ for i in [
 ]:
     i_f = '/data/e/workspace/lynxi/script/python/.setup/katana/Macros/{}.yml'.format(i)
     i_m = ktn_scripts.ScpMacro(i_f)
-    # if i_m.get_is_changed() is True:
+    # if i_m.is_changed() is True:
     KatanaFile.New()
     i_m.build()
     i_m.save()

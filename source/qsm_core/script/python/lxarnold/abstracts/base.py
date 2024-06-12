@@ -211,7 +211,7 @@ class AbsObjScene(
         and_port_name = and_port_mtd.port_name
         #
         and_type_is_array = and_port_mtd.get_type_is_array()
-        and_is_enumerate_type = and_port_mtd.get_is_enumerate_type()
+        and_is_enumerate_type = and_port_mtd.is_enumerate_type()
         if and_is_enumerate_type is True:
             ar_port_enumerate_strings = and_port_mtd.get_enumerate_strings()
         else:

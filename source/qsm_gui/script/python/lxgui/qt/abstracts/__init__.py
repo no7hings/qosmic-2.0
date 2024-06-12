@@ -1,6 +1,8 @@
 # coding:utf-8
 from .base import *
 
+from .widget import *
+
 from .action import *
 
 from .view import *
@@ -13,3 +15,8 @@ from .show import *
 
 from .dcc import *
 
+from .thread import *
+
+from .thread_worker import *
+
+from .thread_extra import *

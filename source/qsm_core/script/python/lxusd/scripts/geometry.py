@@ -13,9 +13,9 @@ class VertexColorBaker(object):
 
         for i_prim in self._stage_opt.get_all_mesh_objs():
             i_key = i_prim.GetPath().pathString.split('/')[-1]
-            i_image_file_path = image_mapper[i_key]
+            i_image_path = image_mapper[i_key]
             i_mesh_opt = usd_core.UsdMeshOpt(i_prim)
-            i_color_map = i_mesh_opt.compute_vertex_color_map_from_image(i_image_file_path, 'st')
+            i_color_map = i_mesh_opt.compute_vertex_color_map_from_image(i_image_path, 'st')
             i_mesh_opt.set_display_colors_as_vertex(i_color_map)
 
     def save(self):

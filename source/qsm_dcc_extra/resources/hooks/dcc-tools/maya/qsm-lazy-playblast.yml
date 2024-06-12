@@ -1,0 +1,229 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Lazy Playblast'
+        name_chs: '懒人拍屏'
+        group_name: 'General(s)'
+        #
+        icon_name: 'application/playblast'
+        tool_tip:
+            |-
+            Playblast tool as simplify.
+        #
+        tool_tip_chs:
+            |-
+            简化的拍屏工具。
+        #
+        size: [480, 720]
+
+
+build:
+    options:
+        playblast:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+                camera:
+                    widget: group
+                    name: 'Camera'
+                    name_chs: '相机'
+
+                camera/scheme:
+                    widget: capsule_string
+                    name: 'Camera Scheme'
+                    name_chs: '相机方案'
+                    options: ['auto', 'camera_path']
+                    option_names_chs: ['自动', '相机路径']
+                    default: 'auto'
+                    enable: True
+
+                camera/path:
+                    widget: enumerate
+                    name: 'Camera Path'
+                    name_chs: '相机路径'
+                    options: ['|persp|perspShape', '|top|topShape', '|front|frontShape', '|side|sideShape']
+                    default: '|persp|perspShape'
+
+                resolution:
+                    widget: group
+                    name: 'Resolution'
+                    name_chs: '分辨率'
+
+                resolution/scheme:
+                    widget: capsule_string
+                    name: 'Resolution Scheme'
+                    name_chs: '分辨率方案'
+                    options: ['render_setting', 'resolution_preset', 'resolution_size']
+                    option_names_chs: ['渲染设置', '分辨率预设', '分辨率大小']
+                    default: 'resolution_preset'
+                    enable: True
+
+                resolution/preset:
+                    widget: enumerate
+                    name: 'Resolution Preset'
+                    name_chs: '分辨率预设'
+                    options: ['HD 1080P', 'HD 720P', 'HD 540P', '640x480', '320x240', '4k Square', '3k Square', '2k Square', '1k Square']
+                    default: 'HD 720P'
+                    history_key: 'easy_playblast.resolution_preset'
+                    pull_history_latest: True
+                    enable: True
+
+                resolution/size:
+                    widget: integer2
+                    name: 'Resolution Size'
+                    name_chs: '分辨率大小'
+                    value: [1280, 120]
+                    tool_tip: '...'
+
+                frame:
+                    widget: group
+                    name: 'Frame'
+                    name_chs: '帧'
+
+                frame/scheme:
+                    widget: capsule_string
+                    name: 'Frame Scheme'
+                    name_chs: '帧方案'
+                    options: ['time_slider', 'frame_range']
+                    option_names_chs: ['时间轴', '帧范围']
+                    default: 'time_slider'
+                    enable: True
+                    tool_tip: 'choose a frame scheme'
+                    tool_tip_chs:
+                        |-
+                        设置一个帧方案:
+                            时间轴：自动读取帧范围
+                            帧范围：在帧范围中输入
+
+                frame/range:
+                    widget: integer2
+                    name: 'Frame Range'
+                    name_chs: '帧范围'
+                    value: [0, 24]
+                    tool_tip: '...'
+
+                frame/step:
+                    widget: integer
+                    name: 'Frame Step'
+                    name_chs: '帧间隔'
+                    enable: True
+                    value: 1
+
+                render_setting:
+                    widget: group
+                    name: 'Render Setting'
+                    name_chs: '渲染设置'
+
+                render_setting/texture_enable:
+                    widget: boolean
+                    name: 'Texture'
+                    name_chs: '贴图'
+                    value: True
+                    history_key: 'easy_playblast.texture_enable'
+                    pull_history_latest: True
+
+                render_setting/light_enable:
+                    widget: boolean
+                    name: 'Light'
+                    name_chs: '灯光'
+                    value: True
+                    join_to_next: True
+                    history_key: 'easy_playblast.light_enable'
+                    pull_history_latest: True
+
+                render_setting/shadow_enable:
+                    widget: boolean
+                    name: 'Shadow'
+                    name_chs: '影子'
+                    value: True
+                    history_key: 'easy_playblast.shadow_enable'
+                    pull_history_latest: True
+
+                display_setting:
+                    widget: group
+                    name: 'Display Setting'
+                    name_chs: '显示设置'
+
+                display_setting/hud_enable:
+                    widget: boolean
+                    name: 'HUD'
+                    name_chs: 'HUD'
+                    value: True
+                    enable: True
+                    history_key: 'easy_playblast.hud_enable'
+                    pull_history_latest: True
+
+                output:
+                    widget: group
+                    name: 'Output'
+                    name_chs: '输出'
+
+                output/save_scheme:
+                    widget: capsule_string
+                    name: 'Output Save Scheme'
+                    name_chs: '输出保存方案'
+                    options: ['auto', 'specific_directory', 'specific_file']
+                    option_names_chs: ['自动', '指定目录', '指定文件']
+                    default: 'auto'
+                    enable: True
+
+                output/update_scheme:
+                    widget: capsule_string
+                    name: 'Output Update Scheme'
+                    name_chs: '输出更新方案'
+                    options: ['overlay', 'new_version']
+                    option_names_chs: ['覆盖', '新版本']
+                    default: 'overlay'
+                    enable: True
+                    visible_condition: {
+                        operator: 'match_one', port: 'output/save_scheme', value: ['auto', 'specific_directory']
+                    }
+
+                output/directory:
+                    widget: directory
+                    name: 'Directory'
+                    name_chs: '目录'
+                    open_or_save: save
+                    history_key: 'easy_playblast.output_directory'
+                    pull_history_latest: True
+                    value: ''
+                    visible_condition: {
+                       operator: 'is', port: 'output/save_scheme', value: 'specific_directory'
+                    }
+
+                output/file:
+                    widget: file
+                    name: 'File'
+                    name_chs: '文件'
+                    open_or_save: save
+                    history_key: 'easy_playblast.output_file'
+                    pull_history_latest: True
+                    ext_filter: 'All File (*.mov)'
+                    value: ''
+                    visible_condition: {
+                        operator: 'is', port: 'output/save_scheme', value: 'specific_file'
+                    }
+
+                play_enable:
+                    widget: boolean
+                    name: 'Play When Finished'
+                    name_chs: '结束后播放'
+                    value: True
+                    enable: True
+                    history_key: 'easy_playblast.play_enable'
+                    pull_history_latest: True
+
+    buttons:
+        playblast:
+            name: 'Playblast'
+            name_chs: '拍屏'
+
+        playblast_backstage:
+            name: 'Playblast as Backstage'
+            name_chs: '后台拍屏'
+

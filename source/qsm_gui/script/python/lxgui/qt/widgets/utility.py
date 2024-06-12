@@ -562,7 +562,7 @@ class QtInfoBubble(QtWidgets.QWidget):
         #
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
 
-        self.setFont(gui_qt_core.GuiQtFont.generate(size=12, italic=True))
+        self.setFont(gui_qt_core.QtFont.generate(size=12, italic=True))
 
         self._info_text = ''
 
@@ -601,7 +601,7 @@ class QtInfoBubble(QtWidgets.QWidget):
                 rect=self.rect(),
                 text=self._info_text,
                 font=self.font(),
-                font_color=gui_qt_core.QtColors.ToolTipText,
+                text_color=gui_qt_core.QtColors.ToolTipText,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             )
 
@@ -647,15 +647,36 @@ class QtHScrollArea(QtWidgets.QScrollArea):
         pass
 
 
+class _QWidget(QtWidgets.QWidget):
+    def __init__(self, *args, **kwargs):
+        super(_QWidget, self).__init__(*args, **kwargs)
+
+        self._border_color = gui_qt_core.QtBackgroundColors.Transparent
+        self._background_color = gui_qt_core.QtBackgroundColors.Basic
+
+    def paintEvent(self, event):
+        painter = gui_qt_core.QtPainter(self)
+        painter._set_border_color_(self._border_color)
+        painter._set_background_color_(self._background_color)
+        painter.drawRect(self.rect())
+
+    def _set_border_color_(self, color):
+        self._border_color = color
+
+    def _set_background_color_(self, color):
+        self._background_color = color
+
+
 class QtVScrollArea(QtWidgets.QScrollArea):
     def __init__(self, *args, **kwargs):
         super(QtVScrollArea, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
         self.setWidgetResizable(True)
-        widget = QtWidget()
-        self.setWidget(widget)
-        self._layout = gui_qt_wgt_base.QtVBoxLayout(widget)
+
+        self._widget = _QWidget()
+        self.setWidget(self._widget)
+        self._layout = gui_qt_wgt_base.QtVBoxLayout(self._widget)
         self._layout.setAlignment(QtCore.Qt.AlignTop)
         self._layout.setContentsMargins(*[0]*4)
         self._layout.setSpacing(gui_core.GuiSize.LayoutDefaultSpacing)
@@ -677,9 +698,17 @@ class QtVScrollArea(QtWidgets.QScrollArea):
     def keyPressEvent(self, event):
         pass
 
+    def paintEvent(self, event):
+        pass
+
     def _add_widget_(self, widget):
         self._layout.addWidget(widget)
 
+    def _set_border_color_(self, color):
+        self._widget._border_color = color
+
+    def _set_background_color_(self, color):
+        self._widget._background_color = color
 
 
 class QtThreadDef(object):
@@ -759,7 +788,7 @@ class QtTextItem(
             painter._draw_text_by_rect_(
                 rect=self._name_draw_rect,
                 text=self._name_text,
-                font_color=text_color,
+                text_color=text_color,
                 font=self._name_draw_font,
                 text_option=self._name_text_option,
             )
@@ -780,7 +809,7 @@ class QtInfoLabel(
         x, y = 0, 0
         w, h = self.width(), self.height()
 
-        w_t, h_t = gui_qt_core.GuiQtFont.compute_size_2(h*.725, self._text)
+        w_t, h_t = gui_qt_core.QtFont.compute_size_2(h*.725, self._text)
 
         self.setFixedWidth(w_t)
 
@@ -819,7 +848,7 @@ class QtInfoLabel(
             painter._draw_text_by_rect_(
                 rect=self._text_draw_rect,
                 text=self._text,
-                font_color=gui_qt_core.QtColors.Text,
+                text_color=gui_qt_core.QtColors.Text,
                 font=self.font(),
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             )
@@ -1025,7 +1054,7 @@ class _QtHItem(
     gui_qt_abstracts.AbsQtActionBaseDef,
     gui_qt_abstracts.AbsQtActionForHoverDef,
     gui_qt_abstracts.AbsQtActionForPressDef,
-    gui_qt_abstracts.AbsQtPressSelectExtraDef,
+    gui_qt_abstracts.AbsQtActionForSelectDef,
     gui_qt_abstracts.AbsQtActionForCheckDef,
     gui_qt_abstracts.AbsQtDeleteBaseDef,
     #
@@ -1059,8 +1088,8 @@ class _QtHItem(
         self._init_action_for_check_def_(self)
         self._check_icon_file_path_0 = gui_core.GuiIcon.get('filter_unchecked')
         self._check_icon_file_path_1 = gui_core.GuiIcon.get('filter_checked')
-        self._refresh_check_draw_()
-        self._init_press_select_extra_def_(self)
+        self._refresh_check_()
+        self._init_action_for_select_def_(self)
         #
         self._init_item_filter_extra_def_(self)
         #
@@ -1124,7 +1153,7 @@ class _QtHItem(
             c_x += c_h+spacing
             c_w -= c_h+spacing
         # image
-        if self._image_draw_is_enable is True:
+        if self._image_flag is True:
             img_p = self._image_draw_percent
             img_w, img_h = c_h*img_p, c_h*img_p
             self._set_image_rect_(
@@ -1161,7 +1190,7 @@ class _QtHItem(
                     i_n_x, i_n_y, i_n_w, i_n_h, i
                 )
         #
-        self._set_index_draw_rect_(
+        self._index_draw_rect.setRect(
             c_x, c_y, c_w, c_h
         )
 
@@ -1240,7 +1269,7 @@ class _QtHItem(
                 rect=self._check_icon_draw_rect,
                 file_path=self._check_icon_file_path_current,
                 offset=offset,
-                # frame_rect=self._check_rect,
+                # frame_rect=self._check_frame_rect,
                 is_hovered=self._check_is_hovered
             )
 
@@ -1267,7 +1296,7 @@ class _QtHItem(
                     file_path=self._icon_file_path,
                 )
         # image
-        if self._image_draw_is_enable is True:
+        if self._image_flag is True:
             painter._draw_image_data_by_rect_(
                 rect=self._image_draw_rect,
                 image_data=self._image_data,
@@ -1280,7 +1309,7 @@ class _QtHItem(
                 painter._draw_text_by_rect_(
                     rect=self._name_draw_rects[i],
                     text=self._name_texts[i],
-                    font_color=self._name_color,
+                    text_color=self._name_draw_color,
                     font=self._name_draw_font,
                     text_option=self._name_text_option,
                     is_hovered=self._is_hovered,
@@ -1292,7 +1321,7 @@ class _QtHItem(
             painter._draw_text_by_rect_(
                 self._name_draw_rect,
                 self._name_text,
-                font_color=self._name_color,
+                text_color=self._name_draw_color,
                 font=self._name_draw_font,
                 text_option=self._name_text_option,
                 is_hovered=self._is_hovered,
@@ -1302,10 +1331,10 @@ class _QtHItem(
         #
         if self._index_text is not None:
             painter._draw_text_by_rect_(
-                self._index_rect,
+                self._index_draw_rect,
                 self._get_index_text_(),
-                font_color=self._index_text_color,
-                font=self._index_text_font,
+                text_color=self._index_color,
+                font=self._index_font,
                 text_option=self._index_text_option,
                 offset=offset
             )
@@ -1325,7 +1354,7 @@ class _QtHItem(
         self._delete_is_hovered = False
 
         if self._check_action_is_enable is True:
-            if self._check_rect.contains(p):
+            if self._check_frame_rect.contains(p):
                 self._check_is_hovered = True
         if self._rect_frame_draw.contains(p):
             self._press_is_hovered = True
@@ -1339,101 +1368,3 @@ class _QtHItem(
 
     def _get_is_visible_(self):
         return self.isVisible()
-
-
-class _QtScreenshotFrame(
-    QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
-    gui_qt_abstracts.AbsQtScreenshotBaseDef,
-
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForPressDef,
-):
-    def _refresh_widget_draw_(self):
-        self.update()
-
-    def _refresh_widget_draw_geometry_(self):
-        x, y = 0, 0
-        w, h = self.width(), self.height()
-        #
-        self._rect_frame_draw.setRect(
-            x-1, y-1, w+2, h+2
-        )
-
-    def __init__(self, *args, **kwargs):
-        super(_QtScreenshotFrame, self).__init__(*args, **kwargs)
-        self.installEventFilter(self)
-        self.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setWindowModality(QtCore.Qt.ApplicationModal)
-        self.setMouseTracking(True)
-        self.setWindowFlags(
-            QtCore.Qt.Popup
-            | QtCore.Qt.FramelessWindowHint
-            | QtCore.Qt.WindowStaysOnTopHint
-        )
-
-        self._init_frame_base_def_(self)
-        self._init_screenshot_base_def_(self)
-
-        self._init_action_base_def_(self)
-        self._init_action_for_hover_def_(self)
-        self._init_action_for_press_def_(self)
-
-        self._help_text_draw_size = 480, 240
-        self._help_text = (
-            '"LMB-click" and "LMB-move" to create screenshot,\n'
-            '"LMB-double-click" or "Enter Key-press" to accept\n'
-            '"Escape Key-press" to cancel'
-        )
-
-    def eventFilter(self, *args):
-        widget, event = args
-        if widget == self:
-            if event.type() == QtCore.QEvent.Resize:
-                self._update_screenshot_geometry_()
-                self._refresh_widget_draw_geometry_()
-                self._refresh_widget_draw_()
-            elif event.type() == QtCore.QEvent.MouseButtonPress:
-                self._do_screenshot_press_(event)
-            elif event.type() == QtCore.QEvent.MouseButtonDblClick:
-                self._accept_screenshot_()
-            elif event.type() == QtCore.QEvent.MouseMove:
-                if event.buttons() == QtCore.Qt.LeftButton:
-                    self._do_screenshot_press_move_(event)
-                else:
-                    self._do_screenshot_hover_(event)
-            elif event.type() == QtCore.QEvent.MouseButtonRelease:
-                self._do_screenshot_press_release_(event)
-            elif event.type() == QtCore.QEvent.KeyPress:
-                if event.key() in {QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter}:
-                    self._accept_screenshot_()
-                elif event.key() == QtCore.Qt.Key_Escape:
-                    self._cancel_screenshot_()
-        return False
-
-    def paintEvent(self, event):
-        if self._screenshot_mode != self.Mode.Stopped:
-            painter = gui_qt_core.QtPainter(self)
-
-            painter._set_screenshot_draw_by_rect_(
-                rect_0=self._rect_frame_draw,
-                rect_1=self._screenshot_rect,
-                border_color=(79, 95, 151),
-                background_color=(0, 0, 0, 127)
-            )
-
-            if self._screenshot_mode == self.Mode.Started:
-                painter._draw_frame_by_rect_(
-                    rect=self._help_frame_draw_rect,
-                    border_color=(0, 0, 0),
-                    background_color=(0, 0, 0, 127)
-                )
-                painter._draw_text_by_rect_(
-                    rect=self._help_draw_rect,
-                    text=self._help_text,
-                    font=gui_qt_core.QtFonts.Large,
-                    text_option=QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop,
-                    word_warp=True
-                )

@@ -607,7 +607,7 @@ class FncExporterForLookYml(gnl_fnc_abstracts.AbsFncOptionBase):
                 i_port_raw['connection'] = i_port.get_source()
                 dic[i_port.get_port_path()] = i_port_raw
             else:
-                if i_port.get_is_changed() is True:
+                if i_port.is_changed() is True:
                     i_port_raw['value'] = i_port.get()
                     dic[i_port.get_port_path()] = i_port_raw
         return dic
@@ -622,7 +622,7 @@ class FncExporterForLookYml(gnl_fnc_abstracts.AbsFncOptionBase):
             if i_port.get_has_source_(exact=True):
                 i_port_raw['connection'] = i_port.get_source()
             #
-            if i_port.get_is_enumerate():
+            if i_port.is_enumerate():
                 i_port_raw['enumerate-strings'] = i_port.get_enumerate_strings()
             #
             i_port_raw['value'] = i_port.get()

@@ -163,7 +163,7 @@ class CmdAtrQueryOpt(object):
         if _ is True:
             return [int(i) for i in cmds.getAttr(self.atr_path, multiIndices=1, silent=1) or []]
 
-    def get_is_enumerate(self):
+    def is_enumerate(self):
         return cmds.attributeQuery(
             self.port_path,
             node=self.obj_path,
@@ -283,7 +283,7 @@ class CmdPortQueryOpt(object):
             **self.__get_query_kwargs_(obj_path, readable=True)
         ) or False
 
-    def get_is_enumerate(self, obj_path=None):
+    def is_enumerate(self, obj_path=None):
         return cmds.attributeQuery(
             self.__get_query_key_(),
             **self.__get_query_kwargs_(obj_path, enum=True)
@@ -553,11 +553,11 @@ class CmdPortOpt(object):
             return [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]
         return _
 
-    def get_is_changed(self):
+    def is_changed(self):
         return self.get() != self.get_default()
 
-    def get_is_enumerate(self):
-        return self.get_port_query().get_is_enumerate(self.get_obj_path())
+    def is_enumerate(self):
+        return self.get_port_query().is_enumerate(self.get_obj_path())
 
     def get_enumerate_strings(self):
         return self.get_port_query().get_enumerate_strings(

@@ -489,7 +489,7 @@ class AbsPortValueExtraDef(object):
     def set_enumerate(self, boolean):
         self._is_enumerate = boolean
 
-    def get_is_enumerate(self):
+    def is_enumerate(self):
         return self._is_enumerate
 
     def set_enumerate_raw(self, enumerate_raw):
@@ -499,7 +499,7 @@ class AbsPortValueExtraDef(object):
         return self._enumerate_raw
 
     def get_as_index(self):
-        if self.get_is_enumerate():
+        if self.is_enumerate():
             raw = self.get()
             return self.get_enumerate_strings().index(raw)
 

@@ -319,7 +319,7 @@ class _AbsQtPopupAsChoose(
                     rect=self._rect_popup_top_toolbar_tool_tip,
                     text=tool_tip_text,
                     font=gui_qt_core.QtFonts.NameNormal,
-                    font_color=gui_qt_core.QtColors.TextDisable,
+                    text_color=gui_qt_core.QtColors.TextDisable,
                     text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 )
             #
@@ -358,7 +358,7 @@ class _AbsQtPopupAsChoose(
                     self._rect_popup_top_toolbar_tool_tip,
                     'entry to filter ...',
                     font=gui_qt_core.QtFonts.NameNormal,
-                    font_color=gui_qt_core.QtColors.TextDisable,
+                    text_color=gui_qt_core.QtColors.TextDisable,
                     text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 )
 
@@ -493,7 +493,7 @@ class _AbsQtPopupAsChoose(
             item_widget._set_image_url_(_image_url)
 
         item._set_item_show_fnc_(cache_fnc_, build_fnc_)
-        item_widget._set_image_draw_enable_(True)
+        item_widget._set_image_flag_(True)
 
     @staticmethod
     def _popup_item_show_deferred_fnc_1_(item, item_widget, data):
@@ -507,7 +507,7 @@ class _AbsQtPopupAsChoose(
             item_widget._set_icon_name_(_icon_name)
 
         item._set_item_show_fnc_(cache_fnc_, build_fnc_)
-        item_widget._set_image_draw_enable_(True)
+        item_widget._set_image_flag_(True)
 
     def _get_popup_width_(self, texts):
         count = len(texts)
@@ -536,7 +536,7 @@ class _AbsQtPopupAsChoose(
                 values_cur = self._get_popup_values_current_()
                 for index, i_value in enumerate(values):
                     i_item_widget = _utility._QtHItem()
-                    i_item = _item_for_list.QtListWidgetItem()
+                    i_item = _item_for_list.QtListItem()
                     i_item.setSizeHint(QtCore.QSize(self._w_popup_item, self._h_popup_item))
 
                     self._popup_view.addItem(i_item)
@@ -605,7 +605,7 @@ class _AbsQtPopupAsChoose(
                         tags.insert(0, self.TAG_ALL)
                     for i_tag in tags:
                         i_item_widget = _utility._QtHItem()
-                        i_item = _item_for_list.QtListWidgetItem()
+                        i_item = _item_for_list.QtListItem()
                         i_item.setSizeHint(
                             QtCore.QSize(self._popup_tag_filter_item_width, self._popup_tag_filter_item_height)
                         )
@@ -654,8 +654,8 @@ class _AbsQtPopupAsChoose(
 
                 self._popup_is_activated = True
                 # show
-                self._popup_view._refresh_view_all_items_viewport_showable_()
-                self._popup_tag_filter_view._refresh_view_all_items_viewport_showable_()
+                self._popup_view._refresh_all_items_viewport_showable_()
+                self._popup_tag_filter_view._refresh_all_items_viewport_showable_()
 
                 if isinstance(self._entry_widget, QtWidgets.QLineEdit):
                     self._read_only_mark = self._entry_widget.isReadOnly()
@@ -703,7 +703,7 @@ class _AbsQtPopupAsChoose(
         self._popup_view._set_view_keyword_filter_data_src_([self._popup_keyword_filter_entry.text()])
         #
         self._popup_view._refresh_view_items_visible_by_any_filter_()
-        self._popup_view._refresh_view_all_items_viewport_showable_()
+        self._popup_view._refresh_all_items_viewport_showable_()
         #
         if self._popup_auto_resize_is_enable is True:
             self._execute_auto_resize_()
@@ -894,7 +894,7 @@ class QtPopupAsCompletion(
                     'press "ESC" to cancel ...'
                 ).format(c),
                 font=gui_qt_core.QtFonts.NameNormal,
-                font_color=gui_qt_core.QtColors.TextDisable,
+                text_color=gui_qt_core.QtColors.TextDisable,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             )
 
@@ -948,7 +948,7 @@ class QtPopupAsCompletion(
             text_current = self._entry_widget._get_value_()
             for index, i_text in enumerate(values):
                 i_item_widget = _utility._QtHItem()
-                i_item = _item_for_list.QtListWidgetItem()
+                i_item = _item_for_list.QtListItem()
                 i_item.setSizeHint(
                     QtCore.QSize(self._w_popup_item, self._h_popup_item)
                 )
@@ -1141,7 +1141,7 @@ class QtPopupAsChooseForGuide(
                 self._rect_popup_top_toolbar_tool_tip,
                 'entry to filter ...',
                 font=gui_qt_core.QtFonts.NameNormal,
-                font_color=gui_qt_core.QtColors.TextDisable,
+                text_color=gui_qt_core.QtColors.TextDisable,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             )
 
@@ -1174,7 +1174,7 @@ class QtPopupAsChooseForGuide(
         self._popup_view._set_view_keyword_filter_data_src_([self._popup_keyword_filter_entry.text()])
         #
         self._popup_view._refresh_view_items_visible_by_any_filter_()
-        self._popup_view._refresh_view_all_items_viewport_showable_()
+        self._popup_view._refresh_all_items_viewport_showable_()
 
     def _set_entry_widget_(self, widget):
         self._entry_widget = widget
@@ -1202,7 +1202,7 @@ class QtPopupAsChooseForGuide(
             text_current = input_widget._get_guide_name_text_at_(index)
             for seq, i_text in enumerate(values):
                 i_item_widget = _utility._QtHItem()
-                i_item = _item_for_list.QtListWidgetItem()
+                i_item = _item_for_list.QtListItem()
                 i_item.setSizeHint(QtCore.QSize(self._w_popup_item, self._h_popup_item))
                 #
                 self._popup_view.addItem(i_item)

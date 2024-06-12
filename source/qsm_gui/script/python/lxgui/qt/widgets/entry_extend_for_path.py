@@ -64,7 +64,7 @@ class QtEntryExtendAsPath(QtWidgets.QWidget):
         self._entry_widget = gui_qt_wgt_entry.QtEntryAsConstant()
         self._lot.addWidget(self._entry_widget)
         self._entry_widget.setFocusPolicy(QtCore.Qt.ClickFocus)
-        self._entry_widget.setFont(gui_qt_core.GuiQtFont.generate_2(size=12))
+        self._entry_widget.setFont(gui_qt_core.QtFont.generate_2(size=12))
         # reg = QtCore.QRegExp(r'^[a-zA-Z][a-zA-Z0-9_]+$')
         reg = QtCore.QRegExp(r'^[a-zA-Z0-9_]+$')
         validator = QtGui.QRegExpValidator(reg, self._entry_widget)

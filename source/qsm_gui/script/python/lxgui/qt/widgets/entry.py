@@ -43,7 +43,7 @@ class QtEntryAsConstant(
     def __init__(self, *args, **kwargs):
         super(QtEntryAsConstant, self).__init__(*args, **kwargs)
         self.setPalette(_qt_core.GuiQtDcc.generate_qt_palette())
-        self.setFont(_qt_core.GuiQtFont.generate_2(size=12))
+        self.setFont(_qt_core.QtFont.generate_2(size=12))
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
         # self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         #
@@ -377,7 +377,7 @@ class QtEntryAsConstant(
         pass
 
     #
-    def _get_is_selected_(self):
+    def _is_selected_(self):
         boolean = False
         if self.selectedText():
             boolean = True
@@ -968,7 +968,7 @@ class QtEntryAsList(
         item_widget._set_value_(value)
         item_widget._set_delete_enable_(True)
         item_widget.delete_press_clicked.connect(delete_fnc_)
-        item = _item_for_list.QtListWidgetItem()
+        item = _item_for_list.QtListItem()
         w, h = self._grid_size
         item.setSizeHint(QtCore.QSize(w, h))
         self.addItem(item)
@@ -1030,10 +1030,10 @@ class QtEntryAsBubble(
             else:
                 text = self.__text
 
-            s_t, w_t, w_c, h_c = _qt_core.GuiQtText.generate_draw_args(self, text, self._w_maximum_text)
+            s_t, w_t, w_c, h_c = _qt_core.GuiQtText.generate_draw_args(self, text, self._text_w_maximum)
             self.setFixedWidth(w_c)
 
-            self._radius_border = s_t
+            self._frame_border_radius = s_t
 
             x, y = 0, 0
 
@@ -1051,7 +1051,7 @@ class QtEntryAsBubble(
             QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding
         )
 
-        self.setFont(_qt_core.GuiQtFont.generate_2(size=12))
+        self.setFont(_qt_core.QtFont.generate_2(size=12))
 
         self._init_entry_base_def_(self)
 
@@ -1064,11 +1064,11 @@ class QtEntryAsBubble(
 
         self.__texts_draw = []
 
-        self.__is_hovered = False
+        self._is_hovered = False
 
-        self._radius_border = 0
+        self._frame_border_radius = 0
 
-        self._w_maximum_text = 96
+        self._text_w_maximum = 96
 
         self.__w_mark = None
 
@@ -1091,10 +1091,10 @@ class QtEntryAsBubble(
                 self._refresh_widget_all_()
             #
             elif event.type() == QtCore.QEvent.Enter:
-                self.__is_hovered = True
+                self._is_hovered = True
                 self._refresh_widget_draw_()
             elif event.type() == QtCore.QEvent.Leave:
-                self.__is_hovered = False
+                self._is_hovered = False
                 self._refresh_widget_draw_()
 
             elif event.type() == QtCore.QEvent.Wheel:
@@ -1137,14 +1137,14 @@ class QtEntryAsBubble(
             painter._set_border_color_(_qt_core.QtColors.BubbleBorder)
             if offset:
                 painter._set_background_color_(_qt_core.QtColors.BubbleBackgroundActioned)
-            elif self.__is_hovered:
+            elif self._is_hovered:
                 painter._set_background_color_(_qt_core.QtColors.BubbleBackgroundHover)
             else:
                 painter._set_background_color_(color_bkg)
 
             painter.drawRoundedRect(
                 rect_frame,
-                self._radius_border, self._radius_border,
+                self._frame_border_radius, self._frame_border_radius,
                 QtCore.Qt.AbsoluteSize
             )
 
@@ -1155,7 +1155,7 @@ class QtEntryAsBubble(
 
             if offset:
                 painter._set_text_color_(_qt_core.QtColors.BubbleText)
-            elif self.__is_hovered:
+            elif self._is_hovered:
                 painter._set_text_color_(_qt_core.QtColors.BubbleText)
             else:
                 painter._set_text_color_(color_txt)

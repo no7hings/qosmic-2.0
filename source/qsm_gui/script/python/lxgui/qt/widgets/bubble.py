@@ -36,29 +36,31 @@ class QtTextBubble(
             w, h = self.width(), self.height()
             dlt_w, dlt_h = h, h
 
-            w_t, h_t = self.fontMetrics().width(self._text), self.fontMetrics().height()/2
-            # print h_t, h_t_
-            s_t = (h-h_t)/2
-            self._radius_border = s_t
+            spc = 2
+
+            txt_w, txt_h = QtGui.QFontMetrics(self._text_font).width(self._text)+16, h
+            # print txt_h, h_t_
+            s_t = (h-txt_h)/2
+            self._frame_border_radius = 2
             # fit to max size
-            w_t = min(w_t, self._w_maximum_text)
-            w_t_1 = w_t+s_t
+            fix_w = min(txt_w, self._text_w_maximum)
+            w_t_1 = fix_w+s_t
             w_c = w_t_1+dlt_w
             self.setFixedWidth(w_c)
 
-            dlt_icon_w, dlt_icon_h = self.__size_delete_icon_draw
+            dlt_icon_w, dlt_icon_h = self._delete_icon_size
 
-            self.__rect_frame_draw.setRect(
+            self._frame_draw_rect.setRect(
                 x+1, y+1, w_c-2, h-2
             )
-            self.__rect_text_draw.setRect(
-                x+s_t, y, w_t+2, h
+            self._text_draw_rect.setRect(
+                x+s_t, y, txt_w+2, h
             )
 
-            self.__rect_delete.setRect(
+            self._delete_frame_rect.setRect(
                 x+w_t_1, y, dlt_w, dlt_h
             )
-            self.__rect_delete_draw.setRect(
+            self._delete_draw_rect.setRect(
                 x+w_t_1+(dlt_w-dlt_icon_w)/2, y+(dlt_h-dlt_icon_h)/2, dlt_icon_w, dlt_icon_h
             )
 
@@ -69,30 +71,27 @@ class QtTextBubble(
             QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding
         )
         self.setMouseTracking(True)
-
-        self.setFont(_qt_core.GuiQtFont.generate_2(size=12))
-
         self._init_action_base_def_(self)
         self._init_action_for_press_def_(self)
 
-        self.__rect_frame_draw = QtCore.QRect()
+        self._frame_draw_rect = QtCore.QRect()
 
-        self.__is_hovered = False
-        self.__delete_is_hovered = False
+        self._is_hovered = False
+        self._delete_is_hovered = False
 
-        self.__w_text, self.__h_text = 0, 16
-        self._w_maximum_text = 64
-        self.__h_delete = 20
-        self.__w_side = 2
-        self.__text_spacing = 2
+        self._text_w, self._text_h = 0, 16
+        self._text_w_maximum = 64
+        self._side_w = 2
+        self._text_spacing = 2
         self._text = None
-        self.__rect_text_draw = QtCore.QRect()
-        self.__rect_delete = QtCore.QRect()
-        self.__rect_delete_draw = QtCore.QRect()
-        self.__size_delete = 16, 16
-        self.__size_delete_icon_draw = 8, 8
-        self.__icon_delete_0 = gui_core.GuiIcon.get('close')
-        self.__icon_delete_1 = gui_core.GuiIcon.get('close-hover')
+        self._text_font = _qt_core.QtFont.generate(size=8)
+        self.setFont(self._text_font)
+        self._text_draw_rect = QtCore.QRect()
+        self._delete_frame_rect = QtCore.QRect()
+        self._delete_draw_rect = QtCore.QRect()
+        self._delete_icon_size = 8, 8
+        self._delete_icon_file_path_0 = gui_core.GuiIcon.get('close')
+        self._delete_icon_file_path_1 = gui_core.GuiIcon.get('close-hover')
         
         self.installEventFilter(self)
 
@@ -107,11 +106,11 @@ class QtTextBubble(
                     self._refresh_widget_all_()
                 #
                 elif event.type() == QtCore.QEvent.Enter:
-                    self.__is_hovered = True
+                    self._is_hovered = True
                     self._refresh_widget_draw_()
                 elif event.type() == QtCore.QEvent.Leave:
-                    self.__is_hovered = False
-                    self.__delete_is_hovered = False
+                    self._is_hovered = False
+                    self._delete_is_hovered = False
                     self._refresh_widget_draw_()
                 elif event.type() == QtCore.QEvent.MouseMove:
                     self._do_hover_move_(event)
@@ -125,7 +124,7 @@ class QtTextBubble(
                         pass
                 elif event.type() == QtCore.QEvent.MouseButtonRelease:
                     if event.button() == QtCore.Qt.LeftButton:
-                        if self.__delete_is_hovered is True:
+                        if self._delete_is_hovered is True:
                             self.close()
                             self.deleteLater()
                     #
@@ -140,25 +139,25 @@ class QtTextBubble(
         if self._text is not None:
             offset = self._get_action_offset_()
             painter._draw_frame_by_rect_(
-                rect=self.__rect_frame_draw,
+                rect=self._frame_draw_rect,
                 border_color=_qt_core.QtBorderColors.Transparent,
-                background_color=[_qt_core.QtColors.BubbleBackground, _qt_core.QtColors.BubbleBackgroundHover][self.__is_hovered],
-                border_radius=self._radius_border,
+                background_color=[_qt_core.QtColors.BubbleBackground, _qt_core.QtColors.BubbleBackgroundHover][self._is_hovered],
+                border_radius=self._frame_border_radius,
                 offset=offset
             )
             painter._draw_text_by_rect_(
-                rect=self.__rect_text_draw,
+                rect=self._text_draw_rect,
                 text=self._text,
-                font_color=_qt_core.QtColors.ToolTipText,
-                font=self.font(),
+                text_color=_qt_core.QtColors.ToolTipText,
+                font=self._text_font,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 offset=offset
             )
 
             painter._draw_icon_file_by_rect_(
-                rect=self.__rect_delete_draw,
-                file_path=[self.__icon_delete_0, self.__icon_delete_1][
-                    self.__delete_is_hovered],
+                rect=self._delete_draw_rect,
+                file_path=[self._delete_icon_file_path_0, self._delete_icon_file_path_1][
+                    self._delete_is_hovered],
                 offset=offset
             )
 
@@ -172,10 +171,10 @@ class QtTextBubble(
 
     def _do_hover_move_(self, event):
         p = event.pos()
-        if self.__rect_delete.contains(p):
-            self.__delete_is_hovered = True
+        if self._delete_frame_rect.contains(p):
+            self._delete_is_hovered = True
         else:
-            self.__delete_is_hovered = False
+            self._delete_is_hovered = False
         #
         self._refresh_widget_draw_()
 
@@ -198,14 +197,14 @@ class QtInfoBubble(
         if self._text:
             w, h = self.width(), self.height()
 
-            self.setFont(_qt_core.GuiQtFont.generate_2(size=h*self._text_draw_percent))
+            self.setFont(_qt_core.QtFont.generate_2(size=h*self._text_draw_percent))
 
-            w_t, h_t = self.fontMetrics().width(self._text), self.fontMetrics().height()/2
-            s_t = (h-h_t)/2
+            txt_w, txt_h = self.fontMetrics().width(self._text)+16, self.fontMetrics().height()/2
+            s_t = (h-txt_h)/2
 
-            self._radius_border = s_t
+            self._frame_border_radius = s_t
 
-            w_c = w_t+s_t*2
+            w_c = txt_w+s_t*2
 
             if self.__size_mode == self.SizeMode.Auto:
                 self.setFixedWidth(w_c)
@@ -230,7 +229,7 @@ class QtInfoBubble(
 
         self.__size_mode = self.SizeMode.Auto
 
-        self._radius_border = 0
+        self._frame_border_radius = 0
 
         self.installEventFilter(self)
 
@@ -248,7 +247,7 @@ class QtInfoBubble(
             painter._draw_text_by_rect_(
                 rect=self._text_draw_rect,
                 text=self._text,
-                font_color=_qt_core.QtColors.TextTemporary,
+                text_color=_qt_core.QtColors.TextTemporary,
                 font=self.font(),
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             )
@@ -389,7 +388,7 @@ class QtPathBubble(
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
         )
-        self.setFont(_qt_core.GuiQtFont.generate_2(size=12))
+        self.setFont(_qt_core.QtFont.generate_2(size=12))
         self.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self._init_action_base_def_(self)
@@ -601,7 +600,7 @@ class QtBubbleAsChoice(
         x_d, y_d = rect_draw.x(), rect_draw.y()
         w_d, h_d = rect_draw.width(), rect_draw.height()
         # update font
-        painter._set_font_(_qt_core.GuiQtFont.generate_2(size=h*.725))
+        painter._set_font_(_qt_core.QtFont.generate_2(size=h*.725))
 
         text_option_ = QtGui.QTextOption(
             QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter
@@ -677,7 +676,7 @@ class QtBubbleAsChoice(
                 x, y, w, h
             )
 
-            h_i = self.__h_text_input
+            h_i = self._text_h_input
             self.__rect_input.setRect(
                 x, y, w, h_i
             )
@@ -689,14 +688,14 @@ class QtBubbleAsChoice(
                 x_0, y_0 = 0, h_i
                 w_0, h_0 = w, h-h_i
                 c = len(self.__idx_all)
-                c_h = max(min(int(h_0/c), self.__h_text_maximum), self.__h_text_minimum)
+                c_h = max(min(int(h_0/c), self._text_h_maximum), self._text_h_minimum)
 
                 v_h = c*c_h
                 v_y = y_0+(h_0-v_h)/2
 
                 for i_seq, i_index in enumerate(self.__idx_all):
                     i_text = self.__texts[i_index]
-                    i_t_w, i_t_h = _qt_core.GuiQtFont.compute_size_2(c_h*.725, i_text)
+                    i_t_w, i_t_h = _qt_core.QtFont.compute_size_2(c_h*.725, i_text)
 
                     i_rect = self.__rects[i_index]
                     i_x, i_y = x_0+(w_0-i_t_w)/2, y_0+(h_0-v_h)/2+c_h*i_seq
@@ -738,14 +737,14 @@ class QtBubbleAsChoice(
         self.__texts = []
         self.__idx_all = []
 
-        self.__h_text_input = 20
-        self.__h_text_maximum, self.__h_text_minimum = 32, 4
+        self._text_h_input = 20
+        self._text_h_maximum, self._text_h_minimum = 32, 4
 
         self.__rect_input = QtCore.QRect()
         self.__rects = []
 
-        self.__font_input = _qt_core.GuiQtFont.generate(size=12)
-        self.__font_current = _qt_core.GuiQtFont.generate(size=24)
+        self.__font_input = _qt_core.QtFont.generate(size=12)
+        self.__font_current = _qt_core.QtFont.generate(size=24)
 
         self.__y_hover = -1
 
@@ -851,8 +850,8 @@ class QtBubbleAsChoice(
                     text_cur = self.__texts[self._index_current]
                     rect_cur = self.__rects[self._index_current]
 
-                    h_c = self.__h_text_maximum+4
-                    t_w_c, t_h_c = _qt_core.GuiQtFont.compute_size_2(
+                    h_c = self._text_h_maximum+4
+                    t_w_c, t_h_c = _qt_core.QtFont.compute_size_2(
                         h_c*.725, text_cur
                     )
 
@@ -1011,7 +1010,7 @@ class QtBubbleAsChoose(
         w, h = self.width(), self.height()
         if self.__texts:
             side = 8
-            t_t_w, t_t_h = _qt_core.GuiQtFont.compute_size_2(self.__font_size_tips, self.__tips)
+            t_t_w, t_t_h = _qt_core.QtFont.compute_size_2(self.__font_size_tips, self.__tips)
             t_w, t_h = side*2+t_t_w, side*2+t_t_h
             self.__rect_tips.setRect(
                 c_x+(w-t_w)/2, c_y+1, t_w, t_h-2
@@ -1020,7 +1019,7 @@ class QtBubbleAsChoose(
 
             for i_index, i_text in enumerate(self.__texts):
                 i_rect = self.__rects[i_index]
-                i_t_w, i_t_h = _qt_core.GuiQtFont.compute_size_2(self.__font_size_text, i_text)
+                i_t_w, i_t_h = _qt_core.QtFont.compute_size_2(self.__font_size_text, i_text)
                 i_w, i_h = side*2+i_t_w, side*2+i_t_h
                 i_rect.setRect(c_x+(w-i_w)/2, c_y+1, i_w, i_h-2)
                 c_y += i_h
@@ -1031,14 +1030,14 @@ class QtBubbleAsChoose(
         if self.__texts:
             side = 8
 
-            t_t_w, t_t_h = _qt_core.GuiQtFont.compute_size_2(self.__font_size_tips, self.__tips)
+            t_t_w, t_t_h = _qt_core.QtFont.compute_size_2(self.__font_size_tips, self.__tips)
             t_w, t_h = side*2+t_t_w, side*2+t_t_h
             ws = [t_w]
             hs = [t_h]
             for i_index, i_text in enumerate(self.__texts):
                 i_text_draw = self.__texts_draw[i_index]
 
-                i_t_w, i_t_h = _qt_core.GuiQtFont.compute_size_2(self.__font_size_text, i_text_draw)
+                i_t_w, i_t_h = _qt_core.QtFont.compute_size_2(self.__font_size_text, i_text_draw)
                 i_w, i_h = side*2+i_t_w, side*2+i_t_h
                 ws.append(i_w)
                 hs.append(i_h)
@@ -1127,7 +1126,7 @@ class QtBubbleAsChoose(
             painter = _qt_core.QtPainter(self)
             painter._set_antialiasing_(False)
 
-            painter._set_font_(_qt_core.GuiQtFont.generate(size=self.__font_size_tips*.725))
+            painter._set_font_(_qt_core.QtFont.generate(size=self.__font_size_tips*.725))
             painter._set_text_color_(_qt_core.QtColors.TextWarning)
 
             painter.drawText(
@@ -1149,7 +1148,7 @@ class QtBubbleAsChoose(
 
                 painter.drawRect(i_rect)
 
-                painter._set_font_(_qt_core.GuiQtFont.generate(size=self.__font_size_text*.725))
+                painter._set_font_(_qt_core.QtFont.generate(size=self.__font_size_text*.725))
                 painter._set_text_color_(_qt_core.QtColors.BubbleText)
                 painter.drawText(
                     i_rect,

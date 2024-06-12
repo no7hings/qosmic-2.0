@@ -84,9 +84,9 @@ class GuiGLUsdData(object):
         bsc_log.Log.test_end('build stage')
 
         self._hash_key = bsc_core.BscHash.get_hash_value(self._vertices, as_unique_id=True)
-        self._image_file_path = '{}/{}.png'.format(self._cache_directory_path, self._hash_key)
+        self._image_path = '{}/{}.png'.format(self._cache_directory_path, self._hash_key)
 
-        return bsc_storage.StgFileOpt(self._image_file_path).get_is_exists()
+        return bsc_storage.StgFileOpt(self._image_path).get_is_exists()
 
     def __build_mesh(self, prim):
         mesh_opt = usd_core.UsdMeshOpt(usd_core.UsdGeom.Mesh(prim))
@@ -140,7 +140,7 @@ class GuiGLUsdData(object):
         return self._vbo_indices
 
     def get_image_path(self):
-        return self._image_file_path
+        return self._image_path
 
     def get_result(self):
         return self._result

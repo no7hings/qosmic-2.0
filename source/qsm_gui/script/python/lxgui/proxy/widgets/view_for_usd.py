@@ -48,8 +48,8 @@ if gui_qt_usd_core.QT_USD_FLAG is True:
         def load_usd_file(self, *args, **kwargs):
             self._qt_widget._load_usd_file_(*args, **kwargs)
 
-        def run_as_thread(self, cache_fnc, build_fnc, post_fnc):
-            self._qt_widget._run_build_use_thread_(
+        def run_build_extra_use_thread(self, cache_fnc, build_fnc, post_fnc):
+            self._qt_widget._run_build_extra_use_thread_(
                 cache_fnc, build_fnc, post_fnc
             )
 
@@ -89,7 +89,7 @@ else:
         def load_usd_file(self, *args, **kwargs):
             pass
 
-        def run_as_thread(self, cache_fnc, build_fnc, post_fnc):
+        def run_build_extra_use_thread(self, cache_fnc, build_fnc, post_fnc):
             pass
 
         def get_usd_model(self):

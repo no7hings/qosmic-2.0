@@ -62,7 +62,7 @@ class _GuiEntityOpt(
 
     def gui_add_root(self):
         path = '/'
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             prx_item = self._prx_tree_view.create_item(
                 self.ROOT_NAME,
                 icon=gui_core.GuiIcon.get('database/all'),
@@ -72,14 +72,14 @@ class _GuiEntityOpt(
             prx_item.set_expanded(True)
             prx_item.set_checked(False)
             return True, prx_item
-        return False, self.gui_get(path)
+        return False, self.gui_get_one(path)
 
     def gui_add(self, obj, use_show_thread=False):
         name = obj.name
         path = obj.path
         type_name = obj.type
-        if self.gui_is_exists(path) is True:
-            prx_item = self.gui_get(path)
+        if self.gui_check_exists(path) is True:
+            prx_item = self.gui_get_one(path)
             return False, prx_item
         else:
             create_kwargs = dict(
@@ -88,7 +88,7 @@ class _GuiEntityOpt(
             )
             parent = obj.get_parent()
             if parent is not None:
-                prx_item_parent = self.gui_get(parent.path)
+                prx_item_parent = self.gui_get_one(parent.path)
                 prx_item = prx_item_parent.add_child(
                     **create_kwargs
                 )
@@ -150,7 +150,7 @@ class _GuiEntityOpt(
             ancestors.reverse()
             for i in ancestors:
                 i_path = i.get_path()
-                if self.gui_is_exists(i_path) is False:
+                if self.gui_check_exists(i_path) is False:
                     self.gui_add(i, use_show_thread=True)
         #
         return self.gui_add(obj, use_show_thread=True)
@@ -344,8 +344,8 @@ class _GuiTaskOpt(
             )
 
         path = rsv_task.get_path()
-        if self.gui_is_exists(path) is True:
-            return self.gui_get(path)
+        if self.gui_check_exists(path) is True:
+            return self.gui_get_one(path)
 
         valid = self.__get_is_valid(rsv_task)
         if valid is True:
@@ -365,7 +365,7 @@ class _GuiTaskOpt(
             path = rsv_task.get_path()
             prx_item_widget = self._prx_list_view.create_item_widget()
             self.gui_register(path, prx_item_widget)
-            prx_item_widget.set_index_draw_enable(True)
+            prx_item_widget.set_index_draw_flag(True)
             prx_item_widget.set_check_enable(True)
             prx_item_widget.set_gui_dcc_obj(
                 rsv_task, namespace=self.GUI_NAMESPACE
@@ -616,7 +616,7 @@ class _GuiFileOpt(
             prx_item_widget.refresh_widget_force()
 
         path = file_path = file_opt.get_path()
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             prx_item_widget = self._prx_list_view.create_item_widget()
 
             self.gui_register(path, prx_item_widget)
@@ -632,7 +632,7 @@ class _GuiFileOpt(
                 file_opt, namespace=self.GUI_NAMESPACE
             )
             return prx_item_widget
-        return self.gui_get(path)
+        return self.gui_get_one(path)
 
     def gui_add_all(self, directory_opt):
         file_opts = directory_opt.get_files()
@@ -698,7 +698,7 @@ class _GuiUsdStageViewOpt(_GuiBaseOpt):
 
         self._index_thread_batch += 1
 
-        self._usd_stage_view.run_as_thread(
+        self._usd_stage_view.run_build_extra_use_thread(
             cache_fnc_,
             build_fnc_,
             post_fnc_
@@ -810,7 +810,6 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
         self._item_name_frame_size = 80, 44
         self._file_prx_view.set_item_frame_size_basic(*self._file_frame_size)
         self._file_prx_view.set_item_name_frame_size(*self._item_name_frame_size)
-        self._file_prx_view.set_item_icon_frame_draw_enable(False)
         self._file_prx_view.set_item_name_frame_draw_enable(False)
         self._file_prx_view.set_item_names_draw_range([None, 1])
         self._file_prx_view.set_item_image_frame_draw_enable(False)
@@ -880,7 +879,6 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
         #
         self._task_prx_view.set_item_icon_frame_size(*self.ITEM_ICON_FRAME_SIZE)
         self._task_prx_view.set_item_icon_size(*self.ITEM_ICON_SIZE)
-        self._task_prx_view.set_item_icon_frame_draw_enable(True)
         self._task_prx_view.set_item_name_frame_draw_enable(True)
         self._task_prx_view.set_item_names_draw_range([None, 3])
         self._task_prx_view.set_item_image_frame_draw_enable(True)

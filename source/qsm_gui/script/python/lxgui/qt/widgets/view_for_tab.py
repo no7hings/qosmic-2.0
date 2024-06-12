@@ -326,7 +326,7 @@ class QtTabView(
         self._tab_w, self._tab_h = 48, 24
 
         self.setFont(
-            _qt_core.GuiQtFont.generate(size=10)
+            _qt_core.QtFont.generate(size=10)
         )
 
         self._gui_scroll = _qt_core.GuiQtModForScroll()

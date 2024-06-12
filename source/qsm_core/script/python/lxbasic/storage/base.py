@@ -964,12 +964,19 @@ class StgPathOpt(object):
     PATHSEP = '/'
 
     @classmethod
+    def auto_unicode(cls, path):
+        if not isinstance(path, six.text_type):
+            return path.decode('utf-8')
+        return path
+
+    @classmethod
     def auto_string(cls, path):
         if isinstance(path, six.text_type):
             return path.encode('utf-8')
         return path
 
     def __init__(self, path, cleanup=True):
+        path = self.auto_unicode(path)
         if cleanup is True:
             self._path = _cor_base.BscStorage.clear_pathsep_to(path)
         else:
@@ -1051,6 +1058,9 @@ class StgPathOpt(object):
 
     def get_access_timestamp(self):
         return os.stat(self._path).st_atime
+
+    def get_creation_timestamp(self):
+        return os.stat(self._path).st_ctime
 
     def get_timestamp_is_same_to(self, file_path):
         if file_path is not None:
@@ -1213,6 +1223,11 @@ class StgDirectoryOpt(StgPathOpt):
         return self.__class__(path)
 
     def set_create(self):
+        _cor_base.BscStorage.create_directory(
+            self.path
+        )
+
+    def do_create(self):
         _cor_base.BscStorage.create_directory(
             self.path
         )
@@ -1488,6 +1503,10 @@ class StgFileOpt(StgPathOpt):
         if os.path.isfile(self.path):
             return os.path.getsize(self.path)
         return 0
+
+    def get_size_as_gb(self):
+        value = self.get_size()
+        return value/(1024.0**3)
 
     def get_tag_as_36(self):
         timestamp = self.get_modify_timestamp()

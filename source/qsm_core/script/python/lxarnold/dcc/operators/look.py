@@ -47,7 +47,7 @@ class ShapeLookOpt(AbsLookOpt):
         for key in keys:
             port = self.obj.get_input_port(key)
             if port is not None:
-                if port.get_is_enumerate():
+                if port.is_enumerate():
                     raw = port.get_as_index()
                 else:
                     raw = port.get()

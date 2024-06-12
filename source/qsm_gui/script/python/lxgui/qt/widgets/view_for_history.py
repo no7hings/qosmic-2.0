@@ -238,24 +238,24 @@ class QtItemForHistoryEntity(
 
         self._menu_button_s = 20
 
-        self._border_color = _gui_core.GuiRgba.Gray
-        self._background_color = _gui_core.GuiRgba.Basic
+        self._frame_border_color = _gui_core.GuiRgba.Gray
+        self._frame_background_color = _gui_core.GuiRgba.Basic
 
-        self._name_color = _gui_core.GuiRgba.Light
+        self._name_draw_color = _gui_core.GuiRgba.Light
         self._time_color = _gui_core.GuiRgba.DarkGray
-        self._name_font = _qt_core.GuiQtFont.generate(
+        self._name_font = _qt_core.QtFont.generate(
             size=10
         )
-        self._time_font = _qt_core.GuiQtFont.generate(
+        self._time_font = _qt_core.QtFont.generate(
             size=8
         )
         
         self._file_text_color = _gui_core.GuiRgba.LightBlue
         self._file_text_color_lost = _gui_core.GuiRgba.Gray
-        self._file_font = _qt_core.GuiQtFont.generate(
+        self._file_font = _qt_core.QtFont.generate(
             size=8, underline=True
         )
-        self._text_font_lost = _qt_core.GuiQtFont.generate(
+        self._text_font_lost = _qt_core.QtFont.generate(
             size=8, strike_out=True
         )
 
@@ -285,8 +285,8 @@ class QtItemForHistoryEntity(
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
 
-        painter._set_border_color_(self._border_color)
-        painter._set_background_color_(self._background_color)
+        painter._set_border_color_(self._frame_border_color)
+        painter._set_background_color_(self._frame_background_color)
 
         border_radius = 6
 
@@ -300,7 +300,7 @@ class QtItemForHistoryEntity(
 
         painter._set_antialiasing_(False)
 
-        painter._set_border_color_(self._border_color)
+        painter._set_border_color_(self._frame_border_color)
         painter._set_border_width_(1)
         painter.drawLine(
             self._frame_draw_line_left
@@ -310,7 +310,7 @@ class QtItemForHistoryEntity(
         )
 
         painter._set_font_(self._name_font)
-        painter._set_text_color_(self._name_color)
+        painter._set_text_color_(self._name_draw_color)
 
         name_text = painter.fontMetrics().elidedText(
             self._name_text,
@@ -352,7 +352,7 @@ class QtItemForHistoryEntity(
 
         if self._associated_entity_id:
             painter._set_font_(self._file_font)
-            painter._set_text_color_(self._name_color)
+            painter._set_text_color_(self._name_draw_color)
 
             text_elided = painter.fontMetrics().elidedText(
                 self._associated_entity_id,

@@ -26,9 +26,49 @@ class QtListWidget(
     info_text_accepted = qt_signal(str)
     QT_MENU_CLS = _utility.QtMenu
 
+    def _do_wheel_(self, event):
+        if self._action_control_flag is True:
+            delta = event.angleDelta().y()
+            step = 4
+            w_pre, h_pre = self._item_frame_size
+            if delta > 0:
+                w_cur = w_pre+step
+            else:
+                w_cur = w_pre-step
+            #
+            w_cur = max(min(w_cur, 480), 28)
+            if w_cur != w_pre:
+                h_cur = int(float(h_pre)/float(w_pre)*w_cur)
+                self._set_item_frame_size_(w_cur, h_cur)
+                self._set_all_item_widgets_update_()
+
+    def _do_hover_move_(self, event):
+        item = self.itemAt(event.pos())
+        if item is None:
+            return
+
+        item_widget = self.itemWidget(item)
+        if item_widget is None:
+            return
+
+        self._clear_item_hover_()
+
+        if item not in self._pre_hovered_items:
+            self._pre_hovered_items.append(item)
+
+            item_widget._set_hovered_(True)
+
+    def _clear_item_hover_(self):
+        if self._pre_hovered_items:
+            for i_item in self._pre_hovered_items:
+                i_item_widget = self.itemWidget(i_item)
+                if i_item_widget is not None:
+                    i_item_widget._set_hovered_(False)
+
+            self._pre_hovered_items = []
+
     def __init__(self, *args, **kwargs):
         super(QtListWidget, self).__init__(*args, **kwargs)
-        self._init_menu_base_def_(self)
         qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
 
@@ -36,6 +76,9 @@ class QtListWidget(
 
         self.setResizeMode(self.Adjust)
         self.setVerticalScrollMode(self.ScrollPerItem)
+        self.setMouseTracking(True)
+        
+        self._init_menu_base_def_(self)
 
         self._item_frame_icon_width, self._item_frame_icon_height = 40, 128
         self._item_frame_image_width, self._item_frame_image_height = 128, 128
@@ -67,14 +110,12 @@ class QtListWidget(
 
         self._item_image_frame_draw_enable = False
 
-        self._item_image_draw_as_full = False
-
         self._set_grid_mode_()
 
         self._action_control_flag = False
 
         self.item_checked.connect(
-            self._refresh_info_
+            self._refresh_check_info_
         )
 
         self._info = ''
@@ -82,39 +123,8 @@ class QtListWidget(
         self._drag_action_flag = False
 
         self._selection_mode_mark = None
-
-    def _do_wheel_(self, event):
-        if self._action_control_flag is True:
-            delta = event.angleDelta().y()
-            step = 4
-            w_pre, h_pre = self._item_frame_size
-            if delta > 0:
-                w_cur = w_pre+step
-            else:
-                w_cur = w_pre-step
-            #
-            w_cur = max(min(w_cur, 480), 28)
-            if w_cur != w_pre:
-                h_cur = int(float(h_pre)/float(w_pre)*w_cur)
-                self._set_item_frame_size_(w_cur, h_cur)
-                self._set_all_item_widgets_update_()
-
-    def _set_item_scale_percent_(self, scale):
-        self._item_scale_percent = scale
-        #
-        w_pre, h_pre = self._item_frame_size
-        w_bsc, h_bsc = self._item_frame_size_basic
-        #
-        w_cur = w_bsc*scale
-        w_cur = max(min(w_cur, 480), 48)
-        w_cur = w_cur+w_cur%2
-        #
-        if w_cur != w_pre:
-            h_cur = int(float(h_bsc)/float(w_bsc)*w_cur)
-            self._set_item_frame_size_(w_cur, h_cur)
-            self._set_all_item_widgets_update_()
-            #
-            self._refresh_viewport_showable_auto_()
+        
+        self._item_event_override_flag = False
 
     def contextMenuEvent(self, event):
         menu_data = []
@@ -141,6 +151,7 @@ class QtListWidget(
 
     def eventFilter(self, *args):
         widget, event = args
+
         if widget == self:
             if event.type() == QtCore.QEvent.KeyPress:
                 if event.key() == QtCore.Qt.Key_F and event.modifiers() == QtCore.Qt.ControlModifier:
@@ -156,8 +167,7 @@ class QtListWidget(
                 self._do_wheel_(event)
                 return True
             elif event.type() == QtCore.QEvent.Resize:
-                # self._refresh_size_()
-                self._refresh_view_all_items_viewport_showable_()
+                self._refresh_all_items_viewport_showable_()
             elif event.type() == QtCore.QEvent.FocusIn:
                 self._is_focused = True
                 parent = self.parent()
@@ -172,7 +182,17 @@ class QtListWidget(
                 self.focus_changed.emit()
         # view port
         elif widget == self.viewport():
-            if event.type() == QtCore.QEvent.MouseButtonPress:
+            if event.type() == QtCore.QEvent.Leave:
+                if self._item_event_override_flag is True:
+                    self._clear_item_hover_()
+
+            # elif event.type() == QtCore.QEvent.Wheel:
+            #     # if self._item_event_override_flag is True:
+            #     #     self._do_hover_move_(event)
+            #     print event.pos()
+            #     print self.itemAt(event.pos())
+
+            elif event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.buttons() == QtCore.Qt.LeftButton:
                     # todo: to fix error rect selection when item is drag
                     # when is drag set to single selection mode
@@ -183,13 +203,12 @@ class QtListWidget(
 
                     self.pressed.emit()
             elif event.type() == QtCore.QEvent.MouseMove:
-                if event.buttons() == QtCore.Qt.LeftButton:
-                    pass
+                if self._item_event_override_flag is True:
+                    self._do_hover_move_(event)
+
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
                     self.press_released.emit()
-        if widget == self.verticalScrollBar():
-            pass
         return False
 
     def paintEvent(self, event):
@@ -200,6 +219,26 @@ class QtListWidget(
                 self._empty_icon_name
             )
         # super(QtListWidget, self).paintEvent(event)
+
+    def _set_item_event_override_flag_(self, boolean):
+        self._item_event_override_flag = boolean
+    
+    def _set_item_scale_percent_(self, scale):
+        self._item_scale_percent = scale
+        #
+        w_pre, h_pre = self._item_frame_size
+        w_bsc, h_bsc = self._item_frame_size_basic
+        #
+        w_cur = w_bsc*scale
+        w_cur = max(min(w_cur, 480), 48)
+        w_cur = w_cur+w_cur%2
+        #
+        if w_cur != w_pre:
+            h_cur = int(float(h_bsc)/float(w_bsc)*w_cur)
+            self._set_item_frame_size_(w_cur, h_cur)
+            self._set_all_item_widgets_update_()
+            #
+            self._refresh_viewport_showable_auto_()
 
     def _update_drag_action_(self):
         # when is drag set to single selection mode
@@ -220,8 +259,9 @@ class QtListWidget(
             # self.adjustSize()
 
     # noinspection PyUnusedLocal
-    def _refresh_info_(self, *args, **kwargs):
-        c = sum([self.item(i)._get_is_checked_() for i in range(self.count())])
+    @qt_slot()
+    def _refresh_check_info_(self, *args, **kwargs):
+        c = sum([self.item(i)._is_checked_() for i in range(self.count())])
         if c:
             info = '{} item is checked ...'.format(c)
         else:
@@ -308,9 +348,6 @@ class QtListWidget(
     def _set_item_image_frame_draw_enable_(self, boolean):
         self._item_image_frame_draw_enable = boolean
 
-    def _set_item_image_draw_as_full_(self, boolean):
-        self._item_image_draw_as_full = boolean
-
     def _get_item_count_(self):
         return self.count()
 
@@ -358,7 +395,7 @@ class QtListWidget(
         view = self
         #
         index_cur = view._get_item_count_()
-        item = _item_for_list.QtListWidgetItem('', view)
+        item = _item_for_list.QtListItem('', view)
         view.addItem(item)
         # debug for position error
         index = self.row(item)
@@ -371,7 +408,7 @@ class QtListWidget(
         item.gui_proxy = item_widget.gui_proxy
         #
         item_widget.user_check_toggled.connect(
-            item._update_checked_from_user_
+            item._update_user_check_action_
         )
         item._initialize_item_show_()
         item.setText(str(index_cur).zfill(4))
@@ -395,9 +432,6 @@ class QtListWidget(
         item_widget._set_icon_size_(
             *self._item_icon_size
         )
-        item_widget._set_icon_frame_draw_enable_(
-            self._item_icon_frame_draw_enable
-        )
         #
         item_widget._set_name_frame_size_(
             *self._item_name_frame_size
@@ -411,9 +445,6 @@ class QtListWidget(
         item_widget._set_name_frame_draw_enable_(
             self._item_name_frame_draw_enable
         )
-        item_widget._set_image_draw_as_full_(
-            self._item_image_draw_as_full
-        )
         #
         item_widget._set_image_frame_draw_enable_(
             self._item_image_frame_draw_enable
@@ -423,18 +454,17 @@ class QtListWidget(
         view = self
         #
         index_cur = view._get_item_count_()
-        item = _item_for_list.QtListWidgetItem('', view)
+        item = _item_for_list.QtListItem('', view)
         view.addItem(item)
         # debug for position error
+        # todo: index always is 0?
         index = self.row(item)
-        if index > 0:
+        if index_cur > 0:
             item.setHidden(True)
             item.setHidden(False)
 
         item.setSizeHint(QtCore.QSize(*self._grid_size))
-        item.setText(str(index_cur).zfill(4))
-
-        item._set_sort_number_key_(index)
+        item._set_sort_number_key_(index_cur)
         item._initialize_item_show_()
         return item
 
@@ -446,26 +476,40 @@ class QtListWidget(
         view.setItemWidget(item, item_widget)
         item.gui_proxy = item_widget.gui_proxy
 
-        item_widget.user_check_toggled.connect(item._update_checked_from_user_)
+        item_widget.user_check_toggled.connect(item._update_user_check_action_)
         # set view and item first
         item_widget._set_view_(view)
         item_widget._set_item_(item)
         # and set other below
         item_widget._set_index_(index)
+        # update check
+        item_widget._set_checked_(item._is_checked_())
         #
-        item_widget._set_frame_size_(
-            *self._item_frame_size
-        )
+        item_widget._set_frame_size_(*self._item_frame_size)
         item_widget._set_frame_draw_enable_(self._item_frame_draw_enable)
         item_widget._set_icon_frame_draw_size_(*self._item_icon_frame_size)
         item_widget._set_icon_size_(*self._item_icon_size)
-        item_widget._set_icon_frame_draw_enable_(self._item_icon_frame_draw_enable)
         item_widget._set_name_frame_size_(*self._item_name_frame_size)
         item_widget._set_names_draw_range_(self._item_names_draw_range)
         item_widget._set_name_size_(*self._item_name_size)
         item_widget._set_name_frame_draw_enable_(self._item_name_frame_draw_enable)
-        item_widget._set_image_draw_as_full_(self._item_image_draw_as_full)
         item_widget._set_image_frame_draw_enable_(self._item_image_frame_draw_enable)
+    
+    def _assign_item_widget_(self, item, item_widget, *args, **kwargs):
+        view = self
+
+        index = self.row(item)
+
+        view.setItemWidget(item, item_widget)
+
+        item_widget.user_check_toggled.connect(item._update_user_check_action_)
+        # set view and item first
+        item_widget._set_view_(view)
+        item_widget._set_item_(item)
+        # and set other below
+        item_widget._set_index_(index)
+        # update check
+        item_widget._set_checked_(item._is_checked_())
 
     def _set_clear_(self):
         for i in self._get_all_items_():
@@ -473,5 +517,6 @@ class QtListWidget(
             i._stop_item_show_all_()
         #
         self._pre_selected_items = []
+        self._pre_hovered_items = []
         #
         self.clear()

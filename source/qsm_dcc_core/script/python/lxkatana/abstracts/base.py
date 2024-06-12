@@ -91,7 +91,7 @@ class AbsKtnPort(gnl_dcc_abstracts.AbsDccPort):
             return ktn_port, True
         return ktn_port, False
 
-    def get_is_enumerate(self):
+    def is_enumerate(self):
         pass
 
     def get(self, time=0):

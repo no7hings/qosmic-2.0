@@ -3,7 +3,7 @@ import os
 
 tool_names = [
     ('qsm-asset-manager', 'Resource Manager'),
-    ('qsm-easy-playblast', 'Easy Playblast'),
+    ('qsm-lazy-playblast', 'Easy Playblast'),
 ]
 
 python_file_path = '{}/maya-startup.py'.format(

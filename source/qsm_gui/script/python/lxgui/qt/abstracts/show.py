@@ -2,7 +2,6 @@
 import os
 
 import lxbasic.core as bsc_core
-
 # gui
 from ... import core as _gui_core
 # qt
@@ -16,13 +15,8 @@ class AbsQtBuildBaseForItemDef(object):
     def _get_view_(self):
         raise NotImplementedError()
 
-    def _setup_item_show_runnable_stack_(self, view):
-        self._build_runnable_stack = view._build_runnable_stack
-
     def _generate_item_show_runnable_(self, cache_fnc, build_fnc, post_fnc=None):
-        return self._build_runnable_stack.generate_thread(
-            cache_fnc, build_fnc, post_fnc
-        )
+        return self._get_view_()._generate_thread_(cache_fnc, build_fnc, post_fnc=post_fnc)
 
 
 # show base
@@ -77,8 +71,6 @@ class AbsQtShowBaseForVirtualItemDef(
         return self._item_show_flag
 
     def _setup_item_show_(self, view):
-        self._setup_item_show_runnable_stack_(view)
-
         self._item_show_runnable = None
         self._item_show_image_runnable = None
         #
@@ -94,7 +86,7 @@ class AbsQtShowBaseForVirtualItemDef(
         #
         self._item_show_image_sub_process = None
         self._item_show_image_cmd = None
-        self._item_show_image_file_path = None
+        self._item_show_image_path = None
 
     def _set_item_show_build_fnc_(self, method):
         def cache_fnc_():
@@ -201,7 +193,7 @@ class AbsQtShowBaseForVirtualItemDef(
             pass
 
         if cmd is not None:
-            self._item_show_image_file_path = image_file_path
+            self._item_show_image_path = image_file_path
             self._set_item_show_image_fnc_(cache_fnc_, build_fnc_)
 
     def _set_item_show_image_fnc_(self, cache_fnc, build_fnc):
@@ -250,8 +242,8 @@ class AbsQtShowBaseForVirtualItemDef(
                 self._finish_item_show_image_()
 
     def _finish_item_show_image_(self):
-        if self._item_show_image_file_path is not None:
-            if os.path.isfile(self._item_show_image_file_path) is True:
+        if self._item_show_image_path is not None:
+            if os.path.isfile(self._item_show_image_path) is True:
                 self._set_item_show_image_stop_(self.ShowStatus.Completed)
             else:
                 self._set_item_show_image_stop_(self.ShowStatus.Failed)
@@ -261,7 +253,7 @@ class AbsQtShowBaseForVirtualItemDef(
         if status == self.ShowStatus.Failed:
             item_widget = self._get_item_widget_()
             if item_widget is not None:
-                item_widget._set_image_file_path_(
+                item_widget._set_image_path_(
                     _gui_core.GuiIcon.get('image_loading_failed_error')
                 )
         #
@@ -338,7 +330,7 @@ class AbsQtShowBaseForViewDef(object):
                 return True
         return False
 
-    def _refresh_view_all_items_viewport_showable_(self, includes=None):
+    def _refresh_all_items_viewport_showable_(self, includes=None):
         if isinstance(includes, (tuple, list)):
             items_ = includes
         else:
@@ -349,16 +341,18 @@ class AbsQtShowBaseForViewDef(object):
                 if self._get_view_item_viewport_showable_(i_item) is True:
                     i_item._set_item_viewport_visible_(True)
         # todo: use update() error in maya 2017?
+        # noinspection PyBroadException
         try:
             self._widget.update()
         except Exception:
             pass
 
     def _refresh_viewport_showable_auto_(self):
-        self._refresh_view_all_items_viewport_showable_(
+        self._refresh_all_items_viewport_showable_(
             self._get_all_show_items_()
         )
 
+    @qt_slot()
     def _refresh_viewport_showable_by_scroll_(self):
         self._refresh_viewport_showable_auto_()
 

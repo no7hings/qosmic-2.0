@@ -17,6 +17,8 @@ import collections
 
 import itertools
 
+import pypinyin
+
 
 def auto_string(text):
     if isinstance(text, six.text_type):
@@ -447,6 +449,26 @@ class RawListMtd(object):
     def get_deletion(cls, a, b):
         pass
 
+    @classmethod
+    def split_to(cls, lst, max_chunk_count, min_chunk_size):
+        if len(lst) <= min_chunk_size:
+            return [lst]
+
+        num_chunks = min((len(lst) + min_chunk_size - 1) // min_chunk_size, max_chunk_count)
+
+        avg_size = len(lst) // num_chunks
+        remainder = len(lst) % num_chunks
+
+        chunks = []
+        start = 0
+
+        for i in range(num_chunks):
+            end = start + avg_size + (1 if i < remainder else 0)
+            chunks.append(lst[start:end])
+            start = end
+
+        return chunks
+
 
 class RawValueRangeMtd(object):
     @classmethod
@@ -553,9 +575,9 @@ class RawIntegerMtd(object):
     @classmethod
     def frame_to_time(cls, frame, fps=24):
         second = int(frame)/fps
-        h = second/3600
-        m = second/60-60*h
-        s = second-3600*h-60*m
+        h = int(second/3600)
+        m = int(second/60-60*h)
+        s = int(second-3600*h-60*m)
         return h, m, s
 
     @classmethod
@@ -791,6 +813,22 @@ class RawTextOpt(object):
             h = float(h_a%(360+seed)*d)/d
             s = float((s_p/2)+s_a%(s_p/2))/100.0
             v = float((v_p/2)+v_a%(v_p/2))/100.0
+            return RawColorMtd.hsv2rgb(h, s, v, maximum)
+        return 0, 0, 0
+
+    def to_rgb_1(self, maximum=255, seed=0, s_p=(35, 65), v_p=(35, 65)):
+        string = self.__raw
+        if string:
+            d = 1000.0
+            s_p_min, s_p_max = s_p
+            v_p_min, v_p_max = v_p
+            hash_ = hashlib.md5(string.encode('utf-8')).hexdigest()
+            h_a = int(hash_[0:8], 16)
+            s_a = int(hash_[8:16], 16)
+            v_a = int(hash_[16:24], 16)
+            h = float(h_a%(360+seed)*d)/d
+            s = float(s_p_min+s_a%(s_p_max-s_p_min))/100.0
+            v = float(v_p_min+v_a%(v_p_max-v_p_min))/100.0
             return RawColorMtd.hsv2rgb(h, s, v, maximum)
         return 0, 0, 0
 

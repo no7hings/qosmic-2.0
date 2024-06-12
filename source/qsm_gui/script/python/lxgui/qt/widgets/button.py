@@ -83,7 +83,7 @@ class QtCheckButton(
         self._init_value_default_extra_def_(self)
         self._init_value_history_base_def_(self)
         #
-        self._refresh_check_draw_()
+        self._refresh_check_()
         #
         self._set_name_draw_font_(_qt_core.QtFonts.Button)
 
@@ -98,7 +98,7 @@ class QtCheckButton(
         self._set_checked_(value)
 
     def _get_value_(self):
-        return self._get_is_checked_()
+        return self._is_checked_()
 
     def _set_value_(self, value):
         self._set_checked_(value)
@@ -114,7 +114,7 @@ class QtCheckButton(
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
                     if self._get_action_flag_() == self.ActionFlag.CheckPress:
-                        self._send_check_emit_()
+                        self._swap_user_check_action_()
                     #
                     self.user_check_clicked.emit()
                     #
@@ -153,7 +153,7 @@ class QtCheckButton(
                 rect=self._name_draw_rect,
                 text=name_text,
                 font=self._name_draw_font,
-                font_color=text_color,
+                text_color=text_color,
                 text_option=QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter,
                 offset=offset
             )
@@ -230,7 +230,7 @@ class QtPressButton(
         #
         self._init_item_layout_base_def_(self)
         #
-        self._refresh_check_draw_()
+        self._refresh_check_()
         #
         self._set_name_draw_font_(_qt_core.QtFonts.Button)
         #
@@ -294,7 +294,7 @@ class QtPressButton(
         c_name_w, c_name_h = w, h
         #
         if check_enable is True:
-            self._check_rect.setRect(
+            self._check_frame_rect.setRect(
                 c_icn_x, c_icn_y, icn_frm_w, icn_frm_h
             )
             self._check_icon_draw_rect.setRect(
@@ -435,7 +435,7 @@ class QtPressButton(
                     self._action_flag = None
                     #
                     flag_raw = [
-                        (check_enable, self._check_rect, self.ActionFlag.CheckPress),
+                        (check_enable, self._check_frame_rect, self.ActionFlag.CheckPress),
                         (click_enable, self._rect_frame_draw, self.ActionFlag.Press),
                         (option_click_enable, self._option_click_rect, self.ActionFlag.OptionPress),
                     ]
@@ -453,7 +453,7 @@ class QtPressButton(
                     self.update()
                 elif event.type() == QtCore.QEvent.MouseButtonRelease:
                     if self._action_flag == self.ActionFlag.CheckPress:
-                        self._execute_check_swap_()
+                        self._swap_check_()
                         self.checked.emit()
                         self.press_clicked.emit()
                     elif self._action_flag == self.ActionFlag.Press:
@@ -585,7 +585,7 @@ class QtPressButton(
             painter._draw_text_by_rect_(
                 self._name_draw_rect,
                 text=name_text,
-                font_color=text_color,
+                text_color=text_color,
                 font=self._name_draw_font,
                 offset=offset
             )
@@ -594,7 +594,7 @@ class QtPressButton(
                 self._sub_name_draw_rect,
                 text=self._sub_name_text,
                 text_option=QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter,
-                font_color=_qt_core.QtColors.TextTemporary,
+                text_color=_qt_core.QtColors.TextTemporary,
                 font=self._name_draw_font,
                 offset=offset,
             )
@@ -775,7 +775,7 @@ class QtIconPressButton(
                     elif event.button() == QtCore.Qt.RightButton:
                         pass
                     #
-                    self._set_action_hovered_(False)
+                    self._set_hovered_(False)
                     self._clear_all_action_flags_()
                 # drag move
                 elif event.type() == QtCore.QEvent.MouseMove:
@@ -1149,7 +1149,7 @@ class QtIconToggleButton(
         #
         self._init_value_default_extra_def_(self)
         #
-        self._refresh_check_draw_()
+        self._refresh_check_()
 
     def _refresh_widget_draw_(self):
         self.update()
@@ -1166,7 +1166,7 @@ class QtIconToggleButton(
         self._rect_frame_draw.setRect(
             x, y, w-1, h-1
         )
-        self._check_rect.setRect(
+        self._check_frame_rect.setRect(
             x+(w-icn_frm_w)/2, y+(h-icn_frm_w)/2, icn_frm_w, icn_frm_h
         )
         #
@@ -1214,7 +1214,7 @@ class QtIconToggleButton(
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
                     if self._get_action_flag_() == self.ActionFlag.CheckPress:
-                        self._send_check_emit_()
+                        self._swap_user_check_action_()
                     #
                     self._clear_all_action_flags_()
         return False
@@ -1226,14 +1226,14 @@ class QtIconToggleButton(
         #
         offset = self._get_action_offset_()
         #
-        background_color = painter._get_item_background_color_by_rect_(
-            self._check_rect,
+        background_color = painter._generate_item_background_color_by_rect_(
+            self._check_frame_rect,
             is_hovered=self._is_hovered,
             is_selected=self._is_checked,
             is_actioned=self._get_is_actioned_()
         )
         painter._draw_frame_by_rect_(
-            self._check_rect,
+            self._check_frame_rect,
             border_color=_qt_core.QtBorderColors.Transparent,
             background_color=background_color,
             border_radius=2,
@@ -1276,13 +1276,13 @@ class QtIconToggleButton(
                 self._name_draw_rect,
                 self._name_text,
                 font=_qt_core.QtFonts.NameNormal,
-                font_color=_qt_core.QtFontColors.Basic,
+                text_color=_qt_core.QtFontColors.Basic,
                 text_option=QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter,
                 offset=offset
             )
 
     def _get_value_(self):
-        return self._get_is_checked_()
+        return self._is_checked_()
 
     def _set_menu_data_(self, data):
         super(QtIconToggleButton, self)._set_menu_data_(data)

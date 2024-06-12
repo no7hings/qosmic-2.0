@@ -24,6 +24,8 @@ from ...qt.widgets import input as gui_qt_wgt_input
 from ...qt.widgets import window_base as _qt_window_base
 
 from ...qt.widgets import window as gui_qt_wgt_window
+
+from ...qt.widgets import screenshot as _screenshot
 # proxy abstracts
 from .. import abstracts as gui_prx_abstracts
 
@@ -412,12 +414,12 @@ class PrxTextBrowser(gui_prx_abstracts.AbsPrxWidget):
 
     def add_error(self, text):
         self._qt_entry_widget.append(
-            gui_core.GuiXml.get_text(text, font_color=gui_core.GuiXmlColor.Red)
+            gui_core.GuiXml.get_text(text, text_color=gui_core.GuiXmlColor.TorchRed)
         )
 
     def add_warning(self, text):
         self._qt_entry_widget.append(
-            gui_core.GuiXml.get_text(text, font_color=gui_core.GuiXmlColor.Yellow)
+            gui_core.GuiXml.get_text(text, text_color=gui_core.GuiXmlColor.Yellow)
         )
 
     def trace_log(self, text):
@@ -566,7 +568,7 @@ class PrxPressButton(gui_prx_abstracts.AbsPrxWidget):
         self.widget.update()
 
     def get_is_checked(self):
-        return self.widget._get_is_checked_()
+        return self.widget._is_checked_()
 
     def set_checked(self, boolean):
         self._qt_widget._set_checked_(boolean)
@@ -673,13 +675,13 @@ class PrxToggleButton(gui_prx_abstracts.AbsPrxWidget):
         self._qt_widget._set_checked_(boolean)
 
     def get_is_checked(self):
-        return self._qt_widget._get_is_checked_()
+        return self._qt_widget._is_checked_()
 
     def execute_swap_check(self):
-        self._qt_widget._execute_check_swap_()
+        self._qt_widget._swap_check_()
 
     def get_checked(self):
-        return self._qt_widget._get_is_checked_()
+        return self._qt_widget._is_checked_()
 
     def connect_check_clicked_to(self, fnc):
         self._qt_widget.check_clicked.connect(fnc)
@@ -805,7 +807,7 @@ class PrxWindowNew(
 class PrxScreenshotFrame(
     gui_prx_abstracts.AbsPrxWidget
 ):
-    QT_WIDGET_CLS = gui_qt_wgt_utility._QtScreenshotFrame
+    QT_WIDGET_CLS = _screenshot.QtScreenshotFrame
 
     def __init__(self, *args, **kwargs):
         main_window = gui_qt_core.GuiQtDcc.get_qt_active_window()

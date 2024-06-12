@@ -54,10 +54,10 @@ class ThreadWorker(threading.Thread):
                 self._entity, status, results
             )
 
-    def __init__(self, cmd_script, index=0):
+    def __init__(self, cmd_script, entity=0):
         threading.Thread.__init__(self)
         self._cmd_script = cmd_script
-        self._entity = index
+        self._entity = entity
 
         self._is_killed = False
 

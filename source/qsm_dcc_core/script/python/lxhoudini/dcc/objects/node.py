@@ -46,11 +46,11 @@ class ImageReference(hou_abstracts.AbsHouFileReferenceObj):
                     lis.append(parm.name())
         return lis
 
-    def get_image_file_paths(self):
+    def get_image_paths(self):
         lis = []
         for port_path in self.get_image_attribute_names():
-            os_image_file_path = self.get_port(port_path).get()
-            lis.append(os_image_file_path)
+            os_image_path = self.get_port(port_path).get()
+            lis.append(os_image_path)
         return lis
 
 

@@ -297,7 +297,7 @@ class QtPainter(QtGui.QPainter):
             )
             text_option = QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter
             self._set_font_(
-                _base.GuiQtFont.generate(size=font_size, weight=75)
+                _base.QtFont.generate(size=font_size, weight=75)
             )
 
             self._set_text_color_(text_color)
@@ -450,7 +450,7 @@ class QtPainter(QtGui.QPainter):
             )
             text_option = QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter
             self._set_font_(
-                _base.GuiQtFont.generate(size=font_size, weight=75)
+                _base.QtFont.generate(size=font_size, weight=75)
             )
 
             self._set_text_color_(text_color)
@@ -479,7 +479,7 @@ class QtPainter(QtGui.QPainter):
             frm_x+bsc_w-frm_w-frm_w*.25, frm_y, frm_w, frm_h
         )
         self._set_font_(
-            _base.GuiQtFont.generate(size=int(frm_h*.675), weight=75, italic=True)
+            _base.QtFont.generate(size=int(frm_h*.675), weight=75, italic=True)
         )
         self._set_text_color_(i_r*.75, i_g*.75, i_b*.75)
         self.drawText(
@@ -510,7 +510,7 @@ class QtPainter(QtGui.QPainter):
         )
         self._set_text_color_(_color_and_brush.QtFontColors.Dark)
         self._set_font_(
-            _base.GuiQtFont.generate(size=int(txt_r*.5)-offset, italic=True)
+            _base.QtFont.generate(size=int(txt_r*.5)-offset, italic=True)
         )
         self.drawText(
             txt_rect, QtCore.Qt.AlignRight | QtCore.Qt.AlignTop,
@@ -714,13 +714,13 @@ class QtPainter(QtGui.QPainter):
         frm_w, frm_h = max(min(w, 200), 100), max(min(h, 40), 20)
         frm_x, frm_y = x+(w-frm_w)/2, y+(h-frm_h)/2
         #
-        f_w_t, f_h_t = self._get_font_test_size_(_base.GuiQtFont.generate(size=12, weight=75), text)
+        f_w_t, f_h_t = self._get_font_test_size_(_base.QtFont.generate(size=12, weight=75), text)
         txt_x, txt_y, txt_w, txt_h = bsc_core.RawSizeMtd.fit_to(
             (f_w_t, f_h_t), (frm_w, frm_h)
         )
         text_size = txt_h/2
-        text_font = _base.GuiQtFont.generate(size=text_size, weight=75)
-        text_sub_font = _base.GuiQtFont.generate(size=10, weight=50, italic=True)
+        text_font = _base.QtFont.generate(size=text_size, weight=75)
+        text_sub_font = _base.QtFont.generate(size=10, weight=50, italic=True)
         t_w_n, t_h_n = self._get_font_test_size_(text_font, text)
         self._set_border_color_((31, 31, 31, 255))
         if text_sub:
@@ -1083,16 +1083,16 @@ class QtPainter(QtGui.QPainter):
         txt_size = max(txt_size, 1)
         #
         self._set_font_(
-            _base.GuiQtFont.generate(size=txt_size)
+            _base.QtFont.generate(size=txt_size)
         )
         #
-        background_color, font_color = _base.GuiQtColor.generate_color_args_by_text(text)
+        background_color, text_color = _base.GuiQtColor.generate_color_args_by_text(text)
         self._set_border_color_(_color_and_brush.QtBorderColors.Icon)
         self._set_background_color_(background_color)
         self.drawRect(
             rect
         )
-        self._set_text_color_(font_color)
+        self._set_text_color_(text_color)
         self.drawText(
             rect,
             QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
@@ -1144,7 +1144,7 @@ class QtPainter(QtGui.QPainter):
         #
         self.device()
 
-    def _set_movie_play_button_draw_by_rect_(
+    def _draw_video_play_button_by_rect_(
         self, rect, scale=1.0, offset=0, border_width=4, is_hovered=False, is_selected=False, is_actioned=False
     ):
         if offset != 0:
@@ -1203,7 +1203,7 @@ class QtPainter(QtGui.QPainter):
         self.drawRect(rect_)
 
     def _draw_image_use_text_by_rect_(
-        self, rect, text, border_color=None, background_color=None, font_color=None, offset=0, border_radius=0,
+        self, rect, text, border_color=None, background_color=None, text_color=None, offset=0, border_radius=0,
         border_width=1, is_hovered=False, is_enable=True, is_pressed=False
     ):
         if offset != 0:
@@ -1232,8 +1232,8 @@ class QtPainter(QtGui.QPainter):
             background_color__ = bsc_core.RawTextOpt(text).to_rgb_0(s_p=50, v_p=50)
 
         background_color_, text_color_ = _base.GuiQtColor.generate_color_args_by_rgb(*background_color__)
-        if font_color is not None:
-            text_color_ = font_color
+        if text_color is not None:
+            text_color_ = text_color
 
         r = min(w, h)
 
@@ -1333,7 +1333,7 @@ class QtPainter(QtGui.QPainter):
             w, h
         )
         self._set_font_(
-            _base.GuiQtFont.generate(size=txt_size)
+            _base.QtFont.generate(size=txt_size)
         )
         self._set_text_color_(text_color_)
 
@@ -1426,7 +1426,7 @@ class QtPainter(QtGui.QPainter):
         # print x_1, y_1, w_1, h_1
 
         self._set_font_(
-            _base.GuiQtFont.generate(size=txt_size)
+            _base.QtFont.generate(size=txt_size)
         )
         self._set_text_color_(text_color_)
 
@@ -1450,7 +1450,8 @@ class QtPainter(QtGui.QPainter):
         )
 
     def _draw_frame_by_rect_(
-        self, rect, border_color, background_color, background_style=None, offset=0, border_radius=0,
+        self, rect, border_color, background_color, background_style=None,
+        offset=0, border_radius=0,
         border_width=1, border_style=None
     ):
         self._set_border_color_(border_color)
@@ -1719,11 +1720,11 @@ class QtPainter(QtGui.QPainter):
             self.drawRect(rect_offset)
 
     def _draw_text_by_rect_(
-        self, rect, text, font_color=None, font=None, offset=0, text_option=None, word_warp=False, is_hovered=False,
+        self, rect, text, text_color=None, font=None, offset=0, text_option=None, word_warp=False, is_hovered=False,
         is_selected=False
     ):
-        if font_color is not None:
-            self._set_border_color_(font_color)
+        if text_color is not None:
+            self._set_border_color_(text_color)
         else:
             self._set_border_color_(_color_and_brush.QtFontColors.Basic)
         #
@@ -1762,7 +1763,7 @@ class QtPainter(QtGui.QPainter):
             #
             text_ = self.fontMetrics().elidedText(
                 text,
-                QtCore.Qt.ElideLeft,
+                QtCore.Qt.ElideMiddle,
                 rect_offset.width(),
                 QtCore.Qt.TextShowMnemonic
             )
@@ -1777,7 +1778,7 @@ class QtPainter(QtGui.QPainter):
             text_option__,
         )
 
-    def _set_text_draw_by_rect_use_dict_(self, rect, text_dict, text_size, text_weight, font_color):
+    def _set_text_draw_by_rect_use_dict_(self, rect, text_dict, text_size, text_weight, text_color):
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()
         self._set_font_option_(text_size, text_weight)
@@ -1794,7 +1795,7 @@ class QtPainter(QtGui.QPainter):
                 key_text_width=txt_w,
                 key_text_size=text_size, value_text_size=text_size,
                 key_text_weight=text_weight, value_text_weight=text_weight,
-                key_text_color=font_color, value_text_color=font_color,
+                key_text_color=text_color, value_text_color=text_color,
             )
 
     def _set_radar_chart_draw_by_rect_(self, rect, chart_data):
@@ -1958,37 +1959,41 @@ class QtPainter(QtGui.QPainter):
             return color
 
     @classmethod
-    def _get_item_background_color_by_rect_(
-        cls, rect, is_hovered=False, is_selected=False, is_actioned=False, default_background_color=None
+    def _generate_item_background_color_by_rect_(
+        cls,
+        rect,
+        is_hovered=False, is_selected=False, is_actioned=False,
+        background_color=None,
+        background_color_hovered=None, background_color_selected=None, background_color_actioned=None
     ):
         conditions = [is_hovered, is_selected]
         if conditions == [False, False]:
-            if default_background_color is not None:
-                return default_background_color
+            if background_color is not None:
+                return background_color
             return _color_and_brush.QtBackgroundColors.Transparent
         elif conditions == [False, True]:
-            return _color_and_brush.QtBackgroundColors.Selected
+            return background_color_selected or _color_and_brush.QtBackgroundColors.Selected
         elif conditions == [True, False]:
             if is_actioned:
-                color_0 = _color_and_brush.QtBackgroundColors.Hovered
-                color_1 = _color_and_brush.QtBackgroundColors.Actioned
+                color_0 = background_color_hovered or _color_and_brush.QtBackgroundColors.Hovered
+                color_1 = background_color_actioned or _color_and_brush.QtBackgroundColors.Actioned
                 start_pos, end_pos = rect.topLeft(), rect.bottomLeft()
                 color = QtGui.QLinearGradient(start_pos, end_pos)
-                color.setColorAt(0, color_0)
-                color.setColorAt(1, color_1)
+                color.setColorAt(0, _base.GuiQtColor.to_qt_color(color_0))
+                color.setColorAt(1, _base.GuiQtColor.to_qt_color(color_1))
                 return color
-            return _color_and_brush.QtBackgroundColors.Hovered
+            return background_color_hovered or _color_and_brush.QtBackgroundColors.Hovered
         elif conditions == [True, True]:
-            color_0 = _color_and_brush.QtBackgroundColors.Hovered
+            color_0 = background_color_hovered or _color_and_brush.QtBackgroundColors.Hovered
             if is_actioned:
-                color_1 = _color_and_brush.QtBackgroundColors.Actioned
+                color_1 = background_color_actioned or _color_and_brush.QtBackgroundColors.Actioned
             else:
-                color_1 = _color_and_brush.QtBackgroundColors.Selected
+                color_1 = background_color_selected or _color_and_brush.QtBackgroundColors.Selected
             #
             start_pos, end_pos = rect.topLeft(), rect.bottomLeft()
             color = QtGui.QLinearGradient(start_pos, end_pos)
-            color.setColorAt(0, color_0)
-            color.setColorAt(1, color_1)
+            color.setColorAt(0, _base.GuiQtColor.to_qt_color(color_0))
+            color.setColorAt(1, _base.GuiQtColor.to_qt_color(color_1))
             return color
 
     @classmethod
@@ -2099,7 +2104,7 @@ class QtPainter(QtGui.QPainter):
                 self.drawEllipse(i_text_ellipse)
                 #
                 self._set_font_(
-                    _base.GuiQtFont.generate()
+                    _base.QtFont.generate()
                 )
                 #
                 self.drawText(i_text_point, i_text)
@@ -2169,7 +2174,7 @@ class QtPainter(QtGui.QPainter):
                 )
                 #
                 self._set_border_color_(223, 223, 223, 255)
-                self._set_font_(_base.GuiQtFont.generate(size=12, weight=75))
+                self._set_font_(_base.QtFont.generate(size=12, weight=75))
                 #
                 self.drawText(
                     current_label_rect,
@@ -2310,7 +2315,7 @@ class QtPainter(QtGui.QPainter):
         index_y = translate_y/grid_h
         #
         self._set_border_color_(grid_border_color)
-        self._set_font_(_base.GuiQtFont.generate(size=6))
+        self._set_font_(_base.QtFont.generate(size=6))
         text_h = self.fontMetrics().height()
         points_h, points_v = get_h_points(), get_v_points()
         #
@@ -2426,27 +2431,72 @@ class QtPainter(QtGui.QPainter):
         else:
             self.drawRect(rect_)
 
-    def _set_screenshot_draw_by_rect_(self, rect_0, rect_1, border_color, background_color):
+    def _set_screenshot_draw_by_rect_(self, base_rect, screenshot_rect, border_color, background_color):
         rect_f_0 = QtCore.QRectF(
-            rect_0.x(), rect_0.y(), rect_0.width(), rect_0.height()
+            base_rect.x(), base_rect.y(), base_rect.width(), base_rect.height()
         )
         path_0 = QtGui.QPainterPath()
         path_0.addRect(rect_f_0)
 
+        x, y, w, h = screenshot_rect.x(), screenshot_rect.y(), screenshot_rect.width(), screenshot_rect.height()
         rect_f_1 = QtCore.QRectF(
-            rect_1.x(), rect_1.y(), rect_1.width(), rect_1.height()
+            screenshot_rect.x(), screenshot_rect.y(), screenshot_rect.width(), screenshot_rect.height()
         )
         path_1 = QtGui.QPainterPath()
         path_1.addRect(rect_f_1)
 
         path_2 = path_0-path_1
-
-        self._set_background_color_(background_color)
-        self._set_border_color_(border_color)
-        self._set_border_width_(2)
-        self._set_border_style_(QtCore.Qt.DashLine)
+        # draw outside
+        # self._set_background_color_(background_color)
+        # self._set_border_color_(border_color)
+        # self._set_border_style_(QtCore.Qt.DashLine)
         #
-        self.drawPath(path_2)
+        # self.drawPath(path_2)
+
+        # self._set_background_color_(border_color)
+        # draw inside
+        # fixme: must fill color?
+        self._set_border_color_(border_color)
+        self._set_background_color_(0, 0, 0, 1)
+        self._set_border_width_(2)
+        self.drawRect(
+            screenshot_rect
+        )
+        # draw region
+        self._set_border_color_(border_color)
+        self._set_background_color_(border_color)
+        e_s = 4
+        for i_point in [
+            screenshot_rect.topRight(),
+            QtCore.QPoint(),
+            screenshot_rect.topLeft(),
+            screenshot_rect.bottomLeft(),
+            screenshot_rect.bottomRight(),
+        ]:
+            self.drawEllipse(
+                i_point, e_s, e_s
+            )
+
+        r_s = 8
+        for i_rect in [
+            # top
+            QtCore.QRect(
+                x+(w-r_s)/2, y-r_s/2, r_s, r_s
+            ),
+            # right
+            QtCore.QRect(
+                x+w-r_s/2, y+(h-r_s)/2, r_s, r_s
+            ),
+            # bottom
+            QtCore.QRect(
+                x+(w-r_s)/2, y+h-r_s/2, r_s, r_s
+            ),
+            # left
+            QtCore.QRect(
+                x-r_s/2, y+(h-r_s)/2, r_s, r_s
+            ),
+        ]:
+            self.drawRect(i_rect)
 
 
 # noinspection PyUnusedLocal
@@ -2645,7 +2695,7 @@ class QtPixmapDrawer(object):
                 i_g_rect
             )
 
-            painter._set_font_(_base.GuiQtFont.generate(g_h*.8))
+            painter._set_font_(_base.QtFont.generate(g_h*.8))
 
             i_t_r, i_t_g, i_t_b = bsc_core.RawColorMtd.get_complementary_rgb(*i_background_rgb)
             i_t_a = QtGui.qGray(i_t_r, i_t_g, i_t_b)
@@ -2690,11 +2740,11 @@ class QtPixmapDrawer(object):
             text_content = data.get('draw.text.content')
             text_size = data.get('draw.text.size')
             text_weight = data.get('draw.text.weight')
-            font_color = data.get('draw.text.color')
+            text_color = data.get('draw.text.color')
             txt_rect = QtCore.QRect(x+m, y+m, w, h/2)
             if isinstance(text_content, dict):
                 painter._set_text_draw_by_rect_use_dict_(
-                    txt_rect, text_content, text_size, text_weight, font_color
+                    txt_rect, text_content, text_size, text_weight, text_color
                 )
 
         painter.end()

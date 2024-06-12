@@ -27,7 +27,7 @@ class _QtWindow(
         self.setWindowFlags(QtCore.Qt.Window)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setFont(gui_qt_core.GuiQtFont.generate())
+        self.setFont(gui_qt_core.QtFont.generate())
         #
         self._qt_main_layout = gui_qt_wgt_base.QtVBoxLayout(self)
         self._qt_main_layout.setContentsMargins(0, 0, 0, 0)

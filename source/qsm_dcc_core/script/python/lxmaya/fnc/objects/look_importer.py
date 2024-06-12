@@ -309,7 +309,7 @@ class AssImportFnc(object):
                 #
                 dcc_port = dcc_obj.get_port(dcc_port_name)
                 if dcc_port.get_is_exists() is True:
-                    if and_port.get_is_enumerate():
+                    if and_port.is_enumerate():
                         raw = and_port.get_as_index()
                     else:
                         raw = and_port.get()

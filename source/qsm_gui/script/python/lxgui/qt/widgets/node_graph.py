@@ -545,7 +545,7 @@ class _QtNGConnection(
     gui_qt_abstracts.AbsQtActionForHoverDef,
     gui_qt_abstracts.AbsQtActionForPressDef,
     #
-    gui_qt_abstracts.AbsQtPressSelectExtraDef,
+    gui_qt_abstracts.AbsQtActionForSelectDef,
 ):
     def _refresh_widget_all_(self):
         self._set_wgt_update_shape_()
@@ -643,7 +643,7 @@ class _QtNGConnection(
         self._init_action_base_def_(self)
         self._init_action_for_hover_def_(self)
         self._init_action_for_press_def_(self)
-        self._init_press_select_extra_def_(self)
+        self._init_action_for_select_def_(self)
 
         self._set_ng_connection_def_init_(self)
 
@@ -902,7 +902,7 @@ class _QtNGNode(
     gui_qt_abstracts.AbsQtActionForHoverDef,
     gui_qt_abstracts.AbsQtActionForPressDef,
     #
-    gui_qt_abstracts.AbsQtPressSelectExtraDef,
+    gui_qt_abstracts.AbsQtActionForSelectDef,
     #
     AbsQtNGNodeDef,
     AbsQtNGDrawNodeDef,
@@ -927,7 +927,7 @@ class _QtNGNode(
         self._init_action_base_def_(self)
         self._init_action_for_hover_def_(self)
         self._init_action_for_press_def_(self)
-        self._init_press_select_extra_def_(self)
+        self._init_action_for_select_def_(self)
 
         self._set_ng_node_def_init_(self)
         self._set_ng_draw_node_def_init_(self)
@@ -1042,9 +1042,9 @@ class _QtNGNode(
     def _do_hover_move_(self, event):
         point = event.pos()
         if self._ng_node_rect_select.contains(point):
-            self._set_action_hovered_(True)
+            self._set_hovered_(True)
         else:
-            self._set_action_hovered_(False)
+            self._set_hovered_(False)
 
     def _set_ng_action_node_press_move_execute_(self, event):
         d_point = event.globalPos()-self._ng_action_node_move_point_start
@@ -1122,7 +1122,7 @@ class _QtNGNode(
             border_color=self._type_color,
             border_width=self._ng_draw_border_w,
             border_radius=self._ng_draw_border_w,
-            is_hovered=self._get_is_hovered_(),
+            is_hovered=self._is_hovered_(),
             is_selected=self._is_selected,
             is_actioned=self._get_is_actioned_(),
         )
@@ -1158,8 +1158,8 @@ class _QtNGNode(
             painter._draw_text_by_rect_(
                 self._name_draw_rect,
                 self._name_text,
-                font=gui_qt_core.GuiQtFont.generate(size=self._ng_draw_font_h),
-                font_color=gui_qt_core.QtFontColors.Basic,
+                font=gui_qt_core.QtFont.generate(size=self._ng_draw_font_h),
+                text_color=gui_qt_core.QtFontColors.Basic,
                 text_option=QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter,
                 offset=offset
             )
@@ -1503,9 +1503,9 @@ class _QtNGGraph(
                 i_obj.type_name
             )
             i_ng_node._set_tool_tip_(['path: "{}"'.format(i_obj.path)])
-            # i_image_file_path = i_obj.get('image')
-            # if i_image_file_path:
-            #     i_ng_node._set_image_file_path_(i_image_file_path)
+            # i_image_path = i_obj.get('image')
+            # if i_image_path:
+            #     i_ng_node._set_image_path_(i_image_path)
 
             i_obj.set_gui_ng_graph_node(i_ng_node)
 
@@ -1811,7 +1811,7 @@ class _QtNGGraph(
         [i._set_ng_node_coord_glb_orig_update_() for i in self._ng_graph_nodes_selected]
 
     def _set_ng_graph_node_move_execute_(self, sbj, d_point):
-        if sbj._get_is_selected_() is True:
+        if sbj._is_selected_() is True:
             self._set_ng_graph_node_move_as_together_(sbj, d_point)
         else:
             self._set_ng_graph_node_move_as_separate_(sbj)
@@ -2084,17 +2084,17 @@ class _QtNGImage(_QtNGNode):
             painter._draw_text_by_rect_(
                 self._name_draw_rect,
                 text,
-                font=gui_qt_core.GuiQtFont.generate(size=self._ng_draw_font_h),
-                font_color=gui_qt_core.QtFontColors.Basic,
+                font=gui_qt_core.QtFont.generate(size=self._ng_draw_font_h),
+                text_color=gui_qt_core.QtFontColors.Basic,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 offset=offset,
                 word_warp=True
             )
 
-        if self._image_file_path is not None:
+        if self._image_path is not None:
             painter._draw_image_by_rect_(
                 self._ng_node_rect_frame,
-                self._image_file_path,
+                self._image_path,
                 offset=offset
             )
 
@@ -2179,8 +2179,8 @@ class _QtNGImageGraph(_QtNGGraph):
 
         obj = self._ng_node_universe.get_objs()
         for i_obj in obj:
-            i_image_file_path = i_obj.get('image')
-            if i_image_file_path:
+            i_image_path = i_obj.get('image')
+            if i_image_path:
                 i_ng_node = self._set_ng_graph_sbj_node_create_()
                 i_ng_node._set_ng_node_obj_(i_obj)
                 i_ng_node._set_type_text_(
@@ -2193,8 +2193,8 @@ class _QtNGImageGraph(_QtNGGraph):
                     i_obj.type_name
                 )
 
-                i_ng_node._set_image_file_path_(i_image_file_path)
-                i_w, i_h = i_ng_node._get_image_size_()
+                i_ng_node._set_image_path_(i_image_path)
+                i_w, i_h = i_ng_node._get_image_file_size_()
 
                 i_width, i_height = i_w*self._ng_graph_image_scale, i_h*self._ng_graph_image_scale
                 i_width -= 1
@@ -2233,8 +2233,8 @@ class _QtNGImageGraph(_QtNGGraph):
         if objs:
             ng_nodes = []
             for i_obj in objs:
-                i_image_file_path = i_obj.get('image')
-                if i_image_file_path:
+                i_image_path = i_obj.get('image')
+                if i_image_path:
                     i_ng_node = i_obj.get_gui_ng_graph_node()
                     ng_nodes.append(i_ng_node)
             #
@@ -2288,8 +2288,8 @@ class _QtNGImageGraph(_QtNGGraph):
             painter._draw_text_by_rect_(
                 i_t_rect,
                 i_t_name_text,
-                font=gui_qt_core.GuiQtFont.generate(size=i_t_font_size),
-                font_color=gui_qt_core.QtFontColors.Basic,
+                font=gui_qt_core.QtFont.generate(size=i_t_font_size),
+                text_color=gui_qt_core.QtFontColors.Basic,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 offset=offset,
                 word_warp=True
@@ -2297,11 +2297,11 @@ class _QtNGImageGraph(_QtNGGraph):
             i_i_rect = QtCore.QRect(
                 x_0, h_-i_i_h-m, i_i_w, i_i_h
             )
-            i_image_file_path = i_ng_node._get_image_file_path_()
+            i_image_path = i_ng_node._get_image_path_()
             # painter.fillRect(i_i_rect, QtGui.QColor(255, 0, 255))
             painter._draw_image_by_rect_(
                 i_i_rect,
-                i_image_file_path,
+                i_image_path,
                 offset=offset
             )
             x_0 += i_i_w

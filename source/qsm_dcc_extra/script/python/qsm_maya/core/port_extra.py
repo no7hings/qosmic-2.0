@@ -22,6 +22,16 @@ class BscPortOpt(object):
         self._port_query = None
         self._type_name = None
 
+    def __str__(self):
+        return '{}(type="{}", path="{}")'.format(
+            self.__class__.__name__,
+            self.get_type_name(),
+            self.get_path()
+        )
+
+    def __repr__(self):
+        return '\n'+self.__str__()
+
     @classmethod
     def create(cls, node_path, port_path, type_name, enumerate_strings=None):
         if cls.check_exists(node_path, port_path) is False:
@@ -137,6 +147,9 @@ class BscPortOpt(object):
             is_lock = cmds.getAttr(self.get_path(), lock=1)
             if is_lock:
                 cmds.setAttr(self.get_path(), lock=0)
+
+            if value is None:
+                return
             #
             if self.get_port_query().is_writable(self.get_node_path()) is True:
                 if self.get_type_name() == 'string':
@@ -148,7 +161,6 @@ class BscPortOpt(object):
                             enumName=':'.join(enumerate_strings),
                             edit=1
                         )
-                    #
                     if isinstance(value, six.string_types):
                         enumerate_strings = self.get_port_query().get_enumerate_strings(self.get_node_path())
                         index = enumerate_strings.index(value)
@@ -157,7 +169,7 @@ class BscPortOpt(object):
                         cmds.setAttr(self.get_path(), value)
                 else:
                     if isinstance(value, (tuple, list)):
-                        cmds.setAttr(self.get_path(), *value, clamp=1)
+                        cmds.setAttr(self.get_path(), *value, type=self.get_type_name(), clamp=1)
                     else:
                         # Debug ( Clamp Maximum or Minimum Value )
                         cmds.setAttr(self.get_path(), value, clamp=1)
@@ -175,11 +187,14 @@ class BscPortOpt(object):
             return [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]
         return _
 
-    def get_is_changed(self):
+    def is_changed(self):
         return self.get() != self.get_default()
 
-    def get_is_enumerate(self):
-        return self.get_port_query().get_is_enumerate(self.get_node_path())
+    def is_locked(self):
+        return cmds.getAttr(self._path, lock=1)
+
+    def is_enumerate(self):
+        return self.get_port_query().is_enumerate(self.get_node_path())
 
     def get_enumerate_strings(self):
         return self.get_port_query().get_enumerate_strings(
@@ -196,11 +211,11 @@ class BscPortOpt(object):
         _ = cmds.connectionInfo(
             self.get_path(), isExactDestination=True
         )
-        if self.get_port_query().get_has_channels(self.get_node_path()) is True:
+        if self.get_port_query().has_channels(self.get_node_path()) is True:
             return cmds.connectionInfo(
                 self.get_path(), isDestination=True
             )
-        elif self.get_port_query().get_has_parent(self.get_node_path()) is True:
+        elif self.get_port_query().has_parent(self.get_node_path()) is True:
             return cmds.connectionInfo(
                 self.get_path(), isDestination=True
             )
@@ -250,13 +265,3 @@ class BscPortOpt(object):
             if self.get_is_naming_match(i) is True:
                 return True
         return False
-
-    def __str__(self):
-        return '{}(type="{}", path="{}")'.format(
-            self.__class__.__name__, 
-            self.get_type_name(),
-            self.get_path()
-        )
-
-    def __repr__(self):
-        return '\n'+self.__str__()

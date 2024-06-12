@@ -49,6 +49,8 @@ from .input_for_path import *
 
 from .item_for_list import *
 
+from .item_widget_for_list import *
+
 from .item_for_tree import *
 
 from .view import *
@@ -63,6 +65,8 @@ from .view_for_tab import *
 
 from .view_for_history import *
 
+from .view_for_tag_filter import *
+
 from .scroll import *
 
 from .chart import *
@@ -74,5 +78,11 @@ from .node_graph import *
 from .process import *
 
 from .layer_stack import *
+
+from .screenshot import *
+
+from .media_player import *
+
+
 
 

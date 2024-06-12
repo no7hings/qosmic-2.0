@@ -72,12 +72,12 @@ class QtHResizeHandle(
         widget, event = args
         if widget == self:
             if event.type() == QtCore.QEvent.Enter:
-                self._set_action_hovered_(True)
+                self._set_hovered_(True)
                 self._set_action_flag_(
                     [self.ActionFlag.SplitHHover, self.ActionFlag.SplitVHover][self._resize_orientation]
                 )
             elif event.type() == QtCore.QEvent.Leave:
-                self._set_action_hovered_(False)
+                self._set_hovered_(False)
                 self._clear_all_action_flags_()
             elif event.type() == QtCore.QEvent.Resize:
                 self._refresh_widget_draw_geometry_()

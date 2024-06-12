@@ -237,3 +237,7 @@ class DateTime(object):
         else:
             year_str = "{}年".format(input_time.year) if language == 'chs' else str(input_time.year)
             return year_str
+
+    @classmethod
+    def to_tag(cls):
+        pass

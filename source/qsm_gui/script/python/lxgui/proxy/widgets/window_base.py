@@ -414,8 +414,8 @@ class PrxBaseWindow(
     def gui_bustling(self):
         return self._qt_widget._gui_bustling_()
 
-    def run_as_thread(self, cache_fnc, build_fnc, post_fnc):
-        self._qt_widget._run_build_use_thread_(
+    def run_build_extra_use_thread(self, cache_fnc, build_fnc, post_fnc=None):
+        self._qt_widget._run_build_extra_use_thread_(
             cache_fnc, build_fnc, post_fnc
         )
     

@@ -2,7 +2,7 @@
 # qt
 from ..core.wrap import *
 
-from .. import core as gui_qt_core
+from .. import core as _qt_core
 
 from .. import abstracts as gui_qt_abstracts
 # qt widgets
@@ -21,7 +21,7 @@ class QtToolGridLayoutWidget(
 ):
     QT_MENU_CLS = gui_qt_wgt_utility.QtMenu
 
-    LAYOUT_MODEL_CLS = gui_qt_core.GuiQtModForGridLayout
+    LAYOUT_MODEL_CLS = _qt_core.GuiQtModForGridLayout
 
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_()
@@ -42,13 +42,13 @@ class QtToolGridLayoutWidget(
         # print self, self._get_action_flag_()
         # swap when flag is drag child polish or add
         if self._get_action_flag_is_match_(
-                self.ActionFlag.DragChildPolish
+            self.ActionFlag.DragChildPolish
         ) and self._index_drag_child_polish is not None:
-            self._layout_model.set_count(self.__layout_item_stack.get_count())
+            self._layout_model.set_count(self._layout_item_stack.get_count())
             self._layout_model.update()
-            _index_maximum = self.__layout_item_stack.get_index_maximum()
-            for i_index in self.__layout_item_stack.get_indices():
-                i_widget = self.__layout_item_stack.get_widget_at(i_index)
+            _index_maximum = self._layout_item_stack.get_index_maximum()
+            for i_index in self._layout_item_stack.get_indices():
+                i_widget = self._layout_item_stack.get_widget_at(i_index)
 
                 i_index_cur = i_index
 
@@ -74,12 +74,12 @@ class QtToolGridLayoutWidget(
                 else:
                     i_widget.show()
         elif self._get_action_flag_is_match_(
-                self.ActionFlag.DragChildRemove
+            self.ActionFlag.DragChildRemove
         ):
-            self._layout_model.set_count(self.__layout_item_stack.get_count())
+            self._layout_model.set_count(self._layout_item_stack.get_count())
             self._layout_model.update()
-            for i_index in self.__layout_item_stack.get_indices():
-                i_widget = self.__layout_item_stack.get_widget_at(i_index)
+            for i_index in self._layout_item_stack.get_indices():
+                i_widget = self._layout_item_stack.get_widget_at(i_index)
 
                 if self._index_drag_child_polish_start < i_index:
                     i_index_cur = i_index-1
@@ -98,12 +98,12 @@ class QtToolGridLayoutWidget(
                 else:
                     i_widget.show()
         elif self._get_action_flag_is_match_(
-                self.ActionFlag.DragChildAdd
+            self.ActionFlag.DragChildAdd
         ):
-            self._layout_model.set_count(self.__layout_item_stack.get_count()+1)
+            self._layout_model.set_count(self._layout_item_stack.get_count()+1)
             self._layout_model.update()
-            for i_index in self.__layout_item_stack.get_indices():
-                i_item = self.__layout_item_stack.get_item_at(i_index)
+            for i_index in self._layout_item_stack.get_indices():
+                i_item = self._layout_item_stack.get_item_at(i_index)
                 i_widget = i_item.get_widget()
 
                 if self._index_drag_child_add <= i_index:
@@ -119,10 +119,10 @@ class QtToolGridLayoutWidget(
                 i_widget.setFixedSize(i_w, i_h)
                 i_widget.show()
         else:
-            self._layout_model.set_count(self.__layout_item_stack.get_count())
+            self._layout_model.set_count(self._layout_item_stack.get_count())
             self._layout_model.update()
-            for i_index in self.__layout_item_stack.get_indices():
-                i_item = self.__layout_item_stack.get_item_at(i_index)
+            for i_index in self._layout_item_stack.get_indices():
+                i_item = self._layout_item_stack.get_item_at(i_index)
                 i_widget = i_item.get_widget()
 
                 i_x, i_y, i_w, i_h = self._layout_model.get_geometry_at(i_index)
@@ -148,7 +148,7 @@ class QtToolGridLayoutWidget(
         self._widget = widget
 
         self._layout_model = self.LAYOUT_MODEL_CLS()
-        self.__layout_item_stack = gui_qt_core.GuiQtModForLayoutItemStack(self)
+        self._layout_item_stack = _qt_core.GuiQtModForLayoutItemStack(self)
 
         self._layout_margins = 4, 4, 4, 4
 
@@ -221,27 +221,27 @@ class QtToolGridLayoutWidget(
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         if self._frame_draw_is_enable is True:
             painter._draw_frame_by_rect_(
                 rect=self._rect_frame_draw,
-                border_color=gui_qt_core.QtBorderColors.Basic,
-                background_color=gui_qt_core.QtBackgroundColors.Dark,
+                border_color=_qt_core.QtBorderColors.Basic,
+                background_color=_qt_core.QtBackgroundColors.Dark,
                 border_radius=4
             )
 
         if self._get_action_flag_is_match_(self.ActionFlag.DragChildPolish):
             painter._draw_frame_by_rect_(
                 rect=self._drag_rect_child_polish,
-                border_color=gui_qt_core.QtBorderColors.Button,
-                background_color=gui_qt_core.QtBackgroundColors.BDragChildPolish,
+                border_color=_qt_core.QtBorderColors.Button,
+                background_color=_qt_core.QtBackgroundColors.BDragChildPolish,
                 border_width=1,
             )
         elif self._get_action_flag_is_match_(self.ActionFlag.DragChildAdd):
             painter._draw_frame_by_rect_(
                 rect=self._drag_rect_child_add,
-                border_color=gui_qt_core.QtBorderColors.Button,
-                background_color=gui_qt_core.QtBackgroundColors.BDragChildAdd,
+                border_color=_qt_core.QtBorderColors.Button,
+                background_color=_qt_core.QtBackgroundColors.BDragChildAdd,
                 border_width=1,
             )
 
@@ -261,10 +261,10 @@ class QtToolGridLayoutWidget(
         key = mdt.data('lynxi/drag-and-drop-key')
         if key:
             key_cur = str(key)
-            item = self.__layout_item_stack.get_item_by(key_cur)
+            item = self._layout_item_stack.get_item_by(key_cur)
             if item:
                 self._drag_and_drop_key = key_cur
-                index = self.__layout_item_stack.get_index_by(item)
+                index = self._layout_item_stack.get_index_by(item)
                 self._set_action_flag_(self.ActionFlag.DragChildPolish)
                 self._index_drag_child_polish_start = index
                 self._refresh_widget_all_()
@@ -272,8 +272,8 @@ class QtToolGridLayoutWidget(
                 return True
 
         self._set_action_flag_(self.ActionFlag.DragChildAdd)
-        self._index_drag_child_add_start = self.__layout_item_stack.get_index_maximum()+1
-        self._layout_model.set_count(self.__layout_item_stack.get_count()+1)
+        self._index_drag_child_add_start = self._layout_item_stack.get_index_maximum()+1
+        self._layout_model.set_count(self._layout_item_stack.get_count()+1)
         self._layout_model.update()
         event.accept()
         return True
@@ -284,7 +284,7 @@ class QtToolGridLayoutWidget(
         column, row = self._layout_model.get_coord_loc(x, y)
         index_cur = self._layout_model.get_index_between(column, row)
         if index_cur != self._index_drag_child_polish:
-            self._index_drag_child_polish = min(index_cur, self.__layout_item_stack.get_index_maximum())
+            self._index_drag_child_polish = min(index_cur, self._layout_item_stack.get_index_maximum())
             c_x, c_y, c_w, c_h = self._layout_model.get_geometry_at(self._index_drag_child_polish)
             self._drag_rect_child_polish.setRect(c_x, c_y, c_w-1, c_h-1)
             self._refresh_widget_all_()
@@ -295,7 +295,7 @@ class QtToolGridLayoutWidget(
         column, row = self._layout_model.get_coord_loc(x, y)
         index_cur = self._layout_model.get_index_between(column, row)
         if index_cur != self._index_drag_child_add:
-            self._index_drag_child_add = min(index_cur, self.__layout_item_stack.get_index_maximum()+1)
+            self._index_drag_child_add = min(index_cur, self._layout_item_stack.get_index_maximum()+1)
             c_x, c_y, c_w, c_h = self._layout_model.get_geometry_at(self._index_drag_child_add)
             self._drag_rect_child_add.setRect(c_x, c_y, c_w-1, c_h-1)
             self._refresh_widget_all_()
@@ -318,7 +318,7 @@ class QtToolGridLayoutWidget(
         event.ignore()
 
     def _do_drop_child_polish_(self, event):
-        self.__layout_item_stack.insert_item_between(
+        self._layout_item_stack.insert_item_between(
             self._index_drag_child_polish_start, self._index_drag_child_polish
         )
 
@@ -331,8 +331,8 @@ class QtToolGridLayoutWidget(
         event.accept()
 
     def _do_drop_child_add_(self, event):
-        # item = self.__layout_item_stack.fetch_drag_and_drop_cache()
-        # self.__layout_item_stack.drop_item_to(item, 0)
+        # item = self._layout_item_stack.fetch_drag_and_drop_cache()
+        # self._layout_item_stack.drop_item_to(item, 0)
 
         self._index_drag_child_add_start = None
         self._index_drag_child_add = None
@@ -358,11 +358,11 @@ class QtToolGridLayoutWidget(
     # noinspection PyUnusedLocal
     def _add_widget_(self, widget, *args, **kwargs):
         widget.setParent(self)
-        self.__layout_item_stack.create_item(widget)
+        self._layout_item_stack.create_item(widget)
         self._refresh_widget_all_()
 
     def _clear_all_widgets_(self):
-        self.__layout_item_stack.restore()
+        self._layout_item_stack.restore()
 
 
 class QtToolGroupVLayoutWidget(
@@ -371,7 +371,7 @@ class QtToolGroupVLayoutWidget(
     gui_qt_abstracts.AbsQtActionBaseDef,
     gui_qt_abstracts.AbsQtActionForDropDef,
 ):
-    LAYOUT_MODEL_CLS = gui_qt_core.GuiQtModForVLayout
+    LAYOUT_MODEL_CLS = _qt_core.GuiQtModForVLayout
 
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_()
@@ -394,8 +394,8 @@ class QtToolGroupVLayoutWidget(
         ):
             self._layout_model.set_pos(v_x, v_y)
             self._layout_model.set_size(v_w, v_h)
-            for i_index in self.__layout_item_stack.get_indices():
-                i_widget = self.__layout_item_stack.get_widget_at(i_index)
+            for i_index in self._layout_item_stack.get_indices():
+                i_widget = self._layout_item_stack.get_widget_at(i_index)
 
                 i_index_cur = i_index
 
@@ -417,7 +417,7 @@ class QtToolGroupVLayoutWidget(
                 heights.append(i_h)
         else:
             c_v_y = v_y
-            for i_widget in self.__layout_item_stack.get_all_widgets():
+            for i_widget in self._layout_item_stack.get_all_widgets():
                 i_widget.show()
                 # i_widget.setFixedWidth(v_w)
                 i_size = i_widget._get_layout_minimum_size_()
@@ -449,7 +449,7 @@ class QtToolGroupVLayoutWidget(
         self._init_action_for_drop_def_(self)
 
         self._layout_model = self.LAYOUT_MODEL_CLS()
-        self.__layout_item_stack = gui_qt_core.GuiQtModForLayoutItemStack(self)
+        self._layout_item_stack = _qt_core.GuiQtModForLayoutItemStack(self)
 
         self._layout_margins = 0, 0, 0, 0
 
@@ -483,19 +483,19 @@ class QtToolGroupVLayoutWidget(
                         self.ActionFlag.DragChildPolish
                 ):
                     self._do_drop_child_polish_(event)
-        elif widget in self.__layout_item_stack.get_all_widgets():
+        elif widget in self._layout_item_stack.get_all_widgets():
             if event.type() == QtCore.QEvent.LayoutRequest:
                 self._refresh_widget_all_()
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
 
         if self._get_action_flag_is_match_(self.ActionFlag.DragChildPolish):
             painter._draw_frame_by_rect_(
                 rect=self._drag_rect_child_polish,
-                border_color=gui_qt_core.QtBorderColors.Button,
-                background_color=gui_qt_core.QtBackgroundColors.BDragChildPolish,
+                border_color=_qt_core.QtBorderColors.Button,
+                background_color=_qt_core.QtBackgroundColors.BDragChildPolish,
                 border_width=1,
             )
 
@@ -504,12 +504,12 @@ class QtToolGroupVLayoutWidget(
         key = mdt.data('lynxi/drag-and-drop-key')
         if key:
             key_cur = str(key)
-            item = self.__layout_item_stack.get_item_by(key_cur)
+            item = self._layout_item_stack.get_item_by(key_cur)
             if item:
-                index = self.__layout_item_stack.get_index_by(item)
+                index = self._layout_item_stack.get_index_by(item)
                 self._index_drag_child_polish_start = index
                 self._set_action_flag_(self.ActionFlag.DragChildPolish)
-                for i_widget in self.__layout_item_stack.get_all_widgets():
+                for i_widget in self._layout_item_stack.get_all_widgets():
                     i_widget._start_drag_mode_()
                 self._refresh_widget_all_()
                 event.accept()
@@ -519,7 +519,7 @@ class QtToolGroupVLayoutWidget(
         x, y = p.x(), p.y()
         index_cur = self._layout_model.get_index_loc(x, y)
         if index_cur != self._index_drag_child_polish:
-            self._index_drag_child_polish = min(index_cur, self.__layout_item_stack.get_index_maximum())
+            self._index_drag_child_polish = min(index_cur, self._layout_item_stack.get_index_maximum())
             c_x, c_y, c_w, c_h = self._layout_model.get_geometry_at(self._index_drag_child_polish)
             self._drag_rect_child_polish.setRect(c_x, c_y, c_w-1, c_h-1)
             self._refresh_widget_all_()
@@ -530,7 +530,7 @@ class QtToolGroupVLayoutWidget(
         event.ignore()
 
     def _do_drop_child_polish_(self, event):
-        self.__layout_item_stack.insert_item_between(
+        self._layout_item_stack.insert_item_between(
             self._index_drag_child_polish_start, self._index_drag_child_polish
         )
 
@@ -543,7 +543,7 @@ class QtToolGroupVLayoutWidget(
         event.accept()
 
     def _drag_release_cbk_(self):
-        for i_widget in self.__layout_item_stack.get_all_widgets():
+        for i_widget in self._layout_item_stack.get_all_widgets():
             i_widget._end_drag_mode_()
 
         self._index_drag_child_polish_start = None
@@ -556,20 +556,20 @@ class QtToolGroupVLayoutWidget(
     def _add_widget_(self, widget, *args, **kwargs):
         widget.setParent(self)
         widget.installEventFilter(self)
-        self.__layout_item_stack.create_item(widget)
+        self._layout_item_stack.create_item(widget)
         self._refresh_widget_all_()
 
     def _set_drop_enable_(self, boolean):
         self.setAcceptDrops(boolean)
 
     def _clear_all_widgets_(self):
-        self.__layout_item_stack.restore()
+        self._layout_item_stack.restore()
         
     def _get_all_widgets_(self):
-        return self.__layout_item_stack.get_all_widgets()
+        return self._layout_item_stack.get_all_widgets()
 
     def _get_all_widget_name_texts_(self):
-        return self.__layout_item_stack.get_all_widget_names()
+        return self._layout_item_stack.get_all_widget_names()
 
     def _sort_widgets_by_name_texts_(self, texts):
-        self.__layout_item_stack.sort_widgets_by_names(texts)
+        self._layout_item_stack.sort_widgets_by_names(texts)

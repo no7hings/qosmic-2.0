@@ -23,6 +23,8 @@ from .view_for_tree import *
 
 from .view_for_list import *
 
+from .view_for_tag_filter import *
+
 from .chart import *
 
 from .node_graph import *

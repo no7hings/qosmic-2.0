@@ -23,7 +23,7 @@ class VdoFileOpt(object):
     def get_thumbnail_file_path(self, ext='.jpg'):
         return _extend.StgTmpThumbnailMtd.get_file_path_(self._file_path, ext=ext)
 
-    def generate_thumbnail(self, width=128, ext='.jpg', block=False):
+    def generate_thumbnail(self, width=256, ext='.jpg', block=False):
         thumbnail_file_path = self.get_thumbnail_file_path(ext=ext)
         if os.path.exists(self._file_path):
             if os.path.exists(thumbnail_file_path) is False:
@@ -49,7 +49,7 @@ class VdoFileOpt(object):
                     )
         return thumbnail_file_path
 
-    def generate_thumbnail_create_args(self, width=128, ext='.jpg'):
+    def generate_thumbnail_create_args(self, width=256, ext='.jpg'):
         thumbnail_file_path = self.get_thumbnail_file_path(ext=ext)
         if os.path.exists(thumbnail_file_path) is False:
             if os.path.exists(self._file_path):

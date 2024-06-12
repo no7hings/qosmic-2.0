@@ -470,11 +470,11 @@ class AbsPnlManagerForTextureSpaceDcc(gui_prx_widgets.PrxSessionWindow):
             t.append_method(
                 run_fnc_
             )
-            t.start()
             if post_fnc is not None:
                 t.run_finished.connect(
                     post_fnc
                 )
+            t.start()
 
             self.connect_window_close_to(quit_fnc_)
         else:

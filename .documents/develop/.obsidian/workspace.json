@@ -13,18 +13,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "开发相关/开发进度/通用/后台任务管理工具.md",
+                "file": "随记/python/Python包安装.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "eb6e8f805e177b18",
+            "id": "c7e7ed9b8a2ff02f",
             "type": "leaf",
             "state": {
               "type": "card-board-view",
               "state": {}
+            }
+          },
+          {
+            "id": "1264b7dc8a1367a3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ],
@@ -94,7 +106,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "开发相关/开发进度/通用/后台任务管理工具.md",
+                "file": "开发相关/开发进度/优化.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -111,7 +123,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "开发相关/开发进度/通用/后台任务管理工具.md",
+                "file": "开发相关/开发进度/优化.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -134,7 +146,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "开发相关/开发进度/通用/后台任务管理工具.md"
+                "file": "开发相关/开发进度/优化.md"
               }
             }
           },
@@ -156,7 +168,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "开发相关/开发进度/通用/后台任务管理工具.md"
+                "file": "开发相关/开发进度/优化.md"
               }
             }
           },
@@ -176,8 +188,7 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 7
+        ]
       }
     ],
     "direction": "horizontal",
@@ -196,14 +207,20 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "eb6e8f805e177b18",
+  "active": "c7e7ed9b8a2ff02f",
   "lastOpenFiles": [
+    "随记/python/Python包安装.md",
+    "开发相关/开发进度/maya/绑定移动工具.md",
+    "随记/python/PyQt.md",
+    "开发相关/开发进度/通用/后台任务管理工具.md",
+    "随记/PyQt/未命名.md",
+    "随记/PyQt",
+    "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
+    "开发相关/开发进度/优化.md",
+    "开发相关/开发进度/maya/场景显示优化工具.md",
     "开发相关/开发进度/maya/节点参数模版工具.md",
     "开发相关/开发任务/maya/解算相关/节点图模版工具（Node Graph Template Tool）.md",
     "开发相关/开发进度/maya/节点图模版工具.md",
-    "开发相关/开发进度/通用/后台任务管理工具.md",
-    "开发相关/开发进度/优化.md",
-    "开发相关/开发进度/maya/绑定移动工具.md",
     "文档/sqlite.md",
     "文档",
     "开发相关/开发进度/通用/农场解算发布工具.md",
@@ -211,22 +228,17 @@
     "开发相关/开发进度/BUG.md",
     "开发相关/开发进度/maya/动作复制工具.md",
     "开发相关/开发进度/maya/简易拍屏工具.md",
-    "开发相关/开发进度/maya/场景显示优化工具.md",
     "开发相关/开发进度/maya/绑定显示优化工具.md",
     "开发相关/开发任务/通用/农场相关/农场解算发布工具（Deadline Simulation Summit Tool）.md",
-    "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
     "开发相关/开发计划/总览.md",
     "随记/插件和工具为什么不推荐安装在本地.md",
     "技术文档/总览.canvas",
     "开发相关/开发计划/四月-五月.md",
-    "随记/python/Python包安装.md",
     "随记/gantt view.md",
     "随记/利用标签进行分类.md",
     "未命名.canvas",
     "常见问题/maya/batch.md",
     "技术文档/Qosmic/组件与模块/组件/软件/qsm_dcc_resource.md",
-    "开发相关/开发计划/六月-七月.md",
-    "开发相关/开发文档/资源管理工具（Resource Manager）.md",
     "技术文档/Qosmic",
     "技术文档/Qosmic/组件与模块/依赖关系.canvas",
     "技术文档/工具说明/images/Pasted image 20240520110227.png",
@@ -239,7 +251,6 @@
     "开发相关/开发任务/通用/农场相关",
     "开发相关/开发任务/通用",
     "开发相关/开发任务/maya",
-    "开发相关/开发任务/maya/解算相关",
     "开发相关/开发文档/images/Pasted image 20240523103725.png",
     "开发相关/开发文档/images/Pasted image 20240523120517.png",
     "技术文档/工具说明/images/rig-resource-dynamic-gpu.png",

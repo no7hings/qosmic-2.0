@@ -61,8 +61,9 @@ class EnvBaseMtd(object):
 
     @classmethod
     def get_qt_thread_enable(cls):
-        if _base.BasApplication.get_is_maya():
-            return False
+        # fixme: why disable in maya?
+        # if _base.BasApplication.get_is_maya():
+        #     return False
         return True
 
     @classmethod

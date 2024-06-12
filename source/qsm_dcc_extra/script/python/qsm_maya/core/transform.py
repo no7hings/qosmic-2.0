@@ -79,6 +79,15 @@ class Transform(_node_for_dag.DagNode):
         x_dst, y_dst, z_dst = p_1
         return math.sqrt((x-x_dst)**2+(y-y_dst)**2+(z-z_dst)**2)
 
+    @classmethod
+    def check_is_transform(cls, path):
+        if cmds.nodeType(path) == 'transform':
+            shape_paths = cmds.listRelatives(path, children=1, shapes=1, noIntermediate=0, fullPath=1) or []
+            if shape_paths:
+                return True
+            return False
+        return False
+
 
 class TransformOpt(object):
     def __init__(self, transform_path):

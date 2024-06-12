@@ -1,4 +1,6 @@
 # coding:utf-8
+import getpass
+
 from peewee import *
 
 import datetime
@@ -22,6 +24,7 @@ class _Entity(Model):
 
     ctime = TimestampField(default=datetime.datetime.now)
     mtime = TimestampField(default=datetime.datetime.now)
+    user = CharField(default=getpass.getuser)
 
     metadata = FixedCharField(default='{}')
 
@@ -82,6 +85,8 @@ class Property(_Entity):
     """
     for node extend
     """
+    category = CharField(default='property')
+
     node = CharField(default='')
     port = CharField(default='')
     value = CharField(default='')

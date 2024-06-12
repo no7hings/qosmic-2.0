@@ -4,22 +4,22 @@ from ... import core as gui_core
 # qt
 from ..core.wrap import *
 
-from .. import abstracts as gui_qt_abstracts
+from .. import abstracts as _qt_abstracts
 # qt widgets
-from ..widgets import base as gui_qt_wgt_base
+from ..widgets import base as _base
 
-from ..widgets import entry_for_capsule as gui_qt_wgt_entry_for_capsule
+from ..widgets import entry_for_capsule as _entry_for_capsule
 
 
 class QtInputAsCapsule(
     QtWidgets.QWidget,
 
-    gui_qt_abstracts.AbsQtInputBaseDef,
+    _qt_abstracts.AbsQtInputBaseDef,
 ):
     def _pull_history_(self, *args, **kwargs):
         pass
 
-    QT_ENTRY_CLS = gui_qt_wgt_entry_for_capsule.QtEntryAsCapsule
+    QT_ENTRY_CLS = _entry_for_capsule.QtEntryAsCapsule
 
     def __init__(self, *args, **kwargs):
         super(QtInputAsCapsule, self).__init__(*args, **kwargs)
@@ -36,7 +36,7 @@ class QtInputAsCapsule(
 
         self._value_type = value_type
         #
-        entry_layout = gui_qt_wgt_base.QtHBoxLayout(self)
+        entry_layout = _base.QtHBoxLayout(self)
         entry_layout.setContentsMargins(*[1] * 4)
         entry_layout.setSpacing(4)
         #

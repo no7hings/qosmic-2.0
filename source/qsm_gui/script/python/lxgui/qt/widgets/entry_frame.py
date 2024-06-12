@@ -122,7 +122,7 @@ class QtEntryFrame(
 
         color_bkg = self._frame_background_color
         color_bdr = [_qt_core.QtBorderColors.Basic, _qt_core.QtBorderColors.HighLight][is_selected]
-        w_bdr = [self._frame_border_draw_width, self._frame_border_draw_width+1][is_selected]
+        w_bdr = [self._frame_border_width, self._frame_border_width+1][is_selected]
         painter._set_border_color_(
             _qt_core.QtColors.Transparent
         )
@@ -137,7 +137,7 @@ class QtEntryFrame(
                 painter._draw_text_by_rect_(
                     rect=self._tip_draw_rect,
                     text=self._tip_text,
-                    font_color=_qt_core.QtColors.TextDisable,
+                    text_color=_qt_core.QtColors.TextDisable,
                     font=_qt_core.QtFonts.DefaultItalic,
                     text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 )

@@ -48,6 +48,16 @@ class Shape(_node_dag.DagNode):
         _ = cmds.parent(path, transform_path_dst, shape=1, add=1)
         return _node_dag.DagNode.to_path(_[0])
 
+    @classmethod
+    def check_is_shape(cls, path):
+        if cmds.nodeType(path) != 'transform':
+            transform_paths = cmds.listRelatives(path, parent=1, fullPath=1, type='transform') or []
+            shape_paths = cmds.listRelatives(path, children=1, shapes=1, noIntermediate=0, fullPath=1) or []
+            if transform_paths and not shape_paths:
+                return True
+            return False
+        return False
+
 
 class ShapeOpt(_node_dag.DagNodeOpt):
     def __init__(self, path):

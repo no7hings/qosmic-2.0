@@ -536,7 +536,9 @@ class QtMainWindow(
     _utility.QtThreadDef,
     AbsQtMainWindowDef,
     AbsQtShortcutBaseDef,
-    AbsNoticeBaseDef
+    AbsNoticeBaseDef,
+
+    _qt_abstracts.AbsQtThreadWorkerExtraDef
 ):
     close_clicked = qt_signal()
     key_escape_pressed = qt_signal()
@@ -574,9 +576,9 @@ class QtMainWindow(
         # self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         #
         self.setFont(_qt_core.QtFonts.NameNormal)
-        #
+
         _qt_core.GuiQtUtil.assign_qt_shadow(self, radius=2)
-        #
+
         self._window_system_tray_icon = None
         self._init_busy_base_def_(self)
         self._init_action_base_def_(self)
@@ -584,7 +586,9 @@ class QtMainWindow(
         self._init_window_base_def_(self)
         self._init_shortcut_base_def_(self)
         self._init_notice_base_def_(self)
-        #
+
+        self._init_thread_worker_extra_def_(self)
+
         self.setStyleSheet(
             _qt_core.GuiQtStyle.get('QMainWindow')
         )
@@ -599,6 +603,11 @@ class QtMainWindow(
         self._connect_window_close_to_(
             self._do_notice_close_all_
         )
+
+        # fixme: do not connect this method
+        # self._connect_size_changed_to_(
+        #     self._kill_all_thread_worker_
+        # )
 
     def eventFilter(self, *args):
         widget, event = args
@@ -643,11 +652,13 @@ class QtMainWindow(
             w._do_exec_()
             if w._get_result_():
                 self._do_window_close_()
+                self._do_kill_all_thread_worker_()
                 event.accept()
             else:
                 event.ignore()
         else:
             self._do_window_close_()
+            self._do_kill_all_thread_worker_()
             event.accept()
 
     def _exec_message_(self, message):

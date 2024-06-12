@@ -34,7 +34,7 @@ class AbsGuiPrxTreeViewOpt(object):
         self._namespace = namespace
 
     def register_occurrence(self, key, path):
-        prx_item = self.gui_get(path)
+        prx_item = self.gui_get_one(path)
         self._prx_tree_view._qt_view._register_keyword_filter_occurrence_(
             key, prx_item.get_item()
         )
@@ -49,10 +49,10 @@ class AbsGuiPrxTreeViewOpt(object):
         self._prx_tree_view.set_clear()
         self._keys.clear()
 
-    def gui_is_exists(self, path):
+    def gui_check_exists(self, path):
         return self._item_dict.get(path) is not None
 
-    def gui_get(self, path):
+    def gui_get_one(self, path):
         if path:
             return self._item_dict[path]
         return self._prx_tree_view
@@ -106,7 +106,7 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
         self.__pull_expand_cache()
 
         path = directory_path[len(self._root):]
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             path_opt = bsc_core.PthNodeOpt(path)
             prx_item = self._prx_tree_view.create_item(
                 path_opt.get_name(),
@@ -127,15 +127,15 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
                 ]
             )
             return True, prx_item
-        return False, self.gui_get(path)
+        return False, self.gui_get_one(path)
 
     def gui_add_one(self, directory_opt):
         directory_path = directory_opt.get_path()
         path = directory_path[len(self._root):]
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             path_opt = bsc_core.PthNodeOpt(path)
             #
-            parent_gui = self.gui_get(path_opt.get_parent_path())
+            parent_gui = self.gui_get_one(path_opt.get_parent_path())
             #
             prx_item = parent_gui.add_child(
                 path_opt.name,
@@ -166,7 +166,7 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
                     prx_item.ValidationStatus.Unwritable
                 )
             return prx_item
-        return self.gui_get(path)
+        return self.gui_get_one(path)
 
     def gui_add_all(self, directory_path):
         directory_opt = bsc_storage.StgDirectoryOpt(directory_path)
@@ -250,7 +250,7 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
         self.__pull_expand_cache()
 
         path = directory_path[len(self._root):]
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             path_opt = bsc_core.PthNodeOpt(path)
 
             prx_item = self._prx_tree_view.create_item(
@@ -272,15 +272,15 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
                 ]
             )
             return True, prx_item
-        return False, self.gui_get(path)
+        return False, self.gui_get_one(path)
 
     def gui_add_one(self, stg_opt):
         stg_path = stg_opt.get_path()
         path = stg_path[len(self._root):]
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             path_opt = bsc_core.PthNodeOpt(path)
             #
-            parent_gui = self.gui_get(path_opt.get_parent_path())
+            parent_gui = self.gui_get_one(path_opt.get_parent_path())
 
             time_txt = bsc_core.auto_string(
                 bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
@@ -323,7 +323,7 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
                     prx_item.ValidationStatus.Unwritable
                 )
             return prx_item
-        return self.gui_get(path)
+        return self.gui_get_one(path)
 
     def gui_add_all(self, root):
         directory_opt = bsc_storage.StgDirectoryOpt(root)
@@ -428,7 +428,7 @@ class AbsGuiTreeViewAsTagOpt(AbsGuiPrxTreeViewOpt):
     def gui_get_tag(self, path):
         return self._tag_item_dict[path]
 
-    def gui_is_exists(self, path):
+    def gui_check_exists(self, path):
         return path in self._tag_item_dict
 
     def gui_register_group(self, path, prx_item):
@@ -439,7 +439,7 @@ class AbsGuiTreeViewAsTagOpt(AbsGuiPrxTreeViewOpt):
         # self.gui_register(path, prx_item)
         self._tag_item_dict[path] = prx_item
 
-    def gui_get(self, path):
+    def gui_get_one(self, path):
         return self._tag_item_dict[path]
 
     def gui_add_root(self):
@@ -483,7 +483,7 @@ class AbsGuiTreeViewAsTagOpt(AbsGuiPrxTreeViewOpt):
         return self.gui_get_group(path)
 
     def gui_add_tag_by_path(self, path):
-        if self.gui_is_exists(path) is False:
+        if self.gui_check_exists(path) is False:
             path_opt = bsc_core.PthNodeOpt(path)
             parent_path = path_opt.get_parent_path()
             parent_prx_item = self.gui_get_group(parent_path)
@@ -561,17 +561,18 @@ class AbsGuiPrxListViewOpt(object):
         self._namespace = namespace
 
     def register_occurrence(self, key, path):
-        prx_item = self.gui_get(path)
+        prx_item = self.gui_get_one(path)
         self._prx_list_view._qt_view._register_keyword_filter_occurrence_(key, prx_item.get_item())
 
     def restore(self):
         self._prx_list_view.set_clear()
         self._keys.clear()
+        self._prx_list_view.refresh_check_info()
 
-    def gui_is_exists(self, path):
+    def gui_check_exists(self, path):
         return self._item_dict.get(path) is not None
 
-    def gui_get(self, path):
+    def gui_get_one(self, path):
         return self._item_dict[path]
 
     def gui_register(self, path, prx_item):

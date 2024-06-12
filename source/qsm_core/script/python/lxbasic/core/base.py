@@ -222,13 +222,25 @@ class BscSystem(object):
     def get_application(cls):
         return BasApplication.get_current()
 
-    #
+    @classmethod
+    def get_windows_home(cls):
+        return '{}{}'.format(
+            os.environ.get('HOMEDRIVE', 'c:'),
+            os.environ.get('HOMEPATH', '/temp')
+        ).replace('\\', '/')
+
+    @classmethod
+    def get_linux_home(cls):
+        return '{}'.format(
+            os.environ.get('HOME', '/temp')
+        )
+
     @classmethod
     def get_home_directory(cls):
         if cls.get_is_windows():
-            return os.environ.get('HOMEPATH')
+            return cls.get_windows_home()
         elif cls.get_is_linux():
-            return os.environ.get('HOME')
+            return cls.get_linux_home()
         else:
             raise SystemError()
 
@@ -1062,6 +1074,84 @@ Subtitle options:
             bin=cls.get_ffmpeg_source(),
             **kwargs
         )
+
+    @classmethod
+    def create_thumbnail(cls, file_path):
+        pass
+
+    @classmethod
+    def auto_unicode(cls, path):
+        if not isinstance(path, six.text_type):
+            return path.decode('utf-8')
+        return path
+
+    @staticmethod
+    def auto_string(text):
+        if isinstance(text, six.text_type):
+            return text.encode('utf-8')
+        return text
+
+    @classmethod
+    def get_frame_count(cls, video_path):
+        cmd_args = [
+            cls.get_ffprobe_source(),
+            '-v',
+            'error',
+            '-select_streams',
+            'v:0',
+            '-show_entries',
+            'stream=r_frame_rate,duration',
+            '-of',
+            'default=nokey=1:noprint_wrappers=1',
+        ]
+
+        cmd_script = '{} "{}"'.format(' '.join(cmd_args), video_path)
+
+        result = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = result.communicate()
+
+        if result.returncode != 0:
+            print("Error: ", stderr)
+            return None
+
+        lines = stdout.strip().split('\n')
+        if len(lines) < 2:
+            print("Error: Could not retrieve frame rate and duration.")
+            return None
+
+        frame_rate_str = lines[0]
+        duration_str = lines[1]
+
+        frame_rate = eval(frame_rate_str)
+        if duration_str == 'N/A':
+            duration = 0
+        else:
+            duration = float(duration_str)
+
+        frame_count = int(frame_rate*duration)
+
+        return frame_count
+
+    @classmethod
+    def extract_frame(cls, video_path, image_path, frame_index):
+        """
+Y:/deploy/rez-packages/external/ffmpeg/6.0/platform-windows/bin/ffmpeg.exe -i Z:/temeporaries/dongchangbao/playblast_tool/test.export.v004.mov -vf select=eq(n\,0) -vsync vfr -q:v 2 -y Z:/temeporaries/dongchangbao/playblast_tool/test.export.v004.jpg
+        """
+        try:
+            cmd_args = [
+                cls.get_ffmpeg_source(),
+                r'-i "{}"'.format(video_path),
+                r'-vf',
+                r'select=eq(n\,{})'.format(frame_index),
+                '-vsync vfr', '-q:v 2', '-y',
+                '"{}"'.format(image_path)
+            ]
+            cmd_script = ' '.join(cmd_args)
+            subprocess.check_call(cmd_script)
+            sys.stdout.write('frame extract to: "{}"\n'.format(image_path))
+        except subprocess.CalledProcessError:
+            import traceback
+            traceback.print_exc()
 
 
 _HEXDIG = '0123456789ABCDEFabcdef'

@@ -83,6 +83,15 @@ class BscNodeOpt(object):
         self._type_name = None
         self._node_query = None
 
+    def __str__(self):
+        return '{}(type={}, path="{}")'.format(
+            self.__class__.__name__,
+            self.get_type_name(), self.get_path()
+        )
+
+    def __repr__(self):
+        return self.__str__()
+
     @classmethod
     def create_shader(cls, name_or_path, type_name):
         if cls.check_exists(name_or_path) is False:
@@ -184,10 +193,13 @@ class BscNodeOpt(object):
             ) or []
         )
 
+    def get_all_keyable_port_paths(self):
+        return cmds.listAttr(self.get_path(), keyable=1) or []
+
     def get_all_ports(self, includes=None):
         _ = self.get_all_port_paths()
         if isinstance(includes, (tuple, list)):
-            _ = includes
+            _ = self._unpack_port_paths(includes)
         return [
             self.get_port(i) for i in _
         ]
@@ -310,12 +322,3 @@ class BscNodeOpt(object):
 
     def to_dict(self):
         pass
-
-    def __str__(self):
-        return '{}(type={}, path="{}")'.format(
-            self.__class__.__name__, 
-            self.get_type_name(), self.get_path()
-        )
-
-    def __repr__(self):
-        return self.__str__()

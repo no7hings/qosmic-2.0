@@ -2147,7 +2147,7 @@ class NGPortOpt(object):
             if isinstance(value, unicode):
                 _value = str(value)
             #
-            if self.get_is_enumerate() is True:
+            if self.is_enumerate() is True:
                 if isinstance(value, int):
                     strings = self.get_enumerate_strings()
                     index = max(min(value, len(strings)-1), 0)
@@ -2168,7 +2168,7 @@ class NGPortOpt(object):
             str(hint_dict)
         )
 
-    def get_is_enumerate(self):
+    def is_enumerate(self):
         hint_string = self.ktn_port.getHintString()
         if hint_string:
             hint_dict = eval(hint_string)

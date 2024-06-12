@@ -152,7 +152,7 @@ class QtEntryAsGuide(
             i_text_x = c_x
             i_text_w = 0
             if i_type_text:
-                i_type_w, _ = _qt_core.GuiQtFont.compute_size(self.TYPE_FONT_SIZE, i_type_text)
+                i_type_w, _ = _qt_core.QtFont.compute_size(self.TYPE_FONT_SIZE, i_type_text)
                 i_type_w_ = i_type_w+spacing*2
                 i_text_w += i_type_w_
                 i_item._set_type_draw_rect_(
@@ -161,7 +161,7 @@ class QtEntryAsGuide(
             else:
                 i_type_w_ = 0
             #
-            i_name_w, _ = _qt_core.GuiQtFont.compute_size(self.NAME_FONT_SIZE, i_name_text)
+            i_name_w, _ = _qt_core.QtFont.compute_size(self.NAME_FONT_SIZE, i_name_text)
             i_name_w_ = i_name_w+spacing*2
             i_text_w += i_name_w_
             #
@@ -327,8 +327,8 @@ class QtEntryAsGuide(
                 rect=i_item._type_rect,
                 text=i_type_text,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
-                font_color=bsc_core.RawTextOpt(i_type_text).to_rgb_0(s_p=100, v_p=100),
-                font=_qt_core.GuiQtFont.generate(size=self.TYPE_FONT_SIZE, italic=True),
+                text_color=bsc_core.RawTextOpt(i_type_text).to_rgb_0(s_p=100, v_p=100),
+                font=_qt_core.QtFont.generate(size=self.TYPE_FONT_SIZE, italic=True),
                 offset=name_offset,
                 is_hovered=guide_is_hovered,
             )
@@ -338,7 +338,7 @@ class QtEntryAsGuide(
                 rect=i_item._name_draw_rect,
                 text=i_name_text,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
-                font=_qt_core.GuiQtFont.generate(size=self.NAME_FONT_SIZE),
+                font=_qt_core.QtFont.generate(size=self.NAME_FONT_SIZE),
                 offset=name_offset,
                 is_hovered=guide_is_hovered,
             )

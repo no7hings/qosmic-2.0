@@ -66,7 +66,6 @@ class AbsPnlSubmitterForAssetRenderDcc(gui_prx_widgets.PrxSessionWindow):
         self._result_list_view.set_item_frame_size_basic(*self._item_frame_size)
         self._result_list_view.set_item_icon_frame_size(*self._item_icon_frame_size)
         self._result_list_view.set_item_icon_size(*self._item_icon_size)
-        self._result_list_view.set_item_icon_frame_draw_enable(True)
         self._result_list_view.set_item_name_frame_draw_enable(True)
         self._result_list_view.set_item_names_draw_range([None, 1])
         self._result_list_view.set_item_image_frame_draw_enable(True)

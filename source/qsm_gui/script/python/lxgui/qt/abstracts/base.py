@@ -13,17 +13,21 @@ import six
 
 import contextlib
 
+import functools
+
 import lxbasic.content as bsc_content
 
 import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
+
+import lxbasic.pinyin as bsc_pinyin
 # gui
 from ... import core as _gui_core
 # qt
 from ..core.wrap import *
 
-from .. import core as _gui_qt_core
+from .. import core as _qt_core
 
 
 class AbsQtWidgetBaseDef(object):
@@ -228,7 +232,7 @@ class AbsQtStatusBaseDef(object):
         elif status in {cls.Status.Suspended}:
             return cls._get_rgb_args_(*cls.Rgba.Yellow)
         elif status in {cls.Status.Failed, cls.Status.Killed, cls.Status.Error}:
-            return cls._get_rgb_args_(*cls.Rgba.Red)
+            return cls._get_rgb_args_(*cls.Rgba.TorchRed)
         elif status in {cls.Status.Completed}:
             return cls._get_rgb_args_(*cls.Rgba.Green)
         # validation
@@ -238,7 +242,7 @@ class AbsQtStatusBaseDef(object):
             return cls._get_rgb_args_(*cls.Rgba.DarkGray)
         #
         elif status in {cls.ValidationStatus.Error}:
-            return cls._get_rgb_args_(*cls.Rgba.DarkRed)
+            return cls._get_rgb_args_(*cls.Rgba.DarkTorchRed)
         return cls._get_rgb_args_(*cls.Rgba.Transparent)
 
     @classmethod
@@ -252,7 +256,7 @@ class AbsQtStatusBaseDef(object):
         elif status in {cls.Status.Suspended}:
             return cls._get_rgb_args_(*cls.Rgba.Yellow)
         elif status in {cls.Status.Failed, cls.Status.Error, cls.Status.Killed}:
-            return cls._get_rgb_args_(*cls.Rgba.Red)
+            return cls._get_rgb_args_(*cls.Rgba.TorchRed)
         elif status in {cls.Status.Completed}:
             return cls._get_rgb_args_(*cls.Rgba.Green)
         return cls._get_rgb_args_(*cls.Rgba.Transparent)
@@ -264,7 +268,7 @@ class AbsQtStatusBaseDef(object):
         elif status in {cls.ValidationStatus.Disable, cls.ValidationStatus.Lost}:
             return cls._get_rgb_args_(*cls.Rgba.DarkGray)
         elif status in {cls.ValidationStatus.Error, cls.ValidationStatus.Unreadable}:
-            return cls._get_rgb_args_(*cls.Rgba.Red)
+            return cls._get_rgb_args_(*cls.Rgba.TorchRed)
         elif status in {cls.ValidationStatus.Locked, cls.ValidationStatus.Unwritable}:
             return cls._get_rgb_args_(*cls.Rgba.Purple)
         elif status in {cls.ValidationStatus.Active}:
@@ -280,7 +284,7 @@ class AbsQtStatusBaseDef(object):
         elif status in {cls.ValidationStatus.Disable, cls.ValidationStatus.Lost}:
             return cls._get_rgb_args_(*cls.Rgba.DarkGray)
         elif status in {cls.ValidationStatus.Error, cls.ValidationStatus.Unreadable}:
-            return cls._get_rgb_args_(*cls.Rgba.Red)
+            return cls._get_rgb_args_(*cls.Rgba.TorchRed)
         elif status in {cls.ValidationStatus.Locked, cls.ValidationStatus.Unwritable}:
             return cls._get_rgb_args_(*cls.Rgba.Purple)
         elif status in {cls.ValidationStatus.Active}:
@@ -296,8 +300,8 @@ class AbsQtStatusBaseDef(object):
         #
         self._status = _gui_core.GuiProcessStatus.Stopped
         #
-        self._status_color = _gui_qt_core.QtBackgroundColors.Transparent
-        self._hover_status_color = _gui_qt_core.QtBackgroundColors.Transparent
+        self._status_color = _qt_core.QtBackgroundColors.Transparent
+        self._hover_status_color = _qt_core.QtBackgroundColors.Transparent
         #
         self._status_rect = QtCore.QRect()
 
@@ -533,15 +537,15 @@ class AbsQtFrameBaseDef(object):
 
     def _init_frame_base_def_(self, widget):
         self._widget = widget
-        self._frame_border_color = _gui_qt_core.QtBackgroundColors.Transparent
-        self._hovered_frame_border_color = _gui_qt_core.QtBackgroundColors.Transparent
-        self._selected_frame_border_color = _gui_qt_core.QtBackgroundColors.Transparent
-        self._actioned_frame_border_color = _gui_qt_core.QtBackgroundColors.Transparent
+        self._frame_border_color = _qt_core.QtBackgroundColors.Transparent
+        self._hovered_frame_border_color = _qt_core.QtBackgroundColors.Transparent
+        self._selected_frame_border_color = _qt_core.QtBackgroundColors.Transparent
+        self._actioned_frame_border_color = _qt_core.QtBackgroundColors.Transparent
         #
-        self._frame_background_color = _gui_qt_core.QtBackgroundColors.Transparent
-        self._hovered_frame_background_color = _gui_qt_core.QtBackgroundColors.Transparent
-        self._selected_frame_background_color = _gui_qt_core.QtBackgroundColors.Transparent
-        self._actioned_frame_background_color = _gui_qt_core.QtBackgroundColors.Transparent
+        self._frame_background_color = _qt_core.QtBackgroundColors.Transparent
+        self._hovered_frame_background_color = _qt_core.QtBackgroundColors.Transparent
+        self._selected_frame_background_color = _qt_core.QtBackgroundColors.Transparent
+        self._actioned_frame_background_color = _qt_core.QtBackgroundColors.Transparent
         #
         self._frame_border_radius = 0
         #
@@ -550,7 +554,7 @@ class AbsQtFrameBaseDef(object):
         self._frame_draw_margins = 0, 0, 0, 0
         self._frame_size = 20, 20
         self._frame_border_draw_style = QtCore.Qt.SolidLine
-        self._frame_border_draw_width = 1
+        self._frame_border_width = 1
 
         self._margins_offset_frame = 0, 0, 0, 0
 
@@ -561,11 +565,11 @@ class AbsQtFrameBaseDef(object):
         self._refresh_widget_all_()
 
     def _set_border_color_(self, color):
-        self._frame_border_color = _gui_qt_core.GuiQtColor.to_qt_color(color)
+        self._frame_border_color = _qt_core.GuiQtColor.to_qt_color(color)
         self._refresh_widget_draw_()
 
     def _set_background_color_(self, color):
-        self._frame_background_color = _gui_qt_core.GuiQtColor.to_qt_color(color)
+        self._frame_background_color = _qt_core.GuiQtColor.to_qt_color(color)
         self._refresh_widget_draw_()
 
     def _get_border_color_(self):
@@ -1170,8 +1174,9 @@ class AbsQtIconBaseDef(object):
 class AbsQtIconsBaseDef(object):
     def _init_icons_base_def_(self, widget):
         self._widget = widget
-        #
-        self._icons_enable = False
+
+        self._icon_flag = False
+
         self._icon_pixmaps = []
         self._icon_file_paths = []
         self._icon_name_texts = []
@@ -1267,30 +1272,30 @@ class AbsQtIconsBaseDef(object):
     def _set_icon_size_(self, w, h):
         self._icon_draw_size = w, h
 
-    def _set_icon_frame_draw_enable_(self, boolean):
-        self._icon_frame_draw_enable = boolean
-
 
 class AbsQtIndexBaseDef(object):
     def _init_index_base_def_(self, widget):
         self._widget = widget
-        self._index_draw_enable = False
+        self._index_flag = False
+        self._index_draw_flag = False
         self._index = 0
         self._index_text = None
-        self._index_text_color = _gui_qt_core.QtFontColors.Dark
-        self._index_text_font = _gui_qt_core.QtFonts.Index
         self._index_text_option = QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter
-        #
-        self._index_frame_rect = QtCore.QRect()
-        self._index_rect = QtCore.QRect()
-        #
-        self._index_frame_draw_enable = False
-        self._index_draw_enable = False
 
-    def _set_index_draw_enable_(self, boolean):
-        self._index_draw_enable = boolean
+        self._index_color = _gui_core.GuiRgba.Dark
+        self._index_font = _qt_core.QtFont.generate(size=8)
+        self._index_h = 20
+        
+        self._index_margin = 4
+
+        self._index_draw_rect = QtCore.QRect()
+
+    def _set_index_draw_flag_(self, boolean):
+        self._index_draw_flag = boolean
 
     def _set_index_(self, index):
+        self._index_flag = True
+
         self._index = index
         self._index_text = str(index+1)
 
@@ -1299,14 +1304,6 @@ class AbsQtIndexBaseDef(object):
 
     def _get_index_text_(self):
         return self._index_text
-
-    def _set_index_draw_rect_(self, x, y, w, h):
-        self._index_rect.setRect(
-            x, y, w, h
-        )
-
-    def _get_index_rect_(self):
-        return self._index_rect
 
 
 class AbsQtTypeDef(object):
@@ -1510,19 +1507,20 @@ class AbsQtNameBaseDef(object):
 
     def _init_name_base_def_(self, widget):
         self._widget = widget
-        #
-        self._name_enable = False
+
+        self._name_flag = False
+
         self._name_text = None
         self._name_text_orig = None
-        self._name_draw_font = _gui_qt_core.QtFonts.NameNormal
+        self._name_draw_font = _qt_core.QtFonts.NameNormal
         #
         self._sub_name_enable = False
         self._sub_name_text = None
         #
         self._name_align = self.AlignRegion.Center
         #
-        self._name_color = _gui_qt_core.QtFontColors.Basic
-        self._hover_name_color = _gui_qt_core.QtFontColors.Light
+        self._name_draw_color = _qt_core.QtFontColors.Basic
+        self._hover_name_color = _qt_core.QtFontColors.Light
         self._name_text_option = QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
         #
         self._name_word_warp = True
@@ -1541,7 +1539,7 @@ class AbsQtNameBaseDef(object):
         self._name_align = align
 
     def _set_name_color_(self, color):
-        self._name_color = color
+        self._name_draw_color = color
 
     def _get_name_text_draw_width_(self, text=None):
         if text is None:
@@ -1550,7 +1548,7 @@ class AbsQtNameBaseDef(object):
         return self._widget.fontMetrics().width(text)
 
     def _set_name_text_(self, text):
-        self._name_enable = True
+        self._name_flag = True
         self._name_text = text
         #
         if self._tool_tip_text is not None:
@@ -1559,13 +1557,13 @@ class AbsQtNameBaseDef(object):
         self._widget.update()
 
     def _fix_width_to_name_(self):
-        w = _gui_qt_core.GuiQtText.get_draw_width(
+        w = _qt_core.GuiQtText.get_draw_width(
             self._widget, self._name_text
         )
         self._widget.setFixedWidth(w+16)
 
     def _get_name_text_(self):
-        if self._name_enable is True:
+        if self._name_flag is True:
             return self._name_text
 
     def _set_sub_name_text_(self, text):
@@ -1647,14 +1645,14 @@ class AbsQtNameBaseDef(object):
                 for i_text in texts:
                     i_text = bsc_core.auto_string(i_text)
                     i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
-                    i_text = _gui_qt_core.GuiQtUtil.generate_tool_tip_action_css(i_text)
+                    i_text = _qt_core.GuiQtUtil.generate_tool_tip_action_css(i_text)
                     css += '<p class="no_wrap">{}</p>\n'.format(i_text)
 
             if 'action_tip' in kwargs:
                 action_tip = kwargs['action_tip']
                 css += '<p><hr></p>\n'
                 action_tip = action_tip.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
-                action_tip = _gui_qt_core.GuiQtUtil.generate_tool_tip_action_css(action_tip)
+                action_tip = _qt_core.GuiQtUtil.generate_tool_tip_action_css(action_tip)
                 css += '<p class="no_wrap">{}</p>\n'.format(action_tip)
 
             css += '</body>\n</html>'
@@ -1690,8 +1688,7 @@ class AbsQtNamesBaseDef(AbsQtNameBaseDef):
         self._init_name_base_def_(widget)
         #
         self._widget = widget
-        #
-        self._names_enable = False
+
         self._name_texts = []
         self._name_indices = []
         self._name_draw_rects = []
@@ -1726,7 +1723,10 @@ class AbsQtNamesBaseDef(AbsQtNameBaseDef):
         )
 
     def _set_name_text_(self, text):
+        self._name_flag = True
+
         if not isinstance(text, six.text_type):
+            # number
             text = str(text)
 
         self._name_text = text
@@ -1738,6 +1738,8 @@ class AbsQtNamesBaseDef(AbsQtNameBaseDef):
             return self._name_texts[0]
 
     def _set_name_texts_(self, texts):
+        self._name_flag = True
+
         self._name_texts = texts
         self._name_indices = range(len(texts))
         self._name_draw_rects = []
@@ -1752,6 +1754,8 @@ class AbsQtNamesBaseDef(AbsQtNameBaseDef):
         return self._name_texts
 
     def _set_name_text_dict_(self, text_dict):
+        self._name_flag = True
+
         self._name_text_dict = text_dict
         self._set_name_texts_(
             [v if seq == 0 else '{}: {}'.format(k, v) for seq, (k, v) in enumerate(self._name_text_dict.items())]
@@ -1835,7 +1839,7 @@ class AbsQtNamesBaseDef(AbsQtNameBaseDef):
                 for i_text in texts_extend:
                     i_text = bsc_core.auto_string(i_text)
                     i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
-                    i_text = _gui_qt_core.GuiQtUtil.generate_tool_tip_action_css(i_text)
+                    i_text = _qt_core.GuiQtUtil.generate_tool_tip_action_css(i_text)
                     css += '<p class="no_wrap">{}</p>\n'.format(i_text)
 
             css += '</body>\n</html>'
@@ -1930,10 +1934,9 @@ class AbsQtProgressBaseDef(object):
 
 class AbsQtImageBaseDef(object):
     def _init_image_base_def_(self):
-        self._image_enable = False
-        self._image_draw_is_enable = False
+        self._image_flag = False
         #
-        self._image_file_path = None
+        self._image_path = None
         self._image_sub_file_path = None
         self._image_text = None
         self._image_data = None
@@ -1952,11 +1955,10 @@ class AbsQtImageBaseDef(object):
     def _refresh_widget_draw_(self):
         raise NotImplementedError()
 
-    def _set_image_file_path_(self, arg):
-        self._image_enable = True
-        self._image_draw_is_enable = True
+    def _set_image_path_(self, arg):
+        self._image_flag = True
         if isinstance(arg, six.string_types):
-            self._image_file_path = arg
+            self._image_path = arg
         elif isinstance(arg, QtGui.QPixmap):
             self._image_pixmap = arg
 
@@ -1967,11 +1969,12 @@ class AbsQtImageBaseDef(object):
         self._refresh_widget_draw_()
 
     def _set_image_text_(self, text):
+        self._image_flag = True
         self._image_text = text
         self._refresh_widget_draw_()
 
     def _set_image_url_(self, url):
-        self._image_draw_is_enable = True
+        self._image_flag = True
         # noinspection PyBroadException
         try:
             self._image_data = urllib.urlopen(url).read()
@@ -1980,11 +1983,11 @@ class AbsQtImageBaseDef(object):
 
         self._refresh_widget_draw_()
 
-    def _set_image_draw_enable_(self, boolean):
-        self._image_draw_is_enable = boolean
+    def _set_image_flag_(self, boolean):
+        self._image_flag = boolean
 
     def _get_image_data(self):
-        if self._image_enable is True:
+        if self._image_flag is True:
             return self._image_data
 
     def _set_image_draw_size_(self, w, h):
@@ -1993,23 +1996,23 @@ class AbsQtImageBaseDef(object):
     def _get_image_draw_size_(self):
         return self._image_draw_size
 
-    def _get_image_size_(self):
-        if self._image_file_path is not None:
-            if os.path.isfile(self._image_file_path):
-                ext = os.path.splitext(self._image_file_path)[-1]
+    def _get_image_file_size_(self):
+        if self._image_path is not None:
+            if os.path.isfile(self._image_path):
+                ext = os.path.splitext(self._image_path)[-1]
                 if ext in ['.jpg', '.png']:
-                    image = QtGui.QImage(self._image_file_path)
+                    image = QtGui.QImage(self._image_path)
                     if image.isNull() is False:
-                        # image.save(self._image_file_path, 'PNG')
+                        # image.save(self._image_path, 'PNG')
                         s = image.size()
                         return s.width(), s.height()
                 elif ext in ['.mov']:
                     pass
         return self._image_draw_size
 
-    def _get_image_file_path_(self):
-        if self._image_enable is True:
-            return self._image_file_path
+    def _get_image_path_(self):
+        if self._image_flag is True:
+            return self._image_path
 
     def _set_image_rect_(self, x, y, w, h):
         self._image_draw_rect.setRect(
@@ -2021,7 +2024,7 @@ class AbsQtImageBaseDef(object):
 
     def _get_has_image_(self):
         return (
-            self._image_file_path is not None or
+            self._image_path is not None or
             self._image_sub_file_path is not None or
             self._image_text is not None or
             self._image_pixmap is not None
@@ -2030,11 +2033,48 @@ class AbsQtImageBaseDef(object):
     def _set_image_frame_draw_enable_(self, boolean):
         self._image_frame_draw_enable = boolean
 
-    def _set_image_draw_as_full_(self, boolean):
-        self._image_draw_as_full = boolean
-
     def _get_image_frame_rect_(self):
         return self._image_frame_rect
+
+
+
+class AbsQtItemNameBaseDef(object):
+    def _init_item_name_base_dict_(self, widget):
+        self._widget = widget
+        self._name_flag = False
+
+        self._name_text = None
+        self._name_draw_rect = QtCore.QRect()
+        self._name_text_draw_flag = False
+
+        self._name_dict = {}
+        self._name_dict_draw_data = []
+        self._name_dict_draw_flag = False
+
+        self._name_key_width = 48
+        self._name_h = 20
+        self._name_margin = 4
+
+        self._name_font = _qt_core.QtFont.generate(size=10)
+        self._name_color = _gui_core.GuiRgba.DarkWhite
+        self._name_text_option = QtCore.Qt.AlignHCenter | QtCore.Qt.AlignBottom
+
+    def _set_name_text_(self, text):
+        self._name_flag = True
+
+        self._name_text = text
+
+    def _set_name_dict_(self, dict_):
+        self._name_flag = True
+
+        self._name_dict = dict_
+        self._name_dict_draw_data = []
+        keys = self._name_dict.keys()
+        keys.sort()
+        for i_key in keys:
+            self._name_dict_draw_data.append(
+                (i_key, self._name_dict[i_key], QtCore.QRect())
+            )
 
 
 class AbsQtMovieBaseDef(object):
@@ -2043,7 +2083,7 @@ class AbsQtMovieBaseDef(object):
 
     def _init_movie_base_def_(self):
         self._play_draw_enable = False
-        self._movie_rect = QtCore.QRect()
+        self._video_play_rect = QtCore.QRect()
 
     def _get_play_draw_is_enable_(self):
         return self._play_draw_enable
@@ -2052,7 +2092,7 @@ class AbsQtMovieBaseDef(object):
         self._play_draw_enable = boolean
 
     def _set_movie_rect_(self, x, y, w, h):
-        self._movie_rect.setRect(x, y, w, h)
+        self._video_play_rect.setRect(x, y, w, h)
 
 
 class AbsQtChartBaseDef(object):
@@ -2099,6 +2139,7 @@ class AbsQtChartBaseDef(object):
         self.setMinimumHeight(h)
 
 
+
 class AbsQtThreadBaseDef(object):
     def _init_thread_base_def_(self, widget):
         self._widget = widget
@@ -2112,7 +2153,7 @@ class AbsQtThreadBaseDef(object):
         # noinspection PyUnresolvedReferences
         self._thread_running_timer.timeout.connect(self._refresh_thread_draw_)
 
-        self.__thread_exists = None
+        self._thread_exists = None
 
     def _set_action_busied_(self, *args, **kwargs):
         raise NotImplementedError()
@@ -2132,41 +2173,43 @@ class AbsQtThreadBaseDef(object):
         self._refresh_thread_draw_()
 
     def _thread_start_accept_fnc_(self, thread):
-        if self.__thread_exists:
+        if self._thread_exists:
             if thread.isFinished() is False:
                 thread.do_quit()
-            self.__thread_exists = None
+            self._thread_exists = None
 
-        self.__thread_exists = thread
+        self._thread_exists = thread
         if self._thread_draw_flag is False:
             self._start_thread_draw_()
 
     def _thread_finish_accept_fnc_(self, thread):
         if thread.isFinished() is False:
             thread.do_quit()
-        self.__thread_exists = None
+        self._thread_exists = None
         self._stop_thread_draw_()
 
     def _refresh_thread_draw_(self):
         self._thread_load_index += 1
         self._widget.update()
 
-    def _run_build_use_thread_(self, cache_fnc, build_fnc, post_fnc):
+    def _run_build_extra_use_thread_(self, cache_fnc, build_fnc, post_fnc=None):
         if self._qt_thread_enable is True:
-            t = _gui_qt_core.QtBuildThreadExtra(self._widget)
+            t = _qt_core.QtBuildThreadExtra(self._widget)
             t.set_cache_fnc(cache_fnc)
             t.cache_value_accepted.connect(build_fnc)
-            t.run_finished.connect(post_fnc)
+            if post_fnc is not None:
+                t.run_finished.connect(post_fnc)
             t.start_accepted.connect(self._thread_start_accept_fnc_)
             t.finish_accepted.connect(self._thread_finish_accept_fnc_)
             t.start()
         else:
             build_fnc(cache_fnc())
-            post_fnc()
+            if post_fnc is not None:
+                post_fnc()
 
     def _run_fnc_use_thread_(self, fnc):
         if self._qt_thread_enable is True:
-            t = _gui_qt_core.QtMethodThread(self._widget)
+            t = _qt_core.QtMethodThread(self._widget)
             t.append_method(fnc)
             t.start_accepted.connect(self._thread_start_accept_fnc_)
             t.finish_accepted.connect(self._thread_finish_accept_fnc_)
@@ -2436,26 +2479,23 @@ class AbsQtGuideEntryDef(AbsQtGuideBaseDef):
             widget_pre._do_popup_close_()
 
 
-class AbsQtPressSelectExtraDef(object):
+class AbsQtActionForSelectDef(object):
     user_press_select_accepted = qt_signal(bool)
 
     def _refresh_widget_draw_(self):
         raise NotImplementedError()
 
     #
-    def _init_press_select_extra_def_(self, widget):
+    def _init_action_for_select_def_(self, widget):
         self._widget = widget
         #
         self._is_selected = False
 
-    def _get_action_flag_(self):
-        raise NotImplementedError()
-
     def _set_selected_(self, boolean):
         self._is_selected = boolean
-        self._refresh_widget_draw_()
+        self._widget.update()
 
-    def _get_is_selected_(self):
+    def _is_selected_(self):
         return self._is_selected
 
 
@@ -2475,10 +2515,13 @@ class AbsQtItemMovieActionDef(object):
         self.movie_play_press_clicked.emit()
 
 
-class AbsQtItemWidgetExtra(object):
-    def _init_item_widget_extra_(self, widget):
+class AbsQtVirtualItemWidgetBaseDef(object):
+    def _init_virtual_item_widget_base_def_(self, widget):
         self._widget = widget
+
         self._item = None
+
+        self._view = None
 
     def _set_item_(self, item):
         self._item = item
@@ -2486,20 +2529,17 @@ class AbsQtItemWidgetExtra(object):
     def _get_item_(self):
         return self._item
 
+    def _set_view_(self, widget):
+        self._view = widget
 
-class AbsQtBuildViewDef(object):
-    def _init_view_build_extra_def_(self):
-        pass
-
-    def _setup_view_build_(self, view):
-        self._build_runnable_stack = _gui_qt_core.QtBuildRunnableStack(
-            view
-        )
+    def _get_view_(self):
+        return self._view
 
 
 class AbsQtViewSelectActionDef(object):
     def _set_view_select_action_def_init_(self):
         self._pre_selected_items = []
+        self._pre_hovered_items = []
 
     def _set_view_item_selected_(self, item, boolean):
         raise NotImplementedError()
@@ -2513,7 +2553,7 @@ class AbsQtViewSelectActionDef(object):
     def _get_selected_item_widgets_(self):
         raise NotImplementedError()
 
-    def _view_item_select_cbk(self):
+    def _item_select_cbk_(self):
         raise NotImplementedError()
 
     def _set_selection_use_multiply_(self):
@@ -2580,15 +2620,21 @@ class AbsQtItemFilterDef(object):
         self._item_keyword_filter_keys_tgt_cache = None
 
     def _set_item_keyword_filter_keys_tgt_(self, keys):
+        self._item_keyword_filter_keys_tgt = self._clean_up_keyword_filter_keys_tgt_(keys)
+
+    @classmethod
+    def _clean_up_keyword_filter_keys_tgt_(cls, keys):
         def to_string_fnc_(x_):
             if isinstance(x_, six.string_types):
-                return bsc_core.auto_string(x_)
+                return bsc_core.auto_unicode(x_)
             return str(x_)
-        keys = map(lambda x: to_string_fnc_(x), keys)
-        self._item_keyword_filter_keys_tgt = set(keys)
+
+        return set(map(lambda x: to_string_fnc_(x), filter(None, set(keys))))
 
     def _update_item_keyword_filter_keys_tgt_(self, keys):
-        self._item_keyword_filter_keys_tgt.update(set(keys))
+        self._item_keyword_filter_keys_tgt.update(
+            self._clean_up_keyword_filter_keys_tgt_(keys)
+        )
 
     def _get_keyword_filter_keys_tgt_(self):
         return list(self._item_keyword_filter_keys_tgt)
@@ -2597,25 +2643,31 @@ class AbsQtItemFilterDef(object):
         return [j for i in self._get_keyword_filter_keys_tgt_() for j in bsc_core.RawTextMtd.find_words(i)]
 
     def _get_keyword_filter_keys_auto_(self):
+        # use filter keys default
         keys = self._get_keyword_filter_keys_tgt_()
         if keys:
-            return [i for i in keys if i]
-        else:
-            if hasattr(self, '_get_name_texts_'):
-                if self._get_name_texts_():
-                    return [i for i in self._get_name_texts_() if i]
-            if hasattr(self, '_get_name_text_'):
-                return [self._get_name_text_() or 'unknown']
+            return keys
+
+        if hasattr(self, '_get_name_texts_'):
+            if self._get_name_texts_():
+                return [i for i in self._get_name_texts_() if i]
+        if hasattr(self, '_get_name_text_'):
+            return [self._get_name_text_() or 'unknown']
         return []
 
     def _get_keyword_filter_keys_auto_use_cache_(self):
         if self._item_keyword_filter_keys_tgt_cache is not None:
             return self._item_keyword_filter_keys_tgt_cache
+
         self._item_keyword_filter_keys_tgt_cache = self._get_keyword_filter_keys_auto_()
         return self._item_keyword_filter_keys_tgt_cache
 
     def _generate_keyword_filter_keys_(self):
-        return [j for i in self._get_keyword_filter_keys_auto_use_cache_() for j in bsc_core.RawTextMtd.split_any_to(i)]
+        return [
+            j
+            for i in self._get_keyword_filter_keys_auto_use_cache_()
+            for j in bsc_pinyin.Text.split_any_to_words(i)
+        ]
 
     def _get_item_keyword_filter_context_(self):
         return '+'.join(self._get_keyword_filter_keys_auto_use_cache_())
@@ -2781,7 +2833,7 @@ class AbsQtViewFilterExtraDef(object):
         semantic_tag_filter_data_src = self._view_semantic_tag_filter_data_src
         keyword_filter_data_src = self._view_keyword_filter_data_src
         self._view_keyword_filter_match_items = []
-        #
+
         items = self._get_all_items_()
         for i_item in items:
             i_force_hidden_flag = i_item._get_force_hidden_flag_()
@@ -2903,7 +2955,7 @@ class AbsQtStateDef(object):
     def _set_state_def_init_(self):
         self._state = _gui_core.GuiState.NORMAL
         self._state_draw_is_enable = False
-        self._state_color = _gui_qt_core.QtBrushes.Text
+        self._state_color = _qt_core.QtBrushes.Text
 
     # noinspection PyUnusedLocal
     def _set_state_(self, *args, **kwargs):
@@ -3148,265 +3200,13 @@ class AbsQtHelpBaseDef(object):
 
         self._help_text_is_enable = False
         #
-        self._help_text_draw_size = 480, 240
+        self._help_text_draw_size = 320, 240
         self._help_frame_draw_rect = QtCore.QRect()
         self._help_draw_rect = QtCore.QRect()
         self._help_text = ''
 
     def _set_help_text_(self, text):
         self._help_text = text
-
-
-class AbsQtScreenshotBaseDef(AbsQtHelpBaseDef):
-    class Mode(enum.IntEnum):
-        Started = 0
-        New = 1
-        Edit = 2
-        Stopped = 3
-
-    RectRegion = _gui_core.GuiRectRegion
-
-    CURSOR_MAPPER = {
-        RectRegion.Unknown: QtCore.Qt.ArrowCursor,
-        RectRegion.Top: QtCore.Qt.SizeVerCursor,
-        RectRegion.Bottom: QtCore.Qt.SizeVerCursor,
-        RectRegion.Left: QtCore.Qt.SizeHorCursor,
-        RectRegion.Right: QtCore.Qt.SizeHorCursor,
-        RectRegion.TopLeft: QtCore.Qt.SizeFDiagCursor,
-        RectRegion.TopRight: QtCore.Qt.SizeBDiagCursor,
-        RectRegion.BottomLeft: QtCore.Qt.SizeBDiagCursor,
-        RectRegion.BottomRight: QtCore.Qt.SizeFDiagCursor,
-        RectRegion.Inside: QtCore.Qt.SizeAllCursor,
-    }
-
-    screenshot_started = qt_signal()
-    screenshot_finished = qt_signal()
-    screenshot_accepted = qt_signal(list)
-    CACHE = 0, 0, 0, 0
-
-    def _init_screenshot_base_def_(self, widget):
-        self._widget = widget
-        self._init_help_base_def_(widget)
-
-        self._screenshot_mode = self.Mode.Started
-        self._screenshot_is_modify = False
-
-        self._screenshot_file_path = None
-
-        self._screenshot_rect = QtCore.QRect()
-
-        self._screenshot_is_activated = False
-        #
-        self._screenshot_point_start = QtCore.QPoint()
-        #
-        self._screenshot_rect_point_start = QtCore.QPoint()
-        self._screenshot_rect_point_start_offset = [0, 0]
-        self._screenshot_rect_point_start_offset_temp = [0, 0]
-        self._screenshot_rect_point_end = QtCore.QPoint()
-        self._screenshot_rect_point_end_offset = [0, 0]
-        self._screenshot_rect_point_end_offset_temp = [0, 0]
-
-        self._screenshot_rect_region_edit = self.RectRegion.Unknown
-
-        self._screenshot_modify_gap = 8
-
-    def _do_screenshot_press_(self, event):
-        self._screenshot_point_start = event.pos()
-        if self._screenshot_mode == self.Mode.Started:
-            self._screenshot_mode = self.Mode.New
-
-        self._widget.update()
-
-    def _do_screenshot_press_move_(self, event):
-        p = event.pos()
-        if self._screenshot_mode == self.Mode.New:
-            self._screenshot_rect_point_start.setX(self._screenshot_point_start.x())
-            self._screenshot_rect_point_start.setY(self._screenshot_point_start.y())
-            self._screenshot_rect_point_end = event.pos()
-        elif self._screenshot_mode == self.Mode.Edit:
-            d_p = p-self._screenshot_point_start
-            d_p_x, d_p_y = d_p.x(), d_p.y()
-            o_x_0, o_y_0 = self._screenshot_rect_point_start_offset_temp
-            o_x_1, o_y_1 = self._screenshot_rect_point_end_offset_temp
-            if self._screenshot_rect_region_edit == self.RectRegion.Inside:
-                self._screenshot_rect_point_start_offset[0] = o_x_0+d_p_x
-                self._screenshot_rect_point_start_offset[1] = o_y_0+d_p_y
-                self._screenshot_rect_point_end_offset[0] = o_x_1+d_p_x
-                self._screenshot_rect_point_end_offset[1] = o_y_1+d_p_y
-            elif self._screenshot_rect_region_edit == self.RectRegion.Top:
-                self._screenshot_rect_point_start_offset[1] = o_y_0+d_p_y
-            elif self._screenshot_rect_region_edit == self.RectRegion.Bottom:
-                self._screenshot_rect_point_end_offset[1] = o_y_1+d_p_y
-            elif self._screenshot_rect_region_edit == self.RectRegion.Left:
-                self._screenshot_rect_point_start_offset[0] = o_x_0+d_p_x
-            elif self._screenshot_rect_region_edit == self.RectRegion.Right:
-                self._screenshot_rect_point_end_offset[0] = o_x_1+d_p_x
-            elif self._screenshot_rect_region_edit == self.RectRegion.TopLeft:
-                self._screenshot_rect_point_start_offset[0] = o_x_0+d_p_x
-                self._screenshot_rect_point_start_offset[1] = o_y_0+d_p_y
-            elif self._screenshot_rect_region_edit == self.RectRegion.TopRight:
-                self._screenshot_rect_point_start_offset[1] = o_y_0+d_p_y
-                self._screenshot_rect_point_end_offset[0] = o_x_1+d_p_x
-            elif self._screenshot_rect_region_edit == self.RectRegion.BottomLeft:
-                self._screenshot_rect_point_start_offset[0] = o_x_0+d_p_x
-                self._screenshot_rect_point_end_offset[1] = o_y_1+d_p_y
-            elif self._screenshot_rect_region_edit == self.RectRegion.BottomRight:
-                self._screenshot_rect_point_end_offset[0] = o_x_1+d_p_x
-                self._screenshot_rect_point_end_offset[1] = o_y_1+d_p_y
-
-        self._update_screenshot_geometry_()
-        self._widget.update()
-
-    def _do_screenshot_hover_(self, event):
-        if self._screenshot_mode == self.Mode.Edit:
-            pos = event.pos()
-
-            x, y = self._screenshot_rect.x(), self._screenshot_rect.y()
-            w, h = self._screenshot_rect.width(), self._screenshot_rect.height()
-
-            m_x, m_y = pos.x(), pos.y()
-
-            self._screenshot_rect_region_edit = self._get_rect_region_(
-                m_x, m_y, x, y, w, h, 8
-            )
-            cursor = self.CURSOR_MAPPER[self._screenshot_rect_region_edit]
-
-            self._widget.setCursor(QtGui.QCursor(cursor))
-
-    # noinspection PyUnusedLocal
-    def _do_screenshot_press_release_(self, event):
-        if self._screenshot_mode == self.Mode.New:
-            if self._screenshot_rect_point_start != self._screenshot_rect_point_end:
-                self._screenshot_mode = self.Mode.Edit
-        elif self._screenshot_mode == self.Mode.Edit:
-            self._screenshot_rect_point_start_offset_temp[0] = self._screenshot_rect_point_start_offset[0]
-            self._screenshot_rect_point_start_offset_temp[1] = self._screenshot_rect_point_start_offset[1]
-            self._screenshot_rect_point_end_offset_temp[0] = self._screenshot_rect_point_end_offset[0]
-            self._screenshot_rect_point_end_offset_temp[1] = self._screenshot_rect_point_end_offset[1]
-
-        self._widget.update()
-
-    def _update_screenshot_geometry_(self):
-        x, y = 0, 0
-        w, h = self._widget.width(), self._widget.height()
-
-        x_0, y_0 = self._screenshot_rect_point_start.x(), self._screenshot_rect_point_start.y()
-        x_1, y_1 = self._screenshot_rect_point_end.x(), self._screenshot_rect_point_end.y()
-
-        o_x_0, o_y_0 = self._screenshot_rect_point_start_offset
-        o_x_1, o_y_1 = self._screenshot_rect_point_end_offset
-
-        x_0 += o_x_0
-        y_0 += o_y_0
-        x_1 += o_x_1
-        y_1 += o_y_1
-
-        s_x, s_y = min(x_0, x_1), min(y_0, y_1)
-        s_w, s_h = abs(x_1-x_0), abs(y_1-y_0)
-
-        self._screenshot_rect.setRect(
-            s_x, s_y, s_w, s_h
-        )
-
-        t_w, t_h = self._help_text_draw_size
-
-        t_t_w, t_t_h = t_w-48, t_h-48
-
-        self._help_frame_draw_rect.setRect(
-            x+(w-t_w)/2, y+(h-t_h)/2, t_w, t_h
-        )
-        self._help_draw_rect.setRect(
-            x+(w-t_t_w)/2, y+(h-t_t_h)/2, t_t_w, t_t_h
-        )
-
-    def _cancel_screenshot_(self):
-        self.screenshot_finished.emit()
-        self._widget.close()
-        self._widget.deleteLater()
-
-    def _accept_screenshot_(self):
-        def fnc_():
-            x, y, w, h = self._get_screenshot_accept_geometry_args_()
-            self.screenshot_finished.emit()
-            self.screenshot_accepted.emit([x, y, w, h])
-            self._widget.close()
-            self._widget.deleteLater()
-
-        self._screenshot_mode = self.Mode.Stopped
-        self._widget.update()
-
-        AbsQtScreenshotBaseDef.CACHE = self._get_screenshot_accept_geometry_args_()
-
-        self._timer = QtCore.QTimer(self._widget)
-        self._timer.singleShot(100, fnc_)
-
-    def _start_screenshot_(self):
-        self.screenshot_started.emit()
-        self._widget.setGeometry(
-            QtWidgets.QApplication.desktop().rect()
-        )
-        self._widget.show()
-        self._widget.setCursor(
-            QtGui.QCursor(QtCore.Qt.CrossCursor)
-        )
-
-    @classmethod
-    def _get_rect_region_(cls, m_x, m_y, x, y, w, h, gap):
-        # top
-        if x+gap < m_x < x+w-gap and y-gap < m_y < y+gap:
-            return cls.RectRegion.Top
-        # bottom
-        elif x+gap < m_x < x+w-gap and y+h-gap < m_y < y+h+gap:
-            return cls.RectRegion.Bottom
-        # left
-        elif x-gap < m_x < x+gap and y+gap < m_y < y+h-gap:
-            return cls.RectRegion.Left
-        # right
-        elif x+w-gap < m_x < x+w+gap and y+gap < m_y < y+h-gap:
-            return cls.RectRegion.Right
-        # top left
-        elif x-gap < m_x < x+gap and y-gap < m_y < y+gap:
-            return cls.RectRegion.TopLeft
-        # top right
-        elif x+w-gap <= m_x <= x+w+gap and y-gap <= m_y <= y+gap:
-            return cls.RectRegion.TopRight
-        # bottom left
-        elif x-gap < m_x < x+gap and y+h-gap < m_y < y+h+gap:
-            return cls.RectRegion.BottomLeft
-        # bottom right
-        elif x+w-gap < m_x < x+w+gap and y+h-gap < m_y < y+h+gap:
-            return cls.RectRegion.BottomRight
-        # inside
-        elif x+gap < m_x < x+w-gap and y+gap < m_y < y+h-gap:
-            return cls.RectRegion.Inside
-        else:
-            return cls.RectRegion.Unknown
-
-    def _get_screenshot_accept_geometry_args_(self):
-        x, y = self._widget.x(), self._widget.y()
-
-        rect_0 = self._screenshot_rect
-        x_0, y_0, w_0, h_0 = rect_0.x(), rect_0.y(), rect_0.width(), rect_0.height()
-        return x+x_0, y+y_0, w_0, h_0
-
-    @classmethod
-    def _save_screenshot_to_(cls, geometry, file_path):
-        bsc_storage.StgFileOpt(file_path).create_directory()
-        rect = QtCore.QRect(*geometry)
-
-        if bsc_core.BasApplication.get_is_maya():
-            main_window = _gui_qt_core.GuiQtMaya.get_qt_main_window()
-            s = QtGui.QPixmap.grabWindow(
-                long(main_window.winId())
-            )
-            s.copy(rect).save(file_path)
-        else:
-            app_ = QtWidgets.QApplication
-
-            s = app_.primaryScreen().grabWindow(
-                app_.desktop().winId()
-            )
-            s.copy(rect).save(file_path)
 
 
 class AbsQtItemDagLoading(object):

@@ -159,8 +159,8 @@ class QtInputAsFilter(
             )
         )
         #
-        self.__text_bubbles = _bubble.QtTextBubbles()
-        self._input_layout.addWidget(self.__text_bubbles)
+        self._text_bubbles = _bubble.QtTextBubbles()
+        self._input_layout.addWidget(self._text_bubbles)
         #
         self._entry_widget = self.QT_ENTRY_CLS()
         self._input_layout.addWidget(self._entry_widget)
@@ -189,16 +189,17 @@ class QtInputAsFilter(
         #
         self._build_input_history_(self._history_button)
         self._entry_widget.entry_value_change_accepted.connect(self._push_history_)
-        self._entry_widget.entry_value_change_accepted.connect(self.__text_bubbles._create_bubble_)
+        self._entry_widget.entry_value_change_accepted.connect(self._text_bubbles._create_bubble_)
         #
-        self.__text_bubbles._set_entry_widget_(self._entry_widget)
+        self._text_bubbles._set_entry_widget_(self._entry_widget)
+        # noinspection PyUnresolvedReferences
         self._entry_widget.textEdited.connect(self._do_refresh_filter_tip_)
-        self._entry_widget.user_entry_text_accepted.connect(self.__text_bubbles._create_bubble_)
+        self._entry_widget.user_entry_text_accepted.connect(self._text_bubbles._create_bubble_)
         self._entry_widget.user_entry_text_accepted.connect(self._push_history_)
-        self._entry_widget.key_backspace_extra_pressed.connect(self.__text_bubbles._execute_bubble_backspace_)
+        self._entry_widget.key_backspace_extra_pressed.connect(self._text_bubbles._execute_bubble_backspace_)
         #
-        self.__text_bubbles.bubbles_value_changed.connect(self._do_refresh_filter_tip_)
-        self.__text_bubbles.bubbles_value_changed.connect(self._do_input_change_)
+        self._text_bubbles.bubbles_value_changed.connect(self._do_refresh_filter_tip_)
+        self._text_bubbles.bubbles_value_changed.connect(self._do_input_change_)
         #
         self._entry_clear_button.press_clicked.connect(self._do_refresh_filter_tip_)
 
@@ -212,7 +213,7 @@ class QtInputAsFilter(
             self._entry_frame_widget._refresh_widget_draw_()
 
     def _get_all_keywords_(self):
-        _ = copy.copy(self.__text_bubbles._get_all_bubble_texts_())
+        _ = copy.copy(self._text_bubbles._get_all_bubble_texts_())
         if self._entry_widget._get_value_():
             _.append(self._entry_widget._get_value_())
         return list(_)
@@ -301,10 +302,10 @@ class QtInputAsFilter(
         if self._filter_result_count is not None:
             if self._filter_index_current is not None:
                 self._result_label._set_name_text_(
-                    '{} / {}'.format(self._filter_index_current+1, self._filter_result_count)
+                    '{}/{}'.format(self._filter_index_current+1, self._filter_result_count)
                     )
             else:
-                self._result_label._set_name_text_('1 / {}'.format(self._filter_result_count))
+                self._result_label._set_name_text_('1/{}'.format(self._filter_result_count))
         else:
             self._result_label._set_name_text_('')
 
@@ -320,7 +321,7 @@ class QtInputAsFilter(
         self._get_entry_widget_()._set_focused_(boolean)
 
     def _accept_element_(self, value):
-        self.__text_bubbles._create_bubble_(value)
+        self._text_bubbles._create_bubble_(value)
         self.input_value_changed.emit()
         self.input_value_change_accepted.emit(value)
 

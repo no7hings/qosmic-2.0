@@ -60,7 +60,7 @@ class QtColors(object):
     TextDisable = QtGui.QColor(*gui_core.GuiRgba.DarkGray)
     TextTemporary = QtGui.QColor(*gui_core.GuiRgba.Gray)
     TextWarning = QtGui.QColor(*gui_core.GuiRgba.Yellow)
-    TextError = QtGui.QColor(*gui_core.GuiRgba.Red)
+    TextError = QtGui.QColor(*gui_core.GuiRgba.TorchRed)
     TextLock = QtGui.QColor(*gui_core.GuiRgba.Purple)
     TextCorrect = QtGui.QColor(*gui_core.GuiRgba.Green)
     TextActive = QtGui.QColor(*gui_core.GuiRgba.Blue)
@@ -71,7 +71,7 @@ class QtColors(object):
     Progress = QtGui.QColor(63, 255, 127, 255)
     ProgressBackground = QtGui.QColor(47, 47, 47, 255)
 
-    Red = QtGui.QColor(*gui_core.GuiRgba.Red)
+    Red = QtGui.QColor(*gui_core.GuiRgba.TorchRed)
     Yellow = QtGui.QColor(*gui_core.GuiRgba.Yellow)
     Transparent = QtGui.QColor(*gui_core.GuiRgba.Transparent)
 

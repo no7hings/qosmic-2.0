@@ -215,7 +215,7 @@ class GuiQtUtil(object):
         app = QtWidgets.QApplication(sys.argv)
         app.setPalette(cls.generate_qt_palette(tool_tip=True))
         cls.add_qt_fonts(gui_core.GuiFont.get_all())
-        app.setFont(GuiQtFont.generate())
+        app.setFont(QtFont.generate())
         return app
 
     @classmethod
@@ -428,7 +428,7 @@ class GuiQtIcon(object):
             painter.setBrush(QtGui.QBrush(QtGui.QColor(*background_color_)))
             painter.drawRoundedRect(icon_rect, 2, 2, QtCore.Qt.AbsoluteSize)
             painter.setPen(QtGui.QColor(*text_color_))
-            painter.setFont(GuiQtFont.generate(size=int(rd * .675), italic=True))
+            painter.setFont(QtFont.generate(size=int(rd * .675), italic=True))
             painter.drawText(
                 rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
                 str(bsc_core.RawTextMtd.get_first_word(name)).capitalize()
@@ -453,21 +453,18 @@ class GuiQtColor(object):
                 return _
             elif isinstance(_, (tuple, list)):
                 return cls.to_qt_color_fnc(*_)
-            else:
-                raise TypeError()
-        else:
-            return cls.to_qt_color_fnc(*args)
+            raise TypeError()
+        return cls.to_qt_color_fnc(*args)
 
     @classmethod
     def to_qt_color_fnc(cls, *args):
         if len(args) == 3:
             r, g, b = args
             a = 255
+            return QtGui.QColor(r, g, b, a)
         elif len(args) == 4:
-            r, g, b, a = args
-        else:
-            raise TypeError()
-        return QtGui.QColor(r, g, b, a)
+            return QtGui.QColor(*args)
+        raise TypeError()
 
     @classmethod
     def to_rgb(cls, *args):
@@ -536,7 +533,7 @@ class GuiQtColor(object):
         return (b_r, b_g, b_b, b_a), (t_l, t_l, t_l, 255)
 
 
-class GuiQtFont(object):
+class QtFont(object):
     @classmethod
     def generate(cls, size=None, weight=None, italic=False, underline=False, strike_out=False, family='Arial'):
         f = QtGui.QFont()
@@ -563,7 +560,7 @@ class GuiQtFont(object):
 
     @classmethod
     def compute_size(cls, size, text, w_adjust=True):
-        f = GuiQtFont.generate()
+        f = QtFont.generate()
         f.setPointSize(size)
         m = QtGui.QFontMetrics(f)
         w = m.width(text) + size if w_adjust is True else 0
@@ -572,7 +569,7 @@ class GuiQtFont(object):
 
     @classmethod
     def compute_size_2(cls, size, text, w_adjust=True):
-        f = GuiQtFont.generate()
+        f = QtFont.generate()
         f.setPixelSize(size)
         m = QtGui.QFontMetrics(f)
         w = m.width(text) + size if w_adjust is True else 0
@@ -629,7 +626,7 @@ class GuiQtPixmap(object):
                 painter.drawRect(icon_rect)
             #
             painter.setPen(_color_and_brush.QtFontColors.Basic)
-            painter.setFont(GuiQtFont.generate(size=int(rd * .6), italic=True))
+            painter.setFont(QtFont.generate(size=int(rd * .6), italic=True))
             painter.drawText(
                 rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
                 str(name[0]).capitalize()
@@ -702,7 +699,7 @@ class GuiQtPixmap(object):
         painter.setBrush(QtGui.QBrush(QtGui.QColor(*background_color_)))
         painter.drawRoundedRect(tag_rect, txt_w / 2, txt_h / 2, QtCore.Qt.AbsoluteSize)
         painter.setPen(QtGui.QColor(*text_color_))
-        painter.setFont(GuiQtFont.generate(size=int(txt_w * .625)))
+        painter.setFont(QtFont.generate(size=int(txt_w * .625)))
         painter.drawText(
             tag_rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter, str(tag[0]).capitalize()
         )
@@ -845,35 +842,35 @@ class _ClassProperty(property):
 class QtFonts(object):
     # @_ClassProperty
     # def Default(cls):
-    #     return GuiQtFont.generate(size=8)
+    #     return QtFont.generate(size=8)
 
-    Default = GuiQtFont.generate(size=8)
-    DefaultItalic = GuiQtFont.generate(size=8, italic=True)
-    Medium = GuiQtFont.generate(size=10)
-    Large = GuiQtFont.generate(size=12)
+    Default = QtFont.generate(size=8)
+    DefaultItalic = QtFont.generate(size=8, italic=True)
+    Medium = QtFont.generate(size=10)
+    Large = QtFont.generate(size=12)
 
-    Index = GuiQtFont.generate(size=8)
+    Index = QtFont.generate(size=8)
 
-    NameNormal = GuiQtFont.generate(size=8)
-    NameDisable = GuiQtFont.generate(size=8, italic=True, strike_out=True)
-    NameKey = GuiQtFont.generate(size=8, italic=True)
-    NameValue = GuiQtFont.generate(size=8)
+    NameNormal = QtFont.generate(size=8)
+    NameDisable = QtFont.generate(size=8, italic=True, strike_out=True)
+    NameKey = QtFont.generate(size=8, italic=True)
+    NameValue = QtFont.generate(size=8)
 
-    Description = GuiQtFont.generate(size=10)
-    Content = GuiQtFont.generate(size=8, family='Monospace')
+    Description = QtFont.generate(size=10)
+    Content = QtFont.generate(size=8, family='Monospace')
 
-    Loading = GuiQtFont.generate(size=10, weight=75, italic=True)
+    Loading = QtFont.generate(size=10, weight=75, italic=True)
 
-    Label = GuiQtFont.generate(size=8)
-    Button = GuiQtFont.generate(size=9)
-    Chart = GuiQtFont.generate(size=10, italic=True)
+    Label = QtFont.generate(size=8)
+    Button = QtFont.generate(size=9)
+    Chart = QtFont.generate(size=10, italic=True)
 
-    ToolGroup = GuiQtFont.generate(size=9, weight=75, italic=True)
+    ToolGroup = QtFont.generate(size=9, weight=75, italic=True)
 
-    Title = GuiQtFont.generate(size=12)
-    SubTitle = GuiQtFont.generate(size=11, italic=True)
+    Title = QtFont.generate(size=12)
+    SubTitle = QtFont.generate(size=11, italic=True)
 
-    MenuSeparator = GuiQtFont.generate(size=8, italic=True)
+    MenuSeparator = QtFont.generate(size=8, italic=True)
 
 
 class GuiQtCache(object):

@@ -535,7 +535,7 @@ class AbsPrxViewFilterTagDef(object):
     def set_tag_filter_all_keys_src(self, *args, **kwargs):
         self.view._set_view_tag_filter_data_src_(*args, **kwargs)
         self.refresh_items_visible_by_any_filter()
-        self.view._refresh_view_all_items_viewport_showable_()
+        self.view._refresh_all_items_viewport_showable_()
 
     def get_item_states(self, items):
         return self.view._get_view_item_states_(items)

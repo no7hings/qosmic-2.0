@@ -19,7 +19,7 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
                 #     '/l/temp/td/dongchangbao/Arnold_Shader_Suite_for_MAYA_v2.0/09-ADVANCED/Del_Cracks_11_1_1_1.jpg'
                 # ).generate_thumbnail()
                 thumbnail_file_path = '/production/library/resource/all/surface/fort_damaged_floor_te3maaeg/v0001/image/preview_test.jpg'
-                # self._prx_list_view.set_loading_update()
+                # self._prx_list_view.process_event()
                 prx_item_widget.set_image(thumbnail_file_path)
                 if i_ % 2 == 0:
                     prx_item_widget.set_icons_by_pixmap(
@@ -91,7 +91,6 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
         self._prx_list_view.get_top_tool_bar().set_expanded(True)
         self._prx_list_view.set_selection_use_multiply()
         # self._prx_list_view.set_drag_enable(True)
-        self._prx_list_view.set_item_icon_frame_draw_enable(True)
         self._prx_list_view.set_item_image_frame_draw_enable(True)
         self._prx_list_view.set_item_name_frame_draw_enable(True)
         self._prx_list_view.get_check_tool_box().set_visible(True)

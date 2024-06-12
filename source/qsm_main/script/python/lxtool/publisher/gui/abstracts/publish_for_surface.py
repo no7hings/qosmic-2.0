@@ -781,7 +781,7 @@ class AbsPnlPublisherForSurface(gui_prx_widgets.PrxSessionWindow):
 
         stg_task = c.get_stg_task(**self._rsv_task.properties.get_value())
 
-        p.run_as_thread(
+        p.run_build_extra_use_thread(
             cache_fnc_, built_fnc_, post_fnc_
         )
 

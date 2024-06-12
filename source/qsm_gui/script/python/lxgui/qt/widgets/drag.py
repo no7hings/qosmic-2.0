@@ -153,7 +153,7 @@ class QtDragForTreeItem(QtGui.QDrag):
         pnt._draw_text_by_rect_(
             rect=text_rect,
             text=name_text,
-            font_color=_qt_core.QtFontColors.Basic
+            text_color=_qt_core.QtFontColors.Basic
         )
         #
         pnt.end()
