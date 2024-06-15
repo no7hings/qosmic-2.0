@@ -54,11 +54,15 @@ class QtEntryAsConstant(
         self._maximum = 1
         self._minimum = 0
 
+        # noinspection PyUnresolvedReferences
         self.returnPressed.connect(self.user_entry_finished.emit)
-        self.returnPressed.connect(self.__execute_text_change_accepted_)
+        # noinspection PyUnresolvedReferences
+        self.returnPressed.connect(self._execute_text_change_accepted_)
         # emit send by setText
+        # noinspection PyUnresolvedReferences
         self.textChanged.connect(self._do_entry_change_)
         # user enter
+        # noinspection PyUnresolvedReferences
         self.textEdited.connect(self._do_user_entry_change_)
 
         self.setStyleSheet(
@@ -79,7 +83,7 @@ class QtEntryAsConstant(
 
         # self.setFocusPolicy(QtCore.Qt.StrongFocus)
 
-    def __execute_text_change_accepted_(self):
+    def _execute_text_change_accepted_(self):
         self.user_entry_text_accepted.emit(self.text())
         self.entry_value_change_accepted.emit(
             self._get_value_()
@@ -260,6 +264,7 @@ class QtEntryAsConstant(
         super(QtEntryAsConstant, self)._set_entry_use_as_storage_(boolean)
         if boolean is True:
             action = QtWidgets.QAction(self)
+            # noinspection PyUnresolvedReferences
             action.triggered.connect(
                 self._execute_open_in_system_
             )
@@ -376,7 +381,6 @@ class QtEntryAsConstant(
     def _connect_focused_to_(self, widget):
         pass
 
-    #
     def _is_selected_(self):
         boolean = False
         if self.selectedText():
@@ -685,7 +689,7 @@ class QtEntryAsList(
 
         self._item_icon_file_path = None
 
-        self._empty_icon_name = 'placeholder/default'
+        self._empty_icon_name = 'placeholder/empty'
         self._empty_text = None
 
     def contextMenuEvent(self, event):
@@ -808,6 +812,7 @@ class QtEntryAsList(
         ]
         for i_fnc, i_shortcut in actions:
             i_action = QtWidgets.QAction(self)
+            # noinspection PyUnresolvedReferences
             i_action.triggered.connect(
                 i_fnc
             )
@@ -821,10 +826,15 @@ class QtEntryAsList(
             )
             self.addAction(i_action)
 
+    def _do_action_open_(self, path):
+        if os.path.isfile(path):
+            os.startfile(path)
+
     def _do_action_copy_(self):
         selected_item_widgets = self._get_selected_item_widgets_()
         if selected_item_widgets:
             values = [i._get_value_() for i in selected_item_widgets]
+            # noinspection PyArgumentList
             QtWidgets.QApplication.clipboard().setText(
                 '\n'.join(values)
             )
@@ -833,12 +843,14 @@ class QtEntryAsList(
         selected_item_widgets = self._get_selected_item_widgets_()
         if selected_item_widgets:
             values = [i._get_value_() for i in selected_item_widgets]
+            # noinspection PyArgumentList
             QtWidgets.QApplication.clipboard().setText(
                 '\n'.join(values)
             )
             [self._delete_value_(i) for i in values]
 
     def _do_action_paste_(self):
+        # noinspection PyArgumentList
         text = QtWidgets.QApplication.clipboard().text()
         if text:
             values = [i.strip() for i in text.split('\n')]
@@ -916,7 +928,7 @@ class QtEntryAsList(
         # use original value, do not encode
         if value and value not in self._values:
             self._values.append(value)
-            self._create_bubble_(value)
+            self._create_item_(value)
             self.entry_value_added.emit()
 
     def _insert_value_(self, index, value):
@@ -938,6 +950,7 @@ class QtEntryAsList(
         item_widget._set_name_text_(text)
         item_widget._set_tool_tip_(text)
         if self._entry_use_as_storage is True:
+            item_widget.press_dbl_clicked.connect(lambda: self._do_action_open_(text))
             if os.path.isdir(text):
                 item_widget._set_icon_(
                     _qt_core.GuiQtDcc.get_qt_folder_icon(use_system=True)
@@ -954,7 +967,7 @@ class QtEntryAsList(
             else:
                 item_widget._set_icon_name_text_(text)
 
-    def _create_bubble_(self, value):
+    def _create_item_(self, value):
         def cache_fnc_():
             return [item_widget, value]
 
@@ -994,6 +1007,7 @@ class QtEntryAsList(
         super(QtEntryAsList, self)._set_entry_use_as_storage_(boolean)
         if boolean is True:
             i_action = QtWidgets.QAction(self)
+            # noinspection PyUnresolvedReferences
             i_action.triggered.connect(
                 self._execute_open_in_system_
             )
@@ -1128,7 +1142,7 @@ class QtEntryAsBubble(
         painter = _qt_core.QtPainter(self)
         if self.__text is not None:
             offset = self._get_action_offset_()
-            color_bkg, color_txt = _qt_core.GuiQtColor.generate_color_args_by_text(self.__text)
+            color_bkg, color_txt = _qt_core.QtColor.generate_color_args_by_text(self.__text)
 
             rect_frame = self.__rect_frame_draw
             rect_frame = QtCore.QRect(

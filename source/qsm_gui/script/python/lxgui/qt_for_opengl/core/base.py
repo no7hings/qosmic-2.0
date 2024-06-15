@@ -91,7 +91,7 @@ class GuiGLUsdData(object):
     def __build_mesh(self, prim):
         mesh_opt = usd_core.UsdMeshOpt(usd_core.UsdGeom.Mesh(prim))
         path = mesh_opt.get_path()
-        r, g, b = bsc_core.PthNodeOpt(path).get_plant_rgb(maximum=1.0)
+        r, g, b = bsc_core.BscPathOpt(path).get_plant_rgb(maximum=1.0)
         r_p, g_p, b_p = r/1.0, g/1.0, b/1.0
         variants = self._p_o.get_variants(path)
         index = int(variants['index'])

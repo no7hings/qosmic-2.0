@@ -9,7 +9,7 @@ import lxbasic.storage as bsc_storage
 
 import qsm_screw.core as qsm_scr_core
 
-import lxbasic.media.core as bsc_mda_core
+import lxbasic.cv.core as bsc_cv_core
 
 import os
 
@@ -17,12 +17,15 @@ asset_type = 'video'
 
 d = 'F:/video/film'
 
-location = 'Z:/libraries/media/all'
+location = 'Z:/libraries/lazy-resource/all'
 
 stage = qsm_scr_core.Stage(
-    'Z:/libraries/media/.database/video.db'
+    'video'
 )
 stage.connect()
+stage.initialize()
+
+stage.build()
 
 ps = [
     '{gui_name}[{gui_name_chs}]',
@@ -56,7 +59,7 @@ for i_directory in bsc_storage.StgDirectoryOpt(
 
                 i_gui_name = bsc_core.RawTextMtd.to_prettify(i_name)
 
-                i_node_path = '/{}/{}'.format(asset_type, i_name)
+                i_node_path = '/{}'.format(i_name)
 
                 try:
                     ctime = i_file.get_creation_timestamp()
@@ -73,11 +76,11 @@ for i_directory in bsc_storage.StgDirectoryOpt(
                         gui_name_chs=i_data['gui_name_chs'],
                     )
 
-                i_node_directory_path = '{}{}'.format(location, i_node_path)
+                i_node_directory_path = '{}/video{}'.format(location, i_node_path)
 
-                bsc_storage.StgDirectoryOpt(i_node_directory_path).do_create()
+                # bsc_storage.StgDirectoryOpt(i_node_directory_path).do_create()
 
-                i_type_path = '/video/movies/unspecified'
+                i_type_path = '/movies/feature'
                 stage.create_assign(i_node_path, i_type_path, type='type_assign')
 
                 i_tag_path = '/years/{}'.format(i_data['year'])
@@ -87,19 +90,19 @@ for i_directory in bsc_storage.StgDirectoryOpt(
                 )
                 stage.create_assign(i_node_path, i_tag_path, type='tag_assign')
 
-                stage.create_property(
-                    i_node_path, 'directory', i_directory.path, type='parameter'
+                stage.create_parameter(
+                    i_node_path, 'directory', i_directory.path
                 )
-                stage.create_property(
-                    i_node_path, 'video', i_file.path, type='parameter'
+                stage.create_parameter(
+                    i_node_path, 'video', i_file.path
                 )
 
-                i_thumbnail_path = '{}/image/{}.jpg'.format(i_node_directory_path, i_name)
+                i_thumbnail_path = '{}/thumbnail/{}.png'.format(i_node_directory_path, i_name)
 
                 if os.path.isfile(i_thumbnail_path) is False:
                     print i_thumbnail_path
                     try:
-                        bsc_mda_core.FrameExtractor(
+                        bsc_cv_core.FrameExtractor(
                             i_file.path, i_thumbnail_path
                         ).run()
                     except Exception:

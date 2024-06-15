@@ -661,13 +661,14 @@ class QtMainWindow(
             self._do_kill_all_thread_worker_()
             event.accept()
 
-    def _exec_message_(self, message):
+    def _exec_message_(self, message, *args, **kwargs):
         w = QtMessageBox(self)
         w._set_title_('Message')
         w._set_ok_visible_(True)
         w._set_no_visible_(True)
         w._set_message_(message)
         w._do_exec_()
+        return w._get_result_()
 
     def _set_icon_name_text_(self, text):
         self.setWindowIcon(

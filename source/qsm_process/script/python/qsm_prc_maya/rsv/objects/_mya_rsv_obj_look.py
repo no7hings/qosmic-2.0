@@ -35,7 +35,7 @@ class RsvDccLookHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
         else:
             raise TypeError()
         #
-        root_dag_opt = bsc_core.PthNodeOpt(root)
+        root_dag_opt = bsc_core.BscPathOpt(root)
         mya_root_dag_opt = root_dag_opt.translate_to(pathsep)
         mya_root = mya_dcc_objects.Group(mya_root_dag_opt.value)
         if mya_root.get_is_exists() is True:
@@ -117,7 +117,7 @@ class RsvDccLookHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
 
         look_yml_file_rsv_unit = self._rsv_task.get_rsv_unit(keyword=keyword)
 
-        root_dcc_dag_path = bsc_core.PthNodeOpt(root)
+        root_dcc_dag_path = bsc_core.BscPathOpt(root)
         root_mya_dag_path = root_dcc_dag_path.translate_to(pathsep)
         root_mya_obj = mya_dcc_objects.Group(root_mya_dag_path.path)
         if root_mya_obj.get_is_exists() is True:

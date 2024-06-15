@@ -36,7 +36,7 @@ class XgenExporter(gnl_fnc_abstracts.AbsFncOptionBase):
 
     @classmethod
     def _set_grow_mesh_abc_export_(cls, directory_path, location):
-        mya_location = bsc_core.PthNodeOpt(location).translate_to('|').to_string()
+        mya_location = bsc_core.BscPathOpt(location).translate_to('|').to_string()
         group = mya_dcc_objects.Group(mya_location)
         xgen_collection_obj_paths = group.get_all_shape_paths(include_obj_type=[mya_core.MyaNodeTypes.XgenPalette])
         for i_xgen_collection_obj_path in xgen_collection_obj_paths:
@@ -60,7 +60,7 @@ class XgenExporter(gnl_fnc_abstracts.AbsFncOptionBase):
 
     @classmethod
     def _set_xgen_collection_export_(cls, xgen_project_directory_path_tgt, xgen_collection_directory_path_tgt, location):
-        mya_location = bsc_core.PthNodeOpt(location).translate_to('|').to_string()
+        mya_location = bsc_core.BscPathOpt(location).translate_to('|').to_string()
         group = mya_dcc_objects.Group(mya_location)
         xgen_collection_obj_paths = group.get_all_shape_paths(include_obj_type=[mya_core.MyaNodeTypes.XgenPalette])
         for i_xgen_collection_obj_path in xgen_collection_obj_paths:
@@ -122,7 +122,7 @@ class XgenUsdExporter(gnl_fnc_abstracts.AbsFncOptionBase):
     def set_run(self):
         option_opt = self.get_option()
         location = option_opt.get('location')
-        location_dag_opt = bsc_core.PthNodeOpt(location)
+        location_dag_opt = bsc_core.BscPathOpt(location)
         mya_location_obj_path = location_dag_opt.translate_to(
             pathsep=mya_core.MyaUtil.OBJ_PATHSEP
         )

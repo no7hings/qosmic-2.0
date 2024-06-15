@@ -351,14 +351,14 @@ class QtTabView(
     def eventFilter(self, *args):
         widget, event = args
         if widget == self:
-            if event.type() == QtCore.QEvent.Enter:
+            if event.type() == QtCore.QEvent.Resize:
+                self._refresh_widget_all_()
+            elif event.type() == QtCore.QEvent.ToolTip:
+                self._do_show_tool_tip_(event)
+            elif event.type() == QtCore.QEvent.Enter:
                 pass
             elif event.type() == QtCore.QEvent.Leave:
                 self._clear_item_hover_()
-            elif event.type() == QtCore.QEvent.ToolTip:
-                self._do_show_tool_tip_(event)
-            elif event.type() == QtCore.QEvent.Resize:
-                self._refresh_widget_all_()
             elif event.type() == QtCore.QEvent.MouseButtonPress:
                 self._index_press_tmp = self._compute_press_index_loc_(
                     event.pos()
@@ -401,7 +401,7 @@ class QtTabView(
                     # when drag press move less than 10px, do press release also
                     if self._get_action_flag_is_match_(self.ActionFlag.Press, self.ActionFlag.DragPress):
                         # send signal in release action
-                        self._do_press_release_(event)
+                        self._do_mouse_press_release_(event)
                     elif self._get_action_flag_is_match_(self.ActionFlag.DragChildPolish):
                         self._do_drop_(event)
                 elif event.button() == QtCore.Qt.RightButton:
@@ -475,7 +475,7 @@ class QtTabView(
     def _set_tab_add_menu_data_(self, data):
         self._tab_add_button._set_menu_data_(data)
 
-    def _set_tab_add_menu_gain_fnc_(self, fnc):
+    def _set__gui_tab_add_menu_gain_fnc_(self, fnc):
         self._tab_add_button._set_menu_data_generate_fnc_(fnc)
 
     def _set_tab_menu_enable_(self, boolean):
@@ -566,13 +566,16 @@ class QtTabView(
                     '"RMB-click" to show more actions for this page',
                 ]
             )
-            # noinspection PyArgumentList
+            rect = self._get_rect_at_(self._index_hover)
+            p = rect.bottomRight()
+            p = self.mapToGlobal(p) + QtCore.QPoint(0, -18)
+
             QtWidgets.QToolTip.showText(
-                QtGui.QCursor.pos(), css, self
+                p, css, self
             )
 
     # noinspection PyUnusedLocal
-    def _do_press_release_(self, event):
+    def _do_mouse_press_release_(self, event):
         if self._index_press_tmp is not None:
             self._switch_current_to_(
                 self._index_press_tmp
@@ -661,6 +664,9 @@ class QtTabView(
 
     def _get_page_name_text_at_(self, index):
         return self._tab_item_stack.get_name_at(index)
+
+    def _get_rect_at_(self, index):
+        return self._tab_item_stack.get_rect_at(index)
 
     def _get_page_tool_tip_text_at_(self, index):
         return self._tab_item_stack.get_tool_tip_at(index)

@@ -37,6 +37,9 @@ class GuiQtModForTabItem(object):
 
     name_text = property(get_name)
 
+    def get_rect(self):
+        return self._rect
+
     def set_icon_text(self, text):
         self._icon_text = text
 
@@ -127,6 +130,12 @@ class GuiQtModForTabItemStack(object):
         if item:
             # noinspection PyUnresolvedReferences
             return item.get_name()
+
+    def get_rect_at(self, index):
+        item = self.get_item_at(index)
+        if item:
+            # noinspection PyUnresolvedReferences
+            return item.get_rect()
 
     def get_tool_tip_at(self, index):
         item = self.get_item_at(index)

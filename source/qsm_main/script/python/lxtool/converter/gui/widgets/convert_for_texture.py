@@ -64,7 +64,7 @@ class PnlTextureConverter(gui_prx_widgets.PrxSessionWindow):
         h_s.add_widget(s_1)
         self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         s_1.add_widget(self._options_prx_node)
-        self._options_prx_node.create_ports_by_data(
+        self._options_prx_node.build_by_data(
             self._session.configure.get('build.node.options'),
         )
         #

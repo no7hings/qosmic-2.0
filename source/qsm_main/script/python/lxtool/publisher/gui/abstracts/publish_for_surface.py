@@ -315,7 +315,7 @@ class AbsValidatorOpt(object):
         return prx_item
 
     def _get_node_(self, scene_prx_item, rsv_scene_properties, group_prx_item, dcc_path, description, status):
-        dcc_path_dag_opt = bsc_core.PthNodeOpt(dcc_path)
+        dcc_path_dag_opt = bsc_core.BscPathOpt(dcc_path)
         pathsep = dcc_path_dag_opt.get_pathsep()
         pathsep_src = rsv_scene_properties.get('dcc.pathsep')
         if pathsep == pathsep_src:
@@ -336,7 +336,7 @@ class AbsValidatorOpt(object):
         return prx_item
 
     def _get_component_(self, scene_prx_item, node_prx_item, dcc_path, description, status):
-        dcc_path_dag_opt = bsc_core.PthNodeOpt(dcc_path)
+        dcc_path_dag_opt = bsc_core.BscPathOpt(dcc_path)
         pathsep = dcc_path_dag_opt.get_pathsep()
         if pathsep != self.DCC_PATHSEP:
             dcc_path = dcc_path_dag_opt.translate_to(self.DCC_PATHSEP).to_string()
@@ -453,7 +453,7 @@ class AbsPnlPublisherForSurface(gui_prx_widgets.PrxSessionWindow):
 
         self._cfg_options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         sa_1.add_widget(self._cfg_options_prx_node)
-        self._cfg_options_prx_node.create_ports_by_data(
+        self._cfg_options_prx_node.build_by_data(
             self._session.configure.get('build.node.validation_options'),
         )
 
@@ -510,7 +510,7 @@ class AbsPnlPublisherForSurface(gui_prx_widgets.PrxSessionWindow):
         layer_widget.add_widget(sa_2)
         self._publish_options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         sa_2.add_widget(self._publish_options_prx_node)
-        self._publish_options_prx_node.create_ports_by_data(
+        self._publish_options_prx_node.build_by_data(
             self._session.configure.get('build.node.publish_options')
         )
 

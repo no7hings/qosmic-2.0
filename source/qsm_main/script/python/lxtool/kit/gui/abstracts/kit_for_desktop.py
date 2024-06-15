@@ -186,7 +186,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         gui_core.GuiHistory.set_one(self.KEY_TOOL_GROUP_ORDER, tool_group_order_dict)
 
     def restore_variants(self):
-        self.__gui_page_query = _GuiPageQuery(self)
+        self._gui_page_query = _GuiPageQuery(self)
         self.__gui_query = _GuiQuery(self)
 
         self.__hook_dict = {}
@@ -207,8 +207,8 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         self.add_widget(self._prx_tab_view)
         self._prx_tab_view.set_drag_enable(True)
         self._prx_tab_view.set_add_enable(True)
-        self._prx_tab_view.set_add_menu_data_gain_fnc(self.tab_add_menu_gain_fnc)
-        self._prx_tab_view.connect_delete_accepted_to(self.gui_tab_page_delete_fnc)
+        self._prx_tab_view.set_add_menu_data_gain_fnc(self._gui_tab_add_menu_gain_fnc)
+        self._prx_tab_view.connect_delete_accepted_to(self._gui_tab_page_delete_fnc)
 
         self.__bubbles_filter = qt_widgets.QtBubbleAsChoice(self._qt_widget)
         self.__bubbles_filter._setup_()
@@ -237,7 +237,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
 
     def gui_build_filter(self):
         all_tool_keys = []
-        page_keys = self.__gui_page_query.get_all_filterable_keys()
+        page_keys = self._gui_page_query.get_all_filterable_keys()
         for i_page_key in page_keys:
             i_tool_keys = kit_core.KitDesktopHook.find_all_tool_keys_at(i_page_key)
             all_tool_keys.extend(i_tool_keys)
@@ -256,15 +256,15 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
             _, execute_fnc = args
             self.__debug_run(execute_fnc)
 
-    def tab_add_menu_gain_fnc(self):
+    def _gui_tab_add_menu_gain_fnc(self):
         list_ = []
         # default
 
-        for i_page_key in self.__gui_page_query.get_defaults_waiting():
+        for i_page_key in self._gui_page_query.get_defaults_waiting():
             list_.append(
                 (
                     i_page_key, 'tag', functools.partial(
-                        self.gui_tab_page_add_fnc, i_page_key, True
+                        self._gui_tab_add_page_fnc, i_page_key, True
                     )
                 )
             )
@@ -272,12 +272,12 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
             list_.append(())
         # department
         sub_list = []
-        for i_page_key in self.__gui_page_query.get_departments_waiting():
+        for i_page_key in self._gui_page_query.get_departments_waiting():
             i_name = i_page_key.split('/')[-1]
             sub_list.append(
                 (
                     i_name, 'tag', functools.partial(
-                        self.gui_tab_page_add_fnc, i_page_key, True
+                        self._gui_tab_add_page_fnc, i_page_key, True
                     )
                 )
             )
@@ -289,12 +289,12 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         )
         # user
         sub_list = []
-        for i_page_key in self.__gui_page_query.get_users_waiting():
+        for i_page_key in self._gui_page_query.get_users_waiting():
             i_name = i_page_key.split('/')[-1]
             sub_list.append(
                 (
                     i_name, 'user', functools.partial(
-                        self.gui_tab_page_add_fnc, i_page_key, True
+                        self._gui_tab_add_page_fnc, i_page_key, True
                     )
                 )
             )
@@ -312,7 +312,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         s = gui_prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(s)
         self._create_option_prx_node = gui_prx_widgets.PrxOptionsNode('options')
-        self._create_option_prx_node.create_ports_by_data(
+        self._create_option_prx_node.build_by_data(
             self._session.configure.get('build.node.create_options')
         )
         s.add_widget(self._create_option_prx_node.widget)
@@ -339,7 +339,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         s = gui_prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(s)
         self._modify_option_prx_node = gui_prx_widgets.PrxOptionsNode('options')
-        self._modify_option_prx_node.create_ports_by_data(
+        self._modify_option_prx_node.build_by_data(
             self._session.configure.get('build.node.modify_options'),
         )
         s.add_widget(self._modify_option_prx_node.widget)
@@ -366,7 +366,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         s = gui_prx_widgets.PrxVScrollArea()
         layer_widget.add_widget(s)
         self._copy_option_prx_node = gui_prx_widgets.PrxOptionsNode('options')
-        self._copy_option_prx_node.create_ports_by_data(
+        self._copy_option_prx_node.build_by_data(
             self._session.configure.get('build.node.copy_options'),
         )
         s.add_widget(self._copy_option_prx_node.widget)
@@ -447,7 +447,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         group_sub_name = gui_configure.get('group_sub_name') or 'Tool'
         if 'gui_parent' in kwargs:
             gui_path = kwargs.get('gui_parent')
-            gui_path_opts = bsc_core.PthNodeOpt(gui_path).get_components()
+            gui_path_opts = bsc_core.BscPathOpt(gui_path).get_components()
             page_opt = gui_path_opts[1]
             page_name = page_opt.get_name()
             group_sub_opt = gui_path_opts[0]
@@ -593,15 +593,15 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         self.gui_build_all_for_customize()
 
     def gui_build_all_for_customize(self):
-        page_keys = self.__gui_page_query.get_placeholder_keys()
+        page_keys = self._gui_page_query.get_placeholder_keys()
 
         history_tag_keys = gui_core.GuiHistory.get_one(self.KEY_TAB_KEYS)
         if history_tag_keys:
-            page_keys = [i for i in history_tag_keys if i in self.__gui_page_query.get_all_keys()]
+            page_keys = [i for i in history_tag_keys if i in self._gui_page_query.get_all_keys()]
 
         with self.gui_bustling():
             for i_page_key in page_keys:
-                self.__gui_page_query.push_to_using(i_page_key)
+                self._gui_page_query.push_to_using(i_page_key)
 
                 self.gui_add_customize_for_page(i_page_key)
 
@@ -666,17 +666,17 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         )
         return False
 
-    def gui_tab_page_add_fnc(self, page_name, switch_to=False):
-        self.__gui_page_query.push_to_using(page_name)
-        self.gui_add_all_for_page(page_name, switch_to=switch_to)
+    def _gui_tab_add_page_fnc(self, page_name, switch_to=False):
+        self._gui_page_query.push_to_using(page_name)
+        self._gui_tab_add_page(page_name, switch_to=switch_to)
 
-    def gui_tab_page_delete_fnc(self, page_name):
-        self.__gui_page_query.pull_from_using(page_name)
+    def _gui_tab_page_delete_fnc(self, page_name):
+        self._gui_page_query.pull_from_using(page_name)
         self.gui_delete_group_for(page_name)
 
     def gui_action_create_fnc(self, page_name):
         # check had edit permission first
-        if self.__gui_page_query.key_is_user(page_name) is True:
+        if self._gui_page_query.key_is_user(page_name) is True:
             if sum(kit_core.KitPermissionQuery.get_user_args(page_name)) < 2:
                 return self.__show_no_edit_permission_dialog(page_name)
 
@@ -691,7 +691,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         group_sub_name = gui_configure.get('group_sub_name')
 
         # check had edit permission first
-        if self.__gui_page_query.key_is_user(page_name) is True:
+        if self._gui_page_query.key_is_user(page_name) is True:
             if sum(kit_core.KitPermissionQuery.get_user_args(page_name)) < 2:
                 return self.__show_no_edit_permission_dialog(page_name)
 
@@ -747,8 +747,8 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         self._copy_option_prx_node.set('type', session.get_type())
         self._copy_option_prx_node.set('name', session.get_name())
         self._copy_option_prx_node.set('gui.name', gui_configure.get('name'))
-        self._copy_option_prx_node.set('gui.group_name', self.__gui_page_query.get_all_keys())
-        self._copy_option_prx_node.set('gui.group_name', self.__gui_page_query.get_current_user_key())
+        self._copy_option_prx_node.set('gui.group_name', self._gui_page_query.get_all_keys())
+        self._copy_option_prx_node.set('gui.group_name', self._gui_page_query.get_current_user_key())
         self._copy_option_prx_node.set('gui.group_sub_name', group_sub_name)
         self._copy_option_prx_node.set('gui.icon_name', gui_configure.get('icon_name') or '')
         self._copy_option_prx_node.set('gui.icon_style', gui_configure.get('icon_style') or '')
@@ -788,7 +788,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         gui_path = '/{}'.format(page_name)
         self.__gui_query.delete(gui_path)
 
-    def gui_add_all_for_page(self, page_name, switch_to=False):
+    def _gui_tab_add_page(self, page_name, switch_to=False):
         self.gui_add_customize_for_page(page_name, switch_to=switch_to)
         self.gui_add_builtin_for_page(page_name, switch_to=switch_to)
 

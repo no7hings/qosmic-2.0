@@ -194,7 +194,7 @@ class PthNodeMtd(object):
         return list_
 
 
-class PthNodeOpt(object):
+class BscPathOpt(object):
     PLANT_HSV_MAPPER = dict(
         tree_leaf=(120.0, 0.5, 0.15),
         tree_stem=(40.0, 0.5, 0.15),

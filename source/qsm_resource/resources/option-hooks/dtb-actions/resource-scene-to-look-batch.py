@@ -42,7 +42,7 @@ def main(session):
                     #
                     _i_dtb_types = _i_dtb_version_opt.get_types()
                     _i_dtb_type_path = _i_dtb_types[0].path
-                    _i_dtb_type_path_opt = bsc_core.PthNodeOpt(_i_dtb_type_path)
+                    _i_dtb_type_path_opt = bsc_core.BscPathOpt(_i_dtb_type_path)
                     #
                     _i_category_name = _i_dtb_type_path_opt.get_parent().get_name()
                     _i_type_name = _i_dtb_type_path_opt.get_name()

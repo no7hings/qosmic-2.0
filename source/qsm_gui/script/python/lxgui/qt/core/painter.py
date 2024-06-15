@@ -7,7 +7,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
 from .wrap import *
 
@@ -64,11 +64,11 @@ class QtPainter(QtGui.QPainter):
                 self._set_border_color_(_color_and_brush.QtColors.CapsuleBorderChecked)
                 if use_exclusive is True:
                     i_background_color, i_font_color = (
-                        gui_core.GuiRgba.DarkBlue,
-                        gui_core.GuiRgba.LightBlack
+                        _gui_core.GuiRgba.LightBlue,
+                        _gui_core.GuiRgba.LightBlack
                     )
                 else:
-                    i_background_color, i_font_color = _base.GuiQtColor.generate_color_args_by_text(i_text)
+                    i_background_color, i_font_color = _base.QtColor.generate_color_args_by_text(i_text)
 
                 self._set_background_color_(i_background_color)
             else:
@@ -277,9 +277,9 @@ class QtPainter(QtGui.QPainter):
 
         if is_pressed is True or is_hovered is True:
             if is_pressed is True:
-                act_bkg_color = QtGui.QColor(*gui_core.GuiRgba.LightBlue)
+                act_bkg_color = QtGui.QColor(*_gui_core.GuiRgba.LightBlue)
             elif is_hovered is True:
-                act_bkg_color = QtGui.QColor(*gui_core.GuiRgba.LightOrange)
+                act_bkg_color = QtGui.QColor(*_gui_core.GuiRgba.LightOrange)
             else:
                 act_bkg_color = background_color
 
@@ -314,8 +314,8 @@ class QtPainter(QtGui.QPainter):
     ):
         self._draw_frame_by_rect_(
             rect=frame_rect,
-            border_color=_color_and_brush.QtBorderColors.Transparent,
-            background_color=_color_and_brush.QtBackgroundColors.Dark,
+            border_color=_gui_core.GuiRgba.Transparent,
+            background_color=_gui_core.GuiRgba.Dark,
         )
         if virtual_items:
             for i_index, i_virtual_item in enumerate(virtual_items):
@@ -416,7 +416,7 @@ class QtPainter(QtGui.QPainter):
                 (frm_x+frm_w-1, frm_y+frm_h),
                 (frm_x+frm_w-icn_w, frm_y+frm_h),
             ]
-            i_r, i_g, i_b = bsc_core.RawTextOpt(icon_name_text).to_rgb_0(s_p=50, v_p=50)
+            i_r, i_g, i_b = bsc_core.RawTextOpt(icon_name_text).to_rgb_1(s_p=(35, 50), v_p=(75, 95))
             self._set_border_width_(1)
             self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
             icn_bkg_color = QtGui.QColor(i_r, i_g, i_b, a)
@@ -430,17 +430,18 @@ class QtPainter(QtGui.QPainter):
 
         if is_pressed is True or is_hovered is True:
             if is_pressed is True:
-                act_bkg_color = QtGui.QColor(*gui_core.GuiRgba.LightBlue)
+                act_bkg_color = QtGui.QColor(*_gui_core.GuiRgba.LightBlue)
             elif is_hovered is True:
-                act_bkg_color = QtGui.QColor(*gui_core.GuiRgba.LightOrange)
+                act_bkg_color = QtGui.QColor(*_gui_core.GuiRgba.LightOrange)
             else:
                 act_bkg_color = background_color
 
             act_w, act_h = 32, 2
             self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
             self._set_background_color_(act_bkg_color)
+
             action_rect = QtCore.QRect(
-                frm_x+8, f_y+f_h-act_h, frm_w-16, act_h
+                frm_x+(frm_w-act_w)/2, f_y+f_h-act_h, act_w, act_h
             )
             self.drawRoundedRect(action_rect, act_h/2, act_h/2, QtCore.Qt.AbsoluteSize)
         # text
@@ -597,7 +598,7 @@ class QtPainter(QtGui.QPainter):
         self._set_border_color_(*args)
 
     def _set_border_color_(self, *args):
-        qt_color = _base.GuiQtColor.to_qt_color(*args)
+        qt_color = _base.QtColor.to_qt_color(*args)
         pen = QtGui.QPen(qt_color)
         pen.setCapStyle(QtCore.Qt.SquareCap)
         pen.setJoinStyle(QtCore.Qt.BevelJoin)
@@ -617,7 +618,7 @@ class QtPainter(QtGui.QPainter):
         return self.pen().color()
 
     def _set_background_color_(self, *args):
-        qt_color = _base.GuiQtColor.to_qt_color(*args)
+        qt_color = _base.QtColor.to_qt_color(*args)
         self.setBrush(QtGui.QBrush(qt_color))
 
     def _get_background_color_(self):
@@ -680,7 +681,7 @@ class QtPainter(QtGui.QPainter):
             QtCore.Qt.SmoothTransformation
         )
         if enable is False:
-            new_pixmap = _base.GuiQtPixmap._to_gray_(new_pixmap)
+            new_pixmap = _base.QtPixmap.to_gray(new_pixmap)
         #
         self.drawPixmap(
             rect_,
@@ -699,7 +700,7 @@ class QtPainter(QtGui.QPainter):
             x+(w-frm_w)/2, y+(h-frm_h)/2, frm_w, frm_h
         )
         self._draw_icon_file_by_rect_(
-            rect=rect, file_path=gui_core.GuiIcon.get(icon_name)
+            rect=rect, file_path=_gui_core.GuiIcon.get(icon_name)
         )
 
     @classmethod
@@ -733,7 +734,7 @@ class QtPainter(QtGui.QPainter):
                 x+(w-t_w_n)/2-txt_h/2, frm_y+txt_y-txt_s_h, txt_h, txt_h
             )
             self._draw_icon_file_by_rect_(
-                rect=icon_rect, file_path=gui_core.GuiIcon.get(
+                rect=icon_rect, file_path=_gui_core.GuiIcon.get(
                     'drag-and-drop'
                 )
             )
@@ -762,14 +763,16 @@ class QtPainter(QtGui.QPainter):
                 text_sub
             )
 
-    def _draw_icon_by_rect_(self, icon, rect, offset):
+    def _draw_icon_by_rect_(self, icon, rect, offset=0):
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()
-
-        rect_ = QtCore.QRect(
-            x+offset, y+offset,
-            w-offset, h-offset
-        )
+        if offset:
+            rect_ = QtCore.QRect(
+                x+offset, y+offset,
+                w-offset, h-offset
+            )
+        else:
+            rect_ = rect
 
         pixmap = icon.pixmap(w, h)
         self.drawPixmap(
@@ -780,7 +783,8 @@ class QtPainter(QtGui.QPainter):
 
     def _draw_icon_file_by_rect_(
         self, rect, file_path,
-        offset=0, frame_rect=None, is_hovered=False, hover_color=None, is_pressed=False
+        offset=0, frame_rect=None,
+        is_hovered=False, hover_color=None, is_pressed=False, is_action_enable=True
     ):
         if file_path:
             # draw frame rect
@@ -796,7 +800,7 @@ class QtPainter(QtGui.QPainter):
                     border_radius=4,
                     offset=offset
                 )
-            #
+            # svg
             if file_path.endswith('.svg'):
                 self._draw_svg_by_rect_(
                     rect=rect,
@@ -805,6 +809,7 @@ class QtPainter(QtGui.QPainter):
                     is_hovered=is_hovered,
                     hover_color=hover_color,
                     is_pressed=is_pressed,
+                    is_action_enable=is_action_enable
                 )
             else:
                 self._draw_image_by_rect_(
@@ -814,6 +819,7 @@ class QtPainter(QtGui.QPainter):
                     is_hovered=is_hovered,
                     hover_color=hover_color,
                     is_pressed=is_pressed,
+                    is_action_enable=is_action_enable
                 )
 
     def _draw_image_use_file_path_by_rect_(
@@ -860,7 +866,11 @@ class QtPainter(QtGui.QPainter):
         #
         self.device()
 
-    def _draw_svg_by_rect_(self, rect, file_path, offset=0, is_hovered=False, hover_color=None, is_pressed=False):
+    def _draw_svg_by_rect_(
+        self,
+        rect, file_path, offset=0,
+        is_hovered=False, hover_color=None, is_pressed=False, is_action_enable=True
+    ):
         rect_ = QtCore.QRect(
             rect.x()+offset, rect.y()+offset,
             rect.width()-offset, rect.height()-offset
@@ -870,26 +880,31 @@ class QtPainter(QtGui.QPainter):
             rect.width()-offset, rect.height()-offset
         )
         svg_render = QtSvg.QSvgRenderer(file_path)
-        svg_render.render(self, rct_f)
-        if is_pressed is True:
-            p_over = self._generate_svg_rgba_over_(rect_, svg_render, gui_core.GuiRgba.LightBlue)
+        if is_action_enable is True:
+            svg_render.render(self, rct_f)
+            if is_pressed is True:
+                p_over = self._generate_svg_rgba_over_(rect_, svg_render, _gui_core.GuiRgba.LightBlue)
+                self.drawPixmap(
+                    rect_,
+                    p_over
+                )
+            elif is_hovered is True:
+                p_over = self._generate_svg_rgba_over_(rect_, svg_render, _gui_core.GuiRgba.LightOrange)
+                if hover_color is not None:
+                    if isinstance(hover_color, (tuple, list)):
+                        if len(hover_color) == 4:
+                            alpha = hover_color[3]
+                            p_over = self._generate_svg_rgba_over_(rect_, svg_render, hover_color, alpha=alpha)
+                        else:
+                            p_over = self._generate_svg_rgba_over_(rect_, svg_render, hover_color)
+                self.drawPixmap(
+                    rect_,
+                    p_over
+                )
+        else:
+            pixmap = _base.QtSvgRender.to_pixmap_gray(svg_render, rect)
             self.drawPixmap(
-                rect_,
-                p_over
-            )
-        elif is_hovered is True:
-            p_over = self._generate_svg_rgba_over_(rect_, svg_render, gui_core.GuiRgba.LightOrange)
-            if hover_color is not None:
-                if isinstance(hover_color, (tuple, list)):
-                    if len(hover_color) == 4:
-                        alpha = hover_color[3]
-                        p_over = self._generate_svg_rgba_over_(rect_, svg_render, hover_color, alpha=alpha)
-                    else:
-                        p_over = self._generate_svg_rgba_over_(rect_, svg_render, hover_color)
-
-            self.drawPixmap(
-                rect_,
-                p_over
+                rect_, pixmap
             )
         #
         self.device()
@@ -908,13 +923,13 @@ class QtPainter(QtGui.QPainter):
         svg_render.render(painter, QtCore.QRectF(0, 0, w, h))
         painter.end()
 
-        p_mask = QtGui.QPixmap(i_new).createMaskFromColor(mask_color)
+        pxm_mask = QtGui.QPixmap(i_new).createMaskFromColor(mask_color)
         r, g, b, a = rgba
         c = QtGui.QColor(r, g, b, alpha)
 
         p_over = QtGui.QPixmap(i_new)
         p_over.fill(QtGui.QColor(c.red(), c.green(), c.blue(), alpha))
-        p_over.setMask(p_mask)
+        p_over.setMask(pxm_mask)
         return p_over
 
     # todo: fix bug for "QImage has no attribute pixelColor"
@@ -933,13 +948,13 @@ class QtPainter(QtGui.QPainter):
         painter.drawPixmap(rect, pixmap)
         painter.end()
 
-        p_mask = QtGui.QPixmap(img_new).createMaskFromColor(mask_color)
+        pxm_mask = QtGui.QPixmap(img_new).createMaskFromColor(mask_color)
         r, g, b, a = rgba
         c = QtGui.QColor(r, g, b, alpha)
 
         p_over = QtGui.QPixmap(img_new)
         p_over.fill(QtGui.QColor(c.red(), c.green(), c.blue(), alpha))
-        p_over.setMask(p_mask)
+        p_over.setMask(pxm_mask)
         return p_over
 
     @classmethod
@@ -959,8 +974,8 @@ class QtPainter(QtGui.QPainter):
         #
         if QT_LOAD_INDEX == 0:
             pixmap_new = pixmap.fromImage(image_new)
-            p_mask = cls._get_pixmap_mask_(pixmap)
-            pixmap_new.setMask(p_mask)
+            pxm_mask = cls._get_pixmap_mask_(pixmap)
+            pixmap_new.setMask(pxm_mask)
         else:
             i_alpha = image.alphaChannel()
             image_new.setAlphaChannel(i_alpha)
@@ -988,31 +1003,44 @@ class QtPainter(QtGui.QPainter):
         return pixmap_mask
 
     def _draw_image_by_rect_(
-        self, rect, file_path, offset=0, is_hovered=False, hover_color=None, is_pressed=False, cache_resize=False
+        self, rect, file_path, offset=0,
+        is_hovered=False, hover_color=None, is_pressed=False,
+        is_action_enable=True,
+        cache_resize=False
     ):
-        rect_ = QtCore.QRect(
-            rect.x()+offset, rect.y()+offset,
-            rect.width()-offset, rect.height()-offset
-        )
+        if offset:
+            rect_ = QtCore.QRect(
+                rect.x()+offset, rect.y()+offset,
+                rect.width()-offset, rect.height()-offset
+            )
+        else:
+            rect_ = rect
 
         image = _base.GuiQtCache.generate_qt_image(rect_, file_path, cache_resize)
 
         pixmap = QtGui.QPixmap(image)
-        self.drawPixmap(
-            rect_,
-            pixmap
-        )
-
-        pxm_over = None
-        if is_pressed is True:
-            pxm_over = self._generate_pixmap_rgba_over_(pixmap, gui_core.GuiRgba.LightBlue, alpha=63)
-        elif is_hovered is True:
-            pxm_over = self._generate_pixmap_rgba_over_(pixmap, gui_core.GuiRgba.LightOrange, alpha=63)
-
-        if pxm_over is not None:
+        if is_action_enable is True:
             self.drawPixmap(
                 rect_,
-                pxm_over
+                pixmap
+            )
+
+            pxm_over = None
+            if is_pressed is True:
+                pxm_over = self._generate_pixmap_rgba_over_(pixmap, _gui_core.GuiRgba.LightBlue, alpha=63)
+            elif is_hovered is True:
+                pxm_over = self._generate_pixmap_rgba_over_(pixmap, _gui_core.GuiRgba.LightOrange, alpha=63)
+
+            if pxm_over is not None:
+                self.drawPixmap(
+                    rect_,
+                    pxm_over
+                )
+        else:
+            pixmap = _base.QtPixmap.to_gray(pixmap)
+            self.drawPixmap(
+                rect_,
+                pixmap
             )
 
         self.device()
@@ -1086,7 +1114,7 @@ class QtPainter(QtGui.QPainter):
             _base.QtFont.generate(size=txt_size)
         )
         #
-        background_color, text_color = _base.GuiQtColor.generate_color_args_by_text(text)
+        background_color, text_color = _base.QtColor.generate_color_args_by_text(text)
         self._set_border_color_(_color_and_brush.QtBorderColors.Icon)
         self._set_background_color_(background_color)
         self.drawRect(
@@ -1166,10 +1194,10 @@ class QtPainter(QtGui.QPainter):
         #
         ellipse_rect = QtCore.QRect(x_-4, y_-4, r_+8, r_+8)
         coords = [
-            gui_core.GuiEllipse2d.get_coord_at_angle(start=(x_, y_), radius=r_, angle=90),
-            gui_core.GuiEllipse2d.get_coord_at_angle(start=(x_, y_), radius=r_, angle=210),
-            gui_core.GuiEllipse2d.get_coord_at_angle(start=(x_, y_), radius=r_, angle=330),
-            gui_core.GuiEllipse2d.get_coord_at_angle(start=(x_, y_), radius=r_, angle=90)
+            _gui_core.GuiEllipse2d.get_coord_at_angle(start=(x_, y_), radius=r_, angle=90),
+            _gui_core.GuiEllipse2d.get_coord_at_angle(start=(x_, y_), radius=r_, angle=210),
+            _gui_core.GuiEllipse2d.get_coord_at_angle(start=(x_, y_), radius=r_, angle=330),
+            _gui_core.GuiEllipse2d.get_coord_at_angle(start=(x_, y_), radius=r_, angle=90)
         ]
         #
         self._set_background_color_(_color_and_brush.QtBackgroundColors.Transparent)
@@ -1227,11 +1255,11 @@ class QtPainter(QtGui.QPainter):
             border_color_ = _color_and_brush.QtBorderColors.Icon
         #
         if background_color is not None:
-            background_color__ = _base.GuiQtColor.to_rgba(background_color)
+            background_color__ = _base.QtColor.to_rgba(background_color)
         else:
             background_color__ = bsc_core.RawTextOpt(text).to_rgb_0(s_p=50, v_p=50)
 
-        background_color_, text_color_ = _base.GuiQtColor.generate_color_args_by_rgb(*background_color__)
+        background_color_, text_color_ = _base.QtColor.generate_color_args_by_rgb(*background_color__)
         if text_color is not None:
             text_color_ = text_color
 
@@ -1360,14 +1388,14 @@ class QtPainter(QtGui.QPainter):
         w, h = rect_.width(), rect_.height()
 
         if background_color is not None:
-            background_color__ = _base.GuiQtColor.to_rgba(background_color)
+            background_color__ = _base.QtColor.to_rgba(background_color)
         else:
             r_, g_, b_ = bsc_core.RawTextOpt(text).to_rgb_0(s_p=100, v_p=100)
             background_color__ = r_, g_, b_, 255
 
-        icon_file_path = gui_core.GuiIcon.get(icon_style)
+        icon_file_path = _gui_core.GuiIcon.get(icon_style)
         if icon_file_path is None:
-            icon_file_path = gui_core.GuiIcon.get('tool_style/tool-style-1')
+            icon_file_path = _gui_core.GuiIcon.get('tool_style/tool-style-1')
 
         svg_render = QtSvg.QSvgRenderer(icon_file_path)
         svg_render.render(self, rct_f)
@@ -1385,7 +1413,7 @@ class QtPainter(QtGui.QPainter):
 
         if is_pressed is True:
             p_over_1 = self._generate_svg_rgba_over_(
-                rect_, svg_render, gui_core.GuiRgba.LightBlue,
+                rect_, svg_render, _gui_core.GuiRgba.LightBlue,
                 alpha=63, mask_color=QtGui.QColor(255, 0, 0, 255)
             )
             self.drawPixmap(
@@ -1394,7 +1422,7 @@ class QtPainter(QtGui.QPainter):
             )
         elif is_hovered is True:
             p_over_1 = self._generate_svg_rgba_over_(
-                rect_, svg_render, gui_core.GuiRgba.LightOrange,
+                rect_, svg_render, _gui_core.GuiRgba.LightOrange,
                 alpha=63, mask_color=QtGui.QColor(255, 0, 0, 255)
             )
             self.drawPixmap(
@@ -1547,7 +1575,7 @@ class QtPainter(QtGui.QPainter):
             rect_ = rect
         #
         gradient_color = QtGui.QLinearGradient(rect_.topLeft(), rect_.bottomLeft())
-        gradient_color.setColorAt(0, _base.GuiQtColor.to_qt_color(color))
+        gradient_color.setColorAt(0, _base.QtColor.to_qt_color(color))
         gradient_color.setColorAt(.5, _color_and_brush.QtBackgroundColors.Transparent)
         self._set_background_color_(gradient_color)
         #
@@ -1579,7 +1607,7 @@ class QtPainter(QtGui.QPainter):
             for seq, i_color in enumerate(colors):
                 _ = float(seq)/float(c)
                 i_index = max(min(_, 1), 0)
-                i_qt_color = _base.GuiQtColor.to_qt_color(i_color)
+                i_qt_color = _base.QtColor.to_qt_color(i_color)
                 gradient_color.setColorAt(i_index, i_qt_color)
                 gradient_color.setColorAt(i_index+p*.9, i_qt_color)
             #
@@ -1610,7 +1638,7 @@ class QtPainter(QtGui.QPainter):
         for seq, i_color in enumerate(colors):
             _ = float(seq)/float(c)
             i_index = max(min(_, 1), 0)
-            i_qt_color = _base.GuiQtColor.to_qt_color(i_color)
+            i_qt_color = _base.QtColor.to_qt_color(i_color)
             gradient_color.setColorAt(i_index, i_qt_color)
             gradient_color.setColorAt(i_index+p*.9, i_qt_color)
         return gradient_color
@@ -1758,13 +1786,14 @@ class QtPainter(QtGui.QPainter):
                 text_option__.WrapAtWordBoundaryOrAnywhere
             )
         else:
-            text_option__.setUseDesignMetrics(True)
+            # fixme: text width error
+            # text_option__.setUseDesignMetrics(True)
             text_option__.setWrapMode(text_option__.NoWrap)
             #
             text_ = self.fontMetrics().elidedText(
                 text,
                 QtCore.Qt.ElideMiddle,
-                rect_offset.width(),
+                rect_offset.width()-4,
                 QtCore.Qt.TextShowMnemonic
             )
         #
@@ -1857,7 +1886,8 @@ class QtPainter(QtGui.QPainter):
             )
             qt_value_text_option = QtGui.QTextOption()
             qt_value_text_option.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-            qt_value_text_option.setUseDesignMetrics(True)
+            # fixme: text width error
+            # qt_value_text_option.setUseDesignMetrics(True)
             value_text_ = self.fontMetrics().elidedText(
                 value_text,
                 QtCore.Qt.ElideLeft,
@@ -1979,8 +2009,8 @@ class QtPainter(QtGui.QPainter):
                 color_1 = background_color_actioned or _color_and_brush.QtBackgroundColors.Actioned
                 start_pos, end_pos = rect.topLeft(), rect.bottomLeft()
                 color = QtGui.QLinearGradient(start_pos, end_pos)
-                color.setColorAt(0, _base.GuiQtColor.to_qt_color(color_0))
-                color.setColorAt(1, _base.GuiQtColor.to_qt_color(color_1))
+                color.setColorAt(0, _base.QtColor.to_qt_color(color_0))
+                color.setColorAt(1, _base.QtColor.to_qt_color(color_1))
                 return color
             return background_color_hovered or _color_and_brush.QtBackgroundColors.Hovered
         elif conditions == [True, True]:
@@ -1992,8 +2022,8 @@ class QtPainter(QtGui.QPainter):
             #
             start_pos, end_pos = rect.topLeft(), rect.bottomLeft()
             color = QtGui.QLinearGradient(start_pos, end_pos)
-            color.setColorAt(0, _base.GuiQtColor.to_qt_color(color_0))
-            color.setColorAt(1, _base.GuiQtColor.to_qt_color(color_1))
+            color.setColorAt(0, _base.QtColor.to_qt_color(color_0))
+            color.setColorAt(1, _base.QtColor.to_qt_color(color_1))
             return color
 
     @classmethod
@@ -2576,10 +2606,10 @@ class QtNGPainter(QtPainter):
         #
         r = h
         coords = [
-            gui_core.GuiEllipse2d.get_coord_at_angle(start=(x, y), radius=r, angle=90),
-            gui_core.GuiEllipse2d.get_coord_at_angle(start=(x, y), radius=r, angle=210),
-            gui_core.GuiEllipse2d.get_coord_at_angle(start=(x, y), radius=r, angle=330),
-            gui_core.GuiEllipse2d.get_coord_at_angle(start=(x, y), radius=r, angle=90)
+            _gui_core.GuiEllipse2d.get_coord_at_angle(start=(x, y), radius=r, angle=90),
+            _gui_core.GuiEllipse2d.get_coord_at_angle(start=(x, y), radius=r, angle=210),
+            _gui_core.GuiEllipse2d.get_coord_at_angle(start=(x, y), radius=r, angle=330),
+            _gui_core.GuiEllipse2d.get_coord_at_angle(start=(x, y), radius=r, angle=90)
         ]
         #
         self._draw_path_by_coords_(coords)

@@ -393,7 +393,7 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
 
     def __init__(self, path_or_name, *args, **kwargs):
         super(PrxOptionsNode, self).__init__(*args, **kwargs)
-        self._path_dag_opt = bsc_core.PthNodeOpt(path_or_name)
+        self._path_dag_opt = bsc_core.BscPathOpt(path_or_name)
         # debug: do not set minimum height
         # self._qt_widget.setMinimumHeight(24)
         #
@@ -505,7 +505,7 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
         self._name_width = w
         # self._prx_root_group._qt_label_widget.setFixedWidth(self._name_width)
 
-    def create_ports_by_data(self, configure):
+    def build_by_data(self, configure):
         for k, v in configure.items():
             self.create_port_by_data(k.replace('/', '.'), v)
 

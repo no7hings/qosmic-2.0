@@ -255,9 +255,6 @@ class Playblast(object):
             resolution = _mya_core.RenderSettings.get_resolution()
 
         w, h = resolution
-        # if _mya_core.Scene.get_is_ui_mode():
-        #     if show_hud is True:
-        #         h += 60
 
         cls.create_window(
             camera=camera, width=480, height=320, display_mode=display_mode, show_hud=show_hud, show_window=show_window,
@@ -321,6 +318,32 @@ class Playblast(object):
             os.startfile(
                 movie_file_path
             )
+
+    @classmethod
+    def show_window(
+        cls,
+        camera='|persp|perspShape',
+        resolution=(1280, 720), display_mode=6, hud_enable=False, show_hud=False,
+        texture_enable=False, light_enable=False, shadow_enable=False,
+        show_window=True
+    ):
+        if resolution is None:
+            resolution = _mya_core.RenderSettings.get_resolution()
+
+        w, h = resolution
+
+        cls.create_window(
+            camera=camera, width=w, height=h, display_mode=display_mode, show_hud=show_hud, show_window=show_window,
+            texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable,
+            hud_enable=hud_enable
+        )
+        if show_hud is True:
+            cls.hud_prc(camera)
+
+        cls.render_setting_prc(
+            camera, display_mode,
+            texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable
+        )
 
     @classmethod
     def generate_movie_file_path(cls, directory_path=None, update_scheme='new_version'):

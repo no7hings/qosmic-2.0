@@ -187,23 +187,23 @@ class AbsPnlSubmitterForRenderBase(
         self.set_all_refresh()
 
     def _set_prx_node_build_(self):
-        self._schemes_prx_node.create_ports_by_data(
+        self._schemes_prx_node.build_by_data(
             self._hook_build_configure.get('node.schemes')
         )
         #
-        self._options_prx_node.create_ports_by_data(
+        self._options_prx_node.build_by_data(
             self._hook_build_configure.get('node.options')
         )
         # usd
-        self._usd_prx_node.create_ports_by_data(
+        self._usd_prx_node.build_by_data(
             self._hook_build_configure.get('node.usd')
         )
 
-        self._variables_prx_node.create_ports_by_data(
+        self._variables_prx_node.build_by_data(
             self._hook_build_configure.get('node.variables')
         )
 
-        self._settings_prx_node.create_ports_by_data(
+        self._settings_prx_node.build_by_data(
             self._hook_build_configure.get('node.settings')
         )
 
@@ -580,7 +580,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
             if i_file_path:
                 i_rsv_properties = i_rsv_unit.generate_properties_by_result(i_file_path)
                 i_rsv_unit_file = gnl_dcc_objects.StgFile(i_file_path)
-                i_pixmap = gui_qt_core.GuiQtPixmap.get_by_file_ext_with_tag(
+                i_pixmap = gui_qt_core.QtPixmap.get_by_file_ext_with_tag(
                     i_rsv_unit_file.ext,
                     tag=i_rsv_properties.get('workspace'),
                     frame_size=self.ITEM_ICON_SIZE
@@ -882,7 +882,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
             _key = key_mapper[key_]
             for _i_k in _ks:
                 if c.get(_i_k) is True:
-                    _name = bsc_core.PthNodeOpt(_i_k).get_name()
+                    _name = bsc_core.BscPathOpt(_i_k).get_name()
                     dic.setdefault(_key, []).append(_name)
 
         #
@@ -1162,7 +1162,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
             if i_file_path:
                 i_rsv_properties = i_rsv_unit.generate_properties_by_result(i_file_path)
                 i_rsv_unit_file = gnl_dcc_objects.StgFile(i_file_path)
-                i_pixmap = gui_qt_core.GuiQtPixmap.get_by_file_ext_with_tag(
+                i_pixmap = gui_qt_core.QtPixmap.get_by_file_ext_with_tag(
                     i_rsv_unit_file.ext,
                     tag=i_rsv_properties.get('workspace'),
                     frame_size=self.ITEM_ICON_SIZE

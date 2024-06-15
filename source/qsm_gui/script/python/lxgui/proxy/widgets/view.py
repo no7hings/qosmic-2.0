@@ -108,7 +108,7 @@ class PrxTabView(gui_prx_abstracts.AbsPrxWidget):
         self._qt_widget._set_tab_add_enable_(boolean)
 
     def set_add_menu_data_gain_fnc(self, fnc):
-        self._qt_widget._set_tab_add_menu_gain_fnc_(fnc)
+        self._qt_widget._set__gui_tab_add_menu_gain_fnc_(fnc)
 
     def set_menu_enable(self, boolean):
         self._qt_widget._set_tab_menu_enable_(boolean)

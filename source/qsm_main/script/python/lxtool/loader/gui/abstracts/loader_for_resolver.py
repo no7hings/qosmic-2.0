@@ -285,7 +285,7 @@ class _GuiTagOpt(
         super(_GuiTagOpt, self).__init__(window, session, resolver)
         self._init_tree_view_as_tag_opt_(prx_tree_view, self.GUI_NAMESPACE)
 
-        self._index_thread_batch = 0
+        self._gui_thread_flag = 0
 
     def gui_add_all_groups(self, rsv_project):
         self.gui_add_root()
@@ -299,7 +299,7 @@ class _GuiTagOpt(
         def cache_fnc_():
             branch = self._window._rsv_filter_opt.get('branch')
             return [
-                self._index_thread_batch,
+                self._gui_thread_flag,
                 rsv_project.get_all_steps(branch=branch)
             ]
 
@@ -314,7 +314,7 @@ class _GuiTagOpt(
 
         self.gui_add_root()
 
-        self._index_thread_batch += 1
+        self._gui_thread_flag += 1
 
         t = gui_qt_core.QtBuildThread(self._window.widget)
         t.set_cache_fnc(cache_fnc_)
@@ -557,7 +557,7 @@ class _GuiDirectoryOpt(
             prx_tree_view, self.GUI_NAMESPACE
         )
 
-        self._index_thread_batch = 0
+        self._gui_thread_flag = 0
 
 
 class _GuiFileOpt(
@@ -643,7 +643,7 @@ class _GuiFileOpt(
     def gui_add_all_use_thread(self, directory_opt):
         def cache_fnc_():
             return [
-                self._index_thread_batch,
+                self._gui_thread_flag,
                 directory_opt.get_files()
             ]
 
@@ -651,14 +651,14 @@ class _GuiFileOpt(
             _index_thread_batch_current, _file_opts = args[0]
             if _file_opts:
                 for _i_file_opt in _file_opts:
-                    if _index_thread_batch_current != self._index_thread_batch:
+                    if _index_thread_batch_current != self._gui_thread_flag:
                         break
                     self.gui_add(_i_file_opt)
 
         def post_fnc_():
             pass
 
-        self._index_thread_batch += 1
+        self._gui_thread_flag += 1
 
         t = gui_qt_core.QtBuildThread(self._prx_list_view.get_widget())
         t.set_cache_fnc(cache_fnc_)
@@ -676,7 +676,7 @@ class _GuiUsdStageViewOpt(_GuiBaseOpt):
         self._usd_stage_view = usd_stage_view
         if gui_qt_usd_core.QT_USD_FLAG is True:
             self._usd_stage_view.get_usd_model().set_camera_light_enable(True)
-        self._index_thread_batch = 1
+        self._gui_thread_flag = 1
 
     def gui_load_use_thread(self, rsv_task):
         def cache_fnc_():
@@ -685,18 +685,18 @@ class _GuiUsdStageViewOpt(_GuiBaseOpt):
             self._usd_stage_view.load_usd_file(
                 usd_file=_file_path,
             )
-            return [self._index_thread_batch, None]
+            return [self._gui_thread_flag, None]
 
         def build_fnc_(*args):
             _index_thread_batch_current, _ = args[0]
-            if _index_thread_batch_current != self._index_thread_batch:
+            if _index_thread_batch_current != self._gui_thread_flag:
                 return
             self._usd_stage_view.refresh_usd_view_draw()
 
         def post_fnc_():
             pass
 
-        self._index_thread_batch += 1
+        self._gui_thread_flag += 1
 
         self._usd_stage_view.run_build_extra_use_thread(
             cache_fnc_,
@@ -907,7 +907,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
 
     def restore_variants(self):
         self._running_threads_stacks = []
-        self._index_thread_batch = 0
+        self._gui_thread_flag = 0
         self.__resource_count = 0
 
     def __init__(self, session, *args, **kwargs):
@@ -953,7 +953,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
             )
             #
             if text in self._rsv_project_paths:
-                self._rsv_project_name_cur = bsc_core.PthNodeOpt(text).get_name()
+                self._rsv_project_name_cur = bsc_core.BscPathOpt(text).get_name()
                 self.refresh_all()
 
     def gui_tree_select_cbk_1(self, text):
@@ -1106,7 +1106,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
         # kill running
         self.__restore_thread_stack_()
 
-        self._index_thread_batch += 1
+        self._gui_thread_flag += 1
 
         self._start_timestamp = bsc_core.BscSystem.get_timestamp()
 
@@ -1123,11 +1123,11 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
                     'step',
                     'task'
                 ]:
-                    self.__batch_add_tasks_and_units_by_entities_([rsv_entity], self._index_thread_batch)
+                    self.__batch_add_tasks_and_units_by_entities_([rsv_entity], self._gui_thread_flag)
 
     # refresh task unit by any entity
     # todo: thread bug in katana
-    def __batch_add_tasks_and_units_by_entities_(self, rsv_entities, thread_stack_index):
+    def __batch_add_tasks_and_units_by_entities_(self, rsv_entities, gui_thread_flag):
         def post_fnc_():
             pass
 
@@ -1145,7 +1145,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
             for i_rsv_entities in rsv_entities_map:
                 ts.register(
                     functools.partial(
-                        self.__batch_gui_cache_fnc_for_tasks_and_units_by_entities_, i_rsv_entities, thread_stack_index
+                        self.__batch_gui_cache_fnc_for_tasks_and_units_by_entities_, i_rsv_entities, gui_thread_flag
                     ),
                     self.__batch_gui_build_fnc_for_tasks_and_units_
                 )
@@ -1156,10 +1156,10 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
         else:
             for i_rsv_entities in rsv_entities_map:
                 self.__batch_gui_build_fnc_for_tasks_and_units_(
-                    self.__batch_gui_cache_fnc_for_tasks_and_units_by_entities_(i_rsv_entities, thread_stack_index)
+                    self.__batch_gui_cache_fnc_for_tasks_and_units_by_entities_(i_rsv_entities, gui_thread_flag)
                 )
 
-    def __batch_gui_cache_fnc_for_tasks_and_units_by_entities_(self, rsv_entities, thread_stack_index):
+    def __batch_gui_cache_fnc_for_tasks_and_units_by_entities_(self, rsv_entities, gui_thread_flag):
         if rsv_entities:
             type_name = rsv_entities[0].type_name
             if type_name in [
@@ -1167,12 +1167,12 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
             ]:
                 return [
                     [j for i in rsv_entities for j in i.get_rsv_resources(**self._rsv_filter_opt.value)],
-                    thread_stack_index
+                    gui_thread_flag
                 ]
             else:
                 return [
                     rsv_entities,
-                    thread_stack_index
+                    gui_thread_flag
                 ]
 
     def __batch_gui_build_fnc_for_tasks_and_units_(self, *args):
@@ -1183,7 +1183,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
         def quit_fnc_():
             ts.do_quit()
 
-        rsv_entities, thread_stack_index = args[0]
+        rsv_entities, gui_thread_flag = args[0]
         rsv_entities_map = bsc_core.RawListMtd.grid_to(
             rsv_entities, self.THREAD_STEP
         )
@@ -1195,7 +1195,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
             for i_rsv_entities in rsv_entities_map:
                 ts.register(
                     functools.partial(
-                        self.__gui_cache_fnc_for_tasks_and_units_by_entities_, i_rsv_entities, thread_stack_index
+                        self.__gui_cache_fnc_for_tasks_and_units_by_entities_, i_rsv_entities, gui_thread_flag
                     ),
                     self.__gui_build_fnc_for_tasks_and_units_
                 )
@@ -1210,28 +1210,28 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
                 for i_rsv_entities in rsv_entities_map:
                     g_p.do_update()
                     self.__gui_build_fnc_for_tasks_and_units_(
-                        self.__gui_cache_fnc_for_tasks_and_units_by_entities_(i_rsv_entities, thread_stack_index)
+                        self.__gui_cache_fnc_for_tasks_and_units_by_entities_(i_rsv_entities, gui_thread_flag)
                     )
 
-    def __gui_cache_fnc_for_tasks_and_units_by_entities_(self, rsv_entities, thread_stack_index):
+    def __gui_cache_fnc_for_tasks_and_units_by_entities_(self, rsv_entities, gui_thread_flag):
         if rsv_entities:
             if rsv_entities[0].type_name == 'task':
                 return [
                     rsv_entities,
-                    thread_stack_index
+                    gui_thread_flag
                 ]
             else:
                 return [
                     [j for i in rsv_entities for j in i.get_rsv_tasks(**self._rsv_filter_opt.value)],
-                    thread_stack_index
+                    gui_thread_flag
                 ]
 
     def __gui_build_fnc_for_tasks_and_units_(self, *args):
-        rsv_tasks, thread_stack_index = args[0]
+        rsv_tasks, gui_thread_flag = args[0]
         # print rsv_tasks
         with self.gui_bustling():
             for i_rsv_task in rsv_tasks:
-                if thread_stack_index != self._index_thread_batch:
+                if gui_thread_flag != self._gui_thread_flag:
                     break
                 i_task = i_rsv_task.get('task')
 
@@ -1303,7 +1303,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
                         if 'gui_parent' in i_hook_option:
                             i_gui_parent_path = i_hook_option['gui_parent']
                     #
-                    i_gui_parent_path_opt = bsc_core.PthNodeOpt(i_gui_parent_path)
+                    i_gui_parent_path_opt = bsc_core.BscPathOpt(i_gui_parent_path)
                     #
                     if i_gui_parent_path_opt.get_is_root():
                         i_gui_path = '/{}'.format(i_gui_name)

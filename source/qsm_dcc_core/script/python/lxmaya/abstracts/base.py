@@ -542,7 +542,7 @@ class AbsMyaNode(
             )
 
     def set_repath(self, new_obj_path):
-        new_dcc_path_dag_opt = bsc_core.PthNodeOpt(new_obj_path)
+        new_dcc_path_dag_opt = bsc_core.BscPathOpt(new_obj_path)
         new_dcc_parent_dag_opt = new_dcc_path_dag_opt.get_parent()
         new_parent_dcc_obj = self.__class__(new_dcc_parent_dag_opt.path)
         if new_parent_dcc_obj.get_is_exists() is True:

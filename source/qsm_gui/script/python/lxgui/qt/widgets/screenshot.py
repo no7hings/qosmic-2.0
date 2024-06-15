@@ -438,29 +438,33 @@ class AbsQtScreenshotBaseDef(_qt_abstracts.AbsQtHelpBaseDef):
     def _save_screenshot_to_(cls, geometry, file_path):
         bsc_storage.StgFileOpt(file_path).create_directory()
         rect = QtCore.QRect(*geometry)
-
-        if bsc_core.BasApplication.get_is_maya():
-            main_window = _qt_core.GuiQtMaya.get_qt_main_window()
-            image = QtGui.QPixmap.grabWindow(
-                long(main_window.winId())
-            ).copy(rect).toImage()
-        else:
+        app = QtWidgets.QApplication
+        # noinspection PyArgumentList
+        if QT_LOAD_INDEX == 0:
             app_ = QtWidgets.QApplication
             # noinspection PyArgumentList
             image = app_.primaryScreen().grabWindow(
                 app_.desktop().winId()
             ).copy(rect).toImage()
+        else:
+            app_ = QtWidgets.QApplication
+            # noinspection PyArgumentList
+            image = QtGui.QPixmap.grabWindow(
+                app_.desktop().winId()
+            ).copy(rect).toImage()
 
-        cls._save_screenshot_image_(image, file_path)
+        cls._save_image_(image, file_path)
 
     @classmethod
-    def _save_screenshot_image_(cls, image, file_path):
+    def _save_image_(cls, image, file_path):
         import numpy as np
 
         import cv2
 
         ptr = image.bits()
-        ptr.setsize(image.byteCount())
+        # PyQt
+        if QT_LOAD_INDEX == 0:
+            ptr.setsize(image.byteCount())
 
         width = image.width()
         height = image.height()
@@ -742,7 +746,7 @@ class QtInputAsScreenshot(
     @staticmethod
     def _generate_screenshot_file_path_():
         d = bsc_core.BscSystem.get_home_directory()
-        return six.u('{}/screenshot/untitled-{}.jpg').format(d, bsc_core.TimeExtraMtd.generate_time_tag_36())
+        return six.u('{}/screenshot/untitled-{}.png').format(d, bsc_core.TimeExtraMtd.generate_time_tag_36())
 
     def _save_screenshot_(self, g):
         f = self._generate_screenshot_file_path_()

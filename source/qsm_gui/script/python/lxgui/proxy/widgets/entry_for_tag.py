@@ -4,7 +4,7 @@ from ...qt.widgets import base as _qt_widget_base
 
 from ...qt.widgets import entry_frame as _qt_widget_entry_frame
 
-from ...qt.widgets import view_for_tag_filter as _view_for_tag_filter
+from ...qt.widgets import entry_for_tag as _view_for_tag_filter
 # proxy abstracts
 from .. import abstracts as _prx_abstracts
 
@@ -13,29 +13,29 @@ from . import container as _container
 from . import utility as _utility
 
 
-class PrxTagFilterView(
+class PrxTagInput(
     _prx_abstracts.AbsPrxWidget,
 ):
     QT_WIDGET_CLS = _qt_widget_entry_frame.QtEntryFrame
-    QT_VIEW_CLS = _view_for_tag_filter.QtRootForTagFilter
+    QT_VIEW_CLS = _view_for_tag_filter.QtEntryRootForTag
 
     def _add_fnc(self):
         pass
 
-    def _gui_add_main_tools(self):
-        for i in [
-            ('create', 'file/add-file', '', self._add_fnc)
-        ]:
-            i_key, i_icon_name, i_tool_tip, i_fnc = i
-            i_tool = _utility.PrxIconPressButton()
-            self._main_prx_tool_box.add_widget(i_tool)
-            i_tool.set_name(i_key)
-            i_tool.set_icon_name(i_icon_name)
-            i_tool.set_tool_tip(i_tool_tip)
-            i_tool.connect_press_clicked_to(i_fnc)
+    # def _gui_add_main_tools(self):
+    #     for i in [
+    #         ('create', 'file/add-file', '', self._add_fnc)
+    #     ]:
+    #         i_key, i_icon_name, i_tool_tip, i_fnc = i
+    #         i_tool = _utility.PrxIconPressButton()
+    #         self._main_prx_tool_box.add_widget(i_tool)
+    #         i_tool.set_name(i_key)
+    #         i_tool.set_icon_name(i_icon_name)
+    #         i_tool.set_tool_tip(i_tool_tip)
+    #         i_tool.connect_press_clicked_to(i_fnc)
 
     def __init__(self, *args, **kwargs):
-        super(PrxTagFilterView, self).__init__(*args, **kwargs)
+        super(PrxTagInput, self).__init__(*args, **kwargs)
         self._qt_layout_0 = _qt_widget_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout_0.setContentsMargins(4, 4, 4, 4)
         self._qt_layout_0.setSpacing(2)
@@ -69,6 +69,11 @@ class PrxTagFilterView(
     def get_one(self, path):
         return self._qt_view._get_one_(path)
 
+    def set_node_checked(self, path, boolean):
+        _ = self.get_one(path)
+        if _:
+            _._set_checked_(boolean)
+
     def get_top_tool_bar(self):
         return self._top_prx_tool_bar
 
@@ -83,3 +88,6 @@ class PrxTagFilterView(
     
     def get_all_checked_node_paths(self):
         return self._qt_view._get_all_checked_node_paths_()
+
+    def restore(self):
+        self._qt_view._restore_()

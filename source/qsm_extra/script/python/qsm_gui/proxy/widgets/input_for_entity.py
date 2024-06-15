@@ -97,7 +97,7 @@ class PrxInputForRig(prx_abstracts.AbsPrxWidget):
 
     def _pull_history_fnc(self, path):
         self._buffer_fnc(
-            bsc_core.PthNodeOpt(path)
+            bsc_core.BscPathOpt(path)
         )
 
     def _buffer_fnc(self, path_opt):
@@ -115,7 +115,7 @@ class PrxInputForRig(prx_abstracts.AbsPrxWidget):
 
     def _cache_entities(self):
         path = self._qt_path_input._get_value_()
-        path_opt = bsc_core.PthNodeOpt(path)
+        path_opt = bsc_core.BscPathOpt(path)
         cs = path_opt.get_components()
         cs.reverse()
 

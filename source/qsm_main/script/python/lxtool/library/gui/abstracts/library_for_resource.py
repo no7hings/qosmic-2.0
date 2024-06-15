@@ -435,7 +435,7 @@ class _GuiTagOpt(
             self._dtb_opt.Kinds.ResourceFormatTag
         ]
         #
-        self._index_thread_batch = 0
+        self._gui_thread_flag = 0
 
     def gui_add_all_groups(self):
         self.gui_add_root()
@@ -451,7 +451,7 @@ class _GuiTagOpt(
     def gui_add_all_groups_use_thread(self):
         def cache_fnc_():
             return [
-                self._index_thread_batch, self._dtb_opt.get_entities(
+                self._gui_thread_flag, self._dtb_opt.get_entities(
                     entity_type=self._dtb_opt.EntityTypes.TagGroup,
                     filters=[
                         ('kind', 'in', self._tag_group_kinds)
@@ -462,7 +462,7 @@ class _GuiTagOpt(
         def build_fnc_(*args):
             _index_thread_batch_current, _dtb_tags = args[0]
             for _i_dtb_tag in _dtb_tags:
-                if _index_thread_batch_current != self._index_thread_batch:
+                if _index_thread_batch_current != self._gui_thread_flag:
                     break
                 self.gui_add_group(_i_dtb_tag)
 
@@ -471,7 +471,7 @@ class _GuiTagOpt(
 
         self.gui_add_root()
 
-        self._index_thread_batch += 1
+        self._gui_thread_flag += 1
 
         t = gui_qt_core.QtBuildThread(self._window.widget)
         t.set_cache_fnc(cache_fnc_)
@@ -585,7 +585,7 @@ class _GuiTagOpt(
                 dtb_tag_args.append(i_dtb_tag)
             else:
                 i_tag_path = i_dtb_assign.value
-                i_tag_group = bsc_core.PthNodeOpt(i_tag_path).get_parent_path()
+                i_tag_group = bsc_core.BscPathOpt(i_tag_path).get_parent_path()
                 dtb_tag_args.append(i_tag_path)
 
             semantic_tag_filter_data.setdefault(
@@ -821,7 +821,7 @@ class _GuiResourceOpt(
         prx_item_widget.set_name(dtb_resource.gui_name)
         prx_item_widget.set_sort_name_key(dtb_resource.gui_name)
         prx_item_widget.set_gui_attribute('path', dtb_type.path)
-        keys = {bsc_core.PthNodeOpt(j).get_name() for i_k, i_v in semantic_tag_filter_data.items() for j in i_v}
+        keys = {bsc_core.BscPathOpt(j).get_name() for i_k, i_v in semantic_tag_filter_data.items() for j in i_v}
         keys.add(str(dtb_resource.gui_name).lower())
         keys.add(str(dtb_resource.name).lower())
         keys.add(str(dtb_resource.ctime).lower())
@@ -941,11 +941,11 @@ class _GuiDirectoryOpt(
             prx_tree_view, self.GUI_NAMESPACE
         )
 
-        self._index_thread_batch = 1
+        self._gui_thread_flag = 1
 
     def gui_add_all_use_thread(self, dtb_resource, dtb_version, path_cur=None):
         def cache_fnc_():
-            return self._index_thread_batch, self._dtb_opt.get_entities(
+            return self._gui_thread_flag, self._dtb_opt.get_entities(
                 entity_type=self._dtb_opt.EntityTypes.Storage,
                 filters=[
                     ('kind', 'is', self._dtb_opt.Kinds.Directory),
@@ -957,7 +957,7 @@ class _GuiDirectoryOpt(
             _index_thread_batch_current, _dtb_directories = args[0]
             _version_stg_location = self._dtb_opt.get_property(version_dtb_path, 'location')
             for _i_dtb_storage in _dtb_directories:
-                if _index_thread_batch_current != self._index_thread_batch:
+                if _index_thread_batch_current != self._gui_thread_flag:
                     break
                 _i_storage_dtb_path = _i_dtb_storage.path
                 _i_storage_stg_location = self._dtb_opt.get_property(_i_storage_dtb_path, 'location')
@@ -968,10 +968,10 @@ class _GuiDirectoryOpt(
             pass
 
         version_dtb_path = dtb_version.path
-        version_path_opt = bsc_core.PthNodeOpt(version_dtb_path)
+        version_path_opt = bsc_core.BscPathOpt(version_dtb_path)
         self.gui_add_root(version_path_opt.name)
 
-        self._index_thread_batch += 1
+        self._gui_thread_flag += 1
 
         t = gui_qt_core.QtBuildThread(self._window.widget)
         t.set_cache_fnc(cache_fnc_)
@@ -982,7 +982,7 @@ class _GuiDirectoryOpt(
 
     def gui_add_all(self, dtb_resource, dtb_version, path_cur=None):
         version_dtb_path = dtb_version.path
-        version_path_opt = bsc_core.PthNodeOpt(version_dtb_path)
+        version_path_opt = bsc_core.BscPathOpt(version_dtb_path)
         #
         self.gui_add_root(version_path_opt.name)
         dtb_directories = self._dtb_opt.get_entities(
@@ -1001,7 +1001,7 @@ class _GuiDirectoryOpt(
             self.gui_add_one(dtb_resource, i_dtb_storage, i_sub_path)
 
     def gui_add_one(self, dtb_resource, dtb_directory, file_type, is_current=False):
-        path_opt = bsc_core.PthNodeOpt(file_type)
+        path_opt = bsc_core.BscPathOpt(file_type)
         ancestors = path_opt.get_ancestors()
         if ancestors:
             ancestors.reverse()
@@ -1026,7 +1026,7 @@ class _GuiDirectoryOpt(
 
     def gui_add_group(self, file_type):
         if self.gui_check_exists(file_type) is False:
-            path_opt = bsc_core.PthNodeOpt(file_type)
+            path_opt = bsc_core.BscPathOpt(file_type)
             #
             parent_gui = self.gui_get_one(path_opt.get_parent_path())
             #
@@ -1079,7 +1079,7 @@ class _GuiDirectoryOpt(
             prx_item_widget.set_tool_tip(_location)
 
         if self.gui_check_exists(file_type) is False:
-            path_opt = bsc_core.PthNodeOpt(file_type)
+            path_opt = bsc_core.BscPathOpt(file_type)
             #
             parent_gui = self.gui_get_one(path_opt.get_parent_path())
             #
@@ -1280,7 +1280,7 @@ class _GuiUsdStageViewOpt(_GuiBaseOpt):
     def __init__(self, window, session, database_opt, usd_stage_view):
         super(_GuiUsdStageViewOpt, self).__init__(window, session, database_opt)
         self._usd_stage_view = usd_stage_view
-        self._index_thread_batch = 1
+        self._gui_thread_flag = 1
 
     def get_variants(self, dtb_version):
         p = self._dtb_opt.get_pattern(keyword='version-dir')
@@ -1332,19 +1332,19 @@ class _GuiUsdStageViewOpt(_GuiBaseOpt):
             hdri_file=hdri_file_path,
             use_as_hdri=use_as_hdri
         )
-        return [self._index_thread_batch, None]
+        return [self._gui_thread_flag, None]
 
     def refresh_textures_use_thread(self, dtb_resource, dtb_version, use_as_imperfection=False, use_as_hdri=False):
         def build_fnc_(*args):
             _index_thread_batch_current, _ = args[0]
-            if _index_thread_batch_current != self._index_thread_batch:
+            if _index_thread_batch_current != self._gui_thread_flag:
                 return
             self._usd_stage_view.refresh_usd_view_draw()
 
         def post_fnc_():
             pass
 
-        self._index_thread_batch += 1
+        self._gui_thread_flag += 1
 
         self._usd_stage_view.run_build_extra_use_thread(
             functools.partial(self.__gui_cache_fnc, dtb_version, use_as_imperfection, use_as_hdri),
@@ -1524,7 +1524,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         else:
             self._dtb_superclass_path_cur = self._dtb_superclass_paths[0]
         #
-        self._dtb_superclass_name_cur = bsc_core.PthNodeOpt(self._dtb_superclass_path_cur).get_name()
+        self._dtb_superclass_name_cur = bsc_core.BscPathOpt(self._dtb_superclass_path_cur).get_name()
 
         self.refresh_all()
 
@@ -1568,7 +1568,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
     def restore_variants(self):
         self._running_threads_stacks = None
 
-        self._index_thread_batch = 0
+        self._gui_thread_flag = 0
 
         self.__attribute_options = {}
         self.__attribute_options_default = {}
@@ -1590,7 +1590,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
                 self.HISTORY_KEY, self._dtb_superclass_path_cur
             )
 
-        self._dtb_superclass_name_cur = bsc_core.PthNodeOpt(self._dtb_superclass_path_cur).get_name()
+        self._dtb_superclass_name_cur = bsc_core.BscPathOpt(self._dtb_superclass_path_cur).get_name()
         self._dtb_cfg_file_path_extend = bsc_resource.RscExtendConfigure.get_yaml(
             'database/library/resource-{}'.format(self._dtb_superclass_name_cur)
         )
@@ -1806,7 +1806,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         #
         self.__restore_thread_stack()
         #
-        self._index_thread_batch += 1
+        self._gui_thread_flag += 1
         #
         self._resource_prx_view.set_clear()
         self._gui_tag_opt.reset()
@@ -1833,9 +1833,9 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
                     elif dtb_entity.kind == self._dtb_opt.Kinds.ResourceType:
                         dtb_types = [dtb_entity]
                 #
-                self.__batch_gui_add_for_resources_by_types(dtb_types, self._index_thread_batch)
+                self.__batch_gui_add_for_resources_by_types(dtb_types, self._gui_thread_flag)
 
-    def __batch_gui_add_for_resources_by_types(self, dtb_types, thread_stack_index):
+    def __batch_gui_add_for_resources_by_types(self, dtb_types, gui_thread_flag):
         def post_fnc_():
             pass
 
@@ -1854,7 +1854,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
                 for i_dtb_types in dtb_types_map:
                     ts.register(
                         cache_fnc=functools.partial(
-                            self.__batch_gui_cache_fnc_for_resources_by_entities, i_dtb_types, thread_stack_index
+                            self.__batch_gui_cache_fnc_for_resources_by_entities, i_dtb_types, gui_thread_flag
                         ),
                         build_fnc=self.__batch_gui_build_fnc_for_resources
                     )
@@ -1867,11 +1867,11 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
                 for i_dtb_types in dtb_types_map:
                     g_p.do_update()
                     self.__batch_gui_build_fnc_for_resources(
-                        self.__batch_gui_cache_fnc_for_resources_by_entities(i_dtb_types, thread_stack_index)
+                        self.__batch_gui_cache_fnc_for_resources_by_entities(i_dtb_types, gui_thread_flag)
                     )
 
-    def __batch_gui_cache_fnc_for_resources_by_entities(self, dtb_types, thread_stack_index):
-        if thread_stack_index != self._index_thread_batch:
+    def __batch_gui_cache_fnc_for_resources_by_entities(self, dtb_types, gui_thread_flag):
+        if gui_thread_flag != self._gui_thread_flag:
             return
 
         if dtb_types:
@@ -1883,7 +1883,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
                     ('value', 'in', [i.path for i in dtb_types])
                 ]
             )
-            return [dtb_assigns, thread_stack_index]
+            return [dtb_assigns, gui_thread_flag]
 
     def __batch_gui_build_fnc_for_resources(self, *args):
         def post_fnc_():
@@ -1895,8 +1895,8 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         if args[0] is None:
             return
 
-        dtb_assigns, thread_stack_index = args[0]
-        if thread_stack_index != self._index_thread_batch:
+        dtb_assigns, gui_thread_flag = args[0]
+        if gui_thread_flag != self._gui_thread_flag:
             return
 
         dtb_type_assigns_map = bsc_core.RawListMtd.grid_to(
@@ -1909,7 +1909,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
             for i_dtb_type_assigns in dtb_type_assigns_map:
                 ts.register(
                     cache_fnc=functools.partial(
-                        self.__gui_cache_fnc_for_resources, i_dtb_type_assigns, thread_stack_index
+                        self.__gui_cache_fnc_for_resources, i_dtb_type_assigns, gui_thread_flag
                     ),
                     build_fnc=self.__gui_build_fnc_for_resources
                 )
@@ -1922,10 +1922,10 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
                 for i_dtb_type_assigns in dtb_type_assigns_map:
                     g_p.do_update()
                     self.__gui_build_fnc_for_resources(
-                        self.__gui_cache_fnc_for_resources(i_dtb_type_assigns, thread_stack_index)
+                        self.__gui_cache_fnc_for_resources(i_dtb_type_assigns, gui_thread_flag)
                     )
 
-    def __gui_cache_fnc_for_resources(self, dtb_assigns, thread_stack_index):
+    def __gui_cache_fnc_for_resources(self, dtb_assigns, gui_thread_flag):
         build_args = []
 
         for i_dtb_assign in dtb_assigns:
@@ -1949,17 +1949,17 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
             build_args.append(
                 (i_dtg_type, i_dtb_resource, i_dtb_tag_args, i_semantic_tag_filter_data)
             )
-        return [build_args, thread_stack_index]
+        return [build_args, gui_thread_flag]
 
     def __gui_build_fnc_for_resources(self, *args):
-        build_args, thread_stack_index = args[0]
+        build_args, gui_thread_flag = args[0]
 
         if args[0] is None:
             return
 
         with self.gui_bustling():
             for i_dtg_type, i_dtb_resource, i_dtb_tag_args, i_semantic_tag_filter_data in build_args:
-                if thread_stack_index != self._index_thread_batch:
+                if gui_thread_flag != self._gui_thread_flag:
                     break
 
                 self._gui_resource_opt.gui_add(

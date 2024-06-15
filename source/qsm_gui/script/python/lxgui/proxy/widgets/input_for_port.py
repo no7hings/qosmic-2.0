@@ -424,6 +424,7 @@ class PrxInputAsFilesOpen(PrxInputAsStorageArray):
             gui_core.GuiIcon.get('file/file')
         )
         self._qt_input_widget._get_entry_widget_()._set_entry_use_as_file_(True)
+        self._qt_input_widget._get_entry_widget_()._set_entry_use_as_storage_(True)
         self._qt_input_widget._get_entry_widget_()._set_entry_use_as_file_multiply_(True)
 
     def open_with_dialog_fnc(self):
@@ -475,12 +476,12 @@ class PrxInputAsMediasOpen(PrxInputAsFilesOpen):
         )
 
     @staticmethod
-    def _get_screenshot_file_path():
+    def _generate_screenshot_file_path():
         d = bsc_core.BscSystem.get_home_directory()
-        return six.u('{}/screenshot/untitled-{}.jpg').format(d, bsc_core.TimeExtraMtd.generate_time_tag_36())
+        return six.u('{}/screenshot/untitled-{}.png').format(d, bsc_core.TimeExtraMtd.generate_time_tag_36())
 
     def _do_screenshot_save(self, g):
-        f = self._get_screenshot_file_path()
+        f = self._generate_screenshot_file_path()
         gui_prx_wdt_utility.PrxScreenshotFrame.save_to(
             g, f
         )

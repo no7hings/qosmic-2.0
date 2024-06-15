@@ -86,9 +86,11 @@ class PrxPanelForTaskManager(gui_prx_widgets.PrxSessionWindow):
             self._notice_prx_page.do_gui_refresh_all(force)
 
     def start_web_socket_server(self):
-        self._notice_web_server = gui_qt_core.QtWebServerForNotice(self._qt_widget)
+        self._notice_web_server = gui_qt_core.QtWebServerForWindowNotice(self._qt_widget)
         self._notice_web_server._start_(
-            qsm_tsk_process.NoticeWebServerBase.HOST, qsm_tsk_process.NoticeWebServerBase.PORT
+            qsm_tsk_process.NoticeWebServerBase.NAME,
+            qsm_tsk_process.NoticeWebServerBase.HOST,
+            qsm_tsk_process.NoticeWebServerBase.PORT
         )
         self._task_web_server = _gui_qt.QtWebServerForTask(self._qt_widget)
         self._task_web_server._start_(

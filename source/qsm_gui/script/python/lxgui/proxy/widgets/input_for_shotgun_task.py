@@ -123,7 +123,7 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
     def __update_branch(self, text):
         if text != self.__scheme:
             path_text = self._qt_path_input._get_value_()
-            path = bsc_core.PthNodeOpt(path_text)
+            path = bsc_core.BscPathOpt(path_text)
 
             self.__scheme = text
             self._qt_path_input._restore_buffer_cache_()
@@ -285,7 +285,7 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
         self.__stg_task = None
         self.__result_dict = None
         if path_text:
-            path = bsc_core.PthNodeOpt(path_text)
+            path = bsc_core.BscPathOpt(path_text)
             cs = path.get_components()
             cs.reverse()
 

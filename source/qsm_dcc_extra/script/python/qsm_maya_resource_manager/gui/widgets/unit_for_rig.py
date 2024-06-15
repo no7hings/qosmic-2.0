@@ -266,7 +266,7 @@ class UnitForRigUtilityToolSet(
                 self._window._language, self._session.configure.get('build.options.rig_utility')
             )
         )
-        self._prx_options_node.create_ports_by_data(
+        self._prx_options_node.build_by_data(
             self._session.configure.get('build.options.rig_utility.parameters'),
         )
         self._page.gui_get_tool_tab_box().add_widget(
@@ -350,7 +350,7 @@ class UnitForRigSwitchToolSet(
                 self._window._language, self._session.configure.get('build.options.rig_switch')
             )
         )
-        self._prx_options_node.create_ports_by_data(
+        self._prx_options_node.build_by_data(
             self._session.configure.get('build.options.rig_switch.parameters'),
         )
         self._page.gui_get_tool_tab_box().add_widget(
@@ -477,7 +477,7 @@ class UnitForRigExtendToolSet(
                 self._window._language, self._session.configure.get('build.options.rig_motion')
             )
         )
-        self._prx_options_node.create_ports_by_data(
+        self._prx_options_node.build_by_data(
             self._session.configure.get('build.options.rig_motion.parameters'),
         )
         self._page.gui_get_tool_tab_box().add_widget(

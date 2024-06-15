@@ -20,11 +20,11 @@ def main(session):
         )
         type_path = dtb_types[0]
 
-        type_path_opt = bsc_core.PthNodeOpt(type_path)
+        type_path_opt = bsc_core.BscPathOpt(type_path)
         type_path_opt = type_path_opt.to_dcc()
-        resource_path_opt = bsc_core.PthNodeOpt(resource_path)
+        resource_path_opt = bsc_core.BscPathOpt(resource_path)
         resource_path_opt = resource_path_opt.to_dcc()
-        file_type_path_opt = bsc_core.PthNodeOpt(file_type_path)
+        file_type_path_opt = bsc_core.BscPathOpt(file_type_path)
         file_type_path_opt = file_type_path_opt.to_dcc()
 
         resource_location = '{}/{}'.format(

@@ -336,7 +336,7 @@ class AssImportFnc(object):
                     g_p.do_update()
                     #
                     geometry_and_obj_path = geometry_and_obj.path
-                    geometry_dcc_dag_path = bsc_core.PthNodeOpt(geometry_and_obj_path).translate_to(
+                    geometry_dcc_dag_path = bsc_core.BscPathOpt(geometry_and_obj_path).translate_to(
                         mya_core.MyaUtil.OBJ_PATHSEP
                     )
                     geometry_dcc_obj = mya_dcc_objects.Geometry(geometry_dcc_dag_path.path)

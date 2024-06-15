@@ -827,6 +827,7 @@ class QtIconPressButton(
                     is_hovered=self._is_hovered,
                     hover_color=self._icon_hover_color,
                     is_pressed=is_pressed,
+                    is_action_enable=self._action_is_enable,
                 )
             elif self._icon_text is not None:
                 if self.__icon_style is not None:
@@ -870,14 +871,15 @@ class QtIconPressButton(
                         rect=self._icon_state_draw_rect,
                         file_path=self._icon_state_file_path,
                         offset=offset,
-                        is_hovered=self._is_hovered
+                        is_hovered=self._is_hovered,
+                        is_action_enable=self._action_is_enable,
                     )
         # state
-        if self._action_state in [self.ActionState.Disable]:
-            painter._draw_icon_file_by_rect_(
-                self._action_state_rect,
-                _gui_core.GuiIcon.get('state-disable')
-            )
+        # if self._action_state in [self.ActionState.Disable]:
+        #     painter._draw_icon_file_by_rect_(
+        #         self._action_state_rect,
+        #         _gui_core.GuiIcon.get('state-disable')
+        #     )
         # text
         if self._name_text:
             painter._draw_text_by_rect_(

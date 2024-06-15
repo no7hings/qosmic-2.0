@@ -159,7 +159,7 @@ class UsdStageOpt(UsdBasic):
             return _
 
     def create_obj(self, path_text, type_name=''):
-        path_opt = bsc_core.PthNodeOpt(path_text)
+        path_opt = bsc_core.BscPathOpt(path_text)
         paths = path_opt.get_component_paths()
         paths.reverse()
         for i_path in paths:
@@ -176,7 +176,7 @@ class UsdStageOpt(UsdBasic):
     def copy_dag_from(self, usd_prim):
         usd_stage = usd_prim.GetStage()
         path_text = usd_prim.GetPath().pathString
-        path_opt = bsc_core.PthNodeOpt(path_text)
+        path_opt = bsc_core.BscPathOpt(path_text)
         paths = path_opt.get_component_paths()
         paths.reverse()
         for i_path in paths:
@@ -229,7 +229,7 @@ class UsdStageOpt(UsdBasic):
             i_usd_prim_opt = UsdPrimOpt(i_usd_prim)
             list_.append(i_usd_prim_opt.get_path())
         #
-        path_opt = bsc_core.PthNodeOpt(regex)
+        path_opt = bsc_core.BscPathOpt(regex)
         #
         child_paths = bsc_core.PthNodeMtd.find_dag_child_paths(
             path_opt.get_parent_path(), list_

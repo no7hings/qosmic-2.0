@@ -136,7 +136,7 @@ class ScpResourcesAddFor3dPlant(object):
                 raise RuntimeError()
 
     def add_3d_from(self, directory_path_src, type_dtb_path):
-        type_opt = bsc_core.PthNodeOpt(type_dtb_path)
+        type_opt = bsc_core.BscPathOpt(type_dtb_path)
         cs = type_opt.get_components()
         category_group_opt = cs[-2]
         category_group = category_group_opt.get_name()

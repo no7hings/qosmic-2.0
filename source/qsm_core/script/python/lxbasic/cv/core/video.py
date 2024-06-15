@@ -1,23 +1,21 @@
 # coding:utf-8
 from __future__ import print_function
 
-import six
+import sys
 
 import os
-
-import cv2
 
 import threading
 
 import lxbasic.core as bsc_core
+
+from .wrap import *
 
 
 class VideoCaptureOpt(object):
     def __init__(self, video_path):
         self._video_path = bsc_core.auto_unicode(video_path)
         self._cpt = cv2.VideoCapture(self._video_path)
-        # if not self._cpt.isOpened():
-        #     raise Exception('Cannot open video file: {}'.format(bsc_core.auto_string(video_path)))
 
     def is_valid(self):
         return self._cpt.isOpened()
@@ -49,9 +47,15 @@ class VideoCaptureOpt(object):
         return int(self._cpt.get(cv2.CAP_PROP_FRAME_COUNT))
 
     def get_fps(self):
-        return self._cpt.get(cv2.CAP_PROP_FPS)
+        return int(self._cpt.get(cv2.CAP_PROP_FPS))
 
     def release(self):
+        self._cpt.release()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
         self._cpt.release()
 
 
@@ -68,12 +72,13 @@ class FrameExtractor(object):
         self._cpt = cv2.VideoCapture(self._video_path)
 
         if not self._cpt.isOpened():
-            print("Error: Cannot open video file.")
+            sys.stderr.write('Error: Cannot open video file.\n')
             return
 
         frame_count = int(self._cpt.get(cv2.CAP_PROP_FRAME_COUNT))
+        fps = int(self._cpt.get(cv2.CAP_PROP_FPS))
 
-        frame_index = min(24*100, int(frame_count/2))
+        frame_index = min(fps*30, int(frame_count/2))
 
         # frame_index = 0
 
@@ -86,10 +91,11 @@ class FrameExtractor(object):
             directory_path = os.path.dirname(self._image_path)
             if os.path.exists(directory_path) is False:
                 os.makedirs(directory_path)
+
             cv2.imwrite(self._image_path, self._frame)
-            print("Thumbnail saved at:", self._image_path)
+            sys.stdout.write('Thumbnail saved at: "{}"\n'.format(bsc_core.auto_string(self._image_path)))
         else:
-            print("Error: Cannot read frame.")
+            sys.stderr.write('Error: Cannot read frame.\n')
 
     def run(self):
         thread = threading.Thread(target=self.extract_frame)
@@ -97,6 +103,6 @@ class FrameExtractor(object):
         thread.join(self._timeout)
 
         if thread.is_alive():
-            print("Error: Reading frame timed out.")
+            sys.stderr.write('Error: Reading frame timed out.\n')
         else:
             self.save_frame()

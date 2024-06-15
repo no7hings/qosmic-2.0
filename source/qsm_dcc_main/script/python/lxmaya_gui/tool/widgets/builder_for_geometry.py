@@ -11,7 +11,7 @@ class PnlBuilderForAssetGeometry(gui_prx_widgets.PrxSessionToolWindow):
         self.add_widget(s)
         self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         s.add_widget(self._options_prx_node)
-        self._options_prx_node.create_ports_by_data(
+        self._options_prx_node.build_by_data(
             self._session.configure.get('build.node.options'),
         )
         # tip

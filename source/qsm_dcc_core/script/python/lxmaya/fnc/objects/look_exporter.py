@@ -459,7 +459,7 @@ class TextureBaker(gnl_fnc_abstracts.AbsFncOptionBase):
             # debug, render a black texture when "castsShadows" is "False"
             mya_show_set.get_port('castsShadows').set(True)
         #
-        mya_location_path = bsc_core.PthNodeOpt(location_path).translate_to('|').get_value()
+        mya_location_path = bsc_core.BscPathOpt(location_path).translate_to('|').get_value()
         #
         mya_group = mya_dcc_objects.Group(mya_location_path)
         mya_mesh_paths = mya_group.get_all_shape_paths(
@@ -520,7 +520,7 @@ class TextureBaker(gnl_fnc_abstracts.AbsFncOptionBase):
         directory = gnl_dcc_objects.StgDirectory(directory_path)
 
         mya_group = mya_dcc_objects.Group(
-            bsc_core.PthNodeOpt(location_path).translate_to('|').get_value()
+            bsc_core.BscPathOpt(location_path).translate_to('|').get_value()
         )
         mya_mesh_paths = mya_group.get_all_shape_paths(
             include_obj_type=['mesh']
@@ -630,7 +630,7 @@ class FncExporterForLookYml(gnl_fnc_abstracts.AbsFncOptionBase):
         return dic
 
     def update_by_location_fnc(self, location, pathsep):
-        location_cur = bsc_core.PthNodeOpt(location).translate_to(pathsep).get_value()
+        location_cur = bsc_core.BscPathOpt(location).translate_to(pathsep).get_value()
         group = mya_dcc_objects.Group(location_cur)
         nodes = group.get_descendants()
         if nodes:

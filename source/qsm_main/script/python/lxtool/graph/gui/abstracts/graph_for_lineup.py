@@ -57,7 +57,7 @@ class AbsPnlAssetLineup(gui_prx_widgets.PrxSessionWindow):
         v_s.add_widget(s)
         self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         s.add_widget(self._options_prx_node)
-        self._options_prx_node.create_ports_by_data(
+        self._options_prx_node.build_by_data(
             self._hook_build_configure.get('node.options')
         )
 
@@ -298,7 +298,7 @@ class AbsPnlAssetLineup(gui_prx_widgets.PrxSessionWindow):
                         if 'gui_parent' in i_hook_option:
                             i_gui_parent_path = i_hook_option['gui_parent']
                     #
-                    i_gui_parent_path_opt = bsc_core.PthNodeOpt(i_gui_parent_path)
+                    i_gui_parent_path_opt = bsc_core.BscPathOpt(i_gui_parent_path)
                     #
                     if i_gui_parent_path_opt.get_is_root():
                         i_gui_path = '/{}'.format(i_gui_name)

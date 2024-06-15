@@ -1,0 +1,21 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Resource Load'
+        name_chs: '资源加载'
+        group_name: 'General(s)'
+        #
+        icon_name: 'file/add-file'
+        tool_tip:
+            |-
+            For resource load.
+        #
+        tool_tip_chs:
+            |-
+            用于资源加载。
+
+        size: [480, 720]

@@ -77,7 +77,7 @@ class QtInputAsPath(
 
         self._build_input_entry_()
 
-        self._index_thread_batch = 0
+        self._gui_thread_flag = 0
 
     def _build_input_entry_(self):
         self._entry_frame_widget = self
@@ -130,16 +130,16 @@ class QtInputAsPath(
         def cache_fnc_():
             _key = path.to_string()
             if _key in self.__buffer_cache:
-                return [self._index_thread_batch, self.__buffer_cache[_key]]
+                return [self._gui_thread_flag, self.__buffer_cache[_key]]
 
             _data = self._buffer_fnc(path)
             self.__buffer_cache[_key] = _data
-            return [self._index_thread_batch, _data]
+            return [self._gui_thread_flag, _data]
 
         def build_fnc_(*args):
             _index_thread_batch_current, _dict = args[0]
 
-            if _index_thread_batch_current != self._index_thread_batch:
+            if _index_thread_batch_current != self._gui_thread_flag:
                 return
 
             if _dict:
@@ -172,7 +172,7 @@ class QtInputAsPath(
         def post_fnc_():
             self._entry_extend_widget._do_next_wait_end_()
 
-        self._index_thread_batch += 1
+        self._gui_thread_flag += 1
 
         # thread only use when widget is show
         # if self.isVisible() is True:

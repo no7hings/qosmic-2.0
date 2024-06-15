@@ -44,7 +44,7 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
             tab_view.add_widget(i_s, name=i)
             i_n = gui_prx_widgets.PrxOptionsNode(i)
             i_s.add_widget(i_n)
-            i_n.create_ports_by_data(
+            i_n.build_by_data(
                 c.get(i)
             )
             # print i_n.get_all_ports()

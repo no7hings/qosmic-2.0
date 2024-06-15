@@ -7,7 +7,7 @@ import lxbasic.core as bsc_core
 
 import lxgui.qt.core as gui_qt_core
 
-import lxbasic.media.core as bsc_mda_core
+import lxbasic.cv.core as bsc_cv_core
 
 
 class W(gui_prx_widgets.PrxBaseWindow):

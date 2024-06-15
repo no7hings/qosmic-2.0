@@ -32,7 +32,7 @@ class VdoFileOpt(object):
                     os.makedirs(directory_path)
                 #
                 cmd_args = [
-                    bsc_cor_execute.ExcBaseMtd.ffmpeg(),
+                    bsc_cor_base.BscFfmpeg.get_ffmpeg_source(),
                     u'-i "{}"'.format(self.path),
                     '-vf scale={}:-1'.format(width),
                     '-vframes 1',
@@ -58,7 +58,7 @@ class VdoFileOpt(object):
                     os.makedirs(directory_path)
                 #
                 cmd_args = [
-                    bsc_cor_execute.ExcBaseMtd.ffmpeg(),
+                    bsc_cor_base.BscFfmpeg.get_ffmpeg_source(),
                     u'-i "{}"'.format(self.path),
                     '-vf scale={}:-1'.format(width),
                     '-vframes 1',
@@ -74,7 +74,7 @@ class VdoFileOpt(object):
     def set_mov_create_from(self, image_file_path, width=1024, fps=24, block=False):
         if _base.StgPathMtd.get_is_exists(self._file_path) is False:
             cmd_args = [
-                bsc_cor_execute.ExcBaseMtd.ffmpeg(),
+                bsc_cor_base.BscFfmpeg.get_ffmpeg_source(),
                 '-i "{}"'.format(image_file_path),
                 '-r {}'.format(fps),
                 '-f mov',
@@ -94,7 +94,7 @@ class VdoFileOpt(object):
                 )
 
     def set_create_from(self, image_file_path, start_frame=0):
-        cmd = '/opt/rv/bin/rvio "{image_file}" -overlay frameburn .4 1.0 30.0 -dlut "{lut_directory}" -o "{movie_file}" -comment "{user}" -outparams timecode={start_frame}'.format(
+        cmd_string = '/opt/rv/bin/rvio "{image_file}" -overlay frameburn .4 1.0 30.0 -dlut "{lut_directory}" -o "{movie_file}" -comment "{user}" -outparams timecode={start_frame}'.format(
             **dict(
                 movie_file=self._file_path,
                 image_file=image_file_path,
@@ -104,17 +104,33 @@ class VdoFileOpt(object):
             )
         )
         bsc_cor_process.PrcBaseMtd.execute_with_result(
-            cmd
+            cmd_string
         )
 
     def get_size(self):
         cmd_args = [
-            bsc_cor_execute.ExcBaseMtd.ffmpeg(),
+            bsc_cor_base.BscFfmpeg.get_ffmpeg_source(),
             u'-i "{}"'.format(self.path),
         ]
-        cmd = ' '.join(cmd_args)
-        bsc_cor_process.PrcBaseMtd.execute_with_result(
-            cmd
+        cmd_string = ' '.join(cmd_args)
+        bsc_cor_process.PrcBaseMtd.execute_as_trace(
+            cmd_string
+        )
+
+    def create_thumbnail(self, thumbnail_path, frame_index=0):
+        thumbnail_opt = _base.StgFileOpt(thumbnail_path)
+        thumbnail_opt.create_directory()
+        cmd_args = [
+            bsc_cor_base.BscFfmpeg.get_ffmpeg_source(),
+            r'-i "{}"'.format(self.path),
+            r'-vf',
+            r'select=eq(n\,{})'.format(frame_index),
+            '-vsync vfr', '-q:v 2', '-y',
+            '"{}"'.format(thumbnail_path)
+        ]
+        cmd_string = ' '.join(cmd_args)
+        bsc_cor_process.PrcBaseMtd.execute_as_trace(
+            cmd_string
         )
 
 

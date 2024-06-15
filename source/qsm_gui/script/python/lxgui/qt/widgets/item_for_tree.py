@@ -163,7 +163,7 @@ class QtTreeWidgetItem(
     def _set_icon_name_text_(self, text, column=0):
         self._icon_text = text
         icon = QtGui.QIcon()
-        pixmap = gui_qt_core.GuiQtPixmap.get_by_name(
+        pixmap = gui_qt_core.QtPixmap.get_by_name(
             self._icon_text,
             size=(14, 14)
         )
@@ -181,7 +181,7 @@ class QtTreeWidgetItem(
             if self._icon_file_path is not None:
                 pixmap = QtGui.QPixmap(self._icon_file_path)
             elif self._icon_text is not None:
-                pixmap = gui_qt_core.GuiQtPixmap.get_by_name(
+                pixmap = gui_qt_core.QtPixmap.get_by_name(
                     self._icon_text,
                     size=(14, 14)
                 )
@@ -350,7 +350,7 @@ class QtTreeWidgetItem(
             elif self._icon_file_path is not None:
                 pixmap = QtGui.QPixmap(self._icon_file_path)
             elif self._icon_text is not None:
-                pixmap = gui_qt_core.GuiQtPixmap.get_by_name(
+                pixmap = gui_qt_core.QtPixmap.get_by_name(
                     self._icon_text,
                     size=(14, 14)
                 )

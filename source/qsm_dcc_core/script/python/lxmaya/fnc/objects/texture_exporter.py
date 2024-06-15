@@ -40,7 +40,7 @@ class FncExporterForRenderTexture(
         for i in self.PLUGINS:
             cmds.loadPlugin(i, quiet=1)
         #
-        root_dag_path = bsc_core.PthNodeOpt(self._location)
+        root_dag_path = bsc_core.BscPathOpt(self._location)
         root_mya_dag_path = root_dag_path.translate_to(
             pathsep=mya_core.MyaUtil.OBJ_PATHSEP
         )

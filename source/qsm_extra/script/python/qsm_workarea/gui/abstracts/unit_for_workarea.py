@@ -43,7 +43,7 @@ class _GuiDirectoryOpt(
             '{location}/{entity}/workarea/user.{artist}/{step}.{task}/{task_extra}/{entity}.{step}.{task}.{task_extra}.v{version}{ext}'
         )
 
-        self._index_thread_batch = 0
+        self._gui_thread_flag = 0
         self._root = None
         self._root_opt = None
 
@@ -86,7 +86,7 @@ class _GuiDirectoryOpt(
 
         path = directory_path[len(self._root):]
         if self.gui_check_exists(path) is False:
-            path_opt = bsc_core.PthNodeOpt(path)
+            path_opt = bsc_core.BscPathOpt(path)
             prx_item = self._prx_tree_view.create_item(
                 path_opt.get_name(),
                 icon=gui_core.GuiIcon.get('database/all'),
@@ -111,7 +111,7 @@ class _GuiDirectoryOpt(
         directory_path = directory_opt.get_path()
         path = directory_path[len(self._root):]
         if self.gui_check_exists(path) is False:
-            path_opt = bsc_core.PthNodeOpt(path)
+            path_opt = bsc_core.BscPathOpt(path)
             #
             parent_gui = self.gui_get_one(path_opt.get_parent_path())
             #
@@ -158,7 +158,7 @@ class _GuiDirectoryOpt(
             directory_opts = directory_opt.get_directories()
             directory_opts.sort(key=lambda x: bsc_core.RawTextMtd.to_number_embedded_args(x.path))
             return [
-                self._index_thread_batch,
+                self._gui_thread_flag,
                 directory_opts
             ]
 
@@ -166,14 +166,14 @@ class _GuiDirectoryOpt(
             _index_thread_batch_current, _directory_opts = args[0]
             with self._prx_tree_view.gui_bustling():
                 for _i_directory_opt in _directory_opts:
-                    if _index_thread_batch_current != self._index_thread_batch:
+                    if _index_thread_batch_current != self._gui_thread_flag:
                         break
                     self.gui_add_directory(_i_directory_opt)
 
         def post_fnc_():
             pass
 
-        self._index_thread_batch += 1
+        self._gui_thread_flag += 1
 
         directory_opt = bsc_storage.StgDirectoryOpt(directory_path)
 

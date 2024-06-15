@@ -79,16 +79,16 @@ class QtBuildThreadWorker(QtCore.QThread):
                 bsc_core.BscException.print_stack()
             #
             finally:
-                self._stdout('thread is finished: {}\n'.format(self._entity))
-                self.run_finished.emit()
-                self.finish_accepted.emit(self)
-                self.set_status(self.Status.Finished)
-
                 self.parent()._thread_workers.remove(self)
 
                 with QtCore.QMutexLocker(self.parent()._thread_worker_mutex):
                     self.parent()._thread_worker_value -= 1
                     self.parent()._thread_worker_condition.wakeAll()
+                # send finish finally
+                self._stdout('thread is finished: {}\n'.format(self._entity))
+                self.run_finished.emit()
+                self.finish_accepted.emit(self)
+                self.set_status(self.Status.Finished)
         else:
             self._stderr('thread is killed: {}\n'.format(self._entity))
 

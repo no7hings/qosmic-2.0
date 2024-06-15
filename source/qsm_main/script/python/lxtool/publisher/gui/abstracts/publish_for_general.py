@@ -274,7 +274,7 @@ class AbsPnlPublisherForGeneral(gui_prx_widgets.PrxSessionWindow):
         layer_widget.add_widget(sa_2)
         self._publish_options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         sa_2.add_widget(self._publish_options_prx_node)
-        self._publish_options_prx_node.create_ports_by_data(
+        self._publish_options_prx_node.build_by_data(
             self._session.configure.get('build.node.publish_options')
         )
 

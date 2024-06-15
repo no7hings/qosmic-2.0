@@ -23,7 +23,7 @@ from .view_for_tree import *
 
 from .view_for_list import *
 
-from .view_for_tag_filter import *
+from .entry_for_tag import *
 
 from .chart import *
 

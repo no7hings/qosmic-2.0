@@ -2,6 +2,8 @@
 # qt
 from ...qt.core.wrap import *
 
+from ... import core as _gui_core
+
 from ...qt import core as _qt_core
 
 from ...qt import abstracts as _qt_abstracts
@@ -43,19 +45,21 @@ class QtListWidget(
                 self._set_all_item_widgets_update_()
 
     def _do_hover_move_(self, event):
-        item = self.itemAt(event.pos())
+        p = event.pos()
+        item = self.itemAt(p)
         if item is None:
+            # no item under mouse
+            self._clear_item_hover_()
             return
 
         item_widget = self.itemWidget(item)
         if item_widget is None:
             return
 
-        self._clear_item_hover_()
-
         if item not in self._pre_hovered_items:
+            # clear pre when is changed
+            self._clear_item_hover_()
             self._pre_hovered_items.append(item)
-
             item_widget._set_hovered_(True)
 
     def _clear_item_hover_(self):
@@ -66,6 +70,25 @@ class QtListWidget(
                     i_item_widget._set_hovered_(False)
 
             self._pre_hovered_items = []
+
+    def _do_show_tool_tip_(self, event):
+        item = self.itemAt(event.pos())
+        if item is None:
+            return
+
+        item_widget = self.itemWidget(item)
+        if item_widget is None:
+            return
+
+        css = item_widget._get_tool_tip_css_()
+        if css:
+            rect = self.visualItemRect(item)
+            p = rect.bottomRight()
+            p = self.mapToGlobal(p) + QtCore.QPoint(0, -18)
+            # noinspection PyArgumentList
+            QtWidgets.QToolTip.showText(
+                p, css, self
+            )
 
     def __init__(self, *args, **kwargs):
         super(QtListWidget, self).__init__(*args, **kwargs)
@@ -191,6 +214,9 @@ class QtListWidget(
             #     #     self._do_hover_move_(event)
             #     print event.pos()
             #     print self.itemAt(event.pos())
+            elif event.type() == QtCore.QEvent.ToolTip:
+                if self._item_event_override_flag is True:
+                    self._do_show_tool_tip_(event)
 
             elif event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.buttons() == QtCore.Qt.LeftButton:
@@ -218,6 +244,29 @@ class QtListWidget(
                 self.rect(),
                 self._empty_icon_name
             )
+        else:
+            painter = _qt_core.QtPainter(self.viewport())
+            for i in range(self.count()):
+                i_item = self.item(i)
+                i_item_widget = self.itemWidget(i_item)
+                if not i_item_widget:
+                    if self._get_view_item_viewport_showable_(i_item) is True:
+                        i_rect = self.visualItemRect(i_item)
+                        i_x, i_y, i_w, i_h = i_rect.x(), i_rect.y(), i_rect.width(), i_rect.height()
+                        painter._set_border_color_(
+                            _gui_core.GuiRgba.Dark
+                        )
+                        painter._set_background_color_(
+                            _gui_core.GuiRgba.Dim
+                        )
+                        painter.drawRect(
+                            QtCore.QRect(i_x+2, i_y+2, i_w-4, i_h-4)
+                        )
+
+                        painter._draw_empty_image_by_rect_(
+                            i_rect, 'placeholder/item-empty'
+                        )
+
         # super(QtListWidget, self).paintEvent(event)
 
     def _set_item_event_override_flag_(self, boolean):
@@ -517,6 +566,7 @@ class QtListWidget(
             i._stop_item_show_all_()
         #
         self._pre_selected_items = []
+
         self._pre_hovered_items = []
         #
         self.clear()

@@ -4,18 +4,34 @@ import lxbasic.resource as bsc_resource
 
 import lxbasic.core as bsc_core
 
-print bsc_core.TimestampOpt(1718000000).get_as_tag()
-
 
 if __name__ == '__main__':
-    stage = qsm_scr_core.Stage(
-        # 'Z:/libraries/screw/.database/node.db'
-        'Z:/libraries/media/.database/video.db'
-    )
+    print qsm_scr_core.Stage.get_all_keys()
 
-    stage.connect()
+    # stage = qsm_scr_core.Stage(
+    #     'node'
+    #     # 'video'
+    # )
+    #
+    # stage.connect()
 
-    print stage.find_all_by_ctime_tag('Node', 'yesterday')
+
+
+    # stage.update_entity(
+    #     stage.EntityTypes.Property,
+    #     '/node/piao_dai_A.thumbnail',
+    #     value='Z:/libraries/lazy-resource/all/node/piao_dai_A/thumbnail/piao_dai_A.png'
+    # )
+
+    # stage.upload_node_media(
+    #     '/node/piao_dai_A', 'C:/Users/nothings/screenshot/untitled-SEYM9Z.jpg'
+    # )
+    #
+    # stage.upload_node_media(
+    #     '/node/piao_dai_B', 'Z:/temeporaries/dongchangbao/playblast_tool/test.v008.mov'
+    # )
+
+    # print stage.find_all_by_ctime_tag('Node', 'yesterday')
 
     # print stage.find_one(
     #     'Node', filters=[

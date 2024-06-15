@@ -222,7 +222,7 @@ class GuiQtMenuOpt(object):
             for i_key in keys:
                 i_atr_path_opt = bsc_core.PthAttributeOpt(i_key)
                 i_obj_path = i_atr_path_opt.obj_path
-                i_obj_path_opt = bsc_core.PthNodeOpt(i_obj_path)
+                i_obj_path_opt = bsc_core.BscPathOpt(i_obj_path)
                 i_content = content.get_as_content(i_key)
                 i_type = i_content.get('type')
                 if i_obj_path_opt.get_is_root():

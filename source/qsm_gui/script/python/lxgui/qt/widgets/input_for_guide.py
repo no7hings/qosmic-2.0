@@ -416,7 +416,7 @@ class QtEntryAsGuide(
     def _set_guide_path_text_(self, path):
         self._clear_all_guide_items_()
         #
-        path_opt = bsc_core.PthNodeOpt(path)
+        path_opt = bsc_core.BscPathOpt(path)
         components = path_opt.get_components()
         if components:
             components.reverse()

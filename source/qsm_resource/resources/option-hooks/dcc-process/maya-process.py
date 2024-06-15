@@ -40,7 +40,7 @@ def lib_fbx_to_usd_fnc(option_opt):
 
         meshes = mya_dcc_objects.Nodes(['mesh']).get_objs()
         if meshes:
-            group = mya_dcc_objects.Group(bsc_core.PthNodeOpt(location).translate_to('|').get_path())
+            group = mya_dcc_objects.Group(bsc_core.BscPathOpt(location).translate_to('|').get_path())
             group.set_create('transform')
             #
             for i in mya_dcc_objects.Nodes(['mesh']).get_objs():
@@ -97,7 +97,7 @@ def lib_scene_src_to_scene_fnc(option_opt):
     import lxmaya.scripts as mya_scripts
 
     type_path = option_opt.get('type_path')
-    type_opt = bsc_core.PthNodeOpt(type_path)
+    type_opt = bsc_core.BscPathOpt(type_path)
     type_name = type_opt.get_name()
     category_opt = type_opt.get_parent()
     category_path = category_opt.get_path()
@@ -121,7 +121,7 @@ def lib_scene_src_to_scene_fnc(option_opt):
         if not meshes:
             return
         #
-        group = mya_dcc_objects.Group(bsc_core.PthNodeOpt(location).translate_to('|').get_path())
+        group = mya_dcc_objects.Group(bsc_core.BscPathOpt(location).translate_to('|').get_path())
         group.set_create('transform')
         # collection geometry
         for seq, i_mesh in enumerate(mya_dcc_objects.Nodes(['mesh']).get_objs()):
@@ -411,7 +411,7 @@ def register_texture_search(option_opt):
 
     resource_path = option_opt.get('resource_path')
     version_path = '{}/v0001'.format(resource_path)
-    path_opt = bsc_core.PthNodeOpt(version_path)
+    path_opt = bsc_core.BscPathOpt(version_path)
     cs = path_opt.get_components()
     category_group = cs[-2].get_name()
     dtb_opt = bsc_database.DtbOptForResource.generate(category_group)
@@ -436,7 +436,7 @@ def register_texture_search(option_opt):
 
             dtb_types = dtb_version_opt.get_types()
             dtb_type_path = dtb_types[0].path
-            dtb_type_path_opt = bsc_core.PthNodeOpt(dtb_type_path)
+            dtb_type_path_opt = bsc_core.BscPathOpt(dtb_type_path)
 
             category_name = dtb_type_path_opt.get_parent().get_name()
             type_name = dtb_type_path_opt.get_name()

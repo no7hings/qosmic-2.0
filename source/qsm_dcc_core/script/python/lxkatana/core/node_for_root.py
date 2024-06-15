@@ -85,7 +85,7 @@ class WorkspaceSetting(object):
 
     def setup(self):
         # self._obj_opt.clear_ports(self._cfg.get('main.clear_start'))
-        self._obj_opt.create_ports_by_data(
+        self._obj_opt.build_by_data(
             self._cfg.get('main.ports')
         )
 
@@ -93,7 +93,7 @@ class WorkspaceSetting(object):
         root = self._cfg.get('main.environment.root')
         if self._obj_opt.get_port_is_exists(root) is False:
             # self._obj_opt.clear_ports(root)
-            self._obj_opt.create_ports_by_data(
+            self._obj_opt.build_by_data(
                 self._cfg.get('main.environment.ports')
             )
 
@@ -139,7 +139,7 @@ class WorkspaceSetting(object):
         root = self._cfg.get('main.look.root')
         if self._obj_opt.get_port_is_exists(root) is False:
             # self._obj_opt.clear_ports(root)
-            self._obj_opt.create_ports_by_data(
+            self._obj_opt.build_by_data(
                 self._cfg.get('main.look.ports')
             )
 

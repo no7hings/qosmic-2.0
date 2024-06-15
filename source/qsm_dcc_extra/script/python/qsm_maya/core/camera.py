@@ -7,11 +7,7 @@ import maya.OpenMaya as om
 # noinspection PyUnresolvedReferences
 import maya.OpenMayaUI as om_ui
 
-from . import node as _nod
-
-from . import transform as _tsf
-
-from . import shape as _shp
+from . import node as _node
 
 from . import render as _rdr
 
@@ -48,7 +44,7 @@ class Camera(object):
             i_shape_dag_path = om.MDagPath()
             tvl.itemPath(i, i_shape_dag_path)
             i_shape_path = i_shape_dag_path.fullPathName()
-            if _nod.Node.is_exists(i_shape_path) is True:
+            if _node.Node.is_exists(i_shape_path) is True:
                 if filter_fnc_(i_shape_path) is True:
                     list_.append(i_shape_path)
 

@@ -184,7 +184,7 @@ class _GuiTaskOpt(
         if self.gui_check_exists(path):
             return False, self.gui_get_one(path)
 
-        path_opt = bsc_core.PthNodeOpt(path)
+        path_opt = bsc_core.BscPathOpt(path)
         parent_gui = self.gui_get_one(path_opt.get_parent_path())
 
         prx_item = parent_gui.prepend_child(
@@ -290,7 +290,7 @@ class _GuiTaskOpt(
         return True, prx_item
 
     def do_gui_refresh_entities_force(self):
-        self._index_thread_batch += 1
+        self._gui_thread_flag += 1
         self._auto_update_timer.stop()
         # noinspection PyBroadException
         try:
@@ -303,7 +303,7 @@ class _GuiTaskOpt(
         self.do_gui_add_entities_batch()
 
     def do_gui_add_entities_batch(self):
-        self._index_thread_batch += 1
+        self._gui_thread_flag += 1
 
         self.gui_add_root()
 
@@ -318,22 +318,22 @@ class _GuiTaskOpt(
         t = gui_qt_core.QtBuildThread(self._prx_tree_view.get_widget())
         t.set_cache_fnc(
             functools.partial(
-                self._gui_add_entities_batch_cache_fnc, self._index_thread_batch
+                self._gui_add_entities_batch_cache_fnc, self._gui_thread_flag
             )
         )
         t.cache_value_accepted.connect(self._gui_add_entities_batch_build_fnc)
         #
         t.start()
 
-    def _gui_add_entities_batch_cache_fnc(self, thread_stack_index):
-        if thread_stack_index != self._index_thread_batch:
+    def _gui_add_entities_batch_cache_fnc(self, gui_thread_flag):
+        if gui_thread_flag != self._gui_thread_flag:
             return []
 
         self._entity_pool.do_update()
         entity_ids = self._entity_pool.find_entity_ids(ignore_delete=True)[:self.ITEM_MAXIMUM]
         return [
             entity_ids,
-            thread_stack_index
+            gui_thread_flag
         ]
 
     def _gui_add_entities_batch_build_fnc(self, *args):
@@ -349,8 +349,8 @@ class _GuiTaskOpt(
         if not args[0]:
             return
 
-        entity_ids, thread_stack_index = args[0]
-        if thread_stack_index != self._index_thread_batch:
+        entity_ids, gui_thread_flag = args[0]
+        if gui_thread_flag != self._gui_thread_flag:
             return
 
         if entity_ids:
@@ -364,7 +364,7 @@ class _GuiTaskOpt(
             for i_task_ids in task_ids_map:
                 ts.register(
                     functools.partial(
-                        self._gui_add_entities_cache_fnc, i_task_ids, thread_stack_index
+                        self._gui_add_entities_cache_fnc, i_task_ids, gui_thread_flag
                     ),
                     self._gui_add_entities_build_fnc
                 )
@@ -375,20 +375,20 @@ class _GuiTaskOpt(
         else:
             post_fnc_()
 
-    def _gui_add_entities_cache_fnc(self, entity_ids, thread_stack_index):
-        if thread_stack_index != self._index_thread_batch:
+    def _gui_add_entities_cache_fnc(self, entity_ids, gui_thread_flag):
+        if gui_thread_flag != self._gui_thread_flag:
             return []
         return [
             self._entity_pool.find_entities(entity_ids),
-            thread_stack_index
+            gui_thread_flag
         ]
 
     def _gui_add_entities_build_fnc(self, *args):
         if not args[0]:
             return
 
-        prc_tasks, thread_stack_index = args[0]
-        if thread_stack_index != self._index_thread_batch:
+        prc_tasks, gui_thread_flag = args[0]
+        if gui_thread_flag != self._gui_thread_flag:
             return
 
         with self._prx_tree_view.gui_bustling():
@@ -466,7 +466,7 @@ class _GuiTaskOpt(
             _entity_ids_new = self._entity_pool.do_update()
             _prc_tasks_new = self._entity_pool.find_entities(_entity_ids_new)
             return [
-                self._index_thread_batch,
+                self._gui_thread_flag,
                 _prc_tasks_new
             ]
 
@@ -474,7 +474,7 @@ class _GuiTaskOpt(
             _index_thread_batch_current, _prc_tasks_new = args[0]
             with self._prx_tree_view.gui_bustling():
                 for _i_prc_task in _prc_tasks_new:
-                    if _index_thread_batch_current != self._index_thread_batch:
+                    if _index_thread_batch_current != self._gui_thread_flag:
                         break
                     self.gui_add_entity(_i_prc_task)
 
@@ -531,7 +531,7 @@ class PrxPageForMonitor(prx_abstracts.AbsPrxWidget):
 
         self._task_properties_prx_options_node = gui_prx_widgets.PrxOptionsNode('Options')
         prx_sca.add_widget(self._task_properties_prx_options_node)
-        self._task_properties_prx_options_node.create_ports_by_data(
+        self._task_properties_prx_options_node.build_by_data(
             self._session.configure.get('build.task_properties.parameters'),
         )
         #

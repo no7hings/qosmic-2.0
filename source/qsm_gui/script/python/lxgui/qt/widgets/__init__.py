@@ -65,7 +65,7 @@ from .view_for_tab import *
 
 from .view_for_history import *
 
-from .view_for_tag_filter import *
+from .entry_for_tag import *
 
 from .scroll import *
 

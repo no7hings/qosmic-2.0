@@ -117,7 +117,7 @@ class AbsEntity(object):
         self._root = root
         self._root_entity_stack = root.entity_stack
         self._path = path
-        self._path_opt = bsc_core.PthNodeOpt(self._path)
+        self._path_opt = bsc_core.BscPathOpt(self._path)
         self._name = self._path_opt.get_name()
         self._variants = variants
         self._properties = Properties()
@@ -297,7 +297,7 @@ class AbsTask(object):
     def __init__(self, entity, path, variants):
         self._entity = entity
         self._path = path
-        self._path_opt = bsc_core.PthNodeOpt(self._path)
+        self._path_opt = bsc_core.BscPathOpt(self._path)
         self._name = self._path_opt.get_name()
 
         self._variants = variants

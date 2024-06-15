@@ -1,3 +1,7 @@
+options:
+    gui_name: 'Test'
+    gui_name_chs: '测试'
+
 entities:
     types:
         /:
@@ -12,96 +16,88 @@ entities:
         /unspecified:
             category: 'node'
             type: 'node'
-            kind: 'builtin'
+            kind: 'unavailable'
 
             gui_name_chs: '未指定'
             gui_icon_name: 'database/object'
 
-        /node:
-            category: 'group'
-            type: 'group'
-            kind: 'builtin'
-
-            gui_name_chs: '节点'
-            gui_icon_name: 'database/groups'
-
-        /node/deformers:
+        /deformers:
             category: 'group'
             type: 'group'
 
             gui_name_chs: '变形器'
             gui_icon_name: 'database/group'
 
-        /node/deformers/bend:
+        /deformers/bend:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '弯曲'
 
-        /node/deformers/flare:
+        /deformers/flare:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '扩张'
 
-        /node/deformers/sine:
+        /deformers/sine:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '正弦'
 
-        /node/deformers/squash:
+        /deformers/squash:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '挤压'
 
-        /node/deformers/twist:
+        /deformers/twist:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '扭曲'
 
-        /node/deformers/wave:
+        /deformers/wave:
             category: 'node'
             type: 'node'
             gui_name_chs: '波浪'
 
-        /node/cfx:
+        /cfx:
             category: 'group'
             type: 'group'
 
             gui_name_chs: 'CFX'
             gui_icon_name: 'database/group'
 
-        /node/cfx/n_hair:
+        /cfx/n_hair:
             category: 'node'
             type: 'node'
 
             gui_name: 'nHair'
             gui_name_chs: 'nHair'
 
-        /node/cfx/n_cloth:
+        /cfx/n_cloth:
             category: 'node'
             type: 'node'
 
             gui_name: 'nCloth'
             gui_name_chs: 'nCloth'
 
-        /node/cfx/nucleus:
+        /cfx/nucleus:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '解算器'
 
-        /node/dynamics:
+        /dynamics:
             category: 'group'
             type: 'group'
 
             gui_name_chs: '动力学'
             gui_icon_name: 'database/group'
 
-        /node/dynamics/air_field:
+        /dynamics/air_field:
             category: 'node'
             type: 'node'
 
@@ -120,7 +116,7 @@ entities:
         /ctime:
             category: 'group'
             type: 'group'
-            kind: 'builtin'
+            kind: 'unavailable'
 
             gui_name: 'Creation Time'
             gui_name_chs: '创建时间'
@@ -129,7 +125,7 @@ entities:
         /ctime/today:
             category: 'node'
             type: 'node'
-            kind: 'builtin'
+            kind: 'unavailable'
 
             gui_name: 'Today'
             gui_name_chs: '今天'
@@ -137,7 +133,7 @@ entities:
         /ctime/yesterday:
             category: 'node'
             type: 'node'
-            kind: 'builtin'
+            kind: 'unavailable'
 
             gui_name: 'Yesterday'
             gui_name_chs: '昨天'
@@ -145,7 +141,7 @@ entities:
         /ctime/earlier_this_week:
             category: 'node'
             type: 'node'
-            kind: 'builtin'
+            kind: 'unavailable'
 
             gui_name: 'Earlier this Week'
             gui_name_chs: '本周早些时候'
@@ -153,7 +149,7 @@ entities:
         /ctime/last_week:
             category: 'node'
             type: 'node'
-            kind: 'builtin'
+            kind: 'unavailable'
 
             gui_name: 'Last Week'
             gui_name_chs: '上周'
@@ -161,7 +157,7 @@ entities:
         /ctime/earlier_this_month:
             category: 'node'
             type: 'node'
-            kind: 'builtin'
+            kind: 'unavailable'
 
             gui_name: 'Earlier This Month'
             gui_name_chs: '本月早些时候'
@@ -169,7 +165,7 @@ entities:
         /ctime/last_month:
             category: 'node'
             type: 'node'
-            kind: 'builtin'
+            kind: 'unavailable'
 
             gui_name: 'Last Month'
             gui_name_chs: '上月'
@@ -177,7 +173,7 @@ entities:
         /ctime/earlier_this_year:
             category: 'node'
             type: 'node'
-            kind: 'builtin'
+            kind: 'unavailable'
 
             gui_name: 'Earlier This Year'
             gui_name_chs: '今年早些时候'
@@ -185,79 +181,10 @@ entities:
         /ctime/long_time_ago:
             category: 'node'
             type: 'node'
-            kind: 'builtin'
+            kind: 'unavailable'
 
             gui_name: 'Long Time Ago'
             gui_name_chs: '很久以前'
-
-        /speeds:
-            category: 'group'
-            type: 'group'
-
-            gui_name_chs: '速度'
-            gui_icon_name: 'database/group'
-
-        /speeds/slow:
-            category: 'node'
-            type: 'node'
-
-            gui_name_chs: '缓慢'
-
-        /speeds/fast:
-            category: 'node'
-            type: 'node'
-
-            gui_name_chs: '快速'
-
-        /softness:
-            category: 'group'
-            type: 'group'
-
-            gui_name_chs: '柔软度'
-            gui_icon_name: 'database/group'
-
-        /softness/pliable:
-            category: 'node'
-            type: 'node'
-
-            gui_name_chs: '柔韧'
-
-        /softness/moderate:
-            category: 'node'
-            type: 'node'
-
-            gui_name_chs: '适中'
-
-        /softness/soft:
-            category: 'node'
-            type: 'node'
-
-            gui_name_chs: '柔软'
-
-        /thickness:
-            category: 'group'
-            type: 'group'
-
-            gui_name_chs: '厚度'
-            gui_icon_name: 'database/group'
-
-        /thickness/thick:
-            category: 'node'
-            type: 'node'
-
-            gui_name_chs: '厚'
-
-        /thickness/moderate:
-            category: 'node'
-            type: 'node'
-
-            gui_name_chs: '适中'
-
-        /thickness/thin:
-            category: 'node'
-            type: 'node'
-
-            gui_name_chs: '薄'
 
         /parts:
             category: 'group'
@@ -315,6 +242,81 @@ entities:
 
             gui_name_chs: '棉布'
 
+        /speeds:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '速度'
+            gui_icon_name: 'database/group'
+
+        /speeds/slow:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '缓慢'
+
+        /speeds/moderate:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '适中'
+
+        /speeds/fast:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '快速'
+
+        /softness:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '柔软度'
+            gui_icon_name: 'database/group'
+
+        /softness/pliable:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '柔韧'
+
+        /softness/moderate:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '适中'
+
+        /softness/soft:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '柔软'
+
+        /thickness:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '厚度'
+            gui_icon_name: 'database/group'
+
+        /thickness/thick:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '厚'
+
+        /thickness/moderate:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '适中'
+
+        /thickness/thin:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '薄'
+
     nodes:
         /:
             category: 'group'
@@ -324,11 +326,3 @@ entities:
             gui_name: 'All'
             gui_name_chs: '所有'
             gui_icon_name: 'database/all'
-
-        /node:
-            category: 'group'
-            type: 'group'
-            kind: 'builtin'
-
-            gui_name_chs: '节点'
-            gui_icon_name: 'database/groups'

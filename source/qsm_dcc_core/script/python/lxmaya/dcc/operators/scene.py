@@ -47,7 +47,7 @@ class SceneOpt(gnl_dcc_abstracts.AbsSceneOpt):
                                 dcc_path = i_dcc_obj.path
                                 dcc_obj_name = i_dcc_obj.name
                                 #
-                                dcc_path_dag_opt = bsc_core.PthNodeOpt(dcc_path)
+                                dcc_path_dag_opt = bsc_core.BscPathOpt(dcc_path)
                                 mya_path_dag_opt = dcc_path_dag_opt.translate_to(mya_core.MyaUtil.OBJ_PATHSEP)
                                 mya_obj_path = mya_path_dag_opt.path
                                 mya_mesh = mya_dcc_obj_node_for_geometry.Mesh(mya_obj_path)
@@ -94,7 +94,7 @@ class SceneOpt(gnl_dcc_abstracts.AbsSceneOpt):
                     if obj_type_name == 'mesh':
                         dcc_path = i_dcc_obj.path
                         #
-                        dcc_path_dag_opt = bsc_core.PthNodeOpt(dcc_path)
+                        dcc_path_dag_opt = bsc_core.BscPathOpt(dcc_path)
                         mya_path_dag_opt = dcc_path_dag_opt.translate_to(mya_core.MyaUtil.OBJ_PATHSEP)
                         mya_obj_path = mya_path_dag_opt.path
                         mya_mesh = mya_dcc_obj_node_for_geometry.Mesh(mya_obj_path)

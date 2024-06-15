@@ -16,9 +16,9 @@ from . import entry_frame as _entry_frame
 class QtTreeWidget(
     _qt_abstracts.AbsQtTreeWidget,
 ):
-    PEN_LINE = QtGui.QPen(_qt_core.QtBackgroundColors.Basic, _gui_core.GuiDpiScale.get(1))
-    PEN_BRANCH = QtGui.QPen(_qt_core.QtBackgroundColors.Button, _gui_core.GuiDpiScale.get(1))
-    PEN_BRANCH_HIGHLIGHT = QtGui.QPen(_qt_core.QtBackgroundColors.Selected, _gui_core.GuiDpiScale.get(1))
+    PEN_LINE = QtGui.QPen(QtGui.QColor(*_gui_core.GuiRgba.Dark), _gui_core.GuiDpiScale.get(1))
+    PEN_BRANCH = QtGui.QPen(QtGui.QColor(*_gui_core.GuiRgba.Gray), _gui_core.GuiDpiScale.get(1))
+    PEN_BRANCH_HIGHLIGHT = QtGui.QPen(QtGui.QColor(*_gui_core.GuiRgba.LightBlue), _gui_core.GuiDpiScale.get(1))
     cachedAncestors = None
     _is_expand_descendants = False
     #
@@ -50,7 +50,7 @@ class QtTreeWidget(
         # self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollMode(self.ScrollPerItem)
         # self.setAllColumnsShowFocus(True)
-        self.setAlternatingRowColors(True)
+        # self.setAlternatingRowColors(True)
         self.setUniformRowHeights(True)
         self.setExpandsOnDoubleClick(False)
         self.setEditTriggers(self.NoEditTriggers)
@@ -350,12 +350,12 @@ class QtTreeWidget(
         is_selected = False
         if index in self._selected_indices:
             painter.fillRect(
-                select_rect, _qt_core.QtBackgroundColors.ItemSelected
+                select_rect, QtGui.QColor(*_gui_core.GuiRgba.LightBlue)
             )
             is_selected = True
         elif index in self._selected_indirect_indices:
             painter.fillRect(
-                select_rect, _qt_core.QtBackgroundColors.ItemSelectedIndirect
+                select_rect, QtGui.QColor(*_gui_core.GuiRgba.DarkBlue)
             )
             is_selected = True
         if self._draw_for_check_state_enable is True:
@@ -373,7 +373,7 @@ class QtTreeWidget(
                         x, y, d_w, h
                     )
                 painter.fillRect(
-                    check_rect, _qt_core.QtBackgroundColors.Checked
+                    check_rect, QtGui.QColor(*_gui_core.GuiRgba.Purple)
                 )
 
     @qt_slot(object, int)

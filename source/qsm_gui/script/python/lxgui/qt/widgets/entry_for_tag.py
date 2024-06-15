@@ -1,6 +1,8 @@
 # coding=utf-8
 import collections
+
 import fnmatch
+
 import os
 
 import six
@@ -19,20 +21,24 @@ from . import base as _base
 
 from . import utility as _utility
 
+from . import entry_frame as _entry_frame
 
-class AbsTagFilterBase(object):
+
+class AbsEntryForTagBase(object):
     INDENT = 20
     HEIGHT = 18
 
     PATHSEP = '/'
 
-    def _init_tag_filter_base_(self, widget):
+    def _init_tag_base_(self, widget):
         self._widget = widget
 
         self._group_root_widget = None
         self._parent_widget = None
 
         self._path_set = set()
+
+        self._tool_tip_css = None
 
     def _get_text_(self):
         raise NotImplementedError()
@@ -50,10 +56,8 @@ class AbsTagFilterBase(object):
         self._parent_widget = group_widget
 
     def _set_tool_tip_(self, content):
-        self._widget.setToolTip(
-            _qt_core.GuiQtUtil.generate_tool_tip_css(
-                self._get_text_(), content
-            )
+        self._tool_tip_css = _qt_core.GuiQtUtil.generate_tool_tip_css(
+            self._get_text_(), content
         )
 
     def _is_checked_(self):
@@ -85,7 +89,7 @@ class AbsTagFilterBase(object):
         [x._set_checked_(self._is_checked_()) for x in widgets]
 
     def _update_check_state_for_ancestors_(self):
-        ancestor_paths = bsc_core.PthNodeOpt(
+        ancestor_paths = bsc_core.BscPathOpt(
             self._get_path_text_()
         ).get_ancestor_paths()
         ancestors = self._get_all_(ancestor_paths)
@@ -107,7 +111,7 @@ class AbsTagFilterBase(object):
         self._set_number_(len(path_set))
 
 
-class QtNodeForTagFilter(
+class QtEntryNodeForTag(
     QtWidgets.QWidget,
     _qt_abstracts.AbsQtPathBaseDef,
     _qt_abstracts.AbsQtActionBaseDef,
@@ -115,7 +119,7 @@ class QtNodeForTagFilter(
 
     _qt_abstracts.AbsQtThreadBaseDef,
 
-    AbsTagFilterBase
+    AbsEntryForTagBase
 ):
     user_filter_checked = qt_signal()
     
@@ -164,11 +168,11 @@ class QtNodeForTagFilter(
         self._expand_is_hovered = False
         self._refresh_widget_draw_()
 
-    def _do_press_(self, event):
+    def _do_mouse_press_(self, event):
         if self._get_action_is_enable_() is True:
             self._set_action_flag_(self.ActionFlag.Press)
 
-    def _do_press_release_(self, event):
+    def _do_mouse_press_release_(self, event):
         if self._get_action_flag_is_match_(self.ActionFlag.Press):
             self._swap_check_()
 
@@ -187,8 +191,17 @@ class QtNodeForTagFilter(
         self._parent_widget._set_all_node_checked_(False)
         self._set_checked_(True)
 
+    def _do_show_tool_tip_(self, event):
+        if self._tool_tip_css is not None:
+            p = self._frame_draw_rect.bottomRight()
+            p = self.mapToGlobal(p) + QtCore.QPoint(0, -18)
+            # noinspection PyArgumentList
+            QtWidgets.QToolTip.showText(
+                p, self._tool_tip_css, self
+            )
+
     def __init__(self, *args, **kwargs):
-        super(QtNodeForTagFilter, self).__init__(*args, **kwargs)
+        super(QtEntryNodeForTag, self).__init__(*args, **kwargs)
 
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -200,13 +213,14 @@ class QtNodeForTagFilter(
 
         self._init_thread_base_def_(self)
 
-        self._init_tag_filter_base_(self)
+        self._init_tag_base_(self)
 
         self._is_hovered = False
 
         self._frame_draw_rect = QtCore.QRect()
         self._frame_border_radius = 0
         self._frame_background_color = _gui_core.GuiRgba.DarkWhite
+        self._frame_background_color_checked = _gui_core.GuiRgba.LightBlue
 
         self._text = None
         self._text_color = _gui_core.GuiRgba.LightBlack
@@ -231,22 +245,23 @@ class QtNodeForTagFilter(
         if widget == self:
             if event.type() == QtCore.QEvent.Resize:
                 self._refresh_widget_all_()
+            elif event.type() == QtCore.QEvent.ToolTip:
+                self._do_show_tool_tip_(event)
 
             elif event.type() == QtCore.QEvent.Enter:
                 self._do_enter_()
             elif event.type() == QtCore.QEvent.Leave:
                 self._do_leave_()
-            # elif event.type() == QtCore.QEvent.ToolTip:
-            #     self._do_show_tool_tip_(event)
+
             elif event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.button() == QtCore.Qt.LeftButton:
-                    self._do_press_(event)
+                    self._do_mouse_press_(event)
             # elif event.type() == QtCore.QEvent.MouseButtonDblClick:
             #     if event.button() == QtCore.Qt.LeftButton:
             #         self._do_press_dbl_click_(event)
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
-                    self._do_press_release_(event)
+                    self._do_mouse_press_release_(event)
 
                 self._clear_all_action_flags_()
         return False
@@ -263,8 +278,8 @@ class QtNodeForTagFilter(
             is_actioned=self._get_is_actioned_(),
             background_color=self._frame_background_color,
             background_color_hovered=_gui_core.GuiRgba.LightOrange,
-            background_color_selected=_gui_core.GuiRgba.LightBlue,
-            background_color_actioned=_gui_core.GuiRgba.LightPurple
+            background_color_selected=self._frame_background_color_checked,
+            background_color_actioned=_gui_core.GuiRgba.LightPink
         )
         painter._draw_frame_by_rect_(
             rect=self._frame_draw_rect,
@@ -308,14 +323,16 @@ class QtNodeForTagFilter(
 
         if value > 0:
             self._frame_background_color = _gui_core.GuiRgba.DarkWhite
+            self._frame_background_color_checked = _gui_core.GuiRgba.LightBlue
             self._text_color = _gui_core.GuiRgba.LightBlack
             self._text_font.setItalic(False)
             self._number_font.setItalic(False)
             self._text_font.setStrikeOut(False)
             self._number_font.setStrikeOut(False)
         else:
-            self._frame_background_color = _gui_core.GuiRgba.LightBlack
-            self._text_color = _gui_core.GuiRgba.DarkWhite
+            self._frame_background_color = _gui_core.GuiRgba.Dim
+            self._frame_background_color_checked = _gui_core.GuiRgba.DarkBlue
+            self._text_color = _gui_core.GuiRgba.Gray
             self._text_font.setItalic(True)
             self._number_font.setItalic(True)
             self._text_font.setStrikeOut(True)
@@ -326,7 +343,7 @@ class QtNodeForTagFilter(
         self._parent_widget._refresh_widget_all_()
 
 
-class QtGroupForTagFilter(
+class QtEntryGroupForTag(
     QtWidgets.QWidget,
     _qt_abstracts.AbsQtPathBaseDef,
     _qt_abstracts.AbsQtActionBaseDef,
@@ -335,7 +352,7 @@ class QtGroupForTagFilter(
 
     _qt_abstracts.AbsQtThreadBaseDef,
 
-    AbsTagFilterBase
+    AbsEntryForTagBase
 ):
     SPACING = 2
 
@@ -380,7 +397,7 @@ class QtGroupForTagFilter(
         )
         c_x += frm_w+spc
         # text
-        txt_w, txt_h = _qt_core.GuiQtText.get_draw_width(self, self._text)+4, frm_h
+        txt_w, txt_h = QtGui.QFontMetrics(self._text_font).width(self._text)+8, frm_h
         self._text_draw_rect.setRect(
             c_x, y, txt_w, txt_h
         )
@@ -410,7 +427,11 @@ class QtGroupForTagFilter(
                         i_y += frm_h+spc
                         i_x = 0
 
-                    i_widget.move(i_x, i_y)
+                    # i_widget.move(i_x, i_y)
+                    i_widget.setGeometry(
+                        i_x, i_y, i_w, i_h
+                    )
+                    i_widget.show()
                     i_widget._refresh_widget_all_()
 
                     i_x += i_w+spc
@@ -445,7 +466,9 @@ class QtGroupForTagFilter(
         self._is_hovered = False
 
         self._expand_is_hovered = False
-        self._check_is_hovered = False
+        self._is_check_hovered = False
+
+        # print 'leave', self._text, self._expand_is_hovered
 
         self._refresh_widget_draw_()
 
@@ -453,25 +476,27 @@ class QtGroupForTagFilter(
         p = event.pos()
 
         self._expand_is_hovered = False
-        self._check_is_hovered = False
+        self._is_check_hovered = False
         if self._head_frame_rect.contains(p):
             if self._expand_frame_rect.contains(p):
                 self._expand_is_hovered = True
             elif self._check_frame_rect.contains(p):
-                self._check_is_hovered = True
+                self._is_check_hovered = True
+
+        # print self._text, self._expand_is_hovered
 
         self._refresh_widget_draw_()
 
-    def _do_press_(self, event):
+    def _do_mouse_press_(self, event):
         if self._head_frame_rect.contains(event.pos()):
             if self._get_action_is_enable_() is True:
                 self._set_action_flag_(self.ActionFlag.Press)
 
-    def _do_press_release_(self, event):
+    def _do_mouse_press_release_(self, event):
         if self._get_action_flag_is_match_(self.ActionFlag.Press):
             if self._expand_is_hovered is True:
                 self._swap_expand_()
-            elif self._check_is_hovered is True:
+            elif self._is_check_hovered is True:
                 self._swap_check_()
 
                 self._update_check_state_for_siblings_()
@@ -481,8 +506,18 @@ class QtGroupForTagFilter(
 
                 self.user_filter_checked.emit()
 
+    def _do_show_tool_tip_(self, event):
+        if self._tool_tip_css is not None:
+            if self._head_frame_rect.contains(event.pos()):
+                p = self._head_frame_rect.bottomRight()
+                p = self.mapToGlobal(p) + QtCore.QPoint(0, -18)
+                # noinspection PyArgumentList
+                QtWidgets.QToolTip.showText(
+                    p, self._tool_tip_css, self
+                )
+
     def __init__(self, *args, **kwargs):
-        super(QtGroupForTagFilter, self).__init__(*args, **kwargs)
+        super(QtEntryGroupForTag, self).__init__(*args, **kwargs)
 
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -496,7 +531,7 @@ class QtGroupForTagFilter(
 
         self._init_thread_base_def_(self)
 
-        self._init_tag_filter_base_(self)
+        self._init_tag_base_(self)
 
         self._is_hovered = False
 
@@ -557,12 +592,15 @@ class QtGroupForTagFilter(
         self._node_widgets = []
 
         self.installEventFilter(self)
+        self._viewport.installEventFilter(self)
 
     def eventFilter(self, *args):
         widget, event = args
         if widget == self:
             if event.type() == QtCore.QEvent.Resize:
                 self._refresh_widget_all_()
+            elif event.type() == QtCore.QEvent.ToolTip:
+                self._do_show_tool_tip_(event)
 
             elif event.type() == QtCore.QEvent.Enter:
                 self._do_enter_()
@@ -574,12 +612,15 @@ class QtGroupForTagFilter(
                 self._do_hover_move_(event)
             elif event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.button() == QtCore.Qt.LeftButton:
-                    self._do_press_(event)
+                    self._do_mouse_press_(event)
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
-                    self._do_press_release_(event)
+                    self._do_mouse_press_release_(event)
 
                 self._clear_all_action_flags_()
+        elif widget == self._viewport:
+            if event.type() == QtCore.QEvent.Enter:
+                self._do_leave_()
         return False
 
     def paintEvent(self, event):
@@ -597,7 +638,7 @@ class QtGroupForTagFilter(
             rect=self._check_icon_draw_rect,
             file_path=self._check_icon_file_path_current,
             offset=offset,
-            is_hovered=self._check_is_hovered
+            is_hovered=self._is_check_hovered
         )
         # text
         painter._draw_text_by_rect_(
@@ -659,7 +700,7 @@ class QtGroupForTagFilter(
         self._refresh_widget_all_()
 
     def _create_group_(self, path, *args, **kwargs):
-        widget = QtGroupForTagFilter(self._viewport)
+        widget = QtEntryGroupForTag(self._viewport)
         self._group_lot.addWidget(widget)
         self._group_widgets.append(widget)
         widget._set_group_(self)
@@ -677,7 +718,7 @@ class QtGroupForTagFilter(
         return widget
 
     def _create_node_(self, path, *args, **kwargs):
-        widget = QtNodeForTagFilter(self._viewport)
+        widget = QtEntryNodeForTag(self._viewport)
         self._node_widgets.append(widget)
         widget._set_group_(self)
         widget._set_path_text_(path)
@@ -700,10 +741,10 @@ class QtGroupForTagFilter(
         [x._set_checked_(boolean) for x in self._group_widgets or self._node_widgets]
 
 
-class QtRootForTagFilter(
+class QtEntryRootForTag(
     QtWidgets.QWidget,
 
-    AbsTagFilterBase
+    AbsEntryForTagBase,
 ):
     SPACING = 2
 
@@ -711,6 +752,8 @@ class QtRootForTagFilter(
 
     check_paths_change_accepted = qt_signal(list)
     check_paths_changed = qt_signal()
+
+    focus_changed = qt_signal()
 
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_()
@@ -729,14 +772,14 @@ class QtRootForTagFilter(
         self.check_paths_changed.emit()
 
     def __init__(self, *args, **kwargs):
-        super(QtRootForTagFilter, self).__init__(*args, **kwargs)
+        super(QtEntryRootForTag, self).__init__(*args, **kwargs)
 
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.setMinimumHeight(self.HEIGHT)
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
 
-        self._init_tag_filter_base_(self)
+        self._init_tag_base_(self)
 
         self._frame_background_color = _qt_core.QtBackgroundColors.Dim
 
@@ -747,6 +790,7 @@ class QtRootForTagFilter(
         self._scr = _utility.QtVScrollArea()
         self._lot.addWidget(self._scr)
         self._scr._set_background_color_(self._frame_background_color)
+        self._scr._set_empty_draw_flag_(True)
         self._scr._layout.setAlignment(QtCore.Qt.AlignTop)
 
         self._item_dict = collections.OrderedDict()
@@ -758,17 +802,35 @@ class QtRootForTagFilter(
         if widget == self:
             if event.type() == QtCore.QEvent.Resize:
                 self._refresh_widget_all_()
+            elif event.type() == QtCore.QEvent.FocusIn:
+                self._is_focused = True
+                parent = self.parent()
+                if isinstance(parent, _entry_frame.QtEntryFrame):
+                    parent._set_focused_(True)
+                self.focus_changed.emit()
+            elif event.type() == QtCore.QEvent.FocusOut:
+                self._is_focused = False
+                parent = self.parent()
+                if isinstance(parent, _entry_frame.QtEntryFrame):
+                    parent._set_focused_(False)
+                self.focus_changed.emit()
         return False
 
     def paintEvent(self, event):
         pass
+        # if not self._item_dict:
+        #     painter = _qt_core.QtPainter(self)
+        #     painter._draw_empty_image_by_rect_(
+        #         self.rect(),
+        #         self._empty_icon_name
+        #     )
         # offset = self._scr.verticalScrollBar().value()
         # h = self._scr._layout.minimumSize().height()
         # x, y = 0, 0
         # print offset, h
 
     def _create_group_root_(self, path, *args, **kwargs):
-        widget = QtGroupForTagFilter()
+        widget = QtEntryGroupForTag()
         self._scr._add_widget_(widget)
         widget._set_path_text_(path)
         if 'show_name' in kwargs:
@@ -779,6 +841,7 @@ class QtRootForTagFilter(
         widget._set_group_root_(self)
         self._item_dict[path] = widget
         widget.user_filter_checked.connect(self._user_filter_check_cbk_)
+        self._scr._set_empty_draw_flag_(False)
         return widget
 
     def _create_group_(self, path, *args, **kwargs):
@@ -818,7 +881,12 @@ class QtRootForTagFilter(
         return [x._get_path_text_() for x in self._get_all_checked_nodes_()]
 
     def _get_all_checked_nodes_(self):
-        return [x for x in self._item_dict.values() if x._is_checked_() and isinstance(x, QtNodeForTagFilter)]
+        return [x for x in self._item_dict.values() if x._is_checked_() and isinstance(x, QtEntryNodeForTag)]
 
     def _apply_intersection_paths_(self, path_set):
         [x._update_path_set_as_intersection_(path_set) for x in self._item_dict.values()]
+
+    def _restore_(self):
+        self._scr._layout._clear_all_widgets_()
+        self._item_dict.clear()
+        self._scr._set_empty_draw_flag_(True)

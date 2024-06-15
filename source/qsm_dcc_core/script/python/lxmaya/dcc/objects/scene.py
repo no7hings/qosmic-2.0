@@ -540,7 +540,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
     def _load_from_location_fnc(self, root, include_obj_type):
         self.restore_all()
         #
-        root_dag_path = bsc_core.PthNodeOpt(root)
+        root_dag_path = bsc_core.BscPathOpt(root)
         root_mya_dag_path = root_dag_path.translate_to(mya_core.MyaUtil.OBJ_PATHSEP)
         mya_root = _mya_dcc_obj_node_for_dag.Group(root_mya_dag_path.path)
         if mya_root.get_is_exists() is True:
@@ -556,7 +556,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
         obj_category_name = unr_core.UnrObjCategory.MAYA
         obj_type_name = mya_obj.type
         mya_obj_path = mya_obj.path
-        mya_dag_path = bsc_core.PthNodeOpt(mya_obj_path)
+        mya_dag_path = bsc_core.BscPathOpt(mya_obj_path)
         dcc_dag_path = mya_dag_path.translate_to('/')
         dcc_obj_path = dcc_dag_path.path
         #

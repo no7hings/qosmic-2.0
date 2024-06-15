@@ -59,7 +59,7 @@ class FncExporterForScene(
         )
         _selected_paths = []
         if location:
-            root_dag_opt = bsc_core.PthNodeOpt(location)
+            root_dag_opt = bsc_core.BscPathOpt(location)
             root_mya_dag_opt = root_dag_opt.translate_to(
                 mya_core.MyaUtil.OBJ_PATHSEP
             )
@@ -138,7 +138,7 @@ class FncExporterForPreview(
         #
         self._root = self.get('root')
         if root is not None:
-            self._root_dat_opt = bsc_core.PthNodeOpt(root)
+            self._root_dat_opt = bsc_core.BscPathOpt(root)
         else:
             self._root_dat_opt = None
 

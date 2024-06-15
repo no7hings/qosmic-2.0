@@ -5,15 +5,13 @@ import lxbasic.resource as bsc_resource
 
 if __name__ == '__main__':
     stage = qsm_scr_core.Stage(
-        'Z:/libraries/media/.database/video.db'
+        'video'
     )
 
     stage.connect()
     stage.initialize()
 
-    stage.build(
-        bsc_resource.RscExtendConfigure.get_as_content('screw/video')
-    )
+    stage.build()
     # stage.build_test('node')
 
     # print stage.create_node_root_group()

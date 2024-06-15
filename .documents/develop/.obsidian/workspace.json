@@ -8,39 +8,14 @@
         "type": "tabs",
         "children": [
           {
-            "id": "e38d8b72b2946f7b",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "随记/python/Python包安装.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
             "id": "c7e7ed9b8a2ff02f",
             "type": "leaf",
             "state": {
               "type": "card-board-view",
               "state": {}
             }
-          },
-          {
-            "id": "1264b7dc8a1367a3",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
-                "mode": "source",
-                "source": false
-              }
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -90,7 +65,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 290.5
+    "width": 290.5,
+    "collapsed": true
   },
   "right": {
     "id": "079848c8f8affc0b",
@@ -106,7 +82,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "开发相关/开发进度/优化.md",
+                "file": "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -123,7 +99,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "开发相关/开发进度/优化.md",
+                "file": "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -146,7 +122,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "开发相关/开发进度/优化.md"
+                "file": "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md"
               }
             }
           },
@@ -168,7 +144,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "开发相关/开发进度/优化.md"
+                "file": "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md"
               }
             }
           },
@@ -210,13 +186,13 @@
   "active": "c7e7ed9b8a2ff02f",
   "lastOpenFiles": [
     "随记/python/Python包安装.md",
+    "开发相关/开发进度/优化.md",
     "开发相关/开发进度/maya/绑定移动工具.md",
     "随记/python/PyQt.md",
     "开发相关/开发进度/通用/后台任务管理工具.md",
     "随记/PyQt/未命名.md",
     "随记/PyQt",
     "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
-    "开发相关/开发进度/优化.md",
     "开发相关/开发进度/maya/场景显示优化工具.md",
     "开发相关/开发进度/maya/节点参数模版工具.md",
     "开发相关/开发任务/maya/解算相关/节点图模版工具（Node Graph Template Tool）.md",

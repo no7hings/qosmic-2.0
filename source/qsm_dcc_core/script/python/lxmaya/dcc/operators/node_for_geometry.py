@@ -56,7 +56,7 @@ class TransformOpt(gnl_dcc_abstracts.AbsNodeOpt):
     def set_create(self, matrix=None):
         if self.obj.get_is_exists() is False:
             path = self.obj.get_path()
-            path_opt = bsc_core.PthNodeOpt(path)
+            path_opt = bsc_core.BscPathOpt(path)
             parent_path = path_opt.get_parent_path()
             name = path_opt.get_name()
             if parent_path != mya_core.MyaUtil.OBJ_PATHSEP:

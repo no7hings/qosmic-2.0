@@ -345,7 +345,7 @@ class KtnSGSelectionOpt(object):
         paths = self._paths
         list_ = []
         for path in paths:
-            ps = bsc_core.PthNodeOpt(path).get_ancestor_paths()
+            ps = bsc_core.BscPathOpt(path).get_ancestor_paths()
             for p in ps:
                 if p not in list_:
                     if p != '/':

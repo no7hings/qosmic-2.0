@@ -33,6 +33,7 @@ class AbsGuiDcc(object):
 class GuiQtMaya(object):
     @classmethod
     def get_qt_object(cls, ptr, base=QtWidgets.QWidget):
+        # noinspection PyUnresolvedReferences
         from shiboken2 import wrapInstance
 
         return wrapInstance(long(ptr), base)
@@ -224,6 +225,7 @@ class GuiQtDcc(AbsGuiDcc):
         if cls.QT_MAIN_WINDOW is not None:
             return cls.QT_MAIN_WINDOW
         #
+        # noinspection PyArgumentList
         _ = QtWidgets.QApplication.topLevelWidgets()
         if _:
             cls.QT_MAIN_WINDOW = _[0]

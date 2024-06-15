@@ -45,11 +45,11 @@ class QtWebServerForTask(QtCore.QObject):
             )
 
         # noinspection PyUnresolvedReferences
-        self._web_server.newConnection.connect(self._do_new_connection_)
+        self._web_server.newConnection.connect(self._new_connection_fnc_)
         self._sockets = []
 
     @qt_slot(str)
-    def _do_process_(self, text):
+    def _process_fnc_(self, text):
         text = self.auto_string(text)
         self.text_message_accepted.emit(text)
         for i in self._sockets:
@@ -61,10 +61,10 @@ class QtWebServerForTask(QtCore.QObject):
             )
 
     @qt_slot()
-    def _do_new_connection_(self):
+    def _new_connection_fnc_(self):
         skt = self._web_server.nextPendingConnection()
-        skt.textMessageReceived.connect(self._do_process_)
-        skt.disconnected.connect(self._do_disconnected_)
+        skt.textMessageReceived.connect(self._process_fnc_)
+        skt.disconnected.connect(self._disconnected_fnc_)
         self._sockets.append(skt)
         if self._verbose is True:
             bsc_log.Log.trace_method_result(
@@ -72,7 +72,7 @@ class QtWebServerForTask(QtCore.QObject):
             )
 
     @qt_slot()
-    def _do_disconnected_(self):
+    def _disconnected_fnc_(self):
         skt = self.sender()
         self._sockets.remove(skt)
         skt.deleteLater()

@@ -12,6 +12,34 @@ from .. import abstracts as _qt_abstracts
 from . import base as _base
 
 
+class QtTestWidget(
+    QtWidgets.QWidget
+):
+    def __init__(self, *args, **kwargs):
+        super(QtTestWidget, self).__init__(*args, **kwargs)
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setFixedSize(32, 32)
+
+    def paintEvent(self, event):
+        painter = QtGui.QPainter(self)
+        image = QtGui.QImage(
+            'E:/myworkspace/qosmic-2.0/source/qsm_resource/resources/icons/application/maya.png'
+        )
+        print image.hasAlphaChannel()
+        pixmap = QtGui.QPixmap(image)
+        painter.drawPixmap(
+            self.rect(),
+            pixmap
+        )
+        w, h = pixmap.width(), pixmap.height()
+        for i_x in range(w):
+            for i_y in range(h):
+                print i_x, i_y
+                i_p = image.pixel(i_x, i_y)
+                i_c = QtGui.QColor(i_p)
+                print i_c.red(), i_c.green(), i_c.blue(), i_c.alpha()
+
+
 class QtVideoPlayWidget(
     QtWidgets.QWidget,
     _qt_abstracts.AbsQtWidgetCloseBaseDef,
@@ -35,30 +63,35 @@ class QtVideoPlayWidget(
 
             spc = 2
 
-            vdo_w, vdo_h = self._video_size
+            img_size = self._video_size
 
-            frm_x, frm_y, frm_w, frm_h = (
-                x+img_mrg, y+img_mrg, w-img_mrg*2, h-img_mrg*2
+            _x, _y, img_frm_w, img_frm_h = bsc_core.RawSizeMtd.fit_to(
+                (img_size[0], img_size[1]), (w, h)
+            )
+            img_frm_x, img_frm_y = x+_x, y+_y
+
+            self._image_frame_rect.setRect(
+                img_frm_x, img_frm_y, img_frm_w, img_frm_h
             )
 
-            img_x, img_y, img_w, img_h = bsc_core.RawSizeMtd.fit_to(
-                (vdo_w, vdo_h), (frm_w, frm_h)
+            img_x, img_y, img_w, img_h = (
+                img_frm_x+img_mrg, img_frm_y+img_mrg, img_frm_w-img_mrg*2, img_frm_h-img_mrg*2
             )
 
             self._image_draw_rect.setRect(
-                frm_x+img_x, frm_y+img_y, img_w, img_h
+                img_x, img_y, img_w, img_h
             )
 
             prg_h = self._progress_h
             self._progress_draw_rect.setRect(
-                frm_x+img_x, frm_y+img_y+img_h-prg_h, frm_w, prg_h
+                img_x, img_y+img_h-prg_h, img_w, prg_h
             )
 
             txt_frm_w, txt_frm_h = self._text_frm_w, self._text_frm_h
 
-            txt_frm_x, txt_frm_y = frm_x+(frm_w-txt_frm_w)/2, frm_y+img_y+img_h-prg_h-txt_frm_h-spc
+            txt_frm_x, txt_frm_y = img_x+(img_w-txt_frm_w)/2, img_y+img_h-prg_h-txt_frm_h-spc
             self._text_draw_rect.setRect(
-                frm_x+img_x, txt_frm_y, frm_w, txt_frm_h
+                txt_frm_x, txt_frm_y, txt_frm_w, txt_frm_h
             )
             self._text_frame_draw_rect.setRect(
                 txt_frm_x, txt_frm_y, txt_frm_w, txt_frm_h
@@ -89,8 +122,13 @@ class QtVideoPlayWidget(
             self._refresh_widget_draw_()
 
     def _do_hover_move_(self, event):
+        pos = event.pos()
+        if self.parent()._check_frame_rect.contains(pos):
+            self.parent()._set_check_hovered_(True)
+        else:
+            self.parent()._set_check_hovered_(False)
+
         if self._video_flag is True:
-            pos = event.pos()
             if 0 <= pos.x() <= self.width():
                 frame_index = int((float(pos.x())/self.width())*self._frame_index_maximum)
                 frame_index = min(self._frame_index_maximum-1, frame_index)
@@ -133,6 +171,7 @@ class QtVideoPlayWidget(
         self._pixmap_frame = None
         self._image_cover = None
         self._pixmap_cover = None
+        self._image_frame_rect = QtCore.QRect()
         self._image_draw_rect = QtCore.QRect()
 
         self._progress_h = 4
@@ -295,9 +334,9 @@ class QtVideoPlayWidget(
 
     def _load_video_data_use_thread_(self):
         def cache_fnc_():
-            import lxbasic.media.core as bsc_mda_core
+            import lxbasic.cv.core as bsc_cv_core
 
-            self._video_capture_opt = bsc_mda_core.VideoCaptureOpt(self._video_path)
+            self._video_capture_opt = bsc_cv_core.VideoCaptureOpt(self._video_path)
 
             data = self._video_capture_opt.get_data(0)
             if data:
@@ -376,80 +415,29 @@ class QtItemWidgetForList(
 
             frm_x_0, frm_y_0, frm_w_0, frm_h_0 = x+frm_mrg, y+frm_mrg, w-frm_mrg*2-rdu, h-frm_mrg*2-rdu
 
-            self._frame_state_draw_rect.setRect(
+            self._stage_draw_rect.setRect(
                 x+1, y+1, w-rdu-2, h-rdu-2
             )
             self._shadow_draw_rect.setRect(
                 x+(w-frm_w_0), y+(h-frm_h_0), frm_w_0, frm_h_0
             )
             self._frame_draw_rect.setRect(
-                frm_x_0, frm_y_0, frm_w_0, frm_h_0
+                frm_x_0, frm_y_0, frm_w_0-1, frm_h_0-1
             )
 
-            frm_x, frm_y, frm_w, frm_h = (
+            frm_bsc_x, frm_bsc_y, frm_bsc_w, frm_bsc_h = (
                 x+frm_mrg, y+frm_mrg, grd_w-frm_mrg*2-rdu, grd_h-frm_mrg*2-rdu
             )
-            self._frame_main_rect.setRect(
-                frm_x, frm_y, frm_w, frm_h
-            )
-
-            self._lot.setContentsMargins(
-                frm_x, frm_y, w-frm_w, h-frm_h
-            )
-            # image
-            img_mrg = self._image_margin
-            img_frm_x, img_frm_y, img_frm_w, img_frm_h = (
-                frm_x+img_mrg, frm_y+img_mrg, frm_w-img_mrg*2, frm_h-img_mrg*2
-            )
-
-            if self._image_flag is True:
-                img_size = self._image_size
-                if img_size is not None:
-                    self._image_draw_flag = True
-                    img_x, img_y, img_w, img_h = bsc_core.RawSizeMtd.fit_to(
-                        (img_size[0], img_size[1]), (img_frm_w, img_frm_h)
-                    )
-                    self._image_draw_rect.setRect(
-                        img_frm_x+img_x, img_frm_y+img_y, img_w, img_h
-                    )
-                    if self._svg_flag is False:
-                        pixmap = QtGui.QPixmap.fromImage(self._image, QtCore.Qt.AutoColor)
-                        self._pixmap = pixmap.scaled(
-                            self._image_draw_rect.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation
-                        )
-                else:
-                    self._image_draw_flag = False
-
-            if self._video_auto_play_flag is True:
-                vdo_w = vdo_h = self._video_s
-                self._video_play_rect.setRect(
-                    frm_x+(frm_w-vdo_w)/2, frm_y+(frm_h-vdo_h)/2, vdo_w, vdo_h
-                )
-            # name
-            if self._name_flag is True:
-                nme_mrg = self._name_margin
-                nme_frm_x, nme_frm_y, nme_frm_w, nme_frm_h = (
-                    frm_x+nme_mrg, frm_y+nme_mrg, frm_w-nme_mrg*2, frm_h-nme_mrg*2
-                )
-                if self._name_text:
-                    self._name_text_draw_flag = True
-                    self._name_draw_rect.setRect(
-                        nme_frm_x, nme_frm_y, nme_frm_w, nme_frm_h
-                    )
-                else:
-                    self._name_text_draw_flag = False
-
-                self._name_dict_draw_flag = False
             # index
             if self._index_flag is True:
                 idx_mrg = self._index_margin
                 idx_frm_x, idx_frm_y, idx_frm_w, idx_frm_h = (
-                    frm_x+idx_mrg, frm_y+idx_mrg, frm_w-idx_mrg*2, frm_h-idx_mrg*2
+                    frm_bsc_x+idx_mrg, frm_bsc_y+idx_mrg, frm_bsc_w-idx_mrg*2, frm_bsc_h-idx_mrg*2
                 )
                 if self._index_text:
                     idx_w, idx_h = QtGui.QFontMetrics(self._index_font).width(self._index_text), self._index_h
                     self._index_draw_rect.setRect(
-                        idx_frm_x, idx_frm_y, idx_w, idx_h
+                        idx_frm_x+idx_frm_w-idx_w, idx_frm_y, idx_w, idx_h
                     )
                     self._index_draw_flag = True
                 else:
@@ -461,17 +449,119 @@ class QtItemWidgetForList(
                 self._do_update_widget_frame_geometries_for_list_mode_()
 
     def _do_update_widget_frame_geometries_for_grid_mode_(self):
-        pass
+        x, y = 0, 0
+
+        grd_size = self._view.gridSize()
+        grd_w, grd_h = grd_size.width(), grd_size.height()
+        # frame
+        frm_mrg = self._frame_margin
+        rdu = self._shadow_radius
+
+        frm_bsc_x, frm_bsc_y, frm_bsc_w, frm_bsc_h = (
+            x+frm_mrg, y+frm_mrg, grd_w-frm_mrg*2-rdu, grd_h-frm_mrg*2-rdu
+        )
+        self._frame_main_rect.setRect(
+            frm_bsc_x, frm_bsc_y, frm_bsc_w, frm_bsc_h
+        )
+        #
+        img_size = self._image_size
+        _x, _y, img_frm_w, img_frm_h = bsc_core.RawSizeMtd.fit_to(
+            (img_size[0], img_size[1]), (frm_bsc_w, frm_bsc_h)
+        )
+        img_frm_x, img_frm_y = frm_bsc_x+_x, frm_bsc_y+_y
+        # image
+        if self._image_flag is True:
+            self._image_frame_rect.setRect(
+                img_frm_x, img_frm_y, img_frm_w, img_frm_h
+            )
+            img_mrg = self._image_margin
+            self._image_draw_rect.setRect(
+                img_frm_x+img_mrg, img_frm_y+img_mrg, img_frm_w-img_mrg*2, img_frm_h-img_mrg*2
+            )
+            if self._image_draw_flag is True:
+                self._image_pixmap_draw = self._image_pixmap.scaled(
+                    self._image_draw_rect.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation
+                )
+        # video
+        if self._video_flag is True:
+            vdo_w = vdo_h = self._video_play_s
+            self._video_play_rect.setRect(
+                img_frm_x+(img_frm_w-vdo_w)/2, img_frm_y+(img_frm_h-vdo_h)/2, vdo_w, vdo_h
+            )
+        # name
+        if self._name_flag is True:
+            frm_bsc_x, frm_bsc_y, frm_bsc_w, frm_bsc_h = (
+                self._frame_main_rect.x(), self._frame_main_rect.y(),
+                self._frame_main_rect.width(), self._frame_main_rect.height()
+            )
+            nme_mrg = self._name_margin
+            nme_frm_x, nme_frm_y, nme_frm_w, nme_frm_h = (
+                frm_bsc_x+nme_mrg, frm_bsc_y+nme_mrg, frm_bsc_w-nme_mrg*2, frm_bsc_h-nme_mrg*2
+            )
+            if self._name_text:
+                self._name_text_draw_flag = True
+                self._name_draw_rect.setRect(
+                    nme_frm_x, nme_frm_y, nme_frm_w, nme_frm_h
+                )
+            else:
+                self._name_text_draw_flag = False
+
+            self._name_dict_draw_flag = False
+        # check
+        chk_frm_w, chk_frm_h = self._check_frame_size
+        chk_frm_x, chk_frm_y = frm_bsc_x, frm_bsc_y
+        self._check_frame_rect.setRect(
+            chk_frm_x, chk_frm_y, chk_frm_w, chk_frm_h
+        )
+        chk_icn_w, chk_icn_h = self._check_icon_size
+        self._check_icon_draw_rect.setRect(
+            chk_frm_x+(chk_frm_w-chk_icn_w)/2, chk_frm_y+(chk_frm_h-chk_icn_h)/2,
+            chk_icn_w, chk_icn_h
+        )
 
     def _do_update_widget_frame_geometries_for_list_mode_(self):
+        x, y = 0, 0
+        w, h = self.width(), self.height()
+
+        frm_mrg = self._frame_margin
+        rdu = self._shadow_radius
+
+        frm_bsc_x, frm_bsc_y, frm_bsc_w, frm_bsc_h = (
+            x+frm_mrg, y+frm_mrg, w-frm_mrg*2-rdu, h-frm_mrg*2-rdu
+        )
+        img_w, img_h = self._image_size
+        img_frm_w, img_frm_h = int(float(img_w)/img_h*frm_bsc_h), frm_bsc_h
+
+        img_frm_x, img_frm_y = frm_bsc_x, frm_bsc_y
+        self._frame_main_rect.setRect(
+            frm_bsc_x, frm_bsc_y, img_frm_w, img_frm_h
+        )
+        # image
+        if self._image_flag is True:
+            self._image_frame_rect.setRect(
+                img_frm_x, img_frm_y, img_frm_w, img_frm_h
+            )
+            img_mrg = self._image_margin
+            self._image_draw_rect.setRect(
+                img_frm_x+img_mrg, img_frm_y+img_mrg, img_frm_w-img_mrg*2, img_frm_h-img_mrg*2
+            )
+            if self._image_draw_flag is True:
+                self._image_pixmap_draw = self._image_pixmap.scaled(
+                    self._image_draw_rect.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation
+                )
+        # video
+        if self._video_flag is True:
+            vdo_w = vdo_h = self._video_play_s
+            self._video_play_rect.setRect(
+                img_frm_x+(img_frm_w-vdo_w)/2, img_frm_y+(img_frm_h-vdo_h)/2, vdo_w, vdo_h
+            )
+        # name
         if self._name_flag:
-            p = self._frame_main_rect.topRight()
-            x, y = p.x(), p.y()
-            w, h = self.width()-self._frame_main_rect.width(), self._frame_main_rect.height()
+            x, y = frm_bsc_x+img_frm_w, frm_bsc_y
+            w, h = self.width()-img_frm_w, frm_bsc_h
             spc = self._frame_spacing
             if self._name_dict:
                 self._name_dict_draw_flag = True
-
                 key_widths = []
                 c_x, c_y = x+spc, y
                 txt_h = self._name_h
@@ -487,19 +577,48 @@ class QtItemWidgetForList(
                 self._name_key_width = max(key_widths)
             else:
                 self._name_dict_draw_flag = False
+            self._name_text_draw_flag = False
+        # check
+        chk_frm_w, chk_frm_h = self._check_frame_size
+        chk_frm_x, chk_frm_y = frm_bsc_x+frm_bsc_w-chk_frm_w, frm_bsc_x
+        self._check_frame_rect.setRect(
+            chk_frm_x, chk_frm_y, chk_frm_w, chk_frm_h
+        )
+        chk_icn_w, chk_icn_h = self._check_icon_size
+        self._check_icon_draw_rect.setRect(
+            chk_frm_x+(chk_frm_w-chk_icn_w)/2, chk_frm_y+(chk_frm_h-chk_icn_h)/2,
+            chk_icn_w, chk_icn_h
+        )
 
-    def _do_enter_(self):
+    def _do_hover_move_(self, event):
+        if self._check_frame_rect.contains(event.pos()):
+            self._set_check_hovered_(True)
+        else:
+            self._set_check_hovered_(False)
+
+    def _do_mouse_press_release_(self, event):
+        if self._check_frame_rect.contains(event.pos()):
+            self._swap_check_()
+            self.user_check_toggled.emit(self._is_checked)
+
+    def _do_enter_(self, event):
+        # if self._check_frame_rect.contains(event.pos()):
+        #     self._set_check_hovered_(True)
+
         self._is_hovered = True
 
         self._refresh_widget_draw_()
 
     def _do_leave_(self):
         self._set_hovered_(False)
+        self._set_check_hovered_(False)
+        self._close_video_play_widget_()
 
     def __init__(self, *args, **kwargs):
         super(QtItemWidgetForList, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
+        self.setMouseTracking(True)
 
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
 
@@ -518,6 +637,9 @@ class QtItemWidgetForList(
         self._init_action_base_def_(self)
         self._init_action_for_hover_def_(self)
         self._init_action_for_check_def_(self)
+        self._check_icon_file_path_0 = _gui_core.GuiIcon.get('tag-filter-unchecked')
+        self._check_icon_file_path_1 = _gui_core.GuiIcon.get('tag-filter-checked')
+        self._update_check_icon_file_()
         self._init_action_for_select_def_(self)
 
         self._frame_margin = 2
@@ -527,18 +649,16 @@ class QtItemWidgetForList(
 
         self._frame_main_rect = QtCore.QRect()
 
-        self._frame_state_draw_rect = QtCore.QRect()
+        self._stage_draw_rect = QtCore.QRect()
         self._frame_draw_rect = QtCore.QRect()
         self._shadow_draw_rect = QtCore.QRect()
 
-        self._frame_background_color = _gui_core.GuiRgba.Basic
+        self._frame_border_color = _gui_core.GuiRgba.Dark
+        self._frame_background_color = _gui_core.GuiRgba.Dim
 
         self._video_player_show_timer = QtCore.QTimer()
 
         self._video_player_show_flag = False
-
-        self._lot = _base.QtVBoxLayout(self)
-        # m_l, m_t, m_r, m_b
 
         self.installEventFilter(self)
 
@@ -552,9 +672,16 @@ class QtItemWidgetForList(
                 self._refresh_widget_all_()
 
             elif event.type() == QtCore.QEvent.Enter:
-                self._do_enter_()
+                self._do_enter_(event)
             elif event.type() == QtCore.QEvent.Leave:
                 self._do_leave_()
+
+            elif event.type() == QtCore.QEvent.MouseMove:
+                self._do_hover_move_(event)
+
+            elif event.type() == QtCore.QEvent.MouseButtonRelease:
+                if event.button() == QtCore.Qt.LeftButton:
+                    self._do_mouse_press_release_(event)
 
         return False
 
@@ -571,7 +698,7 @@ class QtItemWidgetForList(
             )
             # frame base
             bck_color = painter._generate_item_background_color_by_rect_(
-                self._frame_state_draw_rect,
+                self._stage_draw_rect,
                 is_hovered=self._is_hovered,
                 is_selected=self._is_selected,
                 is_actioned=self._get_is_actioned_(),
@@ -581,7 +708,7 @@ class QtItemWidgetForList(
                 background_color_actioned=_gui_core.GuiRgba.LightPurple
             )
             painter._draw_frame_by_rect_(
-                rect=self._frame_state_draw_rect,
+                rect=self._stage_draw_rect,
                 border_color=_qt_core.QtBorderColors.Transparent,
                 background_color=bck_color,
                 border_radius=self._frame_border_radius,
@@ -590,26 +717,26 @@ class QtItemWidgetForList(
             # frame
             painter._draw_frame_by_rect_(
                 self._frame_draw_rect,
-                border_color=_qt_core.QtBorderColors.Transparent,
+                border_color=self._frame_border_color,
                 background_color=self._frame_background_color,
                 border_radius=self._frame_border_radius,
                 offset=offset
             )
             # image
-            if self._image_draw_flag is True:
-                if self._svg_flag is True:
-                    painter._draw_svg_by_rect_(
-                        self._image_draw_rect,
-                        self._svg_path
-                    )
-                else:
+            if self._image_flag is True:
+                if self._image_draw_flag is True:
                     painter.drawPixmap(
                         self._image_draw_rect,
-                        self._pixmap
+                        self._image_pixmap_draw
                     )
                     painter.device()
-                
-                if self._video_auto_play_flag is True:
+                else:
+                    painter._draw_svg_by_rect_(
+                        self._image_draw_rect,
+                        self._image_svg_path
+                    )
+
+                if self._video_flag is True:
                     painter._draw_video_play_button_by_rect_(
                         self._video_play_rect,
                         offset=offset,
@@ -618,6 +745,17 @@ class QtItemWidgetForList(
             self._draw_name_(painter)
             # index
             self._draw_index_(painter)
+            # check
+            self._draw_check_(painter)
+    
+    def _draw_check_(self, painter):
+        if self._is_hovered or self._is_checked:
+            painter._draw_icon_file_by_rect_(
+                rect=self._check_icon_draw_rect,
+                file_path=self._check_icon_file_path_current,
+                is_hovered=self._is_check_hovered
+                # offset=offset
+            )
 
     def _draw_name_(self, painter):
         # name text
@@ -673,31 +811,44 @@ class QtItemWidgetForList(
 
     def _set_hovered_(self, boolean):
         self._is_hovered = boolean
+        self._update_event_flag_(boolean)
         if self._video_auto_play_flag is True:
             self._update_video_play_(boolean)
         self._widget.update()
 
-    def _show_video_auto_play_(self):
+    def _show_video_play_widget_(self):
         if self._video_player_show_flag is True:
-            self._lot._clear_all_widgets_()
-            self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents, False)
-            wgt = QtVideoPlayWidget()
-            self._lot.addWidget(wgt)
-            wgt._set_video_path_(
-                self._video_path
-            )
+            if self._video_play_widget is None:
+                self._video_play_widget = QtVideoPlayWidget(self)
 
-    def _close_video_auto_play_(self):
-        self._video_player_show_flag = False
-        self._lot._clear_all_widgets_()
-        self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents, True)
+                self._video_play_widget.setGeometry(
+                    self._frame_main_rect.x(), self._frame_main_rect.x(),
+                    self._frame_main_rect.width(), self._frame_main_rect.height()
+                )
+                self._video_play_widget.show()
+                self._video_play_widget._set_video_path_(
+                    self._video_path
+                )
+
+    def _close_video_play_widget_(self):
+        if self._video_play_widget is not None:
+            self._video_play_widget.close()
+
+        self._video_player_show_timer.stop()
+        self._video_play_widget = None
+
+    def _update_event_flag_(self, boolean):
+        self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents, not boolean)
 
     def _update_video_play_(self, boolean):
         if boolean is True:
             self._video_player_show_flag = True
-            self._video_player_show_timer.singleShot(500, self._show_video_auto_play_)
+            self._video_player_show_timer.singleShot(
+                250, self._show_video_play_widget_
+            )
         else:
-            self._close_video_auto_play_()
+            self._video_player_show_flag = False
+            self._close_video_play_widget_()
 
     # fixme: for size change
     def _set_frame_size_(self, *args, **kwargs):

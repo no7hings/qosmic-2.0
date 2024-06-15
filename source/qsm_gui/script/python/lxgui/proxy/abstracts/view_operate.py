@@ -29,7 +29,7 @@ class AbsGuiPrxTreeViewOpt(object):
         self._item_dict = self._prx_tree_view._item_dict
         self._keys = set()
 
-        self._index_thread_batch = 0
+        self._gui_thread_flag = 0
 
         self._namespace = namespace
 
@@ -71,7 +71,7 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
     def _init_tree_view_as_directory_opt_(self, prx_tree_view, namespace):
         self._init_tree_view_opt_(prx_tree_view, namespace)
 
-        self._index_thread_batch = 0
+        self._gui_thread_flag = 0
         self._root = None
 
         self._cache_expand_all = dict()
@@ -107,7 +107,7 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
 
         path = directory_path[len(self._root):]
         if self.gui_check_exists(path) is False:
-            path_opt = bsc_core.PthNodeOpt(path)
+            path_opt = bsc_core.BscPathOpt(path)
             prx_item = self._prx_tree_view.create_item(
                 path_opt.get_name(),
                 icon=gui_core.GuiIcon.get('database/all'),
@@ -133,7 +133,7 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
         directory_path = directory_opt.get_path()
         path = directory_path[len(self._root):]
         if self.gui_check_exists(path) is False:
-            path_opt = bsc_core.PthNodeOpt(path)
+            path_opt = bsc_core.BscPathOpt(path)
             #
             parent_gui = self.gui_get_one(path_opt.get_parent_path())
             #
@@ -181,7 +181,7 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
     def gui_add_all_use_thread(self, directory_path):
         def cache_fnc_():
             return [
-                self._index_thread_batch,
+                self._gui_thread_flag,
                 directory_opt.get_all_directories()
             ]
 
@@ -189,14 +189,14 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
             _index_thread_batch_current, _all_directories = args[0]
             with self._prx_tree_view.gui_bustling():
                 for _i_directory_opt in _all_directories:
-                    if _index_thread_batch_current != self._index_thread_batch:
+                    if _index_thread_batch_current != self._gui_thread_flag:
                         break
                     self.gui_add_one(_i_directory_opt)
 
         def post_fnc_():
             pass
 
-        self._index_thread_batch += 1
+        self._gui_thread_flag += 1
 
         directory_opt = bsc_storage.StgDirectoryOpt(directory_path)
         self.gui_add_root(
@@ -215,7 +215,7 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
     def _init_tree_view_as_storage_opt_(self, prx_tree_view, namespace):
         self._init_tree_view_opt_(prx_tree_view, namespace)
 
-        self._index_thread_batch = 0
+        self._gui_thread_flag = 0
         self._root = None
 
         self._cache_expand_all = dict()
@@ -251,7 +251,7 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
 
         path = directory_path[len(self._root):]
         if self.gui_check_exists(path) is False:
-            path_opt = bsc_core.PthNodeOpt(path)
+            path_opt = bsc_core.BscPathOpt(path)
 
             prx_item = self._prx_tree_view.create_item(
                 path_opt.get_name(),
@@ -278,7 +278,7 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
         stg_path = stg_opt.get_path()
         path = stg_path[len(self._root):]
         if self.gui_check_exists(path) is False:
-            path_opt = bsc_core.PthNodeOpt(path)
+            path_opt = bsc_core.BscPathOpt(path)
             #
             parent_gui = self.gui_get_one(path_opt.get_parent_path())
 
@@ -338,7 +338,7 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
     def gui_add_all_use_thread(self, root):
         def cache_fnc_():
             return [
-                self._index_thread_batch,
+                self._gui_thread_flag,
                 directory_opt.get_all()
             ]
 
@@ -346,14 +346,14 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
             _index_thread_batch_current, _all_opts = args[0]
             with self._prx_tree_view.gui_bustling():
                 for _i_opt in _all_opts:
-                    if _index_thread_batch_current != self._index_thread_batch:
+                    if _index_thread_batch_current != self._gui_thread_flag:
                         break
                     self.gui_add_one(_i_opt)
 
         def post_fnc_():
             pass
 
-        self._index_thread_batch += 1
+        self._gui_thread_flag += 1
 
         directory_opt = bsc_storage.StgDirectoryOpt(root)
         self.gui_add_root(
@@ -460,7 +460,7 @@ class AbsGuiTreeViewAsTagOpt(AbsGuiPrxTreeViewOpt):
 
     def gui_add_group_by_path(self, path):
         if self.gui_get_group_is_exists(path) is False:
-            path_opt = bsc_core.PthNodeOpt(path)
+            path_opt = bsc_core.BscPathOpt(path)
             parent_gui = self.gui_get_group(path_opt.get_parent_path())
             gui_name = bsc_core.RawStrUnderlineOpt(path_opt.get_name()).to_prettify()
             prx_item = parent_gui.add_child(
@@ -484,7 +484,7 @@ class AbsGuiTreeViewAsTagOpt(AbsGuiPrxTreeViewOpt):
 
     def gui_add_tag_by_path(self, path):
         if self.gui_check_exists(path) is False:
-            path_opt = bsc_core.PthNodeOpt(path)
+            path_opt = bsc_core.BscPathOpt(path)
             parent_path = path_opt.get_parent_path()
             parent_prx_item = self.gui_get_group(parent_path)
             if self.GROUP_SCHEME == self.GroupScheme.Disable:
@@ -510,7 +510,7 @@ class AbsGuiTreeViewAsTagOpt(AbsGuiPrxTreeViewOpt):
 
     def gui_register_tag_by_path(self, tag_path, path, auto_create_ancestors=False):
         if auto_create_ancestors is True:
-            path_opt = bsc_core.PthNodeOpt(tag_path)
+            path_opt = bsc_core.BscPathOpt(tag_path)
             ancestors = path_opt.get_ancestors()
             ancestors.reverse()
             for i_path_opt in ancestors:
@@ -542,7 +542,7 @@ class AbsGuiTreeViewAsTagOpt(AbsGuiPrxTreeViewOpt):
         dict_ = {}
         for i_tag_path, i_prx_item in self._tag_item_dict.items():
             if i_prx_item.get_is_checked() is True:
-                i_group_path = bsc_core.PthNodeOpt(i_tag_path).get_parent_path()
+                i_group_path = bsc_core.BscPathOpt(i_tag_path).get_parent_path()
                 dict_.setdefault(i_group_path, set()).add(i_tag_path)
         return dict_
 
@@ -556,7 +556,7 @@ class AbsGuiPrxListViewOpt(object):
         self._item_dict = self._prx_list_view._item_dict
         self._keys = set()
 
-        self._index_thread_batch = 0
+        self._gui_thread_flag = 0
 
         self._namespace = namespace
 

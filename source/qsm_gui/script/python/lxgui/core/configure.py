@@ -231,6 +231,10 @@ class GuiRgba(object):
     DarkPurple = 95, 95, 159, 255
     LightPurple = 175, 175, 255, 255
 
+    PinkPurple = 255, 127, 255, 255
+    DarkPinkPurple = 159, 95, 159, 255
+    LightPinkPurple = 255, 175, 255, 255
+
     Pink = 255, 127, 127, 255
     DarkPink = 159, 95, 95, 255
     LightPink = 255, 175, 175, 255

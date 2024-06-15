@@ -1,4 +1,6 @@
 # coding:utf-8
+import copy
+
 import datetime
 
 import time
@@ -13,12 +15,23 @@ import peewee
 
 import lxbasic.core as bsc_core
 
+import lxbasic.resource as bsc_resource
+
 import lxbasic.storage as bsc_storage
 
 from .. import database as _database
 
 
 class Entity(dict):
+    DESCRIPTION_KEYS = [
+        ('path', '路径'),
+        ('gui_name_chs', '名字'),
+        ('gui_description_chs', '描述'),
+        ('user', '用户'),
+        ('ctime', '创建时间'),
+        ('mtime', '修改时间')
+    ]
+
     def __init__(self, entity_type, *args, **kwargs):
         self.entity_type = entity_type
         super(Entity, self).__init__(*args, **kwargs)
@@ -41,6 +54,9 @@ class Entity(dict):
             keys = self.keys()
             keys.sort()
         return '\n'.join(['{}: {}'.format(x, bsc_core.auto_string(self[x])) for x in keys])
+
+    def to_description(self):
+        return '\n'.join(['{}: {}'.format(x[1], bsc_core.auto_string(self[x[0]])) for x in self.DESCRIPTION_KEYS])
 
 
 class Stage(object):
@@ -81,6 +97,50 @@ class Stage(object):
         'long_time_ago',
     ]
 
+    PTN_DATABASE_PATH = '{root}/lazy-resource/.database/{key}.db'
+
+    PTN_THUMBNAIL_PATH = '{root}/lazy-resource/all/{key}/{node}/thumbnail/{node}.png'
+    PTN_IMAGE_PATH = '{root}/lazy-resource/all/{key}/{node}/image/{node}.{format}'
+    PTN_VIDEO_PATH = '{root}/lazy-resource/all/{key}/{node}/video/{node}.{format}'
+
+    ROOT = None
+    OPTIONS = dict()
+
+    @classmethod
+    def get_root(cls):
+        if cls.ROOT is not None:
+            return cls.ROOT
+        root = bsc_core.EnvBaseMtd.get_library_root()
+        if root is None:
+            raise RuntimeError()
+        cls.ROOT = root
+        return cls.ROOT
+
+    @classmethod
+    def get_options(cls):
+        if cls.OPTIONS:
+            return cls.OPTIONS
+        options = dict(root=cls.get_root())
+        cls.OPTIONS = options
+        return cls.OPTIONS
+
+    @classmethod
+    def get_options_as_copy(cls):
+        return copy.copy(cls.get_options())
+
+    @classmethod
+    def get_all_keys(cls):
+        lst = []
+        ptn_opt = bsc_core.PtnStgParseOpt(cls.PTN_DATABASE_PATH)
+        ptn_opt.update_variants(**cls.get_options())
+        for i in ptn_opt.get_matches():
+            lst.append(i['key'])
+        return lst
+
+    @classmethod
+    def get_configure(cls, key):
+        return bsc_resource.RscExtendConfigure.get_as_content('lazy/screw/{}'.format(key))
+
     @classmethod
     def to_expression_str(cls, entity_type, filters):
         list_ = []
@@ -115,9 +175,25 @@ class Stage(object):
     def to_entity(cls, entity_type, data):
         return Entity(entity_type, data)
 
-    def __init__(self, dtb_path):
+    def __init__(self, key):
+        self._key = key
+        self._root = self.get_root()
+        self._base_options = dict(
+            root=self._root
+        )
+
+        self._options = copy.copy(self._base_options)
+        self._options['key'] = self._key
+
+        dtb_path = self.PTN_DATABASE_PATH.format(
+            **self._options
+        )
         self._dtb_path = dtb_path
         self._dtb = peewee.SqliteDatabase(dtb_path, thread_safe=True)
+
+    @property
+    def key(self):
+        return self._key
 
     @property
     def dtb(self):
@@ -141,7 +217,10 @@ class Stage(object):
             self.ALL
         )
 
-    def build(self, configure):
+    def build(self):
+        self.initialize()
+        key = self._key
+        configure = bsc_resource.RscExtendConfigure.get_as_content('lazy/screw/{}'.format(key))
         if configure is None:
             raise RuntimeError()
 
@@ -173,7 +252,7 @@ class Stage(object):
                 self.EntityTypes.Type,
                 filters=[
                     ('type', 'is', 'node'),
-                    ('kind', 'is not', 'builtin')
+                    ('kind', 'is not', 'unavailable')
                 ]
             )
         ]
@@ -182,7 +261,7 @@ class Stage(object):
                 self.EntityTypes.Tag,
                 filters=[
                     ('type', 'is', 'node'),
-                    ('kind', 'is not', 'builtin')
+                    ('kind', 'is not', 'unavailable')
                 ]
             )
         ]
@@ -271,6 +350,15 @@ class Stage(object):
         _.save()
         return self.to_entity(entity_type, _.__data__)
 
+    def update_entity(self, entity_type, path, **kwargs):
+        dtb_entity = self.to_dtb_entity(entity_type)
+        _ = dtb_entity.select().where(dtb_entity.path == path)
+        if _.exists():
+            entity = _.first()
+            for k, v in kwargs.items():
+                exec 'entity.{} = {}'.format(k, json.dumps(v))
+            entity.save()
+
     def create_node_root_group(self, **kwargs):
         options = dict(
             path='/', category='group', type='root', gui_icon_name='database/all'
@@ -311,11 +399,21 @@ class Stage(object):
             **options
         )
 
-    def create_property(self, node, port, value, **kwargs):
-        path = '{}.{}'.format(node, port)
+    def create_type_assign(self, path_source, path_target, **kwargs):
+        return self.create_assign(
+            path_source, path_target, type='type_assign', **kwargs
+        )
+
+    def create_tag_assign(self, path_source, path_target, **kwargs):
+        return self.create_assign(
+            path_source, path_target, type='tag_assign', **kwargs
+        )
+
+    def create_property(self, node_path, port, value, **kwargs):
+        path = '{}.{}'.format(node_path, port)
         options = dict(
             path=path,
-            node=node,
+            node=node_path,
             port=port,
             value=value,
         )
@@ -325,15 +423,91 @@ class Stage(object):
             **options
         )
 
-    def create_parameter(self, node, port, value, **kwargs):
-        return self.create_property(node, port, value, type='parameter', **kwargs)
+    def update_property(self, node_path, port, value, **kwargs):
+        path = '{}.{}'.format(node_path, port)
+        self.update_entity(
+            self.EntityTypes.Property, path, value=value, **kwargs
+        )
+
+    def create_or_update_property(self, node_path, port, value, **kwargs):
+        path = '{}.{}'.format(node_path, port)
+        if self.is_entity_exists(self.EntityTypes.Property, path) is False:
+            self.create_property(
+                node_path, port, value, **kwargs
+            )
+        else:
+            self.update_property(
+                node_path, port, value, **kwargs
+            )
+
+    def create_parameter(self, node_path, port, value, **kwargs):
+        return self.create_property(node_path, port, value, type='parameter', **kwargs)
+
+    def create_or_update_parameters(self, node_path, port, value, **kwargs):
+        return self.create_or_update_property(node_path, port, value, type='parameter', **kwargs)
+
+    def upload_node_media(self, node_path, file_path):
+        if self.check_node_exists(node_path) is False:
+            return False
+
+        file_opt = bsc_storage.StgFileOpt(file_path)
+        if file_opt.get_is_file() is False:
+            return False
+
+        node_name = bsc_core.BscPathOpt(node_path).name
+        options = copy.copy(self._options)
+        options['node'] = node_name
+
+        thumbnail_path = self.PTN_THUMBNAIL_PATH.format(**options)
+        options['format'] = file_opt.type
+        # image
+        if file_opt.ext in {'.png', '.jpg'}:
+            image_path = self.PTN_IMAGE_PATH.format(**options)
+            file_opt.copy_to_file(image_path)
+            # noinspection PyBroadException
+            try:
+                bsc_storage.ImgOiioOpt(image_path).convert_to(
+                    thumbnail_path
+                )
+                self.create_or_update_parameters(
+                    node_path, 'image', image_path
+                )
+                self.create_or_update_parameters(
+                    node_path, 'thumbnail', thumbnail_path
+                )
+                return True
+            except Exception:
+                return False
+        # video
+        elif file_opt.ext in {'.mov', '.mp4'}:
+            video_path = self.PTN_VIDEO_PATH.format(**options)
+            file_opt.copy_to_file(video_path)
+            # noinspection PyBroadException
+            try:
+                bsc_storage.VdoFileOpt(video_path).create_thumbnail(
+                    thumbnail_path
+                )
+                self.create_or_update_parameters(
+                    node_path, 'video', video_path
+                )
+                self.create_or_update_parameters(
+                    node_path, 'thumbnail', thumbnail_path
+                )
+                return True
+            except Exception:
+                return False
+
+        return False
+
+    def update_node_json(self, node_path, file_path):
+        pass
 
     def get_node(self, path):
         return self.get_entity(
             self.EntityTypes.Node, path
         )
 
-    def is_node_exists(self, path):
+    def check_node_exists(self, path):
         return self.Node.select().where(self.Node.path == path).exists()
 
     def find_all_by_ctime_tag(self, entity_type, tag='today', filters=None):
@@ -356,10 +530,10 @@ class Stage(object):
             # start_of_week <= ctime < yesterday
             'earlier_this_week': '(dtb_entity.ctime >= start_of_week) & (dtb_entity.ctime < yesterday)',
             #
-            'last_week': '(dtb_entity.ctime >= start_of_last_week) & (dtb_entity.ctime <= end_of_last_week)',
-            'earlier_this_month': '(dtb_entity.ctime >= start_of_month) & (dtb_entity.ctime < end_of_last_week)',
-            'last_month': '(dtb_entity.ctime >= start_of_last_month) & (dtb_entity.ctime <= end_of_last_month)',
-            'earlier_this_year': '(dtb_entity.ctime >= start_of_year) & (dtb_entity.ctime < end_of_last_month)',
+            'last_week': '(dtb_entity.ctime >= start_of_last_week) & (dtb_entity.ctime < end_of_last_week)',
+            'earlier_this_month': '(dtb_entity.ctime >= start_of_month) & (dtb_entity.ctime < start_of_last_week)',
+            'last_month': '(dtb_entity.ctime >= start_of_last_month) & (dtb_entity.ctime < start_of_month)',
+            'earlier_this_year': '(dtb_entity.ctime >= start_of_year) & (dtb_entity.ctime < start_of_last_month)',
             'long_time_ago': '(dtb_entity.ctime < start_of_year)'
         }
         if filters:

@@ -1,3 +1,7 @@
+options:
+    gui_name: 'Video'
+    gui_name_chs: '视频'
+
 entities:
     types:
         /:
@@ -16,58 +20,42 @@ entities:
             gui_name_chs: '未指定'
             gui_icon_name: 'database/object'
 
-        /video:
+        /movies:
             category: 'group'
             type: 'group'
-            gui_name_chs: '视频'
 
-            gui_icon_name: 'database/groups'
-
-        /video/movies:
-            category: 'group'
-            type: 'group'
             gui_name_chs: '电影'
-
             gui_icon_name: 'database/groups'
 
-        /video/movies/unspecified:
+        /movies/feature:
             category: 'node'
             type: 'node'
-            gui_name_chs: '未指定'
 
-        /video/tv_series:
+            gui_name_chs: '长片'
+            gui_icon_name: 'database/groups'
+
+        /tv_series:
             category: 'group'
             type: 'group'
+
             gui_name: 'TV series'
             gui_name_chs: '电视剧'
-
             gui_icon_name: 'database/groups'
 
-        /video/tv_series/unspecified:
+        /tv_series/episodes:
             category: 'node'
             type: 'node'
-            gui_name_chs: '未指定'
 
-        /video/documentaries:
-            category: 'group'
-            type: 'group'
-            gui_name: 'documentaries'
-            gui_name_chs: '纪录片'
-
-            gui_icon_name: 'database/groups'
-
-        /video/documentaries/unspecified:
-            category: 'node'
-            type: 'node'
-            gui_name_chs: '未指定'
+            gui_name: 'TV series'
+            gui_name_chs: '剧集'
 
     tags:
         /:
             category: 'group'
             type: 'root'
+
             gui_name: 'All'
             gui_name_chs: '所有'
-
             gui_icon_name: 'database/all'
 
         # creation time
@@ -154,35 +142,39 @@ entities:
         /genres/science:
             category: 'node'
             type: 'node'
+
             gui_name_chs: '科幻'
 
         /genres/action:
             category: 'node'
             type: 'node'
+
             gui_name_chs: '动作'
 
         /regions:
             category: 'group'
             type: 'group'
-            gui_name_chs: '地区'
 
+            gui_name_chs: '地区'
             gui_icon_name: 'database/group'
 
         /regions/chinese:
             category: 'node'
             type: 'node'
+
             gui_name_chs: '华语'
 
         /regions/europe_and_america:
             category: 'node'
             type: 'node'
+
             gui_name_chs: '欧美'
 
         /years:
             category: 'group'
             type: 'group'
-            gui_name_chs: '年份'
 
+            gui_name_chs: '年份'
             gui_icon_name: 'database/group'
 
         /years/2024:
@@ -194,13 +186,14 @@ entities:
         /special:
             category: 'group'
             type: 'group'
-            gui_name_chs: '特殊'
 
+            gui_name_chs: '特殊'
             gui_icon_name: 'database/group'
 
         /special/unabridged:
             category: 'node'
             type: 'node'
+
             gui_name_chs: '未删减'
 
     nodes:
@@ -212,11 +205,3 @@ entities:
             gui_name: 'All'
             gui_name_chs: '所有'
             gui_icon_name: 'database/all'
-
-        /node:
-            category: 'group'
-            type: 'group'
-            kind: 'builtin'
-
-            gui_name_chs: '节点'
-            gui_icon_name: 'database/groups'

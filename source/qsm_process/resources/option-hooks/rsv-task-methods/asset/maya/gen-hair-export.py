@@ -67,7 +67,7 @@ def set_hair_xgen_export(rsv_task, rsv_scene_properties):
     pathsep = rsv_scene_properties.get('dcc.pathsep')
     location = '{}/hair'.format(root)
     mya_location = mya_dcc_objects.Group(
-        bsc_core.PthNodeOpt(location).translate_to(
+        bsc_core.BscPathOpt(location).translate_to(
             pathsep
         ).to_string()
     )
@@ -129,7 +129,7 @@ def set_hair_xgen_usd_export(rsv_task, rsv_scene_properties):
     location = '{}/hair'.format(root)
 
     mya_location = mya_dcc_objects.Group(
-        bsc_core.PthNodeOpt(location).translate_to(
+        bsc_core.BscPathOpt(location).translate_to(
             pathsep
         ).to_string()
     )

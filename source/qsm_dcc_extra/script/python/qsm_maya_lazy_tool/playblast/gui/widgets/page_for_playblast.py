@@ -37,7 +37,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         '1k Square': (1024, 1024),
     }
 
-    SCRIPT_JOB_NAME = 'easy_tool_for_playblast'
+    SCRIPT_JOB_NAME = 'lazy_tool_for_playblast'
 
     def _do_dcc_register_all_script_jobs(self):
         self._script_job = qsm_mya_core.ScriptJob(
@@ -167,8 +167,8 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
             return self._output_file_port.get()
 
     def do_dcc_playblast(self):
-        move_file_path = self.gui_get_file_path()
-        if move_file_path is None:
+        movie_path = self.gui_get_file_path()
+        if movie_path is None:
             return
 
         camera_path = self.gui_get_camera_path()
@@ -207,7 +207,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         # noinspection PyBroadException
         try:
             qsm_mya_prv_core.Playblast.execute(
-                move_file_path,
+                movie_path,
                 camera=camera_path,
                 resolution=resolution_size,
                 frame=frame_range, frame_step=frame_step,
@@ -228,8 +228,8 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         import qsm_task.process as qsm_tsk_process
 
         if qsm_tsk_process.TaskProcessClient.get_server_status():
-            move_file_path = self.gui_get_file_path()
-            if move_file_path is None:
+            movie_path = self.gui_get_file_path()
+            if movie_path is None:
                 raise RuntimeError()
 
             camera_path = self.gui_get_camera_path()
@@ -298,7 +298,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
             )
         )
         prx_sca.add_widget(self._prx_options_node)
-        self._prx_options_node.create_ports_by_data(
+        self._prx_options_node.build_by_data(
             self._session.configure.get('build.options.playblast.parameters')
         )
         # camera

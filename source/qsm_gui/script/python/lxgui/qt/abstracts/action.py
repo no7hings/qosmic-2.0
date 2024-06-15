@@ -369,15 +369,16 @@ class AbsQtActionForCheckDef(object):
         #
         self._is_checked = False
         self._check_frame_rect = QtCore.QRect()
+        self._check_frame_size = 20, 20
         self._check_icon_frame_draw_rect = QtCore.QRect()
         self._check_icon_draw_rect = QtCore.QRect()
         self._check_is_pressed = False
-        self._check_is_hovered = False
+        self._is_check_hovered = False
         #
         self._check_icon_frame_draw_percent = .875
         self._check_icon_frame_draw_size = 20, 20
         self._check_icon_draw_percent = .8
-        self._check_icon_draw_size = 16, 16
+        self._check_icon_size = 16, 16
         #
         self._check_icon_file_path_0 = _gui_core.GuiIcon.get('box_unchecked')
         self._check_icon_file_path_1 = _gui_core.GuiIcon.get('box_checked')
@@ -412,6 +413,10 @@ class AbsQtActionForCheckDef(object):
             self.check_clicked.emit()
             self.check_toggled.emit(boolean)
             self._refresh_check_()
+
+    def _set_check_hovered_(self, boolean):
+        self._is_check_hovered = boolean
+        self._widget.update()
 
     def _set_exclusive_widgets_(self, widgets):
         self._check_exclusive_widgets = widgets
@@ -448,7 +453,7 @@ class AbsQtActionForCheckDef(object):
         self._check_icon_file_path_current = [
             self._check_icon_file_path_0, self._check_icon_file_path_1
         ][self._is_checked]
-        #
+
         self._widget.update()
 
     def _set_check_icon_frame_draw_rect_(self, x, y, w, h):

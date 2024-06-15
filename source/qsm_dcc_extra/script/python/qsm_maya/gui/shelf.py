@@ -47,8 +47,8 @@ class MainShelf(object):
 
         # delete old
         for i in self.OLD_SHELF_NAMES:
-            _mya_core.Shelf.is_exists(i)
-            _mya_core.Shelf.delete(i)
+            if _mya_core.Shelf.is_exists(i):
+                _mya_core.Shelf.delete(i)
         # create new
         if bsc_core.EnvBaseMtd.get_ui_language() == 'chs':
             shelf_name = self.SHELF_NAME_CHS

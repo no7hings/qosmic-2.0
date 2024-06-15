@@ -1399,7 +1399,7 @@ class QtPopupAsChooseForRgba(
 
     def _save_chart_(self):
         d = bsc_core.BscSystem.get_home_directory()
-        file_path = six.u('{}/screenshot/untitled-{}.jpg').format(d, bsc_core.TimeExtraMtd.generate_time_tag_36())
+        file_path = six.u('{}/screenshot/untitled-{}.png').format(d, bsc_core.TimeExtraMtd.generate_time_tag_36())
 
         w, h = self.width(), self.height()
         pixmap = QtGui.QPixmap(QtCore.QSize(w, h))

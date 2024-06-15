@@ -19,4 +19,4 @@ from .thread import *
 
 from .thread_worker import *
 
-from .thread_extra import *
+from .item_widget import *

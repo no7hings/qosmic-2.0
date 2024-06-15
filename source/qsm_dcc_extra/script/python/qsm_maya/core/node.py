@@ -2,8 +2,6 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-from . import node_query as _node_query
-
 
 class Node(object):
     class Types(object):

@@ -115,7 +115,7 @@ class ResourcesQuery(object):
             i_kwargs['namespace'] = i_namespace
             i_path_virtual = self.DAG_PTN.format(**i_kwargs)
             i_resource._path = i_path_virtual
-            i_resource._path_opt = bsc_core.PthNodeOpt(i_path_virtual)
+            i_resource._path_opt = bsc_core.BscPathOpt(i_path_virtual)
             i_resource._variants = i_variants
             self._cache_dict[i_namespace] = i_resource
 

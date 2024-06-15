@@ -33,7 +33,7 @@ class FncExporterForCameraYml(
 
     @classmethod
     def _set_camera_create_(cls, root, persp_view):
-        dcc_root_dag_path = bsc_core.PthNodeOpt(root)
+        dcc_root_dag_path = bsc_core.BscPathOpt(root)
         mya_root_dag_path = dcc_root_dag_path.translate_to(
             pathsep='|'
         )

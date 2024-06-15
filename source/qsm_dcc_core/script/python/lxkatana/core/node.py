@@ -289,7 +289,7 @@ class NGNodeOpt(object):
 
     @classmethod
     def _set_create_(cls, path, type_name):
-        path_opt = bsc_core.PthNodeOpt(path)
+        path_opt = bsc_core.BscPathOpt(path)
         name = path_opt.name
         parent_opt = path_opt.get_parent()
         parent_name = parent_opt.get_name()
@@ -318,7 +318,7 @@ class NGNodeOpt(object):
 
     @classmethod
     def _generate_node_create_args(cls, path, type_name):
-        path_opt = bsc_core.PthNodeOpt(path)
+        path_opt = bsc_core.BscPathOpt(path)
         name = path_opt.name
         parent_opt = path_opt.get_parent()
         parent_name = parent_opt.get_name()
@@ -346,7 +346,7 @@ class NGNodeOpt(object):
 
     @classmethod
     def _generate_group_child_create_args(cls, path, type_name):
-        path_opt = bsc_core.PthNodeOpt(path)
+        path_opt = bsc_core.BscPathOpt(path)
         name = path_opt.name
         parent_opt = path_opt.get_parent()
         parent_name = parent_opt.get_name()
@@ -385,7 +385,7 @@ class NGNodeOpt(object):
 
     @classmethod
     def _generate_material_node_graph_create_args(cls, path, type_name, shader_type_name=None):
-        path_opt = bsc_core.PthNodeOpt(path)
+        path_opt = bsc_core.BscPathOpt(path)
         name = path_opt.name
         parent_opt = path_opt.get_parent()
         parent_name = parent_opt.get_name()
@@ -544,7 +544,7 @@ class NGNodeOpt(object):
     def _generate_ktn_obj(cls, string_arg):
         if string_arg.startswith(cls.PATHSEP):
             return NodegraphAPI.GetNode(
-                bsc_core.PthNodeOpt(string_arg).get_name()
+                bsc_core.BscPathOpt(string_arg).get_name()
             )
         else:
             return NodegraphAPI.GetNode(string_arg)
@@ -553,7 +553,7 @@ class NGNodeOpt(object):
         if isinstance(ktn_obj, six.string_types):
             if ktn_obj.startswith(self.PATHSEP):
                 self._ktn_obj = NodegraphAPI.GetNode(
-                    bsc_core.PthNodeOpt(ktn_obj).get_name()
+                    bsc_core.BscPathOpt(ktn_obj).get_name()
                 )
             else:
                 self._ktn_obj = NodegraphAPI.GetNode(ktn_obj)
@@ -1502,7 +1502,7 @@ class NGNodeOpt(object):
             edited=boolean, exclusive=True
         )
 
-    def create_ports_by_data(self, data):
+    def build_by_data(self, data):
         for k, v in data.items():
             k = k.replace('/', '.')
             self.create_port_by_data(k, v)

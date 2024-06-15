@@ -99,9 +99,10 @@ class AbsQtEmptyBaseDef(object):
     def _init_empty_base_def_(self, widget):
         self._widget = widget
 
-        self._empty_icon_name = 'placeholder/default'
+        self._empty_icon_name = 'placeholder/empty'
         self._empty_text = None
         self._empty_sub_text = None
+        self._empty_draw_flag = False
 
     def _set_empty_icon_name_(self, text):
         self._empty_icon_name = text
@@ -114,6 +115,9 @@ class AbsQtEmptyBaseDef(object):
     def _set_empty_sub_text_(self, text):
         self._empty_sub_text = text
         self._widget.update()
+
+    def _set_empty_draw_flag_(self, boolean):
+        self._empty_draw_flag = boolean
 
 
 class AbsQtMenuBaseDef(object):
@@ -565,11 +569,11 @@ class AbsQtFrameBaseDef(object):
         self._refresh_widget_all_()
 
     def _set_border_color_(self, color):
-        self._frame_border_color = _qt_core.GuiQtColor.to_qt_color(color)
+        self._frame_border_color = _qt_core.QtColor.to_qt_color(color)
         self._refresh_widget_draw_()
 
     def _set_background_color_(self, color):
-        self._frame_background_color = _qt_core.GuiQtColor.to_qt_color(color)
+        self._frame_background_color = _qt_core.QtColor.to_qt_color(color)
         self._refresh_widget_draw_()
 
     def _get_border_color_(self):
@@ -1284,7 +1288,7 @@ class AbsQtIndexBaseDef(object):
 
         self._index_color = _gui_core.GuiRgba.Dark
         self._index_font = _qt_core.QtFont.generate(size=8)
-        self._index_h = 20
+        self._index_h = 10
         
         self._index_margin = 4
 
@@ -2037,7 +2041,6 @@ class AbsQtImageBaseDef(object):
         return self._image_frame_rect
 
 
-
 class AbsQtItemNameBaseDef(object):
     def _init_item_name_base_dict_(self, widget):
         self._widget = widget
@@ -2059,10 +2062,15 @@ class AbsQtItemNameBaseDef(object):
         self._name_color = _gui_core.GuiRgba.DarkWhite
         self._name_text_option = QtCore.Qt.AlignHCenter | QtCore.Qt.AlignBottom
 
+        self._tool_tip_css = None
+
     def _set_name_text_(self, text):
         self._name_flag = True
 
         self._name_text = text
+
+    def _get_name_text_(self):
+        return self._name_text
 
     def _set_name_dict_(self, dict_):
         self._name_flag = True
@@ -2075,6 +2083,17 @@ class AbsQtItemNameBaseDef(object):
             self._name_dict_draw_data.append(
                 (i_key, self._name_dict[i_key], QtCore.QRect())
             )
+
+    def _set_tool_tip_(self, content):
+        self._tool_tip_css = _qt_core.GuiQtUtil.generate_tool_tip_css(
+            self._get_name_text_(), content
+        )
+        # self._widget.setToolTip(
+        #     self._tool_tip_css
+        # )
+
+    def _get_tool_tip_css_(self):
+        return self._tool_tip_css
 
 
 class AbsQtMovieBaseDef(object):
@@ -2137,7 +2156,6 @@ class AbsQtChartBaseDef(object):
         self.setMaximumHeight(h)
         # noinspection PyUnresolvedReferences
         self.setMinimumHeight(h)
-
 
 
 class AbsQtThreadBaseDef(object):
@@ -2551,9 +2569,6 @@ class AbsQtViewSelectActionDef(object):
         raise NotImplementedError()
 
     def _get_selected_item_widgets_(self):
-        raise NotImplementedError()
-
-    def _item_select_cbk_(self):
         raise NotImplementedError()
 
     def _set_selection_use_multiply_(self):

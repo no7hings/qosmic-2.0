@@ -272,7 +272,7 @@ class QtHTabToolGroup(
                     # when drag press move less than 10px, do press release also
                     if self._get_action_flag_is_match_(self.ActionFlag.Press):
                         # send signal in release action
-                        self._do_press_release_(event)
+                        self._do_mouse_press_release_(event)
                 elif event.button() == QtCore.Qt.RightButton:
                     pass
                 elif event.button() == QtCore.Qt.MidButton:
@@ -337,7 +337,7 @@ class QtHTabToolGroup(
 
             self._refresh_widget_all_()
     
-    def _do_press_release_(self, event):
+    def _do_mouse_press_release_(self, event):
         if self._index_press_tmp is not None:
             self._switch_current_to_(
                 self._index_press_tmp

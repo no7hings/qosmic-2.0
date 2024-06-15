@@ -161,7 +161,7 @@ class PnlViewerForMaterialDcc(vwr_gui_abstracts.AbsPnlViewerForMaterialDcc):
             _obj_opt = geometry_obj_.obj_opt
             _material_scene_graph_path = _obj_opt.get_port_raw('materialAssign')
             if _material_scene_graph_path is not None:
-                _sub_material_key = bsc_core.PthNodeOpt(_material_scene_graph_path).name
+                _sub_material_key = bsc_core.BscPathOpt(_material_scene_graph_path).name
                 _material_obj = material_dict[_material_scene_graph_path]
             else:
                 _geometry_obj_gui.check_state.set('ignore')

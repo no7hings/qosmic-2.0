@@ -236,7 +236,7 @@ widget:
         QHeaderView{
             background: rgba(<option.background.color-transparent>); 
             color: rgba(<option.font.color-basic>);
-            border: 1px rgba(<option.border.color-basic>); border-radius: 0px; border-style: none none solid none; 
+            border: 1px rgba(<option.background.color-dark>); border-radius: 0px; border-style: none none solid none; 
         }
         QHeaderView::section{
             background: rgba(<option.background.color-transparent>); 
@@ -263,7 +263,7 @@ widget:
         |-
         QScrollBar:vertical{
             background: rgba(<option.background.color-transparent>);
-            border: 1px rgba(<option.border.color-dark>); border-radius: 1px; border-style: none none none solid;
+            border: 1px rgba(<option.background.color-dark>); border-radius: 1px; border-style: none none none solid;
             width: <option.size.scroll-bar.width>px; margin: 0px, 0px, 0px, 0px; padding: <option.size.scroll-bar.width>px 1px <option.size.scroll-bar.width>px 1px;
         }
         QScrollBar::handle:vertical{
@@ -291,7 +291,7 @@ widget:
         }
         QScrollBar:horizontal{
             background: rgba(<option.background.color-transparent>);
-            border: 1px rgba(<option.border.color-dark>); border-radius: 1px; border-style: solid none none none;
+            border: 1px rgba(<option.background.color-dark>); border-radius: 1px; border-style: solid none none none;
             height: <option.size.scroll-bar.height>px; margin: 0px, 0px, 0px, 0px; padding: 1px <option.size.scroll-bar.height>px 1px <option.size.scroll-bar.height>px;
         }
         QScrollBar::handle:horizontal{

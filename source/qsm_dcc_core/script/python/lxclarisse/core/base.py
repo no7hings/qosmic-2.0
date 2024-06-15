@@ -32,7 +32,7 @@ class StageOpt(object):
         pass
 
     def create_obj(self, path_text, type_name):
-        path_opt = bsc_core.PthNodeOpt(path_text)
+        path_opt = bsc_core.BscPathOpt(path_text)
         if type_name == self.Types.Group:
             ix.cmds.CreateContext(
                 path_opt.get_name(),
@@ -51,7 +51,7 @@ class StageOpt(object):
         )
 
     def create_dag(self, path_text):
-        path_opt = bsc_core.PthNodeOpt(path_text)
+        path_opt = bsc_core.BscPathOpt(path_text)
         path_texts = path_opt.get_component_paths()
         path_texts.reverse()
         for i_path_text in path_texts:
@@ -62,7 +62,7 @@ class StageOpt(object):
     def reference_file_to(self, path_text, file_path_text):
         file_opt = bsc_storage.StgFileOpt(file_path_text)
         if self.get_obj_is_exists(path_text) is False and file_opt.get_is_exists() is True:
-            path_opt = bsc_core.PthNodeOpt(path_text)
+            path_opt = bsc_core.BscPathOpt(path_text)
             parent_path_text = path_opt.get_parent_path()
             self.create_dag(parent_path_text)
             ix.cmds.CreateCustomContext(

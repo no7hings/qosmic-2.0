@@ -116,11 +116,14 @@ class WebSocket(object):
         self._skt = None
 
     def is_valid(self):
+        return self.check_is_in_use(self._host, self._port)
+
+    @classmethod
+    def check_is_in_use(cls, host, port):
         # noinspection PyBroadException
         try:
             skt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            skt.connect((self._host, self._port))
-            return True
+            return skt.connect_ex((host, port)) == 0
         except Exception:
             return False
 
@@ -129,6 +132,9 @@ class WebSocket(object):
             self._skt.close()
 
     def connect(self):
+        if self._skt is not None:
+            return True
+
         self._skt = self.create_fnc(self._host, self._port)
         if self._skt is None:
             return False

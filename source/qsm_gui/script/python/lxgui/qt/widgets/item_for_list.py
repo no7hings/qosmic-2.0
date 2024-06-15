@@ -636,7 +636,7 @@ class QtListItemWidget(
 
         bkg_color = painter._get_frame_background_color_by_rect_(
             rect=base_rect,
-            check_is_hovered=self._check_is_hovered,
+            check_is_hovered=self._is_check_hovered,
             is_checked=self._is_checked,
             press_is_hovered=self._press_is_hovered,
             is_pressed=is_actioned,
@@ -745,7 +745,7 @@ class QtListItemWidget(
                 file_path=self._check_icon_file_path_current,
                 offset=offset,
                 # frame_rect=self._check_icon_frame_draw_rect,
-                is_hovered=self._check_is_hovered
+                is_hovered=self._is_check_hovered
             )
         # icons
         if self._get_has_icons_() is True:
@@ -767,7 +767,7 @@ class QtListItemWidget(
                                 self._get_icon_rect_at_(icon_index),
                                 self._get_icon_file_path_at_(icon_index),
                                 offset=offset,
-                                is_hovered=self._check_is_hovered
+                                is_hovered=self._is_check_hovered
                             )
         # icon
         if self._icon_is_enable is True:
@@ -851,11 +851,11 @@ class QtListItemWidget(
 
     def _do_hover_move_(self, event):
         p = event.pos()
-        self._check_is_hovered = False
+        self._is_check_hovered = False
         self._press_is_hovered = False
         if self._check_action_is_enable is True:
             if self._check_frame_rect.contains(p):
-                self._check_is_hovered = True
+                self._is_check_hovered = True
             else:
                 self._press_is_hovered = True
         else:
@@ -889,12 +889,12 @@ class QtListItemWidget(
 
     def _set_hovered_(self, boolean):
         if boolean is True:
-            self._check_is_hovered = True
+            self._is_check_hovered = True
         else:
-            self._check_is_hovered = False
+            self._is_check_hovered = False
             self._press_is_hovered = False
         #
-        self._refresh_widget_draw_()
+        self._widget.update()
 
     def _set_frame_icon_size_(self, w, h):
         self._frame_icon_width, self._frame_icon_height = w, h

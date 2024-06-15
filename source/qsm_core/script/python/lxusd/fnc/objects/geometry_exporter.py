@@ -165,7 +165,7 @@ class GeometryLookPropertyExporter(gnl_fnc_abstracts.AbsFncOptionBase):
                 #
                 i_obj_type_name = i_usd_prim_src.GetTypeName()
                 i_obj_path = i_usd_prim_src.GetPath().pathString
-                i_obj_path_opt = bsc_core.PthNodeOpt(i_obj_path)
+                i_obj_path_opt = bsc_core.BscPathOpt(i_obj_path)
                 #
                 i_usd_prim_tgt = self._usd_stage_tgt.OverridePrim(i_obj_path)
                 if i_obj_type_name in [usd_core.UsdNodeTypes.Mesh, usd_core.UsdNodeTypes.NurbsCurves]:
@@ -212,7 +212,7 @@ class GeometryLookPropertyExporter(gnl_fnc_abstracts.AbsFncOptionBase):
                         if self.get('with_display_color') is True:
                             i_usd_mesh_opt_tgt.fill_display_color(display_color)
         #
-        component_paths = bsc_core.PthNodeOpt(self._location_path).get_component_paths()
+        component_paths = bsc_core.BscPathOpt(self._location_path).get_component_paths()
         if component_paths:
             component_paths.reverse()
             self._usd_stage_opt_tgt.set_default_prim(
@@ -274,7 +274,7 @@ class GeometryDisplayColorExporter(gnl_fnc_abstracts.AbsFncOptionBase):
             for i_index, i_usd_prim_src in enumerate(self._usd_stage_src.TraverseAll()):
                 i_obj_type_name = i_usd_prim_src.GetTypeName()
                 i_obj_path = i_usd_prim_src.GetPath().pathString
-                i_obj_path_opt = bsc_core.PthNodeOpt(i_obj_path)
+                i_obj_path_opt = bsc_core.BscPathOpt(i_obj_path)
                 #
                 i_usd_prim_src = self._usd_stage_src.GetPrimAtPath(i_obj_path)
                 i_usd_prim_tgt = self._usd_stage_tgt.OverridePrim(i_obj_path)
@@ -315,7 +315,7 @@ class GeometryDisplayColorExporter(gnl_fnc_abstracts.AbsFncOptionBase):
                 #
                 l_p.do_update()
         #
-        component_paths = bsc_core.PthNodeOpt(self._location_path).get_component_paths()
+        component_paths = bsc_core.BscPathOpt(self._location_path).get_component_paths()
         if component_paths:
             component_paths.reverse()
             self._usd_stage_opt_tgt.set_default_prim(

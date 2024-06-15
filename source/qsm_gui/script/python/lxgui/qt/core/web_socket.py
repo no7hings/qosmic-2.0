@@ -1,13 +1,20 @@
 # coding=utf-8
+import functools
+
 import six
 
+import socket
+
 import lxbasic.log as bsc_log
+
+import lxbasic.web as bsc_web
 
 from ..core.wrap import *
 
 
-class QtWebServerForNotice(QtCore.QObject):
+class AbsQtWebServerForWindowNotice(QtCore.QObject):
     KEY = 'web socket server'
+    NAME = 'Qosmic Window Notice'
 
     @staticmethod
     def auto_string(text):
@@ -20,20 +27,28 @@ class QtWebServerForNotice(QtCore.QObject):
         pass
 
     def __init__(self, *args, **kwargs):
-        super(QtWebServerForNotice, self).__init__(*args, **kwargs)
+        super(AbsQtWebServerForWindowNotice, self).__init__(*args, **kwargs)
 
-        self._name = 'Qosmic Web Server'
+        self._name = None
+        self._host = None
+        self._port = None
+
+        self._web_server = None
 
         self._verbose = False
 
         self._window = self.parent()
 
-    def _start_(self, host, port):
+    def _start_(self, name, host, port):
+        self._name = None
         self._host = host
         self._port = port
 
+        if bsc_web.WebSocket.check_is_in_use(host, port) is True:
+            raise RuntimeError()
+
         self._web_server = QtWebSockets.QWebSocketServer(
-            self._name, QtWebSockets.QWebSocketServer.NonSecureMode
+            name, QtWebSockets.QWebSocketServer.NonSecureMode
         )
 
         # noinspection PyArgumentList
@@ -45,11 +60,11 @@ class QtWebServerForNotice(QtCore.QObject):
             )
 
         # noinspection PyUnresolvedReferences
-        self._web_server.newConnection.connect(self._do_new_connection_)
+        self._web_server.newConnection.connect(self._new_connection_fnc_)
         self._sockets = []
 
     @qt_slot(str)
-    def _do_process_(self, text):
+    def _process_fnc_(self, text):
         text = self.auto_string(text)
         self._window._show_notice_(text)
         for i in self._sockets:
@@ -61,22 +76,68 @@ class QtWebServerForNotice(QtCore.QObject):
             )
 
     @qt_slot()
-    def _do_new_connection_(self):
+    def _new_connection_fnc_(self):
         skt = self._web_server.nextPendingConnection()
-        skt.textMessageReceived.connect(self._do_process_)
-        skt.disconnected.connect(self._do_disconnected_)
         self._sockets.append(skt)
+        skt.textMessageReceived.connect(self._process_fnc_)
+        skt.disconnected.connect(functools.partial(self._disconnected_fnc_, skt))
         if self._verbose is True:
             bsc_log.Log.trace_method_result(
                 self.KEY, 'new connection'
             )
 
     @qt_slot()
-    def _do_disconnected_(self):
-        skt = self.sender()
+    def _disconnected_fnc_(self, skt):
         self._sockets.remove(skt)
+        skt.close()
         skt.deleteLater()
         if self._verbose is True:
             bsc_log.Log.trace_method_result(
                 self.KEY, 'disconnected'
+            )
+
+    def _do_close_(self):
+        if self._web_server is not None:
+            for seq, i in enumerate(self._sockets):
+                i.close()
+                i.deleteLater()
+            self._sockets = []
+            self._web_server.close()
+
+
+class QtWebServerForWindowNotice(AbsQtWebServerForWindowNotice):
+    KEY = 'web socket server'
+
+    def __init__(self, *args, **kwargs):
+        super(QtWebServerForWindowNotice, self).__init__(*args, **kwargs)
+
+    @qt_slot(str)
+    def _process_fnc_(self, text):
+        text = self.auto_string(text)
+        self._window._show_notice_(text)
+        for i in self._sockets:
+            i.sendTextMessage(text)
+
+        if self._verbose is True:
+            bsc_log.Log.trace_method_result(
+                self.KEY, 'received: "{}"'.format(text)
+            )
+
+
+class QtWebServerForDcc(AbsQtWebServerForWindowNotice):
+    def __init__(self, *args, **kwargs):
+        super(QtWebServerForDcc, self).__init__(*args, **kwargs)
+
+        # self._verbose = True
+
+    @qt_slot(str)
+    def _process_fnc_(self, text):
+        text = self.auto_string(text)
+        exec text
+        for i in self._sockets:
+            i.sendTextMessage(text)
+
+        if self._verbose is True:
+            bsc_log.Log.trace_method_result(
+                self.KEY, 'received: "{}"'.format(text)
             )

@@ -110,7 +110,7 @@ class ScpMacro(object):
                     data.get('clear_start')
                 )
             #
-            self._obj_opt.create_ports_by_data(
+            self._obj_opt.build_by_data(
                 data.get('ports') or {}
             )
             self._obj_opt.set_parameters_by_data(
@@ -160,7 +160,7 @@ class ScpMacro(object):
                 data.get('output_ports') or []
             )
             #
-            obj_opt.create_ports_by_data(
+            obj_opt.build_by_data(
                 data.get('ports') or {}
             )
             #
@@ -328,7 +328,7 @@ class ScpMacro(object):
             data.get('output_ports') or []
         )
         #
-        obj_opt.create_ports_by_data(
+        obj_opt.build_by_data(
             data.get('ports') or {}
         )
         obj_opt.set_port_hints_by_data(

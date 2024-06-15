@@ -65,7 +65,7 @@ class _GuiHistoryOpt(
 
         self._startup_flag = True
 
-        self._index_thread_batch = 0
+        self._gui_thread_flag = 0
 
     def restore(self):
         self._qt_history_view._restore_()
@@ -96,7 +96,7 @@ class _GuiHistoryOpt(
         )
 
     def do_gui_refresh_entities_force(self):
-        self._index_thread_batch += 1
+        self._gui_thread_flag += 1
         self._auto_update_timer.stop()
         # noinspection PyBroadException
         try:
@@ -109,7 +109,7 @@ class _GuiHistoryOpt(
         self.do_gui_add_entities_batch()
 
     def do_gui_add_entities_batch(self):
-        self._index_thread_batch += 1
+        self._gui_thread_flag += 1
 
         if self._window.SERVER_FLAG is True:
             self._worker_queue = qsm_tsk_process.TaskProcessClient.get_worker_queue()
@@ -122,22 +122,22 @@ class _GuiHistoryOpt(
         t = gui_qt_core.QtBuildThread(self._qt_history_view)
         t.set_cache_fnc(
             functools.partial(
-                self._gui_add_entities_batch_cache_fnc, self._index_thread_batch
+                self._gui_add_entities_batch_cache_fnc, self._gui_thread_flag
             )
         )
         t.cache_value_accepted.connect(self._gui_add_entities_batch_build_fnc)
         #
         t.start()
 
-    def _gui_add_entities_batch_cache_fnc(self, thread_stack_index):
-        if thread_stack_index != self._index_thread_batch:
+    def _gui_add_entities_batch_cache_fnc(self, gui_thread_flag):
+        if gui_thread_flag != self._gui_thread_flag:
             return []
 
         self._entity_pool.do_update()
         entity_ids = self._entity_pool.find_entity_ids(ignore_delete=True)[:self.ITEM_MAXIMUM]
         return [
             entity_ids,
-            thread_stack_index
+            gui_thread_flag
         ]
 
     def _gui_add_entities_batch_build_fnc(self, *args):
@@ -153,8 +153,8 @@ class _GuiHistoryOpt(
         if not args[0]:
             return
 
-        entity_ids, thread_stack_index = args[0]
-        if thread_stack_index != self._index_thread_batch:
+        entity_ids, gui_thread_flag = args[0]
+        if gui_thread_flag != self._gui_thread_flag:
             return
 
         if entity_ids:
@@ -168,7 +168,7 @@ class _GuiHistoryOpt(
             for i_entity_ids in entity_ids_map:
                 ts.register(
                     functools.partial(
-                        self._gui_add_entities_cache_fnc, i_entity_ids, thread_stack_index
+                        self._gui_add_entities_cache_fnc, i_entity_ids, gui_thread_flag
                     ),
                     self._gui_add_entities_build_fnc
                 )
@@ -179,20 +179,20 @@ class _GuiHistoryOpt(
         else:
             post_fnc_()
 
-    def _gui_add_entities_cache_fnc(self, entity_ids, thread_stack_index):
-        if thread_stack_index != self._index_thread_batch:
+    def _gui_add_entities_cache_fnc(self, entity_ids, gui_thread_flag):
+        if gui_thread_flag != self._gui_thread_flag:
             return []
         return [
             self._entity_pool.find_entities(entity_ids),
-            thread_stack_index
+            gui_thread_flag
         ]
 
     def _gui_add_entities_build_fnc(self, *args):
         if not args[0]:
             return
 
-        entities, thread_stack_index = args[0]
-        if thread_stack_index != self._index_thread_batch:
+        entities, gui_thread_flag = args[0]
+        if gui_thread_flag != self._gui_thread_flag:
             return
 
         with self._qt_history_view._gui_bustling_():
@@ -219,7 +219,7 @@ class _GuiHistoryOpt(
             _entity_ids_new = self._entity_pool.do_update()
             _entities_new = self._entity_pool.find_entities(_entity_ids_new)
             return [
-                self._index_thread_batch,
+                self._gui_thread_flag,
                 _entities_new
             ]
 
@@ -227,7 +227,7 @@ class _GuiHistoryOpt(
             _index_thread_batch_current, _entities_new = args[0]
             with self._qt_history_view._gui_bustling_():
                 for _i_entity in _entities_new:
-                    if _index_thread_batch_current != self._index_thread_batch:
+                    if _index_thread_batch_current != self._gui_thread_flag:
                         break
                     self.gui_add_entity(_i_entity)
 

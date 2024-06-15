@@ -22,7 +22,7 @@ class _GuiTagOpt(
         super(_GuiTagOpt, self).__init__(window, session)
         self._init_tree_view_as_tag_opt_(prx_tree_view, self.GUI_NAMESPACE)
 
-        self._index_thread_batch = 0
+        self._gui_thread_flag = 0
 
 
 class AbsPnlSubmitterForAssetRenderDcc(gui_prx_widgets.PrxSessionWindow):
@@ -83,7 +83,7 @@ class AbsPnlSubmitterForAssetRenderDcc(gui_prx_widgets.PrxSessionWindow):
 
         self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         sa_0.add_widget(self._options_prx_node)
-        self._options_prx_node.create_ports_by_data(
+        self._options_prx_node.build_by_data(
             self._session.configure.get('build.node.options'),
         )
         self._options_prx_node.set(

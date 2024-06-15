@@ -9,7 +9,7 @@ option:
         name_chs: '懒人资源'
         group_name: 'General(s)'
         #
-        icon_name: 'tool/maya/attribute-edit'
+        icon_name: 'application/lineup'
         tool_tip:
             |-
             For manager node template.

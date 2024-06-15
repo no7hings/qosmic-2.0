@@ -244,7 +244,7 @@ class UnitForSceneryUtilityToolSet(
                 self._window._language, self._session.configure.get('build.options.scenery_utility')
             )
         )
-        self._prx_options_node.create_ports_by_data(
+        self._prx_options_node.build_by_data(
             self._session.configure.get('build.options.scenery_utility.parameters'),
         )
         self._page.gui_get_tool_tab_box().add_widget(
@@ -336,7 +336,7 @@ class UnitForScenerySwitchToolSet(
                 self._window._language, self._session.configure.get('build.options.scenery_switch')
             )
         )
-        self._prx_options_node.create_ports_by_data(
+        self._prx_options_node.build_by_data(
             self._session.configure.get('build.options.scenery_switch.parameters'),
         )
         self._page.gui_get_tool_tab_box().add_widget(
@@ -466,7 +466,7 @@ class UnitForSceneryExtendToolSet(
                 self._window._language, self._session.configure.get('build.options.scenery_camera')
             )
         )
-        self._prx_options_node.create_ports_by_data(
+        self._prx_options_node.build_by_data(
             self._session.configure.get('build.options.scenery_camera.parameters'),
         )
         self._page.gui_get_tool_tab_box().add_widget(

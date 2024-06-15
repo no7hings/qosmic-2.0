@@ -45,8 +45,8 @@ class AbsDccComparerOpt(object):
         if path_src in self._item_dict:
             return self._item_dict[path_src]
         #
-        dcc_path_dag_opt_src = bsc_core.PthNodeOpt(path_src)
-        dcc_path_dag_opt_tgt = bsc_core.PthNodeOpt(path_tgt)
+        dcc_path_dag_opt_src = bsc_core.BscPathOpt(path_src)
+        dcc_path_dag_opt_tgt = bsc_core.BscPathOpt(path_tgt)
         #
         dcc_obj_src = self.DCC_NODE_CLS(path_src)
 
@@ -177,7 +177,7 @@ class AbsPnlComparerForAssetGeometry(gui_prx_widgets.PrxSessionWindow):
         #
         self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         s.add_widget(self._options_prx_node)
-        self._options_prx_node.create_ports_by_data(
+        self._options_prx_node.build_by_data(
             self._session.configure.get('build.node.options'),
         )
 

@@ -108,7 +108,7 @@ class FncImporterForGeometryUsd(gnl_fnc_abstracts.AbsFncOptionBase):
 
     @classmethod
     def create_root_fnc(cls, path, type_name):
-        path_opt = bsc_core.PthNodeOpt(path)
+        path_opt = bsc_core.BscPathOpt(path)
         mya_dag_path = path_opt.translate_to(cls.OBJ_PATHSEP)
         mya_obj = mya_dcc_objects.Transform(mya_dag_path.path)
         if mya_obj.get_is_exists() is False:
@@ -118,7 +118,7 @@ class FncImporterForGeometryUsd(gnl_fnc_abstracts.AbsFncOptionBase):
 
     @classmethod
     def create_path_fnc(cls, path):
-        path_opt = bsc_core.PthNodeOpt(path)
+        path_opt = bsc_core.BscPathOpt(path)
         paths = path_opt.get_component_paths()
         if paths:
             paths.reverse()
@@ -128,7 +128,7 @@ class FncImporterForGeometryUsd(gnl_fnc_abstracts.AbsFncOptionBase):
 
     @classmethod
     def create_transform_fnc(cls, path, matrix=None):
-        path_opt = bsc_core.PthNodeOpt(path)
+        path_opt = bsc_core.BscPathOpt(path)
         mya_dag_path = path_opt.translate_to(cls.OBJ_PATHSEP)
         mya_obj = mya_dcc_objects.Transform(mya_dag_path.path)
         if mya_obj.get_is_exists() is False:
@@ -140,7 +140,7 @@ class FncImporterForGeometryUsd(gnl_fnc_abstracts.AbsFncOptionBase):
     @classmethod
     def create_mesh_uv_map_fnc(cls, prim, uv_map_face_vertices_contrast=True):
         obj_path = prim.GetPath().pathString
-        usd_dag_path = bsc_core.PthNodeOpt(obj_path)
+        usd_dag_path = bsc_core.BscPathOpt(obj_path)
         mya_dag_path = usd_dag_path.translate_to(cls.OBJ_PATHSEP)
         #
         mya_obj_path = mya_dag_path.path
@@ -310,7 +310,7 @@ class FncImporterForGeometryAbc(gnl_fnc_abstracts.AbsFncOptionBase):
         namespace_temporary = 'alembic_import_{}'.format(bsc_core.BscSystem.get_time_tag())
         file_path = self.get('file')
         location = self.get('location')
-        root = bsc_core.PthNodeOpt(location).translate_to(
+        root = bsc_core.BscPathOpt(location).translate_to(
             self.OBJ_PATHSEP
         ).path
         group = mya_dcc_objects.Group(root)
@@ -403,7 +403,7 @@ class FncImporterForGeometryXgen(
 
         #
         group = mya_dcc_objects.Group(
-            bsc_core.PthNodeOpt(xgen_location).translate_to('|').get_value()
+            bsc_core.BscPathOpt(xgen_location).translate_to('|').get_value()
         )
         group.set_dag_components_create()
         #
@@ -429,7 +429,7 @@ class FncImporterForGeometryXgen(
                 value=i_xgen_collection_data_directory,
             )
             for i_xgen_guide in mya_dcc_objects.Group(
-                    bsc_core.PthNodeOpt(xgen_location).translate_to('|').value
+                    bsc_core.BscPathOpt(xgen_location).translate_to('|').value
             ).get_all_paths(include_obj_type=['xgmSplineGuide']):
                 mya_dcc_objects.Node(i_xgen_guide).set('width', .01)
             #

@@ -224,6 +224,13 @@ class Main(object):
                 else:
                     cls.add_other(j_key, j_value, i_variants)
 
+        cls.add_other(
+            'PATH', 'Y:/deploy/rez-packages/external/maya_numpy/1.9.2/platform-windows/bin', {}
+        )
+        cls.add_python(
+            'Y:/deploy/rez-packages/external/maya_numpy/1.9.2/platform-windows/python', {}
+        )
+
         os.environ[cls.MARK_KEY] = 'TRUE'
 
     @classmethod

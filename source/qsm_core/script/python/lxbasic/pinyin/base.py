@@ -14,7 +14,7 @@ class Text(object):
         # to string
         if isinstance(text, six.text_type):
             text = text.encode('utf-8')
-        return re.findall(six.u(r'[\w]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
+        return re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
 
     @staticmethod
     def split_any_to_words_extra(text):
@@ -23,12 +23,27 @@ class Text(object):
         if isinstance(text, six.text_type):
             text = text.encode('utf-8')
 
-        chars = re.findall(six.u(r'[\w]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
+        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
         for i_c in chars:
             lst.append(i_c)
             if re.match(six.u(r'[\u4e00-\u9fff]+'), i_c):
                 lst.append(''.join(map(lambda x: str(x).capitalize(), pypinyin.lazy_pinyin(i_c))))
         return lst
+
+    @classmethod
+    def to_pinyin(cls, text):
+        lst = []
+        # to string
+        if isinstance(text, six.text_type):
+            text = text.encode('utf-8')
+
+        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
+        for i_c in chars:
+            if re.match(six.u(r'[\u4e00-\u9fff]+'), i_c):
+                lst.append('_'.join(map(lambda x: str(x).lower(), pypinyin.lazy_pinyin(i_c))))
+            else:
+                lst.append(i_c)
+        return '_'.join(lst)
 
 
 class Texts(object):

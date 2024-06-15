@@ -590,8 +590,14 @@ class ImgOiioOpt(object):
     def convert_to(self, file_path_tgt):
         file_opt_src = _base.StgFileOpt(self._file_path)
         if file_opt_src.get_is_file() is True:
+            _ext_src = file_opt_src.get_ext()
             file_opt_tgt = _base.StgFileOpt(file_path_tgt)
+            file_opt_tgt.create_directory()
             _ext_tgt = file_opt_tgt.get_ext()
+            if _ext_src == _ext_tgt:
+                file_opt_src.copy_to_file(file_path_tgt)
+                return
+
             time_mark = bsc_cor_time.TimestampMtd.to_string(
                 self.TIME_MARK_PATTERN, file_opt_src.get_modify_timestamp()
             )
@@ -603,7 +609,7 @@ class ImgOiioOpt(object):
                 '--threads 1',
                 '-o "{}"'.format(bsc_cor_raw.auto_string(file_opt_tgt.get_path())),
             ]
-            bsc_cor_process.PrcBaseMtd.execute_with_result(
+            bsc_cor_process.PrcBaseMtd.execute_as_trace(
                 ' '.join(cmd_args)
             )
 

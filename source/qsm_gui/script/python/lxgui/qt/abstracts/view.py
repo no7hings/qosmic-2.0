@@ -227,7 +227,6 @@ class AbsQtListWidget(
         self._set_view_visible_connection_def_init_()
         #
         # noinspection PyUnresolvedReferences
-        self.itemSelectionChanged.connect(self._item_select_cbk_)
         # noinspection PyUnresolvedReferences
         self.itemSelectionChanged.connect(self._item_widget_select_cbk_)
         # noinspection PyUnresolvedReferences
@@ -352,10 +351,6 @@ class AbsQtListWidget(
         return [i for i in self._get_all_item_widgets_() if i._is_checked_() is True]
 
     @qt_slot()
-    def _item_select_cbk_(self):
-        pass
-
-    @qt_slot()
     def _item_widget_select_cbk_(self):
         # unselect pre
         if self._pre_selected_items:
@@ -455,6 +450,7 @@ class AbsQtListWidget(
             i._stop_item_show_all_()
         #
         self._pre_selected_items = []
+
         self._pre_hovered_items = []
         #
         self.clear()

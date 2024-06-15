@@ -327,7 +327,7 @@ class AbsPrxDialogWindow(
         return self._options_prx_node
 
     def set_options_create_by_configure(self, configure):
-        self._options_prx_node.create_ports_by_data(configure)
+        self._options_prx_node.build_by_data(configure)
 
     def trace_log_use_thread(self, text):
         self._tip_text_browser.trace_log_use_thread(text)

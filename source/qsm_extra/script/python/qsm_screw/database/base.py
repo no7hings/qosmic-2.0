@@ -20,6 +20,8 @@ __all__ = [
 class _Entity(Model):
     enable = BooleanField(default=True)
 
+    trash = BooleanField(default=True)
+
     uuid = UUIDField(default=uuid.uuid1)
 
     ctime = TimestampField(default=datetime.datetime.now)

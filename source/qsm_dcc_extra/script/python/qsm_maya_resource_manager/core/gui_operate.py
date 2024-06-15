@@ -30,7 +30,7 @@ class GuiResourceTagOpt(
         super(GuiResourceTagOpt, self).__init__(window, page, session)
         self._init_tree_view_as_tag_opt_(prx_tree_view, self.GUI_NAMESPACE)
 
-        self._index_thread_batch = 0
+        self._gui_thread_flag = 0
 
 
 class GuiResourceOpt(

@@ -59,7 +59,7 @@ class GuiQtUtil(object):
             # noinspection PyArgumentList
             QtWidgets.QToolTip.setPalette(p)
             # noinspection PyArgumentList
-            QtWidgets.QToolTip.setFont(QtFonts.Description)
+            QtWidgets.QToolTip.setFont(QtFont.generate(size=8))
         #
         return palette
 
@@ -422,7 +422,7 @@ class GuiQtIcon(object):
             else:
                 r, g, b = bsc_core.RawTextOpt(name).to_rgb()
 
-            background_color_, text_color_ = GuiQtColor.generate_color_args_by_rgb(r, g, b)
+            background_color_, text_color_ = QtColor.generate_color_args_by_rgb(r, g, b)
             #
             painter.setPen(_color_and_brush.QtBorderColors.Icon)
             painter.setBrush(QtGui.QBrush(QtGui.QColor(*background_color_)))
@@ -444,7 +444,7 @@ class GuiQtIcon(object):
         return icon
 
 
-class GuiQtColor(object):
+class QtColor(object):
     @classmethod
     def to_qt_color(cls, *args):
         if len(args) == 1:
@@ -577,7 +577,7 @@ class QtFont(object):
         return w, h
 
 
-class GuiQtPixmap(object):
+class QtPixmap(object):
     @classmethod
     def _to_gray_(cls, pixmap):
         w, h = pixmap.width(), pixmap.height()
@@ -587,12 +587,40 @@ class GuiQtPixmap(object):
         for i_x in range(w):
             for i_y in range(h):
                 i_p = image.pixel(i_x, i_y)
+                # noinspection PyArgumentList
                 i_a = QtGui.qGray(i_p)
                 i_g_c = QtGui.QColor(i_a, i_a, i_a)
                 image_gray.setPixel(i_x, i_y, i_g_c.rgb())
         #
         image_gray.setAlphaChannel(image_alpha)
         return pixmap.fromImage(image_gray)
+
+    @classmethod
+    def to_gray(cls, pixmap):
+        w, h = pixmap.width(), pixmap.height()
+
+        pxm_new = QtGui.QPixmap(w, h)
+        painter = QtGui.QPainter(pxm_new)
+        pxm_new.fill(QtCore.Qt.black)
+        painter.drawPixmap(
+            QtCore.QRect(0, 0, w, h), pixmap
+        )
+        painter.end()
+
+        img_gray = QtGui.QImage(w, h, QtGui.QImage.Format_RGB32)
+        img_new = pxm_new.toImage()
+        for i_x in range(w):
+            for i_y in range(h):
+                i_p = img_new.pixel(i_x, i_y)
+                # noinspection PyArgumentList
+                i_a = QtGui.qGray(i_p)
+                i_g_c = QtGui.QColor(i_a, i_a, i_a)
+                img_gray.setPixel(i_x, i_y, i_g_c.rgb())
+
+        pxm_gray = pxm_new.fromImage(img_gray)
+        pxm_mask = QtGui.QPixmap(pxm_new).createMaskFromColor(QtCore.Qt.black)
+        pxm_gray.setMask(pxm_mask)
+        return pxm_gray
 
     @classmethod
     def _to_hovered_(cls, pixmap):
@@ -656,7 +684,7 @@ class GuiQtPixmap(object):
                 icon_percent=icon_percent
             )
             if gray is True:
-                return cls._to_gray_(pixmap)
+                return cls.to_gray(pixmap)
             return pixmap
         return cls.get_by_name(
             text=ext[1:],
@@ -694,7 +722,7 @@ class GuiQtPixmap(object):
         tag_rect = QtCore.QRect(
             x + w - txt_w - 2, y + h - txt_h - 2, txt_w, txt_h
         )
-        background_color_, text_color_ = GuiQtColor.generate_color_args_by_text(tag)
+        background_color_, text_color_ = QtColor.generate_color_args_by_text(tag)
         painter.setPen(_color_and_brush.QtBorderColors.Icon)
         painter.setBrush(QtGui.QBrush(QtGui.QColor(*background_color_)))
         painter.drawRoundedRect(tag_rect, txt_w / 2, txt_h / 2, QtCore.Qt.AbsoluteSize)
@@ -705,6 +733,32 @@ class GuiQtPixmap(object):
         )
         painter.end()
         return pixmap
+
+
+class QtSvgRender:
+    @classmethod
+    def to_pixmap_gray(cls, svg_render, rect):
+        w, h = rect.width(), rect.height()
+        pxm_new = QtGui.QPixmap(w, h)
+        painter = QtGui.QPainter(pxm_new)
+        pxm_new.fill(QtCore.Qt.black)
+        svg_render.render(painter, QtCore.QRectF(0, 0, w, h))
+        painter.end()
+
+        img_gray = QtGui.QImage(w, h, QtGui.QImage.Format_RGB32)
+        img_new = pxm_new.toImage()
+        for i_x in range(w):
+            for i_y in range(h):
+                i_p = img_new.pixel(i_x, i_y)
+                # noinspection PyArgumentList
+                i_a = QtGui.qGray(i_p)
+                i_g_c = QtGui.QColor(i_a, i_a, i_a)
+                img_gray.setPixel(i_x, i_y, i_g_c.rgb())
+
+        pxm_gray = pxm_new.fromImage(img_gray)
+        pxm_mask = QtGui.QPixmap(pxm_new).createMaskFromColor(QtCore.Qt.black)
+        pxm_gray.setMask(pxm_mask)
+        return pxm_gray
 
 
 class GuiQtText(object):

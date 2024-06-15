@@ -159,7 +159,7 @@ class BscNodeOpt(object):
         if self._name is not None:
             return self._name
 
-        _ = bsc_core.PthNodeOpt(
+        _ = bsc_core.BscPathOpt(
             self.get_path()
         ).get_name()
         self._name = _
