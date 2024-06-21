@@ -4,6 +4,8 @@ import sys
 import re
 
 import lxbasic.core as bsc_core
+
+import lxbasic.pinyin as bsc_pinyin
 # gui
 from ... import core as gui_core
 # qt
@@ -668,7 +670,7 @@ class QtBubbleAsChoice(
         self.update()
 
     def _refresh_widget_draw_geometry_(self):
-        if self.__texts:
+        if self._texts:
             p = self.parent()
             x, y = 0, 0
             w, h = p.width(), p.height()
@@ -684,21 +686,21 @@ class QtBubbleAsChoice(
 
             self.__draw_data = []
 
-            if self.__idx_all:
+            if self._idx_all:
                 h_y = self.__y_hover
                 x_0, y_0 = 0, h_i
                 w_0, h_0 = w, h-h_i
-                c = len(self.__idx_all)
+                c = len(self._idx_all)
                 c_h = max(min(int(h_0/c), self._text_h_maximum), self._text_h_minimum)
 
                 v_h = c*c_h
                 v_y = y_0+(h_0-v_h)/2
 
-                for i_seq, i_index in enumerate(self.__idx_all):
-                    i_text = self.__texts[i_index]
+                for i_seq, i_index in enumerate(self._idx_all):
+                    i_text = self._texts[i_index]
                     i_t_w, i_t_h = _qt_core.QtFont.compute_size_2(c_h*.725, i_text)
 
-                    i_rect = self.__rects[i_index]
+                    i_rect = self._rects[i_index]
                     i_x, i_y = x_0+(w_0-i_t_w)/2, y_0+(h_0-v_h)/2+c_h*i_seq
 
                     if self._get_action_flag_is_match_(
@@ -717,9 +719,9 @@ class QtBubbleAsChoice(
                     i_rect.setRect(i_x-2, i_y, i_t_w+4, c_h)
                 # clamp to viewport
                 if self.__y_hover < v_y:
-                    self._index_current = self.__idx_all[0]
+                    self._index_current = self._idx_all[0]
                 elif self.__y_hover > v_y+v_h:
-                    self._index_current = self.__idx_all[-1]
+                    self._index_current = self._idx_all[-1]
 
     def __init__(self, *args, **kwargs):
         super(QtBubbleAsChoice, self).__init__(*args, **kwargs)
@@ -735,14 +737,14 @@ class QtBubbleAsChoice(
 
         self.__text_input = ''
         self.__pattern = None
-        self.__texts = []
-        self.__idx_all = []
+        self._texts = []
+        self._idx_all = []
 
         self._text_h_input = 20
         self._text_h_maximum, self._text_h_minimum = 32, 4
 
         self.__rect_input = QtCore.QRect()
-        self.__rects = []
+        self._rects = []
 
         self.__font_input = _qt_core.QtFont.generate(size=12)
         self.__font_current = _qt_core.QtFont.generate(size=24)
@@ -750,7 +752,7 @@ class QtBubbleAsChoice(
         self.__y_hover = -1
 
         self._index_current = None
-        self.__idx_maximum, self.__idx_minimum = None, 0
+        self._idx_maximum, self.__idx_minimum = None, 0
 
         self.__draw_data = []
 
@@ -813,7 +815,7 @@ class QtBubbleAsChoice(
         return False
 
     def paintEvent(self, event):
-        if self.__texts:
+        if self._texts:
             painter = _qt_core.QtPainter(self)
             painter._set_antialiasing_(False)
             x, y = 0, 0
@@ -825,10 +827,10 @@ class QtBubbleAsChoice(
             painter.drawRect(rect)
 
             alpha = [63, 255][self.hasFocus()]
-            if self.__idx_all:
-                for i_index in self.__idx_all:
-                    i_text = self.__texts[i_index]
-                    i_rect = self.__rects[i_index]
+            if self._idx_all:
+                for i_index in self._idx_all:
+                    i_text = self._texts[i_index]
+                    i_rect = self._rects[i_index]
                     if i_index != self._index_current:
                         i_x, i_y = i_rect.x(), i_rect.y()
                         i_w, i_h = i_rect.width(), i_rect.height()
@@ -848,8 +850,8 @@ class QtBubbleAsChoice(
                         )
 
                 if self._index_current is not None:
-                    text_cur = self.__texts[self._index_current]
-                    rect_cur = self.__rects[self._index_current]
+                    text_cur = self._texts[self._index_current]
+                    rect_cur = self._rects[self._index_current]
 
                     h_c = self._text_h_maximum+4
                     t_w_c, t_h_c = _qt_core.QtFont.compute_size_2(
@@ -885,7 +887,7 @@ class QtBubbleAsChoice(
 
             painter._set_font_(self.__font_input)
             if self.__text_input:
-                if self.__idx_all:
+                if self._idx_all:
                     text = self.__text_input
                     painter._set_text_color_(_qt_core.QtColors.TextCorrect)
                 else:
@@ -911,14 +913,14 @@ class QtBubbleAsChoice(
 
         self.__text_input = self.text()
         self.__pattern = r'(.*{})(.*)'.format(self.__text_input.replace('*', '.*'))
-        self.__idx_all = [
-            i_index for i_index, i in enumerate(self.__texts) if re.match(self.__pattern, i, re.IGNORECASE)
+        self._idx_all = [
+            i_index for i_index, i in enumerate(self._texts) if re.match(self.__pattern, i, re.IGNORECASE)
         ]
 
-        if self.__idx_all:
-            self.__idx_maximum = len(self.__idx_all)-1
+        if self._idx_all:
+            self._idx_maximum = len(self._idx_all)-1
         else:
-            self.__idx_maximum = None
+            self._idx_maximum = None
             self._index_current = None
 
         self._refresh_widget_all_()
@@ -930,40 +932,40 @@ class QtBubbleAsChoice(
         self._refresh_widget_all_()
 
     def _do_previous_key_press_(self):
-        if self.__idx_maximum is not None:
+        if self._idx_maximum is not None:
             if self._index_current is None:
-                self._index_current = self.__idx_all[-1]
+                self._index_current = self._idx_all[-1]
             else:
-                if self._index_current not in self.__idx_all:
-                    self._index_current = self.__idx_all[-1]
+                if self._index_current not in self._idx_all:
+                    self._index_current = self._idx_all[-1]
 
                 index_pre = self._index_current
-                idx = self.__idx_all.index(index_pre)
+                idx = self._idx_all.index(index_pre)
                 idx -= 1
-                idx = max(min(idx, self.__idx_maximum), self.__idx_minimum)
-                self._index_current = self.__idx_all[idx]
+                idx = max(min(idx, self._idx_maximum), self.__idx_minimum)
+                self._index_current = self._idx_all[idx]
 
             self._refresh_widget_draw_()
 
     def _do_next_key_press_(self):
-        if self.__idx_maximum is not None:
+        if self._idx_maximum is not None:
             if self._index_current is None:
-                self._index_current = self.__idx_all[0]
+                self._index_current = self._idx_all[0]
             else:
-                if self._index_current not in self.__idx_all:
-                    self._index_current = self.__idx_all[0]
+                if self._index_current not in self._idx_all:
+                    self._index_current = self._idx_all[0]
 
                 index_pre = self._index_current
-                idx = self.__idx_all.index(index_pre)
+                idx = self._idx_all.index(index_pre)
                 idx += 1
-                idx = max(min(idx, self.__idx_maximum), self.__idx_minimum)
-                self._index_current = self.__idx_all[idx]
+                idx = max(min(idx, self._idx_maximum), self.__idx_minimum)
+                self._index_current = self._idx_all[idx]
 
             self._refresh_widget_draw_()
 
     def _do_accept_(self):
         if self._index_current is not None:
-            text = self.__texts[self._index_current]
+            text = self._texts[self._index_current]
             self.choice_index_accepted.emit(self._index_current)
             self.choice_text_accepted.emit(text)
             self.hide()
@@ -977,8 +979,8 @@ class QtBubbleAsChoice(
         self.__is_active = False
 
     def _set_texts_(self, texts):
-        self.__texts = texts
-        self.__rects = [QtCore.QRect() for _ in range(len(self.__texts))]
+        self._texts = texts
+        self._rects = [QtCore.QRect() for _ in range(len(self._texts))]
 
     def _start_(self):
         if self.__is_active is True:
@@ -1007,20 +1009,21 @@ class QtBubbleAsChoose(
         self._refresh_widget_draw_()
 
     def _refresh_widget_draw_geometry_(self):
-        c_x, c_y = 0, 0
+        mrg = self._margin
+        c_x, c_y = mrg, mrg
         w, h = self.width(), self.height()
-        if self.__texts:
+        if self._texts:
             side = 8
-            t_t_w, t_t_h = _qt_core.QtFont.compute_size_2(self.__font_size_tips, self.__tips)
+            t_t_w, t_t_h = _qt_core.QtFont.compute_size_2(self._tips_font_siz, self._tips)
             t_w, t_h = side*2+t_t_w, side*2+t_t_h
-            self.__rect_tips.setRect(
+            self._tips_draw_rect.setRect(
                 c_x+(w-t_w)/2, c_y+1, t_w, t_h-2
             )
             c_y += t_h
 
-            for i_index, i_text in enumerate(self.__texts):
-                i_rect = self.__rects[i_index]
-                i_t_w, i_t_h = _qt_core.QtFont.compute_size_2(self.__font_size_text, i_text)
+            for i_index, i_text in enumerate(self._texts):
+                i_rect = self._rects[i_index]
+                i_t_w, i_t_h = _qt_core.QtFont.compute_size_2(self._text_font_size, i_text)
                 i_w, i_h = side*2+i_t_w, side*2+i_t_h
                 i_rect.setRect(c_x+(w-i_w)/2, c_y+1, i_w, i_h-2)
                 c_y += i_h
@@ -1028,23 +1031,24 @@ class QtBubbleAsChoose(
     def _compute_geometry_args_(self, pos):
         x_0, y_0 = pos.x(), pos.y()
 
-        if self.__texts:
+        if self._texts:
+            mrg = self._margin
             side = 8
 
-            t_t_w, t_t_h = _qt_core.QtFont.compute_size_2(self.__font_size_tips, self.__tips)
+            t_t_w, t_t_h = _qt_core.QtFont.compute_size_2(self._tips_font_siz, self._tips)
             t_w, t_h = side*2+t_t_w, side*2+t_t_h
             ws = [t_w]
             hs = [t_h]
-            for i_index, i_text in enumerate(self.__texts):
-                i_text_draw = self.__texts_draw[i_index]
+            for i_index, i_text in enumerate(self._texts):
+                i_text_draw = self._texts_draw[i_index]
 
-                i_t_w, i_t_h = _qt_core.QtFont.compute_size_2(self.__font_size_text, i_text_draw)
+                i_t_w, i_t_h = _qt_core.QtFont.compute_size_2(self._text_font_size, i_text_draw)
                 i_w, i_h = side*2+i_t_w, side*2+i_t_h
                 ws.append(i_w)
                 hs.append(i_h)
 
-            w, h = max(ws), sum(hs)
-            x, y = x_0-w/2, y_0-h/2
+            w, h = max(ws)+mrg*2, sum(hs)+mrg*2
+            x, y = x_0-w/2-mrg, y_0-h/2-mrg
             return x, y, w, h
 
     def _refresh_widget_draw_(self):
@@ -1052,13 +1056,17 @@ class QtBubbleAsChoose(
 
     bubble_text_choose_accepted = qt_signal(str)
 
+    def _do_cancel_(self):
+        self._do_popup_close_()
+
     def __init__(self, *args, **kwargs):
         super(QtBubbleAsChoose, self).__init__(*args, **kwargs)
 
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setMouseTracking(True)
-        self.setWindowFlags(QtCore.Qt.Popup | QtCore.Qt.FramelessWindowHint)
+        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowDoesNotAcceptFocus)
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
+        # self.setGraphicsEffect()
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Fixed,
             QtWidgets.QSizePolicy.Fixed
@@ -1066,21 +1074,25 @@ class QtBubbleAsChoose(
 
         self._init_action_base_def_(self)
 
-        self.__tips = 'untitled'
-        self.__rect_tips = QtCore.QRect()
-        self.__font_size_tips = 16
+        self._margin = 16
 
-        self.__texts = []
-        self.__texts_draw = []
-        self.__rects = []
+        self._tips = 'untitled'
+        self._tips_draw_rect = QtCore.QRect()
+        self._tips_font_siz = 16
+
+        self._texts = []
+        self._texts_draw = []
+        self._rects = []
 
         self._index_current = None
-        self.__idx_maximum, self.__idx_minimum = None, 0
-        self.__idx_all = []
+        self._idx_maximum, self.__idx_minimum = None, 0
+        self._idx_all = []
 
-        self.__font_size_text = 24
+        self._text_font_size = 16
 
-        self.__result = None
+        self._result = None
+        
+        self._close_draw_rect = QtCore.QRect()
 
         self.installEventFilter(self)
 
@@ -1091,6 +1103,8 @@ class QtBubbleAsChoose(
                 self._do_popup_close_()
             elif event.type() == QtCore.QEvent.Resize:
                 self._refresh_widget_all_()
+            elif event.type == QtCore.QEvent.WindowDeactivate:
+                print 'AAA'
 
             elif event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.button() == QtCore.Qt.LeftButton:
@@ -1117,28 +1131,34 @@ class QtBubbleAsChoose(
                         self.ActionFlag.KeyPress
                     )
                     self._do_next_key_press_()
+                elif event.key() == QtCore.Qt.Key_Escape:
+                    self._do_cancel_()
                 elif event.key() in {QtCore.Qt.Key_Return, QtCore.Qt.Key_Enter}:
                     self._do_accept_()
 
         return False
 
     def paintEvent(self, event):
-        if self.__texts:
+        if self._texts:
             painter = _qt_core.QtPainter(self)
             painter._set_antialiasing_(False)
 
-            painter._set_font_(_qt_core.QtFont.generate(size=self.__font_size_tips*.725))
+            painter.fillRect(
+                self.rect(), QtGui.QColor(0, 0, 0, 1)
+            )
+
+            painter._set_font_(_qt_core.QtFont.generate(size=self._tips_font_siz*.725))
             painter._set_text_color_(_qt_core.QtColors.TextWarning)
 
             painter.drawText(
-                self.__rect_tips,
+                self._tips_draw_rect,
                 QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
-                self.__tips
+                self._tips
             )
 
-            for i_index, i_text in enumerate(self.__texts):
-                i_text_draw = self.__texts_draw[i_index]
-                i_rect = self.__rects[i_index]
+            for i_index, i_text in enumerate(self._texts):
+                i_text_draw = self._texts_draw[i_index]
+                i_rect = self._rects[i_index]
 
                 if i_index == self._index_current:
                     painter._set_border_color_(_qt_core.QtColors.BubbleBorder)
@@ -1149,7 +1169,7 @@ class QtBubbleAsChoose(
 
                 painter.drawRect(i_rect)
 
-                painter._set_font_(_qt_core.QtFont.generate(size=self.__font_size_text*.725))
+                painter._set_font_(_qt_core.QtFont.generate(size=self._text_font_size*.725))
                 painter._set_text_color_(_qt_core.QtColors.BubbleText)
                 painter.drawText(
                     i_rect,
@@ -1160,8 +1180,8 @@ class QtBubbleAsChoose(
     def _do_hover_move_(self, p):
         index_pre = self._index_current
         self._index_current = None
-        if self.__rects:
-            for i_index, i_rect in enumerate(self.__rects):
+        if self._rects:
+            for i_index, i_rect in enumerate(self._rects):
                 if i_rect.contains(p):
                     self._index_current = i_index
                     break
@@ -1170,42 +1190,44 @@ class QtBubbleAsChoose(
             self._refresh_widget_draw_()
 
     def _do_previous_key_press_(self):
-        if self.__idx_maximum is not None:
+        if self._idx_maximum is not None:
             if self._index_current is None:
-                self._index_current = self.__idx_all[-1]
+                self._index_current = self._idx_all[-1]
             else:
-                if self._index_current not in self.__idx_all:
-                    self._index_current = self.__idx_all[-1]
+                if self._index_current not in self._idx_all:
+                    self._index_current = self._idx_all[-1]
 
                 index_pre = self._index_current
-                idx = self.__idx_all.index(index_pre)
+                idx = self._idx_all.index(index_pre)
                 idx -= 1
-                idx = max(min(idx, self.__idx_maximum), self.__idx_minimum)
-                self._index_current = self.__idx_all[idx]
+                idx = max(min(idx, self._idx_maximum), self.__idx_minimum)
+                self._index_current = self._idx_all[idx]
 
             self._refresh_widget_draw_()
 
     def _do_next_key_press_(self):
-        if self.__idx_maximum is not None:
+        if self._idx_maximum is not None:
             if self._index_current is None:
-                self._index_current = self.__idx_all[0]
+                self._index_current = self._idx_all[0]
             else:
-                if self._index_current not in self.__idx_all:
-                    self._index_current = self.__idx_all[0]
+                if self._index_current not in self._idx_all:
+                    self._index_current = self._idx_all[0]
 
                 index_pre = self._index_current
-                idx = self.__idx_all.index(index_pre)
+                idx = self._idx_all.index(index_pre)
                 idx += 1
-                idx = max(min(idx, self.__idx_maximum), self.__idx_minimum)
-                self._index_current = self.__idx_all[idx]
+                idx = max(min(idx, self._idx_maximum), self.__idx_minimum)
+                self._index_current = self._idx_all[idx]
 
             self._refresh_widget_draw_()
 
     def _do_accept_(self):
         if self._index_current is not None:
-            text = self.__texts[self._index_current]
+            text = self._texts[self._index_current]
             self.bubble_text_choose_accepted.emit(text)
-            self.__result = text
+            self._result = text
+            self._do_popup_close_()
+        else:
             self._do_popup_close_()
 
     def _do_popup_start_(self):
@@ -1224,19 +1246,19 @@ class QtBubbleAsChoose(
         self.close()
 
     def _set_tips_(self, text):
-        self.__tips = text
+        self._tips = text
 
-    def _set_texts_(self, texts):
-        self.__texts = texts
-        self.__texts_draw = map(
-            bsc_core.RawTextMtd.to_prettify, self.__texts
+    def _set_texts_(self, texts, texts_draw=None):
+        self._texts = texts
+        self._texts_draw = map(
+            bsc_pinyin.Text.to_prettify, self._texts
         )
-        self.__rects = [QtCore.QRect() for _ in range(len(self.__texts))]
-        self.__idx_maximum = len(self.__texts)-1
-        self.__idx_all = range(len(self.__texts))
+        self._rects = [QtCore.QRect() for _ in range(len(self._texts))]
+        self._idx_maximum = len(self._texts)-1
+        self._idx_all = range(len(self._texts))
 
     def _get_result_(self):
-        return self.__result
+        return self._result
 
     def get_result(self):
-        return self.__result
+        return self._result

@@ -13,6 +13,7 @@ class ShaderCategory(object):
             for i_category in ['shader', 'texture', 'light', 'utility']:
                 for j_type in cmds.listNodeTypes(i_category) or []:
                     cls.CACHE[j_type] = i_category
+        return cls.CACHE
 
     @classmethod
     def get(cls, type_name, default='unknown'):

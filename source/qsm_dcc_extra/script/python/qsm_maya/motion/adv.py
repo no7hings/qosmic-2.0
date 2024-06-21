@@ -106,7 +106,7 @@ class AdvMotionOpt(object):
         if cmds.objExists(locator_path) is False:
             locator_path = _mya_core.DagNode.create_locator(locator_path)
             w, h, d = _mya_core.Transform.get_dimension(main_control)
-            locator_shape = _mya_core.Transform.get_shape_path(
+            locator_shape = _mya_core.Transform.get_shape(
                 locator_path
             )
             _mya_core.NodeAttribute.set_as_tuple(

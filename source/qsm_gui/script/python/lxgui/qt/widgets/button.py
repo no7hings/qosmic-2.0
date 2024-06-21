@@ -662,7 +662,7 @@ class QtIconPressButton(
             # sub icon
             if self._icon is not None or \
                     self._icon_sub_file_path or \
-                    self._icon_sub_text or \
+                    self._sub_icon_text or \
                     self._icon_state_draw_is_enable:
                 if self._icon_state_draw_is_enable is True:
                     icn_s_p = self._icon_sub_draw_percent
@@ -1173,7 +1173,7 @@ class QtIconToggleButton(
         )
         #
         if self._icon_is_enable is True:
-            if self._icon_sub_file_path or self._icon_sub_text:
+            if self._icon_sub_file_path or self._sub_icon_text:
                 self._icon_draw_rect.setRect(
                     x+2, y+2, icn_w, icn_h
                 )
@@ -1250,10 +1250,10 @@ class QtIconToggleButton(
                     offset=offset,
                     is_hovered=self._is_hovered
                 )
-                if self._icon_sub_text:
+                if self._sub_icon_text:
                     painter._draw_image_use_text_by_rect_(
                         rect=self._icon_sub_draw_rect,
-                        text=self._icon_sub_text,
+                        text=self._sub_icon_text,
                         border_radius=4,
                         offset=offset
                     )

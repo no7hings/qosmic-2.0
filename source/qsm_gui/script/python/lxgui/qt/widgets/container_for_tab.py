@@ -46,7 +46,6 @@ class QtHTabToolGroup(
         )
 
         scroll_w = w
-        c_x, c_y = x, y
 
         btn_f_w, btn_f_h = t_h, t_h
         btn_w, btn_h = 20, 20
@@ -114,6 +113,7 @@ class QtHTabToolGroup(
                 self._tab_scroll_next_button.hide()
                 self._tab_choose_button.hide()
 
+            c_x, c_y = x, y
             scroll_value = self._gui_scroll.get_value()
             widths = self._item_width_dict.values()
             for i_index, i_tab_item in enumerate(tab_items):

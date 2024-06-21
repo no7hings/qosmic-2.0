@@ -31,7 +31,13 @@ class MainShelf(object):
             'general',
             [
                 'dcc-tools/maya/qsm-asset-manager',
-                'dcc-tools/maya/qsm-lazy-playblast'
+                'dcc-tools/maya/qsm-lazy-playblast',
+            ]
+        ),
+        (
+            'lazy-resource',
+            [
+                'dcc-tools/maya/qsm-lazy-resource-tool',
             ]
         )
     ]

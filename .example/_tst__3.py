@@ -8,6 +8,6 @@ bsc_core.PtnFileTilesMtd.get_is_valid(
 )
 
 
-# print bsc_storage.StgFileMtdForTiles.get_number_args(
+# print bsc_storage.StgFileTiles.get_number_args(
 #     'test.1001.exr', '*.exr'
 # )

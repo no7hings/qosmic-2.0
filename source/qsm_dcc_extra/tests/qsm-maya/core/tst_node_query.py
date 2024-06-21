@@ -14,4 +14,4 @@ import qsm_maya.core as qsm_mya_core
 for i in qsm_mya_core.NodeQuery(
     'deformWave'
 ).get_all_port_queries():
-    print i.is_writable()
+    print i.is_writeable()

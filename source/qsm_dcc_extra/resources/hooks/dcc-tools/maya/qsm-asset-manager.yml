@@ -95,6 +95,15 @@ build:
                     value: True
                     enable: True
                     tool_tip: '...'
+                    join_to_next: True
+
+                skin_proxy/check_bbox:
+                    widget: boolean
+                    name: 'Use BBox'
+                    name_chs: '检测边界框'
+                    value: True
+                    enable: True
+                    tool_tip: '...'
 
                 skin_proxy/load:
                     widget: sub_process_button

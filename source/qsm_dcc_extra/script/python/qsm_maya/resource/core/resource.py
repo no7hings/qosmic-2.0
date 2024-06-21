@@ -128,6 +128,7 @@ class ResourcesQuery(object):
                 bsc_log.Log.trace_warning(
                     'invalid reference: "{}"'.format(i_path)
                 )
+                continue
 
             i_file_path, i_namespace, i_is_loaded = i_args
             # check file path

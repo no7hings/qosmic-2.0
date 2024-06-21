@@ -47,7 +47,7 @@ class RsvDccSceneHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             )
             scene_file_path = scene_file_rsv_unit.get_result(version=version)
             bsc_storage.StgFileOpt(scene_file_path).create_directory()
-            bsc_storage.StgPathLinkMtd.link_file_to(
+            bsc_storage.StgPathLink.link_file_to(
                 scene_src_file_path, scene_file_path
             )
 

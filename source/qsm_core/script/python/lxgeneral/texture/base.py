@@ -57,7 +57,7 @@ class TxrMethodForBuild(_AbsTxrBase):
                 j_variants['type'] = j_keyword
                 j_file_name = p.format(**j_variants)
                 j_file_path = '{}/{}'.format(directory_path, j_file_name)
-                if bsc_storage.StgFileMtdForTiles.get_is_exists(j_file_path) is True:
+                if bsc_storage.StgFileTiles.get_is_exists(j_file_path) is True:
                     dict_.setdefault(i_type, []).append(j_file_path)
         return dict_
 
@@ -78,7 +78,7 @@ class TxrMethodForBuild(_AbsTxrBase):
         for i_p in cls.NAME_PATTERNS:
             i_p_0 = i_p.replace('{name}.{type}', '*')
             i_p_0 = i_p_0.format(format=file_opt.get_format())
-            i_number_args = bsc_storage.StgFileMtdForTiles.get_number_args(file_opt.get_name(), i_p_0)
+            i_number_args = bsc_storage.StgFileTiles.get_number_args(file_opt.get_name(), i_p_0)
             if i_number_args:
                 i_file_name, _ = i_number_args
                 return i_file_name, i_p

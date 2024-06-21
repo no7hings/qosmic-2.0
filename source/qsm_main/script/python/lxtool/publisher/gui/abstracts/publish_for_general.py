@@ -150,7 +150,7 @@ class _PublishOptForGeneral(object):
             with self._window.gui_progressing(maximum=len(file_paths), label='export image') as g_p:
                 for i_index, i_file_path in enumerate(file_paths):
                     g_p.do_update()
-                    i_file_tile_paths = bsc_storage.StgFileMtdForTiles.get_exists_unit_paths(i_file_path)
+                    i_file_tile_paths = bsc_storage.StgFileTiles.get_exists_unit_paths(i_file_path)
                     for j_file_path in i_file_tile_paths:
                         j_file_opt = bsc_storage.StgFileOpt(j_file_path)
                         j_file_path_tgt = '{}/{}'.format(

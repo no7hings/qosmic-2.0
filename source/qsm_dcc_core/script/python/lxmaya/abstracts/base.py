@@ -112,34 +112,36 @@ class AbsMyaPort(gnl_dcc_abstracts.AbsDccPort):
     def set(self, value):
         if self.get_is_exists() is True:
             if self.has_source() is False:
-                if self.type == 'string':
+                type_name = self.type
+                path = self.path
+                if type_name == 'string':
                     if isinstance(value, six.string_types):
-                        cmds.setAttr(self.path, value, type=self.type)
+                        cmds.setAttr(path, value, type=type_name)
                     else:
                         bsc_log.Log.trace_method_warning(
                             'port set',
-                            'attribute="{}", value="{}" is not available'.format(self.path, value)
+                            'attribute="{}", value="{}" is not available'.format(path, value)
                         )
-                elif self.type == 'enum':
+                elif type_name == 'enum':
                     if isinstance(value, six.string_types):
                         enumerate_strings = self._obj_atr_query.get_enumerate_strings()
                         index = enumerate_strings.index(value)
-                        cmds.setAttr(self.path, index)
+                        cmds.setAttr(path, index)
                     else:
-                        cmds.setAttr(self.path, value)
+                        cmds.setAttr(path, value)
                 else:
                     if isinstance(value, (tuple, list)):
-                        if self.type == 'matrix':
+                        if type_name == 'matrix':
                             # ((1, 1, 1), ...)
                             if isinstance(value[0], (tuple, list)):
                                 value = [j for i in value for j in i]
                             #
-                            cmds.setAttr(self.path, value, type='matrix')
+                            cmds.setAttr(path, value, type='matrix')
                         else:
-                            cmds.setAttr(self.path, *value, clamp=1)
+                            cmds.setAttr(path, *value, clamp=1)
                     else:
                         # Debug ( Clamp Maximum or Minimum Value )
-                        cmds.setAttr(self.path, value, clamp=1)
+                        cmds.setAttr(path, value, clamp=1)
                 #
             else:
                 bsc_log.Log.trace_method_warning(
@@ -472,7 +474,7 @@ class AbsMyaNode(
         if mya_core.MyaUtil.get_is_ui_mode():
             import lxgui.qt.core as gui_qt_core
 
-            return gui_qt_core.GuiQtMaya.generate_qt_icon_by_name(self.type)
+            return gui_qt_core.QtMaya.generate_qt_icon_by_name(self.type)
 
     icon = property(get_icon)
 

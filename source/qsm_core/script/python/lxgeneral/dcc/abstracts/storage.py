@@ -379,7 +379,7 @@ class AbsStgFile(
 
     @classmethod
     def get_exists_unit_paths_fnc(cls, file_path):
-        return bsc_storage.StgFileMtdForTiles.get_exists_unit_paths(file_path)
+        return bsc_storage.StgFileTiles.get_exists_unit_paths(file_path)
 
     def get_exists_unit_paths(self):
         return self.get_exists_unit_paths_fnc(self.path)
@@ -482,26 +482,26 @@ class AbsStgFile(
             if copy_log is not None:
                 # unlock when is not writeable
                 file_opt_copy_log = bsc_storage.StgFileOpt(file_path_copy_log)
-                if file_opt_copy_log.get_is_writable() is False:
+                if file_opt_copy_log.get_is_writeable() is False:
                     bsc_storage.StgPermissionMtd.unlock(file_path_copy_log)
                 file_opt_copy_log.append(copy_log)
             #
             file_tgt = self.__class__(file_path_tgt)
             if file_tgt.get_is_exists_file() is True:
                 if replace is True:
-                    if bsc_storage.StgPathLinkMtd.get_is_link_source_to(
+                    if bsc_storage.StgPathLink.get_is_link_source_to(
                             file_path_src, file_path_tgt,
                     ) is False:
                         os.remove(file_tgt.path)
                         #
-                        bsc_storage.StgPathLinkMtd.link_to(file_path_src, file_tgt.path)
+                        bsc_storage.StgPathLink.link_to(file_path_src, file_tgt.path)
                         link_log = bsc_log.Log.trace_method_result(
                             'link replace',
                             'connection="{} >> {}"'.format(file_path_src, file_path_tgt)
                         )
                         # unlock when is not writeable
                         file_opt_link_log = bsc_storage.StgFileOpt(file_path_link_log)
-                        if file_opt_link_log.get_is_writable() is False:
+                        if file_opt_link_log.get_is_writeable() is False:
                             bsc_storage.StgPermissionMtd.unlock(file_path_link_log)
                         file_opt_link_log.append(link_log)
                         return True, link_log
@@ -514,14 +514,14 @@ class AbsStgFile(
             if file_tgt.get_is_exists() is False:
                 file_tgt.create_directory()
                 # link src to target
-                bsc_storage.StgPathLinkMtd.link_to(file_path_src, file_path_tgt)
+                bsc_storage.StgPathLink.link_to(file_path_src, file_path_tgt)
                 link_log = bsc_log.Log.trace_method_result(
                     'link create',
                     'connection="{} >> {}"'.format(file_path_src, file_path_tgt)
                 )
                 # unlock when is not writeable
                 file_opt_link_log = bsc_storage.StgFileOpt(file_path_link_log)
-                if file_opt_link_log.get_is_writable() is False:
+                if file_opt_link_log.get_is_writeable() is False:
                     bsc_storage.StgPermissionMtd.unlock(file_path_link_log)
                 file_opt_link_log.append(link_log)
                 return True, link_log
@@ -590,7 +590,7 @@ class AbsStgFile(
                 )
 
     def get_is_link_source_to(self, file_path_tgt):
-        return bsc_storage.StgPathLinkMtd.get_is_link_source_to(
+        return bsc_storage.StgPathLink.get_is_link_source_to(
             self.path, file_path_tgt,
         )
 
@@ -601,9 +601,9 @@ class AbsStgFile(
         if self.get_is_exists() is True:
             if file_tgt.get_is_exists():
                 if replace is True:
-                    if bsc_storage.StgPathMtd.get_is_writable(file_path_tgt) is True:
-                        if bsc_storage.StgPathLinkMtd.get_is_link(file_path_tgt) is True:
-                            if bsc_storage.StgPathLinkMtd.get_is_link_source_to(
+                    if bsc_storage.StgPathMtd.get_is_writeable(file_path_tgt) is True:
+                        if bsc_storage.StgPathLink.get_is_link(file_path_tgt) is True:
+                            if bsc_storage.StgPathLink.get_is_link_source_to(
                                     file_path_src, file_path_tgt,
                             ) is True:
                                 bsc_log.Log.trace_method_warning(
@@ -613,7 +613,7 @@ class AbsStgFile(
                                 return
                             #
                             os.remove(file_path_tgt)
-                            bsc_storage.StgPathLinkMtd.link_file_to(file_path_src, file_path_tgt)
+                            bsc_storage.StgPathLink.link_file_to(file_path_src, file_path_tgt)
                             bsc_log.Log.trace_method_result(
                                 'file link replace',
                                 u'relation="{} >> {}"'.format(file_path_src, file_path_tgt)
@@ -621,7 +621,7 @@ class AbsStgFile(
                             return
                         #
                         os.remove(file_path_tgt)
-                        bsc_storage.StgPathLinkMtd.link_file_to(file_path_src, file_path_tgt)
+                        bsc_storage.StgPathLink.link_file_to(file_path_src, file_path_tgt)
                         bsc_log.Log.trace_method_result(
                             'file link replace',
                             u'relation="{} >> {}"'.format(file_path_src, file_path_tgt)
@@ -643,7 +643,7 @@ class AbsStgFile(
             if file_tgt.get_is_exists() is False:
                 file_tgt.create_directory()
                 #
-                bsc_storage.StgPathLinkMtd.link_file_to(
+                bsc_storage.StgPathLink.link_file_to(
                     self.path, file_tgt.path
                 )
                 #
@@ -665,9 +665,9 @@ class AbsStgFile(
             file_path_tgt, replace
         )
 
-    def get_is_writable(self):
+    def get_is_writeable(self):
         for i in self.get_exists_unit_paths():
-            if bsc_storage.StgPathMtd.get_is_writable(i) is False:
+            if bsc_storage.StgPathMtd.get_is_writeable(i) is False:
                 return False
         return True
 
@@ -925,7 +925,7 @@ class AbsStgTexture(
             glob_pattern = '{}.*'.format(path_base)
 
             ext_src = cls._get_unit_name_base_same_ext_(
-                file_path_any, bsc_storage.StgExtraMtd.get_paths_by_fnmatch_pattern(glob_pattern)
+                file_path_any, bsc_storage.StgExtra.get_paths_by_fnmatch_pattern(glob_pattern)
             )
             if ext_src is not None:
                 return ext_src

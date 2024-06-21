@@ -101,6 +101,21 @@ class Setup(object):
             cmds.evalDeferred(fnc_)
 
     @classmethod
+    def setup_shelves(cls):
+        def fnc_():
+            import lxbasic.log as bsc_log
+
+            import qsm_maya.gui as qsm_mya_gui
+
+            with bsc_log.LogContext.create(cls.KEY, 'Shelf'):
+                qsm_mya_gui.MainShelf().create()
+
+        # noinspection PyUnresolvedReferences
+        from maya import cmds
+
+        cmds.evalDeferred(fnc_)
+
+    @classmethod
     def execute(cls, *args, **kwargs):
         import lxbasic.log as bsc_log
         if cls.get_is_maya():
@@ -110,6 +125,7 @@ class Setup(object):
                 cls.setup_td_menu()
                 # cls.setup_workspace_environment()
                 # cls.setup_workspace_gui()
+                cls.setup_shelves()
 
 
 if __name__ == '__main__':

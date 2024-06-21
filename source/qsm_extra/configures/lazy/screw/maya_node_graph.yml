@@ -1,6 +1,6 @@
 options:
-    gui_name: 'Node'
-    gui_name_chs: '节点'
+    gui_name: 'Maya Node-graph'
+    gui_name_chs: 'MAYA节点图'
 
 entities:
     types:
@@ -21,107 +21,82 @@ entities:
             gui_name_chs: '未指定'
             gui_icon_name: 'database/object'
 
-        /cfx:
-            category: 'group'
-            type: 'group'
-
-            gui_name_chs: 'CFX'
-            gui_icon_name: 'database/group'
-
-        /cfx/deformers:
+        /deformers:
             category: 'group'
             type: 'group'
 
             gui_name_chs: '变形器'
             gui_icon_name: 'database/group'
 
-        /cfx/deformers/bend:
+        /deformers/non_linear:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '非线性'
+            gui_icon_name: 'database/group'
+
+        /deformers/non_linear/bend:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '弯曲'
 
-        /cfx/deformers/flare:
+        /deformers/non_linear/flare:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '扩张'
 
-        /cfx/deformers/sine:
+        /deformers/non_linear/sine:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '正弦'
 
-        /cfx/deformers/squash:
+        /deformers/non_linear/squash:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '挤压'
 
-        /cfx/deformers/twist:
+        /deformers/non_linear/twist:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '扭曲'
 
-        /cfx/deformers/wave:
+        /deformers/non_linear/wave:
             category: 'node'
             type: 'node'
             gui_name_chs: '波浪'
 
-        /cfx/dynamics:
+        /effects:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: 'FX'
+            gui_icon_name: 'database/group'
+
+        /effects/nucleus:
             category: 'group'
             type: 'group'
 
             gui_name_chs: '动力学'
             gui_icon_name: 'database/group'
 
-        /cfx/dynamics/n_hair:
+        /effects/nucleus/n_hair:
             category: 'node'
             type: 'node'
 
             gui_name: 'nHair'
             gui_name_chs: 'nHair'
 
-        /cfx/dynamics/n_cloth:
+        /effects/nucleus/n_cloth:
             category: 'node'
             type: 'node'
 
             gui_name: 'nCloth'
             gui_name_chs: 'nCloth'
-
-        /cfx/dynamics/nucleus:
-            category: 'node'
-            type: 'node'
-
-            gui_name_chs: '解算器'
-
-        /cfx/dynamics/air_field:
-            category: 'node'
-            type: 'node'
-
-            gui_name_chs: '风场'
-
-        /animation:
-            category: 'group'
-            type: 'group'
-
-            gui_name_chs: '动画'
-            gui_icon_name: 'database/group'
-
-        /animation/constrains:
-            category: 'group'
-            type: 'group'
-
-            gui_name_chs: '约束'
-            gui_icon_name: 'database/group'
-
-        /animation/constrains/motion_path:
-            category: 'node'
-            type: 'node'
-
-            gui_name_chs: '路径动画'
 
     tags:
         /:

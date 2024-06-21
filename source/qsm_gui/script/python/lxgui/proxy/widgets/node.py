@@ -654,6 +654,7 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
             port.set_default(value_)
         # bool
         elif widget_ in {'boolean'}:
+            value_ = value_ or False
             port = _port.PrxPortAsBoolean(
                 port_path,
                 node_widget=self.widget
@@ -740,19 +741,20 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
             )
             #
             value_options = variants.get('options')
-            value_names = variants.get('labels')
-            if ui_language == 'chs':
-                if 'option_names_chs' in variants:
-                    value_names = variants['option_names_chs']
-            port.set_options(value_options, value_names)
-            #
-            value_default = variants.get('default')
-            if value_default is not None:
-                port.set(value_default)
-                port.set_default(value_default)
-            else:
-                port.set(value_options[-1])
-                port.set_default(value_options[-1])
+            if value_options:
+                value_names = variants.get('labels')
+                if ui_language == 'chs':
+                    if 'option_names_chs' in variants:
+                        value_names = variants['option_names_chs']
+                port.set_options(value_options, value_names)
+                #
+                value_default = variants.get('default')
+                if value_default is not None:
+                    port.set(value_default)
+                    port.set_default(value_default)
+                else:
+                    port.set(value_options[-1])
+                    port.set_default(value_options[-1])
             #
             lock = variants.get('lock') or False
             if lock is True:
@@ -1051,6 +1053,11 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
         port.set_visible_condition(
             variants.get('visible_condition')
         )
+
+        if 'visible' in variants:
+            port.set_visible(
+                variants['visible']
+            )
 
         if 'exclusive_set' in variants:
             port.update_exclusive_set(variants['exclusive_set'])

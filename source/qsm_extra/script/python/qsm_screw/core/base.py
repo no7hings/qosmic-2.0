@@ -3,6 +3,8 @@ import copy
 
 import datetime
 
+import sys
+
 import time
 
 import json
@@ -20,6 +22,18 @@ import lxbasic.resource as bsc_resource
 import lxbasic.storage as bsc_storage
 
 from .. import database as _database
+
+
+def create_model_with_database(model_class, database_):
+    class Meta:
+        database = database_
+
+    attrs = {
+        '__module__': model_class.__module__,
+        'Meta': Meta,
+    }
+
+    return type(model_class.__name__, (model_class,), attrs)
 
 
 class Entity(dict):
@@ -60,12 +74,6 @@ class Entity(dict):
 
 
 class Stage(object):
-    Node = _database.Node
-    Type = _database.Type
-    Tag = _database.Tag
-    Assign = _database.Assign
-    Property = _database.Property
-    Connection = _database.Connection
 
     class EntityTypes:
         Node = _database.Node.__name__
@@ -74,15 +82,6 @@ class Stage(object):
         Assign = _database.Assign.__name__
         Property = _database.Property.__name__
         Connection = _database.Connection.__name__
-
-    ALL = [
-        Node,
-        Type,
-        Tag,
-        Assign,
-        Property,
-        Connection
-    ]
 
     PATHSEP = '/'
 
@@ -102,6 +101,8 @@ class Stage(object):
     PTN_THUMBNAIL_PATH = '{root}/lazy-resource/all/{key}/{node}/thumbnail/{node}.png'
     PTN_IMAGE_PATH = '{root}/lazy-resource/all/{key}/{node}/image/{node}.{format}'
     PTN_VIDEO_PATH = '{root}/lazy-resource/all/{key}/{node}/video/{node}.{format}'
+
+    PTN_JSON_PATH = '{root}/lazy-resource/all/{key}/{node}/json/{node}.{tag}.json'
 
     ROOT = None
     OPTIONS = dict()
@@ -138,6 +139,12 @@ class Stage(object):
         return lst
 
     @classmethod
+    def get_dtb_path(cls, key):
+        copy_options = cls.get_options_as_copy()
+        copy_options['key'] = key
+        return cls.PTN_DATABASE_PATH.format(**copy_options)
+
+    @classmethod
     def get_configure(cls, key):
         return bsc_resource.RscExtendConfigure.get_as_content('lazy/screw/{}'.format(key))
 
@@ -166,10 +173,15 @@ class Stage(object):
         return ' & '.join(list_)
 
     @classmethod
-    def to_dtb_entity(cls, entity_type):
+    def to_dtb_entity_old(cls, entity_type):
         if entity_type not in cls.__dict__:
             raise RuntimeError()
         return cls.__dict__[entity_type]
+
+    def to_dtd_entity(self, entity_type):
+        if entity_type not in self.__dict__:
+            raise RuntimeError()
+        return self.__dict__[entity_type]
 
     @classmethod
     def to_entity(cls, entity_type, data):
@@ -182,14 +194,14 @@ class Stage(object):
             root=self._root
         )
 
-        self._options = copy.copy(self._base_options)
+        self._options = self.get_options_as_copy()
         self._options['key'] = self._key
 
-        dtb_path = self.PTN_DATABASE_PATH.format(
-            **self._options
-        )
+        dtb_path = self.get_dtb_path(key)
         self._dtb_path = dtb_path
         self._dtb = peewee.SqliteDatabase(dtb_path, thread_safe=True)
+
+        self.connect()
 
     @property
     def key(self):
@@ -200,9 +212,20 @@ class Stage(object):
         return self._dtb
 
     def connect(self):
-        for i in self.ALL:
-            # noinspection PyUnresolvedReferences
-            i._meta.database = self._dtb
+        self.Node = create_model_with_database(_database.Node, self._dtb)
+        self.Type = create_model_with_database(_database.Type, self._dtb)
+        self.Tag = create_model_with_database(_database.Tag, self._dtb)
+        self.Assign = create_model_with_database(_database.Assign, self._dtb)
+        self.Property = create_model_with_database(_database.Property, self._dtb)
+        self.Connection = create_model_with_database(_database.Connection, self._dtb)
+        self.All = [
+            self.Node,
+            self.Type,
+            self.Tag,
+            self.Assign,
+            self.Property,
+            self.Connection
+        ]
         return self._dtb
 
     def close(self):
@@ -214,7 +237,7 @@ class Stage(object):
             os.makedirs(directory_path)
 
         self._dtb.create_tables(
-            self.ALL
+            self.All
         )
 
     def build(self):
@@ -298,6 +321,7 @@ class Stage(object):
                 'Z:/temeporaries/dongchangbao/playblast_tool/test.export.v004.png'
             )
 
+    # base method
     def find_one(self, entity_type, filters):
         dtb_entity = self.__class__.__dict__[entity_type]
         e_str = self.to_expression_str(
@@ -310,7 +334,7 @@ class Stage(object):
             return self.to_entity(entity_type, _.first().__data__)
 
     def find_all(self, entity_type, filters=None):
-        dtb_entity = self.__class__.__dict__[entity_type]
+        dtb_entity = self.to_dtd_entity(entity_type)
         if filters:
             e_str = self.to_expression_str(
                  entity_type, filters
@@ -324,21 +348,60 @@ class Stage(object):
             return map(lambda x: self.to_entity(entity_type, x.__data__), _)
         return []
 
+    def find_all_by_ctime_tag(self, entity_type, tag='today', filters=None):
+        today = datetime.date.today()
+        yesterday = today-datetime.timedelta(days=1)
+        start_of_week = today-datetime.timedelta(days=today.weekday())
+        start_of_last_week = start_of_week-datetime.timedelta(days=7)
+        end_of_last_week = start_of_week-datetime.timedelta(seconds=1)
+        start_of_month = today.replace(day=1)
+        start_of_last_month = (start_of_month-datetime.timedelta(days=1)).replace(day=1)
+        end_of_last_month = start_of_month-datetime.timedelta(seconds=1)
+        start_of_year = today.replace(month=1, day=1)
+        dtb_entity = self.to_dtd_entity(entity_type)
+
+        conditions = {
+            #
+            'today': '(dtb_entity.ctime >= today) & (dtb_entity.ctime < today+datetime.timedelta(days=1))',
+            # yesterday <= ctime < today
+            'yesterday': '(dtb_entity.ctime >= yesterday) & (dtb_entity.ctime < today)',
+            # start_of_week <= ctime < yesterday
+            'earlier_this_week': '(dtb_entity.ctime >= start_of_week) & (dtb_entity.ctime < yesterday)',
+            #
+            'last_week': '(dtb_entity.ctime >= start_of_last_week) & (dtb_entity.ctime < end_of_last_week)',
+            'earlier_this_month': '(dtb_entity.ctime >= start_of_month) & (dtb_entity.ctime < start_of_last_week)',
+            'last_month': '(dtb_entity.ctime >= start_of_last_month) & (dtb_entity.ctime < start_of_month)',
+            'earlier_this_year': '(dtb_entity.ctime >= start_of_year) & (dtb_entity.ctime < start_of_last_month)',
+            'long_time_ago': '(dtb_entity.ctime < start_of_year)'
+        }
+        if filters:
+            _ = dtb_entity.select().where(
+                eval(conditions[tag]+'&'+self.to_expression_str(entity_type, filters))
+            )
+        else:
+            _ = dtb_entity.select().where(
+                eval(conditions[tag])
+            )
+        if _.exists():
+            return map(lambda x: self.to_entity(entity_type, x.__data__), _)
+        return []
+
     def is_entity_exists(self, entity_type, path):
-        dtb_entity = self.to_dtb_entity(entity_type)
+        dtb_entity = self.to_dtd_entity(entity_type)
         return dtb_entity.select().where(dtb_entity.path == path).exists()
 
     def get_entity(self, entity_type, path):
-        dtb_entity = self.to_dtb_entity(entity_type)
+        dtb_entity = self.to_dtd_entity(entity_type)
         _ = dtb_entity.select().where(dtb_entity.path == path)
         if _.exists():
             return self.to_entity(entity_type, _.first().__data__)
 
     def create_entity(self, entity_type, path, **kwargs):
-        if self.is_entity_exists(entity_type, path) is True:
+        dtb_entity = self.to_dtd_entity(entity_type)
+        if dtb_entity.select().where(dtb_entity.path == path).exists() is True:
             return self.get_entity(entity_type, path)
 
-        dtb_entity = self.to_dtb_entity(entity_type)
+        dtb_entity = self.to_dtd_entity(entity_type)
         name = path.split(self.PATHSEP)[-1]
         gui_name = bsc_core.RawTextMtd.to_prettify(name, capitalize=True)
         options = dict(
@@ -351,7 +414,7 @@ class Stage(object):
         return self.to_entity(entity_type, _.__data__)
 
     def update_entity(self, entity_type, path, **kwargs):
-        dtb_entity = self.to_dtb_entity(entity_type)
+        dtb_entity = self.to_dtd_entity(entity_type)
         _ = dtb_entity.select().where(dtb_entity.path == path)
         if _.exists():
             entity = _.first()
@@ -359,6 +422,7 @@ class Stage(object):
                 exec 'entity.{} = {}'.format(k, json.dumps(v))
             entity.save()
 
+    # extend method
     def create_node_root_group(self, **kwargs):
         options = dict(
             path='/', category='group', type='root', gui_icon_name='database/all'
@@ -499,8 +563,23 @@ class Stage(object):
 
         return False
 
-    def update_node_json(self, node_path, file_path):
-        pass
+    def upload_node_json(self, node_path, tag, data):
+        if self.check_node_exists(node_path) is False:
+            return False
+
+        node_name = bsc_core.BscPathOpt(node_path).name
+        options = copy.copy(self._options)
+        options['node'] = node_name
+        options['tag'] = tag
+
+        json_path = self.PTN_JSON_PATH.format(**options)
+
+        json_opt = bsc_storage.StgFileOpt(json_path)
+        json_opt.set_write(data)
+
+        self.create_or_update_parameters(
+            node_path, tag, json_path
+        )
 
     def get_node(self, path):
         return self.get_entity(
@@ -508,45 +587,6 @@ class Stage(object):
         )
 
     def check_node_exists(self, path):
-        return self.Node.select().where(self.Node.path == path).exists()
-
-    def find_all_by_ctime_tag(self, entity_type, tag='today', filters=None):
-        today = datetime.date.today()
-        yesterday = today-datetime.timedelta(days=1)
-        start_of_week = today-datetime.timedelta(days=today.weekday())
-        start_of_last_week = start_of_week-datetime.timedelta(days=7)
-        end_of_last_week = start_of_week-datetime.timedelta(seconds=1)
-        start_of_month = today.replace(day=1)
-        start_of_last_month = (start_of_month-datetime.timedelta(days=1)).replace(day=1)
-        end_of_last_month = start_of_month-datetime.timedelta(seconds=1)
-        start_of_year = today.replace(month=1, day=1)
-        dtb_entity = self.__class__.__dict__[entity_type]
-
-        conditions = {
-            #
-            'today': '(dtb_entity.ctime >= today) & (dtb_entity.ctime < today+datetime.timedelta(days=1))',
-            # yesterday <= ctime < today
-            'yesterday': '(dtb_entity.ctime >= yesterday) & (dtb_entity.ctime < today)',
-            # start_of_week <= ctime < yesterday
-            'earlier_this_week': '(dtb_entity.ctime >= start_of_week) & (dtb_entity.ctime < yesterday)',
-            #
-            'last_week': '(dtb_entity.ctime >= start_of_last_week) & (dtb_entity.ctime < end_of_last_week)',
-            'earlier_this_month': '(dtb_entity.ctime >= start_of_month) & (dtb_entity.ctime < start_of_last_week)',
-            'last_month': '(dtb_entity.ctime >= start_of_last_month) & (dtb_entity.ctime < start_of_month)',
-            'earlier_this_year': '(dtb_entity.ctime >= start_of_year) & (dtb_entity.ctime < start_of_last_month)',
-            'long_time_ago': '(dtb_entity.ctime < start_of_year)'
-        }
-        if filters:
-            _ = dtb_entity.select().where(
-                eval(conditions[tag] + '&' + self.to_expression_str(entity_type, filters))
-            )
-        else:
-            _ = dtb_entity.select().where(
-                eval(conditions[tag])
-            )
-        if _.exists():
-            return map(lambda x: self.to_entity(entity_type, x.__data__), _)
-        return []
-
+        return self.is_entity_exists(self.EntityTypes.Node, path)
 
 

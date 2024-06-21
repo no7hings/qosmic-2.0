@@ -227,3 +227,14 @@ build:
             name: 'Playblast as Backstage'
             name_chs: '后台拍屏'
 
+    tip:
+        name: 'Tip'
+        name_chs: '提示'
+
+        tool_tip:
+            |-
+            to be supplemented
+        tool_tip_chs:
+            |-
+            待补充
+

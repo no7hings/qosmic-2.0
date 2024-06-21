@@ -49,10 +49,10 @@ with bsc_log.LogProcessContext.create_as_bar(maximum=len(cs), label='usd combine
             i_list = i_yaml_file_opt.set_read()
             list_.extend([i_path + j for j in i_list])
         else:
-            i_file_path_ = bsc_storage.StgFileMtdForTiles.convert_to(
+            i_file_path_ = bsc_storage.StgFileTiles.convert_to(
                 i_file_path, ['*.####.{format}']
             )
-            i_file_tile_paths = bsc_storage.StgFileMtdForTiles.get_exists_unit_paths(
+            i_file_tile_paths = bsc_storage.StgFileTiles.get_exists_unit_paths(
                 i_file_path_
             )
             i_list = []

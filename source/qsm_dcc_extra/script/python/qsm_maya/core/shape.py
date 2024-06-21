@@ -50,13 +50,46 @@ class Shape(_node_dag.DagNode):
 
     @classmethod
     def check_is_shape(cls, path):
-        if cmds.nodeType(path) != 'transform':
-            transform_paths = cmds.listRelatives(path, parent=1, fullPath=1, type='transform') or []
-            shape_paths = cmds.listRelatives(path, children=1, shapes=1, noIntermediate=0, fullPath=1) or []
-            if transform_paths and not shape_paths:
-                return True
-            return False
-        return False
+        return not not cmds.ls(path, shapes=1)
+
+    @classmethod
+    def clear_all_instanced(cls, shape_path):
+        transform_paths = cmds.listRelatives(shape_path, fullPath=1, allParents=1) or []
+        if len(transform_paths) > 1:
+            for i_transform_path in transform_paths:
+                i_children = cmds.listRelatives(i_transform_path, children=1, fullPath=1)
+                i_parents = cmds.listRelatives(i_children[0], fullPath=1, allParents=1)
+                if i_parents > 1:
+                    i_transform_name = i_transform_path.split('|')[-1]
+                    i_transform_name_copy = '{}_copy'.format(i_transform_name)
+                    transform_copy = cmds.duplicate(
+                        i_transform_path, name=i_transform_name_copy
+                    )
+                    cmds.delete(i_transform_path)
+                    cmds.rename(transform_copy[0], i_transform_name)
+
+
+class Geometry(Shape):
+
+    @classmethod
+    def get_materials(cls, shape_path):
+        return cmds.listConnections(
+            shape_path, destination=1, source=0, type=mya_core.MyaNodeTypes.Material
+        ) or []
+
+    @classmethod
+    def get_material_assign_map(cls, shape_path):
+        dict_ = {}
+        transform_path = cls.get_transform(shape_path)
+        material_paths = cls.get_materials(shape_path)
+        if material_paths:
+            for i_material_path in material_paths:
+                i_results = cmds.sets(i_material_path, query=1)
+                if i_results:
+                    i_element_paths = cmds.ls(i_results, leaf=1, noIntermediate=1, long=1) or []
+                    for j_element_path in i_element_paths:
+                        dict_[j_element_path] = i_material_path
+        return dict_
 
 
 class ShapeOpt(_node_dag.DagNodeOpt):

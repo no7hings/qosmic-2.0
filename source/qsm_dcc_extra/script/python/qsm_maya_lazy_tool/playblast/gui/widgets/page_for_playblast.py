@@ -330,6 +330,22 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         self._output_save_scheme_port.connect_input_changed_to(self._do_gui_refresh_output_by_save_scheme)
 
         self._do_gui_refresh_output_by_save_scheme()
+        # tip
+        self._tip_prx_tool_group = gui_prx_widgets.PrxHToolGroup()
+        prx_sca.add_widget(self._tip_prx_tool_group)
+        self._tip_prx_tool_group.set_expanded(True)
+        self._tip_prx_tool_group.set_name(
+            gui_core.GuiUtil.choice_name(
+                self._window._language, self._session.configure.get('build.tip')
+            )
+        )
+        self._tip_prx_text_browser = gui_prx_widgets.PrxTextBrowser()
+        self._tip_prx_tool_group.add_widget(self._tip_prx_text_browser)
+        self._tip_prx_text_browser.set_content(
+            gui_core.GuiUtil.choice_tool_tip(
+                self._window._language, self._session.configure.get('build.tip')
+            )
+        )
 
         tool_bar = gui_prx_widgets.PrxHToolBar()
         qt_lot.addWidget(tool_bar.widget)

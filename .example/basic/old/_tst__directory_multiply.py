@@ -11,10 +11,10 @@ import lxbasic.storage as bsc_storage
 # for k, v in dic.items():
 #     print bsc_core.RawIntArrayMtd.merge_to(v)
 
-# print bsc_storage.StgFileMtdForTiles.get_number_args(
+# print bsc_storage.StgFileTiles.get_number_args(
 #     'A.1001.1001.exr', '*.<udim>.%04d.*'
 # )
-# print bsc_storage.StgFileMtdForTiles.get_number_args(
+# print bsc_storage.StgFileTiles.get_number_args(
 #     'A.1001.exr', '*.####.*'
 # )
 

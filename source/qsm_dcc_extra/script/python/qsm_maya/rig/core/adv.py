@@ -1,6 +1,10 @@
 # coding:utf-8
+import collections
+
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
+
+import lxbasic.core as bsc_core
 
 from ... import core as _mya_core
 
@@ -50,7 +54,7 @@ class AdvRig(_rsc_core.Resource):
         if _:
             return _[0]
 
-    def get_skin_proxy_exists(self):
+    def is_skin_proxy_exists(self):
         _ = self.get_skin_proxy_location()
         if _:
             if cmds.objExists(_) is True:
@@ -91,7 +95,7 @@ class AdvRig(_rsc_core.Resource):
         if _:
             return _[0]
 
-    def get_dynamic_gpu_exists(self):
+    def is_dynamic_gpu_exists(self):
         _ = self.get_dynamic_gpu_location()
         if _:
             if cmds.objExists(_) is True:
@@ -143,7 +147,7 @@ class AdvRig(_rsc_core.Resource):
         elif scheme == 'main_control':
             return [self.get_main_control()]
 
-    def get_joint(self, name):
+    def find_joint(self, name):
         _ = cmds.ls('{}:{}'.format(self.namespace, name), long=1)
         if _:
             return _[0]
@@ -166,6 +170,33 @@ class AdvRig(_rsc_core.Resource):
                 self.set_skin_proxy_enable(True)
             elif k == 'dynamic_gpu':
                 self.set_dynamic_gpu_enable(True)
+    
+    def generate_joint_transformation_data(self):
+        joint_root = self.get_deformation_root()
+        if joint_root:
+            return collections.OrderedDict(
+                [
+                    (':'.join(x.split('|')[-1].split(':')[1:]), _mya_core.Transform.get_world_transformation(x))
+                    for x in cmds.ls(joint_root, dag=1, type='joint', long=1) or []
+                ]
+            )
+        return {}
+
+    def generate_geometry_bbox_data(self):
+        dict_ = collections.OrderedDict()
+        geometry_root = self.get_geometry_root()
+        if geometry_root:
+            _ = cmds.ls(geometry_root, dag=1, type='mesh', noIntermediate=1, long=1)
+            for i in _:
+                i_transform_path = _mya_core.Shape.get_transform(i)
+                i_key = ':'.join(i_transform_path.split('|')[-1].split(':')[1:])
+                dict_[i_key] = _mya_core.Transform.get_world_extent(i_transform_path)
+        return dict_
+
+    def find_geometry_shape(self, key):
+        _ = cmds.ls('{namespace}:{transform}'.format(namespace=self.namespace, transform=key), long=1)
+        if _:
+            return _[0]
 
 
 class AdvRigsQuery(_rsc_core.ResourcesQuery):

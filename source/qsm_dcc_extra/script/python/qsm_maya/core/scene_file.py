@@ -79,6 +79,15 @@ class SceneFile(object):
         )
 
     @classmethod
+    def import_file_force(cls, file_path, namespace=':'):
+        # noinspection PyBroadException
+        try:
+            return cls.import_file(file_path, namespace)
+        except Exception:
+            import traceback
+            traceback.print_exc()
+
+    @classmethod
     def import_container_file(cls, file_path, namespace=':'):
         """
 file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash false -namespace "gpu" -options "v=1;"  -pr  -importFrameRate true  -importTimeRange "override" "Z:/caches/temporary/.asset-cache/unit-assembly/10E/B0768C98-5DF4-3D31-AA9D-AAE3BF84651E/gpu.ma";

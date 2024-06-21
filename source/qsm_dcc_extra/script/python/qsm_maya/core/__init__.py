@@ -71,9 +71,15 @@ from .window import *
 
 from .shelf import *
 
-from .port_extra import *
+from .deformer import *
+
+from .node_port_extra import *
 
 from .node_extra import *
+
+from .hotkey import *
+
+
 
 
 

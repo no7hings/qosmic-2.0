@@ -1017,7 +1017,7 @@ class AbsQtIconBaseDef(object):
         self._icon_color_rgb = None
         self._icon_text = None
         self._icon_name_rgba = None
-        self._icon_sub_text = None
+        self._sub_icon_text = None
         self._icon_name_is_enable = False
         #
         self._icon_name_auto_color = True
@@ -1088,8 +1088,8 @@ class AbsQtIconBaseDef(object):
         self._icon_sub_file_path = file_path
         self._widget.update()
 
-    def _set_icon_sub_text_(self, text):
-        self._icon_sub_text = text
+    def _set_sub_icon_by_text_(self, text):
+        self._sub_icon_text = text
         self._widget.update()
 
     def _set_icon_sub_name_(self, icon_name):
@@ -1127,7 +1127,7 @@ class AbsQtIconBaseDef(object):
         self._icon_color_rgb = rgb
         self._widget.update()
 
-    def _set_icon_name_text_(self, text):
+    def _set_icon_by_text_(self, text):
         self._icon_is_enable = True
         self._icon_text = text
         self._widget.update()
@@ -1290,7 +1290,7 @@ class AbsQtIndexBaseDef(object):
         self._index_font = _qt_core.QtFont.generate(size=8)
         self._index_h = 10
         
-        self._index_margin = 4
+        self._index_margin = 8
 
         self._index_draw_rect = QtCore.QRect()
 
@@ -2039,61 +2039,6 @@ class AbsQtImageBaseDef(object):
 
     def _get_image_frame_rect_(self):
         return self._image_frame_rect
-
-
-class AbsQtItemNameBaseDef(object):
-    def _init_item_name_base_dict_(self, widget):
-        self._widget = widget
-        self._name_flag = False
-
-        self._name_text = None
-        self._name_draw_rect = QtCore.QRect()
-        self._name_text_draw_flag = False
-
-        self._name_dict = {}
-        self._name_dict_draw_data = []
-        self._name_dict_draw_flag = False
-
-        self._name_key_width = 48
-        self._name_h = 20
-        self._name_margin = 4
-
-        self._name_font = _qt_core.QtFont.generate(size=10)
-        self._name_color = _gui_core.GuiRgba.DarkWhite
-        self._name_text_option = QtCore.Qt.AlignHCenter | QtCore.Qt.AlignBottom
-
-        self._tool_tip_css = None
-
-    def _set_name_text_(self, text):
-        self._name_flag = True
-
-        self._name_text = text
-
-    def _get_name_text_(self):
-        return self._name_text
-
-    def _set_name_dict_(self, dict_):
-        self._name_flag = True
-
-        self._name_dict = dict_
-        self._name_dict_draw_data = []
-        keys = self._name_dict.keys()
-        keys.sort()
-        for i_key in keys:
-            self._name_dict_draw_data.append(
-                (i_key, self._name_dict[i_key], QtCore.QRect())
-            )
-
-    def _set_tool_tip_(self, content):
-        self._tool_tip_css = _qt_core.GuiQtUtil.generate_tool_tip_css(
-            self._get_name_text_(), content
-        )
-        # self._widget.setToolTip(
-        #     self._tool_tip_css
-        # )
-
-    def _get_tool_tip_css_(self):
-        return self._tool_tip_css
 
 
 class AbsQtMovieBaseDef(object):

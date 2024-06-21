@@ -5,17 +5,17 @@ option:
         - '*-maya'
     #
     gui:
-        name: 'Resource Load'
-        name_chs: '资源加载'
+        name: 'Lazy Resource Tool'
+        name_chs: '懒人资源工具'
         group_name: 'General(s)'
         #
-        icon_name: 'file/add-file'
+        icon_name: 'qosmic/lazy-resource-register'
         tool_tip:
             |-
-            For resource load.
+            For resource register or load.
         #
         tool_tip_chs:
             |-
-            用于资源加载。
+            用于资源登记或加载。
 
         size: [480, 720]

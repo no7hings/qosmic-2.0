@@ -44,7 +44,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:#waiting",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -61,7 +61,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -82,7 +83,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -99,7 +99,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -121,9 +120,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md"
-              }
+              "state": {}
             }
           },
           {
@@ -143,9 +140,7 @@
             "type": "leaf",
             "state": {
               "type": "file-properties",
-              "state": {
-                "file": "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md"
-              }
+              "state": {}
             }
           },
           {
@@ -185,6 +180,7 @@
   },
   "active": "c7e7ed9b8a2ff02f",
   "lastOpenFiles": [
+    "开发相关/开发进度/maya/节点图模版工具.md",
     "随记/python/Python包安装.md",
     "开发相关/开发进度/优化.md",
     "开发相关/开发进度/maya/绑定移动工具.md",
@@ -196,7 +192,6 @@
     "开发相关/开发进度/maya/场景显示优化工具.md",
     "开发相关/开发进度/maya/节点参数模版工具.md",
     "开发相关/开发任务/maya/解算相关/节点图模版工具（Node Graph Template Tool）.md",
-    "开发相关/开发进度/maya/节点图模版工具.md",
     "文档/sqlite.md",
     "文档",
     "开发相关/开发进度/通用/农场解算发布工具.md",

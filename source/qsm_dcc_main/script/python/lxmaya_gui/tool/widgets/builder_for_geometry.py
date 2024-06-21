@@ -15,12 +15,12 @@ class PnlBuilderForAssetGeometry(gui_prx_widgets.PrxSessionToolWindow):
             self._session.configure.get('build.node.options'),
         )
         # tip
-        self._tip_group = gui_prx_widgets.PrxHToolGroup()
-        s.add_widget(self._tip_group)
-        self._tip_group.set_expanded(True)
-        self._tip_group.set_name('tips')
-        self._tip_text_browser = gui_prx_widgets.PrxTextBrowser()
-        self._tip_group.add_widget(self._tip_text_browser)
+        self._tip_prx_tool_group = gui_prx_widgets.PrxHToolGroup()
+        s.add_widget(self._tip_prx_tool_group)
+        self._tip_prx_tool_group.set_expanded(True)
+        self._tip_prx_tool_group.set_name('tips')
+        self._tip_prx_text_browser = gui_prx_widgets.PrxTextBrowser()
+        self._tip_prx_tool_group.add_widget(self._tip_prx_text_browser)
 
         self.post_setup_fnc()
 
@@ -48,7 +48,7 @@ class PnlBuilderForAssetGeometry(gui_prx_widgets.PrxSessionToolWindow):
 
             o.set('geometry.import', self.import_geometry_fnc)
             o.set('geometry_uv_map.import', self.import_geometry_uv_map_fnc)
-            self._tip_text_browser.set_content(self._session.gui_configure.get('content'))
+            self._tip_prx_text_browser.set_content(self._session.gui_configure.get('content'))
         else:
             gui_core.GuiDialog.create(
                 session.gui_name,

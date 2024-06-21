@@ -5,7 +5,7 @@ import lxbasic.storage as bsc_storage
 
 f_src = '/l/prod/cgm/work/shots/z95/z95141/srf/surfacing/texture/small_disp_tx/oceanevaluate_small.disp.<udim>.####.tx'
 
-fs = bsc_storage.StgFileMtdForTiles.get_exists_unit_paths(
+fs = bsc_storage.StgFileTiles.get_exists_unit_paths(
     f_src
 )
 

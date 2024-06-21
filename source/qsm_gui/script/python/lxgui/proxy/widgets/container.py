@@ -57,8 +57,8 @@ class AbsPrxToolGroup(gui_prx_abstracts.AbsPrxWidget):
     def set_name(self, name):
         self._qt_head._set_name_text_(name)
 
-    def set_icon_by_name(self, name):
-        self._qt_head._set_icon_name_text_(name)
+    def set_icon_by_text(self, name):
+        self._qt_head._set_icon_by_text_(name)
 
     def set_name_icon_enable(self, boolean):
         self._qt_head._set_icon_name_enable_(boolean)
@@ -184,24 +184,24 @@ class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
     def _gui_build_(self):
         self._wgt_w, self._wgt_h = 28, 28
         self._wgt_w_min, self._wgt_h_min = 12, 12
-        #
+
         qt_layout_0 = gui_qt_wgt_base.QtHBoxLayout(self._qt_widget)
-        qt_layout_0.setContentsMargins(*[0]*4)
+        qt_layout_0.setContentsMargins(2, 0, 2, 0)
         qt_layout_0.setSpacing(2)
         # header
         self._qt_head = gui_qt_wgt_head.QtHExpandHead1()
         qt_layout_0.addWidget(self._qt_head)
         self._qt_head.expand_toggled.connect(self.set_expanded)
         self._qt_head._set_tool_tip_text_('"LMB-click" to expand "on" / "off"')
-        #
+
         qt_widget_1 = gui_qt_wgt_scroll.QtHScrollBox()
         qt_layout_0.addWidget(qt_widget_1)
-        # qt_layout_1.setAlignment(gui_qt_core.QtCore.Qt.AlignLeft)
+
         self._qt_view = qt_widget_1
         self._qt_layout_0 = qt_widget_1._get_layout_()
-        #
+
         self._refresh_expand_()
-        #
+
         self._qt_view.setSizePolicy(
             gui_qt_core.QtWidgets.QSizePolicy.Expanding,
             gui_qt_core.QtWidgets.QSizePolicy.Minimum

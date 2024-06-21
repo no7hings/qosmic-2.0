@@ -7,7 +7,7 @@ def main(session):
     import qsm_lazy_tool.resource.gui.widgets as gui_widgets
 
     gui_prx_core.GuiProxyUtil.show_window_proxy_auto(
-        gui_widgets.PrxPanelForResource,
+        gui_widgets.PrxPanelForManager,
         window_unique_name=session.get_gui_window_name(),
         session=session
     )

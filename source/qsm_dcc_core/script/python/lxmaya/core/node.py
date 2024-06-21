@@ -265,7 +265,7 @@ class CmdPortQueryOpt(object):
             **self.__get_query_kwargs_(obj_path, multi=True)
         ) or False
 
-    def get_is_writable(self, obj_path=None):
+    def get_is_writeable(self, obj_path=None):
         return cmds.attributeQuery(
             self.__get_query_key_(),
             **self.__get_query_kwargs_(obj_path, writable=True)
@@ -516,7 +516,7 @@ class CmdPortOpt(object):
             if is_lock:
                 cmds.setAttr(self.get_path(), lock=0)
             #
-            if self.get_port_query().get_is_writable(self.get_obj_path()) is True:
+            if self.get_port_query().get_is_writeable(self.get_obj_path()) is True:
                 if self.get_type_name() == 'string':
                     cmds.setAttr(self.get_path(), value, type=self.get_type_name())
                 elif self.get_type_name() == 'enum':

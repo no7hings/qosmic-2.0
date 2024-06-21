@@ -54,7 +54,7 @@ class PlayblastOpt(object):
                 texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable
             )
         )
-        # cmd_script = _ast_core.MayaCacheProcess.generate_command(
+        # cmd_script = qsm_gnl_core.MayaCacheProcess.generate_command(
         #     (
         #         'method=playblast&file={file}&movie={movie}&camera={camera}'
         #         '&start_frame={start_frame}&end_frame={end_frame}&frame_step={frame_step}'

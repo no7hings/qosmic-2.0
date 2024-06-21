@@ -9,6 +9,8 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
+import qsm_general.core as qsm_gnl_core
+
 from ... import core as _mya_core
 
 from ...asset import core as _ast_core
@@ -52,7 +54,7 @@ class GpuInstanceOpt(_rsc_core.ResourceScriptOpt):
             file_path
         )
         if os.path.isfile(cache_file_path) is False:
-            cmd_script = _ast_core.MayaCacheProcess.generate_command(
+            cmd_script = qsm_gnl_core.MayaCacheProcess.generate_command(
                 'method=gpu-instance-cache-generate&file={}&cache_file={}'.format(
                     file_path,
                     cache_file_path,
@@ -204,6 +206,7 @@ class GpuInstanceProcess(object):
             )
             # export gpu
             if bsc_storage.StgPathMtd.get_is_file(gpu_file_path) is False:
+                # to world
                 transform_path_copy = _mya_core.DagNode.copy_to_world(transform_path)
                 transform_new_name = '{}_mesh'.format(transform_name)
                 transform_path_new = _mya_core.DagNode.rename(transform_path_copy, transform_new_name)
@@ -217,7 +220,7 @@ class GpuInstanceProcess(object):
                     mesh_file_path, transform_path_new
                 )
                 # lod
-                shape_path_new = _mya_core.Transform.get_shape_path(transform_path_new)
+                shape_path_new = _mya_core.Transform.get_shape(transform_path_new)
                 for i_seq in range(2):
                     i_level = i_seq+1
                     # todo: may be mesh had lamina or non-manifold
@@ -249,32 +252,32 @@ class GpuInstanceProcess(object):
 
                 _mya_core.Node.delete(transform_path_new)
             #
-            if _mya_core.Shape.is_instanced(shape_path):
-                instanced_transform_paths = _mya_core.Shape.get_instanced_transforms(shape_path)
-                for i_transform_path in instanced_transform_paths:
-                    i_shape_path = _mya_core.Transform.get_shape_path(i_transform_path)
-                    _mya_core.Shape.remove_instanced(i_shape_path)
-                    _mya_core.Transform.delete_all_shapes(i_transform_path)
-                #
-                gpu_shape_path = _mya_core.GpuCache.create(
-                    gpu_file_path, gpu_transform_path
-                )
-                self._hash_key_dict[hash_key] = gpu_shape_path
-                for i_transform_path in instanced_transform_paths:
-                    if i_transform_path != transform_path:
-                        i_gpu_transform_path = self.create_gpu_transform(
-                            i_transform_path, hash_key
-                        )
-                        _mya_core.Shape.instance_to(
-                            gpu_shape_path, i_gpu_transform_path
-                        )
-            else:
-                _mya_core.Transform.delete_all_shapes(transform_path)
-                # create gpu shape
-                gpu_shape_path = _mya_core.GpuCache.create(
-                    gpu_file_path, gpu_transform_path
-                )
-                self._hash_key_dict[hash_key] = gpu_shape_path
+            # if _mya_core.Shape.is_instanced(shape_path):
+            #     instanced_transform_paths = _mya_core.Shape.get_instanced_transforms(shape_path)
+            #     for i_transform_path in instanced_transform_paths:
+            #         i_shape_path = _mya_core.Transform.get_shape(i_transform_path)
+            #         _mya_core.Shape.remove_instanced(i_shape_path)
+            #         _mya_core.Transform.delete_all_shapes(i_transform_path)
+            #
+            #     gpu_shape_path = _mya_core.GpuCache.create(
+            #         gpu_file_path, gpu_transform_path
+            #     )
+            #     self._hash_key_dict[hash_key] = gpu_shape_path
+            #     for i_transform_path in instanced_transform_paths:
+            #         if i_transform_path != transform_path:
+            #             i_gpu_transform_path = self.create_gpu_transform(
+            #                 i_transform_path, hash_key
+            #             )
+            #             _mya_core.Shape.instance_to(
+            #                 gpu_shape_path, i_gpu_transform_path
+            #             )
+            # else:
+            _mya_core.Transform.delete_all_shapes(transform_path)
+            # create gpu shape
+            gpu_shape_path = _mya_core.GpuCache.create(
+                gpu_file_path, gpu_transform_path
+            )
+            self._hash_key_dict[hash_key] = gpu_shape_path
         else:
             _mya_core.Transform.delete_all_shapes(transform_path)
             # instance gpu shape
@@ -304,8 +307,9 @@ class GpuInstanceProcess(object):
         _mya_core.Scene.clear_unknown_nodes()
         all_roots = _mya_core.DagNode.find_roots(import_paths)
         # find lost reference first
+        _scn_core.GpuImport.find_all_gpu_files(self._directory_path)
         _mya_core.FileReferences.search_all_from(
-            [self._directory_path]
+            [self._directory_path], ignore_exists=True
         )
         # repair all instanced
         _mya_core.Scene.remove_all_instanced(type_includes=['mesh', 'gpuCache'])

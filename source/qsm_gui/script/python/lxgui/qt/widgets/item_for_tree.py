@@ -160,7 +160,7 @@ class QtTreeWidgetItem(
             gui_qt_core.GuiQtIcon.generate_by_rgb(rgb)
         )
 
-    def _set_icon_name_text_(self, text, column=0):
+    def _set_icon_by_text_(self, text, column=0):
         self._icon_text = text
         icon = QtGui.QIcon()
         pixmap = gui_qt_core.QtPixmap.get_by_name(
@@ -173,6 +173,9 @@ class QtTreeWidgetItem(
             QtGui.QIcon.On
         )
         self.setIcon(column, icon)
+
+    def _set_sub_icon_by_text_(self, text, column=0):
+        self._sub_icon_text = text
 
     def _set_icon_state_update_(self, column=0):
         if column == 0:

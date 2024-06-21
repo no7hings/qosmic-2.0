@@ -19,6 +19,10 @@ class Joint(object):
         for i_skin_cluster in skin_clusters:
             i_mesh_paths = cmds.skinCluster(i_skin_cluster, query=True, geometry=True)
             for j_shape_path in i_mesh_paths:
+                # fixme? ignore when is not a mesh
+                if _mya_core.Node.is_mesh(j_shape_path) is False:
+                    continue
+
                 j_transform_path = _mya_core.Shape.get_transform(j_shape_path)
                 j_vertex_count = cmds.polyEvaluate(j_shape_path, vertex=1)
                 has_weight = False

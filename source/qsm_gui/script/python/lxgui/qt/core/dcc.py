@@ -30,9 +30,9 @@ class AbsGuiDcc(object):
         return gui_core.GuiUtil.get_is_clarisse()
 
 
-class GuiQtMaya(object):
+class QtMaya(object):
     @classmethod
-    def get_qt_object(cls, ptr, base=QtWidgets.QWidget):
+    def to_qt_object(cls, ptr, base=QtWidgets.QWidget):
         # noinspection PyUnresolvedReferences
         from shiboken2 import wrapInstance
 
@@ -67,7 +67,7 @@ class GuiQtMaya(object):
         #
         main_window = OpenMayaUI.MQtUtil.mainWindow()
         if main_window:
-            return cls.get_qt_object(
+            return cls.to_qt_object(
                 main_window,
                 QtWidgets.QMainWindow
             )
@@ -80,44 +80,44 @@ class GuiQtMaya(object):
         ptr = OpenMayaUI.MQtUtil.createIcon(icon_name)
         if ptr is None:
             ptr = OpenMayaUI.MQtUtil.createIcon('default')
-        return cls.get_qt_object(ptr, QtGui.QIcon)
+        return cls.to_qt_object(ptr, QtGui.QIcon)
 
     @classmethod
     def find_all_qt_widgets_by_class(cls, *args, **kwargs):
         return gui_qt_cor_base.GuiQtUtil.find_all_qt_widgets_by_class(*args, **kwargs)
 
-    @classmethod
-    def _test(cls):
-        # noinspection PyUnresolvedReferences
-        from maya import cmds, mel, OpenMayaUI
-        # noinspection PyUnresolvedReferences
-        from shiboken2 import wrapInstance, getCppPointer
-        width, height = 400, 400
-        control_name = 'lynxi_tool'
-        control_label = 'Lynxi Tool'
-        if cmds.workspaceControl(control_name, query=1, exists=1):
-            cmds.workspaceControl(
-                control_name, edit=1, visible=1, restore=1,
-                initialWidth=width,
-                minimumWidth=height
-            )
-        else:
-            LEcomponent = mel.eval(r'getUIComponentDockControl("Channel Box / Layer Editor", false);')
-            cmds.workspaceControl(
-                control_name,
-                label=control_label, tabToControl=(LEcomponent, -1),
-                initialWidth=width, initialHeight=height,
-                widthProperty='free', heightProperty='free'
-            )
-            parentPtr = OpenMayaUI.MQtUtil.getCurrentParent()
-            parentWidget = wrapInstance(parentPtr, QtWidgets.QWidget)
-            import qsm_gui.proxy.widgets as qsm_gui_prx_widgets
-            p = qsm_gui_prx_widgets.AbsPrxUnitForWorkarea()
-            p.widget.setParent(parentWidget)
-            OpenMayaUI.MQtUtil.addWidgetToMayaLayout(
-                long(getCppPointer(p.widget)[0]), long(parentPtr)
-            )
-        pass
+    # @classmethod
+    # def _test(cls):
+    #     # noinspection PyUnresolvedReferences
+    #     from maya import cmds, mel, OpenMayaUI
+    #     # noinspection PyUnresolvedReferences
+    #     from shiboken2 import wrapInstance, getCppPointer
+    #     width, height = 400, 400
+    #     control_name = 'lynxi_tool'
+    #     control_label = 'Lynxi Tool'
+    #     if cmds.workspaceControl(control_name, query=1, exists=1):
+    #         cmds.workspaceControl(
+    #             control_name, edit=1, visible=1, restore=1,
+    #             initialWidth=width,
+    #             minimumWidth=height
+    #         )
+    #     else:
+    #         LEcomponent = mel.eval(r'getUIComponentDockControl("Channel Box / Layer Editor", false);')
+    #         cmds.workspaceControl(
+    #             control_name,
+    #             label=control_label, tabToControl=(LEcomponent, -1),
+    #             initialWidth=width, initialHeight=height,
+    #             widthProperty='free', heightProperty='free'
+    #         )
+    #         parentPtr = OpenMayaUI.MQtUtil.getCurrentParent()
+    #         parentWidget = wrapInstance(parentPtr, QtWidgets.QWidget)
+    #         import qsm_gui.proxy.widgets as qsm_gui_prx_widgets
+    #         p = qsm_gui_prx_widgets.AbsPrxUnitForWorkarea()
+    #         p.widget.setParent(parentWidget)
+    #         OpenMayaUI.MQtUtil.addWidgetToMayaLayout(
+    #             long(getCppPointer(p.widget)[0]), long(parentPtr)
+    #         )
+    #     pass
 
     @classmethod
     def make_snapshot(cls, file_path):
@@ -127,6 +127,16 @@ class GuiQtMaya(object):
         )
         rect = main_window.rect()
         s.copy(rect).save(file_path)
+
+    @classmethod
+    def create_window_shortcut_action(cls, fnc, shortcut):
+        main_window = cls.get_qt_main_window()
+        act = QtWidgets.QAction(main_window)
+        # noinspection PyUnresolvedReferences
+        act.triggered.connect(fnc)
+        act.setShortcut(QtGui.QKeySequence(shortcut))
+        act.setShortcutContext(QtCore.Qt.WindowShortcut)
+        main_window.addAction(act)
 
 
 class GuiQtHoudini(object):
@@ -214,7 +224,7 @@ class GuiQtDcc(AbsGuiDcc):
     @classmethod
     def get_qt_main_window(cls):
         if cls.get_is_maya():
-            return GuiQtMaya.get_qt_main_window()
+            return QtMaya.get_qt_main_window()
         elif cls.get_is_houdini():
             return GuiQtHoudini.get_qt_main_window()
         elif cls.get_is_katana():
@@ -238,7 +248,7 @@ class GuiQtDcc(AbsGuiDcc):
     @classmethod
     def generate_qt_icon_by_name(cls, icon_name):
         if cls.get_is_maya():
-            return GuiQtMaya.generate_qt_icon_by_name(icon_name)
+            return QtMaya.generate_qt_icon_by_name(icon_name)
         elif cls.get_is_houdini():
             return GuiQtHoudini.generate_qt_icon_by_name(icon_name)
         return gui_qt_cor_base.GuiQtIcon.generate_by_name(icon_name)

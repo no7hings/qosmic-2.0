@@ -7,6 +7,8 @@ import maya.cmds as cmds
 
 import lxbasic.content as bsc_content
 
+import lxbasic.storage as bsc_storage
+
 import lxbasic.resource as bsc_resource
 
 import lxbasic.core as bsc_core
@@ -41,11 +43,21 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
         set_ = set()
         for i_key in [
             'Head_M',
-            'EyeJoint_R',
+            #
             'EyeJoint_L',
-            'EyeBrow*'
+            'Eye_L',
+            'EyeJoint_R',
+            'Eye_R',
+            #
+            'EyeBrow*',
+            #
+            'FaceJoint_M',
+            'Face_M',
+            #
+            'JawJoint_M',
+            'Jaw_M',
         ]:
-            i_joint = self._resource.get_joint(i_key)
+            i_joint = self._resource.find_joint(i_key)
             if i_joint is None:
                 continue
             i_meshes = _rig_core.Joint.find_influenced_meshes(i_joint)
@@ -53,6 +65,27 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
                 set_.update(i_meshes)
 
         return list(set_)
+
+    def find_rig_neck_split_geometries_by_bbox(self, data_file_path):
+        neck_above_list = []
+        neck_below_list = []
+        data = bsc_storage.StgFileOpt(data_file_path).set_read()
+        if data:
+            joint_transformation_data = data['joint_transformation']
+            geometry_bbox_data = data['geometry_bbox']
+            neck_transformation = joint_transformation_data['Neck_M']
+            x, y, z = neck_transformation[0]
+            for i_key, i_extend in geometry_bbox_data.items():
+                i_path = self._resource.find_geometry_shape(i_key)
+                if i_path:
+                    # bottom point higher than neck position
+                    if i_extend[0][1] > y:
+                        neck_above_list.append(i_path)
+                    # top point lower than neck position
+                    elif i_extend[1][1] < y:
+                        neck_below_list.append(i_path)
+
+        return neck_above_list, neck_below_list
 
     def connect_cache_constrains(self, location, namespace):
         root_skeleton_paths = self._adv_query.skeleton_query.get('root.M')
@@ -77,35 +110,54 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
 
                 AdvSkinProxyGenerate._connect_parent_constrain(j_skeleton_paths[0], j_constrains[0])
 
-    def load_cache(self, cache_file_path, keep_head=False):
+    def load_cache(self, cache_file_path, data_file_path, keep_head=False, check_bbox=False):
         self.create_cache_root_auto()
 
         cache_location_new = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
         cache_location = '|{}:{}'.format(self._namespace, self.CACHE_NAME)
         if cmds.objExists(cache_location) is False and cmds.objExists(cache_location_new) is False:
             if os.path.isfile(cache_file_path) is True:
-                _mya_core.SceneFile.import_file(
+                # noinspection PyBroadException
+                _mya_core.SceneFile.import_file_force(
                     cache_file_path, namespace=self._namespace
                 )
+
                 self.connect_cache_constrains(cache_location, self._namespace)
 
                 cmds.parent(cache_location, self.CACHE_ROOT)
+                head_geometries, rig_head_geometries = self.get_head_hide_args(
+                    data_file_path, keep_head, check_bbox
+                )
 
-                self.hide_resource_auto(keep_head=keep_head)
+                self.hide_resource_auto(head_geometries, rig_head_geometries)
 
-    def hide_resource_auto(self, keep_head=False):
+    def get_head_hide_args(self, data_file_path, keep_head=False, check_bbox=False):
+        if keep_head is True:
+            head_geometries = self.find_head_geometries()
+            rig_head_geometries = self.find_rig_head_geometries()
+            if check_bbox is True:
+                neck_above_list, neck_below_list = self.find_rig_neck_split_geometries_by_bbox(
+                    data_file_path
+                )
+                if neck_above_list:
+                    rig_head_geometries.extend(neck_above_list)
+                return head_geometries, rig_head_geometries
+            else:
+                rig_head_geometries = self.find_rig_head_geometries()
+                return head_geometries, rig_head_geometries
+
+        return [], []
+
+    def hide_resource_auto(self, head_geometries, rig_head_geometries):
         cache_location = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
         mesh_paths_for_hide = self._resource.get_all_meshes()
         if mesh_paths_for_hide:
-            if keep_head is True:
-                head_geometries = self.find_head_geometries()
-                print head_geometries
-                if head_geometries:
-                    mesh_paths_for_hide.extend(head_geometries)
-
-                rig_head_geometry = self.find_rig_head_geometries()
-                if rig_head_geometry:
-                    [mesh_paths_for_hide.remove(x) for x in rig_head_geometry if x in mesh_paths_for_hide]
+            # add skin proxy head
+            if head_geometries:
+                mesh_paths_for_hide.extend(head_geometries)
+            # remove rig head
+            if rig_head_geometries:
+                [mesh_paths_for_hide.remove(x) for x in rig_head_geometries if x in mesh_paths_for_hide]
 
             layer_name = '{}_skin_proxy_hide'.format(self._namespace)
             layer_path = cmds.createDisplayLayer(name=layer_name, number=1, empty=True)
@@ -119,18 +171,22 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
         self._resource.remove_dynamic_gpu()
 
         file_path = self._resource.file
-        cache_file_path = _ast_core.AssetCache.generate_skin_proxy_file(
+        cache_file_path = _ast_core.AssetCache.generate_skin_proxy_scene_file(
             file_path
         )
-        if os.path.isfile(cache_file_path) is False:
-            cmd_script = _ast_core.MayaCacheProcess.generate_command(
-                'method=skin-proxy-cache-generate&file={}&cache_file={}'.format(
+        data_file_path = _ast_core.AssetCache.generate_skin_proxy_data_file(
+            file_path
+        )
+        if os.path.isfile(cache_file_path) is False or os.path.isfile(data_file_path) is False:
+            cmd_script = qsm_gnl_core.MayaCacheProcess.generate_command(
+                'method=skin-proxy-cache-generate&file={}&cache_file={}&data_file={}'.format(
                     file_path,
                     cache_file_path,
+                    data_file_path
                 )
             )
-            return cmd_script, cache_file_path
-        return None, cache_file_path
+            return cmd_script, cache_file_path, data_file_path
+        return None, cache_file_path, data_file_path
 
 
 class AdvSkinProxyGenerate(object):
@@ -470,7 +526,7 @@ class AdvSkinProxyGenerate(object):
 
     def create_resource_controls(self, location):
         if cmds.objExists(self.PROXY_CONTROL_PATH) is False:
-            _mya_core.SceneFile.import_file(bsc_resource.ExtendResource.get('rig/skin_proxy_control.ma'))
+            _mya_core.SceneFile.import_file_force(bsc_resource.ExtendResource.get('rig/skin_proxy_control.ma'))
 
         parent_path = '|'.join(location.split('|')[:-1])
         name = location.split('|')[-1]
@@ -581,11 +637,11 @@ class AdvSkinProxyGenerate(object):
     def create_resource_geometries(self, location):
         if cmds.objExists(self.PROXY_GEOMETRY_GROUP_PATH) is False:
             if qsm_gnl_core.scheme_is_new():
-                _mya_core.SceneFile.import_file(
+                _mya_core.SceneFile.import_file_force(
                     bsc_resource.ExtendResource.get('rig/skin_proxy_geometry_new.ma')
                 )
             else:
-                _mya_core.SceneFile.import_file(
+                _mya_core.SceneFile.import_file_force(
                     bsc_resource.ExtendResource.get('rig/skin_proxy_geometry.ma')
                 )
 
@@ -623,11 +679,11 @@ class AdvSkinProxyGenerate(object):
         location = '|{}'.format(self.CACHE_NAME)
         if cmds.objExists(location) is False:
             if qsm_gnl_core.scheme_is_new():
-                _mya_core.SceneFile.import_file(
+                _mya_core.SceneFile.import_file_force(
                     bsc_resource.ExtendResource.get('rig/skin_proxy_new.ma')
                 )
             else:
-                _mya_core.SceneFile.import_file(
+                _mya_core.SceneFile.import_file_force(
                     bsc_resource.ExtendResource.get('rig/skin_proxy.ma')
                 )
 
@@ -637,7 +693,7 @@ class AdvSkinProxyGenerate(object):
 
         if cache_file_path is None:
             file_path = _mya_core.ReferenceNamespacesCache().get_file(self._namespace)
-            cache_file_path = _ast_core.AssetCache.generate_skin_proxy_file(
+            cache_file_path = _ast_core.AssetCache.generate_skin_proxy_scene_file(
                 file_path
             )
 
@@ -768,14 +824,28 @@ class AdvSkinProxyGenerate(object):
 
 
 class AdvSkinProxyProcess(object):
-    def __init__(self, file_path, cache_file_path):
+    def __init__(self, file_path, cache_file_path, data_file_path):
         self._file_path = file_path
         self._cache_file_path = cache_file_path
+        self._data_file_path = data_file_path
 
     def execute(self):
         namespace = 'skin_proxy'
         _mya_core.SceneFile.new()
+        # use reference
         _mya_core.SceneFile.reference_file(self._file_path, namespace=namespace)
+
+        rsc_adv_rig = _rig_core.AdvRig(
+            namespace
+        )
+        data = dict(
+            joint_transformation=rsc_adv_rig.generate_joint_transformation_data(),
+            geometry_bbox=rsc_adv_rig.generate_geometry_bbox_data()
+        )
+        bsc_storage.StgFileOpt(
+            self._data_file_path
+        ).set_write(data)
+
         AdvSkinProxyGenerate(namespace).create_cache(
             self._cache_file_path
         )

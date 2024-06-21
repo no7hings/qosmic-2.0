@@ -13,11 +13,20 @@ class AssetCache(object):
         return bsc_core.BscUuid.generate_by_file(file_path)
 
     @classmethod
-    def generate_skin_proxy_file(cls, file_path):
+    def generate_skin_proxy_scene_file(cls, file_path):
         root = bsc_core.EnvBaseMtd.get_temporary_root()
         key = cls.get_key(file_path)
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
         return '{}/.asset-cache/skin-proxy/{}/{}.ma'.format(
+            root, region, key
+        )
+
+    @classmethod
+    def generate_skin_proxy_data_file(cls, file_path):
+        root = bsc_core.EnvBaseMtd.get_temporary_root()
+        key = cls.get_key(file_path)
+        region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
+        return '{}/.asset-cache/skin-proxy/{}/{}.json'.format(
             root, region, key
         )
 

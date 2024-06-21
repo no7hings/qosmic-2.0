@@ -3,7 +3,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-print bsc_storage.StgPathMtd.get_is_writable(
+print bsc_storage.StgPathMtd.get_is_writeable(
     '/production/shows/nsa_dev/assets/chr/td_test/user/team.srf/test/v001'
 )
 

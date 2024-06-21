@@ -11,6 +11,8 @@ import lxbasic.resource as bsc_resource
 
 import lxbasic.storage as bsc_storage
 
+import qsm_general.core as qsm_gnl_core
+
 from ... import core as _mya_core
 
 from ...asset import core as _ast_core
@@ -54,7 +56,7 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
             file_path
         )
         if os.path.isfile(cache_file_path) is False:
-            cmd_script = _ast_core.MayaCacheProcess.generate_command(
+            cmd_script = qsm_gnl_core.MayaCacheProcess.generate_command(
                 'method=unit-assembly-cache-generate&file={}&cache_file={}'.format(
                     file_path,
                     cache_file_path,
@@ -223,7 +225,7 @@ class UnitAssemblyProcess(object):
 
             for i_seq in range(2):
                 i_level = i_seq+1
-                shape_path_new = _mya_core.Transform.get_shape_path(transform_path_new)
+                shape_path_new = _mya_core.Transform.get_shape(transform_path_new)
                 # todo: may be mesh had lamina or non-manifold
                 # noinspection PyBroadException
                 try:
@@ -311,9 +313,10 @@ class UnitAssemblyProcess(object):
         )
         _mya_core.Scene.clear_unknown_nodes()
         all_roots = _mya_core.DagNode.find_roots(import_paths)
+        _scn_core.GpuImport.find_all_gpu_files(self._directory_path)
         # find lost reference first
         _mya_core.FileReferences.search_all_from(
-            [self._directory_path]
+            [self._directory_path], ignore_exists=True
         )
         # repair all instanced
         _mya_core.Scene.remove_all_instanced(type_includes=['mesh', 'gpuCache'])
@@ -321,7 +324,6 @@ class UnitAssemblyProcess(object):
         _scn_core.GpuImport().execute()
         # process
         mesh_paths = _mya_core.Scene.find_all_dag_nodes(type_includes=['mesh'])
-        count = len(mesh_paths)
         with bsc_log.LogProcessContext.create(maximum=len(mesh_paths), label='unit assembly process') as g_p:
             for i_path in mesh_paths:
                 self.mesh_prc(i_path)

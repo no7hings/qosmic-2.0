@@ -173,3 +173,77 @@ class AbsQtMediaBaseDef(
         #
         # t.start()
         build_fnc_(cache_fnc_())
+
+
+class AbsQtItemWidgetBaseDef(object):
+    def _init_item_name_base_dict_(self, widget):
+        self._widget = widget
+        self._name_flag = False
+
+        self._name_text = None
+        self._name_draw_rect = QtCore.QRect()
+        self._name_text_draw_flag = False
+
+        self._name_dict = {}
+        self._name_dict_draw_data = []
+        self._name_dict_draw_flag = False
+
+        self._name_key_width = 48
+        self._name_h = 20
+        self._name_margin = 4
+
+        self._name_font = _qt_core.QtFont.generate(size=10)
+        self._name_color = _gui_core.GuiRgba.DarkWhite
+        self._name_text_option = QtCore.Qt.AlignHCenter | QtCore.Qt.AlignBottom
+
+        self._tool_tip_css = None
+
+        self._properties_dict = dict()
+
+        self._entity = None
+
+    def _set_name_text_(self, text):
+        self._name_flag = True
+
+        self._name_text = text
+
+    def _get_name_text_(self):
+        return self._name_text
+
+    def _set_name_dict_(self, dict_):
+        self._name_flag = True
+
+        self._name_dict = dict_
+        self._name_dict_draw_data = []
+        keys = self._name_dict.keys()
+        keys.sort()
+        for i_key in keys:
+            self._name_dict_draw_data.append(
+                (i_key, self._name_dict[i_key], QtCore.QRect())
+            )
+
+    def _set_tool_tip_(self, content):
+        self._tool_tip_css = _qt_core.GuiQtUtil.generate_tool_tip_css(
+            self._get_name_text_(), content
+        )
+        # self._widget.setToolTip(
+        #     self._tool_tip_css
+        # )
+
+    def _get_tool_tip_css_(self):
+        return self._tool_tip_css
+
+    def _set_property_dict_(self, dict_):
+        self._properties_dict = dict_
+
+    def _get_property_dict_(self):
+        return self._properties_dict
+
+    def _get_property_(self, key):
+        return self._properties_dict.get(key)
+
+    def _set_entity_(self, node):
+        self._entity = node
+
+    def _get_entity_(self):
+        return self._entity

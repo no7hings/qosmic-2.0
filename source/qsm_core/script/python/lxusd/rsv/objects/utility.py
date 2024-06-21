@@ -259,7 +259,7 @@ class RsvUsdAssetSetCreator(object):
                 raise RuntimeError()
         else:
             usd_file_path = '{}{}.usda'.format(
-                bsc_storage.StgUserMtd.get_user_temporary_directory(),
+                bsc_storage.StgUser.get_user_temporary_directory(),
                 rsv_asset.path
             )
         return usd_file_path
@@ -297,7 +297,7 @@ class RsvUsdAssetSetCreator(object):
                 raise RuntimeError()
         else:
             usd_file_path = '{}{}.usda'.format(
-                bsc_storage.StgUserMtd.get_user_temporary_directory(),
+                bsc_storage.StgUser.get_user_temporary_directory(),
                 rsv_asset.path
             )
         return usd_file_path
@@ -349,7 +349,7 @@ class RsvUsdAssetSetCreator(object):
                 )
         else:
             usd_file_path = '{}{}.usda'.format(
-                bsc_storage.StgUserMtd.get_user_temporary_directory(),
+                bsc_storage.StgUser.get_user_temporary_directory(),
                 rsv_asset.path
             )
         return usd_file_path

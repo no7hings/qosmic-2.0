@@ -327,6 +327,8 @@ class QtLayerStack(QtWidgets.QWidget):
         self._index_current = index
         self._refresh_widget_all_()
 
+        self.current_changed.emit()
+
     def _get_current_index_(self):
         return self._index_current
 

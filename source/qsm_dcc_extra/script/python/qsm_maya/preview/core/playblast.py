@@ -121,8 +121,13 @@ class Window(object):
     def create(
         cls, camera, width, height, display_mode, use_default_material, show_hud, show_window,
         texture_enable, light_enable, shadow_enable,
-        hud_enable
+        hud_enable,
+        use_exists_window=False,
     ):
+        if use_exists_window is True:
+            if _mya_core.Window.is_exists(cls.WINDOW_NAME) is True:
+                return
+
         window = _mya_core.Window.create_force(cls.WINDOW_NAME, (width, height))
         if show_window is True:
             _mya_core.Window.show(window)
@@ -169,7 +174,8 @@ class Playblast(object):
     @classmethod
     def create_window(
         cls, camera, width, height, display_mode, show_hud, show_window,
-        texture_enable, light_enable, shadow_enable, hud_enable
+        texture_enable, light_enable, shadow_enable, hud_enable,
+        use_exists_window=False
     ):
         Window.create(
             camera=camera,
@@ -181,7 +187,8 @@ class Playblast(object):
             texture_enable=texture_enable,
             light_enable=light_enable,
             shadow_enable=shadow_enable,
-            hud_enable=hud_enable
+            hud_enable=hud_enable,
+            use_exists_window=use_exists_window
         )
 
     @classmethod
@@ -250,6 +257,7 @@ class Playblast(object):
         percent=100, quality=100, fps=24,
         texture_enable=False, light_enable=False, shadow_enable=False,
         hud_enable=False, play_enable=False,
+        use_exists_window=False,
     ):
         if resolution is None:
             resolution = _mya_core.RenderSettings.get_resolution()
@@ -259,7 +267,8 @@ class Playblast(object):
         cls.create_window(
             camera=camera, width=480, height=320, display_mode=display_mode, show_hud=show_hud, show_window=show_window,
             texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable,
-            hud_enable=hud_enable
+            hud_enable=hud_enable,
+            use_exists_window=use_exists_window
         )
         if show_hud is True:
             cls.hud_prc(camera)
@@ -273,7 +282,7 @@ class Playblast(object):
         file_path_base = file_opt.path_base
 
         directory_path_tmp = '{}/{}'.format(
-            bsc_storage.StgUserMtd.get_user_temporary_directory(),
+            bsc_storage.StgUser.get_user_temporary_directory(),
             bsc_core.BscUuid.generate_new()
         )
         bsc_storage.StgPathMtd.create_directory(directory_path_tmp)

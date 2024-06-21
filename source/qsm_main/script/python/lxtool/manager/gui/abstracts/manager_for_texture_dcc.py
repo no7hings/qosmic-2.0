@@ -220,7 +220,7 @@ class AbsPnlManagerForAssetTextureDcc(gui_prx_widgets.PrxSessionWindow):
                             repath_src_statuses[i_index] = i_texture_prx_item.ValidationStatus.Lost
                         else:
                             if i_texture_src.get_is_exists() is True:
-                                if i_texture_src.get_is_writable() is True:
+                                if i_texture_src.get_is_writeable() is True:
                                     if i_texture_any == i_texture_src:
                                         repath_src_statuses[i_index] = i_texture_prx_item.ValidationStatus.Correct
                                 else:
@@ -232,7 +232,7 @@ class AbsPnlManagerForAssetTextureDcc(gui_prx_widgets.PrxSessionWindow):
                                 repath_src_statuses[i_index] = i_texture_prx_item.ValidationStatus.Lost
                         #
                         if i_texture_tgt.get_is_exists() is True:
-                            if i_texture_tgt.get_is_writable() is True:
+                            if i_texture_tgt.get_is_writeable() is True:
                                 if i_texture_any == i_texture_tgt:
                                     repath_tgt_statuses[i_index] = i_texture_prx_item.ValidationStatus.Correct
                             else:

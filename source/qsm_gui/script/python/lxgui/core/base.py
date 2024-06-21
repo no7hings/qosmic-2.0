@@ -121,6 +121,13 @@ class GuiUtil(object):
                 return variants['tool_tip_chs']
         return variants['tool_tip']
 
+    @classmethod
+    def choice_message(cls, language, variants):
+        if language == 'chs':
+            if 'message_chs' in variants:
+                return variants['message_chs']
+        return variants['message']
+
 
 class GuiXml(object):
     @classmethod

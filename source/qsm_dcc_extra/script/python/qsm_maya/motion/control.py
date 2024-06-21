@@ -10,75 +10,20 @@ class ControlOpt(object):
     def to_control_name(cls, path):
         return path.split('|')[-1].split(':')[-1]
 
-    @classmethod
-    def apply_value(cls, path, atr_data, force=False):
-        atr_name, value = atr_data
-        if _mya_core.NodeAttribute.is_exists(path, atr_name) is False:
-            return
-        if _mya_core.NodeAttribute.is_lock(path, atr_name) is True:
-            # when node is from reference, ignore
-            if _mya_core.Reference.is_from_reference(path) is True:
-                return
-            if force is True:
-                _mya_core.NodeAttribute.unlock(path, atr_name)
-            else:
-                return
-        if _mya_core.NodeAttribute.has_source(path, atr_name) is True:
-            if force is True:
-                result = _mya_core.NodeAttribute.break_source(path, atr_name)
-                if result is False:
-                    return
-            else:
-                return
-        value_dst = _mya_core.NodeAttribute.get_value(path, atr_name)
-        if value != value_dst:
-            _mya_core.NodeAttribute.set_value(path, atr_name, value)
-
-    @classmethod
-    def apply_curve(cls, path, atr_data, frame_offset=0, force=False):
-        atr_name, curve_type, infinities, curve_points = atr_data
-        if _mya_core.NodeAttribute.is_exists(path, atr_name) is False:
-            return
-        if _mya_core.NodeAttribute.is_lock(path, atr_name) is True:
-            # when node is from reference, ignore
-            if _mya_core.Reference.is_from_reference(path) is True:
-                return
-            if force is True:
-                _mya_core.NodeAttribute.unlock(path, atr_name)
-            else:
-                return
-        if _mya_core.NodeAttribute.has_source(path, atr_name) is True:
-            if force is True:
-                _mya_core.NodeAttribute.break_source(path, atr_name)
-            else:
-                return
-
-        curve_name = '{}_{}'.format(
-            path.split('|')[-1].split(':')[-1],
-            atr_name.replace('.', '_')
-        )
-        curve_name_new = cmds.createNode(curve_type, name=curve_name, skipSelect=1)
-
-        i_atr_path_src = '{}.output'.format(curve_name_new)
-        i_atr_path_dst = '{}.{}'.format(path, atr_name)
-        _mya_core.Connection.create(i_atr_path_src, i_atr_path_dst)
-
-        _mya_core.AnimationCurveOpt(path, atr_name).set_points(curve_points, frame_offset=frame_offset)
-
-        _mya_core.NodeAttribute.set_value(
-            curve_name_new, 'preInfinity', infinities[0]
-        )
-        _mya_core.NodeAttribute.set_value(
-            curve_name_new, 'postInfinity', infinities[0]
-        )
-
     def __init__(self, path):
         self._path = path
 
-    def get_animation(self):
+    def get_animation(self, includes=None):
+        if isinstance(includes, (tuple, list)):
+            atr_names = [x for x in includes if _mya_core.NodeAttribute.is_exists(self._path, x) is True]
+        else:
+            atr_names = _mya_core.NodeAttributes.get_all_keyable_names(self._path)
+
         list_ = []
-        for i_atr_name in _mya_core.NodeAttributes.get_all_keyable_names(self._path):
+        for i_atr_name in atr_names:
+            # fixme: use attribute connection?
             i_curve_name = _mya_core.NodeAttribute.get_source_node(self._path, i_atr_name, 'animCurve')
+            # i_curve_name = _mya_core.AnimationCurveOpt(self._path, i_atr_name).get_node()
             if i_curve_name is not None:
                 i_curve_type = cmds.nodeType(i_curve_name)
                 i_infinities = [
@@ -92,16 +37,16 @@ class ControlOpt(object):
                 list_.append((i_atr_name, i_value))
         return list_
 
-    def apply_animation(self, motion, frame_offset=0, force=False):
-        for i_atr_data in motion:
+    def apply_animation(self, data, frame_offset=0, force=False):
+        for i_atr_data in data:
             if len(i_atr_data) == 2:
-                self.apply_value(self._path, i_atr_data, force=force)
+                _mya_core.Keyframe.apply_value(self._path, i_atr_data, force=force)
             else:
-                self.apply_curve(self._path, i_atr_data, frame_offset=frame_offset, force=force)
+                _mya_core.Keyframe.apply_curve(self._path, i_atr_data, frame_offset=frame_offset, force=force)
 
     def transfer_animation_to(self, path_dst, **kwargs):
-        motion = self.get_animation()
-        self.__class__(path_dst).apply_animation(motion, **kwargs)
+        data = self.get_animation()
+        self.__class__(path_dst).apply_animation(data, **kwargs)
 
     def get_animation_curve_at(self, atr_name):
         return _mya_core.NodeAttribute.get_source_node(self._path, atr_name, 'animCurve')

@@ -1,6 +1,8 @@
 # coding:utf-8
 import copy
 
+import itertools
+
 import functools
 
 import six
@@ -183,10 +185,12 @@ class _GuiTypeOpt(
                 prx_item.set_status(
                     prx_item.ValidationStatus.Normal
                 )
+                prx_item.set_expanded(True)
             else:
                 prx_item.set_status(
                     prx_item.ValidationStatus.Disable
                 )
+                prx_item.set_expanded(False)
 
         path = scr_entity.path
 
@@ -213,15 +217,7 @@ class _GuiTypeOpt(
             bsc_pinyin.Texts.split_any_to_words_extra([scr_entity.gui_name, scr_entity.gui_name_chs])
         )
         prx_item.set_tool_tip(scr_entity.to_description())
-        #
-        # self._prx_tree_view.connect_item_expand_to(
-        #     prx_item,
-        #     functools.partial(self.refresh_by_category_expanded, prx_item),
-        #     time=100
-        # )
-        #
-        prx_item.set_expanded(True)
-        # prx_item.set_checked(True)
+
         prx_item.set_show_fnc(
             cache_fnc_, build_fnc_
         )
@@ -519,8 +515,10 @@ class _GuiNodeOpt(
         self._prx_list_view.get_sort_switch_tool_box().set_visible(True)
         self._prx_list_view.set_filter_entry_tip('filter by keyword ...')
         self._prx_list_view.set_item_event_override_flag(True)
-        #
+
         self._prx_list_view.get_top_tool_bar().set_expanded(True)
+
+        self._prx_list_view.get_filter_tool_box().set_visible(False)
         self._prx_list_view.set_item_frame_size_basic(*self._item_frame_size)
         self._prx_list_view.set_item_icon_frame_size(*self._item_icon_frame_size)
         self._prx_list_view.set_item_icon_size(*self._item_icon_size)
@@ -528,6 +526,8 @@ class _GuiNodeOpt(
         # self._prx_list_view.set_item_name_frame_draw_enable(True)
         self._prx_list_view.set_item_names_draw_range([None, 1])
         # self._prx_list_view.set_item_image_frame_draw_enable(True)
+
+        self._prx_list_view.connect_press_released_to(self.do_save_context)
 
         self._init_list_view_opt_(self._prx_list_view, self.GUI_NAMESPACE)
 
@@ -554,6 +554,19 @@ class _GuiNodeOpt(
             [i.do_quit() for i in self._running_threads_stacks]
 
         self._running_threads_stacks = []
+
+    def do_save_context(self):
+        selected_qt_item_widgets = self._prx_list_view.get_selected_qt_item_widgets()
+        if selected_qt_item_widgets:
+            qt_item_widget = selected_qt_item_widgets[0]
+            scr_entity = qt_item_widget._get_entity_()
+            data = dict(
+                stage=self._page._scr_stage_key,
+                path=scr_entity.path,
+                gui_name_chs=scr_entity.gui_name_chs,
+                file=qt_item_widget._get_property_('rebuild')
+            )
+            qsm_scr_core.NodeContext.save(data)
 
     # node
     def gui_add_nodes(self, scr_node_paths, gui_thread_flag):
@@ -669,6 +682,8 @@ class _GuiNodeOpt(
         self._prx_list_view.assign_item_widget(qt_item, qt_item_widget)
 
         tag_dict, property_dict = data
+        qt_item_widget._set_entity_(scr_entity)
+        qt_item_widget._set_path_text_(scr_entity.path)
         qt_item_widget._set_index_(scr_entity.id)
         qt_item_widget._set_name_text_(scr_entity.gui_name_chs or scr_entity.gui_name)
         qt_item_widget._set_name_dict_(tag_dict)
@@ -687,6 +702,8 @@ class _GuiNodeOpt(
                 qt_item_widget._set_image_path_(
                     property_dict['thumbnail']
                 )
+
+        qt_item_widget._set_property_dict_(property_dict)
 
         qt_item_widget._refresh_widget_all_()
 
@@ -817,13 +834,15 @@ class _GuiNodeOpt(
         pass
 
 
-class AbsPrxPageForResource(
+class AbsPrxPageForManager(
     gui_prx_abstracts.AbsPrxWidget,
     _GuiThreadExtra,
 ):
     QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
 
     HISTORY_KEY = 'lazy-resource.stage_key'
+
+    FILTER_MAXIMUM = 50
 
     def do_gui_node_refresh_by_type_selection(self):
         self._gui_node_opt.do_gui_add_all_by_type(
@@ -839,9 +858,8 @@ class AbsPrxPageForResource(
         self._scr_stage.close()
 
     def do_gui_initialize(self, key):
-        self._scr_key = key
-        self._scr_stage = qsm_scr_core.Stage(self._scr_key)
-        self._scr_stage.connect()
+        self._scr_stage_key = key
+        self._scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
         self.gui_setup_page()
 
     def _gui_add_main_tools(self):
@@ -849,6 +867,35 @@ class AbsPrxPageForResource(
         self._main_prx_tool_box.add_widget(self._maya_status_prx_button)
         self._maya_status_prx_button.set_icon_name('application/maya')
         self._maya_status_prx_button.set_action_enable(False)
+
+    def _gui_add_filter_tools(self):
+        self._keyword_set = set()
+        self._keyword_pinyin_dict = {}
+        self._prx_filter_bar = gui_prx_widgets.PrxFilterBar()
+        self._filter_prx_tool_box.add_widget(self._prx_filter_bar)
+        
+        self._prx_filter_bar._qt_widget._set_input_completion_buffer_fnc_(self._gui_keyword_filter_completion_gain_fnc)
+        self._prx_filter_bar._qt_widget.input_value_change_accepted.connect(self._gui_update_keyword_filter_path_set_fnc)
+    
+    def _gui_keyword_filter_completion_gain_fnc(self, *args, **kwargs):
+        keyword = args[0]
+        if keyword:
+            match_pinyin = bsc_core.PtnFnmatchMtd.filter(
+                self._keyword_pinyin_dict.keys(), six.u('*{}*').format(keyword)
+            )
+
+            match_chs = [self._keyword_pinyin_dict[x] for x in match_pinyin]
+
+            matches = bsc_core.PtnFnmatchMtd.filter(
+                self._keyword_set, six.u('*{}*').format(keyword)
+            )
+            all_texts = match_chs + matches
+            return bsc_core.RawTextsMtd.sort_by_initial(all_texts)[:self.FILTER_MAXIMUM]
+        return []
+
+    def _gui_update_keyword_filter_path_set_fnc(self, *args, **kwargs):
+        keyword = args[0]
+        print keyword
 
     def _check_maya_web_server_is_in_use(self):
         def cache_fnc_(gui_thread_flag_):
@@ -876,14 +923,43 @@ class AbsPrxPageForResource(
 
         t.do_start()
 
+    def _gui_update_keyword_filter_texts(self):
+        def cache_fnc_(gui_thread_flag_):
+            self._keyword_set = set()
+            self._keyword_pinyin_dict = {}
+
+            _all_scr_nodes = self._scr_stage.find_all(
+                self._scr_stage.EntityTypes.Node,
+                [
+                    ('type', 'is', 'node'),
+                ]
+            )
+
+            for _i in _all_scr_nodes:
+                _i_list, _i_dict = bsc_pinyin.Text.to_pinyin_map(_i.gui_name_chs)
+                self._keyword_set.update(_i_list)
+                self._keyword_pinyin_dict.update(_i_dict)
+
+            return []
+
+        def build_fnc_(data_):
+            pass
+
+        t = self.gui_run_thread(
+            functools.partial(cache_fnc_, self._gui_thread_flag),
+            build_fnc_
+        )
+
+        t.do_start()
+
     def __init__(self, window, session, *args, **kwargs):
-        super(AbsPrxPageForResource, self).__init__(*args, **kwargs)
+        super(AbsPrxPageForManager, self).__init__(*args, **kwargs)
         self._init_gui_thread_extra_(window)
 
         self._window = window
         self._session = session
 
-        self._scr_key = None
+        self._scr_stage_key = None
         self._scr_stage = None
 
         self._window.connect_window_close_to(self.do_gui_close)
@@ -895,10 +971,14 @@ class AbsPrxPageForResource(
 
         self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
         v_qt_lot_0.addWidget(self._top_prx_tool_bar.widget)
+        self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)
 
         self._main_prx_tool_box = self._top_prx_tool_bar.create_tool_box('main')
         self._gui_add_main_tools()
+
+        self._filter_prx_tool_box = self._top_prx_tool_bar.create_tool_box('filter', size_mode=1)
+        self._gui_add_filter_tools()
 
         prx_sca = gui_prx_widgets.PrxVScrollArea()
         v_qt_lot_0.addWidget(prx_sca.widget)
@@ -919,11 +999,10 @@ class AbsPrxPageForResource(
         self.do_gui_refresh_all()
 
     def do_gui_refresh_all(self):
+        self._gui_update_keyword_filter_texts()
         self._gui_node_opt.restore_all()
         self._gui_type_opt.restore_all()
         self._gui_tag_opt.restore_all()
 
         self._gui_type_opt.do_gui_add_all()
         self._gui_tag_opt.do_gui_add_all()
-
-        self._check_maya_web_server_is_in_use()

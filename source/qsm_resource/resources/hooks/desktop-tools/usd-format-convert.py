@@ -52,10 +52,10 @@ class PnlUsdFormatConvert(gui_prx_widgets.PrxSessionToolWindow):
             self._session.configure.get('build.node.options'),
         )
         #
-        self._tip_text_browser = gui_prx_widgets.PrxTextBrowser()
-        s_1.add_widget(self._tip_text_browser)
-        self._tip_text_browser.set_font_size(12)
-        self._tip_text_browser.set_content(
+        self._tip_prx_text_browser = gui_prx_widgets.PrxTextBrowser()
+        s_1.add_widget(self._tip_prx_text_browser)
+        self._tip_prx_text_browser.set_font_size(12)
+        self._tip_prx_text_browser.set_content(
             self._session.configure.get('build.node.content'),
         )
 

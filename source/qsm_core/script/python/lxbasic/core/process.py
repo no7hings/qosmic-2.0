@@ -490,7 +490,6 @@ class PrcBaseMtd(object):
             )
         #
         output, unused_err = s_p.communicate()
-        #
         if s_p.returncode != 0:
             # noinspection PyArgumentList
             output = decode_fnc(output)

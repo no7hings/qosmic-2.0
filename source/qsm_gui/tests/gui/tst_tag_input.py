@@ -20,9 +20,9 @@ class W(gui_prx_widgets.PrxBaseWindow):
         self.add_widget(self._d_1)
 
         self._scr_stage = qsm_scr_core.Stage(
-            'node'
+            'maya_node'
         )
-        self._scr_stage.connect()
+        # self._scr_stage.connect()
 
         self.connect_refresh_action_for(self.test)
 

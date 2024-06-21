@@ -36,10 +36,10 @@ for i_seq, i_prim in enumerate(prim_opt.get_children()):
 
     print i_file_path
 
-    i_file_path_m = bsc_storage.StgFileMtdForTiles.convert_to(
+    i_file_path_m = bsc_storage.StgFileTiles.convert_to(
         i_file_path, ['*.####.{format}']
     )
-    i_file_tile_paths = bsc_storage.StgFileMtdForTiles.get_exists_unit_paths(
+    i_file_tile_paths = bsc_storage.StgFileTiles.get_exists_unit_paths(
         i_file_path_m
     )
 

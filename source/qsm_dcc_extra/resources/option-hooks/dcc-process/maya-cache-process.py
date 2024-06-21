@@ -4,11 +4,12 @@
 def skin_proxy_generate_fnc(option_opt):
     file_path = option_opt.get('file')
     cache_file_path = option_opt.get('cache_file')
+    data_file_path = option_opt.get('data_file')
 
     import qsm_maya.rig.scripts as qsm_mya_rig_scripts
 
     qsm_mya_rig_scripts.AdvSkinProxyProcess(
-        file_path, cache_file_path
+        file_path, cache_file_path, data_file_path
     ).execute()
 
 

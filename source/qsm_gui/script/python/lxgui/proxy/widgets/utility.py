@@ -510,8 +510,8 @@ class PrxIconPressButton(gui_prx_abstracts.AbsPrxWidget):
             color
         )
 
-    def set_icon_by_name(self, text):
-        self._qt_widget._set_icon_name_text_(text)
+    def set_icon_by_text(self, text):
+        self._qt_widget._set_icon_by_text_(text)
 
     def set_icon_color(self, rgba):
         self._qt_widget._set_icon_name_rgba_(rgba)
@@ -586,8 +586,8 @@ class PrxPressButton(gui_prx_abstracts.AbsPrxWidget):
         self.widget._icon_is_enable = True
         self.widget.update()
 
-    def set_icon_by_name(self, text):
-        self.widget._set_icon_name_text_(text)
+    def set_icon_by_text(self, text):
+        self.widget._set_icon_by_text_(text)
 
     def set_icon_color_by_name(self, name):
         pass
@@ -739,7 +739,7 @@ class PrxFilterBar(gui_prx_abstracts.AbsPrxWidget):
         self.widget._set_filter_result_index_current_(value)
 
     def set_result_clear(self):
-        self.widget._set_result_clear_()
+        self.widget._clear_filter_result_()
 
     def restore(self):
         self._qt_widget._restore_()

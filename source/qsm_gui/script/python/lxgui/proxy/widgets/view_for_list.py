@@ -90,7 +90,6 @@ class PrxListView(
             '"LMB-click" for switch view mode to "icon" / "list"'
         )
         # scale switch
-
         self._prx_scale_switch_tool_box = self.create_top_tool_box('scale', True, False, 0)
         # sort
         self._prx_sort_switch_tool_box = self.create_top_tool_box('sort', True, False, 0)
@@ -131,7 +130,7 @@ class PrxListView(
         self._prx_filter_bar._qt_widget.occurrence_next_press_clicked.connect(
             self._qt_view._do_keyword_filter_occurrence_to_next_
         )
-        self._prx_filter_bar._qt_widget._set_input_completion_buffer_fnc_(self._view_keyword_filter_completion_gain_fnc)
+        self._prx_filter_bar._qt_widget._set_input_completion_buffer_fnc_(self._gui_keyword_filter_completion_gain_fnc)
 
     @property
     def view(self):
@@ -163,7 +162,7 @@ class PrxListView(
         return tool_box
 
     # noinspection PyUnusedLocal
-    def _view_keyword_filter_completion_gain_fnc(self, *args, **kwargs):
+    def _gui_keyword_filter_completion_gain_fnc(self, *args, **kwargs):
         keyword = args[0]
         if keyword:
             if self._keyword_filter_completion_cache is None:
@@ -438,6 +437,9 @@ class PrxListView(
 
     def get_selected_item_widgets(self):
         return [self._qt_view._get_item_widget_(i).gui_proxy for i in self._qt_view.selectedItems()]
+
+    def get_selected_qt_item_widgets(self):
+        return [self._qt_view._get_item_widget_(i) for i in self._qt_view.selectedItems()]
 
     def connect_press_released_to(self, fnc):
         self._qt_view.press_released.connect(fnc)

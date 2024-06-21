@@ -8,7 +8,7 @@ if __name__ == '__main__':
         'video'
     )
 
-    stage.connect()
+    # stage.connect()
     stage.initialize()
 
     stage.build()

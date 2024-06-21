@@ -15,6 +15,10 @@ class Window(object):
         )
 
     @classmethod
+    def is_exists(cls, name):
+        return cmds.window(name, query=1, exists=1)
+
+    @classmethod
     def delete(cls, name):
         if cmds.window(name, query=1, exists=1):
             cmds.deleteUI(name, window=1)

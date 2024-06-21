@@ -10,7 +10,7 @@ import lxbasic.core as bsc_core
 from . import node_query as _node_query
 
 
-class BscPortOpt(object):
+class BscNodePortOpt(object):
     PATHSEP = '.'
 
     def __init__(self, node_path, port_path):
@@ -130,7 +130,8 @@ class BscPortOpt(object):
         return []
 
     def get(self, as_string=False):
-        if self.get_type_name() in {'message', 'TdataCompound'}:
+        print self.get_type_name(), self.get_port_path()
+        if self.get_type_name() in {'message', 'TdataCompound', 'Nobject', 'nurbsCurve'}:
             return None
 
         if as_string is True:
@@ -142,37 +143,62 @@ class BscPortOpt(object):
         return _
 
     def set(self, value, enumerate_strings=None):
-        if self.has_source() is False:
-            # unlock first
-            is_lock = cmds.getAttr(self.get_path(), lock=1)
-            if is_lock:
-                cmds.setAttr(self.get_path(), lock=0)
+        # ignore None value
+        if value is None:
+            return
+        # ignore connection
+        if self.has_source():
+            return
+        # ignore lock
+        if cmds.getAttr(self.get_path(), lock=1):
+            return
 
-            if value is None:
-                return
-            #
-            if self.get_port_query().is_writable(self.get_node_path()) is True:
-                if self.get_type_name() == 'string':
-                    cmds.setAttr(self.get_path(), value, type=self.get_type_name())
-                elif self.get_type_name() == 'enum':
+        type_name = self.get_type_name()
+        path = self.get_path()
+        # noinspection PyBroadException
+        try:
+            if self.get_port_query().is_writeable(self.get_node_path()) is True:
+                if type_name == 'string':
+                    cmds.setAttr(path, value, type=self.get_type_name())
+                elif type_name == 'enum':
                     if enumerate_strings is not None:
                         cmds.addAttr(
-                            self.get_path(),
+                            path,
                             enumName=':'.join(enumerate_strings),
                             edit=1
                         )
                     if isinstance(value, six.string_types):
                         enumerate_strings = self.get_port_query().get_enumerate_strings(self.get_node_path())
                         index = enumerate_strings.index(value)
-                        cmds.setAttr(self.get_path(), index)
+                        cmds.setAttr(path, index)
                     else:
-                        cmds.setAttr(self.get_path(), value)
+                        cmds.setAttr(path, value)
                 else:
                     if isinstance(value, (tuple, list)):
-                        cmds.setAttr(self.get_path(), *value, type=self.get_type_name(), clamp=1)
+                        if type_name == 'matrix':
+                            # ((1, 1, 1), ...)
+                            if isinstance(value[0], (tuple, list)):
+                                value = [j for i in value for j in i]
+                            cmds.setAttr(path, value, type=type_name)
+                        elif type_name in 'doubleArray':
+                            cmds.setAttr(path, value, type=type_name)
+                        elif type_name in 'vectorArray':
+                            cmds.setAttr(path, len(value), *value, type=type_name)
+                        else:
+                            # print path, type_name, value
+                            cmds.setAttr(path, *value, clamp=1, type=type_name)
                     else:
-                        # Debug ( Clamp Maximum or Minimum Value )
-                        cmds.setAttr(self.get_path(), value, clamp=1)
+                        if isinstance(value, bool):
+                            cmds.setAttr(path, int(value))
+                        elif isinstance(value, (float, int)):
+                            cmds.setAttr(path, value)
+                        else:
+                            # print path, type_name, value
+                            # Debug ( Clamp Maximum or Minimum Value )
+                            cmds.setAttr(path, value, clamp=1)
+        except Exception:
+            import traceback
+            traceback.print_exc()
 
     def get_default(self):
         if self.get_type_name() == 'message':
@@ -231,6 +257,11 @@ class BscPortOpt(object):
         )
 
     def get_source(self):
+        args = self.get_source_args()
+        if args:
+            return self.PATHSEP.join(args)
+
+    def get_source_args(self):
         _ = cmds.connectionInfo(
             self.get_path(),
             sourceFromDestination=1
@@ -238,12 +269,9 @@ class BscPortOpt(object):
         if _:
             atr = bsc_core.PthAttributeOpt(_)
             node_path = atr.obj_path
-            
             if cmds.objExists(node_path) is True:
                 port_path = atr.port_path
-                return self.PATHSEP.join(
-                    [_node_query.NodeQuery._to_node_path(node_path), port_path]
-                )
+                return _node_query.NodeQuery._to_node_path(node_path), port_path
 
     def set_disconnect(self):
         source = self.get_source()

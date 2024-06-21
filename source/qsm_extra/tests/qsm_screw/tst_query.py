@@ -9,8 +9,7 @@ if __name__ == '__main__':
     print qsm_scr_core.Stage.get_all_keys()
 
     # stage = qsm_scr_core.Stage(
-    #     'node'
-    #     # 'video'
+    #     'maya_node'
     # )
     #
     # stage.connect()

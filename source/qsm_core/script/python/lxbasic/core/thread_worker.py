@@ -71,27 +71,6 @@ class ThreadWorker(threading.Thread):
 
         self._options = {}
 
-    @property
-    def status_changed(self):
-        return self._signal_status_changed
-
-    @property
-    def completed(self):
-        # index, results
-        return self._signal_completed
-
-    @property
-    def failed(self):
-        return self._signal_failed
-
-    @property
-    def started(self):
-        return self._signal_started
-
-    @property
-    def finished(self):
-        return self._signal_finished
-
     def run(self):
         if self._is_killed is True:
             return
@@ -150,6 +129,26 @@ class ThreadWorker(threading.Thread):
                 ThreadWorker.EVENT.clear()
             ThreadWorker.LOCK.release()
 
+    @property
+    def status_changed(self):
+        return self._signal_status_changed
+
+    @property
+    def completed(self):
+        # index, results
+        return self._signal_completed
+
+    @property
+    def failed(self):
+        return self._signal_failed
+
+    @property
+    def started(self):
+        return self._signal_started
+
+    @property
+    def finished(self):
+        return self._signal_finished
     @staticmethod
     def is_busy():
         return ThreadWorker.VALUE >= ThreadWorker.MAXIMUM

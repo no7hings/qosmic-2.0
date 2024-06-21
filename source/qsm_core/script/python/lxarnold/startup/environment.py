@@ -22,6 +22,7 @@ class AbsArnoldSetup(gnl_dcc_abstracts.AbsDccSetup):
         [self.add_environ_fnc('ARNOLD_PROCEDURAL_PATH', i) for i in map(self._path_process_, args)]
 
     def add_plugins(self, *args):
+
         [self.add_environ_fnc('ARNOLD_PLUGIN_PATH', i) for i in map(self._path_process_, args)]
 
     def add_xgen(self, *args):

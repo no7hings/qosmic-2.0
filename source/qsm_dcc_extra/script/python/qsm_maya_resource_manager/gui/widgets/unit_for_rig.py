@@ -46,6 +46,104 @@ class UnitForRigView(
         super(UnitForRigView, self).__init__(window, unit, session, prx_tree_view)
         self._skin_proxy_load_args_array = []
         self._dynamic_gpu_load_args_array = []
+    
+    def gui_add_resource(self, resource):
+        def build_fnc_():
+            prx_item.set_name(
+                path_opt.get_name()
+            )
+            _reference_node = resource.reference_opt
+            _semantic_tag_filter_data = {}
+            _tag_group_key = '/status'
+            if _reference_node.is_loaded():
+                prx_item.set_icon_by_file(
+                    gui_core.GuiIcon.get('node/maya/reference')
+                )
+                _semantic_tag_filter_data.setdefault(
+                    _tag_group_key, set()
+                ).add('/status/loaded')
+                self._page._gui_resource_tag_opt.gui_register_tag_by_path(
+                    '/status/loaded', path, auto_create_ancestors=True
+                )
+            else:
+                prx_item.set_icon_by_file(
+                    gui_core.GuiIcon.get('node/maya/reference-unloaded')
+                )
+                _semantic_tag_filter_data.setdefault(
+                    _tag_group_key, set()
+                ).add('/status/unloaded')
+                self._page._gui_resource_tag_opt.gui_register_tag_by_path(
+                    '/status/unloaded', path, auto_create_ancestors=True
+                )
+            
+            if resource.is_skin_proxy_exists():
+                prx_item.set_status(
+                    prx_item.ValidationStatus.Active
+                )
+                if self._window._language == 'chs':
+                    prx_item.set_name('简模代理', 1)
+                else:
+                    prx_item.set_name('Skin Proxy', 1)
+            elif resource.is_dynamic_gpu_exists():
+                prx_item.set_status(
+                    prx_item.ValidationStatus.Locked
+                )
+                if self._window._language == 'chs':
+                    prx_item.set_name('动态GPU', 1)
+                else:
+                    prx_item.set_name('Dynamic GPU', 1)
+            else:
+                prx_item.set_status(
+                    prx_item.ValidationStatus.Normal
+                )
+                prx_item.set_name('', 1)
+
+            prx_item.get_item()._update_item_semantic_tag_filter_keys_tgt_(_semantic_tag_filter_data)
+            prx_item.set_tool_tip(
+                '\n'.join(['{}: {}'.format(_k, _v) for _k, _v in resource.variants.items()])
+            )
+
+        path = resource.path
+        if self.gui_check_exists(path) is False:
+            path_opt = resource.path_opt
+            create_kwargs = dict(
+                name='loading ...',
+                filter_key=path,
+            )
+            parent = path_opt.get_parent()
+            if parent is not None:
+                prx_item_parent = self.gui_get_one(parent.path)
+                prx_item = prx_item_parent.add_child(
+                    **create_kwargs
+                )
+            else:
+                prx_item = self._prx_tree_view.create_item(
+                    **create_kwargs
+                )
+
+            # prx_item.set_checked(True)
+            self.gui_register(path, prx_item)
+            variants = resource.variants
+            semantic_tag_filter_data = {}
+            for i in self.TAG_KEYS_INCLUDE:
+                if i in variants:
+                    i_v = variants[i]
+                    i_tag_group = '/{}'.format(i)
+                    i_tag_path = '/{}/{}'.format(i, i_v)
+                    semantic_tag_filter_data.setdefault(
+                        i_tag_group, set()
+                    ).add(i_tag_path)
+                    self._page._gui_resource_tag_opt.gui_register_tag_by_path(
+                        i_tag_path, path, auto_create_ancestors=True
+                    )
+
+            prx_item.get_item()._update_item_semantic_tag_filter_keys_tgt_(semantic_tag_filter_data)
+            prx_item.set_gui_dcc_obj(
+                resource, namespace=self.NAMESPACE
+            )
+            prx_item.set_show_build_fnc(build_fnc_)
+            return True, prx_item
+        return False, self.gui_get_one(path)
 
 
 class UnitForRigReference(
@@ -121,13 +219,18 @@ class UnitForRigUtilityToolSet(
     def do_dcc_load_skin_proxies(self):
         if self._skin_proxy_load_args_array:
             keep_head = self._prx_options_node.get('skin_proxy.keep_head')
+            check_bbox = self._prx_options_node.get('skin_proxy.check_bbox')
             with self._window.gui_progressing(
                 maximum=len(self._skin_proxy_load_args_array), label='load skin proxies'
             ) as g_p:
-                for i_opt, i_cache_file in self._skin_proxy_load_args_array:
+                for i_opt, i_cache_file, i_data_file_path in self._skin_proxy_load_args_array:
                     g_p.do_update()
                     if i_opt.is_resource_exists() is True:
-                        i_opt.load_cache(i_cache_file, keep_head=keep_head)
+                        i_opt.load_cache(
+                            i_cache_file, i_data_file_path, keep_head=keep_head, check_bbox=check_bbox
+                        )
+
+        self._page.do_gui_refresh_all(force=True)
 
         self._page._gui_resource_opt.do_gui_refresh_by_dcc_selection()
 
@@ -147,12 +250,12 @@ class UnitForRigUtilityToolSet(
 
                         i_opt = qsm_mya_rig_scripts.SkinProxyOpt(i_resource)
                         if i_opt.is_exists() is False:
-                            i_cmd, i_cache_file = i_opt.generate_args()
+                            i_cmd, i_cache_file, i_data_file_path = i_opt.generate_args()
                             if i_cmd is not None:
                                 create_cmds.append(i_cmd)
 
                             self._skin_proxy_load_args_array.append(
-                                (i_opt, i_cache_file)
+                                (i_opt, i_cache_file, i_data_file_path)
                             )
 
                         g_p.do_update()
@@ -169,6 +272,8 @@ class UnitForRigUtilityToolSet(
             for i_resource in resources:
                 i_opt = qsm_mya_rig_scripts.SkinProxyOpt(i_resource)
                 i_opt.remove_cache()
+
+        self._page.do_gui_refresh_all(force=True)
 
         self._page._gui_resource_opt.do_gui_refresh_by_dcc_selection()
 
@@ -220,12 +325,16 @@ class UnitForRigUtilityToolSet(
                 else:
                     self.do_dcc_load_dynamic_gpus()
 
+        self._page.do_gui_refresh_all(force=True)
+
     def do_dcc_remove_dynamic_gpus(self):
         resources = self._page._gui_resource_opt.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
                 i_opt = qsm_mya_rig_scripts.DynamicGpuCacheOpt(i_resource)
                 i_opt.remove_cache()
+
+        self._page.do_gui_refresh_all(force=True)
 
     def do_gui_refresh_by_camera_changing(self):
         cameras = qsm_mya_core.Cameras.get_all()
@@ -396,7 +505,9 @@ class UnitForRigSwitchToolSet(
 
     def do_gui_refresh_buttons(self):
         namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
-        resources = [self._page._gui_resource_opt.get_resources_query().get(x) for x in namespaces]
+        resources = list(
+            filter(None, [self._page._gui_resource_opt.get_resources_query().get(x) for x in namespaces])
+        )
         self.do_gui_refresh_buttons_for_skin_proxy(resources)
         self.do_gui_refresh_buttons_for_dynamic_gpu(resources)
 

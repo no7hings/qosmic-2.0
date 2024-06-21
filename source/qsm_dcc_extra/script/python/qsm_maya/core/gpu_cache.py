@@ -34,6 +34,7 @@ class GpuCache(object):
 
     @classmethod
     def export_frame_(cls, gpu_file_path, location, frame=None):
+        cmds.loadPlugin('gpuCache', quiet=1)
         mel_script = cls.to_mel_script(
             gpu_file_path, location, frame
         )

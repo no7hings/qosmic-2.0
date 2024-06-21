@@ -110,6 +110,13 @@ class AbsEntryForTagBase(object):
 
         self._set_number_(len(path_set))
 
+    def _expand_ancestors_(self):
+        ancestor_paths = bsc_core.BscPathOpt(
+            self._get_path_text_()
+        ).get_ancestor_paths()
+        ancestors = self._get_all_(ancestor_paths)
+        [x._set_expanded_(True) for x in ancestors]
+
 
 class QtEntryNodeForTag(
     QtWidgets.QWidget,
@@ -342,6 +349,10 @@ class QtEntryNodeForTag(
         # update when text is changed
         self._parent_widget._refresh_widget_all_()
 
+    def _apply_check_state_(self, boolean):
+        self._set_checked_(boolean)
+        self._update_check_state_for_ancestors_()
+
 
 class QtEntryGroupForTag(
     QtWidgets.QWidget,
@@ -439,14 +450,14 @@ class QtEntryGroupForTag(
                 vpt_h = i_y+frm_h
                 self._viewport.setMinimumHeight(vpt_h)
                 
-                h_min = vpt_h+frm_h
+                h_min = vpt_h+frm_h+spc
                 self.setMinimumHeight(h_min)
                 if h_min != h:
                     if self._parent_widget is not None:
                         self._parent_widget._refresh_widget_all_()
             else:
                 l_h = self._group_lot.minimumSize().height()
-                h_min = l_h+frm_h
+                h_min = l_h+frm_h+spc
                 self.setMinimumHeight(h_min)
         else:
             self._viewport.hide()
@@ -874,6 +885,9 @@ class QtEntryRootForTag(
     def _check_exists_(self, path):
         return path in self._item_dict
 
+    def _clear_all_checked_(self):
+        [x._set_checked_(False) for x in self._item_dict.values()]
+
     def _get_one_(self, path):
         return self._item_dict[path]
 
@@ -890,3 +904,11 @@ class QtEntryRootForTag(
         self._scr._layout._clear_all_widgets_()
         self._item_dict.clear()
         self._scr._set_empty_draw_flag_(True)
+
+    def _collapse_all_groups_(self):
+        [x._set_expanded_(False) for x in self._item_dict.values() if isinstance(x, QtEntryGroupForTag)]
+
+    def _expand_exclusive_(self, path):
+        self._collapse_all_groups_()
+        node = self._get_one_(path)
+        node._expand_ancestors_()

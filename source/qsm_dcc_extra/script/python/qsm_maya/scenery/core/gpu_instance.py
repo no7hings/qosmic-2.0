@@ -31,7 +31,7 @@ class GpuInstanceOpt(object):
 
     def __init__(self, node):
         self._node = node
-        self._shape = _mya_core.Transform.get_shape_path(self._node)
+        self._shape = _mya_core.Transform.get_shape(self._node)
 
         self._path = None
         self._path_opt = None

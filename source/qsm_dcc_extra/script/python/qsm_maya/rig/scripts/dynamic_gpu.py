@@ -5,6 +5,8 @@ import maya.cmds as cmds
 
 import lxbasic.core as bsc_core
 
+import qsm_general.core as qsm_gnl_core
+
 from ... import core as _mya_core
 
 from ...rig import core as _rig_core
@@ -58,7 +60,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
         cache_location = '|{}:{}'.format(self._namespace, self.CACHE_NAME)
         if cmds.objExists(cache_location) is False and cmds.objExists(cache_location_new) is False:
             if os.path.isfile(cache_file_path) is True:
-                _mya_core.SceneFile.import_file(
+                _mya_core.SceneFile.import_file_force(
                     cache_file_path, namespace=self._namespace
                 )
                 cmds.setAttr(
@@ -91,7 +93,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
             create_flag, motion_file_path, cache_file_path = self.export_motion()
             if create_flag is True:
                 rig_file_path = self._resource.file
-                cmd_script = _ast_core.MayaCacheProcess.generate_command(
+                cmd_script = qsm_gnl_core.MayaCacheProcess.generate_command(
                     (
                         'method=dynamic-gpu-cache-generate'
                         '&file={file}&cache_file={cache_file}&namespace={namespace}'
@@ -114,7 +116,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
             source_file_path = '{}/source.ma'.format(directory_path)
             self.export_source(source_file_path)
             cache_file_path = '{}/gpu.ma'.format(directory_path)
-            cmd_script = _ast_core.MayaCacheProcess.generate_command(
+            cmd_script = qsm_gnl_core.MayaCacheProcess.generate_command(
                 (
                     'method=dynamic-gpu-cache-generate'
                     '&file={file}&cache_file={cache_file}&namespace={namespace}'

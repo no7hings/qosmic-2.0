@@ -75,7 +75,7 @@ class PortQuery(object):
             **self._to_query_kwargs(node_path, multi=True)
         ) or False
 
-    def is_writable(self, node_path=None):
+    def is_writeable(self, node_path=None):
         return cmds.attributeQuery(
             self._to_query_key(),
             **self._to_query_kwargs(node_path, writable=True)

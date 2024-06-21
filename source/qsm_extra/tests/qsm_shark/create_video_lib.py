@@ -22,7 +22,7 @@ location = 'Z:/libraries/lazy-resource/all'
 stage = qsm_scr_core.Stage(
     'video'
 )
-stage.connect()
+# stage.connect()
 stage.initialize()
 
 stage.build()

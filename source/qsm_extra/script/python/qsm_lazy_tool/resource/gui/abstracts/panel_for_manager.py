@@ -7,11 +7,11 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_screw.core as qsm_scr_core
 
-from . import page_for_resource as _page_for_resource
+from . import page_for_manager as _page_for_manager
 
 
 class AbsPrxPanelForResource(gui_prx_widgets.PrxSessionWindow):
-    PAGE_FOR_RESOURCE_CLS = _page_for_resource.AbsPrxPageForResource
+    PAGE_FOR_RESOURCE_CLS = _page_for_manager.AbsPrxPageForManager
 
     KEY_TAB_KEYS = 'lazy-resource.page_keys'
     HST_TAB_KEY_CURRENT = 'lazy-resource.page_key_current'
@@ -55,9 +55,9 @@ class AbsPrxPanelForResource(gui_prx_widgets.PrxSessionWindow):
         prx_page = self.PAGE_FOR_RESOURCE_CLS(
             self, self._session
         )
+        self._tab_page_dict[key] = prx_page
         prx_page.do_gui_initialize(key)
         prx_sca.add_widget(prx_page)
-        self._tab_page_dict[key] = prx_page
 
     def do_gui_close(self):
         page_keys = self._prx_tab_view.get_all_page_keys()
@@ -77,7 +77,7 @@ class AbsPrxPanelForResource(gui_prx_widgets.PrxSessionWindow):
         self._prx_tab_view.set_add_enable(True)
 
         self._tag_page_key_opened = set()
-        self._all_scr_keys = qsm_scr_core.Stage.get_all_keys()
+        self._all_scr_stage_keys = qsm_scr_core.Stage.get_all_keys()
 
         self._tab_page_dict = {}
 
@@ -85,14 +85,18 @@ class AbsPrxPanelForResource(gui_prx_widgets.PrxSessionWindow):
         self._prx_tab_view.connect_delete_accepted_to(self._gui_tab_page_delete_fnc)
 
         history_tag_keys = gui_core.GuiHistory.get_one(self.KEY_TAB_KEYS)
+        page_keys = self._all_scr_stage_keys
         if history_tag_keys:
-            page_keys = [x for x in history_tag_keys if x in self._all_scr_keys]
-            self._gui_tab_add_page_fnc(page_keys[0], False)
-        else:
-            self._gui_tab_add_page_fnc(self._all_scr_keys[0], False)
+            _ = [x for x in history_tag_keys if x in self._all_scr_stage_keys]
+            if _:
+                page_keys = _
+
+        self._gui_tab_add_page_fnc(page_keys[0], False)
 
         self.connect_refresh_action_for(self.do_gui_refresh_all)
         self.connect_window_close_to(self.do_gui_close)
 
     def do_gui_refresh_all(self):
-        self._tab_page_dict[self._prx_tab_view.get_current_key()].do_gui_refresh_all()
+        key = self._prx_tab_view.get_current_key()
+        if key in self._tab_page_dict:
+            self._tab_page_dict[key].do_gui_refresh_all()

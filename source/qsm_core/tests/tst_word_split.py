@@ -15,16 +15,16 @@ import lxbasic.pinyin as bsc_pinyin
 #     return result
 #
 # # 示例用法
-string_list = [u'Hello, 你好，世界！', u'Python_3.8版本发布了。']
+string_list = [u'hello_你好_世界！', u'Python_3.8版本发布了。']
 # result = split_words_and_chars([s.encode('utf-8') for s in string_list])
 # print(result)
 
 for i in string_list:
-    print bsc_pinyin.Text.split_any_to_words(i)
+    print bsc_pinyin.Text.to_to_prettify(i)
 
 
 
-a = ['Hello', u'你好', '世界', 'Python', '3.8', '版本发布了']
-
-for i in bsc_pinyin.Texts.split_any_to_words_extra(a):
-    print i
+# a = ['Hello', u'你好', '世界', 'Python', '3.8', '版本发布了']
+#
+# for i in bsc_pinyin.Texts.split_any_to_words_extra(a):
+#     print i

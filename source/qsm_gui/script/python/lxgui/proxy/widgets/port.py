@@ -291,6 +291,9 @@ class _AbsPrxPortBase(AbsPrxPortBaseDef):
     def get_use_enable(self):
         return self._use_enable
 
+    def set_action_enable(self, boolean):
+        self._prx_port_input.set_action_enable(boolean)
+
     def set_name_width(self, w):
         self.label_widget.set_width(w)
 

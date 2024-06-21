@@ -141,7 +141,7 @@ class QtInputAsFilter(
         self._filter_result_count = None
         self._filter_index_current = None
         #
-        self.__refresh_filter_()
+        self._update_filter_()
         self._do_refresh_filter_tip_()
 
     def _build_input_entry_(self, value_type):
@@ -218,7 +218,7 @@ class QtInputAsFilter(
             _.append(self._entry_widget._get_value_())
         return list(_)
 
-    def __refresh_filter_(self):
+    def _update_filter_(self):
         self._match_case_button._set_icon_file_path_(
             _gui_core.GuiIcon.get(self._match_case_icon_names[self._is_match_case])
         )
@@ -229,13 +229,13 @@ class QtInputAsFilter(
 
     def _do_match_case_swap_(self):
         self._is_match_case = not self._is_match_case
-        self.__refresh_filter_()
+        self._update_filter_()
 
         self._do_input_change_()
 
     def _do_match_word_swap_(self):
         self._is_match_word = not self._is_match_word
-        self.__refresh_filter_()
+        self._update_filter_()
 
         self._do_input_change_()
 
@@ -309,7 +309,7 @@ class QtInputAsFilter(
         else:
             self._result_label._set_name_text_('')
 
-    def _set_result_clear_(self):
+    def _clear_filter_result_(self):
         self._filter_result_count = None
         self._filter_index_current = None
         self._refresh_filter_result_()

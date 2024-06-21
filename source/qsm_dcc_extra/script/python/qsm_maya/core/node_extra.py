@@ -1,4 +1,6 @@
 # coding:utf-8
+import collections
+
 import six
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
@@ -9,55 +11,72 @@ from . import node_category as _node_category
 
 from . import node_query as _node_query
 
-from . import port_extra as _port_extra
+from . import node_port_extra as _node_port_extra
 
 from . import material as _material
+
+from . import attribute as _attribute
+
+from . import keyframe as _keyframe
 
 
 class BscNodeOpt(object):
     PATHSEP = '|'
 
-    def _unpack_port_paths(self, port_paths):
+    def _flatten_port_paths(self, port_paths):
         def rcs_fnc_(port_path_):
             _port_query = node_query.get_port_query(
                 port_path_
             )
             _condition = _port_query.is_array(node_path), _port_query.has_channels(node_path)
+            # array and channel
             if _condition == (True, True):
-                _array_indices = _port_extra.BscPortOpt(node_path, port_path_).get_array_indices()
+                _array_indices = _node_port_extra.BscNodePortOpt(node_path, port_path_).get_array_indices()
                 _child_port_names = _port_query.get_channel_names()
                 for _i_array_index in _array_indices:
                     for _i_child_port_name in _child_port_names:
                         _i_port_path = '{}[{}].{}'.format(port_path_, _i_array_index, _i_child_port_name)
                         list_.append(_i_port_path)
                         rcs_fnc_(_i_port_path)
+            # array
             elif _condition == (True, False):
-                _array_indices = _port_extra.BscPortOpt(node_path, port_path_).get_array_indices()
+                _array_indices = _node_port_extra.BscNodePortOpt(node_path, port_path_).get_array_indices()
                 for _i_array_index in _array_indices:
                     _i_port_path = '{}[{}]'.format(port_path_, _i_array_index)
                     list_.append(_i_port_path)
                     rcs_fnc_(_i_port_path)
+            # channel
             elif _condition == (False, True):
                 _child_port_names = _port_query.get_channel_names()
                 for _i_child_port_name in _child_port_names:
                     _i_port_path = '{}.{}'.format(port_path_, _i_child_port_name)
                     list_.append(_i_port_path)
                     rcs_fnc_(_i_port_path)
+            # all not
             elif _condition == (False, False):
-                pass
+                list_.append(port_path_)
 
         list_ = []
-        node_query = self.get_node_query()
         node_path = self.get_path()
+        node_query = self.get_node_query()
         port_paths.sort()
         for i_port_path in port_paths:
             i_port_query = node_query.get_port_query(
                 i_port_path
             )
-            if _port_extra.BscPortOpt.check_exists(node_path, i_port_path) is True:
+            if _node_port_extra.BscNodePortOpt.check_exists(node_path, i_port_path) is True:
+                # check port is top level
                 if i_port_query.has_parent(node_path) is False:
-                    list_.append(i_port_path)
+                    # list_.append(i_port_path)
                     rcs_fnc_(i_port_path)
+        return list_
+
+    def _filter_port_paths_by_keyable(self, port_paths):
+        list_ = []
+        node_query = self.get_node_query()
+        for i_port_path in port_paths:
+            if node_query.get_port_query(i_port_path).is_keyable(self._path) is True:
+                list_.append(i_port_path)
         return list_
 
     @classmethod
@@ -140,6 +159,9 @@ class BscNodeOpt(object):
         self._node_query = _
         return _
 
+    def get_port_query(self, port_path):
+        return self.get_node_query().get_port_query(port_path)
+
     def get_type_name(self):
         if self._type_name is not None:
             return self._type_name
@@ -187,25 +209,36 @@ class BscNodeOpt(object):
                     cmds.parent(self.get_path(), path)
 
     def get_all_port_paths(self):
-        return self._unpack_port_paths(
-            cmds.listAttr(
-                self.get_path(), read=1, write=1, inUse=1, multi=1
-            ) or []
-        )
+        _ = cmds.listAttr(
+            self.get_path(),
+            read=1,
+            write=1,
+            inUse=1,
+            # fixme: use multi?
+            # multi=1
+        ) or []
+        if _:
+            _.sort()
+            return self._flatten_port_paths(_)
+        return []
 
     def get_all_keyable_port_paths(self):
-        return cmds.listAttr(self.get_path(), keyable=1) or []
+        _ = self.get_all_port_paths()
+        return self._filter_port_paths_by_keyable(
+            self.get_all_port_paths()
+        )
 
     def get_all_ports(self, includes=None):
-        _ = self.get_all_port_paths()
         if isinstance(includes, (tuple, list)):
-            _ = self._unpack_port_paths(includes)
+            _ = list(includes)
+        else:
+            _ = self.get_all_port_paths()
         return [
             self.get_port(i) for i in _
         ]
 
     def get_all_customize_port_paths(self):
-        return self._unpack_port_paths(
+        return self._flatten_port_paths(
             cmds.listAttr(self.get_path(), userDefined=1) or []
         )
 
@@ -214,7 +247,7 @@ class BscNodeOpt(object):
         if isinstance(includes, (tuple, list)):
             _ = includes
         return [
-            self.get_port(i) for i in _ if _port_extra.BscPortOpt.check_exists(
+            self.get_port(i) for i in _ if _node_port_extra.BscNodePortOpt.check_exists(
                 self.get_path(), i
             )
         ]
@@ -263,13 +296,13 @@ class BscNodeOpt(object):
             else:
                 raise RuntimeError()
             #
-            _port_extra.BscPortOpt.create(
+            _node_port_extra.BscNodePortOpt.create(
                 node_path=node_path,
                 port_path=i_port_path,
                 type_name=type_name
             )
             #
-            port = _port_extra.BscPortOpt(node_path, i_port_path)
+            port = _node_port_extra.BscNodePortOpt(node_path, i_port_path)
             if i_value is not None:
                 port.set(i_value)
 
@@ -287,17 +320,17 @@ class BscNodeOpt(object):
             else:
                 raise RuntimeError()
             #
-            _port_extra.BscPortOpt.create(
+            _node_port_extra.BscNodePortOpt.create(
                 node_path=node_path,
                 port_path=port_path,
                 type_name=type_name
             )
             #
-            port = _port_extra.BscPortOpt(node_path, port_path)
+            port = _node_port_extra.BscNodePortOpt(node_path, port_path)
             port.set(value)
 
     def get_port(self, port_path):
-        return _port_extra.BscPortOpt(self._path, port_path)
+        return _node_port_extra.BscNodePortOpt(self._path, port_path)
 
     def reset(self):
         for i_port in self.get_all_ports():
@@ -314,7 +347,7 @@ class BscNodeOpt(object):
         self.get_port(key).set(value)
 
     def get(self, key):
-        if _port_extra.BscPortOpt.check_exists(self.get_path(), key) is True:
+        if _node_port_extra.BscNodePortOpt.check_exists(self.get_path(), key) is True:
             return self.get_port(key).get()
 
     def delete(self):
@@ -322,3 +355,99 @@ class BscNodeOpt(object):
 
     def to_dict(self):
         pass
+
+    def get_node_properties(self, includes=None):
+        if isinstance(includes, (tuple, list)):
+            atr_names = [x for x in includes if _attribute.NodeAttribute.is_exists(self._path, x) is True]
+        else:
+            atr_names = self.get_all_port_paths()
+
+        dict_ = collections.OrderedDict()
+        node_path = self.get_path()
+        for i_atr_name in atr_names:
+            if _attribute.NodeAttribute.is_exists(node_path, i_atr_name) is False:
+                continue
+
+            i_curve_name = _attribute.NodeAttribute.get_source_node(node_path, i_atr_name, 'animCurve')
+            if i_curve_name is not None:
+                i_curve_type = cmds.nodeType(i_curve_name)
+                i_infinities = [
+                    _attribute.NodeAttribute.get_value(i_curve_name, 'preInfinity'),
+                    _attribute.NodeAttribute.get_value(i_curve_name, 'postInfinity')
+                ]
+                i_curve_points = _keyframe.AnimationCurveOpt(node_path, i_atr_name).get_points()
+                dict_[i_atr_name] = dict(
+                    flag='animation_curve',
+                    data=[
+                        i_atr_name, i_curve_type, i_infinities, i_curve_points
+                    ]
+                )
+            else:
+                i_value = self.get(i_atr_name)
+                dict_[i_atr_name] = dict(
+                    flag='value',
+                    data=i_value
+                )
+        return dict_
+
+    def apply_node_properties(self, data, frame_offset=0, force=True, excludes=None):
+        for i_atr_name, i_v in data.items():
+            if excludes is not None:
+                if i_atr_name in excludes:
+                    continue
+
+            i_flag = i_v['flag']
+            if i_flag == 'value':
+                self.set(i_atr_name, i_v['data'])
+            elif i_flag == 'animation_curve':
+                _keyframe.Keyframe.apply_curve(
+                    self._path, i_v['data'], frame_offset=frame_offset, force=force
+                )
+
+
+class BscNodeGraph(object):
+    def __init__(self, name_or_path):
+        self._path = name_or_path
+
+        self._data_dict = {}
+        self._name_dict = {}
+
+    def _node_graph_rcs_fnc(self, node_path):
+        dict_ = collections.OrderedDict()
+        node_opt = BscNodeOpt(node_path)
+        atr_names = node_opt.get_all_port_paths()
+        for i_atr_name in atr_names:
+            i_curve_name = _attribute.NodeAttribute.get_source_node(node_path, i_atr_name, 'animCurve')
+            if i_curve_name:
+                i_curve_type = cmds.nodeType(i_curve_name)
+                i_infinities = [
+                    _attribute.NodeAttribute.get_value(i_curve_name, 'preInfinity'),
+                    _attribute.NodeAttribute.get_value(i_curve_name, 'postInfinity')
+                ]
+                i_curve_points = _keyframe.AnimationCurveOpt(node_path, i_atr_name).get_points()
+                dict_[i_atr_name] = dict(
+                    flag='animation_curve',
+                    data=[
+                        i_atr_name, i_curve_type, i_infinities, i_curve_points
+                    ]
+                )
+            else:
+                i_source_args = node_opt.get_port(i_atr_name).get_source_args()
+                if i_source_args:
+                    i_source_node, i_source_port_path = i_source_args
+                    print i_source_node
+                else:
+                    i_value = node_opt.get(i_atr_name)
+                    dict_[i_atr_name] = dict(
+                        flag='value',
+                        data=i_value
+                    )
+
+        self._data_dict[node_path] = dict_
+
+    def generate(self):
+        self._data_dict = {}
+        self._name_dict = {}
+
+        self._node_graph_rcs_fnc(self._path)
+        return self._data_dict

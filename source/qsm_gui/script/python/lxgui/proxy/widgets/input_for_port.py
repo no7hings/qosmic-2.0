@@ -129,6 +129,9 @@ class _AbsPrxInput(gui_prx_abstracts.AbsPrxWidget):
     def set_history_button_visible(self, boolean):
         pass
 
+    def set_action_enable(self, boolean):
+        self._qt_input_widget._set_action_enable_(boolean)
+
 
 # storage
 class PrxInputAsStorage(_AbsPrxInput):
@@ -441,7 +444,7 @@ class PrxInputAsFilesOpen(PrxInputAsStorageArray):
             # s = files, filter
             values = s[0]
             if values:
-                values = bsc_storage.StgFileMtdForTiles.merge_to(
+                values = bsc_storage.StgFileTiles.merge_to(
                     values,
                     ['*.<udim>.####.*', '*.####.*']
                 )
@@ -454,7 +457,7 @@ class PrxInputAsFilesOpen(PrxInputAsStorageArray):
                 ext = os.path.splitext(value)[-1]
                 if ext not in self._ext_includes:
                     return False
-            return bsc_storage.StgFileMtdForTiles.get_is_exists(value)
+            return bsc_storage.StgFileTiles.get_is_exists(value)
         return False
 
 
@@ -1223,7 +1226,7 @@ class PrxInputAsSubProcessButton(_AbsPrxInput):
         self._stop_button = gui_prx_wdt_utility.PrxIconPressButton()
         self.add_button(self._stop_button)
         self._stop_button.set_name('Stop Process')
-        self._stop_button.set_icon_by_name('Stop Process')
+        self._stop_button.set_icon_by_text('Stop Process')
         self._stop_button.set_tool_tip('press to stop process')
 
     def get(self):
@@ -1520,7 +1523,7 @@ class PrxInputAsResolverEntity(_AbsPrxInputExtra):
         #
         result = obj.get('result')
         update = obj.get('update')
-        prx_item.set_icon_by_name(obj_type_name)
+        prx_item.set_icon_by_text(obj_type_name)
         prx_item.set_names([obj_name, update])
         prx_item.set_tool_tip(obj.description)
         if result:
@@ -1530,7 +1533,7 @@ class PrxInputAsResolverEntity(_AbsPrxInputExtra):
         prx_item.set_gui_menu_data(menu_raw)
         prx_item.set_menu_content(obj.get_gui_menu_content())
 
-    def __add_item_as_tree(self, obj):
+    def _add_item_as_tree(self, obj):
         ancestors = obj.get_ancestors()
         if ancestors:
             ancestors.reverse()
@@ -1541,7 +1544,7 @@ class PrxInputAsResolverEntity(_AbsPrxInputExtra):
         #
         self.__set_item_comp_add_as_tree_(obj, use_show_thread=True)
 
-    def __add_item_as_list(self, obj):
+    def _add_item_as_list(self, obj):
         obj_path = obj.path
         obj_type = obj.type
         #
@@ -1582,7 +1585,7 @@ class PrxInputAsResolverEntity(_AbsPrxInputExtra):
                     for i in objs:
                         g_p.do_update()
                         #
-                        self.__add_item_as_list(i)
+                        self._add_item_as_list(i)
                     #
                     self.__set_item_selected(
                         objs[-1]
@@ -1626,17 +1629,17 @@ class PrxInputAsNodes(_AbsPrxInputExtra):
 
         self._view_mode = 'list'
 
-    def __add_item_comp_as_tree_(self, obj, use_show_thread=False):
-        obj_path = obj.path
-        obj_type = obj.type
-        if obj_path in self._item_dict:
-            prx_item = self._item_dict[obj_path]
+    def _add_item_component_as_tree(self, obj, use_show_thread=False):
+        path = obj.path
+        # obj_type = obj.type
+        if path in self._item_dict:
+            prx_item = self._item_dict[path]
             return False, prx_item, None
         else:
             create_kwargs = dict(
                 name='loading ...',
-                icon=obj.icon,
-                filter_key=obj_path
+                icon=gui_core.GuiIcon.get('database/object'),
+                filter_key=path
             )
             parent = obj.get_parent()
             if parent is not None:
@@ -1649,11 +1652,13 @@ class PrxInputAsNodes(_AbsPrxInputExtra):
                     **create_kwargs
                 )
             #
+            if path == obj.pathsep:
+                prx_item.set_expanded(True)
+
             prx_item.set_checked(True)
-            prx_item.update_keyword_filter_keys_tgt([obj_path, obj_type])
-            obj.set_obj_gui(prx_item)
+            prx_item.update_keyword_filter_keys_tgt([obj.name])
             prx_item.set_gui_dcc_obj(obj, namespace=self.NAMESPACE)
-            self._item_dict[obj_path] = prx_item
+            self._item_dict[path] = prx_item
             #
             if use_show_thread is True:
                 prx_item.set_show_build_fnc(
@@ -1671,46 +1676,26 @@ class PrxInputAsNodes(_AbsPrxInputExtra):
         )
         prx_item.set_tool_tip(
             (
-                'type: {}\n'
                 'path: {}\n'
-            ).format(obj.get_type_name(), obj.get_path())
-        )
-        menu_raw = []
-        menu_raw.extend(
-            obj.get_gui_menu_raw() or []
-        )
-        menu_raw.extend(
-            obj.get_gui_extend_menu_raw() or []
-        )
-        #
-        if use_as_tree is True:
-            menu_raw.extend(
-                [
-                    ('expanded',),
-                    ('expand branch', 'expand', prx_item.set_expand_branch),
-                    ('collapse branch', 'collapse', prx_item.set_collapse_branch),
-                ]
+            ).format(
+                obj.get_path()
             )
-        #
-        prx_item.set_gui_menu_data(menu_raw)
-        prx_item.set_menu_content(obj.get_gui_menu_content())
-        #
-        # self._prx_input.process_event()
+        )
 
-    def __add_item_as_tree(self, obj):
+    def _add_item_as_tree(self, obj):
         ancestors = obj.get_ancestors()
         if ancestors:
             ancestors.reverse()
             for i_rsv_obj in ancestors:
                 ancestor_path = i_rsv_obj.path
                 if ancestor_path not in self._item_dict:
-                    i_is_create, i_prx_item, _ = self.__add_item_comp_as_tree_(i_rsv_obj, use_show_thread=True)
+                    i_is_create, i_prx_item, _ = self._add_item_component_as_tree(i_rsv_obj, use_show_thread=True)
                     if i_is_create is True:
                         i_prx_item.set_expanded(True)
 
-        self.__add_item_comp_as_tree_(obj, use_show_thread=True)
+        self._add_item_component_as_tree(obj, use_show_thread=True)
 
-    def __add_item_as_list(self, obj):
+    def _add_item_as_list(self, obj):
         path = obj.path
         type_name = obj.type_name
         #
@@ -1725,7 +1710,6 @@ class PrxInputAsNodes(_AbsPrxInputExtra):
         #
         prx_item.set_checked(True)
         prx_item.update_keyword_filter_keys_tgt([path, type_name])
-        obj.set_obj_gui(prx_item)
         prx_item.set_gui_dcc_obj(obj, namespace=self.NAMESPACE)
         prx_item.set_tool_tip(path)
         self._item_dict[path] = prx_item
@@ -1733,10 +1717,12 @@ class PrxInputAsNodes(_AbsPrxInputExtra):
         self.__item_show_deferred_fnc(prx_item, use_as_tree=False)
 
     def __set_item_selected(self, obj):
-        item = obj.get_obj_gui()
-        self._prx_input.set_item_selected(
-            item, exclusive=True
-        )
+        path = obj.path
+        if path in self._item_dict:
+            item = self._item_dict[path]
+            self._prx_input.set_item_selected(
+                item, exclusive=True
+            )
 
     def __clear_items_(self):
         self._prx_input.set_clear()
@@ -1751,13 +1737,13 @@ class PrxInputAsNodes(_AbsPrxInputExtra):
             if objs:
                 for i in objs:
                     if self._view_mode == 'list':
-                        self.__add_item_as_list(i)
+                        self._add_item_as_list(i)
                     elif self._view_mode == 'tree':
-                        self.__add_item_as_tree(i)
+                        self._add_item_as_tree(i)
 
-                self.__set_item_selected(
-                    objs[-1]
-                )
+                # self.__set_item_selected(
+                #     objs[-1]
+                # )
         else:
             pass
 
@@ -1827,7 +1813,7 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
 
         self._paths = []
 
-    def __add_item_comp_as_tree_(self, obj, scheme):
+    def _add_item_component_as_tree(self, obj, scheme):
         path = obj.path
         type_name = obj.type
         if path in self._item_dict:
@@ -1968,14 +1954,14 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
             prx_item.set_status(
                 prx_item.ValidationStatus.Unreadable
             )
-        elif obj.get_is_writable() is False:
+        elif obj.get_is_writeable() is False:
             prx_item.set_status(
                 prx_item.ValidationStatus.Unwritable
             )
 
-    def __add_item_as_tree(self, obj, scheme):
+    def _add_item_as_tree(self, obj, scheme):
         if self._root_location is not None:
-            i_is_create, i_prx_item, _ = self.__add_item_as_list(self._root_obj, scheme)
+            i_is_create, i_prx_item, _ = self._add_item_as_list(self._root_obj, scheme)
             if i_is_create is True:
                 i_prx_item.set_expanded(True)
             ancestor_paths = obj.get_ancestor_paths()
@@ -1985,7 +1971,7 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
                 for i_path in ancestor_paths[index:]:
                     if i_path not in self._item_dict:
                         i_obj = self._root_obj.create_dag_fnc(i_path)
-                        i_is_create, i_prx_item, _ = self.__add_item_comp_as_tree_(i_obj, scheme='folder')
+                        i_is_create, i_prx_item, _ = self._add_item_component_as_tree(i_obj, scheme='folder')
                         if i_is_create is True:
                             i_prx_item.set_expanded(True)
             else:
@@ -1997,13 +1983,13 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
                 for i_path in ancestor_paths:
                     i_obj = self._root_obj.create_dag_fnc(i_path)
                     if i_path not in self._item_dict:
-                        i_is_create, i_prx_item, _ = self.__add_item_comp_as_tree_(i_obj, scheme='folder')
+                        i_is_create, i_prx_item, _ = self._add_item_component_as_tree(i_obj, scheme='folder')
                         if i_is_create is True:
                             i_prx_item.set_expanded(True)
         #
-        self.__add_item_comp_as_tree_(obj, scheme)
+        self._add_item_component_as_tree(obj, scheme)
 
-    def __add_item_as_list(self, obj, scheme):
+    def _add_item_as_list(self, obj, scheme):
         path = obj.get_path()
         type_name = obj.get_type_name()
         if path in self._item_dict:
@@ -2062,9 +2048,9 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
                     obj_cur = i_obj
                     #
                     if self._view_mode == 'list':
-                        self.__add_item_as_list(i_obj, i_scheme)
+                        self._add_item_as_list(i_obj, i_scheme)
                     elif self._view_mode == 'tree':
-                        self.__add_item_as_tree(i_obj, i_scheme)
+                        self._add_item_as_tree(i_obj, i_scheme)
                 #
                 self.__set_item_selected(obj_cur)
         else:

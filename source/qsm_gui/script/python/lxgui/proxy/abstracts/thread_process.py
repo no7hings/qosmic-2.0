@@ -108,7 +108,7 @@ class AbsQtThreadProcessBase(object):
 
     def execute(self):
         self.restore()
-        directory_path = bsc_storage.StgUserMtd.get_user_batch_exception_directory(self._tag, create=True)
+        directory_path = bsc_storage.StgUser.get_user_batch_exception_directory(self._tag, create=True)
         self._batch_exception_log_file_path = '{}/{}.log'.format(directory_path, bsc_core.BscUuid.generate_new())
 
         self.build_for_data()

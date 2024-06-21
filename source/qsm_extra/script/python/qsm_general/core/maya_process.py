@@ -14,7 +14,7 @@ class MayaCacheProcess(object):
         # do not use unicode
         # windows
         cmd_scripts = [
-            'rez-env maya-{} qsm_dcc_main'.format(maya_version),
+            'rez-env maya-{} mtoa qsm_dcc_main'.format(maya_version),
             (
                 r'-- mayabatch -command '
                 r'"python('

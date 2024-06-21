@@ -961,7 +961,7 @@ class AbsNodeTemplate(AbsTemplateBase):
         pass
 
     @classmethod
-    def get_qt_object(cls, maya_ui_name, qt_type=QtWidgets.QWidget):
+    def to_qt_object(cls, maya_ui_name, qt_type=QtWidgets.QWidget):
         ptr = OpenMayaUI.MQtUtil.findControl(maya_ui_name)
         if ptr is None:
             ptr = OpenMayaUI.MQtUtil.findLayout(maya_ui_name)
@@ -975,7 +975,7 @@ class AbsNodeTemplate(AbsTemplateBase):
     @classmethod
     def get_current_widget(cls):
         currentWidgetName = cmds.setParent(query=True)
-        return cls.get_qt_object(currentWidgetName)
+        return cls.to_qt_object(currentWidgetName)
 
     def create_port(self, atr_path):
         pass

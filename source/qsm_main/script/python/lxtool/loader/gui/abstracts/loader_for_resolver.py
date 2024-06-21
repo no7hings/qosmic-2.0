@@ -373,7 +373,7 @@ class _GuiTaskOpt(
             prx_item_widget.set_gui_attribute('path', rsv_task.get_path())
             prx_item_widget.set_name(rsv_task.get_path())
             prx_item_widget.set_name_dict(name_dict)
-            prx_item_widget.set_icon_by_name(step)
+            prx_item_widget.set_icon_by_text(step)
             prx_item_widget.set_tool_tip(rsv_task.description)
             prx_item_widget.set_sort_name_key(rsv_task.get_name())
             prx_item_widget.set_keyword_filter_keys_tgt(

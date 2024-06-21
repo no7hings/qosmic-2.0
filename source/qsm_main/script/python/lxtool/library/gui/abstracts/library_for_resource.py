@@ -843,7 +843,7 @@ class _GuiResourceOpt(
             language=1
         )
         prx_item_widget.set_name_dict(name_dict)
-        # prx_item_widget.set_icon_by_name(dtb_type.name)
+
         prx_item_widget.set_tool_tip(
             dtb_resource.to_string()
         )

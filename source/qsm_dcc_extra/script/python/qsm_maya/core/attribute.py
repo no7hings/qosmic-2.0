@@ -11,6 +11,13 @@ class NodeAttribute(object):
         return '{}.{}'.format(path, atr_name)
 
     @classmethod
+    def to_node_path(cls, name):
+        _ = cmds.ls(name, long=1)
+        if not _:
+            raise RuntimeError()
+        return _[0]
+
+    @classmethod
     def get_value(cls, path, atr_name):
         return cmds.getAttr(cls.to_atr_path(path, atr_name))
 
@@ -120,9 +127,9 @@ class NodeAttribute(object):
         return lis
 
     @classmethod
-    def get_source_node(cls, path, atr_name, node_type=None, skip_conversion_nodes=0):
+    def get_source_node(cls, path, atr_name, node_type=None, skip_conversion_nodes=0, shapes=1):
         kwargs = dict(
-            destination=0, source=1, skipConversionNodes=skip_conversion_nodes
+            destination=0, source=1, skipConversionNodes=skip_conversion_nodes, shapes=shapes
         )
         if node_type is not None:
             kwargs['type'] = node_type
@@ -131,12 +138,12 @@ class NodeAttribute(object):
             cls.to_atr_path(path, atr_name), **kwargs
         ) or []
         if _:
-            return _[0]
+            return cls.to_node_path(_[0])
 
     @classmethod
-    def get_target_nodes(cls, path, atr_name, node_type=None):
+    def get_target_nodes(cls, path, atr_name, node_type=None, skip_conversion_nodes=0, shapes=1):
         kwargs = dict(
-            destination=1, source=0
+            destination=1, source=0, skipConversionNodes=skip_conversion_nodes, shapes=shapes
         )
         if node_type is not None:
             kwargs['type'] = node_type

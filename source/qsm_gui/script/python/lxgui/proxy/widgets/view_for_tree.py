@@ -111,7 +111,7 @@ class PrxTreeView(
         #
         self._prx_filter_bar = self._prx_filer_bar_0
         self._prx_filter_bar.set_completion_gain_fnc(
-            self._view_keyword_filter_completion_gain_fnc
+            self._gui_keyword_filter_completion_gain_fnc
         )
         self._keyword_filter_prx_items = []
 
@@ -439,7 +439,7 @@ class PrxTreeView(
         self._prx_filter_bar.set_completion_gain_fnc(fnc)
 
     # noinspection PyUnusedLocal
-    def _view_keyword_filter_completion_gain_fnc(self, *args, **kwargs):
+    def _gui_keyword_filter_completion_gain_fnc(self, *args, **kwargs):
         keyword = args[0]
         if keyword:
             if self._keyword_filter_completion_cache is None:

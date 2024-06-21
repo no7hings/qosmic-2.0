@@ -128,7 +128,7 @@ class GuiPrxScpForTreeTagFilter(object):
         name = bsc_core.SPathMtd.unquote_to(path_dag_opt.name)
         path = bsc_core.SPathMtd.unquote_to(path_dag_opt.path)
         prx_item.set_name(name)
-        prx_item.set_icon_by_name(path, 0)
+        prx_item.set_icon_by_text(name, 0)
         prx_item.set_tool_tip(path)
 
     def _add_prx_item_src_(self, path):
@@ -343,7 +343,7 @@ class GuiPrxScpForTreeAdd(gui_prx_abstracts.AbsGuiPrxCacheDef):
             prx_item.set_gui_dcc_obj(obj, namespace=self._dcc_namespace)
             prx_item.set_expanded(True)
             prx_item.set_checked(False)
-            prx_item.set_icon_by_name(obj.type_name, 1)
+            prx_item.set_icon_by_text(obj.type_name, 1)
             self._item_dict[obj_path] = prx_item
             return prx_item
 
@@ -651,7 +651,7 @@ class GuiPrxScpForStorageTreeAdd(gui_prx_abstracts.AbsGuiPrxCacheDef):
                         tool_tip_.append(i_file_tile)
                     else:
                         readable = i_file_tile.get_is_readable()
-                        writable = i_file_tile.get_is_writable()
+                        writable = i_file_tile.get_is_writeable()
                         tool_tip_.append(
                             u'path="{}"; readable={}; writable={}'.format(
                                 i_file_tile.path, readable, writable
@@ -690,7 +690,7 @@ class GuiPrxScpForStorageTreeAdd(gui_prx_abstracts.AbsGuiPrxCacheDef):
                 prx_item.set_status(prx_item.ValidationStatus.Lost)
             elif obj.get_is_readable() is False:
                 prx_item.set_status(prx_item.ValidationStatus.Unreadable)
-            elif obj.get_is_writable() is False:
+            elif obj.get_is_writeable() is False:
                 prx_item.set_status(prx_item.ValidationStatus.Unwritable)
             else:
                 prx_item.set_status(prx_item.ValidationStatus.Normal)
@@ -865,7 +865,7 @@ class GuiPrxScpForTreeAdd1(object):
         menu_raw = obj.get_gui_menu_raw()
 
         prx_item.set_icon_by_file(icon)
-        prx_item.set_icon_by_name(obj_type_name, 1)
+        prx_item.set_icon_by_text(obj_type_name, 1)
         prx_item.set_name(obj_name)
         prx_item.set_tool_tip(obj_path)
 

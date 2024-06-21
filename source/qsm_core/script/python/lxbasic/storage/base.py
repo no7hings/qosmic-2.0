@@ -54,7 +54,7 @@ from ..core import process as _cor_process
 from ..core import thread as _cor_thread
 
 
-class StgRpcMtd(object):
+class StgRpc(object):
     RPC_SERVER = '10.10.206.117'
     RPC_PORT = 58888
     PATHSEP = '/'
@@ -224,7 +224,7 @@ class StgRpcMtd(object):
             )
 
 
-class StgSshMtd(object):
+class StgSsh(object):
     GROUP_ID_QUERY = {
         'cg_group': 20002,
         # 'cg_grp': 20002,
@@ -321,7 +321,7 @@ class StgSshMtd(object):
             'command=`{}`'.format(cmd)
         )
         #
-        password = StgSshMtd.MakePassword(120, 'KBHBOCCCMDMBKEBDCBKBLAKA')
+        password = StgSsh.MakePassword(120, 'KBHBOCCCMDMBKEBDCBKBLAKA')
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(
@@ -438,31 +438,31 @@ class StgSshOpt(object):
         self._nas_path = _cor_base.BscStorage.set_map_to_nas(path)
 
     def remove_all_group(self):
-        group_data = StgSshMtd._get_all_group_data_1_(self._nas_path)
+        group_data = StgSsh._get_all_group_data_1_(self._nas_path)
         group_data.reverse()
         for i_group_name, i_index, i_content in group_data:
-            if i_group_name in StgSshMtd.GROUP_ID_QUERY:
+            if i_group_name in StgSsh.GROUP_ID_QUERY:
                 i_kwargs = dict(
                     path=self._nas_path,
                     index=i_index
                 )
-                i_cmd = StgSshMtd.CMD_QUERY['remove_grp'].format(
+                i_cmd = StgSsh.CMD_QUERY['remove_grp'].format(
                     **i_kwargs
                 )
-                StgSshMtd._set_nas_cmd_run_(i_cmd)
+                StgSsh._set_nas_cmd_run_(i_cmd)
 
     def set_read_only_for_groups(self, group_names):
         for i_group_name in group_names:
-            if i_group_name in StgSshMtd.GROUP_ID_QUERY:
-                i_group_id = StgSshMtd.GROUP_ID_QUERY[i_group_name]
+            if i_group_name in StgSsh.GROUP_ID_QUERY:
+                i_group_id = StgSsh.GROUP_ID_QUERY[i_group_name]
                 i_kwargs = dict(
                     group_id=i_group_id,
                     path=self._nas_path,
                 )
-                i_cmd = StgSshMtd.CMD_QUERY['read_only'].format(
+                i_cmd = StgSsh.CMD_QUERY['read_only'].format(
                     **i_kwargs
                 )
-                StgSshMtd._set_nas_cmd_run_(i_cmd)
+                StgSsh._set_nas_cmd_run_(i_cmd)
 
     def set_just_read_only_for(self, group_names):
         self.remove_all_group()
@@ -470,13 +470,13 @@ class StgSshOpt(object):
         self.set_read_only_for_groups(group_names)
 
     def get_all_group_data(self):
-        return StgSshMtd._get_all_group_data_1_(self._nas_path)
+        return StgSsh._get_all_group_data_1_(self._nas_path)
 
     def get_all_user_data(self):
-        return StgSshMtd._get_all_user_data_(self._nas_path)
+        return StgSsh._get_all_user_data_(self._nas_path)
 
     def remove_all_user(self):
-        user_data = StgSshMtd._get_all_user_data_(self._nas_path)
+        user_data = StgSsh._get_all_user_data_(self._nas_path)
         user_data.reverse()
         for i_user_name, i_index, i_content in user_data:
             print i_user_name, i_index
@@ -484,16 +484,16 @@ class StgSshOpt(object):
                 path=self._nas_path,
                 index=i_index
             )
-            i_cmd = StgSshMtd.CMD_QUERY['remove_grp'].format(
+            i_cmd = StgSsh.CMD_QUERY['remove_grp'].format(
                 **i_kwargs
             )
-            StgSshMtd._set_nas_cmd_run_(i_cmd)
+            StgSsh._set_nas_cmd_run_(i_cmd)
 
     def get_all_data(self):
-        return StgSshMtd._get_all_data_(self._nas_path)
+        return StgSsh._get_all_data_(self._nas_path)
 
 
-class StgUserMtd(object):
+class StgUser(object):
     @classmethod
     def get_windows_home(cls):
         return '{}{}'.format(
@@ -626,7 +626,7 @@ class StgSystem(object):
     def open_directory_force(cls, path):
         path = _cor_raw.auto_string(path)
         if os.path.exists(path) is False:
-            path = StgExtraMtd.get_exists_component(path)
+            path = StgExtra.get_exists_component(path)
 
         cls.open_directory(path)
 
@@ -655,12 +655,12 @@ class StgSystem(object):
             elif os.path.isfile(path):
                 cls.open_file(path)
         else:
-            component = StgExtraMtd.get_exists_component(path)
+            component = StgExtra.get_exists_component(path)
             if component:
                 cls.open_directory(component)
 
 
-class StgExtraMtd(object):
+class StgExtra(object):
     @classmethod
     def get_exists_component(cls, path):
         units = _cor_path.PthNodeMtd.get_dag_component_paths(path)
@@ -691,7 +691,7 @@ class StgExtraMtd(object):
             )
 
 
-class StgPathLinkMtd(object):
+class StgPathLink(object):
     @classmethod
     def link_to(cls, path_src, path_tgt):
         if os.path.exists(path_tgt) is False:
@@ -827,7 +827,7 @@ class StgDirectoryMtdForMultiply(object):
         _ = _scan_base.ScanBase.get_all_file_paths(directory_path)
         for i_file_path in _:
             i_opt = StgFileOpt(i_file_path)
-            i_number_args = StgFileMtdForTiles.get_number_args(
+            i_number_args = StgFileTiles.get_number_args(
                 i_opt.name, name_pattern
             )
             if i_number_args:
@@ -859,7 +859,7 @@ class StgFileMtd(object):
         return os.path.splitext(file_path)[-1]
 
 
-class StgFileMtdForTiles(object):
+class StgFileTiles(object):
     """
     methods using for multiply file
     etc. "/tmp/image.1001.exr" convert to "/tmp/image.####.exr"
@@ -913,7 +913,7 @@ class StgFileMtdForTiles(object):
                 **dict(format=file_opt.get_format())
             )
             if _cor_pattern.PtnFileTilesMtd.get_is_valid(i_name_pattern):
-                i_number_args = StgFileMtdForTiles.get_number_args(
+                i_number_args = StgFileTiles.get_number_args(
                     file_opt.name, i_name_pattern
                 )
                 if i_number_args:
@@ -1072,7 +1072,7 @@ class StgPathOpt(object):
     def get_is_readable(self):
         return os.access(self._path, os.R_OK)
 
-    def get_is_writable(self):
+    def get_is_writeable(self):
         return os.access(self._path, os.W_OK)
 
     def map_to_current(self):
@@ -1681,57 +1681,57 @@ class StgPermissionDefaultMtd(object):
 class StgPermissionNewMtd(StgPermissionDefaultMtd):
     @classmethod
     def create_directory(cls, path, mode):
-        StgRpcMtd.create_directory(path)
+        StgRpc.create_directory(path)
 
     @classmethod
     def change_mode(cls, path, mode):
-        StgRpcMtd.change_mode(path, mode)
+        StgRpc.change_mode(path, mode)
 
     @classmethod
     def change_owner(cls, path, user='artist', group='artists'):
-        StgRpcMtd.change_owner(path, user, group)
+        StgRpc.change_owner(path, user, group)
 
     @classmethod
     def lock(cls, path):
-        StgRpcMtd.change_mode(
+        StgRpc.change_mode(
             path, '555'
         )
 
     @classmethod
     def unlock(cls, path):
-        StgRpcMtd.change_mode(
+        StgRpc.change_mode(
             path, '775'
         )
 
     @classmethod
     def delete(cls, path):
-        StgRpcMtd.delete(
+        StgRpc.delete(
             path
         )
 
     @classmethod
     def lock_all_directories(cls, path):
-        StgRpcMtd.change_mode(
+        StgRpc.change_mode(
             path, '555'
         )
         ds = _scan_base.ScanBase.get_all_directory_paths(
             path
         )
         for i in ds:
-            StgRpcMtd.change_mode(
+            StgRpc.change_mode(
                 i, '555'
             )
 
     @classmethod
     def unlock_all_directories(cls, path):
-        StgRpcMtd.change_mode(
+        StgRpc.change_mode(
             path, '775'
         )
         ds = _scan_base.ScanBase.get_all_directory_paths(
             path
         )
         for i in ds:
-            StgRpcMtd.change_mode(
+            StgRpc.change_mode(
                 i, '775'
             )
 
@@ -1741,20 +1741,20 @@ class StgPermissionNewMtd(StgPermissionDefaultMtd):
             path
         )
         for i in fs:
-            StgRpcMtd.change_mode(
+            StgRpc.change_mode(
                 i, '555'
             )
 
     @classmethod
     def unlock_all_files(cls, path):
-        StgRpcMtd.change_mode(
+        StgRpc.change_mode(
             path, '775'
         )
         ds = _scan_base.ScanBase.get_all_file_paths(
             path
         )
         for i in ds:
-            StgRpcMtd.change_mode(
+            StgRpc.change_mode(
                 i, '775'
             )
 
@@ -1765,7 +1765,7 @@ class StgPermissionNewMtd(StgPermissionDefaultMtd):
             cls.change_owner(file_path_tgt)
             cls.change_mode(file_path_tgt, '775')
         else:
-            StgRpcMtd.copy_to_file(
+            StgRpc.copy_to_file(
                 file_path_src, file_path_tgt, replace=replace
             )
 

@@ -72,7 +72,13 @@ class PrxTagInput(
     def set_node_checked(self, path, boolean):
         _ = self.get_one(path)
         if _:
-            _._set_checked_(boolean)
+            _._apply_check_state_(boolean)
+    
+    def expand_exclusive(self, path):
+        self._qt_view._expand_exclusive_(path)
+    
+    def clear_all_checked(self):
+        self._qt_view._clear_all_checked_()
 
     def get_top_tool_bar(self):
         return self._top_prx_tool_bar

@@ -20,7 +20,6 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
             item_prx.set_image('/data/f/vedio_test/laohu_da.rig.layout_rigging.v002.thumbnail.jpg')
             item_prx.set_icon_by_file('application/maya')
             item_prx.set_name(str(i).zfill(9))
-            # item_prx.set_icon_by_name('asset')
             item_prx.set_gui_menu_data(
                 [
                     ('Open folder', 'file/open-folder', None),

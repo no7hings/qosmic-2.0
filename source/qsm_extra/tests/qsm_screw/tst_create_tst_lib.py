@@ -21,7 +21,7 @@ if __name__ == '__main__':
         'test'
     )
     #
-    stage.connect()
+    # stage.connect()
     stage.build()
 
     random.seed(0)
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     ctimes = range(minimum, maximum)
 
     for i in range(100):
-        i_node_path = '/{}/test_{}'.format(stage.key, i)
+        i_node_path = '/test_{}'.format(i)
 
         stage.create_node(i_node_path, ctime=random.choice(ctimes))
         if i%3:

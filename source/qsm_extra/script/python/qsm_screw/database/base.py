@@ -20,7 +20,8 @@ __all__ = [
 class _Entity(Model):
     enable = BooleanField(default=True)
 
-    trash = BooleanField(default=True)
+    trash = BooleanField(default=False)
+    permission = CharField(default='*')
 
     uuid = UUIDField(default=uuid.uuid1)
 

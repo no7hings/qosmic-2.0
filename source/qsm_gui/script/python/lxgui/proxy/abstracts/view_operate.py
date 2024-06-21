@@ -161,7 +161,7 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
                 prx_item.set_status(
                     prx_item.ValidationStatus.Unreadable
                 )
-            elif directory_opt.get_is_writable() is False:
+            elif directory_opt.get_is_writeable() is False:
                 prx_item.set_status(
                     prx_item.ValidationStatus.Unwritable
                 )
@@ -318,7 +318,7 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
                 prx_item.set_status(
                     prx_item.ValidationStatus.Unreadable
                 )
-            elif stg_opt.get_is_writable() is False:
+            elif stg_opt.get_is_writeable() is False:
                 prx_item.set_status(
                     prx_item.ValidationStatus.Unwritable
                 )

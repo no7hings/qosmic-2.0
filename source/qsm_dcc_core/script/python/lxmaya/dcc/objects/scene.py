@@ -567,7 +567,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
             import lxgui.qt.core as gui_qt_core
 
             obj.set_gui_attribute(
-                'icon', gui_qt_core.GuiQtMaya.generate_qt_icon_by_name(obj_type_name)
+                'icon', gui_qt_core.QtMaya.generate_qt_icon_by_name(obj_type_name)
             )
         return obj
 

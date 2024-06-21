@@ -25,7 +25,6 @@ class QtTestWidget(
         image = QtGui.QImage(
             'E:/myworkspace/qosmic-2.0/source/qsm_resource/resources/icons/application/maya.png'
         )
-        print image.hasAlphaChannel()
         pixmap = QtGui.QPixmap(image)
         painter.drawPixmap(
             self.rect(),
@@ -242,7 +241,7 @@ class QtVideoPlayWidget(
                     if self._image_frame is not None:
                         pixmap = QtGui.QPixmap.fromImage(self._image_frame, QtCore.Qt.AutoColor)
                         self._pixmap_frame = pixmap.scaled(
-                            self._image_draw_rect.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation
+                            self._image_draw_rect.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation
                         )
                         self._pixmap_cache_dict[self._frame_index] = self._pixmap_frame
                 
@@ -297,6 +296,9 @@ class QtVideoPlayWidget(
                     text_color=self._text_color,
                     text_option=self._text_option,
                 )
+
+            self.parent()._draw_index_(painter)
+            self.parent()._draw_check_(painter)
 
     def _do_play_(self):
         if self._video_flag is True:
@@ -383,9 +385,9 @@ class QtItemWidgetForList(
     QtWidgets.QWidget,
 
     _qt_abstracts.AbsQtVirtualItemWidgetBaseDef,
+    _qt_abstracts.AbsQtItemWidgetBaseDef,
 
     _qt_abstracts.AbsQtMediaBaseDef,
-    _qt_abstracts.AbsQtItemNameBaseDef,
 
     _qt_abstracts.AbsQtPathBaseDef,
     _qt_abstracts.AbsQtIndexBaseDef,
@@ -426,22 +428,8 @@ class QtItemWidgetForList(
             )
 
             frm_bsc_x, frm_bsc_y, frm_bsc_w, frm_bsc_h = (
-                x+frm_mrg, y+frm_mrg, grd_w-frm_mrg*2-rdu, grd_h-frm_mrg*2-rdu
+                x, y, grd_w-rdu, grd_h-rdu
             )
-            # index
-            if self._index_flag is True:
-                idx_mrg = self._index_margin
-                idx_frm_x, idx_frm_y, idx_frm_w, idx_frm_h = (
-                    frm_bsc_x+idx_mrg, frm_bsc_y+idx_mrg, frm_bsc_w-idx_mrg*2, frm_bsc_h-idx_mrg*2
-                )
-                if self._index_text:
-                    idx_w, idx_h = QtGui.QFontMetrics(self._index_font).width(self._index_text), self._index_h
-                    self._index_draw_rect.setRect(
-                        idx_frm_x+idx_frm_w-idx_w, idx_frm_y, idx_w, idx_h
-                    )
-                    self._index_draw_flag = True
-                else:
-                    self._index_draw_flag = False
             #
             if self._view._get_is_grid_mode_():
                 self._do_update_widget_frame_geometries_for_grid_mode_()
@@ -458,7 +446,7 @@ class QtItemWidgetForList(
         rdu = self._shadow_radius
 
         frm_bsc_x, frm_bsc_y, frm_bsc_w, frm_bsc_h = (
-            x+frm_mrg, y+frm_mrg, grd_w-frm_mrg*2-rdu, grd_h-frm_mrg*2-rdu
+            x, y, grd_w-rdu, grd_h-rdu
         )
         self._frame_main_rect.setRect(
             frm_bsc_x, frm_bsc_y, frm_bsc_w, frm_bsc_h
@@ -507,9 +495,24 @@ class QtItemWidgetForList(
                 self._name_text_draw_flag = False
 
             self._name_dict_draw_flag = False
+        # index
+        if self._index_flag is True:
+            idx_mrg = self._index_margin
+            idx_frm_x, idx_frm_y, idx_frm_w, idx_frm_h = (
+                frm_bsc_x+idx_mrg, frm_bsc_y+idx_mrg, frm_bsc_w-idx_mrg*2, frm_bsc_h-idx_mrg*2
+            )
+            if self._index_text:
+                idx_w, idx_h = QtGui.QFontMetrics(self._index_font).width(self._index_text), self._index_h
+                self._index_draw_rect.setRect(
+                    idx_frm_x+idx_frm_w-idx_w, idx_frm_y, idx_w, idx_h
+                )
+                self._index_draw_flag = True
+            else:
+                self._index_draw_flag = False
         # check
+        chk_mrg = 4
         chk_frm_w, chk_frm_h = self._check_frame_size
-        chk_frm_x, chk_frm_y = frm_bsc_x, frm_bsc_y
+        chk_frm_x, chk_frm_y = frm_bsc_x+chk_mrg, frm_bsc_y+chk_mrg
         self._check_frame_rect.setRect(
             chk_frm_x, chk_frm_y, chk_frm_w, chk_frm_h
         )
@@ -527,7 +530,7 @@ class QtItemWidgetForList(
         rdu = self._shadow_radius
 
         frm_bsc_x, frm_bsc_y, frm_bsc_w, frm_bsc_h = (
-            x+frm_mrg, y+frm_mrg, w-frm_mrg*2-rdu, h-frm_mrg*2-rdu
+            x, y, w-rdu, h-rdu
         )
         img_w, img_h = self._image_size
         img_frm_w, img_frm_h = int(float(img_w)/img_h*frm_bsc_h), frm_bsc_h
@@ -578,9 +581,24 @@ class QtItemWidgetForList(
             else:
                 self._name_dict_draw_flag = False
             self._name_text_draw_flag = False
+        # index
+        if self._index_flag is True:
+            idx_mrg = self._index_margin
+            idx_frm_x, idx_frm_y, idx_frm_w, idx_frm_h = (
+                frm_bsc_x+idx_mrg, frm_bsc_y+idx_mrg, frm_bsc_w-idx_mrg*2, frm_bsc_h-idx_mrg*2
+            )
+            if self._index_text:
+                idx_w, idx_h = QtGui.QFontMetrics(self._index_font).width(self._index_text), self._index_h
+                self._index_draw_rect.setRect(
+                    idx_frm_x+idx_frm_w-idx_w, idx_frm_y, idx_w, idx_h
+                )
+                self._index_draw_flag = True
+            else:
+                self._index_draw_flag = False
         # check
+        chk_mrg = 2
         chk_frm_w, chk_frm_h = self._check_frame_size
-        chk_frm_x, chk_frm_y = frm_bsc_x+frm_bsc_w-chk_frm_w, frm_bsc_x
+        chk_frm_x, chk_frm_y = frm_bsc_x+chk_mrg, frm_bsc_y+chk_mrg
         self._check_frame_rect.setRect(
             chk_frm_x, chk_frm_y, chk_frm_w, chk_frm_h
         )
@@ -746,7 +764,8 @@ class QtItemWidgetForList(
             # index
             self._draw_index_(painter)
             # check
-            self._draw_check_(painter)
+            if self._video_play_widget is None:
+                self._draw_check_(painter)
     
     def _draw_check_(self, painter):
         if self._is_hovered or self._is_checked:

@@ -1,6 +1,6 @@
 options:
-    gui_name: 'Test'
-    gui_name_chs: '测试'
+    gui_name: 'Maya Node'
+    gui_name_chs: 'MAYA节点'
 
 entities:
     types:
@@ -28,80 +28,261 @@ entities:
             gui_name_chs: '变形器'
             gui_icon_name: 'database/group'
 
-        /deformers/bend:
+        /deformers/non_linear:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '非线性'
+            gui_icon_name: 'database/group'
+
+        /deformers/non_linear/bend:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '弯曲'
 
-        /deformers/flare:
+        /deformers/non_linear/flare:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '扩张'
 
-        /deformers/sine:
+        /deformers/non_linear/sine:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '正弦'
 
-        /deformers/squash:
+        /deformers/non_linear/squash:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '挤压'
 
-        /deformers/twist:
+        /deformers/non_linear/twist:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '扭曲'
 
-        /deformers/wave:
+        /deformers/non_linear/wave:
             category: 'node'
             type: 'node'
             gui_name_chs: '波浪'
-
-        /cfx:
+        
+        /effects:
             category: 'group'
             type: 'group'
 
-            gui_name_chs: 'CFX'
+            gui_name_chs: 'VFX & CFX'
             gui_icon_name: 'database/group'
 
-        /cfx/n_hair:
+        /effects/nucleus:
+            category: 'group'
+            type: 'group'
+
+            gui_name: 'Nucleus'
+            gui_name_chs: '核心'
+            gui_icon_name: 'database/group'
+
+        /effects/nucleus/n_hair:
             category: 'node'
             type: 'node'
 
             gui_name: 'nHair'
             gui_name_chs: 'nHair'
 
-        /cfx/n_cloth:
+        /effects/nucleus/n_cloth:
             category: 'node'
             type: 'node'
 
             gui_name: 'nCloth'
             gui_name_chs: 'nCloth'
 
-        /cfx/nucleus:
+        /effects/nucleus/n_rigid:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'nRigid'
+            gui_name_chs: 'nRigid'
+
+        /effects/nucleus/n_particle:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'nParticle'
+            gui_name_chs: 'nParticle'
+
+        /effects/nucleus/nucleus:
             category: 'node'
             type: 'node'
 
             gui_name_chs: '解算器'
 
-        /dynamics:
+        /effects/fields:
             category: 'group'
             type: 'group'
 
-            gui_name_chs: '动力学'
+            gui_name_chs: '场'
             gui_icon_name: 'database/group'
 
-        /dynamics/air_field:
+        /effects/fields/air_field:
             category: 'node'
             type: 'node'
 
-            gui_name_chs: '风场'
+            gui_name_chs: '空气'
+
+        /effects/fields/drag_field:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '阻力'
+
+        /effects/fields/gravity_field:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '重力'
+
+        /effects/fields/newton_field:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '牛顿'
+
+        /effects/fields/radial_field:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '径向'
+
+        /effects/fields/turbulence_field:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '湍流'
+
+        /effects/fields/uniform_field:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '一致'
+
+        /effects/fields/vortex_field:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '旋涡'
+
+        /effects/qualoth:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: 'Qualoth'
+            gui_icon_name: 'database/group'
+
+        /effects/qualoth/ql_cloth:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: 'qlCloth'
+
+        /effects/qualoth/ql_solver:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: 'qlSolver'
+
+        /animation:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '动画'
+            gui_icon_name: 'database/group'
+
+        /animation/constrains:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '约束'
+            gui_icon_name: 'database/group'
+
+        /animation/constrains/motion_path:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '运动路径'
+
+        /look:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '视觉'
+            gui_icon_name: 'database/group'
+
+        /look/shader:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '材质'
+            gui_icon_name: 'database/group'
+
+        /look/shader/surface:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '表面'
+            gui_icon_name: 'database/group'
+
+        /look/shader/texture:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '贴图'
+            gui_icon_name: 'database/group'
+
+        /look/shader/regular:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '常规'
+            gui_icon_name: 'database/group'
+
+        /look/light:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '灯光'
+            gui_icon_name: 'database/group'
+
+        /look/light/regular:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '常规'
+            gui_icon_name: 'database/group'
+
+        /scene:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '场景'
+            gui_icon_name: 'database/group'
+
+        /scene/animation:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '动画'
+            gui_icon_name: 'database/group'
+
+        /scene/animation/regular:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '常规'
+            gui_icon_name: 'database/group'
+
 
     tags:
         /:
@@ -186,11 +367,42 @@ entities:
             gui_name: 'Long Time Ago'
             gui_name_chs: '很久以前'
 
+        /purpose:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '目的'
+            gui_icon_name: 'database/group'
+
+        /purpose/test:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '测试'
+
+        /purpose/layout:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '分镜'
+
+        /purpose/animation:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '动画'
+
+        /purpose/simulation:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '解算'
+
         /parts:
             category: 'group'
             type: 'group'
-            gui_name_chs: '部件'
 
+            gui_name_chs: '部件'
             gui_icon_name: 'database/group'
 
         /parts/hair:
@@ -208,8 +420,8 @@ entities:
         /material:
             category: 'group'
             type: 'group'
-            gui_name_chs: '材料'
 
+            gui_name_chs: '材料'
             gui_icon_name: 'database/group'
 
         /material/leather:

@@ -6,7 +6,7 @@ import lxbasic.storage as bsc_storage
 from .. import core as rsv_core
 
 
-class RsvPermissionMtd(bsc_storage.StgSshMtd):
+class RsvPermissionMtd(bsc_storage.StgSsh):
     @classmethod
     def set_entity_task_create(cls, **kwargs):
         r = rsv_core.RsvBase.generate_root()

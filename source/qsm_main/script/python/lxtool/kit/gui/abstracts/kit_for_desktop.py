@@ -638,11 +638,11 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
                     ('open folder', 'file/open-folder', session.open_configure_directory),
                     (),
                     # todo: may be not useful now
-                    # (
-                    #     'save main icon to file', 'file/file', functools.partial(
-                    #         self.__save_main_icon_to_file, page_name, group_sub_name, session
-                    #     )
-                    # )
+                    (
+                        'save main icon to file', 'file/file', functools.partial(
+                            self.__save_main_icon_to_file, page_name, group_sub_name, session
+                        )
+                    )
                 ]
             )
 
@@ -868,9 +868,9 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
                     if icon_style is not None:
                         prx_tool.widget._set_icon_style_(icon_style)
                     prx_tool.set_icon_color(icon_color)
-                    prx_tool.set_icon_by_name(name)
+                    prx_tool.set_icon_by_text(name)
                 else:
-                    prx_tool.set_icon_by_name(name)
+                    prx_tool.set_icon_by_text(name)
 
                 if icon_sub_name:
                     prx_tool.set_icon_sub_name(icon_sub_name)
@@ -915,7 +915,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
                 if icon_name:
                     prx_tool.set_icon_name(icon_name)
                 else:
-                    prx_tool.set_icon_by_name(name)
+                    prx_tool.set_icon_by_text(name)
 
                 if icon_sub_name:
                     prx_tool.set_icon_sub_name(icon_sub_name)

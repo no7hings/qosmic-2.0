@@ -310,6 +310,7 @@ class AbsObjDagExtraDef(object):
         ) != []
 
     def get_as_new_name(self, new_name):
+        # noinspection PyArgumentList
         return self.__class__(
             '{}/{}'.format(
                 self.get_parent_path(), new_name
@@ -939,8 +940,8 @@ class AbsObjStgExtraDef(object):
     def get_permission(self):
         return bsc_storage.StgPathMtd.get_permission(self.path)
 
-    def get_is_writable(self):
-        return bsc_storage.StgPathMtd.get_is_writable(self.path)
+    def get_is_writeable(self):
+        return bsc_storage.StgPathMtd.get_is_writeable(self.path)
 
     def get_is_readable(self):
         return bsc_storage.StgPathMtd.get_is_readable(self.path)
@@ -1256,7 +1257,7 @@ class AbsStgFile(
 
     def do_delete(self):
         if self.get_is_exists() is True:
-            if self.get_is_writable() is True:
+            if self.get_is_writeable() is True:
                 os.remove(self.path)
                 bsc_log.Log.trace_method_result(
                     'file delete',
@@ -1273,7 +1274,7 @@ class AbsStgFile(
             file_tgt = self.__class__(file_path_tgt)
             if replace is True:
                 if bsc_storage.StgPathMtd.get_is_exists(file_path_tgt) is True:
-                    if bsc_storage.StgPathMtd.get_is_writable(file_path_tgt) is True:
+                    if bsc_storage.StgPathMtd.get_is_writeable(file_path_tgt) is True:
                         os.remove(file_tgt.path)
                         shutil.copy2(self.path, file_tgt.path)
                         return True, bsc_log.Log.trace_method_result(

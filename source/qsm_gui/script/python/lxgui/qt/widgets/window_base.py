@@ -12,6 +12,8 @@ import lxbasic.web as bsc_web
 
 import lxbasic.core as bsc_core
 
+from ... import core as _gui_core
+# qt
 from ..core.wrap import *
 
 from .. import core as _qt_core
@@ -126,7 +128,7 @@ class AbsQtMainWindowDef(object):
         )
 
 
-    def _set_icon_name_text_(self, text):
+    def _set_icon_by_text_(self, text):
         self._widget.setWindowIcon(
             _qt_core.GuiQtIcon.generate_by_text(text)
         )
@@ -573,7 +575,6 @@ class QtMainWindow(
         #
         self.setPalette(_qt_core.GuiQtDcc.generate_qt_palette())
         self.setAutoFillBackground(True)
-        # self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         #
         self.setFont(_qt_core.QtFonts.NameNormal)
 
@@ -667,10 +668,24 @@ class QtMainWindow(
         w._set_ok_visible_(True)
         w._set_no_visible_(True)
         w._set_message_(message)
+        if 'status' in kwargs:
+            status = kwargs['status']
+            if status == 'warning':
+                w._set_status_(
+                    _gui_core.GuiValidationStatus.Warning
+                )
+            elif status == 'error':
+                w._set_status_(
+                    _gui_core.GuiValidationStatus.Error
+                )
+            elif status == 'correct':
+                w._set_status_(
+                    _gui_core.GuiValidationStatus.Correct
+                )
         w._do_exec_()
         return w._get_result_()
 
-    def _set_icon_name_text_(self, text):
+    def _set_icon_by_text_(self, text):
         self.setWindowIcon(
             _qt_core.GuiQtIcon.generate_by_text(text)
         )

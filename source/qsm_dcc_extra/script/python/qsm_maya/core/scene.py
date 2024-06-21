@@ -77,15 +77,18 @@ class Scene(object):
 
     @classmethod
     def remove_all_instanced(cls, type_includes):
-        _ = cmds.ls(type=type_includes, long=1) or []
-        for i_path in _:
-            i_parent_paths = cmds.listRelatives(i_path, fullPath=1, allParents=1) or []
-            if len(i_parent_paths) > 1:
-                i_name = i_path.split('|')[-1]
-                for j_transform_path in i_parent_paths:
-                    j_path_shape = '{}|{}'.format(j_transform_path, i_name)
-                    if j_path_shape != i_path:
-                        cls.remove_instanced(j_transform_path)
+        _ = cls.find_all_dag_nodes(type_includes)
+        for i_shape_path in _:
+            # may be removed
+            if cmds.objExists(i_shape_path):
+                cls.convert_all_instance_to_object(i_shape_path)
+
+    @classmethod
+    def convert_all_instance_to_object(cls, shape_path):
+        parents = cmds.listRelatives(shape_path, fullPath=1, allParents=1) or []
+        if len(parents) > 1:
+            for i_transform_path in parents:
+                cls.remove_instanced(i_transform_path)
 
     @classmethod
     def remove_all_empty_groups(cls):

@@ -60,7 +60,7 @@ class PrxBaseWindow(
     # noinspection PyUnusedLocal
     def _init_base_window_def_(self, *args, **kwargs):
 
-        self.set_log_file_path(bsc_storage.StgUserMtd.get_user_log_directory())
+        self.set_log_file_path(bsc_storage.StgUser.get_user_log_directory())
 
         self._log_file_path = None
 

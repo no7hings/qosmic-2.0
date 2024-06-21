@@ -128,12 +128,12 @@ class AbsPrxDialogWindow(
         self._customize_layout.addWidget(self._options_prx_node.widget)
         self._options_prx_node.set_hide()
         # tip
-        self._tip_group = gui_prx_wgt_container.PrxHToolGroup()
-        self._customize_layout.addWidget(self._tip_group.widget)
-        self._tip_group.set_visible(False)
-        self._tip_group.set_name('tips')
-        self._tip_text_browser = gui_prx_wdt_utility.PrxTextBrowser()
-        self._tip_group.add_widget(self._tip_text_browser)
+        self._tip_prx_tool_group = gui_prx_wgt_container.PrxHToolGroup()
+        self._customize_layout.addWidget(self._tip_prx_tool_group.widget)
+        self._tip_prx_tool_group.set_visible(False)
+        self._tip_prx_tool_group.set_name('tips')
+        self._tip_prx_text_browser = gui_prx_wdt_utility.PrxTextBrowser()
+        self._tip_prx_tool_group.add_widget(self._tip_prx_text_browser)
         #
         self._bottom_toolbar = gui_prx_wgt_container.PrxHToolBar()
         self._central_layout.addWidget(self._bottom_toolbar.widget)
@@ -168,13 +168,6 @@ class AbsPrxDialogWindow(
         self._cancel_button.set_icon_name('dialog/cancel')
         self._cancel_button.set_width(self.BUTTON_WIDTH)
         self._cancel_button.connect_press_clicked_to(self.do_cancel)
-        #
-        # self._close_button = gui_prx_wdt_utility.PrxPressButton()
-        # self._close_button.set_visible(False)
-        # self._input_button_layout.addWidget(self._close_button.widget)
-        # self._close_button.set_name('Close')
-        # self._close_button.set_icon_by_name('close')
-        # self._close_button.set_width(self.BUTTON_WIDTH)
         #
         self._ok_methods = []
         self._no_methods = []
@@ -260,7 +253,6 @@ class AbsPrxDialogWindow(
 
     def set_ok_label(self, text):
         self._ok_button.set_name(text)
-        # self._ok_button.set_icon_by_name(text)
 
     # noinspection PyUnusedLocal
     def connect_ok_to(self, method, args=None):
@@ -271,7 +263,6 @@ class AbsPrxDialogWindow(
 
     def set_no_label(self, text):
         self._no_button.set_name(text)
-        # self._no_button.set_icon_by_name(text)
 
     # noinspection PyUnusedLocal
     def connect_no_to(self, method, args=None):
@@ -282,7 +273,6 @@ class AbsPrxDialogWindow(
 
     def set_cancel_label(self, text):
         self._cancel_button.set_name(text)
-        # self._cancel_button.set_icon_by_name(text)
 
     # noinspection PyUnusedLocal
     def connect_cancel_method(self, method, args=None):
@@ -307,14 +297,14 @@ class AbsPrxDialogWindow(
         self.trace_log_use_thread(text)
 
     def set_content_font_size(self, size):
-        self._tip_text_browser.set_font_size(size)
+        self._tip_prx_text_browser.set_font_size(size)
 
     def set_tip_group_enable(self):
-        self._tip_group.set_visible(True)
-        self._tip_group.set_expanded(True)
+        self._tip_prx_tool_group.set_visible(True)
+        self._tip_prx_tool_group.set_expanded(True)
 
     def set_tip_visible(self, boolean):
-        self._tip_group.set_visible(boolean)
+        self._tip_prx_tool_group.set_visible(boolean)
 
     def set_options_group_enable(self):
         self._options_prx_node.set_visible(True)
@@ -330,10 +320,10 @@ class AbsPrxDialogWindow(
         self._options_prx_node.build_by_data(configure)
 
     def trace_log_use_thread(self, text):
-        self._tip_text_browser.trace_log_use_thread(text)
+        self._tip_prx_text_browser.trace_log_use_thread(text)
 
     def set_content_with_thread(self, text):
-        self._tip_text_browser.set_content_with_thread(text)
+        self._tip_prx_text_browser.set_content_with_thread(text)
 
     def set_failed(self):
         pass
@@ -347,8 +337,8 @@ class PrxDialogWindow0(AbsPrxDialogWindow):
 
     def __init__(self, *args, **kwargs):
         super(PrxDialogWindow0, self).__init__(*args, **kwargs)
-        self._tip_group.set_visible(True)
-        self._tip_group.set_expanded(True)
+        self._tip_prx_tool_group.set_visible(True)
+        self._tip_prx_tool_group.set_expanded(True)
         self.set_content_font_size(10)
 
         # self._top_toolbar.set_show()
@@ -388,8 +378,8 @@ class PrxDialogWindow1(AbsPrxDialogWindow):
 
     def __init__(self, *args, **kwargs):
         super(PrxDialogWindow1, self).__init__(*args, **kwargs)
-        self._tip_group.set_visible(True)
-        self._tip_group.set_expanded(True)
+        self._tip_prx_tool_group.set_visible(True)
+        self._tip_prx_tool_group.set_expanded(True)
         self.set_content_font_size(10)
 
     def _set_central_layout_create_(self):
@@ -437,8 +427,8 @@ class PrxDialogWindow1(AbsPrxDialogWindow):
 class PrxTipWindow(PrxDialogWindow0):
     def __init__(self, *args, **kwargs):
         super(PrxTipWindow, self).__init__(*args, **kwargs)
-        self._tip_group.set_visible(True)
-        self._tip_group.set_expanded(True)
+        self._tip_prx_tool_group.set_visible(True)
+        self._tip_prx_tool_group.set_expanded(True)
         self.set_content_font_size(10)
 
     def do_no(self):
@@ -498,8 +488,8 @@ class PrxMonitorWindow(
         self._qt_widget.setCentralWidget(self._central_widget)
         self._central_layout = _qt_wgt_base.QtVBoxLayout(self._central_widget)
         #
-        self._tip_text_browser = gui_prx_wdt_utility.PrxTextBrowser()
-        self._central_layout.addWidget(self._tip_text_browser.widget)
+        self._tip_prx_text_browser = gui_prx_wdt_utility.PrxTextBrowser()
+        self._central_layout.addWidget(self._tip_prx_text_browser.widget)
         #
         qt_widget_1 = _qt_wgt_utility.QtWidget()
         self._central_layout.addWidget(qt_widget_1)
@@ -509,7 +499,7 @@ class PrxMonitorWindow(
         self._status_button = gui_prx_wdt_utility.PrxPressButton()
         self._input_button_layout.addWidget(self._status_button.widget)
         self._status_button.set_name('process')
-        self._status_button.set_icon_by_name('process')
+        self._status_button.set_icon_by_text('process')
 
         self._set_waiting_def_init_()
         self._set_progressing_def_init_()
@@ -521,7 +511,7 @@ class PrxMonitorWindow(
         return self._status_button
 
     def set_logging(self, *args):
-        self._tip_text_browser.trace_log_use_thread(*args)
+        self._tip_prx_text_browser.trace_log_use_thread(*args)
 
     def set_status_at(self, *args):
         self._status_button.set_status_at(*args)
@@ -558,8 +548,8 @@ class PrxProcessingWindow(
         self._qt_processing_bar = _qt_wgt_process.QtProcessingBar()
         self._central_layout.addWidget(self._qt_processing_bar)
         #
-        self._tip_text_browser = gui_prx_wdt_utility.PrxTextBrowser()
-        self._central_layout.addWidget(self._tip_text_browser.widget)
+        self._tip_prx_text_browser = gui_prx_wdt_utility.PrxTextBrowser()
+        self._central_layout.addWidget(self._tip_prx_text_browser.widget)
 
         self._bottom_toolbar = gui_prx_wgt_container.PrxHToolBar()
         self._central_layout.addWidget(self._bottom_toolbar.widget)
@@ -579,7 +569,7 @@ class PrxProcessingWindow(
         self._close_button = _qt_wgt_button.QtPressButton()
         self._bottom_toolbar.add_widget(self._close_button)
         self._close_button._set_name_text_('Close')
-        self._close_button._set_icon_name_('cancel')
+        self._close_button._set_icon_name_('close-hover')
         self._close_button.setFixedWidth(80)
         self._close_button.press_clicked.connect(self.set_window_close)
 
@@ -602,4 +592,4 @@ class PrxProcessingWindow(
         return self._qt_processing_bar._get_is_killed_()
 
     def update_logging(self, text):
-        self._tip_text_browser.trace_log_use_thread(text)
+        self._tip_prx_text_browser.trace_log_use_thread(text)

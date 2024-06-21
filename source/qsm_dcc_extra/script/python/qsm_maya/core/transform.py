@@ -41,7 +41,7 @@ class Transform(_node_for_dag.DagNode):
         cmds.makeIdentity(path, apply=0, translate=1, rotate=1, scale=1)
 
     @classmethod
-    def get_shape_path(cls, path):
+    def get_shape(cls, path):
         _ = cmds.listRelatives(path, children=1, shapes=1, noIntermediate=1, fullPath=1)
         if _:
             return _[0]
@@ -61,6 +61,7 @@ class Transform(_node_for_dag.DagNode):
     @classmethod
     def get_world_extent(cls, path):
         _x, _y, _z, x, y, z = cmds.xform(path, boundingBox=1, worldSpace=1, query=1)
+        # min, max
         return (_x, _y, _z), (x, y, z)
 
     @classmethod
@@ -72,6 +73,30 @@ class Transform(_node_for_dag.DagNode):
     def get_world_center(cls, path):
         _x, _y, _z, x, y, z = cmds.xform(path, boundingBox=1, worldSpace=1, query=1)
         return (_x+x)/2, (_y+y)/2, (_z+z)/2
+
+    @classmethod
+    def get_world_matrix(cls, path):
+        return cmds.xform(path, matrix=1, worldSpace=1, query=1)
+
+    @classmethod
+    def get_world_translation(cls, path):
+        return cmds.xform(path, translation=1, worldSpace=1, query=1)
+
+    @classmethod
+    def get_world_rotation(cls, path):
+        return cmds.xform(path, rotation=1, worldSpace=1, query=1)
+
+    @classmethod
+    def get_world_scale(cls, path):
+        return cmds.xform(path, scale=1, worldSpace=1, query=1)
+
+    @classmethod
+    def get_world_transformation(cls, path):
+        return (
+            cls.get_world_translation(path),
+            cls.get_world_rotation(path),
+            cls.get_world_scale(path),
+        )
 
     @classmethod
     def compute_distance(cls, p_0, p_1):

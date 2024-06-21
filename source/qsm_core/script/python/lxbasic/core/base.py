@@ -498,7 +498,7 @@ class BscStorage(object):
         return os.access(path, os.R_OK)
 
     @classmethod
-    def get_is_writable(cls, path):
+    def get_is_writeable(cls, path):
         return os.access(path, os.W_OK)
 
     @classmethod

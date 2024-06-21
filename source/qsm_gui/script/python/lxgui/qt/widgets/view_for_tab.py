@@ -449,9 +449,11 @@ class QtTabView(
     def _delete_widget_at_(self, index):
         item = self._tab_item_stack.get_item_at(index)
         self.__layer_stack._delete_widget_at_(index)
-        self.tab_delete_accepted.emit(item.get_key() or item.get_name())
         self._tab_item_stack.delete_item(item)
         self._refresh_widget_all_()
+
+        self.tab_delete_accepted.emit(item.get_key() or item.get_name())
+        self.current_changed.emit()
 
     def _add_widget_(self, widget, *args, **kwargs):
         # widget.setParent(self)
@@ -674,8 +676,8 @@ class QtTabView(
     def _tab_item_menu_gain_fnc_(self):
         if self._index_press_tmp is not None:
             return [
-                ('close tab', 'cancel', functools.partial(self._delete_widget_at_, self._index_press_tmp)),
-                ('close other tabs', 'cancel', None)
+                ('close tab', 'close-hover', functools.partial(self._delete_widget_at_, self._index_press_tmp)),
+                ('close other tabs', 'close-hover', None)
             ]
         return []
 

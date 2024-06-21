@@ -26,7 +26,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
 if __name__ == '__main__':
     import sys
 
-    from lxgui.qt import wrap
+    from lxgui.qt.core import wrap
     #
     app = wrap.QtWidgets.QApplication(sys.argv)
     #

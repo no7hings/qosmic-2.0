@@ -69,7 +69,7 @@ class FileReferences(object):
         if node_type == 'file':
             stg_file = bsc_storage.StgFileOpt(file_path)
             if bsc_core.PtnFileTilesMtd.get_is_valid(stg_file.name_base) is True:
-                unit_paths = bsc_storage.StgFileMtdForTiles.get_exists_unit_paths(
+                unit_paths = bsc_storage.StgFileTiles.get_exists_unit_paths(
                     file_path
                 )
                 # sequence
@@ -84,7 +84,7 @@ class FileReferences(object):
             _attribute.NodeAttribute.set_as_string(path, atr_name, file_path)
 
     @classmethod
-    def search_all_from(cls, directory_paths):
+    def search_all_from(cls, directory_paths, ignore_exists=False):
         search_opt = bsc_storage.StgFileSearchOpt(
             ignore_name_case=True, ignore_ext_case=True
         )
@@ -95,8 +95,11 @@ class FileReferences(object):
         for i_path in paths:
             i_node_type = _node.Node.get_type(i_path)
             i_atr_names = cls.QUERY[i_node_type]
-
             for j_atr_name in i_atr_names:
                 j_file_path = cls.get_file(i_path, j_atr_name)
+                if ignore_exists is True:
+                    if bsc_storage.StgFileTiles.get_is_exists(j_file_path) is True:
+                        continue
+
                 j_file_path_new = search_opt.get_result(j_file_path)
                 cls.set_file_path(i_path, j_atr_name, j_file_path_new)

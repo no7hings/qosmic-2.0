@@ -19,31 +19,37 @@ class Material(object):
         )
 
     @classmethod
-    def get_all_shading_engines(cls, path):
+    def get_all_shading_engines(cls, name):
         return cmds.listConnections(
-            path, destination=1, source=0, type='shadingEngine'
+            name, destination=1, source=0, type='shadingEngine'
         ) or []
 
     @classmethod
-    def get_all_texture_references(cls, path):
+    def get_all_texture_references(cls, name):
         return _node_graph.NodeGraph.get_all_source_nodes(
-            path, type_includes=['file']
+            name, type_includes=['file']
         )
 
     @classmethod
-    def assign_surface_shader(cls, path, shader):
+    def assign_surface_shader(cls, name, shader):
         _connection.Connection.create(
             _attribute.NodeAttribute.to_atr_path(
                 shader, 'outColor'
             ),
             _attribute.NodeAttribute.to_atr_path(
-                path, 'surfaceShader'
+                name, 'surfaceShader'
             )
         )
 
     @classmethod
-    def assign_to(cls, path, geometry_path):
-        cmds.sets(geometry_path, forceElement=path)
+    def assign_to(cls, name, geometry_path):
+        cmds.sets(geometry_path, forceElement=name)
+
+    @classmethod
+    def get_surface_shader(cls, name):
+        return _attribute.NodeAttribute.get_source_node(
+            name, 'surfaceShader'
+        )
 
 
 class MaterialLightLink(object):

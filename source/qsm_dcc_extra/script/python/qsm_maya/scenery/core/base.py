@@ -1,4 +1,6 @@
 # coding:utf-8
+import os.path
+
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
@@ -95,6 +97,21 @@ class MeshInstance(object):
 
 
 class GpuImport(object):
+
+    # fixme: this is holly shit
+    @classmethod
+    def find_all_gpu_files(cls, directory_path):
+        for i in cmds.ls(type='gpuCache', long=1):
+            i_file_path = _mya_core.NodeAttribute.get_as_string(i, 'cacheFileName')
+            if i_file_path.startswith('O:/ABCWrite/'):
+                i_file_path_new = '{}/ABCWrite/{}'.format(
+                    directory_path, i_file_path.replace('O:/ABCWrite/', '')
+                )
+                if os.path.exists(i_file_path_new):
+                    _mya_core.NodeAttribute.set_as_string(
+                        i, 'cacheFileName', i_file_path_new
+                    )
+
     def __init__(self):
         pass
 

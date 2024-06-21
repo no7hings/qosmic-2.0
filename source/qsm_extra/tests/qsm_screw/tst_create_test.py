@@ -9,5 +9,5 @@ if __name__ == '__main__':
         'test'
     )
     #
-    stage.connect()
+    # stage.connect()
     stage.build()
