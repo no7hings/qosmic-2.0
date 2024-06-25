@@ -50,6 +50,13 @@ class DagNode(_node.Node):
         return _[0]
 
     @classmethod
+    def check_is_dag(cls, path_or_name):
+        _ = cls.to_path(path_or_name)
+        if _:
+            return _.startswith('|')
+        return False
+
+    @classmethod
     def get_parent(cls, path):
         return '|'.join(path.split('|')[:-1])
 

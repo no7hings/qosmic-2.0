@@ -28,3 +28,7 @@ class SceneriesQuery(_rsc_core.ResourcesQuery):
 
     def __init__(self):
         super(SceneriesQuery, self).__init__()
+
+    def check_is_valid(self, *args, **kwargs):
+        file_path = kwargs['file']
+        return self._pth.get_is_matched(file_path)

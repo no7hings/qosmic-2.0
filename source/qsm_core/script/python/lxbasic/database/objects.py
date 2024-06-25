@@ -362,7 +362,7 @@ class DtbOptForResource(DtbBaseOpt):
 
     def get_pattern_opt(self, keyword):
         p = self.get_pattern(keyword)
-        p_opt = bsc_core.PtnStgParseOpt(p)
+        p_opt = bsc_core.BscStgParseOpt(p)
         return p_opt.update_variants_to(
             **self._dtb_pattern_kwargs
         )
@@ -873,7 +873,7 @@ class DtbNodeOptForRscVersion(object):
 
     def __build_varints(self):
         p = self._dtb_opt.get_pattern(keyword='version-dir')
-        p_o = bsc_core.PtnStgParseOpt(p)
+        p_o = bsc_core.BscStgParseOpt(p)
         version_stg_path = self._dtb_opt.get_property(
             self._dtb_version.path, 'location'
         )
@@ -894,40 +894,40 @@ class DtbNodeOptForRscVersion(object):
 
     def get_geometry_usd_file(self, force=False):
         p = self._dtb_opt.get_pattern(keyword='geometry-usd-file')
-        p_o = bsc_core.PtnStgParseOpt(p)
+        p_o = bsc_core.BscStgParseOpt(p)
         path = p_o.update_variants_to(**self._variants).get_value()
-        if bsc_storage.StgPathMtd.get_is_exists(path):
+        if bsc_storage.StgPath.get_is_exists(path):
             return path
         if force is True:
             return bsc_resource.ExtendResource.get('assets/library/geometry/sphere.usda')
 
     def get_geometry_abc_file(self):
         p = self._dtb_opt.get_pattern(keyword='geometry-abc-file')
-        p_o = bsc_core.PtnStgParseOpt(p)
+        p_o = bsc_core.BscStgParseOpt(p)
         path = p_o.update_variants_to(**self._variants).get_value()
-        if bsc_storage.StgPathMtd.get_is_exists(path):
+        if bsc_storage.StgPath.get_is_exists(path):
             return path
 
     def get_geometry_fbx_file(self):
         p = self._dtb_opt.get_pattern(keyword='geometry-fbx-file')
-        p_o = bsc_core.PtnStgParseOpt(p)
+        p_o = bsc_core.BscStgParseOpt(p)
         path = p_o.update_variants_to(**self._variants).get_value()
-        if bsc_storage.StgPathMtd.get_is_exists(path):
+        if bsc_storage.StgPath.get_is_exists(path):
             return path
 
     def get_look_preview_usd_file(self):
         p = self._dtb_opt.get_pattern(keyword='look-preview-usd-file')
-        p_o = bsc_core.PtnStgParseOpt(p)
+        p_o = bsc_core.BscStgParseOpt(p)
         path = p_o.update_variants_to(**self._variants).get_value()
-        if bsc_storage.StgPathMtd.get_is_exists(path):
+        if bsc_storage.StgPath.get_is_exists(path):
             return path
         return bsc_resource.ExtendResource.get('assets/library/preview-material.usda')
 
     def get_hdri_file(self):
         p = self._dtb_opt.get_pattern(keyword='hdri-original-jpg-file')
-        p_o = bsc_core.PtnStgParseOpt(p)
+        p_o = bsc_core.BscStgParseOpt(p)
         path = p_o.update_variants_to(**self._variants).get_value()
-        if bsc_storage.StgPathMtd.get_is_exists(path):
+        if bsc_storage.StgPath.get_is_exists(path):
             return path
         return bsc_resource.ExtendResource.get('assets/library/hdri/srgb/StinsonBeach.png')
 
@@ -962,12 +962,12 @@ class DtbNodeOptForRscVersion(object):
 
     def get_scene_maya_file(self):
         p = self._dtb_opt.get_pattern(keyword='scene-maya-file')
-        p_o = bsc_core.PtnStgParseOpt(p)
+        p_o = bsc_core.BscStgParseOpt(p)
         return p_o.update_variants_to(**self._variants).get_value()
 
     def get_file(self, keyword):
         p = self._dtb_opt.get_pattern(keyword=keyword)
-        p_o = bsc_core.PtnStgParseOpt(p)
+        p_o = bsc_core.BscStgParseOpt(p)
         return p_o.update_variants_to(**self._variants).get_value()
 
     def get_exists_file(self, keyword):

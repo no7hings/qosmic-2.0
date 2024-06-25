@@ -262,7 +262,7 @@ class PrxTreeView(
     def _get_selected_items_(self):
         return self.view.selectedItems()
 
-    def get_selected_items(self):
+    def get_all_selected_items(self):
         return [i.gui_proxy for i in self._get_selected_items_()]
 
     def get_selected_item_widgets(self):

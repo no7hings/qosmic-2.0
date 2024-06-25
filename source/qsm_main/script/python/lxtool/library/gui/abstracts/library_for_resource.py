@@ -596,14 +596,14 @@ class _GuiTagOpt(
         return semantic_tag_filter_data, dtb_tag_args
 
 
-class _GuiResourceOpt(
+class _UnitrResource(
     _GuiBaseOpt,
     gui_prx_abstracts.AbsGuiPrxListViewOpt
 ):
     CACHE = dict()
 
     def __init__(self, window, session, database_opt, prx_list_view):
-        super(_GuiResourceOpt, self).__init__(window, session, database_opt)
+        super(_UnitrResource, self).__init__(window, session, database_opt)
         self._init_list_view_opt_(prx_list_view, self.GUI_NAMESPACE)
 
         self._arnold_texture_types = gnl_texture.TxrMethodForBuild.generate_instance().get_arnold_includes()
@@ -923,7 +923,7 @@ class _GuiResourceOpt(
                 )
 
     def get_current_obj(self):
-        _ = self._prx_list_view.get_selected_items()
+        _ = self._prx_list_view.get_all_selected_items()
         if _:
             return _[-1].get_gui_dcc_obj(self.GUI_NAMESPACE)
 
@@ -1093,7 +1093,7 @@ class _GuiDirectoryOpt(
             )
             prx_item_widget.set_checked(False)
             location = self._dtb_opt.get_property(dtb_directory.path, 'location')
-            if bsc_storage.StgPathMtd.get_is_exists(location) is True:
+            if bsc_storage.StgPath.get_is_exists(location) is True:
                 prx_item_widget.set_status(prx_item_widget.ValidationStatus.Normal)
                 prx_item_widget.set_expanded(True, ancestors=True)
             else:
@@ -1109,7 +1109,7 @@ class _GuiDirectoryOpt(
         return self.gui_get_one(file_type)
 
     def get_current_obj(self):
-        _ = self._prx_tree_view.get_selected_items()
+        _ = self._prx_tree_view.get_all_selected_items()
         if _:
             return _[-1].get_gui_dcc_obj(self.GUI_NAMESPACE)
 
@@ -1255,13 +1255,13 @@ class _GuiGuideOpt(_GuiBaseOpt):
 
     def gui_refresh(self):
         path = None
-        list_item_prxes = self._prx_list_view.get_selected_items()
+        list_item_prxes = self._prx_list_view.get_all_selected_items()
         # gain list first
         if list_item_prxes:
             list_item_prx = list_item_prxes[-1]
             path = list_item_prx.get_gui_attribute('path')
         else:
-            tree_item_prxes = self._prx_tree_view.get_selected_items()
+            tree_item_prxes = self._prx_tree_view.get_all_selected_items()
             if tree_item_prxes:
                 tree_item_prx = tree_item_prxes[-1]
                 path = tree_item_prx.get_gui_attribute('path')
@@ -1284,7 +1284,7 @@ class _GuiUsdStageViewOpt(_GuiBaseOpt):
 
     def get_variants(self, dtb_version):
         p = self._dtb_opt.get_pattern(keyword='version-dir')
-        p_o = bsc_core.PtnStgParseOpt(p)
+        p_o = bsc_core.BscStgParseOpt(p)
         version_stg_path = self._dtb_opt.get_property(
             dtb_version.path, 'location'
         )
@@ -1292,17 +1292,17 @@ class _GuiUsdStageViewOpt(_GuiBaseOpt):
 
     def get_look_preview_usd_file(self, variants):
         p = self._dtb_opt.get_pattern(keyword='look-preview-usd-file')
-        p_o = bsc_core.PtnStgParseOpt(p)
+        p_o = bsc_core.BscStgParseOpt(p)
         path = p_o.update_variants_to(**variants).get_value()
-        if bsc_storage.StgPathMtd.get_is_exists(path):
+        if bsc_storage.StgPath.get_is_exists(path):
             return path
         return bsc_resource.ExtendResource.get('assets/library/preview-material.usda')
 
     def get_geometry_usd_file(self, variants):
         p = self._dtb_opt.get_pattern(keyword='geometry-usd-file')
-        p_o = bsc_core.PtnStgParseOpt(p)
+        p_o = bsc_core.BscStgParseOpt(p)
         path = p_o.update_variants_to(**variants).get_value()
-        if bsc_storage.StgPathMtd.get_is_exists(path):
+        if bsc_storage.StgPath.get_is_exists(path):
             return path
         return bsc_resource.ExtendResource.get('assets/library/geometry/sphere.usda')
 
@@ -1615,7 +1615,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         self._gui_tag_opt = _GuiTagOpt(
             self, self._session, self._dtb_opt, self._tag_prx_view
         )
-        self._gui_resource_opt = _GuiResourceOpt(
+        self._gui_resource_prx_unit = _UnitrResource(
             self, self._session, self._dtb_opt, self._resource_prx_view
         )
         #
@@ -1639,7 +1639,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         self.gui_refresh_fnc()
 
     def get_gui_resource_opt(self):
-        return self._gui_resource_opt
+        return self._gui_resource_prx_unit
 
     def gui_guide_choose_cbk(self, text):
         if text is not None:
@@ -1665,10 +1665,10 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         current_item = self._resource_prx_view.get_current_item()
         if current_item:
             dtb_resource = current_item.get_gui_dcc_obj(
-                namespace=_GuiResourceOpt.GUI_NAMESPACE
+                namespace=_UnitrResource.GUI_NAMESPACE
             )
             if dtb_resource:
-                self._gui_resource_opt.copy_to_clipboard_from(dtb_resource)
+                self._gui_resource_prx_unit.copy_to_clipboard_from(dtb_resource)
 
     def __gui_add_resource_copy_tools(self):
         self._copy_tool_box = self._resource_prx_view.create_top_tool_box(
@@ -1707,7 +1707,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         keyword = args[0]
         if keyword:
             _ = fnmatch.filter(
-                self._gui_resource_opt._keys, '*{}*'.format(keyword)
+                self._gui_resource_prx_unit._keys, '*{}*'.format(keyword)
             )
             return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_MAXIMUM]
         return []
@@ -1721,7 +1721,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
     def gui_refresh_fnc(self):
         self._gui_type_opt.restore()
         self._gui_tag_opt.restore()
-        self._gui_resource_opt.restore()
+        self._gui_resource_prx_unit.restore()
         self._type_guide_bar.set_clear()
         # type
         is_create, prx_item = self._gui_type_opt.gui_add_root()
@@ -1802,7 +1802,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         qt_view._refresh_viewport_showable_auto_()
 
     def __execute_gui_refresh_for_resources_by_type_selection(self):
-        entity_prx_items = self._type_prx_view.get_selected_items()
+        entity_prx_items = self._type_prx_view.get_all_selected_items()
         #
         self.__restore_thread_stack()
         #
@@ -1962,7 +1962,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
                 if gui_thread_flag != self._gui_thread_flag:
                     break
 
-                self._gui_resource_opt.gui_add(
+                self._gui_resource_prx_unit.gui_add(
                     i_dtg_type, i_dtb_resource, i_semantic_tag_filter_data
                 )
                 #
@@ -2001,7 +2001,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
             self._main_h_s.get_is_contracted_at(2) is False
             and self._right_v_s.get_is_contracted_at(1) is False
         ):
-            dtb_resource = self._gui_resource_opt.get_current_obj()
+            dtb_resource = self._gui_resource_prx_unit.get_current_obj()
             if dtb_resource is not None:
                 self._dtb_resource_cur = dtb_resource
                 self.__gui_refresh_usd_stage(dtb_resource)

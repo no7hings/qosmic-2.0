@@ -487,7 +487,7 @@ class RsvVedioComposite(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
 
         render_output_file_path_pattern = '{directory}/main/{camera}.{layer}.{light_pass}.{look_pass}.{quality}/{render_pass}.{frame}.exr'
 
-        p = bsc_core.PtnStgParseOpt(render_output_file_path_pattern)
+        p = bsc_core.BscStgParseOpt(render_output_file_path_pattern)
         p.update_variants(directory=render_output_directory_path)
 
         dict_ = collections.OrderedDict()

@@ -346,7 +346,7 @@ class AbsPnlManagerForAssetTextureDcc(gui_prx_widgets.PrxSessionWindow):
 
         def run_fnc_():
             for i_index, (i_file_path, i_output_directory_path) in enumerate(self._create_data):
-                bsc_storage.StgPathMtd.create_directory(
+                bsc_storage.StgPath.create_directory(
                     i_output_directory_path
                 )
 

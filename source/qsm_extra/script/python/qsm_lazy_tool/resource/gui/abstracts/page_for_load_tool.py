@@ -19,10 +19,10 @@ import lxgui.proxy.abstracts as gui_prx_abstracts
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_screw.core as qsm_scr_core
+import qsm_lazy.core as qsm_lzy_core
 
 
-class AbsPrxPageForLoad(gui_prx_abstracts.AbsPrxWidget):
+class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
 
     def do_gui_update_by_dcc_selection(self):
@@ -39,7 +39,7 @@ class AbsPrxPageForLoad(gui_prx_abstracts.AbsPrxWidget):
         return excludes
 
     def generate_key_includes(self):
-        return [x.name for x in self._prx_options_node.get('data')]
+        return [x.name for x in self._prx_options_node.get('node_data')]
 
     def ao_apply(self):
         pass
@@ -47,41 +47,76 @@ class AbsPrxPageForLoad(gui_prx_abstracts.AbsPrxWidget):
     def do_create_and_apply(self):
         pass
 
+    def get_resource_data_type(self):
+        return self._prx_options_node.get('data_type')
+
     def __init__(self, window, session, *args, **kwargs):
-        super(AbsPrxPageForLoad, self).__init__(*args, **kwargs)
+        super(AbsPrxPageForLoadTool, self).__init__(*args, **kwargs)
 
         self._window = window
         self._session = session
 
-        self._all_scr_stage_keys = qsm_scr_core.Stage.get_all_keys()
-        self._scr_stage_key = self._all_scr_stage_keys[0]
-        self._scr_stage = None
+        self._all_lzy_stage_keys = qsm_lzy_core.Stage.get_all_keys()
+        self._lzy_stage_key = self._all_lzy_stage_keys[0]
+        self._lzy_stage = None
 
-        self._node_opt_list = []
-        self._node_creator_list = []
+        self._dcc_node_opt_list = []
+        self._dcc_node_creator_list = []
+        
+        self._dcc_node_graph_opt = None
 
-        self._node_rebuild_data = None
-
-        self._data = None
+        self._lzy_data_file_opt = None
+        self._lzy_node_data = None
 
         self.gui_setup_page()
 
-    def do_gui_show_data(self, data):
-        if data != self._data:
-            self._data = data
-            content = bsc_content.Content(value=self._data)
-            path_opts = map(lambda x: bsc_core.BscPathOpt('/{}'.format(x)), content.get_top_keys())
+    def do_gui_show_data(self):
+        if self._lzy_data_file_opt is None:
+            self._lzy_node_data = None
             self._prx_options_node.set(
-                'data', path_opts
+                'node_data', []
+            )
+            return
+
+        if self._lzy_data_file_opt.get_is_file() is False:
+            self._lzy_node_data = None
+            self._prx_options_node.set(
+                'node_data', []
+            )
+            return
+
+        if self._lzy_data_file_opt.ext == '.json':
+            node_data = self._lzy_data_file_opt.set_read()
+            if node_data != self._lzy_node_data:
+                self._lzy_node_data = node_data
+                content = bsc_content.Content(value=self._lzy_node_data['data'])
+                path_opts = map(lambda x: bsc_core.BscPathOpt('/{}'.format(x)), content.get_top_keys())
+                self._prx_options_node.set(
+                    'node_data', path_opts
+                )
+        else:
+            self._lzy_node_data = None
+            self._prx_options_node.set(
+                'node_data', []
             )
 
-    def gui_setup_page(self):
-        qt_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
-        qt_lot.setContentsMargins(*[0]*4)
-        qt_lot.setSpacing(2)
+    def do_gui_load_data_types(self):
+        values = qsm_lzy_core.DataTypes.All
+        pot = self._prx_options_node.get_port('data_type')
+        if self._window._language == 'chs':
+            value_names = [qsm_lzy_core.DataTypes.NAME_CHS_MAP[x] for x in values]
+        else:
+            value_names = [qsm_lzy_core.DataTypes.NAME_MAP[x] for x in values]
 
-        prx_sca = gui_prx_widgets.PrxVScrollArea()
-        qt_lot.addWidget(prx_sca.widget)
+        pot.set_options(
+            values, value_names
+        )
+        pot.set(values[0])
+
+    def gui_setup_page(self):
+        v_qt_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
+        v_qt_lot.setContentsMargins(*[0]*4)
+        v_qt_lot.setSpacing(2)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
@@ -89,7 +124,7 @@ class AbsPrxPageForLoad(gui_prx_abstracts.AbsPrxWidget):
             )
         )
 
-        prx_sca.add_widget(self._prx_options_node)
+        v_qt_lot.addWidget(self._prx_options_node.widget)
 
         self._prx_options_node.build_by_data(
             self._window._configure.get('build.load.options.parameters')
@@ -97,28 +132,27 @@ class AbsPrxPageForLoad(gui_prx_abstracts.AbsPrxWidget):
 
         if self._window._language == 'chs':
             gui_names = [
-                qsm_scr_core.Stage.get_configure(x).get('options.gui_name_chs')
-                for x in self._all_scr_stage_keys
+                qsm_lzy_core.Stage.get_configure(x).get('options.gui_name_chs')
+                for x in self._all_lzy_stage_keys
             ]
         else:
             gui_names = [
-                qsm_scr_core.Stage.get_configure(x).get('options.gui_name')
-                for x in self._all_scr_stage_keys
+                qsm_lzy_core.Stage.get_configure(x).get('options.gui_name')
+                for x in self._all_lzy_stage_keys
             ]
 
         self._prx_options_node.get_port('stage').set_options(
-            self._all_scr_stage_keys, gui_names
-        )
-        self._prx_options_node.get_port('search_scheme').connect_input_changed_to(
-            self.do_gui_update_by_dcc_selection
+            self._all_lzy_stage_keys, gui_names
         )
 
         self._prx_options_node.set(
             'automatic.create_and_apply', self.do_create_and_apply
         )
+
+        self.do_gui_load_data_types()
         # tip
         self._tip_prx_tool_group = gui_prx_widgets.PrxHToolGroup()
-        prx_sca.add_widget(self._tip_prx_tool_group)
+        v_qt_lot.addWidget(self._tip_prx_tool_group.widget)
         self._tip_prx_tool_group.set_expanded(True)
         self._tip_prx_tool_group.set_name(
             gui_core.GuiUtil.choice_name(
@@ -134,14 +168,12 @@ class AbsPrxPageForLoad(gui_prx_abstracts.AbsPrxWidget):
         )
 
     def do_gui_refresh_all(self):
-        node_context = qsm_scr_core.NodeContext.read()
+        node_context = qsm_lzy_core.DataContext.read()
         if node_context:
             self._prx_options_node.set_dict(
                 node_context
             )
-            json_path = node_context.get('file')
-            self._node_rebuild_data = bsc_storage.StgFileOpt(json_path).set_read()
-            if self._node_rebuild_data:
-                self.do_gui_show_data(self._node_rebuild_data['data'])
+            self._lzy_data_file_opt = bsc_storage.StgFileOpt(node_context.get('file'))
+            self.do_gui_show_data()
         else:
             self._prx_options_node.set_reset()

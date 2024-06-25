@@ -36,10 +36,10 @@ class _GuiDirectoryOpt(
 
         self._variants = dict()
 
-        self._directory_ptn_opt = bsc_core.PtnStgParseOpt(
+        self._directory_ptn_opt = bsc_core.BscStgParseOpt(
             '{location}/{entity}/workarea/user.{artist}/{step}.{task}'
         )
-        self._file_ptn_opt = bsc_core.PtnStgParseOpt(
+        self._file_ptn_opt = bsc_core.BscStgParseOpt(
             '{location}/{entity}/workarea/user.{artist}/{step}.{task}/{task_extra}/{entity}.{step}.{task}.{task_extra}.v{version}{ext}'
         )
 
@@ -235,7 +235,7 @@ class _GuiFileOpt(
         directory_path = file_opt.get_directory_path()
         file_name_base = file_opt.get_name_base()
         image_file_path = '{}/.snapshot/{}.jpg'.format(directory_path, file_name_base)
-        if bsc_storage.StgPathMtd.get_is_file(image_file_path):
+        if bsc_storage.StgPath.get_is_file(image_file_path):
             return image_file_path
 
     def __init__(self, window, session, prx_list_view):

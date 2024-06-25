@@ -1,0 +1,491 @@
+options:
+    gui_name: 'Maya CFX'
+    gui_name_chs: 'MAYA CFX'
+
+    data_types:
+        - 'maya_node'
+        - 'maya_node_graph'
+
+entities:
+    types:
+        /:
+            category: 'group'
+            type: 'root'
+            kind: 'builtin'
+
+            gui_name: 'All'
+            gui_name_chs: '所有'
+            gui_icon_name: 'database/all'
+
+        /unspecified:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name_chs: '未指定'
+
+        /nodes:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '节点'
+            gui_icon_name: 'database/group'
+
+        /nodes/non_linear:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '非线性'
+            gui_icon_name: 'database/group'
+
+        /nodes/non_linear/bend:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '弯曲'
+
+        /nodes/non_linear/flare:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '扩张'
+
+        /nodes/non_linear/sine:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '正弦'
+
+        /nodes/non_linear/squash:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '挤压'
+
+        /nodes/non_linear/twist:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '扭曲'
+
+        /nodes/non_linear/wave:
+            category: 'node'
+            type: 'node'
+            gui_name_chs: '波浪'
+
+        /nodes/nucleus:
+            category: 'group'
+            type: 'group'
+
+            gui_name: 'RebuildForNucleus'
+            gui_name_chs: '核心'
+            gui_icon_name: 'database/group'
+
+        /nodes/nucleus/n_hair:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'nHair'
+            gui_name_chs: 'nHair'
+
+        /nodes/nucleus/n_cloth:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'nCloth'
+            gui_name_chs: 'nCloth'
+
+        /nodes/nucleus/n_rigid:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'nRigid'
+            gui_name_chs: 'nRigid'
+
+        /nodes/nucleus/n_particle:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'nParticle'
+            gui_name_chs: 'nParticle'
+
+        /nodes/nucleus/nucleus:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '解算器'
+
+        /nodes/fields:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '场'
+            gui_icon_name: 'database/group'
+
+        /nodes/fields/air_field:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '空气场'
+
+        /nodes/fields/drag_field:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '阻力场'
+
+        /nodes/fields/gravity_field:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '重力场'
+
+        /nodes/fields/newton_field:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '牛顿场'
+
+        /nodes/fields/radial_field:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '径向场'
+
+        /nodes/fields/turbulence_field:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '湍流场'
+
+        /nodes/fields/uniform_field:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '一致场'
+
+        /nodes/fields/vortex_field:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '旋涡场'
+
+        /nodes/qualoth:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: 'Qualoth'
+            gui_icon_name: 'database/group'
+
+        /nodes/qualoth/ql_cloth:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: 'qlCloth'
+
+        /nodes/qualoth/ql_solver:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: 'qlSolver'
+
+        /node_graphs:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '节点网络'
+            gui_icon_name: 'database/group'
+
+        /node_graphs/component:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '组件'
+            gui_icon_name: 'database/group'
+
+        /node_graphs/component/regular:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '常规'
+
+        /node_graphs/hair:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '毛发'
+            gui_icon_name: 'database/group'
+
+        /node_graphs/hair/regular:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '常规'
+
+        /node_graphs/clothing:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '衣物'
+            gui_icon_name: 'database/group'
+
+        /node_graphs/clothing/regular:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '常规'
+
+    tags:
+        /:
+            category: 'group'
+            type: 'root'
+            kind: 'builtin'
+
+            gui_name: 'All'
+            gui_name_chs: '所有'
+            gui_icon_name: 'database/all'
+        # creation time
+        /ctime:
+            category: 'group'
+            type: 'group'
+            kind: 'unavailable'
+
+            gui_name: 'Creation Time'
+            gui_name_chs: '创建时间'
+            gui_icon_name: 'database/group'
+
+        /ctime/today:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Today'
+            gui_name_chs: '今天'
+
+        /ctime/yesterday:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Yesterday'
+            gui_name_chs: '昨天'
+
+        /ctime/earlier_this_week:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Earlier this Week'
+            gui_name_chs: '本周早些时候'
+
+        /ctime/last_week:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Last Week'
+            gui_name_chs: '上周'
+
+        /ctime/earlier_this_month:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Earlier This Month'
+            gui_name_chs: '本月早些时候'
+
+        /ctime/last_month:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Last Month'
+            gui_name_chs: '上月'
+
+        /ctime/earlier_this_year:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Earlier This Year'
+            gui_name_chs: '今年早些时候'
+
+        /ctime/long_time_ago:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Long Time Ago'
+            gui_name_chs: '很久以前'
+
+        /purpose:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '目的'
+            gui_icon_name: 'database/group'
+
+        /purpose/test:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '测试'
+
+        /purpose/layout:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '分镜'
+
+        /purpose/animation:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '动画'
+
+        /purpose/simulation:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '解算'
+
+        /parts:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '部件'
+            gui_icon_name: 'database/group'
+
+        /parts/hair:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '头发'
+
+        /parts/ribbon:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '飘带'
+
+        /material:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '材料'
+            gui_icon_name: 'database/group'
+
+        /material/leather:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '皮革'
+
+        /material/linen:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '麻布'
+
+        /material/silk:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '丝绸'
+
+        /material/gauze:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '纱布'
+
+        /material/cotton:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '棉布'
+
+        /speeds:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '速度'
+            gui_icon_name: 'database/group'
+
+        /speeds/slow:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '缓慢'
+
+        /speeds/moderate:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '适中'
+
+        /speeds/fast:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '快速'
+
+        /softness:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '柔软度'
+            gui_icon_name: 'database/group'
+
+        /softness/pliable:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '柔韧'
+
+        /softness/moderate:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '适中'
+
+        /softness/soft:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '柔软'
+
+        /thickness:
+            category: 'group'
+            type: 'group'
+
+            gui_name_chs: '厚度'
+            gui_icon_name: 'database/group'
+
+        /thickness/thick:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '厚'
+
+        /thickness/moderate:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '适中'
+
+        /thickness/thin:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '薄'
+
+    nodes:
+        /:
+            category: 'group'
+            type: 'root'
+            kind: 'builtin'
+
+            gui_name: 'All'
+            gui_name_chs: '所有'
+            gui_icon_name: 'database/all'

@@ -435,7 +435,7 @@ class BscNodeGraph(object):
                 i_source_args = node_opt.get_port(i_atr_name).get_source_args()
                 if i_source_args:
                     i_source_node, i_source_port_path = i_source_args
-                    print i_source_node
+                    # print i_source_node
                 else:
                     i_value = node_opt.get(i_atr_name)
                     dict_[i_atr_name] = dict(

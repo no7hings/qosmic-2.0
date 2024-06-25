@@ -1492,14 +1492,14 @@ class PrxInputAsResolverEntity(_AbsPrxInputExtra):
             #
             if use_show_thread is True:
                 prx_item.set_show_build_fnc(
-                    lambda *args, **kwargs: self.__item_show_deferred_fnc(prx_item)
+                    lambda *args, **kwargs: self._item_show_fnc(prx_item)
                 )
                 return True, prx_item, None
             else:
-                self.__item_show_deferred_fnc(prx_item)
+                self._item_show_fnc(prx_item)
                 return True, prx_item, None
 
-    def __item_show_deferred_fnc(self, prx_item, use_as_tree=True):
+    def _item_show_fnc(self, prx_item, use_as_tree=True):
         obj = prx_item.get_gui_dcc_obj(namespace=self.NAMESPACE)
         obj_type_name = obj.type_name
         obj_name = obj.name
@@ -1563,11 +1563,11 @@ class PrxInputAsResolverEntity(_AbsPrxInputExtra):
         #
         prx_item.set_show_build_fnc(
             functools.partial(
-                self.__item_show_deferred_fnc, prx_item, False
+                self._item_show_fnc, prx_item, False
             )
         )
 
-    def __set_item_selected(self, obj):
+    def _set_item_selected(self, obj):
         item = obj.get_obj_gui()
         self._prx_input.set_item_selected(
             item, exclusive=True
@@ -1587,7 +1587,7 @@ class PrxInputAsResolverEntity(_AbsPrxInputExtra):
                         #
                         self._add_item_as_list(i)
                     #
-                    self.__set_item_selected(
+                    self._set_item_selected(
                         objs[-1]
                     )
         else:
@@ -1662,14 +1662,14 @@ class PrxInputAsNodes(_AbsPrxInputExtra):
             #
             if use_show_thread is True:
                 prx_item.set_show_build_fnc(
-                    lambda *args, **kwargs: self.__item_show_deferred_fnc(prx_item)
+                    lambda *args, **kwargs: self._item_show_fnc(prx_item)
                 )
                 return True, prx_item, None
             else:
-                self.__item_show_deferred_fnc(prx_item)
+                self._item_show_fnc(prx_item)
                 return True, prx_item, None
 
-    def __item_show_deferred_fnc(self, prx_item, use_as_tree=True):
+    def _item_show_fnc(self, prx_item, use_as_tree=True):
         obj = prx_item.get_gui_dcc_obj(namespace=self.NAMESPACE)
         prx_item.set_name(
             obj.get_name()
@@ -1714,9 +1714,9 @@ class PrxInputAsNodes(_AbsPrxInputExtra):
         prx_item.set_tool_tip(path)
         self._item_dict[path] = prx_item
         #
-        self.__item_show_deferred_fnc(prx_item, use_as_tree=False)
+        self._item_show_fnc(prx_item, use_as_tree=False)
 
-    def __set_item_selected(self, obj):
+    def _set_item_selected(self, obj):
         path = obj.path
         if path in self._item_dict:
             item = self._item_dict[path]
@@ -1741,7 +1741,7 @@ class PrxInputAsNodes(_AbsPrxInputExtra):
                     elif self._view_mode == 'tree':
                         self._add_item_as_tree(i)
 
-                # self.__set_item_selected(
+                # self._set_item_selected(
                 #     objs[-1]
                 # )
         else:
@@ -1842,11 +1842,11 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
         self._item_dict[path] = prx_item
         #
         prx_item.set_show_build_fnc(
-            lambda *args, **kwargs: self.__item_show_deferred_fnc(prx_item, scheme)
+            lambda *args, **kwargs: self._item_show_fnc(prx_item, scheme)
         )
         return True, prx_item, None
 
-    def __item_show_deferred_fnc(self, prx_item, scheme, use_as_tree=True):
+    def _item_show_fnc(self, prx_item, scheme, use_as_tree=True):
         def rpc_lock_folder_fnc_():
             bsc_storage.StgPermissionMtd.change_mode(path, mode='555')
             prx_item.set_status(
@@ -1897,12 +1897,12 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
             prx_item.set_names([obj.get_path_prettify(), update])
 
         if scheme == 'folder':
-            prx_item.set_icon_by_file(
-                gui_core.GuiIcon.get_directory()
+            prx_item.set_icon(
+                gui_qt_core.GuiQtDcc.get_qt_folder_icon()
             )
         else:
-            prx_item.set_icon_by_file(
-                gui_core.GuiIcon.get_by_file(path)
+            prx_item.set_icon(
+                gui_qt_core.GuiQtDcc.get_qt_file_icon(path)
             )
 
         prx_item.set_tool_tip(
@@ -1914,15 +1914,14 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
         menu_raw = [
             ('open folder', 'file/folder', obj.open_in_system)
         ]
-        if use_as_tree is True:
-            menu_raw.extend(
-                [
-                    ('expanded',),
-                    ('expand branch', 'expand', prx_item.set_expand_branch),
-                    ('collapse branch', 'collapse', prx_item.set_collapse_branch),
-                ]
-            )
-        #
+        # if use_as_tree is True:
+        #     menu_raw.extend(
+        #         [
+        #             ('expanded',),
+        #             ('expand branch', 'expand', prx_item.set_expand_branch),
+        #             ('collapse branch', 'collapse', prx_item.set_collapse_branch),
+        #         ]
+        #     )
         if scheme == 'file':
             prx_item.set_drag_enable(True)
             prx_item.set_drag_urls([obj.get_path()])
@@ -1932,17 +1931,17 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
                     'nodegraph/fileref': str(obj.get_path())
                 }
             )
-        elif scheme == 'folder':
-            menu_raw.extend(
-                [
-                    ('rpc folder permission',),
-                    ('rpc lock folder (555)', 'lock', rpc_lock_folder_fnc_),
-                    ('rpc unlock folder (775)', 'lock', rpc_unlock_folder_fnc_),
-                    ('rpc file permission',),
-                    ('rpc lock files (555)', 'lock', rpc_lock_files_fnc_),
-                    ('rpc unlock files (775)', 'lock', rpc_unlock_files_fnc_),
-                ]
-            )
+        # elif scheme == 'folder':
+        #     menu_raw.extend(
+        #         [
+        #             ('rpc folder permission',),
+        #             ('rpc lock folder (555)', 'lock', rpc_lock_folder_fnc_),
+        #             ('rpc unlock folder (775)', 'lock', rpc_unlock_folder_fnc_),
+        #             ('rpc file permission',),
+        #             ('rpc lock files (555)', 'lock', rpc_lock_files_fnc_),
+        #             ('rpc unlock files (775)', 'lock', rpc_unlock_files_fnc_),
+        #         ]
+        #     )
         #
         prx_item.set_gui_menu_data(menu_raw)
         #
@@ -1961,9 +1960,10 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
 
     def _add_item_as_tree(self, obj, scheme):
         if self._root_location is not None:
-            i_is_create, i_prx_item, _ = self._add_item_as_list(self._root_obj, scheme)
+            i_is_create, i_prx_item, _ = self._add_item_as_list(self._root_obj, scheme='folder')
             if i_is_create is True:
                 i_prx_item.set_expanded(True)
+
             ancestor_paths = obj.get_ancestor_paths()
             ancestor_paths.reverse()
             if self._root_location in ancestor_paths:
@@ -1995,7 +1995,7 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
         if path in self._item_dict:
             prx_item = self._item_dict[path]
             return False, prx_item, None
-        #
+
         create_kwargs = dict(
             name='...',
             filter_key=path
@@ -2012,11 +2012,11 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
         self._item_dict[path] = prx_item
         #
         prx_item.set_show_build_fnc(
-            lambda *args, **kwargs: self.__item_show_deferred_fnc(prx_item, scheme, use_as_tree=False)
+            lambda *args, **kwargs: self._item_show_fnc(prx_item, scheme, use_as_tree=False)
         )
         return True, prx_item, None
 
-    def __set_item_selected(self, obj):
+    def _set_item_selected(self, obj):
         item = obj.get_gui()
         self._prx_input.set_item_selected(
             item, exclusive=True
@@ -2052,7 +2052,7 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
                     elif self._view_mode == 'tree':
                         self._add_item_as_tree(i_obj, i_scheme)
                 #
-                self.__set_item_selected(obj_cur)
+                self._set_item_selected(obj_cur)
         else:
             pass
 

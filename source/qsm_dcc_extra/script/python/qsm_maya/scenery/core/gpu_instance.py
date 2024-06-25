@@ -80,7 +80,7 @@ class GpuInstanceOpt(object):
             file_path_new = '{}/{}.abc'.format(
                 file_opt.directory_path, key
             )
-            if bsc_storage.StgPathMtd.get_is_file(file_path_new) is True:
+            if bsc_storage.StgPath.get_is_file(file_path_new) is True:
                 _mya_core.NodeAttribute.set_as_string(
                     self._shape, 'cacheFileName', file_path_new
                 )

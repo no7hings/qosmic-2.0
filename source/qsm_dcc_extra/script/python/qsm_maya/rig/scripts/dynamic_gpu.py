@@ -11,7 +11,7 @@ from ... import core as _mya_core
 
 from ...rig import core as _rig_core
 
-from ... asset import core as _ast_core
+from ... general import core as _gnl_core
 
 from ... import motion as _motion
 
@@ -19,9 +19,8 @@ from ...resource import core as _rsc_core
 
 
 class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
-    CACHE_NAME = _rig_core.RigConfigure.DynamicGpuCacheName
-
-    CACHE_ROOT = '|__DYNAMIC_GPU__'
+    CACHE_ROOT = _gnl_core.ResourceCaches.DynamicGpuRoot
+    CACHE_NAME = _gnl_core.ResourceCaches.DynamicGpuName
 
     def __init__(self, *args, **kwargs):
         super(DynamicGpuCacheOpt, self).__init__(*args, **kwargs)
@@ -41,7 +40,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
         if self._root is not None:
             motion = _motion.AdvMotionOpt(self._namespace).get_animations()
             key = bsc_core.BscHash.to_hash_key(motion)
-            directory_path = _ast_core.AssetCache.generate_dynamic_gpu_directory(
+            directory_path = _gnl_core.AssetCaches.generate_dynamic_gpu_directory(
                 user_name=bsc_core.BscSystem.get_user_name(), key=key
             )
             motion_file_path = '{}/motion.json'.format(directory_path)
@@ -60,7 +59,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
         cache_location = '|{}:{}'.format(self._namespace, self.CACHE_NAME)
         if cmds.objExists(cache_location) is False and cmds.objExists(cache_location_new) is False:
             if os.path.isfile(cache_file_path) is True:
-                _mya_core.SceneFile.import_file_force(
+                _mya_core.SceneFile.import_file_ignore_error(
                     cache_file_path, namespace=self._namespace
                 )
                 cmds.setAttr(
@@ -110,7 +109,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
                 return cmd_script, cache_file_path
             return None, cache_file_path
         else:
-            directory_path = _ast_core.AssetCache.generate_dynamic_gpu_directory(
+            directory_path = _gnl_core.AssetCaches.generate_dynamic_gpu_directory(
                 user_name=bsc_core.BscSystem.get_user_name()
             )
             source_file_path = '{}/source.ma'.format(directory_path)

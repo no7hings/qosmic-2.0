@@ -228,12 +228,20 @@ class PrxTreeItem(
     def get_key(self):
         return self._key
 
+    def set_icon(self, qt_icon, column=0):
+        self._qt_widget._set_icon_(qt_icon, column)
+
     def set_icon_by_file(self, icon, column=0):
         if isinstance(icon, six.string_types):
             self._qt_widget._set_icon_file_path_(icon, column)
         elif isinstance(icon, _qt_core.QtGui.QIcon):
             qt_icon = icon
             self._qt_widget._set_icon_(qt_icon, column)
+
+    def set_icon_name(self, icon_name, column=0):
+        self._qt_widget._set_icon_file_path_(
+            _gui_core.GuiIcon.get(icon_name), column
+        )
 
     def set_icon_by_color(self, color, column=0):
         self._qt_widget._set_icon_color_rgb_(color, column)

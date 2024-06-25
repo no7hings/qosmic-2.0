@@ -146,7 +146,7 @@ class RsvAssetTextureOpt(object):
         list_ = []
         for i in matches:
             i_result, i_variants = i
-            if bsc_storage.StgPathMtd.get_is_writeable(i_result) is False:
+            if bsc_storage.StgPath.get_is_writeable(i_result) is False:
                 list_.append(i_variants['version'])
         return list_
 
@@ -157,7 +157,7 @@ class RsvAssetTextureOpt(object):
         list_ = []
         for i in matches:
             i_result, i_variants = i
-            if bsc_storage.StgPathMtd.get_is_writeable(i_result) is True:
+            if bsc_storage.StgPath.get_is_writeable(i_result) is True:
                 list_.append(i_variants['version'])
         return list_
 
@@ -179,7 +179,7 @@ class RsvAssetTextureOpt(object):
                 i_k
             )
             i_check_p = i_p+'/{extra}'
-            i_check_p_opt = bsc_core.PtnStgParseOpt(
+            i_check_p_opt = bsc_core.BscStgParseOpt(
                 i_check_p
             )
             i_check_p_opt.update_variants(**dict(root=rsv_project.get('root')))
@@ -202,7 +202,7 @@ class RsvAssetTextureOpt(object):
         directory_paths = self.get_all_directories(
             dcc_objs
         )
-        unlocked_directory_paths = [i for i in directory_paths if bsc_storage.StgPathMtd.get_is_writeable(i) is True]
+        unlocked_directory_paths = [i for i in directory_paths if bsc_storage.StgPath.get_is_writeable(i) is True]
         if unlocked_directory_paths:
             with bsc_log.LogProcessContext.create_as_bar(
                     maximum=len(unlocked_directory_paths),

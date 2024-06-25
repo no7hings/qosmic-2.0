@@ -9,7 +9,7 @@ import lxbasic.extra.methods as utl_etr_methods
 class VideoComp(object):
     @classmethod
     def comp_by_image(cls, file_path):
-        user_directory_path = bsc_storage.StgTmpBaseMtd.get_user_directory('vedio-converter')
+        user_directory_path = bsc_storage.StgTmpBaseMtd.get_user_directory('video-converter')
         file_name = bsc_core.BscUuid.generate_by_text(file_path)
         movie_file_path = '{}/{}.mov'.format(user_directory_path, file_name)
         utl_etr_methods.EtrRv.convert_to_mov(
@@ -37,7 +37,7 @@ class VideoComp(object):
                     i_movie_file_path = cls.comp_by_image(i_file_path)
                 movie_file_paths.append(i_movie_file_path)
             #
-            user_directory_path = bsc_storage.StgTmpBaseMtd.get_user_directory('vedio-converter')
+            user_directory_path = bsc_storage.StgTmpBaseMtd.get_user_directory('video-converter')
             file_name = bsc_core.BscUuid.generate_by_text(
                 ' '.join(movie_file_paths)
             )

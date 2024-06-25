@@ -2,7 +2,7 @@
 from .. import abstracts as _abstracts
 
 
-class PrxPageForLoadTool(_abstracts.AbsPrxPageForLoad):
+class PrxPageForLoadTool(_abstracts.AbsPrxPageForLoadTool):
     def __init__(self, window, session, *args, **kwargs):
         super(PrxPageForLoadTool, self).__init__(window, session, *args, **kwargs)
 

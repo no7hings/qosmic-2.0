@@ -100,40 +100,41 @@ class QtTextBubble(
     def eventFilter(self, *args):
         widget, event = args
         if widget == self:
-            if hasattr(event, 'type'):
-                if event.type() == QtCore.QEvent.Close:
-                    self.delete_text_accepted.emit(self._get_text_())
+            if not hasattr(event, 'type'):
+                return False
+            if event.type() == QtCore.QEvent.Close:
+                self.delete_text_accepted.emit(self._get_text_())
+            #
+            elif event.type() == QtCore.QEvent.Resize:
+                self._refresh_widget_all_()
+            #
+            elif event.type() == QtCore.QEvent.Enter:
+                self._is_hovered = True
+                self._refresh_widget_draw_()
+            elif event.type() == QtCore.QEvent.Leave:
+                self._is_hovered = False
+                self._delete_is_hovered = False
+                self._refresh_widget_draw_()
+            elif event.type() == QtCore.QEvent.MouseMove:
+                self._do_hover_move_(event)
+            #
+            elif event.type() == QtCore.QEvent.MouseButtonPress:
+                if event.button() == QtCore.Qt.LeftButton:
+                    self._set_action_flag_(self.ActionFlag.Press)
+                self._refresh_widget_draw_()
+            elif event.type() == QtCore.QEvent.MouseButtonDblClick:
+                if event.button() == QtCore.Qt.LeftButton:
+                    pass
+            elif event.type() == QtCore.QEvent.MouseButtonRelease:
+                if event.button() == QtCore.Qt.LeftButton:
+                    if self._delete_is_hovered is True:
+                        self.close()
+                        self.deleteLater()
                 #
-                elif event.type() == QtCore.QEvent.Resize:
-                    self._refresh_widget_all_()
+                self._clear_all_action_flags_()
                 #
-                elif event.type() == QtCore.QEvent.Enter:
-                    self._is_hovered = True
-                    self._refresh_widget_draw_()
-                elif event.type() == QtCore.QEvent.Leave:
-                    self._is_hovered = False
-                    self._delete_is_hovered = False
-                    self._refresh_widget_draw_()
-                elif event.type() == QtCore.QEvent.MouseMove:
-                    self._do_hover_move_(event)
-                #
-                elif event.type() == QtCore.QEvent.MouseButtonPress:
-                    if event.button() == QtCore.Qt.LeftButton:
-                        self._set_action_flag_(self.ActionFlag.Press)
-                    self._refresh_widget_draw_()
-                elif event.type() == QtCore.QEvent.MouseButtonDblClick:
-                    if event.button() == QtCore.Qt.LeftButton:
-                        pass
-                elif event.type() == QtCore.QEvent.MouseButtonRelease:
-                    if event.button() == QtCore.Qt.LeftButton:
-                        if self._delete_is_hovered is True:
-                            self.close()
-                            self.deleteLater()
-                    #
-                    self._clear_all_action_flags_()
-                    #
-                    self._is_hovered = False
-                    self._refresh_widget_draw_()
+                self._is_hovered = False
+                self._refresh_widget_draw_()
         return False
 
     def paintEvent(self, event):

@@ -110,7 +110,7 @@ build:
                 frame/step:
                     widget: integer
                     name: 'Frame Step'
-                    name_chs: '帧间隔'
+                    name_chs: '帧步长'
                     enable: True
                     value: 1
 
@@ -176,9 +176,9 @@ build:
                     widget: capsule_string
                     name: 'Output Update Scheme'
                     name_chs: '输出更新方案'
-                    options: ['overlay', 'new_version']
-                    option_names_chs: ['覆盖', '新版本']
-                    default: 'overlay'
+                    options: ['no_version', 'new_version']
+                    option_names_chs: ['无版本', '新版本']
+                    default: 'no_version'
                     enable: True
                     visible_condition: {
                         operator: 'match_one', port: 'output/save_scheme', value: ['auto', 'specific_directory']
@@ -233,7 +233,7 @@ build:
 
         tool_tip:
             |-
-            to be supplemented
+            to be supplemented.
         tool_tip_chs:
             |-
             待补充

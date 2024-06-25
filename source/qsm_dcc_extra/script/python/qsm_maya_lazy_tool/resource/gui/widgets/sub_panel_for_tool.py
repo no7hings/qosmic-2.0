@@ -8,9 +8,9 @@ from . import page_for_load_tool as _page_for_load_tool
 import qsm_maya.core as qsm_mya_core
 
 
-class PrxSubPanelForTool(_abstracts.AbsPrxSubPanelForRegister):
-    PAGE_FOR_REGISTER_CLS = _page_for_register_tool.PrxPageForRegisterTool
-    PAGE_FOR_LOAD_CLS = _page_for_load_tool.PrxPageForLoadTool
+class PrxSubPanelForTool(_abstracts.AbsPrxSubPanelForTool):
+    PAGE_FOR_REGISTER_TOOL_CLS = _page_for_register_tool.PrxPageForRegisterTool
+    PAGE_FOR_LOAD_TOOL_CLS = _page_for_load_tool.PrxPageForLoadTool
 
     SCRIPT_JOB_NAME = 'lazy_resource_tool'
 

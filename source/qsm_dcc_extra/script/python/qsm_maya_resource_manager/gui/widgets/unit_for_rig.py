@@ -17,7 +17,7 @@ import qsm_general.scan as qsm_gnl_scan
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.asset.core as qsm_mya_ast_core
+import qsm_maya.general.core as qsm_mya_gnl_core
 
 import qsm_maya.rig.core as qsm_mya_rig_core
 
@@ -25,11 +25,11 @@ import qsm_maya.rig.scripts as qsm_mya_rig_scripts
 
 import qsm_maya.motion as qsm_mya_motion
 
-from ... import core as _rsc_mng_core
+import qsm_maya_gui.core as qsm_mya_gui_core
 
 
 class UnitForRigView(
-    _rsc_mng_core.GuiResourceOpt
+    qsm_mya_gui_core.PrxUnitForResourceOpt
 ):
     ROOT_NAME = 'Rigs'
 
@@ -44,110 +44,10 @@ class UnitForRigView(
 
     def __init__(self, window, unit, session, prx_tree_view):
         super(UnitForRigView, self).__init__(window, unit, session, prx_tree_view)
-        self._skin_proxy_load_args_array = []
-        self._dynamic_gpu_load_args_array = []
-    
-    def gui_add_resource(self, resource):
-        def build_fnc_():
-            prx_item.set_name(
-                path_opt.get_name()
-            )
-            _reference_node = resource.reference_opt
-            _semantic_tag_filter_data = {}
-            _tag_group_key = '/status'
-            if _reference_node.is_loaded():
-                prx_item.set_icon_by_file(
-                    gui_core.GuiIcon.get('node/maya/reference')
-                )
-                _semantic_tag_filter_data.setdefault(
-                    _tag_group_key, set()
-                ).add('/status/loaded')
-                self._page._gui_resource_tag_opt.gui_register_tag_by_path(
-                    '/status/loaded', path, auto_create_ancestors=True
-                )
-            else:
-                prx_item.set_icon_by_file(
-                    gui_core.GuiIcon.get('node/maya/reference-unloaded')
-                )
-                _semantic_tag_filter_data.setdefault(
-                    _tag_group_key, set()
-                ).add('/status/unloaded')
-                self._page._gui_resource_tag_opt.gui_register_tag_by_path(
-                    '/status/unloaded', path, auto_create_ancestors=True
-                )
-            
-            if resource.is_skin_proxy_exists():
-                prx_item.set_status(
-                    prx_item.ValidationStatus.Active
-                )
-                if self._window._language == 'chs':
-                    prx_item.set_name('简模代理', 1)
-                else:
-                    prx_item.set_name('Skin Proxy', 1)
-            elif resource.is_dynamic_gpu_exists():
-                prx_item.set_status(
-                    prx_item.ValidationStatus.Locked
-                )
-                if self._window._language == 'chs':
-                    prx_item.set_name('动态GPU', 1)
-                else:
-                    prx_item.set_name('Dynamic GPU', 1)
-            else:
-                prx_item.set_status(
-                    prx_item.ValidationStatus.Normal
-                )
-                prx_item.set_name('', 1)
-
-            prx_item.get_item()._update_item_semantic_tag_filter_keys_tgt_(_semantic_tag_filter_data)
-            prx_item.set_tool_tip(
-                '\n'.join(['{}: {}'.format(_k, _v) for _k, _v in resource.variants.items()])
-            )
-
-        path = resource.path
-        if self.gui_check_exists(path) is False:
-            path_opt = resource.path_opt
-            create_kwargs = dict(
-                name='loading ...',
-                filter_key=path,
-            )
-            parent = path_opt.get_parent()
-            if parent is not None:
-                prx_item_parent = self.gui_get_one(parent.path)
-                prx_item = prx_item_parent.add_child(
-                    **create_kwargs
-                )
-            else:
-                prx_item = self._prx_tree_view.create_item(
-                    **create_kwargs
-                )
-
-            # prx_item.set_checked(True)
-            self.gui_register(path, prx_item)
-            variants = resource.variants
-            semantic_tag_filter_data = {}
-            for i in self.TAG_KEYS_INCLUDE:
-                if i in variants:
-                    i_v = variants[i]
-                    i_tag_group = '/{}'.format(i)
-                    i_tag_path = '/{}/{}'.format(i, i_v)
-                    semantic_tag_filter_data.setdefault(
-                        i_tag_group, set()
-                    ).add(i_tag_path)
-                    self._page._gui_resource_tag_opt.gui_register_tag_by_path(
-                        i_tag_path, path, auto_create_ancestors=True
-                    )
-
-            prx_item.get_item()._update_item_semantic_tag_filter_keys_tgt_(semantic_tag_filter_data)
-            prx_item.set_gui_dcc_obj(
-                resource, namespace=self.NAMESPACE
-            )
-            prx_item.set_show_build_fnc(build_fnc_)
-            return True, prx_item
-        return False, self.gui_get_one(path)
 
 
 class UnitForRigReference(
-    _rsc_mng_core.GuiBaseOpt
+    qsm_mya_gui_core.PrxUnitBaseOpt
 ):
     def __init__(self, window, unit, session, prx_input_for_asset):
         super(UnitForRigReference, self).__init__(window, unit, session)
@@ -211,8 +111,8 @@ class UnitForRigReference(
                         self._reference_button._set_action_enable_(True)
 
 
-class UnitForRigUtilityToolSet(
-    _rsc_mng_core.GuiBaseOpt
+class ToolSetUnitForRigUtility(
+    qsm_mya_gui_core.PrxUnitBaseOpt
 ):
 
     # skin proxy
@@ -232,11 +132,11 @@ class UnitForRigUtilityToolSet(
 
         self._page.do_gui_refresh_all(force=True)
 
-        self._page._gui_resource_opt.do_gui_refresh_by_dcc_selection()
+        self._page._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection()
 
     def do_dcc_do_dcc_load_skin_proxies_by_selection(self):
         if self._load_skin_proxy_button.get_is_started() is False:
-            resources = self._page._gui_resource_opt.gui_get_selected_resources()
+            resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
             if resources:
                 self._skin_proxy_load_args_array = []
                 create_cmds = []
@@ -267,7 +167,7 @@ class UnitForRigUtilityToolSet(
                     self.do_dcc_load_skin_proxies()
 
     def do_dcc_remove_skin_proxies(self):
-        resources = self._page._gui_resource_opt.gui_get_selected_resources()
+        resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
                 i_opt = qsm_mya_rig_scripts.SkinProxyOpt(i_resource)
@@ -275,7 +175,7 @@ class UnitForRigUtilityToolSet(
 
         self._page.do_gui_refresh_all(force=True)
 
-        self._page._gui_resource_opt.do_gui_refresh_by_dcc_selection()
+        self._page._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection()
 
     # dynamic gpu
     def do_dcc_load_dynamic_gpus(self):
@@ -290,7 +190,7 @@ class UnitForRigUtilityToolSet(
 
     def do_dcc_do_dcc_load_dynamic_gpus_bt_selection(self):
         if self._load_dynamic_gpu_button.get_is_started() is False:
-            resources = self._page._gui_resource_opt.gui_get_selected_resources()
+            resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
             if resources:
                 self._dynamic_gpu_load_args_array = []
                 create_cmds = []
@@ -306,7 +206,7 @@ class UnitForRigUtilityToolSet(
 
                         i_opt = qsm_mya_rig_scripts.DynamicGpuCacheOpt(i_resource)
                         if i_opt.is_exists() is False:
-                            i_directory_path = qsm_mya_ast_core.AssetCache.generate_dynamic_gpu_directory(
+                            i_directory_path = qsm_mya_gnl_core.AssetCaches.generate_dynamic_gpu_directory(
                                 user_name=bsc_core.BscSystem.get_user_name()
                             )
                             i_cmd, i_cache_file = i_opt.generate_args(
@@ -328,7 +228,7 @@ class UnitForRigUtilityToolSet(
         self._page.do_gui_refresh_all(force=True)
 
     def do_dcc_remove_dynamic_gpus(self):
-        resources = self._page._gui_resource_opt.gui_get_selected_resources()
+        resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
                 i_opt = qsm_mya_rig_scripts.DynamicGpuCacheOpt(i_resource)
@@ -368,7 +268,7 @@ class UnitForRigUtilityToolSet(
             self._frame_range_port.set(frame_range)
 
     def __init__(self, window, unit, session):
-        super(UnitForRigUtilityToolSet, self).__init__(window, unit, session)
+        super(ToolSetUnitForRigUtility, self).__init__(window, unit, session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
@@ -404,10 +304,6 @@ class UnitForRigUtilityToolSet(
         self._prx_options_node.set(
             'dynamic_gpu.remove', self.do_dcc_remove_dynamic_gpus
         )
-
-        self._prx_options_node.get_port('selection_scheme').connect_input_changed_to(
-            self._page._gui_resource_opt.do_dcc_refresh_resources_selection
-        )
         self._prx_options_node.get_port('setting.frame_scheme').connect_input_changed_to(
             self.do_gui_refresh_by_frame_scheme_changing
         )
@@ -423,12 +319,9 @@ class UnitForRigUtilityToolSet(
     def gui_get_frame_scheme(self):
         return self._prx_options_node.get('setting.frame_scheme')
 
-    def gui_get_selection_scheme(self):
-        return self._prx_options_node.get('selection_scheme')
-
 
 class UnitForRigSwitchToolSet(
-    _rsc_mng_core.GuiBaseOpt
+    qsm_mya_gui_core.PrxUnitBaseOpt
 ):
     def do_dcc_skin_proxy_switch_to(self, key):
         if key == 'enable':
@@ -506,7 +399,7 @@ class UnitForRigSwitchToolSet(
     def do_gui_refresh_buttons(self):
         namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
         resources = list(
-            filter(None, [self._page._gui_resource_opt.get_resources_query().get(x) for x in namespaces])
+            filter(None, [self._page._gui_resource_prx_unit.get_resources_query().get(x) for x in namespaces])
         )
         self.do_gui_refresh_buttons_for_skin_proxy(resources)
         self.do_gui_refresh_buttons_for_dynamic_gpu(resources)
@@ -570,15 +463,15 @@ class UnitForRigSwitchToolSet(
                 i_b.set_sub_name('({})'.format(i_c))
 
     def do_gui_refresh_by_dcc_selection(self):
-        if self._page.gui_get_current_tool_tab_key() == 'switch':
+        if self._page.gui_get_tool_tab_current_key() == 'switch':
             self.do_gui_refresh_buttons()
 
     def do_gui_selection_all_resources(self):
-        self._page._gui_resource_opt.do_gui_select_all_resources()
+        self._page._gui_resource_prx_unit.do_gui_select_all_resources()
 
 
 class UnitForRigExtendToolSet(
-    _rsc_mng_core.GuiBaseOpt
+    qsm_mya_gui_core.PrxUnitBaseOpt
 ):
     def __init__(self, window, unit, session):
         super(UnitForRigExtendToolSet, self).__init__(window, unit, session)
@@ -629,13 +522,13 @@ class UnitForRigExtendToolSet(
         )
 
     def do_dcc_copy_animation(self):
-        file_path = qsm_mya_ast_core.AssetCache.generate_animation_file(
+        file_path = qsm_mya_gnl_core.AssetCaches.generate_animation_file(
             bsc_core.BscSystem.get_user_name()
         )
         namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
         if not namespaces:
             return
-        adv_rig_query = self._page._gui_resource_opt.get_resources_query()
+        adv_rig_query = self._page._gui_resource_prx_unit.get_resources_query()
         valid_namespaces = adv_rig_query.to_valid_namespaces(namespaces)
         if not valid_namespaces:
             return
@@ -645,15 +538,15 @@ class UnitForRigExtendToolSet(
         )
 
     def do_dcc_paste_animation(self):
-        file_path = qsm_mya_ast_core.AssetCache.generate_animation_file(
+        file_path = qsm_mya_gnl_core.AssetCaches.generate_animation_file(
             bsc_core.BscSystem.get_user_name()
         )
-        if bsc_storage.StgPathMtd.get_is_file(file_path) is False:
+        if bsc_storage.StgPath.get_is_file(file_path) is False:
             return
         namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
         if not namespaces:
             return
-        adv_rig_query = self._page._gui_resource_opt.get_resources_query()
+        adv_rig_query = self._page._gui_resource_prx_unit.get_resources_query()
         valid_namespaces = adv_rig_query.to_valid_namespaces(namespaces)
         if not valid_namespaces:
             return
@@ -670,7 +563,7 @@ class UnitForRigExtendToolSet(
         if namespaces:
             self._dynamic_gpu_load_args_array = []
 
-            adv_rig_query = self._page._gui_resource_opt.get_resources_query()
+            adv_rig_query = self._page._gui_resource_prx_unit.get_resources_query()
             valid_namespaces = adv_rig_query.to_valid_namespaces(namespaces)
             if len(valid_namespaces) >= 2:
                 namespace_src = valid_namespaces[-2]
@@ -696,7 +589,7 @@ class UnitForRigExtendToolSet(
                 )
 
     def do_dcc_enable_control_playback_visible(self):
-        resources = self._page._gui_resource_opt.gui_get_selected_resources()
+        resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
                 if i_resource.is_exists() is False:
@@ -706,7 +599,7 @@ class UnitForRigExtendToolSet(
                 [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 0) for x in i_controls]
 
     def do_dcc_disable_control_playback_visible(self):
-        resources = self._page._gui_resource_opt.gui_get_selected_resources()
+        resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
                 if i_resource.is_exists() is False:
@@ -716,13 +609,13 @@ class UnitForRigExtendToolSet(
                 [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 1) for x in i_controls]
 
     def do_dcc_create_transformation_locator(self):
-        resources = self._page._gui_resource_opt.gui_get_selected_resources()
+        resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
         if resources:
             namespaces = [x.namespace for x in resources]
             qsm_mya_rig_scripts.TransformationLocatorOpt(namespaces).create_transformation_locators()
 
     def do_dcc_remove_transformation_locator(self):
-        resources = self._page._gui_resource_opt.gui_get_selected_resources()
+        resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
         if resources:
             namespaces = [x.namespace for x in resources]
             qsm_mya_rig_scripts.TransformationLocatorOpt(namespaces).remove_transformation_locators()

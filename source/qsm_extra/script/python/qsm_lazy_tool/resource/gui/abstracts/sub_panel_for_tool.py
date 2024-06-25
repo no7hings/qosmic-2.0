@@ -10,19 +10,19 @@ from . import page_for_register_tool as _page_for_register_tool
 from . import page_for_load_tool as _page_for_load_tool
 
 
-class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseWindow):
-    PAGE_FOR_REGISTER_CLS = _page_for_register_tool.AbsPrxPageForRegisterTool
+class AbsPrxSubPanelForTool(gui_prx_widgets.PrxBaseWindow):
+    PAGE_FOR_REGISTER_TOOL_CLS = _page_for_register_tool.AbsPrxPageForRegisterTool
 
-    PAGE_FOR_LOAD_CLS = _page_for_load_tool.AbsPrxPageForLoad
+    PAGE_FOR_LOAD_TOOL_CLS = _page_for_load_tool.AbsPrxPageForLoadTool
 
     class TabKeys:
         Register = 'register'
         Load = 'load'
 
     def do_gui_update_by_dcc_selection(self):
-        if self._tool_prx_tab_box.get_current_key() == self.TabKeys.Register:
+        if self._page_prx_tab_box.get_current_key() == self.TabKeys.Register:
             self._register_prx_page.do_gui_update_by_dcc_selection()
-        elif self._tool_prx_tab_box.get_current_key() == self.TabKeys.Load:
+        elif self._page_prx_tab_box.get_current_key() == self.TabKeys.Load:
             self._load_prx_page.do_gui_update_by_dcc_selection()
 
     def _do_dcc_register_all_script_jobs(self):
@@ -32,7 +32,7 @@ class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseWindow):
         pass
 
     def __init__(self, window, session, *args, **kwargs):
-        super(AbsPrxSubPanelForRegister, self).__init__(*args, **kwargs)
+        super(AbsPrxSubPanelForTool, self).__init__(*args, **kwargs)
         if window is None:
             self._window = self
         else:
@@ -43,7 +43,7 @@ class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseWindow):
         self._language = gui_core.GuiUtil.get_language()
 
         self._configure = bsc_resource.RscExtendConfigure.get_as_content(
-            'lazy/resource/tool'
+            'lazy-resource/gui/tool'
         )
 
         self.set_window_title(
@@ -59,17 +59,17 @@ class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseWindow):
         self.gui_setup_window()
 
     def apply_and_close_fnc(self):
-        if self._tool_prx_tab_box.get_current_key() == self.TabKeys.Register:
+        if self._page_prx_tab_box.get_current_key() == self.TabKeys.Register:
             self._register_prx_page.ao_apply()
-        elif self._tool_prx_tab_box.get_current_key() == self.TabKeys.Load:
+        elif self._page_prx_tab_box.get_current_key() == self.TabKeys.Load:
             self._load_prx_page.ao_apply()
 
         self.do_close_window_later(500)
 
     def apply_fnc(self):
-        if self._tool_prx_tab_box.get_current_key() == self.TabKeys.Register:
+        if self._page_prx_tab_box.get_current_key() == self.TabKeys.Register:
             self._register_prx_page.ao_apply()
-        elif self._tool_prx_tab_box.get_current_key() == self.TabKeys.Load:
+        elif self._page_prx_tab_box.get_current_key() == self.TabKeys.Load:
             self._load_prx_page.ao_apply()
 
     def close_fnc(self):
@@ -84,11 +84,11 @@ class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseWindow):
             i.set_enable(boolean)
 
     def gui_setup_window(self):
-        self._tool_prx_tab_box = gui_prx_widgets.PrxHTabBox()
-        self.add_widget(self._tool_prx_tab_box)
+        self._page_prx_tab_box = gui_prx_widgets.PrxHTabBox()
+        self.add_widget(self._page_prx_tab_box)
         # register
         register_prx_sca = gui_prx_widgets.PrxVScrollArea()
-        self._tool_prx_tab_box.add_widget(
+        self._page_prx_tab_box.add_widget(
             register_prx_sca,
             key='register',
             name=gui_core.GuiUtil.choice_name(
@@ -98,13 +98,13 @@ class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseWindow):
                 self._language, self._window._configure.get('build.register.tab')
             )
         )
-        self._register_prx_page = self.PAGE_FOR_REGISTER_CLS(
+        self._register_prx_page = self.PAGE_FOR_REGISTER_TOOL_CLS(
             self._window, self._session
         )
         register_prx_sca.add_widget(self._register_prx_page)
         # load
         load_prx_sca = gui_prx_widgets.PrxVScrollArea()
-        self._tool_prx_tab_box.add_widget(
+        self._page_prx_tab_box.add_widget(
             load_prx_sca,
             key='load',
             name=gui_core.GuiUtil.choice_name(
@@ -115,7 +115,7 @@ class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseWindow):
             )
         )
 
-        self._load_prx_page = self.PAGE_FOR_LOAD_CLS(
+        self._load_prx_page = self.PAGE_FOR_LOAD_TOOL_CLS(
             self._window, self._session
         )
         load_prx_sca.add_widget(self._load_prx_page)
@@ -159,15 +159,26 @@ class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseWindow):
 
         self.do_gui_refresh_all()
 
-        self._tool_prx_tab_box.connect_current_changed_to(
+        self._page_prx_tab_box.connect_current_changed_to(
             self.do_gui_refresh_all
         )
+        self._page_prx_tab_box.set_history_key('lazy-resource-tool.page_key_current')
+        self._page_prx_tab_box.load_history()
+        # for load
+        self._window.connect_window_activate_changed_to(self.do_gui_refresh_for_load)
 
-        self._window.connect_window_activate_changed_to(self.do_gui_refresh_all)
+        self._window.connect_window_close_to(self.gui_close_fnc)
+
+    def gui_close_fnc(self):
+        self._page_prx_tab_box.save_history()
+
+    def do_gui_refresh_for_load(self):
+        if self._page_prx_tab_box.get_current_key() == self.TabKeys.Load:
+            self._load_prx_page.do_gui_refresh_all()
 
     def do_gui_refresh_all(self):
-        if self._tool_prx_tab_box.get_current_key() == self.TabKeys.Register:
+        if self._page_prx_tab_box.get_current_key() == self.TabKeys.Register:
             self._register_prx_page.do_gui_refresh_all()
-        elif self._tool_prx_tab_box.get_current_key() == self.TabKeys.Load:
+        elif self._page_prx_tab_box.get_current_key() == self.TabKeys.Load:
             self._load_prx_page.do_gui_refresh_all()
 

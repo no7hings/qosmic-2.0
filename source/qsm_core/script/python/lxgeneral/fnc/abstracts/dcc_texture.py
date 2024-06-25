@@ -39,7 +39,7 @@ class AbsFncExporterForDccTextureDef(object):
                     l_p.do_update()
                     # dpt to dst, file path can be is multiply
                     for j_port_path, j_texture_path_dpt in i_dcc_obj.reference_raw.items():
-                        if bsc_storage.StgPathMtd.get_is_exists(j_texture_path_dpt) is False:
+                        if bsc_storage.StgPath.get_is_exists(j_texture_path_dpt) is False:
                             continue
                         # map path to current platform
                         j_texture_path_dpt = bsc_storage.StgPathMapper.map_to_current(j_texture_path_dpt)

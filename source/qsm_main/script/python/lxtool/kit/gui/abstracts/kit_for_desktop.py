@@ -710,7 +710,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         self._modify_option_prx_node.set('gui.icon_color', gui_configure.get('icon_color') or (255, 255, 255, 255))
         self._modify_option_prx_node.set('gui.tool_tip', gui_configure.get('tool_tip'))
         python_file_path = '{}.py'.format(configure_file_opt.path_base)
-        if bsc_storage.StgPathMtd.get_is_file(python_file_path):
+        if bsc_storage.StgPath.get_is_file(python_file_path):
             self._modify_option_prx_node.set(
                 'script.python', bsc_storage.StgFileOpt(python_file_path).set_read()
             )
@@ -719,7 +719,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
                 'script.python', ''
             )
         windows_shell_file_path = '{}.bat'.format(configure_file_opt.path_base)
-        if bsc_storage.StgPathMtd.get_is_file(windows_shell_file_path):
+        if bsc_storage.StgPath.get_is_file(windows_shell_file_path):
             self._modify_option_prx_node.set(
                 'script.windows', bsc_storage.StgFileOpt(windows_shell_file_path).set_read()
             )
@@ -728,7 +728,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
                 'script.windows', ''
             )
         linux_shell_file_path = '{}.sh'.format(configure_file_opt.path_base)
-        if bsc_storage.StgPathMtd.get_is_file(linux_shell_file_path):
+        if bsc_storage.StgPath.get_is_file(linux_shell_file_path):
             self._modify_option_prx_node.set(
                 'script.linux', bsc_storage.StgFileOpt(linux_shell_file_path).set_read()
             )
@@ -756,7 +756,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         self._copy_option_prx_node.set('gui.icon_color', gui_configure.get('icon_color') or (255, 255, 255, 255))
         self._copy_option_prx_node.set('gui.tool_tip', gui_configure.get('tool_tip'))
         python_file_path = '{}.py'.format(configure_file_opt.path_base)
-        if bsc_storage.StgPathMtd.get_is_file(python_file_path):
+        if bsc_storage.StgPath.get_is_file(python_file_path):
             self._copy_option_prx_node.set(
                 'script.python', bsc_storage.StgFileOpt(python_file_path).set_read()
             )
@@ -765,7 +765,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
                 'script.python', ''
             )
         windows_shell_file_path = '{}.bat'.format(configure_file_opt.path_base)
-        if bsc_storage.StgPathMtd.get_is_file(windows_shell_file_path):
+        if bsc_storage.StgPath.get_is_file(windows_shell_file_path):
             self._copy_option_prx_node.set(
                 'script.windows', bsc_storage.StgFileOpt(windows_shell_file_path).set_read()
             )
@@ -774,7 +774,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
                 'script.windows', ''
             )
         linux_shell_file_path = '{}.sh'.format(configure_file_opt.path_base)
-        if bsc_storage.StgPathMtd.get_is_file(linux_shell_file_path):
+        if bsc_storage.StgPath.get_is_file(linux_shell_file_path):
             self._copy_option_prx_node.set(
                 'script.linux', bsc_storage.StgFileOpt(linux_shell_file_path).set_read()
             )

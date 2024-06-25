@@ -23,7 +23,7 @@ import lxgui.proxy.abstracts as gui_prx_abstracts
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_screw.core as qsm_scr_core
+import qsm_lazy.core as qsm_lzy_core
 
 
 class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
@@ -38,9 +38,12 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         self._window = window
         self._session = session
 
-        self._all_scr_stage_keys = qsm_scr_core.Stage.get_all_keys()
-        self._scr_stage_key = self._all_scr_stage_keys[0]
-        self._scr_stage = None
+        self._all_lzy_stage_keys = qsm_lzy_core.Stage.get_all_keys()
+        self._lzy_stage_key = self._all_lzy_stage_keys[0]
+        self._lzy_stage = None
+
+        self._dcc_node_opt = None
+        self._dcc_node_graph_opt = None
 
         self.gui_setup_page()
 
@@ -48,22 +51,43 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
 
     def _do_gui_switch_stage(self):
         key = self._prx_options_node.get('stage')
-        if self._scr_stage is not None:
-            self._scr_stage.close()
+        if self._lzy_stage is not None:
+            self._lzy_stage.close()
 
-        self._scr_stage_key = key
-        self._scr_stage = qsm_scr_core.Stage(
-            self._scr_stage_key
+        self._lzy_stage_key = key
+        self._lzy_stage = qsm_lzy_core.Stage(
+            self._lzy_stage_key
         )
-
         self.do_gui_add_types()
         self.do_gui_add_tags()
+        
+        self.do_gui_load_data_types()
+
+        self.do_gui_update_by_dcc_selection()
+        
+    def do_gui_load_data_types(self):
+        configure = qsm_lzy_core.Stage.get_configure(self._lzy_stage_key)
+        values = configure.get('options.data_types')
+
+        pot = self._prx_options_node.get_port('data_type')
+        if values:
+            if self._window._language == 'chs':
+                value_names = [qsm_lzy_core.DataTypes.NAME_CHS_MAP[x] for x in values]
+            else:
+                value_names = [qsm_lzy_core.DataTypes.NAME_MAP[x] for x in values]
+
+            pot.set_options(
+                values, value_names
+            )
+            pot.set(values[0])
+        else:
+            pot.set([])
 
     def do_gui_add_types(self):
         self._type_prx_tag_input.restore()
 
-        for i in self._scr_stage.find_all(
-            self._scr_stage.EntityTypes.Type,
+        for i in self._lzy_stage.find_all(
+            self._lzy_stage.EntityTypes.Type,
             filters=[
                 ('category', 'is', 'group'),
                 ('kind', 'is not', 'unavailable')
@@ -79,8 +103,8 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
 
             i_group._set_tool_tip_(i.to_description())
 
-        for i in self._scr_stage.find_all(
-            self._scr_stage.EntityTypes.Type,
+        for i in self._lzy_stage.find_all(
+            self._lzy_stage.EntityTypes.Type,
             filters=[
                 ('category', 'is', 'node'),
                 ('kind', 'is not', 'unavailable')
@@ -97,8 +121,8 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
     def do_gui_add_tags(self):
         self._tag_prx_tag_input.restore()
 
-        for i in self._scr_stage.find_all(
-            self._scr_stage.EntityTypes.Tag,
+        for i in self._lzy_stage.find_all(
+            self._lzy_stage.EntityTypes.Tag,
             filters=[
                 ('category', 'is', 'group'),
                 ('kind', 'is not', 'unavailable')
@@ -114,8 +138,8 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
 
             i_group._set_tool_tip_(i.to_description())
 
-        for i in self._scr_stage.find_all(
-            self._scr_stage.EntityTypes.Tag,
+        for i in self._lzy_stage.find_all(
+            self._lzy_stage.EntityTypes.Tag,
             filters=[
                 ('category', 'is', 'node'),
                 ('kind', 'is not', 'unavailable')
@@ -141,7 +165,10 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         raise NotImplementedError()
 
     def do_gui_close(self):
-        self._scr_stage.close()
+        self._lzy_stage.close()
+
+    def get_resource_data_type(self):
+        return self._prx_options_node.get('data_type')
 
     def get_data(self):
         raise NotImplementedError()
@@ -193,7 +220,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             return
 
         node_path = options.get('path')
-        if self._scr_stage.check_node_exists(node_path) is True:
+        if self._lzy_stage.check_node_exists(node_path) is True:
             self._window.exec_message(
                 gui_core.GuiUtil.choice_message(
                     self._window._language, self._window._configure.get('build.register.messages.name_exists')
@@ -206,7 +233,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         if not type_paths:
             self._window.exec_message(
                 gui_core.GuiUtil.choice_message(
-                    self._window._language, self._window._configure.get('build.messages.type')
+                    self._window._language, self._window._configure.get('build.register.messages.type')
                 ),
                 status='warning'
             )
@@ -216,45 +243,58 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         if not tag_paths:
             self._window.exec_message(
                 gui_core.GuiUtil.choice_message(
-                    self._window._language, self._window._configure.get('build.messages.tag')
+                    self._window._language, self._window._configure.get('build.register.messages.tag')
                 ),
                 status='warning'
             )
             return
 
-        self._scr_stage.create_node(
+        self._lzy_stage.create_node(
             node_path, gui_name=gui_name, gui_name_chs=gui_name_chs
         )
 
         for i_type_path in type_paths:
-            self._scr_stage.create_type_assign(
+            self._lzy_stage.create_type_assign(
                 node_path, i_type_path
             )
 
         for i_tag_path in tag_paths:
-            self._scr_stage.create_tag_assign(
+            self._lzy_stage.create_tag_assign(
                 node_path, i_tag_path
             )
 
         file_path = preview_files[-1]
 
-        self._scr_stage.upload_node_media(
+        self._lzy_stage.upload_node_media(
             node_path, file_path
         )
-        self._scr_stage.upload_node_json(
-            node_path, 'rebuild', data
-        )
+        
+        data_type = self.get_resource_data_type()
+        if data_type == qsm_lzy_core.DataTypes.MayaNode:
+            self._lzy_stage.upload_node_json(
+                node_path, qsm_lzy_core.DataTypes.MayaNode, data
+            )
+            self._lzy_stage.create_or_update_parameters(
+                node_path, 'data_type', qsm_lzy_core.DataTypes.MayaNode
+            )
+        elif data_type == qsm_lzy_core.DataTypes.MayaNodeGraph:
+            self._lzy_stage.upload_node_maya_scene(
+                node_path, qsm_lzy_core.DataTypes.MayaNodeGraph, data
+            )
+            self._lzy_stage.create_or_update_parameters(
+                node_path, 'data_type', qsm_lzy_core.DataTypes.MayaNodeGraph
+            )
         self._window.exec_message(
             gui_core.GuiUtil.choice_message(
-                self._window._language, self._window._configure.get('build.messages.successful')
+                self._window._language, self._window._configure.get('build.register.messages.successful')
             ),
             status='correct'
         )
 
     def gui_setup_page(self):
-        v_qt_lot_0 = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
-        v_qt_lot_0.setContentsMargins(*[0]*4)
-        v_qt_lot_0.setSpacing(2)
+        v_qt_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
+        v_qt_lot.setContentsMargins(*[0]*4)
+        v_qt_lot.setSpacing(2)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
@@ -262,7 +302,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             )
         )
 
-        v_qt_lot_0.addWidget(self._prx_options_node.widget)
+        v_qt_lot.addWidget(self._prx_options_node.widget)
 
         self._prx_options_node.build_by_data(
             self._window._configure.get('build.register.options.parameters')
@@ -278,7 +318,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         self._type_prx_tag_input = gui_prx_widgets.PrxTagInput()
 
         self._prx_tool_group = gui_prx_widgets.PrxHToolGroup()
-        v_qt_lot_0.addWidget(self._prx_tool_group.widget)
+        v_qt_lot.addWidget(self._prx_tool_group.widget)
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
             gui_core.GuiUtil.choice_name(
@@ -299,24 +339,24 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
 
         if self._window._language == 'chs':
             gui_names = [
-                qsm_scr_core.Stage.get_configure(x).get('options.gui_name_chs')
-                for x in self._all_scr_stage_keys
+                qsm_lzy_core.Stage.get_configure(x).get('options.gui_name_chs')
+                for x in self._all_lzy_stage_keys
             ]
         else:
             gui_names = [
-                qsm_scr_core.Stage.get_configure(x).get('options.gui_name')
-                for x in self._all_scr_stage_keys
+                qsm_lzy_core.Stage.get_configure(x).get('options.gui_name')
+                for x in self._all_lzy_stage_keys
             ]
 
         self._prx_options_node.get_port('stage').set_options(
-            self._all_scr_stage_keys, gui_names
+            self._all_lzy_stage_keys, gui_names
         )
 
         self._prx_options_node.get_port('stage').connect_input_changed_to(
             self._do_gui_switch_stage
         )
 
-        self._prx_options_node.get_port('search_scheme').connect_input_changed_to(
+        self._prx_options_node.get_port('data_type').connect_input_changed_to(
             self.do_gui_update_by_dcc_selection
         )
 

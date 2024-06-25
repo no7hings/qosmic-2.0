@@ -263,7 +263,7 @@ class GuiQtDcc(AbsGuiDcc):
     @classmethod
     def get_qt_file_icon(cls, file_path):
         f_i_p = QtWidgets.QFileIconProvider()
-        if bsc_storage.StgPathMtd.get_is_file(file_path) is True:
+        if bsc_storage.StgPath.get_is_file(file_path) is True:
             info = QtCore.QFileInfo(file_path)
             return f_i_p.icon(info)
         return f_i_p.icon(f_i_p.File)

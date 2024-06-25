@@ -466,7 +466,7 @@ class AbsFncComparerForDccGeometry(_base.AbsFncOptionBase):
         self._location = self.get('location')
         self._location_source = self.get('location_source')
         #
-        self._cache_directory = bsc_core.EnvBaseMtd.get_temporary_root()
+        self._cache_directory = bsc_core.EnvBaseMtd.get_cache_temporary_root()
         self._resolver = rsv_core.RsvBase.generate_root()
         #
         self._rsv_scene_properties = self._resolver.get_rsv_scene_properties_by_any_scene_file_path(

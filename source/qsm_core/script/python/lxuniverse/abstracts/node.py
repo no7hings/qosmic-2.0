@@ -861,7 +861,7 @@ class AbsObjStgExtraDef(object):
         return platform.system() == 'Windows'
 
     def _init_obj_storage_extra_def_(self):
-        self._root = bsc_storage.StgPathMtd.get_root(
+        self._root = bsc_storage.StgPath.get_root(
             self.path
         )
 
@@ -938,13 +938,13 @@ class AbsObjStgExtraDef(object):
         return os.path.normpath(self.path) == os.path.normpath(file_path)
 
     def get_permission(self):
-        return bsc_storage.StgPathMtd.get_permission(self.path)
+        return bsc_storage.StgPath.get_permission(self.path)
 
     def get_is_writeable(self):
-        return bsc_storage.StgPathMtd.get_is_writeable(self.path)
+        return bsc_storage.StgPath.get_is_writeable(self.path)
 
     def get_is_readable(self):
-        return bsc_storage.StgPathMtd.get_is_readable(self.path)
+        return bsc_storage.StgPath.get_is_readable(self.path)
 
     def link_to(self, *args, **kwargs):
         pass
@@ -1273,8 +1273,8 @@ class AbsStgFile(
         if self.get_is_exists() is True:
             file_tgt = self.__class__(file_path_tgt)
             if replace is True:
-                if bsc_storage.StgPathMtd.get_is_exists(file_path_tgt) is True:
-                    if bsc_storage.StgPathMtd.get_is_writeable(file_path_tgt) is True:
+                if bsc_storage.StgPath.get_is_exists(file_path_tgt) is True:
+                    if bsc_storage.StgPath.get_is_writeable(file_path_tgt) is True:
                         os.remove(file_tgt.path)
                         shutil.copy2(self.path, file_tgt.path)
                         return True, bsc_log.Log.trace_method_result(

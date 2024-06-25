@@ -319,7 +319,7 @@ class AbsPnlManagerForTextureSpaceDcc(gui_prx_widgets.PrxSessionWindow):
             self._dcc_objs
         )
 
-        unlocked_directory_paths = [i for i in directory_paths if bsc_storage.StgPathMtd.get_is_writeable(i) is True]
+        unlocked_directory_paths = [i for i in directory_paths if bsc_storage.StgPath.get_is_writeable(i) is True]
         if unlocked_directory_paths:
             w = gui_core.GuiDialog.create(
                 self._session.gui_name,
@@ -422,7 +422,7 @@ class AbsPnlManagerForTextureSpaceDcc(gui_prx_widgets.PrxSessionWindow):
 
         def run_fnc_():
             for i_index, (i_file_path, i_output_directory_path) in enumerate(self._create_data):
-                bsc_storage.StgPathMtd.create_directory(
+                bsc_storage.StgPath.create_directory(
                     i_output_directory_path
                 )
 

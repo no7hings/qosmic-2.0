@@ -78,7 +78,7 @@ def main(session):
         return _list
     # get checked resources
     window = session.get_window()
-    gui_resource_opt = window._gui_resource_opt
+    gui_resource_opt = window._gui_resource_prx_unit
     dtb_resources = gui_resource_opt.get_checked_or_selected_db_resources()
     if not dtb_resources:
         gui_core.GuiDialog.create(
@@ -99,11 +99,11 @@ def main(session):
         base_variants = dict(root=dtb_opt.get_stg_root())
         #
         scene_maya_directory_p = dtb_opt.get_pattern(keyword='scene-maya-dir')
-        scene_maya_directory_p_o = bsc_core.PtnStgParseOpt(scene_maya_directory_p)
+        scene_maya_directory_p_o = bsc_core.BscStgParseOpt(scene_maya_directory_p)
         scene_maya_directory_p_o.update_variants(**base_variants)
         #
         proxy_ass_directory_p = dtb_opt.get_pattern(keyword='proxy-ass-dir')
-        proxy_ass_directory_p_o = bsc_core.PtnStgParseOpt(proxy_ass_directory_p)
+        proxy_ass_directory_p_o = bsc_core.BscStgParseOpt(proxy_ass_directory_p)
         proxy_ass_directory_p_o.update_variants(**base_variants)
         #
         window = session.get_window()

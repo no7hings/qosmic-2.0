@@ -304,7 +304,7 @@ class QtInputAsStorage(
 
     def _choose_value_completion_gain_fnc_(self, value):
         if value:
-            path = bsc_storage.StgPathMtd.clear_pathsep_to(value)
+            path = bsc_storage.StgPath.clear_pathsep_to(value)
             p = path + '*'
             results = bsc_scan.ScanGlob.glob(p)
             if self._storage_scheme in {self.StorageScheme.DirectoryOpen, self.StorageScheme.DirectorySave}:

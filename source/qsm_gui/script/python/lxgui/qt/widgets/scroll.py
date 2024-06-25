@@ -14,15 +14,16 @@ from . import button as gui_qt_wgt_button
 class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
     QT_ORIENTATION = None
 
-    def _refresh_widget_all_(self):
-        self._refresh_widget_draw_geometry_()
+    def _refresh_widget_all_(self, w_over=None):
+        self._refresh_widget_draw_geometry_(w_over=w_over)
         self._refresh_widget_draw_()
 
     def _refresh_widget_draw_(self):
         self.update()
 
-    def _refresh_widget_draw_geometry_(self):
+    def _refresh_widget_draw_geometry_(self, w_over=None):
         super(AbsQtScrollBox, self)._refresh_widget_draw_geometry_()
+
         x, y = 0, 0
         w, h = self.width(), self.height()
         if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
@@ -76,7 +77,9 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
                 self._viewport.setGeometry(
                     x, y, abs_w, h
                 )
-                # self._layout.update()
+
+            # self._viewport.setMinimumWidth(abs_w)
+            # self._layout.update()
 
         elif self.QT_ORIENTATION == QtCore.Qt.Vertical:
             v_h = self._viewport.layout().minimumSize().height()

@@ -13,6 +13,6 @@ print os.path.exists(f)
 
 print os.access(f, os.R_OK)
 
-print bsc_storage.StgPathMtd.set_map_to_nas(f)
+print bsc_storage.StgPath.set_map_to_nas(f)
 
 # f = '/l/temp/td/dongchangbao/test_a'

@@ -89,13 +89,13 @@ def main(session):
 
     def deduplication_fnc_():
         _formats = map(lambda x: str(x).strip(), o.get('deduplication_priority_formats').split(','))
-        _file_paths_as_dd = bsc_storage.StgPathMtd.deduplication_files_by_formats(
+        _file_paths_as_dd = bsc_storage.StgPath.deduplication_files_by_formats(
             file_paths, _formats
         )
         files_p.set_unchecked_by_include_paths(_file_paths_as_dd)
     # get checked resources
     window = session.get_window()
-    gui_resource_opt = window._gui_resource_opt
+    gui_resource_opt = window._gui_resource_prx_unit
     dtb_resources = gui_resource_opt.get_checked_or_selected_db_resources()
     if not dtb_resources:
         gui_core.GuiDialog.create(
@@ -117,15 +117,15 @@ def main(session):
         base_variants = dict(root=dtb_opt.get_stg_root())
         #
         texture_original_src_directory_p = dtb_opt.get_pattern(keyword='texture-original-src-dir')
-        texture_original_src_directory_p_o = bsc_core.PtnStgParseOpt(texture_original_src_directory_p)
+        texture_original_src_directory_p_o = bsc_core.BscStgParseOpt(texture_original_src_directory_p)
         texture_original_src_directory_p_o.update_variants(**base_variants)
         #
         texture_acescg_src_directory_pattern = dtb_opt.get_pattern(keyword='texture-acescg-src-dir')
-        texture_acescg_src_directory_pattern_opt = bsc_core.PtnStgParseOpt(texture_acescg_src_directory_pattern)
+        texture_acescg_src_directory_pattern_opt = bsc_core.BscStgParseOpt(texture_acescg_src_directory_pattern)
         texture_acescg_src_directory_pattern_opt.update_variants(**base_variants)
         #
         texture_acescg_tx_directory_pattern = dtb_opt.get_pattern(keyword='texture-acescg-tx-dir')
-        texture_acescg_tx_directory_pattern_opt = bsc_core.PtnStgParseOpt(texture_acescg_tx_directory_pattern)
+        texture_acescg_tx_directory_pattern_opt = bsc_core.BscStgParseOpt(texture_acescg_tx_directory_pattern)
         texture_acescg_tx_directory_pattern_opt.update_variants(**base_variants)
         #
         w = gui_core.GuiDialog.create(

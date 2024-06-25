@@ -285,7 +285,7 @@ class Playblast(object):
             bsc_storage.StgUser.get_user_temporary_directory(),
             bsc_core.BscUuid.generate_new()
         )
-        bsc_storage.StgPathMtd.create_directory(directory_path_tmp)
+        bsc_storage.StgPath.create_directory(directory_path_tmp)
         # directory_path_tmp = '{}.images'.format(file_path_base)
         image_file_path_tmp = '{}/image.jpg'.format(directory_path_tmp)
         movie_file_path_tmp = '{}/movie.mov'.format(directory_path_tmp)
@@ -334,7 +334,7 @@ class Playblast(object):
         camera='|persp|perspShape',
         resolution=(1280, 720), display_mode=6, hud_enable=False, show_hud=False,
         texture_enable=False, light_enable=False, shadow_enable=False,
-        show_window=True
+        show_window=True, node_filter_scheme='',
     ):
         if resolution is None:
             resolution = _mya_core.RenderSettings.get_resolution()
@@ -362,14 +362,24 @@ class Playblast(object):
         if directory_path is not None:
             if os.path.isdir(directory_path) is False:
                 return None
-            ptn = six.u(
-                '{}/{}.v{{version}}.mov'
-            ).format(
-                bsc_core.auto_unicode(directory_path), bsc_core.auto_unicode(file_opt.name_base)
-            )
-            return bsc_core.PtnVersionPath.generate_as_new_version(ptn)
+            if update_scheme == 'new_version':
+                ptn = six.u(
+                    '{}/{}.v{{version}}.mov'
+                ).format(
+                    bsc_core.auto_unicode(directory_path), bsc_core.auto_unicode(file_opt.name_base)
+                )
+                return bsc_core.PtnVersionPath.generate_as_new_version(ptn)
+            else:
+                return six.u('{}/{}.mov').format(
+                    bsc_core.auto_unicode(directory_path), bsc_core.auto_unicode(file_opt.name_base)
+                )
         else:
-            ptn = six.u(
-                '{}.v{{version}}.mov'
-            ).format(bsc_core.auto_unicode(file_opt.path_base))
-            return bsc_core.PtnVersionPath.generate_as_new_version(ptn)
+            if update_scheme == 'new_version':
+                ptn = six.u(
+                    '{}.v{{version}}.mov'
+                ).format(bsc_core.auto_unicode(file_opt.path_base))
+                return bsc_core.PtnVersionPath.generate_as_new_version(ptn)
+            else:
+                return six.u('{}.mov').format(
+                    bsc_core.auto_unicode(file_opt.path_base)
+                )

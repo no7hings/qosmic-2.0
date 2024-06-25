@@ -361,9 +361,9 @@ class PthDccParseOpt(AbsPtnParseOpt):
         super(PthDccParseOpt, self).__init__(p, variants)
 
 
-class PtnStgParseOpt(AbsPtnParseOpt):
+class BscStgParseOpt(AbsPtnParseOpt):
     def __init__(self, p, variants=None):
-        super(PtnStgParseOpt, self).__init__(p, variants)
+        super(BscStgParseOpt, self).__init__(p, variants)
 
     def get_matches(self, sort=False):
         list_ = []

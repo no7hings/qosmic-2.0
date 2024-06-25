@@ -336,7 +336,7 @@ class PnlTextureConverter(gui_prx_widgets.PrxSessionWindow):
             import lxgeneral.dcc.objects as gnl_dcc_objects
 
             for i_index, (i_file_path_src, i_directory_path_tgt) in enumerate(self._target_format_create_data):
-                bsc_storage.StgPathMtd.create_directory(
+                bsc_storage.StgPath.create_directory(
                     i_directory_path_tgt
                 )
                 i_path_base, i_ext_src = os.path.splitext(i_file_path_src)

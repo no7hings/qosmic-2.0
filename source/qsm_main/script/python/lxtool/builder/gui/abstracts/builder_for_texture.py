@@ -172,7 +172,7 @@ class AbsPnlBuilderForTexture(gui_prx_widgets.PrxSessionWindow):
 
     def __gui_refresh_next_button(self):
         f = self._options_prx_node.get('file')
-        if bsc_storage.StgPathMtd.get_is_file(f):
+        if bsc_storage.StgPath.get_is_file(f):
             self.__next_button.set_enable(True)
         else:
             self.__next_button.set_enable(False)
@@ -185,7 +185,7 @@ class AbsPnlBuilderForTexture(gui_prx_widgets.PrxSessionWindow):
         f = self._options_prx_node.get('file')
         self._gui_texture_opt.restore()
         self._gui_texture_opt.gui_add_root()
-        if bsc_storage.StgPathMtd.get_is_file(f):
+        if bsc_storage.StgPath.get_is_file(f):
             m = gnl_texture.TxrMethodForBuild.generate_instance()
             texture_args = m.generate_all_texture_args(f)
             if texture_args:

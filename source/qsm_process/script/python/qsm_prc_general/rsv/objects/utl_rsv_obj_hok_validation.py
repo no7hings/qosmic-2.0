@@ -142,7 +142,7 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                 i_k
             )
             i_check_p = i_p+'/{extra}'
-            i_check_p_opt = bsc_core.PtnStgParseOpt(i_check_p)
+            i_check_p_opt = bsc_core.BscStgParseOpt(i_check_p)
             i_check_p_opt.update_variants(**dict(root=rsv_project.get('root')))
             check_pattern_opts.append(i_check_p_opt)
 
@@ -192,7 +192,7 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
         ).get_all_directories(
             dcc_objs
         )
-        unlocked_directory_paths = [i for i in directory_paths if bsc_storage.StgPathMtd.get_is_writeable(i) is True]
+        unlocked_directory_paths = [i for i in directory_paths if bsc_storage.StgPath.get_is_writeable(i) is True]
         if unlocked_directory_paths:
             validation_checker.register_node_directories_result(
                 location,

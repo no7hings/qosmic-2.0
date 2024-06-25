@@ -11,7 +11,7 @@ import qsm_general.core as qsm_gnl_core
 
 from ... import core as _mya_core
 
-from ...asset import core as _ast_core
+from ...general import core as _gnl_core
 
 from ...rig import core as _rig_core
 

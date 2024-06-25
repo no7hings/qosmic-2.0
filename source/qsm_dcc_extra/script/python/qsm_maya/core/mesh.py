@@ -68,6 +68,11 @@ class MeshOpt(_shape.ShapeOpt):
             indices = list(om2_indices)
             face_vertex_indices.extend(indices)
         return face_vertex_counts, face_vertex_indices
+
+    def get_face_vertices_as_uuid(self):
+        return bsc_core.BscHash.to_hash_key(
+            self.get_face_vertices()
+        )
     
     def get_points(self, round_count=None):
         return self.to_point_array(

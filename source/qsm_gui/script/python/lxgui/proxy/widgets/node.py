@@ -742,7 +742,7 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
             #
             value_options = variants.get('options')
             if value_options:
-                value_names = variants.get('labels')
+                value_names = variants.get('option_names')
                 if ui_language == 'chs':
                     if 'option_names_chs' in variants:
                         value_names = variants['option_names_chs']

@@ -3,6 +3,8 @@ import os
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+import lxbasic.core as bsc_core
+
 import lxbasic.storage as bsc_storage
 
 
@@ -70,6 +72,7 @@ class SceneFile(object):
         return cmds.file(
             file_path,
             i=1,
+            force=1,
             options='v=0;',
             type=cls.get_file_type(file_path),
             ra=1,
@@ -79,7 +82,7 @@ class SceneFile(object):
         )
 
     @classmethod
-    def import_file_force(cls, file_path, namespace=':'):
+    def import_file_ignore_error(cls, file_path, namespace=':'):
         # noinspection PyBroadException
         try:
             return cls.import_file(file_path, namespace)
@@ -110,7 +113,7 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
     
     @classmethod
     def export_file(cls, file_path, location=None, keep_reference=False):
-        option = dict(
+        kwargs = dict(
             type=cls.get_file_type(file_path),
             options='v=0;',
             force=True,
@@ -122,13 +125,13 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
         if location is not None:
             selected_mark = cmds.ls(selection=1, long=1) or []
             cmds.select(location)
-            option['exportSelected'] = True
+            kwargs['exportSelected'] = True
         else:
-            option['exportAll'] = True
+            kwargs['exportAll'] = True
 
         bsc_storage.StgFileOpt(file_path).create_directory()
-        results = cmds.file(file_path, **option)
-        if 'exportSelected' in option:
+        results = cmds.file(file_path, **kwargs)
+        if 'exportSelected' in kwargs:
             if selected_mark:
                 cmds.select(selected_mark)
             else:
@@ -156,3 +159,56 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
                 force=1,
                 type=cls.get_file_type(file_path)
             )
+
+    @classmethod
+    def export_as_node_graph(cls, file_path, location):
+        """
+            file -force
+            -exportSelected
+            -constructionHistory true
+            -channels true
+            -expressions true
+            -constraints true
+            -shader true
+            -type $fileType
+            $filePath;
+        """
+        bsc_storage.StgFileOpt(file_path).create_directory()
+        cmds.select(location)
+        kwargs = dict(
+            exportSelected=1,
+            force=1,
+            constructionHistory=1,
+            channels=1,
+            expressions=1,
+            constraints=1,
+            shader=1,
+            type=cls.get_file_type(file_path)
+        )
+        return cmds.file(file_path, **kwargs)
+
+    @classmethod
+    def import_as_node_graph(cls, file_path):
+        """
+        string $newTransforms[] = `file -force
+            -import
+            -renameAll true
+            -renamingPrefix "pasted_"
+            -groupReference
+            -returnNewNodes
+            $filePath`;
+
+        select -replace `ls -dag -head 1 $newTransforms`;
+        """
+        name = bsc_core.RandomName().next()
+        kwargs = dict(
+            i=True,
+            force=True,
+            renameAll=True,
+            renamingPrefix='QSM',
+            groupReference=1,
+            returnNewNodes=1,
+            groupName='QSM_{}_GRP'.format(name.upper())
+        )
+        _ = cmds.file(file_path, **kwargs)
+        cmds.select(cmds.ls(dag=True, head=1), replace=1)

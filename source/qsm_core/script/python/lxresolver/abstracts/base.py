@@ -845,7 +845,7 @@ class AbsRsvUnit(AbsRsvEntity):
         result = self.get_result(*args, **kwargs)
         if result:
             if isinstance(result, six.string_types):
-                if bsc_storage.StgPathMtd.get_is_exists(result):
+                if bsc_storage.StgPath.get_is_exists(result):
                     return result
             elif isinstance(result, (tuple, list)):
                 return result
@@ -1660,7 +1660,7 @@ class AbsRsvConfigureExtraDef(AbsRsvBaseDef):
         return self._patterns_dict[keyword]
 
     def get_pattern_opt(self, keyword):
-        return bsc_core.PtnStgParseOpt(
+        return bsc_core.BscStgParseOpt(
             self.get_pattern(keyword)
         )
 
@@ -3008,7 +3008,7 @@ class AbsRsvProject(
 
         p = create_kwargs['pattern']
 
-        p_o = bsc_core.PtnStgParseOpt(
+        p_o = bsc_core.BscStgParseOpt(
             p
         ).update_variants_to(
             **create_kwargs
@@ -3034,11 +3034,11 @@ class AbsRsvProject(
         variants_over['workspace'] = workspace
 
         ptn = self.get_pattern(keyword)
-        ptn_opt = bsc_core.PtnStgParseOpt(ptn)
+        ptn_opt = bsc_core.BscStgParseOpt(ptn)
         ptn_opt.update_variants(**variants_over)
         if not ptn_opt.get_keys():
             directory_path = ptn_opt.get_value()
-            if bsc_storage.StgPathMtd.get_is_exists(directory_path) is False:
+            if bsc_storage.StgPath.get_is_exists(directory_path) is False:
                 bsc_storage.StgPermissionMtd.create_directory(
                     directory_path, mode='755'
                 )

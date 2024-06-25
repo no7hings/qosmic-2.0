@@ -20,6 +20,7 @@ class PrxPnlResourceManager(gui_prx_widgets.PrxSessionWindow):
         super(PrxPnlResourceManager, self).__init__(session, *args, **kwargs)
 
     def gui_setup_window(self):
+        self._configure = self._session.configure
         self.set_main_style_mode(1)
         self._prx_tab_view = gui_prx_widgets.PrxTabView()
         self.add_widget(self._prx_tab_view)
@@ -83,8 +84,8 @@ class PrxPnlResourceManager(gui_prx_widgets.PrxSessionWindow):
 
     def gui_close_fnc(self):
         self._prx_tab_view.save_history()
-        self._rig_prx_page._tool_prx_tab_box.save_history()
-        self._scenery_prx_page._tool_prx_tab_box.save_history()
+        self._rig_prx_page._page_prx_tab_box.save_history()
+        self._scenery_prx_page._page_prx_tab_box.save_history()
 
     def show_help(self):
         import os

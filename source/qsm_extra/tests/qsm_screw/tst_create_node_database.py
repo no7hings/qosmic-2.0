@@ -1,4 +1,4 @@
-import qsm_screw.core as qsm_scr_core
+import qsm_lazy.core as qsm_lzy_core
 
 import lxbasic.resource as bsc_resource
 
@@ -6,11 +6,13 @@ import lxbasic.resource as bsc_resource
 if __name__ == '__main__':
 
     for i in [
-        'maya_node',
-        # 'maya_node_graph',
+        'maya_cfx',
+        'maya_layout',
+        # 'maya_motion',
+        # 'maya_scene',
     ]:
 
-        stage = qsm_scr_core.Stage(
+        stage = qsm_lzy_core.Stage(
             i
         )
         stage.initialize()

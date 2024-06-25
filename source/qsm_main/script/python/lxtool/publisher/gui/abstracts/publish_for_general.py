@@ -420,7 +420,7 @@ class AbsPnlPublisherForGeneral(gui_prx_widgets.PrxSessionWindow):
             task_directory_path = task_directory_pattern.format(
                 **kwargs
             )
-            if bsc_storage.StgPathMtd.get_is_exists(task_directory_path) is False:
+            if bsc_storage.StgPath.get_is_exists(task_directory_path) is False:
                 bsc_storage.StgPermissionMtd.create_directory(
                     task_directory_path
                 )

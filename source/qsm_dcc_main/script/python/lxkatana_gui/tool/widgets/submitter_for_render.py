@@ -50,7 +50,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
 
     def node_selection_fnc(self):
         list_ = []
-        prx_items = self._result_list_view.get_selected_items()
+        prx_items = self._result_list_view.get_all_selected_items()
         for i_prx_item in prx_items:
             i_render_node_opt = i_prx_item.get_gui_dcc_obj(
                 namespace=self.GUI_NAMESPACE
@@ -165,7 +165,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
             if _name_dict:
                 if 'output-directory' in _name_dict:
                     _directory_path = _name_dict['output-directory']
-                    return bsc_storage.StgPathMtd.get_is_exists(_directory_path)
+                    return bsc_storage.StgPath.get_is_exists(_directory_path)
             return False
 
         menu_raw = [
@@ -259,7 +259,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
         file_path = self._options_prx_node.get('scene')
 
         render_file_path = bsc_storage.StgFileOpt(file_path).get_render_file_path()
-        if bsc_storage.StgPathMtd.get_is_exists(render_file_path) is True:
+        if bsc_storage.StgPath.get_is_exists(render_file_path) is True:
             w = gui_core.GuiDialog.create(
                 label=self._session.gui_name,
                 content=six.u('Scene is non changed for submit, render file for this scene is exists:\n"{}"').format(

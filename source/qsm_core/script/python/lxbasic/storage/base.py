@@ -744,7 +744,7 @@ class StgPathLink(object):
                 os.symlink(src_rel_path, path_tgt)
 
 
-class StgPathMtd(_cor_base.BscStorage):
+class StgPath(_cor_base.BscStorage):
     @classmethod
     def get_parent(cls, path):
         return _cor_path.PthNodeMtd.get_dag_parent_path(
@@ -1335,6 +1335,11 @@ class StgFileOpt(StgPathOpt):
 
     directory_path = property(get_directory_path)
 
+    def get_directory(self):
+        return StgDirectoryOpt(self.get_directory_path())
+
+    directory = property(get_directory)
+
     def get_type(self):
         return self.ext
 
@@ -1625,7 +1630,7 @@ class StgRarFileOpt(StgFileOpt):
 class StgPermissionDefaultMtd(object):
     @classmethod
     def create_directory(cls, path, mode):
-        StgPathMtd.create_directory(path)
+        StgPath.create_directory(path)
 
     @classmethod
     def change_mode(cls, path, mode):

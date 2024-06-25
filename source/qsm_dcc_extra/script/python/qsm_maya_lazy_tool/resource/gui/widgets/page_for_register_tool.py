@@ -1,50 +1,92 @@
 # coding:utf-8
 import qsm_lazy_tool.resource.gui.abstracts as _abstracts
 
+import qsm_lazy.core as qsm_lzy_core
+
 import qsm_maya.core as qsm_mya_core
 
 import qsm_maya.preview.core as qsm_mya_prv_core
 
-import qsm_maya_resource.rebuild as qsm_mya_rsc_rebuild
+import qsm_maya_lazy.resource as qsm_mya_lzy_resource
 
 
 class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
     SCRIPT_JOB_NAME = 'lazy_resource_register_tool'
 
     def do_gui_update_by_dcc_selection(self):
-        self._node_opt = None
+        self.do_gui_update_node_opt_by_dcc_selection()
+
+        if self._dcc_node_opt is not None:
+            scr_type_path = self._dcc_node_opt.to_scr_type_path()
+            if scr_type_path:
+                gui_name_chs = self._lzy_stage.get_entity(
+                    self._lzy_stage.EntityTypes.Type, scr_type_path
+                ).gui_name_chs
+
+                self._prx_options_node.set(
+                    'gui_name_chs', gui_name_chs
+                )
+
+                self._type_prx_tag_input.set_node_checked(
+                    scr_type_path, True
+                )
+                self._type_prx_tag_input.expand_exclusive_for_node(
+                    scr_type_path
+                )
+        else:
+            self._type_prx_tag_input.expand_all_groups()
+        
+        self._window.gui_set_buttons_enable(
+            self._dcc_node_opt is not None or self._dcc_node_graph_opt is not None
+        )
+
+    def do_gui_update_node_opt_by_dcc_selection(self):
+        self._dcc_node_opt = None
+        self._dcc_node_graph_opt = None
+
         self._type_prx_tag_input.clear_all_checked()
+        self._tag_prx_tag_input.clear_all_checked()
+
         self._prx_options_node.set(
             'gui_name_chs', '未命名'
         )
         node_paths = qsm_mya_core.Selection.get_as_nodes()
         if node_paths:
-            search_scheme = self._prx_options_node.get('search_scheme')
+            data_type = self.get_resource_data_type()
             stage_key = self._prx_options_node.get('stage')
-            if stage_key in {'maya_node', 'maya_node_test'}:
-                node_opt = qsm_mya_rsc_rebuild.Generator.generate_one(
-                    node_paths[0], search_scheme=search_scheme
-                )
-                if node_opt is not None:
-                    self._node_opt = node_opt
-                    scr_type_path = self._node_opt.to_scr_type_path()
-                    if scr_type_path:
-                        gui_name_chs = self._scr_stage.get_entity(
-                            self._scr_stage.EntityTypes.Type, scr_type_path
-                        ).gui_name_chs
+            if stage_key in {'maya_cfx'}:
+                if data_type == qsm_lzy_core.DataTypes.MayaNode:
+                    self.do_gui_update_node_opt_by_dcc_selection_for_dynamic(node_paths[0])
+                elif data_type == qsm_lzy_core.DataTypes.MayaNodeGraph:
+                    self.do_gui_update_node_graph_opt_by_dcc_selection_for_any(node_paths)
+            elif stage_key in {'maya_layout'}:
+                if data_type == qsm_lzy_core.DataTypes.MayaNodeGraph:
+                    self.do_gui_update_node_graph_opt_by_dcc_selection_for_any(node_paths)
 
-                        self._prx_options_node.set(
-                            'gui_name_chs', gui_name_chs
-                        )
+    def do_gui_update_node_opt_by_dcc_selection_for_dynamic(self, node_path):
+        node_opt = qsm_mya_lzy_resource.DynamicGenerator.generate_node_opt(node_path)
+        if node_opt is not None:
+            self._dcc_node_opt = node_opt
 
-                        self._type_prx_tag_input.set_node_checked(
-                            scr_type_path, True
-                        )
-                        self._type_prx_tag_input.expand_exclusive(
-                            scr_type_path
-                        )
-        
-        self._window.gui_set_buttons_enable(self._node_opt is not None)
+    def do_gui_update_node_graph_opt_by_dcc_selection_for_any(self, node_paths):
+        node_graph_opt = qsm_mya_lzy_resource.BaseGenerator.generate_node_graph_opt(node_paths)
+        if node_graph_opt is not None:
+            self._dcc_node_graph_opt = node_graph_opt
+
+    def do_gui_update_node_opt_by_dcc_selection_for_look(self, node_path):
+        node_opt = qsm_mya_lzy_resource.LookGenerator.generate_node_opt(node_path)
+        if node_opt is not None:
+            self._dcc_node_opt = node_opt
+
+    def do_gui_update_node_opt_by_dcc_selection_for_motion(self, node_path):
+        node_opt = qsm_mya_lzy_resource.MotionGenerator.generate_node_opt(node_path)
+        if node_opt is not None:
+            self._dcc_node_opt = node_opt
+
+    def do_gui_update_node_opt_by_dcc_selection_for_scene(self, node_path):
+        node_opt = qsm_mya_lzy_resource.SceneGenerator.generate_node_opt(node_path)
+        if node_opt is not None:
+            self._dcc_node_opt = node_opt
 
     def do_show_playblast_window(self):
         camera_path = qsm_mya_core.Camera.get_active()
@@ -54,7 +96,7 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
             resolution=resolution_size,
             texture_enable=True, light_enable=False, shadow_enable=False,
             show_window=True,
-            hud_enable=False
+            hud_enable=False,
         )
 
     def do_create_playblast(self):
@@ -81,11 +123,14 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
         )
 
     def get_data(self):
-        if self._node_opt is not None:
-            return self._node_opt.get_data()
+        data_type = self.get_resource_data_type()
+        if data_type == qsm_lzy_core.DataTypes.MayaNode:
+            if self._dcc_node_opt is not None:
+                return self._dcc_node_opt.get_data()
+        elif data_type == qsm_lzy_core.DataTypes.MayaNodeGraph:
+            if self._dcc_node_graph_opt is not None:
+                return self._dcc_node_graph_opt.get_data()
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxPageForRegisterTool, self).__init__(window, session, *args, **kwargs)
-
-        self._node_opt = None
 

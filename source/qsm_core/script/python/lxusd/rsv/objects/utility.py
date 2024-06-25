@@ -862,7 +862,7 @@ class RsvUsdShotSetCreator(object):
         paths = usd_core.UsdStageOpt(
             usd_file_path
         ).find_obj_paths(
-            '/assets/efx/effects/*'
+            '/assets/efx/nodes/*'
         )
         if paths:
             paths = bsc_core.RawTextsOpt(paths).sort_by_number()

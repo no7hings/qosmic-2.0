@@ -146,7 +146,7 @@ class Task(_base.AbsEntity):
         ).set_write(text)
 
     def read_log(self):
-        if bsc_storage.StgPathMtd.get_is_file(
+        if bsc_storage.StgPath.get_is_file(
             self._log_location
         ):
             return bsc_storage.StgFileOpt(self._log_location).set_read()

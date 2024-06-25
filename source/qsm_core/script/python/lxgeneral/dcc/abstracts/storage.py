@@ -69,7 +69,7 @@ class AbsStgDirectory(
 
     def set_create(self):
         if self.get_is_exists() is False:
-            bsc_storage.StgPathMtd.create_directory(self.path)
+            bsc_storage.StgPath.create_directory(self.path)
             bsc_log.Log.trace_method_result(
                 'directory create',
                 u'directory-path="{}"'.format(self.path)
@@ -389,7 +389,7 @@ class AbsStgFile(
 
     # noinspection PyUnusedLocal
     def get_permissions(self, *args, **kwargs):
-        return [bsc_storage.StgPathMtd.get_permission(i) for i in self.get_exists_unit_paths()]
+        return [bsc_storage.StgPath.get_permission(i) for i in self.get_exists_unit_paths()]
 
     def get_modify_timestamp(self, *args, **kwargs):
         exists_file_paths = self.get_exists_unit_paths(*args, **kwargs)
@@ -601,7 +601,7 @@ class AbsStgFile(
         if self.get_is_exists() is True:
             if file_tgt.get_is_exists():
                 if replace is True:
-                    if bsc_storage.StgPathMtd.get_is_writeable(file_path_tgt) is True:
+                    if bsc_storage.StgPath.get_is_writeable(file_path_tgt) is True:
                         if bsc_storage.StgPathLink.get_is_link(file_path_tgt) is True:
                             if bsc_storage.StgPathLink.get_is_link_source_to(
                                     file_path_src, file_path_tgt,
@@ -667,13 +667,13 @@ class AbsStgFile(
 
     def get_is_writeable(self):
         for i in self.get_exists_unit_paths():
-            if bsc_storage.StgPathMtd.get_is_writeable(i) is False:
+            if bsc_storage.StgPath.get_is_writeable(i) is False:
                 return False
         return True
 
     def get_is_readable(self):
         for i in self.get_exists_unit_paths():
-            if bsc_storage.StgPathMtd.get_is_readable(i) is False:
+            if bsc_storage.StgPath.get_is_readable(i) is False:
                 return False
         return True
 

@@ -947,7 +947,7 @@ class GuiQtCache(object):
         if cache_resize is True:
             if file_path.endswith('.png'):
                 path_tmp = bsc_storage.StgTmpThumbnailMtd.generate_for_qt_resize(file_path, width=max(w, h), ext='.png')
-                if bsc_storage.StgPathMtd.get_is_exists(path_tmp) is False:
+                if bsc_storage.StgPath.get_is_exists(path_tmp) is False:
                     bsc_storage.StgFileOpt(path_tmp).create_directory()
                     img_scaled.save(path_tmp)
                 img_scaled = QtGui.QImage(path_tmp)

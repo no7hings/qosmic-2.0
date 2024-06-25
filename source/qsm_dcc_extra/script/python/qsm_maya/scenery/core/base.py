@@ -126,7 +126,7 @@ class GpuImport(object):
         )
         shape_opt = _mya_core.ShapeOpt(shape_path)
         transform_path = shape_opt.transform_path
-        if bsc_storage.StgPathMtd.get_is_file(gpu_file_path):
+        if bsc_storage.StgPath.get_is_file(gpu_file_path):
             paths = _mya_core.SceneFile.import_file(
                 gpu_file_path
             )

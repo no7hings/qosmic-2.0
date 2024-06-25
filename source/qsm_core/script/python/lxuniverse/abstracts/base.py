@@ -343,9 +343,9 @@ class AbsGuiExtraDef(object):
         #
         _ = p.split(pathsep)
         if len(_) > 6:
-            if bsc_storage.StgPathMtd.get_path_is_windows(p):
+            if bsc_storage.StgPath.get_path_is_windows(p):
                 return u'{0}{2}...{2}{1}'.format(pathsep.join(_[:3]), pathsep.join(_[-3:]), pathsep)
-            elif bsc_storage.StgPathMtd.get_path_is_linux(p):
+            elif bsc_storage.StgPath.get_path_is_linux(p):
                 return u'{0}{2}...{2}{1}'.format(pathsep.join(_[:2]), pathsep.join(_[-3:]), pathsep)
             else:
                 return p

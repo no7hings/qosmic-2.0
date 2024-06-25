@@ -43,7 +43,7 @@ class ScpRenderLayer(object):
     def get_render_version(self, default_render_version):
         render_version_mode = self._obj_opt.get('parameters.render.version.mode')
         directory_p = self._obj_opt.get('parameters.render.output.directory')
-        directory_p_opt = bsc_core.PtnStgParseOpt(directory_p)
+        directory_p_opt = bsc_core.BscStgParseOpt(directory_p)
         # check is valid
         if directory_p_opt.get_keys():
             directory_p_opt.update_variants(**self._variant)
@@ -63,7 +63,7 @@ class ScpRenderLayer(object):
 
     def get_render_output_directory(self, default_render_version):
         directory_p = self._obj_opt.get('parameters.render.output.directory')
-        directory_p_opt = bsc_core.PtnStgParseOpt(directory_p)
+        directory_p_opt = bsc_core.BscStgParseOpt(directory_p)
         # check is valid
         if directory_p_opt.get_keys():
             directory_p_opt.update_variants(**self._variant)
@@ -78,7 +78,7 @@ class ScpRenderLayer(object):
     def get_latest_render_output_image(self):
         # use primary pass
         directory_p = self._obj_opt.get('parameters.render.output.directory')
-        directory_p_opt = bsc_core.PtnStgParseOpt(directory_p)
+        directory_p_opt = bsc_core.BscStgParseOpt(directory_p)
         # check is valid
         if directory_p_opt.get_keys():
             directory_p_opt.update_variants(**self._variant)
@@ -87,14 +87,14 @@ class ScpRenderLayer(object):
                 directory = results[-1]
                 variant = copy.copy(self._variant)
                 image_sub_p = self._obj_opt.get('parameters.render.output.builtin.image_pattern')
-                image_file_p = bsc_core.PtnStgParseOpt('{}{}'.format(directory, image_sub_p))
+                image_file_p = bsc_core.BscStgParseOpt('{}{}'.format(directory, image_sub_p))
                 variant.update(dict(aov='primary'))
                 image_file_p.update_variants(**variant)
                 return image_file_p.get_value()
 
     def get_render_output_directory_key(self):
         directory_p = self._obj_opt.get('parameters.render.output.directory')
-        directory_p_opt = bsc_core.PtnStgParseOpt(directory_p)
+        directory_p_opt = bsc_core.BscStgParseOpt(directory_p)
         directory_p_opt.update_variants(**self._variant)
         return directory_p_opt.get_value()
 
@@ -148,7 +148,7 @@ class ScpRenderBuild(object):
             i_kwargs.pop(version_key)
             i_render_version_mode = i_obj_opt.get('parameters.render.version.mode')
             i_directory_p = i_obj_opt.get('parameters.render.output.directory')
-            i_directory_p_opt = bsc_core.PtnStgParseOpt(i_directory_p)
+            i_directory_p_opt = bsc_core.BscStgParseOpt(i_directory_p)
             # check is valid
             if i_directory_p_opt.get_keys():
                 i_directory_p_opt.update_variants(**i_kwargs)

@@ -180,12 +180,13 @@ class QtDialogBase(
     def eventFilter(self, *args):
         widget, event = args
         if widget == self:
-            if hasattr(event, 'type'):
-                if event.type() == QtCore.QEvent.KeyPress:
-                    if event.key() == QtCore.Qt.Key_Escape:
-                        self.key_escape_pressed.emit()
-                elif event.type() == QtCore.QEvent.Resize:
-                    self.size_changed.emit()
+            if not hasattr(event, 'type'):
+                return False
+            if event.type() == QtCore.QEvent.KeyPress:
+                if event.key() == QtCore.Qt.Key_Escape:
+                    self.key_escape_pressed.emit()
+            elif event.type() == QtCore.QEvent.Resize:
+                self.size_changed.emit()
         return False
 
     def closeEvent(self, event):
@@ -613,22 +614,23 @@ class QtMainWindow(
     def eventFilter(self, *args):
         widget, event = args
         if widget == self:
-            if hasattr(event, 'type'):
-                # if event.type() == QtCore.QEvent.Close:
-                #     self.hide()
-                #     self._do_window_close_()
-                if event.type() == QtCore.QEvent.KeyPress:
-                    if event.key() == QtCore.Qt.Key_Escape:
-                        self.key_escape_pressed.emit()
-                elif event.type() == QtCore.QEvent.Resize:
-                    self.size_changed.emit()
-                elif event.type() == QtCore.QEvent.WindowActivate:
-                    self.window_activate_changed.emit()
-                elif event.type() == QtCore.QEvent.WindowDeactivate:
-                    self.window_activate_changed.emit()
-                # elif event.type() == QtCore.QEvent.ShortcutOverride:
-                #     if event.key() == QtCore.Qt.Key_Space:
-                #         event.ignore()
+            if not hasattr(event, 'type'):
+                return False
+            # if event.type() == QtCore.QEvent.Close:
+            #     self.hide()
+            #     self._do_window_close_()
+            if event.type() == QtCore.QEvent.KeyPress:
+                if event.key() == QtCore.Qt.Key_Escape:
+                    self.key_escape_pressed.emit()
+            elif event.type() == QtCore.QEvent.Resize:
+                self.size_changed.emit()
+            elif event.type() == QtCore.QEvent.WindowActivate:
+                self.window_activate_changed.emit()
+            elif event.type() == QtCore.QEvent.WindowDeactivate:
+                self.window_activate_changed.emit()
+            # elif event.type() == QtCore.QEvent.ShortcutOverride:
+            #     if event.key() == QtCore.Qt.Key_Space:
+            #         event.ignore()
         return False
 
     def paintEvent(self, event):

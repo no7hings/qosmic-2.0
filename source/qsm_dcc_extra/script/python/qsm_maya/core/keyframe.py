@@ -200,7 +200,7 @@ class Keyframe(object):
             curve_name_new, 'preInfinity', infinities[0]
         )
         _attribute.NodeAttribute.set_value(
-            curve_name_new, 'postInfinity', infinities[0]
+            curve_name_new, 'postInfinity', infinities[1]
         )
 
 

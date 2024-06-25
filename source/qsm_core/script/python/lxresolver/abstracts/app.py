@@ -75,7 +75,7 @@ class AbsRsvAppDef(object):
     def get_user_package_roots(self):
         list_ = []
         for i_p in self._configure.get('package-user-root-patterns.{}'.format(self._platform)) or []:
-            i_p_opt = bsc_core.PtnStgParseOpt(
+            i_p_opt = bsc_core.BscStgParseOpt(
                 i_p
             )
             i_p_opt.update_variants(**self._variants)
@@ -87,7 +87,7 @@ class AbsRsvAppDef(object):
     def get_pre_release_package_roots(self):
         list_ = []
         for i_p in self._configure.get('package-pre_release-root-patterns.{}'.format(self._platform)) or []:
-            i_p_opt = bsc_core.PtnStgParseOpt(
+            i_p_opt = bsc_core.BscStgParseOpt(
                 i_p
             )
             i_p_opt.update_variants(**self._variants)
@@ -99,7 +99,7 @@ class AbsRsvAppDef(object):
     def get_release_package_roots(self):
         list_ = []
         for i_p in self._configure.get('package-release-root-patterns.{}'.format(self._platform)) or []:
-            i_p_opt = bsc_core.PtnStgParseOpt(
+            i_p_opt = bsc_core.BscStgParseOpt(
                 i_p
             )
             i_p_opt.update_variants(**self._variants)
@@ -120,7 +120,7 @@ class AbsRsvAppDef(object):
 
     def _get_configure_directory(self):
         for i_p in self._get_configure_root_patterns():
-            i_p_opt = bsc_core.PtnStgParseOpt(
+            i_p_opt = bsc_core.BscStgParseOpt(
                 i_p
             )
             i_p_opt.update_variants(**self._variants)
@@ -137,7 +137,7 @@ class AbsRsvAppDef(object):
             application=self._application
         )
         for i_p in self._get_configure_file_patterns():
-            i_p_opt = bsc_core.PtnStgParseOpt(
+            i_p_opt = bsc_core.BscStgParseOpt(
                 i_p
             )
             i_p_opt.update_variants(**variants)

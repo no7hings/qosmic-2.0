@@ -485,7 +485,7 @@ class _GuiTaskOpt(
         )
 
     def get_current_rsv_task(self):
-        _ = self._prx_list_view.get_selected_items()
+        _ = self._prx_list_view.get_all_selected_items()
         if _:
             return _[-1].get_gui_dcc_obj(self.GUI_NAMESPACE)
 
@@ -525,13 +525,13 @@ class _GuiGuideOpt(_GuiBaseOpt):
 
     def gui_refresh(self):
         path = None
-        list_item_prxes = self._prx_list_view.get_selected_items()
+        list_item_prxes = self._prx_list_view.get_all_selected_items()
         # gain list first
         if list_item_prxes:
             list_item_prx = list_item_prxes[-1]
             path = list_item_prx.get_gui_attribute('path')
         else:
-            tree_item_prxes = self._prx_tree_view.get_selected_items()
+            tree_item_prxes = self._prx_tree_view.get_all_selected_items()
             if tree_item_prxes:
                 tree_item_prx = tree_item_prxes[-1]
                 path = tree_item_prx.get_gui_attribute('path')
@@ -1102,7 +1102,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
             self.__task_keys.add(i_rsv_task.name)
 
     def _do_gui_refresh_tasks_and_units_by_entity_selection(self):
-        tree_item_prxes = self._entity_prx_view.get_selected_items()
+        tree_item_prxes = self._entity_prx_view.get_all_selected_items()
         # kill running
         self.__restore_thread_stack_()
 

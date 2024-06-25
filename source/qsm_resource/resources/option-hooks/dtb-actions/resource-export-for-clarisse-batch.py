@@ -95,7 +95,7 @@ def main(session):
 
     # get checked resources
     window = session.get_window()
-    gui_resource_opt = window._gui_resource_opt
+    gui_resource_opt = window._gui_resource_prx_unit
     dtb_resources = gui_resource_opt.get_checked_or_selected_db_resources()
     if not dtb_resources:
         gui_core.GuiDialog.create(
@@ -116,7 +116,7 @@ def main(session):
         base_variants = dict(root=dtb_opt.get_stg_root())
         #
         geometry_abc_file_p = dtb_opt.get_pattern(keyword='geometry-abc-file')
-        geometry_abc_file_p_o = bsc_core.PtnStgParseOpt(geometry_abc_file_p)
+        geometry_abc_file_p_o = bsc_core.BscStgParseOpt(geometry_abc_file_p)
         geometry_abc_file_p_o.update_variants(**base_variants)
         #
         window = session.get_window()

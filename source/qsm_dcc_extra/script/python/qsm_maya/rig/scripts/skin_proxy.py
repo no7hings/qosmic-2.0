@@ -17,7 +17,7 @@ import qsm_general.core as qsm_gnl_core
 
 from ... import core as _mya_core
 
-from ...asset import core as _ast_core
+from ...general import core as _gnl_core
 
 from ...rig import core as _rig_core
 
@@ -25,9 +25,8 @@ from ...resource import core as _rsc_core
 
 
 class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
-    CACHE_NAME = _rig_core.RigConfigure.SkinProxyCacheName
-
-    CACHE_ROOT = '|__SKIN_PROXY__'
+    CACHE_ROOT = _gnl_core.ResourceCaches.SkinProxyRoot
+    CACHE_NAME = _gnl_core.ResourceCaches.SkinProxyName
 
     def __init__(self, *args, **kwargs):
         super(SkinProxyOpt, self).__init__(*args, **kwargs)
@@ -46,8 +45,10 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
             #
             'EyeJoint_L',
             'Eye_L',
+            'Eye_L*',
             'EyeJoint_R',
             'Eye_R',
+            'Eye_R*',
             #
             'EyeBrow*',
             #
@@ -111,25 +112,27 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
                 AdvSkinProxyGenerate._connect_parent_constrain(j_skeleton_paths[0], j_constrains[0])
 
     def load_cache(self, cache_file_path, data_file_path, keep_head=False, check_bbox=False):
+        if os.path.isfile(cache_file_path) is False:
+            return
+
         self.create_cache_root_auto()
 
         cache_location_new = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
         cache_location = '|{}:{}'.format(self._namespace, self.CACHE_NAME)
         if cmds.objExists(cache_location) is False and cmds.objExists(cache_location_new) is False:
-            if os.path.isfile(cache_file_path) is True:
-                # noinspection PyBroadException
-                _mya_core.SceneFile.import_file_force(
-                    cache_file_path, namespace=self._namespace
-                )
+            # noinspection PyBroadException
+            _mya_core.SceneFile.import_file_ignore_error(
+                cache_file_path, namespace=self._namespace
+            )
 
-                self.connect_cache_constrains(cache_location, self._namespace)
+            self.connect_cache_constrains(cache_location, self._namespace)
 
-                cmds.parent(cache_location, self.CACHE_ROOT)
-                head_geometries, rig_head_geometries = self.get_head_hide_args(
-                    data_file_path, keep_head, check_bbox
-                )
+            cmds.parent(cache_location, self.CACHE_ROOT)
+            head_geometries, rig_head_geometries = self.get_head_hide_args(
+                data_file_path, keep_head, check_bbox
+            )
 
-                self.hide_resource_auto(head_geometries, rig_head_geometries)
+            self.hide_resource_auto(head_geometries, rig_head_geometries)
 
     def get_head_hide_args(self, data_file_path, keep_head=False, check_bbox=False):
         if keep_head is True:
@@ -141,7 +144,7 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
                 )
                 if neck_above_list:
                     rig_head_geometries.extend(neck_above_list)
-                return head_geometries, rig_head_geometries
+                return head_geometries, list(set(rig_head_geometries))
             else:
                 rig_head_geometries = self.find_rig_head_geometries()
                 return head_geometries, rig_head_geometries
@@ -171,10 +174,10 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
         self._resource.remove_dynamic_gpu()
 
         file_path = self._resource.file
-        cache_file_path = _ast_core.AssetCache.generate_skin_proxy_scene_file(
+        cache_file_path = _gnl_core.AssetCaches.generate_skin_proxy_scene_file(
             file_path
         )
-        data_file_path = _ast_core.AssetCache.generate_skin_proxy_data_file(
+        data_file_path = _gnl_core.AssetCaches.generate_skin_proxy_data_file(
             file_path
         )
         if os.path.isfile(cache_file_path) is False or os.path.isfile(data_file_path) is False:
@@ -215,9 +218,8 @@ class AdvSkinProxyGenerate(object):
     PROXY_CONTROL_PATH = '|__skin_proxy_control__'
     PROXY_GEOMETRY_GROUP_PATH = '|__skin_proxy_geo_grp__'
 
-    CACHE_ROOT = '|__SKIN_PROXY__'
-
-    CACHE_NAME = _rig_core.RigConfigure.SkinProxyCacheName
+    CACHE_ROOT = _gnl_core.ResourceCaches.SkinProxyRoot
+    CACHE_NAME = _gnl_core.ResourceCaches.SkinProxyName
 
     @classmethod
     def _create_group(cls, path):
@@ -526,7 +528,7 @@ class AdvSkinProxyGenerate(object):
 
     def create_resource_controls(self, location):
         if cmds.objExists(self.PROXY_CONTROL_PATH) is False:
-            _mya_core.SceneFile.import_file_force(bsc_resource.ExtendResource.get('rig/skin_proxy_control.ma'))
+            _mya_core.SceneFile.import_file_ignore_error(bsc_resource.ExtendResource.get('rig/skin_proxy_control.ma'))
 
         parent_path = '|'.join(location.split('|')[:-1])
         name = location.split('|')[-1]
@@ -637,11 +639,11 @@ class AdvSkinProxyGenerate(object):
     def create_resource_geometries(self, location):
         if cmds.objExists(self.PROXY_GEOMETRY_GROUP_PATH) is False:
             if qsm_gnl_core.scheme_is_new():
-                _mya_core.SceneFile.import_file_force(
+                _mya_core.SceneFile.import_file_ignore_error(
                     bsc_resource.ExtendResource.get('rig/skin_proxy_geometry_new.ma')
                 )
             else:
-                _mya_core.SceneFile.import_file_force(
+                _mya_core.SceneFile.import_file_ignore_error(
                     bsc_resource.ExtendResource.get('rig/skin_proxy_geometry.ma')
                 )
 
@@ -679,11 +681,11 @@ class AdvSkinProxyGenerate(object):
         location = '|{}'.format(self.CACHE_NAME)
         if cmds.objExists(location) is False:
             if qsm_gnl_core.scheme_is_new():
-                _mya_core.SceneFile.import_file_force(
+                _mya_core.SceneFile.import_file_ignore_error(
                     bsc_resource.ExtendResource.get('rig/skin_proxy_new.ma')
                 )
             else:
-                _mya_core.SceneFile.import_file_force(
+                _mya_core.SceneFile.import_file_ignore_error(
                     bsc_resource.ExtendResource.get('rig/skin_proxy.ma')
                 )
 
@@ -693,7 +695,7 @@ class AdvSkinProxyGenerate(object):
 
         if cache_file_path is None:
             file_path = _mya_core.ReferenceNamespacesCache().get_file(self._namespace)
-            cache_file_path = _ast_core.AssetCache.generate_skin_proxy_scene_file(
+            cache_file_path = _gnl_core.AssetCaches.generate_skin_proxy_scene_file(
                 file_path
             )
 

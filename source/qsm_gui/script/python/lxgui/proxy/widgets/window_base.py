@@ -421,6 +421,16 @@ class PrxBaseWindow(
     
     def exec_message(self, *args, **kwargs):
         self._qt_widget._exec_message_(*args, **kwargs)
+
+    def choice_message(self, data):
+        return gui_core.GuiUtil.choice_message(
+            self._language, data
+        )
+
+    def choice_tool_tip(self, data):
+        return gui_core.GuiUtil.choice_tool_tip(
+            self._language, data
+        )
         
 
 class PrxSessionWindow(PrxBaseWindow):

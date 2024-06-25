@@ -612,7 +612,7 @@ class StgConnector(object):
         task = kwargs['task']
         version = kwargs['version']
         #
-        version_code = bsc_core.PtnStgParseOpt(self.VERSION_NAME_PATTERN).update_variants_to(
+        version_code = bsc_core.BscStgParseOpt(self.VERSION_NAME_PATTERN).update_variants_to(
             resource=kwargs[branch],
             step=step,
             task=task,
@@ -660,7 +660,7 @@ class StgConnector(object):
         task = kwargs['task']
         version = kwargs['version']
         #
-        name = bsc_core.PtnStgParseOpt(self.VERSION_NAME_PATTERN).update_variants_to(
+        name = bsc_core.BscStgParseOpt(self.VERSION_NAME_PATTERN).update_variants_to(
             resource=kwargs[branch],
             step=step,
             task=task,

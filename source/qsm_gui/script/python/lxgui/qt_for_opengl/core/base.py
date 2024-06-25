@@ -28,7 +28,7 @@ class GuiGLUsdData(object):
 
         self._file_path = file_path
 
-        self._p_o = bsc_core.PtnStgParseOpt(self.INDEX_P)
+        self._p_o = bsc_core.BscStgParseOpt(self.INDEX_P)
 
         r, g, b = rgb
 

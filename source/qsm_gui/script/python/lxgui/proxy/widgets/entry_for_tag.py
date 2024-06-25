@@ -74,8 +74,14 @@ class PrxTagInput(
         if _:
             _._apply_check_state_(boolean)
     
-    def expand_exclusive(self, path):
-        self._qt_view._expand_exclusive_(path)
+    def expand_exclusive_for_node(self, path):
+        self._qt_view._expand_exclusive_for_node_(path)
+    
+    def expand_all_groups(self):
+        self._qt_view._expand_all_groups_()
+
+    def expand_for_group(self, path):
+        self._qt_view._expand_for_group_(path)
     
     def clear_all_checked(self):
         self._qt_view._clear_all_checked_()
@@ -94,6 +100,9 @@ class PrxTagInput(
     
     def get_all_checked_node_paths(self):
         return self._qt_view._get_all_checked_node_paths_()
+
+    def set_force_hidden_flag_for_group(self, path, boolean):
+        self._qt_view._set_force_hidden_flag_for_group_(path, boolean)
 
     def restore(self):
         self._qt_view._restore_()

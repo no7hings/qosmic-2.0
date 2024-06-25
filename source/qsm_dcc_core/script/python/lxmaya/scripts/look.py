@@ -165,7 +165,7 @@ mya_scripts.ScpLibraryLook.create_user_datas()
             _texture_file_path = '{}/{}_{}.{}.jpg'.format(
                 texture_directory_path, resource_name, seq_, texture_type_
             )
-            if bsc_storage.StgPathMtd.get_is_exists(_texture_file_path) is False:
+            if bsc_storage.StgPath.get_is_exists(_texture_file_path) is False:
                 _diffuse_name = '{}_{}_{}'.format(resource_name, texture_type_, seq)
                 cmds.convertSolidTx(
                     '{}.{}'.format(shader_.get_path(), key_),
@@ -182,7 +182,7 @@ mya_scripts.ScpLibraryLook.create_user_datas()
             _texture_file_path = '{}/{}_{}.{}.jpg'.format(
                 texture_directory_path, resource_name, seq_, texture_type_
             )
-            if bsc_storage.StgPathMtd.get_is_exists(_texture_file_path) is False:
+            if bsc_storage.StgPath.get_is_exists(_texture_file_path) is False:
                 _texture_src = None
                 _shaders = shader_.get_all_source_objs_at(key_)
                 if _shaders:

@@ -304,7 +304,7 @@ class RsvDccSceneHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
         )
         scene_src_file_path = scene_src_file_rsv_unit.get_result(version=version)
         #
-        if bsc_storage.StgPathMtd.get_is_exists(scene_src_file_path) is False:
+        if bsc_storage.StgPath.get_is_exists(scene_src_file_path) is False:
             gnl_dcc_objects.StgFile(
                 scene_file_path
             ).link_to(

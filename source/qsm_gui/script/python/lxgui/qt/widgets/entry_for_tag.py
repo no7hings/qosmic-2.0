@@ -40,6 +40,8 @@ class AbsEntryForTagBase(object):
 
         self._tool_tip_css = None
 
+        self._force_visible_flag = False
+
     def _get_text_(self):
         raise NotImplementedError()
 
@@ -116,6 +118,9 @@ class AbsEntryForTagBase(object):
         ).get_ancestor_paths()
         ancestors = self._get_all_(ancestor_paths)
         [x._set_expanded_(True) for x in ancestors]
+
+    def _set_force_hidden_flag_(self, boolean):
+        self._force_visible_flag = boolean
 
 
 class QtEntryNodeForTag(
@@ -603,11 +608,15 @@ class QtEntryGroupForTag(
         self._node_widgets = []
 
         self.installEventFilter(self)
+
         self._viewport.installEventFilter(self)
 
     def eventFilter(self, *args):
         widget, event = args
         if widget == self:
+            if not hasattr(event, 'type'):
+                return False
+
             if event.type() == QtCore.QEvent.Resize:
                 self._refresh_widget_all_()
             elif event.type() == QtCore.QEvent.ToolTip:
@@ -901,14 +910,29 @@ class QtEntryRootForTag(
         [x._update_path_set_as_intersection_(path_set) for x in self._item_dict.values()]
 
     def _restore_(self):
-        self._scr._layout._clear_all_widgets_()
         self._item_dict.clear()
+        self._scr._layout._clear_all_widgets_()
         self._scr._set_empty_draw_flag_(True)
 
     def _collapse_all_groups_(self):
         [x._set_expanded_(False) for x in self._item_dict.values() if isinstance(x, QtEntryGroupForTag)]
 
-    def _expand_exclusive_(self, path):
+    def _expand_exclusive_for_node_(self, path):
         self._collapse_all_groups_()
         node = self._get_one_(path)
         node._expand_ancestors_()
+    
+    def _expand_all_groups_(self):
+        [x._set_expanded_(True) for x in self._item_dict.values() if isinstance(x, QtEntryGroupForTag)]
+
+    def _expand_for_group_(self, path):
+        self._collapse_all_groups_()
+        paths = self._item_dict.values()
+        sibling_paths = bsc_core.PthNodeMtd.find_dag_sibling_paths(
+            path, paths
+        )
+        print sibling_paths
+
+    def _set_force_hidden_flag_for_group_(self, path, boolean):
+        pass
+

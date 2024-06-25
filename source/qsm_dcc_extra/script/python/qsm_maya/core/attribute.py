@@ -148,9 +148,7 @@ class NodeAttribute(object):
         if node_type is not None:
             kwargs['type'] = node_type
 
-        return cmds.listConnections(
-            cls.to_atr_path(path, atr_name), **kwargs
-        ) or []
+        return [cls.to_node_path(x) for x in cmds.listConnections(cls.to_atr_path(path, atr_name), **kwargs) or []]
 
     @classmethod
     def create_as_string(cls, path, atr_name, default=None):

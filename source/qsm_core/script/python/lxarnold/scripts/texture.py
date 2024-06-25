@@ -30,7 +30,7 @@ class ScpTextureCreate(object):
 
     @classmethod
     def to_exr_by_directory_as_acescg(cls, directory_path_src, directory_path_tgt, formats=None, use_update_mode=True):
-        bsc_storage.StgPathMtd.create_directory(directory_path_tgt)
+        bsc_storage.StgPath.create_directory(directory_path_tgt)
         #
         directory_opt_src = bsc_storage.StgDirectoryOpt(directory_path_src)
         directory_opt_tgt = bsc_storage.StgDirectoryOpt(directory_path_tgt)
@@ -39,7 +39,7 @@ class ScpTextureCreate(object):
         file_paths_src = directory_opt_src.get_all_file_paths(
             ext_includes=map(lambda x: '.{}'.format(x), formats)
         )
-        file_paths_src = bsc_storage.StgPathMtd.deduplication_files_by_formats(
+        file_paths_src = bsc_storage.StgPath.deduplication_files_by_formats(
             file_paths_src, formats
         )
         # bsc_core.FncThread()
@@ -73,7 +73,7 @@ class ScpTextureCreate(object):
         file_paths_src = directory_opt_src.get_all_file_paths(
             ext_includes=map(lambda x: '.{}'.format(x), formats)
         )
-        file_paths_src = bsc_storage.StgPathMtd.deduplication_files_by_formats(
+        file_paths_src = bsc_storage.StgPath.deduplication_files_by_formats(
             file_paths_src, formats
         )
         for i_index, i_file_path_src in enumerate(file_paths_src):
@@ -101,7 +101,7 @@ class ScpTextureCreate(object):
         cls, directory_path_src, directory_path_tgt, formats=None, use_update_mode=True
     ):
         list_ = []
-        bsc_storage.StgPathMtd.create_directory(directory_path_tgt)
+        bsc_storage.StgPath.create_directory(directory_path_tgt)
         #
         directory_opt_src = bsc_storage.StgDirectoryOpt(directory_path_src)
         directory_opt_tgt = bsc_storage.StgDirectoryOpt(directory_path_tgt)
@@ -110,7 +110,7 @@ class ScpTextureCreate(object):
         file_paths_src = directory_opt_src.get_all_file_paths(
             ext_includes=map(lambda x: '.{}'.format(x), formats)
         )
-        file_paths_src = bsc_storage.StgPathMtd.deduplication_files_by_formats(
+        file_paths_src = bsc_storage.StgPath.deduplication_files_by_formats(
             file_paths_src, formats
         )
         for i_index, i_file_path_src in enumerate(file_paths_src):
@@ -126,7 +126,7 @@ class ScpTextureCreate(object):
     def to_tx_by_directory_as_acescg(
         cls, directory_path_src, directory_path_tgt, formats=None, use_update_mode=True
     ):
-        bsc_storage.StgPathMtd.create_directory(directory_path_tgt)
+        bsc_storage.StgPath.create_directory(directory_path_tgt)
         #
         directory_opt_src = bsc_storage.StgDirectoryOpt(directory_path_src)
         directory_opt_tgt = bsc_storage.StgDirectoryOpt(directory_path_tgt)
@@ -135,7 +135,7 @@ class ScpTextureCreate(object):
         file_paths_src = directory_opt_src.get_all_file_paths(
             ext_includes=map(lambda x: '.{}'.format(x), formats)
         )
-        file_paths_src = bsc_storage.StgPathMtd.deduplication_files_by_formats(
+        file_paths_src = bsc_storage.StgPath.deduplication_files_by_formats(
             file_paths_src, formats
         )
         #
@@ -165,7 +165,7 @@ class ScpTextureCreate(object):
         cls, directory_path_src, directory_path_tgt, formats=None, use_update_mode=True
     ):
         list_ = []
-        bsc_storage.StgPathMtd.create_directory(directory_path_tgt)
+        bsc_storage.StgPath.create_directory(directory_path_tgt)
         #
         directory_opt_src = bsc_storage.StgDirectoryOpt(directory_path_src)
         directory_opt_tgt = bsc_storage.StgDirectoryOpt(directory_path_tgt)
@@ -174,7 +174,7 @@ class ScpTextureCreate(object):
         file_paths_src = directory_opt_src.get_all_file_paths(
             ext_includes=map(lambda x: '.{}'.format(x), formats)
         )
-        file_paths_src = bsc_storage.StgPathMtd.deduplication_files_by_formats(
+        file_paths_src = bsc_storage.StgPath.deduplication_files_by_formats(
             file_paths_src, formats
         )
         #

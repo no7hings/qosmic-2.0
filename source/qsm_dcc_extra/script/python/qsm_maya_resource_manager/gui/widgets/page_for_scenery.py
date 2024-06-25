@@ -1,9 +1,9 @@
 # coding:utf-8
 import lxgui.qt.core as gui_qt_core
 
-import lxgui.qt.widgets as qt_widgets
+import lxgui.qt.widgets as gui_qt_widgets
 
-import lxgui.proxy.abstracts as prx_abstracts
+import lxgui.proxy.abstracts as gui_prx_abstracts
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
@@ -11,13 +11,13 @@ import qsm_maya.core as qsm_mya_core
 
 import qsm_gui.proxy.widgets as qsm_gui_prx_widgets
 
-from ... import core as _rsc_mng_core
+import qsm_maya_gui.core as qsm_mya_gui_core
 
 from . import unit_for_scenery as _unit_for_scenery
 
 
-class PrxPageForSceneryResource(prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = qt_widgets.QtTranslucentWidget
+class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
+    QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
 
     SCRIPT_JOB_NAME = 'resource_manager_for_scenery'
 
@@ -42,7 +42,7 @@ class PrxPageForSceneryResource(prx_abstracts.AbsPrxWidget):
         )
         self._script_job.register(
             [
-                self._gui_resource_opt.do_gui_refresh_by_dcc_selection,
+                self._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection,
                 self._gui_switch_opt.do_gui_refresh_by_dcc_selection,
             ],
             self._script_job.EventTypes.SelectionChanged
@@ -59,8 +59,35 @@ class PrxPageForSceneryResource(prx_abstracts.AbsPrxWidget):
     def _do_dcc_destroy_all_script_jobs(self):
         self._script_job.destroy()
 
+    def _do_gui_build_selection_scheme(self):
+        options = self._window._configure.get('build.scenery_selection_scheme.options')
+        default = self._window._configure.get('build.scenery_selection_scheme.default')
+        if self._window._language == 'chs':
+            option_names_chs = self._window._configure.get('build.scenery_selection_scheme.option_names_chs')
+            self._selection_scheme_prx_input.set_options(
+                options, option_names_chs
+            )
+        else:
+            self._selection_scheme_prx_input.set_options(
+                options
+            )
+
+        self._selection_scheme_prx_input.set(default)
+        self._selection_scheme_prx_input.set_tool_tip(
+            self._window.choice_tool_tip(
+                self._window._configure.get('build.scenery_selection_scheme')
+            )
+        )
+
+        self._selection_scheme_prx_input.connect_input_changed_to(
+            self._gui_resource_prx_unit.do_dcc_refresh_resources_selection
+        )
+
+    def gui_get_selection_scheme(self):
+        return self._selection_scheme_prx_input.get()
+
     def do_gui_refresh_by_resource_tag_checking(self):
-        filter_data_src = self._gui_resource_tag_opt.generate_semantic_tag_filter_data_src()
+        filter_data_src = self._gui_resource_tag_prx_unit.generate_semantic_tag_filter_data_src()
         qt_view = self._resource_prx_tree_view._qt_view
         qt_view._set_view_semantic_tag_filter_data_src_(filter_data_src)
         qt_view._set_view_keyword_filter_data_src_(
@@ -70,7 +97,7 @@ class PrxPageForSceneryResource(prx_abstracts.AbsPrxWidget):
         qt_view._refresh_viewport_showable_auto_()
 
     def do_gui_refresh_by_window_active_changing(self):
-        self._gui_resource_opt.do_gui_refresh_tools()
+        self._gui_resource_prx_unit.do_gui_refresh_tools()
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxPageForSceneryResource, self).__init__(*args, **kwargs)
@@ -86,7 +113,7 @@ class PrxPageForSceneryResource(prx_abstracts.AbsPrxWidget):
             gui_qt_core.QtWidgets.QSizePolicy.Expanding,
             gui_qt_core.QtWidgets.QSizePolicy.Expanding
         )
-        qt_lot = qt_widgets.QtVBoxLayout(self._qt_widget)
+        qt_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
         qt_lot.setContentsMargins(*[0]*4)
         qt_lot.setSpacing(2)
         # top toolbar
@@ -106,6 +133,7 @@ class PrxPageForSceneryResource(prx_abstracts.AbsPrxWidget):
         # reference
         self._prx_input_for_asset = qsm_gui_prx_widgets.PrxInputForScenery()
         self._reference_tool_box.add_widget(self._prx_input_for_asset)
+        self._prx_input_for_asset.widget.setMaximumWidth(488)
 
         self._gui_reference_opt = _unit_for_scenery.UnitForSceneryReference(
             self._window, self, self._session, self._prx_input_for_asset
@@ -113,34 +141,38 @@ class PrxPageForSceneryResource(prx_abstracts.AbsPrxWidget):
 
         self._prx_h_splitter = gui_prx_widgets.PrxHSplitter()
         qt_lot.addWidget(self._prx_h_splitter.widget)
-
+        # resource tag
         self._resource_tag_tree_view = gui_prx_widgets.PrxTreeView()
         self._prx_h_splitter.add_widget(self._resource_tag_tree_view)
         self._resource_tag_tree_view.create_header_view(
             [('name', 2)],
             self._window.get_definition_window_size()[0]
         )
-
+        # resource
         self._resource_prx_tree_view = gui_prx_widgets.PrxTreeView()
         self._prx_h_splitter.add_widget(self._resource_prx_tree_view)
         self._prx_h_splitter.set_fixed_size_at(0, 240)
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
         self._prx_h_splitter.set_contract_enable(False)
 
-        self._gui_resource_tag_opt = _rsc_mng_core.GuiResourceTagOpt(
+        self._gui_resource_tag_prx_unit = qsm_mya_gui_core.PrxUnitForResourceTagOpt(
             self._window, self, self._session, self._resource_tag_tree_view
         )
-        self._gui_resource_opt = _unit_for_scenery.UnitForSceneryView(
+        self._gui_resource_prx_unit = _unit_for_scenery.UnitForSceneryView(
             self._window, self, self._session, self._resource_prx_tree_view
         )
         self._resource_tag_tree_view.connect_item_check_changed_to(
             self.do_gui_refresh_by_resource_tag_checking
         )
+        # selection scheme
+        self._selection_scheme_prx_input = gui_prx_widgets.PrxInputAsCapsule()
+        qt_lot.addWidget(self._selection_scheme_prx_input.widget)
+        self._do_gui_build_selection_scheme()
         # tool kit
-        self._tool_prx_tab_box = gui_prx_widgets.PrxHTabBox()
-        qt_lot.addWidget(self._tool_prx_tab_box.widget)
+        self._page_prx_tab_box = gui_prx_widgets.PrxHTabBox()
+        qt_lot.addWidget(self._page_prx_tab_box.widget)
         # utility
-        self._gui_utility_opt = _unit_for_scenery.UnitForSceneryUtilityToolSet(
+        self._gui_utility_tool_set_unit = _unit_for_scenery.UnitForSceneryUtilityToolSet(
             self._window, self, self._session
         )
         # switch
@@ -159,31 +191,31 @@ class PrxPageForSceneryResource(prx_abstracts.AbsPrxWidget):
 
         self._window.connect_window_activate_changed_to(self.do_gui_refresh_by_window_active_changing)
         self._window.connect_window_close_to(self._do_dcc_destroy_all_script_jobs)
-        self._tool_prx_tab_box.connect_current_changed_to(self.do_gui_refresh_tabs)
+        self._page_prx_tab_box.connect_current_changed_to(self.do_gui_refresh_units)
 
-        self._tool_prx_tab_box.set_history_key('resource-manager.scenery_page_key_current')
-        self._tool_prx_tab_box.load_history()
+        self._page_prx_tab_box.set_history_key('resource-manager.scenery_page_key_current')
+        self._page_prx_tab_box.load_history()
 
     def gui_get_tool_tab_box(self):
-        return self._tool_prx_tab_box
+        return self._page_prx_tab_box
 
     def do_gui_refresh_all(self, force=False):
         self._top_prx_tool_bar.do_gui_refresh()
-        is_changed = self._gui_resource_opt.get_resources_query().do_update()
+        is_changed = self._gui_resource_prx_unit.get_resources_query().do_update()
         if is_changed is True or force is True:
-            self._gui_resource_tag_opt.restore()
-            self._gui_resource_tag_opt.gui_add_root()
+            self._gui_resource_tag_prx_unit.restore()
+            self._gui_resource_tag_prx_unit.gui_add_root()
 
-            self._gui_resource_opt.restore()
-            self._gui_resource_opt.gui_add_all()
+            self._gui_resource_prx_unit.restore()
+            self._gui_resource_prx_unit.gui_add_all()
 
-        self._gui_resource_opt.do_gui_refresh_by_dcc_selection()
-        self._gui_resource_opt.do_gui_refresh_tools()
+        self._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection()
+        self._gui_resource_prx_unit.do_gui_refresh_tools()
 
-        self.do_gui_refresh_tabs()
+        self.do_gui_refresh_units()
 
-    def gui_get_current_tool_tab_key(self):
-        return self._tool_prx_tab_box.get_current_key()
+    def gui_get_tool_tab_current_key(self):
+        return self._page_prx_tab_box.get_current_key()
 
-    def do_gui_refresh_tabs(self):
+    def do_gui_refresh_units(self):
         self._gui_switch_opt.do_gui_refresh_by_dcc_selection()

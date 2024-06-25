@@ -210,7 +210,7 @@ class AbsEntitiesCache(object):
 
         self._variants = {}
         self._variants.update(variants)
-        self._stg_ptn_opt_for_scan = bsc_core.PtnStgParseOpt(
+        self._stg_ptn_opt_for_scan = bsc_core.BscStgParseOpt(
             EntityScanPatterns.__dict__[self.EntityClass.Type]
         )
         self._stg_ptn_opt_for_scan.update_variants(**self._variants)
@@ -224,7 +224,7 @@ class AbsEntitiesCache(object):
         if variants_extend:
             for k, v in variants_extend.items():
                 for j in v:
-                    j_pth_opt = bsc_core.PtnStgParseOpt(
+                    j_pth_opt = bsc_core.BscStgParseOpt(
                         EntityScanPatterns.__dict__[self.EntityClass.Type]
                     )
                     j_variants = copy.copy(self._variants)
@@ -333,7 +333,7 @@ class AbsTask(object):
         return self._properties
     
     def find_result(self, p):
-        p_opt = bsc_core.PtnStgParseOpt(p)
+        p_opt = bsc_core.BscStgParseOpt(p)
         _ = p_opt.get_exists_results(**self._variants)
         if _:
             return _[0]
@@ -348,7 +348,7 @@ class AbsTaskQuery(object):
         self._variants = {}
         self._variants.update(variants)
         key = '{}{}'.format(self._entity.Type, self.EntityClass.Type)
-        self._stg_ptn_opt_for_scan = bsc_core.PtnStgParseOpt(
+        self._stg_ptn_opt_for_scan = bsc_core.BscStgParseOpt(
             EntityScanPatterns.__dict__[key]
         )
         self._stg_ptn_opt_for_scan.update_variants(**self._variants)

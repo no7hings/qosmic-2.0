@@ -35,7 +35,7 @@ if __name__ == '__main__':
     directory_path_src = '/l/resource/library/texture/all/surface/rough_concrete_ogioE0/v0001/texture/original/src'
     directory_path_tgt = '/l/resource/library/texture/all/surface/rough_concrete_ogioE0/v0001/texture/acescg/src'
 
-    bsc_storage.StgPathMtd.create_directory(directory_path_tgt)
+    bsc_storage.StgPath.create_directory(directory_path_tgt)
 
     d_original_src_opt = bsc_storage.StgDirectoryOpt(directory_path_src)
     d_acescg_src_opt = bsc_storage.StgDirectoryOpt(directory_path_tgt)
@@ -44,11 +44,11 @@ if __name__ == '__main__':
     jpg_file_paths = d_original_src_opt.get_all_file_paths(
         ext_includes=['.jpg']
     )
-    jpg_file_path_mapper = bsc_storage.StgPathMtd.to_file_deduplication_mapper(jpg_file_paths)
+    jpg_file_path_mapper = bsc_storage.StgPath.to_file_deduplication_mapper(jpg_file_paths)
     exr_file_paths = d_original_src_opt.get_all_file_paths(
         ext_includes=['.exr']
     )
-    exr_file_path_mapper = bsc_storage.StgPathMtd.to_file_deduplication_mapper(exr_file_paths)
+    exr_file_path_mapper = bsc_storage.StgPath.to_file_deduplication_mapper(exr_file_paths)
 
     for k, v in jpg_file_path_mapper.items():
         if k in exr_file_path_mapper:

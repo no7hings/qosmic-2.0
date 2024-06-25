@@ -59,7 +59,7 @@ class Reference(object):
             namespace = _scene_file.SceneFile.get_namespace(file_args[0])
             is_loaded = cls.is_loaded(path)
             if namespace is not None:
-                return file_args[1], namespace, is_loaded
+                return namespace, file_args[1], is_loaded
         return None
 
     @classmethod
@@ -85,6 +85,10 @@ class Reference(object):
     @classmethod
     def unload(cls, path):
         cmds.file(unloadReference=path)
+
+    @classmethod
+    def replace(cls, path, file_path):
+        cmds.file(file_path, loadReference=path)
 
 
 class References(object):
@@ -147,6 +151,9 @@ class ReferenceOpt(_base.AbsNodeOpt):
 
     def do_unload(self):
         Reference.unload(self._path)
+
+    def do_replace(self, file_path):
+        Reference.replace(self._path, file_path)
 
 
 class ReferenceQuery(object):

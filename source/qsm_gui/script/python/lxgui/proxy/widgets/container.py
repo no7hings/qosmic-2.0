@@ -178,8 +178,8 @@ class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
             gui_qt_core.QtWidgets.QSizePolicy.Minimum
         )
 
-    def do_gui_refresh(self):
-        self._qt_view._refresh_widget_all_()
+    def do_gui_refresh(self, w_over=None):
+        self._qt_view._refresh_widget_all_(w_over=w_over)
 
     def _gui_build_(self):
         self._wgt_w, self._wgt_h = 28, 28

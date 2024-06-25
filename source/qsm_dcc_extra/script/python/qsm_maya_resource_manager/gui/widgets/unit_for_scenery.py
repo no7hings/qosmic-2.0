@@ -21,11 +21,11 @@ import qsm_maya.scenery.core as qsm_mya_scn_core
 
 import qsm_maya.scenery.scripts as qsm_mya_scn_scripts
 
-from ... import core as _rsc_mng_core
+import qsm_maya_gui.core as qsm_mya_gui_core
 
 
 class UnitForSceneryView(
-    _rsc_mng_core.GuiResourceOpt
+    qsm_mya_gui_core.PrxUnitForResourceOpt
 ):
     ROOT_NAME = 'Sceneries'
 
@@ -45,7 +45,7 @@ class UnitForSceneryView(
 
 
 class UnitForSceneryReference(
-    _rsc_mng_core.GuiBaseOpt
+    qsm_mya_gui_core.PrxUnitBaseOpt
 ):
     def __init__(self, window, unit, session, prx_input_for_asset):
         super(UnitForSceneryReference, self).__init__(window, unit, session)
@@ -113,7 +113,7 @@ class UnitForSceneryReference(
 
 
 class UnitForSceneryUtilityToolSet(
-    _rsc_mng_core.GuiBaseOpt
+    qsm_mya_gui_core.PrxUnitBaseOpt
 ):
 
     # unit assembly
@@ -132,7 +132,7 @@ class UnitForSceneryUtilityToolSet(
 
     def do_dcc_do_dcc_load_unit_assemblies_by_selection(self):
         if self._load_unit_assembly_button.get_is_started() is False:
-            resources = self._page._gui_resource_opt.gui_get_selected_resources()
+            resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
             if resources:
                 self._unit_assembly_load_args_array = []
                 create_cmds = []
@@ -160,7 +160,7 @@ class UnitForSceneryUtilityToolSet(
                     self.do_dcc_load_unit_assemblies()
 
     def do_dcc_remove_unit_assemblies(self):
-        resources = self._page._gui_resource_opt.gui_get_selected_resources()
+        resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
         if resources:
             w = gui_core.GuiDialog.create(
                 label=self._session.gui_name,
@@ -192,7 +192,7 @@ class UnitForSceneryUtilityToolSet(
 
     def do_dcc_do_dcc_load_gpu_instances_by_selection(self):
         if self._load_gpu_instance_button.get_is_started() is False:
-            resources = self._page._gui_resource_opt.gui_get_selected_resources()
+            resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
             if resources:
                 self._gpu_instance_load_args_array = []
                 create_cmds = []
@@ -220,7 +220,7 @@ class UnitForSceneryUtilityToolSet(
                     self.do_dcc_load_gpu_instances()
 
     def do_dcc_remove_gpu_instances(self):
-        resources = self._page._gui_resource_opt.gui_get_selected_resources()
+        resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
         if resources:
             w = gui_core.GuiDialog.create(
                 label=self._session.gui_name,
@@ -272,16 +272,8 @@ class UnitForSceneryUtilityToolSet(
             'gpu_instance.remove', self.do_dcc_remove_gpu_instances
         )
 
-        self._prx_options_node.get_port('selection_scheme').connect_input_changed_to(
-            self._page._gui_resource_opt.do_dcc_refresh_resources_selection
-        )
-
-    def gui_get_selection_scheme(self):
-        return self._prx_options_node.get('selection_scheme')
-
-
 class UnitForScenerySwitchToolSet(
-    _rsc_mng_core.GuiBaseOpt
+    qsm_mya_gui_core.PrxUnitBaseOpt
 ):
 
     def do_dcc_unit_assembly_switch_to(self, key):
@@ -427,12 +419,12 @@ class UnitForScenerySwitchToolSet(
                     self._gpu_instance_paths.extend(v)
 
     def do_gui_refresh_by_dcc_selection(self):
-        if self._page.gui_get_current_tool_tab_key() == 'switch':
+        if self._page.gui_get_tool_tab_current_key() == 'switch':
             self.do_gui_refresh_buttons()
 
 
 class UnitForSceneryExtendToolSet(
-    _rsc_mng_core.GuiBaseOpt
+    qsm_mya_gui_core.PrxUnitBaseOpt
 ):
 
     def do_gui_refresh_by_frame_scheme_changing(self):

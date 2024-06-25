@@ -36,6 +36,6 @@ result = rsv_unit.get_result(version='latest')
 print result
 print rsv_unit.generate_properties_by_result(result)
 
-f = '/l/prod/xkt/work/shots/z88/z88010/efx/effects/houdini/z88010.efx.effects.v032.hip'
+f = '/l/prod/xkt/work/shots/z88/z88010/efx/nodes/houdini/z88010.efx.effects.v032.hip'
 
 print r.get_rsv_scene_properties_by_any_scene_file_path(f)

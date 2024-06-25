@@ -70,7 +70,7 @@ def main(session):
         return _list
     # get checked resources
     window = session.get_window()
-    gui_resource_opt = window._gui_resource_opt
+    gui_resource_opt = window._gui_resource_prx_unit
     dtb_resources = gui_resource_opt.get_checked_or_selected_db_resources()
     if not dtb_resources:
         gui_core.GuiDialog.create(
@@ -91,11 +91,11 @@ def main(session):
         base_variants = dict(root=dtb_opt.get_stg_root())
         #
         geometry_fbx_directory_p = dtb_opt.get_pattern(keyword='geometry-fbx-dir')
-        geometry_fbx_directory_p_o = bsc_core.PtnStgParseOpt(geometry_fbx_directory_p)
+        geometry_fbx_directory_p_o = bsc_core.BscStgParseOpt(geometry_fbx_directory_p)
         geometry_fbx_directory_p_o.update_variants(**base_variants)
         #
         geometry_usd_directory_p = dtb_opt.get_pattern(keyword='geometry-usd-dir')
-        geometry_usd_directory_p_o = bsc_core.PtnStgParseOpt(geometry_usd_directory_p)
+        geometry_usd_directory_p_o = bsc_core.BscStgParseOpt(geometry_usd_directory_p)
         geometry_usd_directory_p_o.update_variants(**base_variants)
         #
         window = session.get_window()

@@ -144,6 +144,9 @@ class QtEntryAsConstant(
     def eventFilter(self, *args):
         widget, event = args
         if widget == self:
+            if not hasattr(event, 'type'):
+                return False
+
             if event.type() == QtCore.QEvent.FocusIn:
                 self._is_focused = True
                 entry_frame = self._get_entry_frame_()
@@ -619,7 +622,7 @@ class QtEntryAsContent(
                 if urls:
                     for i_url in urls:
                         i_path = i_url.toLocalFile()
-                        if bsc_storage.StgPathMtd.get_is_file(i_path) is True:
+                        if bsc_storage.StgPath.get_is_file(i_path) is True:
                             i_file_opt = bsc_storage.StgFileOpt(i_path)
                             i_data = i_file_opt.set_read()
                             self.insertPlainText(i_data)

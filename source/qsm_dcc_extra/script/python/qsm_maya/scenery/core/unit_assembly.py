@@ -76,7 +76,7 @@ class UnitAssemblyOpt(object):
                 file_path_new = '{}/{}.abc'.format(
                     file_opt.directory_path, key
                 )
-                if bsc_storage.StgPathMtd.get_is_file(file_path_new) is True:
+                if bsc_storage.StgPath.get_is_file(file_path_new) is True:
                     _mya_core.AssemblyReference.set_active(
                         self._node, key
                     )
@@ -84,7 +84,7 @@ class UnitAssemblyOpt(object):
                 file_path_new = '{}/{}.ma'.format(
                     file_opt.directory_path, key
                 )
-                if bsc_storage.StgPathMtd.get_is_file(file_path_new) is True:
+                if bsc_storage.StgPath.get_is_file(file_path_new) is True:
                     _mya_core.AssemblyReference.set_active(
                         self._node, key
                     )

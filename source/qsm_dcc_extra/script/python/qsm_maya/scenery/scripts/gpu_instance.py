@@ -13,7 +13,7 @@ import qsm_general.core as qsm_gnl_core
 
 from ... import core as _mya_core
 
-from ...asset import core as _ast_core
+from ...general import core as _gnl_core
 
 from ...assembly import core as _asb_core
 
@@ -23,9 +23,8 @@ from ...resource import core as _rsc_core
 
 
 class GpuInstanceOpt(_rsc_core.ResourceScriptOpt):
-    CACHE_NAME = 'gpu_instance_dgc'
-
-    CACHE_ROOT = '|__GPU_INSTANCE__'
+    CACHE_ROOT = _gnl_core.ResourceCaches.GpuInstanceRoot
+    CACHE_NAME = _gnl_core.ResourceCaches.GpuInstanceName
 
     def __init__(self, *args, **kwargs):
         super(GpuInstanceOpt, self).__init__(*args, **kwargs)
@@ -50,7 +49,7 @@ class GpuInstanceOpt(_rsc_core.ResourceScriptOpt):
 
     def generate_args(self):
         file_path = self._resource.file
-        cache_file_path = _ast_core.AssetCache.generate_gpu_instance_file(
+        cache_file_path = _gnl_core.AssetCaches.generate_gpu_instance_file(
             file_path
         )
         if os.path.isfile(cache_file_path) is False:
@@ -96,7 +95,7 @@ class GpuInstanceProcess(object):
         ).directory_path
 
         if cache_file_path is None:
-            self._cache_file_path = _ast_core.AssetCache.generate_gpu_instance_file(
+            self._cache_file_path = _gnl_core.AssetCaches.generate_gpu_instance_file(
                 self._file_path
             )
         else:
@@ -205,7 +204,7 @@ class GpuInstanceProcess(object):
                 unit_directory_path, mesh_key
             )
             # export gpu
-            if bsc_storage.StgPathMtd.get_is_file(gpu_file_path) is False:
+            if bsc_storage.StgPath.get_is_file(gpu_file_path) is False:
                 # to world
                 transform_path_copy = _mya_core.DagNode.copy_to_world(transform_path)
                 transform_new_name = '{}_mesh'.format(transform_name)

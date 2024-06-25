@@ -1,3 +1,6 @@
 connection:
     host: '10.10.202.56'
     port: 8082
+
+mongoDB:
+    password: admin

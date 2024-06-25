@@ -6,7 +6,11 @@ import maya.cmds as cmds
 
 import lxbasic.core as bsc_core
 
+import lxbasic.storage as bsc_storage
+
 from ... import core as _mya_core
+
+from ...general import core as _gnl_core
 
 from ...resource import core as _rsc_core
 
@@ -49,8 +53,12 @@ class AdvRig(_rsc_core.Resource):
         if _:
             return _[0]
 
+    # skin proxy
     def get_skin_proxy_location(self):
-        _ = cmds.ls('{}:skin_proxy_dgc'.format(self.namespace), long=1)
+        _ = cmds.ls(
+            '{}:{}'.format(self.namespace, _gnl_core.ResourceCaches.SkinProxyName),
+            long=1
+        )
         if _:
             return _[0]
 
@@ -90,8 +98,12 @@ class AdvRig(_rsc_core.Resource):
         _mya_core.Node.delete(location)
         return True
 
+    # dynamic gpu
     def get_dynamic_gpu_location(self):
-        _ = cmds.ls('{}:dynamic_gpu_dgc'.format(self.namespace), long=1)
+        _ = cmds.ls(
+            '{}:{}'.format(self.namespace, _gnl_core.ResourceCaches.DynamicGpuName), 
+            long=1
+        )
         if _:
             return _[0]
 
@@ -132,6 +144,22 @@ class AdvRig(_rsc_core.Resource):
         _mya_core.Node.delete(location)
         return True
 
+    # cfx cloth
+    def get_cfx_cloth_location(self):
+        _ = cmds.ls(
+            '{}:{}'.format(self.namespace, _gnl_core.ResourceCaches.CfxClothName),
+            long=1
+        )
+        if _:
+            return _[0]
+
+    def is_cfx_cloth_exists(self):
+        _ = self.get_cfx_cloth_location()
+        if _:
+            if cmds.objExists(_) is True:
+                return True
+        return False
+    
     def find_nodes_by_scheme(self, scheme):
         if self.get_dynamic_gpu_is_enable() is True:
             return [self.get_dynamic_gpu_location()]
@@ -186,17 +214,64 @@ class AdvRig(_rsc_core.Resource):
         dict_ = collections.OrderedDict()
         geometry_root = self.get_geometry_root()
         if geometry_root:
-            _ = cmds.ls(geometry_root, dag=1, type='mesh', noIntermediate=1, long=1)
+            _ = cmds.ls(geometry_root, dag=1, type='mesh', noIntermediate=1, long=1) or []
             for i in _:
                 i_transform_path = _mya_core.Shape.get_transform(i)
                 i_key = ':'.join(i_transform_path.split('|')[-1].split(':')[1:])
                 dict_[i_key] = _mya_core.Transform.get_world_extent(i_transform_path)
         return dict_
 
+    @classmethod
+    def path_to_key(cls, namespace, root, path, pathsep):
+        path_strip = path[len(root):]
+        return '/'.join(
+            map(
+                lambda x: x[len(namespace)+1:] if x.startswith(namespace) else x,
+                path_strip.split(pathsep)
+            )
+        )
+
+    @classmethod
+    def key_to_path(cls, namespace, root, key, pathsep):
+        return '{}{}'.format(
+            root, pathsep.join(map(lambda x: '{}:{}'.format(namespace, x) if x else x, key.split('/')))
+        )
+
     def find_geometry_shape(self, key):
-        _ = cmds.ls('{namespace}:{transform}'.format(namespace=self.namespace, transform=key), long=1)
+        _ = cmds.ls(
+            '{namespace}:{transform}|*:*'.format(namespace=self.namespace, transform=key),
+            noIntermediate=1, type='mesh', long=1
+        )
         if _:
             return _[0]
+
+    def generate_geometry_topology_data(self):
+        dict_ = collections.OrderedDict()
+        namespace = self._namespace
+        geometry_root = self.get_geometry_root()
+        if geometry_root:
+            _ = cmds.ls(geometry_root, dag=1, type='mesh', noIntermediate=1, long=1) or []
+            for i in _:
+                i_transform_path = _mya_core.Shape.get_transform(i)
+                i_transform_name = i_transform_path.split('|')[-1]
+                # ignore when not form this asset
+                if not i_transform_name.startswith(namespace+':'):
+                    continue
+                i_key = self.path_to_key(namespace, geometry_root, i_transform_path, pathsep='|')
+                dict_[i_key] = _mya_core.MeshOpt(i).get_face_vertices_as_uuid()
+        return dict_
+
+    def pull_geometry_topology_data(self):
+        if self._file_path:
+            cache_path = _gnl_core.AssetCaches.generate_rig_geometry_data_file(
+                self._file_path, 'topology'
+            )
+            if bsc_storage.StgPath.get_is_file(cache_path) is True:
+                data = bsc_storage.StgFileOpt(cache_path).set_read()
+            else:
+                data = self.generate_geometry_topology_data()
+                bsc_storage.StgFileOpt(cache_path).set_write(data)
+            return data
 
 
 class AdvRigsQuery(_rsc_core.ResourcesQuery):
@@ -206,3 +281,16 @@ class AdvRigsQuery(_rsc_core.ResourcesQuery):
 
     def __init__(self):
         super(AdvRigsQuery, self).__init__()
+
+    def check_is_valid(self, *args, **kwargs):
+        is_loaded = kwargs['is_loaded']
+        if is_loaded:
+            namespace = kwargs['namespace']
+            _ = cmds.ls('{}:MainShape'.format(namespace), long=1)
+            if _:
+                if cmds.nodeType(_[0]) == 'nurbsCurve':
+                    return True
+            return False
+        else:
+            file_path = kwargs['file']
+            return self._pth.get_is_matched(file_path)

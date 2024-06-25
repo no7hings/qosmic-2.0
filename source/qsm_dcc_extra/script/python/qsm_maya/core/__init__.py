@@ -1,6 +1,8 @@
 # coding:utf-8
 from .undo import *
 
+from .history import *
+
 from .selection import *
 
 from .display_layer import *
@@ -55,7 +57,7 @@ from .assembly import *
 
 from .file_reference import *
 
-from .shader import *
+from .node_for_shader import *
 
 from .material import *
 
@@ -67,17 +69,25 @@ from .mesh import *
 
 from .gpu_cache import *
 
+from .alembic_cache import *
+
+from .geometry_cache import *
+
 from .window import *
 
 from .shelf import *
 
-from .deformer import *
+from .node_for_deformer import *
+
+from .node_for_dynamic import *
 
 from .node_port_extra import *
 
 from .node_extra import *
 
 from .hotkey import *
+
+
 
 
 

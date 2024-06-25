@@ -15,7 +15,7 @@ import qsm_general.core as qsm_gnl_core
 
 from ... import core as _mya_core
 
-from ...asset import core as _ast_core
+from ...general import core as _gnl_core
 
 from .. import core as _scn_core
 
@@ -25,9 +25,8 @@ from ...assembly import core as _asb_core
 
 
 class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
-    CACHE_NAME = 'unit_assembly_dgc'
-
-    CACHE_ROOT = '|__UNIT_ASSEMBLY__'
+    CACHE_ROOT = _gnl_core.ResourceCaches.UnitAssemblyRoot
+    CACHE_NAME = _gnl_core.ResourceCaches.UnitAssemblyName
 
     def __init__(self, resource):
         super(UnitAssemblyOpt, self).__init__(resource)
@@ -52,7 +51,7 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
 
     def generate_args(self):
         file_path = self._resource.file
-        cache_file_path = _ast_core.AssetCache.generate_unit_assembly_file(
+        cache_file_path = _gnl_core.AssetCaches.generate_unit_assembly_file(
             file_path
         )
         if os.path.isfile(cache_file_path) is False:
@@ -76,7 +75,7 @@ class UnitAssemblyProcess(object):
         ).directory_path
 
         if cache_file_path is None:
-            self._cache_file_path = _ast_core.AssetCache.generate_unit_assembly_file(
+            self._cache_file_path = _gnl_core.AssetCaches.generate_unit_assembly_file(
                 self._file_path
             )
         else:
@@ -189,7 +188,7 @@ class UnitAssemblyProcess(object):
             unit_directory_path
         )
 
-        if bsc_storage.StgPathMtd.get_is_file(ad_file_path) is False:
+        if bsc_storage.StgPath.get_is_file(ad_file_path) is False:
             file_dict = {}
 
             transform_path_copy = _mya_core.DagNode.copy_to_world(transform_path)

@@ -139,7 +139,7 @@ class FncExporterForDotXgenUsda(
                 #
                 c.set(
                     'asset.xgen.collections.{}.file'.format(i_xgen_collection_name),
-                    bsc_storage.StgPathMtd.get_file_realpath(
+                    bsc_storage.StgPath.get_file_realpath(
                         file_path, i_xgen_collection_file_path
                     )
                 )

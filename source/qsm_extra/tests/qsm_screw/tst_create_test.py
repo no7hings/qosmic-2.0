@@ -1,11 +1,11 @@
-import qsm_screw.core as qsm_scr_core
+import qsm_lazy.core as qsm_lzy_core
 
 import lxbasic.resource as bsc_resource
 
 
 if __name__ == '__main__':
 
-    stage = qsm_scr_core.Stage(
+    stage = qsm_lzy_core.Stage(
         'test'
     )
     #

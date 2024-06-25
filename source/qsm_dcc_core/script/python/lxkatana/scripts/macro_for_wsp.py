@@ -1898,7 +1898,7 @@ class ScpInstanceColorMap(object):
         cache_usd_directory_path = bsc_storage.StgTmpBaseMtd.get_cache_directory('usd-cache')
         cache_usd_file_path = '{}/{}.usd'.format(cache_usd_directory_path, cache_file_name)
         self._obj_opt.set('parameters.grow.cache.usd', cache_usd_file_path)
-        if bsc_storage.StgPathMtd.get_is_exists(cache_usd_file_path) is False or force is True:
+        if bsc_storage.StgPath.get_is_exists(cache_usd_file_path) is False or force is True:
             import lxgui.proxy.widgets as gui_prx_widgets
 
             w = gui_prx_widgets.PrxProcessingWindow()
@@ -1931,7 +1931,7 @@ class ScpInstanceColorMap(object):
         cache_json_directory_path = bsc_storage.StgTmpBaseMtd.get_cache_directory('json-cache')
         cache_json_file_path = '{}/{}.json'.format(cache_json_directory_path, cache_file_name)
         self._obj_opt.set('parameters.instance.cache.json', cache_json_file_path)
-        if bsc_storage.StgPathMtd.get_is_exists(cache_usd_file_path) is False or force is True:
+        if bsc_storage.StgPath.get_is_exists(cache_usd_file_path) is False or force is True:
             import lxgui.proxy.widgets as gui_prx_widgets
 
             w = gui_prx_widgets.PrxProcessingWindow()

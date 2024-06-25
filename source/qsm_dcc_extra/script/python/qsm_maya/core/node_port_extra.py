@@ -130,7 +130,6 @@ class BscNodePortOpt(object):
         return []
 
     def get(self, as_string=False):
-        print self.get_type_name(), self.get_port_path()
         if self.get_type_name() in {'message', 'TdataCompound', 'Nobject', 'nurbsCurve'}:
             return None
 

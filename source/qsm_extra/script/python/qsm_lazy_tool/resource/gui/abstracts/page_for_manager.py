@@ -25,7 +25,7 @@ import lxgui.proxy.abstracts as gui_prx_abstracts
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_screw.core as qsm_scr_core
+import qsm_lazy.core as qsm_lzy_core
 
 from .... import core as _lzy_tol_core
 
@@ -121,8 +121,8 @@ class _GuiTypeOpt(
                 _src_node_path_set = set(
                     map(
                         lambda _x: _x.path,
-                        self._page._scr_stage.find_all(
-                            entity_type=self._page._scr_stage.EntityTypes.Node,
+                        self._page._lzy_stage.find_all(
+                            entity_type=self._page._lzy_stage.EntityTypes.Node,
                             filters=[
                                 ('type', 'is', 'node')
                             ]
@@ -136,8 +136,8 @@ class _GuiTypeOpt(
                 _all_scr_node_path_set = set(
                     map(
                         lambda _x: _x.path,
-                        self._page._scr_stage.find_all(
-                            entity_type=self._page._scr_stage.EntityTypes.Node,
+                        self._page._lzy_stage.find_all(
+                            entity_type=self._page._lzy_stage.EntityTypes.Node,
                             filters=[
                                 ('type', 'is', 'node')
                             ]
@@ -148,8 +148,8 @@ class _GuiTypeOpt(
                 _all_assigned_node_scr_path_set = set(
                     map(
                         lambda _x: _x.source,
-                        self._page._scr_stage.find_all(
-                            entity_type=self._page._scr_stage.EntityTypes.Assign,
+                        self._page._lzy_stage.find_all(
+                            entity_type=self._page._lzy_stage.EntityTypes.Assign,
                             filters=[
                                 ('type', 'is', 'type_assign')
                             ]
@@ -161,8 +161,8 @@ class _GuiTypeOpt(
                 self._data_cache_dict[path] = _src_node_path_set
                 return [_src_node_path_set]
 
-            _scr_assigns = self._page._scr_stage.find_all(
-                entity_type=self._page._scr_stage.EntityTypes.Assign,
+            _scr_assigns = self._page._lzy_stage.find_all(
+                entity_type=self._page._lzy_stage.EntityTypes.Assign,
                 filters=[
                     ('type', 'is', 'type_assign'),
                     ('target', 'startswith', path),
@@ -240,8 +240,8 @@ class _GuiTypeOpt(
             return [[], 0]
 
         return [
-            self._page._scr_stage.find_all(
-                self._page._scr_stage.EntityTypes.Type,
+            self._page._lzy_stage.find_all(
+                self._page._lzy_stage.EntityTypes.Type,
                 # filters=[
                 #     ('category', 'is', 'group')
                 # ]
@@ -262,7 +262,7 @@ class _GuiTypeOpt(
         self.gui_add_entities()
 
     def get_selected_entities(self):
-        return [x.get_gui_dcc_obj(self._namespace) for x in self._prx_tree_view.get_selected_items()]
+        return [x.get_gui_dcc_obj(self._namespace) for x in self._prx_tree_view.get_all_selected_items()]
 
     def get_assigned_node_paths(self, scr_type_path):
         return self._data_cache_dict[scr_type_path]
@@ -324,8 +324,8 @@ class _GuiTagOpt(
             return [[], 0]
 
         return [
-            self._page._scr_stage.find_all(
-                self._page._scr_stage.EntityTypes.Tag,
+            self._page._lzy_stage.find_all(
+                self._page._lzy_stage.EntityTypes.Tag,
                 # filters=[
                 #     ('category', 'is', 'group')
                 # ]
@@ -352,8 +352,8 @@ class _GuiTagOpt(
                 _src_node_path_set = set(
                     map(
                         lambda _x: _x.path,
-                        self._page._scr_stage.find_all(
-                            entity_type=self._page._scr_stage.EntityTypes.Node,
+                        self._page._lzy_stage.find_all(
+                            entity_type=self._page._lzy_stage.EntityTypes.Node,
                             filters=[
                                 ('type', 'is', 'node')
                             ]
@@ -366,8 +366,8 @@ class _GuiTagOpt(
                 _src_node_path_set = set(
                     map(
                         lambda _x: _x.path,
-                        self._page._scr_stage.find_all(
-                            entity_type=self._page._scr_stage.EntityTypes.Node,
+                        self._page._lzy_stage.find_all(
+                            entity_type=self._page._lzy_stage.EntityTypes.Node,
                             filters=[
                                 ('type', 'is', 'node')
                             ]
@@ -377,8 +377,8 @@ class _GuiTagOpt(
                 self._data_cache_dict[path] = _src_node_path_set
                 return [_src_node_path_set]
             else:
-                _scr_assigns = self._page._scr_stage.find_all(
-                    entity_type=self._page._scr_stage.EntityTypes.Assign,
+                _scr_assigns = self._page._lzy_stage.find_all(
+                    entity_type=self._page._lzy_stage.EntityTypes.Assign,
                     filters=[
                         ('type', 'is', 'tag_assign'),
                         ('target', 'startswith', scr_entity.path),
@@ -420,8 +420,8 @@ class _GuiTagOpt(
                 _src_node_path_set = set(
                     map(
                         lambda _x: _x.path,
-                        self._page._scr_stage.find_all_by_ctime_tag(
-                            self._page._scr_stage.EntityTypes.Node,
+                        self._page._lzy_stage.find_all_by_ctime_tag(
+                            self._page._lzy_stage.EntityTypes.Node,
                             bsc_core.BscPathOpt(path).name,
                             filters=[
                                 ('type', 'is', 'node')
@@ -432,8 +432,8 @@ class _GuiTagOpt(
                 self._data_cache_dict[path] = _src_node_path_set
                 return [_src_node_path_set]
             else:
-                _scr_assigns = self._page._scr_stage.find_all(
-                    entity_type=self._page._scr_stage.EntityTypes.Assign,
+                _scr_assigns = self._page._lzy_stage.find_all(
+                    entity_type=self._page._lzy_stage.EntityTypes.Assign,
                     filters=[
                         ('type', 'is', 'tag_assign'),
                         ('target', 'startswith', scr_entity.path),
@@ -560,13 +560,16 @@ class _GuiNodeOpt(
         if selected_qt_item_widgets:
             qt_item_widget = selected_qt_item_widgets[0]
             scr_entity = qt_item_widget._get_entity_()
+            data_type = qt_item_widget._get_property_('data_type')
+            file_path = qt_item_widget._get_property_(data_type)
             data = dict(
-                stage=self._page._scr_stage_key,
+                stage=self._page._lzy_stage_key,
                 path=scr_entity.path,
                 gui_name_chs=scr_entity.gui_name_chs,
-                file=qt_item_widget._get_property_('rebuild')
+                data_type=data_type,
+                file=file_path
             )
-            qsm_scr_core.NodeContext.save(data)
+            qsm_lzy_core.DataContext.save(data)
 
     # node
     def gui_add_nodes(self, scr_node_paths, gui_thread_flag):
@@ -596,7 +599,7 @@ class _GuiNodeOpt(
             return [[], 0]
 
         return [
-            [self._page._scr_stage.get_node(x) for x in scr_node_paths],
+            [self._page._lzy_stage.get_node(x) for x in scr_node_paths],
             gui_thread_flag
         ]
 
@@ -633,8 +636,8 @@ class _GuiNodeOpt(
             data = self._data_cache_dict[path]
             return [[qt_item, scr_entity, data], gui_thread_flag]
 
-        scr_assigns = self._page._scr_stage.find_all(
-            self._page._scr_stage.EntityTypes.Assign,
+        scr_assigns = self._page._lzy_stage.find_all(
+            self._page._lzy_stage.EntityTypes.Assign,
             [
                 ('type', 'is', 'tag_assign'),
                 ('source', 'is', scr_entity.path),
@@ -643,11 +646,11 @@ class _GuiNodeOpt(
         tag_dict = {}
         for i_scr_assign in scr_assigns:
             i_scr_tag_path = i_scr_assign.target
-            i_scr_tag = self._page._scr_stage.get_entity(
-                self._page._scr_stage.EntityTypes.Tag, i_scr_tag_path
+            i_scr_tag = self._page._lzy_stage.get_entity(
+                self._page._lzy_stage.EntityTypes.Tag, i_scr_tag_path
             )
-            i_scr_tag_group = self._page._scr_stage.get_entity(
-                self._page._scr_stage.EntityTypes.Tag, bsc_core.PthNodeMtd.get_dag_parent_path(i_scr_tag_path)
+            i_scr_tag_group = self._page._lzy_stage.get_entity(
+                self._page._lzy_stage.EntityTypes.Tag, bsc_core.PthNodeMtd.get_dag_parent_path(i_scr_tag_path)
             )
             tag_dict[i_scr_tag_group.gui_name_chs] = i_scr_tag.gui_name_chs
 
@@ -655,8 +658,8 @@ class _GuiNodeOpt(
             '%Y-%m-%d %H:%M:%S'
         )
 
-        scr_properties = self._page._scr_stage.find_all(
-            self._page._scr_stage.EntityTypes.Property,
+        scr_properties = self._page._lzy_stage.find_all(
+            self._page._lzy_stage.EntityTypes.Property,
             [
                 ('type', 'is', 'parameter'),
                 ('node', 'is', scr_entity.path),
@@ -855,11 +858,11 @@ class AbsPrxPageForManager(
         )
 
     def do_gui_close(self):
-        self._scr_stage.close()
+        self._lzy_stage.close()
 
     def do_gui_initialize(self, key):
-        self._scr_stage_key = key
-        self._scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
+        self._lzy_stage_key = key
+        self._lzy_stage = qsm_lzy_core.Stage(self._lzy_stage_key)
         self.gui_setup_page()
 
     def _gui_add_main_tools(self):
@@ -928,8 +931,8 @@ class AbsPrxPageForManager(
             self._keyword_set = set()
             self._keyword_pinyin_dict = {}
 
-            _all_scr_nodes = self._scr_stage.find_all(
-                self._scr_stage.EntityTypes.Node,
+            _all_scr_nodes = self._lzy_stage.find_all(
+                self._lzy_stage.EntityTypes.Node,
                 [
                     ('type', 'is', 'node'),
                 ]
@@ -959,8 +962,8 @@ class AbsPrxPageForManager(
         self._window = window
         self._session = session
 
-        self._scr_stage_key = None
-        self._scr_stage = None
+        self._lzy_stage_key = None
+        self._lzy_stage = None
 
         self._window.connect_window_close_to(self.do_gui_close)
 

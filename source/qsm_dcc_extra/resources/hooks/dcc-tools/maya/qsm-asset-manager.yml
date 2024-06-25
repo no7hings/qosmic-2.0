@@ -5,8 +5,8 @@ option:
         - '*-maya'
     #
     gui:
-        name: 'Resource Manager'
-        name_chs: '资源管理'
+        name: 'Lazy Animation Tool'
+        name_chs: '懒人动画工具'
         group_name: 'Asset(s)'
         #
         icon_name: 'application/resource_library'
@@ -27,21 +27,6 @@ build:
             name: 'Skin Proxy & Dynamic GPU'
             name_chs: '简模代理 & 动态GPU'
             parameters:
-                selection_scheme:
-                    widget: capsule_string
-                    name_chs: '选择方案'
-                    options: ['root', 'geometry_root', 'deformation_root', 'motion_root', 'main_control']
-                    option_names_chs: ['根组', '模型组', '骨骼组', '控制器组', '主控制器']
-                    default: 'main_control'
-                    enable: True
-                    tool_tip: 'choose a selection scheme'
-                    tool_tip_chs:
-                        |-
-                        设置一个选择方案
-                            根组：选择整个绑定组
-                            模型：选中模型组
-                            骨骼：选择骨骼组
-                            控制器：选中控制器组
 
                 setting:
                     widget: group
@@ -99,7 +84,7 @@ build:
 
                 skin_proxy/check_bbox:
                     widget: boolean
-                    name: 'Use BBox'
+                    name: 'Check BBox'
                     name_chs: '检测边界框'
                     value: True
                     enable: True
@@ -343,20 +328,6 @@ build:
             name: 'Unit Assembly & GPU Instance'
             name_chs: '元素组装 & GPU实例'
             parameters:
-                selection_scheme:
-                    widget: capsule_string
-                    name_chs: '选择方案'
-                    options: ['root', 'geometry', 'none']
-                    option_names_chs: ['根组', '模型组', '不选']
-                    default: 'root'
-                    enable: True
-                    tool_tip: 'choose a selection scheme'
-                    tool_tip_chs:
-                        |-
-                        设置一个选择方案
-                            根组：选择所有根组
-                            几何物体：选择所有模型
-                            不选：不选择任何物体
 
                 unit_assembly:
                     widget: group
@@ -665,15 +636,15 @@ build:
 
     tabs:
         rig:
-            name: 'Rig Resources'
-            name_chs: '绑定资源'
+            name: 'Rig'
+            name_chs: '绑定'
 
             tool_tip: 'Include all tools for rig'
             tool_tip_chs: '包含所有跟绑定相关的工具'
 
         scenery:
-            name: 'Scenery Resource'
-            name_chs: '场景资源'
+            name: 'Scenery'
+            name_chs: '场景'
 
             tool_tip: 'Include all tools for scenery'
             tool_tip_chs: '包含所有跟场景相关的工具'
@@ -720,3 +691,28 @@ build:
 
             tool_tip: 'Include all tool for scenery as extend, etc. animation transfer'
             tool_tip_chs: '包含所有跟场景相关的扩展工具，如：相机遮罩等'
+
+    rig_selection_scheme:
+        options: ['root', 'geometry_root', 'deformation_root', 'motion_root', 'main_control']
+        option_names_chs: ['根组', '模型组', '骨骼组', '控制器组', '主控制器']
+        default: 'main_control'
+        tool_tip: 'choose a selection scheme'
+        tool_tip_chs:
+            |-
+            设置一个选择方案
+                根组：选择整个绑定组
+                模型：选中模型组
+                骨骼：选择骨骼组
+                控制器：选中控制器组
+
+    scenery_selection_scheme:
+        options: ['root', 'geometry', 'none']
+        option_names_chs: ['根组', '模型组', '不选']
+        default: 'root'
+        tool_tip: 'choose a selection scheme'
+        tool_tip_chs:
+            |-
+            设置一个选择方案
+                根组：选择所有根组
+                几何物体：选择所有模型
+                不选：不选择任何物体

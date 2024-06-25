@@ -74,7 +74,7 @@ class ResourcesQuery(object):
     RESOURCE_CLS = Resource
 
     def __init__(self):
-        self._pth = bsc_core.PtnStgParseOpt(
+        self._pth = bsc_core.BscStgParseOpt(
             self.STG_PTN
         )
         self._cache_hash_key = None
@@ -90,6 +90,10 @@ class ResourcesQuery(object):
 
     def __repr__(self):
         return self.__str__()
+
+    def check_is_valid(self, *args, **kwargs):
+        file_path = kwargs['file']
+        return self._pth.get_is_matched(file_path)
 
     def do_update(self):
         data = self.get_data()
@@ -130,9 +134,9 @@ class ResourcesQuery(object):
                 )
                 continue
 
-            i_file_path, i_namespace, i_is_loaded = i_args
+            i_namespace, i_file_path, i_is_loaded = i_args
             # check file path
-            if self._pth.get_is_matched(i_file_path) is True:
+            if self.check_is_valid(namespace=i_namespace, file=i_file_path, is_loaded=i_is_loaded) is True:
                 i_variants = self._pth.get_variants(i_file_path)
                 dict_[i_namespace] = i_path, i_is_loaded, i_file_path, i_variants
         return dict_
@@ -149,9 +153,8 @@ class ResourcesQuery(object):
 
 
 class ResourceScriptOpt(object):
-    CACHE_NAME = None
-
     CACHE_ROOT = None
+    CACHE_NAME = None
 
     def __init__(self, resource):
         self._resource = resource

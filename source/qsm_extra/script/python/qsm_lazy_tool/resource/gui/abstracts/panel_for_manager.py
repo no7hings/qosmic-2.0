@@ -5,7 +5,7 @@ import lxgui.core as gui_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_screw.core as qsm_scr_core
+import qsm_lazy.core as qsm_lzy_core
 
 from . import page_for_manager as _page_for_manager
 
@@ -18,9 +18,9 @@ class AbsPrxPanelForResource(gui_prx_widgets.PrxSessionWindow):
     
     def _gui_tab_add_menu_gain_fnc(self):
         lst = []
-        for i_key in qsm_scr_core.Stage.get_all_keys():
+        for i_key in qsm_lzy_core.Stage.get_all_keys():
             if i_key not in self._tag_page_key_opened:
-                i_configure = qsm_scr_core.Stage.get_configure(i_key)
+                i_configure = qsm_lzy_core.Stage.get_configure(i_key)
                 lst.append(
                     (
                         i_configure.get('options.gui_name_chs'),
@@ -43,7 +43,7 @@ class AbsPrxPanelForResource(gui_prx_widgets.PrxSessionWindow):
 
     def _gui_tab_add_page(self, key, switch_to=False):
         prx_sca = gui_prx_widgets.PrxVScrollArea()
-        configure = qsm_scr_core.Stage.get_configure(key)
+        configure = qsm_lzy_core.Stage.get_configure(key)
         self._prx_tab_view.add_widget(
             prx_sca,
             key=key,
@@ -77,7 +77,7 @@ class AbsPrxPanelForResource(gui_prx_widgets.PrxSessionWindow):
         self._prx_tab_view.set_add_enable(True)
 
         self._tag_page_key_opened = set()
-        self._all_scr_stage_keys = qsm_scr_core.Stage.get_all_keys()
+        self._all_lzy_stage_keys = qsm_lzy_core.Stage.get_all_keys()
 
         self._tab_page_dict = {}
 
@@ -85,9 +85,9 @@ class AbsPrxPanelForResource(gui_prx_widgets.PrxSessionWindow):
         self._prx_tab_view.connect_delete_accepted_to(self._gui_tab_page_delete_fnc)
 
         history_tag_keys = gui_core.GuiHistory.get_one(self.KEY_TAB_KEYS)
-        page_keys = self._all_scr_stage_keys
+        page_keys = self._all_lzy_stage_keys
         if history_tag_keys:
-            _ = [x for x in history_tag_keys if x in self._all_scr_stage_keys]
+            _ = [x for x in history_tag_keys if x in self._all_lzy_stage_keys]
             if _:
                 page_keys = _
 

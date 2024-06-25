@@ -291,7 +291,7 @@ class AbsRsvProjectMethodHookExecutor(AbsHookExecutor):
                 rsv_project
             )
             if deadline_configure_file_path:
-                if bsc_storage.StgPathMtd.get_is_exists(deadline_configure_file_path):
+                if bsc_storage.StgPath.get_is_exists(deadline_configure_file_path):
                     deadline_configure = bsc_content.Content(value=deadline_configure_file_path)
             job_name = session.get_ddl_job_name()
             return self._submit_deadline_job_(
@@ -327,7 +327,7 @@ class AbsRsvTaskMethodHookExecutor(AbsHookExecutor):
                 rsv_project
             )
             if deadline_configure_file_path:
-                if bsc_storage.StgPathMtd.get_is_exists(deadline_configure_file_path):
+                if bsc_storage.StgPath.get_is_exists(deadline_configure_file_path):
                     deadline_configure = bsc_content.Content(value=deadline_configure_file_path)
             #
             job_name = session._get_rsv_task_version_(rsv_scene_properties)

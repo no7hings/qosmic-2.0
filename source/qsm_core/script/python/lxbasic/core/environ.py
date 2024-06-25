@@ -122,15 +122,15 @@ class EnvBaseMtd(object):
         return _
 
     @classmethod
-    def get_temporary_root(cls):
+    def get_cache_temporary_root(cls):
         return '{}/temporary'.format(cls.get_cache_root())
 
     @classmethod
-    def get_session_root(cls):
+    def get_cache_session_root(cls):
         return '{}/session'.format(cls.get_cache_root())
 
     @classmethod
-    def get_database_root(cls):
+    def get_cache_database_root(cls):
         return '{}/database'.format(cls.get_cache_root())
 
     @classmethod
