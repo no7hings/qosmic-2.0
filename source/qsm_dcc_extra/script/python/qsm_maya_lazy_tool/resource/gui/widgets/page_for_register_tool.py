@@ -33,6 +33,12 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
                 self._type_prx_tag_input.expand_exclusive_for_node(
                     scr_type_path
                 )
+        elif self._dcc_node_graph_opt is not None:
+            scr_type_path = '/node_graphs/component/regular'
+            self._type_prx_tag_input.set_node_checked(
+                scr_type_path, True
+            )
+            self._type_prx_tag_input.expand_for_all_from('/node_graphs')
         else:
             self._type_prx_tag_input.expand_all_groups()
         

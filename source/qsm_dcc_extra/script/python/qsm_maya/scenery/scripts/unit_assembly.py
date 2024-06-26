@@ -25,8 +25,8 @@ from ...assembly import core as _asb_core
 
 
 class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
-    CACHE_ROOT = _gnl_core.ResourceCaches.UnitAssemblyRoot
-    CACHE_NAME = _gnl_core.ResourceCaches.UnitAssemblyName
+    CACHE_ROOT = _gnl_core.ResourceCacheNodes.UnitAssemblyRoot
+    CACHE_NAME = _gnl_core.ResourceCacheNodes.UnitAssemblyName
 
     def __init__(self, resource):
         super(UnitAssemblyOpt, self).__init__(resource)
@@ -51,7 +51,7 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
 
     def generate_args(self):
         file_path = self._resource.file
-        cache_file_path = _gnl_core.AssetCaches.generate_unit_assembly_file(
+        cache_file_path = _gnl_core.ResourceCache.generate_unit_assembly_file(
             file_path
         )
         if os.path.isfile(cache_file_path) is False:
@@ -75,7 +75,7 @@ class UnitAssemblyProcess(object):
         ).directory_path
 
         if cache_file_path is None:
-            self._cache_file_path = _gnl_core.AssetCaches.generate_unit_assembly_file(
+            self._cache_file_path = _gnl_core.ResourceCache.generate_unit_assembly_file(
                 self._file_path
             )
         else:

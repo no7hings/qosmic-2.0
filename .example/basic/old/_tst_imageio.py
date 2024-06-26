@@ -15,7 +15,7 @@ def test():
         # '--ch R,G,B,A=1.0',
         u'-o "{output}"',
     ]
-    bsc_core.PrcBaseMtd.execute_with_result(
+    bsc_core.BscProcess.execute_with_result(
         ' '.join(cmd_args).format(**option)
     )
 

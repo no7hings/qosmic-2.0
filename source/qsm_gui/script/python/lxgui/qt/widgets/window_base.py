@@ -135,7 +135,7 @@ class AbsQtMainWindowDef(object):
 
     def _set_icon_name_(self, icon_name):
         self._widget.setWindowIcon(
-            _qt_core.GuiQtIcon.create_by_icon_name(icon_name)
+            _qt_core.GuiQtIcon.generate_by_icon_name(icon_name)
         )
 
 
@@ -369,7 +369,6 @@ class QtMessageBase(QtDialogBase):
     def _execute_python_script_(script):
         if script is not None:
             # noinspection PyBroadException
-            script = 'import os; os.startfile("Z:/temeporaries/dongchangbao/playblast_tool/test.export.v004.mov".decode("utf-8"))'
             try:
                 exec script
             except Exception:
@@ -694,7 +693,7 @@ class QtMainWindow(
 
     def _set_icon_name_(self, icon_name):
         self.setWindowIcon(
-            _qt_core.GuiQtIcon.create_by_icon_name(icon_name)
+            _qt_core.GuiQtIcon.generate_by_icon_name(icon_name)
         )
 
     def _set_window_system_tray_icon_(self, widget):

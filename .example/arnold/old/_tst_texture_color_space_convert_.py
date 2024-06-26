@@ -25,7 +25,7 @@ if __name__ == '__main__':
     #     'ACES - ACEScg'
     # )
     #
-    # bsc_core.PrcBaseMtd.execute_as_block(
+    # bsc_core.BscProcess.execute_as_block(
     #     i_cmd
     # )
 
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     #     'ACES - ACEScg'
     # )
     #
-    # bsc_core.PrcBaseMtd.execute_as_block(
+    # bsc_core.BscProcess.execute_as_block(
     #     i_cmd
     # )
 
@@ -47,7 +47,7 @@ if __name__ == '__main__':
         'ACES - ACEScg'
     )
 
-    bsc_core.PrcBaseMtd.execute_as_block(
+    bsc_core.BscProcess.execute_as_block(
         i_cmd
     )
 

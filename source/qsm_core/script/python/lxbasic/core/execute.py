@@ -111,12 +111,12 @@ class ExcExtraMtd(object):
                 'gnome-terminal', '-t', kwargs.get('title') or 'untitled',
                 '-e "bash -l {}"'.format(file_path)
             ]
-            _process.PrcBaseMtd.execute_as_trace(
+            _process.BscProcess.execute_as_trace(
                 ' '.join(cmds)
             )
         elif _base.BasPlatform.get_is_windows():
             cmds = ['start', 'cmd', '/k', file_path]
-            _process.PrcBaseMtd.execute_as_trace(
+            _process.BscProcess.execute_as_trace(
                 ' '.join(cmds)
             )
         _bsc_log.Log.trace_method_result(
@@ -133,18 +133,18 @@ class ExcExtraMtd(object):
                 '-t', kwargs.get('title') or 'untitled',
                 '--', 'bash', '-l', '-c', cmd
             ]
-            _process.PrcBaseMtd.execute_as_trace(
+            _process.BscProcess.execute_as_trace(
                 ' '.join(cmds)
             )
         elif _base.BasPlatform.get_is_windows():
             cmds = ['start', 'cmd', '/k', cmd]
-            _process.PrcBaseMtd.execute_as_trace(
+            _process.BscProcess.execute_as_trace(
                 ' '.join(cmds)
             )
 
     @staticmethod
     def execute_shell_script(cmd, use_thread=True):
         if use_thread is True:
-            _process.PrcBaseMtd.execute_use_thread(cmd)
+            _process.BscProcess.execute_use_thread(cmd)
         else:
-            _process.PrcBaseMtd.execute(cmd)
+            _process.BscProcess.execute(cmd)

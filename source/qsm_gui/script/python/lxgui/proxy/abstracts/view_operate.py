@@ -9,16 +9,28 @@ from ...qt import core as gui_qt_core
 
 
 class AbsGuiPrxCacheDef(object):
-    def _init_cache_def_(self, prx_tree_view):
-        self._cache_expand = prx_tree_view._cache_expand
-        self._cache_check = prx_tree_view._cache_check
+    CHECK_BOX_FLAG = False
 
-    def _generate_cache(self, item_dict):
-        self._cache_expand.clear()
-        self._cache_check.clear()
-        for k, v in item_dict.items():
-            self._cache_expand[k] = v.get_is_expanded()
-            self._cache_check[k] = v.get_is_checked()
+    def _init_cache_def_(self, prx_tree_view):
+        self._prx_tree_view = prx_tree_view
+
+    def _push_cache(self):
+        self._prx_tree_view._expand_cache_dict.clear()
+        self._prx_tree_view._check_cache_dict.clear()
+        for k, v in self._prx_tree_view._item_dict.items():
+            self._prx_tree_view._expand_cache_dict[k] = v.get_is_expanded()
+
+            if self.CHECK_BOX_FLAG is True:
+                self._prx_tree_view._check_cache_dict[k] = v.get_is_checked()
+    
+    def _pull_cache(self):
+        for k, v in self._prx_tree_view._item_dict.items():
+            if k in self._prx_tree_view._expand_cache_dict:
+                v.set_expanded(self._prx_tree_view._expand_cache_dict[k])
+
+            if self.CHECK_BOX_FLAG is True:
+                if k in self._prx_tree_view._check_cache_dict:
+                    v.set_checked(self._prx_tree_view._check_cache_dict[k])
 
 
 class AbsGuiPrxTreeViewOpt(object):
@@ -255,7 +267,7 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
 
             prx_item = self._prx_tree_view.create_item(
                 path_opt.get_name(),
-                icon=gui_qt_core.GuiQtDcc.get_qt_folder_icon(use_system=True),
+                icon=gui_qt_core.GuiQtDcc.generate_qt_directory_icon(use_system=True),
             )
             self.gui_register(path, prx_item)
 
@@ -289,9 +301,9 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
             )
             #
             if stg_opt.get_is_file():
-                icon = gui_qt_core.GuiQtDcc.get_qt_file_icon(stg_path)
+                icon = gui_qt_core.GuiQtDcc.generate_qt_file_icon(stg_path)
             else:
-                icon = gui_qt_core.GuiQtDcc.get_qt_folder_icon(use_system=True)
+                icon = gui_qt_core.GuiQtDcc.generate_qt_directory_icon(use_system=True)
 
             prx_item = parent_gui.add_child(
                 path_opt.name,
@@ -385,7 +397,7 @@ class AbsGuiTreeViewAsTagOpt(AbsGuiPrxTreeViewOpt):
 
         self._count_tag_dict = {}
 
-        self._cache_check = {}
+        self._check_cache_dict = {}
 
     def __push_check_cache(self):
         pass

@@ -78,8 +78,8 @@ class PrxTreeView(
         # self._prx_filer_bar_0.set_filter_connect_to(self)
         self._gui_menu_raw = []
         self._item_dict = collections.OrderedDict()
-        self._cache_expand = dict()
-        self._cache_check = dict()
+        self._expand_cache_dict = dict()
+        self._check_cache_dict = dict()
         self._keyword_filter_completion_cache = None
         self._loading_item_prxes = []
         self._view_keyword_filter_occurrence_index_current = 0

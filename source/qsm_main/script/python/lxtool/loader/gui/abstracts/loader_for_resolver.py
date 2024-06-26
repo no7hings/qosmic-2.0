@@ -598,7 +598,7 @@ class _GuiFileOpt(
                 if image_sp_cmd is not None:
                     prx_item_widget.set_image_show_args(image_file_path, image_sp_cmd)
             else:
-                file_icon = gui_qt_core.GuiQtDcc.get_qt_file_icon(file_path)
+                file_icon = gui_qt_core.GuiQtDcc.generate_qt_file_icon(file_path)
                 if file_icon:
                     pixmap = file_icon.pixmap(80, 80)
                     prx_item_widget.set_image(

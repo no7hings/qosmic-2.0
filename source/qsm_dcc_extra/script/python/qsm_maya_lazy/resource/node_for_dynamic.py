@@ -5,7 +5,7 @@ from . import base as _base
 
 
 class NonLinearShapeOpt(_base.AbsShapeOpt):
-    SCHEME_BASE = '/non_linear'
+    SCHEME_BASE = '/node/non_linear'
 
     TYPE_INCLUDES = [
         'deformBend',
@@ -63,7 +63,7 @@ class NonlinearCreator(_base.AbsNodeCreator):
 
 
 class NucleusShapeOpt(_base.AbsShapeOpt):
-    SCHEME_BASE = '/nucleus'
+    SCHEME_BASE = '/node/nucleus'
 
     TYPE_INCLUDES = [
         'hairSystem',
@@ -110,7 +110,7 @@ class NucleusCreator(_base.AbsNodeCreator):
 
 
 class FieldOpt(_base.AbsNodeOpt):
-    SCHEME_BASE = '/field'
+    SCHEME_BASE = '/node/field'
 
     TYPE_INCLUDES = [
         'airField',

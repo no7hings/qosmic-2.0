@@ -69,7 +69,7 @@ class StgRpc(object):
 
     @classmethod
     def create_directory(cls, directory_path, mode='775'):
-        units = _cor_path.PthNodeMtd.get_dag_component_paths(directory_path)
+        units = _cor_path.BscPath.get_dag_component_paths(directory_path)
         units.reverse()
         list_ = []
         for i_path in units:
@@ -616,7 +616,7 @@ class StgSystem(object):
 
         t_0 = threading.Thread(
             target=functools.partial(
-                _cor_process.PrcBaseMtd.execute, cmd, ignore_return_code=1
+                _cor_process.BscProcess.execute, cmd, ignore_return_code=1
             )
         )
         t_0.setDaemon(True)
@@ -641,7 +641,7 @@ class StgSystem(object):
 
         t_0 = threading.Thread(
             target=functools.partial(
-                _cor_process.PrcBaseMtd.execute, cmd, ignore_return_code=1
+                _cor_process.BscProcess.execute, cmd, ignore_return_code=1
             )
         )
         t_0.setDaemon(True)
@@ -663,7 +663,7 @@ class StgSystem(object):
 class StgExtra(object):
     @classmethod
     def get_exists_component(cls, path):
-        units = _cor_path.PthNodeMtd.get_dag_component_paths(path)
+        units = _cor_path.BscPath.get_dag_component_paths(path)
         for i in units:
             if os.path.exists(i):
                 return i
@@ -747,7 +747,7 @@ class StgPathLink(object):
 class StgPath(_cor_base.BscStorage):
     @classmethod
     def get_parent(cls, path):
-        return _cor_path.PthNodeMtd.get_dag_parent_path(
+        return _cor_path.BscPath.get_dag_parent_path(
             path
         )
 
@@ -1090,12 +1090,12 @@ class StgPathOpt(object):
             )
 
     def get_component_paths(self):
-        return _cor_path.PthNodeMtd.get_dag_component_paths(
+        return _cor_path.BscPath.get_dag_component_paths(
             path=self.get_path(), pathsep=self.PATHSEP
         )
 
     def get_parent_path(self):
-        return _cor_path.PthNodeMtd.get_dag_parent_path(
+        return _cor_path.BscPath.get_dag_parent_path(
             path=self.get_path(), pathsep=self.PATHSEP
         )
 
@@ -1329,6 +1329,14 @@ class StgFileOpt(StgPathOpt):
 
     def __repr__(self):
         return self.__str__()
+
+    def __eq__(self, other):
+        if other is not None:
+            if isinstance(other, six.text_type):
+                return self._path == other
+            elif isinstance(other, self.__class__):
+                return self._path == other._path
+        return False
 
     def get_directory_path(self):
         return os.path.dirname(self.path)

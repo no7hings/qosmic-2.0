@@ -373,10 +373,10 @@ class AbsObjScene(
     def _set_dcc_geometry_create_(self, obj_type_args, obj_path_args):
         dcc_obj_type = self.universe.generate_obj_type(*obj_type_args)
         # clear namespace per component for path args
-        obj_path_args = [bsc_core.PthNodeMtd.get_dag_name_with_namespace_clear(i) for i in obj_path_args]
+        obj_path_args = [bsc_core.BscPath.get_dag_name_with_namespace_clear(i) for i in obj_path_args]
         # path lstrip
-        obj_path = bsc_core.PthNodeMtd.get_dag_path(obj_path_args)
-        obj_path = bsc_core.PthNodeMtd.get_dag_path_lstrip(obj_path, self._path_lstrip)
+        obj_path = bsc_core.BscPath.get_dag_path(obj_path_args)
+        obj_path = bsc_core.BscPath.get_dag_path_lstrip(obj_path, self._path_lstrip)
         if self._path_mapper_opt is not None:
             obj_path = self._path_mapper_opt.get(obj_path)
         dcc_obj = dcc_obj_type.create_obj(obj_path)

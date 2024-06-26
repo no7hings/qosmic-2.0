@@ -562,7 +562,7 @@ class Om2MeshOpt(object):
         """
         bsc_log.Log.debug('start create transform')
         transform = cmds.createNode('transform', name=name, skipSelect=1)
-        transform_name = bsc_core.PthNodeMtd.get_dag_name(transform, '|')
+        transform_name = bsc_core.BscPath.get_dag_name(transform, '|')
         bsc_log.Log.debug('start create mesh')
         om2_fnc = om2.MFnMesh()
         face_vertex_counts, face_vertex_indices = face_vertices

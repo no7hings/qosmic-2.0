@@ -11,7 +11,7 @@ from . import node as _node
 
 class DagNode(_node.Node):
     PATHSEP = '|'
-
+    NAMESPACESEP = ':'
     @classmethod
     def create(cls, path, type_name):
         parent_path = '|'.join(path.split('|')[:-1])
@@ -36,6 +36,10 @@ class DagNode(_node.Node):
     @classmethod
     def to_name(cls, path_or_name):
         return path_or_name.split(cls.PATHSEP)[-1]
+
+    @classmethod
+    def to_name_without_namespace(cls, path_or_name):
+        return path_or_name.split(cls.PATHSEP)[-1].split(cls.NAMESPACESEP)[-1]
     
     @classmethod
     def to_namespace(cls, path_or_name):
@@ -98,7 +102,7 @@ class DagNode(_node.Node):
 
     @classmethod
     def find_roots(cls, paths):
-        return bsc_core.PthNodeMtd.find_dag_child_paths(
+        return bsc_core.BscPath.find_dag_child_paths(
             '|', paths, '|'
         )
 

@@ -23,14 +23,14 @@ class ControlOpt(object):
         for i_atr_name in atr_names:
             # fixme: use attribute connection?
             i_curve_name = _mya_core.NodeAttribute.get_source_node(self._path, i_atr_name, 'animCurve')
-            # i_curve_name = _mya_core.AnimationCurveOpt(self._path, i_atr_name).get_node()
+            # i_curve_name = _mya_core.NodeAttributeKeyframeOpt(self._path, i_atr_name).get_node()
             if i_curve_name is not None:
                 i_curve_type = cmds.nodeType(i_curve_name)
                 i_infinities = [
                     _mya_core.NodeAttribute.get_value(i_curve_name, 'preInfinity'),
                     _mya_core.NodeAttribute.get_value(i_curve_name, 'postInfinity')
                 ]
-                i_curve_points = _mya_core.AnimationCurveOpt(self._path, i_atr_name).get_points()
+                i_curve_points = _mya_core.NodeAttributeKeyframeOpt(self._path, i_atr_name).get_points()
                 list_.append((i_atr_name, i_curve_type, i_infinities, i_curve_points))
             else:
                 i_value = _mya_core.NodeAttribute.get_value(self._path, i_atr_name)
@@ -40,9 +40,9 @@ class ControlOpt(object):
     def apply_animation(self, data, frame_offset=0, force=False):
         for i_atr_data in data:
             if len(i_atr_data) == 2:
-                _mya_core.Keyframe.apply_value(self._path, i_atr_data, force=force)
+                _mya_core.NodeKeyframe.apply_value(self._path, i_atr_data, force=force)
             else:
-                _mya_core.Keyframe.apply_curve(self._path, i_atr_data, frame_offset=frame_offset, force=force)
+                _mya_core.NodeKeyframe.apply_curve(self._path, i_atr_data, frame_offset=frame_offset, force=force)
 
     def transfer_animation_to(self, path_dst, **kwargs):
         data = self.get_animation()
@@ -182,7 +182,7 @@ class ControlOpt(object):
                 _mya_core.Connection.create(
                     i_animation_curve+'.output', self._path+'.'+i_atr_name
                 )
-                _mya_core.AnimationCurveOpt(
+                _mya_core.NodeAttributeKeyframeOpt(
                     self._path, i_atr_name
                 ).offset_all_values(
                     i_value_current+i_value_offset

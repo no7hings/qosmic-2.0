@@ -730,7 +730,7 @@ class QtEntryGroupForTag(
         else:
             widget._set_text_(
                 bsc_core.RawTextMtd.to_prettify(
-                    bsc_core.PthNodeMtd.get_dag_name(path),
+                    bsc_core.BscPath.get_dag_name(path),
                     capitalize=True
                 )
             )
@@ -747,7 +747,7 @@ class QtEntryGroupForTag(
         else:
             widget._set_text_(
                 bsc_core.RawTextMtd.to_prettify(
-                    bsc_core.PthNodeMtd.get_dag_name(path),
+                    bsc_core.BscPath.get_dag_name(path),
                     capitalize=True
                 )
             )
@@ -871,7 +871,7 @@ class QtEntryRootForTag(
         if path == self.PATHSEP:
             return self._create_group_root_(path, *args, **kwargs)
 
-        group_widget = self._item_dict[bsc_core.PthNodeMtd.get_dag_parent_path(path)]
+        group_widget = self._item_dict[bsc_core.BscPath.get_dag_parent_path(path)]
         widget = group_widget._create_group_(path, *args, **kwargs)
 
         widget._set_group_root_(self)
@@ -883,7 +883,7 @@ class QtEntryRootForTag(
         if path in self._item_dict:
             return self._item_dict[path]
 
-        group_widget = self._item_dict[bsc_core.PthNodeMtd.get_dag_parent_path(path)]
+        group_widget = self._item_dict[bsc_core.BscPath.get_dag_parent_path(path)]
         widget = group_widget._create_node_(path, *args, **kwargs)
 
         widget._set_group_root_(self)
@@ -919,19 +919,29 @@ class QtEntryRootForTag(
 
     def _expand_exclusive_for_node_(self, path):
         self._collapse_all_groups_()
-        node = self._get_one_(path)
-        node._expand_ancestors_()
+        paths = bsc_core.BscPath.get_dag_component_paths(path)
+        for i in paths:
+            if i in self._item_dict:
+                i_widget = self._item_dict[i]
+                if isinstance(i_widget, QtEntryGroupForTag):
+                    i_widget._set_expanded_(True)
     
     def _expand_all_groups_(self):
         [x._set_expanded_(True) for x in self._item_dict.values() if isinstance(x, QtEntryGroupForTag)]
 
-    def _expand_for_group_(self, path):
+    def _expand_for_all_from_(self, path):
         self._collapse_all_groups_()
-        paths = self._item_dict.values()
-        sibling_paths = bsc_core.PthNodeMtd.find_dag_sibling_paths(
-            path, paths
-        )
-        print sibling_paths
+        paths = bsc_core.BscPath.get_dag_component_paths(path)
+        self._set_expanded_for_(paths, True)
+        descendant_paths = bsc_core.BscPath.find_dag_descendant_paths(path, self._item_dict.keys())
+        self._set_expanded_for_(descendant_paths, True)
+
+    def _set_expanded_for_(self, paths, boolean):
+        for i in paths:
+            if i in self._item_dict:
+                i_widget = self._item_dict[i]
+                if isinstance(i_widget, QtEntryGroupForTag):
+                    i_widget._set_expanded_(boolean)
 
     def _set_force_hidden_flag_for_group_(self, path, boolean):
         pass

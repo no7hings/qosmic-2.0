@@ -1104,7 +1104,7 @@ class AbsStgTexture(
     def _create_unit_exr_as_acescg(cls, file_path_src, file_path_tgt, use_update_mode=True):
         cmd = cls._generate_unit_exr_create_cmd_as_acescg(file_path_src, file_path_tgt, use_update_mode)
         if cmd is not None:
-            bsc_core.PrcBaseMtd.execute_with_result(
+            bsc_core.BscProcess.execute_with_result(
                 cmd
             )
 
@@ -1125,7 +1125,7 @@ class AbsStgTexture(
     @classmethod
     def _create_unit_tx_as_acescg(cls, file_path_src, file_path_tgt, use_update_mode=True):
         cmd = cls._generate_unit_tx_create_cmd_as_acescg(file_path_src, file_path_tgt, use_update_mode)
-        bsc_core.PrcBaseMtd.execute_with_result(cmd)
+        bsc_core.BscProcess.execute_with_result(cmd)
 
     @classmethod
     def _generate_unit_tx_create_cmd_as_acescg(cls, file_path_src, file_path_tgt, use_update_mode=True):
@@ -1148,7 +1148,7 @@ class AbsStgTexture(
             file_path_src=file_path_src, file_path_tgt=file_path_tgt,
             color_space_src=color_space_src, color_space_tgt=color_space_tgt
         )
-        bsc_core.PrcBaseMtd.execute_with_result(cmd)
+        bsc_core.BscProcess.execute_with_result(cmd)
 
     # find path source use multipy path
     @classmethod

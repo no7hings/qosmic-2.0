@@ -84,7 +84,7 @@ class ThreadWorker(threading.Thread):
             if isinstance(self._cmd_script, six.string_types):
                 return_dict = {}
                 return_dicts.append(return_dict)
-                _process.PrcBaseMtd.execute_as_block(
+                _process.BscProcess.execute_as_block(
                     self._cmd_script, clear_environ='auto', return_dict=return_dict
                 )
                 status = self.Status.Completed
@@ -93,7 +93,7 @@ class ThreadWorker(threading.Thread):
                 for i_cmd_script in self._cmd_script:
                     i_return_dict = {}
                     return_dicts.append(i_return_dict)
-                    _process.PrcBaseMtd.execute_as_block(
+                    _process.BscProcess.execute_as_block(
                         i_cmd_script, clear_environ='auto', return_dict=i_return_dict
                     )
                 status = self.Status.Completed

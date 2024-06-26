@@ -38,7 +38,7 @@ class ImgOiioMtd(object):
             '--fit {size}',
             '-o "{output}"',
         ]
-        bsc_cor_process.PrcBaseMtd.execute_with_result(
+        bsc_cor_process.BscProcess.execute_with_result(
             ' '.join(cmd_args).format(**option)
         )
 
@@ -56,7 +56,7 @@ class ImgOiioMtd(object):
             # u'-i "{}"'.format(file_path_src),
             '-o "{output}"',
         ]
-        bsc_cor_process.PrcBaseMtd.execute_with_result(
+        bsc_cor_process.BscProcess.execute_with_result(
             ' '.join(cmd_args).format(**option)
         )
 
@@ -73,7 +73,7 @@ class ImgOiioMtd(object):
             '--fill:color={color} {size}',
             '-o "{output}"',
         ]
-        bsc_cor_process.PrcBaseMtd.execute_with_result(
+        bsc_cor_process.BscProcess.execute_with_result(
             ' '.join(cmd_args).format(**option)
         )
 
@@ -92,7 +92,7 @@ class ImgOiioMtd(object):
             '--over',
             '-o "{output}"',
         ]
-        bsc_cor_process.PrcBaseMtd.execute_with_result(
+        bsc_cor_process.BscProcess.execute_with_result(
             ' '.join(cmd_args).format(**option)
         )
 
@@ -151,7 +151,7 @@ class ImgOiioMtd(object):
             '-o "{output}"',
         ]
         # print ' '.join(cmd_args).format(**option)
-        bsc_cor_process.PrcBaseMtd.execute_with_result(
+        bsc_cor_process.BscProcess.execute_with_result(
             ' '.join(cmd_args).format(**option)
         )
 
@@ -167,7 +167,7 @@ class ImgOiioMtd(object):
             '--ch R,G,B,A=1.0',
             '-o "{output}"',
         ]
-        bsc_cor_process.PrcBaseMtd.execute_with_result(
+        bsc_cor_process.BscProcess.execute_with_result(
             ' '.join(cmd_args).format(**option)
         )
 
@@ -188,7 +188,7 @@ class ImgOiioMtd(object):
             '--colorconvert "{from_color_space}" "{to_color_space}"',
             '-o "{output}"',
         ]
-        bsc_cor_process.PrcBaseMtd.execute_with_result(
+        bsc_cor_process.BscProcess.execute_with_result(
             ' '.join(cmd_args).format(**option)
         )
 
@@ -210,7 +210,7 @@ class ImgOiioMtd(object):
             '--threads 1',
             '-o "{output}"',
         ]
-        bsc_cor_process.PrcBaseMtd.execute_with_result(
+        bsc_cor_process.BscProcess.execute_with_result(
             ' '.join(cmd_args).format(**option)
         )
 
@@ -539,7 +539,7 @@ class ImgOiioOpt(object):
             bsc_cor_execute.ExcBaseMtd.oiiotool(),
             '--info:verbose=1 "{}"'.format(file_path),
         ]
-        p = bsc_cor_process.PrcBaseMtd.set_run(' '.join(cmd_args))
+        p = bsc_cor_process.BscProcess.set_run(' '.join(cmd_args))
         _ = p.stdout.readlines()
         if _:
             p = parse.parse(cls.INFO_PATTERN, _[0])
@@ -552,7 +552,7 @@ class ImgOiioOpt(object):
             bsc_cor_execute.ExcBaseMtd.oiiotool(),
             '--info:verbose=1 "{}"'.format(file_path),
         ]
-        p = bsc_cor_process.PrcBaseMtd.set_run(' '.join(cmd_args))
+        p = bsc_cor_process.BscProcess.set_run(' '.join(cmd_args))
         _ = p.stdout.readlines()
 
     def __init__(self, file_path):
@@ -609,7 +609,7 @@ class ImgOiioOpt(object):
                 '--threads 1',
                 '-o "{}"'.format(bsc_cor_raw.auto_string(file_opt_tgt.get_path())),
             ]
-            bsc_cor_process.PrcBaseMtd.execute_as_trace(
+            bsc_cor_process.BscProcess.execute_as_trace(
                 ' '.join(cmd_args)
             )
 
@@ -686,7 +686,7 @@ class ImgOiioOptForThumbnail(object):
                     '--resize {}x0'.format(width),
                     '-o "{}"'.format(file_path_)
                 ]
-                bsc_cor_process.PrcBaseMtd.execute_with_result(
+                bsc_cor_process.BscProcess.execute_with_result(
                     ' '.join(cmd_args)
                 )
         return file_path_
@@ -768,12 +768,12 @@ class ImgOiioOptForThumbnail(object):
                 u'-o "{}"'.format(jpg_file_path),
             ]
             if block is True:
-                bsc_cor_process.PrcBaseMtd.execute_with_result(
+                bsc_cor_process.BscProcess.execute_with_result(
                     ' '.join(cmd_args)
                 )
                 return True
             else:
-                s_p = bsc_cor_process.PrcBaseMtd.set_run(
+                s_p = bsc_cor_process.BscProcess.set_run(
                     ' '.join(cmd_args)
                 )
                 return s_p
@@ -794,6 +794,6 @@ class ImgOiioOptForThumbnail(object):
                 '--threads 1',
                 '-o "{}"'.format(bsc_cor_raw.auto_string(file_opt_tgt.get_path())),
             ]
-            bsc_cor_process.PrcBaseMtd.execute_with_result(
+            bsc_cor_process.BscProcess.execute_with_result(
                 ' '.join(cmd_args)
             )

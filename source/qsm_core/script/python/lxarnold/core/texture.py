@@ -215,12 +215,12 @@ class AndTextureOpt(AndImageOpt):
         )
         #
         if block is True:
-            bsc_core.PrcBaseMtd.execute_with_result(
+            bsc_core.BscProcess.execute_with_result(
                 cmd
             )
             return True
         else:
-            return bsc_core.PrcBaseMtd.set_run(
+            return bsc_core.BscProcess.set_run(
                 cmd
             )
 

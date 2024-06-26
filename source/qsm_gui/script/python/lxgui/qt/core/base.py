@@ -347,7 +347,7 @@ class GuiQtStyle(object):
 
 class GuiQtIcon(object):
     @classmethod
-    def create_by_icon_name(cls, icon_name):
+    def generate_by_icon_name(cls, icon_name):
         icon = QtGui.QIcon()
         file_path = gui_core.GuiIcon.get(icon_name)
         if file_path:
@@ -362,7 +362,7 @@ class GuiQtIcon(object):
     def generate_by_name(cls, icon_name):
         # noinspection PyArgumentList
         if QtWidgets.QApplication.instance() is not None:
-            return cls.create_by_icon_name(icon_name)
+            return cls.generate_by_icon_name(icon_name)
 
     @classmethod
     def generate_by_rgb(cls, rgb):

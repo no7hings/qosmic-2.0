@@ -2315,7 +2315,7 @@ class AbsQtGuideBaseDef(object):
     def _set_guide_name_text_at_(self, name_text, index=0):
         item = self._get_guide_item_at_(index)
         path_text = item._path_text
-        child_path_text = bsc_core.PthNodeMtd.get_dag_child_path(path_text, name_text)
+        child_path_text = bsc_core.BscPath.get_dag_child_path(path_text, name_text)
         #
         self._set_guide_path_text_(child_path_text)
         return child_path_text
@@ -2384,12 +2384,12 @@ class AbsQtGuideEntryDef(AbsQtGuideBaseDef):
             return self._get_guide_sibling_name_texts_from_(item)
 
     def _get_guide_child_name_texts_from_(self, item):
-        return bsc_core.PthNodeMtd.find_dag_child_names(
+        return bsc_core.BscPath.find_dag_child_names(
             item._path_text, self._get_guide_valid_path_texts_()
         )
 
     def _get_guide_sibling_name_texts_from_(self, item):
-        return bsc_core.PthNodeMtd.find_dag_sibling_names(
+        return bsc_core.BscPath.find_dag_sibling_names(
             item._path_text, self._get_guide_valid_path_texts_()
         )
 

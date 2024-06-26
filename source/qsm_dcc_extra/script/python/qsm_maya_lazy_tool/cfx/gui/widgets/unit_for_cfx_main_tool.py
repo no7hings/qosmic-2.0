@@ -18,7 +18,7 @@ import qsm_maya.cfx.scripts as qsm_mya_cfx_scripts
 import qsm_maya_gui.core as qsm_mya_gui_core
 
 
-class UnitForCfxRigView(
+class UnitForCfxResourceView(
     qsm_mya_gui_core.PrxUnitForResourceOpt
 ):
     ROOT_NAME = 'Rigs'
@@ -35,14 +35,13 @@ class UnitForCfxRigView(
     ]
 
     def __init__(self, window, unit, session, prx_tree_view):
-        super(UnitForCfxRigView, self).__init__(window, unit, session, prx_tree_view)
+        super(UnitForCfxResourceView, self).__init__(window, unit, session, prx_tree_view)
 
-    def gui_add_components(self, resource, prx_item):
-        clothes, meshes = resource.find_all_cloth_export_args()
-        if meshes:
-            prx_item.set_icon_name('node/maya/reference-cfx')
-            for i in meshes:
-                self.gui_add_component(i, prx_item)
+    def gui_add_resource_components(self, resource):
+        data = resource.generate_cfx_cloth_component_data()
+        for k, v in data.items():
+            self.gui_add_resource_component(k, v)
+        return True
 
 
 class ToolSetUnitForCfxRigExport(
@@ -50,7 +49,8 @@ class ToolSetUnitForCfxRigExport(
 ):
     # cloth
     # export
-    def do_dcc_export_cloth_cache_by_checked(self):
+
+    def _get_export_args(self):
         resources = self._page._gui_resource_prx_unit.gui_get_checked_resources()
         if not resources:
             self._window.exec_message(
@@ -73,19 +73,91 @@ class ToolSetUnitForCfxRigExport(
             )
             return
 
-        directory_path = self._prx_options_node.get('cloth.version_directory')
-        frame_range = self._frame_range_port.get()
-        frame_step = self._prx_options_node.get('setting.frame_step')
-        frame_offset = self._prx_options_node.get('setting.frame_offset')
+        return resources, with_alembic_cache, with_geometry_cache
 
-        for i_resource in resources:
-            i_opt = qsm_mya_cfx_scripts.NClothCacheOpt(i_resource)
-            i_opt.do_export(
-                directory_path, frame_range, frame_step, frame_offset,
-                with_alembic_cache=with_alembic_cache, with_geometry_cache=with_geometry_cache
+    def do_dcc_export_cfx_cloth_cache_by_checked(self):
+        args = self._get_export_args()
+        if args:
+            resources, with_alembic_cache, with_geometry_cache = args
+
+            directory_path = self._prx_options_node.get('cloth.version_directory')
+            frame_range = self._frame_range_port.get()
+            frame_step = self._prx_options_node.get('setting.frame_step')
+            frame_offset = self._prx_options_node.get('setting.frame_offset')
+
+            with self._window.gui_progressing(
+                maximum=len(resources), label='processing cfx clothes'
+            ) as g_p:
+                for i_resource in resources:
+                    i_opt = qsm_mya_cfx_scripts.CfxNClothCacheOpt(i_resource)
+                    i_opt.do_export(
+                        directory_path,
+                        frame_range, frame_step, frame_offset,
+                        with_alembic_cache=with_alembic_cache, with_geometry_cache=with_geometry_cache
+                    )
+                    g_p.do_update()
+
+            self.do_gui_update_version_directory_by_version_scheme_changing()
+
+    def do_dcc_export_cfx_cloth_cache_by_checked_as_backstage(self):
+        import lxbasic.web as bsc_web
+
+        import qsm_task.process as qsm_tsk_process
+
+        if qsm_tsk_process.TaskProcessClient.get_server_status():
+            args = self._get_export_args()
+            if args:
+                resources, with_alembic_cache, with_geometry_cache = args
+
+                directory_path = self._prx_options_node.get('cloth.version_directory')
+                frame_range = self._frame_range_port.get()
+                frame_step = self._prx_options_node.get('setting.frame_step')
+                frame_offset = self._prx_options_node.get('setting.frame_offset')
+
+                namespaces = [x.namespace for x in resources]
+
+                task_name, scene_src_path, cmd_script = qsm_mya_cfx_scripts.CfxNClothCacheProcess.generate_task_args(
+                    namespaces,
+                    directory_path,
+                    frame_range, frame_step, frame_offset, with_alembic_cache, with_geometry_cache
                 )
 
-        self.do_gui_update_version_directory_by_version_scheme_changing()
+                qsm_tsk_process.TaskProcessClient.new_entity(
+                    group=None,
+                    type='cfx-cache',
+                    name=task_name,
+                    cmd_script=cmd_script,
+                    icon_name='application/maya',
+                    file=scene_src_path,
+                    output_file=bsc_core.auto_unicode(directory_path),
+                    # must use string
+                    completed_notice=bsc_web.UrlOptions.to_string(
+                        dict(
+                            title='通知',
+                            message='缓存输出结束了, 是否打开文件夹?',
+                            # todo? exec must use unicode
+                            ok_python_script='import os; os.startfile("{}".decode("utf-8"))'.format(
+                                # to string
+                                bsc_core.auto_string(directory_path)
+                            ),
+                            status='normal'
+                        )
+                    )
+                )
+
+                self._window.exec_message(
+                    self._window.choice_message(
+                        self._window._configure.get('build.main.messages.task_submit_successful')
+                    ),
+                    status='correct'
+                )
+        else:
+            self._window.exec_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.no_task_server')
+                ),
+                status='warning'
+            )
 
     # settings
     def do_dcc_refresh_by_fps_changing(self):
@@ -176,9 +248,16 @@ class ToolSetUnitForCfxRigExport(
             self.do_gui_update_version_directory_by_version_scheme_changing
         )
 
-        self._cloth_export_button = self._prx_options_node.get_port('cloth.export_cfx_cloth_use_localhost')
-        self._cloth_export_button.set(
-            self.do_dcc_export_cloth_cache_by_checked
+        self._cfx_cloth_export_button = self._prx_options_node.get_port('cloth.export_cfx_cloth')
+        self._cfx_cloth_export_button.set(
+            self.do_dcc_export_cfx_cloth_cache_by_checked
+        )
+        
+        self._cfx_cloth_export_button_as_backstage = self._prx_options_node.get_port(
+            'cloth.export_cfx_cloth_as_backstage'
+        )
+        self._cfx_cloth_export_button_as_backstage.set(
+            self.do_dcc_export_cfx_cloth_cache_by_checked_as_backstage
         )
 
         self.do_gui_refresh_by_fps_changing()
@@ -212,7 +291,7 @@ class ToolSetUnitForCfxRigImport(
         abc_paths = ptn_opt.get_match_results()
         pot.set(abc_paths)
 
-    def do_dcc_import_cloth_cache_by_checked(self):
+    def do_dcc_load_cloth_cache_by_checked(self):
         directory_path = self._prx_options_node.get(
             'cloth.version_directory'
         )
@@ -229,14 +308,30 @@ class ToolSetUnitForCfxRigImport(
             ptn_opt = bsc_core.BscStgParseOpt(
                 ptn
             )
-            for i_cache_path in cache_paths:
-                if ptn_opt.get_is_matched(i_cache_path) is True:
-                    i_properties = ptn_opt.get_variants(i_cache_path)
-                    i_resource = resources_query.get(i_properties['namespace'])
-                    if i_resource:
-                        i_resource_opt = qsm_mya_cfx_scripts.NClothCacheOpt(i_resource)
-                        i_resource_opt.do_import_abc(i_cache_path)
+            with self._window.gui_progressing(
+                maximum=len(cache_paths), label='load cfx clothes'
+            ) as g_p:
+                for i_cache_path in cache_paths:
+                    if ptn_opt.get_is_matched(i_cache_path) is True:
+                        i_properties = ptn_opt.get_variants(i_cache_path)
+                        i_resource = resources_query.get(i_properties['namespace'])
+                        if i_resource:
+                            i_resource_opt = qsm_mya_cfx_scripts.CfxNClothCacheOpt(i_resource)
+                            i_resource_opt.load_cache(i_cache_path)
 
+                    g_p.do_update()
+    
+    def do_dcc_remove_cloth_cache_by_checked(self):
+        resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
+        if resources:
+            for i_resource in resources:
+                i_opt = qsm_mya_cfx_scripts.CfxNClothCacheOpt(i_resource)
+                i_opt.remove_cache()
+
+        self._page.do_gui_refresh_all(force=True)
+
+        self._page._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection()
+    
     def __init__(self, window, unit, session):
         super(ToolSetUnitForCfxRigImport, self).__init__(window, unit, session)
 
@@ -266,6 +361,11 @@ class ToolSetUnitForCfxRigImport(
         )
 
         self._prx_options_node.set(
-            'cloth.import_cfx_cloth',
-            self.do_dcc_import_cloth_cache_by_checked
+            'cloth.load_cfx_cloth',
+            self.do_dcc_load_cloth_cache_by_checked
+        )
+
+        self._prx_options_node.set(
+            'cloth.remove_cfx_cloth',
+            self.do_dcc_remove_cloth_cache_by_checked
         )

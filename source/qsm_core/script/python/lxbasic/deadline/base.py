@@ -29,8 +29,11 @@ class DdlBase(object):
         from Deadline import DeadlineConnect
 
         cct = cls._generate_content()
+        # c = DeadlineConnect.DeadlineCon(
+        #     cct.get('connection.host'), cct.get('connection.port')
+        # )
         c = DeadlineConnect.DeadlineCon(
-            cct.get('connection.host'), cct.get('connection.port')
+            '10.32.21.16', 8080
         )
         cls.CONNECTION = c
         return c
@@ -68,7 +71,7 @@ class AbsDdlLog(object):
 
     def __init__(self, raw):
         self._raw = raw
-        self._update_lines()
+        self._load_lines()
 
     @classmethod
     def _to_lines(cls, raw, sep):
@@ -78,7 +81,7 @@ class AbsDdlLog(object):
     def lines(self):
         return self._lines
 
-    def _update_lines(self):
+    def _load_lines(self):
         self._lines = []
         if self._raw is not None:
             raw = self._raw

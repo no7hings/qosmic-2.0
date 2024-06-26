@@ -1052,12 +1052,12 @@ class CmdShapeOpt(CmdObjOpt):
         super(CmdShapeOpt, self).__init__(path)
 
     def get_transform_name(self):
-        return bsc_core.PthNodeMtd.get_dag_parent_name(
+        return bsc_core.BscPath.get_dag_parent_name(
             self.get_path(), self.PATHSEP
         )
 
     def get_transform_path(self):
-        return bsc_core.PthNodeMtd.get_dag_parent_path(
+        return bsc_core.BscPath.get_dag_parent_path(
             self.get_path(), self.PATHSEP
         )
 

@@ -307,13 +307,13 @@ class AbsSsnGener(
                 ),
                 '-e "bash -l {}"'.format(file_path)
             ]
-            bsc_core.PrcBaseMtd.execute_as_trace_use_thread(
+            bsc_core.BscProcess.execute_as_trace_use_thread(
                 ' '.join(cmds)
             )
         elif bsc_core.BasPlatform.get_is_windows():
             # when process finish use /c for auto close terminal, /k not
             cmds = ['start', 'cmd', '/c', file_path]
-            bsc_core.PrcBaseMtd.execute_as_trace_use_thread(
+            bsc_core.BscProcess.execute_as_trace_use_thread(
                 ' '.join(cmds)
             )
 
@@ -334,21 +334,21 @@ class AbsSsnGener(
                 ),
                 '--', 'bash', '-l', '-c', cmd
             ]
-            bsc_core.PrcBaseMtd.execute_as_trace_use_thread(
+            bsc_core.BscProcess.execute_as_trace_use_thread(
                 ' '.join(cmds)
             )
         elif bsc_core.BasPlatform.get_is_windows():
             cmds = ['start', 'cmd', '/c', cmd]
-            bsc_core.PrcBaseMtd.execute_as_trace_use_thread(
+            bsc_core.BscProcess.execute_as_trace_use_thread(
                 ' '.join(cmds)
             )
 
     @staticmethod
     def execute_shell_script(cmd, use_thread=True):
         if use_thread is True:
-            bsc_core.PrcBaseMtd.execute_use_thread(cmd)
+            bsc_core.BscProcess.execute_use_thread(cmd)
         else:
-            bsc_core.PrcBaseMtd.execute(cmd)
+            bsc_core.BscProcess.execute(cmd)
 
     def set_gui(self, widget):
         self._gui_widget = widget
@@ -363,11 +363,11 @@ class AbsSsnGener(
         if self._gui_widget is not None:
             self._gui_widget._run_fnc_use_thread_(
                 functools.partial(
-                    bsc_core.PrcBaseMtd.execute, cmd
+                    bsc_core.BscProcess.execute, cmd
                 )
             )
         else:
-            bsc_core.PrcBaseMtd.execute_use_thread(cmd)
+            bsc_core.BscProcess.execute_use_thread(cmd)
 
     def get_is_system_matched(self, system_key):
         return self.system in bsc_core.BscSystem.get_system_includes([system_key])

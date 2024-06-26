@@ -243,7 +243,7 @@ class Playblast(object):
             fps=fps
         )
 
-        bsc_core.PrcBaseMtd.execute_as_trace(
+        bsc_core.BscProcess.execute_as_trace(
             cmd_script
         )
 

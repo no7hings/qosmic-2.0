@@ -375,7 +375,7 @@ class BscNodeOpt(object):
                     _attribute.NodeAttribute.get_value(i_curve_name, 'preInfinity'),
                     _attribute.NodeAttribute.get_value(i_curve_name, 'postInfinity')
                 ]
-                i_curve_points = _keyframe.AnimationCurveOpt(node_path, i_atr_name).get_points()
+                i_curve_points = _keyframe.NodeAttributeKeyframeOpt(node_path, i_atr_name).get_points()
                 dict_[i_atr_name] = dict(
                     flag='animation_curve',
                     data=[
@@ -400,7 +400,7 @@ class BscNodeOpt(object):
             if i_flag == 'value':
                 self.set(i_atr_name, i_v['data'])
             elif i_flag == 'animation_curve':
-                _keyframe.Keyframe.apply_curve(
+                _keyframe.NodeKeyframe.apply_curve(
                     self._path, i_v['data'], frame_offset=frame_offset, force=force
                 )
 
@@ -424,7 +424,7 @@ class BscNodeGraph(object):
                     _attribute.NodeAttribute.get_value(i_curve_name, 'preInfinity'),
                     _attribute.NodeAttribute.get_value(i_curve_name, 'postInfinity')
                 ]
-                i_curve_points = _keyframe.AnimationCurveOpt(node_path, i_atr_name).get_points()
+                i_curve_points = _keyframe.NodeAttributeKeyframeOpt(node_path, i_atr_name).get_points()
                 dict_[i_atr_name] = dict(
                     flag='animation_curve',
                     data=[

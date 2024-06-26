@@ -1,7 +1,7 @@
 # coding:utf-8
-from .page_for_manager import *
+from .page_for_resource_manager import *
 
-from .panel_for_manager import *
+from .panel_for_resource_manager import *
 
 from .page_for_register_tool import *
 

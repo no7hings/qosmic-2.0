@@ -254,14 +254,14 @@ class GuiQtDcc(AbsGuiDcc):
         return gui_qt_cor_base.GuiQtIcon.generate_by_name(icon_name)
 
     @classmethod
-    def get_qt_folder_icon(cls, use_system=False):
+    def generate_qt_directory_icon(cls, use_system=False):
+        f_i_p = QtWidgets.QFileIconProvider()
         if use_system is True:
-            f_i_p = QtWidgets.QFileIconProvider()
             return f_i_p.icon(f_i_p.Folder)
-        return gui_qt_cor_base.GuiQtIcon.create_by_icon_name('file/folder')
+        return gui_qt_cor_base.GuiQtIcon.generate_by_icon_name('file/folder')
 
     @classmethod
-    def get_qt_file_icon(cls, file_path):
+    def generate_qt_file_icon(cls, file_path):
         f_i_p = QtWidgets.QFileIconProvider()
         if bsc_storage.StgPath.get_is_file(file_path) is True:
             info = QtCore.QFileInfo(file_path)

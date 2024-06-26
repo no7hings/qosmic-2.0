@@ -2,6 +2,8 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+import lxbasic.core as bsc_core
+
 
 class Frame(object):
     RENDER_ATTR_DICT = {
@@ -98,3 +100,22 @@ class Frame(object):
         start_frame = cmds.getAttr(cls.RENDER_ATTR_DICT['start_frame'])
         end_frame = cmds.getAttr(cls.RENDER_ATTR_DICT['end_frame'])
         return int(start_frame), int(end_frame)
+
+    @classmethod
+    def get_playback_speed(cls):
+        return cmds.playbackOptions(query=1, playbackSpeed=1)
+
+    @classmethod
+    def get_playback_info(cls):
+        fps = cls.get_fps()
+        speed = cls.get_playback_speed()
+        if speed == 0:
+            return 'Play every frame'
+        elif speed > 0:
+            return '{} x {}'.format(
+                bsc_core.RawTextMtd.to_prettify(fps), speed
+            )
+
+    @classmethod
+    def set_playback_speed(cls, value):
+        cmds.playbackOptions(playbackSpeed=value)

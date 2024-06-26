@@ -57,7 +57,7 @@ class ImgOiioOptForThumbnail(object):
                 ]
             #
 
-            bsc_core.PrcBaseMtd.execute_with_result(
+            bsc_core.BscProcess.execute_with_result(
                 ' '.join(arguments)
             )
             bsc_log.Log.trace_method_result(
@@ -75,7 +75,7 @@ class ImgOiioOptForThumbnail(object):
             arguments = [self._rv_ls_path]
             if self._obj.get_is_exists() is True:
                 arguments += ['-x', '"{}"'.format(self._obj.path)]
-                bsc_core.PrcBaseMtd.execute_with_result(
+                bsc_core.BscProcess.execute_with_result(
                     ' '.join(arguments)
                 )
 

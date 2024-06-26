@@ -11,7 +11,7 @@ from . import reference as _reference
 from . import connection as _connection
 
 
-class AnimationCurveOpt(object):
+class NodeAttributeKeyframeOpt(object):
     DATA_KEYS = [
         'inAngle', 'outAngle',
         'inWeight', 'outWeight',
@@ -137,7 +137,7 @@ class AnimationCurveOpt(object):
             self.set_value_at_time(i_time, i_value_new)
 
 
-class Keyframe(object):
+class NodeKeyframe(object):
 
     @classmethod
     def apply_value(cls, path, atr_data, force=False):
@@ -194,7 +194,7 @@ class Keyframe(object):
         i_atr_path_dst = '{}.{}'.format(path, atr_name)
         _connection.Connection.create(i_atr_path_src, i_atr_path_dst)
 
-        AnimationCurveOpt(path, atr_name).set_points(curve_points, frame_offset=frame_offset)
+        NodeAttributeKeyframeOpt(path, atr_name).set_points(curve_points, frame_offset=frame_offset)
 
         _attribute.NodeAttribute.set_value(
             curve_name_new, 'preInfinity', infinities[0]
@@ -204,8 +204,20 @@ class Keyframe(object):
         )
 
 
-class Keyframes(object):
+class AnimCurve(object):
+    NODE_TYPES = [
+        'animCurveTL', 'animCurveTA', 'animCurveTT', 'animCurveTU',
+        'animCurveUL', 'animCurveUA', 'animCurveUT', 'animCurveUU'
+    ]
 
     @classmethod
-    def get_all(cls, path, atr_name):
-        pass
+    def offset_frame(cls, anim_curve, offset):
+        times = cmds.keyframe(anim_curve, query=True, timeChange=True)
+        for i_time in times:
+            i_time_new = i_time+offset
+            cmds.cutKey(anim_curve, time=(i_time,))
+            cmds.pasteKey(anim_curve, time=(i_time_new,))
+
+    @classmethod
+    def check_is_anim_curve(cls, any_node):
+        return cmds.nodeType(any_node).startswith('animCurve')

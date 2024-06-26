@@ -368,7 +368,7 @@ class FncExporterForGeometryUsdOld1(object):
         # noinspection PyUnresolvedReferences
         from papyUsd.maya import MayaUsdExport
 
-        root = bsc_core.PthNodeMtd.get_dag_pathsep_replace(
+        root = bsc_core.BscPath.get_dag_pathsep_replace(
             self._root, pathsep_tgt=mya_core.MyaUtil.OBJ_PATHSEP
         )
         s_r = root
@@ -548,10 +548,10 @@ class FncExporterForGeometryUsd(gnl_fnc_abstracts.AbsFncOptionBase):
                         i_mya_api_type_name = i_mya_obj.get_api_type()
                         i_mya_obj_path = i_mya_obj.get_path()
                         #
-                        i_usd_obj_path = bsc_core.PthNodeMtd.get_dag_pathsep_replace(
+                        i_usd_obj_path = bsc_core.BscPath.get_dag_pathsep_replace(
                             i_mya_obj_path, pathsep_src=mya_core.MyaUtil.OBJ_PATHSEP
                         )
-                        i_usd_obj_path = bsc_core.PthNodeMtd.get_dag_path_lstrip(i_usd_obj_path, usd_root_lstrip)
+                        i_usd_obj_path = bsc_core.BscPath.get_dag_path_lstrip(i_usd_obj_path, usd_root_lstrip)
 
                         i_rgb = None
                         if auto_plant_display_color is True:
@@ -567,10 +567,10 @@ class FncExporterForGeometryUsd(gnl_fnc_abstracts.AbsFncOptionBase):
                                 'obj="{}" has namespace'.format(i_usd_obj_path)
                             )
                         #
-                        i_usd_obj_path = bsc_core.PthNodeMtd.get_dag_path_with_namespace_clear(
+                        i_usd_obj_path = bsc_core.BscPath.get_dag_path_with_namespace_clear(
                             i_usd_obj_path
                         )
-                        i_usd_obj_path = bsc_core.PthNodeMtd.cleanup_dag_path(
+                        i_usd_obj_path = bsc_core.BscPath.cleanup_dag_path(
                             i_usd_obj_path
                         )
                         if i_mya_api_type_name in mya_core.MyaNodeApiTypes.Transforms:

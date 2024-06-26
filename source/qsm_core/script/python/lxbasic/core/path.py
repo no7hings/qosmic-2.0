@@ -6,7 +6,7 @@ import re
 from . import raw as _raw
 
 
-class PthNodeMtd(object):
+class BscPath(object):
     @classmethod
     def get_dag_args(cls, path, pathsep='/'):
         """
@@ -160,7 +160,7 @@ class PthNodeMtd(object):
         etc.
         ps = ['/cgm', '/cjd', '/shl', '/cg7', '/lib', '/lib_bck', '/nsa_dev', '/tnt', '/']
         print(
-            PthNodeMtd.find_dag_sibling_names(
+            BscPath.find_dag_sibling_names(
                 '/cgm', ps
             )
         )
@@ -170,6 +170,10 @@ class PthNodeMtd(object):
         :return:
         """
         return [cls.get_dag_name(x) for x in cls.find_dag_sibling_paths(path, paths, pathsep)]
+
+    @classmethod
+    def find_dag_descendant_paths(cls, path, paths, pathsep='/'):
+        return fnmatch.filter(paths, path+pathsep+'*')
 
     # replace word to '_' unless it's "a-z, A-Z, 0-9"
     @classmethod
@@ -233,7 +237,7 @@ class BscPathOpt(object):
     path = property(get_path)
 
     def get_name(self):
-        return PthNodeMtd.get_dag_name(
+        return BscPath.get_dag_name(
             path=self._path_text, pathsep=self._pathsep
         )
 
@@ -269,7 +273,7 @@ class BscPathOpt(object):
         return self.path == self.pathsep
 
     def get_parent_path(self):
-        return PthNodeMtd.get_dag_parent_path(
+        return BscPath.get_dag_parent_path(
             path=self._path_text, pathsep=self._pathsep
         )
 
@@ -291,7 +295,7 @@ class BscPathOpt(object):
             )
 
     def get_component_paths(self):
-        return PthNodeMtd.get_dag_component_paths(
+        return BscPath.get_dag_component_paths(
             path=self._path_text, pathsep=self._pathsep
         )
 
@@ -300,7 +304,7 @@ class BscPathOpt(object):
 
     def translate_to(self, pathsep='/'):
         return self.__class__(
-            PthNodeMtd.get_dag_pathsep_replace(
+            BscPath.get_dag_pathsep_replace(
                 self.path,
                 pathsep_src=self.pathsep,
                 pathsep_tgt=pathsep
@@ -309,7 +313,7 @@ class BscPathOpt(object):
 
     def clear_namespace_to(self):
         return self.__class__(
-            PthNodeMtd.get_dag_path_with_namespace_clear(
+            BscPath.get_dag_path_with_namespace_clear(
                 self.path,
                 pathsep=self.pathsep,
                 # namespacesep=':',
@@ -358,14 +362,14 @@ class BscPathOpt(object):
 
     def generate_child(self, name):
         return self.__class__(
-            PthNodeMtd.get_dag_child_path(
+            BscPath.get_dag_child_path(
                 self._path_text, name, pathsep=self._pathsep
             )
         )
 
     def get_depth(self):
         return len(
-            PthNodeMtd.get_dag_args(
+            BscPath.get_dag_args(
                 self._path_text,
                 pathsep=self._pathsep
             )

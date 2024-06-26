@@ -66,7 +66,7 @@ class QtItemForHistoryEntity(
         )
 
         icon_w = icon_h = self._file_icon_s
-        self._file_icon_draw_rect.setRect(
+        self._storage_icon_draw_rect.setRect(
             x+m_0+(w_left-icon_w)/2, y+(h-icon_w)/2, icon_w, icon_h
         )
 
@@ -88,12 +88,12 @@ class QtItemForHistoryEntity(
             x+m_0+w_left, txt_y, x+w-m_0, txt_y
         )
 
-        if self._file_path is not None:
+        if self._storage_path is not None:
             txt_w_0 = _qt_core.GuiQtText.get_draw_width(
-                self, self._file_path
+                self, self._storage_path
             )+4
             txt_w = min(txt_w_0, info_w_max)
-            self._file_path_draw_rect.setRect(
+            self._storage_path_draw_rect.setRect(
                 x+w_left+m_0+txt_m, txt_y, txt_w, info_h
             )
             txt_y += info_h+spc
@@ -117,8 +117,8 @@ class QtItemForHistoryEntity(
 
     def _do_hover_move_(self, event):
         p = event.pos()
-        if self._file_path_draw_rect.contains(p):
-            self._file_hover_flag = True
+        if self._storage_path_draw_rect.contains(p):
+            self._storage_hover_flag = True
             if self._check_file_exists_() is True:
                 self.setCursor(
                     QtCore.Qt.PointingHandCursor
@@ -129,22 +129,22 @@ class QtItemForHistoryEntity(
                 QtCore.Qt.PointingHandCursor
             )
         else:
-            self._file_hover_flag = False
+            self._storage_hover_flag = False
             self._associate_hover_flag = False
             self.unsetCursor()
             # noinspection PyArgumentList
             QtWidgets.QToolTip.hideText()
 
     def _do_leave_(self):
-        self._file_hover_flag = False
+        self._storage_hover_flag = False
         self.unsetCursor()
         # noinspection PyArgumentList
         QtWidgets.QToolTip.hideText()
 
     def _do_show_tool_tip_(self, event):
-        if self._file_hover_flag is True:
+        if self._storage_hover_flag is True:
             css = _qt_core.GuiQtUtil.generate_tool_tip_css(
-                self._file_path,
+                self._storage_path,
                 action_tip=[
                     '"LMB-click" to open file',
                 ]
@@ -159,12 +159,8 @@ class QtItemForHistoryEntity(
         self._do_open_associate_()
 
     def _do_open_file_(self):
-        if self._file_hover_flag is True:
-            if self._file_path is not None:
-                if os.path.exists(self._file_path):
-                    os.startfile(
-                        self._file_path
-                    )
+        if self._storage_hover_flag is True:
+            self._open_directory_fnc_()
 
     def _do_open_associate_(self):
         if self._associate_hover_flag is True:
@@ -192,7 +188,7 @@ class QtItemForHistoryEntity(
         self._name_text = None
         self._name_text_draw = None
 
-        self._file_hover_flag = False
+        self._storage_hover_flag = False
         self._associate_hover_flag = False
 
         self._tool_tip_flag = False
@@ -201,8 +197,8 @@ class QtItemForHistoryEntity(
         self._time_text = None
         self._open_associate_fnc_ = None
 
-        self._file_path = None
-        self._file_icon = None
+        self._storage_path = None
+        self._storage_icon = None
 
         self._frame_draw_rect = QtCore.QRect()
         
@@ -211,8 +207,8 @@ class QtItemForHistoryEntity(
         self._frame_draw_line_right = QtCore.QLine()
         
         self._name_draw_rect = QtCore.QRect()
-        self._file_icon_draw_rect = QtCore.QRect()
-        self._file_path_draw_rect = QtCore.QRect()
+        self._storage_icon_draw_rect = QtCore.QRect()
+        self._storage_path_draw_rect = QtCore.QRect()
         self._time_draw_rect = QtCore.QRect()
 
         self._associate_draw_rect = QtCore.QRect()
@@ -225,12 +221,12 @@ class QtItemForHistoryEntity(
 
         if self._get_language_() == 'chs':
             menu_data = [
-                ('在文件夹中显示', 'file/open-folder', self._open_folder_fnc_),
+                ('在文件夹中显示', 'file/open-folder', self._open_directory_fnc_),
                 ('移动到回收站', 'trash', self._delete_fnc_)
             ]
         else:
             menu_data = [
-                ('Show in folder', 'file/open-folder', self._open_folder_fnc_),
+                ('Show in folder', 'file/open-folder', self._open_directory_fnc_),
                 ('Send to trash', 'trash', self._delete_fnc_)
             ]
 
@@ -323,12 +319,12 @@ class QtItemForHistoryEntity(
             name_text
         )
 
-        if self._file_path is not None:
-            pxm = self._file_icon.pixmap(
-                self._file_icon_draw_rect.width(), self._file_icon_draw_rect.height()
+        if self._storage_path is not None:
+            pxm = self._storage_icon.pixmap(
+                self._storage_icon_draw_rect.width(), self._storage_icon_draw_rect.height()
             )
             painter.drawPixmap(
-                self._file_icon_draw_rect, pxm
+                self._storage_icon_draw_rect, pxm
             )
             # text
             if self._check_file_exists_():
@@ -339,14 +335,14 @@ class QtItemForHistoryEntity(
                 painter._set_text_color_(self._file_text_color_lost)
 
             text_elided = painter.fontMetrics().elidedText(
-                self._file_path,
+                self._storage_path,
                 QtCore.Qt.ElideMiddle,
-                self._file_path_draw_rect.width()-4,
+                self._storage_path_draw_rect.width()-4,
                 QtCore.Qt.TextShowMnemonic
             )
             # noinspection PyArgumentEqualDefault
             painter.drawText(
-                self._file_path_draw_rect, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
+                self._storage_path_draw_rect, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
                 text_elided
             )
 
@@ -382,12 +378,17 @@ class QtItemForHistoryEntity(
                 text_elided
             )
 
-    def _open_folder_fnc_(self):
-        if self._file_path is not None:
-            directory_path = os.path.dirname(self._file_path)
-            os.startfile(
-                directory_path
-            )
+    def _open_directory_fnc_(self):
+        if self._storage_path is not None:
+            if os.path.isfile(self._storage_path):
+                directory_path = os.path.dirname(self._storage_path)
+                os.startfile(
+                    directory_path
+                )
+            elif os.path.isdir(self._storage_path):
+                os.startfile(
+                    self._storage_path
+                )
 
     def _delete_fnc_(self):
         self.close()
@@ -395,20 +396,25 @@ class QtItemForHistoryEntity(
 
         self.delete_accepted.emit(self)
 
-    def _check_file_exists_(self):
-        if self._file_path is not None:
-            return os.path.exists(self._file_path)
-        return False
-
     def _set_associated_entity_id_(self, path):
         self._associated_entity_id = path
 
     def _set_open_associate_fnc_(self, fnc):
         self._open_associate_fnc_ = fnc
 
-    def _set_file_path_(self, path):
-        self._file_path = bsc_core.auto_unicode(path)
-        self._file_icon = _qt_core.GuiQtDcc.get_qt_file_icon(self._file_path)
+    def _set_storage_path_(self, path):
+        self._storage_path = bsc_core.auto_unicode(path)
+        if os.path.isfile(self._storage_path):
+            self._storage_icon = _qt_core.GuiQtDcc.generate_qt_file_icon(self._storage_path)
+        elif os.path.isdir(self._storage_path):
+            self._storage_icon = _qt_core.GuiQtDcc.generate_qt_directory_icon(self._storage_path)
+        else:
+            self._storage_icon = _qt_core.GuiQtIcon.generate_by_icon_name('file/lost')
+    
+    def _check_file_exists_(self):
+        if self._storage_path is not None:
+            return os.path.exists(self._storage_path)
+        return False
 
     def _set_group_widget_(self, widget):
         self._group_widget = widget

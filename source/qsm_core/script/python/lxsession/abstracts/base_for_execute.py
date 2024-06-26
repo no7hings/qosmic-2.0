@@ -234,11 +234,11 @@ class AbsHookExecutor(object):
         cmd = self.get_shell_command()
         #
         if block is True:
-            bsc_core.PrcBaseMtd.execute_with_result(
+            bsc_core.BscProcess.execute_with_result(
                 cmd, environs_extend=environs_extend
             )
         else:
-            bsc_core.PrcBaseMtd.set_run_with_result_use_thread(
+            bsc_core.BscProcess.set_run_with_result_use_thread(
                 cmd, environs_extend=environs_extend
             )
 

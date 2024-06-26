@@ -1,0 +1,21 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Lazy CFX Tool'
+        name_chs: '懒人解算工具'
+        group_name: 'General(s)'
+        #
+        icon_name: 'qosmic/lazy-cfx-tool'
+        tool_tip:
+            |-
+            For CFX.
+        #
+        tool_tip_chs:
+            |-
+            用于解算。
+
+        size: [560, 720]

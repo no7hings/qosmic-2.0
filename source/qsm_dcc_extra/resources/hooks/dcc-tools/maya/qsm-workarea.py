@@ -100,8 +100,6 @@ def main(session):
 
     import qsm_maya_gui.core as qsm_mya_gui_core
 
-    import qsm_maya_tool.workarea.gui.widgets as qsm_wka_gui_widgets
-
 
 
 if __name__ == '__main__':

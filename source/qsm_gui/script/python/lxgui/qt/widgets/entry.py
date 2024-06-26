@@ -956,11 +956,11 @@ class QtEntryAsList(
             item_widget.press_dbl_clicked.connect(lambda: self._do_action_open_(text))
             if os.path.isdir(text):
                 item_widget._set_icon_(
-                    _qt_core.GuiQtDcc.get_qt_folder_icon(use_system=True)
+                    _qt_core.GuiQtDcc.generate_qt_directory_icon(use_system=True)
                 )
             elif os.path.isfile(text):
                 item_widget._set_icon_(
-                    _qt_core.GuiQtDcc.get_qt_file_icon(text)
+                    _qt_core.GuiQtDcc.generate_qt_file_icon(text)
                 )
             else:
                 item_widget._set_icon_by_text_(text)

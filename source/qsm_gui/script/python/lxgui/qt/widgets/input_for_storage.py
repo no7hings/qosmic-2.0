@@ -220,12 +220,12 @@ class QtInputAsStorage(
         if p:
             if os.path.isdir(p):
                 self._head._set_icon_(
-                    gui_qt_core.GuiQtDcc.get_qt_folder_icon(use_system=True)
+                    gui_qt_core.GuiQtDcc.generate_qt_directory_icon(use_system=True)
                 )
 
             elif os.path.isfile(p):
                 self._head._set_icon_(
-                    gui_qt_core.GuiQtDcc.get_qt_file_icon(p)
+                    gui_qt_core.GuiQtDcc.generate_qt_file_icon(p)
                 )
             else:
                 self._head._set_icon_file_path_(

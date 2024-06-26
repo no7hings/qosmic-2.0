@@ -39,6 +39,12 @@ class MainShelf(object):
             [
                 'dcc-tools/maya/qsm-lazy-resource-tool',
             ]
+        ),
+        (
+            'lazy-cfx',
+            [
+                'dcc-tools/maya/qsm-lazy-cfx-tool',
+            ]
         )
     ]
 

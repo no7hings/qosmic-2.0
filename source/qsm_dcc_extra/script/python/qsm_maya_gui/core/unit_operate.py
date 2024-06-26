@@ -2,6 +2,8 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+import lxbasic.core as bsc_core
+
 import lxgui.core as gui_core
 
 import lxgui.qt.core as gui_qt_core
@@ -12,7 +14,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.rig.core as qsm_mya_rig_core
+import qsm_maya.animation.core as qsm_mya_anm_core
 
 
 class PrxUnitBaseOpt(object):
@@ -26,7 +28,7 @@ class PrxUnitBaseOpt(object):
 
 class PrxUnitForResourceTagOpt(
     PrxUnitBaseOpt,
-    gui_prx_abstracts.AbsGuiTreeViewAsTagOpt
+    gui_prx_abstracts.AbsGuiTreeViewAsTagOpt,
 ):
     GROUP_SCHEME = gui_prx_abstracts.AbsGuiTreeViewAsTagOpt.GroupScheme.Hide
 
@@ -38,7 +40,8 @@ class PrxUnitForResourceTagOpt(
 
 
 class PrxUnitForResourceOpt(
-    PrxUnitBaseOpt
+    PrxUnitBaseOpt,
+    gui_prx_abstracts.AbsGuiPrxCacheDef,
 ):
     ROOT_NAME = 'Tags'
 
@@ -277,6 +280,7 @@ class PrxUnitForResourceOpt(
 
     def __init__(self, window, page, session, prx_tree_view):
         super(PrxUnitForResourceOpt, self).__init__(window, page, session)
+        self._init_cache_def_(prx_tree_view)
         self._prx_tree_view = prx_tree_view
         self._prx_tree_view.create_header_view(
             [('name', 2), ('description', 1)],
@@ -305,6 +309,7 @@ class PrxUnitForResourceOpt(
         self._resources_query = self.RESOURCES_QUERY_CLS()
 
     def restore(self):
+        self._push_cache()
         self._prx_tree_view.set_clear()
 
     def gui_check_exists(self, path):
@@ -402,7 +407,7 @@ class PrxUnitForResourceOpt(
                     '/status/unloaded', path, auto_create_ancestors=True
                 )
 
-            if isinstance(resource, qsm_mya_rig_core.AdvRig):
+            if isinstance(resource, qsm_mya_anm_core.AdvRig):
                 if resource.is_skin_proxy_exists():
                     prx_item.set_status(
                         prx_item.ValidationStatus.Active
@@ -431,12 +436,19 @@ class PrxUnitForResourceOpt(
                     prx_item.set_status(
                         prx_item.ValidationStatus.Normal
                     )
-                    prx_item.set_name('', 1)
+                    prx_item.set_name('Rig', 1)
 
             prx_item.get_item()._update_item_semantic_tag_filter_keys_tgt_(_semantic_tag_filter_data)
             prx_item.set_tool_tip(
                 '\n'.join(['{}: {}'.format(_k, _v) for _k, _v in resource.variants.items()])
             )
+
+            result = self.gui_add_resource_components(resource)
+            if result is True:
+                prx_item.set_icon_name(
+                    'node/maya/reference-cfx'
+                )
+                prx_item.set_name('CFX Rig', 1)
 
         path = resource.path
         if self.gui_check_exists(path) is False:
@@ -476,45 +488,60 @@ class PrxUnitForResourceOpt(
             prx_item.set_gui_dcc_obj(
                 resource, namespace=self.NAMESPACE
             )
+
+            if self.CHECK_BOX_FLAG is True:
+                prx_item.set_checked(self.CHECK_DEFAULT)
+
             prx_item.set_show_build_fnc(build_fnc_)
             return True, prx_item
         return False, self.gui_get_one(path)
 
-    def gui_add_components(self, resource, prx_item):
-        pass
-
-    def gui_add_component(self, path, prx_item_parent):
+    def gui_add_resource_components(self, resource):
+        return False
+    
+    def gui_add_resource_component(self, path, dcc_path):
         def build_fnc_():
             prx_item.set_name(
-                node_opt.get_name()
+                path_opt.get_name()
             )
-            icon = gui_qt_core.QtMaya.generate_qt_icon_by_name(type_name)
+            _node_type = node_opt.get_type_name()
             prx_item.set_icon(
-                icon
+                gui_qt_core.QtMaya.generate_qt_icon_by_name(_node_type)
+            )
+            prx_item.set_name(
+                _node_type, 1
             )
 
-        node_opt = qsm_mya_core.BscNodeOpt(path)
-        type_name = node_opt.get_type_name()
+        if self.gui_check_exists(path) is False:
+            path_opt = bsc_core.BscPathOpt(path)
+            create_kwargs = dict(
+                name='loading ...',
+                filter_key=path,
+            )
 
-        create_kwargs = dict(
-            name='loading ...',
-            filter_key=path,
-        )
+            parent = path_opt.get_parent()
+            if parent is not None:
+                prx_item_parent = self.gui_get_one(parent.path)
+                prx_item = prx_item_parent.add_child(
+                    **create_kwargs
+                )
+            else:
+                prx_item = self._prx_tree_view.create_item(
+                    **create_kwargs
+                )
+            self.gui_register(path, prx_item)
 
-        prx_item = prx_item_parent.add_child(
-            **create_kwargs
-        )
-        self.gui_register(path, prx_item)
-        prx_item.set_gui_dcc_obj(
-            node_opt, namespace=self.NAMESPACE_FOR_COMPONENT
-        )
+            node_opt = qsm_mya_core.BscNodeOpt(dcc_path)
+            prx_item.set_gui_dcc_obj(
+                node_opt, namespace=self.NAMESPACE_FOR_COMPONENT
+            )
 
-        if self.CHECK_BOX_FLAG is True:
-            prx_item.set_checked(self.CHECK_DEFAULT)
+            if self.CHECK_BOX_FLAG is True:
+                prx_item.set_checked(self.CHECK_DEFAULT)
 
-        prx_item.set_show_build_fnc(build_fnc_)
-
-        return prx_item
+            prx_item.set_show_build_fnc(build_fnc_)
+            return True, prx_item
+        return False, self.gui_get_one(path)
 
     def gui_add_one(self, resource):
         ancestors = resource.path_opt.get_ancestors()
@@ -533,6 +560,8 @@ class PrxUnitForResourceOpt(
         resources = self._resources_query.get_all()
         for i_resource in resources:
             self.gui_add_one(i_resource)
+
+        self._pull_cache()
 
     def get_current_obj(self):
         _ = self._prx_tree_view.get_all_selected_items()

@@ -24,7 +24,7 @@ from . import base as _base
 from . import environ as _environ
 
 
-class PrcBaseMtd(object):
+class BscProcess(object):
     if platform.system().lower() == 'windows':
         # noinspection PyUnresolvedReferences
         NO_WINDOW = subprocess.STARTUPINFO()

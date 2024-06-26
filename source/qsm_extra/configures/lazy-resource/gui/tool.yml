@@ -9,7 +9,7 @@ option:
         name_chs: '懒人资源工具'
         group_name: 'General(s)'
         #
-        icon_name: 'qosmic/lazy-resource-register'
+        icon_name: 'qosmic/lazy-resource-tool'
         tool_tip:
             |-
             For resource register or load.
@@ -235,7 +235,7 @@ build:
 
                 animation:
                     widget: group
-                    name: 'Ignore'
+                    name: 'Animation'
                     name_chs: '动画'
 
                 animation/force:
@@ -246,19 +246,28 @@ build:
 
                 animation/frame_offset:
                     widget: group
-                    name: 'Animation Frame Offset'
+                    name: 'Frame Offset'
                     name_chs: '帧偏移'
                     value: 0
 
-                animation/frame_offset/random:
+                animation/frame_offset/random_enable:
                     widget: boolean
-                    name: 'Random Frame Offset'
-                    name_chs: '随机偏移'
-                    value: True
+                    name: 'Random'
+                    name_chs: '随机'
+                    value: False
+
+                animation/frame_offset/random_range:
+                    widget: integer2
+                    name: 'Random Range'
+                    name_chs: '随机范围'
+                    value: [0, 10]
+                    visible_condition:  {
+                        operator: 'is', port: 'animation/frame_offset/random', value: True
+                    }
 
                 animation/frame_offset/value:
                     widget: integer
-                    name: 'Animation Frame Offset'
+                    name: 'Frame Offset'
                     name_chs: '偏移值'
                     value: 0
 

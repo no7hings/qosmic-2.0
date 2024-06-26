@@ -19,6 +19,6 @@ cmd_script = r'rez-env maya-2019 qsm_dcc_main -- mayabatch -command "python(\"im
 
 print cmd_script
 
-# bsc_core.PrcBaseMtd.execute_as_trace(
+# bsc_core.BscProcess.execute_as_trace(
 #     cmd_script
 # )

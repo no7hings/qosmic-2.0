@@ -9,7 +9,7 @@ bsc_core.PyReloader2(
     ['lxbasic', 'qsm_general', 'qsm_maya', 'qsm_maya_lazy_tool']
 ).do_reload()
 
-import qsm_maya.rig.scripts as qsm_mya_rig_scripts
+import qsm_maya.animation.scripts as qsm_mya_rig_scripts
 
 qsm_mya_rig_scripts.TransformationLocatorOpt(
     ['sam_Skin', 'sam_Skin1']

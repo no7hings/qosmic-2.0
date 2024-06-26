@@ -5,7 +5,7 @@ from . import task as _task
 
 
 class TaskPool(_base.AbsEntityPool):
-    LOCATION_PTN = 'Z:/caches/database/prc-task/{user_name}/task_pool'
+    LOCATION_PTN = 'Z:/caches/database/prc-task/{user_name}/tasks'
 
     CACHE = None
 

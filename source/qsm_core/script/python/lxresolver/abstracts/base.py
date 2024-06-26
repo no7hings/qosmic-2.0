@@ -257,7 +257,7 @@ class AbsRsvEntityBaseDef(AbsRsvBaseDef):
     type_name = property(get_type_name)
 
     def get_name(self):
-        return bsc_core.PthNodeMtd.get_dag_name(self._rsv_path, pathsep=self.PATHSEP)
+        return bsc_core.BscPath.get_dag_name(self._rsv_path, pathsep=self.PATHSEP)
 
     name = property(get_name)
 
@@ -2905,10 +2905,10 @@ class AbsRsvProject(
         return self._rsv_obj_stack.get_objects(regex)
 
     def _project__find_rsv_entity_child_paths(self, path):
-        return bsc_core.PthNodeMtd.find_dag_child_paths(path, self._rsv_obj_stack.get_keys())
+        return bsc_core.BscPath.find_dag_child_paths(path, self._rsv_obj_stack.get_keys())
 
     def _project__find_rsv_entity_children(self, path):
-        child_paths = bsc_core.PthNodeMtd.find_dag_child_paths(path, self._rsv_obj_stack.get_keys())
+        child_paths = bsc_core.BscPath.find_dag_child_paths(path, self._rsv_obj_stack.get_keys())
         return [self._rsv_obj_stack.get_object(i) for i in child_paths]
 
     def get_rsv_resource_by_any_file_path(self, file_path, variants_override=None):

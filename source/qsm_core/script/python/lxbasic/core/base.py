@@ -1022,7 +1022,7 @@ Subtitle options:
         fps=24
     )
 
-    PrcBaseMtd.execute_with_result(
+    BscProcess.execute_with_result(
         cmd
     )
         """

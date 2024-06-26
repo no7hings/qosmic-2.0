@@ -169,7 +169,7 @@ class AbsRsvAppDef(object):
                 'execute app',
                 'command=`{}` is started'.format(cmd_script)
             )
-            bsc_core.PrcBaseMtd.execute_with_result(
+            bsc_core.BscProcess.execute_with_result(
                 cmd_script,
                 **sub_progress_kwargs
             )
@@ -180,7 +180,7 @@ class AbsRsvAppDef(object):
             'execute app',
             'command=`{}` is started'.format(cmd_script)
         )
-        bsc_core.PrcBaseMtd.execute_with_result(
+        bsc_core.BscProcess.execute_with_result(
             cmd_script,
             **sub_progress_kwargs
         )

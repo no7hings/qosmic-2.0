@@ -17,7 +17,7 @@ from . import unit_for_cfx_main_tool as _unit_for_cfx_rig
 class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
     
-    UNIT_FOR_MAIN_TOOL_CLS = _unit_for_cfx_rig.UnitForCfxRigView
+    UNIT_FOR_MAIN_TOOL_CLS = _unit_for_cfx_rig.UnitForCfxResourceView
 
     SCRIPT_JOB_NAME = 'lazy_tool_for_cfx'
 
@@ -30,6 +30,13 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         )
         qt_view._refresh_view_items_visible_by_any_filter_()
         qt_view._refresh_viewport_showable_auto_()
+
+    def do_gui_update_scene_info(self):
+        self._scene_info_label._set_info_(
+            'Playback speed: {}'.format(
+                qsm_mya_core.Frame.get_playback_info()
+            )
+        )
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxPageForCfxMainTool, self).__init__(*args, **kwargs)
@@ -117,7 +124,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         qt_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
         qt_lot.setContentsMargins(*[0]*4)
         qt_lot.setSpacing(2)
-
+        # top
         self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
         qt_lot.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_align_left()
@@ -148,7 +155,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
         self._prx_h_splitter.set_contract_enable(False)
 
-        self._gui_resource_prx_unit = _unit_for_cfx_rig.UnitForCfxRigView(
+        self._gui_resource_prx_unit = _unit_for_cfx_rig.UnitForCfxResourceView(
             self._window, self, self._session, self._resource_prx_tree_view
         )
         self._resource_tag_tree_view.connect_item_check_changed_to(
@@ -169,6 +176,20 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         self._gui_import_tool_set_unit = _unit_for_cfx_rig.ToolSetUnitForCfxRigImport(
             self._window, self, self._session
         )
+        # bottom
+        self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
+        qt_lot.addWidget(self._bottom_prx_tool_bar.widget)
+        self._bottom_prx_tool_bar.set_align_left()
+        self._bottom_prx_tool_bar.set_expanded(True)
+
+        self._info_prx_tool_box = self._bottom_prx_tool_bar.create_tool_box(
+            'info', size_mode=1
+        )
+        self._scene_info_label = gui_qt_widgets.QtInfoLabel()
+        self._info_prx_tool_box.add_widget(self._scene_info_label)
+        self._scene_info_label._set_info_('N/a')
+
+        self._window.connect_window_activate_changed_to(self.do_gui_update_scene_info)
 
         self._do_dcc_register_all_script_jobs()
         self._window.connect_window_close_to(self._do_dcc_destroy_all_script_jobs)

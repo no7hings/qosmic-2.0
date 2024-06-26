@@ -67,7 +67,7 @@ class EtrBase(bsc_etr_abstracts.AbsEtrBase):
         cmd = 'rez-env sublime_text -- sublime_text "{}"'.format(
             file_path
         )
-        bsc_core.PrcBaseMtd.set_run(cmd)
+        bsc_core.BscProcess.set_run(cmd)
 
     @classmethod
     def get_app_execute_mapper(cls, *args, **kwargs):

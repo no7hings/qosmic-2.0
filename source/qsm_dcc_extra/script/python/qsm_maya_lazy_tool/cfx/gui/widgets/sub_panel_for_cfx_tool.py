@@ -9,8 +9,6 @@ from . import page_for_cfx_main_tool as _page_for_cfx_main_tool
 
 
 class PrxSubPanelForCfxTool(gui_prx_widgets.PrxBaseWindow):
-    PAGE_FOR_MAIN_TOOL_CLS = _page_for_cfx_main_tool.PrxPageForCfxMainTool
-
     def __init__(self, window, session, *args, **kwargs):
         super(PrxSubPanelForCfxTool, self).__init__(*args, **kwargs)
         if window is None:
@@ -40,15 +38,15 @@ class PrxSubPanelForCfxTool(gui_prx_widgets.PrxBaseWindow):
 
     def gui_close_fnc(self):
         self._prx_tab_box.save_history()
-        self._main_prx_page._page_prx_tab_box.save_history()
+        self._main_tool_prx_page._page_prx_tab_box.save_history()
 
     def gui_setup_window(self):
         self._prx_tab_box = gui_prx_widgets.PrxHTabBox()
         self.add_widget(self._prx_tab_box)
         # main
-        cfx_main_prx_sca = gui_prx_widgets.PrxVScrollArea()
+        main_tool_prx_sca = gui_prx_widgets.PrxVScrollArea()
         self._prx_tab_box.add_widget(
-            cfx_main_prx_sca,
+            main_tool_prx_sca,
             key='main',
             name=gui_core.GuiUtil.choice_name(
                 self._language, self._window._configure.get('build.main.tab')
@@ -57,10 +55,10 @@ class PrxSubPanelForCfxTool(gui_prx_widgets.PrxBaseWindow):
                 self._language, self._window._configure.get('build.main.tab')
             )
         )
-        self._main_prx_page = self.PAGE_FOR_MAIN_TOOL_CLS(
+        self._main_tool_prx_page = _page_for_cfx_main_tool.PrxPageForCfxMainTool(
             self._window, self._session
         )
-        cfx_main_prx_sca.add_widget(self._main_prx_page)
+        main_tool_prx_sca.add_widget(self._main_tool_prx_page)
 
         self._window.connect_refresh_action_for(
             lambda: self.do_gui_refresh_all(True)
@@ -74,5 +72,5 @@ class PrxSubPanelForCfxTool(gui_prx_widgets.PrxBaseWindow):
     def do_gui_refresh_all(self, force=False):
         key = self._prx_tab_box.get_current_key()
         if key == 'main':
-            self._main_prx_page.do_gui_refresh_all(force)
+            self._main_tool_prx_page.do_gui_refresh_all(force)
 

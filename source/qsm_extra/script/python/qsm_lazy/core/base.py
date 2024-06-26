@@ -569,7 +569,7 @@ class Stage(object):
             except Exception:
                 return False
         # video
-        elif file_opt.ext in {'.mov', '.mp4'}:
+        elif file_opt.ext in {'.mov', '.avi', '.mp4'}:
             video_path = self.PTN_VIDEO_PATH.format(**options)
             file_opt.copy_to_file(video_path)
             # noinspection PyBroadException

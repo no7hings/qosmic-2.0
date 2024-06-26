@@ -18,7 +18,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
         import qsm_task.core as qsm_tsk_core
 
-        p = qsm_tsk_core.HistoryPool.generate()
+        p = qsm_tsk_core.NoticePool.generate()
         p.do_update()
 
         self._d._restore_()
@@ -36,7 +36,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
             i_wgt._set_associated_entity_id_(
                 i.get('task')
             )
-            i_wgt._set_file_path_(
+            i_wgt._set_storage_path_(
                 i.get('file')
             )
 

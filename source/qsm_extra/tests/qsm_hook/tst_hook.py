@@ -28,6 +28,7 @@ if qsm_tsk_process.TaskProcessClient.get_server_status():
             # group='[playblast][{}]'.format(time_tag),
             cmd_script=i_cmd,
             group=None,
+            type='test',
             name='[playblast][1280x720][1-32]'.format(i_index),
             completed_notice=bsc_web.UrlOptions.to_string(
                 dict(

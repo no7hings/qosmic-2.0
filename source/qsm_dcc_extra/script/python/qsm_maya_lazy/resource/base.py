@@ -56,7 +56,7 @@ class Util(object):
 
 class AbsNodeOpt(object):
 
-    SCHEME_BASE = '/node'
+    SCHEME_BASE = '/node/any'
 
     TYPE_INCLUDES = []
 
@@ -243,7 +243,7 @@ class AbsNodeCreator(object):
 
 
 class AbsShapeOpt(AbsNodeOpt):
-    SCHEME_BASE = '/shape'
+    SCHEME_BASE = '/node/shape'
 
     DATA_KEY_INCLUDES = [
         Util.DataKeys.Node,
@@ -286,10 +286,15 @@ class AbsNodeGraphOpt(object):
         )
         return file_path
     
-    def apply_data(self, file_path):
-        qsm_mya_core.SceneFile.import_as_node_graph(
+    def apply_data(self, file_path, frame_offset=None):
+        print frame_offset
+        nodes = qsm_mya_core.SceneFile.import_as_node_graph(
             file_path
         )
+        if frame_offset is not None:
+            for i in nodes:
+                if qsm_mya_core.AnimCurve.check_is_anim_curve(i):
+                    qsm_mya_core.AnimCurve.offset_frame(i, frame_offset)
     
     @classmethod
     def check_is_valid(cls, node_type):

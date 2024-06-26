@@ -148,7 +148,6 @@ class AbsEntity(object):
                 {
                     'properties': properties,
                 }
-
             )
         return cls(entities_cache, entity_id)
 
@@ -345,7 +344,6 @@ class AbsEntitiesCache(object):
 
     def new_entity(self, **kwargs):
         entity_id = Util.new_uuid()
-
         entity_index = len(self.get_entity_ids())
         entity = self.ENTITY_CLS.create(self, entity_id, entity_index, **kwargs)
         self._json_content.set(

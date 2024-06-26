@@ -50,13 +50,13 @@ class MyaUtil(object):
 
     @classmethod
     def get_name_with_namespace_clear(cls, name):
-        return bsc_core.PthNodeMtd.get_dag_name_with_namespace_clear(
+        return bsc_core.BscPath.get_dag_name_with_namespace_clear(
             name, cls.NAMESPACE_PATHSEP
         )
 
     @classmethod
     def get_path_with_namespace_clear(cls, path):
-        return bsc_core.PthNodeMtd.get_dag_path_with_namespace_clear(
+        return bsc_core.BscPath.get_dag_path_with_namespace_clear(
             path, cls.OBJ_PATHSEP, cls.NAMESPACE_PATHSEP
         )
 

@@ -128,9 +128,9 @@ class _AbsDotFile(object):
 
     def __init__(self, file_path):
         self._file_path = file_path
-        self._update_lines()
+        self._load_lines()
 
-    def _update_lines(self):
+    def _load_lines(self):
         self._lines = []
         if self._file_path is not None:
             with open(self._file_path) as f:
@@ -1054,9 +1054,7 @@ class DotMaOpt(_AbsDotFile):
         dict_ = collections.OrderedDict()
         #
         obj_matcher = self.LINE_PATTERN_CLS('createNode {obj_type} -n "{obj_name}";\n')
-        lines = fnmatch.filter(
-            self._lines, obj_matcher.pattern_for_fnmatch
-        )
+        lines = self._obj_lines
         for i_line in lines:
             i_properties = collections.OrderedDict()
             p = parse.parse(
@@ -1149,7 +1147,7 @@ class DotMaOpt(_AbsDotFile):
 
     def _get_obj_is_io_(self, obj_properties):
         lines = self._get_obj_port_lines_(obj_properties)
-        return fnmatch.filter(lines, '\tsetAttr ".io" yes;\n') != []
+        return fnmatch.filter(lines, r'\tsetAttr ".io" yes;\n') != []
 
     def _get_port_properties_at_line_(self, line):
         matchers = [

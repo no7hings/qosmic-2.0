@@ -15,7 +15,7 @@ def main(session):
             file_path
         )
 
-        bsc_core.PrcBaseMtd.execute_with_result_use_thread(cmd)
+        bsc_core.BscProcess.execute_with_result_use_thread(cmd)
 
 
 if __name__ == '__main__':

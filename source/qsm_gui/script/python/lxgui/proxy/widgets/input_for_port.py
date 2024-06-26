@@ -1898,11 +1898,11 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
 
         if scheme == 'folder':
             prx_item.set_icon(
-                gui_qt_core.GuiQtDcc.get_qt_folder_icon()
+                gui_qt_core.GuiQtDcc.generate_qt_directory_icon()
             )
         else:
             prx_item.set_icon(
-                gui_qt_core.GuiQtDcc.get_qt_file_icon(path)
+                gui_qt_core.GuiQtDcc.generate_qt_file_icon(path)
             )
 
         prx_item.set_tool_tip(

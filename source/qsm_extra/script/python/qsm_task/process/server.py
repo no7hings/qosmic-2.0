@@ -449,8 +449,9 @@ class TaskProcessWorker(object):
 
                 import qsm_task.core as qsm_tsk_core
 
-                history_pool = qsm_tsk_core.HistoryPool.generate()
-                history_pool.new_entity(
+                notice_pool = qsm_tsk_core.NoticePool.generate()
+                notice_pool.new_entity(
+                    type=prc_task.get('type'),
                     name=prc_task.get('name'),
                     file=prc_task.get('output_file'),
                     task=prc_task.id

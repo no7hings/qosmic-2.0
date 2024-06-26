@@ -12,7 +12,7 @@ class AbsObjDagPath(object):
         return self._pathsep
 
     def get_name(self):
-        return bsc_core.PthNodeMtd.get_dag_name(
+        return bsc_core.BscPath.get_dag_name(
             path=self._path, pathsep=self._pathsep
         )
 
@@ -29,7 +29,7 @@ class AbsObjDagPath(object):
         return self.path == self.pathsep
 
     def get_parent_path(self):
-        return bsc_core.PthNodeMtd.get_dag_parent_path(
+        return bsc_core.BscPath.get_dag_parent_path(
             path=self._path, pathsep=self._pathsep
         )
 
@@ -48,7 +48,7 @@ class AbsObjDagPath(object):
             )
 
     def get_component_paths(self):
-        return bsc_core.PthNodeMtd.get_dag_component_paths(
+        return bsc_core.BscPath.get_dag_component_paths(
             path=self._path, pathsep=self._pathsep
         )
 
@@ -57,7 +57,7 @@ class AbsObjDagPath(object):
 
     def translate_to(self, pathsep):
         return self.__class__(
-            bsc_core.PthNodeMtd.get_dag_pathsep_replace(
+            bsc_core.BscPath.get_dag_pathsep_replace(
                 self.path,
                 pathsep_src=self.pathsep,
                 pathsep_tgt=pathsep
@@ -66,7 +66,7 @@ class AbsObjDagPath(object):
 
     def clear_namespace_to(self):
         return self.__class__(
-            bsc_core.PthNodeMtd.get_dag_path_with_namespace_clear(
+            bsc_core.BscPath.get_dag_path_with_namespace_clear(
                 self.path,
                 pathsep=self.pathsep,
                 namespacesep=':'
@@ -102,6 +102,6 @@ class AbsPortDagPath(object):
         return self._path
 
     def get_parent_path(self):
-        return bsc_core.PthNodeMtd.get_dag_parent_path(
+        return bsc_core.BscPath.get_dag_parent_path(
             path=self._path, pathsep=self._pathsep
         )

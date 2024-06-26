@@ -7,7 +7,7 @@ import lxbasic.core as bsc_core
 import lxbasic.storage as bsc_storage
 
 
-class ResourceCaches(object):
+class ResourceCacheNodes(object):
     SkinProxyRoot = '|__SKIN_PROXY__'
     SkinProxyName = 'skin_proxy_dgc'
 
@@ -24,7 +24,7 @@ class ResourceCaches(object):
     CfxClothName = 'cfx_cloth_dgc'
 
 
-class AssetCaches(object):
+class ResourceCache(object):
     @classmethod
     def get_key(cls, file_path):
         return bsc_core.BscUuid.generate_by_file(file_path)

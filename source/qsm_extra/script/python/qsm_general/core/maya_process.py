@@ -43,7 +43,7 @@ class MayaCacheProcess(object):
         )
 
     @classmethod
-    def to_option_dict(cls, method, option):
+    def to_option_dict(cls, option):
         option_opt = bsc_core.ArgDictStringOpt(option)
         key = option_opt.get('method_option')
         file_path = cls.to_option_file_path(key)

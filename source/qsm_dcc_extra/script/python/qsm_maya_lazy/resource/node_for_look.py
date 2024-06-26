@@ -5,7 +5,7 @@ from . import base as _base
 
 
 class SurfaceNodeOpt(_base.AbsNodeOpt):
-    SCHEME_BASE = '/surface'
+    SCHEME_BASE = '/node/surface'
 
     TYPE_INCLUDES = [
         'lambert',
@@ -46,7 +46,7 @@ class SurfaceCreator(_base.AbsNodeCreator):
 
 
 class TextureNodeOpt(_base.AbsNodeOpt):
-    SCHEME_BASE = '/texture'
+    SCHEME_BASE = '/node/texture'
 
     TYPE_INCLUDES = [
         'file',

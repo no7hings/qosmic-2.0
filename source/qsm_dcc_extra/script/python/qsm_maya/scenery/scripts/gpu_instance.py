@@ -23,8 +23,8 @@ from ...resource import core as _rsc_core
 
 
 class GpuInstanceOpt(_rsc_core.ResourceScriptOpt):
-    CACHE_ROOT = _gnl_core.ResourceCaches.GpuInstanceRoot
-    CACHE_NAME = _gnl_core.ResourceCaches.GpuInstanceName
+    CACHE_ROOT = _gnl_core.ResourceCacheNodes.GpuInstanceRoot
+    CACHE_NAME = _gnl_core.ResourceCacheNodes.GpuInstanceName
 
     def __init__(self, *args, **kwargs):
         super(GpuInstanceOpt, self).__init__(*args, **kwargs)
@@ -49,7 +49,7 @@ class GpuInstanceOpt(_rsc_core.ResourceScriptOpt):
 
     def generate_args(self):
         file_path = self._resource.file
-        cache_file_path = _gnl_core.AssetCaches.generate_gpu_instance_file(
+        cache_file_path = _gnl_core.ResourceCache.generate_gpu_instance_file(
             file_path
         )
         if os.path.isfile(cache_file_path) is False:
@@ -95,7 +95,7 @@ class GpuInstanceProcess(object):
         ).directory_path
 
         if cache_file_path is None:
-            self._cache_file_path = _gnl_core.AssetCaches.generate_gpu_instance_file(
+            self._cache_file_path = _gnl_core.ResourceCache.generate_gpu_instance_file(
                 self._file_path
             )
         else:

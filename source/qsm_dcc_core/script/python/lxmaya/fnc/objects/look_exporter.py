@@ -50,7 +50,7 @@ class FncExporterForLookAss(gnl_fnc_abstracts.AbsFncOptionBase):
         self._camera = self.get('camera')
         self._texture_use_environ_map = self.get('texture_use_environ_map')
         #
-        self._root = bsc_core.PthNodeMtd.get_dag_pathsep_replace(
+        self._root = bsc_core.BscPath.get_dag_pathsep_replace(
             self._location, pathsep_tgt=mya_core.MyaUtil.OBJ_PATHSEP
         )
         #

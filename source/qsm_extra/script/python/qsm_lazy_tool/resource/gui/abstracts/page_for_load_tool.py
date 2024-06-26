@@ -19,6 +19,8 @@ import lxgui.proxy.abstracts as gui_prx_abstracts
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
+import qsm_general.dotfile as qsm_gnl_dotfile
+
 import qsm_lazy.core as qsm_lzy_core
 
 
@@ -65,40 +67,31 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
         
         self._dcc_node_graph_opt = None
 
-        self._lzy_data_file_opt = None
-        self._lzy_node_data = None
+        self._lzy_data_file_path = None
+
+        self._lzy_data_for_node = None
 
         self.gui_setup_page()
 
-    def do_gui_show_data(self):
-        if self._lzy_data_file_opt is None:
-            self._lzy_node_data = None
-            self._prx_options_node.set(
-                'node_data', []
-            )
-            return
-
-        if self._lzy_data_file_opt.get_is_file() is False:
-            self._lzy_node_data = None
-            self._prx_options_node.set(
-                'node_data', []
-            )
-            return
-
-        if self._lzy_data_file_opt.ext == '.json':
-            node_data = self._lzy_data_file_opt.set_read()
-            if node_data != self._lzy_node_data:
-                self._lzy_node_data = node_data
-                content = bsc_content.Content(value=self._lzy_node_data['data'])
+    def do_gui_update_file(self, file_path):
+        # file opt put first
+        if self._lzy_data_file_path != file_path:
+            self._lzy_data_file_path = file_path
+            file_opt = bsc_storage.StgFileOpt(file_path)
+            if file_opt.ext == '.json':
+                node_data = file_opt.set_read()
+                self._lzy_data_for_node = node_data
+                content = bsc_content.Content(value=node_data['data'])
                 path_opts = map(lambda x: bsc_core.BscPathOpt('/{}'.format(x)), content.get_top_keys())
                 self._prx_options_node.set(
                     'node_data', path_opts
                 )
-        else:
-            self._lzy_node_data = None
-            self._prx_options_node.set(
-                'node_data', []
-            )
+            elif file_opt.ext == '.ma':
+                node_dict = qsm_gnl_dotfile.MayaAscii(file_path).get_node_dict()
+                path_opts = map(lambda x: bsc_core.BscPathOpt('/{}'.format(x)), node_dict.keys())
+                self._prx_options_node.set(
+                    'node_data', path_opts
+                )
 
     def do_gui_load_data_types(self):
         values = qsm_lzy_core.DataTypes.All
@@ -173,7 +166,8 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
             self._prx_options_node.set_dict(
                 node_context
             )
-            self._lzy_data_file_opt = bsc_storage.StgFileOpt(node_context.get('file'))
-            self.do_gui_show_data()
+            file_path = node_context.get('file')
+            if bsc_storage.StgPath.get_is_file(file_path):
+                self.do_gui_update_file(file_path)
         else:
             self._prx_options_node.set_reset()

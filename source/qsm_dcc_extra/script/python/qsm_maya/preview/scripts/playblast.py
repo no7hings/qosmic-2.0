@@ -13,7 +13,7 @@ from ... import core as _mya_core
 
 from ...general import core as _gnl_core
 
-from ...rig import core as _rig_core
+from ...animation import core as _animation_core
 
 from .. import core as _prv_core
 
@@ -97,7 +97,7 @@ class PlayblastProcess(object):
         if file_opt.get_is_file():
             _mya_core.SceneFile.open(self._file_path)
 
-            q = _rig_core.AdvRigsQuery()
+            q = _animation_core.AdvRigsQuery()
 
             q.do_update()
 

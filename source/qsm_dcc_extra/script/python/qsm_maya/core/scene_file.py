@@ -205,10 +205,13 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
             i=True,
             force=True,
             renameAll=True,
-            renamingPrefix='QSM',
+            renamingPrefix='QSM_{}'.format(name.upper()),
             groupReference=1,
             returnNewNodes=1,
             groupName='QSM_{}_GRP'.format(name.upper())
         )
         _ = cmds.file(file_path, **kwargs)
-        cmds.select(cmds.ls(dag=True, head=1), replace=1)
+        cmds.select(_)
+        cmds.sets(name='QSM_{}_SET'.format(name.upper()))
+        cmds.select(cmds.ls(_, dag=1, head=1), replace=1)
+        return _

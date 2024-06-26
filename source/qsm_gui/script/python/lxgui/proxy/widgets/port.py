@@ -116,7 +116,7 @@ class AbsPrxPortBaseDef(object):
         if self.get_is_pseudo_root():
             _ = [i for i in port_paths if '.' not in i]
         else:
-            _ = bsc_core.PthNodeMtd.find_dag_child_paths(
+            _ = bsc_core.BscPath.find_dag_child_paths(
                 port_path, port_paths, pathsep='.'
             )
         return node._get_ports_(_)

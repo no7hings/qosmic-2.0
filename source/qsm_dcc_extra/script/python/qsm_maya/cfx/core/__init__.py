@@ -1,2 +1,2 @@
 # coding:utf-8
-from .rig import *
+from .cfx_rig import *

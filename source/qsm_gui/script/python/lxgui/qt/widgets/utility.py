@@ -388,14 +388,14 @@ class QtMenu(QtWidgets.QMenu):
                         if icon_name:
                             if icon_name == 'box-check':
                                 icon = [
-                                    _qt_core.GuiQtIcon.create_by_icon_name('basic/box-check-off'),
-                                    _qt_core.GuiQtIcon.create_by_icon_name('basic/box-check-on')
+                                    _qt_core.GuiQtIcon.generate_by_icon_name('basic/box-check-off'),
+                                    _qt_core.GuiQtIcon.generate_by_icon_name('basic/box-check-on')
                                 ][is_checked]
                                 item.setIcon(icon)
                             elif icon_name == 'radio-check':
                                 icon = [
-                                    _qt_core.GuiQtIcon.create_by_icon_name('basic/radio-check-off'),
-                                    _qt_core.GuiQtIcon.create_by_icon_name('basic/radio-check-on')
+                                    _qt_core.GuiQtIcon.generate_by_icon_name('basic/radio-check-off'),
+                                    _qt_core.GuiQtIcon.generate_by_icon_name('basic/radio-check-on')
                                 ][is_checked]
                                 item.setIcon(icon)
                             else:
@@ -522,7 +522,7 @@ class QtMenu(QtWidgets.QMenu):
         menu.addAction(widget_action)
         if icon_name:
             widget_action.setIcon(
-                _qt_core.GuiQtIcon.create_by_icon_name(icon_name)
+                _qt_core.GuiQtIcon.generate_by_icon_name(icon_name)
             )
         else:
             widget_action.setIcon(
@@ -823,11 +823,8 @@ class QtInfoLabel(
     def _refresh_widget_draw_geometry_(self):
         x, y = 0, 0
         w, h = self.width(), self.height()
-
-        w_t, h_t = _qt_core.QtFont.compute_size_2(h*.725, self._text)
-
+        w_t, h_t = QtGui.QFontMetrics(self._text_font).width(self._text)+8, h
         self.setFixedWidth(w_t)
-
         self._text_draw_rect.setRect(
             x, y, w_t, h
         )
@@ -844,7 +841,9 @@ class QtInfoLabel(
         self._text = ''
         self._text_draw_rect = QtCore.QRect()
 
-        self.setFont(_qt_core.QtFonts.NameNormal)
+        self._text_font = _qt_core.QtFont.generate(size=8)
+
+        self.setFont(self._text_font)
 
         self.setFixedHeight(20)
 
@@ -863,8 +862,8 @@ class QtInfoLabel(
             painter._draw_text_by_rect_(
                 rect=self._text_draw_rect,
                 text=self._text,
-                text_color=_qt_core.QtColors.Text,
-                font=self.font(),
+                text_color=_gui_core.GuiRgba.DarkWhite,
+                font=self._text_font,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             )
 

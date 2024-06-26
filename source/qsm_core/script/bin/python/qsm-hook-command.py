@@ -126,7 +126,7 @@ def __execute_hook(option):
             for k, v in hook_environs_extend:
                 environs_extend[k] = v
         # run command by subprocess
-        bsc_core.PrcBaseMtd.execute_with_result_use_thread(
+        bsc_core.BscProcess.execute_with_result_use_thread(
             opt_cmd, environs_extend=environs_extend
         )
 

@@ -181,7 +181,7 @@ class AbsQtShowBaseForVirtualItemDef(
         def cache_fnc_():
             # noinspection PyBroadException
             try:
-                bsc_core.PrcBaseMtd.execute_with_result(
+                bsc_core.BscProcess.execute_with_result(
                     cmd
                 )
             except Exception:

@@ -16,7 +16,7 @@ class LocatorNodeOpt(_base.AbsNodeOpt):
         'vortexField',
     ]
 
-    SCHEME_BASE = '/xform'
+    SCHEME_BASE = '/node/xform'
 
     def __init__(self, *args, **kwargs):
         super(LocatorNodeOpt, self).__init__(*args, **kwargs)

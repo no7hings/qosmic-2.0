@@ -28,6 +28,7 @@ if qsm_tsk_process.TaskProcessClient.get_server_status():
         qsm_tsk_process.TaskProcessClient.new_entity(
             cmd_script=i_cmd_script,
             group=None,
+            type='test',
             name='[playblast][1280x720][1-32]'.format(i_index),
             icon_name='application/maya',
             output_file='Z:/temeporaries/dongchangbao/playblast/test_source.mov',

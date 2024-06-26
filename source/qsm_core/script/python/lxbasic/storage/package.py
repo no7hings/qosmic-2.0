@@ -96,7 +96,7 @@ class PkgContextNew(object):
 
     def get_resolved_packages_data(self):
         if self._args:
-            results = bsc_cor_process.PrcBaseMtd.execute_as_block(
+            results = bsc_cor_process.BscProcess.execute_as_block(
                 '{} {} -v'.format(self._bin_source, self._args)
             )
             if not results:

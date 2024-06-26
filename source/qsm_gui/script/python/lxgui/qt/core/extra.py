@@ -180,7 +180,7 @@ class QtSystemTrayIcon(QtWidgets.QSystemTrayIcon):
         widget_action = QtWidgetAction(menu)
         widget_action.setFont(_base.QtFonts.NameNormal)
         widget_action.setText('quit')
-        widget_action.setIcon(_base.GuiQtIcon.create_by_icon_name('window/close'))
+        widget_action.setIcon(_base.GuiQtIcon.generate_by_icon_name('window/close'))
         menu.addAction(widget_action)
         # noinspection PyUnresolvedReferences
         widget_action.triggered.connect(
@@ -253,7 +253,7 @@ class GuiQtMenuOpt(object):
         widget_action.setFont(_base.QtFonts.NameNormal)
         widget_action.setText(name)
         widget_action.setIcon(
-            _base.GuiQtIcon.create_by_icon_name('file/folder')
+            _base.GuiQtIcon.generate_by_icon_name('file/folder')
         )
         sub_menu = menu.__class__(menu)
         sub_menu.setTearOffEnabled(True)
@@ -285,7 +285,7 @@ class GuiQtMenuOpt(object):
         menu.addAction(widget_action)
         if icon_name:
             widget_action.setIcon(
-                _base.GuiQtIcon.create_by_icon_name(icon_name)
+                _base.GuiQtIcon.generate_by_icon_name(icon_name)
             )
         else:
             widget_action.setIcon(

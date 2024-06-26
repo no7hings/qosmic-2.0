@@ -69,7 +69,7 @@ class FncImporterForCameraAbc(
                             j_camera.set_display_()
                     #
                     target_obj_path = '{}|{}'.format(
-                        mya_location, bsc_core.PthNodeMtd.get_dag_name_with_namespace_clear(i_obj.name)
+                        mya_location, bsc_core.BscPath.get_dag_name_with_namespace_clear(i_obj.name)
                     )
                     obj_tgt = mya_dcc_objects.Node(target_obj_path)
                     if obj_tgt.get_is_exists() is True:

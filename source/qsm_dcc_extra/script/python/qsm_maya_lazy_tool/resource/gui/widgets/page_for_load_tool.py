@@ -38,10 +38,10 @@ class PrxPageForLoadTool(_abstracts.AbsPrxPageForLoadTool):
             if not path_map:
                 return
 
-            if not self._lzy_node_data:
+            if not self._lzy_data_for_node:
                 return
 
-            node_scheme = self._lzy_node_data['scheme']
+            node_scheme = self._lzy_data_for_node['scheme']
             self.do_gui_update_node_opt_by_dcc_selection_for_dynamic(
                 path_map, node_scheme
             )
@@ -66,23 +66,20 @@ class PrxPageForLoadTool(_abstracts.AbsPrxPageForLoadTool):
             self._dcc_node_graph_opt = node_graph_opt
 
     def generate_frame_offset_values(self):
-        random_enable = self._prx_options_node.get('animation.frame_offset.random')
+        random_enable = self._prx_options_node.get('animation.frame_offset.random_enable')
         frame_offset = self._prx_options_node.get('animation.frame_offset.value')
-        if random_enable:
-            if frame_offset != 0:
-                if frame_offset < 0:
-                    return range(frame_offset, 0)
-                return range(frame_offset)
-        return [0]
+        if random_enable is True:
+            random_range = self._prx_options_node.get('animation.frame_offset.random_range')
+            return range(*random_range)
+        return [frame_offset]
 
     @qsm_mya_core.Undo.execute
     def ao_apply(self):
-        random.seed(0)
         frame_offset_values = self.generate_frame_offset_values()
-        if self._dcc_node_opt_list and self._lzy_data_file_opt is not None:
+        if self._dcc_node_opt_list and self._lzy_data_file_path is not None:
             [
                 x.apply_data(
-                    self._lzy_data_file_opt.path,
+                    self._lzy_data_file_path,
                     frame_offset=random.choice(frame_offset_values),
                     force=self._prx_options_node.get('animation.force'),
                     excludes=self.generate_excludes(),
@@ -93,7 +90,8 @@ class PrxPageForLoadTool(_abstracts.AbsPrxPageForLoadTool):
 
         if self._dcc_node_graph_opt is not None:
             self._dcc_node_graph_opt.apply_data(
-                self._lzy_data_file_opt.path
+                self._lzy_data_file_path,
+                frame_offset=random.choice(frame_offset_values)
             )
 
     @qsm_mya_core.Undo.execute
@@ -105,7 +103,7 @@ class PrxPageForLoadTool(_abstracts.AbsPrxPageForLoadTool):
                 i_opt = i_creator.do_create()
                 if i_opt is not None:
                     i_opt.apply_data(
-                        self._lzy_data_file_opt.path,
+                        self._lzy_data_file_path,
                         frame_offset=random.choice(frame_offset_values),
                         force=self._prx_options_node.get('animation.force'),
                         excludes=self.generate_excludes(),
@@ -116,6 +114,8 @@ class PrxPageForLoadTool(_abstracts.AbsPrxPageForLoadTool):
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxPageForLoadTool, self).__init__(window, session, *args, **kwargs)
+
+        random.seed(0)
 
     def do_gui_refresh_all(self):
         super(PrxPageForLoadTool, self).do_gui_refresh_all()

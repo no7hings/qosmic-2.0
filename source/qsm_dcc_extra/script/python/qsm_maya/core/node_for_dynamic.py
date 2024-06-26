@@ -77,8 +77,19 @@ class RebuildForNucleus(object):
 
 class NCloth(object):
     @classmethod
-    def find_output_geometry(cls, path):
+    def find_input_mesh_transform(cls, path):
         # target
+        _ = _attribute.NodeAttribute.get_source_node(
+            path, 'inputMesh', 'mesh'
+        )
+        if _:
+            return _shape.Shape.get_transform(_)
+
+
+class NRigid(object):
+    @classmethod
+    def find_input_mesh_transform(cls, path):
+        # source
         _ = _attribute.NodeAttribute.get_source_node(
             path, 'inputMesh', 'mesh'
         )

@@ -40,11 +40,11 @@ class VdoFileOpt(object):
                 ]
                 #
                 if block is True:
-                    bsc_cor_process.PrcBaseMtd.execute_with_result(
+                    bsc_cor_process.BscProcess.execute_with_result(
                         ' '.join(cmd_args)
                     )
                 else:
-                    bsc_cor_process.PrcBaseMtd.set_run(
+                    bsc_cor_process.BscProcess.set_run(
                         ' '.join(cmd_args)
                     )
         return thumbnail_file_path
@@ -85,11 +85,11 @@ class VdoFileOpt(object):
             ]
             cmd = ' '.join(cmd_args)
             if block is True:
-                bsc_cor_process.PrcBaseMtd.execute_with_result(
+                bsc_cor_process.BscProcess.execute_with_result(
                     cmd
                 )
             else:
-                bsc_cor_process.PrcBaseMtd.set_run(
+                bsc_cor_process.BscProcess.set_run(
                     cmd
                 )
 
@@ -103,7 +103,7 @@ class VdoFileOpt(object):
                 user=bsc_cor_base.BscSystem.get_user_name()
             )
         )
-        bsc_cor_process.PrcBaseMtd.execute_with_result(
+        bsc_cor_process.BscProcess.execute_with_result(
             cmd_string
         )
 
@@ -113,7 +113,7 @@ class VdoFileOpt(object):
             u'-i "{}"'.format(self.path),
         ]
         cmd_string = ' '.join(cmd_args)
-        bsc_cor_process.PrcBaseMtd.execute_as_trace(
+        bsc_cor_process.BscProcess.execute_as_trace(
             cmd_string
         )
 
@@ -129,7 +129,7 @@ class VdoFileOpt(object):
             '"{}"'.format(thumbnail_path)
         ]
         cmd_string = ' '.join(cmd_args)
-        bsc_cor_process.PrcBaseMtd.execute_as_trace(
+        bsc_cor_process.BscProcess.execute_as_trace(
             cmd_string
         )
 
@@ -561,7 +561,7 @@ class VdoRvioOpt(object):
             # maximum = 2048?
             # '-resize {width}x0'
         ]
-        bsc_cor_process.PrcBaseMtd.execute_with_result(
+        bsc_cor_process.BscProcess.execute_with_result(
             ' '.join(cmd_args).format(**self._option)
         )
 
@@ -577,7 +577,7 @@ class VdoRvioOpt(object):
             '-outparams timecode={start_frame}',
             '-quality {quality}',
         ]
-        bsc_cor_process.PrcBaseMtd.execute_with_result(
+        bsc_cor_process.BscProcess.execute_with_result(
             ' '.join(cmd_args).format(**self._option)
         )
 
@@ -593,6 +593,6 @@ class VdoRvioOpt(object):
             '-quality {quality}',
             '-copyright "©2013-2022 Papergames. All rights reserved."'
         ]
-        bsc_cor_process.PrcBaseMtd.execute_with_result(
+        bsc_cor_process.BscProcess.execute_with_result(
             ' '.join(cmd_args).format(**self._option)
         )

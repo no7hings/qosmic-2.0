@@ -9,7 +9,7 @@ option:
         name_chs: '懒人解算工具'
         group_name: 'General(s)'
         #
-        icon_name: 'qosmic/lazy-resource-register'
+        icon_name: 'qosmic/lazy-cfx-tool'
         tool_tip:
             |-
             For CFX.
@@ -86,6 +86,7 @@ build:
                             name_chs: '帧偏移'
                             value: 0
                             tool_tip: '...'
+                            visible: False
 
                         setting/frame_step:
                             widget: integer
@@ -143,10 +144,17 @@ build:
                             name_chs: '几何缓存'
                             value: False
 
-                        cloth/export_cfx_cloth_use_localhost:
+                        cloth/export_cfx_cloth:
                             widget: button
                             name: 'Export Cache (localhost)'
-                            name_chs: '导出CFX布料（本地）'
+                            name_chs: '导出CFX布料'
+                            icon: 'upload'
+                            join_to_next: True
+
+                        cloth/export_cfx_cloth_as_backstage:
+                            widget: button
+                            name: 'Export Cache (localhost)'
+                            name_chs: '导出CFX布料（后台）'
                             icon: 'upload'
 
             import:
@@ -177,7 +185,7 @@ build:
                             name: 'File'
                             name_chs: '文件'
 
-                        cloth/import_cfx_cloth:
+                        cloth/load_cfx_cloth:
                             widget: button
                             name: 'Import Cache'
                             name_chs: '导入CFX布料'
@@ -201,6 +209,14 @@ build:
             no_cache_type:
                 message: 'to be supplemented.'
                 message_chs: '勾选至少一种缓存类型（Alembic缓存， 几何缓存）。'
+            
+            no_task_server:
+                message: 'Task Server is not Start.'
+                message_chs: '任务服务器未开启。'
+
+            task_submit_successful:
+                message: 'Task Submit Successful.'
+                message_chs: '任务提交成功。'
 
     rig_selection_scheme:
         options: ['root', 'geometry_root', 'deformation_root', 'motion_root', 'main_control']

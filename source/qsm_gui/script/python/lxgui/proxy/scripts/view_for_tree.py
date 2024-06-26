@@ -315,7 +315,7 @@ class GuiPrxScpForTreeAdd(gui_prx_abstracts.AbsGuiPrxCacheDef):
         self._init_cache_def_(self._prx_tree_view)
 
     def restore_all(self):
-        self._generate_cache(self._item_dict)
+        self._push_cache()
         self._prx_tree_view.set_clear()
 
     def _set_dag_dcc_obj_gui_add_(self, obj):
@@ -381,12 +381,12 @@ class GuiPrxScpForTreeAdd(gui_prx_abstracts.AbsGuiPrxCacheDef):
         prx_item.set_gui_dcc_obj(obj, namespace=self._dcc_namespace)
         self._item_dict[key] = prx_item
 
-        if key in self._cache_expand:
-            prx_item.set_expanded(self._cache_expand[key])
+        if key in self._prx_tree_view._expand_cache_dict:
+            prx_item.set_expanded(self._prx_tree_view._expand_cache_dict[key])
         else:
             prx_item.set_expanded(False)
-        if key in self._cache_check:
-            prx_item.set_checked(self._cache_check[key])
+        if key in self._prx_tree_view._check_cache_dict:
+            prx_item.set_checked(self._prx_tree_view._check_cache_dict[key])
         else:
             prx_item.set_checked(False)
         return prx_item
@@ -474,7 +474,7 @@ class GuiPrxScpForStorageTreeAdd(gui_prx_abstracts.AbsGuiPrxCacheDef):
         self._dcc_namespace = 'storage'
 
     def restore_all(self):
-        self._generate_cache(self._item_dict)
+        self._push_cache()
         self._prx_tree_view.set_clear()
 
     def _set_dag_dcc_obj_gui_add_(self, obj):
@@ -549,12 +549,12 @@ class GuiPrxScpForStorageTreeAdd(gui_prx_abstracts.AbsGuiPrxCacheDef):
                 )
 
             self._item_dict[key] = prx_item
-            if key in self._cache_expand:
-                prx_item.set_expanded(self._cache_expand[key])
+            if key in self._prx_tree_view._expand_cache_dict:
+                prx_item.set_expanded(self._prx_tree_view._expand_cache_dict[key])
             else:
                 prx_item.set_expanded(False)
-            if key in self._cache_check:
-                prx_item.set_checked(self._cache_check[key])
+            if key in self._prx_tree_view._check_cache_dict:
+                prx_item.set_checked(self._prx_tree_view._check_cache_dict[key])
             else:
                 prx_item.set_checked(False)
             #

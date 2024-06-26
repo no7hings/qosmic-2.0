@@ -19,6 +19,6 @@ c = and_core.AndTextureOpt.generate_create_exr_as_acescg_command(
 )
 
 
-print bsc_core.PrcBaseMtd.execute_with_result(
+print bsc_core.BscProcess.execute_with_result(
     c
 )

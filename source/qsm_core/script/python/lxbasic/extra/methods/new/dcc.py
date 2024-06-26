@@ -11,7 +11,7 @@ from ... import abstracts as bsc_etr_abstracts
 class EtrRv(bsc_etr_abstracts.AbsEtrRv):
     @classmethod
     def open_file(cls, file_path):
-        bsc_core.PrcBaseMtd.set_run_with_result_use_thread(
+        bsc_core.BscProcess.set_run_with_result_use_thread(
             'rez-env pgrv -- rv "{}"'.format(file_path)
         )
 
@@ -77,7 +77,7 @@ class EtrRv(bsc_etr_abstracts.AbsEtrRv):
         output_opt = bsc_storage.StgFileOpt(output)
         output_opt.create_directory()
         default_kwargs['output'] = output
-        bsc_core.PrcBaseMtd.execute_with_result(
+        bsc_core.BscProcess.execute_with_result(
             ' '.join(cmd_args).format(**default_kwargs)
         )
 

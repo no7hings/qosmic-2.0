@@ -346,7 +346,7 @@ class FncImporterForGeometryAbc(gnl_fnc_abstracts.AbsFncOptionBase):
                     obj.set_visible(False)
                 #
                 target_obj_path = '{}|{}'.format(
-                    root, bsc_core.PthNodeMtd.get_dag_name_with_namespace_clear(obj.name)
+                    root, bsc_core.BscPath.get_dag_name_with_namespace_clear(obj.name)
                 )
                 if cmds.objExists(target_obj_path) is False:
                     obj.parent_to_path(root)

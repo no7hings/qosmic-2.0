@@ -962,11 +962,11 @@ class QtPopupAsCompletion(
                 if self._use_as_storage is True:
                     if os.path.isdir(i_text):
                         i_item_widget._set_icon_(
-                            gui_qt_core.GuiQtDcc.get_qt_folder_icon(use_system=True)
+                            gui_qt_core.GuiQtDcc.generate_qt_directory_icon(use_system=True)
                         )
                     elif os.path.isfile(i_text):
                         i_item_widget._set_icon_(
-                            gui_qt_core.GuiQtDcc.get_qt_file_icon(i_text)
+                            gui_qt_core.GuiQtDcc.generate_qt_file_icon(i_text)
                         )
                     else:
                         i_item_widget._set_icon_by_text_(i_text)

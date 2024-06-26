@@ -25,7 +25,7 @@ class OslFileMtd(object):
             bsc_cor_execute.ExcBaseMtd.oslc(),
             '-o "{}" "{}"'.format(compile_file_path, file_opt.path),
         ]
-        bsc_cor_process.PrcBaseMtd.execute_with_result(' '.join(cmd_args))
+        bsc_cor_process.BscProcess.execute_with_result(' '.join(cmd_args))
 
     @classmethod
     def get_info(cls, file_path):
@@ -38,7 +38,7 @@ class OslFileMtd(object):
             bsc_cor_execute.ExcBaseMtd.oslinfo(),
             '-v "{}"'.format(compile_file_path),
         ]
-        p = bsc_cor_process.PrcBaseMtd.set_run(' '.join(cmd_args))
+        p = bsc_cor_process.BscProcess.set_run(' '.join(cmd_args))
         _ = p.stdout.readlines()
         if _:
             p = parse.parse(cls.OBJ_PATTERN, _[0])

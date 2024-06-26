@@ -85,14 +85,14 @@ def set_asset_geometry_proxy_usd_export(self):
                 geometry_usd_hi_file_path,
                 geometry_proxy_usd_low_file_path
             )
-            bsc_core.PrcBaseMtd.execute_with_result(
+            bsc_core.BscProcess.execute_with_result(
                 cmd_0
             )
             cmd_1 = 'hython -m process.houHdaProcess -hda reducemesh -m 2 -i "{}" -o "{}"'.format(
                 geometry_usd_hi_file_path,
                 geometry_proxy_usd_shell_file_path
             )
-            bsc_core.PrcBaseMtd.execute_with_result(
+            bsc_core.BscProcess.execute_with_result(
                 cmd_1
             )
 
@@ -143,14 +143,14 @@ def set_asset_geometry_proxy_abc_export(self):
                 geometry_usd_hi_file_path,
                 geometry_proxy_abc_low_file_path
             )
-            bsc_core.PrcBaseMtd.execute_with_result(
+            bsc_core.BscProcess.execute_with_result(
                 cmd_0
             )
             cmd_1 = 'hython -m process.houHdaProcess -hda reducemesh -m 2 -i "{}" -o "{}"'.format(
                 geometry_usd_hi_file_path,
                 geometry_proxy_abc_shell_file_path
             )
-            bsc_core.PrcBaseMtd.execute_with_result(
+            bsc_core.BscProcess.execute_with_result(
                 cmd_1
             )
 

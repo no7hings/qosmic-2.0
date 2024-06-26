@@ -380,7 +380,7 @@ class FncGeometryExporter(gnl_fnc_abstracts.AbsFncOptionBase):
 
     @classmethod
     def _create_location_fnc_(cls, stage, location):
-        dag_path_comps = bsc_core.PthNodeMtd.get_dag_component_paths(location, pathsep=usd_core.UsdNodes.PATHSEP)
+        dag_path_comps = bsc_core.BscPath.get_dag_component_paths(location, pathsep=usd_core.UsdNodes.PATHSEP)
         if dag_path_comps:
             dag_path_comps.reverse()
         #

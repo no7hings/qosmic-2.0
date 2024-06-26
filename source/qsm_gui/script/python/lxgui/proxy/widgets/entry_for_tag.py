@@ -80,9 +80,12 @@ class PrxTagInput(
     def expand_all_groups(self):
         self._qt_view._expand_all_groups_()
 
-    def expand_for_group(self, path):
-        self._qt_view._expand_for_group_(path)
-    
+    def collapse_all_groups(self):
+        self._qt_view._collapse_all_groups_()
+
+    def expand_for_all_from(self, path):
+        self._qt_view._expand_for_all_from_(path)
+
     def clear_all_checked(self):
         self._qt_view._clear_all_checked_()
 

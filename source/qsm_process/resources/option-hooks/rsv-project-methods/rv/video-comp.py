@@ -10,7 +10,7 @@ def main(session):
         **hook_option_opt.get_raw()
     )
 
-    bsc_core.PrcBaseMtd.execute_with_result(
+    bsc_core.BscProcess.execute_with_result(
         cmd
     )
 

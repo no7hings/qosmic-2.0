@@ -86,7 +86,7 @@ class AbsPnlLauncherForApplication(gui_prx_widgets.PrxSessionWindow):
                 ).get_command(
                     args_execute=[
                         '-- lxapp -o "{}"'.format(
-                            bsc_core.PrcBaseMtd._cmd_cleanup(option)
+                            bsc_core.BscProcess._cmd_cleanup(option)
                         )
                     ],
                 )

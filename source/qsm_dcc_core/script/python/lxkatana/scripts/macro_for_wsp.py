@@ -1005,7 +1005,7 @@ class ScpComponentLayout(AbsWsp):
             paths = ktn_core.CEL(
                 self._ktn_obj, self._obj_opt.get('CEL')
             ).parse()
-            paths_leaf = bsc_core.PthNodeMtd.to_leaf_paths(paths)
+            paths_leaf = bsc_core.BscPath.to_leaf_paths(paths)
             if paths_leaf:
                 keys = []
                 bboxes = []

@@ -107,7 +107,7 @@ class _SubProcess(object):
         self.__master_fd, self.__slave_fd = self.M_PTY.openpty()
         clear_environ = kwargs.get('clear_environ', False)
         if clear_environ == 'auto':
-            clear_environ = bsc_core.PrcBaseMtd.check_command_clear_environ(self.__cmd)
+            clear_environ = bsc_core.BscProcess.check_command_clear_environ(self.__cmd)
         if clear_environ is True:
             self.__proc = subprocess.Popen(
                 self.__cmd,

@@ -207,7 +207,7 @@ class UsdStageOpt(UsdBasic):
         )
 
     def set_root_create(self, root, override=False):
-        dag_path_comps = bsc_core.PthNodeMtd.get_dag_component_paths(
+        dag_path_comps = bsc_core.BscPath.get_dag_component_paths(
             root, pathsep=_configure.UsdNodes.PATHSEP
         )
         if dag_path_comps:
@@ -231,7 +231,7 @@ class UsdStageOpt(UsdBasic):
         #
         path_opt = bsc_core.BscPathOpt(regex)
         #
-        child_paths = bsc_core.PthNodeMtd.find_dag_child_paths(
+        child_paths = bsc_core.BscPath.find_dag_child_paths(
             path_opt.get_parent_path(), list_
         )
         #
@@ -456,7 +456,7 @@ class UsdStageOpt(UsdBasic):
     def load_by_location_fnc(self, file_path, location_source, location_target):
         usd_location = self._usd_stage.GetPseudoRoot()
         #
-        dag_path_comps = bsc_core.PthNodeMtd.get_dag_component_paths(
+        dag_path_comps = bsc_core.BscPath.get_dag_component_paths(
             location_target, pathsep=_configure.UsdNodes.PATHSEP
         )
         if dag_path_comps:
@@ -509,7 +509,7 @@ class UsdFileWriteOpt(object):
         self._usd_stage = Usd.Stage.CreateInMemory()
 
     def set_location_add(self, location):
-        dag_path_comps = bsc_core.PthNodeMtd.get_dag_component_paths(
+        dag_path_comps = bsc_core.BscPath.get_dag_component_paths(
             location, pathsep=_configure.UsdNodes.PATHSEP
         )
         if dag_path_comps:

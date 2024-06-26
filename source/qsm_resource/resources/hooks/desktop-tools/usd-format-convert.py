@@ -33,7 +33,7 @@ class PnlUsdFormatConvert(gui_prx_widgets.PrxSessionToolWindow):
             cmd = 'rez-env usd -- usdcat -o {} {}'.format(
                 file_path_tgt, file_path_src
             )
-            bsc_core.PrcBaseMtd.execute_with_result(
+            bsc_core.BscProcess.execute_with_result(
                 cmd
             )
 

@@ -14,6 +14,6 @@ cmd_script = qsm_gnl_core.MayaCacheProcess.generate_cmd_script_by_option_dict(
 
 print cmd_script
 
-bsc_core.PrcBaseMtd.execute_as_trace(
+bsc_core.BscProcess.execute_as_trace(
     cmd_script
 )

@@ -5,6 +5,6 @@ return_dict = {}
 
 cmd = r'rez-env maya-2019 -- mayabatch -command "python(\"print \\\"A\\\"\")"'
 
-bsc_core.PrcBaseMtd.execute_as_trace(
+bsc_core.BscProcess.execute_as_trace(
     cmd
 )
