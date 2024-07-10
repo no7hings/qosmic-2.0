@@ -21,6 +21,15 @@ class Selection(object):
         return [x.split('.')[0] for x in cmds.ls(selection=1, long=1) or []]
 
     @classmethod
+    def get_main_controls(cls):
+        list_ = []
+        _ = [x.split('.')[0] for x in cmds.ls(selection=1, long=1) or []]
+        for i in _:
+            if cmds.objExists(i+'.translate') is True and cmds.objExists(i+'.rotate') is True:
+                list_.append(i)
+        return list_
+
+    @classmethod
     def get_one_node(cls):
         _ = cls.get_as_nodes()
         if _:

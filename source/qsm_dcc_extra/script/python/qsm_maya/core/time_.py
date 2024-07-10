@@ -81,10 +81,17 @@ class Frame(object):
         return cmds.currentTime(query=1)
 
     @classmethod
-    def get_fps(cls):
+    def get_fps_tag(cls):
         _ = cmds.currentUnit(query=1, time=1)
         if _ in cls.FPS_QUERY_DICT:
             return cls.FPS_QUERY_DICT[_]
+        else:
+            if _.endswith('fps'):
+                return _[:-3]+'_fps'
+
+    @classmethod
+    def get_fps_value(cls):
+        return float(cls.get_fps_tag().split('_')[0])
 
     @classmethod
     def get_fps_(cls):
@@ -107,7 +114,7 @@ class Frame(object):
 
     @classmethod
     def get_playback_info(cls):
-        fps = cls.get_fps()
+        fps = cls.get_fps_tag()
         speed = cls.get_playback_speed()
         if speed == 0:
             return 'Play every frame'

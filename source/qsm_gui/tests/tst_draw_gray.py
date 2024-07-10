@@ -27,6 +27,6 @@ if __name__ == '__main__':
     #
     w = W()
     w.set_definition_window_size((320, 480))
-    w.set_window_show()
+    w.show_window_auto()
     #
     sys.exit(app.exec_())

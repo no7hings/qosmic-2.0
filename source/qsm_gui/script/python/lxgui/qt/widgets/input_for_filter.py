@@ -323,7 +323,7 @@ class QtInputAsFilter(
     def _accept_element_(self, value):
         self._text_bubbles._create_bubble_(value)
         self.input_value_changed.emit()
-        self.input_value_change_accepted.emit(value)
+        self.input_value_accepted.emit(value)
 
 
 class QtInputAsBubble(

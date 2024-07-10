@@ -259,8 +259,10 @@ class AbsQtStatusBaseDef(object):
             return cls._get_rgb_args_(*cls.Rgba.Orange)
         elif status in {cls.Status.Suspended}:
             return cls._get_rgb_args_(*cls.Rgba.Yellow)
-        elif status in {cls.Status.Failed, cls.Status.Error, cls.Status.Killed}:
-            return cls._get_rgb_args_(*cls.Rgba.TorchRed)
+        elif status in {cls.Status.Failed, cls.Status.Error}:
+            return cls._get_rgb_args_(*cls.Rgba.Red)
+        elif status in {cls.Status.Killed}:
+            return cls._get_rgb_args_(*cls.Rgba.Pink)
         elif status in {cls.Status.Completed}:
             return cls._get_rgb_args_(*cls.Rgba.Green)
         return cls._get_rgb_args_(*cls.Rgba.Transparent)
@@ -554,7 +556,8 @@ class AbsQtFrameBaseDef(object):
         self._frame_border_radius = 0
         #
         self._frame_draw_is_enable = False
-        self._rect_frame_draw = QtCore.QRect()
+        self._frame_rect = QtCore.QRect()
+        self._frame_draw_rect = QtCore.QRect()
         self._frame_draw_margins = 0, 0, 0, 0
         self._frame_size = 20, 20
         self._frame_border_draw_style = QtCore.Qt.SolidLine
@@ -583,12 +586,12 @@ class AbsQtFrameBaseDef(object):
         return self._frame_background_color
 
     def _set_frame_draw_rect_(self, x, y, w, h):
-        self._rect_frame_draw.setRect(
+        self._frame_draw_rect.setRect(
             x, y, w, h
         )
 
     def _get_frame_rect_(self):
-        return self._rect_frame_draw
+        return self._frame_draw_rect
 
     def _set_frame_size_(self, w, h):
         self._frame_size = w, h
@@ -1475,7 +1478,7 @@ class AbsQtValueHistoryExtraDef(object):
                         self._history_key,
                         value
                     )
-            #
+
             self._refresh_history_()
 
     def _pull_history_latest_(self):

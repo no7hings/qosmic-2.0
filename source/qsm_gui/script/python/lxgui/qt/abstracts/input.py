@@ -30,8 +30,8 @@ class AbsQtInputBaseDef(
     #   clear
     user_input_value_cleared = qt_signal()
 
-    input_value_change_accepted = qt_signal(object)
-    user_input_value_change_accepted = qt_signal(object)
+    input_value_accepted = qt_signal(object)
+    user_input_value_accepted = qt_signal(object)
 
     def _init_input_base_def_(self, widget):
         self._init_value_base_def_(widget)

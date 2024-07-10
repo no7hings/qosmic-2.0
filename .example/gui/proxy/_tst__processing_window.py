@@ -7,13 +7,18 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 
 def process_fnc_(w_):
+    import qsm_general.core as qsm_gnl_core
+
     w_.start(
-        gnl_dcc_core.PythonProcess.generate_command(
-            'method=test'
+        qsm_gnl_core.MayaCacheProcess.generate_command(
+            'method=test-process'
         )
     )
 
 
-w = gui_prx_core.GuiProxyUtil.show_window_proxy_auto(gui_prx_widgets.PrxProcessingWindow, window_process_fnc=process_fnc_)
+w = gui_prx_core.GuiProxyUtil.show_window_proxy_auto(
+    gui_prx_widgets.PrxSubProcessWindow, window_process_fnc=process_fnc_
+)
+
 
 

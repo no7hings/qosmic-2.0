@@ -150,7 +150,7 @@ class AbsQtHead(
         bkg_color = gui_qt_core.QtColors.HeadBackground
 
         painter._draw_frame_by_rect_(
-            self._rect_frame_draw,
+            self._frame_draw_rect,
             border_color=bdr_color,
             background_color=bkg_color,
             # border_radius=1,
@@ -160,7 +160,7 @@ class AbsQtHead(
         if self._icon_name_is_enable is True:
             if self._icon_text is not None:
                 painter._draw_frame_color_with_name_text_by_rect_(
-                    rect=self._rect_frame_draw,
+                    rect=self._frame_draw_rect,
                     text=self._icon_text,
                     offset=offset,
                 )
@@ -284,7 +284,7 @@ class QtHeadStyleB(AbsQtHead):
         if self._icon_name_is_enable is True:
             if self._icon_text is not None:
                 painter._draw_frame_color_with_name_text_by_rect_(
-                    rect=self._rect_frame_draw,
+                    rect=self._frame_draw_rect,
                     text=self._icon_text,
                     offset=offset,
                 )
@@ -381,7 +381,7 @@ class QtHeadStyleC(AbsQtHead):
         if self._icon_name_is_enable is True:
             if self._icon_text is not None:
                 painter._draw_frame_color_with_name_text_by_rect_(
-                    rect=self._rect_frame_draw,
+                    rect=self._frame_draw_rect,
                     text=self._icon_text,
                     offset=offset,
                 )
@@ -475,7 +475,7 @@ class AbsQtHead1(
         bkg_color = gui_qt_core.QtColors.HeadBackground
 
         painter._draw_frame_by_rect_(
-            rect=self._rect_frame_draw,
+            rect=self._frame_draw_rect,
             border_color=bdr_color,
             background_color=bkg_color,
             # border_radius=self._frame_border_radius,

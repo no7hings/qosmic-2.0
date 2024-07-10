@@ -145,9 +145,9 @@ def __execute_option_hook(option):
 
         deadline_enable = option_opt.get_as_boolean('deadline_enable')
         if deadline_enable is True:
-            session.set_execute_by_deadline()
+            session.execute_hook_with_deadline()
         else:
-            session.set_execute_by_shell()
+            session.execute_hook_with_shell()
 
 
 if __name__ == '__main__':

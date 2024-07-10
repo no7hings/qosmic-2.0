@@ -73,9 +73,9 @@ class GuiProxyUtil(object):
                 qt_window._set_window_system_tray_icon_(qt_system_tray_icon)
 
             if isinstance(show_kwargs, dict):
-                prx_window.set_window_show(**show_kwargs)
+                prx_window.show_window_auto(**show_kwargs)
             else:
-                prx_window.set_window_show()
+                prx_window.show_window_auto()
 
             if window_process_fnc is not None:
                 window_process_fnc(prx_window)
@@ -88,9 +88,9 @@ class GuiProxyUtil(object):
                 prx_window.set_window_ask_for_close_enable(window_ask_for_close)
 
             if isinstance(show_kwargs, dict):
-                prx_window.set_window_show(**show_kwargs)
+                prx_window.show_window_auto(**show_kwargs)
             else:
-                prx_window.set_window_show()
+                prx_window.show_window_auto()
 
             if window_process_fnc is not None:
                 window_process_fnc(prx_window)
@@ -220,7 +220,7 @@ class GuiProxyProcess(object):
                 window_proxy = i_window.gui_proxy
                 if hasattr(window_proxy, 'PRX_CATEGORY'):
                     if window_proxy.PRX_CATEGORY in {'tool_window', 'dialog_window'}:
-                        p = window_proxy.set_progress_create(maximum, label=label)
+                        p = window_proxy.create_progress_model(maximum, label=label)
                         list_.append(p)
         return list_
 
@@ -240,7 +240,7 @@ class GuiProxyException(object):
 
         _1.set_window_title('Exception')
         _1.set_definition_window_size((640, 320))
-        _1.set_window_show()
+        _1.show_window_auto()
         return _1
 
     @classmethod

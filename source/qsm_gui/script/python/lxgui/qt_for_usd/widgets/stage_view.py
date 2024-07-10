@@ -75,7 +75,7 @@ if QT_USD_FLAG is True:
             self._is_focused = False
 
             self._frame_draw_margins = 0, 0, 0, 0
-            self._rect_frame_draw = QtCore.QRect()
+            self._frame_draw_rect = QtCore.QRect()
             self._stage_view_draw_rect = QtCore.QRect()
             self._frame_border_color = gui_qt_core.QtBorderColors.Light
             self._hovered_frame_border_color = gui_qt_core.QtBorderColors.Hovered
@@ -1296,7 +1296,7 @@ if QT_USD_FLAG is True:
 
             frm_x, frm_y = x+m_l+1, y+m_t+1
             frm_w, frm_h = w-m_l-m_r-2, h-m_t-m_b-2
-            self._rect_frame_draw.setRect(
+            self._frame_draw_rect.setRect(
                 frm_x, frm_y, frm_w, frm_h
             )
             self._stage_view_draw_rect.setRect(
@@ -1331,7 +1331,7 @@ if QT_USD_FLAG is True:
             bdr_color = [gui_qt_core.QtBorderColors.Basic, gui_qt_core.QtBorderColors.HighLight][is_selected]
             bdr_w = [1, 2][is_selected]
             painter._draw_frame_by_rect_(
-                rect=self._rect_frame_draw,
+                rect=self._frame_draw_rect,
                 border_color=bdr_color,
                 background_color=bcg_color,
                 # border_radius=1,

@@ -832,6 +832,28 @@ class RawTextOpt(object):
             return RawColorMtd.hsv2rgb(h, s, v, maximum)
         return 0, 0, 0
 
+    def to_rgb_2(self, maximum=255, seed=0, s_p=(35, 65), v_p=(35, 65)):
+        string = self.__raw
+        if string:
+            d = 1.0
+            gap = 4
+            s_p_min, s_p_max = s_p
+            v_p_min, v_p_max = v_p
+            value = re.sub(
+                r'[^a-zA-Z0-9]', '0', string
+            ).lower()
+            value_txt = str(value).ljust(gap*3, '0')[:gap*3]
+            print value_txt
+            h_a = int(value_txt[0:gap], 32)
+            s_a = int(value_txt[gap:gap*2], 32)
+            v_a = int(value_txt[gap*2:gap*3], 32)
+            print h_a, s_a, v_a
+            h = float(h_a%(360+seed)*d)/d
+            s = float(s_p_min+s_a%(s_p_max-s_p_min))/100.0
+            v = float(v_p_min+v_a%(v_p_max-v_p_min))/100.0
+            return RawColorMtd.hsv2rgb(h, s, v, maximum)
+        return 0, 0, 0
+
     def get_index(self):
         string = self.__raw
         return sum([ord(i)*(seq*10 if seq > 0 else 1) for seq, i in enumerate(string[::-1])])

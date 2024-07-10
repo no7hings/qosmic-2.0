@@ -13,17 +13,30 @@ class W(gui_prx_widgets.PrxBaseWindow):
         lot = qt_widgets.QtVBoxLayout(wgt)
         lot._set_align_top_()
 
-        c = gui_prx_widgets.PrxHTabBox()
-        lot.addWidget(c.widget)
+        c_h = gui_prx_widgets.PrxHTabToolBox()
+        lot.addWidget(c_h.widget)
 
         t_0 = gui_prx_widgets.PrxOptionsNode('TEST-0')
-        c.add_widget(t_0, name='TEST-0')
+        c_h.add_widget(t_0, name='TEST-0', icon_name_text='A')
 
         t_1 = gui_prx_widgets.PrxTreeView()
-        c.add_widget(t_1, name='TEST-1')
+        c_h.add_widget(t_1, name='TEST-1', icon_name_text='B')
 
         t_2 = gui_prx_widgets.PrxTreeView()
-        c.add_widget(t_2, name='TEST-2')
+        c_h.add_widget(t_2, name='TEST-2', icon_name_text='C')
+
+        c_v = gui_prx_widgets.PrxVTabToolBox()
+        lot.addWidget(c_v.widget)
+        c_v.set_tab_direction(c_v.TabDirections.RightToLeft)
+
+        t_0 = gui_prx_widgets.PrxOptionsNode('TEST-0')
+        c_v.add_widget(t_0, name='TEST-0', icon_name_text='A')
+
+        t_1 = gui_prx_widgets.PrxTreeView()
+        c_v.add_widget(t_1, name='TEST-1', icon_name_text='B')
+
+        t_2 = gui_prx_widgets.PrxTreeView()
+        c_v.add_widget(t_2, name='TEST-2', icon_name_text='C')
 
 
 if __name__ == '__main__':
@@ -35,6 +48,6 @@ if __name__ == '__main__':
     #
     w = W()
     w.set_definition_window_size((480, 480))
-    w.set_window_show()
+    w.show_window_auto()
     #
     sys.exit(app.exec_())

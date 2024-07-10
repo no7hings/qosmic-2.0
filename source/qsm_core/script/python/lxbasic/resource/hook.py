@@ -35,14 +35,14 @@ class RscHook(object):
             )
 
     @classmethod
-    def get_args(cls, key):
-        yaml_file_path = cls.get_yaml(key)
+    def get_args(cls, key, search_paths=None):
+        yaml_file_path = cls.get_yaml(key, search_paths)
         if yaml_file_path:
             configure = bsc_content.Content(value=yaml_file_path)
             type_ = configure.get('option.type')
             if type_:
-                python_file_path = cls.get_python(key)
-                shell_file_path = cls.get_shell(key)
+                python_file_path = cls.get_python(key, search_paths)
+                shell_file_path = cls.get_shell(key, search_paths)
                 return type_, key, configure, yaml_file_path, python_file_path, shell_file_path
 
             bsc_log.Log.trace_warning(
@@ -53,3 +53,7 @@ class RscHook(object):
             'hook file is found: "{}"'.format(key)
         )
         return None
+
+
+class RscOptionHook(RscHook):
+    BRANCH = 'option-hooks'

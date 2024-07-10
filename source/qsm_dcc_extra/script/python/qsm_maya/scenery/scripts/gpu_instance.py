@@ -29,7 +29,9 @@ class GpuInstanceOpt(_rsc_core.ResourceScriptOpt):
     def __init__(self, *args, **kwargs):
         super(GpuInstanceOpt, self).__init__(*args, **kwargs)
 
-    def load_cache(self, cache_file_path):
+        cmds.loadPlugin('gpuCache', quiet=1)
+
+    def load_cache(self, cache_file_path, hide_scenery=True):
         self.create_cache_root_auto()
 
         namespace = self._namespace
@@ -42,10 +44,23 @@ class GpuInstanceOpt(_rsc_core.ResourceScriptOpt):
                 )
                 cmds.parent(cache_location, self.CACHE_ROOT)
 
-                self.hide_resource_auto()
+                self.remove_resource_auto(hide_scenery)
 
-    def hide_resource_auto(self):
-        self._resource.reference_opt.do_unload()
+    def remove_resource_auto(self, hide_scenery=True):
+        if hide_scenery is True:
+            cache_location = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
+            layer_name = '{}_dynamic_gpu_hide'.format(self._namespace)
+            layer_path = cmds.createDisplayLayer(name=layer_name, number=1, empty=True)
+
+            roots = _mya_core.Namespace.find_roots(
+                self._namespace
+            )
+            cmds.editDisplayLayerMembers(layer_path, *roots)
+            cmds.setAttr(layer_path+'.visibility', False)
+
+            cmds.container(cache_location, edit=1, force=1, addNode=[layer_path])
+        else:
+            self._resource.reference_opt.do_unload()
 
     def generate_args(self):
         file_path = self._resource.file
@@ -64,6 +79,8 @@ class GpuInstanceOpt(_rsc_core.ResourceScriptOpt):
 
 
 class GpuInstanceProcess(object):
+    KEY = 'gpu instance'
+
     @classmethod
     def create_gpu_transform(cls, path, hash_key):
         name = _mya_core.DagNode.to_name(path)
@@ -88,6 +105,8 @@ class GpuInstanceProcess(object):
         return gpu_path_new
 
     def __init__(self, file_path, cache_file_path=None, gpu_unpack=True, auto_instance=True):
+        cmds.loadPlugin('gpuCache', quiet=1)
+
         self._file_path = file_path
 
         self._directory_path = bsc_storage.StgFileOpt(
@@ -135,6 +154,10 @@ class GpuInstanceProcess(object):
                 i_group_path_new = _mya_core.Group.create(i_group_path)
                 i_shape_paths = mapper[i_key]
                 for j_shape_path in i_shape_paths:
+                    # fixme: mesh parent mesh
+                    if _mya_core.DagNode.is_exists(j_shape_path) is False:
+                        continue
+
                     j_transform_path = _mya_core.Shape.get_transform(j_shape_path)
                     _mya_core.Group.add(i_group_path_new, j_transform_path)
 
@@ -179,7 +202,10 @@ class GpuInstanceProcess(object):
 
     def mesh_prc(self, shape_path):
         mesh_opt = _mya_core.MeshOpt(shape_path)
-        face_count = mesh_opt.get_face_number()
+        face_count = _mya_core.Mesh.get_face_number(shape_path)
+        if face_count == 0:
+            return
+
         if face_count < _scn_core.Assembly.FACE_COUNT_MAXIMUM:
             return
 
@@ -298,6 +324,10 @@ class GpuInstanceProcess(object):
         )
         _mya_core.NodeAttribute.create_as_string(
             container, 'qsm_cache', self._cache_file_path
+        )
+
+        bsc_log.Log.trace_method_result(
+            self.KEY, 'load scene: {}'.format(self._file_path)
         )
 
         import_paths = _mya_core.SceneFile.import_file(

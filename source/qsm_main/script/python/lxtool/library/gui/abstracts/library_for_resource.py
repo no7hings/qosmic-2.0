@@ -1779,7 +1779,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
             #
             ts.do_start()
             #
-            self.connect_window_close_to(quit_fnc_)
+            self.register_window_close_method(quit_fnc_)
         else:
             with self.gui_progressing(maximum=len(dtb_categories_map), label='gui-add for type') as g_p:
                 for i_dtb_categories in dtb_categories_map:
@@ -1861,7 +1861,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
             #
             ts.do_start()
             #
-            self.connect_window_close_to(quit_fnc_)
+            self.register_window_close_method(quit_fnc_)
         else:
             with self.gui_progressing(maximum=len(dtb_types_map), label='batch gui-add resource') as g_p:
                 for i_dtb_types in dtb_types_map:
@@ -1916,7 +1916,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
             #
             ts.do_start()
             #
-            self.connect_window_close_to(quit_fnc_)
+            self.register_window_close_method(quit_fnc_)
         else:
             with self.gui_progressing(maximum=len(dtb_type_assigns_map), label='gui-add resources') as g_p:
                 for i_dtb_type_assigns in dtb_type_assigns_map:

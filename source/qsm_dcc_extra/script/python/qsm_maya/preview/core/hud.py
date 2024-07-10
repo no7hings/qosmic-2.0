@@ -29,7 +29,7 @@ class HUD(object):
         return _mya_core.DagNode.to_name(camera_path)
 
     @classmethod
-    def get_fps(cls):
+    def get_fps_tag(cls):
         time_unit = _mya_core.Frame.get_fps_()
         return cls.timeConfig[time_unit]
 
@@ -80,7 +80,7 @@ class HUD(object):
                 blockSize='medium',
                 label='FPS: ',
                 labelWidth=64,
-                command=lambda: cls.get_fps(),
+                command=lambda: cls.get_fps_tag(),
                 attachToRefresh=1
             ),
             'resolution': dict(

@@ -70,6 +70,6 @@ class GuiThreadWorker(object):
                 run_fnc_
             )
             q_t.start()
-            self._window.connect_window_close_to(quit_fnc_)
+            self._window.register_window_close_method(quit_fnc_)
         else:
             prx_button.restore_all()

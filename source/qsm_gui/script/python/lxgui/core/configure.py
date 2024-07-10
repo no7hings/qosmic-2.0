@@ -19,7 +19,7 @@ class GuiAlignment(enum.IntEnum):
     Right = 1
 
 
-class GuiDirection(enum.IntEnum):
+class GuiDirections(enum.IntEnum):
     LeftToRight = 0
     RightToLeft = 1
     TopToBottom = 2
@@ -30,9 +30,11 @@ class GuiActionFlag(enum.IntEnum):
     AnyClick = 0x00
     #
     Press = 0x01
-    PressDbClick = 0x02
-    PressMove = 0x03
-    HoverMove = 0x04
+    PressClick = 0x02
+    PressDblClick = 0x03
+    PressMove = 0x04
+    #
+    HoverMove = 0x05
     #
     TrackPress = 0x11
     TrackMove = 0x12
@@ -221,6 +223,7 @@ class GuiRgba(object):
 
     Blue = 63, 127, 255, 255
     DarkBlue = 63, 95, 159, 255
+    DimBlue = 55, 87, 151, 255
     LightBlue = 111, 175, 255, 255
 
     BabyBlue = 63, 255, 255, 255
@@ -281,6 +284,25 @@ class GuiProcessStatus(enum.IntEnum):
     Error = 8
     Killed = 9
     Finished = 10
+
+
+class GuiProcessStatusMapper(object):
+    MAPPER = {
+        GuiProcessStatus.Unknown: 'Unknown',
+        GuiProcessStatus.Started: 'Started',
+        GuiProcessStatus.Running: 'Running',
+        GuiProcessStatus.Waiting: 'Waiting',
+        GuiProcessStatus.Completed: 'Completed',
+        GuiProcessStatus.Suspended: 'Suspended',
+        GuiProcessStatus.Failed: 'Failed',
+        GuiProcessStatus.Stopped: 'Stopped',
+        GuiProcessStatus.Error: 'Error',
+        GuiProcessStatus.Killed: 'Killed',
+        GuiProcessStatus.Finished: 'Finished',
+    }
+    MAPPER_CHS = {
+
+    }
 
 
 class GuiShowStatus(enum.IntEnum):

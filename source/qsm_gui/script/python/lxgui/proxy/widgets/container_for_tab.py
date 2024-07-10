@@ -1,26 +1,23 @@
 # coding:utf-8
+from ... import core as _gui_core
 # qt
-from ...qt import core as gui_qt_core
+from ...qt import core as _qt_core
 # qt widgets
-from ...qt.widgets import base as gui_qt_wgt_base
-
-from ...qt.widgets import container_for_tab as gui_qt_wgt_container_for_tab
-
-from ...qt.widgets import head as gui_qt_wgt_head
-
-from ...qt.widgets import scroll as gui_qt_wgt_scroll
+from ...qt.widgets import container_for_tab as _qt_container_for_tab
 # proxy abstracts
-from .. import abstracts as gui_prx_abstracts
+from .. import abstracts as _prx_abstracts
 
 
-class PrxHTabBox(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_container_for_tab.QtHTabToolGroup
+class _AbsPrxTabToolBox(_prx_abstracts.AbsPrxWidget):
+    QT_WIDGET_CLS = _qt_container_for_tab.QtHTabToolBox
+
+    TabDirections = _gui_core.GuiDirections
 
     def __init__(self, *args, **kwargs):
-        super(PrxHTabBox, self).__init__(*args, **kwargs)
+        super(_AbsPrxTabToolBox, self).__init__(*args, **kwargs)
 
     def add_widget(self, widget, *args, **kwargs):
-        if isinstance(widget, gui_qt_core.QtCore.QObject):
+        if isinstance(widget, _qt_core.QtCore.QObject):
             qt_widget = widget
         else:
             qt_widget = widget.widget
@@ -44,3 +41,20 @@ class PrxHTabBox(gui_prx_abstracts.AbsPrxWidget):
 
     def save_history(self):
         self._qt_widget._save_history_()
+    
+    def set_tab_direction(self, direction):
+        self._qt_widget._set_tab_direction_(direction)
+
+
+class PrxHTabToolBox(_AbsPrxTabToolBox):
+    QT_WIDGET_CLS = _qt_container_for_tab.QtHTabToolBox
+
+    def __init__(self, *args, **kwargs):
+        super(PrxHTabToolBox, self).__init__(*args, **kwargs)
+
+
+class PrxVTabToolBox(_AbsPrxTabToolBox):
+    QT_WIDGET_CLS = _qt_container_for_tab.QtVTabToolBox
+
+    def __init__(self, *args, **kwargs):
+        super(PrxVTabToolBox, self).__init__(*args, **kwargs)

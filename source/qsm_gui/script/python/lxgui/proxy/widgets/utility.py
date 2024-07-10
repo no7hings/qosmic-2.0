@@ -99,7 +99,6 @@ class PrxVScrollArea(gui_prx_abstracts.AbsPrxWidget):
                             if spacer:
                                 spacer.deleteLater()
 
-        #
         rcs_fnc_(self._qt_layout)
 
     def restore(self):
@@ -272,13 +271,13 @@ class Window(gui_prx_abstracts.AbsPrxWindow):
     def _gui_build_(self):
         self._qt_main_widget = gui_qt_wgt_utility.QtWidget()
         self._qt_widget.setCentralWidget(self._qt_main_widget)
-        self._qt_main_layout = gui_qt_wgt_base.QtHBoxLayout(self._qt_main_widget)
+        self._main_qt_layout = gui_qt_wgt_base.QtHBoxLayout(self._qt_main_widget)
 
     def get_main_widget(self):
         return self._qt_main_widget
 
     def add_widget(self, widget):
-        self._qt_main_layout.addWidget(widget)
+        self._main_qt_layout.addWidget(widget)
 
 
 class PrxLayerWidget(gui_prx_abstracts.AbsPrxWidget):

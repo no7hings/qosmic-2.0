@@ -17,7 +17,7 @@ class QtInputAsCapsule(
     _qt_abstracts.AbsQtInputBaseDef,
 ):
     def _pull_history_(self, *args, **kwargs):
-        pass
+        self._entry_widget._set_value_(args[0])
 
     QT_ENTRY_CLS = _entry_for_capsule.QtEntryAsCapsule
 
@@ -45,6 +45,11 @@ class QtInputAsCapsule(
 
         self.input_value_changed = self._entry_widget.value_changed
         self.user_input_value_changed = self._entry_widget.user_value_changed
+        self.user_input_value_accepted = self._entry_widget.user_value_accepted
+        
+        self.user_input_value_accepted.connect(
+            self._push_history_
+        )
 
     def _set_value_options_(self, values, names=None):
         self._entry_widget._set_value_options_(values, names)

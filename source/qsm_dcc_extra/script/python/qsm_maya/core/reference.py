@@ -1,4 +1,6 @@
 # coding:utf-8
+import re
+
 import collections
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
@@ -75,12 +77,13 @@ class Reference(object):
     @classmethod
     def duplicate(cls, path):
         namespace = cmds.referenceQuery(path, namespace=1, shortName=1)
-        file_path = cmds.referenceQuery(path, filename=1)
+        # namespace = re.sub(r'\d+$', '', namespace)
+        file_path = cmds.referenceQuery(path, filename=1, withoutCopyNumber=1)
         _scene_file.SceneFile.reference_file(file_path, namespace)
 
     @classmethod
     def reload(cls, path):
-        cmds.file(loadReference=path)
+        cmds.file(loadReference=path, force=1)
 
     @classmethod
     def unload(cls, path):
@@ -88,7 +91,7 @@ class Reference(object):
 
     @classmethod
     def replace(cls, path, file_path):
-        cmds.file(file_path, loadReference=path)
+        cmds.file(file_path, loadReference=path, force=1)
 
 
 class References(object):

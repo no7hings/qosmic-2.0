@@ -1250,7 +1250,7 @@ class LxRenderer(object):
                 file_path
             )
         )
-        w.set_window_show()
+        w.show_window_auto()
 
 
 class LxVariant(object):

@@ -60,7 +60,7 @@ def __execute_with_option(option):
     #
     option_hook_key = option_opt.get('option_hook_key')
     if option_hook_key:
-        __execute_option_hook(hook_option=option)
+        __execute_option_hook_new(hook_option=option)
 
 
 def __execute_option_hook(hook_option):
@@ -114,7 +114,7 @@ def __execute_option_hook(hook_option):
     opt_args_execute = []
     opt_packages_extend = []
     # add extend packages
-    hook_packages_extend = option_opt.get('extend_packages', as_array=True)
+    hook_packages_extend = option_opt.get('rez_extend_packages', as_array=True)
     if hook_packages_extend:
         opt_packages_extend.extend(
             hook_packages_extend
@@ -167,6 +167,81 @@ def __execute_option_hook(hook_option):
         rsv_app.execute_with_result(
             command, environs_extend=environs_extend
         )
+
+
+def __execute_option_hook_new(hook_option):
+    import lxbasic.log as bsc_log
+
+    import lxbasic.core as bsc_core
+
+    import lxbasic.extra.methods as bsc_etr_methods
+
+    import lxresolver.core as rsv_core
+
+    import lxsession.core as ssn_core
+
+    # fixme, option has ""
+    if hook_option.startswith('"'):
+        hook_option = eval(hook_option)
+
+    option_opt = bsc_core.ArgDictStringOpt(hook_option)
+
+    hook_engine = option_opt.get('hook_engine')
+    if hook_engine is None:
+        raise RuntimeError(
+            bsc_log.Log.trace_method_error(
+                KEY, 'hook engine is not valid or not definition'
+            )
+        )
+
+    all_hook_engines = ssn_core.SsnHookEngineMtd.get_all()
+    if hook_engine not in all_hook_engines:
+        raise RuntimeError(
+            bsc_log.Log.trace_method_error(
+                KEY, 'hook engine is not in configure'
+            )
+        )
+
+    application = hook_engine.split('-')[0]
+
+    rez_beta = option_opt.get('rez_beta') or False
+    if rez_beta is True:
+        bsc_core.EnvBaseMtd.set(
+            'REZ_BETA', '1'
+        )
+
+    kwargs = option_opt.value
+    kwargs.update(
+        dict(
+            lxdcc_root=os.environ.get('QSM_CORE_BASE'),
+            hook_option=hook_option,
+        )
+    )
+    opt_args_execute = []
+    opt_packages_extend = []
+    # add extend packages
+    hook_packages_extend = option_opt.get('rez_extend_packages', as_array=True)
+    if hook_packages_extend:
+        opt_packages_extend.extend(
+            hook_packages_extend
+        )
+
+    opt_args_execute.append(
+        ssn_core.SsnHookEngineMtd.get_command(
+            **kwargs
+        )
+    )
+
+    cmd_args = [
+        r'rez-env',
+        r' '.join(hook_packages_extend),
+        r' '.join(opt_args_execute)
+    ]
+    cmd_script = r' '.join(cmd_args)
+
+    bsc_core.BscProcess.execute_as_trace(
+        cmd_script
+    )
 
 
 if __name__ == '__main__':

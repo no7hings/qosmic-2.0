@@ -39,12 +39,16 @@ class DynamicGenerator(BaseGenerator):
         if qsm_mya_core.Transform.check_is_transform(node_path) is True:
             shape_path = qsm_mya_core.Transform.get_shape(node_path)
             shape_type = qsm_mya_core.Node.get_type(shape_path)
-            return cls._generate_for_shape(shape_type, shape_path)
+            _ = cls._generate_for_shape(shape_type, shape_path)
+            if _:
+                return _
         # shape
-        elif qsm_mya_core.Shape.check_is_shape(node_path) is True:
+        if qsm_mya_core.Shape.check_is_shape(node_path) is True:
             shape_path = qsm_mya_core.DagNode.to_path(node_path)
             shape_type = qsm_mya_core.Node.get_type(node_path)
-            return cls._generate_for_shape(shape_type, shape_path)
+            _ = cls._generate_for_shape(shape_type, shape_path)
+            if _:
+                return _
         # other
         node_path = qsm_mya_core.DagNode.to_path(node_path)
         node_type = qsm_mya_core.Node.get_type(node_path)
@@ -89,6 +93,7 @@ class DynamicGenerator(BaseGenerator):
     def _generate_for_node(cls, node_type, node_path):
         if _node_for_dynamic.FieldOpt.check_is_valid(node_type) is True:
             return _node_for_dynamic.FieldOpt(node_path)
+        return _node_for_any.AnyNodeOpt(node_path)
 
     @classmethod
     def generate_node_creators(cls, path_map, scheme):

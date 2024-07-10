@@ -71,7 +71,7 @@ def main(session):
         o.get_port('show_all_quixel_json_files').set(show_quixel_json_files_fnc_)
         o.get_port('add_resources').set(ok_fnc_)
 
-        w.set_window_show()
+        w.show_window_auto()
 
 
 if __name__ == '__main__':

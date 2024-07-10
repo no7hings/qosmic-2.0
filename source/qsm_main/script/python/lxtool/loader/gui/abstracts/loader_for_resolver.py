@@ -197,7 +197,7 @@ class _GuiEntityOpt(
             #
             ts.do_start()
             #
-            self._window.connect_window_close_to(quit_fnc_)
+            self._window.register_window_close_method(quit_fnc_)
         else:
             with bsc_log.LogProcessContext.create(
                 maximum=len(rsv_resource_groups), label='gui-add for resource'
@@ -1090,7 +1090,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
         #
         t.start()
 
-        self.connect_window_close_to(quit_fnc_)
+        self.register_window_close_method(quit_fnc_)
 
     def __gui_cache_fnc_for_tasks_by_resource_(self, rsv_resource):
         return rsv_resource.get_rsv_tasks(**self._rsv_filter_opt.value)
@@ -1152,7 +1152,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
             #
             ts.do_start()
             #
-            self.connect_window_close_to(quit_fnc_)
+            self.register_window_close_method(quit_fnc_)
         else:
             for i_rsv_entities in rsv_entities_map:
                 self.__batch_gui_build_fnc_for_tasks_and_units_(
@@ -1202,7 +1202,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
             #
             ts.do_start()
             #
-            self.connect_window_close_to(quit_fnc_)
+            self.register_window_close_method(quit_fnc_)
         else:
             with bsc_log.LogProcessContext.create(
                 maximum=len(rsv_entities_map), label='gui-add for task unit'

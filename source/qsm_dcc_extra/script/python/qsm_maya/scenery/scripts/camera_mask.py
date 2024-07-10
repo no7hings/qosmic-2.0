@@ -105,10 +105,29 @@ class CameraViewFrustum(object):
         _mya_core.Container.add_nodes(container, [eps_name])
 
 
+class CameraMaskOpt(object):
+    @classmethod
+    def load_auto(cls, **kwargs):
+        scheme = kwargs['scheme']
+        if scheme == 'default':
+            camera = _mya_core.Camera.get_active()
+            CameraMask(camera).execute_for_all()
+        elif scheme == 'dynamic':
+            camera = _mya_core.Camera.get_active()
+            DynamicCameraMask(camera).execute_for_all()
+        
+    @classmethod
+    def remove_auto(cls, **kwargs):
+        DynamicCameraMask.restore()
+        CameraMask.restore()
+
+
 class DynamicCameraMask(object):
     CONTAINER_NAME = 'dynamic_camera_mask_dgc'
 
     def __init__(self, camera=None, frame=None):
+        cmds.loadPlugin('gpuCache', quiet=1)
+
         if camera is None:
             self._camera_path = _mya_core.Camera.get_active()
         else:
@@ -159,9 +178,18 @@ class DynamicCameraMask(object):
         results = _mya_core.Camera.generate_mask_nodes(
             self._camera_path, type_includes=['mesh', 'gpuCache']
         )
-        return results
+
+        list_ = []
+        for i_path in results:
+            if _mya_core.DagNode.is_mesh(i_path):
+                if _mya_core.Mesh.is_deformed(i_path) is False:
+                    list_.append(i_path)
+            else:
+                list_.append(i_path)
+        return list_
 
     def nodes_pre_prc(self, all_paths):
+        nodes = []
         for i_index, i_shape_path in enumerate(all_paths):
             # ignore deformed mesh
             if _mya_core.DagNode.is_mesh(i_shape_path) is True:
@@ -173,6 +201,9 @@ class DynamicCameraMask(object):
                 i_sum_name, 'plusMinusAverage'
             )
             self._node_dict[i_shape_path] = i_sum_name
+
+            nodes.append(i_sum_name)
+        return nodes
 
     def nodes_post_prc(self, container):
         for i_any_path, v in self._node_dict.items():
@@ -210,20 +241,7 @@ class DynamicCameraMask(object):
 
         all_paths = _mya_core.Scene.find_all_dag_nodes(type_includes=['mesh', 'gpuCache'])
         all_path_new = self._filter_cache.generate(all_paths)
-        self.nodes_pre_prc(all_path_new)
-
-        nodes = []
-
-        tuc = _mya_core.Node.create(
-            'camera_mask_tuc', 'timeToUnitConversion'
-        )
-        _mya_core.NodeAttribute.set_value(
-            tuc, 'conversionFactor', 0.004
-        )
-        _mya_core.Connection.create(
-            'time1.outTime', tuc+'.input'
-        )
-        nodes.append(tuc)
+        nodes = self.nodes_pre_prc(all_path_new)
 
         for i_seq, i_frame in enumerate(frames):
             i_cdt_name = 'camera_mask_{}_cdt'.format(i_frame)
@@ -231,10 +249,15 @@ class DynamicCameraMask(object):
                 i_cdt_name, 'condition'
             )
             cmds.setAttr('{}.firstTerm'.format(i_cdt_name), i_frame)
-            cmds.connectAttr(tuc+'.output', i_cdt_name+'.secondTerm')
+            cmds.connectAttr('time1.outTime', i_cdt_name+'.secondTerm')
             cmds.setAttr('{}.colorIfTrueR'.format(i_cdt_name), 1.0)
             cmds.setAttr('{}.colorIfFalseR'.format(i_cdt_name), 0.0)
             nodes.append(i_cdt_name)
+
+            i_unit_conversion = _mya_core.NodeAttribute.get_source_node(
+                i_cdt_name, 'secondTerm', 'timeToUnitConversion'
+            )
+            nodes.append(i_unit_conversion)
 
             i_mask_nodes = self.generate_mask_nodes_at_frame(i_frame)
             i_mask_nodes_new = self._filter_cache.generate(i_mask_nodes)
@@ -255,6 +278,8 @@ class CameraMask(object):
     LAYER_NAME = 'camera_mask_dgc'
 
     def __init__(self, camera=None, frame=None):
+        cmds.loadPlugin('gpuCache', quiet=1)
+
         if camera is None:
             self._camera_path = _mya_core.Camera.get_active()
         else:
@@ -285,6 +310,7 @@ class CameraMask(object):
         results = _mya_core.Camera.generate_mask_nodes(
             self._camera_path, type_includes=['mesh', 'gpuCache']
         )
+
         list_ = []
         for i_path in results:
             if _mya_core.DagNode.is_mesh(i_path):
@@ -292,7 +318,6 @@ class CameraMask(object):
                     list_.append(i_path)
             else:
                 list_.append(i_path)
-
         return list_
 
     @_mya_core.Undo.execute

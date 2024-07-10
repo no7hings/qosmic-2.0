@@ -7,7 +7,7 @@ from ... import abstracts as bsc_etr_abstracts
 class EtrBase(bsc_etr_abstracts.AbsEtrBase):
     @classmethod
     def get_base_packages_extend(cls):
-        return []
+        return ['qsm_main']
 
     @classmethod
     def get_builtin_packages_extend(cls):

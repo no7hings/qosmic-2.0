@@ -28,13 +28,19 @@ class DdlBase(object):
 
         from Deadline import DeadlineConnect
 
+        import qsm_general.core as qsm_gnl_core
+
         cct = cls._generate_content()
-        # c = DeadlineConnect.DeadlineCon(
-        #     cct.get('connection.host'), cct.get('connection.port')
-        # )
-        c = DeadlineConnect.DeadlineCon(
-            '10.32.21.16', 8080
-        )
+
+        if qsm_gnl_core.scheme_is_new():
+            c = DeadlineConnect.DeadlineCon(
+                cct.get('connection_new.host'), cct.get('connection_new.port')
+            )
+        else:
+            c = DeadlineConnect.DeadlineCon(
+                cct.get('connection_default.host'), cct.get('connection_default.port')
+            )
+
         cls.CONNECTION = c
         return c
 

@@ -33,7 +33,7 @@ class KitDesktopHook(object):
         if _:
             hook_type, hook_key, hook_configure, yaml_file_path, python_file_path, shell_file_path = _
 
-            session = bsc_session.CommandSession(
+            session = bsc_session.ScriptSession(
                 type=hook_type,
                 hook=hook_key,
                 configure=hook_configure

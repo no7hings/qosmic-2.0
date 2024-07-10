@@ -177,14 +177,13 @@ class AbsSsnOptionExecuteDef(object):
     def find_dependent_ddl_job_ids(self, *args, **kwargs):
         pass
 
-    def get_executor(self):
+    def generate_executor(self):
         return self.EXECUTOR(
             self
         )
 
-    def set_execute_by_deadline(self):
-        executor = self.get_executor()
-        return executor.execute_with_deadline()
+    def execute_hook_with_deadline(self):
+        return self.generate_executor().execute_with_deadline()
 
     def set_ddl_job_id(self, ddl_job_id):
         self._ddl_job_id = ddl_job_id
@@ -192,12 +191,11 @@ class AbsSsnOptionExecuteDef(object):
     def get_ddl_job_id(self):
         return self._ddl_job_id
 
-    def set_execute_by_shell(self, block=False):
-        executor = self.get_executor()
-        executor.execute_with_shell(block)
+    def execute_hook_with_shell(self, block=False):
+        self.generate_executor().execute_with_shell(block)
 
     def get_shell_script_command(self):
-        return self.get_executor().get_shell_command()
+        return self.generate_executor().get_shell_command()
 
 
 class AbsSsnOptionGui(
@@ -275,16 +273,16 @@ class AbsSsnShellExecuteDef(object):
     def _set_shell_execute_def_init_(self, configure):
         self.__set_execute_option_completion_()
 
-    def get_executor(self):
+    def generate_executor(self):
         return self.EXECUTOR(
             self
         )
 
-    def set_execute_by_shell(self, block=False):
-        self.get_executor().execute_with_shell(block)
+    def execute_hook_with_shell(self, block=False):
+        self.generate_executor().execute_with_shell(block)
 
     def get_shell_script_command(self):
-        return self.get_executor().get_shell_command()
+        return self.generate_executor().get_shell_command()
 
     def __set_execute_option_completion_(self):
         hook_engine = self.configure.get('hook_option.engine')
@@ -881,7 +879,7 @@ class AbsSsnRsvTaskOptionMethod(
     def get_ddl_name(self):
         return self.get_name()
 
-    def get_executor(self):
+    def generate_executor(self):
         return self.EXECUTOR(
             self
         )

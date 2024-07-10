@@ -43,7 +43,7 @@ class QtEntryFrame(
         frm_x, frm_y = x+m_l+1, y+m_t+1
         frm_w, frm_h = w-m_l-m_r-2, h-m_t-m_b-2
         #
-        self._rect_frame_draw.setRect(
+        self._frame_draw_rect.setRect(
             frm_x, frm_y, frm_w, frm_h
         )
         if c > 1:

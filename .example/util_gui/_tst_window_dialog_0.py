@@ -23,7 +23,7 @@ if __name__ == '__main__':
     #
     app = QtWidgets.QApplication(sys.argv)
     w = gui_prx_widgets.PrxBaseWindow()
-    w.set_window_show()
+    w.show_window_auto()
     for i in range(20):
         if i == 10:
             w = gui_core.GuiDialog.create(

@@ -35,7 +35,7 @@ def get_hook_args(key, search_paths=None):
         elif type_name in {
             'python-script', 'shell-script'
         }:
-            session = bsc_session.CommandSession(
+            session = bsc_session.ScriptSession(
                 type=type_name,
                 hook=key,
                 configure=configure
@@ -108,7 +108,7 @@ def get_option_hook_args(option, search_paths=None):
                 'action',
                 'launcher'
             }:
-                session = bsc_session.OptionGenerSession(
+                session = bsc_session.GenerOptionSession(
                     type=type_name,
                     hook=option_hook_key,
                     configure=configure,
@@ -122,7 +122,7 @@ def get_option_hook_args(option, search_paths=None):
                     option=option_opt.to_string()
                 )
             elif type_name == 'launcher':
-                session = bsc_session.OptionGenerSession(
+                session = bsc_session.GenerOptionSession(
                     type=type_name,
                     hook=option_hook_key,
                     configure=configure,
@@ -232,7 +232,7 @@ def execute_option_hook_by_shell(option, block=False):
     if hook_args is not None:
         session, execute_fnc = hook_args
         #
-        session.set_execute_by_shell(block)
+        session.execute_hook_with_shell(block)
         return session
 
 
@@ -241,7 +241,7 @@ def execute_option_hook_by_deadline(option):
     if hook_args is not None:
         session, execute_fnc = hook_args
         #
-        session.set_execute_by_deadline()
+        session.execute_hook_with_deadline()
         return session
 
 

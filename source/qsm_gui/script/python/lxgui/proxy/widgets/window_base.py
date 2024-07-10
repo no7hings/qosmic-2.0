@@ -105,7 +105,7 @@ class PrxBaseWindow(
         self._qt_central_widget = gui_qt_wgt_utility.QtTranslucentWidget()
         self._qt_widget.setCentralWidget(self._qt_central_widget)
         #
-        self._set_progressing_def_init_()
+        self._init_progressing_def_()
         #
         self._qt_central_layout = gui_qt_wgt_base.QtVBoxLayout(self._qt_central_widget)
         self._qt_central_layout.setContentsMargins(0, 0, 0, 0)
@@ -136,10 +136,10 @@ class PrxBaseWindow(
     def set_main_style_mode(self, mode):
         if mode == 0:
             self._qt_main_line.show()
-            self._qt_main_layout.setContentsMargins(2, 2, 2, 2)
+            self._main_qt_layout.setContentsMargins(2, 2, 2, 2)
         elif mode == 1:
             self._qt_main_line.hide()
-            self._qt_main_layout.setContentsMargins(0, 0, 0, 0)
+            self._main_qt_layout.setContentsMargins(0, 0, 0, 0)
 
     def create_layer_widget(self, key, label=None):
         def fnc_():
@@ -162,8 +162,8 @@ class PrxBaseWindow(
         # main widget
         self._qt_main_widget = gui_qt_wgt_utility.QtTranslucentWidget()
         qt_layout_0.addWidget(self._qt_main_widget)
-        self._qt_main_layout = gui_qt_wgt_base.QtVBoxLayout(self._qt_main_widget)
-        self._qt_main_layout.setContentsMargins(2, 2, 2, 2)
+        self._main_qt_layout = gui_qt_wgt_base.QtVBoxLayout(self._qt_main_widget)
+        self._main_qt_layout.setContentsMargins(2, 2, 2, 2)
         # bottom toolbar
         self._window_bottom_tool_bar = gui_prx_wgt_container.PrxHToolBar()
         qt_layout_0.addWidget(self._window_bottom_tool_bar.widget)
@@ -224,12 +224,12 @@ class PrxBaseWindow(
 
     def add_widget(self, widget):
         if isinstance(widget, gui_qt_core.QtCore.QObject):
-            self._qt_main_layout.addWidget(widget)
+            self._main_qt_layout.addWidget(widget)
         else:
-            self._qt_main_layout.addWidget(widget.widget)
+            self._main_qt_layout.addWidget(widget.widget)
 
     def set_qt_widget_add(self, qt_widget):
-        self._qt_main_layout.addWidget(qt_widget)
+        self._main_qt_layout.addWidget(qt_widget)
 
     def add_button(self, widget):
         self._window_bottom_tool_bar.add_widget(widget)
@@ -367,7 +367,6 @@ class PrxBaseWindow(
     def show_message(self, text=None, status=None):
         self.switch_current_layer_to('window_message_0')
         if text:
-            # unit.set_status(status)
             self._message_text_browser.set_content(
                 text
             )
@@ -380,7 +379,7 @@ class PrxBaseWindow(
                 '\n'.join(text)
             )
 
-    def set_window_show(self, pos=None, size=None, exclusive=True):
+    def show_window_auto(self, pos=None, size=None, exclusive=True):
         # show unique
         if exclusive is True:
             gui_proxies = gui_prx_core.GuiProxyUtil.find_widget_proxy_by_class(self.__class__)
@@ -420,16 +419,19 @@ class PrxBaseWindow(
         )
     
     def exec_message(self, *args, **kwargs):
-        self._qt_widget._exec_message_(*args, **kwargs)
+        return self._qt_widget._exec_message_(*args, **kwargs)
 
-    def choice_message(self, data):
+    def popup_bubble_message(self, *args, **kwargs):
+        return self._qt_widget._popup_bubble_message_(*args, **kwargs)
+
+    def choice_message(self, options):
         return gui_core.GuiUtil.choice_message(
-            self._language, data
+            self._language, options
         )
 
-    def choice_tool_tip(self, data):
+    def choice_tool_tip(self, options):
         return gui_core.GuiUtil.choice_tool_tip(
-            self._language, data
+            self._language, options
         )
         
 

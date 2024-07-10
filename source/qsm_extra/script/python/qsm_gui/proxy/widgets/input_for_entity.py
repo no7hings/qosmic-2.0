@@ -111,7 +111,7 @@ class PrxInputForRig(prx_abstracts.AbsPrxWidget):
         return dict()
 
     def connect_input_change_accepted_to(self, fnc):
-        self._qt_path_input.input_value_change_accepted.connect(fnc)
+        self._qt_path_input.input_value_accepted.connect(fnc)
 
     def _cache_entities(self):
         path = self._qt_path_input._get_value_()

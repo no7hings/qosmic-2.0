@@ -10,7 +10,7 @@ def main(session):
     if file_path:
         hook_option = 'file={}'.format(file_path)
         w = smt_gui_widgets.PnlSubmitterForShotRender(hook_option=hook_option)
-        w.set_window_show()
+        w.show_window_auto()
 
 
 if __name__ == '__main__':

@@ -10,7 +10,7 @@ from ...qt import abstracts as _qt_abstracts
 from . import button as _qt_wgt_button
 
 
-class QtHTabToolGroup(
+class _AbsQtHTabToolBox(
     QtWidgets.QWidget,
     _qt_abstracts.AbsQtWidgetBaseDef,
     _qt_abstracts.AbsQtFrameBaseDef,
@@ -20,6 +20,8 @@ class QtHTabToolGroup(
     _qt_abstracts.AbsQtHistoryBaseDef,
 ):
     current_changed = qt_signal()
+
+    QT_ORIENTATION = None
 
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_(self.rect())
@@ -31,116 +33,231 @@ class QtHTabToolGroup(
     def _refresh_widget_draw_geometry_(self, rect):
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()
-
-        self._rect_frame_draw.setRect(
+        self._frame_rect.setRect(
             x, y, w, h
         )
-
         m_l, m_t, m_r, m_b = self._tab_view_margins
-        t_w, t_h = self._tab_w, self._tab_h
-        c_t_f_x, c_t_f_y = x, y
-        c_t_f_w, c_t_f_h = w, t_h
-
-        self._layout.setContentsMargins(
-            m_l, t_h+m_t, m_r, m_b
-        )
-
-        scroll_w = w
-
-        btn_f_w, btn_f_h = t_h, t_h
+        tab_w, tab_h = self._tab_w, self._tab_h
+        btn_frm_w, btn_frm_h = tab_h, tab_h
         btn_w, btn_h = 20, 20
+        if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
+            tab_bar_x, tab_bar_y = x, y
+            tab_bar_w, tab_bar_h = w, tab_h
 
-        scroll_abs_w = 0
-        tab_items = self._tab_item_stack.get_all_items()
-        if tab_items:
-            for i_index, i_tab_item in enumerate(tab_items):
-                i_name_text = i_tab_item.get_name()
-                if i_name_text is not None:
-                    i_text_width = self._get_text_draw_width_(
-                        i_name_text
+            self._layout.setContentsMargins(
+                m_l, m_t+tab_h, m_r, m_b
+            )
+            self._tab_bar_draw_rect.setRect(
+                tab_bar_x, tab_bar_y, tab_bar_w, tab_bar_h-1
+            )
+            self._tab_bar_rect.setRect(
+                tab_bar_x, tab_bar_y, tab_bar_w, tab_bar_h
+            )
+
+            scroll_abs_w = 0
+            tab_items = self._tab_item_stack.get_all_items()
+            if tab_items:
+                for i_index, i_tab_item in enumerate(tab_items):
+                    i_name_text = i_tab_item.get_name()
+                    if i_name_text is not None:
+                        i_text_width = QtGui.QFontMetrics(self._tab_text_font).width(i_name_text)
+                    else:
+                        i_text_width = tab_w
+                    # compute tab width
+                    i_t_w = i_text_width+16
+                    if i_tab_item.icon_text:
+                        i_t_w += 10
+                    self._item_width_or_height_dict[i_index] = i_t_w
+                    scroll_abs_w += i_t_w
+                # scroll
+                scroll_w = w  # use width
+                # update scroll model
+                self._gui_scroll.set_w_or_h(scroll_w)
+                self._gui_scroll.set_abs_w_or_h(scroll_abs_w+btn_frm_w*3)
+                self._gui_scroll.update()
+
+                if self._gui_scroll.get_is_valid():
+                    btn_w_1, btn_h_1 = btn_w/2, btn_h
+                    btn_f_w_r = btn_frm_w*2
+                    c_x_1, c_y_1 = w-btn_f_w_r, y
+                    c_x_1 = max(c_x_1, btn_f_w_r)
+                    self._tab_right_tool_box_rect.setRect(
+                        c_x_1, c_y_1, btn_f_w_r, btn_frm_h
                     )
+                    self._tab_right_tool_box_draw_rect.setRect(
+                        c_x_1, c_y_1, btn_f_w_r, btn_frm_h-1
+                    )
+                    #
+                    self._tab_scroll_previous_button.show()
+                    self._tab_scroll_previous_button.setGeometry(
+                        c_x_1+(btn_frm_w-btn_w)/2, c_y_1+(btn_frm_h-btn_h_1)/2, btn_w_1, btn_h_1
+                    )
+
+                    if self._gui_scroll.get_is_minimum():
+                        self._tab_scroll_previous_button._set_icon_file_path_(self._icons_0[1])
+                    else:
+                        self._tab_scroll_previous_button._set_icon_file_path_(self._icons_0[0])
+
+                    self._tab_scroll_next_button.show()
+                    self._tab_scroll_next_button.setGeometry(
+                        c_x_1+(btn_frm_w-btn_w)/2+btn_w_1, c_y_1+(btn_frm_h-btn_h_1)/2, btn_w_1, btn_h_1
+                    )
+
+                    if self._gui_scroll.get_is_maximum():
+                        self._tab_scroll_next_button._set_icon_file_path_(self._icons_1[1])
+                    else:
+                        self._tab_scroll_next_button._set_icon_file_path_(self._icons_1[0])
+
+                    self._tab_choose_button.show()
+                    self._tab_choose_button.setGeometry(
+                        c_x_1+btn_frm_w+(btn_frm_w-btn_w)/2, c_y_1+(btn_frm_h-btn_h)/2, btn_w, btn_h
+                    )
+
+                    tab_bar_w -= btn_f_w_r
                 else:
-                    i_text_width = t_w
-                # compute tab width
-                i_t_w = i_text_width+t_h*2
-                self._item_width_dict[i_index] = i_t_w
-                scroll_abs_w += i_t_w
-            # update scroll model
-            self._gui_scroll.set_w_or_h(scroll_w)
-            self._gui_scroll.set_abs_w_or_h(scroll_abs_w+btn_f_w*3)
-            self._gui_scroll.update()
+                    self._tab_scroll_previous_button.hide()
+                    self._tab_scroll_next_button.hide()
+                    self._tab_choose_button.hide()
+                # tab items
+                c_x, c_y = x, y
+                scroll_value = self._gui_scroll.get_value()
+                widths = self._item_width_or_height_dict.values()
+                for i_index, i_tab_item in enumerate(tab_items):
+                    i_x = sum(widths[:i_index])
+                    i_w = self._item_width_or_height_dict[i_index]
 
-            if self._gui_scroll.get_is_valid():
-                btn_w_1, btn_h_1 = btn_w/2, btn_h
-                btn_f_w_r = btn_f_w*2
-                c_x_1, c_y_1 = w-btn_f_w_r, y
-                c_x_1 = max(c_x_1, btn_f_w_r)
-                self._tab_right_tool_box_rect.setRect(
-                    c_x_1, c_y_1, btn_f_w_r, btn_f_h
+                    i_tab_item.get_rect().setRect(
+                        c_x+i_x-scroll_value, c_y, i_w, tab_h
+                    )
+                    i_tab_item.get_draw_rect().setRect(
+                        c_x+i_x-scroll_value, c_y, i_w, tab_h
+                    )
+                    
+                    i_widget = i_tab_item.get_widget()
+                    if i_index == self._index_current:
+                        i_widget.show()
+                    else:
+                        i_widget.hide()
+        elif self.QT_ORIENTATION == QtCore.Qt.Vertical:
+            tab_bar_x, tab_bar_y = x, y
+            tab_bar_w, tab_bar_h = tab_w, h
+
+            if self._direction == _gui_core.GuiDirections.LeftToRight:
+                self._layout.setContentsMargins(
+                    m_l+tab_w, m_t, m_r, m_b
                 )
-                self._tab_right_tool_box_draw_rect.setRect(
-                    c_x_1, c_y_1, btn_f_w_r, btn_f_h-1
+                self._tab_bar_draw_rect.setRect(
+                    tab_bar_x, tab_bar_y, tab_bar_w-1, tab_bar_h
                 )
-                #
-                self._tab_scroll_previous_button.show()
-                self._tab_scroll_previous_button.setGeometry(
-                    c_x_1+(btn_f_w-btn_w)/2, c_y_1+(btn_f_h-btn_h_1)/2, btn_w_1, btn_h_1
+                self._tab_bar_rect.setRect(
+                    tab_bar_x, tab_bar_y, tab_bar_w, tab_bar_h
                 )
-
-                if self._gui_scroll.get_is_minimum():
-                    self._tab_scroll_previous_button._set_icon_file_path_(self._icons_0[1])
-                else:
-                    self._tab_scroll_previous_button._set_icon_file_path_(self._icons_0[0])
-
-                self._tab_scroll_next_button.show()
-                self._tab_scroll_next_button.setGeometry(
-                    c_x_1+(btn_f_w-btn_w)/2+btn_w_1, c_y_1+(btn_f_h-btn_h_1)/2, btn_w_1, btn_h_1
+            elif self._direction == _gui_core.GuiDirections.RightToLeft:
+                self._layout.setContentsMargins(
+                    m_l, m_t, m_r+tab_w, m_b
                 )
-
-                if self._gui_scroll.get_is_maximum():
-                    self._tab_scroll_next_button._set_icon_file_path_(self._icons_1[1])
-                else:
-                    self._tab_scroll_next_button._set_icon_file_path_(self._icons_1[0])
-
-                self._tab_choose_button.show()
-                self._tab_choose_button.setGeometry(
-                    c_x_1+btn_f_w+(btn_f_w-btn_w)/2, c_y_1+(btn_f_h-btn_h)/2, btn_w, btn_h
+                self._tab_bar_draw_rect.setRect(
+                    w-tab_bar_w, tab_bar_y, tab_bar_w-1, tab_bar_h
                 )
-
-                c_t_f_w -= btn_f_w_r
+                self._tab_bar_rect.setRect(
+                    w-tab_bar_w, tab_bar_y, tab_bar_w, tab_bar_h
+                )
             else:
-                self._tab_scroll_previous_button.hide()
-                self._tab_scroll_next_button.hide()
-                self._tab_choose_button.hide()
+                raise RuntimeError()
 
-            c_x, c_y = x, y
-            scroll_value = self._gui_scroll.get_value()
-            widths = self._item_width_dict.values()
-            for i_index, i_tab_item in enumerate(tab_items):
-                i_rect = i_tab_item.get_rect()
-                i_widget = i_tab_item.get_widget()
-                i_draw_rect = i_tab_item.get_draw_rect()
+            scroll_abs_w = 0
+            tab_items = self._tab_item_stack.get_all_items()
+            if tab_items:
+                for i_index, i_tab_item in enumerate(tab_items):
+                    i_name_text = i_tab_item.get_name()
+                    if i_name_text is not None:
+                        i_text_width = QtGui.QFontMetrics(self._tab_text_font).width(i_name_text)
+                    else:
+                        i_text_width = tab_w
+                    # compute tab width
+                    i_t_w = i_text_width+16
+                    if i_tab_item.icon_text:
+                        i_t_w += 10
+                    self._item_width_or_height_dict[i_index] = i_t_w
+                    scroll_abs_w += i_t_w
+                # scroll
+                scroll_w = h  # use height
+                # update scroll model
+                self._gui_scroll.set_w_or_h(scroll_w)
+                self._gui_scroll.set_abs_w_or_h(scroll_abs_w+btn_frm_w*3)
+                self._gui_scroll.update()
 
-                i_x = sum(widths[:i_index])
-                i_w = self._item_width_dict[i_index]
+                if self._gui_scroll.get_is_valid():
+                    btn_w_1, btn_h_1 = btn_w/2, btn_h
+                    btn_f_w_r = btn_frm_w*2
+                    c_x_1, c_y_1 = w-btn_f_w_r, y
+                    c_x_1 = max(c_x_1, btn_f_w_r)
+                    self._tab_right_tool_box_rect.setRect(
+                        c_x_1, c_y_1, btn_f_w_r, btn_frm_h
+                    )
+                    self._tab_right_tool_box_draw_rect.setRect(
+                        c_x_1, c_y_1, btn_f_w_r, btn_frm_h-1
+                    )
+                    #
+                    self._tab_scroll_previous_button.show()
+                    self._tab_scroll_previous_button.setGeometry(
+                        c_x_1+(btn_frm_w-btn_w)/2, c_y_1+(btn_frm_h-btn_h_1)/2, btn_w_1, btn_h_1
+                    )
 
-                i_draw_rect.setRect(
-                    c_x + i_x - scroll_value, y, i_w, t_h
-                )
-                i_rect.setRect(
-                    c_x + i_x - scroll_value, y, i_w, t_h
-                )
-                if i_index == self._index_current:
-                    i_widget.show()
+                    if self._gui_scroll.get_is_minimum():
+                        self._tab_scroll_previous_button._set_icon_file_path_(self._icons_0[1])
+                    else:
+                        self._tab_scroll_previous_button._set_icon_file_path_(self._icons_0[0])
+
+                    self._tab_scroll_next_button.show()
+                    self._tab_scroll_next_button.setGeometry(
+                        c_x_1+(btn_frm_w-btn_w)/2+btn_w_1, c_y_1+(btn_frm_h-btn_h_1)/2, btn_w_1, btn_h_1
+                    )
+
+                    if self._gui_scroll.get_is_maximum():
+                        self._tab_scroll_next_button._set_icon_file_path_(self._icons_1[1])
+                    else:
+                        self._tab_scroll_next_button._set_icon_file_path_(self._icons_1[0])
+
+                    self._tab_choose_button.show()
+                    self._tab_choose_button.setGeometry(
+                        c_x_1+btn_frm_w+(btn_frm_w-btn_w)/2, c_y_1+(btn_frm_h-btn_h)/2, btn_w, btn_h
+                    )
+
+                    tab_bar_w -= btn_f_w_r
                 else:
-                    i_widget.hide()
-
-        self._tab_bar_draw_rect.setRect(
-            x, y, w, t_h-1
-        )
-        self._tab_bar_rect.setRect(
-            c_t_f_x, c_t_f_y, c_t_f_w, c_t_f_h
-        )
+                    self._tab_scroll_previous_button.hide()
+                    self._tab_scroll_next_button.hide()
+                    self._tab_choose_button.hide()
+                # tab items
+                c_x, c_y = x, y
+                scroll_value = self._gui_scroll.get_value()
+                heights = self._item_width_or_height_dict.values()
+                for i_index, i_tab_item in enumerate(tab_items):
+                    i_y = sum(heights[:i_index])
+                    i_h = self._item_width_or_height_dict[i_index]
+                    if self._direction == _gui_core.GuiDirections.LeftToRight:
+                        i_tab_item.get_rect().setRect(
+                            c_x, c_y+i_y-scroll_value, tab_w, i_h
+                        )
+                        i_tab_item.get_draw_rect().setRect(
+                            c_x, c_y+i_y-scroll_value, tab_w, i_h
+                        )
+                    elif self._direction == _gui_core.GuiDirections.RightToLeft:
+                        i_tab_item.get_rect().setRect(
+                            w-tab_w, c_y+i_y-scroll_value, tab_w, i_h
+                        )
+                        i_tab_item.get_draw_rect().setRect(
+                            w-tab_w, c_y+i_y - scroll_value, tab_w, i_h
+                        )
+                    else:
+                        raise RuntimeError()
+                    
+                    i_widget = i_tab_item.get_widget()
+                    if i_index == self._index_current:
+                        i_widget.show()
+                    else:
+                        i_widget.hide()
 
     def _do_scroll_to_(self, index):
         item = self._tab_item_stack.get_item_at(index)
@@ -167,13 +284,19 @@ class QtHTabToolGroup(
         )
 
     def __init__(self, *args, **kwargs):
-        super(QtHTabToolGroup, self).__init__(*args, **kwargs)
+        super(_AbsQtHTabToolBox, self).__init__(*args, **kwargs)
 
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setMouseTracking(True)
-        self.setSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+
+        if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
+            self.setSizePolicy(
+                QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+            )
+        elif self.QT_ORIENTATION == QtCore.Qt.Vertical:
+            self.setSizePolicy(
+                QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+            )
 
         self._init_widget_base_def_(self)
         self._init_frame_base_def_(self)
@@ -186,6 +309,8 @@ class QtHTabToolGroup(
 
         self._tab_view_margins = 2, 2, 2, 2
         self._tab_w, self._tab_h = 24, 24
+
+        self._tab_text_font = _qt_core.QtFont.generate(size=10, weight=75)
 
         self._tab_bar_rect = QtCore.QRect()
         self._tab_bar_draw_rect = QtCore.QRect()
@@ -229,13 +354,15 @@ class QtHTabToolGroup(
         self._gui_scroll = _qt_core.GuiQtModForScroll()
         self._gui_scroll.set_step(64)
 
-        self._item_width_dict = {}
+        self._item_width_or_height_dict = {}
 
         self._index_current = 0
 
         self._index_press_tmp = None
         self._index_press = None
         self._index_hover = None
+
+        self._direction = _gui_core.GuiDirections.TopToBottom
 
         self._layout = _qt_core.QtHBoxLayout(self)
 
@@ -292,11 +419,13 @@ class QtHTabToolGroup(
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
         painter._draw_virtual_buttons_(
-            self._tab_bar_draw_rect,
+            bar_rect=self._tab_bar_draw_rect,
             virtual_items=self._tab_item_stack.get_all_items(),
             index_hover=self._index_hover,
             index_pressed=self._index_press,
             index_current=self._get_current_index_(),
+            orientation=self.QT_ORIENTATION,
+            direction=self._direction
         )
 
         if self._gui_scroll.get_is_valid():
@@ -315,7 +444,7 @@ class QtHTabToolGroup(
         if 'name' in kwargs:
             tab_item.set_name(kwargs['name'])
         if 'icon_name_text' in kwargs:
-            tab_item.set_icon_text(kwargs['name'])
+            tab_item.set_icon_text(kwargs['icon_name_text'])
         if 'tool_tip' in kwargs:
             tab_item.set_tool_tip(kwargs['tool_tip'])
 
@@ -359,8 +488,8 @@ class QtHTabToolGroup(
                 title = self._tab_item_stack.get_name_at(self._index_hover)
                 tool_tip = self._tab_item_stack.get_tool_tip_at(self._index_hover)
             else:
-                title = 'N/a'
-                tool_tip = 'N/a'
+                title = self._tab_item_stack.get_name_at(self._index_hover)
+                tool_tip = self._tab_item_stack.get_tool_tip_at(self._index_hover)
 
             css = _qt_core.GuiQtUtil.generate_tool_tip_css(
                 title,
@@ -420,3 +549,26 @@ class QtHTabToolGroup(
         if index is not None:
             self._switch_current_to_(index)
 
+    def _set_tab_direction_(self, direction):
+        self._direction = direction
+
+
+class QtHTabToolBox(
+    _AbsQtHTabToolBox
+):
+
+    QT_ORIENTATION = QtCore.Qt.Horizontal
+
+    def __init__(self, *args, **kwargs):
+        super(QtHTabToolBox, self).__init__(*args, **kwargs)
+        self._direction = _gui_core.GuiDirections.TopToBottom
+
+
+class QtVTabToolBox(
+    _AbsQtHTabToolBox
+):
+    QT_ORIENTATION = QtCore.Qt.Vertical
+
+    def __init__(self, *args, **kwargs):
+        super(QtVTabToolBox, self).__init__(*args, **kwargs)
+        self._direction = _gui_core.GuiDirections.LeftToRight

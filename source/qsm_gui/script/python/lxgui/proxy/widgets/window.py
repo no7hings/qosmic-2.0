@@ -14,7 +14,7 @@ from ...qt.widgets import button as _qt_wgt_button
 
 from ...qt.widgets import chart as _qt_wgt_chart
 
-from ...qt.widgets import process as _qt_wgt_process
+from ...qt.widgets import progress_bar_for_subprocess as _qt_wgt_process
 # proxy abstracts
 from .. import abstracts as gui_prx_abstracts
 # proxy widgets
@@ -74,10 +74,10 @@ class AbsPrxDialogWindow(
         self._notify_when_ok_completed = boolean
 
     def _set_central_layout_create_(self):
-        self._central_widget = _qt_wgt_utility.QtWidget()
-        self._qt_widget.setCentralWidget(self._central_widget)
-        self._central_layout = _qt_wgt_base.QtVBoxLayout(self._central_widget)
-        self._central_layout.setContentsMargins(*[4]*4)
+        self._central_qt_widget = _qt_wgt_utility.QtWidget()
+        self._qt_widget.setCentralWidget(self._central_qt_widget)
+        self._central_qt_layout = _qt_wgt_base.QtVBoxLayout(self._central_qt_widget)
+        self._central_qt_layout.setContentsMargins(*[4]*4)
 
     def _gui_build_(self):
         self._set_central_layout_create_()
@@ -85,7 +85,7 @@ class AbsPrxDialogWindow(
         self._set_waiting_def_init_()
         #
         self._sub_label = _qt_wgt_utility.QtTextItem()
-        self._central_layout.addWidget(self._sub_label)
+        self._central_qt_layout.addWidget(self._sub_label)
         self._sub_label.setVisible(False)
         self._sub_label.setFixedHeight(20)
         self._sub_label._set_name_draw_font_(gui_qt_core.QtFonts.SubTitle)
@@ -93,11 +93,11 @@ class AbsPrxDialogWindow(
             gui_qt_core.QtCore.Qt.AlignHCenter | gui_qt_core.QtCore.Qt.AlignVCenter
         )
         #
-        self._set_progressing_def_init_()
+        self._init_progressing_def_()
         #
         self._top_toolbar = gui_prx_wgt_container.PrxHToolBar()
         self._top_toolbar.set_hide()
-        self._central_layout.addWidget(self._top_toolbar.widget)
+        self._central_qt_layout.addWidget(self._top_toolbar.widget)
         self._top_toolbar.set_expanded(True)
         #
         self._modal_button = gui_prx_wdt_utility.PrxToggleButton()
@@ -112,7 +112,7 @@ class AbsPrxDialogWindow(
         )
         #
         s = gui_prx_wdt_utility.PrxVScrollArea()
-        self._central_layout.addWidget(s.widget)
+        self._central_qt_layout.addWidget(s.widget)
         #
         self._customize_widget = _qt_wgt_utility.QtWidget()
         s.add_widget(self._customize_widget)
@@ -136,7 +136,7 @@ class AbsPrxDialogWindow(
         self._tip_prx_tool_group.add_widget(self._tip_prx_text_browser)
         #
         self._bottom_toolbar = gui_prx_wgt_container.PrxHToolBar()
-        self._central_layout.addWidget(self._bottom_toolbar.widget)
+        self._central_qt_layout.addWidget(self._bottom_toolbar.widget)
         self._bottom_toolbar.set_expanded(True)
         qt_widget_2 = _qt_wgt_utility.QtWidget()
         self._bottom_toolbar.add_widget(qt_widget_2)
@@ -279,7 +279,7 @@ class AbsPrxDialogWindow(
         self._cancel_methods.append(method)
 
     def set_status(self, status):
-        self._central_widget._set_status_(status)
+        self._central_qt_widget._set_status_(status)
         self._sub_label._set_status_(status)
 
     def add_customize_widget(self, widget):
@@ -343,7 +343,7 @@ class PrxDialogWindow0(AbsPrxDialogWindow):
 
         # self._top_toolbar.set_show()
 
-    def set_window_show(self, pos=None, size=None, exclusive=True):
+    def show_window_auto(self, pos=None, size=None, exclusive=True):
         # do not show unique
         gui_qt_core.GuiQtUtil.show_qt_window(
             self.widget,
@@ -385,10 +385,10 @@ class PrxDialogWindow1(AbsPrxDialogWindow):
     def _set_central_layout_create_(self):
         layout = _qt_wgt_base.QtVBoxLayout(self.widget)
         layout.setContentsMargins(0, 0, 0, 0)
-        self._central_widget = _qt_wgt_utility.QtWidget()
-        layout.addWidget(self._central_widget)
-        self._central_layout = _qt_wgt_base.QtVBoxLayout(self._central_widget)
-        self._central_layout.setContentsMargins(*[4]*4)
+        self._central_qt_widget = _qt_wgt_utility.QtWidget()
+        layout.addWidget(self._central_qt_widget)
+        self._central_qt_layout = _qt_wgt_base.QtVBoxLayout(self._central_qt_widget)
+        self._central_qt_layout.setContentsMargins(*[4]*4)
 
     def do_yes(self):
         self._result = True
@@ -414,7 +414,7 @@ class PrxDialogWindow1(AbsPrxDialogWindow):
         #
         self._qt_widget._do_cancel_()
 
-    def set_window_show(self, pos=None, size=None, exclusive=True):
+    def show_window_auto(self, pos=None, size=None, exclusive=True):
         # do not show unique
         gui_qt_core.GuiQtUtil.show_qt_window(
             self.widget,
@@ -484,15 +484,15 @@ class PrxMonitorWindow(
         )
 
     def _gui_build_(self):
-        self._central_widget = _qt_wgt_utility.QtWidget()
-        self._qt_widget.setCentralWidget(self._central_widget)
-        self._central_layout = _qt_wgt_base.QtVBoxLayout(self._central_widget)
+        self._central_qt_widget = _qt_wgt_utility.QtWidget()
+        self._qt_widget.setCentralWidget(self._central_qt_widget)
+        self._central_qt_layout = _qt_wgt_base.QtVBoxLayout(self._central_qt_widget)
         #
         self._tip_prx_text_browser = gui_prx_wdt_utility.PrxTextBrowser()
-        self._central_layout.addWidget(self._tip_prx_text_browser.widget)
+        self._central_qt_layout.addWidget(self._tip_prx_text_browser.widget)
         #
         qt_widget_1 = _qt_wgt_utility.QtWidget()
-        self._central_layout.addWidget(qt_widget_1)
+        self._central_qt_layout.addWidget(qt_widget_1)
         #
         self._input_button_layout = _qt_wgt_base.QtHBoxLayout(qt_widget_1)
         #
@@ -502,10 +502,10 @@ class PrxMonitorWindow(
         self._status_button.set_icon_by_text('process')
 
         self._set_waiting_def_init_()
-        self._set_progressing_def_init_()
+        self._init_progressing_def_()
 
     def set_status(self, status):
-        self._central_widget._set_status_(status)
+        self._central_qt_widget._set_status_(status)
 
     def get_status_button(self):
         return self._status_button
@@ -520,14 +520,14 @@ class PrxMonitorWindow(
         self._status_button.set_finished_at(*args)
 
 
-class PrxProcessingWindow(
+class PrxSubProcessWindow(
     gui_prx_abstracts.AbsPrxWindow,
     gui_prx_abstracts.AbsPrxProgressingDef,
 ):
     QT_WIDGET_CLS = _qt_window_base.QtMainWindow
 
     def __init__(self, *args, **kwargs):
-        super(PrxProcessingWindow, self).__init__(*args, **kwargs)
+        super(PrxSubProcessWindow, self).__init__(*args, **kwargs)
         if isinstance(kwargs.get('parent'), gui_qt_core.QtWidgets.QMainWindow):
             self.widget.setWindowFlags(
                 gui_qt_core.QtCore.Qt.Tool | gui_qt_core.QtCore.Qt.WindowStaysOnTopHint
@@ -541,22 +541,22 @@ class PrxProcessingWindow(
         self.set_definition_window_size((480, 240))
 
     def _gui_build_(self):
-        self._central_widget = _qt_wgt_utility.QtWidget()
-        self._qt_widget.setCentralWidget(self._central_widget)
-        self._central_layout = _qt_wgt_base.QtVBoxLayout(self._central_widget)
+        self._central_qt_widget = _qt_wgt_utility.QtWidget()
+        self._qt_widget.setCentralWidget(self._central_qt_widget)
+        self._central_qt_layout = _qt_wgt_base.QtVBoxLayout(self._central_qt_widget)
         #
-        self._qt_processing_bar = _qt_wgt_process.QtProcessingBar()
-        self._central_layout.addWidget(self._qt_processing_bar)
+        self._qt_processing_bar = _qt_wgt_process.QtProgressBarForSubprocess()
+        self._central_qt_layout.addWidget(self._qt_processing_bar)
         #
         self._tip_prx_text_browser = gui_prx_wdt_utility.PrxTextBrowser()
-        self._central_layout.addWidget(self._tip_prx_text_browser.widget)
+        self._central_qt_layout.addWidget(self._tip_prx_text_browser.widget)
 
         self._bottom_toolbar = gui_prx_wgt_container.PrxHToolBar()
-        self._central_layout.addWidget(self._bottom_toolbar.widget)
+        self._central_qt_layout.addWidget(self._bottom_toolbar.widget)
         self._bottom_toolbar.set_expanded(True)
         self._bottom_toolbar.set_align_right()
 
-        self.connect_window_close_to(self.kill_processing)
+        self.register_window_close_method(self.kill_processing)
 
         self._stop_button = _qt_wgt_button.QtPressButton()
         self._bottom_toolbar.add_widget(self._stop_button)
@@ -573,23 +573,23 @@ class PrxProcessingWindow(
         self._close_button.setFixedWidth(80)
         self._close_button.press_clicked.connect(self.set_window_close)
 
-        self._qt_processing_bar.update_logging.connect(self.update_logging)
+        self._qt_processing_bar.log_update.connect(self.log_update)
 
     def start(self, fnc, *args, **kwargs):
         t = self._qt_processing_bar._generate_thread_()
         t.set_fnc(fnc, *args, **kwargs)
         t.start()
-        t.finished.connect(self.__finish)
+        t.finished.connect(self._on_finished)
         return t
 
-    def __finish(self):
+    def _on_finished(self):
         self._stop_button.hide()
 
     def kill_processing(self):
-        self._qt_processing_bar._kill_processing_()
+        self._qt_processing_bar._do_close_()
 
-    def get_is_killed(self):
+    def is_killed(self):
         return self._qt_processing_bar._get_is_killed_()
 
-    def update_logging(self, text):
+    def log_update(self, text):
         self._tip_prx_text_browser.trace_log_use_thread(text)

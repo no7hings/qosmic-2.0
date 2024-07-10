@@ -6,9 +6,9 @@ def skin_proxy_generate_fnc(option_opt):
     cache_file_path = option_opt.get('cache_file')
     data_file_path = option_opt.get('data_file')
 
-    import qsm_maya.animation.scripts as qsm_mya_rig_scripts
+    import qsm_maya.animation.scripts as qsm_mya_anm_scripts
 
-    qsm_mya_rig_scripts.AdvSkinProxyProcess(
+    qsm_mya_anm_scripts.AdvSkinProxyProcess(
         file_path, cache_file_path, data_file_path
     ).execute()
 
@@ -22,9 +22,9 @@ def dynamic_gpu_generate_fnc(option_opt):
     motion_file = option_opt.get('motion_file')
     use_motion = option_opt.get_as_boolean('use_motion')
 
-    import qsm_maya.animation.scripts as qsm_mya_rig_scripts
+    import qsm_maya.animation.scripts as qsm_mya_anm_scripts
 
-    qsm_mya_rig_scripts.DynamicGpuCacheProcess(
+    qsm_mya_anm_scripts.DynamicGpuCacheProcess(
         file_path, cache_file_path, namespace, start_frame, end_frame, motion_file, use_motion
     ).execute()
 
@@ -66,6 +66,8 @@ def playblast_fnc(option_opt):
     start_frame = dict_.get('start_frame')
     end_frame = dict_.get('end_frame')
     frame_step = dict_.get('frame_step') or 1.0
+    fps = dict_.get('fps') or 24.0
+
     width = dict_.get('width')
     height = dict_.get('height')
     texture_enable = dict_.get('texture_enable')
@@ -75,7 +77,8 @@ def playblast_fnc(option_opt):
     qsm_mya_prv_scripts.PlayblastProcess(
         file_path,
         movie_file_path,
-        camera_path, start_frame, end_frame, frame_step, width, height,
+        camera_path, start_frame, end_frame, frame_step, fps,
+        width, height,
         texture_enable, light_enable, shadow_enable
     ).execute()
 
@@ -98,11 +101,32 @@ def test_unicode(method, option_opt):
     pass
 
 
+def test_progress(method, option_opt):
+    import lxbasic.log as bsc_log
+    import time
+
+    with bsc_log.LogProcessContext.create(
+        maximum=5,
+        label='test-1',
+    ) as g_p:
+        for i in range(5):
+            time.sleep(1)
+            g_p.do_update()
+
+    with bsc_log.LogProcessContext.create(
+        maximum=5,
+        label='test-2',
+    ) as g_p:
+        for i in range(5):
+            time.sleep(1)
+            g_p.do_update()
+
+
 def main(session):
     # noinspection PyUnresolvedReferences
     from maya import cmds
     cmds.stackTrace(state=1)
-    #
+
     option_opt = session.get_option_opt()
     method = option_opt.get('method')
     if method == 'skin-proxy-cache-generate':
@@ -120,6 +144,9 @@ def main(session):
     # test
     elif method == 'test-unicode':
         test_unicode(method, option_opt)
+    # test
+    elif method == 'test-process':
+        test_progress(method, option_opt)
 
 
 if __name__ == '__main__':

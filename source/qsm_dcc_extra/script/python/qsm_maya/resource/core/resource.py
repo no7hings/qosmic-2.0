@@ -63,6 +63,10 @@ class Resource(object):
     def find_nodes_by_scheme(self, scheme):
         raise NotImplementedError()
 
+    def get_all_for_isolate_select(self):
+        roots = cmds.ls('|{}:*'.format(self._namespace), long=1) or []
+        return roots
+
 
 class ResourcesQuery(object):
     KEY = 'resource query'
@@ -185,7 +189,7 @@ class ResourceScriptOpt(object):
     def load_cache(self, *args, **kwargs):
         raise NotImplementedError()
 
-    def hide_resource_auto(self, *args, **kwargs):
+    def remove_resource_auto(self, *args, **kwargs):
         raise NotImplementedError()
 
     def generate_args(self, *args, **kwargs):

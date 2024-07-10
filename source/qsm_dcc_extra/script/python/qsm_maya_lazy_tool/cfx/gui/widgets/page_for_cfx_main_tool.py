@@ -19,7 +19,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
     
     UNIT_FOR_MAIN_TOOL_CLS = _unit_for_cfx_rig.UnitForCfxResourceView
 
-    SCRIPT_JOB_NAME = 'lazy_tool_for_cfx'
+    SCRIPT_JOB_NAME = 'lazy_tool_for_cfx_main'
 
     def do_gui_refresh_by_resource_tag_checking(self):
         filter_data_src = self._gui_resource_tag_prx_unit.generate_semantic_tag_filter_data_src()
@@ -57,12 +57,21 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
             self._script_job.EventTypes.SelectionChanged
         )
         self._script_job.register(
-            self._gui_export_tool_set_unit.do_gui_refresh_by_dcc_frame_changing,
+            self._gui_export_toolset_unit.do_gui_refresh_by_dcc_frame_changing,
             self._script_job.EventTypes.FrameRangeChanged
+        )
+        # refresh all when scene changed
+        self._script_job.register(
+            self.do_gui_refresh_all,
+            self._script_job.EventTypes.SceneNew
         )
         self._script_job.register(
             self.do_gui_refresh_all,
             self._script_job.EventTypes.SceneOpened
+        )
+        self._script_job.register(
+            self.do_gui_refresh_all,
+            self._script_job.EventTypes.SceneSaved
         )
 
     def _do_dcc_destroy_all_script_jobs(self):
@@ -84,10 +93,10 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
             i_tool.connect_check_toggled_to(i_fnc)
 
     def gui_get_tool_tab_box(self):
-        return self._page_prx_tab_box
+        return self._page_prx_tab_tool_box
     
     def gui_get_tool_tab_current_key(self):
-        return self._page_prx_tab_box.get_current_key()
+        return self._page_prx_tab_tool_box.get_current_key()
 
     def _do_gui_build_selection_scheme(self):
         options = self._window._configure.get('build.rig_selection_scheme.options')
@@ -121,12 +130,12 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
             gui_qt_core.QtWidgets.QSizePolicy.Expanding,
             gui_qt_core.QtWidgets.QSizePolicy.Expanding
         )
-        qt_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
-        qt_lot.setContentsMargins(*[0]*4)
-        qt_lot.setSpacing(2)
+        main_qt_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
+        main_qt_lot.setContentsMargins(*[0]*4)
+        main_qt_lot.setSpacing(2)
         # top
         self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
-        qt_lot.addWidget(self._top_prx_tool_bar.widget)
+        main_qt_lot.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)
         # main tool box
@@ -136,7 +145,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         self._gui_add_main_tools()
 
         self._prx_h_splitter = gui_prx_widgets.PrxHSplitter()
-        qt_lot.addWidget(self._prx_h_splitter.widget)
+        main_qt_lot.addWidget(self._prx_h_splitter.widget)
         # resource tag
         self._resource_tag_tree_view = gui_prx_widgets.PrxTreeView()
         self._prx_h_splitter.add_widget(self._resource_tag_tree_view)
@@ -145,7 +154,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
             self._window.get_definition_window_size()[0]
         )
 
-        self._gui_resource_tag_prx_unit = qsm_mya_gui_core.PrxUnitForResourceTagOpt(
+        self._gui_resource_tag_prx_unit = qsm_mya_gui_core.PrxTreeviewUnitForResourceTagOpt(
             self._window, self, self._session, self._resource_tag_tree_view
         )
         # resource
@@ -163,22 +172,22 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         )
         # selection scheme
         self._selection_scheme_prx_input = gui_prx_widgets.PrxInputAsCapsule()
-        qt_lot.addWidget(self._selection_scheme_prx_input.widget)
+        main_qt_lot.addWidget(self._selection_scheme_prx_input.widget)
         self._do_gui_build_selection_scheme()
         # tool set
-        self._page_prx_tab_box = gui_prx_widgets.PrxHTabBox()
-        qt_lot.addWidget(self._page_prx_tab_box.widget)
+        self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
+        main_qt_lot.addWidget(self._page_prx_tab_tool_box.widget)
         # export
-        self._gui_export_tool_set_unit = _unit_for_cfx_rig.ToolSetUnitForCfxRigExport(
+        self._gui_export_toolset_unit = _unit_for_cfx_rig.ToolsetUnitForCfxRigExport(
             self._window, self, self._session
         )
         # import
-        self._gui_import_tool_set_unit = _unit_for_cfx_rig.ToolSetUnitForCfxRigImport(
+        self._gui_import_toolset_unit = _unit_for_cfx_rig.ToolsetUnitForCfxRigImport(
             self._window, self, self._session
         )
         # bottom
         self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
-        qt_lot.addWidget(self._bottom_prx_tool_bar.widget)
+        main_qt_lot.addWidget(self._bottom_prx_tool_bar.widget)
         self._bottom_prx_tool_bar.set_align_left()
         self._bottom_prx_tool_bar.set_expanded(True)
 
@@ -192,14 +201,17 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         self._window.connect_window_activate_changed_to(self.do_gui_update_scene_info)
 
         self._do_dcc_register_all_script_jobs()
-        self._window.connect_window_close_to(self._do_dcc_destroy_all_script_jobs)
+        self._window.register_window_close_method(self._do_dcc_destroy_all_script_jobs)
         
-        self._page_prx_tab_box.connect_current_changed_to(self.do_gui_refresh_units)
-        self._page_prx_tab_box.set_history_key('lazy-cfx-tool.main_page_key_current')
-        self._page_prx_tab_box.load_history()
+        self._page_prx_tab_tool_box.connect_current_changed_to(self.do_gui_refresh_toolset_units)
+        self._page_prx_tab_tool_box.set_history_key('lazy-cfx-tool.main_page_key_current')
+        self._page_prx_tab_tool_box.load_history()
 
     def do_gui_refresh_all(self, force=False):
+        # toolbar
         self._top_prx_tool_bar.do_gui_refresh()
+        self._bottom_prx_tool_bar.do_gui_refresh()
+        # resource view
         is_changed = self._gui_resource_prx_unit.get_resources_query().do_update()
         if is_changed is True or force is True:
             self._gui_resource_tag_prx_unit.restore()
@@ -210,9 +222,11 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
 
         self._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection()
         self._gui_resource_prx_unit.do_gui_refresh_tools()
+        # tool set
+        self.do_gui_refresh_toolset_units()
 
-        self.do_gui_refresh_units()
-
-    def do_gui_refresh_units(self):
-        if self.gui_get_tool_tab_current_key() == 'import':
-            pass
+    def do_gui_refresh_toolset_units(self):
+        if self.gui_get_tool_tab_current_key() == 'export':
+            self._gui_export_toolset_unit.do_gui_refresh_all()
+        elif self.gui_get_tool_tab_current_key() == 'import':
+            self._gui_import_toolset_unit.do_gui_refresh_all()

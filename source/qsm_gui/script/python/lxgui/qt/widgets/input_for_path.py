@@ -32,8 +32,8 @@ class QtInputAsPath(
     def _refresh_choose_index_(self):
         pass
 
-    input_value_change_accepted = qt_signal(str)
-    user_input_value_change_accepted = qt_signal(str)
+    input_value_accepted = qt_signal(str)
+    user_input_value_accepted = qt_signal(str)
 
     input_entry_key_enter_press = qt_signal()
 
@@ -117,8 +117,8 @@ class QtInputAsPath(
         self._entry_extend_widget.entry_value_change_accepted.connect(self._push_history_)
 
         self.input_value_changed = self._entry_extend_widget.entry_value_changed
-        self.input_value_change_accepted = self._entry_extend_widget.entry_value_change_accepted
-        self.user_input_value_change_accepted = self._entry_extend_widget.user_entry_value_change_accepted
+        self.input_value_accepted = self._entry_extend_widget.entry_value_change_accepted
+        self.user_input_value_accepted = self._entry_extend_widget.user_entry_value_change_accepted
 
     def _set_buffer_fnc_(self, fnc):
         self._buffer_fnc = fnc

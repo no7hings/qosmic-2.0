@@ -34,7 +34,7 @@ hook_option:
         # need render, do not use subprocess
         group: all
         #
-        pool: emergency
+        pool: all
     #
     rez:
         extend_packages: []

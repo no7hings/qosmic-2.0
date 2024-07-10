@@ -38,7 +38,7 @@ hook_option:
         #
         group: all
         #
-        pool: emergency
+        pool: all
     #
     rez:
         extend_packages: []

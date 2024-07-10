@@ -328,7 +328,7 @@ class QtPressButton(
             c_name_w -= icn_frm_w
             c_w -= icn_frm_w
         #
-        self._rect_frame_draw.setRect(
+        self._frame_draw_rect.setRect(
             c_x, c_y, c_w, c_h
         )
         self._status_rect.setRect(
@@ -436,7 +436,7 @@ class QtPressButton(
                     #
                     flag_raw = [
                         (check_enable, self._check_frame_rect, self.ActionFlag.CheckPress),
-                        (click_enable, self._rect_frame_draw, self.ActionFlag.Press),
+                        (click_enable, self._frame_draw_rect, self.ActionFlag.Press),
                         (option_click_enable, self._option_click_rect, self.ActionFlag.OptionPress),
                     ]
                     if event.button() == QtCore.Qt.LeftButton:
@@ -480,7 +480,7 @@ class QtPressButton(
             bkg_color = _qt_core.QtBackgroundColors.ButtonDisable
 
         painter._draw_frame_by_rect_(
-            rect=self._rect_frame_draw,
+            rect=self._frame_draw_rect,
             border_color=bdr_color,
             background_color=bkg_color,
             border_radius=4,
@@ -490,7 +490,7 @@ class QtPressButton(
         if self._get_status_is_enable_() is True and self._get_sub_process_is_enable_() is False:
             bkg_color = [self._status_color, self._hover_status_color][self._is_hovered]
             painter._draw_frame_by_rect_(
-                rect=self._rect_frame_draw,
+                rect=self._frame_draw_rect,
                 border_color=bdr_color,
                 background_color=bkg_color,
                 border_radius=4,
@@ -507,7 +507,7 @@ class QtPressButton(
             #
             r, g, b, a = status_rgba
             painter._draw_alternating_colors_by_rect_(
-                rect=self._rect_frame_draw,
+                rect=self._frame_draw_rect,
                 colors=((r, g, b, 127), (0, 0, 0, 0)),
                 offset=offset,
                 border_radius=4,
@@ -651,7 +651,7 @@ class QtIconPressButton(
         else:
             raise RuntimeError()
 
-        self._rect_frame_draw.setRect(
+        self._frame_draw_rect.setRect(
             x, y, w-1, h-1
         )
 
@@ -756,12 +756,12 @@ class QtIconPressButton(
                     self._refresh_widget_draw_()
                 elif event.type() == QtCore.QEvent.MouseButtonDblClick:
                     if event.button() == QtCore.Qt.LeftButton:
-                        self._set_action_flag_(self.ActionFlag.PressDbClick)
+                        self._set_action_flag_(self.ActionFlag.PressDblClick)
                     elif event.button() == QtCore.Qt.RightButton:
                         pass
                 elif event.type() == QtCore.QEvent.MouseButtonRelease:
                     if event.button() == QtCore.Qt.LeftButton:
-                        if self._get_action_flag_is_match_(self.ActionFlag.PressDbClick):
+                        if self._get_action_flag_is_match_(self.ActionFlag.PressDblClick):
                             self.press_dbl_clicked.emit()
                         elif self._get_action_flag_is_match_(self.ActionFlag.Press):
                             p = event.pos()
@@ -799,14 +799,14 @@ class QtIconPressButton(
         )
         if self._get_action_flag_is_match_(self.ActionFlag.DragMove):
             painter._draw_frame_by_rect_(
-                    rect=self._rect_frame_draw,
+                    rect=self._frame_draw_rect,
                     border_color=_qt_core.QtBorderColors.Button,
                     background_color=_qt_core.QtBackgroundColors.ItemSelected,
                 )
 
         if self._thread_draw_flag is True:
             painter._draw_alternating_colors_by_rect_(
-                rect=self._rect_frame_draw,
+                rect=self._frame_draw_rect,
                 colors=((0, 0, 0, 63), (0, 0, 0, 0)),
                 # border_radius=4,
                 running=True
@@ -1165,7 +1165,7 @@ class QtIconToggleButton(
         icn_p = self._icon_draw_percent
         icn_w = icn_h = r*icn_p
         #
-        self._rect_frame_draw.setRect(
+        self._frame_draw_rect.setRect(
             x, y, w-1, h-1
         )
         self._check_frame_rect.setRect(

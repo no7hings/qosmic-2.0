@@ -38,7 +38,7 @@ class Container(object):
 
     @classmethod
     def get_all_nodes(cls, path):
-        return cmds.container(path, query=1, nodeList=1)
+        return cmds.container(path, query=1, nodeList=1) or []
 
     @classmethod
     def find_all_nodes(cls, path, type_includes):

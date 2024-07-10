@@ -25,31 +25,31 @@ class ThreadWorker(threading.Thread):
 
     def _do_update_status(self, status):
         self._status = status
-        if self._is_killed is False:
+        if self._kill_flag is False:
             self._signal_status_changed.send_emit(
                 self._entity, status
             )
 
     def _do_completed(self, results):
-        if self._is_killed is False:
+        if self._kill_flag is False:
             self._signal_completed.send_emit(
                 self._entity, results
             )
 
     def _do_failed(self, results):
-        if self._is_killed is False:
+        if self._kill_flag is False:
             self._signal_failed.send_emit(
                 self._entity, results
             )
 
     def _do_started(self):
-        if self._is_killed is False:
+        if self._kill_flag is False:
             self._signal_started.send_emit(
                 self._entity
             )
 
     def _do_finished(self, status, results):
-        if self._is_killed is False:
+        if self._kill_flag is False:
             self._signal_finished.send_emit(
                 self._entity, status, results
             )
@@ -59,7 +59,7 @@ class ThreadWorker(threading.Thread):
         self._cmd_script = cmd_script
         self._entity = entity
 
-        self._is_killed = False
+        self._kill_flag = False
 
         self._signal_status_changed = _thread.TrdSignal(object, int)
         self._signal_completed = _thread.TrdSignal(object, list)
@@ -72,7 +72,7 @@ class ThreadWorker(threading.Thread):
         self._options = {}
 
     def run(self):
-        if self._is_killed is True:
+        if self._kill_flag is True:
             return
 
         self._do_update_status(self.Status.Running)
@@ -149,6 +149,7 @@ class ThreadWorker(threading.Thread):
     @property
     def finished(self):
         return self._signal_finished
+
     @staticmethod
     def is_busy():
         return ThreadWorker.VALUE >= ThreadWorker.MAXIMUM
@@ -179,7 +180,7 @@ class ThreadWorker(threading.Thread):
         self._do_update_status(
             self.Status.Killed
         )
-        self._is_killed = True
+        self._kill_flag = True
 
     def do_quit(self):
         pass

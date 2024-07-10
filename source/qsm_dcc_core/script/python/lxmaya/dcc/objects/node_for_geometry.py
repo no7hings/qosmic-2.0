@@ -386,7 +386,6 @@ class Mesh(_node_for_dag.Shape):
             cmds.select(clear=1)
         return [i.split(self.COMPONENT_CLS.PATHSEP)[-1] for i in _]
 
-    #
     def get_display_smooth_iterations(self):
         return self.get_port('displaySmoothMesh').get()
 

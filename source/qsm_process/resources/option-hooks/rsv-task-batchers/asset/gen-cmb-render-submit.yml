@@ -63,7 +63,7 @@ hook_option:
         #
         group: all
         #
-        pool: emergency
+        pool: all
         #
         error_limit: 1
     #

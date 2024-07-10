@@ -150,7 +150,7 @@ class AbsPnlForHashGeometryDcc(
         )
         #
         self._geometry_unify_ddl_job_process = None
-        self.connect_window_close_to(self._set_geometry_unify_ddl_job_stop_)
+        self.register_window_close_method(self._set_geometry_unify_ddl_job_stop_)
         #
         _port = self._hash_uv_node_prx.add_port(
             gui_prx_widgets.PrxSubProcessPort('geometry_uv_map_assign', 'Assign Geometry UV-map By Select(s)')

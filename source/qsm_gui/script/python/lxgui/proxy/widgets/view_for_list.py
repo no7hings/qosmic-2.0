@@ -121,7 +121,7 @@ class PrxListView(
         self.__add_sort_mode_switch_tools()
 
         self._prx_filter_bar._qt_widget.input_value_changed.connect(self.__keyword_filter_cbk)
-        self._prx_filter_bar._qt_widget.input_value_change_accepted.connect(
+        self._prx_filter_bar._qt_widget.input_value_accepted.connect(
             self._qt_view._do_keyword_filter_occurrence_
         )
         self._prx_filter_bar._qt_widget.occurrence_previous_press_clicked.connect(

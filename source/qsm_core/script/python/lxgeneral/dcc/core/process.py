@@ -5,7 +5,7 @@ class MayaProcess(object):
     @classmethod
     def generate_command(cls, option):
         # windows
-        cmds = [
+        cmd_args = [
             'rez-env qsm_dcc_main maya-2019 usd-20.11',
             (
                 r'-- mayabatch -command '
@@ -16,7 +16,7 @@ class MayaProcess(object):
                 hook_option='option_hook_key=dcc-process/maya-process&' + option
             )
         ]
-        return ' '.join(cmds)
+        return ' '.join(cmd_args)
 
         # import lxbasic.storage as bsc_storage
         # c = bsc_storage.PkgContextNew(
@@ -42,15 +42,27 @@ class PythonProcess(object):
     def generate_command(cls, option):
         import lxbasic.resource as bsc_resource
 
-        import lxbasic.storage as bsc_storage
+        cmd_args = [
+            'rez-env qsm_dcc_main',
+            (
+                r'-- qsm-python {process_file} "{option}"'
+            ).format(
+                process_file=bsc_resource.ExtendResource.get('python-process/usd-script.py'), option=option
+            )
+        ]
 
-        c = bsc_storage.PkgContextNew(
-            ' '.join(['lxdcc', 'usd'])
-        ).get_command(
-            args_execute=[
-                r'-- qsm-python {process_file} "{option}"'.format(
-                    process_file=bsc_resource.ExtendResource.get('python-process/usd-script.py'), option=option
-                )
-            ],
-        )
-        return c
+        return ' '.join(cmd_args)
+        # import lxbasic.resource as bsc_resource
+        #
+        # import lxbasic.storage as bsc_storage
+        #
+        # c = bsc_storage.PkgContextNew(
+        #     ' '.join(['lxdcc', 'usd'])
+        # ).get_command(
+        #     args_execute=[
+        #         r'-- qsm-python {process_file} "{option}"'.format(
+        #             process_file=bsc_resource.ExtendResource.get('python-process/usd-script.py'), option=option
+        #         )
+        #     ],
+        # )
+        # return c

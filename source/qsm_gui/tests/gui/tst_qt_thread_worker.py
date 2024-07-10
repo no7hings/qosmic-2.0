@@ -20,7 +20,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
     def test(self):
         for i in range(10):
-            i_thread = gui_qt_core.QtBuildThreadWorker.generate(self._qt_widget)
+            i_thread = gui_qt_core.QtThreadWorkerForBuild.generate(self._qt_widget)
             i_thread.set_cache_fnc(lambda: (time.sleep(5), []))
             i_thread.set_entity(i)
             i_thread.start()
@@ -35,6 +35,6 @@ if __name__ == '__main__':
     #
     w = W()
     w.set_definition_window_size((480, 480))
-    w.set_window_show()
+    w.show_window_auto()
     #
     sys.exit(app.exec_())

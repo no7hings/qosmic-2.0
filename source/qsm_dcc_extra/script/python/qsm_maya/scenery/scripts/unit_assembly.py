@@ -1,4 +1,6 @@
 # coding:utf-8
+import functools
+
 import os
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
@@ -7,7 +9,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.resource as bsc_resource
+import lxgui.core as gui_core
 
 import lxbasic.storage as bsc_storage
 
@@ -17,7 +19,7 @@ from ... import core as _mya_core
 
 from ...general import core as _gnl_core
 
-from .. import core as _scn_core
+from .. import core as _core
 
 from ...resource import core as _rsc_core
 
@@ -31,7 +33,10 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
     def __init__(self, resource):
         super(UnitAssemblyOpt, self).__init__(resource)
 
-    def load_cache(self, cache_file_path):
+        cmds.loadPlugin('sceneAssembly', quiet=1)
+        cmds.loadPlugin('gpuCache', quiet=1)
+
+    def load_cache(self, cache_file_path, hide_scenery=True):
         self.create_cache_root_auto()
 
         namespace = self._namespace
@@ -44,13 +49,31 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
                 )
                 cmds.parent(cache_location, self.CACHE_ROOT)
 
-                self.hide_resource_auto()
+                self.remove_resource_auto(hide_scenery)
 
-    def hide_resource_auto(self):
-        self._resource.reference_opt.do_unload()
+    def remove_resource_auto(self, hide_scenery=True):
+        if hide_scenery is True:
+            cache_location = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
+            layer_name = '{}_dynamic_gpu_hide'.format(self._namespace)
+            layer_path = cmds.createDisplayLayer(name=layer_name, number=1, empty=True)
+
+            roots = _mya_core.Namespace.find_roots(
+                self._namespace
+            )
+            cmds.editDisplayLayerMembers(layer_path, *roots)
+            cmds.setAttr(layer_path+'.visibility', False)
+
+            cmds.container(cache_location, edit=1, force=1, addNode=[layer_path])
+        else:
+            self._resource.reference_opt.do_unload()
 
     def generate_args(self):
         file_path = self._resource.file
+
+        task_name = '[skin-proxy][{}]'.format(
+            bsc_storage.StgFileOpt(file_path).name
+        )
+
         cache_file_path = _gnl_core.ResourceCache.generate_unit_assembly_file(
             file_path
         )
@@ -61,13 +84,114 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
                     cache_file_path,
                 )
             )
-            return cmd_script, cache_file_path
-        return None, cache_file_path
+            return task_name, cmd_script, cache_file_path
+        return task_name, None, cache_file_path
+
+    @classmethod
+    def _execute_fnc(cls, window, task_args_dict):
+        with window.gui_progressing(maximum=len(task_args_dict.keys())) as g_p:
+            for i_k, i_v in task_args_dict.items():
+                i_task_name, i_cmd_script, i_cache_file = i_k
+
+                window.submit(
+                    i_task_name,
+                    i_cmd_script,
+                    completed_fnc=[
+                        functools.partial(cls(x).load_cache, i_cache_file, True) for x in i_v
+                    ]
+                )
+                g_p.do_update()
+
+    @classmethod
+    def load_auto(cls, **kwargs):
+        scheme = kwargs['scheme']
+        if scheme == 'default':
+            resources = []
+            namespaces = _mya_core.Namespaces.extract_roots_from_selection()
+            if namespaces:
+                resources_query = _core.SceneriesQuery()
+                resources_query.do_update()
+                for i_namespace in namespaces:
+                    i_resource = resources_query.get(i_namespace)
+                    if i_resource.is_unit_assembly_exists() is False:
+                        resources.append(i_resource)
+
+            if not resources:
+                gui_core.GuiDialog.create(
+                    '元素组装加载',
+                    content='选择一个或多个可用的场景（如果选中的场景已经加载了元素组装，会被忽略），可以选择场景的任意部件。',
+                    status=gui_core.GuiDialog.ValidationStatus.Warning,
+                    no_label='关闭',
+                    ok_visible=False, no_visible=True, cancel_visible=False,
+                )
+                return
+
+            task_args_dict = {}
+            for i_resource in resources:
+                i_resource_opt = cls(i_resource)
+                i_task_name, i_cmd_script, i_cache_file = i_resource_opt.generate_args()
+                if i_cmd_script is not None:
+                    task_args_dict.setdefault(
+                        (i_task_name, i_cmd_script, i_cache_file),
+                        []
+                    ).append(
+                        i_resource
+                    )
+                else:
+                    i_resource_opt.load_cache(i_cache_file, True)
+
+            if task_args_dict:
+                import lxgui.proxy.widgets as gui_prx_widgets
+
+                window = gui_prx_widgets.PrxSubprocessWindow()
+                if window._language == 'chs':
+                    window.set_window_title('元素组装加载')
+                    window.set_tip(
+                        '元素组装会在后台生成，生成成功后会自动加载到场景中，请耐心等待；\n'
+                        '这个过程可能会让MAYA前台操作产生些许卡顿；\n'
+                        '如需要终止任务，请点击“关闭”'
+                    )
+                else:
+                    window.set_window_title('Unit Assembly Load')
+
+                window.show_window_auto(exclusive=False)
+                window.run_fnc_delay(
+                    functools.partial(cls._execute_fnc, window, task_args_dict), 500
+                )
+
+    @classmethod
+    def remove_auto(cls, **kwargs):
+        resources = []
+        namespaces = _mya_core.Namespaces.extract_roots_from_selection()
+        if namespaces:
+            resources_query = _core.SceneriesQuery()
+            resources_query.do_update()
+            for i_namespace in namespaces:
+                i_resource = resources_query.get(i_namespace)
+                if i_resource.is_unit_assembly_exists() is True:
+                    resources.append(i_resource)
+
+        if not resources:
+            gui_core.GuiDialog.create(
+                '元素组装移除',
+                content='选择一个或多个可用的场景（已经加载了元素组装），可以选择场景的任意部件。',
+                status=gui_core.GuiDialog.ValidationStatus.Warning,
+                no_label='关闭',
+                ok_visible=False, no_visible=True, cancel_visible=False,
+            )
+            return
+
+        for i_resource in resources:
+            cls(i_resource).remove_cache()
 
 
 class UnitAssemblyProcess(object):
+    KEY = 'unit assembly'
 
     def __init__(self, file_path, cache_file_path=None, gpu_unpack=True):
+        cmds.loadPlugin('sceneAssembly', quiet=1)
+        cmds.loadPlugin('gpuCache', quiet=1)
+
         self._file_path = file_path
 
         self._directory_path = bsc_storage.StgFileOpt(
@@ -96,86 +220,99 @@ class UnitAssemblyProcess(object):
                 i_mesh_opt = _mya_core.MeshOpt(i_shape_path)
                 i_w, i_h, i_d = i_mesh_opt.get_dimension()
                 i_s = max(i_w, i_h, i_d)
-                if i_s < _scn_core.Assembly.DIMENSION_MINIMUM:
+                if i_s < _core.Assembly.DIMENSION_MINIMUM:
                     list_for_grid.append(i_shape_path)
+                else:
+                    self.mesh_prc(i_shape_path, check_face_count=False)
 
         if list_for_grid:
-            mapper = _asb_core.GridSpace(list_for_grid, _scn_core.Assembly.DIMENSION_MINIMUM).generate()
+            mapper = _asb_core.GridSpace(list_for_grid, _core.Assembly.DIMENSION_MINIMUM).generate()
             keys = mapper.keys()
             keys.sort()
-            for i_seq, i_key in enumerate(keys):
-                i_hash_key = bsc_core.BscHash.to_hash_key(i_key)
-                i_directory_path = '{}/region/{}'.format(
-                    self._cache_directory_path, i_hash_key
-                )
-                i_ad_file_path = '{}/AD.ma'.format(
-                    i_directory_path
-                )
-                if bsc_storage.StgFileOpt(i_ad_file_path).get_is_file() is False:
-                    i_gpu_file_path = '{}/gpu.abc'.format(
+            with bsc_log.LogProcessContext.create(maximum=len(keys), label='grid process') as l_p:
+                for i_seq, i_key in enumerate(keys):
+                    i_hash_key = bsc_core.BscHash.to_hash_key(i_key)
+                    i_directory_path = '{}/region/{}'.format(
+                        self._cache_directory_path, i_hash_key
+                    )
+                    i_ad_file_path = '{}/AD.ma'.format(
                         i_directory_path
                     )
-                    i_mesh_file_path = '{}/mesh.ma'.format(
-                        i_directory_path
-                    )
+                    if bsc_storage.StgFileOpt(i_ad_file_path).get_is_file() is False:
+                        i_gpu_file_path = '{}/gpu.abc'.format(
+                            i_directory_path
+                        )
+                        i_mesh_file_path = '{}/mesh.ma'.format(
+                            i_directory_path
+                        )
 
-                    i_group_path = '|region_{}_GRP'.format(i_seq)
-                    i_group_path_new = _mya_core.Group.create(i_group_path)
-                    i_shape_paths = mapper[i_key]
-                    for j_shape_path in i_shape_paths:
-                        j_transform_path = _mya_core.Shape.get_transform(j_shape_path)
-                        _mya_core.Group.add(i_group_path_new, j_transform_path)
-                    # export to gpu and mesh
-                    i_children = _mya_core.Group.get_children(i_group_path_new)
-                    _mya_core.GpuCache.export_frame_(
-                        i_gpu_file_path, i_children
-                    )
-                    _mya_core.SceneFile.export_file(
-                        i_mesh_file_path, i_children
-                    )
-                    _mya_core.Node.delete(i_group_path_new)
-                    # create AD
-                    i_ad_path = '|region_{}_AD'.format(i_seq)
-                    # ad
-                    _mya_core.AssemblyDefinition.create(
-                        i_ad_path
-                    )
-                    _mya_core.AssemblyDefinition.add_cache(
-                        i_ad_path, i_gpu_file_path, 'gpu'
-                    )
-                    _mya_core.AssemblyDefinition.add_scene(
-                        i_ad_path, i_mesh_file_path, 'mesh'
-                    )
-                    _mya_core.SceneFile.export_file(
-                        i_ad_file_path, i_ad_path
-                    )
-                    _mya_core.Node.delete(i_ad_path)
+                        i_group_path = '|region_{}_GRP'.format(i_seq)
+                        i_group_path_new = _mya_core.Group.create(i_group_path)
+                        i_shape_paths = mapper[i_key]
+                        for j_shape_path in i_shape_paths:
+                            # fixme: mesh parent mesh
+                            if _mya_core.DagNode.is_exists(j_shape_path) is False:
+                                continue
 
-                i_ar_path = '|region_{}_AR'.format(i_seq)
-                i_ar_path_new = _mya_core.AssemblyReference.create(
-                    i_ad_file_path, i_ar_path
-                )
-                _mya_core.NodeAttribute.create_as_string(
-                    i_ar_path_new, 'qsm_type', 'unit_assembly'
-                )
-                _mya_core.NodeAttribute.create_as_string(
-                    i_ar_path_new, 'qsm_hash_key', i_hash_key
-                )
-                _mya_core.NodeDrawOverride.set_enable(
-                    i_ar_path_new, True
-                )
-                _mya_core.NodeDrawOverride.set_color(
-                    i_ar_path_new, (1.0, .5, .25)
-                )
-                nodes.append(i_ar_path_new)
+                            j_transform_path = _mya_core.Shape.get_transform(j_shape_path)
+                            _mya_core.Group.add(i_group_path_new, j_transform_path)
+                        # export to gpu and mesh
+                        i_children = _mya_core.Group.get_children(i_group_path_new)
+                        _mya_core.GpuCache.export_frame_(
+                            i_gpu_file_path, i_children
+                        )
+                        _mya_core.SceneFile.export_file(
+                            i_mesh_file_path, i_children
+                        )
+                        _mya_core.Node.delete(i_group_path_new)
+                        # create AD
+                        i_ad_path = '|region_{}_AD'.format(i_seq)
+                        # ad
+                        _mya_core.AssemblyDefinition.create(
+                            i_ad_path
+                        )
+                        _mya_core.AssemblyDefinition.add_cache(
+                            i_ad_path, i_gpu_file_path, 'gpu'
+                        )
+                        _mya_core.AssemblyDefinition.add_scene(
+                            i_ad_path, i_mesh_file_path, 'mesh'
+                        )
+                        _mya_core.SceneFile.export_file(
+                            i_ad_file_path, i_ad_path
+                        )
+                        _mya_core.Node.delete(i_ad_path)
+
+                    i_ar_path = '|region_{}_AR'.format(i_seq)
+                    i_ar_path_new = _mya_core.AssemblyReference.create(
+                        i_ad_file_path, i_ar_path
+                    )
+                    _mya_core.NodeAttribute.create_as_string(
+                        i_ar_path_new, 'qsm_type', 'unit_assembly'
+                    )
+                    _mya_core.NodeAttribute.create_as_string(
+                        i_ar_path_new, 'qsm_hash_key', i_hash_key
+                    )
+                    _mya_core.NodeDrawOverride.set_enable(
+                        i_ar_path_new, True
+                    )
+                    _mya_core.NodeDrawOverride.set_color(
+                        i_ar_path_new, (1.0, .5, .25)
+                    )
+                    nodes.append(i_ar_path_new)
+
+                    l_p.do_update()
 
         return nodes
 
-    def mesh_prc(self, shape_path):
+    def mesh_prc(self, shape_path, check_face_count=True):
         mesh_opt = _mya_core.MeshOpt(shape_path)
-        face_count = mesh_opt.get_face_number()
-        if face_count < _scn_core.Assembly.FACE_COUNT_MAXIMUM:
-            return
+        if check_face_count is True:
+            face_count = _mya_core.Mesh.get_face_number(shape_path)
+            if face_count == 0:
+                return
+
+            if face_count < _core.Assembly.FACE_COUNT_MAXIMUM:
+                return
 
         hash_key = mesh_opt.to_hash()
         transform_path = mesh_opt.transform_path
@@ -200,7 +337,7 @@ class UnitAssemblyProcess(object):
 
             _mya_core.Transform.zero_transformations(transform_path_new)
             # gpu
-            gpu_key = _scn_core.Assembly.Keys.GPU
+            gpu_key = _core.Assembly.Keys.GPU
             gpu_file_path = '{}/{}.abc'.format(
                 unit_directory_path, gpu_key
             )
@@ -209,7 +346,7 @@ class UnitAssemblyProcess(object):
             )
             file_dict[gpu_key] = gpu_file_path
             # mesh
-            mesh_key = _scn_core.Assembly.Keys.Mesh
+            mesh_key = _core.Assembly.Keys.Mesh
             mesh_file_path = '{}/{}.ma'.format(
                 unit_directory_path, mesh_key
             )
@@ -236,7 +373,7 @@ class UnitAssemblyProcess(object):
                         )
                     )
                 # gpu
-                i_gpu_key = _scn_core.Assembly.Keys.GPU_LOD.format(i_level)
+                i_gpu_key = _core.Assembly.Keys.GPU_LOD.format(i_level)
                 i_gpu_file_path_lod = '{}/{}.abc'.format(
                     unit_directory_path, i_gpu_key
                 )
@@ -245,7 +382,7 @@ class UnitAssemblyProcess(object):
                 )
                 file_dict[i_gpu_key] = i_gpu_file_path_lod
                 # mesh
-                i_mesh_key = _scn_core.Assembly.Keys.Mesh_LOD.format(i_level)
+                i_mesh_key = _core.Assembly.Keys.Mesh_LOD.format(i_level)
                 i_mesh_file_path_lod = '{}/{}.ma'.format(
                     unit_directory_path, i_mesh_key
                 )
@@ -254,14 +391,14 @@ class UnitAssemblyProcess(object):
                 )
                 file_dict[i_mesh_key] = i_mesh_file_path_lod
             # add attribute
-            for i_key in _scn_core.Assembly.Keys.All:
+            for i_key in _core.Assembly.Keys.All:
                 if i_key in file_dict:
                     i_file_path = file_dict[i_key]
-                    if i_key.startswith(_scn_core.Assembly.Keys.Mesh):
+                    if i_key.startswith(_core.Assembly.Keys.Mesh):
                         _mya_core.AssemblyDefinition.add_scene(
                             ad_path, i_file_path, i_key
                         )
-                    elif i_key.startswith(_scn_core.Assembly.Keys.GPU):
+                    elif i_key.startswith(_core.Assembly.Keys.GPU):
                         _mya_core.AssemblyDefinition.add_cache(
                             ad_path, i_file_path, i_key
                         )
@@ -307,12 +444,16 @@ class UnitAssemblyProcess(object):
             container, 'qsm_cache', self._cache_file_path
         )
 
+        bsc_log.Log.trace_method_result(
+            self.KEY, 'load scene: {}'.format(self._file_path)
+        )
+
         import_paths = _mya_core.SceneFile.import_file(
             self._file_path
         )
         _mya_core.Scene.clear_unknown_nodes()
         all_roots = _mya_core.DagNode.find_roots(import_paths)
-        _scn_core.GpuImport.find_all_gpu_files(self._directory_path)
+        _core.GpuImport.find_all_gpu_files(self._directory_path)
         # find lost reference first
         _mya_core.FileReferences.search_all_from(
             [self._directory_path], ignore_exists=True
@@ -320,19 +461,19 @@ class UnitAssemblyProcess(object):
         # repair all instanced
         _mya_core.Scene.remove_all_instanced(type_includes=['mesh', 'gpuCache'])
         # import all gpu
-        _scn_core.GpuImport().execute()
+        _core.GpuImport().execute()
         # process
         mesh_paths = _mya_core.Scene.find_all_dag_nodes(type_includes=['mesh'])
-        with bsc_log.LogProcessContext.create(maximum=len(mesh_paths), label='unit assembly process') as g_p:
+        with bsc_log.LogProcessContext.create(maximum=len(mesh_paths), label='mesh process') as l_p:
             for i_path in mesh_paths:
                 self.mesh_prc(i_path)
-                g_p.do_update()
+                l_p.do_update()
         #
         grid_paths = self.grid_mesh_prc()
         if grid_paths:
             _mya_core.Container.add_dag_nodes(container, grid_paths)
         # instance all mesh
-        # _scn_core.MeshInstance(material=True).execute()
+        # _core.MeshInstance(material=True).execute()
         # remove unused groups
         _mya_core.Scene.remove_all_empty_groups()
         # collection roots

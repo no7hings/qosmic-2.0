@@ -44,6 +44,6 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     w = TestWindow()
     #
-    w.set_window_show()
+    w.show_window_auto()
     #
     sys.exit(app.exec_())

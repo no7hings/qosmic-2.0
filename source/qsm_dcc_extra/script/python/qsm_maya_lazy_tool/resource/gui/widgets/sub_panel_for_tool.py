@@ -32,4 +32,4 @@ class PrxSubPanelForTool(_abstracts.AbsPrxSubPanelForTool):
         super(PrxSubPanelForTool, self).__init__(window, session, *args, **kwargs)
 
         self._do_dcc_register_all_script_jobs()
-        self._window.connect_window_close_to(self._do_dcc_destroy_all_script_jobs)
+        self._window.register_window_close_method(self._do_dcc_destroy_all_script_jobs)

@@ -4,7 +4,7 @@ command:
     #
     python: '<command.maya-python>'
     #
-    maya: '-- mayabatch -command "python(\"importlib=__import__(\\\"importlib\\\");ssn_commands=importlib.import_module(\\\"lxsession.commands\\\");ssn_commands.execute_option_hook(option=\\\"{hook_option}\\\")\")"'
+    maya: '-- mayabatch -command "python(\"import lxsession.commands as ssn_commands;ssn_commands.execute_option_hook(option=\\\"{hook_option}\\\")\")"'
     maya-python: '-- mayapy {lxdcc_root}/script/bin/python/qsm-hook-engine-script.py "{hook_option}"'
     #
     maya-render: '-- Render -r arnold -rd {render_directory} -cam {render_camera} -rt 0 -ai:lve 3 -s {start_index} -e {end_index} "{render_file}"'

@@ -1123,7 +1123,7 @@ class QtEntryAsBubble(
                 self._refresh_widget_draw_()
             elif event.type() == QtCore.QEvent.MouseButtonDblClick:
                 if event.button() == QtCore.Qt.LeftButton:
-                    self._set_action_flag_(self.ActionFlag.PressDbClick)
+                    self._set_action_flag_(self.ActionFlag.PressDblClick)
                 self._refresh_widget_draw_()
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:

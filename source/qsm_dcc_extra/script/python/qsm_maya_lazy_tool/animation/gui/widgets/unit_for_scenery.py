@@ -25,7 +25,7 @@ import qsm_maya_gui.core as qsm_mya_gui_core
 
 
 class UnitForSceneryView(
-    qsm_mya_gui_core.PrxUnitForResourceOpt
+    qsm_mya_gui_core.PrxTreeviewUnitForResourceOpt
 ):
     ROOT_NAME = 'Sceneries'
 
@@ -63,12 +63,12 @@ class UnitForSceneryReference(
         self._prx_input_for_asset.add_widget(self._reference_button)
         self._reference_button._set_name_text_(
             gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.buttons.reference')
+                self._window._language, self._window._configure.get('build.scenery.buttons.reference')
             )
         )
         self._reference_button._set_tool_tip_text_(
             gui_core.GuiUtil.choice_tool_tip(
-                self._window._language, self._session.configure.get('build.buttons.reference')
+                self._window._language, self._window._configure.get('build.scenery.buttons.reference')
             )
         )
         self._reference_button.setMaximumWidth(64)
@@ -119,12 +119,13 @@ class UnitForSceneryUtilityToolSet(
     # unit assembly
     def do_dcc_load_unit_assemblies(self):
         if self._unit_assembly_load_args_array:
+            hide_scenery = self._prx_options_node.get('setting.hide_scenery')
             with self._window.gui_progressing(
                 maximum=len(self._unit_assembly_load_args_array), label='load unit assemblies'
             ) as g_p:
                 for i_opt, i_cache_file in self._unit_assembly_load_args_array:
                     if i_opt.is_resource_exists() is True:
-                        i_opt.load_cache(i_cache_file)
+                        i_opt.load_cache(i_cache_file, hide_scenery=hide_scenery)
                     g_p.do_update()
 
             self._page.do_gui_refresh_all(force=True)
@@ -143,9 +144,9 @@ class UnitForSceneryUtilityToolSet(
                     for i_resource in resources:
                         i_opt = qsm_mya_scn_scripts.UnitAssemblyOpt(i_resource)
                         if i_opt.is_exists() is False:
-                            i_cmd, i_cache_file = i_opt.generate_args()
-                            if i_cmd is not None:
-                                create_cmds.append(i_cmd)
+                            i_task_name, i_cmd_script, i_cache_file = i_opt.generate_args()
+                            if i_cmd_script is not None:
+                                create_cmds.append(i_cmd_script)
 
                             self._unit_assembly_load_args_array.append(
                                 (i_opt, i_cache_file)
@@ -179,12 +180,13 @@ class UnitForSceneryUtilityToolSet(
     # gpu instance
     def do_dcc_load_gpu_instances(self):
         if self._gpu_instance_load_args_array:
+            hide_scenery = self._prx_options_node.get('setting.hide_scenery')
             with self._window.gui_progressing(
                 maximum=len(self._gpu_instance_load_args_array), label='load gpu instances'
             ) as g_p:
                 for i_opt, i_cache_file in self._gpu_instance_load_args_array:
                     if i_opt.is_resource_exists() is True:
-                        i_opt.load_cache(i_cache_file)
+                        i_opt.load_cache(i_cache_file, hide_scenery=hide_scenery)
                     g_p.do_update()
 
             self._page.do_gui_refresh_all(force=True)
@@ -203,9 +205,9 @@ class UnitForSceneryUtilityToolSet(
                     for i_resource in resources:
                         i_opt = qsm_mya_scn_scripts.GpuInstanceOpt(i_resource)
                         if i_opt.is_exists() is False:
-                            i_cmd, i_cache_file = i_opt.generate_args()
-                            if i_cmd is not None:
-                                create_cmds.append(i_cmd)
+                            i_cmd_script, i_cache_file = i_opt.generate_args()
+                            if i_cmd_script is not None:
+                                create_cmds.append(i_cmd_script)
 
                             self._gpu_instance_load_args_array.append(
                                 (i_opt, i_cache_file)
@@ -241,20 +243,21 @@ class UnitForSceneryUtilityToolSet(
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.options.scenery_utility')
+                self._window._language, self._window._configure.get('build.scenery.units.unit_assembly_and_gpu_instance_load.options')
             )
         )
         self._prx_options_node.build_by_data(
-            self._session.configure.get('build.options.scenery_utility.parameters'),
+            self._window._configure.get('build.scenery.units.unit_assembly_and_gpu_instance_load.options.parameters'),
         )
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='utility',
             name=gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.tag-groups.scenery_utility')
+                self._window._language, self._window._configure.get('build.scenery.units.unit_assembly_and_gpu_instance_load')
             ),
+            icon_name_text='utility',
             tool_tip=gui_core.GuiUtil.choice_tool_tip(
-                self._window._language, self._session.configure.get('build.tag-groups.scenery_utility')
+                self._window._language, self._window._configure.get('build.scenery.units.unit_assembly_and_gpu_instance_load')
             )
         )
 
@@ -271,6 +274,7 @@ class UnitForSceneryUtilityToolSet(
         self._prx_options_node.set(
             'gpu_instance.remove', self.do_dcc_remove_gpu_instances
         )
+
 
 class UnitForScenerySwitchToolSet(
     qsm_mya_gui_core.PrxUnitBaseOpt
@@ -325,20 +329,21 @@ class UnitForScenerySwitchToolSet(
         super(UnitForScenerySwitchToolSet, self).__init__(window, unit, session)
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.options.scenery_switch')
+                self._window._language, self._window._configure.get('build.scenery.units.unit_assembly_and_gpu_instance_switch.options')
             )
         )
         self._prx_options_node.build_by_data(
-            self._session.configure.get('build.options.scenery_switch.parameters'),
+            self._window._configure.get('build.scenery.units.unit_assembly_and_gpu_instance_switch.options.parameters'),
         )
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='switch',
             name=gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.tag-groups.scenery_switch')
+                self._window._language, self._window._configure.get('build.scenery.units.unit_assembly_and_gpu_instance_switch')
             ),
+            icon_name_text='switch',
             tool_tip=gui_core.GuiUtil.choice_tool_tip(
-                self._window._language, self._session.configure.get('build.tag-groups.scenery_switch')
+                self._window._language, self._window._configure.get('build.scenery.units.unit_assembly_and_gpu_instance_switch')
             )
         )
 
@@ -451,24 +456,28 @@ class UnitForSceneryExtendToolSet(
             active_camera
         )
 
+    def do_gui_load_active_camera(self):
+        self.do_gui_refresh_by_camera_changing()
+
     def __init__(self, window, unit, session):
         super(UnitForSceneryExtendToolSet, self).__init__(window, unit, session)
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.options.scenery_camera')
+                self._window._language, self._window._configure.get('build.scenery.units.camera_mask.options')
             )
         )
         self._prx_options_node.build_by_data(
-            self._session.configure.get('build.options.scenery_camera.parameters'),
+            self._window._configure.get('build.scenery.units.camera_mask.options.parameters'),
         )
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='extend',
             name=gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.tag-groups.scenery_extend')
+                self._window._language, self._window._configure.get('build.scenery.units.camera_mask')
             ),
+            icon_name_text='extend',
             tool_tip=gui_core.GuiUtil.choice_tool_tip(
-                self._window._language, self._session.configure.get('build.tag-groups.scenery_extend')
+                self._window._language, self._window._configure.get('build.scenery.units.camera_mask')
             )
         )
 
@@ -498,6 +507,10 @@ class UnitForSceneryExtendToolSet(
 
         self._prx_options_node.set(
             'camera_lod_switch.create', self.do_dcc_create_camera_lod_switch
+        )
+
+        self._prx_options_node.set(
+            'setting.load_active_camera', self.do_gui_load_active_camera
         )
 
     def gui_get_frame_scheme(self):

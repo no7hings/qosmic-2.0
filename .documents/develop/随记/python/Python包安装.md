@@ -33,3 +33,13 @@ uninstall.exe
 重新安装
 {root}\Autodesk Maya 2020.4 Win\x86\Licensing\AdskLicensing-installer.exe
 ```
+
+## psutil
+
+```
+cd C:\Program Files\Autodesk\Maya2020\bin
+
+mayapy -m pip install psutil==2.2.1
+
+mayapy -m pip install C:/Users/nothings/Downloads/psutil-2.2.1-cp27-none-win_amd64.whl
+```

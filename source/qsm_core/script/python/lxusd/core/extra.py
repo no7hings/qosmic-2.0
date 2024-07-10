@@ -290,7 +290,7 @@ class UsdStageOpt(UsdBasic):
             tgt_file_path
         )
 
-    def get_fps(self):
+    def get_fps_tag(self):
         return self._usd_stage.GetTimeCodesPerSecond()
 
     def set_frame(self, frame):

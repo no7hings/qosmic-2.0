@@ -344,7 +344,7 @@ class QtVideoPlayWidget(
             if data:
                 frame, width, height, channel = data
                 self._frame_index_maximum = self._video_capture_opt.get_frame_count()
-                self._fps = self._video_capture_opt.get_fps()
+                self._fps = self._video_capture_opt.get_fps_tag()
                 self._frame_interval = int(1000/self._fps)
                 return [frame, width, height, channel]
 

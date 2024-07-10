@@ -46,7 +46,7 @@ class VideoCaptureOpt(object):
     def get_frame_count(self):
         return int(self._cpt.get(cv2.CAP_PROP_FRAME_COUNT))
 
-    def get_fps(self):
+    def get_fps_tag(self):
         return int(self._cpt.get(cv2.CAP_PROP_FPS))
 
     def release(self):
@@ -97,7 +97,7 @@ class FrameExtractor(object):
         else:
             sys.stderr.write('Error: Cannot read frame.\n')
 
-    def run(self):
+    def execute(self):
         thread = threading.Thread(target=self.extract_frame)
         thread.start()
         thread.join(self._timeout)
@@ -106,3 +106,26 @@ class FrameExtractor(object):
             sys.stderr.write('Error: Reading frame timed out.\n')
         else:
             self.save_frame()
+
+
+class ImageConcat(object):
+    def __init__(self, image_paths,  video_path, fps=24):
+        self._image_paths = image_paths
+        self._video_path = video_path
+        self._fps = fps
+
+    def execute(self):
+        frame = cv2.imread(self._image_paths[0])
+        height, width, channels = frame.shape
+        # coding is mpeg
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        video = cv2.VideoWriter(self._video_path, fourcc, self._fps, (width, height))
+
+        for i_image_path in self._image_paths:
+            i_rgb_image = cv2.imread(i_image_path)
+            # do not convert
+            # i_bgr_image = cv2.cvtColor(i_rgb_image, cv2.COLOR_RGB2BGR)
+            video.write(i_rgb_image)
+
+        video.release()
+        cv2.destroyAllWindows()

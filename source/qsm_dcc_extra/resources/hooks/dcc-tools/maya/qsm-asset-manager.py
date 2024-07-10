@@ -3,8 +3,8 @@
 
 def main(session):
     import qsm_maya_lazy_tool.animation.gui.widgets as gui_widgets
-    w = gui_widgets.PrxPnlResourceManager(session)
-    w.set_window_show()
+    w = gui_widgets.PrxPanelForAnimationTool(session)
+    w.show_window_auto()
 
 
 if __name__ == '__main__':

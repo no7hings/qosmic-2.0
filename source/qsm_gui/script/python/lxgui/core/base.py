@@ -108,25 +108,25 @@ class GuiUtil(object):
         return bsc_core.EnvBaseMtd.get_ui_language()
 
     @classmethod
-    def choice_name(cls, language, variants):
+    def choice_name(cls, language, options):
         if language == 'chs':
-            if 'name_chs' in variants:
-                return variants['name_chs']
-        return variants['name']
+            if 'name_chs' in options:
+                return options['name_chs']
+        return options['name']
 
     @classmethod
-    def choice_tool_tip(cls, language, variants):
+    def choice_tool_tip(cls, language, options):
         if language == 'chs':
-            if 'tool_tip_chs' in variants:
-                return variants['tool_tip_chs']
-        return variants['tool_tip']
+            if 'tool_tip_chs' in options:
+                return options['tool_tip_chs']
+        return options['tool_tip']
 
     @classmethod
-    def choice_message(cls, language, variants):
+    def choice_message(cls, language, options):
         if language == 'chs':
-            if 'message_chs' in variants:
-                return variants['message_chs']
-        return variants['message']
+            if 'message_chs' in options:
+                return options['message_chs']
+        return options['message']
 
 
 class GuiXml(object):

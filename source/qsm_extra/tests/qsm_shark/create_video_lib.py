@@ -104,7 +104,7 @@ for i_directory in bsc_storage.StgDirectoryOpt(
                     try:
                         bsc_cv_core.FrameExtractor(
                             i_file.path, i_thumbnail_path
-                        ).run()
+                        ).execute()
                     except Exception:
                         print i_file.path
 

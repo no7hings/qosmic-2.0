@@ -11,7 +11,7 @@ class UploadReview(gui_prx_widgets.PrxBaseWindow):
 
 def ok_method():
     w = UploadReview()
-    w.set_window_show()
+    w.show_window_auto()
 
 
 @bsc_core.MdfBaseMtd.run_with_exception_catch

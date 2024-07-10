@@ -28,6 +28,8 @@ from . import input as _message_input
 
 from . import button as _button
 
+from . import bubble as _bubble
+
 
 class AbsQtShortcutBaseDef(object):
     def _init_shortcut_base_def_(self, widget):
@@ -52,6 +54,7 @@ class AbsQtShortcutBaseDef(object):
 
 class AbsQtMainWindowDef(object):
     window_close_accepted = qt_signal(object)
+    window_closed = qt_signal()
 
     def _init_window_base_def_(self, widget):
         self._widget = widget
@@ -67,17 +70,19 @@ class AbsQtMainWindowDef(object):
 
         self._window_opacity = 1.0
 
-    def _do_window_close_later_(self, delay_time):
+    def _close_window_delay_(self, delay_time):
         tmr = QtCore.QTimer(self)
-        tmr.timeout.connect(self._do_window_close_)
-        tmr.start(delay_time)
+        tmr.singleShot(delay_time, self._do_window_close_)
 
-    def _do_window_auto_close_later_(self, delay_time):
+    def _run_fnc_delay_(self, fnc, delay_time):
+        tmr = QtCore.QTimer(self)
+        tmr.singleShot(delay_time, fnc)
+
+    def _close_window_delay_as_fade_(self, delay_time):
         self._window_auto_close_flag = True
 
         tmr = QtCore.QTimer(self)
-        tmr.timeout.connect(self._do_window_close_as_fade_)
-        tmr.start(delay_time)
+        tmr.singleShot(delay_time, self._do_window_close_as_fade_)
 
     def _do_window_cancel_auto_close_(self):
         self._window_auto_close_flag = False
@@ -97,7 +102,7 @@ class AbsQtMainWindowDef(object):
         tmr.timeout.connect(fnc_)
         tmr.start(250)
 
-    def _connect_window_close_to_(self, fnc):
+    def _register_window_close_method_(self, fnc):
         self._window_close_fncs.append(fnc)
 
     def _do_window_close_(self):
@@ -107,6 +112,7 @@ class AbsQtMainWindowDef(object):
                     i()
 
             self.window_close_accepted.emit(self)
+            self.window_closed.emit()
 
             self._widget.close()
             self._widget.deleteLater()
@@ -126,7 +132,6 @@ class AbsQtMainWindowDef(object):
         _qt_core.GuiQtUtil.show_qt_window(
             self._widget, pos, size, use_exec
         )
-
 
     def _set_icon_by_text_(self, text):
         self._widget.setWindowIcon(
@@ -278,13 +283,13 @@ class QtMessageBase(QtDialogBase):
 
         lot = _base.QtVBoxLayout(self)
         lot.setContentsMargins(0, 0, 0, 0)
-        self._central_widget = _utility.QtWidget()
-        lot.addWidget(self._central_widget)
-        self._central_layout = _base.QtVBoxLayout(self._central_widget)
-        self._central_layout.setContentsMargins(*[4]*4)
+        self._central_qt_widget = _utility.QtWidget()
+        lot.addWidget(self._central_qt_widget)
+        self._central_qt_layout = _base.QtVBoxLayout(self._central_qt_widget)
+        self._central_qt_layout.setContentsMargins(*[4]*4)
 
         sca = _utility.QtVScrollArea()
-        self._central_layout.addWidget(sca)
+        self._central_qt_layout.addWidget(sca)
         self._message_input = _message_input.QtInputAsContent()
         sca._add_widget_(self._message_input)
         self._message_input._set_entry_enable_(False)
@@ -329,8 +334,8 @@ class QtMessageBase(QtDialogBase):
     def _set_info_(self, text):
         self._info_label._set_info_(text)
 
-    def _do_window_auto_close_later_(self, delay_time):
-        super(QtMessageBase, self)._do_window_auto_close_later_(delay_time)
+    def _close_window_delay_as_fade_(self, delay_time):
+        super(QtMessageBase, self)._close_window_delay_as_fade_(delay_time)
         self._do_window_auto_close_countdown_(delay_time)
 
     def _do_window_auto_close_countdown_(self, delay_time):
@@ -420,7 +425,7 @@ class QtMessageBase(QtDialogBase):
         )
 
     def _set_status_(self, status):
-        self._central_widget._set_status_(status)
+        self._central_qt_widget._set_status_(status)
 
 
 class QtMessageBox(QtMessageBase):
@@ -441,8 +446,8 @@ class QtNoticeBox(QtMessageBase):
         )
 
 
-class AbsNoticeBaseDef(object):
-    def _init_notice_base_def_(self, widget):
+class AbsWindowNoticeBaseDef(object):
+    def _init_window_notice_base_def_(self, widget):
         self._widget = widget
 
         self._notice_widgets = []
@@ -478,7 +483,7 @@ class AbsNoticeBaseDef(object):
             *self._get_notice_window_geometry_()
         )
         delay_time = 5000
-        widget._do_window_auto_close_later_(delay_time)
+        widget._close_window_delay_as_fade_(delay_time)
 
     def _do_notice_close_all_(self):
         # list maybe dynamic
@@ -527,6 +532,14 @@ class AbsNoticeBaseDef(object):
         self._notice_show_fnc_(wgt)
 
 
+class AbsWindowBubbleMessageBaseDef(object):
+    def _init_window_bubble_message_base_def_(self, widget):
+        self._widget = widget
+
+    def _popup_bubble_message_(self, text):
+        _bubble.QtMessageBubble._create_for_(self, text)
+
+
 class QtMainWindow(
     QtWidgets.QMainWindow,
     #
@@ -538,7 +551,8 @@ class QtMainWindow(
     _utility.QtThreadDef,
     AbsQtMainWindowDef,
     AbsQtShortcutBaseDef,
-    AbsNoticeBaseDef,
+    AbsWindowNoticeBaseDef,
+    AbsWindowBubbleMessageBaseDef,
 
     _qt_abstracts.AbsQtThreadWorkerExtraDef
 ):
@@ -559,7 +573,7 @@ class QtMainWindow(
         x, y = 0, 0
         w, h = self.width(), self.height()
         m_h = self.menuBar().height()
-        self._rect_frame_draw.setRect(
+        self._frame_draw_rect.setRect(
             x, y, w, h
         )
         self._menu_frame_draw_rect.setRect(
@@ -586,7 +600,8 @@ class QtMainWindow(
         self._init_thread_base_def_(self)
         self._init_window_base_def_(self)
         self._init_shortcut_base_def_(self)
-        self._init_notice_base_def_(self)
+        self._init_window_notice_base_def_(self)
+        self._init_window_bubble_message_base_def_(self)
 
         self._init_thread_worker_extra_def_(self)
 
@@ -596,12 +611,12 @@ class QtMainWindow(
         self.menuBar().setStyleSheet(
             _qt_core.GuiQtStyle.get('QMenuBar')
         )
-        self._rect_frame_draw = QtCore.QRect()
+        self._frame_draw_rect = QtCore.QRect()
         self._menu_frame_draw_rect = QtCore.QRect()
 
         self.installEventFilter(self)
 
-        self._connect_window_close_to_(
+        self._register_window_close_method_(
             self._do_notice_close_all_
         )
 
@@ -636,7 +651,7 @@ class QtMainWindow(
         self._refresh_widget_draw_geometry_()
         painter = _qt_core.QtPainter(self)
         painter.fillRect(
-            self._rect_frame_draw,
+            self._frame_draw_rect,
             _qt_core.QtBackgroundColors.Basic
         )
         painter.fillRect(
@@ -666,6 +681,7 @@ class QtMainWindow(
     def _exec_message_(self, message, *args, **kwargs):
         w = QtMessageBox(self)
         w._set_title_('Message')
+
         w._set_ok_visible_(True)
         w._set_no_visible_(True)
         w._set_message_(message)
@@ -683,6 +699,7 @@ class QtMainWindow(
                 w._set_status_(
                     _gui_core.GuiValidationStatus.Correct
                 )
+
         w._do_exec_()
         return w._get_result_()
 

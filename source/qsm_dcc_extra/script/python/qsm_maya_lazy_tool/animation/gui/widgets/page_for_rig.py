@@ -68,12 +68,21 @@ class PrxPageForRigResource(gui_prx_abstracts.AbsPrxWidget):
             self._script_job.EventTypes.SelectionChanged
         )
         self._script_job.register(
-            self._gui_utility_tool_set_unit.do_gui_refresh_by_dcc_frame_changing,
+            self._gui_utility_toolset_unit.do_gui_refresh_by_dcc_frame_changing,
             self._script_job.EventTypes.FrameRangeChanged
+        )
+        
+        self._script_job.register(
+            self.do_gui_refresh_all,
+            self._script_job.EventTypes.SceneNew
         )
         self._script_job.register(
             self.do_gui_refresh_all,
             self._script_job.EventTypes.SceneOpened
+        )
+        self._script_job.register(
+            self.do_gui_refresh_all,
+            self._script_job.EventTypes.SceneSaved
         )
 
     def _do_dcc_destroy_all_script_jobs(self):
@@ -98,6 +107,12 @@ class PrxPageForRigResource(gui_prx_abstracts.AbsPrxWidget):
                 self._window._configure.get('build.rig_selection_scheme')
             )
         )
+
+        self._selection_scheme_prx_input.set_history_key(
+            self._window._configure.get('build.rig_selection_scheme.history_key')
+        )
+        self._selection_scheme_prx_input.pull_history_latest()
+
         self._selection_scheme_prx_input.connect_input_changed_to(
             self._gui_resource_prx_unit.do_dcc_refresh_resources_selection
         )
@@ -106,10 +121,10 @@ class PrxPageForRigResource(gui_prx_abstracts.AbsPrxWidget):
         return self._selection_scheme_prx_input.get()
 
     def gui_get_tool_tab_box(self):
-        return self._page_prx_tab_box
+        return self._page_prx_tab_tool_box
 
     def gui_get_tool_tab_current_key(self):
-        return self._page_prx_tab_box.get_current_key()
+        return self._page_prx_tab_tool_box.get_current_key()
 
     def gui_setup_page(self):
         self._dynamic_gpu_load_args_array = []
@@ -140,7 +155,7 @@ class PrxPageForRigResource(gui_prx_abstracts.AbsPrxWidget):
         self._reference_tool_box.add_widget(self._prx_input_for_asset)
         self._prx_input_for_asset.widget.setMaximumWidth(488)
 
-        self._gui_reference_opt = _unit_for_rig.UnitForRigReference(
+        self._gui_rig_reference_prx_toolbar_unit = _unit_for_rig.ToolbarUnitForRigReference(
             self._window, self, self._session, self._prx_input_for_asset
         )
 
@@ -154,7 +169,7 @@ class PrxPageForRigResource(gui_prx_abstracts.AbsPrxWidget):
             self._window.get_definition_window_size()[0]
         )
 
-        self._gui_resource_tag_prx_unit = qsm_mya_gui_core.PrxUnitForResourceTagOpt(
+        self._gui_resource_tag_prx_unit = qsm_mya_gui_core.PrxTreeviewUnitForResourceTagOpt(
             self._window, self, self._session, self._resource_tag_tree_view
         )
         # resource
@@ -175,29 +190,28 @@ class PrxPageForRigResource(gui_prx_abstracts.AbsPrxWidget):
         qt_lot.addWidget(self._selection_scheme_prx_input.widget)
         self._do_gui_build_selection_scheme()
         # tool set
-        self._page_prx_tab_box = gui_prx_widgets.PrxHTabBox()
-        qt_lot.addWidget(self._page_prx_tab_box.widget)
+        self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
+        qt_lot.addWidget(self._page_prx_tab_tool_box.widget)
         # utility
-        self._gui_utility_tool_set_unit = _unit_for_rig.ToolSetUnitForRigUtility(
+        self._gui_utility_toolset_unit = _unit_for_rig.ToolsetUnitForRigUtility(
             self._window, self, self._session
         )
         # switch
-        self._gui_switch_opt = _unit_for_rig.UnitForRigSwitchToolSet(
+        self._gui_switch_opt = _unit_for_rig.ToolsetUnitForRigSwitch(
             self._window, self, self._session
         )
         # extend
-        self._gui_extend_opt = _unit_for_rig.UnitForRigExtendToolSet(
+        self._gui_extend_opt = _unit_for_rig.ToolsetUnitForRigExtend(
             self._window, self, self._session
         )
 
         self._do_dcc_register_all_script_jobs()
+        self._window.register_window_close_method(self._do_dcc_destroy_all_script_jobs)
 
         self._window.connect_window_activate_changed_to(self.do_gui_refresh_by_window_active_changing)
-        self._window.connect_window_close_to(self._do_dcc_destroy_all_script_jobs)
-
-        self._page_prx_tab_box.connect_current_changed_to(self.do_gui_refresh_units)
-        self._page_prx_tab_box.set_history_key('resource-manager.rig_page_key_current')
-        self._page_prx_tab_box.load_history()
+        self._page_prx_tab_tool_box.connect_current_changed_to(self.do_gui_refresh_toolset_units)
+        self._page_prx_tab_tool_box.set_history_key('resource-manager.rig_page_key_current')
+        self._page_prx_tab_tool_box.load_history()
 
     def do_gui_refresh_all(self, force=False):
         self._top_prx_tool_bar.do_gui_refresh()
@@ -213,7 +227,7 @@ class PrxPageForRigResource(gui_prx_abstracts.AbsPrxWidget):
         self._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection()
         self._gui_resource_prx_unit.do_gui_refresh_tools()
 
-        self.do_gui_refresh_units()
+        self.do_gui_refresh_toolset_units()
 
-    def do_gui_refresh_units(self):
+    def do_gui_refresh_toolset_units(self):
         self._gui_switch_opt.do_gui_refresh_by_dcc_selection()

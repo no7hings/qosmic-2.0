@@ -2,7 +2,7 @@
 # session
 from .. import abstracts as ssn_abstracts
 
-from . import executor as ssn_obj_executor
+from . import hook_executor as ssn_obj_executor
 
 
 class OptionGuiSession(ssn_abstracts.AbsSsnOptionGui):
@@ -41,14 +41,14 @@ class SsnOptionMethod(ssn_abstracts.AbsSsnOptionMethod):
 
 
 class RsvProjectMethodSession(ssn_abstracts.AbsSsnRsvProjectOptionMethod):
-    EXECUTOR = ssn_obj_executor.RsvProjectHookExecutor
+    EXECUTOR = ssn_obj_executor.HookExecutorForRsvProject
 
     def __init__(self, *args, **kwargs):
         super(RsvProjectMethodSession, self).__init__(*args, **kwargs)
 
 
 class RsvTaskMethodSession(ssn_abstracts.AbsSsnRsvTaskOptionMethod):
-    EXECUTOR = ssn_obj_executor.RsvTaskHookExecutor
+    EXECUTOR = ssn_obj_executor.HookExecutorForRsvTask
 
     def __init__(self, *args, **kwargs):
         super(RsvTaskMethodSession, self).__init__(*args, **kwargs)

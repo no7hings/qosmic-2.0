@@ -98,7 +98,7 @@ class QtBuildThread(QtCore.QThread):
     def __init__(self, *args, **kwargs):
         super(QtBuildThread, self).__init__(*args, **kwargs)
         self._cache_fnc = None
-        self._is_killed = False
+        self._kill_flag = False
 
         self._status = self.Status.Waiting
 

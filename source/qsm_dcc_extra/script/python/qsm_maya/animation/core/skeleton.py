@@ -8,8 +8,9 @@ from ... import core as _mya_core
 class Joint(object):
     @classmethod
     def find_skin_clusters(cls, path):
-        return _mya_core.NodeConnection.find_all_target_nodes(
-            path, 'skinCluster'
+        # must connect to influenceColor[*]
+        return _mya_core.NodeAttribute.get_target_nodes(
+            path, 'objectColorRGB', 'skinCluster'
         )
 
     @classmethod
@@ -17,9 +18,9 @@ class Joint(object):
         skin_clusters = cls.find_skin_clusters(path)
         list_ = []
         for i_skin_cluster in skin_clusters:
-            i_mesh_paths = cmds.skinCluster(i_skin_cluster, query=True, geometry=True)
-            for j_shape_path in i_mesh_paths:
-                # fixme? ignore when is not a mesh
+            i_geometry_paths = cmds.skinCluster(i_skin_cluster, query=True, geometry=True) or []
+            for j_shape_path in i_geometry_paths:
+                # check is mesh
                 if _mya_core.Node.is_mesh(j_shape_path) is False:
                     continue
 

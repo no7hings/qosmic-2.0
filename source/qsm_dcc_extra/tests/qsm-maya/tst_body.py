@@ -7,6 +7,8 @@ import lxbasic.storage as bsc_storage
 
 import qsm_maya.core as qsm_mya_core
 
+cmds.file(save=1, f=1)
+
 dict_ = collections.OrderedDict()
 
 for i in qsm_mya_core.Scene.find_all_dag_nodes(type_includes=['mesh']):
@@ -25,5 +27,5 @@ for i in qsm_mya_core.Scene.find_all_dag_nodes(type_includes=['mesh']):
     dict_[i_key] = i_coords
 
 bsc_storage.StgFileOpt(
-    'E:/myworkspace/qosmic-2.0/source/qsm_extra/resources/gui/body.json'
+    'E:/myworkspace/qosmic-2.0/source/qsm_extra/resources/gui/adv-picker-body.json'
 ).set_write(dict_)

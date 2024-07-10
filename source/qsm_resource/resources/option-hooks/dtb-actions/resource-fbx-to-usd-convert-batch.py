@@ -133,7 +133,7 @@ def main(session):
         mtd = CreateMtd()
         button.set(mtd.execute)
 
-        w.set_window_show()
+        w.show_window_auto()
 
 
 if __name__ == '__main__':

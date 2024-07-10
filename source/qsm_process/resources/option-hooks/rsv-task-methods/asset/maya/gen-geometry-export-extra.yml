@@ -27,7 +27,7 @@ hook_option:
         # deadline-group default is "subprocess"
         group: all
         # pool
-        pool: emergency
+        pool: all
     #
     rez:
         extend_packages: []

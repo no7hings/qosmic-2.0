@@ -95,7 +95,7 @@ class _AbsQtPopupAsChoose(
             c_x, c_y = x+1, y+1
             c_w, c_h = w-2, h-2
 
-            self._rect_frame_draw.setRect(
+            self._frame_draw_rect.setRect(
                 c_x, c_y, c_w, c_h
             )
 
@@ -291,7 +291,7 @@ class _AbsQtPopupAsChoose(
 
         if self._popup_style == self.PopupStyle.FromFrame:
             painter._draw_frame_by_rect_(
-                self._rect_frame_draw,
+                self._frame_draw_rect,
                 border_color=gui_qt_core.QtColors.PopupBorder,
                 background_color=self._frame_background_color,
                 border_radius=1,
@@ -453,6 +453,7 @@ class _AbsQtPopupAsChoose(
         self._popup_item_tag_filter_is_enable = boolean
         if boolean is True:
             self._popup_tag_filter_view.show()
+            # noinspection PyUnresolvedReferences
             self._popup_tag_filter_view.itemSelectionChanged.connect(
                 self._do_popup_filter_
             )
@@ -797,11 +798,11 @@ class QtPopupAsCompletion(
         h_top_tbr = self._h_popup_top_toolbar
         spacing = 2
         #
-        self._rect_frame_draw.setRect(
+        self._frame_draw_rect.setRect(
             c_x, c_y, c_w, c_h
         )
         #
-        self._rect_frame_draw.setRect(
+        self._frame_draw_rect.setRect(
             c_x, c_y, c_w, c_h
         )
         tbr_w = c_w
@@ -857,6 +858,7 @@ class QtPopupAsCompletion(
         )
         self._popup_view.setSpacing(2)
         self._popup_view.setUniformItemSizes(True)
+        # noinspection PyUnresolvedReferences
         self._popup_view.itemClicked.connect(
             self._do_popup_end_
         )
@@ -873,7 +875,7 @@ class QtPopupAsCompletion(
         painter = gui_qt_core.QtPainter(self)
         #
         painter._draw_frame_by_rect_(
-            self._rect_frame_draw,
+            self._frame_draw_rect,
             border_color=gui_qt_core.QtColors.PopupBorder,
             background_color=self._frame_background_color,
             border_radius=1,
@@ -943,7 +945,7 @@ class QtPopupAsCompletion(
         _ = input_widget._generate_completion_texts_()
         if _:
             _.sort()
-            values = _[:25]
+            values = _[:50]
             has_match = False
             text_current = self._entry_widget._get_value_()
             for index, i_text in enumerate(values):
@@ -1057,6 +1059,7 @@ class QtPopupAsChooseForGuide(
         self._popup_view.setGridSize(QtCore.QSize(self._w_popup_item, self._h_popup_item))
         self._popup_view.setSpacing(2)
         self._popup_view.setUniformItemSizes(True)
+        # noinspection PyUnresolvedReferences
         self._popup_view.itemClicked.connect(
             self._do_popup_end_
         )
@@ -1294,12 +1297,12 @@ class QtPopupAsChooseForRgba(
         side = self._popup_side
         margin = self._popup_margin
         shadow_radius = self._popup_shadow_radius
-        #
+
         x, y = 0, 0
         w, h = self.width(), self.height()
         v_x, v_y = x+margin+side+1, y+margin+side+1
         v_w, v_h = w-margin*2-side*2-shadow_radius-2, h-margin*2-side*2-shadow_radius-2
-        #
+
         self._popup_view.setGeometry(
             v_x, v_y, v_w, v_h
         )

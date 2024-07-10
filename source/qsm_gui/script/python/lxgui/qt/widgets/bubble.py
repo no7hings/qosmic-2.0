@@ -7,7 +7,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.pinyin as bsc_pinyin
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
 from ...qt.core.wrap import *
 # qt process
@@ -92,8 +92,8 @@ class QtTextBubble(
         self._delete_frame_rect = QtCore.QRect()
         self._delete_draw_rect = QtCore.QRect()
         self._delete_icon_size = 8, 8
-        self._delete_icon_file_path_0 = gui_core.GuiIcon.get('close')
-        self._delete_icon_file_path_1 = gui_core.GuiIcon.get('close-hover')
+        self._delete_icon_file_path_0 = _gui_core.GuiIcon.get('close')
+        self._delete_icon_file_path_1 = _gui_core.GuiIcon.get('close-hover')
         
         self.installEventFilter(self)
 
@@ -209,7 +209,7 @@ class QtInfoBubble(
 
             w_c = txt_w+s_t*2
 
-            if self.__size_mode == self.SizeMode.Auto:
+            if self._size_mode == self.SizeMode.Auto:
                 self.setFixedWidth(w_c)
 
             x_0, y_0 = 0, 0
@@ -230,7 +230,7 @@ class QtInfoBubble(
 
         self._text_draw_percent = 0.5
 
-        self.__size_mode = self.SizeMode.Auto
+        self._size_mode = self.SizeMode.Auto
 
         self._frame_border_radius = 0
 
@@ -256,11 +256,151 @@ class QtInfoBubble(
             )
 
     def _set_size_mode_(self, mode):
-        self.__size_mode = mode
+        self._size_mode = mode
 
     def _set_text_(self, text):
         self._text = text
         self._refresh_widget_all_()
+
+
+class QtMessageBubble(
+    QtWidgets.QWidget,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForPressDef,
+):
+    def _refresh_widget_all_(self):
+        self._refresh_widget_draw_geometry_()
+        self._refresh_widget_draw_()
+
+    def _refresh_widget_draw_(self):
+        self.update()
+
+    def _refresh_widget_draw_geometry_(self):
+        if self._text:
+            x, y = 0, 0
+
+            mrg = 2
+
+            txt_w, txt_h = (
+                QtGui.QFontMetrics(self._text_font).width(self._text)+8, QtGui.QFontMetrics(self._text_font).height()
+            )
+
+            self._text_draw_rect.setRect(
+                x+mrg, y+mrg, txt_w, txt_h
+            )
+
+            frm_w, frm_h = txt_w+mrg*2, txt_h+mrg*2
+            self._frame_draw_rect.setRect(
+                x+mrg, y+mrg, frm_w, frm_h
+            )
+
+            self.setFixedSize(frm_w+2, frm_h+2)
+
+    def _do_close_(self):
+        self._fade_timer.stop()
+
+        self.parent()._bubble_message_widgets.remove(self)
+
+        self.close()
+        self.deleteLater()
+
+    def __init__(self, *args, **kwargs):
+        super(QtMessageBubble, self).__init__(*args, **kwargs)
+        self.setSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        )
+
+        self._text = None
+        self._text_draw_rect = QtCore.QRect()
+        self._text_font = _qt_core.QtFont.generate(size=12)
+        self._text_color = _gui_core.GuiRgba.LightBlack
+
+        self._frame_border_color = _gui_core.GuiRgba.LightBlack
+        self._frame_background_color = _gui_core.GuiRgba.DarkWhite
+        self._frame_draw_rect = QtCore.QRect()
+        self._frame_border_radius = 3
+
+        self._opacity = 1.0
+
+        self._fade_timer = QtCore.QTimer(self)
+
+        self.installEventFilter(self)
+
+    def eventFilter(self, *args):
+        widget, event = args
+        if widget == self:
+            if event.type() == QtCore.QEvent.Resize:
+                self._refresh_widget_all_()
+            elif event.type() == QtCore.QEvent.MouseButtonPress:
+                if event.button() == QtCore.Qt.LeftButton:
+                    self._do_close_()
+
+        return False
+
+    def paintEvent(self, event):
+        painter = _qt_core.QtPainter(self)
+        if self._text:
+            painter._set_border_color_(*(self._frame_border_color[:3]+(self._opacity*255.0, )))
+            painter._set_background_color_(*(self._frame_background_color[:3]+(self._opacity*255.0, )))
+            painter.drawRoundedRect(
+                self._frame_draw_rect,
+                self._frame_border_radius, self._frame_border_radius,
+                QtCore.Qt.AbsoluteSize
+            )
+
+            painter._set_text_color_(*(self._text_color[:3]+(self._opacity*255.0, )))
+            painter._set_font_(self._text_font)
+            painter.drawText(
+                self._frame_draw_rect,
+                QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+                self._text
+            )
+
+    @classmethod
+    def _create_for_(cls, widget, text):
+        if hasattr(widget, '_bubble_message_widgets') is False:
+            widget._bubble_message_widgets = []
+
+        wgt = cls(widget)
+        wgt._set_text_(text)
+        wgt._popup_()
+        # collection later
+        widget._bubble_message_widgets.append(wgt)
+
+    def _set_text_(self, text):
+        self._text = text
+        self._refresh_widget_all_()
+
+    def _close_delay_as_fade_(self, delay_time):
+        tmr = QtCore.QTimer(self)
+        tmr.singleShot(delay_time, self._do_close_as_fade_)
+
+    def _do_close_as_fade_(self):
+        def fnc_():
+            self._opacity -= .1
+            self._refresh_widget_draw_()
+            if self._opacity <= .1:
+                self._do_close_()
+
+        self._fade_timer.timeout.connect(fnc_)
+        self._fade_timer.start(50)
+
+    def _popup_(self):
+        x, y = 0, 0
+        widgets = self.parent()._bubble_message_widgets
+
+        if widgets:
+            y_c = y+max([(_.y()+_.height()) for _ in widgets])
+        else:
+            y_c = y
+
+        p_w, p_h = self.parent().width(), self.parent().height()
+        w, h = self.width(), self.height()
+        self.move(x+(p_w-w)/2, y_c)
+        self.show()
+        self.raise_()
+
+        self._close_delay_as_fade_(1000)
 
 
 class QtImageBubble(
@@ -405,7 +545,7 @@ class QtPathBubble(
         self.__rect_next = QtCore.QRect()
         self.__w_next = 20
 
-        self.__icon_next_enable = gui_core.GuiIcon.get('path_popup')
+        self.__icon_next_enable = _gui_core.GuiIcon.get('path_popup')
 
         self.__component_index_hovered = None
         self.__component_index_pressed = None

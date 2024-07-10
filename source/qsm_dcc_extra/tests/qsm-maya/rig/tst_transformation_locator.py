@@ -9,8 +9,8 @@ bsc_core.PyReloader2(
     ['lxbasic', 'qsm_general', 'qsm_maya', 'qsm_maya_lazy_tool']
 ).do_reload()
 
-import qsm_maya.motion as qsm_mya_motion
+import qsm_maya.motion.core as qsm_mya_mtn_core
 
-qsm_mya_motion.AdvMotionOpt(
+qsm_mya_mtn_core.AdvMotionOpt(
     'sam_Skin1'
 ).create_transformation_locator()

@@ -5,7 +5,7 @@ import qsm_lazy.core as qsm_lzy_core
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.preview.core as qsm_mya_prv_core
+import qsm_maya.preview.scripts as qsm_mya_prv_scripts
 
 import qsm_maya_lazy.resource as qsm_mya_lzy_resource
 
@@ -15,7 +15,7 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
 
     def do_gui_update_by_dcc_selection(self):
         self.do_gui_update_node_opt_by_dcc_selection()
-
+        # node
         if self._dcc_node_opt is not None:
             scr_type_path = self._dcc_node_opt.to_scr_type_path()
             if scr_type_path:
@@ -33,14 +33,34 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
                 self._type_prx_tag_input.expand_exclusive_for_node(
                     scr_type_path
                 )
+            else:
+                self._prx_options_node.set(
+                    'gui_name_chs', '未命名节点'
+                )
+                self._type_prx_tag_input.clear_all_checked()
+        # node graph
         elif self._dcc_node_graph_opt is not None:
             scr_type_path = '/node_graphs/component/regular'
+
+            self._prx_options_node.set(
+                'gui_name_chs', '未命名节点网络'
+            )
             self._type_prx_tag_input.set_node_checked(
                 scr_type_path, True
             )
             self._type_prx_tag_input.expand_for_all_from('/node_graphs')
         else:
+            data_type = self.get_resource_data_type()
+            if data_type == qsm_lzy_core.DataTypes.MayaNode:
+                self._prx_options_node.set(
+                    'gui_name_chs', '未命名节点'
+                )
+            elif data_type == qsm_lzy_core.DataTypes.MayaNodeGraph:
+                self._prx_options_node.set(
+                    'gui_name_chs', '未命名节点网络'
+                )
             self._type_prx_tag_input.expand_all_groups()
+            self._type_prx_tag_input.clear_all_checked()
         
         self._window.gui_set_buttons_enable(
             self._dcc_node_opt is not None or self._dcc_node_graph_opt is not None
@@ -50,12 +70,8 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
         self._dcc_node_opt = None
         self._dcc_node_graph_opt = None
 
-        self._type_prx_tag_input.clear_all_checked()
         self._tag_prx_tag_input.clear_all_checked()
 
-        self._prx_options_node.set(
-            'gui_name_chs', '未命名'
-        )
         node_paths = qsm_mya_core.Selection.get_as_nodes()
         if node_paths:
             data_type = self.get_resource_data_type()
@@ -97,7 +113,7 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
     def do_show_playblast_window(self):
         camera_path = qsm_mya_core.Camera.get_active()
         resolution_size = (512, 512)
-        qsm_mya_prv_core.Playblast.show_window(
+        qsm_mya_prv_scripts.PlayblastOpt.show_window(
             camera=camera_path,
             resolution=resolution_size,
             texture_enable=True, light_enable=False, shadow_enable=False,
@@ -112,7 +128,7 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
         play_enable = self._prx_options_node.get('playblast.play')
         frame_step = 1
         resolution_size = (512, 512)
-        qsm_mya_prv_core.Playblast.execute(
+        qsm_mya_prv_scripts.PlayblastOpt.execute(
             movie_path,
             camera=camera_path,
             resolution=resolution_size,

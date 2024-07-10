@@ -32,9 +32,9 @@ class AbsPrx(object):
     QT_WIDGET_CLS = None
     MODEL_CLS = None
     DCC_OBJ_KEY = 'dcc_obj'
-    #
+
     PRX_CATEGORY = 'dialog_window'
-    #
+
     Status = gui_core.GuiProcessStatus
     ProcessStatus = gui_core.GuiProcessStatus
     ShowStatus = gui_core.GuiShowStatus
@@ -285,7 +285,7 @@ class AbsPrxWindow(AbsPrx):
                 gui_qt_core.QtCore.QSize(*self._definition_window_size)
             )
 
-    def set_window_show(self, pos=None, size=None, exclusive=True):
+    def show_window_auto(self, pos=None, size=None, exclusive=True):
         # show unique
         if exclusive is True:
             gui_proxies = gui_prx_core.GuiProxyUtil.find_widget_proxy_by_class(self.__class__)
@@ -301,8 +301,11 @@ class AbsPrxWindow(AbsPrx):
         #
         gui_qt_core.GuiQtUtil.show_qt_window(self._qt_widget, pos, size)
 
-    def connect_window_close_to(self, fnc):
-        self._qt_widget._connect_window_close_to_(fnc)
+    def run_fnc_delay(self, fnc, delay_time):
+        self._qt_widget._run_fnc_delay_(fnc, delay_time)
+
+    def register_window_close_method(self, fnc):
+        self._qt_widget._register_window_close_method_(fnc)
 
     def set_window_close(self):
         self._qt_widget._do_window_close_()
@@ -311,7 +314,7 @@ class AbsPrxWindow(AbsPrx):
         self._qt_widget._set_window_ask_for_close_enable_(boolean)
 
     def do_close_window_later(self, delay_time=1000):
-        self._qt_widget._do_window_close_later_(delay_time)
+        self._qt_widget._close_window_delay_(delay_time)
 
     def set_window_title(self, *args):
         text = args[0]
@@ -409,13 +412,14 @@ class AbsPrxLayerBaseDef(object):
 class AbsPrxProgressingDef(object):
     QT_PROGRESSING_CHART_CLS = None
     GUI_PROGRESS_MODEL_CLS = gui_prx_core.GuiPrxModForProgress
+
     PROGRESS_WIDGET_CLS = None
 
     @property
     def widget(self):
         raise NotImplementedError()
 
-    def _set_progressing_def_init_(self):
+    def _init_progressing_def_(self):
         self._qt_progressing_char = self.QT_PROGRESSING_CHART_CLS(self.widget)
         self._qt_progressing_char.hide()
 
@@ -431,7 +435,7 @@ class AbsPrxProgressingDef(object):
         )
         self._qt_progressing_char._refresh_widget_draw_()
 
-    def set_progress_create(self, maximum, label=None):
+    def create_progress_model(self, maximum, label=None):
         g_p = self.GUI_PROGRESS_MODEL_CLS(
             proxy=self,
             qt_progress=self._qt_progressing_char,
@@ -449,7 +453,7 @@ class AbsPrxProgressingDef(object):
 
     @contextmanager
     def gui_progressing(self, maximum, label=None):
-        g_p = self.set_progress_create(maximum, label)
+        g_p = self.create_progress_model(maximum, label)
         yield g_p
         g_p.set_stop()
 

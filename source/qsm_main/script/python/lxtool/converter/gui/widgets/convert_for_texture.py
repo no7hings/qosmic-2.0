@@ -392,7 +392,7 @@ class PnlTextureConverter(gui_prx_widgets.PrxSessionWindow):
                 run_fnc_
             )
             t.start()
-            self.connect_window_close_to(quit_fnc_)
+            self.register_window_close_method(quit_fnc_)
         else:
             button.restore_all()
 
@@ -594,7 +594,7 @@ class PnlTextureConverter(gui_prx_widgets.PrxSessionWindow):
                 run_fnc_
             )
             t.start()
-            self.connect_window_close_to(quit_fnc_)
+            self.register_window_close_method(quit_fnc_)
         else:
             button.restore_all()
 
@@ -656,4 +656,4 @@ class PnlTextureConverter(gui_prx_widgets.PrxSessionWindow):
 
         v.set_textures([texture])
 
-        w.set_window_show()
+        w.show_window_auto()

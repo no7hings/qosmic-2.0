@@ -23,7 +23,7 @@ option_opt = bsc_core.ArgDictStringOpt(
 
 # s = ssn_commands.get_option_hook_session(option_opt.to_string())
 #
-# print s.get_executor().get_deadline_command()
+# print s.generate_executor().get_deadline_command()
 #
 ssn_commands.execute_option_hook_by_deadline(
     option=option_opt.to_string()

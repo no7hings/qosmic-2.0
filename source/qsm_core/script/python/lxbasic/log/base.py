@@ -364,9 +364,9 @@ class Log(object):
             return _time, _keyword, _count
 
     @classmethod
-    def filter_process(cls, text):
+    def filter_progress(cls, text):
         """
-        print Log.filter_process(
+        print Log.filter_progress(
             '2023-09-13 15:50:27         | <test> ■□□□□□□□□□□□□□□□□□□□   10%, cost time 00:00:00.5006'
         )
         """
@@ -376,7 +376,7 @@ class Log(object):
             _time = m.group(1)
             _keyword = m.group(2)
             _percent = m.group(3)
-            return _time, _keyword, _percent
+            return _time, _keyword, float(_percent)/100.0
 
     @classmethod
     def filter_result(cls, text):

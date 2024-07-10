@@ -1,0 +1,218 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Lazy Motion Tool'
+        name_chs: '懒人动作工具'
+        group_name: 'General(s)'
+        #
+        icon_name: 'qosmic/lazy-cfx-tool'
+        tool_tip:
+            |-
+            For Motion.
+        #
+        tool_tip_chs:
+            |-
+            用于动作。
+
+        size: [720, 560]
+
+build:
+    main:
+        tab:
+            name: 'Main'
+            name_chs: '主要'
+
+            tool_tip:
+                |-
+                Tool For Motion Main.
+
+            tool_tip_chs:
+                |-
+                用于动作的主要工具。
+
+        units:
+            copy_and_paste:
+                name: 'Copy & Paste'
+                name_chs: '复制 & 粘贴'
+
+                tool_tip: 'to be supplemented.'
+                tool_tip_chs: '待补充。'
+
+                options:
+                    name: 'Options'
+                    name_chs: '选项'
+
+                    parameters:
+                        setting:
+                            widget: group
+                            name: 'Setting'
+                            name_chs: '设置'
+
+                        setting/includes:
+                            widget: group
+                            name: 'Includes'
+                            name_chs: '包含'
+
+                        setting/includes/part_includes:
+                            widget: capsule_strings
+                            options: ['body', 'face']
+                            option_names_chs: ['身体', '面部']
+                            default: ['body', 'face']
+                            name: 'Part Include'
+                            name_chs: '部件包含'
+
+                        setting/includes/control_includes:
+                            widget: capsule_strings
+                            options: ['default', 'extra']
+                            option_names_chs: ['默认', '额外']
+                            default: ['default']
+                            name: 'Control Include'
+                            name_chs: '控制器包含'
+
+                        setting/ignore:
+                            widget: group
+                            name: 'Ignore'
+                            name_chs: '忽略'
+
+                        setting/ignore/attribute_ignore:
+                            widget: capsule_strings
+                            options: ['translate', 'rotate', 'scale']
+                            option_names_chs: ['移动', '旋转', '缩放']
+                            default: []
+                            name: 'Control Include '
+                            name_chs: '通道忽略'
+
+                        setting/ignore/control_ignore:
+                            widget: capsule_strings
+                            options: ['main']
+                            option_names_chs: ['主控制器']
+                            default: []
+                            name: 'Control Ignore '
+                            name_chs: '控制器忽略'
+
+                        setting/frame:
+                            widget: group
+                            name: 'Frame'
+                            name_chs: '帧'
+
+                        setting/frame/frame_offset:
+                            widget: integer
+                            name_chs: '帧偏移'
+                            value: 0
+                            enable: True
+                            tool_tip: '...'
+
+                        copy_keyframe:
+                            widget: group
+                            name: 'Copy Keyframe'
+                            name_chs: '复制关键帧'
+
+                        copy_keyframe/copy_all:
+                            widget: button
+                            name: 'Copy Selected'
+                            icon: 'tool/maya/copy'
+                            name_chs: '复制所有'
+                            join_to_next: True
+
+                        copy_keyframe/copy_selected:
+                            widget: button
+                            name: 'Copy Selected'
+                            name_chs: '复制选中'
+                            icon: 'tool/maya/copy'
+
+                        paste_keyframe:
+                            widget: group
+                            name: 'Paste Keyframe'
+                            name_chs: '粘贴关键帧'
+
+                        paste_keyframe/paste_to_all:
+                            widget: button
+                            name: 'Paste to All'
+                            icon: 'tool/maya/paste'
+                            name_chs: '粘贴到所有'
+                            join_to_next: True
+
+                        paste_keyframe/paste_to_selected:
+                            widget: button
+                            name: 'Paste to Selected'
+                            name_chs: '粘贴到选中'
+                            icon: 'tool/maya/paste'
+
+                        mirror_keyframe:
+                            widget: group
+                            name: 'Mirror Keyframe'
+                            name_chs: '镜像关键帧'
+
+                        mirror_keyframe/mirror_selected_auto:
+                            widget: button
+                            name: 'Mirror Selected Auto'
+                            name_chs: '镜像选中（自动）'
+                            icon: 'tool/maya/mirror'
+
+                        mirror_keyframe/mirror_selected_as_left_to_right:
+                            widget: button
+                            name: 'Mirror Selected (Left to Right)'
+                            name_chs: '镜像选中（左到右）'
+                            icon: 'tool/maya/mirror_left_to_right'
+                            join_to_next: True
+
+                        mirror_keyframe/mirror_all_as_left_to_right:
+                            widget: button
+                            name: 'Mirror All (Left to Right)'
+                            name_chs: '镜像所有（左到右）'
+                            icon: 'tool/maya/mirror_left_to_right'
+
+                        mirror_keyframe/mirror_selected_as_right_to_left:
+                            widget: button
+                            name: 'Mirror Selected (Right to Left)'
+                            name_chs: '镜像选中（右到左）'
+                            icon: 'tool/maya/mirror_right_to_left'
+                            join_to_next: True
+
+                        mirror_keyframe/mirror_all_as_right_to_left:
+                            widget: button
+                            name: 'Mirror All (Right to Left)'
+                            name_chs: '镜像所有（右到左）'
+                            icon: 'tool/maya/mirror_right_to_left'
+
+            move:
+                name: 'Move'
+                name_chs: '移动'
+
+                tool_tip: 'to be supplemented.'
+                tool_tip_chs: '待补充。'
+
+                options:
+                    name: 'Options'
+                    name_chs: '选项'
+
+                    parameters:
+                        transformation:
+                            widget: group
+                            name: 'Transformation'
+                            name_chs: '变换'
+
+                        transformation/create_transformation_locator:
+                            widget: button
+                            name: 'Create Transformation Locator'
+                            name_chs: '创建变换定位器（Locator）'
+                            icon: 'tool/maya/move'
+                            join_to_next: True
+                            tool_tip:
+                                |-
+                                点击创建一个定位器（Locator）用于移动带动画的绑定；
+                                需要选择绑定或者相机的根控制器或者根组；
+                                移动后务必不要手动删除定位器，请使用“移除变换定位器（Locator）”移除。
+
+                        transformation/remove_transformation_locator:
+                            widget: button
+                            name: 'Remove Transformation Locator'
+                            name_chs: '移除变换定位器（Locator）'
+                            icon: 'tool/maya/delete'
+                            tool_tip:
+                                |-
+                                点击移除定位器，移除后会把定位器的位移和旋转数据偏移到控制器上。

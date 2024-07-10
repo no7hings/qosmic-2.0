@@ -296,7 +296,7 @@ class _QtWindowHead(
         self._set_widget_geometries_update_()
         #
         painter._draw_frame_by_rect_(
-            self._rect_frame_draw,
+            self._frame_draw_rect,
             background_color=self._frame_background_color,
             border_color=self._frame_border_color
         )

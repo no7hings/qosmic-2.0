@@ -24,6 +24,7 @@ class QtEntryAsCapsule(
 ):
     value_changed = qt_signal()
     user_value_changed = qt_signal()
+    user_value_accepted = qt_signal(object)
 
     def __init__(self, *args, **kwargs):
         super(QtEntryAsCapsule, self).__init__(*args, **kwargs)
@@ -45,19 +46,19 @@ class QtEntryAsCapsule(
 
         self._capsule_per_width = 0
 
-        self.__check_use_exclusive = True
+        self._check_use_exclusive = True
 
         self.__index_hover = None
-        self.__index_pressed = None
+        self._press_index = None
         self._index_current = None
 
-        self.__value_output = None
+        self._value = None
 
-        self.__values = []
-        self.__texts_draw = []
+        self._values = []
+        self._draw_texts = []
         self._indices = []
         #
-        self.__rects_frame = []
+        self._frame_rects = []
         #
         self._checked_indices = []
 
@@ -75,20 +76,20 @@ class QtEntryAsCapsule(
         x, y = 0, 0
         w, h = self.width(), self.height()
         #
-        if self.__texts_draw:
-            c = len(self.__texts_draw)
+        if self._draw_texts:
+            c = len(self._draw_texts)
             w_a = w/c
             h_t = self.fontMetrics().height()
             s_t = (h-h_t)/2
-            w_t = int(max([self.fontMetrics().width(i)+8 for i in self.__texts_draw]))
-            c = len(self.__texts_draw)
+            w_t = int(max([self.fontMetrics().width(i)+8 for i in self._draw_texts]))
+            c = len(self._draw_texts)
             w_m = w_t+(w_t%2)+s_t*2
             # width use minimum of average or maximum each
             self._capsule_per_width = min(w_a, w_m)
             for i_index in range(c):
                 i_x, i_y = x+i_index*self._capsule_per_width, y
                 i_w, i_h = self._capsule_per_width, h
-                self.__rects_frame[i_index].setRect(
+                self._frame_rects[i_index].setRect(
                     x+i_x, y+1, i_w, h-2
                 )
 
@@ -120,7 +121,7 @@ class QtEntryAsCapsule(
             elif event.type() == QtCore.QEvent.MouseMove:
                 if self._get_action_flag_is_match_(self.ActionFlag.Press):
                     self._do_press_move_(event)
-                #
+
                 self._do_hover_move_(event)
             elif event.type() == QtCore.QEvent.ToolTip:
                 self._do_show_tool_tip_(event)
@@ -131,14 +132,14 @@ class QtEntryAsCapsule(
 
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
-        if self.__texts_draw:
+        if self._draw_texts:
             painter._draw_capsule_by_rects_(
-                rects=self.__rects_frame,
-                texts=self.__texts_draw,
+                rects=self._frame_rects,
+                texts=self._draw_texts,
                 checked_indices=self._checked_indices,
                 index_hover=self.__index_hover,
-                index_pressed=self.__index_pressed,
-                use_exclusive=self.__check_use_exclusive,
+                index_pressed=self._press_index,
+                use_exclusive=self._check_use_exclusive,
                 is_enable=self._action_is_enable
             )
 
@@ -152,7 +153,7 @@ class QtEntryAsCapsule(
             else:
                 title = value
 
-            if self.__check_use_exclusive is True:
+            if self._check_use_exclusive is True:
                 css = _qt_core.GuiQtUtil.generate_tool_tip_css(
                     title,
                     content=tool_tip or 'N/a',
@@ -177,8 +178,8 @@ class QtEntryAsCapsule(
         if super(QtEntryAsCapsule, self)._set_value_options_(values) is True:
             c = len(values)
             self._indices = range(c)
-            self.__texts_draw = []
-            self.__rects_frame = []
+            self._draw_texts = []
+            self._frame_rects = []
             self._checked_indices = []
             for i_index in self._indices:
                 if names:
@@ -186,23 +187,22 @@ class QtEntryAsCapsule(
                 else:
                     i_label = bsc_core.RawTextMtd.to_prettify(values[i_index], capitalize=True)
 
-                self.__texts_draw.append(i_label)
-                self.__rects_frame.append(QtCore.QRect())
+                self._draw_texts.append(i_label)
+                self._frame_rects.append(QtCore.QRect())
 
                 self._checked_indices.append(False)
 
             if c:
-                if self.__check_use_exclusive is True:
+                if self._check_use_exclusive is True:
                     self._set_value_(values[0])
 
         self._refresh_widget_all_()
 
     def _set_value_(self, value):
         values_all = self._get_value_options_()
-        if value not in values_all:
-            return
-
-        if self.__check_use_exclusive is True:
+        if self._check_use_exclusive is True:
+            if value not in values_all:
+                return
             idx = values_all.index(value)
             self._index_current = idx
             self._checked_indices = [True if i in [idx] else False for i in self._indices]
@@ -216,32 +216,36 @@ class QtEntryAsCapsule(
         self._refresh_widget_draw_()
 
     def _get_value_(self):
-        return self.__value_output
+        return self._value
 
     def _generate_value_output_(self):
         values_all = self._get_value_options_()
         _ = [values_all[i] for i in self._indices if self._checked_indices[i] is True]
-        if self.__check_use_exclusive:
+        if self._check_use_exclusive:
             if _:
                 return _[0]
             return ''
         return _
 
-    def _update_value_output_(self):
-        value_pre = self.__value_output
-        self.__value_output = self._generate_value_output_()
-        if value_pre != self.__value_output:
+    def _update_value_output_(self, user_flag=False):
+        value_pre = self._value
+        self._value = self._generate_value_output_()
+        if value_pre != self._value:
             self.value_changed.emit()
+            
+            if user_flag is True:
+                self.user_value_changed.emit()
+                self.user_value_accepted.emit(self._value)
 
     def _set_use_exclusive_(self, boolean):
-        self.__check_use_exclusive = boolean
+        self._check_use_exclusive = boolean
 
     def _get_is_use_exclusive_(self):
-        return self.__check_use_exclusive
+        return self._check_use_exclusive
 
     def _do_hover_move_(self, event):
-        if self._action_is_enable is False:
-            return
+        # if self._action_is_enable is False:
+        #     return
         if not self._capsule_per_width:
             return
         p = event.pos()
@@ -265,8 +269,8 @@ class QtEntryAsCapsule(
         index = int(x/self._capsule_per_width)
         if index in self._indices:
             self._index_current = index
-            self.__index_pressed = self._index_current
-            if self.__check_use_exclusive is True:
+            self._press_index = self._index_current
+            if self._check_use_exclusive is True:
                 if index_pre is not None:
                     self._checked_indices[index_pre] = False
                 self._checked_indices[self._index_current] = True
@@ -276,7 +280,7 @@ class QtEntryAsCapsule(
 
             self._capsule_press_state = self._checked_indices[self._index_current]
 
-            self._update_value_output_()
+            self._update_value_output_(user_flag=True)
 
     def _do_press_move_(self, event):
         if self._action_is_enable is False:
@@ -289,21 +293,22 @@ class QtEntryAsCapsule(
         index = int(x/self._capsule_per_width)
         if index in self._indices:
             self._index_current = index
-            self.__index_pressed = self._index_current
+            self._press_index = self._index_current
             if index_pre != self._index_current:
-                if self.__check_use_exclusive is True:
+                if self._check_use_exclusive is True:
                     if index_pre is not None:
                         self._checked_indices[index_pre] = False
                     self._checked_indices[self._index_current] = True
                 else:
                     self._checked_indices[self._index_current] = self._capsule_press_state
-                #
-                self._update_value_output_()
+
+                self._update_value_output_(user_flag=True)
 
     def _do_press_end_(self, event):
         if self._action_is_enable is False:
             return
-        self.__index_pressed = None
+
+        self._press_index = None
         event.accept()
 
     def _set_entry_enable_(self, boolean):

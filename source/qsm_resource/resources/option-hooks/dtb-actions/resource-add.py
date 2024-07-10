@@ -49,7 +49,7 @@ def main(session):
 
         o.set('type', dtb_entity.path)
 
-        w.set_window_show()
+        w.show_window_auto()
 
 
 if __name__ == '__main__':

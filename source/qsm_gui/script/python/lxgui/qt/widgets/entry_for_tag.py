@@ -194,7 +194,7 @@ class QtEntryNodeForTag(
 
     def _do_press_dbl_click_(self, event):
         if self._get_action_is_enable_() is True:
-            self._set_action_flag_(self.ActionFlag.PressDbClick)
+            self._set_action_flag_(self.ActionFlag.PressDblClick)
             self._do_check_exclusive_()
 
             self._update_check_state_for_ancestors_()
@@ -435,6 +435,8 @@ class QtEntryGroupForTag(
 
         if self._is_expanded is True:
             self._viewport.show()
+            # node
+            nod_h_min = 0
             if len(self._node_widgets) > 0:
                 i_x, i_y = 0, 0
                 for i_widget in self._node_widgets:
@@ -443,7 +445,6 @@ class QtEntryGroupForTag(
                         i_y += frm_h+spc
                         i_x = 0
 
-                    # i_widget.move(i_x, i_y)
                     i_widget.setGeometry(
                         i_x, i_y, i_w, i_h
                     )
@@ -453,17 +454,36 @@ class QtEntryGroupForTag(
                     i_x += i_w+spc
 
                 vpt_h = i_y+frm_h
-                self._viewport.setMinimumHeight(vpt_h)
-                
-                h_min = vpt_h+frm_h+spc
-                self.setMinimumHeight(h_min)
-                if h_min != h:
+
+                nod_h_min = vpt_h
+                # update to parent
+                if nod_h_min != h:
                     if self._parent_widget is not None:
                         self._parent_widget._refresh_widget_all_()
+
+                self._group_lot.setContentsMargins(
+                    0, nod_h_min+spc, 0, 0
+                )
             else:
-                l_h = self._group_lot.minimumSize().height()
-                h_min = l_h+frm_h+spc
-                self.setMinimumHeight(h_min)
+                self._group_lot.setContentsMargins(
+                    0, 0, 0, 0
+                )
+
+            grp_h_min = 0
+            if self._group_widgets:
+                grp_hs = 0
+                for i in self._group_widgets:
+                    grp_hs += i.minimumHeight()+spc
+
+                grp_h_min = grp_hs
+
+            if nod_h_min > 0:
+                if grp_h_min > 0:
+                    self.setMinimumHeight(frm_h+spc+nod_h_min+spc+grp_h_min)
+                else:
+                    self.setMinimumHeight(frm_h+spc+nod_h_min+spc+grp_h_min)
+            else:
+                self.setMinimumHeight(frm_h+spc+grp_h_min)
         else:
             self._viewport.hide()
 
@@ -557,7 +577,7 @@ class QtEntryGroupForTag(
         self._lot = _base.QtVBoxLayout(self)
         self._lot.setContentsMargins(self.INDENT, self.HEIGHT+self.SPACING, 0, 0)
         self._lot.setAlignment(QtCore.Qt.AlignTop)
-        self._lot.setSpacing(2)
+        self._lot.setSpacing(0)
 
         self._viewport = QtWidgets.QWidget()
         self._viewport.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -569,7 +589,7 @@ class QtEntryGroupForTag(
         self._group_lot = _base.QtVBoxLayout(self._viewport)
         self._group_lot.setContentsMargins(0, 0, 0, 0)
         self._group_lot.setAlignment(QtCore.Qt.AlignTop)
-        self._group_lot.setSpacing(2)
+        self._group_lot.setSpacing(0)
 
         self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('file/folder-close')
         self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('file/folder-open')

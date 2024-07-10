@@ -1,7 +1,12 @@
-connection:
+connection_default:
     host: '10.32.21.16'
-    port: 8080
+    port: 8082
 
-web_server:
-    host: '127.0.0.1'
-    port: 8080
+#connection_default:
+#    host: '192.168.3.8'
+#    port: 8082
+
+connection_new:
+    host: '10.33.4.90'
+    port: 8082
+

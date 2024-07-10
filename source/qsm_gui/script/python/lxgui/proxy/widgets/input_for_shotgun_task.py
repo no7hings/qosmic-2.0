@@ -64,7 +64,7 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
         self.__qt_scheme_input._set_choose_values_(
             self.Schemes.All
         )
-        self.__qt_scheme_input.input_value_change_accepted.connect(
+        self.__qt_scheme_input.input_value_accepted.connect(
             self.__update_branch
         )
 
@@ -84,7 +84,7 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
 
         self._qt_path_input._setup_()
 
-        self._qt_path_input.input_value_change_accepted.connect(self.__update_task)
+        self._qt_path_input.input_value_accepted.connect(self.__update_task)
         self._qt_path_input.user_input_entry_finished.connect(self.__accept_result)
 
         self.__qt_scheme_input._set_value_(self.Schemes.AssetTask)

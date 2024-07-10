@@ -91,7 +91,7 @@ class GuiDialog(object):
         w.set_tip_visible(tip_visible)
         #
         if show is True:
-            w.set_window_show()
+            w.show_window_auto()
         return w
 
 
@@ -209,9 +209,9 @@ class GuiMonitorForDeadline(object):
         j_m.task_finished_at.connect_to(w.set_finished_at)
         j_m.do_start()
 
-        w.connect_window_close_to(j_m.set_stop)
+        w.register_window_close_method(j_m.set_stop)
 
-        w.set_window_show(size=(480, 240))
+        w.show_window_auto(size=(480, 240))
 
 
 class GuiMonitorForCommand(object):
@@ -244,7 +244,7 @@ class GuiMonitorForCommand(object):
         c_t.status_changed.connect_to(lambda x: w.set_status_at(0, x))
         # c_t.finished.connect_to(lambda x: w.set_finished_at(0, x))
         c_t.logging.connect_to(w.set_logging)
-        w.connect_window_close_to(c_t.set_stopped)
+        w.register_window_close_method(c_t.set_stopped)
         #
         q_c_s = gui_qt_core.QtCommandSignals(w.widget)
         #
@@ -258,5 +258,5 @@ class GuiMonitorForCommand(object):
         #
         c_t.start()
 
-        w.set_window_show(size=(480, 240))
+        w.show_window_auto(size=(480, 240))
         return q_c_s

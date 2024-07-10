@@ -179,7 +179,7 @@ def main(session):
         mtd = CreateMtd()
         button.set(mtd.execute)
 
-        w.set_window_show()
+        w.show_window_auto()
 
         file_paths = get_all_file_paths_fnc_()
         files_p = o.get_port('files')

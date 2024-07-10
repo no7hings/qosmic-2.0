@@ -50,7 +50,7 @@ class CfxNClothCacheOpt(_rsc_core.ResourceScriptOpt):
 
             data = dict(
                 scene_file=_mya_core.SceneFile.get_current(),
-                scene_fps=_mya_core.Frame.get_fps(),
+                scene_fps=_mya_core.Frame.get_fps_tag(),
                 user=bsc_core.BscSystem.get_user_name(),
                 host=bsc_core.BscSystem.get_host(),
                 time=bsc_core.BscSystem.get_time(),
@@ -158,7 +158,7 @@ class CfxNClothCacheProcess(object):
         scene_src_path = _gnl_core.FilePatterns.SceneSrcFile.format(**options)
         _mya_core.SceneFile.export_file(scene_src_path)
 
-        task_name = '[cfx-cloth][{}][{}]'.format(
+        task_name = '[cfx-cloth-cache][{}][{}]'.format(
             bsc_storage.StgDirectoryOpt(directory_path).get_name(), '{}-{}'.format(*frame_range)
         )
 
@@ -175,6 +175,40 @@ class CfxNClothCacheProcess(object):
         )
 
         return task_name, scene_src_path, cmd_script
+
+    @classmethod
+    def generate_deadline_job_args(
+        cls,
+        namespaces,
+        directory_path,
+        frame_range, frame_step, frame_offset,
+        with_alembic_cache, with_geometry_cache
+    ):
+        options = dict(
+            directory=directory_path,
+        )
+        scene_src_path = _gnl_core.FilePatterns.SceneSrcFile.format(**options)
+        _mya_core.SceneFile.export_file(scene_src_path)
+
+        job_name = '[cfx-cloth-cache][{}][{}]'.format(
+            bsc_storage.StgDirectoryOpt(directory_path).get_name(), '{}-{}'.format(*frame_range)
+        )
+
+        hook_option = qsm_gnl_core.MayaCacheProcess.generate_hook_option_by_option_dict(
+            'cfx-cloth-cache-generate',
+            dict(
+                directory_path=directory_path,
+                namespaces=namespaces,
+                frame_range=frame_range,
+                frame_step=frame_step,
+                frame_offset=frame_offset,
+                with_alembic_cache=with_alembic_cache, with_geometry_cache=with_geometry_cache
+            ),
+            job_name=job_name,
+            output_directory=directory_path
+        )
+
+        return hook_option
 
     def execute(self):
         options = dict(

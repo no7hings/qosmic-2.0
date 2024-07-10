@@ -590,7 +590,7 @@ class QtListItemWidget(
                         return True
                     # press
                     else:
-                        self._set_action_flag_(self.ActionFlag.PressDbClick)
+                        self._set_action_flag_(self.ActionFlag.PressDblClick)
             #
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if self._get_action_flag_is_match_(self.ActionFlag.CheckPress):
@@ -605,7 +605,7 @@ class QtListItemWidget(
                     self.check_dbl_clicked.emit()
                 elif self._get_action_flag_is_match_(self.ActionFlag.Press):
                     self.press_clicked.emit()
-                elif self._get_action_flag_is_match_(self.ActionFlag.PressDbClick):
+                elif self._get_action_flag_is_match_(self.ActionFlag.PressDblClick):
                     self.press_dbl_clicked.emit()
                 #
                 self._clear_all_action_flags_()
@@ -656,7 +656,7 @@ class QtListItemWidget(
         item = self._get_item_()
         if item._item_show_status in {item.ShowStatus.Loading, item.ShowStatus.Waiting}:
             painter._draw_loading_by_rect_(
-                self._rect_frame_draw,
+                self._frame_draw_rect,
                 item._item_show_loading_index
             )
 
@@ -677,7 +677,7 @@ class QtListItemWidget(
         )
         if self._frame_draw_is_enable is True:
             painter._draw_frame_by_rect_(
-                rect=self._rect_frame_draw,
+                rect=self._frame_draw_rect,
                 border_color=_qt_core.QtBorderColors.Transparent,
                 background_color=self._frame_background_color,
                 border_radius=0,
@@ -829,7 +829,7 @@ class QtListItemWidget(
         # index
         if self._index_draw_flag is True:
             painter._draw_index_by_rect_(
-                rect=self._rect_frame_draw,
+                rect=self._frame_draw_rect,
                 text=self._index_text,
                 offset=offset,
             )

@@ -54,7 +54,7 @@ class QtLayer(QtWidgets.QWidget):
         self.__anim_index = 0
 
         self.__swap_flag = False
-        self.__swap_switch_direction = gui_core.GuiDirection.TopToBottom
+        self.__swap_switch_direction = gui_core.GuiDirections.TopToBottom
 
         self.__swap_mode = 'hide'
         
@@ -167,7 +167,7 @@ class QtLayerStack(QtWidgets.QWidget):
         self.__swap_rect_0, self.__swap_rect_1 = QtCore.QRect(), QtCore.QRect()
 
         self.__swap_flag = False
-        self.__swap_switch_direction = gui_core.GuiDirection.LeftToRight
+        self.__swap_switch_direction = gui_core.GuiDirections.LeftToRight
 
         self.__swap_mode = 'switch'
 
@@ -188,14 +188,14 @@ class QtLayerStack(QtWidgets.QWidget):
             d = sum([(0.5/(2**i))*1 for i in range(index)])
             if self.__swap_mode == 'switch':
                 w_d = w*d
-                if self.__swap_switch_direction == gui_core.GuiDirection.LeftToRight:
+                if self.__swap_switch_direction == gui_core.GuiDirections.LeftToRight:
                     self.__swap_rect_0.setRect(
                         x-w_d, y, w, h
                     )
                     self.__swap_rect_1.setRect(
                         w-w_d, y, w, h
                     )
-                elif self.__swap_switch_direction == gui_core.GuiDirection.RightToLeft:
+                elif self.__swap_switch_direction == gui_core.GuiDirections.RightToLeft:
                     self.__swap_rect_0.setRect(
                         x+w_d, y, w, h
                     )
@@ -344,9 +344,9 @@ class QtLayerStack(QtWidgets.QWidget):
 
     def _swap_current_between_(self, index_0, index_1, mode):
         if index_0 < index_1:
-            self.__swap_switch_direction = gui_core.GuiDirection.LeftToRight
+            self.__swap_switch_direction = gui_core.GuiDirections.LeftToRight
         else:
-            self.__swap_switch_direction = gui_core.GuiDirection.RightToLeft
+            self.__swap_switch_direction = gui_core.GuiDirections.RightToLeft
 
         self.__swap_mode = mode
         # x, y = 0, 0

@@ -592,11 +592,11 @@ class GenerSession(AbsSsnGener):
         super(GenerSession, self).__init__(*args, **kwargs)
 
 
-class CommandSession(AbsSsnCommand):
+class ScriptSession(AbsSsnCommand):
     def __init__(self, *args, **kwargs):
-        super(CommandSession, self).__init__(*args, **kwargs)
+        super(ScriptSession, self).__init__(*args, **kwargs)
 
 
-class OptionGenerSession(AbsSsnOptionGener):
+class GenerOptionSession(AbsSsnOptionGener):
     def __init__(self, *args, **kwargs):
-        super(OptionGenerSession, self).__init__(*args, **kwargs)
+        super(GenerOptionSession, self).__init__(*args, **kwargs)

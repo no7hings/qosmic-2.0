@@ -1901,9 +1901,9 @@ class ScpInstanceColorMap(object):
         if bsc_storage.StgPath.get_is_exists(cache_usd_file_path) is False or force is True:
             import lxgui.proxy.widgets as gui_prx_widgets
 
-            w = gui_prx_widgets.PrxProcessingWindow()
+            w = gui_prx_widgets.PrxSubProcessWindow()
             w.set_window_title('Generator Grow Cache')
-            w.set_window_show(exclusive=False)
+            w.show_window_auto(exclusive=False)
 
             w.start(
                 gnl_dcc_core.PythonProcess.generate_command(
@@ -1934,9 +1934,9 @@ class ScpInstanceColorMap(object):
         if bsc_storage.StgPath.get_is_exists(cache_usd_file_path) is False or force is True:
             import lxgui.proxy.widgets as gui_prx_widgets
 
-            w = gui_prx_widgets.PrxProcessingWindow()
+            w = gui_prx_widgets.PrxSubProcessWindow()
             w.set_window_title('Generator Instance Cache')
-            w.set_window_show(exclusive=False)
+            w.show_window_auto(exclusive=False)
 
             w.start(
                 gnl_dcc_core.PythonProcess.generate_command(

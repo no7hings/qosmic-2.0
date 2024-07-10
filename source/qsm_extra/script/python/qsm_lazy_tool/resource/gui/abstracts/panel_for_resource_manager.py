@@ -94,7 +94,7 @@ class AbsPrxPanelForResource(gui_prx_widgets.PrxSessionWindow):
         self._gui_tab_add_page_fnc(page_keys[0], False)
 
         self.connect_refresh_action_for(self.do_gui_refresh_all)
-        self.connect_window_close_to(self.do_gui_close)
+        self.register_window_close_method(self.do_gui_close)
 
     def do_gui_refresh_all(self):
         key = self._prx_tab_view.get_current_key()

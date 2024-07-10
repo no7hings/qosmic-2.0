@@ -47,7 +47,7 @@ class QtWidget(
     def paintEvent(self, event):
         if self._get_status_is_enable_() is True:
             painter = _qt_core.QtPainter(self)
-            #
+
             color, hover_color = self._get_rgba_args_by_validator_status_(self._status)
             border_color = color
             pox_x, pos_y = 0, 0
@@ -55,13 +55,85 @@ class QtWidget(
             frame_rect = QtCore.QRect(
                 pox_x+1, pos_y+1, width-2, height-2
             )
-            #
+
             painter._draw_focus_frame_by_rect_(
                 frame_rect,
-                border_color=border_color,
-                background_color=(0, 0, 0, 0),
-                border_width=4,
+                color=border_color,
             )
+
+
+class QtTestPaint(QtWidgets.QWidget):
+    def __init__(self, *args, **kwargs):
+        super(QtTestPaint, self).__init__(*args, **kwargs)
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
+
+    def paintEvent(self, event):
+        painter = _qt_core.QtPainter(self)
+
+        w, h = self.width(), self.height()
+
+        btn_w, btn_h = 60, 20
+        # left to right
+        # for seq, rect in enumerate(
+        #     [
+        #         QtCore.QRect(0, 0, btn_h, btn_w),
+        #         QtCore.QRect(0, btn_w, btn_h, btn_w)
+        #     ]
+        # ):
+        #     r_x, r_y, r_w, r_h = rect.x(), rect.y(), rect.width(), rect.height()
+        #
+        #     painter.rotate(-90)
+        #     painter.translate(QtCore.QPoint(-r_y-(r_y+r_h), 0))
+        #
+        #     rect_new = QtCore.QRect(r_y, r_x, r_h, r_w)
+        #
+        #     painter.fillRect(
+        #         rect_new, QtGui.QColor(255, 0, 0, 255)
+        #     )
+        #
+        #     painter.drawText(
+        #         rect_new, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+        #         'TEST-' + str(seq)
+        #     )
+        #     painter.resetTransform()
+
+        # right to left
+        for seq, rect in enumerate(
+            [
+                QtCore.QRect(w-btn_h, 0, btn_h, btn_w),
+                QtCore.QRect(w-btn_h, btn_w, btn_h, btn_w)
+            ]
+        ):
+            r_x, r_y, r_w, r_h = rect.x(), rect.y(), rect.width(), rect.height()
+
+            painter.rotate(90)
+            painter.translate(QtCore.QPoint(0, -r_w-r_x))
+
+            rect_new = QtCore.QRect(r_y, 0, r_h, r_w)
+            print rect_new
+
+            painter.fillRect(
+                rect_new, QtGui.QColor(255, 0, 0, 255)
+            )
+
+            painter.drawText(
+                rect_new, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+                'TEST-' + str(seq)
+            )
+            painter.resetTransform()
+
+        # rect = QtCore.QRect(0, 0, 60, 20)
+        # painter.fillRect(
+        #     rect, QtGui.QColor(0, 255, 0, 255)
+        # )
+        # painter.rotate(90)
+        # painter.translate(QtCore.QPoint(0, -20))
+        # painter.fillRect(
+        #     rect, QtGui.QColor(255, 0, 0, 255)
+        # )
 
 
 class QtButtonFrame(
@@ -78,7 +150,7 @@ class QtButtonFrame(
     def _refresh_widget_draw_geometry_(self):
         x, y = 0, 0
         w, h = self.width(), self.height()
-        self._rect_frame_draw.setRect(
+        self._frame_draw_rect.setRect(
             x, y, w, h
         )
 
@@ -99,7 +171,7 @@ class QtButtonFrame(
         painter = _qt_core.QtPainter(self)
 
         painter._draw_frame_by_rect_(
-            rect=self._rect_frame_draw,
+            rect=self._frame_draw_rect,
             border_color=_qt_core.QtBorderColors.Transparent,
             background_color=_qt_core.QtBackgroundColors.Basic,
         )
@@ -1266,7 +1338,7 @@ class _QtHItem(
         offset = self._get_action_offset_()
         #
         bkg_color = painter._get_frame_background_color_by_rect_(
-            rect=self._rect_frame_draw,
+            rect=self._frame_draw_rect,
             check_is_hovered=self._is_check_hovered,
             is_checked=self._is_checked,
             press_is_hovered=self._press_is_hovered,
@@ -1275,7 +1347,7 @@ class _QtHItem(
             delete_is_hovered=self._delete_is_hovered
         )
         painter._draw_frame_by_rect_(
-            self._rect_frame_draw,
+            self._frame_draw_rect,
             border_color=_qt_core.QtBorderColors.Transparent,
             background_color=bkg_color,
             border_radius=1
@@ -1373,7 +1445,7 @@ class _QtHItem(
         if self._check_action_is_enable is True:
             if self._check_frame_rect.contains(p):
                 self._is_check_hovered = True
-        if self._rect_frame_draw.contains(p):
+        if self._frame_draw_rect.contains(p):
             self._press_is_hovered = True
         if self._delete_is_enable is True:
             if self._delete_action_rect.contains(p):

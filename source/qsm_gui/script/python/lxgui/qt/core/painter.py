@@ -184,11 +184,12 @@ class QtPainter(QtGui.QPainter):
         self.drawRect(rect)
 
     def _draw_virtual_buttons_(
-        self, frame_rect, virtual_items, index_hover, index_pressed,
-        index_current
+        self, bar_rect, virtual_items, index_hover, index_pressed,
+        index_current,
+        orientation, direction
     ):
         if virtual_items:
-            # draw current
+            # buttons
             for i_index, i_virtual_item in enumerate(virtual_items):
                 i_name_text = i_virtual_item.name_text
                 i_draw_rect = i_virtual_item.get_draw_rect()
@@ -197,14 +198,41 @@ class QtPainter(QtGui.QPainter):
                 i_is_pressed = i_index == index_pressed
                 i_is_current = i_index == index_current
                 self._draw_virtual_button_at_(
-                    frame_rect, i_draw_rect, i_name_text, i_icon_text, i_is_hovered, i_is_pressed, i_is_current
+                    bar_rect,
+                    i_draw_rect,
+                    i_name_text, i_icon_text,
+                    i_is_hovered, i_is_pressed, i_is_current,
+                    orientation, direction
                 )
+            # line
+            f_x, f_y = bar_rect.x(), bar_rect.y()
+            f_w, f_h = bar_rect.width(), bar_rect.height()
+            if orientation == QtCore.Qt.Horizontal:
+                line = QtCore.QLine(f_x, f_y+f_h, f_x+f_w, f_y+f_h)
+            elif orientation == QtCore.Qt.Vertical:
+                if direction == _gui_core.GuiDirections.LeftToRight:
+                    line = QtCore.QLine(f_x+f_w, f_y, f_x+f_w, f_y+f_h)
+                elif direction == _gui_core.GuiDirections.RightToLeft:
+                    line = QtCore.QLine(f_x, f_y, f_x, f_y+f_h)
+                else:
+                    raise RuntimeError()
+            else:
+                raise RuntimeError()
+
+            self._set_antialiasing_(False)
+            self._set_border_color_(
+                _color_and_brush.QtColors.TabGroupBorder
+            )
+            self.drawLine(line)
 
     def _draw_virtual_button_at_(
-        self, frame_rect, rect, text, icon_name_text, is_hovered, is_pressed, is_current
+        self,
+        bar_rect,
+        button_rect, text,
+        icon_name_text, is_hovered, is_pressed, is_current,
+        orientation, direction
     ):
-        f_x, f_y = frame_rect.x(), frame_rect.y()
-        f_w, f_h = frame_rect.width(), frame_rect.height()
+        bar_x, bar_y, bar_w, bar_h = bar_rect.x(), bar_rect.y(), bar_rect.width(), bar_rect.height()
         a = 255
 
         border_color = _color_and_brush.QtColors.TabGroupBorder
@@ -216,37 +244,89 @@ class QtPainter(QtGui.QPainter):
             background_color = _color_and_brush.QtColors.TabGroupBackground
             text_color = _color_and_brush.QtColors.TextTemporary
 
-        x, y = rect.x(), rect.y()
-        w, h = rect.width(), rect.height()
+        btn_x, btn_y, btn_w, btn_h = button_rect.x(), button_rect.y(), button_rect.width(), button_rect.height()
 
         if is_pressed is True:
             offset = 2
-            x += offset
-            y += offset
-            w -= offset
-            h -= offset
+            if direction == _gui_core.GuiDirections.RightToLeft:
+                btn_y += offset
+                btn_w -= offset
+                btn_h -= offset
+            else:
+                btn_x += offset
+                btn_y += offset
+                btn_w -= offset
+                btn_h -= offset
 
         if is_current is True:
-            frm_x, frm_y = x, y
-            frm_w, frm_h = w, h-1
             border_width = 1
-            frame_coords = [
-                (f_x, frm_y+frm_h),
-                # bottom left, top left, top right, bottom right, ...
-                (frm_x, frm_y+frm_h), (frm_x, frm_y), (frm_x+frm_w, frm_y),
-                (frm_x+frm_w, frm_y+frm_h),
-                (f_w, frm_y+frm_h),
-            ]
             font_size = 10
+            if orientation == QtCore.Qt.Horizontal:
+                btn_frm_x, btn_frm_y = btn_x, btn_y
+                btn_frm_w, btn_frm_h = btn_w, btn_h-1
+                frame_coords = [
+                    (btn_frm_x, btn_frm_y+btn_frm_h),  # bottom left
+                    (btn_frm_x, btn_frm_y),  # top left
+                    (btn_frm_x+btn_frm_w, btn_frm_y),  # top right
+                    (btn_frm_x+btn_frm_w, btn_frm_y+btn_frm_h),  # bottom right
+                ]
+            elif orientation == QtCore.Qt.Vertical:
+                btn_frm_x, btn_frm_y = btn_x, btn_y
+                btn_frm_w, btn_frm_h = btn_w-1, btn_h
+                if direction == _gui_core.GuiDirections.LeftToRight:
+                    frame_coords = [
+                        (btn_frm_x+btn_frm_w, btn_frm_y),  # top right
+                        (btn_frm_x, btn_frm_y),  # top left
+                        (btn_frm_x, btn_frm_y+btn_frm_h),  # bottom left
+                        (btn_frm_x+btn_frm_w, btn_frm_y+btn_frm_h),  # bottom right
+                    ]
+                elif direction == _gui_core.GuiDirections.RightToLeft:
+                    frame_coords = [
+                        (btn_frm_x, btn_frm_y),  # top left
+                        (btn_frm_x+btn_frm_w, btn_frm_y),  # top right
+                        (btn_frm_x+btn_frm_w, btn_frm_y+btn_frm_h),  # bottom right
+                        (btn_frm_x, btn_frm_y+btn_frm_h),  # bottom left
+                    ]
+                else:
+                    raise RuntimeError()
+            else:
+                raise RuntimeError()
         else:
-            frm_x, frm_y = x, y+4
-            frm_w, frm_h = w, h-6
             border_width = 1
-            frame_coords = [
-                (frm_x, frm_y+frm_h), (frm_x, frm_y), (frm_x+frm_w, frm_y),
-                (frm_x+frm_w, frm_y+frm_h),
-            ]
             font_size = 8
+            if orientation == QtCore.Qt.Horizontal:
+                btn_frm_x, btn_frm_y = btn_x, btn_y+4
+                btn_frm_w, btn_frm_h = btn_w, btn_h-6
+
+                frame_coords = [
+                    (btn_frm_x, btn_frm_y+btn_frm_h),  # bottom left
+                    (btn_frm_x, btn_frm_y),  # top left
+                    (btn_frm_x+btn_frm_w, btn_frm_y),  # top right
+                    (btn_frm_x+btn_frm_w, btn_frm_y+btn_frm_h),  # bottom right
+                ]
+            elif orientation == QtCore.Qt.Vertical:
+                if direction == _gui_core.GuiDirections.LeftToRight:
+                    btn_frm_x, btn_frm_y = btn_x+4, btn_y
+                    btn_frm_w, btn_frm_h = btn_w-6, btn_h
+                    frame_coords = [
+                        (btn_frm_x+btn_frm_w, btn_frm_y),  # top right
+                        (btn_frm_x, btn_frm_y),  # top left
+                        (btn_frm_x, btn_frm_y+btn_frm_h),  # bottom left
+                        (btn_frm_x+btn_frm_w, btn_frm_y+btn_frm_h),  # bottom right
+                    ]
+                elif direction == _gui_core.GuiDirections.RightToLeft:
+                    btn_frm_x, btn_frm_y = btn_x, btn_y
+                    btn_frm_w, btn_frm_h = btn_w-4, btn_h
+                    frame_coords = [
+                        (btn_frm_x, btn_frm_y),  # top left
+                        (btn_frm_x+btn_frm_w, btn_frm_y),  # top right
+                        (btn_frm_x+btn_frm_w, btn_frm_y+btn_frm_h),  # bottom right
+                        (btn_frm_x, btn_frm_y+btn_frm_h),  # bottom left
+                    ]
+                else:
+                    raise RuntimeError()
+            else:
+                raise RuntimeError()
 
         self._set_border_color_(border_color)
         self._set_border_width_(border_width)
@@ -255,15 +335,26 @@ class QtPainter(QtGui.QPainter):
         self._draw_path_by_coords_(frame_coords, antialiasing=False)
         # icon
         if icon_name_text is not None:
-            icn_w = 16
-            icon_coords = [
-                # bottom left, top left, top right, bottom right, ...
-                (frm_x+frm_w-icn_w, frm_y+frm_h), (frm_x+frm_w-frm_h-icn_w, frm_y+1),
-                (frm_x+frm_w-frm_h, frm_y+1),
-                (frm_x+frm_w-1, frm_y+frm_h),
-                (frm_x+frm_w-icn_w, frm_y+frm_h),
-            ]
-            i_r, i_g, i_b = bsc_core.RawTextOpt(icon_name_text).to_rgb_0(s_p=50, v_p=50)
+            icn_w = 8
+            if orientation == QtCore.Qt.Horizontal:
+                icon_rect = QtCore.QRect(
+                    btn_frm_x+btn_frm_w-icn_w, btn_frm_y+1, icn_w, btn_frm_h
+                )
+            elif orientation == QtCore.Qt.Vertical:
+                if direction == _gui_core.GuiDirections.LeftToRight:
+                    icon_rect = QtCore.QRect(
+                        btn_frm_x+1, btn_frm_y+1, btn_frm_w, icn_w
+                    )
+                elif direction == _gui_core.GuiDirections.RightToLeft:
+                    icon_rect = QtCore.QRect(
+                        btn_frm_x+1, btn_frm_y+btn_frm_h-icn_w, btn_frm_w, icn_w
+                    )
+                else:
+                    raise RuntimeError()
+            else:
+                raise RuntimeError()
+
+            i_r, i_g, i_b = bsc_core.RawTextOpt(icon_name_text).to_rgb_1(s_p=(35, 50), v_p=(75, 95))
             self._set_border_width_(1)
             self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
             icn_bkg_color = QtGui.QColor(i_r, i_g, i_b, a)
@@ -271,10 +362,10 @@ class QtPainter(QtGui.QPainter):
                 self._set_background_color_(icn_bkg_color)
             else:
                 self._set_background_color_(i_r, i_g, i_b)
-            self._draw_path_by_coords_(icon_coords)
+            self.drawRect(icon_rect)
         else:
             icn_w = 0
-
+        # action state
         if is_pressed is True or is_hovered is True:
             if is_pressed is True:
                 act_bkg_color = QtGui.QColor(*_gui_core.GuiRgba.LightBlue)
@@ -283,18 +374,31 @@ class QtPainter(QtGui.QPainter):
             else:
                 act_bkg_color = background_color
 
-            act_w, act_h = 32, 2
+            if orientation == QtCore.Qt.Horizontal:
+                act_h = 2
+                action_rect = QtCore.QRect(
+                    btn_frm_x+8, bar_y+bar_h-act_h, btn_frm_w-16-icn_w, act_h
+                )
+            elif orientation == QtCore.Qt.Vertical:
+                act_h = 2
+                if direction == _gui_core.GuiDirections.LeftToRight:
+                    action_rect = QtCore.QRect(
+                        bar_x+bar_w-act_h, btn_frm_y+8+icn_w, act_h, btn_frm_h-16-icn_w
+                    )
+                elif direction == _gui_core.GuiDirections.RightToLeft:
+                    action_rect = QtCore.QRect(
+                        bar_x+act_h, btn_frm_y+8, act_h, btn_frm_h-16-icn_w
+                    )
+                else:
+                    raise RuntimeError()
+            else:
+                raise RuntimeError()
+
             self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
             self._set_background_color_(act_bkg_color)
-            action_rect = QtCore.QRect(
-                frm_x+8, f_y+f_h-act_h, frm_w-16-icn_w, act_h
-            )
             self.drawRoundedRect(action_rect, act_h/2, act_h/2, QtCore.Qt.AbsoluteSize)
         # text
         if text is not None:
-            txt_rect = QtCore.QRect(
-                frm_x, frm_y, frm_w-icn_w, frm_h
-            )
             text_option = QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter
             self._set_font_(
                 _base.QtFont.generate(size=font_size, weight=75)
@@ -302,18 +406,48 @@ class QtPainter(QtGui.QPainter):
 
             self._set_text_color_(text_color)
 
-            self.drawText(
-                txt_rect,
-                text_option,
-                text,
-            )
+            if orientation == QtCore.Qt.Horizontal:
+                txt_rect = QtCore.QRect(
+                    btn_frm_x, btn_frm_y, btn_frm_w-icn_w, btn_frm_h
+                )
+                self.drawText(
+                    txt_rect,
+                    text_option,
+                    text,
+                )
+            elif orientation == QtCore.Qt.Vertical:
+                if direction == _gui_core.GuiDirections.LeftToRight:
+                    txt_rect = QtCore.QRect(
+                        btn_frm_x, btn_frm_y+icn_w, btn_frm_w, btn_frm_h-icn_w
+                    )
+                    r_x, r_y, r_w, r_h = txt_rect.x(), txt_rect.y(), txt_rect.width(), txt_rect.height()
+                    self.rotate(-90)
+                    self.translate(QtCore.QPoint(-r_y-(r_y+r_h), 0))
+                    txt_rect_new = QtCore.QRect(r_y, r_x, r_h, r_w)
+                elif direction == _gui_core.GuiDirections.RightToLeft:
+                    txt_rect = QtCore.QRect(
+                        btn_frm_x, btn_frm_y, btn_frm_w, btn_frm_h-icn_w
+                    )
+                    r_x, r_y, r_w, r_h = txt_rect.x(), txt_rect.y(), txt_rect.width(), txt_rect.height()
+                    self.rotate(90)
+                    self.translate(QtCore.QPoint(0, -r_w-r_x))
+                    txt_rect_new = QtCore.QRect(r_y, 0, r_h, r_w)
+                else:
+                    raise RuntimeError()
+
+                self.drawText(
+                    txt_rect_new,
+                    text_option,
+                    text,
+                )
+                self.resetTransform()
 
     def _draw_tab_buttons_by_rects_(
-        self, frame_rect, virtual_items, index_hover, index_pressed,
+        self, bar_rect, virtual_items, index_hover, index_pressed,
         index_current
     ):
         self._draw_frame_by_rect_(
-            rect=frame_rect,
+            rect=bar_rect,
             border_color=_gui_core.GuiRgba.Transparent,
             background_color=_gui_core.GuiRgba.Dark,
         )
@@ -327,7 +461,7 @@ class QtPainter(QtGui.QPainter):
                 i_is_current = i_index == index_current
                 if i_is_current is False:
                     self._draw_tab_button_at_(
-                        frame_rect, i_draw_rect, i_name_text, i_icon_text, i_is_hovered, i_is_pressed, i_is_current
+                        bar_rect, i_draw_rect, i_name_text, i_icon_text, i_is_hovered, i_is_pressed, i_is_current
                     )
             # draw current
             for i_index, i_virtual_item in enumerate(virtual_items):
@@ -339,21 +473,20 @@ class QtPainter(QtGui.QPainter):
                 i_is_current = i_index == index_current
                 if i_is_current is True:
                     self._draw_tab_button_at_(
-                        frame_rect, i_draw_rect, i_name_text, i_icon_text, i_is_hovered, i_is_pressed, i_is_current
+                        bar_rect, i_draw_rect, i_name_text, i_icon_text, i_is_hovered, i_is_pressed, i_is_current
                     )
         else:
-            f_x, f_y = frame_rect.x(), frame_rect.y()
-            f_w, f_h = frame_rect.width(), frame_rect.height()
+            bar_x, bar_y = bar_rect.x(), bar_rect.y()
+            bar_w, bar_h = bar_rect.width(), bar_rect.height()
             self._set_border_color_(_color_and_brush.QtColors.TabBorderCurrent)
             self._set_border_width_(1)
-            frame_coords = [(f_x, f_y+f_h), (f_w, f_y+f_h)]
+            frame_coords = [(bar_x, bar_y+bar_h), (bar_w, bar_y+bar_h)]
             self._draw_path_by_coords_(frame_coords, antialiasing=False)
 
     def _draw_tab_button_at_(
-        self, frame_rect, rect, text, icon_name_text, is_hovered, is_pressed, is_current
+        self, bar_rect, rect, text, icon_name_text, is_hovered, is_pressed, is_current
     ):
-        f_x, f_y = frame_rect.x(), frame_rect.y()
-        f_w, f_h = frame_rect.width(), frame_rect.height()
+        bar_x, bar_y, bar_w, bar_h = bar_rect.x(), bar_rect.y(), bar_rect.width(), bar_rect.height()
         a = 255
 
         if is_current is True:
@@ -368,36 +501,36 @@ class QtPainter(QtGui.QPainter):
             background_color = _color_and_brush.QtColors.TabBackground
             text_color = _color_and_brush.QtColors.TextTemporary
 
-        x, y = rect.x(), rect.y()
-        w, h = rect.width(), rect.height()
+        btn_x, btn_y = rect.x(), rect.y()
+        btn_w, btn_h = rect.width(), rect.height()
 
         if is_pressed is True:
             offset = 2
-            x += offset
-            y += offset
-            w -= offset
-            h -= offset
+            btn_x += offset
+            btn_y += offset
+            btn_w -= offset
+            btn_h -= offset
 
-        r = h
+        btn_r = btn_h
         if is_current is True:
-            frm_x, frm_y = x, y
-            frm_w, frm_h = w+r, h-1
+            btn_frm_x, btn_frm_y = btn_x, btn_y
+            btn_frm_w, btn_frm_h = btn_w+btn_r, btn_h-1
             border_width = 1
             frame_coords = [
-                (f_x, frm_y+frm_h),
+                (bar_x, btn_frm_y+btn_frm_h),
                 # bottom left, top left, top right, bottom right, ...
-                (frm_x, frm_y+frm_h), (frm_x+frm_h, frm_y), (frm_x+frm_w-frm_h, frm_y),
-                (frm_x+frm_w, frm_y+frm_h),
-                (f_w, frm_y+frm_h),
+                (btn_frm_x, btn_frm_y+btn_frm_h), (btn_frm_x+btn_frm_h, btn_frm_y), (btn_frm_x+btn_frm_w-btn_frm_h, btn_frm_y),
+                (btn_frm_x+btn_frm_w, btn_frm_y+btn_frm_h),
+                (bar_w, btn_frm_y+btn_frm_h),
             ]
             font_size = 10
         else:
-            frm_x, frm_y = x, y+4
-            frm_w, frm_h = w+r, h-5
+            btn_frm_x, btn_frm_y = btn_x, btn_y+4
+            btn_frm_w, btn_frm_h = btn_w+btn_r, btn_h-5
             border_width = 1
             frame_coords = [
-                (frm_x, frm_y+frm_h), (frm_x+frm_h, frm_y), (frm_x+frm_w-frm_h, frm_y),
-                (frm_x+frm_w, frm_y+frm_h),
+                (btn_frm_x, btn_frm_y+btn_frm_h), (btn_frm_x+btn_frm_h, btn_frm_y), (btn_frm_x+btn_frm_w-btn_frm_h, btn_frm_y),
+                (btn_frm_x+btn_frm_w, btn_frm_y+btn_frm_h),
             ]
             font_size = 8
 
@@ -411,10 +544,10 @@ class QtPainter(QtGui.QPainter):
             icn_w = 16
             icon_coords = [
                 # bottom left, top left, top right, bottom right, ...
-                (frm_x+frm_w-icn_w, frm_y+frm_h), (frm_x+frm_w-frm_h-icn_w, frm_y+1),
-                (frm_x+frm_w-frm_h, frm_y+1),
-                (frm_x+frm_w-1, frm_y+frm_h),
-                (frm_x+frm_w-icn_w, frm_y+frm_h),
+                (btn_frm_x+btn_frm_w-icn_w, btn_frm_y+btn_frm_h), (btn_frm_x+btn_frm_w-btn_frm_h-icn_w, btn_frm_y+1),
+                (btn_frm_x+btn_frm_w-btn_frm_h, btn_frm_y+1),
+                (btn_frm_x+btn_frm_w-1, btn_frm_y+btn_frm_h),
+                (btn_frm_x+btn_frm_w-icn_w, btn_frm_y+btn_frm_h),
             ]
             i_r, i_g, i_b = bsc_core.RawTextOpt(icon_name_text).to_rgb_1(s_p=(35, 50), v_p=(75, 95))
             self._set_border_width_(1)
@@ -441,13 +574,13 @@ class QtPainter(QtGui.QPainter):
             self._set_background_color_(act_bkg_color)
 
             action_rect = QtCore.QRect(
-                frm_x+(frm_w-act_w)/2, f_y+f_h-act_h, act_w, act_h
+                btn_frm_x+(btn_frm_w-act_w)/2, bar_y+bar_h-act_h, act_w, act_h
             )
             self.drawRoundedRect(action_rect, act_h/2, act_h/2, QtCore.Qt.AbsoluteSize)
         # text
         if text is not None:
             txt_rect = QtCore.QRect(
-                frm_x, frm_y, frm_w-icn_w, frm_h
+                btn_frm_x, btn_frm_y, btn_frm_w-icn_w, btn_frm_h
             )
             text_option = QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter
             self._set_font_(
@@ -1521,26 +1654,43 @@ class QtPainter(QtGui.QPainter):
             self._set_antialiasing_(False)
             self.drawRect(rect_)
 
-    def _draw_focus_frame_by_rect_(self, rect, border_color=None, background_color=None, border_width=1, offset=0):
-        if background_color is None:
-            background_color = 0, 0, 0, 0
-        if border_color is None:
-            border_color = 63, 255, 127, 255
-        #
-        self._set_background_color_(background_color)
-        self._set_border_color_(border_color)
-        self._set_border_width_(border_width)
-        #
-        l_ = 32
+    def _draw_focus_frame_by_rect_(self, rect, color=None):
+        l_ = 96
+        w, h = rect.width(), rect.height()
+        x_c, y_c = w/2, h/2
+        r_c = min(x_c, y_c)
         p1, p2, p3, p4 = rect.topLeft(), rect.topRight(), rect.bottomRight(), rect.bottomLeft()
         (x1, y1), (x2, y2), (x3, y3), (x4, y4) = (p1.x(), p1.y()), (p2.x(), p2.y()), (p3.x(), p3.y()), (p4.x(), p4.y())
         point_coords = (
-            ((x1, y1+l_), (x1, y1), (x1+l_, y1)),
-            ((x2-l_, y2), (x2, y2), (x2, y2+l_)),
-            ((x3, y3-l_), (x3, y3), (x3-l_, y3)),
-            ((x4+l_, y4), (x4, y4), (x4, y4-l_))
+            # top left
+            (((x1, y1+r_c), (x1, y1), (x1+r_c, y1)), (x1, y1), (x1+r_c, y1+r_c)),
+            # top right
+            (((x2-r_c, y2), (x2, y2), (x2, y2+r_c)), (x2, y2), (x2-r_c, y1+r_c)),
+            # bottom right
+            (((x3, y3-r_c), (x3, y3), (x3-r_c, y3)), (x3, y3), (x3-r_c, y3-r_c)),
+            # bottom left
+            (((x4+r_c, y4), (x4, y4), (x4, y4-r_c)), (x4, y4), (x4+r_c, y4-r_c))
         )
-        [self._draw_path_by_coords_(i) for i in point_coords]
+        for i_points, i_s, i_e in point_coords:
+            i_start = QtCore.QPoint(*i_s)
+            i_end = QtCore.QPoint(*i_e)
+            i_c = QtGui.QLinearGradient(
+                i_start, i_end
+            )
+            i_c.setColorAt(
+                0, _base.QtColor.to_qt_color(color)
+            )
+            i_c.setColorAt(
+                .5, QtGui.QColor(0, 0, 0, 0)
+            )
+            i_c.setColorAt(
+                1, QtGui.QColor(0, 0, 0, 0)
+            )
+            i_brush = QtGui.QBrush(i_c)
+            i_pen = QtGui.QPen(i_brush, 2)
+            i_pen.setJoinStyle(QtCore.Qt.RoundJoin)
+            self.setPen(i_pen)
+            self._draw_path_by_coords_(i_points)
 
     def _draw_line_by_rect_(self, rect, border_color, background_color, border_width=1):
         self._set_border_color_(border_color)

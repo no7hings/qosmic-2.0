@@ -320,10 +320,10 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
         )
         w.set_ok_completed_notify_enable(True)
 
-        w.connect_window_close_to(
+        w.register_window_close_method(
             self.widget.show
         )
 
         self.widget.hide()
 
-        w.set_window_show()
+        w.show_window_auto()

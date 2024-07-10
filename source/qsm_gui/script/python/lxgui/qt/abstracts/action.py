@@ -70,7 +70,7 @@ class AbsQtActionBaseDef(object):
             if self._action_flag is not None:
                 if self._action_flag in {
                     self.ActionFlag.Press,
-                    self.ActionFlag.PressDbClick,
+                    self.ActionFlag.PressDblClick,
                     # track
                     self.ActionFlag.TrackPress,
                     #

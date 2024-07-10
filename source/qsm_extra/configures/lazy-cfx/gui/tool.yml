@@ -34,7 +34,7 @@ build:
                 |-
                 用于解算。
 
-        unit:
+        units:
             export:
                 name: 'Export'
                 name_chs: '导出'
@@ -45,11 +45,13 @@ build:
                 options:
                     name: 'Cache'
                     name_chs: '缓存'
+
                     parameters:
                         setting:
                             widget: group
                             name: 'Setting'
                             name_chs: '设置'
+                            collapse: True
 
                         setting/fps:
                             widget: capsule_string
@@ -59,6 +61,7 @@ build:
                             tool_tip: 'show scene FPS'
                             tool_tip_chs: '显示当前场景的帧率'
                             lock: True
+                            visible: False
 
                         setting/frame_scheme:
                             widget: capsule_string
@@ -80,6 +83,9 @@ build:
                             value: [0, 24]
                             tool_tip: '...'
                             lock: True
+                            visible_condition: {
+                                operator: 'is', port: 'setting/frame_scheme', value: 'frame_range'
+                            }
 
                         setting/frame_offset:
                             widget: integer
@@ -122,7 +128,8 @@ build:
                             widget: directory
                             open_or_save: save
                             name_chs: '导出目录'
-                            value: 'Z:/temeporaries/dongchangbao/cfx'
+                            value: ''
+                            history_key: 'tool-panels.lazy-cfx-tool.cloth-export-version-directory-open'
 
                         cloth/version_directory:
                             widget: directory
@@ -153,8 +160,14 @@ build:
 
                         cloth/export_cfx_cloth_as_backstage:
                             widget: button
-                            name: 'Export Cache (localhost)'
+                            name: 'Export Cache (backstage)'
                             name_chs: '导出CFX布料（后台）'
+                            icon: 'upload'
+
+                        cloth/export_cfx_cloth_as_farm:
+                            widget: button
+                            name: 'Export Cache (farm)'
+                            name_chs: '导出CFX布料（农场）'
                             icon: 'upload'
 
             import:
@@ -211,12 +224,25 @@ build:
                 message_chs: '勾选至少一种缓存类型（Alembic缓存， 几何缓存）。'
             
             no_task_server:
-                message: 'Task Server is not Start.'
-                message_chs: '任务服务器未开启。'
-
+                message: 'Backstage Task Server is not Start.'
+                message_chs: '后台任务服务未开启。'
+            
             task_submit_successful:
                 message: 'Task Submit Successful.'
                 message_chs: '任务提交成功。'
+
+            no_farm_server:
+                message: 'Farm Server is not Start.'
+                message_chs: '农场服务未开启。'
+            
+            farm_submit_successful:
+                message: 'Farm Task Submit Successful.'
+                message_chs: '农场任务提交成功。'
+
+    messages:
+        remove_reference:
+            message: 'do you want remove selected references?\n, press "Ok" to continue.'
+            message_chs: '是否要移除选中的引用\n，点击“Ok”以继续。'
 
     rig_selection_scheme:
         options: ['root', 'geometry_root', 'deformation_root', 'motion_root', 'main_control']

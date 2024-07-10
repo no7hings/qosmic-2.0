@@ -536,6 +536,11 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
             group.set_visible_condition(
                 variants.get('visible_condition')
             )
+            #
+            if 'visible' in variants:
+                group.set_visible(
+                    variants['visible']
+                )
             return
         #
         key_ = variants.get('key')
@@ -659,6 +664,7 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
                 port_path,
                 node_widget=self.widget
             )
+
             history_key_ = variants.get('history_key')
             if history_key_:
                 port.set_history_key(history_key_)
@@ -739,15 +745,16 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
                 port_path,
                 node_widget=self.widget
             )
-            #
+
             value_options = variants.get('options')
             if value_options:
                 value_names = variants.get('option_names')
                 if ui_language == 'chs':
                     if 'option_names_chs' in variants:
                         value_names = variants['option_names_chs']
+
                 port.set_options(value_options, value_names)
-                #
+
                 value_default = variants.get('default')
                 if value_default is not None:
                     port.set(value_default)
@@ -755,10 +762,19 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
                 else:
                     port.set(value_options[-1])
                     port.set_default(value_options[-1])
-            #
+
             lock = variants.get('lock') or False
             if lock is True:
                 port.set_locked(True)
+
+            history_key_ = variants.get('history_key')
+            if history_key_:
+                port.set_history_key(history_key_)
+
+            pull_history_latest = variants.get('pull_history_latest')
+            if pull_history_latest is True:
+                port.pull_history_latest()
+
         elif widget_ in {'capsule_strings'}:
             port = _port.PrxPortAsCapsuleStrings(
                 port_path,
@@ -769,17 +785,26 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
             if ui_language == 'chs':
                 if 'option_names_chs' in variants:
                     value_names = variants['option_names_chs']
+
             port.set_options(value_options, value_names)
-            #
+
             value_default = variants.get('default')
             if value_default is not None:
                 port.set(value_default)
                 port.set_default(value_default)
-            #
+
             lock = variants.get('lock') or False
             if lock is True:
                 port.set_locked(True)
-        #
+
+            history_key_ = variants.get('history_key')
+            if history_key_:
+                port.set_history_key(history_key_)
+
+            pull_history_latest = variants.get('pull_history_latest')
+            if pull_history_latest is True:
+                port.pull_history_latest()
+
         elif widget_ in {'file'}:
             open_or_save = variants.get('open_or_save')
             if open_or_save == 'save':
@@ -859,11 +884,11 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
             )
             port.set(value_)
             port.set_default(value_)
-            #
+
             ext_includes = variants.get('ext_includes')
             if ext_includes:
                 port.set_ext_includes(ext_includes)
-            #
+
             history_key_ = variants.get('history_key')
             if history_key_:
                 port.set_history_key(history_key_)

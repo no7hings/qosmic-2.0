@@ -14,7 +14,7 @@ if __name__ == '__main__':
     #
     app = QtWidgets.QApplication(sys.argv)
     w = gui_prx_widgets.PrxBaseWindow()
-    w.set_window_show()
+    w.show_window_auto()
 
     c_0 = 5
     c_1 = 10

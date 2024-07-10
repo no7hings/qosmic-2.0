@@ -51,7 +51,7 @@ option:
 #
 output:
     info:
-        Plugin: "Rocket"
+        Plugin: "LazyMachine"
         #
         BatchName: <option.deadline.batch_name>
         Name: <option.deadline.job_name>
@@ -108,7 +108,7 @@ output:
         ExtraInfo7: <option.extra.application>
     plug:
         Arguments: <option.deadline.command>
-        Shell: "default"
+        Shell: "cmd"
         ShellExecute: True
         Executable: ''
         Software: ''

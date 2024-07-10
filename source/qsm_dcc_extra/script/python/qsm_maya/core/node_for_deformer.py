@@ -2,7 +2,7 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 # noinspection PyUnresolvedReferences
-import maya.internal.common.cmd.base as cmd_base
+import maya.mel as mel
 
 from . import node as _node
 
@@ -14,12 +14,16 @@ from . import transform as _transform
 class NonLinear(object):
     @classmethod
     def create_for(cls, key, target_shape_path, target_any_paths):
+        # noinspection PyUnresolvedReferences
+        # import maya.internal.common.cmd.base as cmd_base
+
         cmds.select(target_any_paths)
 
         if _transform.Transform.is_transform(target_shape_path):
             target_shape_path = _transform.Transform.get_shape(target_shape_path)
 
-        cmd_base.executeCommand('{}.cmd_create'.format(key))
+        mel.eval('{};'.format(key.upper()))
+        # cmd_base.executeCommand('{}.cmd_create'.format(key))
         node = _attribute.NodeAttribute.get_source_node(
             target_shape_path, 'inMesh', 'nonLinear'
         )

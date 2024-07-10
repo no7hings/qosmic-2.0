@@ -21,15 +21,15 @@ import qsm_maya.general.core as qsm_mya_gnl_core
 
 import qsm_maya.animation.core as qsm_mya_anm_core
 
-import qsm_maya.animation.scripts as qsm_mya_rig_scripts
+import qsm_maya.animation.scripts as qsm_mya_anm_scripts
 
-import qsm_maya.motion as qsm_mya_motion
+import qsm_maya.motion.core as qsm_mya_mtn_core
 
 import qsm_maya_gui.core as qsm_mya_gui_core
 
 
 class UnitForRigView(
-    qsm_mya_gui_core.PrxUnitForResourceOpt
+    qsm_mya_gui_core.PrxTreeviewUnitForResourceOpt
 ):
     ROOT_NAME = 'Rigs'
 
@@ -46,11 +46,11 @@ class UnitForRigView(
         super(UnitForRigView, self).__init__(window, unit, session, prx_tree_view)
 
 
-class UnitForRigReference(
+class ToolbarUnitForRigReference(
     qsm_mya_gui_core.PrxUnitBaseOpt
 ):
     def __init__(self, window, unit, session, prx_input_for_asset):
-        super(UnitForRigReference, self).__init__(window, unit, session)
+        super(ToolbarUnitForRigReference, self).__init__(window, unit, session)
         self._scan_root = qsm_gnl_scan.Root.generate()
         self._prx_input_for_asset = prx_input_for_asset
 
@@ -65,12 +65,12 @@ class UnitForRigReference(
         self._prx_input_for_asset.add_widget(self._reference_button)
         self._reference_button._set_name_text_(
             gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.buttons.reference')
+                self._window._language, self._window._configure.get('build.rig.buttons.reference')
             )
         )
         self._reference_button._set_tool_tip_text_(
             gui_core.GuiUtil.choice_tool_tip(
-                self._window._language, self._session.configure.get('build.buttons.reference')
+                self._window._language, self._window._configure.get('build.rig.buttons.reference')
             )
         )
         self._reference_button.setMaximumWidth(64)
@@ -111,7 +111,7 @@ class UnitForRigReference(
                         self._reference_button._set_action_enable_(True)
 
 
-class ToolSetUnitForRigUtility(
+class ToolsetUnitForRigUtility(
     qsm_mya_gui_core.PrxUnitBaseOpt
 ):
 
@@ -148,11 +148,11 @@ class ToolSetUnitForRigUtility(
                         if i_resource.reference_opt.is_loaded() is False:
                             continue
 
-                        i_opt = qsm_mya_rig_scripts.SkinProxyOpt(i_resource)
+                        i_opt = qsm_mya_anm_scripts.SkinProxyOpt(i_resource)
                         if i_opt.is_exists() is False:
-                            i_cmd, i_cache_file, i_data_file_path = i_opt.generate_args()
-                            if i_cmd is not None:
-                                create_cmds.append(i_cmd)
+                            i_task_name, i_cmd_script, i_cache_file, i_data_file_path = i_opt.generate_args()
+                            if i_cmd_script is not None:
+                                create_cmds.append(i_cmd_script)
 
                             self._skin_proxy_load_args_array.append(
                                 (i_opt, i_cache_file, i_data_file_path)
@@ -170,7 +170,7 @@ class ToolSetUnitForRigUtility(
         resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
-                i_opt = qsm_mya_rig_scripts.SkinProxyOpt(i_resource)
+                i_opt = qsm_mya_anm_scripts.SkinProxyOpt(i_resource)
                 i_opt.remove_cache()
 
         self._page.do_gui_refresh_all(force=True)
@@ -204,16 +204,13 @@ class ToolSetUnitForRigUtility(
                         if i_resource.reference_opt.is_loaded() is False:
                             continue
 
-                        i_opt = qsm_mya_rig_scripts.DynamicGpuCacheOpt(i_resource)
+                        i_opt = qsm_mya_anm_scripts.DynamicGpuCacheOpt(i_resource)
                         if i_opt.is_exists() is False:
-                            i_directory_path = qsm_mya_gnl_core.ResourceCache.generate_dynamic_gpu_directory(
-                                user_name=bsc_core.BscSystem.get_user_name()
+                            i_task_name, i_cmd_script, i_cache_file = i_opt.generate_args(
+                                start_frame, end_frame, use_motion=use_motion
                             )
-                            i_cmd, i_cache_file = i_opt.generate_args(
-                                i_directory_path, start_frame, end_frame, use_motion=use_motion
-                            )
-                            if i_cmd is not None:
-                                create_cmds.append(i_cmd)
+                            if i_cmd_script is not None:
+                                create_cmds.append(i_cmd_script)
 
                             self._dynamic_gpu_load_args_array.append(
                                 (i_opt, i_cache_file))
@@ -231,7 +228,7 @@ class ToolSetUnitForRigUtility(
         resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
-                i_opt = qsm_mya_rig_scripts.DynamicGpuCacheOpt(i_resource)
+                i_opt = qsm_mya_anm_scripts.DynamicGpuCacheOpt(i_resource)
                 i_opt.remove_cache()
 
         self._page.do_gui_refresh_all(force=True)
@@ -249,8 +246,8 @@ class ToolSetUnitForRigUtility(
     def do_dcc_refresh_by_fps_changing(self):
         pass
 
-    def do_gui_refresh_by_fps_changing(self):
-        fps = qsm_mya_core.Frame.get_fps()
+    def do_gui_refresh_fps(self):
+        fps = qsm_mya_core.Frame.get_fps_tag()
         self._fps_port.set(fps)
 
     def do_gui_refresh_by_frame_scheme_changing(self):
@@ -267,25 +264,29 @@ class ToolSetUnitForRigUtility(
             frame_range = qsm_mya_core.Frame.get_frame_range()
             self._frame_range_port.set(frame_range)
 
+    def do_gui_load_active_camera(self):
+        self.do_gui_refresh_by_camera_changing()
+
     def __init__(self, window, unit, session):
-        super(ToolSetUnitForRigUtility, self).__init__(window, unit, session)
+        super(ToolsetUnitForRigUtility, self).__init__(window, unit, session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.options.rig_utility')
+                self._window._language, self._window._configure.get('build.rig.units.skin_proxy_and_dynamic_gpu_load.options')
             )
         )
         self._prx_options_node.build_by_data(
-            self._session.configure.get('build.options.rig_utility.parameters'),
+            self._window._configure.get('build.rig.units.skin_proxy_and_dynamic_gpu_load.options.parameters'),
         )
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='utility',
             name=gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.tag-groups.rig_utility')
+                self._window._language, self._window._configure.get('build.rig.units.skin_proxy_and_dynamic_gpu_load')
             ),
+            icon_name_text='utility',
             tool_tip=gui_core.GuiUtil.choice_tool_tip(
-                self._window._language, self._session.configure.get('build.tag-groups.rig_utility')
+                self._window._language, self._window._configure.get('build.rig.units.skin_proxy_and_dynamic_gpu_load')
             )
         )
 
@@ -313,14 +314,18 @@ class ToolSetUnitForRigUtility(
         self._frame_range_port = self._prx_options_node.get_port('setting.frame_range')
 
         self.do_gui_refresh_by_camera_changing()
-        self.do_gui_refresh_by_fps_changing()
+        self.do_gui_refresh_fps()
         self.do_gui_refresh_by_dcc_frame_changing()
+
+        self._prx_options_node.set(
+            'setting.load_active_camera', self.do_gui_load_active_camera
+        )
 
     def gui_get_frame_scheme(self):
         return self._prx_options_node.get('setting.frame_scheme')
 
 
-class UnitForRigSwitchToolSet(
+class ToolsetUnitForRigSwitch(
     qsm_mya_gui_core.PrxUnitBaseOpt
 ):
     def do_dcc_skin_proxy_switch_to(self, key):
@@ -346,23 +351,24 @@ class UnitForRigSwitchToolSet(
         self.do_gui_refresh_buttons()
 
     def __init__(self, window, unit, session):
-        super(UnitForRigSwitchToolSet, self).__init__(window, unit, session)
+        super(ToolsetUnitForRigSwitch, self).__init__(window, unit, session)
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.options.rig_switch')
+                self._window._language, self._window._configure.get('build.rig.units.skin_proxy_and_dynamic_gpu_switch.options')
             )
         )
         self._prx_options_node.build_by_data(
-            self._session.configure.get('build.options.rig_switch.parameters'),
+            self._window._configure.get('build.rig.units.skin_proxy_and_dynamic_gpu_switch.options.parameters'),
         )
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='switch',
             name=gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.tag-groups.rig_switch')
+                self._window._language, self._window._configure.get('build.rig.units.skin_proxy_and_dynamic_gpu_switch')
             ),
+            icon_name_text='switch',
             tool_tip=gui_core.GuiUtil.choice_tool_tip(
-                self._window._language, self._session.configure.get('build.tag-groups.rig_switch')
+                self._window._language, self._window._configure.get('build.rig.units.skin_proxy_and_dynamic_gpu_switch')
             )
         )
 
@@ -470,28 +476,29 @@ class UnitForRigSwitchToolSet(
         self._page._gui_resource_prx_unit.do_gui_select_all_resources()
 
 
-class UnitForRigExtendToolSet(
+class ToolsetUnitForRigExtend(
     qsm_mya_gui_core.PrxUnitBaseOpt
 ):
     def __init__(self, window, unit, session):
-        super(UnitForRigExtendToolSet, self).__init__(window, unit, session)
+        super(ToolsetUnitForRigExtend, self).__init__(window, unit, session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.options.rig_motion')
+                self._window._language, self._window._configure.get('build.rig.units.motion.options')
             )
         )
         self._prx_options_node.build_by_data(
-            self._session.configure.get('build.options.rig_motion.parameters'),
+            self._window._configure.get('build.rig.units.motion.options.parameters'),
         )
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='extend',
             name=gui_core.GuiUtil.choice_name(
-                self._window._language, self._session.configure.get('build.tag-groups.rig_extend')
+                self._window._language, self._window._configure.get('build.rig.units.motion')
             ),
+            icon_name_text='extend',
             tool_tip=gui_core.GuiUtil.choice_tool_tip(
-                self._window._language, self._session.configure.get('build.tag-groups.rig_extend')
+                self._window._language, self._window._configure.get('build.rig.units.motion')
             )
         )
         # control
@@ -532,9 +539,10 @@ class UnitForRigExtendToolSet(
         valid_namespaces = adv_rig_query.to_valid_namespaces(namespaces)
         if not valid_namespaces:
             return
+
         namespace = valid_namespaces[0]
-        qsm_mya_motion.AdvMotionOpt(namespace).export_animations_to(
-            file_path
+        qsm_mya_mtn_core.AdvMotionOpt(namespace).export_data_to(
+            file_path, part_includes=['body', 'face']
         )
 
     def do_dcc_paste_animation(self):
@@ -553,7 +561,7 @@ class UnitForRigExtendToolSet(
         namespace = valid_namespaces[0]
         force = self._prx_options_node.get('animation_transfer.force')
         frame_offset = self._prx_options_node.get('animation_transfer.frame_offset')
-        qsm_mya_motion.AdvMotionOpt(namespace).import_animations_from(
+        qsm_mya_mtn_core.AdvMotionOpt(namespace).import_data_from(
             file_path, frame_offset=frame_offset, force=force
         )
 
@@ -584,7 +592,7 @@ class UnitForRigExtendToolSet(
             if result is True:
                 force = self._prx_options_node.get('animation_transfer.force')
                 frame_offset = self._prx_options_node.get('animation_transfer.frame_offset')
-                qsm_mya_motion.AdvMotionOpt(namespace_src).transfer_animations_to(
+                qsm_mya_mtn_core.AdvMotionOpt(namespace_src).transfer_to(
                     namespace_dst, frame_offset=frame_offset, force=force
                 )
 
@@ -595,7 +603,7 @@ class UnitForRigExtendToolSet(
                 if i_resource.is_exists() is False:
                     continue
                 i_namespace = i_resource.namespace
-                i_controls = qsm_mya_motion.AdvMotionOpt(i_namespace).find_controls()
+                i_controls = qsm_mya_mtn_core.AdvMotionOpt(i_namespace).find_all_controls()
                 [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 0) for x in i_controls]
 
     def do_dcc_disable_control_playback_visible(self):
@@ -605,17 +613,17 @@ class UnitForRigExtendToolSet(
                 if i_resource.is_exists() is False:
                     continue
                 i_namespace = i_resource.namespace
-                i_controls = qsm_mya_motion.AdvMotionOpt(i_namespace).find_controls()
+                i_controls = qsm_mya_mtn_core.AdvMotionOpt(i_namespace).find_all_controls()
                 [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 1) for x in i_controls]
 
     def do_dcc_create_transformation_locator(self):
         resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
         if resources:
             namespaces = [x.namespace for x in resources]
-            qsm_mya_rig_scripts.TransformationLocatorOpt(namespaces).create_transformation_locators()
+            qsm_mya_anm_scripts.AdvTransformationLocatorOpt(namespaces).create_transformation_locators()
 
     def do_dcc_remove_transformation_locator(self):
         resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
         if resources:
             namespaces = [x.namespace for x in resources]
-            qsm_mya_rig_scripts.TransformationLocatorOpt(namespaces).remove_transformation_locators()
+            qsm_mya_anm_scripts.AdvTransformationLocatorOpt(namespaces).remove_transformation_locators()

@@ -1,0 +1,819 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Lazy Animation Tool'
+        name_chs: '懒人动画工具'
+        group_name: 'Asset(s)'
+        #
+        icon_name: 'application/resource_library'
+        tool_tip:
+            |-
+            include tools for rig, assembly, ...
+
+        tool_tip_chs:
+            包含绑定，场景等相关工具
+        #
+        size: [560, 720]
+
+build:
+    rig:
+        tab:
+            name: 'Character & Prop'
+            name_chs: '角色 & 道具'
+
+            tool_tip: '...'
+            tool_tip_chs: '包含所有跟角色，道具相关的工具'
+
+        units:
+            skin_proxy_and_dynamic_gpu_load:
+                name: 'Skin Proxy & Dynamic GPU Load'
+                name_chs: '简模代理 & 动态GPU 加载'
+
+                tool_tip: '...'
+                tool_tip_chs: '用于生成简模代理，生成动态GPU'
+
+                options:
+                    name: 'Options'
+                    name_chs: '选项'
+
+                    parameters:
+                        setting:
+                            widget: group
+                            name: 'Setting'
+                            name_chs: '设置'
+                            collapse: True
+
+                        setting/camera:
+                            widget: enumerate
+                            name_chs: '相机'
+                            value: ['None']
+                            tool_tip: '...'
+                            visible: False
+
+                        setting/fps:
+                            widget: capsule_string
+                            name_chs: '帧率'
+                            options: ['24_fps', '30_fps']
+                            default: '24_fps'
+                            tool_tip: 'show scene FPS'
+                            tool_tip_chs: '显示当前场景的帧率'
+                            lock: True
+                            visible: False
+
+                        setting/frame_scheme:
+                            widget: capsule_string
+                            name_chs: '帧方案'
+                            options: ['time_slider', 'frame_range']
+                            option_names_chs: ['时间轴', '帧范围']
+                            default: 'time_slider'
+                            enable: True
+                            tool_tip: 'choose a frame scheme'
+                            tool_tip_chs:
+                                |-
+                                设置一个帧方案:
+                                    时间轴：自动读取帧范围
+                                    帧范围：在帧范围中输入
+
+                        setting/frame_range:
+                            widget: integer2
+                            name_chs: '帧范围'
+                            value: [0, 24]
+                            tool_tip:
+                                |-
+                                这个选项会影响动态GPU的输出
+                            lock: True
+                            visible_condition: {
+                               operator: 'is', port: 'setting/frame_scheme', value: 'frame_range'
+                            }
+
+                        setting/load_active_camera:
+                            widget: button
+                            name: 'Load Active Camera'
+                            name_chs: '获取当前相机'
+                            visible: False
+
+                        skin_proxy:
+                            widget: group
+                            name_chs: '简模代理'
+
+                        skin_proxy/keep_head:
+                            widget: boolean
+                            name: 'Keep Head'
+                            name_chs: '保留脑袋'
+                            value: True
+                            enable: True
+                            tool_tip:
+                                |-
+                                开启这个选项：
+                                    在导入简模代理的时候会保留原始绑定的头部，包含头发、眼睛等。
+                                    这个选项目前无法保证完美的保留脑袋所有的部件。
+                            join_to_next: True
+
+                        skin_proxy/check_bbox:
+                            widget: boolean
+                            name: 'Check BBox'
+                            name_chs: '检测边界框'
+                            value: True
+                            enable: True
+                            tool_tip:
+                                |-
+                                开启这个选项：
+                                    在计算保留脑袋的时候会加入模型的边界框作为判定，以提高保留脑袋部件的准确率。
+
+                        skin_proxy/load:
+                            widget: sub_process_button
+                            name: 'Load Skin Proxy'
+                            name_chs: '加载简模代理'
+                            value: ''
+                            icon: 'tool/maya/create-container'
+                            tool_tip:
+                                |-
+                                press to load skin proxy auto.
+                            tool_tip_chs:
+                                |-
+                                点击自动加载简模代理。
+                                    点击按钮后会在后台输出GPU缓存，请耐心等待（如果缓存已经存在会直接加载），缓存输出完毕后会自动加载到场景中；
+                                    如果选择多个资产同时执行，可能会造成卡顿，尽量一次不要选择太多的绑定；
+                                    目前简模代理提高MAYA运行效率有限，请根据实际需求使用。
+                            join_to_next: True
+
+                        skin_proxy/remove:
+                            widget: button
+                            name: 'Remove Skin Proxy'
+                            name_chs: '移除简模代理'
+                            value: ''
+                            icon: 'tool/maya/delete'
+                            tool_tip:
+                                |-
+                                点击移除简模代理：
+                                    点击后会删除简模代理，并显示绑定。
+                                    如果你只是想显示暂时显示绑定，请使用“绑定切换 > 关闭简模代理”
+
+                        dynamic_gpu:
+                            widget: group
+                            name_chs: '动态GPU'
+
+                        dynamic_gpu/use_motion:
+                            widget: boolean
+                            name: 'Use Motion'
+                            name_chs: '使用动作'
+                            value: False
+                            enable: True
+                            tool_tip:
+                                |-
+                                开启这个选项：
+                                    会输出动画数据到后台进行GPU缓存输出，比直接导出整个绑定的速度要快。
+                                    如果这个绑定被其他绑定约束了，请不要开启这个选项。
+
+                        dynamic_gpu/load:
+                            widget: sub_process_button
+                            name: 'Load Dynamic GPU'
+                            name_chs: '加载动态GPU'
+                            value: ''
+                            icon: 'tool/maya/create-container'
+                            tool_tip:
+                                |-
+                                press to load dynamic GPU auto.
+                            tool_tip_chs:
+                                |-
+                                点击自动加载动态GPU：
+                                    点击按钮后会在后台输出GPU缓存，请耐心等待（如果缓存已经存在会直接加载），缓存输出完毕后会自动加载到场景中；
+                                    如果选择多个资产同时执行，可能会造成卡顿，尽量一次不要选择太多的绑定；
+                                    这个过程是在后台执行的，所以不影响前台的操作；
+                                    输出的时间范围默认为时间轴，如果需要修改时间范围，请在设置里进行修改。
+                            join_to_next: True
+
+                        dynamic_gpu/remove:
+                            widget: button
+                            name: 'Remove Dynamic GPU'
+                            name_chs: '移除动态GPU'
+                            value: ''
+                            icon: 'tool/maya/delete'
+                            tool_tip:
+                                |-
+                                点击移除动态GPU：
+                                    点击后会删除动态GPU，并显示绑定。
+                                    如果你只是想显示暂时显示绑定，请使用“绑定切换 > 关闭动态GPU”
+
+            
+            skin_proxy_and_dynamic_gpu_switch:
+                name: 'Switch & Selection'
+                name_chs: '切换 & 选择'
+
+                tool_tip: '...'
+                tool_tip_chs: '用于切换简模代理和动态GPU'
+
+                options:
+                    name: 'Options'
+                    name_chs: '选项'
+
+                    parameters:
+                        switch:
+                            widget: group
+                            name: 'Switch'
+                            name_chs: '切换'
+
+                        switch/skin_proxy:
+                            widget: group
+                            name: 'Skin Proxy'
+                            name_chs: '简模代理'
+
+                        switch/skin_proxy/enable:
+                            widget: button
+                            name: 'Enable Skin Proxy'
+                            name_chs: '启用简模代理'
+                            value: ''
+                            icon: 'tool/show'
+                            tool_tip: '...'
+                            join_to_next: True
+
+                        switch/skin_proxy/disable:
+                            widget: button
+                            name: 'Disable Skin Proxy'
+                            name_chs: '关闭简模代理'
+                            value: ''
+                            icon: 'tool/hide'
+                            tool_tip: '...'
+
+                        switch/dynamic_gpu:
+                            widget: group
+                            name: 'Dynamic GPU'
+                            name_chs: '动态GPU'
+
+                        switch/dynamic_gpu/enable:
+                            widget: button
+                            name: 'Enable Dynamic GPU'
+                            name_chs: '启用动态GPU'
+                            value: ''
+                            icon: 'tool/show'
+                            tool_tip: '...'
+                            join_to_next: True
+
+                        switch/dynamic_gpu/disable:
+                            widget: button
+                            name: 'Disable Dynamic GPU'
+                            name_chs: '关闭动态GPU'
+                            value: ''
+                            icon: 'tool/hide'
+                            tool_tip: '...'
+
+                        selection:
+                            widget: group
+                            name_chs: '选择'
+
+                        selection/all:
+                            widget: button
+                            name: 'Select All'
+                            name_chs: '选择所有'
+                            value: ''
+                            icon: 'tool/maya/select'
+                            tool_tip: '...'
+                            join_to_next: True
+
+            motion:
+                name: 'Motion'
+                name_chs: '动作'
+
+                tool_tip: 'Include all tool for rig as extend, etc. animation transfer'
+                tool_tip_chs: '动作相关工具，如动画传递等'
+
+                options:
+                    name: 'Options'
+                    name_chs: '选项'
+
+                    parameters:
+                        control:
+                            widget: group
+                            name: 'Control'
+                            name_chs: '控制器'
+
+                        control/enable_playback_visible:
+                            widget: button
+                            name: 'Enable Control Playback Visible'
+                            name_chs: '启用控制器播放可见'
+                            icon: 'tool/show'
+                            tool_tip: '...'
+                            join_to_next: True
+
+                        control/disable_playback_visible:
+                            widget: button
+                            name: 'Disable Control Playback Visible'
+                            name_chs: '关闭控制器播放可见'
+                            icon: 'tool/hide'
+                            tool_tip: '...'
+
+                        transformation:
+                            widget: group
+                            name: 'Transformation'
+                            name_chs: '变换'
+
+                        transformation/create_transformation_locator:
+                            widget: button
+                            name: 'Create Transformation Locator'
+                            name_chs: '创建变换定位器（Locator）'
+                            icon: 'tool/maya/move'
+                            join_to_next: True
+                            tool_tip:
+                                |-
+                                创建一个定位器（Locator）用于移动带动画的绑定
+
+                        transformation/remove_transformation_locator:
+                            widget: button
+                            name: 'Remove Transformation Locator'
+                            name_chs: '移除变换定位器（Locator）'
+                            icon: 'tool/maya/delete'
+                            tool_tip: '...'
+
+                        animation_transfer:
+                            widget: group
+                            name_chs: '动画传递'
+
+                        animation_transfer/force:
+                            widget: boolean
+                            name_chs: '强制'
+                            value: False
+                            enable: True
+                            tool_tip: '...'
+
+                        animation_transfer/frame_offset:
+                            widget: integer
+                            name_chs: '帧偏移'
+                            value: 0
+                            enable: True
+                            tool_tip: '...'
+
+                        animation_transfer/transfer_all:
+                            widget: button
+                            name_chs: '传递所有'
+                            value: ''
+                            icon: 'tool/maya/transfer-animation'
+                            tool_tip:
+                                |-
+                                press to transfer animation
+                            tool_tip_chs:
+                                |-
+                                点击传递动画：
+                                    先选中源物体，再选中目标物体
+                                    可选中任意部件
+
+                        animation_transfer/copy_all:
+                            widget: button
+                            name_chs: '复制所有'
+                            value: ''
+                            icon: 'tool/maya/copy'
+                            tool_tip:
+                                |-
+                                press to copy animation
+                            join_to_next: True
+                            tool_tip_chs:
+                                |-
+                                点击复制动画。
+
+                        animation_transfer/paste_all:
+                            widget: button
+                            name_chs: '粘贴所有'
+                            value: ''
+                            icon: 'tool/maya/paste'
+                            tool_tip:
+                                |-
+                                press to paste animation
+                            tool_tip_chs:
+                                |-
+                                点击粘贴动画。
+
+        buttons:
+            reference:
+                name: 'Reference'
+                name_chs: '引用'
+
+                tool_tip:
+                    |-
+                    Press reference current asset's rig
+                tool_tip_chs:
+                    |-
+                    点击引用当前资产的绑定
+                        按钮为灰色，代表当前资产无绑定文件
+                        前面的数字框可以输入引用数量，鼠标滚轮可以快速增加或减少数量
+
+    scenery:
+        tab:
+            name: 'Scenery'
+            name_chs: '场景'
+
+            tool_tip: 'Include all tools for scenery'
+            tool_tip_chs: '包含所有跟场景相关的工具'
+
+        units:
+            unit_assembly_and_gpu_instance_load:
+                name: 'Unit Assembly'
+                name_chs: '元素组装加载'
+
+                tool_tip: '...'
+                tool_tip_chs: '用于生成元素组装'
+
+                options:
+                    name: 'Options'
+                    name_chs: '选项'
+
+                    parameters:
+                        setting:
+                            widget: group
+                            name: 'Setting'
+                            name_chs: '设置'
+                            collapse: True
+
+                        setting/hide_scenery:
+                            widget: boolean
+                            name: 'Hide Scenery'
+                            name_chs: '隐藏场景'
+                            value: True
+                            tool_tip:
+                                |-
+                                开启这个选项后，加载元素组装的时候只会隐藏原始场景
+
+                        unit_assembly:
+                            widget: group
+                            name: 'Unit Assembly'
+                            name_chs: '元素组装'
+
+                        unit_assembly/load:
+                            widget: sub_process_button
+                            name: 'Load Unit Assembly'
+                            name_chs: '加载元素组装'
+                            value: ''
+                            icon: 'tool/maya/create-container'
+                            tool_tip:
+                                |-
+                                press to load unit assembly auto.
+                            tool_tip_chs:
+                                |-
+                                点击自动加载元素组装:
+                                    这个过程可能会花费一点时间，如果场景特比巨大花费的时间会比较多，请耐心等待；
+                                    这个过程是在后台进行的，可能会造成电脑的卡顿，但是你还是可以继续前台的操作。
+                            join_to_next: True
+
+                        unit_assembly/remove:
+                            widget: button
+                            name: 'Remove Unit Assembly'
+                            name_chs: '移除元素组装'
+                            value: ''
+                            icon: 'tool/maya/delete'
+                            tool_tip:
+                                |-
+                                点击移除元素组装。
+
+                        gpu_instance:
+                            widget: group
+                            name: 'GPU Instance'
+                            name_chs: 'GPU实例'
+                            visible: False
+
+                        gpu_instance/load:
+                            widget: sub_process_button
+                            name: 'Load GPU Instance'
+                            name_chs: '加载GPU实例'
+                            value: ''
+                            icon: 'tool/maya/create-container'
+                            tool_tip:
+                                |-
+                                press to load unit assembly auto.
+                            tool_tip_chs:
+                                |-
+                                点击自动加载元素组装。
+                            join_to_next: True
+
+                        gpu_instance/remove:
+                            widget: button
+                            name: 'Remove GPU Instance'
+                            name_chs: '移除GPU实例'
+                            value: ''
+                            icon: 'tool/maya/delete'
+                            tool_tip: '...'
+
+            unit_assembly_and_gpu_instance_switch:
+                name: 'Switch & Selection'
+                name_chs: '切换 & 选择'
+
+                tool_tip: 'Include all tool for scenery switch'
+                tool_tip_chs: '包含所有跟场景相关的切换工具'
+
+                options:
+                    name: 'Options'
+                    name_chs: '选项'
+
+                    parameters:
+                        switch:
+                            widget: group
+                            name: 'Switch'
+                            name_chs: '切换'
+
+                        switch/unit_assembly:
+                            widget: group
+                            name: 'Unit Assembly'
+                            name_chs: '元素组装'
+
+                        switch/unit_assembly/gpu:
+                            widget: button
+                            name: 'GPU'
+                            name_chs: 'GPU'
+                            value: ''
+                            icon: 'tool/maya/switch-to-gpu'
+                            tool_tip: '...'
+                            join_to_next: True
+
+                        switch/unit_assembly/gpu_lod1:
+                            widget: button
+                            name: 'GPU-LOD01'
+                            name_chs: 'GPU-LOD01'
+                            value: ''
+                            icon: 'tool/maya/switch-to-gpu'
+                            tool_tip: '...'
+                            join_to_next: True
+
+                        switch/unit_assembly/gpu_lod2:
+                            widget: button
+                            name: 'GPU-LOD02'
+                            name_chs: 'GPU-LOD02'
+                            value: ''
+                            icon: 'tool/maya/switch-to-gpu'
+                            tool_tip: '...'
+
+                        switch/unit_assembly/mesh:
+                            widget: button
+                            name: 'Mesh'
+                            name_chs: '模型'
+                            value: ''
+                            icon: 'tool/maya/switch-to-mesh'
+                            tool_tip: '...'
+                            join_to_next: True
+
+                        switch/unit_assembly/mesh_lod1:
+                            widget: button
+                            name: 'Mesh-LOD01'
+                            name_chs: '模型-LOD01'
+                            value: ''
+                            icon: 'tool/maya/switch-to-mesh'
+                            tool_tip: '...'
+                            join_to_next: True
+
+                        switch/unit_assembly/mesh_lod2:
+                            widget: button
+                            name: 'Mesh-LOD02'
+                            name_chs: '模型-LOD02'
+                            value: ''
+                            icon: 'tool/maya/switch-to-mesh'
+                            tool_tip: '...'
+
+                        switch/gpu_instance:
+                            widget: group
+                            name: 'GPU Instance'
+                            name_chs: 'GPU实例'
+
+                        switch/gpu_instance/gpu:
+                            widget: button
+                            name: 'GPU'
+                            name_chs: 'GPU'
+                            value: ''
+                            icon: 'tool/maya/switch-to-gpu'
+                            tool_tip: '...'
+                            join_to_next: True
+
+                        switch/gpu_instance/gpu_lod1:
+                            widget: button
+                            name: 'GPU-LOD01'
+                            name_chs: 'GPU-LOD01'
+                            value: ''
+                            icon: 'tool/maya/switch-to-gpu'
+                            tool_tip: '...'
+                            join_to_next: True
+
+                        switch/gpu_instance/gpu_lod2:
+                            widget: button
+                            name: 'GPU-LOD02'
+                            name_chs: 'GPU-LOD02'
+                            value: ''
+                            icon: 'tool/maya/switch-to-gpu'
+                            tool_tip: '...'
+
+                        import:
+                            widget: group
+                            name: 'Import'
+                            name_chs: '导入'
+
+                        import/mesh:
+                            widget: button
+                            name: 'Import Mesh'
+                            name_chs: '导入模型'
+                            value: ''
+                            icon: 'tool/maya/import'
+                            tool_tip: '...'
+
+                        convert:
+                            widget: group
+                            name: 'Convert'
+                            name_chs: '转化'
+
+                        selection:
+                            widget: group
+                            name_chs: '选择'
+
+                        selection/camera_visible:
+                            widget: button
+                            name: 'Select Camera Visible'
+                            name_chs: '选择相机可见'
+                            value: ''
+                            icon: 'tool/maya/select'
+                            tool_tip: '...'
+
+            camera_mask:
+                name: 'Camera Frustum & Camera Mask'
+                name_chs: '相机视体 & 相机遮罩'
+
+                tool_tip: 'Include all tool for scenery as extend, etc. animation transfer'
+                tool_tip_chs: '包含相机遮罩等'
+
+                options:
+                    name: 'Options'
+                    name_chs: '选项'
+
+                    parameters:
+                        setting:
+                            widget: group
+                            name: 'Setting'
+                            name_chs: '设置'
+
+                        setting/camera:
+                            widget: enumerate
+                            name: 'Camera'
+                            name_chs: '相机'
+                            value: ['None']
+                            tool_tip: '...'
+
+                        setting/frame_scheme:
+                            widget: capsule_string
+                            name_chs: '帧方案'
+                            options: ['time_slider', 'frame_range']
+                            option_names_chs: ['时间轴', '帧范围']
+                            default: 'time_slider'
+                            enable: True
+                            tool_tip: 'choose a frame scheme'
+                            tool_tip_chs:
+                                |-
+                                设置一个帧方案:
+                                    当前帧: 使用当前帧
+                                    时间轴：自动读取帧范围
+                                    帧范围：在帧范围中输入
+
+                        setting/frame_range:
+                            widget: integer2
+                            name_chs: '帧范围'
+                            value: [0, 24]
+                            tool_tip: '...'
+                            lock: True
+
+                        setting/load_active_camera:
+                            widget: button
+                            name: 'Load Active Camera'
+                            name_chs: '获取当前相机'
+
+                        camera_view_frustum:
+                            widget: group
+                            name: 'Camera View Frustum'
+                            name_chs: '相机视体'
+
+                        camera_view_frustum/create:
+                            widget: button
+                            name: 'Create Camera View Frustum'
+                            name_chs: '创建相机视体'
+                            value: ''
+                            icon: 'tool/maya/create-camera-view-frustum'
+                            tool_tip: '...'
+                            tool_tip_chs:
+                                |-
+                                点击窗机相机视体：
+                                    可用来直观展示相机的可视范围
+                            join_to_next: True
+
+                        camera_view_frustum/remove:
+                            widget: button
+                            name: 'Remove Camera View Frustum'
+                            name_chs: '移除相机视体'
+                            value: ''
+                            icon: 'tool/maya/delete'
+                            tool_tip: '...'
+                            tool_tip_chs:
+                                |-
+                                点击移除相机视体
+
+                        camera_mask:
+                            widget: group
+                            name: 'Camera Mask'
+                            name_chs: '相机遮罩'
+
+                        camera_mask/create_dynamic:
+                            widget: button
+                            name: 'Create Camera Mask (Dynamic)'
+                            name_chs: '创建相机遮罩（动态）'
+                            value: ''
+                            icon: 'tool/maya/create-camera-mask'
+                            tool_tip: '...'
+                            tool_tip_chs:
+                                |-
+                                点击创建动态相机遮罩：
+                                    在相机视角以外的物体会被动态隐藏（跟随帧变化）；
+                                    在相机动态较大的时候可以用这种方式。
+                            join_to_next: True
+
+                        camera_mask/create:
+                            widget: button
+                            name: 'Create Camera Mask'
+                            name_chs: '创建相机遮罩'
+                            value: ''
+                            icon: 'tool/maya/create-camera-mask'
+                            tool_tip: '...'
+                            tool_tip_chs:
+                                |-
+                                点击创建相机遮罩：
+                                    会计算所有的帧，在所有的帧范围内都不可见的物体会被隐藏；
+                                    在相机动态变化不大的情况下可以用这种方式。
+
+                        camera_mask/remove_all:
+                            widget: button
+                            name: 'Remove All Camera Mask'
+                            name_chs: '移除所有相机遮罩'
+                            value: ''
+                            icon: 'tool/maya/delete'
+                            tool_tip: '...'
+
+                        camera_lod_switch:
+                            widget: group
+                            name: 'Camera LOD'
+                            name_chs: '相机LOD'
+
+                        camera_lod_switch/distance_range:
+                            widget: integer2
+                            name: 'Distance Range'
+                            name_chs: '距离范围'
+                            value: [1000, 1500]
+                            tool_tip: '...'
+
+                        camera_lod_switch/create:
+                            widget: button
+                            name: 'Switch by Camera Distance'
+                            name_chs: '通过相机距离切换LOD'
+                            value: ''
+                            icon: 'tool/maya/create-camera-lod'
+                            tool_tip: '...'
+
+        buttons:
+            reference:
+                name: 'Reference'
+                name_chs: '引用'
+
+                tool_tip:
+                    |-
+                    Press reference current asset's rig
+                tool_tip_chs:
+                    |-
+                    点击引用当前资产的绑定
+                        按钮为灰色，代表当前资产无绑定文件
+                        前面的数字框可以输入引用数量，鼠标滚轮可以快速增加或减少数量
+
+    messages:
+        remove_reference:
+            message: 'do you want remove selected references?\n, press "Ok" to continue.'
+            message_chs: '是否要移除选中的引用\n，点击“Ok”以继续。'
+
+
+    rig_selection_scheme:
+        options: ['root', 'geometry_root', 'deformation_root', 'motion_root', 'main_control']
+        option_names_chs: ['根组', '模型组', '骨骼组', '控制器组', '主控制器']
+        default: 'main_control'
+        history_key: 'tool-panels.lazy-animation-tool.rig-selection-scheme'
+        tool_tip: 'choose a selection scheme'
+        tool_tip_chs:
+            |-
+            设置一个选择方案:
+                根组：选择整个绑定组
+                模型：选中模型组
+                骨骼：选择骨骼组
+                控制器：选中控制器组
+            只有上方视图中的绑定被选中了才会起作用。
+
+    scenery_selection_scheme:
+        options: ['root', 'geometry', 'none']
+        option_names_chs: ['根组', '模型组', '不选']
+        default: 'root'
+        history_key: 'tool-panels.lazy-animation-tool.scenery-selection-scheme'
+        tool_tip: 'choose a selection scheme'
+        tool_tip_chs:
+            |-
+            设置一个选择方案：
+                根组：选择所有根组
+                几何物体：选择所有模型
+                不选：不选择任何物体
+            只有上方视图中的绑定被选中了才会起作用。

@@ -135,7 +135,7 @@ class _GuiCmdForNewVersion(object):
         v_p_0.set_all_items_checked(False)
         v_p_0.set_checked_by_include_paths(all_directory_paths[-1])
 
-        w.set_window_show()
+        w.show_window_auto()
 
 
 # noinspection PyUnusedLocal
@@ -344,7 +344,7 @@ class AbsPnlManagerForTextureSpaceDcc(gui_prx_widgets.PrxSessionWindow):
                 'directories', unlocked_directory_paths
             )
 
-            w.set_window_show()
+            w.show_window_auto()
         else:
             gui_core.GuiDialog.create(
                 self._session.gui_name,
@@ -476,7 +476,7 @@ class AbsPnlManagerForTextureSpaceDcc(gui_prx_widgets.PrxSessionWindow):
                 )
             t.start()
 
-            self.connect_window_close_to(quit_fnc_)
+            self.register_window_close_method(quit_fnc_)
         else:
             button.restore_all()
 

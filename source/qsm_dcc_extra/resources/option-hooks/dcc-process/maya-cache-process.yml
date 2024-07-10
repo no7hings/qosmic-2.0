@@ -20,7 +20,11 @@ hook_option:
         #
         group: all
         #
-        pool: emergency
+        pool: all
     #
     rez:
-        extend_packages: []
+        extend_packages: [
+            'maya-2020',
+            'mtoa',
+            'qsm_dcc_main',
+        ]

@@ -57,7 +57,7 @@ class Shelf(object):
             style='shelf',
             width=12,
             height=35,
-            horizontal=0
+            horizontal=0,
         )
         options.update(**kwargs)
         return cmds.separator(
@@ -73,7 +73,7 @@ class Shelf(object):
             font='plainLabelFont',
             commandRepeatable=1,
             style='iconOnly',
-            image=gui_core.GuiIcon.get('application/python'),
+            image=gui_core.GuiIcon.get('tool/python_base'),
             annotation='...',
             width=35,
             height=34,
@@ -87,5 +87,13 @@ class Shelf(object):
         )
         return cmds.shelfButton(
             **options
+        )
+
+    @classmethod
+    def create_button_action(cls, button, name, script):
+        cmds.shelfButton(
+            button,
+            edit=1,
+            menuItem=(name, 'python(\"{}\")'.format(script.replace('"', r'\"')))
         )
 

@@ -145,3 +145,15 @@ class GpuImport(object):
 
                         if _mya_core.Node.is_exists(i_path):
                             _mya_core.Node.delete(i_path)
+
+
+class ShitFixer(object):
+    def __init__(self):
+        pass
+
+    def execute(self):
+        shape_paths = _mya_core.Scene.find_all_dag_nodes(type_includes=['mesh'])
+        for i_shape_path in shape_paths:
+            i_transform_path = _mya_core.Shape.get_transform(i_shape_path)
+            _ = cmds.ls(i_transform_path, type='mesh', noIntermediate=0, dag=1, long=1)
+            print _

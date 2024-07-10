@@ -24,7 +24,7 @@ hook_option:
         # deadline-group default is "subprocess"
         group: all
         # pool
-        pool: emergency
+        pool: all
         #
         error_limit: 1
     #

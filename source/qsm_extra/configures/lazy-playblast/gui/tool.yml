@@ -59,6 +59,98 @@ build:
                     name_chs: '相机路径'
                     options: ['|persp|perspShape', '|top|topShape', '|front|frontShape', '|side|sideShape']
                     default: '|persp|perspShape'
+                    visible_condition: {
+                        operator: 'is', port: 'camera/scheme', value: 'camera_path'
+                    }
+
+                camera/load_active_camera:
+                    widget: button
+                    name: 'Load Active Camera'
+                    name_chs: '获取当前相机'
+                    visible_condition: {
+                        operator: 'is', port: 'camera/scheme', value: 'camera_path'
+                    }
+
+                camera_display:
+                    widget: group
+                    name: 'Camera Display'
+                    name_chs: '相机显示'
+
+                camera_display/scheme:
+                    widget: capsule_string
+                    name: 'Camera Display Scheme'
+                    name_chs: '相机显示方案'
+                    options: ['default', 'customize']
+                    option_names_chs: ['默认', '自定义']
+                    default: 'default'
+                    enable: True
+                    history_key: 'easy_playblast.camera_display_scheme'
+                    pull_history_latest: True
+
+                camera_display/display_resolution:
+                    widget: boolean
+                    name: 'Display Resolution'
+                    name_chs: '显示分辨率'
+                    value: False
+                    visible_condition: {
+                       operator: 'is', port: 'camera_display/scheme', value: 'customize'
+                    }
+                    history_key: 'easy_playblast.camera_display_resolution'
+                    pull_history_latest: True
+
+                camera_display/display_safe_action:
+                    widget: boolean
+                    name: 'Display Save Action'
+                    name_chs: '显示安全动作'
+                    value: False
+                    join_to_next: True
+                    visible_condition: {
+                        operator: 'is', port: 'camera_display/scheme', value: 'customize'
+                    }
+                    history_key: 'easy_playblast.camera_display_safe_action'
+                    pull_history_latest: True
+
+                camera_display/display_safe_title:
+                    widget: boolean
+                    name: 'Display Save Title'
+                    name_chs: '显示安全标题'
+                    visible_condition: {
+                        operator: 'is', port: 'camera_display/scheme', value: 'customize'
+                    }
+                    history_key: 'easy_playblast.camera_display_safe_title'
+                    pull_history_latest: True
+
+                camera_display/display_film_pivot:
+                    widget: boolean
+                    name: 'Display Fim Pivot'
+                    name_chs: '显示胶片枢轴'
+                    visible_condition: {
+                        operator: 'is', port: 'camera_display/scheme', value: 'customize'
+                    }
+                    history_key: 'easy_playblast.camera_display_film_pivot'
+                    pull_history_latest: True
+                    join_to_next: True
+
+                camera_display/display_film_origin:
+                    widget: boolean
+                    name: 'Display Film Origin'
+                    name_chs: '显示胶片原点'
+                    visible_condition: {
+                        operator: 'is', port: 'camera_display/scheme', value: 'customize'
+                    }
+                    history_key: 'easy_playblast.camera_display_film_origin'
+                    pull_history_latest: True
+
+                camera_display/overscan:
+                    widget: float
+                    name: 'Overscan'
+                    name_chs: '过扫描'
+                    value: 1.0
+                    visible_condition: {
+                        operator: 'is', port: 'camera_display/scheme', value: 'customize'
+                    }
+                    history_key: 'easy_playblast.camera_display_overscan'
+                    pull_history_latest: True
 
                 resolution:
                     widget: group
@@ -83,13 +175,24 @@ build:
                     history_key: 'easy_playblast.resolution_preset'
                     pull_history_latest: True
                     enable: True
+                    tool_tip:
+                        |-
+                        选择预设设置分辨率大小，加入预设中没有你需要的分辨率，请选择“分辨率方案”为“分辨率大小”并在“分辨率大小”中进行设置
+                    visible_condition: {
+                        operator: 'is', port: 'resolution/scheme', value: 'resolution_preset'
+                    }
 
                 resolution/size:
                     widget: integer2
                     name: 'Resolution Size'
                     name_chs: '分辨率大小'
                     value: [1280, 120]
-                    tool_tip: '...'
+                    tool_tip:
+                        |-
+                        输入宽和高设置分辨率大小
+                    visible_condition: {
+                        operator: 'is', port: 'resolution/scheme', value: 'resolution_size'
+                    }
 
                 frame:
                     widget: group
@@ -117,6 +220,9 @@ build:
                     name_chs: '帧范围'
                     value: [0, 24]
                     tool_tip: '...'
+                    visible_condition: {
+                        operator: 'is', port: 'frame/scheme', value: 'frame_range'
+                    }
 
                 frame/step:
                     widget: integer
@@ -124,6 +230,13 @@ build:
                     name_chs: '帧步长'
                     enable: True
                     value: 1
+
+                frame/fps:
+                    widget: float
+                    name_chs: '帧率'
+                    tool_tip: 'Show scene FPS'
+                    tool_tip_chs: '显示当前场景的帧率'
+                    lock: True
 
                 render_setting:
                     widget: group
@@ -182,6 +295,8 @@ build:
                     option_names_chs: ['自动', '指定目录', '指定文件']
                     default: 'auto'
                     enable: True
+                    history_key: 'easy_playblast.output_save_scheme'
+                    pull_history_latest: True
 
                 output/update_scheme:
                     widget: capsule_string
@@ -194,15 +309,17 @@ build:
                     visible_condition: {
                         operator: 'match_one', port: 'output/save_scheme', value: ['auto', 'specific_directory']
                     }
+                    history_key: 'easy_playblast.output_update_scheme'
+                    pull_history_latest: True
 
                 output/directory:
                     widget: directory
                     name: 'Directory'
                     name_chs: '目录'
                     open_or_save: save
+                    value: ''
                     history_key: 'easy_playblast.output_directory'
                     pull_history_latest: True
-                    value: ''
                     visible_condition: {
                        operator: 'is', port: 'output/save_scheme', value: 'specific_directory'
                     }
@@ -212,10 +329,10 @@ build:
                     name: 'File'
                     name_chs: '文件'
                     open_or_save: save
-                    history_key: 'easy_playblast.output_file'
-                    pull_history_latest: True
                     ext_filter: 'All File (*.mov)'
                     value: ''
+                    history_key: 'easy_playblast.output_file'
+                    pull_history_latest: True
                     visible_condition: {
                         operator: 'is', port: 'output/save_scheme', value: 'specific_file'
                     }

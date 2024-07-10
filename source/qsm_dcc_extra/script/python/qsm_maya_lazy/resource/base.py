@@ -184,7 +184,7 @@ class AbsNodeOpt(object):
     def to_scr_type_path(self):
         if self._node_type in self.SCR_TYPE_PATH_MAPPER:
             return self.SCR_TYPE_PATH_MAPPER[self._node_type]
-        return ''
+        return '/nodes/other'
 
     def get_for_node(self):
         path = self._node_path
@@ -293,8 +293,8 @@ class AbsNodeGraphOpt(object):
         )
         if frame_offset is not None:
             for i in nodes:
-                if qsm_mya_core.AnimCurve.check_is_anim_curve(i):
-                    qsm_mya_core.AnimCurve.offset_frame(i, frame_offset)
+                if qsm_mya_core.AnmCurve.check_is_valid(i):
+                    qsm_mya_core.AnmCurve.offset_frame(i, frame_offset)
     
     @classmethod
     def check_is_valid(cls, node_type):

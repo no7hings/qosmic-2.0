@@ -182,11 +182,14 @@ class ScriptJobEventTypes(enum.EnumMeta):
     # teEditorPrefsChanged
 
     SelectionChanged = 'SelectionChanged'
+
     FrameChanged = 'timeChanged'
     FrameRangeChanged = 'playbackRangeChanged'
+    FPSChanged = 'timeUnitChanged'
 
     SceneOpened = 'SceneOpened'
     SceneNew = 'NewSceneOpened'
+    SceneSaved = 'SceneSaved'
 
     CameraChanged = 'cameraChange'
 
@@ -200,7 +203,7 @@ class ScriptJob(object):
 
     def register(self, method, event_type):
         if not cmds.window(self._window_name, exists=1):
-            cmds.window(self._window_name, title='script gob window', sizeable=1, resizeToFitChildren=1)
+            cmds.window(self._window_name, title='Script Job Window', sizeable=1, resizeToFitChildren=1)
 
         if isinstance(method, list):
             for i_method in method:
@@ -210,13 +213,22 @@ class ScriptJob(object):
 
     def register_as_attribute_change(self, method, atr_path):
         if not cmds.window(self._window_name, exists=1):
-            cmds.window(self._window_name, title='script gob window', sizeable=1, resizeToFitChildren=1)
+            cmds.window(self._window_name, title='Script Job Window', sizeable=1, resizeToFitChildren=1)
 
         if isinstance(method, list):
             for i_method in method:
-                cmds.scriptJob(parent=self._window_name, replacePrevious=True, attributeChange=[atr_path, i_method])
+                cmds.scriptJob(
+                    parent=self._window_name,
+                    # fixme: do not use "replacePrevious"
+                    # replacePrevious=True,
+                    attributeChange=[atr_path, i_method]
+                )
         else:
-            cmds.scriptJob(parent=self._window_name, replacePrevious=True, attributeChange=[atr_path, method])
+            cmds.scriptJob(
+                parent=self._window_name,
+                # replacePrevious=True,
+                attributeChange=[atr_path, method]
+            )
 
     def destroy(self):
         # noinspection PyUnresolvedReferences

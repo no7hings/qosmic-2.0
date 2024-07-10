@@ -47,9 +47,9 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
 
         self.gui_setup_page()
 
-        self._window.connect_window_close_to(self.do_gui_close)
+        self._window.register_window_close_method(self.do_gui_close)
 
-    def _do_gui_switch_stage(self):
+    def _do_gui_load_stage(self):
         key = self._prx_options_node.get('stage')
         if self._lzy_stage is not None:
             self._lzy_stage.close()
@@ -353,7 +353,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         )
 
         self._prx_options_node.get_port('stage').connect_input_changed_to(
-            self._do_gui_switch_stage
+            self._do_gui_load_stage
         )
 
         self._prx_options_node.get_port('data_type').connect_input_changed_to(
@@ -361,6 +361,6 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         )
 
     def do_gui_refresh_all(self):
-        self._do_gui_switch_stage()
+        self._do_gui_load_stage()
         self.do_gui_update_by_dcc_selection()
 

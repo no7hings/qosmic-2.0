@@ -124,7 +124,7 @@ if __name__ == '__main__':
     w = TestWindow()
     #
     w.set_definition_window_size((960, 480))
-    w.set_window_show()
+    w.show_window_auto()
     w._test_()
     #
     sys.exit(app.exec_())

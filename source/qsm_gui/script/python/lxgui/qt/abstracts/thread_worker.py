@@ -11,8 +11,8 @@ class AbsQtThreadWorkerExtraDef(object):
 
         self._thread_worker_mutex = QtCore.QMutex()
         self._thread_worker_condition = QtCore.QWaitCondition()
-        self._thread_worker_value = 0
         self._thread_worker_maximum = 32
+        self._thread_worker_value = 0
 
         self._thread_workers = []
 
@@ -25,7 +25,7 @@ class AbsQtThreadWorkerExtraDef(object):
         self._thread_workers = []
 
     def _generate_thread_(self, cache_fnc, build_fnc, post_fnc=None, previous_fnc=None):
-        t = _qt_core.QtBuildThreadWorker.generate(self._widget)
+        t = _qt_core.QtThreadWorkerForBuild.generate(self._widget)
         t.set_cache_fnc(cache_fnc)
         t.cache_value_accepted.connect(build_fnc)
         if post_fnc is not None:

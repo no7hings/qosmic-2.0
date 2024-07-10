@@ -51,6 +51,8 @@ from .connection import *
 
 from .node_graph import *
 
+from .animation_layer import *
+
 from .keyframe import *
 
 from .assembly import *

@@ -1,0 +1,17 @@
+option:
+    type: python-script
+    #
+    systems:
+        - '*-maya'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Dynamic GPU'
+        icon_name: 'application/python'
+#
+hook_option:
+    engine: 'maya'
+    #
+    script:
+        scheme: 'default'

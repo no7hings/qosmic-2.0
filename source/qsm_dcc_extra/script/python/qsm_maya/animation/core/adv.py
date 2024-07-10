@@ -1,10 +1,7 @@
 # coding:utf-8
 import collections
-
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
-
-import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
@@ -16,6 +13,11 @@ from ...resource import core as _rsc_core
 
 
 class AdvRig(_rsc_core.Resource):
+
+    @classmethod
+    def filter_namespaces(cls, namespaces):
+        return [x for x in namespaces if cls(x).get_root() is not None]
+
     def __init__(self, *args, **kwargs):
         super(AdvRig, self).__init__(*args, **kwargs)
         
@@ -101,7 +103,7 @@ class AdvRig(_rsc_core.Resource):
     # dynamic gpu
     def get_dynamic_gpu_location(self):
         _ = cmds.ls(
-            '{}:{}'.format(self.namespace, _gnl_core.ResourceCacheNodes.DynamicGpuName), 
+            '{}:{}'.format(self.namespace, _gnl_core.ResourceCacheNodes.DynamicGpuName),
             long=1
         )
         if _:
@@ -176,9 +178,17 @@ class AdvRig(_rsc_core.Resource):
             return [self.get_main_control()]
 
     def find_joint(self, name):
-        _ = cmds.ls('{}:{}'.format(self.namespace, name), long=1)
+        _ = cmds.ls('{}:{}'.format(self.namespace, name), type='joint', long=1)
         if _:
             return _[0]
+
+    def find_control(self, key):
+        _ = cmds.ls('{}:{}'.format(self.namespace, key), long=1)
+        if _:
+            return _[0]
+
+    def find_all_controls(self, key):
+        return cmds.ls('{}:{}'.format(self.namespace, key), long=1) or []
 
     def switch_to_original(self):
         self._switch_result = {}
@@ -272,6 +282,16 @@ class AdvRig(_rsc_core.Resource):
                 data = self.generate_geometry_topology_data()
                 bsc_storage.StgFileOpt(cache_path).set_write(data)
             return data
+
+    def get_all_for_isolate_select(self):
+        roots = cmds.ls('|{}:*'.format(self._namespace), long=1) or []
+        _ = self.get_skin_proxy_location()
+        if _:
+            roots.append(_)
+        _ = self.get_dynamic_gpu_location()
+        if _:
+            roots.append(_)
+        return roots
 
 
 class AdvRigsQuery(_rsc_core.ResourcesQuery):

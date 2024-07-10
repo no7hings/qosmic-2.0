@@ -229,7 +229,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
             self.refresh_current_group
         )
 
-        self.connect_window_close_to(self.__close_fnc)
+        self.register_window_close_method(self.__close_fnc)
 
         bsc_log.Log.trace_method_result(
             self.KEY, 'is ready'

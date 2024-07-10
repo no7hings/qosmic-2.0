@@ -27,6 +27,10 @@ class MayaCacheProcess(object):
         return ' '.join(cmd_scripts)
 
     @classmethod
+    def generate_hook_option(cls, option):
+        return 'option_hook_key=dcc-process/maya-cache-process&' + option
+
+    @classmethod
     def to_option(cls, method, option_dict):
         key = bsc_core.BscHash.to_hash_key(option_dict)
         file_path = cls.to_option_file_path(key)
@@ -50,6 +54,15 @@ class MayaCacheProcess(object):
         return bsc_storage.StgFileOpt(file_path).set_read()
 
     @classmethod
-    def generate_cmd_script_by_option_dict(cls, method, option_dict):
-        option = cls.to_option(method, option_dict)
+    def generate_cmd_script_by_option_dict(cls, method, method_option_dict):
+        option = cls.to_option(method, method_option_dict)
         return cls.generate_command(option)
+
+    @classmethod
+    def generate_hook_option_by_option_dict(cls, method, method_option_dict, **kwargs):
+        method_option = cls.to_option(method, method_option_dict)
+        hook_option = cls.generate_hook_option(method_option)
+        if kwargs:
+            option_extend = bsc_core.ArgDictString.to_string(**kwargs)
+            return hook_option+'&'+option_extend
+        return hook_option

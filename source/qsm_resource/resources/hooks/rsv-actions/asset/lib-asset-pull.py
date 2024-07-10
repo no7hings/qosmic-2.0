@@ -82,7 +82,7 @@ def main(session):
         projects = get_projects()
         p.set(enumerate_strings=projects)
         #
-        w.set_window_show()
+        w.show_window_auto()
     else:
         gui_core.GuiDialog.create(
             window_title,

@@ -26,20 +26,20 @@ class PrxUnitBaseOpt(object):
         self._session = session
 
 
-class PrxUnitForResourceTagOpt(
+class PrxTreeviewUnitForResourceTagOpt(
     PrxUnitBaseOpt,
     gui_prx_abstracts.AbsGuiTreeViewAsTagOpt,
 ):
     GROUP_SCHEME = gui_prx_abstracts.AbsGuiTreeViewAsTagOpt.GroupScheme.Hide
 
     def __init__(self, window, page, session, prx_tree_view):
-        super(PrxUnitForResourceTagOpt, self).__init__(window, page, session)
+        super(PrxTreeviewUnitForResourceTagOpt, self).__init__(window, page, session)
         self._init_tree_view_as_tag_opt_(prx_tree_view, self.GUI_NAMESPACE)
 
         self._gui_thread_flag = 0
 
 
-class PrxUnitForResourceOpt(
+class PrxTreeviewUnitForResourceOpt(
     PrxUnitBaseOpt,
     gui_prx_abstracts.AbsGuiPrxCacheDef,
 ):
@@ -109,15 +109,22 @@ class PrxUnitForResourceOpt(
 
     # reference
     def do_dcc_remove_resources(self):
-        w = gui_core.GuiDialog.create(
-            label=self._session.gui_name,
-            sub_label='remove-resource',
-            content='do you want remove selected rigs?\n, press "Ok" to continue',
-            status=gui_core.GuiDialog.ValidationStatus.Warning,
-            parent=self._window.widget
-        )
 
-        result = w.get_result()
+        result = self._window.exec_message(
+            self._window.choice_message(
+                self._window._configure.get('build.messages.remove_reference')
+            ),
+            status='warning'
+        )
+        # w = gui_core.GuiDialog.create(
+        #     label=self._session.gui_name,
+        #     sub_label='remove-resource',
+        #     content='do you want remove selected rigs?\n, press "Ok" to continue',
+        #     status=gui_core.GuiDialog.ValidationStatus.Warning,
+        #     parent=self._window.widget
+        # )
+
+        # result = w.get_result()
         if result is True:
             _ = self._prx_tree_view.get_all_selected_items()
             for i in _:
@@ -217,8 +224,7 @@ class PrxUnitForResourceOpt(
             _ = self._prx_tree_view.get_all_selected_items()
             for i in _:
                 i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
-                i_reference_opt = i_resource.reference_opt
-                i_roots = i_reference_opt.get_roots()
+                i_roots = i_resource.get_all_for_isolate_select()
                 isolate_select_opt.add_nodes(i_roots)
 
     def do_dcc_isolate_select_add_resources(self):
@@ -227,8 +233,7 @@ class PrxUnitForResourceOpt(
         _ = self._prx_tree_view.get_all_selected_items()
         for i in _:
             i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
-            i_reference_opt = i_resource.reference_opt
-            i_roots = i_reference_opt.get_roots()
+            i_roots = i_resource.get_all_for_isolate_select()
             isolate_select_opt.add_nodes(i_roots)
 
     def do_dcc_isolate_select_remove_resources(self):
@@ -237,8 +242,7 @@ class PrxUnitForResourceOpt(
         _ = self._prx_tree_view.get_all_selected_items()
         for i in _:
             i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
-            i_reference_opt = i_resource.reference_opt
-            i_roots = i_reference_opt.get_roots()
+            i_roots = i_resource.get_all_for_isolate_select()
             isolate_select_opt.remove_nodes(i_roots)
 
     def do_gui_refresh_tools(self):
@@ -279,7 +283,7 @@ class PrxUnitForResourceOpt(
             self.do_gui_selected(paths)
 
     def __init__(self, window, page, session, prx_tree_view):
-        super(PrxUnitForResourceOpt, self).__init__(window, page, session)
+        super(PrxTreeviewUnitForResourceOpt, self).__init__(window, page, session)
         self._init_cache_def_(prx_tree_view)
         self._prx_tree_view = prx_tree_view
         self._prx_tree_view.create_header_view(
@@ -443,12 +447,12 @@ class PrxUnitForResourceOpt(
                 '\n'.join(['{}: {}'.format(_k, _v) for _k, _v in resource.variants.items()])
             )
 
-            result = self.gui_add_resource_components(resource)
-            if result is True:
+            tag = self.gui_add_resource_components(resource)
+            if tag is not None:
                 prx_item.set_icon_name(
                     'node/maya/reference-cfx'
                 )
-                prx_item.set_name('CFX Rig', 1)
+                prx_item.set_name('Rig for {}'.format(tag), 1)
 
         path = resource.path
         if self.gui_check_exists(path) is False:
@@ -497,7 +501,7 @@ class PrxUnitForResourceOpt(
         return False, self.gui_get_one(path)
 
     def gui_add_resource_components(self, resource):
-        return False
+        return None
     
     def gui_add_resource_component(self, path, dcc_path):
         def build_fnc_():

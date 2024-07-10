@@ -58,31 +58,31 @@ class TrdCommandPool(threading.Thread):
 
     def _do_update_status(self, status):
         self._status = status
-        if self._is_killed is False:
+        if self._kill_flag is False:
             self._signal_status_changed.send_emit(
                 self._index, status
             )
 
     def _do_completed(self, results):
-        if self._is_killed is False:
+        if self._kill_flag is False:
             self._signal_completed.send_emit(
                 self._index, results
             )
 
     def _do_failed(self, results):
-        if self._is_killed is False:
+        if self._kill_flag is False:
             self._signal_failed.send_emit(
                 self._index, results
             )
 
     def _do_started(self):
-        if self._is_killed is False:
+        if self._kill_flag is False:
             self._signal_started.send_emit(
                 self._index
             )
 
     def _do_finished(self, status, results):
-        if self._is_killed is False:
+        if self._kill_flag is False:
             self._signal_finished.send_emit(
                 self._index, status, results
             )
@@ -92,7 +92,7 @@ class TrdCommandPool(threading.Thread):
         self._cmd = cmd
         self._index = index
 
-        self._is_killed = False
+        self._kill_flag = False
         
         self._signal_status_changed = TrdSignal(object, int)
         self._signal_completed = TrdSignal(object, list)
@@ -126,7 +126,7 @@ class TrdCommandPool(threading.Thread):
         return self._signal_finished
 
     def run(self):
-        if self._is_killed is True:
+        if self._kill_flag is True:
             return
 
         self._do_update_status(self.Status.Running)
@@ -220,7 +220,7 @@ class TrdCommandPool(threading.Thread):
         self._do_update_status(
             self.Status.Killed
         )
-        self._is_killed = True
+        self._kill_flag = True
 
     def do_quit(self):
         pass
@@ -503,10 +503,10 @@ class TrdFncsChainPool(object):
             self._signal_finished = TrdSignal()
             self._signal_failed = TrdSignal(str)
 
-            self._is_killed = False
+            self._kill_flag = False
 
         def run(self):
-            if self._is_killed is True:
+            if self._kill_flag is True:
                 return
 
             self.__started()
@@ -522,7 +522,7 @@ class TrdFncsChainPool(object):
                 self.__finished()
 
         def __started(self):
-            if self._is_killed is True:
+            if self._kill_flag is True:
                 return
 
             self.__started_signal.send_emit()
@@ -531,7 +531,7 @@ class TrdFncsChainPool(object):
             self.__started_signal.connect_to(fnc)
 
         def __finished(self):
-            if self._is_killed is True:
+            if self._kill_flag is True:
                 return
 
             self._signal_finished.send_emit()
@@ -540,7 +540,7 @@ class TrdFncsChainPool(object):
             self._signal_finished.connect_to(fnc)
 
         def __failed(self, text):
-            if self._is_killed is True:
+            if self._kill_flag is True:
                 return
             self._signal_failed.send_emit(text)
 
@@ -558,7 +558,7 @@ class TrdFncsChainPool(object):
             threads[0].start()
 
         def do_kill(self):
-            self._is_killed = True
+            self._kill_flag = True
 
     def __init__(self):
         self._threads = []
@@ -602,84 +602,6 @@ class TrdFncsChainPool(object):
 
     def connect_all_finish_to(self, fnc):
         self._all_finish_signal.connect_to(fnc)
-
-
-class TrdFncProcessing(threading.Thread):
-    def __init__(self):
-        threading.Thread.__init__(self)
-        self.__is_killed = False
-        self.__started_signal = TrdSignal(object)
-        self._signal_finished = TrdSignal()
-        self._signal_failed = TrdSignal(str)
-        self.__start_processing_signal = TrdSignal(int)
-        self.__update_processing_signal = TrdSignal()
-        self.__update_logging_signal = TrdSignal(str)
-
-    def connect_started_to(self, fnc):
-        self.__started_signal.connect_to(fnc)
-
-    def __started(self):
-        if self.__is_killed is True:
-            return
-        self.__started_signal.send_emit()
-
-    def connect_finished_to(self, fnc):
-        self._signal_finished.connect_to(fnc)
-
-    def __finished(self):
-        if self.__is_killed is True:
-            return
-        self._signal_finished.send_emit()
-
-    def connect_failed_to(self, fnc):
-        self._signal_failed.connect_to(fnc)
-
-    def __failed(self, text):
-        if self.__is_killed is True:
-            return
-        self._signal_failed.send_emit(text)
-
-    def connect_start_processing_to(self, fnc):
-        self.__start_processing_signal.connect_to(fnc)
-
-    def start_processing(self, maximum):
-        if self.__is_killed is True:
-            return
-        self.__start_processing_signal.send_emit(maximum)
-
-    def connect_update_processing_to(self, fnc):
-        self.__update_processing_signal.connect_to(fnc)
-    
-    def update_processing(self):
-        if self.__is_killed is True:
-            return
-        self.__update_processing_signal.send_emit()
-
-    def connect_update_logging_to(self, fnc):
-        self.__update_logging_signal.connect_to(fnc)
-
-    def update_logging(self, text):
-        if self.__is_killed is True:
-            return
-        self.__update_logging_signal.send_emit(text)
-
-    def kill(self):
-        self.__is_killed = True
-
-    def get_is_killed(self):
-        return self.__is_killed
-
-    def run(self):
-        # noinspection PyBroadException
-        try:
-            self.__started()
-        except Exception:
-            import traceback
-            self.__failed(
-                traceback.format_exc()
-            )
-        finally:
-            self.__finished()
 
 
 class TrdGainSignal(object):

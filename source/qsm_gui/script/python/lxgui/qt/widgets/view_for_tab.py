@@ -72,7 +72,7 @@ class QtTabView(
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()
         #
-        self._rect_frame_draw.setRect(
+        self._frame_draw_rect.setRect(
             x, y, w, h
         )
         m_l, m_t, m_r, m_b = self._tab_view_margins
@@ -464,7 +464,7 @@ class QtTabView(
         if 'name' in kwargs:
             tab_item.set_name(kwargs['name'])
         if 'icon_name_text' in kwargs:
-            tab_item.set_icon_text(kwargs['name'])
+            tab_item.set_icon_text(kwargs['icon_name_text'])
         if 'tool_tip' in kwargs:
             tab_item.set_tool_tip(kwargs['tool_tip'])
 

@@ -165,7 +165,7 @@ class _GuiNoticeOpt(
             #
             ts.do_start()
             #
-            self._window.connect_window_close_to(quit_fnc_)
+            self._window.register_window_close_method(quit_fnc_)
         else:
             post_fnc_()
 

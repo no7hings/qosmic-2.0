@@ -13,10 +13,12 @@ import lxbasic.extra.methods as bsc_etr_methods
 
 
 class AbsHookExecutor(object):
-    SHELL_PATTERN = '-- qsm-hook-engine -o "{option}"'
-    DEADLINE_PATTERN = '-- qsm-hook-engine -o "{option}&start_index=<STARTFRAME>&end_index=<ENDFRAME>"'
-    #
-    SUBMITTER_CLS = None
+    KEY = 'hook executor'
+    # do not use repr or r''
+    SHELL_PATTERN = r'-- qsm-hook-engine -o "{option}"'
+    DEADLINE_PATTERN = r'-- qsm-hook-engine -o \"{option}&start_index=<STARTFRAME>&end_index=<ENDFRAME>\"'
+
+    DDL_JOB_SUBMITTER_CLS = None
 
     def __init__(self, session):
         self._session = session
@@ -30,19 +32,19 @@ class AbsHookExecutor(object):
         session = self.get_session()
 
         name = session.get_type()
-        return self._submit_deadline_job_(
+        return self._deadline_submit_fnc(
             session, name, dict(platform=bsc_core.BscSystem.get_platform())
         )
 
-    def _submit_deadline_job_(self, session, name, option_extra_variants, deadline_configure=None):
+    def _deadline_submit_fnc(self, session, name, option_extra_variants, deadline_configure=None):
         hook_option_opt = session.get_option_opt()
         hook_option = session.get_option()
         submit_key = hook_option_opt.get('option_hook_key')
-        #
+
         ssn_ddl_configure = session.get_ddl_configure()
-        #
-        self._ddl_submiter = self.SUBMITTER_CLS()
-        self._ddl_submiter.set_option(
+
+        self._ddl_job_submiter = self.DDL_JOB_SUBMITTER_CLS()
+        self._ddl_job_submiter.set_option(
             batch_name=session.get_batch_name(),
             type=session.get_type(),
             name=name,
@@ -53,17 +55,20 @@ class AbsHookExecutor(object):
             user=hook_option_opt.get('user'),
             time_tag=hook_option_opt.get('time_tag'),
         )
+        job_name = hook_option_opt.get('job_name')
+        if job_name:
+            self._ddl_job_submiter.option.set('deadline.job_name', job_name)
         # update task properties
-        self._ddl_submiter.set_option_extra(
+        self._ddl_job_submiter.set_option_extra(
             **option_extra_variants
         )
         # load deadline options from session configure
-        self._ddl_submiter.option.set('deadline.group', ssn_ddl_configure.get('group'))
-        self._ddl_submiter.option.set('deadline.pool', ssn_ddl_configure.get('pool'))
+        self._ddl_job_submiter.option.set('deadline.group', ssn_ddl_configure.get('group'))
+        self._ddl_job_submiter.option.set('deadline.pool', ssn_ddl_configure.get('pool'))
         # job software
         deadline_job_software = ssn_ddl_configure.get('job_software')
         if deadline_job_software:
-            self._ddl_submiter.job_plug.set(
+            self._ddl_job_submiter.job_plug.set(
                 'Software', deadline_job_software
             )
         # load deadline options from deadline configure
@@ -80,86 +85,95 @@ class AbsHookExecutor(object):
                     content_1 = content_0.get_as_content('default')
                 #
                 if content_1:
-                    self._ddl_submiter.option.set('deadline.priority', content_1.get('priority'))
-                    self._ddl_submiter.option.set('deadline.group', content_1.get('group'))
-                    self._ddl_submiter.option.set('deadline.pool', content_1.get('pool'))
-                    self._ddl_submiter.option.set('deadline.secondary_pool', content_1.get('secondary_pool'))
-                    self._ddl_submiter.option.set('deadline.machine_limit', content_1.get('machine_limit'))
+                    self._ddl_job_submiter.option.set('deadline.priority', content_1.get('priority'))
+                    self._ddl_job_submiter.option.set('deadline.group', content_1.get('group'))
+                    self._ddl_job_submiter.option.set('deadline.pool', content_1.get('pool'))
+                    self._ddl_job_submiter.option.set('deadline.secondary_pool', content_1.get('secondary_pool'))
+                    self._ddl_job_submiter.option.set('deadline.machine_limit', content_1.get('machine_limit'))
         #
         error_limit = ssn_ddl_configure.get('error_limit')
         if error_limit is not None:
-            self._ddl_submiter.job_info.set(
+            self._ddl_job_submiter.job_info.set(
                 'FailureDetectionTaskErrors', error_limit
             )
         #
         batch_key = hook_option_opt.get('batch_key')
         if batch_key:
             batch_list = hook_option_opt.get(batch_key, as_array=True) or []
-            self._ddl_submiter.job_info.set(
+            self._ddl_job_submiter.job_info.set(
                 'Frames', ','.join(map(str, range(len(batch_list))))
             )
-        # check is render mode
+        # output result, etc. cache, playblast
+        # directory
+        output_directory_path = hook_option_opt.get('output_directory')
+        if output_directory_path:
+            self._ddl_job_submiter.option.set('deadline.output_directory', output_directory_path)
+        # file
+        output_file_path = hook_option_opt.get('output_file')
+        if output_file_path:
+            self._ddl_job_submiter.option.set('deadline.output_file', output_file_path)
+        # render
         renderer = hook_option_opt.get('renderer')
         render_node = hook_option_opt.get('render_node')
         if renderer or render_node:
             render_output_directory_path = hook_option_opt.get('render_output_directory')
             if render_output_directory_path:
-                self._ddl_submiter.option.set('deadline.output_directory', render_output_directory_path)
-            #
+                self._ddl_job_submiter.option.set('deadline.output_directory', render_output_directory_path)
+
             render_frames = hook_option_opt.get('render_frames', as_array=True)
             if render_frames:
-                self._ddl_submiter.job_info.set(
+                self._ddl_job_submiter.job_info.set(
                     'Frames', ','.join(render_frames)
                 )
         else:
             file_path = hook_option_opt.get('file')
             if file_path:
-                self._ddl_submiter.option.set('deadline.output_file', file_path)
+                self._ddl_job_submiter.option.set('deadline.output_file', file_path)
         # priority
         deadline_priority = hook_option_opt.get('deadline_priority')
         if deadline_priority is not None:
-            self._ddl_submiter.job_info.set('Priority', int(deadline_priority))
+            self._ddl_job_submiter.job_info.set('Priority', int(deadline_priority))
         #
         option_hook_key_over = hook_option_opt.get('option_hook_key_over', as_array=True)
         if option_hook_key_over:
             keys = option_hook_key_over
             submit_key = '/'.join(keys)
-            self._ddl_submiter.option.set('hook', submit_key)
+            self._ddl_job_submiter.option.set('hook', submit_key)
         else:
             option_hook_key_extend = hook_option_opt.get('option_hook_key_extend', as_array=True)
             if option_hook_key_extend:
                 keys = [submit_key]
                 keys.extend(option_hook_key_extend)
                 submit_key = '/'.join(keys)
-                self._ddl_submiter.option.set('hook', submit_key)
+                self._ddl_job_submiter.option.set('hook', submit_key)
         #
-        self._ddl_submiter.job_info.set(
+        self._ddl_job_submiter.job_info.set(
             'Comment', hook_option
         )
         ddl_command = self.get_deadline_command()
         if bsc_core.RawTextOpt(ddl_command).get_is_contain_chinese():
             ddl_command = ddl_command.encode(locale.getdefaultlocale()[1])
         #
-        self._ddl_submiter.option.set(
+        self._ddl_job_submiter.option.set(
             'deadline.command',
             ddl_command
         )
         #
         hook_dependent_ddl_job_ids = session.find_dependent_ddl_job_ids(hook_option)
         if isinstance(hook_dependent_ddl_job_ids, (tuple, list)):
-            self._ddl_submiter.job_info.set('JobDependencies', ','.join(hook_dependent_ddl_job_ids))
-            self._ddl_submiter.job_info.set('ResumeOnCompleteDependencies', True)
+            self._ddl_job_submiter.job_info.set('JobDependencies', ','.join(hook_dependent_ddl_job_ids))
+            self._ddl_job_submiter.job_info.set('ResumeOnCompleteDependencies', True)
         #
         dependent_ddl_job_id_extend = hook_option_opt.get('dependent_ddl_job_id_extend', as_array=True)
         if dependent_ddl_job_id_extend:
-            dependent_ddl_job_ids_string_old = self._ddl_submiter.job_info.get('JobDependencies')
+            dependent_ddl_job_ids_string_old = self._ddl_job_submiter.job_info.get('JobDependencies')
             dependent_ddl_job_id_extend_string = ','.join(dependent_ddl_job_id_extend)
             if dependent_ddl_job_ids_string_old:
-                self._ddl_submiter.job_info.set(
+                self._ddl_job_submiter.job_info.set(
                     'JobDependencies',
                     ','.join([dependent_ddl_job_ids_string_old, dependent_ddl_job_id_extend_string])
                 )
-                self._ddl_submiter.job_info.set(
+                self._ddl_job_submiter.job_info.set(
                     'ResumeOnCompleteDependencies',
                     True
                 )
@@ -167,36 +181,36 @@ class AbsHookExecutor(object):
                 dependent_ddl_job_ids_string_new = '{},{}'.format(
                     dependent_ddl_job_ids_string_old, dependent_ddl_job_id_extend_string
                 )
-                self._ddl_submiter.job_info.set('JobDependencies', dependent_ddl_job_ids_string_new)
-                self._ddl_submiter.job_info.set('ResumeOnCompleteDependencies', True)
+                self._ddl_job_submiter.job_info.set('JobDependencies', dependent_ddl_job_ids_string_new)
+                self._ddl_job_submiter.job_info.set('ResumeOnCompleteDependencies', True)
         # when "td_enable" is discard, override deadline pool and group options
         td_enable = hook_option_opt.get('td_enable') or False
         if td_enable is True:
-            self._ddl_submiter.job_info.set(
+            self._ddl_job_submiter.job_info.set(
                 'Pool', 'td'
             )
-            self._ddl_submiter.job_info.set(
+            self._ddl_job_submiter.job_info.set(
                 'SecondaryPool', 'td'
             )
-            self._ddl_submiter.job_info.set(
+            self._ddl_job_submiter.job_info.set(
                 'Group', 'td'
             )
-            self._ddl_submiter.job_info.set(
+            self._ddl_job_submiter.job_info.set(
                 'Whitelist', bsc_core.BscSystem.get_host()
             )
         # when "localhost" is discard, override deadline pool and group options
         localhost_enable = hook_option_opt.get('localhost_enable') or False
         if localhost_enable is True:
-            self._ddl_submiter.job_info.set(
+            self._ddl_job_submiter.job_info.set(
                 'Pool', 'artist'
             )
-            self._ddl_submiter.job_info.set(
+            self._ddl_job_submiter.job_info.set(
                 'SecondaryPool', 'artist'
             )
-            self._ddl_submiter.job_info.set(
+            self._ddl_job_submiter.job_info.set(
                 'Group', 'artist'
             )
-            self._ddl_submiter.job_info.set(
+            self._ddl_job_submiter.job_info.set(
                 'Whitelist', bsc_core.BscSystem.get_host()
             )
         #
@@ -204,12 +218,12 @@ class AbsHookExecutor(object):
         if exists_ddl_job_id:
             session._ddl_job_id = exists_ddl_job_id
             bsc_log.Log.trace_method_warning(
-                'option-hook execute by deadline', 'option-hook="{}", job-id="{}" is exists'.format(
+                self.KEY, 'option-hook="{}", job-id="{}" is exists'.format(
                     submit_key, exists_ddl_job_id
                 )
             )
         else:
-            ddl_job_id = self._ddl_submiter.set_job_submit()
+            ddl_job_id = self._ddl_job_submiter.do_submit()
             if ddl_job_id is not None:
                 session._ddl_job_id = ddl_job_id
                 #
@@ -217,11 +231,11 @@ class AbsHookExecutor(object):
                     hook_option, ddl_job_id
                 )
                 bsc_log.Log.trace_method_result(
-                    'option-hook execute by deadline', 'option-hook="{}", job-id="{}"'.format(
+                    self.KEY, 'option-hook="{}", job-id="{}"'.format(
                         submit_key, ddl_job_id
                     )
                 )
-        return self._ddl_submiter.get_job_result()
+        return self._ddl_job_submiter.get_job_result()
 
     def execute_with_shell(self, block=False):
         #
@@ -294,7 +308,7 @@ class AbsRsvProjectMethodHookExecutor(AbsHookExecutor):
                 if bsc_storage.StgPath.get_is_exists(deadline_configure_file_path):
                     deadline_configure = bsc_content.Content(value=deadline_configure_file_path)
             job_name = session.get_ddl_job_name()
-            return self._submit_deadline_job_(
+            return self._deadline_submit_fnc(
                 session, job_name, rsv_properties.value, deadline_configure
             )
 
@@ -331,7 +345,7 @@ class AbsRsvTaskMethodHookExecutor(AbsHookExecutor):
                     deadline_configure = bsc_content.Content(value=deadline_configure_file_path)
             #
             job_name = session._get_rsv_task_version_(rsv_scene_properties)
-            return self._submit_deadline_job_(
+            return self._deadline_submit_fnc(
                 session, job_name, rsv_scene_properties.value, deadline_configure
             )
 

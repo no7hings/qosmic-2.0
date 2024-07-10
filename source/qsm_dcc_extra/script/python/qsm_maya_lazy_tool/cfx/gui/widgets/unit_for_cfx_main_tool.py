@@ -19,7 +19,7 @@ import qsm_maya_gui.core as qsm_mya_gui_core
 
 
 class UnitForCfxResourceView(
-    qsm_mya_gui_core.PrxUnitForResourceOpt
+    qsm_mya_gui_core.PrxTreeviewUnitForResourceOpt
 ):
     ROOT_NAME = 'Rigs'
 
@@ -38,13 +38,15 @@ class UnitForCfxResourceView(
         super(UnitForCfxResourceView, self).__init__(window, unit, session, prx_tree_view)
 
     def gui_add_resource_components(self, resource):
-        data = resource.generate_cfx_cloth_component_data()
-        for k, v in data.items():
-            self.gui_add_resource_component(k, v)
-        return True
+        data = resource.generate_cfx_component_data()
+        if data:
+            for k, v in data.items():
+                self.gui_add_resource_component(k, v)
+            return 'CFX'
+        return None
 
 
-class ToolSetUnitForCfxRigExport(
+class ToolsetUnitForCfxRigExport(
     qsm_mya_gui_core.PrxUnitBaseOpt
 ):
     # cloth
@@ -97,7 +99,7 @@ class ToolSetUnitForCfxRigExport(
                     )
                     g_p.do_update()
 
-            self.do_gui_update_version_directory_by_version_scheme_changing()
+            self.do_gui_refresh_version_by_version_scheme_changing()
 
     def do_dcc_export_cfx_cloth_cache_by_checked_as_backstage(self):
         import lxbasic.web as bsc_web
@@ -159,12 +161,55 @@ class ToolSetUnitForCfxRigExport(
                 status='warning'
             )
 
+    def do_dcc_export_cfx_cloth_cache_by_checked_as_farm(self):
+        import lxbasic.deadline as bsc_deadline
+        c = bsc_deadline.DdlBase.generate_connection()
+        groups = c.Groups.GetGroupNames()
+        if isinstance(groups, list):
+            args = self._get_export_args()
+            if args:
+                resources, with_alembic_cache, with_geometry_cache = args
+
+                directory_path = self._prx_options_node.get('cloth.version_directory')
+                frame_range = self._frame_range_port.get()
+                frame_step = self._prx_options_node.get('setting.frame_step')
+                frame_offset = self._prx_options_node.get('setting.frame_offset')
+
+                namespaces = [x.namespace for x in resources]
+
+                option_hook = qsm_mya_cfx_scripts.CfxNClothCacheProcess.generate_deadline_job_args(
+                    namespaces,
+                    directory_path,
+                    frame_range, frame_step, frame_offset, with_alembic_cache, with_geometry_cache
+                )
+
+                import lxsession.commands as ssn_commands
+
+                ssn_commands.execute_option_hook_by_deadline(
+                    option_hook
+                )
+                
+                self._window.exec_message(
+                    self._window.choice_message(
+                        self._window._configure.get('build.main.messages.farm_submit_successful')
+                    ),
+                    status='correct'
+                )
+
+        else:
+            self._window.exec_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.no_farm_server')
+                ),
+                status='warning'
+            )
+
     # settings
     def do_dcc_refresh_by_fps_changing(self):
         pass
 
-    def do_gui_refresh_by_fps_changing(self):
-        fps = qsm_mya_core.Frame.get_fps()
+    def do_gui_refresh_fps(self):
+        fps = qsm_mya_core.Frame.get_fps_tag()
         self._fps_port.set(fps)
 
     def do_gui_refresh_by_frame_scheme_changing(self):
@@ -181,7 +226,7 @@ class ToolSetUnitForCfxRigExport(
             frame_range = qsm_mya_core.Frame.get_frame_range()
             self._frame_range_port.set(frame_range)
 
-    def do_gui_update_version_directory_by_version_scheme_changing(self):
+    def do_gui_refresh_version_by_version_scheme_changing(self):
         directory_path = self._prx_options_node.get('cloth.directory')
         version_scheme = self._prx_options_node.get('cloth.version_scheme')
 
@@ -212,24 +257,25 @@ class ToolSetUnitForCfxRigExport(
         )
 
     def __init__(self, window, unit, session):
-        super(ToolSetUnitForCfxRigExport, self).__init__(window, unit, session)
+        super(ToolsetUnitForCfxRigExport, self).__init__(window, unit, session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
-                self._window._language, self._window._configure.get('build.main.unit.export.options')
+                self._window._language, self._window._configure.get('build.main.units.export.options')
             )
         )
         self._prx_options_node.build_by_data(
-            self._window._configure.get('build.main.unit.export.options.parameters'),
+            self._window._configure.get('build.main.units.export.options.parameters'),
         )
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='export',
             name=gui_core.GuiUtil.choice_name(
-                self._window._language, self._window._configure.get('build.main.unit.export')
+                self._window._language, self._window._configure.get('build.main.units.export')
             ),
+            icon_name_text='export',
             tool_tip=gui_core.GuiUtil.choice_tool_tip(
-                self._window._language, self._window._configure.get('build.main.unit.export')
+                self._window._language, self._window._configure.get('build.main.units.export')
             )
         )
         self._prx_options_node.get_port('setting.frame_scheme').connect_input_changed_to(
@@ -239,13 +285,11 @@ class ToolSetUnitForCfxRigExport(
         self._fps_port = self._prx_options_node.get_port('setting.fps')
         self._frame_range_port = self._prx_options_node.get_port('setting.frame_range')
 
-        self.do_gui_update_version_directory_by_version_scheme_changing()
-
         self._prx_options_node.get_port('cloth.version_scheme').connect_input_changed_to(
-            self.do_gui_update_version_directory_by_version_scheme_changing
+            self.do_gui_refresh_version_by_version_scheme_changing
         )
         self._prx_options_node.get_port('cloth.specified_version').connect_input_changed_to(
-            self.do_gui_update_version_directory_by_version_scheme_changing
+            self.do_gui_refresh_version_by_version_scheme_changing
         )
 
         self._cfx_cloth_export_button = self._prx_options_node.get_port('cloth.export_cfx_cloth')
@@ -260,14 +304,27 @@ class ToolSetUnitForCfxRigExport(
             self.do_dcc_export_cfx_cloth_cache_by_checked_as_backstage
         )
 
-        self.do_gui_refresh_by_fps_changing()
-        self.do_gui_refresh_by_dcc_frame_changing()
+        self._cfa_cloth_export_button_as_farm = self._prx_options_node.get_port(
+            'cloth.export_cfx_cloth_as_farm'
+        )
+        self._cfa_cloth_export_button_as_farm.set(
+            self.do_dcc_export_cfx_cloth_cache_by_checked_as_farm
+        )
+
+        directory_path = 'Z:/temporaries/{}/cfx'.format(bsc_core.BscSystem.get_user_name())
+        self._prx_options_node.set('cloth.directory', directory_path)
 
     def gui_get_frame_scheme(self):
         return self._prx_options_node.get('setting.frame_scheme')
 
+    def do_gui_refresh_all(self):
+        self.do_gui_refresh_fps()
+        self.do_gui_refresh_by_dcc_frame_changing()
+        
+        self.do_gui_refresh_version_by_version_scheme_changing()
 
-class ToolSetUnitForCfxRigImport(
+
+class ToolsetUnitForCfxRigImport(
     qsm_mya_gui_core.PrxUnitBaseOpt
 ):
 
@@ -333,24 +390,25 @@ class ToolSetUnitForCfxRigImport(
         self._page._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection()
     
     def __init__(self, window, unit, session):
-        super(ToolSetUnitForCfxRigImport, self).__init__(window, unit, session)
+        super(ToolsetUnitForCfxRigImport, self).__init__(window, unit, session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
-                self._window._language, self._window._configure.get('build.main.unit.import.options')
+                self._window._language, self._window._configure.get('build.main.units.import.options')
             )
         )
         self._prx_options_node.build_by_data(
-            self._window._configure.get('build.main.unit.import.options.parameters'),
+            self._window._configure.get('build.main.units.import.options.parameters'),
         )
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='import',
             name=gui_core.GuiUtil.choice_name(
-                self._window._language, self._window._configure.get('build.main.unit.import')
+                self._window._language, self._window._configure.get('build.main.units.import')
             ),
+            icon_name_text='import',
             tool_tip=gui_core.GuiUtil.choice_tool_tip(
-                self._window._language, self._window._configure.get('build.main.unit.import')
+                self._window._language, self._window._configure.get('build.main.units.import')
             )
         )
 
@@ -369,3 +427,6 @@ class ToolSetUnitForCfxRigImport(
             'cloth.remove_cfx_cloth',
             self.do_dcc_remove_cloth_cache_by_checked
         )
+
+    def do_gui_refresh_all(self):
+        self.do_gui_refresh_by_version_directory_changing()

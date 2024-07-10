@@ -39,3 +39,6 @@ from .dcc import *
 
 from .random_name import *
 
+from .ffmpeg import *
+
+

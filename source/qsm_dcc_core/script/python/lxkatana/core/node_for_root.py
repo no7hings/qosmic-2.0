@@ -206,7 +206,7 @@ class WorkspaceSetting(object):
 
                     o.set('dcc.node', [i.get_name() for i in opts])
 
-                    w.set_window_show()
+                    w.show_window_auto()
 
                     if w.get_result() is True:
                         return self.get_current_look_output()
@@ -252,7 +252,7 @@ class WorkspaceSetting(object):
 
                         o.set('dcc.node', [i.get_name() for i in opts])
 
-                        w.set_window_show()
+                        w.show_window_auto()
 
                         if w.get_result() is True:
                             return self.get_current_look_output_opt()

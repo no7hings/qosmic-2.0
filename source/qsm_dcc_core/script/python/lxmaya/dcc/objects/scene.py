@@ -724,7 +724,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
                 cmds.delete(reference_node)
                 bsc_log.Log.trace_method_result(
                     'scene-clear',
-                    u'unload-reference-node: "{}"'.format(reference_node)
+                    'unload-reference-node: "{}"'.format(reference_node)
                 )
 
     @classmethod

@@ -1,3 +1,3 @@
 # coding:utf-8
-from .chart_for_picker import *
+from .adv_picker import *
 

@@ -7,7 +7,7 @@ if __name__ == '__main__':
 
     for i in [
         'maya_cfx',
-        'maya_layout',
+        # 'maya_layout',
         # 'maya_motion',
         # 'maya_scene',
     ]:

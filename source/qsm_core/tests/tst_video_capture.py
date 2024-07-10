@@ -12,4 +12,4 @@ import lxbasic.cv.core as bsc_cv_core
 bsc_cv_core.FrameExtractor(
 'Z:/temeporaries/dongchangbao/playblast_tool/test.export.v004.mov',
 'Z:/temeporaries/dongchangbao/playblast_tool/test.export.v004.png'
-).run()
+).execute()

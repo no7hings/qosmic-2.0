@@ -140,7 +140,7 @@ class QtToolGridLayoutWidget(
         frm_w, frm_h = w, vpt_h+m_t+m_b
         self.setMinimumHeight(frm_h)
 
-        self._rect_frame_draw.setRect(
+        self._frame_draw_rect.setRect(
             x+1, y+1, w-2, frm_h-2
         )
 
@@ -224,7 +224,7 @@ class QtToolGridLayoutWidget(
         painter = _qt_core.QtPainter(self)
         if self._frame_draw_is_enable is True:
             painter._draw_frame_by_rect_(
-                rect=self._rect_frame_draw,
+                rect=self._frame_draw_rect,
                 border_color=_qt_core.QtBorderColors.Basic,
                 background_color=_qt_core.QtBackgroundColors.Dark,
                 border_radius=4

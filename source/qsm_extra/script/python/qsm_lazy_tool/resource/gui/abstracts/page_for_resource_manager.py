@@ -516,7 +516,7 @@ class _GuiNodeOpt(
 
         self._running_threads_stacks = []
 
-        self._window.connect_window_close_to(
+        self._window.register_window_close_method(
             self.restore_thread_stack
         )
 
@@ -861,7 +861,7 @@ class AbsPrxPageForManager(
         self._filter_prx_tool_box.add_widget(self._prx_filter_bar)
         
         self._prx_filter_bar._qt_widget._set_input_completion_buffer_fnc_(self._gui_keyword_filter_completion_gain_fnc)
-        self._prx_filter_bar._qt_widget.input_value_change_accepted.connect(self._gui_update_keyword_filter_path_set_fnc)
+        self._prx_filter_bar._qt_widget.input_value_accepted.connect(self._gui_update_keyword_filter_path_set_fnc)
     
     def _gui_keyword_filter_completion_gain_fnc(self, *args, **kwargs):
         keyword = args[0]
@@ -948,7 +948,7 @@ class AbsPrxPageForManager(
         self._lzy_stage_key = None
         self._lzy_stage = None
 
-        self._window.connect_window_close_to(self.do_gui_close)
+        self._window.register_window_close_method(self.do_gui_close)
 
     def gui_setup_page(self):
         v_qt_lot_0 = gui_qt_widgets.QtVBoxLayout(self._qt_widget)

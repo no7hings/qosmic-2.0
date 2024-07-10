@@ -1,5 +1,8 @@
 # coding:utf-8
+import collections
 import os
+
+import functools
 
 import math
 # noinspection PyUnresolvedReferences
@@ -13,15 +16,19 @@ import lxbasic.resource as bsc_resource
 
 import lxbasic.core as bsc_core
 
+import lxbasic.log as bsc_log
+
+import lxgui.core as gui_core
+
 import qsm_general.core as qsm_gnl_core
 
 from ... import core as _mya_core
 
 from ...general import core as _gnl_core
 
-from ...animation import core as _animation_core
-
 from ...resource import core as _rsc_core
+
+from .. import core as _core
 
 
 class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
@@ -31,7 +38,7 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
     def __init__(self, *args, **kwargs):
         super(SkinProxyOpt, self).__init__(*args, **kwargs)
 
-        self._adv_query = _animation_core.AdvQuery(self._namespace)
+        self._adv_query = _core.AdvQuery(self._namespace)
 
     def find_head_geometries(self):
         return cmds.ls(
@@ -61,7 +68,7 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
             i_joint = self._resource.find_joint(i_key)
             if i_joint is None:
                 continue
-            i_meshes = _animation_core.Joint.find_influenced_meshes(i_joint)
+            i_meshes = _core.Joint.find_influenced_meshes(i_joint)
             if i_meshes:
                 set_.update(i_meshes)
 
@@ -132,7 +139,7 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
                 data_file_path, keep_head, check_bbox
             )
 
-            self.hide_resource_auto(head_geometries, rig_head_geometries)
+            self.remove_resource_auto(head_geometries, rig_head_geometries)
 
     def get_head_hide_args(self, data_file_path, keep_head=False, check_bbox=False):
         if keep_head is True:
@@ -151,7 +158,7 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
 
         return [], []
 
-    def hide_resource_auto(self, head_geometries, rig_head_geometries):
+    def remove_resource_auto(self, head_geometries, rig_head_geometries):
         cache_location = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
         mesh_paths_for_hide = self._resource.get_all_meshes()
         if mesh_paths_for_hide:
@@ -174,6 +181,11 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
         self._resource.remove_dynamic_gpu()
 
         file_path = self._resource.file
+
+        task_name = '[skin-proxy][{}]'.format(
+            bsc_storage.StgFileOpt(file_path).name
+        )
+
         cache_file_path = _gnl_core.ResourceCache.generate_skin_proxy_scene_file(
             file_path
         )
@@ -188,8 +200,80 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
                     data_file_path
                 )
             )
-            return cmd_script, cache_file_path, data_file_path
-        return None, cache_file_path, data_file_path
+            return task_name, cmd_script, cache_file_path, data_file_path
+        return task_name, None, cache_file_path, data_file_path
+
+    @classmethod
+    def _execute_fnc(cls, window, task_args_dict):
+        with window.gui_progressing(maximum=len(task_args_dict.keys())) as g_p:
+            for i_k, i_v in task_args_dict.items():
+                i_task_name, i_cmd_script, i_cache_file, i_data_file = i_k
+
+                window.submit(
+                    i_task_name,
+                    i_cmd_script,
+                    completed_fnc=[
+                        functools.partial(cls(x).load_cache, i_cache_file, i_data_file, True, True) for x in i_v
+                    ]
+                )
+                g_p.do_update()
+
+    @classmethod
+    def load_auto(cls, **kwargs):
+        scheme = kwargs['scheme']
+        if scheme == 'default':
+            resources = []
+            namespaces = _mya_core.Namespaces.extract_roots_from_selection()
+            if namespaces:
+                resources_query = _core.AdvRigsQuery()
+                resources_query.do_update()
+                for i_namespace in namespaces:
+                    i_resource = resources_query.get(i_namespace)
+                    if i_resource.is_skin_proxy_exists() is False:
+                        resources.append(i_resource)
+
+            if not resources:
+                gui_core.GuiDialog.create(
+                    '简模代理（火柴人）加载',
+                    content='选择一个或多个可用的绑定（如果选中的绑定已经加载了简模代理，会被忽略），可以选择绑定的任意部件。',
+                    status=gui_core.GuiDialog.ValidationStatus.Warning,
+                    no_label='关闭',
+                    ok_visible=False, no_visible=True, cancel_visible=False,
+                )
+                return
+
+            task_args_dict = {}
+            for i_resource in resources:
+                i_resource_opt = cls(i_resource)
+                i_task_name, i_cmd_script, i_cache_file, i_data_file = i_resource_opt.generate_args()
+                if i_cmd_script is not None:
+                    task_args_dict.setdefault(
+                        (i_task_name, i_cmd_script, i_cache_file, i_data_file),
+                        []
+                    ).append(
+                        i_resource
+                    )
+                else:
+                    i_resource_opt.load_cache(i_cache_file, i_data_file, True, True)
+
+            if task_args_dict:
+                import lxgui.proxy.widgets as gui_prx_widgets
+
+                window = gui_prx_widgets.PrxSubprocessWindow()
+                if window._language == 'chs':
+                    window.set_window_title('简模代理（火柴人）加载')
+                    window.set_tip(
+                        '简模代理会在后台生成，生成成功后会自动加载到场景中，请耐心等待；\n'
+                        '这个过程可能会让MAYA前台操作产生些许卡顿；\n'
+                        '如需要终止任务，请点击“关闭”'
+                    )
+                else:
+                    window.set_window_title('Skin Proxy Load')
+
+                window.show_window_auto(exclusive=False)
+                window.run_fnc_delay(
+                    functools.partial(cls._execute_fnc, window, task_args_dict), 500
+                )
 
 
 class AdvSkinProxyGenerate(object):
@@ -486,7 +570,7 @@ class AdvSkinProxyGenerate(object):
 
     def __init__(self, namespace):
         self._namespace = namespace
-        self._adv_query = _animation_core.AdvQuery(namespace)
+        self._adv_query = _core.AdvQuery(namespace)
 
     def create_cache_root_auto(self):
         if cmds.objExists(self.CACHE_ROOT) is False:
@@ -678,34 +762,41 @@ class AdvSkinProxyGenerate(object):
 
     # create cache
     def create_cache(self, cache_file_path=None):
-        location = '|{}'.format(self.CACHE_NAME)
-        if cmds.objExists(location) is False:
-            if qsm_gnl_core.scheme_is_new():
-                _mya_core.SceneFile.import_file_ignore_error(
-                    bsc_resource.ExtendResource.get('rig/skin_proxy_new.ma')
-                )
-            else:
-                _mya_core.SceneFile.import_file_ignore_error(
-                    bsc_resource.ExtendResource.get('rig/skin_proxy.ma')
-                )
+        with bsc_log.LogProcessContext.create(maximum=4) as l_p:
+            location = '|{}'.format(self.CACHE_NAME)
+            # step 1
+            if cmds.objExists(location) is False:
+                if qsm_gnl_core.scheme_is_new():
+                    _mya_core.SceneFile.import_file_ignore_error(
+                        bsc_resource.ExtendResource.get('rig/skin_proxy_new.ma')
+                    )
+                else:
+                    _mya_core.SceneFile.import_file_ignore_error(
+                        bsc_resource.ExtendResource.get('rig/skin_proxy.ma')
+                    )
+            # step 2
+            self.match_cache_positions(location)
+            l_p.do_update()
+            # step 3
+            self.match_cache_sizes(location)
+            l_p.do_update()
 
-        self.match_cache_positions(location)
-        self.match_cache_sizes(location)
-        cmds.setAttr(location + '.blackBox', 1, lock=1)
-
-        if cache_file_path is None:
-            file_path = _mya_core.ReferenceNamespacesCache().get_file(self._namespace)
-            cache_file_path = _gnl_core.ResourceCache.generate_skin_proxy_scene_file(
-                file_path
+            cmds.setAttr(location + '.blackBox', 1, lock=1)
+            if cache_file_path is None:
+                file_path = _mya_core.ReferenceNamespacesCache().get_file(self._namespace)
+                cache_file_path = _gnl_core.ResourceCache.generate_skin_proxy_scene_file(
+                    file_path
+                )
+            # step 4
+            bsc_core.BscStorage.create_directory(
+                os.path.dirname(cache_file_path)
             )
+            l_p.do_update()
 
-        bsc_core.BscStorage.create_directory(
-            os.path.dirname(cache_file_path)
-        )
-
-        _mya_core.SceneFile.export_file(
-            cache_file_path, location
-        )
+            _mya_core.SceneFile.export_file(
+                cache_file_path, location
+            )
+            l_p.do_update()
 
     def match_cache_positions(self, location):
         root_skeleton_paths = self._adv_query.skeleton_query.get('root.M')
@@ -826,6 +917,8 @@ class AdvSkinProxyGenerate(object):
 
 
 class AdvSkinProxyProcess(object):
+    KEY = 'skin proxy'
+
     def __init__(self, file_path, cache_file_path, data_file_path):
         self._file_path = file_path
         self._cache_file_path = cache_file_path
@@ -833,11 +926,15 @@ class AdvSkinProxyProcess(object):
 
     def execute(self):
         namespace = 'skin_proxy'
+
         _mya_core.SceneFile.new()
+        bsc_log.Log.trace_method_result(
+            self.KEY, 'load scene: {}'.format(self._file_path)
+        )
         # use reference
         _mya_core.SceneFile.reference_file(self._file_path, namespace=namespace)
 
-        rsc_adv_rig = _animation_core.AdvRig(
+        rsc_adv_rig = _core.AdvRig(
             namespace
         )
         data = dict(

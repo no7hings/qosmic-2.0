@@ -1,4 +1,9 @@
 # coding:utf-8
+# noinspection PyUnresolvedReferences
+import maya.cmds as cmds
+
+from ...general import core as _gnl_core
+
 from ...resource import core as _rsc_core
 
 from ... import core as _mya_core
@@ -7,6 +12,21 @@ from ... import core as _mya_core
 class Scenery(_rsc_core.Resource):
     def __init__(self, *args, **kwargs):
         super(Scenery, self).__init__(*args, **kwargs)
+
+    def get_unit_assembly_location(self):
+        _ = cmds.ls(
+            '{}:{}'.format(self.namespace, _gnl_core.ResourceCacheNodes.UnitAssemblyName),
+            long=1
+        )
+        if _:
+            return _[0]
+
+    def is_unit_assembly_exists(self):
+        _ = self.get_unit_assembly_location()
+        if _:
+            if cmds.objExists(_) is True:
+                return True
+        return False
     
     def find_nodes_by_scheme(self, scheme):
         if scheme == 'root':

@@ -398,7 +398,7 @@ class AbsPnlManagerForAssetTextureDcc(gui_prx_widgets.PrxSessionWindow):
                 )
             t.start()
 
-            self.connect_window_close_to(quit_fnc_)
+            self.register_window_close_method(quit_fnc_)
         else:
             button.restore_all()
 
@@ -607,7 +607,7 @@ class AbsPnlManagerForAssetTextureDcc(gui_prx_widgets.PrxSessionWindow):
                 #
                 parent=self.widget,
             )
-            w.set_window_show()
+            w.show_window_auto()
         else:
             contents.append(
                 u'check one or more node and retry'
@@ -727,7 +727,7 @@ class AbsPnlManagerForAssetTextureDcc(gui_prx_widgets.PrxSessionWindow):
                 #
                 parent=self.widget,
             )
-            w.set_window_show()
+            w.show_window_auto()
         else:
             contents.append(
                 u'check one or more node and retry'
@@ -764,4 +764,4 @@ class AbsPnlManagerForAssetTextureDcc(gui_prx_widgets.PrxSessionWindow):
 
         v.set_textures([texture])
 
-        w.set_window_show()
+        w.show_window_auto()
