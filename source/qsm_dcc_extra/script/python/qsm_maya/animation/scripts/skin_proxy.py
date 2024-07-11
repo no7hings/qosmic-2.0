@@ -229,8 +229,9 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
                 resources_query.do_update()
                 for i_namespace in namespaces:
                     i_resource = resources_query.get(i_namespace)
-                    if i_resource.is_skin_proxy_exists() is False:
-                        resources.append(i_resource)
+                    if i_resource:
+                        if i_resource.is_skin_proxy_exists() is False:
+                            resources.append(i_resource)
 
             if not resources:
                 gui_core.GuiDialog.create(

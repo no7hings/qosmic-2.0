@@ -43,7 +43,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
 
     def export_motion(self):
         if self._root is not None:
-            motion = _mtn_core.AdvMotionOpt(self._namespace).get_data(part_includes=['body', 'face'])
+            motion = _mtn_core.AdvRigMotionOpt(self._namespace).get_data(control_set_includes=['body', 'face'])
             key = bsc_core.BscHash.to_hash_key(motion)
             directory_path = _gnl_core.ResourceCache.generate_dynamic_gpu_directory(
                 user_name=bsc_core.BscSystem.get_user_name(), key=key
@@ -51,8 +51,8 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
             motion_file_path = '{}/motion.json'.format(directory_path)
             cache_file_path = '{}/gpu.ma'.format(directory_path)
             if os.path.isfile(motion_file_path) is False:
-                _mtn_core.AdvMotionOpt(self._namespace).export_data_to(
-                    motion_file_path, part_includes=['body', 'face']
+                _mtn_core.AdvRigMotionOpt(self._namespace).export_to(
+                    motion_file_path, control_set_includes=['body', 'face']
                 )
                 return True, motion_file_path, cache_file_path
             return False, motion_file_path, cache_file_path
@@ -165,8 +165,9 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
                 resources_query.do_update()
                 for i_namespace in namespaces:
                     i_resource = resources_query.get(i_namespace)
-                    if i_resource.is_dynamic_gpu_exists() is False:
-                        resources.append(i_resource)
+                    if i_resource:
+                        if i_resource.is_dynamic_gpu_exists() is False:
+                            resources.append(i_resource)
 
             if not resources:
                 gui_core.GuiDialog.create(
@@ -425,7 +426,7 @@ class DynamicGpuCacheProcess(object):
             _mya_core.SceneFile.open(self._file_path)
         else:
             _mya_core.SceneFile.reference_file(self._file_path, namespace=self._namespace)
-            _mtn_core.AdvMotionOpt(self._namespace).import_data_from(
+            _mtn_core.AdvRigMotionOpt(self._namespace).load_from(
                 self._motion_file, force=True
             )
 

@@ -312,7 +312,7 @@ class QtMessageBubble(
 
         self._text = None
         self._text_draw_rect = QtCore.QRect()
-        self._text_font = _qt_core.QtFont.generate(size=12)
+        self._text_font = _qt_core.QtFont.generate(size=10)
         self._text_color = _gui_core.GuiRgba.LightBlack
 
         self._frame_border_color = _gui_core.GuiRgba.LightBlack
@@ -400,7 +400,7 @@ class QtMessageBubble(
         self.show()
         self.raise_()
 
-        self._close_delay_as_fade_(1000)
+        self._close_delay_as_fade_(1500)
 
 
 class QtImageBubble(

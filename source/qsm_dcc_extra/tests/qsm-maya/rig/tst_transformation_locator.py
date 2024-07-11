@@ -11,6 +11,6 @@ bsc_core.PyReloader2(
 
 import qsm_maya.motion.core as qsm_mya_mtn_core
 
-qsm_mya_mtn_core.AdvMotionOpt(
+qsm_mya_mtn_core.AdvRigMotionOpt(
     'sam_Skin1'
 ).create_transformation_locator()

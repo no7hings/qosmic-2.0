@@ -35,9 +35,9 @@ build:
                 用于动作的主要工具。
 
         units:
-            copy_and_paste:
-                name: 'Copy & Paste'
-                name_chs: '复制 & 粘贴'
+            copy_paste_mirror:
+                name: 'Copy & Paste & Mirror'
+                name_chs: '复制 & 粘贴 & 镜像'
 
                 tool_tip: 'to be supplemented.'
                 tool_tip_chs: '待补充。'
@@ -57,7 +57,7 @@ build:
                             name: 'Includes'
                             name_chs: '包含'
 
-                        setting/includes/part_includes:
+                        setting/includes/control_set_includes:
                             widget: capsule_strings
                             options: ['body', 'face']
                             option_names_chs: ['身体', '面部']
@@ -88,8 +88,8 @@ build:
 
                         setting/ignore/control_ignore:
                             widget: capsule_strings
-                            options: ['main']
-                            option_names_chs: ['主控制器']
+                            options: ['Main']
+                            option_names_chs: ['主要（大环）']
                             default: []
                             name: 'Control Ignore '
                             name_chs: '控制器忽略'
@@ -106,78 +106,130 @@ build:
                             enable: True
                             tool_tip: '...'
 
-                        copy_keyframe:
+                        copy_motion:
                             widget: group
                             name: 'Copy Keyframe'
-                            name_chs: '复制关键帧'
+                            name_chs: '复制动作'
 
-                        copy_keyframe/copy_all:
+                        copy_motion/copy_character:
                             widget: button
-                            name: 'Copy Selected'
+                            name: 'Copy CHR'
                             icon: 'tool/maya/copy'
-                            name_chs: '复制所有'
+                            name_chs: '复制角色'
+                            tool_tip:
+                                |-
+                                Copy character animation
+                            tool_tip_chs:
+                                |-
+                                拷贝角色动画。
                             join_to_next: True
 
-                        copy_keyframe/copy_selected:
+                        copy_motion/copy_selected:
                             widget: button
-                            name: 'Copy Selected'
+                            name: 'Copy SEL'
                             name_chs: '复制选中'
                             icon: 'tool/maya/copy'
 
-                        paste_keyframe:
+                        paste_motion:
                             widget: group
                             name: 'Paste Keyframe'
-                            name_chs: '粘贴关键帧'
+                            name_chs: '粘贴动作'
 
-                        paste_keyframe/paste_to_all:
+                        paste_motion/paste_character:
                             widget: button
-                            name: 'Paste to All'
+                            name: 'Paste to CHR'
                             icon: 'tool/maya/paste'
-                            name_chs: '粘贴到所有'
+                            name_chs: '粘贴角色'
+                            tool_tip:
+                                |-
+                                Paste character animation, press "z" undo.
+                            tool_tip_chs:
+                                |-
+                                粘贴动画到角色，可以按“Z”撤销。
                             join_to_next: True
 
-                        paste_keyframe/paste_to_selected:
+                        paste_motion/paste_character_to_selected:
                             widget: button
-                            name: 'Paste to Selected'
-                            name_chs: '粘贴到选中'
+                            name: 'Paste CHR to SEL'
+                            icon: 'tool/maya/paste'
+                            name_chs: '粘贴角色到选中'
+
+                        paste_motion/paste_selected_to_character:
+                            widget: button
+                            name: 'Paste SEL to CHR'
+                            name_chs: '粘贴选中到角色'
+                            icon: 'tool/maya/paste'
+                            join_to_next: True
+
+                        paste_motion/paste_selected:
+                            widget: button
+                            name: 'Paste to SEL'
+                            name_chs: '粘贴选中'
                             icon: 'tool/maya/paste'
 
-                        mirror_keyframe:
+                        mirror_motion:
                             widget: group
                             name: 'Mirror Keyframe'
-                            name_chs: '镜像关键帧'
+                            name_chs: '镜像动作'
 
-                        mirror_keyframe/mirror_selected_auto:
+                        mirror_motion/mirror_character_left_to_right:
                             widget: button
-                            name: 'Mirror Selected Auto'
+                            name: 'Mirror CHR (L to R)'
+                            name_chs: '镜像角色（左到右）'
+                            icon: 'tool/maya/mirror_left_to_right'
+                            join_to_next: True
+
+                        mirror_motion/mirror_character_as_middle:
+                            widget: button
+                            name: 'Mirror CHR (M)'
+                            name_chs: '镜像角色（中间）'
+                            icon: 'tool/maya/mirror'
+                            join_to_next: True
+
+                        mirror_motion/mirror_character_right_to_left:
+                            widget: button
+                            name: 'Mirror CHR (R to L)'
+                            name_chs: '镜像角色（右到左）'
+                            icon: 'tool/maya/mirror_right_to_left'
+
+                        mirror_motion/mirror_selected_auto:
+                            widget: button
+                            name: 'Mirror SEL (Auto)'
                             name_chs: '镜像选中（自动）'
                             icon: 'tool/maya/mirror'
 
-                        mirror_keyframe/mirror_selected_as_left_to_right:
+                        mirror_motion/mirror_selected_left_to_right:
                             widget: button
-                            name: 'Mirror Selected (Left to Right)'
+                            name: 'Mirror SEL (L to R)'
                             name_chs: '镜像选中（左到右）'
                             icon: 'tool/maya/mirror_left_to_right'
                             join_to_next: True
 
-                        mirror_keyframe/mirror_all_as_left_to_right:
+                        mirror_motion/mirror_selected_middle:
                             widget: button
-                            name: 'Mirror All (Left to Right)'
-                            name_chs: '镜像所有（左到右）'
-                            icon: 'tool/maya/mirror_left_to_right'
-
-                        mirror_keyframe/mirror_selected_as_right_to_left:
-                            widget: button
-                            name: 'Mirror Selected (Right to Left)'
-                            name_chs: '镜像选中（右到左）'
-                            icon: 'tool/maya/mirror_right_to_left'
+                            name: 'Mirror SEL (M)'
+                            name_chs: '镜像选中（中间）'
+                            icon: 'tool/maya/mirror'
                             join_to_next: True
 
-                        mirror_keyframe/mirror_all_as_right_to_left:
+                        mirror_motion/mirror_selected_right_to_left:
                             widget: button
-                            name: 'Mirror All (Right to Left)'
-                            name_chs: '镜像所有（右到左）'
+                            name: 'Mirror SEL (R to L)'
+                            name_chs: '镜像选中（右到左）'
                             icon: 'tool/maya/mirror_right_to_left'
+
+                        mirror_motion/mirror_character_all:
+                            widget: button
+                            name: 'Mirror CHR (ALL)'
+                            name_chs: '镜像角色（所有）'
+                            icon: 'tool/maya/mirror'
+                            join_to_next: True
+
+                        mirror_motion/mirror_selected_all:
+                            widget: button
+                            name: 'Mirror SEL (ALL)'
+                            name_chs: '镜像选中（所有）'
+                            icon: 'tool/maya/mirror'
 
             move:
                 name: 'Move'

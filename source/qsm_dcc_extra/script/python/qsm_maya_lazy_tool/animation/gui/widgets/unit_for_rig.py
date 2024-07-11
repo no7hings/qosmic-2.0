@@ -522,14 +522,14 @@ class ToolsetUnitForRigExtend(
             'animation_transfer.transfer_all', self.do_dcc_transfer_animation
         )
         self._prx_options_node.set(
-            'animation_transfer.copy_all', self.do_dcc_copy_animation
+            'animation_transfer.copy_character', self.do_dcc_copy_animation
         )
         self._prx_options_node.set(
             'animation_transfer.paste_all', self.do_dcc_paste_animation
         )
 
     def do_dcc_copy_animation(self):
-        file_path = qsm_mya_gnl_core.ResourceCache.generate_animation_file(
+        file_path = qsm_mya_gnl_core.ResourceCache.generate_character_motion_file(
             bsc_core.BscSystem.get_user_name()
         )
         namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
@@ -541,12 +541,12 @@ class ToolsetUnitForRigExtend(
             return
 
         namespace = valid_namespaces[0]
-        qsm_mya_mtn_core.AdvMotionOpt(namespace).export_data_to(
-            file_path, part_includes=['body', 'face']
+        qsm_mya_mtn_core.AdvRigMotionOpt(namespace).export_to(
+            file_path, control_set_includes=['body', 'face']
         )
 
     def do_dcc_paste_animation(self):
-        file_path = qsm_mya_gnl_core.ResourceCache.generate_animation_file(
+        file_path = qsm_mya_gnl_core.ResourceCache.generate_character_motion_file(
             bsc_core.BscSystem.get_user_name()
         )
         if bsc_storage.StgPath.get_is_file(file_path) is False:
@@ -561,7 +561,7 @@ class ToolsetUnitForRigExtend(
         namespace = valid_namespaces[0]
         force = self._prx_options_node.get('animation_transfer.force')
         frame_offset = self._prx_options_node.get('animation_transfer.frame_offset')
-        qsm_mya_mtn_core.AdvMotionOpt(namespace).import_data_from(
+        qsm_mya_mtn_core.AdvRigMotionOpt(namespace).load_from(
             file_path, frame_offset=frame_offset, force=force
         )
 
@@ -592,7 +592,7 @@ class ToolsetUnitForRigExtend(
             if result is True:
                 force = self._prx_options_node.get('animation_transfer.force')
                 frame_offset = self._prx_options_node.get('animation_transfer.frame_offset')
-                qsm_mya_mtn_core.AdvMotionOpt(namespace_src).transfer_to(
+                qsm_mya_mtn_core.AdvRigMotionOpt(namespace_src).transfer_to(
                     namespace_dst, frame_offset=frame_offset, force=force
                 )
 
@@ -603,7 +603,7 @@ class ToolsetUnitForRigExtend(
                 if i_resource.is_exists() is False:
                     continue
                 i_namespace = i_resource.namespace
-                i_controls = qsm_mya_mtn_core.AdvMotionOpt(i_namespace).find_all_controls()
+                i_controls = qsm_mya_mtn_core.AdvRigMotionOpt(i_namespace).find_all_controls()
                 [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 0) for x in i_controls]
 
     def do_dcc_disable_control_playback_visible(self):
@@ -613,7 +613,7 @@ class ToolsetUnitForRigExtend(
                 if i_resource.is_exists() is False:
                     continue
                 i_namespace = i_resource.namespace
-                i_controls = qsm_mya_mtn_core.AdvMotionOpt(i_namespace).find_all_controls()
+                i_controls = qsm_mya_mtn_core.AdvRigMotionOpt(i_namespace).find_all_controls()
                 [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 1) for x in i_controls]
 
     def do_dcc_create_transformation_locator(self):

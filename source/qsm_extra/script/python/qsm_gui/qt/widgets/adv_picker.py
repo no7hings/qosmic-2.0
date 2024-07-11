@@ -251,19 +251,20 @@ class QtAdvPicker(
             self.ActionFlag.KeyShiftPress
         ):
             if self._sketch_key_hover is not None:
-                keys = self._get_next_keys_(self._sketch_key_hover)
+                
+                keys = self._adv_control_cfg.find_next_keys_at(self._sketch_key_hover)
                 self._sketch_key_set_selected.update(keys)
         # sub
         elif self._is_action_mdf_flags_include_(
             self.ActionFlag.KeyControlPress
         ):
             if self._sketch_key_hover is not None:
-                keys = self._get_next_keys_(self._sketch_key_hover)
+                keys = self._adv_control_cfg.find_next_keys_at(self._sketch_key_hover)
                 [self._sketch_key_set_selected.discard(x) for x in keys]
         # override
         else:
             if self._sketch_key_hover is not None:
-                keys = self._get_next_keys_(self._sketch_key_hover)
+                keys = self._adv_control_cfg.find_next_keys_at(self._sketch_key_hover)
                 self._sketch_key_set_selected.update(keys)
 
         self._refresh_widget_draw_()
@@ -296,21 +297,17 @@ class QtAdvPicker(
             QtWidgets.QToolTip.showText(
                 QtGui.QCursor.pos(), css, self
             )
-
-    def _get_next_keys_(self, sketch_key):
-        key_paths = self._sketch_tree_cfg.get_keys('*.{}.*'.format(sketch_key))
-        return set([x.split('.')[-1] for x in key_paths])
     
-    def _get_control_keys_(self, sketch_key, control_includes):
+    def _get_control_keys_(self, key, control_includes):
         list_ = []
         for i in control_includes:
-            i_keys = self._control_map_cfg.get(sketch_key+'.'+i) or []
+            i_keys = self._adv_control_cfg.get_control_keys_at(key, i)
             if i_keys:
                 list_.extend(i_keys)
         return list_
     
-    def _get_extra_control_keys_(self, sketch_key):
-        return self._control_map_cfg.get(sketch_key+'.extra') or []
+    def _get_extra_control_keys_(self, key):
+        return self._adv_control_cfg.get_control_keys_at(key, 'extra')
 
     def __init__(self, *args, **kwargs):
         super(QtAdvPicker, self).__init__(*args, **kwargs)
@@ -323,10 +320,8 @@ class QtAdvPicker(
         )
 
         self._init_action_base_def_(self)
-
-        self._configure = bsc_resource.RscExtendConfigure.get_as_content('gui/adv-picker')
-        self._sketch_tree_cfg = self._configure.get_as_content('sketch_tree')
-        self._control_map_cfg = self._configure.get_as_content('control_map')
+        
+        self._adv_control_cfg = qsm_gnl_core.AdvControlConfigure()
 
         self._body_json_file = bsc_resource.ExtendResource.get('gui/adv-picker-body.json')
         if self._body_json_file is None:
@@ -471,6 +466,13 @@ class QtAdvPicker(
                 self._main_text
             )
 
+    def _clear_all_selection_(self):
+        self._sketch_key_current = None
+        self._sketch_key_set_tmp = set()
+        self._sketch_key_set_selected = set()
+
+        self._refresh_widget_draw_()
+
     def _has_focus_(self):
         return self.hasFocus()
 
@@ -478,6 +480,9 @@ class QtAdvPicker(
         if text != self._namespace:
             self._namespace = text
             self._main_text = '{}:Main'.format(self._namespace)
+
+            self._clear_all_selection_()
+
             self._refresh_widget_all_()
     
     def _get_namespace_(self):

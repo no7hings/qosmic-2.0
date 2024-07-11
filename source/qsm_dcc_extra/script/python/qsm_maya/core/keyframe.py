@@ -13,7 +13,7 @@ from . import connection as _connection
 
 class AnimCurves(object):
     @classmethod
-    def get_all(cls):
+    def get_all_from_selection(cls):
         nodes = cmds.ls(sl=True) or []
         history_nodes = cmds.listHistory(nodes, pruneDagObjects=True, leaf=False) or []
         return cmds.ls(history_nodes, type='animCurve') or []
@@ -165,19 +165,21 @@ class NodePortAnmCurveOpt(object):
 class NodeKeyframe(object):
 
     @classmethod
-    def apply_value(cls, path, atr_data, force=False):
-        atr_name, value = atr_data
+    def apply_value(cls, path, data, force=False, mirror_keys=None):
+        atr_name, value = data
         if _attribute.NodeAttribute.is_exists(path, atr_name) is False:
             return
+        # try to unlock
         if _attribute.NodeAttribute.is_lock(path, atr_name) is True:
             # when node is from reference, ignore
             if _reference.Reference.is_from_reference(path) is True:
                 return
+
             if force is True:
                 _attribute.NodeAttribute.unlock(path, atr_name)
             else:
                 return
-
+        # try to break source
         if _attribute.NodeAttribute.has_source(path, atr_name) is True:
             if force is True:
                 result = _attribute.NodeAttribute.break_source(path, atr_name)
@@ -185,15 +187,17 @@ class NodeKeyframe(object):
                     return
             else:
                 return
+
         value_dst = _attribute.NodeAttribute.get_value(path, atr_name)
         if value != value_dst:
             _attribute.NodeAttribute.set_value(path, atr_name, value)
 
     @classmethod
-    def apply_curve(cls, path, atr_data, frame_offset=0, force=False):
-        atr_name, curve_type, infinities, curve_points = atr_data
+    def apply_curve(cls, path, data, frame_offset=0, force=False):
+        atr_name, curve_type, infinities, curve_points = data
         if _attribute.NodeAttribute.is_exists(path, atr_name) is False:
             return
+
         if _attribute.NodeAttribute.is_lock(path, atr_name) is True:
             # when node is from reference, ignore
             if _reference.Reference.is_from_reference(path) is True:

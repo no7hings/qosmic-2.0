@@ -84,6 +84,7 @@ class PrxBaseWindow(
 
     def _gui_build_(self):
         self._language = gui_core.GuiUtil.get_language()
+
         self._window_loading_flag = False
         # menu bar
         self._qt_menu_bar_0 = gui_qt_wgt_utility.QtMenuBar()

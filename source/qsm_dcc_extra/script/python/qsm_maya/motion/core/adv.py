@@ -13,12 +13,8 @@ from ... import core as _mya_core
 from . import control as _control
 
 
-class AdvMotionOpt(object):
-    KEY = 'motion operate'
-
-    @classmethod
-    def to_control_key(cls, path):
-        return path.split('|')[-1].split(':')[-1]
+class AdvRigMotionOpt(object):
+    KEY = 'adv rig motion'
     
     def __init__(self, namespace):
         self._namespace = namespace
@@ -56,24 +52,18 @@ class AdvMotionOpt(object):
     def find_main_control(self):
         return self.find_control('Main')
 
-    def get_data(self, part_includes):
-        dict_ = {}
+    def get_data(self, control_set_includes):
         controls = []
-
-        if 'body' in part_includes:
+        if 'body' in control_set_includes:
             controls += self.find_controls()
-        if 'face' in part_includes:
+        if 'face' in control_set_includes:
             controls += self.find_face_controls()
 
         if controls:
             # todo, dict order error if not use sort
             controls.sort()
-            for i_path in controls:
-                i_control_opt = _control.ControlOpt(i_path)
-                i_motion = i_control_opt.get_animation()
-                i_key = self.to_control_key(i_path)
-                dict_[i_key] = i_motion
-        return dict_
+            return _control.ControlsMotionOpt(self._namespace, controls).get_data()
+        return {}
 
     @_mya_core.Undo.execute
     def apply_data(self, data, **kwargs):
@@ -81,13 +71,20 @@ class AdvMotionOpt(object):
             self.KEY,
             'apply data: "{}"'.format(', '.join(['{}={}'.format(k, v) for k, v in kwargs.items()]))
         )
+
+        control_key_excludes = kwargs.pop('control_key_excludes') if 'control_key_excludes' in kwargs else None
+
         for i_control_key, i_motion in data.items():
+            if control_key_excludes:
+                if i_control_key in control_key_excludes:
+                    continue
+
             i_control_path = self.find_control(i_control_key)
             if i_control_path is not None:
-                _control.ControlOpt(i_control_path).apply_animation(i_motion, **kwargs)
+                _control.ControlMotionOpt(i_control_path).apply_data(i_motion, **kwargs)
 
     def transfer_to(self, namespace, **kwargs):
-        motions = self.get_data(part_includes=['body', 'face'])
+        motions = self.get_data(control_set_includes=['body', 'face'])
         self.__class__(namespace).apply_data(
             motions, **kwargs
         )
@@ -95,14 +92,14 @@ class AdvMotionOpt(object):
     def get_data_as_uuid(self):
         return bsc_core.BscUuid.generate_by_hash_value(
             bsc_core.BscHash.to_hash_key(
-                self.get_data(part_includes=['body', 'face'])
+                self.get_data(control_set_includes=['body', 'face'])
             )
         )
 
-    def export_data_to(self, file_path, part_includes):
-        bsc_storage.StgFileOpt(file_path).set_write(self.get_data(part_includes))
+    def export_to(self, file_path, control_set_includes):
+        bsc_storage.StgFileOpt(file_path).set_write(self.get_data(control_set_includes))
 
-    def import_data_from(self, file_path, **kwargs):
+    def load_from(self, file_path, **kwargs):
         self.apply_data(
             bsc_storage.StgFileOpt(file_path).set_read(), **kwargs
         )
@@ -146,7 +143,7 @@ class AdvMotionOpt(object):
             )
             _mya_core.ParentConstraint.clear_all(locator_path)
 
-            _control.ControlOpt(main_control).create_transformation_locator(
+            _control.ControlMotionOpt(main_control).create_transformation_locator(
                 locator_path
             )
 
@@ -161,6 +158,6 @@ class AdvMotionOpt(object):
 
     @classmethod
     def remove_transformation_locator_fnc(cls, main_control):
-        _control.ControlOpt(main_control).remove_transformation_locator()
+        _control.ControlMotionOpt(main_control).remove_transformation_locator()
 
 

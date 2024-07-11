@@ -360,7 +360,7 @@ build:
                                     先选中源物体，再选中目标物体
                                     可选中任意部件
 
-                        animation_transfer/copy_all:
+                        animation_transfer/copy_character:
                             widget: button
                             name_chs: '复制所有'
                             value: ''

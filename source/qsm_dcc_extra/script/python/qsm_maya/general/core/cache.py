@@ -58,11 +58,20 @@ class ResourceCache(object):
         )
 
     @classmethod
-    def generate_animation_file(cls, user_name):
+    def generate_character_motion_file(cls, user_name):
         root = bsc_core.EnvBaseMtd.get_cache_temporary_root()
         key = bsc_core.BscUuid.BASIC
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
-        return '{}/.asset-cache/animation/{}/{}/{}.json'.format(
+        return '{}/.asset-cache/character-motion/{}/{}/{}.json'.format(
+            root, user_name, region, key
+        )
+
+    @classmethod
+    def generate_control_motion_file(cls, user_name):
+        root = bsc_core.EnvBaseMtd.get_cache_temporary_root()
+        key = bsc_core.BscUuid.BASIC
+        region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
+        return '{}/.asset-cache/control-motion/{}/{}/{}.json'.format(
             root, user_name, region, key
         )
 

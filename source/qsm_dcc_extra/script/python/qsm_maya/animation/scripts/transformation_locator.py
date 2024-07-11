@@ -32,14 +32,14 @@ class AdvTransformationLocatorOpt(object):
         self.create_root()
 
         for i_namespace in self._namespaces:
-            _mtn_core.AdvMotionOpt(i_namespace).create_transformation_locator(
+            _mtn_core.AdvRigMotionOpt(i_namespace).create_transformation_locator(
                 root=self.ROOT_PATH
             )
 
     @_mya_core.Undo.execute
     def remove_transformation_locators(self):
         for i_namespace in self._namespaces:
-            _mtn_core.AdvMotionOpt(i_namespace).remove_transformation_locator()
+            _mtn_core.AdvRigMotionOpt(i_namespace).remove_transformation_locator()
 
 
 class ControlTransformationLocator(object):
@@ -67,7 +67,7 @@ class ControlTransformationLocator(object):
         self.create_root()
 
         for i_path in self._main_controls:
-            _mtn_core.AdvMotionOpt.create_transformation_locator_fnc(
+            _mtn_core.AdvRigMotionOpt.create_transformation_locator_fnc(
                 i_path,
                 root=self.ROOT_PATH
             )
@@ -75,4 +75,4 @@ class ControlTransformationLocator(object):
     @_mya_core.Undo.execute
     def remove_transformation_locators(self):
         for i_path in self._main_controls:
-            _mtn_core.AdvMotionOpt.remove_transformation_locator_fnc(i_path)
+            _mtn_core.AdvRigMotionOpt.remove_transformation_locator_fnc(i_path)
