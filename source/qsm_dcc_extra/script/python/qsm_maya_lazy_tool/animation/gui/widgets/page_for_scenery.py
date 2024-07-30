@@ -19,7 +19,7 @@ from . import unit_for_scenery as _unit_for_scenery
 class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
 
-    SCRIPT_JOB_NAME = 'resource_manager_for_scenery'
+    SCRIPT_JOB_NAME = 'lazy_tool_for_scenery'
 
     def _gui_filter_update_visible(self, boolean):
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
@@ -149,7 +149,7 @@ class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
         self._reference_tool_box.add_widget(self._prx_input_for_asset)
         self._prx_input_for_asset.widget.setMaximumWidth(488)
 
-        self._gui_rig_reference_prx_toolbar_unit = _unit_for_scenery.UnitForSceneryReference(
+        self._gui_rig_reference_prx_toolbar_unit = _unit_for_scenery.PrxToolbarForSceneryReference(
             self._window, self, self._session, self._prx_input_for_asset
         )
 
@@ -186,15 +186,15 @@ class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         qt_lot.addWidget(self._page_prx_tab_tool_box.widget)
         # utility
-        self._gui_utility_toolset_unit = _unit_for_scenery.UnitForSceneryUtilityToolSet(
+        self._gui_skin_proxy_prx_toolset_unit = _unit_for_scenery.PrxToolsetForUnitAssemblyLoad(
             self._window, self, self._session
         )
         # switch
-        self._gui_switch_opt = _unit_for_scenery.UnitForScenerySwitchToolSet(
+        self._gui_switch_opt = _unit_for_scenery.PrxToolsetForUnitAssemblySwitch(
             self._window, self, self._session
         )
         # extend
-        self._gui_extend_opt = _unit_for_scenery.UnitForSceneryExtendToolSet(
+        self._gui_extend_opt = _unit_for_scenery.PrxToolsetForCameraMask(
             self._window, self, self._session
         )
 

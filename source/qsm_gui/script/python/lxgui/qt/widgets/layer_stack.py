@@ -7,7 +7,7 @@ from ..core.wrap import *
 from .. import core as gui_qt_core
 
 
-class QtLayer(QtWidgets.QWidget):
+class QtTimeTrack(QtWidgets.QWidget):
     DELAY_TIME = 250
     DELAY_TIME_FPS = 25
 
@@ -39,7 +39,7 @@ class QtLayer(QtWidgets.QWidget):
             )
 
     def __init__(self, *args, **kwargs):
-        super(QtLayer, self).__init__(*args, **kwargs)
+        super(QtTimeTrack, self).__init__(*args, **kwargs)
         self.installEventFilter(self)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 

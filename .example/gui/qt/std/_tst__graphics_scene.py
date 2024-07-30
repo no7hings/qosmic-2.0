@@ -39,15 +39,15 @@ class S(QtWidgets.QGraphicsView):
                 pass
             elif event.type() == QtCore.QEvent.KeyPress:
                 if event.key() == QtCore.Qt.Key_Control:
-                    self._set_action_mdf_flag_add_(
+                    self._add_action_modifier_flag_(
                         self.ActionFlag.KeyControlPress
                     )
                 elif event.key() == QtCore.Qt.Key_Alt:
-                    self._set_action_mdf_flag_add_(
+                    self._add_action_modifier_flag_(
                         self.ActionFlag.KeyAltPress
                     )
                 elif event.key() == QtCore.Qt.Key_Shift:
-                    self._set_action_mdf_flag_add_(
+                    self._add_action_modifier_flag_(
                         self.ActionFlag.KeyShiftPress
                     )
                 elif event.key() == QtCore.Qt.Key_F:
@@ -61,13 +61,13 @@ class S(QtWidgets.QGraphicsView):
                 self._clear_action_modifier_flags_()
             elif event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.button() == QtCore.Qt.LeftButton:
-                    if self._get_action_flag_is_match_(
+                    if self._is_action_flag_match_(
                         self.ActionFlag.NGNodePressClick
                     ) is False:
                         self._set_action_flag_(
                             self.ActionFlag.RectSelectClick
                         )
-                        self._set_action_rect_select_start_(event)
+                        self._do_rect_select_start_(event)
                 #
                 elif event.button() == QtCore.Qt.RightButton:
                     pass
@@ -86,7 +86,7 @@ class S(QtWidgets.QGraphicsView):
                     event.ignore()
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
-                    self._set_action_rect_select_end_(event)
+                    self._do_rect_select_end_(event)
                 elif event.button() == QtCore.Qt.RightButton:
                     pass
                 elif event.button() == QtCore.Qt.MidButton:

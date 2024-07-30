@@ -10,7 +10,7 @@ import lxbasic.core as bsc_core
 from . import node_query as _node_query
 
 
-class BscNodePortOpt(object):
+class EtrNodePortOpt(object):
     PATHSEP = '.'
 
     def __init__(self, node_path, port_path):

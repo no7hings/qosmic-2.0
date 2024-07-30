@@ -3,6 +3,8 @@ import sys
 
 import lxbasic.log as bsc_log
 
+import lxbasic.storage as bsc_storage
+
 from lxbasic.log import bridge as log_bridge
 # gui
 from ... import core as gui_core
@@ -238,7 +240,7 @@ class GuiProxyException(object):
 
         _1 = gui_prx_widgets.PrxWindowForException()
 
-        _1.set_window_title('Exception')
+        _1.set_window_title('发生异常' if gui_core.GuiUtil.get_language() == 'chs' else 'Exception occurred')
         _1.set_definition_window_size((640, 320))
         _1.show_window_auto()
         return _1
@@ -267,6 +269,13 @@ class GuiProxyException(object):
             [w.add_content(i) for i in exc_texts]
             w.add_content(value)
             w.add_content('*'*80)
+
+            file_path = bsc_log.LogBase.get_user_debug_file(
+                'script', create=True
+            )
+            bsc_storage.StgFileOpt(
+                file_path
+            ).set_write('\n'.join(exc_texts))
 
             # sys.stderr.write('traceback:\n')
             # sys.stderr.write('\n'.join(exc_texts)+'\n')

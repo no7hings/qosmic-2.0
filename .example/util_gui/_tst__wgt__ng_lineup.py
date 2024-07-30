@@ -26,7 +26,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
         r.create_output_port(
             t, 'output'
         )
-        d = gnl_dcc_objects.StgDirectory('/l/temp/td/dongchangbao/lineup-test')
+        d = gnl_dcc_objects.StgDirectory('Z:/temporaries/node_graph_test')
 
         for i in d.get_all_file_paths():
             i_f = gnl_dcc_objects.StgFile(i)
@@ -48,7 +48,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
 if __name__ == '__main__':
     import sys
     #
-    from PySide2 import QtWidgets
+    from QtSide import QtWidgets
     #
     app = QtWidgets.QApplication(sys.argv)
     #

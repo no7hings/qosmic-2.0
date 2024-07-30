@@ -105,23 +105,6 @@ class CameraViewFrustum(object):
         _mya_core.Container.add_nodes(container, [eps_name])
 
 
-class CameraMaskOpt(object):
-    @classmethod
-    def load_auto(cls, **kwargs):
-        scheme = kwargs['scheme']
-        if scheme == 'default':
-            camera = _mya_core.Camera.get_active()
-            CameraMask(camera).execute_for_all()
-        elif scheme == 'dynamic':
-            camera = _mya_core.Camera.get_active()
-            DynamicCameraMask(camera).execute_for_all()
-        
-    @classmethod
-    def remove_auto(cls, **kwargs):
-        DynamicCameraMask.restore()
-        CameraMask.restore()
-
-
 class DynamicCameraMask(object):
     CONTAINER_NAME = 'dynamic_camera_mask_dgc'
 
@@ -356,6 +339,7 @@ class CameraSelection(object):
         else:
             self._camera_path = _mya_core.DagNode.to_path(camera)
 
+    @_mya_core.Undo.execute
     def execute(self):
         shape_paths = _mya_core.Camera.generate_mask_nodes(
             self._camera_path, type_includes=['mesh', 'gpuCache']
@@ -392,6 +376,7 @@ class CameraLodSwitch(object):
                 list_.append(i_result)
         return list_
 
+    @_mya_core.Undo.execute
     def execute(self, distance_range=(50, 100)):
         dict_ = {}
         camera_transform = _mya_core.Shape.get_transform(self._camera_path)
@@ -431,4 +416,18 @@ class CameraLodSwitch(object):
                 i_opt.set_lod(i_lod)
 
 
+class CameraMaskOpt(object):
+    @classmethod
+    def create_auto(cls, **kwargs):
+        scheme = kwargs['scheme']
+        if scheme == 'default':
+            camera = _mya_core.Camera.get_active()
+            CameraMask(camera).execute_for_all()
+        elif scheme == 'dynamic':
+            camera = _mya_core.Camera.get_active()
+            DynamicCameraMask(camera).execute_for_all()
 
+    @classmethod
+    def remove_auto(cls, **kwargs):
+        DynamicCameraMask.restore()
+        CameraMask.restore()

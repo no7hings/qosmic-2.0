@@ -58,7 +58,7 @@ class AbsQtActionBaseDef(object):
     def _set_action_mdf_flags_(self, flags):
         self._action_mdf_flags = flags
 
-    def _set_action_mdf_flag_add_(self, flag):
+    def _add_action_modifier_flag_(self, flag):
         if flag is not None:
             if flag not in self._action_mdf_flags:
                 self._action_mdf_flags.append(flag)
@@ -109,7 +109,9 @@ class AbsQtActionBaseDef(object):
                 elif self._action_flag in {
                     self.ActionFlag.TrackMove,
                     self.ActionFlag.ZoomMove,
-                    self.ActionFlag.NGNodePressMove
+                    self.ActionFlag.NGNodePressMove,
+                    #
+                    self.ActionFlag.NGGraphTrackClick, self.ActionFlag.NGGraphTrackMove
                 }:
                     p = QtGui.QPixmap(20, 20)
                     p.load(_gui_core.GuiIcon.get('system/track-move'))
@@ -135,6 +137,8 @@ class AbsQtActionBaseDef(object):
                     self.ActionFlag.SplitHHover,
                     self.ActionFlag.SplitHPress,
                     self.ActionFlag.SplitHMove,
+                    self.ActionFlag.TimeMove,
+                    self.ActionFlag.NGTimeScaleLeft, self.ActionFlag.NGTimeScaleRight
                 }:
                     self._widget.setCursor(
                         QtGui.QCursor(
@@ -154,6 +158,7 @@ class AbsQtActionBaseDef(object):
                 # resize
                 elif self._action_flag in {
                     self.ActionFlag.ResizeLeft,
+                    self.ActionFlag.NGTimeResizeLeft
                 }:
                     self._widget.setCursor(
                         QtGui.QCursor(
@@ -162,6 +167,7 @@ class AbsQtActionBaseDef(object):
                     )
                 elif self._action_flag in {
                     self.ActionFlag.ResizeRight,
+                    self.ActionFlag.NGTimeResizeRight
                 }:
                     self._widget.setCursor(
                         QtGui.QCursor(
@@ -230,7 +236,7 @@ class AbsQtActionBaseDef(object):
         self._action_mdf_flags = []
         self._widget.update()
 
-    def _get_action_flag_is_match_(self, *args):
+    def _is_action_flag_match_(self, *args):
         return self._action_flag in args
 
     def _is_action_mdf_flags_include_(self, flag):
@@ -322,7 +328,7 @@ class AbsQtActionForPressDef(object):
     def _get_action_flag_(self):
         raise NotImplementedError()
 
-    def _get_action_flag_is_match_(self, flag):
+    def _is_action_flag_match_(self, flag):
         raise NotImplementedError()
 
     def _get_action_press_is_enable_(self):
@@ -341,7 +347,7 @@ class AbsQtActionForPressDef(object):
         self.press_dbl_clicked.emit()
 
     def _get_action_press_flag_is_click_(self):
-        return self._get_action_flag_is_match_(
+        return self._is_action_flag_match_(
             self.ActionFlag.Press
         )
 

@@ -39,6 +39,16 @@ class Frame(object):
     }
     FPS_QUERY_DICT = {v: k for k, v in FPS_DICT.items()}
 
+    # UnitToTimeFactor
+    # 2, 3000
+    # 3, 2000
+    # 4, 1500
+    # 5, 1200
+    # 12, 500
+    # 24, 250
+    # 30, 200
+    # 60, 100
+
     @classmethod
     def get_frame_range(cls):
         start_frame = cmds.playbackOptions(query=1, minTime=1)

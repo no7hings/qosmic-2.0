@@ -761,9 +761,9 @@ class QtIconPressButton(
                         pass
                 elif event.type() == QtCore.QEvent.MouseButtonRelease:
                     if event.button() == QtCore.Qt.LeftButton:
-                        if self._get_action_flag_is_match_(self.ActionFlag.PressDblClick):
+                        if self._is_action_flag_match_(self.ActionFlag.PressDblClick):
                             self.press_dbl_clicked.emit()
-                        elif self._get_action_flag_is_match_(self.ActionFlag.Press):
+                        elif self._is_action_flag_match_(self.ActionFlag.Press):
                             p = event.pos()
                             if self._icon_state_draw_is_enable:
                                 if self._icon_state_rect.contains(p):
@@ -781,12 +781,12 @@ class QtIconPressButton(
                 elif event.type() == QtCore.QEvent.MouseMove:
                     if event.buttons() == QtCore.Qt.LeftButton:
                         if self._drag_is_enable is True:
-                            if self._get_action_flag_is_match_(self.ActionFlag.Press):
+                            if self._is_action_flag_match_(self.ActionFlag.Press):
                                 self._drag_press_point = self._press_point
                                 self._set_action_flag_(self.ActionFlag.DragPress)
-                            elif self._get_action_flag_is_match_(self.ActionFlag.DragPress):
+                            elif self._is_action_flag_match_(self.ActionFlag.DragPress):
                                 self._do_drag_press_(event)
-                            elif self._get_action_flag_is_match_(self.ActionFlag.DragMove):
+                            elif self._is_action_flag_match_(self.ActionFlag.DragMove):
                                 self._do_drag_move_(event)
         return False
 
@@ -794,10 +794,10 @@ class QtIconPressButton(
         painter = _qt_core.QtPainter(self)
         self._refresh_widget_draw_geometry_()
         offset = self._get_action_offset_()
-        is_pressed = self._get_action_flag_is_match_(
+        is_pressed = self._is_action_flag_match_(
             self.ActionFlag.Press, self.ActionFlag.DragPress, self.ActionFlag.DragMove
         )
-        if self._get_action_flag_is_match_(self.ActionFlag.DragMove):
+        if self._is_action_flag_match_(self.ActionFlag.DragMove):
             painter._draw_frame_by_rect_(
                     rect=self._frame_draw_rect,
                     border_color=_qt_core.QtBorderColors.Button,
@@ -1085,7 +1085,7 @@ class QtIconMenuButton(
                     self._set_action_flag_(self.ActionFlag.Press)
                     self._refresh_widget_all_()
                 elif event.type() == QtCore.QEvent.MouseButtonRelease:
-                    if self._get_action_flag_is_match_(self.ActionFlag.Press):
+                    if self._is_action_flag_match_(self.ActionFlag.Press):
                         self._popup_menu_()
                     self._clear_all_action_flags_()
                     self._refresh_widget_all_()

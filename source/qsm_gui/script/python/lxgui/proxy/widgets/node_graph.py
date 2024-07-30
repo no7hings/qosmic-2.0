@@ -2,9 +2,11 @@
 # qt widgets
 from ...qt.widgets import base as _qt_widget_base
 
-from ...qt.widgets import entry_frame as _qt_widget_entry_frame
+from ...qt.widgets import entry_frame as _qt_wgt_entry_frame
 
-from ...qt.widgets import node_graph as _qt_widget_node_graph
+from ...qt.graphs import graph_for_node as _qt_grh_for_node
+
+from ...qt.graphs import graph_for_image as _qt_grh_for_image
 # proxy abstracts
 from ...proxy import abstracts as _proxy_abstracts
 # proxy widgets
@@ -16,8 +18,8 @@ from . import container as _container
 class PrxNGGraph(
     _proxy_abstracts.AbsPrxWidget
 ):
-    QT_WIDGET_CLS = _qt_widget_entry_frame.QtEntryFrame
-    QT_VIEW_CLS = _qt_widget_node_graph._QtNGGraph
+    QT_WIDGET_CLS = _qt_wgt_entry_frame.QtEntryFrame
+    QT_VIEW_CLS = _qt_grh_for_node.QtNodeGraph
 
     def __init__(self, *args, **kwargs):
         super(PrxNGGraph, self).__init__(*args, **kwargs)
@@ -45,7 +47,7 @@ class PrxNGGraph(
         return self._prx_filter_bar
 
     def set_node_add(self, *args, **kwargs):
-        self._qt_view._set_ng_graph_sbj_node_create_(*args, **kwargs)
+        self._qt_view._create_node_(*args, **kwargs)
 
     def set_universe(self, universe):
         self._qt_view._set_ng_universe_(universe)
@@ -57,8 +59,8 @@ class PrxNGGraph(
 class PrxNGTree(
     _proxy_abstracts.AbsPrxWidget
 ):
-    QT_WIDGET_CLS = _qt_widget_entry_frame.QtEntryFrame
-    QT_VIEW_CLS = _qt_widget_node_graph._QtNGTree
+    QT_WIDGET_CLS = _qt_wgt_entry_frame.QtEntryFrame
+    QT_VIEW_CLS = _qt_grh_for_node._QtNGTree
 
     def __init__(self, *args, **kwargs):
         super(PrxNGTree, self).__init__(*args, **kwargs)
@@ -91,8 +93,8 @@ class PrxNGTree(
 class PrxNGImageGraph(
     _proxy_abstracts.AbsPrxWidget
 ):
-    QT_WIDGET_CLS = _qt_widget_entry_frame.QtEntryFrame
-    QT_VIEW_CLS = _qt_widget_node_graph._QtNGImageGraph
+    QT_WIDGET_CLS = _qt_wgt_entry_frame.QtEntryFrame
+    QT_VIEW_CLS = _qt_grh_for_image.QtImageGraph
 
     def __init__(self, *args, **kwargs):
         super(PrxNGImageGraph, self).__init__(*args, **kwargs)
@@ -120,7 +122,7 @@ class PrxNGImageGraph(
         return self._prx_filter_bar
 
     def set_node_add(self, *args, **kwargs):
-        self._qt_view._set_ng_graph_sbj_node_create_(*args, **kwargs)
+        self._qt_view._create_node_(*args, **kwargs)
 
     def restore_all(self):
         self._qt_view._set_restore_()

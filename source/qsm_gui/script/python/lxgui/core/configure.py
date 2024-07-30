@@ -68,6 +68,12 @@ class GuiActionFlag(enum.IntEnum):
     #
     ZoomWheel = 0x51
     #
+    TimeMove = 0x52
+    NGTimeResizeLeft = 0x53
+    NGTimeResizeRight = 0x54
+    NGTimeScaleLeft = 0x55
+    NGTimeScaleRight = 0x56
+    #
     RectSelectClick = 0x61
     RectSelectMove = 0x62
     #
@@ -75,6 +81,7 @@ class GuiActionFlag(enum.IntEnum):
     NGGraphTrackMove = 0x72
     NGNodePressClick = 0x73
     NGNodePressMove = 0x74
+    NGNodeAnyAction = 0x75
     #
     KeyAltPress = 0x81
     KeyControlPress = 0x82
@@ -199,6 +206,7 @@ class GuiXmlColor(object):
 class GuiRgba(object):
     # 63+48=111
     # 127+48=175
+    # 175+48=223
     Red = 255, 0, 0, 255
     DarkRed = 159, 0, 0, 255
     LightRed = 255, 47, 47, 255
@@ -217,14 +225,23 @@ class GuiRgba(object):
     DarkYellow = 159, 159, 63, 255
     LightYellow = 255, 255, 111, 255
 
-    Green = 63, 255, 127, 255
-    DarkGreen = 63, 159, 95, 255
-    LightGreen = 111, 255, 175, 255
+    Green = 0, 255, 0, 255
+    DarkGreen = 0, 159, 0, 255
+    LightGreen = 47, 255, 47, 255
 
-    Blue = 63, 127, 255, 255
-    DarkBlue = 63, 95, 159, 255
-    DimBlue = 55, 87, 151, 255
-    LightBlue = 111, 175, 255, 255
+    NeonGreen = 63, 255, 127, 255
+    DarkNeonGreen = 63, 159, 95, 255
+    LightNeonGreen = 111, 255, 175, 255
+    BrightNeonGreen = 119, 255, 223, 255
+
+    Blue = 0, 0, 255, 255
+    DarkBlue = 0, 0, 159, 255
+    LightBlue = 47, 47, 255, 255
+
+    AzureBlue = 63, 127, 255, 255
+    DarkAzureBlue = 63, 95, 159, 255
+    DimAzureBlue = 55, 87, 151, 255
+    LightAzureBlue = 111, 175, 255, 255
 
     BabyBlue = 63, 255, 255, 255
     DarkBabyBlue = 63, 159, 159, 255
@@ -264,8 +281,8 @@ class GuiRgba(object):
         TorchRed, DarkTorchRed, LightTorchRed,
         LightOrange, Orange, DarkOrange,
         LightYellow, Yellow, DarkYellow,
-        LightGreen, Green, DarkGreen,
-        LightBlue, Blue, DarkBlue,
+        LightNeonGreen, NeonGreen, DarkNeonGreen,
+        LightAzureBlue, AzureBlue, DarkAzureBlue,
         LightPurple, Purple, DarkPurple,
         LightPink, Pink, DarkPink,
         White, Black, Gray, Light, Transparent

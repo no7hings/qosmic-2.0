@@ -185,7 +185,7 @@ class QtEntryNodeForTag(
             self._set_action_flag_(self.ActionFlag.Press)
 
     def _do_mouse_press_release_(self, event):
-        if self._get_action_flag_is_match_(self.ActionFlag.Press):
+        if self._is_action_flag_match_(self.ActionFlag.Press):
             self._swap_check_()
 
             self._update_check_state_for_ancestors_()
@@ -232,7 +232,7 @@ class QtEntryNodeForTag(
         self._frame_draw_rect = QtCore.QRect()
         self._frame_border_radius = 0
         self._frame_background_color = _gui_core.GuiRgba.DarkWhite
-        self._frame_background_color_checked = _gui_core.GuiRgba.LightBlue
+        self._frame_background_color_checked = _gui_core.GuiRgba.LightAzureBlue
 
         self._text = None
         self._text_color = _gui_core.GuiRgba.LightBlack
@@ -335,7 +335,7 @@ class QtEntryNodeForTag(
 
         if value > 0:
             self._frame_background_color = _gui_core.GuiRgba.DarkWhite
-            self._frame_background_color_checked = _gui_core.GuiRgba.LightBlue
+            self._frame_background_color_checked = _gui_core.GuiRgba.LightAzureBlue
             self._text_color = _gui_core.GuiRgba.LightBlack
             self._text_font.setItalic(False)
             self._number_font.setItalic(False)
@@ -343,7 +343,7 @@ class QtEntryNodeForTag(
             self._number_font.setStrikeOut(False)
         else:
             self._frame_background_color = _gui_core.GuiRgba.Dim
-            self._frame_background_color_checked = _gui_core.GuiRgba.DarkBlue
+            self._frame_background_color_checked = _gui_core.GuiRgba.DarkAzureBlue
             self._text_color = _gui_core.GuiRgba.Gray
             self._text_font.setItalic(True)
             self._number_font.setItalic(True)
@@ -529,7 +529,7 @@ class QtEntryGroupForTag(
                 self._set_action_flag_(self.ActionFlag.Press)
 
     def _do_mouse_press_release_(self, event):
-        if self._get_action_flag_is_match_(self.ActionFlag.Press):
+        if self._is_action_flag_match_(self.ActionFlag.Press):
             if self._expand_is_hovered is True:
                 self._swap_expand_()
             elif self._is_check_hovered is True:

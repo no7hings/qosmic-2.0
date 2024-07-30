@@ -74,12 +74,12 @@ class AbsQtToolGroup(
         if widget == self.__head:
             if event.type() == QtCore.QEvent.MouseMove:
                 if self._drag_is_enable is True:
-                    if self.__head._get_action_flag_is_match_(self.ActionFlag.Press):
+                    if self.__head._is_action_flag_match_(self.ActionFlag.Press):
                         self._drag_press_point = self.__head._get_press_point_()
                         self.__head._set_action_flag_(self.ActionFlag.DragPress)
-                    elif self.__head._get_action_flag_is_match_(self.ActionFlag.DragPress):
+                    elif self.__head._is_action_flag_match_(self.ActionFlag.DragPress):
                         self._do_drag_press_(event)
-                    elif self.__head._get_action_flag_is_match_(self.ActionFlag.DragMove):
+                    elif self.__head._is_action_flag_match_(self.ActionFlag.DragMove):
                         self._do_drag_move_(event)
         return False
 

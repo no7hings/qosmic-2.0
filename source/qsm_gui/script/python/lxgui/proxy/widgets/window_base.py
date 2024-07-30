@@ -425,6 +425,12 @@ class PrxBaseWindow(
     def popup_bubble_message(self, *args, **kwargs):
         return self._qt_widget._popup_bubble_message_(*args, **kwargs)
 
+    # for language
+    def choice_name(self, options):
+        return gui_core.GuiUtil.choice_name(
+            self._language, options
+        )
+
     def choice_message(self, options):
         return gui_core.GuiUtil.choice_message(
             self._language, options

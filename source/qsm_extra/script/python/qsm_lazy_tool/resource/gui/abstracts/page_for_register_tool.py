@@ -185,7 +185,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             self._prx_options_node.set('path', '')
             self._prx_options_node.set('gui_name', '')
 
-    def ao_apply(self):
+    def do_apply(self):
         data = self.get_data()
         if not data:
             self._window.exec_message(

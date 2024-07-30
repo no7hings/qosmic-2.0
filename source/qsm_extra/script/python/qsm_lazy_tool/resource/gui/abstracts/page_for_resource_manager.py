@@ -866,13 +866,13 @@ class AbsPrxPageForManager(
     def _gui_keyword_filter_completion_gain_fnc(self, *args, **kwargs):
         keyword = args[0]
         if keyword:
-            match_pinyin = bsc_core.PtnFnmatchMtd.filter(
+            match_pinyin = bsc_core.BscFnmatch.filter(
                 self._keyword_pinyin_dict.keys(), six.u('*{}*').format(keyword)
             )
 
             match_chs = [self._keyword_pinyin_dict[x] for x in match_pinyin]
 
-            matches = bsc_core.PtnFnmatchMtd.filter(
+            matches = bsc_core.BscFnmatch.filter(
                 self._keyword_set, six.u('*{}*').format(keyword)
             )
             all_texts = match_chs + matches

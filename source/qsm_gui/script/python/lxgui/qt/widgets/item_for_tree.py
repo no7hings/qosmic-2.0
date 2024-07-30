@@ -309,13 +309,13 @@ class QtTreeWidgetItem(
         elif status in {self.ProcessStatus.Waiting}:
             color = QtGui.QColor(*self.Rgba.LightOrange)
         elif status in {self.ProcessStatus.Started, self.ProcessStatus.Running}:
-            color = QtGui.QColor(*self.Rgba.LightBlue)
+            color = QtGui.QColor(*self.Rgba.LightAzureBlue)
         elif status in {self.ProcessStatus.Suspended}:
             color = QtGui.QColor(*self.Rgba.LightYellow)
         elif status in {self.ProcessStatus.Failed, self.ProcessStatus.Error, self.ProcessStatus.Killed}:
             color = QtGui.QColor(*self.Rgba.LightTorchRed)
         elif status in {self.ProcessStatus.Completed, self.ProcessStatus.Finished}:
-            color = QtGui.QColor(*self.Rgba.LightGreen)
+            color = QtGui.QColor(*self.Rgba.LightNeonGreen)
         elif status in {self.ProcessStatus.Stopped}:
             color = QtGui.QColor(*self.Rgba.DarkGray)
         else:

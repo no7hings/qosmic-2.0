@@ -18,7 +18,7 @@ class QtTreeWidget(
 ):
     PEN_LINE = QtGui.QPen(QtGui.QColor(*_gui_core.GuiRgba.Dark), _gui_core.GuiDpiScale.get(1))
     PEN_BRANCH = QtGui.QPen(QtGui.QColor(*_gui_core.GuiRgba.Gray), _gui_core.GuiDpiScale.get(1))
-    PEN_BRANCH_HIGHLIGHT = QtGui.QPen(QtGui.QColor(*_gui_core.GuiRgba.LightBlue), _gui_core.GuiDpiScale.get(1))
+    PEN_BRANCH_HIGHLIGHT = QtGui.QPen(QtGui.QColor(*_gui_core.GuiRgba.LightAzureBlue), _gui_core.GuiDpiScale.get(1))
     cachedAncestors = None
     _is_expand_descendants = False
     #
@@ -350,12 +350,12 @@ class QtTreeWidget(
         is_selected = False
         if index in self._selected_indices:
             painter.fillRect(
-                select_rect, QtGui.QColor(*_gui_core.GuiRgba.LightBlue)
+                select_rect, QtGui.QColor(*_gui_core.GuiRgba.LightAzureBlue)
             )
             is_selected = True
         elif index in self._selected_indirect_indices:
             painter.fillRect(
-                select_rect, QtGui.QColor(*_gui_core.GuiRgba.DarkBlue)
+                select_rect, QtGui.QColor(*_gui_core.GuiRgba.DarkAzureBlue)
             )
             is_selected = True
         if self._draw_for_check_state_enable is True:

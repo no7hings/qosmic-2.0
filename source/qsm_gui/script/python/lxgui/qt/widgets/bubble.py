@@ -279,7 +279,7 @@ class QtMessageBubble(
         if self._text:
             x, y = 0, 0
 
-            mrg = 2
+            mrg = 4
 
             txt_w, txt_h = (
                 QtGui.QFontMetrics(self._text_font).width(self._text)+8, QtGui.QFontMetrics(self._text_font).height()
@@ -291,7 +291,7 @@ class QtMessageBubble(
 
             frm_w, frm_h = txt_w+mrg*2, txt_h+mrg*2
             self._frame_draw_rect.setRect(
-                x+mrg, y+mrg, frm_w, frm_h
+                x, y, frm_w, frm_h
             )
 
             self.setFixedSize(frm_w+2, frm_h+2)
@@ -316,7 +316,7 @@ class QtMessageBubble(
         self._text_color = _gui_core.GuiRgba.LightBlack
 
         self._frame_border_color = _gui_core.GuiRgba.LightBlack
-        self._frame_background_color = _gui_core.GuiRgba.DarkWhite
+        self._frame_background_color = _gui_core.GuiRgba.LightNeonGreen
         self._frame_draw_rect = QtCore.QRect()
         self._frame_border_radius = 3
 
@@ -589,13 +589,13 @@ class QtPathBubble(
                 self._do_hover_move_(event)
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
-                    if self._get_action_flag_is_match_(self.ActionFlag.ComponentPress):
+                    if self._is_action_flag_match_(self.ActionFlag.ComponentPress):
                         self.component_press_clicked.emit(self.__component_index_pressed)
                         self.__component_index_pressed = None
-                    elif self._get_action_flag_is_match_(self.ActionFlag.ComponentDbClick):
+                    elif self._is_action_flag_match_(self.ActionFlag.ComponentDbClick):
                         self.component_press_dbl_clicked.emit(self.__component_index_pressed)
                         self.__component_index_pressed = None
-                    elif self._get_action_flag_is_match_(self.ActionFlag.NextPress):
+                    elif self._is_action_flag_match_(self.ActionFlag.NextPress):
                         self.next_press_clicked.emit()
 
                 self._clear_all_action_flags_()
@@ -651,7 +651,7 @@ class QtPathBubble(
                 ]
                 painter._set_border_color_(_qt_core.QtColors.BubbleBorder)
                 if self.__next_is_hovered is True:
-                    if self._get_action_flag_is_match_(self.ActionFlag.NextPress):
+                    if self._is_action_flag_match_(self.ActionFlag.NextPress):
                         painter._set_background_color_(
                             _qt_core.QtColors.BubbleBackgroundActioned
                         )
@@ -844,7 +844,7 @@ class QtBubbleAsChoice(
                     i_rect = self._rects[i_index]
                     i_x, i_y = x_0+(w_0-i_t_w)/2, y_0+(h_0-v_h)/2+c_h*i_seq
 
-                    if self._get_action_flag_is_match_(
+                    if self._is_action_flag_match_(
                         self.ActionFlag.HoverMove
                     ):
                         if i_seq == 0:

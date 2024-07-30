@@ -16,19 +16,55 @@
             }
           },
           {
-            "id": "b9e9014e7ce53802",
+            "id": "773b32fd1143e29c",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "随记/python/Python包安装.md",
+                "file": "开发相关/开发计划/七月-八月.md",
                 "mode": "source",
                 "source": false
               }
             }
+          },
+          {
+            "id": "e4d9334cf14c69de",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "开发相关/其他/简模代理.md",
+                "mode": "source",
+                "source": true
+              }
+            }
+          },
+          {
+            "id": "512948f2951a8d4c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "开发相关/其他/动态GPU.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "2d3517a2f5f09340",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "开发相关/其他/元素组装.md",
+                "mode": "source",
+                "source": true
+              }
+            }
           }
         ],
-        "currentTab": 1
+        "currentTab": 4
       }
     ],
     "direction": "vertical"
@@ -94,7 +130,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "随记/python/Python包安装.md",
+                "file": "开发相关/其他/元素组装.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -111,7 +147,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "随记/python/Python包安装.md",
+                "file": "开发相关/其他/元素组装.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -134,7 +170,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "随记/python/Python包安装.md"
+                "file": "开发相关/其他/元素组装.md"
               }
             }
           },
@@ -156,7 +192,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "随记/python/Python包安装.md"
+                "file": "开发相关/其他/元素组装.md"
               }
             }
           },
@@ -195,42 +231,44 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "b9e9014e7ce53802",
+  "active": "2d3517a2f5f09340",
   "lastOpenFiles": [
-    "随记/maya/Maya性能优化.md",
-    "开发相关/开发进度/maya/简易拍屏工具.md",
-    "开发相关/开发进度/BUG.md",
-    "开发相关/开发进度/优化.md",
-    "技术文档/工具安装说明（临时版）.md",
+    "开发相关/其他/简模代理.md",
+    "开发相关/其他/动态GPU.md",
+    "开发相关/其他/元素组装.md",
     "文档/sqlite.md",
+    "开发相关/其他",
+    "开发相关/开发任务/maya/动作相关/动作复制工具.md",
+    "开发相关/开发任务/maya/动作相关/动作拼接工具.md",
+    "开发相关/开发计划/七月-八月.md",
+    "开发相关/开发计划/总览.md",
+    "开发相关/开发进度/maya/简易拍屏工具.md",
+    "开发相关/开发进度/maya/动作拼接工具.md",
+    "开发相关/制作相关/资产.md",
+    "开发相关/开发进度/优化.md",
+    "开发相关/制作相关",
+    "开发相关/开发进度/BUG.md",
+    "开发相关/开发进度/maya/动作复制工具.md",
+    "开发相关/开发进度/maya/场景显示优化工具.md",
+    "开发相关/开发进度/maya/绑定移动工具.md",
+    "开发相关/开发进度/maya/绑定显示优化工具.md",
+    "开发相关/开发计划/四月-五月.md",
+    "开发相关/开发计划/六月.md",
+    "随记/python/Python包安装.md",
+    "随记/maya/Maya性能优化.md",
+    "技术文档/工具安装说明（临时版）.md",
     "Pasted image 20240628102505.png",
     "Pasted image 20240627192346.png",
     "Pasted image 20240627192052.png",
     "Pasted image 20240628102534.png",
     "Pasted image 20240628102603.png",
     "开发相关/开发进度/maya/节点图模版工具.md",
-    "随记/python/Python包安装.md",
-    "开发相关/开发进度/maya/绑定移动工具.md",
     "随记/python/PyQt.md",
     "开发相关/开发进度/通用/后台任务管理工具.md",
     "随记/PyQt/未命名.md",
     "随记/PyQt",
-    "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
-    "开发相关/开发进度/maya/场景显示优化工具.md",
-    "开发相关/开发进度/maya/节点参数模版工具.md",
-    "开发相关/开发任务/maya/解算相关/节点图模版工具（Node Graph Template Tool）.md",
     "文档",
-    "开发相关/开发进度/通用/农场解算发布工具.md",
-    "开发相关/开发进度/通用/农场插件.md",
-    "开发相关/开发进度/maya/动作复制工具.md",
-    "开发相关/开发进度/maya/绑定显示优化工具.md",
-    "开发相关/开发任务/通用/农场相关/农场解算发布工具（Deadline Simulation Summit Tool）.md",
-    "开发相关/开发计划/总览.md",
-    "随记/插件和工具为什么不推荐安装在本地.md",
     "技术文档/总览.canvas",
-    "开发相关/开发计划/四月-五月.md",
-    "随记/gantt view.md",
-    "随记/利用标签进行分类.md",
     "未命名.canvas",
     "技术文档/Qosmic",
     "技术文档/Qosmic/组件与模块/依赖关系.canvas",
@@ -242,8 +280,6 @@
     "开发相关/开发任务/通用/流程相关",
     "ViewFrustum.svg.png",
     "开发相关/开发任务/通用/农场相关",
-    "开发相关/开发任务/通用",
-    "开发相关/开发任务/maya",
     "开发相关/开发文档/images/Pasted image 20240523103725.png",
     "开发相关/开发文档/images/Pasted image 20240523120517.png",
     "Untitled.canvas"

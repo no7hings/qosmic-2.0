@@ -78,7 +78,7 @@ class PrxSubprocessWindow(
             self._stop_and_close_prx_button.set_name('关闭')
         else:
             self._prx_tool_group.set_name('Backstage Task')
-            self._stop_and_close_prx_button.set_name('Stop and Close')
+            self._stop_and_close_prx_button.set_name('Close')
 
     def _do_gui_stop(self):
         # kill first

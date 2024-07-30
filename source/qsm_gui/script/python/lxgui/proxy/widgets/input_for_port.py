@@ -13,43 +13,43 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
-from ...qt import core as gui_qt_core
+from ...qt import core as _qt_core
 # qt widgets
-from ...qt.widgets import base as gui_qt_wgt_base
+from ...qt.widgets import base as _qt_wgt_base
 
-from ...qt.widgets import utility as gui_qt_wgt_utility
+from ...qt.widgets import utility as _qt_wgt_utility
 
-from ...qt.widgets import button as gui_qt_wgt_button
+from ...qt.widgets import button as _qt_wgt_button
 
-from ...qt.widgets import input as gui_qt_wgt_input
+from ...qt.widgets import input as _qt_wgt_input
 
-from ...qt.widgets import input_for_capsule as gui_qt_wgt_input_for_capsule
+from ...qt.widgets import input_for_capsule as _qt_wgt_input_for_capsule
 
-from ...qt.widgets import input_for_storage as gui_qt_wgt_input_for_storage
+from ...qt.widgets import input_for_storage as _qt_wgt_input_for_storage
 # proxy abstracts
-from .. import abstracts as gui_prx_abstracts
+from .. import abstracts as _abstracts
 # proxy widgets
-from . import utility as gui_prx_wdt_utility
+from . import utility as _utility
 
-from . import port_base as gui_prx_wgt_port_base
+from . import port_base as _port_base
 
-from . import view_for_tree as gui_prx_wgt_view_for_tree
+from . import view_for_tree as _wgt_view_for_tree
 
 
 # entry
-class _AbsPrxInput(gui_prx_abstracts.AbsPrxWidget):
+class _AbsPrxInput(_abstracts.AbsPrxWidget):
     QT_INPUT_WIDGET_CLS = None
 
     def __init__(self, *args, **kwargs):
         super(_AbsPrxInput, self).__init__(*args, **kwargs)
         self.widget.setFixedHeight(
-            gui_prx_wgt_port_base.AttrConfig.PRX_PORT_HEIGHT
+            _port_base.AttrConfig.PRX_PORT_HEIGHT
         )
 
     def _gui_build_(self):
-        self._qt_layout = gui_qt_wgt_base.QtHBoxLayout(self._qt_widget)
+        self._qt_layout = _qt_wgt_base.QtHBoxLayout(self._qt_widget)
         self._qt_layout.setContentsMargins(0, 0, 0, 0)
         self._qt_layout.setSpacing(2)
         #
@@ -62,7 +62,7 @@ class _AbsPrxInput(gui_prx_abstracts.AbsPrxWidget):
         return self._qt_input_widget
 
     def add_button(self, widget):
-        if isinstance(widget, gui_qt_core.QtCore.QObject):
+        if isinstance(widget, _qt_core.QtCore.QObject):
             self._qt_layout.addWidget(widget)
         else:
             self._qt_layout.addWidget(widget.widget)
@@ -135,8 +135,8 @@ class _AbsPrxInput(gui_prx_abstracts.AbsPrxWidget):
 
 # storage
 class PrxInputAsStorage(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input_for_storage.QtInputAsStorage
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_input_for_storage.QtInputAsStorage
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsStorage, self).__init__(*args, **kwargs)
@@ -237,8 +237,8 @@ class PrxInputAsDirectorySave(PrxInputAsStorage):
 
 # storage array
 class PrxInputAsStorageArray(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input.QtInputAsList
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_input.QtInputAsList
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsStorageArray, self).__init__(*args, **kwargs)
@@ -256,20 +256,20 @@ class PrxInputAsStorageArray(_AbsPrxInput):
         self._qt_input_widget._get_entry_widget_().entry_value_added.connect(self.update_history)
         self._qt_input_widget._get_choose_popup_widget_()._set_popup_auto_resize_enable_(True)
         self._qt_input_widget._set_value_choose_button_icon_file_path_(
-            gui_core.GuiIcon.get('history')
+            _gui_core.GuiIcon.get('history')
         )
         self._qt_input_widget._set_choose_button_state_icon_file_path_(
-            gui_core.GuiIcon.get('state/popup')
+            _gui_core.GuiIcon.get('state/popup')
         )
         self._qt_input_widget._set_value_choose_button_name_text_('choose history')
 
-        self.widget.setFixedHeight(gui_prx_wgt_port_base.AttrConfig.PRX_PORT_HEIGHT_2)
+        self.widget.setFixedHeight(_port_base.AttrConfig.PRX_PORT_HEIGHT_2)
 
         self._ext_filter = 'All File (*.*)'
 
         self._ext_includes = []
 
-        self._open_button = gui_prx_wdt_utility.PrxIconPressButton()
+        self._open_button = _utility.PrxIconPressButton()
         self._qt_input_widget._add_input_button_(self._open_button.widget)
         self._open_button.connect_press_clicked_to(self.open_with_dialog_fnc)
         self._open_button.set_name('open file')
@@ -328,12 +328,12 @@ class PrxInputAsStorageArray(_AbsPrxInput):
                 value = values[-1]
                 if value:
                     if self._value_validation_fnc_(value) is True:
-                        gui_core.GuiHistory.append(
+                        _gui_core.GuiHistory.append(
                             self._history_key,
                             value
                         )
             #
-            histories = gui_core.GuiHistory.get_all(
+            histories = _gui_core.GuiHistory.get_all(
                 self._history_key
             )
             if histories:
@@ -347,7 +347,7 @@ class PrxInputAsStorageArray(_AbsPrxInput):
 
     def pull_history_latest(self):
         if self._history_key is not None:
-            _ = gui_core.GuiHistory.get_latest(self._history_key)
+            _ = _gui_core.GuiHistory.get_latest(self._history_key)
             if _:
                 self._qt_input_widget._append_value_(_)
 
@@ -368,10 +368,10 @@ class PrxInputAsDirectoriesOpen(PrxInputAsStorageArray):
             ]
         )
         self._qt_input_widget._set_choose_popup_item_icon_file_path_(
-            gui_core.GuiIcon.get('file/folder')
+            _gui_core.GuiIcon.get('file/folder')
         )
         self._qt_input_widget._set_entry_item_icon_file_path_(
-            gui_core.GuiIcon.get('file/folder')
+            _gui_core.GuiIcon.get('file/folder')
         )
         self.set_history_key('gui.directories-open')
 
@@ -385,7 +385,7 @@ class PrxInputAsDirectoriesOpen(PrxInputAsStorageArray):
         self._qt_input_widget._set_input_choose_visible_(boolean)
 
     def open_with_dialog_fnc(self):
-        f = gui_qt_core.QtWidgets.QFileDialog()
+        f = _qt_core.QtWidgets.QFileDialog()
         options = f.Options()
         # options |= f.DontUseNativeDialog
         s = f.getExistingDirectory(
@@ -421,17 +421,17 @@ class PrxInputAsFilesOpen(PrxInputAsStorageArray):
             ]
         )
         self._qt_input_widget._set_choose_popup_item_icon_file_path_(
-            gui_core.GuiIcon.get('file/file')
+            _gui_core.GuiIcon.get('file/file')
         )
         self._qt_input_widget._set_entry_item_icon_file_path_(
-            gui_core.GuiIcon.get('file/file')
+            _gui_core.GuiIcon.get('file/file')
         )
         self._qt_input_widget._get_entry_widget_()._set_entry_use_as_file_(True)
         self._qt_input_widget._get_entry_widget_()._set_entry_use_as_storage_(True)
         self._qt_input_widget._get_entry_widget_()._set_entry_use_as_file_multiply_(True)
 
     def open_with_dialog_fnc(self):
-        f = gui_qt_core.QtWidgets.QFileDialog()
+        f = _qt_core.QtWidgets.QFileDialog()
         # options |= f.DontUseNativeDialog
         # noinspection PyArgumentList
         s = f.getOpenFileNames(
@@ -465,7 +465,7 @@ class PrxInputAsFilesOpen(PrxInputAsStorageArray):
 class PrxInputAsMediasOpen(PrxInputAsFilesOpen):
     def __init__(self, *args, **kwargs):
         super(PrxInputAsMediasOpen, self).__init__(*args, **kwargs)
-        self._create_button = gui_prx_wdt_utility.PrxIconPressButton()
+        self._create_button = _utility.PrxIconPressButton()
         self._qt_input_widget._add_input_button_(self._create_button.widget)
         self._create_button.connect_press_clicked_to(self._do_screenshot)
         self._create_button.set_name('create file')
@@ -485,15 +485,15 @@ class PrxInputAsMediasOpen(PrxInputAsFilesOpen):
 
     def _do_screenshot_save(self, g):
         f = self._generate_screenshot_file_path()
-        gui_prx_wdt_utility.PrxScreenshotFrame.save_to(
+        _utility.PrxScreenshotFrame.save_to(
             g, f
         )
         self.append(f)
         self.update_history()
 
     def _do_screenshot(self):
-        active_window = gui_qt_core.GuiQtUtil.get_qt_active_window()
-        w = gui_prx_wdt_utility.PrxScreenshotFrame()
+        active_window = _qt_core.GuiQtUtil.get_qt_active_window()
+        w = _utility.PrxScreenshotFrame()
         w.connect_started_to(active_window.hide)
         w.do_start()
         w.connect_accepted_to(self._do_screenshot_save)
@@ -502,8 +502,8 @@ class PrxInputAsMediasOpen(PrxInputAsFilesOpen):
 
 # any array
 class PrxInputAsArray(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input.QtInputAsList
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_input.QtInputAsList
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsArray, self).__init__(*args, **kwargs)
@@ -515,12 +515,12 @@ class PrxInputAsArray(_AbsPrxInput):
         self._qt_input_widget._get_resize_handle_()._set_resize_minimum_(42)
         self._qt_input_widget._set_size_policy_height_fixed_mode_()
         self._qt_input_widget._set_value_choose_button_icon_file_path_(
-            gui_core.GuiIcon.get('attribute')
+            _gui_core.GuiIcon.get('attribute')
         )
 
-        self.widget.setFixedHeight(gui_prx_wgt_port_base.AttrConfig.PRX_PORT_HEIGHT_2)
+        self.widget.setFixedHeight(_port_base.AttrConfig.PRX_PORT_HEIGHT_2)
 
-        self._add_button = gui_prx_wdt_utility.PrxIconPressButton()
+        self._add_button = _utility.PrxIconPressButton()
         self._qt_input_widget._add_input_button_(self._add_button.widget)
         self._add_button.connect_press_clicked_to(self._set_add_)
         self._add_button.set_name('add')
@@ -550,8 +550,8 @@ class PrxInputAsArray(_AbsPrxInput):
 # any array choose
 # noinspection PyUnusedLocal
 class PrxInputAsArrayWithChoose(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input.QtInputAsListWithChoose
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_input.QtInputAsListWithChoose
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsArrayWithChoose, self).__init__(*args, **kwargs)
@@ -563,10 +563,10 @@ class PrxInputAsArrayWithChoose(_AbsPrxInput):
         self._qt_input_widget._get_resize_handle_()._set_resize_minimum_(42)
         self._qt_input_widget._set_size_policy_height_fixed_mode_()
         self._qt_input_widget._set_value_choose_button_icon_file_path_(
-            gui_core.GuiIcon.get('attribute')
+            _gui_core.GuiIcon.get('attribute')
         )
 
-        self.widget.setFixedHeight(gui_prx_wgt_port_base.AttrConfig.PRX_PORT_HEIGHT_2)
+        self.widget.setFixedHeight(_port_base.AttrConfig.PRX_PORT_HEIGHT_2)
 
     def _set_add_(self):
         pass
@@ -588,8 +588,8 @@ class PrxInputAsArrayWithChoose(_AbsPrxInput):
 
 #   entity
 class PrxInputAsShotgunEntityWithChoose(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input.QtInputAsConstantWithChoose
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_input.QtInputAsConstantWithChoose
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsShotgunEntityWithChoose, self).__init__(*args, **kwargs)
@@ -603,10 +603,10 @@ class PrxInputAsShotgunEntityWithChoose(_AbsPrxInput):
         self._qt_input_widget._set_choose_popup_keyword_filter_enable_(True)
         self._qt_input_widget._set_choose_popup_item_size_(40, 40)
         self._qt_input_widget._set_value_choose_button_icon_file_path_(
-            gui_core.GuiIcon.get('application/shotgrid')
+            _gui_core.GuiIcon.get('application/shotgrid')
         )
         self._qt_input_widget._set_choose_button_state_icon_file_path_(
-            gui_core.GuiIcon.get('state/popup')
+            _gui_core.GuiIcon.get('state/popup')
         )
 
         self._data = []
@@ -691,8 +691,8 @@ class PrxInputAsShotgunEntityWithChoose(_AbsPrxInput):
 
 #   entities
 class PrxInputAsShotgunEntitiesWithChoose(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input.QtInputAsList
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_input.QtInputAsList
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsShotgunEntitiesWithChoose, self).__init__(*args, **kwargs)
@@ -712,13 +712,13 @@ class PrxInputAsShotgunEntitiesWithChoose(_AbsPrxInput):
         self._qt_input_widget._set_choose_popup_keyword_filter_enable_(True)
         self._qt_input_widget._set_choose_popup_item_size_(40, 40)
         self._qt_input_widget._set_value_choose_button_icon_file_path_(
-            gui_core.GuiIcon.get('application/shotgrid')
+            _gui_core.GuiIcon.get('application/shotgrid')
         )
         self._qt_input_widget._set_choose_button_state_icon_file_path_(
-            gui_core.GuiIcon.get('state/popup')
+            _gui_core.GuiIcon.get('state/popup')
         )
         #
-        self.widget.setFixedHeight(gui_prx_wgt_port_base.AttrConfig.PRX_PORT_HEIGHT_2)
+        self.widget.setFixedHeight(_port_base.AttrConfig.PRX_PORT_HEIGHT_2)
         #
         self._data = []
 
@@ -778,8 +778,8 @@ class PrxInputAsShotgunEntitiesWithChoose(_AbsPrxInput):
 
 
 class PrxInputAsRsvProject(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input.QtInputAsConstantWithChoose
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_input.QtInputAsConstantWithChoose
     #
     HISTORY_KEY = 'gui.projects'
 
@@ -820,12 +820,12 @@ class PrxInputAsRsvProject(_AbsPrxInput):
             project_directory_path = rsv_project.get_directory_path()
             work_directory_path = '{}/work'.format(project_directory_path)
             if bsc_storage.StgPathOpt(work_directory_path).get_is_exists() is True:
-                gui_core.GuiHistory.append(
+                _gui_core.GuiHistory.append(
                     self.HISTORY_KEY,
                     project
                 )
         #
-        histories = gui_core.GuiHistory.get_all(
+        histories = _gui_core.GuiHistory.get_all(
             self.HISTORY_KEY
         )
         if histories:
@@ -837,19 +837,19 @@ class PrxInputAsRsvProject(_AbsPrxInput):
             )
 
     def pull_history_latest(self):
-        _ = gui_core.GuiHistory.get_latest(self.HISTORY_KEY)
+        _ = _gui_core.GuiHistory.get_latest(self.HISTORY_KEY)
         if _:
             self._qt_input_widget._set_value_(_)
 
     def get_histories(self):
-        return gui_core.GuiHistory.get_all(
+        return _gui_core.GuiHistory.get_all(
             self.HISTORY_KEY
         )
 
 
 class PrxInputAsSchemeWithChoose(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input.QtInputAsConstantWithChoose
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_input.QtInputAsConstantWithChoose
     #
     HISTORY_KEY = 'gui.schemes'
 
@@ -889,14 +889,14 @@ class PrxInputAsSchemeWithChoose(_AbsPrxInput):
     #
     def get_histories(self):
         if self._scheme_key is not None:
-            return gui_core.GuiHistory.get_all(
+            return _gui_core.GuiHistory.get_all(
                 self._scheme_key
             )
         return []
 
     def set_history_add(self, scheme):
         if self._scheme_key is not None:
-            gui_core.GuiHistory.append(
+            _gui_core.GuiHistory.append(
                 self._scheme_key,
                 scheme
             )
@@ -906,12 +906,12 @@ class PrxInputAsSchemeWithChoose(_AbsPrxInput):
         if self._scheme_key is not None:
             scheme = self._qt_input_widget._get_value_()
             if scheme:
-                gui_core.GuiHistory.append(
+                _gui_core.GuiHistory.append(
                     self._scheme_key,
                     scheme
                 )
             #
-            histories = gui_core.GuiHistory.get_all(
+            histories = _gui_core.GuiHistory.get_all(
                 self._scheme_key
             )
             if histories:
@@ -924,15 +924,15 @@ class PrxInputAsSchemeWithChoose(_AbsPrxInput):
 
     def pull_history_latest(self):
         if self._scheme_key is not None:
-            _ = gui_core.GuiHistory.get_latest(self._scheme_key)
+            _ = _gui_core.GuiHistory.get_latest(self._scheme_key)
             if _:
                 self._qt_input_widget._set_value_(_)
 
 
 # any constant choose, etc. enumerate
 class PrxInputAsConstantWithChoose(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input.QtInputAsConstantWithChoose
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_input.QtInputAsConstantWithChoose
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsConstantWithChoose, self).__init__(*args, **kwargs)
@@ -991,8 +991,8 @@ class PrxInputAsConstantWithChoose(_AbsPrxInput):
 
 # icon choose
 class PrxInputAsIconWithChoose(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input.QtInputAsIcon
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_input.QtInputAsIcon
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsIconWithChoose, self).__init__(*args, **kwargs)
@@ -1029,12 +1029,12 @@ class PrxInputAsIconWithChoose(_AbsPrxInput):
 
 # any
 class PrxInputAsConstant(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input.QtInputAsConstant
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_input.QtInputAsConstant
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsConstant, self).__init__(*args, **kwargs)
-        # self._qt_input_widget.setAlignment(gui_qt_core.QtCore.Qt.AlignLeft | gui_qt_core.QtCore.Qt.AlignVCenter)
+        # self._qt_input_widget.setAlignment(_qt_core.QtCore.Qt.AlignLeft | _qt_core.QtCore.Qt.AlignVCenter)
         #
         self.widget.setFocusProxy(self._qt_input_widget)
 
@@ -1096,12 +1096,12 @@ class PrxInputAsText(PrxInputAsConstant):
 
 #   script
 class PrxInputAsScript(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input.QtInputAsContent
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_input.QtInputAsContent
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsScript, self).__init__(*args, **kwargs)
-        self.widget.setFixedHeight(gui_prx_wgt_port_base.AttrConfig.PRX_PORT_HEIGHT_2)
+        self.widget.setFixedHeight(_port_base.AttrConfig.PRX_PORT_HEIGHT_2)
         #
         self._qt_input_widget._get_resize_handle_()._set_resize_target_(self.widget)
         self._qt_input_widget._set_resize_enable_(True)
@@ -1144,8 +1144,8 @@ class PrxInputAsInteger(PrxInputAsConstant):
 
 #   boolean as check box
 class PrxInputAsBoolean(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_button.QtCheckButton
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_button.QtCheckButton
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsBoolean, self).__init__(*args, **kwargs)
@@ -1178,8 +1178,8 @@ class PrxInputAsFloat(PrxInputAsConstant):
 
 #   press button
 class PrxInputAsPressButton(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_button.QtPressButton
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_button.QtPressButton
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsPressButton, self).__init__(*args, **kwargs)
@@ -1187,12 +1187,12 @@ class PrxInputAsPressButton(_AbsPrxInput):
     def get(self):
         return None
 
-    @gui_core.GuiModifier.run_with_exception_catch
+    @_gui_core.GuiModifier.run_with_exception_catch
     def __exec_fnc(self, fnc):
         fnc()
 
     @staticmethod
-    @gui_core.GuiModifier.run_with_exception_catch
+    @_gui_core.GuiModifier.run_with_exception_catch
     def __exec_scp(script):
         exec script
 
@@ -1218,12 +1218,12 @@ class PrxInputAsPressButton(_AbsPrxInput):
 
 #   sub process button
 class PrxInputAsSubProcessButton(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_button.QtPressButton
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_button.QtPressButton
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsSubProcessButton, self).__init__(*args, **kwargs)
-        self._stop_button = gui_prx_wdt_utility.PrxIconPressButton()
+        self._stop_button = _utility.PrxIconPressButton()
         self.add_button(self._stop_button)
         self._stop_button.set_name('Stop Process')
         self._stop_button.set_icon_by_text('Stop Process')
@@ -1232,7 +1232,7 @@ class PrxInputAsSubProcessButton(_AbsPrxInput):
     def get(self):
         return None
 
-    @gui_core.GuiModifier.run_with_exception_catch
+    @_gui_core.GuiModifier.run_with_exception_catch
     def __exec_fnc(self, fnc):
         fnc()
 
@@ -1262,8 +1262,8 @@ class PrxInputAsSubProcessButton(_AbsPrxInput):
 
 #   validation button
 class PrxInputAsValidationButton(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_button.QtPressButton
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_button.QtPressButton
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsValidationButton, self).__init__(*args, **kwargs)
@@ -1271,7 +1271,7 @@ class PrxInputAsValidationButton(_AbsPrxInput):
     def get(self):
         return None
 
-    @gui_core.GuiModifier.run_with_exception_catch
+    @_gui_core.GuiModifier.run_with_exception_catch
     def __exec_fnc(self, fnc):
         fnc()
 
@@ -1287,8 +1287,8 @@ class PrxInputAsValidationButton(_AbsPrxInput):
 
 #   capsule
 class PrxInputAsCapsule(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input_for_capsule.QtInputAsCapsule
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_input_for_capsule.QtInputAsCapsule
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsCapsule, self).__init__(*args, **kwargs)
@@ -1329,8 +1329,8 @@ class PrxInputAsCapsule(_AbsPrxInput):
 
 # any2, any3
 class PrxInputAsTuple(_AbsPrxInput):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input.QtInputAsTuple
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    QT_INPUT_WIDGET_CLS = _qt_wgt_input.QtInputAsTuple
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsTuple, self).__init__(*args, **kwargs)
@@ -1380,7 +1380,7 @@ class PrxInputAsFloatTuple(PrxInputAsTuple):
 
 #   rgba
 class PrxInputAsRgbaChoose(PrxInputAsConstant):
-    QT_INPUT_WIDGET_CLS = gui_qt_wgt_input.QtInputAsRgba
+    QT_INPUT_WIDGET_CLS = _qt_wgt_input.QtInputAsRgba
 
     def __init__(self, *args, **kwargs):
         super(PrxInputAsRgbaChoose, self).__init__(*args, **kwargs)
@@ -1388,14 +1388,14 @@ class PrxInputAsRgbaChoose(PrxInputAsConstant):
 
 # proxy
 # noinspection PyMethodMayBeStatic
-class _AbsPrxInputExtra(gui_prx_abstracts.AbsPrxWidget):
+class _AbsPrxInputExtra(_abstracts.AbsPrxWidget):
     PRX_INPUT_CLS = None
 
     def __init__(self, *args, **kwargs):
         super(_AbsPrxInputExtra, self).__init__(*args, **kwargs)
 
     def _gui_build_(self):
-        self._qt_layout = gui_qt_wgt_base.QtHBoxLayout(self._qt_widget)
+        self._qt_layout = _qt_wgt_base.QtHBoxLayout(self._qt_widget)
         self._qt_layout.setContentsMargins(0, 0, 0, 0)
         self._qt_layout.setSpacing(2)
         #
@@ -1442,8 +1442,8 @@ class _AbsPrxInputExtra(gui_prx_abstracts.AbsPrxWidget):
 #   entity
 # noinspection PyUnusedLocal
 class PrxInputAsResolverEntity(_AbsPrxInputExtra):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    PRX_INPUT_CLS = gui_prx_wgt_view_for_tree.PrxTreeView
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    PRX_INPUT_CLS = _wgt_view_for_tree.PrxTreeView
     NAMESPACE = 'resolver'
 
     def __init__(self, *args, **kwargs):
@@ -1528,7 +1528,7 @@ class PrxInputAsResolverEntity(_AbsPrxInputExtra):
         prx_item.set_tool_tip(obj.description)
         if result:
             if bsc_storage.StgPathOpt(result).get_is_file():
-                prx_item.set_icon_by_file(gui_core.GuiIcon.get_by_file(result))
+                prx_item.set_icon_by_file(_gui_core.GuiIcon.get_by_file(result))
         #
         prx_item.set_gui_menu_data(menu_raw)
         prx_item.set_menu_content(obj.get_gui_menu_content())
@@ -1607,8 +1607,8 @@ class PrxInputAsResolverEntity(_AbsPrxInputExtra):
 # array
 #   nodes
 class PrxInputAsNodes(_AbsPrxInputExtra):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    PRX_INPUT_CLS = gui_prx_wgt_view_for_tree.PrxTreeView
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    PRX_INPUT_CLS = _wgt_view_for_tree.PrxTreeView
     NAMESPACE = 'dcc'
 
     def __init__(self, *args, **kwargs):
@@ -1638,7 +1638,7 @@ class PrxInputAsNodes(_AbsPrxInputExtra):
         else:
             create_kwargs = dict(
                 name='loading ...',
-                icon=gui_core.GuiIcon.get('database/object'),
+                icon=_gui_core.GuiIcon.get('database/object'),
                 filter_key=path
             )
             parent = obj.get_parent()
@@ -1785,8 +1785,8 @@ class PrxInputAsNodes(_AbsPrxInputExtra):
 #   files
 # noinspection PyUnusedLocal
 class PrxInputAsFiles(_AbsPrxInputExtra):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
-    PRX_INPUT_CLS = gui_prx_wgt_view_for_tree.PrxTreeView
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+    PRX_INPUT_CLS = _wgt_view_for_tree.PrxTreeView
     NAMESPACE = 'storage'
 
     def __init__(self, *args, **kwargs):
@@ -1898,11 +1898,11 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
 
         if scheme == 'folder':
             prx_item.set_icon(
-                gui_qt_core.GuiQtDcc.generate_qt_directory_icon()
+                _qt_core.GuiQtDcc.generate_qt_directory_icon()
             )
         else:
             prx_item.set_icon(
-                gui_qt_core.GuiQtDcc.generate_qt_file_icon(path)
+                _qt_core.GuiQtDcc.generate_qt_file_icon(path)
             )
 
         prx_item.set_tool_tip(

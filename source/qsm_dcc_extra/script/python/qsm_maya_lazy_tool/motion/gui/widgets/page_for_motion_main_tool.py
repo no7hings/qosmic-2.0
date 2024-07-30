@@ -26,7 +26,7 @@ class PrxPageForMotionMainTool(gui_prx_abstracts.AbsPrxWidget):
         self._script_job.register(
             [
                 self._gui_rig_picker_unit.do_gui_refresh_by_dcc_selection,
-                self._gui_copy_and_paste_toolset_unit.do_gui_refresh_by_dcc_selection,
+                self._gui_motion_copy_and_paste_prx_toolset.do_gui_refresh_by_dcc_selection,
             ],
             self._script_job.EventTypes.SelectionChanged
         )
@@ -60,7 +60,7 @@ class PrxPageForMotionMainTool(gui_prx_abstracts.AbsPrxWidget):
         qt_lot.setContentsMargins(*[0]*4)
         qt_lot.setSpacing(2)
         # chart
-        self._qt_picker = qsm_qt_widgets.QtAdvPicker()
+        self._qt_picker = qsm_qt_widgets.QtAdvCharacterPicker()
         qt_lot.addWidget(self._qt_picker)
         self._gui_rig_picker_unit = _unit_for_motion_main_tool.UnitForRigPicker(
             self._window, self, self._session, self._qt_picker,
@@ -71,11 +71,15 @@ class PrxPageForMotionMainTool(gui_prx_abstracts.AbsPrxWidget):
         qt_lot.addWidget(self._page_prx_tab_tool_box.widget)
         self._page_prx_tab_tool_box.set_tab_direction(self._page_prx_tab_tool_box.TabDirections.RightToLeft)
         # copy and paste
-        self._gui_copy_and_paste_toolset_unit = _unit_for_motion_main_tool.ToolsetUnitForMotionCopyAndPaste(
+        self._gui_motion_copy_and_paste_prx_toolset = _unit_for_motion_main_tool.ToolsetForMotionCopyAndPaste(
+            self._window, self, self._session
+        )
+        # offset
+        self._gui_motion_offset_prx_toolset = _unit_for_motion_main_tool.ToolsetForMotionOffset(
             self._window, self, self._session
         )
         # move
-        self._gui_move_toolset_unit = _unit_for_motion_main_tool.ToolsetUnitForMotionMove(
+        self._gui_move_toolset_unit = _unit_for_motion_main_tool.ToolsetForMove(
             self._window, self, self._session
         )
 

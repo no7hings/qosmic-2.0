@@ -43,7 +43,7 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
     def generate_key_includes(self):
         return [x.name for x in self._prx_options_node.get('node_data')]
 
-    def ao_apply(self):
+    def do_apply(self):
         pass
 
     def do_create_and_apply(self):

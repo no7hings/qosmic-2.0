@@ -80,7 +80,7 @@ class AbsQtScreenshotBaseDef(_qt_abstracts.AbsQtHelpBaseDef):
         self._frame_draw_rect = QtCore.QRect()
 
         self._position_text = '0, 0'
-        self._position_text_color = _gui_core.GuiRgba.LightBlue
+        self._position_text_color = _gui_core.GuiRgba.LightAzureBlue
         self._position_frame_region = self.RectRegion.BottomRight
         self._position_frame_h = 24
         self._position_frame_draw_rect = QtCore.QRect()
@@ -90,7 +90,7 @@ class AbsQtScreenshotBaseDef(_qt_abstracts.AbsQtHelpBaseDef):
         self._position_v_line = QtCore.QLine()
 
         self._geometry_text = '0, 0, 0, 0'
-        self._geometry_text_color = _gui_core.GuiRgba.LightBlue
+        self._geometry_text_color = _gui_core.GuiRgba.LightAzureBlue
         self._geometry_frame_h = 24
         self._geometry_frame_draw_rect = QtCore.QRect()
         self._geometry_text_font = _qt_core.QtFont.generate(size=12)
@@ -601,7 +601,7 @@ class QtScreenshotFrame(
                 painter._set_screenshot_draw_by_rect_(
                     base_rect=self._frame_draw_rect,
                     screenshot_rect=self._screenshot_rect,
-                    border_color=_gui_core.GuiRgba.LightBlue,
+                    border_color=_gui_core.GuiRgba.LightAzureBlue,
                     background_color=(0, 0, 0, 127)
                 )
                 # help

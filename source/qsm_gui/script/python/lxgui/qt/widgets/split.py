@@ -335,7 +335,7 @@ class _AbsQtSplitterHandle(
                             )
                 # press move
                 elif event.buttons() == QtCore.Qt.LeftButton:
-                    if self._get_action_flag_is_match_(
+                    if self._is_action_flag_match_(
                             self.ActionFlag.SplitHPress, self.ActionFlag.SplitVPress
                     ):
                         self._do_split_press_move_(event)
@@ -344,16 +344,16 @@ class _AbsQtSplitterHandle(
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if self._contract_enable is True:
                     # resize
-                    if self._get_action_flag_is_match_(
+                    if self._is_action_flag_match_(
                             self.ActionFlag.ResizeLeft, self.ActionFlag.ResizeUp
                     ):
                         self._do_swap_contract_left_or_top_()
-                    elif self._get_action_flag_is_match_(
+                    elif self._is_action_flag_match_(
                             self.ActionFlag.ResizeRight, self.ActionFlag.ResizeDown
                     ):
                         self._do_swap_contract_right_or_bottom_()
                     # swap
-                    elif self._get_action_flag_is_match_(
+                    elif self._is_action_flag_match_(
                             self.ActionFlag.SwapH, self.ActionFlag.SwapV
                     ):
                         self._do_swap_()

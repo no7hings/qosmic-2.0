@@ -300,7 +300,7 @@ build:
 
             tool_tip:
                 |-
-                to be supplemented.
+                To be supplemented.
             tool_tip_chs:
                 |-
                 选择一个物体，如果物体和当前数据的类型想匹配，加载按钮将会亮起，点击加载以继续。

@@ -43,6 +43,10 @@ class UnitForRigPicker(
                 if namespace_for_adv:
                     self._qt_picker._set_namespace_(namespaces[-1])
 
+            _ = qsm_mya_core.Selection.get()
+            if not _:
+                self._qt_picker._clear_all_selection_()
+
     @gui_qt_core.qt_slot(list)
     def on_picker_user_select_control_key_accepted(self, control_keys):
         controls = []
@@ -50,7 +54,7 @@ class UnitForRigPicker(
         if namespace:
             resource = qsm_mya_anm_core.AdvRig(namespace)
             for i_key in control_keys:
-                i_controls = resource.find_all_controls(i_key)
+                i_controls = resource.find_many_controls(i_key)
                 if i_controls:
                     controls.extend(i_controls)
 
@@ -61,7 +65,7 @@ class UnitForRigPicker(
 
     def __init__(self, window, unit, session, qt_picker):
         super(UnitForRigPicker, self).__init__(window, unit, session)
-        if not isinstance(qt_picker, qsm_qt_widgets.QtAdvPicker):
+        if not isinstance(qt_picker, qsm_qt_widgets.QtAdvCharacterPicker):
             raise RuntimeError()
 
         self._qt_picker = qt_picker
@@ -72,7 +76,7 @@ class UnitForRigPicker(
         self.do_gui_refresh_by_dcc_selection()
 
 
-class ToolsetUnitForMotionCopyAndPaste(
+class ToolsetForMotionCopyAndPaste(
     qsm_mya_gui_core.PrxUnitBaseOpt
 ):
     def do_gui_refresh_by_dcc_selection(self):
@@ -83,164 +87,320 @@ class ToolsetUnitForMotionCopyAndPaste(
     
     def get_control_key_excludes(self):
         return self._prx_options_node.get('setting.ignore.control_ignore')
+
+    def get_control_set_includes(self):
+        return self._prx_options_node.get('setting.includes.control_set_includes')
+    
+    def get_dcc_character_args(self):
+        results = []
+        namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+        if namespaces:
+            results = qsm_mya_anm_core.AdvRig.filter_namespaces(namespaces)
+
+        if not results:
+            self._window.exec_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.no_characters')
+                ),
+                status='warning'
+            )
+            return
+        return results
+    
+    def get_dcc_control_args(self):
+        args = qsm_mya_mtn_core.ControlsMotionOpt.get_args_from_selection()
+        if not args:
+            self._window.exec_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.no_controls')
+                ),
+                status='warning'
+            )
+            return
+        return args
+
+    def get_dcc_control_args_for_mirror(self):
+        args = qsm_mya_mtn_core.ControlsMotionOpt.get_args_from_selection_for_mirror()
+        if not args:
+            self._window.exec_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.no_controls_for_mirror')
+                ),
+                status='warning'
+            )
+            return
+        return args
     
     # copy
     def do_dcc_copy_character(self):
-        namespace = self._page._gui_rig_picker_unit.get_dcc_namespace()
-        if not namespace:
-            self._window.exec_message(
-                '选择一个角色（可以是任意部件）。' if self._window._language == 'chs' else 'Select one character.',
-                status='warning'
+        namespaces = self.get_dcc_character_args()
+        if namespaces:
+            namespace = namespaces[-1]
+            opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(namespace)
+            file_path = qsm_mya_gnl_core.ResourceCache.generate_character_motion_file(bsc_core.BscSystem.get_user_name())
+            opt.export_to(
+                file_path,
+                control_set_includes=['body', 'face']
             )
-            return
 
-        opt = qsm_mya_mtn_core.AdvRigMotionOpt(namespace)
-        file_path = qsm_mya_gnl_core.ResourceCache.generate_character_motion_file(bsc_core.BscSystem.get_user_name())
-        opt.export_to(
-            file_path,
-            control_set_includes=['body', 'face']
-        )
-
-        self._window.popup_bubble_message(
-            '成功拷贝角色动画。' if self._window._language == 'chs'
-            else 'Copy character animation successful.'
-        )
+            self._window.popup_bubble_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.copy_character')
+                )
+            )
     
-    def do_dcc_copy_selected(self):
-        args = qsm_mya_mtn_core.ControlsMotionOpt.get_args_from_selection()
-        if not args:
-            self._window.exec_message(
-                '选择一个或多个控制器。' if self._window._language == 'chs' else 'Select one or more control.',
-                status='warning'
+    def do_dcc_copy_controls(self):
+        args = self.get_dcc_control_args()
+        if args:
+            namespace, paths = args.keys()[-1], args.values()[-1]
+    
+            opt = qsm_mya_mtn_core.ControlsMotionOpt(namespace, paths)
+    
+            file_path = qsm_mya_gnl_core.ResourceCache.generate_control_motion_file(bsc_core.BscSystem.get_user_name())
+            opt.export_to(
+                file_path,
             )
-            return
+            self._window.popup_bubble_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.copy_controls')
+                )
+            )
 
-        namespace, paths = args.keys()[-1], args.values()[-1]
+    def do_dcc_duplicate_characters(self):
+        namespaces = self.get_dcc_character_args()
+        if namespaces:
+            with self._window.gui_progressing(
+                maximum=len(namespaces), label='duplicate characters'
+            ) as g_p:
+                for i_namespace in namespaces:
+                    i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
+                    i_opt.duplicate(
+                        control_key_excludes=self.get_control_key_excludes(),
+                        frame_offset=self.get_frame_offset(),
+                    )
 
-        opt = qsm_mya_mtn_core.ControlsMotionOpt(namespace, paths)
+                    g_p.do_update()
 
-        file_path = qsm_mya_gnl_core.ResourceCache.generate_control_motion_file(bsc_core.BscSystem.get_user_name())
-        opt.export_to(
-            file_path,
-        )
-        self._window.popup_bubble_message(
-            '成功拷贝选中控制器的动画。' if self._window._language == 'chs'
-            else 'Copy animation from selected control successful.'
-        )
+            self._window.popup_bubble_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.duplicate_characters')
+                )
+            )
 
     # paste
-    def do_dcc_paste_character(self):
-        namespace_for_adv = []
-        namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+    def do_dcc_paste_characters(self):
+        namespaces = self.get_dcc_character_args()
         if namespaces:
-            namespace_for_adv = qsm_mya_anm_core.AdvRig.filter_namespaces(namespaces)
-
-        if not namespace_for_adv:
-            self._window.exec_message(
-                '选择一个或者多个角色（可以是任意部件）。' if self._window._language == 'chs' else 'Select one character.',
-                status='warning'
+            file_path = qsm_mya_gnl_core.ResourceCache.generate_character_motion_file(
+                bsc_core.BscSystem.get_user_name()
             )
-            return
-
-        control_key_excludes = self.get_control_key_excludes()
-        file_path = qsm_mya_gnl_core.ResourceCache.generate_character_motion_file(bsc_core.BscSystem.get_user_name())
-        for i_namespace in namespace_for_adv:
-            i_opt = qsm_mya_mtn_core.AdvRigMotionOpt(i_namespace)
-            i_opt.load_from(
-                file_path,
-                force=True,
-                frame_offset=self.get_frame_offset(),
-                control_key_excludes=control_key_excludes
-            )
-
-        self._window.popup_bubble_message(
-            '成功粘贴动画到选中的角色，可以按“Z”撤销。' if self._window._language == 'chs'
-            else 'Paste animation to selected characters successful, press "z" undo.'
-        )
-
-    def do_dcc_paste_character_to_selected(self):
-        args = qsm_mya_mtn_core.ControlsMotionOpt.get_args_from_selection()
-        if not args:
-            self._window.exec_message(
-                '选择一个或多个控制器。' if self._window._language == 'chs' else 'Select one or more control.',
-                status='warning'
-            )
-            return
-
-        control_key_excludes = self.get_control_key_excludes()
-        file_path = qsm_mya_gnl_core.ResourceCache.generate_character_motion_file(bsc_core.BscSystem.get_user_name())
-        for k, v in args.items():
-            i_opt = qsm_mya_mtn_core.ControlsMotionOpt(k, v)
-            i_opt.load_from(
-                file_path,
-                control_key_excludes=control_key_excludes
+            with self._window.gui_progressing(
+                maximum=len(namespaces), label='paste characters'
+            ) as g_p:
+                for i_namespace in namespaces:
+                    i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
+                    i_opt.load_from(
+                        file_path,
+                        control_key_excludes=self.get_control_key_excludes(),
+                        force=True,
+                        frame_offset=self.get_frame_offset(),
+                    )
+                    g_p.do_update()
+    
+            self._window.popup_bubble_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.paste_characters')
+                )
             )
 
-        self._window.popup_bubble_message(
-            '成功粘贴角色动画到选中，可以按“Z”撤销。' if self._window._language == 'chs'
-            else 'Paste character animation to selected successful, press "z" undo.'
-        )
+    def do_dcc_paste_controls(self):
+        args = self.get_dcc_control_args()
+        if args:
+            file_path = qsm_mya_gnl_core.ResourceCache.generate_control_motion_file(bsc_core.BscSystem.get_user_name())
+            for k, v in args.items():
+                i_opt = qsm_mya_mtn_core.ControlsMotionOpt(k, v)
+                i_opt.load_from(
+                    file_path,
+                    control_key_excludes=self.get_control_key_excludes(),
+                    force=True,
+                    frame_offset=self.get_frame_offset(),
+                )
 
-    def do_dcc_paste_selected_to_character(self):
-        namespace_for_adv = []
-        namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+            self._window.popup_bubble_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.paste_controls')
+                )
+            )
+
+    def do_dcc_paste_character_to_controls(self):
+        args = self.get_dcc_control_args()
+        if args:
+            file_path = qsm_mya_gnl_core.ResourceCache.generate_character_motion_file(bsc_core.BscSystem.get_user_name())
+            for k, v in args.items():
+                i_opt = qsm_mya_mtn_core.ControlsMotionOpt(k, v)
+                i_opt.load_from(
+                    file_path,
+                    control_key_excludes=self.get_control_key_excludes(),
+                    force=True,
+                    frame_offset=self.get_frame_offset(),
+                )
+    
+            self._window.popup_bubble_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.paste_controls')
+                )
+            )
+
+    def do_dcc_paste_controls_to_characters(self):
+        namespaces = self.get_dcc_character_args()
         if namespaces:
-            namespace_for_adv = qsm_mya_anm_core.AdvRig.filter_namespaces(namespaces)
-
-        if not namespace_for_adv:
-            self._window.exec_message(
-                '选择一个或者多个角色（可以是任意部件）。' if self._window._language == 'chs' else 'Select one character.',
-                status='warning'
+            file_path = qsm_mya_gnl_core.ResourceCache.generate_control_motion_file(bsc_core.BscSystem.get_user_name())
+            for i_namespace in namespaces:
+                i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
+                i_opt.load_from(
+                    file_path,
+                    control_key_excludes=self.get_control_key_excludes(),
+                    force=True,
+                    frame_offset=self.get_frame_offset(),
+                )
+    
+            self._window.popup_bubble_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.paste_characters')
+                )
             )
-            return
-
-        control_key_excludes = self.get_control_key_excludes()
-        file_path = qsm_mya_gnl_core.ResourceCache.generate_control_motion_file(bsc_core.BscSystem.get_user_name())
-        for i_namespace in namespace_for_adv:
-            i_opt = qsm_mya_mtn_core.AdvRigMotionOpt(i_namespace)
-            i_opt.load_from(
-                file_path,
-                force=True,
-                frame_offset=self.get_frame_offset(),
-                control_key_excludes=control_key_excludes
-            )
-
-        self._window.popup_bubble_message(
-            '成功粘贴选中的动画到角色，可以按“Z”撤销。' if self._window._language == 'chs'
-            else 'Paste selected animation to characters successful, press "z" undo.'
-        )
-
-    def do_dcc_paste_to_selected(self):
-        args = qsm_mya_mtn_core.ControlsMotionOpt.get_args_from_selection()
-        if not args:
-            self._window.exec_message(
-                '选择一个或多个控制器。' if self._window._language == 'chs' else 'Select one or more control.',
-                status='warning'
-            )
-            return
-
-        control_key_excludes = self.get_control_key_excludes()
-        file_path = qsm_mya_gnl_core.ResourceCache.generate_control_motion_file(bsc_core.BscSystem.get_user_name())
-        for k, v in args.items():
-            i_opt = qsm_mya_mtn_core.ControlsMotionOpt(k, v)
-            i_opt.load_from(
-                file_path,
-                control_key_excludes=control_key_excludes
-            )
-
-        self._window.popup_bubble_message(
-            '成功粘贴动画到选中，可以按“Z”撤销。' if self._window._language == 'chs'
-            else 'Paste animation to selected successful, press "z" undo.'
-        )
 
     # mirror
+    def do_dcc_mirror_characters_right_to_left(self):
+        namespaces = self.get_dcc_character_args()
+        if namespaces:
+            control_set_includes = self.get_control_set_includes()
+            for i_namespace in namespaces:
+                i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
+                i_opt.mirror_right_to_left(
+                    control_set_includes=control_set_includes,
+                    force=True,
+                    frame_offset=self.get_frame_offset(),
+                )
+
+            self._window.popup_bubble_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.mirror_any')
+                )
+            )
+
+    def do_dcc_mirror_characters_middle(self):
+        namespaces = self.get_dcc_character_args()
+        if namespaces:
+            control_set_includes = self.get_control_set_includes()
+            for i_namespace in namespaces:
+                i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
+                i_opt.mirror_middle(
+                    control_set_includes=control_set_includes,
+                    force=True,
+                    frame_offset=self.get_frame_offset(),
+                )
+
+            self._window.popup_bubble_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.mirror_any')
+                )
+            )
+
+    def do_dcc_mirror_characters_left_to_right(self):
+        namespaces = self.get_dcc_character_args()
+        if namespaces:
+            control_set_includes = self.get_control_set_includes()
+            for i_namespace in namespaces:
+                i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
+                i_opt.mirror_left_to_right(
+                    control_set_includes=control_set_includes,
+                    force=True,
+                    frame_offset=self.get_frame_offset(),
+                )
+
+            self._window.popup_bubble_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.mirror_any')
+                )
+            )
+
     def do_dcc_mirror_selected_auto(self):
-        pass
+        args = self.get_dcc_control_args_for_mirror()
+        if args:
+            for k, v in args.items():
+                i_opt = qsm_mya_mtn_core.ControlsMotionOpt(k, v)
+                i_opt.mirror_auto(
+                    force=True,
+                    frame_offset=self.get_frame_offset(),
+                )
+
+            self._window.popup_bubble_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.mirror_any')
+                )
+            )
+
+    # mirror and paste
+    def do_dcc_mirror_and_paste_controls(self):
+        args = self.get_dcc_control_args_for_mirror()
+        if args:
+            for k, v in args.items():
+                i_opt = qsm_mya_mtn_core.MirrorPasteOpt(k)
+                file_path = qsm_mya_gnl_core.ResourceCache.generate_control_motion_file(
+                    bsc_core.BscSystem.get_user_name()
+                )
+                i_opt.load_from(
+                    file_path,
+                    force=True,
+                    frame_offset=self.get_frame_offset(),
+                )
+            
+            self._window.popup_bubble_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.mirror_any')
+                )
+            )
+    
+    # flip
+    def do_dcc_flip_characters(self):
+        namespaces = self.get_dcc_character_args()
+        if namespaces:
+            control_set_includes = self.get_control_set_includes()
+            for i_namespace in namespaces:
+                i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
+                i_opt.flip(
+                    control_set_includes=control_set_includes,
+                    force=True,
+                    frame_offset=self.get_frame_offset(),
+                )
+
+            self._window.popup_bubble_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.mirror_any')
+                )
+            )
+    
+    def do_dcc_flip_controls(self):
+        args = self.get_dcc_control_args_for_mirror()
+        if args:
+            for k, v in args.items():
+                i_opt = qsm_mya_mtn_core.ControlsMotionOpt(k, v)
+                i_opt.flip(
+                    force=True,
+                    frame_offset=self.get_frame_offset(),
+                )
+
+            self._window.popup_bubble_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.mirror_any')
+                )
+            )
 
     def __init__(self, window, unit, session):
-        super(ToolsetUnitForMotionCopyAndPaste, self).__init__(window, unit, session)
+        super(ToolsetForMotionCopyAndPaste, self).__init__(window, unit, session)
 
-        self._adv_control_cfg = qsm_gnl_core.AdvControlConfigure()
+        self._adv_control_cfg = qsm_gnl_core.AdvCharacterControlConfigure()
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
@@ -251,8 +411,12 @@ class ToolsetUnitForMotionCopyAndPaste(
         self._prx_options_node.build_by_data(
             self._window._configure.get('build.main.units.copy_paste_mirror.options.parameters'),
         )
+
+        prx_sca = gui_prx_widgets.PrxVScrollArea()
+        prx_sca.add_widget(self._prx_options_node)
+
         self._page.gui_get_tool_tab_box().add_widget(
-            self._prx_options_node,
+            prx_sca,
             key='copy_paste_mirror',
             name=gui_core.GuiUtil.choice_name(
                 self._window._language, self._window._configure.get('build.main.units.copy_paste_mirror')
@@ -264,56 +428,109 @@ class ToolsetUnitForMotionCopyAndPaste(
         )
         # copy
         self._prx_options_node.set(
-            'copy_motion.copy_character', self.do_dcc_copy_character
+            'character_motion.copy_character', self.do_dcc_copy_character
         )
         self._prx_options_node.set(
-            'copy_motion.copy_selected', self.do_dcc_copy_selected
+            'control_motion.copy_controls', self.do_dcc_copy_controls
+        )
+        self._prx_options_node.set(
+            'character_motion.duplicate_characters', self.do_dcc_duplicate_characters
         )
         # paste
         self._prx_options_node.set(
-            'paste_motion.paste_character', self.do_dcc_paste_character
+            'character_motion.paste_character', self.do_dcc_paste_characters
         )
         self._prx_options_node.set(
-            'paste_motion.paste_character_to_selected', self.do_dcc_paste_character_to_selected
+            'control_motion.paste_controls', self.do_dcc_paste_controls
+        )
+        self._prx_options_node.set(
+            'character_motion.paste_character_to_controls', self.do_dcc_paste_character_to_controls
         )
         
         self._prx_options_node.set(
-            'paste_motion.paste_selected_to_character', self.do_dcc_paste_selected_to_character
+            'control_motion.paste_controls_to_characters', self.do_dcc_paste_controls_to_characters
+        )
+        # mirror
+        self._prx_options_node.set(
+            'mirror_motion.mirror_characters_right_to_left', self.do_dcc_mirror_characters_right_to_left
+        )
+
+        self._prx_options_node.set(
+            'mirror_motion.mirror_characters_middle', self.do_dcc_mirror_characters_middle
+        )
+
+        self._prx_options_node.set(
+            'mirror_motion.mirror_characters_left_to_right', self.do_dcc_mirror_characters_left_to_right
+        )
+
+        self._prx_options_node.set(
+            'mirror_motion.mirror_selected_auto', self.do_dcc_mirror_selected_auto
+        )
+        # mirror and paste
+        self._prx_options_node.set(
+            'mirror_and_paste_motion.mirror_and_paste_controls', self.do_dcc_mirror_and_paste_controls
+        )
+        # flip
+        self._prx_options_node.set(
+            'flip_motion.flip_characters', self.do_dcc_flip_characters
         )
         self._prx_options_node.set(
-            'paste_motion.paste_selected', self.do_dcc_paste_to_selected
+            'flip_motion.flip_controls', self.do_dcc_flip_controls
         )
 
 
-class ToolsetUnitForMotionMove(
+class ToolsetForMotionOffset(
     qsm_mya_gui_core.PrxUnitBaseOpt
 ):
-    def do_dcc_create_transformation_locator(self):
-        main_controls = qsm_mya_core.Selection.get_main_controls()
-        if not main_controls:
-            self._window.exec_message(
-                '选择一个或多个主控制器（必须有移动和旋转属性，如大环）。' if self._window._language == 'chs'
-                else 'Select one or more main control.',
-                status='warning'
+    def __init__(self, window, unit, session):
+        super(ToolsetForMotionOffset, self).__init__(window, unit, session)
+
+        self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
+            gui_core.GuiUtil.choice_name(
+                self._window._language, self._window._configure.get('build.main.units.offset.options')
             )
-            return
+        )
 
-        qsm_mya_anm_scripts.ControlTransformationLocator(main_controls).create_transformation_locators()
+        self._prx_options_node.build_by_data(
+            self._window._configure.get('build.main.units.offset.options.parameters'),
+        )
 
-    def do_dcc_remove_transformation_locator(self):
-        main_controls = qsm_mya_core.Selection.get_main_controls()
-        if not main_controls:
-            self._window.exec_message(
-                '选择一个或多个主控制器（必须有移动和旋转属性，如大环）。' if self._window._language == 'chs'
-                else 'Select one or more main control.',
-                status='warning'
+        prx_sca = gui_prx_widgets.PrxVScrollArea()
+        prx_sca.add_widget(self._prx_options_node)
+
+        self._page.gui_get_tool_tab_box().add_widget(
+            prx_sca,
+            key='offset',
+            name=gui_core.GuiUtil.choice_name(
+                self._window._language, self._window._configure.get('build.main.units.offset')
+            ),
+            icon_name_text='offset',
+            tool_tip=gui_core.GuiUtil.choice_tool_tip(
+                self._window._language, self._window._configure.get('build.main.units.offset')
             )
-            return
+        )
 
-        qsm_mya_anm_scripts.ControlTransformationLocator(main_controls).remove_transformation_locators()
+
+class ToolsetForMove(
+    qsm_mya_gui_core.PrxUnitBaseOpt
+):
+
+    @staticmethod
+    def do_dcc_create_transformation_locator():
+        import lxbasic.session as bsc_session
+        bsc_session.OptionHook.execute(
+            "option_hook_key=dcc-script/maya/qsm-control-move-create-script"
+        )
+
+    @staticmethod
+    def do_dcc_remove_transformation_locator():
+        import lxbasic.session as bsc_session
+        bsc_session.OptionHook.execute(
+            "option_hook_key=dcc-script/maya/qsm-control-move-remove-script"
+        )
 
     def __init__(self, window, unit, session):
-        super(ToolsetUnitForMotionMove, self).__init__(window, unit, session)
+        super(ToolsetForMove, self).__init__(window, unit, session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
@@ -337,9 +554,9 @@ class ToolsetUnitForMotionMove(
         )
         
         self._prx_options_node.set(
-            'transformation.create_transformation_locator', self.do_dcc_create_transformation_locator
+            'transformation.create_control_move_locator', self.do_dcc_create_transformation_locator
         )
 
         self._prx_options_node.set(
-            'transformation.remove_transformation_locator', self.do_dcc_remove_transformation_locator
+            'transformation.remove_control_move_locator', self.do_dcc_remove_transformation_locator
         )

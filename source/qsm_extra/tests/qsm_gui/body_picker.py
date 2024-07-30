@@ -10,7 +10,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
 
-        wgt = qsm_qt_widgets.QtAdvPicker()
+        wgt = qsm_qt_widgets.QtAdvCharacterPicker()
         self.add_widget(wgt)
 
         wgt._set_namespace_('test_Skin')

@@ -228,20 +228,22 @@ class AbsQtStatusBaseDef(object):
     def _get_background_rgba_args_by_status_(cls, status):
         # process
         if status in {cls.Status.Started}:
-            return cls._get_rgb_args_(*cls.Rgba.BabyBlue)
+            return cls._get_rgb_args_(*cls.Rgba.DarkAzureBlue)
         elif status in {cls.Status.Running}:
-            return cls._get_rgb_args_(*cls.Rgba.Blue)
+            return cls._get_rgb_args_(*cls.Rgba.LightAzureBlue)
         elif status in {cls.Status.Waiting}:
             return cls._get_rgb_args_(*cls.Rgba.Orange)
         elif status in {cls.Status.Suspended}:
             return cls._get_rgb_args_(*cls.Rgba.Yellow)
-        elif status in {cls.Status.Failed, cls.Status.Killed, cls.Status.Error}:
-            return cls._get_rgb_args_(*cls.Rgba.TorchRed)
+        elif status in {cls.Status.Failed, cls.Status.Error}:
+            return cls._get_rgb_args_(*cls.Rgba.LightRed)
+        elif status in {cls.Status.Killed}:
+            return cls._get_rgb_args_(*cls.Rgba.Pink)
         elif status in {cls.Status.Completed}:
-            return cls._get_rgb_args_(*cls.Rgba.Green)
+            return cls._get_rgb_args_(*cls.Rgba.LightNeonGreen)
         # validation
         elif status in {cls.ValidationStatus.Active}:
-            return cls._get_rgb_args_(*cls.Rgba.DarkBlue)
+            return cls._get_rgb_args_(*cls.Rgba.Gray)
         elif status in {cls.ValidationStatus.Disable}:
             return cls._get_rgb_args_(*cls.Rgba.DarkGray)
         #
@@ -252,19 +254,19 @@ class AbsQtStatusBaseDef(object):
     @classmethod
     def _get_rgba_args_by_status_(cls, status):
         if status in {cls.Status.Started}:
-            return cls._get_rgb_args_(*cls.Rgba.DarkBlue)
+            return cls._get_rgb_args_(*cls.Rgba.DarkAzureBlue)
         elif status in {cls.Status.Running}:
-            return cls._get_rgb_args_(*cls.Rgba.Blue)
+            return cls._get_rgb_args_(*cls.Rgba.LightAzureBlue)
         elif status in {cls.Status.Waiting}:
             return cls._get_rgb_args_(*cls.Rgba.Orange)
         elif status in {cls.Status.Suspended}:
             return cls._get_rgb_args_(*cls.Rgba.Yellow)
         elif status in {cls.Status.Failed, cls.Status.Error}:
-            return cls._get_rgb_args_(*cls.Rgba.Red)
+            return cls._get_rgb_args_(*cls.Rgba.LightRed)
         elif status in {cls.Status.Killed}:
             return cls._get_rgb_args_(*cls.Rgba.Pink)
         elif status in {cls.Status.Completed}:
-            return cls._get_rgb_args_(*cls.Rgba.Green)
+            return cls._get_rgb_args_(*cls.Rgba.LightNeonGreen)
         return cls._get_rgb_args_(*cls.Rgba.Transparent)
 
     @classmethod
@@ -278,7 +280,7 @@ class AbsQtStatusBaseDef(object):
         elif status in {cls.ValidationStatus.Locked, cls.ValidationStatus.Unwritable}:
             return cls._get_rgb_args_(*cls.Rgba.Purple)
         elif status in {cls.ValidationStatus.Active}:
-            return cls._get_rgb_args_(*cls.Rgba.Blue)
+            return cls._get_rgb_args_(*cls.Rgba.AzureBlue)
         elif status in {cls.ValidationStatus.Correct, cls.ValidationStatus.New}:
             return cls._get_rgb_args_(*cls.Rgba.Green)
         return cls._get_rgb_args_(*cls.Rgba.White)
@@ -294,7 +296,7 @@ class AbsQtStatusBaseDef(object):
         elif status in {cls.ValidationStatus.Locked, cls.ValidationStatus.Unwritable}:
             return cls._get_rgb_args_(*cls.Rgba.Purple)
         elif status in {cls.ValidationStatus.Active}:
-            return cls._get_rgb_args_(*cls.Rgba.Blue)
+            return cls._get_rgb_args_(*cls.Rgba.AzureBlue)
         elif status in {cls.ValidationStatus.Correct, cls.ValidationStatus.New}:
             return cls._get_rgb_args_(*cls.Rgba.Green)
         return cls._get_rgb_args_(*cls.Rgba.Transparent)
@@ -962,6 +964,7 @@ class AbsQtActionForDragDef(object):
             )
         #
         if self._drag_urls:
+            # noinspection PyArgumentList
             self._drag_mime_data.setUrls(
                 [QtCore.QUrl.fromLocalFile(i) for i in self._drag_urls]
             )
@@ -1940,7 +1943,9 @@ class AbsQtProgressBaseDef(object):
 
 
 class AbsQtImageBaseDef(object):
-    def _init_image_base_def_(self):
+    def _init_image_base_def_(self, widget):
+        self._widget = widget
+
         self._image_flag = False
         #
         self._image_path = None
@@ -2346,7 +2351,7 @@ class AbsQtGuideEntryDef(AbsQtGuideBaseDef):
     def _get_action_flag_(self):
         raise NotImplementedError()
 
-    def _get_action_flag_is_match_(self, flag):
+    def _is_action_flag_match_(self, flag):
         raise NotImplementedError()
 
     def _get_guide_choose_point_at_(self, index=0):
@@ -2424,7 +2429,7 @@ class AbsQtGuideEntryDef(AbsQtGuideBaseDef):
         self._widget.update()
 
     def _get_is_guide_choose_flag_(self):
-        return self._get_action_flag_is_match_(
+        return self._is_action_flag_match_(
             _gui_core.GuiActionFlag.ChoosePress
         )
 
@@ -3092,7 +3097,7 @@ class AbsQtShowStackForItemDef(object):
 
 
 class AbsQtDrawGridDef(object):
-    def _set_draw_grid_def_init_(self, widget):
+    def _init_draw_grid_def_(self, widget):
         self._widget = widget
         #
         self._grid_border_color = 71, 71, 71, 255

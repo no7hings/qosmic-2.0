@@ -179,7 +179,7 @@ class QtTabView(
 
             scroll_value = self._gui_scroll.get_value()
             widths = self._item_width_dict.values()
-            if self._get_action_flag_is_match_(
+            if self._is_action_flag_match_(
                 self.ActionFlag.DragChildPolish
             ):
                 width_ = self._item_width_dict[self._index_drag_child_polish_start]
@@ -380,13 +380,13 @@ class QtTabView(
                 if event.buttons() == QtCore.Qt.LeftButton:
                     if self._drag_is_enable is True:
                         # check "DragPress" when flag is match "Press"
-                        if self._get_action_flag_is_match_(self.ActionFlag.Press):
+                        if self._is_action_flag_match_(self.ActionFlag.Press):
                             if self._index_press_tmp is not None:
                                 self._drag_press_point = self._press_point
                                 self._set_action_flag_(self.ActionFlag.DragPress)
-                        elif self._get_action_flag_is_match_(self.ActionFlag.DragPress):
+                        elif self._is_action_flag_match_(self.ActionFlag.DragPress):
                             self._do_drag_press_(event)
-                        elif self._get_action_flag_is_match_(self.ActionFlag.DragChildPolish):
+                        elif self._is_action_flag_match_(self.ActionFlag.DragChildPolish):
                             self._do_drag_child_polish_(event)
                 elif event.button() == QtCore.Qt.RightButton:
                     pass
@@ -399,10 +399,10 @@ class QtTabView(
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
                     # when drag press move less than 10px, do press release also
-                    if self._get_action_flag_is_match_(self.ActionFlag.Press, self.ActionFlag.DragPress):
+                    if self._is_action_flag_match_(self.ActionFlag.Press, self.ActionFlag.DragPress):
                         # send signal in release action
                         self._do_mouse_press_release_(event)
-                    elif self._get_action_flag_is_match_(self.ActionFlag.DragChildPolish):
+                    elif self._is_action_flag_match_(self.ActionFlag.DragChildPolish):
                         self._do_drop_(event)
                 elif event.button() == QtCore.Qt.RightButton:
                     pass

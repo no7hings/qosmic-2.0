@@ -12,6 +12,7 @@ from . import node as _node
 class DagNode(_node.Node):
     PATHSEP = '|'
     NAMESPACESEP = ':'
+
     @classmethod
     def create(cls, path, type_name):
         parent_path = '|'.join(path.split('|')[:-1])
@@ -32,6 +33,10 @@ class DagNode(_node.Node):
     @classmethod
     def create_transform(cls, path):
         return cls.create(path, 'transform')
+
+    @classmethod
+    def create_joint(cls, path):
+        return cls.create(path, 'joint')
 
     @classmethod
     def to_name(cls, path_or_name):
@@ -166,6 +171,12 @@ class NodeDisplay(object):
     def set_visible(cls, path, boolean):
         cmds.setAttr(
             path+'.visibility', boolean
+        )
+
+    @classmethod
+    def set_outliner_visible(cls, path, boolean):
+        cmds.setAttr(
+            path+'.hiddenInOutliner', not boolean
         )
 
 

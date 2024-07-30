@@ -2212,7 +2212,7 @@ class AbsRsvProject(
             i_result, i_variants = i_m
             if p is not None:
                 i_name = i_variants[entity_type]
-                if not bsc_core.PtnFnmatchMtd.filter([i_name], p):
+                if not bsc_core.BscFnmatch.filter([i_name], p):
                     continue
             i_kwargs_over = copy.copy(kwargs_over)
             i_kwargs_over.update(i_variants)
@@ -2324,7 +2324,7 @@ class AbsRsvProject(
                 j_result, j_variants = j_match
                 if p is not None:
                     j_name = j_variants[entity_type]
-                    if not bsc_core.PtnFnmatchMtd.filter([j_name], p):
+                    if not bsc_core.BscFnmatch.filter([j_name], p):
                         continue
                 j_kwargs_over = self._copy_variants_as_branches_(i_kwargs_over)
                 j_kwargs_over.update(j_variants)
@@ -2466,7 +2466,7 @@ class AbsRsvProject(
                 j_result, j_variants = j_match
                 if p is not None:
                     j_name = j_variants[entity_type]
-                    if not bsc_core.PtnFnmatchMtd.filter([j_name], p):
+                    if not bsc_core.BscFnmatch.filter([j_name], p):
                         continue
                 j_kwargs_over = self._copy_variants_as_branches_(i_kwargs_over)
                 j_kwargs_over.update(j_variants)

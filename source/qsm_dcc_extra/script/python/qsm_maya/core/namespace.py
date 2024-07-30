@@ -70,6 +70,11 @@ class Namespace(object):
     def find_all_dag_nodes(cls, namespace, type_includes):
         return [x for x in cls.get_all_dag_nodes(namespace) if cmds.nodeType(x) in type_includes]
 
+    @classmethod
+    def create(cls, namespace):
+        if cmds.namespace(exists=namespace) is False:
+            cmds.namespace(add=namespace)
+
 
 class Namespaces(object):
     @classmethod

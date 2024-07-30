@@ -112,6 +112,7 @@ class GuiDialogForChooseAsBubble(object):
         return None
 
 
+# noinspection PyArgumentList
 class GuiDialogForFile(object):
     @classmethod
     def open_file(cls, ext_filter='All File (*.*)', parent=None):

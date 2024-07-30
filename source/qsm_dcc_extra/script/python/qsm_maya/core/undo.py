@@ -3,6 +3,8 @@ import maya.cmds as cmds
 
 import lxbasic.core as bsc_core
 
+import lxbasic.log as bsc_log
+
 
 class Undo(object):
     @staticmethod
@@ -14,7 +16,7 @@ class Undo(object):
                 _method = fnc(*args, **kwargs)
                 return _method
             except Exception:
-                bsc_core.BscException.set_print()
+                bsc_log.LogException.trace()
             #
             finally:
                 cmds.undoInfo(closeChunk=1, undoName=fnc.__name__)

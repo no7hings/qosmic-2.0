@@ -3,7 +3,6 @@ def main(session):
     import qsm_maya.scenery.scripts as qsm_scn_scripts
 
     option_opt = session.get_option_opt()
-    scheme = option_opt.get('scheme')
 
     qsm_scn_scripts.CameraMaskOpt.remove_auto(**option_opt.to_dict())
 

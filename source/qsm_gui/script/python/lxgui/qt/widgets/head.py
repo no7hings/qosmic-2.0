@@ -132,7 +132,7 @@ class AbsQtHead(
 
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
-                    if self._get_action_flag_is_match_(self.ActionFlag.Press):
+                    if self._is_action_flag_match_(self.ActionFlag.Press):
                         self._execute_action_expand_()
                     self.press_toggled.emit(False)
 

@@ -1160,7 +1160,7 @@ class _QtHItem(
         self._init_icon_base_def_(self)
         self._init_names_base_def_(self)
         self._init_path_base_def_(self)
-        self._init_image_base_def_()
+        self._init_image_base_def_(self)
         #
         self._init_value_base_def_(self)
         #

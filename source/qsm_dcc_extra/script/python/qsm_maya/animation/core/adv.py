@@ -50,7 +50,7 @@ class AdvRig(_rsc_core.Resource):
         if _:
             return _[0]
 
-    def get_main_control(self):
+    def find_main_control(self):
         _ = cmds.ls('{}:Main'.format(self.namespace), long=1)
         if _:
             return _[0]
@@ -71,7 +71,7 @@ class AdvRig(_rsc_core.Resource):
                 return True
         return False
 
-    def get_skin_proxy_is_enable(self):
+    def is_skin_proxy_enable(self):
         _ = self.get_skin_proxy_location()
         if _:
             return _mya_core.NodeDisplay.is_visible(_)
@@ -116,7 +116,7 @@ class AdvRig(_rsc_core.Resource):
                 return True
         return False
 
-    def get_dynamic_gpu_is_enable(self):
+    def is_dynamic_gpu_enable(self):
         _ = self.get_dynamic_gpu_location()
         if _:
             return _mya_core.NodeDisplay.is_visible(_)
@@ -163,7 +163,7 @@ class AdvRig(_rsc_core.Resource):
         return False
     
     def find_nodes_by_scheme(self, scheme):
-        if self.get_dynamic_gpu_is_enable() is True:
+        if self.is_dynamic_gpu_enable() is True:
             return [self.get_dynamic_gpu_location()]
 
         if scheme == 'root':
@@ -175,28 +175,30 @@ class AdvRig(_rsc_core.Resource):
         elif scheme == 'deformation_root':
             return [self.get_deformation_root()]
         elif scheme == 'main_control':
-            return [self.get_main_control()]
+            return [self.find_main_control()]
 
     def find_joint(self, name):
         _ = cmds.ls('{}:{}'.format(self.namespace, name), type='joint', long=1)
         if _:
             return _[0]
 
-    def find_control(self, key):
-        _ = cmds.ls('{}:{}'.format(self.namespace, key), long=1)
+    def find_one_control(self, control_key):
+        _ = cmds.ls('{}:{}'.format(self.namespace, control_key), long=1)
         if _:
             return _[0]
 
-    def find_all_controls(self, key):
-        return cmds.ls('{}:{}'.format(self.namespace, key), long=1) or []
+    def find_many_controls(self, regex):
+        return cmds.ls(
+            '{}:{}'.format(self.namespace, regex), long=1
+        ) or []
 
     def switch_to_original(self):
         self._switch_result = {}
-        if self.get_skin_proxy_is_enable() is True:
+        if self.is_skin_proxy_enable() is True:
             self._switch_result['skin_proxy'] = True
             self.set_skin_proxy_enable(False)
 
-        if self.get_dynamic_gpu_is_enable():
+        if self.is_dynamic_gpu_enable():
             self._switch_result['dynamic_gpu'] = True
             self.set_dynamic_gpu_enable(False)
 

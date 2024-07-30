@@ -22,6 +22,8 @@ import lxgui.core as gui_core
 
 import qsm_general.core as qsm_gnl_core
 
+import qsm_maya.motion.core as qsm_mya_mth_core
+
 from ... import core as _mya_core
 
 from ...general import core as _gnl_core
@@ -48,7 +50,7 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
     def find_rig_head_geometries(self):
         set_ = set()
         for i_key in [
-            'Head_M',
+            'Head_M', 'Head_Root',
             #
             'EyeJoint_L',
             'Eye_L',
@@ -118,7 +120,11 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
 
                 AdvSkinProxyGenerate._connect_parent_constrain(j_skeleton_paths[0], j_constrains[0])
 
-    def load_cache(self, cache_file_path, data_file_path, keep_head=False, check_bbox=False):
+    def load_cache(
+        self, cache_file_path, data_file_path,
+        keep_head=False, check_bbox=False,
+        hide_secondary_controls=False
+    ):
         if os.path.isfile(cache_file_path) is False:
             return
 
@@ -139,7 +145,12 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
                 data_file_path, keep_head, check_bbox
             )
 
-            self.remove_resource_auto(head_geometries, rig_head_geometries)
+            if hide_secondary_controls is True:
+                controls = qsm_mya_mth_core.AdvCharacterMotionOpt(self._namespace).find_all_secondary_curve_controls()
+            else:
+                controls = []
+
+            self.remove_resource_auto(head_geometries, rig_head_geometries, controls)
 
     def get_head_hide_args(self, data_file_path, keep_head=False, check_bbox=False):
         if keep_head is True:
@@ -158,20 +169,23 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
 
         return [], []
 
-    def remove_resource_auto(self, head_geometries, rig_head_geometries):
+    def remove_resource_auto(self, head_geometries, rig_head_geometries, controls):
         cache_location = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
-        mesh_paths_for_hide = self._resource.get_all_meshes()
-        if mesh_paths_for_hide:
+        paths_for_hide = self._resource.get_all_meshes()
+        if paths_for_hide:
             # add skin proxy head
             if head_geometries:
-                mesh_paths_for_hide.extend(head_geometries)
+                paths_for_hide.extend(head_geometries)
             # remove rig head
             if rig_head_geometries:
-                [mesh_paths_for_hide.remove(x) for x in rig_head_geometries if x in mesh_paths_for_hide]
+                [paths_for_hide.remove(x) for x in rig_head_geometries if x in paths_for_hide]
+
+            if controls:
+                paths_for_hide.extend(controls)
 
             layer_name = '{}_skin_proxy_hide'.format(self._namespace)
             layer_path = cmds.createDisplayLayer(name=layer_name, number=1, empty=True)
-            cmds.editDisplayLayerMembers(layer_path, *mesh_paths_for_hide)
+            cmds.editDisplayLayerMembers(layer_path, *paths_for_hide)
             cmds.setAttr(layer_path+'.visibility', False)
 
             cmds.container(cache_location, edit=1, force=1, addNode=[layer_path])
@@ -204,7 +218,7 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
         return task_name, None, cache_file_path, data_file_path
 
     @classmethod
-    def _execute_fnc(cls, window, task_args_dict):
+    def _load_delay_fnc(cls, window, task_args_dict, keep_head, check_bbox, hide_secondary_controls):
         with window.gui_progressing(maximum=len(task_args_dict.keys())) as g_p:
             for i_k, i_v in task_args_dict.items():
                 i_task_name, i_cmd_script, i_cache_file, i_data_file = i_k
@@ -213,7 +227,10 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
                     i_task_name,
                     i_cmd_script,
                     completed_fnc=[
-                        functools.partial(cls(x).load_cache, i_cache_file, i_data_file, True, True) for x in i_v
+                        functools.partial(
+                            cls(x).load_cache,
+                            i_cache_file, i_data_file, keep_head, check_bbox, hide_secondary_controls
+                        ) for x in i_v
                     ]
                 )
                 g_p.do_update()
@@ -221,6 +238,9 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
     @classmethod
     def load_auto(cls, **kwargs):
         scheme = kwargs['scheme']
+        keep_head = kwargs.get('keep_head', True)
+        check_bbox = kwargs.get('check_bbox', True)
+        hide_secondary_controls = kwargs.get('hide_secondary_controls', True)
         if scheme == 'default':
             resources = []
             namespaces = _mya_core.Namespaces.extract_roots_from_selection()
@@ -236,7 +256,7 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
             if not resources:
                 gui_core.GuiDialog.create(
                     '简模代理（火柴人）加载',
-                    content='选择一个或多个可用的绑定（如果选中的绑定已经加载了简模代理，会被忽略），可以选择绑定的任意部件。',
+                    content='选择一个或多个可用的角色（如果选中的绑定已经加载了简模代理，会被忽略），可以选择绑定的任意部件。',
                     status=gui_core.GuiDialog.ValidationStatus.Warning,
                     no_label='关闭',
                     ok_visible=False, no_visible=True, cancel_visible=False,
@@ -255,7 +275,9 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
                         i_resource
                     )
                 else:
-                    i_resource_opt.load_cache(i_cache_file, i_data_file, True, True)
+                    i_resource_opt.load_cache(
+                        i_cache_file, i_data_file, keep_head, check_bbox, hide_secondary_controls
+                    )
 
             if task_args_dict:
                 import lxgui.proxy.widgets as gui_prx_widgets
@@ -273,7 +295,11 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
 
                 window.show_window_auto(exclusive=False)
                 window.run_fnc_delay(
-                    functools.partial(cls._execute_fnc, window, task_args_dict), 500
+                    functools.partial(
+                        cls._load_delay_fnc,
+                        window, task_args_dict, keep_head, check_bbox, hide_secondary_controls
+                    ),
+                    500
                 )
 
 
@@ -926,26 +952,32 @@ class AdvSkinProxyProcess(object):
         self._data_file_path = data_file_path
 
     def execute(self):
-        namespace = 'skin_proxy'
-
-        _mya_core.SceneFile.new()
-        bsc_log.Log.trace_method_result(
-            self.KEY, 'load scene: {}'.format(self._file_path)
-        )
-        # use reference
-        _mya_core.SceneFile.reference_file(self._file_path, namespace=namespace)
-
-        rsc_adv_rig = _core.AdvRig(
-            namespace
-        )
-        data = dict(
-            joint_transformation=rsc_adv_rig.generate_joint_transformation_data(),
-            geometry_bbox=rsc_adv_rig.generate_geometry_bbox_data()
-        )
-        bsc_storage.StgFileOpt(
-            self._data_file_path
-        ).set_write(data)
-
-        AdvSkinProxyGenerate(namespace).create_cache(
-            self._cache_file_path
-        )
+        with bsc_log.LogProcessContext.create(maximum=4) as l_p:
+            # step 1
+            namespace = 'skin_proxy'
+            _mya_core.SceneFile.new()
+            l_p.do_update()
+            # step 2
+            bsc_log.Log.trace_method_result(
+                self.KEY, 'load scene: {}'.format(self._file_path)
+            )
+            # use reference
+            _mya_core.SceneFile.reference_file(self._file_path, namespace=namespace)
+            l_p.do_update()
+            # step 3
+            rsc_adv_rig = _core.AdvRig(
+                namespace
+            )
+            data = dict(
+                joint_transformation=rsc_adv_rig.generate_joint_transformation_data(),
+                geometry_bbox=rsc_adv_rig.generate_geometry_bbox_data()
+            )
+            bsc_storage.StgFileOpt(
+                self._data_file_path
+            ).set_write(data)
+            l_p.do_update()
+            # step 4
+            AdvSkinProxyGenerate(namespace).create_cache(
+                self._cache_file_path
+            )
+            l_p.do_update()

@@ -267,7 +267,7 @@ class QtVideoPlayWidget(
                 )
                 if self._is_playing:
                     painter._set_background_color_(
-                        _gui_core.GuiRgba.LightBlue
+                        _gui_core.GuiRgba.LightAzureBlue
                     )
                 else:
                     painter._set_background_color_(
@@ -722,7 +722,7 @@ class QtItemWidgetForList(
                 is_actioned=self._get_is_actioned_(),
                 background_color=_gui_core.GuiRgba.Transparent,
                 background_color_hovered=_gui_core.GuiRgba.LightOrange,
-                background_color_selected=_gui_core.GuiRgba.LightBlue,
+                background_color_selected=_gui_core.GuiRgba.LightAzureBlue,
                 background_color_actioned=_gui_core.GuiRgba.LightPurple
             )
             painter._draw_frame_by_rect_(

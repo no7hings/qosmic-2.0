@@ -456,6 +456,10 @@ class PrxWindowForException(PrxTipWindow):
     def __init__(self, *args, **kwargs):
         super(PrxWindowForException, self).__init__(*args, **kwargs)
 
+        self.set_ok_label('Close')
+        self.set_no_visible(False)
+        self.set_cancel_visible(False)
+
 
 class PrxMonitorWindow(
     gui_prx_abstracts.AbsPrxWindow,

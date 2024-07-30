@@ -246,7 +246,7 @@ class QtItemForHistoryEntity(
             size=8
         )
         
-        self._file_text_color = _gui_core.GuiRgba.LightBlue
+        self._file_text_color = _gui_core.GuiRgba.LightAzureBlue
         self._file_text_color_lost = _gui_core.GuiRgba.Gray
         self._file_font = _qt_core.QtFont.generate(
             size=8, underline=True

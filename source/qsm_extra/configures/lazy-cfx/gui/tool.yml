@@ -39,7 +39,7 @@ build:
                 name: 'Export'
                 name_chs: '导出'
 
-                tool_tip: 'to be supplemented.'
+                tool_tip: 'To be supplemented.'
                 tool_tip_chs: '待补充。'
 
                 options:
@@ -174,7 +174,7 @@ build:
                 name: 'Import'
                 name_chs: '导入'
 
-                tool_tip: 'to be supplemented.'
+                tool_tip: 'To be supplemented.'
                 tool_tip_chs: '待补充。'
 
                 options:
@@ -216,11 +216,11 @@ build:
 
         messages:
             no_resource:
-                message: 'to be supplemented.'
+                message: 'To be supplemented.'
                 message_chs: '勾选至少一个资源。'
 
             no_cache_type:
-                message: 'to be supplemented.'
+                message: 'To be supplemented.'
                 message_chs: '勾选至少一种缓存类型（Alembic缓存， 几何缓存）。'
             
             no_task_server:
@@ -241,8 +241,8 @@ build:
 
     messages:
         remove_reference:
-            message: 'do you want remove selected references?\n, press "Ok" to continue.'
-            message_chs: '是否要移除选中的引用\n，点击“Ok”以继续。'
+            message: 'do you want remove selected references?, press "Ok" to continue.'
+            message_chs: '是否要移除选中的引用，点击“Ok”以继续。'
 
     rig_selection_scheme:
         options: ['root', 'geometry_root', 'deformation_root', 'motion_root', 'main_control']

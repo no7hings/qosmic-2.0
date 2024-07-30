@@ -1,0 +1,1759 @@
+options:
+    namespace: ''
+
+dag_nodes:
+    /MAIN:
+        type: transform
+        properties:
+            translateX: 0.0
+            translateY: 0.0
+            translateZ: 0.0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+        create_properties:
+            start_translate_x:
+                type: float
+                value: 0
+            start_translate_y:
+                type: float
+                value: 0
+            start_translate_z:
+                type: float
+                value: 0
+
+            start_rotate_x:
+                type: angle
+                value: 0
+            start_rotate_y:
+                type: angle
+                value: 0
+            start_rotate_z:
+                type: angle
+                value: 0
+    /MAIN/ROOT:
+        type: transform
+        properties:
+            translateX: 0.0
+            translateY: 0.0
+            translateZ: 0.0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+    /MAIN/ROOT/Root_M:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -3.659757573679698e-07
+            translateY: 8.372549042545922
+            translateZ: -1.7450406099424539e-16
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 1.1198709655450322e-13
+            rotateOrder: 0
+            jointOrientX: 90.00000250447816
+            jointOrientY: 0.0
+            jointOrientZ: 90.00000250447816
+    /MAIN/ROOT/Root_M/Hip_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.528829161665568
+            translateY: -0.04159614586536606
+            translateZ: -0.636981518490809
+            rotateX: -1.218242606159776e-06
+            rotateY: 1.1035610010232429e-16
+            rotateZ: 3.5163275573808946e-06
+            rotateOrder: 2
+            jointOrientX: 179.45021576190533
+            jointOrientY: 0.2930566034566698
+            jointOrientZ: -179.3865857195975
+    /MAIN/ROOT/Root_M/Hip_R/Knee_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 3.5331840515136723
+            translateY: -1.1102230246251565e-16
+            translateZ: 2.886579864025407e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: -1.9295923281396557e-06
+            rotateOrder: 2
+            jointOrientX: -9.939233379573492e-17
+            jointOrientY: -5.590818776010089e-17
+            jointOrientZ: -3.4260508487653136
+    /MAIN/ROOT/Root_M/Hip_R/Knee_R/Ankle_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 3.559377193450926
+            translateY: -1.8915424782051105e-14
+            translateZ: -2.220446049250313e-16
+            rotateX: -1.5643429783092405e-14
+            rotateY: 1.1217639225746935e-07
+            rotateZ: -1.2373401603105654e-07
+            rotateOrder: 3
+            jointOrientX: -1.0169722652891755
+            jointOrientY: 0.2871404056553959
+            jointOrientZ: 4.042253226767524
+    /MAIN/ROOT/Root_M/Hip_R/Knee_R/Ankle_R/Toes_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.45736554094383813
+            translateY: 1.024308098529672
+            translateZ: -8.677283336311348e-10
+            rotateX: 1.413855963287628e-14
+            rotateY: -5.565970310434482e-15
+            rotateZ: 3.097097061820337e-06
+            rotateOrder: 5
+            jointOrientX: 2.1228236478136107
+            jointOrientY: -1.0785970067453798
+            jointOrientZ: 59.98037853616664
+    /MAIN/ROOT/Root_M/Hip_R/Knee_R/Ankle_R/Toes_R/ToesEnd_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.6036867087595778
+            translateY: 1.2212453270876722e-15
+            translateZ: 2.3314683517128287e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 5
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.5615281408514257
+            translateY: 5.551115123125755e-17
+            translateZ: -3.901193576321089e-16
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: -3.791516639546772e-22
+            jointOrientY: -5.18178130076575e-22
+            jointOrientZ: -2.0127412719108724e-29
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.599624255999025
+            translateY: 5.551115123125794e-17
+            translateZ: -7.594655436395373e-16
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: -3.791516639546772e-22
+            jointOrientY: -5.18178130076575e-22
+            jointOrientZ: -2.0127412719108724e-29
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.6377203711466171
+            translateY: -1.6653345369377417e-16
+            translateZ: -6.971460768802504e-16
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 5.565970692561154e-15
+            rotateOrder: 0
+            jointOrientX: -3.791516639546772e-22
+            jointOrientY: -9.47879159886693e-23
+            jointOrientZ: -4.899102165692916
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Neck_M:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 1.5849514155166684
+            translateY: -2.220446049250313e-16
+            translateZ: 1.978345154726677e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 1.113194138512231e-14
+            rotateOrder: 5
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 11.793716668165006
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Neck_M/Head_M:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 1.0169299053850334
+            translateY: -2.220446049250313e-15
+            translateZ: 3.7801001732114054e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 5
+            jointOrientX: 7.583033279093544e-22
+            jointOrientY: 7.73113939782584e-22
+            jointOrientZ: -7.136957298186947
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Neck_M/Head_M/HeadEnd_M:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 2.44613263873746
+            translateY: -2.831068712794149e-15
+            translateZ: 1.4643878777056214e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 1.196359384527243
+            translateY: -0.16669359158877284
+            translateZ: -0.3392337131504115
+            rotateX: -2.255646083250215e-06
+            rotateY: 3.721000492564906e-15
+            rotateZ: 1.987845943464573e-16
+            rotateOrder: 2
+            jointOrientX: 57.95465371135073
+            jointOrientY: 90.02123073241857
+            jointOrientZ: 54.91946107818551
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.6976079304617839
+            translateY: -6.439293542825908e-15
+            translateZ: -8.171241461241152e-14
+            rotateX: -4.611648987600542e-15
+            rotateY: -1.2970699560343405e-14
+            rotateZ: 3.683728371304424e-15
+            rotateOrder: 5
+            jointOrientX: -7.945795556775837
+            jointOrientY: 0.29736421166712645
+            jointOrientZ: -1.6286531647825455
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 2.0315295518981626
+            translateY: 4.996003610813204e-16
+            translateZ: -1.7763568394002505e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 4.373262687012335e-15
+            rotateOrder: 5
+            jointOrientX: -2.7462428959817215e-19
+            jointOrientY: 1.9868632290703983e-16
+            jointOrientZ: 3.3711672905765
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 1.88294356609389
+            translateY: -5.739853037312059e-14
+            translateZ: 3.597122599785507e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 5
+            jointOrientX: -2.761171992749937e-19
+            jointOrientY: -9.958731327945418e-17
+            jointOrientZ: -1.987846675914698e-16
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/MiddleFinger1_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.6278214171260146
+            translateY: 0.028269968418709657
+            translateZ: 0.08480825719352403
+            rotateX: -4.67143968839954e-15
+            rotateY: -9.641056378186285e-15
+            rotateZ: -5.466578358765416e-16
+            rotateOrder: 0
+            jointOrientX: 8.042128544829708
+            jointOrientY: 4.627903101395208
+            jointOrientZ: -0.3748403547634773
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/MiddleFinger1_R/MiddleFinger2_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.2505406166608539
+            translateY: 1.1102230246251565e-15
+            translateZ: -7.087663789206999e-12
+            rotateX: 0.0
+            rotateY: 8.348956038841729e-15
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 3.3063643767221156
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/MiddleFinger1_R/MiddleFinger2_R/MiddleFinger3_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.18688778786226923
+            translateY: -2.220446049250313e-16
+            translateZ: 3.907985046680551e-14
+            rotateX: 0.0
+            rotateY: 1.5455507905236776e-14
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.31504276895152905
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/MiddleFinger1_R/MiddleFinger2_R/MiddleFinger3_R/MiddleFinger4_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.18115391430840155
+            translateY: -6.661338147750939e-16
+            translateZ: -1.0658141036401503e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/ThumbFinger1_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.1437434596225673
+            translateY: 0.1884101501828184
+            translateZ: -0.02818566467899153
+            rotateX: -2.1235695370375725e-06
+            rotateY: 6.361109624477255e-15
+            rotateZ: 1.4113711281112565e-14
+            rotateOrder: 0
+            jointOrientX: -65.49810587602644
+            jointOrientY: 15.002501974196528
+            jointOrientZ: 27.02196834726151
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/ThumbFinger1_R/ThumbFinger2_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.27267209710481244
+            translateY: -1.5987211554602254e-14
+            translateZ: 5.329070518200751e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/ThumbFinger1_R/ThumbFinger2_R/ThumbFinger3_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.17963884026204258
+            translateY: -1.7763568394002505e-15
+            translateZ: 2.353672812205332e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/ThumbFinger1_R/ThumbFinger2_R/ThumbFinger3_R/ThumbFinger4_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.20724412934139047
+            translateY: -2.8691447795381464e-07
+            translateZ: -1.8335008089565008e-07
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/IndexFinger1_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.6102610618709052
+            translateY: 0.17207985322355862
+            translateZ: 0.05669800259183333
+            rotateX: 7.516545243302449e-16
+            rotateY: 1.6660639952510062e-14
+            rotateZ: -1.6151254241806921e-15
+            rotateOrder: 0
+            jointOrientX: 3.051447202745257
+            jointOrientY: 2.6966607102717637
+            jointOrientZ: 2.31415496226883
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/IndexFinger1_R/IndexFinger2_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.24678135317476713
+            translateY: 1.3322676295501878e-15
+            translateZ: 5.1514348342607263e-14
+            rotateX: 0.0
+            rotateY: 9.541664044390549e-15
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 6.422779058192061
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/IndexFinger1_R/IndexFinger2_R/IndexFinger3_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.1506295141516465
+            translateY: -3.552713678800501e-15
+            translateZ: -1.9539925233402755e-14
+            rotateX: 0.0
+            rotateY: 1.967968209155551e-14
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: -0.36182308142249014
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/IndexFinger1_R/IndexFinger2_R/IndexFinger3_R/IndexFinger4_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.1703947966986279
+            translateY: -5.329070518200751e-15
+            translateZ: 0.0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.15341432108665298
+            translateY: -0.08657177004601424
+            translateZ: -0.012137618108589265
+            rotateX: -1.441188840038156e-14
+            rotateY: 1.4908850069360234e-14
+            rotateZ: 4.969616689786743e-15
+            rotateOrder: 0
+            jointOrientX: 20.021096164984744
+            jointOrientY: -10.054865764922
+            jointOrientZ: 5.831025128880507
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/PinkyFinger1_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.4042014714282294
+            translateY: -0.18356061944482827
+            translateZ: 0.021732731646169512
+            rotateX: 3.458853216091575e-14
+            rotateY: 6.361109362927032e-15
+            rotateZ: 5.218097524276084e-15
+            rotateOrder: 0
+            jointOrientX: -8.883761529831595
+            jointOrientY: 5.055206992947206
+            jointOrientZ: -16.76448928947933
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/PinkyFinger1_R/PinkyFinger2_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.16890317859353843
+            translateY: 1.3322676295501878e-15
+            translateZ: 1.4210854715202004e-14
+            rotateX: 0.0
+            rotateY: 7.951386703658789e-15
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 8.250591894714006
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/PinkyFinger1_R/PinkyFinger2_R/PinkyFinger3_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.11865603280626225
+            translateY: -7.993605777301127e-15
+            translateZ: -6.927791673660977e-14
+            rotateX: 0.0
+            rotateY: 1.987846675914698e-15
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: -1.145915564648438
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/PinkyFinger1_R/PinkyFinger2_R/PinkyFinger3_R/PinkyFinger4_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.1393407709630754
+            translateY: -3.1086244689504383e-15
+            translateZ: 5.861977570020827e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/RingFinger1_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.4563956396984139
+            translateY: -0.0658317778295161
+            translateZ: 0.012258222186043
+            rotateX: -4.1545995526617185e-14
+            rotateY: 1.3318572728628477e-14
+            rotateZ: -3.3793393490549915e-15
+            rotateOrder: 0
+            jointOrientX: -13.90484873966683
+            jointOrientY: 9.357466738396896
+            jointOrientZ: -13.573562366806408
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/RingFinger1_R/RingFinger2_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.23175265222754682
+            translateY: 3.1086244689504383e-15
+            translateZ: 3.552713678800501e-15
+            rotateX: 0.0
+            rotateY: 1.3517357396219947e-14
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 6.875493387890622
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/RingFinger1_R/RingFinger2_R/RingFinger3_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.1623061679037443
+            translateY: -2.886579864025407e-15
+            translateZ: 7.283063041541027e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/RingFinger1_R/RingFinger2_R/RingFinger3_R/RingFinger4_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.1655661147012153
+            translateY: -6.217248937900877e-15
+            translateZ: -1.4210854715202004e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 1.1963593845272413
+            translateY: -0.16669359158877495
+            translateZ: 0.33923371315041567
+            rotateX: 5.075171348277815e-12
+            rotateY: -1.908332808877947e-14
+            rotateZ: 3.6775163504421066e-14
+            rotateOrder: 2
+            jointOrientX: -122.04534881356916
+            jointOrientY: 89.9787694464316
+            jointOrientZ: 54.919460596166864
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.6976079304617838
+            translateY: 5.551115123125783e-15
+            translateZ: 9.059419880941277e-14
+            rotateX: 1.1220224296108548e-11
+            rotateY: 3.071595835540049e-13
+            rotateZ: 1.0851779244232573e-13
+            rotateOrder: 5
+            jointOrientX: -7.945795556775837
+            jointOrientY: 0.29736421166712645
+            jointOrientZ: -1.6286531647825455
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -2.0315295518981635
+            translateY: -3.8191672047105385e-14
+            translateZ: 1.7319479184152442e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 1.0774128983457664e-13
+            rotateOrder: 5
+            jointOrientX: -5.589359042103863e-18
+            jointOrientY: -1.182106513289636e-16
+            jointOrientZ: 3.3711672905764987
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -1.8829435660938896
+            translateY: 2.1538326677728037e-14
+            translateZ: -3.907985046680551e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 5
+            jointOrientX: -2.4819267922473163e-18
+            jointOrientY: -1.8721675328633496e-17
+            jointOrientZ: 1.987846675914698e-16
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/MiddleFinger1_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.6278214171260137
+            translateY: -0.028269968418693253
+            translateZ: -0.08480825719353646
+            rotateX: -4.6105618839496516e-14
+            rotateY: -1.9170296380852366e-14
+            rotateZ: 2.236327510404042e-15
+            rotateOrder: 0
+            jointOrientX: 8.042128544829708
+            jointOrientY: 4.627903101395208
+            jointOrientZ: -0.3748403547634773
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/MiddleFinger1_L/MiddleFinger2_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.25054061666085836
+            translateY: -5.995204332975845e-15
+            translateZ: 7.077005648170598e-12
+            rotateX: 0.0
+            rotateY: -1.590277340731758e-15
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 3.3063643767221156
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/MiddleFinger1_L/MiddleFinger2_L/MiddleFinger3_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.18688778786226923
+            translateY: -6.217248937900877e-15
+            translateZ: -4.440892098500626e-14
+            rotateX: 0.0
+            rotateY: 5.665363026356889e-15
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.31504276895152905
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/MiddleFinger1_L/MiddleFinger2_L/MiddleFinger3_L/MiddleFinger4_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.18115391430840244
+            translateY: -5.10702591327572e-15
+            translateZ: 1.4210854715202004e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/ThumbFinger1_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.1437434596225673
+            translateY: -0.18841015018282467
+            translateZ: 0.02818566467894712
+            rotateX: -1.779122774943655e-14
+            rotateY: 2.2263882770244617e-14
+            rotateZ: -8.945310041616143e-15
+            rotateOrder: 0
+            jointOrientX: -65.498107999596
+            jointOrientY: 15.002501974196548
+            jointOrientZ: 27.021968347261506
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/ThumbFinger1_L/ThumbFinger2_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.2726720971048118
+            translateY: 3.019806626980426e-14
+            translateZ: -2.9753977059954195e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/ThumbFinger1_L/ThumbFinger2_L/ThumbFinger3_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.17963884026204213
+            translateY: 1.2434497875801753e-14
+            translateZ: -4.1300296516055823e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/ThumbFinger1_L/ThumbFinger2_L/ThumbFinger3_L/ThumbFinger4_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.20724412934139202
+            translateY: 2.869144903883125e-07
+            translateZ: 1.833500635761709e-07
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/IndexFinger1_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.6102610618709052
+            translateY: -0.17207985322354824
+            translateZ: -0.056698002591874186
+            rotateX: -6.323837237753633e-15
+            rotateY: 2.5220804700667736e-15
+            rotateZ: 1.7393658414253597e-16
+            rotateOrder: 0
+            jointOrientX: 3.051447202745257
+            jointOrientY: 2.6966607102717637
+            jointOrientZ: 2.31415496226883
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/IndexFinger1_L/IndexFinger2_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.24678135317476446
+            translateY: -3.6637359812630166e-15
+            translateZ: -4.618527782440651e-14
+            rotateX: 0.0
+            rotateY: 2.385416011097637e-15
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 6.422779058192061
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/IndexFinger1_L/IndexFinger2_L/IndexFinger3_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.15062951415164472
+            translateY: -2.275957200481571e-15
+            translateZ: 1.0658141036401503e-14
+            rotateX: 0.0
+            rotateY: 7.851994369863057e-15
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: -0.36182308142249014
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/IndexFinger1_L/IndexFinger2_L/IndexFinger3_L/IndexFinger4_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.170394796698627
+            translateY: -3.3306690738754696e-16
+            translateZ: -1.7763568394002505e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.15341432108665298
+            translateY: 0.08657177004601202
+            translateZ: 0.012137618108605253
+            rotateX: -1.5505204072134644e-14
+            rotateY: 1.2324649390671126e-14
+            rotateZ: -9.342879376799082e-15
+            rotateOrder: 0
+            jointOrientX: 20.021096164984744
+            jointOrientY: -10.054865764922
+            jointOrientZ: 5.831025128880507
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/PinkyFinger1_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.4042014714282258
+            translateY: 0.18356061944484203
+            translateZ: -0.021732731646153525
+            rotateX: -9.34287937679908e-15
+            rotateY: -9.939233379573494e-16
+            rotateZ: -3.677516350442191e-15
+            rotateOrder: 0
+            jointOrientX: -8.883761529831595
+            jointOrientY: 5.055206992947206
+            jointOrientZ: -16.76448928947933
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/PinkyFinger1_L/PinkyFinger2_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.16890317859353843
+            translateY: 4.440892098500626e-16
+            translateZ: -5.329070518200751e-15
+            rotateX: 0.0
+            rotateY: -3.180554681463516e-15
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 8.250591894714006
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/PinkyFinger1_L/PinkyFinger2_L/PinkyFinger3_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.1186560328062587
+            translateY: 4.440892098500626e-15
+            translateZ: 7.460698725481052e-14
+            rotateX: 0.0
+            rotateY: 1.133072605271378e-14
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: -1.145915564648438
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/PinkyFinger1_L/PinkyFinger2_L/PinkyFinger3_L/PinkyFinger4_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.13934077096307274
+            translateY: -4.440892098500626e-16
+            translateZ: -5.5067062021407764e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/RingFinger1_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.45639563969841657
+            translateY: 0.06583177782952765
+            translateZ: -0.012258222186051881
+            rotateX: -2.8426207465580184e-14
+            rotateY: -2.6040791454482544e-14
+            rotateZ: 1.1927080055488253e-15
+            rotateOrder: 0
+            jointOrientX: -13.90484873966683
+            jointOrientY: 9.357466738396896
+            jointOrientZ: -13.573562366806408
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/RingFinger1_L/RingFinger2_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.23175265222754415
+            translateY: -5.551115123125783e-15
+            translateZ: 0.0
+            rotateX: 0.0
+            rotateY: -3.180554681463517e-14
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 6.875493387890622
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/RingFinger1_L/RingFinger2_L/RingFinger3_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.16230616790374386
+            translateY: -3.552713678800501e-15
+            translateZ: -6.927791673660977e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/RingFinger1_L/RingFinger2_L/RingFinger3_L/RingFinger4_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.16556611470121263
+            translateY: -4.440892098500626e-16
+            translateZ: 1.4210854715202004e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/ROOT/Root_M/Hip_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.5288291616655716
+            translateY: -0.04159614586536661
+            translateZ: 0.6369815184908086
+            rotateX: -3.8825130388958935e-19
+            rotateY: 3.3675432571793796e-37
+            rotateZ: -9.939233379573487e-17
+            rotateOrder: 2
+            jointOrientX: 179.4502145256768
+            jointOrientY: 0.2930565955557249
+            jointOrientZ: 0.6134107639427042
+    /MAIN/ROOT/Root_M/Hip_L/Knee_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -3.5331840515136728
+            translateY: 4.954370247389761e-15
+            translateZ: -2.4424906541753444e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: -1.929592313032021e-06
+            rotateOrder: 2
+            jointOrientX: 0.0
+            jointOrientY: -6.212020862233431e-18
+            jointOrientZ: -3.4260508487653136
+    /MAIN/ROOT/Root_M/Hip_L/Knee_L/Ankle_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -3.559377193450927
+            translateY: 3.7789216200678766e-14
+            translateZ: 2.886579864025407e-15
+            rotateX: -9.102361782540403e-15
+            rotateY: 1.3692611757468858e-07
+            rotateZ: -1.2330451683565046e-07
+            rotateOrder: 3
+            jointOrientX: -1.0169722652891755
+            jointOrientY: 0.2871404056553959
+            jointOrientZ: 4.042253226767524
+    /MAIN/ROOT/Root_M/Hip_L/Knee_L/Ankle_L/Toes_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.4573655409379352
+            translateY: -1.0243080985323074
+            translateZ: 9.642272535970164e-10
+            rotateX: 1.9679682091555504e-14
+            rotateY: 3.776908684237962e-15
+            rotateZ: 2.0975199042374293e-13
+            rotateOrder: 5
+            jointOrientX: 2.122823589543671
+            jointOrientY: -1.0785971214673817
+            jointOrientZ: 59.98038163168668
+    /MAIN/ROOT/Root_M/Hip_L/Knee_L/Ankle_L/Toes_L/ToesEnd_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.603686708759578
+            translateY: -7.549516567451064e-15
+            translateZ: -2.55351295663786e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            rotateOrder: 5
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    # root translation
+    /MAIN/ROOT/ROOT_END_TRS_PRX:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 0
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+            visibility: 0
+        connections:
+            - "<options.namespace>:Root_M.jointOrient"
+            - "<options.namespace>:ROOT_END_TRS_PRX.jointOrient"
+    /MAIN/ROOT_START_SRC:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 0
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+            visibility: 0
+            overrideEnabled: 1
+            # red
+            overrideColor: 12
+    /MAIN/ROOT_END_SRC:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 0
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+            visibility: 0
+            overrideEnabled: 1
+            # blue
+            overrideColor: 6
+    # root start
+    /MAIN/ROOT_START:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 0
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+            overrideEnabled: 1
+            # red
+            overrideColor: 12
+    /MAIN/ROOT_START/ROOT_START_PRC:
+        type: parentConstraint
+        properties:
+            enableRestPosition: 1
+        connections:
+            # translation
+            # rotation
+            - "<options.namespace>:ROOT_START_PRC.constraintRotateX"
+            - "<options.namespace>:ROOT_START.rotateX"
+            - "<options.namespace>:ROOT_START_PRC.constraintRotateY"
+            - "<options.namespace>:ROOT_START.rotateY"
+            - "<options.namespace>:ROOT_START_PRC.constraintRotateZ"
+            - "<options.namespace>:ROOT_START.rotateZ"
+            # default use start source translate
+            - '<options.namespace>:ROOT_START_SRC.translate'
+            - '<options.namespace>:ROOT_START_PRC.target[0].targetTranslate'
+    # root end
+    /MAIN/ROOT_END:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 0
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+            overrideEnabled: 1
+            # blue
+            overrideColor: 6
+        connections:
+            # to rotation
+            - "<options.namespace>:ROOT_START.translate"
+            - "<options.namespace>:ROOT.rotatePivot"
+            - "<options.namespace>:ROOT_START.translate"
+            - "<options.namespace>:ROOT.scalePivot"
+            # to main
+            - "<options.namespace>:ROOT_START.translateX"
+            - "<options.namespace>:MAIN.start_translate_x"
+            - "<options.namespace>:ROOT_START.translateY"
+            - "<options.namespace>:MAIN.start_translate_y"
+            - "<options.namespace>:ROOT_START.translateZ"
+            - "<options.namespace>:MAIN.start_translate_z"
+            #
+            - "<options.namespace>:ROOT_START.rotateX"
+            - "<options.namespace>:MAIN.start_rotate_x"
+            - "<options.namespace>:ROOT_START.rotateY"
+            - "<options.namespace>:MAIN.start_rotate_y"
+            - "<options.namespace>:ROOT_START.rotateZ"
+            - "<options.namespace>:MAIN.start_rotate_z"
+    /MAIN/ROOT_END/ROOT_END_PTC:
+        type: pointConstraint
+        properties:
+            enableRestPosition: 1
+        connections:
+            #
+            - "<options.namespace>:ROOT_END_PTC.constraintTranslateX"
+            - "<options.namespace>:ROOT_END.translateX"
+            - "<options.namespace>:ROOT_END_PTC.constraintTranslateY"
+            - "<options.namespace>:ROOT_END.translateY"
+            - "<options.namespace>:ROOT_END_PTC.constraintTranslateZ"
+            - "<options.namespace>:ROOT_END.translateZ"
+            #
+            - "<options.namespace>:ROOT_END.parentInverseMatrix"
+            - "<options.namespace>:ROOT_END_PTC.constraintParentInverseMatrix"
+            - "<options.namespace>:ROOT_END.rotatePivot"
+            - "<options.namespace>:ROOT_END_PTC.constraintRotatePivot"
+            #
+            - "<options.namespace>:ROOT_END.rotatePivotTranslate"
+            - "<options.namespace>:ROOT_END_PTC.constraintRotateTranslate"
+            - "<options.namespace>:ROOT_END_TRS_PRX.translate"
+            - "<options.namespace>:ROOT_END_PTC.target[0].targetTranslate"
+            - "<options.namespace>:ROOT_END_TRS_PRX.rotatePivot"
+            - "<options.namespace>:ROOT_END_PTC.target[0].targetRotatePivot"
+            - "<options.namespace>:ROOT_END_TRS_PRX.rotatePivotTranslate"
+            - "<options.namespace>:ROOT_END_PTC.target[0].targetRotateTranslate"
+            - "<options.namespace>:ROOT_END_TRS_PRX.parentMatrix"
+            - "<options.namespace>:ROOT_END_PTC.target[0].targetParentMatrix"
+    /MAIN/ROOT_END/ROOT_END_ORC:
+        type: orientConstraint
+        properties:
+            offsetY: 90
+            enableRestPosition: 1
+        connections:
+            - "<options.namespace>:ROOT_END_ORC.constraintRotateX"
+            - "<options.namespace>:ROOT_END.rotateX"
+            - "<options.namespace>:ROOT_END_ORC.constraintRotateY"
+            - "<options.namespace>:ROOT_END.rotateY"
+            - "<options.namespace>:ROOT_END_ORC.constraintRotateZ"
+            - "<options.namespace>:ROOT_END.rotateZ"
+            #
+            - "<options.namespace>:ROOT_END.rotateOrder"
+            - "<options.namespace>:ROOT_END_ORC.constraintRotateOrder"
+            - "<options.namespace>:ROOT_END.parentInverseMatrix"
+            - "<options.namespace>:ROOT_END_ORC.constraintParentInverseMatrix"
+            - "<options.namespace>:ROOT_END.jointOrient"
+            - "<options.namespace>:ROOT_END_ORC.constraintJointOrient"
+            - "<options.namespace>:ROOT_END.inverseScale"
+            - "<options.namespace>:ROOT_END_ORC.inverseScale"
+    # root rotation
+    /MAIN/ROOT_END_RTT:
+        type: transform
+        properties:
+            translateX: 0.0
+            translateY: 0.0
+            translateZ: 0.0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            visibility: 0
+        connections:
+            - "<options.namespace>:ROOT_END.translate"
+            - "<options.namespace>:ROOT_END_RTT.translate"
+    #
+    /MAIN/ROOT_END_RTT/ROOT_END_AMI:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 0
+            translateZ: 1
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+
+    /MAIN/ROOT_END_RTT/ROOT_END_AMI/ROOT_END_AMI_PTC:
+        type: pointConstraint
+        properties:
+            enableRestPosition: 1
+        connections:
+            # ignore Y
+            - "<options.namespace>:ROOT_END_AMI_PTC.constraintTranslateX"
+            - "<options.namespace>:ROOT_END_AMI.translateX"
+            # no Y
+            - "<options.namespace>:ROOT_END_AMI_PTC.constraintTranslateZ"
+            - "<options.namespace>:ROOT_END_AMI.translateZ"
+            #
+            - "<options.namespace>:ROOT_END_AMI.parentInverseMatrix"
+            - "<options.namespace>:ROOT_END_AMI_PTC.constraintParentInverseMatrix"
+            - "<options.namespace>:ROOT_END_AMI.rotatePivot"
+            - "<options.namespace>:ROOT_END_AMI_PTC.constraintRotatePivot"
+            - "<options.namespace>:ROOT_END_AMI.rotatePivotTranslate"
+            - "<options.namespace>:ROOT_END_AMI_PTC.constraintRotateTranslate"
+
+    /MAIN/ROOT_END_RTT/ROOT_END_RTT_PRX:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 0
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: -90
+            jointOrientZ: 0
+            overrideEnabled: 1
+            overrideColor: 17
+
+    /MAIN/ROOT_END_RTT/ROOT_END_RTT_PRX/ROOT_END_RTT_PRX_AMI:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 1
+            translateY: 0
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+            overrideEnabled: 1
+            overrideColor: 17
+
+    /MAIN/ROOT_END_RTT/ROOT_END_RTT_PRX/ROOT_END_RTT_PRX_AMC:
+        type: aimConstraint
+        properties:
+            enableRestPosition: 1
+        connections:
+            - "<options.namespace>:ROOT_END_RTT_PRX.parentInverseMatrix"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintParentInverseMatrix"
+            - "<options.namespace>:ROOT_END_RTT_PRX.translate"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintTranslate"
+            - "<options.namespace>:ROOT_END_RTT_PRX.rotatePivot"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintRotatePivot"
+            - "<options.namespace>:ROOT_END_RTT_PRX.rotatePivotTranslate"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintRotateTranslate"
+            - "<options.namespace>:ROOT_END_RTT_PRX.rotateOrder"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintRotateOrder"
+            - "<options.namespace>:ROOT_END_RTT_PRX.jointOrient"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintJointOrient"
+            - "<options.namespace>:ROOT_END_RTT_PRX.inverseScale"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.inverseScale"
+            - "<options.namespace>:ROOT_END_AMI.translate"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.target[0].targetTranslate"
+            - "<options.namespace>:ROOT_END_AMI.rotatePivot"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.target[0].targetRotatePivot"
+            - "<options.namespace>:ROOT_END_AMI.rotatePivotTranslate"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.target[0].targetRotateTranslate"
+            - "<options.namespace>:ROOT_END_AMI.parentMatrix"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.target[0].targetParentMatrix"
+            #
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintRotateX"
+            - "<options.namespace>:ROOT_END_RTT_PRX.rotateX"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintRotateY"
+            - "<options.namespace>:ROOT_END_RTT_PRX.rotateY"
+            - "<options.namespace>:ROOT_END_RTT_PRX_AMC.constraintRotateZ"
+            - "<options.namespace>:ROOT_END_RTT_PRX.rotateZ"
+            #
+            - "<options.namespace>:ROOT_END_RTT_PRX.rotate"
+            - "<options.namespace>:ROOT_END_ORC.target[0].targetRotate"
+            - "<options.namespace>:ROOT_END_RTT_PRX.rotateOrder"
+            - "<options.namespace>:ROOT_END_ORC.target[0].targetRotateOrder"
+            - "<options.namespace>:ROOT_END_RTT_PRX.parentMatrix"
+            - "<options.namespace>:ROOT_END_ORC.target[0].targetParentMatrix"
+            - "<options.namespace>:ROOT_END_RTT_PRX.jointOrient"
+            - "<options.namespace>:ROOT_END_ORC.target[0].targetJointOrient"
+    /MAIN/ROOT_END_RTT/ROOT_END_RTT_BSE:
+        type: transform
+        properties:
+            translateX: 0.0
+            translateY: 0.0
+            translateZ: 0.0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+
+    /MAIN/ROOT_END_RTT/ROOT_END_RTT_BSE/ROOT_END_RTT_BSE_AMI:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 1
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+        connections:
+            # to constraint
+            - "<options.namespace>:ROOT_END_RTT_BSE_AMI.translate"
+            - "<options.namespace>:ROOT_END_AMI_PTC.target[0].targetTranslate"
+            - "<options.namespace>:ROOT_END_RTT_BSE_AMI.rotatePivot"
+            - "<options.namespace>:ROOT_END_AMI_PTC.target[0].targetRotatePivot"
+            - "<options.namespace>:ROOT_END_RTT_BSE_AMI.rotatePivotTranslate"
+            - "<options.namespace>:ROOT_END_AMI_PTC.target[0].targetRotateTranslate"
+            - "<options.namespace>:ROOT_END_RTT_BSE_AMI.parentMatrix"
+            - "<options.namespace>:ROOT_END_AMI_PTC.target[0].targetParentMatrix"
+
+nodes:
+    ROOT_START_SRC_MTX:
+        name: '<options.namespace>:<..key>'
+        type: decomposeMatrix
+        connections:
+            - '<options.namespace>:ROOT_START_SRC.worldMatrix[0]'
+            - '<options.namespace>:ROOT_START_SRC_MTX.inputMatrix'
+    ROOT_OFFSET_MTX:
+        name: '<options.namespace>:<..key>'
+        type: decomposeMatrix
+        connections:
+            - '<options.namespace>:ROOT_START.worldMatrix[0]'
+            - '<options.namespace>:ROOT_OFFSET_MTX.inputMatrix'
+    # translation
+    root_translate_offset_dif:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            operation: 2
+        connections:
+            - "<options.namespace>:ROOT_OFFSET_MTX.outputTranslate"
+            - "<options.namespace>:root_translate_offset_dif.input3D[0]"
+            - "<options.namespace>:ROOT_START_SRC_MTX.outputTranslate"
+            - "<options.namespace>:root_translate_offset_dif.input3D[1]"
+
+    root_translate_offset_scale:
+        name: '<options.namespace>:<..key>'
+        type: multiplyDivide
+        properties:
+            operation: 2
+        connections:
+            - "<options.namespace>:root_translate_offset_dif.output3D"
+            - "<options.namespace>:root_translate_offset_scale.input1"
+            - "<options.namespace>:ROOT_START_SRC_MTX.outputScale"
+            - "<options.namespace>:root_translate_offset_scale.input2"
+
+    Root_M_translateX:
+        name: '<options.namespace>:<..key>'
+        type: animCurveTL
+        properties:
+            preInfinity: 4
+            postInfinity: 4
+
+    Root_M_translateY:
+        name: '<options.namespace>:<..key>'
+        type: animCurveTL
+        properties:
+            preInfinity: 4
+            postInfinity: 4
+
+    Root_M_translateZ:
+        name: '<options.namespace>:<..key>'
+        type: animCurveTL
+        properties:
+            preInfinity: 4
+            postInfinity: 4
+    # root source start and end
+    # start
+    Root_M_translateX_start:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            # from curve
+            - "<options.namespace>:Root_M_translateX.output"
+            - "<options.namespace>:Root_M_translateX_start.stream"
+            # to joint
+            - "<options.namespace>:Root_M_translateX_start.varying"
+            - "<options.namespace>:ROOT_START_SRC.translateX"
+    Root_M_translateY_start:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            # from curve
+            - "<options.namespace>:Root_M_translateY.output"
+            - "<options.namespace>:Root_M_translateY_start.stream"
+            # to joint
+            - "<options.namespace>:Root_M_translateY_start.varying"
+            - "<options.namespace>:ROOT_START_SRC.translateY"
+    Root_M_translateZ_start:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            # from curve
+            - "<options.namespace>:Root_M_translateZ.output"
+            - "<options.namespace>:Root_M_translateZ_start.stream"
+            # to joint
+            - "<options.namespace>:Root_M_translateZ_start.varying"
+            - "<options.namespace>:ROOT_START_SRC.translateZ"
+    # end
+    Root_M_translateX_end:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            # from curve
+            - "<options.namespace>:Root_M_translateX.output"
+            - "<options.namespace>:Root_M_translateX_end.stream"
+            # to joint
+            - "<options.namespace>:Root_M_translateX_end.varying"
+            - "<options.namespace>:ROOT_END_SRC.translateX"
+    Root_M_translateY_end:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            # from curve
+            - "<options.namespace>:Root_M_translateY.output"
+            - "<options.namespace>:Root_M_translateY_end.stream"
+            # to joint
+            - "<options.namespace>:Root_M_translateY_end.varying"
+            - "<options.namespace>:ROOT_END_SRC.translateY"
+    Root_M_translateZ_end:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            # from curve
+            - "<options.namespace>:Root_M_translateZ.output"
+            - "<options.namespace>:Root_M_translateZ_end.stream"
+            # to joint
+            - "<options.namespace>:Root_M_translateZ_end.varying"
+            - "<options.namespace>:ROOT_END_SRC.translateZ"
+
+    root_translate_sum:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties: {}
+        connections:
+            - "<options.namespace>:root_translate_offset_scale.outputX"
+            - "<options.namespace>:root_translate_sum.input3D[0].input3Dx"
+            # fixme: ignore Y axis?
+            - "<options.namespace>:root_translate_offset_scale.outputZ"
+            - "<options.namespace>:root_translate_sum.input3D[0].input3Dz"
+            #
+            - "<options.namespace>:Root_M_translateX.output"
+            - "<options.namespace>:root_translate_sum.input3D[1].input3Dx"
+            - "<options.namespace>:Root_M_translateY.output"
+            - "<options.namespace>:root_translate_sum.input3D[1].input3Dy"
+            - "<options.namespace>:Root_M_translateZ.output"
+            - "<options.namespace>:root_translate_sum.input3D[1].input3Dz"
+            # to joint
+            - "<options.namespace>:root_translate_sum.output3D"
+            - "<options.namespace>:Root_M.translate"
+    # root end
+    root_end_translate_sum:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties: {}
+        connections:
+            - "<options.namespace>:ROOT_END_SRC.translate"
+            - "<options.namespace>:root_end_translate_sum.input3D[0]"
+            #
+            - "<options.namespace>:root_translate_offset_scale.output"
+            - "<options.namespace>:root_end_translate_sum.input3D[1]"
+            # to joint
+            - "<options.namespace>:root_end_translate_sum.output3D"
+            - "<options.namespace>:ROOT_END_TRS_PRX.translate"
+    # rotation
+    Root_M_rotateX:
+        name: '<options.namespace>:<..key>'
+        type: animCurveTA
+        properties:
+            preInfinity: 4
+            postInfinity: 4
+        connections:
+            - "<options.namespace>:Root_M_rotateX.output"
+            - "<options.namespace>:Root_M.rotateX"
+    Root_M_rotateY:
+        name: '<options.namespace>:<..key>'
+        type: animCurveTA
+        properties:
+            preInfinity: 4
+            postInfinity: 4
+        connections:
+            - "<options.namespace>:Root_M_rotateY.output"
+            - "<options.namespace>:Root_M.rotateY"
+    Root_M_rotateZ:
+        name: '<options.namespace>:<..key>'
+        type: animCurveTA
+        properties:
+            preInfinity: 4
+            postInfinity: 4
+        connections:
+            - "<options.namespace>:Root_M_rotateZ.output"
+            - "<options.namespace>:Root_M.rotateZ"
+    Root_M_rotateX_end_CVT_IN:
+        name: '<options.namespace>:<..key>'
+        type: unitConversion
+        properties:
+            conversionFactor: 57.295779513082323
+        connections:
+            - "<options.namespace>:Root_M_rotateX.output"
+            - "<options.namespace>:Root_M_rotateX_end_CVT_IN.input"
+    Root_M_rotateY_end_CVT_IN:
+        name: '<options.namespace>:<..key>'
+        type: unitConversion
+        properties:
+            conversionFactor: 57.295779513082323
+        connections:
+            - "<options.namespace>:Root_M_rotateY.output"
+            - "<options.namespace>:Root_M_rotateY_end_CVT_IN.input"
+    Root_M_rotateZ_end_CVT_IN:
+        name: '<options.namespace>:<..key>'
+        type: unitConversion
+        properties:
+            conversionFactor: 57.295779513082323
+        connections:
+            - "<options.namespace>:Root_M_rotateZ.output"
+            - "<options.namespace>:Root_M_rotateZ_end_CVT_IN.input"
+    Root_M_rotateX_end:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            - "<options.namespace>:Root_M_rotateX_end_CVT_IN.output"
+            - "<options.namespace>:Root_M_rotateX_end.stream"
+    Root_M_rotateY_end:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            - "<options.namespace>:Root_M_rotateY_end_CVT_IN.output"
+            - "<options.namespace>:Root_M_rotateY_end.stream"
+    Root_M_rotateZ_end:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            - "<options.namespace>:Root_M_rotateZ_end_CVT_IN.output"
+            - "<options.namespace>:Root_M_rotateZ_end.stream"
+    root_rotate_sum:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        connections:
+            - "<options.namespace>:Root_M_rotateX_end.varying"
+            - "<options.namespace>:root_rotate_sum.input3D[0].input3Dx"
+            - "<options.namespace>:Root_M_rotateY_end.varying"
+            - "<options.namespace>:root_rotate_sum.input3D[0].input3Dy"
+            - "<options.namespace>:Root_M_rotateZ_end.varying"
+            - "<options.namespace>:root_rotate_sum.input3D[0].input3Dz"
+    root_rotate_CVT_OUT:
+        name: '<options.namespace>:<..key>'
+        type: unitConversion
+        properties:
+            conversionFactor: 0.017453292519943295
+        connections:
+            - "<options.namespace>:root_rotate_sum.output3D"
+            - "<options.namespace>:root_rotate_CVT_OUT.input"
+            # to joint
+            - "<options.namespace>:root_rotate_CVT_OUT.output"
+            - "<options.namespace>:ROOT_END_TRS_PRX.rotate"
+    ROOT_END_ROT_MTX:
+        name: '<options.namespace>:<..key>'
+        type: decomposeMatrix
+
+        connections:
+            - "<options.namespace>:ROOT_END_TRS_PRX.worldMatrix"
+            - "<options.namespace>:ROOT_END_ROT_MTX.inputMatrix"
+            #
+            - "<options.namespace>:ROOT_END_ROT_MTX.outputRotate"
+            - "<options.namespace>:ROOT_END_RTT_BSE.rotate"
+    #
+    root_start_rotate_offset_sum_CVT_IN:
+        name: '<options.namespace>:<..key>'
+        type: unitConversion
+        properties:
+            conversionFactor: 57.295779513082323
+        connections:
+            - "<options.namespace>:ROOT_START.rotate"
+            - "<options.namespace>:root_start_rotate_offset_sum_CVT_IN.input"
+
+    root_start_rotate_offset_sum:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        connections:
+            - "<options.namespace>:root_start_rotate_offset_sum_CVT_IN.output"
+            - "<options.namespace>:root_start_rotate_offset_sum.input3D[0]"
+
+    root_start_rotate_offset_sum_CVT_OUT:
+        name: '<options.namespace>:<..key>'
+        type: unitConversion
+        properties:
+            conversionFactor: 0.017453292519943295
+        connections:
+            #
+            - "<options.namespace>:root_start_rotate_offset_sum.output3D"
+            - "<options.namespace>:root_start_rotate_offset_sum_CVT_OUT.input"
+            #
+            - "<options.namespace>:root_start_rotate_offset_sum_CVT_OUT.output"
+            - "<options.namespace>:ROOT.rotate"
+
+    root_start_translate_offset_sum:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        connections:
+            - "<options.namespace>:ROOT_START_PRC.constraintTranslate"
+            - "<options.namespace>:root_start_translate_offset_sum.input3D[0]"
+            #
+            - "<options.namespace>:root_start_translate_offset_sum.output3D"
+            - "<options.namespace>:ROOT_START.translate"
+
+containers:
+    LAYER:
+        name: '<options.namespace>:<..key>'
+        type: dagContainer
+        properties:
+            iconName: 'out_timeEditorLayer.png'
+        create_properties:
+            clip:
+                type: message
+                value: '<options.namespace>:CLIP'
+            blend:
+                type: message
+                value: '<options.namespace>:BLEND'
+
+            main_weight:
+                type: float
+                value: 1.0
+
+            clip_start_frame:
+                type: float
+                value: 1
+
+            clip_end_frame:
+                type: float
+                value: 1
+
+            start_frame:
+                type: float
+                value: 1
+
+            end_frame:
+                type: float
+                value: 48
+
+            speed:
+                type: float
+                value: 1.0
+
+            blend_start_frame:
+                type: time
+                value: 1
+            blend_end_frame:
+                type: time
+                value: 48
+
+            pre_blend_frame:
+                type: float
+                value: 4
+            post_blend_frame:
+                type: float
+                value: 4
+
+            source_start_frame:
+                type: float
+                value: 0
+            source_end_frame:
+                type: float
+                value: 24
+
+            pre_cycle:
+                type: float
+                value: 0
+            post_cycle:
+                type: float
+                value: 999
+
+            translate_offset:
+                type: float3
+                value: [0, 0, 0]
+
+            rotate_offset:
+                type: float3
+                value: [0, 0, 0]
+
+            match_scale:
+                type: float
+                value: 1.0
+
+            layer_index:
+                type: integer
+                value: 0
+
+        connections:
+            # connect to clip
+            - '<options.namespace>:LAYER.start_frame'
+            - '<options.namespace>:CLIP.start_frame'
+            - '<options.namespace>:LAYER.end_frame'
+            - '<options.namespace>:CLIP.end_frame'
+            #
+            - '<options.namespace>:LAYER.speed'
+            - '<options.namespace>:CLIP.speed'
+            #
+            - '<options.namespace>:LAYER.source_start_frame'
+            - '<options.namespace>:CLIP.source_start_frame'
+            - '<options.namespace>:LAYER.source_end_frame'
+            - '<options.namespace>:CLIP.source_end_frame'
+            #
+            - '<options.namespace>:LAYER.pre_cycle'
+            - '<options.namespace>:CLIP.pre_cycle'
+            - '<options.namespace>:LAYER.post_cycle'
+            - '<options.namespace>:CLIP.post_cycle'
+            # connect to blend
+            - '<options.namespace>:LAYER.blend_start_frame'
+            - '<options.namespace>:BLEND.blend_start_frame'
+            - '<options.namespace>:LAYER.blend_end_frame'
+            - '<options.namespace>:BLEND.blend_end_frame'
+            #
+            - '<options.namespace>:LAYER.pre_blend_frame'
+            - '<options.namespace>:BLEND.pre_blend_frame'
+            - '<options.namespace>:LAYER.post_blend_frame'
+            - '<options.namespace>:BLEND.post_blend_frame'
+            #
+            - '<options.namespace>:BLEND.output_weight'
+            - '<options.namespace>:LAYER.main_weight'
+            #
+            - '<options.namespace>:LAYER.main_weight'
+            - '<options.namespace>:LAYER.visibility'
+            # translation
+            # start
+            - '<options.namespace>:LAYER.start_frame'
+            - "<options.namespace>:Root_M_translateX_start.varyTime"
+            - '<options.namespace>:LAYER.start_frame'
+            - "<options.namespace>:Root_M_translateY_start.varyTime"
+            - '<options.namespace>:LAYER.start_frame'
+            - "<options.namespace>:Root_M_translateZ_start.varyTime"
+            # end
+            - '<options.namespace>:LAYER.end_frame'
+            - "<options.namespace>:Root_M_translateX_end.varyTime"
+            - '<options.namespace>:LAYER.end_frame'
+            - "<options.namespace>:Root_M_translateY_end.varyTime"
+            - '<options.namespace>:LAYER.end_frame'
+            - "<options.namespace>:Root_M_translateZ_end.varyTime"
+            # rotation
+            - '<options.namespace>:LAYER.end_frame'
+            - "<options.namespace>:Root_M_rotateX_end.varyTime"
+            - '<options.namespace>:LAYER.end_frame'
+            - "<options.namespace>:Root_M_rotateY_end.varyTime"
+            - '<options.namespace>:LAYER.end_frame'
+            - "<options.namespace>:Root_M_rotateZ_end.varyTime"
+            #
+            - '<options.namespace>:LAYER.rotate_offset'
+            - "<options.namespace>:root_start_rotate_offset_sum.input3D[1]"
+            #
+            - '<options.namespace>:LAYER.translate_offset'
+            - "<options.namespace>:root_start_translate_offset_sum.input3D[1]"
+            - "<options.namespace>:LAYER.translate_offsetY"
+            - "<options.namespace>:root_translate_sum.input3D[0].input3Dy"

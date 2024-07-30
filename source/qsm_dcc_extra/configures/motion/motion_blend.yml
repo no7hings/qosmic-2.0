@@ -1,0 +1,259 @@
+nodes:
+    # curve
+    blend_pre_blend_curve:
+        name: '<options.namespace>:<..key>'
+        type: animCurveTU
+        # noinspection YAMLIncompatibleTypes
+        keyframes: [
+            [0.0, 0.0, [0.0, 0.0, 1.0, 1.0, 'auto', 'auto']], [10.0, 1.0, [0.0, 0.0, 1.0, 1.0, 'auto', 'auto']]
+        ]
+    blend_post_blend_curve:
+        name: '<options.namespace>:<..key>'
+        type: animCurveTU
+        # noinspection YAMLIncompatibleTypes
+        keyframes: [
+            [0.0, 1.0, [0.0, 0.0, 1.0, 1.0, 'auto', 'auto']], [10.0, 0.0, [0.0, 0.0, 1.0, 1.0, 'auto', 'auto']]
+        ]
+    # time to unit
+    blend_time_to_unit:
+        name: '<options.namespace>:<..key>'
+        type: timeToUnitConversion
+        properties:
+            # 24fps
+            conversionFactor: 0.004
+    # pre
+    # pre blend = blend_start_frame-pre_blend_frame
+    blend_pre_blend_frame:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            operation: 2
+
+    blend_pre_frame_offset:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            operation: 2
+        connections:
+            - "<options.namespace>:blend_time_to_unit.output"
+            - "<options.namespace>:blend_pre_frame_offset.input1D[0]"
+            - "<options.namespace>:blend_pre_blend_frame.output1D"
+            - "<options.namespace>:blend_pre_frame_offset.input1D[1]"
+
+    blend_pre_blend_dvd:
+        name: '<options.namespace>:<..key>'
+        type: multiplyDivide
+        properties:
+            operation: 2
+            input1: [10, 1, 0]
+            input2: [1, 1, 1]
+
+    blend_pre_blend_mtp:
+        name: '<options.namespace>:<..key>'
+        type: multiplyDivide
+        connections:
+            - "<options.namespace>:blend_pre_blend_dvd.output"
+            - "<options.namespace>:blend_pre_blend_mtp.input1"
+            #
+            - "<options.namespace>:blend_pre_frame_offset.output1D"
+            - "<options.namespace>:blend_pre_blend_mtp.input2X"
+
+    blend_pre_frame_cache:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            # input curve
+            - "<options.namespace>:blend_pre_blend_curve.output"
+            - "<options.namespace>:blend_pre_frame_cache.stream"
+            # input time
+            - "<options.namespace>:blend_pre_blend_mtp.outputX"
+            - "<options.namespace>:blend_pre_frame_cache.varyTime"
+
+    blend_pre_blend_value_sub:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            operation: 2
+        connections:
+            - "<options.namespace>:blend_pre_blend_dvd.input1Y"
+            - "<options.namespace>:blend_pre_blend_value_sub.input1D[0]"
+            #
+            - "<options.namespace>:blend_pre_frame_cache.varying"
+            - "<options.namespace>:blend_pre_blend_value_sub.input1D[1]"
+
+    blend_pre_blend_cdt:
+        name: '<options.namespace>:<..key>'
+        type: condition
+        properties:
+            # frame < blend_start_frame
+            operation: 4
+            colorIfTrue: [1, 1, 1]
+            colorIfFalse: [0, 0, 0]
+        connections:
+            # input time
+            - "<options.namespace>:blend_time_to_unit.output"
+            - "<options.namespace>:blend_pre_blend_cdt.firstTerm"
+            # input blend
+            - "<options.namespace>:blend_pre_blend_value_sub.output1D"
+            - "<options.namespace>:blend_pre_blend_cdt.colorIfTrueR"
+
+    # post blend = blend_end_frame+post_blend_frame
+    blend_post_blend_frame:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+
+    blend_post_frame_offset:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            operation: 2
+        connections:
+            - "<options.namespace>:blend_time_to_unit.output"
+            - "<options.namespace>:blend_post_frame_offset.input1D[0]"
+
+    blend_post_blend_dvd:
+        name: '<options.namespace>:<..key>'
+        type: multiplyDivide
+        properties:
+            operation: 2
+            input1: [10, 1, 0]
+            input2: [1, 1, 1]
+
+    blend_post_blend_mtp:
+        name: '<options.namespace>:<..key>'
+        type: multiplyDivide
+        connections:
+            - "<options.namespace>:blend_post_blend_dvd.output"
+            - "<options.namespace>:blend_post_blend_mtp.input1"
+            #
+            - "<options.namespace>:blend_post_frame_offset.output1D"
+            - "<options.namespace>:blend_post_blend_mtp.input2X"
+
+    blend_post_frame_cache:
+        name: '<options.namespace>:<..key>'
+        type: frameCache
+        connections:
+            # input curve
+            - "<options.namespace>:blend_post_blend_curve.output"
+            - "<options.namespace>:blend_post_frame_cache.stream"
+            # input time
+            - "<options.namespace>:blend_post_blend_mtp.outputX"
+            - "<options.namespace>:blend_post_frame_cache.varyTime"
+
+    blend_post_blend_value_sub:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            operation: 2
+        connections:
+            - "<options.namespace>:blend_post_blend_dvd.input1Y"
+            - "<options.namespace>:blend_post_blend_value_sub.input1D[0]"
+            #
+            - "<options.namespace>:blend_post_frame_cache.varying"
+            - "<options.namespace>:blend_post_blend_value_sub.input1D[1]"
+
+    blend_post_blend_cdt:
+        name: '<options.namespace>:<..key>'
+        type: condition
+        properties:
+            # frame > blend_end_frame
+            operation: 2
+            colorIfTrue: [1, 1, 1]
+            colorIfFalse: [0, 0, 0]
+        connections:
+            # input time
+            - "<options.namespace>:blend_time_to_unit.output"
+            - "<options.namespace>:blend_post_blend_cdt.firstTerm"
+            # input blend
+            - "<options.namespace>:blend_post_blend_value_sub.output1D"
+            - "<options.namespace>:blend_post_blend_cdt.colorIfTrueR"
+    # output
+    blend_sum:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        connections:
+            - "<options.namespace>:blend_pre_blend_cdt.outColor"
+            - "<options.namespace>:blend_sum.input3D[0]"
+            - "<options.namespace>:blend_post_blend_cdt.outColor"
+            - "<options.namespace>:blend_sum.input3D[1]"
+
+    blend_sub:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            operation: 2
+            input3D[0]: [1, 1, 1]
+
+        connections:
+            - "<options.namespace>:blend_sum.output3D"
+            - "<options.namespace>:blend_sub.input3D[1]"
+
+containers:
+    BLEND:
+        name: '<options.namespace>:<..key>'
+        type: dagContainer
+        properties:
+            iconName: 'out_timeEditorClip.png'
+        create_properties:
+            blend_start_frame:
+                type: float
+                value: 1
+            blend_end_frame:
+                type: float
+                value: 48
+            pre_blend_frame:
+                type: float
+                value: 4
+            post_blend_frame:
+                type: float
+                value: 4
+            input_time:
+                type: time
+                value: 0
+            output_weight:
+                type: float
+                value: 1.0
+
+            pre_blend_curve:
+                type: message
+
+            post_blend_curve:
+                type: message
+
+        connections:
+            - 'time1.outTime'
+            - '<options.namespace>:BLEND.input_time'
+            #
+            - '<options.namespace>:BLEND.input_time'
+            - '<options.namespace>:blend_time_to_unit.input'
+            #
+            - '<options.namespace>:blend_pre_blend_curve.message'
+            - '<options.namespace>:BLEND.pre_blend_curve'
+            - '<options.namespace>:blend_post_blend_curve.message'
+            - '<options.namespace>:BLEND.post_blend_curve'
+            # frame
+            - "<options.namespace>:BLEND.blend_start_frame"
+            - "<options.namespace>:blend_pre_blend_frame.input1D[0]"
+            - "<options.namespace>:BLEND.pre_blend_frame"
+            - "<options.namespace>:blend_pre_blend_frame.input1D[1]"
+            #
+            - "<options.namespace>:BLEND.blend_start_frame"
+            - "<options.namespace>:blend_pre_blend_cdt.secondTerm"
+            - "<options.namespace>:BLEND.blend_end_frame"
+            - "<options.namespace>:blend_post_blend_cdt.secondTerm"
+            #
+            - "<options.namespace>:BLEND.blend_end_frame"
+            - "<options.namespace>:blend_post_blend_frame.input1D[0]"
+            - "<options.namespace>:BLEND.post_blend_frame"
+            - "<options.namespace>:blend_post_blend_frame.input1D[1]"
+            # output
+            - '<options.namespace>:blend_sub.output3Dx'
+            - '<options.namespace>:BLEND.output_weight'
+            #
+            - "<options.namespace>:BLEND.pre_blend_frame"
+            - "<options.namespace>:blend_pre_blend_dvd.input2X"
+            - "<options.namespace>:BLEND.post_blend_frame"
+            - "<options.namespace>:blend_post_blend_dvd.input2X"
+            #
+            - "<options.namespace>:BLEND.blend_end_frame"
+            - "<options.namespace>:blend_post_frame_offset.input1D[1]"

@@ -11,7 +11,7 @@ bsc_core.PyReloader2(
 
 import qsm_maya.core as qsm_mya_core
 
-for i in qsm_mya_core.BscNodeOpt(
+for i in qsm_mya_core.EtrNodeOpt(
     'wave1'
 ).get_all_port_paths():
     print i

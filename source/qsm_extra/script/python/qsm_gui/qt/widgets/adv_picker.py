@@ -16,7 +16,7 @@ import lxbasic.storage as bsc_storage
 import qsm_general.core as qsm_gnl_core
 
 
-class Keys(object):
+class _Keys(object):
     main = 'main'
     #
     root_fk_M = 'root_fk_M'
@@ -26,6 +26,8 @@ class Keys(object):
     spine_fk_ik_swap_M = 'spine_fk_ik_swap_M'
     spine_fk_M = 'spine_fk_M'
     spine_ik_M = 'spine_ik_M'
+    spine_ik_hybrid_M = 'spine_ik_hybrid_M'
+    spine_ik_cv_M = 'spine_ik_cv_M'
 
     chest_fk_M = 'chest_fk_M'
     neck_fk_M = 'neck_fk_M'
@@ -35,6 +37,7 @@ class Keys(object):
     shoulder_fk_L = 'shoulder_fk_L'
     elbow_fk_L = 'elbow_fk_L'
     wrist_fk_L = 'wrist_fk_L'
+    cup_fk_L = 'cup_fk_L'
     thumb_fk_L = 'thumb_fk_L'
     finger_fk_L = 'finger_fk_L'
     # arm right
@@ -42,6 +45,7 @@ class Keys(object):
     shoulder_fk_R = 'shoulder_fk_R'
     elbow_fk_R = 'elbow_fk_R'
     wrist_fk_R = 'wrist_fk_R'
+    cup_fk_R = 'cup_fk_R'
     thumb_fk_R = 'thumb_fk_R'
     finger_fk_R = 'finger_fk_R'
     # leg left
@@ -78,8 +82,11 @@ class Keys(object):
     leg_ik_toe_L = 'leg_ik_toe_L'
     leg_ik_toe_R = 'leg_ik_toe_R'
 
-    leg_ik_toe_end_L = 'leg_ik_toe_end_L'
-    leg_ik_toe_end_R = 'leg_ik_toe_end_R'
+    leg_ik_toe_roll_L = 'leg_ik_toe_roll_L'
+    leg_ik_toe_roll_R = 'leg_ik_toe_roll_R'
+
+    leg_ik_toe_roll_end_L = 'leg_ik_toe_roll_end_L'
+    leg_ik_toe_roll_end_R = 'leg_ik_toe_roll_end_R'
 
     leg_ik_heel_L = 'leg_ik_heel_L'
     leg_ik_heel_R = 'leg_ik_heel_R'
@@ -93,7 +100,7 @@ class Keys(object):
 
         spine_fk_ik_swap_M,
         spine_fk_M,
-        spine_ik_M,
+        spine_ik_M, spine_ik_hybrid_M, spine_ik_cv_M,
         chest_fk_M,
         neck_fk_M,
         head_fk_M,
@@ -118,6 +125,8 @@ class Keys(object):
         toes_fk_R,
         wrist_fk_L,
         wrist_fk_R,
+        cup_fk_L,
+        cup_fk_R,
 
         arm_ik_pole_L,
         arm_ik_pole_R,
@@ -133,12 +142,13 @@ class Keys(object):
         leg_ik_L, leg_ik_R,
 
         leg_ik_toe_L, leg_ik_toe_R,
-        leg_ik_toe_end_L, leg_ik_toe_end_R,
+        leg_ik_toe_roll_L, leg_ik_toe_roll_R,
+        leg_ik_toe_roll_end_L, leg_ik_toe_roll_end_R,
         leg_ik_heel_L, leg_ik_heel_R,
     ]
 
 
-class QtAdvPicker(
+class QtAdvCharacterPicker(
     QtWidgets.QWidget,
     gui_qt_abstracts.AbsQtActionBaseDef,
 ):
@@ -215,7 +225,7 @@ class QtAdvPicker(
 
     def _do_press_click_(self, event):
         if self._action_is_enable is False:
-            return 
+            return
 
         self._sketch_key_set_tmp = copy.copy(self._sketch_key_set_selected)
         # add
@@ -251,7 +261,7 @@ class QtAdvPicker(
             self.ActionFlag.KeyShiftPress
         ):
             if self._sketch_key_hover is not None:
-                
+
                 keys = self._adv_control_cfg.find_next_keys_at(self._sketch_key_hover)
                 self._sketch_key_set_selected.update(keys)
         # sub
@@ -274,22 +284,29 @@ class QtAdvPicker(
             return
 
         if self._sketch_key_set_tmp != self._sketch_key_set_selected:
-            control_keys = []
-            for i in self._sketch_key_set_selected:
-                i_control_keys = self._get_control_keys_(i, self._control_includes)
-                if i_control_keys:
-                    control_keys.extend(i_control_keys)
-
             self.user_select_control_key_changed.emit()
-            self.user_select_control_key_accepted.emit(control_keys)
+
+        control_keys = []
+        for i in self._sketch_key_set_selected:
+            i_control_keys = self._get_control_keys_(i, self._control_includes)
+            if i_control_keys:
+                control_keys.extend(i_control_keys)
+
+        self.user_select_control_key_accepted.emit(control_keys)
 
     def _do_show_tool_tip_(self, event):
         if self._sketch_key_hover is not None:
             css = gui_qt_core.GuiQtUtil.generate_tool_tip_css(
                 self._sketch_key_hover,
                 action_tip=[
+                    '"鼠标左键点击" 选择当前',
+                    '"鼠标左键双击" 选择所有的子集',
+                    '按“SHIFT”加选，按“CTRL”减选',
+                ] if gui_core.GuiUtil.get_language() == 'chs'
+                else [
                     '"LMB-click" to select current',
                     '"LMB-dbl-click" to select all below',
+                    'Press "SHIFT" add, press "CTRL" sub'
                 ]
             )
 
@@ -297,7 +314,7 @@ class QtAdvPicker(
             QtWidgets.QToolTip.showText(
                 QtGui.QCursor.pos(), css, self
             )
-    
+
     def _get_control_keys_(self, key, control_includes):
         list_ = []
         for i in control_includes:
@@ -305,13 +322,13 @@ class QtAdvPicker(
             if i_keys:
                 list_.extend(i_keys)
         return list_
-    
+
     def _get_extra_control_keys_(self, key):
         return self._adv_control_cfg.get_control_keys_at(key, 'extra')
 
     def __init__(self, *args, **kwargs):
-        super(QtAdvPicker, self).__init__(*args, **kwargs)
-        
+        super(QtAdvCharacterPicker, self).__init__(*args, **kwargs)
+
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setMouseTracking(True)
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
@@ -320,8 +337,8 @@ class QtAdvPicker(
         )
 
         self._init_action_base_def_(self)
-        
-        self._adv_control_cfg = qsm_gnl_core.AdvControlConfigure()
+
+        self._adv_control_cfg = qsm_gnl_core.AdvCharacterControlConfigure()
 
         self._body_json_file = bsc_resource.ExtendResource.get('gui/adv-picker-body.json')
         if self._body_json_file is None:
@@ -376,11 +393,11 @@ class QtAdvPicker(
 
             elif event.type() == QtCore.QEvent.KeyPress:
                 if event.modifiers() == QtCore.Qt.ControlModifier:
-                    self._set_action_mdf_flag_add_(
+                    self._add_action_modifier_flag_(
                         self.ActionFlag.KeyControlPress
                     )
                 elif event.modifiers() == QtCore.Qt.ShiftModifier:
-                    self._set_action_mdf_flag_add_(
+                    self._add_action_modifier_flag_(
                         self.ActionFlag.KeyShiftPress
                     )
             elif event.type() == QtCore.QEvent.KeyRelease:
@@ -420,17 +437,17 @@ class QtAdvPicker(
         # painter.fillRect(rect, QtGui.QColor(255, 0, 0, 255))
 
         for i_key, i_path in self._draw_path_dict.items():
-            if i_key in Keys.All:
+            if i_key in _Keys.All:
                 # select
                 if i_key in self._sketch_key_set_selected:
                     if i_key == self._sketch_key_current:
-                        i_r, i_g, i_b, _ = gui_core.GuiRgba.LightBlue
+                        i_r, i_g, i_b, _ = gui_core.GuiRgba.LightAzureBlue
                         painter._set_border_color_(i_r, i_g, i_b, 255)
                         painter._set_background_color_(i_r, i_g, i_b, alpha)
                         # painter._set_background_style_(QtCore.Qt.FDiagPattern)
                         painter._set_border_width_(4)
                     else:
-                        i_r, i_g, i_b, _ = gui_core.GuiRgba.Blue
+                        i_r, i_g, i_b, _ = gui_core.GuiRgba.AzureBlue
                         painter._set_border_color_(i_r, i_g, i_b, 255)
                         painter._set_background_color_(i_r, i_g, i_b, alpha)
                         # painter._set_background_style_(QtCore.Qt.BDiagPattern)
@@ -484,7 +501,7 @@ class QtAdvPicker(
             self._clear_all_selection_()
 
             self._refresh_widget_all_()
-    
+
     def _get_namespace_(self):
         return self._namespace
 

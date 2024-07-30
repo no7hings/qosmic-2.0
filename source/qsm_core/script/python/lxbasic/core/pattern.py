@@ -223,7 +223,7 @@ class PtnParseMtd(object):
         return p
 
 
-class PtnFnmatchMtd(object):
+class BscFnmatch(object):
     FILTER_CACHE = dict()
     FILTER_CACHE_MAXIMUM = 1000
 

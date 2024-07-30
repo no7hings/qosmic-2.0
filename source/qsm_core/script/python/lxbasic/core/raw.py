@@ -1136,6 +1136,8 @@ class RawMatrix33Opt(object):
                 m[row][col] = m1[row][0]*m2[0][col]+m1[row][1]*m2[1][col]+m1[row][2]*m2[2][col]
         return m
 
+    def __str__(self):
+        return str(self.__raw)
 
 class RawIndexMtd(object):
     @classmethod

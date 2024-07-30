@@ -47,7 +47,9 @@ class Reference(object):
         # noinspection PyBroadException
         try:
             return (
+                # with copy number, ect. /a/b.ma
                 cmds.referenceQuery(path, filename=1),
+                # without copy number, ect. /a/b.ma{1}
                 cmds.referenceQuery(path, filename=1, withoutCopyNumber=1)
             )
         except Exception:
@@ -77,9 +79,10 @@ class Reference(object):
     @classmethod
     def duplicate(cls, path):
         namespace = cmds.referenceQuery(path, namespace=1, shortName=1)
-        # namespace = re.sub(r'\d+$', '', namespace)
         file_path = cmds.referenceQuery(path, filename=1, withoutCopyNumber=1)
-        _scene_file.SceneFile.reference_file(file_path, namespace)
+        result = _scene_file.SceneFile.reference_file(file_path, namespace)
+        namespace_new = _scene_file.SceneFile.get_namespace(result)
+        return namespace_new
 
     @classmethod
     def reload(cls, path):
@@ -159,19 +162,6 @@ class ReferenceOpt(_base.AbsNodeOpt):
         Reference.replace(self._path, file_path)
 
 
-class ReferenceQuery(object):
-    def __init__(self):
-        self._cache_dict = collections.OrderedDict()
-
-        self.do_update()
-
-    def do_update(self):
-        _ = References.get_all()
-        for i_path in _:
-            i_opt = ReferenceOpt(i_path)
-            self._cache_dict[i_path] = i_opt
-
-
 class ReferenceNamespacesCache(object):
 
     def __init__(self):
@@ -188,6 +178,9 @@ class ReferenceNamespacesCache(object):
         if namespace in self._cache_dict:
             path = self._cache_dict[namespace]
             return Reference.get_file(path, extend)
+
+    def get(self, namespace):
+        return self._cache_dict[namespace]
 
     def to_valid_namespaces(self, namespaces):
         list_ = []

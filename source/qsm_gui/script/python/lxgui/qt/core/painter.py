@@ -64,7 +64,7 @@ class QtPainter(QtGui.QPainter):
                 self._set_border_color_(_color_and_brush.QtColors.CapsuleBorderChecked)
                 if use_exclusive is True:
                     i_background_color, i_font_color = (
-                        _gui_core.GuiRgba.LightBlue,
+                        _gui_core.GuiRgba.LightAzureBlue,
                         _gui_core.GuiRgba.LightBlack
                     )
                 else:
@@ -368,7 +368,7 @@ class QtPainter(QtGui.QPainter):
         # action state
         if is_pressed is True or is_hovered is True:
             if is_pressed is True:
-                act_bkg_color = QtGui.QColor(*_gui_core.GuiRgba.LightBlue)
+                act_bkg_color = QtGui.QColor(*_gui_core.GuiRgba.LightAzureBlue)
             elif is_hovered is True:
                 act_bkg_color = QtGui.QColor(*_gui_core.GuiRgba.LightOrange)
             else:
@@ -563,7 +563,7 @@ class QtPainter(QtGui.QPainter):
 
         if is_pressed is True or is_hovered is True:
             if is_pressed is True:
-                act_bkg_color = QtGui.QColor(*_gui_core.GuiRgba.LightBlue)
+                act_bkg_color = QtGui.QColor(*_gui_core.GuiRgba.LightAzureBlue)
             elif is_hovered is True:
                 act_bkg_color = QtGui.QColor(*_gui_core.GuiRgba.LightOrange)
             else:
@@ -1016,7 +1016,7 @@ class QtPainter(QtGui.QPainter):
         if is_action_enable is True:
             svg_render.render(self, rct_f)
             if is_pressed is True:
-                p_over = self._generate_svg_rgba_over_(rect_, svg_render, _gui_core.GuiRgba.LightBlue)
+                p_over = self._generate_svg_rgba_over_(rect_, svg_render, _gui_core.GuiRgba.LightAzureBlue)
                 self.drawPixmap(
                     rect_,
                     p_over
@@ -1160,7 +1160,7 @@ class QtPainter(QtGui.QPainter):
 
             pxm_over = None
             if is_pressed is True:
-                pxm_over = self._generate_pixmap_rgba_over_(pixmap, _gui_core.GuiRgba.LightBlue, alpha=63)
+                pxm_over = self._generate_pixmap_rgba_over_(pixmap, _gui_core.GuiRgba.LightAzureBlue, alpha=63)
             elif is_hovered is True:
                 pxm_over = self._generate_pixmap_rgba_over_(pixmap, _gui_core.GuiRgba.LightOrange, alpha=63)
 
@@ -1546,7 +1546,7 @@ class QtPainter(QtGui.QPainter):
 
         if is_pressed is True:
             p_over_1 = self._generate_svg_rgba_over_(
-                rect_, svg_render, _gui_core.GuiRgba.LightBlue,
+                rect_, svg_render, _gui_core.GuiRgba.LightAzureBlue,
                 alpha=63, mask_color=QtGui.QColor(255, 0, 0, 255)
             )
             self.drawPixmap(
@@ -1939,14 +1939,13 @@ class QtPainter(QtGui.QPainter):
             # fixme: text width error
             # text_option__.setUseDesignMetrics(True)
             text_option__.setWrapMode(text_option__.NoWrap)
-            #
             text_ = self.fontMetrics().elidedText(
                 text,
                 QtCore.Qt.ElideMiddle,
                 rect_offset.width()-4,
                 QtCore.Qt.TextShowMnemonic
             )
-        #
+
         rect_f_ = QtCore.QRectF(
             rect_offset.x(), rect_offset.y(),
             rect_offset.width(), rect_offset.height()
@@ -2366,7 +2365,7 @@ class QtPainter(QtGui.QPainter):
                     )
                 )
 
-    def _set_grid_draw_(self, rect, axis_dir, grid_size, grid_scale, translate, grid_offset, border_color):
+    def _draw_grid_(self, rect, axis_dir, grid_size, grid_scale, translate, grid_offset, border_color):
         def set_branch_draw_fnc_(lines, axis_index, scale):
             for seq, line_points in enumerate(lines):
                 # if (seq - axis_index)/scale % 10 == 0:
@@ -2426,7 +2425,7 @@ class QtPainter(QtGui.QPainter):
         set_branch_draw_fnc_(lines_h, index_y, grid_scale_y)
         set_branch_draw_fnc_(lines_v, index_x, grid_scale_x)
 
-    def _set_grid_mark_draw_(
+    def _draw_grid_mark_(
         self, rect, axis_dir, grid_size, translate, grid_offset, grid_scale, grid_value_offset, grid_border_color,
         grid_value_show_mode
     ):
@@ -2482,10 +2481,9 @@ class QtPainter(QtGui.QPainter):
             #
             return lis
 
-        #
         width, height = rect.width(), rect.height()
         grid_w, grid_h = grid_size
-        #
+
         axis_dir_x, axis_dir_y = axis_dir
         translate_x, translate_y = translate
         grid_offset_x, grid_offset_y = grid_offset
@@ -2493,7 +2491,7 @@ class QtPainter(QtGui.QPainter):
         value_offset_x, value_offset_y = grid_value_offset
         index_x = translate_x/grid_w
         index_y = translate_y/grid_h
-        #
+
         self._set_border_color_(grid_border_color)
         self._set_font_(_base.QtFont.generate(size=6))
         text_h = self.fontMetrics().height()
@@ -2506,7 +2504,7 @@ class QtPainter(QtGui.QPainter):
             points_v, index_y, value_scale_y, value_offset_y
         )
 
-    def _set_grid_axis_draw_(self, rect, axis_dir, translate, grid_offset, grid_axis_lock, grid_border_colors):
+    def _draw_grid_axis_(self, rect, axis_dir, translate, grid_offset, grid_axis_lock, grid_border_colors):
         width, height = rect.width(), rect.height()
         axis_dir_x, axis_dir_y = axis_dir
         #
@@ -2544,7 +2542,7 @@ class QtPainter(QtGui.QPainter):
         self._set_border_color_(border_color_y)
         self.drawLine(points_v[0], points_v[1])
 
-    def _set_dotted_frame_draw_(self, rect, border_color, background_color, border_width=2):
+    def _draw_dotted_frame_(self, rect, border_color, background_color, border_width=2):
         self._set_background_color_(background_color)
         self._set_border_color_(border_color)
         self._set_border_width_(2)
@@ -2785,7 +2783,7 @@ class QtNGPainter(QtPainter):
                 i_p_0, i_p_1 = QtCore.QPoint(x, y+i*h/c), QtCore.QPoint(x+w, y+i*h/c)
                 self.drawLine(i_p_0, i_p_1)
 
-    def _set_ng_node_frame_head_draw_(
+    def _draw_node_frame_head_by_rect_(
         self, rect, border_color, border_width, border_radius, is_hovered=False, is_selected=False,
         is_actioned=False
     ):
@@ -2814,7 +2812,7 @@ class QtNGPainter(QtPainter):
         )
         self.drawPath(path_0+path_1)
 
-    def _set_ng_node_frame_body_draw_(self, rect, border_color, border_width, border_radius):
+    def _draw_node_frame_body_by_rect_(self, rect, border_color, border_width, border_radius):
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()
         x_0, y_0 = x, y

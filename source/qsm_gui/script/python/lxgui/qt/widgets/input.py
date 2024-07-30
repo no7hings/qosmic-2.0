@@ -905,7 +905,7 @@ class QtInputAsRgba(
                 self._refresh_widget_draw_()
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
-                    if self._get_action_flag_is_match_(
+                    if self._is_action_flag_match_(
                             self.ActionFlag.ChoosePress
                     ) is True:
                         self.press_clicked.emit()
@@ -1020,7 +1020,7 @@ class QtInputAsIcon(
                 self._refresh_widget_draw_()
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
-                    if self._get_action_flag_is_match_(
+                    if self._is_action_flag_match_(
                             self.ActionFlag.ChoosePress
                     ) is True:
                         self.press_clicked.emit()

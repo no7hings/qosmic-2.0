@@ -1101,7 +1101,7 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
         if port is not None:
             port.set(value)
         else:
-            bsc_log.Log.trace_method_warning(
+            bsc_log.Log.trace_method_error(
                 'port set',
                 'port="{}" is non-exists'.format(key)
             )

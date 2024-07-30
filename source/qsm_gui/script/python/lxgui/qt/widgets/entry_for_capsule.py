@@ -119,7 +119,7 @@ class QtEntryAsCapsule(
                         self.ActionFlag.Press
                     )
             elif event.type() == QtCore.QEvent.MouseMove:
-                if self._get_action_flag_is_match_(self.ActionFlag.Press):
+                if self._is_action_flag_match_(self.ActionFlag.Press):
                     self._do_press_move_(event)
 
                 self._do_hover_move_(event)

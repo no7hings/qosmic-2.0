@@ -95,18 +95,26 @@ class NodeAttribute(object):
             return _[0]
 
     @classmethod
+    def get_source_(cls, attribute):
+        _ = cmds.listConnections(
+            attribute, destination=0, source=1, plugs=1
+        )
+        if _:
+            return _[0]
+
+    @classmethod
     def get_targets(cls, path, atr_name):
         return cmds.listConnections(
             cls.to_atr_path(path, atr_name), destination=1, source=0, plugs=1
         ) or []
 
     @classmethod
-    def get_all_sources(cls, path):
+    def get_all_source_connections(cls, node_or_attribute):
         list_ = []
-        _ = cmds.listConnections(path, destination=0, source=1, connections=1, plugs=1) or []
+        _ = cmds.listConnections(node_or_attribute, destination=0, source=1, connections=1, plugs=1) or []
         # ["source-atr-path", "target-atr-path", ...]
         for seq, i in enumerate(_):
-            if seq % 2:
+            if seq%2:
                 source_atr_path = i
                 target_atr_path = _[seq - 1]
                 #
@@ -114,10 +122,10 @@ class NodeAttribute(object):
         return list_
 
     @classmethod
-    def get_all_targets(cls, path):
+    def get_all_target_connections(cls, node_or_attribute):
         lis = []
-        _ = cmds.listConnections(path, destination=1, source=0, connections=1, plugs=1) or []
-        # ["source-atr-path", "target-atr-path", ...]
+        _ = cmds.listConnections(node_or_attribute, destination=1, source=0, connections=1, plugs=1) or []
+        # ["source-atr-node_or_attribute", "target-atr-path", ...]
         for seq, i in enumerate(_):
             if seq%2:
                 source_atr_path = _[seq-1]
@@ -158,11 +166,52 @@ class NodeAttribute(object):
                 cls.set_as_string(path, atr_name, default)
 
     @classmethod
+    def create_as_group(cls, path, atr_name, child_number):
+        if cls.is_exists(path, atr_name) is False:
+            cmds.addAttr(
+                path, longName=atr_name, numberOfChildren=child_number, attributeType='compound'
+            )
+
+    @classmethod
     def create_as_boolean(cls, path, atr_name, default=None):
         if cls.is_exists(path, atr_name) is False:
             cmds.addAttr(path, longName=atr_name, attributeType='bool', keyable=1)
             if default is not None:
                 cls.set_value(path, atr_name, default)
+
+    @classmethod
+    def create_as_time(cls, path, atr_name, default=None):
+        if cls.is_exists(path, atr_name) is False:
+            cmds.addAttr(path, longName=atr_name, attributeType='time', keyable=1)
+            if default is not None:
+                cls.set_value(path, atr_name, default)
+
+    @classmethod
+    def create_as_message(cls, path, atr_name, default=None, **kwargs):
+        if cls.is_exists(path, atr_name) is False:
+            options = dict(
+                longName=atr_name, attributeType='message', keyable=1
+            )
+            options.update(**kwargs)
+            cmds.addAttr(path, **options)
+            if default is not None:
+                cmds.connectAttr(
+                    default+'.message', path+'.'+atr_name
+                )
+
+    @classmethod
+    def set_as_message(cls, path, atr_name, value):
+        cmds.connectAttr(
+            value+'.message', path+'.'+atr_name
+        )
+
+    @classmethod
+    def get_as_message(cls, path, atr_name):
+        _ = cmds.listConnections(
+            cls.to_atr_path(path, atr_name), destination=0, source=1
+        )
+        if _:
+            return _[0].split('.')[0]
 
     @classmethod
     def create_as_integer(cls, path, atr_name, default=None):
@@ -172,9 +221,44 @@ class NodeAttribute(object):
                 cls.set_value(path, atr_name, default)
 
     @classmethod
-    def create_as_float(cls, path, atr_name, default=None):
+    def create_as_float(cls, path, atr_name, default=None, **kwargs):
         if cls.is_exists(path, atr_name) is False:
-            cmds.addAttr(path, longName=atr_name, attributeType='double', keyable=1)
+            options = dict(
+                longName=atr_name, attributeType='double', keyable=1
+            )
+            options.update(**kwargs)
+            cmds.addAttr(path, **options)
+            if default is not None:
+                cls.set_value(path, atr_name, default)
+
+    @classmethod
+    def create_as_float3(cls, path, atr_name, default=None, **kwargs):
+        if cls.is_exists(path, atr_name) is False:
+            options = dict(
+                longName=atr_name, attributeType='double3', keyable=1
+            )
+            options.update(**kwargs)
+            cmds.addAttr(path, **options)
+            cmds.addAttr(
+                path, longName=atr_name+'X', attributeType='double', parent=atr_name, keyable=1
+            )
+            cmds.addAttr(
+                path, longName=atr_name+'Y', attributeType='double', parent=atr_name, keyable=1
+            )
+            cmds.addAttr(
+                path, longName=atr_name+'Z', attributeType='double', parent=atr_name, keyable=1
+            )
+            if default is not None:
+                cls.set_as_tuple(path, atr_name, default)
+
+    @classmethod
+    def create_as_angle(cls, path, atr_name, default=None, **kwargs):
+        if cls.is_exists(path, atr_name) is False:
+            options = dict(
+                longName=atr_name, attributeType='doubleAngle', keyable=1
+            )
+            options.update(**kwargs)
+            cmds.addAttr(path, **options)
             if default is not None:
                 cls.set_value(path, atr_name, default)
 
@@ -192,5 +276,5 @@ class NodeAttributes(object):
 
     @classmethod
     def get_all_keyable_names(cls, path):
-        return cmds.listAttr(path, keyable=1)
+        return cmds.listAttr(path, keyable=1, unlocked=1)
 

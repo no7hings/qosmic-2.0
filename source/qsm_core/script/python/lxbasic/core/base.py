@@ -701,6 +701,15 @@ class BscHash(object):
         return s.upper()
 
     @classmethod
+    def to_hash_key_for_large_data(cls, raw, as_unique_id=False):
+        s = hashlib.md5(
+            str(raw)
+        ).hexdigest()
+        if as_unique_id is True:
+            return BscUuid.generate_by_hash_value(s)
+        return s.upper()
+
+    @classmethod
     def get_hash_value_(cls, raw, as_unique_id=False):
         raw_str = str(raw)
         pack_array = [ord(i) for i in raw_str]

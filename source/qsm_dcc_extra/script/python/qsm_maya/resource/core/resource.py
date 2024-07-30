@@ -115,7 +115,10 @@ class ResourcesQuery(object):
 
     def do_update_by(self, data):
         self._cache_dict.clear()
-        for i_namespace, (i_node_path, i_is_loaded, i_file_path, i_variants) in data.items():
+        keys = data.keys()
+        keys.sort()
+        for i_namespace in keys:
+            i_node_path, i_is_loaded, i_file_path, i_variants = data[i_namespace]
             i_resource = self.RESOURCE_CLS(i_namespace)
             i_resource._node = i_node_path
             i_resource._file_path = i_file_path

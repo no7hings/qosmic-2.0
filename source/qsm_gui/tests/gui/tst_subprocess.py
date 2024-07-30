@@ -34,11 +34,18 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
             trd = wgt._generate_thread_(self._qt_widget)
 
-            trd.set_fnc(
-                qsm_gnl_core.MayaCacheProcess.generate_command(
-                    'method=test-process'
+            if i == 0:
+                trd.set_fnc(
+                    qsm_gnl_core.MayaCacheProcess.generate_command(
+                        'method=test-process&tag=error'
+                    )
                 )
-            )
+            else:
+                trd.set_fnc(
+                    qsm_gnl_core.MayaCacheProcess.generate_command(
+                        'method=test-process'
+                    )
+                )
             trd.start()
 
         self._qt_widget.window_closed.connect(self._do_close_)

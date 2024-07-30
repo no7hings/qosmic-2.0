@@ -2,6 +2,8 @@
 import os
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
+# noinspection PyUnresolvedReferences
+import maya.mel as mel
 
 import lxbasic.log as bsc_log
 
@@ -246,34 +248,49 @@ class GpuInstanceProcess(object):
                 )
                 # lod
                 shape_path_new = _mya_core.Transform.get_shape(transform_path_new)
-                for i_seq in range(2):
-                    i_level = i_seq+1
-                    # todo: may be mesh had lamina or non-manifold
-                    # noinspection PyBroadException
-                    try:
-                        _mya_core.MeshReduce.reduce_off(shape_path_new, 50)
-                    except Exception:
-                        bsc_log.Log.trace_method_error(
-                            'mesh reduce', 'mesh "{}" had lamina or non-manifold faces or vertices'.format(
-                                shape_path_new
-                            )
+                bsc_log.Log.trace_method_result(
+                    self.KEY, 'create lod for: "{}", face count is {}'.format(
+                        shape_path_new, face_count
+                    )
+                )
+                # memory error when face more than 25000000
+                if face_count <= 25000000:
+                    cmds.select(shape_path_new)
+                    mel.eval(
+                        (
+                            'expandPolyGroupSelection; '
+                            'polyCleanupArgList 4 '
+                            '{ "0","1","0","0","0","0","0","0","0","1e-05","0","1e-05","0","1e-05","0","1","1","0" };'
                         )
-                    # gpu
-                    i_gpu_key = _scn_core.Assembly.Keys.GPU_LOD.format(i_level)
-                    i_gpu_file_path_lod = '{}/{}.abc'.format(
-                        unit_directory_path, i_gpu_key
                     )
-                    _mya_core.GpuCache.export_frame(
-                        i_gpu_file_path_lod, transform_path_new
-                    )
-                    # mesh
-                    i_mesh_key = _scn_core.Assembly.Keys.Mesh_LOD.format(i_level)
-                    i_mesh_file_path_lod = '{}/{}.ma'.format(
-                        unit_directory_path, i_mesh_key
-                    )
-                    _mya_core.SceneFile.export_file(
-                        i_mesh_file_path_lod, transform_path_new
-                    )
+                    for i_seq in range(2):
+                        i_level = i_seq+1
+                        # todo: may be mesh had lamina or non-manifold
+                        # noinspection PyBroadException
+                        try:
+                            _mya_core.MeshReduce.reduce_off(shape_path_new, 50)
+                        except Exception:
+                            bsc_log.Log.trace_method_error(
+                                'mesh reduce', 'mesh "{}" had lamina or non-manifold faces or vertices'.format(
+                                    shape_path_new
+                                )
+                            )
+                        # gpu
+                        i_gpu_key = _scn_core.Assembly.Keys.GPU_LOD.format(i_level)
+                        i_gpu_file_path_lod = '{}/{}.abc'.format(
+                            unit_directory_path, i_gpu_key
+                        )
+                        _mya_core.GpuCache.export_frame(
+                            i_gpu_file_path_lod, transform_path_new
+                        )
+                        # mesh
+                        i_mesh_key = _scn_core.Assembly.Keys.Mesh_LOD.format(i_level)
+                        i_mesh_file_path_lod = '{}/{}.ma'.format(
+                            unit_directory_path, i_mesh_key
+                        )
+                        _mya_core.SceneFile.export_file(
+                            i_mesh_file_path_lod, transform_path_new
+                        )
 
                 _mya_core.Node.delete(transform_path_new)
             #

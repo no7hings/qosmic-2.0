@@ -43,7 +43,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
 
     def export_motion(self):
         if self._root is not None:
-            motion = _mtn_core.AdvRigMotionOpt(self._namespace).get_data(control_set_includes=['body', 'face'])
+            motion = _mtn_core.AdvCharacterMotionOpt(self._namespace).get_data(control_set_includes=['body', 'face'])
             key = bsc_core.BscHash.to_hash_key(motion)
             directory_path = _gnl_core.ResourceCache.generate_dynamic_gpu_directory(
                 user_name=bsc_core.BscSystem.get_user_name(), key=key
@@ -51,7 +51,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
             motion_file_path = '{}/motion.json'.format(directory_path)
             cache_file_path = '{}/gpu.ma'.format(directory_path)
             if os.path.isfile(motion_file_path) is False:
-                _mtn_core.AdvRigMotionOpt(self._namespace).export_to(
+                _mtn_core.AdvCharacterMotionOpt(self._namespace).export_to(
                     motion_file_path, control_set_includes=['body', 'face']
                 )
                 return True, motion_file_path, cache_file_path
@@ -139,24 +139,31 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
         return task_name, cmd_script, cache_file_path
 
     @classmethod
-    def _execute_fnc(cls, window, resources):
-        start_frame, end_frame = _mya_core.Frame.get_frame_range()
+    def _load_delay_fnc(cls, window, resources, start_frame, end_frame, use_motion):
         with window.gui_progressing(maximum=len(resources)) as g_p:
             for i_resource in resources:
                 i_resource_opt = cls(i_resource)
                 i_task_name, i_cmd_script, i_cache_file = i_resource_opt.generate_args(
-                    start_frame, end_frame, use_motion=False
+                    start_frame, end_frame, use_motion
                 )
-                window.submit(
-                    i_task_name,
-                    i_cmd_script,
-                    completed_fnc=functools.partial(i_resource_opt.load_cache, i_cache_file)
-                )
+                if i_cmd_script is not None:
+                    window.submit(
+                        i_task_name,
+                        i_cmd_script,
+                        completed_fnc=functools.partial(i_resource_opt.load_cache, i_cache_file)
+                    )
+                else:
+                    i_resource_opt.load_cache(i_cache_file)
+
                 g_p.do_update()
 
     @classmethod
     def load_auto(cls, **kwargs):
         scheme = kwargs['scheme']
+        use_motion = kwargs.get('use_motion', False)
+        start_frame_, end_frame_ = _mya_core.Frame.get_frame_range()
+        start_frame = kwargs.get('start_frame', start_frame_)
+        end_frame = kwargs.get('end_frame', end_frame_)
         if scheme == 'default':
             resources = []
             namespaces = _mya_core.Namespaces.extract_roots_from_selection()
@@ -172,7 +179,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
             if not resources:
                 gui_core.GuiDialog.create(
                     '动态GPU加载',
-                    content='选择一个或多个可用的绑定（如果选中的绑定加载动态GPU了，会被忽略），可以选择绑定的任意部件。',
+                    content='选择一个或多个可用的角色（如果选中的绑定加载动态GPU了，会被忽略），可以选择绑定的任意部件。',
                     status=gui_core.GuiDialog.ValidationStatus.Warning,
                     no_label='关闭',
                     ok_visible=False, no_visible=True, cancel_visible=False,
@@ -195,7 +202,10 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
 
             window.show_window_auto(exclusive=False)
             window.run_fnc_delay(
-                functools.partial(cls._execute_fnc, window, resources), 500
+                functools.partial(
+                    cls._load_delay_fnc,
+                    window, resources, start_frame, end_frame, use_motion),
+                500
             )
 
 
@@ -414,32 +424,38 @@ class DynamicGpuCacheProcess(object):
         self._use_motion = use_motion
 
     def execute(self):
-        _mya_core.SceneFile.new()
-        if os.path.isfile(self._file_path) is False:
-            raise RuntimeError()
+        with bsc_log.LogProcessContext.create(maximum=4) as l_p:
+            # step 1
+            _mya_core.SceneFile.new()
+            l_p.do_update()
+            # step 2
+            if os.path.isfile(self._file_path) is False:
+                raise RuntimeError()
 
-        bsc_log.Log.trace_method_result(
-            self.KEY, 'load scene: {}'.format(self._file_path)
-        )
-
-        if self._use_motion is False:
-            _mya_core.SceneFile.open(self._file_path)
-        else:
-            _mya_core.SceneFile.reference_file(self._file_path, namespace=self._namespace)
-            _mtn_core.AdvRigMotionOpt(self._namespace).load_from(
-                self._motion_file, force=True
+            bsc_log.Log.trace_method_result(
+                self.KEY, 'load scene: {}'.format(self._file_path)
             )
-
-        generate = DynamicGpuCacheGenerate(self._namespace)
-        geometry_location = generate.get_geometry_root()
-        generate._clear_display_layers(geometry_location)
-
-        generate.export_gpu(
-            self._gpu_file_path, self._start_frame, self._end_frame
-        )
-        generate.create_cache(
-            self._cache_file_path, self._gpu_file_path, self._start_frame, self._end_frame
-        )
+            if self._use_motion is False:
+                _mya_core.SceneFile.open(self._file_path)
+            else:
+                _mya_core.SceneFile.reference_file(self._file_path, namespace=self._namespace)
+                _mtn_core.AdvCharacterMotionOpt(self._namespace).load_from(
+                    self._motion_file, force=True
+                )
+            l_p.do_update()
+            # step 3
+            generate = DynamicGpuCacheGenerate(self._namespace)
+            geometry_location = generate.get_geometry_root()
+            generate._clear_display_layers(geometry_location)
+            generate.export_gpu(
+                self._gpu_file_path, self._start_frame, self._end_frame
+            )
+            l_p.do_update()
+            # step 4
+            generate.create_cache(
+                self._cache_file_path, self._gpu_file_path, self._start_frame, self._end_frame
+            )
+            l_p.do_update()
 
 
 if __name__ == '__main__':

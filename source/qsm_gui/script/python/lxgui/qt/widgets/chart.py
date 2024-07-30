@@ -247,7 +247,7 @@ class QtChartAsRgbaChoose(
                     self._set_action_flag_(self.ActionFlag.TrackCircle)
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
-                    if self._get_action_flag_is_match_(
+                    if self._is_action_flag_match_(
                         self.ActionFlag.Press
                     ):
                         self._do_press_click_(event)
@@ -1076,7 +1076,7 @@ class QtChartAsHistogram(
         #
         self.installEventFilter(self)
         #
-        self._set_draw_grid_def_init_(self)
+        self._init_draw_grid_def_(self)
         self._grid_axis_lock_x, self._grid_axis_lock_y = 1, 1
         self._grid_dir_x, self._grid_dir_y = 1, -1
         # self._grid_offset_x, self._grid_offset_y = 20, 20
@@ -1168,7 +1168,7 @@ class QtChartAsHistogram(
         rect = QtCore.QRect(
             x, y, width, height
         )
-        painter._set_grid_draw_(
+        painter._draw_grid_(
             rect,
             axis_dir=(self._grid_dir_x, self._grid_dir_y),
             grid_size=(self._grid_width, self._grid_height),
@@ -1196,7 +1196,7 @@ class QtChartAsHistogram(
                 mode=self._grid_value_show_mode,
             )
         #
-        painter._set_grid_axis_draw_(
+        painter._draw_grid_axis_(
             rect,
             (self._grid_dir_x, self._grid_dir_y),
             (self._track_offset_x, 0),
@@ -1204,7 +1204,7 @@ class QtChartAsHistogram(
             (self._grid_axis_lock_x, self._grid_axis_lock_y),
             (self._grid_axis_border_color_x, self._grid_axis_border_color_y)
         )
-        painter._set_grid_mark_draw_(
+        painter._draw_grid_mark_(
             rect,
             (self._grid_dir_x, self._grid_dir_y),
             (self._grid_width, self._grid_height),

@@ -10,6 +10,8 @@ import lxbasic.content as bsc_content
 import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
+
+import lxbasic.pinyin as bsc_pinyin
 # gui
 from ... import core as gui_core
 # qt
@@ -415,7 +417,12 @@ class GuiQtIcon(object):
             c_w, c_h
         )
         if text is not None:
-            name = text.split('/')[-1] or ' '
+            words = bsc_pinyin.Text.split_any_to_letters(text)
+            if words:
+                name = words[0]
+            else:
+                name = '?'
+
             painter.setPen(_color_and_brush.QtBorderColors.Icon)
             if background_color is not None:
                 r, g, b = background_color
@@ -643,6 +650,7 @@ class QtPixmap(object):
         )
         if text is not None:
             name = text.split('/')[-1] or ' '
+
             painter.setPen(_color_and_brush.QtBorderColors.Icon)
             r, g, b = bsc_core.RawTextOpt(name).to_rgb_0(s_p=50, v_p=50)
             if background_color is not None:

@@ -134,6 +134,7 @@ class Window(object):
             edit=1,
             activeView=1,
             polymeshes=1,
+            nurbsSurfaces=1,
             subdivSurfaces=1,
             fluids=1,
             strokes=1,

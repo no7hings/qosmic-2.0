@@ -60,17 +60,17 @@ class AbsPrxSubPanelForTool(gui_prx_widgets.PrxBaseWindow):
 
     def apply_and_close_fnc(self):
         if self._page_prx_tab_tool_box.get_current_key() == self.TabKeys.Register:
-            self._register_prx_page.ao_apply()
+            self._register_prx_page.do_apply()
         elif self._page_prx_tab_tool_box.get_current_key() == self.TabKeys.Load:
-            self._load_prx_page.ao_apply()
+            self._load_prx_page.do_apply()
 
         self.do_close_window_later(500)
 
     def apply_fnc(self):
         if self._page_prx_tab_tool_box.get_current_key() == self.TabKeys.Register:
-            self._register_prx_page.ao_apply()
+            self._register_prx_page.do_apply()
         elif self._page_prx_tab_tool_box.get_current_key() == self.TabKeys.Load:
-            self._load_prx_page.ao_apply()
+            self._load_prx_page.do_apply()
 
     def close_fnc(self):
         self.do_close_window_later(500)

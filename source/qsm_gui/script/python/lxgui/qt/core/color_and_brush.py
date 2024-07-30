@@ -18,23 +18,23 @@ class QtColors(object):
     BubbleBackground = QtGui.QColor(223, 223, 223, 255)
     BubbleBackgroundDisable = QtGui.QColor(127, 127, 127, 255)
     BubbleNextWaiting = QtGui.QColor(*gui_core.GuiRgba.LightYellow)
-    BubbleNextFinished = QtGui.QColor(*gui_core.GuiRgba.LightGreen)
+    BubbleNextFinished = QtGui.QColor(*gui_core.GuiRgba.LightNeonGreen)
     BubbleBackgroundHover = QtGui.QColor(*gui_core.GuiRgba.LightOrange)
-    BubbleBackgroundActioned = QtGui.QColor(*gui_core.GuiRgba.LightBlue)
+    BubbleBackgroundActioned = QtGui.QColor(*gui_core.GuiRgba.LightAzureBlue)
     BubbleBorder = QtGui.QColor(127, 127, 127, 255)
     BubbleText = QtGui.QColor(31, 31, 31, 255)
 
     CapsuleBorderChecked = QtGui.QColor(127, 127, 127, 255)
     CapsuleBorderUnchecked = QtGui.QColor(55, 55, 55, 255)
     CapsuleBorderHover = QtGui.QColor(*gui_core.GuiRgba.LightOrange)
-    CapsuleBorderActioned = QtGui.QColor(*gui_core.GuiRgba.LightBlue)
+    CapsuleBorderActioned = QtGui.QColor(*gui_core.GuiRgba.LightAzureBlue)
     CapsuleBackground = QtGui.QColor(47, 47, 47, 255)
     CapsuleBackgroundDisable = QtGui.QColor(55, 55, 55, 255)
 
     SubIconBorder = QtGui.QColor(207, 207, 207, 255)
     SubIconBackground = QtGui.QColor(127, 127, 127, 255)
 
-    PopupBorder = QtGui.QColor(*gui_core.GuiRgba.LightBlue)
+    PopupBorder = QtGui.QColor(*gui_core.GuiRgba.LightAzureBlue)
 
     TabBorder = QtGui.QColor(63, 63, 63, 255)
     TabBackground = QtGui.QColor(47, 47, 47, 255)
@@ -56,14 +56,14 @@ class QtColors(object):
 
     Text = QtGui.QColor(223, 223, 223, 255)
     TextHover = QtGui.QColor(255, 255, 255, 255)
-    TextEnable = QtGui.QColor(*gui_core.GuiRgba.Green)
+    TextEnable = QtGui.QColor(*gui_core.GuiRgba.NeonGreen)
     TextDisable = QtGui.QColor(*gui_core.GuiRgba.DarkGray)
     TextTemporary = QtGui.QColor(*gui_core.GuiRgba.Gray)
     TextWarning = QtGui.QColor(*gui_core.GuiRgba.Yellow)
     TextError = QtGui.QColor(*gui_core.GuiRgba.TorchRed)
     TextLock = QtGui.QColor(*gui_core.GuiRgba.Purple)
-    TextCorrect = QtGui.QColor(*gui_core.GuiRgba.Green)
-    TextActive = QtGui.QColor(*gui_core.GuiRgba.Blue)
+    TextCorrect = QtGui.QColor(*gui_core.GuiRgba.NeonGreen)
+    TextActive = QtGui.QColor(*gui_core.GuiRgba.AzureBlue)
 
     TextKeywordFilter = QtGui.QColor(255, 127, 63, 255)
     TextKeywordFilterOccurrence = QtGui.QColor(255, 63, 63, 255)
@@ -212,7 +212,7 @@ class QtBackgroundColors(object):
     )
 
     BDragChildPolish = QtGui.QColor(*gui_core.GuiRgba.LightYellow)
-    BDragChildAdd = QtGui.QColor(*gui_core.GuiRgba.LightGreen)
+    BDragChildAdd = QtGui.QColor(*gui_core.GuiRgba.LightNeonGreen)
 
 
 class QtFontColors(object):

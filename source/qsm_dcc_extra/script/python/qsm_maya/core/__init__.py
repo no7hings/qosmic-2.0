@@ -89,6 +89,9 @@ from .node_extra import *
 
 from .hotkey import *
 
+from .character import *
+
+
 
 
 

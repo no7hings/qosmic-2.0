@@ -1,0 +1,898 @@
+options:
+    namespace: ''
+
+dag_nodes:
+    /MAIN:
+        path: <options.namespace>:<..key>
+        type: transform
+        properties:
+            translateX: 0.0
+            translateY: 0.0
+            translateZ: 0.0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+    /MAIN/Root_M:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -3.659757573679698e-07
+            translateY: 8.372549042545922
+            translateZ: -1.7450406099424539e-16
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 1.1198709655450322e-13
+            jointOrientX: 90.00000250447816
+            jointOrientY: 0.0
+            jointOrientZ: 90.00000250447816
+    /MAIN/Root_M/Hip_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.528829161665568
+            translateY: -0.04159614586536606
+            translateZ: -0.636981518490809
+            rotateX: -1.218242606159776e-06
+            rotateY: 1.1035610010232429e-16
+            rotateZ: 3.5163275573808946e-06
+            jointOrientX: 179.45021576190533
+            jointOrientY: 0.2930566034566698
+            jointOrientZ: -179.3865857195975
+    /MAIN/Root_M/Hip_R/Knee_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 3.5331840515136723
+            translateY: -1.1102230246251565e-16
+            translateZ: 2.886579864025407e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: -1.9295923281396557e-06
+            jointOrientX: -9.939233379573492e-17
+            jointOrientY: -5.590818776010089e-17
+            jointOrientZ: -3.4260508487653136
+    /MAIN/Root_M/Hip_R/Knee_R/Ankle_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 3.559377193450926
+            translateY: -1.8915424782051105e-14
+            translateZ: -2.220446049250313e-16
+            rotateX: -1.5643429783092405e-14
+            rotateY: 1.1217639225746935e-07
+            rotateZ: -1.2373401603105654e-07
+            jointOrientX: -1.0169722652891755
+            jointOrientY: 0.2871404056553959
+            jointOrientZ: 4.042253226767524
+    /MAIN/Root_M/Hip_R/Knee_R/Ankle_R/Toes_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.45736554094383813
+            translateY: 1.024308098529672
+            translateZ: -8.677283336311348e-10
+            rotateX: 1.413855963287628e-14
+            rotateY: -5.565970310434482e-15
+            rotateZ: 3.097097061820337e-06
+            jointOrientX: 2.1228236478136107
+            jointOrientY: -1.0785970067453798
+            jointOrientZ: 59.98037853616664
+    /MAIN/Root_M/Hip_R/Knee_R/Ankle_R/Toes_R/ToesEnd_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.6036867087595778
+            translateY: 1.2212453270876722e-15
+            translateZ: 2.3314683517128287e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.5615281408514257
+            translateY: 5.551115123125755e-17
+            translateZ: -3.901193576321089e-16
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: -3.791516639546772e-22
+            jointOrientY: -5.18178130076575e-22
+            jointOrientZ: -2.0127412719108724e-29
+    /MAIN/Root_M/Spine1_M/Spine2_M:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.599624255999025
+            translateY: 5.551115123125794e-17
+            translateZ: -7.594655436395373e-16
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: -3.791516639546772e-22
+            jointOrientY: -5.18178130076575e-22
+            jointOrientZ: -2.0127412719108724e-29
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.6377203711466171
+            translateY: -1.6653345369377417e-16
+            translateZ: -6.971460768802504e-16
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 5.565970692561154e-15
+            jointOrientX: -3.791516639546772e-22
+            jointOrientY: -9.47879159886693e-23
+            jointOrientZ: -4.899102165692916
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Neck_M:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 1.5849514155166684
+            translateY: -2.220446049250313e-16
+            translateZ: 1.978345154726677e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 1.113194138512231e-14
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 11.793716668165006
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Neck_M/Head_M:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 1.0169299053850334
+            translateY: -2.220446049250313e-15
+            translateZ: 3.7801001732114054e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 7.583033279093544e-22
+            jointOrientY: 7.73113939782584e-22
+            jointOrientZ: -7.136957298186947
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Neck_M/Head_M/HeadEnd_M:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 2.44613263873746
+            translateY: -2.831068712794149e-15
+            translateZ: 1.4643878777056214e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 1.196359384527243
+            translateY: -0.16669359158877284
+            translateZ: -0.3392337131504115
+            rotateX: -2.255646083250215e-06
+            rotateY: 3.721000492564906e-15
+            rotateZ: 1.987845943464573e-16
+            jointOrientX: 57.95465371135073
+            jointOrientY: 90.02123073241857
+            jointOrientZ: 54.91946107818551
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.6976079304617839
+            translateY: -6.439293542825908e-15
+            translateZ: -8.171241461241152e-14
+            rotateX: -4.611648987600542e-15
+            rotateY: -1.2970699560343405e-14
+            rotateZ: 3.683728371304424e-15
+            jointOrientX: -7.945795556775837
+            jointOrientY: 0.29736421166712645
+            jointOrientZ: -1.6286531647825455
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 2.0315295518981626
+            translateY: 4.996003610813204e-16
+            translateZ: -1.7763568394002505e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 4.373262687012335e-15
+            jointOrientX: -2.7462428959817215e-19
+            jointOrientY: 1.9868632290703983e-16
+            jointOrientZ: 3.3711672905765
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 1.88294356609389
+            translateY: -5.739853037312059e-14
+            translateZ: 3.597122599785507e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: -2.761171992749937e-19
+            jointOrientY: -9.958731327945418e-17
+            jointOrientZ: -1.987846675914698e-16
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/MiddleFinger1_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.6278214171260146
+            translateY: 0.028269968418709657
+            translateZ: 0.08480825719352403
+            rotateX: -4.67143968839954e-15
+            rotateY: -9.641056378186285e-15
+            rotateZ: -5.466578358765416e-16
+            jointOrientX: 8.042128544829708
+            jointOrientY: 4.627903101395208
+            jointOrientZ: -0.3748403547634773
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/MiddleFinger1_R/MiddleFinger2_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.2505406166608539
+            translateY: 1.1102230246251565e-15
+            translateZ: -7.087663789206999e-12
+            rotateX: 0.0
+            rotateY: 8.348956038841729e-15
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 3.3063643767221156
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/MiddleFinger1_R/MiddleFinger2_R/MiddleFinger3_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.18688778786226923
+            translateY: -2.220446049250313e-16
+            translateZ: 3.907985046680551e-14
+            rotateX: 0.0
+            rotateY: 1.5455507905236776e-14
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.31504276895152905
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/MiddleFinger1_R/MiddleFinger2_R/MiddleFinger3_R/MiddleFinger4_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.18115391430840155
+            translateY: -6.661338147750939e-16
+            translateZ: -1.0658141036401503e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/ThumbFinger1_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.1437434596225673
+            translateY: 0.1884101501828184
+            translateZ: -0.02818566467899153
+            rotateX: -2.1235695370375725e-06
+            rotateY: 6.361109624477255e-15
+            rotateZ: 1.4113711281112565e-14
+            jointOrientX: -65.49810587602644
+            jointOrientY: 15.002501974196528
+            jointOrientZ: 27.02196834726151
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/ThumbFinger1_R/ThumbFinger2_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.27267209710481244
+            translateY: -1.5987211554602254e-14
+            translateZ: 5.329070518200751e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/ThumbFinger1_R/ThumbFinger2_R/ThumbFinger3_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.17963884026204258
+            translateY: -1.7763568394002505e-15
+            translateZ: 2.353672812205332e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/ThumbFinger1_R/ThumbFinger2_R/ThumbFinger3_R/ThumbFinger4_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.20724412934139047
+            translateY: -2.8691447795381464e-07
+            translateZ: -1.8335008089565008e-07
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/IndexFinger1_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.6102610618709052
+            translateY: 0.17207985322355862
+            translateZ: 0.05669800259183333
+            rotateX: 7.516545243302449e-16
+            rotateY: 1.6660639952510062e-14
+            rotateZ: -1.6151254241806921e-15
+            jointOrientX: 3.051447202745257
+            jointOrientY: 2.6966607102717637
+            jointOrientZ: 2.31415496226883
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/IndexFinger1_R/IndexFinger2_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.24678135317476713
+            translateY: 1.3322676295501878e-15
+            translateZ: 5.1514348342607263e-14
+            rotateX: 0.0
+            rotateY: 9.541664044390549e-15
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 6.422779058192061
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/IndexFinger1_R/IndexFinger2_R/IndexFinger3_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.1506295141516465
+            translateY: -3.552713678800501e-15
+            translateZ: -1.9539925233402755e-14
+            rotateX: 0.0
+            rotateY: 1.967968209155551e-14
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: -0.36182308142249014
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/IndexFinger1_R/IndexFinger2_R/IndexFinger3_R/IndexFinger4_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.1703947966986279
+            translateY: -5.329070518200751e-15
+            translateZ: 0.0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.15341432108665298
+            translateY: -0.08657177004601424
+            translateZ: -0.012137618108589265
+            rotateX: -1.441188840038156e-14
+            rotateY: 1.4908850069360234e-14
+            rotateZ: 4.969616689786743e-15
+            jointOrientX: 20.021096164984744
+            jointOrientY: -10.054865764922
+            jointOrientZ: 5.831025128880507
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/PinkyFinger1_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.4042014714282294
+            translateY: -0.18356061944482827
+            translateZ: 0.021732731646169512
+            rotateX: 3.458853216091575e-14
+            rotateY: 6.361109362927032e-15
+            rotateZ: 5.218097524276084e-15
+            jointOrientX: -8.883761529831595
+            jointOrientY: 5.055206992947206
+            jointOrientZ: -16.76448928947933
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/PinkyFinger1_R/PinkyFinger2_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.16890317859353843
+            translateY: 1.3322676295501878e-15
+            translateZ: 1.4210854715202004e-14
+            rotateX: 0.0
+            rotateY: 7.951386703658789e-15
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 8.250591894714006
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/PinkyFinger1_R/PinkyFinger2_R/PinkyFinger3_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.11865603280626225
+            translateY: -7.993605777301127e-15
+            translateZ: -6.927791673660977e-14
+            rotateX: 0.0
+            rotateY: 1.987846675914698e-15
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: -1.145915564648438
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/PinkyFinger1_R/PinkyFinger2_R/PinkyFinger3_R/PinkyFinger4_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.1393407709630754
+            translateY: -3.1086244689504383e-15
+            translateZ: 5.861977570020827e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/RingFinger1_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.4563956396984139
+            translateY: -0.0658317778295161
+            translateZ: 0.012258222186043
+            rotateX: -4.1545995526617185e-14
+            rotateY: 1.3318572728628477e-14
+            rotateZ: -3.3793393490549915e-15
+            jointOrientX: -13.90484873966683
+            jointOrientY: 9.357466738396896
+            jointOrientZ: -13.573562366806408
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/RingFinger1_R/RingFinger2_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.23175265222754682
+            translateY: 3.1086244689504383e-15
+            translateZ: 3.552713678800501e-15
+            rotateX: 0.0
+            rotateY: 1.3517357396219947e-14
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 6.875493387890622
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/RingFinger1_R/RingFinger2_R/RingFinger3_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.1623061679037443
+            translateY: -2.886579864025407e-15
+            translateZ: 7.283063041541027e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/RingFinger1_R/RingFinger2_R/RingFinger3_R/RingFinger4_R:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0.1655661147012153
+            translateY: -6.217248937900877e-15
+            translateZ: -1.4210854715202004e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 1.1963593845272413
+            translateY: -0.16669359158877495
+            translateZ: 0.33923371315041567
+            rotateX: 5.075171348277815e-12
+            rotateY: -1.908332808877947e-14
+            rotateZ: 3.6775163504421066e-14
+            jointOrientX: -122.04534881356916
+            jointOrientY: 89.9787694464316
+            jointOrientZ: 54.919460596166864
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.6976079304617838
+            translateY: 5.551115123125783e-15
+            translateZ: 9.059419880941277e-14
+            rotateX: 1.1220224296108548e-11
+            rotateY: 3.071595835540049e-13
+            rotateZ: 1.0851779244232573e-13
+            jointOrientX: -7.945795556775837
+            jointOrientY: 0.29736421166712645
+            jointOrientZ: -1.6286531647825455
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -2.0315295518981635
+            translateY: -3.8191672047105385e-14
+            translateZ: 1.7319479184152442e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 1.0774128983457664e-13
+            jointOrientX: -5.589359042103863e-18
+            jointOrientY: -1.182106513289636e-16
+            jointOrientZ: 3.3711672905764987
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -1.8829435660938896
+            translateY: 2.1538326677728037e-14
+            translateZ: -3.907985046680551e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: -2.4819267922473163e-18
+            jointOrientY: -1.8721675328633496e-17
+            jointOrientZ: 1.987846675914698e-16
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/MiddleFinger1_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.6278214171260137
+            translateY: -0.028269968418693253
+            translateZ: -0.08480825719353646
+            rotateX: -4.6105618839496516e-14
+            rotateY: -1.9170296380852366e-14
+            rotateZ: 2.236327510404042e-15
+            jointOrientX: 8.042128544829708
+            jointOrientY: 4.627903101395208
+            jointOrientZ: -0.3748403547634773
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/MiddleFinger1_L/MiddleFinger2_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.25054061666085836
+            translateY: -5.995204332975845e-15
+            translateZ: 7.077005648170598e-12
+            rotateX: 0.0
+            rotateY: -1.590277340731758e-15
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 3.3063643767221156
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/MiddleFinger1_L/MiddleFinger2_L/MiddleFinger3_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.18688778786226923
+            translateY: -6.217248937900877e-15
+            translateZ: -4.440892098500626e-14
+            rotateX: 0.0
+            rotateY: 5.665363026356889e-15
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.31504276895152905
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/MiddleFinger1_L/MiddleFinger2_L/MiddleFinger3_L/MiddleFinger4_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.18115391430840244
+            translateY: -5.10702591327572e-15
+            translateZ: 1.4210854715202004e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/ThumbFinger1_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.1437434596225673
+            translateY: -0.18841015018282467
+            translateZ: 0.02818566467894712
+            rotateX: -1.779122774943655e-14
+            rotateY: 2.2263882770244617e-14
+            rotateZ: -8.945310041616143e-15
+            jointOrientX: -65.498107999596
+            jointOrientY: 15.002501974196548
+            jointOrientZ: 27.021968347261506
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/ThumbFinger1_L/ThumbFinger2_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.2726720971048118
+            translateY: 3.019806626980426e-14
+            translateZ: -2.9753977059954195e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/ThumbFinger1_L/ThumbFinger2_L/ThumbFinger3_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.17963884026204213
+            translateY: 1.2434497875801753e-14
+            translateZ: -4.1300296516055823e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/ThumbFinger1_L/ThumbFinger2_L/ThumbFinger3_L/ThumbFinger4_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.20724412934139202
+            translateY: 2.869144903883125e-07
+            translateZ: 1.833500635761709e-07
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/IndexFinger1_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.6102610618709052
+            translateY: -0.17207985322354824
+            translateZ: -0.056698002591874186
+            rotateX: -6.323837237753633e-15
+            rotateY: 2.5220804700667736e-15
+            rotateZ: 1.7393658414253597e-16
+            jointOrientX: 3.051447202745257
+            jointOrientY: 2.6966607102717637
+            jointOrientZ: 2.31415496226883
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/IndexFinger1_L/IndexFinger2_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.24678135317476446
+            translateY: -3.6637359812630166e-15
+            translateZ: -4.618527782440651e-14
+            rotateX: 0.0
+            rotateY: 2.385416011097637e-15
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 6.422779058192061
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/IndexFinger1_L/IndexFinger2_L/IndexFinger3_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.15062951415164472
+            translateY: -2.275957200481571e-15
+            translateZ: 1.0658141036401503e-14
+            rotateX: 0.0
+            rotateY: 7.851994369863057e-15
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: -0.36182308142249014
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/IndexFinger1_L/IndexFinger2_L/IndexFinger3_L/IndexFinger4_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.170394796698627
+            translateY: -3.3306690738754696e-16
+            translateZ: -1.7763568394002505e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.15341432108665298
+            translateY: 0.08657177004601202
+            translateZ: 0.012137618108605253
+            rotateX: -1.5505204072134644e-14
+            rotateY: 1.2324649390671126e-14
+            rotateZ: -9.342879376799082e-15
+            jointOrientX: 20.021096164984744
+            jointOrientY: -10.054865764922
+            jointOrientZ: 5.831025128880507
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/PinkyFinger1_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.4042014714282258
+            translateY: 0.18356061944484203
+            translateZ: -0.021732731646153525
+            rotateX: -9.34287937679908e-15
+            rotateY: -9.939233379573494e-16
+            rotateZ: -3.677516350442191e-15
+            jointOrientX: -8.883761529831595
+            jointOrientY: 5.055206992947206
+            jointOrientZ: -16.76448928947933
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/PinkyFinger1_L/PinkyFinger2_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.16890317859353843
+            translateY: 4.440892098500626e-16
+            translateZ: -5.329070518200751e-15
+            rotateX: 0.0
+            rotateY: -3.180554681463516e-15
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 8.250591894714006
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/PinkyFinger1_L/PinkyFinger2_L/PinkyFinger3_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.1186560328062587
+            translateY: 4.440892098500626e-15
+            translateZ: 7.460698725481052e-14
+            rotateX: 0.0
+            rotateY: 1.133072605271378e-14
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: -1.145915564648438
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/PinkyFinger1_L/PinkyFinger2_L/PinkyFinger3_L/PinkyFinger4_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.13934077096307274
+            translateY: -4.440892098500626e-16
+            translateZ: -5.5067062021407764e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/RingFinger1_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.45639563969841657
+            translateY: 0.06583177782952765
+            translateZ: -0.012258222186051881
+            rotateX: -2.8426207465580184e-14
+            rotateY: -2.6040791454482544e-14
+            rotateZ: 1.1927080055488253e-15
+            jointOrientX: -13.90484873966683
+            jointOrientY: 9.357466738396896
+            jointOrientZ: -13.573562366806408
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/RingFinger1_L/RingFinger2_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.23175265222754415
+            translateY: -5.551115123125783e-15
+            translateZ: 0.0
+            rotateX: 0.0
+            rotateY: -3.180554681463517e-14
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 6.875493387890622
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/RingFinger1_L/RingFinger2_L/RingFinger3_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.16230616790374386
+            translateY: -3.552713678800501e-15
+            translateZ: -6.927791673660977e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/RingFinger1_L/RingFinger2_L/RingFinger3_L/RingFinger4_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.16556611470121263
+            translateY: -4.440892098500626e-16
+            translateZ: 1.4210854715202004e-14
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+    /MAIN/Root_M/Hip_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.5288291616655716
+            translateY: -0.04159614586536661
+            translateZ: 0.6369815184908086
+            rotateX: -3.8825130388958935e-19
+            rotateY: 3.3675432571793796e-37
+            rotateZ: -9.939233379573487e-17
+            jointOrientX: 179.4502145256768
+            jointOrientY: 0.2930565955557249
+            jointOrientZ: 0.6134107639427042
+    /MAIN/Root_M/Hip_L/Knee_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -3.5331840515136728
+            translateY: 4.954370247389761e-15
+            translateZ: -2.4424906541753444e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: -1.929592313032021e-06
+            jointOrientX: 0.0
+            jointOrientY: -6.212020862233431e-18
+            jointOrientZ: -3.4260508487653136
+    /MAIN/Root_M/Hip_L/Knee_L/Ankle_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -3.559377193450927
+            translateY: 3.7789216200678766e-14
+            translateZ: 2.886579864025407e-15
+            rotateX: -9.102361782540403e-15
+            rotateY: 1.3692611757468858e-07
+            rotateZ: -1.2330451683565046e-07
+            jointOrientX: -1.0169722652891755
+            jointOrientY: 0.2871404056553959
+            jointOrientZ: 4.042253226767524
+    /MAIN/Root_M/Hip_L/Knee_L/Ankle_L/Toes_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.4573655409379352
+            translateY: -1.0243080985323074
+            translateZ: 9.642272535970164e-10
+            rotateX: 1.9679682091555504e-14
+            rotateY: 3.776908684237962e-15
+            rotateZ: 2.0975199042374293e-13
+            jointOrientX: 2.122823589543671
+            jointOrientY: -1.0785971214673817
+            jointOrientZ: 59.98038163168668
+    /MAIN/Root_M/Hip_L/Knee_L/Ankle_L/Toes_L/ToesEnd_L:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: -0.603686708759578
+            translateY: -7.549516567451064e-15
+            translateZ: -2.55351295663786e-15
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0.0
+            jointOrientX: 0.0
+            jointOrientY: 0.0
+            jointOrientZ: 0.0
+
+nodes: {}
+
+containers:
+    MASTER_LAYER:
+        name: '<options.namespace>:<..key>'
+        type: dagContainer
+        properties:
+            iconName: 'out_timeEditorLayersFolder.png'
+        create_properties:
+            match_scale:
+                type: float
+                value: 1.0

@@ -483,7 +483,7 @@ class QtListItemWidget(
         self._init_index_base_def_(self)
         self._init_icon_base_def_(self)
         self._init_icons_base_def_(self)
-        self._init_image_base_def_()
+        self._init_image_base_def_(self)
         self._init_names_base_def_(self)
         self._set_name_align_h_center_top_()
         self._init_menu_base_def_(self)
@@ -541,7 +541,7 @@ class QtListItemWidget(
                 self._refresh_widget_all_()
             # drag move
             elif event.type() == QtCore.QEvent.MouseMove:
-                if self._get_action_flag_is_match_(self.ActionFlag.Press):
+                if self._is_action_flag_match_(self.ActionFlag.Press):
                     if self._drag_is_enable is True:
                         self._set_action_flag_(self.ActionFlag.DragMove)
                         #
@@ -593,7 +593,7 @@ class QtListItemWidget(
                         self._set_action_flag_(self.ActionFlag.PressDblClick)
             #
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
-                if self._get_action_flag_is_match_(self.ActionFlag.CheckPress):
+                if self._is_action_flag_match_(self.ActionFlag.CheckPress):
                     self._do_check_press_(event)
                     self.check_clicked.emit()
                     self.check_toggled.emit(self._is_checked)
@@ -601,11 +601,11 @@ class QtListItemWidget(
                     event.accept()
                     self._clear_all_action_flags_()
                     return True
-                elif self._get_action_flag_is_match_(self.ActionFlag.CheckDbClick):
+                elif self._is_action_flag_match_(self.ActionFlag.CheckDbClick):
                     self.check_dbl_clicked.emit()
-                elif self._get_action_flag_is_match_(self.ActionFlag.Press):
+                elif self._is_action_flag_match_(self.ActionFlag.Press):
                     self.press_clicked.emit()
-                elif self._get_action_flag_is_match_(self.ActionFlag.PressDblClick):
+                elif self._is_action_flag_match_(self.ActionFlag.PressDblClick):
                     self.press_dbl_clicked.emit()
                 #
                 self._clear_all_action_flags_()

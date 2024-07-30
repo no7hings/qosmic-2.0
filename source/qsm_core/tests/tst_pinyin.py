@@ -14,6 +14,7 @@ def split_words_and_chars(string_list):
                 result.append(wc)
     return result
 
+
 # 示例用法
 string_list = [u'Hello, 你好，世界！', u'Python_3.8版本发布了。']
 result = split_words_and_chars([s.encode('utf-8') for s in string_list])

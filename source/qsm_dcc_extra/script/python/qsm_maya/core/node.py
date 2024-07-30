@@ -7,6 +7,7 @@ class Node(object):
     class Types(object):
         Transform = 'transform'
         Mesh = 'mesh'
+        Curve = 'nurbsCurve'
         GPU = 'gpuCache'
         AssemblyReference = 'assemblyReference'
         Material = 'shadingEngine'
@@ -36,6 +37,10 @@ class Node(object):
     @classmethod
     def is_mesh(cls, name):
         return cls.get_type(name) == cls.Types.Mesh
+
+    @classmethod
+    def is_curve(cls, name):
+        return cls.get_type(name) == cls.Types.Curve
 
     @classmethod
     def is_gpu(cls, name):

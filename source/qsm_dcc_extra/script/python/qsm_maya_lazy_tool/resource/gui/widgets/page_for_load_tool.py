@@ -74,7 +74,7 @@ class PrxPageForLoadTool(_abstracts.AbsPrxPageForLoadTool):
         return [frame_offset]
 
     @qsm_mya_core.Undo.execute
-    def ao_apply(self):
+    def do_apply(self):
         frame_offset_values = self.generate_frame_offset_values()
         if self._dcc_node_opt_list and self._lzy_data_file_path is not None:
             [

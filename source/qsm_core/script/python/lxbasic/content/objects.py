@@ -227,12 +227,14 @@ class AbsContent(object):
                 return default_value
         return v
 
-    def get_as_content(self, key_path):
+    def get_as_content(self, key_path, relative=False):
         key = key_path.split(self.PATHSEP)[-1]
         value = self.get(key_path)
-        return self.__create(key, value)
+        if relative is True:
+            return self._create_fnc(None, value)
+        return self._create_fnc(key, value)
 
-    def __create(self, key, value):
+    def _create_fnc(self, key, value):
         if isinstance(value, dict) is False:
             raise TypeError()
         return self.__class__(

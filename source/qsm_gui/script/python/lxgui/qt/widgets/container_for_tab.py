@@ -397,7 +397,7 @@ class _AbsQtHTabToolBox(
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
                     # when drag press move less than 10px, do press release also
-                    if self._get_action_flag_is_match_(self.ActionFlag.Press):
+                    if self._is_action_flag_match_(self.ActionFlag.Press):
                         # send signal in release action
                         self._do_mouse_press_release_(event)
                 elif event.button() == QtCore.Qt.RightButton:

@@ -416,18 +416,30 @@ class PrxTreeviewUnitForResourceOpt(
                     prx_item.set_status(
                         prx_item.ValidationStatus.Active
                     )
-                    if self._window._language == 'chs':
-                        prx_item.set_name('简模代理', 1)
+                    if resource.is_skin_proxy_enable():
+                        if self._window._language == 'chs':
+                            prx_item.set_name('简模代理（启用）', 1)
+                        else:
+                            prx_item.set_name('Skin Proxy (Enable)', 1)
                     else:
-                        prx_item.set_name('Skin Proxy', 1)
+                        if self._window._language == 'chs':
+                            prx_item.set_name('简模代理（禁用）', 1)
+                        else:
+                            prx_item.set_name('Skin Proxy (Disable)', 1)
                 elif resource.is_dynamic_gpu_exists():
                     prx_item.set_status(
                         prx_item.ValidationStatus.New
                     )
-                    if self._window._language == 'chs':
-                        prx_item.set_name('动态GPU', 1)
+                    if resource.is_dynamic_gpu_enable():
+                        if self._window._language == 'chs':
+                            prx_item.set_name('动态GPU（启用）', 1)
+                        else:
+                            prx_item.set_name('Dynamic GPU (Enable)', 1)
                     else:
-                        prx_item.set_name('Dynamic GPU', 1)
+                        if self._window._language == 'chs':
+                            prx_item.set_name('简模代理（禁用）', 1)
+                        else:
+                            prx_item.set_name('Skin Proxy (Disable)', 1)
                 elif resource.is_cfx_cloth_exists():
                     prx_item.set_status(
                         prx_item.ValidationStatus.Locked
@@ -535,7 +547,7 @@ class PrxTreeviewUnitForResourceOpt(
                 )
             self.gui_register(path, prx_item)
 
-            node_opt = qsm_mya_core.BscNodeOpt(dcc_path)
+            node_opt = qsm_mya_core.EtrNodeOpt(dcc_path)
             prx_item.set_gui_dcc_obj(
                 node_opt, namespace=self.NAMESPACE_FOR_COMPONENT
             )

@@ -7,7 +7,7 @@ import maya.mel as mel
 
 from . import time_ as _time
 
-from . import node_for_dag as _node_dag
+from . import node_for_dag as _node_for_dag
 
 
 class GpuCache(object):
@@ -76,4 +76,4 @@ class GpuCache(object):
         shape_name = '{}Shape'.format(name)
         _ = cmds.createNode('gpuCache', name=shape_name, parent=location, skipSelect=1)
         cmds.setAttr(_+'.cacheFileName', file_path, type='string')
-        return _node_dag.DagNode.to_path(_)
+        return _node_for_dag.DagNode.to_path(_)

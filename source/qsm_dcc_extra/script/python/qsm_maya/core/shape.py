@@ -10,10 +10,10 @@ import lxmaya.core as mya_core
 
 from . import node as _node
 
-from . import node_for_dag as _node_dag
+from . import node_for_dag as _node_for_dag
 
 
-class Shape(_node_dag.DagNode):
+class Shape(_node_for_dag.DagNode):
 
     @classmethod
     def get_transform(cls, path):
@@ -46,7 +46,7 @@ class Shape(_node_dag.DagNode):
         if cmds.objExists(new_path) is True:
             return path
         _ = cmds.parent(path, transform_path_dst, shape=1, add=1)
-        return _node_dag.DagNode.to_path(_[0])
+        return _node_for_dag.DagNode.to_path(_[0])
 
     @classmethod
     def check_is_shape(cls, path):
@@ -92,7 +92,7 @@ class Geometry(Shape):
         return dict_
 
 
-class ShapeOpt(_node_dag.DagNodeOpt):
+class ShapeOpt(_node_for_dag.DagNodeOpt):
     def __init__(self, path):
         super(ShapeOpt, self).__init__(path)
 
@@ -107,7 +107,7 @@ class ShapeOpt(_node_dag.DagNodeOpt):
     @property
     def transform_path(self):
         return bsc_core.BscPath.get_dag_parent_path(
-            self._path, _node_dag.DagNode.PATHSEP
+            self._path, _node_for_dag.DagNode.PATHSEP
         )
 
     @property

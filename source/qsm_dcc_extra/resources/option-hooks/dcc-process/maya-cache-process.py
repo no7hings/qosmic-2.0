@@ -101,9 +101,11 @@ def test_unicode(method, option_opt):
     pass
 
 
-def test_progress(method, option_opt):
+def test_progress(option_opt):
     import lxbasic.log as bsc_log
     import time
+
+    tag = option_opt.get('tag')
 
     with bsc_log.LogProcessContext.create(
         maximum=5,
@@ -113,6 +115,9 @@ def test_progress(method, option_opt):
             time.sleep(1)
             g_p.do_update()
 
+    if tag == 'error':
+        raise RuntimeError()
+
     with bsc_log.LogProcessContext.create(
         maximum=5,
         label='test-2',
@@ -120,6 +125,7 @@ def test_progress(method, option_opt):
         for i in range(5):
             time.sleep(1)
             g_p.do_update()
+
 
 
 def main(session):
@@ -146,7 +152,7 @@ def main(session):
         test_unicode(method, option_opt)
     # test
     elif method == 'test-process':
-        test_progress(method, option_opt)
+        test_progress(option_opt)
 
 
 if __name__ == '__main__':

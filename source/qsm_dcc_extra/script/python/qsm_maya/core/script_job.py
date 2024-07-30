@@ -5,181 +5,184 @@ import maya.cmds as cmds
 
 
 class ScriptJobEventTypes(enum.EnumMeta):
-    # dbTraceChanged
-    # resourceLimitStateChange
-    # linearUnitChanged
-    # timeUnitChanged
-    # angularUnitChanged
-    # Undo
-    # undoSupressed
-    # Redo
-    # customEvaluatorChanged
-    # serialExecutorFallback
-    # timeChanged
-    # currentContainerChange
-    # quitApplication
-    # idleHigh
-    # idle
-    # idleVeryLow
-    # RecentCommandChanged
-    # ToolChanged
-    # PostToolChanged
-    # ToolDirtyChanged
-    # ToolSettingsChanged
-    # DisplayRGBColorChanged
-    # animLayerRebuild
-    # animLayerRefresh
-    # animLayerAnimationChanged
-    # animLayerLockChanged
-    # animLayerBaseLockChanged
-    # animLayerGhostChanged
-    # cteEventKeyingTargetForClipChanged
-    # cteEventKeyingTargetForLayerChanged
-    # cteEventKeyingTargetForInvalidChanged
-    # teClipAdded
-    # teClipModified
-    # teClipRemoved
-    # teCompositionAdded
-    # teCompositionRemoved
-    # teCompositionActiveChanged
-    # teCompositionNameChanged
-    # teMuteChanged
-    # cameraChange
-    # cameraDisplayAttributesChange
-    # SelectionChanged
-    # PreSelectionChangedTriggered
-    # LiveListChanged
     # ActiveViewChanged
-    # SelectModeChanged
-    # SelectTypeChanged
-    # SelectPreferenceChanged
-    # DisplayPreferenceChanged
-    # DagObjectCreated
-    # transformLockChange
-    # renderLayerManagerChange
-    # renderLayerChange
-    # displayLayerManagerChange
-    # displayLayerAdded
-    # displayLayerDeleted
-    # displayLayerVisibilityChanged
-    # displayLayerChange
-    # renderPassChange
-    # renderPassSetChange
-    # renderPassSetMembershipChange
-    # passContributionMapChange
-    # DisplayColorChanged
-    # lightLinkingChanged
-    # lightLinkingChangedNonSG
-    # UvTileProxyDirtyChangeTrigger
-    # preferredRendererChanged
-    # polyTopoSymmetryValidChanged
-    # SceneSegmentChanged
-    # PostSceneSegmentChanged
-    # SequencerActiveShotChanged
+    # ChannelBoxLabelSelected
     # ColorIndexChanged
-    # deleteAll
+    # CurveRGBColorChanged
+    # DagObjectCreated
+    # DisplayColorChanged
+    # DisplayPreferenceChanged
+    # DisplayRGBColorChanged
+    # DragRelease
+    # EditModeChanged
+    # LiveListChanged
+    # MenuModeChanged
+    # ModelPanelSetFocus
     # NameChanged
-    # symmetricModellingOptionsChanged
-    # softSelectOptionsChanged
-    # SetModified
-    # xformConstraintOptionsChanged
-    # metadataVisualStatusChanged
-    # undoXformCmd
-    # redoXformCmd
-    # freezeOptionsChanged
-    # linearToleranceChanged
-    # angularToleranceChanged
-    # nurbsToPolygonsPrefsChanged
-    # nurbsCurveRebuildPrefsChanged
-    # constructionHistoryChanged
-    # threadCountChanged
-    # SceneSaved
     # NewSceneOpened
-    # SceneOpened
-    # SceneImported
-    # PreFileNewOrOpened
-    # PreFileNew
-    # PreFileOpened
-    # PostSceneRead
-    # renderSetupAutoSave
-    # workspaceChanged
     # PolyUVSetChanged
     # PolyUVSetDeleted
-    # selectionConstraintsChanged
-    # nurbsToSubdivPrefsChanged
-    # startColorPerVertexTool
-    # stopColorPerVertexTool
-    # start3dPaintTool
-    # stop3dPaintTool
-    # DragRelease
-    # ModelPanelSetFocus
-    # modelEditorChanged
-    # MenuModeChanged
-    # gridDisplayChanged
-    # interactionStyleChanged
-    # axisAtOriginChanged
-    # CurveRGBColorChanged
-    # SelectPriorityChanged
-    # snapModeChanged
-    # texWindowEditorImageBaseColorChanged
-    # texWindowEditorCheckerDensityChanged
-    # texWindowEditorCheckerDisplayChanged
-    # texWindowEditorDisplaySolidMapChanged
-    # texWindowEditorShowup
-    # texWindowEditorClose
-    # profilerSelectionChanged
-    # activeHandleChanged
-    # ChannelBoxLabelSelected
-    # colorMgtOCIORulesEnabledChanged
-    # colorMgtUserPrefsChanged
+    # PostSceneRead
+    # PostSceneSegmentChanged
+    # PostToolChanged
+    # PreFileNew
+    # PreFileNewOrOpened
+    # PreFileOpened
+    # PreSelectionChangedTriggered
+    # RebuildUIValues
+    # RecentCommandChanged
+    # Redo
     # RenderSetupSelectionChanged
-    # colorMgtEnabledChanged
+    # RenderViewCameraChanged
+    # SceneImported
+    # SceneOpened
+    # SceneSaved
+    # SceneSegmentChanged
+    # SelectModeChanged
+    # SelectPreferenceChanged
+    # SelectPriorityChanged
+    # SelectTypeChanged
+    # SelectionChanged
+    # SequencerActiveShotChanged
+    # SetModified
+    # SoundNodeAdded
+    # SoundNodeRemoved
+    # ToolChanged
+    # ToolDirtyChanged
+    # ToolSettingsChanged
+    # Undo
+    # UvTileProxyDirtyChangeTrigger
+    # activeHandleChanged
+    # angularToleranceChanged
+    # angularUnitChanged
+    # animLayerAnimationChanged
+    # animLayerBaseLockChanged
+    # animLayerGhostChanged
+    # animLayerLockChanged
+    # animLayerRebuild
+    # animLayerRefresh
+    # axisAtOriginChanged
+    # cacheDestroyed
+    # cachingEvaluationModeChanged
+    # cachingPreferencesChanged
+    # cachingSafeModeChanged
+    # cameraChange
+    # cameraDisplayAttributesChange
+    # colorMgtConfigChanged
     # colorMgtConfigFileEnableChanged
     # colorMgtConfigFilePathChanged
-    # colorMgtConfigChanged
-    # colorMgtWorkingSpaceChanged
-    # colorMgtPrefsViewTransformChanged
-    # colorMgtPrefsReloaded
+    # colorMgtEnabledChanged
+    # colorMgtOCIORulesEnabledChanged
     # colorMgtOutputChanged
     # colorMgtPlayblastOutputChanged
+    # colorMgtPrefsReloaded
+    # colorMgtPrefsViewTransformChanged
     # colorMgtRefreshed
-    # selectionPipelineChanged
+    # colorMgtUserPrefsChanged
+    # colorMgtWorkingSpaceChanged
+    # constructionHistoryChanged
+    # cteEventClipEditModeChanged
+    # cteEventKeyingTargetForClipChanged
+    # cteEventKeyingTargetForInvalidChanged
+    # cteEventKeyingTargetForLayerChanged
+    # currentContainerChange
     # currentSoundNodeChanged
+    # customEvaluatorChanged
+    # dbTraceChanged
+    # deleteAll
+    # displayLayerAdded
+    # displayLayerChange
+    # displayLayerDeleted
+    # displayLayerManagerChange
+    # displayLayerVisibilityChanged
+    # freezeOptionsChanged
+    # glFrameTrigger
     # graphEditorChanged
-    # graphEditorParamCurveSelected
     # graphEditorOutlinerHighlightChanged
     # graphEditorOutlinerListChanged
-    # glFrameTrigger
-    # EditModeChanged
-    # playbackRangeAboutToChange
-    # playbackSpeedChanged
-    # playbackModeChanged
-    # playbackRangeSliderChanged
+    # graphEditorParamCurveSelected
+    # gridDisplayChanged
+    # idle
+    # idleHigh
+    # idleVeryLow
+    # interactionStyleChanged
+    # lightLinkingChanged
+    # lightLinkingChangedNonSG
+    # linearToleranceChanged
+    # linearUnitChanged
+    # metadataVisualStatusChanged
+    # modelEditorChanged
+    # nurbsCurveRebuildPrefsChanged
+    # nurbsToPolygonsPrefsChanged
+    # nurbsToSubdivPrefsChanged
+    # passContributionMapChange
     # playbackByChanged
+    # playbackModeChanged
+    # playbackRangeAboutToChange
     # playbackRangeChanged
-    # RenderViewCameraChanged
-    # texScaleContextOptionsChanged
-    # texRotateContextOptionsChanged
-    # texMoveContextOptionsChanged
-    # polyCutUVSteadyStrokeChanged
+    # playbackRangeSliderChanged
+    # playbackSpeedChanged
     # polyCutUVEventTexEditorCheckerDisplayChanged
     # polyCutUVShowTextureBordersChanged
     # polyCutUVShowUVShellColoringChanged
-    # shapeEditorTreeviewSelectionChanged
+    # polyCutUVSteadyStrokeChanged
+    # polyTopoSymmetryValidChanged
     # poseEditorTreeviewSelectionChanged
+    # preferredRendererChanged
+    # profilerSelectionChanged
+    # quitApplication
+    # redoXformCmd
+    # renderLayerChange
+    # renderLayerManagerChange
+    # renderPassChange
+    # renderPassSetChange
+    # renderPassSetMembershipChange
+    # renderSetupAutoSave
+    # resourceLimitStateChange
     # sculptMeshCacheBlendShapeListChanged
     # sculptMeshCacheCloneSourceChanged
-    # RebuildUIValues
-    # cacheDestroyed
-    # cachingPreferencesChanged
-    # cachingSafeModeChanged
-    # cachingEvaluationModeChanged
-    # teTrackAdded
-    # teTrackRemoved
-    # teTrackNameChanged
-    # teTrackModified
-    # cteEventClipEditModeChanged
+    # selectionConstraintsChanged
+    # selectionPipelineChanged
+    # serialExecutorFallback
+    # shapeEditorTreeviewSelectionChanged
+    # snapModeChanged
+    # softSelectOptionsChanged
+    # start3dPaintTool
+    # startColorPerVertexTool
+    # stop3dPaintTool
+    # stopColorPerVertexTool
+    # symmetricModellingOptionsChanged
+    # tabletModeChanged
+    # teClipAdded
+    # teClipModified
+    # teClipRemoved
+    # teCompositionActiveChanged
+    # teCompositionAdded
+    # teCompositionNameChanged
+    # teCompositionRemoved
     # teEditorPrefsChanged
+    # teMuteChanged
+    # teTrackAdded
+    # teTrackModified
+    # teTrackNameChanged
+    # teTrackRemoved
+    # texMoveContextOptionsChanged
+    # texRotateContextOptionsChanged
+    # texScaleContextOptionsChanged
+    # texWindowEditorCheckerDensityChanged
+    # texWindowEditorCheckerDisplayChanged
+    # texWindowEditorClose
+    # texWindowEditorDisplaySolidMapChanged
+    # texWindowEditorImageBaseColorChanged
+    # texWindowEditorShowup
+    # threadCountChanged
+    # timeChanged
+    # timeUnitChanged
+    # transformLockChange
+    # undoSupressed
+    # undoXformCmd
+    # workspaceChanged
+    # xformConstraintOptionsChanged
 
     SelectionChanged = 'SelectionChanged'
 
@@ -192,6 +195,9 @@ class ScriptJobEventTypes(enum.EnumMeta):
     SceneSaved = 'SceneSaved'
 
     CameraChanged = 'cameraChange'
+
+    ViewPortChanged = 'ModelPanelSetFocus'
+    Test = 'ActiveViewChanged'
 
 
 class ScriptJob(object):

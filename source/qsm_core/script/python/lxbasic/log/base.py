@@ -529,7 +529,7 @@ class LogProcessContext(object):
 
 class LogException(object):
     @staticmethod
-    def __trace():
+    def _trace():
         import sys
 
         import traceback
@@ -551,15 +551,15 @@ class LogException(object):
             sys.stderr.write('*'*80+'\n')
 
     @staticmethod
-    def __gui_trace():
+    def _gui_trace():
         if _bridge.BRG_FNC_LOG_GUI_EXCEPTION_ENABLE is True:
             if isinstance(_bridge.BRG_FNC_LOG_GUI_EXCEPTION_TRACE, (types.FunctionType, types.MethodType)):
                 _bridge.BRG_FNC_LOG_GUI_EXCEPTION_TRACE()
 
     @classmethod
     def trace(cls):
-        cls.__trace()
-        cls.__gui_trace()
+        cls._trace()
+        cls._gui_trace()
 
 
 if __name__ == '__main__':

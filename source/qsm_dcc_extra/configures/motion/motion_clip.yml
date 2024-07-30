@@ -1,0 +1,251 @@
+options:
+    namespace: ''
+
+nodes:
+    clip_time_to_unit:
+        name: '<options.namespace>:<..key>'
+        type: timeToUnitConversion
+        properties:
+            # 24fps
+            conversionFactor: 0.004
+    # cycle
+    clip_source_frame_and_cycle:
+        name: '<options.namespace>:<..key>'
+        type: multiplyDivide
+        properties:
+            # source_start_frame(default is 0), source_end_frame, clip_source_frame_count(default is 24)
+            input1: [0, 24, 24]
+            # clip_source_frame_count+1, frame_count+1, cycle(default is 1)
+            input2: [1, 1, 1]
+
+    clip_source_frame_count:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            # sub
+            operation: 2
+        connections:
+            # source_start_frame
+            - '<options.namespace>:clip_source_frame_and_cycle.input1X'
+            - '<options.namespace>:clip_source_frame_count.input1D[1]'
+            # source_end_frame
+            - '<options.namespace>:clip_source_frame_and_cycle.input1Y'
+            - '<options.namespace>:clip_source_frame_count.input1D[0]'
+            # source_frame_count
+            - '<options.namespace>:clip_source_frame_count.output1D'
+            - '<options.namespace>:clip_source_frame_and_cycle.input1Z'
+
+    clip_end_frame_with_cycle:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            # sum
+            operation: 1
+        connections:
+            # source_frame_count
+            - '<options.namespace>:clip_source_frame_and_cycle.outputZ'
+            - '<options.namespace>:clip_end_frame_with_cycle.input1D[0]'
+            # source_frame+1
+            - '<options.namespace>:clip_source_frame_and_cycle.input2X'
+            - '<options.namespace>:clip_end_frame_with_cycle.input1D[2]'
+
+    clip_frame_scale_with_cycle:
+        name: '<options.namespace>:<..key>'
+        type: multiplyDivide
+        properties:
+            # divide
+            operation: 2
+            input1: [0, 0, 0]
+            input2: [1, 1, 1]
+        connections:
+            - "<options.namespace>:clip_end_frame_with_cycle.output1D"
+            - "<options.namespace>:clip_frame_scale_with_cycle.input1X"
+
+    clip_end_frame_with_cycle_cdt:
+        name: '<options.namespace>:<..key>'
+        type: condition
+        properties:
+            # end_frame, default is 48
+            secondTerm: 48
+            # less than, use minimum of clip_end_frame_with_cycle and end_frame
+            operation: 5
+        connections:
+            # end frame for cycle
+            - '<options.namespace>:clip_frame_scale_with_cycle.outputX'
+            - '<options.namespace>:clip_end_frame_with_cycle_cdt.firstTerm'
+            # use end frame for cycle when is true
+            - '<options.namespace>:clip_end_frame_with_cycle_cdt.firstTerm'
+            - '<options.namespace>:clip_end_frame_with_cycle_cdt.colorIfTrueR'
+            # use end frame when is false
+            - '<options.namespace>:clip_end_frame_with_cycle_cdt.secondTerm'
+            - '<options.namespace>:clip_end_frame_with_cycle_cdt.colorIfFalseR'
+
+    clip_start_frame_cdt:
+        name: '<options.namespace>:<..key>'
+        type: condition
+        properties:
+            # start_frame
+            secondTerm: 1
+            # >= start_frame
+            operation: 3
+            # time, start_frame
+            colorIfTrue: [0, 0, 0]
+            colorIfFalse: [0, 0, 0]
+        connections:
+            - '<options.namespace>:clip_time_to_unit.output'
+            - '<options.namespace>:clip_start_frame_cdt.firstTerm'
+            - '<options.namespace>:clip_time_to_unit.output'
+            - '<options.namespace>:clip_start_frame_cdt.colorIfTrueR'
+            # avoiding negative values
+            - '<options.namespace>:clip_start_frame_cdt.secondTerm'
+            - '<options.namespace>:clip_start_frame_cdt.colorIfTrueG'
+            # start_fame
+            - '<options.namespace>:clip_start_frame_cdt.secondTerm'
+            - '<options.namespace>:clip_end_frame_with_cycle.input1D[1]'
+
+    clip_start_frame_sub:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            # sub
+            operation: 2
+        connections:
+            - '<options.namespace>:clip_start_frame_cdt.outColorR'
+            - '<options.namespace>:clip_start_frame_sub.input1D[0]'
+            - '<options.namespace>:clip_start_frame_cdt.secondTerm'
+            - '<options.namespace>:clip_start_frame_sub.input1D[1]'
+            # avoiding negative values
+            - '<options.namespace>:clip_start_frame_cdt.outColorG'
+            - '<options.namespace>:clip_start_frame_sub.input1D[1]'
+
+    clip_end_frame_clip_cdt:
+        name: '<options.namespace>:<..key>'
+        type: condition
+        properties:
+            # <= end_frame
+            operation: 5
+            colorIfFalse: [0, 0, 0]
+        connections:
+            - '<options.namespace>:clip_time_to_unit.output'
+            - '<options.namespace>:clip_end_frame_clip_cdt.firstTerm'
+            - '<options.namespace>:clip_start_frame_sub.output1D'
+            - '<options.namespace>:clip_end_frame_clip_cdt.colorIfTrueR'
+            # connect real_end_frame
+            - '<options.namespace>:clip_end_frame_with_cycle_cdt.outColorR'
+            - '<options.namespace>:clip_end_frame_clip_cdt.secondTerm'
+
+    clip_frame_count:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            # sub
+            operation: 2
+        connections:
+            # end_frame
+            - '<options.namespace>:clip_end_frame_clip_cdt.secondTerm'
+            - '<options.namespace>:clip_frame_count.input1D[0]'
+            # start_frame
+            - '<options.namespace>:clip_start_frame_cdt.secondTerm'
+            - '<options.namespace>:clip_frame_count.input1D[1]'
+            # +1
+            # to end_frame stop
+            - '<options.namespace>:clip_frame_count.output1D'
+            - '<options.namespace>:clip_end_frame_clip_cdt.colorIfFalseR'
+
+    clip_frame_scale:
+        name: '<options.namespace>:<..key>'
+        type: multiplyDivide
+        properties:
+            # scale
+            input2: [1, 1, 1]
+        connections:
+            - '<options.namespace>:clip_end_frame_clip_cdt.outColorR'
+            - '<options.namespace>:clip_frame_scale.input1X'
+
+    clip_unit_to_time:
+        name: '<options.namespace>:<..key>'
+        type: unitToTimeConversion
+        properties:
+            # 24fps
+            conversionFactor: 250
+        connections:
+            - '<options.namespace>:clip_frame_scale.outputX'
+            - '<options.namespace>:clip_unit_to_time.input'
+
+containers:
+    CLIP:
+        name: '<options.namespace>:<..key>'
+        type: dagContainer
+        properties:
+            iconName: 'out_timeEditorClip.png'
+        create_properties:
+            clip_start_frame:
+                type: float
+                value: 1
+            clip_end_frame:
+                type: float
+                value: 1
+            start_frame:
+                type: float
+                value: 1
+            end_frame:
+                type: float
+                value: 48
+            speed:
+                type: float
+                value: 1.0
+            source_start_frame:
+                type: float
+                value: 0
+            source_end_frame:
+                type: float
+                value: 24
+            source_count:
+                type: float
+                value: 24
+            pre_cycle:
+                type: float
+                value: 0
+            post_cycle:
+                type: float
+                value: 999
+            source_frame:
+                type: float
+                value: 0
+            input_time:
+                type: time
+                value: 0
+            output_time:
+                type: time
+                value: 0
+        connections:
+            # start and end
+            - '<options.namespace>:CLIP.start_frame'
+            - '<options.namespace>:clip_start_frame_cdt.secondTerm'
+            - '<options.namespace>:CLIP.end_frame'
+            - '<options.namespace>:clip_end_frame_with_cycle_cdt.secondTerm'
+            # speed
+            - '<options.namespace>:CLIP.speed'
+            - '<options.namespace>:clip_frame_scale.input2.input2X'
+            # speed
+            - '<options.namespace>:CLIP.speed'
+            - '<options.namespace>:clip_frame_scale_with_cycle.input2.input2X'
+            #
+            - '<options.namespace>:CLIP.source_start_frame'
+            - '<options.namespace>:clip_source_frame_and_cycle.input1X'
+            - '<options.namespace>:CLIP.source_end_frame'
+            - '<options.namespace>:clip_source_frame_and_cycle.input1Y'
+            - '<options.namespace>:CLIP.post_cycle'
+            - '<options.namespace>:clip_source_frame_and_cycle.input2Z'
+            #
+            - '<options.namespace>:clip_end_frame_clip_cdt.outColorR'
+            - '<options.namespace>:CLIP.source_frame'
+            #
+            - 'time1.outTime'
+            - '<options.namespace>:CLIP.input_time'
+            #
+            - '<options.namespace>:CLIP.input_time'
+            - '<options.namespace>:clip_time_to_unit.input'
+            #
+            - '<options.namespace>:clip_unit_to_time.output'
+            - '<options.namespace>:CLIP.output_time'

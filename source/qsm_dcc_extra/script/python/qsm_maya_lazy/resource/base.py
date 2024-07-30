@@ -23,7 +23,7 @@ class Util(object):
 
     def __init__(self, path):
         self._node_path = path
-        self._dcc_node_opt_list = qsm_mya_core.BscNodeOpt(path)
+        self._dcc_node_opt_list = qsm_mya_core.EtrNodeOpt(path)
 
     @classmethod
     def get_node_properties(cls, path, includes=None):
@@ -33,7 +33,7 @@ class Util(object):
         if qsm_mya_core.Node.is_exists(path) is False:
             raise RuntimeError()
 
-        node_opt = qsm_mya_core.BscNodeOpt(path)
+        node_opt = qsm_mya_core.EtrNodeOpt(path)
         if isinstance(includes, (tuple, list)):
             _ = includes
         else:
@@ -48,7 +48,7 @@ class Util(object):
         if qsm_mya_core.Node.is_exists(path) is False:
             raise RuntimeError()
 
-        node_opt = qsm_mya_core.BscNodeOpt(path)
+        node_opt = qsm_mya_core.EtrNodeOpt(path)
         node_opt.apply_node_properties(
             data, *args, **kwargs
         )

@@ -40,9 +40,11 @@ class PrxSubPanelForMotionTool(gui_prx_widgets.PrxBaseWindow):
         self._prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         self.add_widget(self._prx_tab_tool_box)
         # main
-        main_tool_prx_sca = gui_prx_widgets.PrxVScrollArea()
+        self._gui_main_tool_prx_page = _page_for_motion_main_tool.PrxPageForMotionMainTool(
+            self._window, self._session
+        )
         self._prx_tab_tool_box.add_widget(
-            main_tool_prx_sca,
+            self._gui_main_tool_prx_page,
             key='main',
             name=gui_core.GuiUtil.choice_name(
                 self._language, self._window._configure.get('build.main.tab')
@@ -52,10 +54,6 @@ class PrxSubPanelForMotionTool(gui_prx_widgets.PrxBaseWindow):
                 self._language, self._window._configure.get('build.main.tab')
             )
         )
-        self._gui_main_tool_prx_page = _page_for_motion_main_tool.PrxPageForMotionMainTool(
-            self._window, self._session
-        )
-        main_tool_prx_sca.add_widget(self._gui_main_tool_prx_page)
 
         self.do_gui_refresh_all()
 

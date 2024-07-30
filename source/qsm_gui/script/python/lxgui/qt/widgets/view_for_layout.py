@@ -41,7 +41,7 @@ class QtToolGridLayoutWidget(
         self._layout_model.set_size(v_w, v_h)
         # print self, self._get_action_flag_()
         # swap when flag is drag child polish or add
-        if self._get_action_flag_is_match_(
+        if self._is_action_flag_match_(
             self.ActionFlag.DragChildPolish
         ) and self._index_drag_child_polish is not None:
             self._layout_model.set_count(self._layout_item_stack.get_count())
@@ -73,7 +73,7 @@ class QtToolGridLayoutWidget(
                     i_widget.hide()
                 else:
                     i_widget.show()
-        elif self._get_action_flag_is_match_(
+        elif self._is_action_flag_match_(
             self.ActionFlag.DragChildRemove
         ):
             self._layout_model.set_count(self._layout_item_stack.get_count())
@@ -97,7 +97,7 @@ class QtToolGridLayoutWidget(
                     i_widget.hide()
                 else:
                     i_widget.show()
-        elif self._get_action_flag_is_match_(
+        elif self._is_action_flag_match_(
             self.ActionFlag.DragChildAdd
         ):
             self._layout_model.set_count(self._layout_item_stack.get_count()+1)
@@ -192,29 +192,29 @@ class QtToolGridLayoutWidget(
             elif event.type() == QtCore.QEvent.DragEnter:
                 self._do_drag_enter_(event)
             elif event.type() == QtCore.QEvent.DragMove:
-                if self._get_action_flag_is_match_(
+                if self._is_action_flag_match_(
                         self.ActionFlag.DragChildPolish
                 ):
                     self._do_drag_child_polish_(event)
-                elif self._get_action_flag_is_match_(
+                elif self._is_action_flag_match_(
                         self.ActionFlag.DragChildAdd
                 ):
                     self._do_drag_child_add_(event)
             elif event.type() == QtCore.QEvent.DragLeave:
-                if self._get_action_flag_is_match_(
+                if self._is_action_flag_match_(
                         self.ActionFlag.DragChildPolish
                 ):
                     self._do_drag_child_polish_leave_(event)
-                elif self._get_action_flag_is_match_(
+                elif self._is_action_flag_match_(
                         self.ActionFlag.DragChildAdd
                 ):
                     self._do_drag_child_add_leave_(event)
             elif event.type() == QtCore.QEvent.Drop:
-                if self._get_action_flag_is_match_(
+                if self._is_action_flag_match_(
                         self.ActionFlag.DragChildPolish
                 ):
                     self._do_drop_child_polish_(event)
-                elif self._get_action_flag_is_match_(
+                elif self._is_action_flag_match_(
                         self.ActionFlag.DragChildAdd
                 ):
                     self._do_drop_child_add_(event)
@@ -230,14 +230,14 @@ class QtToolGridLayoutWidget(
                 border_radius=4
             )
 
-        if self._get_action_flag_is_match_(self.ActionFlag.DragChildPolish):
+        if self._is_action_flag_match_(self.ActionFlag.DragChildPolish):
             painter._draw_frame_by_rect_(
                 rect=self._drag_rect_child_polish,
                 border_color=_qt_core.QtBorderColors.Button,
                 background_color=_qt_core.QtBackgroundColors.BDragChildPolish,
                 border_width=1,
             )
-        elif self._get_action_flag_is_match_(self.ActionFlag.DragChildAdd):
+        elif self._is_action_flag_match_(self.ActionFlag.DragChildAdd):
             painter._draw_frame_by_rect_(
                 rect=self._drag_rect_child_add,
                 border_color=_qt_core.QtBorderColors.Button,
@@ -389,7 +389,7 @@ class QtToolGroupVLayoutWidget(
         v_w, v_h = w-m_l-m_r, h-m_t-m_b
 
         heights = []
-        if self._get_action_flag_is_match_(
+        if self._is_action_flag_match_(
                 self.ActionFlag.DragChildPolish, self.ActionFlag.DragChildRemove
         ):
             self._layout_model.set_pos(v_x, v_y)
@@ -469,17 +469,17 @@ class QtToolGroupVLayoutWidget(
             elif event.type() == QtCore.QEvent.DragEnter:
                 self._do_drag_enter_(event)
             elif event.type() == QtCore.QEvent.DragMove:
-                if self._get_action_flag_is_match_(
+                if self._is_action_flag_match_(
                     self.ActionFlag.DragChildPolish
                 ):
                     self._do_drag_child_polish_(event)
             elif event.type() == QtCore.QEvent.DragLeave:
-                if self._get_action_flag_is_match_(
+                if self._is_action_flag_match_(
                         self.ActionFlag.DragChildPolish
                 ):
                     self._do_drag_child_polish_leave_(event)
             elif event.type() == QtCore.QEvent.Drop:
-                if self._get_action_flag_is_match_(
+                if self._is_action_flag_match_(
                         self.ActionFlag.DragChildPolish
                 ):
                     self._do_drop_child_polish_(event)
@@ -491,7 +491,7 @@ class QtToolGroupVLayoutWidget(
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
 
-        if self._get_action_flag_is_match_(self.ActionFlag.DragChildPolish):
+        if self._is_action_flag_match_(self.ActionFlag.DragChildPolish):
             painter._draw_frame_by_rect_(
                 rect=self._drag_rect_child_polish,
                 border_color=_qt_core.QtBorderColors.Button,
