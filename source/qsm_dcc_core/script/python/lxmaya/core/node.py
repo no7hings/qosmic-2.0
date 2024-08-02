@@ -455,7 +455,7 @@ class CmdPortOpt(object):
         )
 
     @classmethod
-    def _set_connection_create_(cls, atr_path_src, atr_path_tgt):
+    def _create_connection_fnc(cls, atr_path_src, atr_path_tgt):
         if cmds.isConnected(atr_path_src, atr_path_tgt) is False:
             if cmds.getAttr(atr_path_tgt, lock=1) is False:
                 cmds.connectAttr(atr_path_src, atr_path_tgt, force=1)

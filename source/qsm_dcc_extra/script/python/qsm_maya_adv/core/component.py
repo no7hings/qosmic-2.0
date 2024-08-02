@@ -63,21 +63,33 @@ class _GraphBase(object):
 
 
 class MotionClipGraph(_GraphBase):
+    """
+# coding:utf-8
+import qsm_maya_adv
+reload(qsm_maya_adv)
+qsm_maya_adv.do_reload()
+
+import qsm_maya_adv.core as c
+
+c.MotionClipGraph.test()
+
+    """
 
     def __init__(self, namespace):
         self._namespace = namespace
 
     # @qsm_mya_core.Undo.execute
-    def create_all(self):
+    def create_all(self, add_to_container=True):
         qsm_mya_core.Namespace.create(self._namespace)
-        self._cfg = bsc_resource.RscExtendConfigure.get_as_content('motion/motion_clip')
+        self._cfg = bsc_resource.RscExtendConfigure.get_as_content('motion/motion_time')
         self._cfg.set('options.namespace', self._namespace)
         self._cfg.do_flatten()
         nodes = self._create_nodes()
         containers = self._create_containers()
-        qsm_mya_core.Container.add_nodes(
-            containers[0], nodes
-        )
+        if add_to_container is True:
+            qsm_mya_core.Container.add_nodes(
+                containers[0], nodes
+            )
         return containers[0]
 
     def _create_containers(self):
@@ -100,12 +112,17 @@ class MotionClipGraph(_GraphBase):
     def test(cls):
         cls('test').create_all()
 
+    @classmethod
+    def test_1(cls):
+        cls('test').create_all(False)
+        qsm_mya_core.Namespace.remove('test')
+
 
 class MotionBlendGraph(MotionClipGraph):
     def __init__(self, namespace):
         super(MotionBlendGraph, self).__init__(namespace)
 
-    def create_all(self):
+    def create_all(self, *args, **kwargs):
         qsm_mya_core.Namespace.create(self._namespace)
         self._cfg = bsc_resource.RscExtendConfigure.get_as_content('motion/motion_blend')
         self._cfg.set('options.namespace', self._namespace)

@@ -806,7 +806,7 @@ class LxGeometrySettings(object):
                     'current scene is not available'
                 )
         #
-        if stage_opt.get_obj_exists(location) is True:
+        if stage_opt.is_obj_exists(location) is True:
             obj_opt.set(
                 'usd.location', location
             )
@@ -859,7 +859,7 @@ class LxGeometrySettings(object):
             obj_opt.set('usd.override_enable', False)
         elif scheme == 'shot':
             location = obj_opt.get('usd.location')
-            if stage_opt.get_obj_exists(location) is True:
+            if stage_opt.is_obj_exists(location) is True:
                 usd_file_path = self._set_override_usd_create_()
                 obj_opt.set(
                     'usd.shot_override.file', usd_file_path

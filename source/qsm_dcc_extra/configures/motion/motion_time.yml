@@ -1,0 +1,422 @@
+options:
+    namespace: ''
+
+nodes:
+    time_input_frame:
+        name: '<options.namespace>:<..key>'
+        type: timeToUnitConversion
+        properties:
+            # 24fps
+            conversionFactor: 0.004
+
+    time_output_source_time:
+        name: '<options.namespace>:<..key>'
+        type: unitToTimeConversion
+        properties:
+            # 24fps
+            conversionFactor: 250
+
+    time_speed_reciprocal:
+        name: '<options.namespace>:<..key>'
+        type: multiplyDivide
+        properties:
+            # divide
+            operation: 2
+            input1: [1, 1, 1]
+            input2: [1, 1, 1]
+    # x is pre, y is post, no speed
+    time_source_pre_and_post_count:
+        name: '<options.namespace>:<..key>'
+        type: multiplyDivide
+        properties:
+            # multiply
+            operation: 1
+            input1: [1, 1, 1]
+            input2: [1, 1, 1]
+    # with speed
+    time_basic_pre_and_post_count:
+        name: '<options.namespace>:<..key>'
+        type: multiplyDivide
+        properties:
+            # divide
+            operation: 2
+            input1: [1, 1, 1]
+            input2: [1, 1, 1]
+        connections:
+            # x is pre
+            - '<options.namespace>:time_source_pre_and_post_count.outputX'
+            - '<options.namespace>:time_basic_pre_and_post_count.input1X'
+            # y is post
+            - '<options.namespace>:time_source_pre_and_post_count.outputY'
+            - '<options.namespace>:time_basic_pre_and_post_count.input1Y'
+
+    time_basic_start:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            # sub
+            operation: 2
+    # when input_frame >= basic_start, output input_frame, else output basic_start
+    time_basic_start_cdt:
+        name: '<options.namespace>:<..key>'
+        type: condition
+        properties:
+            # input_frame
+            firstTerm: 0
+            # basic_start
+            secondTerm: 1
+            # >= basic_start
+            operation: 3
+            # time, start_frame
+            colorIfTrue: [0, 0, 0]
+            colorIfFalse: [0, 0, 0]
+        connections:
+            - '<options.namespace>:time_basic_start_cdt.firstTerm'
+            - '<options.namespace>:time_basic_start_cdt.colorIfTrueR'
+            - '<options.namespace>:time_basic_start_cdt.secondTerm'
+            - '<options.namespace>:time_basic_start_cdt.colorIfFalseR'
+
+    time_basic_end:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            # plus
+            operation: 1
+    # when input_frame <= basic_end, output input_frame, else output basic_end
+    time_basic_end_cdt:
+        name: '<options.namespace>:<..key>'
+        type: condition
+        properties:
+            # basic_start condition result
+            firstTerm: 0
+            # basic_end
+            secondTerm: 0
+            # <= basic_end
+            operation: 5
+            # time, start_frame
+            colorIfTrue: [0, 0, 0]
+            colorIfFalse: [0, 0, 0]
+        connections:
+            - '<options.namespace>:time_basic_end_cdt.firstTerm'
+            - '<options.namespace>:time_basic_end_cdt.colorIfTrueR'
+            - '<options.namespace>:time_basic_end_cdt.secondTerm'
+            - '<options.namespace>:time_basic_end_cdt.colorIfFalseR'
+
+    time_start_offset:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            # sub
+            operation: 2
+
+    time_source_offset:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            # sub
+            operation: 2
+
+    time_source_count:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            # sub
+            operation: 2
+    #
+    time_clip_start_cdt:
+        name: '<options.namespace>:<..key>'
+        type: condition
+        properties:
+            # input_frame=basic_end condition result
+            firstTerm: 0
+            # clip_start
+            secondTerm: 1
+            # >= clip_start
+            operation: 3
+
+            colorIfTrue: [0, 0, 0]
+            colorIfFalse: [0, 0, 0]
+        connections:
+            - '<options.namespace>:time_clip_start_cdt.firstTerm'
+            - '<options.namespace>:time_clip_start_cdt.colorIfTrueR'
+            - '<options.namespace>:time_clip_start_cdt.secondTerm'
+            - '<options.namespace>:time_clip_start_cdt.colorIfFalseR'
+    #
+    time_clip_end_cdt:
+        name: '<options.namespace>:<..key>'
+        type: condition
+        properties:
+            # input_frame=clip_start condition result
+            firstTerm: 0
+            # clip_end
+            secondTerm: 0
+            # <= clip_end
+            operation: 5
+            # time, start_frame
+            colorIfTrue: [0, 0, 0]
+            colorIfFalse: [0, 0, 0]
+        connections:
+            - '<options.namespace>:time_clip_end_cdt.firstTerm'
+            - '<options.namespace>:time_clip_end_cdt.colorIfTrueR'
+            - '<options.namespace>:time_clip_end_cdt.secondTerm'
+            - '<options.namespace>:time_clip_end_cdt.colorIfFalseR'
+
+    time_output_source_frame:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
+        properties:
+            # sub
+            operation: 2
+
+    time_output_source_frame_with_speed:
+        name: '<options.namespace>:<..key>'
+        type: multiplyDivide
+        properties:
+            # divide
+            operation: 2
+            input1: [1, 1, 1]
+            input2: [1, 1, 1]
+
+containers:
+    TIME:
+        name: '<options.namespace>:<..key>'
+        type: dagContainer
+        properties:
+            iconName: 'out_timeEditorClip.png'
+
+        create_properties:
+            input_frame:
+                type: integer
+                value: 0
+
+            clip_start:
+                type: integer
+                value: 1
+            clip_end:
+                type: integer
+                value: 24
+
+            output_clip_frame:
+                type: integer
+                value: 0
+
+            start:
+                type: integer
+                value: 1
+
+            start_offset:
+                type: integer
+                value: 1
+
+            speed:
+                type: float
+                value: 1.0
+
+            speed_reciprocal:
+                type: float
+                value: 1.0
+
+            source_start:
+                type: integer
+                value: 1
+            source_end:
+                type: integer
+                value: 24
+            source_count:
+                type: integer
+                value: 24
+            source_pre_count:
+                type: integer
+                value: 0
+            source_post_count:
+                type: integer
+                value: 24
+            source_offset:
+                type: integer
+                value: 0
+
+            pre_cycle:
+                type: integer
+                value: 1
+            post_cycle:
+                type: integer
+                value: 10
+
+            basic_pre_count:
+                type: integer
+                value: 0
+
+            basic_post_count:
+                type: integer
+                value: 24
+            
+            basic_start:
+                type: integer
+                value: 1
+            
+            basic_end:
+                type: integer
+                value: 24
+
+            output_basic_frame:
+                type: integer
+                value: 0
+
+            input_time:
+                type: time
+                value: 0
+
+            output_source_frame:
+                type: integer
+                value: 0
+
+            output_source_time:
+                type: time
+                value: 0
+
+            one:
+                type: integer
+                value: 1
+            one_minus:
+                type: integer
+                value: -1
+
+        connections:
+            # input_frame
+            - '<options.namespace>:time_input_frame.output'
+            - '<options.namespace>:TIME.input_frame'
+            # basic_start condition
+            - '<options.namespace>:TIME.input_frame'
+            - '<options.namespace>:time_basic_start_cdt.firstTerm'
+            - '<options.namespace>:TIME.basic_start'
+            - '<options.namespace>:time_basic_start_cdt.secondTerm'
+            # basic_end condition
+            - '<options.namespace>:time_basic_start_cdt.outColorR'
+            - '<options.namespace>:time_basic_end_cdt.firstTerm'
+            - '<options.namespace>:TIME.basic_end'
+            - '<options.namespace>:time_basic_end_cdt.secondTerm'
+            #
+            - '<options.namespace>:time_basic_end_cdt.outColorR'
+            - '<options.namespace>:TIME.output_basic_frame'
+            # clip_start condition
+            - '<options.namespace>:time_basic_end_cdt.outColorR'
+            - '<options.namespace>:time_clip_start_cdt.firstTerm'
+            - '<options.namespace>:TIME.clip_start'
+            - '<options.namespace>:time_clip_start_cdt.secondTerm'
+            # clip_end condition
+            - '<options.namespace>:time_clip_start_cdt.outColorR'
+            - '<options.namespace>:time_clip_end_cdt.firstTerm'
+            - '<options.namespace>:TIME.clip_end'
+            - '<options.namespace>:time_clip_end_cdt.secondTerm'
+            #
+            - '<options.namespace>:time_clip_end_cdt.outColorR'
+            - '<options.namespace>:TIME.output_clip_frame'
+            # time_output_source_frame
+            - '<options.namespace>:time_clip_end_cdt.outColorR'
+            - '<options.namespace>:time_output_source_frame.input1D[0]'
+            - '<options.namespace>:TIME.source_offset'
+            - '<options.namespace>:time_output_source_frame.input1D[1]'
+            # time_output_source_frame_with_speed
+            - '<options.namespace>:time_output_source_frame.output1D'
+            - '<options.namespace>:time_output_source_frame_with_speed.input1X'
+            # /speed
+            - '<options.namespace>:TIME.speed'
+            - '<options.namespace>:time_output_source_frame_with_speed.input2X'
+            #
+            - '<options.namespace>:time_output_source_frame_with_speed.outputX'
+            - '<options.namespace>:TIME.output_source_frame'
+            # basic_start=start-basic_pre_count
+            - '<options.namespace>:TIME.start'
+            - '<options.namespace>:time_basic_start.input1D[0]'
+            - '<options.namespace>:TIME.basic_pre_count'
+            - '<options.namespace>:time_basic_start.input1D[1]'
+            #
+            - '<options.namespace>:time_basic_start.output1D'
+            - '<options.namespace>:TIME.basic_start'
+            # basic_end=start+basic_post_count-1, use plus
+            - '<options.namespace>:TIME.start'
+            - '<options.namespace>:time_basic_end.input1D[0]'
+            - '<options.namespace>:TIME.basic_post_count'
+            - '<options.namespace>:time_basic_end.input1D[1]'
+            # +(-1)
+            - '<options.namespace>:TIME.one_minus'
+            - '<options.namespace>:time_basic_end.input1D[2]'
+            #
+            - '<options.namespace>:time_basic_end.output1D'
+            - '<options.namespace>:TIME.basic_end'
+            # start and end
+            - '<options.namespace>:TIME.clip_start'
+            - '<options.namespace>:time_clip_start_cdt.secondTerm'
+            # basic_pre_count=source_count*pre_cycle/speed
+            - '<options.namespace>:TIME.source_count'
+            - '<options.namespace>:time_source_pre_and_post_count.input1X'
+            - '<options.namespace>:TIME.pre_cycle'
+            - '<options.namespace>:time_source_pre_and_post_count.input2X'
+            # /speed
+            - '<options.namespace>:TIME.speed'
+            - '<options.namespace>:time_basic_pre_and_post_count.input2X'
+            #
+            - '<options.namespace>:time_source_pre_and_post_count.outputX'
+            - '<options.namespace>:TIME.source_pre_count'
+            #
+            - '<options.namespace>:time_basic_pre_and_post_count.outputX'
+            - '<options.namespace>:TIME.basic_pre_count'
+            # basic_post_count=source_count*post_cycle/speed
+            - '<options.namespace>:TIME.source_count'
+            - '<options.namespace>:time_source_pre_and_post_count.input1Y'
+            - '<options.namespace>:TIME.post_cycle'
+            - '<options.namespace>:time_source_pre_and_post_count.input2Y'
+            # /speed
+            - '<options.namespace>:TIME.speed'
+            - '<options.namespace>:time_basic_pre_and_post_count.input2Y'
+            #
+            - '<options.namespace>:time_source_pre_and_post_count.outputY'
+            - '<options.namespace>:TIME.source_post_count'
+            #
+            - '<options.namespace>:time_basic_pre_and_post_count.outputY'
+            - '<options.namespace>:TIME.basic_post_count'
+            # speed_reciprocal=1/speed
+            - '<options.namespace>:TIME.speed'
+            - '<options.namespace>:time_speed_reciprocal.input2X'
+            #
+            - '<options.namespace>:time_speed_reciprocal.outputX'
+            - '<options.namespace>:TIME.speed_reciprocal'
+            # start_offset=start-clip_start
+            - "<options.namespace>:TIME.start"
+            - "<options.namespace>:time_start_offset.input1D[0]"
+            - "<options.namespace>:TIME.clip_start"
+            - "<options.namespace>:time_start_offset.input1D[1]"
+            #
+            - '<options.namespace>:time_start_offset.output1D'
+            - '<options.namespace>:TIME.start_offset'
+            # source_offset=start-source_start
+            - "<options.namespace>:TIME.start"
+            - "<options.namespace>:time_source_offset.input1D[0]"
+            - "<options.namespace>:TIME.source_start"
+            - "<options.namespace>:time_source_offset.input1D[1]"
+            #
+            - '<options.namespace>:time_source_offset.output1D'
+            - '<options.namespace>:TIME.source_offset'
+            # basic_pre_count=source_end-source_statr+1, use sub
+            - "<options.namespace>:TIME.source_end"
+            - "<options.namespace>:time_source_count.input1D[0]"
+            - "<options.namespace>:TIME.source_start"
+            - "<options.namespace>:time_source_count.input1D[1]"
+            # -(-1)
+            - "<options.namespace>:TIME.one_minus"
+            - "<options.namespace>:time_source_count.input1D[2]"
+            #
+            - '<options.namespace>:time_source_count.output1D'
+            - '<options.namespace>:TIME.source_count'
+            # time
+            - 'time1.outTime'
+            - '<options.namespace>:TIME.input_time'
+            #
+            - '<options.namespace>:TIME.input_time'
+            - '<options.namespace>:time_input_frame.input'
+            #
+            - '<options.namespace>:time_output_source_frame_with_speed.outputX'
+            - '<options.namespace>:time_output_source_time.input'
+            #
+            - '<options.namespace>:time_output_source_time.output'
+            - '<options.namespace>:TIME.output_source_time'

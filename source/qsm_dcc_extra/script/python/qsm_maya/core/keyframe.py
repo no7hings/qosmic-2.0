@@ -10,6 +10,8 @@ from . import reference as _reference
 
 from . import connection as _connection
 
+from . import node_for_dag as _node_for_dag
+
 
 class AnimCurves(object):
     @classmethod
@@ -251,6 +253,13 @@ class AnmCurve(object):
     def check_is_valid(cls, any_node):
         return cmds.nodeType(any_node).startswith('animCurve')
 
+    @classmethod
+    def clear_keyframes(cls, curve_name):
+        if cmds.objExists(curve_name):
+            key_times = cmds.keyframe(curve_name, query=True, timeChange=True)
+            if key_times:
+                cmds.cutKey(curve_name, time=(min(key_times), max(key_times)))
+
 
 class AnmCurveOpt(object):
     DATA_KEYS = [
@@ -260,11 +269,17 @@ class AnmCurveOpt(object):
     ]
 
     @classmethod
-    def create(cls, path, atr_name):
-        curve_name = '{}_{}'.format(
-            path.split('|')[-1].split(':')[-1],
-            atr_name.replace('.', '_')
-        )
+    def create(cls, path, atr_name, keep_namespace=False):
+        if keep_namespace is True:
+            curve_name = '{}_{}'.format(
+                path.split('|')[-1],
+                atr_name.replace('.', '_')
+            )
+        else:
+            curve_name = '{}_{}'.format(
+                path.split('|')[-1].split(':')[-1],
+                atr_name.replace('.', '_')
+            )
         curve_type = 'animCurveTL'
         curve_name_new = cmds.createNode(curve_type, name=curve_name, skipSelect=1)
 
@@ -276,6 +291,16 @@ class AnmCurveOpt(object):
 
     def __init__(self, curve_name):
         self._curve_name = curve_name
+
+    @property
+    def path(self):
+        return self._curve_name
+
+    def clear(self):
+        AnmCurve.clear_keyframes(self._curve_name)
+
+    def delete(self):
+        _node_for_dag.DagNode.delete(self._curve_name)
 
     def get_index_count(self):
         return cmds.keyframe(

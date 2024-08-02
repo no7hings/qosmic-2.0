@@ -36,8 +36,13 @@ class QtTimeHandle(
 
     def __init__(self, *args, **kwargs):
         super(QtTimeHandle, self).__init__(*args, **kwargs)
+        self.setMouseTracking(True)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.setSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
 
         self._rect = QtCore.QRect()
 
@@ -46,9 +51,7 @@ class QtTimeHandle(
     def eventFilter(self, *args):
         widget, event = args
         if widget == self:
-            if event.type() == QtCore.QEvent.Resize:
-                self._refresh_widget_all_()
-
+            event.ignore()
         return False
 
     def paintEvent(self, event):

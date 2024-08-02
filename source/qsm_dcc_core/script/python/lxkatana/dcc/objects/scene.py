@@ -162,7 +162,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
         obj_category_name = unr_core.UnrObjCategory.LYNXI
         #
         obj_category = self.universe.generate_obj_category(obj_category_name)
-        obj_type = obj_category.generate_type(obj_type_name)
+        obj_type = obj_category.create_type(obj_type_name)
         _obj = obj_type.create_obj(obj_path)
         #
         if ktn_core.KtnUtil.get_is_ui_mode() is True:

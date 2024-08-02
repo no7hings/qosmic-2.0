@@ -561,7 +561,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
         dcc_obj_path = dcc_dag_path.path
         #
         obj_category = self.universe.generate_obj_category(obj_category_name)
-        obj_type = obj_category.generate_type(obj_type_name)
+        obj_type = obj_category.create_type(obj_type_name)
         obj = obj_type.create_obj(dcc_obj_path)
         if mya_core.MyaUtil.get_is_ui_mode():
             import lxgui.qt.core as gui_qt_core

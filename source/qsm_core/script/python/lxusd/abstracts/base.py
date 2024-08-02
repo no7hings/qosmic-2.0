@@ -114,7 +114,7 @@ class AbsUsdObjScene(unr_abstracts.AbsObjScene):
         obj_path = usd_prim.GetPath().pathString
         #
         obj_category = self.universe.generate_obj_category(obj_category_name)
-        obj_type = obj_category.generate_type(obj_type_name)
+        obj_type = obj_category.create_type(obj_type_name)
         #
         _obj = obj_type.create_obj(obj_path)
         _obj._usd_obj = usd_prim

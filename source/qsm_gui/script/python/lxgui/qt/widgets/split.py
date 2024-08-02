@@ -923,7 +923,9 @@ class _AbsQtSplitter(QtWidgets.QWidget):
                     painter._draw_alternating_frame_by_rect_(
                         rect=i_widget_rect,
                         colors=((31, 31, 31, 255), (35, 35, 35, 255)),
-                        border_radius=1
+                        border_radius=1,
+                        x_offset=-i_widget_rect.x(),
+                        y_offset=-i_widget_rect.y()
                     )
 
                     painter._draw_size_bubble_by_rect_(
@@ -933,6 +935,7 @@ class _AbsQtSplitter(QtWidgets.QWidget):
 
     def _install_full_size_shortcut_(self):
         action = QtWidgets.QAction(self)
+        # noinspection PyUnresolvedReferences
         action.triggered.connect(
             self._do_swap_show_full_size_
         )
@@ -1152,6 +1155,7 @@ class QtVSplitter(_AbsQtSplitter):
 
 class QtHSplitterOld(QtWidgets.QSplitter):
     def __init__(self, *args, **kwargs):
+        # noinspection PyArgumentList
         super(QtHSplitterOld, self).__init__(*args, **kwargs)
         self.setHandleWidth(2)
         self.setContentsMargins(0, 0, 0, 0)

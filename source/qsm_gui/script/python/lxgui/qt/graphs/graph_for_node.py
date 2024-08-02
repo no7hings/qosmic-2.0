@@ -41,21 +41,6 @@ class AbsQtActionFrameDef(object):
         raise NotImplementedError()
 
 
-class AbsQtNGUniverseDef(object):
-    def _set_ng_universe_def_init_(self):
-        self._ng_node_universe = None
-        self._ng_node_universe_dict = {}
-
-    def _set_ng_universe_(self, *args, **kwargs):
-        raise NotImplementedError()
-
-    def _set_ng_show_by_universe_(self, *args, **kwargs):
-        raise NotImplementedError()
-
-    def _set_ng_universe_node_add_(self, *args, **kwargs):
-        raise NotImplementedError()
-
-
 class AbsQtNGDrawNodeDef(object):
     def _set_ng_draw_node_def_init_(self, widget):
         self._widget = widget
@@ -74,7 +59,7 @@ class QtNodeGraph(
     _graph_base.AbsQtGraphBaseDef,
     _graph_base.AbsQtGraphDrawBaseDef,
 
-    AbsQtNGUniverseDef
+    _graph_base.AbsQtNGUniverseDef
 ):
     NG_NODE_CLS = _sbj_node.QtNode
     NG_CONNECTION_CLS = _sbj_connection.QtConnection
@@ -85,13 +70,11 @@ class QtNodeGraph(
     # frame
     def _refresh_widget_all_(self):
         self._update_graph_geometry_()
-        #
+
         self._update_graph_draw_args_(
             self._graph_translate_x, self._graph_translate_y
         )
-        self._refresh_widget_draw_geometry_(
-            self.rect()
-        )
+        self._refresh_widget_draw_geometry_(self.rect())
         self._update_all_nodes_graph_args_(
             self._graph_translate_x, self._graph_translate_y, self._graph_scale_x, self._graph_scale_y
         )
@@ -133,7 +116,7 @@ class QtNodeGraph(
 
         self._ng_graph_layout_flag = self.NGLayoutFlag.Dependent
 
-        self._set_ng_universe_def_init_()
+        self._init_universe_def_(self)
         # undo
         self._undo_stack = QtWidgets.QUndoStack()
         self._undo_action = self._undo_stack.createUndoAction(self, 'undo')
@@ -157,7 +140,7 @@ class QtNodeGraph(
             (functools.partial(self._set_ng_action_graph_layout_selection_, '-height'), 'Ctrl+L'),
             (functools.partial(self._set_ng_action_graph_layout_selection_, 'height'), 'Shift+L'),
             (self._set_ng_action_graph_frame_, 'F'),
-            (self._set_ng_action_graph_select_all_, 'Ctrl+A')
+            (self._select_all_nodes_, 'Ctrl+A')
         ]
         for i_fnc, i_shortcut in actions:
             i_action = QtWidgets.QAction(self)
@@ -348,10 +331,10 @@ class QtNodeGraph(
             )
 
     # universe
-    def _set_ng_universe_(self, universe):
-        self._ng_node_universe = universe
-        obj = self._ng_node_universe.get_objs()
-        for i_obj in obj:
+    def _set_graph_universe_(self, universe):
+        self._graph_universe = universe
+        objs = self._graph_universe.get_objs()
+        for i_obj in objs:
             i_ng_node = self._create_node_()
             i_ng_node._set_unr_obj_(i_obj)
             i_ng_node._set_type_text_(
@@ -370,7 +353,7 @@ class QtNodeGraph(
 
             i_obj.set_gui_ng_graph_node(i_ng_node)
 
-        connections = self._ng_node_universe.get_connections()
+        connections = self._graph_universe.get_connections()
         for i_connection in connections:
             i_ng_connection = self._create_connection_()
             i_obj_src = i_connection.get_source_obj()
@@ -380,7 +363,7 @@ class QtNodeGraph(
 
     def _set_ng_show_by_universe_(self, *args, **kwargs):
         def frame_fnc_():
-            self._set_ng_graph_frame_to_nodes_auto_()
+            self._do_frame_nodes_auto_()
             t.stop()
 
         if args:
@@ -389,9 +372,9 @@ class QtNodeGraph(
             obj_path = None
 
         if obj_path is not None:
-            objs = [self._ng_node_universe.get_obj(obj_path)]
+            objs = [self._graph_universe.get_obj(obj_path)]
         else:
-            objs = self._ng_node_universe.get_basic_source_objs()
+            objs = self._graph_universe.get_basic_source_objs()
         #
         if objs:
             ng_nodes = [i.get_gui_ng_graph_node() for i in objs]
@@ -402,7 +385,7 @@ class QtNodeGraph(
                 )
                 idx += 1
             #
-            ng_nodes_0 = self._set_ng_graph_node_layout_by_connection_(
+            ng_nodes_0 = self._layout_nodes_by_connection_for_(
                 ng_nodes,
                 size=(192, 192)
             )
@@ -430,53 +413,8 @@ class QtNodeGraph(
         _w_0, _h_0 = x_1-x_0, y_1-y_0
         return x_0, y_0, x_1, y_1
 
-    def _set_ng_graph_frame_translate_to_nodes_(self, ng_nodes):
-        t_x, t_y = self._graph_translate_x, self._graph_translate_y
-        o_w, o_h = self.width(), self.height()
-        x_0, y_0, x_1, y_1, w_0, h_0 = self._get_graph_frame_args_by_nodes_(ng_nodes)
-        c_x, c_y = x_0+(x_1-x_0)/2, y_0+(y_1-y_0)/2
-        x, y = o_w/2-c_x+t_x, o_h/2-c_y+t_y
-        self._translate_graph_to_(
-            x, y
-        )
-
-    def _set_ng_graph_frame_scale_to_nodes_(self, ng_nodes):
-        o_s_x, o_s_y = self._graph_scale_x, self._graph_scale_y
-        o_w, o_h = self.width(), self.height()
-        x_0, y_0, x_1, y_1, w_0, h_0 = self._get_graph_frame_args_by_nodes_(ng_nodes)
-        #
-        i_x, i_y, i_w, i_h = bsc_core.RawSizeMtd.fit_to(
-            (w_0, h_0), (o_w, o_h)
-        )
-        o_r = (i_w*.75)
-        r_0 = w_0
-        s_x_0, s_y_0 = float(o_r)/float(r_0), float(o_r)/float(r_0)
-        s_x_0, s_y_0 = s_x_0*o_s_x, s_y_0*o_s_y
-        self._scale_graph_to_(
-            s_x_0, s_y_0
-        )
-
-    def _set_ng_graph_frame_to_nodes_(self, ng_nodes=None):
-        if ng_nodes:
-            if isinstance(ng_nodes, (tuple, list)):
-                _ = ng_nodes
-            else:
-                _ = [ng_nodes]
-            # scale
-            self._set_ng_graph_frame_scale_to_nodes_(_)
-            # translate
-            self._set_ng_graph_frame_translate_to_nodes_(_)
-
-    def _set_ng_graph_frame_to_nodes_auto_(self):
-        if self._nodes_selected:
-            ng_nodes = self._nodes_selected
-        else:
-            ng_nodes = self._graph_nodes
-        #
-        self._set_ng_graph_frame_to_nodes_(ng_nodes)
-
     # layout
-    def _set_ng_graph_node_layout_by_connection_(self, ng_nodes, size, direction=('r-l', 't-b')):
+    def _layout_nodes_by_connection_for_(self, nodes, size, direction=('r-l', 't-b')):
         def rcs_fnc_(obj_, column_):
             _source_objs = obj_.get_source_objs()
             if _source_objs:
@@ -496,18 +434,17 @@ class QtNodeGraph(
                         obj_stack.append(_i_obj)
                         rcs_fnc_(_i_obj, _cur_column)
 
-        #
         obj_stack = []
         o2c_dict = {}
         c2o_dict = {}
         #
-        x, y, w, h = ng_nodes[0]._get_geometry_args_()
-        [rcs_fnc_(i._ng_node_obj, 0) for i in ng_nodes]
+        x, y, w, h = nodes[0]._get_geometry_args_()
+        [rcs_fnc_(i._ng_node_obj, 0) for i in nodes]
 
-        # objs = [i._ng_node_obj for i in ng_nodes]
-        # basic_source_objs = self._ng_node_universe.get_basic_source_objs(objs)
+        # objs = [i._ng_node_obj for i in nodes]
+        # basic_source_objs = self._graph_universe.get_basic_source_objs(objs)
         ys = []
-        for i in ng_nodes:
+        for i in nodes:
             i_x, i_y, i_w, i_h = i._get_geometry_args_()
             ys.append(i_y)
 
@@ -539,7 +476,7 @@ class QtNodeGraph(
                     raise ValueError()
                 if v:
                     for i_row, i_obj_path in enumerate(v):
-                        i_obj = self._ng_node_universe.get_obj(i_obj_path)
+                        i_obj = self._graph_universe.get_obj(i_obj_path)
                         i_x = s_x
                         if dir_y == 'b-t':
                             i_y = s_y-i_row*h
@@ -555,16 +492,16 @@ class QtNodeGraph(
         return [i.get_gui_ng_graph_node() for i in obj_stack]
 
     @classmethod
-    def _set_ng_graph_nodes_sort_by_(cls, ng_nodes, sort_key=None):
+    def _set_ng_graph_nodes_sort_by_(cls, nodes, sort_key=None):
         """
-        :param ng_nodes:
+        :param nodes:
         :param sort_key: "x", "-x" / "height" / "-height"
         :return:
         """
         keys = []
         list_ = []
         query_dict = {}
-        for i_ng_node in ng_nodes:
+        for i_ng_node in nodes:
             i_x = i_ng_node.pos().x()
             _i_width = i_ng_node.width()
             i_height = i_ng_node._get_image_line_height_()
@@ -595,16 +532,16 @@ class QtNodeGraph(
 
         return list_
 
-    def _set_ng_graph_node_layout_as_line_(self, ng_nodes, sort_key=None):
+    def _set_ng_graph_node_layout_as_line_(self, nodes, sort_key=None):
         if sort_key is not None:
-            ng_nodes = self._set_ng_graph_nodes_sort_by_(
-                ng_nodes,
+            nodes = self._set_ng_graph_nodes_sort_by_(
+                nodes,
                 sort_key=sort_key
             )
 
-        x_0, y_0, x_1, y_1 = self._get_ng_graph_layout_args_(ng_nodes)
+        x_0, y_0, x_1, y_1 = self._get_ng_graph_layout_args_(nodes)
 
-        for seq, i_ng_node in enumerate(ng_nodes):
+        for seq, i_ng_node in enumerate(nodes):
             i_w, i_h = i_ng_node.width(), i_ng_node.height()
 
             y_0 = y_1-i_h
@@ -617,18 +554,18 @@ class QtNodeGraph(
             x_0 += i_w
             x_1 += i_w
 
-    def _set_ng_graph_node_layout_by_nodes_(self, ng_nodes, sort_key='x'):
-        if ng_nodes:
+    def _layout_nodes_for_(self, nodes, sort_key='x'):
+        if nodes:
             if self._ng_graph_layout_flag == self.NGLayoutFlag.Dependent:
-                x, y, w, h = ng_nodes[0]._get_geometry_args_()
-                self._set_ng_graph_node_layout_by_connection_(
-                    ng_nodes,
+                x, y, w, h = nodes[0]._get_geometry_args_()
+                self._layout_nodes_by_connection_for_(
+                    nodes,
                     size=(w, w)
                 )
                 self._refresh_widget_all_()
             elif self._ng_graph_layout_flag == self.NGLayoutFlag.Line:
                 self._set_ng_graph_node_layout_as_line_(
-                    ng_nodes,
+                    nodes,
                     sort_key=sort_key
                 )
 
@@ -647,22 +584,18 @@ class QtNodeGraph(
 
     # action frame select
     def _set_action_frame_execute_(self, event):
-        self._set_ng_graph_frame_to_nodes_auto_()
+        self._do_frame_nodes_auto_()
 
     def _set_ng_action_graph_frame_(self):
-        self._set_ng_graph_frame_to_nodes_auto_()
+        self._do_frame_nodes_auto_()
 
     def _set_ng_action_graph_layout_selection_(self, sort_key='x'):
         if self._nodes_selected:
-            self._do_node_press_move_start_()
-            self._set_ng_graph_node_layout_by_nodes_(
+            self._do_node_press_start_for_any_action_()
+            self._layout_nodes_for_(
                 self._nodes_selected, sort_key
             )
-            self._do_node_move_or_resize_end_()
-
-    def _set_ng_action_graph_select_all_(self):
-        for i_sbj in self._graph_nodes:
-            self._add_select_node_for_(i_sbj)
+            self._do_node_press_end_for_any_action_()
 
 
 class _QtNGTreeNode(
@@ -682,14 +615,14 @@ class _QtNGTreeNode(
 
 class _QtNGTree(
     _qt_wgt_view_for_tree.QtTreeWidget,
-    AbsQtNGUniverseDef
+    _graph_base.AbsQtNGUniverseDef
 ):
     QT_MENU_CLS = _qt_wgt_utility.QtMenu
 
-    def _set_ng_universe_(self, universe):
+    def _set_graph_universe_(self, universe):
         self.clear()
-        self._ng_node_universe = universe
-        objs = self._ng_node_universe.get_objs()
+        self._graph_universe = universe
+        objs = self._graph_universe.get_objs()
         for i_obj in objs:
             self._set_ng_universe_node_add_(i_obj)
 
@@ -698,8 +631,8 @@ class _QtNGTree(
 
     def __init__(self, *args, **kwargs):
         super(_QtNGTree, self).__init__(*args, **kwargs)
-        self._set_ng_universe_def_init_()
-        #
+        self._init_universe_def_(self)
+
         # self.itemSelectionChanged.connect(self._set_ng_graph_node_select_)
 
     def _set_ng_node_add_0_(self, obj):

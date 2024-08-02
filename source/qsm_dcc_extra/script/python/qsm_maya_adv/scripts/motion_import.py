@@ -75,7 +75,8 @@ s.AdvChrMotionImportOpt('sam_Skin').test()
                 i_file_path = bsc_resource.ExtendResource.get('motion/{}.json'.format(i_key))
 
                 self._adv_master_layer.append_layer(
-                    i_file_path, post_cycle=i_cycle,
+                    i_file_path,
+                    post_cycle=i_cycle,
                     pre_blend_frame=4, post_blend_frame=4
                 )
                 l_p.do_update()
@@ -88,19 +89,19 @@ s.AdvChrMotionImportOpt('sam_Skin').test()
         self.setup()
         with bsc_log.LogProcessContext.create(maximum=2) as l_p:
             for i_key, i_cycle in [
-                ('sam_run_offset', 3),
-                # ('sam_run_turn_left', 1),
-                # ('sam_run_offset', 3),
-                ('sam_walk_forward', 3),
-                # ('sam_walk_sneak_turn_right', 1),
-                # ('sam_run_forward', 3),
-                # ('sam_walk_sneak_forward', 3)
+                ('sam_run_forward', 2),
+                ('sam_walk_forward', 2),
+                ('sam_walk_sneak_turn_right', 1),
+                ('sam_run_forward', 3),
+                ('sam_walk_sneak_forward', 3)
             ]:
                 i_file_path = bsc_resource.ExtendResource.get('motion/{}.json'.format(i_key))
 
                 self._adv_master_layer.append_layer(
-                    i_file_path, post_cycle=i_cycle,
-                    pre_blend_frame=4, post_blend_frame=4
+                    i_file_path,
+                    post_cycle=i_cycle,
+                    pre_blend_frame=4,
+                    post_blend_frame=4,
                 )
                 l_p.do_update()
 

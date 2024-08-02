@@ -83,6 +83,13 @@ class Frame(object):
         cls.set_current(start_frame)
 
     @classmethod
+    def update_frame(cls, start_frame, end_frame, frame):
+        start_frame_pre, end_frame_pre = cls.get_frame_range()
+        if start_frame != start_frame_pre or end_frame != end_frame_pre:
+            cls.set_frame_range(start_frame, end_frame)
+            cls.set_current(frame)
+
+    @classmethod
     def set_current(cls, frame):
         cmds.currentTime(frame)
 

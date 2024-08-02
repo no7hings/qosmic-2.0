@@ -1773,14 +1773,15 @@ class QtPainter(QtGui.QPainter):
                 self.drawRect(rect_offset)
 
     @classmethod
-    def _get_alternating_color_(cls, rect, colors, width, time_offset=0, running=False):
+    def _get_alternating_color_(cls, rect, colors, width, time_offset=0, running=False, x_offset=0, y_offset=0):
         if running is True:
             x_o = (time_offset%(width*2))
         else:
-            x_o = 0
+            x_o = x_offset
+
         x, y = rect.x(), rect.y()
         gradient_color = QtGui.QLinearGradient(
-            QtCore.QPoint(x+x_o, y), QtCore.QPoint(x+width+x_o, y+width)
+            QtCore.QPoint(x+x_o, y+y_offset), QtCore.QPoint(x+width+x_o, y+width+y_offset)
         )
         gradient_color.setSpread(gradient_color.RepeatSpread)
         c = len(colors)
@@ -1793,10 +1794,10 @@ class QtPainter(QtGui.QPainter):
             gradient_color.setColorAt(i_index+p*.9, i_qt_color)
         return gradient_color
 
-    def _draw_alternating_frame_by_rect_(self, rect, colors, border_radius=0):
+    def _draw_alternating_frame_by_rect_(self, rect, colors, border_radius=0, x_offset=0, y_offset=0):
         rect_offset = rect
         background_color = self._get_alternating_color_(
-            rect, colors, 20
+            rect, colors, 20, x_offset=x_offset, y_offset=y_offset
         )
         self._set_border_color_(colors[0])
         self._set_background_color_(background_color)
@@ -1862,7 +1863,9 @@ class QtPainter(QtGui.QPainter):
             text
         )
 
-    def _draw_alternating_colors_by_rect_(self, rect, colors, offset=0, border_radius=0, border_width=1, running=False):
+    def _draw_alternating_colors_by_rect_(
+        self, rect, colors, offset=0, border_radius=0, border_width=1, running=False, x_offset=0, y_offset=0
+    ):
         if offset != 0:
             rect_offset = QtCore.QRect(
                 rect.x()+offset, rect.y()+offset,
@@ -1873,7 +1876,8 @@ class QtPainter(QtGui.QPainter):
         #
         self._set_border_color_(colors[0])
         background_color = self._get_alternating_color_(
-            rect_offset, colors, 20, int(time.time()*10), running
+            rect_offset, colors, 20, int(time.time()*10),
+            running=running, x_offset=x_offset, y_offset=y_offset
         )
         #
         self._set_background_color_(background_color)

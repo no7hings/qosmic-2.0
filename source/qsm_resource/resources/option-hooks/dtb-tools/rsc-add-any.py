@@ -395,11 +395,11 @@ class PnlRscTextureAddTool(gui_prx_widgets.PrxSessionWindow):
 
     def gui_refresh(self):
         self._universe = unv_objects.ObjUniverse()
-        self._unr_resource_type = self._universe.generate_obj_type('database', 'resource')
-        self._unr_version_type = self._universe.generate_obj_type('database', 'version')
-        self._unr_image_type = self._universe.generate_obj_type('database', 'image')
-        self._unr_texture_type = self._universe.generate_obj_type('database', 'texture')
-        self._unr_hdri_type = self._universe.generate_obj_type('database', 'hdri')
+        self._unr_resource_type = self._universe.create_obj_type('database', 'resource')
+        self._unr_version_type = self._universe.create_obj_type('database', 'version')
+        self._unr_image_type = self._universe.create_obj_type('database', 'image')
+        self._unr_texture_type = self._universe.create_obj_type('database', 'texture')
+        self._unr_hdri_type = self._universe.create_obj_type('database', 'hdri')
         self._options = self._options_prx_node.to_dict()
         directory_path = self._options.get('directory')
         if directory_path:
@@ -412,7 +412,7 @@ class PnlRscTextureAddTool(gui_prx_widgets.PrxSessionWindow):
             self._type_path = '/'+'/'.join([self._category_group, self._category, self._type])
             #
             self.__unr_add_resources()
-            self._node_prx_tree_view.set_universe(
+            self._node_prx_tree_view.set_graph_universe(
                 self._universe
             )
             self._node_prx_tree_view.expand_items_by_depth(

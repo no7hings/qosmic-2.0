@@ -2,18 +2,18 @@ options:
     namespace: ''
 
 nodes:
-    clip_time_to_unit:
+    time_input_time:
         name: '<options.namespace>:<..key>'
         type: timeToUnitConversion
         properties:
             # 24fps
             conversionFactor: 0.004
     # cycle
-    clip_source_frame_and_cycle:
+    time_basic_pre_count:
         name: '<options.namespace>:<..key>'
         type: multiplyDivide
         properties:
-            # source_start_frame(default is 0), source_end_frame, clip_source_frame_count(default is 24)
+            # source_start(default is 0), source_end, clip_source_frame_count(default is 24)
             input1: [0, 24, 24]
             # clip_source_frame_count+1, frame_count+1, cycle(default is 1)
             input2: [1, 1, 1]
@@ -25,15 +25,15 @@ nodes:
             # sub
             operation: 2
         connections:
-            # source_start_frame
-            - '<options.namespace>:clip_source_frame_and_cycle.input1X'
+            # source_start
+            - '<options.namespace>:time_basic_pre_count.input1X'
             - '<options.namespace>:clip_source_frame_count.input1D[1]'
-            # source_end_frame
-            - '<options.namespace>:clip_source_frame_and_cycle.input1Y'
+            # source_end
+            - '<options.namespace>:time_basic_pre_count.input1Y'
             - '<options.namespace>:clip_source_frame_count.input1D[0]'
             # source_frame_count
             - '<options.namespace>:clip_source_frame_count.output1D'
-            - '<options.namespace>:clip_source_frame_and_cycle.input1Z'
+            - '<options.namespace>:time_basic_pre_count.input1Z'
 
     clip_end_frame_with_cycle:
         name: '<options.namespace>:<..key>'
@@ -43,10 +43,10 @@ nodes:
             operation: 1
         connections:
             # source_frame_count
-            - '<options.namespace>:clip_source_frame_and_cycle.outputZ'
+            - '<options.namespace>:time_basic_pre_count.outputZ'
             - '<options.namespace>:clip_end_frame_with_cycle.input1D[0]'
-            # source_frame+1
-            - '<options.namespace>:clip_source_frame_and_cycle.input2X'
+            # source_time+1
+            - '<options.namespace>:time_basic_pre_count.input2X'
             - '<options.namespace>:clip_end_frame_with_cycle.input1D[2]'
 
     clip_frame_scale_with_cycle:
@@ -80,7 +80,7 @@ nodes:
             - '<options.namespace>:clip_end_frame_with_cycle_cdt.secondTerm'
             - '<options.namespace>:clip_end_frame_with_cycle_cdt.colorIfFalseR'
 
-    clip_start_frame_cdt:
+    time_clip_start_cdt:
         name: '<options.namespace>:<..key>'
         type: condition
         properties:
@@ -92,15 +92,15 @@ nodes:
             colorIfTrue: [0, 0, 0]
             colorIfFalse: [0, 0, 0]
         connections:
-            - '<options.namespace>:clip_time_to_unit.output'
-            - '<options.namespace>:clip_start_frame_cdt.firstTerm'
-            - '<options.namespace>:clip_time_to_unit.output'
-            - '<options.namespace>:clip_start_frame_cdt.colorIfTrueR'
+            - '<options.namespace>:time_input_time.output'
+            - '<options.namespace>:time_clip_start_cdt.firstTerm'
+            - '<options.namespace>:time_input_time.output'
+            - '<options.namespace>:time_clip_start_cdt.colorIfTrueR'
             # avoiding negative values
-            - '<options.namespace>:clip_start_frame_cdt.secondTerm'
-            - '<options.namespace>:clip_start_frame_cdt.colorIfTrueG'
+            - '<options.namespace>:time_clip_start_cdt.secondTerm'
+            - '<options.namespace>:time_clip_start_cdt.colorIfTrueG'
             # start_fame
-            - '<options.namespace>:clip_start_frame_cdt.secondTerm'
+            - '<options.namespace>:time_clip_start_cdt.secondTerm'
             - '<options.namespace>:clip_end_frame_with_cycle.input1D[1]'
 
     clip_start_frame_sub:
@@ -110,12 +110,12 @@ nodes:
             # sub
             operation: 2
         connections:
-            - '<options.namespace>:clip_start_frame_cdt.outColorR'
+            - '<options.namespace>:time_clip_start_cdt.outColorR'
             - '<options.namespace>:clip_start_frame_sub.input1D[0]'
-            - '<options.namespace>:clip_start_frame_cdt.secondTerm'
+            - '<options.namespace>:time_clip_start_cdt.secondTerm'
             - '<options.namespace>:clip_start_frame_sub.input1D[1]'
             # avoiding negative values
-            - '<options.namespace>:clip_start_frame_cdt.outColorG'
+            - '<options.namespace>:time_clip_start_cdt.outColorG'
             - '<options.namespace>:clip_start_frame_sub.input1D[1]'
 
     clip_end_frame_clip_cdt:
@@ -126,7 +126,7 @@ nodes:
             operation: 5
             colorIfFalse: [0, 0, 0]
         connections:
-            - '<options.namespace>:clip_time_to_unit.output'
+            - '<options.namespace>:time_input_time.output'
             - '<options.namespace>:clip_end_frame_clip_cdt.firstTerm'
             - '<options.namespace>:clip_start_frame_sub.output1D'
             - '<options.namespace>:clip_end_frame_clip_cdt.colorIfTrueR'
@@ -145,7 +145,7 @@ nodes:
             - '<options.namespace>:clip_end_frame_clip_cdt.secondTerm'
             - '<options.namespace>:clip_frame_count.input1D[0]'
             # start_frame
-            - '<options.namespace>:clip_start_frame_cdt.secondTerm'
+            - '<options.namespace>:time_clip_start_cdt.secondTerm'
             - '<options.namespace>:clip_frame_count.input1D[1]'
             # +1
             # to end_frame stop
@@ -162,7 +162,7 @@ nodes:
             - '<options.namespace>:clip_end_frame_clip_cdt.outColorR'
             - '<options.namespace>:clip_frame_scale.input1X'
 
-    clip_unit_to_time:
+    time_output_source_time:
         name: '<options.namespace>:<..key>'
         type: unitToTimeConversion
         properties:
@@ -170,34 +170,36 @@ nodes:
             conversionFactor: 250
         connections:
             - '<options.namespace>:clip_frame_scale.outputX'
-            - '<options.namespace>:clip_unit_to_time.input'
+            - '<options.namespace>:time_output_source_time.input'
 
 containers:
-    CLIP:
+    TIME:
         name: '<options.namespace>:<..key>'
         type: dagContainer
         properties:
             iconName: 'out_timeEditorClip.png'
         create_properties:
-            clip_start_frame:
+            clip_start:
                 type: float
                 value: 1
-            clip_end_frame:
+            clip_end:
                 type: float
-                value: 1
+                value: 24
+            
             start_frame:
                 type: float
                 value: 1
             end_frame:
                 type: float
-                value: 48
+                value: 24
+            
             speed:
                 type: float
                 value: 1.0
-            source_start_frame:
+            source_start:
                 type: float
                 value: 0
-            source_end_frame:
+            source_end:
                 type: float
                 value: 24
             source_count:
@@ -209,43 +211,43 @@ containers:
             post_cycle:
                 type: float
                 value: 999
-            source_frame:
+            source_time:
                 type: float
                 value: 0
             input_time:
                 type: time
                 value: 0
-            output_time:
+            output_source_time:
                 type: time
                 value: 0
         connections:
             # start and end
-            - '<options.namespace>:CLIP.start_frame'
-            - '<options.namespace>:clip_start_frame_cdt.secondTerm'
-            - '<options.namespace>:CLIP.end_frame'
+            - '<options.namespace>:TIME.clip_start'
+            - '<options.namespace>:time_clip_start_cdt.secondTerm'
+            - '<options.namespace>:TIME.clip_end'
             - '<options.namespace>:clip_end_frame_with_cycle_cdt.secondTerm'
             # speed
-            - '<options.namespace>:CLIP.speed'
+            - '<options.namespace>:TIME.speed'
             - '<options.namespace>:clip_frame_scale.input2.input2X'
             # speed
-            - '<options.namespace>:CLIP.speed'
+            - '<options.namespace>:TIME.speed'
             - '<options.namespace>:clip_frame_scale_with_cycle.input2.input2X'
             #
-            - '<options.namespace>:CLIP.source_start_frame'
-            - '<options.namespace>:clip_source_frame_and_cycle.input1X'
-            - '<options.namespace>:CLIP.source_end_frame'
-            - '<options.namespace>:clip_source_frame_and_cycle.input1Y'
-            - '<options.namespace>:CLIP.post_cycle'
-            - '<options.namespace>:clip_source_frame_and_cycle.input2Z'
+            - '<options.namespace>:TIME.source_start'
+            - '<options.namespace>:time_basic_pre_count.input1X'
+            - '<options.namespace>:TIME.source_end'
+            - '<options.namespace>:time_basic_pre_count.input1Y'
+            - '<options.namespace>:TIME.post_cycle'
+            - '<options.namespace>:time_basic_pre_count.input2Z'
             #
             - '<options.namespace>:clip_end_frame_clip_cdt.outColorR'
-            - '<options.namespace>:CLIP.source_frame'
+            - '<options.namespace>:TIME.source_time'
             #
             - 'time1.outTime'
-            - '<options.namespace>:CLIP.input_time'
+            - '<options.namespace>:TIME.input_time'
             #
-            - '<options.namespace>:CLIP.input_time'
-            - '<options.namespace>:clip_time_to_unit.input'
+            - '<options.namespace>:TIME.input_time'
+            - '<options.namespace>:time_input_time.input'
             #
-            - '<options.namespace>:clip_unit_to_time.output'
-            - '<options.namespace>:CLIP.output_time'
+            - '<options.namespace>:time_output_source_time.output'
+            - '<options.namespace>:TIME.output_source_time'

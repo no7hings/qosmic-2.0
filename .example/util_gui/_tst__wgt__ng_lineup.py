@@ -14,16 +14,16 @@ class W(gui_prx_widgets.PrxBaseWindow):
         self.add_widget(c)
         u = unr_objects.ObjUniverse()
 
-        o_t = u.generate_obj_type('lynxi', 'shader')
+        o_t = u.create_obj_type('lynxi', 'shader')
 
-        t = u.generate_type(u.Category.CONSTANT, u.Type.STRING)
+        t = u.create_type(u.Category.CONSTANT, u.Type.STRING)
 
         r = u.get_root()
 
-        r.create_input_port(
+        r.create_input(
             t, 'input'
         )
-        r.create_output_port(
+        r.create_output(
             t, 'output'
         )
         d = gnl_dcc_objects.StgDirectory('Z:/temporaries/node_graph_test')
@@ -33,12 +33,12 @@ class W(gui_prx_widgets.PrxBaseWindow):
             i_n = o_t.create_obj(
                 '/{}'.format(i_f.name_base)
             )
-            i_p = i_n.generate_variant_port(
+            i_p = i_n.create_parameter(
                 t, 'image'
             )
             i_p.set(i)
 
-        c.set_universe(u)
+        c.set_graph_universe(u)
         c.set_node_show()
 
     def test(self):

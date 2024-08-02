@@ -37,7 +37,7 @@ class QtTimetrackActionCommand(QtWidgets.QUndoCommand):
         for i, i_model, i_last_model in self._data:
             i._pull_track_model_(i_last_model)
             sys.stdout.write(
-                'timetrack change: name="{}", model={}\n'.format(i._get_name_text_(), i_last_model)
+                'timetrack change: name="{}", model={}\n'.format(i_model.key, i_last_model)
             )
             self._graph._update_stage_()
 
@@ -45,5 +45,6 @@ class QtTimetrackActionCommand(QtWidgets.QUndoCommand):
         for i, i_model, i_last_model in self._data:
             i._pull_track_model_(i_model)
             sys.stdout.write(
-                'timetrack change: name="{}", model={}\n'.format(i._get_name_text_(), i_model)
+                'timetrack change: name="{}", model={}\n'.format(i_model.key, i_model)
             )
+            self._graph._update_stage_()

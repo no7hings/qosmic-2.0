@@ -57,7 +57,7 @@ class AbsObjUniverseBaseDef(object):
             obj_category._build_port_queries_(unr_core.UnrObjCategory.PORT_QUERY_RAW)
         #
         for obj_category_name, obj_type_name in unr_core.UnrObjType.ALL:
-            obj_type = self.generate_obj_type(obj_category_name, obj_type_name)
+            obj_type = self.create_obj_type(obj_category_name, obj_type_name)
             obj_type._build_port_queries_(unr_core.UnrObjType.PORT_QUERY_RAW)
         #
         root_type = self.get_obj_type(unr_core.UnrObjType.ROOT)
@@ -73,7 +73,7 @@ class AbsObjUniverseBaseDef(object):
     def __create_category(self, category_name):
         return self.CATEGORY_CLS(self, category_name)
 
-    def generate_category(self, category_name):
+    def create_category(self, category_name):
         stack = self._category_stack
         if stack.get_object_exists(category_name) is True:
             return stack.get_object(category_name)
@@ -88,9 +88,9 @@ class AbsObjUniverseBaseDef(object):
         return self._category_stack.get_object(category_name)
 
     # <type>
-    def generate_type(self, category_name, type_name):
-        category = self.generate_category(category_name)
-        return category.generate_type(type_name)
+    def create_type(self, category_name, type_name):
+        category = self.create_category(category_name)
+        return category.create_type(type_name)
 
     def _get_type(self, type_path):
         stack = self._type_stack
@@ -98,7 +98,7 @@ class AbsObjUniverseBaseDef(object):
             return stack.get_object(type_path)
         #
         category_name, type_name = self.CATEGORY_CLS._get_type_path_args_(type_path)
-        category = self.generate_category(category_name)
+        category = self.create_category(category_name)
         type_ = category._new_type_(type_name)
         stack.set_object_add(type_)
         return type_
@@ -138,9 +138,9 @@ class AbsObjUniverseBaseDef(object):
         return self._obj_category_stack.get_object(obj_category_name)
 
     # <obj-type>
-    def generate_obj_type(self, obj_category_name, obj_type_name):
+    def create_obj_type(self, obj_category_name, obj_type_name):
         category = self.generate_obj_category(obj_category_name)
-        return category.generate_type(obj_type_name)
+        return category.create_type(obj_type_name)
 
     def get_obj_types(self):
         return self._obj_type_stack.get_objects()
@@ -228,7 +228,7 @@ class AbsObjUniverseBaseDef(object):
         if _:
             return _[-1]
 
-    def get_obj_exists(self, obj_string):
+    def is_obj_exists(self, obj_string):
         """
         :param obj_string: str(<obj-path>) or str(<obj-name>)
         :return: bool
@@ -242,15 +242,14 @@ class AbsObjUniverseBaseDef(object):
         return self._obj_stack_test.get_objects_exists(regex=regex)
 
     # <obj-connection>
-    def set_connection_create(self, source_obj_args, source_port_args, target_obj_args, target_port_args):
-        obj_connection = self._set_connection_create_(
+    def create_connection(self, source_obj_args, source_port_args, target_obj_args, target_port_args):
+        obj_connection = self._create_connection_fnc(
             source_obj_args, source_port_args, target_obj_args, target_port_args
         )
         self._obj_connection_stack._set_object_register_(obj_connection)
         return obj_connection
 
-    #
-    def _set_connection_create_(self, source_obj_args, source_port_args, target_obj_args, target_port_args):
+    def _create_connection_fnc(self, source_obj_args, source_port_args, target_obj_args, target_port_args):
         def get_obj_path_fnc_(obj_args_):
             if isinstance(obj_args_, six.string_types):
                 return obj_args_

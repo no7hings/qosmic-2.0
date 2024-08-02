@@ -1,0 +1,35 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Lazy Montage'
+        name_chs: '懒人拼接'
+        group_name: 'Animation(s)'
+        #
+        icon_name: 'qosmic/lazy-resource-tool'
+        tool_tip:
+            |-
+            For motion composition.
+        #
+        tool_tip_chs:
+            |-
+            用于动作拼接。
+
+        size: [960, 720]
+
+build:
+    composition:
+        tab:
+            name: 'Composition'
+            name_chs: '合成'
+
+            tool_tip:
+                |-
+                For motion composition.
+
+            tool_tip_chs:
+                |-
+                用于动作合成。

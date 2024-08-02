@@ -75,6 +75,11 @@ class Namespace(object):
         if cmds.namespace(exists=namespace) is False:
             cmds.namespace(add=namespace)
 
+    @classmethod
+    def remove(cls, namespace):
+        if cmds.namespace(exists=namespace) is True:
+            cmds.namespace(removeNamespace=namespace, mergeNamespaceWithRoot=1)
+
 
 class Namespaces(object):
     @classmethod

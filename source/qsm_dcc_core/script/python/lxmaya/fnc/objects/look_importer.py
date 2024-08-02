@@ -481,7 +481,7 @@ class FncImporterForLookYml(gnl_fnc_abstracts.AbsFncImporterForLookYmlDcc):
             if obj_path_src in self._name_dict:
                 obj_path_src = self._name_dict[obj_path_src]
             atr_path_src = bsc_core.PthAttributeMtd.join_by(obj_path_src, port_path_src)
-            mya_core.CmdPortOpt._set_connection_create_(atr_path_src, atr_path_tgt)
+            mya_core.CmdPortOpt._create_connection_fnc(atr_path_src, atr_path_tgt)
 
     def create_node_fnc(
         self, scheme, obj_key, obj_path, create=False, definition=False, customize=False, assigns=False,

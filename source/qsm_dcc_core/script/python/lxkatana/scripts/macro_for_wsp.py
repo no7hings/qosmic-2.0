@@ -516,7 +516,7 @@ class ScpWspVariantRegister(AbsWsp):
             )
 
     def register_one(self, variant, obj_opt):
-        self._obj_opt.create_input_port(variant)
+        self._obj_opt.create_input(variant)
         self._obj_opt.connect_input_from(
             variant, (obj_opt.get_path(), None)
         )

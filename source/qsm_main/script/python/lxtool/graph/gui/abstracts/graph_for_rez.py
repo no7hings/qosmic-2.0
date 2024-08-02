@@ -73,21 +73,21 @@ class AbsRezGraph(gui_prx_widgets.PrxBaseWindow):
 
         u = unr_objects.ObjUniverse()
 
-        r_s_t = u.generate_obj_type('rez', 'system')
-        r_p_t = u.generate_obj_type('rez', 'package')
-        r_v_t = u.generate_obj_type('rez', 'v')
+        r_s_t = u.create_obj_type('rez', 'system')
+        r_p_t = u.create_obj_type('rez', 'package')
+        r_v_t = u.create_obj_type('rez', 'v')
 
-        t = u.generate_type(u.Category.CONSTANT, u.Type.NODE)
+        t = u.create_type(u.Category.CONSTANT, u.Type.NODE)
 
         r = r_c.ResolvedContext(
             packages,
         )
 
         root = u.get_root()
-        root.create_input_port(
+        root.create_input(
             t, 'input'
         )
-        root.create_output_port(
+        root.create_output(
             t, 'output'
         )
 
@@ -100,10 +100,10 @@ class AbsRezGraph(gui_prx_widgets.PrxBaseWindow):
                 i_n = i_type.create_obj(
                     i_path
                 )
-                i_n.create_input_port(
+                i_n.create_input(
                     t, 'input'
                 )
-                i_n.create_output_port(
+                i_n.create_output(
                     t, 'output'
                 )
                 root.get_input_port(
@@ -121,10 +121,10 @@ class AbsRezGraph(gui_prx_widgets.PrxBaseWindow):
                 i_p_n = i_type.create_obj(
                     i_path
                 )
-                i_p_n.create_input_port(
+                i_p_n.create_input(
                     t, 'input'
                 )
-                i_p_n.create_output_port(
+                i_p_n.create_output(
                     t, 'output'
                 )
                 root.get_input_port(
@@ -164,10 +164,10 @@ class AbsRezGraph(gui_prx_widgets.PrxBaseWindow):
             i_n = i_type.create_obj(
                 i_path
             )
-            i_n.create_input_port(
+            i_n.create_input(
                 t, 'input'
             )
-            i_n.create_output_port(
+            i_n.create_output(
                 t, 'output'
             )
             path_dict[i] = i_path
@@ -181,10 +181,10 @@ class AbsRezGraph(gui_prx_widgets.PrxBaseWindow):
                 i_n_tgt.get_input_port('input')
             )
 
-        self._node_graph.set_universe(u)
+        self._node_graph.set_graph_universe(u)
         self._node_graph.set_node_show()
 
-        self._node_tree.set_universe(u)
+        self._node_tree.set_graph_universe(u)
 
         menu = self.create_menu(
             'Tool(s)'

@@ -153,7 +153,7 @@ class KtnStageOpt(object):
     def _test_(self, location):
         pass
 
-    def get_obj_exists(self, obj_path):
+    def is_obj_exists(self, obj_path):
         t = self._get_traversal_(obj_path)
         return t.valid()
 

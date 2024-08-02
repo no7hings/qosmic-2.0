@@ -33,14 +33,6 @@ class QtTrackLayer(
         self._coord_model = None
         self._graph = None
 
-        self._layer_index_current = 0
-
-        self._layer_unit_basic_h = 48
-        self._layer_unit_h = 48
-
-        self._layer_index_offset = 0
-        self._layer_unit_offset = 0
-
         self._layer_rect = QtCore.QRect()
 
     def paintEvent(self, event):
@@ -53,8 +45,6 @@ class QtTrackLayer(
         self._coord_model.update(translate, scale, h)
 
         self._layer_rect.setRect(x, y, w, h)
-
-        self._layer_unit_h = self._layer_unit_basic_h*scale
 
         self._refresh_widget_all_()
 

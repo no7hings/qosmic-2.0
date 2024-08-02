@@ -242,9 +242,9 @@ class AbsPnlAssetLineup(gui_prx_widgets.PrxSessionWindow):
     def _set_graph_reload_(self):
         self._universe = unr_objects.ObjUniverse()
 
-        self._u_asset_type = self._universe.generate_obj_type('lynxi', 'asset')
+        self._u_asset_type = self._universe.create_obj_type('lynxi', 'asset')
 
-        self._u_image_type = self._universe.generate_type(
+        self._u_image_type = self._universe.create_type(
             self._universe.Category.CONSTANT, self._universe.Type.STRING
         )
 
@@ -258,13 +258,13 @@ class AbsPnlAssetLineup(gui_prx_widgets.PrxSessionWindow):
                             i_rsv_entity.name
                         )
                     )
-                    p = i_n.generate_variant_port(
+                    p = i_n.create_parameter(
                         self._u_image_type, 'image'
                     )
                     p.set(v)
 
         self._node_graph.set_clear()
-        self._node_graph.set_universe(self._universe)
+        self._node_graph.set_graph_universe(self._universe)
         self._node_graph.set_node_show()
 
     @classmethod

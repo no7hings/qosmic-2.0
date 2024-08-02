@@ -22,14 +22,32 @@ class _NGSelectionFlag(enum.IntEnum):
     Invert = 3
 
 
+class AbsQtNGUniverseDef(object):
+    def _init_universe_def_(self, widget):
+        self._widget = widget
+        self._graph_universe = None
+        self._ng_node_universe_dict = {}
+
+    def _set_graph_universe_(self, *args, **kwargs):
+        raise NotImplementedError()
+
+    def _set_ng_show_by_universe_(self, *args, **kwargs):
+        raise NotImplementedError()
+
+    def _set_ng_universe_node_add_(self, *args, **kwargs):
+        raise NotImplementedError()
+
+
 # graph
 class AbsQtGraphBaseDef(object):
     @classmethod
-    def _get_graph_frame_args_by_nodes_(cls, ng_nodes):
-        xs_0, ys_0 = [i.x() for i in ng_nodes], [i.y() for i in ng_nodes]
-        xs_1, ys_1 = [i.x()+i.width() for i in ng_nodes], [i.y()+i.height() for i in ng_nodes]
-        x_0, y_0 = min(xs_0), min(ys_0)
-        x_1, y_1 = max(xs_1), max(ys_1)
+    def _get_nodes_basic_geometry_args_for_(cls, nodes):
+        tl_xs = [x._node_basic_x for x in nodes]
+        tl_ys = [x._node_basic_y for x in nodes]
+        br_xs = [x._node_basic_x+x._node_basic_w for x in nodes]
+        br_ys = [x._node_basic_y+x._node_basic_h for x in nodes]
+        x_0, y_0 = min(tl_xs), min(tl_ys)
+        x_1, y_1 = max(br_xs), max(br_ys)
         w_0, h_0 = x_1-x_0, y_1-y_0
         return x_0, y_0, x_1, y_1, w_0, h_0
 
@@ -56,7 +74,7 @@ class AbsQtGraphBaseDef(object):
         self._graph_scale_x, self._graph_scale_y = 1.0, 1.0
         self._ng_graph_scale_radix_x, self._ng_graph_scale_radix_y = 0.25, 0.25
         # graph viewport 
-        self._graph_basic_w, self._graph_basic_h = 512, 512
+        self._graph_basic_w, self._graph_basic_h = 1024, 1024
         self._graph_basic_w_minimum, self._graph_basic_w_maximum = 2, 8192
         self._graph_basic_h_minimum, self._graph_basic_h_maximum = 2, 8192
         #
@@ -137,6 +155,7 @@ class AbsQtGraphBaseDef(object):
         self._ng_graph_point_start.setY(y_0)
         self._ng_graph_point_end.setX(x_1)
         self._ng_graph_point_end.setY(y_1)
+
         self._refresh_widget_all_()
 
     def _get_graph_rect_args_(self):
@@ -149,12 +168,20 @@ class AbsQtGraphBaseDef(object):
         o_x_0, o_y_0, o_x_1, o_y_1, o_r_w, o_r_h = self._get_graph_rect_args_()
         x_0, y_0 = x, y
         x_1, y_1 = x+o_r_w, y+o_r_h
+
         self._update_graph_rect_points_(x_0, y_0, x_1, y_1)
 
     def _scale_graph_to_(self, s_x, s_y):
-        o_x_0, o_y_0 = self._graph_translate_x, self._graph_translate_y
-        x_0, y_0 = o_x_0, o_y_0
-        x_1, y_1 = o_x_0+self._graph_basic_w*s_x, o_y_0+self._graph_basic_h*s_y
+        x_0, y_0 = self._graph_translate_x, self._graph_translate_y
+        x_1, y_1 = x_0+self._graph_basic_w*s_x, y_0+self._graph_basic_h*s_y
+
+        self._update_graph_rect_points_(x_0, y_0, x_1, y_1)
+
+    def _scale_graph_to_origin_(self, s_x, s_y):
+        s_w_0, s_h_0 = self._graph_basic_w*s_x, self._graph_basic_h*s_y
+        x_0, y_0 = 0, 0
+        x_1, y_1 = s_w_0, s_h_0
+
         self._update_graph_rect_points_(x_0, y_0, x_1, y_1)
 
     def _get_graph_translate_(self):
@@ -205,6 +232,17 @@ class AbsQtGraphBaseDef(object):
 class AbsQtGraphSbjDef(object):
     NG_NODE_CLS = None
     NG_CONNECTION_CLS = None
+    
+    @classmethod
+    def _filter_nodes_on_left_(cls, sbj, sbj_list):
+        list_ = []
+        x = sbj.x()
+        for i_sbj in sbj_list:
+            if i_sbj != sbj:
+                i_x = i_sbj.x()
+                if i_x < x:
+                    list_.append(i_sbj)
+        return list_
 
     def _init_sbj_base_def_(self, widget):
         self._widget = widget
@@ -244,8 +282,48 @@ class AbsQtGraphSbjDef(object):
     def _set_ng_graph_clear_(self):
         pass
 
-    def _set_ng_graph_frame_to_nodes_(self, *args):
-        raise NotImplementedError()
+    def _do_graph_frame_scale_for_(self, nodes):
+        x_0, y_0, x_1, y_1, w_0, h_0 = self._widget._get_nodes_basic_geometry_args_for_(nodes)
+
+        w_1, h_1 = self._widget.width(), self._widget.height()
+        if w_0 > h_0:
+            s_x_0 = float(w_1)/float(w_0)
+        else:
+            s_x_0 = float(h_1)/float(h_0)
+
+        self._widget._scale_graph_to_origin_(
+            s_x_0*.875, s_x_0*.875
+        )
+
+    def _do_graph_frame_translate_for_(self, nodes):
+        x_0, y_0, x_1, y_1, w_0, h_0 = self._widget._get_nodes_basic_geometry_args_for_(nodes)
+        sx, sy = self._widget._graph_scale_x, self._widget._graph_scale_y
+
+        s_x_0, s_y_0 = x_0*sx, y_0*sy
+        s_w_0, s_h_0 = w_0*sx, h_0*sy
+        w_1, h_1 = self._widget.width(), self._widget.height()
+        x, y = -s_x_0+(w_1-s_w_0)/2, -s_y_0+(h_1-s_h_0)/2
+        self._widget._translate_graph_to_(
+            x, y
+        )
+
+    def _do_frame_nodes_for_(self, ng_nodes=None):
+        if ng_nodes:
+            if isinstance(ng_nodes, (tuple, list)):
+                _ = ng_nodes
+            else:
+                _ = [ng_nodes]
+            # scale
+            self._do_graph_frame_scale_for_(_)
+            # translate
+            self._do_graph_frame_translate_for_(_)
+    
+    def _do_frame_nodes_auto_(self):
+        if self._nodes_selected:
+            ng_nodes = self._nodes_selected
+        else:
+            ng_nodes = self._graph_nodes
+        self._do_frame_nodes_for_(ng_nodes)
 
     def _set_node_current_for_(self, sbj):
         self._node_current = sbj
@@ -302,7 +380,7 @@ class AbsQtGraphSbjDef(object):
                 self._invert_select_node_for_(sbj)
 
     # move
-    def _do_node_move_or_resize_start_(self):
+    def _do_node_press_start_for_any_action_(self):
         [i._push_last_properties_() for i in self._nodes_selected]
 
     def _do_node_press_move_for_(self, sbj, d_point):
@@ -315,7 +393,7 @@ class AbsQtGraphSbjDef(object):
         self._set_node_current_for_(sbj)
 
         if self._node_current is not None:
-            p_0 = self._node_current.pos()
+            p_0 = sbj.pos()
             for i_sbj in self._nodes_selected:
                 if i_sbj != self._node_current:
                     i_p = i_sbj.pos()
@@ -335,37 +413,41 @@ class AbsQtGraphSbjDef(object):
             self._separate_resize_node_(sbj, d_point, start_size, flag)
 
     def _together_resize_nodes_(self, sbj, d_point, start_size, flag):
-        self._set_node_current_for_(sbj)
-
-        if self._node_current is not None:
-            p_0 = self._node_current.pos()
-            if flag == self._widget.ActionFlag.NGTimeResizeLeft:
-                sbj._resize_left_by_point_(d_point)
-                nodes = self._filter_nodes_on_left_(sbj, self._nodes_selected)
-                # print nodes
-            elif flag == self._widget.ActionFlag.NGTimeResizeRight:
-                sbj._resize_right_by_point_(d_point, start_size)
-
-    @classmethod
-    def _filter_nodes_on_left_(cls, sbj, sbj_list):
-        list_ = []
-        x = sbj.x()
-        for i_sbj in sbj_list:
-            if i_sbj != sbj:
-                i_x = i_sbj.x()
-                if i_x < x:
-                    list_.append(i_sbj)
-        return list_
+        # if self._node_current is not None:
+        if flag == self._widget.ActionFlag.NGTimeResizeLeft:
+            p_0 = sbj.pos()
+            sbj._resize_left_fnc_(d_point)
+            # nodes = self._filter_nodes_on_left_(sbj, self._nodes_selected)
+            # print nodes
+        elif flag == self._widget.ActionFlag.NGTimeResizeRight:
+            sbj._resize_right_fnc_(d_point, start_size)
 
     def _separate_resize_node_(self, sbj, d_point, start_size, flag):
         sbj.raise_()
         if flag == self._widget.ActionFlag.NGTimeResizeLeft:
-            sbj._resize_left_by_point_(d_point)
+            sbj._resize_left_fnc_(d_point)
         elif flag == self._widget.ActionFlag.NGTimeResizeRight:
-            sbj._resize_right_by_point_(d_point, start_size)
+            sbj._resize_right_fnc_(d_point, start_size)
+
+    # scale
+    def _do_node_press_scale_for_(self, sbj, d_point, start_size, flag):
+        if sbj._is_selected_() is True:
+            self._together_scale_nodes_(sbj, d_point, start_size, flag)
+        else:
+            self._separate_scale_node_(sbj, d_point, start_size, flag)
+            
+    def _together_scale_nodes_(self, sbj, d_point, start_size, flag):
+        pass
+    
+    def _separate_scale_node_(self, sbj, d_point, start_size, flag):
+        sbj.raise_()
+        if flag == self._widget.ActionFlag.NGTimeScaleLeft:
+            sbj._scale_left_fnc_(d_point)
+        elif flag == self._widget.ActionFlag.NGTimeScaleRight:
+            sbj._scale_right_fnc_(d_point, start_size)
 
     # undo
-    def _do_node_move_or_resize_end_(self, sbj=None):
+    def _do_node_press_end_for_any_action_(self, sbj=None):
         data = []
         for i in self._nodes_selected:
             i_coord, i_last_coord = i._get_basic_coord_(), i._get_basic_last_coord_()
@@ -410,6 +492,10 @@ class AbsQtGraphSbjDef(object):
         elif sbj not in self._nodes_selected:
             sbj._set_selected_(True)
             self._nodes_selected.append(sbj)
+
+    def _select_all_nodes_(self):
+        for i_sbj in self._graph_nodes:
+            self._add_select_node_for_(i_sbj)
 
 
 class AbsQtGraphDrawBaseDef(object):

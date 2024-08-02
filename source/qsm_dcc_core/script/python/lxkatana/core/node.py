@@ -1011,10 +1011,11 @@ class NGNodeOpt(object):
         if port:
             _ = NGPortOpt(port).get()
             if _:
-                name = _.split('.')[0]
-                NGNodeOpt(name).set_parameters_by_data(
-                    data, extend_kwargs
-                )
+                if isinstance(_, six.string_types):
+                    name = _.split('.')[0]
+                    NGNodeOpt(name).set_parameters_by_data(
+                        data, extend_kwargs
+                    )
 
     def set_shader_parameters_by_data(self, data, extend_kwargs=None):
         """
@@ -1269,7 +1270,7 @@ class NGNodeOpt(object):
     def get_input_port(self, port_path):
         return self._ktn_obj.getInputPort(port_path)
 
-    def create_input_port(self, port_path, **create_kwargs):
+    def create_input(self, port_path, **create_kwargs):
         _ = self._ktn_obj.getInputPort(port_path)
         if _ is not None:
             return _
@@ -1279,11 +1280,11 @@ class NGNodeOpt(object):
         for i in ports_data:
             if isinstance(i, six.string_types):
                 i_name = i
-                self.create_input_port(i_name)
+                self.create_input(i_name)
             elif isinstance(i, dict):
                 i_name = i.keys()[0]
                 i_metadata = i.values()[0]
-                self.create_input_port(i_name)
+                self.create_input(i_name)
                 i_port = self._ktn_obj.getInputPort(i_name)
                 for j_k, j_v in i_metadata.items():
                     i_port.addOrUpdateMetadata(
@@ -1456,14 +1457,14 @@ class NGNodeOpt(object):
                         node = self._ktn_obj
                         exec script
 
-    def create_output_port(self, port_path):
+    def create_output(self, port_path):
         _ = self._ktn_obj.getOutputPort(port_path)
         if _ is None:
             self._ktn_obj.addOutputPort(port_path)
 
     def create_output_ports_by_data(self, ports_data):
         for i in ports_data:
-            self.create_output_port(i)
+            self.create_output(i)
 
     def get_parent(self):
         return self._ktn_obj.getParent()
@@ -2584,12 +2585,12 @@ class NGMacro(object):
     def __init__(self, ktn_obj):
         self._ktn_obj = ktn_obj
 
-    def create_input_port(self, port_path):
+    def create_input(self, port_path):
         _ = self._ktn_obj.getInputPort(port_path)
         if _ is None:
             self._ktn_obj.addInputPort(port_path)
 
-    def create_output_port(self, port_path):
+    def create_output(self, port_path):
         _ = self._ktn_obj.getOutputPort(port_path)
         if _ is None:
             self._ktn_obj.addOutputPort(port_path)
@@ -2606,11 +2607,11 @@ class NGMacro(object):
         )
         #
         for i_input_port_path in input_ports:
-            NGNodeOpt(self._ktn_obj).create_input_port(i_input_port_path)
+            NGNodeOpt(self._ktn_obj).create_input(i_input_port_path)
         #
         output_ports = configure.get('output_ports') or []
         for i_output_port_path in output_ports:
-            NGNodeOpt(self._ktn_obj).create_output_port(i_output_port_path)
+            NGNodeOpt(self._ktn_obj).create_output(i_output_port_path)
         #
         parameters = configure.get('parameters') or {}
         for k, v in parameters.items():

@@ -1051,6 +1051,25 @@ dag_nodes:
             overrideEnabled: 1
             # red
             overrideColor: 12
+
+    /MAIN/ROOT_START_INPUT:
+        type: joint
+        properties:
+            radius: 0.2
+            translateX: 0
+            translateY: 0
+            translateZ: 0
+            rotateX: 0.0
+            rotateY: 0.0
+            rotateZ: 0
+            rotateOrder: 0
+            jointOrientX: 0
+            jointOrientY: 0
+            jointOrientZ: 0
+            overrideEnabled: 1
+            # red
+            overrideColor: 12
+
     /MAIN/ROOT_START/ROOT_START_PRC:
         type: parentConstraint
         properties:
@@ -1065,8 +1084,10 @@ dag_nodes:
             - "<options.namespace>:ROOT_START_PRC.constraintRotateZ"
             - "<options.namespace>:ROOT_START.rotateZ"
             # default use start source translate
-            - '<options.namespace>:ROOT_START_SRC.translate'
+            - '<options.namespace>:ROOT_START_INPUT.translate'
             - '<options.namespace>:ROOT_START_PRC.target[0].targetTranslate'
+            - '<options.namespace>:ROOT_START_INPUT.rotate'
+            - '<options.namespace>:ROOT_START_PRC.target[0].targetRotate'
     # root end
     /MAIN/ROOT_END:
         type: joint
@@ -1617,64 +1638,103 @@ containers:
         properties:
             iconName: 'out_timeEditorLayer.png'
         create_properties:
-            clip:
+            qsm_type:
+                type: string
+                value: 'motion_layer'
+
+            match_scale:
+                type: float
+                value: 1.0
+
+            TIME:
                 type: message
-                value: '<options.namespace>:CLIP'
-            blend:
-                type: message
-                value: '<options.namespace>:BLEND'
+                value: '<options.namespace>:TIME'
+
+#            blend:
+#                type: message
+#                value: '<options.namespace>:BLEND'
 
             main_weight:
                 type: float
                 value: 1.0
 
-            clip_start_frame:
-                type: float
+            main_weight_curve:
+                type: message
+
+            root_input_start_tx_curve:
+                type: message
+
+            root_input_start_ty_curve:
+                type: message
+
+            root_input_start_tz_curve:
+                type: message
+
+            root_input_start_sx_curve:
+                type: message
+
+            root_input_start_sy_curve:
+                type: message
+
+            root_input_start_sz_curve:
+                type: message
+
+            output_end:
+                type: integer
                 value: 1
 
-            clip_end_frame:
-                type: float
+            clip_start:
+                type: integer
                 value: 1
 
-            start_frame:
-                type: float
+            clip_end:
+                type: integer
+                value: 24
+
+            valid_start:
+                type: integer
                 value: 1
 
-            end_frame:
-                type: float
-                value: 48
+            valid_end:
+                type: integer
+                value: 24
+
+            start:
+                type: integer
+                value: 1
 
             speed:
                 type: float
                 value: 1.0
 
-            blend_start_frame:
+            blend_start_time:
                 type: time
                 value: 1
-            blend_end_frame:
+            
+            blend_end_time:
                 type: time
                 value: 48
 
             pre_blend_frame:
-                type: float
+                type: integer
                 value: 4
             post_blend_frame:
-                type: float
+                type: integer
                 value: 4
 
-            source_start_frame:
-                type: float
+            source_start:
+                type: integer
                 value: 0
-            source_end_frame:
-                type: float
+            source_end:
+                type: integer
                 value: 24
 
             pre_cycle:
-                type: float
-                value: 0
+                type: integer
+                value: 1
             post_cycle:
-                type: float
-                value: 999
+                type: integer
+                value: 10
 
             translate_offset:
                 type: float3
@@ -1684,70 +1744,69 @@ containers:
                 type: float3
                 value: [0, 0, 0]
 
-            match_scale:
-                type: float
-                value: 1.0
-
             layer_index:
                 type: integer
                 value: 0
 
         connections:
             # connect to clip
-            - '<options.namespace>:LAYER.start_frame'
-            - '<options.namespace>:CLIP.start_frame'
-            - '<options.namespace>:LAYER.end_frame'
-            - '<options.namespace>:CLIP.end_frame'
+            - '<options.namespace>:LAYER.valid_start'
+            - '<options.namespace>:TIME.clip_start'
+            - '<options.namespace>:LAYER.clip_end'
+            - '<options.namespace>:TIME.clip_end'
+
+            - '<options.namespace>:LAYER.start'
+            - '<options.namespace>:TIME.start'
             #
             - '<options.namespace>:LAYER.speed'
-            - '<options.namespace>:CLIP.speed'
+            - '<options.namespace>:TIME.speed'
             #
-            - '<options.namespace>:LAYER.source_start_frame'
-            - '<options.namespace>:CLIP.source_start_frame'
-            - '<options.namespace>:LAYER.source_end_frame'
-            - '<options.namespace>:CLIP.source_end_frame'
+            - '<options.namespace>:LAYER.source_start'
+            - '<options.namespace>:TIME.source_start'
+            - '<options.namespace>:LAYER.source_end'
+            - '<options.namespace>:TIME.source_end'
             #
             - '<options.namespace>:LAYER.pre_cycle'
-            - '<options.namespace>:CLIP.pre_cycle'
+            - '<options.namespace>:TIME.pre_cycle'
             - '<options.namespace>:LAYER.post_cycle'
-            - '<options.namespace>:CLIP.post_cycle'
+            - '<options.namespace>:TIME.post_cycle'
             # connect to blend
-            - '<options.namespace>:LAYER.blend_start_frame'
-            - '<options.namespace>:BLEND.blend_start_frame'
-            - '<options.namespace>:LAYER.blend_end_frame'
-            - '<options.namespace>:BLEND.blend_end_frame'
-            #
-            - '<options.namespace>:LAYER.pre_blend_frame'
-            - '<options.namespace>:BLEND.pre_blend_frame'
-            - '<options.namespace>:LAYER.post_blend_frame'
-            - '<options.namespace>:BLEND.post_blend_frame'
-            #
-            - '<options.namespace>:BLEND.output_weight'
-            - '<options.namespace>:LAYER.main_weight'
+#            - '<options.namespace>:LAYER.blend_start_time'
+#            - '<options.namespace>:BLEND.blend_start_time'
+#            - '<options.namespace>:LAYER.blend_end_time'
+#            - '<options.namespace>:BLEND.blend_end_time'
+#            #
+#            - '<options.namespace>:LAYER.pre_blend_frame'
+#            - '<options.namespace>:BLEND.pre_blend_frame'
+#            - '<options.namespace>:LAYER.post_blend_frame'
+#            - '<options.namespace>:BLEND.post_blend_frame'
+#            #
+#            - '<options.namespace>:BLEND.output_weight'
+#            - '<options.namespace>:LAYER.main_weight'
             #
             - '<options.namespace>:LAYER.main_weight'
             - '<options.namespace>:LAYER.visibility'
             # translation
             # start
-            - '<options.namespace>:LAYER.start_frame'
+            - '<options.namespace>:LAYER.clip_start'
             - "<options.namespace>:Root_M_translateX_start.varyTime"
-            - '<options.namespace>:LAYER.start_frame'
+            - '<options.namespace>:LAYER.clip_start'
             - "<options.namespace>:Root_M_translateY_start.varyTime"
-            - '<options.namespace>:LAYER.start_frame'
+            - '<options.namespace>:LAYER.clip_start'
             - "<options.namespace>:Root_M_translateZ_start.varyTime"
-            # end
-            - '<options.namespace>:LAYER.end_frame'
+            # end translation
+            - '<options.namespace>:LAYER.output_end'
             - "<options.namespace>:Root_M_translateX_end.varyTime"
-            - '<options.namespace>:LAYER.end_frame'
+            - '<options.namespace>:LAYER.output_end'
             - "<options.namespace>:Root_M_translateY_end.varyTime"
-            - '<options.namespace>:LAYER.end_frame'
+            - '<options.namespace>:LAYER.output_end'
             - "<options.namespace>:Root_M_translateZ_end.varyTime"
-            # rotation
-            - '<options.namespace>:LAYER.end_frame'
+            # end rotation
+            - '<options.namespace>:LAYER.output_end'
             - "<options.namespace>:Root_M_rotateX_end.varyTime"
-            - '<options.namespace>:LAYER.end_frame'
+            - '<options.namespace>:LAYER.output_end'
             - "<options.namespace>:Root_M_rotateY_end.varyTime"
-            - '<options.namespace>:LAYER.end_frame'
+            - '<options.namespace>:LAYER.output_end'
             - "<options.namespace>:Root_M_rotateZ_end.varyTime"
             #
             - '<options.namespace>:LAYER.rotate_offset'

@@ -248,7 +248,7 @@ class AbsPortSourceExtraDef(object):
         target_obj_args = self.obj_path
         target_port_args = self.port_path
         #
-        return self.obj.universe.set_connection_create(
+        return self.obj.universe.create_connection(
             source_obj_args, source_port_args,
             target_obj_args, target_port_args
         )
@@ -316,7 +316,7 @@ class AbsPortTargetExtraDef(object):
         target_obj_args = input_port.obj_path
         target_port_args = input_port.port_path
         #
-        return self.obj.universe.set_connection_create(
+        return self.obj.universe.create_connection(
             source_obj_args, source_port_args,
             target_obj_args, target_port_args
         )
@@ -440,9 +440,9 @@ class AbsPortChannelExtraDef(object):
 
 class AbsPortValueExtraDef(object):
     def _init_port_value_extra_def_(self):
-        self._value = self.type.set_value_create(None)
-        self._value_default = self.type.set_value_create(None)
-        #
+        self._value = self.type.create_value(None)
+        self._value_default = self.type.create_value(None)
+
         self._is_enumerate = False
         self._enumerate_raw = []
 

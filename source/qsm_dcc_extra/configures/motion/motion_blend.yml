@@ -22,7 +22,7 @@ nodes:
             # 24fps
             conversionFactor: 0.004
     # pre
-    # pre blend = blend_start_frame-pre_blend_frame
+    # pre blend = blend_start_time-pre_blend_frame
     blend_pre_blend_frame:
         name: '<options.namespace>:<..key>'
         type: plusMinusAverage
@@ -85,7 +85,7 @@ nodes:
         name: '<options.namespace>:<..key>'
         type: condition
         properties:
-            # frame < blend_start_frame
+            # frame < blend_start_time
             operation: 4
             colorIfTrue: [1, 1, 1]
             colorIfFalse: [0, 0, 0]
@@ -97,7 +97,7 @@ nodes:
             - "<options.namespace>:blend_pre_blend_value_sub.output1D"
             - "<options.namespace>:blend_pre_blend_cdt.colorIfTrueR"
 
-    # post blend = blend_end_frame+post_blend_frame
+    # post blend = blend_end_time+post_blend_frame
     blend_post_blend_frame:
         name: '<options.namespace>:<..key>'
         type: plusMinusAverage
@@ -156,7 +156,7 @@ nodes:
         name: '<options.namespace>:<..key>'
         type: condition
         properties:
-            # frame > blend_end_frame
+            # frame > blend_end_time
             operation: 2
             colorIfTrue: [1, 1, 1]
             colorIfFalse: [0, 0, 0]
@@ -195,10 +195,10 @@ containers:
         properties:
             iconName: 'out_timeEditorClip.png'
         create_properties:
-            blend_start_frame:
+            blend_start_time:
                 type: float
                 value: 1
-            blend_end_frame:
+            blend_end_time:
                 type: float
                 value: 48
             pre_blend_frame:
@@ -232,17 +232,17 @@ containers:
             - '<options.namespace>:blend_post_blend_curve.message'
             - '<options.namespace>:BLEND.post_blend_curve'
             # frame
-            - "<options.namespace>:BLEND.blend_start_frame"
+            - "<options.namespace>:BLEND.blend_start_time"
             - "<options.namespace>:blend_pre_blend_frame.input1D[0]"
             - "<options.namespace>:BLEND.pre_blend_frame"
             - "<options.namespace>:blend_pre_blend_frame.input1D[1]"
             #
-            - "<options.namespace>:BLEND.blend_start_frame"
+            - "<options.namespace>:BLEND.blend_start_time"
             - "<options.namespace>:blend_pre_blend_cdt.secondTerm"
-            - "<options.namespace>:BLEND.blend_end_frame"
+            - "<options.namespace>:BLEND.blend_end_time"
             - "<options.namespace>:blend_post_blend_cdt.secondTerm"
             #
-            - "<options.namespace>:BLEND.blend_end_frame"
+            - "<options.namespace>:BLEND.blend_end_time"
             - "<options.namespace>:blend_post_blend_frame.input1D[0]"
             - "<options.namespace>:BLEND.post_blend_frame"
             - "<options.namespace>:blend_post_blend_frame.input1D[1]"
@@ -255,5 +255,5 @@ containers:
             - "<options.namespace>:BLEND.post_blend_frame"
             - "<options.namespace>:blend_post_blend_dvd.input2X"
             #
-            - "<options.namespace>:BLEND.blend_end_frame"
+            - "<options.namespace>:BLEND.blend_end_time"
             - "<options.namespace>:blend_post_frame_offset.input1D[1]"

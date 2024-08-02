@@ -197,17 +197,17 @@ ktn_dcc_operators.LookOutputOpt(
 
     def get_geometry_scheme(self):
         s = ktn_core.KtnStageOpt(self._obj_opt._ktn_obj)
-        if s.get_obj_exists('/root/world/geo/master') is True:
+        if s.is_obj_exists('/root/world/geo/master') is True:
             return 'asset'
-        elif s.get_obj_exists('/root/world/geo/assets') is True:
+        elif s.is_obj_exists('/root/world/geo/assets') is True:
             return 'shot'
         return 'asset'
 
     def get_geometry_root(self):
         s = ktn_core.KtnStageOpt(self._obj_opt._ktn_obj)
-        if s.get_obj_exists('/root/world/geo/master') is True:
+        if s.is_obj_exists('/root/world/geo/master') is True:
             return '/root/world/geo/master'
-        elif s.get_obj_exists('/root/world/geo/assets') is True:
+        elif s.is_obj_exists('/root/world/geo/assets') is True:
             return '/root/world/geo/assets'
         return '/root/world/geo/master'
 

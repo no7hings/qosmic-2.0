@@ -1,4 +1,5 @@
 # coding=utf-8
+import copy
 import functools
 
 import os.path
@@ -25,9 +26,9 @@ from . import graph_base as _graph_base
 
 from . import sbj_track as _sbj_time_track
 
-from . import track_time as _track_time
+from . import track_timeline as _track_timeline
 
-from . import timehandle as _timehandle
+from . import track_timehandle as _track_timehandle
 
 from . import undo_command as _undo_command
 
@@ -38,7 +39,7 @@ from . import track_layer as _track_layer
 from . import track_stage as _track_stage
 
 
-class QtTimeTrackGraph(
+class QtTrackGraph(
     QtWidgets.QWidget,
 
     _qt_abstracts.AbsQtActionBaseDef,
@@ -46,8 +47,10 @@ class QtTimeTrackGraph(
 
     _graph_base.AbsQtGraphBaseDef,
     _graph_base.AbsQtGraphSbjDef,
+    
+    _graph_base.AbsQtNGUniverseDef,
 ):
-    NG_NODE_CLS = _sbj_time_track.QtTimeTrack
+    NG_NODE_CLS = _sbj_time_track.QtTrack
     NG_CONNECTION_CLS = _sbj_connection.QtConnection
 
     NGSelectionFlag = _graph_base._NGSelectionFlag
@@ -69,7 +72,7 @@ class QtTimeTrackGraph(
         # update graph first
         self._update_graph_geometry_()
         # x axis for timeline
-        self._track_time._update_from_graph_(rect, self._graph_translate_x, self._graph_scale_x)
+        self._track_timeline._update_from_graph_(rect, self._graph_translate_x, self._graph_scale_x)
         # y axis for layer
         self._track_layer._update_from_graph_(rect, self._graph_translate_y, self._graph_scale_y)
         # update nodes
@@ -94,23 +97,21 @@ class QtTimeTrackGraph(
         self._update_graph_nodes_()
 
     def _together_move_nodes_(self, sbj, d_point):
-        self._set_node_current_for_(sbj)
-        if self._node_current is not None:
-            p_0 = self._node_current.pos()
-            p_1_x, p_1_y = d_point.x(), d_point.y()
-            x_1, y_1 = self._track_stage_model.step_coord_loc(p_1_x, p_1_y)
-            d_point_step = QtCore.QPoint(x_1, y_1)
-            for i_sbj in self._nodes_selected:
-                if i_sbj != self._node_current:
-                    i_p = i_sbj.pos()
-                    i_offset_point = p_0-i_p
-                    i_sbj._move_by_point_(d_point_step, i_offset_point)
-                else:
-                    i_sbj._move_by_point_(d_point_step)
+        p_0 = sbj.pos()
+        p_1_x, p_1_y = d_point.x(), d_point.y()
+        x_1 = self._track_stage_model.step_x_loc(p_1_x)
+        d_point_step = QtCore.QPoint(x_1, p_1_y)
+        for i_sbj in self._nodes_selected:
+            if i_sbj != sbj:
+                i_p = i_sbj.pos()
+                i_offset_point = p_0-i_p
+                i_sbj._move_by_point_(d_point_step, i_offset_point)
+            else:
+                i_sbj._move_by_point_(d_point_step)
 
-    def _do_node_move_or_resize_end_(self, sbj=None):
+    def _do_node_press_end_for_any_action_(self, sbj=None):
         data = []
-        nodes = self._nodes_selected
+        nodes = copy.copy(self._nodes_selected)
         if sbj is not None:
             if sbj not in nodes:
                 nodes += [sbj]
@@ -126,15 +127,50 @@ class QtTimeTrackGraph(
             c = _undo_command.QtTimetrackActionCommand(
                 data
             )
-            self._widget._undo_stack.push(c)
             c._graph = self
-            self._track_stage._update_stage_()
+            self._widget._undo_stack.push(c)
 
     def _update_stage_(self):
         self._track_stage._update_stage_()
 
+    def _get_hovered_node_(self):
+        for i in self._graph_nodes:
+            if i._is_hovered:
+                return i
+
+    def _do_bypass_start_(self, event):
+        sbj = self._get_hovered_node_()
+        if sbj is not None:
+            sbj._push_last_properties_()
+
+            sbj._track_model.swap_bypass()
+
+            self._do_node_press_end_for_any_action_(sbj)
+
+    def _do_graph_frame_scale_for_(self, nodes):
+        x_0, y_0, x_1, y_1, w_0, h_0 = self._get_nodes_basic_geometry_args_for_(nodes)
+        w_1, h_1 = self.width(), self.height()
+
+        s_x_0 = float(w_1)/float(w_0)
+
+        self._scale_graph_to_origin_(
+            s_x_0*.875, 1.0
+        )
+
+    def _do_graph_frame_translate_for_(self, nodes):
+        x_0, y_0, x_1, y_1, w_0, h_0 = self._get_nodes_basic_geometry_args_for_(nodes)
+        sx, sy = self._graph_scale_x, self._graph_scale_y
+
+        s_x_0, s_y_0 = x_0*sx, y_0*sy
+        s_w_0, s_h_0 = w_0*sx, h_0*sy
+        w_1, h_1 = self.width(), self.height()
+        x, y = -s_x_0+(w_1-s_w_0)/2, -s_y_0+(h_1-s_h_0)/2
+        self._translate_graph_to_(
+            x, y
+        )
+
     def __init__(self, *args, **kwargs):
-        super(QtTimeTrackGraph, self).__init__(*args, **kwargs)
+        super(QtTrackGraph, self).__init__(*args, **kwargs)
         self.setMouseTracking(True)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
@@ -147,13 +183,15 @@ class QtTimeTrackGraph(
 
         self._init_graph_base_def_(self)
         self._init_sbj_base_def_(self)
+        
+        self._init_universe_def_(self)
 
         self._graph_scale_x_enable, self._graph_scale_y_enable = True, False
 
         self._track_stage = None
         self._track_stage_model = None
 
-        self._track_time = None
+        self._track_timeline = None
 
         self._track_layer = None
 
@@ -178,6 +216,22 @@ class QtTimeTrackGraph(
         self.addAction(self._redo_action)
 
         self.installEventFilter(self)
+        actions = [
+            (self._do_frame_nodes_auto_, 'F'),
+            (self._select_all_nodes_, 'Ctrl+A')
+        ]
+        for i_fnc, i_shortcut in actions:
+            i_action = QtWidgets.QAction(self)
+            # noinspection PyUnresolvedReferences
+            i_action.triggered.connect(
+                i_fnc
+            )
+            i_action.setShortcut(
+                QtGui.QKeySequence(
+                    i_shortcut
+                )
+            )
+            self.addAction(i_action)
 
     def eventFilter(self, *args):
         widget, event = args
@@ -188,8 +242,12 @@ class QtTimeTrackGraph(
                 pass
             elif event.type() == QtCore.QEvent.Leave:
                 pass
+
             elif event.type() == QtCore.QEvent.KeyPress:
-                if event.modifiers() == QtCore.Qt.ControlModifier:
+                # bypass
+                if event.key() == QtCore.Qt.Key_D:
+                    self._do_bypass_start_(event)
+                elif event.modifiers() == QtCore.Qt.ControlModifier:
                     self._add_action_modifier_flag_(
                         self.ActionFlag.KeyControlPress
                     )
@@ -201,7 +259,7 @@ class QtTimeTrackGraph(
                     self._add_action_modifier_flag_(
                         self.ActionFlag.KeyAltPress
                     )
-                elif event.modifiers() == (QtCore.Qt.ControlModifier|QtCore.Qt.ShiftModifier):
+                elif event.modifiers() == (QtCore.Qt.ControlModifier | QtCore.Qt.ShiftModifier):
                     self._set_action_mdf_flags_(
                         [self.ActionFlag.KeyControlShiftPress]
                     )
@@ -317,8 +375,17 @@ class QtTimeTrackGraph(
                 key_text_width=key_text_width
             )
 
+    def _set_graph_universe_(self, universe):
+        self._graph_universe = universe
+        
+    def _setup_graph_by_universe_(self):
+        obj_type = self._graph_universe.get_obj_type('graph/track')
+        objs = obj_type.get_objs()
+        for i_obj in objs:
+            self._create_node_(**{x.name: x.get() for x in i_obj.get_parameters()})
+
     def _set_timeline_(self, widget):
-        self._track_time = widget
+        self._track_timeline = widget
 
     def _set_track_layer_(self, widget):
         self._track_layer = widget
@@ -328,12 +395,14 @@ class QtTimeTrackGraph(
         self._track_stage_model = self._track_stage._stage_model
 
     def _create_node_(self, *args, **kwargs):
+        key = kwargs['key']
+        if self._track_stage_model.is_exists(key) is True:
+            return self._track_stage.get_one_node(key)
+
         ng_node = self.NG_NODE_CLS(self)
         self._graph_nodes.append(ng_node)
         ng_node._set_graph_(self)
-        ng_node._setup_track_(
-            **kwargs
-        )
+        ng_node._setup_track_(**kwargs)
         return ng_node
 
     def _create_connection_(self, *args, **kwargs):
@@ -342,57 +411,12 @@ class QtTimeTrackGraph(
         ng_connection._set_graph_(self)
         return ng_connection
 
-    def _set_ng_graph_frame_translate_to_nodes_(self, ng_nodes):
-        t_x, t_y = self._graph_translate_x, self._graph_translate_y
-        o_w, o_h = self.width(), self.height()
-        x_0, y_0, x_1, y_1, w_0, h_0 = self._get_graph_frame_args_by_nodes_(ng_nodes)
-        c_x, c_y = x_0+(x_1-x_0)/2, y_0+(y_1-y_0)/2
-        x, y = o_w/2-c_x+t_x, o_h/2-c_y+t_y
-        self._translate_graph_to_(
-            x, y
-        )
 
-    def _set_ng_graph_frame_scale_to_nodes_(self, ng_nodes):
-        o_s_x, o_s_y = self._graph_scale_x, 1.0
-        o_w, o_h = self.width(), self.height()
-        x_0, y_0, x_1, y_1, w_0, h_0 = self._get_graph_frame_args_by_nodes_(ng_nodes)
-        #
-        i_x, i_y, i_w, i_h = bsc_core.RawSizeMtd.fit_to(
-            (w_0, h_0), (o_w, o_h)
-        )
-        o_r = (i_w*.75)
-        r_0 = w_0
-        s_x_0, s_y_0 = float(o_r)/float(r_0), float(o_r)/float(r_0)
-        s_x_0, s_y_0 = s_x_0*o_s_x, s_y_0*o_s_y
-        self._scale_graph_to_(
-            s_x_0, 1.0
-        )
-
-    def _set_ng_graph_frame_to_nodes_(self, ng_nodes=None):
-        if ng_nodes:
-            if isinstance(ng_nodes, (tuple, list)):
-                _ = ng_nodes
-            else:
-                _ = [ng_nodes]
-            # scale
-            self._set_ng_graph_frame_scale_to_nodes_(_)
-            # translate
-            self._set_ng_graph_frame_translate_to_nodes_(_)
-
-    def _set_ng_graph_frame_to_nodes_auto_(self):
-        if self._nodes_selected:
-            ng_nodes = self._nodes_selected
-        else:
-            ng_nodes = self._graph_nodes
-        #
-        self._set_ng_graph_frame_to_nodes_(ng_nodes)
-
-
-class QtComposition(
+class QtTrackView(
     _qt_wgt_entry_frame.QtEntryFrame
 ):
     def __init__(self, *args, **kwargs):
-        super(QtComposition, self).__init__(*args, **kwargs)
+        super(QtTrackView, self).__init__(*args, **kwargs)
 
         self._lot = _qt_wgt_base.QtVBoxLayout(self)
         self._lot.setSpacing(0)
@@ -404,7 +428,7 @@ class QtComposition(
         self._lot.addWidget(self._track_stage)
         self._track_layer._set_coord_model_(self._track_stage._stage_model._layer_coord_model)
 
-        self._graph = QtTimeTrackGraph()
+        self._graph = QtTrackGraph()
         self._lot.addWidget(self._graph)
         self._graph._set_track_stage_(self._track_stage)
         self._track_layer._set_graph_(self._graph)
@@ -413,12 +437,12 @@ class QtComposition(
 
         self._graph._set_track_layer_(self._track_layer)
 
-        self._track_time = _track_time.QtTrackTime()
-        self._lot.addWidget(self._track_time)
-        self._track_time._set_coord_model_(self._track_stage._stage_model._time_coord_model)
-        self._track_time._set_graph_(self._graph)
-        self._graph._set_timeline_(self._track_time)
+        self._track_timeline = _track_timeline.QtTrackTimeline()
+        self._lot.addWidget(self._track_timeline)
+        self._track_timeline._set_coord_model_(self._track_stage._stage_model._time_coord_model)
+        self._track_timeline._set_graph_(self._graph)
+        self._graph._set_timeline_(self._track_timeline)
 
-        self._timehandle = _timehandle.QtTimeHandle(self)
-        self._track_time._set_timehandle_(self._timehandle)
+        self._track_timehandle = _track_timehandle.QtTimeHandle(self)
+        self._track_timeline._set_timehandle_(self._track_timehandle)
 

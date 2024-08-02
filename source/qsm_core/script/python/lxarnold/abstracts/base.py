@@ -44,7 +44,7 @@ class AbsDotMtlxDef(object):
         for geometry_properties in geometries_properties:
             obj_category = self.universe.generate_obj_category(and_core.AndNodeCategories.LYNXI)
             obj_type_name = geometry_properties.get('type')
-            obj_type = obj_category.generate_type(obj_type_name)
+            obj_type = obj_category.create_type(obj_type_name)
             obj_path = geometry_properties.get('path')
             if root is not None:
                 obj_path = '{}{}'.format(root, obj_path)
@@ -219,7 +219,7 @@ class AbsObjScene(
         # type
         and_exact_type = and_port_mtd.exact_type
         dcc_category_name, dcc_type_name = and_core.AndTypeOpt(and_exact_type).get_dcc_type_args(and_type_is_array)
-        dcc_type = self.universe.generate_type(dcc_category_name, dcc_type_name)
+        dcc_type = self.universe.create_type(dcc_category_name, dcc_type_name)
         #
         dcc_port_raw_default = and_port_mtd.get_default()
         #
@@ -268,7 +268,7 @@ class AbsObjScene(
         dcc_output_port_name = and_obj_mtd.get_dcc_output_port_name()
 
         dcc_category_name, dcc_type_name = and_core.AndTypeOpt(and_output_type).get_dcc_type_args(and_type_is_array)
-        dcc_type = self.universe.generate_type(dcc_category_name, dcc_type_name)
+        dcc_type = self.universe.create_type(dcc_category_name, dcc_type_name)
         dcc_output = dcc_obj.generate_port(dcc_type, dcc_output_port_name, unr_core.UnrPortAssign.OUTPUTS)
         # output channel
         self._set_dcc_port_channels_build_(
@@ -327,7 +327,7 @@ class AbsObjScene(
                     source_index, self._look_pass_name, self._time_tag
                     )
                 dcc_source_obj_args = ('', source_and_prettify_obj_name)
-                self.universe.set_connection_create(
+                self.universe.create_connection(
                     dcc_source_obj_args, dcc_source_port_args,
                     ('', target_and_prettify_obj_name), (and_port_name,)
                 )
@@ -341,7 +341,7 @@ class AbsObjScene(
         #
         and_obj_type_name = shader_and_obj_mtd.type_name
         and_obj_category_name = shader_and_obj_mtd.category_name
-        dcc_obj_type = self.universe.generate_obj_type(and_obj_category_name, and_obj_type_name)
+        dcc_obj_type = self.universe.create_obj_type(and_obj_category_name, and_obj_type_name)
         dcc_obj_path_args = ('', and_prettify_obj_name)
         dcc_obj = dcc_obj_type.generate_obj(dcc_obj_path_args)
         # port/input
@@ -371,7 +371,7 @@ class AbsObjScene(
             self._set_dcc_geometry_obj_visibilities_build_(shape_and_obj_mtd, i_dcc_mesh)
 
     def _set_dcc_geometry_create_(self, obj_type_args, obj_path_args):
-        dcc_obj_type = self.universe.generate_obj_type(*obj_type_args)
+        dcc_obj_type = self.universe.create_obj_type(*obj_type_args)
         # clear namespace per component for path args
         obj_path_args = [bsc_core.BscPath.get_dag_name_with_namespace_clear(i) for i in obj_path_args]
         # path lstrip
@@ -412,7 +412,7 @@ class AbsObjScene(
     def _set_dcc_geometry_obj_visibility_build_(self, dcc_obj, dcc_port_name, dcc_port_raw):
         and_type_is_array = False
         dcc_category_name, dcc_type_name = and_core.AndTypeOpt(ai.AI_TYPE_BOOLEAN).get_dcc_type_args(and_type_is_array)
-        dcc_type = self.universe.generate_type(dcc_category_name, dcc_type_name)
+        dcc_type = self.universe.create_type(dcc_category_name, dcc_type_name)
         dcc_port = dcc_obj.generate_port(dcc_type, dcc_port_name, unr_core.UnrPortAssign.INPUTS)
         dcc_port.set(dcc_port_raw)
         dcc_port.set_default(True)
@@ -421,7 +421,7 @@ class AbsObjScene(
     def _set_dcc_obj_material_input_build_(self, dcc_obj, dcc_port_raw, dcc_port_raw_default):
         and_type_is_array = True
         dcc_category_name, dcc_type_name = and_core.AndTypeOpt(ai.AI_TYPE_NODE).get_dcc_type_args(and_type_is_array)
-        dcc_type = self.universe.generate_type(dcc_category_name, dcc_type_name)
+        dcc_type = self.universe.create_type(dcc_category_name, dcc_type_name)
         dcc_port_name = and_core.AndGeometryPorts.MATERIAL
         #
         _dcc_material_port = dcc_obj.generate_port(dcc_type, dcc_port_name, unr_core.UnrPortAssign.INPUTS)
@@ -561,7 +561,7 @@ class AbsObjScene(
         return dcc_nodes
 
     def _set_dcc_material_build_(self, material_dcc_obj_name, shader_dcc_obj_names):
-        dcc_obj_type = self.universe.generate_obj_type(*and_core.AndNodeTypes.QSM_MATERIAL_ARGS)
+        dcc_obj_type = self.universe.create_obj_type(*and_core.AndNodeTypes.QSM_MATERIAL_ARGS)
         obj_path_args = ('', material_dcc_obj_name)
         dcc_obj = dcc_obj_type.generate_obj(obj_path_args)
         # shader port
@@ -582,7 +582,7 @@ class AbsObjScene(
     def _set_dcc_material_bind_port_build_(self, dcc_obj, dcc_port_name, dcc_port_raw):
         and_type_is_array = False
         dcc_category_name, dcc_type_name = and_core.AndTypeOpt(ai.AI_TYPE_CLOSURE).get_dcc_type_args(and_type_is_array)
-        dcc_type = self.universe.generate_type(dcc_category_name, dcc_type_name)
+        dcc_type = self.universe.create_type(dcc_category_name, dcc_type_name)
         dcc_port = dcc_obj.generate_port(dcc_type, dcc_port_name, unr_core.UnrPortAssign.INPUTS)
         if dcc_port_raw is not None:
             shader_obj_path = '/{}'.format(dcc_port_raw)

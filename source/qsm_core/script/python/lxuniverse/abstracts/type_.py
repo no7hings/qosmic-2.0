@@ -64,7 +64,7 @@ class AbsCategoryBaseDef(object):
         """
         return self.TYPE_CLS(self, type_name)
 
-    def generate_type(self, type_name):
+    def create_type(self, type_name):
         category = self
         category_name = self.name
         stack = self._type_stack
@@ -295,7 +295,7 @@ class AbsType(AbsTypeBaseDef):
                 return None
             type_name = unr_core.UnrType.get_channel_type_name(category_name)
             category = self.universe.get_category(channel_category_name)
-            return category.generate_type(type_name)
+            return category.create_type(type_name)
 
     # <type-array>
     def get_is_array(self):
@@ -313,9 +313,9 @@ class AbsType(AbsTypeBaseDef):
                 element_category_name = unr_core.UnrCategory.CONSTANT
             type_name = self.name
             category = self.universe.get_category(element_category_name)
-            return category.generate_type(type_name)
+            return category.create_type(type_name)
 
-    def set_value_create(self, raw):
+    def create_value(self, raw):
         type_name = self.name
         is_array = self.get_is_array()
         #
@@ -613,7 +613,7 @@ class AbsObjType(
             i_type_path = i_port_query.type.path
             i_port_path = i_port_query.port_path
             i_port_assign = i_port_query.port_assign
-            i_port = new_obj._create_port_(
+            i_port = new_obj._create_port_fnc(
                 i_type_path, i_port_path, i_port_assign
             )
             i_port.set(i_port_query.get())

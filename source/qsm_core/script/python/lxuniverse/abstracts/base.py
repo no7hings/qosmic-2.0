@@ -344,9 +344,9 @@ class AbsGuiExtraDef(object):
         _ = p.split(pathsep)
         if len(_) > 6:
             if bsc_storage.StgPath.get_path_is_windows(p):
-                return u'{0}{2}...{2}{1}'.format(pathsep.join(_[:3]), pathsep.join(_[-3:]), pathsep)
+                return '{0}{2}...{2}{1}'.format(pathsep.join(_[:3]), pathsep.join(_[-3:]), pathsep)
             elif bsc_storage.StgPath.get_path_is_linux(p):
-                return u'{0}{2}...{2}{1}'.format(pathsep.join(_[:2]), pathsep.join(_[-3:]), pathsep)
+                return '{0}{2}...{2}{1}'.format(pathsep.join(_[:2]), pathsep.join(_[-3:]), pathsep)
             else:
                 return p
         else:
@@ -361,7 +361,7 @@ class AbsGuiExtraDef(object):
         d = p[:-len(n)-1]
         c = len(d)
         if c > maximum_:
-            return u'{}...{}/{}'.format(d[:(int(maximum_/2))], d[-(int(maximum_/2)+3):], n)
+            return '{}...{}/{}'.format(d[:(int(maximum_/2))], d[-(int(maximum_/2)+3):], n)
         return p
 
     def set_gui_attribute(self, key, value):
@@ -436,7 +436,7 @@ class AbsPortQuery(object):
         self._port_path = port_path
         self._port_assign = port_assign
         #
-        self._value = self.type.set_value_create(raw)
+        self._value = self.type.create_value(raw)
         self._raw = raw
 
     # type
@@ -579,9 +579,9 @@ class AbsValue(object):
             tuple_size = self.get_tuple_size()
             if tuple_size > 0:
                 if index > tuple_size:
-                    return channel_type.set_value_create(None)
-                return channel_type.set_value_create(self.get()[index])
-            return channel_type.set_value_create(None)
+                    return channel_type.create_value(None)
+                return channel_type.create_value(self.get()[index])
+            return channel_type.create_value(None)
 
     # <type-matrix>
     def get_is_matrix(self):
@@ -602,11 +602,10 @@ class AbsValue(object):
             array_size = self.get_array_size()
             if array_size > 0:
                 if index > array_size:
-                    return element_type.set_value_create(None)
-                return element_type.set_value_create(self.get()[index])
-            return element_type.set_value_create(None)
+                    return element_type.create_value(None)
+                return element_type.create_value(self.get()[index])
+            return element_type.create_value(None)
 
-    #
     def get(self):
         return self._raw
 
@@ -615,14 +614,14 @@ class AbsValue(object):
 
     def get_as_string(self):
         if self.get_is_array():
-            return u', '.join([self.get_element(i).get_as_string() for i in range(self.get_array_size())])
+            return ', '.join([self.get_element(i).get_as_string() for i in range(self.get_array_size())])
         elif self.type.get_is_vector() or self.type.get_is_color():
-            return u','.join([self.get_channel(i).get_as_string() for i in range(self.get_tuple_size())])
+            return ','.join([self.get_channel(i).get_as_string() for i in range(self.get_tuple_size())])
         elif self.type.get_is_matrix():
-            return u', '.join([self.get_channel(i).get_as_string() for i in range(self.get_tuple_size())])
+            return ', '.join([self.get_channel(i).get_as_string() for i in range(self.get_tuple_size())])
         else:
             if self.get_is_boolean():
-                return [u'false', u'true'][self.get()]
+                return ['false', 'true'][self.get()]
             else:
                 return unicode(self.get())
 

@@ -49,8 +49,8 @@ class PrxNGGraph(
     def set_node_add(self, *args, **kwargs):
         self._qt_view._create_node_(*args, **kwargs)
 
-    def set_universe(self, universe):
-        self._qt_view._set_ng_universe_(universe)
+    def set_graph_universe(self, universe):
+        self._qt_view._set_graph_universe_(universe)
 
     def set_node_show(self, obj_path=None):
         self._qt_view._set_ng_show_by_universe_(obj_path)
@@ -83,8 +83,8 @@ class PrxNGTree(
             [('name', 4)], 320
         )
 
-    def set_universe(self, universe):
-        self._qt_view._set_ng_universe_(universe)
+    def set_graph_universe(self, universe):
+        self._qt_view._set_graph_universe_(universe)
 
     def expand_items_by_depth(self, depth):
         self._qt_view._expand_items_by_depth_(depth)
@@ -130,8 +130,8 @@ class PrxNGImageGraph(
     def set_clear(self):
         self._qt_view._set_clear_()
 
-    def set_universe(self, universe):
-        self._qt_view._set_ng_universe_(universe)
+    def set_graph_universe(self, universe):
+        self._qt_view._set_graph_universe_(universe)
 
     def set_node_show(self, obj_path=None):
         self._qt_view._set_ng_show_by_universe_(obj_path)

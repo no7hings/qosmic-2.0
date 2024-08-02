@@ -131,10 +131,10 @@ class QtImageGraph(_graph_for_node.QtNodeGraph):
                 background_color=gui_qt_core.QtBackgroundColors.Transparent
             )
 
-    def _set_ng_universe_(self, universe):
-        self._ng_node_universe = universe
+    def _set_graph_universe_(self, universe):
+        self._graph_universe = universe
 
-        obj = self._ng_node_universe.get_objs()
+        obj = self._graph_universe.get_objs()
         for i_obj in obj:
             i_image_path = i_obj.get('image')
             if i_image_path:
@@ -182,11 +182,11 @@ class QtImageGraph(_graph_for_node.QtNodeGraph):
                 ng_nodes,
                 sort_key='-height'
             )
-            self._set_ng_graph_frame_to_nodes_auto_()
+            self._do_frame_nodes_auto_()
             #
             l_t.stop()
 
-        objs = self._ng_node_universe.get_objs()
+        objs = self._graph_universe.get_objs()
         if objs:
             ng_nodes = []
             for i_obj in objs:

@@ -368,7 +368,7 @@ class AbsObjPortExtraDef(object):
         if self._port_stack.get_object_exists(port_token) is True:
             port = self._port_stack.get_object(port_token)
         else:
-            port = self._create_port_(
+            port = self._create_port_fnc(
                 type_path, port_path, port_assign
             )
             self._port_stack.set_object_add(port)
@@ -380,22 +380,22 @@ class AbsObjPortExtraDef(object):
         if self._port_stack.get_object_exists(port_token) is True:
             port = self._port_stack.get_object(port_token)
         else:
-            port = self._create_port_(
+            port = self._create_port_fnc(
                 type_args, port_path, port_assign
             )
             self._port_stack.set_object_add(port)
         return port
 
-    def generate_variant_port(self, type_args, port_path):
+    def create_parameter(self, type_args, port_path):
         return self.generate_port(type_args, port_path, unr_core.UnrPortAssign.VARIANTS)
 
-    def create_input_port(self, type_args, port_path):
+    def create_input(self, type_args, port_path):
         return self.generate_port(type_args, port_path, unr_core.UnrPortAssign.INPUTS)
 
-    def create_output_port(self, type_args, port_path):
+    def create_output(self, type_args, port_path):
         return self.generate_port(type_args, port_path, unr_core.UnrPortAssign.OUTPUTS)
 
-    def _create_port_(self, type_args, port_path, port_assign):
+    def _create_port_fnc(self, type_args, port_path, port_assign):
         port = self.DCC_PORT_CLS(
             self, type_args, port_path, port_assign
         )
@@ -505,7 +505,7 @@ class AbsObjPortExtraDef(object):
         return self.get_port(port_token)
 
     # noinspection PyUnusedLocal
-    def get_variant_ports(self, regex=None):
+    def get_parameters(self, regex=None):
         port_assign = unr_core.UnrPortAssign.VARIANTS
         port_path = '*'
         regex = self.OBJ_TOKEN._get_port_token_(port_assign, port_path)

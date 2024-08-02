@@ -9,11 +9,11 @@ from .. import core as _qt_core
 from .. import abstracts as _qt_abstracts
 
 
-class QtTrackTime(
+class QtTrackTimeline(
     QtWidgets.QWidget,
     _qt_abstracts.AbsQtActionBaseDef,
 ):
-    timehandle_offset_accepted = qt_signal(int)
+    frame_accepted = qt_signal(int)
 
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_()
@@ -79,7 +79,8 @@ class QtTrackTime(
         x = p.x()
         frame = self._coord_model.compute_unit_index_loc(x)
         if frame != self._timeframe_current:
-            self._timeframe_current = frame
+            self._timeframe_current = int(frame)
+            self.frame_accepted.emit(self._timeframe_current)
             self._refresh_widget_all_()
 
     def _do_press_move_(self, event):
@@ -89,29 +90,30 @@ class QtTrackTime(
 
         frame = self._coord_model.compute_unit_index_loc(x)
         if frame != self._timeframe_current:
-            self._timeframe_current = frame
+            self._timeframe_current = int(frame)
+            self.frame_accepted.emit(self._timeframe_current)
             self._refresh_widget_all_()
 
     def _update_to_timehandle_(self):
         hdl_w = 7
-        self._timehandle.setGeometry(
+        self._track_timehandle.setGeometry(
             2+self._unit_current_coord-hdl_w/2, 1,
             hdl_w, self.parent().height()-self.height()/2
         )
-        self._timehandle._update_from_graph_()
+        self._track_timehandle._update_from_graph_()
 
     def _set_timehandle_(self, widget):
-        self._timehandle = widget
+        self._track_timehandle = widget
 
     def __init__(self, *args, **kwargs):
-        super(QtTrackTime, self).__init__(*args, **kwargs)
+        super(QtTrackTimeline, self).__init__(*args, **kwargs)
         self.setMouseTracking(True)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
         )
-        self.setFixedHeight(48)
+        self.setFixedHeight(40)
 
         self._init_action_base_def_(self)
 
@@ -176,6 +178,9 @@ class QtTrackTime(
         self._draw_timeline_basic_(painter)
         self._draw_timehandle_(painter)
 
+    def _get_current_frame_(self):
+        return self._timeframe_current
+
     def _set_coord_model_(self, model):
         self._coord_model = model
 
@@ -189,8 +194,8 @@ class QtTrackTime(
         )
         painter._set_antialiasing_(False)
         frm_line = QtCore.QLine(x, y, w, y)
-        painter._set_border_color_(_gui_core.GuiRgba.Dark)
-        painter._set_background_color_(_gui_core.GuiRgba.Dark)
+        painter._set_border_color_(_gui_core.GuiRgba.Dim)
+        painter._set_background_color_(_gui_core.GuiRgba.Dim)
         painter.drawRect(self._timeframe_basic_rect)
         # bottom line
         painter._set_border_color_(_gui_core.GuiRgba.Gray)

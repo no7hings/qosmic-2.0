@@ -780,7 +780,7 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             location = '{}{}'.format(geometry_location, root_location)
             stage_opt = ktn_core.KtnStageOpt(opt.ktn_obj)
 
-            if stage_opt.get_obj_exists(location) is False:
+            if stage_opt.is_obj_exists(location) is False:
                 validation_checker.register_node_result(
                     opt.get_path(),
                     check_group=check_group,

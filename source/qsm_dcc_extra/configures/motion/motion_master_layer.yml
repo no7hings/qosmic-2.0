@@ -893,6 +893,10 @@ containers:
         properties:
             iconName: 'out_timeEditorLayersFolder.png'
         create_properties:
+            qsm_type:
+                type: string
+                value: 'motion_master_layer'
+
             match_scale:
                 type: float
                 value: 1.0
