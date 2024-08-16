@@ -727,15 +727,18 @@ class BscUuid(object):
     VERSION = 3.0
 
     @classmethod
-    def _to_file_str(cls, file_path):
+    def _to_file_str(cls, file_path, version=None):
         file_path = StgBasePathMapMtd.map_to_linux(file_path)
+        if version is None:
+            version = cls.VERSION
+
         if os.path.isfile(file_path):
             timestamp = os.stat(file_path).st_mtime
             size = os.path.getsize(file_path)
             if isinstance(file_path, six.text_type):
                 file_path = file_path.encode('utf-8')
-            return 'file={}&timestamp={}&size={}&version={}'.format(file_path, timestamp, size, cls.VERSION)
-        return 'file={}&version={}'.format(file_path, cls.VERSION)
+            return 'file={}&timestamp={}&size={}&version={}'.format(file_path, timestamp, size, version)
+        return 'file={}&version={}'.format(file_path, version)
 
     @classmethod
     def generate_new(cls):
@@ -752,8 +755,8 @@ class BscUuid(object):
         return cls.generate_by_text(hash_value)
 
     @classmethod
-    def generate_by_file(cls, file_path):
-        file_str = cls._to_file_str(file_path)
+    def generate_by_file(cls, file_path, version=None):
+        file_str = cls._to_file_str(file_path, version)
         return str(
             uuid.uuid3(
                 uuid.UUID(cls.BASIC),

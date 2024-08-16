@@ -37,36 +37,36 @@ class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
             i_tool.connect_check_toggled_to(i_fnc)
 
     def _do_dcc_register_all_script_jobs(self):
-        self._script_job = qsm_mya_core.ScriptJob(
+        self._script_job_opt = qsm_mya_core.ScriptJobOpt(
             self.SCRIPT_JOB_NAME
         )
-        self._script_job.register(
+        self._script_job_opt.register(
             [
                 self._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection,
                 self._gui_switch_opt.do_gui_refresh_by_dcc_selection,
             ],
-            self._script_job.EventTypes.SelectionChanged
+            self._script_job_opt.EventTypes.SelectionChanged
         )
-        self._script_job.register(
+        self._script_job_opt.register(
             self._gui_extend_opt.do_gui_refresh_by_dcc_frame_changing,
-            self._script_job.EventTypes.FrameRangeChanged
+            self._script_job_opt.EventTypes.FrameRangeChanged
         )
         
-        self._script_job.register(
+        self._script_job_opt.register(
             self.do_gui_refresh_all,
-            self._script_job.EventTypes.SceneNew
+            self._script_job_opt.EventTypes.SceneNew
         )
-        self._script_job.register(
+        self._script_job_opt.register(
             self.do_gui_refresh_all,
-            self._script_job.EventTypes.SceneOpened
+            self._script_job_opt.EventTypes.SceneOpened
         )
-        self._script_job.register(
+        self._script_job_opt.register(
             self.do_gui_refresh_all,
-            self._script_job.EventTypes.SceneSaved
+            self._script_job_opt.EventTypes.SceneSaved
         )
 
     def _do_dcc_destroy_all_script_jobs(self):
-        self._script_job.destroy()
+        self._script_job_opt.destroy()
 
     def _do_gui_build_selection_scheme(self):
         options = self._window._configure.get('build.scenery_selection_scheme.options')

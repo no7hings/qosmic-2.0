@@ -77,3 +77,11 @@ class GpuCache(object):
         _ = cmds.createNode('gpuCache', name=shape_name, parent=location, skipSelect=1)
         cmds.setAttr(_+'.cacheFileName', file_path, type='string')
         return _node_for_dag.DagNode.to_path(_)
+
+    @classmethod
+    def refresh_all(cls):
+        cmds.loadPlugin('gpuCache', quiet=1)
+        for i in cmds.ls(type='gpuCache', long=1) or []:
+            mel.eval(
+                'gpuCache -e -refresh {};'.format(i)
+            )

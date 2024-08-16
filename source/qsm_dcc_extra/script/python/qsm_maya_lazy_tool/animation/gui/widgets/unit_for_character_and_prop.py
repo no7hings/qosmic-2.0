@@ -13,6 +13,8 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.proxy.scripts as gui_prx_scripts
 
+import qsm_general.core as qsm_gnl_core
+
 import qsm_general.scan as qsm_gnl_scan
 
 import qsm_maya.core as qsm_mya_core
@@ -705,7 +707,7 @@ class PrxToolsetForMotion(
         )
 
     def do_dcc_copy_animation(self):
-        file_path = qsm_mya_gnl_core.ResourceCache.generate_character_motion_file(
+        file_path = qsm_gnl_core.MayaCache.generate_character_motion_file(
             bsc_core.BscSystem.get_user_name()
         )
         namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
@@ -722,7 +724,7 @@ class PrxToolsetForMotion(
         )
 
     def do_dcc_paste_animation(self):
-        file_path = qsm_mya_gnl_core.ResourceCache.generate_character_motion_file(
+        file_path = qsm_gnl_core.MayaCache.generate_character_motion_file(
             bsc_core.BscSystem.get_user_name()
         )
         if bsc_storage.StgPath.get_is_file(file_path) is False:

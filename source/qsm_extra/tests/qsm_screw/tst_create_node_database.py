@@ -6,10 +6,11 @@ import lxbasic.resource as bsc_resource
 if __name__ == '__main__':
 
     for i in [
-        'maya_cfx',
+        # 'maya_cfx',
         # 'maya_layout',
         # 'maya_motion',
         # 'maya_scene',
+        'motion'
     ]:
 
         stage = qsm_lzy_core.Stage(

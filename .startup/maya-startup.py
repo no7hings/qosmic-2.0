@@ -20,6 +20,7 @@ class Main(object):
     PROJECT_ROOT = 'Z:/projects'
 
     CACHE_ROOT = 'Z:/caches'
+    CACHE_LOCAL_ROOT = 'D:/caches'
 
     LIBRARY_ROOT = 'Z:/libraries'
 
@@ -42,7 +43,7 @@ class Main(object):
                 '{root}/script/bin/windows',
                 '{deploy_root}/.rez/build/windows/2.112.0/Scripts/rez'
             ],
-            'QSM_EXTEND_CONFIGURES': ['{root}/configures'],
+            'QSM_EXTEND_CONFIGURES': ['{deploy_root}/.configures', '{root}/configures'],
             'QSM_EXTEND_RESOURCES': ['{deploy_root}/.resources', '{root}/resources'],
             'QSM_LOG_ROOT': '{deploy_root}/.log',
             'QSM_TOOLS': ['{deploy_root}/.tools'],
@@ -50,6 +51,7 @@ class Main(object):
             'QSM_DEPLOY_ROOT': DEPLOY_ROOT,
             'QSM_PROJECT_ROOT': PROJECT_ROOT,
             'QSM_CACHE_ROOT': CACHE_ROOT,
+            'QSM_CACHE_LOCAL_ROOT': CACHE_LOCAL_ROOT,
             'QSM_LIBRARY_ROOT': LIBRARY_ROOT,
             #
             'QSM_UI_LANGUAGE': 'chs',

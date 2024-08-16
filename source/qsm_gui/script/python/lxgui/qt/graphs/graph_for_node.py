@@ -69,15 +69,12 @@ class QtNodeGraph(
     
     # frame
     def _refresh_widget_all_(self):
-        self._update_graph_geometry_()
+        # self._update_graph_geometry_()
 
         self._update_graph_draw_args_(
-            self._graph_translate_x, self._graph_translate_y
+            self._graph_model.tx, self._graph_model.ty
         )
         self._refresh_widget_draw_geometry_(self.rect())
-        self._update_all_nodes_graph_args_(
-            self._graph_translate_x, self._graph_translate_y, self._graph_scale_x, self._graph_scale_y
-        )
         self._update_graph_nodes_()
 
         self._refresh_widget_draw_()
@@ -265,7 +262,7 @@ class QtNodeGraph(
             painter._draw_grid_(
                 rect,
                 axis_dir=(self._grid_dir_x, self._grid_dir_y),
-                grid_scale=(self._graph_scale_x, self._graph_scale_y),
+                grid_scale=(self._graph_model.sx, self._graph_model.sy),
                 grid_size=(self._grid_width, self._grid_height),
                 translate=(self._graph_grid_translate_x, self._graph_grid_translate_y),
                 grid_offset=(self._grid_offset_x, self._grid_offset_y),
@@ -278,7 +275,7 @@ class QtNodeGraph(
                 (self._grid_width, self._grid_height),
                 (self._graph_grid_translate_x, self._graph_grid_translate_y),
                 (self._grid_offset_x, self._grid_offset_y),
-                (self._graph_scale_x, self._graph_scale_y),
+                (self._graph_model.sx, self._graph_model.sy),
                 (self._grid_value_offset_x, self._grid_value_offset_y),
                 self._grid_mark_border_color,
                 self._grid_value_show_mode
@@ -304,12 +301,20 @@ class QtNodeGraph(
 
         infos = collections.OrderedDict(
             [
-                ('translate', '{}, {}'.format(self._graph_translate_x, self._graph_translate_y)),
-                ('scale', '{}, {}'.format(self._graph_scale_x, self._graph_scale_y)),
+                (
+                    'translate', '{}, {}'.format(
+                        self._graph_model.tx,
+                        self._graph_model.ty
+                    )
+                ),
+                (
+                    'scale', '{}, {}'.format(
+                        self._graph_model.sx,
+                        self._graph_model.sy
+                    )
+                ),
                 ('action flag', str(self._get_action_flag_())),
                 ('modifier action flag', str(', '.join(map(str, self._get_action_mdf_flags_())))),
-                ('current node', self._get_ng_graph_node_current_name_text_()),
-                ('count', str(len(self._graph_nodes)))
             ]
         )
 

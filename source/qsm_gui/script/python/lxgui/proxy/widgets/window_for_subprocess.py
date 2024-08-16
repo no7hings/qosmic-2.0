@@ -87,7 +87,7 @@ class PrxSubprocessWindow(
 
     def _do_stop_and_close(self):
         self._do_gui_stop()
-        self.set_window_close()
+        self.close_window()
 
     def set_tip(self, text):
         self._tip_prx_text_browser.set_content(text)

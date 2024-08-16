@@ -20,19 +20,35 @@ class PrxPageForMotionMainTool(gui_prx_abstracts.AbsPrxWidget):
     SCRIPT_JOB_NAME = 'lazy_tool_for_motion_main'
     
     def _do_dcc_register_all_script_jobs(self):
-        self._script_job = qsm_mya_core.ScriptJob(
+        self._script_job_opt = qsm_mya_core.ScriptJobOpt(
             self.SCRIPT_JOB_NAME
         )
-        self._script_job.register(
+        self._script_job_opt.register(
             [
                 self._gui_rig_picker_unit.do_gui_refresh_by_dcc_selection,
                 self._gui_motion_copy_and_paste_prx_toolset.do_gui_refresh_by_dcc_selection,
             ],
-            self._script_job.EventTypes.SelectionChanged
+            self._script_job_opt.EventTypes.SelectionChanged
+        )
+        self._script_job_opt.register(
+            self.do_gui_refresh_all,
+            self._script_job_opt.EventTypes.SceneNew,
+        )
+        self._script_job_opt.register(
+            self.do_gui_refresh_all,
+            self._script_job_opt.EventTypes.SceneOpened,
+        )
+        self._script_job_opt.register(
+            self.do_gui_refresh_all,
+            self._script_job_opt.EventTypes.Undo,
+        )
+        self._script_job_opt.register(
+            self.do_gui_refresh_all,
+            self._script_job_opt.EventTypes.Redo,
         )
     
     def _do_dcc_destroy_all_script_jobs(self):
-        self._script_job.destroy()
+        self._script_job_opt.destroy()
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxPageForMotionMainTool, self).__init__(*args, **kwargs)
@@ -44,6 +60,10 @@ class PrxPageForMotionMainTool(gui_prx_abstracts.AbsPrxWidget):
 
     def gui_get_tool_tab_box(self):
         return self._page_prx_tab_tool_box
+
+    def gui_close_fnc(self):
+        self._page_prx_tab_tool_box.save_history()
+        self._script_job_opt.destroy()
 
     def gui_setup_page(self):
         self._qt_widget.setSizePolicy(
@@ -65,26 +85,32 @@ class PrxPageForMotionMainTool(gui_prx_abstracts.AbsPrxWidget):
         self._gui_rig_picker_unit = _unit_for_motion_main_tool.UnitForRigPicker(
             self._window, self, self._session, self._qt_picker,
         )
-        # tool set
-        # basic
+        # page
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxVTabToolBox()
         qt_lot.addWidget(self._page_prx_tab_tool_box.widget)
         self._page_prx_tab_tool_box.set_tab_direction(self._page_prx_tab_tool_box.TabDirections.RightToLeft)
+        # tool set
         # copy and paste
         self._gui_motion_copy_and_paste_prx_toolset = _unit_for_motion_main_tool.ToolsetForMotionCopyAndPaste(
             self._window, self, self._session
         )
-        # offset
-        self._gui_motion_offset_prx_toolset = _unit_for_motion_main_tool.ToolsetForMotionOffset(
+        # keyframe
+        self._gui_motion_keyframe_prx_toolset = _unit_for_motion_main_tool.ToolsetForMotionKeyframe(
             self._window, self, self._session
         )
         # move
         self._gui_move_toolset_unit = _unit_for_motion_main_tool.ToolsetForMove(
             self._window, self, self._session
         )
+        #
+        self._page_prx_tab_tool_box.set_history_key('lazy-motion-tool.main.page_key_current')
+        self._page_prx_tab_tool_box.load_history()
+        self._page_prx_tab_tool_box.connect_current_changed_to(self.do_gui_refresh_all)
 
         self._do_dcc_register_all_script_jobs()
-        self._window.register_window_close_method(self._do_dcc_destroy_all_script_jobs)
+        self._window.register_window_close_method(self.gui_close_fnc)
 
     def do_gui_refresh_all(self, force=False):
         self._gui_rig_picker_unit.do_gui_refresh_all()
+        if self._page_prx_tab_tool_box.get_current_key() == 'keyframe':
+            self._gui_motion_keyframe_prx_toolset.do_gui_refresh_all()

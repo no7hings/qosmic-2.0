@@ -5,6 +5,8 @@ import maya.cmds as cmds
 
 import lxbasic.storage as bsc_storage
 
+import qsm_general.core as qsm_gnl_core
+
 from ... import core as _mya_core
 
 from ...general import core as _gnl_core
@@ -275,7 +277,7 @@ class AdvRig(_rsc_core.Resource):
 
     def pull_geometry_topology_data(self):
         if self._file_path:
-            cache_path = _gnl_core.ResourceCache.generate_rig_geometry_data_file(
+            cache_path = qsm_gnl_core.MayaCache.generate_rig_geometry_data_file(
                 self._file_path, 'topology'
             )
             if bsc_storage.StgPath.get_is_file(cache_path) is True:

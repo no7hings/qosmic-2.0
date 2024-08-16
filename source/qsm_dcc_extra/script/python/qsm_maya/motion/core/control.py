@@ -187,7 +187,7 @@ class ControlMotionOpt(_base.MotionBase):
                 _mya_core.Connection.create(
                     i_animation_curve+'.output', self._path+'.'+i_atr_name
                 )
-                _mya_core.NodePortAnmCurveOpt(
+                _mya_core.NodeAttributeAnmCurveOpt(
                     self._path, i_atr_name
                 ).offset_all_values(
                     i_value_current+i_value_offset
@@ -409,3 +409,47 @@ class MirrorPasteOpt(_base.MotionBase):
         self.apply_data(
             bsc_storage.StgFileOpt(file_path).set_read(), **kwargs
         )
+
+
+class ControlsBake(object):
+    def __init__(self, paths):
+        self._paths = paths
+
+    def execute(self, start_frame, end_frame, frame_extend=0):
+        """
+bakeResults
+-simulation true
+-t "0:32"
+-sampleBy 1
+-oversamplingRate 1
+-disableImplicitControl true
+-preserveOutsideKeys true
+-sparseAnimCurveBake false
+-removeBakedAttributeFromLayer false
+-removeBakedAnimFromLayer false
+-bakeOnOverrideLayer false
+-minimizeRotation true
+-controlPoints false
+-shape true
+{"sam_Skin:Main"};
+        """
+        cmds.bakeResults(
+            self._paths,
+            time=(start_frame-frame_extend, end_frame+frame_extend),
+            simulation=1,
+            sampleBy=1,
+            oversamplingRate=1,
+            disableImplicitControl=1,
+            preserveOutsideKeys=1,
+            sparseAnimCurveBake=0,
+            removeBakedAttributeFromLayer=0,
+            removeBakedAnimFromLayer=0,
+            bakeOnOverrideLayer=0,
+            minimizeRotation=1,
+            controlPoints=0,
+            shape=0,
+        )
+
+    @classmethod
+    def test(cls):
+        cls(['sam_Skin:FKKnee_R', 'sam_Skin:FKKnee_L']).execute(0, 32)

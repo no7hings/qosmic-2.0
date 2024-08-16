@@ -297,7 +297,7 @@ class AbsPrxWindow(AbsPrx):
                                 self.__class__.__name__
                             )
                         )
-                        i.set_window_close()
+                        i.close_window()
         #
         gui_qt_core.GuiQtUtil.show_qt_window(self._qt_widget, pos, size)
 
@@ -307,7 +307,7 @@ class AbsPrxWindow(AbsPrx):
     def register_window_close_method(self, fnc):
         self._qt_widget._register_window_close_method_(fnc)
 
-    def set_window_close(self):
+    def close_window(self):
         self._qt_widget._do_window_close_()
     
     def set_window_ask_for_close_enable(self, boolean):

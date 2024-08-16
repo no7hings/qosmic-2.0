@@ -97,6 +97,20 @@ def cfx_cloth_cache_generate_fnc(option_opt):
     ).execute()
 
 
+def rig_validation_fnc(option_opt):
+    import qsm_general.core as qsm_gnl_core
+
+    import qsm_maya_lazy.validation.main as s
+
+    kwargs = qsm_gnl_core.MayaCacheProcess.to_option_dict(
+        option_opt.to_string()
+    )
+
+    s.RigValidationProcess(
+        **kwargs
+    ).execute()
+
+
 def test_unicode(method, option_opt):
     pass
 
@@ -127,7 +141,6 @@ def test_progress(option_opt):
             g_p.do_update()
 
 
-
 def main(session):
     # noinspection PyUnresolvedReferences
     from maya import cmds
@@ -147,6 +160,8 @@ def main(session):
         cfx_cloth_cache_generate_fnc(option_opt)
     elif method == 'playblast':
         playblast_fnc(option_opt)
+    elif method == 'rig-validation':
+        rig_validation_fnc(option_opt)
     # test
     elif method == 'test-unicode':
         test_unicode(method, option_opt)

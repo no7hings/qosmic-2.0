@@ -30,6 +30,10 @@ class NodeAttribute(object):
         return False
 
     @classmethod
+    def get_channel_box_enable(cls, path, atr_name):
+        return cmds.getAttr(cls.to_atr_path(path, atr_name), channelBox=True, keyable=True)
+
+    @classmethod
     def get_as_string(cls, path, atr_name):
         return cmds.getAttr(cls.to_atr_path(path, atr_name), asString=True) or ''
 

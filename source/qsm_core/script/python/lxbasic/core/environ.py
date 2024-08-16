@@ -12,6 +12,7 @@ class EnvBaseMtd(object):
 
     PROJECT_ROOT_KEY = 'QSM_PROJECT_ROOT'
     CACHE_ROOT_KEY = 'QSM_CACHE_ROOT'
+    LOCAL_CACHE_ROOT_KEY = 'QSM_CACHE_LOCAL_ROOT'
     LIBRARY_ROOT_KEY = 'QSM_LIBRARY_ROOT'
 
     TRUE = 'true'
@@ -115,6 +116,13 @@ class EnvBaseMtd(object):
         return _
 
     @classmethod
+    def get_local_cache_root(cls):
+        _ = cls.get(cls.LOCAL_CACHE_ROOT_KEY)
+        if _ is None:
+            raise RuntimeError()
+        return _
+
+    @classmethod
     def get_library_root(cls):
         _ = cls.get(cls.LIBRARY_ROOT_KEY)
         if _ is None:
@@ -124,6 +132,10 @@ class EnvBaseMtd(object):
     @classmethod
     def get_cache_temporary_root(cls):
         return '{}/temporary'.format(cls.get_cache_root())
+
+    @classmethod
+    def get_local_cache_temporary_root(cls):
+        return '{}/temporary'.format(cls.get_local_cache_root())
 
     @classmethod
     def get_cache_session_root(cls):

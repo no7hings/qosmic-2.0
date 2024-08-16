@@ -10,7 +10,7 @@ class MayaCacheProcess(object):
         if bsc_core.BasApplication.get_is_maya():
             maya_version = bsc_core.BasApplication.get_maya_version()
         else:
-            maya_version = '2019'
+            maya_version = '2020'
         # do not use unicode
         # windows
         cmd_scripts = [

@@ -41,14 +41,14 @@ class Motion(MotionBase):
         list_ = []
         for i_atr_name in keys:
             # fixme: use attribute connection?
-            i_curve_node = _mya_core.NodePortAnmCurveOpt(path, i_atr_name).find_node()
+            i_curve_node = _mya_core.NodeAttributeAnmCurveOpt(path, i_atr_name).find_node()
             if i_curve_node is not None:
                 i_curve_type = cmds.nodeType(i_curve_node)
                 i_infinities = [
                     _mya_core.NodeAttribute.get_value(i_curve_node, 'preInfinity'),
                     _mya_core.NodeAttribute.get_value(i_curve_node, 'postInfinity')
                 ]
-                i_curve_points = _mya_core.NodePortAnmCurveOpt(path, i_atr_name).get_points()
+                i_curve_points = _mya_core.NodeAttributeAnmCurveOpt(path, i_atr_name).get_points()
                 list_.append((i_atr_name, i_curve_type, i_infinities, i_curve_points))
             else:
                 i_value = _mya_core.NodeAttribute.get_value(path, i_atr_name)
@@ -64,7 +64,7 @@ class Motion(MotionBase):
 
         list_ = []
         for i_atr_name in keys:
-            i_curve_node = _mya_core.NodePortAnmCurveOpt(path, i_atr_name).find_node()
+            i_curve_node = _mya_core.NodeAttributeAnmCurveOpt(path, i_atr_name).find_node()
             if i_curve_node:
                 list_.append(i_curve_node)
         return list_
@@ -78,6 +78,9 @@ class Motion(MotionBase):
         for i_atr_data in data:
             # value
             if len(i_atr_data) == 2:
+                cls.clear_curve(
+                    path, i_atr_data
+                )
                 cls.apply_value(
                     path, i_atr_data, force=force, mirror_keys=mirror_keys
                 )
@@ -124,6 +127,13 @@ class Motion(MotionBase):
         _mya_core.NodeAttribute.set_value(path, key, value)
 
     @classmethod
+    def clear_curve(cls, path, data):
+        key, value = data
+        curve = _mya_core.NodeAttributeAnmCurveOpt(path, key).find_node()
+        if curve:
+            _mya_core.Node.delete(curve)
+
+    @classmethod
     def apply_curve(cls, path, data, force, frame_offset, mirror_keys):
         key, curve_type, infinities, curve_points = data
         if _mya_core.NodeAttribute.is_exists(path, key) is False:
@@ -163,7 +173,7 @@ class Motion(MotionBase):
         i_atr_path_dst = '{}.{}'.format(path, key)
         _mya_core.Connection.create(i_atr_path_src, i_atr_path_dst)
 
-        _mya_core.NodePortAnmCurveOpt(path, key).set_points(
+        _mya_core.NodeAttributeAnmCurveOpt(path, key).set_points(
             curve_points, frame_offset=frame_offset, value_factor=value_factor
         )
 

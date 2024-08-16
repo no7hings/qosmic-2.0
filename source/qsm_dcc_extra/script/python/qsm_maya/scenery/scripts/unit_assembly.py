@@ -76,7 +76,7 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
             bsc_storage.StgFileOpt(file_path).name
         )
 
-        cache_file_path = _gnl_core.ResourceCache.generate_unit_assembly_file(
+        cache_file_path = qsm_gnl_core.MayaCache.generate_unit_assembly_file(
             file_path
         )
         if os.path.isfile(cache_file_path) is False:
@@ -203,7 +203,7 @@ class UnitAssemblyProcess(object):
         ).directory_path
 
         if cache_file_path is None:
-            self._cache_file_path = _gnl_core.ResourceCache.generate_unit_assembly_file(
+            self._cache_file_path = qsm_gnl_core.MayaCache.generate_unit_assembly_file(
                 self._file_path
             )
         else:
@@ -216,18 +216,21 @@ class UnitAssemblyProcess(object):
         self._gpu_unpack = gpu_unpack
 
     def grid_mesh_prc(self):
-        paths = _mya_core.Scene.find_all_dag_nodes(['mesh'])
+        mesh_paths = _mya_core.Scene.find_all_dag_nodes(['mesh'])
         nodes = []
         list_for_grid = []
-        for i_shape_path in paths:
-            if _mya_core.Node.is_mesh(i_shape_path) is True:
-                i_mesh_opt = _mya_core.MeshOpt(i_shape_path)
-                i_w, i_h, i_d = i_mesh_opt.get_dimension()
-                i_s = max(i_w, i_h, i_d)
-                if i_s < _core.Assembly.DIMENSION_MINIMUM:
-                    list_for_grid.append(i_shape_path)
-                else:
-                    self.mesh_prc(i_shape_path, check_face_count=False)
+        with bsc_log.LogProcessContext.create(maximum=len(mesh_paths), label='mesh process') as l_p:
+            for i_shape_path in mesh_paths:
+                if _mya_core.Node.is_mesh(i_shape_path) is True:
+                    i_mesh_opt = _mya_core.MeshOpt(i_shape_path)
+                    i_w, i_h, i_d = i_mesh_opt.get_dimension()
+                    i_s = max(i_w, i_h, i_d)
+                    if i_s < _core.Assembly.DIMENSION_MINIMUM:
+                        list_for_grid.append(i_shape_path)
+                    else:
+                        self.mesh_prc(i_shape_path, check_face_count=False)
+
+                l_p.do_update()
 
         if list_for_grid:
             mapper = _asb_core.GridSpace(list_for_grid, _core.Assembly.DIMENSION_MINIMUM).generate()
@@ -363,13 +366,14 @@ class UnitAssemblyProcess(object):
             )
 
             shape_path_new = _mya_core.Transform.get_shape(transform_path_new)
-            bsc_log.Log.trace_method_result(
-                self.KEY, 'try create lod for: "{}", face count is {}'.format(
-                    shape_path_new, face_count
-                )
-            )
             # memory error when face more than 25000000
             if face_count <= 25000000:
+                bsc_log.Log.trace_method_result(
+                    self.KEY, 'try create lod for: "{}", face count is {}'.format(
+                        shape_path_new, face_count
+                    )
+                )
+
                 cmds.select(shape_path_new)
                 mel.eval(
                     (

@@ -5,7 +5,7 @@ from lxbasic.core import base as bsc_cor_base
 
 from lxbasic.core import process as bsc_cor_process
 
-from lxbasic.core import execute as bsc_cor_execute
+from lxbasic.core import ffmpeg as bsc_core_ffmpeg
 
 from . import base as _base
 
@@ -32,7 +32,7 @@ class VdoFileOpt(object):
                     os.makedirs(directory_path)
                 #
                 cmd_args = [
-                    bsc_cor_base.BscFfmpeg.get_ffmpeg_source(),
+                    bsc_core_ffmpeg.BscFfmpeg.get_ffmpeg_source(),
                     u'-i "{}"'.format(self.path),
                     '-vf scale={}:-1'.format(width),
                     '-vframes 1',
@@ -58,7 +58,7 @@ class VdoFileOpt(object):
                     os.makedirs(directory_path)
                 #
                 cmd_args = [
-                    bsc_cor_base.BscFfmpeg.get_ffmpeg_source(),
+                    bsc_core_ffmpeg.BscFfmpeg.get_ffmpeg_source(),
                     u'-i "{}"'.format(self.path),
                     '-vf scale={}:-1'.format(width),
                     '-vframes 1',
@@ -74,7 +74,7 @@ class VdoFileOpt(object):
     def set_mov_create_from(self, image_file_path, width=1024, fps=24, block=False):
         if _base.StgPath.get_is_exists(self._file_path) is False:
             cmd_args = [
-                bsc_cor_base.BscFfmpeg.get_ffmpeg_source(),
+                bsc_core_ffmpeg.BscFfmpeg.get_ffmpeg_source(),
                 '-i "{}"'.format(image_file_path),
                 '-r {}'.format(fps),
                 '-f mov',
@@ -109,7 +109,7 @@ class VdoFileOpt(object):
 
     def get_size(self):
         cmd_args = [
-            bsc_cor_base.BscFfmpeg.get_ffmpeg_source(),
+            bsc_core_ffmpeg.BscFfmpeg.get_ffmpeg_source(),
             u'-i "{}"'.format(self.path),
         ]
         cmd_string = ' '.join(cmd_args)
@@ -121,7 +121,7 @@ class VdoFileOpt(object):
         thumbnail_opt = _base.StgFileOpt(thumbnail_path)
         thumbnail_opt.create_directory()
         cmd_args = [
-            bsc_cor_base.BscFfmpeg.get_ffmpeg_source(),
+            bsc_core_ffmpeg.BscFfmpeg.get_ffmpeg_source(),
             r'-i "{}"'.format(self.path),
             r'-vf',
             r'select=eq(n\,{})'.format(frame_index),

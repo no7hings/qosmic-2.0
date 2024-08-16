@@ -66,7 +66,7 @@ class DagNode(_node.Node):
 
     @classmethod
     def get_parent(cls, path):
-        return '|'.join(path.split('|')[:-1])
+        return '|'.join(cls.to_path(path).split('|')[:-1])
 
     @classmethod
     def to_parent_path(cls, path):

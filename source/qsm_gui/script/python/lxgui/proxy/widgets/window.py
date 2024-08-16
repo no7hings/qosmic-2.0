@@ -575,7 +575,7 @@ class PrxSubProcessWindow(
         self._close_button._set_name_text_('Close')
         self._close_button._set_icon_name_('close-hover')
         self._close_button.setFixedWidth(80)
-        self._close_button.press_clicked.connect(self.set_window_close)
+        self._close_button.press_clicked.connect(self.close_window)
 
         self._qt_processing_bar.log_update.connect(self.log_update)
 

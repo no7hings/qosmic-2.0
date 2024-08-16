@@ -15,18 +15,18 @@ class PrxSubPanelForTool(_abstracts.AbsPrxSubPanelForTool):
     SCRIPT_JOB_NAME = 'lazy_resource_tool'
 
     def _do_dcc_register_all_script_jobs(self):
-        self._script_job = qsm_mya_core.ScriptJob(
+        self._script_job_opt = qsm_mya_core.ScriptJobOpt(
             self.SCRIPT_JOB_NAME
         )
-        self._script_job.register(
+        self._script_job_opt.register(
             [
                 self.do_gui_update_by_dcc_selection,
             ],
-            self._script_job.EventTypes.SelectionChanged
+            self._script_job_opt.EventTypes.SelectionChanged
         )
 
     def _do_dcc_destroy_all_script_jobs(self):
-        self._script_job.destroy()
+        self._script_job_opt.destroy()
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxSubPanelForTool, self).__init__(window, session, *args, **kwargs)

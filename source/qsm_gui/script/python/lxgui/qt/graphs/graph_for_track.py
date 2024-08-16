@@ -70,14 +70,16 @@ class QtTrackGraph(
             x, y, width, height
         )
         # update graph first
-        self._update_graph_geometry_()
+        # self._update_graph_geometry_()
         # x axis for timeline
-        self._track_timeline._update_from_graph_(rect, self._graph_translate_x, self._graph_scale_x)
+        self._track_timeline._update_from_graph_(
+            rect,
+            self._graph_model.tx, self._graph_model.sx
+        )
         # y axis for layer
-        self._track_layer._update_from_graph_(rect, self._graph_translate_y, self._graph_scale_y)
-        # update nodes
-        self._update_all_nodes_graph_args_(
-            self._graph_translate_x, self._graph_translate_y, self._graph_scale_x, self._graph_scale_y
+        self._track_layer._update_from_graph_(
+            rect,
+            self._graph_model.ty, self._graph_model.sy
         )
         # update sbj layer
         self._timetrack_trim_sbj_layer.setGeometry(
@@ -148,24 +150,24 @@ class QtTrackGraph(
             self._do_node_press_end_for_any_action_(sbj)
 
     def _do_graph_frame_scale_for_(self, nodes):
-        x_0, y_0, x_1, y_1, w_0, h_0 = self._get_nodes_basic_geometry_args_for_(nodes)
+        x_0, y_0, x_1, y_1, w_0, h_0 = self._graph_model._compute_nodes_basic_geometry_args_for(nodes)
         w_1, h_1 = self.width(), self.height()
 
         s_x_0 = float(w_1)/float(w_0)
 
-        self._scale_graph_to_origin_(
+        self._graph_model.scale_to_origin(
             s_x_0*.875, 1.0
         )
 
     def _do_graph_frame_translate_for_(self, nodes):
-        x_0, y_0, x_1, y_1, w_0, h_0 = self._get_nodes_basic_geometry_args_for_(nodes)
-        sx, sy = self._graph_scale_x, self._graph_scale_y
+        x_0, y_0, x_1, y_1, w_0, h_0 = self._graph_model._compute_nodes_basic_geometry_args_for(nodes)
+        sx, sy = self._graph_model.sx, self._graph_model.sy
 
         s_x_0, s_y_0 = x_0*sx, y_0*sy
         s_w_0, s_h_0 = w_0*sx, h_0*sy
         w_1, h_1 = self.width(), self.height()
         x, y = -s_x_0+(w_1-s_w_0)/2, -s_y_0+(h_1-s_h_0)/2
-        self._translate_graph_to_(
+        self._graph_model.translate_to(
             x, y
         )
 
@@ -186,7 +188,8 @@ class QtTrackGraph(
         
         self._init_universe_def_(self)
 
-        self._graph_scale_x_enable, self._graph_scale_y_enable = True, False
+        self._graph_model._graph_scale_x_enable = True
+        self._graph_model._graph_scale_y_enable = False
 
         self._track_stage = None
         self._track_stage_model = None
@@ -352,8 +355,18 @@ class QtTrackGraph(
 
         infos = collections.OrderedDict(
             [
-                ('translate', '{}, {}'.format(self._graph_translate_x, self._graph_translate_y)),
-                ('scale', '{}, {}'.format(self._graph_scale_x, self._graph_scale_y)),
+                (
+                    'translate', '{}, {}'.format(
+                        self._graph_model.tx,
+                        self._graph_model.ty
+                    )
+                ),
+                (
+                    'scale', '{}, {}'.format(
+                        self._graph_model.sx,
+                        self._graph_model.sy
+                    )
+                ),
                 ('action flag', str(self._get_action_flag_())),
                 ('modifier action flag', str(', '.join(map(str, self._get_action_mdf_flags_())))),
             ]

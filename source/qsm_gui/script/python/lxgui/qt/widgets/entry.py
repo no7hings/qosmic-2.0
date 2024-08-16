@@ -859,6 +859,8 @@ class QtEntryAsList(
             values = [i.strip() for i in text.split('\n')]
             for i_value in values:
                 if self._get_value_is_valid_(i_value):
+                    if self._entry_use_as_storage is True:
+                        i_value = bsc_storage.StgPath.clear_pathsep_to(i_value)
                     self._append_value_(i_value)
 
     def _do_action_select_all_(self):
@@ -884,7 +886,7 @@ class QtEntryAsList(
                     for i_url in urls:
                         i_value = i_url.toLocalFile()
                         if self._get_value_is_valid_(i_value):
-                            values.append(i_value)
+                            values.append(bsc_storage.StgPath.clear_pathsep_to(i_value))
                     #
                     if self._entry_use_as_file_multiply is True:
                         values = bsc_storage.StgFileTiles.merge_to(

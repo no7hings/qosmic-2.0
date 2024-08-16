@@ -242,11 +242,11 @@ class AbsQtStatusBaseDef(object):
         elif status in {cls.Status.Completed}:
             return cls._get_rgb_args_(*cls.Rgba.LightNeonGreen)
         # validation
-        elif status in {cls.ValidationStatus.Active}:
+        elif status in {cls.ValidationStatus.Enable}:
             return cls._get_rgb_args_(*cls.Rgba.Gray)
         elif status in {cls.ValidationStatus.Disable}:
             return cls._get_rgb_args_(*cls.Rgba.DarkGray)
-        #
+
         elif status in {cls.ValidationStatus.Error}:
             return cls._get_rgb_args_(*cls.Rgba.DarkTorchRed)
         return cls._get_rgb_args_(*cls.Rgba.Transparent)

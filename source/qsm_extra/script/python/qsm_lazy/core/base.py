@@ -122,7 +122,9 @@ class Stage(object):
 
     PTN_DATABASE_PATH = '{root}/lazy-resource/.database/{key}.db'
 
-    PTN_THUMBNAIL_PATH = '{root}/lazy-resource/all/{key}/{node}/thumbnail/{node}.png'
+    PTN_THUMBNAIL_JPG_PATH = '{root}/lazy-resource/all/{key}/{node}/thumbnail/{node}.jpg'
+    # fixme: cannot load jpg to QImage for maya(PySide2)
+    PTN_THUMBNAIL_PNG_PATH = '{root}/lazy-resource/all/{key}/{node}/thumbnail/{node}.png'
     PTN_IMAGE_PATH = '{root}/lazy-resource/all/{key}/{node}/image/{node}.{format}'
     PTN_VIDEO_PATH = '{root}/lazy-resource/all/{key}/{node}/video/{node}.{format}'
 
@@ -548,8 +550,8 @@ class Stage(object):
         options = copy.copy(self._options)
         options['node'] = node_name
 
-        thumbnail_path = self.PTN_THUMBNAIL_PATH.format(**options)
-        options['format'] = file_opt.type
+        thumbnail_path = self.PTN_THUMBNAIL_PNG_PATH.format(**options)
+        options['format'] = file_opt.format
         # image
         if file_opt.ext in {'.png', '.jpg'}:
             image_path = self.PTN_IMAGE_PATH.format(**options)
@@ -585,6 +587,7 @@ class Stage(object):
                 )
                 return True
             except Exception:
+                bsc_core.BscException.print_stack()
                 return False
 
         return False

@@ -24,6 +24,9 @@ class AdvCharacterMotionOpt(object):
         self._namespace = namespace
 
     def find_control_set(self):
+        """
+        ControlSet
+        """
         _ = cmds.ls('{}:ControlSet'.format(self._namespace), long=1)
         if _:
             return _[0]
@@ -80,6 +83,35 @@ class AdvCharacterMotionOpt(object):
         return list(
             set(self.find_all_curve_controls())-set(self.find_all_basic_curve_controls())
         )
+
+    def find_joint_set(self):
+        """
+        DeformSet
+        """
+        _ = cmds.ls('{}:DeformSet'.format(self._namespace), long=1)
+        if _:
+            return _[0]
+
+    def find_all_joints(self):
+        _ = self.find_joint_set()
+        if _:
+            return [_mya_core.DagNode.to_path(x) for x in cmds.sets(_, query=1) or []]
+        return []
+
+    def find_geometry_location(self):
+        """
+        Geometry
+        """
+        _ = cmds.ls('{}:Geometry'.format(self._namespace), long=1)
+        if _:
+            return _[0]
+
+    def find_all_meshes(self):
+        _ = self.find_geometry_location()
+        if _:
+            return cmds.ls(
+                _, type='mesh', long=1, noIntermediate=1, dag=1
+            )
 
     def get_data(self, control_set_includes):
         controls = []
@@ -138,6 +170,10 @@ class AdvCharacterMotionOpt(object):
             bsc_storage.StgFileOpt(file_path).set_read(), **kwargs
         )
 
+    def find_all_anm_curves(self):
+        controls = self.find_all_controls()
+        return _mya_core.AnimCurves.get_all_from(controls)
+
     # do not mark undo, "ControlsMotionOpt" is already using
     def mirror_left_to_right(self, control_set_includes, **kwargs):
         controls = []
@@ -193,6 +229,11 @@ class AdvCharacterMotionOpt(object):
         _mya_core.Selection.set(
             self.__class__(namespace_new).find_main_control()
         )
+
+    @_mya_core.Undo.execute
+    def bake_all_controls(self, *args, **kwargs):
+        controls = self.find_all_curve_controls()
+        _control.ControlsBake(controls).execute(*args, **kwargs)
 
 
 class AdvCharacterMotionSystemOpt(object):

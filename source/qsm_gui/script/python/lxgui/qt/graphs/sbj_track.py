@@ -110,7 +110,7 @@ class QtTrackTrim(
 
         painter._draw_alternating_colors_by_rect_(
             self._frame_rect,
-            [_gui_core.GuiRgba.Basic, _gui_core.GuiRgba.Transparent],
+            [_gui_core.GuiRgba.LightBlack, _gui_core.GuiRgba.Transparent],
             x_offset=-self.x(), y_offset=-self.y()
         )
 
@@ -235,7 +235,7 @@ class QtTrack(
         )
         # time offset line
         self._time_start_draw_line.setLine(
-            start_offset_x, frm_y, start_offset_x, frm_h
+            start_offset_x, bdy_frm_y, start_offset_x, frm_h
         )
         # time
         self._time_start_rect.setRect(
@@ -249,15 +249,30 @@ class QtTrack(
         )
         # time basic
         basic_start_offset_x = self._track_model.compute_w_by_count(
-            self._track_model.basic_start_offset
+            self._track_model.basic_start_offset_to_start
         )
         basic_end_offset_x = self._track_model.compute_w_by_count(
-            self._track_model.basic_end_offset
+            self._track_model.basic_end_offset_to_start
         )
-        self._time_basic_frame_draw_rect.setRect(
+        self._time_basic_frame_rect.setRect(
             basic_start_offset_x, hrd_frm_y,
             basic_end_offset_x-basic_start_offset_x, hrd_frm_h
         )
+        if basic_start_offset_x > x:
+            self._time_left_draw_flag = True
+            self._time_left_frame_rect.setRect(
+                x, hrd_frm_y, basic_start_offset_x-x, hrd_frm_h
+            )
+        else:
+            self._time_left_draw_flag = False
+
+        if basic_end_offset_x < x+w:
+            self._time_right_draw_flag = True
+            self._time_right_frame_rect.setRect(
+                basic_end_offset_x, hrd_frm_y, x+w-basic_end_offset_x, hrd_frm_h
+            )
+        else:
+            self._time_right_draw_flag = False
         # count
         tme_c_x = max(bdy_frm_x, start_offset_x)
         tme_c_w = min(bdy_frm_w-tme_c_x, basic_end_offset_x-start_offset_x)
@@ -292,42 +307,53 @@ class QtTrack(
             hrd_frm_x+frm_w-ofs_w, hrd_frm_y, ofs_w, hrd_frm_h
         )
 
-    def _update_basic_coord_(self, x, y):
+    def _update_basic_coord_as_move_(self, x, y):
         clip_start = self._track_model.compute_clip_start_loc(x)
+        self._track_model.move_by_clip_start(clip_start)
+        
         bsc_x = self._track_model.compute_basic_x_at(clip_start)
-        self._track_model.offset_by_clip_start(clip_start)
 
         layer_index = self._track_model.compute_layer_index_loc(y)
         self._track_model.layer_index = layer_index
         bsc_y = self._track_model.compute_basic_y_at(layer_index)
-        # print bsc_y
         # update coord
         self._node_basic_x, self._node_basic_y = bsc_x, bsc_y
 
     # resize
     def _update_basic_args_as_left_resize_(self, x, y, w, h):
         # position
-        clip_start = self._track_model.compute_clip_start_loc(x)
-        bsc_x = self._track_model.compute_basic_x_at(clip_start)
-        self._track_model.resize_by_clip_start(clip_start)
-        # size
-        clip_count = self._track_model.clip_count
-        bsc_w = self._track_model.compute_basic_w_by(clip_count)
+        clip_start = self._track_model.resize_by_clip_start(
+            self._track_model.compute_clip_start_loc(x)
+        )
         # update geometry
-        self._node_basic_x, self._node_basic_y = bsc_x, self._node_basic_y
-        self._node_basic_w, self._node_basic_h = bsc_w, self._node_basic_h
+        self._node_basic_x = self._track_model.compute_basic_x_at(clip_start)
+        self._node_basic_w = self._track_model.compute_basic_w_by(self._track_model.clip_count)
 
     def _update_basic_args_as_right_resize_(self, w, h):
-        clip_count = self._track_model.compute_clip_count_by(w)
-        clip_count = max(clip_count, 1)
-        bsc_w = self._track_model.compute_basic_w_by(clip_count)
-        self._track_model.clip_count = clip_count
+        # size
+        clip_count = self._track_model.resize_by_clip_count(
+            self._track_model.compute_clip_count_by(w)
+        )
         # update size
-        self._node_basic_w, self._node_basic_h = bsc_w, self._node_basic_h
+        self._node_basic_w = self._track_model.compute_basic_w_by(clip_count)
 
     # scale
     def _update_basic_args_as_left_scale_(self, x, y, w, h):
-        clip_start = self._track_model.compute_clip_start_loc(x)
+        # position
+        clip_start = self._track_model.scale_by_clip_start(
+            self._track_model.compute_clip_start_loc(x)
+        )
+        # update geometry
+        self._node_basic_x = self._track_model.compute_basic_x_at(clip_start)
+        self._node_basic_w = self._track_model.compute_basic_w_by(self._track_model.clip_count)
+
+    def _update_basic_args_as_right_scale_(self, w, h):
+        # size
+        clip_count = self._track_model.scale_by_clip_count(
+            self._track_model.compute_clip_count_by(w)
+        )
+        # update size
+        self._node_basic_w = self._track_model.compute_basic_w_by(clip_count)
 
     def _do_hover_move_(self, event):
         pos = event.pos()
@@ -391,7 +417,11 @@ class QtTrack(
         self._track_model = None
         self._track_last_model = None
 
-        self._time_basic_frame_draw_rect = QtCore.QRect()
+        self._time_basic_frame_rect = QtCore.QRect()
+        self._time_left_draw_flag = False
+        self._time_left_frame_rect = QtCore.QRect()
+        self._time_right_draw_flag = False
+        self._time_right_frame_rect = QtCore.QRect()
         
         self._layer_index = 0
 
@@ -420,9 +450,11 @@ class QtTrack(
                     elif self._is_action_flag_match_(
                         self.ActionFlag.NGTimeScaleLeft, self.ActionFlag.NGTimeScaleRight
                     ):
+                        self._do_press_start_for_any_action_(event)
                         return True
                     else:
                         self._update_press_click_flag_(event)
+
                         if self._is_action_flag_match_(
                             self.ActionFlag.NGNodePressClick,
                         ):
@@ -541,10 +573,17 @@ class QtTrack(
             self._time_clip_end_rect, QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter,
             end_text
         )
-        
+
+        if self._track_model.speed == 1:
+            count_text_0 = str(self._track_model.clip_count)
+        else:
+            count_text_0 = '{}x{}'.format(
+                self._track_model.clip_count,
+                round(self._track_model.speed, 2)
+            )
+
         count_text = painter.fontMetrics().elidedText(
-            # str('{}({})'.format(self._track_model.clip_count, self._track_model.speed)),
-            str(self._track_model.clip_count),
+            count_text_0,
             QtCore.Qt.ElideMiddle,
             self._count_draw_rect.width()-4,
             QtCore.Qt.TextShowMnemonic
@@ -589,40 +628,46 @@ class QtTrack(
 
     def _draw_basic_(self, painter):
         if self._track_model.is_bypass:
-            head_rgb_0 = (127, 127, 127)
+            rgb_0 = (127, 127, 127)
         else:
-            head_rgb_0 = self._track_model.rgb
+            rgb_0 = self._track_model.rgb
+        # basic
+        painter._set_border_color_(rgb_0)
+        painter._set_background_color_(rgb_0)
+        painter.drawRect(self._time_basic_frame_rect)
+        pre_cycle = self._track_model.pre_cycle
+        post_cycle = self._track_model.post_cycle
+        # cycle line
+        cycle_x, cycle_y, cycle_w, cycle_h = (
+            self._time_basic_frame_rect.x(), self._time_basic_frame_rect.y(),
+            self._time_basic_frame_rect.width(), self._time_basic_frame_rect.height()
+        )
+        cycle_count = pre_cycle+post_cycle
+        cycle_d = cycle_w/cycle_count
+        painter._set_border_color_(_gui_core.GuiRgba.Light)
+        for i in range(cycle_count):
+            i_line = QtCore.QLine(
+                cycle_x+i*cycle_d, cycle_y, cycle_x+i*cycle_d, cycle_y+cycle_h
+            )
+            painter.drawLine(i_line)
+        # no frames
+        if self._time_left_draw_flag is True:
+            painter._draw_alternating_colors_by_rect_(
+                self._time_left_frame_rect,
+                [_gui_core.GuiRgba.LightBlack, _gui_core.GuiRgba.Transparent],
+                x_offset=-self.x(), y_offset=-self.y()
+            )
+        if self._time_right_draw_flag is True:
+            painter._draw_alternating_colors_by_rect_(
+                self._time_right_frame_rect,
+                [_gui_core.GuiRgba.LightBlack, _gui_core.GuiRgba.Transparent],
+                x_offset=-self._time_right_frame_rect.x()-self.x(), y_offset=-self.y()
+            )
+        # name
+        painter._set_text_color_(_gui_core.GuiRgba.LightBlack)
+        painter._set_font_(_qt_core.QtFont.generate(size=8))
 
-        head_rgb_1 = list(head_rgb_0)+[63]
-
-        painter._set_border_color_(
-            head_rgb_0
-        )
-        painter._set_background_color_(
-            head_rgb_1
-        )
-        painter.drawRect(
-            self._frame_draw_rect
-        )
-
-        painter._set_border_color_(
-            head_rgb_0
-        )
-        painter._set_background_color_(
-            head_rgb_0
-        )
-        painter.drawRect(
-            self._time_basic_frame_draw_rect
-        )
-
-        painter._set_text_color_(
-            _gui_core.GuiRgba.LightBlack
-        )
-        painter._set_font_(
-            _qt_core.QtFont.generate(size=8)
-        )
-
-        text = painter.fontMetrics().elidedText(
+        name_text_1 = painter.fontMetrics().elidedText(
             self._track_model.key,
             QtCore.Qt.ElideMiddle,
             self._name_draw_rect.width()-4,
@@ -630,7 +675,7 @@ class QtTrack(
         )
         painter.drawText(
             self._name_draw_rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
-            text
+            name_text_1
         )
 
     def _setup_track_(self, **kwargs):

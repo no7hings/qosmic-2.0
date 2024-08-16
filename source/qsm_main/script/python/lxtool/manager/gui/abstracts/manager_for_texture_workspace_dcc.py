@@ -292,7 +292,7 @@ class AbsPnlManagerForTextureSpaceDcc(gui_prx_widgets.PrxSessionWindow):
                 return True
             else:
                 self._is_disable = True
-                self.set_window_close()
+                self.close_window()
 
     def _set_wsp_version_new_(self):
         _GuiCmdForNewVersion(

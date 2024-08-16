@@ -130,10 +130,10 @@ class QtTrackStage(
         painter.drawRect(self._frame_rect)
         # trim
         painter._draw_alternating_colors_by_rect_(
-            self._left_trim_rect, [_gui_core.GuiRgba.Basic, _gui_core.GuiRgba.Transparent]
+            self._left_trim_rect, [_gui_core.GuiRgba.LightBlack, _gui_core.GuiRgba.Transparent]
         )
         painter._draw_alternating_colors_by_rect_(
-            self._right_trim_rect, [_gui_core.GuiRgba.Basic, _gui_core.GuiRgba.Transparent],
+            self._right_trim_rect, [_gui_core.GuiRgba.LightBlack, _gui_core.GuiRgba.Transparent],
             x_offset=-self._right_trim_rect.x()
         )
         # frame range

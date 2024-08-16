@@ -42,6 +42,12 @@ def commands():
             env.QSM_DEPLOY_ROOT
         )
     )
+    # configure
+    env.QSM_EXTEND_CONFIGURES.append(
+        '{}/.configures'.format(
+            env.QSM_DEPLOY_ROOT
+        )
+    )
     # resource
     env.QSM_EXTEND_RESOURCES.append(
         '{}/.resources'.format(
@@ -56,5 +62,6 @@ def commands():
         env.QSM_PROJECT_ROOT = 'Z:/projects'
         # cache
         env.QSM_CACHE_ROOT = 'Z:/caches'
+        env.QSM_CACHE_LOCAL_ROOT = 'D:/caches'
         # library
         env.QSM_LIBRARY_ROOT = 'Z:/libraries'

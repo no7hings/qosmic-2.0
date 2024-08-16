@@ -172,8 +172,8 @@ nodes:
         name: '<options.namespace>:<..key>'
         type: multiplyDivide
         properties:
-            # divide
-            operation: 2
+            # multiply
+            operation: 1
             input1: [1, 1, 1]
             input2: [1, 1, 1]
 

@@ -77,7 +77,7 @@ s.AdvChrMotionImportOpt('sam_Skin').test()
                 self._adv_master_layer.append_layer(
                     i_file_path,
                     post_cycle=i_cycle,
-                    pre_blend_frame=4, post_blend_frame=4
+                    pre_blend=4, post_blend=4
                 )
                 l_p.do_update()
 
@@ -100,8 +100,8 @@ s.AdvChrMotionImportOpt('sam_Skin').test()
                 self._adv_master_layer.append_layer(
                     i_file_path,
                     post_cycle=i_cycle,
-                    pre_blend_frame=4,
-                    post_blend_frame=4,
+                    pre_blend=4,
+                    post_blend=4,
                 )
                 l_p.do_update()
 

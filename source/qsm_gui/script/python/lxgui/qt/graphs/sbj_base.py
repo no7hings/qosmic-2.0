@@ -33,9 +33,6 @@ class AbsQtSbjBaseDef(object):
     def _set_graph_(self, widget):
         self._graph = widget
 
-    def _get_graph_scale_(self):
-        return self._graph._get_graph_scale_()
-
     def _update_graph_action_flag_(self, flag):
         self._graph._set_action_flag_(flag)
 
@@ -43,7 +40,7 @@ class AbsQtSbjBaseDef(object):
         return self._graph._get_action_mdf_flags_()
 
     def _update_node_draw_properties_(self):
-        s_x, s_y = self._get_graph_scale_()
+        s_x, s_y = self._graph._graph_model.get_scale()
 
         self._ng_draw_border_w = self._ng_draw_border_w_basic*s_y
         self._ng_draw_connection_r = self._ng_draw_connection_r_basic*s_y
@@ -76,8 +73,6 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
 
         self._move_start_point = QtCore.QPoint(0, 0)
 
-        self._graph_translate_x, self._graph_translate_y = 0, 0
-        self._graph_scale_x, self._graph_scale_y = 1.0, 1.0
         # coord without graph translate and scale
         self._node_basic_x, self._node_basic_y = 0, 0
         self._node_basic_last_x, self._node_basic_last_y = 0, 0
@@ -162,26 +157,13 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
             x+x_1, y+y_1, w_1, h_1
         )
 
-    def _update_graph_args_(self, t_x, t_y, s_x, s_y):
-        self._graph_translate_x, self._graph_translate_y = t_x, t_y
-        self._graph_scale_x, self._graph_scale_y = s_x, s_y
-
-    def _get_graph_translate_(self):
-        return self._graph_translate_x, self._graph_translate_y
-
-    def _get_graph_scale_(self):
-        return self._graph_scale_x, self._graph_scale_y
-
-    def _get_graph_args_(self):
-        return self._graph_translate_x, self._graph_translate_y, self._graph_scale_x, self._graph_scale_y
-
-    def _update_basic_coord_(self, x, y):
+    def _update_basic_coord_as_move_(self, x, y):
         def _int(_c):
             if _c >= 0:
                 return int(_c)
             return int(_c)-1
 
-        t_x, t_y, s_x, s_y = self._get_graph_args_()
+        t_x, t_y, s_x, s_y = self._widget._graph._graph_model.get_transformation()
         x_1, y_1 = (x-t_x)/s_x, (y-t_y)/s_y
 
         self._node_basic_x, self._node_basic_y = _int(x_1), _int(y_1)
@@ -192,7 +174,7 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
                 return int(_c)
             return int(_c)-1
 
-        t_x, t_y, s_x, s_y = self._get_graph_args_()
+        t_x, t_y, s_x, s_y = self._widget._graph._graph_model.get_transformation()
 
         x_1, y_1 = (x-t_x)/s_x, (y-t_y)/s_y
         self._node_basic_x, self._node_basic_y = _int(x_1), _int(y_1)
@@ -201,13 +183,13 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         self._node_basic_w, self._node_basic_h = int(w_1), int(h_1)
 
     def _update_basic_args_as_right_resize_(self, w, h):
-        t_x, t_y, s_x, s_y = self._get_graph_args_()
+        t_x, t_y, s_x, s_y = self._widget._graph._graph_model.get_transformation()
 
         w_1, h_1 = w/s_x, h/s_y
         self._node_basic_w, self._node_basic_h = int(w_1), int(h_1)
 
     def _compute_geometry_by_graph_args_(self):
-        t_x, t_y, s_x, s_y = self._get_graph_args_()
+        t_x, t_y, s_x, s_y = self._widget._graph._graph_model.get_transformation()
         return self._node_basic_x*s_x+t_x, self._node_basic_y*s_y+t_y, self._node_basic_w*s_x, self._node_basic_h*s_y
 
     def _get_geometry_args_(self):
@@ -270,7 +252,7 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         # move real time
         self._widget.move(x, y)
 
-        self._update_basic_coord_(x, y)
+        self._update_basic_coord_as_move_(x, y)
         self._update_node_rect_properties_()
 
         self._update_attachments_()
@@ -283,7 +265,7 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         # move real time
         self._widget.move(x, y)
 
-        self._update_basic_coord_(x, y)
+        self._update_basic_coord_as_move_(x, y)
         self._update_node_rect_properties_()
 
         self._update_attachments_()
@@ -351,6 +333,10 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         # point offset
         d_point = event.globalPos()-self._resize_start_point_0
 
+        self._graph._do_node_press_scale_for_(
+            self, d_point, self._resize_start_size, self._widget._get_action_flag_()
+        )
+
     def _do_press_scale_end_(self, event):
         self._get_graph_()._do_node_press_end_for_any_action_(self)
     
@@ -367,7 +353,15 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
             self._scale_left_by_geometry_(x, y, w, h)
     
     def _scale_right_fnc_(self, d_point, start_size, offset_point=None):
-        pass
+        if offset_point is not None:
+            pass
+        else:
+            x_0, y_0 = d_point.x(), d_point.y()
+            w_0, h_0 = start_size.width(), start_size.height()
+            x, y = self._widget.x(), self._widget.y()
+            x_o = x_0-x
+            w, h = w_0+x_o, h_0
+            self._scale_right_by_size_(w, h)
 
     def _scale_left_by_geometry_(self, x, y, w, h):
         self._update_basic_args_as_left_scale_(x, y, w, h)
@@ -377,6 +371,16 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         self._update_attachments_()
 
     def _update_basic_args_as_left_scale_(self, x, y, w, h):
+        pass
+
+    def _scale_right_by_size_(self, w, h):
+        self._update_basic_args_as_right_scale_(w, h)
+
+        self._refresh_widget_all_()
+
+        self._update_attachments_()
+
+    def _update_basic_args_as_right_scale_(self, w, h):
         pass
 
     # basic coord

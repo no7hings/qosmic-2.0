@@ -323,9 +323,10 @@ class _AbsPrxPortBase(AbsPrxPortBaseDef):
     def set_choose_values(self, *args, **kwargs):
         self._prx_port_input.set_choose_values(*args, **kwargs)
 
-    def append(self, raw):
+    def append(self, value):
+        print value
         if hasattr(self._prx_port_input, 'append'):
-            self._prx_port_input.append(raw)
+            self._prx_port_input.append(value)
 
     def set_clear(self):
         self._prx_port_input.set_clear()

@@ -97,11 +97,19 @@ build:
                         动态GPU会在后台生成，生成成功后会自动加载到场景中，请耐心等待；
                         加载动态GPU可以明显提高MAYA的帧率，请根据实际需求使用；
                         加载成功后选中删除可移除。
+                    右键菜单：
+                        刷新GPU缓存：
+                            如果遇到某一帧的GPU缓存不显示，可以点这个按钮强行刷新。
                 button_style: 'text_and_icon'
                 button_name: 'GPU'
                 button_name_chs: 'GPU'
                 icon: 'tool/maya/load-dynamic-gpu'
                 script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-dynamic-gpu-load-script")'
+                actions:
+                    action_0:
+                        name: 'Refresh GPU Cache'
+                        name_chs: '刷新GPU缓存'
+                        script: 'import qsm_maya.core as c; c.GpuCache.refresh_all()'
 
     motion:
         tool_tip: 'To be supplemented.'
@@ -130,10 +138,23 @@ build:
 
                 actions:
                     action_0:
-                        name: 'Remove Camera Mask'
+                        name: 'Remove Control Move(Locator)'
                         name_chs: '移除控制器移动（定位器）'
                         script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-control-move-remove-script")'
-
+            tool_1:
+                name: 'FK/IK Switch'
+                name_chs: 'FK/IK 切换'
+                tool_tip: 'To be supplemented.'
+                tool_tip_chs:
+                    |-
+                    点击自动切换FK/IK：
+                        会自动K帧；
+                        目前只支持四肢。
+                button_style: 'text_and_icon'
+                button_name: 'FK/IK'
+                button_name_chs: 'FK/IK'
+                icon: 'tool/maya/fk-ik-switch'
+                script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-fk-ik-switch-script")'
     scenery:
         tool_tip: 'To be supplemented.'
         tool_tip_chs: '场景。'
@@ -151,7 +172,9 @@ build:
                         当场景特别复杂巨大的时候可以使用元素组装来优化场景的加载和显示。
                     右键菜单：
                         移除元素组装：
-                            移除选中的元素组装
+                            移除选中的元素组装。
+                        刷新GPU缓存：
+                            如果遇到某一帧的GPU缓存不显示，可以点这个按钮强行刷新。
                 button_style: 'text_and_icon'
                 button_name: 'ASB'
                 button_name_chs: '组装'
@@ -163,6 +186,10 @@ build:
                         name: 'Remove Unit Assembly'
                         name_chs: '移除元素组装'
                         script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-unit-assembly-remove-script")'
+                    action_1:
+                        name: 'Refresh GPU Cache'
+                        name_chs: '刷新GPU缓存'
+                        script: 'import qsm_maya.core as c; c.GpuCache.refresh_all()'
 
             tool_1:
                 name: 'Camera Mask'

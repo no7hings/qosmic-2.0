@@ -1775,7 +1775,7 @@ class QtPainter(QtGui.QPainter):
     @classmethod
     def _get_alternating_color_(cls, rect, colors, width, time_offset=0, running=False, x_offset=0, y_offset=0):
         if running is True:
-            x_o = (time_offset%(width*2))
+            x_o = (time_offset % (width*2))
         else:
             x_o = x_offset
 
@@ -2445,7 +2445,6 @@ class QtPainter(QtGui.QPainter):
                         i_point, text
                     )
 
-        #
         def get_h_points():
             lis = []
             for i_x in range(width/grid_w):
@@ -2465,7 +2464,6 @@ class QtPainter(QtGui.QPainter):
             #
             return lis
 
-        #
         def get_v_points():
             lis = []
             for i_y in range(height/grid_h):
@@ -2837,6 +2835,115 @@ class QtNGPainter(QtPainter):
             border_radius, border_radius, QtCore.Qt.AbsoluteSize
         )
         self.drawPath(path_0+path_1)
+
+
+class PainterFnc(object):
+    @classmethod
+    def draw_timeline(cls, painter, coord_model, rect):
+        x, y, w, h = (
+            rect.x(), rect.y(),
+            rect.width(), rect.height()
+        )
+        painter._set_antialiasing_(False)
+        frm_line = QtCore.QLine(x, y, w, y)
+        painter._set_border_color_(_gui_core.GuiRgba.Dim)
+        painter._set_background_color_(_gui_core.GuiRgba.Dim)
+        painter.drawRect(rect)
+        # bottom line
+        painter._set_border_color_(_gui_core.GuiRgba.Gray)
+        painter.drawLine(frm_line)
+
+        painter._set_border_color_(_gui_core.GuiRgba.LightGray)
+        painter._set_font_(_base.QtFont.generate(size=8))
+        # draw +1
+        for i in range(coord_model.unit_count):
+            # offset -1
+            i_time_index = coord_model.compute_draw_index_at(i)
+            if i_time_index == 0:
+                painter._set_border_color_(_gui_core.GuiRgba.LightYellow)
+                painter._set_font_(_base.QtFont.generate(size=8))
+                # draw +1
+            else:
+                painter._set_border_color_(_gui_core.GuiRgba.LightGray)
+                painter._set_font_(_base.QtFont.generate(size=8))
+                # draw +1
+            i_x = coord_model.compute_draw_coord_at(i)
+            # 200
+            if coord_model.unit_size <= 0.5:
+                # 200 per frame
+                if not i_time_index%200:
+                    i_line = QtCore.QLine(i_x, y+h*.5, i_x, y+h)
+                    painter.drawLine(i_line)
+                    cls.draw_timeline_text(painter, i_time_index, i_x, y, h)
+            # 100
+            elif 0.1 < coord_model.unit_size <= 1:
+                # 100 per frame
+                if not i_time_index%100:
+                    i_line = QtCore.QLine(i_x, y+h*.5, i_x, y+h)
+                    painter.drawLine(i_line)
+                    cls.draw_timeline_text(painter, i_time_index, i_x, y, h)
+                # 10 per frame
+                elif not i_time_index%10:
+                    i_line = QtCore.QLine(i_x, y+h*.75, i_x, y+h)
+                    painter.drawLine(i_line)
+            # 50
+            elif 1 < coord_model.unit_size <= 2:
+                # 50 per frame
+                if not i_time_index%50:
+                    i_line = QtCore.QLine(i_x, y+h*.5, i_x, y+h)
+                    painter.drawLine(i_line)
+                    cls.draw_timeline_text(painter, i_time_index, i_x, y, h)
+                # 10 per frame
+                elif not i_time_index%10:
+                    i_line = QtCore.QLine(i_x, y+h*.75, i_x, y+h)
+                    painter.drawLine(i_line)
+            # 20
+            elif 2 < coord_model.unit_size <= 5:
+                # 20 per frame
+                if not i_time_index%20:
+                    i_line = QtCore.QLine(i_x, y+h*.5, i_x, y+h)
+                    painter.drawLine(i_line)
+                    cls.draw_timeline_text(painter, i_time_index, i_x, y, h)
+                # 10 per frame
+                elif not i_time_index%10:
+                    i_line = QtCore.QLine(i_x, y+h*.75, i_x, y+h)
+                    painter.drawLine(i_line)
+            # 10
+            elif 5 < coord_model.unit_size <= 10:
+                # 10 per frame
+                if not i_time_index%10:
+                    i_line = QtCore.QLine(i_x, y+h*.5, i_x, y+h)
+                    painter.drawLine(i_line)
+                    cls.draw_timeline_text(painter, i_time_index, i_x, y, h)
+                # 1 per frame
+                else:
+                    i_line = QtCore.QLine(i_x, y+h*.75, i_x, y+h)
+                    painter.drawLine(i_line)
+            # 5
+            elif 10 < coord_model.unit_size <= 20:
+                if not i_time_index%5:
+                    i_line = QtCore.QLine(i_x, y+h*.5, i_x, y+h)
+                    painter.drawLine(i_line)
+                    cls.draw_timeline_text(painter, i_time_index, i_x, y, h)
+                # 1 per frame
+                else:
+                    i_line = QtCore.QLine(i_x, y+h*.75, i_x, y+h)
+                    painter.drawLine(i_line)
+            # 1
+            elif 20 < coord_model.unit_size:
+                i_line = QtCore.QLine(i_x, y+h*.5, i_x, y+h)
+                painter.drawLine(i_line)
+                cls.draw_timeline_text(painter, i_time_index, i_x, y, h)
+
+    @classmethod
+    def draw_timeline_text(cls, painter, i_time_index, i_x, y, h):
+        txt_w = 64
+        i_rect = QtCore.QRect(
+            i_x-txt_w/2, y, txt_w, h*.5
+        )
+        painter.drawText(
+            i_rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter, str(i_time_index)
+        )
 
 
 class QtPixmapDrawer(object):

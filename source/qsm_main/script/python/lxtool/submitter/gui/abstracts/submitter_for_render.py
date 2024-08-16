@@ -347,7 +347,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                 content='step="{}" is not available, please call for TD get more help'.format(step),
                 status=gui_core.GuiDialog.ValidationStatus.Error,
                 #
-                ok_label='Close', ok_method=self.set_window_close,
+                ok_label='Close', ok_method=self.close_window,
                 #
                 no_visible=False, cancel_visible=False,
                 use_exec=False
@@ -814,7 +814,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                 content='light-rig(s) is not found, please call for TD get more help',
                 status=gui_core.GuiDialog.ValidationStatus.Error,
                 #
-                ok_label='Close', ok_method=self.set_window_close,
+                ok_label='Close', ok_method=self.close_window,
                 #
                 no_visible=False, cancel_visible=False,
             )

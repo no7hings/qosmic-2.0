@@ -26,10 +26,10 @@ class PrxTrackView(
         self._qt_widget._graph._set_graph_universe_(self._universe)
 
     def translate_graph_to(self, x, y):
-        self._qt_widget._graph._translate_graph_to_(x, y)
+        self._qt_widget._graph._graph_model.translate_to(x, y)
 
     def scale_graph_to(self, s_x, s_y):
-        self._qt_widget._graph._scale_graph_to_(s_x, s_y)
+        self._qt_widget._graph._graph_model.scale_to(s_x, s_y)
 
     def connect_stage_change_to(self, fnc):
         self._qt_widget._track_stage.stage_changed.connect(fnc)
@@ -41,21 +41,34 @@ class PrxTrackView(
         self,
         key,
         clip_start, clip_end,
-        start, speed,
+        start, speed, count,
         source_start, source_end,
         pre_cycle, post_cycle,
+        scale_start, scale_end,
+        pre_blend, post_blend,
         layer_index
     ):
         obj = self._track_obj_type.create_obj('/{}'.format(key))
         obj.create_parameter(self._type_raw, 'key').set(key)
+        #
         obj.create_parameter(self._type_raw, 'clip_start').set(clip_start)
         obj.create_parameter(self._type_raw, 'clip_end').set(clip_end)
+        #
         obj.create_parameter(self._type_raw, 'start').set(start)
         obj.create_parameter(self._type_raw, 'speed').set(speed)
+        obj.create_parameter(self._type_raw, 'count').set(count)
+        #
         obj.create_parameter(self._type_raw, 'source_start').set(source_start)
         obj.create_parameter(self._type_raw, 'source_end').set(source_end)
         obj.create_parameter(self._type_raw, 'pre_cycle').set(pre_cycle)
         obj.create_parameter(self._type_raw, 'post_cycle').set(post_cycle)
+        # scale
+        obj.create_parameter(self._type_raw, 'scale_start').set(scale_start)
+        obj.create_parameter(self._type_raw, 'scale_end').set(scale_end)
+        # blend
+        obj.create_parameter(self._type_raw, 'pre_blend').set(pre_blend)
+        obj.create_parameter(self._type_raw, 'post_blend').set(post_blend)
+        #
         obj.create_parameter(self._type_raw, 'layer_index').set(layer_index)
 
     def set_graph_universe(self, universe):
@@ -75,11 +88,11 @@ class PrxTrackView(
 
         args = [
             ('sam_walk_macho_forward', 24),
-            ('sam_run_turn_left', 24),
-            ('sam_walk_forward', 24),
+            ('sam_run_turn_left', 32),
+            ('sam_walk_forward', 48),
             ('sam_walk_sneak_turn_right', 24),
-            ('sam_run_forward', 24),
-            ('sam_walk_sneak_forward', 24)
+            ('sam_run_forward', 72),
+            ('sam_walk_sneak_forward', 32)
         ]
 
         random.seed(1)
@@ -96,9 +109,11 @@ class PrxTrackView(
             self.register_track_to_universe(
                 key='{}_{}'.format(i_name, i_index),
                 clip_start=clip_start, clip_end=i_clip_end,
-                start=clip_start, speed=1.0,
+                start=clip_start, speed=1.0, count=None,
                 source_start=1, source_end=i_source_count-1,
                 pre_cycle=0, post_cycle=i_post_cycle,
+                scale_start=None, scale_end=None,
+                pre_blend=4, post_blend=4,
                 layer_index=i_index
             )
 

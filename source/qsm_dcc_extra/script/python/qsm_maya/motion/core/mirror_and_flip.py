@@ -179,18 +179,18 @@ class MirrorAndFlip(_base.MotionBase):
             cmds.setAttr(k, v)
 
     @classmethod
-    def get_vector(cls, path):
+    def get_axis_vector(cls, path):
         dict_ = {}
         # mark auto key
-        auto_key = cmds.autoKeyframe(state=True, query=True)
+        auto_key = cmds.autoKeyframe(state=1, query=1)
         if auto_key:
-            cmds.autoKeyframe(state=False)
+            cmds.autoKeyframe(state=0)
 
         rotate_data = cls._mark_rotate(path)
         # zero rotate
         cls._zero_rotate(rotate_data)
 
-        world_mat = cmds.xform(path, matrix=True, worldSpace=True, query=True)
+        world_mat = cmds.xform(path, matrix=1, worldSpace=1, query=1)
         # Rounding the values in the world matrix
         for i, value in enumerate(world_mat):
             rounded_value = round(value, 3)
@@ -209,12 +209,12 @@ class MirrorAndFlip(_base.MotionBase):
     @classmethod
     def mirror_side_fnc(cls, path_src, path_dst, data, mirror_axis):
         # Getting the direction of the axis on controller
-        vector_src = cls.get_vector(path_src)
+        vector_src = cls.get_axis_vector(path_src)
         x_axis_vector_src = vector_src['x_axis']
         y_axis_vector_src = vector_src['y_axis']
         z_axis_vector_src = vector_src['z_axis']
         # Getting the direction of the axis on opposite controller
-        vector_dst = cls.get_vector(path_dst)
+        vector_dst = cls.get_axis_vector(path_dst)
         x_axis_vector_dst = vector_dst['x_axis']
         y_axis_vector_dst = vector_dst['y_axis']
         z_axis_vector_dst = vector_dst['z_axis']
@@ -253,12 +253,12 @@ class MirrorAndFlip(_base.MotionBase):
     def generate_side_mirror_keys(cls, path_src, path_dst, mirror_axis, key_includes):
         list_ = []
         # Getting the direction of the axis on controller
-        vector_src = cls.get_vector(path_src)
+        vector_src = cls.get_axis_vector(path_src)
         x_axis_vector_src = vector_src['x_axis']
         y_axis_vector_src = vector_src['y_axis']
         z_axis_vector_src = vector_src['z_axis']
         # Getting the direction of the axis on opposite controller
-        vector_dst = cls.get_vector(path_dst)
+        vector_dst = cls.get_axis_vector(path_dst)
         x_axis_vector_dst = vector_dst['x_axis']
         y_axis_vector_dst = vector_dst['y_axis']
         z_axis_vector_dst = vector_dst['z_axis']
@@ -294,7 +294,7 @@ class MirrorAndFlip(_base.MotionBase):
     def generate_middle_mirror_keys(cls, path_src, mirror_axis, key_includes):
         list_ = []
 
-        vector_src = cls.get_vector(path_src)
+        vector_src = cls.get_axis_vector(path_src)
         x_axis_vector_src = vector_src['x_axis']
         y_axis_vector_src = vector_src['y_axis']
         z_axis_vector_src = vector_src['z_axis']
@@ -426,7 +426,7 @@ class MirrorAndFlip(_base.MotionBase):
     def mirror_middle_fnc(cls, path, data, mirror_axis):
         # Getting the direction of the axis on middle controller
         # Getting the direction of the axis on controller
-        vector_src = cls.get_vector(path)
+        vector_src = cls.get_axis_vector(path)
         x_axis_vector_src = vector_src['x_axis']
         y_axis_vector_src = vector_src['y_axis']
         z_axis_vector_src = vector_src['z_axis']

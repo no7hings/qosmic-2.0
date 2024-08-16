@@ -47,35 +47,35 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         self.gui_setup_page()
 
     def _do_dcc_register_all_script_jobs(self):
-        self._script_job = qsm_mya_core.ScriptJob(
+        self._script_job_opt = qsm_mya_core.ScriptJobOpt(
             self.SCRIPT_JOB_NAME
         )
-        self._script_job.register(
+        self._script_job_opt.register(
             [
                 self._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection,
             ],
-            self._script_job.EventTypes.SelectionChanged
+            self._script_job_opt.EventTypes.SelectionChanged
         )
-        self._script_job.register(
+        self._script_job_opt.register(
             self._gui_export_toolset_unit.do_gui_refresh_by_dcc_frame_changing,
-            self._script_job.EventTypes.FrameRangeChanged
+            self._script_job_opt.EventTypes.FrameRangeChanged
         )
         # refresh all when scene changed
-        self._script_job.register(
+        self._script_job_opt.register(
             self.do_gui_refresh_all,
-            self._script_job.EventTypes.SceneNew
+            self._script_job_opt.EventTypes.SceneNew
         )
-        self._script_job.register(
+        self._script_job_opt.register(
             self.do_gui_refresh_all,
-            self._script_job.EventTypes.SceneOpened
+            self._script_job_opt.EventTypes.SceneOpened
         )
-        self._script_job.register(
+        self._script_job_opt.register(
             self.do_gui_refresh_all,
-            self._script_job.EventTypes.SceneSaved
+            self._script_job_opt.EventTypes.SceneSaved
         )
 
     def _do_dcc_destroy_all_script_jobs(self):
-        self._script_job.destroy()
+        self._script_job_opt.destroy()
 
     def _gui_filter_update_visible(self, boolean):
         self._prx_h_splitter.swap_contract_left_or_top_at(0)

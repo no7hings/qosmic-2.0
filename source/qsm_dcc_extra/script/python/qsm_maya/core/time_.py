@@ -79,8 +79,7 @@ class Frame(object):
     def set_frame_range(cls, start_frame, end_frame):
         cmds.playbackOptions(minTime=start_frame), cmds.playbackOptions(animationStartTime=int(start_frame)-5)
         cmds.playbackOptions(maxTime=end_frame), cmds.playbackOptions(animationEndTime=int(end_frame)+5)
-        #
-        cls.set_current(start_frame)
+        # cls.set_current(start_frame)
 
     @classmethod
     def update_frame(cls, start_frame, end_frame, frame):

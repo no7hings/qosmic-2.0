@@ -194,13 +194,16 @@ class ScriptJobEventTypes(enum.EnumMeta):
     SceneNew = 'NewSceneOpened'
     SceneSaved = 'SceneSaved'
 
+    Undo = 'Undo'
+    Redo = 'Redo'
+
     CameraChanged = 'cameraChange'
 
     ViewPortChanged = 'ModelPanelSetFocus'
     Test = 'ActiveViewChanged'
 
 
-class ScriptJob(object):
+class ScriptJobOpt(object):
     EventTypes = ScriptJobEventTypes
 
     def __init__(self, name):

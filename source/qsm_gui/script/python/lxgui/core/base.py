@@ -115,6 +115,13 @@ class GuiUtil(object):
         return options['name']
 
     @classmethod
+    def choice_description(cls, language, options):
+        if language == 'chs':
+            if 'description_chs' in options:
+                return options['description_chs']
+        return options['description']
+
+    @classmethod
     def choice_tool_tip(cls, language, options):
         if language == 'chs':
             if 'tool_tip_chs' in options:

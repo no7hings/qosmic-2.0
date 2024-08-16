@@ -72,7 +72,6 @@ class ControlMoveOpt(object):
                 i_control = _mtn_core.ControlMove.find_main_control(i_path)
                 if i_control is not None:
                     main_controls.append(i_control)
-
             if not main_controls:
                 gui_core.GuiDialog.create(
                     '控制器移动定位器移除',

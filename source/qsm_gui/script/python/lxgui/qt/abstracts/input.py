@@ -149,9 +149,10 @@ class AbsQtInputAsComponentsBaseDef(
         return len(self._value_entries)
 
     def _set_value_(self, value):
-        for i, i_value in enumerate(value):
-            widget = self._value_entries[i]
-            widget._set_value_(i_value)
+        if isinstance(value, (tuple, list)):
+            for i, i_value in enumerate(value):
+                widget = self._value_entries[i]
+                widget._set_value_(i_value)
 
     def _get_value_(self):
         value = []

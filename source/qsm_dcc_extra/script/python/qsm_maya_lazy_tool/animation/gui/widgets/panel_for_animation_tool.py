@@ -24,17 +24,17 @@ class PrxPanelForAnimationTool(gui_prx_widgets.PrxSessionWindow):
         print "AAA"
 
     def _do_dcc_register_all_script_jobs(self):
-        self._script_job = qsm_mya_core.ScriptJob(
+        self._script_job_opt = qsm_mya_core.ScriptJobOpt(
             self.SCRIPT_JOB_NAME
         )
 
-        self._script_job.register(
+        self._script_job_opt.register(
             self.do_gui_refresh_scene_info,
-            self._script_job.EventTypes.Test
+            self._script_job_opt.EventTypes.Test
         )
 
     def _do_dcc_destroy_all_script_jobs(self):
-        self._script_job.destroy()
+        self._script_job_opt.destroy()
 
     def __init__(self, session, *args, **kwargs):
         super(PrxPanelForAnimationTool, self).__init__(session, *args, **kwargs)

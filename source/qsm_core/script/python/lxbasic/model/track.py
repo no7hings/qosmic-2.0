@@ -21,18 +21,64 @@ class TrackModel(object):
         'pre_cycle', 'post_cycle',
         'layer_index'
     ]
+
     COPY_KEYS = [
         '_key',
-        '_speed',
-        '_start',
+        '_clip_start', '_clip_end',
+        '_speed', '_start',
         '_source_start', '_source_end',
         '_pre_cycle', '_post_cycle',
-        '_clip_start', '_clip_end',
+        # variant for scale
+        '_scale_start', '_scale_end', '_count',
+        # variant for blend
         '_pre_blend', '_post_blend',
         '_valid_frames', '_valid_frame_ranges',
+        '_test_offset',
         '_layer_index',
         '_is_bypass'
     ]
+
+    def setup(
+        self,
+        key,
+        clip_start=1, clip_end=None,
+        start=None, speed=None, count=None,
+        source_start=1, source_end=24,
+        pre_cycle=0, post_cycle=1,
+        scale_start=None, scale_end=None,
+        pre_blend=4, post_blend=4,
+        layer_index=0
+    ):
+        self._key = key
+
+        self._speed = speed if speed is not None else 1.0
+
+        self._source_start = int(source_start)
+        self._source_end = int(source_end)
+
+        self._pre_cycle = int(pre_cycle)
+        self._post_cycle = int(post_cycle)
+
+        self._clip_start = int(clip_start)
+        self._start = int(start) if start is not None else self._clip_start
+
+        self._clip_end = int(clip_end) if clip_end is not None else self._start+self.basic_post_count-1
+        self._count = count if count is not None else self.clip_count
+
+        self._scale_start = scale_start if scale_start is not None else self._clip_start
+        self._scale_end = scale_end if scale_end is not None else self._clip_end
+
+        self._pre_blend = pre_blend
+        self._post_blend = post_blend
+
+        self._valid_frames = []
+        self._valid_frame_ranges = []
+
+        self._layer_index = int(layer_index)
+
+        self._test_offset = 0
+
+        self._is_bypass = False
 
     @classmethod
     def compute_end(cls, start, source_start, source_end, cycle, speed=1.0):
@@ -109,12 +155,14 @@ class TrackModel(object):
         self._stage_model = stage_model
 
         self.setup(
-            'untitled',
-            1, None,
-            None, None,
-            1, 24,
-            0, 1,
-            0
+            key='untitled',
+            clip_start=1, clip_end=None,
+            start=None, speed=None, count=None,
+            source_start=1, source_end=24,
+            pre_cycle=0, post_cycle=1,
+            scale_start=None, scale_end=None,
+            pre_blend=4, post_blend=4,
+            layer_index=0
         )
 
     def __str__(self):
@@ -154,39 +202,6 @@ class TrackModel(object):
             else:
                 dict_[i_key] = i_value
         return dict_
-
-    def setup(
-        self,
-        key,
-        clip_start, clip_end,
-        start, speed,
-        source_start, source_end,
-        pre_cycle, post_cycle,
-        layer_index
-    ):
-        self._key = key
-
-        self._speed = speed if speed is not None else 1.0
-
-        self._source_start = int(source_start)
-        self._source_end = int(source_end)
-
-        self._pre_cycle = int(pre_cycle)
-        self._post_cycle = int(post_cycle)
-
-        self._clip_start = int(clip_start)
-        self._start = int(start) if start is not None else self._clip_start
-        self._clip_end = int(clip_end) if clip_end is not None else self._start+self.basic_post_count-1
-
-        self._pre_blend = 4
-        self._post_blend = 4
-
-        self._valid_frames = []
-        self._valid_frame_ranges = []
-
-        self._layer_index = int(layer_index)
-
-        self._is_bypass = False
 
     def apply_valid_frames(self, frames):
         self._valid_frames = frames
@@ -233,10 +248,6 @@ class TrackModel(object):
         self._is_bypass = not self._is_bypass
 
     @property
-    def speed(self):
-        return self._speed
-
-    @property
     def speed_rcp(self):
         return 1.0/self._speed
 
@@ -244,21 +255,21 @@ class TrackModel(object):
     def start(self):
         return self._start
 
-    @start.setter
-    def start(self, value):
-        if value != self._start:
-            # start_offset and clip_count is not change mark first
-            offset = self.start_offset
-            count = self.clip_count
-
-            self._start = int(value)
-            # update clip start and end, count is not change
-            self._clip_start = self._start-offset
-            self._clip_end = self._clip_start+count-1
-
     @property
     def start_offset(self):
         return self._start-self._clip_start
+
+    @property
+    def speed(self):
+        return self._speed
+
+    @property
+    def count(self):
+        return self._count
+    
+    @property
+    def count_offset(self):
+        return self._count-self.clip_count
 
     @property
     def clip_start(self):
@@ -279,19 +290,68 @@ class TrackModel(object):
         if value != self._clip_start:
             self._clip_start = int(value)
 
-    def resize_by_clip_start(self, value):
-        self.clip_start = min(value, self.clip_end-1)
+    def update_test_offset(self):
+        start_offset = self.start_offset
+        count_offset = self.count_offset
+        self._test_offset = (start_offset+count_offset)
 
-    def offset_by_clip_start(self, value):
+    def move_by_clip_start(self, value):
         if value != self._clip_start:
             # start_offset and clip_count is not change mark first
-            offset = self.start_offset
+            start_offset = self.start_offset
             count = self.clip_count
 
             self._clip_start = int(value)
 
-            self._start = self._clip_start+offset
+            self._start = self._clip_start+start_offset
+
             self._clip_end = int(self._clip_start+count-1)
+
+    def resize_by_clip_start(self, value):
+        # start < end-1
+        self.clip_start = min(value, self.clip_end-1)
+        self.update_test_offset()
+        return self.clip_start
+
+    def resize_by_clip_count(self, value):
+        # count > 1
+        self.clip_count = max(value, 1)
+        self.update_test_offset()
+        return self.clip_count
+
+    def scale_by_clip_start(self, value):
+        # start < end-1
+        start = min(int(value), self.clip_end-1)
+        count = self._clip_end-start+1
+
+        start_offset = self.start_offset
+        scale_count = self.scale_count
+        # update variants
+        self._start = start+start_offset
+        self._clip_start = start
+        self._count = count-start_offset+self._test_offset
+
+        scale = float(self._count)/float(scale_count)
+        self._speed = 1/scale
+        return self.clip_start
+
+    def scale_by_clip_count(self, value):
+        # count > 1
+        count = max(int(value), 1)
+
+        start_offset = self.start_offset
+        scale_count = self.scale_count
+        # update variants
+        self._clip_end = self._clip_start+count-1
+        self._count = count-start_offset+self._test_offset
+
+        scale = float(self._count)/float(scale_count)
+        self._speed = 1/scale
+        return self.clip_count
+
+    @property
+    def scale_count(self):
+        return self._scale_end-self._scale_start+1
 
     @property
     def clip_end(self):
@@ -321,12 +381,12 @@ class TrackModel(object):
         return 0
 
     @property
-    def end_offset(self):
+    def basic_end_offset(self):
         return self.clip_end-self.basic_end
 
     @property
     def basic_end_trim(self):
-        offset = self.end_offset
+        offset = self.basic_end_offset
         if offset < 0:
             return -offset
         return 0
@@ -366,11 +426,12 @@ class TrackModel(object):
         return self._start+self.basic_post_count-1
 
     @property
-    def basic_start_offset(self):
+    def basic_start_offset_to_start(self):
+        # offset for start
         return -self.basic_pre_count-self._clip_start+self._start
 
     @property
-    def basic_end_offset(self):
+    def basic_end_offset_to_start(self):
         # offset for start
         return self.basic_post_count-self._clip_start+self._start
 
@@ -386,18 +447,17 @@ class TrackModel(object):
     def output_clip_frame(self):
         return max(min(self.output_basic_frame, self.clip_start), self.clip_end)
 
-    # blend
-    @property
-    def pre_blend(self):
-        return self._pre_blend
-
-    @property
-    def post_blend(self):
-        return self._post_blend
-
     @property
     def frames(self):
         return list(range(self._clip_start, self._clip_end+1))
+
+    @property
+    def source_start(self):
+        return self._source_start
+
+    @property
+    def source_end(self):
+        return self._source_end
 
     @property
     def pre_cycle(self):
@@ -406,6 +466,24 @@ class TrackModel(object):
     @property
     def post_cycle(self):
         return self._post_cycle
+
+    # scale
+    @property
+    def scale_start(self):
+        return self._scale_start
+
+    @property
+    def scale_end(self):
+        return self._scale_end
+
+    # blend
+    @property
+    def pre_blend(self):
+        return self._pre_blend
+
+    @property
+    def post_blend(self):
+        return self._post_blend
 
     def compute_timetrack_args(self):
         bsc_x = self.compute_basic_x_at(self._clip_start)
@@ -521,19 +599,23 @@ class TrackStageModel(object):
         widget,
         key,
         clip_start, clip_end,
-        start, speed,
+        start, speed, count,
         source_start, source_end,
         pre_cycle, post_cycle,
+        scale_start, scale_end,
+        pre_blend, post_blend,
         layer_index
     ):
         model = TrackModel(self)
         model.setup(
-            key,
-            clip_start, clip_end,
-            start, speed,
-            source_start, source_end,
-            pre_cycle, post_cycle,
-            layer_index
+            key=key,
+            clip_start=clip_start, clip_end=clip_end,
+            start=start, speed=speed, count=count,
+            source_start=source_start, source_end=source_end,
+            pre_cycle=pre_cycle, post_cycle=post_cycle,
+            scale_start=scale_start, scale_end=scale_end,
+            pre_blend=pre_blend, post_blend=post_blend,
+            layer_index=layer_index
         )
         widget._track_model = model
         widget._track_last_model = model.copy()

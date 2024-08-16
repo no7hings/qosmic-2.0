@@ -392,7 +392,7 @@ class PrxBaseWindow(
                                 self.__class__.__name__
                             )
                         )
-                        i.set_window_close()
+                        i.close_window()
         #
         if self._window_loading_flag is True:
             gui_qt_core.GuiQtUtil.show_qt_window(

@@ -7,6 +7,8 @@ from ... import core as gui_core
 # qt
 from ..core.wrap import *
 
+from .. import core as _qt_core
+
 from . import undo_command as _undo_command
 
 
@@ -40,54 +42,11 @@ class AbsQtNGUniverseDef(object):
 
 # graph
 class AbsQtGraphBaseDef(object):
-    @classmethod
-    def _get_nodes_basic_geometry_args_for_(cls, nodes):
-        tl_xs = [x._node_basic_x for x in nodes]
-        tl_ys = [x._node_basic_y for x in nodes]
-        br_xs = [x._node_basic_x+x._node_basic_w for x in nodes]
-        br_ys = [x._node_basic_y+x._node_basic_h for x in nodes]
-        x_0, y_0 = min(tl_xs), min(tl_ys)
-        x_1, y_1 = max(br_xs), max(br_ys)
-        w_0, h_0 = x_1-x_0, y_1-y_0
-        return x_0, y_0, x_1, y_1, w_0, h_0
-
-    @staticmethod
-    def _update_graph_point_by_matrix_(point, matrix):
-        x_0, y_0 = point.x(), point.y()
-        x_1, y_1 = (
-            matrix[0][0]*x_0+matrix[0][1]*y_0+matrix[0][2],
-            matrix[1][0]*x_0+matrix[1][1]*y_0+matrix[1][2]
-        )
-        point.setX(x_1)
-        point.setY(y_1)
 
     def _init_graph_base_def_(self, widget):
         self._widget = widget
 
-        self._ng_graph_translate_point = QtCore.QPoint(0, 0)
-        #
-        self._ng_graph_composite_matrix = bsc_core.RawMatrix33Opt.get_identity()
-        #
-        self._graph_translate_x, self._graph_translate_y = 0, 0
-        self._ng_graph_translate_x_enable, self._ng_graph_translate_y_enable = True, True
-        #
-        self._graph_scale_x, self._graph_scale_y = 1.0, 1.0
-        self._ng_graph_scale_radix_x, self._ng_graph_scale_radix_y = 0.25, 0.25
-        # graph viewport 
-        self._graph_basic_w, self._graph_basic_h = 1024, 1024
-        self._graph_basic_w_minimum, self._graph_basic_w_maximum = 2, 8192
-        self._graph_basic_h_minimum, self._graph_basic_h_maximum = 2, 8192
-        #
-        self._ng_graph_point_start = QtCore.QPoint(0, 0)
-        self._ng_graph_point_end = QtCore.QPoint(
-            self._graph_basic_w*self._graph_scale_x, self._graph_basic_h*self._graph_scale_y
-        )
-        self._ng_rect = QtCore.QRect(
-            0, 0,
-            self._graph_basic_w, self._graph_basic_h
-        )
-
-        self._graph_scale_x_enable, self._graph_scale_y_enable = True, True
+        self._graph_model = _qt_core.GraphModel(self._widget)
 
     def _refresh_widget_draw_(self):
         raise NotImplementedError()
@@ -95,138 +54,19 @@ class AbsQtGraphBaseDef(object):
     def _refresh_widget_all_(self):
         raise NotImplementedError()
 
-    def _update_graph_geometry_(self):
-        x_0, y_0, x_1, y_1, r_w, r_h = self._get_graph_rect_args_()
-        self._graph_translate_x, self._graph_translate_y = x_0, y_0
-
-        self._graph_scale_x, self._graph_scale_y = (
-            r_w/float(self._graph_basic_w), r_h/float(self._graph_basic_h)
-        )
-        self._ng_rect.setRect(
-            x_0, y_0, r_w, r_h
-        )
-
     # action
     def _do_graph_track_start_(self, event):
-        self._ng_graph_translate_point = event.pos()
-        self._refresh_widget_all_()
+        self._graph_model.on_track_start(event.pos())
 
     def _do_graph_track_move_(self, event):
-        point = event.pos()
-
-        d_p = point-self._ng_graph_translate_point
-        d_t_x, d_t_y = d_p.x(), d_p.y()
-
-        self._update_graph_matrix_by_track_(d_t_x, d_t_y)
-        self._update_graph_transformation_by_matrix_()
-        if point is not None:
-            self._ng_graph_translate_point = point
-        else:
-            self._ng_graph_translate_point = QtCore.QPoint(0, 0)
-        self._refresh_widget_all_()
+        self._graph_model.on_track_move(event.pos())
 
     def _do_graph_track_end_(self, event):
-        self._ng_graph_translate_point = event.pos()
-        self._refresh_widget_all_()
+        self._graph_model.on_track_end(event.pos())
 
     # zoom
     def _do_graph_zoom_(self, event):
-        delta = event.angleDelta().y()
-        point = event.pos()
-
-        if delta > 0:
-            d_s_x, d_s_y = 1+self._ng_graph_scale_radix_x, 1+self._ng_graph_scale_radix_y
-        else:
-            d_s_x, d_s_y = 1/(1+self._ng_graph_scale_radix_x), 1/(1+self._ng_graph_scale_radix_y)
-
-        c_x, c_y = point.x(), point.y()
-
-        self._update_graph_matrix_by_zoom_(c_x, c_y, d_s_x, d_s_y)
-        self._update_graph_transformation_by_matrix_()
-        if point is not None:
-            self._ng_graph_translate_point = point
-        else:
-            self._ng_graph_translate_point = QtCore.QPoint(0, 0)
-
-        self._refresh_widget_all_()
-
-    def _update_graph_rect_points_(self, x_0, y_0, x_1, y_1):
-        self._ng_graph_point_start.setX(x_0)
-        self._ng_graph_point_start.setY(y_0)
-        self._ng_graph_point_end.setX(x_1)
-        self._ng_graph_point_end.setY(y_1)
-
-        self._refresh_widget_all_()
-
-    def _get_graph_rect_args_(self):
-        o_x_0, o_y_0 = self._ng_graph_point_start.x(), self._ng_graph_point_start.y()
-        o_x_1, o_y_1 = self._ng_graph_point_end.x(), self._ng_graph_point_end.y()
-        o_r_w, o_r_h = o_x_1-o_x_0, o_y_1-o_y_0
-        return o_x_0, o_y_0, o_x_1, o_y_1, o_r_w, o_r_h
-
-    def _translate_graph_to_(self, x, y):
-        o_x_0, o_y_0, o_x_1, o_y_1, o_r_w, o_r_h = self._get_graph_rect_args_()
-        x_0, y_0 = x, y
-        x_1, y_1 = x+o_r_w, y+o_r_h
-
-        self._update_graph_rect_points_(x_0, y_0, x_1, y_1)
-
-    def _scale_graph_to_(self, s_x, s_y):
-        x_0, y_0 = self._graph_translate_x, self._graph_translate_y
-        x_1, y_1 = x_0+self._graph_basic_w*s_x, y_0+self._graph_basic_h*s_y
-
-        self._update_graph_rect_points_(x_0, y_0, x_1, y_1)
-
-    def _scale_graph_to_origin_(self, s_x, s_y):
-        s_w_0, s_h_0 = self._graph_basic_w*s_x, self._graph_basic_h*s_y
-        x_0, y_0 = 0, 0
-        x_1, y_1 = s_w_0, s_h_0
-
-        self._update_graph_rect_points_(x_0, y_0, x_1, y_1)
-
-    def _get_graph_translate_(self):
-        return self._graph_translate_x, self._graph_translate_y
-
-    def _get_graph_scale_(self):
-        return self._graph_scale_x, self._graph_scale_y
-
-    def _update_graph_matrix_by_track_(self, d_t_x, d_t_y):
-        m = self._ng_graph_composite_matrix
-        m_t = bsc_core.RawMatrix33Opt.get_default()
-        m_t = bsc_core.RawMatrix33Opt.identity_to(m_t)
-        m_t[0][2] = d_t_x
-        m_t[1][2] = d_t_y
-        self._ng_graph_composite_matrix = bsc_core.RawMatrix33Opt(m_t).multiply_to(m)
-
-    def _update_graph_matrix_by_zoom_(self, c_x, c_y, d_s_x, d_s_y):
-        m = self._ng_graph_composite_matrix
-        # scale matrix
-        s_m = bsc_core.RawMatrix33Opt.get_default()
-        s_m = bsc_core.RawMatrix33Opt.identity_to(s_m)
-        if self._graph_scale_x_enable is True:
-            s_m[0][0] = d_s_x
-            s_m[0][2] = (1-d_s_x)*c_x
-        if self._graph_scale_y_enable is True:
-            s_m[1][1] = d_s_y
-            s_m[1][2] = (1-d_s_y)*c_y
-        self._ng_graph_composite_matrix = bsc_core.RawMatrix33Opt(s_m).multiply_to(m)
-
-    def _update_graph_transformation_by_matrix_(self):
-        m = self._ng_graph_composite_matrix
-
-        self._update_graph_point_by_matrix_(self._ng_graph_point_start, m)
-        self._update_graph_point_by_matrix_(self._ng_graph_point_end, m)
-        x_0, y_0 = self._ng_graph_point_start.x(), self._ng_graph_point_start.y()
-        x_1, y_1 = self._ng_graph_point_end.x(), self._ng_graph_point_end.y()
-        # make scale != 0
-        x_2, y_2 = (
-            max(min(x_1, x_0+self._graph_basic_w_maximum), x_0+self._graph_basic_w_minimum),
-            max(min(y_1, y_0+self._graph_basic_h_maximum), y_0+self._graph_basic_h_minimum)
-        )
-        self._ng_graph_point_end.setX(x_2)
-        self._ng_graph_point_end.setY(y_2)
-        # reset matrix
-        self._ng_graph_composite_matrix = bsc_core.RawMatrix33Opt.identity_to(m)
+        self._graph_model.on_zoom(event.pos(), event.angleDelta().y())
 
 
 class AbsQtGraphSbjDef(object):
@@ -283,7 +123,7 @@ class AbsQtGraphSbjDef(object):
         pass
 
     def _do_graph_frame_scale_for_(self, nodes):
-        x_0, y_0, x_1, y_1, w_0, h_0 = self._widget._get_nodes_basic_geometry_args_for_(nodes)
+        x_0, y_0, x_1, y_1, w_0, h_0 = self._widget._graph_model._compute_nodes_basic_geometry_args_for(nodes)
 
         w_1, h_1 = self._widget.width(), self._widget.height()
         if w_0 > h_0:
@@ -291,19 +131,19 @@ class AbsQtGraphSbjDef(object):
         else:
             s_x_0 = float(h_1)/float(h_0)
 
-        self._widget._scale_graph_to_origin_(
+        self._widget._graph_model.scale_to_origin(
             s_x_0*.875, s_x_0*.875
         )
 
     def _do_graph_frame_translate_for_(self, nodes):
-        x_0, y_0, x_1, y_1, w_0, h_0 = self._widget._get_nodes_basic_geometry_args_for_(nodes)
-        sx, sy = self._widget._graph_scale_x, self._widget._graph_scale_y
+        x_0, y_0, x_1, y_1, w_0, h_0 = self._widget._graph_model._compute_nodes_basic_geometry_args_for(nodes)
+        sx, sy = self._widget._graph_model.sx, self._widget._graph_model.sy
 
         s_x_0, s_y_0 = x_0*sx, y_0*sy
         s_w_0, s_h_0 = w_0*sx, h_0*sy
         w_1, h_1 = self._widget.width(), self._widget.height()
         x, y = -s_x_0+(w_1-s_w_0)/2, -s_y_0+(h_1-s_h_0)/2
-        self._widget._translate_graph_to_(
+        self._widget._graph_model.translate_to(
             x, y
         )
 
@@ -323,6 +163,7 @@ class AbsQtGraphSbjDef(object):
             ng_nodes = self._nodes_selected
         else:
             ng_nodes = self._graph_nodes
+
         self._do_frame_nodes_for_(ng_nodes)
 
     def _set_node_current_for_(self, sbj):
@@ -342,9 +183,6 @@ class AbsQtGraphSbjDef(object):
 
         self._nodes_selected = []
         self._node_current = None
-
-    def _update_all_nodes_graph_args_(self, t_x, t_y, s_x, s_y):
-        [x._update_graph_args_(t_x, t_y, s_x, s_y) for x in self._graph_nodes]
 
     def _get_node_selection_flag_(self):
         flags = self._widget._get_action_mdf_flags_()
@@ -437,7 +275,14 @@ class AbsQtGraphSbjDef(object):
             self._separate_scale_node_(sbj, d_point, start_size, flag)
             
     def _together_scale_nodes_(self, sbj, d_point, start_size, flag):
-        pass
+        # if self._node_current is not None:
+        if flag == self._widget.ActionFlag.NGTimeScaleLeft:
+            p_0 = sbj.pos()
+            sbj._scale_left_fnc_(d_point)
+            # nodes = self._filter_nodes_on_left_(sbj, self._nodes_selected)
+            # print nodes
+        elif flag == self._widget.ActionFlag.NGTimeScaleRight:
+            sbj._scale_right_fnc_(d_point, start_size)
     
     def _separate_scale_node_(self, sbj, d_point, start_size, flag):
         sbj.raise_()

@@ -1126,12 +1126,12 @@ class QtInputAsTuple(
         self._entry_frame_widget = self
 
         self._value_type = value_type
-        #
+
         if self._value_entries:
             _qt_core.GuiQtLayout.clear_all_widgets(self._entry_layout)
-        #
+
         self._value_entries = []
-        #
+
         self._set_entry_count_(value_size)
         if value_size:
             for i in range(value_size):
@@ -1147,3 +1147,6 @@ class QtInputAsTuple(
         self._update_background_color_by_locked_(boolean)
 
         self._refresh_widget_all_()
+
+    def _set_action_enable_(self, boolean):
+        self._set_entry_enable_(boolean)

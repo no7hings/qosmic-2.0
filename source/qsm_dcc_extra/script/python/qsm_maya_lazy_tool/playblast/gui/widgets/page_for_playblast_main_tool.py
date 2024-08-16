@@ -40,26 +40,26 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
     SCRIPT_JOB_NAME = 'lazy_tool_for_playblast'
 
     def _do_dcc_register_all_script_jobs(self):
-        self._script_job = qsm_mya_core.ScriptJob(
+        self._script_job_opt = qsm_mya_core.ScriptJobOpt(
             self.SCRIPT_JOB_NAME
         )
-        self._script_job.register(
+        self._script_job_opt.register(
             self.do_gui_refresh_by_dcc_frame_changing,
-            self._script_job.EventTypes.FrameRangeChanged
+            self._script_job_opt.EventTypes.FrameRangeChanged
         )
-        self._script_job.register(
+        self._script_job_opt.register(
             self.do_gui_refresh_fps,
-            self._script_job.EventTypes.FPSChanged
+            self._script_job_opt.EventTypes.FPSChanged
         )
-        self._script_job.register_as_attribute_change(
+        self._script_job_opt.register_as_attribute_change(
             self.do_gui_refresh_resolution_size_by_render_setting, 'defaultResolution.width'
         )
-        self._script_job.register_as_attribute_change(
+        self._script_job_opt.register_as_attribute_change(
             self.do_gui_refresh_resolution_size_by_render_setting, 'defaultResolution.height'
         )
 
     def _do_dcc_destroy_all_script_jobs(self):
-        self._script_job.destroy()
+        self._script_job_opt.destroy()
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxPageForPlayblast, self).__init__(*args, **kwargs)

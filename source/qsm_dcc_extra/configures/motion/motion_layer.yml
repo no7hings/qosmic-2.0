@@ -1706,25 +1706,15 @@ containers:
             speed:
                 type: float
                 value: 1.0
-
-            blend_start_time:
-                type: time
-                value: 1
             
-            blend_end_time:
-                type: time
-                value: 48
-
-            pre_blend_frame:
+            count:
                 type: integer
-                value: 4
-            post_blend_frame:
-                type: integer
-                value: 4
+                value: 24
 
             source_start:
                 type: integer
                 value: 0
+
             source_end:
                 type: integer
                 value: 24
@@ -1735,6 +1725,30 @@ containers:
             post_cycle:
                 type: integer
                 value: 10
+
+            scale_start:
+                type: integer
+                value: 1
+
+            scale_end:
+                type: integer
+                value: 24
+
+            pre_blend:
+                type: integer
+                value: 4
+
+            post_blend:
+                type: integer
+                value: 4
+
+            blend_start_time:
+                type: time
+                value: 1
+            
+            blend_end_time:
+                type: time
+                value: 48
 
             translate_offset:
                 type: float3
@@ -1754,7 +1768,7 @@ containers:
             - '<options.namespace>:TIME.clip_start'
             - '<options.namespace>:LAYER.clip_end'
             - '<options.namespace>:TIME.clip_end'
-
+            #
             - '<options.namespace>:LAYER.start'
             - '<options.namespace>:TIME.start'
             #
@@ -1770,19 +1784,6 @@ containers:
             - '<options.namespace>:TIME.pre_cycle'
             - '<options.namespace>:LAYER.post_cycle'
             - '<options.namespace>:TIME.post_cycle'
-            # connect to blend
-#            - '<options.namespace>:LAYER.blend_start_time'
-#            - '<options.namespace>:BLEND.blend_start_time'
-#            - '<options.namespace>:LAYER.blend_end_time'
-#            - '<options.namespace>:BLEND.blend_end_time'
-#            #
-#            - '<options.namespace>:LAYER.pre_blend_frame'
-#            - '<options.namespace>:BLEND.pre_blend_frame'
-#            - '<options.namespace>:LAYER.post_blend_frame'
-#            - '<options.namespace>:BLEND.post_blend_frame'
-#            #
-#            - '<options.namespace>:BLEND.output_weight'
-#            - '<options.namespace>:LAYER.main_weight'
             #
             - '<options.namespace>:LAYER.main_weight'
             - '<options.namespace>:LAYER.visibility'

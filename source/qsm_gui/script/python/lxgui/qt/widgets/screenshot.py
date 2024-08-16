@@ -116,7 +116,7 @@ class AbsQtScreenshotBaseDef(_qt_abstracts.AbsQtHelpBaseDef):
 
         self._record_frame_background_color = list(_gui_core.GuiRgba.LightBlack)[:3]+[127]
 
-        self._record_text = '00:00:00'
+        self._record_text = '00:00:00:00'
         self._record_frame_index = 0
         self._record_fps = 24
         self._record_frame_interval = int(1000/self._record_fps)

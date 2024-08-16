@@ -9,6 +9,8 @@ import lxgui.qt.core as gui_qt_core
 
 import lxbasic.cv.core as bsc_cv_core
 
+import lxbasic.storage as bsc_storage
+
 
 class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
@@ -16,8 +18,14 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
         self._d = gui_qt_widgets.QtVideoPlayWidget(self._qt_widget)
         self.add_widget(self._d)
-        self._d._set_video_path_(
-            'Z:/temeporaries/dongchangbao/playblast_tool/test.export.v004.mov'
+        # self._d._set_video_path_(
+        #     'Z:/temeporaries/dongchangbao/playblast_tool/test.export.v004.mov'
+        # )
+        images = bsc_storage.StgFileTiles.get_exists_unit_paths(
+            'Z:/libraries/lazy-resource/all/maya_cfx/bo_lang_A/video/bo_lang_A.images/image.####.jpg'
+        )
+        self._d._set_images_(
+            images, fps=24.0
         )
 
 

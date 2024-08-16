@@ -1,0 +1,1667 @@
+control:
+    Main:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - 0.0
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    FKRoot_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            y_axis:
+            - -0.0
+            - 0.0
+            - 1.0
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 0
+    HipSwinger_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            y_axis:
+            - -0.0
+            - 0.0
+            - 1.0
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 0
+    FKRootPart?_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            y_axis:
+            - -0.0
+            - 0.0
+            - 1.0
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 0
+    FKSpine?_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            y_axis:
+            - -0.0
+            - 0.0
+            - 1.0
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 0
+    FKSpine?Part?_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            y_axis:
+            - -0.0
+            - 0.0
+            - 1.0
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 0
+    FKChest_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 0.996
+            - -0.085
+            y_axis:
+            - -0.0
+            - 0.085
+            - 0.996
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 0
+    FKHip_R:
+        axis_vector:
+            x_axis:
+            - -0.005
+            - -1.0
+            - -0.011
+            y_axis:
+            - 0.01
+            - -0.011
+            - 1.0
+            z_axis:
+            - -1.0
+            - 0.005
+            - 0.01
+        rotate_order: 2
+    FKKnee_R:
+        axis_vector:
+            x_axis:
+            - -0.006
+            - -0.997
+            - -0.07
+            y_axis:
+            - 0.009
+            - -0.07
+            - 0.997
+            z_axis:
+            - -1.0
+            - 0.005
+            - 0.01
+        rotate_order: 2
+    FKAnkle_R:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - -1.0
+            - -0.0
+            y_axis:
+            - 0.027
+            - 0.0
+            - 1.0
+            z_axis:
+            - -1.0
+            - -0.0
+            - 0.027
+        rotate_order: 3
+    FKToes_R:
+        axis_vector:
+            x_axis:
+            - 0.005
+            - -0.5
+            - 0.866
+            y_axis:
+            - -0.023
+            - 0.866
+            - 0.5
+            z_axis:
+            - -1.0
+            - -0.023
+            - -0.007
+        rotate_order: 5
+    FKHip_L:
+        axis_vector:
+            x_axis:
+            - -0.005
+            - 1.0
+            - 0.011
+            y_axis:
+            - 0.01
+            - 0.011
+            - -1.0
+            z_axis:
+            - -1.0
+            - -0.005
+            - -0.01
+        rotate_order: 2
+    FKKnee_L:
+        axis_vector:
+            x_axis:
+            - -0.006
+            - 0.997
+            - 0.07
+            y_axis:
+            - 0.009
+            - 0.07
+            - -0.997
+            z_axis:
+            - -1.0
+            - -0.005
+            - -0.01
+        rotate_order: 2
+    FKAnkle_L:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            y_axis:
+            - 0.027
+            - -0.0
+            - -1.0
+            z_axis:
+            - -1.0
+            - 0.0
+            - -0.027
+        rotate_order: 3
+    FKToes_L:
+        axis_vector:
+            x_axis:
+            - 0.005
+            - 0.5
+            - -0.866
+            y_axis:
+            - -0.023
+            - -0.866
+            - -0.5
+            z_axis:
+            - -1.0
+            - 0.023
+            - 0.007
+        rotate_order: 5
+    FKNeck_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 0.993
+            - 0.12
+            y_axis:
+            - -0.0
+            - -0.12
+            - 0.993
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 5
+    FKNeckPart?_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 0.993
+            - 0.12
+            y_axis:
+            - -0.0
+            - -0.12
+            - 0.993
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 5
+    FKHead_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 1.0
+            - -0.004
+            y_axis:
+            - -0.0
+            - 0.004
+            - 1.0
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 5
+    FKScapula_R:
+        axis_vector:
+            x_axis:
+            - -1.0
+            - -0.0
+            - -0.0
+            y_axis:
+            - -0.0
+            - 0.138
+            - 0.99
+            z_axis:
+            - -0.0
+            - 0.99
+            - -0.138
+        rotate_order: 2
+    FKScapula_L:
+        axis_vector:
+            x_axis:
+            - -1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - -0.0
+            - -0.138
+            - -0.99
+            z_axis:
+            - -0.0
+            - -0.99
+            - 0.138
+        rotate_order: 2
+    FKMiddleFinger?_R:
+        axis_vector:
+            x_axis:
+            - -0.996
+            - -0.09
+            - 0.024
+            y_axis:
+            - 0.012
+            - 0.14
+            - 0.99
+            z_axis:
+            - -0.092
+            - 0.986
+            - -0.138
+        rotate_order: 0
+    FKThumbFinger?_R:
+        axis_vector:
+            x_axis:
+            - -0.844
+            - -0.267
+            - 0.465
+            y_axis:
+            - 0.414
+            - -0.875
+            - 0.25
+            z_axis:
+            - 0.341
+            - 0.404
+            - 0.849
+        rotate_order: 0
+    FKIndexFinger?_R:
+        axis_vector:
+            x_axis:
+            - -0.996
+            - -0.056
+            - 0.071
+            y_axis:
+            - 0.068
+            - 0.054
+            - 0.996
+            z_axis:
+            - -0.06
+            - 0.997
+            - -0.05
+        rotate_order: 0
+    FKCup_R:
+        axis_vector:
+            x_axis:
+            - -0.978
+            - 0.166
+            - 0.13
+            y_axis:
+            - 0.181
+            - 0.339
+            - 0.923
+            z_axis:
+            - 0.109
+            - 0.926
+            - -0.361
+        rotate_order: 0
+    FKPinkyFinger?_R:
+        axis_vector:
+            x_axis:
+            - -0.994
+            - -0.021
+            - -0.109
+            y_axis:
+            - -0.111
+            - 0.224
+            - 0.968
+            z_axis:
+            - 0.004
+            - 0.974
+            - -0.225
+        rotate_order: 0
+    FKRingFinger?_R:
+        axis_vector:
+            x_axis:
+            - -0.997
+            - -0.07
+            - -0.03
+            y_axis:
+            - -0.039
+            - 0.135
+            - 0.99
+            z_axis:
+            - -0.066
+            - 0.988
+            - -0.137
+        rotate_order: 0
+    FKShoulder_R:
+        axis_vector:
+            x_axis:
+            - -1.0
+            - -0.009
+            - -0.028
+            y_axis:
+            - -0.028
+            - -0.0
+            - 1.0
+            z_axis:
+            - -0.009
+            - 1.0
+            - -0.0
+        rotate_order: 5
+    FKElbow_R:
+        axis_vector:
+            x_axis:
+            - -0.999
+            - -0.009
+            - 0.031
+            y_axis:
+            - 0.031
+            - 0.0
+            - 1.0
+            z_axis:
+            - -0.009
+            - 1.0
+            - -0.0
+        rotate_order: 5
+    FKWrist_R:
+        axis_vector:
+            x_axis:
+            - -0.999
+            - -0.009
+            - 0.031
+            y_axis:
+            - 0.031
+            - 0.0
+            - 1.0
+            z_axis:
+            - -0.009
+            - 1.0
+            - -0.0
+        rotate_order: 5
+    FKMiddleFinger?_L:
+        axis_vector:
+            x_axis:
+            - -0.996
+            - 0.09
+            - -0.024
+            y_axis:
+            - 0.012
+            - -0.14
+            - -0.99
+            z_axis:
+            - -0.092
+            - -0.986
+            - 0.138
+        rotate_order: 0
+    FKThumbFinger?_L:
+        axis_vector:
+            x_axis:
+            - -0.844
+            - 0.267
+            - -0.465
+            y_axis:
+            - 0.414
+            - 0.875
+            - -0.25
+            z_axis:
+            - 0.341
+            - -0.404
+            - -0.849
+        rotate_order: 0
+    FKIndexFinger?_L:
+        axis_vector:
+            x_axis:
+            - -0.996
+            - 0.056
+            - -0.071
+            y_axis:
+            - 0.068
+            - -0.054
+            - -0.996
+            z_axis:
+            - -0.06
+            - -0.997
+            - 0.05
+        rotate_order: 0
+    FKCup_L:
+        axis_vector:
+            x_axis:
+            - -0.978
+            - -0.166
+            - -0.13
+            y_axis:
+            - 0.181
+            - -0.339
+            - -0.923
+            z_axis:
+            - 0.109
+            - -0.926
+            - 0.361
+        rotate_order: 0
+    FKPinkyFinger?_L:
+        axis_vector:
+            x_axis:
+            - -0.994
+            - 0.021
+            - 0.109
+            y_axis:
+            - -0.111
+            - -0.224
+            - -0.968
+            z_axis:
+            - 0.004
+            - -0.974
+            - 0.225
+        rotate_order: 0
+    FKRingFinger?_L:
+        axis_vector:
+            x_axis:
+            - -0.997
+            - 0.07
+            - 0.03
+            y_axis:
+            - -0.039
+            - -0.135
+            - -0.99
+            z_axis:
+            - -0.066
+            - -0.988
+            - 0.137
+        rotate_order: 0
+    FKShoulder_L:
+        axis_vector:
+            x_axis:
+            - -1.0
+            - 0.009
+            - 0.028
+            y_axis:
+            - -0.028
+            - 0.0
+            - -1.0
+            z_axis:
+            - -0.009
+            - -1.0
+            - 0.0
+        rotate_order: 5
+    FKElbow_L:
+        axis_vector:
+            x_axis:
+            - -0.999
+            - 0.009
+            - -0.031
+            y_axis:
+            - 0.031
+            - -0.0
+            - -1.0
+            z_axis:
+            - -0.009
+            - -1.0
+            - 0.0
+        rotate_order: 5
+    FKWrist_L:
+        axis_vector:
+            x_axis:
+            - -0.999
+            - 0.009
+            - -0.031
+            y_axis:
+            - 0.031
+            - -0.0
+            - -1.0
+            z_axis:
+            - -0.009
+            - -1.0
+            - 0.0
+        rotate_order: 5
+    IKLeg_R:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - 0.0
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    RollHeel_R:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - -0.027
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - 0.027
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    RollToesEnd_R:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - -0.027
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - 0.027
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    RollToes_R:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - -0.027
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - 0.027
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    IKToes_R:
+        axis_vector:
+            x_axis:
+            - 0.005
+            - -0.5
+            - 0.866
+            y_axis:
+            - -0.023
+            - 0.866
+            - 0.5
+            z_axis:
+            - -1.0
+            - -0.023
+            - -0.007
+        rotate_order: 5
+    PoleLeg_R:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - 0.0
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    IKArm_R:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - 0.0
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    PoleArm_R:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - 0.0
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    IKcvSpine?_M:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - 0.0
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    IKSpine?_M:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - -0.0
+            - 1.0
+            - -0.0
+            z_axis:
+            - -0.0
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    IKhybridSpine?_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            y_axis:
+            - -0.0
+            - 0.0
+            - 1.0
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 0
+    IKLeg_L:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - 0.0
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    RollHeel_L:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.027
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - -0.027
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    RollToesEnd_L:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.027
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - -0.027
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    RollToes_L:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.027
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - -0.027
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    IKToes_L:
+        axis_vector:
+            x_axis:
+            - 0.005
+            - 0.5
+            - -0.866
+            y_axis:
+            - -0.023
+            - -0.866
+            - -0.5
+            z_axis:
+            - -1.0
+            - 0.023
+            - 0.007
+        rotate_order: 5
+    PoleLeg_L:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - 0.0
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    IKArm_L:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - 0.0
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    PoleArm_L:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - 0.0
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    IKSpineCurve_M:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - 0.0
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    FKIKLeg_R:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+            y_axis:
+            - -0.0
+            - 1.0
+            - -0.0
+            z_axis:
+            - -0.0
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    FKIKArm_R:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - -0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - -0.0
+            - -0.0
+            - 1.0
+        rotate_order: 0
+    FKIKSpine_M:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - -0.0
+            - 1.0
+            - -0.0
+            z_axis:
+            - -0.0
+            - 0.0
+            - 1.0
+        rotate_order: 0
+    FKIKLeg_L:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - -0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - -0.0
+            - -0.0
+            - 1.0
+        rotate_order: 0
+    FKIKArm_L:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - -0.0
+            - -0.0
+            - 1.0
+        rotate_order: 0
+    RootX_M:
+        axis_vector:
+            x_axis:
+            - 1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - 0.0
+            - 1.0
+            - 0.0
+            z_axis:
+            - 0.0
+            - 0.0
+            - 1.0
+        rotate_order: 3
+    Fingers_R:
+        axis_vector:
+            x_axis:
+            - -0.999
+            - 0.009
+            - 0.045
+            y_axis:
+            - 0.045
+            - -0.0
+            - 0.999
+            z_axis:
+            - 0.009
+            - 1.0
+            - -0.0
+        rotate_order: 0
+    Fingers_L:
+        axis_vector:
+            x_axis:
+            - 0.999
+            - 0.009
+            - 0.045
+            y_axis:
+            - 0.045
+            - 0.0
+            - -0.999
+            z_axis:
+            - -0.009
+            - 1.0
+            - -0.0
+        rotate_order: 0
+joint:
+    Root_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 1.0
+            - -0.0
+            y_axis:
+            - -0.0
+            - 0.0
+            - 1.0
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 0
+    RootPart?_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 1.0
+            - -0.0
+            y_axis:
+            - -0.0
+            - 0.0
+            - 1.0
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 0
+    Spine?_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 1.0
+            - -0.0
+            y_axis:
+            - -0.0
+            - 0.0
+            - 1.0
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 0
+    Spine?Part?_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 1.0
+            - -0.0
+            y_axis:
+            - -0.0
+            - 0.0
+            - 1.0
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 0
+    Chest_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 0.996
+            - -0.085
+            y_axis:
+            - -0.0
+            - 0.085
+            - 0.996
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 0
+    Neck_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 0.993
+            - 0.12
+            y_axis:
+            - -0.0
+            - -0.12
+            - 0.993
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 5
+    NeckPart?_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 0.993
+            - 0.12
+            y_axis:
+            - -0.0
+            - -0.12
+            - 0.993
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 5
+    Head_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 1.0
+            - -0.004
+            y_axis:
+            - -0.0
+            - 0.004
+            - 1.0
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 5
+    HeadEnd_M:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - 1.0
+            - -0.004
+            y_axis:
+            - -0.0
+            - 0.004
+            - 1.0
+            z_axis:
+            - 1.0
+            - -0.0
+            - 0.0
+        rotate_order: 0
+    Hip_R:
+        axis_vector:
+            x_axis:
+            - -0.005
+            - -1.0
+            - -0.011
+            y_axis:
+            - 0.01
+            - -0.011
+            - 1.0
+            z_axis:
+            - -1.0
+            - 0.005
+            - 0.01
+        rotate_order: 2
+    HipPart?_R:
+        axis_vector:
+            x_axis:
+            - -0.005
+            - -1.0
+            - -0.011
+            y_axis:
+            - 0.01
+            - -0.011
+            - 1.0
+            z_axis:
+            - -1.0
+            - 0.005
+            - 0.01
+        rotate_order: 2
+    Knee_R:
+        axis_vector:
+            x_axis:
+            - -0.006
+            - -0.997
+            - -0.07
+            y_axis:
+            - 0.009
+            - -0.07
+            - 0.997
+            z_axis:
+            - -1.0
+            - 0.005
+            - 0.01
+        rotate_order: 2
+    Ankle_R:
+        axis_vector:
+            x_axis:
+            - 0.0
+            - -1.0
+            - -0.0
+            y_axis:
+            - 0.027
+            - -0.0
+            - 1.0
+            z_axis:
+            - -1.0
+            - -0.0
+            - 0.027
+        rotate_order: 3
+    Toes_R:
+        axis_vector:
+            x_axis:
+            - 0.005
+            - -0.5
+            - 0.866
+            y_axis:
+            - -0.023
+            - 0.866
+            - 0.5
+            z_axis:
+            - -1.0
+            - -0.023
+            - -0.007
+        rotate_order: 5
+    ToesEnd_R:
+        axis_vector:
+            x_axis:
+            - 0.005
+            - -0.5
+            - 0.866
+            y_axis:
+            - -0.023
+            - 0.866
+            - 0.5
+            z_axis:
+            - -1.0
+            - -0.023
+            - -0.007
+        rotate_order: 5
+    Hip_L:
+        axis_vector:
+            x_axis:
+            - -0.005
+            - 1.0
+            - 0.011
+            y_axis:
+            - 0.01
+            - 0.011
+            - -1.0
+            z_axis:
+            - -1.0
+            - -0.005
+            - -0.01
+        rotate_order: 2
+    HipPart?_L:
+        axis_vector:
+            x_axis:
+            - -0.005
+            - 1.0
+            - 0.011
+            y_axis:
+            - 0.01
+            - 0.011
+            - -1.0
+            z_axis:
+            - -1.0
+            - -0.005
+            - -0.01
+        rotate_order: 2
+    Knee_L:
+        axis_vector:
+            x_axis:
+            - -0.006
+            - 0.997
+            - 0.07
+            y_axis:
+            - 0.009
+            - 0.07
+            - -0.997
+            z_axis:
+            - -1.0
+            - -0.005
+            - -0.01
+        rotate_order: 2
+    Ankle_L:
+        axis_vector:
+            x_axis:
+            - -0.0
+            - 1.0
+            - 0.0
+            y_axis:
+            - 0.027
+            - 0.0
+            - -1.0
+            z_axis:
+            - -1.0
+            - 0.0
+            - -0.027
+        rotate_order: 3
+    Toes_L:
+        axis_vector:
+            x_axis:
+            - 0.005
+            - 0.5
+            - -0.866
+            y_axis:
+            - -0.023
+            - -0.866
+            - -0.5
+            z_axis:
+            - -1.0
+            - 0.023
+            - 0.007
+        rotate_order: 5
+    ToesEnd_L:
+        axis_vector:
+            x_axis:
+            - 0.005
+            - 0.5
+            - -0.866
+            y_axis:
+            - -0.023
+            - -0.866
+            - -0.5
+            z_axis:
+            - -1.0
+            - 0.023
+            - 0.007
+        rotate_order: 5
+    Scapula_R:
+        axis_vector:
+            x_axis:
+            - -1.0
+            - -0.0
+            - -0.0
+            y_axis:
+            - -0.0
+            - 0.138
+            - 0.99
+            z_axis:
+            - -0.0
+            - 0.99
+            - -0.138
+        rotate_order: 2
+    Shoulder_R:
+        axis_vector:
+            x_axis:
+            - -1.0
+            - -0.009
+            - -0.028
+            y_axis:
+            - -0.028
+            - -0.0
+            - 1.0
+            z_axis:
+            - -0.009
+            - 1.0
+            - -0.0
+        rotate_order: 5
+    ShoulderPart?_R:
+        axis_vector:
+            x_axis:
+            - -1.0
+            - -0.009
+            - -0.028
+            y_axis:
+            - -0.028
+            - -0.0
+            - 1.0
+            z_axis:
+            - -0.009
+            - 1.0
+            - -0.0
+        rotate_order: 5
+    Elbow_R:
+        axis_vector:
+            x_axis:
+            - -0.999
+            - -0.009
+            - 0.031
+            y_axis:
+            - 0.031
+            - 0.0
+            - 1.0
+            z_axis:
+            - -0.009
+            - 1.0
+            - -0.0
+        rotate_order: 5
+    ElbowPart?_R:
+        axis_vector:
+            x_axis:
+            - -0.999
+            - -0.009
+            - 0.031
+            y_axis:
+            - 0.031
+            - 0.0
+            - 1.0
+            z_axis:
+            - -0.009
+            - 1.0
+            - -0.0
+        rotate_order: 5
+    Wrist_R:
+        axis_vector:
+            x_axis:
+            - -0.999
+            - -0.009
+            - 0.031
+            y_axis:
+            - 0.031
+            - 0.0
+            - 1.0
+            z_axis:
+            - -0.009
+            - 1.0
+            - -0.0
+        rotate_order: 5
+    MiddleFinger?_R:
+        axis_vector:
+            x_axis:
+            - -0.996
+            - -0.09
+            - 0.024
+            y_axis:
+            - 0.012
+            - 0.14
+            - 0.99
+            z_axis:
+            - -0.092
+            - 0.986
+            - -0.138
+        rotate_order: 0
+    ThumbFinger?_R:
+        axis_vector:
+            x_axis:
+            - -0.844
+            - -0.267
+            - 0.465
+            y_axis:
+            - 0.414
+            - -0.875
+            - 0.25
+            z_axis:
+            - 0.341
+            - 0.404
+            - 0.849
+        rotate_order: 0
+    IndexFinger?_R:
+        axis_vector:
+            x_axis:
+            - -0.996
+            - -0.056
+            - 0.071
+            y_axis:
+            - 0.068
+            - 0.054
+            - 0.996
+            z_axis:
+            - -0.06
+            - 0.997
+            - -0.05
+        rotate_order: 0
+    Cup_R:
+        axis_vector:
+            x_axis:
+            - -0.978
+            - 0.166
+            - 0.13
+            y_axis:
+            - 0.181
+            - 0.339
+            - 0.923
+            z_axis:
+            - 0.109
+            - 0.926
+            - -0.361
+        rotate_order: 0
+    PinkyFinger?_R:
+        axis_vector:
+            x_axis:
+            - -0.994
+            - -0.021
+            - -0.109
+            y_axis:
+            - -0.111
+            - 0.224
+            - 0.968
+            z_axis:
+            - 0.004
+            - 0.974
+            - -0.225
+        rotate_order: 0
+    RingFinger?_R:
+        axis_vector:
+            x_axis:
+            - -0.997
+            - -0.07
+            - -0.03
+            y_axis:
+            - -0.039
+            - 0.135
+            - 0.99
+            z_axis:
+            - -0.066
+            - 0.988
+            - -0.137
+        rotate_order: 0
+    Scapula_L:
+        axis_vector:
+            x_axis:
+            - -1.0
+            - 0.0
+            - 0.0
+            y_axis:
+            - -0.0
+            - -0.138
+            - -0.99
+            z_axis:
+            - -0.0
+            - -0.99
+            - 0.138
+        rotate_order: 2
+    Shoulder_L:
+        axis_vector:
+            x_axis:
+            - -1.0
+            - 0.009
+            - 0.028
+            y_axis:
+            - -0.028
+            - 0.0
+            - -1.0
+            z_axis:
+            - -0.009
+            - -1.0
+            - 0.0
+        rotate_order: 5
+    ShoulderPart?_L:
+        axis_vector:
+            x_axis:
+            - -1.0
+            - 0.009
+            - 0.028
+            y_axis:
+            - -0.028
+            - 0.0
+            - -1.0
+            z_axis:
+            - -0.009
+            - -1.0
+            - 0.0
+        rotate_order: 5
+    Elbow_L:
+        axis_vector:
+            x_axis:
+            - -0.999
+            - 0.009
+            - -0.031
+            y_axis:
+            - 0.031
+            - -0.0
+            - -1.0
+            z_axis:
+            - -0.009
+            - -1.0
+            - 0.0
+        rotate_order: 5
+    ElbowPart?_L:
+        axis_vector:
+            x_axis:
+            - -0.999
+            - 0.009
+            - -0.031
+            y_axis:
+            - 0.031
+            - -0.0
+            - -1.0
+            z_axis:
+            - -0.009
+            - -1.0
+            - 0.0
+        rotate_order: 5
+    Wrist_L:
+        axis_vector:
+            x_axis:
+            - -0.999
+            - 0.009
+            - -0.031
+            y_axis:
+            - 0.031
+            - -0.0
+            - -1.0
+            z_axis:
+            - -0.009
+            - -1.0
+            - 0.0
+        rotate_order: 5
+    MiddleFinger?_L:
+        axis_vector:
+            x_axis:
+            - -0.996
+            - 0.09
+            - -0.024
+            y_axis:
+            - 0.012
+            - -0.14
+            - -0.99
+            z_axis:
+            - -0.092
+            - -0.986
+            - 0.138
+        rotate_order: 0
+    ThumbFinger?_L:
+        axis_vector:
+            x_axis:
+            - -0.844
+            - 0.267
+            - -0.465
+            y_axis:
+            - 0.414
+            - 0.875
+            - -0.25
+            z_axis:
+            - 0.341
+            - -0.404
+            - -0.849
+        rotate_order: 0
+    IndexFinger?_L:
+        axis_vector:
+            x_axis:
+            - -0.996
+            - 0.056
+            - -0.071
+            y_axis:
+            - 0.068
+            - -0.054
+            - -0.996
+            z_axis:
+            - -0.06
+            - -0.997
+            - 0.05
+        rotate_order: 0
+    Cup_L:
+        axis_vector:
+            x_axis:
+            - -0.978
+            - -0.166
+            - -0.13
+            y_axis:
+            - 0.181
+            - -0.339
+            - -0.923
+            z_axis:
+            - 0.109
+            - -0.926
+            - 0.361
+        rotate_order: 0
+    PinkyFinger?_L:
+        axis_vector:
+            x_axis:
+            - -0.994
+            - 0.021
+            - 0.109
+            y_axis:
+            - -0.111
+            - -0.224
+            - -0.968
+            z_axis:
+            - 0.004
+            - -0.974
+            - 0.225
+        rotate_order: 0
+    RingFinger?_L:
+        axis_vector:
+            x_axis:
+            - -0.997
+            - 0.07
+            - 0.03
+            y_axis:
+            - -0.039
+            - -0.135
+            - -0.99
+            z_axis:
+            - -0.066
+            - -0.988
+            - 0.137
+        rotate_order: 0

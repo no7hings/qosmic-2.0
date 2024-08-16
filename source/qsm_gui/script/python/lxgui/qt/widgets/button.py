@@ -203,45 +203,45 @@ class QtPressButton(
         qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
         self.setFont(_qt_core.QtFonts.NameNormal)
-        #
+
         self.setMaximumHeight(20)
         self.setMinimumHeight(20)
-        #
+
         self.installEventFilter(self)
-        #
+
         self.setFocusPolicy(QtCore.Qt.NoFocus)
-        #
+
         self._init_frame_base_def_(self)
         self._init_visible_base_def_(self)
         self._init_status_base_def_(self)
         self._init_sub_process_base_def_()
         self._init_validator_base_def_(self)
-        #
+
         self._init_icon_base_def_(self)
         self._init_name_base_def_(self)
         self._init_menu_base_def_(self)
         self._init_progress_base_def_()
-        #
+
         self._init_action_for_hover_def_(self)
         self._init_action_base_def_(self)
         self._init_action_for_press_def_(self)
         self._init_action_for_check_def_(self)
         self._init_action_for_option_press_def_(self)
-        #
+
         self._init_item_layout_base_def_(self)
-        #
+
         self._refresh_check_()
-        #
+
         self._set_name_draw_font_(_qt_core.QtFonts.Button)
-        #
+
         r, g, b = 167, 167, 167
         h, s, v = bsc_core.RawColorMtd.rgb_to_hsv(r, g, b)
         color = bsc_core.RawColorMtd.hsv2rgb(h, s*.75, v*.75)
         hover_color = r, g, b
-        #
+
         self._frame_border_color = color
         self._hovered_frame_border_color = hover_color
-        #
+
         r, g, b = 151, 151, 151
         h, s, v = bsc_core.RawColorMtd.rgb_to_hsv(r, g, b)
         color = bsc_core.RawColorMtd.hsv2rgb(h, s*.75, v*.75)

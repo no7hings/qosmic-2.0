@@ -413,49 +413,177 @@ build:
                                     该选项会影响粘贴。
                             enable: True
 
-            offset:
-                name: 'Offset'
-                name_chs: '偏移'
+            keyframe:
+                name: 'Keyframe'
+                name_chs: '关键帧'
 
                 tool_tip: 'To be supplemented.'
-                tool_tip_chs: '待补充。'
+                tool_tip_chs: '帧相关的工具。'
 
                 options:
                     name: 'Options'
                     name_chs: '选项'
 
                     parameters:
-                        offset_curve:
+                        selection:
                             widget: group
-                            name: 'Copy Motion'
-                            name_chs: '偏移曲线'
+                            name: 'Selection'
+                            name_chs: '选择'
 
-                        offset_curve/offset_character_curves:
+                        selection/select_all_curves:
                             widget: button
-                            name: 'Offset Character Curves'
-                            icon: 'tool/maya/offset'
-                            name_chs: '偏移角色曲线'
+                            name: 'Select All Curves'
+                            name_chs: '选中所有曲线'
+                            icon: 'tool/maya/select'
                             tool_tip:
                                 |-
                                 To be supplemented.
                             tool_tip_chs:
                                 |-
-                                点击偏移选中角色（所有控制器）曲线：
-                                    可以在“设置”的“帧偏移”修改偏移帧。
+                                点击选中所有的动画曲线（不包含引用文件内的曲线）
                             join_to_next: True
 
-                        offset_curve/offset_control_curves:
+                        selection/select_character_all_curves:
                             widget: button
-                            name: 'Offset Control Curves'
-                            name_chs: '偏移控制器曲线'
-                            icon: 'tool/maya/offset'
+                            name: 'Select Character All Curves'
+                            name_chs: '选中角色所有曲线'
+                            icon: 'tool/maya/select'
                             tool_tip:
                                 |-
                                 To be supplemented.
                             tool_tip_chs:
                                 |-
-                                点击偏移选中控制器的曲线：
-                                    动作数据包含数值和曲线。
+                                点击选中所有角色（选中）的动画曲线（不包含引用文件内的曲线）
+
+                        curve_timewarp:
+                            widget: group
+                            name: 'Curve Timewarp(offset, scale)'
+                            name_chs: '曲线时间扭曲（偏移，缩放）'
+
+                        curve_timewarp/warp_scheme:
+                            widget: capsule_string
+                            name: 'Scale Scheme'
+                            name_chs: '扭曲方案'
+                            options: ['frame_range', 'scale_value']
+                            option_names_chs: ['帧范围', '缩放值']
+                            default: 'frame_range'
+                            tool_tip:
+                                |-
+                                To be supplemented.
+                            tool_tip_chs:
+                                |-
+                                选择一个扭曲方案。
+
+                        curve_timewarp/frame_range_src:
+                            widget: integer2
+                            name: 'Frame Range(Source)'
+                            name_chs: '帧范围（源）'
+                            value: [1, 24]
+                            tool_tip:
+                                |-
+                                To be supplemented.
+                            tool_tip_chs:
+                                |-
+                                输入一个帧范围。
+
+                        curve_timewarp/frame_range_tgt:
+                            widget: integer2
+                            name: 'Frame Range(Target)'
+                            name_chs: '帧范围（目标）'
+                            value: [1, 24]
+                            tool_tip:
+                                |-
+                                To be supplemented.
+                            tool_tip_chs:
+                                |-
+                                输入一个帧范围，扭曲到目标范围。
+                            visible_condition: {
+                                operator: 'is', port: 'curve_timewarp/warp_scheme', value: 'frame_range'
+                            }
+
+                        curve_timewarp/scale_value:
+                            widget: float
+                            name: 'Scale Value'
+                            name_chs: '缩放值'
+                            value: 1.0
+                            tool_tip:
+                                |-
+                                To be supplemented.
+                            tool_tip_chs:
+                                |-
+                                输入一个缩放值，缩放到指定值，并保持起始帧。
+                            visible_condition: {
+                                operator: 'is', port: 'curve_timewarp/warp_scheme', value: 'scale_value'
+                            }
+
+                        curve_timewarp/create_or_update_timewarp_preview:
+                            widget: button
+                            name: 'Create/Update Preview'
+                            name_chs: '创建/更新预览'
+                            icon: 'tool/maya/create-timewarp'
+                            tool_tip:
+                                |-
+                                To be supplemented.
+                            tool_tip_chs:
+                                |-
+                                点击创建时间扭曲预览，按“Z”撤销。
+                            join_to_next: True
+
+                        curve_timewarp/remove_timewarp_preview:
+                            widget: button
+                            name: 'Remove Preview'
+                            name_chs: '移除预览'
+                            icon: 'tool/maya/delete'
+                            tool_tip:
+                                |-
+                                To be supplemented.
+                            tool_tip_chs:
+                                |-
+                                点击移除时间扭曲预览，按“Z”撤销。
+
+                        curve_timewarp/apply_timewarp:
+                            widget: button
+                            name: 'Apply Timewarp'
+                            name_chs: '应用（偏移，缩放所有曲线并移除预览）'
+                            icon: 'tool/maya/apply-timewarp'
+                            tool_tip:
+                                |-
+                                To be supplemented.
+                            tool_tip_chs:
+                                |-
+                                点击应用时间扭曲到所有曲线，按“Z”撤销。
+
+#                        offset_curve_time:
+#                            widget: group
+#                            name: 'Offset Curve'
+#                            name_chs: '偏移曲线'
+#
+#                        offset_curve_time/offset_character_curves:
+#                            widget: button
+#                            name: 'Offset Character Curves'
+#                            name_chs: '偏移角色曲线'
+#                            icon: 'tool/maya/offset'
+#                            tool_tip:
+#                                |-
+#                                To be supplemented.
+#                            tool_tip_chs:
+#                                |-
+#                                点击偏移选中角色（所有控制器）曲线：
+#                                    可以在“设置”的“帧偏移”修改偏移帧。
+#                            join_to_next: True
+#
+#                        offset_curve_time/offset_control_curves:
+#                            widget: button
+#                            name: 'Offset Control Curves'
+#                            name_chs: '偏移控制器曲线'
+#                            icon: 'tool/maya/offset'
+#                            tool_tip:
+#                                |-
+#                                To be supplemented.
+#                            tool_tip_chs:
+#                                |-
+#                                点击偏移选中控制器的曲线：
+#                                    动作数据包含数值和曲线。
 
             move:
                 name: 'Move'
@@ -533,16 +661,44 @@ build:
 
             paste_characters:
                 message_chs: '粘贴动作到选中的角色成功，按“Z”撤销。'
-                message: 'Paste animation to selected characters successful, press "z" undo.'
+                message: 'Paste animation to selected characters successful, press "Z" undo.'
 
             paste_controls:
                 message_chs: '粘贴动作到选中的控制器成功，按“Z”撤销。'
-                message: 'Paste animation to selected controls successful, press "z" undo.'
+                message: 'Paste animation to selected controls successful, press "Z" undo.'
 
             mirror_any:
                 message_chs: '镜像成功，按“Z”撤销。'
-                message: 'Mirror successful, press "z" undo.'
+                message: 'Mirror successful, press "Z" undo.'
 
             flip_any:
                 message_chs: '翻转成功，按“Z”撤销。'
-                message: 'Flip successful, press "z" undo.'
+                message: 'Flip successful, press "Z" undo.'
+
+            select_all_curves:
+                message_chs: '选择所有曲线成功，按“Z”撤销。'
+                message: 'Select all curves successful, press "Z" undo.'
+
+            select_all_character_curves:
+                message_chs: '选择所有角色曲线成功，按“Z”撤销。'
+                message: 'Select all curves successful, press "Z" undo.'
+
+            select_character_all_curves:
+                message_chs: '选择所有曲线成功，按“Z”撤销。'
+                message: 'Select all curves successful, press "Z" undo.'
+
+            update_timewarp_preview:
+                message_chs: '创建/更新时间扭曲预览成功，按“Z”撤销。'
+                message: 'Create/Update timewarp successful, press "Z" undo.'
+
+            remove_timewarp_preview:
+                message_chs: '移除时间扭曲预览成功，按“Z”撤销。'
+                message: 'Remove timewarp successful, press "Z" undo.'
+
+            no_timewarp_preview:
+                message_chs: '点击“创建/更新预览”创建预览以继续。'
+                message: 'Press "Create/Update Preview" for continue.'
+
+            apply_timewarp:
+                message_chs: '应用时间扭曲成功，按“Z”撤销。'
+                message: 'Apply Timewarp to all curve successful, press "Z" undo.'

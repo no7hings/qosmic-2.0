@@ -1,0 +1,21 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Lazy Validation Tool'
+        name_chs: '懒人检查工具'
+        group_name: 'Animation(s)'
+        #
+        icon_name: 'qosmic/lazy-resource-tool'
+        tool_tip:
+            |-
+            To be supplemented.
+        #
+        tool_tip_chs:
+            |-
+            待补充。
+
+        size: [560, 720]

@@ -8,8 +8,7 @@ import qsm_maya_adv.core as qsm_mya_adv_core
 
 class PrxPageForComposition(_gui_abstracts.AbsPrxPageForComposition):
     def __init__(self, window, session, *args, **kwargs):
-        super(PrxPageForComposition, self).__init__(window, session, *args, **kwargs)\
-
+        super(PrxPageForComposition, self).__init__(window, session, *args, **kwargs)
 
     def gui_build_stage(self):
         data = qsm_mya_adv_core.AdvMotionStage().generate_track_data()
@@ -40,15 +39,27 @@ class PrxPageForComposition(_gui_abstracts.AbsPrxPageForComposition):
                 key = track_model.key
                 location = '|{}:LAYER'.format(key)
                 layer_opt = qsm_mya_adv_core.AdvChrMotionLayer(location)
+                #
                 layer_opt.set('clip_start', track_model.clip_start)
                 layer_opt.set('clip_end', track_model.clip_end)
-                layer_opt.set('valid_start', track_model.get_valid_start())
-                layer_opt.set('valid_end', track_model.get_valid_end())
+                #
                 layer_opt.set('start', track_model.start)
                 layer_opt.set('speed', track_model.speed)
+                layer_opt.set('count', track_model.count)
+                #
+                layer_opt.set('source_start', track_model.source_start)
+                layer_opt.set('source_end', track_model.source_end)
                 layer_opt.set('pre_cycle', track_model.pre_cycle)
                 layer_opt.set('post_cycle', track_model.post_cycle)
-
+                #
+                layer_opt.set('scale_start', track_model.scale_start)
+                layer_opt.set('scale_end', track_model.scale_end)
+                #
+                layer_opt.set('pre_blend', track_model.pre_blend)
+                layer_opt.set('post_blend', track_model.post_blend)
+                #
+                layer_opt.set('valid_start', track_model.get_valid_start())
+                layer_opt.set('valid_end', track_model.get_valid_end())
                 layer_opt.set('output_end', frame_range[-1])
 
                 if frame_range_index == 0:

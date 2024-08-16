@@ -24,7 +24,7 @@ class Mesh(_shape.Shape):
 
     @classmethod
     def get_face_number(cls, path):
-        return cmds.polyEvaluate(path, face=1)
+        return cmds.polyEvaluate(path, face=1) or 0
 
     @classmethod
     def is_deformed(cls, path):

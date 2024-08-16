@@ -1353,6 +1353,11 @@ class StgFileOpt(StgPathOpt):
 
     type = property(get_type)
 
+    def get_format(self):
+        return self.ext[1:]
+
+    format = property(get_format)
+
     def get_path_base(self):
         return os.path.splitext(self.path)[0]
 

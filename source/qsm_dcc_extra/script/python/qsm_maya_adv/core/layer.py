@@ -58,7 +58,7 @@ class CharacterCurve(object):
 
         for i_index, i_value in enumerate(values):
             i_frame = i_index+start_frame
-            curve_opt.set_value_at_frame(i_frame, i_value*value_scale)
+            curve_opt.create_value_at_time(i_frame, i_value*value_scale)
 
         return curve_name_new
 
@@ -126,7 +126,7 @@ class SketchCurve(object):
 
         for i_index, i_value in enumerate(values):
             i_frame = i_index+start_frame
-            curve_opt.set_value_at_frame(i_frame, i_value*value_scale)
+            curve_opt.create_value_at_time(i_frame, i_value*value_scale)
 
 
 class AdvMotionLayerBase(object):
@@ -416,59 +416,61 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
         qsm_mya_core.Container.add_nodes(time_container, curve_nodes)
 
     @classmethod
-    def apply_data_for(cls, layer, data, start_frame=1, pre_cycle=0, post_cycle=1, pre_blend_frame=2, post_blend_frame=2):
+    def apply_data_for(
+        cls,
+        layer, data,
+        start_frame=1,
+        pre_cycle=0, post_cycle=1,
+        pre_blend=4, post_blend=4
+    ):
         location = layer.get_root()
         sketch_data = data['sketches']
+
         frame_count = data['frame_count']
         root_height = data['root_height']
+
         master_root_height = cls.DEFAULT_MASTER_ROOT_HEIGHT
         translation_scale = master_root_height/root_height
+
+        speed = 1.0
+
         source_start = 1
         source_end = source_start+frame_count-1
-        end_frame = start_frame+frame_count*post_cycle-1
+
+        clip_start = start_frame
+        clip_end = clip_start+frame_count*post_cycle-1
+        count = clip_end-clip_start+1
 
         main_weight_curve_opt = qsm_mya_core.AnmCurveOpt.create(location, 'main_weight', True)
-        main_weight_curve_opt.set_value_at_frame(start_frame-pre_blend_frame, 0)
-        main_weight_curve_opt.set_value_at_frame(start_frame, 1)
-        main_weight_curve_opt.set_value_at_frame(end_frame, 1)
-        main_weight_curve_opt.set_value_at_frame(end_frame+post_blend_frame, 0)
+        main_weight_curve_opt.create_value_at_time(clip_start-pre_blend, 0)
+        main_weight_curve_opt.create_value_at_time(clip_start, 1)
+        main_weight_curve_opt.create_value_at_time(clip_end, 1)
+        main_weight_curve_opt.create_value_at_time(clip_end+post_blend, 0)
         qsm_mya_core.NodeAttribute.set_as_message(
             location, 'main_weight_curve', main_weight_curve_opt.path
         )
 
         qsm_mya_core.NodeAttribute.set_value(
-            location, 'output_end', end_frame
+            location, 'output_end', clip_end
         )
-
+        # clip
         qsm_mya_core.NodeAttribute.set_value(
-            location, 'blend_start_time', start_frame
-        )
-        qsm_mya_core.NodeAttribute.set_value(
-            location, 'blend_end_time', end_frame
-        )
-
-        qsm_mya_core.NodeAttribute.set_value(
-            location, 'clip_start', start_frame
+            location, 'clip_start', clip_start
         )
         qsm_mya_core.NodeAttribute.set_value(
-            location, 'clip_end', end_frame
+            location, 'clip_end', clip_end
+        )
+        # basic
+        qsm_mya_core.NodeAttribute.set_value(
+            location, 'start', clip_start
         )
         qsm_mya_core.NodeAttribute.set_value(
-            location, 'valid_start', start_frame
+            location, 'speed', speed
         )
         qsm_mya_core.NodeAttribute.set_value(
-            location, 'valid_end', end_frame
+            location, 'count', count
         )
-
-        qsm_mya_core.NodeAttribute.set_value(
-            location, 'start', start_frame
-        )
-        qsm_mya_core.NodeAttribute.set_value(
-            location, 'pre_blend_frame', pre_blend_frame
-        )
-        qsm_mya_core.NodeAttribute.set_value(
-            location, 'post_blend_frame', post_blend_frame
-        )
+        # cycle
         qsm_mya_core.NodeAttribute.set_value(
             location, 'source_start', source_start
         )
@@ -481,6 +483,35 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
         qsm_mya_core.NodeAttribute.set_value(
             location, 'post_cycle', post_cycle
         )
+        # scale
+        qsm_mya_core.NodeAttribute.set_value(
+            location, 'scale_start', clip_start
+        )
+        qsm_mya_core.NodeAttribute.set_value(
+            location, 'scale_end', clip_end
+        )
+        # blend
+        qsm_mya_core.NodeAttribute.set_value(
+            location, 'pre_blend', pre_blend
+        )
+        qsm_mya_core.NodeAttribute.set_value(
+            location, 'post_blend', post_blend
+        )
+        #
+        qsm_mya_core.NodeAttribute.set_value(
+            location, 'valid_start', clip_start
+        )
+        qsm_mya_core.NodeAttribute.set_value(
+            location, 'valid_end', clip_end
+        )
+        # old variant
+        qsm_mya_core.NodeAttribute.set_value(
+            location, 'blend_start_time', clip_start
+        )
+        qsm_mya_core.NodeAttribute.set_value(
+            location, 'blend_end_time', clip_end
+        )
+        #
         for i_sketch_key, i_v in sketch_data.items():
             i_sketch_path = layer.get(i_sketch_key)
             i_orients = i_v['orients']
@@ -642,28 +673,28 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
     def update_main_weight(self, frame_range, is_start=False, is_end=False):
         curve_opt = self.get_main_weight_curve_opt()
 
-        pre_blend_frame, post_blend_frame = 4, 4
+        pre_blend, post_blend = 4, 4
 
         start_frame, end_frame = frame_range
 
         if is_start is True:
-            curve_opt.set_value_at_frame(start_frame, 1)
-            curve_opt.set_value_at_frame(end_frame, 1)
-            curve_opt.set_value_at_frame(end_frame+post_blend_frame, 0)
+            curve_opt.create_value_at_time(start_frame, 1)
+            curve_opt.create_value_at_time(end_frame, 1)
+            curve_opt.create_value_at_time(end_frame+post_blend, 0)
         elif is_end is True:
-            curve_opt.set_value_at_frame(start_frame-pre_blend_frame, 0)
-            curve_opt.set_value_at_frame(start_frame, 1)
-            curve_opt.set_value_at_frame(end_frame, 1)
+            curve_opt.create_value_at_time(start_frame-pre_blend, 0)
+            curve_opt.create_value_at_time(start_frame, 1)
+            curve_opt.create_value_at_time(end_frame, 1)
         else:
             if start_frame == end_frame:
-                curve_opt.set_value_at_frame(start_frame-pre_blend_frame, 0)
-                curve_opt.set_value_at_frame(start_frame, 1)
-                curve_opt.set_value_at_frame(start_frame+post_blend_frame, 0)
+                curve_opt.create_value_at_time(start_frame-pre_blend, 0)
+                curve_opt.create_value_at_time(start_frame, 1)
+                curve_opt.create_value_at_time(start_frame+post_blend, 0)
             else:
-                curve_opt.set_value_at_frame(start_frame-pre_blend_frame, 0)
-                curve_opt.set_value_at_frame(start_frame, 1)
-                curve_opt.set_value_at_frame(end_frame, 1)
-                curve_opt.set_value_at_frame(end_frame+post_blend_frame, 0)
+                curve_opt.create_value_at_time(start_frame-pre_blend, 0)
+                curve_opt.create_value_at_time(start_frame, 1)
+                curve_opt.create_value_at_time(end_frame, 1)
+                curve_opt.create_value_at_time(end_frame+post_blend, 0)
 
     def clear_main_weight_keys(self):
         curve_opt = self.get_main_weight_curve_opt()
@@ -678,7 +709,7 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
         curve_opt = self.get_output_end_curve_opt()
 
         start_frame, end_frame = frame_range
-        curve_opt.set_value_at_frame(end_frame+1, end_frame)
+        curve_opt.create_value_at_time(end_frame+1, end_frame)
 
     def reset_root_start_input(self):
         curve_opt = self.get_output_end_curve_opt()
@@ -742,7 +773,7 @@ class AdcChrMotionMasterLayer(AbsAdvMotionLayer):
         )
         return qsm_mya_core.DagNode.to_namespace(resource_root)
 
-    def append_layer(self, file_path, pre_cycle=1, post_cycle=1, pre_blend_frame=2, post_blend_frame=2):
+    def append_layer(self, file_path, pre_cycle=1, post_cycle=1, pre_blend=2, post_blend=2):
         if not bsc_storage.StgPath.get_is_file(file_path):
             raise OSError()
 
@@ -770,7 +801,7 @@ class AdcChrMotionMasterLayer(AbsAdvMotionLayer):
             data,
             start_frame=stage_end_frame+1,
             post_cycle=post_cycle,
-            pre_blend_frame=pre_blend_frame, post_blend_frame=post_blend_frame
+            pre_blend=pre_blend, post_blend=post_blend
         )
         if motion_layer_last is not None:
             start_frame = motion_layer._node_opt.get('clip_start')
@@ -808,10 +839,12 @@ class AdcChrMotionMasterLayer(AbsAdvMotionLayer):
 class AdvMotionStage(object):
     KEYS = [
         'clip_start', 'clip_end',
-        'start', 'speed',
+        'start', 'speed', 'count',
         'source_start', 'source_end',
         'pre_cycle', 'post_cycle',
-        'layer_index'
+        'scale_start', 'scale_end',
+        'pre_blend', 'post_blend',
+        'layer_index',
     ]
 
     @classmethod

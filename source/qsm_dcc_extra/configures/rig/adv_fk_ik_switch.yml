@@ -1,0 +1,152 @@
+limb_switch:
+    arm_to_fk:
+        blend_control:
+            path: 'FKIKArm_{direction}'
+            port: 'FKIKBlend'
+            value: 0
+
+        controls:
+            Shoulder:
+                control: 'FK<..key>_{direction}'
+                source: 'IKX<..key>_{direction}'
+                match_translation: False
+                match_rotation: True
+            Elbow:
+                control: 'FK<..key>_{direction}'
+                source: 'IKX<..key>_{direction}'
+                match_translation: False
+                match_rotation: True
+            Wrist:
+                control: 'FK<..key>_{direction}'
+                source: 'IKX<..key>_{direction}'
+                match_translation: False
+                match_rotation: True
+
+        correspond_controls:
+            Arm:
+                control: 'IK<..key>_{direction}'
+            Pole:
+                control: '<..key>Arm_{direction}'
+
+    arm_to_ik:
+        blend_control:
+            path: 'FKIKArm_{direction}'
+            port: 'FKIKBlend'
+            value: 10
+
+        controls:
+            Arm:
+                control: 'IK<..key>_{direction}'
+                source: 'AlignIKToWrist_{direction}'
+                match_translation: True
+                match_rotation: True
+        pole:
+            control: 'PoleArm_{direction}'
+            start: 'FKXShoulder_{direction}'
+            middle: 'FKElbow_{direction}'
+            end: 'FKWrist_{direction}'
+            distance_source: 'IKXElbow_{direction}'
+
+        correspond_controls:
+            Shoulder:
+                control: 'FK<..key>_{direction}'
+            Elbow:
+                control: 'FK<..key>_{direction}'
+            Wrist:
+                control: 'FK<..key>_{direction}'
+
+    leg_to_fk:
+        blend_control:
+            path: 'FKIKLeg_{direction}'
+            port: 'FKIKBlend'
+            value: 0
+
+        controls:
+            Hip:
+                control: 'FK<..key>_{direction}'
+                source: 'IKX<..key>_{direction}'
+                match_translation: False
+                match_rotation: True
+            Knee:
+                control: 'FK<..key>_{direction}'
+                source: 'IKX<..key>_{direction}'
+                match_translation: False
+                match_rotation: True
+            Ankle:
+                control: 'FK<..key>_{direction}'
+                source: 'IKX<..key>_{direction}'
+                match_translation: False
+                match_rotation: True
+            Toes:
+                control: 'FK<..key>_{direction}'
+                source: 'IKX<..key>_{direction}'
+                match_translation: False
+                match_rotation: True
+
+        correspond_controls:
+            Leg:
+                control: 'IK<..key>_{direction}'
+            Toes:
+                control: 'IK<..key>_{direction}'
+            # roll
+            RollHeel:
+                control: '<..key>_{direction}'
+            RollToes:
+                control: '<..key>_{direction}'
+            RollToesEnd:
+                control: '<..key>_{direction}'
+            #
+            Pole:
+                control: '<..key>Leg_{direction}'
+
+    leg_to_ik:
+        blend_control:
+            path: 'FKIKLeg_{direction}'
+            port: 'FKIKBlend'
+            value: 10
+
+        controls:
+            Leg:
+                control: 'IK<..key>_{direction}'
+                source: 'AlignIKToAnkle_{direction}'
+                match_translation: True
+                match_rotation: True
+                reset_attributes:
+                    roll: 0.0
+                    rock: 0.0
+            Toes:
+                control: 'IK<..key>_{direction}'
+                source: 'FK<..key>_{direction}'
+                match_translation: False
+                match_rotation: False
+                copy_rotation: True
+            # roll
+            RollHeel:
+                control: '<..key>_{direction}'
+                reset_translation: True
+                reset_rotation: True
+            RollToes:
+                control: '<..key>_{direction}'
+                reset_translation: True
+                reset_rotation: True
+            RollToesEnd:
+                control: '<..key>_{direction}'
+                reset_translation: True
+                reset_rotation: True
+
+        pole:
+            control: 'PoleLeg_{direction}'
+            start: 'FKXHip_{direction}'
+            middle: 'FKKnee_{direction}'
+            end: 'FKAnkle_{direction}'
+            distance_source: 'IKXKnee_{direction}'
+
+        correspond_controls:
+            Hip:
+                control: 'FK<..key>_{direction}'
+            Knee:
+                control: 'FK<..key>_{direction}'
+            Ankle:
+                control: 'FK<..key>_{direction}'
+            Toes:
+                control: 'FK<..key>_{direction}'

@@ -45,9 +45,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
         if self._root is not None:
             motion = _mtn_core.AdvCharacterMotionOpt(self._namespace).get_data(control_set_includes=['body', 'face'])
             key = bsc_core.BscHash.to_hash_key(motion)
-            directory_path = _gnl_core.ResourceCache.generate_dynamic_gpu_directory(
-                user_name=bsc_core.BscSystem.get_user_name(), key=key
-            )
+            directory_path = qsm_gnl_core.MayaCache.generate_dynamic_gpu_directory(key=key)
             motion_file_path = '{}/motion.json'.format(directory_path)
             cache_file_path = '{}/gpu.ma'.format(directory_path)
             if os.path.isfile(motion_file_path) is False:
@@ -117,9 +115,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
                 return task_name, cmd_script, cache_file_path
             return task_name, None, cache_file_path
 
-        directory_path = _gnl_core.ResourceCache.generate_dynamic_gpu_directory(
-            user_name=bsc_core.BscSystem.get_user_name()
-        )
+        directory_path = qsm_gnl_core.MayaCache.generate_dynamic_gpu_local_directory()
         source_file_path = '{}/source.ma'.format(directory_path)
         self.export_source(source_file_path)
         cache_file_path = '{}/gpu.ma'.format(directory_path)

@@ -115,7 +115,7 @@ class QtImageGraph(_graph_for_node.QtNodeGraph):
             painter._draw_grid_(
                 rect,
                 axis_dir=(self._grid_dir_x, self._grid_dir_y),
-                grid_scale=(self._graph_scale_x, self._graph_scale_y),
+                grid_scale=(self._graph_model.sx, self._graph_model.sy),
                 grid_size=(self._grid_width, self._grid_height),
                 translate=(self._graph_grid_translate_x, self._graph_grid_translate_y),
                 grid_offset=(self._grid_offset_x, self._grid_offset_y),

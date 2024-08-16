@@ -49,6 +49,8 @@ from .input_for_path import *
 
 from .item_for_list import *
 
+from .player_for_video import *
+
 from .item_widget_for_list import *
 
 from .item_for_tree import *
@@ -72,6 +74,8 @@ from .scroll import *
 from .chart import *
 
 from .chart_for_process import *
+
+from .chart_for_timewarp import *
 
 from .progress_bar_for_subprocess import *
 

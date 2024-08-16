@@ -1,10 +1,11 @@
 # coding:utf-8
 from PIL import Image
 
-from PySide2 import QtGui
+from PyQt5 import QtGui
 
 
-i = Image.open('/production/library/resource/all/3d_asset/parking_meter_ujpkaadfa/v0001/image/preview.png')
+i = Image.open('Z:/libraries/lazy-resource/all/maya_cfx/bo_lang_A/video/bo_lang_A.images/image.0001.jpg')
+i.verify()
 
 
 def align8to32(bytes, width, mode):
@@ -68,3 +69,7 @@ def _toqclass_helper(im):
 
     __data = data or align8to32(im.tobytes(), im.size[0], im.mode)
     return {"data": __data, "im": im, "format": format, "colortable": colortable}
+
+
+print _toqclass_helper('Z:/libraries/lazy-resource/all/maya_cfx/bo_lang_A/video/bo_lang_A.images/image.0001.jpg')
+

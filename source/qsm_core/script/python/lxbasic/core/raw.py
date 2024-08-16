@@ -583,7 +583,10 @@ class RawIntegerMtd(object):
     @classmethod
     def frame_to_time_prettify(cls, frame, fps=24):
         h, m, s = cls.frame_to_time(frame, fps)
-        return '%s:%s:%s'%(str(h).zfill(2), str(m).zfill(2), str(s).zfill(2))
+
+        return '{h}:{m}:{s}:{f}'.format(
+            h=str(h).zfill(2), m=str(m).zfill(2), s=str(s).zfill(2), f=str(int(frame%fps)).zfill(2)
+        )
 
     @classmethod
     def second_to_time(cls, second):

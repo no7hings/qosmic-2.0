@@ -22,7 +22,7 @@ nodes:
             # 24fps
             conversionFactor: 0.004
     # pre
-    # pre blend = blend_start_time-pre_blend_frame
+    # pre blend = blend_start_time-pre_blend
     blend_pre_blend_frame:
         name: '<options.namespace>:<..key>'
         type: plusMinusAverage
@@ -97,7 +97,7 @@ nodes:
             - "<options.namespace>:blend_pre_blend_value_sub.output1D"
             - "<options.namespace>:blend_pre_blend_cdt.colorIfTrueR"
 
-    # post blend = blend_end_time+post_blend_frame
+    # post blend = blend_end_time+post_blend
     blend_post_blend_frame:
         name: '<options.namespace>:<..key>'
         type: plusMinusAverage
@@ -201,10 +201,10 @@ containers:
             blend_end_time:
                 type: float
                 value: 48
-            pre_blend_frame:
+            pre_blend:
                 type: float
                 value: 4
-            post_blend_frame:
+            post_blend:
                 type: float
                 value: 4
             input_time:
@@ -234,7 +234,7 @@ containers:
             # frame
             - "<options.namespace>:BLEND.blend_start_time"
             - "<options.namespace>:blend_pre_blend_frame.input1D[0]"
-            - "<options.namespace>:BLEND.pre_blend_frame"
+            - "<options.namespace>:BLEND.pre_blend"
             - "<options.namespace>:blend_pre_blend_frame.input1D[1]"
             #
             - "<options.namespace>:BLEND.blend_start_time"
@@ -244,15 +244,15 @@ containers:
             #
             - "<options.namespace>:BLEND.blend_end_time"
             - "<options.namespace>:blend_post_blend_frame.input1D[0]"
-            - "<options.namespace>:BLEND.post_blend_frame"
+            - "<options.namespace>:BLEND.post_blend"
             - "<options.namespace>:blend_post_blend_frame.input1D[1]"
             # output
             - '<options.namespace>:blend_sub.output3Dx'
             - '<options.namespace>:BLEND.output_weight'
             #
-            - "<options.namespace>:BLEND.pre_blend_frame"
+            - "<options.namespace>:BLEND.pre_blend"
             - "<options.namespace>:blend_pre_blend_dvd.input2X"
-            - "<options.namespace>:BLEND.post_blend_frame"
+            - "<options.namespace>:BLEND.post_blend"
             - "<options.namespace>:blend_post_blend_dvd.input2X"
             #
             - "<options.namespace>:BLEND.blend_end_time"

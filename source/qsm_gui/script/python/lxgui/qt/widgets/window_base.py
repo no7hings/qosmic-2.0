@@ -683,7 +683,7 @@ class QtMainWindow(
         w._set_title_('Message')
 
         w._set_ok_visible_(True)
-        w._set_no_visible_(True)
+        # w._set_no_visible_(True)
         w._set_message_(message)
         if 'status' in kwargs:
             status = kwargs['status']

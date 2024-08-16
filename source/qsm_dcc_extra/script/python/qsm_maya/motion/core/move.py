@@ -47,7 +47,7 @@ class ControlMove(object):
                 locator_path
             )
             _mya_core.Connection.create(
-                locator_path+'.visibility', main_control+'.visibility'
+                main_control+'.visibility', locator_path+'.visibility'
             )
 
         return locator_path
@@ -59,8 +59,8 @@ class ControlMove(object):
     @classmethod
     def find_main_control(cls, locator_shape):
         transform = _mya_core.Shape.get_transform(locator_shape)
-        targets = _mya_core.NodeAttribute.get_target_nodes(
+        source = _mya_core.NodeAttribute.get_source_node(
             transform, 'visibility', 'transform'
         )
-        if targets:
-            return targets[0]
+        if source:
+            return source
