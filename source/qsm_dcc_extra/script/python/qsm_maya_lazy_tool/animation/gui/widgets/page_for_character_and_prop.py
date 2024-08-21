@@ -133,12 +133,12 @@ class PrxPageForCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
             gui_qt_core.QtWidgets.QSizePolicy.Expanding,
             gui_qt_core.QtWidgets.QSizePolicy.Expanding
         )
-        qt_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
-        qt_lot.setContentsMargins(*[0]*4)
-        qt_lot.setSpacing(2)
+        qt_v_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
+        qt_v_lot.setContentsMargins(*[0]*4)
+        qt_v_lot.setSpacing(2)
 
         self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
-        qt_lot.addWidget(self._top_prx_tool_bar.widget)
+        qt_v_lot.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)
         # main tool box
@@ -160,7 +160,7 @@ class PrxPageForCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
         )
 
         self._prx_h_splitter = gui_prx_widgets.PrxHSplitter()
-        qt_lot.addWidget(self._prx_h_splitter.widget)
+        qt_v_lot.addWidget(self._prx_h_splitter.widget)
         # resource tag
         self._resource_tag_tree_view = gui_prx_widgets.PrxTreeView()
         self._prx_h_splitter.add_widget(self._resource_tag_tree_view)
@@ -187,11 +187,11 @@ class PrxPageForCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
         )
         # selection scheme
         self._selection_scheme_prx_input = gui_prx_widgets.PrxInputAsCapsule()
-        qt_lot.addWidget(self._selection_scheme_prx_input.widget)
+        qt_v_lot.addWidget(self._selection_scheme_prx_input.widget)
         self._do_gui_build_selection_scheme()
         # tool set
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
-        qt_lot.addWidget(self._page_prx_tab_tool_box.widget)
+        qt_v_lot.addWidget(self._page_prx_tab_tool_box.widget)
         # utility
         self._gui_skin_proxy_prx_toolset_unit = _unit_for_rig.PrxToolsetForSkinProxyLoad(
             self._window, self, self._session

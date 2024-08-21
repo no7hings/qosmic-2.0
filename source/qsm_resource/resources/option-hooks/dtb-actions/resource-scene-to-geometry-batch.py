@@ -78,7 +78,7 @@ def main(session):
                     _list.append(_i_scene_maya_file_path)
         return _list, _dict
     # get checked resources
-    window = session.get_window()
+    window = session.find_window()
     gui_resource_opt = window._gui_resource_prx_unit
     dtb_resources = gui_resource_opt.get_checked_or_selected_db_resources()
     if not dtb_resources:
@@ -97,7 +97,7 @@ def main(session):
     dtb_opt = session.get_database_opt(disable_new_connection=True)
     session.reload_configure()
     if dtb_opt:
-        window = session.get_window()
+        window = session.find_window()
         w = gui_core.GuiDialog.create(
             label=window.get_window_title(),
             sub_label='{}, {} Resources is Checked'.format(session.gui_name, len(dtb_resources)),

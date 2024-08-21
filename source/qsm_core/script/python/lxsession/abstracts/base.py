@@ -251,7 +251,7 @@ class AbsSsnDatabaseOptionAction(
 
     database_opt = property(get_database_opt)
 
-    def get_window(self):
+    def find_window(self):
         import lxgui.proxy.core as gui_prx_core
 
         return gui_prx_core.GuiProxyUtil.find_window_proxy_by_unique_id(

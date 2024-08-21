@@ -161,6 +161,18 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
             )
 
     @classmethod
+    def save_to(cls, file_path):
+        file_opt = bsc_storage.StgFileOpt(file_path)
+        file_opt.create_directory()
+        cmds.file(rename=file_path)
+        cmds.file(
+            save=1,
+            options='v=0;',
+            force=1,
+            type=cls.get_file_type(file_path)
+        )
+
+    @classmethod
     def export_as_node_graph(cls, file_path, location):
         """
             file -force

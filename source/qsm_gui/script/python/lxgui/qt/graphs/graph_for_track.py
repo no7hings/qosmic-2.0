@@ -103,7 +103,7 @@ class QtTrackGraph(
         p_1_x, p_1_y = d_point.x(), d_point.y()
         x_1 = self._track_stage_model.step_x_loc(p_1_x)
         d_point_step = QtCore.QPoint(x_1, p_1_y)
-        for i_sbj in self._nodes_selected:
+        for i_sbj in self._graph_select_nodes:
             if i_sbj != sbj:
                 i_p = i_sbj.pos()
                 i_offset_point = p_0-i_p
@@ -113,7 +113,7 @@ class QtTrackGraph(
 
     def _do_node_press_end_for_any_action_(self, sbj=None):
         data = []
-        nodes = copy.copy(self._nodes_selected)
+        nodes = copy.copy(self._graph_select_nodes)
         if sbj is not None:
             if sbj not in nodes:
                 nodes += [sbj]
@@ -134,11 +134,6 @@ class QtTrackGraph(
 
     def _update_stage_(self):
         self._track_stage._update_stage_()
-
-    def _get_hovered_node_(self):
-        for i in self._graph_nodes:
-            if i._is_hovered:
-                return i
 
     def _do_bypass_start_(self, event):
         sbj = self._get_hovered_node_()
@@ -290,7 +285,9 @@ class QtTrackGraph(
                 else:
                     event.ignore()
             elif event.type() == QtCore.QEvent.MouseMove:
-                if event.buttons() == QtCore.Qt.LeftButton:
+                if event.buttons() == QtCore.Qt.NoButton:
+                    self._do_graph_hover_move_(event)
+                elif event.buttons() == QtCore.Qt.LeftButton:
                     if self._is_action_flag_match_(
                         self.ActionFlag.NGNodePressClick, self.ActionFlag.NGNodePressMove,
                         self.ActionFlag.NGNodeAnyAction
@@ -353,40 +350,40 @@ class QtTrackGraph(
                 background_color=_qt_core.QtBackgroundColors.Transparent
             )
 
-        infos = collections.OrderedDict(
-            [
-                (
-                    'translate', '{}, {}'.format(
-                        self._graph_model.tx,
-                        self._graph_model.ty
-                    )
-                ),
-                (
-                    'scale', '{}, {}'.format(
-                        self._graph_model.sx,
-                        self._graph_model.sy
-                    )
-                ),
-                ('action flag', str(self._get_action_flag_())),
-                ('modifier action flag', str(', '.join(map(str, self._get_action_mdf_flags_())))),
-            ]
-        )
-        key_text_width = _qt_core.GuiQtText.get_draw_width_maximum(
-            painter, infos.keys()
-        )
-        c = len(infos)
-        i_h = 20
-        y = height-i_h*c
-        for i, (i_key, i_value) in enumerate(infos.items()):
-            i_rect = QtCore.QRect(
-                x+40, y+i*20, width, i_h
-            )
-            painter._set_text_draw_by_rect_use_key_value_(
-                i_rect,
-                key_text=i_key,
-                value_text=i_value,
-                key_text_width=key_text_width
-            )
+        # infos = collections.OrderedDict(
+        #     [
+        #         (
+        #             'translate', '{}, {}'.format(
+        #                 self._graph_model.tx,
+        #                 self._graph_model.ty
+        #             )
+        #         ),
+        #         (
+        #             'scale', '{}, {}'.format(
+        #                 self._graph_model.sx,
+        #                 self._graph_model.sy
+        #             )
+        #         ),
+        #         ('action flag', str(self._get_action_flag_())),
+        #         ('modifier action flag', str(', '.join(map(str, self._get_action_mdf_flags_())))),
+        #     ]
+        # )
+        # key_text_width = _qt_core.GuiQtText.get_draw_width_maximum(
+        #     painter, infos.keys()
+        # )
+        # c = len(infos)
+        # i_h = 20
+        # y = height-i_h*c
+        # for i, (i_key, i_value) in enumerate(infos.items()):
+        #     i_rect = QtCore.QRect(
+        #         x+40, y+i*20, width, i_h
+        #     )
+        #     painter._set_text_draw_by_rect_use_key_value_(
+        #         i_rect,
+        #         key_text=i_key,
+        #         value_text=i_value,
+        #         key_text_width=key_text_width
+        #     )
 
     def _set_graph_universe_(self, universe):
         self._graph_universe = universe
@@ -410,12 +407,13 @@ class QtTrackGraph(
     def _create_node_(self, *args, **kwargs):
         key = kwargs['key']
         if self._track_stage_model.is_exists(key) is True:
-            return self._track_stage.get_one_node(key)
+            return self._track_stage._stage_model.get_one_node(key)
 
         ng_node = self.NG_NODE_CLS(self)
         self._graph_nodes.append(ng_node)
         ng_node._set_graph_(self)
         ng_node._setup_track_(**kwargs)
+        ng_node.show()
         return ng_node
 
     def _create_connection_(self, *args, **kwargs):
@@ -423,6 +421,10 @@ class QtTrackGraph(
         self._ng_graph_connections.append(ng_connection)
         ng_connection._set_graph_(self)
         return ng_connection
+
+    def _restore_graph_(self):
+        self._track_stage._restore_stage_()
+        self._clear_graph_()
 
 
 class QtTrackView(

@@ -5,50 +5,52 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
+import lxbasic.resource as bsc_resource
+
 import lxbasic.storage as bsc_storage
 
 from ... import core as gui_core
 # qt
 from ...qt import core as gui_qt_core
 # qt widgets
-from ...qt.widgets import base as gui_qt_wgt_base
+from ...qt.widgets import base as _qt_wgt_base
 
-from ...qt.widgets import utility as gui_qt_wgt_utility
+from ...qt.widgets import utility as _qt_wgt_utility
 
 from ... qt.widgets import window_base as _qt_window_base
 
-from ...qt.widgets import chart as gui_qt_wgt_chart
+from ...qt.widgets import chart as _qt_wgt_chart
 
-from ...qt.widgets import layer_stack as gui_qt_wgt_layer_stack
+from ...qt.widgets import layer_stack as _qt_wgt_layer_stack
 # proxy process
-from .. import core as gui_prx_core
+from .. import core as _prx_core
 # proxy abstracts
-from .. import abstracts as gui_prx_abstracts
+from .. import abstracts as _prx_abstracts
 # proxy widgets
-from . import utility as gui_prx_wdt_utility
+from . import utility as _utility
 
-from . import container as gui_prx_wgt_container
+from . import container as _container
 
 
 class PrxBaseWindow(
-    gui_prx_abstracts.AbsPrxWindow,
+    _prx_abstracts.AbsPrxWindow,
     #
-    gui_prx_abstracts.AbsPrxLayerBaseDef,
+    _prx_abstracts.AbsPrxLayerBaseDef,
     #
-    gui_prx_abstracts.AbsPrxProgressingDef,
-    gui_prx_abstracts.AbsPrxWaitingDef,
+    _prx_abstracts.AbsPrxProgressingDef,
+    _prx_abstracts.AbsPrxWaitingDef,
 ):
     PRX_CATEGORY = 'tool_window'
     PRX_TYPE = 'tool_window'
 
     QT_WIDGET_CLS = _qt_window_base.QtMainWindow
 
-    PRX_LAYER_CLS = gui_prx_wdt_utility.PrxLayer
-    QT_LAYER_STACK_CLS = gui_qt_wgt_layer_stack.QtLayerStack
-    PROGRESS_WIDGET_CLS = gui_qt_wgt_utility.QtProgressBar
+    PRX_LAYER_CLS = _utility.PrxLayer
+    QT_LAYER_STACK_CLS = _qt_wgt_layer_stack.QtLayerStack
+    PROGRESS_WIDGET_CLS = _qt_wgt_utility.QtProgressBar
 
-    QT_WAITING_CHART_CLS = gui_qt_wgt_chart.QtChartAsWaiting
-    QT_PROGRESSING_CHART_CLS = gui_qt_wgt_chart.QtChartAsProgressing
+    QT_WAITING_CHART_CLS = _qt_wgt_chart.QtChartAsWaiting
+    QT_PROGRESSING_CHART_CLS = _qt_wgt_chart.QtChartAsProgressing
 
     HELP_FILE_PATH = None
 
@@ -64,7 +66,7 @@ class PrxBaseWindow(
 
         self._log_file_path = None
 
-        gui_prx_core.GuiProxyLogBridge.generate_all()
+        _prx_core.GuiProxyLogBridge.generate_all()
 
         self._qt_widget._create_window_shortcut_action_for_(
             self.show_help, 'F1'
@@ -87,28 +89,28 @@ class PrxBaseWindow(
 
         self._window_loading_flag = False
         # menu bar
-        self._qt_menu_bar_0 = gui_qt_wgt_utility.QtMenuBar()
+        self._qt_menu_bar_0 = _qt_wgt_utility.QtMenuBar()
         self._qt_widget.setMenuBar(self._qt_menu_bar_0)
-        self.__show_menu = gui_prx_wdt_utility.PrxMenu(self._qt_menu_bar_0)
+        self.__show_menu = _utility.PrxMenu(self._qt_menu_bar_0)
         if self._language == 'chs':
             self.__show_menu.set_name('显示')
         else:
             self.__show_menu.set_name('show')
         self._qt_menu_bar_0.addMenu(self.__show_menu.widget)
 
-        self.__debug_menu = gui_prx_wdt_utility.PrxMenu(self._qt_menu_bar_0)
+        self.__debug_menu = _utility.PrxMenu(self._qt_menu_bar_0)
         if self._language == 'chs':
             self.__debug_menu.set_name('调试器')
         else:
             self.__debug_menu.set_name('debugger')
         self._qt_menu_bar_0.addMenu(self.__debug_menu.widget)
         #
-        self._qt_central_widget = gui_qt_wgt_utility.QtTranslucentWidget()
+        self._qt_central_widget = _qt_wgt_utility.QtTranslucentWidget()
         self._qt_widget.setCentralWidget(self._qt_central_widget)
         #
         self._init_progressing_def_()
         #
-        self._qt_central_layout = gui_qt_wgt_base.QtVBoxLayout(self._qt_central_widget)
+        self._qt_central_layout = _qt_wgt_base.QtVBoxLayout(self._qt_central_widget)
         self._qt_central_layout.setContentsMargins(0, 0, 0, 0)
         #
         self._init_layer_base_def_(self._qt_central_layout)
@@ -129,7 +131,7 @@ class PrxBaseWindow(
         self.switch_current_layer_to('window_main_0')
 
     def create_menu(self, name):
-        menu = gui_prx_wdt_utility.PrxMenu(self._qt_menu_bar_0)
+        menu = _utility.PrxMenu(self._qt_menu_bar_0)
         menu.set_name(name)
         self._qt_menu_bar_0.addMenu(menu.widget)
         return menu
@@ -155,28 +157,28 @@ class PrxBaseWindow(
     def __build_main_layer(self):
         # content_widget_0
         layer = self.create_layer('window_main_0')
-        qt_layout_0 = gui_qt_wgt_base.QtVBoxLayout(layer._qt_widget)
+        qt_layout_0 = _qt_wgt_base.QtVBoxLayout(layer._qt_widget)
         qt_layout_0.setContentsMargins(0, 0, 0, 0)
         qt_layout_0.setSpacing(0)
-        self._qt_main_line = gui_qt_wgt_utility.QtHLine()
+        self._qt_main_line = _qt_wgt_utility.QtHLine()
         qt_layout_0.addWidget(self._qt_main_line)
         # main widget
-        self._qt_main_widget = gui_qt_wgt_utility.QtTranslucentWidget()
+        self._qt_main_widget = _qt_wgt_utility.QtTranslucentWidget()
         qt_layout_0.addWidget(self._qt_main_widget)
-        self._main_qt_layout = gui_qt_wgt_base.QtVBoxLayout(self._qt_main_widget)
+        self._main_qt_layout = _qt_wgt_base.QtVBoxLayout(self._qt_main_widget)
         self._main_qt_layout.setContentsMargins(2, 2, 2, 2)
         # bottom toolbar
-        self._window_bottom_tool_bar = gui_prx_wgt_container.PrxHToolBar()
+        self._window_bottom_tool_bar = _container.PrxHToolBar()
         qt_layout_0.addWidget(self._window_bottom_tool_bar.widget)
         self._window_bottom_tool_bar.set_expanded(True)
         self._window_bottom_tool_bar.set_hide()
         self._window_bottom_tool_bar.set_bottom_direction()
         #
-        self._log_tool_bar = gui_prx_wgt_container.PrxHToolBar()
+        self._log_tool_bar = _container.PrxHToolBar()
         qt_layout_0.addWidget(self._log_tool_bar.widget)
         self._log_tool_bar.set_hide()
         self._log_tool_bar.set_height(120)
-        self._log_text_browser_0 = gui_prx_wdt_utility.PrxTextBrowser()
+        self._log_text_browser_0 = _utility.PrxTextBrowser()
         self._log_tool_bar.add_widget(self._log_text_browser_0)
         self._log_tool_bar.set_bottom_direction()
         #
@@ -190,13 +192,13 @@ class PrxBaseWindow(
     # log
     def __build_log_layer(self):
         layer_widget = self.create_layer_widget('window_log_0', 'Log')
-        self._log_text_browser = gui_prx_wdt_utility.PrxTextBrowser()
+        self._log_text_browser = _utility.PrxTextBrowser()
         layer_widget.add_widget(self._log_text_browser)
 
     # help
     def __build_help_layer(self):
         layer_widget = self.create_layer_widget('window_help_0', 'Help')
-        self._help_text_browser = gui_prx_wdt_utility.PrxTextBrowser()
+        self._help_text_browser = _utility.PrxTextBrowser()
         layer_widget.add_widget(self._help_text_browser)
 
     # loading
@@ -206,14 +208,14 @@ class PrxBaseWindow(
     # exception
     def __build_expression_layer(self):
         layer_widget = self.create_layer_widget('window_exception_0', 'Exception')
-        self._exception_text_browser = gui_prx_wdt_utility.PrxTextBrowser()
+        self._exception_text_browser = _utility.PrxTextBrowser()
         self._exception_text_browser.set_font_size(10)
         layer_widget.add_widget(self._exception_text_browser.widget)
 
     # message
     def __build_message_layer(self):
         layer_widget = self.create_layer_widget('window_message_0', 'Message')
-        self._message_text_browser = gui_prx_wdt_utility.PrxTextBrowser()
+        self._message_text_browser = _utility.PrxTextBrowser()
         self._message_text_browser.set_font_size(12)
         layer_widget.add_widget(self._message_text_browser.widget)
 
@@ -383,7 +385,7 @@ class PrxBaseWindow(
     def show_window_auto(self, pos=None, size=None, exclusive=True):
         # show unique
         if exclusive is True:
-            gui_proxies = gui_prx_core.GuiProxyUtil.find_widget_proxy_by_class(self.__class__)
+            gui_proxies = _prx_core.GuiProxyUtil.find_widget_proxy_by_class(self.__class__)
             for i in gui_proxies:
                 if hasattr(i, '_window_unicode_id'):
                     if i._window_unicode_id != self._window_unicode_id:
@@ -512,7 +514,7 @@ class PrxSessionWindow(PrxBaseWindow):
 
     def _setup_fnc_(self):
         self.restore_variants()
-        self.gui_setup_window()
+        self.gui_setup_fnc()
 
     def _set_collapse_update_(self, collapse_dict):
         for i_k, i_v in collapse_dict.items():
@@ -524,7 +526,7 @@ class PrxSessionWindow(PrxBaseWindow):
     def restore_variants(self):
         pass
 
-    def gui_setup_window(self):
+    def gui_setup_fnc(self):
         raise NotImplementedError()
 
 
@@ -534,9 +536,9 @@ class PrxSessionToolWindow(PrxSessionWindow):
 
     def _setup_fnc_(self):
         self.restore_variants()
-        #
+
         self._setup_ssn_tool_()
-        self.gui_setup_window()
+        self.gui_setup_fnc()
 
     def apply_fnc(self):
         raise NotImplementedError()
@@ -549,21 +551,21 @@ class PrxSessionToolWindow(PrxSessionWindow):
         self.do_close_window_later()
 
     def _setup_ssn_tool_(self):
-        self._ssn_tool_apply_and_close_button = gui_prx_wdt_utility.PrxPressButton()
+        self._ssn_tool_apply_and_close_button = _utility.PrxPressButton()
         self.add_button(self._ssn_tool_apply_and_close_button)
         self._ssn_tool_apply_and_close_button.set_name('Apply and Close')
         self._ssn_tool_apply_and_close_button.connect_press_clicked_to(
             self.apply_and_close_fnc
         )
 
-        self._ssn_tool_apply_button = gui_prx_wdt_utility.PrxPressButton()
+        self._ssn_tool_apply_button = _utility.PrxPressButton()
         self.add_button(self._ssn_tool_apply_button)
         self._ssn_tool_apply_button.set_name('Apply')
         self._ssn_tool_apply_button.connect_press_clicked_to(
             self.apply_fnc
         )
 
-        self._ssn_tool_close_button = gui_prx_wdt_utility.PrxPressButton()
+        self._ssn_tool_close_button = _utility.PrxPressButton()
         self.add_button(self._ssn_tool_close_button)
         self._ssn_tool_close_button.set_name('Close')
         self._ssn_tool_close_button.connect_press_clicked_to(
@@ -571,5 +573,5 @@ class PrxSessionToolWindow(PrxSessionWindow):
         )
         self._log_tool_bar.set_visible(False)
 
-    def gui_setup_window(self):
+    def gui_setup_fnc(self):
         raise NotImplementedError()

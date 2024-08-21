@@ -18,7 +18,7 @@ if file_path:
     if _obj.get_is_exists() is False:
         _obj = _obj.set_create('aiStandIn')
     #
-    _seq_file_paths = _seq_file.get_exists_unit_paths()
+    _seq_file_paths = _seq_file.get_tiles()
     if _seq_file_paths:
         atr_raw = dict(
             dso=_seq_file_paths[0],

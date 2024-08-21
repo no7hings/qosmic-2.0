@@ -1,0 +1,41 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+
+    gui:
+        name: 'Lazy Resource Manager'
+        name_chs: '懒人资源管理'
+        group_name: 'General(s)'
+
+        icon_name: 'application/lineup'
+        tool_tip:
+            |-
+            For resource manager.
+
+        tool_tip_chs:
+            |-
+            用于管理资源。
+
+        size: [1280, 960]
+        item_frame_size: [142, 142]
+        item_icon_frame_size: [20, 20]
+        item_icon_size: [20, 20]
+
+entity-actions:
+    Node:
+        option-hooks:
+            - 'lazy-resource-actions/node-generate-motion-auto': {
+                gui_parent: '/Generate', gui_parent_chs: '/生成', gui_name: 'Motion(for Splicing)', gui_name_chs: '动作（用于拼接）'
+            }
+            - 'lazy-resource-actions/node-load-motion-auto': {
+                gui_parent: '/Load', gui_parent_chs: '/加载', gui_name: 'Motion', gui_name_chs: '动作'
+            }
+            - 'lazy-resource-actions/node-add-motion-to-montage-auto': {
+                gui_parent: '/Load', gui_parent_chs: '/加载', gui_name: 'Motion to Montage', gui_name_chs: '动作到拼接'
+            }
+            - 'lazy-resource-actions/node-open-directory': {
+                gui_parent: '/Open', gui_parent_chs: '/打开', gui_name: 'Directory', gui_name_chs: '目录'
+            }
+

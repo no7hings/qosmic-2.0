@@ -38,7 +38,7 @@ class AbsPnlComparerForAssetGeometryDcc(gui_prx_widgets.PrxSessionWindow):
     def __init__(self, session, *args, **kwargs):
         super(AbsPnlComparerForAssetGeometryDcc, self).__init__(session, *args, **kwargs)
 
-    def gui_setup_window(self):
+    def gui_setup_fnc(self):
         self._set_panel_build_()
         self.post_setup_fnc()
         #

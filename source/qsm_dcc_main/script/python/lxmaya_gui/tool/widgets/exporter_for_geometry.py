@@ -8,7 +8,7 @@ class PnlExporterForAssetGeometry(gui_prx_widgets.PrxSessionToolWindow):
     def __init__(self, session, *args, **kwargs):
         super(PnlExporterForAssetGeometry, self).__init__(session, *args, **kwargs)
 
-    def gui_setup_window(self):
+    def gui_setup_fnc(self):
         self._options_prx_node = gui_prx_widgets.PrxOptionsNode('options')
         self.add_widget(self._options_prx_node)
         self._options_prx_node.build_by_data(

@@ -136,6 +136,7 @@ class QtEntryNodeForTag(
     user_filter_checked = qt_signal()
     
     def _refresh_widget_all_(self):
+        self._painter_flag = True
         self._refresh_widget_draw_geometry_()
         self._refresh_widget_draw_()
 
@@ -229,6 +230,8 @@ class QtEntryNodeForTag(
 
         self._is_hovered = False
 
+        self._painter_flag = False
+
         self._frame_draw_rect = QtCore.QRect()
         self._frame_border_radius = 0
         self._frame_background_color = _gui_core.GuiRgba.DarkWhite
@@ -280,41 +283,42 @@ class QtEntryNodeForTag(
 
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
-        offset = self._get_action_offset_()
-        # bubble
-        # color = bsc_core.RawTextOpt(self._text).to_rgb_1(s_p=(35, 50), v_p=(75, 95))
-        bck_color = painter._generate_item_background_color_by_rect_(
-            self._frame_draw_rect,
-            is_hovered=self._is_hovered,
-            is_selected=self._is_checked,
-            is_actioned=self._get_is_actioned_(),
-            background_color=self._frame_background_color,
-            background_color_hovered=_gui_core.GuiRgba.LightOrange,
-            background_color_selected=self._frame_background_color_checked,
-            background_color_actioned=_gui_core.GuiRgba.LightPink
-        )
-        painter._draw_frame_by_rect_(
-            rect=self._frame_draw_rect,
-            border_color=_qt_core.QtBorderColors.Transparent,
-            background_color=bck_color,
-            border_radius=self._frame_border_radius,
-            offset=offset
+        if self._is_hovered:
+            bkg_color = _gui_core.GuiRgba.LightOrange
+        elif self._is_checked:
+            bkg_color = self._frame_background_color_checked
+        else:
+            bkg_color = self._frame_background_color
+
+        painter._set_border_color_(_qt_core.QtBorderColors.Transparent)
+        painter._set_background_color_(bkg_color)
+        painter.drawRect(
+            self._frame_draw_rect
         )
         # text
-        painter._draw_text_by_rect_(
-            self._text_draw_rect,
-            text=self._text,
-            text_color=[self._text_color, self._text_color_checked][self._is_hovered or self._is_checked],
-            font=self._text_font,
-            offset=offset
+        text = painter.fontMetrics().elidedText(
+            self._text,
+            QtCore.Qt.ElideMiddle,
+            self._text_draw_rect.width()-4,
+            QtCore.Qt.TextShowMnemonic
         )
-        # number
-        painter._draw_text_by_rect_(
+        painter._set_text_color_([self._text_color, self._text_color_checked][self._is_hovered or self._is_checked])
+        painter._set_font_(self._text_font)
+        painter.drawText(
+            self._text_draw_rect,
+            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+            text
+        )
+        number_text = painter.fontMetrics().elidedText(
+            self._number_text,
+            QtCore.Qt.ElideMiddle,
+            self._number_draw_rect.width()-4,
+            QtCore.Qt.TextShowMnemonic
+        )
+        painter.drawText(
             self._number_draw_rect,
-            text=self._number_text,
-            text_color=[self._text_color, self._text_color_checked][self._is_hovered or self._is_checked],
-            font=self._number_font,
-            offset=offset
+            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+            number_text
         )
 
     def _set_text_(self, text):

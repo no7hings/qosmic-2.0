@@ -58,6 +58,10 @@ class AbsQtSbjBaseDef(object):
 
     def _get_graph_(self):
         return self._graph
+    
+    def _do_delete_(self):
+        self._widget.close()
+        self._widget.deleteLater()
 
 
 class AbsQtNodeDef(AbsQtSbjBaseDef):

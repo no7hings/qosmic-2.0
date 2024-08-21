@@ -2172,7 +2172,7 @@ class QtPainter(QtGui.QPainter):
                 color_1 = background_color_actioned or _color_and_brush.QtBackgroundColors.Actioned
             else:
                 color_1 = background_color_selected or _color_and_brush.QtBackgroundColors.Selected
-            #
+
             start_pos, end_pos = rect.topLeft(), rect.bottomLeft()
             color = QtGui.QLinearGradient(start_pos, end_pos)
             color.setColorAt(0, _base.QtColor.to_qt_color(color_0))

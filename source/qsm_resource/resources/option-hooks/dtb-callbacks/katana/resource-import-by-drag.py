@@ -12,7 +12,7 @@ def main(session):
 
     dtb_opt = session.get_database_opt()
     if dtb_opt:
-        window = session.get_window()
+        window = session.find_window()
         #
         dtb_resource = dtb_opt.get_entity(
             entity_type=session.option_opt.get('entity_type'),

@@ -2510,7 +2510,7 @@ class AbsQtVirtualItemWidgetBaseDef(object):
 class AbsQtViewSelectActionDef(object):
     def _set_view_select_action_def_init_(self):
         self._pre_selected_items = []
-        self._pre_hovered_items = []
+        self._pre_hovered_indices = []
 
     def _set_view_item_selected_(self, item, boolean):
         raise NotImplementedError()

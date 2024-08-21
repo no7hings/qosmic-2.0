@@ -251,7 +251,7 @@ c.RigValidationOpt.test()
         sys.stdout.write(
             bsc_core.auto_unicode(
                 self._validation_options.to_text(data)
-            )+'\n'
+            )
         )
 
     def joints_prc(self, branch, leafs):

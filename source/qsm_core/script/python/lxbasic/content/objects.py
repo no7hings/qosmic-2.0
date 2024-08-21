@@ -33,11 +33,11 @@ class AbsContent(object):
                 if filter_fnc([key_], '.*'):
                     _ = key_.split('.')
                     d_c = len([i for i in _ if i == ''])
-                    k_p_2 = '.'.join(key_path.split('.')[:-d_c])
+                    k_p_2 = six.u('.').join(key_path.split('.')[:-d_c])
                     if k_p_2:
-                        key_real = '{}.{}'.format(k_p_2, '.'.join(_[d_c:]))
+                        key_real = six.u('{}.{}').format(k_p_2, '.'.join(_[d_c:]))
                     else:
-                        key_real = '.'.join(_[d_c:])
+                        key_real = six.u('.').join(_[d_c:])
                 else:
                     key_real = key_
                 #
@@ -135,7 +135,7 @@ class AbsContent(object):
         def rcs_fnc_(k_, v_):
             for _k, _v in v_.items():
                 if k_ is not None:
-                    _key = '{}.{}'.format(k_, _k)
+                    _key = six.u('{}.{}').format(k_, _k)
                 else:
                     _key = _k
                 list_.append(_key)
@@ -150,7 +150,7 @@ class AbsContent(object):
         def rcs_fnc_(k_, v_):
             for _k, _v in v_.items():
                 if k_ is not None:
-                    _key = '{}.{}'.format(k_, _k)
+                    _key = six.u('{}.{}').format(k_, _k)
                 else:
                     _key = _k
                 #
@@ -169,7 +169,7 @@ class AbsContent(object):
         def rcs_fnc_(k_, v_):
             for _k, _v in v_.items():
                 if k_ is not None:
-                    _key = '{}.{}'.format(k_, _k)
+                    _key = six.u('{}.{}').format(k_, _k)
                 else:
                     _key = _k
                 #

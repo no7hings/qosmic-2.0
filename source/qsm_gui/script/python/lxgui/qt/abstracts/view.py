@@ -350,6 +350,9 @@ class AbsQtListWidget(
     def _get_checked_item_widgets_(self):
         return [i for i in self._get_all_item_widgets_() if i._is_checked_() is True]
 
+    def _get_checked_items_(self):
+        return [i for i in self._get_all_items_() if i._is_checked_() is True]
+
     @qt_slot()
     def _item_widget_select_cbk_(self):
         # unselect pre
@@ -451,7 +454,7 @@ class AbsQtListWidget(
         #
         self._pre_selected_items = []
 
-        self._pre_hovered_items = []
+        self._pre_hovered_indices = []
         #
         self.clear()
 

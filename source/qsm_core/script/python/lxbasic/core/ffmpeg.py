@@ -503,23 +503,36 @@ Y:/deploy/rez-packages/external/ffmpeg/6.0/platform-windows/bin/ffmpeg.exe -i Z:
             traceback.print_exc()
 
     @classmethod
-    def extract_all_frames(cls, video_path, image_format):
+    def extract_all_frames(cls, video_path, image_format, width_maximum=None):
         directory_path = os.path.dirname(video_path)
         base = os.path.basename(video_path)
         name_base, ext = os.path.splitext(base)
         image_directory_path = '{}/{}.images'.format(directory_path, name_base)
+        image_file_path = '{}/image.%04d.{}'.format(image_directory_path, image_format)
         _base.BscStorage.create_directory(image_directory_path)
         frame_args = cls.get_frame_args(video_path)
         if frame_args:
-            fps, frame_count = frame_args
             cmd_args = [
                 cls.get_ffmpeg_source(),
                 '-i', video_path,
-                '-vf', 'fps={}'.format(fps),
-                '{}/image.%04d.{}'.format(
-                    image_directory_path,
-                    image_format
-                )
             ]
+
+            if isinstance(width_maximum, int):
+                cmd_args.extend(
+                    [
+                        '-vf', 'scale={}:-1'.format(width_maximum),
+                    ]
+                )
+
+            cmd_args.extend(
+                [
+                    '-vsync vfr', '-q:v 2', '-y',
+                    '{}/image.%04d.{}'.format(
+                        image_directory_path,
+                        image_format
+                    )
+                ]
+            )
             cmd_script = ' '.join(cmd_args)
             subprocess.check_call(cmd_script)
+            return image_file_path

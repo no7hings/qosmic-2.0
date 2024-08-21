@@ -31,7 +31,7 @@ class AbsPnlSubmitterForAssetRenderDcc(gui_prx_widgets.PrxSessionWindow):
     def __init__(self, session, *args, **kwargs):
         super(AbsPnlSubmitterForAssetRenderDcc, self).__init__(session, *args, **kwargs)
 
-    def gui_setup_window(self):
+    def gui_setup_fnc(self):
         self._item_frame_size = self._session.gui_configure.get('item_frame_size')
         self._item_icon_frame_size = self._session.gui_configure.get('item_icon_frame_size')
         self._item_icon_size = self._session.gui_configure.get('item_icon_size')

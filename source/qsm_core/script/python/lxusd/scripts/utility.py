@@ -71,7 +71,7 @@ class ShotUsdCombine(object):
                     i_file_path_ = bsc_storage.StgFileTiles.convert_to(
                         i_file_path, ['*.####.{format}']
                     )
-                    i_file_tile_paths = bsc_storage.StgFileTiles.get_exists_unit_paths(
+                    i_file_tile_paths = bsc_storage.StgFileTiles.get_tiles(
                         i_file_path_
                     )
                     i_list = []

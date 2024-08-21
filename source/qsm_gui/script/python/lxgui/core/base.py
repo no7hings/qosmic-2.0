@@ -428,7 +428,6 @@ class GuiThumbnailCache(object):
         c.save()
 
 
-if __name__ == '__main__':
-    print GuiXml.get_text(
-        'test'
-    )
+class GuiPlayModes(object):
+    Video = 0x01
+    ImageSequence = 0x02

@@ -295,6 +295,11 @@ class GuiQtUtil(object):
         # noinspection PyArgumentList
         QtWidgets.QApplication.restoreOverrideCursor()
 
+    @classmethod
+    def is_ctrl_modifier(cls):
+        # noinspection PyArgumentList
+        return QtWidgets.QApplication.keyboardModifiers() == QtCore.Qt.ControlModifier
+
 
 class GuiQtStyle(object):
     CONTENT = None

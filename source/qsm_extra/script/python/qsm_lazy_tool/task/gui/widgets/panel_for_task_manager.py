@@ -22,7 +22,7 @@ class PrxPanelForTaskManager(gui_prx_widgets.PrxSessionWindow):
     def __init__(self, session, *args, **kwargs):
         super(PrxPanelForTaskManager, self).__init__(session, *args, **kwargs)
 
-    def gui_setup_window(self):
+    def gui_setup_fnc(self):
         self.set_main_style_mode(1)
         if self.SERVER_FLAG is True:
             self.start_web_socket_server()

@@ -32,10 +32,25 @@ class TrackModel(object):
         '_scale_start', '_scale_end', '_count',
         # variant for blend
         '_pre_blend', '_post_blend',
-        '_valid_frames', '_valid_frame_ranges',
         '_test_offset',
         '_layer_index',
-        '_is_bypass'
+        '_is_bypass',
+        #
+        '_valid_frames', '_valid_frame_ranges',
+    ]
+    HASH_KEYS = [
+        '_key',
+        '_clip_start', '_clip_end',
+        '_speed', '_start',
+        '_source_start', '_source_end',
+        '_pre_cycle', '_post_cycle',
+        # variant for scale
+        '_scale_start', '_scale_end', '_count',
+        # variant for blend
+        '_pre_blend', '_post_blend',
+        '_test_offset',
+        '_layer_index',
+        '_is_bypass',
     ]
 
     def setup(
@@ -513,6 +528,9 @@ class TrackModel(object):
     def compute_w_by_count(self, count):
         return self._stage_model._time_coord_model.compute_size_by_count(count)
 
+    def to_hash(self):
+        return bsc_core.BscHash.to_hash_key({x: self.__dict__[x] for x in self.HASH_KEYS})
+
 
 class TrackStageModel(object):
     TIME_BASIC_UNIT = 100
@@ -651,7 +669,8 @@ class TrackStageModel(object):
     def update(self):
         self._all_frames = []
         self._valid_frame_range_dict.clear()
-
+        if not self._track_dict:
+            return
         sys.stdout.write('stage is change.\n')
         clip_start_list = []
         clip_end_list = []
@@ -717,6 +736,17 @@ class TrackStageModel(object):
         for k, v in self._track_dict.items():
             dict_[k] = v._track_model.copy_as_dict()
         return dict_
+
+    def restore(self):
+        self._track_dict.clear()
+
+        self._all_frames = []
+        self._valid_frame_range_dict.clear()
+
+    def to_hash(self):
+        return bsc_core.BscHash.to_hash_key(
+            {k: v._track_model.to_hash() for k, v in self._track_dict.items()}
+        )
 
 
 class TrackTravel(object):

@@ -197,7 +197,7 @@ class AbsStgFile(
         return u'D41D8CD98F00B204E9800998ECF8427E'
 
     def get_is_exists(self):
-        return self.get_exists_unit_paths() != []
+        return self.get_tiles() != []
 
     def get_is_udim(self):
         return self._get_is_udim_(self.path)
@@ -375,24 +375,24 @@ class AbsStgFile(
         return self._get_exists_file_paths__(self.path, **kwargs)
 
     def get_exists_files(self, *args, **kwargs):
-        return [self.__class__(i) for i in self.get_exists_unit_paths(*args, **kwargs)]
+        return [self.__class__(i) for i in self.get_tiles(*args, **kwargs)]
 
     @classmethod
     def get_exists_unit_paths_fnc(cls, file_path):
-        return bsc_storage.StgFileTiles.get_exists_unit_paths(file_path)
+        return bsc_storage.StgFileTiles.get_tiles(file_path)
 
-    def get_exists_unit_paths(self):
+    def get_tiles(self):
         return self.get_exists_unit_paths_fnc(self.path)
 
     def get_exists_units(self):
-        return [self.__class__(i) for i in self.get_exists_unit_paths()]
+        return [self.__class__(i) for i in self.get_tiles()]
 
     # noinspection PyUnusedLocal
     def get_permissions(self, *args, **kwargs):
-        return [bsc_storage.StgPath.get_permission(i) for i in self.get_exists_unit_paths()]
+        return [bsc_storage.StgPath.get_permission(i) for i in self.get_tiles()]
 
     def get_modify_timestamp(self, *args, **kwargs):
-        exists_file_paths = self.get_exists_unit_paths(*args, **kwargs)
+        exists_file_paths = self.get_tiles(*args, **kwargs)
         timestamps = [int(os.stat(i).st_mtime) for i in exists_file_paths]
         if timestamps:
             return sum(timestamps)/len(timestamps)
@@ -666,13 +666,13 @@ class AbsStgFile(
         )
 
     def get_is_writeable(self):
-        for i in self.get_exists_unit_paths():
+        for i in self.get_tiles():
             if bsc_storage.StgPath.get_is_writeable(i) is False:
                 return False
         return True
 
     def get_is_readable(self):
-        for i in self.get_exists_unit_paths():
+        for i in self.get_tiles():
             if bsc_storage.StgPath.get_is_readable(i) is False:
                 return False
         return True
@@ -798,7 +798,7 @@ class AbsStgTexture(
     def get_target_file_path_as_src(
         self, directory_path_dst, scheme='separate', target_extension='.tx', fix_name_blank=False
     ):
-        if self.get_exists_unit_paths():
+        if self.get_tiles():
             directory_args_dpt = self.get_directory_args_dpt_fnc(
                 self, target_extension
             )

@@ -16,7 +16,7 @@ class AbsPnlLauncherForApplication(gui_prx_widgets.PrxSessionWindow):
     def __init__(self, session, *args, **kwargs):
         super(AbsPnlLauncherForApplication, self).__init__(session, *args, **kwargs)
 
-    def gui_setup_window(self):
+    def gui_setup_fnc(self):
 
         self._sub_label = qt_widgets.QtTextItem()
         self.add_widget(self._sub_label)

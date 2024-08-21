@@ -111,7 +111,7 @@ def main(session):
         )
         files_p.set_unchecked_by_include_paths(_file_paths_as_dd)
     # get checked resources
-    window = session.get_window()
+    window = session.find_window()
     gui_resource_opt = window._gui_resource_prx_unit
     dtb_resources = gui_resource_opt.get_checked_or_selected_db_resources()
     if not dtb_resources:

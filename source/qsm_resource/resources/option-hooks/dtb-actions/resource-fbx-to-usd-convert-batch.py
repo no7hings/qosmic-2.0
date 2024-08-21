@@ -69,7 +69,7 @@ def main(session):
                 _list.extend(_i_fbx_file_paths)
         return _list
     # get checked resources
-    window = session.get_window()
+    window = session.find_window()
     gui_resource_opt = window._gui_resource_prx_unit
     dtb_resources = gui_resource_opt.get_checked_or_selected_db_resources()
     if not dtb_resources:
@@ -98,7 +98,7 @@ def main(session):
         geometry_usd_directory_p_o = bsc_core.BscStgParseOpt(geometry_usd_directory_p)
         geometry_usd_directory_p_o.update_variants(**base_variants)
         #
-        window = session.get_window()
+        window = session.find_window()
         w = gui_core.GuiDialog.create(
             label=window.get_window_title(),
             sub_label='{}, {} Resources is Checked'.format(session.gui_name, len(dtb_resources)),

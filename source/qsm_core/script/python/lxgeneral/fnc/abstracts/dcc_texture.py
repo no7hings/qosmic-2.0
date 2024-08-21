@@ -44,7 +44,7 @@ class AbsFncExporterForDccTextureDef(object):
                         # map path to current platform
                         j_texture_path_dpt = bsc_storage.StgPathMapper.map_to_current(j_texture_path_dpt)
                         j_texture_dpt = gnl_dcc_objects.StgTexture(j_texture_path_dpt)
-                        if j_texture_dpt.get_exists_unit_paths() is False:
+                        if j_texture_dpt.get_tiles() is False:
                             bsc_log.Log.trace_method_warning(
                                 cls.KEY,
                                 'file="{}" is non exists'.format(j_texture_path_dpt)

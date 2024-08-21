@@ -6,15 +6,19 @@ import lxbasic.core as bsc_core
 
 class MayaCacheProcess(object):
     @classmethod
-    def generate_command(cls, option):
+    def generate_command(cls, option, packages_extend=None):
         if bsc_core.BasApplication.get_is_maya():
             maya_version = bsc_core.BasApplication.get_maya_version()
         else:
             maya_version = '2020'
         # do not use unicode
         # windows
+        main_arg = 'rez-env maya-{} mtoa qsm_dcc_main'.format(maya_version)
+        if isinstance(packages_extend, (tuple, list)):
+            main_arg += ' '+' '.join(packages_extend)
+
         cmd_scripts = [
-            'rez-env maya-{} mtoa qsm_dcc_main'.format(maya_version),
+            main_arg,
             (
                 r'-- mayabatch -command '
                 r'"python('
@@ -54,9 +58,9 @@ class MayaCacheProcess(object):
         return bsc_storage.StgFileOpt(file_path).set_read()
 
     @classmethod
-    def generate_cmd_script_by_option_dict(cls, method, method_option_dict):
+    def generate_cmd_script_by_option_dict(cls, method, method_option_dict, packages_extend=None):
         option = cls.to_option(method, method_option_dict)
-        return cls.generate_command(option)
+        return cls.generate_command(option, packages_extend=packages_extend)
 
     @classmethod
     def generate_hook_option_by_option_dict(cls, method, method_option_dict, **kwargs):

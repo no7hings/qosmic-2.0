@@ -7,7 +7,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import qsm_lazy.core as qsm_lzy_core
+import qsm_lazy.screw.core as qsm_lzy_scr_core
 
 import lxbasic.cv.core as bsc_cv_core
 
@@ -19,7 +19,7 @@ d = 'F:/video/film'
 
 location = 'Z:/libraries/lazy-resource/all'
 
-stage = qsm_lzy_core.Stage(
+stage = qsm_lzy_scr_core.Stage(
     'video'
 )
 # stage.connect()

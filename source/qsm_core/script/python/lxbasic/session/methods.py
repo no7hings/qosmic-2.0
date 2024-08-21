@@ -1,7 +1,11 @@
 # coding:utf-8
+import six
+
 import functools
 
 import lxbasic.log as bsc_log
+
+import lxbasic.content as bsc_content
 
 import lxbasic.core as bsc_core
 
@@ -94,3 +98,87 @@ class OptionHook(object):
                 'option hook execute',
                 'option="{}" is not valid'.format(option)
             )
+
+    @classmethod
+    def generate_menu_contents(cls, hook_options, language):
+        d_ = bsc_content.Dict()
+        for i_hook_option in hook_options:
+            i_hook_args = cls.get_args(i_hook_option)
+            if i_hook_args:
+                i_session, i_execute_fnc = i_hook_args
+                if i_session.get_is_loadable() is True:
+                    i_hook_option_opt = i_session.option_opt
+                    i_gui_configure = i_session.gui_configure
+                    i_gui_parent_path = '/'
+                    #
+                    i_gui_name = i_gui_configure.get('name')
+                    i_gui_group_name = i_gui_configure.get('group_name')
+                    if language == 'chs':
+                        if i_hook_option_opt.get_key_is_exists('gui_name_chs'):
+                            i_gui_name = i_hook_option_opt.get('gui_name_chs')
+
+                        if i_hook_option_opt.get_key_is_exists('gui_group_name_chs'):
+                            i_gui_group_name = i_hook_option_opt.get('gui_group_name_chs')
+
+                        if i_hook_option_opt.get_value():
+                            if i_hook_option_opt.get_key_is_exists('gui_parent_chs'):
+                                i_gui_parent_path = i_hook_option_opt.get('gui_parent_chs')
+                    else:
+                        if i_hook_option_opt.get_key_is_exists('gui_name'):
+                            i_gui_name = i_hook_option_opt.get('gui_name')
+
+                        if i_hook_option_opt.get_key_is_exists('gui_group_name'):
+                            i_gui_group_name = i_hook_option_opt.get('gui_group_name')
+
+                        if i_hook_option_opt.get_value():
+                            if i_hook_option_opt.get_key_is_exists('gui_parent'):
+                                i_gui_parent_path = i_hook_option_opt.get('gui_parent')
+
+                    i_gui_parent_path_opt = bsc_core.BscPathOpt(i_gui_parent_path)
+
+                    if i_gui_parent_path_opt.get_is_root():
+                        i_gui_path = six.u('/{}').format(i_gui_name)
+                    else:
+                        i_gui_path = six.u('{}/{}').format(i_gui_parent_path, i_gui_name)
+
+                    if i_gui_group_name:
+                        if i_gui_parent_path_opt.get_is_root():
+                            i_gui_separator_path = six.u('/{}').format(i_gui_group_name)
+                        else:
+                            i_gui_separator_path = six.u('{}/{}').format(i_gui_parent_path, i_gui_group_name)
+
+                        d_.set(
+                            six.u('{}.properties.type').format(i_gui_separator_path), 'separator'
+                        )
+                        d_.set(
+                            six.u('{}.properties.name').format(i_gui_separator_path), i_gui_configure.get('group_name')
+                        )
+
+                    d_.set(
+                        six.u('{}.properties.type').format(i_gui_path), 'action'
+                    )
+                    d_.set(
+                        six.u('{}.properties.group_name').format(i_gui_path), i_gui_group_name
+                    )
+                    d_.set(
+                        six.u('{}.properties.name').format(i_gui_path), i_gui_name
+                    )
+                    d_.set(
+                        six.u('{}.properties.icon_name').format(i_gui_path), i_gui_configure.get('icon_name')
+                    )
+                    if i_hook_option_opt.get_value():
+                        if i_hook_option_opt.get_key_is_exists('gui_icon_name'):
+                            d_.set(
+                                six.u('{}.properties.icon_name').format(i_gui_path),
+                                i_hook_option_opt.get('gui_icon_name')
+                            )
+                    #
+                    d_.set(
+                        six.u('{}.properties.executable_fnc').format(i_gui_path),
+                        i_session.get_is_executable
+                    )
+                    d_.set(
+                        six.u('{}.properties.execute_fnc').format(i_gui_path),
+                        i_execute_fnc
+                    )
+        return d_

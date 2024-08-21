@@ -27,6 +27,6 @@ class Playblast(object):
             quality=100,
             widthHeight=size,
         )
-        results = bsc_storage.StgFileTiles.get_exists_unit_paths(result)
+        results = bsc_storage.StgFileTiles.get_tiles(result)
         if results:
             bsc_storage.StgFileOpt(results[0]).repath_to(file_path)

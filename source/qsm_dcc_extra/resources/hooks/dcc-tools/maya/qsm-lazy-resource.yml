@@ -19,10 +19,6 @@ option:
             用于管理资源。
         #
         size: [960, 960]
-        item_frame_size: [142, 142]
-        item_icon_frame_size: [20, 20]
-        item_icon_size: [20, 20]
-
 
 build:
     options: {}

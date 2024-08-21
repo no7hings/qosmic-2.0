@@ -21,7 +21,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_general.dotfile as qsm_gnl_dotfile
 
-import qsm_lazy.core as qsm_lzy_core
+import qsm_lazy.screw.core as qsm_lzy_scr_core
 
 
 class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
@@ -58,9 +58,9 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
         self._window = window
         self._session = session
 
-        self._all_lzy_stage_keys = qsm_lzy_core.Stage.get_all_keys()
-        self._lzy_stage_key = self._all_lzy_stage_keys[0]
-        self._lzy_stage = None
+        self._all_scr_stage_keys = qsm_lzy_scr_core.Stage.get_all_keys()
+        self._scr_stage_key = self._all_scr_stage_keys[0]
+        self._scr_stage = None
 
         self._dcc_node_opt_list = []
         self._dcc_node_creator_list = []
@@ -94,12 +94,12 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
                 )
 
     def do_gui_load_data_types(self):
-        values = qsm_lzy_core.DataTypes.All
+        values = qsm_lzy_scr_core.DataTypes.All
         pot = self._prx_options_node.get_port('data_type')
         if self._window._language == 'chs':
-            value_names = [qsm_lzy_core.DataTypes.NAME_CHS_MAP[x] for x in values]
+            value_names = [qsm_lzy_scr_core.DataTypes.NAME_CHS_MAP[x] for x in values]
         else:
-            value_names = [qsm_lzy_core.DataTypes.NAME_MAP[x] for x in values]
+            value_names = [qsm_lzy_scr_core.DataTypes.NAME_MAP[x] for x in values]
 
         pot.set_options(
             values, value_names
@@ -107,9 +107,9 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
         pot.set(values[0])
 
     def gui_setup_page(self):
-        v_qt_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
-        v_qt_lot.setContentsMargins(*[0]*4)
-        v_qt_lot.setSpacing(2)
+        qt_v_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
+        qt_v_lot.setContentsMargins(*[0]*4)
+        qt_v_lot.setSpacing(2)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
@@ -117,7 +117,7 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
             )
         )
 
-        v_qt_lot.addWidget(self._prx_options_node.widget)
+        qt_v_lot.addWidget(self._prx_options_node.widget)
 
         self._prx_options_node.build_by_data(
             self._window._configure.get('build.load.options.parameters')
@@ -125,17 +125,17 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
 
         if self._window._language == 'chs':
             gui_names = [
-                qsm_lzy_core.Stage.get_configure(x).get('options.gui_name_chs')
-                for x in self._all_lzy_stage_keys
+                qsm_lzy_scr_core.Stage.get_configure(x).get('options.gui_name_chs')
+                for x in self._all_scr_stage_keys
             ]
         else:
             gui_names = [
-                qsm_lzy_core.Stage.get_configure(x).get('options.gui_name')
-                for x in self._all_lzy_stage_keys
+                qsm_lzy_scr_core.Stage.get_configure(x).get('options.gui_name')
+                for x in self._all_scr_stage_keys
             ]
 
         self._prx_options_node.get_port('stage').set_options(
-            self._all_lzy_stage_keys, gui_names
+            self._all_scr_stage_keys, gui_names
         )
 
         self._prx_options_node.set(
@@ -145,7 +145,7 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
         self.do_gui_load_data_types()
         # tip
         self._tip_prx_tool_group = gui_prx_widgets.PrxHToolGroup()
-        v_qt_lot.addWidget(self._tip_prx_tool_group.widget)
+        qt_v_lot.addWidget(self._tip_prx_tool_group.widget)
         self._tip_prx_tool_group.set_expanded(True)
         self._tip_prx_tool_group.set_name(
             gui_core.GuiUtil.choice_name(
@@ -161,7 +161,7 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
         )
 
     def do_gui_refresh_all(self):
-        node_context = qsm_lzy_core.DataContext.read()
+        node_context = qsm_lzy_scr_core.DataContext.read()
         if node_context:
             self._prx_options_node.set_dict(
                 node_context

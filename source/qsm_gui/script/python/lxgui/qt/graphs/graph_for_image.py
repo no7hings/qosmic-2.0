@@ -289,4 +289,4 @@ class QtImageGraph(_graph_for_node.QtNodeGraph):
             i.deleteLater()
 
         self._graph_nodes = []
-        self._nodes_selected = []
+        self._graph_select_nodes = []

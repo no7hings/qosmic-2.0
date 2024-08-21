@@ -358,6 +358,7 @@ class QtTrack(
     def _do_hover_move_(self, event):
         pos = event.pos()
         if self._node_selection_rect.contains(pos):
+            self._graph._update_hover_node_(self)
             self._set_hovered_(True)
             if self._time_resize_left_rect.contains(pos):
                 self._set_action_flag_(self.ActionFlag.NGTimeResizeLeft)
@@ -376,6 +377,7 @@ class QtTrack(
                 self._clear_all_action_flags_()
                 self._graph._clear_all_action_flags_()
         else:
+            self._graph._update_hover_node_(None)
             self._set_hovered_(False)
             self._clear_all_action_flags_()
             self._graph._clear_all_action_flags_()
@@ -430,6 +432,14 @@ class QtTrack(
 
         self.installEventFilter(self)
 
+    def __str__(self):
+        return '{}(key={}, x={}, y={})'.format(
+            self.__class__.__name__,
+            self._track_model.key,
+            self._node_global_selection_rect.x(),
+            self._node_global_selection_rect.y()
+        )
+
     def eventFilter(self, *args):
         widget, event = args
         if widget == self:
@@ -439,6 +449,7 @@ class QtTrack(
             elif event.type() == QtCore.QEvent.Leave:
                 self._clear_all_action_flags_()
                 self._graph._clear_all_action_flags_()
+                self._graph._update_hover_node_(None)
             elif event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.button() == QtCore.Qt.LeftButton:
                     self._do_hover_move_(event)
@@ -604,10 +615,6 @@ class QtTrack(
         )
         if self._is_selected:
             border_rgba = _gui_core.GuiRgba.LightAzureBlue
-            border_width = 2
-            rect = QtCore.QRect(x+border_width/2, y+border_width/2, w-border_width/2, h-border_width/2)
-        elif self._is_hovered:
-            border_rgba = _gui_core.GuiRgba.LightOrange
             border_width = 2
             rect = QtCore.QRect(x+border_width/2, y+border_width/2, w-border_width/2, h-border_width/2)
         else:

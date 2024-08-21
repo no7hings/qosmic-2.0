@@ -1,0 +1,94 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+
+    gui:
+        name: 'Lazy Resource Resister Tool'
+        name_chs: '懒人资源登记工具'
+        group_name: 'General(s)'
+
+        icon_name: 'qosmic/lazy-resource-tool'
+        tool_tip:
+            |-
+            For resource register.
+
+        tool_tip_chs:
+            |-
+            用于资源登记。
+
+        size: [480, 720]
+
+build:
+    motion:
+        tab:
+            name: 'Motion'
+            name_chs: '动作'
+
+            tool_tip:
+                |-
+                To be supplemented.
+            tool_tip_chs:
+                |-
+                待补充。
+
+        filter:
+            name: 'Type & Tag'
+            name_chs: '类型 & 标签'
+
+        options:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+                namespace:
+                    widget: string
+                    name: 'Namespace'
+                    name_chs: '空间名'
+                    value: 'Unnamed'
+                    lock: True
+
+                gui_name:
+                    widget: string
+                    name: 'GUI Name'
+                    name_chs: '界面名字'
+                    value: 'Unnamed'
+                    lock: True
+                    visible: False
+
+                gui_name_chs:
+                    widget: string
+                    name: 'GUI Name(Chinese)'
+                    name_chs: '界面名字（中文）'
+                    value: '未命名'
+
+                preview:
+                    widget: medias
+                    name: 'Preview'
+                    name_chs: '预览'
+                    ext_includes: ['.jpg', '.png', '.mov', '.mp4', '.avi']
+                    history_key: 'tool-panels.resource-register.medias-open'
+                    height: 120
+
+                playblast:
+                    widget: group
+                    name: 'Playblast'
+                    name_chs: '拍屏'
+
+                playblast/play:
+                    widget: boolean
+                    name: 'Auto Play'
+                    name_chs: '自动播放'
+                    value: False
+
+                playblast/show_window:
+                    widget: button
+                    name: 'Show Playblast Window'
+                    name_chs: '显示拍屏窗口'
+                    join_to_next: True
+
+                playblast/create:
+                    name: 'Create Playblast'
+                    name_chs: '创建拍屏'
+                    widget: button

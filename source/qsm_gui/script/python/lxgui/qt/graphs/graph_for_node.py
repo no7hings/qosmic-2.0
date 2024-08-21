@@ -595,10 +595,10 @@ class QtNodeGraph(
         self._do_frame_nodes_auto_()
 
     def _set_ng_action_graph_layout_selection_(self, sort_key='x'):
-        if self._nodes_selected:
+        if self._graph_select_nodes:
             self._do_node_press_start_for_any_action_()
             self._layout_nodes_for_(
-                self._nodes_selected, sort_key
+                self._graph_select_nodes, sort_key
             )
             self._do_node_press_end_for_any_action_()
 

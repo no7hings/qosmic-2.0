@@ -40,7 +40,7 @@ class PrxPanelForAnimationTool(gui_prx_widgets.PrxSessionWindow):
         super(PrxPanelForAnimationTool, self).__init__(session, *args, **kwargs)
 
     # noinspection PyUnresolvedReferences
-    def gui_setup_window(self):
+    def gui_setup_fnc(self):
         self._window = self
         self._configure = bsc_resource.RscExtendConfigure.get_as_content(
             'lazy-animation/gui/tool'

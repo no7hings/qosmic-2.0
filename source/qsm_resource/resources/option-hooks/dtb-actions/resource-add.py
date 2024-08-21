@@ -15,7 +15,7 @@ def main(session):
                 ('path', 'is', session.option_opt.get('entity'))
             ]
         )
-        window = session.get_window()
+        window = session.find_window()
         w = gui_core.GuiDialog.create(
             label=window.get_window_title(),
             sub_label='{} for {} "{}"'.format(session.gui_name, dtb_entity.entity_type, dtb_entity.gui_name),

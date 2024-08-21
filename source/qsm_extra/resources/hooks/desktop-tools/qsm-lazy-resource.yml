@@ -2,27 +2,23 @@ option:
     type: 'dcc-tool-panel'
     # config used system
     systems:
-        - '*-maya'
-    #
+        - '*-*'
+
     gui:
         name: 'Lazy Resource'
         name_chs: '懒人资源'
         group_name: 'General(s)'
-        #
+
         icon_name: 'application/lineup'
         tool_tip:
             |-
-            For manager node template.
-        #
+            For resource manager.
+
         tool_tip_chs:
             |-
             用于管理资源。
-        #
-        size: [960, 960]
+
+        size: [1280, 960]
         item_frame_size: [142, 142]
         item_icon_frame_size: [20, 20]
         item_icon_size: [20, 20]
-
-
-build:
-    options: {}

@@ -157,7 +157,7 @@ class AbsPnlManagerForTextureSpaceDcc(gui_prx_widgets.PrxSessionWindow):
 
         self._file_path = None
 
-    def gui_setup_window(self):
+    def gui_setup_fnc(self):
         self.set_main_style_mode(1)
         self._prx_tab_view = gui_prx_widgets.PrxTabView()
         self.add_widget(self._prx_tab_view)

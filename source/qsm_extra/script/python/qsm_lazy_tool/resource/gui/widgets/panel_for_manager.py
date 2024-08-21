@@ -3,9 +3,17 @@ from .. import abstracts as _abstracts
 
 from . import page_for_manager as _page_for_manager
 
+from . import sub_panel_for_register as _sub_panel_for_register
 
-class PrxPanelForManager(_abstracts.AbsPrxPanelForResource):
-    PAGE_FOR_RESOURCE_CLS = _page_for_manager.PrxPageForManager
 
-    def __init__(self, session, *args, **kwargs):
-        super(PrxPanelForManager, self).__init__(session, *args, **kwargs)
+class PrxPanelForResourceManager(_abstracts.AbsPrxPanelForResourceManager):
+    PAGE_CLASS_DICT = dict(
+        manager=_page_for_manager.PrxPageForResourceManager
+    )
+
+    SUB_PANEL_CLASS_DICT = dict(
+        register=_sub_panel_for_register.PrxSubPanelForResourceRegister
+    )
+
+    def __init__(self, window, session, *args, **kwargs):
+        super(PrxPanelForResourceManager, self).__init__(window, session, *args, **kwargs)

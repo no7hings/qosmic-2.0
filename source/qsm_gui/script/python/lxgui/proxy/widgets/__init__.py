@@ -33,6 +33,8 @@ from .view_for_usd import *
 
 from .window_base import *
 
+from .panel_base import *
+
 from .window import *
 
 from .window_for_subprocess import *

@@ -7,7 +7,7 @@ import lxbasic.core as bsc_core
 
 import lxgui.qt.core as gui_qt_core
 
-import qsm_lazy.core as qsm_lzy_core
+import qsm_lazy.screw.core as qsm_lzy_scr_core
 
 
 class W(gui_prx_widgets.PrxBaseWindow):
@@ -19,10 +19,10 @@ class W(gui_prx_widgets.PrxBaseWindow):
         self._d_1 = gui_prx_widgets.PrxTagInput(self._qt_widget)
         self.add_widget(self._d_1)
 
-        self._lzy_stage = qsm_lzy_core.Stage(
+        self._scr_stage = qsm_lzy_scr_core.Stage(
             'maya_cfx'
         )
-        # self._lzy_stage.connect()
+        # self._scr_stage.connect()
 
         self.connect_refresh_action_for(self.test)
 
@@ -31,8 +31,8 @@ class W(gui_prx_widgets.PrxBaseWindow):
     def test(self):
         self._d_0.restore()
         self._d_1.restore()
-        for i in self._lzy_stage.find_all(
-            self._lzy_stage.EntityTypes.Tag,
+        for i in self._scr_stage.find_all(
+            self._scr_stage.EntityTypes.Tag,
             filters=[
                 ('category', 'is', 'group'),
                 ('kind', 'is not', 'unavailable')
@@ -44,8 +44,8 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
             i_group._set_tool_tip_(i.to_string('user', 'gui_description_chs', 'ctime', 'mtime'))
 
-        for i in self._lzy_stage.find_all(
-            self._lzy_stage.EntityTypes.Tag,
+        for i in self._scr_stage.find_all(
+            self._scr_stage.EntityTypes.Tag,
             filters=[
                 ('category', 'is', 'node'),
                 ('kind', 'is not', 'unavailable')
@@ -57,8 +57,8 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
 
 
-        for i in self._lzy_stage.find_all(
-            self._lzy_stage.EntityTypes.Type,
+        for i in self._scr_stage.find_all(
+            self._scr_stage.EntityTypes.Type,
             filters=[
                 ('category', 'is', 'group'),
                 ('kind', 'is not', 'unavailable')
@@ -70,8 +70,8 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
             i_group._set_tool_tip_(i.to_string('user', 'gui_description_chs', 'ctime', 'mtime'))
 
-        for i in self._lzy_stage.find_all(
-            self._lzy_stage.EntityTypes.Type,
+        for i in self._scr_stage.find_all(
+            self._scr_stage.EntityTypes.Type,
             filters=[
                 ('category', 'is', 'node'),
                 ('kind', 'is not', 'unavailable')

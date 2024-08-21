@@ -726,7 +726,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
 
     LOADING_DELAY_TIME = 2000
 
-    def gui_setup_window(self):
+    def gui_setup_fnc(self):
         self._hook_configure = self._session.configure
         self._hook_gui_configure = self._session.gui_configure
 

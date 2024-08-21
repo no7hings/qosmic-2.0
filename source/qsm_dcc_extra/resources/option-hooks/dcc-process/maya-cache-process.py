@@ -111,6 +111,20 @@ def rig_validation_fnc(option_opt):
     ).execute()
 
 
+def stl_convertion_fnc(option_opt):
+    import qsm_general.core as qsm_gnl_core
+
+    import qsm_maya_lazy.montage.scripts as s
+
+    kwargs = qsm_gnl_core.MayaCacheProcess.to_option_dict(
+        option_opt.to_string()
+    )
+
+    s.StlConvertionProcess(
+        **kwargs
+    ).execute()
+
+
 def test_unicode(method, option_opt):
     pass
 
@@ -162,6 +176,8 @@ def main(session):
         playblast_fnc(option_opt)
     elif method == 'rig-validation':
         rig_validation_fnc(option_opt)
+    elif method == 'stl-convertion':
+        stl_convertion_fnc(option_opt)
     # test
     elif method == 'test-unicode':
         test_unicode(method, option_opt)

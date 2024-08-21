@@ -457,7 +457,7 @@ class EtrNodeOpt(object):
                 _attribute.NodeAttribute.create_as_float3(
                     self._path, k, i_value
                 )
-            if i_type == 'integer':
+            elif i_type == 'integer':
                 _attribute.NodeAttribute.create_as_integer(
                     self._path, k, i_value
                 )
@@ -471,6 +471,10 @@ class EtrNodeOpt(object):
                 )
             elif i_type == 'message':
                 _attribute.NodeAttribute.create_as_message(
+                    self._path, k, i_value
+                )
+            elif i_type == 'string':
+                _attribute.NodeAttribute.create_as_string(
                     self._path, k, i_value
                 )
 

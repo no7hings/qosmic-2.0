@@ -482,28 +482,29 @@ class _AbsQtHTabToolBox(
         self._refresh_widget_draw_()
 
     def _do_show_tool_tip_(self, event):
-        if self._index_hover is not None:
-            key = self._tab_item_stack.get_key_at(self._index_hover)
-            if key is None:
-                title = self._tab_item_stack.get_name_at(self._index_hover)
-                tool_tip = self._tab_item_stack.get_tool_tip_at(self._index_hover)
-            else:
-                title = self._tab_item_stack.get_name_at(self._index_hover)
-                tool_tip = self._tab_item_stack.get_tool_tip_at(self._index_hover)
+        if self._tab_bar_rect.contains(event.pos()):
+            if self._index_hover is not None:
+                key = self._tab_item_stack.get_key_at(self._index_hover)
+                if key is None:
+                    title = self._tab_item_stack.get_name_at(self._index_hover)
+                    tool_tip = self._tab_item_stack.get_tool_tip_at(self._index_hover)
+                else:
+                    title = self._tab_item_stack.get_name_at(self._index_hover)
+                    tool_tip = self._tab_item_stack.get_tool_tip_at(self._index_hover)
 
-            css = _qt_core.GuiQtUtil.generate_tool_tip_css(
-                title,
-                content=tool_tip,
-                action_tip=[
-                    '"LMB-click" to show this page',
-                    '"MMB-wheel" to scroll to other page',
-                    '"RMB-click" to show more actions for this page',
-                ]
-            )
-            # noinspection PyArgumentList
-            QtWidgets.QToolTip.showText(
-                QtGui.QCursor.pos(), css, self
-            )
+                css = _qt_core.GuiQtUtil.generate_tool_tip_css(
+                    title,
+                    content=tool_tip,
+                    action_tip=[
+                        '"LMB-click" to show this page',
+                        '"MMB-wheel" to scroll to other page',
+                        '"RMB-click" to show more actions for this page',
+                    ]
+                )
+                # noinspection PyArgumentList
+                QtWidgets.QToolTip.showText(
+                    QtGui.QCursor.pos(), css, self
+                )
 
     def _compute_press_index_loc_(self, p):
         if self._tab_bar_rect.contains(p):

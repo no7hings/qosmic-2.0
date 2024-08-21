@@ -942,7 +942,7 @@ class StgFileTiles(object):
         return name_base_new
 
     @classmethod
-    def get_exists_unit_paths(cls, file_path):
+    def get_tiles(cls, file_path):
         if os.path.isfile(file_path):
             return [file_path]
         #
@@ -957,7 +957,7 @@ class StgFileTiles(object):
 
     @classmethod
     def get_is_exists(cls, file_path):
-        return not not cls.get_exists_unit_paths(file_path)
+        return not not cls.get_tiles(file_path)
 
 
 class StgPathOpt(object):

@@ -23,7 +23,7 @@ import lxgui.proxy.abstracts as gui_prx_abstracts
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy.core as qsm_lzy_core
+import qsm_lazy.screw.core as qsm_lzy_scr_core
 
 
 class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
@@ -38,25 +38,25 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         self._window = window
         self._session = session
 
-        self._all_lzy_stage_keys = qsm_lzy_core.Stage.get_all_keys()
-        self._lzy_stage_key = self._all_lzy_stage_keys[0]
-        self._lzy_stage = None
+        self._all_scr_stage_keys = qsm_lzy_scr_core.Stage.get_all_keys()
+        self._scr_stage_key = self._all_scr_stage_keys[0]
+        self._scr_stage = None
 
         self._dcc_node_opt = None
         self._dcc_node_graph_opt = None
 
         self.gui_setup_page()
 
-        self._window.register_window_close_method(self.do_gui_close)
+        self._window.register_window_close_method(self.gui_close_fnc)
 
     def _do_gui_load_stage(self):
         key = self._prx_options_node.get('stage')
-        if self._lzy_stage is not None:
-            self._lzy_stage.close()
+        if self._scr_stage is not None:
+            self._scr_stage.close()
 
-        self._lzy_stage_key = key
-        self._lzy_stage = qsm_lzy_core.Stage(
-            self._lzy_stage_key
+        self._scr_stage_key = key
+        self._scr_stage = qsm_lzy_scr_core.Stage(
+            self._scr_stage_key
         )
         self.do_gui_add_types()
         self.do_gui_add_tags()
@@ -66,15 +66,15 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         self.do_gui_update_by_dcc_selection()
         
     def do_gui_load_data_types(self):
-        configure = qsm_lzy_core.Stage.get_configure(self._lzy_stage_key)
+        configure = qsm_lzy_scr_core.Stage.get_configure(self._scr_stage_key)
         values = configure.get('options.data_types')
 
         pot = self._prx_options_node.get_port('data_type')
         if values:
             if self._window._language == 'chs':
-                value_names = [qsm_lzy_core.DataTypes.NAME_CHS_MAP[x] for x in values]
+                value_names = [qsm_lzy_scr_core.DataTypes.NAME_CHS_MAP[x] for x in values]
             else:
-                value_names = [qsm_lzy_core.DataTypes.NAME_MAP[x] for x in values]
+                value_names = [qsm_lzy_scr_core.DataTypes.NAME_MAP[x] for x in values]
 
             pot.set_options(
                 values, value_names
@@ -86,8 +86,8 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
     def do_gui_add_types(self):
         self._type_prx_tag_input.restore()
 
-        for i in self._lzy_stage.find_all(
-            self._lzy_stage.EntityTypes.Type,
+        for i in self._scr_stage.find_all(
+            self._scr_stage.EntityTypes.Type,
             filters=[
                 ('category', 'is', 'group'),
                 ('kind', 'is not', 'unavailable')
@@ -101,10 +101,10 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
 
             i_group._set_expanded_(True)
 
-            i_group._set_tool_tip_(i.to_description())
+            i_group._set_tool_tip_(i.to_description(self._window._language))
 
-        for i in self._lzy_stage.find_all(
-            self._lzy_stage.EntityTypes.Type,
+        for i in self._scr_stage.find_all(
+            self._scr_stage.EntityTypes.Type,
             filters=[
                 ('category', 'is', 'node'),
                 ('kind', 'is not', 'unavailable')
@@ -116,13 +116,13 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
 
             i_node = self._type_prx_tag_input.create_node(i.path, show_name=i_gui_name)
 
-            i_node._set_tool_tip_(i.to_description())
+            i_node._set_tool_tip_(i.to_description(self._window._language))
 
     def do_gui_add_tags(self):
         self._tag_prx_tag_input.restore()
 
-        for i in self._lzy_stage.find_all(
-            self._lzy_stage.EntityTypes.Tag,
+        for i in self._scr_stage.find_all(
+            self._scr_stage.EntityTypes.Tag,
             filters=[
                 ('category', 'is', 'group'),
                 ('kind', 'is not', 'unavailable')
@@ -136,10 +136,10 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
 
             i_group._set_expanded_(True)
 
-            i_group._set_tool_tip_(i.to_description())
+            i_group._set_tool_tip_(i.to_description(self._window._language))
 
-        for i in self._lzy_stage.find_all(
-            self._lzy_stage.EntityTypes.Tag,
+        for i in self._scr_stage.find_all(
+            self._scr_stage.EntityTypes.Tag,
             filters=[
                 ('category', 'is', 'node'),
                 ('kind', 'is not', 'unavailable')
@@ -151,7 +151,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
 
             i_node = self._tag_prx_tag_input.create_node(i.path, show_name=i_gui_name)
 
-            i_node._set_tool_tip_(i.to_description())
+            i_node._set_tool_tip_(i.to_description(self._window._language))
 
     @staticmethod
     def _generate_screenshot_file_path():
@@ -164,8 +164,8 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
     def do_create_playblast(self):
         raise NotImplementedError()
 
-    def do_gui_close(self):
-        self._lzy_stage.close()
+    def gui_close_fnc(self):
+        self._scr_stage.close()
 
     def get_resource_data_type(self):
         return self._prx_options_node.get('data_type')
@@ -220,7 +220,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             return
 
         node_path = options.get('path')
-        if self._lzy_stage.check_node_exists(node_path) is True:
+        if self._scr_stage.check_node_exists(node_path) is True:
             self._window.exec_message(
                 gui_core.GuiUtil.choice_message(
                     self._window._language, self._window._configure.get('build.register.messages.name_exists')
@@ -249,40 +249,42 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             )
             return
 
-        self._lzy_stage.create_node(
+        self._scr_stage.create_node(
             node_path, gui_name=gui_name, gui_name_chs=gui_name_chs
         )
 
         for i_type_path in type_paths:
-            self._lzy_stage.create_type_assign(
+            self._scr_stage.create_type_assign(
                 node_path, i_type_path
             )
 
         for i_tag_path in tag_paths:
-            self._lzy_stage.create_tag_assign(
+            self._scr_stage.create_tag_assign(
                 node_path, i_tag_path
             )
 
         file_path = preview_files[-1]
 
-        self._lzy_stage.upload_node_media(
+        result = self._scr_stage.upload_node_preview(
             node_path, file_path
         )
+        if result is False:
+            pass
         
         data_type = self.get_resource_data_type()
-        if data_type == qsm_lzy_core.DataTypes.MayaNode:
-            self._lzy_stage.upload_node_json(
-                node_path, qsm_lzy_core.DataTypes.MayaNode, data
+        if data_type == qsm_lzy_scr_core.DataTypes.MayaNode:
+            self._scr_stage.upload_node_json(
+                node_path, qsm_lzy_scr_core.DataTypes.MayaNode, data
             )
-            self._lzy_stage.create_or_update_parameters(
-                node_path, 'data_type', qsm_lzy_core.DataTypes.MayaNode
+            self._scr_stage.create_or_update_parameters(
+                node_path, 'data_type', qsm_lzy_scr_core.DataTypes.MayaNode
             )
-        elif data_type == qsm_lzy_core.DataTypes.MayaNodeGraph:
-            self._lzy_stage.upload_node_maya_scene(
-                node_path, qsm_lzy_core.DataTypes.MayaNodeGraph, data
+        elif data_type == qsm_lzy_scr_core.DataTypes.MayaNodeGraph:
+            self._scr_stage.upload_node_maya_scene(
+                node_path, qsm_lzy_scr_core.DataTypes.MayaNodeGraph, data
             )
-            self._lzy_stage.create_or_update_parameters(
-                node_path, 'data_type', qsm_lzy_core.DataTypes.MayaNodeGraph
+            self._scr_stage.create_or_update_parameters(
+                node_path, 'data_type', qsm_lzy_scr_core.DataTypes.MayaNodeGraph
             )
         self._window.exec_message(
             gui_core.GuiUtil.choice_message(
@@ -292,9 +294,9 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         )
 
     def gui_setup_page(self):
-        v_qt_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
-        v_qt_lot.setContentsMargins(*[0]*4)
-        v_qt_lot.setSpacing(2)
+        qt_v_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
+        qt_v_lot.setContentsMargins(*[0]*4)
+        qt_v_lot.setSpacing(2)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
@@ -302,7 +304,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             )
         )
 
-        v_qt_lot.addWidget(self._prx_options_node.widget)
+        qt_v_lot.addWidget(self._prx_options_node.widget)
 
         self._prx_options_node.build_by_data(
             self._window._configure.get('build.register.options.parameters')
@@ -315,10 +317,8 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         self._prx_options_node.set('playblast.show_window', self.do_show_playblast_window)
         self._prx_options_node.set('playblast.create', self.do_create_playblast)
 
-        self._type_prx_tag_input = gui_prx_widgets.PrxTagInput()
-
         self._prx_tool_group = gui_prx_widgets.PrxHToolGroup()
-        v_qt_lot.addWidget(self._prx_tool_group.widget)
+        qt_v_lot.addWidget(self._prx_tool_group.widget)
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
             gui_core.GuiUtil.choice_name(
@@ -328,6 +328,8 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         qt_widget_0 = gui_qt_widgets.QtTranslucentWidget()
         self._prx_tool_group.add_widget(qt_widget_0)
         h_qt_lot_0 = gui_qt_widgets.QtHBoxLayout(qt_widget_0)
+
+        self._type_prx_tag_input = gui_prx_widgets.PrxTagInput()
         h_qt_lot_0.addWidget(
             self._type_prx_tag_input.widget
         )
@@ -339,17 +341,17 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
 
         if self._window._language == 'chs':
             gui_names = [
-                qsm_lzy_core.Stage.get_configure(x).get('options.gui_name_chs')
-                for x in self._all_lzy_stage_keys
+                qsm_lzy_scr_core.Stage.get_configure(x).get('options.gui_name_chs')
+                for x in self._all_scr_stage_keys
             ]
         else:
             gui_names = [
-                qsm_lzy_core.Stage.get_configure(x).get('options.gui_name')
-                for x in self._all_lzy_stage_keys
+                qsm_lzy_scr_core.Stage.get_configure(x).get('options.gui_name')
+                for x in self._all_scr_stage_keys
             ]
 
         self._prx_options_node.get_port('stage').set_options(
-            self._all_lzy_stage_keys, gui_names
+            self._all_scr_stage_keys, gui_names
         )
 
         self._prx_options_node.get_port('stage').connect_input_changed_to(

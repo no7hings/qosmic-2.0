@@ -3,8 +3,7 @@
 
 def main(session):
     import qsm_maya_lazy_tool.resource.gui.widgets as gui_widgets
-    w = gui_widgets.PrxPanelForManager(session)
-
+    w = gui_widgets.PrxPanelForResourceManager(window=None, session=session)
     w.show_window_auto()
 
 

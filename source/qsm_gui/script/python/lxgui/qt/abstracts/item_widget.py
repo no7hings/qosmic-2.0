@@ -1,5 +1,7 @@
 # coding=utf-8
 import os
+
+import lxbasic.storage as bsc_storage
 # gui
 from ... import core as _gui_core
 # qt
@@ -77,12 +79,14 @@ class AbsQtMediaBaseDef(
         self._image_pixmap = None
         self._image_pixmap_draw = None
 
-        self._video_flag = False
-        self._video_auto_play_flag = False
+        self._play_flag = False
+        self._auto_play_flag = False
+        self._play_mode = None
 
         self._video_play_rect = QtCore.QRect()
         self._video_play_s = 24
         self._video_path = None
+        self._image_paths = None
         self._video_play_widget = None
 
         self._image_svg_path = _gui_core.GuiIcon.get('placeholder/image')
@@ -117,20 +121,21 @@ class AbsQtMediaBaseDef(
         # build_fnc_(cache_fnc_())
 
     def _set_video_path_(self, video_path):
-        self._video_flag = True
+        self._play_flag = True
         self._image_svg_path = _gui_core.GuiIcon.get('placeholder/video')
 
         if os.path.exists(video_path) is False:
             return
 
         self._video_path = video_path
+        self._play_mode = _gui_core.GuiPlayModes.Video
 
-        self._check_auto_play_flag_use_thread_(self._video_path)
+        self._check_auto_play_flag_use_thread_by_video_(self._video_path)
 
     def _set_video_auto_play_flag_(self, boolean):
-        self._video_auto_play_flag = boolean
+        self._auto_play_flag = boolean
 
-    def _check_auto_play_flag_use_thread_(self, video_path):
+    def _check_auto_play_flag_use_thread_by_video_(self, video_path):
         def cache_fnc_():
             import lxbasic.cv.core as bsc_cv_core
             opt = bsc_cv_core.VideoCaptureOpt(video_path)
@@ -141,7 +146,7 @@ class AbsQtMediaBaseDef(
         def build_fnc_(data_):
             if data_:
                 is_valid = data_[0]
-                self._video_auto_play_flag = is_valid
+                self._auto_play_flag = is_valid
 
             self._widget._refresh_widget_all_()
 
@@ -154,25 +159,19 @@ class AbsQtMediaBaseDef(
         # t.start()
         build_fnc_(cache_fnc_())
 
-    def _load_video_data_use_thread_(self, thumbnail_path):
-        def cache_fnc_():
-            if thumbnail_path:
-                return self._get_data_from_image_(thumbnail_path)
+    def _set_image_sequence_path_(self, image_sequence_path):
+        self._image_svg_path = _gui_core.GuiIcon.get('placeholder/video')
+        self._play_flag = True
 
-        def build_fnc_(data_):
-            if data_:
-                self._image_pixmap, self._image_size = data_
-                self._image_draw_flag = True
+        image_paths = bsc_storage.StgFileTiles.get_tiles(image_sequence_path)
+        if not image_paths:
+            return
 
-            self._widget._refresh_widget_all_()
+        self._image_paths = image_paths
+        self._play_mode = _gui_core.GuiPlayModes.ImageSequence
 
-        # t = _qt_core.QtBuildThread(self._widget)
-        # self._ts.append(t)
-        # t.set_cache_fnc(cache_fnc_)
-        # t.cache_value_accepted.connect(build_fnc_)
-        #
-        # t.start()
-        build_fnc_(cache_fnc_())
+        self._auto_play_flag = True
+        self._widget._refresh_widget_all_()
 
 
 class AbsQtItemWidgetBaseDef(object):
@@ -192,7 +191,7 @@ class AbsQtItemWidgetBaseDef(object):
         self._name_h = 20
         self._name_margin = 4
 
-        self._name_font = _qt_core.QtFont.generate(size=10)
+        self._name_font = _qt_core.QtFont.generate(size=8)
         self._name_color = _gui_core.GuiRgba.DarkWhite
         self._name_text_option = QtCore.Qt.AlignHCenter | QtCore.Qt.AlignBottom
 

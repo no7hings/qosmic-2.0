@@ -38,7 +38,7 @@ class AbsPnlAssetLineup(gui_prx_widgets.PrxSessionWindow):
         self._session_dict = {}
         self._image_dict = {}
 
-    def gui_setup_window(self):
+    def gui_setup_fnc(self):
         self._option_hook_configure = self._session.configure
         self._hook_gui_configure = self._session.configure.get_as_content('option.gui')
         self._hook_resolver_configure = self._session.configure.get_as_content('resolver')

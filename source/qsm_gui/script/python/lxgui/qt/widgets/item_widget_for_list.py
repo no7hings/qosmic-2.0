@@ -131,7 +131,7 @@ class QtItemWidgetForList(
                     self._image_draw_rect.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation
                 )
         # video
-        if self._video_flag is True:
+        if self._play_flag is True:
             vdo_w = vdo_h = self._video_play_s
             self._video_play_rect.setRect(
                 img_frm_x+(img_frm_w-vdo_w)/2, img_frm_y+(img_frm_h-vdo_h)/2, vdo_w, vdo_h
@@ -213,7 +213,7 @@ class QtItemWidgetForList(
                     self._image_draw_rect.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation
                 )
         # video
-        if self._video_flag is True:
+        if self._play_flag is True:
             vdo_w = vdo_h = self._video_play_s
             self._video_play_rect.setRect(
                 img_frm_x+(img_frm_w-vdo_w)/2, img_frm_y+(img_frm_h-vdo_h)/2, vdo_w, vdo_h
@@ -414,7 +414,7 @@ class QtItemWidgetForList(
                         self._image_svg_path
                     )
 
-                if self._video_flag is True:
+                if self._play_flag is True:
                     painter._draw_video_play_button_by_rect_(
                         self._video_play_rect,
                         offset=offset,
@@ -491,24 +491,31 @@ class QtItemWidgetForList(
     def _set_hovered_(self, boolean):
         self._is_hovered = boolean
         self._update_event_flag_(boolean)
-        if self._video_auto_play_flag is True:
-            self._update_video_play_(boolean)
+        if self._auto_play_flag is True:
+            self._update_auto_play_(boolean)
         self._widget.update()
 
     def _show_video_play_widget_(self):
         if self._video_player_show_flag is True:
             if self._video_play_widget is None:
                 self._video_play_widget = _player_for_video.QtVideoPlayWidget(self)
-                self._video_play_widget._set_item_widget_(self)
+                self._video_play_widget._set_proxy_widget_(self)
 
                 self._video_play_widget.setGeometry(
                     self._frame_main_rect.x(), self._frame_main_rect.x(),
                     self._frame_main_rect.width(), self._frame_main_rect.height()
                 )
+
                 self._video_play_widget.show()
-                self._video_play_widget._set_video_path_(
-                    self._video_path
-                )
+
+                if self._play_mode == _gui_core.GuiPlayModes.Video:
+                    self._video_play_widget._set_video_path_(
+                        self._video_path
+                    )
+                elif self._play_mode == _gui_core.GuiPlayModes.ImageSequence:
+                    self._video_play_widget._set_image_paths_(
+                        self._image_paths, 24
+                    )
 
     def _close_video_play_widget_(self):
         if self._video_play_widget is not None:
@@ -520,7 +527,7 @@ class QtItemWidgetForList(
     def _update_event_flag_(self, boolean):
         self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents, not boolean)
 
-    def _update_video_play_(self, boolean):
+    def _update_auto_play_(self, boolean):
         if boolean is True:
             self._video_player_show_flag = True
             self._video_player_show_timer.singleShot(

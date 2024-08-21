@@ -56,7 +56,7 @@ class AbsPrxSubPanelForTool(gui_prx_widgets.PrxBaseWindow):
             self._configure.get('option.gui.size')
         )
 
-        self.gui_setup_window()
+        self.gui_setup_fnc()
 
     def apply_and_close_fnc(self):
         if self._page_prx_tab_tool_box.get_current_key() == self.TabKeys.Register:
@@ -83,7 +83,7 @@ class AbsPrxSubPanelForTool(gui_prx_widgets.PrxBaseWindow):
         ]:
             i.set_enable(boolean)
 
-    def gui_setup_window(self):
+    def gui_setup_fnc(self):
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         self.add_widget(self._page_prx_tab_tool_box)
         # register

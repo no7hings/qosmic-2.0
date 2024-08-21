@@ -394,6 +394,9 @@ class PrxListView(
     def connect_refresh_action_for(self, fnc):
         self._qt_view.f5_key_pressed.connect(fnc)
 
+    def get_checked_items(self):
+        return self._qt_view._get_checked_items_()
+
     def get_checked_item_widgets(self):
         return [i.gui_proxy for i in self._qt_view._get_checked_item_widgets_()]
 
@@ -434,6 +437,9 @@ class PrxListView(
 
     def set_selection_use_single(self):
         self._qt_view._set_selection_use_single_()
+
+    def get_selected_items(self):
+        return self._qt_view.selectedItems()
 
     def get_selected_item_widgets(self):
         return [self._qt_view._get_item_widget_(i).gui_proxy for i in self._qt_view.selectedItems()]

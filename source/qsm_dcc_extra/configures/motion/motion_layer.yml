@@ -1650,10 +1650,6 @@ containers:
                 type: message
                 value: '<options.namespace>:TIME'
 
-#            blend:
-#                type: message
-#                value: '<options.namespace>:BLEND'
-
             main_weight:
                 type: float
                 value: 1.0
@@ -1682,6 +1678,10 @@ containers:
             output_end:
                 type: integer
                 value: 1
+
+            key:
+                type: string
+                value: 'untitled'
 
             clip_start:
                 type: integer
@@ -1722,6 +1722,7 @@ containers:
             pre_cycle:
                 type: integer
                 value: 1
+
             post_cycle:
                 type: integer
                 value: 10

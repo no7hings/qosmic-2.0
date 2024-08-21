@@ -37,7 +37,7 @@ class PnlUsdFormatConvert(gui_prx_widgets.PrxSessionToolWindow):
                 cmd
             )
 
-    def gui_setup_window(self):
+    def gui_setup_fnc(self):
         s_0 = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(s_0)
         h_s = gui_prx_widgets.PrxHSplitter()

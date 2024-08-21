@@ -526,6 +526,17 @@ class AbsSsnOptionGener(AbsSsnGener):
         super(AbsSsnOptionGener, self).__init__(*args, **kwargs)
         self._init_option_def(kwargs['option'])
 
+    def __str__(self):
+        return '{}(type="{}", key={}, option="{}")'.format(
+            self.__class__.__name__,
+            self.get_type(),
+            self.get_key(),
+            self.get_option()
+        )
+
+    def __repr__(self):
+        return self.__str__()
+
     def _init_option_def(self, option):
         self._option_opt = bsc_core.ArgDictStringOpt(
             option
@@ -575,16 +586,12 @@ class AbsSsnOptionGener(AbsSsnGener):
             )
         return lis
 
-    def __str__(self):
-        return '{}(type="{}", key={}, option="{}")'.format(
-            self.__class__.__name__,
-            self.get_type(),
-            self.get_key(),
-            self.get_option()
-        )
+    def find_window(self):
+        import lxgui.proxy.core as gui_prx_core
 
-    def __repr__(self):
-        return self.__str__()
+        return gui_prx_core.GuiProxyUtil.find_window_proxy_by_unique_id(
+            self.option_opt.get('window_unique_id')
+        )
 
 
 class GenerSession(AbsSsnGener):

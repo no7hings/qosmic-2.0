@@ -83,6 +83,12 @@ class PrxTrackView(
     def get_current_frame(self):
         return self._qt_widget._track_timeline._get_current_frame_()
 
+    def restore(self):
+        self._qt_widget._graph._restore_graph_()
+
+    def create_node(self, *args, **kwargs):
+        self._qt_widget._graph._create_node_(*args, **kwargs)
+
     def create_test(self):
         post_cycles = range(1, 5)
 
@@ -106,7 +112,7 @@ class PrxTrackView(
                 clip_start, 1, i_source_count-1, i_post_cycle
             )
 
-            self.register_track_to_universe(
+            self._qt_widget._graph._create_node_(
                 key='{}_{}'.format(i_name, i_index),
                 clip_start=clip_start, clip_end=i_clip_end,
                 start=clip_start, speed=1.0, count=None,
@@ -116,8 +122,7 @@ class PrxTrackView(
                 pre_blend=4, post_blend=4,
                 layer_index=i_index
             )
-
             clip_start = i_clip_end+1
 
-        self.setup_graph_by_universe()
+        # self.setup_graph_by_universe()
 

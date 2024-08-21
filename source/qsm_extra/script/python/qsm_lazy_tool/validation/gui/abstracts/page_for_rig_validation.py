@@ -70,12 +70,12 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
         self.gui_setup_page()
 
     def gui_setup_page(self):
-        v_qt_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
-        v_qt_lot.setContentsMargins(*[0]*4)
-        v_qt_lot.setSpacing(2)
+        qt_v_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
+        qt_v_lot.setContentsMargins(*[0]*4)
+        qt_v_lot.setSpacing(2)
 
         self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
-        v_qt_lot.addWidget(self._top_prx_tool_bar.widget)
+        qt_v_lot.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)
         # load tool
@@ -99,7 +99,7 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
         self._reference_button._set_action_enable_(False)
 
         v_prx_sca = gui_prx_widgets.PrxVScrollArea()
-        v_qt_lot.addWidget(v_prx_sca.widget)
+        qt_v_lot.addWidget(v_prx_sca.widget)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             self._window.choice_name(
@@ -129,7 +129,7 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
         )
         # buttons
         self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
-        v_qt_lot.addWidget(self._bottom_prx_tool_bar.widget)
+        qt_v_lot.addWidget(self._bottom_prx_tool_bar.widget)
         self._bottom_prx_tool_bar.set_expanded(True)
 
         self._start_prx_button = gui_prx_widgets.PrxPressButton()

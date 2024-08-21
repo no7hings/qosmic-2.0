@@ -22,9 +22,9 @@ class ArgDictString(object):
             v = kwargs[k]
             if isinstance(v, (tuple, list)):
                 # must convert to str
-                vars_.append('{}={}'.format(k, '+'.join(map(str, v))))
+                vars_.append(six.u('{}={}').format(k, '+'.join(map(str, v))))
             else:
-                vars_.append('{}={}'.format(k, v))
+                vars_.append(six.u('{}={}').format(k, v))
         return cls.ARGUMENT_SEP.join(vars_)
 
 

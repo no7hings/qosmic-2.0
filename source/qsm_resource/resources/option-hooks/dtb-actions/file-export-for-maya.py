@@ -4,7 +4,7 @@
 def main(session):
     import lxgeneral.dcc.core as gnl_dcc_core
     #
-    window = session.get_window()
+    window = session.find_window()
     dtb_opt = session.get_database_opt()
 
     if dtb_opt:

@@ -34,9 +34,9 @@ class PrxSubPanelForMotionTool(gui_prx_widgets.PrxBaseWindow):
             self._configure.get('option.gui.size')
         )
 
-        self.gui_setup_window()
+        self.gui_setup_fnc()
 
-    def gui_setup_window(self):
+    def gui_setup_fnc(self):
         self._prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         self.add_widget(self._prx_tab_tool_box)
         # main

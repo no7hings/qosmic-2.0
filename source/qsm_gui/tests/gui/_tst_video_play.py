@@ -21,10 +21,10 @@ class W(gui_prx_widgets.PrxBaseWindow):
         # self._d._set_video_path_(
         #     'Z:/temeporaries/dongchangbao/playblast_tool/test.export.v004.mov'
         # )
-        images = bsc_storage.StgFileTiles.get_exists_unit_paths(
-            'Z:/libraries/lazy-resource/all/maya_cfx/bo_lang_A/video/bo_lang_A.images/image.####.jpg'
+        images = bsc_storage.StgFileTiles.get_tiles(
+            'Z:/libraries/lazy-resource/all/motion_test/ceshi_jichu_paobu_nan_anim/preview/images/image.%04d.jpg'
         )
-        self._d._set_images_(
+        self._d._set_image_paths_(
             images, fps=24.0
         )
 

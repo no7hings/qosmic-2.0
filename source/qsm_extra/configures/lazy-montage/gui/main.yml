@@ -21,15 +21,38 @@ option:
         size: [960, 720]
 
 build:
-    composition:
+    main:
+        messages:
+            exists_master_layer:
+                message_chs: '主层已经存在。'
+                message: 'Master layer is exists.'
+
+            no_character:
+                message_chs: '选择一个角色（可以是任意部件）。'
+                message: 'Select one character (any part).'
+
+    resource:
         tab:
-            name: 'Composition'
-            name_chs: '合成'
+            name: 'Resource'
+            name_chs: '资源'
 
             tool_tip:
                 |-
-                For motion composition.
+                For motion splicing.
 
             tool_tip_chs:
                 |-
-                用于动作合成。
+                用于动作拼接。
+
+    splicing:
+        tab:
+            name: 'Splicing'
+            name_chs: '拼接'
+
+            tool_tip:
+                |-
+                For motion splicing.
+
+            tool_tip_chs:
+                |-
+                用于动作拼接。

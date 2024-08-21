@@ -29,7 +29,7 @@ class QtListWidget(
     QT_MENU_CLS = _utility.QtMenu
 
     def _do_wheel_(self, event):
-        if self._action_control_flag is True:
+        if _qt_core.GuiQtUtil.is_ctrl_modifier():
             delta = event.angleDelta().y()
             step = 4
             w_pre, h_pre = self._item_frame_size
@@ -56,20 +56,23 @@ class QtListWidget(
         if item_widget is None:
             return
 
-        if item not in self._pre_hovered_items:
+        item_index = self.row(item)
+        if item_index not in self._pre_hovered_indices:
             # clear pre when is changed
             self._clear_item_hover_()
-            self._pre_hovered_items.append(item)
+            self._pre_hovered_indices.append(item_index)
             item_widget._set_hovered_(True)
 
     def _clear_item_hover_(self):
-        if self._pre_hovered_items:
-            for i_item in self._pre_hovered_items:
+        if self._pre_hovered_indices:
+            for i_index in self._pre_hovered_indices:
+                i_item = self.item(i_index)
+                i_index = self.row(i_item)
                 i_item_widget = self.itemWidget(i_item)
                 if i_item_widget is not None:
                     i_item_widget._set_hovered_(False)
 
-            self._pre_hovered_items = []
+            self._pre_hovered_indices = []
 
     def _do_show_tool_tip_(self, event):
         item = self.itemAt(event.pos())
@@ -149,28 +152,67 @@ class QtListWidget(
         
         self._item_event_override_flag = False
 
+        # action = QtWidgets.QAction(self)
+        # self.addAction(action)
+        # # noinspection PyUnresolvedReferences
+        # action.triggered.connect(self._update_ctrl_flag_)
+
+    def _update_ctrl_flag_(self, event):
+        pass
+
     def contextMenuEvent(self, event):
-        menu_data = []
+        # menu_data = []
         #
-        view_menu_data = self._get_menu_data_()
-        if view_menu_data:
-            menu_data.extend(view_menu_data)
-            menu_data.append(
-                ()
-            )
+        # view_menu_data = self._get_menu_data_()
+        # if view_menu_data:
+        #     menu_data.extend(view_menu_data)
+        #     menu_data.append(
+        #         ()
+        #     )
         #
-        item = self._get_item_current_()
-        if item:
-            item_menu_data = item._get_menu_data_()
-            menu_data.extend(
-                item_menu_data
-            )
         #
+        # item = self._get_item_current_()
+        # if item:
+        #     item_menu_data = item._get_menu_data_()
+        #     menu_data.extend(
+        #         item_menu_data
+        #     )
+        #
+        # if menu_data:
+        #     menu = self.QT_MENU_CLS(self)
+        #     #
+        #     menu._set_menu_data_(menu_data)
+        #     menu._popup_start_()
+        _ = self.itemAt(event.pos())
+        if _:
+            item = _
+            menu_data = item._get_menu_data_()
+            menu_content = item._get_menu_content_()
+        else:
+            menu_data = self._get_menu_data_()
+            menu_content = self._get_menu_content_()
+
+        menu = None
+
+        if menu_content:
+            if menu is None:
+                menu = self.QT_MENU_CLS(self)
+            menu._set_menu_content_(menu_content)
+
         if menu_data:
-            menu = self.QT_MENU_CLS(self)
-            #
+            if menu is None:
+                menu = self.QT_MENU_CLS(self)
             menu._set_menu_data_(menu_data)
+
+        if menu is not None:
             menu._popup_start_()
+
+    def wheelEvent(self, event):
+        if _qt_core.GuiQtUtil.is_ctrl_modifier():
+            self._do_wheel_(event)
+            event.ignore()
+        else:
+            super(QtListWidget, self).wheelEvent(event)
 
     def eventFilter(self, *args):
         widget, event = args
@@ -186,9 +228,6 @@ class QtListWidget(
             elif event.type() == QtCore.QEvent.KeyRelease:
                 if event.key() == QtCore.Qt.Key_Control:
                     self._action_control_flag = False
-            elif event.type() == QtCore.QEvent.Wheel:
-                self._do_wheel_(event)
-                return True
             elif event.type() == QtCore.QEvent.Resize:
                 self._refresh_all_items_viewport_showable_()
             elif event.type() == QtCore.QEvent.FocusIn:
@@ -566,7 +605,7 @@ class QtListWidget(
             i._stop_item_show_all_()
         #
         self._pre_selected_items = []
-
-        self._pre_hovered_items = []
+        # fixme: use index for maya PySide
+        self._pre_hovered_indices = []
         #
         self.clear()

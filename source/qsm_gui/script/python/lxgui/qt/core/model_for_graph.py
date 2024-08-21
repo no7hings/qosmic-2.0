@@ -98,6 +98,7 @@ class GraphModel(object):
     def __init__(self, widget):
         self._widget = widget
 
+        self._graph_hover_point = QtCore.QPoint(0, 0)
         self._graph_track_start_point = QtCore.QPoint(0, 0)
 
         self._graph_composite_matrix = bsc_core.RawMatrix33Opt.get_identity()
@@ -135,6 +136,13 @@ class GraphModel(object):
     @property
     def sy(self):
         return self._graph_scale_y
+
+    @property
+    def hover_point(self):
+        return self._graph_hover_point
+
+    def on_hover(self, point):
+        self._graph_hover_point = point
 
     def on_track_start(self, point):
         self._graph_track_start_point = point

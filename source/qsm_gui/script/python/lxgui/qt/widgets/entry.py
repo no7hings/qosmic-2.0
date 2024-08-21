@@ -579,11 +579,12 @@ class QtEntryAsContent(
 
     def _add_value_(self, value):
         def add_fnc_(value_):
-            if isinstance(value_, six.text_type):
-                value_ = value_.encode('utf-8')
-            #
-            self.moveCursor(QtGui.QTextCursor.End)
-            self.insertPlainText(value_+'\n')
+            if value_ is not None:
+                if isinstance(value_, six.text_type):
+                    value_ = value_.encode('utf-8')
+
+                self.moveCursor(QtGui.QTextCursor.End)
+                self.insertPlainText(value_+'\n')
 
         #
         if isinstance(value, (tuple, list)):

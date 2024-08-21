@@ -287,7 +287,7 @@ class AbsFileReferences(object):
                 file_ = gnl_dcc_objects.StgFile(file_path)
                 # sequence
                 if obj.get('useFrameExtension'):
-                    exists_file_paths = file_.get_exists_unit_paths()
+                    exists_file_paths = file_.get_tiles()
                     if port.get_is_locked():
                         port.set_unlock()
                     #
@@ -295,7 +295,7 @@ class AbsFileReferences(object):
                 #
                 if file_.get_is_udim():
                     if obj.get('uvTilingMode') == 3:
-                        exists_file_paths = file_.get_exists_unit_paths()
+                        exists_file_paths = file_.get_tiles()
                         if port.get_is_locked():
                             port.set_unlock()
                         #

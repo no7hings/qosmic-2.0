@@ -128,7 +128,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
             #
             latest_render_output_image_path = render_layer_scp.get_latest_render_output_image()
             if latest_render_output_image_path is not None:
-                file_paths = bsc_storage.StgFileTiles.get_exists_unit_paths(
+                file_paths = bsc_storage.StgFileTiles.get_tiles(
                     latest_render_output_image_path
                 )
                 if file_paths:

@@ -36,7 +36,7 @@ def main(session):
 
     dtb_opt = session.get_database_opt()
     if dtb_opt:
-        window = session.get_window()
+        window = session.find_window()
         w = gui_core.GuiDialog.create(
             label=window.get_window_title(),
             sub_label=session.gui_name,

@@ -368,3 +368,7 @@ class QtTrackStage(
 
     def _set_graph_(self, widget):
         self._graph = widget
+
+    def _restore_stage_(self):
+        self._stage_model.restore()
+        self._refresh_widget_all_()
