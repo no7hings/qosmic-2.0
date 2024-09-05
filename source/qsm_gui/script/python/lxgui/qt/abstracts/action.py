@@ -422,7 +422,7 @@ class AbsQtActionForCheckDef(object):
 
     def _set_check_hovered_(self, boolean):
         self._is_check_hovered = boolean
-        self._widget.update()
+        self._widget._refresh_widget_draw_()
 
     def _set_exclusive_widgets_(self, widgets):
         self._check_exclusive_widgets = widgets
@@ -459,8 +459,7 @@ class AbsQtActionForCheckDef(object):
         self._check_icon_file_path_current = [
             self._check_icon_file_path_0, self._check_icon_file_path_1
         ][self._is_checked]
-
-        self._widget.update()
+        self._widget._refresh_widget_draw_()
 
     def _set_check_icon_frame_draw_rect_(self, x, y, w, h):
         self._check_icon_frame_draw_rect.setRect(

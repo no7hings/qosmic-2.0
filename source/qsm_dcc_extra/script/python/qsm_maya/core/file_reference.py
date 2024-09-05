@@ -22,6 +22,12 @@ class FileReferences(object):
         'AlembicNode': ['abc_File']
     }
 
+    PLUGIN_NAMES = [
+        'AbcImport',
+        'AbcExport',
+        'gpuCache'
+    ]
+
     @classmethod
     def search_from(cls, paths, directory_paths):
         pass
@@ -68,7 +74,7 @@ class FileReferences(object):
         node_type = _node.Node.get_type(path)
         if node_type == 'file':
             stg_file = bsc_storage.StgFileOpt(file_path)
-            if bsc_core.PtnFileTilesMtd.get_is_valid(stg_file.name_base) is True:
+            if bsc_core.PtnFileTilesMtd.is_valid(stg_file.name_base) is True:
                 unit_paths = bsc_storage.StgFileTiles.get_tiles(
                     file_path
                 )
@@ -84,7 +90,14 @@ class FileReferences(object):
             _attribute.NodeAttribute.set_as_string(path, atr_name, file_path)
 
     @classmethod
+    def load_plugins(cls):
+        for i in cls.PLUGIN_NAMES:
+            cmds.loadPlugin(i, quiet=1)
+
+    @classmethod
     def search_all_from(cls, directory_paths, ignore_exists=False):
+        cls.load_plugins()
+
         search_opt = bsc_storage.StgFileSearchOpt(
             ignore_name_case=True, ignore_ext_case=True
         )

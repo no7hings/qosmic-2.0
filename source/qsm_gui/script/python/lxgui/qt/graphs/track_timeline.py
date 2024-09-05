@@ -1,5 +1,7 @@
 # coding=utf-8
 # gui
+import sys
+
 from ... import core as _gui_core
 # qt
 from ..core.wrap import *
@@ -176,6 +178,11 @@ class QtTrackTimeline(
 
     def _get_current_frame_(self):
         return self._timeframe_current
+
+    def _set_current_frame_(self, frame):
+        self._timeframe_current = frame
+        self._refresh_widget_all_()
+        sys.stdout.write('frame is change: {}.\n'.format(frame))
 
     def _set_coord_model_(self, model):
         self._coord_model = model

@@ -269,7 +269,7 @@ class UsdScpForClarisseCleanup(object):
             if not scales:
                 scales = usd_core.Vt.Vec3fArray([usd_core.Gf.Vec3f((1, 1, 1))]*c)
 
-            c_r = bsc_core.RawRgbRange(c)
+            c_r = bsc_core.BscRgbRange(c)
 
             for i_index, i_center in enumerate(translates):
                 i_proto_index = proto_indices[i_index]

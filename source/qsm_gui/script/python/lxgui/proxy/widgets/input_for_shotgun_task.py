@@ -380,7 +380,7 @@ class PrxInputAsStgTask(gui_prx_abstracts.AbsPrxWidget):
         if dict_:
             self.__signals.dict_accepted.emit(dict_)
 
-    def get_is_valid(self):
+    def is_valid(self):
         return self.__result_dict is not None
 
     def get_result(self):

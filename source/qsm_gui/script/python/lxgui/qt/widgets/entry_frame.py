@@ -160,7 +160,7 @@ class QtEntryFrame(
         for i_rect in self._frame_draw_rects:
             painter.drawRect(i_rect)
         #
-        if self._is_status_enable is True:
+        if self._status_flag is True:
             for i_rect in self._frame_draw_rects:
                 painter._set_background_color_(
                     self._status_color

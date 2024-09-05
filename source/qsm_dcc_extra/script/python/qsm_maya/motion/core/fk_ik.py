@@ -133,7 +133,7 @@ class FKIKSwitch(object):
     @classmethod
     @_mya_core.Undo.execute
     def switch_limb_auto(cls, content, namespace, direction, mark_key=True):
-        frame = _mya_core.Frame.get_current_frame()
+        frame = _mya_core.Frame.get_current_time()
         selection_mark = cmds.ls(selection=1) or []
         options = dict(
             direction=direction,

@@ -20,7 +20,7 @@ from .wrap import *
 from . import color_and_brush as _color_and_brush
 
 
-class GuiQtUtil(object):
+class QtUtil(object):
     WINDOW_KEY = 'QSM_WINDOW_FLAG'
 
     @classmethod
@@ -184,7 +184,7 @@ class GuiQtUtil(object):
             w_p, w_h = prt.width(), prt.height()
             x_p, y_p = prt.pos().x(), prt.pos().y()
         else:
-            desktop_rect = GuiQtUtil.get_qt_desktop_current_rect()
+            desktop_rect = QtUtil.get_qt_desktop_current_rect()
             w_p, w_h = desktop_rect.width(), desktop_rect.height()
             x_p, y_p = desktop_rect.x(), desktop_rect.y()
 
@@ -200,7 +200,6 @@ class GuiQtUtil(object):
         widget.setGeometry(
             max(x, 0), max(y, 0), w_1, h_1
         )
-        #
         if use_exec is True:
             widget.exec_()
         else:
@@ -299,7 +298,25 @@ class GuiQtUtil(object):
     def is_ctrl_modifier(cls):
         # noinspection PyArgumentList
         return QtWidgets.QApplication.keyboardModifiers() == QtCore.Qt.ControlModifier
+    
+    @classmethod
+    def save_qt_image(cls, qt_image, file_path):
+        import numpy as np
 
+        import cv2
+
+        ptr = qt_image.bits()
+        # PyQt
+        if QT_LOAD_INDEX == 0:
+            ptr.setsize(qt_image.byteCount())
+
+        width = qt_image.width()
+        height = qt_image.height()
+        # noinspection PyArgumentList
+        img_arr = np.array(ptr).reshape(height, width, 4)
+        img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGRA2BGR)
+        cv2.imwrite(file_path, img_arr)
+    
 
 class GuiQtStyle(object):
     CONTENT = None
@@ -432,7 +449,7 @@ class GuiQtIcon(object):
             if background_color is not None:
                 r, g, b = background_color
             else:
-                r, g, b = bsc_core.RawTextOpt(name).to_rgb()
+                r, g, b = bsc_core.BscTextOpt(name).to_rgb()
 
             background_color_, text_color_ = QtColor.generate_color_args_by_rgb(r, g, b)
             #
@@ -524,7 +541,7 @@ class QtColor(object):
     @classmethod
     def generate_color_args_by_text(cls, text):
         return cls.generate_color_args_by_rgb(
-            *bsc_core.RawTextOpt(text).to_rgb_0(s_p=50, v_p=50)
+            *bsc_core.BscTextOpt(text).to_hash_rgb(s_p=(35, 50), v_p=(65, 85))
         )
 
     @classmethod
@@ -536,7 +553,7 @@ class QtColor(object):
             b_r, b_g, b_b, b_a = args
         else:
             raise TypeError()
-        t_r, t_g, t_b = bsc_core.RawColorMtd.get_complementary_rgb(b_r, b_g, b_b)
+        t_r, t_g, t_b = bsc_core.BscColor.get_complementary_rgb(b_r, b_g, b_b)
         b_l = QtGui.qGray(t_r, t_g, t_b)
         if b_l >= 127:
             t_l = 239
@@ -657,7 +674,7 @@ class QtPixmap(object):
             name = text.split('/')[-1] or ' '
 
             painter.setPen(_color_and_brush.QtBorderColors.Icon)
-            r, g, b = bsc_core.RawTextOpt(name).to_rgb_0(s_p=50, v_p=50)
+            r, g, b = bsc_core.BscTextOpt(name).to_rgb_0(s_p=50, v_p=50)
             if background_color is not None:
                 r, g, b = background_color
             painter.setBrush(QtGui.QBrush(QtGui.QColor(r, g, b, 255)))
@@ -874,25 +891,6 @@ class GuiQtLayout(object):
 
         #
         rcs_fnc_(layout)
-
-
-class GuiQtApplicationOpt(object):
-    def __init__(self, app=None):
-        if app is None:
-            # noinspection PyArgumentList
-            self._instance = QtWidgets.QApplication.instance()
-        else:
-            self._instance = None
-
-    def set_process_run_0(self):
-        if self._instance:
-            self._instance.processEvents(
-                QtCore.QEventLoop.ExcludeUserInputEvents
-            )
-
-    def set_process_run_1(self):
-        if self._instance:
-            self._instance.processEvents()
 
 
 class _ClassProperty(property):

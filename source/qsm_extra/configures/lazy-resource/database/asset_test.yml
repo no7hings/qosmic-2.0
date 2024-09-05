@@ -1,0 +1,358 @@
+options:
+    gui_name: 'Asset (Test)'
+    gui_name_chs: '资产（测试）'
+
+entities:
+    types:
+        /:
+            category: 'group'
+            type: 'root'
+            kind: 'builtin'
+
+            gui_name: 'All'
+            gui_name_chs: '所有'
+            gui_icon_name: 'database/all'
+
+        /unspecified:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name_chs: '未指定'
+            gui_icon_name: 'database/object'
+
+    tags:
+        /:
+            category: 'group'
+            type: 'root'
+            kind: 'builtin'
+
+            gui_name: 'All'
+            gui_name_chs: '所有'
+            gui_icon_name: 'database/all'
+        # creation time
+        /ctime:
+            category: 'group'
+            type: 'group'
+            kind: 'unavailable'
+
+            gui_name: 'Creation Time'
+            gui_name_chs: '创建时间'
+            gui_icon_name: 'database/group'
+
+        /ctime/today:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Today'
+            gui_name_chs: '今天'
+
+        /ctime/yesterday:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Yesterday'
+            gui_name_chs: '昨天'
+
+        /ctime/earlier_this_week:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Earlier this Week'
+            gui_name_chs: '本周早些时候'
+
+        /ctime/last_week:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Last Week'
+            gui_name_chs: '上周'
+
+        /ctime/earlier_this_month:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Earlier This Month'
+            gui_name_chs: '本月早些时候'
+
+        /ctime/last_month:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Last Month'
+            gui_name_chs: '上月'
+
+        /ctime/earlier_this_year:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Earlier This Year'
+            gui_name_chs: '今年早些时候'
+
+        /ctime/long_time_ago:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: 'Long Time Ago'
+            gui_name_chs: '很久以前'
+
+        /mesh_count:
+            category: 'group'
+            type: 'group'
+
+            gui_name: 'Mesh Count'
+            gui_name_chs: '网格计数'
+            gui_icon_name: 'database/group'
+
+        /mesh_count/face:
+            category: 'group'
+            type: 'group'
+
+            gui_name: 'Face ()'
+            gui_name_chs: '面'
+
+        /mesh_count/face/unspecified:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'Unspecified'
+            gui_name_chs: '未指定'
+
+        /mesh_count/face/less_than_10k:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'Less than 10K'
+            gui_name_chs: '小于1万'
+
+        /mesh_count/face/10k_to_50k:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '10K-50K'
+            gui_name_chs: '1万-5万'
+
+        /mesh_count/face/50k_to_100k:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '50K-100K'
+            gui_name_chs: '5万-10万'
+
+        /mesh_count/face/100k_to_500k:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '100K-500K'
+            gui_name_chs: '10万-50万'
+
+        /mesh_count/face/500k_to_1m:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '500K-1M'
+            gui_name_chs: '50万-1百万'
+
+        /mesh_count/face/1m_to_5m:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '1M-5M'
+            gui_name_chs: '1百万-5百万'
+
+        /mesh_count/face/5m_to_10m:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '5M-10M'
+            gui_name_chs: '5百万-1千万'
+
+        /mesh_count/face/10m_to_50m:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '10M-50M'
+            gui_name_chs: '1千万-5千万'
+
+        /mesh_count/face/50m_to_100m:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '50M-100M'
+            gui_name_chs: '5千万-1亿'
+
+        /mesh_count/face/100m_to_500m:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '100M-500M'
+            gui_name_chs: '1亿-5亿'
+
+        /mesh_count/face/500m_to_1b:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '500M-1B'
+            gui_name_chs: '5亿-10亿'
+
+        /mesh_count/face/more_than_1b:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'More than 1B'
+            gui_name_chs: '大于10亿'
+        # for system resource usage
+        /system_resource_usage:
+            category: 'group'
+            type: 'group'
+
+            gui_name: 'System Resource Usage'
+            gui_name_chs: '系统资源使用'
+            gui_icon_name: 'database/group'
+
+        /system_resource_usage/memory:
+            category: 'group'
+            type: 'group'
+
+            gui_name: 'Memory'
+            gui_name_chs: '内存'
+            gui_icon_name: 'database/group'
+
+        /system_resource_usage/memory/unspecified:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'Unspecified'
+            gui_name_chs: '未指定'
+
+        /system_resource_usage/memory/less_than_500mb:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'Less than 500Mb'
+            gui_name_chs: '小于500Mb'
+
+        /system_resource_usage/memory/500mb_to_1gb:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '500Mb-1Gb'
+            gui_name_chs: '500Mb-1Gb'
+
+        /system_resource_usage/memory/1gb_to_5gb:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '1Gb-5Gb'
+            gui_name_chs: '1Gb-5Gb'
+
+        /system_resource_usage/memory/5gb_to_10gb:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '5Gb-10Gb'
+            gui_name_chs: '5Gb-10Gb'
+
+        /system_resource_usage/memory/10gb_to_15gb:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '10Gb-15Gb'
+            gui_name_chs: '10Gb-15Gb'
+
+        /system_resource_usage/memory/15gb_to_20gb:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '15Gb-20Gb'
+            gui_name_chs: '15Gb-20Gb'
+
+        /system_resource_usage/memory/20gb_to_25gb:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '20Gb-25Gb'
+            gui_name_chs: '20Gb-25Gb'
+
+        /system_resource_usage/memory/25gb_to_30gb:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '25Gb-30Gb'
+            gui_name_chs: '25Gb-30Gb'
+
+        /system_resource_usage/memory/more_than_30gb:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'More than 30Gb'
+            gui_name_chs: '大于30Gb'
+
+        /task:
+            category: 'group'
+            type: 'group'
+
+            gui_name: 'Task'
+            gui_name_chs: '任务'
+            gui_icon_name: 'database/group'
+
+        /task/unspecified:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'Unspecified'
+            gui_name_chs: '未指定'
+
+        /task/rig:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'Rig'
+            gui_name_chs: '绑定'
+
+        /task/model:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'Model'
+            gui_name_chs: '模型'
+
+        /task/surface:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'Surface'
+            gui_name_chs: '材质'
+
+        /cache:
+            category: 'group'
+            type: 'group'
+
+            gui_name: 'Cache'
+            gui_name_chs: '缓存'
+            gui_icon_name: 'database/group'
+
+        /cache/unit_assembly:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'Unit Assembly'
+            gui_name_chs: '元素组装'
+
+    nodes:
+        /:
+            category: 'group'
+            type: 'root'
+            kind: 'builtin'
+
+            gui_name: 'All'
+            gui_name_chs: '所有'
+            gui_icon_name: 'database/all'

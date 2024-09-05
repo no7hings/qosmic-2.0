@@ -33,7 +33,7 @@ class LogBase(object):
         return text
 
     @staticmethod
-    def get_timestamp():
+    def generate_timestamp():
         return time.time()
 
     @staticmethod
@@ -433,8 +433,8 @@ class LogProcessContext(object):
         self.__label = label
         self.__use_as_bar = use_as_progress_bar
         #
-        self._start_timestamp = LogBase.get_timestamp()
-        self._pre_timestamp = LogBase.get_timestamp()
+        self._start_timestamp = LogBase.generate_timestamp()
+        self._pre_timestamp = LogBase.generate_timestamp()
         #
         self._p = 0
         #
@@ -463,7 +463,7 @@ class LogProcessContext(object):
         if self._p == p:
             return
 
-        cur_timestamp = LogBase.get_timestamp()
+        cur_timestamp = LogBase.generate_timestamp()
         cost_timestamp = cur_timestamp-self._pre_timestamp
         self._pre_timestamp = cur_timestamp
         if self.__use_as_bar is True:
@@ -507,7 +507,7 @@ class LogProcessContext(object):
         self.__value = 0
         self.__maximum = 0
         #
-        cost_timestamp = LogBase.get_timestamp()-self._start_timestamp
+        cost_timestamp = LogBase.generate_timestamp()-self._start_timestamp
         Log.trace_method_result(
             self.__label,
             'process is completed, cost time {}'.format(

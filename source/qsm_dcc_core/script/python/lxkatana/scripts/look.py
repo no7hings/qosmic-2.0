@@ -52,7 +52,7 @@ class ScpLookAssImport(object):
         self._material_root_location = self._option.get('material_location')
 
         self._time_tag = bsc_core.TimestampOpt(
-            bsc_storage.StgFileOpt(self._file_path).get_modify_timestamp()
+            bsc_storage.StgFileOpt(self._file_path).get_mtime()
             ).get_as_tag_36()
 
         self._convert_configure = bsc_content.Content(

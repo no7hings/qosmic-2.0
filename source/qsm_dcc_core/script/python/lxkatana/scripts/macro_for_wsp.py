@@ -35,7 +35,7 @@ class ScpMacro(object):
         color_hsv = self._cfg.get('option.color_hsv')
         if color_hsv:
             h, s, v = color_hsv['h'], color_hsv['s'], color_hsv['v']
-            r, g, b = bsc_core.RawColorMtd.hsv2rgb(h, s, v, maximum=1.0)
+            r, g, b = bsc_core.BscColor.hsv2rgb(h, s, v, maximum=1.0)
             self._cfg.set(
                 'option.color.r', r
             )
@@ -49,7 +49,7 @@ class ScpMacro(object):
         color_use_variant = self._cfg.get('option.color_use_variant', False)
         if color_use_variant is True:
             variant_key = self._cfg.get('option.variant_key')
-            r, g, b = bsc_core.RawTextOpt(variant_key).to_rgb_(maximum=1.0, s_p=25, v_p=25)
+            r, g, b = bsc_core.BscTextOpt(variant_key).to_rgb_(maximum=1.0, s_p=25, v_p=25)
             self._cfg.set(
                 'option.color.r', r
             )
@@ -63,7 +63,7 @@ class ScpMacro(object):
         color_use_type = self._cfg.get('option.color_use_type', False)
         if color_use_type is True:
             variant_key = self._cfg.get('option.type')
-            r, g, b = bsc_core.RawTextOpt(variant_key).to_rgb_(maximum=1.0, s_p=25, v_p=25)
+            r, g, b = bsc_core.BscTextOpt(variant_key).to_rgb_(maximum=1.0, s_p=25, v_p=25)
             self._cfg.set(
                 'option.color.r', r
             )
@@ -77,7 +77,7 @@ class ScpMacro(object):
         auto_color = self._cfg.get('option.auto_color', default_value=True)
         if auto_color is True:
             type_name = self._cfg.get('option.type')
-            r, g, b = bsc_core.RawTextOpt(type_name).to_rgb_(maximum=1.0, s_p=25, v_p=25)
+            r, g, b = bsc_core.BscTextOpt(type_name).to_rgb_(maximum=1.0, s_p=25, v_p=25)
             self._cfg.set(
                 'option.color.r', r
             )
@@ -150,7 +150,7 @@ class ScpMacro(object):
         obj_opt = ktn_core.NGNodeOpt(ktn_obj)
         if is_create is True or force_update is True:
             if (not type_name.endswith('_Wsp')) and (not type_name.endswith('_Wsp_Usr')):
-                obj_opt.set_color(bsc_core.RawTextOpt(type_name).to_rgb_(maximum=1.0, s_p=25, v_p=25))
+                obj_opt.set_color(bsc_core.BscTextOpt(type_name).to_rgb_(maximum=1.0, s_p=25, v_p=25))
             #
             obj_opt.create_input_ports_by_data(
                 data.get('input_ports') or []
@@ -257,7 +257,7 @@ class ScpMacro(object):
         if is_create is True:
             obj_opt = ktn_core.NGNodeOpt(ktn_obj)
             #
-            obj_opt.set_color(bsc_core.RawTextOpt(type_name).to_rgb_(maximum=1.0, s_p=25, v_p=25))
+            obj_opt.set_color(bsc_core.BscTextOpt(type_name).to_rgb_(maximum=1.0, s_p=25, v_p=25))
             #
             obj_opt.set_attributes(
                 data.get('attributes') or {}
@@ -367,10 +367,10 @@ class ScpMacro(object):
 
     def is_changed(self):
         yaml_file_opt = bsc_storage.StgFileOpt(self._file_path)
-        yaml_timestamp = yaml_file_opt.get_modify_timestamp()
+        yaml_timestamp = yaml_file_opt.get_mtime()
         macro_file_path = '{}.macro'.format(yaml_file_opt.path_base)
         macro_file_opt = bsc_storage.StgFileOpt(macro_file_path)
-        macro_timestamp = macro_file_opt.get_modify_timestamp()
+        macro_timestamp = macro_file_opt.get_mtime()
         return int(yaml_timestamp) != int(macro_timestamp)
 
     def save(self):
@@ -384,7 +384,7 @@ class ScpMacro(object):
                 directory=macro_file_opt.get_directory_path(),
                 name=macro_file_opt.get_name_base(),
                 ext=macro_file_opt.get_ext(),
-                time_tag=bsc_core.TimestampOpt(macro_file_opt.get_modify_timestamp()).get_as_tag()
+                time_tag=bsc_core.TimestampOpt(macro_file_opt.get_mtime()).get_as_tag()
             )
             bck_file_path = '{directory}/.bck/{name}{ext}/{name}.{time_tag}{ext}'.format(
                 **var_dict
@@ -394,7 +394,7 @@ class ScpMacro(object):
         self._obj_opt.save_as_macro(
             macro_file_path
         )
-        os.utime(macro_file_path, (yaml_file_opt.get_modify_timestamp(), yaml_file_opt.get_modify_timestamp()))
+        os.utime(macro_file_path, (yaml_file_opt.get_mtime(), yaml_file_opt.get_mtime()))
 
     @classmethod
     def set_warning_show(cls, label, contents):
@@ -1012,7 +1012,7 @@ class ScpComponentLayout(AbsWsp):
                 points = []
                 xywh_array = []
                 colors = []
-                c_o = bsc_core.RawColorChoiceOpt()
+                c_o = bsc_core.BscColorChoiceOpt()
 
                 stage_opt = ktn_core.KtnStageOpt(self._ktn_obj)
 
@@ -1901,7 +1901,7 @@ class ScpInstanceColorMap(object):
         if bsc_storage.StgPath.get_is_exists(cache_usd_file_path) is False or force is True:
             import lxgui.proxy.widgets as gui_prx_widgets
 
-            w = gui_prx_widgets.PrxSubProcessWindow()
+            w = gui_prx_widgets.PrxSprcTaskWindow()
             w.set_window_title('Generator Grow Cache')
             w.show_window_auto(exclusive=False)
 
@@ -1934,7 +1934,7 @@ class ScpInstanceColorMap(object):
         if bsc_storage.StgPath.get_is_exists(cache_usd_file_path) is False or force is True:
             import lxgui.proxy.widgets as gui_prx_widgets
 
-            w = gui_prx_widgets.PrxSubProcessWindow()
+            w = gui_prx_widgets.PrxSprcTaskWindow()
             w.set_window_title('Generator Instance Cache')
             w.show_window_auto(exclusive=False)
 

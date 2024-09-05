@@ -68,6 +68,10 @@ class Shape(_node_for_dag.DagNode):
                     cmds.delete(i_transform_path)
                     cmds.rename(transform_copy[0], i_transform_name)
 
+    @classmethod
+    def is_intermediate(cls, path):
+        return bool(cmds.getAttr(path+'.intermediateObject'))
+
 
 class Geometry(Shape):
 

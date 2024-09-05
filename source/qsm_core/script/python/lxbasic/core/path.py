@@ -23,7 +23,7 @@ class BscPath(object):
         return path.split(pathsep)
 
     @classmethod
-    def get_dag_name(cls, path, pathsep='/'):
+    def to_dag_name(cls, path, pathsep='/'):
         """
         :param path:
         :param pathsep:
@@ -56,7 +56,7 @@ class BscPath(object):
 
     @classmethod
     def get_dag_parent_name(cls, path, pathsep):
-        return cls.get_dag_name(
+        return cls.to_dag_name(
             cls.get_dag_parent_path(path, pathsep), pathsep
         )
 
@@ -146,7 +146,7 @@ class BscPath(object):
 
     @classmethod
     def find_dag_child_names(cls, path, paths, pathsep='/'):
-        return [cls.get_dag_name(x) for x in cls.find_dag_child_paths(path, paths, pathsep)]
+        return [cls.to_dag_name(x) for x in cls.find_dag_child_paths(path, paths, pathsep)]
 
     @classmethod
     def find_dag_sibling_paths(cls, path, paths, pathsep='/'):
@@ -169,7 +169,7 @@ class BscPath(object):
         :param pathsep:
         :return:
         """
-        return [cls.get_dag_name(x) for x in cls.find_dag_sibling_paths(path, paths, pathsep)]
+        return [cls.to_dag_name(x) for x in cls.find_dag_sibling_paths(path, paths, pathsep)]
 
     @classmethod
     def find_dag_descendant_paths(cls, path, paths, pathsep='/'):
@@ -184,9 +184,12 @@ class BscPath(object):
 
     # leaf path is which path has no children
     @classmethod
-    def to_leaf_paths(cls, paths):
+    def to_leaf_paths(cls, paths, pathsep='/'):
         list_ = []
         for i_path in paths:
+            if i_path == pathsep:
+                continue
+
             i_is_leaf = True
             for j_path in paths:
                 j_r = re.match(r'({})/(.*)'.format(i_path), j_path)
@@ -237,7 +240,7 @@ class BscPathOpt(object):
     path = property(get_path)
 
     def get_name(self):
-        return BscPath.get_dag_name(
+        return BscPath.to_dag_name(
             path=self._path_text, pathsep=self._pathsep
         )
 
@@ -327,7 +330,7 @@ class BscPathOpt(object):
         return namespacesep.join(_[:-1])
 
     def get_color_from_name(self, count=1000, maximum=255, offset=0, seed=0):
-        return _raw.RawColorMtd.get_color_from_string(
+        return _raw.BscColor.get_color_from_string(
             self.get_name(), count=count, maximum=maximum, offset=offset, seed=seed
         )
 
@@ -345,14 +348,14 @@ class BscPathOpt(object):
         return p
 
     def get_rgb(self, maximum=255):
-        return _raw.RawTextOpt(
+        return _raw.BscTextOpt(
             self.get_name()
         ).to_rgb__(maximum=maximum, s_p=50, v_p=100)
 
     def get_plant_rgb(self, maximum=255):
         for k, v in self.PLANT_HSV_MAPPER.items():
             if fnmatch.filter([self._path_text], '*{}*'.format(k)):
-                return _raw.RawColorMtd.hsv2rgb(
+                return _raw.BscColor.hsv2rgb(
                     v[0], v[1], v[2], maximum
                 )
         return 0.25, 0.75, 0.5
@@ -444,7 +447,7 @@ class PthPortMtd(object):
         return path.split(pathsep)
 
     @classmethod
-    def get_dag_name(cls, path, pathsep='.'):
+    def to_dag_name(cls, path, pathsep='.'):
         return cls.get_dag_args(path, pathsep)[-1]
 
     @classmethod
@@ -487,7 +490,7 @@ class PthPortOpt(object):
     path = property(get_path)
 
     def get_name(self):
-        return PthPortMtd.get_dag_name(
+        return PthPortMtd.to_dag_name(
             path=self._path_text, pathsep=self._pathsep
         )
 

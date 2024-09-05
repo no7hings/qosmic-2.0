@@ -34,7 +34,7 @@ def main(session):
                     raise TypeError()
                 #
                 cache_frames = hook_option_opt.get('cache_frames')
-                frame_range = bsc_core.RawTextOpt(cache_frames).to_frame_range()
+                frame_range = bsc_core.BscTextOpt(cache_frames).to_frame_range()
                 #
                 keyword_0 = keyword_0.format(**rsv_scene_properties.value)
                 maya_scene_file_rsv_unit = rsv_task.get_rsv_unit(keyword=keyword_0)

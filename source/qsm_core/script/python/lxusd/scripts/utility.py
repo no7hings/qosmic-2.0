@@ -21,7 +21,7 @@ class ShotUsdCombine(object):
         return '{}/{}.usda'.format(
             user_directory_path,
             bsc_core.TimestampOpt(
-                bsc_storage.StgFileOpt(file_path_src).get_modify_timestamp()
+                bsc_storage.StgFileOpt(file_path_src).get_mtime()
             ).get_as_tag_36()
         )
 

@@ -97,7 +97,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
         NodegraphAPI.GetRootNode().getParameter('currentTime').setValue(frame, 0)
 
     @classmethod
-    def get_current_frame(cls):
+    def get_current_time(cls):
         return NodegraphAPI.GetRootNode().getParameter('currentTime').getValue(0)
 
     @classmethod
@@ -107,7 +107,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
         elif isinstance(frame, (int, float)):
             start_frame = end_frame = frame
         else:
-            start_frame = end_frame = cls.get_current_frame()
+            start_frame = end_frame = cls.get_current_time()
         return start_frame, end_frame
 
     @classmethod

@@ -328,7 +328,7 @@ class AnmCurveOpt(object):
     ]
 
     @classmethod
-    def create(cls, path, atr_name, keep_namespace=False):
+    def create(cls, path, atr_name, keep_namespace=False, curve_type=None):
         if keep_namespace is True:
             curve_name = '{}_{}'.format(
                 path.split('|')[-1],
@@ -339,7 +339,8 @@ class AnmCurveOpt(object):
                 path.split('|')[-1].split(':')[-1],
                 atr_name.replace('.', '_')
             )
-        curve_type = 'animCurveTL'
+
+        curve_type = curve_type or 'animCurveTL'
         curve_name_new = cmds.createNode(curve_type, name=curve_name, skipSelect=1)
 
         atr_path_src = '{}.output'.format(curve_name_new)
@@ -347,6 +348,18 @@ class AnmCurveOpt(object):
         _connection.Connection.create(atr_path_src, atr_path_dst)
 
         return cls(curve_name_new)
+
+    @classmethod
+    def create_as_translate(cls, path, atr_name, keep_namespace=False):
+        return cls.create(path, atr_name, keep_namespace=keep_namespace, curve_type='animCurveTL')
+
+    @classmethod
+    def create_as_rotate(cls, path, atr_name, keep_namespace=False):
+        return cls.create(path, atr_name, keep_namespace=keep_namespace, curve_type='animCurveTA')
+
+    @classmethod
+    def create_as_scale(cls, path, atr_name, keep_namespace=False):
+        return cls.create(path, atr_name, keep_namespace=keep_namespace, curve_type='animCurveTU')
 
     def __init__(self, curve_name):
         self._curve_name = curve_name

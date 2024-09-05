@@ -323,16 +323,15 @@ class QtTrack(
     def _update_basic_args_as_left_resize_(self, x, y, w, h):
         # position
         clip_start = self._track_model.resize_by_clip_start(
-            self._track_model.compute_clip_start_loc(x)
+            self._track_model.compute_clip_start_loc(x), auto_cycle=_qt_core.QtUtil.is_ctrl_modifier()
         )
         # update geometry
         self._node_basic_x = self._track_model.compute_basic_x_at(clip_start)
         self._node_basic_w = self._track_model.compute_basic_w_by(self._track_model.clip_count)
 
     def _update_basic_args_as_right_resize_(self, w, h):
-        # size
         clip_count = self._track_model.resize_by_clip_count(
-            self._track_model.compute_clip_count_by(w)
+            self._track_model.compute_clip_count_by(w), auto_cycle=_qt_core.QtUtil.is_ctrl_modifier()
         )
         # update size
         self._node_basic_w = self._track_model.compute_basic_w_by(clip_count)
@@ -634,7 +633,7 @@ class QtTrack(
         )
 
     def _draw_basic_(self, painter):
-        if self._track_model.is_bypass:
+        if self._track_model.is_bypass > 0:
             rgb_0 = (127, 127, 127)
         else:
             rgb_0 = self._track_model.rgb

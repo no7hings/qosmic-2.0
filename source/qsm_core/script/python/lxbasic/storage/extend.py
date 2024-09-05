@@ -41,7 +41,7 @@ class StgTmpBaseMtd(object):
     @classmethod
     def get_save_region(cls, unique_id):
         number = abs(uuid.UUID(unique_id).int)
-        return bsc_cor_raw.RawIntegerOpt(number%4096).set_encode_to_36()
+        return bsc_cor_raw.BscIntegerOpt(number%4096).encode_to_36()
 
 
 class StgTmpThumbnailMtd(object):

@@ -669,19 +669,19 @@ class _UnitrResource(
         hdri_path = self._get_hdri_path(dtb_resource)
 
         if hdri_path:
-            gui_qt_core.GuiQtUtil.set_text_to_clipboard(
+            gui_qt_core.QtUtil.set_text_to_clipboard(
                 hdri_path
             )
             return
 
         texture_path = self._get_texture_path(dtb_resource)
         if texture_path is not None:
-            gui_qt_core.GuiQtUtil.set_text_to_clipboard(
+            gui_qt_core.QtUtil.set_text_to_clipboard(
                 texture_path
             )
             return
 
-        gui_qt_core.GuiQtUtil.set_text_to_clipboard(
+        gui_qt_core.QtUtil.set_text_to_clipboard(
             ''
         )
 
@@ -1044,10 +1044,10 @@ class _GuiDirectoryOpt(
     def gui_add(self, dtb_resource, dtb_directory, file_type, is_current=False):
         def cache_fnc_():
             def copy_path_fnc_():
-                gui_qt_core.GuiQtUtil.copy_text_to_clipboard(location)
+                gui_qt_core.QtUtil.copy_text_to_clipboard(location)
 
             def open_folder_fnc():
-                bsc_storage.StgDirectoryOpt(location).open_in_system()
+                bsc_storage.StgDirectoryOpt(location).show_in_system()
 
             _location = location
 
@@ -1135,7 +1135,7 @@ class _GuiFileOpt(
             )
             if i_file_opt is not None:
                 i_name_base = i_file_opt.get_name_base()
-                i_r, i_g, i_b = bsc_core.RawTextOpt(i_name_base).to_rgb_0(maximum=1.0, s_p=50, v_p=50)
+                i_r, i_g, i_b = bsc_core.BscTextOpt(i_name_base).to_rgb_0(maximum=1.0, s_p=50, v_p=50)
                 images.append(
                     dict(
                         name=bsc_core.RawTextMtd.clear_up_to(i_name_base),
@@ -1149,7 +1149,7 @@ class _GuiFileOpt(
                 )
         #
         if images:
-            gui_qt_core.GuiQtUtil.set_text_to_clipboard(
+            gui_qt_core.QtUtil.set_text_to_clipboard(
                 bsc_resource.RscExtendJinja.get_result(
                     'katana/images',
                     dict(
@@ -1161,10 +1161,10 @@ class _GuiFileOpt(
     def gui_add(self, dtb_resource, dtb_directory, file_type, file_name, file_path):
         def cache_fnc_():
             def copy_path_fnc_():
-                gui_qt_core.GuiQtUtil.copy_text_to_clipboard(file_path)
+                gui_qt_core.QtUtil.copy_text_to_clipboard(file_path)
 
             def open_folder_fnc():
-                bsc_storage.StgFileOpt(file_path).open_in_system()
+                bsc_storage.StgFileOpt(file_path).show_in_system()
 
             _location = file_opt.get_path()
 
@@ -1739,20 +1739,20 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
     # build for types
     def __gui_add_for_all_types(self):
         def post_fnc_():
-            self._end_timestamp = bsc_core.BscSystem.get_timestamp()
+            self._end_timestamp = bsc_core.BscSystem.generate_timestamp()
             #
             bsc_log.Log.trace_method_result(
                 'load all types',
                 'count={}, cost-time="{}"'.format(
                     len(self._gui_type_opt._keys),
-                    bsc_core.RawIntegerMtd.second_to_time_prettify(self._end_timestamp-self.__start_timestamp)
+                    bsc_core.BscInteger.second_to_time_prettify(self._end_timestamp-self.__start_timestamp)
                 )
             )
 
         def quit_fnc_():
             ts.do_quit()
 
-        self.__start_timestamp = bsc_core.BscSystem.get_timestamp()
+        self.__start_timestamp = bsc_core.BscSystem.generate_timestamp()
 
         dtb_categories = self._dtb_opt.get_entities(
             entity_type=self._dtb_opt.EntityTypes.Category,
@@ -1810,7 +1810,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         #
         self._resource_prx_view.set_clear()
         self._gui_tag_opt.reset()
-        self._resource_prx_view._qt_info_chart._clear_()
+        self._resource_prx_view._qt_info_bar_chart._clear_()
         #
         self.__attribute_count_dict = {}
         #

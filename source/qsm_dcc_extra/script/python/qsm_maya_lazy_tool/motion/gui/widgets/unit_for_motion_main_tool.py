@@ -98,7 +98,7 @@ class ToolsetForMotionCopyAndPaste(
             results = qsm_mya_anm_core.AdvRig.filter_namespaces(namespaces)
 
         if not results:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.no_characters')
                 ),
@@ -110,7 +110,7 @@ class ToolsetForMotionCopyAndPaste(
     def get_dcc_control_args(self):
         args = qsm_mya_mtn_core.ControlsMotionOpt.get_args_from_selection()
         if not args:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.no_controls')
                 ),
@@ -122,7 +122,7 @@ class ToolsetForMotionCopyAndPaste(
     def get_dcc_control_args_for_mirror(self):
         args = qsm_mya_mtn_core.ControlsMotionOpt.get_args_from_selection_for_mirror()
         if not args:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.no_controls_for_mirror')
                 ),
@@ -501,7 +501,7 @@ class ToolsetForMotionKeyframe(
             results = qsm_mya_anm_core.AdvRig.filter_namespaces(namespaces)
 
         if not results:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.no_characters')
                 ),
@@ -580,7 +580,7 @@ class ToolsetForMotionKeyframe(
                 )
             )
         else:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.no_timewarp_preview')
                 ),

@@ -274,7 +274,7 @@ class _AbsQtPopupAsChoose(
         self._popup_name_text = None
 
         self.setToolTip(
-            gui_qt_core.GuiQtUtil.generate_tool_tip_css(
+            gui_qt_core.QtUtil.generate_tool_tip_css(
                 'choose popup',
                 [
                     'press "Up" or "Down" to switch',
@@ -520,9 +520,9 @@ class _AbsQtPopupAsChoose(
 
     def _do_popup_start_(self):
         if self._popup_is_activated is False:
-            self._popup_view._set_clear_()
-            self._popup_tag_filter_view._set_clear_()
-            self._popup_keyword_filter_entry._set_clear_()
+            self._popup_view._do_clear_()
+            self._popup_tag_filter_view._do_clear_()
+            self._popup_keyword_filter_entry._do_clear_()
             values = self._get_popup_values_()
             if values and isinstance(values, (tuple, list)):
                 # icon
@@ -635,7 +635,7 @@ class _AbsQtPopupAsChoose(
                         (width, height_max)
                     )
                 else:
-                    desktop_rect = gui_qt_core.GuiQtUtil.get_qt_desktop_rect()
+                    desktop_rect = gui_qt_core.QtUtil.get_qt_desktop_rect()
                     press_rect = self._get_popup_press_rect_()
                     press_point = self._compute_popup_press_point_(
                         self._get_entry_frame_widget_(), press_rect
@@ -941,7 +941,7 @@ class QtPopupAsCompletion(
         if self._entry_widget._get_choose_popup_is_activated_() is True:
             return
         input_widget = self.parent()
-        self._popup_view._set_clear_()
+        self._popup_view._do_clear_()
         _ = input_widget._generate_completion_texts_()
         if _:
             _.sort()
@@ -1197,7 +1197,7 @@ class QtPopupAsChooseForGuide(
         input_widget = self.parent()
         values = input_widget._get_guide_child_name_texts_at_(index)
         if values:
-            desktop_rect = gui_qt_core.GuiQtUtil.get_qt_desktop_rect()
+            desktop_rect = gui_qt_core.QtUtil.get_qt_desktop_rect()
             #
             press_pos = input_widget._get_guide_choose_point_at_(index)
             press_rect = input_widget._get_guide_choose_rect_at_(index)
@@ -1379,7 +1379,7 @@ class QtPopupAsChooseForRgba(
         input_widget = self.parent()
         press_rect = input_widget._get_value_rect_()
         press_point = self._compute_popup_press_point_(input_widget, press_rect)
-        desktop_rect = gui_qt_core.GuiQtUtil.get_qt_desktop_rect()
+        desktop_rect = gui_qt_core.QtUtil.get_qt_desktop_rect()
         self._show_popup_as_style_0_(
             press_point,
             press_rect,

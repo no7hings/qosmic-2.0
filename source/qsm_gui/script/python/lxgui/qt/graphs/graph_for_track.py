@@ -139,9 +139,7 @@ class QtTrackGraph(
         sbj = self._get_hovered_node_()
         if sbj is not None:
             sbj._push_last_properties_()
-
             sbj._track_model.swap_bypass()
-
             self._do_node_press_end_for_any_action_(sbj)
 
     def _do_graph_frame_scale_for_(self, nodes):
@@ -425,6 +423,7 @@ class QtTrackGraph(
     def _restore_graph_(self):
         self._track_stage._restore_stage_()
         self._clear_graph_()
+        self._undo_stack.clear()
 
 
 class QtTrackView(

@@ -142,7 +142,7 @@ class W(qt_widgets.QtMainWindow):
     def paintEvent(self, event):
         painter = qt_widgets.QtGui.QPainter(self)
 
-        c_o = bsc_core.RawColorChoiceOpt()
+        c_o = bsc_core.BscColorChoiceOpt()
 
         rects = self._rects
         print 'draw {} rects'.format(len(rects))
@@ -194,7 +194,7 @@ class W(qt_widgets.QtMainWindow):
                     painter.drawRect(qt_space_rect_parent)
 
                 area_rect = space_rect.area
-                if area_rect.get_is_valid() is True:
+                if area_rect.is_valid() is True:
                     q_area_rect = QtCore.QRect(area_rect.x-1, area_rect.y-1, area_rect.w+2, area_rect.h+2)
                     painter.setPen(QtGui.QColor(0, 0, 0, 255))
                     painter.setBrush(QtGui.QBrush(QtGui.QColor(0, 0, 0, 0)))

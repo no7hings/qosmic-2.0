@@ -9,6 +9,8 @@ import os
 
 import scandir
 
+import platform
+
 
 class ScanGlob(object):
     MAGIC_CHECK = re.compile('[*?[]')
@@ -33,22 +35,28 @@ class ScanGlob(object):
     def scan_fnc(cls, path):
         list_ = []
         path = cls.auto_unicode(path)
-        for i in scandir.scandir(path):
-            i_path = i.path.replace('\\', '/')
-            list_.append(i_path)
+        if os.path.isdir(path):
+            for i in scandir.scandir(path):
+                i_path = i.path.replace('\\', '/')
+                list_.append(i_path)
         return list_
 
     @classmethod
     def glob(cls, regex):
-        def _rcs_fnc(path_, depth_, is_root=False):
+        def _rcs_fnc(path_, depth_, is_root_=False, flag_=False):
             path_ = cls.auto_unicode(path_)
             _depth = depth_+1
             if _depth <= depth_maximum:
                 _filter_name = cls.auto_unicode(filter_names[_depth])
-                if is_root is True:
-                    _filter_path = six.u('{}{}').format(
-                        path_, _filter_name
-                    )
+                if is_root_ is True:
+                    if flag_ is True:
+                        _filter_path = six.u('{}/{}').format(
+                            path_, _filter_name
+                        )
+                    else:
+                        _filter_path = six.u('{}{}').format(
+                            path_, _filter_name
+                        )
                 else:
                     _filter_path = six.u('{}/{}').format(
                         path_, _filter_name
@@ -78,12 +86,26 @@ class ScanGlob(object):
 
         cache_dict = {}
         list_ = []
-        #
+
         regex = cls.auto_unicode(regex)
-        #
+
         filter_names = regex.split('/')
         depth_maximum = len(filter_names)-1
+        if platform.system() == 'Linux':
+            root = '/'+filter_names[1]
+            start_deep = 1
+            flag = True
+        elif platform.system() == 'Windows':
+            if regex.startswith('//'):
+                root = '//' + filter_names[2]
+                start_deep = 2
+                flag = True
+            else:
+                root = filter_names[0]+'/'
+                start_deep = 0
+                flag = False
+        else:
+            raise SystemError()
 
-        root = filter_names[0]+'/'
-        _rcs_fnc(root, 0, is_root=True)
+        _rcs_fnc(root, start_deep, is_root_=True, flag_=flag)
         return list_

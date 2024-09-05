@@ -31,6 +31,10 @@ build:
                 message_chs: '选择一个角色（可以是任意部件）。'
                 message: 'Select one character (any part).'
 
+            save_old:
+                message_chs: '保存修改到文件：{file}？'
+                message: 'Save change to: {file}.'
+
     resource:
         tab:
             name: 'Resource'
@@ -56,3 +60,18 @@ build:
             tool_tip_chs:
                 |-
                 用于动作拼接。
+
+        buttons:
+            create:
+                name: 'Create'
+                name_chs: '创建'
+
+                tool_tip:
+                    |-
+                    Press reference current asset's rig
+                tool_tip_chs:
+                    |-
+                    点击引用当前资产的绑定
+                        按钮为灰色，代表当前资产无绑定文件
+                        前面的数字框可以输入引用数量，鼠标滚轮可以快速增加或减少数量
+                

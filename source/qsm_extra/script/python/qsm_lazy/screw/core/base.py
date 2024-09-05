@@ -17,6 +17,8 @@ import peewee
 
 import lxbasic.core as bsc_core
 
+import lxbasic.pinyin as bsc_pinyin
+
 import lxbasic.resource as bsc_resource
 
 import lxbasic.storage as bsc_storage
@@ -149,13 +151,67 @@ class Stage(object):
         PreviewVideo = PreviewDir+'/video.{format}'
 
         JsonDir = '{root}/lazy-resource/all/{key}/{node}/json'
-        Json = JsonDir+'/{tag}.json'
+        Json = JsonDir+'/{node}.{tag}.json'
 
         MayaDir = '{root}/lazy-resource/all/{key}/{node}/maya'
-        MayaScene = MayaDir+'/{tag}.ma'
+        MayaScene = MayaDir+'/{node}.{tag}.ma'
 
     ROOT = None
     OPTIONS = dict()
+
+    @classmethod
+    def to_count_tag(cls, count):
+        k = 1000
+        m = k**2
+        b = k**3
+        if count < 10*k:
+            return 'less_than_10k'
+        elif 10*k <= count < 50*k:
+            return '10k_to_50k'
+        elif 50*k <= count < 100*k:
+            return '50k_to_100k'
+        elif 100*k <= count < 500*k:
+            return '100k_to_500k'
+        elif 500*k <= count < k**2:
+            return '500k_to_1m'
+        elif m <= count < m*5:
+            return '1m_to_5m'
+        elif m*5 <= count < m*10:
+            return '5m_to_10m'
+        elif m*10 <= count < m*50:
+            return '10m_to_50m'
+        elif m*50 <= count < m*100:
+            return '50m_to_100m'
+        elif m*100 <= count < m*500:
+            return '100m_to_500m'
+        elif m*500 <= count < b:
+            return '500m_to_1b'
+        elif b <= count:
+            return 'more_than_1b'
+
+    @classmethod
+    def to_memory_size_tag(cls, size):
+        kb = 1024
+        mb = 1024**2
+        gb = 1024**3
+        if size < mb*500:
+            return 'less_than_500mb'
+        elif mb*500 <= size < gb*1:
+            return '500mb_to_1gb'
+        elif gb*1 <= size < gb*5:
+            return '1gb_to_5gb'
+        elif gb*5 <= size < gb*10:
+            return '5gb_to_10gb'
+        elif gb*10 <= size < gb*15:
+            return '10gb_to_15gb'
+        elif gb*15 <= size < gb*20:
+            return '15gb_to_20gb'
+        elif gb*20 <= size < gb*25:
+            return '20gb_to_25gb'
+        elif gb*25 <= size < gb*30:
+            return '25gb_to_30gb'
+        elif gb*30 <= size:
+            return 'more_than_30gb'
 
     @classmethod
     def get_root(cls):
@@ -373,7 +429,7 @@ class Stage(object):
 
     # base method
     def find_one(self, entity_type, filters):
-        dtb_entity = self.__class__.__dict__[entity_type]
+        dtb_entity = self.to_dtd_entity(entity_type)
         e_str = self.to_expression_str(
             entity_type, filters
         )
@@ -453,15 +509,27 @@ class Stage(object):
 
         dtb_entity = self.to_dtd_entity(entity_type)
         name = path.split(self.PATHSEP)[-1]
-        gui_name = bsc_core.RawTextMtd.to_prettify(name, capitalize=True)
+        names = bsc_pinyin.Text.split_any_to_letters(name)
+        gui_name = ' '.join(map(lambda x: str(x).capitalize(), names))
+        gui_name_chs = gui_name
         options = dict(
             path=path,
             gui_name=gui_name,
+            gui_name_chs=gui_name_chs
         )
         options.update(**kwargs)
         _ = dtb_entity.create(**options)
         _.save()
         return self.to_entity(entity_type, _.__data__)
+
+    def remove_entity(self, entity_type, path):
+        dtb_entity = self.to_dtd_entity(entity_type)
+        if dtb_entity.select().where(dtb_entity.path == path).exists() is False:
+            return False
+
+        _ = dtb_entity.get(dtb_entity.path == path)
+        _.delete_instance()
+        return True
 
     def update_entity(self, entity_type, path, **kwargs):
         dtb_entity = self.to_dtd_entity(entity_type)
@@ -531,6 +599,25 @@ class Stage(object):
             **options
         )
 
+    def remove_assign(self, path_source, path_target):
+        path = '{}->{}'.format(path_source, path_target)
+        self.remove_entity(
+            self.EntityTypes.Assign, path
+        )
+
+    def remove_assigns_below(self, path_source, path_target_root):
+        path = '{}->{}'.format(path_source, path_target_root)
+        _ = self.find_all(
+            self.EntityTypes.Assign,
+            filters=[
+                ('path', 'startswith', path)
+            ]
+        )
+        for i in _:
+            self.remove_entity(
+                self.EntityTypes.Assign, i.path
+            )
+
     def create_type_assign(self, path_source, path_target, **kwargs):
         return self.create_assign(
             path_source, path_target, type='type_assign', **kwargs
@@ -595,7 +682,7 @@ class Stage(object):
         # image
         if file_opt.ext in {'.png', '.jpg', '.tga', '.exr'}:
             image_path = self.NodePathPattens.PreviewImage.format(**options)
-            file_opt.copy_to_file(image_path)
+            file_opt.copy_to_file(image_path, replace=True)
             # noinspection PyBroadException
             try:
                 # fixme: convert png to jpg?
@@ -614,7 +701,7 @@ class Stage(object):
         # video
         elif file_opt.ext in {'.mov', '.avi', '.mp4'}:
             video_path = self.NodePathPattens.PreviewVideo.format(**options)
-            file_opt.copy_to_file(video_path)
+            file_opt.copy_to_file(video_path, replace=True)
             # noinspection PyBroadException
             try:
                 self.create_or_update_parameters(
@@ -669,6 +756,9 @@ class Stage(object):
         self.create_or_update_parameters(
             node_path, 'thumbnail', thumbnail_path
         )
+
+    def upload_node_preview_as_image(self, node_path, file_path):
+        pass
 
     def upload_node_json(self, node_path, tag, data):
         if self.check_node_exists(node_path) is False:
@@ -734,6 +824,30 @@ class Stage(object):
         )
         if p:
             return p.value
+
+    def is_exists_for_node_tag(self, node_path, tag_path):
+        path = '{}->{}'.format(node_path, tag_path)
+        _ = self.find_one(
+            self.EntityTypes.Assign,
+            filters=[
+                ('path', 'is', path)
+            ]
+        )
+        if _:
+            return True
+        return False
+
+    def is_exists_for_node_tag_at(self, node_path, tag_path):
+        path = '{}->{}'.format(node_path, tag_path)
+        _ = self.find_all(
+            self.EntityTypes.Assign,
+            filters=[
+                ('path', 'startswith', path)
+            ]
+        )
+        if _:
+            return True
+        return False
 
     def check_node_exists(self, path):
         return self.is_entity_exists(self.EntityTypes.Node, path)

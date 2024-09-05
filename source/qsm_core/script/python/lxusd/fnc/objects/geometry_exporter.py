@@ -159,7 +159,7 @@ class GeometryLookPropertyExporter(gnl_fnc_abstracts.AbsFncOptionBase):
             label='geometry look property create'
         ) as l_p:
             display_color = self.get('display_color')
-            asset_color = bsc_core.RawTextOpt(self._asset_name).to_rgb_(maximum=1, seed=self._color_seed)
+            asset_color = bsc_core.BscTextOpt(self._asset_name).to_rgb_(maximum=1, seed=self._color_seed)
             for i_usd_prim_src in self._usd_stage_src.TraverseAll():
                 l_p.do_update()
                 #
@@ -201,7 +201,7 @@ class GeometryLookPropertyExporter(gnl_fnc_abstracts.AbsFncOptionBase):
                                     i_usd_mesh_opt_tgt.create_uv_map(j_uv_map_name, uv_map)
                         #
                         if self.get('with_shell_color') is True:
-                            i_offset = bsc_core.RawTextOpt(i_obj_path_opt.name).get_index()
+                            i_offset = bsc_core.BscTextOpt(i_obj_path_opt.name).get_index()
                             colors = i_usd_mesh_opt_src.get_colors_fom_shell(
                                 offset=i_offset, seed=self._color_seed
                             )
@@ -270,7 +270,7 @@ class GeometryDisplayColorExporter(gnl_fnc_abstracts.AbsFncOptionBase):
                 maximum=count,
                 label='geometry display-color create'
         ) as l_p:
-            asset_color = bsc_core.RawTextOpt(self._asset_name).to_rgb_(maximum=1, seed=self._color_seed)
+            asset_color = bsc_core.BscTextOpt(self._asset_name).to_rgb_(maximum=1, seed=self._color_seed)
             for i_index, i_usd_prim_src in enumerate(self._usd_stage_src.TraverseAll()):
                 i_obj_type_name = i_usd_prim_src.GetTypeName()
                 i_obj_path = i_usd_prim_src.GetPath().pathString

@@ -507,7 +507,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
             show_info_dict['update'] = bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
                 bsc_storage.StgFileOpt(
                     movie_file_path
-                ).get_modify_timestamp(),
+                ).get_mtime(),
                 language=1
             )
             render_info_file_path = self._render_info_file_rsv_unit.get_result(
@@ -604,7 +604,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
 
         prx_item_widget.set_name_dict(show_info_dict)
         prx_item_widget.set_icons_by_pixmap(pixmaps)
-        r, g, b = bsc_core.RawTextOpt(variable_name).to_rgb()
+        r, g, b = bsc_core.BscTextOpt(variable_name).to_rgb()
         prx_item_widget.set_name_frame_background_color((r, g, b, 127))
 
         prx_item_widget.set_tool_tip(
@@ -1107,7 +1107,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
             variants['update'] = bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
                 bsc_storage.StgFileOpt(
                     movie_file_path
-                ).get_modify_timestamp(),
+                ).get_mtime(),
                 language=1
             )
             #
@@ -1186,7 +1186,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
 
         prx_item_widget.set_name_dict(variants)
         prx_item_widget.set_icons_by_pixmap(pixmaps)
-        r, g, b = bsc_core.RawTextOpt(variable_name).to_rgb()
+        r, g, b = bsc_core.BscTextOpt(variable_name).to_rgb()
         prx_item_widget.set_name_frame_background_color((r, g, b, 127))
 
         prx_item_widget.set_tool_tip(

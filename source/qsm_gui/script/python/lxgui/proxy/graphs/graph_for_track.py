@@ -80,8 +80,11 @@ class PrxTrackView(
     def get_stage_model(self):
         return self._qt_widget._track_stage._stage_model
 
-    def get_current_frame(self):
+    def get_current_time(self):
         return self._qt_widget._track_timeline._get_current_frame_()
+
+    def set_current_frame(self, frame):
+        self._qt_widget._track_timeline._set_current_frame_(frame)
 
     def restore(self):
         self._qt_widget._graph._restore_graph_()
@@ -94,19 +97,19 @@ class PrxTrackView(
 
         args = [
             ('sam_walk_macho_forward', 24),
-            ('sam_run_turn_left', 32),
-            ('sam_walk_forward', 48),
-            ('sam_walk_sneak_turn_right', 24),
-            ('sam_run_forward', 72),
-            ('sam_walk_sneak_forward', 32)
+            # ('sam_run_turn_left', 32),
+            # ('sam_walk_forward', 48),
+            # ('sam_walk_sneak_turn_right', 24),
+            # ('sam_run_forward', 72),
+            # ('sam_walk_sneak_forward', 32)
         ]
 
         random.seed(1)
 
         clip_start = 1
-        for i_index in range(10):
+        for i_index in range(1):
             i_name, i_source_count = random.choice(args)
-            i_post_cycle = random.choice(post_cycles)
+            i_post_cycle = 1
 
             i_clip_end = bsc_model.TrackModel.compute_end(
                 clip_start, 1, i_source_count-1, i_post_cycle
@@ -118,11 +121,14 @@ class PrxTrackView(
                 start=clip_start, speed=1.0, count=None,
                 source_start=1, source_end=i_source_count-1,
                 pre_cycle=0, post_cycle=i_post_cycle,
-                scale_start=None, scale_end=None,
+                scale_start=None, scale_end=None, scale_offset=None,
                 pre_blend=4, post_blend=4,
-                layer_index=i_index
+                layer_index=i_index,
+                is_bypass=0,
             )
             clip_start = i_clip_end+1
 
         # self.setup_graph_by_universe()
 
+    def get_all_layer_names(self):
+        return self._qt_widget._track_stage._stage_model.get_all_layer_names()

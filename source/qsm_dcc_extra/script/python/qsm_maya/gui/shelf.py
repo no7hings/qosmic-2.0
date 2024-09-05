@@ -16,16 +16,15 @@ from .. import core as _mya_core
 class MainShelf(object):
     KEY = 'qosmic shelf'
 
-    SHELF_NAME = 'Lazy Tool'
+    MAIN_SHELF_NAME = 'Lazy Tool'
+    MAIN_SHELF_KEY = 'Lazy_Tool'
 
-    SHELF_NAME_CHS = bsc_core.auto_unicode('懒人工具')
-    
-    SHELF_KEY = 'Lazy_Tool'
+    MAIN_SHELF_NAME_CHS = bsc_core.auto_unicode('懒人工具')
 
     OLD_SHELF_NAMES = [
         'QSM',
-        SHELF_KEY,
-        SHELF_NAME_CHS
+        MAIN_SHELF_KEY,
+        MAIN_SHELF_NAME_CHS
     ]
 
     def __init__(self):
@@ -43,9 +42,9 @@ class MainShelf(object):
                 _mya_core.Shelf.delete(i)
         # create new
         if bsc_core.EnvBaseMtd.get_ui_language() == 'chs':
-            shelf_name = self.SHELF_NAME_CHS
+            shelf_name = self.MAIN_SHELF_NAME_CHS
         else:
-            shelf_name = self.SHELF_NAME
+            shelf_name = self.MAIN_SHELF_NAME
 
         shelf = _mya_core.Shelf.create(shelf_name)
 
@@ -90,7 +89,7 @@ class MainShelf(object):
                         j_button_name = j_v['button_name']
 
                     j_icon = gui_core.GuiIcon.get(j_v['icon'])
-                    background_rgb = bsc_core.RawTextOpt(j_name).to_rgb_1(maximum=1.0, s_p=(32, 55), v_p=(55, 85))
+                    background_rgb = bsc_core.BscTextOpt(j_name).to_hash_rgb(maximum=1.0, s_p=(32, 55), v_p=(55, 85))
                     j_button = _mya_core.Shelf.create_button(
                         shelf,
                         label=j_name,

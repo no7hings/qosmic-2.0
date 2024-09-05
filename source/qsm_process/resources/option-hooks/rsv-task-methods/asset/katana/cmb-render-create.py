@@ -73,12 +73,12 @@ def main(session):
                 i_render_frame_step = int(hook_option_opt.get('render_asset_frame_step'))
             #
             if i_render_frame_step > 1:
-                render_frame_range = bsc_core.RawTextOpt(i_render_frames).to_frame_range()
-                i_render_frames_ = bsc_core.RawFrameRangeMtd.get(
+                render_frame_range = bsc_core.BscTextOpt(i_render_frames).to_frame_range()
+                i_render_frames_ = bsc_core.BscFrameRang.get(
                     render_frame_range, i_render_frame_step
                 )
             else:
-                i_render_frames_ = bsc_core.RawTextOpt(i_render_frames).to_frames()
+                i_render_frames_ = bsc_core.BscTextOpt(i_render_frames).to_frames()
             #
             i_batch_file_path = hook_option_opt.get('batch_file')
             i_file_path = hook_option_opt.get('file')

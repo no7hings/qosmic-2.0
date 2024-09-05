@@ -26,9 +26,9 @@ for i_k in ks:
     for j_v in i_v:
         ms.append(int(i_k))
 
-    print bsc_core.RawIntegerMtd.get_file_size_prettify(int(i_k)), i_v
+    print bsc_core.BscInteger.to_prettify_as_file_size(int(i_k)), i_v
 
-print bsc_core.RawIntegerMtd.get_file_size_prettify(sum([abs(i) for i in ms[:-1]]))
+print bsc_core.BscInteger.to_prettify_as_file_size(sum([abs(i) for i in ms[:-1]]))
 
 
 

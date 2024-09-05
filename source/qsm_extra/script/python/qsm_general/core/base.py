@@ -16,6 +16,62 @@ def scheme_is_new():
     return QSM_SCHEME == 'new'
 
 
+class QsmProject(object):
+    PROJECT_NAME_MAP = dict(
+        QSM_TST=['Test', '测试']
+    )
+    PROJECT_NAME_MAP_NEW = dict(
+        TSXK=['TSXK', '吞噬星空']
+    )
+
+    @classmethod
+    def get_name_args(cls, project_name):
+        if scheme_is_new():
+            return cls.PROJECT_NAME_MAP_NEW[project_name]
+        return cls.PROJECT_NAME_MAP[project_name]
+
+
+class QsmAsset(object):
+    """
+    this is shit.
+    """
+    CHARACTER_AND_PROP_ROLE_MASK = ['chr', 'prp']
+    CHARACTER_AND_PROP_ROLE_MASK_NEW = ['CHA', 'PROP']
+
+    CHARACTER_ROLE_MASK = ['chr']
+    CHARACTER_ROLE_MASK_NEW = ['CHA']
+
+    PROP_ROLE_MASK = ['prp']
+    PROP_ROLE_MASK_NEW = ['PROP']
+
+    SCENERY_ROLE_MASK = ['scn']
+    SCENERY_ROLE_MASK_NEW = ['SCE']
+
+    @classmethod
+    def get_character_and_prop_role_mask(cls):
+        if scheme_is_new():
+            return cls.CHARACTER_AND_PROP_ROLE_MASK_NEW
+        return cls.CHARACTER_AND_PROP_ROLE_MASK
+
+    @classmethod
+    def get_character_role_mask(cls):
+        if scheme_is_new():
+            return cls.CHARACTER_ROLE_MASK_NEW
+        return cls.CHARACTER_ROLE_MASK
+
+    @classmethod
+    def get_prop_role_mask(cls):
+        if scheme_is_new():
+            return cls.PROP_ROLE_MASK_NEW
+        return cls.PROP_ROLE_MASK
+
+    @classmethod
+    def get_scenery_role_mask(cls):
+        if scheme_is_new():
+            return cls.SCENERY_ROLE_MASK_NEW
+        return cls.SCENERY_ROLE_MASK
+
+
 def check_python_lib():
     file_path = 'C:/Windows/System32/python27.dll'
     if os.path.isfile(file_path) is False:

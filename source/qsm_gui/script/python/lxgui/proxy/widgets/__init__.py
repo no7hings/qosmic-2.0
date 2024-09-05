@@ -23,7 +23,9 @@ from .view_for_tree import *
 
 from .view_for_list import *
 
-from .entry_for_tag import *
+from .view_for_scene import *
+
+from .view_for_tag import *
 
 from .chart import *
 
@@ -37,7 +39,7 @@ from .panel_base import *
 
 from .window import *
 
-from .window_for_subprocess import *
+from .window_for_sprc_task import *
 
 
 

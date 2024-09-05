@@ -156,7 +156,7 @@ class AbsQtScreenshotBaseDef(_qt_abstracts.AbsQtHelpBaseDef):
     def _record_next_frame_(self):
         self._record_frame_index += 1
 
-        self._record_text = bsc_core.RawIntegerMtd.frame_to_time_prettify(self._record_frame_index, self._record_fps)
+        self._record_text = bsc_core.BscInteger.frame_to_time_prettify(self._record_frame_index, self._record_fps)
 
         self._widget.update()
 
@@ -453,25 +453,7 @@ class AbsQtScreenshotBaseDef(_qt_abstracts.AbsQtHelpBaseDef):
                 app_.desktop().winId()
             ).copy(rect).toImage()
 
-        cls._save_image_(image, file_path)
-
-    @classmethod
-    def _save_image_(cls, image, file_path):
-        import numpy as np
-
-        import cv2
-
-        ptr = image.bits()
-        # PyQt
-        if QT_LOAD_INDEX == 0:
-            ptr.setsize(image.byteCount())
-
-        width = image.width()
-        height = image.height()
-        # noinspection PyArgumentList
-        img_arr = np.array(ptr).reshape(height, width, 4)
-        img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGRA2BGR)
-        cv2.imwrite(file_path, img_arr)
+        _qt_core.QtUtil.save_qt_image(image, file_path)
 
 
 class QtScreenshotFrame(
@@ -757,7 +739,7 @@ class QtInputAsScreenshot(
         # self.update_history()
 
     def _do_screenshot_(self):
-        active_window = _qt_core.GuiQtUtil.get_qt_active_window()
+        active_window = _qt_core.QtUtil.get_qt_active_window()
         w = QtScreenshotFrame()
         w.screenshot_started.connect(active_window.hide)
         w._start_screenshot_()

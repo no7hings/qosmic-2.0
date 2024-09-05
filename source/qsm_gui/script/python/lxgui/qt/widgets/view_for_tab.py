@@ -124,9 +124,9 @@ class QtTabView(
 
                 scroll_abs_w += i_t_w
             # update scroll model
-            self._gui_scroll.set_w_or_h(scroll_w)
-            self._gui_scroll.set_abs_w_or_h(scroll_abs_w+btn_f_w*3)
-            self._gui_scroll.update()
+            self._scroll_bar_model.set_w_or_h(scroll_w)
+            self._scroll_bar_model.set_abs_w_or_h(scroll_abs_w+btn_f_w*3)
+            self._scroll_bar_model.update()
             #
             # if self._tab_menu_is_enable is True:
             #     self._tab_menu_button.show()
@@ -134,7 +134,7 @@ class QtTabView(
             #         w-btn_f_w+(btn_f_w-btn_w)/2, c_y+(btn_f_h-btn_h)/2, btn_w, btn_h
             #     )
             # check scroll is valid
-            if self._gui_scroll.get_is_valid():
+            if self._scroll_bar_model.is_valid():
                 btn_w_1, btn_h_1 = btn_w/2, btn_h
                 btn_f_w_r = btn_f_w*2
                 c_x_1, c_y_1 = w-btn_f_w_r, y
@@ -151,7 +151,7 @@ class QtTabView(
                     c_x_1+(btn_f_w-btn_w)/2, c_y_1+(btn_f_h-btn_h_1)/2, btn_w_1, btn_h_1
                 )
 
-                if self._gui_scroll.get_is_minimum():
+                if self._scroll_bar_model.get_is_minimum():
                     self._tab_scroll_previous_button._set_icon_file_path_(self._icons_0[1])
                 else:
                     self._tab_scroll_previous_button._set_icon_file_path_(self._icons_0[0])
@@ -161,7 +161,7 @@ class QtTabView(
                     c_x_1+(btn_f_w-btn_w)/2+btn_w_1, c_y_1+(btn_f_h-btn_h_1)/2, btn_w_1, btn_h_1
                 )
 
-                if self._gui_scroll.get_is_maximum():
+                if self._scroll_bar_model.get_is_maximum():
                     self._tab_scroll_next_button._set_icon_file_path_(self._icons_1[1])
                 else:
                     self._tab_scroll_next_button._set_icon_file_path_(self._icons_1[0])
@@ -177,7 +177,7 @@ class QtTabView(
                 self._tab_scroll_next_button.hide()
                 self._tab_choose_button.hide()
 
-            scroll_value = self._gui_scroll.get_value()
+            scroll_value = self._scroll_bar_model.get_value()
             widths = self._item_width_dict.values()
             if self._is_action_flag_match_(
                 self.ActionFlag.DragChildPolish
@@ -329,8 +329,8 @@ class QtTabView(
             _qt_core.QtFont.generate(size=10)
         )
 
-        self._gui_scroll = _qt_core.GuiQtModForScroll()
-        self._gui_scroll.set_step(64)
+        self._scroll_bar_model = _qt_core.GuiQtModForScroll()
+        self._scroll_bar_model.set_step(64)
         self._set_menu_data_generate_fnc_(
             self._tab_item_menu_gain_fnc_
         )
@@ -440,7 +440,7 @@ class QtTabView(
                 rect=self._tab_left_tool_box_draw_rect
             )
         #
-        if self._gui_scroll.get_is_valid():
+        if self._scroll_bar_model.is_valid():
             painter._draw_tab_right_tool_box_by_rect_(
                 rect=self._tab_right_tool_box_draw_rect,
                 background_color=_qt_core.QtBackgroundColors.Dark
@@ -559,7 +559,7 @@ class QtTabView(
                 title = self._get_page_name_text_at_(self._index_hover)
                 tool_tip = self._get_page_tool_tip_text_at_(self._index_hover)
 
-            css = _qt_core.GuiQtUtil.generate_tool_tip_css(
+            css = _qt_core.QtUtil.generate_tool_tip_css(
                 title,
                 content=tool_tip,
                 action_tip=[
@@ -685,12 +685,12 @@ class QtTabView(
         item = self._tab_item_stack.get_item_at(index)
         if item:
             x = item.get_rect().x()
-            self._gui_scroll.accept_value(x-24)
+            self._scroll_bar_model.accept_value(x-24)
 
     def _do_scroll_previous_(self):
-        if self._gui_scroll.step_to_previous():
+        if self._scroll_bar_model.step_to_previous():
             self._refresh_widget_all_()
 
     def _do_scroll_next_(self):
-        if self._gui_scroll.step_to_next():
+        if self._scroll_bar_model.step_to_next():
             self._refresh_widget_all_()

@@ -3,7 +3,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-bsc_core.PtnFileTilesMtd.get_is_valid(
+bsc_core.PtnFileTilesMtd.is_valid(
     '*.<udim>.exr'
 )
 

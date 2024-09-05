@@ -135,7 +135,7 @@ class PnlTextureConverter(gui_prx_widgets.PrxSessionWindow):
 
     @classmethod
     def _set_file_args_update_1_(cls, file_dict, file_opt, name_pattern):
-        if bsc_core.PtnFileTilesMtd.get_is_valid(name_pattern):
+        if bsc_core.PtnFileTilesMtd.is_valid(name_pattern):
             match_args = bsc_storage.StgFileTiles.get_number_args(
                 file_opt.name, name_pattern
             )
@@ -148,7 +148,7 @@ class PnlTextureConverter(gui_prx_widgets.PrxSessionWindow):
                 ).append(file_opt.path)
                 return True
         else:
-            if file_opt.get_is_match_name_pattern(name_pattern):
+            if file_opt.is_name_match_pattern(name_pattern):
                 file_dict.setdefault(
                     file_opt.path, []
                 ).append(file_opt.path)

@@ -204,7 +204,7 @@ class AbsPrxWaitingDef(object):
     def start_waiting(self, auto_stop_time=None):
         self.widget.setCursor(gui_qt_core.QtCore.Qt.BusyCursor)
         self._qt_waiting_char.show()
-        gui_qt_core.GuiQtApplicationOpt().set_process_run_0()
+        gui_qt_core.QtApplication().set_process_run_0()
         self._qt_waiting_char._start_waiting_()
         if isinstance(auto_stop_time, (int, float)):
             self._auto_stop_timer.singleShot(
@@ -213,12 +213,12 @@ class AbsPrxWaitingDef(object):
 
     def update_waiting(self):
         self._qt_waiting_char.update()
-        gui_qt_core.GuiQtApplicationOpt().set_process_run_0()
+        gui_qt_core.QtApplication().set_process_run_0()
 
     def stop_waiting(self):
         self.widget.unsetCursor()
         self._qt_waiting_char.hide()
-        gui_qt_core.GuiQtApplicationOpt().set_process_run_0()
+        gui_qt_core.QtApplication().set_process_run_0()
         self._qt_waiting_char._stop_waiting_()
 
     def _refresh_waiting_draw_(self):
@@ -299,7 +299,7 @@ class AbsPrxWindow(AbsPrx):
                         )
                         i.close_window()
         #
-        gui_qt_core.GuiQtUtil.show_qt_window(self._qt_widget, pos, size)
+        gui_qt_core.QtUtil.show_qt_window(self._qt_widget, pos, size)
 
     def run_fnc_delay(self, fnc, delay_time):
         self._qt_widget._run_fnc_delay_(fnc, delay_time)

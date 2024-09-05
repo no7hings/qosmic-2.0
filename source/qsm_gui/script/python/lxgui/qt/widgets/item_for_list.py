@@ -819,7 +819,7 @@ class QtListItemWidget(
                         )
         # play button
         if self._get_play_draw_is_enable_() is True:
-            painter._draw_video_play_button_by_rect_(
+            painter._draw_play_button_by_rect_(
                 self._video_play_rect,
                 offset=offset,
                 is_hovered=self._is_hovered,

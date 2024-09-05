@@ -284,7 +284,7 @@ class QtImageGraph(_graph_for_node.QtNodeGraph):
     def _set_restore_(self):
         pass
 
-    def _set_clear_(self):
+    def _do_clear_(self):
         for i in self._graph_nodes:
             i.deleteLater()
 

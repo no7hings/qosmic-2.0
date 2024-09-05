@@ -189,7 +189,7 @@ class RsvStgTaskOpt(object):
         )
         #
         stg_version_opt.set_stg_version_number(
-            bsc_core.PtnVersionOpt(version).get_number()
+            bsc_core.BscVersionOpt(version).get_number()
         )
         #
         if version_type:

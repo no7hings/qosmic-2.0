@@ -410,7 +410,7 @@ class QtEntryAsConstant(
     def _has_focus_(self):
         return self.hasFocus()
 
-    def _set_clear_(self):
+    def _do_clear_(self):
         self.clear()
 
     # for completion
@@ -805,7 +805,7 @@ class QtEntryAsList(
             item_widget = self.itemWidget(item)
             if item_widget is not None:
                 value = item_widget._get_value_()
-                bsc_storage.StgPathOpt(value).open_in_system()
+                bsc_storage.StgPathOpt(value).show_in_system()
 
     def _set_shortcut_register_(self):
         actions = [
@@ -949,7 +949,7 @@ class QtEntryAsList(
 
     def _clear_all_values_(self):
         super(QtEntryAsList, self)._clear_all_values_()
-        self._set_clear_()
+        self._do_clear_()
 
     def __item_show_deferred_fnc(self, data):
         item_widget, text = data
@@ -998,8 +998,8 @@ class QtEntryAsList(
         )
         item_widget._refresh_widget_all_()
 
-    def _set_clear_(self):
-        super(QtEntryAsList, self)._set_clear_()
+    def _do_clear_(self):
+        super(QtEntryAsList, self)._do_clear_()
         self._values = []
 
     def _set_values_(self, values):
@@ -1093,7 +1093,7 @@ class QtEntryAsBubble(
         self.__w_mark = None
 
         self.setToolTip(
-            _qt_core.GuiQtUtil.generate_tool_tip_css(
+            _qt_core.QtUtil.generate_tool_tip_css(
                 'bubble entry',
                 [
                     '"LMB-click" to show choose',

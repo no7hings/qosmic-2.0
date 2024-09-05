@@ -611,7 +611,7 @@ class QtInputAsList(
     def _get_values_(self):
         return self._entry_widget._get_values_()
 
-    def _set_clear_(self):
+    def _do_clear_(self):
         self._clear_all_values_()
 
     def _clear_all_values_(self):

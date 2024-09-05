@@ -71,7 +71,7 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
 
         self._lzy_data_for_node = None
 
-        self.gui_setup_page()
+        self.gui_page_setup_fnc()
 
     def do_gui_update_file(self, file_path):
         # file opt put first
@@ -106,7 +106,7 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
         )
         pot.set(values[0])
 
-    def gui_setup_page(self):
+    def gui_page_setup_fnc(self):
         qt_v_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
         qt_v_lot.setContentsMargins(*[0]*4)
         qt_v_lot.setSpacing(2)

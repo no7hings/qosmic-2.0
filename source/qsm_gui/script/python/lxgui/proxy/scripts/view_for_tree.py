@@ -496,7 +496,7 @@ class GuiPrxScpForStorageTreeAdd(gui_prx_abstracts.AbsGuiPrxCacheDef):
                 )
             #
             prx_item.set_checked(False)
-            prx_item.set_icon_by_color(bsc_core.RawTextOpt(obj.type).to_rgb(), 1)
+            prx_item.set_icon_by_color(bsc_core.BscTextOpt(obj.type).to_rgb(), 1)
             self._item_dict[obj_key] = prx_item
             return True, prx_item
 
@@ -850,7 +850,7 @@ class GuiPrxScpForTreeAdd1(object):
             prx_item.set_gui_dcc_obj(obj, namespace=self._dcc_namespace)
             prx_item.set_expanded(True)
             prx_item.set_checked(False)
-            prx_item.set_icon_by_color(bsc_core.RawTextOpt(obj.type.name).to_rgb(), 1)
+            prx_item.set_icon_by_color(bsc_core.BscTextOpt(obj.type.name).to_rgb(), 1)
             self._item_dict[obj_path] = prx_item
             return prx_item
 

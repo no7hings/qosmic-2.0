@@ -286,7 +286,7 @@ class RectLayoutOpt(object):
             if c.y < coord.y:
                 self.h = coord.y-self.y
 
-        def get_is_valid(self):
+        def is_valid(self):
             return None not in [self.w, self.h]
 
     class AreaRect(AbsRect):

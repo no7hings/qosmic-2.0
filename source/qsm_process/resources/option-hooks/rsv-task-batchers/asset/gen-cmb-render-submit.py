@@ -34,7 +34,7 @@ def main(session):
 
     rsv_application = gnl_ssn_objects.SsnRsvApplication()
     choice_scheme = hook_option_opt.get('choice_scheme')
-    if bsc_core.RawTextOpt(choice_scheme).get_filter_by_pattern('asset-*-output'):
+    if bsc_core.BscTextOpt(choice_scheme).get_filter_by_pattern('asset-*-output'):
         # pre export use workspace: "output"
         scene_src_file_path_tgt = rsv_application.get_temporary_scene_src_file(
             version_scheme='new'

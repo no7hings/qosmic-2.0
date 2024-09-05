@@ -10,7 +10,7 @@ def main(session):
     if file_path:
         bsc_storage.StgFileOpt(
             file_path
-        ).open_in_system()
+        ).show_in_system()
 
 
 if __name__ == '__main__':

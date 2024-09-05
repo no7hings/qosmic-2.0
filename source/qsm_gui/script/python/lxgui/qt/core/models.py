@@ -37,9 +37,6 @@ class GuiQtModForTabItem(object):
 
     name_text = property(get_name)
 
-    def get_rect(self):
-        return self._rect
-
     def set_icon_text(self, text):
         self._icon_text = text
 
@@ -188,7 +185,7 @@ class GuiQtModForScroll(object):
     def set_abs_w_or_h(self, v):
         self.__abs_w_or_h = v
 
-    def get_is_valid(self):
+    def is_valid(self):
         return self._is_valid
 
     def set_step(self, v):

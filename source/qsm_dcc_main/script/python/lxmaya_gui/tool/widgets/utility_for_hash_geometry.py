@@ -75,7 +75,7 @@ class PnlHashGeometry(utl_gui_abstracts.AbsPnlForHashGeometryDcc):
             port = self._hash_uv_node_prx.get_port('geometry_unify')
             port.set_name(
                 'Unify Geometry by Select(s) [ Running {} ]'.format(
-                    bsc_core.RawIntegerMtd.second_to_time_prettify(running_time_cost)
+                    bsc_core.BscInteger.second_to_time_prettify(running_time_cost)
                 )
             )
 
@@ -114,7 +114,7 @@ class PnlHashGeometry(utl_gui_abstracts.AbsPnlForHashGeometryDcc):
             port = self._hash_uv_node_prx.get_port('geometry_uv_map_assign')
             port.set_name(
                 'Assign Geometry UV-map By Select(s) [ Running {} ]'.format(
-                    bsc_core.RawIntegerMtd.second_to_time_prettify(running_time_cost)
+                    bsc_core.BscInteger.second_to_time_prettify(running_time_cost)
                 )
             )
 

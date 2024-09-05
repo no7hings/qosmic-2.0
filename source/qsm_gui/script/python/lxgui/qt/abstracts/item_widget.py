@@ -222,7 +222,7 @@ class AbsQtItemWidgetBaseDef(object):
             )
 
     def _set_tool_tip_(self, content):
-        self._tool_tip_css = _qt_core.GuiQtUtil.generate_tool_tip_css(
+        self._tool_tip_css = _qt_core.QtUtil.generate_tool_tip_css(
             self._get_name_text_(), content
         )
         # self._widget.setToolTip(

@@ -9,7 +9,7 @@ from ... import core as gui_core
 # qt
 from .wrap import *
 
-from . import base as gui_qt_cor_base
+from . import base as _base
 
 
 class AbsGuiDcc(object):
@@ -84,7 +84,7 @@ class QtMaya(object):
 
     @classmethod
     def find_all_qt_widgets_by_class(cls, *args, **kwargs):
-        return gui_qt_cor_base.GuiQtUtil.find_all_qt_widgets_by_class(*args, **kwargs)
+        return _base.QtUtil.find_all_qt_widgets_by_class(*args, **kwargs)
 
     # @classmethod
     # def _test(cls):
@@ -121,12 +121,21 @@ class QtMaya(object):
 
     @classmethod
     def make_snapshot(cls, file_path):
+        bsc_storage.StgFileOpt(file_path).create_directory()
+
         main_window = cls.get_qt_main_window()
-        s = QtGui.QPixmap.grabWindow(
-            long(main_window.winId())
-        )
+        # s = QtGui.QPixmap.grabWindow(
+        #     long(main_window.winId())
+        # )
         rect = main_window.rect()
-        s.copy(rect).save(file_path)
+
+        app_ = QtWidgets.QApplication
+        # noinspection PyArgumentList
+        image = QtGui.QPixmap.grabWindow(
+            app_.desktop().winId()
+        ).copy(rect).toImage()
+
+        _base.QtUtil.save_qt_image(image, file_path)
 
     @classmethod
     def create_window_shortcut_action(cls, fnc, shortcut):
@@ -239,11 +248,11 @@ class GuiQtDcc(AbsGuiDcc):
         _ = QtWidgets.QApplication.topLevelWidgets()
         if _:
             cls.QT_MAIN_WINDOW = _[0]
-        return gui_qt_cor_base.GuiQtUtil.get_qt_active_window()
+        return _base.QtUtil.get_qt_active_window()
 
     @classmethod
     def get_qt_active_window(cls):
-        return gui_qt_cor_base.GuiQtUtil.get_qt_active_window()
+        return _base.QtUtil.get_qt_active_window()
 
     @classmethod
     def generate_qt_icon_by_name(cls, icon_name):
@@ -251,14 +260,14 @@ class GuiQtDcc(AbsGuiDcc):
             return QtMaya.generate_qt_icon_by_name(icon_name)
         elif cls.get_is_houdini():
             return GuiQtHoudini.generate_qt_icon_by_name(icon_name)
-        return gui_qt_cor_base.GuiQtIcon.generate_by_name(icon_name)
+        return _base.GuiQtIcon.generate_by_name(icon_name)
 
     @classmethod
     def generate_qt_directory_icon(cls, use_system=False):
         f_i_p = QtWidgets.QFileIconProvider()
         if use_system is True:
             return f_i_p.icon(f_i_p.Folder)
-        return gui_qt_cor_base.GuiQtIcon.generate_by_icon_name('file/folder')
+        return _base.GuiQtIcon.generate_by_icon_name('file/folder')
 
     @classmethod
     def generate_qt_file_icon(cls, file_path):
@@ -271,14 +280,14 @@ class GuiQtDcc(AbsGuiDcc):
     @classmethod
     def generate_qt_palette(cls):
         if cls.get_is_maya():
-            return gui_qt_cor_base.GuiQtUtil.generate_qt_palette()
+            return _base.QtUtil.generate_qt_palette()
         elif cls.get_is_houdini():
-            return gui_qt_cor_base.GuiQtUtil.generate_qt_palette()
+            return _base.QtUtil.generate_qt_palette()
         elif cls.get_is_katana():
-            return gui_qt_cor_base.GuiQtUtil.generate_qt_palette()
+            return _base.QtUtil.generate_qt_palette()
         elif cls.get_is_clarisse():
-            return gui_qt_cor_base.GuiQtUtil.generate_qt_palette(tool_tip=True)
-        return gui_qt_cor_base.GuiQtUtil.generate_qt_palette(tool_tip=True)
+            return _base.QtUtil.generate_qt_palette(tool_tip=True)
+        return _base.QtUtil.generate_qt_palette(tool_tip=True)
 
     @classmethod
     def exit_app(cls, app):

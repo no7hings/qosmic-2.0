@@ -66,7 +66,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         self._window = window
         self._session = session
 
-        self.gui_setup_page()
+        self.gui_page_setup_fnc()
 
     def do_gui_refresh_camera_by_scheme(self):
         scheme = self._camera_scheme_port.get()
@@ -194,7 +194,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
                 directory_path=self._output_directory_port.get(), update_scheme=update_scheme
             )
             if _ is None:
-                self._window.exec_message(
+                self._window.exec_message_dialog(
                     'Directory is non exists'
                 )
             return _
@@ -344,14 +344,14 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
                 )
             )
 
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.task_submit_successful')
                 ),
                 status='correct'
             )
         else:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.no_task_server')
                 ),
@@ -361,7 +361,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
     def do_gui_load_active_camera(self):
         self.do_gui_refresh_camera_by_scheme()
 
-    def gui_setup_page(self):
+    def gui_page_setup_fnc(self):
         qt_lot = qt_widgets.QtVBoxLayout(self._qt_widget)
         qt_lot.setContentsMargins(*[0]*4)
         qt_lot.setSpacing(2)

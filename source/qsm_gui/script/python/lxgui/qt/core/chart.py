@@ -33,7 +33,7 @@ class GuiQtChartDrawDataForSector(object):
         explain, value_maximum, value = datum
         percent = float(value)/float(max(value_maximum, 1))
         #
-        text = '{} : {}%'.format(explain, bsc_core.RawValueMtd.get_percent_prettify(value=value, maximum=value_maximum))
+        text = '{} : {}%'.format(explain, bsc_core.RawValueMtd.to_percent_prettify(value, value_maximum))
         #
         color_percent = max(min(percent, 1), .005)
         if value_maximum == 0:
@@ -50,11 +50,11 @@ class GuiQtChartDrawDataForSector(object):
                     r, g, b = 63, 255, 127
             #
             elif percent > 1:
-                r, g, b = bsc_core.RawColorMtd.hsv2rgb(240-min(percent*15, 45), 1, 1)
+                r, g, b = bsc_core.BscColor.hsv2rgb(240-min(percent*15, 45), 1, 1)
             else:
-                r, g, b = bsc_core.RawColorMtd.hsv2rgb(45*color_percent, 1, 1)
+                r, g, b = bsc_core.BscColor.hsv2rgb(45*color_percent, 1, 1)
                 if mode is gui_core.GuiSectorChartMode.Error:
-                    r, g, b = bsc_core.RawColorMtd.hsv2rgb(45-45*color_percent, 1, 1)
+                    r, g, b = bsc_core.BscColor.hsv2rgb(45-45*color_percent, 1, 1)
             #
             background_rgba = r, g, b, 255
             border_rgba = r, g, b, 255
@@ -188,7 +188,7 @@ class GuiQtChartDrawDataForProcessing(object):
         colors = []
         for i in range(c):
             i_p = float(i)/float(c)
-            i_color = QtGui.QColor(*bsc_core.RawColorMtd.hsv2rgb(140*(1-i_p), .5, 1))
+            i_color = QtGui.QColor(*bsc_core.BscColor.hsv2rgb(140*(1-i_p), .5, 1))
             colors.append(i_color)
             annulus_sector_color.setColorAt(i_p, i_color)
 
@@ -215,7 +215,7 @@ class GuiQtChartDrawDataForProcessing(object):
         else:
             show_name = 'process-{}'.format(index)
         #
-        text_color = QtGui.QColor(*bsc_core.RawColorMtd.hsv2rgb(140*percent, .5, 1))
+        text_color = QtGui.QColor(*bsc_core.BscColor.hsv2rgb(140*percent, .5, 1))
         return (
             annulus_sector_path, annulus_sector_color,
             show_name_rect_f, show_name_option, show_name,
@@ -371,11 +371,11 @@ class GuiQtChartDrawDataForRadar(object):
         percent_sub = float(value_sub)/float(max(value_src, 1))
         text_0 = explain
         if value_sub == 0:
-            text_1 = '{}'.format(bsc_core.RawIntegerMtd.get_prettify(value_tgt))
+            text_1 = '{}'.format(bsc_core.BscInteger.to_prettify(value_tgt))
         else:
             text_1 = '{} ( {}% )'.format(
-                bsc_core.RawIntegerMtd.get_prettify(value_tgt),
-                bsc_core.RawValueMtd.get_percent_prettify(value=value_sub, maximum=value_src)
+                bsc_core.BscInteger.to_prettify(value_tgt),
+                bsc_core.RawValueMtd.to_percent_prettify(value_sub, value_src)
             )
         #
         if value_maximum == 0:
@@ -385,9 +385,9 @@ class GuiQtChartDrawDataForRadar(object):
             if percent_sub == 0:
                 r, g, b = 64, 255, 127
             elif percent_sub > 0:
-                r, g, b = bsc_core.RawColorMtd.hsv2rgb(45*(1-min(percent_sub, 1)), 1, 1)
+                r, g, b = bsc_core.BscColor.hsv2rgb(45*(1-min(percent_sub, 1)), 1, 1)
             else:
-                r, g, b = bsc_core.RawColorMtd.hsv2rgb(120+45*(1-min(percent_sub, 1)), 1, 1)
+                r, g, b = bsc_core.BscColor.hsv2rgb(120+45*(1-min(percent_sub, 1)), 1, 1)
             #
             background_rgba = r, g, b, 255
             border_rgba = r, g, b, 255
@@ -482,7 +482,7 @@ class GuiQtChartDrawDataForPie(object):
     def _get_basic_data_(cls, data, position, size, side):
         def rcs_fnc_(i_data_, i_seq_=0, qa=90, ma=0):
             _i_name, _i_value, color = i_data_[i_seq_]
-            _i_color = bsc_core.RawTextOpt(_i_name).to_rgb()
+            _i_color = bsc_core.BscTextOpt(_i_name).to_rgb()
             #
             p = float(_i_value)/float(maximum)
             _a = 360*p
@@ -502,7 +502,7 @@ class GuiQtChartDrawDataForPie(object):
             _i_shadow_path = rim_path-pie_path
             #
             _i_percent = '{}%'.format(
-                bsc_core.RawValueMtd.get_percent_prettify(value=_i_value, maximum=maximum)
+                bsc_core.RawValueMtd.to_percent_prettify(_i_value, maximum)
             )
             #
             lis.append(

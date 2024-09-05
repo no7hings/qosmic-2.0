@@ -10,5 +10,5 @@ geometry_abc_file_opt = bsc_storage.StgFileOpt(geometry_abc_file_path)
 print geometry_abc_file_opt.get_is_writeable()
 
 geometry_abc_file_opt.set_modify_time(
-    scene_file_opt.get_modify_timestamp()
+    scene_file_opt.get_mtime()
 )

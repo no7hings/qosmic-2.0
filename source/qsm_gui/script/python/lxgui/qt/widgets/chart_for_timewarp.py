@@ -11,6 +11,8 @@ from ...qt import core as _qt_core
 
 from .. import abstracts as _qt_abstracts
 
+from .. import graph_models as _graph_models
+
 
 class QtChartAsTimeWrap(
     QtWidgets.QWidget,
@@ -63,7 +65,7 @@ class QtChartAsTimeWrap(
 
         self._init_action_base_def_(self)
 
-        self._graph_model = _qt_core.GraphModel(self)
+        self._graph_model = _graph_models.ModelForBaseGraph(self)
 
         self._translate_x = 0
         self._scale_x = 0.01

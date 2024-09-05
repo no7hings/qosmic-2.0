@@ -38,6 +38,18 @@ import collections
 from . import configure as _configure
 
 
+def auto_string(text):
+    if isinstance(text, six.text_type):
+        return text.encode('utf-8')
+    return text
+
+
+def auto_unicode(text):
+    if not isinstance(text, six.text_type):
+        return text.decode('utf-8')
+    return text
+
+
 class BasPlatform(object):
     @staticmethod
     def get_is_linux():
@@ -161,7 +173,7 @@ class BscSystem(object):
         )
 
     @classmethod
-    def get_timestamp(cls):
+    def generate_timestamp(cls):
         return time.time()
 
     @classmethod
@@ -315,6 +327,13 @@ class BscSystem(object):
 
 class BscStorage(object):
     PATHSEP = '/'
+    PATHSEP_EXTRA = '//'
+
+    @classmethod
+    def shit_path_auto_convert(cls, path):
+        if r'\u' in path:
+            return path.encode('utf-8').decode('unicode-escape')
+        return path
 
     @staticmethod
     def get_platform_is_linux():
@@ -400,15 +419,20 @@ class BscStorage(object):
 
     @classmethod
     def clear_pathsep_to(cls, path):
+        # convert pathsep first, "\" to "/"
         path_ = cls.convert_pathsep_to(path)
         #
         _ = path_.split(cls.PATHSEP)
-        new_path = cls.PATHSEP.join([i for i in _ if i])
+        new_path = cls.PATHSEP.join(filter(None, _))
         # etc: '/data/f/'
         if path_.endswith(cls.PATHSEP):
             new_path += '/'
-        if path_.startswith(cls.PATHSEP):
-            return cls.PATHSEP+new_path
+        #
+        if path_.startswith(cls.PATHSEP_EXTRA):
+            return cls.PATHSEP_EXTRA+new_path
+        else:
+            if path_.startswith(cls.PATHSEP):
+                return cls.PATHSEP+new_path
         return new_path
 
     @classmethod
@@ -540,14 +564,14 @@ class BscStorage(object):
         return list_
 
     @classmethod
-    def get_modify_timestamp(cls, path):
+    def get_mtime(cls, path):
         return os.stat(path).st_mtime
 
     @classmethod
     def get_file_timestamp_is_same_to(cls, file_path_src, file_path_tgt):
         if file_path_src is not None and file_path_tgt is not None:
             if cls.get_is_file(file_path_src) is True and cls.get_is_file(file_path_tgt) is True:
-                return int(cls.get_modify_timestamp(file_path_src)) == int(cls.get_modify_timestamp(file_path_tgt))
+                return int(cls.get_mtime(file_path_src)) == int(cls.get_mtime(file_path_tgt))
             return False
         return False
 

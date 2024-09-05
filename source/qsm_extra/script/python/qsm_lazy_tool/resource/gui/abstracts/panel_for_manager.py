@@ -54,7 +54,8 @@ class AbsPrxPanelForResourceManager(gui_prx_widgets.PrxBasePanel):
         )
         prx_page = self.generate_page_for('manager')
         self._tab_page_dict[key] = prx_page
-        prx_page.do_gui_initialize(key)
+
+        prx_page.do_gui_page_initialize(key)
         prx_sca.add_widget(prx_page)
 
     def __init__(self, window, session, *args, **kwargs):

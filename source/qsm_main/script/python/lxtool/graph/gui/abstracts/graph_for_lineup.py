@@ -123,7 +123,7 @@ class AbsPnlAssetLineup(gui_prx_widgets.PrxSessionWindow):
 
     def _set_add_rsv_entities_(self, rsv_project):
         def post_fnc_():
-            self._end_timestamp = bsc_core.BscSystem.get_timestamp()
+            self._end_timestamp = bsc_core.BscSystem.generate_timestamp()
 
             bsc_log.Log.trace_method_result(
                 'load asset/shot from "{}"'.format(
@@ -131,14 +131,14 @@ class AbsPnlAssetLineup(gui_prx_widgets.PrxSessionWindow):
                 ),
                 'count={}, cost-time="{}"'.format(
                     self._count,
-                    bsc_core.RawIntegerMtd.second_to_time_prettify(int(self._end_timestamp-self._start_timestamp))
+                    bsc_core.BscInteger.second_to_time_prettify(int(self._end_timestamp-self._start_timestamp))
                 )
             )
 
             self._set_graph_reload_()
 
         self._count = 0
-        self._start_timestamp = bsc_core.BscSystem.get_timestamp()
+        self._start_timestamp = bsc_core.BscSystem.generate_timestamp()
         #
         rsv_tags = rsv_project.get_rsv_resource_groups(**self._rsv_filter_opt.value)
         #
@@ -398,7 +398,7 @@ class AbsPnlAssetLineup(gui_prx_widgets.PrxSessionWindow):
                 content='"{}" save is completed'.format(file_path),
                 status=gui_core.GuiDialog.ValidationStatus.Correct,
                 #
-                ok_label='Open Folder', ok_method=bsc_storage.StgPathOpt(file_path).open_in_system,
+                ok_label='Open Folder', ok_method=bsc_storage.StgPathOpt(file_path).show_in_system,
                 no_label='Close',
                 #
                 cancel_visible=False

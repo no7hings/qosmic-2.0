@@ -135,7 +135,7 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
             prx_item.set_gui_menu_data(
                 [
                     ('system',),
-                    ('open folder', 'file/open-folder', directory_opt.open_in_system)
+                    ('open folder', 'file/open-folder', directory_opt.show_in_system)
                 ]
             )
             return True, prx_item
@@ -166,7 +166,7 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
             prx_item.set_gui_menu_data(
                 [
                     ('system',),
-                    ('open folder', 'file/open-folder', directory_opt.open_in_system)
+                    ('open folder', 'file/open-folder', directory_opt.show_in_system)
                 ]
             )
             if directory_opt.get_is_readable() is False:
@@ -280,7 +280,7 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
             prx_item.set_gui_menu_data(
                 [
                     ('system',),
-                    ('open folder', 'file/open-folder', directory_opt.open_in_system)
+                    ('open folder', 'file/open-folder', directory_opt.show_in_system)
                 ]
             )
             return True, prx_item
@@ -296,7 +296,7 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
 
             time_txt = bsc_core.auto_string(
                 bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
-                    stg_opt.get_modify_timestamp(), language=1
+                    stg_opt.get_mtime(), language=1
                 )
             )
             #
@@ -323,7 +323,7 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
             prx_item.set_gui_menu_data(
                 [
                     ('system',),
-                    ('open folder', 'file/open-folder', stg_opt.open_in_system)
+                    ('open folder', 'file/open-folder', stg_opt.show_in_system)
                 ]
             )
             if stg_opt.get_is_readable() is False:

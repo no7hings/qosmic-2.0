@@ -252,3 +252,33 @@ build:
                 icon: 'tool/kit'
                 script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-cfx-tool")'
                 dbl_script: ''
+
+    montage:
+        tool_tip: 'To be supplemented.'
+        tool_tip_chs: '动作拼接。'
+
+        tools:
+            tool_0:
+                name: 'Lazy Montage'
+                name_chs: '懒人动作拼接'
+                tool_tip: 'To be supplemented.'
+                tool_tip_chs: '待补充。'
+                button_style: 'text_and_icon'
+                button_name: 'SPC'
+                button_name_chs: '拼接'
+                icon: 'tool/kit'
+                script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-montage")'
+                dbl_script: ''
+
+            tool_1:
+                name: 'Lazy Resource'
+                name_chs: '懒人资源'
+                tool_tip: 'To be supplemented.'
+                tool_tip_chs: '待补充。'
+                button_style: 'text_and_icon'
+                button_name: 'RSC'
+                button_name_chs: '资源'
+                icon: 'tool/kit'
+                script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-resource")'
+                dbl_script: ''
+

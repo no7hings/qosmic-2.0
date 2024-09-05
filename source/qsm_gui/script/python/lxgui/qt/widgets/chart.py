@@ -62,7 +62,7 @@ class QtChartAsRgbaChoose(
                     v = color_h_multiply_/100.0
                     v = float(max(min(v, 1.0), 0.0))
                     #
-                    r, g, b = bsc_core.RawColorMtd.hsv2rgb(_color_h, s, v)
+                    r, g, b = bsc_core.BscColor.hsv2rgb(_color_h, s, v)
                     i_background_rgba = r, g, b, 255
                     i_border_rgba = 0, 0, 0, 0
                     #
@@ -392,7 +392,7 @@ class QtChartAsRgbaChoose(
 
     def _update_color_(self):
         r, g, b, a = self._color_rgba_255
-        self._color_hsv = bsc_core.RawColorMtd.rgb_to_hsv(r, g, b)
+        self._color_hsv = bsc_core.BscColor.rgb_to_hsv(r, g, b)
         self._color_css = hex(r)[2:].zfill(2)+hex(g)[2:].zfill(2)+hex(b)[2:].zfill(2)
 
     def _gui_build_(self):
@@ -517,14 +517,14 @@ class QtChartAsProgressing(
                     )
 
 
-class QtChartAsInfo(
+class QtChartForInfoBar(
     QtWidgets.QWidget,
 ):
     def _refresh_widget_draw_(self):
         self.update()
 
     def __init__(self, *args, **kwargs):
-        super(QtChartAsInfo, self).__init__(*args, **kwargs)
+        super(QtChartForInfoBar, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
         #
@@ -532,10 +532,10 @@ class QtChartAsInfo(
         self.setMaximumHeight(20)
         self.setMinimumHeight(20)
 
-        self._info_text = ''
+        self._text = ''
 
         self._info_draw_rect = QtCore.QRect()
-        self._info_draw_size = 160, 24
+        self._frame_size = 160, 24
 
     def _refresh_widget_geometry_(self, x, y, w, h):
         self.setGeometry(
@@ -543,8 +543,8 @@ class QtChartAsInfo(
         )
         self._refresh_widget_draw_()
 
-    def _set_info_text_(self, text):
-        self._info_text = text
+    def _set_text_(self, text):
+        self._text = text
         if text:
             self.show()
             self._refresh_widget_draw_()
@@ -552,11 +552,11 @@ class QtChartAsInfo(
             self.hide()
 
     def _clear_(self):
-        self._set_info_text_('')
+        self._set_text_('')
 
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
-        if self._info_text:
+        if self._text:
             rect = self.rect()
             painter._draw_frame_by_rect_(
                 rect=rect,
@@ -569,7 +569,7 @@ class QtChartAsInfo(
             )
             painter._draw_text_by_rect_(
                 rect=self.rect(),
-                text=self._info_text,
+                text=self._text,
                 font=_qt_core.QtFont.generate(size=10, italic=True),
                 text_color=_qt_core.QtFontColors.ToolTip,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
@@ -633,16 +633,16 @@ class QtChartAsWaiting(
 
     def _start_waiting_(self):
         self._waiting_timer.start(0)
-        # GuiQtApplicationOpt().set_process_run_0()
+        # QtApplication().set_process_run_0()
 
     def _stop_waiting_(self):
         self._waiting_timer.stop()
-        # GuiQtApplicationOpt().set_process_run_0()
+        # QtApplication().set_process_run_0()
 
     def _refresh_waiting_draw_(self):
-        self._waiting_timestamp = int(bsc_core.BscSystem.get_timestamp()*5)
+        self._waiting_timestamp = int(bsc_core.BscSystem.generate_timestamp()*5)
         self._refresh_widget_draw_()
-        # GuiQtApplicationOpt().set_process_run_0()
+        # QtApplication().set_process_run_0()
 
     def eventFilter(self, *args):
         widget, event = args
@@ -671,7 +671,7 @@ class QtChartAsWaiting(
             cur_index = c-timestamp%(c+1)
             i_c_h = abs(cur_index-seq)*(360/c)
             i_h, i_s, i_v = i_c_h, 0.5, 1.0
-            i_c_r, i_c_g, i_c_b = bsc_core.RawColorMtd.hsv2rgb(i_h, i_s, i_v)
+            i_c_r, i_c_g, i_c_b = bsc_core.BscColor.hsv2rgb(i_h, i_s, i_v)
             #
             painter._set_border_color_(0, 0, 0, 0)
             painter._set_background_color_(i_c_r, i_c_g, i_c_b, 255)
@@ -1252,13 +1252,13 @@ class QtChartAsSequence(
             index_array_1 = bsc_core.RawListMtd.get_intersection(
                 index_array_0, index_array
             )
-            self._chart_index_merge_array = bsc_core.RawIntArrayMtd.merge_to(
+            self._chart_index_merge_array = bsc_core.BscIntegers.merge_to(
                 index_array_1
             )
             self._chart_index_lost_array = bsc_core.RawListMtd.get_addition(
                 index_array_0, index_array_1
             )
-            self._chart_index_lost_merge_array = bsc_core.RawIntArrayMtd.merge_to(
+            self._chart_index_lost_merge_array = bsc_core.BscIntegers.merge_to(
                 self._chart_index_lost_array
             )
             self._chart_index_check_range = index_range
@@ -1400,10 +1400,10 @@ class QtChartAsSequence(
                         #
                         i_rect = QtCore.QRect(i_x, i_y, i_w, i_h)
                         i_c_h = c_h-(1-i_percent)*c_h
-                        i_c_r, i_c_g, i_c_b = bsc_core.RawColorMtd.hsv2rgb(i_c_h, c_s, c_v)
+                        i_c_r, i_c_g, i_c_b = bsc_core.BscColor.hsv2rgb(i_c_h, c_s, c_v)
                         if self._hover_flag is True:
                             if i_rect.contains(self._hover_point):
-                                i_c_r, i_c_g, i_c_b = bsc_core.RawColorMtd.hsv2rgb(i_c_h, c_s*.75, c_v)
+                                i_c_r, i_c_g, i_c_b = bsc_core.BscColor.hsv2rgb(i_c_h, c_s*.75, c_v)
                         #
                         painter._set_border_color_(i_c_r, i_c_g, i_c_b, 255)
                         painter._set_background_color_(i_c_r, i_c_g, i_c_b, 255)
@@ -1430,10 +1430,10 @@ class QtChartAsSequence(
                         i_c_h = c_h-(1-i_percent)*c_h
                         if i_percent == 1:
                             i_c_h = 140
-                        i_c_r, i_c_g, i_c_b = bsc_core.RawColorMtd.hsv2rgb(i_c_h, c_s, c_v)
+                        i_c_r, i_c_g, i_c_b = bsc_core.BscColor.hsv2rgb(i_c_h, c_s, c_v)
                         if self._hover_flag is True:
                             if i_rect.contains(self._hover_point):
-                                i_c_r, i_c_g, i_c_b = bsc_core.RawColorMtd.hsv2rgb(i_c_h, c_s*.75, c_v)
+                                i_c_r, i_c_g, i_c_b = bsc_core.BscColor.hsv2rgb(i_c_h, c_s*.75, c_v)
                         #
                         painter._set_border_color_(i_c_r, i_c_g, i_c_b, 255)
                         painter._set_background_color_(i_c_r, i_c_g, i_c_b, 255)

@@ -1,13 +1,8 @@
 # coding:utf-8
-import re
-
-import collections
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
 from . import base as _base
-
-from . import scene as _scene
 
 from . import scene_file as _scene_file
 

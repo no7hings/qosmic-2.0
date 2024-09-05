@@ -10,7 +10,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
 
-        self._d = qt_widgets.QtMessageBox(self._qt_widget)
+        self._d = qt_widgets.QtMessageDialog(self._qt_widget)
         self._d._set_buttons_(True, True, '忽略')
 
 

@@ -62,7 +62,7 @@ for i_directory in bsc_storage.StgDirectoryOpt(
                 i_node_path = '/{}'.format(i_name)
 
                 try:
-                    ctime = i_file.get_creation_timestamp()
+                    ctime = i_file.get_ctime()
                     stage.create_node(
                         i_node_path,
                         gui_name=i_gui_name,

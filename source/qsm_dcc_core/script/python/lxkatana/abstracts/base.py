@@ -580,7 +580,7 @@ class AbsKtnObj(gnl_dcc_abstracts.AbsDccNode):
 
     def set_colour_by_type_name(self):
         type_name = self.type_name
-        r, g, b = bsc_core.RawTextOpt(type_name).to_rgb(maximum=1)
+        r, g, b = bsc_core.BscTextOpt(type_name).to_rgb(maximum=1)
         attributes = self.ktn_obj.getAttributes()
         attributes['ns_colorr'] = r
         attributes['ns_colorg'] = g

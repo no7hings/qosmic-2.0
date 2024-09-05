@@ -67,18 +67,27 @@ class MayaCache(object):
         )
 
     @classmethod
-    def generate_unit_assembly_file(cls, file_path):
+    def generate_asset_unit_assembly_file(cls, file_path, version=None):
         root = bsc_core.EnvBaseMtd.get_cache_temporary_root()
-        key = cls.get_key(file_path)
+        key = cls.get_key(file_path, version)
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
         return '{}/.asset-cache/scenery/{}/{}/unit_assembly.ma'.format(
             root, region, key
         )
 
     @classmethod
-    def generate_gpu_instance_file(cls, file_path):
+    def generate_asset_unit_assembly_file_new(cls, file_path, version=None):
         root = bsc_core.EnvBaseMtd.get_cache_temporary_root()
-        key = cls.get_key(file_path)
+        key = cls.get_key(file_path, version)
+        region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
+        return '{}/.asset-cache/unit-assembly/{}/{}/scene.ma'.format(
+            root, region, key
+        )
+
+    @classmethod
+    def generate_asset_gpu_instance_file(cls, file_path, version=None):
+        root = bsc_core.EnvBaseMtd.get_cache_temporary_root()
+        key = cls.get_key(file_path, version)
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
         return '{}/.asset-cache/scenery/{}/{}/gpu_instance.ma'.format(
             root, region, key
@@ -99,5 +108,32 @@ class MayaCache(object):
         key = cls.get_key(file_path, version)
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
         return '{}/.asset-cache/rig-validation/{}/{}.json'.format(
+            root, region, key
+        )
+
+    @classmethod
+    def generate_asset_mesh_count_file(cls, file_path, version=None):
+        root = bsc_core.EnvBaseMtd.get_cache_temporary_root()
+        key = cls.get_key(file_path, version)
+        region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
+        return '{}/.asset-cache/mesh-count/{}/{}.json'.format(
+            root, region, key
+        )
+
+    @classmethod
+    def generate_asset_system_resource_usage_file(cls, file_path, version=None):
+        root = bsc_core.EnvBaseMtd.get_cache_temporary_root()
+        key = cls.get_key(file_path, version)
+        region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
+        return '{}/.asset-cache/system-resource-usage/{}/{}.json'.format(
+            root, region, key
+        )
+    
+    @classmethod
+    def generate_asset_snapshot_file(cls, file_path, version=None):
+        root = bsc_core.EnvBaseMtd.get_cache_temporary_root()
+        key = cls.get_key(file_path, version)
+        region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
+        return '{}/.asset-cache/snapshot/{}/{}.jpg'.format(
             root, region, key
         )

@@ -115,12 +115,14 @@ class GpuImport(object):
     def __init__(self):
         pass
 
-    def execute(self):
+    @classmethod
+    def execute(cls):
         shape_paths = cmds.ls(type='gpuCache', long=1)
         for i_shape_path in shape_paths:
-            self.gpu_prc(i_shape_path)
+            cls.gpu_prc(i_shape_path)
 
-    def gpu_prc(self, shape_path):
+    @classmethod
+    def gpu_prc(cls, shape_path):
         gpu_file_path = _mya_core.NodeAttribute.get_as_string(
             shape_path, 'cacheFileName'
         )

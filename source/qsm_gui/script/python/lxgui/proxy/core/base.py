@@ -20,7 +20,7 @@ class GuiProxyUtil(object):
         window_unique_name=None, window_ask_for_close=False,
         **window_kwargs
     ):
-        exists_app = gui_qt_core.GuiQtUtil.get_exists_app()
+        exists_app = gui_qt_core.QtUtil.get_exists_app()
         is_window_running = None
         if exists_app is None:
             # check show window as unique
@@ -40,17 +40,17 @@ class GuiProxyUtil(object):
 
                 import win32con
 
-                from ...qt.widgets import window_base as _qt_wgt_window_base
+                from ...qt.widgets import window_for_dialog as _qt_wgt_window_for_dialog
 
-                app = gui_qt_core.GuiQtUtil.create_app()
+                app = gui_qt_core.QtUtil.create_app()
 
-                w = _qt_wgt_window_base.QtMessageBox()
+                w = _qt_wgt_window_for_dialog.QtMessageDialog()
 
                 w._set_message_(
                     'Window "{}" is exists, press "Ok" show it, or close it and retry.'.format(window_unique_name)
                 )
                 w._set_buttons_(True)
-                w._do_exec_()
+                w._do_window_exec_()
 
                 hwnd = win32gui.FindWindow(None, window_unique_name)
                 if hwnd:
@@ -59,7 +59,7 @@ class GuiProxyUtil(object):
 
                 sys.exit(0)
 
-            app = gui_qt_core.GuiQtUtil.create_app()
+            app = gui_qt_core.QtUtil.create_app()
 
             prx_window = prx_window_cls(**window_kwargs)
             prx_window.set_main_window_geometry(gui_qt_core.GuiQtDcc.get_qt_main_window_geometry_args())
@@ -128,7 +128,7 @@ class GuiProxyUtil(object):
 
     @staticmethod
     def find_all_tool_window_proxies():
-        qt_widgets = gui_qt_core.GuiQtUtil.find_all_valid_qt_windows()
+        qt_widgets = gui_qt_core.QtUtil.find_all_valid_qt_windows()
         list_ = []
         for i_qt_widget in qt_widgets:
             if hasattr(i_qt_widget, 'gui_proxy'):
@@ -150,7 +150,7 @@ class GuiProxyUtil(object):
 
     @staticmethod
     def find_window_proxy_by_unique_id(unique_id):
-        qt_windows = gui_qt_core.GuiQtUtil.find_all_valid_qt_windows()
+        qt_windows = gui_qt_core.QtUtil.find_all_valid_qt_windows()
         for i_window in qt_windows:
             if hasattr(i_window, 'gui_proxy'):
                 window_proxy = i_window.gui_proxy
@@ -160,7 +160,7 @@ class GuiProxyUtil(object):
 
     @staticmethod
     def find_window_proxy_by_session_name(name):
-        qt_windows = gui_qt_core.GuiQtUtil.find_all_valid_qt_windows()
+        qt_windows = gui_qt_core.QtUtil.find_all_valid_qt_windows()
         for i_window in qt_windows:
             if hasattr(i_window, 'gui_proxy'):
                 window_proxy = i_window.gui_proxy
@@ -216,7 +216,7 @@ class GuiProxyProcess(object):
     @staticmethod
     def create(maximum, label=None):
         list_ = []
-        qt_windows = gui_qt_core.GuiQtUtil.find_all_valid_qt_windows()
+        qt_windows = gui_qt_core.QtUtil.find_all_valid_qt_windows()
         for i_window in qt_windows:
             if hasattr(i_window, 'gui_proxy'):
                 window_proxy = i_window.gui_proxy

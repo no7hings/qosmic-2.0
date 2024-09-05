@@ -1477,7 +1477,7 @@ class UsdMeshOpt(UsdGeometryOpt):
         vertex_counts, vertex_indices = self.get_face_vertices()
         face_to_shell_dict = bsc_core.DccMeshFaceShellOpt(vertex_counts, vertex_indices).generate()
         max_shell_index = max(face_to_shell_dict.values())
-        choice_colors = bsc_core.RawColorMtd.get_choice_colors(
+        choice_colors = bsc_core.BscColor.get_choice_colors(
             count=max_shell_index+1, maximum=1.0, offset=offset, seed=seed
         )
         colors = []

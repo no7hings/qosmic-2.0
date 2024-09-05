@@ -265,7 +265,7 @@ class RsvDccShotGeometryHookOpt(
             raise TypeError()
 
         cache_frames = self._hook_option_opt.get('cache_shot_frames')
-        start_frame, end_frame = bsc_core.RawTextOpt(cache_frames).to_frame_range()
+        start_frame, end_frame = bsc_core.BscTextOpt(cache_frames).to_frame_range()
 
         asset_shot_geometry_usd_directory_rsv_unit = self._rsv_task.get_rsv_unit(
             keyword=keyword_0
@@ -336,7 +336,7 @@ class RsvDccShotHairHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             raise TypeError()
         #
         cache_frames = self._hook_option_opt.get('cache_shot_frames')
-        start_frame, end_frame = bsc_core.RawTextOpt(cache_frames).to_frame_range()
+        start_frame, end_frame = bsc_core.BscTextOpt(cache_frames).to_frame_range()
         #
         component_usd_directory_rsv_unit = self._rsv_task.get_rsv_unit(
             keyword=keyword

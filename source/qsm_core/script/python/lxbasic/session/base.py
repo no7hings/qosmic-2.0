@@ -417,7 +417,7 @@ class AbsSsnGener(
 
     def open_configure_directory(self):
         if self._hook_yaml_file_path:
-            bsc_storage.StgFileOpt(self._hook_yaml_file_path).open_in_system()
+            bsc_storage.StgFileOpt(self._hook_yaml_file_path).show_in_system()
 
     def open_python_script_file(self):
         if self._hook_python_file_path:

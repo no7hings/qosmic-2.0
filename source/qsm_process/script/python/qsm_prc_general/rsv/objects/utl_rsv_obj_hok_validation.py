@@ -47,10 +47,10 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                             if j_texture.get_is_exists_as_tx() is False:
                                 j_check_results[2] = False
                             #
-                            if bsc_core.RawTextOpt(j_file_path).get_is_contain_chinese() is True:
+                            if bsc_core.BscTextOpt(j_file_path).get_is_contain_chinese() is True:
                                 j_check_results[3] = False
                             #
-                            if bsc_core.RawTextOpt(j_file_path).get_is_contain_space() is True:
+                            if bsc_core.BscTextOpt(j_file_path).get_is_contain_space() is True:
                                 j_check_results[4] = False
                             # todo, need then?
                             # if bsc_core.BscSystem.get_is_linux():

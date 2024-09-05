@@ -45,7 +45,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         self._dcc_node_opt = None
         self._dcc_node_graph_opt = None
 
-        self.gui_setup_page()
+        self.gui_page_setup_fnc()
 
         self._window.register_window_close_method(self.gui_close_fnc)
 
@@ -84,7 +84,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             pot.set([])
 
     def do_gui_add_types(self):
-        self._type_prx_tag_input.restore()
+        self._type_prx_tag_view.restore()
 
         for i in self._scr_stage.find_all(
             self._scr_stage.EntityTypes.Type,
@@ -97,7 +97,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             if self._window._language == 'chs':
                 i_gui_name = i.gui_name_chs
 
-            i_group = self._type_prx_tag_input.create_group(i.path, show_name=i_gui_name)
+            i_group = self._type_prx_tag_view.create_group(i.path, show_name=i_gui_name)
 
             i_group._set_expanded_(True)
 
@@ -114,12 +114,12 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             if self._window._language == 'chs':
                 i_gui_name = i.gui_name_chs
 
-            i_node = self._type_prx_tag_input.create_node(i.path, show_name=i_gui_name)
+            i_node = self._type_prx_tag_view.create_node(i.path, show_name=i_gui_name)
 
             i_node._set_tool_tip_(i.to_description(self._window._language))
 
     def do_gui_add_tags(self):
-        self._tag_prx_tag_input.restore()
+        self._tag_prx_tag_view.restore()
 
         for i in self._scr_stage.find_all(
             self._scr_stage.EntityTypes.Tag,
@@ -132,7 +132,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             if self._window._language == 'chs':
                 i_gui_name = i.gui_name_chs
 
-            i_group = self._tag_prx_tag_input.create_group(i.path, show_name=i_gui_name)
+            i_group = self._tag_prx_tag_view.create_group(i.path, show_name=i_gui_name)
 
             i_group._set_expanded_(True)
 
@@ -149,7 +149,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             if self._window._language == 'chs':
                 i_gui_name = i.gui_name_chs
 
-            i_node = self._tag_prx_tag_input.create_node(i.path, show_name=i_gui_name)
+            i_node = self._tag_prx_tag_view.create_node(i.path, show_name=i_gui_name)
 
             i_node._set_tool_tip_(i.to_description(self._window._language))
 
@@ -188,7 +188,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
     def do_apply(self):
         data = self.get_data()
         if not data:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 gui_core.GuiUtil.choice_message(
                     self._window._language, self._window._configure.get('build.register.messages.node')
                 ),
@@ -199,7 +199,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         options = self._prx_options_node.to_dict()
         gui_name_chs = options.get('gui_name_chs')
         if not gui_name_chs:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 gui_core.GuiUtil.choice_message(
                     self._window._language, self._window._configure.get('build.register.messages.name_empty')
                 ),
@@ -211,7 +211,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
 
         preview_files = self._prx_options_node.get('preview')
         if not preview_files:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 gui_core.GuiUtil.choice_message(
                     self._window._language, self._window._configure.get('build.register.messages.preview')
                 ),
@@ -221,7 +221,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
 
         node_path = options.get('path')
         if self._scr_stage.check_node_exists(node_path) is True:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 gui_core.GuiUtil.choice_message(
                     self._window._language, self._window._configure.get('build.register.messages.name_exists')
                 ),
@@ -229,9 +229,9 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             )
             return
 
-        type_paths = self._type_prx_tag_input.get_all_checked_node_paths()
+        type_paths = self._type_prx_tag_view.get_all_checked_node_paths()
         if not type_paths:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 gui_core.GuiUtil.choice_message(
                     self._window._language, self._window._configure.get('build.register.messages.type')
                 ),
@@ -239,9 +239,9 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             )
             return
 
-        tag_paths = self._tag_prx_tag_input.get_all_checked_node_paths()
+        tag_paths = self._tag_prx_tag_view.get_all_checked_node_paths()
         if not tag_paths:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 gui_core.GuiUtil.choice_message(
                     self._window._language, self._window._configure.get('build.register.messages.tag')
                 ),
@@ -286,14 +286,14 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             self._scr_stage.create_or_update_parameters(
                 node_path, 'data_type', qsm_lzy_scr_core.DataTypes.MayaNodeGraph
             )
-        self._window.exec_message(
+        self._window.exec_message_dialog(
             gui_core.GuiUtil.choice_message(
                 self._window._language, self._window._configure.get('build.register.messages.successful')
             ),
             status='correct'
         )
 
-    def gui_setup_page(self):
+    def gui_page_setup_fnc(self):
         qt_v_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
         qt_v_lot.setContentsMargins(*[0]*4)
         qt_v_lot.setSpacing(2)
@@ -329,14 +329,14 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         self._prx_tool_group.add_widget(qt_widget_0)
         h_qt_lot_0 = gui_qt_widgets.QtHBoxLayout(qt_widget_0)
 
-        self._type_prx_tag_input = gui_prx_widgets.PrxTagInput()
+        self._type_prx_tag_view = gui_prx_widgets.PrxTagView()
         h_qt_lot_0.addWidget(
-            self._type_prx_tag_input.widget
+            self._type_prx_tag_view.widget
         )
 
-        self._tag_prx_tag_input = gui_prx_widgets.PrxTagInput()
+        self._tag_prx_tag_view = gui_prx_widgets.PrxTagView()
         h_qt_lot_0.addWidget(
-            self._tag_prx_tag_input.widget
+            self._tag_prx_tag_view.widget
         )
 
         if self._window._language == 'chs':

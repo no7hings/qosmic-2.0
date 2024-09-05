@@ -16,7 +16,7 @@ class W0(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W0, self).__init__(*args, **kwargs)
 
-        self._widget = qsm_proxy_widgets.PrxInputForRig()
+        self._widget = qsm_proxy_widgets.PrxInputForAsset()
         self.add_widget(self._widget)
 
 

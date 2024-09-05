@@ -24,7 +24,7 @@ class _AbsSocketConnect(object):
     def _init_socket_base_(self):
         self._status = self.Status.Error
 
-    def get_is_valid(self):
+    def is_valid(self):
         return self.get_status() == self.Status.Ok
 
 

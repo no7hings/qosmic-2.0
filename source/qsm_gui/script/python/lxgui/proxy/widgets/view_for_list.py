@@ -74,7 +74,7 @@ class PrxListView(
         self._uncheck_all_button._set_icon_file_path_(gui_core.GuiIcon.get('all_unchecked'))
         self._uncheck_all_button._set_name_text_('uncheck all')
         self._prx_check_tool_box.add_widget(self._uncheck_all_button)
-        self._uncheck_all_button.press_clicked.connect(self._do_uncheck_all_visible_items)
+        self._uncheck_all_button.press_clicked.connect(self._do_uncheck_all_items)
         self._uncheck_all_button._set_tool_tip_text_(
             '"LMB-click" for unchecked all visible items'
         )
@@ -104,17 +104,17 @@ class PrxListView(
         self._set_prx_view_def_init_(self._qt_view)
         self._qt_view._set_sort_enable_(True)
         #
-        self._qt_info_chart = _qt_widget_chart.QtChartAsInfo()
-        self._qt_info_chart.hide()
-        self._qt_layout_0.addWidget(self._qt_info_chart)
+        self._qt_info_bar_chart = _qt_widget_chart.QtChartForInfoBar()
+        self._qt_info_bar_chart.hide()
+        self._qt_layout_0.addWidget(self._qt_info_bar_chart)
         self._qt_view.info_text_accepted.connect(
-            self._qt_info_chart._set_info_text_
+            self._qt_info_bar_chart._set_text_
         )
         #
         self._prx_filter_bar = self._prx_filer_bar_0
         self._qt_view._set_view_keyword_filter_bar_(self._prx_filter_bar._qt_widget)
 
-        self._item_dict = collections.OrderedDict()
+        self._item_dict = self._qt_view._item_dict
         self._keyword_filter_completion_cache = None
 
         self.__add_scale_switch_tools()
@@ -282,11 +282,14 @@ class PrxListView(
     def _do_uncheck_all_visible_items(self):
         self._qt_view._set_all_visible_item_widgets_checked_(False)
 
+    def _do_uncheck_all_items(self):
+        self._qt_view._set_all_item_widgets_checked_(False)
+
     def set_view_list_mode(self):
-        self._qt_view._set_list_mode_()
+        self._qt_view._view_as_list_mode_()
 
     def set_view_grid_mode(self):
-        self._qt_view._set_grid_mode_()
+        self._qt_view._view_as_grid_mode_()
 
     def set_item_frame_size(self, w, h):
         self._qt_view._set_item_frame_size_(w, h)
@@ -375,9 +378,9 @@ class PrxListView(
         return self.get_gui_attribute('visible_tgt_raw')
 
     def set_clear(self):
-        self._item_dict.clear()
+        # clear keyword filter cache
         self._keyword_filter_completion_cache = None
-        self._qt_view._set_clear_()
+        self._qt_view._do_clear_()
 
     def _get_all_items_(self):
         return self._qt_view._get_all_items_()
@@ -499,3 +502,5 @@ class PrxImageView(PrxListView):
         prx_item.set_tool_tip(
             texture_unit.get_path()
         )
+
+

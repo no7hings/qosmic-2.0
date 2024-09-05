@@ -1,5 +1,7 @@
 # coding:utf-8
 # gui
+import collections
+
 from ... import core as gui_core
 # qt
 from ..core.wrap import *
@@ -261,6 +263,8 @@ class AbsQtListWidget(
 
         self._grid_size = 128, 128
 
+        self._item_dict = collections.OrderedDict()
+
     def _set_selection_use_multiply_(self):
         self.setSelectionMode(self.ExtendedSelection)
         # self.setSelectionRectVisible(False)
@@ -376,11 +380,11 @@ class AbsQtListWidget(
             self._scroll_view_to_item_top_(item)
 
     # show mode
-    def _set_grid_mode_(self):
+    def _view_as_grid_mode_(self):
         self.setViewMode(self.IconMode)
         self._update_by_item_mode_change_()
 
-    def _set_list_mode_(self):
+    def _view_as_list_mode_(self):
         self.setViewMode(self.ListMode)
         self._update_by_item_mode_change_()
 
@@ -447,7 +451,7 @@ class AbsQtListWidget(
             QtCore.QEventLoop.ExcludeUserInputEvents
         )
 
-    def _set_clear_(self):
+    def _do_clear_(self):
         for i in self._get_all_items_():
             i._kill_item_all_show_runnables_()
             i._stop_item_show_all_()

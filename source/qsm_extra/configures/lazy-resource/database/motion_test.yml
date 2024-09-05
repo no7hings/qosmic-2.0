@@ -1,6 +1,6 @@
 options:
-    gui_name: 'Motion Test'
-    gui_name_chs: '动作测试'
+    gui_name: 'Motion (Test)'
+    gui_name_chs: '动作（测试）'
 
 entities:
     types:

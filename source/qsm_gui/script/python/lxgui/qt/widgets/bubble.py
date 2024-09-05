@@ -41,29 +41,26 @@ class QtTextBubble(
             spc = 2
 
             txt_w, txt_h = QtGui.QFontMetrics(self._text_font).width(self._text)+16, h
-            # print txt_h, h_t_
-            s_t = (h-txt_h)/2
             self._frame_border_radius = 2
             # fit to max size
-            fix_w = min(txt_w, self._text_w_maximum)
-            w_t_1 = fix_w+s_t
-            w_c = w_t_1+dlt_w
-            self.setFixedWidth(w_c)
+            txt_w = min(txt_w, self._text_w_maximum)
+            wgt_w = txt_w+dlt_w
+            self.setFixedWidth(wgt_w)
 
             dlt_icon_w, dlt_icon_h = self._delete_icon_size
 
             self._frame_draw_rect.setRect(
-                x+1, y+1, w_c-2, h-2
+                x+1, y+1, wgt_w-2, h-2
             )
             self._text_draw_rect.setRect(
-                x+s_t, y, txt_w+2, h
+                x, y, txt_w, h
             )
 
             self._delete_frame_rect.setRect(
-                x+w_t_1, y, dlt_w, dlt_h
+                x+txt_w, y, dlt_w, dlt_h
             )
             self._delete_draw_rect.setRect(
-                x+w_t_1+(dlt_w-dlt_icon_w)/2, y+(dlt_h-dlt_icon_h)/2, dlt_icon_w, dlt_icon_h
+                x+txt_w+(dlt_w-dlt_icon_w)/2, y+(dlt_h-dlt_icon_h)/2, dlt_icon_w, dlt_icon_h
             )
 
     def __init__(self, *args, **kwargs):
@@ -429,8 +426,8 @@ class QtTextBubbles(
     def _set_entry_widget_(self, widget):
         self._bubble_constant_entry = widget
 
-    def _create_bubble_(self, text):
-        texts = self._get_all_bubble_texts_()
+    def _create_one_(self, text):
+        texts = self._get_all_texts_()
         if text and text not in texts:
             self._append_value_(text)
             #
@@ -440,7 +437,7 @@ class QtTextBubbles(
             bubble.delete_text_accepted.connect(self._delete_value_)
 
             if self._bubble_constant_entry is not None:
-                self._bubble_constant_entry._set_clear_()
+                self._bubble_constant_entry._do_clear_()
 
     def _append_value_(self, text):
         self._bubble_texts.append(text)
@@ -454,14 +451,14 @@ class QtTextBubbles(
         self.bubbles_value_changed.emit()
         self.bubbles_value_change_accepted.emit(self._bubble_texts)
 
-    def _execute_bubble_backspace_(self):
+    def _on_backspace_(self):
         # when bubble text widget delete, send emit do self._delete_value_(text)
         self._lot._delete_latest_()
 
         self.bubbles_value_changed.emit()
         self.bubbles_value_change_accepted.emit(self._bubble_texts)
 
-    def _get_all_bubble_texts_(self):
+    def _get_all_texts_(self):
         return self._bubble_texts
 
     def _clear_all_values_(self):
@@ -1045,7 +1042,7 @@ class QtBubbleAsChoice(
             )
 
     def _do_filter_(self):
-        p = _qt_core.GuiQtUtil.get_qt_cursor_point()
+        p = _qt_core.QtUtil.get_qt_cursor_point()
         l_p = self.mapFromGlobal(p)
 
         self.__y_hover = l_p.y()
@@ -1372,7 +1369,7 @@ class QtBubbleAsChoose(
             self._do_popup_close_()
 
     def _do_popup_start_(self):
-        press_pos = _qt_core.GuiQtUtil.get_qt_cursor_point()
+        press_pos = _qt_core.QtUtil.get_qt_cursor_point()
         geometry_args = self._compute_geometry_args_(press_pos)
         if geometry_args:
             self.setGeometry(*geometry_args)

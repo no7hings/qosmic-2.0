@@ -957,7 +957,7 @@ class _AbsQtSplitter(QtWidgets.QWidget):
         self._swap_full_size_fnc_(self)
 
     def _swap_full_size_fnc_(self, spliter_root):
-        p = gui_qt_core.GuiQtUtil.get_qt_cursor_point()
+        p = gui_qt_core.QtUtil.get_qt_cursor_point()
         l_p = self.mapFromGlobal(p)
 
         index = self._compute_index_loc_(l_p)

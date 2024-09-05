@@ -101,7 +101,7 @@ class _GuiDirectoryOpt(
             prx_item.set_gui_menu_data(
                 [
                     ('system',),
-                    ('open folder', 'file/open-folder', directory_opt.open_in_system)
+                    ('open folder', 'file/open-folder', directory_opt.show_in_system)
                 ]
             )
             return True, prx_item
@@ -131,7 +131,7 @@ class _GuiDirectoryOpt(
             prx_item.set_gui_menu_data(
                 [
                     ('system',),
-                    ('open folder', 'file/open-folder', directory_opt.open_in_system)
+                    ('open folder', 'file/open-folder', directory_opt.show_in_system)
                 ]
             )
             if directory_opt.get_is_readable() is False:
@@ -261,17 +261,17 @@ class _GuiFileOpt(
     def gui_add_file(self, file_opt):
         def cache_fnc_():
             def copy_path_fnc_():
-                gui_qt_core.GuiQtUtil.copy_text_to_clipboard(file_path)
+                gui_qt_core.QtUtil.copy_text_to_clipboard(file_path)
 
             def open_folder_fnc():
-                bsc_storage.StgFileOpt(file_path).open_in_system()
+                bsc_storage.StgFileOpt(file_path).show_in_system()
 
             _name_dict = collections.OrderedDict()
             _location = file_opt.get_path()
 
             _name_dict['version'] = file_opt.properties.version
             _name_dict['time'] = bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
-                file_opt.get_modify_timestamp(), language=1
+                file_opt.get_mtime(), language=1
             )
 
             _menu_data = [

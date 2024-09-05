@@ -165,7 +165,7 @@ class _GuiEntityOpt(
 
     def gui_add_for_all_resources(self, rsv_project):
         def post_fnc_():
-            self._end_timestamp = bsc_core.BscSystem.get_timestamp()
+            self._end_timestamp = bsc_core.BscSystem.generate_timestamp()
             #
             bsc_log.Log.trace_method_result(
                 'load asset/shot from "{}"'.format(
@@ -173,7 +173,7 @@ class _GuiEntityOpt(
                 ),
                 'count={}, cost-time="{}"'.format(
                     self.__resource_count,
-                    bsc_core.RawIntegerMtd.second_to_time_prettify(self._end_timestamp-self._start_timestamp)
+                    bsc_core.BscInteger.second_to_time_prettify(self._end_timestamp-self._start_timestamp)
                 )
             )
 
@@ -182,7 +182,7 @@ class _GuiEntityOpt(
 
         #
         self.__resource_count = 0
-        self._start_timestamp = bsc_core.BscSystem.get_timestamp()
+        self._start_timestamp = bsc_core.BscSystem.generate_timestamp()
         #
         rsv_resource_groups = rsv_project.get_rsv_resource_groups(**self._window._rsv_filter_opt.value)
         #
@@ -440,7 +440,7 @@ class _GuiTaskOpt(
 
             movie_file_opt = bsc_storage.StgFileOpt(movie_file_path)
             name_dict['update'] = bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
-                movie_file_opt.get_modify_timestamp(),
+                movie_file_opt.get_mtime(),
                 language=1
             )
             name_dict['user'] = movie_file_opt.get_user()
@@ -571,10 +571,10 @@ class _GuiFileOpt(
     def gui_add(self, file_opt):
         def cache_fnc_():
             def copy_path_fnc_():
-                gui_qt_core.GuiQtUtil.copy_text_to_clipboard(file_path)
+                gui_qt_core.QtUtil.copy_text_to_clipboard(file_path)
 
             def open_folder_fnc():
-                bsc_storage.StgFileOpt(file_path).open_in_system()
+                bsc_storage.StgFileOpt(file_path).show_in_system()
 
             _location = file_opt.get_path()
 
@@ -1108,7 +1108,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
 
         self._gui_thread_flag += 1
 
-        self._start_timestamp = bsc_core.BscSystem.get_timestamp()
+        self._start_timestamp = bsc_core.BscSystem.generate_timestamp()
 
         self._gui_task_opt.restore()
         self._gui_tag_opt.reset()

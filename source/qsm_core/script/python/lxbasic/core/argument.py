@@ -113,7 +113,7 @@ class ArgDictStringOpt(object):
                     if _:
                         if str(_).isdigit():
                             return int(_)
-                        elif _raw.RawTextOpt(_).get_is_float():
+                        elif _raw.BscTextOpt(_).get_is_float():
                             return int(float(_))
                         return 0
                     return 0
@@ -127,7 +127,7 @@ class ArgDictStringOpt(object):
                     if _:
                         if str(_).isdigit():
                             return float(_)
-                        elif _raw.RawTextOpt(_).get_is_float():
+                        elif _raw.BscTextOpt(_).get_is_float():
                             return float(_)
                         return 0.0
                     return 0.0

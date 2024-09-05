@@ -296,7 +296,7 @@ class QtAdvCharacterPicker(
 
     def _do_show_tool_tip_(self, event):
         if self._sketch_key_hover is not None:
-            css = gui_qt_core.GuiQtUtil.generate_tool_tip_css(
+            css = gui_qt_core.QtUtil.generate_tool_tip_css(
                 self._sketch_key_hover,
                 action_tip=[
                     '"鼠标左键点击" 选择当前',

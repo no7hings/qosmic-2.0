@@ -22,6 +22,7 @@ class QtListWidget(
     ctrl_f_key_pressed = qt_signal()
     f5_key_pressed = qt_signal()
     item_checked = qt_signal(object, int)
+    item_widget_press_dbl_clicked = qt_signal(object)
     #
     focus_changed = qt_signal()
     #
@@ -29,7 +30,7 @@ class QtListWidget(
     QT_MENU_CLS = _utility.QtMenu
 
     def _do_wheel_(self, event):
-        if _qt_core.GuiQtUtil.is_ctrl_modifier():
+        if _qt_core.QtUtil.is_ctrl_modifier():
             delta = event.angleDelta().y()
             step = 4
             w_pre, h_pre = self._item_frame_size
@@ -136,7 +137,7 @@ class QtListWidget(
 
         self._item_image_frame_draw_enable = False
 
-        self._set_grid_mode_()
+        self._view_as_grid_mode_()
 
         self._action_control_flag = False
 
@@ -208,7 +209,7 @@ class QtListWidget(
             menu._popup_start_()
 
     def wheelEvent(self, event):
-        if _qt_core.GuiQtUtil.is_ctrl_modifier():
+        if _qt_core.QtUtil.is_ctrl_modifier():
             self._do_wheel_(event)
             event.ignore()
         else:
@@ -381,12 +382,12 @@ class QtListWidget(
         _w, _h = w+self._item_side*2, h+self._item_side*2
         self._set_grid_size_(_w, _h)
 
-    def _set_grid_mode_(self):
+    def _view_as_grid_mode_(self):
         self.setViewMode(self.IconMode)
         self._update_grid_size_(*self._item_frame_size)
         self._update_by_item_mode_change_()
 
-    def _set_list_mode_(self):
+    def _view_as_list_mode_(self):
         self.setViewMode(self.ListMode)
         if self._item_list_mode_auto_size is True:
             self._update_grid_size_(*self._item_image_frame_size)
@@ -469,9 +470,9 @@ class QtListWidget(
 
     def _swap_view_mode_(self):
         if self._get_is_grid_mode_() is True:
-            self._set_list_mode_()
+            self._view_as_list_mode_()
         else:
-            self._set_grid_mode_()
+            self._view_as_grid_mode_()
 
         self._refresh_viewport_showable_auto_()
 
@@ -599,13 +600,15 @@ class QtListWidget(
         # update check
         item_widget._set_checked_(item._is_checked_())
 
-    def _set_clear_(self):
+    def _do_clear_(self):
         for i in self._get_all_items_():
             i._kill_item_all_show_runnables_()
             i._stop_item_show_all_()
-        #
+        # clea item query
+        self._item_dict.clear()
+
         self._pre_selected_items = []
         # fixme: use index for maya PySide
         self._pre_hovered_indices = []
-        #
+
         self.clear()

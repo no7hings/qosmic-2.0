@@ -34,15 +34,18 @@ class QtPainter(QtGui.QPainter):
         self.setRenderHint(self.Antialiasing)
 
     def _draw_capsule_by_rects_(
-        self, rects, texts, checked_indices, index_hover, index_pressed, use_exclusive=False, is_enable=True
+        self,
+        rects, texts, value_options,
+        checked_indices, index_hover, index_pressed, use_exclusive=False, is_enable=True
     ):
         c = len(texts)
         self._set_antialiasing_(True)
-        for i, i_text in enumerate(texts):
-            i_rect = rects[i]
+        for i_idx, i_text in enumerate(texts):
+            i_rect = rects[i_idx]
+            i_value_option = value_options[i_idx]
             i_x, i_y = i_rect.x()+1, i_rect.y()
             i_w, i_h = i_rect.width()-2, i_rect.height()
-            i_is_pressed = i == index_pressed
+            i_is_pressed = i_idx == index_pressed
             if i_is_pressed:
                 i_x += 2
                 i_w -= 2
@@ -57,8 +60,8 @@ class QtPainter(QtGui.QPainter):
             else:
                 i_border_radius = i_h/2
 
-            i_is_hovered = i == index_hover
-            i_is_checked = checked_indices[i]
+            i_is_hovered = i_idx == index_hover
+            i_is_checked = checked_indices[i_idx]
             if i_is_checked is True:
                 i_border_width = 1
                 self._set_border_color_(_color_and_brush.QtColors.CapsuleBorderChecked)
@@ -68,7 +71,7 @@ class QtPainter(QtGui.QPainter):
                         _gui_core.GuiRgba.LightBlack
                     )
                 else:
-                    i_background_color, i_font_color = _base.QtColor.generate_color_args_by_text(i_text)
+                    i_background_color, i_font_color = _base.QtColor.generate_color_args_by_text(str(i_value_option))
 
                 self._set_background_color_(i_background_color)
             else:
@@ -89,7 +92,7 @@ class QtPainter(QtGui.QPainter):
             #
             self._set_border_width_(i_border_width)
             # left
-            if i == 0:
+            if i_idx == 0:
                 if c == 1:
                     i_path_0 = QtGui.QPainterPath()
                     i_path_0.addRoundedRect(
@@ -113,7 +116,7 @@ class QtPainter(QtGui.QPainter):
                         i_path_0+i_path_1
                     )
             # right
-            elif i == (c-1):
+            elif i_idx == (c-1):
                 if c > 1:
                     i_path_0 = QtGui.QPainterPath()
                     i_path_0.addRoundedRect(
@@ -354,7 +357,7 @@ class QtPainter(QtGui.QPainter):
             else:
                 raise RuntimeError()
 
-            i_r, i_g, i_b = bsc_core.RawTextOpt(icon_name_text).to_rgb_1(s_p=(35, 50), v_p=(75, 95))
+            i_r, i_g, i_b = bsc_core.BscTextOpt(icon_name_text).to_hash_rgb(s_p=(35, 50), v_p=(75, 95))
             self._set_border_width_(1)
             self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
             icn_bkg_color = QtGui.QColor(i_r, i_g, i_b, a)
@@ -549,7 +552,7 @@ class QtPainter(QtGui.QPainter):
                 (btn_frm_x+btn_frm_w-1, btn_frm_y+btn_frm_h),
                 (btn_frm_x+btn_frm_w-icn_w, btn_frm_y+btn_frm_h),
             ]
-            i_r, i_g, i_b = bsc_core.RawTextOpt(icon_name_text).to_rgb_1(s_p=(35, 50), v_p=(75, 95))
+            i_r, i_g, i_b = bsc_core.BscTextOpt(icon_name_text).to_hash_rgb(s_p=(35, 50), v_p=(75, 95))
             self._set_border_width_(1)
             self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
             icn_bkg_color = QtGui.QColor(i_r, i_g, i_b, a)
@@ -605,7 +608,7 @@ class QtPainter(QtGui.QPainter):
             (frm_x+bsc_w-frm_w*2, frm_y+frm_h), (frm_x+bsc_w-frm_w, frm_y), (frm_x+bsc_w, frm_y),
             (frm_x+bsc_w, frm_y+frm_h)
         ]
-        i_r, i_g, i_b = bsc_core.RawTextOpt(text).to_rgb_0(s_p=50, v_p=50)
+        i_r, i_g, i_b = bsc_core.BscTextOpt(text).to_rgb_0(s_p=50, v_p=50)
         self._set_background_color_(i_r, i_g, i_b)
         self._draw_path_by_coords_(coords)
         #
@@ -1305,7 +1308,7 @@ class QtPainter(QtGui.QPainter):
         #
         self.device()
 
-    def _draw_video_play_button_by_rect_(
+    def _draw_play_button_by_rect_(
         self, rect, scale=1.0, offset=0, border_width=4, is_hovered=False, is_selected=False, is_actioned=False
     ):
         if offset != 0:
@@ -1336,7 +1339,7 @@ class QtPainter(QtGui.QPainter):
         self._set_background_color_(_color_and_brush.QtBackgroundColors.Transparent)
         border_color = self._get_item_border_color_(ellipse_rect, is_hovered, is_selected, is_actioned)
         self._set_border_color_(border_color)
-        self._set_border_color_alpha_(127)
+        self._set_border_color_alpha_(31)
         #
         self._set_border_width_(border_width)
         self.drawEllipse(ellipse_rect)
@@ -1390,7 +1393,7 @@ class QtPainter(QtGui.QPainter):
         if background_color is not None:
             background_color__ = _base.QtColor.to_rgba(background_color)
         else:
-            background_color__ = bsc_core.RawTextOpt(text).to_rgb_0(s_p=50, v_p=50)
+            background_color__ = bsc_core.BscTextOpt(text).to_rgb_0(s_p=50, v_p=50)
 
         background_color_, text_color_ = _base.QtColor.generate_color_args_by_rgb(*background_color__)
         if text_color is not None:
@@ -1523,7 +1526,7 @@ class QtPainter(QtGui.QPainter):
         if background_color is not None:
             background_color__ = _base.QtColor.to_rgba(background_color)
         else:
-            r_, g_, b_ = bsc_core.RawTextOpt(text).to_rgb_0(s_p=100, v_p=100)
+            r_, g_, b_ = bsc_core.BscTextOpt(text).to_rgb_0(s_p=100, v_p=100)
             background_color__ = r_, g_, b_, 255
 
         icon_file_path = _gui_core.GuiIcon.get(icon_style)
@@ -2319,7 +2322,7 @@ class QtPainter(QtGui.QPainter):
             for i_index, i_value in enumerate(value_array):
                 i_color_percent = float(i_value)/float(maximum)
                 #
-                i_r, i_g, i_b = bsc_core.RawColorMtd.hsv2rgb(140*i_color_percent, 1, 1)
+                i_r, i_g, i_b = bsc_core.BscColor.hsv2rgb(140*i_color_percent, 1, 1)
                 #
                 self._set_background_color_(i_r, i_g, i_b, 255)
                 self._set_border_color_(i_r, i_g, i_b, 255)
@@ -2365,7 +2368,7 @@ class QtPainter(QtGui.QPainter):
                     '{2} ( {0} )\r\n{3} ( {1} )'.format(
                         label_x, label_y,
                         current_x,
-                        bsc_core.RawIntegerMtd.get_prettify_(current_y, mode=mode)
+                        bsc_core.BscInteger.get_prettify_(current_y, mode=mode)
                     )
                 )
 
@@ -2437,7 +2440,7 @@ class QtPainter(QtGui.QPainter):
             for seq, i_point in enumerate(points):
                 if (seq-axis_index)%5 == 0:
                     value = (seq-axis_index)/scale+value_offset
-                    text = bsc_core.RawIntegerMtd.get_prettify_(
+                    text = bsc_core.BscInteger.get_prettify_(
                         value,
                         grid_value_show_mode
                     )
@@ -2969,7 +2972,7 @@ class QtPixmapDrawer(object):
         i_x_0, i_y_0 = 0, h-g_h
         for i in guide_data:
             i_text, i_c = i
-            i_background_rgb = bsc_core.RawTextOpt(i_text).to_rgb()
+            i_background_rgb = bsc_core.BscTextOpt(i_text).to_rgb()
             # background
             i_p = i_c/float(max_c)
             i_x_1, i_y_1 = int(i_x_0+i_p*w), h-1
@@ -2986,7 +2989,7 @@ class QtPixmapDrawer(object):
 
             painter._set_font_(_base.QtFont.generate(g_h*.8))
 
-            i_t_r, i_t_g, i_t_b = bsc_core.RawColorMtd.get_complementary_rgb(*i_background_rgb)
+            i_t_r, i_t_g, i_t_b = bsc_core.BscColor.get_complementary_rgb(*i_background_rgb)
             i_t_a = QtGui.qGray(i_t_r, i_t_g, i_t_b)
             if i_t_a >= 127:
                 i_t_r_ = 223

@@ -76,7 +76,7 @@ class QtEntryExtendAsPath(QtWidgets.QWidget):
         self._next_name_texts = []
 
         self._entry_widget.setToolTip(
-            gui_qt_core.GuiQtUtil.generate_tool_tip_css(
+            gui_qt_core.QtUtil.generate_tool_tip_css(
                 'constant entry',
                 [
                     '"LMB-click" to start entry',

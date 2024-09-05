@@ -46,7 +46,7 @@ class Scene(object):
         directory_path = file_opt.get_directory_path()
         name_base = file_opt.get_name_base()
         image_file_path = '{}/.snapshot/{}.jpg'.format(directory_path, name_base)
-        _playblast.Playblast.make_snapshot(image_file_path, _time.Frame.get_current_frame(), (480, 240))
+        _playblast.Playblast.make_snapshot(image_file_path, _time.Frame.get_current_time(), (480, 240))
 
     # include instanced
     @classmethod
@@ -119,3 +119,17 @@ class Scene(object):
                     if cmds.referenceQuery(i, isNodeReferenced=1) is False:
                         cmds.lockNode(i, lock=0)
                         cmds.delete(i)
+
+
+class Play(object):
+    @classmethod
+    def start(cls):
+        cmds.play(forward=True)
+
+    @classmethod
+    def is_active(cls):
+        return cmds.play(query=True, state=True)
+
+    @classmethod
+    def stop(cls):
+        cmds.play(state=False)

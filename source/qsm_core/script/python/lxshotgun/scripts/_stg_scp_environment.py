@@ -13,7 +13,7 @@ class ScpEnvironment(object):
 
             resolver = rsv_core.RsvBase.generate_root()
             stg_connection = bsc_shotgun.StgConnector()
-            if stg_connection.get_is_valid() is False:
+            if stg_connection.is_valid() is False:
                 return False, None
 
             dict_ = stg_connection.get_data_from_task_id(task_id)

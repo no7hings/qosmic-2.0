@@ -72,11 +72,11 @@ class _AbsQtHTabToolBox(
                 # scroll
                 scroll_w = w  # use width
                 # update scroll model
-                self._gui_scroll.set_w_or_h(scroll_w)
-                self._gui_scroll.set_abs_w_or_h(scroll_abs_w+btn_frm_w*3)
-                self._gui_scroll.update()
+                self._scroll_bar_model.set_w_or_h(scroll_w)
+                self._scroll_bar_model.set_abs_w_or_h(scroll_abs_w+btn_frm_w*3)
+                self._scroll_bar_model.update()
 
-                if self._gui_scroll.get_is_valid():
+                if self._scroll_bar_model.is_valid():
                     btn_w_1, btn_h_1 = btn_w/2, btn_h
                     btn_f_w_r = btn_frm_w*2
                     c_x_1, c_y_1 = w-btn_f_w_r, y
@@ -93,7 +93,7 @@ class _AbsQtHTabToolBox(
                         c_x_1+(btn_frm_w-btn_w)/2, c_y_1+(btn_frm_h-btn_h_1)/2, btn_w_1, btn_h_1
                     )
 
-                    if self._gui_scroll.get_is_minimum():
+                    if self._scroll_bar_model.get_is_minimum():
                         self._tab_scroll_previous_button._set_icon_file_path_(self._icons_0[1])
                     else:
                         self._tab_scroll_previous_button._set_icon_file_path_(self._icons_0[0])
@@ -103,7 +103,7 @@ class _AbsQtHTabToolBox(
                         c_x_1+(btn_frm_w-btn_w)/2+btn_w_1, c_y_1+(btn_frm_h-btn_h_1)/2, btn_w_1, btn_h_1
                     )
 
-                    if self._gui_scroll.get_is_maximum():
+                    if self._scroll_bar_model.get_is_maximum():
                         self._tab_scroll_next_button._set_icon_file_path_(self._icons_1[1])
                     else:
                         self._tab_scroll_next_button._set_icon_file_path_(self._icons_1[0])
@@ -120,7 +120,7 @@ class _AbsQtHTabToolBox(
                     self._tab_choose_button.hide()
                 # tab items
                 c_x, c_y = x, y
-                scroll_value = self._gui_scroll.get_value()
+                scroll_value = self._scroll_bar_model.get_value()
                 widths = self._item_width_or_height_dict.values()
                 for i_index, i_tab_item in enumerate(tab_items):
                     i_x = sum(widths[:i_index])
@@ -183,11 +183,11 @@ class _AbsQtHTabToolBox(
                 # scroll
                 scroll_w = h  # use height
                 # update scroll model
-                self._gui_scroll.set_w_or_h(scroll_w)
-                self._gui_scroll.set_abs_w_or_h(scroll_abs_w+btn_frm_w*3)
-                self._gui_scroll.update()
+                self._scroll_bar_model.set_w_or_h(scroll_w)
+                self._scroll_bar_model.set_abs_w_or_h(scroll_abs_w+btn_frm_w*3)
+                self._scroll_bar_model.update()
 
-                if self._gui_scroll.get_is_valid():
+                if self._scroll_bar_model.is_valid():
                     btn_w_1, btn_h_1 = btn_w/2, btn_h
                     btn_f_w_r = btn_frm_w*2
                     c_x_1, c_y_1 = w-btn_f_w_r, y
@@ -204,7 +204,7 @@ class _AbsQtHTabToolBox(
                         c_x_1+(btn_frm_w-btn_w)/2, c_y_1+(btn_frm_h-btn_h_1)/2, btn_w_1, btn_h_1
                     )
 
-                    if self._gui_scroll.get_is_minimum():
+                    if self._scroll_bar_model.get_is_minimum():
                         self._tab_scroll_previous_button._set_icon_file_path_(self._icons_0[1])
                     else:
                         self._tab_scroll_previous_button._set_icon_file_path_(self._icons_0[0])
@@ -214,7 +214,7 @@ class _AbsQtHTabToolBox(
                         c_x_1+(btn_frm_w-btn_w)/2+btn_w_1, c_y_1+(btn_frm_h-btn_h_1)/2, btn_w_1, btn_h_1
                     )
 
-                    if self._gui_scroll.get_is_maximum():
+                    if self._scroll_bar_model.get_is_maximum():
                         self._tab_scroll_next_button._set_icon_file_path_(self._icons_1[1])
                     else:
                         self._tab_scroll_next_button._set_icon_file_path_(self._icons_1[0])
@@ -231,7 +231,7 @@ class _AbsQtHTabToolBox(
                     self._tab_choose_button.hide()
                 # tab items
                 c_x, c_y = x, y
-                scroll_value = self._gui_scroll.get_value()
+                scroll_value = self._scroll_bar_model.get_value()
                 heights = self._item_width_or_height_dict.values()
                 for i_index, i_tab_item in enumerate(tab_items):
                     i_y = sum(heights[:i_index])
@@ -263,14 +263,14 @@ class _AbsQtHTabToolBox(
         item = self._tab_item_stack.get_item_at(index)
         if item:
             x = item.get_rect().x()
-            self._gui_scroll.accept_value(x-24)
+            self._scroll_bar_model.accept_value(x-24)
 
     def _do_scroll_previous_(self):
-        if self._gui_scroll.step_to_previous():
+        if self._scroll_bar_model.step_to_previous():
             self._refresh_widget_all_()
 
     def _do_scroll_next_(self):
-        if self._gui_scroll.step_to_next():
+        if self._scroll_bar_model.step_to_next():
             self._refresh_widget_all_()
 
     def _load_history_(self):
@@ -351,8 +351,8 @@ class _AbsQtHTabToolBox(
             _gui_core.GuiIcon.get('tab/tab-choose')
         )
 
-        self._gui_scroll = _qt_core.GuiQtModForScroll()
-        self._gui_scroll.set_step(64)
+        self._scroll_bar_model = _qt_core.GuiQtModForScroll()
+        self._scroll_bar_model.set_step(64)
 
         self._item_width_or_height_dict = {}
 
@@ -428,7 +428,7 @@ class _AbsQtHTabToolBox(
             direction=self._direction
         )
 
-        if self._gui_scroll.get_is_valid():
+        if self._scroll_bar_model.is_valid():
             painter._draw_tab_right_tool_box_by_rect_(
                 rect=self._tab_right_tool_box_draw_rect,
                 background_color=_qt_core.QtBackgroundColors.Basic
@@ -492,7 +492,7 @@ class _AbsQtHTabToolBox(
                     title = self._tab_item_stack.get_name_at(self._index_hover)
                     tool_tip = self._tab_item_stack.get_tool_tip_at(self._index_hover)
 
-                css = _qt_core.GuiQtUtil.generate_tool_tip_css(
+                css = _qt_core.QtUtil.generate_tool_tip_css(
                     title,
                     content=tool_tip,
                     action_tip=[

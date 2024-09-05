@@ -242,9 +242,9 @@ class PrxPageForNoticeMonitor(prx_abstracts.AbsPrxWidget):
 
         self._refresh_flag = False
 
-        self.gui_setup_page()
+        self.gui_page_setup_fnc()
 
-    def gui_setup_page(self):
+    def gui_page_setup_fnc(self):
         self._main_layout = qt_widgets.QtVBoxLayout(self._qt_widget)
         self._main_layout.setContentsMargins(*[0]*4)
         self._main_layout.setSpacing(2)

@@ -10,11 +10,13 @@ from ...qt.widgets import utility as _qt_wgt_utility
 
 from ... qt.widgets import window_base as _qt_window_base
 
+from ... qt.widgets import window_for_dialog as _qt_window_for_dialog
+
 from ...qt.widgets import button as _qt_wgt_button
 
 from ...qt.widgets import chart as _qt_wgt_chart
 
-from ...qt.widgets import progress_bar_for_subprocess as _qt_wgt_process
+from ...qt.widgets import chart_for_sprc_task as _chart_for_sprc_task
 # proxy abstracts
 from .. import abstracts as gui_prx_abstracts
 # proxy widgets
@@ -149,7 +151,7 @@ class AbsPrxDialogWindow(
         # self._ok_button.set_visible(False)
         self._input_button_layout.addWidget(self._ok_button.widget)
         self._ok_button.set_name('Yes')
-        self._ok_button.set_icon_name('dialog/yes')
+        # self._ok_button.set_icon_name('dialog/yes')
         self._ok_button.set_width(self.BUTTON_WIDTH)
         self._ok_button.connect_press_clicked_to(self.do_yes)
         #
@@ -157,7 +159,7 @@ class AbsPrxDialogWindow(
         # self._no_button.set_visible(False)
         self._input_button_layout.addWidget(self._no_button.widget)
         self._no_button.set_name('No')
-        self._no_button.set_icon_name('dialog/no')
+        # self._no_button.set_icon_name('dialog/no')
         self._no_button.set_width(self.BUTTON_WIDTH)
         self._no_button.connect_press_clicked_to(self.do_no)
         #
@@ -165,7 +167,7 @@ class AbsPrxDialogWindow(
         # self._cancel_button.set_visible(False)
         self._input_button_layout.addWidget(self._cancel_button.widget)
         self._cancel_button.set_name('Cancel')
-        self._cancel_button.set_icon_name('dialog/cancel')
+        # self._cancel_button.set_icon_name('dialog/cancel')
         self._cancel_button.set_width(self.BUTTON_WIDTH)
         self._cancel_button.connect_press_clicked_to(self.do_cancel)
         #
@@ -345,7 +347,7 @@ class PrxDialogWindow0(AbsPrxDialogWindow):
 
     def show_window_auto(self, pos=None, size=None, exclusive=True):
         # do not show unique
-        gui_qt_core.GuiQtUtil.show_qt_window(
+        gui_qt_core.QtUtil.show_qt_window(
             self.widget,
             pos,
             size
@@ -374,7 +376,7 @@ class PrxDialogWindow0(AbsPrxDialogWindow):
 
 
 class PrxDialogWindow1(AbsPrxDialogWindow):
-    QT_WIDGET_CLS = _qt_window_base.QtDialogWindow
+    QT_WIDGET_CLS = _qt_window_for_dialog.QtBaseDialog
 
     def __init__(self, *args, **kwargs):
         super(PrxDialogWindow1, self).__init__(*args, **kwargs)
@@ -416,7 +418,7 @@ class PrxDialogWindow1(AbsPrxDialogWindow):
 
     def show_window_auto(self, pos=None, size=None, exclusive=True):
         # do not show unique
-        gui_qt_core.GuiQtUtil.show_qt_window(
+        gui_qt_core.QtUtil.show_qt_window(
             self.widget,
             pos,
             size,
@@ -524,14 +526,14 @@ class PrxMonitorWindow(
         self._status_button.set_finished_at(*args)
 
 
-class PrxSubProcessWindow(
+class PrxSprcTaskWindow(
     gui_prx_abstracts.AbsPrxWindow,
     gui_prx_abstracts.AbsPrxProgressingDef,
 ):
     QT_WIDGET_CLS = _qt_window_base.QtMainWindow
 
     def __init__(self, *args, **kwargs):
-        super(PrxSubProcessWindow, self).__init__(*args, **kwargs)
+        super(PrxSprcTaskWindow, self).__init__(*args, **kwargs)
         if isinstance(kwargs.get('parent'), gui_qt_core.QtWidgets.QMainWindow):
             self.widget.setWindowFlags(
                 gui_qt_core.QtCore.Qt.Tool | gui_qt_core.QtCore.Qt.WindowStaysOnTopHint
@@ -549,8 +551,8 @@ class PrxSubProcessWindow(
         self._qt_widget.setCentralWidget(self._central_qt_widget)
         self._central_qt_layout = _qt_wgt_base.QtVBoxLayout(self._central_qt_widget)
         #
-        self._qt_processing_bar = _qt_wgt_process.QtProgressBarForSubprocess()
-        self._central_qt_layout.addWidget(self._qt_processing_bar)
+        self._task_qt_chart = _chart_for_sprc_task.QtChartForSprcTask()
+        self._central_qt_layout.addWidget(self._task_qt_chart)
         #
         self._tip_prx_text_browser = gui_prx_wdt_utility.PrxTextBrowser()
         self._central_qt_layout.addWidget(self._tip_prx_text_browser.widget)
@@ -577,10 +579,10 @@ class PrxSubProcessWindow(
         self._close_button.setFixedWidth(80)
         self._close_button.press_clicked.connect(self.close_window)
 
-        self._qt_processing_bar.log_update.connect(self.log_update)
+        self._task_qt_chart.log_update.connect(self.log_update)
 
     def start(self, fnc, *args, **kwargs):
-        t = self._qt_processing_bar._generate_thread_()
+        t = self._task_qt_chart._generate_thread_(self._qt_widget)
         t.set_fnc(fnc, *args, **kwargs)
         t.start()
         t.finished.connect(self._on_finished)
@@ -590,10 +592,10 @@ class PrxSubProcessWindow(
         self._stop_button.hide()
 
     def kill_processing(self):
-        self._qt_processing_bar._do_close_()
+        self._task_qt_chart._do_close_()
 
     def is_killed(self):
-        return self._qt_processing_bar._get_is_killed_()
+        return self._task_qt_chart._get_is_killed_()
 
     def log_update(self, text):
         self._tip_prx_text_browser.trace_log_use_thread(text)

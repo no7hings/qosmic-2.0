@@ -5,7 +5,11 @@ import maya.cmds as cmds
 # noinspection PyUnresolvedReferences
 import maya.mel as mel
 
+import lxbasic.core as bsc_core
+
 import lxbasic.content as bsc_content
+
+import lxbasic.model as bsc_model
 
 import lxbasic.resource as bsc_resource
 
@@ -250,59 +254,52 @@ class AdvMotionLayerBase(object):
 class AbsAdvMotionLayer(_base.MotionBase):
 
     @classmethod
-    def update_root_start_opt(cls, motion_layer, motion_layer_last, start_frame):
-        motion_layer_last._node_opt.set('output_end', start_frame-1)
-        root_end_pre = motion_layer_last.find_root_end()
-        pre_root_opt = qsm_mya_core.EtrNodeOpt(root_end_pre)
+    def update_root_start_opt(cls, motion_layer_opt, motion_layer_opt_last, start_frame):
+        motion_layer_opt_last._node_opt.set('output_end', start_frame-1)
+        pre_root_opt = qsm_mya_core.EtrNodeOpt(motion_layer_opt_last.find_root_end())
+        motion_layer_opt._node_opt.set(
+            'root_start_input_from', motion_layer_opt_last._node_opt.get('key')
+        )
 
-        root_start_input = motion_layer.find_root_start_input()
-        root_start_input_opt = qsm_mya_core.EtrNodeOpt(root_start_input)
+        for i_key, i_atr_src in [
+            ('root_start_input_tx', 'translateX'),
+            ('root_start_input_ty', 'translateY'),
+            ('root_start_input_tz', 'translateZ'),
+            ('root_start_input_rx', 'rotateX'),
+            ('root_start_input_ry', 'rotateY'),
+            ('root_start_input_rz', 'rotateZ')
+        ]:
+            i_curve_path = motion_layer_opt.get_message_from(i_key+'_curve')
+            if i_curve_path is None:
+                continue
 
-        root_start_input_opt.set(
-            'translateX', pre_root_opt.get('translateX')
-        )
-        root_start_input_opt.set(
-            'translateY', pre_root_opt.get('translateY')
-        )
-        root_start_input_opt.set(
-            'translateZ', pre_root_opt.get('translateZ')
-        )
-        root_start_input_opt.set(
-            'rotateX', pre_root_opt.get('rotateX')
-        )
-        root_start_input_opt.set(
-            'rotateY', pre_root_opt.get('rotateY')
-        )
-        root_start_input_opt.set(
-            'rotateZ', pre_root_opt.get('rotateZ')
-        )
+            i_curve_opt = qsm_mya_core.AnmCurveOpt(i_curve_path)
+            i_curve_opt.create_value_at_time(start_frame, pre_root_opt.get(i_atr_src))
+            i_curve_opt.set_tangent_types_at_time(start_frame, 'auto', 'step')
 
     @classmethod
-    def update_root_start_self(cls, motion_layer):
-        root_start_src = motion_layer.find_root_start_src()
-        pre_root_opt = qsm_mya_core.EtrNodeOpt(root_start_src)
+    def update_root_start_for_self(cls, motion_layer_opt, start_frame):
+        motion_layer_opt._node_opt.set('output_end', start_frame-1)
+        pre_root_opt = qsm_mya_core.EtrNodeOpt(motion_layer_opt.find_root_start_src())
+        motion_layer_opt._node_opt.set(
+            'root_start_input_from', motion_layer_opt._node_opt.get('key')
+        )
 
-        root_start_input = motion_layer.find_root_start_input()
-        root_start_input_opt = qsm_mya_core.EtrNodeOpt(root_start_input)
+        for i_key, i_atr_src in [
+            ('root_start_input_tx', 'translateX'),
+            ('root_start_input_ty', 'translateY'),
+            ('root_start_input_tz', 'translateZ'),
+            ('root_start_input_rx', 'rotateX'),
+            ('root_start_input_ry', 'rotateY'),
+            ('root_start_input_rz', 'rotateZ')
+        ]:
+            i_curve_path = motion_layer_opt.get_message_from(i_key+'_curve')
+            if i_curve_path is None:
+                continue
 
-        root_start_input_opt.set(
-            'translateX', pre_root_opt.get('translateX')
-        )
-        root_start_input_opt.set(
-            'translateY', pre_root_opt.get('translateY')
-        )
-        root_start_input_opt.set(
-            'translateZ', pre_root_opt.get('translateZ')
-        )
-        root_start_input_opt.set(
-            'rotateX', pre_root_opt.get('rotateX')
-        )
-        root_start_input_opt.set(
-            'rotateY', pre_root_opt.get('rotateY')
-        )
-        root_start_input_opt.set(
-            'rotateZ', pre_root_opt.get('rotateZ')
-        )
+            i_curve_opt = qsm_mya_core.AnmCurveOpt(i_curve_path)
+            i_curve_opt.create_value_at_time(start_frame, pre_root_opt.get(i_atr_src))
+            i_curve_opt.set_tangent_types_at_time(start_frame, 'auto', 'step')
 
     def __init__(self, location):
         self._location = location
@@ -385,25 +382,25 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
             namespace
         )
         if is_create is True:
-            layer = cls(location)
-            layer.set('key', namespace)
-            cls.create_curves_for(layer)
-            return layer
+            layer_opt = cls(location)
+            layer_opt.set('key', namespace)
+            cls.create_curves_for(layer_opt)
+            return layer_opt
         return cls(location)
 
     @classmethod
-    def create_curves_for(cls, layer):
+    def create_curves_for(cls, layer_opt):
         curve_nodes = []
-        time_container = layer.get_time_container()
-        for i_sketch_key in layer.ChrMasterSketches.Basic:
-            i_sketch = layer.get(i_sketch_key)
+        time_container = layer_opt.get_time_container()
+        for i_sketch_key in layer_opt.ChrMasterSketches.Basic:
+            i_sketch = layer_opt.get(i_sketch_key)
             if i_sketch is None:
                 continue
 
-            if i_sketch_key == layer.ChrMasterSketches.Root_M:
-                i_atr_names = layer.AtrKeys.Root
+            if i_sketch_key == layer_opt.ChrMasterSketches.Root_M:
+                i_atr_names = layer_opt.AtrKeys.Root
             else:
-                i_atr_names = layer.AtrKeys.Default
+                i_atr_names = layer_opt.AtrKeys.Default
 
             for j_atr_name in i_atr_names:
                 j_curve_node = SketchCurve.create(
@@ -419,12 +416,12 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
     @classmethod
     def apply_data_for(
         cls,
-        layer, data,
+        layer_opt, data,
         start_frame=1,
         pre_cycle=0, post_cycle=1,
         pre_blend=4, post_blend=4
     ):
-        location = layer.get_root()
+        location = layer_opt.get_root()
         sketch_data = data['sketches']
 
         frame_count = data['frame_count']
@@ -441,15 +438,6 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
         clip_start = start_frame
         clip_end = clip_start+frame_count*post_cycle-1
         count = clip_end-clip_start+1
-
-        main_weight_curve_opt = qsm_mya_core.AnmCurveOpt.create(location, 'main_weight', True)
-        main_weight_curve_opt.create_value_at_time(clip_start-pre_blend, 0)
-        main_weight_curve_opt.create_value_at_time(clip_start, 1)
-        main_weight_curve_opt.create_value_at_time(clip_end, 1)
-        main_weight_curve_opt.create_value_at_time(clip_end+post_blend, 0)
-        qsm_mya_core.NodeAttribute.set_as_message(
-            location, 'main_weight_curve', main_weight_curve_opt.path
-        )
 
         qsm_mya_core.NodeAttribute.set_value(
             location, 'output_end', clip_end
@@ -514,19 +502,20 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
         )
         #
         for i_sketch_key, i_v in sketch_data.items():
-            i_sketch_path = layer.get(i_sketch_key)
+            i_sketch_path = layer_opt.get(i_sketch_key)
             i_orients = i_v['orients']
             i_time_samples = i_v['time_samples']
             cls.apply_orient_for(i_sketch_path, i_orients)
             cls.apply_time_samples_for_(i_sketch_path, i_time_samples, source_start, translation_scale)
 
         # connect main_weight to constraint
-        weight_attributes = layer.get_constraint_weight_attributes()
+        weight_attributes = layer_opt.get_constraint_weight_attributes()
         for i_weight_atr in weight_attributes:
             cmds.connectAttr(
-                location+'.main_weight', i_weight_atr,
+                location+'.main_weight_bypass', i_weight_atr,
                 force=1
             )
+        return clip_start, clip_end
 
     @classmethod
     def test(cls):
@@ -534,14 +523,14 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
 
     @classmethod
     def test_1(cls):
-        motion_layer = cls.create_for(
+        motion_layer_opt = cls.create_for(
             'test_1'
         )
         data = bsc_storage.StgFileOpt(
             'E:/myworkspace/qosmic-2.0/source/qsm_dcc_extra/resources/motion/sam_run_forward.json'
             # 'E:/myworkspace/qosmic-2.0/source/qsm_dcc_extra/resources/motion/mixamo_run_forward.json'
         ).set_read()
-        cls.apply_data_for(motion_layer, data, post_cycle=3)
+        cls.apply_data_for(motion_layer_opt, data, post_cycle=3)
 
     def __init__(self, *args, **kwargs):
         super(AdvChrMotionLayer, self).__init__(*args, **kwargs)
@@ -678,11 +667,15 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
 
         start_frame, end_frame = frame_range
 
-        if is_start is True:
+        condition = [is_start, is_end]
+        if condition == [True, True]:
+            curve_opt.create_value_at_time(start_frame, 1)
+            curve_opt.create_value_at_time(end_frame, 1)
+        elif condition == [True, False]:
             curve_opt.create_value_at_time(start_frame, 1)
             curve_opt.create_value_at_time(end_frame, 1)
             curve_opt.create_value_at_time(end_frame+post_blend, 0)
-        elif is_end is True:
+        elif condition == [False, True]:
             curve_opt.create_value_at_time(start_frame-pre_blend, 0)
             curve_opt.create_value_at_time(start_frame, 1)
             curve_opt.create_value_at_time(end_frame, 1)
@@ -697,14 +690,54 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
                 curve_opt.create_value_at_time(end_frame, 1)
                 curve_opt.create_value_at_time(end_frame+post_blend, 0)
 
-    def clear_main_weight_keys(self):
+    def update_main_weight_auto(self, is_start, is_end):
+        clip_start, clip_end = self._node_opt.get('clip_start'), self._node_opt.get('clip_end')
+        self.update_main_weight((clip_start, clip_end), is_start, is_end)
+
+    def restore_main_weight_curve(self):
         curve_opt = self.get_main_weight_curve_opt()
         if curve_opt is not None:
             curve_opt.delete()
+
         curve_opt = qsm_mya_core.AnmCurveOpt.create(self._location, 'main_weight', True)
         qsm_mya_core.NodeAttribute.set_as_message(
             self._location, 'main_weight_curve', curve_opt.path
         )
+
+    def get_root_start_input_transformation_curves_kwargs(self):
+        dict_ = {}
+        for i_key, i_atr_src in [
+            ('root_start_input_tx', 'translateX'),
+            ('root_start_input_ty', 'translateY'),
+            ('root_start_input_tz', 'translateZ'),
+            ('root_start_input_rx', 'rotateX'),
+            ('root_start_input_ry', 'rotateY'),
+            ('root_start_input_rz', 'rotateZ')
+        ]:
+            i_curve = qsm_mya_core.NodeAttribute.get_as_message(
+                self._location, i_key+'_curve'
+            )
+            if i_curve:
+                i_curve_opt = qsm_mya_core.AnmCurveOpt(i_curve)
+            else:
+                i_curve_opt = None
+            dict_[i_key] = i_curve_opt, i_atr_src
+        return dict_
+
+    def restore_root_start_input_transformation_curves(self):
+        curve_kwargs = self.get_root_start_input_transformation_curves_kwargs()
+        for i_key, (i_curve_opt, i_atr_src) in curve_kwargs.items():
+            if i_curve_opt is not None:
+                i_curve_opt.delete()
+
+            i_curve_typ = CharacterCurve.CURVE_TYPE_MAP[i_atr_src]
+            i_curve_opt = qsm_mya_core.AnmCurveOpt.create(
+                self._location, i_key, keep_namespace=True, curve_type=i_curve_typ
+            )
+
+            qsm_mya_core.NodeAttribute.set_as_message(
+                self._location, i_key+'_curve', i_curve_opt.path
+            )
 
     def update_output_end(self, frame_range):
         curve_opt = self.get_output_end_curve_opt()
@@ -731,17 +764,23 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
             )
 
     def get_main_weight_curve_opt(self):
-        _ = qsm_mya_core.NodeAttribute.get_as_message(
-                self._location, 'main_weight_curve'
-            )
+        _ = self.get_message_from(
+            'main_weight_curve'
+        )
         if _:
             return qsm_mya_core.AnmCurveOpt(
                 _
             )
 
+    def get_message_from(self, key):
+        return qsm_mya_core.NodeAttribute.get_as_message(
+            self._location, key
+        )
+
     def generate_kwargs(self):
         kwargs = {}
-        for j_key in self.LAYER_KEYS:
+        keys = bsc_model.TrackModel.MAIN_KEYS
+        for j_key in keys:
             kwargs[j_key] = self._node_opt.get(j_key)
         return kwargs
 
@@ -788,40 +827,51 @@ class AdvChrMotionMasterLayerOpt(AbsAdvMotionLayer):
         resource_namespace = self.get_resource_namespace()
 
         layers_opt = AdvMotionLayersOpt(self.get_all_layers())
-        stage_end_frame = layers_opt.get_end_frame()
-        motion_layer_last = layers_opt.get_end_layer()
 
-        index = self.get_next_layer_index()
+        stage_end_frame = layers_opt.get_end_frame()
+        motion_layer_opt_last = layers_opt.get_end_layer()
+
+        layer_index = self.get_next_layer_index()
+
         file_opt = bsc_storage.StgFileOpt(file_path)
-        name = file_opt.name_base
-        layer_namespace = '{}_{}_{}'.format(resource_namespace, name, index)
-        motion_layer = AdvChrMotionLayer.create_for(layer_namespace)
-        self.fit_layer_scale(motion_layer)
-        motion_layer.constraint_to_master(self)
+        name = bsc_core.RawTextMtd.clear_up_to(file_opt.name_base)
+        layer_namespace = '{}_{}_{}'.format(resource_namespace, name, layer_index)
+        motion_layer_opt = AdvChrMotionLayer.create_for(layer_namespace)
+        self.fit_layer_scale(motion_layer_opt)
+        motion_layer_opt.constraint_to_master(self)
         data = bsc_storage.StgFileOpt(file_path).set_read()
 
         qsm_mya_core.NodeAttribute.set_as_message(
-            self._location, 'qsm_layers.layer_{}'.format(index), motion_layer.get_root()
+            self._location, 'qsm_layers.layer_{}'.format(layer_index), motion_layer_opt.get_root()
         )
-        motion_layer.set_layer_index(index)
-        motion_layer.apply_data_for(
-            motion_layer,
+        motion_layer_opt.set_layer_index(layer_index)
+        clip_start, clip_end = motion_layer_opt.apply_data_for(
+            motion_layer_opt,
             data,
             start_frame=stage_end_frame+1,
             post_cycle=post_cycle,
             pre_blend=pre_blend, post_blend=post_blend
         )
-        if motion_layer_last is not None:
-            start_frame = motion_layer._node_opt.get('clip_start')
-            self.update_root_start_opt(motion_layer, motion_layer_last, start_frame)
+
+        motion_layer_opt.restore_main_weight_curve()
+        motion_layer_opt.restore_root_start_input_transformation_curves()
+        if motion_layer_opt_last is not None:
+            motion_layer_opt.update_main_weight((clip_start, clip_end), is_start=False, is_end=True)
+            self.update_root_start_opt(motion_layer_opt, motion_layer_opt_last, clip_start)
+            # check exists layer count, when count is 1, last layer is start layer
+            if layers_opt.get_layer_count() == 1:
+                motion_layer_opt_last.update_main_weight_auto(is_start=True, is_end=False)
+            else:
+                motion_layer_opt_last.update_main_weight_auto(is_start=False, is_end=False)
         else:
-            self.update_root_start_self(motion_layer)
+            motion_layer_opt.update_main_weight((clip_start, clip_end), is_start=True, is_end=True)
+            self.update_root_start_for_self(motion_layer_opt, clip_start)
 
-        return motion_layer
+        return motion_layer_opt
 
-    def fit_layer_scale(self, layer):
+    def fit_layer_scale(self, layer_opt):
         scale = cmds.getAttr(self._location+'.scaleX')
-        layer.apply_root_scale(scale)
+        layer_opt.apply_root_scale(scale)
 
     def get_all_layers(self):
         list_ = []
@@ -834,6 +884,9 @@ class AdvChrMotionMasterLayerOpt(AbsAdvMotionLayer):
             if _:
                 list_.append(_[0].split('.')[0])
         return list_
+
+    def get_all_layer_names(self):
+        return [x.split(':')[0] for x in self.get_all_layers()]
 
     def get_frame_range(self):
         layers_opt = AdvMotionLayersOpt(self.get_all_layers())
@@ -868,6 +921,20 @@ class AdvMotionStage(object):
             i_kwargs = AdvChrMotionLayer(i_path).generate_kwargs()
             list_.append(i_kwargs)
         return list_
+    
+    def get_all_layers(self):
+        if self._master_layer is None:
+            return []
+
+        opt = AdvChrMotionMasterLayerOpt(self._master_layer)
+        return opt.get_all_layers()
+
+    def get_all_layer_names(self):
+        if self._master_layer is None:
+            return []
+
+        opt = AdvChrMotionMasterLayerOpt(self._master_layer)
+        return opt.get_all_layer_names()
 
 
 class AdvMotionLayersOpt(object):
@@ -884,6 +951,9 @@ class AdvMotionLayersOpt(object):
             return dict_[max(end_frames)][-1]
         return None
 
+    def get_layer_count(self):
+        return len(self._layers)
+
     def get_start_frame(self):
         _ = [x.get_start_frame() for x in self._layers]
         if _:
@@ -894,7 +964,7 @@ class AdvMotionLayersOpt(object):
         _ = [x.get_end_frame() for x in self._layers]
         if _:
             return max(_)
-        return 24
+        return 0
 
     def get_frame_range(self):
         return self.get_start_frame(), self.get_end_frame()

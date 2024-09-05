@@ -21,3 +21,7 @@ threadpool是创建线程的对象，它是一个局部变量，会随着线程�
         worker = Worker(countBox)
         QThreadPool.globalInstance().start(worker)
     ```
+## pyqtSignal
+```
+int类型有大小限制，大数得考虑long
+```

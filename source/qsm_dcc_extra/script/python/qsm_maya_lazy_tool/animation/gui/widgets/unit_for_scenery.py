@@ -52,66 +52,66 @@ class PrxToolbarForSceneryReference(
     def __init__(self, window, unit, session, prx_input_for_asset):
         super(PrxToolbarForSceneryReference, self).__init__(window, unit, session)
         self._scan_root = qsm_gnl_scan.Root.generate()
-        self._prx_input_for_asset = prx_input_for_asset
+        self._asset_prx_input = prx_input_for_asset
 
         self._count_input = qt_widgets.QtInputAsConstant()
-        self._prx_input_for_asset.add_widget(self._count_input)
+        self._asset_prx_input.add_widget(self._count_input)
         self._count_input._set_value_type_(int)
         self._count_input.setMaximumWidth(64)
         self._count_input.setMinimumWidth(64)
         self._count_input._set_value_(1)
 
-        self._reference_button = qt_widgets.QtPressButton()
-        self._prx_input_for_asset.add_widget(self._reference_button)
-        self._reference_button._set_name_text_(
+        self._asset_load_qt_button = qt_widgets.QtPressButton()
+        self._asset_prx_input.add_widget(self._asset_load_qt_button)
+        self._asset_load_qt_button._set_name_text_(
             self._window.choice_name(
                 self._window._configure.get('build.scenery.buttons.reference')
             )
         )
-        self._reference_button._set_tool_tip_text_(
+        self._asset_load_qt_button._set_tool_tip_text_(
             self._window.choice_tool_tip(
                 self._window._configure.get('build.scenery.buttons.reference')
             )
         )
-        self._reference_button.setMaximumWidth(64)
-        self._reference_button.setMinimumWidth(64)
-        self._reference_button.press_clicked.connect(self.do_dcc_reference_resource)
-        self._reference_button._set_action_enable_(False)
+        self._asset_load_qt_button.setMaximumWidth(64)
+        self._asset_load_qt_button.setMinimumWidth(64)
+        self._asset_load_qt_button.press_clicked.connect(self._do_dcc_load_asset)
+        self._asset_load_qt_button._set_action_enable_(False)
 
-        self._prx_input_for_asset.connect_input_change_accepted_to(self.do_gui_refresh_resource)
+        self._asset_prx_input.connect_input_change_accepted_to(self._do_gui_refresh_asset_for)
 
-        self._resource_file_path = None
+        self._asset_path = None
 
-        self.do_gui_refresh_resource(self._prx_input_for_asset.get_path())
+        self._do_gui_refresh_asset_for(self._asset_prx_input.get_path())
 
-    def do_dcc_reference_resource(self):
-        if self._resource_file_path is not None:
-            file_opt = bsc_storage.StgFileOpt(self._resource_file_path)
+    def _do_dcc_load_asset(self):
+        if self._asset_path is not None:
+            file_opt = bsc_storage.StgFileOpt(self._asset_path)
             count = self._count_input._get_value_()
             for i in range(count):
                 qsm_mya_core.SceneFile.reference_file(
-                    self._resource_file_path,
+                    self._asset_path,
                     namespace=file_opt.name_base
                 )
             self._page.do_gui_refresh_all()
 
-    def do_gui_refresh_resource(self, path):
-        self._resource_file_path = None
-        self._reference_button._set_action_enable_(False)
-        entity = self._prx_input_for_asset.get_entity(path)
+    def _do_gui_refresh_asset_for(self, path):
+        self._asset_path = None
+        self._asset_load_qt_button._set_action_enable_(False)
+        entity = self._asset_prx_input.get_entity(path)
         if entity is not None:
             if entity.type == 'Asset':
                 task = entity.task(self._scan_root.EntityTasks.Model)
                 if task is not None:
                     result = task.find_result(
-                        self._scan_root.ResultPatterns.ModelFIle
+                        self._scan_root.ResultPatterns.MayaModelFIle
                     )
                     if result is not None:
-                        self._resource_file_path = result
-                        self._reference_button._set_action_enable_(True)
+                        self._asset_path = result
+                        self._asset_load_qt_button._set_action_enable_(True)
 
     def do_update(self):
-        self._prx_input_for_asset.do_update()
+        self._asset_prx_input.do_update()
 
 
 class PrxToolsetForUnitAssemblyLoad(
@@ -124,9 +124,9 @@ class PrxToolsetForUnitAssemblyLoad(
             with self._window.gui_progressing(
                 maximum=len(self._unit_assembly_load_args_array), label='load unit assemblies'
             ) as g_p:
-                for i_opt, i_cache_file in self._unit_assembly_load_args_array:
+                for i_opt, i_cache_path in self._unit_assembly_load_args_array:
                     if i_opt.is_resource_exists() is True:
-                        i_opt.load_cache(i_cache_file, hide_scenery=hide_scenery)
+                        i_opt.load_cache(i_cache_path, hide_scenery=hide_scenery)
                     g_p.do_update()
 
             self._page.do_gui_refresh_all(force=True)
@@ -145,12 +145,12 @@ class PrxToolsetForUnitAssemblyLoad(
                     for i_resource in resources:
                         i_opt = qsm_mya_scn_scripts.UnitAssemblyOpt(i_resource)
                         if i_opt.is_exists() is False:
-                            i_task_name, i_cmd_script, i_cache_file = i_opt.generate_args()
+                            i_task_name, i_cmd_script, i_cache_path = i_opt.generate_args()
                             if i_cmd_script is not None:
                                 create_cmds.append(i_cmd_script)
 
                             self._unit_assembly_load_args_array.append(
-                                (i_opt, i_cache_file)
+                                (i_opt, i_cache_path)
                             )
 
                         g_p.do_update()
@@ -196,9 +196,9 @@ class PrxToolsetForUnitAssemblyLoad(
             with self._window.gui_progressing(
                 maximum=len(self._gpu_instance_load_args_array), label='load gpu instances'
             ) as g_p:
-                for i_opt, i_cache_file in self._gpu_instance_load_args_array:
+                for i_opt, i_cache_path in self._gpu_instance_load_args_array:
                     if i_opt.is_resource_exists() is True:
-                        i_opt.load_cache(i_cache_file, hide_scenery=hide_scenery)
+                        i_opt.load_cache(i_cache_path, hide_scenery=hide_scenery)
                     g_p.do_update()
 
             self._page.do_gui_refresh_all(force=True)
@@ -217,12 +217,12 @@ class PrxToolsetForUnitAssemblyLoad(
                     for i_resource in resources:
                         i_opt = qsm_mya_scn_scripts.GpuInstanceOpt(i_resource)
                         if i_opt.is_exists() is False:
-                            i_cmd_script, i_cache_file = i_opt.generate_args()
+                            i_cmd_script, i_cache_path = i_opt.generate_args()
                             if i_cmd_script is not None:
                                 create_cmds.append(i_cmd_script)
 
                             self._gpu_instance_load_args_array.append(
-                                (i_opt, i_cache_file)
+                                (i_opt, i_cache_path)
                             )
 
                         g_p.do_update()

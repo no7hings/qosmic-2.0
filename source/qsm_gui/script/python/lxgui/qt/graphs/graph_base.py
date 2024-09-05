@@ -9,6 +9,8 @@ from ..core.wrap import *
 
 from .. import core as _qt_core
 
+from .. import graph_models as _graph_models
+
 from . import undo_command as _undo_command
 
 
@@ -46,7 +48,7 @@ class AbsQtGraphBaseDef(object):
     def _init_graph_base_def_(self, widget):
         self._widget = widget
 
-        self._graph_model = _qt_core.GraphModel(self._widget)
+        self._graph_model = _graph_models.ModelForBaseGraph(self._widget)
 
     def _refresh_widget_draw_(self):
         raise NotImplementedError()

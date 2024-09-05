@@ -203,7 +203,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
         cmds.currentTime(frame)
 
     @classmethod
-    def get_current_frame(cls):
+    def get_current_time(cls):
         return cmds.currentTime(query=1)
 
     @classmethod
@@ -220,7 +220,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
         elif isinstance(frame, (int, float)):
             start_frame = end_frame = frame
         else:
-            start_frame = end_frame = cls.get_current_frame()
+            start_frame = end_frame = cls.get_current_time()
         return float(start_frame), float(end_frame)
 
     @classmethod
@@ -878,8 +878,8 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
     def get_tag_as_36(cls):
         file_path = cls.get_current_file_path()
         file_opt = bsc_storage.StgFileOpt(file_path)
-        timestamp = file_opt.get_modify_timestamp()
-        time_tag = bsc_core.RawIntegerOpt(int(timestamp*10)).set_encode_to_36()
+        timestamp = file_opt.get_mtime()
+        time_tag = bsc_core.BscIntegerOpt(int(timestamp*10)).encode_to_36()
         size = file_opt.get_size()
-        size_tag = bsc_core.RawIntegerOpt(int(size)).set_encode_to_36()
+        size_tag = bsc_core.BscIntegerOpt(int(size)).encode_to_36()
         return '{}{}'.format(time_tag, size_tag)

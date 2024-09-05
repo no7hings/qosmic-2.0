@@ -14,16 +14,16 @@ import qsm_general.scan as qsm_gnl_scan
 import qsm_general.core as qsm_gnl_core
 
 
-class PrxInputForRig(prx_abstracts.AbsPrxWidget):
+class PrxInputForAsset(prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = qt_widgets.QtTranslucentWidget
 
     HISTORY_KEY = 'gui.input-entity-path-asset'
 
-    ROLE_MASK = ['chr', 'prp']
-    ROLE_MASK_NEW = ['CHA', 'PROP']
+    ROLE_MASK = qsm_gnl_core.QsmAsset.CHARACTER_AND_PROP_ROLE_MASK
+    ROLE_MASK_NEW = qsm_gnl_core.QsmAsset.CHARACTER_AND_PROP_ROLE_MASK_NEW
 
     def __init__(self, *args, **kwargs):
-        super(PrxInputForRig, self).__init__(*args, **kwargs)
+        super(PrxInputForAsset, self).__init__(*args, **kwargs)
 
         self._qt_layout_0 = qt_widgets.QtHBoxLayout(self.get_widget())
         self._qt_layout_0.setContentsMargins(*[0]*4)
@@ -156,11 +156,11 @@ class PrxInputForRig(prx_abstracts.AbsPrxWidget):
         return self._qt_path_input._get_value_()
 
 
-class PrxInputForScenery(PrxInputForRig):
+class PrxInputForScenery(PrxInputForAsset):
     HISTORY_KEY = 'gui.input-entity-path-assembly'
 
-    ROLE_MASK = ['scn']
-    ROLE_MASK_NEW = ['SCE']
+    ROLE_MASK = qsm_gnl_core.QsmAsset.SCENERY_ROLE_MASK
+    ROLE_MASK_NEW = qsm_gnl_core.QsmAsset.SCENERY_ROLE_MASK_NEW
 
     def __init__(self, *args, **kwargs):
         super(PrxInputForScenery, self).__init__(*args, **kwargs)

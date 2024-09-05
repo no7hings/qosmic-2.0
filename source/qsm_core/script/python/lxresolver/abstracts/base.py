@@ -257,7 +257,7 @@ class AbsRsvEntityBaseDef(AbsRsvBaseDef):
     type_name = property(get_type_name)
 
     def get_name(self):
-        return bsc_core.BscPath.get_dag_name(self._rsv_path, pathsep=self.PATHSEP)
+        return bsc_core.BscPath.to_dag_name(self._rsv_path, pathsep=self.PATHSEP)
 
     name = property(get_name)
 
@@ -704,7 +704,7 @@ class AbsRsvEntity(
 
     def _open_source_directory(self):
         directory_path = self._get_source_directory_path()
-        bsc_storage.StgDirectoryOpt(directory_path).open_in_system()
+        bsc_storage.StgDirectoryOpt(directory_path).show_in_system()
 
     # user
     def _get_user_directory_path(self):
@@ -721,7 +721,7 @@ class AbsRsvEntity(
 
     def _open_user_directory(self):
         directory_path = self._get_user_directory_path()
-        bsc_storage.StgDirectoryOpt(directory_path).open_in_system()
+        bsc_storage.StgDirectoryOpt(directory_path).show_in_system()
 
     # release
     def _get_release_directory_path(self):
@@ -737,7 +737,7 @@ class AbsRsvEntity(
 
     def _open_release_directory(self):
         directory_path = self._get_release_directory_path()
-        bsc_storage.StgDirectoryOpt(directory_path).open_in_system()
+        bsc_storage.StgDirectoryOpt(directory_path).show_in_system()
 
     # temporary
     def _get_temporary_directory_path(self):
@@ -753,7 +753,7 @@ class AbsRsvEntity(
 
     def _open_temporary_directory(self):
         directory_path = self._get_temporary_directory_path()
-        bsc_storage.StgDirectoryOpt(directory_path).open_in_system()
+        bsc_storage.StgDirectoryOpt(directory_path).show_in_system()
 
     def get_rsv_project(self):
         return self._rsv_project
@@ -1027,7 +1027,7 @@ class AbsRsvUnitVersion(AbsRsvEntity):
 
     def open_directory(self):
         if self._result:
-            bsc_storage.StgPathOpt(self._result).open_in_system()
+            bsc_storage.StgPathOpt(self._result).show_in_system()
 
 
 class AbsRsvTaskVersion(AbsRsvEntity):
@@ -1072,7 +1072,7 @@ class AbsRsvTask(AbsRsvEntity):
                 return bsc_storage.StgDirectoryOpt(_directory_path).get_is_exists()
 
             def set_directory_open_fnc_():
-                bsc_storage.StgDirectoryOpt(_directory_path).open_in_system()
+                bsc_storage.StgDirectoryOpt(_directory_path).show_in_system()
 
             #
             _branch = self.properties.get('branch')
@@ -1513,7 +1513,7 @@ class AbsRsvConfigureExtraDef(AbsRsvBaseDef):
         update = bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
             bsc_storage.StgFileOpt(
                 result
-            ).get_modify_timestamp(),
+            ).get_mtime(),
             language=1
         )
         user = bsc_storage.StgPathOpt(
@@ -1633,7 +1633,7 @@ class AbsRsvConfigureExtraDef(AbsRsvBaseDef):
             update = bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
                 bsc_storage.StgFileOpt(
                     result
-                ).get_modify_timestamp(),
+                ).get_mtime(),
                 language=1
             )
         else:

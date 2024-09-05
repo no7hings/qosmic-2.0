@@ -1209,7 +1209,7 @@ class LxRenderer(object):
                 i_renderer_opt.get_input_port('input')
             )
 
-    def _set_clear_(self):
+    def _do_clear_(self):
         import lxkatana.core as ktn_core
 
         [ktn_core.NGNodeOpt(i).do_delete() for i in ktn_core.NGNodeOpt(self._ktn_obj).get_children()]
@@ -1231,7 +1231,7 @@ class LxRenderer(object):
     def set_create(self):
         Utils.UndoStack.OpenGroup(self._ktn_obj.getName())
         try:
-            self._set_clear_()
+            self._do_clear_()
             self._set_create_()
         except Exception:
             raise

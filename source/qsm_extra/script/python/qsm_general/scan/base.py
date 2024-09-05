@@ -78,8 +78,8 @@ class EntityTasks(object):
 
 
 class ResultPatterns(object):
-    RigFile = '{root}/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
-    ModelFIle = '{root}/{project}/Assets/{role}/{asset}/Maya/Final/{asset}.ma'
+    MayaRigFile = '{root}/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
+    MayaModelFIle = '{root}/{project}/Assets/{role}/{asset}/Maya/Final/{asset}.ma'
 
 
 class NodeStack(object):
@@ -130,7 +130,7 @@ class AbsEntity(object):
 
     def __str__(self):
         return '{}(path="{}")'.format(
-            self.Type, self._path,
+            self.Type, bsc_core.auto_string(self._path),
         )
 
     def __repr__(self):
@@ -306,7 +306,7 @@ class AbsTask(object):
 
     def __str__(self):
         return '{}(path="{}")'.format(
-            self.Type, self._path,
+            self.Type, bsc_core.auto_string(self._path),
         )
 
     def __repr__(self):

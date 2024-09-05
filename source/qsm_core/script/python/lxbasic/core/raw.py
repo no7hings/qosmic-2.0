@@ -17,8 +17,6 @@ import collections
 
 import itertools
 
-import pypinyin
-
 
 def auto_string(text):
     if isinstance(text, six.text_type):
@@ -32,7 +30,7 @@ def auto_unicode(text):
     return text
 
 
-class RawColorMtd(object):
+class BscColor(object):
     @classmethod
     def rgb2hex(cls, r, g, b):
         return hex(r)[2:].zfill(2)+hex(g)[2:].zfill(2)+hex(b)[2:].zfill(2)
@@ -123,7 +121,7 @@ class RawColorMtd(object):
         h = float(a_0%(360+seed)*d)/d
         s = float(45+a_1%55)/100.0
         v = float(45+a_1%55)/100.0
-        return RawColorMtd.hsv2rgb(h, s, v, maximum)
+        return BscColor.hsv2rgb(h, s, v, maximum)
 
     @classmethod
     def get_choice_colors(cls, count, maximum=255, offset=0, seed=0):
@@ -185,7 +183,7 @@ class RawColorMtd(object):
         return out_rgb
 
 
-class RawColorChoiceOpt(object):
+class BscColorChoiceOpt(object):
     def __init__(self, s_minimum=0.125, s_maximum=0.875, v_minimum=0.125, v_maximum=0.875, seed=0):
         random.seed(seed)
 
@@ -202,10 +200,10 @@ class RawColorChoiceOpt(object):
         h = random.choice(self.__hs)/self.__d
         s = random.choice(self.__ss)/self.__d
         v = random.choice(self.__vs)/self.__d
-        return RawColorMtd.hsv2rgb(h, s, v, maximum)
+        return BscColor.hsv2rgb(h, s, v, maximum)
 
 
-class RawCoordMtd(object):
+class BscCoord(object):
     @classmethod
     def get_region(cls, position, size):
         x, y = position
@@ -287,7 +285,7 @@ class RawCoordMtd(object):
         return radian*180/math.pi
 
 
-class RawNestedArrayMtd(object):
+class BscArrayForNested(object):
     @classmethod
     def set_map_to(cls, array):
         """
@@ -314,7 +312,7 @@ class RawNestedArrayMtd(object):
         return list_
 
 
-class RawIntArrayMtd(object):
+class BscIntegers(object):
     @staticmethod
     def merge_to(array):
         """
@@ -413,13 +411,13 @@ class RawValueMtd(object):
             return min1
 
     @classmethod
-    def get_percent_prettify(cls, value, maximum, round_count=3):
+    def to_percent_prettify(cls, value, maximum, round_count=3):
         round_range = 100
         if maximum > 0:
             percent = round(float(value)/float(maximum), round_count)*round_range
         else:
             if value > 0:
-                percent = float(u'inf')
+                percent = float('inf')
             elif value < 0:
                 percent = float('-inf')
             else:
@@ -482,7 +480,8 @@ class RawValueRangeMtd(object):
         return value_1
 
 
-class RawFrameRangeMtd(object):
+class BscFrameRang(object):
+
     @classmethod
     def get(cls, frame_range, frame_step):
         start_frame, end_frame = map(int, frame_range)
@@ -514,11 +513,82 @@ class RawFrameRangeMtd(object):
             raise ValueError()
 
 
-class RawFramesMtd(object):
+class BscFrames(object):
+
+    @staticmethod
+    def to_missing_ranges(array):
+        if not array:
+            return []
+
+        array = sorted(array)
+        result = []
+        start = array[0]
+        end = array[-1]
+
+        full_range = set(range(start, end+1))
+
+        missing_nums = sorted(full_range-set(array))
+
+        if not missing_nums:
+            return result
+
+        missing_start = missing_nums[0]
+        missing_end = missing_nums[0]
+
+        for i in range(1, len(missing_nums)):
+            if missing_nums[i] == missing_end+1:
+                missing_end = missing_nums[i]
+            else:
+                if missing_start == missing_end:
+                    result.append((missing_start, missing_start))
+                else:
+                    result.append((missing_start, missing_end))
+
+                missing_start = missing_nums[i]
+                missing_end = missing_nums[i]
+
+        if missing_start == missing_end:
+            result.append((missing_start, missing_start))
+        else:
+            result.append((missing_start, missing_end))
+
+        return result
+
+    @staticmethod
+    def to_ranges(array):
+        if not array:
+            return []
+
+        array = sorted(array)
+        result = []
+        start = array[0]
+        end = array[0]
+
+        for i in range(1, len(array)):
+            if array[i] == end+1:
+                end = array[i]
+            else:
+                if start == end:
+                    result.append((start, start))
+                else:
+                    result.append((start, end))
+                start = array[i]
+                end = array[i]
+
+        if start == end:
+            result.append((start, start))
+        else:
+            result.append((start, end))
+
+        return result
+    
     @classmethod
     def to_text(cls, frames):
+        """
+        for deadline
+        """
         list_ = []
-        _ = RawIntArrayMtd.merge_to(
+        _ = BscIntegers.merge_to(
             frames
         )
         for i in _:
@@ -529,9 +599,9 @@ class RawFramesMtd(object):
         return ','.join(list_)
 
 
-class RawIntegerMtd(object):
+class BscInteger(object):
     @classmethod
-    def get_file_size_prettify(cls, value):
+    def to_prettify_as_file_size(cls, value):
         if value < 1.0:
             return str(round(float(value), 2))
         #
@@ -542,30 +612,42 @@ class RawIntegerMtd(object):
                 s = int(abs(value))/i[0]
                 if s:
                     return str(round(float(value)/float(i[0]), 2))+i[1]
-        #
+
         return str(round(float(value), 2))
 
     @classmethod
-    def get_prettify(cls, value):
+    def to_prettify(cls, value, language='en_US'):
         if value < 1.0:
+            if isinstance(value, int):
+                return str(value)
             return str(round(float(value), 2))
-        #
-        dv = 1000
-        if int(value) >= dv:
+
+        if language == 'chs':
+            minimum = 1000
+            list_ = [
+                (100000000000, '千亿'), (10000000000, '百亿'), (100000000, '亿'),
+                (10000000, '千万'), (1000000, '百万'), (10000, '万')
+            ]
+        else:
+            minimum = 1000
+            dv = 1000
             list_ = [(dv**4, 'T'), (dv**3, 'B'), (dv**2, 'M'), (dv**1, 'K')]
+
+        if value >= minimum:
             for i in list_:
                 s = int(abs(value))/i[0]
                 if s:
-                    return str(round(float(value)/float(i[0]), 2))+i[1]
-        #
+                    return str(round(float(value)/float(i[0]), 2))+auto_string(i[1])
+        if isinstance(value, int):
+            return str(value)
         return str(round(float(value), 2))
 
     @classmethod
     def get_prettify_(cls, value, mode):
         if mode == 0:
-            return cls.get_prettify(value)
+            return cls.to_prettify(value)
         else:
-            return cls.get_file_size_prettify(value)
+            return cls.to_prettify_as_file_size(value)
 
     @classmethod
     def byte_to_gb(cls, value):
@@ -624,22 +706,22 @@ class RawIntegerMtd(object):
         )
 
 
-class RawRgbRange(object):
+class BscRgbRange(object):
     def __init__(self, count):
         self._p = 360.0/count
 
     def get_rgb(self, index, maximum=255, s_p=50, v_p=50):
         h = self._p*index
-        return RawColorMtd.hsv2rgb(
+        return BscColor.hsv2rgb(
             h, s_p/100.0, v_p/100.0, maximum
         )
 
 
-class RawIntegerOpt(object):
+class BscIntegerOpt(object):
     def __init__(self, raw):
         self._value = raw
 
-    def set_encode_to_36(self):
+    def encode_to_36(self):
         number = self._value
         num_str = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         if number == 0:
@@ -742,7 +824,7 @@ class RawTextMtd(object):
         return re.findall(r'[A-Z](?:[a-z]+)?|[A-Za-z]+', text)
 
 
-class RawTextOpt(object):
+class BscTextOpt(object):
     def __init__(self, raw):
         if isinstance(raw, six.string_types):
             self.__raw = raw
@@ -772,7 +854,7 @@ class RawTextOpt(object):
             h = float(a%25600)/100.0
             s = float(45+a%55)/100.0
             v = float(45+a%55)/100.0
-            return RawColorMtd.hsv2rgb(h, s, v, maximum)
+            return BscColor.hsv2rgb(h, s, v, maximum)
         return 0, 0, 0
 
     def to_rgb_(self, maximum=255, seed=0, s_p=45, v_p=45):
@@ -784,7 +866,7 @@ class RawTextOpt(object):
             s = float((s_p/2)+a%(s_p/2))/100.0
             v = float((v_p/2)+a%(v_p/2))/100.0
             # print h, s, v
-            return RawColorMtd.hsv2rgb(h, s, v, maximum)
+            return BscColor.hsv2rgb(h, s, v, maximum)
         return 0, 0, 0
 
     def to_rgb__(self, maximum=255, seed=0, s_p=45, v_p=45):
@@ -802,7 +884,7 @@ class RawTextOpt(object):
             h = float(a%(360+seed)*d)/d
             s = float((s_p/2)+a%(s_p/2))/100.0
             v = float((v_p/2)+a%(v_p/2))/100.0
-            return RawColorMtd.hsv2rgb(h, s, v, maximum)
+            return BscColor.hsv2rgb(h, s, v, maximum)
         return 0, 0, 0
 
     def to_rgb_0(self, maximum=255, seed=0, s_p=45, v_p=45):
@@ -816,10 +898,10 @@ class RawTextOpt(object):
             h = float(h_a%(360+seed)*d)/d
             s = float((s_p/2)+s_a%(s_p/2))/100.0
             v = float((v_p/2)+v_a%(v_p/2))/100.0
-            return RawColorMtd.hsv2rgb(h, s, v, maximum)
+            return BscColor.hsv2rgb(h, s, v, maximum)
         return 0, 0, 0
 
-    def to_rgb_1(self, maximum=255, seed=0, s_p=(35, 65), v_p=(35, 65)):
+    def to_hash_rgb(self, maximum=255, seed=0, s_p=(35, 65), v_p=(35, 65)):
         string = self.__raw
         if string:
             d = 1000.0
@@ -832,7 +914,7 @@ class RawTextOpt(object):
             h = float(h_a%(360+seed)*d)/d
             s = float(s_p_min+s_a%(s_p_max-s_p_min))/100.0
             v = float(v_p_min+v_a%(v_p_max-v_p_min))/100.0
-            return RawColorMtd.hsv2rgb(h, s, v, maximum)
+            return BscColor.hsv2rgb(h, s, v, maximum)
         return 0, 0, 0
 
     def to_rgb_2(self, maximum=255, seed=0, s_p=(35, 65), v_p=(35, 65)):
@@ -854,7 +936,7 @@ class RawTextOpt(object):
             h = float(h_a%(360+seed)*d)/d
             s = float(s_p_min+s_a%(s_p_max-s_p_min))/100.0
             v = float(v_p_min+v_a%(v_p_max-v_p_min))/100.0
-            return RawColorMtd.hsv2rgb(h, s, v, maximum)
+            return BscColor.hsv2rgb(h, s, v, maximum)
         return 0, 0, 0
 
     def get_index(self):
@@ -881,7 +963,7 @@ class RawTextOpt(object):
                 else:
                     i_frame_step = 1
                 list_.extend(
-                    RawFrameRangeMtd.get(
+                    BscFrameRang.get(
                         (i_start_frame, i_end_frame), i_frame_step
                     )
                 )
@@ -899,6 +981,9 @@ class RawTextOpt(object):
 
     def get_is_float(self):
         return sum([n.isdigit() for n in self.__raw.strip().split('.')]) == 2
+
+    def get_is_integer(self):
+        return self.__raw.isdigit()
 
     def get_is_matched(self, p):
         return fnmatch.filter([self.__raw], p)
@@ -1141,6 +1226,7 @@ class RawMatrix33Opt(object):
 
     def __str__(self):
         return str(self.__raw)
+
 
 class RawIndexMtd(object):
     @classmethod

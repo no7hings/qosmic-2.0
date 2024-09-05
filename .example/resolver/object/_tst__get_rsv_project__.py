@@ -10,7 +10,7 @@ p = r.get_rsv_project(
 )
 
 
-t_s = bsc_core.BscSystem.get_timestamp()
+t_s = bsc_core.BscSystem.generate_timestamp()
 
 for i_rsv_group in p.get_rsv_resource_groups(
     branch='asset'
@@ -20,7 +20,7 @@ for i_rsv_group in p.get_rsv_resource_groups(
     for j_entity in j_entities:
         j = j_entity.get_rsv_tasks()
 
-t_e = bsc_core.BscSystem.get_timestamp()
+t_e = bsc_core.BscSystem.generate_timestamp()
 print 'Cost', t_e - t_s
 
 # Cost 0.24870800972

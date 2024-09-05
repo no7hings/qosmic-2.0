@@ -102,7 +102,7 @@ class AbsPnlLauncherForApplication(gui_prx_widgets.PrxSessionWindow):
         self.__do_accept(self.__input.get_result())
 
     def __do_tip_accept(self, text):
-        if self.__input.get_is_valid():
+        if self.__input.is_valid():
             self.__next_button.set_enable(True)
         else:
             self.__next_button.set_enable(False)

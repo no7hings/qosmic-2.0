@@ -54,7 +54,7 @@ class PrxPageForCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
         self._window = window
         self._session = session
 
-        self.gui_setup_page()
+        self.gui_page_setup_fnc()
 
     def _do_dcc_register_all_script_jobs(self):
         self._script_job_opt = qsm_mya_core.ScriptJobOpt(
@@ -126,7 +126,7 @@ class PrxPageForCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
     def gui_get_tool_tab_current_key(self):
         return self._page_prx_tab_tool_box.get_current_key()
 
-    def gui_setup_page(self):
+    def gui_page_setup_fnc(self):
         self._dynamic_gpu_load_args_array = []
 
         self._qt_widget.setSizePolicy(
@@ -147,16 +147,16 @@ class PrxPageForCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
         )
         self._gui_add_main_tools()
         # reference tool
-        self._reference_tool_box = self._top_prx_tool_bar.create_tool_box(
+        self._asset_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'reference', size_mode=1
         )
         # reference
-        self._prx_input_for_asset = qsm_gui_prx_widgets.PrxInputForRig()
-        self._reference_tool_box.add_widget(self._prx_input_for_asset)
-        self._prx_input_for_asset.widget.setMaximumWidth(488)
+        self._asset_prx_input = qsm_gui_prx_widgets.PrxInputForAsset()
+        self._asset_prx_tool_box.add_widget(self._asset_prx_input)
+        self._asset_prx_input.widget.setMaximumWidth(488)
 
         self._gui_rig_reference_prx_toolbar_unit = _unit_for_rig.PrxToolbarForCharacterAndPropReference(
-            self._window, self, self._session, self._prx_input_for_asset
+            self._window, self, self._session, self._asset_prx_input
         )
 
         self._prx_h_splitter = gui_prx_widgets.PrxHSplitter()

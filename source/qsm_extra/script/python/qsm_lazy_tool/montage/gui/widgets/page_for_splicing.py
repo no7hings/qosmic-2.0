@@ -1,10 +1,16 @@
 # coding:utf-8
 from .. import abstracts as _abstracts
 
+from ....generate.gui import widgets as _gnl_gui_weight
+
 
 class PrxPageForSplicing(_abstracts.AbsPrxPageForSplicing):
-    def __init__(self, window, session, *args, **kwargs):
-        super(PrxPageForSplicing, self).__init__(window, session, *args, **kwargs)
+    UNIT_CLASS_DICT = dict(
+        scene_space=_gnl_gui_weight.PrxUnitForSceneSpace
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(PrxPageForSplicing, self).__init__(*args, **kwargs)
 
     def gui_refresh_stage(self, force=False):
         if force is True:

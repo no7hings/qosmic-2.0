@@ -67,7 +67,7 @@ def lib_fbx_to_usd_fnc(option_opt):
             #
             if usd_file_opt.get_is_file() is True:
                 usd_file_opt.set_modify_time(
-                    fbx_file_opt.get_modify_timestamp()
+                    fbx_file_opt.get_mtime()
                 )
         else:
             bsc_log.Log.trace_method_warning(
@@ -186,7 +186,7 @@ def lib_scene_src_to_scene_fnc(option_opt):
             #
             if maya_scene_file_opt.get_is_file() is True:
                 maya_scene_file_opt.set_modify_time(
-                    scene_maya_src_file_opt.get_modify_timestamp()
+                    scene_maya_src_file_opt.get_mtime()
                 )
     else:
         bsc_log.Log.trace_warning(
@@ -241,7 +241,7 @@ def lib_scene_to_geometry_fnc(option_opt):
 
             if geometry_usd_file_opt.get_is_file() is True:
                 geometry_usd_file_opt.set_modify_time(
-                    scene_file_opt.get_modify_timestamp()
+                    scene_file_opt.get_mtime()
                 )
 
         if option_opt.get_as_boolean('with_geometry_abc') is True:
@@ -261,7 +261,7 @@ def lib_scene_to_geometry_fnc(option_opt):
 
             if geometry_abc_file_opt.get_is_file() is True:
                 geometry_abc_file_opt.set_modify_time(
-                    scene_file_opt.get_modify_timestamp()
+                    scene_file_opt.get_mtime()
                 )
     else:
         bsc_log.Log.trace_warning(
@@ -310,7 +310,7 @@ def lib_scene_to_proxy_fnc(option_opt):
             #
             if ass_file_opt.get_is_file() is True:
                 ass_file_opt.set_modify_time(
-                    scene_file_opt.get_modify_timestamp()
+                    scene_file_opt.get_mtime()
                 )
 
 
@@ -358,7 +358,7 @@ def lib_scene_to_look_fnc(option_opt):
                 #
                 if look_preview_usd_file_opt.get_is_file() is True:
                     look_preview_usd_file_opt.set_modify_time(
-                        scene_file_opt.get_modify_timestamp()
+                        scene_file_opt.get_mtime()
                     )
 
 

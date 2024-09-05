@@ -44,7 +44,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         self._window = window
         self._session = session
 
-        self.gui_setup_page()
+        self.gui_page_setup_fnc()
 
     def _do_dcc_register_all_script_jobs(self):
         self._script_job_opt = qsm_mya_core.ScriptJobOpt(
@@ -125,7 +125,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
     def gui_get_selection_scheme(self):
         return self._selection_scheme_prx_input.get()
 
-    def gui_setup_page(self):
+    def gui_page_setup_fnc(self):
         self._qt_widget.setSizePolicy(
             gui_qt_core.QtWidgets.QSizePolicy.Expanding,
             gui_qt_core.QtWidgets.QSizePolicy.Expanding

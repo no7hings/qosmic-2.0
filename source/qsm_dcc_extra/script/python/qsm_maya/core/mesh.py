@@ -1,4 +1,6 @@
 # coding:utf-8
+import math
+
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 # noinspection PyUnresolvedReferences
@@ -18,6 +20,18 @@ from . import attribute as _attribute
 
 
 class Mesh(_shape.Shape):
+    EVALUATE_KEYS = [
+        'vertex',
+        'edge',
+        'face',
+        'triangle',
+        'uvcoord',
+        'area',
+        'worldArea',
+        'shell',
+        'boundingBox'
+    ]
+
     @classmethod
     def get_shell_number(cls, path):
         return cmds.polyEvaluate(path, shell=1)
@@ -31,6 +45,71 @@ class Mesh(_shape.Shape):
         return _attribute.NodeAttribute.has_source(
             path, 'inMesh'
         )
+    
+    @classmethod
+    def get_evaluate(cls, path):
+        data = {}
+        for i_key in Mesh.EVALUATE_KEYS:
+            v = cmds.polyEvaluate(
+                path, **{i_key: True}
+            )
+            data[i_key] = v
+        return cls.to_evaluate(data)
+
+    @classmethod
+    def compute_count_per_area(cls, count, area):
+        if math.isnan(area):
+            return 0
+        elif math.isinf(area):
+            return 0
+        if area < 0:
+            return 0
+        _ = float(count)/area
+        return min(_, count)
+
+    @classmethod
+    def to_evaluate(cls, data):
+        dict_ = {}
+        bbox = data['boundingBox']
+        dict_['vertex'] = data['vertex']
+        dict_['edge'] = data['edge']
+        dict_['face'] = data['face']
+        dict_['triangle'] = data['triangle']
+        world_area = float(data['worldArea'])
+        if world_area > 0:
+            dict_['face_per_world_area'] = cls.compute_count_per_area(data['face'], data['worldArea'])
+            dict_['triangle_per_world_area'] = cls.compute_count_per_area(data['triangle'], data['worldArea'])
+        else:
+            dict_['face_per_world_area'] = 0.0
+            dict_['triangle_per_world_area'] = 0.0
+        dict_['uv_coord'] = data['uvcoord']
+        dict_['area'] = data['area']
+        dict_['world_area'] = data['worldArea']
+        dict_['shell'] = data['shell']
+        # bbox
+        dict_['center_x'] = bbox[0][0]+bbox[0][1]
+        dict_['center_y'] = bbox[1][0]+bbox[1][1]
+        dict_['center_z'] = bbox[2][0]+bbox[2][1]
+        dict_['start_x'] = bbox[0][0]
+        dict_['start_y'] = bbox[1][0]
+        dict_['start_z'] = bbox[2][0]
+        dict_['width'] = bbox[0][1]-bbox[0][0]
+        dict_['height'] = bbox[1][1]-bbox[1][0]
+        dict_['depth'] = bbox[2][1]-bbox[2][0]
+        return dict_
+
+
+class Meshes(object):
+
+    @classmethod
+    def get_evaluate(cls, paths):
+        data = {}
+        for i_key in Mesh.EVALUATE_KEYS:
+            v = cmds.polyEvaluate(
+                paths, **{i_key: True}
+            )
+            data[i_key] = v
+        return Mesh.to_evaluate(data)
 
 
 class MeshOpt(_shape.ShapeOpt):

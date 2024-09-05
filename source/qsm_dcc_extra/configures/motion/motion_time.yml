@@ -301,8 +301,8 @@ containers:
             # clip_start condition
             - '<options.namespace>:time_basic_end_cdt.outColorR'
             - '<options.namespace>:time_clip_start_cdt.firstTerm'
-            - '<options.namespace>:TIME.clip_start'
-            - '<options.namespace>:time_clip_start_cdt.secondTerm'
+#            - '<options.namespace>:TIME.clip_start'
+#            - '<options.namespace>:time_clip_start_cdt.secondTerm'
             # clip_end condition
             - '<options.namespace>:time_clip_start_cdt.outColorR'
             - '<options.namespace>:time_clip_end_cdt.firstTerm'

@@ -8,6 +8,8 @@ import lxbasic.core as bsc_core
 
 import lxbasic.log as bsc_log
 
+import lxbasic.storage as bsc_storage
+
 import lxgui.core as gui_core
 
 import qsm_general.core as qsm_gnl_core
@@ -72,6 +74,14 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
 
                 self.remove_resource_auto()
 
+        statistics = bsc_storage.Statistics.generate()
+        statistics.update_at_time(
+            dict(
+                method='dynamic_gpu_cache_load',
+                cache=cache_file_path
+            )
+        )
+
     def remove_resource_auto(self):
         cache_location = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
 
@@ -135,21 +145,22 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
         return task_name, cmd_script, cache_file_path
 
     @classmethod
-    def _load_delay_fnc(cls, window, resources, start_frame, end_frame, use_motion):
-        with window.gui_progressing(maximum=len(resources)) as g_p:
+    def _load_delay_fnc(cls, task_window, resources, start_frame, end_frame, use_motion):
+        with task_window.gui_progressing(maximum=len(resources)) as g_p:
             for i_resource in resources:
                 i_resource_opt = cls(i_resource)
-                i_task_name, i_cmd_script, i_cache_file = i_resource_opt.generate_args(
+                i_task_name, i_cmd_script, i_cache_path = i_resource_opt.generate_args(
                     start_frame, end_frame, use_motion
                 )
                 if i_cmd_script is not None:
-                    window.submit(
+                    task_window.submit(
+                        'dynamic_gpu_generate_process',
                         i_task_name,
                         i_cmd_script,
-                        completed_fnc=functools.partial(i_resource_opt.load_cache, i_cache_file)
+                        completed_fnc=functools.partial(i_resource_opt.load_cache, i_cache_path)
                     )
                 else:
-                    i_resource_opt.load_cache(i_cache_file)
+                    i_resource_opt.load_cache(i_cache_path)
 
                 g_p.do_update()
 
@@ -184,23 +195,23 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
 
             import lxgui.proxy.widgets as gui_prx_widgets
 
-            window = gui_prx_widgets.PrxSubprocessWindow()
-            if window._language == 'chs':
-                window.set_window_title('动态GPU加载')
-                window.set_tip(
+            task_window = gui_prx_widgets.PrxSprcTaskWindow()
+            if task_window._language == 'chs':
+                task_window.set_window_title('动态GPU加载')
+                task_window.set_tip(
                     '动态GPU会在后台生成，生成成功后会自动加载到场景中，请耐心等待；\n'
                     '生成后台任务之前会把选中的绑定+动画导出，这个过程会占用比较长的时间；\n'
                     '这个过程可能会让MAYA前台操作产生些许卡顿；\n'
                     '如需要终止任务，请点击“关闭”。'
                 )
             else:
-                window.set_window_title('Dynamic GPU Load')
+                task_window.set_window_title('Dynamic GPU Load')
 
-            window.show_window_auto(exclusive=False)
-            window.run_fnc_delay(
+            task_window.show_window_auto(exclusive=False)
+            task_window.run_fnc_delay(
                 functools.partial(
                     cls._load_delay_fnc,
-                    window, resources, start_frame, end_frame, use_motion),
+                    task_window, resources, start_frame, end_frame, use_motion),
                 500
             )
 
@@ -390,12 +401,12 @@ class DynamicGpuCacheGenerate(object):
         )
 
     def create_cache(self, cache_file_path, gpu_file_path, start_frame, end_frame):
-        cache_path = '|{}'.format(self.CACHE_NAME)
+        cache_location = '|{}'.format(self.CACHE_NAME)
         self._build_cache(
-            cache_path, gpu_file_path, start_frame, end_frame
+            cache_location, gpu_file_path, start_frame, end_frame
         )
         _mya_core.SceneFile.export_file(
-            cache_file_path, cache_path
+            cache_file_path, cache_location
         )
 
     def test(self):

@@ -10,9 +10,9 @@ class Group(_node_for_dag.DagNode):
     def create(cls, group_path, *args, **kwargs):
         if cmds.objExists(group_path):
             return group_path
-        parent_path = cls.get_parent(group_path)
+        parent_path = cls.to_parent_path(group_path)
         if parent_path:
-            return cmds.group(empty=1, name=cls.to_name(group_path), parent=cls.get_parent(group_path))
+            return cmds.group(empty=1, name=cls.to_name(group_path), parent=parent_path)
         return cmds.group(empty=1, name=cls.to_name(group_path))
 
     @classmethod

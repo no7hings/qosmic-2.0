@@ -461,6 +461,10 @@ class EtrNodeOpt(object):
                 _attribute.NodeAttribute.create_as_integer(
                     self._path, k, i_value
                 )
+            elif i_type == 'length':
+                _attribute.NodeAttribute.create_as_length(
+                    self._path, k, i_value
+                )
             elif i_type == 'angle':
                 _attribute.NodeAttribute.create_as_angle(
                     self._path, k, i_value

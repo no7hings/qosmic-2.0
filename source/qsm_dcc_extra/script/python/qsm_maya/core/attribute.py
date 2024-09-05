@@ -236,6 +236,17 @@ class NodeAttribute(object):
                 cls.set_value(path, atr_name, default)
 
     @classmethod
+    def create_as_length(cls, path, atr_name, default=None, **kwargs):
+        if cls.is_exists(path, atr_name) is False:
+            options = dict(
+                longName=atr_name, attributeType='doubleLinear', keyable=1
+            )
+            options.update(**kwargs)
+            cmds.addAttr(path, **options)
+            if default is not None:
+                cls.set_value(path, atr_name, default)
+
+    @classmethod
     def create_as_float3(cls, path, atr_name, default=None, **kwargs):
         if cls.is_exists(path, atr_name) is False:
             options = dict(

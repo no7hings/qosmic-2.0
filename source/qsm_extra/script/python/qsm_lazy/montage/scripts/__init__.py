@@ -1,4 +1,4 @@
 # coding:utf-8
-from .auto_register import *
+from .motion_auto_register import *
 
-from .auto_convertion import *
+from .motion_auto_convertion import *

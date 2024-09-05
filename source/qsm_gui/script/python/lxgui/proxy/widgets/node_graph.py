@@ -128,7 +128,7 @@ class PrxNGImageGraph(
         self._qt_view._set_restore_()
 
     def set_clear(self):
-        self._qt_view._set_clear_()
+        self._qt_view._do_clear_()
 
     def set_graph_universe(self, universe):
         self._qt_view._set_graph_universe_(universe)

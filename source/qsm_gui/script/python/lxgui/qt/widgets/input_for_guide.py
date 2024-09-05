@@ -327,7 +327,7 @@ class QtEntryAsGuide(
                 rect=i_item._type_rect,
                 text=i_type_text,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
-                text_color=bsc_core.RawTextOpt(i_type_text).to_rgb_0(s_p=100, v_p=100),
+                text_color=bsc_core.BscTextOpt(i_type_text).to_rgb_0(s_p=100, v_p=100),
                 font=_qt_core.QtFont.generate(size=self.TYPE_FONT_SIZE, italic=True),
                 offset=name_offset,
                 is_hovered=guide_is_hovered,

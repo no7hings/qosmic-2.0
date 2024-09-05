@@ -113,7 +113,9 @@ class HardwareRenderSettings(object):
             cmds.setAttr('hardwareRenderingGlobals.lightingMode', 1)
 
     @classmethod
-    def set_display_filter(cls, filters):
+    def set_display_filter(
+        cls, filters
+    ):
         """
         $gTotalObjTypeFilters[0] = "NURBS Curves";
         $gTotalObjTypeFilters[1] = "NURBS Surfaces";
@@ -138,3 +140,10 @@ class HardwareRenderSettings(object):
         $gTotalObjTypeFilters[20] = "Misc. UI";
         $gTotalObjTypeFilters[21] = "Ornaments";
         """
+        cmds.setAttr(
+            'hardwareRenderingGlobals.objectTypeFilterValueArray',
+            [
+                0L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 1L, 0L
+            ],
+            type='Int32Array'
+        )

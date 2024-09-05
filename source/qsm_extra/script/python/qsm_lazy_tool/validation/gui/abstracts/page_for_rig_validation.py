@@ -37,24 +37,24 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
     PAGE_KEY = 'rig_validation'
 
-    def do_dcc_reference_resource(self):
-        if self._resource_file_path is not None:
-            self._prx_options_node.get_port('files').append(self._resource_file_path)
+    def _do_dcc_load_asset(self):
+        if self._asset_path is not None:
+            self._prx_options_node.get_port('files').append(self._asset_path)
 
-    def do_gui_refresh_resource(self, path):
-        self._resource_file_path = None
-        self._reference_button._set_action_enable_(False)
-        entity = self._prx_input_for_asset.get_entity(path)
+    def _do_gui_refresh_asset_for(self, path):
+        self._asset_path = None
+        self._asset_load_qt_button._set_action_enable_(False)
+        entity = self._asset_prx_input.get_entity(path)
         if entity is not None:
             if entity.type == 'Asset':
                 task = entity.task(self._scan_root.EntityTasks.Rig)
                 if task is not None:
                     result = task.find_result(
-                        self._scan_root.ResultPatterns.RigFile
+                        self._scan_root.ResultPatterns.MayaRigFile
                     )
                     if result is not None:
-                        self._resource_file_path = result
-                        self._reference_button._set_action_enable_(True)
+                        self._asset_path = result
+                        self._asset_load_qt_button._set_action_enable_(True)
 
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxPageForRigValidation, self).__init__(*args, **kwargs)
@@ -62,14 +62,14 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
         self._window = window
         self._session = session
 
-        self._resource_file_path = None
+        self._asset_path = None
         self._scan_root = qsm_gnl_scan.Root.generate()
         
         self._validation_options = qsm_gnl_core.DccValidationOptions('rig/adv_validation_options')
 
-        self.gui_setup_page()
+        self.gui_page_setup_fnc()
 
-    def gui_setup_page(self):
+    def gui_page_setup_fnc(self):
         qt_v_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
         qt_v_lot.setContentsMargins(*[0]*4)
         qt_v_lot.setSpacing(2)
@@ -79,24 +79,24 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)
         # load tool
-        self._reference_tool_box = self._top_prx_tool_bar.create_tool_box(
+        self._asset_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'load', size_mode=1
         )
-        self._prx_input_for_asset = qsm_gui_prx_widgets.PrxInputForRig()
-        self._reference_tool_box.add_widget(self._prx_input_for_asset)
-        self._prx_input_for_asset.widget.setMaximumWidth(516)
+        self._asset_prx_input = qsm_gui_prx_widgets.PrxInputForAsset()
+        self._asset_prx_tool_box.add_widget(self._asset_prx_input)
+        self._asset_prx_input.widget.setMaximumWidth(516)
 
-        self._reference_button = qt_widgets.QtPressButton()
-        self._prx_input_for_asset.add_widget(self._reference_button)
-        self._reference_button.setMaximumWidth(64)
-        self._reference_button.setMinimumWidth(64)
-        self._reference_button._set_name_text_(
+        self._asset_load_qt_button = qt_widgets.QtPressButton()
+        self._asset_prx_input.add_widget(self._asset_load_qt_button)
+        self._asset_load_qt_button.setMaximumWidth(64)
+        self._asset_load_qt_button.setMinimumWidth(64)
+        self._asset_load_qt_button._set_name_text_(
             self._window.choice_name(
                 self._window._configure.get('build.{}.buttons.add'.format(self.PAGE_KEY))
             )
         )
-        self._reference_button.press_clicked.connect(self.do_dcc_reference_resource)
-        self._reference_button._set_action_enable_(False)
+        self._asset_load_qt_button.press_clicked.connect(self._do_dcc_load_asset)
+        self._asset_load_qt_button._set_action_enable_(False)
 
         v_prx_sca = gui_prx_widgets.PrxVScrollArea()
         qt_v_lot.addWidget(v_prx_sca.widget)
@@ -143,19 +143,19 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
             self._do_start
         )
 
-        self._prx_input_for_asset.connect_input_change_accepted_to(self.do_gui_refresh_resource)
-        self.do_gui_refresh_resource(self._prx_input_for_asset.get_path())
+        self._asset_prx_input.connect_input_change_accepted_to(self._do_gui_refresh_asset_for)
+        self._do_gui_refresh_asset_for(self._asset_prx_input.get_path())
 
         process_options = self._validation_options.generate_process_options()
         for k, v in process_options.items():
             self._prx_options_node.set(k, v)
         
-    def _trace_result(self, cache_file_path, process_options):
-        result = self._to_result(cache_file_path, process_options)
+    def _trace_result(self, cache_path, process_options):
+        result = self._to_result(cache_path, process_options)
         self._result_prx_text_browser.append(result)
 
-    def _to_result(self, cache_file_path, process_options):
-        data = bsc_storage.StgFileOpt(cache_file_path).set_read()
+    def _to_result(self, cache_path, process_options):
+        data = bsc_storage.StgFileOpt(cache_path).set_read()
         validation_opt = qsm_gnl_core.DccValidationOptions('rig/adv_validation_options')
         validation_opt.update_process_options(process_options)
         return validation_opt.to_text(data)
@@ -179,6 +179,7 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
             for i_args in process_args:
                 i_task_name, i_cmd_script, i_cache_file_path = i_args
                 window.submit(
+                    'rig_validation_process',
                     i_task_name,
                     i_cmd_script,
                     completed_fnc=functools.partial(self._trace_result, i_cache_file_path, process_options)
@@ -189,7 +190,7 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
     def _do_start(self):
         file_paths = self._prx_options_node.get('files')
         if not file_paths:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 self._window.choice_message(
                     self._window._configure.get('build.rig_validation.messages.no_files')
                 ),
@@ -199,7 +200,7 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
 
         process_options = self._generate_process_options()
         if not process_options:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 self._window.choice_message(
                     self._window._configure.get('build.rig_validation.messages.no_process_options')
                 ),
@@ -209,7 +210,7 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
 
         self._result_prx_text_browser.set_content('')
 
-        window = gui_prx_widgets.PrxSubprocessWindow()
+        window = gui_prx_widgets.PrxSprcTaskWindow()
         if window._language == 'chs':
             window.set_window_title('绑定检查')
             window.set_tip(
@@ -247,18 +248,18 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
         task_name = '[rig-validation][{}]'.format(
             bsc_storage.StgFileOpt(file_path).name
         )
-        cache_file_path = qsm_gnl_core.MayaCache.generate_rig_validation_result_file(file_path, version=option_hash)
-        if bsc_storage.StgFileOpt(cache_file_path).get_is_file() is False:
+        cache_path = qsm_gnl_core.MayaCache.generate_rig_validation_result_file(file_path, version=option_hash)
+        if bsc_storage.StgFileOpt(cache_path).get_is_file() is False:
             cmd_script = qsm_gnl_core.MayaCacheProcess.generate_cmd_script_by_option_dict(
                 'rig-validation',
                 dict(
                     file_path=file_path,
-                    cache_file_path=cache_file_path,
+                    cache_path=cache_path,
                     process_options=process_options
                 )
             )
-            return task_name, cmd_script, cache_file_path
-        return task_name, None, cache_file_path
+            return task_name, cmd_script, cache_path
+        return task_name, None, cache_path
 
     def do_gui_refresh_all(self):
         pass

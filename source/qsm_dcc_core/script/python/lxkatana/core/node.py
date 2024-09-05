@@ -1092,7 +1092,7 @@ class NGNodeOpt(object):
             self.set_port_hint(
                 i_port_path_src, dict(
                     text=bsc_core.RawStrUnderlineOpt(
-                        bsc_core.PthPortMtd.get_dag_name(i_port_path_src)
+                        bsc_core.PthPortMtd.to_dag_name(i_port_path_src)
                     ).to_prettify(capitalize=False)
                 )
             )
@@ -1360,7 +1360,7 @@ class NGNodeOpt(object):
         port_parent = bsc_core.PthPortMtd.get_dag_parent_path(
             path=port_path, pathsep=self.PORT_PATHSEP
         )
-        port_name = bsc_core.PthPortMtd.get_dag_name(
+        port_name = bsc_core.PthPortMtd.to_dag_name(
             path=port_path, pathsep=self.PORT_PATHSEP
         )
         if _ is None:
@@ -1721,7 +1721,7 @@ class NGNodeOpt(object):
                                         lambda x: bsc_core.RawStrUnderlineOpt(x).to_prettify(), list(value)
                                     ),
                                     exclusive=True,
-                                    colors=[bsc_core.RawTextOpt(i).to_rgb__(s_p=50, v_p=100) for i in list(value)],
+                                    colors=[bsc_core.BscTextOpt(i).to_rgb__(s_p=50, v_p=100) for i in list(value)],
                                     equalPartitionWidths=True,
                                 )
                             )
@@ -1741,7 +1741,7 @@ class NGNodeOpt(object):
                                         lambda x: bsc_core.RawStrUnderlineOpt(x).to_prettify(), list(value)
                                     ),
                                     exclusive=False,
-                                    colors=[bsc_core.RawTextOpt(i).to_rgb__(s_p=50, v_p=100) for i in list(value)],
+                                    colors=[bsc_core.BscTextOpt(i).to_rgb__(s_p=50, v_p=100) for i in list(value)],
                                     equalPartitionWidths=True,
                                     delimiter=sep
                                 )
@@ -2209,7 +2209,7 @@ class NGPortOpt(object):
             dict(
                 options=list(strings),
                 displayText=map(lambda x: bsc_core.RawStrUnderlineOpt(x).to_prettify(word_count_limit=12), list(strings)),
-                colors=[bsc_core.RawTextOpt(i).to_rgb__(s_p=50, v_p=100) for i in list(strings)],
+                colors=[bsc_core.BscTextOpt(i).to_rgb__(s_p=50, v_p=100) for i in list(strings)],
             )
         )
         #
@@ -2234,7 +2234,7 @@ class NGPortOpt(object):
             i_0, i_1 = i
             options.append(i_0)
             display_texts.append(i_1)
-            colors.append(bsc_core.RawTextOpt(i_1).to_rgb__(s_p=50, v_p=50))
+            colors.append(bsc_core.BscTextOpt(i_1).to_rgb__(s_p=50, v_p=50))
         #
         hint_dict.update(
             dict(

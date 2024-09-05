@@ -912,7 +912,7 @@ class StgFileTiles(object):
             i_name_pattern = i_name_pattern.format(
                 **dict(format=file_opt.get_format())
             )
-            if _cor_pattern.PtnFileTilesMtd.get_is_valid(i_name_pattern):
+            if _cor_pattern.PtnFileTilesMtd.is_valid(i_name_pattern):
                 i_number_args = StgFileTiles.get_number_args(
                     file_opt.name, i_name_pattern
                 )
@@ -976,12 +976,14 @@ class StgPathOpt(object):
         return path
 
     def __init__(self, path, cleanup=True):
+        # auto convert to unicode
         path = self.auto_unicode(path)
+
         if cleanup is True:
             self._path = _cor_base.BscStorage.clear_pathsep_to(path)
         else:
             self._path = path
-        #
+
         if self.get_is_windows():
             self._root = self._path.split(self.PATHSEP)[0]
         elif self.get_is_linux():
@@ -1041,16 +1043,16 @@ class StgPathOpt(object):
     def get_is_file(self):
         return os.path.isfile(self.get_path())
 
-    def open_in_system(self):
+    def show_in_system(self):
         if self.get_path():
             StgSystem.open(self.get_path())
 
-    def get_modify_timestamp(self):
+    def get_mtime(self):
         return os.stat(self._path).st_mtime
 
     def get_modify_time_tag(self):
         return _cor_time.TimestampOpt(
-            self.get_modify_timestamp()
+            self.get_mtime()
         ).get_as_tag()
 
     def get_user(self):
@@ -1059,13 +1061,13 @@ class StgPathOpt(object):
     def get_access_timestamp(self):
         return os.stat(self._path).st_atime
 
-    def get_creation_timestamp(self):
+    def get_ctime(self):
         return os.stat(self._path).st_ctime
 
     def get_timestamp_is_same_to(self, file_path):
         if file_path is not None:
             if self.get_is_exists() is True and self.__class__(file_path).get_is_exists() is True:
-                return int(self.get_modify_timestamp()) == int(self.__class__(file_path).get_modify_timestamp())
+                return int(self.get_mtime()) == int(self.__class__(file_path).get_mtime())
             return False
         return False
 
@@ -1167,10 +1169,10 @@ class StgFileSearchOpt(object):
                 i_ext = i_ext.lower()
             # noinspection PyBroadException
             try:
-                self._search_dict['{}/{}{}'.format(i_directory_path, i_name_base, i_ext)] = i
+                self._search_dict[six.u('{}/{}{}').format(i_directory_path, i_name_base, i_ext)] = i
             except Exception:
                 bsc_log.Log.trace_error(
-                    'file "{}" is not valid'.format(i)
+                    six.u('file "{}" is not valid').format(i)
                 )
         # sort
         self._set_key_sort_()
@@ -1385,8 +1387,14 @@ class StgFileOpt(StgPathOpt):
     def get_format(self):
         return self.get_ext()[1:]
 
-    def get_is_match_name_pattern(self, name_pattern):
-        _ = fnmatch.filter([self.name], name_pattern)
+    def is_name_match_pattern(self, p):
+        _ = _cor_pattern.BscFnmatch.filter([self.name], p)
+        if _:
+            return True
+        return False
+    
+    def is_path_match_pattern(self, p):
+        _ = _cor_pattern.BscFnmatch.filter([self.path], p)
         if _:
             return True
         return False
@@ -1455,7 +1463,7 @@ class StgFileOpt(StgPathOpt):
 
     def set_directory_repath_to(self, directory_path_tgt):
         return self.__class__(
-            u'{}/{}'.format(
+            six.u('{}/{}').format(
                 directory_path_tgt, self.get_name()
             )
         )
@@ -1464,7 +1472,7 @@ class StgFileOpt(StgPathOpt):
         directory_path_src = self.get_directory_path()
         uuid_key = _cor_base.BscUuid.generate_by_text(directory_path_src)
         return self.__class__(
-            u'{}/{}/{}'.format(
+            six.u('{}/{}/{}').format(
                 directory_path_tgt, uuid_key, self.get_name()
             )
         )
@@ -1500,7 +1508,7 @@ class StgFileOpt(StgPathOpt):
                 _cor_base.BscException.set_print()
 
     def copy_to_directory(self, directory_path_tgt, replace=False):
-        file_path_tgt = u'{}/{}'.format(
+        file_path_tgt = six.u('{}/{}').format(
             directory_path_tgt, self.name
         )
         self.copy_to_file(
@@ -1527,10 +1535,10 @@ class StgFileOpt(StgPathOpt):
         return value/(1024.0**3)
 
     def get_tag_as_36(self):
-        timestamp = self.get_modify_timestamp()
-        time_tag = _cor_raw.RawIntegerOpt(int(timestamp*10)).set_encode_to_36()
+        timestamp = self.get_mtime()
+        time_tag = _cor_raw.BscIntegerOpt(int(timestamp*10)).encode_to_36()
         size = self.get_size()
-        size_tag = _cor_raw.RawIntegerOpt(int(size)).set_encode_to_36()
+        size_tag = _cor_raw.BscIntegerOpt(int(size)).encode_to_36()
         return '{}{}'.format(time_tag, size_tag)
 
     @classmethod

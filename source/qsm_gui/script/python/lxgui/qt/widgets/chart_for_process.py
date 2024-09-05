@@ -85,7 +85,7 @@ class QtChartAsPoolStatus(QtWidgets.QWidget):
             painter._set_border_color_(self._border_color)
             if i_idx < self._value:
                 i_p = (i_idx+1)/float(self._maximum)
-                i_rgb = bsc_core.RawColorMtd.hsv2rgb(
+                i_rgb = bsc_core.BscColor.hsv2rgb(
                     120-i_p*120, .75, .75
                 )
                 painter._set_background_color_(i_rgb)

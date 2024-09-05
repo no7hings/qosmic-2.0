@@ -29,7 +29,7 @@ def dynamic_gpu_generate_fnc(option_opt):
     ).execute()
 
 
-def unit_assembly_generate_fnc(option_opt):
+def unit_assembly_cache_generate_fnc(option_opt):
     file_path = option_opt.get('file')
     cache_file_path = option_opt.get('cache_file')
 
@@ -111,7 +111,49 @@ def rig_validation_fnc(option_opt):
     ).execute()
 
 
-def stl_convertion_fnc(option_opt):
+def mesh_count_generate_fnc(option_opt):
+    import qsm_general.core as qsm_gnl_core
+
+    import qsm_maya_lazy.resource.scripts as s
+
+    kwargs = qsm_gnl_core.MayaCacheProcess.to_option_dict(
+        option_opt.to_string()
+    )
+
+    s.AssetMeshCountProcess(
+        **kwargs
+    ).execute()
+
+
+def snapshot_generate_fnc(option_opt):
+    import qsm_general.core as qsm_gnl_core
+
+    import qsm_maya_lazy.resource.scripts as s
+
+    kwargs = qsm_gnl_core.MayaCacheProcess.to_option_dict(
+        option_opt.to_string()
+    )
+
+    s.AssetSnapshotProcess(
+        **kwargs
+    ).execute()
+
+
+def unit_assembly_generate_fnc(option_opt):
+    import qsm_general.core as qsm_gnl_core
+
+    import qsm_maya_lazy.resource.scripts as s
+
+    kwargs = qsm_gnl_core.MayaCacheProcess.to_option_dict(
+        option_opt.to_string()
+    )
+
+    s.AssetUnitAssemblyProcess(
+        **kwargs
+    ).execute()
+
+
+def motion_generate_fnc(option_opt):
     import qsm_general.core as qsm_gnl_core
 
     import qsm_maya_lazy.montage.scripts as s
@@ -167,7 +209,7 @@ def main(session):
     elif method == 'dynamic-gpu-cache-generate':
         dynamic_gpu_generate_fnc(option_opt)
     elif method == 'unit-assembly-cache-generate':
-        unit_assembly_generate_fnc(option_opt)
+        unit_assembly_cache_generate_fnc(option_opt)
     elif method == 'gpu-instance-cache-generate':
         gpu_instance_generate_fnc(option_opt)
     elif method == 'cfx-cloth-cache-generate':
@@ -176,14 +218,24 @@ def main(session):
         playblast_fnc(option_opt)
     elif method == 'rig-validation':
         rig_validation_fnc(option_opt)
-    elif method == 'stl-convertion':
-        stl_convertion_fnc(option_opt)
+    # new
+    elif method == 'motion_generate':
+        motion_generate_fnc(option_opt)
+    #
+    elif method == 'mesh_count_generate':
+        mesh_count_generate_fnc(option_opt)
+    elif method == 'snapshot_generate':
+        snapshot_generate_fnc(option_opt)
+    elif method == 'unit_assembly_generate':
+        unit_assembly_generate_fnc(option_opt)
     # test
     elif method == 'test-unicode':
         test_unicode(method, option_opt)
     # test
     elif method == 'test-process':
         test_progress(option_opt)
+    else:
+        raise RuntimeError()
 
 
 if __name__ == '__main__':

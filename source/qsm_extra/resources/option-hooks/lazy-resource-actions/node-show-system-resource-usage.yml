@@ -1,0 +1,25 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Show System Resource Usage'
+        icon_name: 'application/python'
+        #
+        size: [720, 720]
+
+        window:
+            name: 'System Resource Usage'
+            name_chs: '系统资源使用'
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        stage_key: ''
+        #
+        entity_type: ''
+        entity: ''

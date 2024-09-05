@@ -190,8 +190,8 @@ class QtLine(
         self._init_frame_base_def_(self)
 
         r, g, b = 119, 119, 119
-        h, s, v = bsc_core.RawColorMtd.rgb_to_hsv(r, g, b)
-        color = bsc_core.RawColorMtd.hsv2rgb(h, s*.75, v*.75)
+        h, s, v = bsc_core.BscColor.rgb_to_hsv(r, g, b)
+        color = bsc_core.BscColor.hsv2rgb(h, s*.75, v*.75)
         hover_color = r, g, b
         self._frame_border_color = color
         self._hovered_frame_border_color = hover_color
@@ -364,6 +364,7 @@ class QtMenuBar(QtWidgets.QMenuBar):
         )
 
 
+# noinspection PyArgumentList
 class QtMenu(QtWidgets.QMenu):
     def __init__(self, *args, **kwargs):
         super(QtMenu, self).__init__(*args, **kwargs)
@@ -623,61 +624,6 @@ class QtMenu(QtWidgets.QMenu):
         )
 
 
-class QtInfoBubble(QtWidgets.QWidget):
-    def _refresh_widget_draw_(self):
-        self.update()
-
-    def __init__(self, *args, **kwargs):
-        super(QtInfoBubble, self).__init__(*args, **kwargs)
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
-        #
-        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-
-        self.setFont(_qt_core.QtFont.generate(size=12, italic=True))
-
-        self._info_text = ''
-
-        self._info_draw_rect = QtCore.QRect()
-        self._info_draw_size = 160, 32
-
-    def _refresh_widget_geometry_(self, x, y, w, h):
-        self.setGeometry(
-            x, y, w, h
-        )
-        self._refresh_widget_draw_()
-
-    def _set_info_text_(self, text):
-        self._info_text = text
-        if text:
-            self.show()
-            self._refresh_widget_draw_()
-        else:
-            self.hide()
-
-    def _clear_(self):
-        self._set_info_text_('')
-
-    def paintEvent(self, event):
-        painter = _qt_core.QtPainter(self)
-        if self._info_text:
-            rect = self.rect()
-
-            painter._draw_frame_by_rect_(
-                rect=rect,
-                border_color=_qt_core.QtBorderColors.Transparent,
-                background_color=_qt_core.QtColors.ToolTipBackground,
-                border_radius=4
-            )
-            painter._draw_text_by_rect_(
-                rect=self.rect(),
-                text=self._info_text,
-                font=self.font(),
-                text_color=_qt_core.QtColors.ToolTipText,
-                text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
-            )
-
-
 class QtAction(QtWidgets.QAction):
     def __init__(self, *args, **kwargs):
         # noinspection PyArgumentList
@@ -687,37 +633,6 @@ class QtAction(QtWidgets.QAction):
         self.setAutoFillBackground(True)
         #
         self.setFont(_qt_core.QtFonts.NameNormal)
-
-
-class QtHScrollArea(QtWidgets.QScrollArea):
-    def __init__(self, *args, **kwargs):
-        super(QtHScrollArea, self).__init__(*args, **kwargs)
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.setWidgetResizable(True)
-        widget = QtWidget()
-        self.setWidget(widget)
-        self._layout = _base.QtHBoxLayout(widget)
-        self._layout.setAlignment(QtCore.Qt.AlignTop)
-        self._layout.setContentsMargins(*[0]*4)
-        self._layout.setSpacing(_gui_core.GuiSize.LayoutDefaultSpacing)
-        #
-        qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
-        self.setPalette(qt_palette)
-        #
-        self.setStyleSheet(
-            _qt_core.GuiQtStyle.get('QScrollArea')
-        )
-        #
-        self.verticalScrollBar().setStyleSheet(
-            _qt_core.GuiQtStyle.get('QScrollBar')
-        )
-        self.horizontalScrollBar().setStyleSheet(
-            _qt_core.GuiQtStyle.get('QScrollBar')
-        )
-
-    def keyPressEvent(self, event):
-        pass
 
 
 class _QtWidget(
@@ -751,6 +666,59 @@ class _QtWidget(
         self._background_color = color
 
 
+class QtHScrollArea(QtWidgets.QScrollArea):
+    def __init__(self, *args, **kwargs):
+        super(QtHScrollArea, self).__init__(*args, **kwargs)
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.setWidgetResizable(True)
+
+        self._widget = _QtWidget()
+        self.setWidget(self._widget)
+        self._layout = _base.QtHBoxLayout(self._widget)
+        self._layout.setAlignment(QtCore.Qt.AlignTop)
+        self._layout.setContentsMargins(*[0]*4)
+        self._layout.setSpacing(_gui_core.GuiSize.LayoutDefaultSpacing)
+
+        qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
+        self.setPalette(qt_palette)
+
+        self.setStyleSheet(
+            _qt_core.GuiQtStyle.get('QScrollArea')
+        )
+
+        self.verticalScrollBar().setStyleSheet(
+            _qt_core.GuiQtStyle.get('QScrollBar')
+        )
+        self.horizontalScrollBar().setStyleSheet(
+            _qt_core.GuiQtStyle.get('QScrollBar')
+        )
+        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+
+    def keyPressEvent(self, event):
+        pass
+
+    def wheelEvent(self, event):
+        if event.angleDelta().y() != 0:
+            delta = event.angleDelta().y()
+            self.horizontalScrollBar().setValue(self.horizontalScrollBar().value()-delta)
+            event.accept()
+        else:
+            super(QtHScrollArea, self).wheelEvent(event)
+
+    def _add_widget_(self, widget):
+        self._layout.addWidget(widget)
+
+    def _set_border_color_(self, color):
+        self._widget._border_color = color
+
+    def _set_background_color_(self, color):
+        self._widget._background_color = color
+
+    def _set_empty_draw_flag_(self, boolean):
+        self._widget._set_empty_draw_flag_(boolean)
+
+
 class QtVScrollArea(QtWidgets.QScrollArea):
     def __init__(self, *args, **kwargs):
         super(QtVScrollArea, self).__init__(*args, **kwargs)
@@ -764,14 +732,14 @@ class QtVScrollArea(QtWidgets.QScrollArea):
         self._layout.setAlignment(QtCore.Qt.AlignTop)
         self._layout.setContentsMargins(*[0]*4)
         self._layout.setSpacing(_gui_core.GuiSize.LayoutDefaultSpacing)
-        #
+
         qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
-        #
+
         self.setStyleSheet(
             _qt_core.GuiQtStyle.get('QScrollArea')
         )
-        #
+
         self.verticalScrollBar().setStyleSheet(
             _qt_core.GuiQtStyle.get('QScrollBar')
         )
@@ -1069,7 +1037,7 @@ class QtProgressBar(
                 w, h = self.width(), self.height()
                 w -= 2
                 layer_count = len(self._progress_raw)
-                r, g, b = bsc_core.RawColorMtd.hsv2rgb(120, .5, 1)
+                r, g, b = bsc_core.BscColor.hsv2rgb(120, .5, 1)
                 for layer_index, i in enumerate(self._progress_raw):
                     i_percent, (i_range_start, i_range_end), i_label = i
                     p_w = w*(i_range_end-i_range_start)*i_percent
@@ -1080,7 +1048,7 @@ class QtProgressBar(
                     i_rect = QtCore.QRect(i_x, i_y, p_w+1, p_h)
                     #
                     i_p = float(layer_index)/float(layer_count)
-                    r_1, g_1, b_1 = bsc_core.RawColorMtd.hsv2rgb(120*i_p, .5, 1)
+                    r_1, g_1, b_1 = bsc_core.BscColor.hsv2rgb(120*i_p, .5, 1)
                     i_cur_color = QtGui.QColor(r_1, g_1, b_1, 255)
                     if layer_index == 0:
                         i_pre_color = QtGui.QColor(r, g, b, 255)

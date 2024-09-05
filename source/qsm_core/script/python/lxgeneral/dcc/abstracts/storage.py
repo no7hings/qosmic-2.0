@@ -35,12 +35,12 @@ class AbsObjStgGuiExtraDef(object):
     def copy_path_to_clipboard(self):
         import lxgui.qt.core as gui_qt_core
 
-        gui_qt_core.GuiQtUtil.copy_text_to_clipboard(self.path)
+        gui_qt_core.QtUtil.copy_text_to_clipboard(self.path)
 
     def copy_name_to_clipboard(self):
         import lxgui.qt.core as gui_qt_core
 
-        gui_qt_core.GuiQtUtil.copy_text_to_clipboard(self.name)
+        gui_qt_core.QtUtil.copy_text_to_clipboard(self.name)
 
 
 class AbsStgDirectory(
@@ -391,7 +391,7 @@ class AbsStgFile(
     def get_permissions(self, *args, **kwargs):
         return [bsc_storage.StgPath.get_permission(i) for i in self.get_tiles()]
 
-    def get_modify_timestamp(self, *args, **kwargs):
+    def get_mtime(self, *args, **kwargs):
         exists_file_paths = self.get_tiles(*args, **kwargs)
         timestamps = [int(os.stat(i).st_mtime) for i in exists_file_paths]
         if timestamps:
@@ -399,11 +399,11 @@ class AbsStgFile(
 
     def get_time(self):
         if self.get_is_exists() is True:
-            timestamp = self.get_modify_timestamp()
+            timestamp = self.get_mtime()
             return bsc_core.TimestampOpt(timestamp).get()
 
     def get_time_tag(self):
-        timestamp = self.get_modify_timestamp()
+        timestamp = self.get_mtime()
         return bsc_core.TimestampOpt(timestamp).get_as_tag()
 
     def get_timestamp_is_same_to(self, file_tgt):
@@ -411,7 +411,7 @@ class AbsStgFile(
             i_tgt = self.__class__(
                 '{}/{}{}'.format(file_tgt.directory.path, i_src.name_base, file_tgt.ext)
             )
-            if str(i_src.get_modify_timestamp()) != str(i_tgt.get_modify_timestamp()):
+            if str(i_src.get_mtime()) != str(i_tgt.get_mtime()):
                 return False
         return True
 
@@ -461,15 +461,15 @@ class AbsStgFile(
 
     def copy_unit_as_base_link(self, directory_path_bsc, directory_path_dst, fix_name_blank=False, replace=True):
         if self.get_is_exists_file():
-            timestamp = self.get_modify_timestamp()
+            timestamp = self.get_mtime()
             size = self.get_size()
             name = self.name
             if fix_name_blank is True:
                 if ' ' in name:
                     name = name.replace(' ', '_')
             #
-            time_tag = bsc_core.RawIntegerOpt(int(timestamp)).set_encode_to_36()
-            size_tag = bsc_core.RawIntegerOpt(int(size)).set_encode_to_36()
+            time_tag = bsc_core.BscIntegerOpt(int(timestamp)).encode_to_36()
+            size_tag = bsc_core.BscIntegerOpt(int(size)).encode_to_36()
             file_path_tgt = '{}/{}'.format(directory_path_dst, name)
             file_path_dir_src = '{}/{}'.format(directory_path_bsc, name)
             file_path_name_src = 'V-{}-{}.{}'.format(time_tag, size_tag, name)
@@ -909,8 +909,8 @@ class AbsStgTexture(
         tgt_ext_orig_path = cls._get_unit_path_src_as_ext_tgt_(file_path_any, ext_tgt)
         tgt_ext_path = cls._get_path_tgt_as_ext_tgt_(file_path_any, ext_tgt)
         # if is non-exists use 0
-        tgt_ext_orig_timestamp = cls(tgt_ext_orig_path).get_modify_timestamp() or 0
-        tgt_ext_timestamp = cls(tgt_ext_path).get_modify_timestamp() or 0
+        tgt_ext_orig_timestamp = cls(tgt_ext_orig_path).get_mtime() or 0
+        tgt_ext_timestamp = cls(tgt_ext_path).get_mtime() or 0
         return int(tgt_ext_orig_timestamp) == int(tgt_ext_timestamp)
 
     # find ext source use unit path
@@ -964,7 +964,7 @@ class AbsStgTexture(
             return cls.get_method_for_color_space_as_aces().get_default_color_space()
         elif ext_any.lower() == '.exr':
             file_opt = bsc_storage.StgFileOpt(file_path_src)
-            if file_opt.get_is_match_name_pattern('*.z_disp.*.exr') or file_opt.get_is_match_name_pattern('*.hdr.exr'):
+            if file_opt.is_name_match_pattern('*.z_disp.*.exr') or file_opt.is_name_match_pattern('*.hdr.exr'):
                 return cls.get_method_for_color_space_as_aces().to_aces_color_space(
                     cls.get_method_for_color_space_as_tx_convert().get_tx_color_space_input(file_path_src)
                 )
@@ -986,8 +986,8 @@ class AbsStgTexture(
             tgt_ext_path = '{}/{}{}'.format(directory_path, name_base, ext_tgt)
         #
         tgt_ext_orig_path = file_path_src
-        tgt_ext_orig_timestamp = cls(tgt_ext_orig_path).get_modify_timestamp() or 0
-        tgt_ext_timestamp = cls(tgt_ext_path).get_modify_timestamp() or 0
+        tgt_ext_orig_timestamp = cls(tgt_ext_orig_path).get_mtime() or 0
+        tgt_ext_timestamp = cls(tgt_ext_path).get_mtime() or 0
         return int(tgt_ext_orig_timestamp) == int(tgt_ext_timestamp)
 
     @classmethod

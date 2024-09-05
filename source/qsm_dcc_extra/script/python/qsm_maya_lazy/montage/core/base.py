@@ -203,9 +203,10 @@ class MotionBase(object):
         'start', 'speed', 'count',
         'source_start', 'source_end',
         'pre_cycle', 'post_cycle',
-        'scale_start', 'scale_end',
+        'scale_start', 'scale_end', 'scale_offset',
         'pre_blend', 'post_blend',
         'layer_index',
+        'is_bypass',
     ]
 
     class ChrMasterSketches:

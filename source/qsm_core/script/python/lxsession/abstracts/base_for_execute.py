@@ -151,7 +151,7 @@ class AbsHookExecutor(object):
             'Comment', hook_option
         )
         ddl_command = self.get_deadline_command()
-        if bsc_core.RawTextOpt(ddl_command).get_is_contain_chinese():
+        if bsc_core.BscTextOpt(ddl_command).get_is_contain_chinese():
             ddl_command = ddl_command.encode(locale.getdefaultlocale()[1])
         #
         self._ddl_job_submiter.option.set(

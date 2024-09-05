@@ -239,6 +239,25 @@ class ScriptJobOpt(object):
                 attributeChange=[atr_path, method]
             )
 
+    def register_as_attribute_change_(self, method, atr_path):
+        if not cmds.window(self._window_name, exists=1):
+            cmds.window(self._window_name, title='Script Job Window', sizeable=1, resizeToFitChildren=1)
+
+        if isinstance(method, list):
+            for i_method in method:
+                cmds.scriptJob(
+                    parent=self._window_name,
+                    # fixme: do not use "replacePrevious"
+                    # replacePrevious=True,
+                    attributeChange=[atr_path, lambda: i_method(cmds.getAttr(atr_path))]
+                )
+        else:
+            cmds.scriptJob(
+                parent=self._window_name,
+                # replacePrevious=True,
+                attributeChange=[atr_path, lambda: method(cmds.getAttr(atr_path))]
+            )
+
     def destroy(self):
         # noinspection PyUnresolvedReferences
         import maya.cmds as cmds

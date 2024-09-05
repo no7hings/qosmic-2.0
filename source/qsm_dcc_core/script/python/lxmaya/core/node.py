@@ -1168,10 +1168,7 @@ class CmdMeshesOpt(object):
         ) or []
 
     def get_evaluate(self):
-        kwargs = dict(
-            vertex='vertex'
-        )
-        dic = {}
+        dict_ = {}
         if self._mesh_paths:
             keys = [
                 'vertex',
@@ -1194,26 +1191,26 @@ class CmdMeshesOpt(object):
             count = len(self._mesh_paths)
             b_box = dic_0['boundingBox']
             #
-            dic['geometry'] = count
-            dic['vertex'] = dic_0['vertex']
-            dic['edge'] = dic_0['edge']
-            dic['face'] = dic_0['face']
-            dic['triangle'] = dic_0['triangle']
-            dic['uv-map'] = dic_0['uvcoord']
-            dic['area'] = dic_0['area']
-            dic['world-area'] = dic_0['worldArea']
-            dic['shell'] = dic_0['shell']
-            dic['center-x'] = b_box[0][0]+b_box[0][1]
-            dic['center-y'] = b_box[1][0]+b_box[1][1]
-            dic['center-z'] = b_box[2][0]+b_box[2][1]
-            dic['clip-x'] = b_box[0][0]
-            dic['clip-y'] = b_box[1][0]
-            dic['clip-z'] = b_box[2][0]
-            dic['width'] = b_box[0][1]-b_box[0][0]
-            dic['height'] = b_box[1][1]-b_box[1][0]
-            dic['depth'] = b_box[2][1]-b_box[2][0]
+            dict_['geometry'] = count
+            dict_['vertex'] = dic_0['vertex']
+            dict_['edge'] = dic_0['edge']
+            dict_['face'] = dic_0['face']
+            dict_['triangle'] = dic_0['triangle']
+            dict_['uv-map'] = dic_0['uvcoord']
+            dict_['area'] = dic_0['area']
+            dict_['world-area'] = dic_0['worldArea']
+            dict_['shell'] = dic_0['shell']
+            dict_['center-x'] = b_box[0][0]+b_box[0][1]
+            dict_['center-y'] = b_box[1][0]+b_box[1][1]
+            dict_['center-z'] = b_box[2][0]+b_box[2][1]
+            dict_['clip-x'] = b_box[0][0]
+            dict_['clip-y'] = b_box[1][0]
+            dict_['clip-z'] = b_box[2][0]
+            dict_['width'] = b_box[0][1]-b_box[0][0]
+            dict_['height'] = b_box[1][1]-b_box[1][0]
+            dict_['depth'] = b_box[2][1]-b_box[2][0]
         #
-        return dic
+        return dict_
 
     def get_radar_chart_data(self):
         evaluate = self.get_evaluate()
@@ -1372,6 +1369,7 @@ class QtControlOpt(object):
         return wrapInstance(long(ptr), base)
 
     def to_qt_widget(self):
+        # noinspection PyUnresolvedReferences
         from PySide2 import QtWidgets
 
         ptr = OpenMayaUI.MQtUtil.findControl(self._name)

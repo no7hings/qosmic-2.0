@@ -27,11 +27,10 @@ class W(gui_prx_widgets.PrxBaseWindow):
         self._main_qt_layout.setAlignment(gui_qt_core.QtCore.Qt.AlignTop)
         btn.press_clicked.connect(self._do_close_)
         for i in range(5):
-            wgt = gui_qt_widgets.QtProgressBarForSubprocess()
+            wgt = gui_qt_widgets.QtChartForSprcTask()
             self.add_widget(wgt)
             self._prc_list.append(wgt)
             wgt._set_text_('测试-{}'.format(i))
-
             trd = wgt._generate_thread_(self._qt_widget)
 
             if i == 0:

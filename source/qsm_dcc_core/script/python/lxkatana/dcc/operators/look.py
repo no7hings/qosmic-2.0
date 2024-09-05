@@ -52,7 +52,7 @@ class AndShaderOpt(gnl_dcc_abstracts.AbsNodeOpt):
 
     def set_colour_by_type_name(self):
         type_name = self.get_type_name()
-        r, g, b = bsc_core.RawTextOpt(type_name).to_rgb(maximum=1)
+        r, g, b = bsc_core.BscTextOpt(type_name).to_rgb(maximum=1)
         attributes = self._obj.ktn_obj.getAttributes()
         attributes['ns_colorr'] = r
         attributes['ns_colorg'] = g

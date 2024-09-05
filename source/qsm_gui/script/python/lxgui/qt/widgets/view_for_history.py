@@ -143,7 +143,7 @@ class QtItemForHistoryEntity(
 
     def _do_show_tool_tip_(self, event):
         if self._storage_hover_flag is True:
-            css = _qt_core.GuiQtUtil.generate_tool_tip_css(
+            css = _qt_core.QtUtil.generate_tool_tip_css(
                 self._storage_path,
                 action_tip=[
                     '"LMB-click" to open file',
@@ -164,7 +164,7 @@ class QtItemForHistoryEntity(
 
     def _do_open_associate_(self):
         if self._associate_hover_flag is True:
-            _qt_core.GuiQtUtil.copy_text_to_clipboard(
+            _qt_core.QtUtil.copy_text_to_clipboard(
                 self._associated_entity_id
             )
             if self._open_associate_fnc_ is not None:

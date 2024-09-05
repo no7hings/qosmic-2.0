@@ -56,7 +56,7 @@ class _GuiTaskOpt(
     def do_open_output_directory(self, entity):
         file_path = entity.get('output_file')
         if file_path is not None:
-            bsc_storage.StgFileOpt(file_path).open_in_system()
+            bsc_storage.StgFileOpt(file_path).show_in_system()
     
     def do_gui_show_task_properties(self, entity):
         self._window.switch_current_layer_to('task_properties')
@@ -498,7 +498,7 @@ class PrxPageForTaskMonitor(prx_abstracts.AbsPrxWidget):
         
         self._refresh_flag = False
 
-        self.gui_setup_page()
+        self.gui_page_setup_fnc()
 
     def _message_process_(self, text):
         print text, 'abc'
@@ -568,7 +568,7 @@ class PrxPageForTaskMonitor(prx_abstracts.AbsPrxWidget):
     def gui_filter_update_visible(self, boolean):
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
 
-    def gui_setup_page(self):
+    def gui_page_setup_fnc(self):
         self._entity_pool = qsm_task_core.TaskPool.generate()
 
         self._gui_add_task_log_layer()

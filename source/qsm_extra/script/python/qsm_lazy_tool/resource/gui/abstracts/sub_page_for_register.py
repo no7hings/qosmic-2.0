@@ -29,9 +29,9 @@ class AbsPrxSubPageForResourceMotionRegister(gui_prx_widgets.PrxBaseSubPage):
 
     def __init__(self, window, session, sub_window, *args, **kwargs):
         super(AbsPrxSubPageForResourceMotionRegister, self).__init__(window, session, sub_window, *args, **kwargs)
-        self.gui_setup_page()
+        self.gui_page_setup_fnc()
 
-    def gui_setup_page(self):
+    def gui_page_setup_fnc(self):
         prx_sca = gui_prx_widgets.PrxVScrollArea()
         self._qt_layout.addWidget(prx_sca.widget)
 
@@ -58,12 +58,12 @@ class AbsPrxSubPageForResourceMotionRegister(gui_prx_widgets.PrxBaseSubPage):
         self._prx_tool_group.add_widget(qt_widget_0)
         h_qt_lot_0 = gui_qt_widgets.QtHBoxLayout(qt_widget_0)
 
-        self._type_prx_tag_input = gui_prx_widgets.PrxTagInput()
+        self._type_prx_tag_view = gui_prx_widgets.PrxTagView()
         h_qt_lot_0.addWidget(
-            self._type_prx_tag_input.widget
+            self._type_prx_tag_view.widget
         )
 
-        self._tag_prx_tag_input = gui_prx_widgets.PrxTagInput()
+        self._tag_prx_tag_view = gui_prx_widgets.PrxTagView()
         h_qt_lot_0.addWidget(
-            self._tag_prx_tag_input.widget
+            self._tag_prx_tag_view.widget
         )

@@ -163,7 +163,7 @@ class PlayblastOpt(object):
             fps = _mya_core.Frame.get_fps_value()
 
         if frame_step > 1:
-            frames = bsc_core.RawFrameRangeMtd.get(
+            frames = bsc_core.BscFrameRang.get(
                 (start_frame, end_frame), frame_step
             )
             for i_frame in frames:

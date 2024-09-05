@@ -49,7 +49,7 @@ def main(session):
                         ).do_export_asset_look_klf()
                     # run when is katana scheme
                     choice_scheme = hook_option_opt.get('choice_scheme')
-                    if bsc_core.RawTextOpt(choice_scheme).get_is_matched('*-katana-*'):
+                    if bsc_core.BscTextOpt(choice_scheme).get_is_matched('*-katana-*'):
                         if hook_option_opt.get_as_boolean('with_look_ass') is True:
                             ktn_rsv_objects.RsvDccLookHookOpt(
                                 katana_rsv_scene_properties,

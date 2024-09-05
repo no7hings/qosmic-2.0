@@ -77,9 +77,7 @@ class CfxNClothCacheOpt(_rsc_core.ResourceScriptOpt):
                     frame_step=frame_step
                 ).execute()
 
-    def load_cache(
-        self, cache_path
-    ):
+    def load_cache(self, cache_path):
         self.create_cache_root_auto()
         cache_location_new = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
         cache_location = '|{}:{}'.format(self._namespace, self.CACHE_NAME)

@@ -26,7 +26,7 @@ class StatsFileOpt(object):
     def get_peak_memory_gb(self):
         b = self.get_peak_memory_byte()
         if b:
-            return bsc_core.RawIntegerMtd.byte_to_gb(
+            return bsc_core.BscInteger.byte_to_gb(
                 b
             )
 
@@ -81,7 +81,7 @@ class StatsFileOpt(object):
     def get_startup_memory_gb(self):
         b = self.get_startup_memory_byte()
         if b:
-            return bsc_core.RawIntegerMtd.byte_to_gb(
+            return bsc_core.BscInteger.byte_to_gb(
                 b
             )
 
@@ -95,7 +95,7 @@ class StatsFileOpt(object):
     def get_geometry_memory_gb(self):
         b = self.get_geometry_memory_byte()
         if b:
-            return bsc_core.RawIntegerMtd.byte_to_gb(
+            return bsc_core.BscInteger.byte_to_gb(
                 b
             )
 
@@ -110,7 +110,7 @@ class StatsFileOpt(object):
     def get_mesh_memory_gb(self):
         b = self.get_mesh_memory_byte()
         if b:
-            return bsc_core.RawIntegerMtd.byte_to_gb(
+            return bsc_core.BscInteger.byte_to_gb(
                 b
             )
 
@@ -125,7 +125,7 @@ class StatsFileOpt(object):
     def get_curve_memory_gb(self):
         b = self.get_curve_memory_byte()
         if b:
-            return bsc_core.RawIntegerMtd.byte_to_gb(
+            return bsc_core.BscInteger.byte_to_gb(
                 b
             )
 
@@ -139,7 +139,7 @@ class StatsFileOpt(object):
     def get_texture_memory_gb(self):
         b = self.get_texture_memory_byte()
         if b:
-            return bsc_core.RawIntegerMtd.byte_to_gb(
+            return bsc_core.BscInteger.byte_to_gb(
                 b
             )
 
@@ -157,7 +157,7 @@ class StatsFileOpt(object):
     def get_hours(self):
         ms = self.get_microsecond()
         if ms:
-            return bsc_core.RawIntegerMtd.microsecond_to_hours(ms)
+            return bsc_core.BscInteger.microsecond_to_hours(ms)
 
     def get_startup_microsecond(self):
         return self._content.get(
@@ -167,7 +167,7 @@ class StatsFileOpt(object):
     def get_startup_hours(self):
         ms = self.get_startup_microsecond()
         if ms:
-            return bsc_core.RawIntegerMtd.microsecond_to_hours(ms)
+            return bsc_core.BscInteger.microsecond_to_hours(ms)
 
     def _test_(self):
         print self.get_warnings()

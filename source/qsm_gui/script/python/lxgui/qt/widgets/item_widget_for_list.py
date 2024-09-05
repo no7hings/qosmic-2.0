@@ -41,6 +41,14 @@ class QtTestWidget(
                 print i_c.red(), i_c.green(), i_c.blue(), i_c.alpha()
 
 
+class _ItemModel(dict):
+    def __init__(self, *args, **kwargs):
+        super(_ItemModel, self).__init__(*args, **kwargs)
+
+    def __getattr__(self, item):
+        return self.__getitem__(item)  # = self[item]
+
+
 class QtItemWidgetForList(
     QtWidgets.QWidget,
 
@@ -52,6 +60,8 @@ class QtItemWidgetForList(
     _qt_abstracts.AbsQtPathBaseDef,
     _qt_abstracts.AbsQtIndexBaseDef,
 
+    _qt_abstracts.AbsQtStatusBaseDef,
+
     _qt_abstracts.AbsQtActionBaseDef,
     _qt_abstracts.AbsQtActionForHoverDef,
     _qt_abstracts.AbsQtActionForCheckDef,
@@ -62,6 +72,7 @@ class QtItemWidgetForList(
         self._refresh_widget_draw_()
 
     def _refresh_widget_draw_(self):
+        self._generate_pixmap_cache_()
         self.update()
 
     def _refresh_widget_draw_geometry_(self):
@@ -77,7 +88,7 @@ class QtItemWidgetForList(
 
             frm_x_0, frm_y_0, frm_w_0, frm_h_0 = x+frm_mrg, y+frm_mrg, w-frm_mrg*2-rdu, h-frm_mrg*2-rdu
 
-            self._stage_draw_rect.setRect(
+            self._basic_draw_rect.setRect(
                 x+1, y+1, w-rdu-2, h-rdu-2
             )
             self._shadow_draw_rect.setRect(
@@ -87,10 +98,17 @@ class QtItemWidgetForList(
                 frm_x_0, frm_y_0, frm_w_0-1, frm_h_0-1
             )
 
-            frm_bsc_x, frm_bsc_y, frm_bsc_w, frm_bsc_h = (
-                x, y, grd_w-rdu, grd_h-rdu
+            self._statu_draw_path = _qt_core.QtPainterPath()
+            points = [
+                (frm_x_0+frm_w_0-20, frm_y_0+frm_h_0),
+                (frm_x_0+frm_w_0, frm_y_0+frm_h_0),
+                (frm_x_0+frm_w_0, frm_y_0+frm_h_0-20)
+            ]
+            points += points[:1]
+            self._statu_draw_path._add_points_(
+                points
             )
-            #
+
             if self._view._get_is_grid_mode_():
                 self._do_update_widget_frame_geometries_for_grid_mode_()
             else:
@@ -195,6 +213,8 @@ class QtItemWidgetForList(
         img_w, img_h = self._image_size
         img_frm_w, img_frm_h = int(float(img_w)/img_h*frm_bsc_h), frm_bsc_h
 
+        img_frm_w = min(img_frm_w, w-2)
+
         img_frm_x, img_frm_y = frm_bsc_x, frm_bsc_y
         self._frame_main_rect.setRect(
             frm_bsc_x, frm_bsc_y, img_frm_w, img_frm_h
@@ -268,11 +288,92 @@ class QtItemWidgetForList(
             chk_icn_w, chk_icn_h
         )
 
+    def _generate_pixmap_cache_(self):
+        size = QtCore.QSize(self.width(), self.height())
+        self._pixmap_cache = QtGui.QPixmap(size)
+        if self._view is not None:
+            painter = _qt_core.QtPainter(self._pixmap_cache)
+            self._pixmap_cache.fill(QtGui.QColor(*_gui_core.GuiRgba.Dim))
+            offset = self._get_action_offset_()
+            # shadow
+            painter._draw_frame_by_rect_(
+                rect=self._shadow_draw_rect,
+                border_color=_qt_core.QtBorderColors.Transparent,
+                background_color=_qt_core.QtBackgroundColors.Shadow,
+            )
+            # frame base
+            bck_color = painter._generate_item_background_color_by_rect_(
+                self._basic_draw_rect,
+                is_hovered=self._is_hovered,
+                is_selected=self._is_selected,
+                is_actioned=self._get_is_actioned_(),
+                background_color=_gui_core.GuiRgba.Transparent,
+                background_color_hovered=_gui_core.GuiRgba.LightOrange,
+                background_color_selected=_gui_core.GuiRgba.LightAzureBlue,
+                background_color_actioned=_gui_core.GuiRgba.LightPurple
+            )
+            painter._draw_frame_by_rect_(
+                rect=self._basic_draw_rect,
+                border_color=_qt_core.QtBorderColors.Transparent,
+                background_color=bck_color,
+                border_radius=self._frame_border_radius,
+                offset=0
+            )
+            # frame
+            painter._draw_frame_by_rect_(
+                self._frame_draw_rect,
+                border_color=self._frame_border_color,
+                background_color=self._frame_background_color,
+                border_radius=self._frame_border_radius,
+                offset=offset
+            )
+            # image
+            if self._image_flag is True:
+                if self._image_draw_flag is True:
+                    painter.drawPixmap(
+                        self._image_draw_rect,
+                        self._image_pixmap_draw
+                    )
+                    painter.device()
+                else:
+                    painter._draw_svg_by_rect_(
+                        self._image_draw_rect,
+                        self._image_svg_path
+                    )
+
+                if self._play_flag is True:
+                    painter._draw_play_button_by_rect_(
+                        self._video_play_rect,
+                        offset=offset,
+                    )
+            # name
+            self._draw_name_(painter)
+            # index
+            self._draw_index_(painter)
+            # check
+            if self._video_play_widget is None:
+                self._draw_check_(painter)
+            # status
+            if self._status_flag is True:
+                painter._set_border_color_(
+                    self._status_color
+                )
+                painter._set_background_color_(
+                    self._status_color
+                )
+                painter.drawPath(
+                    self._statu_draw_path
+                )
+            painter.end()
+
     def _do_hover_move_(self, event):
         if self._check_frame_rect.contains(event.pos()):
             self._set_check_hovered_(True)
         else:
             self._set_check_hovered_(False)
+
+    def _do_mouse_press_dbl_click_(self, event):
+        self._view.item_widget_press_dbl_clicked.emit(self)
 
     def _do_mouse_press_release_(self, event):
         if self._check_frame_rect.contains(event.pos()):
@@ -308,6 +409,8 @@ class QtItemWidgetForList(
         self._init_path_base_def_(self)
         self._init_index_base_def_(self)
 
+        self._init_status_base_def_(self)
+
         self._index_font = _qt_core.QtFont.generate(size=6)
         self._index_text_option = QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
         self._index_color = _gui_core.GuiRgba.LightGray
@@ -327,9 +430,15 @@ class QtItemWidgetForList(
 
         self._frame_main_rect = QtCore.QRect()
 
-        self._stage_draw_rect = QtCore.QRect()
+        self._basic_draw_rect = QtCore.QRect()
         self._frame_draw_rect = QtCore.QRect()
         self._shadow_draw_rect = QtCore.QRect()
+
+        self._item_model = _ItemModel()
+
+        self._pixmap_cache = QtGui.QPixmap()
+
+        self._statu_draw_path = _qt_core.QtPainterPath()
 
         self._frame_border_color = _gui_core.GuiRgba.Dark
         self._frame_background_color = _gui_core.GuiRgba.Dim
@@ -356,6 +465,9 @@ class QtItemWidgetForList(
 
             elif event.type() == QtCore.QEvent.MouseMove:
                 self._do_hover_move_(event)
+            elif event.type() == QtCore.QEvent.MouseButtonDblClick:
+                if event.button() == QtCore.Qt.LeftButton:
+                    self._do_mouse_press_dbl_click_(event)
 
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
@@ -364,69 +476,10 @@ class QtItemWidgetForList(
         return False
 
     def paintEvent(self, event):
-        if self._view is not None:
-            painter = _qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
+        painter.drawPixmap(0, 0, self._pixmap_cache)
+        painter.device()
 
-            offset = self._get_action_offset_()
-            # shadow
-            painter._draw_frame_by_rect_(
-                rect=self._shadow_draw_rect,
-                border_color=_qt_core.QtBorderColors.Transparent,
-                background_color=_qt_core.QtBackgroundColors.Shadow,
-            )
-            # frame base
-            bck_color = painter._generate_item_background_color_by_rect_(
-                self._stage_draw_rect,
-                is_hovered=self._is_hovered,
-                is_selected=self._is_selected,
-                is_actioned=self._get_is_actioned_(),
-                background_color=_gui_core.GuiRgba.Transparent,
-                background_color_hovered=_gui_core.GuiRgba.LightOrange,
-                background_color_selected=_gui_core.GuiRgba.LightAzureBlue,
-                background_color_actioned=_gui_core.GuiRgba.LightPurple
-            )
-            painter._draw_frame_by_rect_(
-                rect=self._stage_draw_rect,
-                border_color=_qt_core.QtBorderColors.Transparent,
-                background_color=bck_color,
-                border_radius=self._frame_border_radius,
-                offset=0
-            )
-            # frame
-            painter._draw_frame_by_rect_(
-                self._frame_draw_rect,
-                border_color=self._frame_border_color,
-                background_color=self._frame_background_color,
-                border_radius=self._frame_border_radius,
-                offset=offset
-            )
-            # image
-            if self._image_flag is True:
-                if self._image_draw_flag is True:
-                    painter.drawPixmap(
-                        self._image_draw_rect,
-                        self._image_pixmap_draw
-                    )
-                    painter.device()
-                else:
-                    painter._draw_svg_by_rect_(
-                        self._image_draw_rect,
-                        self._image_svg_path
-                    )
-
-                if self._play_flag is True:
-                    painter._draw_video_play_button_by_rect_(
-                        self._video_play_rect,
-                        offset=offset,
-                    )
-            # name
-            self._draw_name_(painter)
-            # index
-            self._draw_index_(painter)
-            # check
-            if self._video_play_widget is None:
-                self._draw_check_(painter)
-    
     def _draw_check_(self, painter):
         if self._is_hovered or self._is_checked:
             painter._draw_icon_file_by_rect_(

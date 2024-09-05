@@ -309,7 +309,7 @@ class PrxTreeView(
         )
 
     def set_clear(self):
-        self.view._set_clear_()
+        self.view._do_clear_()
         self._item_dict.clear()
         self._keyword_filter_completion_cache = None
         self._loading_item_prxes = []

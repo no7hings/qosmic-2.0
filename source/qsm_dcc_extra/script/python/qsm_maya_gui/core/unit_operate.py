@@ -100,7 +100,7 @@ class PrxTreeviewUnitForResourceOpt(
         ]:
             i_key, i_icon_name, i_tool_tip, i_fnc = i
             i_tool = gui_prx_widgets.PrxIconPressButton()
-            self._prx_reference_tool_box.add_widget(i_tool)
+            self._prx_asset_prx_tool_box.add_widget(i_tool)
             i_tool.set_name(i_key)
             i_tool.set_icon_name(i_icon_name)
             i_tool.set_tool_tip(i_tool_tip)
@@ -110,7 +110,7 @@ class PrxTreeviewUnitForResourceOpt(
     # reference
     def do_dcc_remove_resources(self):
 
-        result = self._window.exec_message(
+        result = self._window.exec_message_dialog(
             self._window.choice_message(
                 self._window._configure.get('build.messages.remove_reference')
             ),
@@ -297,7 +297,7 @@ class PrxTreeviewUnitForResourceOpt(
 
         self._tool_dict = {}
         if 'reference' in self.TOOL_INCLUDES:
-            self._prx_reference_tool_box = self._prx_tree_view.create_top_tool_box(
+            self._prx_asset_prx_tool_box = self._prx_tree_view.create_top_tool_box(
                 'reference', insert_args=1
             )
             self._gui_build_reference_tools()

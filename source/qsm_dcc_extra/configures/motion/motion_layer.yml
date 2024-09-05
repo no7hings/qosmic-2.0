@@ -1371,7 +1371,7 @@ nodes:
             - "<options.namespace>:root_translate_offset_scale.input1"
             - "<options.namespace>:ROOT_START_SRC_MTX.outputScale"
             - "<options.namespace>:root_translate_offset_scale.input2"
-
+    # anim curve for root
     Root_M_translateX:
         name: '<options.namespace>:<..key>'
         type: animCurveTL
@@ -1631,6 +1631,20 @@ nodes:
             - "<options.namespace>:root_start_translate_offset_sum.output3D"
             - "<options.namespace>:ROOT_START.translate"
 
+    main_weight_bypass_cdt:
+        name: '<options.namespace>:<..key>'
+        type: condition
+        properties:
+            # basic_start condition result
+            firstTerm: 0
+            # basic_end
+            secondTerm: 0
+            # == 0
+            operation: 0
+            # time, start_frame
+            colorIfTrue: [0, 0, 0]
+            colorIfFalse: [0, 0, 0]
+
 containers:
     LAYER:
         name: '<options.namespace>:<..key>'
@@ -1640,7 +1654,7 @@ containers:
         create_properties:
             qsm_type:
                 type: string
-                value: 'motion_layer'
+                value: 'motion_layer_opt'
 
             match_scale:
                 type: float
@@ -1657,22 +1671,53 @@ containers:
             main_weight_curve:
                 type: message
 
-            root_input_start_tx_curve:
+            main_weight_bypass:
+                type: float
+                value: 1.0
+
+            root_start_input_from:
+                type: string
+
+            root_start_input_tx:
+                type: length
+                value: 0.0
+
+            root_start_input_tx_curve:
                 type: message
 
-            root_input_start_ty_curve:
+            root_start_input_ty:
+                type: length
+                value: 0.0
+
+            root_start_input_ty_curve:
                 type: message
 
-            root_input_start_tz_curve:
+            root_start_input_tz:
+                type: length
+                value: 0.0
+
+            root_start_input_tz_curve:
                 type: message
 
-            root_input_start_sx_curve:
+            root_start_input_rx:
+                type: angle
+                value: 0.0
+
+            root_start_input_rx_curve:
                 type: message
 
-            root_input_start_sy_curve:
+            root_start_input_ry:
+                type: angle
+                value: 0.0
+
+            root_start_input_ry_curve:
                 type: message
 
-            root_input_start_sz_curve:
+            root_start_input_rz:
+                type: angle
+                value: 0.0
+
+            root_start_input_rz_curve:
                 type: message
 
             output_end:
@@ -1735,6 +1780,10 @@ containers:
                 type: integer
                 value: 24
 
+            scale_offset:
+                type: integer
+                value: 0
+
             pre_blend:
                 type: integer
                 value: 4
@@ -1763,7 +1812,20 @@ containers:
                 type: integer
                 value: 0
 
+            is_bypass:
+                type: integer
+                value: 0
+
         connections:
+            # main weight bypass
+            - '<options.namespace>:LAYER.main_weight'
+            - '<options.namespace>:main_weight_bypass_cdt.colorIfTrueR'
+            #
+            - '<options.namespace>:LAYER.is_bypass'
+            - '<options.namespace>:main_weight_bypass_cdt.firstTerm'
+            #
+            - '<options.namespace>:main_weight_bypass_cdt.outColorR'
+            - '<options.namespace>:LAYER.main_weight_bypass'
             # connect to clip
             - '<options.namespace>:LAYER.valid_start'
             - '<options.namespace>:TIME.clip_start'
@@ -1818,3 +1880,17 @@ containers:
             - "<options.namespace>:root_start_translate_offset_sum.input3D[1]"
             - "<options.namespace>:LAYER.translate_offsetY"
             - "<options.namespace>:root_translate_sum.input3D[0].input3Dy"
+            # root start input
+            - '<options.namespace>:LAYER.root_start_input_tx'
+            - '<options.namespace>:ROOT_START_INPUT.translateX'
+            - '<options.namespace>:LAYER.root_start_input_ty'
+            - '<options.namespace>:ROOT_START_INPUT.translateY'
+            - '<options.namespace>:LAYER.root_start_input_tz'
+            - '<options.namespace>:ROOT_START_INPUT.translateZ'
+            #
+            - '<options.namespace>:LAYER.root_start_input_rx'
+            - '<options.namespace>:ROOT_START_INPUT.rotateX'
+            - '<options.namespace>:LAYER.root_start_input_ry'
+            - '<options.namespace>:ROOT_START_INPUT.rotateY'
+            - '<options.namespace>:LAYER.root_start_input_rz'
+            - '<options.namespace>:ROOT_START_INPUT.rotateZ'

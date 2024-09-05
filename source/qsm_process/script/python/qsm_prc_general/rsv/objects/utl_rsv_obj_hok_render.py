@@ -102,12 +102,12 @@ class RsvDccRenderHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                     i_render_frame_step = int(self._hook_option_opt.get_as_integer('render_asset_frame_step'))
                 #
                 if i_render_frame_step > 1:
-                    render_frame_range = bsc_core.RawTextOpt(i_render_frames).to_frame_range()
-                    i_render_frames_ = bsc_core.RawFrameRangeMtd.get(
+                    render_frame_range = bsc_core.BscTextOpt(i_render_frames).to_frame_range()
+                    i_render_frames_ = bsc_core.BscFrameRang.get(
                         render_frame_range, i_render_frame_step
                     )
                 else:
-                    i_render_frames_ = bsc_core.RawTextOpt(i_render_frames).to_frames()
+                    i_render_frames_ = bsc_core.BscTextOpt(i_render_frames).to_frames()
                 #
                 i_katana_render_hook_option_opt = bsc_core.ArgDictStringOpt(
                     dict(

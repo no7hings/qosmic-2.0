@@ -143,24 +143,24 @@ class _QtHContractItem(
         self._refresh_expand_()
         #
         r, g, b = 207, 207, 207
-        h, s, v = bsc_core.RawColorMtd.rgb_to_hsv(r, g, b)
-        color = bsc_core.RawColorMtd.hsv2rgb(h, s*.75, v*.75)
+        h, s, v = bsc_core.BscColor.rgb_to_hsv(r, g, b)
+        color = bsc_core.BscColor.hsv2rgb(h, s*.75, v*.75)
         hover_color = r, g, b
         #
         self._name_draw_color = color
         self._hover_name_color = hover_color
         #
         r, g, b = 135, 135, 135
-        h, s, v = bsc_core.RawColorMtd.rgb_to_hsv(r, g, b)
-        color = bsc_core.RawColorMtd.hsv2rgb(h, s*.75, v*.75)
+        h, s, v = bsc_core.BscColor.rgb_to_hsv(r, g, b)
+        color = bsc_core.BscColor.hsv2rgb(h, s*.75, v*.75)
         hover_color = r, g, b
         #
         self._frame_border_color = color
         self._hovered_frame_border_color = hover_color
         #
         r, g, b = 119, 119, 119
-        h, s, v = bsc_core.RawColorMtd.rgb_to_hsv(r, g, b)
-        color = bsc_core.RawColorMtd.hsv2rgb(h, s*.75, v*.75)
+        h, s, v = bsc_core.BscColor.rgb_to_hsv(r, g, b)
+        color = bsc_core.BscColor.hsv2rgb(h, s*.75, v*.75)
         hover_color = r, g, b
         self._frame_background_color = color
         self._hovered_frame_background_color = hover_color

@@ -164,7 +164,7 @@ class StgConnector(object):
     def shotgun(self):
         return self._stg_instance
 
-    def get_is_valid(self):
+    def is_valid(self):
         return self._stg_instance is not None
 
     @classmethod

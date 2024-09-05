@@ -15,6 +15,8 @@ import lxgui.core as gui_core
 
 import lxbasic.storage as bsc_storage
 
+import lxbasic.model as bsc_model
+
 import qsm_general.core as qsm_gnl_core
 
 from ... import core as _mya_core
@@ -53,6 +55,14 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
 
                 self.remove_resource_auto(hide_scenery)
 
+        statistics = bsc_storage.Statistics.generate()
+        statistics.update_at_time(
+            dict(
+                method='unit_assembly_cache_load',
+                cache=cache_file_path
+            )
+        )
+
     def remove_resource_auto(self, hide_scenery=True):
         if hide_scenery is True:
             cache_location = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
@@ -76,7 +86,7 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
             bsc_storage.StgFileOpt(file_path).name
         )
 
-        cache_file_path = qsm_gnl_core.MayaCache.generate_unit_assembly_file(
+        cache_file_path = qsm_gnl_core.MayaCache.generate_asset_unit_assembly_file(
             file_path
         )
         if os.path.isfile(cache_file_path) is False:
@@ -90,16 +100,17 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
         return task_name, None, cache_file_path
 
     @classmethod
-    def _load_delay_fnc(cls, window, task_args_dict):
-        with window.gui_progressing(maximum=len(task_args_dict.keys())) as g_p:
+    def _load_delay_fnc(cls, task_window, task_args_dict):
+        with task_window.gui_progressing(maximum=len(task_args_dict.keys())) as g_p:
             for i_k, i_v in task_args_dict.items():
-                i_task_name, i_cmd_script, i_cache_file = i_k
+                i_task_name, i_cmd_script, i_cache_path = i_k
 
-                window.submit(
+                task_window.submit(
+                    'unit_assembly_generate',
                     i_task_name,
                     i_cmd_script,
                     completed_fnc=[
-                        functools.partial(cls(x).load_cache, i_cache_file, True) for x in i_v
+                        functools.partial(cls(x).load_cache, i_cache_path, True) for x in i_v
                     ]
                 )
                 g_p.do_update()
@@ -132,35 +143,39 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
             task_args_dict = {}
             for i_resource in resources:
                 i_resource_opt = cls(i_resource)
-                i_task_name, i_cmd_script, i_cache_file = i_resource_opt.generate_args()
+                i_task_name, i_cmd_script, i_cache_path = i_resource_opt.generate_args()
                 if i_cmd_script is not None:
                     task_args_dict.setdefault(
-                        (i_task_name, i_cmd_script, i_cache_file),
+                        (i_task_name, i_cmd_script, i_cache_path),
                         []
                     ).append(
                         i_resource
                     )
                 else:
-                    i_resource_opt.load_cache(i_cache_file, True)
+                    i_resource_opt.load_cache(i_cache_path, True)
 
             if task_args_dict:
                 import lxgui.proxy.widgets as gui_prx_widgets
 
-                window = gui_prx_widgets.PrxSubprocessWindow()
-                if window._language == 'chs':
-                    window.set_window_title('元素组装加载')
-                    window.set_tip(
+                task_window = gui_prx_widgets.PrxSprcTaskWindow()
+                if task_window._language == 'chs':
+                    task_window.set_window_title('元素组装加载')
+                    task_window.set_tip(
                         '元素组装会在后台生成，生成成功后会自动加载到场景中，请耐心等待；\n'
                         '这个过程可能会让MAYA前台操作产生些许卡顿；\n'
                         '如需要终止任务，请点击“关闭”'
                     )
                 else:
-                    window.set_window_title('Unit Assembly Load')
+                    task_window.set_window_title('Unit Assembly Load')
 
-                window.show_window_auto(exclusive=False)
-                window.run_fnc_delay(
-                    functools.partial(cls._load_delay_fnc, window, task_args_dict), 500
+                task_window.show_window_auto(exclusive=False)
+                task_window.run_fnc_delay(
+                    functools.partial(cls._load_delay_fnc, task_window, task_args_dict), 500
                 )
+
+    @classmethod
+    def find_gpu_cache(cls, **kwargs):
+        pass
 
     @classmethod
     def remove_auto(cls, **kwargs):
@@ -191,10 +206,20 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
 
 class UnitAssemblyProcess(object):
     KEY = 'unit assembly'
+    PLUG_NAMES = [
+        'sceneAssembly',
+        'gpuCache',
+        'AbcImport',
+        'AbcExport',
+    ]
+
+    @classmethod
+    def _load_plugs(cls):
+        for i in cls.PLUG_NAMES:
+            cmds.loadPlugin(i, quiet=1)
 
     def __init__(self, file_path, cache_file_path=None, gpu_unpack=True):
-        cmds.loadPlugin('sceneAssembly', quiet=1)
-        cmds.loadPlugin('gpuCache', quiet=1)
+        self._load_plugs()
 
         self._file_path = file_path
 
@@ -203,7 +228,7 @@ class UnitAssemblyProcess(object):
         ).directory_path
 
         if cache_file_path is None:
-            self._cache_file_path = qsm_gnl_core.MayaCache.generate_unit_assembly_file(
+            self._cache_file_path = qsm_gnl_core.MayaCache.generate_asset_unit_assembly_file(
                 self._file_path
             )
         else:
@@ -215,7 +240,7 @@ class UnitAssemblyProcess(object):
 
         self._gpu_unpack = gpu_unpack
 
-    def grid_mesh_prc(self):
+    def grid_mesh_prc(self, grid_size):
         mesh_paths = _mya_core.Scene.find_all_dag_nodes(['mesh'])
         nodes = []
         list_for_grid = []
@@ -225,7 +250,7 @@ class UnitAssemblyProcess(object):
                     i_mesh_opt = _mya_core.MeshOpt(i_shape_path)
                     i_w, i_h, i_d = i_mesh_opt.get_dimension()
                     i_s = max(i_w, i_h, i_d)
-                    if i_s < _core.Assembly.DIMENSION_MINIMUM:
+                    if i_s < grid_size:
                         list_for_grid.append(i_shape_path)
                     else:
                         self.mesh_prc(i_shape_path, check_face_count=False)
@@ -233,7 +258,7 @@ class UnitAssemblyProcess(object):
                 l_p.do_update()
 
         if list_for_grid:
-            mapper = _asb_core.GridSpace(list_for_grid, _core.Assembly.DIMENSION_MINIMUM).generate()
+            mapper = _asb_core.GridSpace(list_for_grid, grid_size).generate()
             keys = mapper.keys()
             keys.sort()
             with bsc_log.LogProcessContext.create(maximum=len(keys), label='grid process') as l_p:
@@ -264,12 +289,11 @@ class UnitAssemblyProcess(object):
                             j_transform_path = _mya_core.Shape.get_transform(j_shape_path)
                             _mya_core.Group.add(i_group_path_new, j_transform_path)
                         # export to gpu and mesh
-                        i_children = _mya_core.Group.get_children(i_group_path_new)
                         _mya_core.GpuCache.export_frame_(
-                            i_gpu_file_path, i_children
+                            i_gpu_file_path, i_group_path_new
                         )
                         _mya_core.SceneFile.export_file(
-                            i_mesh_file_path, i_children
+                            i_mesh_file_path, i_group_path_new
                         )
                         _mya_core.Node.delete(i_group_path_new)
                         # create AD
@@ -288,6 +312,15 @@ class UnitAssemblyProcess(object):
                             i_ad_file_path, i_ad_path
                         )
                         _mya_core.Node.delete(i_ad_path)
+                    else:
+                        i_shape_paths = mapper[i_key]
+                        for j_shape_path in i_shape_paths:
+                            # fixme: mesh parent mesh
+                            if _mya_core.DagNode.is_exists(j_shape_path) is False:
+                                continue
+
+                            j_transform_path = _mya_core.Shape.get_transform(j_shape_path)
+                            _mya_core.Node.delete(j_transform_path)
 
                     i_ar_path = '|region_{}_AR'.format(i_seq)
                     i_ar_path_new = _mya_core.AssemblyReference.create(
@@ -487,12 +520,27 @@ class UnitAssemblyProcess(object):
         _core.GpuImport().execute()
         # process
         mesh_paths = _mya_core.Scene.find_all_dag_nodes(type_includes=['mesh'])
+        mesh_count_data = _mya_core.Meshes.get_evaluate(mesh_paths)
+        width, height = mesh_count_data['width'], mesh_count_data['height']
+        size = max(width, height)
+        d = 100
+        if size <= d*10000:
+            grid_size = d*10
+        elif size <= d*100000:
+            grid_size = d*100
+        elif size <= d*1000000:
+            grid_size = d*1000
+        elif size <= d*10000000:
+            grid_size = d*10000
+        else:
+            grid_size = d*50000
+
         with bsc_log.LogProcessContext.create(maximum=len(mesh_paths), label='mesh process') as l_p:
             for i_path in mesh_paths:
                 self.mesh_prc(i_path)
                 l_p.do_update()
         #
-        grid_paths = self.grid_mesh_prc()
+        grid_paths = self.grid_mesh_prc(grid_size)
         if grid_paths:
             _mya_core.Container.add_dag_nodes(container, grid_paths)
         # instance all mesh

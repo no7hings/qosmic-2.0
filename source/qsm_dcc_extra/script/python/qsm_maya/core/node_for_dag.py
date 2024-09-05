@@ -45,17 +45,20 @@ class DagNode(_node.Node):
     @classmethod
     def to_name_without_namespace(cls, path_or_name):
         return cls.to_name(path_or_name).split(cls.NAMESPACESEP)[-1]
-    
+
+    @classmethod
+    def to_path_without_namespace(cls, path_or_name):
+        return cls.PATHSEP.join([x.split(cls.NAMESPACESEP)[-1] for x in cls.to_path(path_or_name).split(cls.PATHSEP)])
+
     @classmethod
     def to_namespace(cls, path_or_name):
         return cls.NAMESPACESEP.join(cls.to_name(path_or_name).split(cls.NAMESPACESEP)[:-1])
 
     @classmethod
-    def to_path(cls, name):
-        _ = cmds.ls(name, long=1)
-        if not _:
-            raise RuntimeError()
-        return _[0]
+    def to_path(cls, path_or_name):
+        _ = cmds.ls(path_or_name, long=1)
+        if _:
+            return _[0]
 
     @classmethod
     def check_is_dag(cls, path_or_name):

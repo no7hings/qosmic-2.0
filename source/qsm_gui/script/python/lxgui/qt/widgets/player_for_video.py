@@ -319,7 +319,7 @@ class QtVideoPlayWidget(
         painter.drawRect(
             self._text_frame_draw_rect
         )
-        self._text = bsc_core.RawIntegerMtd.frame_to_time_prettify(self._frame_index, self._fps)
+        self._text = bsc_core.BscInteger.frame_to_time_prettify(self._frame_index, self._fps)
         # text
         painter._draw_text_by_rect_(
             rect=self._text_draw_rect,

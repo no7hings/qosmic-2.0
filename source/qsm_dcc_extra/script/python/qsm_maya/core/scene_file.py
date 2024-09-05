@@ -1,4 +1,6 @@
 # coding:utf-8
+import types
+
 import os
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
@@ -6,6 +8,8 @@ import maya.cmds as cmds
 import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
+
+import lxgui.core as gui_core
 
 
 class SceneFile(object):
@@ -141,6 +145,140 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
     @classmethod
     def new(cls):
         cmds.file(new=1, force=1)
+
+    @classmethod
+    def repath_to(cls, file_path, with_create_directory=False):
+        if with_create_directory is True:
+            f = bsc_storage.StgFileOpt(file_path)
+            f.create_directory()
+        #
+        cmds.file(rename=file_path)
+
+    @classmethod
+    def is_dirty(cls):
+        return cmds.file(query=1, modified=1)
+
+    @classmethod
+    def save(cls):
+        file_path = cls.get_current()
+        cmds.file(
+            save=1,
+            options='v=0;',
+            force=1,
+            type=cls.get_file_type(file_path)
+        )
+
+    @classmethod
+    def new_file_with_dialog(cls, file_path, post_fnc=None):
+        def run_post_fnc_():
+            if isinstance(post_fnc, (types.FunctionType, types.MethodType)):
+                post_fnc(file_path)
+
+        def ok_fnc_():
+            cls.save()
+
+            cls.new()
+
+            f = bsc_storage.StgFileOpt(file_path)
+            f.create_directory()
+
+            run_post_fnc_()
+
+            cls.repath_to(file_path)
+
+        def no_fnc_():
+            cls.new()
+
+            f = bsc_storage.StgFileOpt(file_path)
+            f.create_directory()
+
+            run_post_fnc_()
+
+            cls.repath_to(file_path)
+
+        if cls.is_dirty() is True:
+            w = gui_core.GuiDialog.create(
+                label='New',
+                content='Scene has been modified, Do you want to save changed to "{}"'.format(
+                    cls.get_current()
+                ),
+                window_size=(480, 160),
+                #
+                ok_method=ok_fnc_,
+                no_method=no_fnc_,
+                #
+                ok_label='Save and new',
+                no_label='Don\'t save and new'
+            )
+        else:
+            no_fnc_()
+
+    @classmethod
+    def open_with_dialog(cls, file_path):
+        if cls.is_dirty() is True:
+            result = gui_core.GuiApplication.exec_message_dialog(
+                'Save changed to: {}?'.format(
+                    cls.get_current()
+                ),
+                title='Open Scene',
+                show_no=True,
+                show_cancel=True,
+                size=(320, 120)
+            )
+            if result is True:
+                cls.save_to(cls.get_current())
+                cls.open(file_path)
+                return True
+            elif result is False:
+                cls.open(file_path)
+                return True
+        else:
+            cls.open(file_path)
+            return True
+        return False
+
+    @classmethod
+    def new_with_dialog(cls):
+        if cls.is_dirty() is True:
+            result = gui_core.GuiApplication.exec_message_dialog(
+                'Save changed to: {}?'.format(
+                    cls.get_current()
+                ),
+                title='New Scene',
+                show_no=True,
+                show_cancel=True,
+                size=(320, 120),
+                status='warning',
+            )
+            if result is True:
+                cls.save_to(cls.get_current())
+                cls.new()
+                return True
+            elif result is False:
+                cls.new()
+                return True
+        else:
+            cls.new()
+            return True
+        return False
+
+    @classmethod
+    def save_with_dialog(cls, file_path):
+        # check file directory is changed, when changed save to.
+        if os.path.dirname(file_path) == os.path.dirname(cls.get_current()):
+            if cls.is_dirty() is True:
+                cls.save_to(file_path)
+                return True
+
+            gui_core.GuiApplication.exec_message_dialog(
+                'No changed to save.',
+                title='Save Scene',
+                size=(320, 120),
+                status='warning',
+            )
+            return False
+        cls.save_to(file_path)
+        return True
 
     @classmethod
     def open(cls, file_path, ignore_format=True):

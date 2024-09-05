@@ -264,7 +264,22 @@ class QtTrackStage(
 
         text_h = h/2
 
-        if is_start:
+        condition = [is_start, is_end]
+
+        if condition == [True, True]:
+            name_rect = QtCore.QRect(
+                start_x, y, end_x-start_x, text_h
+            )
+            frame_rect = QtCore.QRect(
+                start_x, y+text_h, end_x-start_x, text_h
+            )
+            points = [
+                (start_x, y),
+                (end_x, y),
+                (end_x, h),
+                (start_x, h),
+            ]
+        elif condition == [True, False]:
             name_rect = QtCore.QRect(
                 start_x, y, node_post_blend_end_x-start_x, text_h
             )
@@ -277,7 +292,7 @@ class QtTrackStage(
                 (next_node_pre_blend_start_x, h),
                 (start_x, h),
             ]
-        elif is_end:
+        elif condition == [False, True]:
             name_rect = QtCore.QRect(
                 last_node_post_blend_end_x, y, end_x-last_node_post_blend_end_x, text_h
             )

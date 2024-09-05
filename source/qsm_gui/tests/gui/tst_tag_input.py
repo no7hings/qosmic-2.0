@@ -14,9 +14,9 @@ class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
 
-        self._d_0 = gui_prx_widgets.PrxTagInput(self._qt_widget)
+        self._d_0 = gui_prx_widgets.PrxTagView(self._qt_widget)
         self.add_widget(self._d_0)
-        self._d_1 = gui_prx_widgets.PrxTagInput(self._qt_widget)
+        self._d_1 = gui_prx_widgets.PrxTagView(self._qt_widget)
         self.add_widget(self._d_1)
 
         self._scr_stage = qsm_lzy_scr_core.Stage(

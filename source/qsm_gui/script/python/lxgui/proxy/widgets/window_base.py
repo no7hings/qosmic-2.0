@@ -263,14 +263,14 @@ class PrxBaseWindow(
     def set_option_unit_clear(self):
         self.get_layer_widget('window_option_0').clear()
 
-    def start_window_loading(self, method, delay_time=250):
+    def start_window_loading(self, method, post_fnc=None, delay_time=250):
         def pre_fnc_():
             self.start_waiting()
             self._window_loading_flag = True
             # turn off animation
             self._qt_layer_stack._set_animation_enable_(False)
             self.set_current_layer('window_loading_0')
-            gui_qt_core.GuiQtUtil.show_qt_window(
+            gui_qt_core.QtUtil.show_qt_window(
                 self._qt_widget,
                 size=self.WINDOW_LOADING_SIZE
             )
@@ -282,7 +282,7 @@ class PrxBaseWindow(
 
         def post_fnc_():
             self.stop_waiting()
-            gui_qt_core.GuiQtUtil.show_qt_window(
+            gui_qt_core.QtUtil.show_qt_window(
                 self._qt_widget, size=self.get_definition_window_size()
             )
             self.set_current_layer('window_main_0')
@@ -290,6 +290,8 @@ class PrxBaseWindow(
             # turn on animation
             self._qt_layer_stack._set_animation_enable_(True)
             self._window_loading_flag = False
+            if post_fnc is not None:
+                post_fnc()
 
         pre_fnc_()
 
@@ -397,11 +399,11 @@ class PrxBaseWindow(
                         i.close_window()
         #
         if self._window_loading_flag is True:
-            gui_qt_core.GuiQtUtil.show_qt_window(
+            gui_qt_core.QtUtil.show_qt_window(
                 self.widget, pos, size=(480, 240)
             )
         else:
-            gui_qt_core.GuiQtUtil.show_qt_window(
+            gui_qt_core.QtUtil.show_qt_window(
                 self.widget, pos, size=self.get_definition_window_size()
             )
 
@@ -421,8 +423,8 @@ class PrxBaseWindow(
             cache_fnc, build_fnc, post_fnc
         )
     
-    def exec_message(self, *args, **kwargs):
-        return self._qt_widget._exec_message_(*args, **kwargs)
+    def exec_message_dialog(self, *args, **kwargs):
+        return self._qt_widget._exec_message_dialog_(*args, **kwargs)
 
     def popup_bubble_message(self, *args, **kwargs):
         return self._qt_widget._popup_bubble_message_(*args, **kwargs)

@@ -39,9 +39,9 @@ class AbsPrxPageForResource(gui_prx_abstracts.AbsPrxWidget):
         self._window = window
         self._session = session
 
-        self.gui_setup_page()
+        self.gui_page_setup_fnc()
 
-    def gui_setup_page(self):
+    def gui_page_setup_fnc(self):
         pass
 
     def do_gui_refresh_all(self, force=False):

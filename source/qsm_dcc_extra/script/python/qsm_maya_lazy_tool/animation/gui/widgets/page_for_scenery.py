@@ -118,9 +118,9 @@ class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
         self._window = window
         self._session = session
 
-        self.gui_setup_page()
+        self.gui_page_setup_fnc()
 
-    def gui_setup_page(self):
+    def gui_page_setup_fnc(self):
         self._unit_assembly_load_args_array = []
 
         self._qt_widget.setSizePolicy(
@@ -141,16 +141,16 @@ class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
         )
         self._gui_add_main_tools()
         # reference tool
-        self._reference_tool_box = self._top_prx_tool_bar.create_tool_box(
+        self._asset_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'reference', size_mode=1
         )
         # reference
-        self._prx_input_for_asset = qsm_gui_prx_widgets.PrxInputForScenery()
-        self._reference_tool_box.add_widget(self._prx_input_for_asset)
-        self._prx_input_for_asset.widget.setMaximumWidth(488)
+        self._asset_prx_input = qsm_gui_prx_widgets.PrxInputForScenery()
+        self._asset_prx_tool_box.add_widget(self._asset_prx_input)
+        self._asset_prx_input.widget.setMaximumWidth(488)
 
         self._gui_rig_reference_prx_toolbar_unit = _unit_for_scenery.PrxToolbarForSceneryReference(
-            self._window, self, self._session, self._prx_input_for_asset
+            self._window, self, self._session, self._asset_prx_input
         )
 
         self._prx_h_splitter = gui_prx_widgets.PrxHSplitter()

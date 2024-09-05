@@ -220,12 +220,12 @@ class AbsQtStatusBaseDef(object):
 
     @classmethod
     def _get_rgb_args_(cls, r, g, b, a):
-        h, s, v = bsc_core.RawColorMtd.rgb_to_hsv(r, g, b)
-        r_, g_, b_ = bsc_core.RawColorMtd.hsv2rgb(h, s*.75, v*.75)
+        h, s, v = bsc_core.BscColor.rgb_to_hsv(r, g, b)
+        r_, g_, b_ = bsc_core.BscColor.hsv2rgb(h, s*.75, v*.75)
         return (r_, g_, b_, a), (r, g, b, a)
 
     @classmethod
-    def _get_background_rgba_args_by_status_(cls, status):
+    def _generate_background_rgba_args_by_status_(cls, status):
         # process
         if status in {cls.Status.Started}:
             return cls._get_rgb_args_(*cls.Rgba.DarkAzureBlue)
@@ -246,6 +246,10 @@ class AbsQtStatusBaseDef(object):
             return cls._get_rgb_args_(*cls.Rgba.Gray)
         elif status in {cls.ValidationStatus.Disable}:
             return cls._get_rgb_args_(*cls.Rgba.DarkGray)
+        if status in [cls.ValidationStatus.Warning]:
+            return cls._get_rgb_args_(*cls.Rgba.Yellow)
+        elif status in {cls.ValidationStatus.Error}:
+            return cls._get_rgb_args_(*cls.Rgba.TorchRed)
 
         elif status in {cls.ValidationStatus.Error}:
             return cls._get_rgb_args_(*cls.Rgba.DarkTorchRed)
@@ -304,7 +308,7 @@ class AbsQtStatusBaseDef(object):
     def _init_status_base_def_(self, widget):
         self._widget = widget
         #
-        self._is_status_enable = False
+        self._status_flag = False
         #
         self._status = _gui_core.GuiProcessStatus.Stopped
         #
@@ -317,25 +321,29 @@ class AbsQtStatusBaseDef(object):
         raise NotImplementedError()
 
     def _set_status_(self, status):
-        self._is_status_enable = True
-        #
+        self._status_flag = True
+
         self._status = status
-        #
+
         if status in {_gui_core.GuiProcessStatus.Running}:
             self._widget.setCursor(QtCore.Qt.BusyCursor)
         else:
             self._widget.unsetCursor()
-        #
-        self._status_color, self._hover_status_color = self._get_background_rgba_args_by_status_(
+
+        self._status_color, self._hover_status_color = self._generate_background_rgba_args_by_status_(
             self._status
         )
+        self._refresh_widget_draw_()
+        
+    def _set_status_flag_(self, boolean):
+        self._status_flag = boolean
         self._refresh_widget_draw_()
 
     def _get_status_(self):
         return self._status
 
     def _get_status_is_enable_(self):
-        return self._is_status_enable
+        return self._status_flag
 
 
 class AbsQtSubProcessBaseDef(object):
@@ -376,12 +384,12 @@ class AbsQtSubProcessBaseDef(object):
             self._sub_process_is_enable = True
             self._sub_process_is_started = True
             self._sub_process_statuses = [status]*count
-            color, hover_color = AbsQtStatusBaseDef._get_background_rgba_args_by_status_(status)
+            color, hover_color = AbsQtStatusBaseDef._generate_background_rgba_args_by_status_(status)
             self._sub_process_status_colors = [color]*count
             self._hover_sub_process_status_colors = [hover_color]*count
             self._sub_process_finished_results = [False]*count
             self._sub_process_finished_maximum = len(self._sub_process_finished_results)
-            self._sub_process_timestamp_started = bsc_core.BscSystem.get_timestamp()
+            self._sub_process_timestamp_started = bsc_core.BscSystem.generate_timestamp()
         else:
             self._restore_sub_process_()
 
@@ -395,12 +403,12 @@ class AbsQtSubProcessBaseDef(object):
             self._sub_process_status_colors = []
             self._hover_sub_process_status_colors = []
             for i_status in statuses:
-                i_color, i_hover_color = AbsQtStatusBaseDef._get_background_rgba_args_by_status_(i_status)
+                i_color, i_hover_color = AbsQtStatusBaseDef._generate_background_rgba_args_by_status_(i_status)
                 self._sub_process_status_colors.append(i_color)
                 self._hover_sub_process_status_colors.append(i_hover_color)
 
             self._sub_process_finished_results = [False]*count
-            self._sub_process_timestamp_started = bsc_core.BscSystem.get_timestamp()
+            self._sub_process_timestamp_started = bsc_core.BscSystem.generate_timestamp()
         else:
             self._restore_sub_process_()
         #
@@ -409,7 +417,7 @@ class AbsQtSubProcessBaseDef(object):
     def _set_sub_process_status_at_(self, index, status):
         self._sub_process_statuses[index] = status
         #
-        color, hover_color = AbsQtStatusBaseDef._get_background_rgba_args_by_status_(status)
+        color, hover_color = AbsQtStatusBaseDef._generate_background_rgba_args_by_status_(status)
         self._sub_process_status_colors[index] = color
         self._hover_sub_process_status_colors[index] = hover_color
         #
@@ -436,7 +444,7 @@ class AbsQtSubProcessBaseDef(object):
         self._sub_process_finished_value = sum(self._sub_process_finished_results)
         self._sub_process_finished_maximum = len(self._sub_process_finished_results)
         #
-        self._sub_process_timestamp_costed = bsc_core.BscSystem.get_timestamp()-self._sub_process_timestamp_started
+        self._sub_process_timestamp_costed = bsc_core.BscSystem.generate_timestamp()-self._sub_process_timestamp_started
         if self._sub_process_finished_value > 1:
             self._sub_process_finished_timestamp_estimated = (
                                                                  self._sub_process_timestamp_costed/self._sub_process_finished_value
@@ -445,7 +453,7 @@ class AbsQtSubProcessBaseDef(object):
             self._sub_process_finished_timestamp_estimated = 0
 
     def _refresh_sub_process_draw_(self):
-        self._sub_process_timestamp_costed = bsc_core.BscSystem.get_timestamp()-self._sub_process_timestamp_started
+        self._sub_process_timestamp_costed = bsc_core.BscSystem.generate_timestamp()-self._sub_process_timestamp_started
         self._refresh_widget_draw_()
 
     def _get_sub_process_status_text_(self):
@@ -453,11 +461,11 @@ class AbsQtSubProcessBaseDef(object):
             kwargs = dict(
                 value=self._sub_process_finished_value,
                 maximum=self._sub_process_finished_maximum,
-                costed_time=bsc_core.RawIntegerMtd.second_to_time_prettify(
+                costed_time=bsc_core.BscInteger.second_to_time_prettify(
                     self._sub_process_timestamp_costed,
                     mode=1
                 ),
-                estimated_time=bsc_core.RawIntegerMtd.second_to_time_prettify(
+                estimated_time=bsc_core.BscInteger.second_to_time_prettify(
                     self._sub_process_finished_timestamp_estimated,
                     mode=1
                 ),
@@ -780,7 +788,7 @@ class AbsQtPopupBaseDef(object):
         width_ = view_width+margin*2+side*2+shadow_radius
         height_ = view_height+margin*2+side*2+shadow_radius
         #
-        r_x, r_y, region = bsc_core.RawCoordMtd.set_region_to(
+        r_x, r_y, region = bsc_core.BscCoord.set_region_to(
             position=(press_x, press_y),
             size=(width_, height_),
             maximum_size=(width_maximum, height_maximum),
@@ -1326,7 +1334,7 @@ class AbsQtTypeDef(object):
 
     def _set_type_text_(self, text):
         self._type_text = text or ''
-        self._type_color = bsc_core.RawTextOpt(
+        self._type_color = bsc_core.BscTextOpt(
             self._type_text
         ).to_rgb()
 
@@ -1566,11 +1574,11 @@ class AbsQtNameBaseDef(object):
         #
         self._widget.update()
 
-    def _fix_width_to_name_(self):
+    def _fix_width_to_name_(self, width_add=None):
         w = _qt_core.GuiQtText.get_draw_width(
             self._widget, self._name_text
         )
-        self._widget.setFixedWidth(w+16)
+        self._widget.setFixedWidth(w+16+(width_add or 0))
 
     def _get_name_text_(self):
         if self._name_flag is True:
@@ -1655,14 +1663,14 @@ class AbsQtNameBaseDef(object):
                 for i_text in texts:
                     i_text = bsc_core.auto_string(i_text)
                     i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
-                    i_text = _qt_core.GuiQtUtil.generate_tool_tip_action_css(i_text)
+                    i_text = _qt_core.QtUtil.generate_tool_tip_action_css(i_text)
                     css += '<p class="no_wrap">{}</p>\n'.format(i_text)
 
             if 'action_tip' in kwargs:
                 action_tip = kwargs['action_tip']
                 css += '<p><hr></p>\n'
                 action_tip = action_tip.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
-                action_tip = _qt_core.GuiQtUtil.generate_tool_tip_action_css(action_tip)
+                action_tip = _qt_core.QtUtil.generate_tool_tip_action_css(action_tip)
                 css += '<p class="no_wrap">{}</p>\n'.format(action_tip)
 
             css += '</body>\n</html>'
@@ -1849,7 +1857,7 @@ class AbsQtNamesBaseDef(AbsQtNameBaseDef):
                 for i_text in texts_extend:
                     i_text = bsc_core.auto_string(i_text)
                     i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
-                    i_text = _qt_core.GuiQtUtil.generate_tool_tip_action_css(i_text)
+                    i_text = _qt_core.QtUtil.generate_tool_tip_action_css(i_text)
                     css += '<p class="no_wrap">{}</p>\n'.format(i_text)
 
             css += '</body>\n</html>'
@@ -2078,8 +2086,8 @@ class AbsQtChartBaseDef(object):
         self._hover_point = QtCore.QPoint()
         #
         r, g, b = 143, 143, 143
-        h, s, v = bsc_core.RawColorMtd.rgb_to_hsv(r, g, b)
-        color = bsc_core.RawColorMtd.hsv2rgb(h, s*.75, v*.75)
+        h, s, v = bsc_core.BscColor.rgb_to_hsv(r, g, b)
+        color = bsc_core.BscColor.hsv2rgb(h, s*.75, v*.75)
         hover_color = r, g, b
         #
         self._chart_border_color = color

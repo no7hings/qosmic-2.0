@@ -29,11 +29,11 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
         if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
             v_w = self._viewport.layout().minimumSize().width()
             abs_w = max(w, v_w)
-            self._gui_scroll.set_w_or_h(w)
-            self._gui_scroll.set_abs_w_or_h(abs_w)
-            self._gui_scroll.update()
-            if self._gui_scroll.get_is_valid():
-                value_scroll = self._gui_scroll.get_value()
+            self._scroll_bar_model.set_w_or_h(w)
+            self._scroll_bar_model.set_abs_w_or_h(abs_w)
+            self._scroll_bar_model.update()
+            if self._scroll_bar_model.is_valid():
+                value_scroll = self._scroll_bar_model.get_value()
 
                 btn_f_w, btn_f_h = 24, h-2
                 btn_w, btn_h = 20, 20
@@ -52,7 +52,7 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
                 self._scroll_previous_button.setGeometry(
                     c_x_1+(btn_f_w-btn_w)/2, y+(h-btn_h_1)/2, btn_w_1, btn_h_1
                 )
-                if self._gui_scroll.get_is_minimum():
+                if self._scroll_bar_model.get_is_minimum():
                     self._scroll_previous_button._set_icon_file_path_(self._icons_0[1])
                 else:
                     self._scroll_previous_button._set_icon_file_path_(self._icons_0[0])
@@ -61,7 +61,7 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
                 self._scroll_next_button.setGeometry(
                     c_x_1+(btn_f_w-btn_w)/2+btn_w_1, y+(h-btn_h_1)/2, btn_w_1, btn_h_1
                 )
-                if self._gui_scroll.get_is_maximum():
+                if self._scroll_bar_model.get_is_maximum():
                     self._scroll_next_button._set_icon_file_path_(self._icons_1[1])
                     value_scroll += btn_f_w
                 else:
@@ -84,12 +84,12 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
         elif self.QT_ORIENTATION == QtCore.Qt.Vertical:
             v_h = self._viewport.layout().minimumSize().height()
             abs_h = max(h, v_h)
-            self._gui_scroll.set_w_or_h(h)
-            self._gui_scroll.set_abs_w_or_h(abs_h)
-            self._gui_scroll.update()
+            self._scroll_bar_model.set_w_or_h(h)
+            self._scroll_bar_model.set_abs_w_or_h(abs_h)
+            self._scroll_bar_model.update()
 
-            if self._gui_scroll.get_is_valid():
-                value_scroll = self._gui_scroll.get_value()
+            if self._scroll_bar_model.is_valid():
+                value_scroll = self._scroll_bar_model.get_value()
 
                 btn_f_w, btn_f_h = w-2, 24
                 btn_w, btn_h = 20, 20
@@ -108,7 +108,7 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
                 self._scroll_previous_button.setGeometry(
                     x+(w-btn_w)/2, c_y_1+(btn_f_h-btn_h_1)/2, btn_w_1, btn_h_1
                 )
-                if self._gui_scroll.get_is_minimum():
+                if self._scroll_bar_model.get_is_minimum():
                     self._scroll_previous_button._set_icon_file_path_(self._icons_0[1])
                 else:
                     self._scroll_previous_button._set_icon_file_path_(self._icons_0[0])
@@ -117,7 +117,7 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
                 self._scroll_next_button.setGeometry(
                     x+(w-btn_w)/2, c_y_1+(btn_f_h-btn_h_1)/2+btn_h_1, btn_w_1, btn_h_1
                 )
-                if self._gui_scroll.get_is_maximum():
+                if self._scroll_bar_model.get_is_maximum():
                     self._scroll_next_button._set_icon_file_path_(self._icons_1[1])
                     value_scroll += btn_f_h
                 else:
@@ -164,8 +164,8 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
         self._layout.setContentsMargins(0, 0, 0, 0)
         self._layout.setSpacing(2)
 
-        self._gui_scroll = gui_qt_core.GuiQtModForScroll()
-        self._gui_scroll.set_step(64)
+        self._scroll_bar_model = gui_qt_core.GuiQtModForScroll()
+        self._scroll_bar_model.set_step(64)
 
         self._scroll_button_frame = gui_qt_wgt_utility.QtButtonFrame(self)
         self._scroll_button_frame.hide()
@@ -221,7 +221,7 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
         return False
 
     def _do_wheel_(self, event):
-        if self._gui_scroll.get_is_valid():
+        if self._scroll_bar_model.is_valid():
             delta = event.angleDelta().y()
             if delta < 0:
                 self._do_scroll_next_()
@@ -243,11 +243,11 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
             raise RuntimeError()
 
     def _do_scroll_previous_(self):
-        if self._gui_scroll.step_to_previous() is True:
+        if self._scroll_bar_model.step_to_previous() is True:
             self._refresh_widget_all_()
 
     def _do_scroll_next_(self):
-        if self._gui_scroll.step_to_next() is True:
+        if self._scroll_bar_model.step_to_next() is True:
             self._refresh_widget_all_()
 
     def addWidget(self, *args, **kwargs):

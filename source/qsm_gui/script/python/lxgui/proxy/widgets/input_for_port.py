@@ -105,7 +105,7 @@ class _AbsPrxInput(_abstracts.AbsPrxWidget):
             self._qt_input_widget._set_entry_use_as_storage_(boolean)
 
     def _set_file_show_(self):
-        bsc_storage.StgFileOpt(self.get()).open_in_system()
+        bsc_storage.StgFileOpt(self.get()).show_in_system()
 
     def get_use_as_storage(self):
         return self._use_as_storage
@@ -492,7 +492,7 @@ class PrxInputAsMediasOpen(PrxInputAsFilesOpen):
         self.update_history()
 
     def _do_screenshot(self):
-        active_window = _qt_core.GuiQtUtil.get_qt_active_window()
+        active_window = _qt_core.QtUtil.get_qt_active_window()
         w = _utility.PrxScreenshotFrame()
         w.connect_started_to(active_window.hide)
         w.do_start()
@@ -699,7 +699,7 @@ class PrxInputAsShotgunEntitiesWithChoose(_AbsPrxInput):
         self._shotgun_entity_kwargs = {}
         # entry
         self._qt_input_widget._get_entry_widget_()._set_grid_size_(80, 20)
-        self._qt_input_widget._get_entry_widget_()._set_grid_mode_()
+        self._qt_input_widget._get_entry_widget_()._view_as_grid_mode_()
         self._qt_input_widget._set_entry_enable_(True)
         # resize
         self._qt_input_widget._set_resize_enable_(True)
@@ -736,7 +736,7 @@ class PrxInputAsShotgunEntitiesWithChoose(_AbsPrxInput):
         )
 
     def set_clear(self):
-        self._qt_input_widget._set_clear_()
+        self._qt_input_widget._do_clear_()
 
     def set_shotgun_entity_kwargs(
             self,
@@ -1886,7 +1886,7 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
         path = obj.get_path()
         if obj.get_is_exists() is True:
             update = bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
-                obj.get_modify_timestamp(),
+                obj.get_mtime(),
                 language=1
             )
         else:
@@ -1912,7 +1912,7 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
             ).format(obj.get_type_name(), obj.get_path())
         )
         menu_raw = [
-            ('open folder', 'file/folder', obj.open_in_system)
+            ('open folder', 'file/folder', obj.show_in_system)
         ]
         # if use_as_tree is True:
         #     menu_raw.extend(

@@ -12,34 +12,38 @@ class Main(object):
         self._option_opt = self._session.option_opt
 
     @staticmethod
-    def _start_delay(window, scr_stage_key, src_entities):
+    def _start_delay(window, task_window, scr_stage_key, scr_entities):
         process_args = []
-        for i_scr_entity in src_entities:
-            i_scr_entity_path = i_scr_entity.path
-            i_opt = qsm_lzy_mtg_scripts.StlConvertionOpt(
-                scr_stage_key, i_scr_entity_path
-            )
-            i_args = i_opt.generate_args()
-            if i_args:
-                i_task_name, i_cmd_script, i_cache_file_path = i_args
-                if i_cmd_script is not None:
-                    process_args.append(
-                        (i_task_name, i_cmd_script, i_opt)
-                    )
-                else:
-                    pass
+        with window.gui_progressing(maximum=len(scr_entities)) as g_p:
+            for i_scr_entity in scr_entities:
+                i_scr_entity_path = i_scr_entity.path
+                i_opt = qsm_lzy_mtg_scripts.StlConvertionOpt(
+                    scr_stage_key, i_scr_entity_path
+                )
+                i_args = i_opt.generate_args()
+                if i_args:
+                    i_task_name, i_cmd_script, i_cache_path = i_args
+                    if i_cmd_script is not None:
+                        process_args.append(
+                            (i_task_name, i_cmd_script, i_opt)
+                        )
+                    else:
+                        i_opt.register()
+
+                g_p.do_update()
 
         if process_args:
-            window.show_window_auto(exclusive=False)
+            task_window.show_window_auto(exclusive=False)
             for i_args in process_args:
                 i_task_name, i_cmd_script, i_opt = i_args
-                window.submit(
+                task_window.submit(
+                    'motion_generate',
                     i_task_name,
                     i_cmd_script,
-                    completed_fnc=functools.partial(i_opt.register)
+                    completed_fnc=functools.partial(i_opt.register),
                 )
         else:
-            window.close_window()
+            task_window.close_window()
 
     def execute(self):
         window = self._session.find_window()
@@ -48,22 +52,23 @@ class Main(object):
             node_opt = page._gui_node_opt
             scr_stage_key = self._option_opt.get('stage_key')
 
-            src_entities = node_opt.gui_get_checked_or_selected_scr_entities()
-            if src_entities:
-                window = gui_prx_widgets.PrxSubprocessWindow()
-                if window._language == 'chs':
-                    window.set_window_title('动作生成（用于拼接）')
-                    window.set_tip(
-                        '正在运行动作生成程序，请耐心等待；\n'
+            scr_entities = node_opt.gui_get_checked_or_selected_scr_entities()
+            if scr_entities:
+                task_window = gui_prx_widgets.PrxSprcTaskWindow()
+                task_window.set_thread_maximum(4)
+                if task_window._language == 'chs':
+                    task_window.set_window_title('生成动作（用于拼接）')
+                    task_window.set_tip(
+                        '正在生成动作，请耐心等待；\n'
                         '如需要终止任务，请点击“关闭”。'
                     )
                 else:
-                    window.set_window_title('Motion Convert')
+                    task_window.set_window_title('Motion Convert')
 
-                window.run_fnc_delay(
+                task_window.run_fnc_delay(
                     functools.partial(
                         self._start_delay,
-                        window, scr_stage_key, src_entities
+                        window, task_window, scr_stage_key, scr_entities
                     ),
                     500
                 )

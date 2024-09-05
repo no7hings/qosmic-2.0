@@ -37,7 +37,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
 if __name__ == '__main__':
     import sys
     #
-    from PySide2 import QtWidgets
+    from QtSide import QtWidgets
     #
     app = QtWidgets.QApplication(sys.argv)
     #

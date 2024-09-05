@@ -46,7 +46,7 @@ c.AdvResource('sam_Skin').test()
         data['root_height'] = self.get_root_height()
         data['controls'] = self._control_set.get_data()
         data['metadata'] = dict(
-            ctime=bsc_core.BscSystem.get_timestamp(),
+            ctime=bsc_core.BscSystem.generate_timestamp(),
             user=bsc_core.BscSystem.get_user_name(),
             host=bsc_core.BscSystem.get_host(),
             refernce=dict(

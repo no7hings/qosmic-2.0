@@ -25,7 +25,7 @@ def main(session):
         #
         bsc_storage.StgPathOpt(
             dtb_port.value
-        ).open_in_system()
+        ).show_in_system()
 
 
 if __name__ == '__main__':

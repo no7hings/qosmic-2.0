@@ -55,7 +55,7 @@ class ToolsetUnitForCfxRigExport(
     def _get_export_args(self):
         resources = self._page._gui_resource_prx_unit.gui_get_checked_resources()
         if not resources:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.no_resource')
                 ),
@@ -67,7 +67,7 @@ class ToolsetUnitForCfxRigExport(
         with_geometry_cache = self._prx_options_node.get('cloth.with_geometry_cache')
 
         if sum([with_alembic_cache, with_geometry_cache]) == 0:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.no_cache_type')
                 ),
@@ -147,14 +147,14 @@ class ToolsetUnitForCfxRigExport(
                     )
                 )
 
-                self._window.exec_message(
+                self._window.exec_message_dialog(
                     self._window.choice_message(
                         self._window._configure.get('build.main.messages.task_submit_successful')
                     ),
                     status='correct'
                 )
         else:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.no_task_server')
                 ),
@@ -189,7 +189,7 @@ class ToolsetUnitForCfxRigExport(
                     option_hook
                 )
                 
-                self._window.exec_message(
+                self._window.exec_message_dialog(
                     self._window.choice_message(
                         self._window._configure.get('build.main.messages.farm_submit_successful')
                     ),
@@ -197,7 +197,7 @@ class ToolsetUnitForCfxRigExport(
                 )
 
         else:
-            self._window.exec_message(
+            self._window.exec_message_dialog(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.no_farm_server')
                 ),

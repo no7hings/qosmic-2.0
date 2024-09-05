@@ -66,7 +66,7 @@ class GpuInstanceOpt(_rsc_core.ResourceScriptOpt):
 
     def generate_args(self):
         file_path = self._resource.file
-        cache_file_path = qsm_gnl_core.MayaCache.generate_gpu_instance_file(
+        cache_file_path = qsm_gnl_core.MayaCache.generate_asset_gpu_instance_file(
             file_path
         )
         if os.path.isfile(cache_file_path) is False:
@@ -116,7 +116,7 @@ class GpuInstanceProcess(object):
         ).directory_path
 
         if cache_file_path is None:
-            self._cache_file_path = qsm_gnl_core.MayaCache.generate_gpu_instance_file(
+            self._cache_file_path = qsm_gnl_core.MayaCache.generate_asset_gpu_instance_file(
                 self._file_path
             )
         else:

@@ -106,7 +106,7 @@ class QtInputAsStorage(
         self._ext_filter = text
         self._input_info_bubble._set_text_(self._ext_filter)
         self._input_info_bubble.setToolTip(
-            gui_qt_core.GuiQtUtil.generate_tool_tip_css(
+            gui_qt_core.QtUtil.generate_tool_tip_css(
                 'ext filter', self._ext_filter
             )
         )

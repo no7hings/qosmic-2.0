@@ -12,5 +12,5 @@ class PrxPanelForMontage(_abstracts.AbsPrxPanelForMontage):
         page_for_splicing.PrxPageForSplicing,
     ]
 
-    def __init__(self, window, session, *args, **kwargs):
-        super(PrxPanelForMontage, self).__init__(window, session, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(PrxPanelForMontage, self).__init__(*args, **kwargs)

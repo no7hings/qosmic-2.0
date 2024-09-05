@@ -117,6 +117,6 @@ class PrxPanelForTaskManager(gui_prx_widgets.PrxSessionWindow):
             qsm_tsk_process.TaskProcessServerBase.HOST, qsm_tsk_process.TaskProcessServerBase.PORT
         )
 
-        app = gui_qt_core.GuiQtUtil.get_exists_app()
+        app = gui_qt_core.QtUtil.get_exists_app()
 
         app.aboutToQuit.connect(quit_server_fnc_)

@@ -136,6 +136,7 @@ class QtEntryAsCapsule(
             painter._draw_capsule_by_rects_(
                 rects=self._frame_rects,
                 texts=self._draw_texts,
+                value_options=self._value_options,
                 checked_indices=self._checked_indices,
                 index_hover=self.__index_hover,
                 index_pressed=self._press_index,
@@ -154,7 +155,7 @@ class QtEntryAsCapsule(
                 title = value
 
             if self._check_use_exclusive is True:
-                css = _qt_core.GuiQtUtil.generate_tool_tip_css(
+                css = _qt_core.QtUtil.generate_tool_tip_css(
                     title,
                     content=tool_tip or 'N/a',
                     action_tip=[
@@ -162,7 +163,7 @@ class QtEntryAsCapsule(
                     ]
                 )
             else:
-                css = _qt_core.GuiQtUtil.generate_tool_tip_css(
+                css = _qt_core.QtUtil.generate_tool_tip_css(
                     title,
                     content=tool_tip or 'N/a',
                     action_tip=[
@@ -207,7 +208,7 @@ class QtEntryAsCapsule(
             self._index_current = idx
             self._checked_indices = [True if i in [idx] else False for i in self._indices]
         else:
-            if value:
+            if isinstance(value, (tuple, list)):
                 indices = [values_all.index(i) for i in value if i in values_all]
                 self._index_current = indices[0]
                 self._checked_indices = [True if i in indices else False for i in self._indices]

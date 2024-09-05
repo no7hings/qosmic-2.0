@@ -370,14 +370,14 @@ c.RigValidationOpt.test()
 
 
 class RigValidationProcess(object):
-    def __init__(self, file_path, cache_file_path, process_options):
+    def __init__(self, file_path, cache_path, process_options):
         self._file_path = file_path
-        self._cache_file_path = cache_file_path
+        self._cache_path = cache_path
         self._process_options = process_options
         self._namespace = 'rig_validation'
 
     def execute(self):
-        with bsc_log.LogProcessContext.create(maximum=4) as l_p:
+        with bsc_log.LogProcessContext.create(maximum=3) as l_p:
             # step 1
             qsm_mya_core.SceneFile.new()
             l_p.do_update()
@@ -389,5 +389,5 @@ class RigValidationProcess(object):
             )
             l_p.do_update()
             # step 3
-            RigValidationOpt(self._namespace).execute(self._cache_file_path)
+            RigValidationOpt(self._namespace).execute(self._cache_path)
             l_p.do_update()

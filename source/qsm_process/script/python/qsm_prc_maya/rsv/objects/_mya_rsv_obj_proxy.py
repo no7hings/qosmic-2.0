@@ -26,7 +26,7 @@ class RsvDccProxyHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             act = 'static'
             for i_look_pass in ['default']:
                 i_name = '{}.{}.{}'.format(asset, i_look_pass, act)
-                i_color = bsc_core.RawTextOpt(i_name).to_rgb(maximum=1)
+                i_color = bsc_core.BscTextOpt(i_name).to_rgb(maximum=1)
                 i_xarc_option = dict(
                     name=i_name,
                     color=i_color,

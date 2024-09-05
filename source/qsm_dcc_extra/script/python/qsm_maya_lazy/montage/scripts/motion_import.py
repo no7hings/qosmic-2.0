@@ -25,7 +25,9 @@ qsm_maya_lazy.do_reload()
 
 import qsm_maya_lazy.montage.scripts as s
 
-s.AdvChrMotionImportOpt('sam_Skin').test()
+s.AdvChrMotionImportOpt.append_layer(
+    'Z:/libraries/lazy-resource/all/motion_test/test_new_run_male_anim/json/test_new_run_male_anim.motion.json'
+)
     """
     def __init__(self, namespace):
         self._namespace = namespace
@@ -68,6 +70,12 @@ s.AdvChrMotionImportOpt('sam_Skin').test()
                 start_frame, end_frame
             )
             qsm_mya_core.Frame.set_current(end_frame)
+        # flush undo
+        qsm_mya_core.Undo.flush()
+
+    @classmethod
+    def replace_to_character(cls, motion_path):
+        pass
 
     @classmethod
     def test_(cls):

@@ -24,12 +24,13 @@ class W(gui_prx_widgets.PrxBaseWindow):
         button.connect_press_clicked_to(self._test)
 
     def _test(self):
-        wgt = gui_prx_widgets.PrxSubprocessWindow()
+        wgt = gui_prx_widgets.PrxSprcTaskWindow()
 
         wgt.show_window_auto(exclusive=False)
 
         for i in range(5):
             wgt.submit(
+                'TEST',
                 '测试-{}'.format(i),
                 qsm_gnl_core.MayaCacheProcess.generate_command(
                     'method=test-process'

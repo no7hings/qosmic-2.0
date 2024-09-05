@@ -32,7 +32,7 @@ class ScpTextureBuildCommand(object):
                 obj_opt.move_to_view_center()
             #
             obj_opt.set_attributes(dict(ns_viewState=0.0))
-            obj_opt.set_color(bsc_core.RawTextOpt(shader_type_name).to_rgb_(maximum=1.0, s_p=25, v_p=25))
+            obj_opt.set_color(bsc_core.BscTextOpt(shader_type_name).to_rgb_(maximum=1.0, s_p=25, v_p=25))
             #
             obj_opt.set_shader_parameters_by_data(
                 data.get('shader_parameters') or {},
@@ -71,7 +71,7 @@ class ScpTextureBuildCommand(object):
                 obj_opt.move_to_view_center()
             #
             obj_opt.set_attributes(dict(ns_viewState=0.0))
-            obj_opt.set_color(bsc_core.RawTextOpt(type_name).to_rgb_(maximum=1.0, s_p=25, v_p=25))
+            obj_opt.set_color(bsc_core.BscTextOpt(type_name).to_rgb_(maximum=1.0, s_p=25, v_p=25))
             #
             obj_opt.set_shader_parameters_by_data(
                 data.get('shader_parameters') or {},
@@ -194,7 +194,7 @@ class ScpTextureBuildCommand(object):
             sdr_path = self._cfg.get('node.arnold_surface_shader.path')
             sdr_obj_opt = ktn_core.NGNodeOpt(sdr_path)
             x, y = sdr_obj_opt.get_position()
-            r, g, b = bsc_core.RawTextOpt(texture_name).to_rgb_(maximum=1.0, s_p=25, v_p=25)
+            r, g, b = bsc_core.BscTextOpt(texture_name).to_rgb_(maximum=1.0, s_p=25, v_p=25)
             attributes = dict(
                 x=x-w,
                 y=y,
@@ -629,7 +629,7 @@ class ScpTextureBuildForPaste(object):
 
         import lxgui.qt.core as gui_qt_core
 
-        with gui_qt_core.GuiQtUtil.gui_bustling():
+        with gui_qt_core.QtUtil.gui_bustling():
             layout_path = None
             drop_paths = []
             if self._command is not None:

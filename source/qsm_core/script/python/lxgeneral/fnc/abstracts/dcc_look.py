@@ -31,7 +31,7 @@ class AbsFncImporterForLookYmlDcc(_base.AbsFncOptionBase):
         file_path = self.get('file')
         if bsc_storage.StgPath.get_is_exists(file_path) is True:
             self._time_tag = bsc_core.TimestampOpt(
-                bsc_storage.StgFileOpt(file_path).get_modify_timestamp()
+                bsc_storage.StgFileOpt(file_path).get_mtime()
                 ).get_as_tag_36()
             self._raw = bsc_content.Content(
                 value=self.get('file')

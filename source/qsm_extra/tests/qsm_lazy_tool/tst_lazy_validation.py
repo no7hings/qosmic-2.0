@@ -10,5 +10,3 @@ os.environ['QSM_UI_LANGUAGE'] = 'chs'
 gui_prx_core.GuiProxyUtil.show_window_proxy_auto(
     gui_widgets.PrxPanelForValidation, session=None
 )
-
-

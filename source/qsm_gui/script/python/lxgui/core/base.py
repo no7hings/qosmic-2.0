@@ -115,6 +115,13 @@ class GuiUtil(object):
         return options['name']
 
     @classmethod
+    def choice_name_(cls, options):
+        if cls.get_language() == 'chs':
+            if 'name_chs' in options:
+                return options['name_chs']
+        return options['name']
+
+    @classmethod
     def choice_description(cls, language, options):
         if language == 'chs':
             if 'description_chs' in options:
@@ -431,3 +438,21 @@ class GuiThumbnailCache(object):
 class GuiPlayModes(object):
     Video = 0x01
     ImageSequence = 0x02
+
+
+class GuiApplication(object):
+    @classmethod
+    def show_tool_dialog(cls, *args, **kwargs):
+        import lxgui.qt.core as gui_qt_core
+        return gui_qt_core.QtApplication.show_tool_dialog(*args, **kwargs)
+
+    @classmethod
+    def exec_message_dialog(cls, *args, **kwargs):
+        import lxgui.qt.core as gui_qt_core
+        return gui_qt_core.QtApplication.exec_message_dialog(*args, **kwargs)
+
+    @classmethod
+    def exec_input_dialog(cls, *args, **kwargs):
+        import lxgui.qt.core as gui_qt_core
+        return gui_qt_core.QtApplication.exec_input_dialog(*args, **kwargs)
+

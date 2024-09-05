@@ -56,7 +56,7 @@ class PrxPageForMotionMainTool(gui_prx_abstracts.AbsPrxWidget):
         self._window = window
         self._session = session
 
-        self.gui_setup_page()
+        self.gui_page_setup_fnc()
 
     def gui_get_tool_tab_box(self):
         return self._page_prx_tab_tool_box
@@ -65,7 +65,7 @@ class PrxPageForMotionMainTool(gui_prx_abstracts.AbsPrxWidget):
         self._page_prx_tab_tool_box.save_history()
         self._script_job_opt.destroy()
 
-    def gui_setup_page(self):
+    def gui_page_setup_fnc(self):
         self._qt_widget.setSizePolicy(
             gui_qt_core.QtWidgets.QSizePolicy.Expanding,
             gui_qt_core.QtWidgets.QSizePolicy.Expanding

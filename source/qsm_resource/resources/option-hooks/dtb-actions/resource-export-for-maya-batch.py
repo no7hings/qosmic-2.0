@@ -9,7 +9,7 @@ def main(session):
         import lxgeneral.dcc.core as gnl_dcc_core
 
         s_c = gnl_dcc_core.SocketConnectForMaya()
-        if s_c.get_is_valid():
+        if s_c.is_valid():
             print 'AAA'
 
     # get checked resources

@@ -7,7 +7,7 @@ def main(session):
         version='latest'
     )
     if directory_path:
-        bsc_storage.StgPathOpt(directory_path).open_in_system()
+        bsc_storage.StgPathOpt(directory_path).show_in_system()
 
 
 if __name__ == '__main__':

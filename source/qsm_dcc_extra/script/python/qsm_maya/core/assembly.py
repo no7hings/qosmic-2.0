@@ -15,7 +15,7 @@ class AssemblyDefinition(object):
     @classmethod
     def create(cls, location):
         name = location.split('|')[-1]
-        cmds.container(type=cls.NODE_TYPE, name=name)
+        return cmds.container(type=cls.NODE_TYPE, name=name)
 
     @classmethod
     def add_cache(cls, path, file_path, rep_name):

@@ -115,7 +115,7 @@ class AbsPnlViewerForShaderDcc(
                         if shader_type_name:
                             shader_gui = self._prx_dcc_obj_tree_view_add_opt.gui_add_as(shader, mode='list')
                             shader_gui.set_name(shader_type_name, 1)
-                            shader_gui.set_icon_by_color(bsc_core.RawTextOpt(shader_type_name).to_rgb(), 1)
+                            shader_gui.set_icon_by_color(bsc_core.BscTextOpt(shader_type_name).to_rgb(), 1)
                             #
                             tag_filter_key = 'shader.{}'.format(shader_type_name)
                             self._prx_dcc_obj_tree_view_tag_filter_opt.set_tgt_item_tag_update(

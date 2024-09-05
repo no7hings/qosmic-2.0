@@ -22,3 +22,7 @@ class Undo(object):
                 cmds.undoInfo(closeChunk=1, undoName=fnc.__name__)
 
         return sub_fnc_
+
+    @classmethod
+    def flush(cls):
+        cmds.flushUndo()

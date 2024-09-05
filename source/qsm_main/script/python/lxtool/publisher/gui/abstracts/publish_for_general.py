@@ -303,7 +303,7 @@ class AbsPnlPublisherForGeneral(gui_prx_widgets.PrxSessionWindow):
         self.refresh_all_fnc()
 
     def __do_tip_accept(self, text):
-        if self.__input.get_is_valid():
+        if self.__input.is_valid():
             self.__next_button.set_enable(True)
         else:
             self.__next_button.set_enable(False)

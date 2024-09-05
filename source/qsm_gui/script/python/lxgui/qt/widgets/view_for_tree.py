@@ -681,7 +681,7 @@ class QtTreeWidget(
     def _add_item_(self):
         pass
 
-    def _set_clear_(self):
+    def _do_clear_(self):
         for i in self._get_all_items_():
             i._stop_item_show_all_()
             i._kill_item_all_show_runnables_()

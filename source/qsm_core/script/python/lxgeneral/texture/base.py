@@ -203,7 +203,7 @@ class TxrMethodForColorSpaceAsTxConvert(_AbsTxrBase):
         _ = 'auto'
         # check is match configure, when not use "auto"
         for i_name_pattern in self.get_name_patterns():
-            if file_opt.get_is_match_name_pattern(i_name_pattern) is True:
+            if file_opt.is_name_match_pattern(i_name_pattern) is True:
                 _ = self._color_space_dict[i_name_pattern]
                 break
         # when tag is "auto"
@@ -220,6 +220,6 @@ class TxrMethodForColorSpaceAsTxConvert(_AbsTxrBase):
     def get_purpose(self, file_path):
         file_opt = bsc_storage.StgFileOpt(file_path)
         for i_name_pattern in self.get_name_patterns():
-            if file_opt.get_is_match_name_pattern(i_name_pattern) is True:
+            if file_opt.is_name_match_pattern(i_name_pattern) is True:
                 return self._purpose_dict[i_name_pattern]
         return 'unknown'

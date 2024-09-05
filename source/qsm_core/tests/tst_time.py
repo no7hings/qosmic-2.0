@@ -21,9 +21,9 @@ hex_ = '%032x' % int_
 
 print hex_
 
-# print bsc_core.RawIntegerOpt(100).set_encode_to_36()
+# print bsc_core.BscIntegerOpt(100).encode_to_36()
 #
-# print bsc_core.RawIntegerOpt(100).set_encode_to_36()
+# print bsc_core.BscIntegerOpt(100).encode_to_36()
 
 # for i in range(10):
 #     print str(uuid.uuid1()).upper()

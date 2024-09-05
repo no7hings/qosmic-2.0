@@ -12,7 +12,7 @@ class AbsObjDagPath(object):
         return self._pathsep
 
     def get_name(self):
-        return bsc_core.BscPath.get_dag_name(
+        return bsc_core.BscPath.to_dag_name(
             path=self._path, pathsep=self._pathsep
         )
 
@@ -89,7 +89,7 @@ class AbsPortDagPath(object):
 
     @property
     def name(self):
-        return bsc_core.PthPortMtd.get_dag_name(
+        return bsc_core.PthPortMtd.to_dag_name(
             path=self._path, pathsep=self._pathsep
         )
 

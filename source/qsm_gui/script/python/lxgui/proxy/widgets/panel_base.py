@@ -94,7 +94,7 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
         self.register_window_close_method(self.gui_close_fnc)
 
         self.start_window_loading(
-            self._setup_fnc_
+            self._setup_fnc_, post_fnc=self.gui_setup_post_fnc
         )
 
     def gui_close_fnc(self):
@@ -102,6 +102,9 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
 
     def gui_setup_fnc(self):
         raise NotImplementedError()
+
+    def gui_setup_post_fnc(self):
+        pass
 
     def generate_sub_panel_for(self, key):
         return self.SUB_PANEL_CLASS_DICT[key](self._window, self._session)
@@ -118,6 +121,8 @@ class PrxBasePage(_prx_abstracts.AbsPrxWidget):
 
     PAGE_KEY = None
 
+    UNIT_CLASS_DICT = {}
+
     def __init__(self, window, session, *args, **kwargs):
         super(PrxBasePage, self).__init__(*args, **kwargs)
 
@@ -127,6 +132,39 @@ class PrxBasePage(_prx_abstracts.AbsPrxWidget):
         self._qt_layout = _qt_wgt_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout.setContentsMargins(*[0]*4)
         self._qt_layout.setSpacing(2)
+
+    def gui_page_setup_fnc(self):
+        """
+        main setup function put here
+        """
+
+    def gui_page_setup_post_fnc(self):
+        """
+        fix some size bug for size setup delay
+        """
+
+    def generate_unit_for(self, key):
+        return self.UNIT_CLASS_DICT[key](self._window, self, self._session)
+
+
+class PrxBaseUnit(_prx_abstracts.AbsPrxWidget):
+    QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
+
+    PAGE_KEY = None
+
+    def __init__(self, window, page, session, *args, **kwargs):
+        super(PrxBaseUnit, self).__init__(*args, **kwargs)
+
+        self._window = window
+        self._page = page
+        self._session = session
+
+        self._qt_layout = _qt_wgt_base.QtVBoxLayout(self._qt_widget)
+        self._qt_layout.setContentsMargins(*[0]*4)
+        self._qt_layout.setSpacing(2)
+
+    def gui_unit_setup_fnc(self):
+        pass
 
 
 class PrxBaseSubPanel(_window_base.PrxBaseWindow):

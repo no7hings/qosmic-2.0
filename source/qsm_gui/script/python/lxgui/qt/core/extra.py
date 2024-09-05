@@ -9,7 +9,7 @@ import lxbasic.content as bsc_content
 
 import lxbasic.core as bsc_core
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
 from .wrap import *
 
@@ -19,8 +19,8 @@ from . import base as _base
 class QtHBoxLayout(QtWidgets.QHBoxLayout):
     def __init__(self, *args, **kwargs):
         super(QtHBoxLayout, self).__init__(*args, **kwargs)
-        self.setContentsMargins(*gui_core.GuiSize.LayoutDefaultContentsMargins)
-        self.setSpacing(gui_core.GuiSize.LayoutDefaultSpacing)
+        self.setContentsMargins(*_gui_core.GuiSize.LayoutDefaultContentsMargins)
+        self.setSpacing(_gui_core.GuiSize.LayoutDefaultSpacing)
 
     def _set_align_top_(self):
         self.setAlignment(
@@ -69,8 +69,8 @@ class QtHBoxLayout(QtWidgets.QHBoxLayout):
 class QtVBoxLayout(QtWidgets.QVBoxLayout):
     def __init__(self, *args, **kwargs):
         super(QtVBoxLayout, self).__init__(*args, **kwargs)
-        self.setContentsMargins(*gui_core.GuiSize.LayoutDefaultContentsMargins)
-        self.setSpacing(gui_core.GuiSize.LayoutDefaultSpacing)
+        self.setContentsMargins(*_gui_core.GuiSize.LayoutDefaultContentsMargins)
+        self.setSpacing(_gui_core.GuiSize.LayoutDefaultSpacing)
 
     def _set_align_top_(self):
         self.setAlignment(
@@ -97,8 +97,8 @@ class QtVBoxLayout(QtWidgets.QVBoxLayout):
 class QtGridLayout(QtWidgets.QGridLayout):
     def __init__(self, *args, **kwargs):
         super(QtGridLayout, self).__init__(*args, **kwargs)
-        self.setContentsMargins(*gui_core.GuiSize.LayoutDefaultContentsMargins)
-        self.setSpacing(gui_core.GuiSize.LayoutDefaultSpacing)
+        self.setContentsMargins(*_gui_core.GuiSize.LayoutDefaultContentsMargins)
+        self.setSpacing(_gui_core.GuiSize.LayoutDefaultSpacing)
 
     def _get_widget_count_(self):
         return self.count()
@@ -127,7 +127,7 @@ class QtFileDialog(QtWidgets.QFileDialog):
     def __init__(self, *args, **kwargs):
         # noinspection PyArgumentList
         super(QtFileDialog, self).__init__(*args, **kwargs)
-        self.setPalette(_base.GuiQtUtil.generate_qt_palette())
+        self.setPalette(_base.QtUtil.generate_qt_palette())
 
 
 class QtSystemTrayIcon(QtWidgets.QSystemTrayIcon):
@@ -204,11 +204,11 @@ class GuiQtMenuOpt(object):
         else:
             raise RuntimeError()
 
-    @gui_core.GuiModifier.run_with_exception_catch
+    @_gui_core.GuiModifier.run_with_exception_catch
     def _set_cmd_debug_run_(self, cmd_str):
         exec cmd_str
 
-    @gui_core.GuiModifier.run_with_exception_catch
+    @_gui_core.GuiModifier.run_with_exception_catch
     def _set_fnc_debug_run_(self, fnc):
         fnc()
 
@@ -316,7 +316,7 @@ class GuiQtMenuOpt(object):
         return widget_action
 
 
-class GuiQtApplicationOpt(object):
+class QtApplication(object):
     def __init__(self, app=None):
         if app is None:
             # noinspection PyArgumentList
@@ -333,3 +333,68 @@ class GuiQtApplicationOpt(object):
     def set_process_run_1(self):
         if self._instance:
             self._instance.processEvents()
+
+    @classmethod
+    def show_tool_dialog(cls, *args, **kwargs):
+        import lxgui.qt.widgets as gui_qt_widget
+
+        w = gui_qt_widget.QtToolDialog()
+        w._set_title_(kwargs.get('title', 'Dialog'))
+
+        if 'widget' in kwargs:
+            w._add_widget_(kwargs['widget'])
+
+        w._do_window_show_(
+            size=kwargs.get('size')
+        )
+
+    @classmethod
+    def exec_message_dialog(cls, *args, **kwargs):
+        import lxgui.qt.widgets as gui_qt_widget
+
+        message = args[0]
+
+        # noinspection PyArgumentList
+        w = gui_qt_widget.QtMessageDialog(QtWidgets.QApplication.activeWindow())
+        w._set_title_(kwargs.get('title', 'Dialog'))
+
+        w._set_ok_visible_(True)
+        if kwargs.get('show_no', False):
+            w._set_no_visible_(True)
+        if kwargs.get('show_cancel', False):
+            w._set_cancel_visible_(True)
+        w._set_message_(message)
+        if 'status' in kwargs:
+            status = kwargs['status']
+            if status == 'warning':
+                w._set_status_(
+                    _gui_core.GuiValidationStatus.Warning
+                )
+            elif status == 'error':
+                w._set_status_(
+                    _gui_core.GuiValidationStatus.Error
+                )
+            elif status == 'correct':
+                w._set_status_(
+                    _gui_core.GuiValidationStatus.Correct
+                )
+
+        w._do_window_exec_(
+            size=kwargs.get('size')
+        )
+        return w._get_result_()
+    
+    @classmethod
+    def exec_input_dialog(cls, *args, **kwargs):
+        import lxgui.qt.widgets as gui_qt_widget
+        
+        w = gui_qt_widget.QtInputDialog()
+        w._set_title_(kwargs.get('title', 'Dialog'))
+
+        if 'info' in kwargs:
+            w._set_info_(kwargs['info'])
+
+        w._do_window_exec_(
+            size=kwargs.get('size')
+        )
+        return w._get_result_()

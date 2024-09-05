@@ -120,7 +120,7 @@ class ImgOiioMtd(object):
         i_x_0, i_y_0 = 0, h-g_h
         for i in guide_data:
             i_text, i_c = i
-            i_background_rgb = bsc_cor_raw.RawTextOpt(i_text).to_rgb(maximum=1)
+            i_background_rgb = bsc_cor_raw.BscTextOpt(i_text).to_rgb(maximum=1)
             # background
             box_args.append(
                 '--box:color={},{},{},1:fill=1'.format(*i_background_rgb)
@@ -198,7 +198,7 @@ class ImgOiioMtd(object):
             input=bsc_cor_raw.auto_string(file_path_src),
             output=bsc_cor_raw.auto_string(file_path_tgt),
             time_mark=bsc_cor_time.TimestampMtd.to_string(
-                cls.TIME_MARK_PATTERN, _base.StgFileOpt(file_path_src).get_modify_timestamp()
+                cls.TIME_MARK_PATTERN, _base.StgFileOpt(file_path_src).get_mtime()
             )
         )
         cmd_args = [
@@ -225,7 +225,7 @@ class ImgOiioMtd(object):
             file_path_tgt_opt = file_path_tgt_opt.set_directory_repath_to(directory_path)
         #
         time_mark = bsc_cor_time.TimestampMtd.to_string(
-            cls.TIME_MARK_PATTERN, file_path_opt_src.get_modify_timestamp()
+            cls.TIME_MARK_PATTERN, file_path_opt_src.get_mtime()
         )
         cmd_args = [
             bsc_cor_execute.ExcBaseMtd.oiiotool(),
@@ -265,7 +265,7 @@ class ImgOiioMtd(object):
             os.makedirs(directory_path_tgt)
 
         time_mark = bsc_cor_time.TimestampMtd.to_string(
-            cls.TIME_MARK_PATTERN, file_path_opt_src.get_modify_timestamp()
+            cls.TIME_MARK_PATTERN, file_path_opt_src.get_mtime()
         )
 
         cmd_args = [
@@ -595,11 +595,11 @@ class ImgOiioOpt(object):
             file_opt_tgt.create_directory()
             _ext_tgt = file_opt_tgt.get_ext()
             if _ext_src == _ext_tgt:
-                file_opt_src.copy_to_file(file_path_tgt)
+                file_opt_src.copy_to_file(file_path_tgt, replace=True)
                 return
 
             time_mark = bsc_cor_time.TimestampMtd.to_string(
-                self.TIME_MARK_PATTERN, file_opt_src.get_modify_timestamp()
+                self.TIME_MARK_PATTERN, file_opt_src.get_mtime()
             )
             cmd_args = [
                 bsc_cor_execute.ExcBaseMtd.oiiotool(),
@@ -756,7 +756,7 @@ class ImgOiioOptForThumbnail(object):
                 os.makedirs(directory_path)
             #
             time_mark = bsc_cor_time.TimestampMtd.to_string(
-                self.TIME_MARK_PATTERN, _base.StgFileOpt(file_path).get_modify_timestamp()
+                self.TIME_MARK_PATTERN, _base.StgFileOpt(file_path).get_mtime()
             )
             cmd_args = [
                 bsc_cor_execute.ExcBaseMtd.oiiotool(),
@@ -784,7 +784,7 @@ class ImgOiioOptForThumbnail(object):
             file_opt_tgt = _base.StgFileOpt(file_path_tgt)
             _ext_tgt = file_opt_tgt.get_ext()
             time_mark = bsc_cor_time.TimestampMtd.to_string(
-                self.TIME_MARK_PATTERN, file_opt_src.get_modify_timestamp()
+                self.TIME_MARK_PATTERN, file_opt_src.get_mtime()
             )
             cmd_args = [
                 bsc_cor_execute.ExcBaseMtd.oiiotool(),

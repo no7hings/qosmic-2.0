@@ -54,7 +54,7 @@ class Namespace(object):
             i_path = cmds.ls(i_name, long=1)[0]
             if not i_path.startswith('|'):
                 continue
-
+            # check is instance
             i_parents = cmds.listRelatives(i_path, fullPath=1, allParents=1) or []
             if len(i_parents) > 1:
                 i_name = i_path.split('|')[-1]

@@ -30,11 +30,11 @@ def main(session):
     bsc_log.Log.trace_method_result(
         'option-hook execute', 'version-scheme="{}"'.format(version_scheme)
     )
-    if bsc_core.RawTextOpt(choice_scheme).get_filter_by_pattern('asset-*-output'):
+    if bsc_core.BscTextOpt(choice_scheme).get_filter_by_pattern('asset-*-output'):
         scene_src_file_path_tgt = rsv_application.get_temporary_scene_src_file(
             version_scheme=version_scheme
         )
-    elif bsc_core.RawTextOpt(choice_scheme).get_filter_by_pattern('asset-*-publish'):
+    elif bsc_core.BscTextOpt(choice_scheme).get_filter_by_pattern('asset-*-publish'):
         scene_src_file_path_tgt = rsv_application.get_release_scene_src_file(
             version_scheme=version_scheme
         )

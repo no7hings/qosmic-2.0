@@ -80,7 +80,7 @@ def main(session):
         _file_type_key = o.get('file_type')
         _port = o.get('port')
 
-        if gnl_dcc_core.SocketConnectForClarisse(_port).get_is_valid() is True:
+        if gnl_dcc_core.SocketConnectForClarisse(_port).is_valid() is True:
             _file_type_path = file_type_path_mapper[_file_type_key]
             with w.gui_progressing(maximum=len(dtb_resources)) as g_p:
                 for _i_dtb_resource in dtb_resources:

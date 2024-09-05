@@ -18,6 +18,8 @@ import lxbasic.core as bsc_core
 
 import lxbasic.log as bsc_log
 
+import lxbasic.model as bsc_model
+
 import lxgui.core as gui_core
 
 import qsm_general.core as qsm_gnl_core
@@ -152,6 +154,14 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
 
             self.remove_resource_auto(head_geometries, rig_head_geometries, controls)
 
+        statistics = bsc_storage.Statistics.generate()
+        statistics.update_at_time(
+            dict(
+                method='skin_proxy_cache_load',
+                cache=cache_file_path
+            )
+        )
+
     def get_head_hide_args(self, data_file_path, keep_head=False, check_bbox=False):
         if keep_head is True:
             head_geometries = self.find_head_geometries()
@@ -218,18 +228,19 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
         return task_name, None, cache_file_path, data_file_path
 
     @classmethod
-    def _load_delay_fnc(cls, window, task_args_dict, keep_head, check_bbox, hide_secondary_controls):
-        with window.gui_progressing(maximum=len(task_args_dict.keys())) as g_p:
+    def _load_delay_fnc(cls, task_window, task_args_dict, keep_head, check_bbox, hide_secondary_controls):
+        with task_window.gui_progressing(maximum=len(task_args_dict.keys())) as g_p:
             for i_k, i_v in task_args_dict.items():
-                i_task_name, i_cmd_script, i_cache_file, i_data_file = i_k
+                i_task_name, i_cmd_script, i_cache_path, i_data_path = i_k
 
-                window.submit(
+                task_window.submit(
+                    'skin_proxy_generate_process',
                     i_task_name,
                     i_cmd_script,
                     completed_fnc=[
                         functools.partial(
                             cls(x).load_cache,
-                            i_cache_file, i_data_file, keep_head, check_bbox, hide_secondary_controls
+                            i_cache_path, i_data_path, keep_head, check_bbox, hide_secondary_controls
                         ) for x in i_v
                     ]
                 )
@@ -266,38 +277,38 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
             task_args_dict = {}
             for i_resource in resources:
                 i_resource_opt = cls(i_resource)
-                i_task_name, i_cmd_script, i_cache_file, i_data_file = i_resource_opt.generate_args()
+                i_task_name, i_cmd_script, i_cache_path, i_data_path = i_resource_opt.generate_args()
                 if i_cmd_script is not None:
                     task_args_dict.setdefault(
-                        (i_task_name, i_cmd_script, i_cache_file, i_data_file),
+                        (i_task_name, i_cmd_script, i_cache_path, i_data_path),
                         []
                     ).append(
                         i_resource
                     )
                 else:
                     i_resource_opt.load_cache(
-                        i_cache_file, i_data_file, keep_head, check_bbox, hide_secondary_controls
+                        i_cache_path, i_data_path, keep_head, check_bbox, hide_secondary_controls
                     )
 
             if task_args_dict:
                 import lxgui.proxy.widgets as gui_prx_widgets
 
-                window = gui_prx_widgets.PrxSubprocessWindow()
-                if window._language == 'chs':
-                    window.set_window_title('简模代理（火柴人）加载')
-                    window.set_tip(
+                task_window = gui_prx_widgets.PrxSprcTaskWindow()
+                if task_window._language == 'chs':
+                    task_window.set_window_title('简模代理（火柴人）加载')
+                    task_window.set_tip(
                         '简模代理会在后台生成，生成成功后会自动加载到场景中，请耐心等待；\n'
                         '这个过程可能会让MAYA前台操作产生些许卡顿；\n'
                         '如需要终止任务，请点击“关闭”'
                     )
                 else:
-                    window.set_window_title('Skin Proxy Load')
+                    task_window.set_window_title('Skin Proxy Load')
 
-                window.show_window_auto(exclusive=False)
-                window.run_fnc_delay(
+                task_window.show_window_auto(exclusive=False)
+                task_window.run_fnc_delay(
                     functools.partial(
                         cls._load_delay_fnc,
-                        window, task_args_dict, keep_head, check_bbox, hide_secondary_controls
+                        task_window, task_args_dict, keep_head, check_bbox, hide_secondary_controls
                     ),
                     500
                 )

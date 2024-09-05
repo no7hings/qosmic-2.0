@@ -259,6 +259,12 @@ class AdvRig(_rsc_core.Resource):
         if _:
             return _[0]
 
+    def find_all_meshes(self):
+        geometry_root = self.get_geometry_root()
+        if geometry_root:
+            return cmds.ls(geometry_root, dag=1, type='mesh', noIntermediate=1, long=1) or []
+        return []
+
     def generate_geometry_topology_data(self):
         dict_ = collections.OrderedDict()
         namespace = self._namespace
@@ -277,14 +283,14 @@ class AdvRig(_rsc_core.Resource):
 
     def pull_geometry_topology_data(self):
         if self._file_path:
-            cache_path = qsm_gnl_core.MayaCache.generate_rig_geometry_data_file(
+            data_path = qsm_gnl_core.MayaCache.generate_rig_geometry_data_file(
                 self._file_path, 'topology'
             )
-            if bsc_storage.StgPath.get_is_file(cache_path) is True:
-                data = bsc_storage.StgFileOpt(cache_path).set_read()
+            if bsc_storage.StgPath.get_is_file(data_path) is True:
+                data = bsc_storage.StgFileOpt(data_path).set_read()
             else:
                 data = self.generate_geometry_topology_data()
-                bsc_storage.StgFileOpt(cache_path).set_write(data)
+                bsc_storage.StgFileOpt(data_path).set_write(data)
             return data
 
     def get_all_for_isolate_select(self):

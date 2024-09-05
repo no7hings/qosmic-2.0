@@ -1,0 +1,25 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Show Mesh Count (Component)'
+        icon_name: 'application/python'
+        #
+        size: [720, 720]
+
+        window:
+            name: 'Mesh Count (Component)'
+            name_chs: '网格计数（部件）'
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        stage_key: ''
+        #
+        entity_type: ''
+        entity: ''

@@ -13,7 +13,7 @@ class TimeExtraMtd(object):
 
     @classmethod
     def generate_time_tag_36(cls, multiply=1.0):
-        return _raw.RawIntegerOpt(int(time.time()*multiply)).set_encode_to_36()
+        return _raw.BscIntegerOpt(int(time.time()*multiply)).encode_to_36()
 
     @classmethod
     def generate_time_tag_36_(cls, multiply=1.0):
@@ -22,7 +22,7 @@ class TimeExtraMtd(object):
         m = time.localtime().tm_mon
         d = time.localtime().tm_mday
         c_s = time.mktime(time.strptime('{}-{}-{}'.format(y, m, d), '%Y-%m-%d'))
-        return _raw.RawIntegerOpt(int((s-c_s)*multiply)).set_encode_to_36()
+        return _raw.BscIntegerOpt(int((s-c_s)*multiply)).encode_to_36()
 
 
 class TimePrettifyMtd(object):
@@ -178,9 +178,9 @@ class TimestampOpt(object):
         )
 
     def get_as_tag_36(self, multiply=1):
-        return _raw.RawIntegerOpt(
+        return _raw.BscIntegerOpt(
             int(self._timestamp*multiply)
-        ).set_encode_to_36()
+        ).encode_to_36()
 
     def get_as_tag_36_(self, multiply=1):
         s = self._timestamp
@@ -188,7 +188,7 @@ class TimestampOpt(object):
         m = time.localtime().tm_mon
         d = time.localtime().tm_mday
         c_s = time.mktime(time.strptime('{}-{}-{}'.format(y, m, d), '%Y-%m-%d'))
-        return _raw.RawIntegerOpt(int((s-c_s)*multiply)).set_encode_to_36()
+        return _raw.BscIntegerOpt(int((s-c_s)*multiply)).encode_to_36()
 
     def to_prettify(self, language):
         return TimePrettifyMtd.to_prettify_by_timestamp(self._timestamp, language)

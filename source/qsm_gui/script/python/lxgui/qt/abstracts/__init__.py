@@ -20,3 +20,6 @@ from .thread import *
 from .thread_worker import *
 
 from .item_widget import *
+
+from .window import *
+

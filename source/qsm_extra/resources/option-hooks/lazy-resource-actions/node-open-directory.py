@@ -10,7 +10,7 @@ def main(session):
     scr_node_path = option_opt.get('entity')
     scr_stage = c.Stage(scr_stage_key)
     directory_path = scr_stage.generate_node_base_dir_path(scr_node_path)
-    bsc_storage.StgDirectoryOpt(directory_path).open_in_system()
+    bsc_storage.StgDirectoryOpt(directory_path).show_in_system()
 
 
 if __name__ == '__main__':
