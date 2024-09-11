@@ -448,7 +448,7 @@ class QtInputAsGuide(
     QT_ENTRY_CLS = _entry.QtEntryAsConstant
     QT_COMPLETION_POPUP_CLS = _popup.QtPopupAsCompletion
 
-    FILTER_MAXIMUM = 50
+    FILTER_COMPLETION_MAXIMUM = 50
 
     def _refresh_widget_draw_(self):
         self.update()
@@ -542,7 +542,7 @@ class QtInputAsGuide(
             _ = fnmatch.filter(
                 path_texts, '*{}*'.format(keyword)
             )
-            return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_MAXIMUM]
+            return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_COMPLETION_MAXIMUM]
         return []
 
     def _guide_entry_cbk_(self, text):

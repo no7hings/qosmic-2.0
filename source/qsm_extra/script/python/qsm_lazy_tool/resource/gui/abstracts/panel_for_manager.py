@@ -21,9 +21,14 @@ class AbsPrxPanelForResourceManager(gui_prx_widgets.PrxBasePanel):
         for i_key in qsm_lzy_scr_core.Stage.get_all_keys():
             if i_key not in self._tag_page_key_opened:
                 i_configure = qsm_lzy_scr_core.Stage.get_configure(i_key)
+                if self._window._language == 'chs':
+                    i_name = i_configure.get('options.gui_name_chs')
+                else:
+                    i_name = i_configure.get('options.gui_name')
+
                 lst.append(
                     (
-                        i_configure.get('options.gui_name_chs'),
+                        i_name,
                         'tag',
                         functools.partial(
                             self._gui_tab_add_page_fnc, i_key, True
@@ -44,10 +49,15 @@ class AbsPrxPanelForResourceManager(gui_prx_widgets.PrxBasePanel):
     def _gui_tab_add_page(self, key, switch_to=False):
         prx_sca = gui_prx_widgets.PrxVScrollArea()
         configure = qsm_lzy_scr_core.Stage.get_configure(key)
+        if self._window._language == 'chs':
+            name = configure.get('options.gui_name_chs')
+        else:
+            name = configure.get('options.gui_name')
+
         self._prx_tab_view.add_widget(
             prx_sca,
             key=key,
-            name=configure.get('options.gui_name_chs'),
+            name=name,
             icon_name_text=key,
             tool_tip='...',
             switch_to=switch_to

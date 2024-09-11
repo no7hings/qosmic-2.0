@@ -34,7 +34,7 @@ class Main(object):
             for i_entity in scr_entities:
                 i_dict = {}
                 i_entity_path = i_entity.path
-                i_is_rig = self._scr_stage.is_exists_for_node_tag(
+                i_is_rig = self._scr_stage.is_exists_node_tag(
                     i_entity_path, '/task/rig'
                 )
 

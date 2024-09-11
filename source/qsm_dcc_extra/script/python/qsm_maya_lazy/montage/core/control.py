@@ -2,6 +2,8 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+import lxbasic.storage as bsc_storage
+
 import qsm_maya.core as qsm_mya_core
 
 import qsm_maya.motion.core as qsm_mya_mtn_core
@@ -81,7 +83,21 @@ class AdvControlSet(AbsControlSet):
         return qsm_mya_core.Frame.get_frame_range()
 
     def get_data(self):
-        return qsm_mya_mtn_core.ControlsMotionOpt(self._namespace, self._paths).get_data()
+        return qsm_mya_mtn_core.ControlsMotionOpt(
+            self._namespace, self._paths
+        ).get_data()
+
+    def bake_keyframes(self, start_frame, end_frame, attributes=None):
+        # do not mark undo here
+        qsm_mya_mtn_core.ControlsBake(self._paths).execute(
+            start_frame, end_frame,
+            attributes=attributes
+        )
+
+    def export_motion(self, file_path):
+        bsc_storage.StgFileOpt(file_path).set_write(
+            self.get_data()
+        )
 
 
 class AdvChrControlSet(AdvControlSet):

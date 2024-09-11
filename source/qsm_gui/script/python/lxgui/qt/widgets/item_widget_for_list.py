@@ -41,14 +41,6 @@ class QtTestWidget(
                 print i_c.red(), i_c.green(), i_c.blue(), i_c.alpha()
 
 
-class _ItemModel(dict):
-    def __init__(self, *args, **kwargs):
-        super(_ItemModel, self).__init__(*args, **kwargs)
-
-    def __getattr__(self, item):
-        return self.__getitem__(item)  # = self[item]
-
-
 class QtItemWidgetForList(
     QtWidgets.QWidget,
 
@@ -289,6 +281,9 @@ class QtItemWidgetForList(
         )
 
     def _generate_pixmap_cache_(self):
+        if self.isHidden():
+            return
+
         size = QtCore.QSize(self.width(), self.height())
         self._pixmap_cache = QtGui.QPixmap(size)
         if self._view is not None:
@@ -433,8 +428,6 @@ class QtItemWidgetForList(
         self._basic_draw_rect = QtCore.QRect()
         self._frame_draw_rect = QtCore.QRect()
         self._shadow_draw_rect = QtCore.QRect()
-
-        self._item_model = _ItemModel()
 
         self._pixmap_cache = QtGui.QPixmap()
 

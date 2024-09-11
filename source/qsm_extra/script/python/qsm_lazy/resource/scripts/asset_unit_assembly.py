@@ -17,7 +17,7 @@ class AssetUnitAssemblyGenerateOpt(_asset_general.AssetGeneral):
 
     def generate_args(self):
         scr_stage = _scr_core.Stage(self._scr_stage_key)
-        is_model = scr_stage.is_exists_for_node_tag(
+        is_model = scr_stage.is_exists_node_tag(
             self._scr_node_path, '/task/model'
         )
         if is_model is True:

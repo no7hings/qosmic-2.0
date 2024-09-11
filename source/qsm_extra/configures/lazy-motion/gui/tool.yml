@@ -49,7 +49,7 @@ build:
                     parameters:
                         character_motion:
                             widget: group
-                            name: 'Copy Motion'
+                            name: 'Character Motion'
                             name_chs: '角色动作'
 
                         character_motion/duplicate_characters:
@@ -67,7 +67,7 @@ build:
 
                         control_motion:
                             widget: group
-                            name: 'Paste Motion'
+                            name: 'Control Motion'
                             name_chs: '控制器动作'
 
                         character_motion/copy_character:
@@ -649,7 +649,7 @@ build:
 
             copy_character:
                 message_chs: '拷贝选中角色动作成功。'
-                message: 'Copy animation from selected character successful.'
+                message: 'Copy motion from selected character successful.'
 
             duplicate_characters:
                 message_chs: '复制选中角色动作成功。'
@@ -657,15 +657,15 @@ build:
 
             copy_controls:
                 message_chs: '拷贝选中控制器动作成功。'
-                message: 'Copy animation from selected controls successful.'
+                message: 'Copy motion from selected controls successful.'
 
             paste_characters:
                 message_chs: '粘贴动作到选中的角色成功，按“Z”撤销。'
-                message: 'Paste animation to selected characters successful, press "Z" undo.'
+                message: 'Paste motion to selected characters successful, press "Z" undo.'
 
             paste_controls:
                 message_chs: '粘贴动作到选中的控制器成功，按“Z”撤销。'
-                message: 'Paste animation to selected controls successful, press "Z" undo.'
+                message: 'Paste motion to selected controls successful, press "Z" undo.'
 
             mirror_any:
                 message_chs: '镜像成功，按“Z”撤销。'
@@ -702,3 +702,51 @@ build:
             apply_timewarp:
                 message_chs: '应用时间扭曲成功，按“Z”撤销。'
                 message: 'Apply Timewarp to all curve successful, press "Z" undo.'
+
+    splicing:
+        tab:
+            name: 'Splicing'
+            name_chs: '拼接'
+
+            tool_tip:
+                |-
+                For motion splicing.
+
+            tool_tip_chs:
+                |-
+                用于动作拼接。
+
+        units:
+            import_motion:
+                name: 'Import Motion'
+                name_chs: '导入动作'
+
+                tool_tip: 'To be supplemented.'
+                tool_tip_chs: '待补充。'
+
+                options:
+                    name: 'Options'
+                    name_chs: '选项'
+
+                    parameters:
+                        import_character_motion:
+                            widget: group
+                            name: 'Import CHR Motion'
+                            name_chs: '导入角色动作'
+
+                        import_character_motion/to_control:
+                            widget: button
+                            name: 'Import to Control'
+                            name_chs: '导入到控制器'
+                            icon: 'tool/maya/import'
+                            tool_tip:
+                                |-
+                                To be supplemented.
+                            tool_tip_chs:
+                                |-
+                                待补充。
+
+        messages:
+            import_characters:
+                message_chs: '导入动作到选中的角色成功，按“Z”撤销。'
+                message: 'Import motion to selected characters successful, press "Z" undo.'

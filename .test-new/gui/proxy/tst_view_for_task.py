@@ -15,7 +15,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
         wgt = qt_widgets.QtWidget()
         self.add_widget(wgt)
         lot = qt_widgets.QtVBoxLayout(wgt)
-        lot._set_align_top_()
+        lot._set_align_as_top_()
 
         c = qsm_workarea_widgets.PrxUnitForWorkarea()
         lot.addWidget(c.widget)

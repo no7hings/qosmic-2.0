@@ -551,7 +551,7 @@ class QtScreenshotFrame(
                 painter._draw_frame_by_rect_(
                     rect=self._help_frame_draw_rect,
                     border_color=(0, 0, 0, 0),
-                    background_color=(31, 31, 31, 127)
+                    background_color=(15, 15, 15, 127)
                 )
                 painter._draw_text_by_rect_(
                     rect=self._help_draw_rect,
@@ -590,7 +590,7 @@ class QtScreenshotFrame(
                 painter._draw_frame_by_rect_(
                     rect=self._help_frame_draw_rect,
                     border_color=(0, 0, 0, 0),
-                    background_color=(31, 31, 31, 127)
+                    background_color=(15, 15, 15, 127)
                 )
                 painter._draw_text_by_rect_(
                     rect=self._help_draw_rect,
@@ -710,7 +710,7 @@ class QtInputAsScreenshot(
         )
         entry_layout.addWidget(self._input_button_widget)
         self._input_button_layout = _base.QtVBoxLayout(self._input_button_widget)
-        self._input_button_layout._set_align_top_()
+        self._input_button_layout._set_align_as_top_()
         self._input_button_layout.setContentsMargins(2, 0, 0, 0)
         self._input_button_layout.setSpacing(2)
 

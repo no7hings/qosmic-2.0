@@ -46,7 +46,7 @@ def main(session):
     tree_item = rsv_asset.get_obj_gui()
     tree_view = tree_item.get_view()
 
-    all_items = tree_view.get_all_selected_items()
+    all_items = tree_view.get_selected_items()
 
     assets = []
     for i_item in all_items:

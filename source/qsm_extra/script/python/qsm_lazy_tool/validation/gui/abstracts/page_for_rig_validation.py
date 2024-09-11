@@ -37,7 +37,7 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
     PAGE_KEY = 'rig_validation'
 
-    def _do_dcc_load_asset(self):
+    def _on_dcc_load_asset(self):
         if self._asset_path is not None:
             self._prx_options_node.get_port('files').append(self._asset_path)
 
@@ -50,7 +50,7 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
                 task = entity.task(self._scan_root.EntityTasks.Rig)
                 if task is not None:
                     result = task.find_result(
-                        self._scan_root.ResultPatterns.MayaRigFile
+                        self._scan_root.StoragePatterns.MayaRigFile
                     )
                     if result is not None:
                         self._asset_path = result
@@ -95,7 +95,7 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
                 self._window._configure.get('build.{}.buttons.add'.format(self.PAGE_KEY))
             )
         )
-        self._asset_load_qt_button.press_clicked.connect(self._do_dcc_load_asset)
+        self._asset_load_qt_button.press_clicked.connect(self._on_dcc_load_asset)
         self._asset_load_qt_button._set_action_enable_(False)
 
         v_prx_sca = gui_prx_widgets.PrxVScrollArea()

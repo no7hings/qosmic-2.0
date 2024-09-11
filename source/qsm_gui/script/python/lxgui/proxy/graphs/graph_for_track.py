@@ -3,20 +3,20 @@ import random
 
 import lxbasic.model as bsc_model
 
-from ...qt.graphs import graph_for_track as _graph_for_track
+from ...qt.graph_widgets import graph_for_track as _graph_for_track
 # proxy abstracts
 from ...proxy import abstracts as _proxy_abstracts
 
 import lxuniverse.objects as unr_objects
 
 
-class PrxTrackView(
+class PrxTrackWidget(
     _proxy_abstracts.AbsPrxWidget
 ):
-    QT_WIDGET_CLS = _graph_for_track.QtTrackView
+    QT_WIDGET_CLS = _graph_for_track.QtTrackWidget
 
     def __init__(self, *args, **kwargs):
-        super(PrxTrackView, self).__init__(*args, **kwargs)
+        super(PrxTrackWidget, self).__init__(*args, **kwargs)
 
         self._universe = unr_objects.ObjUniverse()
 

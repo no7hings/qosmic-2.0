@@ -923,7 +923,7 @@ class _UnitrResource(
                 )
 
     def get_current_obj(self):
-        _ = self._prx_list_view.get_all_selected_items()
+        _ = self._prx_list_view.get_selected_items()
         if _:
             return _[-1].get_gui_dcc_obj(self.GUI_NAMESPACE)
 
@@ -1109,7 +1109,7 @@ class _GuiDirectoryOpt(
         return self.gui_get_one(file_type)
 
     def get_current_obj(self):
-        _ = self._prx_tree_view.get_all_selected_items()
+        _ = self._prx_tree_view.get_selected_items()
         if _:
             return _[-1].get_gui_dcc_obj(self.GUI_NAMESPACE)
 
@@ -1255,13 +1255,13 @@ class _GuiGuideOpt(_GuiBaseOpt):
 
     def gui_refresh(self):
         path = None
-        list_item_prxes = self._prx_list_view.get_all_selected_items()
+        list_item_prxes = self._prx_list_view.get_selected_items()
         # gain list first
         if list_item_prxes:
             list_item_prx = list_item_prxes[-1]
             path = list_item_prx.get_gui_attribute('path')
         else:
-            tree_item_prxes = self._prx_tree_view.get_all_selected_items()
+            tree_item_prxes = self._prx_tree_view.get_selected_items()
             if tree_item_prxes:
                 tree_item_prx = tree_item_prxes[-1]
                 path = tree_item_prx.get_gui_attribute('path')
@@ -1370,7 +1370,7 @@ class _GuiUsdStageViewOpt(_GuiBaseOpt):
 class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
     GUI_NAMESPACE = 'database'
     THREAD_STEP = 8
-    FILTER_MAXIMUM = 50
+    FILTER_COMPLETION_MAXIMUM = 50
     HISTORY_KEY = 'gui.resource-library'
 
     LOADING_DELAY_TIME = 2000
@@ -1700,7 +1700,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
             _ = fnmatch.filter(
                 self._gui_type_opt.get_completion_keys(), '*{}*'.format(keyword)
             )
-            return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_MAXIMUM]
+            return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_COMPLETION_MAXIMUM]
         return []
 
     def __gui_resource_completion_gain_fnc(self, *args, **kwargs):
@@ -1709,7 +1709,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
             _ = fnmatch.filter(
                 self._gui_resource_prx_unit._keys, '*{}*'.format(keyword)
             )
-            return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_MAXIMUM]
+            return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_COMPLETION_MAXIMUM]
         return []
 
     def __restore_thread_stack(self):
@@ -1802,7 +1802,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         qt_view._refresh_viewport_showable_auto_()
 
     def __execute_gui_refresh_for_resources_by_type_selection(self):
-        entity_prx_items = self._type_prx_view.get_all_selected_items()
+        entity_prx_items = self._type_prx_view.get_selected_items()
         #
         self.__restore_thread_stack()
         #

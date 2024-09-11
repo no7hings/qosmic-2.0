@@ -11,7 +11,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
         wgt = qt_widgets.QtWidget()
         self.add_widget(wgt)
         lot = qt_widgets.QtVBoxLayout(wgt)
-        lot._set_align_top_()
+        lot._set_align_as_top_()
 
         for i in qt_widgets.QtInputAsStorage.StorageScheme.All:
             i_wgt = qt_widgets.QtInputAsStorage()

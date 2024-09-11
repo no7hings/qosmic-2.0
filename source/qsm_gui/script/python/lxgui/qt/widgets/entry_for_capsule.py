@@ -209,9 +209,14 @@ class QtEntryAsCapsule(
             self._checked_indices = [True if i in [idx] else False for i in self._indices]
         else:
             if isinstance(value, (tuple, list)):
-                indices = [values_all.index(i) for i in value if i in values_all]
-                self._index_current = indices[0]
-                self._checked_indices = [True if i in indices else False for i in self._indices]
+                # value may be empty
+                if value:
+                    indices = [values_all.index(i) for i in value if i in values_all]
+                    self._index_current = indices[0]
+                    self._checked_indices = [True if i in indices else False for i in self._indices]
+                else:
+                    self._index_current = None
+                    self._checked_indices = [False for _ in self._indices]
 
         self._update_value_output_()
         self._refresh_widget_draw_()

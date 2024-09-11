@@ -21,6 +21,10 @@ from . import base as _base
 
 from . import component as _component
 
+from . import control as _control
+
+from . import resource as _resource
+
 
 class CharacterCurve(object):
     CURVE_TYPE_MAP = dict(
@@ -300,6 +304,12 @@ class AbsAdvMotionLayer(_base.MotionBase):
             i_curve_opt = qsm_mya_core.AnmCurveOpt(i_curve_path)
             i_curve_opt.create_value_at_time(start_frame, pre_root_opt.get(i_atr_src))
             i_curve_opt.set_tangent_types_at_time(start_frame, 'auto', 'step')
+
+    @classmethod
+    def find_master_layer_path(cls):
+        _ = cmds.ls('*:MASTER_LAYER')
+        if _:
+            return _[0]
 
     def __init__(self, location):
         self._location = location
@@ -795,6 +805,25 @@ class AdvChrMotionMasterLayerOpt(AbsAdvMotionLayer):
     def __init__(self, *args, **kwargs):
         super(AdvChrMotionMasterLayerOpt, self).__init__(*args, **kwargs)
 
+    def export_motion(self, file_path):
+        namespace = self.get_resource_namespace()
+        start_frame, end_frame = self.get_frame_range()
+        resource = _resource.AdvResource(namespace)
+        main_control_keys = self.ChrMasterControlMap.Default.values()
+        main_controls = [resource._control_set.get(x) for x in main_control_keys]
+        main_controls = list(filter(None, main_controls))
+
+        main_control_set = _control.AdvControlSet(main_controls)
+        main_control_set.bake_keyframes(
+            start_frame, end_frame,
+            attributes=[
+                'translateX', 'translateY', 'translateZ',
+                'rotateX', 'rotateY', 'rotateZ',
+            ]
+        )
+        resource._control_set.export_motion(file_path)
+        cmds.undo()
+
     def connect_to_resource(self, adv_resource):
         qsm_mya_core.NodeAttribute.set_as_message(
             self._location, 'qsm_resource', adv_resource.get_root()
@@ -896,11 +925,28 @@ class AdvChrMotionMasterLayerOpt(AbsAdvMotionLayer):
         for i in self.get_all_layers():
             pass
 
+    @classmethod
+    def test(cls):
+        """
+import qsm_maya_lazy_tool
+reload(qsm_maya_lazy_tool)
+qsm_maya_lazy_tool.do_reload()
+
+import qsm_maya_lazy.montage.core as c
+
+c.AdvChrMotionMasterLayerOpt.test()
+        """
+        cls(
+            cls.find_master_layer_path()
+        ).export_motion(
+            'Z:/temporaries/montage_test/test_1.jsz'
+        )
+
 
 class AdvMotionStage(object):
 
     @classmethod
-    def find_master_layer(cls):
+    def find_master_layer_path(cls):
         _ = cmds.ls('*:MASTER_LAYER', long=1)
         if _:
             for i in _:
@@ -909,7 +955,7 @@ class AdvMotionStage(object):
                         return i
 
     def __init__(self):
-        self._master_layer = self.find_master_layer()
+        self._master_layer = self.find_master_layer_path()
 
     def generate_track_data(self):
         list_ = []

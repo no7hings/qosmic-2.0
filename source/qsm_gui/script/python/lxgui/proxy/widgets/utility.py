@@ -603,7 +603,7 @@ class PrxFilterBar(gui_prx_abstracts.AbsPrxWidget):
 
 
 class PrxButtonGroup(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtLine
+    QT_WIDGET_CLS = gui_qt_wgt_utility.QtVLine
 
     def __init__(self, *args, **kwargs):
         super(PrxButtonGroup, self).__init__(*args, **kwargs)

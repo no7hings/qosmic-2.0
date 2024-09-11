@@ -124,7 +124,7 @@ class QtTrackTrim(
             start_text = painter.fontMetrics().elidedText(
                 str('{}'.format(self._node._track_model.start)),
                 QtCore.Qt.ElideMiddle,
-                self._text_rect.width()-4,
+                self._text_rect.width(),
                 QtCore.Qt.TextShowMnemonic
             )
             painter.drawText(
@@ -135,7 +135,7 @@ class QtTrackTrim(
             end_text = painter.fontMetrics().elidedText(
                 str('{}'.format(self._node._track_model.basic_end)),
                 QtCore.Qt.ElideMiddle,
-                self._text_rect.width()-4,
+                self._text_rect.width(),
                 QtCore.Qt.TextShowMnemonic
             )
             painter.drawText(
@@ -566,7 +566,7 @@ class QtTrack(
         start_text = painter.fontMetrics().elidedText(
             str(self._track_model.clip_start),
             QtCore.Qt.ElideMiddle,
-            self._time_clip_start_rect.width()-4,
+            self._time_clip_start_rect.width(),
             QtCore.Qt.TextShowMnemonic
         )
         painter.drawText(
@@ -576,7 +576,7 @@ class QtTrack(
         end_text = painter.fontMetrics().elidedText(
             str(self._track_model.clip_end),
             QtCore.Qt.ElideMiddle,
-            self._time_clip_end_rect.width()-4,
+            self._time_clip_end_rect.width(),
             QtCore.Qt.TextShowMnemonic
         )
         painter.drawText(
@@ -595,7 +595,7 @@ class QtTrack(
         count_text = painter.fontMetrics().elidedText(
             count_text_0,
             QtCore.Qt.ElideMiddle,
-            self._count_draw_rect.width()-4,
+            self._count_draw_rect.width(),
             QtCore.Qt.TextShowMnemonic
         )
         painter.drawText(
@@ -676,7 +676,7 @@ class QtTrack(
         name_text_1 = painter.fontMetrics().elidedText(
             self._track_model.key,
             QtCore.Qt.ElideMiddle,
-            self._name_draw_rect.width()-4,
+            self._name_draw_rect.width(),
             QtCore.Qt.TextShowMnemonic
         )
         painter.drawText(

@@ -549,9 +549,9 @@ class AbsQtHead1(
             )
 
 
-class QtHExpandHead1(AbsQtHead1):
+class QtHHead(AbsQtHead1):
     def __init__(self, *args, **kwargs):
-        super(QtHExpandHead1, self).__init__(*args, **kwargs)
+        super(QtHHead, self).__init__(*args, **kwargs)
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
         )

@@ -214,8 +214,6 @@ class AbsQtListWidget(
 
     def __init__(self, *args, **kwargs):
         super(AbsQtListWidget, self).__init__(*args, **kwargs)
-        self.installEventFilter(self)
-        self.viewport().installEventFilter(self)
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
         self.setResizeMode(self.Adjust)
         #
@@ -264,6 +262,9 @@ class AbsQtListWidget(
         self._grid_size = 128, 128
 
         self._item_dict = collections.OrderedDict()
+
+        self.installEventFilter(self)
+        self.viewport().installEventFilter(self)
 
     def _set_selection_use_multiply_(self):
         self.setSelectionMode(self.ExtendedSelection)
@@ -569,3 +570,13 @@ class AbsQtListWidget(
 
     def _get_item_widget_(self, item):
         return self.itemWidget(item)
+
+    def _compute_height_maximum_0_(self):
+        if self.count():
+            h = self.gridSize().height()
+            y_maximum = 0
+            for i in range(self.count()):
+                i_rect = self.visualItemRect(self.item(i))
+                y_maximum = max(y_maximum, i_rect.y())
+            return y_maximum+h+8
+        return 0

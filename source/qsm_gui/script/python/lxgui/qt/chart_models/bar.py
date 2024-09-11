@@ -1,4 +1,6 @@
 # coding:utf-8
+import os
+
 import collections
 
 import math
@@ -9,7 +11,7 @@ from ... import core as _gui_core
 
 from ..core.wrap import *
 
-from .. import core as _core
+from .. import core as _qt_core
 
 from . import base as _base
 
@@ -31,7 +33,7 @@ class ChartModelForBar(object):
 
         self._branch_sort_key = []
 
-        self._leaf_h = 16
+        self._row_h = 16
         self._margin = 2
         self._spacing = 2
 
@@ -39,10 +41,11 @@ class ChartModelForBar(object):
         self._name_width_maximum = 240
         self._value_text_width_maximum = 240
 
-        self._font = _core.QtFont.generate(size=8)
+        self._font = _qt_core.QtFont.generate(size=8)
         self._font_metrics = QtGui.QFontMetrics(self._font)
 
         self._normalization_flag = False
+        self._height_maximum = 32768
 
     def set_normalization_flag(self, boolean):
         self._normalization_flag = boolean
@@ -57,14 +60,14 @@ class ChartModelForBar(object):
     def compute_branch_coord(self, branch_index, x_offset, y_offset):
         c = self._active_data_key_count
         return (
-            x_offset, branch_index*self._leaf_h*c+y_offset
+            x_offset, branch_index*self._row_h*c+y_offset
         )
 
     def compute_leaf_coord(self, branch_index, leaf_index, x_offset=0, y_offset=0):
         c = self._active_data_key_count
         index = branch_index*c+leaf_index
         return (
-            x_offset, index*self._leaf_h+y_offset
+            x_offset, index*self._row_h+y_offset
         )
 
     def set_data_keys(self, keys):
@@ -192,7 +195,11 @@ class ChartModelForBar(object):
                         i_value_text = bsc_core.BscInteger.to_prettify_as_file_size(
                             i_value
                         )
-                i_r, i_g, i_b = bsc_core.BscTextOpt(i_data_key).to_hash_rgb(s_p=(35, 50), v_p=(65, 85))
+
+                if i_value > 0:
+                    i_r, i_g, i_b = bsc_core.BscTextOpt(i_data_key).to_hash_rgb(s_p=(35, 50), v_p=(65, 85))
+                else:
+                    i_r, i_g, i_b = 127, 127, 127
 
             # branch[i_data_key] = i_value
 
@@ -231,11 +238,11 @@ class ChartModelForBar(object):
 
         self._branches.append(branch)
 
-    def update(self, x, y, w):
+    def update(self, x, y, w, h):
         mrg = 2
         spc = 2
 
-        leaf_h = self._leaf_h
+        leaf_h = self._row_h
 
         index_w = self.compute_index_width()
         name_w = self.compute_name_width()
@@ -255,6 +262,8 @@ class ChartModelForBar(object):
                 i_index_x = mrg
                 i_branch.index = i_branch_idx+1
                 i_branch.index_text = str(i_branch_idx+1)
+                if i_branch_idx == 2047:
+                    print i_frm_y, 'AAA'
                 i_branch.index_rect.setRect(i_index_x, i_frm_y, index_w-spc, leaf_h)
                 i_name_x = i_index_x+index_w+spc
                 i_branch.name_rect.setRect(i_name_x, i_frm_y, name_w, leaf_h)
@@ -348,13 +357,12 @@ class ChartModelForBar(object):
         painter.drawText(rect, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter, text)
 
     def generate_pixmap(self, x, y, w, h):
-        h_maximum = self.compute_height_maximum()
-        self.update(x, y, w)
-        size = QtCore.QSize(w, h_maximum)
+        self.update(x, y, w, h)
+        size = QtCore.QSize(w, h)
 
         pixmap = QtGui.QPixmap(size)
         pixmap.fill(QtGui.QColor(63, 63, 63, 255))
-        painter = _core.QtPainter(pixmap)
+        painter = _qt_core.QtPainter(pixmap)
         painter._set_antialiasing_(False)
         painter.setFont(self._font)
         self._draw_branches(painter, self._branches)
@@ -440,7 +448,7 @@ class ChartModelForBar(object):
         return self._font_metrics.width(text)+16
 
     def compute_branch_height(self):
-        return self._leaf_h*self._active_data_key_count
+        return self._row_h*self._active_data_key_count
 
     def compute_index_width(self):
         if self._branches:
@@ -448,6 +456,34 @@ class ChartModelForBar(object):
             return self.compute_text_width_by(str(count))
         return 0
 
-    def compute_height_maximum(self):
-        count = len(self._branches)
-        return self._leaf_h*count*self._active_data_key_count+self._margin*2
+    def compute_height(self):
+        if self._branches:
+            count = len(self._branches)
+            h = self._row_h*count*self._active_data_key_count+self._margin*2
+            return min(h, self._height_maximum)
+        return 0
+
+    def export(self, directory_path):
+        for i_key in self._data_keys:
+            self.export_for(directory_path, i_key)
+
+    def export_for(self, directory_path, key):
+        file_path = '{}/{}.{}.png'.format(directory_path, self._name_text, key)
+
+        w, h = 1024, self.compute_height()
+        
+        self.set_active_data_keys([key])
+        pixmap = self.generate_pixmap(0, 0, w, h)
+        ext = os.path.splitext(file_path)[-1]
+        if ext:
+            if ext.lower() not in ['.png', '.jpg', '.jpeg']:
+                format_ = 'PNG'
+            else:
+                format_ = str(ext[1:]).upper()
+        else:
+            format_ = 'PNG'
+
+        pixmap.save(
+            file_path,
+            format_
+        )

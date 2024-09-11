@@ -16,7 +16,7 @@ from . import container_for_box as _container_for_box
 
 
 class AbsPrxToolGroup(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtLine
+    QT_WIDGET_CLS = gui_qt_wgt_utility.QtVLine
     QT_HEAD_CLS = None
 
     QT_HEAD_HEIGHT = 22
@@ -186,10 +186,10 @@ class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
         self._wgt_w_min, self._wgt_h_min = 12, 12
 
         qt_layout_0 = gui_qt_wgt_base.QtHBoxLayout(self._qt_widget)
-        qt_layout_0.setContentsMargins(2, 0, 2, 0)
+        qt_layout_0.setContentsMargins(0, 0, 0, 0)
         qt_layout_0.setSpacing(2)
         # header
-        self._qt_head = gui_qt_wgt_head.QtHExpandHead1()
+        self._qt_head = gui_qt_wgt_head.QtHHead()
         qt_layout_0.addWidget(self._qt_head)
         self._qt_head.expand_toggled.connect(self.set_expanded)
         self._qt_head._set_tool_tip_text_('"LMB-click" to expand "on" / "off"')

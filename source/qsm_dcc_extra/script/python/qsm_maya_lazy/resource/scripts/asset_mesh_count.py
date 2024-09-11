@@ -40,7 +40,7 @@ class AssetGpuMeshCountData(object):
                     component_dict.update(i_component_dict)
 
                 mark_set.add(i_gpu_cache_path)
-
+                # delete when finish
                 qsm_mya_core.Node.delete(i_group_path)
             return cache_dict, component_dict
 

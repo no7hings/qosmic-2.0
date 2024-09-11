@@ -31,7 +31,6 @@ s.AdvChrMotionImportOpt.append_layer(
     """
     def __init__(self, namespace):
         self._namespace = namespace
-        # self._adv_character = _core.AdvResource(self._namespace)
         self._index = 0
 
     def setup(self):
@@ -44,7 +43,7 @@ s.AdvChrMotionImportOpt.append_layer(
         self._adv_master_layer.connect_to_resource(self._adv_resource)
 
     @classmethod
-    def find_master_layer(cls):
+    def find_master_layer_path(cls):
         _ = cmds.ls('*:MASTER_LAYER')
         if _:
             return _[0]
@@ -55,7 +54,7 @@ s.AdvChrMotionImportOpt.append_layer(
         
     @classmethod
     def append_layer(cls, motion_path):
-        master_layer = cls.find_master_layer()
+        master_layer = cls.find_master_layer_path()
         if master_layer:
             opt = _core.AdvChrMotionMasterLayerOpt(master_layer)
             opt.append_layer(
@@ -72,10 +71,6 @@ s.AdvChrMotionImportOpt.append_layer(
             qsm_mya_core.Frame.set_current(end_frame)
         # flush undo
         qsm_mya_core.Undo.flush()
-
-    @classmethod
-    def replace_to_character(cls, motion_path):
-        pass
 
     @classmethod
     def test_(cls):

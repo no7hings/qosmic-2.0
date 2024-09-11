@@ -308,11 +308,14 @@ class ControlsMotionOpt(_base.MotionBase):
 
     def get_data(self):
         dict_ = {}
-        for i_path in self._path_set:
-            i_control_opt = ControlMotionOpt(i_path)
-            i_data = i_control_opt.get_data()
-            i_control_key = ControlMotionOpt.to_control_key(i_path)
-            dict_[i_control_key] = i_data
+        with bsc_log.LogProcessContext.create(maximum=len(self._path_set)) as l_p:
+            for i_path in self._path_set:
+                i_control_opt = ControlMotionOpt(i_path)
+                i_data = i_control_opt.get_data()
+                i_control_key = ControlMotionOpt.to_control_key(i_path)
+                dict_[i_control_key] = i_data
+
+                l_p.do_update()
         return dict_
 
     def export_to(self, file_path):
@@ -415,7 +418,8 @@ class ControlsBake(object):
     def __init__(self, paths):
         self._paths = paths
 
-    def execute(self, start_frame, end_frame, frame_extend=0):
+    @_mya_core.Undo.execute
+    def execute(self, start_frame, end_frame, attributes, frame_extend=0, **kwargs):
         """
 bakeResults
 -simulation true
@@ -433,8 +437,7 @@ bakeResults
 -shape true
 {"sam_Skin:Main"};
         """
-        cmds.bakeResults(
-            self._paths,
+        options = dict(
             time=(start_frame-frame_extend, end_frame+frame_extend),
             simulation=1,
             sampleBy=1,
@@ -448,8 +451,41 @@ bakeResults
             minimizeRotation=1,
             controlPoints=0,
             shape=0,
+            attribute=attributes
+        )
+
+        options.update(kwargs)
+        cmds.bakeResults(
+            self._paths,
+            **options
+        )
+        # remove non change frames
+        self._simplify(start_frame, end_frame, attributes)
+        # filter
+        curves = _mya_core.AnimCurves.get_all_from(self._paths)
+        cmds.filterCurve(
+            curves,
+            filter='keyReducer',
+            precisionMode=1,
+            precision=2.5,
+        )
+
+    def _simplify(self, start_frame, end_frame, attributes):
+        """
+simplify -timeTolerance 0.05 -floatTolerance 0.05 -valueTolerance 0.01 {"nurbsCircle1.visibility", "nurbsCircle1.translateX", "nurbsCircle1.translateY", "nurbsCircle1.translateZ", "nurbsCircle1.rotateX", "nurbsCircle1.rotateY", "nurbsCircle1.rotateZ", "nurbsCircle1.scaleX", "nurbsCircle1.scaleY", "nurbsCircle1.scaleZ"};
+        """
+        options = dict(
+            time=(start_frame, end_frame),
+            timeTolerance=.05,
+            floatTolerance=.05,
+            valueTolerance=0.01,
+            attribute=attributes
+        )
+        cmds.simplify(
+            self._paths,
+            **options
         )
 
     @classmethod
     def test(cls):
-        cls(['sam_Skin:FKKnee_R', 'sam_Skin:FKKnee_L']).execute(0, 32)
+        cls(['nurbsCircle1']).execute(0, 32)

@@ -50,7 +50,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
 
     def node_selection_fnc(self):
         list_ = []
-        prx_items = self._result_list_view.get_all_selected_items()
+        prx_items = self._result_list_view.get_selected_items()
         for i_prx_item in prx_items:
             i_render_node_opt = i_prx_item.get_gui_dcc_obj(
                 namespace=self.GUI_NAMESPACE

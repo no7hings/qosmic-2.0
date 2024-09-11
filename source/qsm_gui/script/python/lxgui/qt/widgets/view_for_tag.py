@@ -174,6 +174,9 @@ class _QtTagNode(
         self.setFixedWidth(fix_w)
 
     def _generate_pixmap_cache_(self):
+        if self.isHidden():
+            return
+
         size = QtCore.QSize(self.width(), self.height())
         self._pixmap_cache = QtGui.QPixmap(size)
         painter = _qt_core.QtPainter(self._pixmap_cache)
@@ -195,7 +198,7 @@ class _QtTagNode(
         text = painter.fontMetrics().elidedText(
             self._text,
             QtCore.Qt.ElideMiddle,
-            self._text_draw_rect.width()-4,
+            self._text_draw_rect.width(),
             QtCore.Qt.TextShowMnemonic
         )
         painter._set_text_color_([self._text_color, self._text_color_checked][self._is_hovered or self._is_checked])
@@ -208,7 +211,7 @@ class _QtTagNode(
         number_text = painter.fontMetrics().elidedText(
             self._number_text,
             QtCore.Qt.ElideMiddle,
-            self._number_draw_rect.width()-4,
+            self._number_draw_rect.width(),
             QtCore.Qt.TextShowMnemonic
         )
         painter.drawText(

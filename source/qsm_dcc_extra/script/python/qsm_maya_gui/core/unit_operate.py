@@ -126,7 +126,7 @@ class PrxTreeviewUnitForResourceOpt(
 
         # result = w.get_result()
         if result is True:
-            _ = self._prx_tree_view.get_all_selected_items()
+            _ = self._prx_tree_view.get_selected_items()
             for i in _:
                 i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
                 i_reference_opt = i_resource.reference_opt
@@ -135,7 +135,7 @@ class PrxTreeviewUnitForResourceOpt(
             self._page.do_gui_refresh_all()
 
     def do_dcc_duplicate_resources(self):
-        _ = self._prx_tree_view.get_all_selected_items()
+        _ = self._prx_tree_view.get_selected_items()
         for i in _:
             i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
             i_reference_opt = i_resource.reference_opt
@@ -144,7 +144,7 @@ class PrxTreeviewUnitForResourceOpt(
         self._page.do_gui_refresh_all()
 
     def do_dcc_reload_resources(self):
-        _ = self._prx_tree_view.get_all_selected_items()
+        _ = self._prx_tree_view.get_selected_items()
         for i in _:
             i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
             i_reference_opt = i_resource.reference_opt
@@ -153,7 +153,7 @@ class PrxTreeviewUnitForResourceOpt(
         self._page.do_gui_refresh_all(force=True)
 
     def do_dcc_unload_resources(self):
-        _ = self._prx_tree_view.get_all_selected_items()
+        _ = self._prx_tree_view.get_selected_items()
         for i in _:
             i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
             i_reference_opt = i_resource.reference_opt
@@ -162,11 +162,11 @@ class PrxTreeviewUnitForResourceOpt(
         self._page.do_gui_refresh_all(force=True)
 
     def do_dcc_replace_references(self):
-        file_path = gui_core.GuiDialogForFile.open_file(
+        file_path = gui_core.GuiStorageDialog.open_file(
             ext_filter='All File (*.ma *.mb)', parent=self._window._qt_widget
         )
         if file_path:
-            _ = self._prx_tree_view.get_all_selected_items()
+            _ = self._prx_tree_view.get_selected_items()
             for i in _:
                 i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
                 i_reference_opt = i_resource.reference_opt
@@ -221,7 +221,7 @@ class PrxTreeviewUnitForResourceOpt(
         isolate_select_opt = qsm_mya_core.ViewPanelIsolateSelectOpt(panel_current)
         isolate_select_opt.set_enable(boolean)
         if boolean is True:
-            _ = self._prx_tree_view.get_all_selected_items()
+            _ = self._prx_tree_view.get_selected_items()
             for i in _:
                 i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
                 i_roots = i_resource.get_all_for_isolate_select()
@@ -230,7 +230,7 @@ class PrxTreeviewUnitForResourceOpt(
     def do_dcc_isolate_select_add_resources(self):
         panel_current = qsm_mya_core.ViewPanels.get_current_name()
         isolate_select_opt = qsm_mya_core.ViewPanelIsolateSelectOpt(panel_current)
-        _ = self._prx_tree_view.get_all_selected_items()
+        _ = self._prx_tree_view.get_selected_items()
         for i in _:
             i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
             i_roots = i_resource.get_all_for_isolate_select()
@@ -239,7 +239,7 @@ class PrxTreeviewUnitForResourceOpt(
     def do_dcc_isolate_select_remove_resources(self):
         panel_current = qsm_mya_core.ViewPanels.get_current_name()
         isolate_select_opt = qsm_mya_core.ViewPanelIsolateSelectOpt(panel_current)
-        _ = self._prx_tree_view.get_all_selected_items()
+        _ = self._prx_tree_view.get_selected_items()
         for i in _:
             i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
             i_roots = i_resource.get_all_for_isolate_select()
@@ -580,13 +580,13 @@ class PrxTreeviewUnitForResourceOpt(
         self._pull_cache()
 
     def get_current_obj(self):
-        _ = self._prx_tree_view.get_all_selected_items()
+        _ = self._prx_tree_view.get_selected_items()
         if _:
             return _[-1].get_gui_dcc_obj(self.NAMESPACE)
 
     def gui_get_selected_resources(self):
         list_ = []
-        _ = self._prx_tree_view.get_all_selected_items()
+        _ = self._prx_tree_view.get_selected_items()
         for i in _:
             i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
             if i_resource is not None:
@@ -604,7 +604,7 @@ class PrxTreeviewUnitForResourceOpt(
 
     def gui_get_selected_components(self):
         list_ = []
-        _ = self._prx_tree_view.get_all_selected_items()
+        _ = self._prx_tree_view.get_selected_items()
         for i in _:
             i_component = i.get_gui_dcc_obj(self.NAMESPACE_FOR_COMPONENT)
             if i_component is not None:

@@ -1,13 +1,11 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
-import lxbasic.pinyin as bsc_pinyin
-
 from ... import core as _gui_core
 
 from ..core.wrap import *
 
-from .. import core as _core
+from .. import core as _qt_core
 
 from . import base as _base
 
@@ -25,14 +23,16 @@ class ChartModelForLine(object):
 
         self._value_maximum_dict = {}
 
-        self._branch_name_width_maximum = 240
+        self._branch_name_width_maximum = 100
 
         self._name_text = None
 
-        self._font = _core.QtFont.generate(size=8)
+        self._font = _qt_core.QtFont.generate(size=8)
         self._font_metrics = QtGui.QFontMetrics(self._font)
 
         self._normalization_flag = False
+
+        self._width_maximum = 32768
 
     def set_normalization_flag(self, boolean):
         self._normalization_flag = boolean
@@ -224,9 +224,10 @@ class ChartModelForLine(object):
             return 0
         return 0
 
-    def compute_width_maximum(self):
+    def compute_width(self):
         if self._branches:
-            return len(self._branches)*self.compute_branch_width()
+            w = len(self._branches)*self.compute_branch_width()
+            return min(w, self._width_maximum)
         return 0
     
     def compute_value_maximum_at(self, key):
@@ -300,7 +301,7 @@ class ChartModelForLine(object):
         size = QtCore.QSize(w, h)
         pixmap = QtGui.QPixmap(size)
         pixmap.fill(QtGui.QColor(63, 63, 63, 255))
-        painter = _core.QtPainter(pixmap)
+        painter = _qt_core.QtPainter(pixmap)
         painter._set_font_(self._font)
         painter._set_antialiasing_(True)
         self._draw_branches(painter, self._branches)

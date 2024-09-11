@@ -37,14 +37,14 @@ class QtChartForSprcTask(QtWidgets.QWidget):
 
     @qt_slot(int)
     def _on_progress_started_(self, maximum):
-        self._progress_model.append_maximum(maximum)
+        self._data_model.append_maximum(maximum)
         self._refresh_widget_all_()
 
     @qt_slot(float)
     def _on_progress_update_(self, percent):
-        result = self._progress_model.update()
+        result = self._data_model.update()
         self._percent_pre = self._percent
-        self._percent = self._progress_model.get_percent()
+        self._percent = self._data_model.get_percent()
         self._progress_index = 0
         if result is True:
             self._refresh_widget_all_()
@@ -114,8 +114,8 @@ class QtChartForSprcTask(QtWidgets.QWidget):
         self.killed.emit()
 
     @qt_slot(dict)
-    def _on_resource_usage_update_(self, dict_):
-        memory_size = dict_['memory_size']
+    def _on_system_resource_usage_update_(self, data):
+        memory_size = data['memory_size']
         self._sprc_memory_sizes.append(memory_size)
 
     def _refresh_widget_all_(self):
@@ -137,7 +137,7 @@ class QtChartForSprcTask(QtWidgets.QWidget):
         prc_x, prc_y = x+2, y+2
         prc_w, prc_h = w-4-btn_w, h-4
 
-        p_b_w_a = 10
+        p_b_w_a = 20
         p_b_w_b = prc_w-p_b_w_a
 
         index = min(self._progress_index, 10)
@@ -145,17 +145,24 @@ class QtChartForSprcTask(QtWidgets.QWidget):
         p_d = sum([(1.0/(2**i))*d for i in range(index)])
         if self._status == self.Status.Completed:
             self._percent_text = '100%'
-            self._processing_draw_rect.setRect(
+            self._progress_draw_rect.setRect(
                 prc_x, prc_y, prc_w, prc_h
             )
         else:
-            self._percent_text = '%3d%%'%(int((self._percent_pre+p_d)*100))
-            self._processing_draw_rect.setRect(
+            self._percent_text = '%3d%%' % (int((self._percent_pre+p_d)*100))
+            self._progress_draw_rect.setRect(
                 prc_x, prc_y, p_b_w_a+int(p_b_w_b*(self._percent_pre+p_d)), prc_h
             )
 
-        self._text_draw_rect.setRect(
-            x+2, y+2, w-4-btn_w, h-4
+        self._main_text = self._generate_main_text_()
+        main_txt_w = QtGui.QFontMetrics(self._text_font).width(self._main_text)+8
+        self._main_text_draw_rect.setRect(
+            x+2, y+3, main_txt_w, h-6
+        )
+
+        percent_txt_w = QtGui.QFontMetrics(self._text_font).width(self._percent_text)+8
+        self._percent_text_draw_rect.setRect(
+            w-percent_txt_w-2, y+3, percent_txt_w, h-6
         )
 
     def _do_progress_started_(self, maximum):
@@ -166,6 +173,7 @@ class QtChartForSprcTask(QtWidgets.QWidget):
 
     def _do_stop_(self):
         self._update_timer.stop()
+
         self._finish_timestamp = bsc_core.BscSystem.generate_timestamp()
         self._refresh_widget_all_()
 
@@ -196,14 +204,18 @@ class QtChartForSprcTask(QtWidgets.QWidget):
         )
         self.setFixedHeight(self.H)
 
-        self._progress_model = bsc_model.Progress(self)
+        self._data_model = bsc_model.Progress(self)
 
         self._start_timestamp = None
         self._finish_timestamp = None
+        self._cost_time = None
+        
+        self._timeout = None
 
         self._frame_draw_rect = QtCore.QRect()
-        self._processing_draw_rect = QtCore.QRect()
-        self._text_draw_rect = QtCore.QRect()
+        self._progress_draw_rect = QtCore.QRect()
+        self._main_text_draw_rect = QtCore.QRect()
+        self._percent_text_draw_rect = QtCore.QRect()
 
         self._status = self.Status.Waiting
         (
@@ -213,7 +225,7 @@ class QtChartForSprcTask(QtWidgets.QWidget):
         )
 
         self._update_timer = QtCore.QTimer(self)
-        self._update_timer.timeout.connect(self._refresh_processing_)
+        self._update_timer.timeout.connect(self._refresh_on_time_)
 
         self._tag_text = None
         self._text = None
@@ -256,60 +268,72 @@ class QtChartForSprcTask(QtWidgets.QWidget):
             background_color=_gui_core.GuiRgba.LightBlack,
             border_radius=3
         )
+
         if self._finish_flag is True:
             painter._draw_frame_by_rect_(
-                rect=self._processing_draw_rect,
+                rect=self._progress_draw_rect,
                 border_color=self._processing_draw_color,
                 background_color=self._processing_draw_color,
-                border_radius=3
+                border_radius=2
             )
         else:
             painter._draw_alternating_colors_by_rect_(
-                rect=self._processing_draw_rect,
+                rect=self._progress_draw_rect,
                 colors=(self._processing_draw_color, _gui_core.GuiRgba.Dim),
                 running=not self._finish_flag,
                 border_radius=2
             )
-        # percent
-        painter._draw_text_by_rect_(
-            rect=self._text_draw_rect,
-            text=self._percent_text,
-            font=self._percent_font,
-            text_color=_qt_core.QtFontColors.Light,
-            text_option=QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter,
-        )
+
+        painter._set_border_color_(QtGui.QColor(0, 0, 0, 0))
+        painter._set_background_color_(QtGui.QColor(15, 15, 15, 127))
+        painter.drawRoundedRect(self._main_text_draw_rect, 2, 2, QtCore.Qt.AbsoluteSize)
+        painter.drawRoundedRect(self._percent_text_draw_rect, 2, 2, QtCore.Qt.AbsoluteSize)
         # main
-        self._main_text = self._generate_draw_text_()
         painter._draw_text_by_rect_(
-            rect=self._text_draw_rect,
+            rect=self._main_text_draw_rect,
             text=self._main_text,
             font=self._text_font,
             text_color=_gui_core.GuiRgba.DarkWhite,
-            text_option=QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter,
+            text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
+        )
+        # percent
+        painter._draw_text_by_rect_(
+            rect=self._percent_text_draw_rect,
+            text=self._percent_text,
+            font=self._percent_font,
+            text_color=_qt_core.QtFontColors.Light,
+            text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
         )
 
     def _generate_thread_(self, widget):
         self._profile = bsc_storage.Profile.generate()
+
         self._trd = _qt_core.QtThreadForSprcTask.generate(
             widget, self
         )
+        # update per 0.1 sec
         self._update_timer.start(100)
+
         self._trd.started.connect(self._on_started_)
         self._trd.finished.connect(self._on_finished_)
         self._trd.completed.connect(self._on_completed_)
         self._trd.failed.connect(self._on_failed_)
         self._trd.killed.connect(self._on_killed_)
-        self._trd.resource_usage_update.connect(self._on_resource_usage_update_)
-        return self._trd
 
-    def _get_cost_timestamp_(self):
+        self._trd.system_resource_usage_update.connect(self._on_system_resource_usage_update_)
+        return self._trd
+    
+    def _set_timeout_(self, value):
+        self._timeout = value
+
+    def _compute_cost_time_(self):
         if self._start_timestamp is None:
             return 0
         if self._finish_timestamp is None:
             return bsc_core.BscSystem.generate_timestamp()-self._start_timestamp
         return self._finish_timestamp-self._start_timestamp
 
-    def _refresh_processing_(self):
+    def _refresh_on_time_(self):
         self._progress_index += 1
         self._refresh_widget_all_()
 
@@ -320,7 +344,7 @@ class QtChartForSprcTask(QtWidgets.QWidget):
             self.Status.Failed
         }
 
-    def _get_is_killed_(self):
+    def _is_killed_(self):
         return self._kill_flag
 
     def _set_tag_text_(self, text):
@@ -328,19 +352,15 @@ class QtChartForSprcTask(QtWidgets.QWidget):
 
     def _set_text_(self, text):
         self._text = text
-        self._main_text = self._generate_draw_text_()
+        self._main_text = self._generate_main_text_()
 
-    def _generate_draw_text_(self):
+    def _generate_main_text_(self):
+        self._cost_time = self._compute_cost_time_()
         if self._text:
             return '{} | {} | {}'.format(
                 bsc_core.auto_string(self._text),
-                bsc_core.BscInteger.second_to_time_prettify(self._get_cost_timestamp_(), mode=1),
+                bsc_core.BscInteger.second_to_time_prettify(self._cost_time, mode=1),
                 _gui_core.GuiProcessStatusMapper.MAPPER[self._status]
 
             )
-        else:
-            return bsc_core.BscInteger.second_to_time_prettify(self._get_cost_timestamp_(), mode=1)
-
-
-if __name__ == '__main__':
-    pass
+        return bsc_core.BscInteger.second_to_time_prettify(self._cost_time, mode=1)

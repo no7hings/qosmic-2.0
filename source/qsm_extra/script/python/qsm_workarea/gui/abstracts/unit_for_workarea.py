@@ -363,7 +363,7 @@ class AbsPrxUnitForWorkarea(prx_abstracts.AbsPrxWidget):
         qt_lot = qt_widgets.QtVBoxLayout(self.widget)
         qt_lot.setContentsMargins(*[0]*4)
         qt_lot.setSpacing(2)
-        # qt_lot._set_align_top_()
+        # qt_lot._set_align_as_top_()
         # label
         self._qt_title_label = qt_widgets.QtTextItem()
         qt_lot.addWidget(self._qt_title_label)

@@ -153,6 +153,9 @@ class QtListWidget(
         
         self._item_event_override_flag = False
 
+        self._item_pixmap_cache = QtGui.QPixmap()
+        self._generate_empty_pixmap_()
+
         # action = QtWidgets.QAction(self)
         # self.addAction(action)
         # # noinspection PyUnresolvedReferences
@@ -189,9 +192,11 @@ class QtListWidget(
             item = _
             menu_data = item._get_menu_data_()
             menu_content = item._get_menu_content_()
+            menu_data_generate_fnc = item._menu_data_generate_fnc
         else:
             menu_data = self._get_menu_data_()
             menu_content = self._get_menu_content_()
+            menu_data_generate_fnc = self._menu_content_generate_fnc
 
         menu = None
 
@@ -204,6 +209,12 @@ class QtListWidget(
             if menu is None:
                 menu = self.QT_MENU_CLS(self)
             menu._set_menu_data_(menu_data)
+
+        if menu_data_generate_fnc:
+            if menu is None:
+                menu = self.QT_MENU_CLS(self)
+
+            menu._set_menu_data_(menu_data_generate_fnc())
 
         if menu is not None:
             menu._popup_start_()
@@ -292,22 +303,41 @@ class QtListWidget(
                 if not i_item_widget:
                     if self._get_view_item_viewport_showable_(i_item) is True:
                         i_rect = self.visualItemRect(i_item)
-                        i_x, i_y, i_w, i_h = i_rect.x(), i_rect.y(), i_rect.width(), i_rect.height()
-                        painter._set_border_color_(
-                            _gui_core.GuiRgba.Dark
-                        )
-                        painter._set_background_color_(
-                            _gui_core.GuiRgba.Dim
-                        )
-                        painter.drawRect(
-                            QtCore.QRect(i_x+2, i_y+2, i_w-4, i_h-4)
-                        )
-
-                        painter._draw_empty_image_by_rect_(
-                            i_rect, 'placeholder/item-empty'
-                        )
+                        if painter.isActive():
+                            painter.drawPixmap(i_rect, self._item_pixmap_cache)
+                            painter.device()
 
         # super(QtListWidget, self).paintEvent(event)
+
+    def _generate_empty_pixmap_(self):
+        if self.isHidden():
+            return
+
+        size = self.gridSize()
+        self._item_pixmap_cache = QtGui.QPixmap(size)
+        self._item_pixmap_cache.fill(QtGui.QColor(*_gui_core.GuiRgba.Dim))
+        painter = _qt_core.QtPainter(self._item_pixmap_cache)
+        rect = QtCore.QRect(0, 0, size.width(), size.height())
+
+        i_x, i_y, i_w, i_h = rect.x(), rect.y(), rect.width(), rect.height()
+        painter._set_border_color_(
+            _gui_core.GuiRgba.Dark
+        )
+        painter._set_background_color_(
+            _gui_core.GuiRgba.Dim
+        )
+        painter.drawRect(
+            QtCore.QRect(i_x+2, i_y+2, i_w-4, i_h-4)
+        )
+
+        painter._draw_empty_image_by_rect_(
+            rect, 'placeholder/item-empty'
+        )
+        painter.end()
+
+    def setGridSize(self, *args, **kwargs):
+        self._generate_empty_pixmap_()
+        super(QtListWidget, self).setGridSize(*args, **kwargs)
 
     def _set_item_event_override_flag_(self, boolean):
         self._item_event_override_flag = boolean

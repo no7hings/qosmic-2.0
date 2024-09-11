@@ -74,7 +74,7 @@ class AbsGuiPrxTreeViewOpt(object):
         prx_item.set_gui_attribute('path', path)
 
     def get_current_obj(self):
-        _ = self._prx_tree_view.get_all_selected_items()
+        _ = self._prx_tree_view.get_selected_items()
         if _:
             return _[-1].get_gui_dcc_obj(self._namespace)
 
@@ -592,7 +592,7 @@ class AbsGuiPrxListViewOpt(object):
         prx_item.set_gui_attribute('path', path)
 
     def get_current_obj(self):
-        _ = self._prx_list_view.get_all_selected_items()
+        _ = self._prx_list_view.get_selected_items()
         if _:
             return _[-1].get_gui_dcc_obj(self._namespace)
 

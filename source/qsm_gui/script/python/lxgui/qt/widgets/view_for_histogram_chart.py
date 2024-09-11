@@ -5,11 +5,15 @@ from ... import core as _gui_core
 # qt
 from ..core.wrap import *
 
-from ..charts import histogram as _cht_histogram
+from ..chart_widgets import histogram as _cht_wgt_histogram
 
 from ..widgets import base as _base
 
 from ..widgets import utility as _utility
+
+from ..widgets import button as _button
+
+from ..widgets import container as _container
 
 
 class QtViewForHistogramChart(
@@ -28,7 +32,7 @@ class QtViewForHistogramChart(
     def __init__(self, *args, **kwargs):
         super(QtViewForHistogramChart, self).__init__(*args, **kwargs)
 
-        self._lot = _base.QtVBoxLayout(self)
+        self._lot = _base.QtHBoxLayout(self)
         self._lot.setSpacing(0)
         self._lot.setContentsMargins(*[2]*4)
 
@@ -36,8 +40,24 @@ class QtViewForHistogramChart(
         self._lot.addWidget(self._sca)
         self._sca._set_background_color_(_gui_core.GuiRgba.Dim)
 
-        self._histogram_chart = _cht_histogram.QtChartForHistogram()
+        self._histogram_chart = _cht_wgt_histogram.QtChartForHistogram()
         self._sca._layout.addWidget(self._histogram_chart)
+
+        right_wgt = _utility.QtVLine()
+        # right_wgt.hide()
+        right_wgt.setFixedWidth(24)
+        right_wgt._set_line_draw_enable_(True)
+        self._lot.addWidget(right_wgt)
+        right_lot = _base.QtVBoxLayout(right_wgt)
+        right_lot.setContentsMargins(*[0]*4)
+        right_lot.setSpacing(2)
+        right_lot._set_align_as_top_()
+
+        self._export_button = _button.QtIconPressButton()
+        right_lot.addWidget(self._export_button)
+        self._export_button.setFixedSize(24, 24)
+        self._export_button._set_icon_name_('tool/export')
+        self._export_button.press_clicked.connect(self._do_export_)
 
         self.installEventFilter(self)
 
@@ -54,12 +74,12 @@ class QtViewForHistogramChart(
     def _set_name_text_(self, text):
         self._histogram_chart._chart_model.set_name(text)
 
-    def _export_all_to_(self, directory_path):
-        self._histogram_chart._export_all_to_(directory_path)
+    def _export_to_(self, file_path):
+        self._histogram_chart._chart_model.export(file_path)
 
-    def _do_export_all_(self):
-        directory_path = _gui_core.GuiDialogForFile.save_directory(self)
-        if directory_path:
-            self._export_all_to_(directory_path)
-            bsc_storage.StgDirectoryOpt(directory_path).show_in_system()
+    def _do_export_(self):
+        file_path = _gui_core.GuiStorageDialog.save_file(ext_filter='All File (*.png)', parent=self)
+        if file_path:
+            self._export_to_(file_path)
+            bsc_storage.StgDirectoryOpt(file_path).show_in_system()
 

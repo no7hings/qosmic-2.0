@@ -418,7 +418,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         )
         if self.__gui_query.get_is_exists(tool_path):
             tool = self.__gui_query.get(tool_path)
-            f = gui_core.GuiDialogForFile.save_file(ext_filter='All File (*.png)', parent=self._qt_widget)
+            f = gui_core.GuiStorageDialog.save_file(ext_filter='All File (*.png)', parent=self._qt_widget)
             if f:
                 tool.save_main_icon_to_file(f)
 

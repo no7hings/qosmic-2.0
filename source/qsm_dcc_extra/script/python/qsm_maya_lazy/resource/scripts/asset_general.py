@@ -62,15 +62,12 @@ class ProcessUtils(object):
     def pre_process_0(cls, file_path):
         # find lost
         directory_path = bsc_storage.StgFileOpt(file_path).directory_path
+        # find gpu shit first
         qsm_mya_scn_core.GpuImport.find_all_gpu_files(directory_path)
+        #
         qsm_mya_core.FileReferences.search_all_from(
             [directory_path], ignore_exists=True
         )
-
-    @classmethod
-    def pre_process_1(cls, namespace):
-        # import gpu
-        GpuImport.execute(namespace)
 
     @classmethod
     def pre_process(cls, namespace, file_path):

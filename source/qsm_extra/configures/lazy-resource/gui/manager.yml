@@ -19,7 +19,7 @@ option:
             用于管理资源。
 
         size: [1280, 960]
-        item_frame_size: [142, 142]
+        item_frame_size: [162, 162]
         item_icon_frame_size: [20, 20]
         item_icon_size: [20, 20]
 
@@ -47,7 +47,7 @@ entity-actions:
                     gui_parent: '/Generate', gui_name: 'Mesh Count', gui_parent_chs: '/生成', gui_name_chs: '网格计数'
                 }
                 - 'lazy-resource-actions/node-generate-snapshot-auto': {
-                    gui_parent: '/Generate', gui_name: 'Snapshot', gui_parent_chs: '/生成', gui_name_chs: '快照'
+                    gui_parent: '/Generate', gui_name: 'Snapshot (Memory Usage)', gui_parent_chs: '/生成', gui_name_chs: '快照（内存使用）'
                 }
                 -   'lazy-resource-actions/node-generate-unit-assembly-auto': {
                     gui_parent: '/Generate', gui_name: 'Unit Assembly', gui_parent_chs: '/生成', gui_name_chs: '元素组装'

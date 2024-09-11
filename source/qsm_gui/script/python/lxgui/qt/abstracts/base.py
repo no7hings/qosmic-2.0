@@ -2581,18 +2581,18 @@ class AbsQtItemFilterDef(object):
     def _init_item_filter_extra_def_(self, widget):
         self._widget = widget
         self._item_keyword_filter_mode = self.TagFilterMode.MatchAll
-        #
+
         self._item_tag_filter_mode = self.TagFilterMode.MatchAll
         self._item_tag_filter_keys_src = set()
         self._item_tag_filter_keys_tgt = set()
-        #
+
         self._item_semantic_tag_filter_mode = self.TagFilterMode.MatchAll
         self._item_semantic_tag_filter_keys_tgt = dict()
-        #
+
         self._item_keyword_filter_keys_tgt = set()
-        #
+
         self._item_tag_filter_tgt_statistic_enable = False
-        #
+
         self._item_keyword_filter_keys_tgt_cache = None
 
     def _set_item_keyword_filter_keys_tgt_(self, keys):
@@ -2768,9 +2768,9 @@ class AbsQtViewFilterExtraDef(object):
         self._view_semantic_tag_filter_data_src = {}
         self._view_keyword_filter_data_src = []
         self._view_keyword_filter_match_items = []
-        #
+
         self._view_keyword_filter_bar = None
-        #
+
         self._view_keyword_filter_occurrence_index_current = None
 
         self._view_keyword_filter_occurrence_dict = {}
@@ -2816,32 +2816,32 @@ class AbsQtViewFilterExtraDef(object):
             if i_force_hidden_flag is True:
                 i_is_hidden = True
             else:
-                i_tag_filter_hidden_flag = False
-                i_semantic_filter_hidden_flag = False
-                i_keyword_filter_hidden_flag = False
+                i_tag_flag = False
+                i_semantic_flag = False
+                i_keyword_flag = False
                 # tag filter
                 if tag_filter_data_src:
-                    i_is_enable, i_hidden_flag = i_item._generate_item_tag_filter_tgt_args_(tag_filter_data_src)
-                    if i_is_enable is True:
-                        i_tag_filter_hidden_flag = i_hidden_flag
+                    i_enable, i_flag = i_item._generate_item_tag_filter_tgt_args_(tag_filter_data_src)
+                    if i_enable is True:
+                        i_tag_flag = i_flag
                 # semantic tag filter
                 if semantic_tag_filter_data_src:
-                    i_is_enable, i_hidden_flag = i_item._generate_item_semantic_tag_filter_tgt_args_(
+                    i_enable, i_flag = i_item._generate_item_semantic_tag_filter_tgt_args_(
                         semantic_tag_filter_data_src
                     )
-                    if i_is_enable is True:
-                        i_semantic_filter_hidden_flag = i_hidden_flag
+                    if i_enable is True:
+                        i_semantic_flag = i_flag
                 # keyword filter
                 if keyword_filter_data_src:
-                    i_is_enable, i_hidden_flag = i_item._generate_item_keyword_filter_tgt_args_(
+                    i_enable, i_flag = i_item._generate_item_keyword_filter_tgt_args_(
                         keyword_filter_data_src
                     )
-                    if i_is_enable is True:
-                        i_keyword_filter_hidden_flag = i_hidden_flag
-                        if i_keyword_filter_hidden_flag is False:
+                    if i_enable is True:
+                        i_keyword_flag = i_flag
+                        if i_keyword_flag is False:
                             self._view_keyword_filter_match_items.append(i_item)
                 # any hidden flag is True, hide this item
-                if True in [i_tag_filter_hidden_flag, i_semantic_filter_hidden_flag, i_keyword_filter_hidden_flag]:
+                if True in [i_tag_flag, i_semantic_flag, i_keyword_flag]:
                     i_is_hidden = True
                 else:
                     i_is_hidden = False

@@ -14,6 +14,7 @@ import os.path
 import random
 
 import peewee
+import six
 
 import lxbasic.core as bsc_core
 
@@ -160,60 +161,6 @@ class Stage(object):
     OPTIONS = dict()
 
     @classmethod
-    def to_count_tag(cls, count):
-        k = 1000
-        m = k**2
-        b = k**3
-        if count < 10*k:
-            return 'less_than_10k'
-        elif 10*k <= count < 50*k:
-            return '10k_to_50k'
-        elif 50*k <= count < 100*k:
-            return '50k_to_100k'
-        elif 100*k <= count < 500*k:
-            return '100k_to_500k'
-        elif 500*k <= count < k**2:
-            return '500k_to_1m'
-        elif m <= count < m*5:
-            return '1m_to_5m'
-        elif m*5 <= count < m*10:
-            return '5m_to_10m'
-        elif m*10 <= count < m*50:
-            return '10m_to_50m'
-        elif m*50 <= count < m*100:
-            return '50m_to_100m'
-        elif m*100 <= count < m*500:
-            return '100m_to_500m'
-        elif m*500 <= count < b:
-            return '500m_to_1b'
-        elif b <= count:
-            return 'more_than_1b'
-
-    @classmethod
-    def to_memory_size_tag(cls, size):
-        kb = 1024
-        mb = 1024**2
-        gb = 1024**3
-        if size < mb*500:
-            return 'less_than_500mb'
-        elif mb*500 <= size < gb*1:
-            return '500mb_to_1gb'
-        elif gb*1 <= size < gb*5:
-            return '1gb_to_5gb'
-        elif gb*5 <= size < gb*10:
-            return '5gb_to_10gb'
-        elif gb*10 <= size < gb*15:
-            return '10gb_to_15gb'
-        elif gb*15 <= size < gb*20:
-            return '15gb_to_20gb'
-        elif gb*20 <= size < gb*25:
-            return '20gb_to_25gb'
-        elif gb*25 <= size < gb*30:
-            return '25gb_to_30gb'
-        elif gb*30 <= size:
-            return 'more_than_30gb'
-
-    @classmethod
     def get_root(cls):
         if cls.ROOT is not None:
             return cls.ROOT
@@ -347,7 +294,9 @@ class Stage(object):
         )
 
     def build(self):
+        # initialize first
         self.initialize()
+
         key = self._key
         configure = bsc_resource.RscExtendConfigure.get_as_content('lazy-resource/database/{}'.format(key))
         if configure is None:
@@ -369,6 +318,18 @@ class Stage(object):
         for k, v in node_data.items():
             self.create_entity(
                 self.EntityTypes.Node, k, **v
+            )
+
+    def update_tags(self):
+        key = self._key
+        configure = bsc_resource.RscExtendConfigure.get_as_content('lazy-resource/database/{}'.format(key))
+        if configure is None:
+            raise RuntimeError()
+
+        tag_data = configure.get('entities.tags')
+        for k, v in tag_data.items():
+            self.update_entity(
+                self.EntityTypes.Tag, k, **v
             )
 
     def build_test(self, asset_type):
@@ -537,7 +498,11 @@ class Stage(object):
         if _.exists():
             entity = _.first()
             for k, v in kwargs.items():
-                exec 'entity.{} = {}'.format(k, json.dumps(v))
+                if isinstance(v, six.string_types):
+                    v = six.u('"{}"').format(v)
+                else:
+                    v = json.dumps(v)
+                exec six.u('entity.{} = {}').format(k, v)
             entity.save()
 
     def create_type_group(self, path, **kwargs):
@@ -606,6 +571,8 @@ class Stage(object):
         )
 
     def remove_assigns_below(self, path_source, path_target_root):
+        if not path_target_root.endswith('/'):
+            path_target_root += '/'
         path = '{}->{}'.format(path_source, path_target_root)
         _ = self.find_all(
             self.EntityTypes.Assign,
@@ -825,24 +792,12 @@ class Stage(object):
         if p:
             return p.value
 
-    def is_exists_for_node_tag(self, node_path, tag_path):
+    def is_exists_node_tag(self, node_path, tag_path):
         path = '{}->{}'.format(node_path, tag_path)
         _ = self.find_one(
             self.EntityTypes.Assign,
             filters=[
                 ('path', 'is', path)
-            ]
-        )
-        if _:
-            return True
-        return False
-
-    def is_exists_for_node_tag_at(self, node_path, tag_path):
-        path = '{}->{}'.format(node_path, tag_path)
-        _ = self.find_all(
-            self.EntityTypes.Assign,
-            filters=[
-                ('path', 'startswith', path)
             ]
         )
         if _:

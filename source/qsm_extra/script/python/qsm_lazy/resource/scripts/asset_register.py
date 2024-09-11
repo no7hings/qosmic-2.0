@@ -30,6 +30,9 @@ class AssetBatchRegisterOpt(object):
     def register_asset(self, asset_path, scr_type_path, maya_scene_path, task_name):
         scr_node_path = '/{}'.format('_'.join(asset_path.split('/')[1:]))
         scene_opt = bsc_storage.StgFileOpt(maya_scene_path)
+        if self._scr_stage.get_node(scr_node_path):
+            return
+
         self._scr_stage.create_node(scr_node_path, ctime=scene_opt.get_ctime(), mtime=scene_opt.get_mtime())
         self._scr_stage.create_type_assign(
             scr_node_path, scr_type_path
@@ -41,13 +44,14 @@ class AssetBatchRegisterOpt(object):
         self._scr_stage.create_tag_assign(
             scr_node_path, scr_task_tag_path
         )
+        # todo: remove this
         # assign unspecified
-        self._scr_stage.create_tag_assign(
-            scr_node_path, '/mesh_count/face/unspecified'
-        )
-        self._scr_stage.create_tag_assign(
-            scr_node_path, '/system_resource_usage/memory/unspecified'
-        )
+        # self._scr_stage.create_tag_assign(
+        #     scr_node_path, '/mesh_count/face/unspecified'
+        # )
+        # self._scr_stage.create_tag_assign(
+        #     scr_node_path, '/system_resource_usage/memory/unspecified'
+        # )
 
     def register_project(self, project_name):
         gui_name, gui_name_chs = qsm_gnl_core.QsmProject.get_name_args(project_name)
@@ -75,7 +79,7 @@ class AssetBatchRegisterOpt(object):
                 i_task = i_asset.task(self._scan_root.EntityTasks.Rig)
                 if i_task is not None:
                     i_maya_scene_path = i_task.find_result(
-                        self._scan_root.ResultPatterns.MayaRigFile
+                        self._scan_root.StoragePatterns.MayaRigFile
                     )
                     if i_maya_scene_path is not None:
                         i_asset_path = i_asset.path
@@ -92,7 +96,7 @@ class AssetBatchRegisterOpt(object):
                 i_task = i_asset.task(self._scan_root.EntityTasks.Rig)
                 if i_task is not None:
                     i_maya_scene_path = i_task.find_result(
-                        self._scan_root.ResultPatterns.MayaRigFile
+                        self._scan_root.StoragePatterns.MayaRigFile
                     )
                     if i_maya_scene_path is not None:
                         i_asset_path = i_asset.path
@@ -109,7 +113,7 @@ class AssetBatchRegisterOpt(object):
                 i_task = i_asset.task(self._scan_root.EntityTasks.Model)
                 if i_task is not None:
                     i_maya_scene_path = i_task.find_result(
-                        self._scan_root.ResultPatterns.MayaModelFIle
+                        self._scan_root.StoragePatterns.MayaModelFIle
                     )
                     if i_maya_scene_path is not None:
                         i_asset_path = i_asset.path

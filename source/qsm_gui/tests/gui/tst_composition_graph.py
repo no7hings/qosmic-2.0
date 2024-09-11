@@ -11,7 +11,7 @@ import lxgui.proxy.graphs as gui_prx_graphs
 class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
-        self._prx_wgt = gui_prx_graphs.PrxTrackView()
+        self._prx_wgt = gui_prx_graphs.PrxTrackWidget()
         self.add_widget(self._prx_wgt.widget)
 
         self._prx_wgt.translate_graph_to(0, 0)

@@ -42,7 +42,7 @@ class PrxTreeView(
     QT_WIDGET_CLS = _qt_widget_entry_frame.QtEntryFrame
     QT_VIEW_CLS = _qt_widget_view_for_tree.QtTreeWidget
     #
-    FILTER_MAXIMUM = 50
+    FILTER_COMPLETION_MAXIMUM = 50
 
     def __init__(self, *args, **kwargs):
         super(PrxTreeView, self).__init__(*args, **kwargs)
@@ -262,7 +262,7 @@ class PrxTreeView(
     def _get_selected_items_(self):
         return self.view.selectedItems()
 
-    def get_all_selected_items(self):
+    def get_selected_items(self):
         return [i.gui_proxy for i in self._get_selected_items_()]
 
     def get_selected_item_widgets(self):
@@ -455,7 +455,7 @@ class PrxTreeView(
             _ = bsc_core.BscFnmatch.filter(
                 self._keyword_filter_completion_cache, six.u('*{}*').format(keyword)
             )
-            return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_MAXIMUM]
+            return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_COMPLETION_MAXIMUM]
         return []
 
     def restore_filter(self):

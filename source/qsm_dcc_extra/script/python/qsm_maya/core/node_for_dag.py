@@ -100,6 +100,14 @@ class DagNode(_node.Node):
 
     @classmethod
     def parent_to(cls, path, parent_path, relative=False):
+        path = cls.to_path(path)
+        if not path:
+            return
+
+        parent_path_ = cls.to_parent_path(path)
+        if parent_path_ == parent_path:
+            return path
+
         if not parent_path:
             return path
 

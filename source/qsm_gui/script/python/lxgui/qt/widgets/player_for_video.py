@@ -114,7 +114,7 @@ class QtVideoPlayWidget(
     def _do_enter_(self):
         if self._play_flag is True:
             self._video_play_flag = True
-            self._wait_play_thread.start(self.WAIT_PLAY_DELAY)
+            self._wait_play_timer.start(self.WAIT_PLAY_DELAY)
 
             self._refresh_widget_draw_()
 
@@ -122,7 +122,7 @@ class QtVideoPlayWidget(
         if self._play_flag is True:
             self._video_play_flag = False
             self._is_playing = False
-            self._wait_play_thread.stop()
+            self._wait_play_timer.stop()
             self._play_thread.do_stop()
 
             self._refresh_widget_draw_()
@@ -149,7 +149,7 @@ class QtVideoPlayWidget(
 
                 self._frame_index = frame_index
 
-            self._wait_play_thread.start(self.WAIT_PLAY_DELAY_FOR_HOVER)
+            self._wait_play_timer.start(self.WAIT_PLAY_DELAY_FOR_HOVER)
 
             self._refresh_widget_draw_()
 
@@ -195,8 +195,8 @@ class QtVideoPlayWidget(
 
         self._video_play_flag = False
 
-        self._wait_play_thread = QtCore.QTimer(self)
-        self._wait_play_thread.timeout.connect(self._do_play_)
+        self._wait_play_timer = QtCore.QTimer(self)
+        self._wait_play_timer.timeout.connect(self._do_play_)
         self._play_thread = _PlayThread(self)
         self._play_thread.timeout.connect(self._play_next_)
         self._is_playing = False
@@ -333,7 +333,7 @@ class QtVideoPlayWidget(
         if self._play_flag is True:
             self._is_playing = True
 
-            self._wait_play_thread.stop()
+            self._wait_play_timer.stop()
 
             self._play_thread.do_start()
 

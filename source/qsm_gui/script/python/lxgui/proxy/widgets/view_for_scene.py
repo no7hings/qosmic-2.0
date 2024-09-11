@@ -80,7 +80,7 @@ class PrxSceneView(
 
         self._item_dict = self._qt_view._item_dict
 
-        self._qt_view.item_widget_press_dbl_clicked.connect(lambda x: self._on_open_scene(x._get_path_text_()))
+        self._qt_view.item_widget_press_dbl_clicked.connect(lambda x: self._on_open_latest_scene(x._get_path_text_()))
 
     def set_root(self, path):
         self._root = path
@@ -192,6 +192,9 @@ class PrxSceneView(
         ptn_opt = ptn_opt.update_variants_to(name=name)
         return ptn_opt.get_exists_results()
 
+    def get_scene_path_latest_for(self, name):
+        pass
+
     def save_new(self):
         name = _gui_core.GuiApplication.exec_input_dialog(
             type='string', info='Entry name for create...', title='New Scene'
@@ -208,20 +211,25 @@ class PrxSceneView(
                     'Name is exists.'
                 )
 
-    def _generate_menu_data(self, widget, scene_paths):
-        sub_menu_data = []
-        for i_file_path in scene_paths:
-            sub_menu_data.append(
-                (
-                    bsc_storage.StgFileOpt(i_file_path).name,
-                    'file/file',
-                    functools.partial(self._on_open_scene, i_file_path)
-                ),
-            )
-        return [
-            ['Open File', 'file/folder-open', sub_menu_data],
-            ('Open Folder', 'file/folder', lambda: bsc_storage.StgFileOpt(scene_paths[0]).show_in_system())
-        ]
+    def _open_file_menu_data_generate_fnc(self, name):
+        scene_paths = self.get_scene_paths_for(name)
+        if scene_paths:
+            # clip to 20
+            scene_paths = scene_paths[-20:]
+            sub_menu_data = []
+            for i_file_path in scene_paths:
+                sub_menu_data.append(
+                    (
+                        bsc_storage.StgFileOpt(i_file_path).name,
+                        'file/file',
+                        functools.partial(self._on_open_scene, i_file_path)
+                    ),
+                )
+            return [
+                ['Open File', 'file/folder-open', sub_menu_data],
+                ('Open Folder', 'file/folder', lambda: bsc_storage.StgFileOpt(scene_paths[0]).show_in_system())
+            ]
+        return []
 
     def _on_open_scene(self, scene_path):
         if self._open_scene_fnc is not None:
@@ -229,6 +237,18 @@ class PrxSceneView(
             result = self._open_scene_fnc(scene_path)
             if result is True:
                 self.update_current_by_scene_path(scene_path)
+
+    def _on_open_latest_scene(self, scene_path):
+        if self._open_scene_fnc is not None:
+            # widget._set_status_(widget.ValidationStatus.Warning)
+            ptn_opt = bsc_core.BscStgParseOpt(self._scene_pattern)
+            variants = ptn_opt.get_variants(scene_path)
+            scene_paths = self.get_scene_paths_for(variants['name'])
+            if scene_paths:
+                scene_path_latest = scene_paths[-1]
+                result = self._open_scene_fnc(scene_path_latest)
+                if result is True:
+                    self.update_current_by_scene_path(scene_path_latest)
 
     def _on_save_scene(self, scene_path):
         if self._save_scene_fnc is not None:
@@ -270,6 +290,7 @@ class PrxSceneView(
             qt_item_widget._set_name_text_(
                 bsc_storage.StgFileOpt(scene_path_current).name
             )
-            qt_item._set_menu_data_(self._generate_menu_data(qt_item_widget, scene_paths))
+            qt_item._set_menu_data_generate_fnc_(functools.partial(self._open_file_menu_data_generate_fnc, name))
+            # qt_item._set_menu_data_(self._generate_menu_data(qt_item_widget, scene_paths))
         self._item_dict[directory_path] = qt_item_widget
         return qt_item_widget

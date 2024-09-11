@@ -28,7 +28,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
             i_dict = {}
             for j in range(random.choice(leaf_counts)):
                 i_dict['leaf_{}'.format(j)] = random.choice(values)
-            dict_['branch_{}'.format(i)] = i_dict
+            dict_['branch_{}'.format(i*'A')] = i_dict
 
         return dict_
 

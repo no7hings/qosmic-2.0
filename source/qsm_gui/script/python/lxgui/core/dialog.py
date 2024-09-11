@@ -113,7 +113,7 @@ class GuiDialogForChooseAsBubble(object):
 
 
 # noinspection PyArgumentList
-class GuiDialogForFile(object):
+class GuiStorageDialog(object):
     @classmethod
     def open_file(cls, ext_filter='All File (*.*)', parent=None):
         from ..qt import core as gui_qt_core

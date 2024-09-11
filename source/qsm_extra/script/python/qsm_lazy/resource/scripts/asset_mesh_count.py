@@ -47,11 +47,27 @@ class AssetMeshCountGenerateOpt(_asset_general.AssetGeneral):
         scr_stage = _scr_core.Stage(self._scr_stage_key)
         # remove exists
         scr_stage.remove_assigns_below(
-            self._scr_node_path, '/mesh_count/face/'
+            self._scr_node_path, '/mesh_count/face'
+        )
+
+        scr_stage.remove_assigns_below(
+            self._scr_node_path, '/mesh_count/geometry'
+        )
+
+        scr_stage.remove_assigns_below(
+            self._scr_node_path, '/mesh_count/non_cache_face_percentage'
         )
 
         scr_stage.create_tag_assign(
             self._scr_node_path, '/mesh_count/face/unspecified'
+        )
+
+        scr_stage.create_tag_assign(
+            self._scr_node_path, '/mesh_count/geometry/unspecified'
+        )
+
+        scr_stage.create_tag_assign(
+            self._scr_node_path, '/mesh_count/non_cache_face_percentage/unspecified'
         )
     
     def register(self):
@@ -64,57 +80,60 @@ class AssetMeshCountGenerateOpt(_asset_general.AssetGeneral):
         image_path = qsm_gnl_core.MayaCache.generate_asset_snapshot_file(file_path, version=self.API_VERSION)
 
         data = bsc_storage.StgFileOpt(cache_path).set_read()
+        
+        mesh_count_data = data['mesh_count']
+        mesh_count_data_opt = _asset_general.MeshCountDataOpt(mesh_count_data)
 
         scr_stage.create_or_update_parameters(
             self._scr_node_path, 'mesh_count', cache_path
         )
         # use triangle
-        mesh_triangle = data['mesh_count']['all']['triangle']
+        triangle_count = mesh_count_data_opt.triangle
+        geometry_count = mesh_count_data_opt.geometry_all
+        non_cache_face_percentage = mesh_count_data_opt.non_cache_face_percentage
 
         scr_stage.create_or_update_parameters(
             self._scr_node_path,
             'mesh_count.face',
-            str(data['mesh_count']['all']['face'])
+            str(mesh_count_data_opt.face)
         )
 
         scr_stage.create_or_update_parameters(
             self._scr_node_path,
             'mesh_count.face_per_world_area',
-            str(data['mesh_count']['all']['face_per_world_area'])
+            str(mesh_count_data_opt.face_per_world_area)
         )
 
         scr_stage.create_or_update_parameters(
             self._scr_node_path,
             'mesh_count.triangle',
-            str(mesh_triangle)
+            str(triangle_count)
         )
         scr_stage.create_or_update_parameters(
             self._scr_node_path,
             'mesh_count.triangle_per_world_area',
-            str(data['mesh_count']['all']['triangle_per_world_area'])
+            str(mesh_count_data_opt.triangle_per_world_area)
         )
 
         scr_stage.create_or_update_parameters(
             self._scr_node_path,
             'mesh_count.geometry_all',
-            str(data['mesh_count']['all']['geometry_all'])
+            str(geometry_count)
         )
         scr_stage.create_or_update_parameters(
             self._scr_node_path,
             'mesh_count.geometry_visible',
-            str(data['mesh_count']['all']['geometry_visible'])
+            str(mesh_count_data_opt.geometry_visible)
+        )
+        scr_stage.create_or_update_parameters(
+            self._scr_node_path,
+            'mesh_count.non_cache_face_percentage',
+            non_cache_face_percentage
         )
 
-        count_tag = scr_stage.to_count_tag(mesh_triangle)
-        tag_path = '/mesh_count/face/{}'.format(count_tag)
-        # remove exists
-        scr_stage.remove_assigns_below(
-            self._scr_node_path, '/mesh_count/face/'
-        )
-
-        scr_stage.create_tag_assign(
-            self._scr_node_path, tag_path
-        )
+        self.register_mesh_face_count_tag(triangle_count)
+        self.register_mesh_geometry_count_tag(geometry_count)
+        self.register_mesh_cache_percentage_tag(non_cache_face_percentage)
 
         scr_stage.upload_node_preview(
             self._scr_node_path, image_path

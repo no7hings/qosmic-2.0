@@ -91,7 +91,7 @@ class _GuiTaskOpt(
 
     def gui_get_selected_prc_task_args(self):
         list_ = []
-        _ = self._prx_tree_view.get_all_selected_items()
+        _ = self._prx_tree_view.get_selected_items()
         for i in _:
             i_task = i.get_gui_dcc_obj(self.TASK_NAMESPACE)
             if i_task is not None:
@@ -100,7 +100,7 @@ class _GuiTaskOpt(
     
     def gui_get_selected_prc_tasks(self):
         list_ = []
-        _ = self._prx_tree_view.get_all_selected_items()
+        _ = self._prx_tree_view.get_selected_items()
         for i in _:
             i_task = i.get_gui_dcc_obj(self.TASK_NAMESPACE)
             if i_task is not None:

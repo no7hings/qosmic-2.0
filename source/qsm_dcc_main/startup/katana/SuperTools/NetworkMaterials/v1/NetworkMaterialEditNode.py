@@ -1299,7 +1299,7 @@ class NetworkMaterialEditNode(NetworkMaterialBaseNode):
         location attrs to match the internal scene graph location attrs.
 
         Must take care to ensure no edits are lost just because the two scene
-        graphs happen to agree at the moment (i.e. if upstream NMC is edited
+        graph_widgets happen to agree at the moment (i.e. if upstream NMC is edited
         to match this NME we do not re-establish syncing between them).
 
         @type gb: C{FnAttribute.GroupBuilder}

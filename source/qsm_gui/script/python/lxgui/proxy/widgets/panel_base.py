@@ -122,6 +122,7 @@ class PrxBasePage(_prx_abstracts.AbsPrxWidget):
     PAGE_KEY = None
 
     UNIT_CLASS_DICT = {}
+    UNIT_CLASSES = []
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxBasePage, self).__init__(*args, **kwargs)
@@ -146,11 +147,14 @@ class PrxBasePage(_prx_abstracts.AbsPrxWidget):
     def generate_unit_for(self, key):
         return self.UNIT_CLASS_DICT[key](self._window, self, self._session)
 
+    def _to_unit_instance(self, cls):
+        return cls(self._window, self, self._session)
+
 
 class PrxBaseUnit(_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
 
-    PAGE_KEY = None
+    UNIT_KEY = None
 
     def __init__(self, window, page, session, *args, **kwargs):
         super(PrxBaseUnit, self).__init__(*args, **kwargs)
@@ -217,6 +221,7 @@ class PrxBaseSubPanel(_window_base.PrxBaseWindow):
         self._window = window
         if self._window is not None:
             self._qt_widget.setWindowFlags(gui_qt_core.QtCore.Qt.Tool)
+
         self._session = session
 
         self._sub_window = self

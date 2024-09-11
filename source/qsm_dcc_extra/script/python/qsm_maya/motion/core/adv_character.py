@@ -135,14 +135,17 @@ class AdvCharacterMotionOpt(object):
 
         control_key_excludes = kwargs.pop('control_key_excludes') if 'control_key_excludes' in kwargs else None
 
-        for i_control_key, i_motion in data.items():
-            if control_key_excludes:
-                if i_control_key in control_key_excludes:
-                    continue
+        with bsc_log.LogProcessContext.create(maximum=len(data)) as l_p:
+            for i_control_key, i_motion in data.items():
+                if control_key_excludes:
+                    if i_control_key in control_key_excludes:
+                        continue
 
-            i_control_path = self.find_one_control(i_control_key)
-            if i_control_path is not None:
-                _control.ControlMotionOpt(i_control_path).apply_data(i_motion, **kwargs)
+                i_control_path = self.find_one_control(i_control_key)
+                if i_control_path is not None:
+                    _control.ControlMotionOpt(i_control_path).apply_data(i_motion, **kwargs)
+
+                l_p.do_update()
 
     def transfer_to(self, namespace, **kwargs):
         if 'control_set_includes' in kwargs:

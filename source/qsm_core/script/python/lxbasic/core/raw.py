@@ -413,6 +413,8 @@ class RawValueMtd(object):
     @classmethod
     def to_percent_prettify(cls, value, maximum, round_count=3):
         round_range = 100
+        if value == 0:
+            return 0
         if maximum > 0:
             percent = round(float(value)/float(maximum), round_count)*round_range
         else:

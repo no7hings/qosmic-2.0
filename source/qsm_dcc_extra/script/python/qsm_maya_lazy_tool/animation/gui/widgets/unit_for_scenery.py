@@ -75,7 +75,7 @@ class PrxToolbarForSceneryReference(
         )
         self._asset_load_qt_button.setMaximumWidth(64)
         self._asset_load_qt_button.setMinimumWidth(64)
-        self._asset_load_qt_button.press_clicked.connect(self._do_dcc_load_asset)
+        self._asset_load_qt_button.press_clicked.connect(self._on_dcc_load_asset)
         self._asset_load_qt_button._set_action_enable_(False)
 
         self._asset_prx_input.connect_input_change_accepted_to(self._do_gui_refresh_asset_for)
@@ -84,7 +84,7 @@ class PrxToolbarForSceneryReference(
 
         self._do_gui_refresh_asset_for(self._asset_prx_input.get_path())
 
-    def _do_dcc_load_asset(self):
+    def _on_dcc_load_asset(self):
         if self._asset_path is not None:
             file_opt = bsc_storage.StgFileOpt(self._asset_path)
             count = self._count_input._get_value_()
@@ -104,7 +104,7 @@ class PrxToolbarForSceneryReference(
                 task = entity.task(self._scan_root.EntityTasks.Model)
                 if task is not None:
                     result = task.find_result(
-                        self._scan_root.ResultPatterns.MayaModelFIle
+                        self._scan_root.StoragePatterns.MayaModelFIle
                     )
                     if result is not None:
                         self._asset_path = result

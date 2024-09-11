@@ -32,13 +32,14 @@ class Main(object):
             'triangle',
             'triangle_per_world_area',
             'geometry_all',
-            'geometry_visible'
+            'geometry_visible',
+            'non_cache_face_percentage',
         ]
         dict_ = {}
         with window.gui_progressing(maximum=len(scr_entities)) as g_p:
             for i_entity in scr_entities:
                 i_entity_path = i_entity.path
-                i_is_rig = self._scr_stage.is_exists_for_node_tag(
+                i_is_rig = self._scr_stage.is_exists_node_tag(
                     i_entity_path, '/task/rig'
                 )
                 if i_is_rig:
@@ -47,6 +48,7 @@ class Main(object):
                         triangle_per_world_area=10,
                         geometry_all=1000,
                         geometry_visible=1000,
+                        non_cache_face_percentage=100,
                     )
                 else:
                     i_value_limit = dict(
@@ -54,6 +56,7 @@ class Main(object):
                         triangle_per_world_area=2,
                         geometry_all=10000,
                         geometry_visible=10000,
+                        non_cache_face_percentage=25,
                     )
                 i_dict = {
                     'VALUE_LIMIT': i_value_limit
@@ -85,16 +88,30 @@ class Main(object):
     def show_dialog(self, data):
         chart_view = qt_widgets.QtViewForBarChart()
         chart_view._set_name_text_('Mesh Count')
+
+        if gui_core.GuiUtil.get_language() == 'chs':
+            data_key_names = [
+                '三角面', '三角面（单位面积）',
+                '模型（所有）', '模型（显示）',
+                '非缓存面数百分比（GPU）',
+            ]
+        else:
+            data_key_names = [
+                'Triangle', 'Triangle (Unit area)',
+                'Geometry (All)', 'Geometry (Visible)',
+                'Non-cache Face Percentage (GPU)',
+            ]
+
         chart_view._set_data_(
             data,
             [
-                # 'face',
-                # 'face_per_world_area',
                 'triangle',
                 'triangle_per_world_area',
                 'geometry_all',
-                'geometry_visible'
-            ]
+                'geometry_visible',
+                'non_cache_face_percentage'
+            ],
+            data_key_names=data_key_names
         )
 
         gui_core.GuiApplication.show_tool_dialog(

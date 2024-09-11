@@ -17,5 +17,4 @@ if __name__ == '__main__':
         stage = qsm_lzy_scr_core.Stage(
             i
         )
-        stage.initialize()
         stage.build()

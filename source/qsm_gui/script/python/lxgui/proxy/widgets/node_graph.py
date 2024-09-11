@@ -4,9 +4,9 @@ from ...qt.widgets import base as _qt_widget_base
 
 from ...qt.widgets import entry_frame as _qt_wgt_entry_frame
 
-from ...qt.graphs import graph_for_node as _qt_grh_for_node
+from ...qt.graph_widgets import graph_for_node as _qt_grh_for_node
 
-from ...qt.graphs import graph_for_image as _qt_grh_for_image
+from ...qt.graph_widgets import graph_for_image as _qt_grh_for_image
 # proxy abstracts
 from ...proxy import abstracts as _proxy_abstracts
 # proxy widgets

@@ -1,13 +1,7 @@
 # coding=utf-8
 import enum
-
-import lxbasic.core as bsc_core
-# gui
-from ... import core as gui_core
 # qt
 from ..core.wrap import *
-
-from .. import core as _qt_core
 
 from .. import graph_models as _graph_models
 

@@ -20,7 +20,6 @@ class StlConvertionProcess(object):
         self._cache_file_path = cache_file_path
 
     def execute(self):
-
         with bsc_log.LogProcessContext.create(maximum=4) as l_p:
             # step 1
             qsm_mya_core.SceneFile.new()

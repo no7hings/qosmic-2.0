@@ -42,7 +42,7 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
 
     def _gui_add_main_tools(self, prx_tool_box):
         for i in [
-            ('export', 'tool/export', 'Press to export motion', self._export_scene),
+            ('export', 'tool/export', 'Press to export motion', self._on_dcc_export_asset),
         ]:
             i_key, i_icon_name, i_tool_tip, i_fnc = i
             i_tool = gui_prx_widgets.PrxIconPressButton()
@@ -99,7 +99,7 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
                 self._window._configure.get('build.{}.buttons.create'.format(self.PAGE_KEY))
             )
         )
-        self._asset_load_qt_button.press_clicked.connect(self._do_dcc_load_asset)
+        self._asset_load_qt_button.press_clicked.connect(self._on_dcc_load_asset)
         self._asset_load_qt_button._set_action_enable_(False)
 
         self._asset_path = None
@@ -115,14 +115,14 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
         self._prx_h_splitter_0 = gui_prx_widgets.PrxHSplitter()
         self._qt_layout.addWidget(self._prx_h_splitter_0.widget)
         # track
-        self._motion_prx_track_view = gui_prx_graphs.PrxTrackView()
-        self._prx_h_splitter_0.add_widget(self._motion_prx_track_view)
+        self._motion_prx_track_widget = gui_prx_graphs.PrxTrackWidget()
+        self._prx_h_splitter_0.add_widget(self._motion_prx_track_widget)
 
-        self._motion_prx_track_view.translate_graph_to(0, 0)
-        self._motion_prx_track_view.scale_graph_to(0.05, 1)
+        self._motion_prx_track_widget.translate_graph_to(0, 0)
+        self._motion_prx_track_widget.scale_graph_to(0.05, 1)
 
-        self._motion_prx_track_view.connect_stage_change_to(self.do_dcc_motion_update)
-        self._motion_prx_track_view.connect_frame_accepted_to(self.do_dcc_update_current_frame)
+        self._motion_prx_track_widget.connect_stage_change_to(self.do_dcc_motion_update)
+        self._motion_prx_track_widget.connect_frame_accepted_to(self.do_dcc_update_current_frame)
         # scene space
         self._scene_space_prx_unit = self.generate_unit_for('scene_space')
         self._prx_h_splitter_0.add_widget(self._scene_space_prx_unit)
@@ -163,7 +163,7 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
     def _do_gui_update_current_frame(self, time):
         # update frame when dcc time is changed, but ignore when window is active
         if self._window.window_is_active() is False:
-            self._motion_prx_track_view.set_current_frame(int(time))
+            self._motion_prx_track_widget.set_current_frame(int(time))
 
     def _do_dcc_playback_swap(self):
         pass
@@ -186,14 +186,14 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
                 task = entity.task(self._scan_root.EntityTasks.Rig)
                 if task is not None:
                     result = task.find_result(
-                        self._scan_root.ResultPatterns.MayaRigFile
+                        self._scan_root.StoragePatterns.MayaRigFile
                     )
                     if result is not None:
                         self._asset_path = result
                         self._asset_load_qt_button._set_action_enable_(True)
 
-    def _do_dcc_load_asset(self):
+    def _on_dcc_load_asset(self):
         pass
 
-    def _export_scene(self):
+    def _on_dcc_export_asset(self):
         pass

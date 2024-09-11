@@ -165,7 +165,7 @@ class QtThreadForSprcTask(QtCore.QThread):
     failed = qt_signal(list)
     killed = qt_signal()
 
-    resource_usage_update = qt_signal(dict)
+    system_resource_usage_update = qt_signal(dict)
 
     Status = _gui_core.GuiProcessStatus
 
@@ -234,7 +234,7 @@ class QtThreadForSprcTask(QtCore.QThread):
             i_name, i_pid = i_args
             if i_name == self._check_memory_prc_name:
                 i_memory_size = bsc_sprc.SprcUsage.get_memory(i_pid)
-                self.resource_usage_update.emit(
+                self.system_resource_usage_update.emit(
                     dict(
                         memory_size=i_memory_size
                     )

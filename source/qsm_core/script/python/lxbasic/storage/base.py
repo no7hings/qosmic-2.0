@@ -1193,7 +1193,7 @@ class StgFileSearchOpt(object):
 
         file_path_keys = self._search_dict.keys()
 
-        match_pattern_0 = '*/{}{}'.format(name_base_pattern, ext_src)
+        match_pattern_0 = six.u('*/{}{}').format(name_base_pattern, ext_src)
         matches_0 = fnmatch.filter(
             file_path_keys, match_pattern_0
         )
@@ -1202,7 +1202,7 @@ class StgFileSearchOpt(object):
             return file_path_tgt
         #
         if self._ignore_ext is True:
-            match_pattern_1 = '*/{}.*'.format(name_base_pattern)
+            match_pattern_1 = six.u('*/{}.*').format(name_base_pattern)
             matches_1 = fnmatch.filter(
                 file_path_keys, match_pattern_1
             )
@@ -1412,6 +1412,8 @@ class StgFileOpt(StgPathOpt):
                     raw = bsc_content.ContentYamlBase.load(y)
                     y.close()
                     return raw
+            elif self.ext in {'.jsz'}:
+                return StgGzipFileOpt(self._path, '.json').set_read()
             else:
                 with open(self.path) as f:
                     raw = f.read()
@@ -1444,6 +1446,8 @@ class StgFileOpt(StgPathOpt):
         elif self.ext in {'.png'}:
             with open(self.path, 'wb') as f:
                 f.write(raw)
+        elif self.ext in {'.jsz'}:
+            StgGzipFileOpt(self._path, '.json').set_write(raw)
         else:
             with open(self.path, 'w') as f:
                 if isinstance(raw, six.text_type):
@@ -1567,11 +1571,15 @@ class StgGzipFileOpt(StgFileOpt):
     def set_read(self):
         if self.get_is_file() is True:
             with gzip.GzipFile(
-                    mode='rb',
-                    fileobj=open(self.path, 'rb')
+                mode='rb',
+                fileobj=open(self.path, 'rb')
             ) as g:
                 if self.get_ext() in {'.yml'}:
                     raw = bsc_content.ContentYamlBase.load(g)
+                    g.close()
+                    return raw
+                elif self.get_ext() in {'.json'}:
+                    raw = json.load(g, object_pairs_hook=collections.OrderedDict)
                     g.close()
                     return raw
 
@@ -1580,17 +1588,23 @@ class StgGzipFileOpt(StgFileOpt):
             os.makedirs(self.directory_path)
         # noinspection PyArgumentEqualDefault
         with gzip.GzipFile(
-                filename=self.name+self.ext,
-                mode='wb',
-                compresslevel=9,
-                fileobj=open(self.path, 'wb')
+            filename=self.name+self.ext,
+            mode='wb',
+            compresslevel=9,
+            fileobj=open(self.path, 'wb')
         ) as g:
-            if self.get_ext() in ['.yml']:
+            if self.get_ext() in {'.yml'}:
                 bsc_content.ContentYamlBase.dump(
                     raw,
                     g,
                     indent=4,
                     default_flow_style=False,
+                )
+            elif self.get_ext() in {'.json'}:
+                json.dump(
+                    raw,
+                    g,
+                    indent=4
                 )
 
 

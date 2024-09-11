@@ -20,7 +20,7 @@ class QtChartForBar(QtWidgets.QWidget):
         self.update()
 
     def _refresh_widget_draw_geometry_(self):
-        self.setMinimumSize(20, self._chart_model.compute_height_maximum())
+        self.setMinimumSize(20, self._chart_model.compute_height())
 
     def _generate_pixmap_cache_(self):
         x, y = 0, 0
@@ -64,34 +64,3 @@ class QtChartForBar(QtWidgets.QWidget):
         
     def _get_data_model_(self):
         return self._chart_model
-
-    def _export_all_to_(self, directory_path):
-        for i_key in self._chart_model.get_data_keys():
-            self._export_for_key_(directory_path, i_key)
-
-    def _export_for_key_(self, directory_path, key):
-        file_path = '{}/{}.{}.png'.format(directory_path, self._chart_model._name_text, key)
-        w, h = 1920, self._chart_model.compute_height_maximum()+20
-        self._chart_model.set_active_data_keys([key])
-        self._chart_model.update(0, 20, w)
-        size = QtCore.QSize(w, h)
-        pixmap = QtGui.QPixmap(size)
-        painter = _qt_core.QtPainter(pixmap)
-        pixmap.fill(QtGui.QColor(64, 64, 64, 255))
-        painter.setFont(_qt_core.QtFont.generate(size=8))
-        self._chart_model._draw_branches(painter, self._chart_model.get_branches())
-        painter.end()
-
-        ext = os.path.splitext(file_path)[-1]
-        if ext:
-            if ext.lower() not in ['.png', '.jpg', '.jpeg']:
-                format_ = 'PNG'
-            else:
-                format_ = str(ext[1:]).upper()
-        else:
-            format_ = 'PNG'
-
-        pixmap.save(
-            file_path,
-            format_
-        )

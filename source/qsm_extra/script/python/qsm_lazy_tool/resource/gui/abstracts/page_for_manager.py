@@ -79,6 +79,13 @@ class _GuiTypeOpt(
         self.restore()
         self.gui_clear_cache()
 
+    def gui_clear_cache(self):
+        self._data_cache_dict.clear()
+        self._leaf_entity_path_set.clear()
+
+    def gui_do_close(self):
+        pass
+
     def __init__(self, window, page, session):
         super(_GuiTypeOpt, self).__init__(window, page, session)
 
@@ -259,17 +266,10 @@ class _GuiTypeOpt(
         self.gui_add_all_entities()
 
     def get_selected_entities(self):
-        return [x.get_gui_dcc_obj(self._namespace) for x in self._prx_tree_view.get_all_selected_items()]
+        return [x.get_gui_dcc_obj(self._namespace) for x in self._prx_tree_view.get_selected_items()]
 
     def get_assigned_node_paths(self, scr_type_path):
         return self._data_cache_dict[scr_type_path]
-
-    def gui_clear_cache(self):
-        self._data_cache_dict.clear()
-        self._leaf_entity_path_set.clear()
-
-    def gui_do_close(self):
-        pass
 
 
 class _GuiTagOpt(
@@ -284,6 +284,7 @@ class _GuiTagOpt(
 
     def gui_clear_cache(self):
         self._data_cache_dict.clear()
+        self._leaf_entity_path_set.clear()
 
     def __init__(self, window, page, session):
         super(_GuiTagOpt, self).__init__(window, page, session)
@@ -298,6 +299,7 @@ class _GuiTagOpt(
         )
 
         self._data_cache_dict = {}
+        self._leaf_entity_path_set = set()
     
     def gui_check_exists(self, path):
         return self._prx_tag_view.check_exists(path)
@@ -336,11 +338,16 @@ class _GuiTagOpt(
         if gui_thread_flag != self._gui_thread_flag:
             return
 
+        # cache leaf paths
+        self._leaf_entity_path_set = set(
+            bsc_core.BscPath.to_leaf_paths([x.path for x in scr_entities])
+        )
+
         for i_scr_entity in scr_entities:
-            if i_scr_entity.category == 'group':
-                self.gui_add_group(i_scr_entity, gui_thread_flag)
-            elif i_scr_entity.category == 'node':
+            if i_scr_entity.path in self._leaf_entity_path_set:
                 self.gui_add_node(i_scr_entity, gui_thread_flag)
+            else:
+                self.gui_add_group(i_scr_entity, gui_thread_flag)
 
     # group
     def gui_add_group(self, scr_entity, gui_thread_flag):
@@ -379,7 +386,7 @@ class _GuiTagOpt(
                     entity_type=self._page._scr_stage.EntityTypes.Assign,
                     filters=[
                         ('type', 'is', 'tag_assign'),
-                        ('target', 'startswith', scr_entity.path),
+                        ('target', 'startswith', scr_entity.path+'/'),
                     ]
                 )
                 # clean duplicate
@@ -434,7 +441,7 @@ class _GuiTagOpt(
                     entity_type=self._page._scr_stage.EntityTypes.Assign,
                     filters=[
                         ('type', 'is', 'tag_assign'),
-                        ('target', 'startswith', scr_entity.path),
+                        ('target', 'is', scr_entity.path),
                     ]
                 )
                 # clean duplicate
@@ -684,6 +691,10 @@ class _GuiNodeOpt(
             i_scr_tag = self._page._scr_stage.get_entity(
                 self._page._scr_stage.EntityTypes.Tag, i_scr_tag_path
             )
+            # fixme: tag may be None
+            if i_scr_tag is None:
+                continue
+
             i_scr_tag_group = self._page._scr_stage.get_entity(
                 self._page._scr_stage.EntityTypes.Tag, bsc_core.BscPath.get_dag_parent_path(i_scr_tag_path)
             )
@@ -912,7 +923,7 @@ class AbsPrxPageForManager(
 ):
     HISTORY_KEY = 'lazy-resource.stage_key'
 
-    FILTER_MAXIMUM = 50
+    FILTER_COMPLETION_MAXIMUM = 50
 
     def do_gui_node_refresh_by_type_selection(self):
         self._gui_node_opt.do_gui_add_all_by_type(
@@ -972,7 +983,7 @@ class AbsPrxPageForManager(
                 self._keyword_set, six.u('*{}*').format(keyword)
             )
             all_texts = match_chs + matches
-            return bsc_core.RawTextsMtd.sort_by_initial(all_texts)[:self.FILTER_MAXIMUM]
+            return bsc_core.RawTextsMtd.sort_by_initial(all_texts)[:self.FILTER_COMPLETION_MAXIMUM]
         return []
 
     def _gui_update_keyword_filter_path_set_fnc(self, *args, **kwargs):

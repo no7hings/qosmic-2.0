@@ -1,6 +1,10 @@
 # coding=utf-8
 # qt
+import enum
+
 from ...qt.core.wrap import *
+
+from ...qt import core as _qt_core
 
 from ...qt import abstracts as _qt_abstracts
 # qt widgets
@@ -11,6 +15,8 @@ from . import utility as _utility
 from . import head as _head
 
 from . import drag as _drag
+
+from . import scroll as _scroll
 
 
 class AbsQtToolGroup(
@@ -199,6 +205,10 @@ class QtHToolGroupStyleC(AbsQtToolGroup):
 
 
 class AbsQtToolBox(QtWidgets.QWidget):
+    class SizeMode(enum.IntEnum):
+        Fixed = 0
+        Expanding = 1
+
     QT_HEAD_CLS = None
     QT_ORIENTATION = None
     QT_HEAD_W, QT_HEAD_H = 12, 24
@@ -206,57 +216,62 @@ class AbsQtToolBox(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         super(AbsQtToolBox, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
-        )
+        # self.setSizePolicy(
+        #     QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+        # )
         self._build_widget_()
 
     def _build_widget_(self):
+        self._wgt_w, self._wgt_h = 24, 24
+        self._wgt_w_min, self._wgt_h_min = 12, 24
+
         if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
-            layout = _base.QtHBoxLayout(self)
+            lot = _base.QtHBoxLayout(self)
         elif self.QT_ORIENTATION == QtCore.Qt.Vertical:
-            layout = _base.QtVBoxLayout(self)
+            lot = _base.QtVBoxLayout(self)
         else:
             raise RuntimeError()
-        layout.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        layout.setContentsMargins(*[0]*4)
-        layout.setSpacing(0)
+
+        lot.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
+        lot.setContentsMargins(*[0]*4)
+        lot.setSpacing(0)
         # header
         self._head = self.QT_HEAD_CLS()
-        layout.addWidget(self._head)
+        lot.addWidget(self._head)
         self._head.expand_toggled.connect(self._set_expanded_)
         self._head._set_tool_tip_text_('"LMB-click" to expand "on" / "off"')
         self._head.setFixedSize(self.QT_HEAD_W, self.QT_HEAD_H)
-        #
-        self._container = _utility.QtTranslucentWidget()
-        layout.addWidget(self._container)
+
+        self._body = QtWidgets.QWidget()
+        lot.addWidget(self._body)
         if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
-            self._qt_layout = _base.QtHBoxLayout(self._container)
+            self._layout = _base.QtHBoxLayout(self._body)
         elif self.QT_ORIENTATION == QtCore.Qt.Vertical:
-            self._qt_layout = _base.QtVBoxLayout(self._container)
+            self._layout = _base.QtVBoxLayout(self._body)
         else:
             raise RuntimeError()
-        self._qt_layout.setContentsMargins(*[0]*4)
-        self._qt_layout.setSpacing(2)
-        self._qt_layout.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
-        #
+
+        self._layout.setContentsMargins(*[0]*4)
+        self._layout.setSpacing(2)
+        # self._layout.setAlignment(QtCore.Qt.AlignLeft)
+
         self._refresh_expand_()
+        self._set_size_mode_(0)
 
     def _refresh_expand_(self):
-        self._container.setVisible(self._head._get_is_expanded_())
+        self._body.setVisible(self._get_is_expanded_())
         self._head._refresh_expand_()
+
         self._refresh_widget_size_()
 
     def _refresh_widget_size_(self):
-        if self._head._get_is_expanded_() is True:
-            s = self._qt_layout.minimumSize()
-            w, h = s.width(), s.height()
-            if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
-                self.setFixedSize(self.QT_HEAD_W+w, self.QT_HEAD_H)
-            elif self.QT_ORIENTATION == QtCore.Qt.Vertical:
-                self.setFixedSize(self.QT_HEAD_W, self.QT_HEAD_H+h)
+        self.setMaximumSize(self._wgt_w_min, self._wgt_h_min)
+        self._head.setMaximumSize(self._wgt_w_min, self._wgt_h)
+        self._head.setMinimumSize(self._wgt_w_min, self._wgt_h)
+        if self._get_is_expanded_() is True:
+            self.setMaximumWidth(166667)
         else:
-            self.setFixedSize(self.QT_HEAD_W, self.QT_HEAD_H)
+            self.setMaximumWidth(self._wgt_w_min)
 
     def _set_expanded_(self, boolean):
         self._head._set_expanded_(boolean)
@@ -270,14 +285,34 @@ class AbsQtToolBox(QtWidgets.QWidget):
 
     def _add_widget_(self, widget):
         if isinstance(widget, QtCore.QObject):
-            self._qt_layout.addWidget(widget)
+            self._layout.addWidget(widget)
         else:
-            self._qt_layout.addWidget(widget._qt_widget)
-        #
+            self._layout.addWidget(widget._qt_widget)
+
         self._refresh_widget_size_()
 
     def _set_name_text_(self, text):
         self._head._set_name_text_(text)
+        
+    def _set_visible_(self, boolean):
+        self.setVisible(boolean)
+    
+    def _set_size_mode_(self, mode):
+        # todo: fix size bug
+        if mode == self.SizeMode.Fixed:
+            self._body.setSizePolicy(
+                QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+            )
+            # self.setSizePolicy(
+            #     QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
+            # )
+        elif mode == self.SizeMode.Expanding:
+            self._body.setSizePolicy(
+                QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
+            )
+            # self.setSizePolicy(
+            #     QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
+            # )
 
 
 class QtHToolBox(AbsQtToolBox):
@@ -296,3 +331,117 @@ class QtVToolBox(AbsQtToolBox):
 
     def __init__(self, *args, **kwargs):
         super(QtVToolBox, self).__init__(*args, **kwargs)
+
+
+class AbsQtToolBar(QtWidgets.QWidget):
+    def __init__(self, *args, **kwargs):
+        super(AbsQtToolBar, self).__init__(*args, **kwargs)
+        qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
+        self.setPalette(qt_palette)
+        self.setAutoFillBackground(True)
+        self.setSizePolicy(
+            QtWidgets.QSizePolicy.Expanding,
+            QtWidgets.QSizePolicy.Fixed
+        )
+        self._wgt_w, self._wgt_h = 28, 28
+        self._wgt_w_min, self._wgt_h_min = 12, 12
+
+        lot = _base.QtHBoxLayout(self)
+        lot.setContentsMargins(0, 0, 0, 0)
+        lot.setSpacing(2)
+        # header
+        self._head = _head.QtHHead()
+        lot.addWidget(self._head)
+        self._head.expand_toggled.connect(self._set_expanded_)
+        self._head._set_tool_tip_text_('"LMB-click" to expand "on" / "off"')
+
+        scb = _scroll.QtHScrollBox()
+        lot.addWidget(scb)
+        scb.setFixedHeight(self._wgt_h)
+
+        self._body = scb
+        self._layout = scb._get_layout_()
+
+        self._refresh_expand_()
+
+    def _refresh_expand_(self):
+        if self._get_is_expanded_() is True:
+            self._head.setMaximumSize(self._wgt_w_min, self._wgt_h)
+            self._head.setMinimumSize(self._wgt_w_min, self._wgt_h)
+
+            self.setFixedHeight(self._wgt_h)
+        else:
+            self._head.setMaximumSize(166667, self._wgt_h_min)
+            self._head.setMinimumSize(self._wgt_w_min, self._wgt_h_min)
+
+            self.setFixedHeight(self._wgt_h_min)
+
+        self._body.setVisible(self._get_is_expanded_())
+        self._head._refresh_expand_()
+
+    def _set_expanded_(self, boolean):
+        self._head._set_expanded_(boolean)
+        self._refresh_expand_()
+
+    def _get_is_expanded_(self):
+        return self._head._get_is_expanded_()
+
+    def _add_widget_(self, widget):
+        if isinstance(widget, QtCore.QObject):
+            self._layout.addWidget(widget)
+        else:
+            self._layout.addWidget(widget.widget)
+
+    def _insert_widget_at_(self, index, widget):
+        if isinstance(widget, QtCore.QObject):
+            self._layout.insertWidget(index, widget)
+        else:
+            self._layout.insertWidget(index, widget.widget)
+    
+    def _create_tool_box_(self, name, expanded=True, visible=True, size_mode=0, insert_args=None):
+        tool_box = QtHToolBox()
+        if isinstance(insert_args, int):
+            self._insert_widget_at_(insert_args, tool_box)
+        else:
+            self._add_widget_(tool_box)
+
+        tool_box._set_name_text_(name)
+        tool_box._set_expanded_(expanded)
+        tool_box._set_visible_(visible)
+        tool_box._set_size_mode_(size_mode)
+        return tool_box
+
+    def _set_width_(self, w):
+        self._wgt_w = w
+        self._refresh_expand_()
+
+    def _set_height_(self, h):
+        self._wgt_h = h
+        self._refresh_expand_()
+
+    def _get_layout_(self):
+        return self._layout
+
+    def _set_top_direction_(self):
+        self._head._set_expand_direction_(self._head.ExpandDirection.TopToBottom)
+
+    def _set_bottom_direction_(self):
+        self._head._set_expand_direction_(self._head.ExpandDirection.BottomToTop)
+
+    def _set_align_center_(self):
+        self._layout.setAlignment(QtCore.Qt.AlignHCenter)
+
+    def _set_align_left_(self):
+        self._layout.setAlignment(QtCore.Qt.AlignLeft)
+
+    def _set_align_right_(self):
+        self._layout.setAlignment(QtCore.Qt.AlignRight)
+
+    def _set_border_radius_(self, radius):
+        self._head._set_frame_border_radius_(radius)
+
+
+class QtHToolBar(AbsQtToolBar):
+    def __init__(self, *args, **kwargs):
+        super(QtHToolBar, self).__init__(*args, **kwargs)
+

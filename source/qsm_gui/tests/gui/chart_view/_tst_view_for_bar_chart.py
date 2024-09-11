@@ -26,7 +26,8 @@ class W(gui_prx_widgets.PrxBaseWindow):
         )
         self._d._set_data_(
             data_0['mesh_count']['components'],
-            ['face', 'face_per_world_area', 'triangle', 'triangle_per_world_area'],
+            ['triangle', 'triangle_per_world_area'],
+            data_key_names=['三角面', '三角面（单位面积）']
         )
         self._d._set_name_text_('TEST')
         self.add_widget(self._d)

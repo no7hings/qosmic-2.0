@@ -11,7 +11,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
         wgt = qt_widgets.QtWidget()
         self.add_widget(wgt)
         lot = qt_widgets.QtVBoxLayout(wgt)
-        lot._set_align_top_()
+        lot._set_align_as_top_()
 
         c_h = gui_prx_widgets.PrxHTabToolBox()
         lot.addWidget(c_h.widget)

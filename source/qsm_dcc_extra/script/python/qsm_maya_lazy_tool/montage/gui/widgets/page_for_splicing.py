@@ -5,6 +5,8 @@ import lxbasic.model as bsc_model
 
 import lxbasic.storage as bsc_storage
 
+import lxgui.core as gui_core
+
 import lxgui.qt.core as gui_qt_core
 
 from qsm_lazy_tool.montage.gui import abstracts as _gui_abstracts
@@ -44,7 +46,7 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
             qsm_mya_core.Play.start()
         else:
             qsm_mya_core.Play.stop()
-            self._motion_prx_track_view.set_current_frame(
+            self._motion_prx_track_widget.set_current_frame(
                 int(qsm_mya_core.Frame.get_current_time())
             )
 
@@ -56,23 +58,23 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
 
     def gui_refresh_stage(self, force=False):
         if force is True:
-            self._motion_prx_track_view.restore()
+            self._motion_prx_track_widget.restore()
 
         data = qsm_mya_lzy_mtg_core.AdvMotionStage().generate_track_data()
         if data:
             for i_kwargs in data:
-                self._motion_prx_track_view.create_node(**i_kwargs)
+                self._motion_prx_track_widget.create_node(**i_kwargs)
 
     def _do_check_update(self):
         dcc_all_layers = qsm_mya_lzy_mtg_core.AdvMotionStage().get_all_layer_names()
-        gui_all_layers = self._motion_prx_track_view.get_all_layer_names()
+        gui_all_layers = self._motion_prx_track_widget.get_all_layer_names()
         if set(dcc_all_layers) != set(gui_all_layers):
             self.do_gui_refresh_all(force=True)
 
     def get_dcc_character_args(self):
         results = []
 
-        master_layer = qsm_mya_lzy_mtg_scripts.AdvChrMotionImportOpt.find_master_layer()
+        master_layer = qsm_mya_lzy_mtg_scripts.AdvChrMotionImportOpt.find_master_layer_path()
         if master_layer:
             self._window.exec_message_dialog(
                 self._window.choice_message(
@@ -115,7 +117,7 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
         )
         qsm_mya_lzy_mtg_scripts.AdvChrMotionImportOpt.setup_for(namespace)
 
-    def _do_dcc_load_asset(self):
+    def _on_dcc_load_asset(self):
         if self._asset_path is None:
             return
 
@@ -123,10 +125,22 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
         if result is True:
             self._new_fnc(self._asset_path)
 
+    def _on_dcc_export_asset(self):
+        master_layer = qsm_mya_lzy_mtg_core.AdvChrMotionLayer.find_master_layer_path()
+        if master_layer:
+            file_path = gui_core.GuiStorageDialog.save_file(ext_filter='All File (*.jsz)', parent=self._qt_widget)
+            master_layer_opt = qsm_mya_lzy_mtg_core.AdvChrMotionMasterLayerOpt(master_layer)
+            master_layer_opt.export_motion(file_path)
+        else:
+            self._window.exec_message_dialog(
+                'No motion to export.',
+                status='warning'
+            )
+
     def do_dcc_motion_update(self):
-        stage = self._motion_prx_track_view.get_stage_model()
+        stage = self._motion_prx_track_widget.get_stage_model()
         start_frame, end_frame = stage.track_start, stage.track_end
-        current_frame = self._motion_prx_track_view.get_current_time()
+        current_frame = self._motion_prx_track_widget.get_current_time()
 
         qsm_mya_core.Frame.update_frame(start_frame, end_frame, current_frame)
 

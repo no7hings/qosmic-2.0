@@ -35,7 +35,7 @@ class Main(object):
                 dict_ = {}
                 dict_.update(mesh_count_data['components'])
                 dict_.update(mesh_count_data.get('gpu_caches', {}))
-                is_rig = self._scr_stage.is_exists_for_node_tag(
+                is_rig = self._scr_stage.is_exists_node_tag(
                     entity_path, '/task/rig'
                 )
                 if is_rig:
@@ -58,6 +58,11 @@ class Main(object):
     def show_dialog(self, data):
         chart_view = qt_widgets.QtViewForBarChart()
         chart_view._set_name_text_('Mesh Count')
+        if gui_core.GuiUtil.get_language() == 'chs':
+            data_key_names = ['三角面', '三角面（单位面积）']
+        else:
+            data_key_names = None
+
         chart_view._set_data_(
             data,
             [
@@ -65,7 +70,8 @@ class Main(object):
                 # 'face_per_world_area',
                 'triangle',
                 'triangle_per_world_area'
-            ]
+            ],
+            data_key_names=data_key_names
         )
         gui_core.GuiApplication.show_tool_dialog(
             widget=chart_view,

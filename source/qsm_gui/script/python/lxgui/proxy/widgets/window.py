@@ -595,7 +595,7 @@ class PrxSprcTaskWindow(
         self._task_qt_chart._do_close_()
 
     def is_killed(self):
-        return self._task_qt_chart._get_is_killed_()
+        return self._task_qt_chart._is_killed_()
 
     def log_update(self, text):
         self._tip_prx_text_browser.trace_log_use_thread(text)

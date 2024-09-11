@@ -25,7 +25,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.proxy.graphs as gui_prx_graphs
 
-import lxgui.qt.graphs as gui_qt_graphs
+import lxgui.qt.graph_widgets as gui_qt_graphs
 
 
 class AbsPrxPageForResource(gui_prx_abstracts.AbsPrxWidget):

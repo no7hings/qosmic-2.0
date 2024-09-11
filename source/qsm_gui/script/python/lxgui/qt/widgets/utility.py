@@ -177,14 +177,14 @@ class QtButtonFrame(
         )
 
 
-class QtLine(
+class QtVLine(
     QtWidgets.QWidget,
     _qt_abstracts.AbsQtFrameBaseDef,
     _qt_abstracts.AbsQtActionBaseDef,
     _qt_abstracts.AbsQtActionForPressDef,
 ):
     def __init__(self, *args, **kwargs):
-        super(QtLine, self).__init__(*args, **kwargs)
+        super(QtVLine, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
         self._init_frame_base_def_(self)
@@ -510,7 +510,7 @@ class QtMenu(QtWidgets.QMenu):
             icon_rect, color
         )
         painter.end()
-        # painter.device()
+
         icon.addPixmap(
             pixmap,
             QtGui.QIcon.Normal,

@@ -14,7 +14,7 @@ class Main(object):
     def execute(self):
         window = self._session.find_window()
         if window is not None:
-            if not qsm_mya_mtg_scripts.AdvChrMotionImportOpt.find_master_layer():
+            if not qsm_mya_mtg_scripts.AdvChrMotionImportOpt.find_master_layer_path():
                 window.exec_message_dialog(
                     'Master layer is not found, you can create use "Lazy Montage".',
                     status='warning'

@@ -426,15 +426,15 @@ class QtTrackGraph(
         self._undo_stack.clear()
 
 
-class QtTrackView(
+class QtTrackWidget(
     _qt_wgt_entry_frame.QtEntryFrame
 ):
     def __init__(self, *args, **kwargs):
-        super(QtTrackView, self).__init__(*args, **kwargs)
+        super(QtTrackWidget, self).__init__(*args, **kwargs)
 
         self._lot = _qt_wgt_base.QtVBoxLayout(self)
-        self._lot.setSpacing(0)
         self._lot.setContentsMargins(*[2]*4)
+        self._lot.setSpacing(2)
         # create track first
         self._track_layer = _track_layer.QtTrackLayer(self)
 

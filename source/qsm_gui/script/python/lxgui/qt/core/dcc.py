@@ -229,6 +229,7 @@ class GuiQtClarisse(object):
 
 class GuiQtDcc(AbsGuiDcc):
     QT_MAIN_WINDOW = None
+    QT_PALETTE_CACHE = None
 
     @classmethod
     def get_qt_main_window(cls):
@@ -279,15 +280,23 @@ class GuiQtDcc(AbsGuiDcc):
 
     @classmethod
     def generate_qt_palette(cls):
-        if cls.get_is_maya():
-            return _base.QtUtil.generate_qt_palette()
-        elif cls.get_is_houdini():
-            return _base.QtUtil.generate_qt_palette()
-        elif cls.get_is_katana():
-            return _base.QtUtil.generate_qt_palette()
-        elif cls.get_is_clarisse():
+        def fnc_():
+            if cls.get_is_maya():
+                return _base.QtUtil.generate_qt_palette()
+            elif cls.get_is_houdini():
+                return _base.QtUtil.generate_qt_palette()
+            elif cls.get_is_katana():
+                return _base.QtUtil.generate_qt_palette()
+            elif cls.get_is_clarisse():
+                return _base.QtUtil.generate_qt_palette(tool_tip=True)
             return _base.QtUtil.generate_qt_palette(tool_tip=True)
-        return _base.QtUtil.generate_qt_palette(tool_tip=True)
+
+        if cls.QT_PALETTE_CACHE is not None:
+            return cls.QT_PALETTE_CACHE
+
+        cls.QT_PALETTE_CACHE = fnc_()
+        return cls.QT_PALETTE_CACHE
+
 
     @classmethod
     def exit_app(cls, app):

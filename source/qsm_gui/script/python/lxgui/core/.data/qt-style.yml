@@ -320,9 +320,9 @@ widget:
     QListView:
         |-
         QListView{
-            background: rgba(<option.background.color-transparent>); 
+            background: rgba(<option.background.color-dim>); 
             color: rgba(<option.font.color-basic>);
-            border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid; 
+            border: 1px rgba(<option.border.color-dim>); border-radius: 0px; border-style: solid; 
         }
     QTextBrowser:
         |-

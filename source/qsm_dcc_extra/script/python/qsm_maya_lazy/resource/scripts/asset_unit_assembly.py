@@ -114,8 +114,10 @@ class _RegionPrc(object):
                 for i_seq, i_key in enumerate(keys):
                     i_shape_paths = grid_map[i_key]
                     i_ar_path_new = self.prc(i_key, i_seq, i_shape_paths)
-                    region_paths.append(i_ar_path_new)
-                    l_p.do_update()
+                    # todo: maybe None
+                    if i_ar_path_new:
+                        region_paths.append(i_ar_path_new)
+                        l_p.do_update()
         return region_paths
 
     def prc(self, key, seq, shape_paths):
@@ -143,6 +145,10 @@ class _RegionPrc(object):
 
                 j_transform_path = qsm_mya_core.Shape.get_transform(j_shape_path)
                 qsm_mya_core.Group.add(group_path_new, j_transform_path)
+
+            if not qsm_mya_core.Group.get_children(group_path_new):
+                return
+
             # export to gpu and mesh
             qsm_mya_core.GpuCache.export_frame_(
                 gpu_file_path, group_path_new

@@ -34,7 +34,7 @@ class Container(object):
 
     @classmethod
     def add_dag_nodes(cls, path, nodes, relative=False):
-        return [cmds.parent(x, path, relative=relative)[0] for x in nodes]
+        return [_node_for_dag.DagNode.parent_to(x, path, relative=relative) for x in nodes if cmds.objExists(x)]
 
     @classmethod
     def get_all_nodes(cls, path):

@@ -42,9 +42,12 @@ c.AdvResource('sam_Skin').test()
 
     def get_data(self):
         start_frame, end_frame = self._control_set.get_frame_range()
+        # sketch motion
         data = self._sketch_set.get_data(start_frame, end_frame)
         data['root_height'] = self.get_root_height()
+        # control motion
         data['controls'] = self._control_set.get_data()
+
         data['metadata'] = dict(
             ctime=bsc_core.BscSystem.generate_timestamp(),
             user=bsc_core.BscSystem.get_user_name(),
@@ -124,8 +127,11 @@ c.AdvResource('sam_Skin').test()
     def find_reference_file(self):
         return qsm_mya_core.ReferenceNamespacesCache().get_file(self._namespace)
 
-    def test(self):
-        print self.get_root_height()
+    @classmethod
+    def test(cls):
+        cls('sam_Skin')._control_set.bake_keyframes(
+            1, 24, ['translateX', 'translateY']
+        )
 
 
 class MixamoResource(object):

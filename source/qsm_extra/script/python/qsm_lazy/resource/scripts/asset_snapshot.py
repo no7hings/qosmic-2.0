@@ -44,7 +44,7 @@ class AssetSnapShotGenerateOpt(_asset_general.AssetGeneral):
         scr_stage = _scr_core.Stage(self._scr_stage_key)
         # remove exists
         scr_stage.remove_assigns_below(
-            self._scr_node_path, '/system_resource_usage/memory/'
+            self._scr_node_path, '/system_resource_usage/memory'
         )
 
         scr_stage.create_tag_assign(
@@ -74,10 +74,10 @@ class AssetSnapShotGenerateOpt(_asset_general.AssetGeneral):
             # register tag
             # remove exists
             scr_stage.remove_assigns_below(
-                self._scr_node_path, '/system_resource_usage/memory/'
+                self._scr_node_path, '/system_resource_usage/memory'
             )
 
-            tag_name = scr_stage.to_memory_size_tag(memory_size)
+            tag_name = _asset_general.AssetTag.to_memory_size_tag(memory_size)
             tag_path = '/system_resource_usage/memory/{}'.format(tag_name)
             scr_stage.create_tag_assign(
                 self._scr_node_path, tag_path

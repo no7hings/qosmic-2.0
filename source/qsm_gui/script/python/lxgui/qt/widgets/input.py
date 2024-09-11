@@ -427,7 +427,7 @@ class QtInputAsContent(
         )
         entry_layout.addWidget(self._input_button_widget)
         self._input_button_layout = _base.QtVBoxLayout(self._input_button_widget)
-        self._input_button_layout._set_align_top_()
+        self._input_button_layout._set_align_as_top_()
         self._input_button_layout.setContentsMargins(2, 0, 0, 0)
         self._input_button_layout.setSpacing(2)
         #
@@ -562,7 +562,7 @@ class QtInputAsList(
         )
         entry_layout.addWidget(self._input_button_widget)
         self._input_button_layout = _base.QtVBoxLayout(self._input_button_widget)
-        self._input_button_layout._set_align_top_()
+        self._input_button_layout._set_align_as_top_()
         self._input_button_layout.setContentsMargins(2, 0, 0, 0)
         self._input_button_layout.setSpacing(2)
 
@@ -721,7 +721,7 @@ class QtInputAsListWithChoose(
         )
         entry_layout.addWidget(self._input_button_widget)
         self._input_button_layout = _base.QtVBoxLayout(self._input_button_widget)
-        self._input_button_layout._set_align_top_()
+        self._input_button_layout._set_align_as_top_()
         self._input_button_layout.setContentsMargins(2, 0, 0, 0)
         self._input_button_layout.setSpacing(2)
 

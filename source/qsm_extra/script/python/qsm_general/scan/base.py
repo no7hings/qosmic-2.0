@@ -77,7 +77,7 @@ class EntityTasks(object):
     Surface = 'UE'
 
 
-class ResultPatterns(object):
+class StoragePatterns(object):
     MayaRigFile = '{root}/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
     MayaModelFIle = '{root}/{project}/Assets/{role}/{asset}/Maya/Final/{asset}.ma'
 
@@ -111,7 +111,7 @@ class AbsEntity(object):
     EntityTypes = EntityTypes
     EntityTasks = EntityTasks
 
-    ResultPatterns = ResultPatterns
+    StoragePatterns = StoragePatterns
 
     def __init__(self, root, path, variants):
         self._root = root
@@ -337,6 +337,11 @@ class AbsTask(object):
         _ = p_opt.get_exists_results(**self._variants)
         if _:
             return _[0]
+    
+    def to_storage_path(self, p):
+        p_opt = bsc_core.BscStgParseOpt(p)
+        p_opt = p_opt.update_variants_to(**self._variants)
+        return p_opt.get_value()
 
 
 class AbsTaskQuery(object):

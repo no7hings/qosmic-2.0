@@ -474,6 +474,8 @@ class GuiQtIcon(object):
 
 
 class QtColor(object):
+    COLOR_CACHE = dict()
+
     @classmethod
     def to_qt_color(cls, *args):
         if len(args) == 1:
@@ -487,13 +489,21 @@ class QtColor(object):
 
     @classmethod
     def to_qt_color_fnc(cls, *args):
-        if len(args) == 3:
-            r, g, b = args
-            a = 255
-            return QtGui.QColor(r, g, b, a)
-        elif len(args) == 4:
-            return QtGui.QColor(*args)
-        raise TypeError()
+        def fnc_():
+            if len(args) == 3:
+                r, g, b = args
+                a = 255
+                return (r, g, b, a), QtGui.QColor(r, g, b, a)
+            elif len(args) == 4:
+                return args, QtGui.QColor(*args)
+            raise TypeError()
+
+        if args in cls.COLOR_CACHE:
+            return cls.COLOR_CACHE[args]
+
+        key, clr = fnc_()
+        cls.COLOR_CACHE[key] = clr
+        return clr
 
     @classmethod
     def to_rgb(cls, *args):

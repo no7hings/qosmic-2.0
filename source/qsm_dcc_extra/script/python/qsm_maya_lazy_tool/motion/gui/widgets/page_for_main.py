@@ -3,18 +3,18 @@ import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.widgets as gui_qt_widgets
 
-import lxgui.proxy.abstracts as gui_prx_abstracts
+import qsm_gui.qt.widgets as qsm_qt_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_gui.qt.widgets as qsm_qt_widgets
-
 import qsm_maya.core as qsm_mya_core
 
-from . import unit_for_motion_main_tool as _unit_for_motion_main_tool
+from . import toolset_for_main as _toolset_for_main
 
 
-class PrxPageForMotionMainTool(gui_prx_abstracts.AbsPrxWidget):
+class PrxPageForMotionMain(gui_prx_widgets.PrxBasePage):
+    PAGE_KEY = 'main'
+
     QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
 
     SCRIPT_JOB_NAME = 'lazy_tool_for_motion_main'
@@ -51,10 +51,7 @@ class PrxPageForMotionMainTool(gui_prx_abstracts.AbsPrxWidget):
         self._script_job_opt.destroy()
 
     def __init__(self, window, session, *args, **kwargs):
-        super(PrxPageForMotionMainTool, self).__init__(*args, **kwargs)
-
-        self._window = window
-        self._session = session
+        super(PrxPageForMotionMain, self).__init__(window, session, *args, **kwargs)
 
         self.gui_page_setup_fnc()
 
@@ -70,36 +67,33 @@ class PrxPageForMotionMainTool(gui_prx_abstracts.AbsPrxWidget):
             gui_qt_core.QtWidgets.QSizePolicy.Expanding,
             gui_qt_core.QtWidgets.QSizePolicy.Expanding
         )
-        main_qt_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
-        main_qt_lot.setContentsMargins(*[0]*4)
-        main_qt_lot.setSpacing(2)
         # central
-        qt_widget = gui_qt_widgets.QtTranslucentWidget()
-        main_qt_lot.addWidget(qt_widget)
-        qt_lot = gui_qt_widgets.QtHBoxLayout(qt_widget)
-        qt_lot.setContentsMargins(*[0]*4)
-        qt_lot.setSpacing(2)
+        central_qt_wgt = gui_qt_widgets.QtTranslucentWidget()
+        self._qt_layout.addWidget(central_qt_wgt)
+        central_qt_lot = gui_qt_widgets.QtHBoxLayout(central_qt_wgt)
+        central_qt_lot.setContentsMargins(*[0]*4)
+        central_qt_lot.setSpacing(2)
         # chart
         self._qt_picker = qsm_qt_widgets.QtAdvCharacterPicker()
-        qt_lot.addWidget(self._qt_picker)
-        self._gui_rig_picker_unit = _unit_for_motion_main_tool.UnitForRigPicker(
+        central_qt_lot.addWidget(self._qt_picker)
+        self._gui_rig_picker_unit = _toolset_for_main.UnitForRigPicker(
             self._window, self, self._session, self._qt_picker,
         )
         # page
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxVTabToolBox()
-        qt_lot.addWidget(self._page_prx_tab_tool_box.widget)
+        central_qt_lot.addWidget(self._page_prx_tab_tool_box.widget)
         self._page_prx_tab_tool_box.set_tab_direction(self._page_prx_tab_tool_box.TabDirections.RightToLeft)
         # tool set
         # copy and paste
-        self._gui_motion_copy_and_paste_prx_toolset = _unit_for_motion_main_tool.ToolsetForMotionCopyAndPaste(
+        self._gui_motion_copy_and_paste_prx_toolset = _toolset_for_main.ToolsetForMotionCopyAndPaste(
             self._window, self, self._session
         )
         # keyframe
-        self._gui_motion_keyframe_prx_toolset = _unit_for_motion_main_tool.ToolsetForMotionKeyframe(
+        self._gui_motion_keyframe_prx_toolset = _toolset_for_main.ToolsetForMotionKeyframe(
             self._window, self, self._session
         )
         # move
-        self._gui_move_toolset_unit = _unit_for_motion_main_tool.ToolsetForMove(
+        self._gui_move_prx_toolset = _toolset_for_main.ToolsetForMove(
             self._window, self, self._session
         )
         #

@@ -1,17 +1,12 @@
 # coding:utf-8
-import itertools
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
 import lxbasic.core as bsc_core
 
-import lxbasic.storage as bsc_storage
-
 import lxgui.core as gui_core
 
 import lxgui.qt.core as gui_qt_core
-
-import qsm_maya.cfx.core as qsm_mya_cfx_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
@@ -21,11 +16,7 @@ import qsm_gui.qt.widgets as qsm_qt_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.general.core as qsm_mya_gnl_core
-
 import qsm_maya.animation.core as qsm_mya_anm_core
-
-import qsm_maya.animation.scripts as qsm_mya_anm_scripts
 
 import qsm_maya.motion.core as qsm_mya_mtn_core
 
@@ -194,24 +185,25 @@ class ToolsetForMotionCopyAndPaste(
             file_path = qsm_gnl_core.MayaCache.generate_character_motion_file(
                 bsc_core.BscSystem.get_user_name()
             )
-            with self._window.gui_progressing(
-                maximum=len(namespaces), label='paste characters'
-            ) as g_p:
-                for i_namespace in namespaces:
-                    i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
-                    i_opt.load_from(
-                        file_path,
-                        control_key_excludes=self.get_control_key_excludes(),
-                        force=True,
-                        frame_offset=self.get_frame_offset(),
+            if file_path:
+                with self._window.gui_progressing(
+                    maximum=len(namespaces), label='paste characters'
+                ) as g_p:
+                    for i_namespace in namespaces:
+                        i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
+                        i_opt.load_from(
+                            file_path,
+                            control_key_excludes=self.get_control_key_excludes(),
+                            force=True,
+                            frame_offset=self.get_frame_offset(),
+                        )
+                        g_p.do_update()
+
+                self._window.popup_bubble_message(
+                    self._window.choice_message(
+                        self._window._configure.get('build.main.messages.paste_characters')
                     )
-                    g_p.do_update()
-    
-            self._window.popup_bubble_message(
-                self._window.choice_message(
-                    self._window._configure.get('build.main.messages.paste_characters')
                 )
-            )
 
     def do_dcc_paste_controls(self):
         args = self.get_dcc_control_args()

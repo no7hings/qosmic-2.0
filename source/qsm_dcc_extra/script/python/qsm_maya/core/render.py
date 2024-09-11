@@ -46,6 +46,9 @@ class RenderSettings(object):
 
     @classmethod
     def set_resolution(cls, width, height):
+        # has minimum value
+        width, height = min(width, 2), min(height, 2)
+
         cmds.setAttr(cls.RENDER_ATTR_DICT['width'], width)
         cmds.setAttr(cls.RENDER_ATTR_DICT['height'], height)
         if width == height:

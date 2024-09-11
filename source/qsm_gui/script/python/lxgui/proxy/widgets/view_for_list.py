@@ -45,7 +45,7 @@ class PrxListView(
     QT_WIDGET_CLS = _qt_widget_entry_frame.QtEntryFrame
     QT_VIEW_CLS = _qt_widget_view_for_list.QtListWidget
     #
-    FILTER_MAXIMUM = 50
+    FILTER_COMPLETION_MAXIMUM = 50
 
     def __init__(self, *args, **kwargs):
         super(PrxListView, self).__init__(*args, **kwargs)
@@ -178,7 +178,7 @@ class PrxListView(
             _ = bsc_core.BscFnmatch.filter(
                 self._keyword_filter_completion_cache, six.u('*{}*').format(keyword)
             )
-            return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_MAXIMUM]
+            return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_COMPLETION_MAXIMUM]
         return []
 
     def __keyword_filter_cbk(self):

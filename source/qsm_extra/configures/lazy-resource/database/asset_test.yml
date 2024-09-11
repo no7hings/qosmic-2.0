@@ -116,8 +116,8 @@ entities:
             category: 'group'
             type: 'group'
 
-            gui_name: 'Face ()'
-            gui_name_chs: '面'
+            gui_name: 'Face Count (triangle)'
+            gui_name_chs: '面数（三角）'
 
         /mesh_count/face/unspecified:
             category: 'node'
@@ -209,6 +209,133 @@ entities:
 
             gui_name: 'More than 1B'
             gui_name_chs: '大于10亿'
+
+        /mesh_count/geometry:
+            category: 'group'
+            type: 'group'
+
+            gui_name: 'Geometry Count (All)'
+            gui_name_chs: '模型数（所有）'
+
+        /mesh_count/geometry/unspecified:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'Unspecified'
+            gui_name_chs: '未指定'
+
+        /mesh_count/geometry/less_than_500:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'Less than 500'
+            gui_name_chs: '小于500'
+
+        /mesh_count/geometry/500_to_1k:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '500-1K'
+            gui_name_chs: '5百-1千'
+
+        /mesh_count/geometry/1k_to_5k:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '1K-5K'
+            gui_name_chs: '1千-5千'
+
+        /mesh_count/geometry/5k_to_10k:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '5K-10K'
+            gui_name_chs: '5千-1万'
+
+        /mesh_count/geometry/10k_to_15k:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '10K-15K'
+            gui_name_chs: '1万-1.5万'
+
+        /mesh_count/geometry/15k_to_20k:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '15K-20K'
+            gui_name_chs: '1.5万-2万'
+
+        /mesh_count/geometry/25k_to_30k:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '15K-20K'
+            gui_name_chs: '2.5万-3万'
+
+        /mesh_count/geometry/more_than_30k:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'More than 30k'
+            gui_name_chs: '大于3万'
+
+        /mesh_count/non_cache_face_percentage:
+            category: 'group'
+            type: 'group'
+
+            gui_name: 'Non-cache Face Percentage (GPU)'
+            gui_name_chs: '非缓存面数百分比（GPU）'
+
+        /mesh_count/non_cache_face_percentage/unspecified:
+            category: 'node'
+            type: 'node'
+
+            gui_name: 'Unspecified'
+            gui_name_chs: '未指定'
+
+        /mesh_count/non_cache_face_percentage/0p:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '0%'
+            gui_name_chs: '0%'
+
+        /mesh_count/non_cache_face_percentage/0p_25p:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '0%-25%'
+            gui_name_chs: '0%-25%'
+
+        /mesh_count/non_cache_face_percentage/25p_50p:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '25%-50%'
+            gui_name_chs: '25%-50%'
+
+        /mesh_count/non_cache_face_percentage/50p_75p:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '50%-75%'
+            gui_name_chs: '50%-75%'
+
+        /mesh_count/non_cache_face_percentage/75p_100p:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '75%-100%'
+            gui_name_chs: '75%-100%'
+
+        /mesh_count/non_cache_face_percentage/100p:
+            category: 'node'
+            type: 'node'
+
+            gui_name: '100%'
+            gui_name_chs: '100%'
+
         # for system resource usage
         /system_resource_usage:
             category: 'group'
