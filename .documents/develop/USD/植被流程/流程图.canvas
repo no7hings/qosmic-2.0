@@ -1,0 +1,29 @@
+{
+	"nodes":[
+		{"id":"61dba2b365c61723","type":"group","x":-1680,"y":-240,"width":1120,"height":800,"label":"modeling"},
+		{"id":"610e74acfe1397ff","type":"group","x":760,"y":-240,"width":1160,"height":580,"label":"surfacing and lighting"},
+		{"id":"796239ea7b81902f","type":"group","x":-440,"y":-240,"width":1040,"height":580,"label":"planting"},
+		{"id":"fd857ab2d7f30bf3","type":"group","x":2080,"y":-240,"width":1240,"height":580,"label":"rending"},
+		{"id":"dee6bbef7b0ca942","type":"text","text":"ARNOLD","x":2120,"y":-200,"width":400,"height":320,"color":"5"},
+		{"id":"52bb832f7c68f222","type":"text","text":"HOUDINI\n植被（分布）制作","x":-400,"y":-200,"width":400,"height":320,"color":"5"},
+		{"id":"ea4c72478b1d8edb","type":"text","text":"USD Set\nUSD组装","x":120,"y":-200,"width":440,"height":320,"color":"6"},
+		{"id":"4a17cfb47382e52b","type":"text","text":"geometry\n几何物体（模型）数据，包含UV","x":-1020,"y":-110,"width":300,"height":140,"color":"6"},
+		{"id":"6180372879a7b832","type":"text","text":"surface\n材质数据（植被流程UV由模型输出）\n材质方案有两种：\n- 每个植被都有材质任务\n\t- 优点：HOUDINI中有预览，工作流比较线性。\n\t- 缺点：材质制作工作量比较大，修改材质需要返回MAYA","x":-1020,"y":140,"width":300,"height":400,"color":"1"},
+		{"id":"1cbd72a40c5a64d9","type":"text","text":"MAYA\n模型制作","x":-1640,"y":-200,"width":400,"height":320,"color":"5"},
+		{"id":"373e4bd3eaa764ce","type":"text","text":"KATANA\n灯光（材质）制作","x":800,"y":-200,"width":400,"height":320,"color":"5"},
+		{"id":"5053b8d3641bfebd","type":"text","text":"suface\n材质数据","x":1500,"y":-110,"width":300,"height":140,"color":"5"},
+		{"id":"4419f44f6c08d790","type":"text","text":"light\n灯光数据","x":1500,"y":70,"width":300,"height":140,"color":"5"}
+	],
+	"edges":[
+		{"id":"f0fdd7a0b87e3d98","fromNode":"1cbd72a40c5a64d9","fromSide":"right","toNode":"4a17cfb47382e52b","toSide":"left"},
+		{"id":"970f7a98c424259b","fromNode":"373e4bd3eaa764ce","fromSide":"right","toNode":"5053b8d3641bfebd","toSide":"left","toEnd":"none"},
+		{"id":"b281ba4d1ea858cd","fromNode":"5053b8d3641bfebd","fromSide":"right","toNode":"dee6bbef7b0ca942","toSide":"left"},
+		{"id":"5e08c82b836dc2dd","fromNode":"373e4bd3eaa764ce","fromSide":"right","toNode":"4419f44f6c08d790","toSide":"left","toEnd":"none"},
+		{"id":"0f7f824d7806ecbc","fromNode":"4419f44f6c08d790","fromSide":"right","toNode":"dee6bbef7b0ca942","toSide":"left"},
+		{"id":"3aa947582e6b57ec","fromNode":"4a17cfb47382e52b","fromSide":"right","toNode":"52bb832f7c68f222","toSide":"left"},
+		{"id":"0993ea2fbd29c5f5","fromNode":"ea4c72478b1d8edb","fromSide":"right","toNode":"373e4bd3eaa764ce","toSide":"left"},
+		{"id":"3d5597cc4dfb109f","fromNode":"52bb832f7c68f222","fromSide":"right","toNode":"ea4c72478b1d8edb","toSide":"left"},
+		{"id":"fc7985034394f58e","fromNode":"1cbd72a40c5a64d9","fromSide":"right","toNode":"6180372879a7b832","toSide":"left"},
+		{"id":"a264fe99aa43c01b","fromNode":"6180372879a7b832","fromSide":"right","toNode":"52bb832f7c68f222","toSide":"left"}
+	]
+}

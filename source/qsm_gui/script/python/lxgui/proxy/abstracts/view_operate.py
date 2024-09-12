@@ -597,6 +597,24 @@ class AbsGuiPrxListViewOpt(object):
             return _[-1].get_gui_dcc_obj(self._namespace)
 
 
+class AbsGuiQtListWidgetOpt(object):
+    def _init_list_view_opt_(self, qt_list_widget, namespace):
+        self._qt_list_widget = qt_list_widget
+        self._gui_thread_flag = 0
+
+    def restore(self):
+        self._qt_list_widget._view_model.restore()
+
+    def gui_check_exists(self, path):
+        return self._qt_list_widget._view_model._check_item_exists(path)
+
+    def gui_get_one(self, path):
+        return self._qt_list_widget._view_model._get_item(path)
+
+    def gui_register(self, path, qt_item):
+        self._qt_list_widget._view_model._register_item(path, qt_item)
+
+
 class AbsGuiPrxListViewAsFileOpt(AbsGuiPrxListViewOpt):
     def _init_list_view_as_file_opt_(self, prx_list_view, namespace):
         self._init_list_view_opt_(prx_list_view, namespace)

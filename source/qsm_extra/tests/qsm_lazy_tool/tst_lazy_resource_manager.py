@@ -14,5 +14,5 @@ def test():
     )
 
 
-# test()
-cProfile.run('test()')
+test()
+# cProfile.run('test()')

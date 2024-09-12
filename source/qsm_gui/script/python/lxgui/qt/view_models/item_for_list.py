@@ -18,6 +18,11 @@ from ...qt import core as _qt_core
 from . import base as _base
 
 
+class _Cache(object):
+    def __init__(self):
+        pass
+
+
 class _PlayThread(QtCore.QThread):
     timeout = qt_signal()
 
@@ -62,8 +67,8 @@ class ItemModelForList(object):
         pass
 
     def do_hover_move(self, point):
-        if self._data.image_sequence.flag is True:
-            # rest play flag
+        if self._data.image_sequence.enable is True:
+            # rest play
             self._data.image_sequence.play_flag = True
             self._data.image_sequence.auto_play_flag = False
 
@@ -106,10 +111,11 @@ class ItemModelForList(object):
         self._data = _base._Data(
             size=QtCore.QSize(),
             rect=QtCore.QRect(),
-
+            index=0,
             name=_base._Data(
-                text=None,
-                flag=False
+                text='',
+                enable=False,
+                rect=QtCore.QRect(),
             ),
 
             frame_color=QtGui.QColor(*_gui_core.GuiRgba.Dark),
@@ -132,16 +138,18 @@ class ItemModelForList(object):
             image_placeholder_svg=_gui_core.GuiIcon.get('placeholder/image'),
             # image
             image=_base._Data(
-                flag=False,
+                enable=False,
                 load_flag=False,
+
                 file=None,
                 pixmap=None,
                 size=None,
             ),
             # image sequence
             image_sequence=_base._Data(
-                flag=False,
+                enable=False,
                 load_flag=False,
+
                 play_flag=False,
                 auto_play_flag=False,
                 file=None,
@@ -161,6 +169,23 @@ class ItemModelForList(object):
                 key_set=set()
             ),
             force_hidden_flag=False,
+            # show
+            show=_base._Data(
+                load_flag=False,
+
+                cache_fnc=None,
+                build_fnc=None,
+            ),
+            menu=_base._Data(
+                content=None,
+                data=None,
+                data_generate_fnc=None
+            ),
+            property_dict=dict(),
+
+            sort_dict=dict(),
+
+            refresh_force_flag=True
         )
 
         self._pixmap_cache = QtGui.QPixmap()
@@ -186,16 +211,47 @@ class ItemModelForList(object):
     def view(self):
         return self._view
 
+    def draw(self, painter, option, rect):
+        painter.drawPixmap(
+            rect, self.refresh_pixmap_cache(rect)
+        )
+
+        select_flag = not not option.state & QtWidgets.QStyle.State_Selected
+        hover_flag = not not option.state & QtWidgets.QStyle.State_MouseOver
+
+        if select_flag:
+            painter.setPen(self._data.select_color)
+            painter.setBrush(QtCore.Qt.transparent)
+            painter.drawRect(self._data.select_rect)
+
+        if hover_flag:
+            painter.setPen(self._data.hover_color)
+            painter.setBrush(QtCore.Qt.transparent)
+            painter.drawRect(self._data.hover_rect)
+
+        self._update_play_by_hover(hover_flag)
+
+        self._update_show_auto()
+
+        self._update_image_auto()
+        self._update_image_sequence_auto()
+
+        # draw check
+        if hover_flag or self._data.check_flag:
+            self._draw_svg(painter, self._data.check_rect_f, self._data.check_svg)
+
+        # name
+        if self._data.name.enable is True:
+            self._draw_name(painter, self._data.name.rect, self._data.name.text)
+
     def compute_text_width_by(self, text):
         return self._font_metrics.width(text)+16
 
-    def update_pixmap_cache(self, rect, force=False):
-        if self._item.isHidden():
-            return
-
+    def refresh_pixmap_cache(self, rect, force=False):
         self.update(rect)
         # check size change
-        if rect.size() != self._data.size or force is True:
+        refresh_force_flag = self._data.refresh_force_flag
+        if rect.size() != self._data.size or force is True or refresh_force_flag is True:
             self._data.size = rect.size()
 
             self._pixmap_cache = QtGui.QPixmap(self._data.size)
@@ -214,16 +270,8 @@ class ItemModelForList(object):
             frame_rect = QtCore.QRect(frm_x, frm_y, frm_w, frm_h)
             painter.drawRect(frame_rect)
             frame_rect_f = QtCore.QRectF(frm_x, frm_y, frm_w, frm_h)
-            # image
-            if self._data.image.flag is True:
-                img_w, img_h = self._data.image.size.width(), self._data.image.size.height()
-                img_x_, img_y_, img_w_, img_h_ = bsc_core.RawSizeMtd.fit_to(
-                    (img_w, img_h), (frm_w, frm_h)
-                )
-                img_rect = QtCore.QRect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
-                self._draw_pixmap(painter, img_rect, self._data.image.pixmap)
-            # image sequence for play
-            elif self._data.image_sequence.flag is True:
+            # image sequence for play, draw image sequence first
+            if self._data.image_sequence.enable is True:
                 img_w, img_h = self._data.image_sequence.size.width(), self._data.image_sequence.size.height()
                 img_x_, img_y_, img_w_, img_h_ = bsc_core.RawSizeMtd.fit_to(
                     (img_w, img_h), (frm_w, frm_h)
@@ -249,15 +297,20 @@ class ItemModelForList(object):
                         painter.setPen(self._data.image_sequence.progress_color)
                         painter.setBrush(QtGui.QColor(self._data.image_sequence.progress_color))
                     painter.drawRect(progress_rect)
+            # image
+            elif self._data.image.enable is True:
+                img_w, img_h = self._data.image.size.width(), self._data.image.size.height()
+                img_x_, img_y_, img_w_, img_h_ = bsc_core.RawSizeMtd.fit_to(
+                    (img_w, img_h), (frm_w, frm_h)
+                )
+                img_rect = QtCore.QRect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
+                self._draw_pixmap(painter, img_rect, self._data.image.pixmap)
             else:
                 self._draw_svg(painter, frame_rect_f, self._data.image_placeholder_svg)
-            # name
-            if self._data.name.flag is True:
-                name_rect = QtCore.QRect(
-                    x, h-20, w, 20
-                )
-                self._draw_name(painter, name_rect, self._data.name.text)
+
             painter.end()
+
+            self._data.refresh_force_flag = False
         return self._pixmap_cache
 
     def update(self, rect):
@@ -278,19 +331,16 @@ class ItemModelForList(object):
             self._data.check_rect_f.setRect(
                 x+4, y+4, 16, 16
             )
-            # update image when rect is changed
-            if self.get_is_showable(rect) is True:
-                if self._data.image.load_flag is True:
-                    self._load_image(self._data.image.file)
-                elif self._data.image_sequence.load_flag is True:
-                    self._load_image_sequence(self._data.image_sequence.file)
+            self._data.name.rect.setRect(
+                x, y+h-20, w, 20
+            )
             return True
         return False
 
     def set_tool_tip(self, text):
         if text:
             self._data.tool_tip_css = _qt_core.QtUtil.generate_tool_tip_css(
-                text
+                self._data.name.text, text
             )
 
     def set_checked(self, boolean):
@@ -354,7 +404,16 @@ class ItemModelForList(object):
     def set_name(self, text):
         if text:
             self._data.name.text = text
-            self._data.name.flag = True
+            self._data.name.enable = True
+
+    def get_name(self):
+        return self._data.name.text
+
+    def set_index(self, index):
+        self._data.index= index
+
+    def mark_refresh_force_flag(self, boolean):
+        self._data.refresh_force_flag = boolean
 
     def apply_keyword_filter_keys(self, texts):
         keys = []
@@ -398,60 +457,81 @@ class ItemModelForList(object):
         self._data.image.file = file_path
         self._data.image.load_flag = True
 
-    def _load_image(self, file_path):
+    def _do_load_image(self):
         def cache_fnc_():
-            if os.path.isfile(file_path):
+            _file_path = self._data.image.file
+            _ = self._view._view_model.pull_image_cache(_file_path)
+            if _:
+                return _
+
+            if os.path.isfile(_file_path):
                 _image = QtGui.QImage()
-                _image.load(file_path)
+                _image.load(_file_path)
                 if _image.isNull() is False:
-                    return [_image, _image.size()]
+                    _pixmap = QtGui.QPixmap.fromImage(_image, QtCore.Qt.AutoColor)
+                    _data = [[_file_path], _pixmap, _pixmap.size()]
+                    self._view._view_model.push_image_cache(_file_path, _data)
+                    return _data
             return []
 
         def build_fnc_(data_):
             if data_:
-                _image, _image_size = data_
-                self._data.image.flag = True
-                self._data.image.pixmap = QtGui.QPixmap.fromImage(_image, QtCore.Qt.AutoColor)
+                _file_paths, _pixmap, _image_size = data_
+                self._data.image.enable = True
+                self._data.image.pixmap = _pixmap
                 self._data.image.size = _image_size
 
-                self.update_pixmap_cache(self._data.rect, True)
+                self.mark_refresh_force_flag(True)
                 self.update_view()
-
-        self._data.image.load_flag = False
 
         trd = self._view._generate_thread_(
             cache_fnc_, build_fnc_
         )
         trd.start()
 
+    def _update_image_auto(self):
+        if self._data.image.load_flag is True:
+            self._data.image.load_flag = False
+            self._do_load_image()
+
     def set_image_sequence(self, file_path):
         self._data.image_sequence.file = file_path
         self._data.image_sequence.load_flag = True
 
-    def _load_image_sequence(self, file_path):
+    def _update_image_sequence_auto(self):
+        if self._data.image_sequence.load_flag is True:
+            self._data.image_sequence.load_flag = False
+            self._do_load_image_sequence()
+
+    def _do_load_image_sequence(self):
         def cache_fnc_():
-            _file_paths = bsc_storage.StgFileTiles.get_tiles(file_path)
+            _file_path = self._data.image_sequence.file
+            _ = self._view._view_model.pull_image_cache(_file_path)
+            if _:
+                return _
+
+            _file_paths = bsc_storage.StgFileTiles.get_tiles(_file_path)
             if _file_paths:
-                _file_path = _file_paths[0]
                 _image = QtGui.QImage()
-                _image.load(_file_path)
+                _image.load(_file_paths[0])
                 if _image.isNull() is False:
-                    return [_file_paths, _image, _image.size()]
+                    _pixmap = QtGui.QPixmap.fromImage(_image, QtCore.Qt.AutoColor)
+                    _data = [_file_paths, _pixmap, _pixmap.size()]
+                    self._view._view_model.push_image_cache(_file_path, _data)
+                    return _data
             return []
 
         def build_fnc_(data_):
             if data_:
-                _file_paths, _image, _image_size = data_
-                self._data.image_sequence.flag = True
-                self._data.image_sequence.pixmap = QtGui.QPixmap.fromImage(_image, QtCore.Qt.AutoColor)
+                _file_paths, _pixmap, _image_size = data_
+                self._data.image_sequence.enable = True
+                self._data.image_sequence.pixmap = _pixmap
                 self._data.image_sequence.size = _image_size
                 self._data.image_sequence.files = _file_paths
                 self._data.image_sequence.index_maximum = len(_file_paths)-1
 
-                self.update_pixmap_cache(self._data.rect, True)
+                self.mark_refresh_force_flag(True)
                 self.update_view()
-
-        self._data.image_sequence.load_flag = False
 
         trd = self._view._generate_thread_(
             cache_fnc_, build_fnc_
@@ -471,7 +551,12 @@ class ItemModelForList(object):
         pass
 
     def update_view(self):
-        self._view.update()
+        # todo: use update() error in maya 2017?
+        # noinspection PyBroadException
+        try:
+            self._view.update()
+        except Exception:
+            pass
 
     def _update_sequence_image_at(self, index):
         index = max(min(index, self._data.image_sequence.index_maximum), 0)
@@ -490,52 +575,82 @@ class ItemModelForList(object):
             image.load(file_path)
             self._data.image_sequence.pixmap = QtGui.QPixmap.fromImage(image, QtCore.Qt.AutoColor)
 
-            self.update_pixmap_cache(self._data.rect, True)
+            self.mark_refresh_force_flag(True)
             self.update_view()
 
-    def _update_play(self, hover_flag, rect):
+    def _update_play_by_hover(self, hover_flag):
         if hover_flag != self._data.hover_flag:
             self._data.hover_flag = hover_flag
 
-            if self._data.image_sequence.flag is True:
+            if self._data.image_sequence.enable is True:
                 self._data.image_sequence.play_flag = hover_flag
                 if hover_flag is False:
                     self._stop_play()
 
-            self.update_pixmap_cache(self._data.rect, True)
+            self.mark_refresh_force_flag(True)
             self.update_view()
 
-    def draw(self, painter, option, rect):
-        painter.drawPixmap(
-            rect, self.update_pixmap_cache(rect)
+    def _update_show_auto(self):
+        if self._data.show.load_flag is True:
+            self._data.show.load_flag = False
+            self._do_load_show_fnc()
+
+    def _do_load_show_fnc(self):
+        trd = self._view._generate_thread_(
+            self._data.show.cache_fnc, self._data.show.build_fnc, post_fnc=self.refresh_force
         )
+        trd.start()
 
-        select_flag = not not option.state & QtWidgets.QStyle.State_Selected
-        hover_flag = not not option.state & QtWidgets.QStyle.State_MouseOver
+    def set_show_fnc(self, cache_fnc, build_fnc):
+        if cache_fnc is not None and build_fnc is not None:
+            if self._data.show.cache_fnc is None and self._data.show.build_fnc is None:
+                self._data.show.load_flag = True
 
-        if select_flag:
-            painter.setPen(self._data.select_color)
-            painter.setBrush(QtCore.Qt.transparent)
-            painter.drawRect(self._data.select_rect)
+                self._data.show.cache_fnc = cache_fnc
+                self._data.show.build_fnc = build_fnc
 
-        if hover_flag:
-            painter.setPen(self._data.hover_color)
-            painter.setBrush(QtCore.Qt.transparent)
-            painter.drawRect(self._data.hover_rect)
+    def refresh_force(self):
+        self.mark_refresh_force_flag(True)
+        # self.refresh_pixmap_cache(self._data.rect, True)
+        self.update_view()
+        
+    def set_menu_content(self, content):
+        self._data.menu.content = content
+    
+    def get_menu_content(self):
+        return self._data.menu.content
 
-        self._update_play(hover_flag, rect)
+    def set_menu_data(self, data):
+        self._data.menu.data = data
 
-        # draw check
-        if hover_flag or self._data.check_flag:
-            self._draw_svg(painter, self._data.check_rect_f, self._data.check_svg)
+    def get_menu_data(self):
+        return self._data.menu.data
+    
+    def set_menu_data_generate_fnc(self, fnc):
+        self._data.menu.data_generate_fnc = fnc
 
-    def get_is_showable(self, rect):
-        i_w, i_h = rect.width(), rect.height()
-        # check is visible
-        if i_w != 0 and i_h != 0:
-            viewport_rect = self._view.rect()
-            v_t, v_b = viewport_rect.top(), viewport_rect.bottom()
-            i_t, i_b = rect.top(), rect.bottom()
-            if v_b >= i_t and i_b >= v_t:
-                return True
-        return False
+    def get_menu_data_generate_fnc(self):
+        return self._data.menu.data_generate_fnc
+
+    def set_property_dict(self, dict_):
+        self._data.property_dict = dict_
+
+    def get_property(self, key):
+        return self._data.property_dict.get(key)
+
+    def update_sort_dict(self, dict_):
+        self._data.sort_dict.update(dict_)
+
+    def update_sort(self, key):
+        if key == 'index':
+            index = self._data.index
+            self._item.setText(
+                str(index).zfill(4)
+            )
+            self.set_name(str(index))
+        else:
+            value = self._data.sort_dict.get(key, '')
+            self._item.setText(
+                self._data.sort_dict.get(key, '')
+            )
+            self.set_name(value)

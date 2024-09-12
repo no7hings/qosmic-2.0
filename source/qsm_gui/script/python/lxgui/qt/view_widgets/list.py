@@ -15,6 +15,8 @@ from ...qt import abstracts as _qt_abstracts
 
 from ..widgets import base as _qt_wgt_base
 
+from ..widgets import utility as _wgt_utility
+
 from ..widgets import entry_frame as _wgt_entry_frame
 
 from ..widgets import container as _wgt_container
@@ -45,7 +47,11 @@ class QtListView(
 ):
     item_check_changed = qt_signal()
 
+    press_released = qt_signal()
+
     info_text_accepted = qt_signal(str)
+
+    QT_MENU_CLS = _wgt_utility.QtMenu
 
     def __init__(self, *args, **kwargs):
         super(QtListView, self).__init__(*args, **kwargs)
@@ -105,8 +111,55 @@ class QtListView(
 
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
-                    pass
+                    self.press_released.emit()
         return False
+
+    def contextMenuEvent(self, event):
+        _ = self.itemAt(event.pos())
+
+        menu = None
+
+        menu_data = self._view_model.get_menu_data()
+        menu_content = self._view_model.get_menu_content()
+        menu_data_generate_fnc = self._view_model.get_menu_data_generate_fnc()
+
+        if menu_content:
+            if menu is None:
+                menu = self.QT_MENU_CLS(self)
+            menu._set_menu_content_(menu_content)
+
+        if menu_data:
+            if menu is None:
+                menu = self.QT_MENU_CLS(self)
+            menu._set_menu_data_(menu_data)
+
+        if menu_data_generate_fnc:
+            if menu is None:
+                menu = self.QT_MENU_CLS(self)
+            menu._set_menu_data_(menu_data_generate_fnc())
+
+        if _:
+            item = _
+            item_menu_data = item._item_model.get_menu_data()
+            item_menu_content = item._item_model.get_menu_content()
+            item_menu_data_generate_fnc = item._item_model.get_menu_data_generate_fnc()
+            if item_menu_content:
+                if menu is None:
+                    menu = self.QT_MENU_CLS(self)
+                menu._set_menu_content_(item_menu_content)
+
+            if item_menu_data:
+                if menu is None:
+                    menu = self.QT_MENU_CLS(self)
+                menu._set_menu_data_(item_menu_data)
+
+            if item_menu_data_generate_fnc:
+                if menu is None:
+                    menu = self.QT_MENU_CLS(self)
+                menu._set_menu_data_(item_menu_data_generate_fnc())
+
+        if menu is not None:
+            menu._popup_start_()
 
     def wheelEvent(self, event):
         if _qt_core.QtUtil.is_ctrl_modifier():
@@ -134,10 +187,12 @@ class QtListWidget(
         self._tool_bar._set_align_left_()
 
         self._check_tool_box = self._tool_bar._create_tool_box_('check')
+        self._sort_and_group_tool_box = self._tool_bar._create_tool_box_('extra')
         self._keyword_filter_tool_box = self._tool_bar._create_tool_box_('keyword filter', size_mode=1)
 
         self._view = QtListView()
         lot.addWidget(self._view)
+        self._view_model = self._view._view_model
 
         self._info_bar_chart = _wgt_chart.QtChartForInfoBar()
         lot.addWidget(self._info_bar_chart)
@@ -146,10 +201,11 @@ class QtListWidget(
             self._info_bar_chart._set_text_
         )
 
-        self._build_check_tool_box()
-        self._build_filter_tool_box()
+        self._build_check_tool_box_()
+        self._build_sort_and_group_tool_box_()
+        self._build_keyword_filter_tool_box_()
 
-    def _build_check_tool_box(self):
+    def _build_check_tool_box_(self):
         self._check_all_button = _wgt_button.QtIconPressButton()
         self._check_all_button._set_name_text_('check all')
         self._check_all_button._set_icon_file_path_(_gui_core.GuiIcon.get('all_checked'))
@@ -157,6 +213,11 @@ class QtListWidget(
         self._check_all_button.press_clicked.connect(self._on_check_all_)
         self._check_all_button._set_tool_tip_text_(
             '"LMB-click" for checked all visible items'
+        )
+        self._check_all_button._set_menu_data_(
+            [
+                ('check visible', 'tool/show', self._on_check_visible_)
+            ]
         )
         #
         self._uncheck_all_button = _wgt_button.QtIconPressButton()
@@ -167,8 +228,24 @@ class QtListWidget(
         self._uncheck_all_button._set_tool_tip_text_(
             '"LMB-click" for unchecked all visible items'
         )
+        self._uncheck_all_button._set_menu_data_(
+            [
+                ('uncheck visible', 'tool/show', self._on_uncheck_visible_)
+            ]
+        )
 
-    def _build_filter_tool_box(self):
+    def _build_sort_and_group_tool_box_(self):
+        self._sort_button = _wgt_button.QtIconPressButton()
+        self._sort_button._set_name_text_('sort')
+        self._sort_button._set_icon_file_path_(_gui_core.GuiIcon.get('tool/sort-by-name-ascend'))
+        self._sort_and_group_tool_box._add_widget_(self._sort_button)
+
+        self._sort_button._set_menu_data_generate_fnc_(
+            self._view_model.generate_sort_menu_data
+        )
+        self._sort_button.press_clicked.connect(self._on_sort_order_swap_)
+
+    def _build_keyword_filter_tool_box_(self):
         self._keyword_filter_completion_cache = None
         self._keyword_filter_input = _wgt_input_for_filter.QtInputAsFilter()
         self._keyword_filter_tool_box._add_widget_(self._keyword_filter_input)
@@ -176,30 +253,43 @@ class QtListWidget(
         self._keyword_filter_input._set_input_completion_buffer_fnc_(self._keyword_filter_input_completion_buffer_fnc)
         self._keyword_filter_input.input_value_changed.connect(self._on_keyword_filer)
         self._keyword_filter_input.occurrence_previous_press_clicked.connect(
-            self._view._view_model.occurrence_item_previous
+            self._view_model.occurrence_item_previous
         )
         self._keyword_filter_input.occurrence_next_press_clicked.connect(
-            self._view._view_model.occurrence_item_next
+            self._view_model.occurrence_item_next
         )
         self._keyword_filter_input._set_occurrence_buttons_enable_(True)
 
     def _on_check_all_(self):
-        self._view._view_model.set_all_items_checked(True)
+        self._view_model.set_all_items_checked(True)
+
+    def _on_check_visible_(self):
+        self._view_model.set_visible_items_checked(True)
 
     def _on_uncheck_all_(self):
-        self._view._view_model.set_all_items_checked(False)
+        self._view_model.set_all_items_checked(False)
+
+    def _on_uncheck_visible_(self):
+        self._view_model.set_visible_items_checked(False)
+
+    def _on_sort_order_swap_(self):
+        self._view_model.swap_sort_order()
+        order = ['ascend', 'descend'][self._view_model.get_sort_order()]
+        self._sort_button._set_icon_file_path_(
+            _gui_core.GuiIcon.get('tool/sort-by-name-{}'.format(order)),
+        )
 
     def _on_keyword_filer(self):
-        self._view._view_model.set_keyword_filter_key_src(
+        self._view_model.set_keyword_filter_key_src(
             self._keyword_filter_input._get_all_keywords_()
         )
-        self._view._view_model.refresh_items_visible_by_any_filter()
+        self._view_model.refresh_items_visible_by_any_filter()
 
     def _keyword_filter_input_completion_buffer_fnc(self, *args, **kwargs):
         keyword = args[0]
         if keyword:
             if self._keyword_filter_completion_cache is None:
-                self._keyword_filter_completion_cache = self._view._view_model.get_all_items_keyword_filter_keys()
+                self._keyword_filter_completion_cache = self._view_model.get_all_items_keyword_filter_keys()
 
             _ = bsc_core.BscFnmatch.filter(
                 self._keyword_filter_completion_cache, six.u('*{}*').format(keyword)

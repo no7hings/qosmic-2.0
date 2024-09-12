@@ -1,5 +1,6 @@
 # coding:utf-8
 import collections
+
 import functools
 
 import six
@@ -13,6 +14,8 @@ import lxbasic.session as bsc_session
 import lxgui.core as gui_core
 
 import lxgui.qt.widgets as gui_qt_widgets
+
+import lxgui.qt.view_widgets as gui_qt_view_widgets
 
 import lxgui.proxy.abstracts as gui_prx_abstracts
 
@@ -917,6 +920,407 @@ class _GuiNodeOpt(
         return self.gui_get_checked_scr_entities() or self.gui_get_selected_scr_entities()
 
 
+class _GuiNodeOptNew(
+    _GuiBaseOpt,
+    gui_prx_abstracts.AbsGuiQtListWidgetOpt
+):
+    GUI_NAMESPACE = 'node'
+
+    CHUNK_SIZE_MINIMUM = 16
+    THREAD_MAXIMUM = 64
+
+    def restore_all(self):
+        super(_GuiNodeOptNew, self).restore()
+        self.gui_clear_cache()
+
+    def get_dtb_entity_menu_content(self, scr_entity):
+        scr_stage_key = self._page._scr_stage.key
+        options = []
+        c = self._window._configure.get(
+            'entity-actions.{}.{}.option-hooks'.format(scr_stage_key, scr_entity.entity_type)
+        )
+        if c:
+            for i in c:
+                if isinstance(i, dict):
+                    i_key = i.keys()[0]
+                    i_value = i.values()[0]
+                else:
+                    i_key = i
+                    i_value = {}
+                #
+                i_kwargs = dict(
+                    option_hook_key=i_key,
+                    stage_key=scr_stage_key,
+                    window_unique_id=self._window.get_window_unique_id(),
+                    entity_type=scr_entity.entity_type,
+                    entity=scr_entity.path,
+                )
+                i_kwargs.update(**{k: v for k, v in i_value.items() if v})
+                options.append(
+                    bsc_core.ArgDictStringOpt(i_kwargs).to_string(),
+                )
+            return bsc_session.OptionHook.generate_menu_contents(options, self._window._language)
+
+    def generate_menu_content(self):
+        pass
+
+    def __init__(self, window, page, session):
+        super(_GuiNodeOptNew, self).__init__(window, page, session)
+
+        self._item_frame_size = self._window._gui_configure.get('item_frame_size')
+
+        self._qt_list_widget = gui_qt_view_widgets.QtListWidget()
+        self._page._prx_h_splitter_0.add_widget(self._qt_list_widget)
+
+        self._qt_list_widget._view_model.set_item_frame_size(*self._item_frame_size)
+
+        self._qt_list_widget._view.press_released.connect(self.do_save_context)
+        self._qt_list_widget._view_model.set_sort_keys(['path', 'name', 'gui_name', 'gui_name_chs'])
+
+        self._init_list_view_opt_(self._qt_list_widget, self.GUI_NAMESPACE)
+
+        self._running_threads_stacks = []
+
+        self._window.register_window_close_method(
+            self.restore_thread_stack
+        )
+
+        self._type_cache_node_paths = []
+        self._tag_cache_node_paths = []
+
+        self._data_cache_dict = {}
+
+        self._node_path_set = set()
+
+    def gui_clear_cache(self):
+        self._type_cache_node_paths = []
+        self._tag_cache_node_paths = []
+        self._data_cache_dict.clear()
+
+    def restore_thread_stack(self):
+        if self._running_threads_stacks:
+            [i.do_quit() for i in self._running_threads_stacks]
+
+        self._running_threads_stacks = []
+
+    def do_save_context(self):
+        qt_items = self._qt_list_widget._view_model.get_selected_items()
+        if qt_items:
+            qt_item = qt_items[0]
+            scr_entity = qt_item._scr_entity
+            data_type = qt_item._item_model.get_property('data_type')
+            if data_type is not None:
+                file_path = qt_item._item_model.get_property(data_type)
+                data = dict(
+                    stage=self._page._scr_stage_key,
+                    path=scr_entity.path,
+                    gui_name_chs=scr_entity.gui_name_chs,
+                    data_type=data_type,
+                    file=file_path
+                )
+                qsm_lzy_scr_core.DataContext.save(data)
+
+    # node
+    def gui_add_nodes(self, scr_node_paths, gui_thread_flag):
+        if gui_thread_flag != self._gui_thread_flag:
+            return
+
+        scr_node_paths = bsc_core.RawTextsMtd.sort_by_number(scr_node_paths)
+
+        scr_node_paths_map = bsc_core.RawListMtd.split_to(
+            scr_node_paths, self.THREAD_MAXIMUM, self.CHUNK_SIZE_MINIMUM
+        )
+
+        ts = []
+        for i_scr_node_paths in scr_node_paths_map:
+            i_r = self._window.widget._generate_thread_(
+                functools.partial(
+                    self._gui_add_nodes_cache_fnc, i_scr_node_paths, gui_thread_flag
+                ),
+                self._gui_add_nodes_build_fnc
+            )
+            ts.append(i_r)
+        #
+        [x.do_start() for x in ts]
+
+    def _gui_add_nodes_cache_fnc(self, scr_node_paths, gui_thread_flag):
+        if gui_thread_flag != self._gui_thread_flag:
+            return [[], 0]
+
+        return [
+            [self._page._scr_stage.get_node(x) for x in scr_node_paths],
+            gui_thread_flag
+        ]
+
+    def _gui_add_nodes_build_fnc(self, *args):
+        scr_nodes, gui_thread_flag = args[0]
+        if gui_thread_flag != self._gui_thread_flag:
+            return
+
+        for i_scr_node in scr_nodes:
+            self.gui_add_node(i_scr_node, gui_thread_flag)
+
+    def gui_add_node(self, scr_entity, gui_thread_flag):
+        if scr_entity is None:
+            return
+
+        path = scr_entity.path
+        name = bsc_core.BscPath.to_dag_name(path)
+        if self.gui_check_exists(path) is True:
+            return self.gui_get_one(path)
+
+        qt_item = self._qt_list_widget._view_model.create_item()
+        self.gui_register(path, qt_item)
+        qt_item._scr_entity = scr_entity
+        qt_item._item_model.update_sort_dict(
+            dict(
+                path=path,
+                name=name,
+                gui_name=scr_entity.gui_name,
+                gui_name_chs=scr_entity.gui_name_chs,
+            )
+        )
+        qt_item._item_model.apply_keyword_filter_keys(
+            [scr_entity.path, scr_entity.gui_name, scr_entity.gui_name_chs]
+        )
+
+        gui_name = scr_entity.gui_name
+        if self._window._language == 'chs':
+            gui_name = scr_entity.gui_name_chs
+
+        qt_item._item_model.set_name(gui_name)
+
+        thumbnail_path = self._page._scr_stage.get_node_parameter(path, 'thumbnail')
+        if thumbnail_path:
+            qt_item._item_model.set_image(thumbnail_path)
+
+        qt_item._item_model.set_show_fnc(
+            functools.partial(self._gui_node_show_cache_fnc, qt_item, scr_entity, gui_thread_flag),
+            self._gui_node_show_build_fnc
+        )
+
+    def _gui_node_show_cache_fnc(self, qt_item, scr_entity, gui_thread_flag):
+        if gui_thread_flag != self._gui_thread_flag:
+            return [[], 0]
+
+        path = scr_entity.path
+
+        if path in self._data_cache_dict:
+            data = self._data_cache_dict[path]
+            return [[qt_item, scr_entity, data], gui_thread_flag]
+
+        tag_dict = collections.OrderedDict()
+        tag_scr_assigns = self._page._scr_stage.find_all(
+            self._page._scr_stage.EntityTypes.Assign,
+            [
+                ('type', 'is', 'tag_assign'),
+                ('source', 'is', scr_entity.path),
+            ]
+        )
+        for i_tag_scr_assign in tag_scr_assigns:
+            i_scr_tag_path = i_tag_scr_assign.target
+            i_scr_tag = self._page._scr_stage.get_entity(
+                self._page._scr_stage.EntityTypes.Tag, i_scr_tag_path
+            )
+            # fixme: tag may be None
+            if i_scr_tag is None:
+                continue
+
+            i_scr_tag_group = self._page._scr_stage.get_entity(
+                self._page._scr_stage.EntityTypes.Tag, bsc_core.BscPath.get_dag_parent_path(i_scr_tag_path)
+            )
+            if self._window._language == 'chs':
+                i_key = bsc_core.auto_string(i_scr_tag_group.gui_name_chs)
+                i_value = bsc_core.auto_string(i_scr_tag.gui_name_chs)
+            else:
+                i_key = bsc_core.auto_string(i_scr_tag_group.gui_name)
+                i_value = bsc_core.auto_string(i_scr_tag.gui_name)
+
+            if i_key in tag_dict:
+                i_value_all = tag_dict[i_key]
+                i_value_all += ', {}'.format(i_value)
+            else:
+                i_value_all = i_value
+
+            tag_dict[i_key] = i_value_all
+
+        scr_properties = self._page._scr_stage.find_all(
+            self._page._scr_stage.EntityTypes.Property,
+            [
+                ('type', 'is', 'parameter'),
+                ('node', 'is', scr_entity.path),
+            ]
+        )
+        property_dict = {}
+        for i_scr_property in scr_properties:
+            property_dict[i_scr_property.port] = i_scr_property.value
+
+        menu_content = self.get_dtb_entity_menu_content(scr_entity)
+        data = [tag_dict, property_dict, menu_content]
+        self._data_cache_dict[path] = data
+        return [
+            [qt_item, scr_entity, data], gui_thread_flag
+        ]
+
+    def _gui_node_show_build_fnc(self, *args):
+        build_data, gui_thread_flag = args[0]
+        if gui_thread_flag != self._gui_thread_flag:
+            return
+
+        qt_item, scr_entity, data = build_data
+        tag_dict, property_dict, menu_content = data
+
+        if menu_content:
+            qt_item._item_model.set_menu_content(menu_content)
+
+        tag_text = '\n'.join(['{}: {}'.format(x_k, x_v) for x_k, x_v in tag_dict.items()])
+        qt_item._item_model.set_tool_tip(
+            scr_entity.to_description(self._window._language)+'\n'+tag_text
+        )
+
+        if 'video' in property_dict:
+            qt_item._item_model.set_video(property_dict['video'])
+        elif 'image_sequence' in property_dict:
+            qt_item._item_model.set_image_sequence(property_dict['image_sequence'])
+
+        qt_item._item_model.set_property_dict(property_dict)
+
+    # by type
+    def do_gui_add_all_by_type(self, scr_type_paths):
+        if scr_type_paths:
+            self.restore()
+            self._gui_add_nodes_by_type_paths(scr_type_paths)
+        else:
+            self._type_cache_node_paths = []
+            self._page._gui_tag_opt.apply_intersection_paths(set(self._type_cache_node_paths))
+            #
+            self._page.do_gui_node_refresh_by_tag_check()
+
+    def _gui_add_nodes_by_type_paths(self, scr_type_paths):
+        self.restore_thread_stack()
+
+        self.gui_update_thread_flag()
+
+        t = self.gui_run_thread(
+            functools.partial(
+                self._gui_add_nodes_by_type_cache_fnc, scr_type_paths, self._gui_thread_flag
+            ),
+            self._gui_add_nodes_by_type_build_fnc
+        )
+
+        t.do_start()
+
+    def _gui_add_nodes_by_type_cache_fnc(self, scr_type_paths, gui_thread_flag):
+        if gui_thread_flag != self._gui_thread_flag:
+            return [[], 0]
+
+        all_sets = []
+        for i_scr_type_path in scr_type_paths:
+            i_scr_node_paths = self._page._gui_type_opt.get_assigned_node_paths(i_scr_type_path)
+            all_sets.append(i_scr_node_paths)
+
+        return [
+            list(set.union(*all_sets)),
+            gui_thread_flag
+        ]
+
+    def _gui_add_nodes_by_type_build_fnc(self, *args):
+        scr_node_paths, gui_thread_flag = args[0]
+        if gui_thread_flag != self._gui_thread_flag:
+            return
+
+        self._type_cache_node_paths = scr_node_paths
+
+        self._page._gui_tag_opt.apply_intersection_paths(set(self._type_cache_node_paths))
+
+        if self._tag_cache_node_paths:
+            scr_node_paths_ = list(set.intersection(set(self._tag_cache_node_paths), set(self._type_cache_node_paths)))
+        else:
+            scr_node_paths_ = scr_node_paths
+
+        self.gui_add_nodes(scr_node_paths_, gui_thread_flag)
+
+    # by tag
+    def do_gui_add_all_by_tag(self, scr_tag_paths):
+        if scr_tag_paths:
+            self.restore()
+            self._gui_add_nodes_by_tag_paths(scr_tag_paths)
+        else:
+            self._tag_cache_node_paths = []
+
+            self.restore()
+            if self._type_cache_node_paths:
+                self.restore_thread_stack()
+
+                self.gui_update_thread_flag()
+
+                self.gui_add_nodes(self._type_cache_node_paths, self._gui_thread_flag)
+
+    def _gui_add_nodes_by_tag_paths(self, scr_tag_paths):
+        self.restore_thread_stack()
+
+        self.gui_update_thread_flag()
+
+        t = self.gui_run_thread(
+            functools.partial(
+                self._gui_add_nodes_by_tag_cache_fnc, scr_tag_paths, self._gui_thread_flag
+            ),
+            self._gui_add_nodes_by_tag_build_fnc
+        )
+        t.do_start()
+
+    def _gui_add_nodes_by_tag_cache_fnc(self, scr_tag_paths, gui_thread_flag):
+        if gui_thread_flag != self._gui_thread_flag:
+            return [[], 0]
+
+        dict_ = {}
+        for i_scr_tag_path in scr_tag_paths:
+            dict_.setdefault(
+                bsc_core.BscPathOpt(i_scr_tag_path).get_parent_path(),
+                set()
+            ).add(i_scr_tag_path)
+
+        all_sets = []
+        for i_k, i_v in dict_.items():
+            i_scr_node_paths = set()
+            for j_scr_tag_path in i_v:
+                j_scr_node_paths = self._page._gui_tag_opt.get_assigned_node_paths(j_scr_tag_path)
+                i_scr_node_paths.update(j_scr_node_paths)
+
+            all_sets.append(i_scr_node_paths)
+
+        return [
+            list(set.intersection(*all_sets)),
+            gui_thread_flag
+        ]
+
+    def _gui_add_nodes_by_tag_build_fnc(self, *args):
+        scr_node_paths, gui_thread_flag = args[0]
+        if gui_thread_flag != self._gui_thread_flag:
+            return
+
+        self._tag_cache_node_paths = scr_node_paths
+
+        if self._type_cache_node_paths:
+            scr_node_paths_ = list(set.intersection(set(self._tag_cache_node_paths), set(self._type_cache_node_paths)))
+        else:
+            scr_node_paths_ = scr_node_paths
+
+        self.gui_add_nodes(scr_node_paths_, gui_thread_flag)
+
+    def gui_do_close(self):
+        pass
+
+    def gui_get_checked_scr_entities(self):
+        return [x._scr_entity for x in self._qt_list_widget._view_model.get_checked_items()]
+
+    def gui_get_selected_scr_entities(self):
+        return [x._scr_entity for x in self._qt_list_widget._view_model.get_selected_items()]
+
+    def gui_get_checked_or_selected_scr_entities(self):
+        return self.gui_get_checked_scr_entities() or self.gui_get_selected_scr_entities()
+
+
 class AbsPrxPageForManager(
     gui_prx_widgets.PrxBasePage,
     _GuiThreadExtra,
@@ -1051,7 +1455,7 @@ class AbsPrxPageForManager(
         self._gui_type_opt = _GuiTypeOpt(self._window, self, self._session)
         self._gui_tag_opt = _GuiTagOpt(self._window, self, self._session)
 
-        self._gui_node_opt = _GuiNodeOpt(self._window, self, self._session)
+        self._gui_node_opt = _GuiNodeOptNew(self._window, self, self._session)
 
         self._prx_v_splitter_1 = gui_prx_widgets.PrxVSplitter()
         self._prx_h_splitter_0.add_widget(self._prx_v_splitter_1)
