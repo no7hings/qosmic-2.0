@@ -180,10 +180,10 @@ class PrxTreeItem(
     def __init__(self, *args, **kwargs):
         super(PrxTreeItem, self).__init__(*args, **kwargs)
         self._init_prx_tree_def_()
-        #
+
         self._gui_menu_raw = []
         self._menu_title = None
-        #
+
         self._loading_item_prx = None
 
         self._key = None

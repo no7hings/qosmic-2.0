@@ -141,7 +141,9 @@ class PrxListView(
         return self._prx_filter_bar
 
     def generate_thread(self, cache_fnc, build_fnc, previous_fnc=None, post_fnc=None):
-        self._qt_view._generate_thread_(cache_fnc, build_fnc, previous_fnc=previous_fnc, post_fnc=post_fnc)
+        self._qt_view._generate_thread_(
+            cache_fnc, build_fnc, previous_fnc=previous_fnc, post_fnc=post_fnc
+        )
 
     def hide_top_tool_bar(self):
         self._top_prx_tool_bar.set_visible(False)

@@ -252,9 +252,14 @@ class QtLineWidget(QtWidgets.QWidget):
         self._line_border_color = _qt_core.QtBorderColors.Basic
         self._line_border_width = 1
 
+        self._background_color = _gui_core.GuiRgba.Transparent
+
     def _set_line_styles_(self, line_styles):
         # top, bottom, left, right
         self._line_styles = line_styles
+
+    def _set_background_color_(self, color):
+        self._background_color = color
 
     def _set_top_line_mode_(self):
         self._line_styles = [self.Style.Solid, self.Style.Null, self.Style.Null, self.Style.Null]
@@ -282,6 +287,11 @@ class QtLineWidget(QtWidgets.QWidget):
 
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
+        painter._set_border_color_(_gui_core.GuiRgba.Transparent)
+        painter._set_background_color_(self._background_color)
+        painter.drawRect(
+            QtCore.QRect(0, 0, self.width(), self.height())
+        )
         for seq, i in enumerate(self._line_styles):
             i_line = self._lines[seq]
             if i == self.Style.Solid:
@@ -364,7 +374,7 @@ class QtMenuBar(QtWidgets.QMenuBar):
         )
 
 
-# noinspection PyArgumentList
+# noinspection PyArgumentList,PyUnresolvedReferences
 class QtMenu(QtWidgets.QMenu):
     def __init__(self, *args, **kwargs):
         super(QtMenu, self).__init__(*args, **kwargs)
@@ -564,8 +574,8 @@ class QtMenu(QtWidgets.QMenu):
             QtGui.QCursor().pos()
         )
 
-    def _set_menu_content_(self, content):
-        _qt_core.GuiQtMenuOpt(self).create_by_content(content)
+    def _set_menu_content_(self, content, append=False):
+        _qt_core.GuiQtMenuOpt(self).create_by_content(content, append)
 
     @classmethod
     def _set_action_create_by_menu_content_(cls, menu):

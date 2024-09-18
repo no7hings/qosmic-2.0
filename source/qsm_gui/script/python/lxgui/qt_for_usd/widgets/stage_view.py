@@ -1377,16 +1377,16 @@ if QT_USD_FLAG is True:
             self._usd_environment_cur = 'stinson-beach'
 
         def __build_top_tool_bar_(self, layout):
-            self._top_tool_scroll_box = gui_qt_wgt_scroll.QtHScrollBox()
-            self._top_tool_scroll_box._set_layout_align_left_or_top_()
-            layout.addWidget(self._top_tool_scroll_box, 0, 1, 1, 1)
-            self._top_tool_scroll_box.setFixedHeight(28)
-            self._top_tool_scroll_box._set_line_styles_(
+            self._top_scroll_box = gui_qt_wgt_scroll.QtHScrollBox()
+            self._top_scroll_box._set_layout_align_left_or_top_()
+            layout.addWidget(self._top_scroll_box, 0, 1, 1, 1)
+            self._top_scroll_box.setFixedHeight(28)
+            self._top_scroll_box._set_line_styles_(
                 [
-                    self._top_tool_scroll_box.Style.Null,
-                    self._top_tool_scroll_box.Style.Solid,
-                    self._top_tool_scroll_box.Style.Null,
-                    self._top_tool_scroll_box.Style.Null
+                    self._top_scroll_box.Style.Null,
+                    self._top_scroll_box.Style.Solid,
+                    self._top_scroll_box.Style.Null,
+                    self._top_scroll_box.Style.Null
                 ]
             )
 
@@ -1405,7 +1405,7 @@ if QT_USD_FLAG is True:
 
             #
             tool_box = gui_qt_wgt_container.QtHToolBox()
-            self._top_tool_scroll_box.addWidget(tool_box)
+            self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('hud-display and camera-mask')
             #
@@ -1434,7 +1434,7 @@ if QT_USD_FLAG is True:
 
         def __add_material_and_light_switch_tools_(self):
             tool_box = gui_qt_wgt_container.QtHToolBox()
-            self._top_tool_scroll_box.addWidget(tool_box)
+            self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('material and light')
             #
@@ -1460,7 +1460,7 @@ if QT_USD_FLAG is True:
 
         def __add_color_space_switch_tools_(self):
             tool_box = gui_qt_wgt_container.QtHToolBox()
-            self._top_tool_scroll_box.addWidget(tool_box)
+            self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('color space')
             #
@@ -1484,7 +1484,7 @@ if QT_USD_FLAG is True:
 
         def __add_camera_and_renderer_switch_tools_(self):
             tool_box = gui_qt_wgt_container.QtHToolBox()
-            self._top_tool_scroll_box.addWidget(tool_box)
+            self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('camera and renderer')
             self._camera_menu_data = [
@@ -1515,7 +1515,7 @@ if QT_USD_FLAG is True:
 
         def __add_environment_switch_tools_(self):
             tool_box = gui_qt_wgt_container.QtHToolBox()
-            self._top_tool_scroll_box.addWidget(tool_box)
+            self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('display-purpose and environment')
             #
@@ -1536,7 +1536,7 @@ if QT_USD_FLAG is True:
 
         def __add_other_tools_(self):
             tool_box = gui_qt_wgt_container.QtHToolBox()
-            self._top_tool_scroll_box.addWidget(tool_box)
+            self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('display-purpose and environment')
             #
@@ -1611,16 +1611,16 @@ if QT_USD_FLAG is True:
                 self._usd_save_pre_geometry_snapshot_fnc_(file_p)
 
         def __build_left_tool_bar_(self, layout):
-            self._left_tool_scroll_box = gui_qt_wgt_scroll.QtVScrollBox()
-            self._left_tool_scroll_box._set_layout_align_left_or_top_()
-            layout.addWidget(self._left_tool_scroll_box, 1, 0, 1, 1)
-            self._left_tool_scroll_box.setFixedWidth(28)
-            self._left_tool_scroll_box._set_line_styles_(
+            self._left_scroll_box = gui_qt_wgt_scroll.QtVScrollBox()
+            self._left_scroll_box._set_layout_align_left_or_top_()
+            layout.addWidget(self._left_scroll_box, 1, 0, 1, 1)
+            self._left_scroll_box.setFixedWidth(28)
+            self._left_scroll_box._set_line_styles_(
                 [
-                    self._left_tool_scroll_box.Style.Null,
-                    self._left_tool_scroll_box.Style.Null,
-                    self._left_tool_scroll_box.Style.Null,
-                    self._left_tool_scroll_box.Style.Solid
+                    self._left_scroll_box.Style.Null,
+                    self._left_scroll_box.Style.Null,
+                    self._left_scroll_box.Style.Null,
+                    self._left_scroll_box.Style.Solid
                 ]
             )
 
@@ -1638,7 +1638,7 @@ if QT_USD_FLAG is True:
 
             #
             tool_box = gui_qt_wgt_container.QtVToolBox()
-            self._left_tool_scroll_box.addWidget(tool_box)
+            self._left_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('isolate select')
             #
@@ -1666,7 +1666,7 @@ if QT_USD_FLAG is True:
 
             #
             tool_box = gui_qt_wgt_container.QtVToolBox()
-            self._left_tool_scroll_box.addWidget(tool_box)
+            self._left_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('render mode')
             #
@@ -1696,7 +1696,7 @@ if QT_USD_FLAG is True:
 
         def __add_other_switch_tools_(self):
             tool_box = gui_qt_wgt_container.QtVToolBox()
-            self._left_tool_scroll_box.addWidget(tool_box)
+            self._left_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('extend')
             #

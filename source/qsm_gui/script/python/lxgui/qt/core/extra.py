@@ -212,8 +212,10 @@ class GuiQtMenuOpt(object):
     def _set_fnc_debug_run_(self, fnc):
         fnc()
 
-    def create_by_content(self, content):
-        self._root_menu.clear()
+    def create_by_content(self, content, append=False):
+        if append is False:
+            self._root_menu.clear()
+
         self._item_dic = {
             '/': self._root_menu
         }
@@ -398,3 +400,13 @@ class QtApplication(object):
             size=kwargs.get('size')
         )
         return w._get_result_()
+
+    @classmethod
+    def is_ctrl_modifier(cls):
+        # noinspection PyArgumentList
+        return QtWidgets.QApplication.keyboardModifiers() == QtCore.Qt.ControlModifier
+
+    @classmethod
+    def is_shift_modifier(cls):
+        # noinspection PyArgumentList
+        return QtWidgets.QApplication.keyboardModifiers() == QtCore.Qt.ShiftModifier

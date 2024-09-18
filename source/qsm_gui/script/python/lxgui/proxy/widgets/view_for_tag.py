@@ -89,13 +89,13 @@ class PrxTagView(
     def expand_all_groups(self):
         self._qt_view._expand_all_groups_()
 
-    def collapse_all_groups(self):
-        self._qt_view._collapse_all_groups_()
+    def collapse_all_group_items(self):
+        self._qt_view._collapse_all_group_items_()
 
-    def expand_for_all_from(self, path):
+    def set_item_expand_below(self, path):
         self._qt_view._expand_for_all_from_(path)
 
-    def clear_all_checked(self):
+    def clear_all_item_check(self):
         self._qt_view._clear_all_checked_()
 
     def get_top_tool_bar(self):
@@ -107,10 +107,10 @@ class PrxTagView(
     def connect_check_paths_changed_to(self, fnc):
         self._qt_view.check_paths_changed.connect(fnc)
 
-    def apply_intersection_paths(self, path_set):
+    def intersection_all_item_assign_path_set(self, path_set):
         self._qt_view._apply_intersection_paths_(path_set)
     
-    def get_all_checked_node_paths(self):
+    def get_checked_item_paths(self):
         return self._qt_view._get_all_checked_node_paths_()
 
     def set_force_hidden_flag_for_group(self, path, boolean):

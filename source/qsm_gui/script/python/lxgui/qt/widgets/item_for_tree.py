@@ -486,14 +486,14 @@ class QtTreeWidgetItem(
             ancestors = self._get_ancestors_()
             [
                 i.setData(
-                    column, QtCore.Qt.CheckStateRole, i._get_check_state_by_descendants(column), emit_send_enable=False
+                    column, QtCore.Qt.CheckStateRole, i._get_check_state_by_descendants_(column), emit_send_enable=False
                 ) for i in ancestors
             ]
 
     def _set_checked_(self, boolean, column=0):
         self._set_check_state_(boolean, column)
 
-    def _get_check_state_by_descendants(self, column):
+    def _get_check_state_by_descendants_(self, column):
         for i in self._get_descendants_():
             if i.checkState(column) == QtCore.Qt.Checked:
                 return QtCore.Qt.Checked

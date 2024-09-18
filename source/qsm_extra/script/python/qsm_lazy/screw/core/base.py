@@ -14,7 +14,12 @@ import os.path
 import random
 
 import peewee
+
 import six
+
+import threading
+
+import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
@@ -23,6 +28,8 @@ import lxbasic.pinyin as bsc_pinyin
 import lxbasic.resource as bsc_resource
 
 import lxbasic.storage as bsc_storage
+
+import qsm_general.core as qsm_gnl_core
 
 from .. import database as _database
 
@@ -114,6 +121,13 @@ class Entity(dict):
 
 
 class Stage(object):
+    """
+# create root user
+mysql -u root -p
+CREATE USER 'qosmic'@'%' IDENTIFIED WITH mysql_native_password BY 'qosmic';
+GRANT ALL PRIVILEGES ON *.* TO 'qosmic'@'%';
+FLUSH PRIVILEGES;
+    """
 
     class EntityTypes:
         Node = _database.Node.__name__
@@ -123,7 +137,18 @@ class Stage(object):
         Property = _database.Property.__name__
         Connection = _database.Connection.__name__
 
+        All = [
+            Node,
+            Type,
+            Tag,
+            Assign,
+            Property,
+            Connection
+        ]
+
     PATHSEP = '/'
+
+    LOCK = threading.Lock()
 
     TIME_TAGS = [
         'today',
@@ -160,6 +185,8 @@ class Stage(object):
     ROOT = None
     OPTIONS = dict()
 
+    DTB_CACHE = dict()
+
     @classmethod
     def get_root(cls):
         if cls.ROOT is not None:
@@ -184,18 +211,32 @@ class Stage(object):
 
     @classmethod
     def get_all_keys(cls):
-        lst = []
-        ptn_opt = bsc_core.BscStgParseOpt(cls.PTN_DATABASE_PATH)
-        ptn_opt.update_variants(**cls.get_options())
-        for i in ptn_opt.get_matches():
-            lst.append(i['key'])
-        return lst
+        cfg = cls.get_mysql_configure()
+        return cfg.get('keys')
+
+    @classmethod
+    def get_mysql_configure(cls):
+        if qsm_gnl_core.scheme_is_release():
+            key = 'lazy/mysql_new'
+        else:
+            key = 'lazy/mysql'
+        return bsc_resource.RscExtendConfigure.get_as_content(key)
+
+    @classmethod
+    def get_mysql_options(cls):
+        cfg = cls.get_mysql_configure()
+        return cfg.get('options')
 
     @classmethod
     def get_dtb_path(cls, key):
+        if key in cls.DTB_CACHE:
+            return cls.DTB_CACHE[key]
+
         copy_options = cls.get_options_as_copy()
         copy_options['key'] = key
-        return cls.PTN_DATABASE_PATH.format(**copy_options)
+        _ = cls.PTN_DATABASE_PATH.format(**copy_options)
+        cls.DTB_CACHE[key] = _
+        return _
 
     @classmethod
     def get_configure(cls, key):
@@ -240,8 +281,9 @@ class Stage(object):
     def to_entity(cls, entity_type, data):
         return Entity(entity_type, data)
 
-    def __init__(self, key):
+    def __init__(self, key, database_type='mysql'):
         self._key = key
+        self._dtb_type = database_type
         self._root = self.get_root()
         self._base_options = dict(
             root=self._root
@@ -249,10 +291,34 @@ class Stage(object):
 
         self._options = self.get_options_as_copy()
         self._options['key'] = self._key
+        self._dtb_key = '{}/{}'.format(self._dtb_type, self._key)
+        if self._dtb_key in self.DTB_CACHE:
+            self._dtb = self.DTB_CACHE[self._dtb_key]
+        else:
+            if self._dtb_type == 'sqlite':
+                self._dtb_path = self.get_dtb_path(key)
+                self._dtb = peewee.SqliteDatabase(
+                    self._dtb_path,
+                    thread_safe=True,
+                    pragmas=dict(
+                        max_open=64,
+                        # fixme: error in maya open, do not use "wal" mode
+                        # journal_mode='wal',
+                        cache_size=-1024*64,
+                        synchronous=0,
+                        timeout=10000
+                    )
+                )
+            elif self._dtb_type == 'mysql':
+                mysql_options = self.get_mysql_options()
+                self._dtb = peewee.MySQLDatabase(
+                    self._key,
+                    **mysql_options
+                )
+            else:
+                raise RuntimeError()
 
-        dtb_path = self.get_dtb_path(key)
-        self._dtb_path = dtb_path
-        self._dtb = peewee.SqliteDatabase(dtb_path, thread_safe=True)
+            self.DTB_CACHE[self._dtb_key] = self._dtb
 
         self.connect()
 
@@ -285,9 +351,10 @@ class Stage(object):
         self._dtb.close()
 
     def initialize(self):
-        directory_path = os.path.dirname(self._dtb_path)
-        if os.path.exists(directory_path) is False:
-            os.makedirs(directory_path)
+        if self._dtb_type == 'sqlite':
+            directory_path = os.path.dirname(self._dtb_path)
+            if os.path.exists(directory_path) is False:
+                os.makedirs(directory_path)
 
         self._dtb.create_tables(
             self.All
@@ -479,9 +546,10 @@ class Stage(object):
             gui_name_chs=gui_name_chs
         )
         options.update(**kwargs)
-        _ = dtb_entity.create(**options)
-        _.save()
-        return self.to_entity(entity_type, _.__data__)
+        with Stage.LOCK:
+            _ = dtb_entity.create(**options)
+            _.save()
+            return self.to_entity(entity_type, _.__data__)
 
     def remove_entity(self, entity_type, path):
         dtb_entity = self.to_dtd_entity(entity_type)
@@ -807,4 +875,22 @@ class Stage(object):
     def check_node_exists(self, path):
         return self.is_entity_exists(self.EntityTypes.Node, path)
 
+    def copy_from(self, stage):
+        entity_types = self.EntityTypes.All
+        with bsc_log.LogProcessContext.create(
+            maximum=len(entity_types), label='copy entity type'
+        ) as l_p_0:
 
+            for i_entity_type in entity_types:
+                i_entities = stage.find_all(i_entity_type)
+                with bsc_log.LogProcessContext.create(
+                    maximum=len(i_entities), label='copy entity',
+                ) as l_p_1:
+                    for j_entity in i_entities:
+                        j_entity_options = dict()
+                        j_entity_options.update(j_entity)
+                        self.create_entity(i_entity_type, **j_entity_options)
+
+                        l_p_1.do_update()
+
+                l_p_0.do_update()

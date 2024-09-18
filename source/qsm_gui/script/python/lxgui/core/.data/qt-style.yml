@@ -231,6 +231,75 @@ widget:
         QTreeView::indicator:unchecked:disabled {
             image: url(<option.icon-dir>/tree-box-check-disable.svg);
         }
+    QTreeView_new:
+        |-
+        QTreeView{
+            show-decoration-selected: 1;
+            background: rgba(<option.background.color-transparent>);
+            color: rgba(<option.font.color-basic>); 
+            border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+        }
+        QTreeView::item{
+            background: rgba(<option.background.color-transparent>);
+            border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+        }
+        QTreeView::item:hover{
+            background: rgba(<option.background.color-transparent>);
+            border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+            color: rgba(<option.font.color-hovered>); 
+        }
+        QTreeView::item:selected{
+            background: rgba(<option.background.color-transparent>);
+            border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+            color: rgba(<option.font.color-selected>); 
+        }
+        QTreeView::item:selected:hover{
+            background: rgba(<option.background.color-transparent>);
+            border: 1px rgba(<option.border.color-transparent>); border-radius: 0px; border-style: solid;
+            color: rgba(<option.font.color-hovered>); 
+        }
+        QTreeView::branch:open:has-children:has-siblings{
+            border-image: none; image: url(<option.icon-file.expand>);
+        }
+        QTreeView::branch:open:has-children:has-siblings:hover{
+            border-image: none; image: url(<option.icon-file.expand>);
+        }
+        QTreeView::branch:open:has-children:!has-siblings{
+            border-image: none; image: url(<option.icon-file.expand>);
+        }
+        QTreeView::branch:open:has-children:!has-siblings:hover{
+            border-image: none; image: url(<option.icon-file.expand>);
+        }
+        QTreeView::branch:closed:has-children:has-siblings{
+            border-image: none; image: url(<option.icon-file.collapse>);
+        }
+        QTreeView::branch:closed:has-children:has-siblings:hover{
+            border-image: none; image: url(<option.icon-file.collapse>);
+        }
+        QTreeView::branch:closed:has-children:!has-siblings{
+            border-image: none; image: url(<option.icon-file.collapse>);
+        }
+        QTreeView::branch:closed:has-children:!has-siblings:hover{
+            border-image: none; image: url(<option.icon-file.collapse>);
+        }
+        QTreeView::indicator:checked{
+            image: url(<option.icon-dir>/tree-box-check-on.svg);
+        }
+        QTreeView::indicator:checked:hover {
+            image: url(<option.icon-dir>/tree-box-check-on-hover.svg);
+        }
+        QTreeView::indicator:checked:disabled {
+            image: url(<option.icon-dir>/tree-box-check-disable.svg);
+        }
+        QTreeView::indicator:unchecked{
+            image: url(<option.icon-dir>/tree-box-check-off.svg);
+        }
+        QTreeView::indicator:unchecked:hover{
+            image: url(<option.icon-dir>/tree-box-check-off-hover.svg);
+        }
+        QTreeView::indicator:unchecked:disabled {
+            image: url(<option.icon-dir>/tree-box-check-disable.svg);
+        }
     QHeaderView:
         |-
         QHeaderView{
@@ -322,7 +391,7 @@ widget:
         QListView{
             background: rgba(<option.background.color-dim>); 
             color: rgba(<option.font.color-basic>);
-            border: 1px rgba(<option.border.color-dim>); border-radius: 0px; border-style: solid; 
+            border: none; 
         }
     QTextBrowser:
         |-

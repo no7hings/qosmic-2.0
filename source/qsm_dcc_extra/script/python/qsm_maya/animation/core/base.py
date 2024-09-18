@@ -21,7 +21,7 @@ class AdvQuery(object):
         self._main_ctt = bsc_content.Dict(value=ctt.get('main'))
         self._main_query = bsc_content.Dict()
 
-        if qsm_gnl_core.scheme_is_new():
+        if qsm_gnl_core.scheme_is_release():
             self._skeleton_ctt = bsc_content.Dict(value=ctt.get('skeleton_new'))
         else:
             self._skeleton_ctt = bsc_content.Dict(value=ctt.get('skeleton'))
@@ -31,7 +31,7 @@ class AdvQuery(object):
         self._rotation_query = bsc_content.Dict()
 
         self._distance_query = bsc_content.Dict(value=ctt.get('distance'))
-        if qsm_gnl_core.scheme_is_new():
+        if qsm_gnl_core.scheme_is_release():
             self._geometry_query = bsc_content.Dict(value=ctt.get('geometry_new'))
         else:
             self._geometry_query = bsc_content.Dict(value=ctt.get('geometry'))

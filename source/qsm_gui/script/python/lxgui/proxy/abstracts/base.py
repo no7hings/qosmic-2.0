@@ -436,20 +436,33 @@ class AbsPrxProgressingDef(object):
         self._qt_progressing_char._refresh_widget_draw_()
 
     def create_progress_model(self, maximum, label=None):
-        g_p = self.GUI_PROGRESS_MODEL_CLS(
-            proxy=self,
-            qt_progress=self._qt_progressing_char,
-            maximum=maximum,
-            label=label
-        )
-        if self._current_progress is None:
-            self._current_progress = g_p
-        else:
-            if self._current_progress.get_is_stop() is True:
+        if maximum > 0:
+            g_p = self.GUI_PROGRESS_MODEL_CLS(
+                proxy=self,
+                qt_progress=self._qt_progressing_char,
+                maximum=maximum,
+                label=label
+            )
+            if self._current_progress is None:
                 self._current_progress = g_p
             else:
-                self._current_progress.add_child(g_p)
-        return g_p
+                if self._current_progress.get_is_stop() is True:
+                    self._current_progress = g_p
+                else:
+                    self._current_progress.add_child(g_p)
+            return g_p
+
+        class _GP(object):
+            def __init__(self):
+                pass
+
+            def do_update(self):
+                pass
+
+            def set_stop(self):
+                pass
+
+        return _GP()
 
     @contextmanager
     def gui_progressing(self, maximum, label=None):

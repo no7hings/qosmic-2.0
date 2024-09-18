@@ -179,7 +179,7 @@ c.RigValidationTemplate.test()
 
     @classmethod
     def test(cls):
-        if qsm_gnl_core.scheme_is_new():
+        if qsm_gnl_core.scheme_is_release():
             cls('LuoFeng_XL_Skin').generate(
                 'Y:/deploy/.configures/rig/adv_validation_template_new.yml'
             )
@@ -204,7 +204,7 @@ c.RigValidationOpt.test()
         self._file_path = qsm_mya_core.ReferenceNamespacesCache().get_file(namespace)
 
         self._adv_cfg = bsc_resource.RscExtendConfigure.get_as_content('rig/adv_validation')
-        if qsm_gnl_core.scheme_is_new():
+        if qsm_gnl_core.scheme_is_release():
             self._template_cfg = bsc_resource.RscExtendConfigure.get_as_content('rig/adv_validation_template_new')
         else:
             self._template_cfg = bsc_resource.RscExtendConfigure.get_as_content('rig/adv_validation_template')

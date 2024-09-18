@@ -222,15 +222,14 @@ class AbsQtToolBox(QtWidgets.QWidget):
         self._build_widget_()
 
     def _build_widget_(self):
-        self._wgt_w, self._wgt_h = 24, 24
-        self._wgt_w_min, self._wgt_h_min = 12, 24
-
         if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
             lot = _base.QtHBoxLayout(self)
         elif self.QT_ORIENTATION == QtCore.Qt.Vertical:
             lot = _base.QtVBoxLayout(self)
         else:
             raise RuntimeError()
+
+        self.setMaximumSize(self.QT_HEAD_W, self.QT_HEAD_H)
 
         lot.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         lot.setContentsMargins(*[0]*4)
@@ -265,13 +264,16 @@ class AbsQtToolBox(QtWidgets.QWidget):
         self._refresh_widget_size_()
 
     def _refresh_widget_size_(self):
-        self.setMaximumSize(self._wgt_w_min, self._wgt_h_min)
-        self._head.setMaximumSize(self._wgt_w_min, self._wgt_h)
-        self._head.setMinimumSize(self._wgt_w_min, self._wgt_h)
         if self._get_is_expanded_() is True:
-            self.setMaximumWidth(166667)
+            if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
+                self.setMaximumWidth(166667)
+            else:
+                self.setMaximumHeight(166667)
         else:
-            self.setMaximumWidth(self._wgt_w_min)
+            if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
+                self.setMaximumWidth(self.QT_HEAD_W)
+            else:
+                self.setMaximumHeight(self.QT_HEAD_H)
 
     def _set_expanded_(self, boolean):
         self._head._set_expanded_(boolean)

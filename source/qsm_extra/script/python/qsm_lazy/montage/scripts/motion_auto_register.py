@@ -9,6 +9,8 @@ import lxbasic.content as bsc_content
 
 import lxbasic.storage as bsc_storage
 
+import lxbasic.scan as bsc_scan
+
 import lxbasic.pinyin as bsc_pinyin
 
 from ...screw import core as _scr_core
@@ -39,7 +41,10 @@ class StlRegisterOpt(object):
 
         content = bsc_content.Content(value=json_file_path)
         data = bsc_storage.StgFileOpt(json_file_path).set_read()
-        reference_file_path = content.get('metadata.references')[0]['filename']
+        references = content.get('metadata.references')
+        if not references:
+            return
+        reference_file_path = references[0]['filename']
         ctime = content.get('metadata.ctime')
 
         start_frame = content.get('metadata.startFrame')
@@ -96,7 +101,7 @@ class StlRegisterOpt(object):
         return '/'.join(keys)
 
 
-class StlBatchRegister(object):
+class MotionBatchRegister(object):
     def __init__(self, root_path, directory_path):
         self._scr_stage = _scr_core.Stage('motion_test')
 

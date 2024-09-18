@@ -12,23 +12,8 @@ sys.stdout.write(
 )
 
 
-def scheme_is_new():
+def scheme_is_release():
     return QSM_SCHEME == 'new'
-
-
-class QsmProject(object):
-    PROJECT_NAME_MAP = dict(
-        QSM_TST=['Test', '测试']
-    )
-    PROJECT_NAME_MAP_NEW = dict(
-        TSXK=['TSXK', '吞噬星空']
-    )
-
-    @classmethod
-    def get_name_args(cls, project_name):
-        if scheme_is_new():
-            return cls.PROJECT_NAME_MAP_NEW[project_name]
-        return cls.PROJECT_NAME_MAP[project_name]
 
 
 class QsmAsset(object):
@@ -49,25 +34,25 @@ class QsmAsset(object):
 
     @classmethod
     def get_character_and_prop_role_mask(cls):
-        if scheme_is_new():
+        if scheme_is_release():
             return cls.CHARACTER_AND_PROP_ROLE_MASK_NEW
         return cls.CHARACTER_AND_PROP_ROLE_MASK
 
     @classmethod
     def get_character_role_mask(cls):
-        if scheme_is_new():
+        if scheme_is_release():
             return cls.CHARACTER_ROLE_MASK_NEW
         return cls.CHARACTER_ROLE_MASK
 
     @classmethod
     def get_prop_role_mask(cls):
-        if scheme_is_new():
+        if scheme_is_release():
             return cls.PROP_ROLE_MASK_NEW
         return cls.PROP_ROLE_MASK
 
     @classmethod
     def get_scenery_role_mask(cls):
-        if scheme_is_new():
+        if scheme_is_release():
             return cls.SCENERY_ROLE_MASK_NEW
         return cls.SCENERY_ROLE_MASK
 
@@ -91,3 +76,21 @@ def check_python_lib():
         )
         return False
     return True
+
+
+class MySql(object):
+    @classmethod
+    def get_options(cls):
+        if scheme_is_release():
+            return dict(
+                user='root',
+                password='qosmic',
+                host='10.33.4.90',
+                port=3306
+            )
+        return dict(
+            user='root',
+            password='qosmic',
+            host='localhost',
+            port=3306
+        )

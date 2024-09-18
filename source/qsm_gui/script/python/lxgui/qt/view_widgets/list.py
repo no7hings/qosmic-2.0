@@ -19,6 +19,8 @@ from ..widgets import utility as _wgt_utility
 
 from ..widgets import entry_frame as _wgt_entry_frame
 
+from ..widgets import scroll as _wgt_scroll
+
 from ..widgets import container as _wgt_container
 
 from ..widgets import button as _wgt_button
@@ -27,9 +29,13 @@ from ..widgets import chart as _wgt_chart
 
 from ..widgets import input_for_filter as _wgt_input_for_filter
 
-from .. import view_models as _view_models
+from ..view_models import base as _vew_mod_base
+
+from ..view_models import list as _vew_mod_list
 
 from . import item_for_list as _item_for_list
+
+from . import base as _base
 
 
 class _QtListItemDelegate(QtWidgets.QStyledItemDelegate):
@@ -41,20 +47,15 @@ class _QtListItemDelegate(QtWidgets.QStyledItemDelegate):
         self.parent()._view_model.draw_item(painter, option, index)
 
 
-class QtListView(
+class _QtListViewWidget(
     QtWidgets.QListWidget,
+    _vew_mod_base.AbsView,
     _qt_abstracts.AbsQtThreadWorkerExtraDef,
 ):
-    item_check_changed = qt_signal()
-
-    press_released = qt_signal()
-
-    info_text_accepted = qt_signal(str)
-
     QT_MENU_CLS = _wgt_utility.QtMenu
 
     def __init__(self, *args, **kwargs):
-        super(QtListView, self).__init__(*args, **kwargs)
+        super(_QtListViewWidget, self).__init__(*args, **kwargs)
 
         self.setStyleSheet(_qt_core.GuiQtStyle.get('QListView'))
         self.verticalScrollBar().setStyleSheet(_qt_core.GuiQtStyle.get('QScrollBar'))
@@ -65,11 +66,14 @@ class QtListView(
 
         self.setResizeMode(self.Adjust)
         self.setViewMode(self.IconMode)
-        self.setSelectionMode(self.SingleSelection)
+
+        self.setSelectionMode(self.ExtendedSelection)
         self.setVerticalScrollMode(self.ScrollPerItem)
         self.setDragEnabled(False)
+        # noinspection PyUnresolvedReferences
+        self.itemSelectionChanged.connect(self.item_select_changed.emit)
 
-        self._view_model = _view_models.ViewModelForList(self)
+        self._view_model = _vew_mod_list.ListViewModel(self)
         self._view_model.data.item.cls = _item_for_list.QtListItem
 
         self.setItemDelegate(_QtListItemDelegate(self))
@@ -114,9 +118,17 @@ class QtListView(
                     self.press_released.emit()
         return False
 
-    def contextMenuEvent(self, event):
-        _ = self.itemAt(event.pos())
+    def paintEvent(self, event):
+        if not self.count():
+            painter = _qt_core.QtPainter(self.viewport())
+            painter._draw_empty_image_by_rect_(
+                self.rect(),
+                'placeholder/empty'
+            )
+        else:
+            super(_QtListViewWidget, self).paintEvent(event)
 
+    def contextMenuEvent(self, event):
         menu = None
 
         menu_data = self._view_model.get_menu_data()
@@ -126,7 +138,7 @@ class QtListView(
         if menu_content:
             if menu is None:
                 menu = self.QT_MENU_CLS(self)
-            menu._set_menu_content_(menu_content)
+            menu._set_menu_content_(menu_content, append=True)
 
         if menu_data:
             if menu is None:
@@ -138,15 +150,16 @@ class QtListView(
                 menu = self.QT_MENU_CLS(self)
             menu._set_menu_data_(menu_data_generate_fnc())
 
-        if _:
-            item = _
+        # data from item
+        item = self.itemAt(event.pos())
+        if item:
             item_menu_data = item._item_model.get_menu_data()
             item_menu_content = item._item_model.get_menu_content()
             item_menu_data_generate_fnc = item._item_model.get_menu_data_generate_fnc()
             if item_menu_content:
                 if menu is None:
                     menu = self.QT_MENU_CLS(self)
-                menu._set_menu_content_(item_menu_content)
+                menu._set_menu_content_(item_menu_content, append=True)
 
             if item_menu_data:
                 if menu is None:
@@ -166,36 +179,46 @@ class QtListView(
             self._view_model.on_wheel(event)
             event.ignore()
         else:
-            super(QtListView, self).wheelEvent(event)
+            super(_QtListViewWidget, self).wheelEvent(event)
 
 
 class QtListWidget(
-    _wgt_entry_frame.QtEntryFrame
+    _base._BaseViewWidget
 ):
     FILTER_COMPLETION_MAXIMUM = 50
 
     def __init__(self, *args, **kwargs):
         super(QtListWidget, self).__init__(*args, **kwargs)
+        # refresh
+        self._refresh_button = _wgt_button.QtIconPressButton()
+        self._grid_lot.addWidget(self._refresh_button, 0, 0, 1, 1)
+        self._refresh_button.setFixedSize(28, 28)
+        self._refresh_button._set_icon_file_path_(
+            _gui_core.GuiIcon.get('refresh')
+        )
+        self._refresh_button.press_clicked.connect(self.refresh.emit)
+        # top
+        self._top_scroll_box = _wgt_scroll.QtHScrollBox()
+        self._grid_lot.addWidget(self._top_scroll_box, 0, 1, 1, 1)
+        self._top_scroll_box._set_layout_align_left_or_top_()
+        self._top_scroll_box.setFixedHeight(28)
+        # left
+        self._left_scroll_box = _wgt_scroll.QtVScrollBox()
+        self._grid_lot.addWidget(self._left_scroll_box, 1, 0, 1, 1)
+        self._left_scroll_box._set_layout_align_left_or_top_()
+        self._left_scroll_box.setFixedWidth(28)
 
-        lot = _qt_wgt_base.QtVBoxLayout(self)
-        lot.setContentsMargins(*[4]*4)
-        lot.setSpacing(2)
+        self._check_tool_box = self._create_left_tool_box_('check')
+        self._sort_and_group_tool_box = self._create_left_tool_box_('sort and group')
+        self._keyword_filter_tool_box = self._create_top_tool_box_('keyword filter', size_mode=1)
 
-        self._tool_bar = _wgt_container.QtHToolBar()
-        lot.addWidget(self._tool_bar)
-        self._tool_bar._set_expanded_(True)
-        self._tool_bar._set_align_left_()
-
-        self._check_tool_box = self._tool_bar._create_tool_box_('check')
-        self._sort_and_group_tool_box = self._tool_bar._create_tool_box_('extra')
-        self._keyword_filter_tool_box = self._tool_bar._create_tool_box_('keyword filter', size_mode=1)
-
-        self._view = QtListView()
-        lot.addWidget(self._view)
+        self._view = _QtListViewWidget()
+        self._grid_lot.addWidget(self._view, 1, 1, 1, 1)
+        self._view.setFocusProxy(self)
         self._view_model = self._view._view_model
 
         self._info_bar_chart = _wgt_chart.QtChartForInfoBar()
-        lot.addWidget(self._info_bar_chart)
+        self._grid_lot.addWidget(self._info_bar_chart, 2, 1, 1, 1)
         self._info_bar_chart.hide()
         self._view.info_text_accepted.connect(
             self._info_bar_chart._set_text_
@@ -204,6 +227,21 @@ class QtListWidget(
         self._build_check_tool_box_()
         self._build_sort_and_group_tool_box_()
         self._build_keyword_filter_tool_box_()
+
+    def _create_top_tool_box_(self, name, size_mode=0):
+        tool_box = _wgt_container.QtHToolBox()
+        self._top_scroll_box.addWidget(tool_box)
+        tool_box._set_expanded_(True)
+        tool_box._set_name_text_(name)
+        tool_box._set_size_mode_(size_mode)
+        return tool_box
+
+    def _create_left_tool_box_(self, name):
+        tool_box = _wgt_container.QtVToolBox()
+        self._left_scroll_box.addWidget(tool_box)
+        tool_box._set_expanded_(True)
+        tool_box._set_name_text_(name)
+        return tool_box
 
     def _build_check_tool_box_(self):
         self._check_all_button = _wgt_button.QtIconPressButton()
@@ -241,12 +279,11 @@ class QtListWidget(
         self._sort_and_group_tool_box._add_widget_(self._sort_button)
 
         self._sort_button._set_menu_data_generate_fnc_(
-            self._view_model.generate_sort_menu_data
+            self._view_model.generate_item_sort_menu_data
         )
         self._sort_button.press_clicked.connect(self._on_sort_order_swap_)
 
     def _build_keyword_filter_tool_box_(self):
-        self._keyword_filter_completion_cache = None
         self._keyword_filter_input = _wgt_input_for_filter.QtInputAsFilter()
         self._keyword_filter_tool_box._add_widget_(self._keyword_filter_input)
 
@@ -273,8 +310,8 @@ class QtListWidget(
         self._view_model.set_visible_items_checked(False)
 
     def _on_sort_order_swap_(self):
-        self._view_model.swap_sort_order()
-        order = ['ascend', 'descend'][self._view_model.get_sort_order()]
+        self._view_model.swap_item_sort_order()
+        order = ['ascend', 'descend'][self._view_model.get_item_sort_order()]
         self._sort_button._set_icon_file_path_(
             _gui_core.GuiIcon.get('tool/sort-by-name-{}'.format(order)),
         )
@@ -288,11 +325,8 @@ class QtListWidget(
     def _keyword_filter_input_completion_buffer_fnc(self, *args, **kwargs):
         keyword = args[0]
         if keyword:
-            if self._keyword_filter_completion_cache is None:
-                self._keyword_filter_completion_cache = self._view_model.get_all_items_keyword_filter_keys()
-
             _ = bsc_core.BscFnmatch.filter(
-                self._keyword_filter_completion_cache, six.u('*{}*').format(keyword)
+                self._view_model.generate_keyword_filter_completion_cache(), six.u('*{}*').format(keyword)
             )
             return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_COMPLETION_MAXIMUM]
         return []

@@ -100,7 +100,7 @@ class _AbsTagBase(object):
         else:
             [x._set_checked_(False) for x in ancestors if sum(x._get_sibling_check_states_()) == 0]
 
-    def _assign_path_set_(self, path_set):
+    def _set_assign_path_set_(self, path_set):
         self._path_set = path_set
         self._set_number_(len(self._path_set))
 
@@ -964,11 +964,11 @@ class QtViewForTagRoot(
         self._sca._layout._clear_all_widgets_()
         self._sca._set_empty_draw_flag_(True)
 
-    def _collapse_all_groups_(self):
+    def _collapse_all_group_items_(self):
         [x._set_expanded_(False) for x in self._item_dict.values() if isinstance(x, _QtTagGroup)]
 
     def _expand_exclusive_for_node_(self, path):
-        self._collapse_all_groups_()
+        self._collapse_all_group_items_()
         paths = bsc_core.BscPath.get_dag_component_paths(path)
         for i in paths:
             if i in self._item_dict:
@@ -980,7 +980,7 @@ class QtViewForTagRoot(
         [x._set_expanded_(True) for x in self._item_dict.values() if isinstance(x, _QtTagGroup)]
 
     def _expand_for_all_from_(self, path):
-        self._collapse_all_groups_()
+        self._collapse_all_group_items_()
         paths = bsc_core.BscPath.get_dag_component_paths(path)
         self._set_expanded_for_(paths, True)
         descendant_paths = bsc_core.BscPath.find_dag_descendant_paths(path, self._item_dict.keys())

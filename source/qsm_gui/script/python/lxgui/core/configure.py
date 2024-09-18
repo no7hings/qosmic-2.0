@@ -272,7 +272,10 @@ class GuiRgba(object):
     LightBlack = 31, 31, 31, 255
 
     Light = 223, 223, 223, 255
+
+    LightBasic = 71, 71, 71, 255
     Basic = 63, 63, 63, 255
+
     Dark = 55, 55, 55, 255
     Dim = 47, 47, 47, 255
     Transparent = 0, 0, 0, 0
@@ -360,3 +363,14 @@ class GuiActionState(enum.IntEnum):
     #
     ChooseEnable = 0x51
     ChooseDisable = 0x52
+
+
+class GuiItemStatus(enum.IntEnum):
+    Normal = 0
+
+    Warning = 1
+    Error = 2
+    Correct = 3
+
+    Enable = Normal
+    Disable = 5

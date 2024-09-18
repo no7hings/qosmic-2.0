@@ -1,0 +1,9 @@
+options:
+    user: 'qosmic'
+    password: 'qosmic'
+    host: 'localhost'
+    port: 3306
+
+keys:
+    - motion_test
+    - asset_test

@@ -11,14 +11,15 @@ from ...screw import core as _scr_core
 
 
 class AssetBatchRegisterOpt(object):
-    def __init__(self, project_name):
+    def __init__(self, project_name, project_chs_name):
         self._project_name = project_name
+        self._project_chs_name = project_chs_name
         self._scan_root = qsm_gnl_scan.Root.generate()
 
         self._scr_stage = _scr_core.Stage('asset_test')
 
     def execute(self, character=False, prop=False, scenery=False):
-        self.register_project(self._project_name)
+        self.register_project(self._project_name, self._project_chs_name)
         self.register_roles(self._project_name)
         if character is True:
             self.register_character_assets(self._project_name)
@@ -53,11 +54,10 @@ class AssetBatchRegisterOpt(object):
         #     scr_node_path, '/system_resource_usage/memory/unspecified'
         # )
 
-    def register_project(self, project_name):
-        gui_name, gui_name_chs = qsm_gnl_core.QsmProject.get_name_args(project_name)
+    def register_project(self, project_name, project_chs_name):
         scr_type_path = '/{}'.format(self._project_name)
         self._scr_stage.create_type_group(
-            scr_type_path, gui_name=gui_name, gui_name_chs=gui_name_chs
+            scr_type_path, gui_name=project_name, gui_name_chs=project_chs_name
         )
 
     def register_roles(self, project_name):

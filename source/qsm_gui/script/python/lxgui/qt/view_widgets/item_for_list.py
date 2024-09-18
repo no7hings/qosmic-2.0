@@ -2,11 +2,11 @@
 # qt
 from ...qt.core.wrap import *
 
-from .. import view_models as _view_models
+from ..view_models import item_for_list as _vew_mod_item_for_list
 
 
 class QtListItem(QtWidgets.QListWidgetItem):
     def __init__(self, *args, **kwargs):
-        super(QtListItem, self).__init__(*args, **kwargs)
+        super(QtListItem, self).__init__(*args)
 
-        self._item_model = _view_models.ItemModelForList(self)
+        self._item_model = _vew_mod_item_for_list.ListItemModel(self)

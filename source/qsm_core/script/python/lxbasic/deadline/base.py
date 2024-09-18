@@ -32,7 +32,7 @@ class DdlBase(object):
 
         cct = cls._generate_content()
 
-        if qsm_gnl_core.scheme_is_new():
+        if qsm_gnl_core.scheme_is_release():
             c = DeadlineConnect.DeadlineCon(
                 cct.get('connection_new.host'), cct.get('connection_new.port')
             )

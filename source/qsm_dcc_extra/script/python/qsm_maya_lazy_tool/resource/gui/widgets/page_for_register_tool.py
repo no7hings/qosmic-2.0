@@ -37,7 +37,7 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
                 self._prx_options_node.set(
                     'gui_name_chs', '未命名节点'
                 )
-                self._type_prx_tag_view.clear_all_checked()
+                self._type_prx_tag_view.clear_all_item_check()
         # node graph
         elif self._dcc_node_graph_opt is not None:
             scr_type_path = '/node_graphs/component/regular'
@@ -48,7 +48,7 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
             self._type_prx_tag_view.set_node_checked(
                 scr_type_path, True
             )
-            self._type_prx_tag_view.expand_for_all_from('/node_graphs')
+            self._type_prx_tag_view.set_item_expand_below('/node_graphs')
         else:
             data_type = self.get_resource_data_type()
             if data_type == qsm_lzy_scr_core.DataTypes.MayaNode:
@@ -60,7 +60,7 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
                     'gui_name_chs', '未命名节点网络'
                 )
             self._type_prx_tag_view.expand_all_groups()
-            self._type_prx_tag_view.clear_all_checked()
+            self._type_prx_tag_view.clear_all_item_check()
         
         self._window.gui_set_buttons_enable(
             self._dcc_node_opt is not None or self._dcc_node_graph_opt is not None
@@ -70,7 +70,7 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
         self._dcc_node_opt = None
         self._dcc_node_graph_opt = None
 
-        self._tag_prx_tag_view.clear_all_checked()
+        self._tag_prx_tag_view.clear_all_item_check()
 
         node_paths = qsm_mya_core.Selection.get_as_nodes()
         if node_paths:

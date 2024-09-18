@@ -229,7 +229,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             )
             return
 
-        type_paths = self._type_prx_tag_view.get_all_checked_node_paths()
+        type_paths = self._type_prx_tag_view.get_checked_item_paths()
         if not type_paths:
             self._window.exec_message_dialog(
                 gui_core.GuiUtil.choice_message(
@@ -239,7 +239,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             )
             return
 
-        tag_paths = self._tag_prx_tag_view.get_all_checked_node_paths()
+        tag_paths = self._tag_prx_tag_view.get_checked_item_paths()
         if not tag_paths:
             self._window.exec_message_dialog(
                 gui_core.GuiUtil.choice_message(

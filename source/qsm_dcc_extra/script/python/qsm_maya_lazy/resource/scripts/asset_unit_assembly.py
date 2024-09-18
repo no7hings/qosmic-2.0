@@ -67,61 +67,69 @@ class _RegionPrc(object):
     @classmethod
     def _compute_grid_size(cls, mesh_paths):
         mesh_count_data = qsm_mya_core.Meshes.get_evaluate(mesh_paths)
-        width, height = mesh_count_data['width'], mesh_count_data['height']
-        size = max(width, height)
-        d = 100
+        width, depth = mesh_count_data['width'], mesh_count_data['depth']
+        size = max(width, depth)
+        m = 100
         # 10K
-        if size <= d*10000:
+        if size <= m*10000:
             # 10
-            grid_size = d*10
+            grid_size = m*10
         # 100K
-        elif size <= d*100000:
+        elif size <= m*100000:
             # 100
-            grid_size = d*100
+            grid_size = m*100
         # 1M
-        elif size <= d*1000000:
+        elif size <= m*1000000:
             # 1K
-            grid_size = d*1000
+            grid_size = m*1000
         # 10M
-        elif size <= d*10000000:
+        elif size <= m*10000000:
             # 10K
-            grid_size = d*10000
+            grid_size = m*10000
         # 100M
-        elif size <= d*10000000:
+        elif size <= m*10000000:
             # 100K
-            grid_size = d*100000
+            grid_size = m*100000
         else:
-            grid_size = d*500000
+            grid_size = m*500000
         return grid_size
 
-    def __init__(self, mesh_paths, cache_directory_path, tag):
+    @classmethod
+    def _compute_grid_size_0(cls, roots):
+        bbox = qsm_mya_core.BBox.exact_for_many(roots)
+        _x, _y, _z, x, y, z = bbox
+        w, h, d = x-_x, y-_y, z-_z
+        size = max(w, d)
+        return int(size/32.0)
+
+    def __init__(self, mesh_paths, cache_directory_path, exists_roots, tag):
         self._mesh_paths = mesh_paths
         self._cache_directory_path = cache_directory_path
+        self._exists_roots = exists_roots
         self._tag = tag
 
     def execute(self):
         mesh_paths = self._mesh_paths
         if not mesh_paths:
             return
-        grid_size = self._compute_grid_size(mesh_paths)
+
+        grid_size = self._compute_grid_size_0(self._exists_roots)
         region_paths = []
 
         if mesh_paths:
             grid_map = qsm_mya_asb_core.GridSpace(mesh_paths, grid_size).generate()
             keys = grid_map.keys()
             keys.sort()
-            with bsc_log.LogProcessContext.create(maximum=len(keys), label='grid process') as l_p:
-                for i_seq, i_key in enumerate(keys):
-                    i_shape_paths = grid_map[i_key]
-                    i_ar_path_new = self.prc(i_key, i_seq, i_shape_paths)
-                    # todo: maybe None
-                    if i_ar_path_new:
-                        region_paths.append(i_ar_path_new)
-                        l_p.do_update()
+            for i_seq, i_key in enumerate(keys):
+                i_shape_paths = grid_map[i_key]
+                i_ar_path_new = self.prc(i_key, i_seq, i_shape_paths)
+                # fixme: maybe None
+                if i_ar_path_new:
+                    region_paths.append(i_ar_path_new)
         return region_paths
 
     def prc(self, key, seq, shape_paths):
-        hash_key = bsc_core.BscHash.to_hash_key(key)
+        hash_key = bsc_core.BscHash.to_hash_key(shape_paths)
         directory_path = '{}/region_{}/{}'.format(
             self._cache_directory_path, self._tag, hash_key
         )
@@ -374,13 +382,14 @@ class _GpuPrc(object):
             if bsc_storage.StgPath.get_is_file(i_gpu_cache_path) is False:
                 continue
 
-            i_mesh_paths = self.prc(i_gpu_path, i_gpu_cache_path)
-            if i_mesh_paths:
+            _ = self.prc(i_gpu_path, i_gpu_cache_path)
+            if _:
+                i_transform_path, i_mesh_paths = _
                 i_tag = 'gpu_{}_{}'.format(
                     bsc_storage.StgFileOpt(i_gpu_cache_path).name_base.lower(), i_idx
                 )
                 i_region_paths = _RegionPrc(
-                    i_mesh_paths, self._cache_directory_path, i_tag
+                    i_mesh_paths, self._cache_directory_path, [i_transform_path], i_tag
                 ).execute()
                 region_paths.extend(i_region_paths)
         return region_paths
@@ -407,12 +416,49 @@ class _GpuPrc(object):
                         qsm_mya_core.DagNode.parent_to(j_transform_path, transform_path, relative=True)
                     if qsm_mya_core.Node.is_exists(i_path):
                         qsm_mya_core.Node.delete(i_path)
-        return cmds.ls(transform_path, dag=1, long=1, type='mesh')
+        return transform_path, cmds.ls(transform_path, dag=1, long=1, type='mesh')
+
+
+class _GpuImportPrc(object):
+    def execute(self):
+        gpu_paths = cmds.ls(type='gpuCache', long=1)
+        for i_idx, i_gpu_path in enumerate(gpu_paths):
+            i_gpu_cache_path = qsm_mya_core.NodeAttribute.get_as_string(
+                i_gpu_path, 'cacheFileName'
+            )
+            if bsc_storage.StgPath.get_is_file(i_gpu_cache_path) is False:
+                continue
+
+            self.prc(i_gpu_path, i_gpu_cache_path)
+
+    @classmethod
+    def prc(cls, gpu_path, gpu_cache_path):
+        shape_opt = qsm_mya_core.ShapeOpt(gpu_path)
+        transform_path = shape_opt.transform_path
+
+        paths = qsm_mya_core.SceneFile.import_file(
+            gpu_cache_path
+        )
+
+        roots = qsm_mya_core.DagNode.find_roots(paths)
+        # remove gpu shape
+        qsm_mya_core.Transform.delete_all_shapes(transform_path)
+        # parent to transform
+        if roots:
+            for i_path in roots:
+                if qsm_mya_core.Node.is_transform(i_path):
+                    i_shape_paths = qsm_mya_core.Group.find_siblings(i_path, ['mesh'])
+                    for j_shape_path in i_shape_paths:
+                        j_transform_path = qsm_mya_core.Shape.get_transform(j_shape_path)
+                        qsm_mya_core.DagNode.parent_to(j_transform_path, transform_path, relative=True)
+                    if qsm_mya_core.Node.is_exists(i_path):
+                        qsm_mya_core.Node.delete(i_path)
 
 
 class _ScenePrc(object):
-    def __init__(self, cache_directory_path):
+    def __init__(self, cache_directory_path, exists_roots):
         self._cache_directory_path = cache_directory_path
+        self._exists_roots = exists_roots
 
     def execute(self):
         unit_prc = _UnitPrc(self._cache_directory_path)
@@ -424,6 +470,7 @@ class _ScenePrc(object):
         return _RegionPrc(
             mesh_paths_less,
             self._cache_directory_path,
+            self._exists_roots,
             'scene'
         ).execute()
 
@@ -493,7 +540,9 @@ class AssetUnitAssemblyProcess(object):
         qsm_mya_core.Scene.remove_all_instanced(type_includes=['mesh', 'gpuCache'])
 
     def _post_prc(self):
+        # remove empty
         qsm_mya_core.Scene.remove_all_empty_groups()
+
         exists_roots = [i for i in self._all_roots if qsm_mya_core.Node.is_exists(i)]
         qsm_mya_core.Container.add_dag_nodes(self._container, exists_roots)
 
@@ -502,8 +551,9 @@ class AssetUnitAssemblyProcess(object):
         )
 
     def _scene_prc(self):
+        exists_roots = [i for i in self._all_roots if qsm_mya_core.Node.is_exists(i)]
         region_paths = _ScenePrc(
-            self._cache_directory_path
+            self._cache_directory_path, exists_roots
         ).execute()
         if region_paths:
             qsm_mya_core.Container.add_dag_nodes(self._container, region_paths)
@@ -515,6 +565,9 @@ class AssetUnitAssemblyProcess(object):
         if region_paths:
             qsm_mya_core.Container.add_dag_nodes(self._container, region_paths)
 
+    def _gpu_import_prc(self):
+        _GpuImportPrc().execute()
+
     def execute(self):
         with bsc_log.LogProcessContext.create(maximum=4) as l_p:
             # step 1
@@ -522,7 +575,9 @@ class AssetUnitAssemblyProcess(object):
             l_p.do_update()
             # step 2
             # process gpu first
-            self._gpu_prc()
+            # fixme: use gpu import instance
+            # self._gpu_prc()
+            self._gpu_import_prc()
             l_p.do_update()
             # step 3
             # scene

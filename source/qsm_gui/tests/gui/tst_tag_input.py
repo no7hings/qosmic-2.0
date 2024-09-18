@@ -20,7 +20,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
         self.add_widget(self._d_1)
 
         self._scr_stage = qsm_lzy_scr_core.Stage(
-            'maya_cfx'
+            'asset_test'
         )
         # self._scr_stage.connect()
 

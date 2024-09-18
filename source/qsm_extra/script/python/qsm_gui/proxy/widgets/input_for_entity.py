@@ -76,7 +76,7 @@ class PrxInputForAsset(prx_abstracts.AbsPrxWidget):
 
         project = self._scan_root.get_entity(path_opt.to_string())
         if project is not None:
-            if qsm_gnl_core.scheme_is_new():
+            if qsm_gnl_core.scheme_is_release():
                 role_mask = self.ROLE_MASK_NEW
             else:
                 role_mask = self.ROLE_MASK
@@ -124,7 +124,7 @@ class PrxInputForAsset(prx_abstracts.AbsPrxWidget):
             if i_d == 1:
                 _projects = self._scan_root.projects
             elif i_d == 2:
-                if qsm_gnl_core.scheme_is_new():
+                if qsm_gnl_core.scheme_is_release():
                     role_mask = self.ROLE_MASK_NEW
                 else:
                     role_mask = self.ROLE_MASK
