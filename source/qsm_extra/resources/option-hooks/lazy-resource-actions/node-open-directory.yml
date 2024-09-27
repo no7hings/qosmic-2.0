@@ -8,7 +8,7 @@ option:
         group_name: 'python'
         #
         name: 'Open Directory'
-        icon_name: 'application/python'
+        icon_name: 'file/open-folder'
         #
         size: [720, 720]
 #

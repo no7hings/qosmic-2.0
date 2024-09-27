@@ -63,8 +63,8 @@ class QtThreadWorkerForBuild(QtCore.QThread):
         )
         self.do_kill()
 
-        self.quit()
         self.wait()
+        self.quit()
         self.deleteLater()
 
     def do_start(self):

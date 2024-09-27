@@ -314,7 +314,7 @@ class PrxTreeviewUnitForResourceOpt(
 
     def restore(self):
         self._push_cache()
-        self._prx_tree_view.set_clear()
+        self._prx_tree_view.do_clear()
 
     def gui_check_exists(self, path):
         return self._item_dict.get(path) is not None

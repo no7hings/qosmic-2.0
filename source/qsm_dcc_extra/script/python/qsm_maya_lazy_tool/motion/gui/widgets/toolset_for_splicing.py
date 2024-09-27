@@ -49,7 +49,7 @@ class PrxToolsetForImportMotion(gui_prx_widgets.PrxBaseUnit):
                         )
                         g_p.do_update()
 
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get(
                         'build.{}.messages.import_characters'.format(self._page.PAGE_KEY)

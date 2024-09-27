@@ -1505,7 +1505,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         #
         self._main_h_s.set_fixed_size_at(0, 320)
         self._main_h_s.set_fixed_size_at(2, 320)
-        if bsc_core.BasApplication.get_is_dcc():
+        if bsc_core.BscApplication.get_is_dcc():
             self._main_h_s.swap_contract_right_or_bottom_at(2)
         #
         self._right_v_s.set_fixed_size_at(0, 320)
@@ -1722,7 +1722,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         self._gui_type_opt.restore()
         self._gui_tag_opt.restore()
         self._gui_resource_prx_unit.restore()
-        self._type_guide_bar.set_clear()
+        self._type_guide_bar.do_clear()
         # type
         is_create, prx_item = self._gui_type_opt.gui_add_root()
         if is_create is True:
@@ -1808,7 +1808,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         #
         self._gui_thread_flag += 1
         #
-        self._resource_prx_view.set_clear()
+        self._resource_prx_view.do_clear()
         self._gui_tag_opt.reset()
         self._resource_prx_view._qt_info_bar_chart._clear_()
         #

@@ -96,7 +96,7 @@ class _PublishOptForSurface(object):
             )
         )
 
-        if bsc_core.BasApplication.get_is_katana():
+        if bsc_core.BscApplication.get_is_katana():
             import lxkatana.core as ktn_core
             option_opt.set('katana_version', ktn_core.KtnUtil.get_katana_version())
 
@@ -584,7 +584,7 @@ class AbsPnlPublisherForSurface(gui_prx_widgets.PrxSessionWindow):
         contents = []
         application = bsc_core.BscSystem.get_application()
         #
-        if bsc_core.BasApplication.get_is_dcc():
+        if bsc_core.BscApplication.get_is_dcc():
             self._scene_file_path = self._get_dcc_scene_file_path_()
             self._cfg_options_prx_node.set(
                 'resolver.scene_file', self._scene_file_path
@@ -599,7 +599,7 @@ class AbsPnlPublisherForSurface(gui_prx_widgets.PrxSessionWindow):
         #
         r = rsv_core.RsvBase.generate_root()
         #
-        self._result_tree_view.set_clear()
+        self._result_tree_view.do_clear()
         if self._scene_file_path:
             self._tree_view_opt._get_scene_(self._scene_file_path)
             #
@@ -654,10 +654,10 @@ class AbsPnlPublisherForSurface(gui_prx_widgets.PrxSessionWindow):
         if self._rsv_scene_properties:
             self._validation_check_options = {v: not self._cfg_options_prx_node.get(k) for k, v in
                                               self._check_key_map.items()}
-            if bsc_core.BasApplication.get_is_dcc():
-                if bsc_core.BasApplication.get_is_katana():
+            if bsc_core.BscApplication.get_is_dcc():
+                if bsc_core.BscApplication.get_is_katana():
                     self._set_katana_validation_in_execute_()
-                elif bsc_core.BasApplication.get_is_maya():
+                elif bsc_core.BscApplication.get_is_maya():
                     self._set_maya_validation_in_dcc_()
             else:
                 application = self._rsv_scene_properties.get('application')
@@ -672,7 +672,7 @@ class AbsPnlPublisherForSurface(gui_prx_widgets.PrxSessionWindow):
             self._validation_check_options
         )
         #
-        self._result_tree_view.set_clear()
+        self._result_tree_view.do_clear()
         self._tree_view_opt.set_results_at(
             self._rsv_scene_properties,
             self._validation_checker.get_data()
@@ -764,7 +764,7 @@ class AbsPnlPublisherForSurface(gui_prx_widgets.PrxSessionWindow):
         c = bsc_shotgun.StgConnector()
 
         p = self._publish_options_prx_node.get_port('notice')
-        p.set_clear()
+        p.do_clear()
         p.set_shotgun_entity_kwargs(
             dict(
                 entity_type='HumanUser',

@@ -25,7 +25,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
         button.connect_press_clicked_to(self._test)
 
     def _test(self):
-        self._qt_widget._popup_bubble_message_('拷贝成功')
+        self._qt_widget._popup_message_('拷贝成功')
 
 
 if __name__ == '__main__':

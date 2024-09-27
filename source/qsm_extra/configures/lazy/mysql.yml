@@ -7,3 +7,10 @@ options:
 keys:
     - motion_test
     - asset_test
+    - audio_test
+    - video_test
+
+maya:
+    keys:
+        - motion_test
+        - asset_test

@@ -45,7 +45,7 @@ class GuiPrxScpForTreeSelection(object):
             if obj_paths:
                 dcc_selection_cls(obj_paths).select_all()
             else:
-                dcc_selection_cls.set_clear()
+                dcc_selection_cls.do_clear()
 
     def set_select(self):
         self.select_fnc(
@@ -166,7 +166,7 @@ class GuiPrxScpForTreeTagFilter(object):
         return True, prx_item
 
     def set_src_items_refresh(self, expand_depth=None):
-        self._prx_tree_view_src.set_clear()
+        self._prx_tree_view_src.do_clear()
         #
         leaf_paths = self._filter_content.get_all_leaf_key_as_dag_paths()
         all_paths = ['/'] + self._filter_content.get_all_key_as_dag_paths()
@@ -316,7 +316,7 @@ class GuiPrxScpForTreeAdd(gui_prx_abstracts.AbsGuiPrxCacheDef):
 
     def restore_all(self):
         self._push_cache()
-        self._prx_tree_view.set_clear()
+        self._prx_tree_view.do_clear()
 
     def _set_dag_dcc_obj_gui_add_(self, obj):
         obj_path = obj.path
@@ -475,7 +475,7 @@ class GuiPrxScpForStorageTreeAdd(gui_prx_abstracts.AbsGuiPrxCacheDef):
 
     def restore_all(self):
         self._push_cache()
-        self._prx_tree_view.set_clear()
+        self._prx_tree_view.do_clear()
 
     def _set_dag_dcc_obj_gui_add_(self, obj):
         obj_path = obj.path
@@ -821,7 +821,7 @@ class GuiPrxScpForTreeAdd1(object):
         self._item_dict = self._prx_tree_view._item_dict
 
     def restore_all(self):
-        self._prx_tree_view.set_clear()
+        self._prx_tree_view.do_clear()
 
     def _set_dag_dcc_obj_gui_add_(self, obj):
         obj_path = obj.path

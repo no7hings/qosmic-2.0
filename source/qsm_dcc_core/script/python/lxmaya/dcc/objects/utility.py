@@ -110,7 +110,7 @@ class Selection(object):
         cmds.select(exist_paths)
 
     @classmethod
-    def set_clear(cls):
+    def do_clear(cls):
         cmds.select(clear=1)
 
     @classmethod

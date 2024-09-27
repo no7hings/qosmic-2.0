@@ -7,8 +7,8 @@ import lxbasic.core as bsc_core
 class MayaCacheProcess(object):
     @classmethod
     def generate_command(cls, option, packages_extend=None):
-        if bsc_core.BasApplication.get_is_maya():
-            maya_version = bsc_core.BasApplication.get_maya_version()
+        if bsc_core.BscApplication.get_is_maya():
+            maya_version = bsc_core.BscApplication.get_maya_version()
         else:
             maya_version = '2020'
         # do not use unicode

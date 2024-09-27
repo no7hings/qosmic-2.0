@@ -316,7 +316,29 @@ class QtUtil(object):
         img_arr = np.array(ptr).reshape(height, width, 4)
         img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGRA2BGR)
         cv2.imwrite(file_path, img_arr)
-    
+
+
+class QtPixmapCache(object):
+    @classmethod
+    def get_cached_svg_pixmap(cls, svg_path, size):
+        cache_key = "{}_{}x{}".format(svg_path, size.width(), size.height())
+        cached_pixmap = QtGui.QPixmapCache.find(cache_key)
+
+        if cached_pixmap is not None:
+            return cached_pixmap
+
+        svg_renderer = QtSvg.QSvgRenderer(svg_path)
+        pixmap = QtGui.QPixmap(size)
+        pixmap.fill(QtCore.Qt.transparent)
+
+        painter = QtGui.QPainter(pixmap)
+        svg_renderer.render(painter)
+        painter.end()
+
+        QtGui.QPixmapCache.insert(cache_key, pixmap)
+
+        return pixmap
+
 
 class GuiQtStyle(object):
     CONTENT = None

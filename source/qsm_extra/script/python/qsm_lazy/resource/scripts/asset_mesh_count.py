@@ -58,15 +58,15 @@ class AssetMeshCountGenerateOpt(_asset_general.AssetGeneral):
             self._scr_node_path, '/mesh_count/non_cache_face_percentage'
         )
 
-        scr_stage.create_tag_assign(
+        scr_stage.create_node_tag_assign(
             self._scr_node_path, '/mesh_count/face/unspecified'
         )
 
-        scr_stage.create_tag_assign(
+        scr_stage.create_node_tag_assign(
             self._scr_node_path, '/mesh_count/geometry/unspecified'
         )
 
-        scr_stage.create_tag_assign(
+        scr_stage.create_node_tag_assign(
             self._scr_node_path, '/mesh_count/non_cache_face_percentage/unspecified'
         )
     

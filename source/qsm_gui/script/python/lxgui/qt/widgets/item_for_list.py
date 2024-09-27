@@ -274,7 +274,7 @@ class QtListItemWidget(
             frm_r = min(w, h)
             i_w_0, i_h_0 = self._get_image_file_size_()
             if (i_w_0, i_h_0) != (0, 0):
-                i_x, i_y, img_w, img_h = bsc_core.RawSizeMtd.fit_to(
+                i_x, i_y, img_w, img_h = bsc_core.BscSize.fit_to_center(
                     (i_w_0, i_h_0), (w, h)
                 )
                 if self._get_play_draw_is_enable_() is True:

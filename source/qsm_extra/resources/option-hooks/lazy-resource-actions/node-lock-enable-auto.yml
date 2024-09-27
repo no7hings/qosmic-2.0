@@ -1,0 +1,28 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Resource Lock Enable'
+        icon_name: 'tool/lock'
+        #
+        size: [720, 720]
+
+        window:
+            name: 'Enable Lock'
+            name_chs: '启用锁定'
+
+            tool_tip: ''
+            tool_tip_chs: '此操作将会启用锁定并保留操作记录，点击“Ok”继续。'
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        stage_key: ''
+        #
+        entity_type: ''
+        entity: ''

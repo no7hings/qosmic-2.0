@@ -59,6 +59,7 @@ class ChartModelForHistogram(object):
                     leafs=[],
                 )
                 i_percent_pre = 0
+                j_key_pre = None
                 for j_idx, (j_k, j_v) in enumerate(i_leaf_data):
                     j_percent = j_v/float(i_value_total)
                     j_percent_text = '{}%'.format(
@@ -71,6 +72,13 @@ class ChartModelForHistogram(object):
                     i_r_1, i_g_1, i_b_1 = bsc_core.BscColor.hsv2rgb(
                         360-180*j_percent_cur, .55, .75
                     )
+                    if j_key_pre is None:
+                        j_r_0, j_g_0, j_b_0 = bsc_core.BscTextOpt(j_k).to_hash_rgb(s_p=(35, 50), v_p=(65, 85))
+                        j_r_1, j_g_1, j_b_1 = j_r_0, j_g_0, j_b_0
+                    else:
+                        j_r_0, j_g_0, j_b_0 = bsc_core.BscTextOpt(j_k).to_hash_rgb(s_p=(35, 50), v_p=(65, 85))
+                        j_r_1, j_g_1, j_b_1 = bsc_core.BscTextOpt(j_k).to_hash_rgb(s_p=(35, 50), v_p=(65, 85))
+
                     j_leaf = _base._Data(
                         index=j_idx,
                         index_text=str(j_idx+1),
@@ -91,13 +99,18 @@ class ChartModelForHistogram(object):
                         
                         value_frame_rect=QtCore.QRect(),
                         
-                        color_0=QtGui.QColor(i_r_0, i_g_0, i_b_0),
-                        color=QtGui.QColor(i_r_1, i_g_1, i_b_1),
+                        # color_0=QtGui.QColor(i_r_0, i_g_0, i_b_0),
+                        # color=QtGui.QColor(i_r_1, i_g_1, i_b_1),
+
+                        color_0=QtGui.QColor(j_r_0, j_g_0, j_b_0),
+                        color=QtGui.QColor(j_r_1, j_g_1, j_b_1),
                         color_gradient=QtGui.QLinearGradient()
                     )
                     i_branch.leafs.append(j_leaf)
 
                     i_percent_pre += j_percent
+
+                    j_key_pre = j_k
 
                 self._branches.append(i_branch)
 
@@ -158,7 +171,8 @@ class ChartModelForHistogram(object):
                 j_color_gradient.setFinalStop(j_leaf.value_frame_rect.bottomLeft())
 
                 j_color_gradient.setColorAt(0, j_leaf.color_0)
-                j_color_gradient.setColorAt(.75, j_leaf.color_0)
+                j_color_gradient.setColorAt(0.05, j_leaf.color_0)
+                j_color_gradient.setColorAt(0.95, j_leaf.color)
                 j_color_gradient.setColorAt(1, j_leaf.color)
 
                 i_c_leaf_key_y += row_h

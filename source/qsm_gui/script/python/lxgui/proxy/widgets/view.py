@@ -80,8 +80,11 @@ class PrxTabView(gui_prx_abstracts.AbsPrxWidget):
             qt_widget = widget
         else:
             qt_widget = widget.widget
-        #
-        self._qt_widget._add_widget_(qt_widget, *args, **kwargs)
+
+        return self._qt_widget._add_widget_(qt_widget, *args, **kwargs)
+    
+    def register_page_delete_pre_fnc(self, key, fnc):
+        self._qt_widget._register_page_delete_pre_fnc_(key, fnc)
 
     def get_current_name(self):
         return self._qt_widget._get_current_name_text_()
@@ -116,8 +119,8 @@ class PrxTabView(gui_prx_abstracts.AbsPrxWidget):
     def set_menu_data_generate_fnc(self, fnc):
         self._qt_widget._set_tab_menu_data_generate_fnc_(fnc)
 
-    def connect_delete_accepted_to(self, fnc):
-        self._qt_widget.tab_delete_accepted.connect(fnc)
+    def connect_delete_post_accepted_to(self, fnc):
+        self._qt_widget.tab_delete_post_accepted.connect(fnc)
 
     def set_drag_enable(self, boolean):
         self._qt_widget._set_drag_enable_(boolean)

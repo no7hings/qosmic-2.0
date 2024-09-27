@@ -379,7 +379,7 @@ class PrxListView(
     def get_visible_tgt_raw(self):
         return self.get_gui_attribute('visible_tgt_raw')
 
-    def set_clear(self):
+    def do_clear(self):
         # clear keyword filter cache
         self._keyword_filter_completion_cache = None
         self._qt_view._do_clear_()
@@ -406,7 +406,7 @@ class PrxListView(
         return [i.gui_proxy for i in self._qt_view._get_checked_item_widgets_()]
 
     def restore_all(self):
-        self.set_clear()
+        self.do_clear()
 
     def set_drag_enable(self, boolean):
         self._qt_view._set_drag_enable_(boolean)

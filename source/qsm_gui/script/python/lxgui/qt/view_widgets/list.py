@@ -13,8 +13,6 @@ from ...qt import core as _qt_core
 
 from ...qt import abstracts as _qt_abstracts
 
-from ..widgets import base as _qt_wgt_base
-
 from ..widgets import utility as _wgt_utility
 
 from ..widgets import entry_frame as _wgt_entry_frame
@@ -31,7 +29,7 @@ from ..widgets import input_for_filter as _wgt_input_for_filter
 
 from ..view_models import base as _vew_mod_base
 
-from ..view_models import list as _vew_mod_list
+from ..view_models import view_for_list as _vew_mod_list
 
 from . import item_for_list as _item_for_list
 
@@ -69,7 +67,10 @@ class _QtListViewWidget(
 
         self.setSelectionMode(self.ExtendedSelection)
         self.setVerticalScrollMode(self.ScrollPerItem)
+        # disable for default
+        self.setSortingEnabled(False)
         self.setDragEnabled(False)
+
         # noinspection PyUnresolvedReferences
         self.itemSelectionChanged.connect(self.item_select_changed.emit)
 
@@ -101,7 +102,7 @@ class _QtListViewWidget(
         # view port
         elif widget == self.viewport():
             if event.type() == QtCore.QEvent.ToolTip:
-                self._view_model.do_item_tool_tip(event)
+                self._view_model.do_item_popup_tool_tip(event)
 
             elif event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.buttons() == QtCore.Qt.LeftButton:
@@ -181,6 +182,65 @@ class _QtListViewWidget(
         else:
             super(_QtListViewWidget, self).wheelEvent(event)
 
+    def startDrag(self, actions):
+        items = self.selectedItems()
+        if items:
+            drag_data = self._view_model.get_drag_data_for(items)
+            if drag_data:
+                c = len(drag_data)
+                c = min(c, 40)
+                drag = QtGui.QDrag(self)
+                x, y = 0, 0
+                grd_w, grd_h = self.gridSize().width(), self.gridSize().height()
+                spc = 4
+                frm_w, frm_h = grd_w, 20
+                pxm_w, pxm_h = grd_w, frm_h+spc*(c-1)
+                pixmap = QtGui.QPixmap(pxm_w, pxm_h)
+                pixmap.fill(QtGui.QColor(63, 63, 63, 255))
+                painter = QtGui.QPainter(pixmap)
+                for i_idx in range(c):
+                    i_rect = QtCore.QRect(x+1, y+(i_idx*spc)+1, frm_w-2, frm_h-2)
+                    painter.setPen(QtGui.QColor(*_gui_core.GuiRgba.LightPinkPurple))
+                    painter.setBrush(QtGui.QColor(*_gui_core.GuiRgba.Dim))
+                    painter.drawRect(i_rect)
+                    if i_idx == (c-1):
+                        i_item_model = items[i_idx]._item_model
+                        painter.setPen(QtGui.QColor(*_gui_core.GuiRgba.DarkWhite))
+                        i_text_rect = QtCore.QRect(x+1+4, y+(i_idx*spc)+1, frm_w-2-4, frm_h-2)
+                        i_text = six.u('{} x {}').format(i_item_model.get_name(), c)
+                        i_text = i_item_model._font_metrics.elidedText(
+                            i_text,
+                            QtCore.Qt.ElideMiddle,
+                            i_text_rect.width()-4,
+                            QtCore.Qt.TextShowMnemonic
+                        )
+                        painter.drawText(
+                            i_text_rect,
+                            QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter,
+                            i_text
+
+                        )
+
+                painter.end()
+                drag.setPixmap(pixmap)
+
+                mime_data = QtCore.QMimeData()
+
+                urls = []
+                for i_data in drag_data:
+                    for j_k, j_v in i_data.items():
+                        if j_k == 'file':
+                            # noinspection PyArgumentList
+                            urls.append(QtCore.QUrl.fromLocalFile(j_v))
+                        else:
+                            mime_data.setData(
+                                bsc_core.auto_string(j_k), bsc_core.auto_string(j_v)
+                            )
+                if urls:
+                    mime_data.setUrls(urls)
+                drag.setMimeData(mime_data)
+                drag.exec_(actions)
+
 
 class QtListWidget(
     _base._BaseViewWidget
@@ -192,7 +252,7 @@ class QtListWidget(
         # refresh
         self._refresh_button = _wgt_button.QtIconPressButton()
         self._grid_lot.addWidget(self._refresh_button, 0, 0, 1, 1)
-        self._refresh_button.setFixedSize(28, 28)
+        self._refresh_button.setFixedSize(self.TOOL_BAR_W, self.TOOL_BAR_W)
         self._refresh_button._set_icon_file_path_(
             _gui_core.GuiIcon.get('refresh')
         )
@@ -201,12 +261,12 @@ class QtListWidget(
         self._top_scroll_box = _wgt_scroll.QtHScrollBox()
         self._grid_lot.addWidget(self._top_scroll_box, 0, 1, 1, 1)
         self._top_scroll_box._set_layout_align_left_or_top_()
-        self._top_scroll_box.setFixedHeight(28)
+        self._top_scroll_box.setFixedHeight(self.TOOL_BAR_W)
         # left
         self._left_scroll_box = _wgt_scroll.QtVScrollBox()
         self._grid_lot.addWidget(self._left_scroll_box, 1, 0, 1, 1)
         self._left_scroll_box._set_layout_align_left_or_top_()
-        self._left_scroll_box.setFixedWidth(28)
+        self._left_scroll_box.setFixedWidth(self.TOOL_BAR_W)
 
         self._check_tool_box = self._create_left_tool_box_('check')
         self._sort_and_group_tool_box = self._create_left_tool_box_('sort and group')
@@ -227,6 +287,25 @@ class QtListWidget(
         self._build_check_tool_box_()
         self._build_sort_and_group_tool_box_()
         self._build_keyword_filter_tool_box_()
+
+        actions = [
+            (self._view.selectAll, 'Ctrl+A'),
+        ]
+        for i_fnc, i_shortcut in actions:
+            i_action = QtWidgets.QAction(self)
+            # noinspection PyUnresolvedReferences
+            i_action.triggered.connect(
+                i_fnc
+            )
+            i_action.setShortcut(
+                QtGui.QKeySequence(
+                    i_shortcut
+                )
+            )
+            i_action.setShortcutContext(
+                QtCore.Qt.WidgetShortcut
+            )
+            self.addAction(i_action)
 
     def _create_top_tool_box_(self, name, size_mode=0):
         tool_box = _wgt_container.QtHToolBox()
@@ -273,15 +352,21 @@ class QtListWidget(
         )
 
     def _build_sort_and_group_tool_box_(self):
-        self._sort_button = _wgt_button.QtIconPressButton()
-        self._sort_button._set_name_text_('sort')
-        self._sort_button._set_icon_file_path_(_gui_core.GuiIcon.get('tool/sort-by-name-ascend'))
-        self._sort_and_group_tool_box._add_widget_(self._sort_button)
-
-        self._sort_button._set_menu_data_generate_fnc_(
+        # sort
+        self._item_sort_button = _wgt_button.QtIconPressButton()
+        self._sort_and_group_tool_box._add_widget_(self._item_sort_button)
+        self._item_sort_button._set_name_text_('sort')
+        self._item_sort_button._set_icon_name_('tool/sort-by-name-ascend')
+        self._item_sort_button._set_menu_data_generate_fnc_(
             self._view_model.generate_item_sort_menu_data
         )
-        self._sort_button.press_clicked.connect(self._on_sort_order_swap_)
+        self._item_sort_button.press_clicked.connect(self._on_sort_order_swap_)
+        # mode
+        self._item_mode_button = _wgt_button.QtIconPressButton()
+        self._sort_and_group_tool_box._add_widget_(self._item_mode_button)
+        self._item_mode_button._set_name_text_('mode')
+        self._item_mode_button._set_icon_name_('tool/icon-mode')
+        self._item_mode_button.press_clicked.connect(self._on_item_mode_swap_)
 
     def _build_keyword_filter_tool_box_(self):
         self._keyword_filter_input = _wgt_input_for_filter.QtInputAsFilter()
@@ -312,9 +397,12 @@ class QtListWidget(
     def _on_sort_order_swap_(self):
         self._view_model.swap_item_sort_order()
         order = ['ascend', 'descend'][self._view_model.get_item_sort_order()]
-        self._sort_button._set_icon_file_path_(
-            _gui_core.GuiIcon.get('tool/sort-by-name-{}'.format(order)),
-        )
+        self._item_sort_button._set_icon_name_('tool/sort-by-name-{}'.format(order))
+
+    def _on_item_mode_swap_(self):
+        self._view_model.swap_item_mode()
+        mode = ['icon', 'list'][self._view_model.get_item_mode()]
+        self._item_mode_button._set_icon_name_('tool/{}-mode'.format(mode))
 
     def _on_keyword_filer(self):
         self._view_model.set_keyword_filter_key_src(

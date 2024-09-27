@@ -92,5 +92,5 @@ class MayaSetup(object):
                     mtoa_plugin_path = results[0]
                     MtoaSetup(mtoa_plugin_path).set_run()
         #
-        if bsc_core.BasApplication.get_is_maya():
+        if bsc_core.BscApplication.get_is_maya():
             cls._set_maya_ae_setup_()

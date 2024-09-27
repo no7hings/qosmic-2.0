@@ -134,7 +134,7 @@ class ToolsetForMotionCopyAndPaste(
                 control_set_includes=['body', 'face']
             )
 
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.copy_character')
                 )
@@ -151,7 +151,7 @@ class ToolsetForMotionCopyAndPaste(
             opt.export_to(
                 file_path,
             )
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.copy_controls')
                 )
@@ -172,7 +172,7 @@ class ToolsetForMotionCopyAndPaste(
 
                     g_p.do_update()
 
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.duplicate_characters')
                 )
@@ -199,7 +199,7 @@ class ToolsetForMotionCopyAndPaste(
                         )
                         g_p.do_update()
 
-                self._window.popup_bubble_message(
+                self._window.popup_message(
                     self._window.choice_message(
                         self._window._configure.get('build.main.messages.paste_characters')
                     )
@@ -218,7 +218,7 @@ class ToolsetForMotionCopyAndPaste(
                     frame_offset=self.get_frame_offset(),
                 )
 
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.paste_controls')
                 )
@@ -237,7 +237,7 @@ class ToolsetForMotionCopyAndPaste(
                     frame_offset=self.get_frame_offset(),
                 )
     
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.paste_controls')
                 )
@@ -256,7 +256,7 @@ class ToolsetForMotionCopyAndPaste(
                     frame_offset=self.get_frame_offset(),
                 )
     
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.paste_characters')
                 )
@@ -275,7 +275,7 @@ class ToolsetForMotionCopyAndPaste(
                     frame_offset=self.get_frame_offset(),
                 )
 
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.mirror_any')
                 )
@@ -293,7 +293,7 @@ class ToolsetForMotionCopyAndPaste(
                     frame_offset=self.get_frame_offset(),
                 )
 
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.mirror_any')
                 )
@@ -311,7 +311,7 @@ class ToolsetForMotionCopyAndPaste(
                     frame_offset=self.get_frame_offset(),
                 )
 
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.mirror_any')
                 )
@@ -327,7 +327,7 @@ class ToolsetForMotionCopyAndPaste(
                     frame_offset=self.get_frame_offset(),
                 )
 
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.mirror_any')
                 )
@@ -348,7 +348,7 @@ class ToolsetForMotionCopyAndPaste(
                     frame_offset=self.get_frame_offset(),
                 )
             
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.mirror_any')
                 )
@@ -367,7 +367,7 @@ class ToolsetForMotionCopyAndPaste(
                     frame_offset=self.get_frame_offset(),
                 )
 
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.mirror_any')
                 )
@@ -383,7 +383,7 @@ class ToolsetForMotionCopyAndPaste(
                     frame_offset=self.get_frame_offset(),
                 )
 
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.mirror_any')
                 )
@@ -480,7 +480,7 @@ class ToolsetForMotionKeyframe(
         curves = qsm_mya_core.AnimCurves.get_all(reference=False, excludes=['timewarp', 'qsm_timewarp'])
         qsm_mya_core.Selection.set(curves)
 
-        self._window.popup_bubble_message(
+        self._window.popup_message(
             self._window.choice_message(
                 self._window._configure.get('build.main.messages.select_all_curves')
             )
@@ -509,7 +509,7 @@ class ToolsetForMotionKeyframe(
 
             qsm_mya_core.Selection.set(curves)
 
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.select_all_character_curves')
                 )
@@ -555,7 +555,7 @@ class ToolsetForMotionKeyframe(
             raise RuntimeError()
 
         if result is True:
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.update_timewarp_preview')
                 )
@@ -566,7 +566,7 @@ class ToolsetForMotionKeyframe(
     def _do_dcc_remove_timewrap_preview(self):
         result =qsm_mya_mtn_core.TimewarpOpt.remove()
         if result is True:
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.remove_timewarp_preview')
                 )
@@ -584,7 +584,7 @@ class ToolsetForMotionKeyframe(
     def _do_dcc_apply_timewrap(self):
         result = qsm_mya_mtn_core.TimewarpOpt.apply()
         if result is True:
-            self._window.popup_bubble_message(
+            self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.apply_timewarp')
                 )

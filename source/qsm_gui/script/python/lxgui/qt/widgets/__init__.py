@@ -1,9 +1,13 @@
 # coding:utf-8
+from .test import *
+
 from .base import *
 
 from .bubble import *
 
 from .utility import *
+
+from .menu import *
 
 from .window_for_dialog import *
 

@@ -852,7 +852,7 @@ class QtPainter(QtGui.QPainter):
         frm_x, frm_y = x+(w-frm_w)/2, y+(h-frm_h)/2
         #
         f_w_t, f_h_t = self._get_font_test_size_(_base.QtFont.generate(size=12, weight=75), text)
-        txt_x, txt_y, txt_w, txt_h = bsc_core.RawSizeMtd.fit_to(
+        txt_x, txt_y, txt_w, txt_h = bsc_core.BscSize.fit_to_center(
             (f_w_t, f_h_t), (frm_w, frm_h)
         )
         text_size = txt_h/2

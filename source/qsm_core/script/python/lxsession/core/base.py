@@ -53,11 +53,11 @@ class SsnHookFileMtd(object):
 
     @classmethod
     def get_shell(cls, key, search_paths=None):
-        if bsc_core.BasPlatform.get_is_linux():
+        if bsc_core.BscPlatform.get_is_linux():
             return bsc_resource.ExtendResource.get(
                 '{}/{}.sh'.format(cls.BRANCH, key), search_paths
             )
-        elif bsc_core.BasPlatform.get_is_windows():
+        elif bsc_core.BscPlatform.get_is_windows():
             return bsc_resource.ExtendResource.get(
                 '{}/{}.bat'.format(cls.BRANCH, key), search_paths
             )

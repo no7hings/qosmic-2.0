@@ -993,7 +993,7 @@ class PrxGuideBar(
     def connect_user_text_press_accepted_to(self, fnc):
         self._qt_widget._guide_entry.guide_text_press_accepted.connect(fnc)
 
-    def set_clear(self):
+    def do_clear(self):
         pass
 
 

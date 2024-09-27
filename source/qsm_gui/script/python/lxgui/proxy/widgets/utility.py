@@ -43,7 +43,7 @@ class PrxHScrollArea(gui_prx_abstracts.AbsPrxWidget):
         else:
             self._layout.addWidget(widget.widget)
 
-    def set_clear(self):
+    def do_clear(self):
         def rcs_fnc_(layout_):
             c = layout_.count()
             for i in range(c):
@@ -65,7 +65,7 @@ class PrxHScrollArea(gui_prx_abstracts.AbsPrxWidget):
         rcs_fnc_(self._layout)
 
     def restore(self):
-        self.set_clear()
+        self.do_clear()
 
 
 class PrxVScrollArea(gui_prx_abstracts.AbsPrxWidget):
@@ -81,7 +81,7 @@ class PrxVScrollArea(gui_prx_abstracts.AbsPrxWidget):
         else:
             self._qt_layout.addWidget(widget.widget)
 
-    def set_clear(self):
+    def do_clear(self):
         def rcs_fnc_(layout_):
             c = layout_.count()
             for i in range(c):
@@ -102,7 +102,7 @@ class PrxVScrollArea(gui_prx_abstracts.AbsPrxWidget):
         rcs_fnc_(self._qt_layout)
 
     def restore(self):
-        self.set_clear()
+        self.do_clear()
 
     def set_margins(self, m_l, m_t, m_r, m_b):
         self._qt_layout.setContentsMargins(m_l, m_t, m_r, m_b)

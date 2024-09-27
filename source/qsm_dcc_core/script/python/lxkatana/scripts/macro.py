@@ -1111,7 +1111,7 @@ class LxCamera(object):
             #
             width, height = int(w*50*multipy), int(h*50*multipy)
             #
-            width_, height_ = bsc_core.RawSizeMtd.set_clamp_to(
+            width_, height_ = bsc_core.BscSize.set_clamp_to(
                 width, height, 2048, 512
             )
             #

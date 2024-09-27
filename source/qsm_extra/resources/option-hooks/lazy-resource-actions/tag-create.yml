@@ -1,0 +1,25 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+
+        name: 'Tag Create'
+        icon_name: 'file/add-file'
+
+        size: [720, 720]
+
+        window:
+            name: 'Create Tag'
+            name_chs: '创建标签'
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        stage_key: ''
+        #
+        entity_type: ''
+        entity: ''

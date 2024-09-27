@@ -3,9 +3,11 @@ from .item_for_list import *
 
 from .item_for_tree import *
 
-from .list import *
+from .item_for_tag import *
 
-from .tree import *
+from .view_for_list import *
 
-from .tag import *
+from .view_for_tree import *
+
+from .view_for_tag import *
 

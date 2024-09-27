@@ -1,5 +1,6 @@
 # coding=utf-8
 import functools
+import sys
 
 import lxbasic.core as bsc_core
 # gui
@@ -57,7 +58,7 @@ class QtTabView(
 ):
     current_changed = qt_signal()
 
-    tab_delete_accepted = qt_signal(str)
+    tab_delete_post_accepted = qt_signal(str)
 
     QT_MENU_CLS = _qt_wgt_utility.QtMenu
 
@@ -228,7 +229,7 @@ class QtTabView(
                         c_x+i_x-scroll_value, y, i_w, t_h
                     )
 
-        self.__layer_stack.setGeometry(
+        self._layer_stack.setGeometry(
             x+m_l, y+t_h+m_t, w-m_l-m_r, h-t_h-m_t-m_b
         )
 
@@ -335,10 +336,12 @@ class QtTabView(
             self._tab_item_menu_gain_fnc_
         )
 
-        self.__layer_stack = _qt_wgt_layer_stack.QtLayerStack(self)
-        self.__layer_stack.installEventFilter(self)
+        self._layer_stack = _qt_wgt_layer_stack.QtLayerStack(self)
+        self._layer_stack.installEventFilter(self)
         # use layer stack signal
-        self.__layer_stack.current_changed.connect(self.current_changed.emit)
+        self._layer_stack.current_changed.connect(self.current_changed.emit)
+
+        self._delete_pre_fnc_dict = dict()
 
         # self._set_tool_tip_(
         #     [
@@ -418,7 +421,7 @@ class QtTabView(
             elif event.type() == QtCore.QEvent.Wheel:
                 self._do_wheel_(event)
                 return True
-        elif widget == self.__layer_stack:
+        elif widget == self._layer_stack:
             if event.type() == QtCore.QEvent.Enter:
                 self._clear_item_hover_()
             if event.type() == QtCore.QEvent.Leave:
@@ -448,16 +451,29 @@ class QtTabView(
 
     def _delete_widget_at_(self, index):
         item = self._tab_item_stack.get_item_at(index)
-        self.__layer_stack._delete_widget_at_(index)
+        # pre delete
+        key = item.get_key()
+        if key in self._delete_pre_fnc_dict:
+            sys.stderr.write('execute page delete pre function at: {}.\n'.format(index))
+            fnc = self._delete_pre_fnc_dict.pop(key)
+            fnc(key)
+
+        sys.stderr.write('delete page at: {}.\n'.format(index))
+        # delete later
+        self._layer_stack._delete_widget_at_(index)
+        # post delete
+        self.tab_delete_post_accepted.emit(item.get_key() or item.get_name())
+        #
         self._tab_item_stack.delete_item(item)
         self._refresh_widget_all_()
-
-        self.tab_delete_accepted.emit(item.get_key() or item.get_name())
         self.current_changed.emit()
+
+    def _register_page_delete_pre_fnc_(self, key, fnc):
+        self._delete_pre_fnc_dict[key] = fnc
 
     def _add_widget_(self, widget, *args, **kwargs):
         # widget.setParent(self)
-        self.__layer_stack._add_widget_(widget, *args, **kwargs)
+        self._layer_stack._add_widget_(widget, *args, **kwargs)
         tab_item = self._tab_item_stack.create_item(widget)
         if 'key' in kwargs:
             tab_item.set_key(kwargs['key'])
@@ -469,6 +485,7 @@ class QtTabView(
             tab_item.set_tool_tip(kwargs['tool_tip'])
 
         self._refresh_widget_all_()
+        return tab_item
 
     def _set_tab_add_enable_(self, boolean):
         self._tab_add_is_enable = boolean
@@ -508,16 +525,16 @@ class QtTabView(
 
     def _switch_current_to_(self, index):
         self._index_press = None
-        self.__layer_stack._switch_current_to_(index)
+        self._layer_stack._switch_current_to_(index)
         self._refresh_widget_all_()
 
     def _update_index_current_(self, index):
         self._index_press = None
-        self.__layer_stack._update_index_current_(index)
+        self._layer_stack._update_index_current_(index)
         self._refresh_widget_all_()
 
     def _get_current_index_(self):
-        return self.__layer_stack._get_current_index_()
+        return self._layer_stack._get_current_index_()
 
     def _set_current_name_text_(self, text):
         index = self._tab_item_stack.get_index_by_name(
@@ -622,7 +639,7 @@ class QtTabView(
         self._tab_item_stack.insert_item_between(
             self._index_drag_child_polish_start, self._index_drag_child_polish
         )
-        self.__layer_stack._insert_widget_between_(
+        self._layer_stack._insert_widget_between_(
             self._index_drag_child_polish_start, self._index_drag_child_polish
         )
         self._refresh_widget_all_()
@@ -677,7 +694,7 @@ class QtTabView(
         if self._index_press_tmp is not None:
             return [
                 ('close tab', 'close-hover', functools.partial(self._delete_widget_at_, self._index_press_tmp)),
-                ('close other tabs', 'close-hover', None)
+                # ('close other tabs', 'close-hover', None)
             ]
         return []
 

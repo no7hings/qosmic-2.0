@@ -1,27 +1,24 @@
 # coding:utf-8
-import functools
-
 import lxgui.core as gui_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy.screw.core as qsm_lzy_scr_core
 
-
-class AbsPrxSubPanelForResourceRegister(gui_prx_widgets.PrxBaseSubPanel):
+class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseSubPanel):
     CONFIGURE_KEY = 'lazy-resource/gui/register'
 
     def __init__(self, window, session, *args, **kwargs):
-        super(AbsPrxSubPanelForResourceRegister, self).__init__(window, session, *args, **kwargs)
+        super(AbsPrxSubPanelForRegister, self).__init__(window, session, *args, **kwargs)
 
     def gui_setup_fnc(self):
-        self._page_dict = {}
-
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         self.add_widget(self._page_prx_tab_tool_box)
     
     def gui_setup_pages_for(self, page_keys):
         for i_page_key in page_keys:
+            if i_page_key not in self.SUB_PAGE_CLASS_DICT:
+                continue
+
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()
             self._page_prx_tab_tool_box.add_widget(
                 i_prx_sca,

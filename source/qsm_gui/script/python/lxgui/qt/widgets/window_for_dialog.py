@@ -331,7 +331,7 @@ class QtInputDialog(
     QtWidgets.QDialog,
     _qt_abstracts.AbsQtMainWindowDef,
 ):
-    DEFAULT_SIZE = (240, 120)
+    DEFAULT_SIZE = (320, 120)
 
     size_changed = qt_signal()
     key_escape_pressed = qt_signal()
@@ -390,11 +390,8 @@ class QtInputDialog(
         self._central_qt_layout = _base.QtVBoxLayout(self._central_qt_widget)
         self._central_qt_layout.setContentsMargins(*[2]*4)
 
-        sca = _utility.QtVScrollArea()
-        self._central_qt_layout.addWidget(sca)
-        self._value_input = _input.QtInputAsConstant()
-        sca._add_widget_(self._value_input)
-        self._value_input._set_entry_enable_(True)
+        self._sca = _utility.QtVScrollArea()
+        self._central_qt_layout.addWidget(self._sca)
 
         self._wgt_bottom = _utility.QtWidget()
         self._wgt_bottom.setFixedHeight(24)
@@ -420,10 +417,6 @@ class QtInputDialog(
         self._cancel_button._fix_width_to_name_()
         self._cancel_button.press_clicked.connect(self._do_cancel_)
 
-        self._value_input._connect_input_user_entry_value_finished_to_(
-            self._do_ok_
-        )
-
     def _set_info_(self, text):
         self._info_label._set_info_(text)
 
@@ -441,6 +434,29 @@ class QtInputDialog(
 
         self._result = None
         self.reject()
+
+    def _set_value_type_(self, type_):
+        if type_ in {'string', 'integer', 'float'}:
+            self._value_input = _input.QtInputAsConstant()
+            self._sca._add_widget_(self._value_input)
+            self._value_input._set_entry_enable_(True)
+            if type_ == 'integer':
+                self._value_input._set_value_type_(int)
+            elif type_ == 'float':
+                self._value_input._set_value_type_(float)
+            self._value_input._connect_input_user_entry_value_finished_to_(
+                self._do_ok_
+            )
+        elif type_ in {'text'}:
+            self._value_input = _input.QtInputAsContent()
+            self._sca._add_widget_(self._value_input)
+            self._value_input._set_entry_enable_(True)
+            self._value_input._connect_input_user_entry_value_finished_to_(
+                self._do_ok_
+            )
+
+    def _set_value_(self, value):
+        self._value_input._set_value_(value)
 
     def _get_result_(self):
         return self._result

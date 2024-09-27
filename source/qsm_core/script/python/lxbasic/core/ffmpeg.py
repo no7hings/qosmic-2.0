@@ -496,7 +496,6 @@ Y:/deploy/rez-packages/external/ffmpeg/6.0/platform-windows/bin/ffmpeg.exe -i Z:
             ]
             cmd_script = ' '.join(cmd_args)
             subprocess.check_call(cmd_script)
-            sys.stdout.write('frame extract to: "{}"\n'.format(image_path))
         except subprocess.CalledProcessError:
             import traceback
 
@@ -536,3 +535,33 @@ Y:/deploy/rez-packages/external/ffmpeg/6.0/platform-windows/bin/ffmpeg.exe -i Z:
             cmd_script = ' '.join(cmd_args)
             subprocess.check_call(cmd_script)
             return image_file_path
+
+    @classmethod
+    def create_compress(cls, video_path_src, video_path_dst, width_maximum=512, replace=False):
+        """
+ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ultrafast output.mp4
+        """
+        video_path_src = _base.ensure_unicode(video_path_src)
+        video_path_dst = _base.ensure_unicode(video_path_dst)
+
+        if os.path.isfile(video_path_dst) is True:
+            if replace is False:
+                return
+
+        # create directory first
+        directory_path = os.path.dirname(video_path_dst)
+        if os.path.exists(directory_path) is False:
+            os.makedirs(directory_path)
+
+        cmd_args = [
+            cls.get_ffmpeg_source(),
+            six.u(r'-i "{}"').format(video_path_src),
+            r'-v error',
+            r'-vf',
+            r'"scale={}:-1"'.format(width_maximum),
+            '-r 24', '-vcodec libx264', '-crf 28', '-preset ultrafast', '-y',
+            six.u('"{}"').format(video_path_dst)
+        ]
+        cmd_args = [cmd.encode('mbcs') if isinstance(cmd, unicode) else cmd for cmd in cmd_args]
+        cmd_script = ' '.join(cmd_args)
+        subprocess.check_call(cmd_script)

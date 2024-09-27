@@ -35,7 +35,7 @@ class ScpRscAddAnyOpt(object):
     @classmethod
     def dtb_assign_resource_types_fnc(cls, dtb_opt, resource_dtb_path, type_dtb_paths):
         for i_type_dtb_path in type_dtb_paths:
-            dtb_opt.create_type_assign(
+            dtb_opt.create_node_type_assign(
                 resource_dtb_path, i_type_dtb_path, kind=dtb_opt.Kinds.ResourceType
             )
 

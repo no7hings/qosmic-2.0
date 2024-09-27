@@ -1,0 +1,25 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Resource Rename'
+        icon_name: 'tool/rename'
+        #
+        size: [720, 720]
+
+        window:
+            name: 'Rename (Resource)'
+            name_chs: '重命名（资源）'
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        stage_key: ''
+        #
+        entity_type: ''
+        entity: ''

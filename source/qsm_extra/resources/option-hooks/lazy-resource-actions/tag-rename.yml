@@ -1,0 +1,25 @@
+option:
+    type: dtb-action
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+
+        name: 'Tag Rename'
+        icon_name: 'tool/rename'
+
+        size: [720, 720]
+
+        window:
+            name: 'Rename (Tag)'
+            name_chs: '重命名（标签）'
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        stage_key: ''
+        #
+        entity_type: ''
+        entity: ''

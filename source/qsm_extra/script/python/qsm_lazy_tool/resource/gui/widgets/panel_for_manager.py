@@ -12,7 +12,7 @@ class PrxPanelForResourceManager(_abstracts.AbsPrxPanelForResourceManager):
     )
 
     SUB_PANEL_CLASS_DICT = dict(
-        register=_sub_panel_for_register.PrxSubPanelForResourceRegister
+        register=_sub_panel_for_register.PrxSubPanelForRegister
     )
 
     def __init__(self, window, session, *args, **kwargs):

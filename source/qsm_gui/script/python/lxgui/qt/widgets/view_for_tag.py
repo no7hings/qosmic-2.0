@@ -33,7 +33,7 @@ class _AbsTagBase(object):
     def _init_tag_base_(self, widget):
         self._widget = widget
 
-        self._group_root_widget = None
+        self._view_widget = None
         self._parent_widget = None
 
         self._path_set = set()
@@ -51,8 +51,8 @@ class _AbsTagBase(object):
     def _set_number_(self, value):
         raise NotImplementedError()
 
-    def _set_group_root_(self, group_widget):
-        self._group_root_widget = group_widget
+    def _set_view_(self, group_widget):
+        self._view_widget = group_widget
 
     def _set_group_(self, group_widget):
         self._parent_widget = group_widget
@@ -68,14 +68,14 @@ class _AbsTagBase(object):
     def _get_siblings_(self):
         if self._get_path_text_() == self.PATHSEP:
             return [
-                self._group_root_widget._item_dict[x]
-                for x in self._group_root_widget._item_dict.keys()
+                self._view_widget._item_dict[x]
+                for x in self._view_widget._item_dict.keys()
                 if x != self.PATHSEP
             ]
         return [
-            self._group_root_widget._item_dict[x]
+            self._view_widget._item_dict[x]
             for x in fnmatch.filter(
-                self._group_root_widget._item_dict.keys(), '{}/*'.format(self._get_path_text_())
+                self._view_widget._item_dict.keys(), '{}/*'.format(self._get_path_text_())
             )
         ]
 
@@ -83,7 +83,7 @@ class _AbsTagBase(object):
         return [x._is_checked_() for x in self._get_siblings_()]
 
     def _get_all_(self, paths):
-        return [self._group_root_widget._item_dict[x] for x in paths]
+        return [self._view_widget._item_dict[x] for x in paths]
 
     def _update_check_state_for_siblings_(self):
         widgets = self._get_siblings_()
@@ -123,7 +123,7 @@ class _AbsTagBase(object):
         self._force_visible_flag = boolean
 
 
-class _QtTagNode(
+class _QtTagNodeItem(
     QtWidgets.QWidget,
     _qt_abstracts.AbsQtPathBaseDef,
     _qt_abstracts.AbsQtActionBaseDef,
@@ -263,7 +263,7 @@ class _QtTagNode(
             )
 
     def __init__(self, *args, **kwargs):
-        super(_QtTagNode, self).__init__(*args, **kwargs)
+        super(_QtTagNodeItem, self).__init__(*args, **kwargs)
 
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -374,12 +374,12 @@ class _QtTagNode(
         # update when text is changed
         self._parent_widget._refresh_widget_all_()
 
-    def _apply_check_state_(self, boolean):
+    def _update_check_state_(self, boolean):
         self._set_checked_(boolean)
         self._update_check_state_for_ancestors_()
 
 
-class _QtTagGroup(
+class _QtTagGroupItem(
     QtWidgets.QWidget,
     _qt_abstracts.AbsQtPathBaseDef,
     _qt_abstracts.AbsQtActionBaseDef,
@@ -624,7 +624,7 @@ class _QtTagGroup(
                 )
 
     def __init__(self, *args, **kwargs):
-        super(_QtTagGroup, self).__init__(*args, **kwargs)
+        super(_QtTagGroupItem, self).__init__(*args, **kwargs)
 
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -644,7 +644,7 @@ class _QtTagGroup(
 
         self._is_hovered = False
 
-        self._group_root_widget = None
+        self._view_widget = None
         self._parent_widget = None
 
         self._lot = _base.QtVBoxLayout(self)
@@ -770,7 +770,7 @@ class _QtTagGroup(
         self._refresh_widget_all_()
 
     def _create_group_(self, path, *args, **kwargs):
-        widget = _QtTagGroup(self._viewport)
+        widget = _QtTagGroupItem(self._viewport)
         self._group_lot.addWidget(widget)
         self._group_widgets.append(widget)
         widget._set_group_(self)
@@ -788,7 +788,7 @@ class _QtTagGroup(
         return widget
 
     def _create_node_(self, path, *args, **kwargs):
-        widget = _QtTagNode(self._viewport)
+        widget = _QtTagNodeItem(self._viewport)
         self._node_widgets.append(widget)
         widget._set_group_(self)
         widget._set_path_text_(path)
@@ -900,7 +900,7 @@ class QtViewForTagRoot(
         # print offset, h
 
     def _create_group_root_(self, path, *args, **kwargs):
-        widget = _QtTagGroup()
+        widget = _QtTagGroupItem()
         self._sca._add_widget_(widget)
         widget._set_path_text_(path)
         if 'show_name' in kwargs:
@@ -908,7 +908,7 @@ class QtViewForTagRoot(
         else:
             widget._set_text_('All')
 
-        widget._set_group_root_(self)
+        widget._set_view_(self)
         self._item_dict[path] = widget
         widget.user_filter_checked.connect(self._user_filter_check_cbk_)
         self._sca._set_empty_draw_flag_(False)
@@ -924,7 +924,7 @@ class QtViewForTagRoot(
         group_widget = self._item_dict[bsc_core.BscPath.get_dag_parent_path(path)]
         widget = group_widget._create_group_(path, *args, **kwargs)
 
-        widget._set_group_root_(self)
+        widget._set_view_(self)
         self._item_dict[path] = widget
         widget.user_filter_checked.connect(self._user_filter_check_cbk_)
         return widget
@@ -936,7 +936,7 @@ class QtViewForTagRoot(
         group_widget = self._item_dict[bsc_core.BscPath.get_dag_parent_path(path)]
         widget = group_widget._create_node_(path, *args, **kwargs)
 
-        widget._set_group_root_(self)
+        widget._set_view_(self)
         self._item_dict[path] = widget
         widget.user_filter_checked.connect(self._user_filter_check_cbk_)
         return widget
@@ -944,7 +944,7 @@ class QtViewForTagRoot(
     def _check_exists_(self, path):
         return path in self._item_dict
 
-    def _clear_all_checked_(self):
+    def _uncheck_all_items_(self):
         [x._set_checked_(False) for x in self._item_dict.values()]
 
     def _get_one_(self, path):
@@ -954,7 +954,7 @@ class QtViewForTagRoot(
         return [x._get_path_text_() for x in self._get_all_checked_nodes_()]
 
     def _get_all_checked_nodes_(self):
-        return [x for x in self._item_dict.values() if x._is_checked_() and isinstance(x, _QtTagNode)]
+        return [x for x in self._item_dict.values() if x._is_checked_() and isinstance(x, _QtTagNodeItem)]
 
     def _apply_intersection_paths_(self, path_set):
         [x._update_path_set_as_intersection_(path_set) for x in self._item_dict.values()]
@@ -965,7 +965,7 @@ class QtViewForTagRoot(
         self._sca._set_empty_draw_flag_(True)
 
     def _collapse_all_group_items_(self):
-        [x._set_expanded_(False) for x in self._item_dict.values() if isinstance(x, _QtTagGroup)]
+        [x._set_expanded_(False) for x in self._item_dict.values() if isinstance(x, _QtTagGroupItem)]
 
     def _expand_exclusive_for_node_(self, path):
         self._collapse_all_group_items_()
@@ -973,11 +973,11 @@ class QtViewForTagRoot(
         for i in paths:
             if i in self._item_dict:
                 i_widget = self._item_dict[i]
-                if isinstance(i_widget, _QtTagGroup):
+                if isinstance(i_widget, _QtTagGroupItem):
                     i_widget._set_expanded_(True)
     
-    def _expand_all_groups_(self):
-        [x._set_expanded_(True) for x in self._item_dict.values() if isinstance(x, _QtTagGroup)]
+    def _expand_all_group_items_(self):
+        [x._set_expanded_(True) for x in self._item_dict.values() if isinstance(x, _QtTagGroupItem)]
 
     def _expand_for_all_from_(self, path):
         self._collapse_all_group_items_()
@@ -990,7 +990,7 @@ class QtViewForTagRoot(
         for i in paths:
             if i in self._item_dict:
                 i_widget = self._item_dict[i]
-                if isinstance(i_widget, _QtTagGroup):
+                if isinstance(i_widget, _QtTagGroupItem):
                     i_widget._set_expanded_(boolean)
 
     def _set_force_hidden_flag_for_group_(self, path, boolean):
@@ -999,7 +999,7 @@ class QtViewForTagRoot(
     def _generate_chart_data_(self):
         dict_ = {}
         for i_wgt in self._item_dict.values():
-            if isinstance(i_wgt, _QtTagGroup):
+            if isinstance(i_wgt, _QtTagGroupItem):
                 i_dict = {}
                 for j_wgt in i_wgt._node_widgets:
                     j_value = j_wgt._number

@@ -35,12 +35,14 @@ class W(gui_prx_widgets.PrxBaseWindow):
         )
         scr_entity_paths = [x.path for x in scr_entities]
         leaf_path_set = set(bsc_core.BscPath.to_leaf_paths(scr_entity_paths))
+
         for i in scr_entities:
             i_path = i.path
             if i_path in leaf_path_set:
-                i_node = self._d_0._view_model.create_node(i_path, show_name=i.gui_name_chs)
+                i_flag, i_item = self._d_0._view_model.create_item(i_path)
+                i_item._item_model.set_name(i.gui_name_chs)
 
-                i_node._set_tool_tip_(i.to_string('user', 'gui_description_chs', 'ctime', 'mtime'))
+                i_item._set_tool_tip_(i.to_string('user', 'gui_description_chs', 'ctime', 'mtime'))
                 i_scr_assigns = self._scr_stage.find_all(
                     entity_type=self._scr_stage.EntityTypes.Assign,
                     filters=[
@@ -49,14 +51,18 @@ class W(gui_prx_widgets.PrxBaseWindow):
                     ]
                 )
                 i_path_set = set([x.source for x in i_scr_assigns])
-                i_node._set_assign_path_set_(i_path_set)
-                i_node._update_assign_path_set_to_ancestors()
+                i_item._set_assign_path_set_(i_path_set)
+                i_item._update_assign_path_set_to_ancestors()
             else:
-                i_group = self._d_0._view_model.create_group(i_path, show_name=i.gui_name_chs)
+                i_flag, i_item = self._d_0._view_model.create_item_as_group(i_path)
+                i_item._item_model.set_name(i.gui_name_chs)
 
-                i_group._set_expanded_(True)
+                i_item._set_expanded_(True)
 
-                i_group._set_tool_tip_(i.to_string('user', 'gui_description_chs', 'ctime', 'mtime'))
+                i_item._set_tool_tip_(i.to_string('user', 'gui_description_chs', 'ctime', 'mtime'))
+
+        flag, item = self._d_0._view_model.create_item('/test')
+        item._item_model.set_name('TEST')
 
 
 if __name__ == '__main__':

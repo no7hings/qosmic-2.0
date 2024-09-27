@@ -35,28 +35,28 @@ class AssetBatchRegisterOpt(object):
             return
 
         self._scr_stage.create_node(scr_node_path, ctime=scene_opt.get_ctime(), mtime=scene_opt.get_mtime())
-        self._scr_stage.create_type_assign(
+        self._scr_stage.create_node_type_assign(
             scr_node_path, scr_type_path
         )
         self._scr_stage.create_or_update_parameters(
             scr_node_path, 'scene', maya_scene_path
         )
         scr_task_tag_path = '/task/{}'.format(task_name)
-        self._scr_stage.create_tag_assign(
+        self._scr_stage.create_node_tag_assign(
             scr_node_path, scr_task_tag_path
         )
         # todo: remove this
         # assign unspecified
-        # self._scr_stage.create_tag_assign(
+        # self._scr_stage.create_node_tag_assign(
         #     scr_node_path, '/mesh_count/face/unspecified'
         # )
-        # self._scr_stage.create_tag_assign(
+        # self._scr_stage.create_node_tag_assign(
         #     scr_node_path, '/system_resource_usage/memory/unspecified'
         # )
 
     def register_project(self, project_name, project_chs_name):
         scr_type_path = '/{}'.format(self._project_name)
-        self._scr_stage.create_type_group(
+        self._scr_stage.create_type_as_group(
             scr_type_path, gui_name=project_name, gui_name_chs=project_chs_name
         )
 

@@ -678,7 +678,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
 
     # renderers
     def set_renderers_refresh(self):
-        self._rsv_renderer_list_view.set_clear()
+        self._rsv_renderer_list_view.do_clear()
         self._prx_dcc_obj_tree_view_tag_filter_opt.restore_all()
         #
         self._set_renderers_add_rsv_units_()
@@ -1419,7 +1419,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
             )
 
         #
-        self._rsv_renderer_list_view.set_clear()
+        self._rsv_renderer_list_view.do_clear()
         self._prx_dcc_obj_tree_view_tag_filter_opt.restore_all()
         #
         self._variable_variants_dic = self._hook_build_configure.get('variables.character')

@@ -308,14 +308,14 @@ class PrxTreeView(
             *args, **kwargs
         )
 
-    def set_clear(self):
+    def do_clear(self):
         self.view._do_clear_()
         self._item_dict.clear()
         self._keyword_filter_completion_cache = None
         self._loading_item_prxes = []
 
     def restore_all(self):
-        self.set_clear()
+        self.do_clear()
 
     def connect_item_select_changed_to(self, fnc):
         # noinspection PyUnresolvedReferences

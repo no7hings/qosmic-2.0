@@ -1,0 +1,25 @@
+option:
+    type: dtb-action
+
+    systems:
+        - '*-*'
+
+    gui:
+        group_name: 'python'
+
+        name: 'Create Type (Group)'
+        icon_name: 'file/add-file'
+
+        size: [720, 720]
+
+        window:
+            name: 'Create Type (Group)'
+            name_chs: '创建类型（组）'
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        stage_key: ''
+        #
+        entity_type: ''
+        entity: ''

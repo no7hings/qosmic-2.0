@@ -29,7 +29,7 @@ from ..widgets import view_for_histogram_chart as _wgt_view_for_histogram_chart
 
 from ..view_models import base as _vew_mod_base
 
-from ..view_models import tree as _vew_mod_tree
+from ..view_models import view_for_tree as _vew_mod_tree
 
 from . import item_for_tree as _item_for_tree
 
@@ -174,7 +174,7 @@ class _QtTreeViewWidget(
         # view port
         elif widget == self.viewport():
             if event.type() == QtCore.QEvent.ToolTip:
-                self._view_model.do_item_tool_tip(event)
+                self._view_model.do_item_popup_tool_tip(event)
 
             elif event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.buttons() == QtCore.Qt.LeftButton:
@@ -334,6 +334,52 @@ class _QtTreeViewWidget(
         #
         super(_QtTreeViewWidget, self).paintEvent(event)
 
+    def contextMenuEvent(self, event):
+        menu = None
+
+        menu_data = self._view_model.get_menu_data()
+        menu_content = self._view_model.get_menu_content()
+        menu_data_generate_fnc = self._view_model.get_menu_data_generate_fnc()
+
+        if menu_content:
+            if menu is None:
+                menu = self.QT_MENU_CLS(self)
+            menu._set_menu_content_(menu_content, append=True)
+
+        if menu_data:
+            if menu is None:
+                menu = self.QT_MENU_CLS(self)
+            menu._set_menu_data_(menu_data)
+
+        if menu_data_generate_fnc:
+            if menu is None:
+                menu = self.QT_MENU_CLS(self)
+            menu._set_menu_data_(menu_data_generate_fnc())
+
+        # data from item
+        item = self.itemAt(event.pos())
+        if item:
+            item_menu_data = item._item_model.get_menu_data()
+            item_menu_content = item._item_model.get_menu_content()
+            item_menu_data_generate_fnc = item._item_model.get_menu_data_generate_fnc()
+            if item_menu_content:
+                if menu is None:
+                    menu = self.QT_MENU_CLS(self)
+                menu._set_menu_content_(item_menu_content, append=True)
+
+            if item_menu_data:
+                if menu is None:
+                    menu = self.QT_MENU_CLS(self)
+                menu._set_menu_data_(item_menu_data)
+
+            if item_menu_data_generate_fnc:
+                if menu is None:
+                    menu = self.QT_MENU_CLS(self)
+                menu._set_menu_data_(item_menu_data_generate_fnc())
+
+        if menu is not None:
+            menu._popup_start_()
+
 
 class QtTreeWidget(
     _base._BaseViewWidget
@@ -345,7 +391,7 @@ class QtTreeWidget(
         # refresh
         self._refresh_button = _wgt_button.QtIconPressButton()
         self._grid_lot.addWidget(self._refresh_button, 0, 0, 1, 1)
-        self._refresh_button.setFixedSize(28, 28)
+        self._refresh_button.setFixedSize(self.TOOL_BAR_W, self.TOOL_BAR_W)
         self._refresh_button._set_icon_file_path_(
             _gui_core.GuiIcon.get('refresh')
         )
@@ -354,12 +400,12 @@ class QtTreeWidget(
         self._top_scroll_box = _wgt_scroll.QtHScrollBox()
         self._grid_lot.addWidget(self._top_scroll_box, 0, 1, 1, 1)
         self._top_scroll_box._set_layout_align_left_or_top_()
-        self._top_scroll_box.setFixedHeight(28)
+        self._top_scroll_box.setFixedHeight(self.TOOL_BAR_W)
         # left
         self._left_scroll_box = _wgt_scroll.QtVScrollBox()
         self._grid_lot.addWidget(self._left_scroll_box, 1, 0, 1, 1)
         self._left_scroll_box._set_layout_align_left_or_top_()
-        self._left_scroll_box.setFixedWidth(28)
+        self._left_scroll_box.setFixedWidth(self.TOOL_BAR_W)
         # keyword filter
         self._keyword_filter_tool_box = self._create_top_tool_box_('keyword filter', size_mode=1)
         # check
@@ -382,6 +428,25 @@ class QtTreeWidget(
         self._build_check_tool_box_()
         self._build_sort_and_chart_tool_box_()
         self._build_keyword_filter_tool_box_()
+
+        actions = [
+            (self._view.selectAll, 'Ctrl+A'),
+        ]
+        for i_fnc, i_shortcut in actions:
+            i_action = QtWidgets.QAction(self)
+            # noinspection PyUnresolvedReferences
+            i_action.triggered.connect(
+                i_fnc
+            )
+            i_action.setShortcut(
+                QtGui.QKeySequence(
+                    i_shortcut
+                )
+            )
+            i_action.setShortcutContext(
+                QtCore.Qt.WidgetShortcut
+            )
+            self.addAction(i_action)
 
     def _create_top_tool_box_(self, name, size_mode=0):
         tool_box = _wgt_container.QtHToolBox()
@@ -428,14 +493,14 @@ class QtTreeWidget(
         )
 
     def _build_sort_and_chart_tool_box_(self):
-        self._sort_button = _wgt_button.QtIconPressButton()
-        self._sort_button._set_name_text_('sort')
-        self._sort_button._set_icon_file_path_(_gui_core.GuiIcon.get('tool/sort-by-name-ascend'))
-        self._sort_and_chart_tool_box._add_widget_(self._sort_button)
-        self._sort_button._set_menu_data_generate_fnc_(
+        self._item_sort_button = _wgt_button.QtIconPressButton()
+        self._item_sort_button._set_name_text_('sort')
+        self._item_sort_button._set_icon_file_path_(_gui_core.GuiIcon.get('tool/sort-by-name-ascend'))
+        self._sort_and_chart_tool_box._add_widget_(self._item_sort_button)
+        self._item_sort_button._set_menu_data_generate_fnc_(
             self._view_model.generate_item_sort_menu_data
         )
-        self._sort_button.press_clicked.connect(self._on_sort_order_swap_)
+        self._item_sort_button.press_clicked.connect(self._on_sort_order_swap_)
 
         self._chat_button = _wgt_button.QtIconPressButton()
         self._chat_button._set_name_text_('chart')
@@ -472,7 +537,7 @@ class QtTreeWidget(
     def _on_sort_order_swap_(self):
         self._view_model.swap_item_sort_order()
         order = ['ascend', 'descend'][self._view_model.get_item_sort_order()]
-        self._sort_button._set_icon_file_path_(
+        self._item_sort_button._set_icon_file_path_(
             _gui_core.GuiIcon.get('tool/sort-by-name-{}'.format(order)),
         )
 

@@ -94,7 +94,7 @@ class Property(_Obj):
 
     node = CharField(default='')
     port = CharField(default='')
-    value = CharField(default='')
+    value = TextField(default='')
 
 
 class Connection(_Relationship):
@@ -102,3 +102,13 @@ class Connection(_Relationship):
     relationship for properties
     """
     category = CharField(default='connection')
+
+
+class ActionLog(Model):
+    ctime = TimestampField(default=datetime.datetime.now)
+    user = CharField(default=getpass.getuser)
+
+    entity_type = CharField(default='')
+    entity_path = CharField(default='')
+
+    action = CharField(default='')

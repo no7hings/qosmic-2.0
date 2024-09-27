@@ -110,7 +110,7 @@ class AbsWindowBubbleMessageBaseDef(object):
     def _init_window_bubble_message_base_def_(self, widget):
         self._widget = widget
 
-    def _popup_bubble_message_(self, text):
+    def _popup_message_(self, text):
         _bubble.QtMessageBubble._create_for_(self, text)
 
 
@@ -254,7 +254,11 @@ class QtMainWindow(
 
     def _exec_message_dialog_(self, message, *args, **kwargs):
         w = _window_for_dialog.QtMessageDialog(self)
-        w._set_title_('Message')
+
+        if 'title' in kwargs:
+            w._set_title_(kwargs['title'])
+        else:
+            w._set_title_('Message')
 
         w._set_ok_visible_(True)
         if kwargs.get('show_no', False):
@@ -277,7 +281,7 @@ class QtMainWindow(
                     _gui_core.GuiValidationStatus.Correct
                 )
 
-        w._do_window_exec_()
+        w._do_window_exec_(size=kwargs.get('size'))
         return w._get_result_()
 
     def _set_icon_by_text_(self, text):

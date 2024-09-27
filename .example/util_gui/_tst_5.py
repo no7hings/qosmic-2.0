@@ -13,7 +13,7 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
 
     def _test_(self):
         wdt = gui_prx_widgets.PrxListView()
-        wdt.set_clear()
+        wdt.do_clear()
         self.add_widget(wdt)
         for i in range(50):
             item_prx = wdt.create_item(name=str(i))

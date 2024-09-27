@@ -196,7 +196,7 @@ class Selection(object):
                 network_editor.homeToSelection()
 
     @classmethod
-    def set_clear(cls):
+    def do_clear(cls):
         hou.clearAllSelected()
 
     @classmethod

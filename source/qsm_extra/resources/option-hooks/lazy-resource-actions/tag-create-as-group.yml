@@ -1,0 +1,25 @@
+option:
+    type: dtb-action
+
+    systems:
+        - '*-*'
+
+    gui:
+        group_name: 'python'
+
+        name: 'Create Tag Group'
+        icon_name: 'file/add-folder'
+
+        size: [720, 720]
+
+        window:
+            name: 'Create Tag (Group)'
+            name_chs: '创建标签（组）'
+#
+hook_option:
+    script:
+        window_unique_id: ''
+        stage_key: ''
+
+        entity_type: ''
+        entity: ''

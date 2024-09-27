@@ -123,7 +123,7 @@ class QtItemWidgetForList(
         )
         #
         img_size = self._image_size
-        _x, _y, img_frm_w, img_frm_h = bsc_core.RawSizeMtd.fit_to(
+        _x, _y, img_frm_w, img_frm_h = bsc_core.BscSize.fit_to_center(
             (img_size[0], img_size[1]), (frm_bsc_w, frm_bsc_h)
         )
         img_frm_x, img_frm_y = frm_bsc_x+_x, frm_bsc_y+_y

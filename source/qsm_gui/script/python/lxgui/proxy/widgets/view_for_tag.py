@@ -78,16 +78,16 @@ class PrxTagView(
     def get_one(self, path):
         return self._qt_view._get_one_(path)
 
-    def set_node_checked(self, path, boolean):
+    def set_node_checked_for(self, path, boolean):
         _ = self.get_one(path)
         if _:
-            _._apply_check_state_(boolean)
+            _._update_check_state_(boolean)
     
     def expand_exclusive_for_node(self, path):
         self._qt_view._expand_exclusive_for_node_(path)
     
-    def expand_all_groups(self):
-        self._qt_view._expand_all_groups_()
+    def expand_all_group_items(self):
+        self._qt_view._expand_all_group_items_()
 
     def collapse_all_group_items(self):
         self._qt_view._collapse_all_group_items_()
@@ -95,8 +95,8 @@ class PrxTagView(
     def set_item_expand_below(self, path):
         self._qt_view._expand_for_all_from_(path)
 
-    def clear_all_item_check(self):
-        self._qt_view._clear_all_checked_()
+    def uncheck_all_items(self):
+        self._qt_view._uncheck_all_items_()
 
     def get_top_tool_bar(self):
         return self._top_prx_tool_bar

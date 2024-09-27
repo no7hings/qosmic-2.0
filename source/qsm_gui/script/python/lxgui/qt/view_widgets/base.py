@@ -17,6 +17,8 @@ from ..widgets import entry_frame as _wgt_entry_frame
 class _BaseViewWidget(QtWidgets.QWidget):
     refresh = qt_signal()
 
+    TOOL_BAR_W = 26
+
     def __init__(self, *args, **kwargs):
         super(_BaseViewWidget, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -24,6 +26,8 @@ class _BaseViewWidget(QtWidgets.QWidget):
         self._grid_lot = _qt_wgt_base.QtGridLayout(self)
         self._grid_lot.setContentsMargins(*[self._mrg]*4)
         self._grid_lot.setSpacing(2)
+
+        self._tool_bar_hide_flag = False
 
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
 
@@ -39,20 +43,23 @@ class _BaseViewWidget(QtWidgets.QWidget):
         painter.setBrush(QtGui.QColor(*_gui_core.GuiRgba.Dim))
         painter.drawRect(f_x, f_y, f_w, f_h)
 
-        x_t, y_t, w_t, h_t = x+mrg, y+mrg, w-mrg*2, h-mrg*2
-        polygon = QtGui.QPolygon(
-            [
-                QtCore.QPoint(x_t, y_t),
-                QtCore.QPoint(x_t+w_t, y_t),
-                QtCore.QPoint(x_t+w_t, y_t+28),
-                QtCore.QPoint(x_t+28, y_t+28),
-                QtCore.QPoint(x_t+28, y_t+h_t),
-                QtCore.QPoint(x_t, y_t+h_t),
-                QtCore.QPoint(x_t, y_t)
-            ]
-        )
-        painter.setPen(QtGui.QColor(*_gui_core.GuiRgba.Basic))
-        painter.setBrush(QtGui.QColor(*_gui_core.GuiRgba.Basic))
-        painter.drawPolygon(
-            polygon
-        )
+        if self._tool_bar_hide_flag is False:
+
+            tol_w = self.TOOL_BAR_W
+            x_t, y_t, w_t, h_t = x+mrg, y+mrg, w-mrg*2, h-mrg*2
+            polygon = QtGui.QPolygon(
+                [
+                    QtCore.QPoint(x_t, y_t),
+                    QtCore.QPoint(x_t+w_t, y_t),
+                    QtCore.QPoint(x_t+w_t, y_t+tol_w),
+                    QtCore.QPoint(x_t+tol_w, y_t+tol_w),
+                    QtCore.QPoint(x_t+tol_w, y_t+h_t),
+                    QtCore.QPoint(x_t, y_t+h_t),
+                    QtCore.QPoint(x_t, y_t)
+                ]
+            )
+            painter.setPen(QtGui.QColor(*_gui_core.GuiRgba.Basic))
+            painter.setBrush(QtGui.QColor(*_gui_core.GuiRgba.Basic))
+            painter.drawPolygon(
+                polygon
+            )

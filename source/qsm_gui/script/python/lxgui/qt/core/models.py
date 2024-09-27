@@ -16,7 +16,7 @@ class GuiQtModForTabItem(object):
         self._draw_rect = QtCore.QRect()
         self._popup_rect = QtCore.QRect()
 
-        self.__is_drawable = False
+        self._is_drawable = False
 
     def get_widget(self):
         return self._widget
@@ -74,10 +74,10 @@ class GuiQtModForTabItem(object):
         # self._widget.deleteLater()
 
     def set_drawable(self, boolean):
-        self.__is_drawable = boolean
+        self._is_drawable = boolean
 
     def get_is_drawable(self):
-        return self.__is_drawable
+        return self._is_drawable
 
 
 class GuiQtModForTabItemStack(object):

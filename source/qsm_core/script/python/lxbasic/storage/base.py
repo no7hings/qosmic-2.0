@@ -29,6 +29,10 @@ import gzip
 
 import zipfile
 
+import hashlib
+
+import uuid
+
 import lxbasic.log as bsc_log
 
 import lxbasic.content as bsc_content
@@ -608,6 +612,7 @@ class StgSystem(object):
     def open_directory(cls, path):
         path = _cor_raw.auto_string(path)
         if _cor_base.BscSystem.get_is_windows():
+            # must replace '/' to '\\', when path is share like "//nas/test.text"
             cmd = 'explorer "{}"'.format(path.replace('/', '\\'))
         elif _cor_base.BscSystem.get_is_linux():
             cmd = 'gio open "{}"'.format(path)
@@ -632,7 +637,10 @@ class StgSystem(object):
 
     @classmethod
     def open_file(cls, path):
+        path = _cor_base.ensure_unicode(path)
+        path = path.encode('mbcs')
         if _cor_base.BscSystem.get_is_windows():
+            # must replace '/' to '\\', when path is share like "//nas/test.text"
             cmd = 'explorer /select,"{}"'.format(path.replace('/', '\\'))
         elif _cor_base.BscSystem.get_is_linux():
             cmd = 'nautilus "{}" --select'.format(path)
@@ -1046,6 +1054,11 @@ class StgPathOpt(object):
     def show_in_system(self):
         if self.get_path():
             StgSystem.open(self.get_path())
+
+    def start_in_system(self):
+        if self.get_path():
+            # must replace '/' to '\\', when path is share like "//nas/test.text"
+            os.startfile(self.get_path().replace('/', '\\'))
 
     def get_mtime(self):
         return os.stat(self._path).st_mtime
@@ -1561,6 +1574,37 @@ class StgFileOpt(StgPathOpt):
         os.remove(
             self.get_path()
         )
+
+    def to_hash_uuid(self):
+        return self.hash_to_uuid(
+            self.calculate_file_hash(
+                self.path
+            )
+        )
+    
+    @classmethod
+    def hash_to_uuid(cls, hash_value):
+        """Convert a hash value (as a hex string) to a UUID."""
+        # Use the first 16 bytes (32 hex characters) of the hash value to create a UUID
+        return str(uuid.UUID(hash_value[:32])).upper()
+
+    @classmethod
+    def calculate_file_hash(cls, file_path, hash_algorithm='md5', chunk_size=4096):
+        """Calculate the hash value of a file using the specified hash algorithm."""
+
+        # Create a hash object based on the specified algorithm
+        hash_func = hashlib.new(hash_algorithm)
+
+        # Open the file in binary mode and calculate hash
+        with open(file_path, 'rb') as f:
+            while True:
+                chunk = f.read(chunk_size)
+                if not chunk:
+                    break
+                hash_func.update(chunk)
+
+        # Return the hex digest of the hash
+        return hash_func.hexdigest()
 
 
 # compress

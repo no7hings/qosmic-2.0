@@ -41,7 +41,7 @@ class AbsQtShowBaseForVirtualItemDef(
     def _init_show_base_for_virtual_item_def_(self, widget):
         self._widget = widget
         #
-        if bsc_core.BasApplication.get_is_maya():
+        if bsc_core.BscApplication.get_is_maya():
             self._item_show_use_thread = False
         else:
             self._item_show_use_thread = True

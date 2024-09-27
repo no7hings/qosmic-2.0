@@ -41,10 +41,10 @@ class PkgContextNew(object):
 
     @classmethod
     def get_bin_source(cls):
-        return cls.BIN_SOURCE[bsc_cor_base.BasPlatform.get_current()]
+        return cls.BIN_SOURCE[bsc_cor_base.BscPlatform.get_current()]
 
     def __init__(self, *args):
-        self._platform = bsc_cor_base.BasPlatform.get_current()
+        self._platform = bsc_cor_base.BscPlatform.get_current()
         self._bin_source = self.get_bin_source()
         if args:
             self._args = args[0]

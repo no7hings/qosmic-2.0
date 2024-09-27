@@ -164,7 +164,7 @@ class AssetGeneral(object):
         count_tag = AssetTag.to_face_count_tag(mesh_triangle)
         tag_path = '/mesh_count/face/{}'.format(count_tag)
 
-        scr_stage.create_tag_assign(
+        scr_stage.create_node_tag_assign(
             self._scr_node_path, tag_path
         )
 
@@ -178,7 +178,7 @@ class AssetGeneral(object):
         count_tag = AssetTag.to_geometry_count_tag(geometry_count)
         tag_path = '/mesh_count/geometry/{}'.format(count_tag)
 
-        scr_stage.create_tag_assign(
+        scr_stage.create_node_tag_assign(
             self._scr_node_path, tag_path
         )
     
@@ -192,7 +192,7 @@ class AssetGeneral(object):
         tag = AssetTag.to_cache_percentage_tag(percentage)
         tag_path = '/mesh_count/non_cache_face_percentage/{}'.format(tag)
 
-        scr_stage.create_tag_assign(
+        scr_stage.create_node_tag_assign(
             self._scr_node_path, tag_path
         )
 
@@ -209,6 +209,6 @@ class AssetGeneral(object):
 
         tag_name = AssetTag.to_memory_size_tag(size)
         tag_path = '/system_resource_usage/memory/{}'.format(tag_name)
-        scr_stage.create_tag_assign(
+        scr_stage.create_node_tag_assign(
             self._scr_node_path, tag_path
         )

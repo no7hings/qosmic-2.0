@@ -1,6 +1,8 @@
 # coding:utf-8
 from .sub_panel_for_register import *
 
+from .sub_panel_for_assign import *
+
 from .page_for_manager import *
 
 from .panel_for_manager import *

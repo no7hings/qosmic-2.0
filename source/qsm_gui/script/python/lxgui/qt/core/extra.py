@@ -216,9 +216,16 @@ class GuiQtMenuOpt(object):
         if append is False:
             self._root_menu.clear()
 
-        self._item_dic = {
-            '/': self._root_menu
-        }
+            self._item_dic = {
+                '/': self._root_menu
+            }
+        # when append is True, but item_dict not root key, we create new
+        else:
+            if '/' not in self._item_dic:
+                self._item_dic = {
+                    '/': self._root_menu
+                }
+
         if isinstance(content, bsc_content.AbsContent):
             keys = content.get_keys(regex='*.properties')
             for i_key in keys:
@@ -395,6 +402,12 @@ class QtApplication(object):
 
         if 'info' in kwargs:
             w._set_info_(kwargs['info'])
+
+        if 'type' in kwargs:
+            w._set_value_type_(kwargs['type'])
+
+        if 'value' in kwargs:
+            w._set_value_(kwargs['value'])
 
         w._do_window_exec_(
             size=kwargs.get('size')

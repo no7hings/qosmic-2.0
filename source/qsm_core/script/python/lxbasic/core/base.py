@@ -50,7 +50,16 @@ def auto_unicode(text):
     return text
 
 
-class BasPlatform(object):
+def ensure_unicode(s):
+    if isinstance(s, six.text_type):
+        return s
+    elif isinstance(s, bytes):
+        return s.decode('utf-8')
+    else:
+        return s
+
+
+class BscPlatform(object):
     @staticmethod
     def get_is_linux():
         return platform.system() == 'Linux'
@@ -62,12 +71,12 @@ class BasPlatform(object):
     @staticmethod
     def get_current():
         if platform.system() == 'Windows':
-            return _configure.BscPlatform.Windows
+            return _configure.BscPlatformCfg.Windows
         elif platform.system() == 'Linux':
-            return _configure.BscPlatform.Linux
+            return _configure.BscPlatformCfg.Linux
 
 
-class BasApplication(object):
+class BscApplication(object):
     @classmethod
     def get_is_maya(cls):
         _ = os.environ.get('MAYA_APP_DIR')
@@ -133,15 +142,15 @@ class BasApplication(object):
     @classmethod
     def get_current(cls):
         for i_fnc, i_app in [
-            (cls.get_is_maya, _configure.BscApplication.Maya),
-            (cls.get_is_houdini, _configure.BscApplication.Houdini),
-            (cls.get_is_katana, _configure.BscApplication.Katana),
-            (cls.get_is_clarisse, _configure.BscApplication.Clarisse),
-            (cls.get_is_lynxi, _configure.BscApplication.Lynxi)
+            (cls.get_is_maya, _configure.BscApplicationCfg.Maya),
+            (cls.get_is_houdini, _configure.BscApplicationCfg.Houdini),
+            (cls.get_is_katana, _configure.BscApplicationCfg.Katana),
+            (cls.get_is_clarisse, _configure.BscApplicationCfg.Clarisse),
+            (cls.get_is_lynxi, _configure.BscApplicationCfg.Lynxi)
         ]:
             if i_fnc() is True:
                 return i_app
-        return _configure.BscApplication.Python
+        return _configure.BscApplicationCfg.Python
 
     @classmethod
     def test(cls):
@@ -151,8 +160,8 @@ class BasApplication(object):
 
 
 class BscSystem(object):
-    Platform = _configure.BscPlatform
-    Application = _configure.BscApplication
+    Platform = _configure.BscPlatformCfg
+    Application = _configure.BscApplicationCfg
 
     TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
     TIME_FORMAT_EXACT = '%Y-%m-%d %H:%M:%S.%f'
@@ -232,7 +241,7 @@ class BscSystem(object):
     #
     @classmethod
     def get_application(cls):
-        return BasApplication.get_current()
+        return BscApplication.get_current()
 
     @classmethod
     def get_windows_home(cls):
@@ -277,7 +286,7 @@ class BscSystem(object):
         lis = []
         for i_system_key in system_keys:
             i_results = fnmatch.filter(
-                _configure.BscSystem.All, i_system_key
+                _configure.BscSystemCfg.All, i_system_key
             ) or []
             for j_system in i_results:
                 if j_system not in lis:
@@ -476,6 +485,13 @@ class BscStorage(object):
                     return user
                 except KeyError:
                     return 'unknown'
+            elif BscStorage.get_platform_is_windows():
+                import win32security
+                # print win32security.__file__
+                sd = win32security.GetFileSecurity(path, win32security.OWNER_SECURITY_INFORMATION)
+                owner_sid = sd.GetSecurityDescriptorOwner()
+                name, domain, _ = win32security.LookupAccountSid(None, owner_sid)
+                return '{}/{}'.format(domain, name)
         return 'unknown'
 
     @classmethod

@@ -7,8 +7,6 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_lazy.screw.core as qsm_lzy_scr_core
 
-from . import page_for_manager as _page_for_resource_manager
-
 
 class AbsPrxPanelForResourceManager(gui_prx_widgets.PrxBasePanel):
     CONFIGURE_KEY = 'lazy-resource/gui/manager'
@@ -41,10 +39,10 @@ class AbsPrxPanelForResourceManager(gui_prx_widgets.PrxBasePanel):
         self._tag_page_key_opened.add(key)
         self._gui_tab_add_page(key, switch_to=switch_to)
 
-    def _gui_tab_page_delete_fnc(self, key):
+    def _gui_page_delete_pre_fnc(self, key):
         page = self._tab_page_dict.pop(key)
-        page.gui_close_fnc()
         self._tag_page_key_opened.remove(key)
+        return page.gui_close_fnc()
 
     def _gui_tab_add_page(self, key, switch_to=False):
         prx_sca = gui_prx_widgets.PrxVScrollArea()
@@ -64,6 +62,8 @@ class AbsPrxPanelForResourceManager(gui_prx_widgets.PrxBasePanel):
         )
         prx_page = self.generate_page_for('manager')
         self._tab_page_dict[key] = prx_page
+        
+        self._prx_tab_view.register_page_delete_pre_fnc(key, self._gui_page_delete_pre_fnc)
 
         prx_page.do_gui_page_initialize(key)
         prx_sca.add_widget(prx_page)
@@ -92,7 +92,6 @@ class AbsPrxPanelForResourceManager(gui_prx_widgets.PrxBasePanel):
         self._tab_page_dict = {}
 
         self._prx_tab_view.set_add_menu_data_gain_fnc(self._gui_tab_add_menu_gain_fnc)
-        self._prx_tab_view.connect_delete_accepted_to(self._gui_tab_page_delete_fnc)
 
         history_tag_keys = gui_core.GuiHistory.get_one(self.KEY_TAB_KEYS)
         page_keys = self._all_scr_stage_keys

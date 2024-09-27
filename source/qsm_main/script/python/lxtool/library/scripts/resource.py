@@ -301,7 +301,7 @@ class ScpResourcesAddByQuixel(object):
             i_dtb_type = dtb_opt.get_type_force(i_type_path)
             if i_dtb_type is not None:
                 # resource types
-                dtb_opt.create_type_assign(
+                dtb_opt.create_node_type_assign(
                     resource_dtb_path, i_type_path, kind=dtb_opt.Kinds.ResourceType
                 )
             else:
@@ -332,7 +332,7 @@ class ScpResourcesAddByQuixel(object):
                                 k_kind = dtb_opt.Kinds.ResourceSecondarySemanticTag
                             #
                             k_tag_path = '/{}/{}'.format(j_tag_group_name, k_tag)
-                            dtb_opt.create_tag_assign(
+                            dtb_opt.create_node_tag_assign(
                                 resource_dtb_path, k_tag_path, kind=k_kind
                             )
                 else:
@@ -508,14 +508,14 @@ class ScpResourcesAddByQuixel(object):
         )
         # texture type tag
         texture_type_tag_dtb_path = '/texture/{}'.format(texture_type_tag)
-        dtb_opt.create_tag_assign(
+        dtb_opt.create_node_tag_assign(
             resource_dtb_path, texture_type_tag_dtb_path, kind=dtb_opt.Kinds.ResourceFileTag
         )
         # texture size tag
         texture_size = bsc_storage.ImgOiioOpt(file_stg_path).get_size()
         texture_size_tag = '{}x{}'.format(*texture_size)
         texture_size_tag_dtb_path = '/resolution/{}'.format(texture_size_tag)
-        dtb_opt.create_tag_assign(
+        dtb_opt.create_node_tag_assign(
             resource_dtb_path, texture_size_tag_dtb_path, kind=dtb_opt.Kinds.ResourcePropertyTag
         )
         #
@@ -622,14 +622,14 @@ class ScpResourcesAddByQuixel(object):
         )
         # texture type tag
         texture_type_tag_dtb_path = '/texture/{}'.format(texture_type_tag)
-        dtb_opt.create_tag_assign(
+        dtb_opt.create_node_tag_assign(
             resource_dtb_path, texture_type_tag_dtb_path, kind=dtb_opt.Kinds.ResourceFileTag
         )
         # texture size tag
         texture_size = bsc_storage.ImgOiioOpt(file_stg_path).get_size()
         texture_size_tag = '{}x{}'.format(*texture_size)
         texture_size_tag_dtb_path = '/resolution/{}'.format(texture_size_tag)
-        dtb_opt.create_tag_assign(
+        dtb_opt.create_node_tag_assign(
             resource_dtb_path, texture_size_tag_dtb_path, kind=dtb_opt.Kinds.ResourcePropertyTag
         )
         #
@@ -733,7 +733,7 @@ class ScpResourcesAddByQuixel(object):
         )
         # file format
         texture_type_tag_dtb_path = '/geometry/{}'.format(file_format)
-        dtb_opt.create_tag_assign(
+        dtb_opt.create_node_tag_assign(
             resource_dtb_path, texture_type_tag_dtb_path, kind=dtb_opt.Kinds.ResourceFileTag
         )
         #

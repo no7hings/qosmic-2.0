@@ -1,4 +1,6 @@
 # coding:utf-8
+import six
+
 import functools
 
 import fnmatch
@@ -104,7 +106,7 @@ class AbsSsnGener(
     AbsSsnEnvironmentBaseDef,
 ):
     Platform = bsc_core.BscPlatform
-    Application = bsc_core.BscApplication
+    Application = bsc_core.BscApplicationCfg
 
     def __init__(self, *args, **kwargs):
         if 'type' in kwargs:
@@ -299,7 +301,7 @@ class AbsSsnGener(
             )
         )
         session = kwargs['session']
-        if bsc_core.BasPlatform.get_is_linux():
+        if bsc_core.BscPlatform.get_is_linux():
             cmds = [
                 'gnome-terminal',
                 '-t "{}-{}"'.format(
@@ -310,7 +312,7 @@ class AbsSsnGener(
             bsc_core.BscProcess.execute_as_trace_use_thread(
                 ' '.join(cmds)
             )
-        elif bsc_core.BasPlatform.get_is_windows():
+        elif bsc_core.BscPlatform.get_is_windows():
             # when process finish use /c for auto close terminal, /k not
             cmds = ['start', 'cmd', '/c', file_path]
             bsc_core.BscProcess.execute_as_trace_use_thread(
@@ -326,7 +328,7 @@ class AbsSsnGener(
     @staticmethod
     def execute_shell_script_use_terminal(cmd, **kwargs):
         session = kwargs['session']
-        if bsc_core.BasPlatform.get_is_linux():
+        if bsc_core.BscPlatform.get_is_linux():
             cmds = [
                 'gnome-terminal',
                 '-t "{}-{}"'.format(
@@ -337,7 +339,7 @@ class AbsSsnGener(
             bsc_core.BscProcess.execute_as_trace_use_thread(
                 ' '.join(cmds)
             )
-        elif bsc_core.BasPlatform.get_is_windows():
+        elif bsc_core.BscPlatform.get_is_windows():
             cmds = ['start', 'cmd', '/c', cmd]
             bsc_core.BscProcess.execute_as_trace_use_thread(
                 ' '.join(cmds)
@@ -527,7 +529,7 @@ class AbsSsnOptionGener(AbsSsnGener):
         self._init_option_def(kwargs['option'])
 
     def __str__(self):
-        return '{}(type="{}", key={}, option="{}")'.format(
+        return six.u('{}(type="{}", key={}, option="{}")').format(
             self.__class__.__name__,
             self.get_type(),
             self.get_key(),

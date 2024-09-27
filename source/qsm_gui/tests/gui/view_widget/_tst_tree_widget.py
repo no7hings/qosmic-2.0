@@ -25,6 +25,8 @@ class W(gui_prx_widgets.PrxBaseWindow):
         scr_stage = qsm_scr_core.Stage('asset_test')
 
         self._d = qt_view_widgets.QtTreeWidget()
+        self._d._view_model.set_item_check_enable(True)
+        self._d._view_model.set_item_color_enable(True)
         # self._d._view_model.set_item_sort_keys(['name', 'gui_name', 'gui_name_chs'])
         self.add_widget(self._d)
         # self._d._view._set_view_header_([('name', 4), ('index', 4)], 320-48)
@@ -56,11 +58,11 @@ class W(gui_prx_widgets.PrxBaseWindow):
                 i_item._item_model.set_assign_path_set(set([x.source for x in i_scr_assigns]))
                 i_item._item_model._update_assign_path_set_to_ancestors()
                 # i_item.setSizeHint(0, QtCore.QSize(40, 40))
-        for i in range(100):
+        for i in range(50):
             i_path = '/test_{}'.format(i)
             i_flag, i_item = self._d._view._view_model.create_item(i_path)
             i_item._item_model.set_icon_name('tree/folder')
-            for j in range(100):
+            for j in range(50):
                 j_path = '{}/test_{}_{}'.format(i_path, i, j)
                 j_flag, j_item = self._d._view._view_model.create_item(j_path)
                 j_item._item_model.set_icon_name('tree/file')

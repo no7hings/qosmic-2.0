@@ -1,0 +1,96 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+
+    gui:
+        name: 'Assign Tool'
+        name_chs: '指定工具'
+        group_name: 'General(s)'
+
+        icon_name: 'application/python'
+        tool_tip:
+            |-
+            For type/tag assign.
+
+        tool_tip_chs:
+            |-
+            用于类型/标签指定。
+
+        size: [480, 720]
+
+build:
+    main:
+        buttons:
+            apply_and_close:
+                name: 'Apply and Close'
+                name_chs: '应用并关闭'
+
+            apply:
+                name: 'Apply'
+                name_chs: '应用'
+
+            close:
+                name: 'Name'
+                name_chs: '关闭'
+
+    type:
+        tab:
+            name: 'Assign Type'
+            name_chs: '指定分类'
+
+            tool_tip:
+                |-
+                To be supplemented.
+            tool_tip_chs:
+                |-
+                待补充。
+
+        filter:
+            name: 'Type'
+            name_chs: '分类'
+
+        options:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+                includes:
+                    widget: capsule_strings
+                    name: 'Include'
+                    name_chs: '包含'
+                    options: ['addition', 'deletion']
+                    option_names: ['Addition', 'Deletion']
+                    option_names_chs: ['增加的', '删除的']
+                    default: ['addition', 'deletion']
+
+    tag:
+        tab:
+            name: 'Assign Tag'
+            name_chs: '指定标签'
+
+            tool_tip:
+                |-
+                To be supplemented.
+            tool_tip_chs:
+                |-
+                待补充。
+
+        filter:
+            name: 'Tag'
+            name_chs: '标签'
+
+        options:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+                includes:
+                    widget: capsule_strings
+                    name: 'Include'
+                    name_chs: '包含'
+                    options: ['addition', 'deletion']
+                    option_names: ['Addition', 'Deletion']
+                    option_names_chs: ['增加的', '删除的']
+                    default: ['addition', 'deletion']

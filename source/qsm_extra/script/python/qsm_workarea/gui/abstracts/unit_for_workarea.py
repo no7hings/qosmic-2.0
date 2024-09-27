@@ -58,7 +58,7 @@ class _GuiDirectoryOpt(
     def restore(self):
         self.__push_expand_cache()
 
-        self._prx_tree_view.set_clear()
+        self._prx_tree_view.do_clear()
         self._keys.clear()
 
     def __push_expand_cache(self):

@@ -13,7 +13,7 @@ class GuiPrxScpForRsvTask(object):
         self._prx_list_view.set_view_list_mode()
 
     def restore_all(self):
-        self._prx_list_view.set_clear()
+        self._prx_list_view.do_clear()
 
     def append(self, rsv_task):
         def cache_fnc_():
@@ -59,7 +59,7 @@ class GuiPrxScpForResolver(object):
         prx_item.set_gui_attribute('path', path)
 
     def restore(self):
-        self._tree_view.set_clear()
+        self._tree_view.do_clear()
         self._keys.clear()
 
     def gui_add_root(self):

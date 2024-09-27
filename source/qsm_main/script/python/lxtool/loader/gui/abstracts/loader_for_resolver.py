@@ -820,7 +820,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
         #
         self._main_h_s.set_fixed_size_at(0, 320)
         self._main_h_s.set_fixed_size_at(2, 320)
-        if bsc_core.BasApplication.get_is_dcc():
+        if bsc_core.BscApplication.get_is_dcc():
             self._main_h_s.swap_contract_right_or_bottom_at(2)
 
         self._right_v_s.set_fixed_size_at(0, 320)
@@ -990,7 +990,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
         self._entity_prx_view.restore_filter()
         self._gui_entity_opt.restore()
         self._gui_tag_opt.restore()
-        self._task_guide_bar.set_clear()
+        self._task_guide_bar.do_clear()
         #
         self.__asset_keys = set()
         self.__task_keys = set()
@@ -1259,7 +1259,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
 
     @classmethod
     def _get_current_application_(cls):
-        return bsc_core.BasApplication.get_current()
+        return bsc_core.BscApplication.get_current()
 
     @classmethod
     def _get_current_project_(cls):

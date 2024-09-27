@@ -47,7 +47,7 @@ class AssetSnapShotGenerateOpt(_asset_general.AssetGeneral):
             self._scr_node_path, '/system_resource_usage/memory'
         )
 
-        scr_stage.create_tag_assign(
+        scr_stage.create_node_tag_assign(
             self._scr_node_path, '/system_resource_usage/memory/unspecified'
         )
 
@@ -79,6 +79,6 @@ class AssetSnapShotGenerateOpt(_asset_general.AssetGeneral):
 
             tag_name = _asset_general.AssetTag.to_memory_size_tag(memory_size)
             tag_path = '/system_resource_usage/memory/{}'.format(tag_name)
-            scr_stage.create_tag_assign(
+            scr_stage.create_node_tag_assign(
                 self._scr_node_path, tag_path
             )

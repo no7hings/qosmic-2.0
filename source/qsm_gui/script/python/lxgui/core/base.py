@@ -109,17 +109,21 @@ class GuiUtil(object):
 
     @classmethod
     def choice_name(cls, language, options):
-        if language == 'chs':
-            if 'name_chs' in options:
-                return options['name_chs']
-        return options['name']
+        if isinstance(options, dict):
+            if language == 'chs':
+                if 'name_chs' in options:
+                    return options['name_chs']
+            return options['name']
+        return 'null'
 
     @classmethod
-    def choice_name_(cls, options):
-        if cls.get_language() == 'chs':
-            if 'name_chs' in options:
-                return options['name_chs']
-        return options['name']
+    def choice_name_auto(cls, options):
+        if isinstance(options, dict):
+            if cls.get_language() == 'chs':
+                if 'name_chs' in options:
+                    return options['name_chs']
+            return options['name']
+        return 'null'
 
     @classmethod
     def choice_description(cls, language, options):

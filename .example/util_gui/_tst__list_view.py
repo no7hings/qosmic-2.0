@@ -99,7 +99,7 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
         self._prx_list_view.set_item_frame_size_basic(96, 72)
         self._prx_list_view.set_item_icon_frame_size(20, 20)
         self._prx_list_view.set_item_icon_size(20, 20)
-        self._prx_list_view.set_clear()
+        self._prx_list_view.do_clear()
         self.add_widget(self._prx_list_view)
         for i in range(200):
             add_fnc_(i)

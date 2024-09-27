@@ -657,8 +657,16 @@ class BscInteger(object):
         return float(value)/dv**3
 
     @classmethod
-    def frame_to_time(cls, frame, fps=24):
+    def frame_to_time_args(cls, frame, fps=24):
         second = int(frame)/fps
+        h = int(second/3600)
+        m = int(second/60-60*h)
+        s = int(second-3600*h-60*m)
+        return h, m, s
+    
+    @classmethod
+    def millisecond_to_time_args(cls, microsecond):
+        second = microsecond // 1000
         h = int(second/3600)
         m = int(second/60-60*h)
         s = int(second-3600*h-60*m)
@@ -666,12 +674,20 @@ class BscInteger(object):
 
     @classmethod
     def frame_to_time_prettify(cls, frame, fps=24):
-        h, m, s = cls.frame_to_time(frame, fps)
+        h, m, s = cls.frame_to_time_args(frame, fps)
 
-        return '{h}:{m}:{s}:{f}'.format(
+        return '{h}:{m}:{s}/{f}'.format(
             h=str(h).zfill(2), m=str(m).zfill(2), s=str(s).zfill(2), f=str(int(frame%fps)).zfill(2)
         )
 
+    @classmethod
+    def millisecond_to_time_prettify(cls, millisecond):
+        h, m, s = cls.millisecond_to_time_args(millisecond)
+
+        return '{h}:{m}:{s}/{f}'.format(
+            h=str(h).zfill(2), m=str(m).zfill(2), s=str(s).zfill(2), f=str(int((millisecond%1000)/1000.0*100)).zfill(2)
+        )
+    
     @classmethod
     def second_to_time(cls, second):
         h = int(int(second)/3600.0)
@@ -1076,7 +1092,7 @@ class RawBBoxMtd(object):
         return max(r_0, r_1)
 
 
-class RawSizeMtd(object):
+class BscSize(object):
     @classmethod
     def set_clamp_to(cls, width, height, maximum, minimum):
         if width > height:
@@ -1129,6 +1145,23 @@ class RawSizeMtd(object):
             w, h = m_1, m_1
         x, y = int((w_1-w)/2), int((h_1-h)/2)
         return x, y, w, h
+
+    @classmethod
+    def fit_to_center(cls, size_0, size):
+        w_0, h_0 = size_0
+        w, h = size
+
+        scale_w = float(w)/w_0
+        scale_h = float(h)/h_0
+        scale = min(scale_w, scale_h)
+
+        new_w = int(w_0*scale)
+        new_h = int(h_0*scale)
+
+        x = (w-new_w)//2
+        y = (h-new_h)//2
+
+        return x, y, new_w, new_h
 
 
 class RawRectMtd(object):

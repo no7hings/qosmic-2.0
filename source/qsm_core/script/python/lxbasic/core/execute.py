@@ -106,7 +106,7 @@ class ExcExtraMtd(object):
                 file_path
             )
         )
-        if _base.BasPlatform.get_is_linux():
+        if _base.BscPlatform.get_is_linux():
             cmds = [
                 'gnome-terminal', '-t', kwargs.get('title') or 'untitled',
                 '-e "bash -l {}"'.format(file_path)
@@ -114,7 +114,7 @@ class ExcExtraMtd(object):
             _process.BscProcess.execute_as_trace(
                 ' '.join(cmds)
             )
-        elif _base.BasPlatform.get_is_windows():
+        elif _base.BscPlatform.get_is_windows():
             cmds = ['start', 'cmd', '/k', file_path]
             _process.BscProcess.execute_as_trace(
                 ' '.join(cmds)
@@ -127,7 +127,7 @@ class ExcExtraMtd(object):
 
     @staticmethod
     def execute_shell_script_use_terminal(cmd, **kwargs):
-        if _base.BasPlatform.get_is_linux():
+        if _base.BscPlatform.get_is_linux():
             cmds = [
                 'gnome-terminal',
                 '-t', kwargs.get('title') or 'untitled',
@@ -136,7 +136,7 @@ class ExcExtraMtd(object):
             _process.BscProcess.execute_as_trace(
                 ' '.join(cmds)
             )
-        elif _base.BasPlatform.get_is_windows():
+        elif _base.BscPlatform.get_is_windows():
             cmds = ['start', 'cmd', '/k', cmd]
             _process.BscProcess.execute_as_trace(
                 ' '.join(cmds)

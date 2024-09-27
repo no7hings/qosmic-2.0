@@ -328,8 +328,8 @@ class _AbsPrxPortBase(AbsPrxPortBaseDef):
         if hasattr(self._prx_port_input, 'append'):
             self._prx_port_input.append(value)
 
-    def set_clear(self):
-        self._prx_port_input.set_clear()
+    def do_clear(self):
+        self._prx_port_input.do_clear()
 
     def set_reset(self):
         default = self.get_default()

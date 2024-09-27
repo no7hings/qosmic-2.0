@@ -143,9 +143,14 @@ class GuiSortMode(enum.IntEnum):
     Name = 1
 
 
-class GuiSortOrder(enum.IntEnum):
+class GuiItemSortOrder(enum.IntEnum):
     Ascend = 0
     Descend = 1
+    
+
+class GuiItemMode(enum.IntEnum):
+    Icon = 0
+    List = 1
 
 
 class GuiSize(object):

@@ -104,7 +104,7 @@ build:
 
         filter:
             name: 'Type & Tag'
-            name_chs: '类型 & 标签'
+            name_chs: '分类 & 标签'
 
         buttons:
             apply_and_close:

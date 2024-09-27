@@ -127,7 +127,7 @@ class AbsPrxToolGroup(gui_prx_abstracts.AbsPrxWidget):
     def connect_expand_changed_to(self, fnc):
         self._qt_head.expand_clicked.connect(fnc)
 
-    def set_clear(self):
+    def do_clear(self):
         def rcs_fnc_(layout_):
             c = layout_.count()
             for i in range(c):

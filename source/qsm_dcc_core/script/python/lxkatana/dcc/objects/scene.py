@@ -330,6 +330,6 @@ class Selection(object):
             ).select_all()
 
     @classmethod
-    def set_clear(cls):
+    def do_clear(cls):
         NodegraphAPI.SetAllSelectedNodes([])
-        ktn_core.KtnSGSelectionOpt.set_clear()
+        ktn_core.KtnSGSelectionOpt.do_clear()

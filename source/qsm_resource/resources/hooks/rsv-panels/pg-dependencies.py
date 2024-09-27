@@ -107,7 +107,7 @@ class PGDependencies(gui_prx_widgets.PrxSessionWindow):
             self.get_definition_window_size()[0]*(3.0/4.0)-32
         )
         self._filter_tree_view_opt.restore_all()
-        self._result_tree_view.set_clear()
+        self._result_tree_view.do_clear()
         for i in self._get_data_():
             key = '&'.join(['{}={}'.format(*j) for j in i])
             names = [j[1] for j in i]

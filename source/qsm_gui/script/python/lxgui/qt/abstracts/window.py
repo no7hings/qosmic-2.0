@@ -81,6 +81,7 @@ class AbsQtMainWindowDef(object):
 
     def _do_window_close_(self):
         if self._window_close_flag is False:
+            # run close fnc first
             if self._window_close_fncs:
                 for i in self._window_close_fncs:
                     i()

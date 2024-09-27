@@ -182,6 +182,8 @@ class PrxBaseSubPanel(_window_base.PrxBaseWindow):
         super(PrxBaseSubPanel, self).__init__(*args, **kwargs)
         self._init_base_panel_def_(window, session, *args, **kwargs)
 
+        self._page_dict = {}
+
     def _debug_run_(self, fnc, *args, **kwargs):
         # noinspection PyBroadException
         try:
@@ -259,6 +261,9 @@ class PrxBaseSubPanel(_window_base.PrxBaseWindow):
 
     def generate_sub_page_for(self, key):
         return self.SUB_PAGE_CLASS_DICT[key](self._window, self._session, self)
+
+    def gui_get_page(self, key):
+        return self._page_dict.get(key)
 
 
 class PrxBaseSubPage(_prx_abstracts.AbsPrxWidget):

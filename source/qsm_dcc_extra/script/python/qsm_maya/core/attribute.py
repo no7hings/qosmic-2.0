@@ -39,7 +39,8 @@ class NodeAttribute(object):
 
     @classmethod
     def set_value(cls, path, atr_name, value):
-        cmds.setAttr(cls.to_atr_path(path, atr_name), value)
+        # value may over maximum value?
+        cmds.setAttr(cls.to_atr_path(path, atr_name), value, clamp=1)
 
     @classmethod
     def set_as_tuple(cls, path, atr_name, value):

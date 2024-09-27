@@ -7,34 +7,39 @@ from ... import core as _gui_core
 # qt
 from ...qt.core.wrap import *
 
+from ...qt import core as _qt_core
+
 from . import base as _base
 
+from . import item_base as _item_base
 
-class _PlayThread(QtCore.QThread):
+
+class _FramePlayThread(QtCore.QThread):
     timeout = qt_signal()
 
     def __init__(self, parent):
-        super(_PlayThread, self).__init__(parent)
+        super(_FramePlayThread, self).__init__(parent)
         self._interval = 1000.0/24
-        self._running = True
+
+        self._running_flag = False
         self._close_flag = False
 
     def set_interval(self, interval):
         self._interval = interval
 
     def do_start(self):
-        self._running = True
         if self._close_flag is False:
+            self._running_flag = True
             self.start()
 
     def run(self):
-        while self._running:
+        while self._running_flag:
             # noinspection PyArgumentList
             QtCore.QThread.msleep(self._interval)
             self.timeout.emit()
 
     def do_stop(self):
-        self._running = False
+        self._running_flag = False
 
     def do_close(self):
         self._close_flag = True
@@ -43,8 +48,103 @@ class _PlayThread(QtCore.QThread):
         self.deleteLater()
 
 
-class ListItemModel(_base.AbsItemModel):
-    WAIT_PLAY_DELAY = 50
+class _AudioPlayThread(QtCore.QThread):
+
+    finished = qt_signal()
+    progress_percent_changed = qt_signal(float)
+
+    def __init__(self, parent, audio_segment):
+        super(_AudioPlayThread, self).__init__(parent)
+        self._audio_segment = audio_segment
+        self._time_maximum = len(audio_segment)/1000.0
+
+        self._interval = 1000.0/24
+        self._start_time = 0
+        self._start_percent = 0.0
+        self._loop_flag = True
+
+        self._running_flag = False
+        self._close_flag = False
+
+        self._progress_percent = 0.0
+
+    def set_interval(self, interval):
+        self._interval = interval
+
+    def run(self):
+        import pyaudio
+
+        pa = pyaudio.PyAudio()
+
+        stream = None
+        while self._running_flag:
+            segment_to_play = self._audio_segment[self._start_time:]
+
+            stream = pa.open(
+                format=pyaudio.paInt16,
+                channels=segment_to_play.channels,
+                rate=segment_to_play.frame_rate,
+                output=True
+            )
+
+            samples = segment_to_play.get_array_of_samples()
+            frame_count = len(samples)
+
+            chunk_size = 1024
+            for i in range(0, frame_count, chunk_size):
+                if not self._running_flag:
+                    break
+
+                chunk = samples[i:i+chunk_size].tostring()
+                stream.write(chunk)
+
+                if self._close_flag is False:
+                    percent = (i+chunk_size)/float(frame_count)*(1-self._start_percent)+self._start_percent
+                    percent = round(percent, 4)
+                    if percent != self._progress_percent:
+                        self._progress_percent = percent
+                        self.progress_percent_changed.emit(self._progress_percent)
+            
+            # when loop is enable, restart from zero
+            if self._loop_flag and self._running_flag:
+                self._start_time = 0
+                self._start_percent = 0.0
+            else:
+                break
+
+        if stream is not None:
+            stream.stop_stream()
+            if not stream.is_stopped():
+                stream.close()
+
+        self.finished.emit()
+
+    def do_start_from(self, percent):
+        if self._close_flag is False:
+            self._start_percent = percent
+            self._start_time = int(self._time_maximum * percent * 1000)
+            self.do_start()
+
+    def do_start(self):
+        if self._close_flag is False:
+            self._running_flag = True
+            self.start()
+
+    def do_stop(self):
+        self._running_flag = False
+        self._start_time = 0
+        self._start_percent = 0.0
+        self._progress_percent = 0.0
+
+    def do_close(self):
+        self._close_flag = True
+        self.do_stop()
+        self.wait()
+        self.deleteLater()
+
+
+class ListItemModel(_item_base.AbsItemModel):
+    WAIT_PLAY_DELAY = 100
     
     def __init__(self, item):
         super(ListItemModel, self).__init__(
@@ -68,34 +168,20 @@ class ListItemModel(_base.AbsItemModel):
 
                 image_placeholder_svg=_gui_core.GuiIcon.get('placeholder/image'),
                 # image
-                image=_base._Data(
-                    enable=False,
-                    load_flag=False,
-
-                    file=None,
-                    pixmap=None,
-                    size=None,
-                ),
-                # image sequence
-                image_sequence=_base._Data(
-                    enable=False,
-                    load_flag=False,
-
-                    play_flag=False,
-                    auto_play_flag=False,
-                    file=None,
-                    files=[],
-                    pixmap_dict={},
-                    size=None,
-                    index=0,
-                    index_maximum=1,
-                    point=QtCore.QPoint(),
-                    fps=24,
-                    time_text='00:00:00:00',
-                    percent=0.0,
-                    progress_color=QtGui.QColor(*_gui_core.GuiRgba.LightNeonGreen),
-                    progress_color_auto_play=QtGui.QColor(*_gui_core.GuiRgba.LightAzureBlue),
-                ),
+                image_enable=False,
+                image=None,
+                # image sequence, default use none
+                image_sequence_enable=False,
+                image_sequence=None,
+                # video
+                video_enable=False,
+                video=None,
+                # audio
+                audio_enable=False,
+                audio=None,
+                # play
+                play_enable=False,
+                autoplay_enable=False,
                 # show
                 show=_base._Data(
                     load_flag=False,
@@ -121,65 +207,166 @@ class ListItemModel(_base.AbsItemModel):
 
         self._pixmap_cache = QtGui.QPixmap()
 
-        self._auto_play_thread = _PlayThread(self._view)
-        self._auto_play_thread.timeout.connect(self._play_next)
+    def _init_play(self):
+        self._data.play_enable = True
+        self._data.play = _base._Data(
+            flag=False,
 
-        self._fps = 24
-        self._frame_interval = int(1000/self._fps)
-        self._auto_play_thread.set_interval(self._frame_interval)
+            point=QtCore.QPoint(),
+            fps=24,
+            # only image sequence show frame
+            time_index_text='00:00:00/00',
+            time_maximum_text='00:00:00/00',
+            # progress
+            progress_enable=False,
+            progress_percent=0.0,
+            progress_color=QtGui.QColor(*_gui_core.GuiRgba.LightOrange),
+            progress_color_auto_play=QtGui.QColor(*_gui_core.GuiRgba.LightAzureBlue),
+        )
 
-        self._wait_play_timer = QtCore.QTimer(self._view)
-        self._wait_play_timer.timeout.connect(self._start_play)
+    def _init_autoplay(self, fps):
+        self._data.autoplay_enable = True
+        play_thread = _FramePlayThread(self._view)
+        play_thread.timeout.connect(self._autoplaying)
+        frame_interval = int(1000/fps)
+        play_thread.set_interval(frame_interval)
 
-    def do_press_dbl_click(self, point):
-        pass
+        wait_timer = QtCore.QTimer(self._view)
+        wait_timer.timeout.connect(self._start_autoplay)
+        self._data.autoplay = _base._Data(
+            flag=False,
+            play_thread=play_thread,
+            wait_timer=wait_timer,
+
+            frame_interval=frame_interval,
+        )
+
+    def do_press_click(self, point):
+        super(ListItemModel, self).do_press_click(point)
+
+        if self._data.basic.rect.contains(point):
+            if _qt_core.QtApplication.is_ctrl_modifier():
+                if self._data.audio_enable is True:
+                    if self._data.audio.autoplay_flag is True:
+                        percent = self._data.play.progress_percent
+                        # close pre and create new thread to play from percent
+                        self._data.audio.play_thread.do_close()
+                        self._data.audio.play_thread = _AudioPlayThread(
+                            self._view, self._data.audio.play_thread._audio_segment
+                        )
+                        self._data.audio.play_thread.progress_percent_changed.connect(
+                            self._update_audio_play_progress_percent
+                        )
+                        self._data.audio.play_thread.do_start_from(percent)
 
     def do_hover_move(self, point):
-        if self._data.image_sequence.enable is True:
-            # rest play
-            self._data.image_sequence.auto_play_flag = False
-            self._auto_play_thread.do_stop()
+        # hover play
+        if self._data.basic.rect.contains(point):
+            if self._data.play_enable is True:
+                self._data.play.flag = True
 
-            self._data.image_sequence.play_flag = True
+                self._data.play.point.setX(point.x())
+                # update video or image sequence frame
+                if self._data.video_enable is True:
+                    self._update_video_by_hover_move()
+                elif self._data.audio_enable is True:
+                    self._update_audio_by_hover_move()
+                elif self._data.image_sequence_enable is True:
+                    self._update_sequence_image_by_hover_move()
 
-            self._data.image_sequence.point.setX(point.x())
-            self._update_sequence_image()
-
-            self._wait_play_timer.start(self.WAIT_PLAY_DELAY)
+                if self._data.autoplay_enable is True:
+                    # rest autoplay
+                    self._data.autoplay.flag = False
+                    # stop first
+                    self._data.autoplay.play_thread.do_stop()
+                    # wait to autoplay when ctrl modifier is disabled
+                    if _qt_core.QtApplication.is_ctrl_modifier() is False:
+                        self._data.autoplay.wait_timer.start(self.WAIT_PLAY_DELAY)
+            # audio
+            if self._data.audio_enable is True:
+                self._start_audio_autoplay()
+        else:
+            self._stop_any_play()
 
     def do_close(self):
-        self._auto_play_thread.do_close()
+        self._close_flag = True
 
-    def _start_play(self):
-        self._wait_play_timer.stop()
-        self._data.image_sequence.auto_play_flag = True
-        self._auto_play_thread.do_start()
+        if self._data.autoplay_enable is True:
+            self._data.autoplay.play_thread.do_close()
 
-    def _play_next(self):
-        if self._data.image_sequence.auto_play_flag is True:
-            index = self._data.image_sequence.index
-            index += 1
-            if index > self._data.image_sequence.index_maximum:
-                index = 0
+        if self._data.audio_enable is True:
+            self._data.audio.play_thread.do_close()
 
-            self._update_sequence_image_at(index)
+    # play
+    def _start_autoplay(self):
+        if self._data.autoplay_enable is True:
+            # stop wait
+            self._data.autoplay.wait_timer.stop()
+            self._data.autoplay.flag = True
+            # autoplay
+            self._data.autoplay.play_thread.do_start()
 
-    def _stop_play(self):
-        self._update_sequence_image_at(0)
-        self._data.image_sequence.play_flag=False
-        self._wait_play_timer.stop()
+    def _start_audio_autoplay(self):
+        if self._data.audio.autoplay_flag is False:
+            self._data.audio.autoplay_flag = True
 
-        self._data.image_sequence.auto_play_flag = False
-        self._auto_play_thread.do_stop()
+            self._update_audio_play_progress_percent(0.0)
+            self._data.audio.play_thread.do_start()
+
+    def _autoplaying(self):
+        if self._data.play_enable is True:
+            if self._data.autoplay_enable is True:
+                if self._data.autoplay.flag is True:
+                    if self._data.video_enable is True:
+                        # make frame cycle
+                        index = self._data.video.index
+                        index += 1
+                        if index > self._data.video.index_maximum:
+                            index = 0
+
+                        self._update_video_frame_at(index)
+                    elif self._data.image_sequence_enable is True:
+                        # make frame cycle
+                        index = self._data.image_sequence.index
+                        index += 1
+                        if index > self._data.image_sequence.index_maximum:
+                            index = 0
+                        self._update_sequence_image_frame_at(index)
+
+    def _stop_any_play(self):
+        if self._data.play_enable is True:
+            # reset image to first frame
+            if self._data.video_enable is True:
+                self._update_video_frame_at(
+                    self._data.video.index_default
+                )
+            elif self._data.image_sequence_enable is True:
+                self._update_sequence_image_frame_at(
+                    self._data.image_sequence.index_default
+                )
+            # hover play
+            self._data.play.flag = False
+            # auto play
+            if self._data.autoplay_enable is True:
+                self._data.autoplay.wait_timer.stop()
+                self._data.autoplay.flag = False
+                self._data.autoplay.play_thread.do_stop()
+        # audio
+        if self._data.audio_enable is True:
+            self._data.audio.autoplay_flag = False
+            self._update_audio_play_progress_percent(0.0)
+            self._data.audio.play_thread.do_stop()
 
     @property
     def view(self):
         return self._view
 
     def draw(self, painter, option, index):
+        # save painter first
         painter.save()
 
         self.update(option.rect)
+
         self._update_select(not not option.state & QtWidgets.QStyle.State_Selected)
         self._update_hover(not not option.state & QtWidgets.QStyle.State_MouseOver)
 
@@ -187,14 +374,18 @@ class ListItemModel(_base.AbsItemModel):
 
         self.draw_background(painter, option, index)
 
-        self._update_image_auto()
-        self._update_image_sequence_auto()
+        self._load_image_auto()
+        self._load_image_sequence_auto()
+        self._load_video_auto()
+        self._load_audio_auto()
 
         painter.drawPixmap(
             self._data.basic.rect, self.refresh_pixmap_cache()
         )
 
         self.draw_names(painter, option, index)
+
+        self.draw_lock(painter, option, index)
 
         painter.restore()
 
@@ -209,18 +400,26 @@ class ListItemModel(_base.AbsItemModel):
             painter.setBrush(self._data.hover.color)
             painter.drawRect(self._data.hover.rect)
         # draw check
-        if self._data.check.enable is True:
+        if self._data.check_enable is True:
             self._draw_icon(painter, self._data.check.rect, self._data.check.file)
         # draw icon
-        if self._data.icon.enable is True:
+        if self._data.icon_enable is True:
             self._draw_icon(painter, self._data.icon.rect, self._data.icon.file)
+
+    def draw_lock(self, painter, option, index):
+        if self._data.lock_enable is True:
+            if self._data.lock.flag is True:
+                self._draw_icon(painter, self._data.lock.rect, self._data.lock.file)
 
     def draw_names(self, painter, option, index):
         # name
         if self._data.name.enable is True:
+            text_color = [
+                self._data.text.color, self._data.text.action_color
+            ][self._data.select.flag or self._data.hover.flag]
             self._draw_name(
                 painter, self._data.name.rect, self._data.name.text,
-                [self._data.name.color, self._data.name.hover_color][self._data.select.flag or self._data.hover.flag]
+                text_color
             )
 
     def refresh_pixmap_cache(self):
@@ -237,52 +436,127 @@ class ListItemModel(_base.AbsItemModel):
             rect = QtCore.QRect(0, 0, rect.width(), rect.height())
 
             x, y, w, h = rect.x(), rect.y(), rect.width(), rect.height()
+            bsc_w, bsc_h = w, h
 
-            bsc_w = bsc_h = w
-
-            painter.setPen(self._data.frame_color)
-            painter.setBrush(self._data.frame_brush)
             frm_x, frm_y, frm_w, frm_h = x+2, y+2, bsc_w-4, bsc_h-4
             frame_rect = QtCore.QRect(frm_x, frm_y, frm_w, frm_h)
+            # basic frame
+            painter.setPen(QtGui.QColor(0, 0, 0, 0))
+            painter.setBrush(self._data.frame_brush)
             painter.drawRect(frame_rect)
-            frame_rect_f = QtCore.QRectF(frm_x, frm_y, frm_w, frm_h)
-            # image sequence for play, draw image sequence first
-            if self._data.image_sequence.enable is True:
+
+            # video for play
+            if self._data.video_enable is True:
+                img_w, img_h = self._data.video.size.width(), self._data.video.size.height()
+                img_x_, img_y_, img_w_, img_h_ = bsc_core.BscSize.fit_to_center(
+                    (img_w, img_h), (frm_w, frm_h)
+                )
+                img_rect = QtCore.QRect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
+                self._draw_pixmap(painter, img_rect, self._data.video.pixmap)
+            # audio
+            elif self._data.audio_enable is True:
+                # fill to frame rect
+                img_rect = QtCore.QRect(frm_x, frm_y, frm_w, frm_h)
+                self._draw_pixmap(painter, img_rect, self._data.audio.pixmap)
+                # draw frame
+                painter.setPen(self._data.frame_color)
+                painter.setBrush(QtGui.QColor(0, 0, 0, 0))
+                painter.drawRect(img_rect)
+                # draw progress and handle
+                if self._data.audio.autoplay_flag is True:
+                    progress_w = frm_w*self._data.audio.progress_percent
+                    self._data.audio.progress_rect.setRect(
+                        frm_x, frm_y, progress_w, frm_h
+                    )
+                    painter.setPen(self._data.audio.progress_color)
+                    painter.setBrush(self._data.audio.progress_color)
+                    painter.drawRect(self._data.audio.progress_rect)
+                # dra handle
+                if self._data.play_enable is True:
+                    if self._data.play.flag is True:
+                        percent = self._data.play.progress_percent
+                        hdl_x = frm_x+int(frm_w*percent)
+                        self._data.audio.handle_line.setLine(
+                            hdl_x, frm_y, hdl_x, frm_y+frm_h
+                        )
+                        painter.setPen(self._data.audio.handle_color)
+                        painter.drawLine(self._data.audio.handle_line)
+            # image sequence for play
+            elif self._data.image_sequence_enable is True:
                 img_w, img_h = self._data.image_sequence.size.width(), self._data.image_sequence.size.height()
-                img_x_, img_y_, img_w_, img_h_ = bsc_core.RawSizeMtd.fit_to(
+                img_x_, img_y_, img_w_, img_h_ = bsc_core.BscSize.fit_to_center(
                     (img_w, img_h), (frm_w, frm_h)
                 )
                 img_rect = QtCore.QRect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
                 self._draw_pixmap(painter, img_rect, self._data.image_sequence.pixmap)
-                if self._data.image_sequence.play_flag is True:
-                    time_txt = self._data.image_sequence.time_text
-                    time_txt_w = self.compute_text_width_by(time_txt)
-                    time_rect = QtCore.QRect(
-                        frm_x+(frm_w-time_txt_w)/2, frm_y+frm_h-16, time_txt_w, 16
-                    )
-                    self._draw_time_text(painter, time_rect, time_txt)
-
-                    progress_w = int(frm_w*self._data.image_sequence.percent)
-                    progress_rect = QtCore.QRect(
-                        frm_x, frm_y+frm_h-2, progress_w, 2
-                    )
-                    if self._data.image_sequence.auto_play_flag is True:
-                        painter.setPen(self._data.image_sequence.progress_color_auto_play)
-                        painter.setBrush(QtGui.QColor(self._data.image_sequence.progress_color_auto_play))
-                    else:
-                        painter.setPen(self._data.image_sequence.progress_color)
-                        painter.setBrush(QtGui.QColor(self._data.image_sequence.progress_color))
-                    painter.drawRect(progress_rect)
             # image
-            elif self._data.image.enable is True:
-                img_w, img_h = self._data.image.size.width(), self._data.image.size.height()
-                img_x_, img_y_, img_w_, img_h_ = bsc_core.RawSizeMtd.fit_to(
+            elif self._data.image_enable is True:
+                source_type = self._data.image.source_type
+                if source_type == 'audio':
+                    img_rect = QtCore.QRect(frm_x, frm_y, frm_w, frm_h)
+                    self._draw_pixmap(painter, img_rect, self._data.image.pixmap)
+                    # draw frame
+                    painter.setPen(self._data.frame_color)
+                    painter.setBrush(QtGui.QColor(0, 0, 0, 0))
+                    painter.drawRect(img_rect)
+                else:
+                    img_w, img_h = self._data.image.size.width(), self._data.image.size.height()
+                    img_x_, img_y_, img_w_, img_h_ = bsc_core.BscSize.fit_to_center(
+                        (img_w, img_h), (frm_w, frm_h)
+                    )
+                    img_rect = QtCore.QRect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
+                    self._draw_pixmap(painter, img_rect, self._data.image.pixmap)
+            # placeholder
+            else:
+                img_w = img_h = min(frm_w, frm_h)
+                img_x_, img_y_, img_w_, img_h_ = bsc_core.BscSize.fit_to_center(
                     (img_w, img_h), (frm_w, frm_h)
                 )
-                img_rect = QtCore.QRect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
-                self._draw_pixmap(painter, img_rect, self._data.image.pixmap)
-            else:
-                self._draw_svg(painter, frame_rect_f, self._data.image_placeholder_svg)
+                img_rect = QtCore.QRectF(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
+                # draw empty
+                self._draw_svg(painter, img_rect, self._data.image_placeholder_svg)
+            # about play
+            if self._data.play_enable is True:
+                # time and progress
+                if (
+                    self._data.video_enable is True
+                    or self._data.audio_enable is True
+                    or self._data.image_sequence_enable is True
+                ):
+                    if self._data.play.flag is True:
+                        # time from index
+                        time_txt = self._data.play.time_index_text
+                        if self._data.play.progress_enable is True:
+                            progress_w = int(frm_w*self._data.play.progress_percent)
+                            progress_rect = QtCore.QRect(
+                                frm_x, frm_y+frm_h-2, progress_w, 2
+                            )
+                            if self._data.autoplay.flag is True:
+                                painter.setPen(self._data.play.progress_color_auto_play)
+                                painter.setBrush(QtGui.QColor(self._data.play.progress_color_auto_play))
+                            else:
+                                painter.setPen(self._data.play.progress_color)
+                                painter.setBrush(QtGui.QColor(self._data.play.progress_color))
+                            painter.drawRect(progress_rect)
+                    else:
+                        time_txt = self._data.play.time_maximum_text
+
+                    time_txt_w = self.compute_text_width_by(time_txt)
+                    mrg = 2
+                    time_rect = QtCore.QRect(
+                        frm_x+frm_w-time_txt_w-mrg, frm_y+frm_h-16-mrg, time_txt_w, 16
+                    )
+
+                    painter.setPen(
+                        QtGui.QColor(0, 0, 0, 0)
+                    )
+                    painter.setBrush(
+                        QtGui.QBrush(QtGui.QColor(15, 15, 15, 127))
+                    )
+                    painter.drawRect(time_rect)
+
+                    painter.setPen(QtGui.QColor(0, 0, 0, 0))
+                    self._draw_time_text(painter, time_rect, time_txt)
 
             painter.end()
 
@@ -295,12 +569,15 @@ class ListItemModel(_base.AbsItemModel):
             # need re instance
             self._data.rect = QtCore.QRect(rect)
 
+            name_h = 20
             x, y, w, h = rect.x(), rect.y(), rect.width(), rect.height()
 
-            bsc_w = bsc_h = w
+            bsc_w_0, bsc_h_0 = w, h-name_h
+
+            bsc_x, bsc_y, bsc_w, bsc_h = x+2, y+2, bsc_w_0-3, bsc_h_0-3
 
             self._data.basic.rect.setRect(
-                x+2, y+2, bsc_w-3, bsc_h-3
+                bsc_x, bsc_y, bsc_w, bsc_h
             )
 
             self._data.select.rect.setRect(
@@ -312,22 +589,32 @@ class ListItemModel(_base.AbsItemModel):
             # check icon
             item_h = 20
             icn_w = 16
+            # lock
+            if self._data.lock_enable is True:
+                lck_w = lck_h = int(min(bsc_w, bsc_h)*.75)
+                self._data.lock.rect.setRect(
+                    bsc_x+(bsc_w-lck_w)/2, bsc_y+(bsc_h-lck_h)/2, lck_w, lck_h
+                )
             cck_w = 0
-            if self._data.check.enable is True:
+            # check
+            if self._data.check_enable is True:
                 cck_w = 20
                 self._data.check.rect.setRect(
                     x+(cck_w-icn_w)/2+1, y+h-item_h+(cck_w-icn_w)/2, icn_w, icn_w
                 )
             # icon
             icn_w = 0
-            if self._data.icon.enable is True:
+            if self._data.icon_enable is True:
                 icn_w = 20
                 self._data.icon.rect.setRect(
                     x+cck_w+(icn_w-icn_w)/2+1, y+h-item_h+(icn_w-icn_w)/2, icn_w, icn_w
                 )
             # name
+            txt_offset = cck_w+icn_w
+            if txt_offset == 0:
+                txt_offset = 4
             self._data.name.rect.setRect(
-                x+cck_w+icn_w+1, y+h-item_h, w-(cck_w+icn_w)-2, item_h
+                x+txt_offset+1, y+h-item_h, w-(cck_w+icn_w)-2, item_h
             )
             return True
         return False
@@ -357,11 +644,39 @@ class ListItemModel(_base.AbsItemModel):
         )
         painter.drawPixmap(rect, pxm_scaled)
 
-    def set_image(self, file_path):
-        self._data.image.file = file_path
-        self._data.image.load_flag = True
+    def _update_hover_play_percent(self):
+        x = self._data.play.point.x()
+        x_offset = self._data.rect.x()
+        w = self._data.basic.size.width()
+        percent = round(float(x-x_offset)/float(w), 2)
+        if percent != self._data.play.progress_percent:
+            self._data.play.progress_percent = percent
+            return True, percent
+        return False, percent
 
-    def _do_load_image(self):
+    # image
+    def set_image(self, file_path, source_type=None):
+        if file_path is not None:
+            self._data.image = _base._Data(
+                load_flag=False,
+
+                file=None,
+                pixmap=None,
+                size=None,
+
+                source_type=source_type
+            )
+
+            self._data.image.file = file_path
+            self._data.image.load_flag = True
+
+    def _load_image_auto(self):
+        if self._data.image is not None:
+            if self._data.image.load_flag is True:
+                self._data.image.load_flag = False
+                self._load_image()
+
+    def _load_image(self):
         def cache_fnc_():
             _file_path = self._data.image.file
             _ = self._view._view_model.pull_image_cache(_file_path)
@@ -373,17 +688,17 @@ class ListItemModel(_base.AbsItemModel):
             _image.load(_file_path)
             if _image.isNull() is False:
                 _pixmap = QtGui.QPixmap.fromImage(_image, QtCore.Qt.AutoColor)
-                _data = [[_file_path], _pixmap, _pixmap.size()]
-                self._view._view_model.push_image_cache(_file_path, _data)
-                return _data
+                _cache = [_pixmap]
+                self._view._view_model.push_image_cache(_file_path, _cache)
+                return _cache
             return []
 
         def build_fnc_(data_):
             if data_:
-                _file_paths, _pixmap, _image_size = data_
-                self._data.image.enable = True
+                _pixmap = data_[0]
+                self._data.image_enable = True
                 self._data.image.pixmap = _pixmap
-                self._data.image.size = _image_size
+                self._data.image.size = _pixmap.size()
 
                 self.mark_force_refresh(True)
                 self.update_view()
@@ -393,24 +708,37 @@ class ListItemModel(_base.AbsItemModel):
         )
         trd.start()
 
-    def _update_image_auto(self):
-        if self._data.image.load_flag is True:
-            self._data.image.load_flag = False
-            self._do_load_image()
-
+    # image sequence
     def set_image_sequence(self, file_path):
-        self._data.image_sequence.file = file_path
-        self._data.image_sequence.load_flag = True
+        if file_path is not None:
+            self._data.image_sequence = _base._Data(
+                load_flag=False,
+                file=None,
+                files=[],
+                size=None,
 
-    def _update_image_sequence_auto(self):
-        if self._data.image_sequence.load_flag is True:
-            self._data.image_sequence.load_flag = False
-            self._do_load_image_sequence()
+                index=0,
+                index_default=0,
+                index_maximum=1,
 
-    def _do_load_image_sequence(self):
+                fps=24,
+
+                pixmap_cache_dict={},
+            )
+            self._data.image_sequence.file = file_path
+            self._data.image_sequence.load_flag = True
+
+    def _load_image_sequence_auto(self):
+        if self._data.image_sequence is not None:
+            if self._data.image_sequence.load_flag is True:
+                # mark to false for load once
+                self._data.image_sequence.load_flag = False
+                self._load_image_sequence()
+
+    def _load_image_sequence(self):
         def cache_fnc_():
             _file_path = self._data.image_sequence.file
-            _ = self._view._view_model.pull_image_cache(_file_path)
+            _ = self._view._view_model.pull_image_sequence_cache(_file_path)
             if _:
                 return _
 
@@ -420,19 +748,34 @@ class ListItemModel(_base.AbsItemModel):
                 _image.load(_file_paths[0])
                 if _image.isNull() is False:
                     _pixmap = QtGui.QPixmap.fromImage(_image, QtCore.Qt.AutoColor)
-                    _data = [_file_paths, _pixmap, _pixmap.size()]
-                    self._view._view_model.push_image_cache(_file_path, _data)
-                    return _data
+                    _cache = [_file_paths, _pixmap]
+                    self._view._view_model.push_image_sequence_cache(_file_path, _cache)
+                    return _cache
             return []
 
         def build_fnc_(data_):
+            if self._view._view_model._close_flag is True:
+                return
+
             if data_:
-                _file_paths, _pixmap, _image_size = data_
-                self._data.image_sequence.enable = True
+                _file_paths, _pixmap = data_
+                self._data.image_sequence_enable = True
                 self._data.image_sequence.pixmap = _pixmap
-                self._data.image_sequence.size = _image_size
+                self._data.image_sequence.size = _pixmap.size()
                 self._data.image_sequence.files = _file_paths
-                self._data.image_sequence.index_maximum = len(_file_paths)-1
+                _frame_count = len(_file_paths)
+                self._data.image_sequence.index_default = int(_frame_count/2)
+                self._data.image_sequence.index_maximum = _frame_count-1
+
+                self._init_play()
+                self._init_autoplay(24)
+
+                self._data.play.progress_enable = True
+
+                self._data.play.time_maximum_text = bsc_core.BscInteger.frame_to_time_prettify(
+                    len(_file_paths),
+                    self._data.image_sequence.fps
+                )
 
                 self.mark_force_refresh(True)
                 self.update_view()
@@ -442,17 +785,249 @@ class ListItemModel(_base.AbsItemModel):
         )
         trd.start()
 
-    def _update_sequence_image(self):
-        x = self._data.image_sequence.point.x()
-        x_offset = self._data.rect.x()
-        w = self._data.basic.size.width()
-        percent = float(x-x_offset)/float(w)
-        index = int(self._data.image_sequence.index_maximum*percent)
-        if index != self._data.image_sequence.index:
-            self._update_sequence_image_at(index)
+    def _update_sequence_image_by_hover_move(self):
+        flag, percent = self._update_hover_play_percent()
+        if flag is True:
+            index = int(self._data.image_sequence.index_maximum*percent)
+            if index != self._data.image_sequence.index:
+                self._update_sequence_image_frame_at(index)
 
+    def _update_sequence_image_frame_at(self, index):
+        index = max(min(index, self._data.image_sequence.index_maximum), 0)
+        self._data.image_sequence.index = index
+        # update percent by index changing
+        percent = float(index)/float(self._data.image_sequence.index_maximum)
+        self._data.play.progress_percent = percent
+
+        self._data.play.time_index_text = bsc_core.BscInteger.frame_to_time_prettify(
+            index+1,
+            self._data.image_sequence.fps
+        )
+        # cache pixmap
+        if index in self._data.image_sequence.pixmap_cache_dict:
+            self._data.image_sequence.pixmap = self._data.image_sequence.pixmap_cache_dict[index]
+        else:
+            file_path = self._data.image_sequence.files[index]
+            image = QtGui.QImage()
+            image.load(file_path)
+            pixmap = QtGui.QPixmap.fromImage(image, QtCore.Qt.AutoColor)
+            self._data.image_sequence.pixmap = pixmap
+            self._data.image_sequence.pixmap_cache_dict[index] = pixmap
+
+        self.mark_force_refresh(True)
+        self.update_view()
+
+    # video
     def set_video(self, file_path):
-        pass
+        if file_path is not None:
+            self._data.video = _base._Data(
+                load_flag=False,
+                file=None,
+                capture_opt=None,
+                size=None,
+                index=0,
+                index_default=0,
+                index_maximum=1,
+                fps=24,
+
+                pixmap_cache_dict={},
+            )
+            self._data.video.file = file_path
+            self._data.video.load_flag = True
+
+    def _load_video_auto(self):
+        if self._data.video is not None:
+            if self._data.video.load_flag is True:
+                # mark to false for load once
+                self._data.video.load_flag = False
+                self._load_video()
+
+    def _load_video(self):
+        def cache_fnc_():
+            _file_path = self._data.video.file
+            _ = self._view._view_model.pull_video_cache(_file_path)
+            if _:
+                return _
+
+            import lxbasic.cv.core as bsc_cv_core
+
+            _capture_opt = bsc_cv_core.VideoCaptureOpt(_file_path)
+            # catch first frame
+            if _capture_opt.is_valid():
+                _image = _capture_opt.generate_qt_image(QtGui.QImage, frame_index=_capture_opt.get_middle_frame_index())
+                _frame_count = _capture_opt.get_frame_count()
+                _fps = _capture_opt.get_frame_rate()
+                _pixmap = QtGui.QPixmap.fromImage(_image, QtCore.Qt.AutoColor)
+                _cache = [_capture_opt, _pixmap, _frame_count, _fps]
+                self._view._view_model.push_video_cache(_file_path, _cache)
+                return _cache
+            return []
+
+        def build_fnc_(data_):
+            if self._view._view_model._close_flag is True:
+                return
+
+            if data_:
+                _capture_opt, _pixmap, _frame_count, _fps = data_
+                self._data.video_enable = True
+                self._data.video.capture_opt = _capture_opt
+                self._data.video.pixmap = _pixmap
+                self._data.video.size = _pixmap.size()
+                self._data.video.index_default = int(_frame_count/2)
+                self._data.video.index_maximum = _frame_count-1
+                self._data.video.fps = _fps
+
+                self._init_play()
+                self._init_autoplay(_fps)
+
+                self._data.play.progress_enable = True
+
+                self._data.play.time_maximum_text = bsc_core.BscInteger.frame_to_time_prettify(
+                    _frame_count,
+                    _fps
+                )
+
+                self.mark_force_refresh(True)
+                self.update_view()
+
+        trd = self._view._generate_thread_(
+            cache_fnc_, build_fnc_
+        )
+        trd.start()
+
+    def _update_video_by_hover_move(self):
+        flag, percent = self._update_hover_play_percent()
+        if flag is True:
+            index = int(self._data.video.index_maximum*percent)
+            if index != self._data.video.index:
+                self._update_video_frame_at(index)
+
+    def _update_video_frame_at(self, index):
+        index = max(min(index, self._data.video.index_maximum), 0)
+        self._data.video.index = index
+        # update percent by index changing
+        percent = float(index)/float(self._data.video.index_maximum)
+        self._data.play.progress_percent = percent
+
+        self._data.play.time_index_text = bsc_core.BscInteger.frame_to_time_prettify(
+            index+1,
+            self._data.video.fps
+        )
+        # cache pixmap
+        if index in self._data.video.pixmap_cache_dict:
+            self._data.video.pixmap = self._data.video.pixmap_cache_dict[index]
+        else:
+            capture_opt = self._data.video.capture_opt
+            image = capture_opt.generate_qt_image(QtGui.QImage, index)
+            pixmap = QtGui.QPixmap.fromImage(image, QtCore.Qt.AutoColor)
+            self._data.video.pixmap = pixmap
+            self._data.video.pixmap_cache_dict[index] = pixmap
+
+        self.mark_force_refresh(True)
+        self.update_view()
+
+    # audio
+    def set_audio(self, file_path, thumbnail_path=None):
+        if file_path is not None:
+            self._data.audio = _base._Data(
+                load_flag=False,
+                file=None,
+                thumbnail=thumbnail_path,
+                capture_opt=None,
+                size=None,
+
+                time_microsecond=1,
+
+                pixmap_cache_dict={},
+
+                play_thread=None,
+
+                progress_percent=0.0,
+                progress_rect=QtCore.QRect(),
+                progress_color=QtGui.QColor(255, 255, 255, 31),
+
+                handle_line=QtCore.QLine(),
+                handle_color=QtGui.QColor(*_gui_core.GuiRgba.LightTorchRed),
+
+                autoplay_flag=False,
+            )
+            self._data.audio.file = file_path
+            self._data.audio.load_flag = True
+
+    def _load_audio_auto(self):
+        if self._data.audio is not None:
+            if self._data.audio.load_flag is True:
+                # mark to false for load once
+                self._data.audio.load_flag = False
+                self._load_audio()
+
+    def _load_audio(self):
+        def cache_fnc_():
+            _file_path = self._data.audio.file
+            _ = self._view._view_model.pull_audio_cache(_file_path)
+            if _:
+                return _
+
+            import lxbasic.cv.core as bsc_cv_core
+
+            _capture_opt = bsc_cv_core.AudioCaptureOpt(_file_path)
+            # catch first frame
+            if _capture_opt.is_valid():
+                if self._data.audio.thumbnail is not None:
+                    _image = QtGui.QImage()
+                    _image.load(self._data.audio.thumbnail)
+                else:
+                    _image = _capture_opt.generate_at_image_from_cache(QtGui.QImage)
+                _microsecond = _capture_opt.get_frame_count()
+                _pixmap = QtGui.QPixmap.fromImage(_image, QtCore.Qt.AutoColor)
+                _cache = [_capture_opt, _pixmap, _microsecond]
+                self._view._view_model.push_audio_cache(_file_path, _cache)
+                return _cache
+            return []
+
+        def build_fnc_(data_):
+            if self._view._view_model._close_flag is True:
+                return
+
+            if data_:
+                _capture_opt, _pixmap, _microsecond = data_
+                self._data.audio_enable = True
+                self._data.audio.capture_opt = _capture_opt
+                self._data.audio.pixmap = _pixmap
+                self._data.audio.size = _pixmap.size()
+                self._data.audio.time_microsecond = _microsecond
+
+                self._data.audio.play_thread = _AudioPlayThread(self._view, _capture_opt._audio_segment)
+                self._data.audio.play_thread.progress_percent_changed.connect(
+                    self._update_audio_play_progress_percent
+                )
+
+                self._init_play()
+
+                self._data.play.time_maximum_text = bsc_core.BscInteger.millisecond_to_time_prettify(
+                    _microsecond
+                )
+
+                self.mark_force_refresh(True)
+                self.update_view()
+
+        trd = self._view._generate_thread_(
+            cache_fnc_, build_fnc_
+        )
+        trd.start()
+
+    def _update_audio_by_hover_move(self):
+        flag, percent = self._update_hover_play_percent()
+
+    def _update_audio_play_progress_percent(self, percent):
+        self._data.audio.progress_percent = percent
+
+        self._data.play.time_index_text = bsc_core.BscInteger.millisecond_to_time_prettify(
+            int(percent*self._data.audio.time_microsecond),
+        )
+
+        self.mark_force_refresh(True)
+        self.update_view()
 
     def update_view(self):
         # todo: use update() error in maya 2017?
@@ -462,33 +1037,19 @@ class ListItemModel(_base.AbsItemModel):
         except Exception:
             pass
 
-    def _update_sequence_image_at(self, index):
-        index = max(min(index, self._data.image_sequence.index_maximum), 0)
-        percent = float(index)/float(self._data.image_sequence.index_maximum)
-        self._data.image_sequence.index = index
-        self._data.image_sequence.percent = percent
-        self._data.image_sequence.time_text = bsc_core.BscInteger.frame_to_time_prettify(
-            index,
-            self._data.image_sequence.fps
-        )
-        if index in self._data.image_sequence.pixmap_dict:
-            self._data.image_sequence.pixmap = self._data.image_sequence.pixmap_dict[index]
-        else:
-            file_path = self._data.image_sequence.files[index]
-            image = QtGui.QImage()
-            image.load(file_path)
-            self._data.image_sequence.pixmap = QtGui.QPixmap.fromImage(image, QtCore.Qt.AutoColor)
-
-            self.mark_force_refresh(True)
-            self.update_view()
-
     def _update_hover(self, flag):
         if flag != self._data.hover.flag:
             self._data.hover.flag = flag
-            if self._data.image_sequence.enable is True:
-                self._data.image_sequence.play_flag = flag
+            if (
+                self._data.video_enable is True
+                or self._data.audio_enable is True
+                or self._data.image_sequence_enable is True
+            ):
+                # stop when mouse leave
                 if flag is False:
-                    self._stop_play()
+                    self._stop_any_play()
+
+                # refresh draw force final
                 self.mark_force_refresh(True)
 
     def _update_show_auto(self):
@@ -519,3 +1080,6 @@ class ListItemModel(_base.AbsItemModel):
 
     def get_property(self, key):
         return self._data.property_dict.get(key)
+
+    def _update_name(self, text):
+        self._item.setText(text)

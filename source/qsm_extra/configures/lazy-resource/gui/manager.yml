@@ -19,14 +19,58 @@ option:
             用于管理资源。
 
         size: [1280, 960]
-        item_frame_size: [162, 162]
+        item_frame_size: [178, 178]
         item_icon_frame_size: [20, 20]
         item_icon_size: [20, 20]
 
+# for all entities
 entity-type-actions:
-    motion_test:
+    video:
         Node:
             option-hooks:
+                # assign
+                -   'lazy-resource-actions/node-assign-type-auto': {
+                    gui_parent: '/Assign', gui_name: 'Type', gui_parent_chs: '/指定', gui_name_chs: '分类'
+                }
+                -   'lazy-resource-actions/node-assign-tag-auto': {
+                    gui_parent: '/Assign', gui_name: 'Tag', gui_parent_chs: '/指定', gui_name_chs: '标签'
+                }
+                # lock
+                -   'lazy-resource-actions/node-lock-enable-auto': {
+                    gui_parent: '/Lock', gui_name: 'Enable', gui_parent_chs: '/锁定', gui_name_chs: '启用'
+                }
+                -   'lazy-resource-actions/node-lock-disable-auto': {
+                    gui_parent: '/Lock', gui_name: 'Disable', gui_parent_chs: '/锁定', gui_name_chs: '禁用'
+                }
+    audio:
+        Node:
+            option-hooks:
+                # assign
+                -   'lazy-resource-actions/node-assign-type-auto': {
+                    gui_parent: '/Assign', gui_name: 'Type', gui_parent_chs: '/指定', gui_name_chs: '分类'
+                }
+                -   'lazy-resource-actions/node-assign-tag-auto': {
+                    gui_parent: '/Assign', gui_name: 'Tag', gui_parent_chs: '/指定', gui_name_chs: '标签'
+                }
+                # lock
+                -   'lazy-resource-actions/node-lock-enable-auto': {
+                    gui_parent: '/Lock', gui_name: 'Enable', gui_parent_chs: '/锁定', gui_name_chs: '启用'
+                }
+                -   'lazy-resource-actions/node-lock-disable-auto': {
+                    gui_parent: '/Lock', gui_name: 'Disable', gui_parent_chs: '/锁定', gui_name_chs: '禁用'
+                }
+
+    motion:
+        Node:
+            option-hooks:
+                # assign
+                -   'lazy-resource-actions/node-assign-type-auto': {
+                    gui_parent: '/Assign', gui_name: 'Type', gui_parent_chs: '/指定', gui_name_chs: '分类'
+                }
+                -   'lazy-resource-actions/node-assign-tag-auto': {
+                    gui_parent: '/Assign', gui_name: 'Tag', gui_parent_chs: '/指定', gui_name_chs: '标签'
+                }
+                # motion extend
                 -   'lazy-resource-actions/node-generate-motion-auto': {
                     gui_parent: '/Generate', gui_name: 'Motion(for Splicing)', gui_parent_chs: '/生成', gui_name_chs: '动作（用于拼接）'
                 }
@@ -37,7 +81,7 @@ entity-type-actions:
                     gui_parent: '/Load', gui_name: 'Motion to Montage', gui_parent_chs: '/加载', gui_name_chs: '动作到拼接'
                 }
 
-    asset_test:
+    asset:
         Node:
             option-hooks:
                 - 'lazy-resource-actions/node-generate-mesh-count-auto': {
@@ -68,16 +112,166 @@ entity-type-actions:
                     gui_parent: '/Load', gui_name: 'Unit Assembly', gui_parent_chs: '/加载', gui_name_chs: '元素组装'
                 }
 
+# for each entity
 entity-actions:
-    motion_test:
+    video:
+        Type:
+            group:
+                option-hooks:
+                    -   'lazy-resource-actions/type-rename': {
+                        gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
+                    }
+                    # create actions
+                    -   'lazy-resource-actions/type-create-as-group': {
+                        gui_parent: '/Create', gui_name: 'Type (Group)', gui_parent_chs: '/创建', gui_name_chs: '分类（组）'
+                    }
+                    -   'lazy-resource-actions/type-create': {
+                        gui_parent: '/Create', gui_name: 'Type', gui_parent_chs: '/创建', gui_name_chs: '分类'
+                    }
+                    -   'lazy-resource-actions/type-create-batch': {
+                        gui_parent: '/Create', gui_name: 'Type (Batch)', gui_parent_chs: '/创建', gui_name_chs: '分类（批量）'
+                    }
+            node:
+                option-hooks:
+                    -   'lazy-resource-actions/type-rename': {
+                        gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
+                    }
+        Tag:
+            group:
+                option-hooks:
+                    -   'lazy-resource-actions/tag-rename': {
+                        gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
+                    }
+                    # create actions
+                    -   'lazy-resource-actions/tag-create-as-group': {
+                        gui_parent: '/Create', gui_name: 'Tag (Group)', gui_parent_chs: '/创建', gui_name_chs: '标签（组）'
+                    }
+                    -   'lazy-resource-actions/tag-create': {
+                        gui_parent: '/Create', gui_name: 'Crate Tag', gui_parent_chs: '/创建', gui_name_chs: '标签'
+                    }
+                    -   'lazy-resource-actions/tag-create-batch': {
+                        gui_parent: '/Create', gui_name: 'Tag (Batch)', gui_parent_chs: '/创建', gui_name_chs: '标签（批量）'
+                    }
+            node:
+                option-hooks:
+                    -   'lazy-resource-actions/tag-rename': {
+                        gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
+                    }
+
         Node:
             option-hooks:
+                -   'lazy-resource-actions/node-rename': {
+                    gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
+                }
+                # basic actions
                 - 'lazy-resource-actions/node-open-directory': {
                     gui_parent: '/Open', gui_name: 'Folder', gui_parent_chs: '/打开', gui_name_chs: '目录'
                 }
-    asset_test:
+                -   'lazy-resource-actions/node-open-source-directory': {
+                    gui_parent: '/Open', gui_name: 'Folder', gui_parent_chs: '/打开', gui_name_chs: '目录（源）'
+                }
+
+    audio:
+        Type:
+            group:
+                option-hooks:
+                    -   'lazy-resource-actions/type-rename': {
+                        gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
+                    }
+                    # create actions
+                    -   'lazy-resource-actions/type-create-as-group': {
+                        gui_parent: '/Create', gui_name: 'Type (Group)', gui_parent_chs: '/创建', gui_name_chs: '分类（组）'
+                    }
+                    -   'lazy-resource-actions/type-create': {
+                        gui_parent: '/Create', gui_name: 'Type', gui_parent_chs: '/创建', gui_name_chs: '分类'
+                    }
+                    -   'lazy-resource-actions/type-create-batch': {
+                        gui_parent: '/Create', gui_name: 'Type (Batch)', gui_parent_chs: '/创建', gui_name_chs: '分类（批量）'
+                    }
+            node:
+                option-hooks:
+                    -   'lazy-resource-actions/type-rename': {
+                        gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
+                    }
+
+        Tag:
+            group:
+                option-hooks:
+                    -   'lazy-resource-actions/tag-rename': {
+                        gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
+                    }
+                    # create actions
+                    -   'lazy-resource-actions/tag-create-as-group': {
+                        gui_parent: '/Create', gui_name: 'Tag (Group)', gui_parent_chs: '/创建', gui_name_chs: '标签（组）'
+                    }
+                    -   'lazy-resource-actions/tag-create': {
+                        gui_parent: '/Create', gui_name: 'Tag', gui_parent_chs: '/创建', gui_name_chs: '标签'
+                    }
+                    -   'lazy-resource-actions/tag-create-batch': {
+                        gui_parent: '/Create', gui_name: 'Tag (Batch)', gui_parent_chs: '/创建', gui_name_chs: '标签（批量）'
+                    }
+            node:
+                option-hooks:
+                    -   'lazy-resource-actions/tag-rename': {
+                        gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
+                    }
+
+        Node:
+            option-hooks:
+                -   'lazy-resource-actions/node-rename': {
+                    gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
+                }
+                # basic actions
+                -   'lazy-resource-actions/node-open-directory': {
+                    gui_parent: '/Open', gui_name: 'Folder', gui_parent_chs: '/打开', gui_name_chs: '目录'
+                }
+                -   'lazy-resource-actions/node-open-source-directory': {
+                    gui_parent: '/Open', gui_name: 'Folder', gui_parent_chs: '/打开', gui_name_chs: '目录（源）'
+                }
+                # lock
+                -   'lazy-resource-actions/node-show-lock-history': {
+                    gui_parent: '/Lock', gui_name: 'Show History', gui_parent_chs: '/锁定', gui_name_chs: '显示历史'
+                }
+
+    motion:
+        Type:
+            group:
+                option-hooks:
+                    -   'lazy-resource-actions/type-rename': {
+                        gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
+                    }
+                    # create actions
+                    -   'lazy-resource-actions/type-create-as-group': {
+                        gui_parent: '/Create', gui_name: 'Type (Group)', gui_parent_chs: '/创建', gui_name_chs: '分类（组）'
+                    }
+                    -   'lazy-resource-actions/type-create': {
+                        gui_parent: '/Create', gui_name: 'Type', gui_parent_chs: '/创建', gui_name_chs: '分类'
+                    }
+                    -   'lazy-resource-actions/type-create-batch': {
+                        gui_parent: '/Create', gui_name: 'Type (Batch)', gui_parent_chs: '/创建', gui_name_chs: '分类（批量）'
+                    }
+            node:
+                option-hooks:
+                    -   'lazy-resource-actions/type-rename': {
+                        gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
+                    }
+
+        Node:
+            option-hooks:
+                -   'lazy-resource-actions/node-rename': {
+                    gui_parent: '/', gui_name: 'Rename', gui_parent_chs: '/', gui_name_chs: '重命名'
+                }
+                # basic actions
+                - 'lazy-resource-actions/node-open-directory': {
+                    gui_parent: '/Open', gui_name: 'Folder', gui_parent_chs: '/打开', gui_name_chs: '目录'
+                }
+                -   'lazy-resource-actions/node-open-source-directory': {
+                    gui_parent: '/Open', gui_name: 'Folder (Source)', gui_parent_chs: '/打开', gui_name_chs: '目录（源）'
+                }
+
+    asset:
         Node:
             option-hooks:
                 - 'lazy-resource-actions/node-open-scene-directory': {
-                    gui_parent: '/Open', gui_name: 'Model, Rig Folder', gui_parent_chs: '/打开', gui_name_chs: '模型，绑定 目录'
+                    gui_parent: '/Open', gui_name: 'Folder (Model, Rig)', gui_parent_chs: '/打开', gui_name_chs: '目录(模型，绑定)'
                 }

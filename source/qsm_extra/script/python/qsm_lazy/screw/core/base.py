@@ -72,7 +72,7 @@ def create_model_with_database(model_class, database_):
 
 class Entity(dict):
     DESCRIPTION_KEYS = [
-        ('path', 'Path'),
+        # ('path', 'Path'),
         ('gui_name', 'Name'),
         ('gui_description', 'Description'),
         ('user', 'User'),
@@ -80,7 +80,7 @@ class Entity(dict):
         ('mtime', 'Modify Time')
     ]
     DESCRIPTION_KEYS_CHS = [
-        ('path', '路径'),
+        # ('path', '路径'),
         ('gui_name_chs', '名字'),
         ('gui_description_chs', '描述'),
         ('user', '用户'),
@@ -110,6 +110,9 @@ class Entity(dict):
             keys = self.keys()
             keys.sort()
         return '\n'.join(['{}: {}'.format(x, bsc_core.auto_string(self[x])) for x in keys])
+
+    def is_root(self):
+        return self.path == '/'
 
     def to_description(self, language):
         keys = self.DESCRIPTION_KEYS
@@ -161,9 +164,11 @@ FLUSH PRIVILEGES;
         'long_time_ago',
     ]
 
-    PTN_DATABASE_PATH = '{root}/lazy-resource/.database/{key}.db'
+    PTN_SQLITE_DATABASE_PATH = '{root}/lazy-resource/.database/{key}.db'
     DEFAULT_THUMBNAIL_FORMAT = 'jpg'
     DEFAULT_THUMBNAIL_WIDTH_MAXIMUM = 512
+
+    TIMEOUT = 3600*4
     
     class NodePathPattens:
         BaseDir = '{root}/lazy-resource/all/{key}/{node}'
@@ -175,6 +180,10 @@ FLUSH PRIVILEGES;
         PreviewImage = PreviewDir+'/image.{format}'
         PreviewImageSequence = PreviewDir+'/images/image.%04d.{format}'
         PreviewVideo = PreviewDir+'/video.{format}'
+        PreviewVideoMov = PreviewDir+'/video.mov'
+        PreviewAudio = PreviewDir+'/audio.{format}'
+        PreviewAudioMp3 = PreviewDir+'/audio.mp3'
+        PreviewAudioPickle = PreviewDir+'/audio.pkl'
 
         JsonDir = '{root}/lazy-resource/all/{key}/{node}/json'
         Json = JsonDir+'/{node}.{tag}.json'
@@ -212,6 +221,8 @@ FLUSH PRIVILEGES;
     @classmethod
     def get_all_keys(cls):
         cfg = cls.get_mysql_configure()
+        if bsc_core.BscApplication.get_is_maya():
+            return cfg.get('maya.keys')
         return cfg.get('keys')
 
     @classmethod
@@ -228,19 +239,19 @@ FLUSH PRIVILEGES;
         return cfg.get('options')
 
     @classmethod
-    def get_dtb_path(cls, key):
+    def get_sqlite_dtb_path(cls, key):
         if key in cls.DTB_CACHE:
             return cls.DTB_CACHE[key]
 
         copy_options = cls.get_options_as_copy()
         copy_options['key'] = key
-        _ = cls.PTN_DATABASE_PATH.format(**copy_options)
+        _ = cls.PTN_SQLITE_DATABASE_PATH.format(**copy_options)
         cls.DTB_CACHE[key] = _
         return _
 
     @classmethod
     def get_configure(cls, key):
-        return bsc_resource.RscExtendConfigure.get_as_content('lazy-resource/database/{}'.format(key))
+        return bsc_resource.RscExtendConfigure.get_as_content('lazy/database/{}'.format(key))
 
     @classmethod
     def to_expression_str(cls, entity_type, filters):
@@ -273,6 +284,9 @@ FLUSH PRIVILEGES;
         return cls.__dict__[entity_type]
 
     def to_dtd_entity(self, entity_type):
+        # fixme: reconnect for timeout?
+        if self._dtb.is_closed():
+            self._dtb.connect()
         if entity_type not in self.__dict__:
             raise RuntimeError()
         return self.__dict__[entity_type]
@@ -282,21 +296,25 @@ FLUSH PRIVILEGES;
         return Entity(entity_type, data)
 
     def __init__(self, key, database_type='mysql'):
-        self._key = key
+        self._dtb_name = key
         self._dtb_type = database_type
         self._root = self.get_root()
+        self._configure = self.get_configure(self._dtb_name)
+        self._type = self._configure.get('options.type')
         self._base_options = dict(
             root=self._root
         )
 
+        self._timeout_dict = dict()
+
         self._options = self.get_options_as_copy()
-        self._options['key'] = self._key
-        self._dtb_key = '{}/{}'.format(self._dtb_type, self._key)
+        self._options['key'] = self._dtb_name
+        self._dtb_key = '{}/{}'.format(self._dtb_type, self._dtb_name)
         if self._dtb_key in self.DTB_CACHE:
             self._dtb = self.DTB_CACHE[self._dtb_key]
         else:
             if self._dtb_type == 'sqlite':
-                self._dtb_path = self.get_dtb_path(key)
+                self._dtb_path = self.get_sqlite_dtb_path(key)
                 self._dtb = peewee.SqliteDatabase(
                     self._dtb_path,
                     thread_safe=True,
@@ -311,8 +329,9 @@ FLUSH PRIVILEGES;
                 )
             elif self._dtb_type == 'mysql':
                 mysql_options = self.get_mysql_options()
+
                 self._dtb = peewee.MySQLDatabase(
-                    self._key,
+                    self._dtb_name,
                     **mysql_options
                 )
             else:
@@ -323,12 +342,20 @@ FLUSH PRIVILEGES;
         self.connect()
 
     @property
+    def type(self):
+        return self._type
+
+    @property
     def key(self):
-        return self._key
+        return self._dtb_name
 
     @property
     def dtb(self):
         return self._dtb
+
+    @property
+    def configure(self):
+        return self._configure
 
     def connect(self):
         self.Node = create_model_with_database(_database.Node, self._dtb)
@@ -364,8 +391,7 @@ FLUSH PRIVILEGES;
         # initialize first
         self.initialize()
 
-        key = self._key
-        configure = bsc_resource.RscExtendConfigure.get_as_content('lazy-resource/database/{}'.format(key))
+        configure = self.get_configure(self._dtb_name)
         if configure is None:
             raise RuntimeError()
 
@@ -388,8 +414,7 @@ FLUSH PRIVILEGES;
             )
 
     def update_tags(self):
-        key = self._key
-        configure = bsc_resource.RscExtendConfigure.get_as_content('lazy-resource/database/{}'.format(key))
+        configure = bsc_resource.RscExtendConfigure.get_as_content('lazy/database/{}'.format(self._dtb_name))
         if configure is None:
             raise RuntimeError()
 
@@ -469,6 +494,13 @@ FLUSH PRIVILEGES;
 
     def find_all(self, entity_type, filters=None):
         dtb_entity = self.to_dtd_entity(entity_type)
+        if not filters:
+            filters = []
+
+        filters.append(
+            ('trash', 'is', 0)
+        )
+
         if filters:
             e_str = self.to_expression_str(
                  entity_type, filters
@@ -530,6 +562,10 @@ FLUSH PRIVILEGES;
         if _.exists():
             return self.to_entity(entity_type, _.first().__data__)
 
+    def get_entity_index_maximum(self, entity_type):
+        dtb_entity = self.to_dtd_entity(entity_type)
+        return dtb_entity.select(peewee.fn.MAX(dtb_entity.id)).scalar()
+
     def create_entity(self, entity_type, path, **kwargs):
         dtb_entity = self.to_dtd_entity(entity_type)
         if dtb_entity.select().where(dtb_entity.path == path).exists() is True:
@@ -564,16 +600,19 @@ FLUSH PRIVILEGES;
         dtb_entity = self.to_dtd_entity(entity_type)
         _ = dtb_entity.select().where(dtb_entity.path == path)
         if _.exists():
-            entity = _.first()
+            csr = _.first()
             for k, v in kwargs.items():
                 if isinstance(v, six.string_types):
-                    v = six.u('"{}"').format(v)
+                    v = six.u('"""{}"""').format(v.replace(r'"', r'\"'))
                 else:
                     v = json.dumps(v)
-                exec six.u('entity.{} = {}').format(k, v)
-            entity.save()
+                exec six.u(r'csr.{} = {}').format(k, v)
+            csr.save()
+            return True
+        return False
 
-    def create_type_group(self, path, **kwargs):
+    # type
+    def create_type_as_group(self, path, **kwargs):
         options = dict(
             path=path, category='group', type='group', gui_icon_name='database/group'
         )
@@ -584,11 +623,50 @@ FLUSH PRIVILEGES;
 
     def create_type(self, path, **kwargs):
         options = dict(
-            path=path, category='node', type='node', gui_icon_name='database/group'
+            path=path, category='node', type='node', gui_icon_name='database/type'
         )
         options.update(**kwargs)
         return self.create_entity(
             self.EntityTypes.Type, **options
+        )
+
+    def get_type(self, path):
+        return self.get_entity(
+            self.EntityTypes.Type, path
+        )
+
+    def update_type(self, path, **kwargs):
+        return self.update_entity(
+            self.EntityTypes.Type, path, **kwargs
+        )
+
+    # tag
+    def create_tag_as_group(self, path, **kwargs):
+        options = dict(
+            path=path, category='group', type='group', gui_icon_name='database/group'
+        )
+        options.update(**kwargs)
+        return self.create_entity(
+            self.EntityTypes.Tag, **options
+        )
+
+    def create_tag(self, path, **kwargs):
+        options = dict(
+            path=path, category='node', type='node', gui_icon_name='database/tag'
+        )
+        options.update(**kwargs)
+        return self.create_entity(
+            self.EntityTypes.Tag, **options
+        )
+
+    def get_tag(self, path):
+        return self.get_entity(
+            self.EntityTypes.Tag, path
+        )
+
+    def update_tag(self, path, **kwargs):
+        return self.update_entity(
+            self.EntityTypes.Tag, path, **kwargs
         )
 
     # extend method
@@ -653,15 +731,41 @@ FLUSH PRIVILEGES;
                 self.EntityTypes.Assign, i.path
             )
 
-    def create_type_assign(self, path_source, path_target, **kwargs):
+    def create_node_type_assign(self, node_path, type_path, **kwargs):
         return self.create_assign(
-            path_source, path_target, type='type_assign', **kwargs
+            node_path, type_path, type='type_assign', **kwargs
         )
 
-    def create_tag_assign(self, path_source, path_target, **kwargs):
-        return self.create_assign(
-            path_source, path_target, type='tag_assign', **kwargs
+    def remove_node_type_assign(self, node_path, type_path):
+        self.remove_assign(node_path, type_path)
+
+    def find_node_assign_types(self, node_path):
+        _ = self.find_all(
+            self.EntityTypes.Assign,
+            filters=[
+                ('source', 'is', node_path),
+                ('type', 'is', 'type_assign')
+            ]
         )
+        return list(filter(None, [self.get_type(x.target) for x in _]))
+
+    def create_node_tag_assign(self, node_path, tag_path, **kwargs):
+        return self.create_assign(
+            node_path, tag_path, type='tag_assign', **kwargs
+        )
+
+    def remove_node_tag_assign(self, node_path, tag_path):
+        self.remove_assign(node_path, tag_path)
+
+    def find_node_assign_tags(self, node_path):
+        _ = self.find_all(
+            self.EntityTypes.Assign,
+            filters=[
+                ('source', 'is', node_path),
+                ('type', 'is', 'tag_assign')
+            ]
+        )
+        return list(filter(None, [self.get_tag(x.target) for x in _]))
 
     def create_property(self, node_path, port, value, **kwargs):
         path = '{}.{}'.format(node_path, port)
@@ -679,26 +783,86 @@ FLUSH PRIVILEGES;
 
     def update_property(self, node_path, port, value, **kwargs):
         path = '{}.{}'.format(node_path, port)
-        self.update_entity(
+        return self.update_entity(
             self.EntityTypes.Property, path, value=value, **kwargs
         )
 
     def create_or_update_property(self, node_path, port, value, **kwargs):
         path = '{}.{}'.format(node_path, port)
         if self.is_entity_exists(self.EntityTypes.Property, path) is False:
-            self.create_property(
+            return self.create_property(
                 node_path, port, value, **kwargs
             )
-        else:
-            self.update_property(
-                node_path, port, value, **kwargs
-            )
+        return self.update_property(
+            node_path, port, value, **kwargs
+        )
 
     def create_parameter(self, node_path, port, value, **kwargs):
         return self.create_property(node_path, port, value, type='parameter', **kwargs)
 
     def create_or_update_parameters(self, node_path, port, value, **kwargs):
         return self.create_or_update_property(node_path, port, value, type='parameter', **kwargs)
+
+    def set_node_locked(self, node_path, boolean):
+        value = self.get_node_parameter(node_path, 'lock')
+        if value is None:
+            self.create_or_update_property(node_path, 'lock', int(boolean))
+        else:
+            if int(value) == int(boolean):
+                return
+
+        self.create_or_update_property(node_path, 'lock', int(boolean))
+
+        tag = ['unlock', 'lock'][boolean]
+
+        value = self.get_node_parameter(node_path, 'lock_history')
+        if value:
+            _ = json.loads(value)
+            # trim to 10
+            history = _[-10:]
+            history.append(
+                [tag, bsc_core.BscSystem.get_user_name(), bsc_core.BscSystem.generate_timestamp()]
+            )
+        else:
+            history = [
+                [tag, bsc_core.BscSystem.get_user_name(), bsc_core.BscSystem.generate_timestamp()]
+            ]
+
+        self.create_or_update_parameters(node_path, 'lock_history', json.dumps(history))
+
+    def generate_node_lock_history(self, node_path, language):
+        value = self.get_node_parameter(node_path, 'lock_history')
+        if value:
+            tag_dict = dict(
+                lock='Locked',
+                unlock='Unlocked'
+            )
+            tag_dict_chs = dict(
+                lock='锁定了',
+                unlock='解锁了'
+            )
+            texts = []
+            _ = json.loads(value)
+            for i in _:
+                i_tag, i_user_name, i_timestamp = i
+                if language == 'chs':
+                    texts.append(
+                        u'{}被"{}"{}；'.format(
+                            bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(i_timestamp, language=0),
+                            i_user_name,
+                            bsc_core.ensure_unicode(tag_dict_chs[i_tag])
+                        )
+                    )
+                else:
+                    texts.append(
+                        '{} by "{}" at {};'.format(
+                            tag_dict[i_tag],
+                            i_user_name,
+                            bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(i_timestamp, language=1)
+                        )
+                    )
+            return '\n'.join(texts)
+        return ''
 
     def upload_node_preview(self, node_path, file_path):
         if self.check_node_exists(node_path) is False:
@@ -792,6 +956,75 @@ FLUSH PRIVILEGES;
             node_path, 'thumbnail', thumbnail_path
         )
 
+    def upload_node_audio(self, node_path, file_path):
+        file_opt = bsc_storage.StgFileOpt(file_path)
+        if file_opt.get_is_file() is False:
+            return False
+
+        node_name = bsc_core.BscPathOpt(node_path).name
+        options = copy.copy(self._options)
+        options['node'] = node_name
+
+        thumbnail_path = self.NodePathPattens.ThumbnailJpg.format(**options)
+
+        import lxbasic.cv.core as bsc_cv_core
+
+        capture_opt = bsc_cv_core.AudioCaptureOpt(file_path)
+        capture_opt.create_thumbnail(thumbnail_path, replace=False)
+
+        preview_audio_mp3_path = self.NodePathPattens.PreviewAudioMp3.format(**options)
+        capture_opt.create_compress(preview_audio_mp3_path, replace=False)
+
+        self.create_or_update_parameters(
+            node_path, 'thumbnail', thumbnail_path
+        )
+
+        self.create_or_update_parameters(
+            node_path, 'source_type', 'audio'
+        )
+
+        self.create_or_update_parameters(
+            node_path, 'audio', preview_audio_mp3_path
+        )
+
+        self.create_or_update_parameters(
+            node_path, 'source', file_path
+        )
+
+    def upload_node_video(self, node_path, file_path):
+        file_opt = bsc_storage.StgFileOpt(file_path)
+        if file_opt.get_is_file() is False:
+            return False
+
+        node_name = bsc_core.BscPathOpt(node_path).name
+        options = copy.copy(self._options)
+        options['node'] = node_name
+
+        thumbnail_path = self.NodePathPattens.ThumbnailJpg.format(**options)
+
+        import lxbasic.cv.core as bsc_cv_core
+        bsc_cv_core.VideoCaptureOpt(file_path).create_thumbnail(thumbnail_path, replace=True)
+
+        preview_video_path = self.NodePathPattens.PreviewVideoMov.format(**options)
+
+        bsc_core.BscFfmpeg.create_compress(file_path, preview_video_path, replace=False)
+
+        self.create_or_update_parameters(
+            node_path, 'thumbnail', thumbnail_path
+        )
+
+        self.create_or_update_parameters(
+            node_path, 'source_type', 'video'
+        )
+
+        self.create_or_update_parameters(
+            node_path, 'video', preview_video_path
+        )
+
+        self.create_or_update_parameters(
+            node_path, 'source', file_path
+        )
+
     def upload_node_preview_as_image(self, node_path, file_path):
         pass
 
@@ -852,6 +1085,11 @@ FLUSH PRIVILEGES;
             self.EntityTypes.Node, path
         )
 
+    def update_node(self, path, **kwargs):
+        return self.update_entity(
+            self.EntityTypes.Node, path, **kwargs
+        )
+
     def get_node_parameter(self, node_path, port):
         path = '{}.{}'.format(node_path, port)
         p = self.get_entity(
@@ -859,6 +1097,16 @@ FLUSH PRIVILEGES;
         )
         if p:
             return p.value
+
+    def get_node_parameter_as_boolean(self, node_path, port):
+        value = self.get_node_parameter(node_path, port)
+        if value is not None:
+            if str(value).isdigit():
+                return not not eval(value)
+            else:
+                if value.lower() == 'true':
+                    return True
+        return False
 
     def is_exists_node_tag(self, node_path, tag_path):
         path = '{}->{}'.format(node_path, tag_path)

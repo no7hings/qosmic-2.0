@@ -52,7 +52,7 @@ class BscSubProcessStatus(enum.EnumMeta):
     Error = -15
 
 
-class BscPlatform(object):
+class BscPlatformCfg(object):
     Windows = 'windows'
     Linux = 'linux'
     #
@@ -62,7 +62,7 @@ class BscPlatform(object):
     ]
 
 
-class BscApplication(object):
+class BscApplicationCfg(object):
     Python = 'python'
     #
     Maya = 'maya'
@@ -86,8 +86,8 @@ class BscApplication(object):
     ]
 
 
-class BscSystem(object):
+class BscSystemCfg(object):
     All = []
-    for i_p in BscPlatform.All:
-        for i_a in BscApplication.All:
+    for i_p in BscPlatformCfg.All:
+        for i_a in BscApplicationCfg.All:
             All.append('{}-{}'.format(i_p, i_a))

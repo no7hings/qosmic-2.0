@@ -706,9 +706,9 @@ class AbsDccSetup(object):
                     )
 
     def add_libraries(self, *args):
-        if bsc_core.BasPlatform.get_is_windows():
+        if bsc_core.BscPlatform.get_is_windows():
             [self.add_environ_fnc('PATH', i) for i in map(self._path_process_, args)]
-        elif bsc_core.BasPlatform.get_is_linux():
+        elif bsc_core.BscPlatform.get_is_linux():
             [self.add_environ_fnc('LD_LIBRARY_PATH', i) for i in map(self._path_process_, args)]
 
     def add_bin_fnc(self, *args):

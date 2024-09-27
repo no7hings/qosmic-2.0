@@ -52,6 +52,9 @@ class TimePrettifyMtd(object):
 
     @classmethod
     def to_prettify_by_timestamp(cls, timestamp, language=1):
+        """
+        0 is chinese
+        """
         if isinstance(timestamp, float):
             return cls.to_prettify_by_timetuple(
                 time.localtime(timestamp),

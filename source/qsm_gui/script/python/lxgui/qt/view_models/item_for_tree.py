@@ -5,15 +5,13 @@ from ...qt.core.wrap import *
 
 from . import base as _base
 
+from . import item_base as _item_base
 
-class TreeItemModel(_base.AbsItemModel):
+
+class TreeItemModel(_item_base.AbsItemModel):
     WAIT_PLAY_DELAY = 50
 
     def __init__(self, item):
-        # if not isinstance(item, QtWidgets.QTreeWidgetItem):
-        #     raise RuntimeError()
-        # self._item = item
-
         super(TreeItemModel, self).__init__(
             item,
             _base._Data(
@@ -48,7 +46,7 @@ class TreeItemModel(_base.AbsItemModel):
         return self._item.treeWidget()
 
     def _update_check_extend(self):
-        if self._data.check.enable is True:
+        if self._data.check_enable is True:
             [x._item_model._update_check_state(self.is_checked()) for x in self.get_descendants()]
             [i._item_model._update_check_state(i._item_model.is_checked_for_descendants()) for i in self.get_ancestors()]
 
@@ -57,13 +55,12 @@ class TreeItemModel(_base.AbsItemModel):
     def get_parent(self):
         return self._item.parent()
 
-    def get_descendants(self):
+    def get_ancestors(self):
         def rcs_fnc_(item_):
-            _child_count = item_.childCount()
-            for _child_index in range(_child_count):
-                _child_item = item_.child(_child_index)
-                list_.append(_child_item)
-                rcs_fnc_(_child_item)
+            _parent_item = item_.parent()
+            if _parent_item is not None:
+                list_.append(_parent_item)
+                rcs_fnc_(_parent_item)
 
         list_ = []
         rcs_fnc_(self._item)
@@ -72,12 +69,13 @@ class TreeItemModel(_base.AbsItemModel):
     def get_children(self):
         return [self._item.child(x) for x in range(self._item.childCount())]
 
-    def get_ancestors(self):
+    def get_descendants(self):
         def rcs_fnc_(item_):
-            _parent_item = item_.parent()
-            if _parent_item is not None:
-                list_.append(_parent_item)
-                rcs_fnc_(_parent_item)
+            _child_count = item_.childCount()
+            for _child_index in range(_child_count):
+                _child_item = item_.child(_child_index)
+                list_.append(_child_item)
+                rcs_fnc_(_child_item)
 
         list_ = []
         rcs_fnc_(self._item)
@@ -100,31 +98,40 @@ class TreeItemModel(_base.AbsItemModel):
             icn_w = 16
             icn_y = y+(h-item_h+(item_h-icn_w)/2)
             check_frm_w = 0
-            if self._data.check.enable is True:
+            if self._data.check_enable is True:
                 check_frm_w = 20
                 self._data.check.rect.setRect(
                     x+(check_frm_w-icn_w)/2+1, icn_y, icn_w, icn_w
                 )
+            # color
+            color_frm_w = 0
+            if self._data.color_enable is True:
+                color_frm_w = 20
+                self._data.color.rect.setRect(
+                    x+check_frm_w+(color_frm_w-icn_w)/2+1, icn_y, icn_w, icn_w
+                )
             # icon
             icon_frm_w = 0
-            if self._data.icon.enable is True:
+            if self._data.icon_enable is True:
                 icon_frm_w = 20
                 self._data.icon.rect.setRect(
-                    x+check_frm_w+(icon_frm_w-icn_w)/2+1, icn_y, icn_w, icn_w
+                    x+check_frm_w+color_frm_w+(icon_frm_w-icn_w)/2+1, icn_y, icn_w, icn_w
                 )
-            less_w = w-(check_frm_w+icon_frm_w)
-            # number
+
             txt_y = y+h-item_h
+            # number
+            number_w_left_sub = w-(check_frm_w+color_frm_w+icon_frm_w)
             number_frm_w = 0
-            if self._data.number.enable is True:
+            if self._data.number_enable is True:
                 number_frm_w = self.compute_text_width_by(self._data.number.text)
-                number_frm_w = min(less_w, number_frm_w)
+                number_frm_w = min(number_w_left_sub, number_frm_w)
                 self._data.number.rect.setRect(
                     x+w-number_frm_w-2, txt_y, number_frm_w, item_h
                 )
             # name
+            name_w_left_sub = check_frm_w+color_frm_w+icon_frm_w
             self._data.name.rect.setRect(
-                x+(check_frm_w+icon_frm_w)+1, txt_y, w-(check_frm_w+icon_frm_w+number_frm_w)-2, item_h
+                x+name_w_left_sub+1, txt_y, w-(name_w_left_sub+number_frm_w)-2, item_h
             )
             return True
         return False
@@ -146,10 +153,15 @@ class TreeItemModel(_base.AbsItemModel):
 
         self.draw_background(painter, option, index)
         self.draw_names(painter, option, index)
-        if self._data.number.enable is True:
+        # number
+        if self._data.number_enable is True:
             if column == 0:
+                text_color = [
+                    self._data.text.color, self._data.text.action_color
+                ][self._data.select.flag or self._data.hover.flag]
+                painter.setFont(self._font)
                 self._draw_name_text(
-                    painter, self._data.number.rect, self._data.number.text, self._data.number.color,
+                    painter, self._data.number.rect, self._data.number.text, text_color,
                     QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter
                 )
         painter.restore()
@@ -176,10 +188,13 @@ class TreeItemModel(_base.AbsItemModel):
         column = index.column()
         if column == 0:
             # draw check
-            if self._data.check.enable is True:
+            if self._data.check_enable is True:
                 self._draw_icon(painter, self._data.check.rect, self._data.check.file)
+            # draw color
+            if self._data.color_enable is True:
+                self._draw_color(painter, self._data.color.rect, self._data.color.rgb)
             # draw icon
-            if self._data.icon.enable is True:
+            if self._data.icon_enable is True:
                 self._draw_icon(painter, self._data.icon.rect, self._data.icon.file)
 
     def draw_names(self, painter, option, index):
@@ -196,8 +211,11 @@ class TreeItemModel(_base.AbsItemModel):
             rect = QtCore.QRect(x, y, w, h)
             text = self._item.text(column)
 
-        color = [self._data.name.color, self._data.name.hover_color][self._data.select.flag or self._data.hover.flag]
-        self._draw_name_text(painter, rect, text, color, QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        text_color = [
+            self._data.text.color, self._data.text.action_color
+        ][self._data.select.flag or self._data.hover.flag]
+        painter.setFont(self._font)
+        self._draw_name_text(painter, rect, text, text_color, QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
 
     # expand
     def expand_to_ancestors(self):
@@ -218,3 +236,6 @@ class TreeItemModel(_base.AbsItemModel):
         else:
             value = self._data.sort_dict.get(key, '')
             self._item.setText(0, value)
+
+    def _update_name(self, text):
+        self._item.setText(0, text)

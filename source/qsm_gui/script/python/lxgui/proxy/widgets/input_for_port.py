@@ -85,7 +85,7 @@ class _AbsPrxInput(_abstracts.AbsPrxWidget):
     def get_is_default(self):
         return False
 
-    def set_clear(self):
+    def do_clear(self):
         pass
 
     def connect_input_changed_to(self, fnc):
@@ -313,6 +313,9 @@ class PrxInputAsStorageArray(_AbsPrxInput):
 
     def get(self):
         return self._qt_input_widget._get_values_()
+
+    def do_clear(self):
+        self._qt_input_widget._do_clear_()
 
     def set_history_key(self, key):
         self._history_key = key
@@ -624,7 +627,7 @@ class PrxInputAsShotgunEntityWithChoose(_AbsPrxInput):
         if _ in self._stg_entity_dict:
             return self._stg_entity_dict[self.get()]
 
-    def set_clear(self):
+    def do_clear(self):
         self._stg_entity_dict = {}
         self._qt_input_widget._clear_input_()
 
@@ -735,7 +738,7 @@ class PrxInputAsShotgunEntitiesWithChoose(_AbsPrxInput):
             value
         )
 
-    def set_clear(self):
+    def do_clear(self):
         self._qt_input_widget._do_clear_()
 
     def set_shotgun_entity_kwargs(
@@ -1422,7 +1425,7 @@ class _AbsPrxInputExtra(_abstracts.AbsPrxWidget):
             if args[0]:
                 self._prx_input._qt_widget._set_tool_tip_(args[0], **kwargs)
 
-    def set_clear(self):
+    def do_clear(self):
         pass
 
     def connect_input_changed_to(self, fnc):
@@ -1574,7 +1577,7 @@ class PrxInputAsResolverEntity(_AbsPrxInputExtra):
         )
 
     def __clear_items_(self):
-        self._prx_input.set_clear()
+        self._prx_input.do_clear()
 
     def set(self, raw=None, **kwargs):
         if isinstance(raw, (tuple, list)):
@@ -1725,7 +1728,7 @@ class PrxInputAsNodes(_AbsPrxInputExtra):
             )
 
     def __clear_items_(self):
-        self._prx_input.set_clear()
+        self._prx_input.do_clear()
 
     def set_view_mode(self, mode):
         self._view_mode = mode
@@ -2023,7 +2026,7 @@ class PrxInputAsFiles(_AbsPrxInputExtra):
         )
 
     def restore(self):
-        self._prx_input.set_clear()
+        self._prx_input.do_clear()
 
     def refresh(self):
         self.set(self._paths)

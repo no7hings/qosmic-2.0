@@ -254,12 +254,12 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         )
 
         for i_type_path in type_paths:
-            self._scr_stage.create_type_assign(
+            self._scr_stage.create_node_type_assign(
                 node_path, i_type_path
             )
 
         for i_tag_path in tag_paths:
-            self._scr_stage.create_tag_assign(
+            self._scr_stage.create_node_tag_assign(
                 node_path, i_tag_path
             )
 

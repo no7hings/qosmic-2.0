@@ -406,7 +406,7 @@ class FncBuilderForAssetOld(gnl_fnc_abstracts.AbsFncOptionBase):
         #
         if with_camera is True:
             if rsv_task is not None:
-                dcc_data = rsv_task.get_rsv_project().get_dcc_data(application=bsc_core.BasApplication.get_current())
+                dcc_data = rsv_task.get_rsv_project().get_dcc_data(application=bsc_core.BscApplication.get_current())
                 location = dcc_data.get('camera_root')
                 camera_main_abc_file_rsv_unit = rsv_task.get_rsv_unit(keyword='asset-camera-main-abc-file')
                 camera_main_abc_file_path = camera_main_abc_file_rsv_unit.get_result(version='latest')

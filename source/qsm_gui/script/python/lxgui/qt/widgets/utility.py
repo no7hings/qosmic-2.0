@@ -387,6 +387,8 @@ class QtMenu(QtWidgets.QMenu):
             _qt_core.GuiQtStyle.get('QMenu')
         )
 
+        self._menu_content_opt = _qt_core.GuiQtMenuOpt(self)
+
     @classmethod
     def _set_cmd_run_(cls, cmd_str):
         exec cmd_str
@@ -575,7 +577,7 @@ class QtMenu(QtWidgets.QMenu):
         )
 
     def _set_menu_content_(self, content, append=False):
-        _qt_core.GuiQtMenuOpt(self).create_by_content(content, append)
+        self._menu_content_opt.create_by_content(content, append)
 
     @classmethod
     def _set_action_create_by_menu_content_(cls, menu):

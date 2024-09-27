@@ -65,7 +65,7 @@ class StlRegisterOpt(object):
         self._src_stage.create_node(
             node_path, gui_name=gui_name, gui_name_chs=gui_name_chs, user=user, ctime=float(ctime)
         )
-        self._src_stage.create_type_assign(
+        self._src_stage.create_node_type_assign(
             node_path, type_path
         )
         self._src_stage.upload_node_preview_as_image_sequence(
@@ -96,7 +96,7 @@ class StlRegisterOpt(object):
                 if i_index == max_index:
                     self._src_stage.create_type(i_path, gui_name=i_gui_name, gui_name_chs=i_gui_name_chs)
                 else:
-                    self._src_stage.create_type_group(i_path, gui_name=i_gui_name, gui_name_chs=i_gui_name_chs)
+                    self._src_stage.create_type_as_group(i_path, gui_name=i_gui_name, gui_name_chs=i_gui_name_chs)
 
         return '/'.join(keys)
 

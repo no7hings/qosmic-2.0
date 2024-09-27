@@ -263,7 +263,7 @@ class AbsPnlAssetLineup(gui_prx_widgets.PrxSessionWindow):
                     )
                     p.set(v)
 
-        self._node_graph.set_clear()
+        self._node_graph.do_clear()
         self._node_graph.set_graph_universe(self._universe)
         self._node_graph.set_node_show()
 

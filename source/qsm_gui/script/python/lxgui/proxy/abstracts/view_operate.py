@@ -58,7 +58,7 @@ class AbsGuiPrxTreeViewOpt(object):
         return self._keys
 
     def restore(self):
-        self._prx_tree_view.set_clear()
+        self._prx_tree_view.do_clear()
         self._keys.clear()
 
     def gui_check_exists(self, path):
@@ -92,7 +92,7 @@ class AbsGuiPrxTreeViewAsDirectoryOpt(AbsGuiPrxTreeViewOpt):
     def restore(self):
         self.__push_expand_cache()
 
-        self._prx_tree_view.set_clear()
+        self._prx_tree_view.do_clear()
         self._keys.clear()
 
     def __push_expand_cache(self):
@@ -236,7 +236,7 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
     def restore(self):
         self.__push_expand_cache()
 
-        self._prx_tree_view.set_clear()
+        self._prx_tree_view.do_clear()
         self._keys.clear()
 
     def __push_expand_cache(self):
@@ -409,7 +409,7 @@ class AbsGuiTreeViewAsTagOpt(AbsGuiPrxTreeViewOpt):
     def restore(self):
         # self.__pull_check_cache()
 
-        self._prx_tree_view.set_clear()
+        self._prx_tree_view.do_clear()
         self._group_item_dict.clear()
         self._tag_item_dict.clear()
 
@@ -577,7 +577,7 @@ class AbsGuiPrxListViewOpt(object):
         self._prx_list_view._qt_view._register_keyword_filter_occurrence_(key, prx_item.get_item())
 
     def restore(self):
-        self._prx_list_view.set_clear()
+        self._prx_list_view.do_clear()
         self._keys.clear()
         self._prx_list_view.refresh_check_info()
 

@@ -355,6 +355,6 @@ class KtnSGSelectionOpt(object):
         self._scene_graph.addSelectedLocations(paths, replace=True)
 
     @classmethod
-    def set_clear(cls):
+    def do_clear(cls):
         ScenegraphManager.getActiveScenegraph().clearOpenLocations()
         ScenegraphManager.getActiveScenegraph().addSelectedLocations([], replace=True)

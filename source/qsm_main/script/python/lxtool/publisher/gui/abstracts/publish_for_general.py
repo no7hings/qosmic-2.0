@@ -385,7 +385,7 @@ class AbsPnlPublisherForGeneral(gui_prx_widgets.PrxSessionWindow):
             )
 
         p = self._publish_options_prx_node.get_port('notice')
-        p.set_clear()
+        p.do_clear()
         p.set_shotgun_entity_kwargs(
             dict(
                 entity_type='HumanUser',
@@ -493,9 +493,9 @@ class AbsPnlPublisherForGeneral(gui_prx_widgets.PrxSessionWindow):
         self._publish_options_prx_node.set('version_type', 'daily')
         self._publish_options_prx_node.set('version_scheme', 'new')
         self._publish_options_prx_node.set('description', '')
-        self._publish_options_prx_node.get_port('review').set_clear()
-        self._publish_options_prx_node.get_port('extra.scene').set_clear()
-        self._publish_options_prx_node.get_port('extra.image').set_clear()
+        self._publish_options_prx_node.get_port('review').do_clear()
+        self._publish_options_prx_node.get_port('extra.scene').do_clear()
+        self._publish_options_prx_node.get_port('extra.image').do_clear()
         self._publish_options_prx_node.set(
             'process.settings.with_scene', False
         )
@@ -516,15 +516,15 @@ class AbsPnlPublisherForGeneral(gui_prx_widgets.PrxSessionWindow):
         )
 
     def refresh_publish_scene(self):
-        if bsc_core.BasApplication.get_is_dcc():
-            if bsc_core.BasApplication.get_is_maya():
+        if bsc_core.BscApplication.get_is_dcc():
+            if bsc_core.BscApplication.get_is_maya():
                 import lxmaya.dcc.objects as mya_dcc_objects
 
                 self._publish_options_prx_node.set(
                     'extra.scene', [mya_dcc_objects.Scene.get_current_file_path()]
 
                 )
-            elif bsc_core.BasApplication.get_is_katana():
+            elif bsc_core.BscApplication.get_is_katana():
                 import lxkatana.dcc.objects as ktn_dcc_objects
 
                 self._publish_options_prx_node.set(

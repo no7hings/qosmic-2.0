@@ -6,6 +6,8 @@ from ... import core as _gui_core
 from ...qt.core.wrap import *
 
 from ...qt import core as _qt_core
+
+from ...qt import abstracts as _qt_abstracts
 # qt widgets
 from ..widgets import base as _wgt_base
 
@@ -21,7 +23,7 @@ from ..widgets import input_for_filter as _wgt_input_for_filter
 
 from ..widgets import view_for_histogram_chart as _wgt_view_for_histogram_chart
 
-from ..view_models import tag as _vew_mod_tag
+from ..view_models import view_for_tag as _vew_mod_tag
 
 from . import base as _base
 
@@ -30,9 +32,13 @@ from . import item_for_tag as _item_for_tag
 
 class _QtTagViewWidget(
     QtWidgets.QWidget,
-
-    _item_for_tag._AbsTagBase,
+    _qt_abstracts.AbsQtThreadWorkerExtraDef,
 ):
+    INDENT = 20
+    HEIGHT = 18
+
+    PATHSEP = '/'
+
     SPACING = 2
 
     MARGIN = 2
@@ -66,8 +72,6 @@ class _QtTagViewWidget(
         self.setMinimumHeight(self.HEIGHT)
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
 
-        self._init_tag_base_(self)
-
         self._frame_background_color = _qt_core.QtBackgroundColors.Dim
 
         self._lot = _wgt_base.QtVBoxLayout(self)
@@ -81,10 +85,12 @@ class _QtTagViewWidget(
         self._sca._layout.setAlignment(QtCore.Qt.AlignTop)
 
         self._view_model = _vew_mod_tag.TagViewModel(self)
-        self._view_model._data.item.cls = _item_for_tag._QtTagNode
-        self._view_model._data.item.group_cls = _item_for_tag._QtTagGroup
+        self._view_model._data.item.cls = _item_for_tag._QtTagNodeItem
+        self._view_model._data.item.group_cls = _item_for_tag._QtTagGroupItem
 
         self._item_dict = self._view_model._data.item_dict
+
+        self._init_thread_worker_extra_def_(self)
 
         self.installEventFilter(self)
 
@@ -109,23 +115,23 @@ class _QtTagViewWidget(
         # print offset, h
 
     def _create_root_(self, path, *args, **kwargs):
-        widget = _item_for_tag._QtTagGroup()
-        self._sca._add_widget_(widget)
-        widget._set_path_text_(path)
-        if 'show_name' in kwargs:
-            widget._set_text_(kwargs['show_name'])
-        else:
-            widget._set_text_('All')
+        if path in self._item_dict:
+            return False, self._item_dict[path]
 
-        widget._set_group_root_(self)
+        widget = _item_for_tag._QtTagGroupItem()
+        self._sca._add_widget_(widget)
+
+        widget._item_model.set_path(path)
+
+        widget._set_view_(self)
         self._item_dict[path] = widget
         widget.user_filter_checked.connect(self._user_filter_check_cbk_)
         self._sca._set_empty_draw_flag_(False)
-        return widget
+        return True, widget
 
     def _create_group_(self, path, *args, **kwargs):
         if path in self._item_dict:
-            return self._item_dict[path]
+            return False, self._item_dict[path]
 
         if path == self.PATHSEP:
             return self._create_root_(path, *args, **kwargs)
@@ -133,37 +139,34 @@ class _QtTagViewWidget(
         group_widget = self._item_dict[bsc_core.BscPath.get_dag_parent_path(path)]
         widget = group_widget._create_group_(path, *args, **kwargs)
 
-        widget._set_group_root_(self)
+        widget._set_view_(self)
         self._item_dict[path] = widget
         widget.user_filter_checked.connect(self._user_filter_check_cbk_)
-        return widget
+        return True, widget
 
     def _create_node_(self, path, *args, **kwargs):
         if path in self._item_dict:
-            return self._item_dict[path]
+            return False, self._item_dict[path]
 
         group_widget = self._item_dict[bsc_core.BscPath.get_dag_parent_path(path)]
         widget = group_widget._create_node_(path, *args, **kwargs)
 
-        widget._set_group_root_(self)
+        widget._set_view_(self)
         self._item_dict[path] = widget
         widget.user_filter_checked.connect(self._user_filter_check_cbk_)
-        return widget
+        return True, widget
 
-    def _check_exists_(self, path):
-        return path in self._item_dict
-
-    def _clear_all_checked_(self):
+    def _uncheck_all_items_(self):
         [x._set_checked_(False) for x in self._item_dict.values()]
 
     def _get_one_(self, path):
         return self._item_dict[path]
 
     def _get_all_checked_node_paths_(self):
-        return [x._get_path_text_() for x in self._get_all_checked_nodes_()]
+        return [x._item_model.get_path() for x in self._get_all_checked_nodes_()]
 
     def _get_all_checked_nodes_(self):
-        return [x for x in self._item_dict.values() if x._is_checked_() and isinstance(x, _item_for_tag._QtTagNode)]
+        return [x for x in self._item_dict.values() if x._is_checked_() and isinstance(x, _item_for_tag._QtTagNodeItem)]
 
     def _apply_intersection_paths_(self, path_set):
         [x._update_path_set_as_intersection_(path_set) for x in self._item_dict.values()]
@@ -174,7 +177,7 @@ class _QtTagViewWidget(
         self._sca._set_empty_draw_flag_(True)
 
     def _collapse_all_group_items_(self):
-        [x._set_expanded_(False) for x in self._item_dict.values() if isinstance(x, _item_for_tag._QtTagGroup)]
+        [x._set_expanded_(False) for x in self._item_dict.values() if isinstance(x, _item_for_tag._QtTagGroupItem)]
 
     def _expand_exclusive_for_node_(self, path):
         self._collapse_all_group_items_()
@@ -182,11 +185,11 @@ class _QtTagViewWidget(
         for i in paths:
             if i in self._item_dict:
                 i_widget = self._item_dict[i]
-                if isinstance(i_widget, _item_for_tag._QtTagGroup):
+                if isinstance(i_widget, _item_for_tag._QtTagGroupItem):
                     i_widget._set_expanded_(True)
 
-    def _expand_all_groups_(self):
-        [x._set_expanded_(True) for x in self._item_dict.values() if isinstance(x, _item_for_tag._QtTagGroup)]
+    def _expand_all_group_items_(self):
+        [x._set_expanded_(True) for x in self._item_dict.values() if isinstance(x, _item_for_tag._QtTagGroupItem)]
 
     def _expand_for_all_from_(self, path):
         self._collapse_all_group_items_()
@@ -199,7 +202,7 @@ class _QtTagViewWidget(
         for i in paths:
             if i in self._item_dict:
                 i_widget = self._item_dict[i]
-                if isinstance(i_widget, _item_for_tag._QtTagGroup):
+                if isinstance(i_widget, _item_for_tag._QtTagGroupItem):
                     i_widget._set_expanded_(boolean)
 
     def _set_force_hidden_flag_for_group_(self, path, boolean):
@@ -208,15 +211,18 @@ class _QtTagViewWidget(
     def _generate_chart_data_(self):
         dict_ = {}
         for i_wgt in self._item_dict.values():
-            if isinstance(i_wgt, _item_for_tag._QtTagGroup):
+            if isinstance(i_wgt, _item_for_tag._QtTagGroupItem):
                 i_dict = {}
                 for j_wgt in i_wgt._node_widgets:
-                    j_value = j_wgt._number
+                    j_value = j_wgt._item_model.get_number()
                     if j_value:
-                        i_dict[j_wgt._text] = j_value
+                        i_dict[j_wgt._item_model.get_name()] = j_value
                 if i_dict:
-                    dict_[i_wgt._text] = i_dict
+                    dict_[i_wgt._item_model.get_name()] = i_dict
         return dict_
+
+    def _get_all_nodes_(self):
+        return [x for x in self._item_dict.values() if isinstance(x, _item_for_tag._QtTagNodeItem)]
 
 
 class QtTagWidget(
@@ -229,7 +235,7 @@ class QtTagWidget(
         # refresh
         self._refresh_button = _wgt_button.QtIconPressButton()
         self._grid_lot.addWidget(self._refresh_button, 0, 0, 1, 1)
-        self._refresh_button.setFixedSize(28, 28)
+        self._refresh_button.setFixedSize(self.TOOL_BAR_W, self.TOOL_BAR_W)
         self._refresh_button._set_icon_file_path_(
             _gui_core.GuiIcon.get('refresh')
         )
@@ -238,12 +244,12 @@ class QtTagWidget(
         self._top_scroll_box = _wgt_scroll.QtHScrollBox()
         self._grid_lot.addWidget(self._top_scroll_box, 0, 1, 1, 1)
         self._top_scroll_box._set_layout_align_left_or_top_()
-        self._top_scroll_box.setFixedHeight(28)
+        self._top_scroll_box.setFixedHeight(self.TOOL_BAR_W)
         # left
         self._left_scroll_box = _wgt_scroll.QtVScrollBox()
         self._grid_lot.addWidget(self._left_scroll_box, 1, 0, 1, 1)
         self._left_scroll_box._set_layout_align_left_or_top_()
-        self._left_scroll_box.setFixedWidth(28)
+        self._left_scroll_box.setFixedWidth(self.TOOL_BAR_W)
         # keyword filter
         self._keyword_filter_tool_box = self._create_top_tool_box_('keyword filter', size_mode=1)
         # chart
@@ -292,3 +298,9 @@ class QtTagWidget(
             _qt_core.QtApplication.show_tool_dialog(
                 widget=chart_view, title='Histogram Chart', size=(640, 480), parent=self
             )
+    
+    def _hide_all_tool_bar_(self):
+        self._tool_bar_hide_flag = True
+        self._refresh_button.hide()
+        self._top_scroll_box.hide()
+        self._left_scroll_box.hide()

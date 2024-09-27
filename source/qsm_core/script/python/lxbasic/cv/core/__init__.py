@@ -2,3 +2,5 @@
 from .image import *
 
 from .video import *
+
+from .audio import *

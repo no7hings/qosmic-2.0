@@ -33,6 +33,9 @@ class PrxSubPanelForMotionTool(gui_prx_widgets.PrxBasePanel):
 
     def gui_setup_pages_for(self, page_keys):
         for i_page_key in page_keys:
+            if i_page_key not in self.PAGE_CLASS_DICT:
+                continue
+
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()
             self._prx_tab_tool_box.add_widget(
                 i_prx_sca,

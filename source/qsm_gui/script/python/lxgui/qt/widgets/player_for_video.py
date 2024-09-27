@@ -73,7 +73,7 @@ class QtVideoPlayWidget(
 
             img_size = self._resolution
 
-            _x, _y, img_frm_w, img_frm_h = bsc_core.RawSizeMtd.fit_to(
+            _x, _y, img_frm_w, img_frm_h = bsc_core.BscSize.fit_to_center(
                 (img_size[0], img_size[1]), (w, h)
             )
             img_frm_x, img_frm_y = x+_x, y+_y

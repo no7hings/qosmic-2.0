@@ -161,7 +161,7 @@ class AbsPnlBuilderForTexture(gui_prx_widgets.PrxSessionWindow):
         if texture_assign:
             texture_name = self._texture_name
             node_path = self._options_prx_node.get('node')
-            if bsc_core.BasApplication.get_is_katana():
+            if bsc_core.BscApplication.get_is_katana():
                 import lxkatana.scripts as ktn_scripts
 
                 ktn_scripts.ScpTextureBuildForCreate(

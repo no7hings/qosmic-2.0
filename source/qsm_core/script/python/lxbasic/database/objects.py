@@ -579,7 +579,7 @@ class DtbOptForResource(DtbBaseOpt):
             ]
         )
 
-    def create_type_assign(self, node_path, value, kind):
+    def create_node_type_assign(self, node_path, value, kind):
         _ = self.get_entity(
             entity_type=self.EntityTypes.Types,
             filters=[
@@ -792,7 +792,7 @@ class DtbOptForResource(DtbBaseOpt):
             )
         )
 
-    def create_tag_assign(self, node_path, value, kind):
+    def create_node_tag_assign(self, node_path, value, kind):
         _ = self.get_entity(
             entity_type=self.EntityTypes.Tags,
             filters=[
