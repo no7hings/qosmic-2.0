@@ -151,7 +151,7 @@ class PrxPageForCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
             'reference', size_mode=1
         )
         # reference
-        self._asset_prx_input = qsm_gui_prx_widgets.PrxInputForAsset()
+        self._asset_prx_input = qsm_gui_prx_widgets.PrxAssetInputForCharacterAndProp()
         self._asset_prx_tool_box.add_widget(self._asset_prx_input)
         self._asset_prx_input.widget.setMaximumWidth(488)
 

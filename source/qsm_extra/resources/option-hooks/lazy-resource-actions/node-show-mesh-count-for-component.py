@@ -40,15 +40,11 @@ class Main(object):
                 )
                 if is_rig:
                     dict_['VALUE_LIMIT'] = dict(
-                        # face=50000,
-                        # face_per_world_area=10,
                         triangle=100000,
                         triangle_per_world_area=20,
                     )
                 else:
                     dict_['VALUE_LIMIT'] = dict(
-                        # face=250000,
-                        # face_per_world_area=5,
                         triangle=500000,
                         triangle_per_world_area=10,
                     )
@@ -59,7 +55,7 @@ class Main(object):
         chart_view = qt_widgets.QtViewForBarChart()
         chart_view._set_name_text_('Mesh Count')
         if gui_core.GuiUtil.get_language() == 'chs':
-            data_key_names = ['三角面', '三角面（单位面积）']
+            data_key_names = ['三角面数', '三角面数（单位面积）']
         else:
             data_key_names = None
 

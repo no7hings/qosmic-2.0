@@ -22,8 +22,27 @@ entities:
             type: 'node'
             kind: 'unavailable'
 
-            gui_name_chs: '未指定'
-            gui_icon_name: 'database/object'
+            gui_name: '0-Unspecified'
+            gui_name_chs: '0-未指定'
+            gui_icon_name: 'database/unspecified'
+
+        /lock:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: '1-Lock'
+            gui_name_chs: '1-锁定'
+            gui_icon_name: 'database/lock'
+
+        /trash:
+            category: 'node'
+            type: 'node'
+            kind: 'unavailable'
+
+            gui_name: '2-Trash'
+            gui_name_chs: '2-回收站'
+            gui_icon_name: 'database/trash'
 
     tags:
         /:
@@ -289,7 +308,7 @@ entities:
             type: 'group'
 
             gui_name: 'Non-cache Face Percentage (GPU)'
-            gui_name_chs: '非缓存面数百分比（GPU）'
+            gui_name_chs: '非缓存（GPU）面数百分比'
 
         /mesh_count/non_cache_face_percentage/unspecified:
             category: 'node'

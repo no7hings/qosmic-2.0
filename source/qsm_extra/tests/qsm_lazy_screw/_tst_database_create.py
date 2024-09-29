@@ -12,8 +12,8 @@ if __name__ == '__main__':
         # 'maya_scene',
         # 'motion_test',
         # 'asset_test',
-        'audio_test',
-        # 'video_test',
+        # 'audio_test',
+        'video_test',
     ]:
 
         stage = qsm_lzy_scr_core.Stage(

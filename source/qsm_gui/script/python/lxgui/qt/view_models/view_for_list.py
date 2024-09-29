@@ -248,6 +248,7 @@ class ListViewModel(_view_base.AbsViewModel):
         return True, item
 
     def _remove_item_fnc(self, item):
+        item._item_model.do_close()
         self._widget.takeItem(self._widget.row(item))
 
     def mark_all_item_refresh_flag(self):

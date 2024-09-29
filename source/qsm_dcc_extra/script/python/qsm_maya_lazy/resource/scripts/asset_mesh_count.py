@@ -90,7 +90,7 @@ class AssetGpuMeshCountData(object):
 
     @classmethod
     def test(cls):
-        # _asset_general.ProcessUtils.pre_process_0(
+        # _asset_general.ProcessUtils.find_all_gpu_caches_and_textures_from(
         #     'X:/QSM_TST/Assets/scn/test_gpu_assembly/Maya/Final/test_gpu_assembly.ma'
         # )
         print cls('test_gpu_assembly').generate()
@@ -211,7 +211,7 @@ class AssetMeshCountProcess(object):
             )
             l_p.do_update()
             # step 3
-            _asset_general.ProcessUtils.pre_process_0(self._file_path)
+            _asset_general.ProcessUtils.find_all_gpu_caches_and_textures_from(self._file_path)
             l_p.do_update()
             # step 4
             locations = qsm_mya_core.Namespace.find_roots(self._namespace)

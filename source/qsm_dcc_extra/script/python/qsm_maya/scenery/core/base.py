@@ -100,7 +100,7 @@ class GpuImport(object):
 
     # fixme: this is holly shit
     @classmethod
-    def find_all_gpu_files(cls, directory_path):
+    def find_all_gpu_caches(cls, directory_path):
         for i in cmds.ls(type='gpuCache', long=1):
             i_file_path = _mya_core.NodeAttribute.get_as_string(i, 'cacheFileName')
             if i_file_path.startswith('O:/ABCWrite/'):

@@ -29,7 +29,7 @@ class AssetSnapshotProcess(object):
             )
             l_p.do_update()
             # step 3
-            _asset_general.ProcessUtils.pre_process_0(self._file_path)
+            _asset_general.ProcessUtils.find_all_gpu_caches_and_textures_from(self._file_path)
             l_p.do_update()
             # step 4
             locations = qsm_mya_core.Namespace.find_roots(self._namespace)

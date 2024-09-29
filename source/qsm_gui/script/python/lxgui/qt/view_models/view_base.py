@@ -18,6 +18,9 @@ class AbsViewModel(object):
     def do_close(self):
         self._close_flag = True
 
+    def do_drop(self, event):
+        pass
+
     @qt_slot()
     def _on_item_check_changed(self):
         self.refresh_info()
@@ -40,6 +43,8 @@ class AbsViewModel(object):
         self._data.item_color_enable = False
         # item drag
         self._data.item_drag_enable = False
+        # item drop
+        self._data.item_drop_enable = False
         # menu
         self._data.menu = _base._Data(
             content=None,
@@ -75,6 +80,10 @@ class AbsViewModel(object):
             self._data.item_sort.enable = True
             self._data.item_sort.keys = keys
             self._widget.setSortingEnabled(True)
+            if isinstance(self._widget, QtWidgets.QListWidget):
+                self._widget.sortItems(QtCore.Qt.AscendingOrder)
+            elif isinstance(self._widget, QtWidgets.QTreeWidget):
+                self._widget.sortByColumn(0, QtCore.Qt.AscendingOrder)
             return True
         self._data.item_sort.enable = False
         return False
@@ -132,7 +141,8 @@ class AbsViewModel(object):
 
     # item color
     def set_item_color_enable(self, boolean):
-        self._data.item_color_enable = boolean
+        if boolean != self._data.item_color_enable:
+            self._data.item_color_enable = boolean
 
     def is_item_color_enable(self):
         return self._data.item_color_enable
@@ -151,6 +161,16 @@ class AbsViewModel(object):
 
     def get_item_drag_enable(self):
         return self._data.item_drag_enable
+
+    # item drop
+    def set_item_drop_enable(self, boolean):
+        if boolean != self._data.item_drop_enable:
+            self._data.item_drop_enable = boolean
+            self._update_item_drop_enable()
+
+    def _update_item_drop_enable(self):
+        self._widget.setAcceptDrops(self._data.item_drop_enable)
+        self._widget.setDropIndicatorShown(False)
 
     # keyword filter
     def set_keyword_filter_key_src(self, texts):
@@ -312,4 +332,3 @@ class AbsViewModel(object):
 
     def create_item(self, path, *args, **kwargs):
         raise NotImplementedError()
-

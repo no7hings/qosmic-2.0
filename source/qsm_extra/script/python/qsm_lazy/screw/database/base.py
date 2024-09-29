@@ -18,9 +18,14 @@ __all__ = [
 
 
 class _Obj(Model):
+    """
+    basic model
+    """
     enable = BooleanField(default=True)
 
     trash = BooleanField(default=False)
+    lock = BooleanField(default=False)
+
     permission = CharField(default='*')
 
     uuid = UUIDField(default=uuid.uuid1)

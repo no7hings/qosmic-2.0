@@ -48,7 +48,7 @@ class QtEntryAsCapsule(
 
         self._check_use_exclusive = True
 
-        self.__index_hover = None
+        self._index_hover = None
         self._press_index = None
         self._index_current = None
 
@@ -75,17 +75,16 @@ class QtEntryAsCapsule(
     def _refresh_widget_draw_geometry_(self):
         x, y = 0, 0
         w, h = self.width(), self.height()
-        #
         if self._draw_texts:
             c = len(self._draw_texts)
-            w_a = w/c
+            w_maximum_1 = w/c
             h_t = self.fontMetrics().height()
             s_t = (h-h_t)/2
             w_t = int(max([self.fontMetrics().width(i)+8 for i in self._draw_texts]))
             c = len(self._draw_texts)
-            w_m = w_t+(w_t%2)+s_t*2
+            w_maximum_0 = w_t+(w_t%2)+s_t*2
             # width use minimum of average or maximum each
-            self._capsule_per_width = min(w_a, w_m)
+            self._capsule_per_width = min(w_maximum_1, w_maximum_0)
             for i_index in range(c):
                 i_x, i_y = x+i_index*self._capsule_per_width, y
                 i_w, i_h = self._capsule_per_width, h
@@ -103,7 +102,7 @@ class QtEntryAsCapsule(
             elif event.type() == QtCore.QEvent.Enter:
                 pass
             elif event.type() == QtCore.QEvent.Leave:
-                self.__index_hover = None
+                self._index_hover = None
                 self._refresh_widget_all_()
             # press
             elif event.type() == QtCore.QEvent.MouseButtonPress:
@@ -138,7 +137,7 @@ class QtEntryAsCapsule(
                 texts=self._draw_texts,
                 value_options=self._value_options,
                 checked_indices=self._checked_indices,
-                index_hover=self.__index_hover,
+                index_hover=self._index_hover,
                 index_pressed=self._press_index,
                 use_exclusive=self._check_use_exclusive,
                 is_enable=self._action_is_enable
@@ -146,13 +145,9 @@ class QtEntryAsCapsule(
 
     # noinspection PyUnusedLocal
     def _do_show_tool_tip_(self, event):
-        if self.__index_hover is not None:
-            value = self._get_value_options_()[self.__index_hover]
+        if self._index_hover is not None:
+            title = self._draw_texts[self._index_hover]
             tool_tip = self._get_tool_tip_text_()
-            if not isinstance(value, six.string_types):
-                title = str(value)
-            else:
-                title = value
 
             if self._check_use_exclusive is True:
                 css = _qt_core.QtUtil.generate_tool_tip_css(
@@ -256,12 +251,12 @@ class QtEntryAsCapsule(
             return
         p = event.pos()
         x, y = p.x(), p.y()
-        self.__index_hover = None
+        self._index_hover = None
         c = len(self._value_options)
         if c:
             index = int(x/self._capsule_per_width)
             if index < c:
-                self.__index_hover = index
+                self._index_hover = index
                 self._refresh_widget_draw_()
 
     def _do_press_start_(self, event):

@@ -1,0 +1,122 @@
+options:
+    mesh:
+        non_manifold:
+            enable: False
+            limit_value: 0
+            description: ''
+            description_chs: ''
+            level: 'warning'
+
+    mesh_count:
+        triangle:
+            enable: True
+            limit_value: 50000000
+            description: 'Count is {value} more than {limit_value}.'
+            description_chs: '数量为{value}，超过了预设的{limit_value}。'
+            level: 'warning'
+
+        triangle_per_world_area:
+            enable: True
+            limit_value: 2
+            description: 'Count is {value} more than {limit_value}.'
+            description_chs: '数量为{value}，超过了预设的{limit_value}。'
+            level: 'warning'
+
+        geometry_visible:
+            enable: True
+            limit_value: 10000
+            description: 'Count is {value} more than {limit_value}.'
+            description_chs: '数量为{value}，超过了预设的{limit_value}。'
+            level: 'warning'
+
+        non_cache_face_percentage:
+            enable: True
+            limit_value: 25
+            description: 'Percentage (GPU) is {value}% more than {limit_value}%.'
+            description_chs: '百分比为{value}%，超过了预设的{limit_value}%。'
+            level: 'warning'
+    
+    component_mesh_count:
+        component_triangle:
+            enable: True
+            limit_value: 500000
+            description: 'Count is {value} more than {limit_value}.'
+            description_chs: '数量为{value}，超过了预设的{limit_value}。'
+            level: 'warning'
+        
+        cache_triangle:
+            enable: True
+            # default is 5000000
+            limit_value: 5000000
+            description: 'Cache (GPU) Triangle count is {value} more than {limit_value}.'
+            description_chs: '数量为{value}，超过了预设的{limit_value}。'
+            level: 'warning'
+
+convertion:
+    file:
+        name: 'File'
+        name_chs: '文件'
+
+    all:
+        name: 'ALl'
+        name_chs: '所有'
+
+    mesh:
+        name: 'Mesh'
+        name_chs: '网格'
+
+    non_manifold:
+        name: 'Non Manifold'
+        name_chs: '非流形'
+
+    mesh_count:
+        name: 'Mesh Count'
+        name_chs: '网格计数'
+
+    triangle:
+        name: 'Triangle'
+        name_chs: '三角面数'
+
+    triangle_per_world_area:
+        name: 'Triangle (Unit area)'
+        name_chs: '三角面数（单位面积）'
+
+    geometry_all:
+        name: 'Geometry (All)'
+        name_chs: '模型数（所有）'
+
+    geometry_visible:
+        name: 'Geometry (Visible)'
+        name_chs: '模型数（可见）'
+
+    non_cache_face_percentage:
+        name: 'Non-cache Face Percentage (GPU)'
+        name_chs: '非缓存（GPU）面数百分比'
+
+    component_mesh_count:
+        name: 'Component Mesh Count'
+        name_chs: '部件网格计数'
+
+    component_triangle:
+        name: 'Component Triangle'
+        name_chs: '单体三角面数'
+        
+    cache_triangle:
+        name: 'Cache (GPU) Triangle'
+        name_chs: '缓存（GPU）三角面数'
+
+    pass:
+        name: 'Pass'
+        name_chs: '通过'
+
+    ignore:
+        name: 'Ignore'
+        name_chs: '忽略'
+
+    warning:
+        name: 'Warning'
+        name_chs: '警告'
+
+    error:
+        name: 'Error'
+        name_chs: '错误'

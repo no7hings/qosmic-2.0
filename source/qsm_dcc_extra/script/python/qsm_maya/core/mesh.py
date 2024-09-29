@@ -41,6 +41,10 @@ class Mesh(_shape.Shape):
         return cmds.polyEvaluate(path, face=1) or 0
 
     @classmethod
+    def get_triangle_number(cls, path):
+        return cmds.polyEvaluate(path, triangle=1) or 0
+
+    @classmethod
     def is_deformed(cls, path):
         return _attribute.NodeAttribute.has_source(
             path, 'inMesh'

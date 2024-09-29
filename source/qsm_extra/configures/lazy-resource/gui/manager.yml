@@ -37,10 +37,10 @@ entity-type-actions:
                 }
                 # lock
                 -   'lazy-resource-actions/node-lock-enable-auto': {
-                    gui_parent: '/Lock', gui_name: 'Enable', gui_parent_chs: '/锁定', gui_name_chs: '启用'
+                    gui_parent: '/Lock', gui_name: 'Enable', gui_parent_chs: '/锁定', gui_name_chs: '开启'
                 }
                 -   'lazy-resource-actions/node-lock-disable-auto': {
-                    gui_parent: '/Lock', gui_name: 'Disable', gui_parent_chs: '/锁定', gui_name_chs: '禁用'
+                    gui_parent: '/Lock', gui_name: 'Disable', gui_parent_chs: '/锁定', gui_name_chs: '关闭'
                 }
     audio:
         Node:
@@ -54,10 +54,10 @@ entity-type-actions:
                 }
                 # lock
                 -   'lazy-resource-actions/node-lock-enable-auto': {
-                    gui_parent: '/Lock', gui_name: 'Enable', gui_parent_chs: '/锁定', gui_name_chs: '启用'
+                    gui_parent: '/Lock', gui_name: 'Enable', gui_parent_chs: '/锁定', gui_name_chs: '开启'
                 }
                 -   'lazy-resource-actions/node-lock-disable-auto': {
-                    gui_parent: '/Lock', gui_name: 'Disable', gui_parent_chs: '/锁定', gui_name_chs: '禁用'
+                    gui_parent: '/Lock', gui_name: 'Disable', gui_parent_chs: '/锁定', gui_name_chs: '关闭'
                 }
 
     motion:

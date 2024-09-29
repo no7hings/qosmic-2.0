@@ -252,6 +252,12 @@ class PrxTextBrowser(gui_prx_abstracts.AbsPrxWidget):
                 text
             )
 
+    def append_html(self, xml):
+        if isinstance(xml, six.string_types):
+            self._qt_entry_widget.insertHtml(
+                xml
+            )
+
     def add_result(self, text):
         self._qt_entry_widget.append(
             gui_core.GuiXml.get_text(text)

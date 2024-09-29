@@ -509,7 +509,7 @@ class UnitAssemblyProcess(object):
         )
         _mya_core.Scene.clear_unknown_nodes()
         all_roots = _mya_core.DagNode.find_roots(import_paths)
-        _core.GpuImport.find_all_gpu_files(self._directory_path)
+        _core.GpuImport.find_all_gpu_caches(self._directory_path)
         # find lost reference first
         _mya_core.FileReferences.search_all_from(
             [self._directory_path], ignore_exists=True

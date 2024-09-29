@@ -585,6 +585,7 @@ class QtColor(object):
             b_r, b_g, b_b, b_a = args
         else:
             raise TypeError()
+
         t_r, t_g, t_b = bsc_core.BscColor.get_complementary_rgb(b_r, b_g, b_b)
         b_l = QtGui.qGray(t_r, t_g, t_b)
         if b_l >= 127:

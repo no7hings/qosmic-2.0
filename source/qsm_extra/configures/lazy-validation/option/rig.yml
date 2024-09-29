@@ -1,0 +1,199 @@
+options:
+    control:
+        rotate_order:
+            enable: True
+            description: 'Rotate order is {value} not match for {value_src}.'
+            description_chs: '旋转顺序为{value}与预设{value_src}不匹配。'
+            level: 'error'
+
+        axis_vector:
+            enable: True
+            limit_value: 90
+            description: 'Axis orientation {axis} offset angle is {angle}, more than preset {limit_value}.'
+            description_chs: '轴朝向{axis}偏移了{angle}度，超过了预设的{limit_value}度。'
+            level: 'warning'
+
+        name_overlapping:
+            enable: True
+            description: 'Name overlapping.'
+            description_chs: '存在重名。'
+            level: 'error'
+
+        reset_transformations:
+            enable: True
+            description: 'Attribute {attribute} value is {}, non-reset.'
+            description_chs: '属性{attribute}的数值为{value}，未重置。'
+            level: 'error'
+
+    joint:
+        rotate_order:
+            enable: True
+            description: 'rotate order is {value} not match for {value_src}.'
+            description_chs: '旋转顺序为{value}与预设{value_src}不匹配。'
+            level: 'warning'
+
+        axis_vector:
+            enable: True
+            limit_value: 90
+            description: 'Axis orientation {axis} offset angle is {angle}, more than preset {limit_value}.'
+            description_chs: '轴朝向{axis}偏移了{angle}度，超过了预设的{limit_value}度。'
+            level: 'warning'
+
+        completeness:
+            enable: True
+            description: 'Is missing.'
+            description_chs: '缺失。'
+            level: 'warning'
+
+        name_overlapping:
+            enable: True
+            description: 'Name overlapping.'
+            description_chs: '存在重名。'
+            level: 'error'
+
+    skin:
+        deficiency_weight_vertices:
+            enable: True
+            description: 'Weight is Deficiency (Sum of weights for all joints is less than 1).'
+            description_chs: '权重不足（所有骨骼的权重和小于1）。'
+            level: 'warning'
+
+    mesh:
+        non_manifold:
+            enable: False
+            limit_value: 0
+            description: ''
+            description_chs: ''
+            level: 'warning'
+
+    mesh_count:
+        triangle:
+            enable: True
+            limit_value: 750000
+            description: 'Count is {value} more than {limit_value}.'
+            description_chs: '数量为{value}，超过了预设的{limit_value}。'
+            level: 'warning'
+
+        triangle_per_world_area:
+            enable: True
+            limit_value: 10
+            description: 'Count is {value} more than {limit_value}.'
+            description_chs: '数量为{value}，超过了预设的{limit_value}。'
+            level: 'warning'
+
+        geometry_visible:
+            enable: True
+            limit_value: 1000
+            description: 'Count is {value} more than {limit_value}.'
+            description_chs: '数量为{value}，超过了预设的{limit_value}。'
+            level: 'warning'
+
+    component_mesh_count:
+        component_triangle:
+            enable: True
+            # default is 100000
+            limit_value: 100000
+            description: 'Count is {value} more than {limit_value}.'
+            description_chs: '数量为{value}，超过了预设的{limit_value}。'
+            level: 'warning'
+
+convertion:
+    file:
+        name: 'File'
+        name_chs: '文件'
+
+    all:
+        name: 'ALl'
+        name_chs: '所有'
+
+    joint:
+        name: 'Joint'
+        name_chs: '骨骼'
+
+    control:
+        name: 'Control'
+        name_chs: '控制器'
+
+    rotate_order:
+        name: 'Rotate Order'
+        name_chs: '旋转顺序'
+
+    axis_vector:
+        name: 'Axis Vector'
+        name_chs: '轴朝向'
+
+    completeness:
+        name: 'Completeness'
+        name_chs: '完整性'
+
+    reset_transformations:
+        name: 'Reset Transformations'
+        name_chs: '重置变换'
+
+    name_overlapping:
+        name: 'Mame Overlapping'
+        name_chs: '重名'
+
+    skin:
+        name: 'Skin'
+        name_chs: '蒙皮'
+
+    deficiency_weight_vertices:
+        name: 'Deficiency Weight Vertices'
+        name_chs: '权重不足的点'
+
+    mesh:
+        name: 'Mesh'
+        name_chs: '网格'
+
+    non_manifold:
+        name: 'Non Manifold'
+        name_chs: '非流形'
+
+    mesh_count:
+        name: 'Mesh Count'
+        name_chs: '网格计数'
+
+    triangle:
+        name: 'Triangle'
+        name_chs: '三角面数'
+
+    triangle_per_world_area:
+        name: 'Triangle (Unit area)'
+        name_chs: '三角面数（单位面积）'
+
+    geometry_all:
+        name: 'Geometry (All)'
+        name_chs: '模型数（所有）'
+
+    geometry_visible:
+        name: 'Geometry (Visible)'
+        name_chs: '模型数（可见）'
+
+    non_cache_face_percentage:
+        name: 'Non-cache Face Percentage (GPU)'
+        name_chs: '非缓存（GPU）面数百分比'
+
+    component_mesh_count:
+        name: 'Mesh Count (Component)'
+        name_chs: '网格计数（部件）'
+
+    component_triangle:
+        name: 'Triangle'
+        name_chs: '三角面数'
+
+    pass:
+        name: 'Pass'
+        name_chs: '通过'
+
+    ignore:
+        name: 'Ignore'
+        name_chs: '忽略'
+
+    warning:
+        name: 'Warning'
+        name_chs: '警告'
+
+    error:
+        name: 'Error'
+        name_chs: '错误'

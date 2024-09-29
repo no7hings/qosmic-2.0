@@ -50,7 +50,7 @@ class Shape(_node_for_dag.DagNode):
 
     @classmethod
     def check_is_shape(cls, path):
-        return not not cmds.ls(path, shapes=1)
+        return bool(cmds.ls(path, shapes=1))
 
     @classmethod
     def clear_all_instanced(cls, shape_path):

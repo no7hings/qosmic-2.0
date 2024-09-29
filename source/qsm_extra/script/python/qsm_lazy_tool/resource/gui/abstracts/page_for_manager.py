@@ -18,6 +18,8 @@ import lxgui.core as gui_core
 
 import lxgui.qt.widgets as gui_qt_widgets
 
+import lxgui.qt.core as gui_qt_core
+
 import lxgui.qt.view_widgets as gui_qt_view_widgets
 
 import lxgui.proxy.abstracts as gui_prx_abstracts
@@ -161,6 +163,7 @@ class _GuiTypeOpt(
         self._qt_tree_widget._view_model.set_item_sort_keys(['name', 'gui_name', 'gui_name_chs'])
         # self._qt_tree_widget._view_model.set_item_check_enable(True)
         self._qt_tree_widget._view_model.set_item_color_enable(True)
+        self._qt_tree_widget._view_model.set_item_drop_enable(True)
 
         menu_content = self.generate_scr_entity_type_menu_content(self._page._scr_stage.EntityTypes.Type)
         if menu_content:
@@ -168,7 +171,10 @@ class _GuiTypeOpt(
 
         self._qt_tree_widget.refresh.connect(self.do_gui_refresh_all)
         self._qt_tree_widget._view.item_select_changed.connect(
-            self._page.do_gui_node_refresh_by_type_selection
+            self._page.do_gui_node_refresh_by_type_select_or_check
+        )
+        self._qt_tree_widget._view.item_check_changed.connect(
+            self._page.do_gui_node_refresh_by_type_select_or_check
         )
 
         self._leaf_entity_path_set = set()
@@ -272,7 +278,8 @@ class _GuiTypeOpt(
                         self._page._scr_stage.find_all(
                             entity_type=self._page._scr_stage.EntityTypes.Node,
                             filters=[
-                                ('type', 'is', 'node')
+                                ('type', 'is', 'node'),
+                                ('lock', 'is', False)
                             ]
                         )
                     )
@@ -284,7 +291,8 @@ class _GuiTypeOpt(
                         self._page._scr_stage.find_all(
                             entity_type=self._page._scr_stage.EntityTypes.Assign,
                             filters=[
-                                ('type', 'is', 'type_assign')
+                                ('type', 'is', 'type_assign'),
+                                ('lock', 'is', False)
                             ]
                         )
                     )
@@ -293,18 +301,32 @@ class _GuiTypeOpt(
                 _src_node_path_set = _all_scr_node_path_set-_all_assigned_node_scr_path_set
 
                 _menu_content = None
+            elif path == '/lock':
+                _scr_nodes_lock = self._page._scr_stage.find_all(
+                    entity_type=self._page._scr_stage.EntityTypes.Node,
+                    filters=[
+                        ('lock', 'is', True),
+                    ]
+                )
+                _src_node_path_set = set([x.path for x in _scr_nodes_lock])
+
+                _menu_content = None
             else:
                 _scr_assigns = self._page._scr_stage.find_all(
                     entity_type=self._page._scr_stage.EntityTypes.Assign,
                     filters=[
                         ('type', 'is', 'type_assign'),
+                        ('lock', 'is', False),
                         ('target', 'is', path),
                     ]
                 )
                 # clean duplicate
                 _src_node_path_set = set([x.source for x in _scr_assigns])
 
-                _menu_content = self.generate_scr_entity_menu_content(scr_entity, extra_key='node')
+                if scr_entity.kind == 'unavailable':
+                    _menu_content = None
+                else:
+                    _menu_content = self.generate_scr_entity_menu_content(scr_entity, extra_key='node')
             return [_src_node_path_set, _menu_content]
 
         def node_build_fnc_(data_):
@@ -362,12 +384,24 @@ class _GuiTypeOpt(
             i_qt_item = self._qt_tree_widget._view_model._get_item(i_scr_entity_path)
             self.gui_update_entity_for(i_qt_item)
 
-        if scr_entity_paths:
-            # update for unspecified latest
-            qt_item = self._qt_tree_widget._view_model._get_item('/unspecified')
-            self.gui_update_entity_for(qt_item)
+        # update force
+        for i_scr_entity_path in [
+            '/unspecified',
+            '/lock'
+        ]:
+            if i_scr_entity_path not in scr_entity_paths:
+                # update for unspecified latest
+                qt_item = self._qt_tree_widget._view_model._get_item(i_scr_entity_path)
+                self.gui_update_entity_for(qt_item)
 
-        self._page.do_gui_node_refresh_by_type_selection()
+        self._page.do_gui_node_refresh_by_type_select_or_check()
+
+    def gui_update_all_entities(self):
+        for i_qt_item in self._qt_tree_widget._view_model.get_all_items():
+            if i_qt_item._scr_entity.category == 'node':
+                self.gui_update_entity_for(i_qt_item)
+
+        self._page.do_gui_node_refresh_by_type_select_or_check()
 
     def gui_update_entity_for(self, qt_item):
         def cache_fnc_():
@@ -378,7 +412,8 @@ class _GuiTypeOpt(
                         self._page._scr_stage.find_all(
                             entity_type=self._page._scr_stage.EntityTypes.Node,
                             filters=[
-                                ('type', 'is', 'node')
+                                ('type', 'is', 'node'),
+                                ('lock', 'is', False)
                             ]
                         )
                     )
@@ -389,17 +424,27 @@ class _GuiTypeOpt(
                         self._page._scr_stage.find_all(
                             entity_type=self._page._scr_stage.EntityTypes.Assign,
                             filters=[
-                                ('type', 'is', 'type_assign')
+                                ('type', 'is', 'type_assign'),
+                                ('lock', 'is', False)
                             ]
                         )
                     )
                 )
                 _src_node_path_set = _all_scr_node_path_set-_all_assigned_node_scr_path_set
+            elif scr_entity.path == '/lock':
+                _scr_nodes_lock = self._page._scr_stage.find_all(
+                    entity_type=self._page._scr_stage.EntityTypes.Node,
+                    filters=[
+                        ('lock', 'is', True),
+                    ]
+                )
+                _src_node_path_set = set([x.path for x in _scr_nodes_lock])
             else:
                 _scr_assigns = self._page._scr_stage.find_all(
                     entity_type=self._page._scr_stage.EntityTypes.Assign,
                     filters=[
                         ('type', 'is', 'type_assign'),
+                        ('lock', 'is', False),
                         ('target', 'is', scr_entity.path),
                     ]
                 )
@@ -426,7 +471,7 @@ class _GuiTypeOpt(
         self.restore_all()
         self.gui_add_all_entities()
 
-    def get_check_or_select_item_paths(self):
+    def get_selected_and_checked_entity_paths(self):
         return self._qt_tree_widget._view_model.get_selected_item_paths()
 
     def get_assign_path_set_for(self, scr_type_path):
@@ -564,27 +609,29 @@ class _GuiTagOpt(
                             self._page._scr_stage.EntityTypes.Node,
                             bsc_core.BscPathOpt(path).name,
                             filters=[
-                                ('type', 'is', 'node')
+                                ('type', 'is', 'node'),
+                                ('lock', 'is', False),
                             ]
                         )
                     )
                 )
                 return [_src_node_path_set, None]
             else:
-                if scr_entity.kind == 'unavailable':
-                    _menu_content = None
-                else:
-                    _menu_content = self.generate_scr_entity_menu_content(scr_entity, extra_key='node')
-
                 _scr_assigns = self._page._scr_stage.find_all(
                     entity_type=self._page._scr_stage.EntityTypes.Assign,
                     filters=[
                         ('type', 'is', 'tag_assign'),
+                        ('lock', 'is', False),
                         ('target', 'is', scr_entity.path),
                     ]
                 )
                 # clean duplicate
                 _src_node_path_set = set([x.source for x in _scr_assigns])
+                # menu
+                if scr_entity.kind == 'unavailable':
+                    _menu_content = None
+                else:
+                    _menu_content = self.generate_scr_entity_menu_content(scr_entity, extra_key='node')
                 return [_src_node_path_set, _menu_content]
 
         def build_fnc_(data_):
@@ -648,6 +695,7 @@ class _GuiTagOpt(
                 entity_type=self._page._scr_stage.EntityTypes.Assign,
                 filters=[
                     ('type', 'is', 'tag_assign'),
+                    ('lock', 'is', False),
                     ('target', 'is', scr_entity.path),
                 ]
             )
@@ -788,8 +836,9 @@ class _GuiNodeOpt(_GuiBaseOpt):
             self.restore()
 
     def gui_add_entities(self, scr_node_paths, gui_thread_flag):
-        if gui_thread_flag != self._gui_thread_flag:
-            return
+        if gui_thread_flag is not None:
+            if gui_thread_flag != self._gui_thread_flag:
+                return
 
         self._node_paths = scr_node_paths
 
@@ -811,15 +860,16 @@ class _GuiNodeOpt(_GuiBaseOpt):
         [x.do_start() for x in ts]
 
     def _gui_add_entities_sub_cache_fnc(self, scr_node_paths, gui_thread_flag):
-        if gui_thread_flag != self._gui_thread_flag:
-            return [[], 0]
+        if gui_thread_flag is not None:
+            if gui_thread_flag != self._gui_thread_flag:
+                return [[], 0]
 
         entity_data = []
         for i_entity_path in scr_node_paths:
             i_scr_entity = self._page._scr_stage.get_node(i_entity_path)
             if i_scr_entity:
                 i_source_type = self._page._scr_stage.get_node_parameter(i_entity_path, 'source_type')
-                i_is_locked = self._page._scr_stage.get_node_parameter_as_boolean(i_entity_path, 'lock')
+                i_is_locked = i_scr_entity.lock
                 i_thumbnail_path = self._page._scr_stage.get_node_parameter(i_entity_path, 'thumbnail')
                 entity_data.append(
                     (i_scr_entity, i_source_type, i_is_locked, i_thumbnail_path)
@@ -889,16 +939,15 @@ class _GuiNodeOpt(_GuiBaseOpt):
                 gui_name = scr_entity.gui_name_chs
             qt_item._item_model.set_name(gui_name)
 
-            is_locked = self._page._scr_stage.get_node_parameter_as_boolean(
-                scr_entity.path, 'lock'
-            )
+            is_locked = scr_entity.lock
             qt_item._item_model.set_locked(is_locked)
 
             qt_item._item_model.refresh_force()
 
     def _gui_node_show_cache_fnc(self, qt_item, scr_entity, gui_thread_flag):
-        if gui_thread_flag != self._gui_thread_flag:
-            return [[], 0]
+        if gui_thread_flag is not None:
+            if gui_thread_flag != self._gui_thread_flag:
+                return [[], 0]
 
         path = scr_entity.path
 
@@ -911,6 +960,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
             self._page._scr_stage.EntityTypes.Assign,
             [
                 ('type', 'is', 'tag_assign'),
+                ('lock', 'is', False),
                 ('source', 'is', scr_entity.path),
             ]
         )
@@ -966,8 +1016,9 @@ class _GuiNodeOpt(_GuiBaseOpt):
                 bsc_storage.StgFileOpt(_file_path).start_in_system()
 
         build_data, gui_thread_flag = args[0]
-        if gui_thread_flag != self._gui_thread_flag:
-            return
+        if gui_thread_flag is not None:
+            if gui_thread_flag != self._gui_thread_flag:
+                return
 
         qt_item, scr_entity, data = build_data
         tag_dict, property_dict, menu_content = data
@@ -1064,14 +1115,12 @@ class _GuiNodeOpt(_GuiBaseOpt):
             else:
                 node_path_set = self._tag_node_path_set
 
-            self.gui_update_entities(node_path_set, self.gui_update_thread_flag())
+            self.gui_update_entities(node_path_set, self._gui_thread_flag)
         # when tag is non checked, upload from type
         else:
-            # self.restore()
-
             self._tag_node_path_set.clear()
 
-            self.gui_update_entities(self._type_node_path_set, self.gui_update_thread_flag())
+            self.gui_update_entities(self._type_node_path_set, self._gui_thread_flag)
 
     def gui_do_close(self):
         self._qt_list_widget._view_model.do_close()
@@ -1088,11 +1137,10 @@ class _GuiNodeOpt(_GuiBaseOpt):
     def do_gui_refresh_all(self):
         self.restore()
 
-        if self._node_paths:
-            self.gui_clear_node_cache_for(self._node_paths)
+        if self._node_path_set:
+            self.gui_clear_node_cache_for(self._node_path_set)
 
-            self.gui_update_thread_flag()
-            self.gui_add_entities(self._node_paths, self._gui_thread_flag)
+            self.gui_add_entities(list(self._node_path_set), self.gui_update_thread_flag())
 
 
 class AbsPrxPageForManager(
@@ -1103,9 +1151,9 @@ class AbsPrxPageForManager(
 
     FILTER_COMPLETION_MAXIMUM = 50
 
-    def do_gui_node_refresh_by_type_selection(self):
+    def do_gui_node_refresh_by_type_select_or_check(self):
         self._gui_node_opt.do_gui_add_all_by_type_(
-            self._gui_type_opt.get_check_or_select_item_paths()
+            self._gui_type_opt.get_selected_and_checked_entity_paths()
         )
 
     def do_gui_node_refresh_by_tag_check(self):
@@ -1129,9 +1177,16 @@ class AbsPrxPageForManager(
         w = self._window.generate_sub_panel_for('register')
         w.gui_setup_pages_for([scr_stage_type])
         w.show_window_auto()
-        page = w.gui_get_page(scr_stage_type)
-        if page is not None:
-            page.set_scr_stage_key(self._scr_stage.key)
+        register_page = w.gui_get_page(scr_stage_type)
+        if register_page is not None:
+            register_page.set_scr_stage_key(self._scr_stage.key)
+            register_page.set_post_fnc(self.gui_on_register_finished)
+
+    @gui_qt_core.qt_slot(list, list)
+    def gui_on_register_finished(self, scr_type_paths, scr_tag_paths):
+        self._gui_type_opt.gui_update_entities_for(scr_type_paths)
+        if scr_tag_paths:
+            self._gui_tag_opt.gui_update_entities_for(scr_tag_paths)
 
     def _gui_add_filter_tools(self):
         self._keyword_set = set()

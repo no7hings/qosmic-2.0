@@ -1,7 +1,7 @@
 # coding:utf-8
-from .list import *
+from .view_for_list import *
 
-from .tree import *
+from .view_for_tree import *
 
-from .tag import *
+from .view_for_tag import *
 

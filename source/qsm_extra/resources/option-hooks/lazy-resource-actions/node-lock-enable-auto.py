@@ -38,6 +38,16 @@ class Main(object):
 
                             g_p.do_update()
 
+                # update all type
+                scr_node_paths = [x.path for x in scr_entities]
+                scr_type_path_set = self._scr_stage.find_nodes_assign_type_path_set(
+                    scr_node_paths
+                )
+                scr_tag_path_set = self._scr_stage.find_nodes_assign_tag_path_set(
+                    scr_node_paths
+                )
+                page.gui_on_register_finished(list(scr_type_path_set), list(scr_tag_path_set))
+
     def execute_for(self, window, scr_entity, value):
         page = window.gui_get_current_page()
         # lock

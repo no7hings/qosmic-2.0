@@ -2,21 +2,12 @@
 import copy
 
 import functools
-import json
-
-import six
 
 import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.resource as bsc_resource
-
-import lxbasic.pinyin as bsc_pinyin
-
 import lxgui.core as gui_core
-
-import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.widgets as gui_qt_widgets
 
@@ -33,9 +24,10 @@ import qsm_general.scan as qsm_gnl_scan
 import qsm_gui.proxy.widgets as qsm_gui_prx_widgets
 
 
-class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
+class AbsPrxPageForRig(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
-    PAGE_KEY = 'rig_validation'
+
+    PAGE_KEY = 'rig'
 
     def _on_dcc_load_asset(self):
         if self._asset_path is not None:
@@ -57,7 +49,7 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
                         self._asset_load_qt_button._set_action_enable_(True)
 
     def __init__(self, window, session, *args, **kwargs):
-        super(AbsPrxPageForRigValidation, self).__init__(*args, **kwargs)
+        super(AbsPrxPageForRig, self).__init__(*args, **kwargs)
 
         self._window = window
         self._session = session
@@ -65,7 +57,7 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
         self._asset_path = None
         self._scan_root = qsm_gnl_scan.Root.generate()
         
-        self._validation_options = qsm_gnl_core.DccValidationOptions('rig/adv_validation_options')
+        self._validation_options = qsm_gnl_core.DccValidationOptions('lazy-validation/option/rig')
 
         self.gui_page_setup_fnc()
 
@@ -82,7 +74,7 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
         self._asset_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'load', size_mode=1
         )
-        self._asset_prx_input = qsm_gui_prx_widgets.PrxInputForAsset()
+        self._asset_prx_input = qsm_gui_prx_widgets.PrxAssetInputForCharacterAndProp()
         self._asset_prx_tool_box.add_widget(self._asset_prx_input)
         self._asset_prx_input.widget.setMaximumWidth(516)
 
@@ -150,39 +142,48 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
         for k, v in process_options.items():
             self._prx_options_node.set(k, v)
         
-    def _trace_result(self, cache_path, process_options):
-        result = self._to_result(cache_path, process_options)
-        self._result_prx_text_browser.append(result)
+    def _trace_result(self, validation_cache_path, mesh_count_cache_path, process_options):
+        validation_result = self._to_validation_result(validation_cache_path, mesh_count_cache_path, process_options)
+        self._result_prx_text_browser.append_html(validation_result)
 
-    def _to_result(self, cache_path, process_options):
-        data = bsc_storage.StgFileOpt(cache_path).set_read()
-        validation_opt = qsm_gnl_core.DccValidationOptions('rig/adv_validation_options')
+    @classmethod
+    def _to_validation_result(cls, validation_cache_path, mesh_count_cache_path, process_options):
+        validation_result_dict = bsc_storage.StgFileOpt(validation_cache_path).set_read()
+        mesh_count_data = bsc_storage.StgFileOpt(mesh_count_cache_path).set_read()
+        validation_opt = qsm_gnl_core.DccValidationOptions('lazy-validation/option/rig')
         validation_opt.update_process_options(process_options)
-        return validation_opt.to_text(data)
+        mesh_count_result_dict = validation_opt.to_result_dict_for_mesh_count(mesh_count_data)
+        component_mesh_count_result_dict =validation_opt.to_result_dict_for_component_mesh_count(mesh_count_data)
+        return validation_opt.to_html(validation_result_dict, mesh_count_result_dict, component_mesh_count_result_dict)
 
     def _start_delay(self, window, file_paths, process_options):
         process_args = []
         for i_file_path in file_paths:
             i_args = self._generate_process_args(i_file_path, process_options)
             if i_args is not None:
-                i_task_name, i_cmd_script, i_cache_file_path = i_args
+                i_task_name, i_cmd_script, i_validation_cache_path, i_mesh_count_cache_path = i_args
                 if i_cmd_script is not None:
                     process_args.append(
-                        (i_task_name, i_cmd_script, i_cache_file_path)
+                        (i_task_name, i_cmd_script, i_validation_cache_path, i_mesh_count_cache_path)
                     )
                 else:
-                    self._trace_result(i_cache_file_path, process_options)
+                    self._trace_result(
+                        i_validation_cache_path, i_mesh_count_cache_path, process_options
+                    )
         
         if process_args:
             window.show_window_auto(exclusive=False)
 
             for i_args in process_args:
-                i_task_name, i_cmd_script, i_cache_file_path = i_args
+                i_task_name, i_cmd_script, i_validation_cache_path, i_mesh_count_cache_path = i_args
                 window.submit(
                     'rig_validation_process',
                     i_task_name,
                     i_cmd_script,
-                    completed_fnc=functools.partial(self._trace_result, i_cache_file_path, process_options)
+                    completed_fnc=functools.partial(
+                        self._trace_result,
+                        i_validation_cache_path, i_mesh_count_cache_path, process_options
+                    )
                 )
         else:
             window.close_window()
@@ -192,7 +193,7 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
         if not file_paths:
             self._window.exec_message_dialog(
                 self._window.choice_message(
-                    self._window._configure.get('build.rig_validation.messages.no_files')
+                    self._window._configure.get('build.{}.messages.no_files'.format(self.PAGE_KEY))
                 ),
                 status='warning'
             )
@@ -202,7 +203,7 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
         if not process_options:
             self._window.exec_message_dialog(
                 self._window.choice_message(
-                    self._window._configure.get('build.rig_validation.messages.no_process_options')
+                    self._window._configure.get('build.{}.messages.no_process_options'.format(self.PAGE_KEY))
                 ),
                 status='warning'
             )
@@ -232,7 +233,11 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
         data = self._prx_options_node.to_dict()
         branches = [
             'joint',
-            'control'
+            'control',
+            'skin',
+            # 'mesh',
+            'mesh_count',
+            'component_mesh_count',
         ]
         for i_branch in branches:
             i_leafs = data[i_branch]
@@ -240,26 +245,37 @@ class AbsPrxPageForRigValidation(gui_prx_abstracts.AbsPrxWidget):
                 options[i_branch] = i_leafs
         return options
 
-    def _generate_process_args(self, file_path, process_options):
+    @classmethod
+    def _generate_process_args(cls, file_path, process_options):
+        api_version=2.0
         process_options = copy.copy(process_options)
-        process_options['version'] = 2.0
+        process_options['version'] = api_version
         option_hash = bsc_core.BscHash.to_hash_key(process_options)
 
         task_name = '[rig-validation][{}]'.format(
             bsc_storage.StgFileOpt(file_path).name
         )
-        cache_path = qsm_gnl_core.MayaCache.generate_rig_validation_result_file(file_path, version=option_hash)
-        if bsc_storage.StgFileOpt(cache_path).get_is_file() is False:
+        validation_cache_path = qsm_gnl_core.MayaCache.generate_asset_rig_validation_result_file(
+            file_path, api_version=option_hash
+        )
+        mesh_count_cache_path = qsm_gnl_core.MayaCache.generate_asset_mesh_count_file(
+            file_path, version=api_version
+        )
+        if (
+            bsc_storage.StgFileOpt(validation_cache_path).get_is_file() is False
+            or bsc_storage.StgFileOpt(mesh_count_cache_path).get_is_file() is False
+        ):
             cmd_script = qsm_gnl_core.MayaCacheProcess.generate_cmd_script_by_option_dict(
-                'rig-validation',
+                'rig_validation',
                 dict(
                     file_path=file_path,
-                    cache_path=cache_path,
+                    validation_cache_path=validation_cache_path,
+                    mesh_count_cache_path=mesh_count_cache_path,
                     process_options=process_options
                 )
             )
-            return task_name, cmd_script, cache_path
-        return task_name, None, cache_path
+            return task_name, cmd_script, validation_cache_path, mesh_count_cache_path
+        return task_name, None, validation_cache_path, mesh_count_cache_path
 
     def do_gui_refresh_all(self):
         pass

@@ -103,11 +103,20 @@ class MayaCache(object):
         )
 
     @classmethod
-    def generate_rig_validation_result_file(cls, file_path, version=None):
+    def generate_asset_rig_validation_result_file(cls, file_path, api_version=None):
         root = bsc_core.EnvBaseMtd.get_cache_temporary_root()
-        key = cls.get_key(file_path, version)
+        key = cls.get_key(file_path, api_version)
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
         return '{}/.asset-cache/rig-validation/{}/{}.json'.format(
+            root, region, key
+        )
+
+    @classmethod
+    def generate_asset_scenery_validation_result_file(cls, file_path, option_hash=None):
+        root = bsc_core.EnvBaseMtd.get_cache_temporary_root()
+        key = cls.get_key(file_path, option_hash)
+        region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
+        return '{}/.asset-cache/scenery-validation/{}/{}.json'.format(
             root, region, key
         )
 

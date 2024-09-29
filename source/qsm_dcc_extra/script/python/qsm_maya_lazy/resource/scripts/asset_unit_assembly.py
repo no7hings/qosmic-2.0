@@ -531,7 +531,7 @@ class AssetUnitAssemblyProcess(object):
         )
         qsm_mya_core.Scene.clear_unknown_nodes()
         self._all_roots = qsm_mya_core.DagNode.find_roots(import_paths)
-        qsm_mya_scn_core.GpuImport.find_all_gpu_files(self._directory_path)
+        qsm_mya_scn_core.GpuImport.find_all_gpu_caches(self._directory_path)
         # find lost reference first
         qsm_mya_core.FileReferences.search_all_from(
             [self._directory_path], ignore_exists=True

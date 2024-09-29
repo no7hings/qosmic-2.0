@@ -5,9 +5,5 @@ from .base import *
 
 from .adv import *
 
-from .skeleton import *
-
-from .deform import *
-
 
 

@@ -46,7 +46,7 @@ class _AbsAssign(object):
                     list_.append(i_qt_item._item_model.get_path())
         return list_
 
-    def _init_register_(self):
+    def _init_base(self):
         self._scr_stage = None
 
         self._scr_nodes = []
@@ -82,7 +82,7 @@ class AbsPrxSubPageForAnyAssign(
 ):
     def __init__(self, window, session, sub_window, *args, **kwargs):
         super(AbsPrxSubPageForAnyAssign, self).__init__(window, session, sub_window, *args, **kwargs)
-        self._init_register_()
+        self._init_base()
         self.gui_page_setup_fnc()
 
     def _on_apply(self):
@@ -238,10 +238,10 @@ class AbsPrxSubPageForTypeAssign(AbsPrxSubPageForAnyAssign):
     def _update_all_types(self):
         dict_ = {}
         for i_scr_node in self._scr_nodes:
-            i_scr_tag = self._scr_stage.find_node_assign_types(i_scr_node.path)
-            for i_scr_tag in i_scr_tag:
+            i_scr_tags = self._scr_stage.find_node_assign_types(i_scr_node.path)
+            for j_scr_tag in i_scr_tags:
                 dict_.setdefault(
-                    i_scr_tag.path, set()
+                    j_scr_tag.path, set()
                 ).add(i_scr_node.path)
 
         for i_qt_item in self._qt_tag_widget._view_model.get_all_nodes():
@@ -336,10 +336,10 @@ class AbsPrxSubPageForTagAssign(AbsPrxSubPageForAnyAssign):
     def _update_all_tags(self):
         dict_ = {}
         for i_scr_node in self._scr_nodes:
-            i_scr_tag = self._scr_stage.find_node_assign_tags(i_scr_node.path)
-            for i_scr_tag in i_scr_tag:
+            i_scr_tags = self._scr_stage.find_node_assign_tags(i_scr_node.path)
+            for j_scr_tag in i_scr_tags:
                 dict_.setdefault(
-                    i_scr_tag.path, set()
+                    j_scr_tag.path, set()
                 ).add(i_scr_node.path)
 
         for i_qt_item in self._qt_tag_widget._view_model.get_all_nodes():

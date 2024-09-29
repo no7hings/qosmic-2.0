@@ -423,10 +423,12 @@ class ListItemModel(_item_base.AbsItemModel):
             )
 
     def refresh_pixmap_cache(self):
+        """
+        refresh pixmap cache for painter, when size is changing or "force_refresh_flag" is True
+        """
         rect = self._data.basic.rect
         # check size change
         if rect.size() != self._data.basic.size or self._data.force_refresh_flag is True:
-
             self._data.basic.size = rect.size()
 
             self._pixmap_cache = QtGui.QPixmap(self._data.basic.size)
@@ -451,8 +453,11 @@ class ListItemModel(_item_base.AbsItemModel):
                 img_x_, img_y_, img_w_, img_h_ = bsc_core.BscSize.fit_to_center(
                     (img_w, img_h), (frm_w, frm_h)
                 )
-                img_rect = QtCore.QRect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
-                self._draw_pixmap(painter, img_rect, self._data.video.pixmap)
+                # draw base frame
+                self._draw_rect(painter, frame_rect, QtGui.QColor(0, 0, 0))
+                # draw video image
+                video_rect = QtCore.QRect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
+                self._draw_pixmap(painter, video_rect, self._data.video.pixmap)
             # audio
             elif self._data.audio_enable is True:
                 # fill to frame rect
@@ -487,6 +492,9 @@ class ListItemModel(_item_base.AbsItemModel):
                 img_x_, img_y_, img_w_, img_h_ = bsc_core.BscSize.fit_to_center(
                     (img_w, img_h), (frm_w, frm_h)
                 )
+                # draw base frame
+                self._draw_rect(painter, frame_rect, QtGui.QColor(0, 0, 0))
+                # draw image
                 img_rect = QtCore.QRect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
                 self._draw_pixmap(painter, img_rect, self._data.image_sequence.pixmap)
             # image
@@ -618,31 +626,6 @@ class ListItemModel(_item_base.AbsItemModel):
             )
             return True
         return False
-
-    @classmethod
-    def _draw_time_text(cls, painter, rect, text):
-        painter.setPen(QtGui.QColor(223, 223, 223))
-        painter.drawText(rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter, text)
-
-    @classmethod
-    def _draw_name(cls, painter, rect, text, color):
-        text = painter.fontMetrics().elidedText(
-            text,
-            QtCore.Qt.ElideMiddle,
-            rect.width(),
-            QtCore.Qt.TextShowMnemonic
-        )
-        painter.setPen(color)
-        painter.drawText(rect, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter, text)
-
-    @classmethod
-    def _draw_pixmap(cls, painter, rect, pixmap):
-        pxm_scaled = pixmap.scaled(
-            rect.size(),
-            QtCore.Qt.IgnoreAspectRatio,
-            QtCore.Qt.SmoothTransformation
-        )
-        painter.drawPixmap(rect, pxm_scaled)
 
     def _update_hover_play_percent(self):
         x = self._data.play.point.x()

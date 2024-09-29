@@ -42,14 +42,16 @@ class Main(object):
                 i_is_rig = self._scr_stage.is_exists_node_tag(
                     i_entity_path, '/task/rig'
                 )
+                # rig
                 if i_is_rig:
                     i_value_limit = dict(
-                        triangle=1000000,
+                        triangle=750000,
                         triangle_per_world_area=10,
                         geometry_all=1000,
                         geometry_visible=1000,
                         non_cache_face_percentage=100,
                     )
+                # scenery
                 else:
                     i_value_limit = dict(
                         triangle=50000000,
@@ -58,13 +60,14 @@ class Main(object):
                         geometry_visible=10000,
                         non_cache_face_percentage=25,
                     )
+
                 i_dict = {
                     'VALUE_LIMIT': i_value_limit
                 }
                 for j_key in keys:
                     j_text = self._scr_stage.get_node_parameter(
-                            i_entity_path, 'mesh_count.{}'.format(j_key)
-                        )
+                        i_entity_path, 'mesh_count.{}'.format(j_key)
+                    )
                     if j_text is not None:
                         j_value_opt = bsc_core.BscTextOpt(j_text)
                         if j_value_opt.get_is_float():
@@ -91,9 +94,9 @@ class Main(object):
 
         if gui_core.GuiUtil.get_language() == 'chs':
             data_key_names = [
-                '三角面', '三角面（单位面积）',
-                '模型（所有）', '模型（显示）',
-                '非缓存面数百分比（GPU）',
+                '三角面数', '三角面数（单位面积）',
+                '模型数（所有）', '模型数（可见）',
+                '非缓存（GPU）面数百分比',
             ]
         else:
             data_key_names = [

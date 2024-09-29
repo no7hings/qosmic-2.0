@@ -52,7 +52,9 @@ class Node(object):
 
     @classmethod
     def is_exists(cls, name):
-        return cmds.objExists(name)
+        if name:
+            return cmds.objExists(name)
+        raise False
 
     @classmethod
     def get_uuid(cls, name):

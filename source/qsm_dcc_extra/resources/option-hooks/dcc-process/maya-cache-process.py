@@ -100,13 +100,27 @@ def cfx_cloth_cache_generate_fnc(option_opt):
 def rig_validation_fnc(option_opt):
     import qsm_general.core as qsm_gnl_core
 
-    import qsm_maya_lazy.validation.main as s
+    import qsm_maya_lazy.validation.scripts as s
 
     kwargs = qsm_gnl_core.MayaCacheProcess.to_option_dict(
         option_opt.to_string()
     )
 
     s.RigValidationProcess(
+        **kwargs
+    ).execute()
+
+
+def scenery_validation_fnc(option_opt):
+    import qsm_general.core as qsm_gnl_core
+
+    import qsm_maya_lazy.validation.scripts as s
+
+    kwargs = qsm_gnl_core.MayaCacheProcess.to_option_dict(
+        option_opt.to_string()
+    )
+
+    s.SceneryValidationProcess(
         **kwargs
     ).execute()
 
@@ -216,8 +230,10 @@ def main(session):
         cfx_cloth_cache_generate_fnc(option_opt)
     elif method == 'playblast':
         playblast_fnc(option_opt)
-    elif method == 'rig-validation':
+    elif method == 'rig_validation':
         rig_validation_fnc(option_opt)
+    elif method == 'scenery_validation':
+        scenery_validation_fnc(option_opt)
     # new
     elif method == 'motion_generate':
         motion_generate_fnc(option_opt)

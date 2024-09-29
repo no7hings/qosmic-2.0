@@ -26,20 +26,21 @@ class Joint(object):
 
                 j_transform_path = _mya_core.Shape.get_transform(j_shape_path)
                 j_vertex_count = cmds.polyEvaluate(j_shape_path, vertex=1)
-                has_weight = False
-                for k in range(j_vertex_count):
-                    k_vertex = j_transform_path+".vtx[{}]".format(k)
-                    k_weights = cmds.skinPercent(
-                        i_skin_cluster, k_vertex, query=True, transform=path
-                    )
-                    if k_weights > 0:
-                        has_weight = True
-                        break
+                if j_vertex_count > 0:
+                    has_weight = False
+                    for k_vtx_id in range(j_vertex_count):
+                        k_vtx = j_transform_path+".vtx[{}]".format(k_vtx_id)
+                        k_weights = cmds.skinPercent(
+                            i_skin_cluster, k_vtx, query=True, transform=path
+                        )
+                        if k_weights > 0:
+                            has_weight = True
+                            break
 
-                if has_weight is True:
-                    list_.append(
-                        _mya_core.DagNode.to_path(j_shape_path)
-                    )
+                    if has_weight is True:
+                        list_.append(
+                            _mya_core.DagNode.to_path(j_shape_path)
+                        )
 
         return list(set(list_))
 

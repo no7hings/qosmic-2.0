@@ -380,6 +380,25 @@ class _QtTreeViewWidget(
         if menu is not None:
             menu._popup_start_()
 
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.accept()
+            return
+        event.ignore()
+        return
+
+    def dragMoveEvent(self, event):
+        QtCore.QMimeData()
+        if event.mimeData().hasUrls():
+            event.setDropAction(QtCore.Qt.MoveAction)
+            event.accept()
+            return
+        event.ignore()
+        return
+
+    def dropEvent(self, event):
+        self._view_model.do_drop(event)
+
 
 class QtTreeWidget(
     _base._BaseViewWidget

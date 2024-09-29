@@ -21,6 +21,37 @@ class AbsItemModel(object):
 
     NUMBER_TEXT_FORMAT = '{}'
 
+    @classmethod
+    def _draw_time_text(cls, painter, rect, text):
+        painter.setPen(QtGui.QColor(223, 223, 223))
+        painter.drawText(rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter, text)
+
+    @classmethod
+    def _draw_name(cls, painter, rect, text, color):
+        text = painter.fontMetrics().elidedText(
+            text,
+            QtCore.Qt.ElideMiddle,
+            rect.width(),
+            QtCore.Qt.TextShowMnemonic
+        )
+        painter.setPen(color)
+        painter.drawText(rect, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter, text)
+
+    @classmethod
+    def _draw_rect(cls, painter, rect, color):
+        painter.setPen(color)
+        painter.setBrush(color)
+        painter.drawRect(rect)
+
+    @classmethod
+    def _draw_pixmap(cls, painter, rect, pixmap):
+        pxm_scaled = pixmap.scaled(
+            rect.size(),
+            QtCore.Qt.IgnoreAspectRatio,
+            QtCore.Qt.SmoothTransformation
+        )
+        painter.drawPixmap(rect, pxm_scaled)
+
     def do_press_click(self, point):
         if self._data.check_enable is True:
             if self._data.check.rect.contains(point):

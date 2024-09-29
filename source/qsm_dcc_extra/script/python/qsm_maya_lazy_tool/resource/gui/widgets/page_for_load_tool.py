@@ -19,7 +19,7 @@ class PrxPageForLoadTool(_abstracts.AbsPrxPageForLoadTool):
         self._window.gui_set_buttons_enable(not not self._dcc_node_opt_list or self._dcc_node_graph_opt is not None)
 
         self._prx_options_node.get_port('automatic.create_and_apply').set_action_enable(
-            not not self._dcc_node_creator_list
+            bool(self._dcc_node_creator_list)
         )
 
     def do_gui_update_node_opt_by_dcc_selection(self):

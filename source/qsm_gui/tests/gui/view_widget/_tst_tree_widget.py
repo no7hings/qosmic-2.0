@@ -27,6 +27,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
         self._d = qt_view_widgets.QtTreeWidget()
         self._d._view_model.set_item_check_enable(True)
         self._d._view_model.set_item_color_enable(True)
+        self._d._view_model.set_item_drop_enable(True)
         # self._d._view_model.set_item_sort_keys(['name', 'gui_name', 'gui_name_chs'])
         self.add_widget(self._d)
         # self._d._view._set_view_header_([('name', 4), ('index', 4)], 320-48)

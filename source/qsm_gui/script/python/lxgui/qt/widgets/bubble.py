@@ -397,7 +397,7 @@ class QtMessageBubble(
         self.show()
         self.raise_()
 
-        self._close_delay_as_fade_(1500)
+        self._close_delay_as_fade_(3000)
 
 
 class QtImageBubble(

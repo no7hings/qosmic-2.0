@@ -353,7 +353,7 @@ class GpuInstanceProcess(object):
         _mya_core.Scene.clear_unknown_nodes()
         all_roots = _mya_core.DagNode.find_roots(import_paths)
         # find lost reference first
-        _scn_core.GpuImport.find_all_gpu_files(self._directory_path)
+        _scn_core.GpuImport.find_all_gpu_caches(self._directory_path)
         _mya_core.FileReferences.search_all_from(
             [self._directory_path], ignore_exists=True
         )

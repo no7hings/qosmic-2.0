@@ -3,8 +3,6 @@ import copy
 
 import datetime
 
-import sys
-
 import time
 
 import json
@@ -14,6 +12,8 @@ import os.path
 import random
 
 import peewee
+
+from playhouse import migrate
 
 import six
 
@@ -149,6 +149,10 @@ FLUSH PRIVILEGES;
             Connection
         ]
 
+    class AssignTypes:
+        Type = 'type_assign'
+        Tag = 'tag_assign'
+
     PATHSEP = '/'
 
     LOCK = threading.Lock()
@@ -271,9 +275,12 @@ FLUSH PRIVILEGES;
                 i_fnc_ = 'endswith'
             else:
                 raise RuntimeError()
+            # when value is bool do not use json.dumps
+            if isinstance(i_value, bool):
+                i_value_ = i_value
+            else:
+                i_value_ = json.dumps(i_value)
 
-            i_value_ = json.dumps(i_value)
-            #
             list_.append('(self.{}.{}.{}({}))'.format(entity_type, i_key, i_fnc_, i_value_))
         return ' & '.join(list_)
 
@@ -282,14 +289,6 @@ FLUSH PRIVILEGES;
         if entity_type not in cls.__dict__:
             raise RuntimeError()
         return cls.__dict__[entity_type]
-
-    def to_dtd_entity(self, entity_type):
-        # fixme: reconnect for timeout?
-        if self._dtb.is_closed():
-            self._dtb.connect()
-        if entity_type not in self.__dict__:
-            raise RuntimeError()
-        return self.__dict__[entity_type]
 
     @classmethod
     def to_entity(cls, entity_type, data):
@@ -383,9 +382,50 @@ FLUSH PRIVILEGES;
             if os.path.exists(directory_path) is False:
                 os.makedirs(directory_path)
 
+        self.create_entity_types()
+
+    def _to_dtb_entity_type(self, entity_type):
+        # fixme: reconnect for timeout?
+        if self._dtb.is_closed():
+            self._dtb.connect()
+        if entity_type not in self.__dict__:
+            raise RuntimeError()
+        return self.__dict__[entity_type]
+        
+    def create_entity_types(self):
         self._dtb.create_tables(
             self.All
         )
+
+    def update_entity_type_for(self, entity_type):
+        model = self._to_dtb_entity_type(entity_type)
+
+        fields_old = self.get_entity_type_property_keys_old(entity_type)
+        fields_new = self.get_entity_type_property_keys_new(entity_type)
+
+        fields_addition = set(fields_new)-set(fields_old)
+        if not fields_addition:
+            return
+
+        migrator = migrate.MySQLMigrator(self._dtb)
+        migrations = []
+        for field_name in fields_addition:
+            field_object = model._meta.fields[field_name]
+
+            migrations.append(migrator.add_column(entity_type, field_name, field_object))
+
+        if migrations:
+            migrate.migrate(*migrations)
+
+    def update_all_entity_types(self):
+        for i_entity_type in self.EntityTypes.All:
+            self.update_entity_type_for(i_entity_type)
+
+    def get_entity_type_property_keys_old(self, entity_type):
+        return [x.name for x in self._dtb.get_columns(entity_type)]
+
+    def get_entity_type_property_keys_new(self, entity_type):
+        return [x.name for x in self._to_dtb_entity_type(entity_type)._meta.sorted_fields]
 
     def build(self):
         # initialize first
@@ -411,6 +451,17 @@ FLUSH PRIVILEGES;
         for k, v in node_data.items():
             self.create_entity(
                 self.EntityTypes.Node, k, **v
+            )
+
+    def update_types(self):
+        configure = bsc_resource.RscExtendConfigure.get_as_content('lazy/database/{}'.format(self._dtb_name))
+        if configure is None:
+            raise RuntimeError()
+
+        tag_data = configure.get('entities.types')
+        for k, v in tag_data.items():
+            self.update_entity(
+                self.EntityTypes.Type, k, **v
             )
 
     def update_tags(self):
@@ -462,12 +513,12 @@ FLUSH PRIVILEGES;
             if i % 3:
                 for j in range(2):
                     j_type_path = random.choice(type_paths)
-                    self.create_assign(i_node_path, j_type_path, type='type_assign')
+                    self.create_assign(i_node_path, j_type_path, type=self.AssignTypes.Type)
 
             if i % 2:
                 for j in range(2):
                     j_tag_path = random.choice(tag_paths)
-                    self.create_assign(i_node_path, j_tag_path, type='tag_assign')
+                    self.create_assign(i_node_path, j_tag_path, type=self.AssignTypes.Tag)
 
             self.create_parameter(
                 i_node_path,
@@ -482,38 +533,39 @@ FLUSH PRIVILEGES;
 
     # base method
     def find_one(self, entity_type, filters):
-        dtb_entity = self.to_dtd_entity(entity_type)
+        dtb_entity_type = self._to_dtb_entity_type(entity_type)
         e_str = self.to_expression_str(
             entity_type, filters
         )
-        _ = dtb_entity.select().where(
+        _ = dtb_entity_type.select().where(
             eval(e_str)
         )
         if _.exists():
             return self.to_entity(entity_type, _.first().__data__)
 
     def find_all(self, entity_type, filters=None):
-        dtb_entity = self.to_dtd_entity(entity_type)
+        dtb_entity_type = self._to_dtb_entity_type(entity_type)
         if not filters:
             filters = []
-
-        filters.append(
-            ('trash', 'is', 0)
-        )
+        # trash flag using in GUI
+        # filters.append(
+        #     ('trash', 'is', 0)
+        # )
 
         if filters:
             e_str = self.to_expression_str(
                  entity_type, filters
             )
-            _ = dtb_entity.select().where(
+            _ = dtb_entity_type.select().where(
                 eval(e_str)
             )
         else:
-            _ = dtb_entity.select()
+            _ = dtb_entity_type.select()
         if _.exists():
             return map(lambda x: self.to_entity(entity_type, x.__data__), _)
         return []
 
+    # noinspection PyUnusedLocal
     def find_all_by_ctime_tag(self, entity_type, tag='today', filters=None):
         today = datetime.date.today()
         yesterday = today-datetime.timedelta(days=1)
@@ -524,28 +576,28 @@ FLUSH PRIVILEGES;
         start_of_last_month = (start_of_month-datetime.timedelta(days=1)).replace(day=1)
         end_of_last_month = start_of_month-datetime.timedelta(seconds=1)
         start_of_year = today.replace(month=1, day=1)
-        dtb_entity = self.to_dtd_entity(entity_type)
+        dtb_entity_type = self._to_dtb_entity_type(entity_type)
 
         conditions = {
             #
-            'today': '(dtb_entity.ctime >= today) & (dtb_entity.ctime < today+datetime.timedelta(days=1))',
+            'today': '(dtb_entity_type.ctime >= today) & (dtb_entity_type.ctime < today+datetime.timedelta(days=1))',
             # yesterday <= ctime < today
-            'yesterday': '(dtb_entity.ctime >= yesterday) & (dtb_entity.ctime < today)',
+            'yesterday': '(dtb_entity_type.ctime >= yesterday) & (dtb_entity_type.ctime < today)',
             # start_of_week <= ctime < yesterday
-            'earlier_this_week': '(dtb_entity.ctime >= start_of_week) & (dtb_entity.ctime < yesterday)',
+            'earlier_this_week': '(dtb_entity_type.ctime >= start_of_week) & (dtb_entity_type.ctime < yesterday)',
             #
-            'last_week': '(dtb_entity.ctime >= start_of_last_week) & (dtb_entity.ctime < end_of_last_week)',
-            'earlier_this_month': '(dtb_entity.ctime >= start_of_month) & (dtb_entity.ctime < start_of_last_week)',
-            'last_month': '(dtb_entity.ctime >= start_of_last_month) & (dtb_entity.ctime < start_of_month)',
-            'earlier_this_year': '(dtb_entity.ctime >= start_of_year) & (dtb_entity.ctime < start_of_last_month)',
-            'long_time_ago': '(dtb_entity.ctime < start_of_year)'
+            'last_week': '(dtb_entity_type.ctime >= start_of_last_week) & (dtb_entity_type.ctime < end_of_last_week)',
+            'earlier_this_month': '(dtb_entity_type.ctime >= start_of_month) & (dtb_entity_type.ctime < start_of_last_week)',
+            'last_month': '(dtb_entity_type.ctime >= start_of_last_month) & (dtb_entity_type.ctime < start_of_month)',
+            'earlier_this_year': '(dtb_entity_type.ctime >= start_of_year) & (dtb_entity_type.ctime < start_of_last_month)',
+            'long_time_ago': '(dtb_entity_type.ctime < start_of_year)'
         }
         if filters:
-            _ = dtb_entity.select().where(
+            _ = dtb_entity_type.select().where(
                 eval(conditions[tag]+'&'+self.to_expression_str(entity_type, filters))
             )
         else:
-            _ = dtb_entity.select().where(
+            _ = dtb_entity_type.select().where(
                 eval(conditions[tag])
             )
         if _.exists():
@@ -553,25 +605,25 @@ FLUSH PRIVILEGES;
         return []
 
     def is_entity_exists(self, entity_type, path):
-        dtb_entity = self.to_dtd_entity(entity_type)
-        return dtb_entity.select().where(dtb_entity.path == path).exists()
+        dtb_entity_type = self._to_dtb_entity_type(entity_type)
+        return dtb_entity_type.select().where(dtb_entity_type.path == path).exists()
 
     def get_entity(self, entity_type, path):
-        dtb_entity = self.to_dtd_entity(entity_type)
-        _ = dtb_entity.select().where(dtb_entity.path == path)
+        dtb_entity_type = self._to_dtb_entity_type(entity_type)
+        _ = dtb_entity_type.select().where(dtb_entity_type.path == path)
         if _.exists():
             return self.to_entity(entity_type, _.first().__data__)
 
     def get_entity_index_maximum(self, entity_type):
-        dtb_entity = self.to_dtd_entity(entity_type)
-        return dtb_entity.select(peewee.fn.MAX(dtb_entity.id)).scalar()
+        dtb_entity_type = self._to_dtb_entity_type(entity_type)
+        return dtb_entity_type.select(peewee.fn.MAX(dtb_entity_type.id)).scalar()
 
     def create_entity(self, entity_type, path, **kwargs):
-        dtb_entity = self.to_dtd_entity(entity_type)
-        if dtb_entity.select().where(dtb_entity.path == path).exists() is True:
+        dtb_entity_type = self._to_dtb_entity_type(entity_type)
+        if dtb_entity_type.select().where(dtb_entity_type.path == path).exists() is True:
             return self.get_entity(entity_type, path)
 
-        dtb_entity = self.to_dtd_entity(entity_type)
+        dtb_entity_type = self._to_dtb_entity_type(entity_type)
         name = path.split(self.PATHSEP)[-1]
         names = bsc_pinyin.Text.split_any_to_letters(name)
         gui_name = ' '.join(map(lambda x: str(x).capitalize(), names))
@@ -583,27 +635,29 @@ FLUSH PRIVILEGES;
         )
         options.update(**kwargs)
         with Stage.LOCK:
-            _ = dtb_entity.create(**options)
+            _ = dtb_entity_type.create(**options)
             _.save()
             return self.to_entity(entity_type, _.__data__)
 
     def remove_entity(self, entity_type, path):
-        dtb_entity = self.to_dtd_entity(entity_type)
-        if dtb_entity.select().where(dtb_entity.path == path).exists() is False:
+        dtb_entity_type = self._to_dtb_entity_type(entity_type)
+        if dtb_entity_type.select().where(dtb_entity_type.path == path).exists() is False:
             return False
 
-        _ = dtb_entity.get(dtb_entity.path == path)
+        _ = dtb_entity_type.get(dtb_entity_type.path == path)
         _.delete_instance()
         return True
 
     def update_entity(self, entity_type, path, **kwargs):
-        dtb_entity = self.to_dtd_entity(entity_type)
-        _ = dtb_entity.select().where(dtb_entity.path == path)
+        dtb_entity_type = self._to_dtb_entity_type(entity_type)
+        _ = dtb_entity_type.select().where(dtb_entity_type.path == path)
         if _.exists():
             csr = _.first()
             for k, v in kwargs.items():
                 if isinstance(v, six.string_types):
                     v = six.u('"""{}"""').format(v.replace(r'"', r'\"'))
+                elif isinstance(v, bool):
+                    v = v
                 else:
                     v = json.dumps(v)
                 exec six.u(r'csr.{} = {}').format(k, v)
@@ -731,9 +785,10 @@ FLUSH PRIVILEGES;
                 self.EntityTypes.Assign, i.path
             )
 
+    # node
     def create_node_type_assign(self, node_path, type_path, **kwargs):
         return self.create_assign(
-            node_path, type_path, type='type_assign', **kwargs
+            node_path, type_path, type=self.AssignTypes.Type, **kwargs
         )
 
     def remove_node_type_assign(self, node_path, type_path):
@@ -744,14 +799,27 @@ FLUSH PRIVILEGES;
             self.EntityTypes.Assign,
             filters=[
                 ('source', 'is', node_path),
-                ('type', 'is', 'type_assign')
+                ('type', 'is', self.AssignTypes.Type)
             ]
         )
         return list(filter(None, [self.get_type(x.target) for x in _]))
 
+    def find_nodes_assign_type_path_set(self, node_paths):
+        path_set = set()
+        for i_node_path in node_paths:
+            i_assigns = self.find_all(
+                self.EntityTypes.Assign,
+                filters=[
+                    ('source', 'is', i_node_path),
+                    ('type', 'is', self.AssignTypes.Type)
+                ]
+            )
+            path_set.update(set([j.target for j in i_assigns]))
+        return path_set
+
     def create_node_tag_assign(self, node_path, tag_path, **kwargs):
         return self.create_assign(
-            node_path, tag_path, type='tag_assign', **kwargs
+            node_path, tag_path, type=self.AssignTypes.Tag, **kwargs
         )
 
     def remove_node_tag_assign(self, node_path, tag_path):
@@ -762,10 +830,23 @@ FLUSH PRIVILEGES;
             self.EntityTypes.Assign,
             filters=[
                 ('source', 'is', node_path),
-                ('type', 'is', 'tag_assign')
+                ('type', 'is', self.AssignTypes.Tag)
             ]
         )
         return list(filter(None, [self.get_tag(x.target) for x in _]))
+
+    def find_nodes_assign_tag_path_set(self, node_paths):
+        path_set = set()
+        for i_node_path in node_paths:
+            i_assigns = self.find_all(
+                self.EntityTypes.Assign,
+                filters=[
+                    ('source', 'is', i_node_path),
+                    ('type', 'is', self.AssignTypes.Tag)
+                ]
+            )
+            path_set.update(set([j.target for j in i_assigns]))
+        return path_set
 
     def create_property(self, node_path, port, value, **kwargs):
         path = '{}.{}'.format(node_path, port)
@@ -804,14 +885,15 @@ FLUSH PRIVILEGES;
         return self.create_or_update_property(node_path, port, value, type='parameter', **kwargs)
 
     def set_node_locked(self, node_path, boolean):
-        value = self.get_node_parameter(node_path, 'lock')
-        if value is None:
-            self.create_or_update_property(node_path, 'lock', int(boolean))
-        else:
-            if int(value) == int(boolean):
-                return
+        scr_entity = self.get_node(node_path)
+        if not scr_entity:
+            return False
 
-        self.create_or_update_property(node_path, 'lock', int(boolean))
+        boolean = bool(boolean)
+        if boolean == scr_entity.lock:
+            return False
+
+        self.update_node(node_path, lock=boolean)
 
         tag = ['unlock', 'lock'][boolean]
 
@@ -829,6 +911,41 @@ FLUSH PRIVILEGES;
             ]
 
         self.create_or_update_parameters(node_path, 'lock_history', json.dumps(history))
+
+        self.set_node_assigns_locked(node_path, boolean)
+        return True
+
+    def get_node_type_assigns(self, node_path):
+        return self.find_all(
+            self.EntityTypes.Assign,
+            filters=[
+                ('source', 'is', node_path),
+                ('type', 'is', self.AssignTypes.Type)
+            ]
+        )
+
+    def get_node_tag_assigns(self, node_path):
+        return self.find_all(
+            self.EntityTypes.Assign,
+            filters=[
+                ('source', 'is', node_path),
+                ('type', 'is', self.AssignTypes.Tag)
+            ]
+        )
+
+    def set_node_assigns_locked(self, node_path, boolean):
+        """
+        when node is locked, must lock type assign and tag assign
+        """
+        # lock type assigns
+        type_assigns = self.get_node_type_assigns(node_path)
+        for i_type_assign in type_assigns:
+            self.update_entity(i_type_assign.entity_type, i_type_assign.path, lock=boolean)
+
+        # lock tag assigns
+        tag_assigns = self.get_node_tag_assigns(node_path)
+        for i_tag_assign in tag_assigns:
+            self.update_entity(i_tag_assign.entity_type, i_tag_assign.path, lock=boolean)
 
     def generate_node_lock_history(self, node_path, language):
         value = self.get_node_parameter(node_path, 'lock_history')

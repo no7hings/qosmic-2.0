@@ -390,7 +390,7 @@ class QtToolGroupVLayoutWidget(
 
         heights = []
         if self._is_action_flag_match_(
-                self.ActionFlag.DragChildPolish, self.ActionFlag.DragChildRemove
+            self.ActionFlag.DragChildPolish, self.ActionFlag.DragChildRemove
         ):
             self._layout_model.set_pos(v_x, v_y)
             self._layout_model.set_size(v_w, v_h)

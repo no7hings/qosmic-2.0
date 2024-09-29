@@ -22,6 +22,14 @@ class TreeViewModel(_view_base.AbsViewModel):
     def do_close(self):
         pass
 
+    def do_drop(self, event):
+        data = event.mimeData()
+        print data
+
+    def _update_item_drop_enable(self):
+        self._widget.setAcceptDrops(self._data.item_drop_enable)
+        self._widget.setDropIndicatorShown(False)
+
     def do_item_popup_tool_tip(self, event):
         item = self._widget.itemAt(event.pos())
         if item is None:
@@ -104,8 +112,10 @@ class TreeViewModel(_view_base.AbsViewModel):
             )
         )
 
-        if not isinstance(self._widget, QtWidgets.QTreeWidget):
+        if not isinstance(widget, QtWidgets.QTreeWidget):
             raise RuntimeError()
+
+        self._widget = widget
 
         self._widget.item_check_changed.connect(self._on_item_check_changed)
 

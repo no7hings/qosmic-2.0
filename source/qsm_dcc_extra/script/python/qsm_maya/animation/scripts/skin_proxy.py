@@ -32,6 +32,8 @@ from ...general import core as _gnl_core
 
 from ...resource import core as _rsc_core
 
+from ...rig import core as _rig_core
+
 from .. import core as _core
 
 
@@ -72,7 +74,7 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
             i_joint = self._resource.find_joint(i_key)
             if i_joint is None:
                 continue
-            i_meshes = _core.Joint.find_influenced_meshes(i_joint)
+            i_meshes = _rig_core.Joint.find_influenced_meshes(i_joint)
             if i_meshes:
                 set_.update(i_meshes)
 

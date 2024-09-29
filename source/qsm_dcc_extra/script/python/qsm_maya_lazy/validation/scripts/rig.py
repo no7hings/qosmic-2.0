@@ -3,10 +3,6 @@ import math
 
 import os
 
-import sys
-
-import six
-
 import collections
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
@@ -21,13 +17,13 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxgui.core as gui_core
-
 import qsm_general.core as qsm_gnl_core
 
 import qsm_maya.core as qsm_mya_core
 
-from .. import process as _process
+import qsm_maya_lazy.resource.scripts as qsm_mya_lzy_scr_scripts
+
+from .. import prc as _prc
 
 
 class VectorLocator(object):
@@ -211,7 +207,7 @@ c.RigValidationOpt.test()
 
         self._result_content = bsc_content.Dict()
 
-        self._validation_options = qsm_gnl_core.DccValidationOptions('rig/adv_validation_options')
+        self._validation_options = qsm_gnl_core.DccValidationOptions('lazy-validation/option/rig')
 
         self._language = bsc_core.EnvBaseMtd.get_ui_language()
 
@@ -248,11 +244,11 @@ c.RigValidationOpt.test()
         if cache_file_path is not None:
             bsc_storage.StgFileOpt(cache_file_path).set_write(data)
 
-        sys.stdout.write(
-            bsc_core.auto_unicode(
-                self._validation_options.to_text(data)
-            )
-        )
+        # sys.stdout.write(
+        #     bsc_core.auto_unicode(
+        #         self._validation_options.to_html(data)
+        #     )
+        # )
 
     def joints_prc(self, branch, leafs):
         self.update_joint_data_map()
@@ -260,12 +256,12 @@ c.RigValidationOpt.test()
             self.joint_prc(branch, leafs, i_main_key, i_name, i_data)
 
         if 'name_overlapping' in leafs:
-            _process.JointNameOverlapping(
+            _prc.JointNameOverlapping(
                 **self._kwargs
             ).execute()
 
         if 'completeness' in leafs:
-            _process.JointCompleteness(
+            _prc.JointCompleteness(
                 **self._kwargs
             ).execute()
 
@@ -291,12 +287,12 @@ c.RigValidationOpt.test()
             self.control_prc(branch, leafs, i_main_key, i_name, i_data)
 
         if 'name_overlapping' in leafs:
-            _process.ControlNameOverlapping(
+            _prc.ControlNameOverlapping(
                 **self._kwargs
             ).execute()
 
         if 'reset_transformations' in leafs:
-            _process.ControlResetTransformations(
+            _prc.ControlResetTransformations(
                 **self._kwargs
             ).execute()
 
@@ -317,10 +313,14 @@ c.RigValidationOpt.test()
             self.axis_vector_prc(branch, 'axis_vector', main_key, name, data)
 
     def meshes_prc(self, branch, leafs):
-        if 'face_count' in leafs:
-            _process.MeshFaceCount(
+        if 'triangle' in leafs:
+            i_prc = _prc.MeshTriangle(
                 **self._kwargs
-            ).execute()
+            )
+            if i_prc.BRANCH != branch:
+                raise RuntimeError()
+
+            i_prc.execute()
 
     def rotate_order_prc(self, branch, main_key, name, data):
         data_key = 'rotate_order'
@@ -370,14 +370,15 @@ c.RigValidationOpt.test()
 
 
 class RigValidationProcess(object):
-    def __init__(self, file_path, cache_path, process_options):
+    def __init__(self, file_path, validation_cache_path, mesh_count_cache_path, process_options):
         self._file_path = file_path
-        self._cache_path = cache_path
+        self._validation_cache_path = validation_cache_path
+        self._mesh_count_cache_path = mesh_count_cache_path
         self._process_options = process_options
         self._namespace = 'rig_validation'
 
     def execute(self):
-        with bsc_log.LogProcessContext.create(maximum=3) as l_p:
+        with bsc_log.LogProcessContext.create(maximum=4) as l_p:
             # step 1
             qsm_mya_core.SceneFile.new()
             l_p.do_update()
@@ -389,5 +390,13 @@ class RigValidationProcess(object):
             )
             l_p.do_update()
             # step 3
-            RigValidationOpt(self._namespace).execute(self._cache_path)
+            if bsc_storage.StgPath.get_is_file(self._mesh_count_cache_path) is False:
+                bsc_storage.StgFileOpt(self._mesh_count_cache_path).set_write(
+                    qsm_mya_lzy_scr_scripts.AssetMeshCountGenerate(self._namespace).generate()
+                )
             l_p.do_update()
+            # step 4
+            if bsc_storage.StgPath.get_is_file(self._validation_cache_path) is False:
+                RigValidationOpt(self._namespace).execute(self._validation_cache_path)
+            l_p.do_update()
+            

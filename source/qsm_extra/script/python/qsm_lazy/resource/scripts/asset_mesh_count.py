@@ -82,7 +82,7 @@ class AssetMeshCountGenerateOpt(_asset_general.AssetGeneral):
         data = bsc_storage.StgFileOpt(cache_path).set_read()
         
         mesh_count_data = data['mesh_count']
-        mesh_count_data_opt = _asset_general.MeshCountDataOpt(mesh_count_data)
+        mesh_count_data_opt = qsm_gnl_core.MeshCountDataOpt(mesh_count_data)
 
         scr_stage.create_or_update_parameters(
             self._scr_node_path, 'mesh_count', cache_path

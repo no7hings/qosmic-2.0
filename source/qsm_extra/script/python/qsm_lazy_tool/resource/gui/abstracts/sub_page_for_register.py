@@ -27,8 +27,18 @@ import qsm_lazy.screw.core as qsm_lzy_scr_core
 
 
 class _AbsRegister(object):
-    def _init_register_(self):
+    @classmethod
+    def _get_scr_type_or_tag_paths_addition(cls, qt_tag_widget):
+        list_ = []
+        for i_qt_item in qt_tag_widget._view_model.get_all_nodes():
+            if i_qt_item._is_checked_() is True:
+                list_.append(i_qt_item._item_model.get_path())
+        return list_
+
+    def _init_base(self):
         self._scr_stage = None
+
+        self._post_fnc = None
 
     def set_scr_stage_key(self, scr_stage_key):
         self._scr_stage = qsm_lzy_scr_core.Stage(scr_stage_key)
@@ -37,6 +47,9 @@ class _AbsRegister(object):
 
     def _load_type_and_tags(self):
         pass
+
+    def set_post_fnc(self, fnc):
+        self._post_fnc = fnc
 
 
 class AbsPrxSubPageForMotionRegister(
@@ -94,7 +107,7 @@ class _AbsPrxPageForAnyRegister(
 
     def __init__(self, window, session, sub_window, *args, **kwargs):
         super(_AbsPrxPageForAnyRegister, self).__init__(window, session, sub_window, *args, **kwargs)
-        self._init_register_()
+        self._init_base()
         self.gui_page_setup_fnc()
 
     def _on_apply(self):
@@ -295,6 +308,13 @@ class AbsPrxSubPageForVideoRegister(_AbsPrxPageForAnyRegister):
             ).execute(
                 scr_type_paths, scr_tag_paths
             )
+
+            scr_type_paths_addition = self._get_scr_type_or_tag_paths_addition(self._type_qt_tag_widget)
+            scr_tag_paths_addition = self._get_scr_type_or_tag_paths_addition(self._tag_qt_tag_widget)
+
+            if self._post_fnc is not None:
+                if scr_type_paths_addition or scr_tag_paths_addition:
+                    self._post_fnc(scr_type_paths_addition, scr_tag_paths_addition)
 
             self._sub_window.popup_message(
                 self._sub_window.choice_message(

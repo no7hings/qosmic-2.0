@@ -780,14 +780,14 @@ class QtEntryAsList(
                 )
 
     def dragEnterEvent(self, event):
-        if event.mimeData().hasUrls:
+        if event.mimeData().hasUrls():
             event.accept()
         else:
             event.ignore()
 
     def dragMoveEvent(self, event):
         if self._entry_use_as_storage is True:
-            if event.mimeData().hasUrls:
+            if event.mimeData().hasUrls():
                 # event.setDropAction(QtCore.Qt.CopyAction)
                 event.accept()
                 return
