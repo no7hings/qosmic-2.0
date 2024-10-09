@@ -446,7 +446,7 @@ class QtTabView(
         if self._scroll_bar_model.is_valid():
             painter._draw_tab_right_tool_box_by_rect_(
                 rect=self._tab_right_tool_box_draw_rect,
-                background_color=_qt_core.QtBackgroundColors.Dark
+                background_color=_qt_core.QtRgba.Dark
             )
 
     def _delete_widget_at_(self, index):

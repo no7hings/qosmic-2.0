@@ -31,7 +31,7 @@ class FncExporterForDotXarc(
     def _update_option_fnc(cls, option, include_keys):
         def convert_fnc_(path_):
             return bsc_storage.StgEnvPathMapper.map_to_env(
-                path_, pattern='${KEY}'
+                path_, pattern='${LOG_KEY}'
             )
 
         for i_k, i_v in option.items():

@@ -140,15 +140,15 @@ class QtTextBubble(
             offset = self._get_action_offset_()
             painter._draw_frame_by_rect_(
                 rect=self._frame_draw_rect,
-                border_color=_qt_core.QtBorderColors.Transparent,
-                background_color=[_qt_core.QtColors.BubbleBackground, _qt_core.QtColors.BubbleBackgroundHover][self._is_hovered],
+                border_color=_qt_core.QtRgba.Transparent,
+                background_color=[_qt_core.QtRgba.BkgBubble, _qt_core.QtRgba.BkgBubbleHover][self._is_hovered],
                 border_radius=self._frame_border_radius,
                 offset=offset
             )
             painter._draw_text_by_rect_(
                 rect=self._text_draw_rect,
                 text=self._text,
-                text_color=_qt_core.QtColors.ToolTipText,
+                text_color=_qt_core.QtRgba.TxtBubble,
                 font=self._text_font,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 offset=offset
@@ -247,7 +247,7 @@ class QtInfoBubble(
             painter._draw_text_by_rect_(
                 rect=self._text_draw_rect,
                 text=self._text,
-                text_color=_qt_core.QtColors.TextTemporary,
+                text_color=_qt_core.QtRgba.TextTemporary,
                 font=self.font(),
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             )
@@ -606,16 +606,16 @@ class QtPathBubble(
                 i_text = i_path.get_name()
                 i_rect_frame = self.__rects_frame[i_index]
                 i_rect_text = self.__rects_text[i_index]
-                painter._set_border_color_(_qt_core.QtColors.BubbleBorder)
+                painter._set_border_color_(_qt_core.QtRgba.BdrBubble)
                 i_is_hovered = i_index == self.__component_index_hovered
                 i_is_pressed = i_index == self.__component_index_pressed
                 i_offset = [0, 1][i_is_pressed]
                 if i_is_pressed is True:
-                    painter._set_background_color_(_qt_core.QtColors.BubbleBackgroundActioned)
+                    painter._set_background_color_(_qt_core.QtRgba.BkgBubbleAction)
                 elif i_is_hovered is True:
-                    painter._set_background_color_(_qt_core.QtColors.BubbleBackgroundHover)
+                    painter._set_background_color_(_qt_core.QtRgba.BkgBubbleHover)
                 else:
-                    painter._set_background_color_(_qt_core.QtColors.BubbleBackground)
+                    painter._set_background_color_(_qt_core.QtRgba.BkgBubble)
 
                 if i_offset > 0:
                     i_rect_frame = QtCore.QRect(
@@ -630,7 +630,7 @@ class QtPathBubble(
                 painter.drawRect(i_rect_frame)
 
                 if i_index > 0:
-                    painter._set_text_color_(_qt_core.QtColors.BubbleText)
+                    painter._set_text_color_(_qt_core.QtRgba.TxtBubble)
                     painter.drawText(
                         i_rect_text,
                         QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
@@ -646,29 +646,29 @@ class QtPathBubble(
                     (x_p, y_p), (x_p+d_p, y_p+d_p), (x_p, y_p+h_p),
                     (x_p, y_p)
                 ]
-                painter._set_border_color_(_qt_core.QtColors.BubbleBorder)
+                painter._set_border_color_(_qt_core.QtRgba.BdrBubble)
                 if self.__next_is_hovered is True:
                     if self._is_action_flag_match_(self.ActionFlag.NextPress):
                         painter._set_background_color_(
-                            _qt_core.QtColors.BubbleBackgroundActioned
+                            _qt_core.QtRgba.BkgBubbleAction
                         )
                     else:
                         painter._set_background_color_(
-                            _qt_core.QtColors.BubbleBackgroundHover
+                            _qt_core.QtRgba.BkgBubbleHover
                         )
                 else:
                     painter._set_background_color_(
-                        _qt_core.QtColors.BubbleBackground
+                        _qt_core.QtRgba.BkgBubble
                     )
                 painter._draw_path_by_coords_(
                     next_coords, False
                 )
             else:
-                painter._set_border_color_(_qt_core.QtColors.BubbleBorder)
+                painter._set_border_color_(_qt_core.QtRgba.BdrBubble)
                 if self.__next_is_waiting is True:
-                    painter._set_background_color_(_qt_core.QtColors.BubbleNextWaiting)
+                    painter._set_background_color_(_qt_core.QtRgba.BkgBubbleNextWait)
                 else:
-                    painter._set_background_color_(_qt_core.QtColors.BubbleNextFinished)
+                    painter._set_background_color_(_qt_core.QtRgba.BkgBubbleNextFinish)
                 painter.drawRect(
                     self.__rect_next
                 )
@@ -1027,12 +1027,12 @@ class QtBubbleAsChoice(
             if self.__text_input:
                 if self._idx_all:
                     text = self.__text_input
-                    painter._set_text_color_(_qt_core.QtColors.TextCorrect)
+                    painter._set_text_color_(_qt_core.QtRgba.TextCorrect)
                 else:
                     text = self.__text_input
-                    painter._set_text_color_(_qt_core.QtColors.TextError)
+                    painter._set_text_color_(_qt_core.QtRgba.TextError)
             else:
-                painter._set_text_color_(_qt_core.QtColors.TextWarning)
+                painter._set_text_color_(_qt_core.QtRgba.TextWarning)
                 text = 'type to narrow choices'
 
             painter.drawText(
@@ -1286,7 +1286,7 @@ class QtBubbleAsChoose(
             )
 
             painter._set_font_(_qt_core.QtFont.generate(size=self._tips_font_siz*.725))
-            painter._set_text_color_(_qt_core.QtColors.TextWarning)
+            painter._set_text_color_(_qt_core.QtRgba.TextWarning)
 
             painter.drawText(
                 self._tips_draw_rect,
@@ -1299,16 +1299,16 @@ class QtBubbleAsChoose(
                 i_rect = self._rects[i_index]
 
                 if i_index == self._index_current:
-                    painter._set_border_color_(_qt_core.QtColors.BubbleBorder)
-                    painter._set_background_color_(_qt_core.QtColors.BubbleBackgroundHover)
+                    painter._set_border_color_(_qt_core.QtRgba.BdrBubble)
+                    painter._set_background_color_(_qt_core.QtRgba.BkgBubbleHover)
                 else:
-                    painter._set_border_color_(_qt_core.QtColors.BubbleBorder)
-                    painter._set_background_color_(_qt_core.QtColors.BubbleBackground)
+                    painter._set_border_color_(_qt_core.QtRgba.BdrBubble)
+                    painter._set_background_color_(_qt_core.QtRgba.BkgBubble)
 
                 painter.drawRect(i_rect)
 
                 painter._set_font_(_qt_core.QtFont.generate(size=self._text_font_size*.725))
-                painter._set_text_color_(_qt_core.QtColors.BubbleText)
+                painter._set_text_color_(_qt_core.QtRgba.TxtBubble)
                 painter.drawText(
                     i_rect,
                     QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,

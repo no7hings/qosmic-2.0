@@ -5,23 +5,23 @@ from ... import core as gui_core
 # qt
 from ..core.wrap import *
 
-from .. import core as gui_qt_core
+from .. import core as _qt_core
 
-from .. import abstracts as gui_qt_abstracts
+from .. import abstracts as _qt_abstracts
 # qt widgets
-from . import base as gui_qt_wgt_base
+from . import base as _qt_wgt_base
 
 
 class _AbsQtSplitterHandle(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
-    gui_qt_abstracts.AbsQtNameBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtNameBaseDef,
     #
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForPressDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForHoverDef,
+    _qt_abstracts.AbsQtActionForPressDef,
     #
-    gui_qt_abstracts.AbsQtStateDef,
+    _qt_abstracts.AbsQtStateDef,
 ):
     QT_ORIENTATION = None
 
@@ -121,7 +121,7 @@ class _AbsQtSplitterHandle(
         #
         self._swap_enable = True
         #
-        qt_palette = gui_qt_core.GuiQtDcc.generate_qt_palette()
+        qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
         #
         self._contract_icon_name_l = ['contract_h_l', 'contract_v_l'][self.QT_ORIENTATION == QtCore.Qt.Horizontal]
@@ -134,7 +134,7 @@ class _AbsQtSplitterHandle(
         self._is_contract_r = False
         #
         self._qt_layout_class = [
-            gui_qt_wgt_base.QtHBoxLayout, gui_qt_wgt_base.QtVBoxLayout
+            _qt_wgt_base.QtHBoxLayout, _qt_wgt_base.QtVBoxLayout
         ][
             self.QT_ORIENTATION == QtCore.Qt.Horizontal
         ]
@@ -168,11 +168,11 @@ class _AbsQtSplitterHandle(
         #
         self._set_state_def_init_()
         #
-        self._hovered_frame_border_color = gui_qt_core.QtBorderColors.Button
-        self._hovered_frame_background_color = gui_qt_core.QtBackgroundColors.Button
+        self._hovered_frame_border_color = _qt_core.QtRgba.BdrButton
+        self._hovered_frame_background_color = _qt_core.QtRgba.BkgButton
 
-        self._actioned_frame_border_color = gui_qt_core.QtBorderColors.Actioned
-        self._actioned_frame_background_color = gui_qt_core.QtBackgroundColors.Actioned
+        self._actioned_frame_border_color = _qt_core.QtRgba.BorderAction
+        self._actioned_frame_background_color = _qt_core.QtRgba.BackgroundAction
         #
         self._handle_draw_rects = [
             QtCore.QRect(), QtCore.QRect()
@@ -366,7 +366,7 @@ class _AbsQtSplitterHandle(
 
     # noinspection PyUnusedLocal
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         #
         offset = [0, 2][
             self._action_flag in {
@@ -378,8 +378,8 @@ class _AbsQtSplitterHandle(
         if self._action_is_enable is True:
             condition = self._is_hovered, self._is_pressed
             if condition == (False, False):
-                border_color = gui_qt_core.QtBackgroundColors.Transparent
-                background_color = gui_qt_core.QtBackgroundColors.Transparent
+                border_color = _qt_core.QtRgba.Transparent
+                background_color = _qt_core.QtRgba.Transparent
             elif condition == (False, True):
                 border_color = self._actioned_frame_border_color
                 background_color = self._actioned_frame_background_color
@@ -392,8 +392,8 @@ class _AbsQtSplitterHandle(
             else:
                 raise SyntaxError()
         else:
-            border_color = gui_qt_core.QtBackgroundColors.ButtonDisable
-            background_color = gui_qt_core.QtBackgroundColors.ButtonDisable
+            border_color = _qt_core.QtRgba.BkgButtonDisable
+            background_color = _qt_core.QtRgba.BkgButtonDisable
         #
         for i_handle_rect in self._handle_draw_rects:
             painter._draw_icon_file_by_rect_(
@@ -905,7 +905,7 @@ class _AbsQtSplitter(QtWidgets.QWidget):
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         if self._is_split_moving:
             for i_index in self._indices_moving:
                 i_is_contracted = self._is_contracted_dict[i_index]
@@ -914,8 +914,8 @@ class _AbsQtSplitter(QtWidgets.QWidget):
 
                     painter._draw_frame_by_rect_(
                         rect=i_widget_rect,
-                        background_color=gui_qt_core.QtBackgroundColors.Transparent,
-                        border_color=gui_qt_core.QtBorderColors.SplitMoving,
+                        background_color=_qt_core.QtRgba.Transparent,
+                        border_color=_qt_core.QtRgba.BdrSplitMoving,
                         border_width=2,
                         border_radius=1
                     )
@@ -957,7 +957,7 @@ class _AbsQtSplitter(QtWidgets.QWidget):
         self._swap_full_size_fnc_(self)
 
     def _swap_full_size_fnc_(self, spliter_root):
-        p = gui_qt_core.QtUtil.get_qt_cursor_point()
+        p = _qt_core.QtUtil.get_qt_cursor_point()
         l_p = self.mapFromGlobal(p)
 
         index = self._compute_index_loc_(l_p)
@@ -1160,5 +1160,5 @@ class QtHSplitterOld(QtWidgets.QSplitter):
         self.setHandleWidth(2)
         self.setContentsMargins(0, 0, 0, 0)
         self.setStyleSheet(
-            gui_qt_core.GuiQtStyle.get('QSplitter')
+            _qt_core.QtStyle.get('QSplitter')
         )

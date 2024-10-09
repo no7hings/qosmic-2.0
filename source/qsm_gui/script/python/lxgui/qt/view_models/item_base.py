@@ -176,11 +176,15 @@ class AbsItemModel(object):
             key_tgt_set=set()
         )
         # assign
+        self._data.assign_enable = True
         self._data.assign = _base._Data(
             enable=False,
             path_set=set(),
-            path_set_pre=set()
+            path_set_pre=set(),
+            file=None,
         )
+        # status
+        self._data.status_enable = False
         # sort
         self._data.sort_dict = dict()
         # property
@@ -280,9 +284,6 @@ class AbsItemModel(object):
         self._data.text.action_color = QtGui.QColor(31, 31, 31)
         return False
 
-    def _update_number(self, value):
-        pass
-
     def get_number(self):
         return self._data.number.value
 
@@ -290,6 +291,9 @@ class AbsItemModel(object):
         if self._data.number_enable is True:
             return self._data.number.flag
         return False
+
+    def _update_number(self, value):
+        pass
 
     # index
     def set_index(self, index):
@@ -309,6 +313,9 @@ class AbsItemModel(object):
             )
 
     def set_color_rgb(self, rgb):
+        if self._data.color_enable is False:
+            self.set_color_enable(True)
+
         if self._data.color_enable is True:
             self._data.color.rgb = rgb
             self._data.color.hex = bsc_core.BscColor.rgb2hex(*rgb)
@@ -371,6 +378,56 @@ class AbsItemModel(object):
 
                 parent_item._item_model._update_assign_path_set(path_set_addition, path_set_deletion)
                 parent_item._item_model._update_assign_path_to_parent()
+
+    def set_assign_file(self, file_path):
+        self._data.assign.file = file_path
+
+    def get_assign_file(self):
+        return self._data.assign.file
+
+    def set_assign_data(self, key, value):
+        self._data.assign[key] = value
+
+    def get_assign_data(self, key):
+        return self._data.assign.get(key)
+
+    # status
+    def set_status_enable(self, boolean):
+        self._data.status_enable = boolean
+        if boolean is True:
+            self._data.status = _base._Data(
+                file=_gui_core.GuiIcon.get('star'),
+                value=self.Status.Normal,
+                rect=QtCore.QRect()
+            )
+
+        self._update_status_rect(self._data.rect)
+        self.update_view()
+
+    def set_status(self, status):
+        if self._data.status_enable is False:
+            self.set_status_enable(True)
+
+        self._data.status.value = status
+        self._update_status_rect(self._data.rect)
+        self.update_view()
+
+    def get_status(self):
+        if self._data.status_enable is True:
+            return self._data.status.value
+
+    def _update_status_rect(self, rect):
+        pass
+
+    def _get_status_color(self):
+        if self._data.status_enable is True:
+            status = self._data.status.value
+            if status == self.Status.Warning:
+                return _qt_core.QtRgba.Yellow
+            elif status == self.Status.Error:
+                return _qt_core.QtRgba.Red
+            elif status == self.Status.Correct:
+                return _qt_core.QtRgba.Green
 
     # tool tip
     def set_tool_tip(self, text):
@@ -484,9 +541,58 @@ class AbsItemModel(object):
         if file_path is None:
             return
         if file_path.endswith('.svg'):
-            cls._draw_svg(painter, QtCore.QRectF(rect), file_path)
+            cls._draw_svg(painter, rect, file_path)
         else:
             cls._draw_image(painter, rect, file_path)
+
+    @classmethod
+    def _draw_svg(cls, painter, rect, svg_path):
+        svg_render = QtSvg.QSvgRenderer(svg_path)
+        svg_render.render(painter, QtCore.QRectF(rect))
+
+    @classmethod
+    def _draw_image(cls, painter, rect, file_path):
+        pixmap = QtGui.QPixmap()
+        pixmap.load(file_path)
+        if pixmap.isNull() is False:
+            pxm_scaled = pixmap.scaled(
+                rect.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation
+            )
+            painter.drawPixmap(rect, pxm_scaled)
+
+    @classmethod
+    def _fill_icon(cls, painter, rect, file_path, color):
+        if file_path is None:
+            return
+        if file_path.endswith('.svg'):
+            cls._fill_svg(painter, rect, file_path, color)
+        else:
+            cls._fill_image(painter, rect, file_path)
+
+    @classmethod
+    def _fill_svg(cls, painter, rect, file_path, color):
+        w, h = rect.width(), rect.height()
+        i_new = QtGui.QImage(
+            w, h, QtGui.QImage.Format_ARGB32
+        )
+        mask_color = QtCore.Qt.black
+
+        i_new.fill(mask_color)
+        ptr = QtGui.QPainter(i_new)
+        svg_render = QtSvg.QSvgRenderer(file_path)
+        svg_render.render(ptr, QtCore.QRectF(0, 0, w, h))
+        ptr.end()
+
+        pxm_mask = QtGui.QPixmap(i_new).createMaskFromColor(mask_color)
+        p_over = QtGui.QPixmap(i_new)
+        p_over.fill(color)
+        p_over.setMask(pxm_mask)
+        painter.drawPixmap(rect, p_over)
+
+
+    @classmethod
+    def _fill_image(cls, painter, rect, file_path):
+        pass
 
     @classmethod
     def _draw_color(cls, painter, rect, rgb):
@@ -499,21 +605,6 @@ class AbsItemModel(object):
         painter.drawRect(
             rect
         )
-
-    @classmethod
-    def _draw_svg(cls, painter, rect_f, svg_path):
-        svg_render = QtSvg.QSvgRenderer(svg_path)
-        svg_render.render(painter, rect_f)
-
-    @classmethod
-    def _draw_image(cls, painter, rect, file_path):
-        pixmap = QtGui.QPixmap()
-        pixmap.load(file_path)
-        if pixmap.isNull() is False:
-            pxm_scaled = pixmap.scaled(
-                rect.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation
-            )
-            painter.drawPixmap(rect, pxm_scaled)
 
     @classmethod
     def _draw_name_text(cls, painter, rect, text, color, option):

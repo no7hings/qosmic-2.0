@@ -327,7 +327,7 @@ class AbsFncRepairerForUsdMesh(object):
 
 
 class AbsFncComparerForUsdGeometry(_base.AbsFncOptionBase):
-    KEY = 'geometry comparer'
+    LOG_KEY = 'geometry comparer'
     OPTION = dict(
         file_src='',
         file_tgt='',

@@ -7,7 +7,7 @@ from lxgui.qt.core.wrap import *
 
 
 class QtWebServerForTask(QtCore.QObject):
-    KEY = 'task web server'
+    LOG_KEY = 'task web server'
 
     text_message_accepted = qt_signal(str)
 
@@ -39,7 +39,7 @@ class QtWebServerForTask(QtCore.QObject):
         # noinspection PyArgumentList
         if self._web_server.listen(port=self._port):
             bsc_log.Log.trace_method_result(
-                self.KEY, 'start for "{}"'.format(
+                self.LOG_KEY, 'start for "{}"'.format(
                     self._port
                 )
             )
@@ -57,7 +57,7 @@ class QtWebServerForTask(QtCore.QObject):
 
         if self._verbose is True:
             bsc_log.Log.trace_method_result(
-                self.KEY, 'received: "{}"'.format(text)
+                self.LOG_KEY, 'received: "{}"'.format(text)
             )
 
     @qt_slot()
@@ -68,7 +68,7 @@ class QtWebServerForTask(QtCore.QObject):
         self._sockets.append(skt)
         if self._verbose is True:
             bsc_log.Log.trace_method_result(
-                self.KEY, 'new connection'
+                self.LOG_KEY, 'new connection'
             )
 
     @qt_slot()
@@ -78,5 +78,5 @@ class QtWebServerForTask(QtCore.QObject):
         skt.deleteLater()
         if self._verbose is True:
             bsc_log.Log.trace_method_result(
-                self.KEY, 'disconnected'
+                self.LOG_KEY, 'disconnected'
             )

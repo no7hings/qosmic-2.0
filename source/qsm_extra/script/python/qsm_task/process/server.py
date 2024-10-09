@@ -71,7 +71,7 @@ class TaskProcessBase(object):
 
 
 class TaskProcessServer(object):
-    KEY = 'task process server'
+    LOG_KEY = 'task process server'
     APP = flask.Flask('Hook Server')
 
     @staticmethod
@@ -159,7 +159,7 @@ class TaskProcessServer(object):
             TaskProcessWorker.TASK_WAITING_LIST.append(task_id)
 
             TaskProcessBase.stdout(
-                TaskProcessServer.KEY, 'Add task to queue: "{}"'.format(task_id)
+                TaskProcessServer.LOG_KEY, 'Add task to queue: "{}"'.format(task_id)
             )
             TaskProcessWorker.QUEUE.put(prc_task)
             return flask.jsonify({'status': 'Task added to queue'}), 202
@@ -179,7 +179,7 @@ class TaskProcessServer(object):
 
         if task_id in TaskProcessWorker.TASK_WAITING_LIST or task_id in TaskProcessWorker.TASK_RUNNING_LIST:
             TaskProcessBase.stderr(
-                TaskProcessServer.KEY, 'Task is already in queue: "{}"'.format(task_id)
+                TaskProcessServer.LOG_KEY, 'Task is already in queue: "{}"'.format(task_id)
             )
             return flask.jsonify({'error': 'task is already in queue'}), 400
 
@@ -191,7 +191,7 @@ class TaskProcessServer(object):
 
         TaskProcessWorker.TASK_WAITING_LIST.append(task_id)
         TaskProcessBase.stdout(
-            TaskProcessServer.KEY, 'Add(requeue) task to queue: "{}"'.format(task_id)
+            TaskProcessServer.LOG_KEY, 'Add(requeue) task to queue: "{}"'.format(task_id)
         )
         TaskProcessWorker.QUEUE.put(prc_task)
         return flask.jsonify({'status': 'Task added to queue'}), 202
@@ -210,7 +210,7 @@ class TaskProcessServer(object):
                     TaskProcessWorker.TASK_WAITING_LIST.remove(task_id)
                     TaskProcessBase.update_stopped(task_id)
                     TaskProcessBase.stdout(
-                        TaskProcessServer.KEY, 'Stop task: "{}"'.format(task_id)
+                        TaskProcessServer.LOG_KEY, 'Stop task: "{}"'.format(task_id)
                     )
                     return flask.jsonify({'status': 'Task Stopped'}), 200
                 except Exception as e:
@@ -220,7 +220,7 @@ class TaskProcessServer(object):
                     TaskProcessWorker.TASK_RUNNING_LIST.remove(task_id)
                     TaskProcessBase.update_stopped(task_id)
                     TaskProcessBase.stdout(
-                        TaskProcessServer.KEY, 'Kill task: "{}"'.format(task_id)
+                        TaskProcessServer.LOG_KEY, 'Kill task: "{}"'.format(task_id)
                     )
                     if task_id in TaskProcessWorker.TASK_PROCESS_PID_DICT:
                         pid = TaskProcessWorker.TASK_PROCESS_PID_DICT.get(task_id)
@@ -230,7 +230,7 @@ class TaskProcessServer(object):
                             TaskProcessWorker.TASK_PROCESS_PID_DICT.pop(task_id, None)
                             TaskProcessBase.update_killed(task_id)
                             TaskProcessBase.stdout(
-                                TaskProcessServer.KEY, 'Kill process: "{}"'.format(pid)
+                                TaskProcessServer.LOG_KEY, 'Kill process: "{}"'.format(pid)
                             )
                             return flask.jsonify({'status': 'Process killed'}), 200
                         except Exception as e:
@@ -300,7 +300,7 @@ class TaskProcess(object):
 
 
 class TaskProcessWorker(object):
-    KEY = 'task process worker'
+    LOG_KEY = 'task process worker'
 
     QUEUE = multiprocessing.Queue()
     LOCK = multiprocessing.Lock()
@@ -373,14 +373,14 @@ class TaskProcessWorker(object):
                 rtc = task_prc.execute()
                 if rtc == 0:
                     TaskProcessBase.stdout(
-                        cls.KEY, 'Process is completed: `{}`'.format(cmd_script)
+                        cls.LOG_KEY, 'Process is completed: `{}`'.format(cmd_script)
                     )
                     # completed
                     with cls.LOCK:
                         cls.update_completed_fnc(prc_task, task_running_list)
                 else:
                     TaskProcessBase.stderr(
-                        cls.KEY, 'Process is failed: `{}`'.format(cmd_script)
+                        cls.LOG_KEY, 'Process is failed: `{}`'.format(cmd_script)
                     )
                     if rtc != 15:
                         # failed
@@ -392,7 +392,7 @@ class TaskProcessWorker(object):
             except Exception as e:
                 cls.update_error_occurred_fnc(prc_task, e, task_running_list)
                 TaskProcessBase.stderr(
-                    cls.KEY, 'Process is error occurred: `{}`'.format(cmd_script)
+                    cls.LOG_KEY, 'Process is error occurred: `{}`'.format(cmd_script)
                 )
             finally:
                 with task_process_lock:
@@ -401,7 +401,7 @@ class TaskProcessWorker(object):
 
                 t_c = time.time()-t_s
                 TaskProcessBase.stdout(
-                    cls.KEY, 'Process exit cost time {}s'.format(t_c)
+                    cls.LOG_KEY, 'Process exit cost time {}s'.format(t_c)
                 )
 
     @classmethod
@@ -410,7 +410,7 @@ class TaskProcessWorker(object):
             return
 
         TaskProcessBase.stdout(
-            cls.KEY, 'Task is started: "{}"'.format(prc_task.id)
+            cls.LOG_KEY, 'Task is started: "{}"'.format(prc_task.id)
         )
         prc_task.refresh_start()
         # cls.send_task_socket(
@@ -472,7 +472,7 @@ class TaskProcessWorker(object):
             return
 
         TaskProcessBase.stdout(
-            cls.KEY, 'Task is finished: "{}"'.format(prc_task.id)
+            cls.LOG_KEY, 'Task is finished: "{}"'.format(prc_task.id)
         )
         prc_task.refresh_finish()
         prc_task.save_log(results)

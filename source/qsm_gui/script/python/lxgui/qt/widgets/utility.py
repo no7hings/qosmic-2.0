@@ -172,8 +172,8 @@ class QtButtonFrame(
 
         painter._draw_frame_by_rect_(
             rect=self._frame_draw_rect,
-            border_color=_qt_core.QtBorderColors.Transparent,
-            background_color=_qt_core.QtBackgroundColors.Basic,
+            border_color=_qt_core.QtRgba.Transparent,
+            background_color=_qt_core.QtRgba.Basic,
         )
 
 
@@ -215,7 +215,7 @@ class QtVLine(
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
 
-        bdr_color = _qt_core.QtColors.HeadBorder
+        bdr_color = _qt_core.QtRgba.BdrHead
 
         offset = [0, 1][self._is_pressed]
         o_x, o_y = self._line_draw_offset_x, self._line_draw_offset_y
@@ -249,7 +249,7 @@ class QtLineWidget(QtWidgets.QWidget):
         # top, bottom, left, right
         self._line_styles = [self.Style.Null]*4
         self._lines = [QtCore.QLine(), QtCore.QLine(), QtCore.QLine(), QtCore.QLine()]
-        self._line_border_color = _qt_core.QtBorderColors.Basic
+        self._line_border_color = _qt_core.QtRgba.FadeBasic
         self._line_border_width = 1
 
         self._background_color = _gui_core.GuiRgba.Transparent
@@ -370,7 +370,7 @@ class QtMenuBar(QtWidgets.QMenuBar):
         )
         #
         self.setStyleSheet(
-            _qt_core.GuiQtStyle.get('QMenuBar')
+            _qt_core.QtStyle.get('QMenuBar')
         )
 
 
@@ -384,7 +384,7 @@ class QtMenu(QtWidgets.QMenu):
         self.setFont(_qt_core.QtFonts.NameNormal)
         #
         self.setStyleSheet(
-            _qt_core.GuiQtStyle.get('QMenu')
+            _qt_core.QtStyle.get('QMenu')
         )
 
         self._menu_content_opt = _qt_core.GuiQtMenuOpt(self)
@@ -656,8 +656,8 @@ class _QtWidget(
         
         self._init_empty_base_def_(self)
 
-        self._border_color = _qt_core.QtBackgroundColors.Transparent
-        self._background_color = _qt_core.QtBackgroundColors.Basic
+        self._border_color = _qt_core.QtRgba.Transparent
+        self._background_color = _qt_core.QtRgba.Basic
 
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
@@ -696,14 +696,14 @@ class QtHScrollArea(QtWidgets.QScrollArea):
         self.setPalette(qt_palette)
 
         self.setStyleSheet(
-            _qt_core.GuiQtStyle.get('QScrollArea')
+            _qt_core.QtStyle.get('QScrollArea')
         )
 
         self.verticalScrollBar().setStyleSheet(
-            _qt_core.GuiQtStyle.get('QScrollBar')
+            _qt_core.QtStyle.get('QScrollBar')
         )
         self.horizontalScrollBar().setStyleSheet(
-            _qt_core.GuiQtStyle.get('QScrollBar')
+            _qt_core.QtStyle.get('QScrollBar')
         )
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
@@ -749,14 +749,14 @@ class QtVScrollArea(QtWidgets.QScrollArea):
         self.setPalette(qt_palette)
 
         self.setStyleSheet(
-            _qt_core.GuiQtStyle.get('QScrollArea')
+            _qt_core.QtStyle.get('QScrollArea')
         )
 
         self.verticalScrollBar().setStyleSheet(
-            _qt_core.GuiQtStyle.get('QScrollBar')
+            _qt_core.QtStyle.get('QScrollBar')
         )
         self.horizontalScrollBar().setStyleSheet(
-            _qt_core.GuiQtStyle.get('QScrollBar')
+            _qt_core.QtStyle.get('QScrollBar')
         )
 
     def keyPressEvent(self, event):
@@ -965,7 +965,7 @@ class QtStyledItemDelegate(QtWidgets.QStyledItemDelegate):
                     x, y, 4, h
                 )
                 painter.fillRect(
-                    hover_rect, _qt_core.QtBackgroundColors.Hovered
+                    hover_rect, _qt_core.QtRgba.BackgroundHover
                 )
         elif option.state&QtWidgets.QStyle.State_Selected:
             if index.column() == 0:
@@ -976,7 +976,7 @@ class QtStyledItemDelegate(QtWidgets.QStyledItemDelegate):
                     x, y, 4, h
                 )
                 painter.fillRect(
-                    hover_rect, _qt_core.QtBackgroundColors.Selected
+                    hover_rect, _qt_core.QtRgba.BackgroundSelect
                 )
 
     @staticmethod
@@ -999,9 +999,9 @@ class QtStyledItemDelegate(QtWidgets.QStyledItemDelegate):
                                 x, y+h, x+w, y+h
                             )
                             if filter_occurrence is True:
-                                painter.setPen(_qt_core.QtColors.TextKeywordFilterOccurrence)
+                                painter.setPen(_qt_core.QtRgba.TxtKeywordFilterOccurrence)
                             else:
-                                painter.setPen(_qt_core.QtColors.TextKeywordFilter)
+                                painter.setPen(_qt_core.QtRgba.TxtKeywordFilter)
                             painter.drawLine(line)
 
     def paint(self, painter, option, index):
@@ -1070,15 +1070,15 @@ class QtProgressBar(
                         i_background_color = i_gradient_color
                     else:
                         i_gradient_color = QtGui.QLinearGradient(i_rect.topLeft(), i_rect.topRight())
-                        i_gradient_color.setColorAt(0, _qt_core.QtBackgroundColors.Transparent)
+                        i_gradient_color.setColorAt(0, _qt_core.QtRgba.Transparent)
                         i_gradient_color.setColorAt(.5, i_cur_color)
                         i_gradient_color.setColorAt(.975, i_cur_color)
-                        i_gradient_color.setColorAt(1, _qt_core.QtBackgroundColors.Transparent)
+                        i_gradient_color.setColorAt(1, _qt_core.QtRgba.Transparent)
                         i_background_color = i_gradient_color
                     #
                     painter._draw_frame_by_rect_(
                         i_rect,
-                        border_color=_qt_core.QtBorderColors.Transparent,
+                        border_color=_qt_core.QtRgba.Transparent,
                         background_color=i_background_color,
                         border_radius=1,
                     )
@@ -1092,7 +1092,7 @@ class QtProgressBar(
                     )
                     painter._draw_frame_by_rect_(
                         rect,
-                        border_color=_qt_core.QtBorderColors.Transparent,
+                        border_color=_qt_core.QtRgba.Transparent,
                         background_color=(255, 255, 255, 255),
                         border_radius=1,
                     )
@@ -1159,7 +1159,7 @@ class _QtHItem(
         #
         self._init_item_filter_extra_def_(self)
         #
-        self._frame_background_color = _qt_core.QtBackgroundColors.Light
+        self._frame_background_color = _qt_core.QtRgba.BackgroundLight
 
     def _refresh_widget_all_(self, *args, **kwargs):
         self._refresh_widget_draw_geometry_()
@@ -1328,7 +1328,7 @@ class _QtHItem(
         )
         painter._draw_frame_by_rect_(
             self._frame_draw_rect,
-            border_color=_qt_core.QtBorderColors.Transparent,
+            border_color=_qt_core.QtRgba.Transparent,
             background_color=bkg_color,
             border_radius=1
         )

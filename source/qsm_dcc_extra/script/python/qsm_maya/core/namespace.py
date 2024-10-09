@@ -23,12 +23,6 @@ class Namespace(object):
         return cmds.namespace(exists=namespace)
 
     @classmethod
-    def find_root(cls, namespace):
-        _ = cmds.ls('|{}:*'.format(namespace, long=1))
-        if _:
-            return _[0]
-
-    @classmethod
     def find_roots(cls, namespace):
         return cmds.ls('|{}:*'.format(namespace, long=1)) or []
 

@@ -43,7 +43,7 @@ class UsdBasic(object):
 
 
 class UsdStageOpt(UsdBasic):
-    KEY = 'usd stage'
+    LOG_KEY = 'usd stage'
 
     def __init__(self, *args):
         if not args:
@@ -55,13 +55,13 @@ class UsdStageOpt(UsdBasic):
                 file_path = args[0]
                 if os.path.isfile(file_path) is True:
                     # bsc_log.Log.trace_method_result(
-                    #     self.KEY, 'open file is started: "{}"'.format(
+                    #     self.LOG_KEY, 'open file is started: "{}"'.format(
                     #         file_path
                     #     )
                     # )
                     stage = self._open_file_(file_path)
                     # bsc_log.Log.trace_method_result(
-                    #     self.KEY, 'open file is completed: "{}"'.format(
+                    #     self.LOG_KEY, 'open file is completed: "{}"'.format(
                     #         file_path
                     #     )
                     # )

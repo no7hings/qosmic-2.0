@@ -5,7 +5,7 @@ from Katana import Callbacks
 
 
 class Setup(object):
-    KEY = 'katana setup'
+    LOG_KEY = 'katana setup'
 
     @classmethod
     def build_menu(cls):
@@ -16,7 +16,7 @@ class Setup(object):
         import lxkatana.startup as ktn_startup
 
         if ktn_core.KtnUtil.get_is_ui_mode():
-            with bsc_log.LogContext.create(cls.KEY, 'register menu'):
+            with bsc_log.LogContext.create(cls.LOG_KEY, 'register menu'):
                 ktn_startup.KatanaMenuSetup().execute()
 
     @classmethod
@@ -39,7 +39,7 @@ class Setup(object):
 
         import lxkatana.startup as ktn_startup
 
-        with bsc_log.LogContext.create(cls.KEY, 'register workspace'):
+        with bsc_log.LogContext.create(cls.LOG_KEY, 'register workspace'):
             ktn_startup.KatanaWorkspaceSetup().execute()
 
     @classmethod
@@ -51,7 +51,7 @@ class Setup(object):
         import lxkatana.scripts as ktn_scripts
 
         if ktn_core.KtnUtil.get_is_ui_mode():
-            with bsc_log.LogContext.create(cls.KEY, 'register hot key'):
+            with bsc_log.LogContext.create(cls.LOG_KEY, 'register hot key'):
                 ktn_scripts.ScpHotKeyForNodeGraphLayout().register()
                 ktn_scripts.ScpHotKeyForNodeGraphPaste().register()
 
@@ -59,7 +59,7 @@ class Setup(object):
     def set_run(cls, *args, **kwargs):
         import lxbasic.log as bsc_log
 
-        with bsc_log.LogContext.create(cls.KEY, 'all'):
+        with bsc_log.LogContext.create(cls.LOG_KEY, 'all'):
             cls.build_menu()
             cls.build_lua()
             cls.build_hot_key()
@@ -67,7 +67,7 @@ class Setup(object):
 
 
 class ArnoldSetup(object):
-    KEY = 'arnold setup'
+    LOG_KEY = 'arnold setup'
 
     @classmethod
     def set_events_register(cls):
@@ -77,7 +77,7 @@ class ArnoldSetup(object):
 
         import lxkatana.scripts as ktn_scripts
 
-        with bsc_log.LogContext.create(cls.KEY, 'register event'):
+        with bsc_log.LogContext.create(cls.LOG_KEY, 'register event'):
 
             ss = [
                 (ktn_scripts.ScpEventForArnold.on_material_create, ktn_core.EventOpt.EventType.NodeCreate),
@@ -100,7 +100,7 @@ class ArnoldSetup(object):
     def set_run(cls, *args, **kwargs):
         import lxbasic.log as bsc_log
 
-        with bsc_log.LogContext.create(cls.KEY, 'all'):
+        with bsc_log.LogContext.create(cls.LOG_KEY, 'all'):
             cls.set_events_register()
             cls.set_callbacks_register()
 

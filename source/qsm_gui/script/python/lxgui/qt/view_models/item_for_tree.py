@@ -168,24 +168,42 @@ class TreeItemModel(_item_base.AbsItemModel):
 
     def draw_background(self, painter, option, index):
         x, y, w, h = option.rect.x(), option.rect.y(), option.rect.width(), option.rect.height()
-        rect = QtCore.QRect()
-        if self._data.select.flag:
-            rect.setRect(
-                x+1, y+1, w-1, h-2
-            )
-            painter.setPen(self._data.select.color)
-            painter.setBrush(self._data.select.color)
-            painter.drawRect(rect)
-
-        if self._data.hover.flag:
-            rect.setRect(
-                x+1, y+1, w-1, h-2
-            )
+        column = index.column()
+        rect = QtCore.QRect(x+1, y+1, w-1, h-2)
+        condition = (self._data.hover.flag, self._data.select.flag)
+        # hover
+        if condition == (True, False):
             painter.setPen(self._data.hover.color)
             painter.setBrush(self._data.hover.color)
             painter.drawRect(rect)
+        # select
+        elif condition == (False, True):
+            painter.setPen(self._data.select.color)
+            painter.setBrush(self._data.select.color)
+            painter.drawRect(rect)
+        # hover and select
+        elif condition == (True, True):
+            if column == 0:
+                # left to right
+                color = QtGui.QLinearGradient(
+                    rect.topLeft(), rect.topRight()
+                )
+                color.setColorAt(
+                    0, self._data.hover.color
+                )
+                color.setColorAt(
+                    1, self._data.select.color
+                )
+                painter.setPen(QtGui.QPen(QtGui.QBrush(color), 1))
+                painter.setBrush(color)
+                painter.drawRect(rect)
+            else:
+                if self._data.select.flag:
+                    painter.setPen(self._data.select.color)
+                    painter.setBrush(self._data.select.color)
+                    painter.drawRect(rect)
+
         # when view is QTreeWidget draw check in first colum
-        column = index.column()
         if column == 0:
             # draw check
             if self._data.check_enable is True:
@@ -211,9 +229,14 @@ class TreeItemModel(_item_base.AbsItemModel):
             rect = QtCore.QRect(x, y, w, h)
             text = self._item.text(column)
 
-        text_color = [
-            self._data.text.color, self._data.text.action_color
-        ][self._data.select.flag or self._data.hover.flag]
+        status_color = self._get_status_color()
+        if status_color is not None:
+            text_color = status_color
+        else:
+            text_color = [
+                self._data.text.color, self._data.text.action_color
+            ][self._data.select.flag or self._data.hover.flag]
+
         painter.setFont(self._font)
         self._draw_name_text(painter, rect, text, text_color, QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
 
@@ -239,3 +262,6 @@ class TreeItemModel(_item_base.AbsItemModel):
 
     def _update_name(self, text):
         self._item.setText(0, text)
+
+    def set_expanded(self, boolean):
+        self._item.setExpanded(boolean)

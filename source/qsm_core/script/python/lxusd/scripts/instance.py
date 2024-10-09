@@ -7,7 +7,7 @@ from .. import core as usd_core
 
 
 class ScpInstance(object):
-    KEY = 'instance color map generate'
+    LOG_KEY = 'instance color map generate'
 
     def __init__(self, grow_usd_file_path, instance_usd_file_path):
         self._grow_usd_file_path = grow_usd_file_path
@@ -84,14 +84,14 @@ class ScpInstance(object):
                     i_point_dict = {_j: _j_seq for _j_seq, _j in enumerate(i_points)}
                     i_points_remaining = {_j: _j_seq for _j_seq, _j in enumerate(i_points)}
 
-                    bsc_log.Log.trace_method_result(cls.KEY, 'start instance: "{}"'.format(i_instance_opt.get_path()))
-                    bsc_log.Log.trace_method_result(cls.KEY, 'point count: {}'.format(i_p_c))
+                    bsc_log.Log.trace_method_result(cls.LOG_KEY, 'start instance: "{}"'.format(i_instance_opt.get_path()))
+                    bsc_log.Log.trace_method_result(cls.LOG_KEY, 'point count: {}'.format(i_p_c))
                     for j_seq, j_mesh_prim in enumerate(mesh_prims):
                         if i_points_remaining:
                             j_prim_opt = usd_core.UsdPrimOpt(j_mesh_prim)
                             j_key = j_prim_opt.get_path()
                             j_mesh_opt = mesh_opt_dict[j_key]
-                            bsc_log.Log.trace_method_result(cls.KEY, 'start mesh: "{}"'.format(j_mesh_opt.get_path()))
+                            bsc_log.Log.trace_method_result(cls.LOG_KEY, 'start mesh: "{}"'.format(j_mesh_opt.get_path()))
 
                             j_mesh_face_extra = j_mesh_opt.generate_face_extra(uv_map_name)
                             j_face_points_kd_tree = j_mesh_opt.generate_face_points_kd_tree()
@@ -122,7 +122,7 @@ class ScpInstance(object):
                                     [i_points_remaining.pop(_k) for _k in j_points_closed]
                 else:
                     bsc_log.Log.trace_method_warning(
-                        cls.KEY, 'instance is nested: "{}"'.format(i_instance_opt.get_path())
+                        cls.LOG_KEY, 'instance is nested: "{}"'.format(i_instance_opt.get_path())
                     )
 
                 i_colors = [i_color_dict[_i] if _i in i_color_dict else (0, 0, 0) for _i in i_point_all_indices]

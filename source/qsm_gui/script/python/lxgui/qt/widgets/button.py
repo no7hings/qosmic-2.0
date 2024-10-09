@@ -145,9 +145,9 @@ class QtCheckButton(
         if self._name_text is not None:
             name_text = self._name_text
             if self._action_is_enable is True:
-                text_color = [_qt_core.QtFontColors.Basic, _qt_core.QtFontColors.Light][self._is_hovered]
+                text_color = [_qt_core.QtRgba.Text, _qt_core.QtRgba.TextHover][self._is_hovered]
             else:
-                text_color = _qt_core.QtColors.TextDisable
+                text_color = _qt_core.QtRgba.TextDisable
             #
             painter._draw_text_by_rect_(
                 rect=self._name_draw_rect,
@@ -476,8 +476,8 @@ class QtPressButton(
             bdr_color = [self._frame_border_color, self._hovered_frame_border_color][self._is_hovered]
             bkg_color = [self._frame_background_color, self._hovered_frame_background_color][self._is_hovered]
         else:
-            bdr_color = _qt_core.QtBorderColors.ButtonDisable
-            bkg_color = _qt_core.QtBackgroundColors.ButtonDisable
+            bdr_color = _qt_core.QtRgba.BdrButtonDisable
+            bkg_color = _qt_core.QtRgba.BkgButtonDisable
 
         painter._draw_frame_by_rect_(
             rect=self._frame_draw_rect,
@@ -535,8 +535,8 @@ class QtPressButton(
         if self._get_progress_is_enable_() is True:
             painter._draw_frame_by_rect_(
                 rect=self._progress_rect,
-                border_color=_qt_core.QtBackgroundColors.Transparent,
-                background_color=_qt_core.QtColors.ProgressBackground,
+                border_color=_qt_core.QtRgba.Transparent,
+                background_color=_qt_core.QtRgba.BkgProgress,
                 border_radius=2,
                 offset=offset
             )
@@ -573,9 +573,9 @@ class QtPressButton(
         if self._name_text is not None:
             name_text = self._name_text
             if self._action_is_enable is True:
-                text_color = [_qt_core.QtFontColors.Basic, _qt_core.QtFontColors.Light][self._is_hovered]
+                text_color = [_qt_core.QtRgba.Text, _qt_core.QtRgba.TextHover][self._is_hovered]
             else:
-                text_color = _qt_core.QtColors.TextDisable
+                text_color = _qt_core.QtRgba.TextDisable
             #
             if self._get_sub_process_is_enable_() is True:
                 name_text = '{} - {}'.format(
@@ -594,7 +594,7 @@ class QtPressButton(
                 self._sub_name_draw_rect,
                 text=self._sub_name_text,
                 text_option=QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter,
-                text_color=_qt_core.QtColors.TextTemporary,
+                text_color=_qt_core.QtRgba.TextTemporary,
                 font=self._name_draw_font,
                 offset=offset,
             )
@@ -799,10 +799,10 @@ class QtIconPressButton(
         )
         if self._is_action_flag_match_(self.ActionFlag.DragMove):
             painter._draw_frame_by_rect_(
-                    rect=self._frame_draw_rect,
-                    border_color=_qt_core.QtBorderColors.Button,
-                    background_color=_qt_core.QtBackgroundColors.ItemSelected,
-                )
+                rect=self._frame_draw_rect,
+                border_color=_qt_core.QtRgba.BdrButton,
+                background_color=_qt_core.QtRgba.BackgroundSelect,
+            )
 
         if self._thread_draw_flag is True:
             painter._draw_alternating_colors_by_rect_(
@@ -860,8 +860,8 @@ class QtIconPressButton(
                     is_hovered=self._is_hovered,
                     #
                     draw_frame=True,
-                    background_color=_qt_core.QtColors.SubIconBackground,
-                    border_color=_qt_core.QtColors.SubIconBorder,
+                    background_color=_qt_core.QtRgba.BkgSubIcon,
+                    border_color=_qt_core.QtRgba.BdrSubIcon,
                     border_radius=4
                 )
             #
@@ -1236,7 +1236,7 @@ class QtIconToggleButton(
         )
         painter._draw_frame_by_rect_(
             self._check_frame_rect,
-            border_color=_qt_core.QtBorderColors.Transparent,
+            border_color=_qt_core.QtRgba.Transparent,
             background_color=background_color,
             border_radius=2,
             offset=offset
@@ -1278,7 +1278,7 @@ class QtIconToggleButton(
                 self._name_draw_rect,
                 self._name_text,
                 font=_qt_core.QtFonts.NameNormal,
-                text_color=_qt_core.QtFontColors.Basic,
+                text_color=_qt_core.QtRgba.Text,
                 text_option=QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter,
                 offset=offset
             )

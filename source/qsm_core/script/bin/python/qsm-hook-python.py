@@ -9,7 +9,7 @@ import getopt
 
 argv = sys.argv
 
-KEY = 'qsm-hook-python'
+LOG_KEY = 'qsm-hook-python'
 
 
 def main():
@@ -52,7 +52,7 @@ def __execute_with_option(option):
     import lxbasic.core as bsc_core
     #
     bsc_log.Log.trace_method_result(
-        KEY,
+        LOG_KEY,
         'execute from: {}'.format(__file__)
     )
     #

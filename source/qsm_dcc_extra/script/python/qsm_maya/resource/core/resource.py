@@ -69,7 +69,7 @@ class Resource(object):
 
 
 class ResourcesQuery(object):
-    KEY = 'resource query'
+    LOG_KEY = 'resource query'
 
     STG_PTN = 'X:/{project}/Assets/{role}/{asset}/Maya/Final/{asset}.ma'
 
@@ -93,7 +93,7 @@ class ResourcesQuery(object):
         )
 
     def __repr__(self):
-        return self.__str__()
+        return '\n'+self.__str__()
 
     def check_is_valid(self, *args, **kwargs):
         file_path = kwargs['file']
@@ -132,7 +132,7 @@ class ResourcesQuery(object):
 
     def get_data(self):
         dict_ = {}
-        _ = _mya_core.References.get_all()
+        _ = _mya_core.References.get_all(nested=True)
         for i_path in _:
             i_args = _mya_core.Reference.get_args(i_path)
             if i_args is None:

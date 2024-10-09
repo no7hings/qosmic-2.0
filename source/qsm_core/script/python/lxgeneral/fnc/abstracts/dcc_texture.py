@@ -7,7 +7,7 @@ import lxgeneral.dcc.objects as gnl_dcc_objects
 
 
 class AbsFncExporterForDccTextureDef(object):
-    KEY = 'texture export'
+    LOG_KEY = 'texture export'
 
     @classmethod
     def copy_and_repath_as_base_link_fnc(
@@ -34,7 +34,7 @@ class AbsFncExporterForDccTextureDef(object):
             index_mapper = {}
             # use for file with same name, etc. "/temp/a/a.exr", "/temp/b/a.exr"
             index_query = {}
-            with bsc_log.LogProcessContext.create_as_bar(maximum=len(dcc_objs), label=cls.KEY) as l_p:
+            with bsc_log.LogProcessContext.create_as_bar(maximum=len(dcc_objs), label=cls.LOG_KEY) as l_p:
                 for i_dcc_obj in dcc_objs:
                     l_p.do_update()
                     # dpt to dst, file path can be is multiply
@@ -46,7 +46,7 @@ class AbsFncExporterForDccTextureDef(object):
                         j_texture_dpt = gnl_dcc_objects.StgTexture(j_texture_path_dpt)
                         if j_texture_dpt.get_tiles() is False:
                             bsc_log.Log.trace_method_warning(
-                                cls.KEY,
+                                cls.LOG_KEY,
                                 'file="{}" is non exists'.format(j_texture_path_dpt)
                             )
                             continue
@@ -128,7 +128,7 @@ class AbsFncExporterForDccTextureDef(object):
                                 if use_environ_map is True:
                                     # noinspection PyArgumentEqualDefault
                                     j_texture_path_dst_new = bsc_storage.StgEnvPathMapper.map_to_env(
-                                        j_texture_path_dst, pattern='[KEY]'
+                                        j_texture_path_dst, pattern='[LOG_KEY]'
                                     )
                                     if j_texture_path_dst_new != j_texture_path_dst:
                                         j_texture_path_dst = j_texture_path_dst_new
@@ -140,12 +140,12 @@ class AbsFncExporterForDccTextureDef(object):
                                     remove_expression,
                                 )
                                 bsc_log.Log.trace_method_result(
-                                    cls.KEY,
+                                    cls.LOG_KEY,
                                     u'"{}" >> "{}"'.format(j_texture_path_dpt, j_texture_path_dst)
                                 )
                             else:
                                 bsc_log.Log.trace_method_warning(
-                                    cls.KEY,
+                                    cls.LOG_KEY,
                                     u'file="{}" is non-exists'.format(j_texture_path_dst)
                                 )
 
@@ -173,7 +173,7 @@ class AbsFncExporterForDccTextureDef(object):
         index_mapper = {}
         # use for file with same name, etc. "/temp/a/a.exr", "/temp/b/a.exr"
         index_query = {}
-        with bsc_log.LogProcessContext.create_as_bar(maximum=len(dcc_objs), label=cls.KEY) as l_p:
+        with bsc_log.LogProcessContext.create_as_bar(maximum=len(dcc_objs), label=cls.LOG_KEY) as l_p:
             for i_dcc_obj in dcc_objs:
                 l_p.do_update()
                 # dpt to dst
@@ -183,7 +183,7 @@ class AbsFncExporterForDccTextureDef(object):
                     j_texture_dpt = gnl_dcc_objects.StgTexture(j_texture_path_dpt)
                     if j_texture_dpt.get_exists_units() is False:
                         bsc_log.Log.trace_method_warning(
-                            cls.KEY,
+                            cls.LOG_KEY,
                             'file="{}" is non exists'.format(j_texture_path_dpt)
                         )
                         continue
@@ -264,7 +264,7 @@ class AbsFncExporterForDccTextureDef(object):
                             if use_environ_map is True:
                                 # noinspection PyArgumentEqualDefault
                                 j_texture_path_dst_new = bsc_storage.StgEnvPathMapper.map_to_env(
-                                    j_texture_path_dst, pattern='[KEY]'
+                                    j_texture_path_dst, pattern='[LOG_KEY]'
                                 )
                                 if j_texture_path_dst_new != j_texture_path_dst:
                                     j_texture_path_dst = j_texture_path_dst_new

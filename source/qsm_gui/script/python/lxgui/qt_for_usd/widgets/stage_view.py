@@ -15,17 +15,17 @@ import lxgeneral.texture as gnl_texture
 # usd
 import lxusd.core as usd_core
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
-from ...qt import core as gui_qt_core
+from ...qt import core as _qt_core
 
-from ...qt import abstracts as gui_qt_abstracts
+from ...qt import abstracts as _qt_abstracts
 # qt widgets
-from ...qt.widgets import button as gui_qt_wgt_button
+from ...qt.widgets import button as _qt_wgt_button
 
-from ...qt.widgets import container as gui_qt_wgt_container
+from ...qt.widgets import container as _qt_wgt_container
 
-from ...qt.widgets import scroll as gui_qt_wgt_scroll
+from ...qt.widgets import scroll as _qt_wgt_scroll
 # qt for usd
 from ..core.wrap import *
 #
@@ -41,8 +41,8 @@ if QT_USD_FLAG is True:
     class QtUsdStageWidget(
         QtWidgets.QWidget,
         #
-        gui_qt_abstracts.AbsQtActionBaseDef,
-        gui_qt_abstracts.AbsQtThreadBaseDef
+        _qt_abstracts.AbsQtActionBaseDef,
+        _qt_abstracts.AbsQtThreadBaseDef
     ):
         # noinspection PyUnresolvedReferences
         UsdQUtils = Usdviewq._usdviewq.Utils
@@ -77,18 +77,18 @@ if QT_USD_FLAG is True:
             self._frame_draw_margins = 0, 0, 0, 0
             self._frame_draw_rect = QtCore.QRect()
             self._stage_view_draw_rect = QtCore.QRect()
-            self._frame_border_color = gui_qt_core.QtBorderColors.Light
-            self._hovered_frame_border_color = gui_qt_core.QtBorderColors.Hovered
-            self._selected_frame_border_color = gui_qt_core.QtBorderColors.Selected
-            self._frame_background_color = gui_qt_core.QtBackgroundColors.Dim
-            layout_g = gui_qt_core.QtGridLayout(self)
+            self._frame_border_color = _qt_core.QtRgba.BorderLight
+            self._hovered_frame_border_color = _qt_core.QtRgba.BorderHover
+            self._selected_frame_border_color = _qt_core.QtRgba.BorderSelect
+            self._frame_background_color = _qt_core.QtRgba.BackgroundDim
+            layout_g = _qt_core.QtGridLayout(self)
             layout_g.setContentsMargins(2, 2, 2, 2)
             layout_g.setSpacing(0)
 
-            self._main_button = gui_qt_wgt_button.QtIconMenuButton()
+            self._main_button = _qt_wgt_button.QtIconMenuButton()
             layout_g.addWidget(self._main_button, 0, 0, 1, 1)
             self._main_button._set_icon_file_path_(
-                gui_core.GuiIcon.get('application/usd')
+                _gui_core.GuiIcon.get('application/usd')
             )
             self._main_button._set_menu_data_generate_fnc_(
                 self._get_main_menu_data_
@@ -1323,12 +1323,12 @@ if QT_USD_FLAG is True:
             return False
 
         def paintEvent(self, event):
-            painter = gui_qt_core.QtPainter(self)
+            painter = _qt_core.QtPainter(self)
             #
             is_selected = self._is_focused
-            bcg_color = gui_qt_core.QtBackgroundColors.Basic
+            bcg_color = _qt_core.QtRgba.Basic
             # swap border color on focus change
-            bdr_color = [gui_qt_core.QtBorderColors.Basic, gui_qt_core.QtBorderColors.HighLight][is_selected]
+            bdr_color = [_qt_core.QtRgba.Border, _qt_core.QtRgba.BorderBright][is_selected]
             bdr_w = [1, 2][is_selected]
             painter._draw_frame_by_rect_(
                 rect=self._frame_draw_rect,
@@ -1377,7 +1377,7 @@ if QT_USD_FLAG is True:
             self._usd_environment_cur = 'stinson-beach'
 
         def __build_top_tool_bar_(self, layout):
-            self._top_scroll_box = gui_qt_wgt_scroll.QtHScrollBox()
+            self._top_scroll_box = _qt_wgt_scroll.QtHScrollBox()
             self._top_scroll_box._set_layout_align_left_or_top_()
             layout.addWidget(self._top_scroll_box, 0, 1, 1, 1)
             self._top_scroll_box.setFixedHeight(28)
@@ -1404,7 +1404,7 @@ if QT_USD_FLAG is True:
                 self._dataModel.viewSettings.showHUD = boolean
 
             #
-            tool_box = gui_qt_wgt_container.QtHToolBox()
+            tool_box = _qt_wgt_container.QtHToolBox()
             self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('hud-display and camera-mask')
@@ -1415,13 +1415,13 @@ if QT_USD_FLAG is True:
                     ('camera-mask', False, self._usd_set_camera_mask_enable_, self._usd_get_camera_mask_menu_data_)
                 ]
             ):
-                i_button = gui_qt_wgt_button.QtIconToggleButton()
+                i_button = _qt_wgt_button.QtIconToggleButton()
                 i_button._set_name_text_(i_key)
                 i_button._set_tool_tip_text_(
                     '"LMB-click" to toggle "{0}"\n"RMB-click" for show more action'.format(i_key)
                 )
                 i_button._set_icon_file_path_(
-                    gui_core.GuiIcon.get('tool/{}'.format(i_key))
+                    _gui_core.GuiIcon.get('tool/{}'.format(i_key))
                 )
                 i_button._set_checked_(i_value)
                 i_button.check_toggled.connect(i_enable_fnc)
@@ -1433,7 +1433,7 @@ if QT_USD_FLAG is True:
                 tool_box._add_widget_(i_button)
 
         def __add_material_and_light_switch_tools_(self):
-            tool_box = gui_qt_wgt_container.QtHToolBox()
+            tool_box = _qt_wgt_container.QtHToolBox()
             self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('material and light')
@@ -1444,13 +1444,13 @@ if QT_USD_FLAG is True:
                     ('light', None, True, self._usd_model.set_lights_enable, self._usd_get_light_menu_data_),
                 ]
             ):
-                i_button = gui_qt_wgt_button.QtIconToggleButton()
+                i_button = _qt_wgt_button.QtIconToggleButton()
                 i_button._set_name_text_(i_key)
                 i_button._set_tool_tip_text_(
                     '"LMB-click" to toggle "{0}"\n"RMB-click" for show more action'.format(i_key)
                 )
                 i_button._set_icon_file_path_(
-                    gui_core.GuiIcon.get('tool/{}'.format(i_key))
+                    _gui_core.GuiIcon.get('tool/{}'.format(i_key))
                 )
                 i_button._set_checked_(i_value)
                 i_button.check_toggled.connect(i_enable_fnc)
@@ -1459,7 +1459,7 @@ if QT_USD_FLAG is True:
                 tool_box._add_widget_(i_button)
 
         def __add_color_space_switch_tools_(self):
-            tool_box = gui_qt_wgt_container.QtHToolBox()
+            tool_box = _qt_wgt_container.QtHToolBox()
             self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('color space')
@@ -1470,11 +1470,11 @@ if QT_USD_FLAG is True:
                      self._usd_get_color_space_menu_data_),
                 ]
             ):
-                i_button = gui_qt_wgt_button.QtIconToggleButton()
+                i_button = _qt_wgt_button.QtIconToggleButton()
                 i_button._set_name_text_(i_key)
                 i_button._set_tool_tip_text_('"LMB-click" to toggle "{0}"\n"RMB-click" to switch "{0}"'.format(i_key))
                 i_button._set_icon_file_path_(
-                    gui_core.GuiIcon.get('tool/{}'.format(i_key))
+                    _gui_core.GuiIcon.get('tool/{}'.format(i_key))
                 )
                 i_button._set_checked_(i_value)
                 i_button.check_toggled.connect(i_enable_fnc)
@@ -1483,7 +1483,7 @@ if QT_USD_FLAG is True:
                 tool_box._add_widget_(i_button)
 
         def __add_camera_and_renderer_switch_tools_(self):
-            tool_box = gui_qt_wgt_container.QtHToolBox()
+            tool_box = _qt_wgt_container.QtHToolBox()
             self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('camera and renderer')
@@ -1502,11 +1502,11 @@ if QT_USD_FLAG is True:
                     ('display-purpose', self._usd_get_display_purpose_menu_data_),
                 ]
             ):
-                i_button = gui_qt_wgt_button.QtIconPressButton()
+                i_button = _qt_wgt_button.QtIconPressButton()
                 i_button._set_name_text_(i_key)
                 i_button._set_tool_tip_text_('"LMB-click" to toggle "{0}"\n"RMB-click" to switch "{0}"'.format(i_key))
                 i_button._set_icon_file_path_(
-                    gui_core.GuiIcon.get('tool/{}'.format(i_key))
+                    _gui_core.GuiIcon.get('tool/{}'.format(i_key))
                 )
                 #
                 i_button._set_menu_data_generate_fnc_(i_menu_data_gain_fnc)
@@ -1514,7 +1514,7 @@ if QT_USD_FLAG is True:
                 tool_box._add_widget_(i_button)
 
         def __add_environment_switch_tools_(self):
-            tool_box = gui_qt_wgt_container.QtHToolBox()
+            tool_box = _qt_wgt_container.QtHToolBox()
             self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('display-purpose and environment')
@@ -1524,18 +1524,18 @@ if QT_USD_FLAG is True:
                     ('environment', self._usd_get_environment_menu_data_),
                 ]
             ):
-                i_button = gui_qt_wgt_button.QtIconPressButton()
+                i_button = _qt_wgt_button.QtIconPressButton()
                 i_button._set_name_text_(i_key)
                 i_button._set_tool_tip_text_('"LMB-click" to toggle "{0}"\n"RMB-click" to switch "{0}"'.format(i_key))
                 i_button._set_icon_file_path_(
-                    gui_core.GuiIcon.get('tool/{}'.format(i_key))
+                    _gui_core.GuiIcon.get('tool/{}'.format(i_key))
                 )
                 i_button._set_menu_data_generate_fnc_(i_menu_data_gain_fnc)
                 #
                 tool_box._add_widget_(i_button)
 
         def __add_other_tools_(self):
-            tool_box = gui_qt_wgt_container.QtHToolBox()
+            tool_box = _qt_wgt_container.QtHToolBox()
             self._top_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('display-purpose and environment')
@@ -1545,11 +1545,11 @@ if QT_USD_FLAG is True:
                     ('snapshot', self._usd_get_snapshot_menu_data_, self._usd_do_snapshot_),
                 ]
             ):
-                i_button = gui_qt_wgt_button.QtIconPressButton()
+                i_button = _qt_wgt_button.QtIconPressButton()
                 i_button._set_name_text_(i_key)
                 i_button._set_tool_tip_text_('"LMB-click" to toggle "{0}"\n"RMB-click" to switch "{0}"'.format(i_key))
                 i_button._set_icon_file_path_(
-                    gui_core.GuiIcon.get('tool/{}'.format(i_key))
+                    _gui_core.GuiIcon.get('tool/{}'.format(i_key))
                 )
                 i_button._set_menu_data_generate_fnc_(i_menu_data_gain_fnc)
                 i_button.press_clicked.connect(i_fnc)
@@ -1578,7 +1578,7 @@ if QT_USD_FLAG is True:
 
         def _usd_save_snapshot_to_(self, file_path):
             bsc_log.Log.trace_result('usd snapshot start')
-            t = gui_qt_core.QtMethodThread(self)
+            t = _qt_core.QtMethodThread(self)
             # wait when render is stopped
             if self._stageView.IsRendererConverged() is False:
                 t.append_method(self._usd_wait_for_painting_)
@@ -1601,7 +1601,7 @@ if QT_USD_FLAG is True:
 
         def _usd_save_per_geometry_snapshot_to_(self, file_p):
             bsc_log.Log.trace_result('usd snapshot start')
-            t = gui_qt_core.QtMethodThread(self)
+            t = _qt_core.QtMethodThread(self)
             # wait when render is stopped
             if self._stageView.IsRendererConverged() is False:
                 t.append_method(self._usd_wait_for_painting_)
@@ -1611,7 +1611,7 @@ if QT_USD_FLAG is True:
                 self._usd_save_pre_geometry_snapshot_fnc_(file_p)
 
         def __build_left_tool_bar_(self, layout):
-            self._left_scroll_box = gui_qt_wgt_scroll.QtVScrollBox()
+            self._left_scroll_box = _qt_wgt_scroll.QtVScrollBox()
             self._left_scroll_box._set_layout_align_left_or_top_()
             layout.addWidget(self._left_scroll_box, 1, 0, 1, 1)
             self._left_scroll_box.setFixedWidth(28)
@@ -1637,7 +1637,7 @@ if QT_USD_FLAG is True:
                     self._usd_do_clear_geometry_isolate_selection_()
 
             #
-            tool_box = gui_qt_wgt_container.QtVToolBox()
+            tool_box = _qt_wgt_container.QtVToolBox()
             self._left_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('isolate select')
@@ -1647,11 +1647,11 @@ if QT_USD_FLAG is True:
                     ('isolate-select', None),
                 ]
             ):
-                i_button = gui_qt_wgt_button.QtIconToggleButton()
+                i_button = _qt_wgt_button.QtIconToggleButton()
                 i_button._set_name_text_(i_key)
                 i_button._set_tool_tip_text_('"LMB-click" to "{}"'.format(i_key))
                 i_button._set_icon_file_path_(
-                    gui_core.GuiIcon.get('tool/{}'.format(i_key))
+                    _gui_core.GuiIcon.get('tool/{}'.format(i_key))
                 )
                 i_button.check_toggled.connect(fnc_)
                 #
@@ -1665,7 +1665,7 @@ if QT_USD_FLAG is True:
                 self._dataModel.viewSettings.renderMode = value_
 
             #
-            tool_box = gui_qt_wgt_container.QtVToolBox()
+            tool_box = _qt_wgt_container.QtVToolBox()
             self._left_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('render mode')
@@ -1678,11 +1678,11 @@ if QT_USD_FLAG is True:
                 ('smooth-shaded', Usdviewq.common.RenderModes.SMOOTH_SHADED),
                 ('flat-shaded', Usdviewq.common.RenderModes.FLAT_SHADED)
             ]:
-                i_button = gui_qt_wgt_button.QtIconToggleButton()
+                i_button = _qt_wgt_button.QtIconToggleButton()
                 i_button._set_name_text_(i_key)
                 i_button._set_tool_tip_text_('"LMB-click" for switch render mode to "{}"'.format(i_key))
                 i_button._set_icon_file_path_(
-                    gui_core.GuiIcon.get('tool/{}'.format(i_key))
+                    _gui_core.GuiIcon.get('tool/{}'.format(i_key))
                 )
                 i_button._set_exclusive_widgets_(tools)
                 i_button.check_changed_as_exclusive.connect(functools.partial(fnc_, i_mode))
@@ -1695,7 +1695,7 @@ if QT_USD_FLAG is True:
                 tool_box._add_widget_(i_button)
 
         def __add_other_switch_tools_(self):
-            tool_box = gui_qt_wgt_container.QtVToolBox()
+            tool_box = _qt_wgt_container.QtVToolBox()
             self._left_scroll_box.addWidget(tool_box)
             tool_box._set_expanded_(True)
             tool_box._set_name_text_('extend')
@@ -1707,13 +1707,13 @@ if QT_USD_FLAG is True:
                     ('cull-backfaces', 'enable', False, self._usd_set_cull_enable_, self._usd_get_cull_menu_data_),
                 ]
             ):
-                i_button = gui_qt_wgt_button.QtIconToggleButton()
+                i_button = _qt_wgt_button.QtIconToggleButton()
                 i_button._set_name_text_(i_key)
                 i_button._set_tool_tip_text_(
                     '"LMB-click" to toggle "{0}"\n"RMB-click" to switch "{0}" mode'.format(i_key)
                 )
                 i_button._set_icon_file_path_(
-                    gui_core.GuiIcon.get('tool/{}'.format(i_key))
+                    _gui_core.GuiIcon.get('tool/{}'.format(i_key))
                 )
                 i_button._set_checked_(i_value)
                 if i_enable_fnc is not None:

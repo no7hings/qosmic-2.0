@@ -13,7 +13,7 @@ from ..dcc import objects as mya_dcc_objects
 
 
 class ScpCbkEnvironment(object):
-    KEY = 'workspace environment'
+    LOG_KEY = 'workspace environment'
 
     def __init__(self):
         self._cfg = bsc_content.Content(
@@ -34,7 +34,7 @@ class ScpCbkEnvironment(object):
                 i_env_key, i_env_value
             )
             bsc_log.Log.trace_method_result(
-                cls.KEY,
+                cls.LOG_KEY,
                 'register: key="{}", value="{}"'.format(i_env_key, i_env_value)
             )
 
@@ -82,5 +82,5 @@ class ScpCbkEnvironment(object):
                 return True
 
         bsc_log.Log.trace_method_error(
-            self.KEY, 'failed to load form any where'
+            self.LOG_KEY, 'failed to load form any where'
         )

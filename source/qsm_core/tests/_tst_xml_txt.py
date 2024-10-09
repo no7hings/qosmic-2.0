@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from PyQt5.QtWidgets import QApplication, QTextBrowser
 
-class XMLFormatter:
+class HtmlFormatter:
     COLORS = {
         'default': 'color: white;',  # 默认白色
         'red': 'color: red;',        # 红色
@@ -69,7 +69,7 @@ app = QApplication([])
 browser = QTextBrowser()
 
 # 使用示例：
-formatter = XMLFormatter()
+formatter = HtmlFormatter()
 
 # 添加行并在同一行中追加不同颜色的文本
 formatter.new_line('X:/QSM_TST/Assets/scn/test_assembly/Maya/Final/test_assembly.ma', indent=0)

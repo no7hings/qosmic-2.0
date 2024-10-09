@@ -84,7 +84,7 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
             )
             return
 
-        namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+        namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
             results = qsm_mya_anm_core.AdvRig.filter_namespaces(namespaces)
 

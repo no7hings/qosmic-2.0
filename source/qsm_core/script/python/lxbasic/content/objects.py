@@ -255,17 +255,6 @@ class AbsContent(object):
                 #
                 v = v[k]
 
-    def add_element(self, key_path, value):
-        v = self.get(key_path)
-        if isinstance(v, (tuple, list)):
-            es = v
-        else:
-            es = []
-            self.set(key_path, es)
-        #
-        if value not in es:
-            es.append(value)
-
     def append_element(self, key_path, value):
         v = self.get(key_path)
         if isinstance(v, (tuple, list)):

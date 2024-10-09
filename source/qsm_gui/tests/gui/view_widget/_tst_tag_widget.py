@@ -7,7 +7,7 @@ import lxbasic.core as bsc_core
 
 import lxgui.qt.core as gui_qt_core
 
-import lxgui.qt.view_widgets as gui_qt_view_widgets
+import lxgui.qt.view_widgets as gui_qt_vew_widgets
 
 import qsm_lazy.screw.core as qsm_lzy_scr_core
 
@@ -16,7 +16,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
 
-        self._d_0 = gui_qt_view_widgets.QtTagWidget(self._qt_widget)
+        self._d_0 = gui_qt_vew_widgets.QtTagWidget(self._qt_widget)
         self.add_widget(self._d_0)
 
         self._scr_stage = qsm_lzy_scr_core.Stage(

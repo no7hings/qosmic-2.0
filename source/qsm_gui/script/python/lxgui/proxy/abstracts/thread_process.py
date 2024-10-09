@@ -9,7 +9,7 @@ from ...qt import core as gui_qt_core
 
 
 class AbsQtThreadProcessBase(object):
-    KEY = 'command batch'
+    LOG_KEY = 'command batch'
 
     def __init__(self, tag, window, button):
         self._tag = tag
@@ -99,7 +99,7 @@ class AbsQtThreadProcessBase(object):
 
     def append_cmd(self, cmd):
         bsc_log.Log.trace_method_result(
-            self.KEY, 'append command: `{}`'.format(cmd)
+            self.LOG_KEY, 'append command: `{}`'.format(cmd)
         )
         self._cmds.append(cmd)
 

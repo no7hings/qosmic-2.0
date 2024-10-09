@@ -66,7 +66,7 @@ class QtEntryAsConstant(
         self.textEdited.connect(self._do_user_entry_change_)
 
         self.setStyleSheet(
-            _qt_core.GuiQtStyle.get('QLineEdit')
+            _qt_core.QtStyle.get('QLineEdit')
         )
 
         self._init_entry_base_def_(self)
@@ -453,14 +453,14 @@ class QtEntryAsContent(
         self._print_signals.print_over_accepted.connect(self._set_value_)
         #
         self.setStyleSheet(
-            _qt_core.GuiQtStyle.get('QTextEdit')
+            _qt_core.QtStyle.get('QTextEdit')
         )
         #
         self.verticalScrollBar().setStyleSheet(
-            _qt_core.GuiQtStyle.get('QScrollBar')
+            _qt_core.QtStyle.get('QScrollBar')
         )
         self.horizontalScrollBar().setStyleSheet(
-            _qt_core.GuiQtStyle.get('QScrollBar')
+            _qt_core.QtStyle.get('QScrollBar')
         )
         self._init_entry_base_def_(self)
         self._init_entry_frame_extra_def_(self)
@@ -937,6 +937,10 @@ class QtEntryAsList(
             self._create_item_(value)
             self.entry_value_added.emit()
 
+    def _remove_value_(self, value):
+        self._delete_value_(value, False)
+
+
     def _insert_value_(self, index, value):
         # use original value, do not encode
         if value and value not in self._values:
@@ -1154,11 +1158,11 @@ class QtEntryAsBubble(
             rect_frame = QtCore.QRect(
                 rect_frame.x()+offset, rect_frame.y()+offset, rect_frame.width()-offset, rect_frame.height()-offset
             )
-            painter._set_border_color_(_qt_core.QtColors.BubbleBorder)
+            painter._set_border_color_(_qt_core.QtRgba.BdrBubble)
             if offset:
-                painter._set_background_color_(_qt_core.QtColors.BubbleBackgroundActioned)
+                painter._set_background_color_(_qt_core.QtRgba.BkgBubbleAction)
             elif self._is_hovered:
-                painter._set_background_color_(_qt_core.QtColors.BubbleBackgroundHover)
+                painter._set_background_color_(_qt_core.QtRgba.BkgBubbleHover)
             else:
                 painter._set_background_color_(color_bkg)
 
@@ -1174,9 +1178,9 @@ class QtEntryAsBubble(
             )
 
             if offset:
-                painter._set_text_color_(_qt_core.QtColors.BubbleText)
+                painter._set_text_color_(_qt_core.QtRgba.TxtBubble)
             elif self._is_hovered:
-                painter._set_text_color_(_qt_core.QtColors.BubbleText)
+                painter._set_text_color_(_qt_core.QtRgba.TxtBubble)
             else:
                 painter._set_text_color_(color_txt)
 

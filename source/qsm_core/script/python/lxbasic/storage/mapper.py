@@ -91,18 +91,18 @@ class StgEnvPathMapper(object):
             )
 
     @classmethod
-    def map_to_path(cls, path, pattern='[KEY]'):
+    def map_to_path(cls, path, pattern='[LOG_KEY]'):
         """
         print(
             PathEnv.map_to_path(
                 '[QSM_CACHE_ROOT]/nsa_dev/assets/chr/td_test/user/team.srf/extend/look/klf/v001/all.json',
-                pattern='[KEY]'
+                pattern='[LOG_KEY]'
             )
         )
         print(
             PathEnv.map_to_path(
                 '${QSM_CACHE_ROOT}/nsa_dev/assets/chr/td_test/user/team.srf/extend/look/klf/v001/all.json',
-                pattern='${KEY}'
+                pattern='${LOG_KEY}'
             )
         )
         :param path:
@@ -113,7 +113,7 @@ class StgEnvPathMapper(object):
         path = _base.StgPathOpt(path).__str__()
         mapper_dict = cls.MAPPER._env_dict
         for i_env_key, i_root in mapper_dict.items():
-            i_string = pattern.replace('KEY', i_env_key)
+            i_string = pattern.replace('LOG_KEY', i_env_key)
             if path == i_string:
                 return i_root
             elif path.startswith(i_string+'/'):
@@ -121,18 +121,18 @@ class StgEnvPathMapper(object):
         return path
 
     @classmethod
-    def map_to_env(cls, path, pattern='[KEY]'):
+    def map_to_env(cls, path, pattern='[LOG_KEY]'):
         """
         print(
             PathEnv.map_to_env(
                 '/production/shows/nsa_dev/assets/chr/td_test/user/team.srf/extend/look/klf/v001/all.json',
-                pattern='[KEY]'
+                pattern='[LOG_KEY]'
             ),
         )
         print(
             PathEnv.map_to_env(
                 '/production/shows/nsa_dev/assets/chr/td_test/user/team.srf/extend/look/klf/v001/all.json',
-                pattern='${KEY}'
+                pattern='${LOG_KEY}'
             )
         )
         :param path:
@@ -143,7 +143,7 @@ class StgEnvPathMapper(object):
         path = _base.StgPathOpt(path).__str__()
         mapper_dict = cls.MAPPER._path_dict
         for i_root, i_env_key in mapper_dict.items():
-            i_string = pattern.replace('KEY', i_env_key)
+            i_string = pattern.replace('LOG_KEY', i_env_key)
             if path == i_root:
                 return i_string
             elif path.startswith(i_root+'/'):

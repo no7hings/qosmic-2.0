@@ -296,7 +296,7 @@ class QtEntryAsGuide(
                 )
                 painter._draw_frame_by_rect_(
                     i_item._icon_frame_draw_rect,
-                    border_color=_qt_core.QtBackgroundColors.Transparent,
+                    border_color=_qt_core.QtRgba.Transparent,
                     background_color=background_color,
                     border_radius=3,
                     offset=i_icon_offset
@@ -310,7 +310,7 @@ class QtEntryAsGuide(
                 name_offset = [0, 2][self._get_action_flag_() is not None]
                 painter._draw_frame_by_rect_(
                     i_item._name_frame_draw_rect,
-                    border_color=_qt_core.QtBackgroundColors.Transparent,
+                    border_color=_qt_core.QtRgba.Transparent,
                     background_color=background_color,
                     border_radius=3,
                     offset=name_offset

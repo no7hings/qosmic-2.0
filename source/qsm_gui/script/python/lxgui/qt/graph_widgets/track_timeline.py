@@ -195,7 +195,7 @@ class QtTrackTimeline(
         painter._set_border_color_(_gui_core.GuiRgba.LightAzureBlue)
         painter._set_background_color_(_gui_core.GuiRgba.LightAzureBlue)
         painter.drawPath(self._timehandle_path)
-        painter._set_text_color_(_gui_core.GuiRgba.LightYellow)
+        painter._set_text_color_(_gui_core.GuiRgba.LightLemonYellow)
         painter._set_font_(_qt_core.QtFont.generate(size=10, weight=75))
         painter.drawText(
             self._timehandle_text_rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,

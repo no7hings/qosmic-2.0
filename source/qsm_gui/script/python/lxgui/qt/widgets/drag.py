@@ -48,11 +48,11 @@ class QtDrag(QtGui.QDrag):
         p = QtGui.QPixmap(c_w, c_h)
         painter = _qt_core.QtPainter(p)
         rect = QtCore.QRect(0, 0, c_w, c_h)
-        painter.fillRect(rect, _qt_core.QtBorderColors.Button)
+        painter.fillRect(rect, _qt_core.QtRgba.BdrButton)
         for i in range(c):
             i_p = QtGui.QPixmap(w, h)
             i_rect = QtCore.QRect(i*o_x, i*o_y, w, h)
-            i_p.fill(_qt_core.QtBorderColors.Button)
+            i_p.fill(_qt_core.QtRgba.BdrButton)
             widget.render(i_p)
             painter.drawPixmap(i_rect, i_p)
 
@@ -73,11 +73,11 @@ class QtDrag(QtGui.QDrag):
         p = QtGui.QPixmap(c_w, c_h)
         painter = _qt_core.QtPainter(p)
         rect = QtCore.QRect(0, 0, c_w, c_h)
-        painter.fillRect(rect, _qt_core.QtBorderColors.Button)
+        painter.fillRect(rect, _qt_core.QtRgba.BdrButton)
         for i in range(c):
             i_p = QtGui.QPixmap(w, h)
             i_rect = QtCore.QRect(i*o_x, i*o_y, w, h)
-            i_p.fill(_qt_core.QtBorderColors.Button)
+            i_p.fill(_qt_core.QtRgba.BdrButton)
             widget.render(i_p)
             painter.drawPixmap(i_rect, i_p)
 
@@ -142,8 +142,8 @@ class QtDragForTreeItem(QtGui.QDrag):
         frame_rect = QtCore.QRect(x, y, w, h)
         pnt._draw_frame_by_rect_(
             rect=frame_rect,
-            background_color=_qt_core.QtBackgroundColors.Basic,
-            border_color=_qt_core.QtBorderColors.Basic,
+            background_color=_qt_core.QtRgba.Basic,
+            border_color=_qt_core.QtRgba.FadeBasic,
             border_width=2
         )
         icon_rect = QtCore.QRect(x+(i_f_w-i_w)/2, y+(i_f_h-i_h)/2, i_w, i_h)
@@ -153,7 +153,7 @@ class QtDragForTreeItem(QtGui.QDrag):
         pnt._draw_text_by_rect_(
             rect=text_rect,
             text=name_text,
-            text_color=_qt_core.QtFontColors.Basic
+            text_color=_qt_core.QtRgba.Text
         )
         #
         pnt.end()

@@ -21,7 +21,7 @@ from .. import core as _prv_core
 
 
 class PlayblastOpt(object):
-    KEY = 'playblast'
+    LOG_KEY = 'playblast'
 
     @classmethod
     def create_window(
@@ -103,7 +103,7 @@ class PlayblastOpt(object):
         )
 
         bsc_log.Log.trace_method_result(
-            cls.KEY, 'run cmd script: `{}`'.format(cmd_script)
+            cls.LOG_KEY, 'run cmd script: `{}`'.format(cmd_script)
         )
         bsc_core.BscProcess.execute_as_trace(
             cmd_script

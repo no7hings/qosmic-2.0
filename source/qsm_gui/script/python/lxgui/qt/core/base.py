@@ -5,8 +5,6 @@ import six
 
 import sys
 
-import lxbasic.content as bsc_content
-
 import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
@@ -17,7 +15,7 @@ from ... import core as gui_core
 # qt
 from .wrap import *
 
-from . import color_and_brush as _color_and_brush
+from . import style as _style
 
 
 class QtUtil(object):
@@ -34,30 +32,30 @@ class QtUtil(object):
     @classmethod
     def generate_qt_palette(cls, tool_tip=False):
         palette = QtGui.QPalette()
-        palette.setColor(palette.All, palette.Shadow, _color_and_brush.QtBackgroundColors.Black)
-        palette.setColor(palette.All, palette.Dark, _color_and_brush.QtBackgroundColors.Dim)
-        palette.setColor(palette.All, palette.Background, _color_and_brush.QtBackgroundColors.Basic)
-        palette.setColor(palette.All, palette.NoRole, _color_and_brush.QtBackgroundColors.Dark)
-        palette.setColor(palette.All, palette.Base, _color_and_brush.QtBackgroundColors.Dark)
-        palette.setColor(palette.All, palette.Light, _color_and_brush.QtBackgroundColors.Light)
+        palette.setColor(palette.All, palette.Shadow, _style.QtRgba.LightBlack)
+        palette.setColor(palette.All, palette.Dark, _style.QtRgba.Dim)
+        palette.setColor(palette.All, palette.Background, _style.QtRgba.Basic)
+        palette.setColor(palette.All, palette.NoRole, _style.QtRgba.Dark)
+        palette.setColor(palette.All, palette.Base, _style.QtRgba.Dark)
+        palette.setColor(palette.All, palette.Light, _style.QtRgba.FadeBasic)
         palette.setColor(palette.All, palette.Highlight, QtGui.QColor(255, 255, 255, 0))
-        palette.setColor(palette.All, palette.Button, _color_and_brush.QtBackgroundColors.Button)
+        palette.setColor(palette.All, palette.Button, _style.QtRgba.BkgButton)
         #
-        palette.setColor(palette.All, palette.Window, _color_and_brush.QtBackgroundColors.Basic)
+        palette.setColor(palette.All, palette.Window, _style.QtRgba.Basic)
         #
-        palette.setColor(palette.All, palette.Text, _color_and_brush.QtFontColors.Basic)
-        palette.setColor(palette.All, palette.BrightText, _color_and_brush.QtFontColors.Light)
-        palette.setColor(palette.All, palette.WindowText, _color_and_brush.QtFontColors.Basic)
-        palette.setColor(palette.All, palette.ButtonText, _color_and_brush.QtFontColors.Basic)
-        palette.setColor(palette.All, palette.HighlightedText, _color_and_brush.QtFontColors.Light)
+        palette.setColor(palette.All, palette.Text, _style.QtRgba.Text)
+        palette.setColor(palette.All, palette.BrightText, _style.QtRgba.TextHover)
+        palette.setColor(palette.All, palette.WindowText, _style.QtRgba.Text)
+        palette.setColor(palette.All, palette.ButtonText, _style.QtRgba.Text)
+        palette.setColor(palette.All, palette.HighlightedText, _style.QtRgba.TextHover)
         #
-        palette.setColor(palette.All, palette.AlternateBase, _color_and_brush.QtBackgroundColors.Dark)
+        palette.setColor(palette.All, palette.AlternateBase, _style.QtRgba.Dark)
         # tool-tip
         if tool_tip is True:
             # noinspection PyArgumentList
             p = QtWidgets.QToolTip.palette()
-            p.setColor(palette.All, p.ToolTipBase, _color_and_brush.QtBackgroundColors.ToolTip)
-            p.setColor(palette.All, palette.ToolTipText, _color_and_brush.QtFontColors.ToolTip)
+            p.setColor(palette.All, p.ToolTipBase, _style.QtRgba.BkgToolTip)
+            p.setColor(palette.All, palette.ToolTipText, _style.QtRgba.TxtToolTip)
             # noinspection PyArgumentList
             QtWidgets.QToolTip.setPalette(p)
             # noinspection PyArgumentList
@@ -151,7 +149,7 @@ class QtUtil(object):
     def assign_qt_shadow(qt_widget, radius):
         shadow = QtWidgets.QGraphicsDropShadowEffect()
         shadow.setBlurRadius(radius)
-        shadow.setColor(_color_and_brush.QtBackgroundColors.Black)
+        shadow.setColor(_style.QtRgba.LightBlack)
         shadow.setOffset(2, 2)
         qt_widget.setGraphicsEffect(shadow)
 
@@ -340,57 +338,6 @@ class QtPixmapCache(object):
         return pixmap
 
 
-class GuiQtStyle(object):
-    CONTENT = None
-
-    @classmethod
-    def _generate_content(cls):
-        if cls.CONTENT is not None:
-            return cls.CONTENT
-        cls.CONTENT = bsc_content.Content(
-            value='{}/qt-style.yml'.format(gui_core.GuiBase.DATA_ROOT)
-        )
-        cls.CONTENT.set(
-            'option.icon-dir', gui_core.GuiIconDirectory.get('qt-style')
-        )
-        cls.CONTENT.do_flatten()
-        return cls.CONTENT
-
-    @classmethod
-    def get(cls, key):
-        c = cls._generate_content()
-        return c.get(
-            'widget.{}'.format(key)
-        )
-
-    @classmethod
-    def get_border(cls, key):
-        c = cls._generate_content()
-        return eval(
-            c.get(
-                'option.border.{}'.format(key)
-            )
-        )
-
-    @classmethod
-    def get_background(cls, key):
-        c = cls._generate_content()
-        return eval(
-            c.get(
-                'option.background.{}'.format(key)
-            )
-        )
-
-    @classmethod
-    def get_font(cls, key):
-        c = cls._generate_content()
-        return eval(
-            c.get(
-                'option.font.{}'.format(key)
-            )
-        )
-
-
 class GuiQtIcon(object):
     @classmethod
     def generate_by_icon_name(cls, icon_name):
@@ -428,7 +375,7 @@ class GuiQtIcon(object):
             c_w, c_h
         )
         r, g, b = rgb
-        painter.setPen(QtGui.QColor(_color_and_brush.QtBorderColors.Icon))
+        painter.setPen(QtGui.QColor(_style.QtRgba.BdrIcon))
         painter.setBrush(QtGui.QBrush(QtGui.QColor(r, g, b, 255)))
         #
         painter.drawRect(icon_rect)
@@ -451,7 +398,7 @@ class GuiQtIcon(object):
         painter.setRenderHint(painter.Antialiasing)
         rect = pixmap.rect()
         pixmap.fill(
-            _color_and_brush.QtBorderColors.Icon
+            _style.QtRgba.BdrIcon
         )
         x, y = rect.x(), rect.y()
         w, h = rect.width(), rect.height()
@@ -467,7 +414,7 @@ class GuiQtIcon(object):
             else:
                 name = '?'
 
-            painter.setPen(_color_and_brush.QtBorderColors.Icon)
+            painter.setPen(_style.QtRgba.BdrIcon)
             if background_color is not None:
                 r, g, b = background_color
             else:
@@ -475,7 +422,7 @@ class GuiQtIcon(object):
 
             background_color_, text_color_ = QtColor.generate_color_args_by_rgb(r, g, b)
             #
-            painter.setPen(_color_and_brush.QtBorderColors.Icon)
+            painter.setPen(_style.QtRgba.BdrIcon)
             painter.setBrush(QtGui.QBrush(QtGui.QColor(*background_color_)))
             painter.drawRoundedRect(icon_rect, 2, 2, QtCore.Qt.AbsoluteSize)
             painter.setPen(QtGui.QColor(*text_color_))
@@ -697,7 +644,7 @@ class QtPixmap(object):
         painter = QtGui.QPainter(pixmap)
         rect = pixmap.rect()
         pixmap.fill(
-            _color_and_brush.QtBorderColors.Icon
+            _style.QtRgba.BdrIcon
         )
         rd = min(w, h)
         icon_rect = QtCore.QRect(
@@ -706,7 +653,7 @@ class QtPixmap(object):
         if text is not None:
             name = text.split('/')[-1] or ' '
 
-            painter.setPen(_color_and_brush.QtBorderColors.Icon)
+            painter.setPen(_style.QtRgba.BdrIcon)
             r, g, b = bsc_core.BscTextOpt(name).to_rgb_0(s_p=50, v_p=50)
             if background_color is not None:
                 r, g, b = background_color
@@ -716,7 +663,7 @@ class QtPixmap(object):
             else:
                 painter.drawRect(icon_rect)
             #
-            painter.setPen(_color_and_brush.QtFontColors.Basic)
+            painter.setPen(_style.QtRgba.Text)
             painter.setFont(QtFont.generate(size=int(rd * .6), italic=True))
             painter.drawText(
                 rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
@@ -774,7 +721,7 @@ class QtPixmap(object):
         painter = QtGui.QPainter(pixmap)
         painter.setRenderHint(painter.Antialiasing)
         painter.fillRect(
-            rect, _color_and_brush.QtBackgroundColors.Light
+            rect, _style.QtRgba.FadeBasic
         )
         painter.drawPixmap(
             base_rect, base_pixmap
@@ -786,7 +733,7 @@ class QtPixmap(object):
             x + w - txt_w - 2, y + h - txt_h - 2, txt_w, txt_h
         )
         background_color_, text_color_ = QtColor.generate_color_args_by_text(tag)
-        painter.setPen(_color_and_brush.QtBorderColors.Icon)
+        painter.setPen(_style.QtRgba.BdrIcon)
         painter.setBrush(QtGui.QBrush(QtGui.QColor(*background_color_)))
         painter.drawRoundedRect(tag_rect, txt_w / 2, txt_h / 2, QtCore.Qt.AbsoluteSize)
         painter.setPen(QtGui.QColor(*text_color_))

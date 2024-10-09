@@ -29,7 +29,28 @@ class SceneFile(object):
     def get_namespace(cls, file_path):
         # noinspection PyBroadException
         try:
-            return cmds.file(file_path, q=True, namespace=True)
+            parent_namespaces = cmds.file(file_path, q=True, parentNamespace=True)
+            namespace = cmds.file(file_path, q=True, namespace=True)
+            # when parent namespace is [''], then is from root return self namespace
+            if parent_namespaces == ['']:
+                return namespace
+            return ':'.join(parent_namespaces+[namespace])
+        except Exception:
+            return None
+
+    @classmethod
+    def get_reference_node(cls, file_path):
+        # noinspection PyBroadException
+        try:
+            return cmds.file(file_path, q=True, referenceNode=True)
+        except Exception:
+            return None
+
+    @classmethod
+    def get_reference_args(cls, file_path):
+        # noinspection PyBroadException
+        try:
+            return cmds.file(file_path, q=True, namespace=True), cmds.file(file_path, q=True, referenceNode=True)
         except Exception:
             return None
 

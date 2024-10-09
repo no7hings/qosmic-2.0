@@ -25,7 +25,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
         scr_stage = qsm_scr_core.Stage('asset_test')
 
         self._d = qt_view_widgets.QtTreeWidget()
-        self._d._view_model.set_item_check_enable(True)
+        self._d._set_item_check_enable_(True)
         self._d._view_model.set_item_color_enable(True)
         self._d._view_model.set_item_drop_enable(True)
         # self._d._view_model.set_item_sort_keys(['name', 'gui_name', 'gui_name_chs'])

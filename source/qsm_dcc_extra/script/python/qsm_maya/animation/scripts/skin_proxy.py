@@ -32,7 +32,7 @@ from ...general import core as _gnl_core
 
 from ...resource import core as _rsc_core
 
-from ...rig import core as _rig_core
+from ...steps.rig import core as _stp_rig_core
 
 from .. import core as _core
 
@@ -74,7 +74,7 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
             i_joint = self._resource.find_joint(i_key)
             if i_joint is None:
                 continue
-            i_meshes = _rig_core.Joint.find_influenced_meshes(i_joint)
+            i_meshes = _stp_rig_core.Joint.find_influenced_meshes(i_joint)
             if i_meshes:
                 set_.update(i_meshes)
 
@@ -256,7 +256,7 @@ class SkinProxyOpt(_rsc_core.ResourceScriptOpt):
         hide_secondary_controls = kwargs.get('hide_secondary_controls', True)
         if scheme == 'default':
             resources = []
-            namespaces = _mya_core.Namespaces.extract_roots_from_selection()
+            namespaces = _mya_core.Namespaces.extract_from_selection()
             if namespaces:
                 resources_query = _core.AdvRigsQuery()
                 resources_query.do_update()
@@ -957,7 +957,7 @@ class AdvSkinProxyGenerate(object):
 
 
 class AdvSkinProxyProcess(object):
-    KEY = 'skin proxy'
+    LOG_KEY = 'skin proxy'
 
     def __init__(self, file_path, cache_file_path, data_file_path):
         self._file_path = file_path
@@ -972,7 +972,7 @@ class AdvSkinProxyProcess(object):
             l_p.do_update()
             # step 2
             bsc_log.Log.trace_method_result(
-                self.KEY, 'load scene: {}'.format(self._file_path)
+                self.LOG_KEY, 'load scene: {}'.format(self._file_path)
             )
             # use reference
             _mya_core.SceneFile.reference_file(self._file_path, namespace=namespace)

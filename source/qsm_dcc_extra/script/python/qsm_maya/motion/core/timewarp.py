@@ -8,7 +8,7 @@ from ... import core as _mya_core
 
 
 class TimewarpOpt(object):
-    KEY = 'timewrap'
+    LOG_KEY = 'timewrap'
     NODE_NAME = 'qsm_timewarp'
 
     @classmethod
@@ -25,7 +25,7 @@ class TimewarpOpt(object):
         opt.frame_range_src = frame_range_src
         opt.frame_range_tgt = frame_range_tgt
         bsc_log.Log.trace_method_result(
-            cls.KEY, 'warp by range, scale is {}, offset is {}'.format(
+            cls.LOG_KEY, 'warp by range, scale is {}, offset is {}'.format(
                 opt.scale, opt.offset
             )
         )
@@ -65,7 +65,7 @@ class TimewarpOpt(object):
                 )
 
                 bsc_log.Log.trace_method_result(
-                    cls.KEY, 'offset all curves, offset is {}'.format(offset)
+                    cls.LOG_KEY, 'offset all curves, offset is {}'.format(offset)
                 )
 
             scale = opt.scale
@@ -76,7 +76,7 @@ class TimewarpOpt(object):
                 )
 
                 bsc_log.Log.trace_method_result(
-                    cls.KEY, 'scale all curves, scale is {}, scale-pivot is {}'.format(
+                    cls.LOG_KEY, 'scale all curves, scale is {}, scale-pivot is {}'.format(
                         scale, scale_pivot
                     )
                 )

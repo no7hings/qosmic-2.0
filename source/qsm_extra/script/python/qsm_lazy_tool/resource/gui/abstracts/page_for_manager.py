@@ -20,7 +20,7 @@ import lxgui.qt.widgets as gui_qt_widgets
 
 import lxgui.qt.core as gui_qt_core
 
-import lxgui.qt.view_widgets as gui_qt_view_widgets
+import lxgui.qt.view_widgets as gui_qt_vew_widgets
 
 import lxgui.proxy.abstracts as gui_prx_abstracts
 
@@ -157,11 +157,11 @@ class _GuiTypeOpt(
     def __init__(self, window, page, session):
         super(_GuiTypeOpt, self).__init__(window, page, session)
 
-        self._qt_tree_widget = gui_qt_view_widgets.QtTreeWidget()
+        self._qt_tree_widget = gui_qt_vew_widgets.QtTreeWidget()
         self._page._prx_v_splitter_0.add_widget(self._qt_tree_widget)
 
         self._qt_tree_widget._view_model.set_item_sort_keys(['name', 'gui_name', 'gui_name_chs'])
-        # self._qt_tree_widget._view_model.set_item_check_enable(True)
+        # self._qt_tree_widget._set_item_check_enable_(True)
         self._qt_tree_widget._view_model.set_item_color_enable(True)
         self._qt_tree_widget._view_model.set_item_drop_enable(True)
 
@@ -508,7 +508,7 @@ class _GuiTagOpt(
     def __init__(self, window, page, session):
         super(_GuiTagOpt, self).__init__(window, page, session)
 
-        self._qt_tag_widget = gui_qt_view_widgets.QtTagWidget()
+        self._qt_tag_widget = gui_qt_vew_widgets.QtTagWidget()
         self._page._prx_v_splitter_0.add_widget(self._qt_tag_widget)
 
         self._qt_tag_widget.refresh.connect(self.do_gui_refresh_all)
@@ -769,14 +769,14 @@ class _GuiNodeOpt(_GuiBaseOpt):
         if item_frame_size is None:
             item_frame_size = self._window._gui_configure.get('item_frame_size')
 
-        self._qt_list_widget = gui_qt_view_widgets.QtListWidget()
+        self._qt_list_widget = gui_qt_vew_widgets.QtListWidget()
         self._page._prx_h_splitter_0.add_widget(self._qt_list_widget)
 
         self._qt_list_widget._view_model.set_item_frame_size(*item_frame_size)
 
         self._qt_list_widget._view_model.set_item_sort_keys(['name', 'gui_name', 'gui_name_chs'])
         self._qt_list_widget._view_model.set_item_lock_enable(True)
-        self._qt_list_widget._view_model.set_item_check_enable(True)
+        self._qt_list_widget._set_item_check_enable_(True)
         self._qt_list_widget._view_model.set_item_drag_enable(True)
 
         self._qt_list_widget._view.press_released.connect(self.do_save_context)
@@ -871,8 +871,10 @@ class _GuiNodeOpt(_GuiBaseOpt):
                 i_source_type = self._page._scr_stage.get_node_parameter(i_entity_path, 'source_type')
                 i_is_locked = i_scr_entity.lock
                 i_thumbnail_path = self._page._scr_stage.get_node_parameter(i_entity_path, 'thumbnail')
+                i_scene_path = self._page._scr_stage.get_node_parameter(i_entity_path, 'scene')
+                i_source_path = self._page._scr_stage.get_node_parameter(i_entity_path, 'source')
                 entity_data.append(
-                    (i_scr_entity, i_source_type, i_is_locked, i_thumbnail_path)
+                    (i_scr_entity, i_source_type, i_is_locked, i_thumbnail_path, i_scene_path, i_source_path)
                 )
         return [
             entity_data,
@@ -890,7 +892,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
             self.gui_add_entity(i_entity_data, gui_thread_flag)
 
     def gui_add_entity(self, entity_data, gui_thread_flag):
-        scr_entity, source_type, is_locked, thumbnail_path = entity_data
+        scr_entity, source_type, is_locked, thumbnail_path, scene_path, source_path = entity_data
 
         path = scr_entity.path
         name = bsc_core.BscPath.to_dag_name(path)
@@ -919,8 +921,26 @@ class _GuiNodeOpt(_GuiBaseOpt):
         qt_item._item_model.set_name(gui_name)
         qt_item._item_model.set_index(scr_entity.id)
         qt_item._item_model.set_locked(is_locked)
+
+        # add thumbnail
         if thumbnail_path:
             qt_item._item_model.set_image(thumbnail_path, source_type)
+
+        # add drag data
+        if scene_path is not None:
+            qt_item._item_model.set_drag_data(
+                dict(
+                    file=scene_path,
+                    scr_entity_path=scr_entity.path
+                )
+            )
+        elif source_path is not None:
+            qt_item._item_model.set_drag_data(
+                dict(
+                    file=source_path,
+                    scr_entity_path=scr_entity.path
+                )
+            )
 
         qt_item._item_model.set_show_fnc(
             functools.partial(self._gui_node_show_cache_fnc, qt_item, scr_entity, gui_thread_flag),
@@ -1040,21 +1060,6 @@ class _GuiNodeOpt(_GuiBaseOpt):
             )
         elif 'image_sequence' in property_dict:
             qt_item._item_model.set_image_sequence(property_dict['image_sequence'])
-
-        if 'scene' in property_dict:
-            qt_item._item_model.set_drag_data(
-                dict(
-                    file=property_dict['scene'],
-                    scr_entity_path=scr_entity.path
-                )
-            )
-        elif 'source' in property_dict:
-            qt_item._item_model.set_drag_data(
-                dict(
-                    file=property_dict['source'],
-                    scr_entity_path=scr_entity.path
-                )
-            )
 
         qt_item._item_model.register_press_dbl_click_fnc(press_dbl_click_fnc)
         qt_item._item_model.set_property_dict(property_dict)

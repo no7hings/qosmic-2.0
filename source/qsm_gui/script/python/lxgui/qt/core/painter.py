@@ -13,7 +13,7 @@ from .wrap import *
 
 from . import base as _base
 
-from . import color_and_brush as _color_and_brush
+from . import style as _style
 
 
 class QtPainterPath(QtGui.QPainterPath):
@@ -64,7 +64,7 @@ class QtPainter(QtGui.QPainter):
             i_is_checked = checked_indices[i_idx]
             if i_is_checked is True:
                 i_border_width = 1
-                self._set_border_color_(_color_and_brush.QtColors.CapsuleBorderChecked)
+                self._set_border_color_(_style.QtRgba.BdrCapsuleCheck)
                 if use_exclusive is True:
                     i_background_color, i_font_color = (
                         _gui_core.GuiRgba.LightAzureBlue,
@@ -76,19 +76,19 @@ class QtPainter(QtGui.QPainter):
                 self._set_background_color_(i_background_color)
             else:
                 i_border_width = 1
-                i_font_color = _color_and_brush.QtFontColors.Dark
-                self._set_border_color_(_color_and_brush.QtColors.CapsuleBorderUnchecked)
+                i_font_color = _style.QtRgba.TextDark
+                self._set_border_color_(_style.QtRgba.BdrCapsuleUncheck)
                 if is_enable is True:
-                    self._set_background_color_(_color_and_brush.QtColors.CapsuleBackground)
+                    self._set_background_color_(_style.QtRgba.BkgCapsule)
                 else:
-                    self._set_background_color_(_color_and_brush.QtColors.CapsuleBackgroundDisable)
+                    self._set_background_color_(_style.QtRgba.BkgCapsuleDisable)
             #
             if i_is_pressed is True:
                 i_border_width = 2
-                self._set_border_color_(_color_and_brush.QtColors.CapsuleBorderActioned)
+                self._set_border_color_(_style.QtRgba.BdrCapsuleAction)
             elif i_is_hovered:
                 i_border_width = 2
-                self._set_border_color_(_color_and_brush.QtColors.CapsuleBorderHover)
+                self._set_border_color_(_style.QtRgba.BdrCapsuleHover)
             #
             self._set_border_width_(i_border_width)
             # left
@@ -157,15 +157,15 @@ class QtPainter(QtGui.QPainter):
             rect.topLeft(), rect.topRight()
         )
         color.setColorAt(
-            0, _color_and_brush.QtBackgroundColors.Dark
+            0, _style.QtRgba.Dark
         )
         color.setColorAt(
-            0.95, _color_and_brush.QtBackgroundColors.Dark
+            0.95, _style.QtRgba.Dark
         )
         color.setColorAt(
-            1, _color_and_brush.QtBackgroundColors.Transparent
+            1, _style.QtRgba.Transparent
         )
-        self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
+        self._set_border_color_(_style.QtRgba.Transparent)
         self._set_background_color_(color)
         self.drawRect(rect)
 
@@ -174,7 +174,7 @@ class QtPainter(QtGui.QPainter):
             rect.topLeft(), rect.topRight()
         )
         color.setColorAt(
-            0, _color_and_brush.QtBackgroundColors.Transparent
+            0, _style.QtRgba.Transparent
         )
         color.setColorAt(
             0.05, background_color
@@ -182,7 +182,7 @@ class QtPainter(QtGui.QPainter):
         color.setColorAt(
             1, background_color
         )
-        self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
+        self._set_border_color_(_style.QtRgba.Transparent)
         self._set_background_color_(color)
         self.drawRect(rect)
 
@@ -224,7 +224,7 @@ class QtPainter(QtGui.QPainter):
 
             self._set_antialiasing_(False)
             self._set_border_color_(
-                _color_and_brush.QtColors.TabGroupBorder
+                _style.QtRgba.BdrTabGroup
             )
             self.drawLine(line)
 
@@ -238,14 +238,14 @@ class QtPainter(QtGui.QPainter):
         bar_x, bar_y, bar_w, bar_h = bar_rect.x(), bar_rect.y(), bar_rect.width(), bar_rect.height()
         a = 255
 
-        border_color = _color_and_brush.QtColors.TabGroupBorder
+        border_color = _style.QtRgba.BdrTabGroup
 
         if is_current is True or is_hovered is True:
-            background_color = _color_and_brush.QtColors.TabGroupBackgroundCurrent
-            text_color = _color_and_brush.QtColors.Text
+            background_color = _style.QtRgba.BkgTabGroupActive
+            text_color = _style.QtRgba.Text
         else:
-            background_color = _color_and_brush.QtColors.TabGroupBackground
-            text_color = _color_and_brush.QtColors.TextTemporary
+            background_color = _style.QtRgba.BkgTabGroup
+            text_color = _style.QtRgba.TextTemporary
 
         btn_x, btn_y, btn_w, btn_h = button_rect.x(), button_rect.y(), button_rect.width(), button_rect.height()
 
@@ -359,7 +359,7 @@ class QtPainter(QtGui.QPainter):
 
             i_r, i_g, i_b = bsc_core.BscTextOpt(icon_name_text).to_hash_rgb(s_p=(35, 50), v_p=(75, 95))
             self._set_border_width_(1)
-            self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
+            self._set_border_color_(_style.QtRgba.Transparent)
             icn_bkg_color = QtGui.QColor(i_r, i_g, i_b, a)
             if is_hovered is True:
                 self._set_background_color_(icn_bkg_color)
@@ -397,7 +397,7 @@ class QtPainter(QtGui.QPainter):
             else:
                 raise RuntimeError()
 
-            self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
+            self._set_border_color_(_style.QtRgba.Transparent)
             self._set_background_color_(act_bkg_color)
             self.drawRoundedRect(action_rect, act_h/2, act_h/2, QtCore.Qt.AbsoluteSize)
         # text
@@ -481,7 +481,7 @@ class QtPainter(QtGui.QPainter):
         else:
             bar_x, bar_y = bar_rect.x(), bar_rect.y()
             bar_w, bar_h = bar_rect.width(), bar_rect.height()
-            self._set_border_color_(_color_and_brush.QtColors.TabBorderCurrent)
+            self._set_border_color_(_style.QtRgba.BdrTabActive)
             self._set_border_width_(1)
             frame_coords = [(bar_x, bar_y+bar_h), (bar_w, bar_y+bar_h)]
             self._draw_path_by_coords_(frame_coords, antialiasing=False)
@@ -493,16 +493,16 @@ class QtPainter(QtGui.QPainter):
         a = 255
 
         if is_current is True:
-            border_color = _color_and_brush.QtColors.TabBorderCurrent
+            border_color = _style.QtRgba.BdrTabActive
         else:
-            border_color = _color_and_brush.QtColors.TabBorder
+            border_color = _style.QtRgba.BdrTab
 
         if is_current is True or is_hovered is True:
-            background_color = _color_and_brush.QtColors.TabBackgroundCurrent
-            text_color = _color_and_brush.QtColors.Text
+            background_color = _style.QtRgba.BkgTabActive
+            text_color = _style.QtRgba.Text
         else:
-            background_color = _color_and_brush.QtColors.TabBackground
-            text_color = _color_and_brush.QtColors.TextTemporary
+            background_color = _style.QtRgba.BkgTab
+            text_color = _style.QtRgba.TextTemporary
 
         btn_x, btn_y = rect.x(), rect.y()
         btn_w, btn_h = rect.width(), rect.height()
@@ -554,7 +554,7 @@ class QtPainter(QtGui.QPainter):
             ]
             i_r, i_g, i_b = bsc_core.BscTextOpt(icon_name_text).to_hash_rgb(s_p=(35, 50), v_p=(75, 95))
             self._set_border_width_(1)
-            self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
+            self._set_border_color_(_style.QtRgba.Transparent)
             icn_bkg_color = QtGui.QColor(i_r, i_g, i_b, a)
             if is_hovered is True:
                 self._set_background_color_(icn_bkg_color)
@@ -573,7 +573,7 @@ class QtPainter(QtGui.QPainter):
                 act_bkg_color = background_color
 
             act_w, act_h = 32, 2
-            self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
+            self._set_border_color_(_style.QtRgba.Transparent)
             self._set_background_color_(act_bkg_color)
 
             action_rect = QtCore.QRect(
@@ -635,8 +635,8 @@ class QtPainter(QtGui.QPainter):
             (frm_x, frm_y), (frm_x+frm_w, frm_y), (frm_x+frm_w, frm_y+frm_h),
             (frm_x, frm_y),
         ]
-        self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
-        self._set_background_color_(_color_and_brush.QtBackgroundColors.Dark)
+        self._set_border_color_(_style.QtRgba.Transparent)
+        self._set_background_color_(_style.QtRgba.Dark)
         self._draw_path_by_coords_(coords)
 
         txt_r = 12
@@ -645,7 +645,7 @@ class QtPainter(QtGui.QPainter):
         txt_rect = QtCore.QRect(
             txt_x, txt_y, txt_w, txt_h
         )
-        self._set_text_color_(_color_and_brush.QtFontColors.Dark)
+        self._set_text_color_(_style.QtRgba.TextDark)
         self._set_font_(
             _base.QtFont.generate(size=int(txt_r*.5)-offset, italic=True)
         )
@@ -718,8 +718,8 @@ class QtPainter(QtGui.QPainter):
                 )
             )
         #
-        self._set_border_color_(_color_and_brush.QtBorderColors.Transparent)
-        self._set_background_color_(_color_and_brush.QtBackgroundColors.Shadow)
+        self._set_border_color_(_style.QtRgba.Transparent)
+        self._set_background_color_(_style.QtRgba.Shadow)
         shadow_path = path1_+path2_
         self.drawPath(shadow_path)
         #
@@ -931,7 +931,7 @@ class QtPainter(QtGui.QPainter):
                 )
                 self._draw_frame_by_rect_(
                     frame_rect,
-                    border_color=_color_and_brush.QtBorderColors.Transparent,
+                    border_color=_style.QtRgba.Transparent,
                     background_color=background_color,
                     border_radius=4,
                     offset=offset
@@ -1195,8 +1195,8 @@ class QtPainter(QtGui.QPainter):
             image.loadFromData(image_data)
             if image.isNull() is False:
                 # draw frame
-                self._set_border_color_(_color_and_brush.QtBorderColors.Icon)
-                self._set_background_color_(_color_and_brush.QtBackgroundColors.Icon)
+                self._set_border_color_(_style.QtRgba.BdrIcon)
+                self._set_background_color_(_style.QtRgba.BkgIcon)
                 self.drawRect(
                     rect_offset
                 )
@@ -1251,7 +1251,7 @@ class QtPainter(QtGui.QPainter):
         )
         #
         background_color, text_color = _base.QtColor.generate_color_args_by_text(text)
-        self._set_border_color_(_color_and_brush.QtBorderColors.Icon)
+        self._set_border_color_(_style.QtRgba.BdrIcon)
         self._set_background_color_(background_color)
         self.drawRect(
             rect
@@ -1267,7 +1267,7 @@ class QtPainter(QtGui.QPainter):
         self.setRenderHint(self.Antialiasing, boolean)
 
     def _draw_loading_by_rect_(self, rect, loading_index):
-        self._set_border_color_(_color_and_brush.QtBorderColors.Basic)
+        self._set_border_color_(_style.QtRgba.Border)
         self._draw_alternating_colors_by_rect_(
             rect=rect,
             colors=((0, 0, 0, 63), (0, 0, 0, 0)),
@@ -1275,7 +1275,7 @@ class QtPainter(QtGui.QPainter):
             running=True
         )
         self._set_font_(_base.QtFonts.Loading)
-        self._set_border_color_(_color_and_brush.QtFontColors.Basic)
+        self._set_border_color_(_style.QtRgba.Text)
         self.drawText(
             rect,
             QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
@@ -1336,7 +1336,7 @@ class QtPainter(QtGui.QPainter):
             _gui_core.GuiEllipse2d.get_coord_at_angle(start=(x_, y_), radius=r_, angle=90)
         ]
         #
-        self._set_background_color_(_color_and_brush.QtBackgroundColors.Transparent)
+        self._set_background_color_(_style.QtRgba.Transparent)
         border_color = self._get_item_border_color_(ellipse_rect, is_hovered, is_selected, is_actioned)
         self._set_border_color_(border_color)
         self._set_border_color_alpha_(31)
@@ -1354,7 +1354,7 @@ class QtPainter(QtGui.QPainter):
 
     def _set_color_icon_draw_(self, rect, color, offset=0):
         r, g, b = color
-        border_color = _color_and_brush.QtBorderColors.Icon
+        border_color = _style.QtRgba.BdrIcon
         self._set_border_width_(1)
         self._set_border_color_(border_color)
         self._set_background_color_(r, g, b, 255)
@@ -1388,7 +1388,7 @@ class QtPainter(QtGui.QPainter):
         if border_color is not None:
             border_color_ = border_color
         else:
-            border_color_ = _color_and_brush.QtBorderColors.Icon
+            border_color_ = _style.QtRgba.BdrIcon
         #
         if background_color is not None:
             background_color__ = _base.QtColor.to_rgba(background_color)
@@ -1587,14 +1587,10 @@ class QtPainter(QtGui.QPainter):
             w_1-offset, h_1-offset
         )
 
-        # print x_1, y_1, w_1, h_1
-
         self._set_font_(
             _base.QtFont.generate(size=txt_size)
         )
         self._set_text_color_(text_color_)
-
-        # self.fillRect(txt_rect, _color_and_brush.QtColors.Yellow)
 
         self.drawText(
             txt_rect,
@@ -1709,7 +1705,7 @@ class QtPainter(QtGui.QPainter):
         self._set_antialiasing_(False)
         self._set_border_color_(border_color)
         self._set_border_width_(border_width)
-        self._set_background_color_(_color_and_brush.QtBackgroundColors.Transparent)
+        self._set_background_color_(_style.QtRgba.Transparent)
         #
         line = QtCore.QLine(
             point_0, point_1
@@ -1717,7 +1713,7 @@ class QtPainter(QtGui.QPainter):
         self.drawLine(line)
 
     def _set_status_draw_by_rect_(self, rect, color, offset=0, border_radius=0):
-        self._set_border_color_(_color_and_brush.QtBackgroundColors.Transparent)
+        self._set_border_color_(_style.QtRgba.Transparent)
         #
         if offset != 0:
             rect_ = QtCore.QRect(
@@ -1729,7 +1725,7 @@ class QtPainter(QtGui.QPainter):
         #
         gradient_color = QtGui.QLinearGradient(rect_.topLeft(), rect_.bottomLeft())
         gradient_color.setColorAt(0, _base.QtColor.to_qt_color(color))
-        gradient_color.setColorAt(.5, _color_and_brush.QtBackgroundColors.Transparent)
+        gradient_color.setColorAt(.5, _style.QtRgba.Transparent)
         self._set_background_color_(gradient_color)
         #
         if border_radius > 0:
@@ -1842,10 +1838,10 @@ class QtPainter(QtGui.QPainter):
         self._set_antialiasing_(False)
 
         self._set_border_color_(
-            _color_and_brush.QtColors.ToolTipBorder
+            _style.QtRgba.BdrToolTip
         )
         self._set_background_color_(
-            _color_and_brush.QtColors.ToolTipBackground
+            _style.QtRgba.BkgToolTip
         )
         rect_frame = QtCore.QRect(
             x+(w-w_f)/2, y+(h-h_f)/2-1, w_f, h_f
@@ -1855,7 +1851,7 @@ class QtPainter(QtGui.QPainter):
         )
 
         self._set_text_color_(
-            _color_and_brush.QtColors.ToolTipText
+            _style.QtRgba.TxtToolTip
         )
         rect_text = QtCore.QRect(
             x+(w-w_t)/2-2, y+(h-h_t)/2-2, w_t+4, h_t+4
@@ -1911,10 +1907,10 @@ class QtPainter(QtGui.QPainter):
         if text_color is not None:
             self._set_border_color_(text_color)
         else:
-            self._set_border_color_(_color_and_brush.QtFontColors.Basic)
+            self._set_border_color_(_style.QtRgba.Text)
         #
         if is_hovered is True or is_selected is True:
-            self._set_border_color_(_color_and_brush.QtFontColors.Hovered)
+            self._set_border_color_(_style.QtRgba.TextHoverA)
         #
         if offset != 0:
             rect_offset = QtCore.QRect(
@@ -1997,12 +1993,12 @@ class QtPainter(QtGui.QPainter):
             if key_text_color is not None:
                 key_color_ = key_text_color
             else:
-                key_color_ = _color_and_brush.QtFontColors.KeyBasic
+                key_color_ = _style.QtRgba.TxtKey
             #
             if value_text_color is not None:
                 value_color_ = value_text_color
             else:
-                value_color_ = _color_and_brush.QtFontColors.ValueBasic
+                value_color_ = _style.QtRgba.TxtValue
             #
             # if is_hovered is True or is_selected is True:
             #     key_color_ = _color_and_brush.QtFontColors.KeyHovered
@@ -2130,14 +2126,14 @@ class QtPainter(QtGui.QPainter):
     def _get_item_background_color_1_by_rect_(cls, rect, is_hovered=False, is_actioned=False):
         conditions = [is_hovered, is_actioned]
         if conditions == [False, False]:
-            return _color_and_brush.QtBackgroundColors.Transparent
+            return _style.QtRgba.Transparent
         elif conditions == [False, True]:
-            return _color_and_brush.QtBackgroundColors.Actioned
+            return _style.QtRgba.BackgroundAction
         elif conditions == [True, False]:
-            return _color_and_brush.QtBackgroundColors.Hovered
+            return _style.QtRgba.BackgroundHover
         elif conditions == [True, True]:
-            color_0 = _color_and_brush.QtBackgroundColors.Hovered
-            color_1 = _color_and_brush.QtBackgroundColors.Actioned
+            color_0 = _style.QtRgba.BackgroundHover
+            color_1 = _style.QtRgba.BackgroundAction
             start_pos, end_pos = rect.topLeft(), rect.bottomLeft()
             color = QtGui.QLinearGradient(start_pos, end_pos)
             color.setColorAt(0, color_0)
@@ -2156,25 +2152,25 @@ class QtPainter(QtGui.QPainter):
         if conditions == [False, False]:
             if background_color is not None:
                 return background_color
-            return _color_and_brush.QtBackgroundColors.Transparent
+            return _style.QtRgba.Transparent
         elif conditions == [False, True]:
-            return background_color_selected or _color_and_brush.QtBackgroundColors.Selected
+            return background_color_selected or _style.QtRgba.BackgroundSelect
         elif conditions == [True, False]:
             if is_actioned:
-                color_0 = background_color_hovered or _color_and_brush.QtBackgroundColors.Hovered
-                color_1 = background_color_actioned or _color_and_brush.QtBackgroundColors.Actioned
+                color_0 = background_color_hovered or _style.QtRgba.BackgroundHover
+                color_1 = background_color_actioned or _style.QtRgba.BackgroundAction
                 start_pos, end_pos = rect.topLeft(), rect.bottomLeft()
                 color = QtGui.QLinearGradient(start_pos, end_pos)
                 color.setColorAt(0, _base.QtColor.to_qt_color(color_0))
                 color.setColorAt(1, _base.QtColor.to_qt_color(color_1))
                 return color
-            return background_color_hovered or _color_and_brush.QtBackgroundColors.Hovered
+            return background_color_hovered or _style.QtRgba.BackgroundHover
         elif conditions == [True, True]:
-            color_0 = background_color_hovered or _color_and_brush.QtBackgroundColors.Hovered
+            color_0 = background_color_hovered or _style.QtRgba.BackgroundHover
             if is_actioned:
-                color_1 = background_color_actioned or _color_and_brush.QtBackgroundColors.Actioned
+                color_1 = background_color_actioned or _style.QtRgba.BackgroundAction
             else:
-                color_1 = background_color_selected or _color_and_brush.QtBackgroundColors.Selected
+                color_1 = background_color_selected or _style.QtRgba.BackgroundSelect
 
             start_pos, end_pos = rect.topLeft(), rect.bottomLeft()
             color = QtGui.QLinearGradient(start_pos, end_pos)
@@ -2189,7 +2185,7 @@ class QtPainter(QtGui.QPainter):
     ):
         conditions = [check_is_hovered, is_checked, press_is_hovered, is_pressed, is_selected]
         if True not in conditions:
-            return _color_and_brush.QtBackgroundColors.Transparent
+            return _style.QtRgba.Transparent
         #
         start_pos, end_pos = rect.topLeft(), rect.bottomRight()
         color = QtGui.QLinearGradient(start_pos, end_pos)
@@ -2201,16 +2197,16 @@ class QtPainter(QtGui.QPainter):
         check_args = []
         if check_conditions == [True, True]:
             check_args = [
-                (check_index, _color_and_brush.QtBackgroundColors.CheckHovered),
-                (.25, _color_and_brush.QtBackgroundColors.Checked)
+                (check_index, _style.QtRgba.BkgCheckHover),
+                (.25, _style.QtRgba.BkgCheck)
             ]
         elif check_conditions == [True, False]:
             check_args = [
-                (check_index, _color_and_brush.QtBackgroundColors.CheckHovered)
+                (check_index, _style.QtRgba.BkgCheckHover)
             ]
         elif check_conditions == [False, True]:
             check_args = [
-                (check_index, _color_and_brush.QtBackgroundColors.Checked)
+                (check_index, _style.QtRgba.BkgCheck)
             ]
         #
         if True in check_args:
@@ -2218,7 +2214,7 @@ class QtPainter(QtGui.QPainter):
         #
         if is_selected is True:
             select_args = [
-                (select_index, _color_and_brush.QtBackgroundColors.Selected)
+                (select_index, _style.QtRgba.BackgroundSelect)
             ]
         else:
             select_args = []
@@ -2230,22 +2226,22 @@ class QtPainter(QtGui.QPainter):
         press_args = []
         if press_conditions == (True, True):
             press_args = [
-                (select_index, _color_and_brush.QtBackgroundColors.Pressed),
-                (press_index, _color_and_brush.QtBackgroundColors.PressedHovered),
+                (select_index, _style.QtRgba.BkgPress),
+                (press_index, _style.QtRgba.BackgroundHover),
             ]
         elif press_conditions == (True, False):
             press_args = [
-                (press_index, _color_and_brush.QtBackgroundColors.PressedHovered),
+                (press_index, _style.QtRgba.BackgroundHover),
             ]
         elif press_conditions == (False, True):
             press_args = [
-                (press_index, _color_and_brush.QtBackgroundColors.Pressed),
+                (press_index, _style.QtRgba.BkgPress),
             ]
         #
         delete_args = []
         if delete_is_hovered is True:
             delete_args = [
-                (1, _color_and_brush.QtBackgroundColors.DeleteHovered)
+                (1, _style.QtRgba.BkgDeleteHover)
             ]
         #
         for i_args in check_args+select_args+press_args+delete_args:
@@ -2256,12 +2252,12 @@ class QtPainter(QtGui.QPainter):
     @classmethod
     def _get_item_border_color_(cls, rect, is_hovered=False, is_selected=False, is_actioned=False):
         if is_actioned:
-            return _color_and_brush.QtBackgroundColors.Actioned
+            return _style.QtRgba.BackgroundAction
         if is_hovered:
-            return _color_and_brush.QtBackgroundColors.Hovered
+            return _style.QtRgba.BackgroundHover
         elif is_selected:
-            return _color_and_brush.QtBackgroundColors.Selected
-        return _color_and_brush.QtBackgroundColors.White
+            return _style.QtRgba.BackgroundSelect
+        return _style.QtRgba.White
 
     def _set_sector_chart_draw_(self, chart_draw_data, background_color, border_color, hover_point):
         if chart_draw_data is not None:
@@ -2561,17 +2557,17 @@ class QtPainter(QtGui.QPainter):
     ):
         conditions = [is_hovered, is_selected]
         if conditions == [False, False]:
-            color = _color_and_brush.QtBorderColors.Transparent
+            color = _style.QtRgba.Transparent
         elif conditions == [True, False]:
-            color = _color_and_brush.QtBorderColors.Hovered
+            color = _style.QtRgba.BorderHover
         elif conditions == [False, True]:
-            color = _color_and_brush.QtBorderColors.Selected
+            color = _style.QtRgba.BorderSelect
         elif conditions == [True, True]:
-            color_0 = _color_and_brush.QtBackgroundColors.Hovered
+            color_0 = _style.QtRgba.BackgroundHover
             if is_actioned:
-                color_1 = _color_and_brush.QtBackgroundColors.Actioned
+                color_1 = _style.QtRgba.BackgroundAction
             else:
-                color_1 = _color_and_brush.QtBackgroundColors.Selected
+                color_1 = _style.QtRgba.BackgroundSelect
             #
             start_pos, end_pos = rect.topLeft(), rect.bottomLeft()
             color = QtGui.QLinearGradient(start_pos, end_pos)
@@ -2584,7 +2580,7 @@ class QtPainter(QtGui.QPainter):
         pen = QtGui.QPen(brush, border_width)
         pen.setJoinStyle(QtCore.Qt.RoundJoin)
         self.setPen(pen)
-        self.setBrush(QtGui.QBrush(_color_and_brush.QtBorderColors.Transparent))
+        self.setBrush(QtGui.QBrush(_style.QtRgba.Transparent))
 
         b_ = border_width/2
         if offset != 0:
@@ -2863,7 +2859,7 @@ class PainterFnc(object):
             # offset -1
             i_time_index = coord_model.compute_draw_index_at(i)
             if i_time_index == 0:
-                painter._set_border_color_(_gui_core.GuiRgba.LightYellow)
+                painter._set_border_color_(_gui_core.GuiRgba.LightLemonYellow)
                 painter._set_font_(_base.QtFont.generate(size=8))
                 # draw +1
             else:

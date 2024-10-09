@@ -62,7 +62,7 @@ class ScpResourcesAddByQuixel(object):
         '3d_plant': 'plant'
     }
 
-    KEY = 'add to quixel'
+    LOG_KEY = 'add to quixel'
 
     def __init__(self):
         self._resource_dict = dict()
@@ -91,7 +91,7 @@ class ScpResourcesAddByQuixel(object):
         # break when category group is not found
         category_group = json_content.get('semanticTags.asset_type')
         if category_group is None:
-            bsc_log.Log.trace_method_error(cls.KEY, 'file: {} is not available'.format(file_path))
+            bsc_log.Log.trace_method_error(cls.LOG_KEY, 'file: {} is not available'.format(file_path))
             return None
 
         category_group = bsc_core.RawTextMtd.clear_up_to(category_group).strip().lower()

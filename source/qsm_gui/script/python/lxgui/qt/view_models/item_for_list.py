@@ -385,20 +385,39 @@ class ListItemModel(_item_base.AbsItemModel):
 
         self.draw_names(painter, option, index)
 
+        self.draw_status(painter, option, index)
         self.draw_lock(painter, option, index)
 
         painter.restore()
 
     def draw_background(self, painter, option, index):
-        if self._data.select.flag:
-            painter.setPen(self._data.select.color)
-            painter.setBrush(self._data.select.color)
-            painter.drawRect(self._data.select.rect)
 
-        if self._data.hover.flag:
+        condition = (self._data.hover.flag, self._data.select.flag)
+        # hover
+        if condition == (True, False):
             painter.setPen(self._data.hover.color)
             painter.setBrush(self._data.hover.color)
             painter.drawRect(self._data.hover.rect)
+        # select
+        elif condition == (False, True):
+            painter.setPen(self._data.select.color)
+            painter.setBrush(self._data.select.color)
+            painter.drawRect(self._data.select.rect)
+        elif condition == (True, True):
+            rect = self._data.select.rect
+            color = QtGui.QLinearGradient(
+                rect.topLeft(), rect.topRight()
+            )
+            color.setColorAt(
+                0, self._data.hover.color
+            )
+            color.setColorAt(
+                1, self._data.select.color
+            )
+            painter.setPen(QtGui.QPen(QtGui.QBrush(color), 1))
+            painter.setBrush(color)
+            painter.drawRect(rect)
+
         # draw check
         if self._data.check_enable is True:
             self._draw_icon(painter, self._data.check.rect, self._data.check.file)
@@ -411,12 +430,28 @@ class ListItemModel(_item_base.AbsItemModel):
             if self._data.lock.flag is True:
                 self._draw_icon(painter, self._data.lock.rect, self._data.lock.file)
 
+    def draw_status(self, painter, option, index):
+        if self._data.status_enable is True:
+            status_color = self._get_status_color()
+            if status_color is not None:
+                rect = self._data.status.rect
+                polygon = QtGui.QPolygon(
+                    [rect.topLeft(), rect.topRight(), rect.bottomLeft(), rect.topLeft()]
+                )
+                painter.setPen(_qt_core.QtRgba.Transparent)
+                painter.setBrush(status_color)
+                painter.drawPolygon(polygon)
+
     def draw_names(self, painter, option, index):
         # name
         if self._data.name.enable is True:
-            text_color = [
-                self._data.text.color, self._data.text.action_color
-            ][self._data.select.flag or self._data.hover.flag]
+            status_color = self._get_status_color()
+            if status_color is not None:
+                text_color = status_color
+            else:
+                text_color = [
+                    self._data.text.color, self._data.text.action_color
+                ][self._data.select.flag or self._data.hover.flag]
             self._draw_name(
                 painter, self._data.name.rect, self._data.name.text,
                 text_color
@@ -624,6 +659,8 @@ class ListItemModel(_item_base.AbsItemModel):
             self._data.name.rect.setRect(
                 x+txt_offset+1, y+h-item_h, w-(cck_w+icn_w)-2, item_h
             )
+            # status
+            self._update_status_rect(rect)
             return True
         return False
 
@@ -1064,5 +1101,14 @@ class ListItemModel(_item_base.AbsItemModel):
     def get_property(self, key):
         return self._data.property_dict.get(key)
 
+    # name
     def _update_name(self, text):
         self._item.setText(text)
+
+    # status
+    def _update_status_rect(self, rect):
+        if self._data.status_enable is True:
+            x, y, w, h = rect.x(), rect.y(), rect.width(), rect.height()
+            self._data.status.rect.setRect(
+                x+2, y+2, 20, 20
+            )

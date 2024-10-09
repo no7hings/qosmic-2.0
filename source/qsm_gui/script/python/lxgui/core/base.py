@@ -109,7 +109,7 @@ class GuiUtil(object):
 
     @classmethod
     def choice_name(cls, language, options):
-        if isinstance(options, dict):
+        if options:
             if language == 'chs':
                 if 'name_chs' in options:
                     return options['name_chs']
@@ -118,7 +118,7 @@ class GuiUtil(object):
 
     @classmethod
     def choice_name_auto(cls, options):
-        if isinstance(options, dict):
+        if options:
             if cls.get_language() == 'chs':
                 if 'name_chs' in options:
                     return options['name_chs']
@@ -127,24 +127,30 @@ class GuiUtil(object):
 
     @classmethod
     def choice_description(cls, language, options):
-        if language == 'chs':
-            if 'description_chs' in options:
-                return options['description_chs']
-        return options['description']
+        if options:
+            if language == 'chs':
+                if 'description_chs' in options:
+                    return options['description_chs']
+            return options['description']
+        return 'null'
 
     @classmethod
     def choice_tool_tip(cls, language, options):
-        if language == 'chs':
-            if 'tool_tip_chs' in options:
-                return options['tool_tip_chs']
-        return options['tool_tip']
+        if options:
+            if language == 'chs':
+                if 'tool_tip_chs' in options:
+                    return options['tool_tip_chs']
+            return options['tool_tip']
+        return 'null'
 
     @classmethod
     def choice_message(cls, language, options):
-        if language == 'chs':
-            if 'message_chs' in options:
-                return options['message_chs']
-        return options['message']
+        if options:
+            if language == 'chs':
+                if 'message_chs' in options:
+                    return options['message_chs']
+            return options['message']
+        return 'null'
 
 
 class GuiXml(object):
@@ -347,7 +353,7 @@ class GuiDpiScale(object):
 
 
 class GuiHistory(object):
-    KEY = 'gui history'
+    LOG_KEY = 'gui history'
     MAXIMUM = 20
 
     FILE_PATH = GuiUtil.get_user_history_cache_file()
@@ -420,7 +426,7 @@ class GuiHistory(object):
 
 
 class GuiThumbnailCache(object):
-    KEY = 'gui history'
+    LOG_KEY = 'gui history'
     MAXIMUM = 20
 
     FILE_PATH = GuiUtil.get_user_history_cache_file()

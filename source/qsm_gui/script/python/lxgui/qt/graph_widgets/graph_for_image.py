@@ -3,7 +3,7 @@ import os.path
 # qt
 from ..core.wrap import *
 
-from .. import core as gui_qt_core
+from .. import core as _qt_core
 
 from . import sbj_node as _sbj_node
 
@@ -20,7 +20,7 @@ class QtImageNode(_sbj_node.QtNode):
         self._image_line_height = 0
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtNGPainter(self)
+        painter = _qt_core.QtNGPainter(self)
 
         offset = 0
 
@@ -39,8 +39,8 @@ class QtImageNode(_sbj_node.QtNode):
             painter._draw_text_by_rect_(
                 self._name_draw_rect,
                 text,
-                font=gui_qt_core.QtFont.generate(size=self._ng_draw_font_h),
-                text_color=gui_qt_core.QtFontColors.Basic,
+                font=_qt_core.QtFont.generate(size=self._ng_draw_font_h),
+                text_color=_qt_core.QtRgba.Text,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 offset=offset,
                 word_warp=True
@@ -103,7 +103,7 @@ class QtImageGraph(_graph_for_node.QtNodeGraph):
 
     # widget
     def paintEvent(self, event):
-        painter = gui_qt_core.QtNGPainter(self)
+        painter = _qt_core.QtNGPainter(self)
         x, y = 0, 0
         width, height = self.width(), self.height()
 
@@ -127,8 +127,8 @@ class QtImageGraph(_graph_for_node.QtNodeGraph):
         ):
             painter._draw_dotted_frame_(
                 self._rect_selection_rect,
-                border_color=gui_qt_core.QtBorderColors.Selected,
-                background_color=gui_qt_core.QtBackgroundColors.Transparent
+                border_color=_qt_core.QtRgba.BorderSelect,
+                background_color=_qt_core.QtRgba.Transparent
             )
 
     def _set_graph_universe_(self, universe):
@@ -226,7 +226,7 @@ class QtImageGraph(_graph_for_node.QtNodeGraph):
         size = QtCore.QSize(w_, h_)
         pixmap = QtGui.QPixmap(size)
         pixmap.fill(QtGui.QColor(55, 55, 55, 255))
-        painter = gui_qt_core.QtPainter(pixmap)
+        painter = _qt_core.QtPainter(pixmap)
         rect = pixmap.rect()
         ng_nodes = self._set_ng_graph_nodes_sort_by_(ng_nodes, sort_key='x')
         offset = 0
@@ -245,8 +245,8 @@ class QtImageGraph(_graph_for_node.QtNodeGraph):
             painter._draw_text_by_rect_(
                 i_t_rect,
                 i_t_name_text,
-                font=gui_qt_core.QtFont.generate(size=i_t_font_size),
-                text_color=gui_qt_core.QtFontColors.Basic,
+                font=_qt_core.QtFont.generate(size=i_t_font_size),
+                text_color=_qt_core.QtRgba.Text,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 offset=offset,
                 word_warp=True

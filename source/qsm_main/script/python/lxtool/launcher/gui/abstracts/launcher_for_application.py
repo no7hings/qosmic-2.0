@@ -11,7 +11,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 
 class AbsPnlLauncherForApplication(gui_prx_widgets.PrxSessionWindow):
-    KEY = 'launcher'
+    LOG_KEY = 'launcher'
 
     def __init__(self, session, *args, **kwargs):
         super(AbsPnlLauncherForApplication, self).__init__(session, *args, **kwargs)

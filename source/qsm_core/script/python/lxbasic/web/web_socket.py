@@ -19,7 +19,7 @@ class WebSocketBase(object):
 
 
 class WebSocket(object):
-    KEY = 'web socket'
+    LOG_KEY = 'web socket'
 
     TIMEOUT = 10
 
@@ -36,7 +36,7 @@ class WebSocket(object):
         response = sock.recv(1024)
         if response:
             bsc_log.Log.trace_method_result(
-                cls.KEY, 'received: "{}"'.format(response)
+                cls.LOG_KEY, 'received: "{}"'.format(response)
             )
 
     @classmethod
@@ -62,13 +62,13 @@ class WebSocket(object):
             skt.connect((host, port))
         except socket.error as e:
             bsc_log.Log.trace_method_error(
-                cls.KEY, 'Connection failed: {}'.format(e)
+                cls.LOG_KEY, 'Connection failed: {}'.format(e)
             )
             return None
 
         if cls.VERBOSE_LEVEL < 1:
             bsc_log.Log.trace_method_result(
-                cls.KEY, 'Connection successful'
+                cls.LOG_KEY, 'Connection successful'
             )
 
         handshake_request = cls.create_handshake_request(host, port, path)
@@ -78,13 +78,13 @@ class WebSocket(object):
         if b"101 Switching Protocols" in response:
             if cls.VERBOSE_LEVEL < 1:
                 bsc_log.Log.trace_method_result(
-                    cls.KEY, 'Handshake successful'
+                    cls.LOG_KEY, 'Handshake successful'
                 )
             return skt
         else:
             if cls.VERBOSE_LEVEL <= 1:
                 bsc_log.Log.trace_method_error(
-                    cls.KEY, 'Handshake failed'
+                    cls.LOG_KEY, 'Handshake failed'
                 )
             skt.close()
             return None

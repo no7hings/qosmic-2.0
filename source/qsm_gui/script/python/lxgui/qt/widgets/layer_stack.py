@@ -2,11 +2,11 @@
 # gui
 import sys
 
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
 from ..core.wrap import *
 
-from .. import core as gui_qt_core
+from .. import core as _qt_core
 
 
 class QtTrack(QtWidgets.QWidget):
@@ -56,7 +56,7 @@ class QtTrack(QtWidgets.QWidget):
         self.__anim_index = 0
 
         self.__swap_flag = False
-        self.__swap_switch_direction = gui_core.GuiDirections.TopToBottom
+        self.__swap_switch_direction = _gui_core.GuiDirections.TopToBottom
 
         self.__swap_mode = 'hide'
         
@@ -169,7 +169,7 @@ class QtLayerStack(QtWidgets.QWidget):
         self.__swap_rect_0, self.__swap_rect_1 = QtCore.QRect(), QtCore.QRect()
 
         self.__swap_flag = False
-        self.__swap_switch_direction = gui_core.GuiDirections.LeftToRight
+        self.__swap_switch_direction = _gui_core.GuiDirections.LeftToRight
 
         self.__swap_mode = 'switch'
 
@@ -190,14 +190,14 @@ class QtLayerStack(QtWidgets.QWidget):
             d = sum([(0.5/(2**i))*1 for i in range(index)])
             if self.__swap_mode == 'switch':
                 w_d = w*d
-                if self.__swap_switch_direction == gui_core.GuiDirections.LeftToRight:
+                if self.__swap_switch_direction == _gui_core.GuiDirections.LeftToRight:
                     self.__swap_rect_0.setRect(
                         x-w_d, y, w, h
                     )
                     self.__swap_rect_1.setRect(
                         w-w_d, y, w, h
                     )
-                elif self.__swap_switch_direction == gui_core.GuiDirections.RightToLeft:
+                elif self.__swap_switch_direction == _gui_core.GuiDirections.RightToLeft:
                     self.__swap_rect_0.setRect(
                         x+w_d, y, w, h
                     )
@@ -261,7 +261,7 @@ class QtLayerStack(QtWidgets.QWidget):
 
     def paintEvent(self, event):
         if self.__swap_flag is True and self.__anim_enable is True:
-            painter = gui_qt_core.QtPainter(self)
+            painter = _qt_core.QtPainter(self)
             if self.__swap_mode in {'add', 'new'}:
                 painter._draw_alternating_colors_by_rect_(
                     rect=self.__swap_rect_0,
@@ -271,8 +271,8 @@ class QtLayerStack(QtWidgets.QWidget):
                 )
                 painter._draw_frame_by_rect_(
                     rect=self.__swap_rect_1,
-                    border_color=gui_qt_core.QtBorderColors.Button,
-                    background_color=gui_core.GuiRgba.LightOrange,
+                    border_color=_qt_core.QtRgba.BdrButton,
+                    background_color=_gui_core.GuiRgba.LightOrange,
                     border_radius=5,
                     border_width=2
                 )
@@ -346,9 +346,9 @@ class QtLayerStack(QtWidgets.QWidget):
 
     def _swap_current_between_(self, index_0, index_1, mode):
         if index_0 < index_1:
-            self.__swap_switch_direction = gui_core.GuiDirections.LeftToRight
+            self.__swap_switch_direction = _gui_core.GuiDirections.LeftToRight
         else:
-            self.__swap_switch_direction = gui_core.GuiDirections.RightToLeft
+            self.__swap_switch_direction = _gui_core.GuiDirections.RightToLeft
 
         self.__swap_mode = mode
         # x, y = 0, 0
@@ -356,9 +356,9 @@ class QtLayerStack(QtWidgets.QWidget):
         wgt_0, wgt_1 = self._widgets[index_0], self._widgets[index_1]
         # wgt_0.setGeometry(x, y, w, h)
         self.__swap_pixmap_0, self.__swap_pixmap_1 = QtGui.QPixmap(w, h), QtGui.QPixmap(w, h)
-        self.__swap_pixmap_0.fill(gui_qt_core.QtBackgroundColors.Basic)
+        self.__swap_pixmap_0.fill(_qt_core.QtRgba.Basic)
         wgt_0.render(self.__swap_pixmap_0)
-        self.__swap_pixmap_1.fill(gui_qt_core.QtBackgroundColors.Basic)
+        self.__swap_pixmap_1.fill(_qt_core.QtRgba.Basic)
         # wgt_1.setGeometry(x, y, w, h)
         wgt_1.render(self.__swap_pixmap_1)
         self.__swap_flag = True

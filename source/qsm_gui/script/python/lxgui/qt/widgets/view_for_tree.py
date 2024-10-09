@@ -61,7 +61,7 @@ class QtTreeWidget(
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.setItemDelegate(_utility.QtStyledItemDelegate())
         self.setStyleSheet(
-            _qt_core.GuiQtStyle.get('QTreeView')
+            _qt_core.QtStyle.get('QTreeView')
         )
         # header view
         self.header().setFixedHeight(16)
@@ -73,7 +73,7 @@ class QtTreeWidget(
         self.header().setPalette(_qt_core.GuiQtDcc.generate_qt_palette())
         # self.header().setSectionResizeMode(self.header().ResizeToContents)
         self.header().setStyleSheet(
-            _qt_core.GuiQtStyle.get('QHeaderView')
+            _qt_core.QtStyle.get('QHeaderView')
         )
         self.header().setFont(_qt_core.QtFonts.NameNormal)
         self.header().setAutoFillBackground(True)
@@ -105,10 +105,10 @@ class QtTreeWidget(
         self._item_expand_method_dic = {}
         #
         self.verticalScrollBar().setStyleSheet(
-            _qt_core.GuiQtStyle.get('QScrollBar')
+            _qt_core.QtStyle.get('QScrollBar')
         )
         self.horizontalScrollBar().setStyleSheet(
-            _qt_core.GuiQtStyle.get('QScrollBar')
+            _qt_core.QtStyle.get('QScrollBar')
         )
 
         self._item_press_current = None

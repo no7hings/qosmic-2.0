@@ -15,6 +15,8 @@ from .wrap import *
 
 from . import base as _base
 
+from . import style as _style
+
 
 class QtHBoxLayout(QtWidgets.QHBoxLayout):
     def __init__(self, *args, **kwargs):
@@ -144,7 +146,7 @@ class QtSystemTrayIcon(QtWidgets.QSystemTrayIcon):
         menu.setAutoFillBackground(True)
         menu.setFont(_base.QtFonts.NameNormal)
         menu.setStyleSheet(
-            _base.GuiQtStyle.get('QMenu')
+            _style.QtStyle.get('QMenu')
         )
         self.setContextMenu(
             menu

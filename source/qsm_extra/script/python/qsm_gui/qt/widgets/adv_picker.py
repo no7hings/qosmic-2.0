@@ -464,7 +464,7 @@ class QtAdvCharacterPicker(
                     if '_fk_ik_swap_' in i_key:
                         i_r, i_g, i_b, _ = gui_core.GuiRgba.Pink
                     elif '_ik_' in i_key:
-                        i_r, i_g, i_b, _ = gui_core.GuiRgba.Yellow
+                        i_r, i_g, i_b, _ = gui_core.GuiRgba.LemonYellow
                     else:
                         i_r, i_g, i_b, _ = gui_core.GuiRgba.Purple
 

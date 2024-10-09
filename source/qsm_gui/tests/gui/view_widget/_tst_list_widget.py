@@ -22,12 +22,12 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
         self._d = qt_view_widgets.QtListWidget()
         self._d._view_model.set_item_sort_keys(['name', 'gui_name', 'gui_name_chs'])
-        self._d._view_model.set_item_check_enable(True)
+        self._d._set_item_check_enable_(True)
         self._d._view_model.set_item_drag_enable(True)
         self._d._view_model.set_item_lock_enable(True)
         self._d._view_model.set_item_frame_size(222, 222)
         self.add_widget(self._d)
-        for i in range(10):
+        for i in range(100):
             i_path = '/test_aaaaaaaaaaaaaaaa{}'.format(i)
             i_create_flag, i_item = self._d._view._view_model.create_item(i_path)
             # i_item._item_model.set_icon_name('file/file')
@@ -35,6 +35,9 @@ class W(gui_prx_widgets.PrxBaseWindow):
             i_item._item_model.register_keyword_filter_keys(['TEST-{}'.format(i), u'测试'])
             if i% 3:
                 i_item._item_model.set_locked(True)
+
+            if i% 4:
+                i_item._item_model.set_status(i_item._item_model.Status.Error)
 
             i_item._item_model.register_sort_dict(
                 dict(

@@ -26,6 +26,17 @@ class TreeViewModel(_view_base.AbsViewModel):
         data = event.mimeData()
         print data
 
+    def refresh_info(self):
+        c = len(self.get_checked_leaf_items())
+        if c:
+            info = '{} leaf item is checked ...'.format(c)
+        else:
+            info = ''
+
+        if info != self._data.info:
+            self._widget.info_text_accepted.emit(info)
+            self._data.info = info
+
     def _update_item_drop_enable(self):
         self._widget.setAcceptDrops(self._data.item_drop_enable)
         self._widget.setDropIndicatorShown(False)
@@ -263,7 +274,6 @@ class TreeViewModel(_view_base.AbsViewModel):
         if self.is_item_check_enable() is True:
             item_model.set_check_enable(True)
         if self.is_item_color_enable() is True:
-            item_model.set_color_enable(True)
             item_model.set_color_rgb(bsc_core.BscTextOpt(name).to_hash_rgb(s_p=(35, 50), v_p=(75, 95)))
         item.setSizeHint(0, self.data.item.grid_size)
 
@@ -304,3 +314,37 @@ class TreeViewModel(_view_base.AbsViewModel):
                     (i_key, icon_name, functools.partial(self.sort_item_by, i_key))
                 )
         return menu_data
+
+    def set_head_data(self, raw, max_width=0):
+        self._widget.setHeaderHidden(False)
+
+        texts, width_ps = zip(*raw)
+        count = len(texts)
+
+        self._widget.setColumnCount(count)
+        self._widget.setHeaderLabels(texts)
+        set_column_enable = count > 1
+        w = 0
+        if set_column_enable is True:
+            max_division = sum(width_ps)
+            w = int(max_width/max_division)
+
+        for i_idx in range(0, count):
+            if set_column_enable is True:
+                self._widget.setColumnWidth(i_idx, w*(width_ps[i_idx]))
+
+            icon = QtGui.QIcon()
+            p = QtGui.QPixmap(16, 16)
+            p.load(_gui_core.GuiIcon.get('qt-style/line-v'))
+            icon.addPixmap(
+                p,
+                QtGui.QIcon.Normal,
+                QtGui.QIcon.On
+            )
+            #
+            self._widget.headerItem().setBackground(i_idx, _qt_core.QtRgba.Background)
+            self._widget.headerItem().setForeground(i_idx, _qt_core.QtRgba.Text)
+            self._widget.headerItem().setFont(i_idx, _qt_core.QtFonts.NameNormal)
+            # todo: in katana will make text display error, PyQt?
+            # if QT_LOAD_INDEX == 1:
+            self._widget.headerItem().setIcon(i_idx, icon)

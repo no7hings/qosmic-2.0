@@ -13,7 +13,7 @@ from ..core.wrap import *
 
 
 class AbsQtWebServerForWindowNotice(QtCore.QObject):
-    KEY = 'web socket server'
+    LOG_KEY = 'web socket server'
     NAME = 'Qosmic Window Notice'
 
     @staticmethod
@@ -54,7 +54,7 @@ class AbsQtWebServerForWindowNotice(QtCore.QObject):
         # noinspection PyArgumentList
         if self._web_server.listen(port=self._port):
             bsc_log.Log.trace_method_result(
-                self.KEY, 'start for "{}"'.format(
+                self.LOG_KEY, 'start for "{}"'.format(
                     port
                 )
             )
@@ -72,7 +72,7 @@ class AbsQtWebServerForWindowNotice(QtCore.QObject):
 
         if self._verbose is True:
             bsc_log.Log.trace_method_result(
-                self.KEY, 'received: "{}"'.format(text)
+                self.LOG_KEY, 'received: "{}"'.format(text)
             )
 
     @qt_slot()
@@ -83,7 +83,7 @@ class AbsQtWebServerForWindowNotice(QtCore.QObject):
         skt.disconnected.connect(functools.partial(self._disconnected_fnc_, skt))
         if self._verbose is True:
             bsc_log.Log.trace_method_result(
-                self.KEY, 'new connection'
+                self.LOG_KEY, 'new connection'
             )
 
     @qt_slot()
@@ -93,7 +93,7 @@ class AbsQtWebServerForWindowNotice(QtCore.QObject):
         skt.deleteLater()
         if self._verbose is True:
             bsc_log.Log.trace_method_result(
-                self.KEY, 'disconnected'
+                self.LOG_KEY, 'disconnected'
             )
 
     def _do_close_(self):
@@ -106,7 +106,7 @@ class AbsQtWebServerForWindowNotice(QtCore.QObject):
 
 
 class QtWebServerForWindowNotice(AbsQtWebServerForWindowNotice):
-    KEY = 'web socket server'
+    LOG_KEY = 'web socket server'
 
     def __init__(self, *args, **kwargs):
         super(QtWebServerForWindowNotice, self).__init__(*args, **kwargs)
@@ -120,7 +120,7 @@ class QtWebServerForWindowNotice(AbsQtWebServerForWindowNotice):
 
         if self._verbose is True:
             bsc_log.Log.trace_method_result(
-                self.KEY, 'received: "{}"'.format(text)
+                self.LOG_KEY, 'received: "{}"'.format(text)
             )
 
 
@@ -139,5 +139,5 @@ class QtWebServerForDcc(AbsQtWebServerForWindowNotice):
 
         if self._verbose is True:
             bsc_log.Log.trace_method_result(
-                self.KEY, 'received: "{}"'.format(text)
+                self.LOG_KEY, 'received: "{}"'.format(text)
             )

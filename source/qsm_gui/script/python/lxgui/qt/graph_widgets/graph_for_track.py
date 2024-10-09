@@ -344,8 +344,8 @@ class QtTrackGraph(
         ):
             painter._draw_dotted_frame_(
                 self._rect_selection_rect,
-                border_color=_qt_core.QtBorderColors.Selected,
-                background_color=_qt_core.QtBackgroundColors.Transparent
+                border_color=_qt_core.QtRgba.BorderSelect,
+                background_color=_qt_core.QtRgba.Transparent
             )
 
         # infos = collections.OrderedDict(

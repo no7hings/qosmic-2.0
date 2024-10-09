@@ -31,6 +31,9 @@ from ...assembly import core as _asb_core
 
 
 class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
+    TASK_KEY = 'unit_assembly_generate'
+    API_VERSION = 1.0
+
     CACHE_ROOT = _gnl_core.ResourceCacheNodes.UnitAssemblyRoot
     CACHE_NAME = _gnl_core.ResourceCacheNodes.UnitAssemblyName
 
@@ -82,22 +85,21 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
     def generate_args(self):
         file_path = self._resource.file
 
-        task_name = '[skin-proxy][{}]'.format(
-            bsc_storage.StgFileOpt(file_path).name
+        task_name = '[{}][{}]'.format(
+            self.TASK_KEY, bsc_storage.StgFileOpt(file_path).name
         )
 
-        cache_file_path = qsm_gnl_core.MayaCache.generate_asset_unit_assembly_file(
-            file_path
-        )
-        if os.path.isfile(cache_file_path) is False:
-            cmd_script = qsm_gnl_core.MayaCacheProcess.generate_command(
-                'method=unit-assembly-cache-generate&file={}&cache_file={}'.format(
-                    file_path,
-                    cache_file_path,
+        cache_path = qsm_gnl_core.MayaCache.generate_asset_unit_assembly_file_new(file_path, version=self.API_VERSION)
+        if bsc_storage.StgFileOpt(cache_path).get_is_file() is False:
+            cmd_script = qsm_gnl_core.MayaCacheProcess.generate_cmd_script_by_option_dict(
+                self.TASK_KEY,
+                dict(
+                    file_path=file_path,
+                    cache_path=cache_path,
                 )
             )
-            return task_name, cmd_script, cache_file_path
-        return task_name, None, cache_file_path
+            return task_name, cmd_script, cache_path
+        return task_name, None, cache_path
 
     @classmethod
     def _load_delay_fnc(cls, task_window, task_args_dict):
@@ -120,7 +122,7 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
         scheme = kwargs['scheme']
         if scheme == 'default':
             resources = []
-            namespaces = _mya_core.Namespaces.extract_roots_from_selection()
+            namespaces = _mya_core.Namespaces.extract_from_selection()
             if namespaces:
                 resources_query = _core.SceneriesQuery()
                 resources_query.do_update()
@@ -180,7 +182,7 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
     @classmethod
     def remove_auto(cls, **kwargs):
         resources = []
-        namespaces = _mya_core.Namespaces.extract_roots_from_selection()
+        namespaces = _mya_core.Namespaces.extract_from_selection()
         if namespaces:
             resources_query = _core.SceneriesQuery()
             resources_query.do_update()
@@ -205,7 +207,7 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
 
 
 class UnitAssemblyProcess(object):
-    KEY = 'unit assembly'
+    LOG_KEY = 'unit assembly'
     PLUG_NAMES = [
         'sceneAssembly',
         'gpuCache',
@@ -402,7 +404,7 @@ class UnitAssemblyProcess(object):
             # memory error when face more than 25000000
             if face_count <= 25000000:
                 bsc_log.Log.trace_method_result(
-                    self.KEY, 'try create lod for: "{}", face count is {}'.format(
+                    self.LOG_KEY, 'try create lod for: "{}", face count is {}'.format(
                         shape_path_new, face_count
                     )
                 )
@@ -501,7 +503,7 @@ class UnitAssemblyProcess(object):
         )
 
         bsc_log.Log.trace_method_result(
-            self.KEY, 'load scene: {}'.format(self._file_path)
+            self.LOG_KEY, 'load scene: {}'.format(self._file_path)
         )
 
         import_paths = _mya_core.SceneFile.import_file(

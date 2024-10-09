@@ -7,7 +7,7 @@ import getopt
 
 argv = sys.argv
 
-KEY = 'qsm-hook-command'
+LOG_KEY = 'qsm-hook-command'
 
 
 def main():
@@ -48,7 +48,7 @@ def __execute_with_option(option):
     import lxbasic.core as bsc_core
 
     bsc_log.Log.trace_method_result(
-        KEY,
+        LOG_KEY,
         'execute from: {}'.format(__file__)
     )
 
@@ -84,7 +84,7 @@ def __execute_hook(option):
         framework_packages_extend = bsc_etr_methods.EtrBase.get_base_packages_extend()
         if framework_packages_extend:
             bsc_log.Log.trace_method_result(
-                KEY,
+                LOG_KEY,
                 'extend packages from framework: {}'.format(', '.join(framework_packages_extend))
             )
             opt_packages_extend.extend(
@@ -94,7 +94,7 @@ def __execute_hook(option):
         builtin_package_extend = bsc_etr_methods.EtrBase.get_builtin_packages_extend()
         if builtin_package_extend:
             bsc_log.Log.trace_method_result(
-                KEY,
+                LOG_KEY,
                 'extend packages from builtin: {}'.format(', '.join(builtin_package_extend))
             )
             opt_packages_extend.extend(
@@ -104,7 +104,7 @@ def __execute_hook(option):
         hook_packages_extend = session.get_packages_extend()
         if hook_packages_extend:
             bsc_log.Log.trace_method_result(
-                KEY,
+                LOG_KEY,
                 'extend packages from session: {}'.format(', '.join(hook_packages_extend))
             )
             opt_packages_extend.extend(

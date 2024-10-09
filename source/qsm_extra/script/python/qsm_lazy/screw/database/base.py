@@ -58,21 +58,21 @@ class _Prim(_Obj):
 
 class Node(_Prim):
     """
-    node
+    node is primitive
     """
     gui_icon_name = CharField(default='database/object')
 
 
 class Type(_Prim):
     """
-    type is node
+    type is primitive
     """
-    gui_icon_name = CharField(default='database/object')
+    gui_icon_name = CharField(default='database/type')
 
 
 class Tag(_Prim):
     """
-    tag is node
+    tag is primitive
     """
     gui_icon_name = CharField(default='database/tag')
 

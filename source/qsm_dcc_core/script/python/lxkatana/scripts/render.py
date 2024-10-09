@@ -110,7 +110,7 @@ class ScpRenderLayer(object):
 
 
 class ScpRenderBuild(object):
-    KEY = 'render build'
+    LOG_KEY = 'render build'
 
     def __init__(self, session):
         self._session = session
@@ -262,7 +262,7 @@ class ScpRenderBuild(object):
         #
         katana_render_hook_key = 'rsv-project-methods/katana/render'
         rv_video_comp_hook_key = 'rsv-project-methods/rv/video-comp'
-        with bsc_log.LogProcessContext.create_as_bar(maximum=len(render_nodes), label=cls.KEY) as l_p:
+        with bsc_log.LogProcessContext.create_as_bar(maximum=len(render_nodes), label=cls.LOG_KEY) as l_p:
             for i_render_node in render_nodes:
                 l_p.do_update()
                 if ktn_core.NGNodeOpt._get_is_exists_(i_render_node) is True:
@@ -370,7 +370,7 @@ class ScpRenderBuild(object):
                         )
                 else:
                     bsc_log.Log.trace_method_warning(
-                        cls.KEY,
+                        cls.LOG_KEY,
                         'render-node: "{}" is non-exists'.format(i_render_node)
                     )
 

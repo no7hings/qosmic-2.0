@@ -15,3 +15,8 @@ class PrxSubPageForVideoRegister(_abstracts.AbsPrxSubPageForVideoRegister):
 class PrxSubPageForAudioRegister(_abstracts.AbsPrxSubPageForAudioRegister):
     def __init__(self, window, session, sub_window, *args, **kwargs):
         super(PrxSubPageForAudioRegister, self).__init__(window, session, sub_window, *args, **kwargs)
+
+
+class PrxSubPageForAssetRegister(_abstracts.AbsPrxSubPageForAssetRegister):
+    def __init__(self, window, session, sub_window, *args, **kwargs):
+        super(PrxSubPageForAssetRegister, self).__init__(window, session, sub_window, *args, **kwargs)

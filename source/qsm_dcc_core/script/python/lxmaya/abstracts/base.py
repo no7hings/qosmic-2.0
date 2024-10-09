@@ -34,7 +34,7 @@ class ObjPortsOpt(object):
 
 class AbsMyaPort(gnl_dcc_abstracts.AbsDccPort):
     PATHSEP = mya_core.MyaUtil.PORT_PATHSEP
-    KEY = 'port'
+    LOG_KEY = 'port'
 
     def __init__(self, obj, path, port_assign=None):
         super(AbsMyaPort, self).__init__(obj, path, port_assign=port_assign)
@@ -443,7 +443,7 @@ class AbsMyaNode(
     gnl_dcc_abstracts.AbsDccNode,
     AbsMaUuidDef
 ):
-    KEY = 'maya node'
+    LOG_KEY = 'maya node'
     PATHSEP = mya_core.MyaUtil.OBJ_PATHSEP
 
     def __init__(self, path):
@@ -505,7 +505,7 @@ class AbsMyaNode(
         cmds.lockNode(self.path, lock=0)
         cmds.warning('unlock node: {}'.format(self.path))
         bsc_log.Log.trace_method_result(
-            self.KEY,
+            self.LOG_KEY,
             'unlock node: {}'.format(self.path)
         )
 
@@ -513,7 +513,7 @@ class AbsMyaNode(
         cmds.lockNode(self.path, lock=1)
         cmds.warning('lock node: {}'.format(self.path))
         bsc_log.Log.trace_method_result(
-            self.KEY,
+            self.LOG_KEY,
             'lock node: {}'.format(self.path)
         )
 
@@ -525,7 +525,7 @@ class AbsMyaNode(
             #
             cmds.delete(self.path)
             bsc_log.Log.trace_method_result(
-                self.KEY,
+                self.LOG_KEY,
                 'delete: "{}"'.format(self.path)
             )
 
@@ -539,7 +539,7 @@ class AbsMyaNode(
             cmds.rename(self.path, new_name)
             self._update_path_()
             bsc_log.Log.trace_method_result(
-                self.KEY,
+                self.LOG_KEY,
                 'rename: "{}" >> "{}"'.format(self.path, new_name)
             )
 
@@ -615,7 +615,7 @@ class AbsMyaNode(
                                 parent_string = cmds.group(empty=1, name=name)
                             #
                             bsc_log.Log.trace_method_result(
-                                self.KEY,
+                                self.LOG_KEY,
                                 u'create transform: "{}", parent is "{}"'.format(name, parent_string)
                             )
                         else:

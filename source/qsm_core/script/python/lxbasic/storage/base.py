@@ -63,7 +63,7 @@ class StgRpc(object):
     RPC_PORT = 58888
     PATHSEP = '/'
 
-    KEY = 'rpc'
+    LOG_KEY = 'rpc'
 
     @classmethod
     def get_client(cls, port_addition=0):
@@ -1149,7 +1149,7 @@ class StgPathOpt(object):
 
 
 class StgFileSearchOpt(object):
-    KEY = 'file search'
+    LOG_KEY = 'file search'
 
     def __init__(self, ignore_name_case=False, ignore_ext_case=False, ignore_ext=False):
         self._ignore_name_case = ignore_name_case
@@ -1162,7 +1162,7 @@ class StgFileSearchOpt(object):
         for i in directory_paths:
             self.append_search_directory(i, recursion_enable=recursion_enable)
             bsc_log.Log.trace_method_result(
-                self.KEY,
+                self.LOG_KEY,
                 'append search directory: "{}"'.format(i)
             )
         #

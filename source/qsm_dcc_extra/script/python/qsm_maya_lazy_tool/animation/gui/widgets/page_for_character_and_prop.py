@@ -196,12 +196,8 @@ class PrxPageForCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
         self._gui_skin_proxy_prx_toolset_unit = _unit_for_rig.PrxToolsetForSkinProxyLoad(
             self._window, self, self._session
         )
-        # switch
-        # self._gui_switch_opt = _unit_for_rig.PrxToolsetForSkinProxySwitch(
-        #     self._window, self, self._session
-        # )
         # extend
-        self._gui_extend_opt = _unit_for_rig.PrxToolsetForMotion(
+        self._gui_motion_opt = _unit_for_rig.PrxToolsetForMotion(
             self._window, self, self._session
         )
 

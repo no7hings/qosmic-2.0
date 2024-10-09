@@ -25,9 +25,9 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxBasePanel, self).__init__(*args, **kwargs)
-        self._init_base_panel_def_(window, session, *args, **kwargs)
+        self._init_base_panel_def(window, session, *args, **kwargs)
 
-    def _debug_run_(self, fnc, *args, **kwargs):
+    def _gui_debug_run(self, fnc, *args, **kwargs):
         # noinspection PyBroadException
         try:
             fnc(*args, **kwargs)
@@ -59,10 +59,10 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
                 [self.set_exception_content_add(i) for i in exc_texts]
                 self.set_exception_content_add(value)
 
-    def _setup_fnc_(self):
+    def _gui_setup_fnc(self):
         self.gui_setup_fnc()
 
-    def _init_base_panel_def_(self, window, session, *args, **kwargs):
+    def _init_base_panel_def(self, window, session, *args, **kwargs):
         if window is None:
             self._window = self
         else:
@@ -72,11 +72,11 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
 
         self._language = gui_core.GuiUtil.get_language()
 
-        self._debug_run_(
-            self._main_fnc_, self.CONFIGURE_KEY
+        self._gui_debug_run(
+            self._gui_main_fnc, self.CONFIGURE_KEY
         )
 
-    def _main_fnc_(self, configure_key):
+    def _gui_main_fnc(self, configure_key):
         self._configure = bsc_resource.RscExtendConfigure.get_as_content(configure_key)
         self._option_configure = self._configure.get_as_content('option')
         self._gui_configure = self._configure.get_as_content('option.gui')
@@ -94,7 +94,7 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
         self.register_window_close_method(self.gui_close_fnc)
 
         self.start_window_loading(
-            self._setup_fnc_, post_fnc=self.gui_setup_post_fnc
+            self._gui_setup_fnc, post_fnc=self.gui_setup_post_fnc
         )
 
     def gui_close_fnc(self):
@@ -180,11 +180,11 @@ class PrxBaseSubPanel(_window_base.PrxBaseWindow):
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxBaseSubPanel, self).__init__(*args, **kwargs)
-        self._init_base_panel_def_(window, session, *args, **kwargs)
+        self._init_base_panel_def(window, session, *args, **kwargs)
 
         self._page_dict = {}
 
-    def _debug_run_(self, fnc, *args, **kwargs):
+    def _gui_debug_run(self, fnc, *args, **kwargs):
         # noinspection PyBroadException
         try:
             fnc(*args, **kwargs)
@@ -216,10 +216,10 @@ class PrxBaseSubPanel(_window_base.PrxBaseWindow):
                 [self.set_exception_content_add(i) for i in exc_texts]
                 self.set_exception_content_add(value)
 
-    def _setup_fnc_(self):
+    def _gui_setup_fnc(self):
         self.gui_setup_fnc()
 
-    def _init_base_panel_def_(self, window, session, *args, **kwargs):
+    def _init_base_panel_def(self, window, session, *args, **kwargs):
         self._window = window
         if self._window is not None:
             self._qt_widget.setWindowFlags(gui_qt_core.QtCore.Qt.Tool)
@@ -230,11 +230,11 @@ class PrxBaseSubPanel(_window_base.PrxBaseWindow):
 
         self._language = gui_core.GuiUtil.get_language()
 
-        self._debug_run_(
-            self._main_fnc_, self.CONFIGURE_KEY
+        self._gui_debug_run(
+            self._gui_main_fnc, self.CONFIGURE_KEY
         )
 
-    def _main_fnc_(self, configure_key):
+    def _gui_main_fnc(self, configure_key):
         self._configure = bsc_resource.RscExtendConfigure.get_as_content(configure_key)
         self._option_configure = self._configure.get_as_content('option')
         self._gui_configure = self._configure.get_as_content('option.gui')
@@ -251,7 +251,7 @@ class PrxBaseSubPanel(_window_base.PrxBaseWindow):
 
         self.register_window_close_method(self.gui_close_fnc)
 
-        self._setup_fnc_()
+        self._gui_setup_fnc()
 
     def gui_close_fnc(self):
         pass

@@ -136,31 +136,31 @@ class PrxTreeItemCheckState(object):
             self.set_passed(column)
 
     def set_normal(self, column=0):
-        self.widget.setForeground(column, _qt_core.QtBrushes.Text)
+        self.widget.setForeground(column, _qt_core.QtRgbaBrush.Text)
         self._item_prx.set_gui_attribute(
             'state', 'normal'
         )
 
     def set_error(self, column=0):
-        self.widget.setForeground(column, _qt_core.QtBrushes.TextError)
+        self.widget.setForeground(column, _qt_core.QtRgbaBrush.TextError)
         self._item_prx.set_gui_attribute(
             'state', 'error'
         )
 
     def set_warning(self, column=0):
-        self.widget.setForeground(column, _qt_core.QtBrushes.TextWarning)
+        self.widget.setForeground(column, _qt_core.QtRgbaBrush.TextWarning)
         self._item_prx.set_gui_attribute(
             'state', 'warning'
         )
 
     def set_passed(self, column=0):
-        self.widget.setForeground(column, _qt_core.QtBrushes.TextCorrect)
+        self.widget.setForeground(column, _qt_core.QtRgbaBrush.TextCorrect)
         self._item_prx.set_gui_attribute(
             'state', 'adopt'
         )
 
     def set_ignored(self, column=0):
-        self.widget.setForeground(column, _qt_core.QtBrushes.TextTemporary)
+        self.widget.setForeground(column, _qt_core.QtRgbaBrush.TextTemporary)
         self._item_prx.set_gui_attribute(
             'state', 'temporary'
         )
@@ -635,27 +635,27 @@ class PrxLabelTreeItem(PrxTreeItem):
 
     def set_normal_state(self):
         self.set_icon_by_file(_gui_core.GuiIcon.get('tag'))
-        self.set_foreground_update(_qt_core.QtBrushes.Text)
+        self.set_foreground_update(_qt_core.QtRgbaBrush.Text)
 
     def set_error_state(self):
         self.set_icon_by_file(_gui_core.GuiIcon.get('error'))
-        self.set_foreground_update(_qt_core.QtBrushes.TextError)
+        self.set_foreground_update(_qt_core.QtRgbaBrush.TextError)
 
     def set_warning_state(self):
         self.set_icon_by_file(_gui_core.GuiIcon.get('warning'))
-        self.set_foreground_update(_qt_core.QtBrushes.TextWarning)
+        self.set_foreground_update(_qt_core.QtRgbaBrush.TextWarning)
 
     def set_adopt_state(self):
         self.set_icon_by_file(_gui_core.GuiIcon.get('adopt'))
-        self.set_foreground_update(_qt_core.QtBrushes.TextCorrect)
+        self.set_foreground_update(_qt_core.QtRgbaBrush.TextCorrect)
 
     def set_disable_state(self):
         self.set_icon_by_file(_gui_core.GuiIcon.get('disable'))
-        self.set_foreground_update(_qt_core.QtBrushes.TextDisable)
+        self.set_foreground_update(_qt_core.QtRgbaBrush.TextDisable)
 
     def set_temporary_state(self):
         self.set_icon_by_file(_gui_core.GuiIcon.get('temporary'))
-        self.set_foreground_update(_qt_core.QtBrushes.TextTemporary)
+        self.set_foreground_update(_qt_core.QtRgbaBrush.TextTemporary)
 
     def set_foreground_update(self, qt_brush):
         qt_tree_widget = self._qt_widget.treeWidget()
@@ -676,7 +676,7 @@ class PrxLoadingTreeItem(PrxTreeItem):
 class PrxObjTreeItem(PrxTreeItem):
     def __init__(self, *args, **kwargs):
         super(PrxObjTreeItem, self).__init__(*args, **kwargs)
-        self._qt_widget.setForeground(0, _qt_core.QtBrushes.Text)
+        self._qt_widget.setForeground(0, _qt_core.QtRgbaBrush.Text)
         # self.set_icon_by_file(_gui_core.GuiIcon.get('tag'))
         self.set_normal_state()
 
@@ -685,37 +685,37 @@ class PrxObjTreeItem(PrxTreeItem):
         return PrxTreeItemCheckState(self)
 
     def set_temporary_state(self, column=0):
-        self._qt_widget.setForeground(column, _qt_core.QtBrushes.TextDisable)
+        self._qt_widget.setForeground(column, _qt_core.QtRgbaBrush.TextDisable)
         self.set_gui_attribute(
             'state', 'temporary'
         )
 
     def set_normal_state(self, column=0):
-        self._qt_widget.setForeground(column, _qt_core.QtBrushes.Text)
+        self._qt_widget.setForeground(column, _qt_core.QtRgbaBrush.Text)
         self.set_gui_attribute(
             'state', 'normal'
         )
 
     def set_error_state(self, column=0):
-        self._qt_widget.setForeground(column, _qt_core.QtBrushes.TextError)
+        self._qt_widget.setForeground(column, _qt_core.QtRgbaBrush.TextError)
         self.set_gui_attribute(
             'state', 'error'
         )
 
     def set_warning_state(self, column=0):
-        self._qt_widget.setForeground(column, _qt_core.QtBrushes.TextWarning)
+        self._qt_widget.setForeground(column, _qt_core.QtRgbaBrush.TextWarning)
         self.set_gui_attribute(
             'state', 'warning'
         )
 
     def set_adopt_state(self, column=0):
-        self._qt_widget.setForeground(column, _qt_core.QtBrushes.TextCorrect)
+        self._qt_widget.setForeground(column, _qt_core.QtRgbaBrush.TextCorrect)
         self.set_gui_attribute(
             'state', 'adopt'
         )
 
     def set_current_state(self, column=0):
-        self._qt_widget.setForeground(column, _qt_core.QtBrushes.TextActive)
+        self._qt_widget.setForeground(column, _qt_core.QtRgbaBrush.TextActive)
         self.set_gui_attribute(
             'state', 'current'
         )

@@ -1,25 +1,25 @@
 # coding=utf-8
 import lxbasic.core as bsc_core
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
 from ..core.wrap import *
 
-from .. import core as gui_qt_core
+from .. import core as _qt_core
 # qt widgets
-from .. import abstracts as gui_qt_abstracts
+from .. import abstracts as _qt_abstracts
 
 
 class AbsQtHead(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
-    gui_qt_abstracts.AbsQtNameBaseDef,
-    gui_qt_abstracts.AbsQtIconBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtNameBaseDef,
+    _qt_abstracts.AbsQtIconBaseDef,
     #
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForPressDef,
-    gui_qt_abstracts.AbsQtActionForExpandDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForHoverDef,
+    _qt_abstracts.AbsQtActionForPressDef,
+    _qt_abstracts.AbsQtActionForExpandDef,
 ):
     def __init__(self, *args, **kwargs):
         super(AbsQtHead, self).__init__(*args, **kwargs)
@@ -31,7 +31,7 @@ class AbsQtHead(
         #
         self._init_frame_base_def_(self)
         self._init_name_base_def_(self)
-        self._name_draw_font = gui_qt_core.QtFonts.ToolGroup
+        self._name_draw_font = _qt_core.QtFonts.ToolGroup
         #
         self._init_icon_base_def_(self)
         self._icon_name_is_enable = True
@@ -43,8 +43,8 @@ class AbsQtHead(
         #
         self._is_expanded = False
 
-        self._expand_icon_file_path_0 = gui_core.GuiIcon.get('expandclose')
-        self._expand_icon_file_path_1 = gui_core.GuiIcon.get('expandopen')
+        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('expandclose')
+        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('expandopen')
 
         self._expand_sub_icon_file_path_0 = None
         self._expand_sub_icon_file_path_1 = None
@@ -140,14 +140,14 @@ class AbsQtHead(
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         #
         self._refresh_widget_draw_geometry_()
         #
         offset = self._get_action_offset_()
 
-        bdr_color = gui_qt_core.QtColors.HeadBorder
-        bkg_color = gui_qt_core.QtColors.HeadBackground
+        bdr_color = _qt_core.QtRgba.BdrHead
+        bkg_color = _qt_core.QtRgba.BkgHead
 
         painter._draw_frame_by_rect_(
             self._frame_draw_rect,
@@ -173,7 +173,7 @@ class AbsQtHead(
         )
         # text
         if self._name_text is not None:
-            color = [gui_qt_core.QtColors.HeadText, gui_qt_core.QtColors.HeadTextHover][self._is_hovered]
+            color = [_qt_core.QtRgba.TxtHead, _qt_core.QtRgba.TxtHeadHover][self._is_hovered]
             painter._draw_text_by_rect_(
                 self._name_draw_rect,
                 self._name_text,
@@ -189,13 +189,13 @@ class AbsQtHead(
         self._refresh_expand_()
 
     def _set_expand_icon_names_(self, icon_name_0, icon_name_1):
-        self._expand_icon_file_path_1 = gui_core.GuiIcon.get(icon_name_0)
-        self._expand_icon_file_path_0 = gui_core.GuiIcon.get(icon_name_1)
+        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get(icon_name_0)
+        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get(icon_name_1)
         self._refresh_expand_()
 
     def _set_expand_sub_icon_names_(self, icon_name_0, icon_name_1):
-        self._expand_sub_icon_file_path_0 = gui_core.GuiIcon.get(icon_name_0)
-        self._expand_sub_icon_file_path_1 = gui_core.GuiIcon.get(icon_name_1)
+        self._expand_sub_icon_file_path_0 = _gui_core.GuiIcon.get(icon_name_0)
+        self._expand_sub_icon_file_path_1 = _gui_core.GuiIcon.get(icon_name_1)
         self._refresh_expand_()
 
     def _refresh_expand_(self):
@@ -267,13 +267,13 @@ class QtHeadStyleB(AbsQtHead):
             self._line_draw_points[1].setY(c_y+h/2)
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         #
         self._refresh_widget_draw_geometry_()
         #
         offset = self._get_action_offset_()
 
-        bkg_color = gui_qt_core.QtColors.HeadBackground
+        bkg_color = _qt_core.QtRgba.BkgHead
 
         painter._draw_line_by_points_(
             point_0=self._line_draw_points[0], point_1=self._line_draw_points[1],
@@ -297,7 +297,7 @@ class QtHeadStyleB(AbsQtHead):
         )
         # text
         if self._name_text is not None:
-            text_color = [gui_qt_core.QtColors.HeadText, gui_qt_core.QtColors.HeadTextHover][self._is_hovered]
+            text_color = [_qt_core.QtRgba.TxtHead, _qt_core.QtRgba.TxtHeadHover][self._is_hovered]
             painter._draw_text_by_rect_(
                 rect=self._name_draw_rect,
                 text=self._name_text,
@@ -312,8 +312,8 @@ class QtHeadStyleC(AbsQtHead):
     def __init__(self, *args, **kwargs):
         super(QtHeadStyleC, self).__init__(*args, **kwargs)
 
-        self._expand_icon_file_path_0 = gui_core.GuiIcon.get('choose_collapse')
-        self._expand_icon_file_path_1 = gui_core.GuiIcon.get('choose_expand')
+        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('choose_collapse')
+        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('choose_expand')
 
     def _refresh_widget_draw_geometry_(self):
         x, y = 0, 0
@@ -364,13 +364,13 @@ class QtHeadStyleC(AbsQtHead):
             self._line_draw_points[1].setY(c_y+h/2)
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         #
         self._refresh_widget_draw_geometry_()
         #
         offset = self._get_action_offset_()
 
-        bkg_color = gui_qt_core.QtColors.HeadBackground
+        bkg_color = _qt_core.QtRgba.BkgHead
 
         painter._draw_line_by_points_(
             point_0=self._line_draw_points[0], point_1=self._line_draw_points[1],
@@ -394,7 +394,7 @@ class QtHeadStyleC(AbsQtHead):
         )
         # text
         if self._name_text is not None:
-            text_color = [gui_qt_core.QtColors.HeadText, gui_qt_core.QtColors.HeadTextHover][self._is_hovered]
+            text_color = [_qt_core.QtRgba.TxtHead, _qt_core.QtRgba.TxtHeadHover][self._is_hovered]
             painter._draw_text_by_rect_(
                 rect=self._name_draw_rect,
                 text=self._name_text,
@@ -407,14 +407,14 @@ class QtHeadStyleC(AbsQtHead):
 
 class AbsQtHead1(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
-    gui_qt_abstracts.AbsQtNameBaseDef,
-    gui_qt_abstracts.AbsQtIconBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtNameBaseDef,
+    _qt_abstracts.AbsQtIconBaseDef,
     #
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForPressDef,
-    gui_qt_abstracts.AbsQtActionForExpandDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForHoverDef,
+    _qt_abstracts.AbsQtActionForPressDef,
+    _qt_abstracts.AbsQtActionForExpandDef,
 ):
     toggled = qt_signal(bool)
 
@@ -438,10 +438,10 @@ class AbsQtHead1(
         #
         self._is_expand_enable = True
         self._is_expanded = False
-        self._expand_icon_file_path_0 = gui_core.GuiIcon.get('qt-style/arrow-right')
-        self._expand_icon_file_path_1 = gui_core.GuiIcon.get('qt-style/arrow-down')
+        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('qt-style/arrow-right')
+        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('qt-style/arrow-down')
 
-        self._expand_icon_file_path_2 = gui_core.GuiIcon.get('qt-style/arrow-up')
+        self._expand_icon_file_path_2 = _gui_core.GuiIcon.get('qt-style/arrow-up')
         #
         r, g, b = 135, 135, 135
         h, s, v = bsc_core.BscColor.rgb_to_hsv(r, g, b)
@@ -459,20 +459,20 @@ class AbsQtHead1(
         #
         self._refresh_expand_()
         # font
-        self.setFont(gui_qt_core.QtFonts.NameNormal)
+        self.setFont(_qt_core.QtFonts.NameNormal)
 
     def _refresh_widget_draw_(self):
         self.update()
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
 
         self._refresh_widget_draw_geometry_()
 
         offset = self._get_action_offset_()
 
-        bdr_color = gui_qt_core.QtColors.HeadBorder
-        bkg_color = gui_qt_core.QtColors.HeadBackground
+        bdr_color = _qt_core.QtRgba.BdrHead
+        bkg_color = _qt_core.QtRgba.BkgHead
 
         painter._draw_frame_by_rect_(
             rect=self._frame_draw_rect,
@@ -556,9 +556,9 @@ class QtHHead(AbsQtHead1):
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
         )
 
-        self._expand_icon_file_path_0 = gui_core.GuiIcon.get('qt-style/arrow-right')
-        self._expand_icon_file_path_1 = gui_core.GuiIcon.get('qt-style/arrow-down')
-        self._expand_icon_file_path_2 = gui_core.GuiIcon.get('qt-style/arrow-up')
+        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('qt-style/arrow-right')
+        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('qt-style/arrow-down')
+        self._expand_icon_file_path_2 = _gui_core.GuiIcon.get('qt-style/arrow-up')
 
 
 class QtVExpandHead1(AbsQtHead1):
@@ -568,20 +568,20 @@ class QtVExpandHead1(AbsQtHead1):
             QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding
         )
 
-        self._expand_icon_file_path_0 = gui_core.GuiIcon.get('qt-style/arrow-down')
-        self._expand_icon_file_path_1 = gui_core.GuiIcon.get('qt-style/arrow-right')
-        self._expand_icon_file_path_2 = gui_core.GuiIcon.get('qt-style/arrow-left')
+        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('qt-style/arrow-down')
+        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('qt-style/arrow-right')
+        self._expand_icon_file_path_2 = _gui_core.GuiIcon.get('qt-style/arrow-left')
 
 
 class AbsQtHead2(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtNameBaseDef,
-    gui_qt_abstracts.AbsQtIconBaseDef,
+    _qt_abstracts.AbsQtNameBaseDef,
+    _qt_abstracts.AbsQtIconBaseDef,
     #
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForPressDef,
-    gui_qt_abstracts.AbsQtActionForExpandDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForHoverDef,
+    _qt_abstracts.AbsQtActionForPressDef,
+    _qt_abstracts.AbsQtActionForExpandDef,
 ):
     def __init__(self, *args, **kwargs):
         super(AbsQtHead2, self).__init__(*args, **kwargs)
@@ -592,7 +592,7 @@ class AbsQtHead2(
             QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
         )
         #
-        self._name_draw_font = gui_qt_core.QtFonts.ToolGroup
+        self._name_draw_font = _qt_core.QtFonts.ToolGroup
         #
         self._init_name_base_def_(self)
         self._init_icon_base_def_(self)
@@ -605,8 +605,8 @@ class AbsQtHead2(
         #
         self._is_expanded = False
 
-        self._expand_icon_file_path_0 = gui_core.GuiIcon.get('v-bar-close')
-        self._expand_icon_file_path_1 = gui_core.GuiIcon.get('v-bar-open')
+        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('v-bar-close')
+        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('v-bar-open')
 
         self._expand_sub_icon_file_path_0 = None
         self._expand_sub_icon_file_path_1 = None
@@ -638,7 +638,7 @@ class AbsQtHead2(
         self._frame_background_color = color
         self._hovered_frame_background_color = hover_color
         # font
-        self.setFont(gui_qt_core.QtFonts.NameNormal)
+        self.setFont(_qt_core.QtFonts.NameNormal)
 
         self._icon_frame_draw_size = 12, 24
         self._icon_draw_percent = 1
@@ -663,13 +663,13 @@ class AbsQtHead2(
         self._refresh_expand_()
 
     def _set_expand_icon_names_(self, icon_name_0, icon_name_1):
-        self._expand_icon_file_path_1 = gui_core.GuiIcon.get(icon_name_0)
-        self._expand_icon_file_path_0 = gui_core.GuiIcon.get(icon_name_1)
+        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get(icon_name_0)
+        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get(icon_name_1)
         self._refresh_expand_()
 
     def _set_expand_sub_icon_names_(self, icon_name_0, icon_name_1):
-        self._expand_sub_icon_file_path_0 = gui_core.GuiIcon.get(icon_name_0)
-        self._expand_sub_icon_file_path_1 = gui_core.GuiIcon.get(icon_name_1)
+        self._expand_sub_icon_file_path_0 = _gui_core.GuiIcon.get(icon_name_0)
+        self._expand_sub_icon_file_path_1 = _gui_core.GuiIcon.get(icon_name_1)
         self._refresh_expand_()
 
     def eventFilter(self, *args):
@@ -693,7 +693,7 @@ class AbsQtHead2(
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         #
         self._refresh_widget_draw_geometry_()
         #
@@ -723,8 +723,8 @@ class QtHExpandHead2(AbsQtHead2):
         self._icon_frame_draw_size = 12, 24
         self._icon_draw_percent = .75
 
-        self._expand_icon_file_path_0 = gui_core.GuiIcon.get('v-bar-close')
-        self._expand_icon_file_path_1 = gui_core.GuiIcon.get('v-bar-open')
+        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('v-bar-close')
+        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('v-bar-open')
 
 
 class QtVExpandHead2(AbsQtHead2):
@@ -732,5 +732,5 @@ class QtVExpandHead2(AbsQtHead2):
         super(QtVExpandHead2, self).__init__(*args, **kwargs)
         self._icon_frame_draw_size = 24, 12
         self._icon_draw_percent = .75
-        self._expand_icon_file_path_1 = gui_core.GuiIcon.get('h-bar-open')
-        self._expand_icon_file_path_0 = gui_core.GuiIcon.get('h-bar-close')
+        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('h-bar-open')
+        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('h-bar-close')

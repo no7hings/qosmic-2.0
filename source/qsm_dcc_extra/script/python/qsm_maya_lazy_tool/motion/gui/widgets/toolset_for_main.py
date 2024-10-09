@@ -28,7 +28,7 @@ class UnitForRigPicker(
 ):
     def do_gui_refresh_by_dcc_selection(self):
         if self._qt_picker._has_focus_() is False:
-            namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+            namespaces = qsm_mya_core.Namespaces.extract_from_selection()
             if namespaces:
                 namespace_for_adv = qsm_mya_anm_core.AdvRig.filter_namespaces(namespaces)
                 if namespace_for_adv:
@@ -84,7 +84,7 @@ class ToolsetForMotionCopyAndPaste(
     
     def get_dcc_character_args(self):
         results = []
-        namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+        namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
             results = qsm_mya_anm_core.AdvRig.filter_namespaces(namespaces)
 
@@ -488,7 +488,7 @@ class ToolsetForMotionKeyframe(
 
     def _do_dcc_select_character_all_curves(self):
         results = []
-        namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+        namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
             results = qsm_mya_anm_core.AdvRig.filter_namespaces(namespaces)
 

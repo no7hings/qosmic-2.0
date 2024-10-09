@@ -226,27 +226,31 @@ class GuiRgba(object):
     DarkOrange = 159, 95, 63, 255
     LightOrange = 255, 175, 111, 255
 
-    Yellow = 255, 255, 63, 255
-    DarkYellow = 159, 159, 63, 255
-    LightYellow = 255, 255, 111, 255
+    Yellow = 255, 255, 0, 255
+    DarkYellow = 159, 159, 0, 255
+    LightYellow = 255, 255, 63, 255
+
+    LemonYellow = 255, 255, 63, 255
+    DarkLemonYellow = 159, 159, 63, 255
+    LightLemonYellow = 255, 255, 111, 255
 
     Green = 0, 255, 0, 255
     DarkGreen = 0, 159, 0, 255
     LightGreen = 47, 255, 47, 255
 
+    BrightNeonGreen = 119, 255, 223, 255
+    LightNeonGreen = 111, 255, 175, 255
     NeonGreen = 63, 255, 127, 255
     DarkNeonGreen = 63, 159, 95, 255
-    LightNeonGreen = 111, 255, 175, 255
-    BrightNeonGreen = 119, 255, 223, 255
 
+    LightBlue = 47, 47, 255, 255
     Blue = 0, 0, 255, 255
     DarkBlue = 0, 0, 159, 255
-    LightBlue = 47, 47, 255, 255
 
+    LightAzureBlue = 111, 175, 255, 255
     AzureBlue = 63, 127, 255, 255
     DarkAzureBlue = 63, 95, 159, 255
     DimAzureBlue = 55, 87, 151, 255
-    LightAzureBlue = 111, 175, 255, 255
 
     BabyBlue = 63, 255, 255, 255
     DarkBabyBlue = 63, 159, 159, 255
@@ -256,45 +260,159 @@ class GuiRgba(object):
     DarkPurple = 95, 95, 159, 255
     LightPurple = 175, 175, 255, 255
 
-    PinkPurple = 255, 127, 255, 255
-    DarkPinkPurple = 159, 95, 159, 255
-    LightPinkPurple = 255, 175, 255, 255
-
     Pink = 255, 127, 127, 255
     DarkPink = 159, 95, 95, 255
     LightPink = 255, 175, 175, 255
+
+    PinkPurple = 255, 127, 255, 255
+    DarkPinkPurple = 159, 95, 159, 255
+    LightPinkPurple = 255, 175, 255, 255
 
     Violet = 127, 0, 255, 255
 
     White = 255, 255, 255, 255
     DarkWhite = 223, 223, 223, 255
 
-    Gray = 127, 127, 127, 255
-    DarkGray = 95, 95, 95, 255
+    # +32
     LightGray = 159, 159, 159, 255
+    # default
+    Gray = 127, 127, 127, 255
+    # -8
+    GrayA = 119, 119, 119, 255
+    # -16
+    GrayB = 111, 111, 111, 255
+    # -24
+    GrayC = 103, 103, 103, 255
+    # -32
+    DarkGray = 95, 95, 95, 255
+    # -56
+    DimGray = 71, 71, 71, 255
 
     Black = 0, 0, 0, 255
     LightBlack = 31, 31, 31, 255
 
     Light = 223, 223, 223, 255
-
-    LightBasic = 71, 71, 71, 255
+    # +16
+    FadeBasicA = 79, 79, 79, 255
+    # +8
+    FadeBasic = 71, 71, 71, 255
+    # default
     Basic = 63, 63, 63, 255
-
+    # -8
     Dark = 55, 55, 55, 255
+    # -16
     Dim = 47, 47, 47, 255
+    #
     Transparent = 0, 0, 0, 0
 
-    All = [
-        TorchRed, DarkTorchRed, LightTorchRed,
-        LightOrange, Orange, DarkOrange,
-        LightYellow, Yellow, DarkYellow,
-        LightNeonGreen, NeonGreen, DarkNeonGreen,
-        LightAzureBlue, AzureBlue, DarkAzureBlue,
-        LightPurple, Purple, DarkPurple,
-        LightPink, Pink, DarkPink,
-        White, Black, Gray, Light, Transparent
-    ]
+    Shadow = 0, 0, 0, 31
+    
+    BkgButton = 111, 111, 111, 255
+    BkgButtonHover = 151, 151, 151, 255
+    BkgButtonDisable = 79, 79, 79, 255
+
+    BdrButton = 95, 95, 95, 255
+    BdrButtonHover = 143, 143, 151, 255
+    BdrButtonDisable = 71, 71, 71, 255
+    
+    BkgToolTip = 223, 223, 191, 255
+    BdrToolTip = LightBlack
+    TxtToolTip = LightBlack
+    
+    Text = DarkWhite
+    TextHoverA = LightBlack
+    TextHover = White
+    TextDark = 127, 127, 127, 255
+
+    TextEnable = NeonGreen
+    TextDisable = DarkGray
+    TextTemporary = Gray
+    TextWarning = LemonYellow
+    TextError = TorchRed
+    TextLock = Purple
+    TextCorrect = NeonGreen
+    TextActive = AzureBlue
+
+    TxtKey = 191, 191, 191, 255
+    TxtValue = 255, 255, 255, 255
+
+    Border = 71, 71, 71, 255
+    BorderHover = LightOrange
+    BorderSelect = LightAzureBlue
+    BorderAction = LightNeonGreen
+    # +8
+    BorderLight = 79, 79, 79, 255
+    # +16
+    BorderBright = 95, 95, 95, 255
+
+    Background = Basic
+    BackgroundHover = LightOrange
+    BackgroundSelect = LightAzureBlue
+    BackgroundAction = LightNeonGreen
+    # +16
+    BackgroundBright = 79, 79, 79, 255
+    # +8
+    BackgroundLight = 71, 71, 71, 255
+    BackgroundDark = Dark
+    BackgroundDim = Dim
+
+    BkgCheck = Purple
+    BkgCheckHover = LightPurple
+
+    BkgPress = 95, 255, 159, 255
+    BkgPressHover = 255, 179, 47, 255
+
+    BkgDelete = 255, 0, 63, 255
+    BkgDeleteHover = 255, 63, 127, 255
+
+    BkgIcon = 127, 127, 127, 255
+    BdrIcon = 159, 159, 159, 255
+    
+    BdrSubIcon = 207, 207, 207, 255
+    BkgSubIcon = 127, 127, 127, 255
+
+    BkgDragChildPolish = LightLemonYellow
+    BkgDragChildAdd = LightNeonGreen
+
+    BdrPopup = LightAzureBlue
+    BdrSplitMoving = 127, 127, 127, 255
+    
+    BdrCapsuleCheck = 127, 127, 127, 255
+    BdrCapsuleUncheck = 55, 55, 55, 255
+    BdrCapsuleHover = LightOrange
+    BdrCapsuleAction = LightAzureBlue
+    BkgCapsule = 47, 47, 47, 255
+    BkgCapsuleDisable = 55, 55, 55, 255
+    
+    BdrTab = 63, 63, 63, 255
+    BdrTabActive = 87, 87, 87, 255
+    BkgTab = 47, 47, 47, 255
+    BkgTabActive = 63, 63, 63, 255
+
+    BdrTabGroup = 87, 87, 87, 255
+    BdrTabGroupActive = 95, 95, 95, 255
+    BkgTabGroup = 55, 55, 55, 255
+    BkgTabGroupActive = 63, 63, 63, 255
+    
+    BkgBubble = 223, 223, 223, 255
+    BkgBubbleDisable = 127, 127, 127, 255
+    BkgBubbleHover = LightOrange
+    BkgBubbleAction = LightNeonGreen
+    BkgBubbleNextWait = LightLemonYellow
+    BkgBubbleNextFinish = LightNeonGreen
+    BdrBubble = 127, 127, 127, 255
+    TxtBubble = 31, 31, 31, 255
+
+    BkgProgress = 47, 47, 47, 255
+    
+    BdrHead = 87, 87, 87, 255
+    BkgHead = 83, 83, 83, 255
+    
+    TxtHead = 207, 207, 207, 255
+    TxtHeadHover = 223, 223, 223, 255
+    
+    TxtKeywordFilter = 255, 127, 63, 255
+    TxtKeywordFilterOccurrence = 255, 63, 63, 255
 
 
 class GuiProcessStatus(enum.IntEnum):

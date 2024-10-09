@@ -15,7 +15,7 @@ from . import base as _base
 
 
 class PkgContextNew(object):
-    KEY = 'package context'
+    LOG_KEY = 'package context'
 
     BIN_SOURCE = dict(
         windows='X:/PLE/support/wrappers/windows/paper',
@@ -229,13 +229,13 @@ class PkgContextNew(object):
             i_package = self._completed_package_to(i_p, use_beta=use_beta)
             if i_package is not None:
                 bsc_log.Log.trace_method_result(
-                    self.KEY,
+                    self.LOG_KEY,
                     'resolve package: "{}"'.format(i_package)
                 )
                 list_.append(i_package)
             else:
                 bsc_log.Log.trace_method_warning(
-                    self.KEY,
+                    self.LOG_KEY,
                     'package: "{}" is invalid'
                 )
         return list_
@@ -249,7 +249,7 @@ class PkgContextNew(object):
             i_replace_package = self._get_replace_package(i_p, use_beta=use_beta)
             if i_replace_package is not None:
                 bsc_log.Log.trace_method_result(
-                    self.KEY,
+                    self.LOG_KEY,
                     'replace package: "{}"'.format(i_replace_package)
                 )
                 list_.append(i_replace_package)

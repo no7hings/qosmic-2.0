@@ -173,7 +173,7 @@ class DynamicGpuCacheOpt(_rsc_core.ResourceScriptOpt):
         end_frame = kwargs.get('end_frame', end_frame_)
         if scheme == 'default':
             resources = []
-            namespaces = _mya_core.Namespaces.extract_roots_from_selection()
+            namespaces = _mya_core.Namespaces.extract_from_selection()
             if namespaces:
                 resources_query = _core.AdvRigsQuery()
                 resources_query.do_update()
@@ -414,7 +414,7 @@ class DynamicGpuCacheGenerate(object):
 
 
 class DynamicGpuCacheProcess(object):
-    KEY = 'dynamic gpu'
+    LOG_KEY = 'dynamic gpu'
 
     def __init__(self, file_path, cache_file_path, namespace, start_frame, end_frame, motion_file, use_motion):
         self._file_path = file_path
@@ -440,7 +440,7 @@ class DynamicGpuCacheProcess(object):
                 raise RuntimeError()
 
             bsc_log.Log.trace_method_result(
-                self.KEY, 'load scene: {}'.format(self._file_path)
+                self.LOG_KEY, 'load scene: {}'.format(self._file_path)
             )
             if self._use_motion is False:
                 _mya_core.SceneFile.open(self._file_path)

@@ -29,7 +29,7 @@ from .wrap import *
 class _Sprc(object):
     ENCODING = locale.getpreferredencoding()
 
-    KEY = 'sub process'
+    LOG_KEY = 'sub process'
 
     VERBOSE_LEVEL = 1
 

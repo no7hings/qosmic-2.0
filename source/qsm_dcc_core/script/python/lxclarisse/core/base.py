@@ -9,7 +9,7 @@ from .wrap import *
 
 
 class StageOpt(object):
-    KEY = 'clarisse stage'
+    LOG_KEY = 'clarisse stage'
     PATHSEP = '/'
 
     class Types(object):
@@ -47,7 +47,7 @@ class StageOpt(object):
                 self.__to_crs_path_text(path_opt.get_parent_path())
             )
         bsc_log.Log.trace_method_result(
-            self.KEY, 'create node: "{}"'.format(path_text)
+            self.LOG_KEY, 'create node: "{}"'.format(path_text)
         )
 
     def create_dag(self, path_text):

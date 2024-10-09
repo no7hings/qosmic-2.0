@@ -456,13 +456,13 @@ class PrxSessionWindow(PrxBaseWindow):
 
     # noinspection PyUnusedLocal
     def _init_session_window_def_(self, session, *args, **kwargs):
-        self._debug_run_(self._main_fnc_, session)
+        self._gui_debug_run(self._gui_main_fnc, session)
 
     @property
     def session(self):
         return self._session
 
-    def _debug_run_(self, fnc, *args, **kwargs):
+    def _gui_debug_run(self, fnc, *args, **kwargs):
         # noinspection PyBroadException
         try:
             fnc(*args, **kwargs)
@@ -495,7 +495,7 @@ class PrxSessionWindow(PrxBaseWindow):
                 self.set_exception_content_add(value)
 
     # noinspection PyUnusedLocal
-    def _main_fnc_(self, *args, **kwargs):
+    def _gui_main_fnc(self, *args, **kwargs):
         self._session = args[0]
         self._session.set_prx_window(self)
         self._session.reload_configure()
@@ -511,10 +511,10 @@ class PrxSessionWindow(PrxBaseWindow):
         self._qt_thread_enable = bsc_core.EnvBaseMtd.get_qt_thread_enable()
 
         self.start_window_loading(
-            self._setup_fnc_
+            self._gui_setup_fnc
         )
 
-    def _setup_fnc_(self):
+    def _gui_setup_fnc(self):
         self.restore_variants()
         self.gui_setup_fnc()
 
@@ -536,7 +536,7 @@ class PrxSessionToolWindow(PrxSessionWindow):
     def __init__(self, session, *args, **kwargs):
         super(PrxSessionToolWindow, self).__init__(session, *args, **kwargs)
 
-    def _setup_fnc_(self):
+    def _gui_setup_fnc(self):
         self.restore_variants()
 
         self._setup_ssn_tool_()

@@ -7,7 +7,7 @@ import os
 
 import getopt
 
-KEY = 'qsm-hook-engine'
+LOG_KEY = 'qsm-hook-engine'
 
 
 def main(argv):
@@ -93,7 +93,7 @@ def __execute_option_hook(hook_option):
     if hook_engine not in all_hook_engines:
         raise RuntimeError(
             bsc_log.Log.trace_method_error(
-                KEY,
+                LOG_KEY,
                 'engine="{}" is not available'.format(hook_engine)
             )
         )
@@ -190,7 +190,7 @@ def __execute_option_hook_new(hook_option):
     if hook_engine is None:
         raise RuntimeError(
             bsc_log.Log.trace_method_error(
-                KEY, 'hook engine is not valid or not definition'
+                LOG_KEY, 'hook engine is not valid or not definition'
             )
         )
 
@@ -198,7 +198,7 @@ def __execute_option_hook_new(hook_option):
     if hook_engine not in all_hook_engines:
         raise RuntimeError(
             bsc_log.Log.trace_method_error(
-                KEY, 'hook engine is not in configure'
+                LOG_KEY, 'hook engine is not in configure'
             )
         )
 

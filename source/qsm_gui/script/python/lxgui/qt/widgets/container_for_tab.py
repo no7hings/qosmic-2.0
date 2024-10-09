@@ -431,7 +431,7 @@ class _AbsQtHTabToolBox(
         if self._scroll_bar_model.is_valid():
             painter._draw_tab_right_tool_box_by_rect_(
                 rect=self._tab_right_tool_box_draw_rect,
-                background_color=_qt_core.QtBackgroundColors.Basic
+                background_color=_qt_core.QtRgba.Basic
             )
 
     def _add_widget_(self, widget, *args, **kwargs):

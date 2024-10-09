@@ -16,7 +16,7 @@ class CustomMenu(QMenu):
         self.setFont(qt_core.QtFonts.NameNormal)
         #
         # self.setStyleSheet(
-        #     qt_core.GuiQtStyle.get('QMenu')
+        #     qt_core.QtStyle.get('QMenu')
         # )
 
         self.item_height = 22

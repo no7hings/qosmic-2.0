@@ -55,9 +55,9 @@ class _QtListViewWidget(
     def __init__(self, *args, **kwargs):
         super(_QtListViewWidget, self).__init__(*args, **kwargs)
 
-        self.setStyleSheet(_qt_core.GuiQtStyle.get('QListView'))
-        self.verticalScrollBar().setStyleSheet(_qt_core.GuiQtStyle.get('QScrollBar'))
-        self.horizontalScrollBar().setStyleSheet(_qt_core.GuiQtStyle.get('QScrollBar'))
+        self.setStyleSheet(_qt_core.QtStyle.get('QListView'))
+        self.verticalScrollBar().setStyleSheet(_qt_core.QtStyle.get('QScrollBar'))
+        self.horizontalScrollBar().setStyleSheet(_qt_core.QtStyle.get('QScrollBar'))
 
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
         self.setMouseTracking(True)
@@ -187,23 +187,26 @@ class _QtListViewWidget(
         if items:
             drag_data = self._view_model.get_drag_data_for(items)
             if drag_data:
+                mime_data = QtCore.QMimeData()
+
                 c = len(drag_data)
-                c = min(c, 40)
+                draw_c = min(c, 40)
                 drag = QtGui.QDrag(self)
                 x, y = 0, 0
                 grd_w, grd_h = self.gridSize().width(), self.gridSize().height()
                 spc = 4
                 frm_w, frm_h = grd_w, 20
-                pxm_w, pxm_h = grd_w, frm_h+spc*(c-1)
+                pxm_w, pxm_h = grd_w, frm_h+spc*(draw_c-1)
                 pixmap = QtGui.QPixmap(pxm_w, pxm_h)
                 pixmap.fill(QtGui.QColor(63, 63, 63, 255))
                 painter = QtGui.QPainter(pixmap)
-                for i_idx in range(c):
+                for i_idx in range(draw_c):
                     i_rect = QtCore.QRect(x+1, y+(i_idx*spc)+1, frm_w-2, frm_h-2)
                     painter.setPen(QtGui.QColor(*_gui_core.GuiRgba.LightPinkPurple))
                     painter.setBrush(QtGui.QColor(*_gui_core.GuiRgba.Dim))
                     painter.drawRect(i_rect)
-                    if i_idx == (c-1):
+                    # last item
+                    if i_idx == (draw_c-1):
                         i_item_model = items[i_idx]._item_model
                         painter.setPen(QtGui.QColor(*_gui_core.GuiRgba.DarkWhite))
                         i_text_rect = QtCore.QRect(x+1+4, y+(i_idx*spc)+1, frm_w-2-4, frm_h-2)
@@ -223,8 +226,6 @@ class _QtListViewWidget(
 
                 painter.end()
                 drag.setPixmap(pixmap)
-
-                mime_data = QtCore.QMimeData()
 
                 urls = []
                 for i_data in drag_data:
@@ -269,6 +270,7 @@ class QtListWidget(
         self._left_scroll_box.setFixedWidth(self.TOOL_BAR_W)
 
         self._check_tool_box = self._create_left_tool_box_('check')
+        self._check_tool_box.hide()
         self._sort_and_group_tool_box = self._create_left_tool_box_('sort and group')
         self._keyword_filter_tool_box = self._create_top_tool_box_('keyword filter', size_mode=1)
 
@@ -306,6 +308,10 @@ class QtListWidget(
                 QtCore.Qt.WidgetShortcut
             )
             self.addAction(i_action)
+
+    def _set_item_check_enable_(self, boolean):
+        self._check_tool_box.setVisible(boolean)
+        self._view_model.set_item_check_enable(boolean)
 
     def _create_top_tool_box_(self, name, size_mode=0):
         tool_box = _wgt_container.QtHToolBox()

@@ -33,7 +33,12 @@ class Reference(object):
     def get_namespace(cls, path):
         # noinspection PyBroadException
         try:
-            return cmds.referenceQuery(path, namespace=1, shortName=1)
+            # result is :A, must strip ":" later
+            _ = cmds.referenceQuery(path, namespace=1)
+            if _:
+                return _.strip(':')
+            return None
+            # return cmds.referenceQuery(path, namespace=1, shortName=1)
         except Exception:
             return None
 
@@ -99,22 +104,28 @@ class References(object):
     ]
 
     @classmethod
-    def get_all_loaded(cls):
+    def get_all_loaded(cls, nested=False):
         list_ = []
         _ = [i for i in cmds.ls(type='reference', long=1) or [] if i not in cls.NODE_EXCLUDE]
         for i in _:
             if not Reference.is_from_reference(i):
                 if Reference.is_loaded(i):
                     list_.append(i)
+            else:
+                if nested is True:
+                    list_.append(i)
         return list_
 
     @classmethod
-    def get_all(cls):
+    def get_all(cls, nested=False):
         list_ = []
-        _ = [i for i in cmds.ls(type='reference', long=1) or [] if i not in cls.NODE_EXCLUDE]
+        _ = [x for x in cmds.ls(type='reference', long=1) or [] if x not in cls.NODE_EXCLUDE]
         for i in _:
             if not Reference.is_from_reference(i):
                 list_.append(i)
+            else:
+                if nested is True:
+                    list_.append(i)
         return list_
 
 
@@ -164,7 +175,7 @@ class ReferenceNamespacesCache(object):
         self.do_update()
 
     def do_update(self):
-        _ = References.get_all_loaded()
+        _ = References.get_all_loaded(nested=True)
         for i in _:
             i_namespace = Reference.get_namespace(i)
             self._cache_dict[i_namespace] = i
@@ -175,7 +186,7 @@ class ReferenceNamespacesCache(object):
             return Reference.get_file(path, extend)
 
     def get(self, namespace):
-        return self._cache_dict[namespace]
+        return self._cache_dict.get(namespace)
 
     def to_valid_namespaces(self, namespaces):
         list_ = []

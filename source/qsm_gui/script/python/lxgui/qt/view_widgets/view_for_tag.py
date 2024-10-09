@@ -72,7 +72,7 @@ class _QtTagViewWidget(
         self.setMinimumHeight(self.HEIGHT)
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
 
-        self._frame_background_color = _qt_core.QtBackgroundColors.Dim
+        self._frame_background_color = _qt_core.QtRgba.Dim
 
         self._lot = _wgt_base.QtVBoxLayout(self)
         self._lot.setContentsMargins(self.MARGIN, self.MARGIN, self.MARGIN, self.MARGIN)
@@ -300,7 +300,7 @@ class QtTagWidget(
             )
     
     def _hide_all_tool_bar_(self):
-        self._tool_bar_hide_flag = True
+        self._toolbar_hide_flag = True
         self._refresh_button.hide()
         self._top_scroll_box.hide()
         self._left_scroll_box.hide()

@@ -1,14 +1,10 @@
 # coding=utf-8
-# gui
-from ... import core as gui_core
 # qt
 from ..core.wrap import *
 
-from .. import core as gui_qt_core
+from .. import core as _qt_core
 
 from .. import abstracts as gui_qt_abstracts
-# qt widgets
-from . import utility as gui_qt_wgt_utility
 
 
 class QtHResizeHandle(
@@ -57,11 +53,11 @@ class QtHResizeHandle(
         self._init_action_for_hover_def_(self)
         self._init_action_for_press_def_(self)
         #
-        self._hovered_frame_border_color = gui_qt_core.QtBorderColors.Button
-        self._hovered_frame_background_color = gui_qt_core.QtBackgroundColors.Button
+        self._hovered_frame_border_color = _qt_core.QtRgba.BdrButton
+        self._hovered_frame_background_color = _qt_core.QtRgba.BkgButton
 
-        self._actioned_frame_border_color = gui_qt_core.QtBorderColors.Actioned
-        self._actioned_frame_background_color = gui_qt_core.QtBackgroundColors.Actioned
+        self._actioned_frame_border_color = _qt_core.QtRgba.BorderAction
+        self._actioned_frame_background_color = _qt_core.QtRgba.BackgroundAction
 
         self._set_name_text_('resize handle')
         self._set_tool_tip_text_(
@@ -100,7 +96,7 @@ class QtHResizeHandle(
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         painter._draw_icon_file_by_rect_(
             rect=self._resize_icon_draw_rect,
             file_path=self._resize_icon_file_path,

@@ -63,10 +63,10 @@ class _QtTreeViewWidget(
         qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
 
-        self.setStyleSheet(_qt_core.GuiQtStyle.get('QTreeView_new'))
-        self.header().setStyleSheet(_qt_core.GuiQtStyle.get('QHeaderView'))
-        self.verticalScrollBar().setStyleSheet(_qt_core.GuiQtStyle.get('QScrollBar'))
-        self.horizontalScrollBar().setStyleSheet(_qt_core.GuiQtStyle.get('QScrollBar'))
+        self.setStyleSheet(_qt_core.QtStyle.get('QTreeView_new'))
+        self.header().setStyleSheet(_qt_core.QtStyle.get('QHeaderView'))
+        self.verticalScrollBar().setStyleSheet(_qt_core.QtStyle.get('QScrollBar'))
+        self.horizontalScrollBar().setStyleSheet(_qt_core.QtStyle.get('QScrollBar'))
 
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
 
@@ -83,6 +83,7 @@ class _QtTreeViewWidget(
         self.header().setSortIndicatorShown(True)
         self.header().setCascadingSectionResizes(True)
         self.header().setPalette(_qt_core.GuiQtDcc.generate_qt_palette())
+        self.header().setSortIndicatorShown(True)
 
         self.setHeaderHidden(True)
 
@@ -107,39 +108,6 @@ class _QtTreeViewWidget(
 
         self.installEventFilter(self)
         self.viewport().installEventFilter(self)
-
-    def _set_view_header_(self, raw, max_width=0):
-        self.setHeaderHidden(False)
-        texts, width_ps = zip(*raw)
-        count = len(texts)
-        #
-        self.setColumnCount(count)
-        self.setHeaderLabels(texts)
-        set_column_enable = count > 1
-        w = 0
-        if set_column_enable is True:
-            max_division = sum(width_ps)
-            w = int(max_width/max_division)
-        #
-        for index in range(0, count):
-            if set_column_enable is True:
-                self.setColumnWidth(index, w*(width_ps[index]))
-            #
-            icon = QtGui.QIcon()
-            p = QtGui.QPixmap(16, 16)
-            p.load(_gui_core.GuiIcon.get('qt-style/line-v'))
-            icon.addPixmap(
-                p,
-                QtGui.QIcon.Normal,
-                QtGui.QIcon.On
-            )
-            #
-            self.headerItem().setBackground(index, _qt_core.QtBrushes.Background)
-            self.headerItem().setForeground(index, QtGui.QBrush(QtGui.QColor(255, 255, 255, 255)))
-            self.headerItem().setFont(index, _qt_core.QtFonts.NameNormal)
-            # todo: in katana will make text display error, PyQt?
-            # if QT_LOAD_INDEX == 1:
-            self.headerItem().setIcon(index, icon)
 
     def _get_item_has_visible_children_by_index_(self, index):
         row_count = self.model().rowCount(index)
@@ -429,6 +397,7 @@ class QtTreeWidget(
         self._keyword_filter_tool_box = self._create_top_tool_box_('keyword filter', size_mode=1)
         # check
         self._check_tool_box = self._create_left_tool_box_('check')
+        self._check_tool_box.hide()
         # sort and chart
         self._sort_and_chart_tool_box = self._create_left_tool_box_('sort and chart')
 
@@ -466,6 +435,10 @@ class QtTreeWidget(
                 QtCore.Qt.WidgetShortcut
             )
             self.addAction(i_action)
+
+    def _set_item_check_enable_(self, boolean):
+        self._check_tool_box.setVisible(boolean)
+        self._view_model.set_item_check_enable(boolean)
 
     def _create_top_tool_box_(self, name, size_mode=0):
         tool_box = _wgt_container.QtHToolBox()

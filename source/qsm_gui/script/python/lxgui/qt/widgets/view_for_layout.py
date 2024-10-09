@@ -225,23 +225,23 @@ class QtToolGridLayoutWidget(
         if self._frame_draw_is_enable is True:
             painter._draw_frame_by_rect_(
                 rect=self._frame_draw_rect,
-                border_color=_qt_core.QtBorderColors.Basic,
-                background_color=_qt_core.QtBackgroundColors.Dark,
+                border_color=_qt_core.QtRgba.FadeBasic,
+                background_color=_qt_core.QtRgba.Dark,
                 border_radius=4
             )
 
         if self._is_action_flag_match_(self.ActionFlag.DragChildPolish):
             painter._draw_frame_by_rect_(
                 rect=self._drag_rect_child_polish,
-                border_color=_qt_core.QtBorderColors.Button,
-                background_color=_qt_core.QtBackgroundColors.BDragChildPolish,
+                border_color=_qt_core.QtRgba.BdrButton,
+                background_color=_qt_core.QtRgba.BkgDragChildPolish,
                 border_width=1,
             )
         elif self._is_action_flag_match_(self.ActionFlag.DragChildAdd):
             painter._draw_frame_by_rect_(
                 rect=self._drag_rect_child_add,
-                border_color=_qt_core.QtBorderColors.Button,
-                background_color=_qt_core.QtBackgroundColors.BDragChildAdd,
+                border_color=_qt_core.QtRgba.BdrButton,
+                background_color=_qt_core.QtRgba.BkgDragChildAdd,
                 border_width=1,
             )
 
@@ -494,8 +494,8 @@ class QtToolGroupVLayoutWidget(
         if self._is_action_flag_match_(self.ActionFlag.DragChildPolish):
             painter._draw_frame_by_rect_(
                 rect=self._drag_rect_child_polish,
-                border_color=_qt_core.QtBorderColors.Button,
-                background_color=_qt_core.QtBackgroundColors.BDragChildPolish,
+                border_color=_qt_core.QtRgba.BdrButton,
+                background_color=_qt_core.QtRgba.BkgDragChildPolish,
                 border_width=1,
             )
 

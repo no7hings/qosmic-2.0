@@ -100,7 +100,7 @@ def cfx_cloth_cache_generate_fnc(option_opt):
 def rig_validation_fnc(option_opt):
     import qsm_general.core as qsm_gnl_core
 
-    import qsm_maya_lazy.validation.scripts as s
+    import qsm_maya_lazy.validation.tasks as s
 
     kwargs = qsm_gnl_core.MayaCacheProcess.to_option_dict(
         option_opt.to_string()
@@ -114,7 +114,7 @@ def rig_validation_fnc(option_opt):
 def scenery_validation_fnc(option_opt):
     import qsm_general.core as qsm_gnl_core
 
-    import qsm_maya_lazy.validation.scripts as s
+    import qsm_maya_lazy.validation.tasks as s
 
     kwargs = qsm_gnl_core.MayaCacheProcess.to_option_dict(
         option_opt.to_string()
@@ -242,6 +242,7 @@ def main(session):
         mesh_count_generate_fnc(option_opt)
     elif method == 'snapshot_generate':
         snapshot_generate_fnc(option_opt)
+    # new method for unit assembly generate
     elif method == 'unit_assembly_generate':
         unit_assembly_generate_fnc(option_opt)
     # test

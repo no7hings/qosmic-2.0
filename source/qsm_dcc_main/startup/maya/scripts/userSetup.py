@@ -2,7 +2,7 @@
 
 
 class Setup(object):
-    KEY = 'maya setup'
+    LOG_KEY = 'maya setup'
 
     @classmethod
     def get_is_maya(cls):
@@ -20,7 +20,7 @@ class Setup(object):
 
             import lxmaya.startup as mya_startup
 
-            with bsc_log.LogContext.create(cls.KEY, 'TD menu'):
+            with bsc_log.LogContext.create(cls.LOG_KEY, 'TD menu'):
                 mya_startup.MenuBuild().execute()
 
         import lxmaya.core as mya_core
@@ -38,7 +38,7 @@ class Setup(object):
 
             import lxarnold.startup as and_startup
 
-            with bsc_log.LogContext.create(cls.KEY, 'arnold'):
+            with bsc_log.LogContext.create(cls.LOG_KEY, 'arnold'):
                 and_startup.MayaSetup().run()
 
         # noinspection PyUnresolvedReferences
@@ -53,7 +53,7 @@ class Setup(object):
 
             import lxusd.startup as usd_startup
 
-            with bsc_log.LogContext.create(cls.KEY, 'USD'):
+            with bsc_log.LogContext.create(cls.LOG_KEY, 'USD'):
                 usd_startup.UsdSetup.build_environ()
 
         # noinspection PyUnresolvedReferences
@@ -107,7 +107,7 @@ class Setup(object):
 
             import qsm_maya.gui as qsm_mya_gui
 
-            with bsc_log.LogContext.create(cls.KEY, 'Shelf'):
+            with bsc_log.LogContext.create(cls.LOG_KEY, 'Shelf'):
                 qsm_mya_gui.MainShelf().create()
 
         # noinspection PyUnresolvedReferences
@@ -119,7 +119,7 @@ class Setup(object):
     def execute(cls, *args, **kwargs):
         import lxbasic.log as bsc_log
         if cls.get_is_maya():
-            with bsc_log.LogContext.create(cls.KEY):
+            with bsc_log.LogContext.create(cls.LOG_KEY):
                 # cls.setup_arnold()
                 # cls.setup_usd()
                 cls.setup_td_menu()

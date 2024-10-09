@@ -17,7 +17,7 @@ import lxkatana.scripts as ktn_scripts
 
 ktn_scripts.ScpWorkspaceCreateNew.new()
     """
-    KEY = 'workspace'
+    LOG_KEY = 'workspace'
 
     def __init__(self, obj_opt):
         self._obj_opt = obj_opt

@@ -78,7 +78,7 @@ class QtInputAsConstant(
         self._entry_widget.setReadOnly(not boolean)
 
         # self._frame_background_color = [
-        #     _qt_core.QtBackgroundColors.Basic, _qt_core.QtBackgroundColors.Dim
+        #     _qt_core.QtRgba.Basic, _qt_core.QtRgba.Dim
         # ][boolean]
         self._update_background_color_by_locked_(boolean)
         self._refresh_widget_draw_()
@@ -395,7 +395,7 @@ class QtInputAsContent(
         #
         self._build_input_entry_(self._value_type)
 
-        # self._frame_background_color = _qt_core.QtBackgroundColors.Dark
+        # self._frame_background_color = _qt_core.QtRgba.Dark
 
     def _build_input_entry_(self, value_type):
         self._entry_frame_widget = self
@@ -491,7 +491,7 @@ class QtInputAsContent(
         self._entry_widget.setReadOnly(not boolean)
         # fixme: not use?
         # self._frame_background_color = [
-        #     _qt_core.QtBackgroundColors.Dark, _qt_core.QtBackgroundColors.Dim
+        #     _qt_core.QtRgba.Dark, _qt_core.QtRgba.Dim
         # ][boolean]
         self._update_background_color_by_locked_(boolean)
         self._refresh_widget_draw_()
@@ -601,6 +601,9 @@ class QtInputAsList(
 
     def _append_value_(self, value):
         self._entry_widget._append_value_(value)
+
+    def _remove_value_(self, value):
+        self._entry_widget._remove_value_(value)
 
     def _extend_values_(self, values):
         self._entry_widget._extend_values_(values)
@@ -926,7 +929,7 @@ class QtInputAsRgba(
         offset = self._get_action_offset_()
         painter._draw_frame_by_rect_(
             self._value_draw_rect,
-            border_color=_qt_core.QtBorderColors.Transparent,
+            border_color=_qt_core.QtRgba.Transparent,
             background_color=rgba,
             offset=offset
         )

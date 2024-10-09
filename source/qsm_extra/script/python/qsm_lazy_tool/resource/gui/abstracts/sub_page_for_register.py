@@ -19,7 +19,7 @@ import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.widgets as gui_qt_widgets
 
-import lxgui.qt.view_widgets as gui_qt_view_widgets
+import lxgui.qt.view_widgets as gui_qt_vew_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
@@ -89,12 +89,12 @@ class AbsPrxSubPageForMotionRegister(
         self._prx_tool_group.add_widget(qt_widget_0)
         h_qt_lot_0 = gui_qt_widgets.QtHBoxLayout(qt_widget_0)
 
-        self._type_qt_tag_widget = gui_qt_view_widgets.QtTagWidget()
+        self._type_qt_tag_widget = gui_qt_vew_widgets.QtTagWidget()
         h_qt_lot_0.addWidget(
             self._type_qt_tag_widget
         )
 
-        self._tag_qt_tag_widget = gui_qt_view_widgets.QtTagWidget()
+        self._tag_qt_tag_widget = gui_qt_vew_widgets.QtTagWidget()
         h_qt_lot_0.addWidget(
             self._tag_qt_tag_widget
         )
@@ -240,13 +240,13 @@ class _AbsPrxPageForAnyRegister(
         self._prx_tool_group.add_widget(qt_widget_0)
         h_qt_lot_0 = gui_qt_widgets.QtHBoxLayout(qt_widget_0)
 
-        self._type_qt_tag_widget = gui_qt_view_widgets.QtTagWidget()
+        self._type_qt_tag_widget = gui_qt_vew_widgets.QtTagWidget()
         h_qt_lot_0.addWidget(
             self._type_qt_tag_widget
         )
         self._type_qt_tag_widget._hide_all_tool_bar_()
 
-        self._tag_qt_tag_widget = gui_qt_view_widgets.QtTagWidget()
+        self._tag_qt_tag_widget = gui_qt_vew_widgets.QtTagWidget()
         h_qt_lot_0.addWidget(
             self._tag_qt_tag_widget
         )
@@ -355,3 +355,16 @@ class AbsPrxSubPageForAudioRegister(_AbsPrxPageForAnyRegister):
         self._prx_options_node.get_port('files').do_clear()
 
         self.clear_type_and_tag_checked()
+
+
+class AbsPrxSubPageForAssetRegister(
+    gui_prx_widgets.PrxBaseSubPage,
+    _AbsRegister
+):
+    def __init__(self, window, session, sub_window, *args, **kwargs):
+        super(AbsPrxSubPageForAssetRegister, self).__init__(window, session, sub_window, *args, **kwargs)
+        self._init_base()
+        self.gui_page_setup_fnc()
+
+    def gui_page_setup_fnc(self):
+        pass

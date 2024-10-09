@@ -1,26 +1,26 @@
 # coding=utf-8
 import lxbasic.core as bsc_core
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
 from ..core.wrap import *
 # qt widgets
-from .. import core as gui_qt_core
+from .. import core as _qt_core
 
-from .. import abstracts as gui_qt_abstracts
+from .. import abstracts as _qt_abstracts
 
-from . import button as gui_qt_wgt_button
+from . import button as _qt_wgt_button
 
 
 class _QtStatusItem(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
-    gui_qt_abstracts.AbsQtNameBaseDef,
-    gui_qt_abstracts.AbsQtIconBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtNameBaseDef,
+    _qt_abstracts.AbsQtIconBaseDef,
     #
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForCheckDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForHoverDef,
+    _qt_abstracts.AbsQtActionForCheckDef,
 ):
     def __init__(self, *args, **kwargs):
         super(_QtStatusItem, self).__init__(*args, **kwargs)
@@ -72,7 +72,7 @@ class _QtStatusItem(
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         #
         self._refresh_widget_draw_geometry_()
         #
@@ -80,7 +80,7 @@ class _QtStatusItem(
         is_hovered = self._is_hovered_()
         #
         if self._is_checked_():
-            background_color = [gui_qt_core.QtColors.Yellow, gui_qt_core.QtColors.BackgroundHover][is_hovered]
+            background_color = [_qt_core.QtRgba.Yellow, _qt_core.QtRgba.BackgroundHover][is_hovered]
             painter._draw_image_use_text_by_rect_(
                 rect=self._icon_color_draw_rect,
                 text='l',
@@ -90,7 +90,7 @@ class _QtStatusItem(
                 border_radius=1
             )
         else:
-            background_color = [gui_qt_core.QtColors.Transparent, gui_qt_core.QtColors.BackgroundHover][is_hovered]
+            background_color = [_qt_core.QtRgba.Transparent, _qt_core.QtRgba.BackgroundHover][is_hovered]
             painter._draw_image_use_text_by_rect_(
                 rect=self._icon_color_draw_rect,
                 text='d',
@@ -103,13 +103,13 @@ class _QtStatusItem(
 
 class _QtHContractItem(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtIconBaseDef,
+    _qt_abstracts.AbsQtIconBaseDef,
     #
-    gui_qt_abstracts.AbsQtNameBaseDef,
-    gui_qt_abstracts.AbsQtActionBaseDef,
-    gui_qt_abstracts.AbsQtActionForHoverDef,
-    gui_qt_abstracts.AbsQtActionForPressDef,
-    gui_qt_abstracts.AbsQtActionForExpandDef,
+    _qt_abstracts.AbsQtNameBaseDef,
+    _qt_abstracts.AbsQtActionBaseDef,
+    _qt_abstracts.AbsQtActionForHoverDef,
+    _qt_abstracts.AbsQtActionForPressDef,
+    _qt_abstracts.AbsQtActionForExpandDef,
 ):
     def __init__(self, *args, **kwargs):
         super(_QtHContractItem, self).__init__(*args, **kwargs)
@@ -120,7 +120,7 @@ class _QtHContractItem(
             QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
         )
         #
-        self._name_draw_font = gui_qt_core.QtFonts.ToolGroup
+        self._name_draw_font = _qt_core.QtFonts.ToolGroup
         #
         self._init_icon_base_def_(self)
         self._init_name_base_def_(self)
@@ -132,8 +132,8 @@ class _QtHContractItem(
         self._init_action_for_expand_def_(self)
         #
         self._is_expanded = False
-        self._expand_icon_file_path_0 = gui_core.GuiIcon.get('contract_v_r')
-        self._expand_icon_file_path_1 = gui_core.GuiIcon.get('contract_v_l')
+        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('contract_v_r')
+        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('contract_v_l')
 
         self._expand_sub_icon_file_path_0 = None
         self._expand_sub_icon_file_path_1 = None
@@ -165,7 +165,7 @@ class _QtHContractItem(
         self._frame_background_color = color
         self._hovered_frame_background_color = hover_color
         # font
-        self.setFont(gui_qt_core.QtFonts.NameNormal)
+        self.setFont(_qt_core.QtFonts.NameNormal)
 
         self._icon_frame_draw_size = 12, 24
         self._icon_draw_percent = 1
@@ -173,11 +173,11 @@ class _QtHContractItem(
 
     def _set_expand_direction_(self, direction):
         if direction == self.CollapseDirection.RightToLeft:
-            self._expand_icon_file_path_0 = gui_core.GuiIcon.get('contract_v_r')
-            self._expand_icon_file_path_1 = gui_core.GuiIcon.get('contract_v_l')
+            self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('contract_v_r')
+            self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('contract_v_l')
         elif direction == self.CollapseDirection.LeftToRight:
-            self._expand_icon_file_path_0 = gui_core.GuiIcon.get('contract_v_l')
-            self._expand_icon_file_path_1 = gui_core.GuiIcon.get('contract_v_r')
+            self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('contract_v_l')
+            self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('contract_v_r')
         #
         self._refresh_expand_()
 
@@ -200,13 +200,13 @@ class _QtHContractItem(
         self._refresh_expand_()
 
     def _set_expand_icon_names_(self, icon_name_0, icon_name_1):
-        self._expand_icon_file_path_1 = gui_core.GuiIcon.get(icon_name_0)
-        self._expand_icon_file_path_0 = gui_core.GuiIcon.get(icon_name_1)
+        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get(icon_name_0)
+        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get(icon_name_1)
         self._refresh_expand_()
 
     def _set_expand_sub_icon_names_(self, icon_name_0, icon_name_1):
-        self._expand_sub_icon_file_path_0 = gui_core.GuiIcon.get(icon_name_0)
-        self._expand_sub_icon_file_path_1 = gui_core.GuiIcon.get(icon_name_1)
+        self._expand_sub_icon_file_path_0 = _gui_core.GuiIcon.get(icon_name_0)
+        self._expand_sub_icon_file_path_1 = _gui_core.GuiIcon.get(icon_name_1)
         self._refresh_expand_()
 
     def eventFilter(self, *args):
@@ -230,7 +230,7 @@ class _QtHContractItem(
         return False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         #
         self._refresh_widget_draw_geometry_()
         #
@@ -260,7 +260,7 @@ class _QtHContractItem(
 
 class _QtWindowHead(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
 ):
     def _refresh_widget_draw_(self):
         self.update()
@@ -276,12 +276,12 @@ class _QtWindowHead(
         self._frame_background_color = 71, 71, 71, 255
         self._frame_border_color = 95, 95, 95, 255
         #
-        self._close_button = gui_qt_wgt_button.QtIconPressButton(self)
+        self._close_button = _qt_wgt_button.QtIconPressButton(self)
         self._close_button._set_icon_file_path_(
-            gui_core.GuiIcon.get('close')
+            _gui_core.GuiIcon.get('close')
         )
         self._close_button._set_hover_icon_file_path_(
-            gui_core.GuiIcon.get('close-hover')
+            _gui_core.GuiIcon.get('close-hover')
         )
         #
         self._close_button.press_clicked.connect(
@@ -291,7 +291,7 @@ class _QtWindowHead(
         self._orientation = QtCore.Qt.Horizontal
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         #
         self._set_widget_geometries_update_()
         #

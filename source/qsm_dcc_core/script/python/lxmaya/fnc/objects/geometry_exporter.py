@@ -790,7 +790,7 @@ class FncExporterForGeometryUvMapUsd(gnl_fnc_abstracts.AbsFncOptionBase):
 
 
 class FncExporterForGeometryUsdNew(gnl_fnc_abstracts.AbsFncOptionBase):
-    KEY = 'geometry usd export'
+    LOG_KEY = 'geometry usd export'
     OPTION = dict(
         file='',
         # locations
@@ -909,6 +909,6 @@ class FncExporterForGeometryUsdNew(gnl_fnc_abstracts.AbsFncOptionBase):
             )
         else:
             bsc_log.Log.trace_method_warning(
-                self.KEY,
+                self.LOG_KEY,
                 'nothing to export'
             )

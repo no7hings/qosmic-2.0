@@ -189,7 +189,7 @@ class _QtTagNodeItem(
         else:
             bkg_color = self._frame_background_color
 
-        painter._set_border_color_(_qt_core.QtBorderColors.Transparent)
+        painter._set_border_color_(_qt_core.QtRgba.Transparent)
         painter._set_background_color_(bkg_color)
         painter.drawRect(
             self._frame_draw_rect
@@ -851,7 +851,7 @@ class QtViewForTagRoot(
 
         self._init_tag_base_(self)
 
-        self._frame_background_color = _qt_core.QtBackgroundColors.Dim
+        self._frame_background_color = _qt_core.QtRgba.Dim
 
         self._lot = _base.QtVBoxLayout(self)
         self._lot.setContentsMargins(self.MARGIN, self.MARGIN, self.MARGIN, self.MARGIN)

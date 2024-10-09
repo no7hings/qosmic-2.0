@@ -150,7 +150,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
     KEY_TOOL_GROUP_ORDER = 'tool-desktop.tool_group_order'
     KEY_TOOL_ORDER = 'tool-desktop.tool_order'
 
-    KEY = 'desktop kit'
+    LOG_KEY = 'desktop kit'
 
     def __init__(self, *args, **kwargs):
         super(AbsToolKitForDesktop, self).__init__(*args, **kwargs)
@@ -232,7 +232,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         self.register_window_close_method(self.__close_fnc)
 
         bsc_log.Log.trace_method_result(
-            self.KEY, 'is ready'
+            self.LOG_KEY, 'is ready'
         )
 
     def gui_build_filter(self):

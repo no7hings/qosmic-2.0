@@ -180,10 +180,10 @@ class QtMainWindow(
         self._init_thread_worker_extra_def_(self)
 
         self.setStyleSheet(
-            _qt_core.GuiQtStyle.get('QMainWindow')
+            _qt_core.QtStyle.get('QMainWindow')
         )
         self.menuBar().setStyleSheet(
-            _qt_core.GuiQtStyle.get('QMenuBar')
+            _qt_core.QtStyle.get('QMenuBar')
         )
         self._frame_draw_rect = QtCore.QRect()
         self._menu_frame_draw_rect = QtCore.QRect()
@@ -226,11 +226,11 @@ class QtMainWindow(
         painter = _qt_core.QtPainter(self)
         painter.fillRect(
             self._frame_draw_rect,
-            _qt_core.QtBackgroundColors.Basic
+            _qt_core.QtRgba.Basic
         )
         painter.fillRect(
             self._menu_frame_draw_rect,
-            _qt_core.QtBackgroundColors.Dark
+            _qt_core.QtRgba.Dark
         )
 
     def closeEvent(self, event):

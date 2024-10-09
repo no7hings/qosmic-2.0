@@ -21,7 +21,7 @@ options:
 
         reset_transformations:
             enable: True
-            description: 'Attribute {attribute} value is {}, non-reset.'
+            description: 'Attribute {attribute} value is {value}, non-reset.'
             description_chs: '属性{attribute}的数值为{value}，未重置。'
             level: 'error'
 
@@ -54,17 +54,24 @@ options:
     skin:
         deficiency_weight_vertices:
             enable: True
-            description: 'Weight is Deficiency (Sum of weights for all joints is less than 1).'
-            description_chs: '权重不足（所有骨骼的权重和小于1）。'
-            level: 'warning'
+            description: '{vertex}'
+            description_chs: '{vertex}'
+            level: 'error'
 
     mesh:
-        non_manifold:
-            enable: False
+        non_manifold_vertices:
+            enable: True
             limit_value: 0
-            description: ''
-            description_chs: ''
-            level: 'warning'
+            description: '{vertex}'
+            description_chs: '{vertex}'
+            level: 'error'
+
+        lamina_faces:
+            enable: True
+            limit_value: 0
+            description: '{face}'
+            description_chs: '{face}'
+            level: 'error'
 
     mesh_count:
         triangle:
@@ -146,9 +153,13 @@ convertion:
         name: 'Mesh'
         name_chs: '网格'
 
-    non_manifold:
-        name: 'Non Manifold'
-        name_chs: '非流形'
+    non_manifold_vertices:
+        name: 'Non Manifold Vertices'
+        name_chs: '非流形的点'
+
+    lamina_faces:
+        name: 'Lamina Faces (face sharing all edges)'
+        name_chs: '重叠的面'
 
     mesh_count:
         name: 'Mesh Count'

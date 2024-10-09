@@ -90,7 +90,7 @@ class Shader(mya_abstracts.AbsMyaNode):
         if self.get_is_exists() is False:
             name = self.name
             bsc_log.Log.trace_method_result(
-                self.KEY,
+                self.LOG_KEY,
                 'create node: "{}"'.format(self.path)
             )
             category = mya_core.ShaderCategory.get(obj_type, 'utility')
@@ -123,7 +123,7 @@ class AndShader(Shader):
         if self.get_is_exists() is False:
             name = self.name
             bsc_log.Log.trace_method_result(
-                self.KEY,
+                self.LOG_KEY,
                 u'create node: "{}"'.format(self.path)
             )
             category = mya_core.ShaderCategory.get(obj_type, 'utility')

@@ -7,7 +7,7 @@ import os
 
 import getopt
 
-KEY = 'qsm-app'
+LOG_KEY = 'qsm-app'
 
 
 def main(argv):
@@ -108,7 +108,7 @@ def __guess_by_args(args):
     import lxbasic.log as bsc_log
 
     bsc_log.Log.trace_method_result(
-        KEY,
+        LOG_KEY,
         'execute from: {}'.format(__file__)
     )
     # etc. nsa_dev.maya

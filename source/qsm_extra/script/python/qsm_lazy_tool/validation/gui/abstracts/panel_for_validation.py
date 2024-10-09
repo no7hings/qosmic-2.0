@@ -6,14 +6,11 @@ import lxgui.core as gui_core
 import lxgui.proxy.widgets as gui_prx_widgets
 
 
-class AbsPrxPanelForMontage(gui_prx_widgets.PrxBasePanel):
-    PAGE_FOR_RIG = None
-    PAGE_CLASSES = []
-
+class AbsPrxPanelForValidation(gui_prx_widgets.PrxBasePanel):
     CONFIGURE_KEY = 'lazy-validation/gui/main'
 
     def __init__(self, window, session, *args, **kwargs):
-        super(AbsPrxPanelForMontage, self).__init__(window, session, *args, **kwargs)
+        super(AbsPrxPanelForValidation, self).__init__(window, session, *args, **kwargs)
 
     def gui_setup_fnc(self):
         self._page_dict = {}
@@ -21,7 +18,7 @@ class AbsPrxPanelForMontage(gui_prx_widgets.PrxBasePanel):
         self._prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         self.add_widget(self._prx_tab_tool_box)
 
-        self.gui_setup_pages_for(['rig', 'scenery'])
+        self.gui_setup_pages_for(['rig', 'rig_batch', 'scenery', 'scenery_batch'])
 
         self._prx_tab_tool_box.set_history_key('lazy-validation.page_key_current')
         self._prx_tab_tool_box.load_history()

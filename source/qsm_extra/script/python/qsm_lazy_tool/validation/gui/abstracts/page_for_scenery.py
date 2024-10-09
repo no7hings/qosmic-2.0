@@ -2,25 +2,12 @@
 import copy
 
 import functools
-import json
-
-import six
 
 import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.resource as bsc_resource
-
-import lxbasic.pinyin as bsc_pinyin
-
 import lxgui.core as gui_core
-
-import lxgui.qt.core as gui_qt_core
-
-import lxgui.qt.widgets as gui_qt_widgets
-
-import lxgui.proxy.abstracts as gui_prx_abstracts
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
@@ -30,27 +17,20 @@ import qsm_general.core as qsm_gnl_core
 
 import qsm_general.scan as qsm_gnl_scan
 
+import qsm_lazy.validation.scripts as qsm_lzy_vld_scripts
+
 import qsm_gui.proxy.widgets as qsm_gui_prx_widgets
 
 
-class AbsPrxPageForScenery(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
-
+class AbsPrxPageForScenery(gui_prx_widgets.PrxBasePage):
     PAGE_KEY = 'scenery'
 
-    def _trace_result(self, validation_cache_path, mesh_count_cache_path, process_options):
-        validation_result = self._to_validation_result(validation_cache_path, mesh_count_cache_path, process_options)
-        self._result_prx_text_browser.append_html(validation_result)
-
-    @classmethod
-    def _to_validation_result(cls, validation_cache_path, mesh_count_cache_path, process_options):
-        validation_result_dict = bsc_storage.StgFileOpt(validation_cache_path).set_read()
-        mesh_count_data = bsc_storage.StgFileOpt(mesh_count_cache_path).set_read()
-        validation_opt = qsm_gnl_core.DccValidationOptions('lazy-validation/option/scenery')
-        validation_opt.update_process_options(process_options)
-        mesh_count_result_dict = validation_opt.to_result_dict_for_mesh_count(mesh_count_data)
-        component_mesh_count_result_dict =validation_opt.to_result_dict_for_component_mesh_count(mesh_count_data)
-        return validation_opt.to_html(validation_result_dict, mesh_count_result_dict, component_mesh_count_result_dict)
+    def _trace_result(self, file_path, validation_cache_path, mesh_count_cache_path, process_options):
+        result, html = self._validation_opt.to_validation_result_args(
+            validation_cache_path, mesh_count_cache_path, process_options
+        )
+        self._result_prx_text_browser.append_html(html)
+        # self._prx_options_node.get_port('files').remove(file_path)
 
     def _on_dcc_load_asset(self):
         if self._asset_path is not None:
@@ -59,30 +39,30 @@ class AbsPrxPageForScenery(gui_prx_abstracts.AbsPrxWidget):
     def _start_delay(self, window, file_paths, process_options):
         process_args = []
         for i_file_path in file_paths:
-            i_args = self._generate_process_args(i_file_path, process_options)
+            i_args = self._validation_opt.generate_process_args(i_file_path)
             if i_args is not None:
                 i_task_name, i_cmd_script, i_validation_cache_path, i_mesh_count_cache_path = i_args
                 if i_cmd_script is not None:
                     process_args.append(
-                        (i_task_name, i_cmd_script, i_validation_cache_path, i_mesh_count_cache_path)
+                        (i_file_path, i_task_name, i_cmd_script, i_validation_cache_path, i_mesh_count_cache_path)
                     )
                 else:
                     self._trace_result(
-                        i_validation_cache_path, i_mesh_count_cache_path, process_options
+                        i_file_path, i_validation_cache_path, i_mesh_count_cache_path, process_options
                     )
 
         if process_args:
             window.show_window_auto(exclusive=False)
 
             for i_args in process_args:
-                i_task_name, i_cmd_script, i_validation_cache_path, i_mesh_count_cache_path = i_args
+                i_file_path, i_task_name, i_cmd_script, i_validation_cache_path, i_mesh_count_cache_path = i_args
                 window.submit(
                     'scenery_validation_process',
                     i_task_name,
                     i_cmd_script,
                     completed_fnc=functools.partial(
                         self._trace_result,
-                        i_validation_cache_path, i_mesh_count_cache_path, process_options
+                        i_file_path, i_validation_cache_path, i_mesh_count_cache_path, process_options
                     )
                 )
         else:
@@ -99,7 +79,7 @@ class AbsPrxPageForScenery(gui_prx_abstracts.AbsPrxWidget):
             )
             return
 
-        process_options = self._generate_process_options()
+        process_options = self._validation_opt.generate_process_options(self._prx_options_node.to_dict())
         if not process_options:
             self._window.exec_message_dialog(
                 self._window.choice_message(
@@ -143,72 +123,18 @@ class AbsPrxPageForScenery(gui_prx_abstracts.AbsPrxWidget):
                         self._asset_path = result
                         self._asset_load_qt_button._set_action_enable_(True)
 
-    def _generate_process_options(self):
-        options = dict()
-        data = self._prx_options_node.to_dict()
-        branches = [
-            # 'mesh',
-            'mesh_count',
-            'component_mesh_count',
-        ]
-        for i_branch in branches:
-            i_leafs = data[i_branch]
-            if i_leafs:
-                options[i_branch] = i_leafs
-        return options
-
-    @classmethod
-    def _generate_process_args(cls, file_path, process_options):
-        api_version = 1.0
-        process_options = copy.copy(process_options)
-        process_options['version'] = api_version
-        option_hash = bsc_core.BscHash.to_hash_key(process_options)
-
-        task_name = '[scenery-validation][{}]'.format(
-            bsc_storage.StgFileOpt(file_path).name
-        )
-        validation_cache_path = qsm_gnl_core.MayaCache.generate_asset_scenery_validation_result_file(
-            file_path, option_hash=option_hash
-        )
-        mesh_count_cache_path = qsm_gnl_core.MayaCache.generate_asset_mesh_count_file(
-            file_path, version=api_version
-        )
-        if (
-            bsc_storage.StgFileOpt(validation_cache_path).get_is_file() is False
-            or bsc_storage.StgFileOpt(mesh_count_cache_path).get_is_file() is False
-        ):
-            cmd_script = qsm_gnl_core.MayaCacheProcess.generate_cmd_script_by_option_dict(
-                'scenery_validation',
-                dict(
-                    file_path=file_path,
-                    validation_cache_path=validation_cache_path,
-                    mesh_count_cache_path=mesh_count_cache_path,
-                    process_options=process_options
-                )
-            )
-            return task_name, cmd_script, validation_cache_path, mesh_count_cache_path
-        return task_name, None, validation_cache_path, mesh_count_cache_path
-
     def __init__(self, window, session, *args, **kwargs):
-        super(AbsPrxPageForScenery, self).__init__(*args, **kwargs)
-
-        self._window = window
-        self._session = session
-
+        super(AbsPrxPageForScenery, self).__init__(window, session, *args, **kwargs)
         self._asset_path = None
         self._scan_root = qsm_gnl_scan.Root.generate()
 
-        self._validation_options = qsm_gnl_core.DccValidationOptions('lazy-validation/option/scenery')
+        self._validation_opt = qsm_lzy_vld_scripts.SceneryValidationOpt()
 
         self.gui_page_setup_fnc()
 
     def gui_page_setup_fnc(self):
-        qt_v_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
-        qt_v_lot.setContentsMargins(*[0]*4)
-        qt_v_lot.setSpacing(2)
-
         self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
-        qt_v_lot.addWidget(self._top_prx_tool_bar.widget)
+        self._qt_layout.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)
         # load tool
@@ -217,7 +143,7 @@ class AbsPrxPageForScenery(gui_prx_abstracts.AbsPrxWidget):
         )
         self._asset_prx_input = qsm_gui_prx_widgets.PrxAssetInputForScenery()
         self._asset_prx_tool_box.add_widget(self._asset_prx_input)
-        self._asset_prx_input.widget.setMaximumWidth(516)
+        # self._asset_prx_input.widget.setMaximumWidth(516)
 
         self._asset_load_qt_button = qt_widgets.QtPressButton()
         self._asset_prx_input.add_widget(self._asset_load_qt_button)
@@ -232,37 +158,38 @@ class AbsPrxPageForScenery(gui_prx_abstracts.AbsPrxWidget):
         self._asset_load_qt_button._set_action_enable_(False)
 
         v_prx_sca = gui_prx_widgets.PrxVScrollArea()
-        qt_v_lot.addWidget(v_prx_sca.widget)
+        self._qt_layout.addWidget(v_prx_sca.widget)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             self._window.choice_name(
-                self._window._configure.get('build.{}.units.main.options'.format(self.PAGE_KEY))
+                self._window._configure.get('build.{}.options'.format(self.PAGE_KEY))
             )
         )
         v_prx_sca.add_widget(self._prx_options_node)
         self._prx_options_node.build_by_data(
-            self._window._configure.get('build.{}.units.main.options.parameters'.format(self.PAGE_KEY)),
+            self._window._configure.get('build.{}.options.parameters'.format(self.PAGE_KEY)),
         )
-
-        # validation result
+        # validation results
         self._result_prx_tool_group = gui_prx_widgets.PrxHToolGroup()
         v_prx_sca.add_widget(self._result_prx_tool_group)
         self._result_prx_tool_group.set_expanded(True)
         self._result_prx_tool_group.set_name(
             gui_core.GuiUtil.choice_name(
-                self._window._language, self._window._configure.get('build.{}.validation_result'.format(self.PAGE_KEY))
+                self._window._language, 
+                self._window._configure.get('build.{}.groups.results'.format(self.PAGE_KEY))
             )
         )
         self._result_prx_text_browser = gui_prx_widgets.PrxTextBrowser()
         self._result_prx_tool_group.add_widget(self._result_prx_text_browser)
         self._result_prx_text_browser.set_content(
-            gui_core.GuiUtil.choice_tool_tip(
-                self._window._language, self._window._configure.get('build.{}.validation_result'.format(self.PAGE_KEY))
+            gui_core.GuiUtil.choice_description(
+                self._window._language, 
+                self._window._configure.get('build.{}.contents.results'.format(self.PAGE_KEY))
             )
         )
         # buttons
         self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
-        qt_v_lot.addWidget(self._bottom_prx_tool_bar.widget)
+        self._qt_layout.addWidget(self._bottom_prx_tool_bar.widget)
         self._bottom_prx_tool_bar.set_expanded(True)
 
         self._start_prx_button = gui_prx_widgets.PrxPressButton()
@@ -279,6 +206,6 @@ class AbsPrxPageForScenery(gui_prx_abstracts.AbsPrxWidget):
         self._asset_prx_input.connect_input_change_accepted_to(self._do_gui_refresh_asset_for)
         self._do_gui_refresh_asset_for(self._asset_prx_input.get_path())
 
-        process_options = self._validation_options.generate_process_options()
+        process_options = self._validation_opt.options.generate_process_options()
         for k, v in process_options.items():
             self._prx_options_node.set(k, v)

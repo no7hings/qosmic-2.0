@@ -301,6 +301,11 @@ class PrxInputAsStorageArray(_AbsPrxInput):
             value
         )
 
+    def remove(self, value):
+        self._qt_input_widget._remove_value_(
+            value
+        )
+
     def extend(self, values):
         self._qt_input_widget._extend_values_(
             values
@@ -546,6 +551,11 @@ class PrxInputAsArray(_AbsPrxInput):
 
     def append(self, value):
         self._qt_input_widget._append_value_(
+            value
+        )
+
+    def remove(self, value):
+        self._qt_input_widget._remove_value_(
             value
         )
 

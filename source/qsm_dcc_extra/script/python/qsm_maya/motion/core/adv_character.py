@@ -18,7 +18,7 @@ from . import control as _control
 
 
 class AdvCharacterMotionOpt(object):
-    KEY = 'adv rig motion'
+    LOG_KEY = 'adv rig motion'
     
     def __init__(self, namespace):
         self._namespace = namespace
@@ -129,7 +129,7 @@ class AdvCharacterMotionOpt(object):
     @_mya_core.Undo.execute
     def apply_data(self, data, **kwargs):
         bsc_log.Log.trace_method_result(
-            self.KEY,
+            self.LOG_KEY,
             'apply data: "{}"'.format(', '.join(['{}={}'.format(k, v) for k, v in kwargs.items()]))
         )
 

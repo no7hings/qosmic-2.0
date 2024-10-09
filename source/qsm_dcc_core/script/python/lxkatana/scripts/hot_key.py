@@ -7,7 +7,7 @@ from .. import core as ktn_core
 
 
 class _AbsHotkey(object):
-    KEY = 'hot key'
+    LOG_KEY = 'hot key'
 
 
 class ScpHotKeyForNodeGraphLayout(_AbsHotkey):
@@ -49,7 +49,7 @@ ktn_core.ScpHotKeyForNodeGraphLayout().register()
 
     def register(self):
         bsc_log.Log.trace_method_result(
-            self.KEY,
+            self.LOG_KEY,
             'register: name is "{}", hot key is "{}"'.format(self.NAME, self.HOT_KEY)
         )
         self._ktn_gui.registerKeyboardShortcut(
@@ -93,7 +93,7 @@ class ScpHotKeyForNodeGraphPaste(_AbsHotkey):
 
     def register(self):
         bsc_log.Log.trace_method_result(
-            self.KEY,
+            self.LOG_KEY,
             'register: name is "{}", hot key is "{}"'.format(self.NAME, self.HOT_KEY)
         )
         self._ktn_gui.registerKeyboardShortcut(

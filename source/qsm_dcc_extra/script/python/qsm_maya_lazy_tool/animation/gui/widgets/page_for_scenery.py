@@ -48,7 +48,7 @@ class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
             self._script_job_opt.EventTypes.SelectionChanged
         )
         self._script_job_opt.register(
-            self._gui_extend_opt.do_gui_refresh_by_dcc_frame_changing,
+            self._gui_motion_opt.do_gui_refresh_by_dcc_frame_changing,
             self._script_job_opt.EventTypes.FrameRangeChanged
         )
         
@@ -194,12 +194,12 @@ class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
             self._window, self, self._session
         )
         # extend
-        self._gui_extend_opt = _unit_for_scenery.PrxToolsetForCameraMask(
+        self._gui_motion_opt = _unit_for_scenery.PrxToolsetForCameraMask(
             self._window, self, self._session
         )
 
-        self._gui_extend_opt.do_gui_refresh_by_camera_changing()
-        self._gui_extend_opt.do_gui_refresh_by_dcc_frame_changing()
+        self._gui_motion_opt.do_gui_refresh_by_camera_changing()
+        self._gui_motion_opt.do_gui_refresh_by_dcc_frame_changing()
 
         self._do_dcc_register_all_script_jobs()
         self._window.register_window_close_method(self._do_dcc_destroy_all_script_jobs)

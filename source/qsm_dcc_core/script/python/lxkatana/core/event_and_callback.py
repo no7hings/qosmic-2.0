@@ -9,7 +9,7 @@ from . import node as ktn_cor_node
 
 
 class EventOpt(object):
-    KEY = 'event'
+    LOG_KEY = 'event'
 
     class EventType(object):
         NodeCreate = 'node_create'
@@ -29,7 +29,7 @@ class EventOpt(object):
         )
         #
         bsc_log.Log.trace_method_result(
-            self.KEY,
+            self.LOG_KEY,
             'register for "{}"'.format(self._event_type)
         )
 
@@ -40,7 +40,7 @@ class EventOpt(object):
                 eventType=self._event_type
             )
             bsc_log.Log.trace_method_result(
-                self.KEY,
+                self.LOG_KEY,
                 'deregister for "{}"'.format(self._event_type)
             )
 
@@ -52,7 +52,7 @@ class EventOpt(object):
 
 
 class CallbackOpt(object):
-    KEY = 'callback'
+    LOG_KEY = 'callback'
 
     def __init__(self, function, callback_type):
         self._function = function
@@ -60,7 +60,7 @@ class CallbackOpt(object):
 
     def append(self):
         bsc_log.Log.trace_method_result(
-            self.KEY,
+            self.LOG_KEY,
             'register for "{}"'.format(self._callback_type)
         )
         Callbacks.addCallback(
@@ -70,7 +70,7 @@ class CallbackOpt(object):
 
     def deregister(self):
         bsc_log.Log.trace_method_result(
-            self.KEY,
+            self.LOG_KEY,
             'deregister for "{}"'.format(self._callback_type)
         )
         Callbacks.delCallback(

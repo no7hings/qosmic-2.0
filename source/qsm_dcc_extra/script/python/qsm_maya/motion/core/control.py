@@ -15,7 +15,7 @@ from . import mirror_and_flip as _mirror_and_flip
 
 
 class ControlMotionOpt(_base.MotionBase):
-    KEY = 'control motion'
+    LOG_KEY = 'control motion'
 
     @classmethod
     def to_control_key(cls, path):
@@ -220,7 +220,7 @@ class ControlMotionOpt(_base.MotionBase):
             path_dst = self.find_one_control(ctr_key_dst)
             if path_dst is None:
                 bsc_log.Log.trace_method_result(
-                    self.KEY, 'control for "{}" is not found'.format(ctr_key_dst)
+                    self.LOG_KEY, 'control for "{}" is not found'.format(ctr_key_dst)
                 )
                 return
             # left or right
@@ -244,7 +244,7 @@ class ControlMotionOpt(_base.MotionBase):
                 path_dst = self.find_one_control(ctr_key_dst)
                 if path_dst is None:
                     bsc_log.Log.trace_method_result(
-                        self.KEY, 'control for "{}" is not found'.format(ctr_key_dst)
+                        self.LOG_KEY, 'control for "{}" is not found'.format(ctr_key_dst)
                     )
                     return
                     # left
@@ -257,7 +257,7 @@ class ControlMotionOpt(_base.MotionBase):
                 path_dst = self.find_one_control(ctr_key_dst)
                 if path_dst is None:
                     bsc_log.Log.trace_method_result(
-                        self.KEY, 'control for "{}" is not found'.format(ctr_key_dst)
+                        self.LOG_KEY, 'control for "{}" is not found'.format(ctr_key_dst)
                     )
                     return
                     # right
@@ -273,7 +273,7 @@ class ControlMotionOpt(_base.MotionBase):
 
 
 class ControlsMotionOpt(_base.MotionBase):
-    KEY = 'controls motion'
+    LOG_KEY = 'controls motion'
 
     @classmethod
     def get_args_from_selection(cls):
@@ -329,7 +329,7 @@ class ControlsMotionOpt(_base.MotionBase):
     @_mya_core.Undo.execute
     def apply_data(self, data, **kwargs):
         bsc_log.Log.trace_method_result(
-            self.KEY,
+            self.LOG_KEY,
             'apply data: "{}"'.format(', '.join(['{}={}'.format(k, v) for k, v in kwargs.items()]))
         )
 

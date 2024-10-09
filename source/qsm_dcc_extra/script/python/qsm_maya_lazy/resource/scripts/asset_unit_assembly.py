@@ -25,6 +25,8 @@ import qsm_maya.scenery.core as qsm_mya_scn_core
 
 
 class AssetUnitAssemblyOpt(object):
+    TASK_KEY = 'unit_assembly_generate'
+
     CACHE_ROOT = qsm_mya_gnl_core.ResourceCacheNodes.UnitAssemblyRoot
     CACHE_NAME = qsm_mya_gnl_core.ResourceCacheNodes.UnitAssemblyName
 
@@ -209,7 +211,7 @@ class _RegionPrc(object):
 
 
 class _UnitPrc(object):
-    KEY = 'mesh assembly'
+    LOG_KEY = 'mesh assembly'
 
     @classmethod
     def filter_prc(cls, shape_path):
@@ -281,7 +283,7 @@ class _UnitPrc(object):
             # memory error when face more than 25000000
             if face_count <= 25000000:
                 bsc_log.Log.trace_method_result(
-                    self.KEY, 'try create lod for: "{}", face count is {}'.format(
+                    self.LOG_KEY, 'try create lod for: "{}", face count is {}'.format(
                         shape_path_new, face_count
                     )
                 )
@@ -476,7 +478,7 @@ class _ScenePrc(object):
 
 
 class AssetUnitAssemblyProcess(object):
-    KEY = 'unit assembly'
+    LOG_KEY = 'unit assembly'
     PLUG_NAMES = [
         'sceneAssembly',
         'gpuCache',
@@ -523,7 +525,7 @@ class AssetUnitAssemblyProcess(object):
         )
 
         bsc_log.Log.trace_method_result(
-            self.KEY, 'load scene: {}'.format(self._file_path)
+            self.LOG_KEY, 'load scene: {}'.format(self._file_path)
         )
 
         import_paths = qsm_mya_core.SceneFile.import_file(

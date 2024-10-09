@@ -293,8 +293,8 @@ class QtItemWidgetForList(
             # shadow
             painter._draw_frame_by_rect_(
                 rect=self._shadow_draw_rect,
-                border_color=_qt_core.QtBorderColors.Transparent,
-                background_color=_qt_core.QtBackgroundColors.Shadow,
+                border_color=_qt_core.QtRgba.Transparent,
+                background_color=_qt_core.QtRgba.Shadow,
             )
             # frame base
             bck_color = painter._generate_item_background_color_by_rect_(
@@ -309,7 +309,7 @@ class QtItemWidgetForList(
             )
             painter._draw_frame_by_rect_(
                 rect=self._basic_draw_rect,
-                border_color=_qt_core.QtBorderColors.Transparent,
+                border_color=_qt_core.QtRgba.Transparent,
                 background_color=bck_color,
                 border_radius=self._frame_border_radius,
                 offset=0

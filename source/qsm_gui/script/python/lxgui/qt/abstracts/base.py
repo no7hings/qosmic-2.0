@@ -234,7 +234,7 @@ class AbsQtStatusBaseDef(object):
         elif status in {cls.Status.Waiting}:
             return cls._get_rgb_args_(*cls.Rgba.Orange)
         elif status in {cls.Status.Suspended}:
-            return cls._get_rgb_args_(*cls.Rgba.Yellow)
+            return cls._get_rgb_args_(*cls.Rgba.LemonYellow)
         elif status in {cls.Status.Failed, cls.Status.Error}:
             return cls._get_rgb_args_(*cls.Rgba.LightRed)
         elif status in {cls.Status.Killed}:
@@ -247,7 +247,7 @@ class AbsQtStatusBaseDef(object):
         elif status in {cls.ValidationStatus.Disable}:
             return cls._get_rgb_args_(*cls.Rgba.DarkGray)
         if status in [cls.ValidationStatus.Warning]:
-            return cls._get_rgb_args_(*cls.Rgba.Yellow)
+            return cls._get_rgb_args_(*cls.Rgba.LemonYellow)
         elif status in {cls.ValidationStatus.Error}:
             return cls._get_rgb_args_(*cls.Rgba.TorchRed)
 
@@ -264,7 +264,7 @@ class AbsQtStatusBaseDef(object):
         elif status in {cls.Status.Waiting}:
             return cls._get_rgb_args_(*cls.Rgba.Orange)
         elif status in {cls.Status.Suspended}:
-            return cls._get_rgb_args_(*cls.Rgba.Yellow)
+            return cls._get_rgb_args_(*cls.Rgba.LemonYellow)
         elif status in {cls.Status.Failed, cls.Status.Error}:
             return cls._get_rgb_args_(*cls.Rgba.LightRed)
         elif status in {cls.Status.Killed}:
@@ -276,7 +276,7 @@ class AbsQtStatusBaseDef(object):
     @classmethod
     def _get_text_rgba_args_by_validator_status_(cls, status):
         if status in {cls.ValidationStatus.Warning}:
-            return cls._get_rgb_args_(*cls.Rgba.Yellow)
+            return cls._get_rgb_args_(*cls.Rgba.LemonYellow)
         elif status in {cls.ValidationStatus.Disable, cls.ValidationStatus.Lost}:
             return cls._get_rgb_args_(*cls.Rgba.DarkGray)
         elif status in {cls.ValidationStatus.Error, cls.ValidationStatus.Unreadable}:
@@ -292,7 +292,7 @@ class AbsQtStatusBaseDef(object):
     @classmethod
     def _get_rgba_args_by_validator_status_(cls, status):
         if status in [cls.ValidationStatus.Warning]:
-            return cls._get_rgb_args_(*cls.Rgba.Yellow)
+            return cls._get_rgb_args_(*cls.Rgba.LemonYellow)
         elif status in {cls.ValidationStatus.Disable, cls.ValidationStatus.Lost}:
             return cls._get_rgb_args_(*cls.Rgba.DarkGray)
         elif status in {cls.ValidationStatus.Error, cls.ValidationStatus.Unreadable}:
@@ -312,8 +312,8 @@ class AbsQtStatusBaseDef(object):
         #
         self._status = _gui_core.GuiProcessStatus.Stopped
         #
-        self._status_color = _qt_core.QtBackgroundColors.Transparent
-        self._hover_status_color = _qt_core.QtBackgroundColors.Transparent
+        self._status_color = _qt_core.QtRgba.Transparent
+        self._hover_status_color = _qt_core.QtRgba.Transparent
         #
         self._status_rect = QtCore.QRect()
 
@@ -553,15 +553,15 @@ class AbsQtFrameBaseDef(object):
 
     def _init_frame_base_def_(self, widget):
         self._widget = widget
-        self._frame_border_color = _qt_core.QtBackgroundColors.Transparent
-        self._hovered_frame_border_color = _qt_core.QtBackgroundColors.Transparent
-        self._selected_frame_border_color = _qt_core.QtBackgroundColors.Transparent
-        self._actioned_frame_border_color = _qt_core.QtBackgroundColors.Transparent
+        self._frame_border_color = _qt_core.QtRgba.Transparent
+        self._hovered_frame_border_color = _qt_core.QtRgba.Transparent
+        self._selected_frame_border_color = _qt_core.QtRgba.Transparent
+        self._actioned_frame_border_color = _qt_core.QtRgba.Transparent
         #
-        self._frame_background_color = _qt_core.QtBackgroundColors.Transparent
-        self._hovered_frame_background_color = _qt_core.QtBackgroundColors.Transparent
-        self._selected_frame_background_color = _qt_core.QtBackgroundColors.Transparent
-        self._actioned_frame_background_color = _qt_core.QtBackgroundColors.Transparent
+        self._frame_background_color = _qt_core.QtRgba.Transparent
+        self._hovered_frame_background_color = _qt_core.QtRgba.Transparent
+        self._selected_frame_background_color = _qt_core.QtRgba.Transparent
+        self._actioned_frame_background_color = _qt_core.QtRgba.Transparent
         #
         self._frame_border_radius = 0
         #
@@ -1537,8 +1537,8 @@ class AbsQtNameBaseDef(object):
         #
         self._name_align = self.AlignRegion.Center
         #
-        self._name_draw_color = _qt_core.QtFontColors.Basic
-        self._hover_name_color = _qt_core.QtFontColors.Light
+        self._name_draw_color = _qt_core.QtRgba.Text
+        self._hover_name_color = _qt_core.QtRgba.TextHover
         self._name_text_option = QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
         #
         self._name_word_warp = True
@@ -2931,7 +2931,7 @@ class AbsQtStateDef(object):
     def _set_state_def_init_(self):
         self._state = _gui_core.GuiState.NORMAL
         self._state_draw_is_enable = False
-        self._state_color = _qt_core.QtBrushes.Text
+        self._state_color = _qt_core.QtRgbaBrush.Text
 
     # noinspection PyUnusedLocal
     def _set_state_(self, *args, **kwargs):

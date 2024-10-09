@@ -7,7 +7,7 @@ import lxgui.qt.abstracts as gui_qt_abstracts
 
 
 class MenuBuild(gui_qt_abstracts.AsbGuiQtDccMenuSetup):
-    KEY = 'menu build'
+    LOG_KEY = 'menu build'
 
     def __init__(self):
         super(MenuBuild, self).__init__()
@@ -26,13 +26,13 @@ class MenuBuild(gui_qt_abstracts.AsbGuiQtDccMenuSetup):
             qt_menu.setObjectName(name)
             qt_menu.setTitle(name)
             bsc_log.Log.trace_method_result(
-                cls.KEY,
+                cls.LOG_KEY,
                 'add menu: "{}"'.format(name)
             )
             qt_menu.setTearOffEnabled(True)
             return qt_menu
 
     def execute(self):
-        with bsc_log.LogContext.create(self.KEY):
+        with bsc_log.LogContext.create(self.LOG_KEY):
             import lxsession.commands as ssn_commands
             ssn_commands.execute_hook('dcc-menus/gen-menu')

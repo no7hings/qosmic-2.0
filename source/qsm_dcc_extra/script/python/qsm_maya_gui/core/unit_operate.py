@@ -274,7 +274,7 @@ class PrxTreeviewUnitForResourceOpt(
 
     def do_gui_refresh_by_dcc_selection(self):
         if self._prx_tree_view.has_focus() is False:
-            namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+            namespaces = qsm_mya_core.Namespaces.extract_from_selection()
             if namespaces:
                 paths = ['/{}'.format(i) for i in namespaces]
             else:
@@ -437,9 +437,9 @@ class PrxTreeviewUnitForResourceOpt(
                             prx_item.set_name('Dynamic GPU (Enable)', 1)
                     else:
                         if self._window._language == 'chs':
-                            prx_item.set_name('简模代理（禁用）', 1)
+                            prx_item.set_name('动态GPU（禁用）', 1)
                         else:
-                            prx_item.set_name('Skin Proxy (Disable)', 1)
+                            prx_item.set_name('Dynamic GPU (Disable)', 1)
                 elif resource.is_cfx_cloth_exists():
                     prx_item.set_status(
                         prx_item.ValidationStatus.Locked

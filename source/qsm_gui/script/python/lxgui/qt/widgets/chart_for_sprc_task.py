@@ -301,7 +301,7 @@ class QtChartForSprcTask(QtWidgets.QWidget):
             rect=self._percent_text_draw_rect,
             text=self._percent_text,
             font=self._percent_font,
-            text_color=_qt_core.QtFontColors.Light,
+            text_color=_qt_core.QtRgba.TextHover,
             text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
         )
 

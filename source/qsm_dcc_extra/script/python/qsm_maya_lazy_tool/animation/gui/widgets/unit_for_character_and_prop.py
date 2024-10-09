@@ -143,7 +143,7 @@ class PrxToolsetForSkinProxyLoad(
         self._page.do_gui_refresh_all(force=True)
 
     def do_gui_refresh_buttons(self):
-        namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+        namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         resources = list(
             filter(None, [self._page._gui_resource_prx_unit.get_resources_query().get(x) for x in namespaces])
         )
@@ -581,7 +581,7 @@ class PrxToolsetForSkinProxySwitch(
         )
 
     def do_gui_refresh_buttons(self):
-        namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+        namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         resources = list(
             filter(None, [self._page._gui_resource_prx_unit.get_resources_query().get(x) for x in namespaces])
         )
@@ -710,7 +710,7 @@ class PrxToolsetForMotion(
         file_path = qsm_gnl_core.MayaCache.generate_character_motion_file(
             bsc_core.BscSystem.get_user_name()
         )
-        namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+        namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if not namespaces:
             return
         adv_rig_query = self._page._gui_resource_prx_unit.get_resources_query()
@@ -729,7 +729,7 @@ class PrxToolsetForMotion(
         )
         if bsc_storage.StgPath.get_is_file(file_path) is False:
             return
-        namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+        namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if not namespaces:
             return
         adv_rig_query = self._page._gui_resource_prx_unit.get_resources_query()
@@ -744,7 +744,7 @@ class PrxToolsetForMotion(
         )
 
     def do_dcc_transfer_animation(self):
-        namespaces = qsm_mya_core.Namespaces.extract_roots_from_selection()
+        namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         namespace_src, namespace_dst = None, None
         if namespaces:
             self._dynamic_gpu_load_args_array = []

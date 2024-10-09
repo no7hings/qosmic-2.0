@@ -133,7 +133,7 @@ class AbsQtTreeWidget(
                 QtGui.QIcon.On
             )
             #
-            self.headerItem().setBackground(index, _qt_core.QtBrushes.Background)
+            self.headerItem().setBackground(index, _qt_core.QtRgbaBrush.Background)
             self.headerItem().setForeground(index, QtGui.QBrush(QtGui.QColor(255, 255, 255, 255)))
             self.headerItem().setFont(index, _qt_core.QtFonts.NameNormal)
             # todo: in katana will make text display error, PyQt?
@@ -241,14 +241,14 @@ class AbsQtListWidget(
         self._item_rects = []
         #
         self.setStyleSheet(
-            _qt_core.GuiQtStyle.get('QListView')
+            _qt_core.QtStyle.get('QListView')
         )
         #
         self.verticalScrollBar().setStyleSheet(
-            _qt_core.GuiQtStyle.get('QScrollBar')
+            _qt_core.QtStyle.get('QScrollBar')
         )
         self.horizontalScrollBar().setStyleSheet(
-            _qt_core.GuiQtStyle.get('QScrollBar')
+            _qt_core.QtStyle.get('QScrollBar')
         )
 
         self._init_show_base_for_view_def_(self)

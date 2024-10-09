@@ -112,7 +112,7 @@ class GeometryAlembicBlender(object):
 
 # noinspection PyUnusedLocal
 class FncBuilderForAssetOld(gnl_fnc_abstracts.AbsFncOptionBase):
-    KEY = 'asset build'
+    LOG_KEY = 'asset build'
     VAR_NAMES = ['hi', 'shape']
     #
     OPTION = dict(
@@ -362,7 +362,7 @@ class FncBuilderForAssetOld(gnl_fnc_abstracts.AbsFncOptionBase):
                     ).execute()
                 else:
                     bsc_log.Log.trace_method_warning(
-                        cls.KEY,
+                        cls.LOG_KEY,
                         'rsv-unit={} is non-exists'.format(look_ass_file)
                     )
 
@@ -577,7 +577,7 @@ class FncBuilderForAssetOld(gnl_fnc_abstracts.AbsFncOptionBase):
 
 
 class FncBuilderForAssetNew(gnl_fnc_abstracts.AbsFncOptionBase):
-    KEY = 'asset build'
+    LOG_KEY = 'asset build'
     OPTION = dict(
         project='',
         asset='',
@@ -832,7 +832,7 @@ class FncBuilderForAssetNew(gnl_fnc_abstracts.AbsFncOptionBase):
                 ).execute()
             else:
                 bsc_log.Log.trace_method_warning(
-                    cls.KEY,
+                    cls.LOG_KEY,
                     'rsv-unit={} is non-exists'.format(rsv_unit)
                 )
 
@@ -859,13 +859,13 @@ class FncBuilderForAssetNew(gnl_fnc_abstracts.AbsFncOptionBase):
                 ).execute()
             else:
                 bsc_log.Log.trace_method_warning(
-                    cls.KEY,
+                    cls.LOG_KEY,
                     'file is not found'
                 )
 
         else:
             bsc_log.Log.trace_method_warning(
-                cls.KEY,
+                cls.LOG_KEY,
                 'task is not found'
             )
 

@@ -19,7 +19,7 @@ import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.widgets as gui_qt_widgets
 
-import lxgui.qt.view_widgets as gui_qt_view_widgets
+import lxgui.qt.view_widgets as gui_qt_vew_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
@@ -118,7 +118,7 @@ class AbsPrxSubPageForAnyAssign(
                 self._sub_window._language, self._sub_window._configure.get('build.{}.filter'.format(self.PAGE_KEY))
             )
         )
-        self._qt_tag_widget = gui_qt_view_widgets.QtTagWidget()
+        self._qt_tag_widget = gui_qt_vew_widgets.QtTagWidget()
         self._prx_tool_group.add_widget(
             self._qt_tag_widget
         )

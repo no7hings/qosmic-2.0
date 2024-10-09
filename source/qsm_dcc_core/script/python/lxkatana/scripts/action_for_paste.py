@@ -9,7 +9,7 @@ from .. import core as ktn_core
 
 
 class ScpActionForNodeGraphMaterialPaste(object):
-    KEY = 'texture build'
+    LOG_KEY = 'texture build'
 
     def __init__(self, ktn_obj):
         if isinstance(ktn_obj, six.string_types):

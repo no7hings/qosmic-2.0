@@ -410,7 +410,7 @@ class DotXgenOpt(_AbsDotFile):
                 else:
                     pass
                     j_key = '{}.extra'.format(cur_description_name)
-                    d.add_element(j_key, i_obj_type)
+                    d.append_element(j_key, i_obj_type)
                     # print i_obj_type
         return d
 
@@ -1307,7 +1307,7 @@ class DotAssOpt(_AbsDotFile):
                         i_file_path = i_variants['file_path']
 
                         i_file_path_new = bsc_storage.StgEnvPathMapper.map_to_env(
-                            i_file_path, pattern='[KEY]'
+                            i_file_path, pattern='[LOG_KEY]'
                         )
                         #
                         if i_file_path_new is not None:

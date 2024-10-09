@@ -46,16 +46,4 @@ class MeshCountDataOpt(object):
     @property
     def gpu_caches(self):
         return self._data.get('gpu_caches', {})
-    
 
-class ComponentMeshCountOpt(object):
-    def __init__(self, data):
-        self._data = data
-
-    @property
-    def triangle(self):
-        return self._data['triangle']
-
-    @property
-    def component_triangle(self):
-        return self._data['triangle']

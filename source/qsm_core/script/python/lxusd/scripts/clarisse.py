@@ -9,7 +9,7 @@ from .. import core as usd_core
 
 
 class UsdScpForClarisseCleanup(object):
-    KEY = 'clarisse USD transfer'
+    LOG_KEY = 'clarisse USD transfer'
 
     def __init__(self, file_path):
         self._file_path = file_path
@@ -235,7 +235,7 @@ class UsdScpForClarisseCleanup(object):
             return opt.create_child('protos', 'Xform')
         else:
             bsc_log.Log.trace_method_warning(
-                self.KEY, 'instance error: proto is not found for "{}"'.format(opt.get_path())
+                self.LOG_KEY, 'instance error: proto is not found for "{}"'.format(opt.get_path())
             )
 
     @staticmethod

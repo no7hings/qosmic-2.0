@@ -499,7 +499,7 @@ class QtChartAsProgressing(
                         i_text_color
                     ) = i_data
                     #
-                    painter._set_border_color_(_qt_core.QtBorderColors.Transparent)
+                    painter._set_border_color_(_qt_core.QtRgba.Transparent)
                     if i_index == 0:
                         painter._set_background_color_(i_annulus_sector_color)
                     else:
@@ -560,18 +560,18 @@ class QtChartForInfoBar(
             rect = self.rect()
             painter._draw_frame_by_rect_(
                 rect=rect,
-                border_color=_qt_core.QtBorderColors.Transparent,
-                background_color=_qt_core.QtBackgroundColors.ToolTip,
+                border_color=_qt_core.QtRgba.Transparent,
+                background_color=_qt_core.QtRgba.BkgToolTip,
             )
             painter._draw_line_by_points_(
                 point_0=rect.topLeft(), point_1=rect.topRight(),
-                border_color=_qt_core.QtBorderColors.Basic
+                border_color=_qt_core.QtRgba.FadeBasic
             )
             painter._draw_text_by_rect_(
                 rect=self.rect(),
                 text=self._text,
                 font=_qt_core.QtFont.generate(size=10, italic=True),
-                text_color=_qt_core.QtFontColors.ToolTip,
+                text_color=_qt_core.QtRgba.TxtToolTip,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             )
 

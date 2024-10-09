@@ -5,13 +5,13 @@ import os
 
 import lxbasic.core as bsc_core
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
 # qt
 from ..core.wrap import *
 
-from .. import core as gui_qt_core
+from .. import core as _qt_core
 
-from .. import abstracts as gui_qt_abstracts
+from .. import abstracts as _qt_abstracts
 # qt widgets
 from . import utility as _utility
 
@@ -26,7 +26,7 @@ from . import item_for_list as _item_for_list
 
 # use for popup
 #   constant
-class _QtViewForPopup(gui_qt_abstracts.AbsQtListWidget):
+class _QtViewForPopup(_qt_abstracts.AbsQtListWidget):
     def __init__(self, *args, **kwargs):
         super(_QtViewForPopup, self).__init__(*args, **kwargs)
         self.setDragDropMode(self.DragOnly)
@@ -34,7 +34,7 @@ class _QtViewForPopup(gui_qt_abstracts.AbsQtListWidget):
         self.setSelectionMode(QtWidgets.QListWidget.SingleSelection)
         self.setResizeMode(QtWidgets.QListWidget.Adjust)
         self.setViewMode(QtWidgets.QListWidget.ListMode)
-        self.setPalette(gui_qt_core.GuiQtDcc.generate_qt_palette())
+        self.setPalette(_qt_core.GuiQtDcc.generate_qt_palette())
 
     def paintEvent(self, event):
         pass
@@ -51,7 +51,7 @@ class _QtViewForPopup(gui_qt_abstracts.AbsQtListWidget):
 
 
 #   icon
-class _QtViewAsIconForPopup(gui_qt_abstracts.AbsQtListWidget):
+class _QtViewAsIconForPopup(_qt_abstracts.AbsQtListWidget):
     def __init__(self, *args, **kwargs):
         super(_QtViewAsIconForPopup, self).__init__(*args, **kwargs)
         self.setDragDropMode(self.DragOnly)
@@ -59,7 +59,7 @@ class _QtViewAsIconForPopup(gui_qt_abstracts.AbsQtListWidget):
         self.setSelectionMode(QtWidgets.QListWidget.SingleSelection)
         self.setResizeMode(QtWidgets.QListWidget.Adjust)
         self.setViewMode(QtWidgets.QListWidget.IconMode)
-        self.setPalette(gui_qt_core.GuiQtDcc.generate_qt_palette())
+        self.setPalette(_qt_core.GuiQtDcc.generate_qt_palette())
 
     # noinspection PyUnusedLocal
     def _compute_height_maximum_(self, row_maximum, includes=None):
@@ -74,8 +74,8 @@ class _QtViewAsIconForPopup(gui_qt_abstracts.AbsQtListWidget):
 
 class _AbsQtPopupAsChoose(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
-    gui_qt_abstracts.AbsQtPopupBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtPopupBaseDef,
 ):
     HEIGHT_MAX = 160
     TAG_ALL = 'All'
@@ -206,7 +206,7 @@ class _AbsQtPopupAsChoose(
 
         self.__popup_cancel_button = _button.QtIconPressButton(self)
         self.__popup_cancel_button._set_name_text_('cancel popup')
-        self.__popup_cancel_button._set_icon_file_path_(gui_core.GuiIcon.get('close-hover'))
+        self.__popup_cancel_button._set_icon_file_path_(_gui_core.GuiIcon.get('close-hover'))
         self.__popup_cancel_button._set_icon_frame_draw_size_(18, 18)
         self.__popup_cancel_button._set_tool_tip_text_(
             '"LMB-click" to cancel'
@@ -216,7 +216,7 @@ class _AbsQtPopupAsChoose(
         self._popup_item_multiply_is_enable = False
         self._popup_all_checked_button = _button.QtIconPressButton(self)
         self._popup_all_checked_button.hide()
-        self._popup_all_checked_button._set_icon_file_path_(gui_core.GuiIcon.get('all_checked'))
+        self._popup_all_checked_button._set_icon_file_path_(_gui_core.GuiIcon.get('all_checked'))
         self._popup_all_checked_button._set_icon_frame_draw_size_(18, 18)
         self._popup_all_checked_button.setToolTip(
             '"LMB-click" to checked all'
@@ -225,7 +225,7 @@ class _AbsQtPopupAsChoose(
         #
         self._popup_all_unchecked_button = _button.QtIconPressButton(self)
         self._popup_all_unchecked_button.hide()
-        self._popup_all_unchecked_button._set_icon_file_path_(gui_core.GuiIcon.get('all_unchecked'))
+        self._popup_all_unchecked_button._set_icon_file_path_(_gui_core.GuiIcon.get('all_unchecked'))
         self._popup_all_unchecked_button._set_icon_frame_draw_size_(18, 18)
         self._popup_all_unchecked_button.setToolTip(
             '"LMB-click" to unchecked all'
@@ -260,21 +260,21 @@ class _AbsQtPopupAsChoose(
         )
         self._popup_view.setSpacing(2)
         self._popup_view.setUniformItemSizes(True)
-        #
+
         self._choose_index = None
-        #
-        self._frame_border_color = gui_qt_core.QtBackgroundColors.Light
-        self._hovered_frame_border_color = gui_qt_core.QtBackgroundColors.Hovered
-        self._selected_frame_border_color = gui_qt_core.QtBackgroundColors.Hovered
-        #
-        self._frame_background_color = gui_qt_core.QtBackgroundColors.Dark
+
+        self._frame_border_color = _qt_core.QtRgba.BackgroundLight
+        self._hovered_frame_border_color = _qt_core.QtRgba.BackgroundHover
+        self._selected_frame_border_color = _qt_core.QtRgba.BackgroundSelect
+
+        self._frame_background_color = _qt_core.QtRgba.BackgroundDark
 
         self._read_only_mark = None
 
         self._popup_name_text = None
 
         self.setToolTip(
-            gui_qt_core.QtUtil.generate_tool_tip_css(
+            _qt_core.QtUtil.generate_tool_tip_css(
                 'choose popup',
                 [
                     'press "Up" or "Down" to switch',
@@ -287,12 +287,12 @@ class _AbsQtPopupAsChoose(
         self._popup_quick_start_enable = False
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
 
         if self._popup_style == self.PopupStyle.FromFrame:
             painter._draw_frame_by_rect_(
                 self._frame_draw_rect,
-                border_color=gui_qt_core.QtColors.PopupBorder,
+                border_color=_qt_core.QtRgba.BdrPopup,
                 background_color=self._frame_background_color,
                 border_radius=1,
                 border_width=2
@@ -318,8 +318,8 @@ class _AbsQtPopupAsChoose(
                 painter._draw_text_by_rect_(
                     rect=self._rect_popup_top_toolbar_tool_tip,
                     text=tool_tip_text,
-                    font=gui_qt_core.QtFonts.NameNormal,
-                    text_color=gui_qt_core.QtColors.TextDisable,
+                    font=_qt_core.QtFonts.NameNormal,
+                    text_color=_qt_core.QtRgba.TextDisable,
                     text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 )
             #
@@ -343,7 +343,7 @@ class _AbsQtPopupAsChoose(
                 side=self._popup_side,
                 shadow_radius=self._popup_shadow_radius,
                 region=self._popup_region,
-                border_color=gui_qt_core.QtColors.PopupBorder,
+                border_color=_qt_core.QtRgba.BdrPopup,
                 background_color=self._frame_background_color,
                 border_width=2
             )
@@ -357,8 +357,8 @@ class _AbsQtPopupAsChoose(
                 painter._draw_text_by_rect_(
                     self._rect_popup_top_toolbar_tool_tip,
                     'entry to filter ...',
-                    font=gui_qt_core.QtFonts.NameNormal,
-                    text_color=gui_qt_core.QtColors.TextDisable,
+                    font=_qt_core.QtFonts.NameNormal,
+                    text_color=_qt_core.QtRgba.TextDisable,
                     text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 )
 
@@ -635,7 +635,7 @@ class _AbsQtPopupAsChoose(
                         (width, height_max)
                     )
                 else:
-                    desktop_rect = gui_qt_core.QtUtil.get_qt_desktop_rect()
+                    desktop_rect = _qt_core.QtUtil.get_qt_desktop_rect()
                     press_rect = self._get_popup_press_rect_()
                     press_point = self._compute_popup_press_point_(
                         self._get_entry_frame_widget_(), press_rect
@@ -786,8 +786,8 @@ class QtPopupAsChooseForIcon(_AbsQtPopupAsChoose):
 
 class QtPopupAsCompletion(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
-    gui_qt_abstracts.AbsQtPopupBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtPopupBaseDef,
 ):
     def _refresh_widget_draw_geometry_(self):
         x, y = 0, 0
@@ -842,7 +842,7 @@ class QtPopupAsCompletion(
         #
         self.__popup_cancel_button = _button.QtIconPressButton(self)
         self.__popup_cancel_button._set_name_text_('cancel popup')
-        self.__popup_cancel_button._set_icon_file_path_(gui_core.GuiIcon.get('close-hover'))
+        self.__popup_cancel_button._set_icon_file_path_(_gui_core.GuiIcon.get('close-hover'))
         self.__popup_cancel_button._set_icon_frame_draw_size_(18, 18)
         self.__popup_cancel_button.press_clicked.connect(self._do_popup_close_)
         self.__popup_cancel_button._set_tool_tip_text_(
@@ -865,18 +865,18 @@ class QtPopupAsCompletion(
         #
         self._choose_index = None
         #
-        self._frame_border_color = gui_qt_core.QtBackgroundColors.Light
-        self._hovered_frame_border_color = gui_qt_core.QtBackgroundColors.Hovered
-        self._selected_frame_border_color = gui_qt_core.QtBackgroundColors.Hovered
+        self._frame_border_color = _qt_core.QtRgba.BackgroundLight
+        self._hovered_frame_border_color = _qt_core.QtRgba.BackgroundHover
+        self._selected_frame_border_color = _qt_core.QtRgba.BackgroundHover
         #
-        self._frame_background_color = gui_qt_core.QtBackgroundColors.Dark
+        self._frame_background_color = _qt_core.QtRgba.Dark
 
     def paintEvent(self, event):
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         #
         painter._draw_frame_by_rect_(
             self._frame_draw_rect,
-            border_color=gui_qt_core.QtColors.PopupBorder,
+            border_color=_qt_core.QtRgba.BdrPopup,
             background_color=self._frame_background_color,
             border_radius=1,
             border_width=2
@@ -895,8 +895,8 @@ class QtPopupAsCompletion(
                     'matching {}, press "Up" or "Down" to switch and press "Enter" to accept, '
                     'press "ESC" to cancel ...'
                 ).format(c),
-                font=gui_qt_core.QtFonts.NameNormal,
-                text_color=gui_qt_core.QtColors.TextDisable,
+                font=_qt_core.QtFonts.NameNormal,
+                text_color=_qt_core.QtRgba.TextDisable,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             )
 
@@ -964,11 +964,11 @@ class QtPopupAsCompletion(
                 if self._use_as_storage is True:
                     if os.path.isdir(i_text):
                         i_item_widget._set_icon_(
-                            gui_qt_core.GuiQtDcc.generate_qt_directory_icon(use_system=True)
+                            _qt_core.GuiQtDcc.generate_qt_directory_icon(use_system=True)
                         )
                     elif os.path.isfile(i_text):
                         i_item_widget._set_icon_(
-                            gui_qt_core.GuiQtDcc.generate_qt_file_icon(i_text)
+                            _qt_core.GuiQtDcc.generate_qt_file_icon(i_text)
                         )
                     else:
                         i_item_widget._set_icon_by_text_(i_text)
@@ -1018,8 +1018,8 @@ class QtPopupAsCompletion(
 
 class QtPopupAsChooseForGuide(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
-    gui_qt_abstracts.AbsQtPopupBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtPopupBaseDef,
 ):
     def __init__(self, *args, **kwargs):
         super(QtPopupAsChooseForGuide, self).__init__(*args, **kwargs)
@@ -1027,7 +1027,7 @@ class QtPopupAsChooseForGuide(
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
         #
-        self.setPalette(gui_qt_core.GuiQtDcc.generate_qt_palette())
+        self.setPalette(_qt_core.GuiQtDcc.generate_qt_palette())
         #
         self._init_frame_base_def_(self)
         self._init_popup_base_def_(self)
@@ -1044,8 +1044,8 @@ class QtPopupAsChooseForGuide(
         #
         self.__popup_cancel_button = _button.QtIconPressButton(self)
         self.__popup_cancel_button._set_name_text_('close popup')
-        self.__popup_cancel_button._set_icon_file_path_(gui_core.GuiIcon.get('close'))
-        self.__popup_cancel_button._set_icon_hover_color_(gui_qt_core.QtBackgroundColors.DeleteHovered)
+        self.__popup_cancel_button._set_icon_file_path_(_gui_core.GuiIcon.get('close'))
+        self.__popup_cancel_button._set_icon_hover_color_(_qt_core.QtRgba.BkgDeleteHover)
         self.__popup_cancel_button.press_clicked.connect(self._do_popup_close_)
         self.__popup_cancel_button._set_tool_tip_text_(
             '"LMB-click" to close'
@@ -1066,11 +1066,11 @@ class QtPopupAsChooseForGuide(
         #
         self._choose_index = None
         #
-        self._frame_border_color = gui_qt_core.QtBackgroundColors.Light
-        self._hovered_frame_border_color = gui_qt_core.QtBackgroundColors.Hovered
-        self._selected_frame_border_color = gui_qt_core.QtBackgroundColors.Selected
+        self._frame_border_color = _qt_core.QtRgba.BackgroundLight
+        self._hovered_frame_border_color = _qt_core.QtRgba.BackgroundHover
+        self._selected_frame_border_color = _qt_core.QtRgba.BackgroundSelect
         #
-        self._frame_background_color = gui_qt_core.QtBackgroundColors.Dark
+        self._frame_background_color = _qt_core.QtRgba.Dark
 
     def _refresh_widget_draw_(self):
         self.update()
@@ -1121,7 +1121,7 @@ class QtPopupAsChooseForGuide(
         bck_rect = QtCore.QRect(
             x, y, w-1, h-1
         )
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         #
         painter._draw_popup_frame_(
             bck_rect,
@@ -1129,7 +1129,7 @@ class QtPopupAsChooseForGuide(
             side=self._popup_side,
             shadow_radius=self._popup_shadow_radius,
             region=self._popup_region,
-            border_color=gui_qt_core.QtColors.PopupBorder,
+            border_color=_qt_core.QtRgba.BdrPopup,
             background_color=self._frame_background_color,
             border_width=2
         )
@@ -1143,8 +1143,8 @@ class QtPopupAsChooseForGuide(
             painter._draw_text_by_rect_(
                 self._rect_popup_top_toolbar_tool_tip,
                 'entry to filter ...',
-                font=gui_qt_core.QtFonts.NameNormal,
-                text_color=gui_qt_core.QtColors.TextDisable,
+                font=_qt_core.QtFonts.NameNormal,
+                text_color=_qt_core.QtRgba.TextDisable,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             )
 
@@ -1197,7 +1197,7 @@ class QtPopupAsChooseForGuide(
         input_widget = self.parent()
         values = input_widget._get_guide_child_name_texts_at_(index)
         if values:
-            desktop_rect = gui_qt_core.QtUtil.get_qt_desktop_rect()
+            desktop_rect = _qt_core.QtUtil.get_qt_desktop_rect()
             #
             press_pos = input_widget._get_guide_choose_point_at_(index)
             press_rect = input_widget._get_guide_choose_rect_at_(index)
@@ -1286,8 +1286,8 @@ class QtPopupAsChooseForGuide(
 # rgba choose
 class QtPopupAsChooseForRgba(
     QtWidgets.QWidget,
-    gui_qt_abstracts.AbsQtFrameBaseDef,
-    gui_qt_abstracts.AbsQtPopupBaseDef,
+    _qt_abstracts.AbsQtFrameBaseDef,
+    _qt_abstracts.AbsQtPopupBaseDef,
 ):
     def _refresh_widget_draw_(self):
         self.update()
@@ -1323,10 +1323,10 @@ class QtPopupAsChooseForRgba(
         self._init_frame_base_def_(self)
         self._init_popup_base_def_(self)
         #
-        self._frame_border_color = gui_qt_core.QtBackgroundColors.Light
-        self._hovered_frame_border_color = gui_qt_core.QtBackgroundColors.Hovered
-        self._selected_frame_border_color = gui_qt_core.QtBackgroundColors.Selected
-        self._frame_background_color = gui_qt_core.QtBackgroundColors.Dark
+        self._frame_border_color = _qt_core.QtRgba.BackgroundLight
+        self._hovered_frame_border_color = _qt_core.QtRgba.BackgroundHover
+        self._selected_frame_border_color = _qt_core.QtRgba.BackgroundSelect
+        self._frame_background_color = _qt_core.QtRgba.Dark
 
         self._popup_view = _chart.QtChartAsRgbaChoose(self)
         self._popup_view.setFocusPolicy(QtCore.Qt.ClickFocus)
@@ -1357,7 +1357,7 @@ class QtPopupAsChooseForRgba(
         bck_rect = QtCore.QRect(
             x, y, w-1, h-1
         )
-        painter = gui_qt_core.QtPainter(self)
+        painter = _qt_core.QtPainter(self)
         #
         painter._draw_popup_frame_(
             bck_rect,
@@ -1365,7 +1365,7 @@ class QtPopupAsChooseForRgba(
             side=self._popup_side,
             shadow_radius=self._popup_shadow_radius,
             region=self._popup_region,
-            border_color=gui_qt_core.QtColors.PopupBorder,
+            border_color=_qt_core.QtRgba.BdrPopup,
             background_color=self._frame_background_color,
         )
 
@@ -1379,7 +1379,7 @@ class QtPopupAsChooseForRgba(
         input_widget = self.parent()
         press_rect = input_widget._get_value_rect_()
         press_point = self._compute_popup_press_point_(input_widget, press_rect)
-        desktop_rect = gui_qt_core.QtUtil.get_qt_desktop_rect()
+        desktop_rect = _qt_core.QtUtil.get_qt_desktop_rect()
         self._show_popup_as_style_0_(
             press_point,
             press_rect,

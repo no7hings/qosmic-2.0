@@ -33,6 +33,9 @@ class _Data(object):
     def __repr__(self):
         return '\n'+self.__str__()
 
+    def get(self, *args, **kwargs):
+        return self._dict.get(*args, **kwargs)
+
 
 class AbsView(object):
     item_check_changed = qt_signal()

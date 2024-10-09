@@ -13,7 +13,7 @@ import lxbasic.extra.methods as bsc_etr_methods
 
 
 class AbsHookExecutor(object):
-    KEY = 'hook executor'
+    LOG_KEY = 'hook executor'
     # do not use repr or r''
     SHELL_PATTERN = r'-- qsm-hook-engine -o "{option}"'
     DEADLINE_PATTERN = r'-- qsm-hook-engine -o \"{option}&start_index=<STARTFRAME>&end_index=<ENDFRAME>\"'
@@ -218,7 +218,7 @@ class AbsHookExecutor(object):
         if exists_ddl_job_id:
             session._ddl_job_id = exists_ddl_job_id
             bsc_log.Log.trace_method_warning(
-                self.KEY, 'option-hook="{}", job-id="{}" is exists'.format(
+                self.LOG_KEY, 'option-hook="{}", job-id="{}" is exists'.format(
                     submit_key, exists_ddl_job_id
                 )
             )
@@ -231,7 +231,7 @@ class AbsHookExecutor(object):
                     hook_option, ddl_job_id
                 )
                 bsc_log.Log.trace_method_result(
-                    self.KEY, 'option-hook="{}", job-id="{}"'.format(
+                    self.LOG_KEY, 'option-hook="{}", job-id="{}"'.format(
                         submit_key, ddl_job_id
                     )
                 )

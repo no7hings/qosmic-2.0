@@ -26,7 +26,7 @@ class AdvRig(_rsc_core.Resource):
         self._switch_result = {}
 
     def get_root(self):
-        _ = cmds.ls('|{}:*'.format(self.namespace), long=1)
+        _ = cmds.ls('|{}:Group'.format(self.namespace), long=1)
         if _:
             return _[0]
 

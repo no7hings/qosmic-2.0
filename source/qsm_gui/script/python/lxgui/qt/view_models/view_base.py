@@ -79,14 +79,18 @@ class AbsViewModel(object):
         if keys is not None:
             self._data.item_sort.enable = True
             self._data.item_sort.keys = keys
-            self._widget.setSortingEnabled(True)
-            if isinstance(self._widget, QtWidgets.QListWidget):
-                self._widget.sortItems(QtCore.Qt.AscendingOrder)
-            elif isinstance(self._widget, QtWidgets.QTreeWidget):
-                self._widget.sortByColumn(0, QtCore.Qt.AscendingOrder)
+            self.set_item_sort_enable(True)
             return True
         self._data.item_sort.enable = False
         return False
+
+    def set_item_sort_enable(self, boolean):
+        self._widget.setSortingEnabled(boolean)
+        # sort later
+        if isinstance(self._widget, QtWidgets.QListWidget):
+            self._widget.sortItems(QtCore.Qt.AscendingOrder)
+        elif isinstance(self._widget, QtWidgets.QTreeWidget):
+            self._widget.sortByColumn(0, QtCore.Qt.AscendingOrder)
 
     def get_item_sort_keys(self):
         return self._data.item_sort.keys
@@ -235,7 +239,7 @@ class AbsViewModel(object):
         self.update_widget()
 
     def set_visible_items_checked(self, boolean):
-        [x._item_model._update_check_state(boolean) for x in self.get_all_items()]
+        [x._item_model._update_check_state(boolean) for x in self.get_visible_items()]
         self._widget.item_check_changed.emit()
         self.update_widget()
 
@@ -245,11 +249,17 @@ class AbsViewModel(object):
     def get_checked_item_paths(self):
         return [x._item_model.get_path() for x in self.get_checked_items()]
 
+    def get_checked_leaf_items(self):
+        return [x for x in self.get_checked_items() if not x._item_model.get_children()]
+
     def get_selected_items(self):
         return self._widget.selectedItems()
 
     def get_selected_item_paths(self):
         return [x._item_model.get_path() for x in self.get_selected_items()]
+
+    def get_selected_leaf_items(self):
+        return [x for x in self.get_selected_items() if not x._item_model.get_children()]
 
     # menu
     def set_menu_content(self, content):

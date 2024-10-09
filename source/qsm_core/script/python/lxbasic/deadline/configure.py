@@ -47,7 +47,7 @@ class DdlOnTaskTimeout(object):
     1 = Error
     2 = Notify
     """
-    KEY = 'Timeout'
+    LOG_KEY = 'Timeout'
 
 
 class DdlOnJobComplete(object):
@@ -57,7 +57,7 @@ class DdlOnJobComplete(object):
     1 = Delete
     2 = Nothing
     """
-    KEY = 'OnComp'
+    LOG_KEY = 'OnComp'
 
 
 class DdlScheduledType(object):
@@ -67,4 +67,4 @@ class DdlScheduledType(object):
     1 = Once
     2 = Daily
     """
-    KEY = 'Schd'
+    LOG_KEY = 'Schd'

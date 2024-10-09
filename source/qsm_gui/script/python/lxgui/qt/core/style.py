@@ -1,23 +1,49 @@
 # coding:utf-8
 import lxbasic.content as bsc_content
 # gui
-from ... import core as gui_core
+from ... import core as _gui_core
+
+from .wrap import *
 
 
-class GuiQtStyle(object):
+class QtRgba(_gui_core.GuiRgba):
+    """
+    override tuple to QColor
+    """
+    pass
+
+
+class QtRgbaBrush(_gui_core.GuiRgba):
+    pass
+
+
+class QtStyle(object):
     CONTENT = None
 
     @classmethod
     def _generate_content(cls):
         if cls.CONTENT is not None:
             return cls.CONTENT
-        cls.CONTENT = bsc_content.Content(
-            value='{}/qt-style.yml'.format(gui_core.GuiBase.DATA_ROOT)
+
+        content = bsc_content.Content(
+            value='{}/qt-style.yml'.format(_gui_core.GuiBase.DATA_ROOT)
         )
-        cls.CONTENT.set(
-            'option.icon-dir', gui_core.GuiIconDirectory.get('qt-style')
+        content.set(
+            'option.icon-dir', _gui_core.GuiIconDirectory.get('qt-style')
         )
-        cls.CONTENT.do_flatten()
+        for k, v in _gui_core.GuiRgba.__dict__.items():
+            if isinstance(v, tuple):
+                if len(v) == 4:
+                    content.set('option.rgba.{}'.format(k), ', '.join(map(str, v)))
+                    setattr(QtRgba, k, QtGui.QColor(*v))
+                    setattr(QtRgbaBrush, k, QtGui.QBrush(QtGui.QColor(*v)))
+                elif len(v) == 3:
+                    content.set('option.rgba.{}'.format(k), ', '.join(map(str, list(v)+[255])))
+                    setattr(QtRgba, k, QtGui.QColor(*v))
+                    setattr(QtRgbaBrush, k, QtGui.QBrush(QtGui.QColor(*v)))
+
+        content.do_flatten()
+        cls.CONTENT = content
         return cls.CONTENT
 
     @classmethod
@@ -27,29 +53,5 @@ class GuiQtStyle(object):
             'widget.{}'.format(key)
         )
 
-    @classmethod
-    def get_border(cls, key):
-        c = cls._generate_content()
-        return eval(
-            c.get(
-                'option.border.{}'.format(key)
-            )
-        )
 
-    @classmethod
-    def get_background(cls, key):
-        c = cls._generate_content()
-        return eval(
-            c.get(
-                'option.background.{}'.format(key)
-            )
-        )
-
-    @classmethod
-    def get_font(cls, key):
-        c = cls._generate_content()
-        return eval(
-            c.get(
-                'option.font.{}'.format(key)
-            )
-        )
+QtStyle._generate_content()

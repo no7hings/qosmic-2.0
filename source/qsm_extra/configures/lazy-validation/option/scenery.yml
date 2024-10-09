@@ -1,11 +1,18 @@
 options:
     mesh:
-        non_manifold:
-            enable: False
+        non_manifold_vertices:
+            enable: True
             limit_value: 0
-            description: ''
-            description_chs: ''
-            level: 'warning'
+            description: '{vertex}'
+            description_chs: '{vertex}'
+            level: 'error'
+
+        lamina_faces:
+            enable: True
+            limit_value: 0
+            description: '{face}'
+            description_chs: '{face}'
+            level: 'error'
 
     mesh_count:
         triangle:
@@ -65,9 +72,13 @@ convertion:
         name: 'Mesh'
         name_chs: '网格'
 
-    non_manifold:
-        name: 'Non Manifold'
-        name_chs: '非流形'
+    non_manifold_vertices:
+        name: 'Non Manifold Vertices'
+        name_chs: '非流形的点'
+
+    lamina_faces:
+        name: 'Lamina Faces (face sharing all edges)'
+        name_chs: '重叠的面'
 
     mesh_count:
         name: 'Mesh Count'

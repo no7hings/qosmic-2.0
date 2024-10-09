@@ -14,7 +14,7 @@ from .. import core as _mya_core
 
 
 class MainShelf(object):
-    KEY = 'qosmic shelf'
+    LOG_KEY = 'qosmic shelf'
 
     MAIN_SHELF_NAME = 'Lazy Tool'
     MAIN_SHELF_KEY = 'Lazy_Tool'
@@ -32,7 +32,7 @@ class MainShelf(object):
 
     def create(self):
         bsc_log.Log.trace_method_result(
-            self.KEY, 'create'
+            self.LOG_KEY, 'create'
         )
         language = bsc_core.EnvBaseMtd.get_ui_language()
 

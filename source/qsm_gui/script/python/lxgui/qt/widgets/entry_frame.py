@@ -92,10 +92,10 @@ class QtEntryFrame(
         self._init_action_base_def_(self)
         self._init_thread_base_def_(self)
         #
-        self._frame_border_color = _qt_core.QtBorderColors.Light
-        self._hovered_frame_border_color = _qt_core.QtBorderColors.Hovered
-        self._selected_frame_border_color = _qt_core.QtBorderColors.Selected
-        self._frame_background_color = _qt_core.QtBackgroundColors.Dim
+        self._frame_border_color = _qt_core.QtRgba.BorderLight
+        self._hovered_frame_border_color = _qt_core.QtRgba.BorderHover
+        self._selected_frame_border_color = _qt_core.QtRgba.BorderSelect
+        self._frame_background_color = _qt_core.QtRgba.Dim
 
         self._resize_handle = _resize.QtVResizeHandle(self)
         self._resize_handle.hide()
@@ -121,10 +121,10 @@ class QtEntryFrame(
         is_selected = self._is_focused
 
         color_bkg = self._frame_background_color
-        color_bdr = [_qt_core.QtBorderColors.Basic, _qt_core.QtBorderColors.HighLight][is_selected]
+        color_bdr = [_qt_core.QtRgba.FadeBasic, _qt_core.QtRgba.BorderBright][is_selected]
         w_bdr = [self._frame_border_width, self._frame_border_width+1][is_selected]
         painter._set_border_color_(
-            _qt_core.QtColors.Transparent
+            _qt_core.QtRgba.Transparent
         )
         painter._set_background_color_(
             color_bkg
@@ -137,7 +137,7 @@ class QtEntryFrame(
                 painter._draw_text_by_rect_(
                     rect=self._tip_draw_rect,
                     text=self._tip_text,
-                    text_color=_qt_core.QtColors.TextDisable,
+                    text_color=_qt_core.QtRgba.TextDisable,
                     font=_qt_core.QtFonts.DefaultItalic,
                     text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 )
@@ -154,7 +154,7 @@ class QtEntryFrame(
             color_bdr
         )
         painter._set_background_color_(
-            _qt_core.QtColors.Transparent
+            _qt_core.QtRgba.Transparent
         )
         painter._set_border_width_(w_bdr)
         for i_rect in self._frame_draw_rects:
@@ -182,7 +182,7 @@ class QtEntryFrame(
 
     def _update_background_color_by_locked_(self, boolean):
         self._frame_background_color = [
-            _qt_core.QtBackgroundColors.Dark, _qt_core.QtBackgroundColors.Dim
+            _qt_core.QtRgba.Dark, _qt_core.QtRgba.Dim
         ][boolean]
 
     def _set_focused_(self, boolean):

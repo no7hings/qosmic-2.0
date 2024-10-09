@@ -264,7 +264,7 @@ class GuiPrxScpForTreeTagFilter(object):
                 i_path, ancestors=True
             )
             prx_item_tgt.set_tag_filter_tgt_statistic_enable(True)
-            self._filter_content.add_element(
+            self._filter_content.append_element(
                 i_key,
                 prx_item_tgt
             )

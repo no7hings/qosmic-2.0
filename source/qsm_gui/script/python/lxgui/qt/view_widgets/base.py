@@ -27,7 +27,7 @@ class _BaseViewWidget(QtWidgets.QWidget):
         self._grid_lot.setContentsMargins(*[self._mrg]*4)
         self._grid_lot.setSpacing(2)
 
-        self._tool_bar_hide_flag = False
+        self._toolbar_hide_flag = False
 
         self.setFocusPolicy(QtCore.Qt.ClickFocus)
 
@@ -43,7 +43,7 @@ class _BaseViewWidget(QtWidgets.QWidget):
         painter.setBrush(QtGui.QColor(*_gui_core.GuiRgba.Dim))
         painter.drawRect(f_x, f_y, f_w, f_h)
 
-        if self._tool_bar_hide_flag is False:
+        if self._toolbar_hide_flag is False:
 
             tol_w = self.TOOL_BAR_W
             x_t, y_t, w_t, h_t = x+mrg, y+mrg, w-mrg*2, h-mrg*2
@@ -63,3 +63,6 @@ class _BaseViewWidget(QtWidgets.QWidget):
             painter.drawPolygon(
                 polygon
             )
+    
+    def _set_toolbar_hide_flag_(self, boolean):
+        self._toolbar_hide_flag = boolean

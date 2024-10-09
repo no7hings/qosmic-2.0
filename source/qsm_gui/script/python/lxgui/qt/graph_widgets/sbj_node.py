@@ -248,7 +248,7 @@ class QtNode(
                 self._name_draw_rect,
                 self._name_text,
                 font=_qt_core.QtFont.generate(size=self._ng_draw_font_h),
-                text_color=_qt_core.QtFontColors.Basic,
+                text_color=_qt_core.QtRgba.Text,
                 text_option=QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter,
                 offset=offset
             )

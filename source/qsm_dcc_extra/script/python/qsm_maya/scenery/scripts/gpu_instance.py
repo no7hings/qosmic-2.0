@@ -81,7 +81,7 @@ class GpuInstanceOpt(_rsc_core.ResourceScriptOpt):
 
 
 class GpuInstanceProcess(object):
-    KEY = 'gpu instance'
+    LOG_KEY = 'gpu instance'
 
     @classmethod
     def create_gpu_transform(cls, path, hash_key):
@@ -249,7 +249,7 @@ class GpuInstanceProcess(object):
                 # lod
                 shape_path_new = _mya_core.Transform.get_shape(transform_path_new)
                 bsc_log.Log.trace_method_result(
-                    self.KEY, 'create lod for: "{}", face count is {}'.format(
+                    self.LOG_KEY, 'create lod for: "{}", face count is {}'.format(
                         shape_path_new, face_count
                     )
                 )
@@ -344,7 +344,7 @@ class GpuInstanceProcess(object):
         )
 
         bsc_log.Log.trace_method_result(
-            self.KEY, 'load scene: {}'.format(self._file_path)
+            self.LOG_KEY, 'load scene: {}'.format(self._file_path)
         )
 
         import_paths = _mya_core.SceneFile.import_file(

@@ -4,8 +4,6 @@ from .base import *
 
 from .style import *
 
-from .color_and_brush import *
-
 from .painter import *
 
 from .extra import *

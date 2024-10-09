@@ -30,11 +30,11 @@ class PyModule(object):
                 self._module = importlib.import_module(module_name)
             else:
                 self._module = None
-        #
+
         self._module_name = None
         self._file_path_pyc = None
         self._file_path_py = None
-        #
+
         if self._module is not None:
             self._module_name = self._module.__name__
             if hasattr(self._module, '__file__') is True:

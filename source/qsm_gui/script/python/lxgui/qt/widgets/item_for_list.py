@@ -518,7 +518,7 @@ class QtListItemWidget(
         #
         self._frame_size = 128, 128
         #
-        self._frame_background_color = _qt_core.QtBackgroundColors.Light
+        self._frame_background_color = _qt_core.QtRgba.BackgroundLight
         #
         self._is_viewport_show_enable = True
         #
@@ -651,7 +651,7 @@ class QtListItemWidget(
             else:
                 bdr_color = bdr_color_
         else:
-            bdr_color = _qt_core.QtBackgroundColors.Transparent
+            bdr_color = _qt_core.QtRgba.Transparent
         #
         item = self._get_item_()
         if item._item_show_status in {item.ShowStatus.Loading, item.ShowStatus.Waiting}:
@@ -663,8 +663,8 @@ class QtListItemWidget(
         if self._frame_draw_is_enable is True:
             painter._draw_frame_by_rect_(
                 rect=shadow_rect,
-                border_color=_qt_core.QtBorderColors.Transparent,
-                background_color=_qt_core.QtBackgroundColors.Shadow,
+                border_color=_qt_core.QtRgba.Transparent,
+                background_color=_qt_core.QtRgba.Shadow,
                 offset=4
             )
         # base
@@ -678,7 +678,7 @@ class QtListItemWidget(
         if self._frame_draw_is_enable is True:
             painter._draw_frame_by_rect_(
                 rect=self._frame_draw_rect,
-                border_color=_qt_core.QtBorderColors.Transparent,
+                border_color=_qt_core.QtRgba.Transparent,
                 background_color=self._frame_background_color,
                 border_radius=0,
                 offset=offset,
@@ -688,7 +688,7 @@ class QtListItemWidget(
             if self._get_has_names_():
                 painter._draw_frame_by_rect_(
                     self._name_frame_draw_rect,
-                    border_color=_qt_core.QtBorderColors.Transparent,
+                    border_color=_qt_core.QtRgba.Transparent,
                     background_color=self._frame_background_color,
                     offset=offset
                 )
@@ -697,7 +697,7 @@ class QtListItemWidget(
             if self._image_frame_draw_enable is True:
                 painter._draw_frame_by_rect_(
                     self._image_frame_rect,
-                    border_color=_qt_core.QtBorderColors.Transparent,
+                    border_color=_qt_core.QtRgba.Transparent,
                     background_color=self._frame_background_color,
                     offset=offset
                 )
@@ -723,19 +723,19 @@ class QtListItemWidget(
                         text=self._image_text,
                         border_radius=4,
                         offset=offset,
-                        border_color=_qt_core.QtBorderColors.Icon,
+                        border_color=_qt_core.QtRgba.BdrIcon,
                         border_width=2
                     )
-                #
+
                 if self._image_sub_file_path:
                     painter._draw_image_use_file_path_by_rect_(
                         rect=self._image_sub_draw_rect,
                         file_path=self._image_sub_file_path,
                         offset=offset,
-                        #
+
                         draw_frame=True,
-                        background_color=_qt_core.QtBorderColors.Icon,
-                        border_color=_qt_core.QtBorderColors.Icon,
+                        background_color=_qt_core.QtRgba.BdrIcon,
+                        border_color=_qt_core.QtRgba.BdrIcon,
                         border_radius=4
                     )
         # check icon
