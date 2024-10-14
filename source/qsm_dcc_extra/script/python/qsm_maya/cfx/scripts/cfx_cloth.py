@@ -26,12 +26,13 @@ class CfxNClothCacheOpt(_rsc_core.ResourceScriptOpt):
     def __init__(self, *args, **kwargs):
         super(CfxNClothCacheOpt, self).__init__(*args, **kwargs)
 
-    def create_cache_root_auto(self):
-        if cmds.objExists(self.CACHE_ROOT) is False:
+    @classmethod
+    def create_cache_root_auto(cls):
+        if cmds.objExists(cls.CACHE_ROOT) is False:
             cmds.createNode(
-                'dagContainer', name=self.CACHE_ROOT.split('|')[-1], shared=1, skipSelect=1
+                'dagContainer', name=cls.CACHE_ROOT.split('|')[-1], shared=1, skipSelect=1
             )
-            cmds.setAttr(self.CACHE_ROOT+'.iconName', 'folder-closed.png', type='string')
+            cmds.setAttr(cls.CACHE_ROOT+'.iconName', 'folder-closed.png', type='string')
 
     def do_export(
         self, directory_path, frame_range, frame_step, frame_offset,

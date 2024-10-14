@@ -11,7 +11,7 @@ from . import environ as _environ
 from . import process as _process
 
 
-class ExcBaseMtd(object):
+class BscBinExecute(object):
     @classmethod
     def oiiotool(cls):
         if _base.BscSystem.get_is_windows():
@@ -73,31 +73,27 @@ class ExcBaseMtd(object):
             return _bsc_resource.RscExtendExe.get(name)
 
 
-class ExcExtraMtd(object):
-    @staticmethod
-    def execute_python_file(file_path, **kwargs):
+class BscScriptExecute(object):
+    LOG_KEY = 'script execute'
+
+    @classmethod
+    def execute_python_file(cls, file_path, **kwargs):
         # use for python 3
         # with open(file_path, 'r') as f:
         #     exec (f.read())
         # use for python 2
         _bsc_log.Log.trace_method_result(
-            'option-hook', 'start for : "{}"'.format(
+            cls.LOG_KEY, 'start for : "{}"'.format(
                 file_path
             )
         )
         kwargs['__name__'] = '__main__'
         execfile(file_path, kwargs)
         _bsc_log.Log.trace_method_result(
-            'option-hook', 'complete for: "{}"'.format(
+            cls.LOG_KEY, 'complete for: "{}"'.format(
                 file_path
             )
         )
-
-    @staticmethod
-    def execute_python_script(cmd, **kwargs):
-        # noinspection PyUnusedLocal
-        session = kwargs['session']
-        exec cmd
 
     @staticmethod
     def execute_shell_file_use_terminal(file_path, **kwargs):

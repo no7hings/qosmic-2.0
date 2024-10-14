@@ -139,7 +139,7 @@ class GpuImport(object):
 
             if roots:
                 for i_path in roots:
-                    if _mya_core.Node.is_transform(i_path):
+                    if _mya_core.Node.is_transform_type(i_path):
                         i_shape_paths = _mya_core.Group.find_siblings(i_path, ['mesh'])
                         for j_shape_path in i_shape_paths:
                             j_transform_path = _mya_core.Shape.get_transform(j_shape_path)

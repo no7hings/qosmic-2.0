@@ -8,7 +8,7 @@ import dummy_thread as _thread
 _allocate_lock = _thread.allocate_lock
 
 
-class RandomName:
+class BscRandomName:
     CHATS = (
         "abcdefghijklmnopqrstuvwxyz"
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

@@ -115,6 +115,10 @@ class Meshes(object):
             data[i_key] = v
         return Mesh.to_evaluate(data)
 
+    @classmethod
+    def get_triangle_number(cls, paths):
+        return cmds.polyEvaluate(paths, triangle=1) or 0
+
 
 class MeshOpt(_shape.ShapeOpt):
     @classmethod

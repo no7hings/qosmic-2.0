@@ -10,7 +10,7 @@ def test():
         output=file_path_tgt,
     )
     cmd_args = [
-        bsc_core.ExcBaseMtd.oiiotool(),
+        bsc_core.BscBinExecute.oiiotool(),
         u'-i "{input}"',
         # '--ch R,G,B,A=1.0',
         u'-o "{output}"',

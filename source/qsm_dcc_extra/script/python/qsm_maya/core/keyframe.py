@@ -344,8 +344,8 @@ class AnmCurveOpt(object):
         curve_name_new = cmds.createNode(curve_type, name=curve_name, skipSelect=1)
 
         atr_path_src = '{}.output'.format(curve_name_new)
-        atr_path_dst = '{}.{}'.format(path, atr_name)
-        _connection.Connection.create(atr_path_src, atr_path_dst)
+        atr_path_tgt = '{}.{}'.format(path, atr_name)
+        _connection.Connection.create(atr_path_src, atr_path_tgt)
 
         return cls(curve_name_new)
 

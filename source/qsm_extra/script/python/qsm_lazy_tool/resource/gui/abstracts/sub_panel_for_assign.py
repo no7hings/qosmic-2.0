@@ -5,7 +5,7 @@ import lxgui.core as gui_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy.screw.core as qsm_lzy_scr_core
+import qsm_screw.core as qsm_scr_core
 
 
 class AbsPrxSubPanelForAssign(gui_prx_widgets.PrxBaseSubPanel):

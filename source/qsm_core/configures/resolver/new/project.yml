@@ -29,24 +29,24 @@ project-root_secondary-windows-dir: 't:/prod'
 project-root_secondary-linux-dir: '/t/prod'
 # project
 #   step
-project-source-step-dir: <project-dir>/user/<workspace-name>.<step-name>
-project-user-step-dir: <project-dir>/user/<workspace-name>.<artist-name>
+project-source-step-dir: <project-dir>/workarea/<workspace-name>.<step-name>
+project-user-step-dir: <project-dir>/workarea/<workspace-name>.<artist-name>
 project-release-step-dir: <project-dir>/<workspace-name>/<step-name>
 project-temporary-step-dir: <project-dir>/<workspace-name>/<step-name>
 #   step search patterns
 project-step-search-patterns:
-    source: '<project-dir>/user/team.<step-name>/<app-name>/scenes/{any_0}/<project-name>.<step-name>.{any_1}.{format}'
-    user: '<project-dir>/user/work.{any_0}/<app-name>/scenes/{any_1}/<project-name>.<step-name>.{any_2}.{format}'
+    source: '<project-dir>/workarea/team.<step-name>/<app-name>/scenes/{any_0}/<project-name>.<step-name>.{any_1}.{format}'
+    user: '<project-dir>/workarea/user.{any_0}/<app-name>/scenes/{any_1}/<project-name>.<step-name>.{any_2}.{format}'
     release: <project-release-step-dir>
 #   task
-project-source-task-dir: <project-dir>/user/<workspace-name>.<step-name>
-project-user-task-dir: <project-dir>/user/<workspace-name>.<artist-name>
+project-source-task-dir: <project-dir>/workarea/<workspace-name>.<step-name>
+project-user-task-dir: <project-dir>/workarea/<workspace-name>.<artist-name>
 project-release-task-dir: <project-release-step-dir>/<task-name>
 project-temporary-task-dir: <project-temporary-step-dir>/<task-name>
 #   task search patterns
 project-task-search-patterns:
-    source: '<project-dir>/user/team.<step-name>/<app-name>/scenes/{any_0}/<project-name>.<step-name>.<task-name>.{any_1}.{format}'
-    user: '<project-dir>/user/work.{any_0}/<app-name>/scenes/{any_1}/<project-name>.<step-name>.<task-name>.{any_2}.{format}'
+    source: '<project-dir>/workarea/team.<step-name>/<app-name>/scenes/{any_0}/<project-name>.<step-name>.<task-name>.{any_1}.{format}'
+    user: '<project-dir>/workarea/user.{any_0}/<app-name>/scenes/{any_1}/<project-name>.<step-name>.<task-name>.{any_2}.{format}'
     release: <project-release-task-dir>
 #   maya
 #       source
@@ -69,24 +69,24 @@ project-user-katana-scene-src-file: <project-user-katana-scene-src-dir>/<task_ex
 # asset
 asset-area-dir: <project-dir>/assets
 # asset step
-asset-source-step-dir: <asset-dir>/user/<workspace-name>.<step-name>
-asset-user-step-dir: <asset-dir>/user/<workspace-name>.<artist-name>
+asset-source-step-dir: <asset-dir>/workarea/<workspace-name>.<step-name>
+asset-user-step-dir: <asset-dir>/workarea/<workspace-name>.<artist-name>
 asset-release-step-dir: <asset-dir>/<workspace-name>/<step-name>
 asset-temporary-step-dir: <asset-dir>/<workspace-name>/<step-name>
 #
 asset-step-search-patterns:
-    source: '<asset-dir>/user/team.<step-name>/<app-name>/scenes/{any_0}/<asset-name>.<step-name>.{any_1}.{format}'
-    user: '<asset-dir>/user/work.{any_0}/<app-name>/scenes/{any_1}/<asset-name>.<step-name>.{any_2}.{format}'
+    source: '<asset-dir>/workarea/team.<step-name>/<app-name>/scenes/{any_0}/<asset-name>.<step-name>.{any_1}.{format}'
+    user: '<asset-dir>/workarea/user.{any_0}/<app-name>/scenes/{any_1}/<asset-name>.<step-name>.{any_2}.{format}'
     release: <asset-release-step-dir>
 # task
-asset-source-task-dir: <asset-dir>/user/<workspace-name>.<step-name>
-asset-user-task-dir: <asset-dir>/user/<workspace-name>.<artist-name>
+asset-source-task-dir: <asset-dir>/workarea/<workspace-name>.<step-name>
+asset-user-task-dir: <asset-dir>/workarea/<workspace-name>.<artist-name>
 asset-release-task-dir: <asset-release-step-dir>/<task-name>
 asset-temporary-task-dir: <asset-temporary-step-dir>/<task-name>
 #
 asset-task-search-patterns:
-    source: '<asset-dir>/user/team.<step-name>/<app-name>/scenes/{any_0}/<asset-name>.<step-name>.<task-name>.{any_1}.{format}'
-    user: '<asset-dir>/user/work.{any_0}/<app-name>/scenes/{any_1}/<asset-name>.<step-name>.<task-name>.{any_2}.{format}'
+    source: '<asset-dir>/workarea/team.<step-name>/<app-name>/scenes/{any_0}/<asset-name>.<step-name>.<task-name>.{any_1}.{format}'
+    user: '<asset-dir>/workarea/user.{any_0}/<app-name>/scenes/{any_1}/<asset-name>.<step-name>.<task-name>.{any_2}.{format}'
     release: <asset-release-task-dir>
 # maya
 #   source
@@ -147,8 +147,8 @@ sequence-release-step-dir: <sequence-dir>/<workspace-name>/<step-name>
 sequence-temporary-step-dir: <sequence-dir>/<workspace-name>/<step-name>
 #   step search patterns
 sequence-step-search-patterns:
-    source: '<sequence-dir>/user/team.<step-name>/<app-name>/scenes/{any_0}/<sequence-name>.<step-name>.{any_1}.{format}'
-    user: '<sequence-dir>/user/work.{any_0}/<app-name>/scenes/{any_1}/<sequence-name>.<step-name>.{any_2}.{format}'
+    source: '<sequence-dir>/workarea/team.<step-name>/<app-name>/scenes/{any_0}/<sequence-name>.<step-name>.{any_1}.{format}'
+    user: '<sequence-dir>/workarea/user.{any_0}/<app-name>/scenes/{any_1}/<sequence-name>.<step-name>.{any_2}.{format}'
     release: <sequence-release-step-dir>
 #   task
 sequence-source-task-dir: <sequence-dir>/<workspace-name>.<step-name>
@@ -157,28 +157,28 @@ sequence-release-task-dir: <sequence-release-step-dir>/<task-name>
 sequence-temporary-task-dir: <sequence-temporary-step-dir>/<task-name>
 #   task search patterns
 sequence-task-search-patterns:
-    source: '<sequence-dir>/user/team.<step-name>/<app-name>/scenes/{any_0}/<sequence-name>.<step-name>.<task-name>.{any_1}.{format}'
-    user: '<sequence-dir>/user/work.{any_0}/<app-name>/scenes/{any_1}/<sequence-name>.<step-name>.<task-name>.{any_2}.{format}'
+    source: '<sequence-dir>/workarea/team.<step-name>/<app-name>/scenes/{any_0}/<sequence-name>.<step-name>.<task-name>.{any_1}.{format}'
+    user: '<sequence-dir>/workarea/user.{any_0}/<app-name>/scenes/{any_1}/<sequence-name>.<step-name>.<task-name>.{any_2}.{format}'
     release: <sequence-release-task-dir>
 #
-shot-source-step-dir: <shot-dir>/user/<workspace-name>.<step-name>
-shot-user-step-dir: <shot-dir>/user/<workspace-name>.<artist-name>
+shot-source-step-dir: <shot-dir>/workarea/<workspace-name>.<step-name>
+shot-user-step-dir: <shot-dir>/workarea/<workspace-name>.<artist-name>
 shot-release-step-dir: <shot-dir>/<workspace-name>/<step-name>
 shot-temporary-step-dir: <shot-dir>/<workspace-name>/<step-name>
 #
 shot-step-search-patterns:
-    source: '<shot-dir>/user/team.<step-name>/<app-name>/scenes/{any_0}/<shot-name>.<step-name>.{any_1}.{format}'
-    user: '<shot-dir>/user/work.{any_0}/<app-name>/scenes/{any_1}/<shot-name>.<step-name>.{any_2}.{format}'
+    source: '<shot-dir>/workarea/team.<step-name>/<app-name>/scenes/{any_0}/<shot-name>.<step-name>.{any_1}.{format}'
+    user: '<shot-dir>/workarea/user.{any_0}/<app-name>/scenes/{any_1}/<shot-name>.<step-name>.{any_2}.{format}'
     release: <shot-release-step-dir>
 # task
-shot-source-task-dir: <shot-dir>/user/<workspace-name>.<step-name>
-shot-user-task-dir: <shot-dir>/user/<workspace-name>.<artist-name>
+shot-source-task-dir: <shot-dir>/workarea/<workspace-name>.<step-name>
+shot-user-task-dir: <shot-dir>/workarea/<workspace-name>.<artist-name>
 shot-release-task-dir: <shot-release-step-dir>/<task-name>
 shot-temporary-task-dir: <shot-temporary-step-dir>/<task-name>
 #
 shot-task-search-patterns:
-    source: '<shot-dir>/user/team.<step-name>/<app-name>/scenes/{any_0}/<shot-name>.<step-name>.<task-name>.{any_1}.{format}'
-    user: '<shot-dir>/user/work.{any_0}/<app-name>/scenes/{any_1}/<shot-name>.<step-name>.<task-name>.{any_2}.{format}'
+    source: '<shot-dir>/workarea/team.<step-name>/<app-name>/scenes/{any_0}/<shot-name>.<step-name>.<task-name>.{any_1}.{format}'
+    user: '<shot-dir>/workarea/user.{any_0}/<app-name>/scenes/{any_1}/<shot-name>.<step-name>.<task-name>.{any_2}.{format}'
     release: <shot-release-task-dir>
 # maya
 #   source

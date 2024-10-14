@@ -13,7 +13,7 @@ from .. import abstracts as _prx_abstracts
 # proxy widgets
 from . import window_base as _window_base
 
-from . import utility as _utility
+from . import node as _node
 
 
 class PrxBasePanel(_window_base.PrxBaseWindow):
@@ -169,6 +169,15 @@ class PrxBaseUnit(_prx_abstracts.AbsPrxWidget):
 
     def gui_unit_setup_fnc(self):
         pass
+
+
+class PrxVirtualUnit(object):
+    UNIT_KEY = None
+
+    def __init__(self, window, page, session):
+        self._window = window
+        self._page = page
+        self._session = session
 
 
 class PrxBaseSubPanel(_window_base.PrxBaseWindow):

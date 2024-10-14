@@ -81,7 +81,7 @@ from .window import *
 
 from .shelf import *
 
-from .node_for_deformer import *
+from .deform import *
 
 from .node_for_dynamic import *
 
@@ -96,6 +96,9 @@ from .character import *
 from .snapshot import *
 
 from .bbox import *
+
+from .locator import *
+
 
 
 

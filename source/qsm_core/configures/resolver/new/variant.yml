@@ -92,7 +92,7 @@ shot_steps:
     animation: ani
     final_layout: flo
     effect: efx
-    character_effext: cfx
+    character_effect: cfx
     #
     light: lgt
     light_rig: lgtrig

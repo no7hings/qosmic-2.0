@@ -5,8 +5,8 @@ import maya.cmds as cmds
 
 class Connection(object):
     @classmethod
-    def create(cls, atr_path_src, atr_path_dst):
-        return cmds.connectAttr(atr_path_src, atr_path_dst, force=1)
+    def create(cls, atr_path_src, atr_path_tgt):
+        return cmds.connectAttr(atr_path_src, atr_path_tgt, force=1)
 
 
 class NodeConnection(object):

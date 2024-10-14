@@ -26,7 +26,7 @@ import lxgui.proxy.abstracts as gui_prx_abstracts
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy.screw.core as qsm_lzy_scr_core
+import qsm_screw.core as qsm_scr_core
 
 import lxsession.commands as ssn_commands
 
@@ -814,7 +814,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
                     data_type=data_type,
                     file=file_path
                 )
-                qsm_lzy_scr_core.DataContext.save(data)
+                qsm_scr_core.DataContext.save(data)
 
     # node
     def gui_update_entities(self, node_path_set, gui_thread_flag):
@@ -1059,7 +1059,14 @@ class _GuiNodeOpt(_GuiBaseOpt):
                 property_dict['thumbnail']
             )
         elif 'image_sequence' in property_dict:
-            qt_item._item_model.set_image_sequence(property_dict['image_sequence'])
+            fps = property_dict.get('fps')
+            if fps is not None:
+                # is a string, convert to int
+                fps = int(fps)
+            else:
+                fps = 24
+
+            qt_item._item_model.set_image_sequence(property_dict['image_sequence'], fps)
 
         qt_item._item_model.register_press_dbl_click_fnc(press_dbl_click_fnc)
         qt_item._item_model.set_property_dict(property_dict)
@@ -1173,7 +1180,7 @@ class AbsPrxPageForManager(
 
     def do_gui_page_initialize(self, key):
         self._scr_stage_key = key
-        self._scr_stage = qsm_lzy_scr_core.Stage(self._scr_stage_key)
+        self._scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
 
         self.gui_page_setup_fnc()
 

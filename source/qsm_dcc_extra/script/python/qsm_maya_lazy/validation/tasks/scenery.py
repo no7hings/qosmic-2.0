@@ -5,19 +5,15 @@ import sys
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-import lxbasic.core as bsc_core
-
 import lxbasic.storage as bsc_storage
-
-import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_general.core as qsm_gnl_core
-
 import qsm_maya_lazy.resource.scripts as qsm_mya_lzy_scr_scripts
+
+from . import task_prc as _task_prc
 
 import _abc
 
@@ -35,7 +31,10 @@ class SceneryValidationTask(_abc.AbsValidationTask):
         with bsc_log.LogProcessContext.create(maximum=len(process_options)) as l_p:
             for i_branch, i_leafs in process_options.items():
                 if i_branch == 'mesh':
-                    self.branch_prc('mesh', i_leafs)
+                    self.execute_branch_task_prc_for(
+                        i_branch, i_leafs,
+                        task_prc_cls=_task_prc.ValidationTaskPrc
+                    )
 
                 l_p.do_update()
 
@@ -57,7 +56,7 @@ class SceneryValidationTask(_abc.AbsValidationTask):
             )
 
 
-class SceneryValidationProcess(object):
+class SceneryValidationTaskProcess(object):
     def __init__(self, file_path, validation_cache_path, mesh_count_cache_path, process_options):
         self._file_path = file_path
         self._validation_cache_path = validation_cache_path

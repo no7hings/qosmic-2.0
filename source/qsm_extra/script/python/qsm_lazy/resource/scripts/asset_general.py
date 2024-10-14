@@ -1,5 +1,5 @@
 # coding:utf-8
-from ...screw import core as _scr_core
+import qsm_screw.core as qsm_scr_core
 
 
 class AssetTag(object):
@@ -105,7 +105,7 @@ class AssetGeneral(object):
             self.register_process_memory_usage(process_name, memory_size)
 
     def register_process_memory_usage(self, process_name, size):
-        scr_stage = _scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
         scr_stage.create_or_update_parameters(
             self._scr_node_path, 'process_memory_usage.{}'.format(process_name), str(size)
         )
@@ -116,7 +116,7 @@ class AssetGeneral(object):
             self.register_memory_usage(memory_size)
 
     def register_mesh_face_count_tag(self, mesh_triangle):
-        scr_stage = _scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
         # remove exists
         scr_stage.remove_assigns_below(
             self._scr_node_path, '/mesh_count/face'
@@ -130,7 +130,7 @@ class AssetGeneral(object):
         )
 
     def register_mesh_geometry_count_tag(self, geometry_count):
-        scr_stage = _scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
         # remove exists
         scr_stage.remove_assigns_below(
             self._scr_node_path, '/mesh_count/geometry'
@@ -144,7 +144,7 @@ class AssetGeneral(object):
         )
     
     def register_mesh_cache_percentage_tag(self, percentage):
-        scr_stage = _scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
         # remove exists
         scr_stage.remove_assigns_below(
             self._scr_node_path, '/mesh_count/non_cache_face_percentage'
@@ -158,7 +158,7 @@ class AssetGeneral(object):
         )
 
     def register_memory_usage(self, size):
-        scr_stage = _scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
 
         scr_stage.create_or_update_parameters(
             self._scr_node_path, 'system_memory_usage', str(size)

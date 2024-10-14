@@ -41,12 +41,9 @@ class AssetUnitAssemblyOpt(object):
             cmds.setAttr(cls.CACHE_ROOT+'.iconName', 'folder-closed.png', type='string')
 
     @classmethod
-    def load_cache(cls, cache_path):
+    def load_cache(cls, namespace, cache_path):
         cls.create_cache_root_auto()
 
-        cache_opt = bsc_storage.StgFileOpt(cache_path)
-
-        namespace = cache_opt.name_base
         cache_location_new = '{}|{}:{}'.format(cls.CACHE_ROOT, namespace, cls.CACHE_NAME)
         cache_location = '|{}:{}'.format(namespace, cls.CACHE_NAME)
         if cmds.objExists(cache_location) is False and cmds.objExists(cache_location_new) is False:
@@ -115,6 +112,7 @@ class _RegionPrc(object):
         if not mesh_paths:
             return
 
+        # compute grid size
         grid_size = self._compute_grid_size_0(self._exists_roots)
         region_paths = []
 
@@ -123,7 +121,9 @@ class _RegionPrc(object):
             keys = grid_map.keys()
             keys.sort()
             for i_seq, i_key in enumerate(keys):
+                # fixme: comp maybe grid again
                 i_shape_paths = grid_map[i_key]
+                print qsm_mya_core.Meshes.get_triangle_number(i_shape_paths), 'AAAA'
                 i_ar_path_new = self.prc(i_key, i_seq, i_shape_paths)
                 # fixme: maybe None
                 if i_ar_path_new:
@@ -411,7 +411,7 @@ class _GpuPrc(object):
 
         if roots:
             for i_path in roots:
-                if qsm_mya_core.Node.is_transform(i_path):
+                if qsm_mya_core.Node.is_transform_type(i_path):
                     i_shape_paths = qsm_mya_core.Group.find_siblings(i_path, ['mesh'])
                     for j_shape_path in i_shape_paths:
                         j_transform_path = qsm_mya_core.Shape.get_transform(j_shape_path)
@@ -448,7 +448,7 @@ class _GpuImportPrc(object):
         # parent to transform
         if roots:
             for i_path in roots:
-                if qsm_mya_core.Node.is_transform(i_path):
+                if qsm_mya_core.Node.is_transform_type(i_path):
                     i_shape_paths = qsm_mya_core.Group.find_siblings(i_path, ['mesh'])
                     for j_shape_path in i_shape_paths:
                         j_transform_path = qsm_mya_core.Shape.get_transform(j_shape_path)
@@ -501,9 +501,7 @@ class AssetUnitAssemblyProcess(object):
         ).directory_path
 
         if cache_path is None:
-            self._cache_file_path = qsm_gnl_core.MayaCache.generate_asset_unit_assembly_file_new(
-                self._file_path
-            )
+            self._cache_file_path = qsm_gnl_core.MayaCache.generate_asset_unit_assembly_file_new(self._file_path)
         else:
             self._cache_file_path = cache_path
 
@@ -592,5 +590,5 @@ class AssetUnitAssemblyProcess(object):
     @classmethod
     def test(cls):
         cls(
-            'X:/QSM_TST/Assets/scn/test_gpu_assembly/Maya/Final/test_gpu_assembly.ma'
+            'X:/QSM_TST/Assets/scn/test_assembly/Maya/Final/test_assembly.ma'
         ).execute()

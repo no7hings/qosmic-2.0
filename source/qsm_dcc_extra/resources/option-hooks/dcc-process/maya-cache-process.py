@@ -106,7 +106,7 @@ def rig_validation_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.RigValidationProcess(
+    s.RigValidationTaskProcess(
         **kwargs
     ).execute()
 
@@ -120,7 +120,7 @@ def scenery_validation_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.SceneryValidationProcess(
+    s.SceneryValidationTaskProcess(
         **kwargs
     ).execute()
 

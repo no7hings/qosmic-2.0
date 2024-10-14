@@ -24,6 +24,14 @@ class DagNode(_node.Node):
         return cls.to_path(_)
 
     @classmethod
+    def get_shape_transform(cls, path):
+        return cmds.listRelatives(path, parent=1, fullPath=1, type='transform')[0]
+
+    @classmethod
+    def node_is_shape(cls, path):
+        return bool(cmds.ls(path, shapes=1))
+
+    @classmethod
     def create_locator(cls, path):
         parent_path = '|'.join(path.split('|')[:-1])
         name = path.split('|')[-1]

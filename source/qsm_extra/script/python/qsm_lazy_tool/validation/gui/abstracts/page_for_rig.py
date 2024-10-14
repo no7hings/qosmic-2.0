@@ -45,7 +45,7 @@ class AbsPrxPageForRig(gui_prx_widgets.PrxBasePage):
                         self._asset_load_qt_button._set_action_enable_(True)
 
     def _trace_result(self, file_path, validation_cache_path, mesh_count_cache_path, process_options):
-        result, html = self._validation_opt.to_validation_result_args(
+        result, result_description, html = self._validation_opt.to_validation_result_args(
             validation_cache_path, mesh_count_cache_path, process_options
         )
         self._result_prx_text_browser.append_html(html)

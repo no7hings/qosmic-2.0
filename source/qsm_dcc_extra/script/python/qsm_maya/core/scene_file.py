@@ -329,7 +329,7 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
 
         select -replace `ls -dag -head 1 $newTransforms`;
         """
-        name = bsc_core.RandomName().next()
+        name = bsc_core.BscRandomName().next()
         kwargs = dict(
             i=True,
             force=True,

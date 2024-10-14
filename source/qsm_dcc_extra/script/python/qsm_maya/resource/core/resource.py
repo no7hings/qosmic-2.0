@@ -180,14 +180,15 @@ class ResourceScriptOpt(object):
         if _:
             cmds.delete(_[0])
 
-    def create_cache_root_auto(self):
-        if cmds.objExists(self.CACHE_ROOT) is False:
-            name = self.CACHE_ROOT.split('|')[-1]
+    @classmethod
+    def create_cache_root_auto(cls):
+        if cmds.objExists(cls.CACHE_ROOT) is False:
+            name = cls.CACHE_ROOT.split('|')[-1]
             # cmds.container(type='dagContainer', name=name)
             cmds.createNode(
                 'dagContainer', name=name, shared=1, skipSelect=1
             )
-            cmds.setAttr(self.CACHE_ROOT+'.iconName', 'folder-closed.png', type='string')
+            cmds.setAttr(cls.CACHE_ROOT+'.iconName', 'folder-closed.png', type='string')
 
     def load_cache(self, *args, **kwargs):
         raise NotImplementedError()

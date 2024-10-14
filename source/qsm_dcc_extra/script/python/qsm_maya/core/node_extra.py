@@ -385,7 +385,7 @@ class EtrNodeOpt(object):
     def to_dict(self):
         pass
 
-    def get_node_properties(self, includes=None):
+    def get_node_motion_properties(self, includes=None):
         if isinstance(includes, (tuple, list)):
             atr_names = [x for x in includes if _attribute.NodeAttribute.is_exists(self._path, x) is True]
         else:
@@ -419,7 +419,7 @@ class EtrNodeOpt(object):
                 )
         return dict_
 
-    def apply_node_properties(self, data, frame_offset=0, force=True, excludes=None):
+    def apply_node_motion_properties(self, data, frame_offset=0, force=True, excludes=None):
         for i_atr_name, i_v in data.items():
             if excludes is not None:
                 if i_atr_name in excludes:

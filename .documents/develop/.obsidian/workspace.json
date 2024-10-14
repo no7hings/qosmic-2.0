@@ -16,55 +16,31 @@
             }
           },
           {
-            "id": "773b32fd1143e29c",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "开发相关/开发计划/七月-八月.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "e4d9334cf14c69de",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "开发相关/其他/简模代理.md",
-                "mode": "source",
-                "source": true
-              }
-            }
-          },
-          {
-            "id": "512948f2951a8d4c",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "开发相关/其他/动态GPU.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
             "id": "2d3517a2f5f09340",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "随记/python/custom.md",
+                "file": "开发相关/开发计划/六月.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "5099c14e477ae29e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "开发相关/开发任务/maya/解算相关/解算流程.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -110,7 +86,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -130,7 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "随记/python/custom.md",
+                "file": "开发相关/开发任务/maya/解算相关/解算流程.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -147,7 +124,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "随记/python/custom.md",
+                "file": "开发相关/开发任务/maya/解算相关/解算流程.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -170,7 +147,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "随记/python/custom.md"
+                "file": "开发相关/开发任务/maya/解算相关/解算流程.md"
               }
             }
           },
@@ -192,7 +169,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "随记/python/custom.md"
+                "file": "开发相关/开发任务/maya/解算相关/解算流程.md"
               }
             }
           },
@@ -205,14 +182,15 @@
             }
           },
           {
-            "id": "bcfe46fef7c6fc41",
+            "id": "62460414d9efaec8",
             "type": "leaf",
             "state": {
               "type": "mermaid-toolbar-view",
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 7
       }
     ],
     "direction": "horizontal",
@@ -231,23 +209,26 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "2d3517a2f5f09340",
+  "active": "5099c14e477ae29e",
   "lastOpenFiles": [
+    "开发相关/开发任务/maya/解算相关/解算流程.md",
+    "开发相关/开发计划/六月.md",
+    "开发相关/其他/简模代理.md",
+    "开发相关/开发计划/七月-八月.md",
+    "开发相关/开发计划/九月.md",
+    "开发相关/开发任务/maya/解算相关/节点图模版工具（Node Graph Template Tool）.md",
+    "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
     "随记/python/PyQt.md",
     "随记/python/custom.md",
     "文档/sqlite.md",
     "USD/植被流程/流程图.canvas",
-    "开发相关/开发计划/九月.md",
     "USD/植被流程",
     "USD",
-    "开发相关/开发计划/七月-八月.md",
     "开发相关/开发计划/总览.md",
     "开发相关/开发计划/四月-五月.md",
-    "开发相关/开发计划/六月.md",
     "随记/maya/Maya性能优化.md",
     "随记/maya/Mayabatch.md",
     "开发相关/其他/元素组装.md",
-    "开发相关/其他/简模代理.md",
     "开发相关/其他/动态GPU.md",
     "开发相关/其他",
     "开发相关/开发任务/maya/动作相关/动作复制工具.md",
@@ -261,9 +242,6 @@
     "开发相关/开发进度/maya/动作复制工具.md",
     "开发相关/开发进度/maya/场景显示优化工具.md",
     "开发相关/开发进度/maya/绑定移动工具.md",
-    "开发相关/开发进度/maya/绑定显示优化工具.md",
-    "随记/python/Python包安装.md",
-    "技术文档/工具安装说明（临时版）.md",
     "Pasted image 20240628102505.png",
     "Pasted image 20240627192346.png",
     "Pasted image 20240627192052.png",

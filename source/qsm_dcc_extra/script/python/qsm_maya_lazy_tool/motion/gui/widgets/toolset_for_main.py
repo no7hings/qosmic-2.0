@@ -24,7 +24,7 @@ import qsm_maya_gui.core as qsm_mya_gui_core
 
 
 class UnitForRigPicker(
-    qsm_mya_gui_core.PrxUnitBaseOpt
+    gui_prx_widgets.PrxVirtualUnit
 ):
     def do_gui_refresh_by_dcc_selection(self):
         if self._qt_picker._has_focus_() is False:
@@ -54,8 +54,8 @@ class UnitForRigPicker(
     def get_dcc_namespace(self):
         return self._qt_picker._get_namespace_()
 
-    def __init__(self, window, unit, session, qt_picker):
-        super(UnitForRigPicker, self).__init__(window, unit, session)
+    def __init__(self, window, page, session, qt_picker):
+        super(UnitForRigPicker, self).__init__(window, page, session)
         if not isinstance(qt_picker, qsm_qt_widgets.QtAdvCharacterPicker):
             raise RuntimeError()
 
@@ -68,8 +68,10 @@ class UnitForRigPicker(
 
 
 class ToolsetForMotionCopyAndPaste(
-    qsm_mya_gui_core.PrxUnitBaseOpt
+    gui_prx_widgets.PrxVirtualUnit
 ):
+    UNIT_KEY = 'copy_paste_mirror'
+
     def do_gui_refresh_by_dcc_selection(self):
         pass
 
@@ -389,8 +391,8 @@ class ToolsetForMotionCopyAndPaste(
                 )
             )
 
-    def __init__(self, window, unit, session):
-        super(ToolsetForMotionCopyAndPaste, self).__init__(window, unit, session)
+    def __init__(self, window, page, session):
+        super(ToolsetForMotionCopyAndPaste, self).__init__(window, page, session)
 
         self._adv_control_cfg = qsm_gnl_core.AdvCharacterControlConfigure()
 
@@ -472,7 +474,7 @@ class ToolsetForMotionCopyAndPaste(
 
 
 class ToolsetForMotionKeyframe(
-    qsm_mya_gui_core.PrxUnitBaseOpt
+    gui_prx_widgets.PrxVirtualUnit
 ):
     TOOLSET_KEY = 'keyframe'
 
@@ -592,8 +594,8 @@ class ToolsetForMotionKeyframe(
         
         self._do_dcc_refresh_timewrap_buttons()
     
-    def __init__(self, window, unit, session):
-        super(ToolsetForMotionKeyframe, self).__init__(window, unit, session)
+    def __init__(self, window, page, session):
+        super(ToolsetForMotionKeyframe, self).__init__(window, page, session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
@@ -644,8 +646,9 @@ class ToolsetForMotionKeyframe(
 
 
 class ToolsetForMove(
-    qsm_mya_gui_core.PrxUnitBaseOpt
+    gui_prx_widgets.PrxVirtualUnit
 ):
+    UNIT_KEY = 'move'
 
     @staticmethod
     def do_dcc_create_transformation_locator():
@@ -661,8 +664,8 @@ class ToolsetForMove(
             "option_hook_key=dcc-script/maya/qsm-control-move-remove-script"
         )
 
-    def __init__(self, window, unit, session):
-        super(ToolsetForMove, self).__init__(window, unit, session)
+    def __init__(self, window, page, session):
+        super(ToolsetForMove, self).__init__(window, page, session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
@@ -691,4 +694,68 @@ class ToolsetForMove(
 
         self._prx_options_node.set(
             'transformation.remove_control_move_locator', self.do_dcc_remove_transformation_locator
+        )
+
+
+class ToolsetForConstrainAndDeform(
+    gui_prx_widgets.PrxVirtualUnit
+):
+    UNIT_KEY = 'constrain_and_deform'
+
+    def do_dcc_replace_motion_path_object(self):
+        paths = cmds.ls(selection=1, type='transform', long=1) or []
+        if len(paths) < 2:
+            self._window.exec_message_dialog(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.less_transforms')
+                ),
+                status='warning'
+            )
+            return
+
+        qsm_mya_core.MotionPath.replace_all(paths)
+
+    def do_dcc_curve_warp_path_object(self):
+        paths = cmds.ls(selection=1, type='transform', long=1) or []
+        if len(paths) < 2:
+            self._window.exec_message_dialog(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.less_transforms')
+                ),
+                status='warning'
+            )
+            return
+
+        qsm_mya_core.CurveWarp.replace_all(paths)
+
+    def __init__(self, window, page, session):
+        super(ToolsetForConstrainAndDeform, self).__init__(window, page, session)
+
+        self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
+            gui_core.GuiUtil.choice_name(
+                self._window._language, self._window._configure.get('build.main.units.{}.options'.format(self.UNIT_KEY))
+            )
+        )
+
+        self._prx_options_node.build_by_data(
+            self._window._configure.get('build.main.units.{}.options.parameters'.format(self.UNIT_KEY)),
+        )
+        self._page.gui_get_tool_tab_box().add_widget(
+            self._prx_options_node,
+            key=self.UNIT_KEY,
+            name=gui_core.GuiUtil.choice_name(
+                self._window._language, self._window._configure.get('build.main.units.{}'.format(self.UNIT_KEY))
+            ),
+            icon_name_text=self.UNIT_KEY,
+            tool_tip=gui_core.GuiUtil.choice_tool_tip(
+                self._window._language, self._window._configure.get('build.main.units.{}'.format(self.UNIT_KEY))
+            )
+        )
+
+        self._prx_options_node.set(
+            'motion_path.replace_object', self.do_dcc_replace_motion_path_object
+        )
+
+        self._prx_options_node.set(
+            'curve_warp.replace_object', self.do_dcc_curve_warp_path_object
         )

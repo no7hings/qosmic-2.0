@@ -5,6 +5,9 @@ import lxbasic.storage as bsc_storage
 
 
 class MayaCache(object):
+    class ApiVersions:
+        UnitAssembly = 1.0
+
     @classmethod
     def get_key(cls, file_path, version=None):
         return bsc_core.BscUuid.generate_by_file(file_path, version)
@@ -76,7 +79,7 @@ class MayaCache(object):
         )
 
     @classmethod
-    def generate_asset_unit_assembly_file_new(cls, file_path, version=None):
+    def generate_asset_unit_assembly_file_new(cls, file_path, version=ApiVersions.UnitAssembly):
         root = bsc_core.EnvBaseMtd.get_cache_temporary_root()
         key = cls.get_key(file_path, version)
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)

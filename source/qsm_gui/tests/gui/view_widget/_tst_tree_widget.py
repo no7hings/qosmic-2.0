@@ -15,7 +15,7 @@ from lxgui.qt.core.wrap import *
 
 import lxgui.qt.core as gui_qt_core
 
-import qsm_lazy.screw.core as qsm_scr_core
+import qsm_screw.core as qsm_scr_core
 
 
 class W(gui_prx_widgets.PrxBaseWindow):

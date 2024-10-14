@@ -1,8 +1,11 @@
 # coding:utf-8
 import re
-
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
+
+import lxbasic.core as bsc_core
+
+from . import undo as _undo
 
 from . import attribute as _attribute
 
@@ -156,3 +159,86 @@ class OrientConstraint(object):
             ) or []
             set_.update(_)
         return list(set_)
+
+
+class MotionPath:
+
+    @classmethod
+    def get_all(cls, constrained_node):
+        # get from source
+        return list(
+            set(
+                cmds.listConnections(
+                    constrained_node+'.rotateX', destination=0, source=1, type='motionPath'
+                ) or []
+            )
+        )
+
+    @classmethod
+    def get_args_from(cls, constrained_node):
+        pass
+
+    @classmethod
+    def replace_target(cls, path, target_node):
+        axes = ['x', 'y', 'z']
+
+        for i_axis in axes:
+            i_atr_0 = '{}Coordinate'.format(i_axis)
+            i_add_nodes = cmds.listConnections(
+                path+'.'+i_atr_0, destination=1, source=0, type='addDoubleLinear'
+            ) or []
+            if i_add_nodes:
+                i_add_node = i_add_nodes[0]
+                # break source first
+                _attribute.NodeAttribute.break_source(
+                    i_add_node, 'input1'
+                )
+                _attribute.NodeAttribute.break_targets(
+                    i_add_node, 'output'
+                )
+
+                # connect target
+                _attribute.NodeAttribute.connect_from(
+                    i_add_node, 'input1', target_node+'.transMinusRotatePivot{}'.format(i_axis.upper())
+                )
+                _attribute.NodeAttribute.connect_to(
+                    i_add_node, 'output',
+                    target_node+'.translate{}'.format(i_axis.upper())
+                )
+
+            i_atr_1 = 'rotate{}'.format(i_axis.upper())
+            # break target
+            _attribute.NodeAttribute.break_targets(
+                path, i_atr_1
+            )
+            # connect target
+            _attribute.NodeAttribute.connect_to(
+                path, i_atr_1,
+                target_node+'.rotate{}'.format(i_axis.upper())
+            )
+
+    @classmethod
+    @_undo.Undo.execute
+    def replace_all(cls, paths):
+        path_map = bsc_core.RawTextsMtd.group_elements(
+            paths, 2
+        )
+        for (i_node_0, i_node_1) in path_map:
+            cls.replace_to(i_node_0, i_node_1)
+
+    @classmethod
+    @_undo.Undo.execute
+    def replace_to(cls, node, constrained_node):
+        _ = cls.get_all(
+            constrained_node
+        )
+        if _:
+            cls.replace_target(_[0], node)
+
+    @classmethod
+    def test(cls):
+        _ = cls.get_all(
+            'pSphere1'
+        )
+        if _:
+            cls.replace_target(_[0], 'pCube1')

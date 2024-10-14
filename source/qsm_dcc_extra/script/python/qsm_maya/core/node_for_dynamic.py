@@ -32,7 +32,7 @@ class RebuildForNucleus(object):
         ]
         cmds.select(target_any_paths)
 
-        if _transform.Transform.is_transform(target_shape_path):
+        if _transform.Transform.is_transform_type(target_shape_path):
             target_shape_path = _transform.Transform.get_shape(target_shape_path)
 
         if node_type == 'nCloth':
@@ -109,7 +109,7 @@ class Field(object):
         ]
         cmds.select(target_any_paths)
 
-        if _transform.Transform.is_transform(target_shape_path):
+        if _transform.Transform.is_transform_type(target_shape_path):
             target_shape_path = _transform.Transform.get_shape(target_shape_path)
 
         if node_type == 'airField':

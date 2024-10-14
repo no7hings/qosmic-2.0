@@ -676,15 +676,19 @@ class BscInteger(object):
     def frame_to_time_prettify(cls, frame, fps=24):
         h, m, s = cls.frame_to_time_args(frame, fps)
 
-        return '{h}:{m}:{s}/{f}'.format(
-            h=str(h).zfill(2), m=str(m).zfill(2), s=str(s).zfill(2), f=str(int(frame%fps)).zfill(2)
+        return '{h}:{m}:{s}:{f}/{fps}'.format(
+            h=str(h).zfill(2),
+            m=str(m).zfill(2),
+            s=str(s).zfill(2),
+            f=str(int(frame%fps)).zfill(2),
+            fps=fps
         )
 
     @classmethod
     def millisecond_to_time_prettify(cls, millisecond):
         h, m, s = cls.millisecond_to_time_args(millisecond)
 
-        return '{h}:{m}:{s}/{f}'.format(
+        return '{h}:{m}:{s}:{f}'.format(
             h=str(h).zfill(2), m=str(m).zfill(2), s=str(s).zfill(2), f=str(int((millisecond%1000)/1000.0*100)).zfill(2)
         )
     
@@ -1038,6 +1042,10 @@ class RawTextsMtd(object):
     def sort_by_initial(cls, texts):
         texts.sort(key=lambda x: x[0].lower())
         return texts
+
+    @staticmethod
+    def group_elements(lst, n):
+        return list(zip(*[lst[i::n] for i in range(n)]))
 
 
 class RawTextsOpt(object):

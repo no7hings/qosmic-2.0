@@ -3,7 +3,7 @@
 def main(session):
     import lxbasic.storage as bsc_storage
 
-    import qsm_lazy.screw.core as c
+    import qsm_screw.core as c
 
     option_opt = session.option_opt
     scr_stage_key = option_opt.get('stage_key')

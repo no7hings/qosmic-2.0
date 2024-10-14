@@ -59,8 +59,7 @@ class PrxToolbarForCharacterAndPropReference(
         self._count_input = qt_widgets.QtInputAsConstant()
         self._asset_prx_input.add_widget(self._count_input)
         self._count_input._set_value_type_(int)
-        self._count_input.setMaximumWidth(64)
-        self._count_input.setMinimumWidth(64)
+        self._count_input.setFixedWidth(96)
         self._count_input._set_value_(1)
 
         self._asset_load_qt_button = qt_widgets.QtPressButton()
@@ -75,8 +74,7 @@ class PrxToolbarForCharacterAndPropReference(
                 self._window._configure.get('build.rig.buttons.reference')
             )
         )
-        self._asset_load_qt_button.setMaximumWidth(64)
-        self._asset_load_qt_button.setMinimumWidth(64)
+        self._asset_load_qt_button.setFixedWidth(96)
         self._asset_load_qt_button.press_clicked.connect(self._on_dcc_load_asset)
         self._asset_load_qt_button._set_action_enable_(False)
 

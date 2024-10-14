@@ -1,4 +1,4 @@
-import qsm_lazy.screw.core as qsm_lzy_scr_core
+import qsm_screw.core as qsm_scr_core
 
 
 if __name__ == '__main__':
@@ -11,11 +11,11 @@ if __name__ == '__main__':
         'motion_test',
         'asset_test'
     ]:
-        stage_sqlite = qsm_lzy_scr_core.Stage(
+        stage_sqlite = qsm_scr_core.Stage(
             i_key, 'sqlite'
         )
 
-        stage_mysql = qsm_lzy_scr_core.Stage(
+        stage_mysql = qsm_scr_core.Stage(
             i_key, 'mysql'
         )
         stage_mysql.initialize()

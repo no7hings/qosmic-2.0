@@ -21,7 +21,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_general.dotfile as qsm_gnl_dotfile
 
-import qsm_lazy.screw.core as qsm_lzy_scr_core
+import qsm_screw.core as qsm_scr_core
 
 
 class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
@@ -58,7 +58,7 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
         self._window = window
         self._session = session
 
-        self._all_scr_stage_keys = qsm_lzy_scr_core.Stage.get_all_keys()
+        self._all_scr_stage_keys = qsm_scr_core.Stage.get_all_keys()
         self._scr_stage_key = self._all_scr_stage_keys[0]
         self._scr_stage = None
 
@@ -94,12 +94,12 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
                 )
 
     def do_gui_load_data_types(self):
-        values = qsm_lzy_scr_core.DataTypes.All
+        values = qsm_scr_core.DataTypes.All
         pot = self._prx_options_node.get_port('data_type')
         if self._window._language == 'chs':
-            value_names = [qsm_lzy_scr_core.DataTypes.NAME_CHS_MAP[x] for x in values]
+            value_names = [qsm_scr_core.DataTypes.NAME_CHS_MAP[x] for x in values]
         else:
-            value_names = [qsm_lzy_scr_core.DataTypes.NAME_MAP[x] for x in values]
+            value_names = [qsm_scr_core.DataTypes.NAME_MAP[x] for x in values]
 
         pot.set_options(
             values, value_names
@@ -125,12 +125,12 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
 
         if self._window._language == 'chs':
             gui_names = [
-                qsm_lzy_scr_core.Stage.get_configure(x).get('options.gui_name_chs')
+                qsm_scr_core.Stage.get_configure(x).get('options.gui_name_chs')
                 for x in self._all_scr_stage_keys
             ]
         else:
             gui_names = [
-                qsm_lzy_scr_core.Stage.get_configure(x).get('options.gui_name')
+                qsm_scr_core.Stage.get_configure(x).get('options.gui_name')
                 for x in self._all_scr_stage_keys
             ]
 
@@ -161,7 +161,7 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
         )
 
     def do_gui_refresh_all(self):
-        node_context = qsm_lzy_scr_core.DataContext.read()
+        node_context = qsm_scr_core.DataContext.read()
         if node_context:
             self._prx_options_node.set_dict(
                 node_context

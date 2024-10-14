@@ -10,7 +10,7 @@ class AbsMeshOpt(object):
         if _mya_core.Node.is_exists(path_or_name) is False:
             raise RuntimeError()
 
-        if _mya_core.Node.is_transform(path_or_name):
+        if _mya_core.Node.is_transform_type(path_or_name):
             self._transform_path = _mya_core.DagNode.to_path(path_or_name)
             _ = _mya_core.Transform.get_shape(path_or_name)
             if _mya_core.Node.is_mesh(_) is True:

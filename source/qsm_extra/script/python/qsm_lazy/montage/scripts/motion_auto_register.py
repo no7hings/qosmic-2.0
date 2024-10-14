@@ -13,12 +13,14 @@ import lxbasic.scan as bsc_scan
 
 import lxbasic.pinyin as bsc_pinyin
 
-from ...screw import core as _scr_core
+import qsm_general.core as qsm_gnl_core
+
+import qsm_screw.core as qsm_scr_core
 
 
 class StlRegisterOpt(object):
     def __init__(self, scr_stage, root_path, directory_path):
-        if isinstance(scr_stage, _scr_core.Stage) is False:
+        if isinstance(scr_stage, qsm_scr_core.Stage) is False:
             raise RuntimeError()
 
         self._src_stage = scr_stage
@@ -52,6 +54,9 @@ class StlRegisterOpt(object):
         frame_count = end_frame-start_frame+1
         user = content.get('metadata.user')
 
+        time_unit = content.get('metadata.timeUnit')
+        fps = qsm_gnl_core.MayaTimeunit.timeunit_to_fps(time_unit)
+
         names = bsc_pinyin.Text.split_any_to_letters(name)
         gui_name = ' '.join(map(lambda x: str(x).capitalize(), names))
         gui_name_chs = gui_name
@@ -76,6 +81,9 @@ class StlRegisterOpt(object):
         )
         self._src_stage.create_or_update_parameters(
             node_path, 'rig_maya_scene', reference_file_path
+        )
+        self._src_stage.create_or_update_parameters(
+            node_path, 'fps', fps
         )
 
     def create_types(self, type_path_src):
@@ -103,7 +111,7 @@ class StlRegisterOpt(object):
 
 class MotionBatchRegister(object):
     def __init__(self, root_path, directory_path):
-        self._scr_stage = _scr_core.Stage('motion_test')
+        self._scr_stage = qsm_scr_core.Stage('motion_test')
 
         self._root_path = bsc_core.auto_unicode(root_path)
         self._directory_path = bsc_core.auto_unicode(directory_path)

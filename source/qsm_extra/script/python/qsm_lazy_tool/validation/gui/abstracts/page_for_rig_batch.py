@@ -9,13 +9,11 @@ import lxbasic.storage as bsc_storage
 
 import lxgui.core as gui_core
 
+import lxgui.qt.core as gui_qt_core
+
 import lxgui.qt.widgets as gui_qt_widgets
 
-import lxgui.proxy.abstracts as gui_prx_abstracts
-
 import lxgui.proxy.widgets as gui_prx_widgets
-
-import lxgui.qt.widgets as qt_widgets
 
 import lxgui.qt.view_widgets as gui_qt_vew_widgets
 
@@ -24,8 +22,6 @@ import qsm_general.core as qsm_gnl_core
 import qsm_general.scan as qsm_gnl_scan
 
 import qsm_lazy.validation.scripts as qsm_lzy_vld_scripts
-
-import qsm_gui.proxy.widgets as qsm_gui_prx_widgets
 
 
 class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
@@ -66,7 +62,7 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
             window.close_window()
 
     def _trace_result(self, file_path, validation_cache_path, mesh_count_cache_path, process_options):
-        result, html = self._validation_opt.to_validation_result_args(
+        result, result_description, html = self._validation_opt.to_validation_result_args(
             validation_cache_path, mesh_count_cache_path, process_options
         )
         if file_path in self._file_to_item_dict:
@@ -80,7 +76,7 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
             elif result == 'error':
                 qt_item._item_model.set_status(qt_item._item_model.Status.Error)
 
-            qt_item.setText(1, self._validation_opt.options.to_convertion_name(result))
+            qt_item.setText(1, result_description)
             self._result_prx_text_browser.append_html(html)
 
     def _show_results(self):
@@ -171,7 +167,7 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
             )
             return
 
-        roles = qsm_gnl_core.QsmAsset.get_character_and_prop_role_mask()
+        roles = qsm_gnl_core.QsmAsset.get_character_role_mask()
 
         # add root
         flag, qt_item = self._asset_qt_tree_widget._view_model.create_item('/')
@@ -205,15 +201,15 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
             if _args is not None:
                 _task_name, _cmd_script, _validation_cache_path, _mesh_count_cache_path = _args
                 if _cmd_script is None:
-                    _result, _html = self._validation_opt.to_validation_result_args(
+                    _result, _result_description, _html = self._validation_opt.to_validation_result_args(
                         _validation_cache_path, _mesh_count_cache_path, process_options
                     )
-                    return [_result, _html]
+                    return [_result, _result_description, _html]
             return []
 
         def build_fnc_(data_):
             if data_:
-                _result, _html = data_
+                _result, _result_description, _html = data_
                 qt_item._item_model.set_assign_data('validation', _html)
                 if _result == 'pass':
                     qt_item._item_model.set_status(qt_item._item_model.Status.Correct)
@@ -222,14 +218,18 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
                 elif _result == 'error':
                     qt_item._item_model.set_status(qt_item._item_model.Status.Error)
 
-                qt_item.setText(1, self._validation_opt.options.to_convertion_name(_result))
+                qt_item.setText(1, _result_description)
 
         def generate_menu_data_fnc_():
             def open_folder_fnc_():
                 bsc_storage.StgFileOpt(file_path).show_in_system()
 
+            def copy_path_fnc():
+                gui_qt_core.QtUtil.copy_text_to_clipboard(file_path)
+
             return [
-                ('Open Folder', 'file/folder', open_folder_fnc_)
+                ('Open Folder', 'file/folder', open_folder_fnc_),
+                ('Copy Path', 'copy', copy_path_fnc)
             ]
 
         file_path = variants['result']

@@ -89,7 +89,7 @@ class UnitAssemblyOpt(_rsc_core.ResourceScriptOpt):
             self.TASK_KEY, bsc_storage.StgFileOpt(file_path).name
         )
 
-        cache_path = qsm_gnl_core.MayaCache.generate_asset_unit_assembly_file_new(file_path, version=self.API_VERSION)
+        cache_path = qsm_gnl_core.MayaCache.generate_asset_unit_assembly_file_new(file_path)
         if bsc_storage.StgFileOpt(cache_path).get_is_file() is False:
             cmd_script = qsm_gnl_core.MayaCacheProcess.generate_cmd_script_by_option_dict(
                 self.TASK_KEY,
@@ -230,9 +230,7 @@ class UnitAssemblyProcess(object):
         ).directory_path
 
         if cache_file_path is None:
-            self._cache_file_path = qsm_gnl_core.MayaCache.generate_asset_unit_assembly_file(
-                self._file_path
-            )
+            self._cache_file_path = qsm_gnl_core.MayaCache.generate_asset_unit_assembly_file_new(self._file_path)
         else:
             self._cache_file_path = cache_file_path
 

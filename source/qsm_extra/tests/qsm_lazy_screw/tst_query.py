@@ -1,4 +1,4 @@
-import qsm_lazy.screw.core as qsm_lzy_scr_core
+import qsm_screw.core as qsm_scr_core
 
 import lxbasic.resource as bsc_resource
 
@@ -6,9 +6,9 @@ import lxbasic.core as bsc_core
 
 
 if __name__ == '__main__':
-    print qsm_lzy_scr_core.Stage.get_all_keys()
+    print qsm_scr_core.Stage.get_all_keys()
 
-    # stage = qsm_lzy_scr_core.Stage(
+    # stage = qsm_scr_core.Stage(
     #     'maya_cfx'
     # )
     #

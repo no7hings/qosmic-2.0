@@ -5,14 +5,12 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.pinyin as bsc_pinyin
-
-from ...screw import core as _scr_core
+import qsm_screw.core as qsm_scr_core
 
 
 class AudioRegister(object):
     def __init__(self, scr_stage, file_path):
-        assert isinstance(scr_stage, _scr_core.Stage)
+        assert isinstance(scr_stage, qsm_scr_core.Stage)
         self._scr_stage = scr_stage
         self._file_path = file_path
 
@@ -44,7 +42,7 @@ class AudioRegister(object):
 
 class AudioBatchRegister(object):
     def __init__(self, scr_stage_key, file_paths):
-        self._scr_stage = _scr_core.Stage(scr_stage_key)
+        self._scr_stage = qsm_scr_core.Stage(scr_stage_key)
         self._file_paths = file_paths
 
     def execute(self, scr_type_paths=None, scr_tag_paths=None):

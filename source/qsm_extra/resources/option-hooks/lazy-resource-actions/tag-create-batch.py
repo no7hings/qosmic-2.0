@@ -10,7 +10,7 @@ def main(session):
 
     import lxgui.core as gui_core
 
-    import qsm_lazy.screw.core as c
+    import qsm_screw.core as c
 
     option_opt = session.option_opt
     scr_stage_key = option_opt.get('stage_key')

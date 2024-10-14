@@ -31,7 +31,7 @@ class Node(object):
         return cmds.nodeType(name)
 
     @classmethod
-    def is_transform(cls, name):
+    def is_transform_type(cls, name):
         return cls.get_type(name) == cls.Types.Transform
 
     @classmethod

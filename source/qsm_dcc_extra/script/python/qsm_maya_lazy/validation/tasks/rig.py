@@ -9,13 +9,9 @@ import maya.cmds as cmds
 
 import lxbasic.resource as bsc_resource
 
-import lxbasic.content as bsc_content
-
 import lxbasic.storage as bsc_storage
 
 import lxbasic.log as bsc_log
-
-import lxbasic.core as bsc_core
 
 import qsm_general.core as qsm_gnl_core
 
@@ -23,26 +19,9 @@ import qsm_maya.core as qsm_mya_core
 
 import qsm_maya_lazy.resource.scripts as qsm_mya_lzy_scr_scripts
 
+from . import task_prc as _task_prc
+
 import _abc
-
-
-class VectorLocator(object):
-    @classmethod
-    def create(cls, path):
-        name = qsm_mya_core.DagNode.to_name(path)
-        t = qsm_mya_core.DagNode.create_transform(path)
-        for i_key, i_vector in [
-            ('X', (1, 0, 0)),
-            ('Y', (0, 1, 0)),
-            ('Z', (0, 0, 1))
-        ]:
-            i_shape = cmds.createNode('locator', name=name+i_key, parent=t, skipSelect=1)
-            cmds.setAttr(i_shape+'.localPosition', *i_vector)
-            cmds.setAttr(i_shape+'.localScale', *i_vector)
-            qsm_mya_core.NodeDrawOverride.set_color(i_shape, i_vector)
-
-    def __init__(self, path):
-        pass
 
 
 class RotateOrder(object):
@@ -217,9 +196,15 @@ class RigValidationTask(
                 elif i_branch == 'control':
                     self.control_branch_prc(i_branch, i_leafs)
                 elif i_branch == 'skin':
-                    self.branch_prc('skin', i_leafs)
+                    self.execute_branch_task_prc_for(
+                        i_branch, i_leafs,
+                        task_prc_cls=_task_prc.RigValidationTaskPrc
+                    )
                 elif i_branch == 'mesh':
-                    self.branch_prc('mesh', i_leafs)
+                    self.execute_branch_task_prc_for(
+                        i_branch, i_leafs,
+                        task_prc_cls=_task_prc.ValidationTaskPrc
+                    )
 
                 l_p.do_update()
 
@@ -243,7 +228,10 @@ class RigValidationTask(
     def joint_branch_prc(self, branch, leafs):
         self.update_joint_data_map()
 
-        self.branch_prc(branch, leafs)
+        self.execute_branch_task_prc_for(
+            branch, leafs,
+            task_prc_cls=_task_prc.RigValidationTaskPrc
+        )
 
     def update_joint_data_map(self):
         self._joint_data.clear()
@@ -258,7 +246,10 @@ class RigValidationTask(
     def control_branch_prc(self, branch, leafs):
         self.update_control_data_map()
 
-        self.branch_prc(branch, leafs)
+        self.execute_branch_task_prc_for(
+            branch, leafs,
+            task_prc_cls=_task_prc.RigValidationTaskPrc
+        )
 
     def update_control_data_map(self):
         self._control_data.clear()
@@ -317,8 +308,27 @@ class RigValidationTask(
         cls.TEST_FLAG = True
         cls('carol_Skin').execute()
 
+        # task = cls('carol_Skin')
+        # task.update_joint_data_map()
+        # task.update_control_data_map()
+        #
+        # task.execute_branch_task_prc_for(
+        #     'skin', ['deficiency_weight_vertices'],
+        #     task_prc_cls=_task_prc.RigValidationTaskPrc
+        # )
+        # task.execute_branch_task_prc_for(
+        #     'joint', ['rotate_order'],
+        #     task_prc_cls=_task_prc.RigValidationTaskPrc
+        # )
+        # task.execute_branch_task_prc_for(
+        #     'mesh',
+        #     ['lamina_faces', 'non_manifold_vertices'],
+        #     task_prc_cls=_task_prc.ValidationTaskPrc
+        # )
+        # print task._result_content
 
-class RigValidationProcess(object):
+
+class RigValidationTaskProcess(object):
     def __init__(self, file_path, validation_cache_path, mesh_count_cache_path, process_options):
         self._file_path = file_path
         self._validation_cache_path = validation_cache_path

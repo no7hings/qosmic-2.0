@@ -5,7 +5,11 @@ import importlib
 
 import lxbasic.log as bsc_log
 
+import lxbasic.core as bsc_core
+
 import lxbasic.content as bsc_content
+
+import lxbasic.resource as bsc_resource
 
 import qsm_lazy.validation.core as qsm_lzy_vld_core
 
@@ -18,14 +22,6 @@ class AbsValidationTask(object):
     LOG_KEY = None
 
     OPTION_KEY = None
-
-    @classmethod
-    def get_prc_cls(cls, branch, leaf):
-        module_name = 'qsm_maya_lazy.validation.prc.{}.{}'.format(branch, leaf)
-        _ = pkgutil.find_loader(module_name)
-        if _:
-            module = importlib.import_module(module_name)
-            return module.__dict__.get('Main')
 
     def __init__(self, namespace):
         self._namespace = namespace
@@ -42,17 +38,22 @@ class AbsValidationTask(object):
             validation_options=self._validation_options
         )
 
-    def branch_prc(self, branch, leafs):
+    def execute_branch_task_prc_for(self, branch, leafs, task_prc_cls):
         for i_leaf in leafs:
-            i_prc_cls = self.get_prc_cls(branch, i_leaf)
-            if i_prc_cls:
-                i_prc_cls.BRANCH = branch
-                i_prc_cls.LEAF = i_leaf
-                i_prc = i_prc_cls(
-                    **self._kwargs
-                )
-                i_prc.execute()
-            else:
-                bsc_log.Log.trace_method_error(
-                    self.LOG_KEY, 'process: {}.{} is not found'.format(branch, i_leaf)
-                )
+            self.execute_leaf_task_prc_for(branch, i_leaf, task_prc_cls)
+
+    def execute_leaf_task_prc_for(self, branch, leaf, task_prc_cls):
+        python_script_path = bsc_resource.ExtendResource.get(
+            'scripts/validation_prc/{}/{}.py'.format(branch, leaf)
+        )
+        if python_script_path:
+            task_prc_cls.BRANCH = branch
+            task_prc_cls.LEAF = leaf
+            task_prc = task_prc_cls(**self._kwargs)
+            bsc_core.BscScriptExecute.execute_python_file(
+                file_path=python_script_path, task_prc=task_prc
+            )
+        else:
+            bsc_log.Log.trace_method_error(
+                self.LOG_KEY, 'process: {}.{} is not found'.format(branch, leaf)
+            )

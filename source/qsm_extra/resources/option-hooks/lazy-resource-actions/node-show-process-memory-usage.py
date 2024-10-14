@@ -3,7 +3,7 @@ import lxgui.core as gui_core
 
 import lxgui.qt.widgets as qt_widgets
 
-import qsm_lazy.screw.core as qsm_lzy_src_core
+import qsm_screw.core as qsm_lzy_src_core
 
 
 class Main(object):

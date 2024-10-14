@@ -3,7 +3,7 @@ import lxbasic.storage as bsc_storage
 
 import qsm_general.core as qsm_gnl_core
 
-from ...screw import core as _scr_core
+import qsm_screw.core as qsm_scr_core
 
 from . import asset_general as _asset_general
 
@@ -16,7 +16,7 @@ class AssetSnapShotGenerateOpt(_asset_general.AssetGeneral):
         super(AssetSnapShotGenerateOpt, self).__init__(*args, **kwargs)
 
     def generate_args(self):
-        scr_stage = _scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
         file_path = scr_stage.get_node_parameter(self._scr_node_path, 'scene')
         if not file_path:
             return
@@ -41,7 +41,7 @@ class AssetSnapShotGenerateOpt(_asset_general.AssetGeneral):
         return task_name, None, image_path
 
     def unregister(self):
-        scr_stage = _scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
         # remove exists
         scr_stage.remove_assigns_below(
             self._scr_node_path, '/system_resource_usage/memory'
@@ -52,7 +52,7 @@ class AssetSnapShotGenerateOpt(_asset_general.AssetGeneral):
         )
 
     def register(self):
-        scr_stage = _scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
         file_path = scr_stage.get_node_parameter(self._scr_node_path, 'scene')
         if not file_path:
             return

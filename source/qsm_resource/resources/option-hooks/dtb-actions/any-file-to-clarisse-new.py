@@ -11,7 +11,7 @@ def main(session):
 import lxbasic.resource as bsc_resource
 import lxbasic.process as bsc_core
 file_path = bsc_resource.ExtendResource.get('scripts/any-file-to-clarisse.py')
-bsc_core.ExcExtraMtd.execute_python_file(
+bsc_core.BscScriptExecute.execute_python_file(
     file_path, options=dict(resource_location='{resource_location}', file='{file}')
 )
     '''.format(**dict(resource_location=option_opt.get('resource_location'), file=option_opt.get('file')))

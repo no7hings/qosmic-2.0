@@ -850,12 +850,24 @@ build:
 
                 tool_tip:
                     |-
-                    Press reference current asset's rig
+                    Press reference current asset's model
                 tool_tip_chs:
                     |-
                     点击引用当前资产的绑定
-                        按钮为灰色，代表当前资产无绑定文件
-                        前面的数字框可以输入引用数量，鼠标滚轮可以快速增加或减少数量
+                        按钮为灰色，代表当前资产无模型文件
+
+            load_unit_assembly:
+                name: 'Load Unit Assembly'
+                name_chs: '加载元素组装'
+
+                tool_tip:
+                    |-
+                    Press load current asset's unit assembly
+                tool_tip_chs:
+                    |-
+                    点击引用当前资产的绑定
+                        按钮为灰色，代表当前资产无元素组装文件
+
 
     messages:
         remove_reference:

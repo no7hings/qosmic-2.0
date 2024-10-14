@@ -50,8 +50,8 @@ class CharacterCurve(object):
         curve_name_new = cmds.createNode(curve_type, name=curve_name, skipSelect=1)
 
         atr_path_src = '{}.output'.format(curve_name_new)
-        atr_path_dst = '{}.{}'.format(path, atr_name)
-        qsm_mya_core.Connection.create(atr_path_src, atr_path_dst)
+        atr_path_tgt = '{}.{}'.format(path, atr_name)
+        qsm_mya_core.Connection.create(atr_path_src, atr_path_tgt)
 
         curve_opt = qsm_mya_core.AnmCurveOpt(curve_name_new)
 
@@ -102,8 +102,8 @@ class SketchCurve(object):
         curve_name_new = cmds.createNode(curve_type, name=curve_name, skipSelect=1)
 
         atr_path_src = '{}.output'.format(curve_name_new)
-        atr_path_dst = '{}.{}'.format(sketch_path, atr_name)
-        qsm_mya_core.Connection.create(atr_path_src, atr_path_dst)
+        atr_path_tgt = '{}.{}'.format(sketch_path, atr_name)
+        qsm_mya_core.Connection.create(atr_path_src, atr_path_tgt)
         # setAttr "test:Hip_L_rotateZ.postInfinity" 4;
         qsm_mya_core.NodeAttribute.set_value(
             curve_name_new, 'preInfinity', 4

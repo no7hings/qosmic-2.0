@@ -5,7 +5,7 @@ import lxgui.core as gui_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy.screw.core as qsm_lzy_scr_core
+import qsm_screw.core as qsm_scr_core
 
 
 class AbsPrxPanelForResourceManager(gui_prx_widgets.PrxBasePanel):
@@ -16,9 +16,10 @@ class AbsPrxPanelForResourceManager(gui_prx_widgets.PrxBasePanel):
     
     def _gui_tab_add_menu_gain_fnc(self):
         lst = []
-        for i_key in qsm_lzy_scr_core.Stage.get_all_keys():
+        for i_key in qsm_scr_core.Stage.get_all_keys():
             if i_key not in self._tag_page_key_opened:
-                i_configure = qsm_lzy_scr_core.Stage.get_configure(i_key)
+                i_configure = qsm_scr_core.Stage.get_configure(i_key)
+                i_type = i_configure.get('options.type')
                 if self._window._language == 'chs':
                     i_name = i_configure.get('options.gui_name_chs')
                 else:
@@ -46,7 +47,7 @@ class AbsPrxPanelForResourceManager(gui_prx_widgets.PrxBasePanel):
 
     def _gui_tab_add_page(self, key, switch_to=False):
         prx_sca = gui_prx_widgets.PrxVScrollArea()
-        configure = qsm_lzy_scr_core.Stage.get_configure(key)
+        configure = qsm_scr_core.Stage.get_configure(key)
         if self._window._language == 'chs':
             name = configure.get('options.gui_name_chs')
         else:
@@ -87,7 +88,7 @@ class AbsPrxPanelForResourceManager(gui_prx_widgets.PrxBasePanel):
         self._prx_tab_view.set_add_enable(True)
 
         self._tag_page_key_opened = set()
-        self._all_scr_stage_keys = qsm_lzy_scr_core.Stage.get_all_keys()
+        self._all_scr_stage_keys = qsm_scr_core.Stage.get_all_keys()
 
         self._tab_page_dict = {}
 

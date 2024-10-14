@@ -96,6 +96,10 @@ class PrxPageForMotionMain(gui_prx_widgets.PrxBasePage):
         self._gui_move_prx_toolset = _toolset_for_main.ToolsetForMove(
             self._window, self, self._session
         )
+        # constrain and deform
+        self._gui_constrain_and_deform_prx_toolset = _toolset_for_main.ToolsetForConstrainAndDeform(
+            self._window, self, self._session
+        )
         #
         self._page_prx_tab_tool_box.set_history_key('lazy-motion-tool.main.page_key_current')
         self._page_prx_tab_tool_box.load_history()

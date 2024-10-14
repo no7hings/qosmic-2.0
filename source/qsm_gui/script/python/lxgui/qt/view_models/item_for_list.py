@@ -215,13 +215,15 @@ class ListItemModel(_item_base.AbsItemModel):
             point=QtCore.QPoint(),
             fps=24,
             # only image sequence show frame
-            time_index_text='00:00:00/00',
-            time_maximum_text='00:00:00/00',
+            time_index_text='00:00:00:00',
+            time_maximum_text='00:00:00:00',
             # progress
             progress_enable=False,
             progress_percent=0.0,
             progress_color=QtGui.QColor(*_gui_core.GuiRgba.LightOrange),
             progress_color_auto_play=QtGui.QColor(*_gui_core.GuiRgba.LightAzureBlue),
+
+            file=_gui_core.GuiIcon.get('play-watermark'),
         )
 
     def _init_autoplay(self, fps):
@@ -584,8 +586,14 @@ class ListItemModel(_item_base.AbsItemModel):
                     else:
                         time_txt = self._data.play.time_maximum_text
 
-                    time_txt_w = self.compute_text_width_by(time_txt)
+                        play_rect = QtCore.QRect(
+                            frm_x+(frm_w-40)/2, frm_y+(frm_h-40)/2, 40, 40
+                        )
+                        self._draw_icon(painter, play_rect, self._data.play.file)
+
                     mrg = 2
+
+                    time_txt_w = self.compute_text_width_by(time_txt)
                     time_rect = QtCore.QRect(
                         frm_x+frm_w-time_txt_w-mrg, frm_y+frm_h-16-mrg, time_txt_w, 16
                     )
@@ -598,7 +606,7 @@ class ListItemModel(_item_base.AbsItemModel):
                     )
                     painter.drawRect(time_rect)
 
-                    painter.setPen(QtGui.QColor(0, 0, 0, 0))
+                    # painter.setPen(QtGui.QColor(0, 0, 0, 0))
                     self._draw_time_text(painter, time_rect, time_txt)
 
             painter.end()
@@ -729,7 +737,7 @@ class ListItemModel(_item_base.AbsItemModel):
         trd.start()
 
     # image sequence
-    def set_image_sequence(self, file_path):
+    def set_image_sequence(self, file_path, fps=24):
         if file_path is not None:
             self._data.image_sequence = _base._Data(
                 load_flag=False,
@@ -741,7 +749,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 index_default=0,
                 index_maximum=1,
 
-                fps=24,
+                fps=fps,
 
                 pixmap_cache_dict={},
             )
@@ -784,6 +792,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 self._data.image_sequence.size = _pixmap.size()
                 self._data.image_sequence.files = _file_paths
                 _frame_count = len(_file_paths)
+                _fps = self._data.image_sequence.fps
                 self._data.image_sequence.index_default = int(_frame_count/2)
                 self._data.image_sequence.index_maximum = _frame_count-1
 
@@ -794,7 +803,7 @@ class ListItemModel(_item_base.AbsItemModel):
 
                 self._data.play.time_maximum_text = bsc_core.BscInteger.frame_to_time_prettify(
                     len(_file_paths),
-                    self._data.image_sequence.fps
+                    _fps
                 )
 
                 self.mark_force_refresh(True)

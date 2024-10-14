@@ -30,7 +30,7 @@ options:
             enable: True
             description: 'rotate order is {value} not match for {value_src}.'
             description_chs: '旋转顺序为{value}与预设{value_src}不匹配。'
-            level: 'warning'
+            level: 'error'
 
         axis_vector:
             enable: True

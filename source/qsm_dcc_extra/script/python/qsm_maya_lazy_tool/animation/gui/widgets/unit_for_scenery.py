@@ -15,6 +15,8 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import lxgui.proxy.scripts as gui_prx_scripts
 
+import qsm_general.core as qsm_gnl_core
+
 import qsm_general.scan as qsm_gnl_scan
 
 import qsm_maya.core as qsm_mya_core
@@ -22,6 +24,8 @@ import qsm_maya.core as qsm_mya_core
 import qsm_maya.scenery.core as qsm_mya_scn_core
 
 import qsm_maya.scenery.scripts as qsm_mya_scn_scripts
+
+import qsm_maya_lazy.resource.scripts as qsm_mya_lzy_rsc_scripts
 
 import qsm_maya_gui.core as qsm_mya_gui_core
 
@@ -54,13 +58,6 @@ class PrxToolbarForSceneryReference(
         self._scan_root = qsm_gnl_scan.Root.generate()
         self._asset_prx_input = prx_input_for_asset
 
-        self._count_input = qt_widgets.QtInputAsConstant()
-        self._asset_prx_input.add_widget(self._count_input)
-        self._count_input._set_value_type_(int)
-        self._count_input.setMaximumWidth(64)
-        self._count_input.setMinimumWidth(64)
-        self._count_input._set_value_(1)
-
         self._asset_load_qt_button = qt_widgets.QtPressButton()
         self._asset_prx_input.add_widget(self._asset_load_qt_button)
         self._asset_load_qt_button._set_name_text_(
@@ -73,31 +70,57 @@ class PrxToolbarForSceneryReference(
                 self._window._configure.get('build.scenery.buttons.reference')
             )
         )
-        self._asset_load_qt_button.setMaximumWidth(64)
-        self._asset_load_qt_button.setMinimumWidth(64)
+        self._asset_load_qt_button.setFixedWidth(96)
         self._asset_load_qt_button.press_clicked.connect(self._on_dcc_load_asset)
         self._asset_load_qt_button._set_action_enable_(False)
+
+        self._unit_assembly_load_qt_button = qt_widgets.QtPressButton()
+        self._asset_prx_input.add_widget(self._unit_assembly_load_qt_button)
+        self._unit_assembly_load_qt_button._set_name_text_(
+            self._window.choice_name(
+                self._window._configure.get('build.scenery.buttons.load_unit_assembly')
+            )
+        )
+        self._unit_assembly_load_qt_button._set_tool_tip_text_(
+            self._window.choice_tool_tip(
+                self._window._configure.get('build.scenery.buttons.load_unit_assembly')
+            )
+        )
+        self._unit_assembly_load_qt_button.setFixedWidth(96)
+        self._unit_assembly_load_qt_button.press_clicked.connect(self._on_dcc_load_unit_assembly)
+        self._unit_assembly_load_qt_button._set_action_enable_(False)
 
         self._asset_prx_input.connect_input_change_accepted_to(self._do_gui_refresh_asset_for)
 
         self._asset_path = None
+        self._unit_assembly_path = None
 
         self._do_gui_refresh_asset_for(self._asset_prx_input.get_path())
 
     def _on_dcc_load_asset(self):
         if self._asset_path is not None:
             file_opt = bsc_storage.StgFileOpt(self._asset_path)
-            count = self._count_input._get_value_()
-            for i in range(count):
-                qsm_mya_core.SceneFile.reference_file(
-                    self._asset_path,
-                    namespace=file_opt.name_base
-                )
+            qsm_mya_core.SceneFile.reference_file(
+                self._asset_path,
+                namespace=file_opt.name_base
+            )
             self._page.do_gui_refresh_all()
+
+    def _on_dcc_load_unit_assembly(self):
+        if self._asset_path is not None and self._unit_assembly_path is not None:
+            namespace = bsc_storage.StgFileOpt(self._asset_path).name_base
+
+            qsm_mya_lzy_rsc_scripts.AssetUnitAssemblyOpt.load_cache(
+                namespace, self._unit_assembly_path
+            )
 
     def _do_gui_refresh_asset_for(self, path):
         self._asset_path = None
+        self._unit_assembly_path = None
+
         self._asset_load_qt_button._set_action_enable_(False)
+        self._unit_assembly_load_qt_button._set_action_enable_(False)
+
         entity = self._asset_prx_input.get_entity(path)
         if entity is not None:
             if entity.type == 'Asset':
@@ -109,6 +132,11 @@ class PrxToolbarForSceneryReference(
                     if result is not None:
                         self._asset_path = result
                         self._asset_load_qt_button._set_action_enable_(True)
+
+                        unit_assembly_path = qsm_gnl_core.MayaCache.generate_asset_unit_assembly_file_new(result)
+                        if bsc_storage.StgPath.get_is_file(unit_assembly_path):
+                            self._unit_assembly_path = unit_assembly_path
+                            self._unit_assembly_load_qt_button._set_action_enable_(True)
 
     def do_update(self):
         self._asset_prx_input.do_update()

@@ -530,9 +530,9 @@ class QtMenu(QtWidgets.QMenu):
         )
         qt_widget.setIcon(icon)
 
-    def _set_menu_data_(self, menu_raw):
+    def _set_menu_data_(self, data):
         """
-        :param menu_raw: [
+        :param data: [
             ('Label', 'icon_name', fnc),
             (),
             [
@@ -543,13 +543,13 @@ class QtMenu(QtWidgets.QMenu):
         ]
         :return:
         """
-        if menu_raw:
-            for i in menu_raw:
+        if data:
+            for i in data:
                 if isinstance(i, tuple):
                     self._create_action_(self, i)
                 # sub menu
                 elif isinstance(i, list):
-                    i_name, i_icon_name, sub_menu_raws = i
+                    i_name, i_icon_name, i_sub_data = i
                     qt_action_item = self.addAction(i_name)
                     if i_icon_name is not None:
                         if isinstance(i_icon_name, six.string_types):
@@ -559,7 +559,7 @@ class QtMenu(QtWidgets.QMenu):
                     #
                     sub_menu = self.__class__(self.parent())
                     qt_action_item.setMenu(sub_menu)
-                    for j in sub_menu_raws:
+                    for j in i_sub_data:
                         self._create_action_(sub_menu, j)
 
     def _set_title_text_(self, text):

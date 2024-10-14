@@ -47,7 +47,7 @@ class GpuImport(object):
         roots = qsm_mya_core.DagNode.find_roots(paths)
         if roots:
             for i_path in roots:
-                if qsm_mya_core.Node.is_transform(i_path):
+                if qsm_mya_core.Node.is_transform_type(i_path):
                     i_shape_paths = qsm_mya_core.Group.find_siblings(i_path, ['mesh'])
                     for j_shape_path in i_shape_paths:
                         j_transform_path = qsm_mya_core.Shape.get_transform(j_shape_path)

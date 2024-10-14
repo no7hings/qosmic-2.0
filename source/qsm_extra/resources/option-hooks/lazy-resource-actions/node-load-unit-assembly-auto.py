@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.storage as bsc_storage
 
-import qsm_lazy.screw.core as qsm_scr_core
+import qsm_screw.core as qsm_scr_core
 
 import qsm_maya.core as qsm_mya_core
 
@@ -25,14 +25,16 @@ class Main(object):
                 scr_stage = qsm_scr_core.Stage(scr_stage_key)
                 with window.gui_progressing(maximum=len(scr_entities)) as g_p:
                     for i_scr_entity in scr_entities:
+                        i_scene_path = scr_stage.get_node_parameter(i_scr_entity.path, 'scene')
                         i_cache_path = scr_stage.get_node_parameter(i_scr_entity.path, 'unit_assembly_cache')
                         if i_cache_path is None:
                             continue
                         if bsc_storage.StgPath.get_is_file(i_cache_path) is False:
                             continue
 
+                        i_namespace = bsc_storage.StgFileOpt(i_scene_path).name_base
                         qsm_mya_lzy_scripts.AssetUnitAssemblyOpt.load_cache(
-                            i_cache_path
+                            i_namespace, i_cache_path
                         )
 
                         g_p.do_update()

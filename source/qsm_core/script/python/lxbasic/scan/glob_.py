@@ -15,17 +15,14 @@ import platform
 class ScanGlob(object):
     MAGIC_CHECK = re.compile('[*?[]')
 
-    @classmethod
-    def auto_unicode(cls, path):
-        if not isinstance(path, six.text_type):
-            return path.decode('utf-8')
-        return path
-
-    @classmethod
-    def auto_string(cls, path):
-        if isinstance(path, six.text_type):
-            return path.encode('utf-8')
-        return path
+    @staticmethod
+    def ensure_unicode(s):
+        if isinstance(s, six.text_type):
+            return s
+        elif isinstance(s, bytes):
+            return s.decode('utf-8')
+        else:
+            return s
 
     @classmethod
     def has_magic(cls, s):
@@ -34,7 +31,7 @@ class ScanGlob(object):
     @classmethod
     def scan_fnc(cls, path):
         list_ = []
-        path = cls.auto_unicode(path)
+        path = cls.ensure_unicode(path)
         if os.path.isdir(path):
             for i in scandir.scandir(path):
                 i_path = i.path.replace('\\', '/')
@@ -44,10 +41,10 @@ class ScanGlob(object):
     @classmethod
     def glob(cls, regex):
         def _rcs_fnc(path_, depth_, is_root_=False, flag_=False):
-            path_ = cls.auto_unicode(path_)
+            path_ = cls.ensure_unicode(path_)
             _depth = depth_+1
             if _depth <= depth_maximum:
-                _filter_name = cls.auto_unicode(filter_names[_depth])
+                _filter_name = cls.ensure_unicode(filter_names[_depth])
                 if is_root_ is True:
                     if flag_ is True:
                         _filter_path = six.u('{}/{}').format(
@@ -87,25 +84,25 @@ class ScanGlob(object):
         cache_dict = {}
         list_ = []
 
-        regex = cls.auto_unicode(regex)
+        regex = cls.ensure_unicode(regex)
 
         filter_names = regex.split('/')
         depth_maximum = len(filter_names)-1
         if platform.system() == 'Linux':
             root = '/'+filter_names[1]
-            start_deep = 1
+            start_depth = 1
             flag = True
         elif platform.system() == 'Windows':
             if regex.startswith('//'):
                 root = '//' + filter_names[2]
-                start_deep = 2
+                start_depth = 2
                 flag = True
             else:
                 root = filter_names[0]+'/'
-                start_deep = 0
+                start_depth = 0
                 flag = False
         else:
             raise SystemError()
 
-        _rcs_fnc(root, start_deep, is_root_=True, flag_=flag)
+        _rcs_fnc(root, start_depth, is_root_=True, flag_=flag)
         return list_

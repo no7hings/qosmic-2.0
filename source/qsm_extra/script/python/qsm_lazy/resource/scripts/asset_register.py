@@ -7,7 +7,7 @@ import qsm_general.core as qsm_gnl_core
 
 import qsm_general.scan as qsm_gnl_scan
 
-from ...screw import core as _scr_core
+import qsm_screw.core as qsm_scr_core
 
 
 class AssetBatchRegisterOpt(object):
@@ -16,7 +16,7 @@ class AssetBatchRegisterOpt(object):
         self._project_chs_name = project_chs_name
         self._scan_root = qsm_gnl_scan.Root.generate()
 
-        self._scr_stage = _scr_core.Stage('asset_test')
+        self._scr_stage = qsm_scr_core.Stage('asset_test')
 
     def execute(self, character=False, prop=False, scenery=False):
         self.register_project(self._project_name, self._project_chs_name)

@@ -23,7 +23,7 @@ import lxgui.qt.view_widgets as gui_qt_vew_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy.screw.core as qsm_lzy_scr_core
+import qsm_screw.core as qsm_scr_core
 
 
 class _AbsRegister(object):
@@ -41,7 +41,7 @@ class _AbsRegister(object):
         self._post_fnc = None
 
     def set_scr_stage_key(self, scr_stage_key):
-        self._scr_stage = qsm_lzy_scr_core.Stage(scr_stage_key)
+        self._scr_stage = qsm_scr_core.Stage(scr_stage_key)
 
         self._load_type_and_tags()
 

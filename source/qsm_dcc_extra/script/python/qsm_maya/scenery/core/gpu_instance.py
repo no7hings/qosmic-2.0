@@ -176,7 +176,7 @@ class GpuInstancesQuery(object):
 
     @classmethod
     def find_one(cls, path):
-        if _mya_core.Node.is_transform(path):
+        if _mya_core.Node.is_transform_type(path):
             _ = path
         elif _mya_core.Node.is_gpu(path):
             _ = _mya_core.Shape.get_transform(path)

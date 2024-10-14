@@ -172,7 +172,7 @@ class BscVersionOpt(object):
         return 'v{}'.format(str(1).zfill(cls.VERSION_ZFILL_COUNT))
 
 
-class PtnParseMtd(object):
+class BasParse(object):
     RE_KEY_PATTERN = r'[{](.*?)[}]'
 
     @classmethod
@@ -208,7 +208,7 @@ class PtnParseMtd(object):
         return p
 
     @classmethod
-    def get_as_fnmatch(cls, p, variants=None):
+    def to_fnmatch_style(cls, p, variants=None):
         if p is not None:
             keys = re.findall(re.compile(cls.RE_KEY_PATTERN, re.S), p)
             s = p
@@ -290,10 +290,10 @@ class AbsPtnParseOpt(object):
         self._variants = {}
         self._variants_default = variants or {}
 
-        self._pattern_fnmatch_origin = PtnParseMtd.get_as_fnmatch(
+        self._pattern_fnmatch_origin = BasParse.to_fnmatch_style(
             self._pattern_origin, self._variants_default
         )
-        self._pattern_fnmatch = PtnParseMtd.get_as_fnmatch(
+        self._pattern_fnmatch = BasParse.to_fnmatch_style(
             self._pattern, self._variants_default
         )
 
@@ -303,14 +303,14 @@ class AbsPtnParseOpt(object):
     pattern = property(get_pattern)
 
     def get_pattern_for_fnmatch(self):
-        return PtnParseMtd.get_as_fnmatch(
+        return BasParse.to_fnmatch_style(
             self._pattern, self._variants_default
         )
 
     pattern_for_fnmatch = property(get_pattern_for_fnmatch)
 
     def get_keys(self):
-        return PtnParseMtd.get_keys(
+        return BasParse.get_keys(
             self._pattern
         )
 
@@ -325,14 +325,14 @@ class AbsPtnParseOpt(object):
             if k in keys:
                 self._variants[k] = v
         #
-        self._pattern = PtnParseMtd.update_variants(self._pattern, **kwargs)
-        self._pattern_fnmatch = PtnParseMtd.get_as_fnmatch(
+        self._pattern = BasParse.update_variants(self._pattern, **kwargs)
+        self._pattern_fnmatch = BasParse.to_fnmatch_style(
             self._pattern, self._variants_default
         )
 
     def update_variants_to(self, **kwargs):
         return self.__class__(
-            PtnParseMtd.update_variants(self._pattern, **kwargs)
+            BasParse.update_variants(self._pattern, **kwargs)
         )
 
     def get_variants(self, result):
@@ -368,13 +368,13 @@ class BscStgParseOpt(AbsPtnParseOpt):
     def get_matches(self, sort=False):
         list_ = []
         paths = _scan_glob.ScanGlob.glob(
-            PtnParseMtd.get_as_fnmatch(
+            BasParse.to_fnmatch_style(
                 self._pattern, self._variants_default
             )
         )
         if sort is True:
             paths = _raw.RawTextsOpt(paths).sort_by_number()
-        #
+
         if self.get_keys():
             for i_path in paths:
                 i_p = parse.parse(
@@ -405,7 +405,7 @@ class BscStgParseOpt(AbsPtnParseOpt):
 
     def get_match_results(self, sort=False):
         paths = _scan_glob.ScanGlob.glob(
-            PtnParseMtd.get_as_fnmatch(
+            BasParse.to_fnmatch_style(
                 self._pattern, self._variants_default
             )
         )

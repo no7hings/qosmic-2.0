@@ -1,5 +1,5 @@
 # coding:utf-8
-import qsm_lazy.screw.core as c
+import qsm_screw.core as c
 
 scr_stage = c.Stage('asset_test')
 

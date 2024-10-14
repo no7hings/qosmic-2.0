@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.storage as bsc_storage
 
-import qsm_lazy.screw.core as qsm_scr_core
+import qsm_screw.core as qsm_scr_core
 
 import qsm_maya.core as qsm_mya_core
 

@@ -59,6 +59,13 @@ class AdvCharacterMotionOpt(object):
                 if _mya_core.Node.is_curve(i_shape) is True:
                     list_.append(i)
         return list_
+    
+    def find_all_transform_controls(self):
+        list_ = []
+        for i in self.find_all_controls():
+            if _mya_core.Transform.check_is_transform(i) is True:
+                list_.append(i)
+        return list_
 
     def find_one_control(self, control_key):
         _ = cmds.ls('{}:{}'.format(self._namespace, control_key), long=1)

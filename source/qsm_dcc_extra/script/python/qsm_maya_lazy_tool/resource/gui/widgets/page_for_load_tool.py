@@ -1,7 +1,7 @@
 # coding:utf-8
 import random
 
-import qsm_lazy.screw.core as qsm_lzy_scr_core
+import qsm_screw.core as qsm_scr_core
 
 import qsm_lazy_tool.resource.gui.abstracts as _abstracts
 
@@ -33,7 +33,7 @@ class PrxPageForLoadTool(_abstracts.AbsPrxPageForLoadTool):
             return
 
         data_type = self.get_resource_data_type()
-        if data_type == qsm_lzy_scr_core.DataTypes.MayaNode:
+        if data_type == qsm_scr_core.DataTypes.MayaNode:
             path_map = qsm_mya_core.Selection.get_path_map()
             if not path_map:
                 return
@@ -45,7 +45,7 @@ class PrxPageForLoadTool(_abstracts.AbsPrxPageForLoadTool):
             self.do_gui_update_node_opt_by_dcc_selection_for_dynamic(
                 path_map, node_scheme
             )
-        elif data_type == qsm_lzy_scr_core.DataTypes.MayaNodeGraph:
+        elif data_type == qsm_scr_core.DataTypes.MayaNodeGraph:
             self.do_gui_update_node_graph_opt_for_any()
 
     def do_gui_update_node_opt_by_dcc_selection_for_dynamic(self, path_map, node_scheme):

@@ -79,6 +79,7 @@ class DccValidationOptions(object):
 
     def to_result_args(self, data, mesh_count_result_data=None, component_mesh_count_result_data=None):
         result = 'pass'
+        result_dict = {}
 
         file_path = data['file']
         result_data = data['results']
@@ -114,10 +115,17 @@ class DccValidationOptions(object):
                             if j_level == 'error':
                                 j_color = 'red'
                                 result = 'error'
+                                result_dict.setdefault(
+                                    'error', []
+                                ).append(j_leaf)
                             elif j_level == 'warning':
                                 j_color = 'yellow'
+                                # ignore result is error
                                 if result == 'pass':
                                     result = 'warning'
+                                result_dict.setdefault(
+                                    'warning', []
+                                ).append(j_leaf)
                             else:
                                 j_color = 'default'
 
@@ -182,7 +190,16 @@ class DccValidationOptions(object):
                 color='green'
             )
 
-        return result, formatter.to_html()
+        result_description = self.to_convertion_name('pass')
+        if result_dict:
+            strings = []
+            for k, v in result_dict.items():
+                i_string = u'{}x{}'.format(self.to_convertion_name(k), len(v))
+                strings.append(i_string)
+
+            result_description = u', '.join(strings)
+
+        return result, result_description, formatter.to_html()
 
     def to_result_dict_for_mesh_count(self, data):
         branch = 'mesh_count'

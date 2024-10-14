@@ -9,7 +9,7 @@ import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.view_widgets as gui_qt_vew_widgets
 
-import qsm_lazy.screw.core as qsm_lzy_scr_core
+import qsm_screw.core as qsm_scr_core
 
 
 class W(gui_prx_widgets.PrxBaseWindow):
@@ -19,7 +19,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
         self._d_0 = gui_qt_vew_widgets.QtTagWidget(self._qt_widget)
         self.add_widget(self._d_0)
 
-        self._scr_stage = qsm_lzy_scr_core.Stage(
+        self._scr_stage = qsm_scr_core.Stage(
             'asset_test'
         )
         # self._scr_stage.connect()

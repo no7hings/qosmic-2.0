@@ -70,6 +70,12 @@ class NodeAttribute(object):
     def unlock(cls, path, atr_name):
         cmds.setAttr(cls.to_atr_path(path, atr_name), lock=0)
 
+    # source
+    @classmethod
+    def connect_from(cls, path, atr_name, source):
+        atr_path_tgt = cls.to_atr_path(path, atr_name)
+        cmds.connectAttr(source, atr_path_tgt, force=1)
+
     @classmethod
     def has_source(cls, path, atr_name):
         return cmds.connectionInfo(
@@ -79,15 +85,15 @@ class NodeAttribute(object):
 
     @classmethod
     def break_source(cls, path, atr_name):
-        atr_path_dst = cls.to_atr_path(path, atr_name)
+        atr_path_tgt = cls.to_atr_path(path, atr_name)
         atr_path_src = cmds.connectionInfo(
-            atr_path_dst,
+            atr_path_tgt,
             sourceFromDestination=1
         )
         if atr_path_src:
             path_src = atr_path_src.split('.')[0]
             if not cmds.referenceQuery(path_src, isNodeReferenced=1):
-                cmds.disconnectAttr(atr_path_src, atr_path_dst)
+                cmds.disconnectAttr(atr_path_src, atr_path_tgt)
                 return True
         return False
 
@@ -106,6 +112,38 @@ class NodeAttribute(object):
         )
         if _:
             return _[0]
+
+    @classmethod
+    def get_source_node(cls, path, atr_name, node_type=None, skip_conversion_nodes=0, shapes=1):
+        kwargs = dict(
+            destination=0, source=1, skipConversionNodes=skip_conversion_nodes, shapes=shapes
+        )
+        if node_type is not None:
+            kwargs['type'] = node_type
+
+        _ = cmds.listConnections(
+            cls.to_atr_path(path, atr_name), **kwargs
+        ) or []
+        if _:
+            return cls.to_node_path(_[0])
+
+    # targets
+    @classmethod
+    def connect_to(cls, path, atr_name, target):
+        atr_path_src = cls.to_atr_path(path, atr_name)
+        cmds.connectAttr(atr_path_src, target, force=1)
+
+    @classmethod
+    def break_targets(cls, path, atr_name):
+        atr_path_src = cls.to_atr_path(path, atr_name)
+        atr_path_tgt_s = cmds.connectionInfo(
+            atr_path_src,
+            destinationFromSource=1
+        ) or []
+        for i_atr_path_tgt in atr_path_tgt_s:
+            i_path_tgt = i_atr_path_tgt.split('.')[0]
+            if not cmds.referenceQuery(i_path_tgt, isNodeReferenced=1):
+                cmds.disconnectAttr(atr_path_src, i_atr_path_tgt)
 
     @classmethod
     def get_targets(cls, path, atr_name):
@@ -138,20 +176,6 @@ class NodeAttribute(object):
                 #
                 lis.append((source_atr_path, target_atr_path))
         return lis
-
-    @classmethod
-    def get_source_node(cls, path, atr_name, node_type=None, skip_conversion_nodes=0, shapes=1):
-        kwargs = dict(
-            destination=0, source=1, skipConversionNodes=skip_conversion_nodes, shapes=shapes
-        )
-        if node_type is not None:
-            kwargs['type'] = node_type
-
-        _ = cmds.listConnections(
-            cls.to_atr_path(path, atr_name), **kwargs
-        ) or []
-        if _:
-            return cls.to_node_path(_[0])
 
     @classmethod
     def get_target_nodes(cls, path, atr_name, node_type=None, skip_conversion_nodes=0, shapes=1):
@@ -291,6 +315,16 @@ class NodeAttribute(object):
 class NodeAttributes(object):
 
     @classmethod
-    def get_all_keyable_names(cls, path):
-        return cmds.listAttr(path, keyable=1, unlocked=1)
+    def get_all_keyable_names(cls, node):
+        return cmds.listAttr(node, keyable=1, unlocked=1) or []
 
+    @classmethod
+    def get_all_names(cls, node):
+        return cmds.listAttr(
+            node,
+            read=1,
+            write=1,
+            inUse=1,
+            # fixme: use multi?
+            # multi=1
+        ) or []

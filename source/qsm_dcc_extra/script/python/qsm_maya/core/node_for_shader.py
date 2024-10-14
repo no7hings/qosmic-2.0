@@ -41,7 +41,7 @@ class Shader(object):
     def create_for(cls, shader_type, target_shape_path, target_any_paths):
         cmds.select(target_any_paths)
 
-        if _transform.Transform.is_transform(target_shape_path):
+        if _transform.Transform.is_transform_type(target_shape_path):
             target_shape_path = _transform.Transform.get_shape(target_shape_path)
 
         mel_script = 'createAndAssignShader {} "";'.format(shader_type)

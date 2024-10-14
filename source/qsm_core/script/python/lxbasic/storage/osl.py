@@ -22,7 +22,7 @@ class OslFileMtd(object):
         compile_file_path = '{}.oso'.format(file_opt.path_base)
         #
         cmd_args = [
-            bsc_cor_execute.ExcBaseMtd.oslc(),
+            bsc_cor_execute.BscBinExecute.oslc(),
             '-o "{}" "{}"'.format(compile_file_path, file_opt.path),
         ]
         bsc_cor_process.BscProcess.execute_with_result(' '.join(cmd_args))
@@ -35,7 +35,7 @@ class OslFileMtd(object):
         compile_file_path = '{}.oso'.format(file_opt.path_base)
         #
         cmd_args = [
-            bsc_cor_execute.ExcBaseMtd.oslinfo(),
+            bsc_cor_execute.BscBinExecute.oslinfo(),
             '-v "{}"'.format(compile_file_path),
         ]
         p = bsc_cor_process.BscProcess.set_run(' '.join(cmd_args))
