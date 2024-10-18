@@ -15,11 +15,15 @@ from .. import core as _qt_core
 
 class QtMenuNew(QtWidgets.QMenu):
     def __init__(self, *args, **kwargs):
+        # noinspection PyArgumentList
         super(QtMenuNew, self).__init__(*args, **kwargs)
         self.setPalette(_qt_core.GuiQtDcc.generate_qt_palette())
         self.setAutoFillBackground(True)
 
         self.setFont(_qt_core.QtFonts.NameNormal)
+        # self.setStyleSheet(
+        #     _qt_core.QtStyle.get('QMenu')
+        # )
 
         self.item_height = 22
 
@@ -56,9 +60,11 @@ class QtMenuNew(QtWidgets.QMenu):
                         (types.FunctionType, types.MethodType, functools.partial, types.LambdaType)
                     ):
                         fnc = args_extend
+                        # noinspection PyUnresolvedReferences
                         item.triggered.connect(fnc)
                     elif isinstance(args_extend, six.string_types):
                         cmd_str = args_extend
+                        # noinspection PyUnresolvedReferences
                         item.triggered.connect(lambda *args, **kwargs: cls._set_cmd_run_(cmd_str))
                     elif isinstance(args_extend, (tuple, list)):
                         # check
@@ -77,6 +83,7 @@ class QtMenuNew(QtWidgets.QMenu):
                                         fnc,
                                         (types.FunctionType, types.MethodType, functools.partial, types.LambdaType)
                                 ):
+                                    # noinspection PyUnresolvedReferences
                                     item.triggered.connect(fnc)
                             else:
                                 set_disable_fnc_(item)
@@ -90,6 +97,7 @@ class QtMenuNew(QtWidgets.QMenu):
                             else:
                                 is_checked = check_fnc
                             #
+                            # noinspection PyUnresolvedReferences
                             item.triggered.connect(fnc)
                             if isinstance(
                                 enable_fnc,
@@ -107,25 +115,25 @@ class QtMenuNew(QtWidgets.QMenu):
                         if icon_name:
                             if icon_name == 'box-check':
                                 icon = [
-                                    _qt_core.GuiQtIcon.generate_by_icon_name('basic/box-check-off'),
-                                    _qt_core.GuiQtIcon.generate_by_icon_name('basic/box-check-on')
+                                    _qt_core.QtIcon.generate_by_icon_name('basic/box-check-off'),
+                                    _qt_core.QtIcon.generate_by_icon_name('basic/box-check-on')
                                 ][is_checked]
                                 item.setIcon(icon)
                             elif icon_name == 'radio-check':
                                 icon = [
-                                    _qt_core.GuiQtIcon.generate_by_icon_name('basic/radio-check-off'),
-                                    _qt_core.GuiQtIcon.generate_by_icon_name('basic/radio-check-on')
+                                    _qt_core.QtIcon.generate_by_icon_name('basic/radio-check-off'),
+                                    _qt_core.QtIcon.generate_by_icon_name('basic/radio-check-on')
                                 ][is_checked]
                                 item.setIcon(icon)
                             else:
-                                item.setIcon(_qt_core.GuiQtIcon.generate_by_name(icon_name))
+                                item.setIcon(_qt_core.QtIcon.generate_by_name(icon_name))
                         else:
                             item.setIcon(
-                                _qt_core.GuiQtIcon.generate_by_text(name, background_color=(64, 64, 64))
+                                _qt_core.QtIcon.generate_by_text(name, background_color=(64, 64, 64))
                             )
                 else:
                     item.setIcon(
-                        _qt_core.GuiQtIcon.generate_by_text(name, background_color=(64, 64, 64))
+                        _qt_core.QtIcon.generate_by_text(name, background_color=(64, 64, 64))
                     )
                 #
                 if len(action_args) >= 4:
@@ -187,9 +195,9 @@ class QtMenuNew(QtWidgets.QMenu):
                     qt_action_item = self.addAction(i_name)
                     if i_icon_name is not None:
                         if isinstance(i_icon_name, six.string_types):
-                            qt_action_item.setIcon(_qt_core.GuiQtIcon.generate_by_name(i_icon_name))
+                            qt_action_item.setIcon(_qt_core.QtIcon.generate_by_name(i_icon_name))
                     else:
-                        qt_action_item.setIcon(_qt_core.GuiQtIcon.generate_by_text(i_name, background_color=(64, 64, 64)))
+                        qt_action_item.setIcon(_qt_core.QtIcon.generate_by_text(i_name, background_color=(64, 64, 64)))
                     #
                     sub_menu = self.__class__(self.parent())
                     qt_action_item.setMenu(sub_menu)
@@ -240,11 +248,11 @@ class QtMenuNew(QtWidgets.QMenu):
         menu.addAction(widget_action)
         if icon_name:
             widget_action.setIcon(
-                _qt_core.GuiQtIcon.generate_by_icon_name(icon_name)
+                _qt_core.QtIcon.generate_by_icon_name(icon_name)
             )
         else:
             widget_action.setIcon(
-                _qt_core.GuiQtIcon.generate_by_text(name, background_color=(64, 64, 64))
+                _qt_core.QtIcon.generate_by_text(name, background_color=(64, 64, 64))
             )
         #
         if isinstance(executable_fnc, (bool, int)):
@@ -258,9 +266,11 @@ class QtMenuNew(QtWidgets.QMenu):
         #
         if isinstance(execute_fnc, (types.FunctionType, types.MethodType)):
             fnc = execute_fnc
+            # noinspection PyUnresolvedReferences
             widget_action.triggered.connect(fnc)
         elif isinstance(execute_fnc, six.string_types):
             cmd_str = execute_fnc
+            # noinspection PyUnresolvedReferences
             widget_action.triggered.connect(lambda *args, **kwargs: cls._set_cmd_run_(cmd_str))
 
     def _popup_start_(self):

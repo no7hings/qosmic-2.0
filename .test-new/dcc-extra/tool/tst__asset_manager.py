@@ -6,7 +6,7 @@ import lxgui
 lxgui.do_reload()
 
 bsc_core.PyReloader2(
-    ['qsm_maya', 'qsm_general', 'qsm_gui', 'qsm_tool', 'lxgui', 'lxbasic']
+    ['qsm_maya', 'qsm_general', 'qsm_gui', 'lxgui', 'lxbasic']
 ).do_reload()
 
 import lxsession.commands as ssn_commands

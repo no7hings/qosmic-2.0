@@ -19,7 +19,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_general.core as qsm_gnl_core
 
-import qsm_general.scan as qsm_gnl_scan
+import qsm_scan as qsm_scan
 
 import qsm_lazy.validation.scripts as qsm_lzy_vld_scripts
 
@@ -137,6 +137,8 @@ class AbsPrxPageForSceneryBatch(gui_prx_widgets.PrxBasePage):
         self._file_to_item_dict = {}
         self._asset_qt_tree_widget._view_model.restore()
 
+        match_scheme = self._prx_options_node.get('match_scheme')
+
         directory_path = self._prx_options_node.get('directory')
         if not directory_path:
             self._window.exec_message_dialog(
@@ -147,15 +149,28 @@ class AbsPrxPageForSceneryBatch(gui_prx_widgets.PrxBasePage):
             )
             return
 
-        pattern = self._prx_options_node.get('file_pattern')
-        if not pattern:
-            self._window.exec_message_dialog(
-                self._window.choice_message(
-                    self._window._configure.get('build.{}.messages.no_file_pattern'.format(self.PAGE_KEY))
-                ),
-                status='warning'
-            )
-            return
+        if match_scheme == 'file_pattern':
+            pattern = self._prx_options_node.get('file_pattern')
+            if not pattern:
+                self._window.exec_message_dialog(
+                    self._window.choice_message(
+                        self._window._configure.get('build.{}.messages.no_file_pattern'.format(self.PAGE_KEY))
+                    ),
+                    status='warning'
+                )
+                return
+        elif match_scheme == 'file_name_pattern':
+            pattern = self._prx_options_node.get('file_name_pattern')
+            if not pattern:
+                self._window.exec_message_dialog(
+                    self._window.choice_message(
+                        self._window._configure.get('build.{}.messages.no_file_name_pattern'.format(self.PAGE_KEY))
+                    ),
+                    status='warning'
+                )
+                return
+        else:
+            raise RuntimeError()
 
         process_options = self._validation_opt.generate_process_options(self._prx_options_node.to_dict())
         if not process_options:
@@ -169,12 +184,36 @@ class AbsPrxPageForSceneryBatch(gui_prx_widgets.PrxBasePage):
 
         roles = qsm_gnl_core.QsmAsset.get_scenery_role_mask()
 
-        # add root
+        role = roles[0]
+        if match_scheme == 'file_pattern':
+            # add root
+            self._create_root()
+            self._create_role(role)
+            self._add_for_role(roles[0], pattern, directory_path, process_options)
+        elif match_scheme == 'file_name_pattern':
+            self._create_root()
+            self._create_role(role)
+            all_file_paths = bsc_storage.StgDirectoryOpt(directory_path).get_all_file_paths()
+            for i_file_path in all_file_paths:
+                i_file_opt = bsc_storage.StgFileOpt(i_file_path)
+                if i_file_opt.is_name_match_pattern(pattern):
+                    i_variants = dict(
+                        role=roles[0],
+                        result=i_file_path,
+                        asset=i_file_opt.name
+                    )
+                    self._add_asset(i_variants, process_options)
+
+    def _create_root(self):
         flag, qt_item = self._asset_qt_tree_widget._view_model.create_item('/')
         qt_item._item_model.set_expanded(True)
         qt_item._item_model.set_icon_name('file/folder')
-        for i_role in roles:
-            self._add_for_role(i_role, pattern, directory_path, process_options)
+
+    def _create_role(self, role):
+        role_path = '/{}'.format(role)
+        flag, qt_item = self._asset_qt_tree_widget._view_model.create_item(role_path)
+        qt_item._item_model.set_expanded(True)
+        qt_item._item_model.set_icon_name('file/folder')
 
     def _add_for_role(self, role, pattern, directory_path, process_options):
         i_role_path = '/{}'.format(role)
@@ -193,6 +232,7 @@ class AbsPrxPageForSceneryBatch(gui_prx_widgets.PrxBasePage):
 
         if matches:
             for i_variants in matches:
+                i_variants['role'] = role
                 self._add_asset(i_variants, process_options)
 
     def _add_asset(self, variants, process_options):
@@ -250,7 +290,7 @@ class AbsPrxPageForSceneryBatch(gui_prx_widgets.PrxBasePage):
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxPageForSceneryBatch, self).__init__(window, session, *args, **kwargs)
 
-        self._scan_root = qsm_gnl_scan.Root.generate()
+        self._scan_root = qsm_scan.Root.generate()
 
         self._validation_opt = qsm_lzy_vld_scripts.SceneryValidationOpt()
 

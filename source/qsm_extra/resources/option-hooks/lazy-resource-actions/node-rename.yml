@@ -5,7 +5,7 @@ option:
         - '*-*'
     #
     gui:
-        group_name: 'python'
+        group_name: 'node'
         #
         name: 'Resource Rename'
         icon_name: 'tool/rename'

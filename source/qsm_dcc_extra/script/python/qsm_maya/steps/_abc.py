@@ -13,11 +13,11 @@ class AbsMeshOpt(object):
         if _mya_core.Node.is_transform_type(path_or_name):
             self._transform_path = _mya_core.DagNode.to_path(path_or_name)
             _ = _mya_core.Transform.get_shape(path_or_name)
-            if _mya_core.Node.is_mesh(_) is True:
+            if _mya_core.Node.is_mesh_type(_) is True:
                 self._shape_path = _
             else:
                 raise RuntimeError()
-        elif _mya_core.Node.is_mesh(path_or_name):
+        elif _mya_core.Node.is_mesh_type(path_or_name):
             self._shape_path = _mya_core.DagNode.to_path(path_or_name)
             self._transform_path = _mya_core.Shape.get_transform(path_or_name)
         else:

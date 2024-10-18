@@ -1064,7 +1064,7 @@ class StgPathOpt(object):
         return os.stat(self._path).st_mtime
 
     def get_modify_time_tag(self):
-        return _cor_time.TimestampOpt(
+        return _cor_time.BscTimestampOpt(
             self.get_mtime()
         ).get_as_tag()
 

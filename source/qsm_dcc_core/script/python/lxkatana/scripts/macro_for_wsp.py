@@ -384,7 +384,7 @@ class ScpMacro(object):
                 directory=macro_file_opt.get_directory_path(),
                 name=macro_file_opt.get_name_base(),
                 ext=macro_file_opt.get_ext(),
-                time_tag=bsc_core.TimestampOpt(macro_file_opt.get_mtime()).get_as_tag()
+                time_tag=bsc_core.BscTimestampOpt(macro_file_opt.get_mtime()).get_as_tag()
             )
             bck_file_path = '{directory}/.bck/{name}{ext}/{name}.{time_tag}{ext}'.format(
                 **var_dict

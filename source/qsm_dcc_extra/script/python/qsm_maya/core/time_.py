@@ -107,7 +107,7 @@ class Frame(object):
 
     @classmethod
     def get_fps_value(cls):
-        return float(cls.get_fps_tag().split('_')[0])
+        return int(cls.get_fps_tag().split('_')[0])
 
     @classmethod
     def get_fps_(cls):

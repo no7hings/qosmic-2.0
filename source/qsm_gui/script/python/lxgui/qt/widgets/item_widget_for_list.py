@@ -351,10 +351,10 @@ class QtItemWidgetForList(
             # status
             if self._status_flag is True:
                 painter._set_border_color_(
-                    self._status_color
+                    self._status_background_color
                 )
                 painter._set_background_color_(
-                    self._status_color
+                    self._status_background_color
                 )
                 painter.drawPath(
                     self._statu_draw_path

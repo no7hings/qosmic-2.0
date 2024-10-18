@@ -276,7 +276,7 @@ class AbsQtActionForHoverDef(object):
 
     def _set_hovered_(self, boolean):
         self._is_hovered = boolean
-        #
+
         self._widget.update()
 
     def _is_hovered_(self):

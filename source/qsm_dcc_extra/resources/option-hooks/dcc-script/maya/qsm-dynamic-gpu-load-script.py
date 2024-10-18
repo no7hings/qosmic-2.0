@@ -5,11 +5,11 @@ def main(session):
     if qsm_gnl_core.check_python_lib() is False:
         return
 
-    import qsm_maya.animation.scripts as qsm_anm_scripts
+    import qsm_maya.steps.animation.scripts as s
 
     option_opt = session.get_option_opt()
 
-    qsm_anm_scripts.DynamicGpuCacheOpt.load_auto(
+    s.DynamicGpuCacheOpt.load_auto(
         **option_opt.to_dict()
     )
 

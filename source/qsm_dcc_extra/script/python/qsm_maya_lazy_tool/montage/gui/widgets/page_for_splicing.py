@@ -13,7 +13,7 @@ from qsm_lazy_tool.montage.gui import abstracts as _gui_abstracts
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.animation.core as qsm_mya_anm_core
+import qsm_maya.steps.animation.core as qsm_mya_stp_anm_core
 
 import qsm_maya_lazy.montage.core as qsm_mya_lzy_mtg_core
 
@@ -86,7 +86,7 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
 
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
-            results = qsm_mya_anm_core.AdvRig.filter_namespaces(namespaces)
+            results = qsm_mya_stp_anm_core.AdvRigAsset.filter_namespaces(namespaces)
 
         if not results:
             self._window.exec_message_dialog(
@@ -130,7 +130,7 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
         if master_layer:
             file_path = gui_core.GuiStorageDialog.save_file(ext_filter='All File (*.jsz)', parent=self._qt_widget)
             master_layer_opt = qsm_mya_lzy_mtg_core.AdvChrMotionMasterLayerOpt(master_layer)
-            master_layer_opt.export_motion(file_path)
+            master_layer_opt.export_motion_to(file_path)
         else:
             self._window.exec_message_dialog(
                 'No motion to export.',

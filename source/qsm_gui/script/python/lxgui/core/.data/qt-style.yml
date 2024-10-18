@@ -60,21 +60,45 @@ widget:
         |-
         QMenu{
             background: rgba(<option.rgba.Background>); 
-            color: rgba(<option.rgba.Text>);
             border: 1px rgba(<option.rgba.Border>); border-radius: 0px; border-style: solid;
-        }
-        QMenu::item{
-            background: rgba(<option.rgba.Background>); 
             color: rgba(<option.rgba.Text>);
-        }
-        QMenu::item:selected{
-            background: rgba(<option.rgba.BackgroundSelect>); 
-            color: rgba(<option.rgba.TextHoverA>);
         }
         QMenu::separator{
-            background: rgba(<option.rgba.DimGray>); 
             color: rgba(<option.rgba.Text>);
+            padding: 0px 1px 0px 1px;
             height: 2px;
+        }
+        QMenu::icon {
+            padding-left: 2px;
+        }
+        QMenu::indicator:non-exclusive {
+            width: 14px;
+            height: 20px;
+            margin-left: 2px;
+        }
+        QMenu::item{
+            min-width: 128px;
+            padding-left: 22px;
+            height: 20px;
+            background: rgba(<option.rgba.Background>);
+            border: 1px rgba(<option.rgba.Transparent>); border-style: solid;
+            color: rgba(<option.rgba.Text>);
+        }
+        QMenu::item:disabled{
+            min-width: 128px;
+            padding-left: 22px;
+            height: 20px;
+            background: rgba(<option.rgba.Background>);
+            border: 1px rgba(<option.rgba.Transparent>); border-style: solid;
+            color: rgba(<option.rgba.TextDisable>);
+        }
+        QMenu::item:selected{
+            background: rgba(<option.rgba.BackgroundSelect>);
+            color: rgba(<option.rgba.TextHoverA>);
+        }
+        QMenu::item:selected:disabled{
+            background: rgba(<option.rgba.Transparent>); 
+            color: rgba(<option.rgba.TextHoverA>);
         }
     QTreeView:
         |-
@@ -250,12 +274,12 @@ widget:
             width: <option.size.scroll-bar.width>px; margin: 0px, 0px, 0px, 0px; padding: <option.size.scroll-bar.width>px 1px <option.size.scroll-bar.width>px 1px;
         }
         QScrollBar::handle:vertical{
-            background: rgba(<option.rgba.Background>); width: 5px; min-height: 5px;
-            border: 1px rgba(<option.rgba.Border>); border-radius: 1px; border-style: solid;
+            background: rgba(<option.rgba.BkgScrollBar>); width: 5px; min-height: 5px;
+            border: 1px rgba(<option.rgba.BdrScrollBar>); border-radius: 1px; border-style: solid;
         }
         QScrollBar::handle:vertical:hover{
-            background:rgba(<option.rgba.GrayC>); min-height: 5px;
-            border: 1px rgba(<option.rgba.GrayB>); border-radius: 1px; border-style: solid;
+            background:rgba(<option.rgba.BkgScrollBarHover>); min-height: 5px;
+            border: 1px rgba(<option.rgba.BdrScrollBarHover>); border-radius: 1px; border-style: solid;
         }
         QScrollBar::add-line:vertical{
             image: url(<option.icon-dir>/v_scroll_add.svg);
@@ -278,12 +302,12 @@ widget:
             height: <option.size.scroll-bar.height>px; margin: 0px, 0px, 0px, 0px; padding: 1px <option.size.scroll-bar.height>px 1px <option.size.scroll-bar.height>px;
         }
         QScrollBar::handle:horizontal{
-            background: rgba(<option.rgba.Background>); height: 5px; min-height: 5px;
-            border: 1px rgba(<option.rgba.Border>); border-radius: 1px; border-style: solid;
+            background: rgba(<option.rgba.BkgScrollBar>); height: 5px; min-height: 5px;
+            border: 1px rgba(<option.rgba.BdrScrollBar>); border-radius: 1px; border-style: solid;
         }
         QScrollBar::handle:horizontal:hover{
-            background: rgba(<option.rgba.GrayC>); min-width: 5px;
-            border: 1px rgba(<option.rgba.GrayB>); border-radius: 1px; border-style: solid;
+            background: rgba(<option.rgba.BkgScrollBarHover>); min-width: 5px;
+            border: 1px rgba(<option.rgba.BdrScrollBarHover>); border-radius: 1px; border-style: solid;
         }
         QScrollBar::add-line:horizontal{
             image: url(<option.icon-dir>/h_scroll_add.svg);

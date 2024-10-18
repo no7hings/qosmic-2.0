@@ -5,7 +5,7 @@ option:
         - '*-*'
     #
     gui:
-        group_name: 'python'
+        group_name: 'tag'
 
         name: 'Tag Create'
         icon_name: 'file/add-file'

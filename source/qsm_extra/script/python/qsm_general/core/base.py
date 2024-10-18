@@ -70,7 +70,7 @@ def check_python_lib():
                 '也可直接拷贝“\\\\10.33.4.90\\pipeline-root\\startup\\python_lib\\python27.dll”到“{file}”。'
             ).format(file=file_path),
             status=gui_core.GuiDialog.ValidationStatus.Error,
-            no_label='关闭',
+            no_label='Close',
             ok_visible=False, no_visible=True, cancel_visible=False,
             window_size=(480, 320)
         )

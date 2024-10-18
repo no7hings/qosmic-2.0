@@ -13,3 +13,6 @@ from .asset_snapshot import *
 
 from .asset_unit_assembly import *
 
+from .motion_register import *
+
+from .motion_generate import *

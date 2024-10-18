@@ -1007,7 +1007,7 @@ class BscTextOpt(object):
     def get_is_integer(self):
         return self.__raw.isdigit()
 
-    def get_is_matched(self, p):
+    def check_is_matched(self, p):
         return fnmatch.filter([self.__raw], p)
 
 

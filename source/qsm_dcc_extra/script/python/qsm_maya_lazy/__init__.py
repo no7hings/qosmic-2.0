@@ -7,7 +7,7 @@ def do_reload():
     bsc_core.PyReloader2(
         [
             'lxbasic', 'lxsession',
-            'qsm_general',
+            'qsm_general', 'qsm_scan', 'qsm_screw',
             'qsm_maya', 'qsm_maya_lazy'
         ]
     ).do_reload()

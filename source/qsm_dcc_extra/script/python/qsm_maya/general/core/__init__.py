@@ -2,3 +2,6 @@
 from .configure import *
 
 from .cache import *
+
+from .control import *
+

@@ -374,7 +374,6 @@ class QtMenuBar(QtWidgets.QMenuBar):
         )
 
 
-# noinspection PyArgumentList,PyUnresolvedReferences
 class QtMenu(QtWidgets.QMenu):
     def __init__(self, *args, **kwargs):
         super(QtMenu, self).__init__(*args, **kwargs)
@@ -401,9 +400,8 @@ class QtMenu(QtWidgets.QMenu):
 
         if action_args:
             if len(action_args) == 1:
-                s = qt_menu.addSeparator()
-                s.setFont(_qt_core.QtFonts.MenuSeparator)
-                s.setText(action_args[0])
+                text = action_args[0]
+                cls._add_separator_(qt_menu, text)
             elif len(action_args) >= 3:
                 name, icon_name, args_extend = action_args[:3]
                 item = _qt_core.QtWidgetAction(qt_menu)
@@ -473,25 +471,25 @@ class QtMenu(QtWidgets.QMenu):
                         if icon_name:
                             if icon_name == 'box-check':
                                 icon = [
-                                    _qt_core.GuiQtIcon.generate_by_icon_name('basic/box-check-off'),
-                                    _qt_core.GuiQtIcon.generate_by_icon_name('basic/box-check-on')
+                                    _qt_core.QtIcon.generate_by_icon_name('basic/box-check-off'),
+                                    _qt_core.QtIcon.generate_by_icon_name('basic/box-check-on')
                                 ][is_checked]
                                 item.setIcon(icon)
                             elif icon_name == 'radio-check':
                                 icon = [
-                                    _qt_core.GuiQtIcon.generate_by_icon_name('basic/radio-check-off'),
-                                    _qt_core.GuiQtIcon.generate_by_icon_name('basic/radio-check-on')
+                                    _qt_core.QtIcon.generate_by_icon_name('basic/radio-check-off'),
+                                    _qt_core.QtIcon.generate_by_icon_name('basic/radio-check-on')
                                 ][is_checked]
                                 item.setIcon(icon)
                             else:
-                                item.setIcon(_qt_core.GuiQtIcon.generate_by_name(icon_name))
+                                item.setIcon(_qt_core.QtIcon.generate_by_name(icon_name))
                         else:
                             item.setIcon(
-                                _qt_core.GuiQtIcon.generate_by_text(name, background_color=(64, 64, 64))
+                                _qt_core.QtIcon.generate_by_text(name, background_color=(64, 64, 64))
                             )
                 else:
                     item.setIcon(
-                        _qt_core.GuiQtIcon.generate_by_text(name, background_color=(64, 64, 64))
+                        _qt_core.QtIcon.generate_by_text(name, background_color=(64, 64, 64))
                     )
                 #
                 if len(action_args) >= 4:
@@ -499,7 +497,19 @@ class QtMenu(QtWidgets.QMenu):
                     item.setShortcut(shortcut)
                     item.setShortcutContext(QtCore.Qt.WidgetShortcut)
         else:
-            qt_menu.addSeparator()
+            cls._add_separator_(qt_menu, None)
+
+    @classmethod
+    def _add_separator_(cls, menu, text):
+        if text is not None:
+            s = _qt_core.QtWidgetActionForSeparator(menu)
+            s.setText(text)
+            menu.addAction(s)
+        else:
+            s = menu.addSeparator()
+            s.setFont(_qt_core.QtFonts.MenuSeparator)
+            s.setText(text)
+        return s
 
     @classmethod
     def _set_icon_color_rgb_(cls, qt_widget, color):
@@ -553,9 +563,9 @@ class QtMenu(QtWidgets.QMenu):
                     qt_action_item = self.addAction(i_name)
                     if i_icon_name is not None:
                         if isinstance(i_icon_name, six.string_types):
-                            qt_action_item.setIcon(_qt_core.GuiQtIcon.generate_by_name(i_icon_name))
+                            qt_action_item.setIcon(_qt_core.QtIcon.generate_by_name(i_icon_name))
                     else:
-                        qt_action_item.setIcon(_qt_core.GuiQtIcon.generate_by_text(i_name, background_color=(64, 64, 64)))
+                        qt_action_item.setIcon(_qt_core.QtIcon.generate_by_text(i_name, background_color=(64, 64, 64)))
                     #
                     sub_menu = self.__class__(self.parent())
                     qt_action_item.setMenu(sub_menu)
@@ -582,53 +592,6 @@ class QtMenu(QtWidgets.QMenu):
     @classmethod
     def _set_action_create_by_menu_content_(cls, menu):
         menu.clear()
-
-    @classmethod
-    def _add_menu_separator_(cls, menu, content):
-        name = content.get('name')
-        separator = menu.addSeparator()
-        separator.setFont(_qt_core.QtFonts.MenuSeparator)
-        separator.setText(name)
-
-    @classmethod
-    def _add_menu_action_(cls, menu, content):
-        def set_disable_fnc_(widget_action_):
-            widget_action_.setFont(_qt_core.QtFonts.NameDisable)
-            widget_action_.setDisabled(True)
-
-        #
-        name = content.get('name')
-        icon_name = content.get('icon_name')
-        executable_fnc = content.get('executable_fnc')
-        execute_fnc = content.get('execute_fnc')
-        widget_action = _qt_core.QtWidgetAction(menu)
-        widget_action.setFont(_qt_core.QtFonts.NameNormal)
-        widget_action.setText(name)
-        menu.addAction(widget_action)
-        if icon_name:
-            widget_action.setIcon(
-                _qt_core.GuiQtIcon.generate_by_icon_name(icon_name)
-            )
-        else:
-            widget_action.setIcon(
-                _qt_core.GuiQtIcon.generate_by_text(name, background_color=(64, 64, 64))
-            )
-        #
-        if isinstance(executable_fnc, (bool, int)):
-            executable = executable_fnc
-            if executable is False:
-                set_disable_fnc_(widget_action)
-        elif isinstance(executable_fnc, (types.FunctionType, types.MethodType)):
-            executable = executable_fnc()
-            if executable is False:
-                set_disable_fnc_(widget_action)
-        #
-        if isinstance(execute_fnc, (types.FunctionType, types.MethodType)):
-            fnc = execute_fnc
-            widget_action.triggered.connect(fnc)
-        elif isinstance(execute_fnc, six.string_types):
-            cmd_str = execute_fnc
-            widget_action.triggered.connect(lambda *args, **kwargs: cls._set_cmd_run_(cmd_str))
 
     def _popup_start_(self):
         self.popup(

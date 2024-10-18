@@ -31,6 +31,7 @@ from . import popup as _popup
 # input as any constant, etc. integer, float, string/text/name, ...
 class QtInputAsConstant(
     _entry_frame.QtEntryFrame,
+    _qt_abstracts.AbsQtNameBaseDef,
     _qt_abstracts.AbsQtInputBaseDef,
 ):
     QT_ENTRY_CLS = _entry.QtEntryAsConstant
@@ -47,6 +48,7 @@ class QtInputAsConstant(
         )
         self.setFixedHeight(_gui_core.GuiSize.InputHeight)
 
+        self._init_name_base_def_(self)
         self._init_input_base_def_(self)
 
         self._build_input_entry_(self._value_type)
@@ -76,10 +78,6 @@ class QtInputAsConstant(
         super(QtInputAsConstant, self)._set_entry_enable_(boolean)
 
         self._entry_widget.setReadOnly(not boolean)
-
-        # self._frame_background_color = [
-        #     _qt_core.QtRgba.Basic, _qt_core.QtRgba.Dim
-        # ][boolean]
         self._update_background_color_by_locked_(boolean)
         self._refresh_widget_draw_()
 
@@ -1102,6 +1100,7 @@ class QtInputAsIcon(
 # any tuple, etc. float2, float3, ...
 class QtInputAsTuple(
     _entry_frame.QtEntryFrame,
+    _qt_abstracts.AbsQtNameBaseDef,
     _qt_abstracts.AbsQtInputAsComponentsBaseDef,
 ):
     def _pull_history_(self, *args, **kwargs):
@@ -1118,6 +1117,7 @@ class QtInputAsTuple(
         )
         self.setFixedHeight(_gui_core.GuiSize.InputHeight)
 
+        self._init_name_base_def_(self)
         self._init_input_as_components_base_def_(self)
         # create entry layout first
         self._entry_layout = _base.QtHBoxLayout(self)

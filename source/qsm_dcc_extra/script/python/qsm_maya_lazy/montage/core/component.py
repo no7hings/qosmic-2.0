@@ -41,7 +41,7 @@ class _GraphBase(object):
             node_opt.create_connections_by_data(connections)
         keyframes = data.get('keyframes')
         if keyframes:
-            qsm_mya_core.AnmCurveOpt(name).set_points(keyframes)
+            qsm_mya_core.AnmCurveNodeOpt(name).set_points(keyframes)
         return name
 
     @classmethod

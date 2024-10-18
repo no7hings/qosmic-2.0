@@ -1,5 +1,5 @@
 options:
-    gui_name: 'Motion'
+    gui_name: 'NodeMotion'
     gui_name_chs: '动作'
 
 entities:

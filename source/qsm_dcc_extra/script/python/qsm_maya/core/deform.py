@@ -100,9 +100,9 @@ class CurveWarp:
 
     @classmethod
     def get_args_from(cls, deformed_node):
-        args = _transform.Transform.to_args(deformed_node)
+        args = _transform.Transform.to_shape_args(deformed_node)
         if args:
-            transform, shape = _transform.Transform.to_args(deformed_node)
+            transform, shape = args
             shape_type = _node.Node.get_type(shape)
             if shape_type == 'mesh':
                 _0 = list(
@@ -121,13 +121,13 @@ class CurveWarp:
                     )
                 )
             else:
-                return
+                return None
             if _0:
                 deform_node = _0[0]
                 curve = cls.get_curve(deform_node)
                 if curve:
                     return deform_node, curve
-            return
+            return None
 
     @classmethod
     def get_curve(cls, deform_node, shape=False):
@@ -151,6 +151,34 @@ class CurveWarp:
 
         cmds.select([node, curve])
         mel.eval('CurveWarp;')
+
+    @classmethod
+    def create_for_lattice(cls, node, curve):
+        args = _transform.Transform.to_shape_args(node)
+        if args:
+            transform, shape = args
+            if _node.Node.get_type(shape) == 'lattice':
+                scale = list(cmds.getAttr(transform+'.scale')[0])
+                lgh = max(scale)
+
+                axis_index = scale.index(lgh)
+
+                cmds.setAttr(transform+'.scale', 1, 1, 1)
+
+                cmds.select([node, curve])
+                mel.eval('CurveWarp;')
+
+                args = cls.get_args_from(shape)
+                if args:
+                    deform_node, curve = args
+                    # 1: auto, 2: X, ...
+                    cmds.setAttr(deform_node+'.alignmentMode', axis_index+2)
+                    cmds.setAttr(deform_node+'.lengthScale', lgh)
+
+    @classmethod
+    @_undo.Undo.execute
+    def create_for_lattice_0(cls, node, curve):
+        cls.create_for_lattice(node, curve)
 
     @classmethod
     def replace_node(cls, deform_node_src, deform_node_tgt):

@@ -141,7 +141,7 @@ class PrxSceneView(
         scene_path_current = self.get_scene_current()
         if scene_path_current:
             pth_opt = bsc_core.BscStgParseOpt(self._scene_pattern)
-            if pth_opt.get_is_matched(scene_path_current) is True:
+            if pth_opt.check_is_matched(scene_path_current) is True:
                 variants = pth_opt.get_variants(scene_path_current)
                 name = variants['name']
                 self.save_to_name(name)
@@ -403,7 +403,7 @@ class PrxSceneViewA(
         scene_path_current = self.get_scene_current()
         if scene_path_current:
             pth_opt = bsc_core.BscStgParseOpt(self._scene_pattern)
-            if pth_opt.get_is_matched(scene_path_current) is True:
+            if pth_opt.check_is_matched(scene_path_current) is True:
                 variants = pth_opt.get_variants(scene_path_current)
                 name = variants['name']
                 self.save_to_name(name)

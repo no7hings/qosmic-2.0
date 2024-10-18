@@ -5,7 +5,7 @@ option:
         - '*-*'
     #
     gui:
-        group_name: 'python'
+        group_name: 'nodes'
         #
         name: 'Resource Assign Tag'
         icon_name: 'database/tag'

@@ -1,2 +1,2 @@
 # coding:utf-8
-from .resource import *
+from .asset import *

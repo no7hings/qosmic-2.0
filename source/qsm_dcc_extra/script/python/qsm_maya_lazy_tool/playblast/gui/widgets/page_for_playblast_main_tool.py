@@ -15,11 +15,11 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.animation.core as qsm_mya_anm_core
+import qsm_maya.steps.animation.core as qsm_mya_stp_anm_core
 
-import qsm_maya.preview.core as qsm_mya_prv_core
+import qsm_maya.steps.general.core as qsm_mya_prv_core
 
-import qsm_maya.preview.scripts as qsm_mya_prv_scripts
+import qsm_maya.steps.general.scripts as qsm_mya_stp_gnl_scripts
 
 
 class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
@@ -111,17 +111,12 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
                 self._resolution_size_port.set(
                     self.RESOLUTION_PRESET_MAPPER[preset]
                 )
-                qsm_mya_core.RenderSettings.set_resolution(
-                    *self.RESOLUTION_PRESET_MAPPER[preset]
-                )
 
     def do_gui_refresh_resolution_size_by_size(self):
         scheme = self._resolution_scheme_port.get()
         if scheme == 'resolution_size':
             w, h = self._resolution_size_port.get()
-            qsm_mya_core.RenderSettings.set_resolution(
-                w, h
-            )
+            self._resolution_size_port.set((w, h))
 
     def do_gui_refresh_resolution_size_by_render_setting(self):
         scheme = self._resolution_scheme_port.get()
@@ -151,7 +146,6 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
             return self._resolution_size_port.get()
 
     def do_gui_refresh_by_dcc_frame_changing(self):
-        print 'CCC'
         scheme = self._frame_scheme_port.get()
         if scheme == 'time_slider':
             self._frame_range_port.set(
@@ -161,6 +155,9 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
     def do_gui_refresh_fps(self):
         fps = qsm_mya_core.Frame.get_fps_value()
         self._fps_port.set(fps)
+
+    def do_gui_refresh_resolution(self):
+        self._resolution_size_port.set(qsm_mya_core.RenderSettings.get_resolution())
 
     # output
     def _do_gui_refresh_output_by_save_scheme(self):
@@ -186,11 +183,11 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         save_scheme = self._output_save_scheme_port.get()
         update_scheme = self._output_update_scheme_port.get()
         if save_scheme == 'auto':
-            return qsm_mya_prv_scripts.PlayblastOpt.generate_movie_file_path(
+            return qsm_mya_stp_gnl_scripts.PlayblastOpt.generate_movie_file_path(
                 update_scheme=update_scheme
             )
         elif save_scheme == 'specific_directory':
-            _ = qsm_mya_prv_scripts.PlayblastOpt.generate_movie_file_path(
+            _ = qsm_mya_stp_gnl_scripts.PlayblastOpt.generate_movie_file_path(
                 directory_path=self._output_directory_port.get(), update_scheme=update_scheme
             )
             if _ is None:
@@ -255,7 +252,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
             'play_enable'
         )
 
-        q = qsm_mya_anm_core.AdvRigsQuery()
+        q = qsm_mya_stp_anm_core.AdvRigAssetsQuery()
 
         q.do_update()
 
@@ -264,7 +261,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
 
         # noinspection PyBroadException
         try:
-            qsm_mya_prv_scripts.PlayblastOpt.execute(
+            qsm_mya_stp_gnl_scripts.PlayblastOpt.execute(
                 movie_path,
                 camera=camera_path,
                 resolution=resolution_size,
@@ -275,7 +272,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
                 camera_display_options=self.gui_get_camera_display_options()
             )
         except Exception:
-            pass
+            bsc_core.BscException.set_print()
 
         finally:
             for i in q.get_all():
@@ -284,9 +281,9 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
     def do_dcc_playblast_backstage(self):
         import lxbasic.web as bsc_web
 
-        import qsm_task.process as qsm_tsk_process
+        import qsm_prc_task.process as qsm_prc_tsk_process
 
-        if qsm_tsk_process.TaskProcessClient.get_server_status():
+        if qsm_prc_tsk_process.TaskProcessClient.get_server_status():
             movie_path = self.gui_get_file_path()
             if movie_path is None:
                 raise RuntimeError()
@@ -315,14 +312,14 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
                 'display_setting.hud_enable'
             )
 
-            task_name, file_path, movie_file_path, cmd_script = qsm_mya_prv_scripts.PlayblastProcess.generate_task_args(
+            task_name, file_path, movie_file_path, cmd_script = qsm_mya_stp_gnl_scripts.PlayblastProcess.generate_task_args(
                 camera_path=camera_path,
                 frame=frame_range, frame_step=frame_step, fps=fps,
                 resolution=resolution_size,
                 texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable
             )
 
-            qsm_tsk_process.TaskProcessClient.new_entity(
+            qsm_prc_tsk_process.TaskProcessClient.new_entity(
                 group=None,
                 type='playblast',
                 name=task_name,
@@ -453,5 +450,8 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
 
         self._prx_options_node.set('camera.load_active_camera', self.do_gui_load_active_camera)
 
+        self.do_gui_refresh_all()
+
     def do_gui_refresh_all(self, force=False):
         self.do_gui_refresh_fps()
+        self.do_gui_refresh_resolution()

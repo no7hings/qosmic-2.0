@@ -439,7 +439,7 @@ class _GuiTaskOpt(
             )
 
             movie_file_opt = bsc_storage.StgFileOpt(movie_file_path)
-            name_dict['update'] = bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
+            name_dict['update'] = bsc_core.BscTimePrettify.to_prettify_by_timestamp(
                 movie_file_opt.get_mtime(),
                 language=1
             )
@@ -1024,7 +1024,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
         self._rsv_project_names = [i.get_name() for i in self._rsv_projects]
         #
         _port = self._options_prx_node.add_port(
-            gui_prx_widgets.PrxPortAsConstantChoose('filter')
+            gui_prx_widgets.PrxPortForConstantChoose('filter')
         )
         self._rsv_filters_dict = self._hook_configure.get('resolver.filters')
         if self._rsv_filters_dict is not None:
@@ -1251,7 +1251,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
                     j_hidden = j_raw.get('hidden') or False
                     j_system_keys = j_raw.get('systems') or []
                     if j_system_keys:
-                        if bsc_core.BscSystem.get_is_matched(j_system_keys):
+                        if bsc_core.BscSystem.check_is_matched(j_system_keys):
                             list_.append((j_keyword, j_hidden))
                     else:
                         list_.append((j_keyword, j_hidden))
@@ -1268,7 +1268,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
     def _get_resolver_application_filter_(self):
         _ = self._hook_configure.get('resolver.application_filter') or {}
         for k, v in _.items():
-            if bsc_core.BscSystem.get_is_matched(['*-{}'.format(k)]):
+            if bsc_core.BscSystem.check_is_matched(['*-{}'.format(k)]):
                 return v
         return self._hook_configure.get('resolver.filter')
 

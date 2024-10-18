@@ -1,10 +1,10 @@
 # coding:utf-8
 def main(session):
-    import qsm_maya.animation.scripts as qsm_anm_scripts
+    import qsm_maya.steps.animation.scripts as s
 
     option_opt = session.get_option_opt()
 
-    qsm_anm_scripts.ControlMoveOpt.remove_auto(
+    s.ControlMoveOpt.remove_auto(
         **option_opt.to_dict()
     )
 

@@ -167,7 +167,8 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
                 node_context
             )
             file_path = node_context.get('file')
-            if bsc_storage.StgPath.get_is_file(file_path):
-                self.do_gui_update_file(file_path)
+            if file_path is not None:
+                if bsc_storage.StgPath.get_is_file(file_path):
+                    self.do_gui_update_file(file_path)
         else:
             self._prx_options_node.set_reset()

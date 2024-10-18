@@ -7,7 +7,7 @@ import lxgui.core as gui_core
 
 import lxgui.qt.core as gui_qt_core
 
-import qsm_task.process as qsm_tsk_process
+import qsm_prc_task.process as qsm_prc_tsk_process
 
 from .. import qt as _gui_qt
 
@@ -88,13 +88,13 @@ class PrxPanelForTaskManager(gui_prx_widgets.PrxSessionWindow):
     def start_web_socket_server(self):
         self._notice_web_server = gui_qt_core.QtWebServerForWindowNotice(self._qt_widget)
         self._notice_web_server._start_(
-            qsm_tsk_process.NoticeWebServerBase.NAME,
-            qsm_tsk_process.NoticeWebServerBase.HOST,
-            qsm_tsk_process.NoticeWebServerBase.PORT
+            qsm_prc_tsk_process.NoticeWebServerBase.NAME,
+            qsm_prc_tsk_process.NoticeWebServerBase.HOST,
+            qsm_prc_tsk_process.NoticeWebServerBase.PORT
         )
         self._task_web_server = _gui_qt.QtWebServerForTask(self._qt_widget)
         self._task_web_server._start_(
-            qsm_tsk_process.TaskWebServerBase.HOST, qsm_tsk_process.TaskWebServerBase.PORT
+            qsm_prc_tsk_process.TaskWebServerBase.HOST, qsm_prc_tsk_process.TaskWebServerBase.PORT
         )
 
     def start_task_server(self):
@@ -111,10 +111,10 @@ class PrxPanelForTaskManager(gui_prx_widgets.PrxSessionWindow):
                 'quit server completed'
             )
 
-        import qsm_task.process.server as qsm_prc_server
+        import qsm_prc_task.process.server as qsm_prc_server
 
         server_process = qsm_prc_server.start_use_process(
-            qsm_tsk_process.TaskProcessServerBase.HOST, qsm_tsk_process.TaskProcessServerBase.PORT
+            qsm_prc_tsk_process.TaskProcessServerBase.HOST, qsm_prc_tsk_process.TaskProcessServerBase.PORT
         )
 
         app = gui_qt_core.QtUtil.get_exists_app()

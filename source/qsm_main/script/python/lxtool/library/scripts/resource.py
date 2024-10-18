@@ -416,7 +416,7 @@ class ScpResourcesAddByQuixel(object):
                 '{}/{}'.format(directory_path_src, cls.TEXTURE_LOD_PATTERN),
                 variants=dict(texture_key='*', texture_size_tag='[0-9]')
             )
-            if i_lod_pattern_opt_src.get_is_matched(i_file_path_src) is True:
+            if i_lod_pattern_opt_src.check_is_matched(i_file_path_src) is True:
                 cls.stg_and_dtb_add_any_texture_fnc(
                     dtb_opt,
                     pattern_kwargs, i_lod_pattern_opt_src,
@@ -442,7 +442,7 @@ class ScpResourcesAddByQuixel(object):
                     '{}/{}'.format(directory_path_src, cls.TEXTURE_PATTERN),
                     variants=dict(texture_key='*', texture_size_tag='[0-9]')
                 )
-                if pattern_opt_src.get_is_matched(i_file_path_src) is True:
+                if pattern_opt_src.check_is_matched(i_file_path_src) is True:
                     cls.stg_and_dtb_add_any_texture_fnc(
                         dtb_opt,
                         pattern_kwargs, pattern_opt_src,
@@ -545,7 +545,7 @@ class ScpResourcesAddByQuixel(object):
                         variants=dict(texture_key='*', texture_size_tag='[0-9]')
                     )
                     for j_file_path_src in i_file_paths_src:
-                        if i_pattern_opt_extra_src.get_is_matched(j_file_path_src) is True:
+                        if i_pattern_opt_extra_src.check_is_matched(j_file_path_src) is True:
                             if i_index == 0:
                                 cls.stg_and_dtb_add_any_texture_fnc(
                                     dtb_opt,
@@ -659,7 +659,7 @@ class ScpResourcesAddByQuixel(object):
             i_lod_pattern_opt_src = bsc_core.BscStgParseOpt(
                 '{}/{}'.format(directory_path_src, cls.GEOMETRY_LOD_PATTERN)
             )
-            if i_lod_pattern_opt_src.get_is_matched(i_file_path_src) is True:
+            if i_lod_pattern_opt_src.check_is_matched(i_file_path_src) is True:
                 i_file_opt = bsc_storage.StgFileOpt(i_file_path_src)
                 i_file_format = i_file_opt.get_format()
                 i_keyword = 'geometry-{}-lod-file'.format(i_file_format)
@@ -767,7 +767,7 @@ class ScpResourcesAddByQuixel(object):
                     )
                     for j_file_path_src in i_file_paths_src:
                         j_file_opt = bsc_storage.StgFileOpt(j_file_path_src)
-                        if i_var_pattern_opt_extra_src.get_is_matched(j_file_path_src):
+                        if i_var_pattern_opt_extra_src.check_is_matched(j_file_path_src):
                             j_file_format = j_file_opt.get_format()
                             j_keyword = 'geometry-{}-var-lod-file'.format(j_file_format)
                             cls.stg_and_dtb_add_any_geometry_var_fnc(

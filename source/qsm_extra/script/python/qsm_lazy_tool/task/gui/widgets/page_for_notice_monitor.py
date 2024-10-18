@@ -15,9 +15,9 @@ import lxgui.proxy.abstracts as prx_abstracts
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_task.core as qsm_task_core
+import qsm_prc_task.core as qsm_task_core
 
-import qsm_task.process as qsm_tsk_process
+import qsm_prc_task.process as qsm_prc_tsk_process
 
 
 class _GuiBaseOpt(object):

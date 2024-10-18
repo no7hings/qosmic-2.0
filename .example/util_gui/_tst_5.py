@@ -1,10 +1,5 @@
 # coding:utf-8
-
-from lxgui.proxy.widgets import utility, node, view
-
 import lxgui.proxy.widgets as gui_prx_widgets
-
-from lxgui.qt.widgets import chart, view
 
 
 class TestWindow(gui_prx_widgets.PrxBaseWindow):

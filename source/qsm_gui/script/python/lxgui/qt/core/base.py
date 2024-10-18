@@ -338,7 +338,7 @@ class QtPixmapCache(object):
         return pixmap
 
 
-class GuiQtIcon(object):
+class QtIcon(object):
     @classmethod
     def generate_by_icon_name(cls, icon_name):
         icon = QtGui.QIcon()

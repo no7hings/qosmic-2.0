@@ -91,7 +91,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 290.5
+    "width": 318.5
   },
   "right": {
     "id": "079848c8f8affc0b",
@@ -182,7 +182,7 @@
             }
           },
           {
-            "id": "62460414d9efaec8",
+            "id": "76fc37dc7013ca0f",
             "type": "leaf",
             "state": {
               "type": "mermaid-toolbar-view",
@@ -205,8 +205,7 @@
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
-      "mermaid-tools:Open Mermaid Toolbar": false,
-      "card-board:CardBoard": false
+      "mermaid-tools:Open Mermaid Toolbar": false
     }
   },
   "active": "5099c14e477ae29e",

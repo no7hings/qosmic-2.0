@@ -5,9 +5,9 @@ from .mirror_and_flip import *
 
 from .control import *
 
-from .move import *
+from .control_set import *
 
-from .adv_character import *
+from .move import *
 
 from .rotation_to_translate import *
 

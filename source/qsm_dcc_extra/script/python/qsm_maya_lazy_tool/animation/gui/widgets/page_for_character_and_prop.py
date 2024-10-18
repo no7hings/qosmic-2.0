@@ -16,8 +16,7 @@ import qsm_maya_gui.core as qsm_mya_gui_core
 from . import unit_for_character_and_prop as _unit_for_rig
 
 
-class PrxPageForCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
+class PrxPageForCharacterAndProp(gui_prx_widgets.PrxBasePage):
 
     SCRIPT_JOB_NAME = 'lazy_tool_for_character_and_prop'
 
@@ -50,9 +49,7 @@ class PrxPageForCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
             i_tool.connect_check_toggled_to(i_fnc)
 
     def __init__(self, window, session, *args, **kwargs):
-        super(PrxPageForCharacterAndProp, self).__init__(*args, **kwargs)
-        self._window = window
-        self._session = session
+        super(PrxPageForCharacterAndProp, self).__init__(window, session, *args, **kwargs)
 
         self.gui_page_setup_fnc()
 
@@ -133,12 +130,9 @@ class PrxPageForCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
             gui_qt_core.QtWidgets.QSizePolicy.Expanding,
             gui_qt_core.QtWidgets.QSizePolicy.Expanding
         )
-        qt_v_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
-        qt_v_lot.setContentsMargins(*[0]*4)
-        qt_v_lot.setSpacing(2)
 
         self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
-        qt_v_lot.addWidget(self._top_prx_tool_bar.widget)
+        self._qt_layout.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)
         # main tool box
@@ -153,14 +147,14 @@ class PrxPageForCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
         # reference
         self._asset_prx_input = qsm_gui_prx_widgets.PrxAssetInputForCharacterAndProp()
         self._asset_prx_tool_box.add_widget(self._asset_prx_input)
-        self._asset_prx_input.widget.setMaximumWidth(488)
+        # self._asset_prx_input.widget.setMaximumWidth(488)
 
         self._gui_rig_reference_prx_toolbar_unit = _unit_for_rig.PrxToolbarForCharacterAndPropReference(
             self._window, self, self._session, self._asset_prx_input
         )
 
         self._prx_h_splitter = gui_prx_widgets.PrxHSplitter()
-        qt_v_lot.addWidget(self._prx_h_splitter.widget)
+        self._qt_layout.addWidget(self._prx_h_splitter.widget)
         # resource tag
         self._resource_tag_tree_view = gui_prx_widgets.PrxTreeView()
         self._prx_h_splitter.add_widget(self._resource_tag_tree_view)
@@ -186,20 +180,20 @@ class PrxPageForCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
             self.do_gui_refresh_by_resource_tag_checking
         )
         # selection scheme
-        self._selection_scheme_prx_input = gui_prx_widgets.PrxInputAsCapsule()
-        qt_v_lot.addWidget(self._selection_scheme_prx_input.widget)
+        self._selection_scheme_prx_input = gui_prx_widgets.PrxInputForCapsule()
+        self._qt_layout.addWidget(self._selection_scheme_prx_input.widget)
         self._do_gui_build_selection_scheme()
         # tool set
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
-        qt_v_lot.addWidget(self._page_prx_tab_tool_box.widget)
+        self._qt_layout.addWidget(self._page_prx_tab_tool_box.widget)
         # utility
         self._gui_skin_proxy_prx_toolset_unit = _unit_for_rig.PrxToolsetForSkinProxyLoad(
             self._window, self, self._session
         )
         # extend
-        self._gui_motion_opt = _unit_for_rig.PrxToolsetForMotion(
-            self._window, self, self._session
-        )
+        # self._gui_motion_opt = _unit_for_rig.PrxToolsetForMotion(
+        #     self._window, self, self._session
+        # )
 
         self._do_dcc_register_all_script_jobs()
         self._window.register_window_close_method(self._do_dcc_destroy_all_script_jobs)
@@ -208,6 +202,9 @@ class PrxPageForCharacterAndProp(gui_prx_abstracts.AbsPrxWidget):
         self._page_prx_tab_tool_box.connect_current_changed_to(self.do_gui_refresh_toolset_units)
         self._page_prx_tab_tool_box.set_history_key('resource-manager.rig_page_key_current')
         self._page_prx_tab_tool_box.load_history()
+
+    def gui_page_setup_post_fnc(self):
+        self._top_prx_tool_bar.do_gui_refresh()
 
     def do_gui_refresh_all(self, force=False):
         self._top_prx_tool_bar.do_gui_refresh()

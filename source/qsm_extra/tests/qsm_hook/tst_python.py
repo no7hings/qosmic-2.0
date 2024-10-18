@@ -3,13 +3,13 @@ import lxbasic.core as bsc_core
 
 import lxbasic.web as bsc_web
 
-import qsm_task.process as qsm_tsk_process
+import qsm_prc_task.process as qsm_prc_tsk_process
 
 time_tag = bsc_core.BscSystem.get_time_tag()
 
-if qsm_tsk_process.TaskProcessClient.get_server_status():
-    # qsm_tsk_process.TaskProcessClient.set_pool_maximum(5)
-    # print qsm_tsk_process.TaskProcessClient.get_worker_status()
+if qsm_prc_tsk_process.TaskProcessClient.get_server_status():
+    # qsm_prc_tsk_process.TaskProcessClient.set_pool_maximum(5)
+    # print qsm_prc_tsk_process.TaskProcessClient.get_worker_status()
     for i_index, i_cmd_script in enumerate(
         [
             # r'rez-env python27 -- python -c "import time; time.sleep(30); print \"A\"; raise RuntimeError()"',
@@ -25,7 +25,7 @@ if qsm_tsk_process.TaskProcessClient.get_server_status():
             # r'rez-env python27 -- python -c "import time; time.sleep(40); print \"K\""',
         ]
     ):
-        qsm_tsk_process.TaskProcessClient.new_entity(
+        qsm_prc_tsk_process.TaskProcessClient.new_entity(
             cmd_script=i_cmd_script,
             group=None,
             type='test',

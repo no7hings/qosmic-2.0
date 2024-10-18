@@ -131,7 +131,7 @@ class DagNode(_node.Node):
 
     @classmethod
     def find_mesh_roots(cls, paths):
-        return list(set([cls.PATHSEP.join(i.split(cls.PATHSEP)[:2]) for i in paths if _node.Node.is_mesh(i)]))
+        return list(set([cls.PATHSEP.join(i.split(cls.PATHSEP)[:2]) for i in paths if _node.Node.is_mesh_type(i)]))
 
     @classmethod
     def find_siblings(cls, path, type_includes):

@@ -295,7 +295,7 @@ class AbsGuiPrxTreeViewAsStorageOpt(AbsGuiPrxTreeViewOpt):
             parent_gui = self.gui_get_one(path_opt.get_parent_path())
 
             time_txt = bsc_core.auto_string(
-                bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
+                bsc_core.BscTimePrettify.to_prettify_by_timestamp(
                     stg_opt.get_mtime(), language=1
                 )
             )

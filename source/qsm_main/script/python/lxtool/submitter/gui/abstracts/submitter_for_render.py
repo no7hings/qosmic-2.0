@@ -504,7 +504,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
             )
             version = rsv_properties.get('version')
             show_info_dict['version'] = version
-            show_info_dict['update'] = bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
+            show_info_dict['update'] = bsc_core.BscTimePrettify.to_prettify_by_timestamp(
                 bsc_storage.StgFileOpt(
                     movie_file_path
                 ).get_mtime(),
@@ -516,7 +516,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
             if render_info_file_path:
                 render_info = bsc_storage.StgFileOpt(render_info_file_path).set_read()
                 show_info_dict['user'] = render_info['user']
-                # show_info_dict['submit_time'] = bsc_core.TimePrettifyMtd.to_prettify_by_time_tag(
+                # show_info_dict['submit_time'] = bsc_core.BscTimePrettify.to_prettify_by_time_tag(
                 #     render_info['time_tag'],
                 #     language=1
                 # )
@@ -1104,7 +1104,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
             )
             version = rsv_properties.get('version')
             variants['version'] = version
-            variants['update'] = bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
+            variants['update'] = bsc_core.BscTimePrettify.to_prettify_by_timestamp(
                 bsc_storage.StgFileOpt(
                     movie_file_path
                 ).get_mtime(),

@@ -72,13 +72,13 @@ entity-type-actions:
                 }
                 # motion extend
                 -   'lazy-resource-actions/node-generate-motion-auto': {
-                    gui_parent: '/Generate', gui_name: 'Motion(for Splicing)', gui_parent_chs: '/生成', gui_name_chs: '动作（用于拼接）'
+                    gui_parent: '/Generate', gui_name: 'NodeMotion(for Splicing)', gui_parent_chs: '/生成', gui_name_chs: '动作（用于拼接）'
                 }
                 -   'lazy-resource-actions/node-load-motion-to-character-auto': {
-                    gui_parent: '/Load', gui_name: 'Motion to Character', gui_parent_chs: '/加载', gui_name_chs: '动作到角色'
+                    gui_parent: '/Load', gui_name: 'NodeMotion to Character', gui_parent_chs: '/加载', gui_name_chs: '动作到角色'
                 }
                 -   'lazy-resource-actions/node-load-motion-to-montage-auto': {
-                    gui_parent: '/Load', gui_name: 'Motion to Montage', gui_parent_chs: '/加载', gui_name_chs: '动作到拼接'
+                    gui_parent: '/Load', gui_name: 'NodeMotion to Montage', gui_parent_chs: '/加载', gui_name_chs: '动作到拼接'
                 }
 
     asset:

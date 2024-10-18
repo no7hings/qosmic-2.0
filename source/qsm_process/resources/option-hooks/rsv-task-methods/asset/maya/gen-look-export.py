@@ -40,7 +40,7 @@ def main(session):
                         ).do_export_asset_render_texture()
                     # run when is maya scheme, ass is same file
                     choice_scheme = hook_option_opt.get('choice_scheme')
-                    if bsc_core.BscTextOpt(choice_scheme).get_is_matched('*-maya-*'):
+                    if bsc_core.BscTextOpt(choice_scheme).check_is_matched('*-maya-*'):
                         if hook_option_opt.get_as_boolean('with_look_ass') is True:
                             mya_rsv_objects.RsvDccLookHookOpt(
                                 maya_rsv_scene_properties,

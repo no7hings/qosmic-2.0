@@ -400,11 +400,11 @@ class AbsStgFile(
     def get_time(self):
         if self.get_is_exists() is True:
             timestamp = self.get_mtime()
-            return bsc_core.TimestampOpt(timestamp).get()
+            return bsc_core.BscTimestampOpt(timestamp).get()
 
     def get_time_tag(self):
         timestamp = self.get_mtime()
-        return bsc_core.TimestampOpt(timestamp).get_as_tag()
+        return bsc_core.BscTimestampOpt(timestamp).get_as_tag()
 
     def get_timestamp_is_same_to(self, file_tgt):
         for i_src in self.get_exists_units():

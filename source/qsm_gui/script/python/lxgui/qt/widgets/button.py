@@ -473,8 +473,8 @@ class QtPressButton(
         offset = self._get_action_offset_()
         #
         if self._action_is_enable is True:
-            bdr_color = [self._frame_border_color, self._hovered_frame_border_color][self._is_hovered]
-            bkg_color = [self._frame_background_color, self._hovered_frame_background_color][self._is_hovered]
+            bdr_color = [_qt_core.QtRgba.BdrButton, _qt_core.QtRgba.BdrButtonHover][self._is_hovered]
+            bkg_color = [_qt_core.QtRgba.BkgButton, _qt_core.QtRgba.BkgButtonHover][self._is_hovered]
         else:
             bdr_color = _qt_core.QtRgba.BdrButtonDisable
             bkg_color = _qt_core.QtRgba.BkgButtonDisable
@@ -488,18 +488,19 @@ class QtPressButton(
         )
         # status
         if self._get_status_is_enable_() is True and self._get_sub_process_is_enable_() is False:
-            bkg_color = [self._status_color, self._hover_status_color][self._is_hovered]
+            bkg_color_ = [self._status_background_color, self._hover_status_background_color][self._is_hovered]
+            bdr_color_ = [self._status_border_color, self._hover_status_border_color][self._is_hovered]
             painter._draw_frame_by_rect_(
                 rect=self._frame_draw_rect,
-                border_color=bdr_color,
-                background_color=bkg_color,
+                border_color=bdr_color_,
+                background_color=bkg_color_,
                 border_radius=4,
                 offset=offset
             )
         # sub process
         if self._get_sub_process_is_enable_() is True:
             status_rgba = [
-                self._status_color, self._hover_status_color
+                self._status_background_color, self._hover_status_background_color
             ][self._is_hovered]
             sub_status_rgba_array = [
                 self._sub_process_status_colors, self._hover_sub_process_status_colors

@@ -3,7 +3,7 @@
 import maya.cmds as cmds
 
 
-class NodeAttribute(object):
+class NodeAttribute:
     @classmethod
     def to_atr_path(cls, path, atr_name=None):
         if atr_name is None:
@@ -16,6 +16,10 @@ class NodeAttribute(object):
         if not _:
             raise RuntimeError()
         return _[0]
+
+    @classmethod
+    def get_type(cls, path, atr_name):
+        return cmds.getAttr(cls.to_atr_path(path, atr_name), type=1)
 
     @classmethod
     def get_value(cls, path, atr_name):
@@ -32,6 +36,10 @@ class NodeAttribute(object):
     @classmethod
     def get_channel_box_enable(cls, path, atr_name):
         return cmds.getAttr(cls.to_atr_path(path, atr_name), channelBox=True, keyable=True)
+
+    @classmethod
+    def get_is_locked(cls, path, atr_name):
+        return cmds.getAttr(cls.to_atr_path(path, atr_name), lock=1)
 
     @classmethod
     def get_as_string(cls, path, atr_name):
@@ -70,6 +78,10 @@ class NodeAttribute(object):
     def unlock(cls, path, atr_name):
         cmds.setAttr(cls.to_atr_path(path, atr_name), lock=0)
 
+    @classmethod
+    def is_settable(cls, path, atr_name):
+        return cmds.getAttr(cls.to_atr_path(path, atr_name), settable=1)
+
     # source
     @classmethod
     def connect_from(cls, path, atr_name, source):
@@ -98,17 +110,11 @@ class NodeAttribute(object):
         return False
 
     @classmethod
-    def get_source(cls, path, atr_name):
+    def get_source(cls, path, atr_name, skip_conversion_nodes=1):
         _ = cmds.listConnections(
-            cls.to_atr_path(path, atr_name), destination=0, source=1, plugs=1
-        )
-        if _:
-            return _[0]
-
-    @classmethod
-    def get_source_(cls, attribute):
-        _ = cmds.listConnections(
-            attribute, destination=0, source=1, plugs=1
+            cls.to_atr_path(path, atr_name),
+            destination=0, source=1, plugs=1,
+            skipConversionNodes=skip_conversion_nodes
         )
         if _:
             return _[0]
@@ -116,7 +122,8 @@ class NodeAttribute(object):
     @classmethod
     def get_source_node(cls, path, atr_name, node_type=None, skip_conversion_nodes=0, shapes=1):
         kwargs = dict(
-            destination=0, source=1, skipConversionNodes=skip_conversion_nodes, shapes=shapes
+            destination=0, source=1, shapes=shapes,
+            skipConversionNodes=skip_conversion_nodes
         )
         if node_type is not None:
             kwargs['type'] = node_type
@@ -312,7 +319,7 @@ class NodeAttribute(object):
                 cls.set_value(path, atr_name, default)
 
 
-class NodeAttributes(object):
+class NodeAttributes:
 
     @classmethod
     def get_all_keyable_names(cls, node):

@@ -50,31 +50,16 @@ class AbsQtHead(
         self._expand_sub_icon_file_path_1 = None
 
         self._is_hovered = False
-        #
+
         self._refresh_expand_()
-        #
+
         r, g, b = 207, 207, 207
         h, s, v = bsc_core.BscColor.rgb_to_hsv(r, g, b)
         color = bsc_core.BscColor.hsv2rgb(h, s*.75, v*.75)
         hover_color = r, g, b
-        #
+
         self._name_draw_color = color
         self._hover_name_color = hover_color
-        #
-        r, g, b = 135, 135, 135
-        h, s, v = bsc_core.BscColor.rgb_to_hsv(r, g, b)
-        color = bsc_core.BscColor.hsv2rgb(h, s*.75, v*.75)
-        hover_color = r, g, b
-        #
-        self._frame_border_color = color
-        self._hovered_frame_border_color = hover_color
-        #
-        r, g, b = 119, 119, 119
-        h, s, v = bsc_core.BscColor.rgb_to_hsv(r, g, b)
-        color = bsc_core.BscColor.hsv2rgb(h, s*.75, v*.75)
-        hover_color = r, g, b
-        self._frame_background_color = color
-        self._hovered_frame_background_color = hover_color
         # font
         self.setFont(self._name_draw_font)
 
@@ -141,18 +126,15 @@ class AbsQtHead(
 
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
-        #
-        self._refresh_widget_draw_geometry_()
-        #
-        offset = self._get_action_offset_()
 
-        bdr_color = _qt_core.QtRgba.BdrHead
-        bkg_color = _qt_core.QtRgba.BkgHead
+        self._refresh_widget_draw_geometry_()
+
+        offset = self._get_action_offset_()
 
         painter._draw_frame_by_rect_(
             self._frame_draw_rect,
-            border_color=bdr_color,
-            background_color=bkg_color,
+            border_color=_qt_core.QtRgba.BdrHead,
+            background_color=_qt_core.QtRgba.BkgHead,
             # border_radius=1,
             offset=offset
         )
@@ -405,7 +387,7 @@ class QtHeadStyleC(AbsQtHead):
             )
 
 
-class AbsQtHead1(
+class AbsQtHeadFrame(
     QtWidgets.QWidget,
     _qt_abstracts.AbsQtFrameBaseDef,
     _qt_abstracts.AbsQtNameBaseDef,
@@ -418,51 +400,37 @@ class AbsQtHead1(
 ):
     toggled = qt_signal(bool)
 
+    def _refresh_widget_draw_(self):
+        self.update()
+
     def __init__(self, *args, **kwargs):
-        super(AbsQtHead1, self).__init__(*args, **kwargs)
+        super(AbsQtHeadFrame, self).__init__(*args, **kwargs)
         self.installEventFilter(self)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        #
+
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
         )
-        #
+
         self._init_frame_base_def_(self)
         self._init_name_base_def_(self)
         self._init_icon_base_def_(self)
-        #
+
         self._init_action_for_hover_def_(self)
         self._init_action_base_def_(self)
         self._init_action_for_press_def_(self)
         self._init_action_for_expand_def_(self)
-        #
+
         self._is_expand_enable = True
         self._is_expanded = False
         self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('qt-style/arrow-right')
         self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('qt-style/arrow-down')
 
         self._expand_icon_file_path_2 = _gui_core.GuiIcon.get('qt-style/arrow-up')
-        #
-        r, g, b = 135, 135, 135
-        h, s, v = bsc_core.BscColor.rgb_to_hsv(r, g, b)
-        color = bsc_core.BscColor.hsv2rgb(h, s*.75, v*.75)
-        hover_color = r, g, b
-        self._frame_border_color = color
-        self._hovered_frame_border_color = hover_color
-        #
-        r, g, b = 119, 119, 119
-        h, s, v = bsc_core.BscColor.rgb_to_hsv(r, g, b)
-        color = bsc_core.BscColor.hsv2rgb(h, s*.75, v*.75)
-        hover_color = r, g, b
-        self._frame_background_color = color
-        self._hovered_frame_background_color = hover_color
-        #
+
         self._refresh_expand_()
         # font
         self.setFont(_qt_core.QtFonts.NameNormal)
-
-    def _refresh_widget_draw_(self):
-        self.update()
 
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
@@ -471,16 +439,15 @@ class AbsQtHead1(
 
         offset = self._get_action_offset_()
 
-        bdr_color = _qt_core.QtRgba.BdrHead
-        bkg_color = _qt_core.QtRgba.BkgHead
-
+        # frame
         painter._draw_frame_by_rect_(
             rect=self._frame_draw_rect,
-            border_color=bdr_color,
-            background_color=bkg_color,
+            border_color=_qt_core.QtRgba.BdrHead,
+            background_color=_qt_core.QtRgba.BkgHead,
             # border_radius=self._frame_border_radius,
             offset=offset
         )
+
         # icon
         painter._draw_icon_file_by_rect_(
             rect=self._icon_draw_rect,
@@ -549,9 +516,9 @@ class AbsQtHead1(
             )
 
 
-class QtHHead(AbsQtHead1):
+class QtHHeadFrame(AbsQtHeadFrame):
     def __init__(self, *args, **kwargs):
-        super(QtHHead, self).__init__(*args, **kwargs)
+        super(QtHHeadFrame, self).__init__(*args, **kwargs)
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
         )
@@ -561,9 +528,9 @@ class QtHHead(AbsQtHead1):
         self._expand_icon_file_path_2 = _gui_core.GuiIcon.get('qt-style/arrow-up')
 
 
-class QtVExpandHead1(AbsQtHead1):
+class QtVHeadFrame(AbsQtHeadFrame):
     def __init__(self, *args, **kwargs):
-        super(QtVExpandHead1, self).__init__(*args, **kwargs)
+        super(QtVHeadFrame, self).__init__(*args, **kwargs)
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding
         )

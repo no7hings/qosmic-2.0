@@ -9,9 +9,9 @@ from ...qt.widgets import item as gui_qt_wgt_item
 from .. import abstracts as gui_prx_abstracts
 
 
-class AttrConfig(object):
-    PRX_PORT_HEIGHT = 24
-    PRX_PORT_HEIGHT_2 = 82
+class OptionNodeBase(object):
+    PortHeight = 24
+    PortHeightA = 82
 
 
 # port
@@ -22,10 +22,10 @@ class PrxPortInfo(gui_prx_abstracts.AbsPrxWidget):
     def __init__(self, *args, **kwargs):
         super(PrxPortInfo, self).__init__(*args, **kwargs)
         # self.widget.setAlignment(gui_qt_core.QtCore.Qt.AlignRight | gui_qt_core.QtCore.Qt.AlignVCenter)
-        self.widget.setMaximumHeight(AttrConfig.PRX_PORT_HEIGHT)
-        self.widget.setMinimumHeight(AttrConfig.PRX_PORT_HEIGHT)
-        self.widget.setMaximumWidth(AttrConfig.PRX_PORT_HEIGHT)
-        self.widget.setMinimumWidth(AttrConfig.PRX_PORT_HEIGHT)
+        self.widget.setMaximumHeight(OptionNodeBase.PortHeight)
+        self.widget.setMinimumHeight(OptionNodeBase.PortHeight)
+        self.widget.setMaximumWidth(OptionNodeBase.PortHeight)
+        self.widget.setMinimumWidth(OptionNodeBase.PortHeight)
 
     def set(self, boolean):
         self.widget._set_checked_(boolean)
@@ -38,10 +38,10 @@ class PrxPortStatus(gui_prx_abstracts.AbsPrxWidget):
     def __init__(self, *args, **kwargs):
         super(PrxPortStatus, self).__init__(*args, **kwargs)
         # self.widget.setAlignment(gui_qt_core.QtCore.Qt.AlignRight | gui_qt_core.QtCore.Qt.AlignVCenter)
-        self.widget.setMaximumHeight(AttrConfig.PRX_PORT_HEIGHT)
-        self.widget.setMinimumHeight(AttrConfig.PRX_PORT_HEIGHT)
-        self.widget.setMaximumWidth(AttrConfig.PRX_PORT_HEIGHT)
-        self.widget.setMinimumWidth(AttrConfig.PRX_PORT_HEIGHT)
+        self.widget.setMaximumHeight(OptionNodeBase.PortHeight)
+        self.widget.setMinimumHeight(OptionNodeBase.PortHeight)
+        self.widget.setMaximumWidth(OptionNodeBase.PortHeight)
+        self.widget.setMinimumWidth(OptionNodeBase.PortHeight)
         self.widget._set_tool_tip_text_(
             '"LMB-click" to use value "default" / "local" / "global"'
         )
@@ -57,8 +57,8 @@ class PrxPortLabel(gui_prx_abstracts.AbsPrxWidget):
     def __init__(self, *args, **kwargs):
         super(PrxPortLabel, self).__init__(*args, **kwargs)
         # self.widget.setAlignment(gui_qt_core.QtCore.Qt.AlignRight | gui_qt_core.QtCore.Qt.AlignVCenter)
-        self.widget.setMaximumHeight(AttrConfig.PRX_PORT_HEIGHT)
-        self.widget.setMinimumHeight(AttrConfig.PRX_PORT_HEIGHT)
+        self.widget.setMaximumHeight(OptionNodeBase.PortHeight)
+        self.widget.setMinimumHeight(OptionNodeBase.PortHeight)
         # self._qt_widget._set_name_align_(gui_configure.AlignRegion.Top)
 
     def set_name(self, text):

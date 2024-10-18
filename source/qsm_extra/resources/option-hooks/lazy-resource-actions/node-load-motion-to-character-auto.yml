@@ -5,9 +5,9 @@ option:
         - '*-maya'
     #
     gui:
-        group_name: 'python'
+        group_name: 'nodes'
         #
-        name: 'Load Motion'
+        name: 'Load NodeMotion'
         icon_name: 'application/python'
         #
         size: [720, 720]

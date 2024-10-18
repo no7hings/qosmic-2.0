@@ -8,7 +8,7 @@ import qsm_screw.core as qsm_scr_core
 from . import asset_general as _asset_general
 
 
-class AssetUnitAssemblyGenerateOpt(_asset_general.AssetGeneral):
+class AssetUnitAssemblyGenerateOpt(_asset_general.AssetGeneralOpt):
     TASK_KEY = 'unit_assembly_generate'
     API_VERSION = 1.0
 

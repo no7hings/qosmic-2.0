@@ -13,8 +13,6 @@ from .. import abstracts as _prx_abstracts
 # proxy widgets
 from . import window_base as _window_base
 
-from . import node as _node
-
 
 class PrxBasePanel(_window_base.PrxBaseWindow):
     CONFIGURE_KEY = None

@@ -207,7 +207,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         self.add_widget(self._prx_tab_view)
         self._prx_tab_view.set_drag_enable(True)
         self._prx_tab_view.set_add_enable(True)
-        self._prx_tab_view.set_add_menu_data_gain_fnc(self._gui_tab_add_menu_gain_fnc)
+        self._prx_tab_view.set_add_menu_data_generate_fnc(self._gui_tab_add_menu_data_generate_fnc)
         self._prx_tab_view.connect_delete_post_accepted_to(self._gui_tab_page_delete_fnc)
 
         self.__bubbles_filter = qt_widgets.QtBubbleAsChoice(self._qt_widget)
@@ -256,7 +256,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
             _, execute_fnc = args
             self.__debug_run(execute_fnc)
 
-    def _gui_tab_add_menu_gain_fnc(self):
+    def _gui_tab_add_menu_data_generate_fnc(self):
         list_ = []
         # default
 

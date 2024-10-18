@@ -163,7 +163,7 @@ build:
                     name_chs: '分辨率方案'
                     options: ['render_setting', 'resolution_preset', 'resolution_size']
                     option_names_chs: ['渲染设置', '分辨率预设', '分辨率大小']
-                    default: 'resolution_preset'
+                    default: 'render_setting'
                     enable: True
 
                 resolution/preset:
@@ -186,13 +186,10 @@ build:
                     widget: integer2
                     name: 'Resolution Size'
                     name_chs: '分辨率大小'
-                    value: [1280, 120]
+                    value: [1280, 720]
                     tool_tip:
                         |-
                         输入宽和高设置分辨率大小
-                    visible_condition: {
-                        operator: 'is', port: 'resolution/scheme', value: 'resolution_size'
-                    }
 
                 frame:
                     widget: group

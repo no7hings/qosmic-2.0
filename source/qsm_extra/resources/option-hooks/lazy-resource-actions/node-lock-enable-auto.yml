@@ -5,7 +5,7 @@ option:
         - '*-*'
     #
     gui:
-        group_name: 'python'
+        group_name: 'nodes'
         #
         name: 'Resource Lock Enable'
         icon_name: 'tool/lock'

@@ -34,7 +34,7 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
         #     project='cgm', branch='asset'
         # )
         # p = n.add_port(
-        #     gui_prx_widgets.PrxRsvObjChoosePort(
+        #     gui_prx_widgets.PrxPortForRsvChoose(
         #         'test'
         #     )
         # )

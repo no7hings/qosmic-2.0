@@ -632,7 +632,7 @@ class FncLookAssImporterNew(gnl_fnc_abstracts.AbsFncOptionBase):
             cmds.loadPlugin(self.PLUG_NAME, quiet=1)
         #
         if self.get('name_join_time_tag') is True:
-            time_tag = bsc_core.TimestampOpt(bsc_storage.StgFileOpt(file_path).get_mtime()).get_as_tag_36()
+            time_tag = bsc_core.BscTimestampOpt(bsc_storage.StgFileOpt(file_path).get_mtime()).get_as_tag_36()
         else:
             time_tag = None
         #

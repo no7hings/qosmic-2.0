@@ -3,11 +3,11 @@ import lxbasic.core as bsc_core
 
 import lxbasic.web as bsc_web
 
-import qsm_task.process as qsm_tsk_process
+import qsm_prc_task.process as qsm_prc_tsk_process
 
 time_tag = bsc_core.BscSystem.get_time_tag()
 
-if qsm_tsk_process.TaskProcessClient.get_server_status():
+if qsm_prc_tsk_process.TaskProcessClient.get_server_status():
     ts = []
     for i_index, i_cmd in enumerate(
         [
@@ -24,7 +24,7 @@ if qsm_tsk_process.TaskProcessClient.get_server_status():
             # r'rez-env maya-2019 qsm_dcc_main -- mayabatch -command "python(\"import lxsession.commands as ssn_commands;ssn_commands.execute_option_hook(option=\\\"option_hook_key=dcc-process/maya-cache-process&method=playblast&file=Z:/temeporaries/dongchangbao/playblast/test_source.ma&camera=|persp|perspShape&start_frame=0&end_frame=32&width=1280&height=720\\\")\")"'
         ]
     ):
-        qsm_tsk_process.TaskProcessClient.new_entity(
+        qsm_prc_tsk_process.TaskProcessClient.new_entity(
             # group='[playblast][{}]'.format(time_tag),
             cmd_script=i_cmd,
             group=None,

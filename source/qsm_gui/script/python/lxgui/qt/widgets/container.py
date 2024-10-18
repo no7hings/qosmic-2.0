@@ -352,7 +352,7 @@ class AbsQtToolBar(QtWidgets.QWidget):
         lot.setContentsMargins(0, 0, 0, 0)
         lot.setSpacing(2)
         # header
-        self._head = _head.QtHHead()
+        self._head = _head.QtHHeadFrame()
         lot.addWidget(self._head)
         self._head.expand_toggled.connect(self._set_expanded_)
         self._head._set_tool_tip_text_('"LMB-click" to expand "on" / "off"')

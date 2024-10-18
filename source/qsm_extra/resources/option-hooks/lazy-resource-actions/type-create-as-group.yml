@@ -5,7 +5,7 @@ option:
         - '*-*'
 
     gui:
-        group_name: 'python'
+        group_name: 'type'
 
         name: 'Create Type (Group)'
         icon_name: 'file/add-file'

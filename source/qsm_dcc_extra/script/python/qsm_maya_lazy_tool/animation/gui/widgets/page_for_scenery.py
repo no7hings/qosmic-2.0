@@ -16,8 +16,7 @@ import qsm_maya_gui.core as qsm_mya_gui_core
 from . import unit_for_scenery as _unit_for_scenery
 
 
-class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
+class PrxPageForSceneryResource(gui_prx_widgets.PrxBasePage):
 
     SCRIPT_JOB_NAME = 'lazy_tool_for_scenery'
 
@@ -48,7 +47,7 @@ class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
             self._script_job_opt.EventTypes.SelectionChanged
         )
         self._script_job_opt.register(
-            self._gui_motion_opt.do_gui_refresh_by_dcc_frame_changing,
+            self._gui_camera_opt.do_gui_refresh_by_dcc_frame_changing,
             self._script_job_opt.EventTypes.FrameRangeChanged
         )
         
@@ -114,9 +113,7 @@ class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
         self._gui_resource_prx_unit.do_gui_refresh_tools()
 
     def __init__(self, window, session, *args, **kwargs):
-        super(PrxPageForSceneryResource, self).__init__(*args, **kwargs)
-        self._window = window
-        self._session = session
+        super(PrxPageForSceneryResource, self).__init__(window, session, *args, **kwargs)
 
         self.gui_page_setup_fnc()
 
@@ -127,12 +124,9 @@ class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
             gui_qt_core.QtWidgets.QSizePolicy.Expanding,
             gui_qt_core.QtWidgets.QSizePolicy.Expanding
         )
-        qt_lot = gui_qt_widgets.QtVBoxLayout(self._qt_widget)
-        qt_lot.setContentsMargins(*[0]*4)
-        qt_lot.setSpacing(2)
         # top toolbar
         self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
-        qt_lot.addWidget(self._top_prx_tool_bar.widget)
+        self._qt_layout.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)
         # main tool
@@ -147,14 +141,14 @@ class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
         # reference
         self._asset_prx_input = qsm_gui_prx_widgets.PrxAssetInputForScenery()
         self._asset_prx_tool_box.add_widget(self._asset_prx_input)
-        self._asset_prx_input.widget.setMaximumWidth(488)
+        # self._asset_prx_input.widget.setMaximumWidth(488)
 
         self._gui_rig_reference_prx_toolbar_unit = _unit_for_scenery.PrxToolbarForSceneryReference(
             self._window, self, self._session, self._asset_prx_input
         )
 
         self._prx_h_splitter = gui_prx_widgets.PrxHSplitter()
-        qt_lot.addWidget(self._prx_h_splitter.widget)
+        self._qt_layout.addWidget(self._prx_h_splitter.widget)
         # resource tag
         self._resource_tag_tree_view = gui_prx_widgets.PrxTreeView()
         self._prx_h_splitter.add_widget(self._resource_tag_tree_view)
@@ -179,12 +173,12 @@ class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
             self.do_gui_refresh_by_resource_tag_checking
         )
         # selection scheme
-        self._selection_scheme_prx_input = gui_prx_widgets.PrxInputAsCapsule()
-        qt_lot.addWidget(self._selection_scheme_prx_input.widget)
+        self._selection_scheme_prx_input = gui_prx_widgets.PrxInputForCapsule()
+        self._qt_layout.addWidget(self._selection_scheme_prx_input.widget)
         self._do_gui_build_selection_scheme()
         # tool kit
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
-        qt_lot.addWidget(self._page_prx_tab_tool_box.widget)
+        self._qt_layout.addWidget(self._page_prx_tab_tool_box.widget)
         # utility
         self._gui_skin_proxy_prx_toolset_unit = _unit_for_scenery.PrxToolsetForUnitAssemblyLoad(
             self._window, self, self._session
@@ -194,12 +188,12 @@ class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
             self._window, self, self._session
         )
         # extend
-        self._gui_motion_opt = _unit_for_scenery.PrxToolsetForCameraMask(
+        self._gui_camera_opt = _unit_for_scenery.PrxToolsetForCameraMask(
             self._window, self, self._session
         )
 
-        self._gui_motion_opt.do_gui_refresh_by_camera_changing()
-        self._gui_motion_opt.do_gui_refresh_by_dcc_frame_changing()
+        self._gui_camera_opt.do_gui_refresh_by_camera_changing()
+        self._gui_camera_opt.do_gui_refresh_by_dcc_frame_changing()
 
         self._do_dcc_register_all_script_jobs()
         self._window.register_window_close_method(self._do_dcc_destroy_all_script_jobs)
@@ -209,6 +203,9 @@ class PrxPageForSceneryResource(gui_prx_abstracts.AbsPrxWidget):
 
         self._page_prx_tab_tool_box.set_history_key('resource-manager.scenery_page_key_current')
         self._page_prx_tab_tool_box.load_history()
+
+    def gui_page_setup_post_fnc(self):
+        self._top_prx_tool_bar.do_gui_refresh()
 
     def gui_get_tool_tab_box(self):
         return self._page_prx_tab_tool_box

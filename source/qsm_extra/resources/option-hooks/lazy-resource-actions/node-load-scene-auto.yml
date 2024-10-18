@@ -5,7 +5,7 @@ option:
         - '*-maya'
     #
     gui:
-        group_name: 'python'
+        group_name: 'nodes'
         #
         name: 'Load Scene'
         icon_name: 'application/python'

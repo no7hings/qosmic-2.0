@@ -1,10 +1,10 @@
 # coding:utf-8
 def main(session):
-    import qsm_maya.scenery.scripts as qsm_scn_scripts
+    import qsm_maya.steps.scenery.scripts as s
 
     option_opt = session.get_option_opt()
 
-    qsm_scn_scripts.CameraMaskOpt.remove_auto(**option_opt.to_dict())
+    s.CameraMaskOpt.remove_auto(**option_opt.to_dict())
 
 
 if __name__ == '__main__':

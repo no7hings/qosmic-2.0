@@ -409,7 +409,7 @@ class QtItemForHistoryEntity(
         elif os.path.isdir(self._storage_path):
             self._storage_icon = _qt_core.GuiQtDcc.generate_qt_directory_icon(self._storage_path)
         else:
-            self._storage_icon = _qt_core.GuiQtIcon.generate_by_icon_name('file/lost')
+            self._storage_icon = _qt_core.QtIcon.generate_by_icon_name('file/lost')
     
     def _check_file_exists_(self):
         if self._storage_path is not None:

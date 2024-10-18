@@ -42,7 +42,7 @@ build:
 
     motion:
         tab:
-            name: 'Motion'
+            name: 'NodeMotion'
             name_chs: '动作'
 
             tool_tip:

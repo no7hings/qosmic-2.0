@@ -94,7 +94,7 @@ class AssetTag(object):
             return 'more_than_30gb'
 
 
-class AssetGeneral(object):
+class AssetGeneralOpt(object):
     def __init__(self, scr_stage_key, scr_node_path):
         self._scr_stage_key = scr_stage_key
         self._scr_node_path = scr_node_path

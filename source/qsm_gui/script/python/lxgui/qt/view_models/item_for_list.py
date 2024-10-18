@@ -483,7 +483,6 @@ class ListItemModel(_item_base.AbsItemModel):
             painter.setPen(QtGui.QColor(0, 0, 0, 0))
             painter.setBrush(self._data.frame_brush)
             painter.drawRect(frame_rect)
-
             # video for play
             if self._data.video_enable is True:
                 img_w, img_h = self._data.video.size.width(), self._data.video.size.height()
@@ -530,7 +529,7 @@ class ListItemModel(_item_base.AbsItemModel):
                     (img_w, img_h), (frm_w, frm_h)
                 )
                 # draw base frame
-                self._draw_rect(painter, frame_rect, QtGui.QColor(0, 0, 0))
+                self._draw_rect_0(painter, frame_rect, QtGui.QColor(0, 0, 0))
                 # draw image
                 img_rect = QtCore.QRect(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
                 self._draw_pixmap(painter, img_rect, self._data.image_sequence.pixmap)
@@ -606,7 +605,6 @@ class ListItemModel(_item_base.AbsItemModel):
                     )
                     painter.drawRect(time_rect)
 
-                    # painter.setPen(QtGui.QColor(0, 0, 0, 0))
                     self._draw_time_text(painter, time_rect, time_txt)
 
             painter.end()

@@ -59,13 +59,13 @@ class Cameras(mya_abstracts.AbsMyaNodes):
         super(Cameras, self).__init__(*args)
 
 
-class AnimationLayers(mya_abstracts.AbsMyaNodes):
+class AnmLayers(mya_abstracts.AbsMyaNodes):
     DCC_TYPES_INCLUDE = ['animLayer']
     DCC_PATHS_EXCLUDE = ['BaseAnimation']
     DCC_NODE_CLS = mya_dcc_obj_node.Node
 
     def __init__(self, *args):
-        super(AnimationLayers, self).__init__(*args)
+        super(AnmLayers, self).__init__(*args)
 
 
 class DisplayLayers(mya_abstracts.AbsMyaNodes):

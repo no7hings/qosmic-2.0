@@ -5,9 +5,9 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.animation.core as qsm_mya_anm_core
+import qsm_maya.steps.animation.core as qsm_mya_stp_anm_core
 
-import qsm_maya.motion.core as qsm_mya_mtn_core
+import qsm_maya.adv.core as qsm_mya_adv_core
 
 
 class PrxToolsetForImportMotion(gui_prx_widgets.PrxBaseUnit):
@@ -17,7 +17,7 @@ class PrxToolsetForImportMotion(gui_prx_widgets.PrxBaseUnit):
         results = []
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
-            results = qsm_mya_anm_core.AdvRig.filter_namespaces(namespaces)
+            results = qsm_mya_stp_anm_core.AdvRigAsset.filter_namespaces(namespaces)
 
         if not results:
             self._window.exec_message_dialog(
@@ -40,10 +40,9 @@ class PrxToolsetForImportMotion(gui_prx_widgets.PrxBaseUnit):
                     maximum=len(namespaces), label='import motion to characters'
                 ) as g_p:
                     for i_namespace in namespaces:
-                        i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
-                        i_opt.load_from(
+                        i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                        i_opt.load_controls_motion_from(
                             file_path,
-                            control_key_excludes=['body', 'face'],
                             force=True,
                             frame_offset=0,
                         )

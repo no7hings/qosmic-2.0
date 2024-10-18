@@ -17,7 +17,7 @@ from . import material as _material
 
 from . import attribute as _attribute
 
-from . import keyframe as _keyframe
+from . import node_keyframe as _node_keyframe
 
 from . import node_for_dag as _node_for_dag
 
@@ -385,54 +385,6 @@ class EtrNodeOpt(object):
     def to_dict(self):
         pass
 
-    def get_node_motion_properties(self, includes=None):
-        if isinstance(includes, (tuple, list)):
-            atr_names = [x for x in includes if _attribute.NodeAttribute.is_exists(self._path, x) is True]
-        else:
-            atr_names = self.get_all_port_paths()
-
-        dict_ = collections.OrderedDict()
-        node_path = self.get_path()
-        for i_atr_name in atr_names:
-            if _attribute.NodeAttribute.is_exists(node_path, i_atr_name) is False:
-                continue
-
-            i_curve_name = _attribute.NodeAttribute.get_source_node(node_path, i_atr_name, 'animCurve')
-            if i_curve_name is not None:
-                i_curve_type = cmds.nodeType(i_curve_name)
-                i_infinities = [
-                    _attribute.NodeAttribute.get_value(i_curve_name, 'preInfinity'),
-                    _attribute.NodeAttribute.get_value(i_curve_name, 'postInfinity')
-                ]
-                i_curve_points = _keyframe.NodeAttributeAnmCurveOpt(node_path, i_atr_name).get_points()
-                dict_[i_atr_name] = dict(
-                    flag='animation_curve',
-                    data=[
-                        i_atr_name, i_curve_type, i_infinities, i_curve_points
-                    ]
-                )
-            else:
-                i_value = self.get(i_atr_name)
-                dict_[i_atr_name] = dict(
-                    flag='value',
-                    data=i_value
-                )
-        return dict_
-
-    def apply_node_motion_properties(self, data, frame_offset=0, force=True, excludes=None):
-        for i_atr_name, i_v in data.items():
-            if excludes is not None:
-                if i_atr_name in excludes:
-                    continue
-
-            i_flag = i_v['flag']
-            if i_flag == 'value':
-                self.set(i_atr_name, i_v['data'])
-            elif i_flag == 'animation_curve':
-                _keyframe.NodeKeyframe.apply_curve(
-                    self._path, i_v['data'], frame_offset=frame_offset, force=force
-                )
-
     def apply_properties(self, data):
         for k, v in data.items():
             self.set(k, v)
@@ -482,50 +434,60 @@ class EtrNodeOpt(object):
                     self._path, k, i_value
                 )
 
+    # motion
+    def generate_motion_properties(self, key_includes=None):
+        if isinstance(key_includes, (tuple, list)):
+            atr_names = [x for x in key_includes if _attribute.NodeAttribute.is_exists(self._path, x) is True]
+        else:
+            atr_names = self.get_all_port_paths()
 
-class BscNodeGraph(object):
-    def __init__(self, name_or_path):
-        self._path = name_or_path
-
-        self._data_dict = {}
-        self._name_dict = {}
-
-    def _node_graph_rcs_fnc(self, node_path):
         dict_ = collections.OrderedDict()
-        node_opt = EtrNodeOpt(node_path)
-        atr_names = node_opt.get_all_port_paths()
+
+        node_path = self.get_path()
+
+        # mark rotate order
+        if _attribute.NodeAttribute.is_exists(node_path, 'rotateOrder'):
+            rotate_order = _attribute.NodeAttribute.get_value(node_path, 'rotateOrder')
+            dict_['rotateOrder'] = dict(
+                flag='ignore',
+                data=rotate_order
+            )
+
         for i_atr_name in atr_names:
-            i_curve_name = _attribute.NodeAttribute.get_source_node(node_path, i_atr_name, 'animCurve')
-            if i_curve_name:
-                i_curve_type = cmds.nodeType(i_curve_name)
-                i_infinities = [
-                    _attribute.NodeAttribute.get_value(i_curve_name, 'preInfinity'),
-                    _attribute.NodeAttribute.get_value(i_curve_name, 'postInfinity')
-                ]
-                i_curve_points = _keyframe.NodeAttributeAnmCurveOpt(node_path, i_atr_name).get_points()
+            if _attribute.NodeAttribute.is_exists(node_path, i_atr_name) is False:
+                continue
+
+            i_opt = _node_keyframe.NodeAttributeKeyframeOpt(node_path, i_atr_name)
+
+            i_curve_node = i_opt.find_curve_node()
+            if i_curve_node is not None:
                 dict_[i_atr_name] = dict(
                     flag='animation_curve',
-                    data=[
-                        i_atr_name, i_curve_type, i_infinities, i_curve_points
-                    ]
+                    data=i_opt.get_curve_data()
                 )
             else:
-                i_source_args = node_opt.get_port(i_atr_name).get_source_args()
-                if i_source_args:
-                    i_source_node, i_source_port_path = i_source_args
-                    # print i_source_node
-                else:
-                    i_value = node_opt.get(i_atr_name)
-                    dict_[i_atr_name] = dict(
-                        flag='value',
-                        data=i_value
-                    )
+                dict_[i_atr_name] = dict(
+                    flag='value',
+                    data=i_opt.get_value_data()
+                )
+        return dict_
 
-        self._data_dict[node_path] = dict_
+    def apply_motion_properties(self, data, frame_offset=0, force=False, excludes=None, **kwargs):
+        mirror_keys = kwargs.get('mirror_keys', [])
+        for i_atr_name, i_v in data.items():
+            if excludes is not None:
+                if i_atr_name in excludes:
+                    continue
 
-    def generate(self):
-        self._data_dict = {}
-        self._name_dict = {}
-
-        self._node_graph_rcs_fnc(self._path)
-        return self._data_dict
+            i_flag = i_v['flag']
+            if i_flag == 'value':
+                _node_keyframe.NodeAttributeKeyframeOpt.apply_value_data_to(
+                    self._path, i_atr_name, i_v['data'],
+                    force=force, mirror_keys=mirror_keys
+                )
+            elif i_flag == 'animation_curve':
+                _node_keyframe.NodeAttributeKeyframeOpt.apply_curve_data_to(
+                    self._path, i_atr_name,
+                    i_v['data'],
+                    frame_offset=frame_offset, force=force, mirror_keys=mirror_keys
+                )

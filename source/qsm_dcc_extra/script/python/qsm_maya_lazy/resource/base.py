@@ -26,7 +26,7 @@ class Util(object):
         self._dcc_node_opt_list = qsm_mya_core.EtrNodeOpt(path)
 
     @classmethod
-    def get_node_motion_properties(cls, path, includes=None):
+    def generate_motion_properties(cls, path, key_includes=None):
         if path is None:
             raise RuntimeError()
 
@@ -34,14 +34,14 @@ class Util(object):
             raise RuntimeError()
 
         node_opt = qsm_mya_core.EtrNodeOpt(path)
-        if isinstance(includes, (tuple, list)):
-            _ = includes
+        if isinstance(key_includes, (tuple, list)):
+            _ = key_includes
         else:
             _ = node_opt.get_all_port_paths()
-        return node_opt.get_node_motion_properties(includes=_)
+        return node_opt.generate_motion_properties(key_includes=_)
 
     @classmethod
-    def apply_node_motion_properties(cls, path, data, *args, **kwargs):
+    def apply_motion_properties(cls, path, data, *args, **kwargs):
         if path is None:
             raise RuntimeError()
 
@@ -49,7 +49,7 @@ class Util(object):
             raise RuntimeError()
 
         node_opt = qsm_mya_core.EtrNodeOpt(path)
-        node_opt.apply_node_motion_properties(
+        node_opt.apply_motion_properties(
             data, *args, **kwargs
         )
 
@@ -127,13 +127,13 @@ class AbsNodeOpt(object):
         _ = qsm_mya_core.Shape.get_transform(self._node_path)
         if _:
             path = _
-            return Util.get_node_motion_properties(path)
+            return Util.generate_motion_properties(path)
 
     def apply_for_transform(self, data, *args, **kwargs):
         _ = qsm_mya_core.Shape.get_transform(self._node_path)
         if _:
             path = _
-            return Util.apply_node_motion_properties(path, data, *args, **kwargs)
+            return Util.apply_motion_properties(path, data, *args, **kwargs)
 
     def get_for_sources(self):
         dict_ = {}
@@ -145,7 +145,7 @@ class AbsNodeOpt(object):
             )
             if _:
                 i_path = _
-                dict_[i_key] = Util.get_node_motion_properties(i_path)
+                dict_[i_key] = Util.generate_motion_properties(i_path)
         return dict_
 
     def apply_for_sources(self, data, *args, **kwargs):
@@ -156,7 +156,7 @@ class AbsNodeOpt(object):
             )
             if _:
                 i_path = _
-                Util.apply_node_motion_properties(i_path, i_data, *args, **kwargs)
+                Util.apply_motion_properties(i_path, i_data, *args, **kwargs)
 
     def get_for_targets(self):
         dict_ = {}
@@ -168,7 +168,7 @@ class AbsNodeOpt(object):
             )
             if _:
                 i_path = _[0]
-                dict_[i_key] = Util.get_node_motion_properties(i_path)
+                dict_[i_key] = Util.generate_motion_properties(i_path)
         return dict_
 
     def apply_for_targets(self, data, *args, **kwargs):
@@ -179,7 +179,7 @@ class AbsNodeOpt(object):
             )
             if _:
                 i_path = _[0]
-                Util.apply_node_motion_properties(i_path, i_data, *args, **kwargs)
+                Util.apply_motion_properties(i_path, i_data, *args, **kwargs)
 
     def to_scr_type_path(self):
         if self._node_type in self.SCR_TYPE_PATH_MAPPER:
@@ -188,10 +188,10 @@ class AbsNodeOpt(object):
 
     def get_for_node(self):
         path = self._node_path
-        return Util.get_node_motion_properties(path)
+        return Util.generate_motion_properties(path)
 
     def apply_for_node(self, data, *args, **kwargs):
-        Util.apply_node_motion_properties(self._node_path, data, *args, **kwargs)
+        Util.apply_motion_properties(self._node_path, data, *args, **kwargs)
 
     def get_data(self):
         data = collections.OrderedDict()
@@ -293,8 +293,8 @@ class AbsNodeGraphOpt(object):
         )
         if frame_offset is not None:
             for i in nodes:
-                if qsm_mya_core.AnmCurve.check_is_valid(i):
-                    qsm_mya_core.AnmCurve.offset_frame(i, frame_offset)
+                if qsm_mya_core.AnmCurveNode.check_is_valid(i):
+                    qsm_mya_core.AnmCurveNode.offset_frame(i, frame_offset)
     
     @classmethod
     def check_is_valid(cls, node_type):

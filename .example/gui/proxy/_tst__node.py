@@ -36,7 +36,7 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
             'constant',
             'tuple',
             'array',
-            'shotgun',
+            # 'shotgun',
             'storage',
             'storages',
         ]:

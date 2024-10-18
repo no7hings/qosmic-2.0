@@ -9,7 +9,7 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.abstracts as prx_abstracts
 
-import qsm_general.scan as qsm_gnl_scan
+import qsm_scan as qsm_scan
 
 import qsm_general.core as qsm_gnl_core
 
@@ -31,7 +31,7 @@ class PrxAssetInputForCharacterAndProp(prx_abstracts.AbsPrxWidget):
         self._qt_path_input = qt_widgets.QtInputAsPath()
         self._qt_layout_0.addWidget(self._qt_path_input)
 
-        self._scan_root = qsm_gnl_scan.Root.generate()
+        self._scan_root = qsm_scan.Root.generate()
 
         self._qt_path_input._set_buffer_fnc_(
             self._buffer_fnc

@@ -15,19 +15,17 @@ import lxgui.proxy.scripts as gui_prx_scripts
 
 import qsm_general.core as qsm_gnl_core
 
-import qsm_general.scan as qsm_gnl_scan
+import qsm_scan as qsm_scan
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.general.core as qsm_mya_gnl_core
-
-import qsm_maya.animation.core as qsm_mya_anm_core
-
-import qsm_maya.animation.scripts as qsm_mya_anm_scripts
-
-import qsm_maya.motion.core as qsm_mya_mtn_core
+import qsm_maya.adv.core as qsm_mya_adv_core
 
 import qsm_maya_gui.core as qsm_mya_gui_core
+
+import qsm_maya.steps.animation.core as qsm_mya_stp_anm_core
+
+import qsm_maya.steps.animation.scripts as qsm_mya_stp_anm_scripts
 
 
 class UnitForRigView(
@@ -37,7 +35,7 @@ class UnitForRigView(
 
     NAMESPACE = 'rig'
 
-    RESOURCES_QUERY_CLS = qsm_mya_anm_core.AdvRigsQuery
+    RESOURCES_QUERY_CLS = qsm_mya_stp_anm_core.AdvRigAssetsQuery
 
     TOOL_INCLUDES = [
         'isolate-select',
@@ -53,13 +51,13 @@ class PrxToolbarForCharacterAndPropReference(
 ):
     def __init__(self, window, unit, session, prx_input_for_asset):
         super(PrxToolbarForCharacterAndPropReference, self).__init__(window, unit, session)
-        self._scan_root = qsm_gnl_scan.Root.generate()
+        self._scan_root = qsm_scan.Root.generate()
         self._asset_prx_input = prx_input_for_asset
 
         self._count_input = qt_widgets.QtInputAsConstant()
         self._asset_prx_input.add_widget(self._count_input)
         self._count_input._set_value_type_(int)
-        self._count_input.setFixedWidth(96)
+        self._count_input.setFixedWidth(64)
         self._count_input._set_value_(1)
 
         self._asset_load_qt_button = qt_widgets.QtPressButton()
@@ -74,9 +72,25 @@ class PrxToolbarForCharacterAndPropReference(
                 self._window._configure.get('build.rig.buttons.reference')
             )
         )
-        self._asset_load_qt_button.setFixedWidth(96)
-        self._asset_load_qt_button.press_clicked.connect(self._on_dcc_load_asset)
+        self._asset_load_qt_button.setFixedWidth(64)
         self._asset_load_qt_button._set_action_enable_(False)
+        self._asset_load_qt_button.press_clicked.connect(self._on_dcc_load_asset)
+
+        self._asset_replace_qt_button = qt_widgets.QtPressButton()
+        self._asset_replace_qt_button._set_name_text_(
+            self._window.choice_name(
+                self._window._configure.get('build.rig.buttons.replace')
+            )
+        )
+        self._asset_replace_qt_button._set_tool_tip_text_(
+            self._window.choice_tool_tip(
+                self._window._configure.get('build.rig.buttons.replace')
+            )
+        )
+        self._asset_prx_input.add_widget(self._asset_replace_qt_button)
+        self._asset_replace_qt_button.setFixedWidth(64)
+        self._asset_replace_qt_button._set_action_enable_(False)
+        self._asset_replace_qt_button.press_clicked.connect(self._on_dcc_replace_to_asset)
 
         self._asset_prx_input.connect_input_change_accepted_to(self._do_gui_refresh_asset_for)
 
@@ -95,9 +109,25 @@ class PrxToolbarForCharacterAndPropReference(
                 )
             self._page.do_gui_refresh_all()
 
+    def _on_dcc_replace_to_asset(self):
+        if self._asset_path is not None:
+            result = self._window.exec_message_dialog(
+                self._window.choice_message(
+                    self._window._configure.get('build.messages.replace_reference')
+                ),
+                status='warning'
+            )
+            #
+            if result is True:
+                assets = self._page._gui_resource_prx_unit.gui_get_selected_resources()
+                for i_asset in assets:
+                    i_asset.reference_opt.do_replace(self._asset_path)
+
     def _do_gui_refresh_asset_for(self, path):
         self._asset_path = None
+
         self._asset_load_qt_button._set_action_enable_(False)
+        self._asset_replace_qt_button._set_action_enable_(False)
         entity = self._asset_prx_input.get_entity(path)
         if entity is not None:
             if entity.type == 'Asset':
@@ -109,6 +139,7 @@ class PrxToolbarForCharacterAndPropReference(
                     if result is not None:
                         self._asset_path = result
                         self._asset_load_qt_button._set_action_enable_(True)
+                        self._asset_replace_qt_button._set_action_enable_(True)
 
 
 class PrxToolsetForSkinProxyLoad(
@@ -246,7 +277,7 @@ class PrxToolsetForSkinProxyLoad(
                         if i_resource.reference_opt.is_loaded() is False:
                             continue
 
-                        i_opt = qsm_mya_anm_scripts.SkinProxyOpt(i_resource)
+                        i_opt = qsm_mya_stp_anm_scripts.SkinProxyOpt(i_resource)
                         if i_opt.is_exists() is False:
                             i_task_name, i_cmd_script, i_cache_path, i_data_file_path = i_opt.generate_args()
                             if i_cmd_script is not None:
@@ -287,7 +318,7 @@ class PrxToolsetForSkinProxyLoad(
         resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
-                i_opt = qsm_mya_anm_scripts.SkinProxyOpt(i_resource)
+                i_opt = qsm_mya_stp_anm_scripts.SkinProxyOpt(i_resource)
                 i_opt.remove_cache()
 
         self._page.do_gui_refresh_all(force=True)
@@ -321,7 +352,7 @@ class PrxToolsetForSkinProxyLoad(
                         if i_resource.reference_opt.is_loaded() is False:
                             continue
 
-                        i_opt = qsm_mya_anm_scripts.DynamicGpuCacheOpt(i_resource)
+                        i_opt = qsm_mya_stp_anm_scripts.DynamicGpuCacheOpt(i_resource)
                         if i_opt.is_exists() is False:
                             i_task_name, i_cmd_script, i_cache_path = i_opt.generate_args(
                                 start_frame, end_frame, use_motion=use_motion
@@ -373,7 +404,7 @@ class PrxToolsetForSkinProxyLoad(
         resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
-                i_opt = qsm_mya_anm_scripts.DynamicGpuCacheOpt(i_resource)
+                i_opt = qsm_mya_stp_anm_scripts.DynamicGpuCacheOpt(i_resource)
                 i_opt.remove_cache()
 
         self._page.do_gui_refresh_all(force=True)
@@ -717,8 +748,8 @@ class PrxToolsetForMotion(
             return
 
         namespace = valid_namespaces[0]
-        qsm_mya_mtn_core.AdvCharacterMotionOpt(namespace).export_to(
-            file_path, control_set_includes=['body', 'face']
+        qsm_mya_adv_core.AdvChrOpt(namespace).export_controls_motion_to(
+            file_path
         )
 
     def do_dcc_paste_animation(self):
@@ -737,7 +768,7 @@ class PrxToolsetForMotion(
         namespace = valid_namespaces[0]
         force = self._prx_options_node.get('animation_transfer.force')
         frame_offset = self._prx_options_node.get('animation_transfer.frame_offset')
-        qsm_mya_mtn_core.AdvCharacterMotionOpt(namespace).load_from(
+        qsm_mya_adv_core.AdvChrOpt(namespace).load_controls_motion_from(
             file_path, frame_offset=frame_offset, force=force
         )
 
@@ -768,7 +799,7 @@ class PrxToolsetForMotion(
             if result is True:
                 force = self._prx_options_node.get('animation_transfer.force')
                 frame_offset = self._prx_options_node.get('animation_transfer.frame_offset')
-                qsm_mya_mtn_core.AdvCharacterMotionOpt(namespace_src).transfer_to(
+                qsm_mya_adv_core.AdvChrOpt(namespace_src).transfer_controls_motion(
                     namespace_dst, frame_offset=frame_offset, force=force
                 )
 
@@ -779,7 +810,7 @@ class PrxToolsetForMotion(
                 if i_resource.is_exists() is False:
                     continue
                 i_namespace = i_resource.namespace
-                i_controls = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace).find_all_controls()
+                i_controls = qsm_mya_adv_core.AdvChrOpt(i_namespace).find_all_controls()
                 [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 0) for x in i_controls]
 
     def do_dcc_disable_control_playback_visible(self):
@@ -789,7 +820,7 @@ class PrxToolsetForMotion(
                 if i_resource.is_exists() is False:
                     continue
                 i_namespace = i_resource.namespace
-                i_controls = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace).find_all_controls()
+                i_controls = qsm_mya_adv_core.AdvChrOpt(i_namespace).find_all_controls()
                 [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 1) for x in i_controls]
 
     @staticmethod

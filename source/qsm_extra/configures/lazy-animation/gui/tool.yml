@@ -126,7 +126,7 @@ build:
 
                         dynamic_gpu/use_motion:
                             widget: boolean
-                            name: 'Use Motion'
+                            name: 'Use NodeMotion'
                             name_chs: '使用动作'
                             value: False
                             enable: True
@@ -337,7 +337,7 @@ build:
                             join_to_next: True
 
             motion:
-                name: 'Motion'
+                name: 'NodeMotion'
                 name_chs: '动作'
 
                 tool_tip: 'Include all tool for rig as extend, etc. animation transfer'
@@ -471,6 +471,18 @@ build:
                     点击引用当前资产的绑定
                         按钮为灰色，代表当前资产无绑定文件
                         前面的数字框可以输入引用数量，鼠标滚轮可以快速增加或减少数量
+
+            replace:
+                name: 'Replace'
+                name_chs: '替换'
+
+                tool_tip:
+                    |-
+                    Press replace select rig to current asset's rig
+                tool_tip_chs:
+                    |-
+                    点击将选中的绑定替换成当前资产
+                        按钮为灰色，代表当前资产无绑定文件
 
     scenery:
         tab:
@@ -869,10 +881,15 @@ build:
                         按钮为灰色，代表当前资产无元素组装文件
 
 
+
     messages:
         remove_reference:
-            message: 'do you want remove selected references?\n, press "Ok" to continue.'
+            message: 'do you want remove selected references?, press "Ok" to continue.'
             message_chs: '是否要移除选中的引用，点击“Ok”以继续。'
+
+        replace_reference:
+            message: 'do you want replace selected references?, press "Ok" to continue.'
+            message_chs: '是否要替换选中的引用，点击“Ok”以继续。'
 
 
     rig_selection_scheme:

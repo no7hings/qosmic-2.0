@@ -8,6 +8,8 @@ import qsm_maya.core as qsm_mya_core
 
 import qsm_maya.motion.core as qsm_mya_mtn_core
 
+import qsm_maya.adv.core as qsm_mya_adv_core
+
 from . import base as _base
 
 
@@ -34,40 +36,11 @@ class AbsControlSet(_base.MotionBase):
 
 
 class AdvControlSet(AbsControlSet):
-    @classmethod
-    def find_control_set(cls, namespace):
-        _ = cmds.ls('{}:ControlSet'.format(namespace), long=1)
-        if _:
-            return _[0]
-
-    @classmethod
-    def find_body_controls(cls, namespace):
-        _ = cls.find_control_set(namespace)
-        if _:
-            return [qsm_mya_core.DagNode.to_path(x) for x in cmds.sets(_, query=1) or []]
-        return []
-
-    @classmethod
-    def find_face_control_set(cls, namespace):
-        _ = cmds.ls('{}:FaceControlSet'.format(namespace), long=1)
-        if _:
-            return _[0]
-
-    @classmethod
-    def find_face_controls(cls, namespace):
-        _ = cls.find_face_control_set(namespace)
-        if _:
-            return [qsm_mya_core.DagNode.to_path(x) for x in cmds.sets(_, query=1) or []]
-        return []
-
-    @classmethod
-    def find_controls(cls, namespace):
-        return cls.find_body_controls(namespace)+cls.find_face_controls(namespace)
 
     @classmethod
     def generate(cls, namespace):
         return cls(
-            cls.find_controls(namespace)
+            qsm_mya_adv_core.AdvOpt(namespace).find_all_controls()
         )
 
     def __init__(self, *args, **kwargs):
@@ -78,29 +51,36 @@ class AdvControlSet(AbsControlSet):
         for i in self._paths:
             i_curve_nodes = qsm_mya_mtn_core.ControlMotionOpt(i).get_all_curve_nodes()
             curve_nodes.extend(i_curve_nodes)
+
         if curve_nodes:
-            return qsm_mya_core.AnimCurves.get_range(curve_nodes)
+            return qsm_mya_core.AnimCurveNodes.get_range(curve_nodes)
         return qsm_mya_core.Frame.get_frame_range()
 
-    def get_data(self):
-        return qsm_mya_mtn_core.ControlsMotionOpt(
+    def generate_motion_dict(self):
+        return qsm_mya_mtn_core.ControlSetMotionOpt(
             self._namespace, self._paths
-        ).get_data()
+        ).generate_motion_dict()
 
-    def bake_keyframes(self, start_frame, end_frame, attributes=None):
+    def export_motion_to(self, file_path):
+        bsc_storage.StgFileOpt(file_path).set_write(
+            self.generate_motion_dict()
+        )
+
+    def bake_all_keyframes(self, start_frame, end_frame, attributes=None):
         # do not mark undo here
-        qsm_mya_mtn_core.ControlsBake(self._paths).execute(
+        qsm_mya_mtn_core.ControlSetBake(self._paths).execute(
             start_frame, end_frame,
             attributes=attributes
         )
 
-    def export_motion(self, file_path):
-        bsc_storage.StgFileOpt(file_path).set_write(
-            self.get_data()
-        )
-
 
 class AdvChrControlSet(AdvControlSet):
+    @classmethod
+    def generate(cls, namespace):
+        return cls(
+            qsm_mya_adv_core.AdvChrOpt(namespace).find_all_controls()
+        )
+
     def __init__(self, *args, **kwargs):
         super(AdvChrControlSet, self).__init__(*args, **kwargs)
 

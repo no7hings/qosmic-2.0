@@ -17,8 +17,12 @@ from . import page_for_character_and_prop as _unit_for_rig_resource
 from . import page_for_scenery as _unit_for_scenery_resource
 
 
-class PrxPanelForAnimationTool(gui_prx_widgets.PrxSessionWindow):
+class PrxPanelForAnimationTool(gui_prx_widgets.PrxBasePanel):
     SCRIPT_JOB_NAME = 'lazy_tool_for_animation'
+
+    CONFIGURE_KEY = 'lazy-animation/gui/tool'
+
+    HST_TAB_KEY_CURRENT = 'lazy-animation-tool.page_key_current'
 
     def do_gui_refresh_scene_info(self):
         print "AAA"
@@ -36,17 +40,11 @@ class PrxPanelForAnimationTool(gui_prx_widgets.PrxSessionWindow):
     def _do_dcc_destroy_all_script_jobs(self):
         self._script_job_opt.destroy()
 
-    def __init__(self, session, *args, **kwargs):
-        super(PrxPanelForAnimationTool, self).__init__(session, *args, **kwargs)
+    def __init__(self, window, session, *args, **kwargs):
+        super(PrxPanelForAnimationTool, self).__init__(window, session, *args, **kwargs)
 
     # noinspection PyUnresolvedReferences
     def gui_setup_fnc(self):
-        self._window = self
-        self._configure = bsc_resource.RscExtendConfigure.get_as_content(
-            'lazy-animation/gui/tool'
-        )
-
-        self.set_main_style_mode(1)
         self._prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         self.add_widget(self._prx_tab_tool_box)
         # rig
@@ -63,10 +61,10 @@ class PrxPanelForAnimationTool(gui_prx_widgets.PrxSessionWindow):
             )
         )
 
-        self._rig_prx_page = _unit_for_rig_resource.PrxPageForCharacterAndProp(
+        self._chr_and_prp_prx_page = _unit_for_rig_resource.PrxPageForCharacterAndProp(
             self, self._session
         )
-        rig_prx_sca.add_widget(self._rig_prx_page)
+        rig_prx_sca.add_widget(self._chr_and_prp_prx_page)
         # scenery
         scenery_prx_sca = gui_prx_widgets.PrxVScrollArea()
         self._prx_tab_tool_box.add_widget(
@@ -105,16 +103,20 @@ class PrxPanelForAnimationTool(gui_prx_widgets.PrxSessionWindow):
 
         self.do_gui_refresh_all()
 
+    def gui_setup_post_fnc(self):
+        self._chr_and_prp_prx_page.gui_page_setup_post_fnc()
+        self._scenery_prx_page.gui_page_setup_post_fnc()
+
     def do_gui_refresh_all(self, force=False):
         key = self._prx_tab_tool_box.get_current_key()
         if key == 'rig':
-            self._rig_prx_page.do_gui_refresh_all(force)
+            self._chr_and_prp_prx_page.do_gui_refresh_all(force)
         elif key == 'scenery':
             self._scenery_prx_page.do_gui_refresh_all(force)
 
     def gui_close_fnc(self):
         self._prx_tab_tool_box.save_history()
-        self._rig_prx_page._page_prx_tab_tool_box.save_history()
+        self._chr_and_prp_prx_page._page_prx_tab_tool_box.save_history()
         self._scenery_prx_page._page_prx_tab_tool_box.save_history()
 
     def show_help(self):

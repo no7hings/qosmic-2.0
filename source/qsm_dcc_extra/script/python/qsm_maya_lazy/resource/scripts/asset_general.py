@@ -1,15 +1,12 @@
 # coding:utf-8
-import os
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
-
-import lxbasic.log as bsc_log
 
 import lxbasic.storage as bsc_storage
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.scenery.core as qsm_mya_scn_core
+import qsm_maya.steps.scenery.core as qsm_mya_stp_scn_core
 
 
 class GpuImport(object):
@@ -63,7 +60,7 @@ class ProcessUtils(object):
         # find lost
         directory_path = bsc_storage.StgFileOpt(file_path).directory_path
         # find gpu shit first
-        qsm_mya_scn_core.GpuImport.find_all_gpu_caches(directory_path)
+        qsm_mya_stp_scn_core.GpuImport.find_all_gpu_caches(directory_path)
         # find others later
         qsm_mya_core.FileReferences.search_all_from(
             [directory_path], ignore_exists=True
@@ -74,13 +71,13 @@ class ProcessUtils(object):
         # find lost
         directory_path = bsc_storage.StgFileOpt(file_path).directory_path
         # find gpu shit first
-        qsm_mya_scn_core.GpuImport.find_all_gpu_caches(directory_path)
+        qsm_mya_stp_scn_core.GpuImport.find_all_gpu_caches(directory_path)
 
     @classmethod
     def pre_process(cls, namespace, file_path):
         # find lost
         directory_path = bsc_storage.StgFileOpt(file_path).directory_path
-        qsm_mya_scn_core.GpuImport.find_all_gpu_caches(directory_path)
+        qsm_mya_stp_scn_core.GpuImport.find_all_gpu_caches(directory_path)
         qsm_mya_core.FileReferences.search_all_from(
             [directory_path], ignore_exists=True
         )

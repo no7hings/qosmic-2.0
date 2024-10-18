@@ -26,7 +26,7 @@ class AsbGuiQtDccMenuSetup(object):
         #
         action_item.setText(name)
         #
-        icon = gui_qt_core.GuiQtIcon.generate_by_text(name)
+        icon = gui_qt_core.QtIcon.generate_by_text(name)
         action_item.setIcon(icon)
         if method is not None:
             if isinstance(method, (types.FunctionType, types.MethodType)):
@@ -48,7 +48,7 @@ class AsbGuiQtDccMenuSetup(object):
                         elif isinstance(i, list):
                             sub_name, sub_icon_name, sub_menu_data = i
                             action_item = menu.addAction(sub_name)
-                            icon = gui_qt_core.GuiQtIcon.generate_by_text(sub_name)
+                            icon = gui_qt_core.QtIcon.generate_by_text(sub_name)
                             action_item.setIcon(icon)
                             #
                             i_menu = QtWidgets.QMenu()

@@ -171,7 +171,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
             self.do_gui_refresh_by_resource_tag_checking
         )
         # selection scheme
-        self._selection_scheme_prx_input = gui_prx_widgets.PrxInputAsCapsule()
+        self._selection_scheme_prx_input = gui_prx_widgets.PrxInputForCapsule()
         main_qt_lot.addWidget(self._selection_scheme_prx_input.widget)
         self._do_gui_build_selection_scheme()
         # tool set

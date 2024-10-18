@@ -15,11 +15,11 @@ import lxgui.proxy.abstracts as prx_abstracts
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_task.core as qsm_task_core
+import qsm_prc_task.core as qsm_task_core
 
-import qsm_task.process as qsm_tsk_process
+import qsm_prc_task.process as qsm_prc_tsk_process
 
-import qsm_task.process.server as qsm_tsk_prc_server
+import qsm_prc_task.process.server as qsm_tsk_prc_server
 
 
 class _GuiBaseOpt(object):
@@ -66,15 +66,15 @@ class _GuiTaskOpt(
     def do_requeue_tasks(self):
         prc_tasks = self.gui_get_selected_prc_tasks()
         if prc_tasks:
-            qsm_tsk_process.TaskProcessClient.requeue_tasks(
+            qsm_prc_tsk_process.TaskProcessClient.requeue_tasks(
                 [x.id for x in prc_tasks]
             )
-            # [qsm_tsk_process.TaskProcessClient.requeue_task(x.id) for x in prc_tasks]
+            # [qsm_prc_tsk_process.TaskProcessClient.requeue_task(x.id) for x in prc_tasks]
 
     def do_stop_tasks(self):
         prc_tasks = self.gui_get_selected_prc_tasks()
         if prc_tasks:
-            qsm_tsk_process.TaskProcessClient.stop_tasks(
+            qsm_prc_tsk_process.TaskProcessClient.stop_tasks(
                 [x.id for x in prc_tasks]
             )
 
@@ -308,7 +308,7 @@ class _GuiTaskOpt(
         self.gui_add_root()
 
         if self._window.SERVER_FLAG is True:
-            self._worker_queue = qsm_tsk_process.TaskProcessClient.get_worker_queue()
+            self._worker_queue = qsm_prc_tsk_process.TaskProcessClient.get_worker_queue()
         else:
             self._worker_queue = dict(
                 waiting=[],
@@ -448,7 +448,7 @@ class _GuiTaskOpt(
 
     def _do_gui_refresh_server_status(self):
         def cache_fnc_():
-            pool_status = qsm_tsk_process.TaskProcessClient.get_worker_status()
+            pool_status = qsm_prc_tsk_process.TaskProcessClient.get_worker_status()
             return [pool_status]
 
         def build_fnc_(data):

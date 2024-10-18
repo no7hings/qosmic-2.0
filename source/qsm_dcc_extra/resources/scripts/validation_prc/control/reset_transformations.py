@@ -15,7 +15,7 @@ class Main(object):
         for i_path in paths:
             i_key_name = self._task_prc.to_node_key_name(i_path)
             i_results = []
-            for j_atr in [
+            for j_atr_name in [
                 'translateX',
                 'translateY',
                 'translateZ',
@@ -23,21 +23,21 @@ class Main(object):
                 'rotateY',
                 'rotateZ',
             ]:
-                if qsm_mya_core.NodeAttribute.get_channel_box_enable(i_path, j_atr) is True:
-                    j_value = qsm_mya_core.NodeAttribute.get_value(i_path, j_atr)
+                if qsm_mya_core.NodeAttribute.get_channel_box_enable(i_path, j_atr_name) is True:
+                    j_value = qsm_mya_core.NodeAttribute.get_value(i_path, j_atr_name)
                     j_value = round(j_value, 3)
                     if j_value != 0:
-                        i_results.append(dict(attribute=j_atr, value=j_value))
-            for j_atr in [
+                        i_results.append(dict(attribute=j_atr_name, value=j_value))
+            for j_atr_name in [
                 'scaleX',
                 'scaleY',
                 'scaleZ',
             ]:
-                if qsm_mya_core.NodeAttribute.get_channel_box_enable(i_path, j_atr) is True:
-                    j_value = qsm_mya_core.NodeAttribute.get_value(i_path, j_atr)
+                if qsm_mya_core.NodeAttribute.get_channel_box_enable(i_path, j_atr_name) is True:
+                    j_value = qsm_mya_core.NodeAttribute.get_value(i_path, j_atr_name)
                     j_value = round(j_value, 3)
                     if j_value != 1.0:
-                        i_results.append(dict(attribute=j_atr, value=j_value))
+                        i_results.append(dict(attribute=j_atr_name, value=j_value))
 
             if i_results:
                 self._task_prc._result_content.append_element(

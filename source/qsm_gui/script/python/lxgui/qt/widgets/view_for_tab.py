@@ -494,8 +494,14 @@ class QtTabView(
     def _set_tab_add_menu_data_(self, data):
         self._tab_add_button._set_menu_data_(data)
 
-    def _set__gui_tab_add_menu_gain_fnc_(self, fnc):
+    def _set_tab_add_menu_data_generate_fnc_(self, fnc):
         self._tab_add_button._set_menu_data_generate_fnc_(fnc)
+    
+    def _set_tab_add_menu_content_(self, content):
+        self._tab_add_button._set_menu_content_(content)
+    
+    def _set_tab_add_menu_content_generate_fnc_(self, fnc):
+        self._tab_add_button._set_menu_content_generate_fnc_(fnc)
 
     def _set_tab_menu_enable_(self, boolean):
         self._tab_menu_is_enable = boolean

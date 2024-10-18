@@ -40,6 +40,7 @@ class _AbsQtHTabToolBox(
         tab_w, tab_h = self._tab_w, self._tab_h
         btn_frm_w, btn_frm_h = tab_h, tab_h
         btn_w, btn_h = 20, 20
+        # horizontal
         if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
             tab_bar_x, tab_bar_y = x, y
             tab_bar_w, tab_bar_h = w, tab_h
@@ -81,10 +82,10 @@ class _AbsQtHTabToolBox(
                     btn_f_w_r = btn_frm_w*2
                     c_x_1, c_y_1 = w-btn_f_w_r, y
                     c_x_1 = max(c_x_1, btn_f_w_r)
-                    self._tab_right_tool_box_rect.setRect(
+                    self._tab_scroll_tool_box_rect.setRect(
                         c_x_1, c_y_1, btn_f_w_r, btn_frm_h
                     )
-                    self._tab_right_tool_box_draw_rect.setRect(
+                    self._tab_scroll_tool_box_draw_rect.setRect(
                         c_x_1, c_y_1, btn_f_w_r, btn_frm_h-1
                     )
                     #
@@ -138,6 +139,7 @@ class _AbsQtHTabToolBox(
                         i_widget.show()
                     else:
                         i_widget.hide()
+        # vertical
         elif self.QT_ORIENTATION == QtCore.Qt.Vertical:
             tab_bar_x, tab_bar_y = x, y
             tab_bar_w, tab_bar_h = tab_w, h
@@ -188,15 +190,15 @@ class _AbsQtHTabToolBox(
                 self._scroll_bar_model.update()
 
                 if self._scroll_bar_model.is_valid():
-                    btn_w_1, btn_h_1 = btn_w/2, btn_h
+                    btn_w_1, btn_h_1 = btn_w, btn_h/2
                     btn_f_w_r = btn_frm_w*2
-                    c_x_1, c_y_1 = w-btn_f_w_r, y
+                    c_x_1, c_y_1 = w-btn_frm_w, h-btn_f_w_r
                     c_x_1 = max(c_x_1, btn_f_w_r)
-                    self._tab_right_tool_box_rect.setRect(
+                    self._tab_scroll_tool_box_rect.setRect(
                         c_x_1, c_y_1, btn_f_w_r, btn_frm_h
                     )
-                    self._tab_right_tool_box_draw_rect.setRect(
-                        c_x_1, c_y_1, btn_f_w_r, btn_frm_h-1
+                    self._tab_scroll_tool_box_draw_rect.setRect(
+                        c_x_1, c_y_1, btn_frm_w-1, btn_f_w_r
                     )
                     #
                     self._tab_scroll_previous_button.show()
@@ -211,7 +213,7 @@ class _AbsQtHTabToolBox(
 
                     self._tab_scroll_next_button.show()
                     self._tab_scroll_next_button.setGeometry(
-                        c_x_1+(btn_frm_w-btn_w)/2+btn_w_1, c_y_1+(btn_frm_h-btn_h_1)/2, btn_w_1, btn_h_1
+                        c_x_1+(btn_frm_w-btn_w)/2, c_y_1+(btn_frm_h-btn_h_1)/2+btn_h_1, btn_w_1, btn_h_1
                     )
 
                     if self._scroll_bar_model.get_is_maximum():
@@ -221,7 +223,7 @@ class _AbsQtHTabToolBox(
 
                     self._tab_choose_button.show()
                     self._tab_choose_button.setGeometry(
-                        c_x_1+btn_frm_w+(btn_frm_w-btn_w)/2, c_y_1+(btn_frm_h-btn_h)/2, btn_w, btn_h
+                        c_x_1+(btn_frm_w-btn_w)/2, c_y_1+btn_frm_w+(btn_frm_h-btn_h)/2, btn_w, btn_h
                     )
 
                     tab_bar_w -= btn_f_w_r
@@ -315,8 +317,8 @@ class _AbsQtHTabToolBox(
         self._tab_bar_rect = QtCore.QRect()
         self._tab_bar_draw_rect = QtCore.QRect()
 
-        self._tab_right_tool_box_rect = QtCore.QRect()
-        self._tab_right_tool_box_draw_rect = QtCore.QRect()
+        self._tab_scroll_tool_box_rect = QtCore.QRect()
+        self._tab_scroll_tool_box_draw_rect = QtCore.QRect()
         
         self._icons_0 = [
             _gui_core.GuiIcon.get('window_base/scroll-left'),
@@ -430,7 +432,7 @@ class _AbsQtHTabToolBox(
 
         if self._scroll_bar_model.is_valid():
             painter._draw_tab_right_tool_box_by_rect_(
-                rect=self._tab_right_tool_box_draw_rect,
+                rect=self._tab_scroll_tool_box_draw_rect,
                 background_color=_qt_core.QtRgba.Basic
             )
 
@@ -572,4 +574,15 @@ class QtVTabToolBox(
 
     def __init__(self, *args, **kwargs):
         super(QtVTabToolBox, self).__init__(*args, **kwargs)
+        self._icons_0 = [
+            _gui_core.GuiIcon.get('window_base/scroll-up'),
+            _gui_core.GuiIcon.get('window_base/scroll-up-disable')
+        ]
+        self._icons_1 = [
+            _gui_core.GuiIcon.get('window_base/scroll-down'),
+            _gui_core.GuiIcon.get('window_base/scroll-down-disable')
+        ]
         self._direction = _gui_core.GuiDirections.LeftToRight
+        
+        self._tab_scroll_previous_button.setFixedSize(20, 10)
+        self._tab_scroll_next_button.setFixedSize(20, 10)

@@ -38,6 +38,15 @@ class W(gui_prx_widgets.PrxBaseWindow):
         t_2 = gui_prx_widgets.PrxTreeView()
         c_v.add_widget(t_2, name='TEST-2', icon_name_text='C')
 
+        t_2 = gui_prx_widgets.PrxTreeView()
+        c_v.add_widget(t_2, name='TEST-3', icon_name_text='D')
+
+        t_2 = gui_prx_widgets.PrxTreeView()
+        c_v.add_widget(t_2, name='TEST-4', icon_name_text='E')
+
+        t_2 = gui_prx_widgets.PrxTreeView()
+        c_v.add_widget(t_2, name='TEST-5', icon_name_text='F')
+
 
 if __name__ == '__main__':
     import sys

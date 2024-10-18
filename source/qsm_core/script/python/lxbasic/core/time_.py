@@ -25,7 +25,7 @@ class TimeExtraMtd(object):
         return _raw.BscIntegerOpt(int((s-c_s)*multiply)).encode_to_36()
 
 
-class TimePrettifyMtd(object):
+class BscTimePrettify(object):
     MONTH = [
         (u'01月', 'January'),
         (u'02月', 'February'),
@@ -62,6 +62,13 @@ class TimePrettifyMtd(object):
             )
 
     @classmethod
+    def to_prettify_by_timestamp_(cls, timestamp, language='en_us'):
+        """
+        0 is chinese
+        """
+        return cls.to_prettify_by_timestamp(timestamp, 0 if language=='chs' else 1)
+
+    @classmethod
     def to_prettify_by_time_tag(cls, time_tag, language=1):
         year = int(time_tag[:4])
         month = int(time_tag[5:7])
@@ -91,24 +98,24 @@ class TimePrettifyMtd(object):
         #
         monday = day-week
         monday_cur = day_cur-week_cur
-        # same year
+        # same year, return year
         if timetuple_cur[:1] == timetuple[:1]:
-            # same month
+            # same month, return month day
             if timetuple_cur[:2] == timetuple[:2]:
-                # same week
+                # same week, return week
                 if monday_cur == monday:
                     week_str = u'{0}'.format(cls.WEEK[int(week)][language])
-                    # same day
+                    # same day, return time
                     if day_cur == day:
                         time_str = [
                             u'今天{}点{}分{}秒'.format(str(hour).zfill(2), str(minute).zfill(2), str(second).zfill(2)),
-                            'today {}:{}:{}'.format(str(hour).zfill(2), str(minute).zfill(2), str(second).zfill(2))
+                            'Today {}:{}:{}'.format(str(hour).zfill(2), str(minute).zfill(2), str(second).zfill(2))
                         ][language]
                         return time_str
                     return week_str
             #
-            month_str = cls.get_month(month, language)
-            day_str = cls.get_day(day, language)
+            month_str = cls.to_month(month, language)
+            day_str = cls.to_day(day, language)
             if language == 0:
                 return u'{}{}'.format(month_str, day_str)
             return '{} {}'.format(day_str, month_str)
@@ -117,15 +124,19 @@ class TimePrettifyMtd(object):
         return year_str
 
     @classmethod
+    def to_prettify_by_timetuple_(cls, timetuple, language='en_us'):
+        return cls.to_prettify_by_timetuple(timetuple, 0 if language=='chs' else 1)
+
+    @classmethod
     def get_year(cls, year, language):
         return [u'{}年'.format(str(year).zfill(4)), str(year).zfill(4)][language]
 
     @classmethod
-    def get_month(cls, month, language):
+    def to_month(cls, month, language):
         return cls.MONTH[int(month)-1][language]
 
     @classmethod
-    def get_day(cls, day, language):
+    def to_day(cls, day, language):
         return [u'{}日'.format(str(day).zfill(2)), str(day).zfill(2)][language]
 
     def time_tag2timestamp(self, time_tag):
@@ -140,7 +151,7 @@ class TimePrettifyMtd(object):
         ).timetuple()
 
 
-class TimestampMtd(object):
+class BscTimestamp(object):
     @classmethod
     def to_string(cls, pattern, timestamp):
         return time.strftime(
@@ -157,7 +168,7 @@ class TimestampMtd(object):
         return time.localtime(time.time())
 
 
-class TimestampOpt(object):
+class BscTimestampOpt(object):
     TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
     TIME_TAG_FORMAT = '%Y_%m%d_%H%M_%S'
 
@@ -194,7 +205,7 @@ class TimestampOpt(object):
         return _raw.BscIntegerOpt(int((s-c_s)*multiply)).encode_to_36()
 
     def to_prettify(self, language):
-        return TimePrettifyMtd.to_prettify_by_timestamp(self._timestamp, language)
+        return BscTimePrettify.to_prettify_by_timestamp(self._timestamp, language)
 
 
 class DateTime(object):
@@ -227,8 +238,7 @@ class DateTime(object):
         elif input_time.date() == yesterday:
             return "昨天" if language == 'chs' else "Yesterday"
         elif start_of_week <= input_time.date() < today:
-            weekday_str = weekdays_chs[input_time.weekday()] if language == 'chs' else weekdays_en[
-                input_time.weekday()]
+            weekday_str = weekdays_chs[input_time.weekday()] if language == 'chs' else weekdays_en[input_time.weekday()]
             return weekday_str
         elif start_of_last_week <= input_time.date() <= end_of_last_week:
             return "上周" if language == 'chs' else "Last week"

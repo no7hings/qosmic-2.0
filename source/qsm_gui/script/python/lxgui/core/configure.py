@@ -307,14 +307,32 @@ class GuiRgba(object):
 
     Shadow = 0, 0, 0, 31
     
+    # button, 8x14
     BkgButton = 111, 111, 111, 255
-    BkgButtonHover = 151, 151, 151, 255
+    # hover + 32
+    BkgButtonHover = 143, 143, 143, 255
     BkgButtonDisable = 79, 79, 79, 255
-
-    BdrButton = 95, 95, 95, 255
-    BdrButtonHover = 143, 143, 151, 255
-    BdrButtonDisable = 71, 71, 71, 255
+    # border +8
+    BdrButton = 119, 119, 119, 255
+    BdrButtonHover = 151, 151, 151, 255
+    BdrButtonDisable = 87, 87, 87, 255
     
+    # scroll bar 8x10
+    BkgScrollBar = 79, 79, 79, 255
+    # hover +32
+    BkgScrollBarHover = 111, 111, 111, 255
+    # border +8
+    BdrScrollBar = 87, 87, 87, 255
+    BdrScrollBarHover = 119, 119, 119, 255
+
+    # head 8x10
+    BkgHead = 79, 79, 79, 255
+    # hover +32
+    BkgHeadHover = 111, 111, 111, 255
+    # border +0
+    BdrHead = 79, 79, 79, 255
+    BdrHeadHover = 111, 111, 111, 255
+
     BkgToolTip = 223, 223, 191, 255
     BdrToolTip = LightBlack
     TxtToolTip = LightBlack
@@ -371,6 +389,7 @@ class GuiRgba(object):
     BdrSubIcon = 207, 207, 207, 255
     BkgSubIcon = 127, 127, 127, 255
 
+    # drag
     BkgDragChildPolish = LightLemonYellow
     BkgDragChildAdd = LightNeonGreen
 
@@ -389,10 +408,12 @@ class GuiRgba(object):
     BkgTab = 47, 47, 47, 255
     BkgTabActive = 63, 63, 63, 255
 
-    BdrTabGroup = 87, 87, 87, 255
-    BdrTabGroupActive = 95, 95, 95, 255
+    # tab
     BkgTabGroup = 55, 55, 55, 255
     BkgTabGroupActive = 63, 63, 63, 255
+    # border +16
+    BdrTabGroup = 71, 71, 71, 255
+    BdrTabGroupActive = 79, 79, 79, 255
     
     BkgBubble = 223, 223, 223, 255
     BkgBubbleDisable = 127, 127, 127, 255
@@ -404,10 +425,7 @@ class GuiRgba(object):
     TxtBubble = 31, 31, 31, 255
 
     BkgProgress = 47, 47, 47, 255
-    
-    BdrHead = 87, 87, 87, 255
-    BkgHead = 83, 83, 83, 255
-    
+
     TxtHead = 207, 207, 207, 255
     TxtHeadHover = 223, 223, 223, 255
     

@@ -1,5 +1,5 @@
 # coding:utf-8
-import qsm_task.core as qsm_tsk_core
+import qsm_prc_task.core as qsm_tsk_core
 
 p = qsm_tsk_core.TaskPool.generate()
 

@@ -2,9 +2,11 @@
 
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
+# noinspection PyUnresolvedReferences
+import maya.mel as mel
 
 
-class AnimationOpt(object):
+class AnmLayerOpt(object):
     def __init__(self, path):
         self._path = path
 
@@ -14,8 +16,15 @@ class AnimationOpt(object):
     def get_weight(self):
         return cmds.animLayer(self._path, query=1, weight=1)
 
+    def set_current(self):
+        mel.eval('selectLayer("{}");'.format(self._path))
 
-class AnimationLayers(object):
+    @classmethod
+    def switch_to_current_base(cls):
+        mel.eval('selectLayer("BaseAnimation");')
+
+
+class AnmLayers(object):
     @classmethod
     def get_root(cls):
         return cmds.animLayer(query=1, root=1)

@@ -35,7 +35,7 @@ class Node(object):
         return cls.get_type(name) == cls.Types.Transform
 
     @classmethod
-    def is_mesh(cls, name):
+    def is_mesh_type(cls, name):
         return cls.get_type(name) == cls.Types.Mesh
 
     @classmethod

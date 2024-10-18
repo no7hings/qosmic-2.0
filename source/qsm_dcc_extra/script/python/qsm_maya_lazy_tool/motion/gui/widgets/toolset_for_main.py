@@ -16,11 +16,11 @@ import qsm_gui.qt.widgets as qsm_qt_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.animation.core as qsm_mya_anm_core
+import qsm_maya.steps.animation.core as qsm_mya_stp_anm_core
 
 import qsm_maya.motion.core as qsm_mya_mtn_core
 
-import qsm_maya_gui.core as qsm_mya_gui_core
+import qsm_maya.adv.core as qsm_mya_adv_core
 
 
 class UnitForRigPicker(
@@ -30,7 +30,7 @@ class UnitForRigPicker(
         if self._qt_picker._has_focus_() is False:
             namespaces = qsm_mya_core.Namespaces.extract_from_selection()
             if namespaces:
-                namespace_for_adv = qsm_mya_anm_core.AdvRig.filter_namespaces(namespaces)
+                namespace_for_adv = qsm_mya_stp_anm_core.AdvRigAsset.filter_namespaces(namespaces)
                 if namespace_for_adv:
                     self._qt_picker._set_namespace_(namespaces[-1])
 
@@ -43,7 +43,7 @@ class UnitForRigPicker(
         controls = []
         namespace = self._qt_picker._get_namespace_()
         if namespace:
-            resource = qsm_mya_anm_core.AdvRig(namespace)
+            resource = qsm_mya_stp_anm_core.AdvRigAsset(namespace)
             for i_key in control_keys:
                 i_controls = resource.find_many_controls(i_key)
                 if i_controls:
@@ -81,14 +81,11 @@ class ToolsetForMotionCopyAndPaste(
     def get_control_key_excludes(self):
         return self._prx_options_node.get('setting.ignore.control_ignore')
 
-    def get_control_set_includes(self):
-        return self._prx_options_node.get('setting.includes.control_set_includes')
-    
     def get_dcc_character_args(self):
         results = []
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
-            results = qsm_mya_anm_core.AdvRig.filter_namespaces(namespaces)
+            results = qsm_mya_stp_anm_core.AdvRigAsset.filter_namespaces(namespaces)
 
         if not results:
             self._window.exec_message_dialog(
@@ -101,7 +98,7 @@ class ToolsetForMotionCopyAndPaste(
         return results
     
     def get_dcc_control_args(self):
-        args = qsm_mya_mtn_core.ControlsMotionOpt.get_args_from_selection()
+        args = qsm_mya_mtn_core.ControlSetMotionOpt.get_args_from_selection()
         if not args:
             self._window.exec_message_dialog(
                 self._window.choice_message(
@@ -113,7 +110,7 @@ class ToolsetForMotionCopyAndPaste(
         return args
 
     def get_dcc_control_args_for_mirror(self):
-        args = qsm_mya_mtn_core.ControlsMotionOpt.get_args_from_selection_for_mirror()
+        args = qsm_mya_mtn_core.ControlSetMotionOpt.get_args_from_selection_for_mirror()
         if not args:
             self._window.exec_message_dialog(
                 self._window.choice_message(
@@ -123,17 +120,38 @@ class ToolsetForMotionCopyAndPaste(
             )
             return
         return args
-    
+
+    # duplicate
+    def do_dcc_duplicate_characters(self):
+        namespaces = self.get_dcc_character_args()
+        if namespaces:
+            with self._window.gui_progressing(
+                maximum=len(namespaces), label='duplicate characters'
+            ) as g_p:
+                for i_namespace in namespaces:
+                    i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                    i_opt.duplicate(
+                        control_key_excludes=self.get_control_key_excludes(),
+                        frame_offset=self.get_frame_offset(),
+                    )
+
+                    g_p.do_update()
+
+            self._window.popup_message(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.duplicate_characters')
+                )
+            )
+
     # copy
     def do_dcc_copy_character(self):
         namespaces = self.get_dcc_character_args()
         if namespaces:
             namespace = namespaces[-1]
-            opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(namespace)
+            opt = qsm_mya_adv_core.AdvChrOpt(namespace)
             file_path = qsm_gnl_core.MayaCache.generate_character_motion_file(bsc_core.BscSystem.get_user_name())
-            opt.export_to(
+            opt.export_controls_motion_to(
                 file_path,
-                control_set_includes=['body', 'face']
             )
 
             self._window.popup_message(
@@ -147,36 +165,15 @@ class ToolsetForMotionCopyAndPaste(
         if args:
             namespace, paths = args.keys()[-1], args.values()[-1]
     
-            opt = qsm_mya_mtn_core.ControlsMotionOpt(namespace, paths)
+            opt = qsm_mya_mtn_core.ControlSetMotionOpt(namespace, paths)
     
             file_path = qsm_gnl_core.MayaCache.generate_control_motion_file(bsc_core.BscSystem.get_user_name())
-            opt.export_to(
+            opt.export_motion_to(
                 file_path,
             )
             self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get('build.main.messages.copy_controls')
-                )
-            )
-
-    def do_dcc_duplicate_characters(self):
-        namespaces = self.get_dcc_character_args()
-        if namespaces:
-            with self._window.gui_progressing(
-                maximum=len(namespaces), label='duplicate characters'
-            ) as g_p:
-                for i_namespace in namespaces:
-                    i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
-                    i_opt.duplicate(
-                        control_key_excludes=self.get_control_key_excludes(),
-                        frame_offset=self.get_frame_offset(),
-                    )
-
-                    g_p.do_update()
-
-            self._window.popup_message(
-                self._window.choice_message(
-                    self._window._configure.get('build.main.messages.duplicate_characters')
                 )
             )
 
@@ -192,8 +189,8 @@ class ToolsetForMotionCopyAndPaste(
                     maximum=len(namespaces), label='paste characters'
                 ) as g_p:
                     for i_namespace in namespaces:
-                        i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
-                        i_opt.load_from(
+                        i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                        i_opt.load_controls_motion_from(
                             file_path,
                             control_key_excludes=self.get_control_key_excludes(),
                             force=True,
@@ -212,8 +209,8 @@ class ToolsetForMotionCopyAndPaste(
         if args:
             file_path = qsm_gnl_core.MayaCache.generate_control_motion_file(bsc_core.BscSystem.get_user_name())
             for k, v in args.items():
-                i_opt = qsm_mya_mtn_core.ControlsMotionOpt(k, v)
-                i_opt.load_from(
+                i_opt = qsm_mya_mtn_core.ControlSetMotionOpt(k, v)
+                i_opt.load_motion_from(
                     file_path,
                     control_key_excludes=self.get_control_key_excludes(),
                     force=True,
@@ -231,8 +228,8 @@ class ToolsetForMotionCopyAndPaste(
         if args:
             file_path = qsm_gnl_core.MayaCache.generate_character_motion_file(bsc_core.BscSystem.get_user_name())
             for k, v in args.items():
-                i_opt = qsm_mya_mtn_core.ControlsMotionOpt(k, v)
-                i_opt.load_from(
+                i_opt = qsm_mya_mtn_core.ControlSetMotionOpt(k, v)
+                i_opt.load_motion_from(
                     file_path,
                     control_key_excludes=self.get_control_key_excludes(),
                     force=True,
@@ -250,8 +247,8 @@ class ToolsetForMotionCopyAndPaste(
         if namespaces:
             file_path = qsm_gnl_core.MayaCache.generate_control_motion_file(bsc_core.BscSystem.get_user_name())
             for i_namespace in namespaces:
-                i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
-                i_opt.load_from(
+                i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                i_opt.load_controls_motion_from(
                     file_path,
                     control_key_excludes=self.get_control_key_excludes(),
                     force=True,
@@ -265,14 +262,13 @@ class ToolsetForMotionCopyAndPaste(
             )
 
     # mirror
+    # mirror character
     def do_dcc_mirror_characters_right_to_left(self):
         namespaces = self.get_dcc_character_args()
         if namespaces:
-            control_set_includes = self.get_control_set_includes()
             for i_namespace in namespaces:
-                i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
-                i_opt.mirror_right_to_left(
-                    control_set_includes=control_set_includes,
+                i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                i_opt.mirror_controls_right_to_left(
                     force=True,
                     frame_offset=self.get_frame_offset(),
                 )
@@ -286,11 +282,9 @@ class ToolsetForMotionCopyAndPaste(
     def do_dcc_mirror_characters_middle(self):
         namespaces = self.get_dcc_character_args()
         if namespaces:
-            control_set_includes = self.get_control_set_includes()
             for i_namespace in namespaces:
-                i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
-                i_opt.mirror_middle(
-                    control_set_includes=control_set_includes,
+                i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                i_opt.mirror_controls_middle(
                     force=True,
                     frame_offset=self.get_frame_offset(),
                 )
@@ -304,11 +298,9 @@ class ToolsetForMotionCopyAndPaste(
     def do_dcc_mirror_characters_left_to_right(self):
         namespaces = self.get_dcc_character_args()
         if namespaces:
-            control_set_includes = self.get_control_set_includes()
             for i_namespace in namespaces:
-                i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
-                i_opt.mirror_left_to_right(
-                    control_set_includes=control_set_includes,
+                i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                i_opt.mirror_controls_left_to_right(
                     force=True,
                     frame_offset=self.get_frame_offset(),
                 )
@@ -319,14 +311,21 @@ class ToolsetForMotionCopyAndPaste(
                 )
             )
 
+    # mirror control
     def do_dcc_mirror_selected_auto(self):
         args = self.get_dcc_control_args_for_mirror()
         if args:
             for k, v in args.items():
-                i_opt = qsm_mya_mtn_core.ControlsMotionOpt(k, v)
-                i_opt.mirror_auto(
+                # generate axis vector dict
+                i_adv_motion_opt = qsm_mya_adv_core.AdvOpt(k)
+                i_controls = i_adv_motion_opt.find_all_controls()
+                ir_axis_vector_dict = qsm_mya_mtn_core.ControlSetMotionOpt(k, i_controls).generate_axis_vector_dict()
+
+                i_opt = qsm_mya_mtn_core.ControlSetMotionOpt(k, v)
+                i_opt.mirror_all_auto(
                     force=True,
                     frame_offset=self.get_frame_offset(),
+                    axis_vector_dict=ir_axis_vector_dict
                 )
 
             self._window.popup_message(
@@ -340,11 +339,11 @@ class ToolsetForMotionCopyAndPaste(
         args = self.get_dcc_control_args_for_mirror()
         if args:
             for k, v in args.items():
-                i_opt = qsm_mya_mtn_core.MirrorPasteOpt(k)
+                i_opt = qsm_mya_mtn_core.ControlMirrorPasteOpt(k)
                 file_path = qsm_gnl_core.MayaCache.generate_control_motion_file(
                     bsc_core.BscSystem.get_user_name()
                 )
-                i_opt.load_from(
+                i_opt.load_motion_from(
                     file_path,
                     force=True,
                     frame_offset=self.get_frame_offset(),
@@ -360,11 +359,10 @@ class ToolsetForMotionCopyAndPaste(
     def do_dcc_flip_characters(self):
         namespaces = self.get_dcc_character_args()
         if namespaces:
-            control_set_includes = self.get_control_set_includes()
             for i_namespace in namespaces:
-                i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
-                i_opt.flip(
-                    control_set_includes=control_set_includes,
+                i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                i_opt.flip_controls(
+                    control_key_excludes=self.get_control_key_excludes(),
                     force=True,
                     frame_offset=self.get_frame_offset(),
                 )
@@ -379,8 +377,8 @@ class ToolsetForMotionCopyAndPaste(
         args = self.get_dcc_control_args_for_mirror()
         if args:
             for k, v in args.items():
-                i_opt = qsm_mya_mtn_core.ControlsMotionOpt(k, v)
-                i_opt.flip(
+                i_opt = qsm_mya_mtn_core.ControlSetMotionOpt(k, v)
+                i_opt.flip_all(
                     force=True,
                     frame_offset=self.get_frame_offset(),
                 )
@@ -479,7 +477,7 @@ class ToolsetForMotionKeyframe(
     TOOLSET_KEY = 'keyframe'
 
     def _do_dcc_select_all_curves(self):
-        curves = qsm_mya_core.AnimCurves.get_all(reference=False, excludes=['timewarp', 'qsm_timewarp'])
+        curves = qsm_mya_core.AnimCurveNodes.get_all(reference=False, excludes=['timewarp', 'qsm_timewarp'])
         qsm_mya_core.Selection.set(curves)
 
         self._window.popup_message(
@@ -492,7 +490,7 @@ class ToolsetForMotionKeyframe(
         results = []
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
-            results = qsm_mya_anm_core.AdvRig.filter_namespaces(namespaces)
+            results = qsm_mya_stp_anm_core.AdvRigAsset.filter_namespaces(namespaces)
 
         if not results:
             self._window.exec_message_dialog(
@@ -506,7 +504,7 @@ class ToolsetForMotionKeyframe(
         if results:
             curves = []
             for i_namespace in results:
-                i_opt = qsm_mya_mtn_core.AdvCharacterMotionOpt(i_namespace)
+                i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
                 curves.extend(i_opt.find_all_anm_curves())
 
             qsm_mya_core.Selection.set(curves)
@@ -728,6 +726,20 @@ class ToolsetForConstrainAndDeform(
 
         qsm_mya_core.CurveWarp.replace_all(paths)
 
+    def do_dcc_create_for_lattice(self):
+        paths = cmds.ls(selection=1, type='transform', long=1) or []
+        if len(paths) < 2:
+            self._window.exec_message_dialog(
+                self._window.choice_message(
+                    self._window._configure.get('build.main.messages.less_transforms')
+                ),
+                status='warning'
+            )
+            return
+
+        node, curve = paths[:2]
+        qsm_mya_core.CurveWarp.create_for_lattice_0(node, curve)
+
     def __init__(self, window, page, session):
         super(ToolsetForConstrainAndDeform, self).__init__(window, page, session)
 
@@ -758,4 +770,7 @@ class ToolsetForConstrainAndDeform(
 
         self._prx_options_node.set(
             'curve_warp.replace_object', self.do_dcc_curve_warp_path_object
+        )
+        self._prx_options_node.set(
+            'curve_warp.create_for_lattice', self.do_dcc_create_for_lattice
         )

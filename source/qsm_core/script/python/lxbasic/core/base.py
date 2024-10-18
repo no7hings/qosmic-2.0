@@ -301,7 +301,7 @@ class BscSystem(object):
         )
 
     @classmethod
-    def get_is_matched(cls, system_keys):
+    def check_is_matched(cls, system_keys):
         return cls.get_current() in cls.get_system_includes(system_keys)
 
     #

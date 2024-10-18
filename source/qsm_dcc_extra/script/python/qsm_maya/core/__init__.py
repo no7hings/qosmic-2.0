@@ -1,6 +1,8 @@
 # coding:utf-8
 from .undo import *
 
+from .transformation import *
+
 from .history import *
 
 from .selection import *
@@ -89,6 +91,10 @@ from .node_port_extra import *
 
 from .node_extra import *
 
+from .node_keyframe import *
+
+from .node_tansformation import *
+
 from .hotkey import *
 
 from .character import *
@@ -98,6 +104,11 @@ from .snapshot import *
 from .bbox import *
 
 from .locator import *
+
+from .joint import *
+
+from .skin_cluster import *
+
 
 
 

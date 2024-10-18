@@ -5,9 +5,9 @@ option:
         - '*-maya'
     #
     gui:
-        group_name: 'python'
+        group_name: 'nodes'
         #
-        name: 'Add Motion to Montage'
+        name: 'Add NodeMotion to Montage'
         icon_name: 'application/python'
         #
         size: [720, 720]

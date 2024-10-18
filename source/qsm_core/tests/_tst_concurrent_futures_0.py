@@ -12,16 +12,15 @@ lst = []
 def rcs_fnc(lst_, depth_):
 
     if depth_ == depth_max:
-        return
+        return False
 
     _depth = depth_+1
     for _i in range(5):
         lst_.append((depth_, _i))
-        # rcs_fnc(lst_, _depth)
         executor.submit(rcs_fnc, lst_, _depth)
+    return True
 
 
-executor.submit(rcs_fnc, lst, 0)
-
-# rcs_fnc(lst, 0)
-print lst
+future = executor.submit(rcs_fnc, lst, 0)
+if future.result():
+    print lst

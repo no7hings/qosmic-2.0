@@ -5,14 +5,14 @@ option:
         - '*-maya'
     #
     gui:
-        name: 'Lazy Motion Tool'
+        name: 'Lazy NodeMotion Tool'
         name_chs: '懒人动作工具'
         group_name: 'General(s)'
         #
         icon_name: 'qosmic/lazy-cfx-tool'
         tool_tip:
             |-
-            For Motion.
+            For NodeMotion.
         #
         tool_tip_chs:
             |-
@@ -28,7 +28,7 @@ build:
 
             tool_tip:
                 |-
-                Tool For Motion Main.
+                Tool For NodeMotion Main.
 
             tool_tip_chs:
                 |-
@@ -49,7 +49,7 @@ build:
                     parameters:
                         character_motion:
                             widget: group
-                            name: 'Character Motion'
+                            name: 'Character NodeMotion'
                             name_chs: '角色动作'
 
                         character_motion/duplicate_characters:
@@ -63,11 +63,11 @@ build:
                             tool_tip_chs:
                                 |-
                                 点击拷贝选中的角色：
-                                    会引用一个一样的角色，并且带动作（数值和曲线）
+                                    会引用一个一样的角色，包含动作（数值和曲线）
 
                         control_motion:
                             widget: group
-                            name: 'Control Motion'
+                            name: 'Control NodeMotion'
                             name_chs: '控制器动作'
 
                         character_motion/copy_character:
@@ -176,14 +176,14 @@ build:
 
                         mirror_motion:
                             widget: group
-                            name: 'Mirror Motion'
+                            name: 'Mirror NodeMotion'
                             name_chs: '镜像动作'
 
                         mirror_motion/mirror_characters_right_to_left:
                             widget: button
                             name: 'Mirror CHR (R to L)'
                             name_chs: '镜像角色（右到左）'
-                            icon: 'tool/maya/mirror_right_to_left'
+                            icon: 'tool/maya/mirror_all_right_to_left'
                             tool_tip:
                                 |-
                                 To be supplemented.
@@ -215,7 +215,7 @@ build:
                             widget: button
                             name: 'Mirror CHR (L to R)'
                             name_chs: '镜像角色（左到右）'
-                            icon: 'tool/maya/mirror_left_to_right'
+                            icon: 'tool/maya/mirror_all_left_to_right'
                             tool_tip:
                                 |-
                                 To be supplemented.
@@ -244,7 +244,7 @@ build:
 
                         mirror_and_paste_motion:
                             widget: group
-                            name: 'Mirror and Paste Motion'
+                            name: 'Mirror and Paste NodeMotion'
                             name_chs: '镜像粘贴动作'
 
                         mirror_and_paste_motion/mirror_and_paste_controls:
@@ -258,7 +258,7 @@ build:
                             tool_tip_chs:
                                 |-
                                 点击镜像粘贴控制器：
-                                    需要先使用“拷贝选择”拷贝数据；
+                                    需要先使用“拷贝控制器”拷贝数据；
                                     可以跨MAYA使用；
                                     可以选择多个绑定（可以是任意部件）同时粘贴；
                                     如果拷贝的是左边（*_L）的控制器，会自动镜像粘贴到右边（*_R），右边同理；
@@ -268,7 +268,7 @@ build:
 
                         flip_motion:
                             widget: group
-                            name: 'Mirror Motion'
+                            name: 'Mirror NodeMotion'
                             name_chs: '翻转动作'
 
                         flip_motion/flip_characters:
@@ -307,6 +307,20 @@ build:
                             name_chs: '设置'
                             collapse: True
 
+                        setting/mirror_axis:
+                            widget: capsule_string
+                            name: 'Mirror Axis'
+                            name_chs: '对称轴'
+                            options: ['x', 'y', 'z']
+                            default: 'x'
+                            tool_tip:
+                                |-
+                                To be supplemented.
+                            tool_tip_chs:
+                                |-
+                                此选项暂时不可用。
+                            enable: True
+
                         setting/frame:
                             widget: group
                             name: 'Frame'
@@ -343,22 +357,6 @@ build:
                             tool_tip_chs:
                                 |-
                                 此选项暂时不可用。
-                            enable: True
-
-                        setting/includes/control_set_includes:
-                            widget: capsule_strings
-                            options: ['body', 'face']
-                            option_names_chs: ['身体', '面部']
-                            default: ['body', 'face']
-                            name: 'Part Include'
-                            name_chs: '包含部件'
-                            tool_tip:
-                                |-
-                                To be supplemented.
-                            tool_tip_chs:
-                                |-
-                                选择包含的部件：
-                                    此选项会影响角色的复制，粘贴和镜像。
                             enable: True
 
                         setting/includes/control_includes:
@@ -496,7 +494,7 @@ build:
                                 To be supplemented.
                             tool_tip_chs:
                                 |-
-                                输入一个帧范围，扭曲到目标范围。
+                                输入一个帧范围，扭曲到目标范围，需要创建预览后才可以编辑。
                             visible_condition: {
                                 operator: 'is', port: 'curve_timewarp/warp_scheme', value: 'frame_range'
                             }
@@ -646,7 +644,7 @@ build:
                     parameters:
                         motion_path:
                             widget: group
-                            name: 'Motion Path'
+                            name: 'NodeMotion Path'
                             name_chs: '运动路径'
 
                         motion_path/replace_object:
@@ -677,6 +675,18 @@ build:
                             tool_tip_chs:
                                 |-
                                 先选择需要替换的物体，再旋转被替换的物体（需要带曲线扭曲），然后点击按钮。
+
+                        curve_warp/create_for_lattice:
+                            widget: button
+                            name: 'Create for Lattice'
+                            name_chs: '创建曲线扭曲（晶格）'
+                            icon: 'tool/maya/curve-warp'
+                            tool_tip:
+                                |-
+                                To be supplemented.
+                            tool_tip_chs:
+                                |-
+                                先选择晶格，再选择曲线，然后点击按钮。
 
         messages:
             no_character:
@@ -757,7 +767,7 @@ build:
 
             no_motion_path:
                 message_chs: '未发现动作路径， 先选择需要替换的物体，再旋转被替换的物体（需要带路径动画）。'
-                message: 'Motion path is not found.'
+                message: 'NodeMotion path is not found.'
 
     splicing:
         tab:
@@ -774,7 +784,7 @@ build:
 
         units:
             import_motion:
-                name: 'Import Motion'
+                name: 'Import NodeMotion'
                 name_chs: '导入动作'
 
                 tool_tip: 'To be supplemented.'
@@ -787,7 +797,7 @@ build:
                     parameters:
                         import_character_motion:
                             widget: group
-                            name: 'Import CHR Motion'
+                            name: 'Import CHR NodeMotion'
                             name_chs: '导入角色动作'
 
                         import_character_motion/to_control:

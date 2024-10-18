@@ -182,7 +182,7 @@ class QtSystemTrayIcon(QtWidgets.QSystemTrayIcon):
         widget_action = QtWidgetAction(menu)
         widget_action.setFont(_base.QtFonts.NameNormal)
         widget_action.setText('quit')
-        widget_action.setIcon(_base.GuiQtIcon.generate_by_icon_name('window/close'))
+        widget_action.setIcon(_base.QtIcon.generate_by_icon_name('window/close'))
         menu.addAction(widget_action)
         # noinspection PyUnresolvedReferences
         widget_action.triggered.connect(
@@ -194,6 +194,97 @@ class QtWidgetAction(QtWidgets.QWidgetAction):
     def __init__(self, *args, **kwargs):
         super(QtWidgetAction, self).__init__(*args, **kwargs)
         self.setFont(_base.QtFonts.NameNormal)
+
+
+class _QtSeparator(QtWidgets.QWidget):
+    def _refresh_widget_all_(self):
+        self._refresh_widget_draw_geometry_()
+        self._refresh_widget_draw_()
+
+    def _refresh_widget_draw_(self):
+        self.update()
+
+    def _refresh_widget_draw_geometry_(self):
+        if self._text is not None:
+            txt_w = self._font_metrics.width(self._text)
+            self.setMinimumWidth(txt_w)
+            self._text_rect.setRect(
+                0, 0, txt_w, self.height()
+            )
+
+        self._rect.setRect(
+            0, 0, self.width(), self.height()
+        )
+
+    def __init__(self, *args):
+        super(_QtSeparator, self).__init__(*args)
+        self.setSizePolicy(
+            QtWidgets.QSizePolicy.Expanding,
+            QtWidgets.QSizePolicy.Expanding
+        )
+
+        self._text = None
+        self._text_rect = QtCore.QRect()
+        self._font = _base.QtFonts.MenuSeparator
+        self._font_metrics = QtGui.QFontMetrics(self._font)
+
+        self._rect = QtCore.QRect()
+
+        self.installEventFilter(self)
+
+    def _set_text_(self, text):
+        self._text = text
+
+    def eventFilter(self, *args):
+        widget, event = args
+        if widget == self:
+            if event.type() == QtCore.QEvent.Resize:
+                self._refresh_widget_all_()
+        return False
+
+    def paintEvent(self, event):
+        painter = QtGui.QPainter(self)
+        painter.setFont(self._font)
+        painter.setPen(
+            _style.QtRgba.Gray
+        )
+        painter.drawText(
+            self._text_rect, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter, self._text
+        )
+
+        painter.setPen(
+            _style.QtRgba.DarkGray
+        )
+        painter.drawLine(
+            self._rect.bottomLeft(), self._rect.bottomRight()
+        )
+
+    def sizeHint(self):
+        # must add size hint
+        return QtCore.QSize(5, 20)
+
+
+class QtWidgetActionForSeparator(QtWidgets.QWidgetAction):
+
+    def __init__(self, *args, **kwargs):
+        QtWidgets.QWidgetAction.__init__(self, *args, **kwargs)
+
+        self._widget = QtWidgets.QWidget(*args, **kwargs)
+        self._label = _QtSeparator(self._widget)
+
+    def setText(self, text):
+        self._label._set_text_(text)
+
+    def createWidget(self, menu):
+
+        wgt = self._widget
+
+        lot = QtWidgets.QHBoxLayout(wgt)
+        lot.setContentsMargins(0, 0, 0, 0)
+        lot.addWidget(self._label)
+        wgt.setLayout(lot)
+
+        return wgt
 
 
 class GuiQtMenuOpt(object):
@@ -232,42 +323,50 @@ class GuiQtMenuOpt(object):
             keys = content.get_keys(regex='*.properties')
             for i_key in keys:
                 i_atr_path_opt = bsc_core.PthAttributeOpt(i_key)
-                i_obj_path = i_atr_path_opt.obj_path
-                i_obj_path_opt = bsc_core.BscPathOpt(i_obj_path)
+                i_path = i_atr_path_opt.obj_path
+                i_path_opt = bsc_core.BscPathOpt(i_path)
                 i_content = content.get_as_content(i_key)
                 i_type = i_content.get('type')
-                if i_obj_path_opt.get_is_root():
+                if i_path_opt.get_is_root():
                     pass
                 else:
-                    menu = self.__get_menu(i_obj_path_opt.get_parent())
+                    menu = self._create_menu_dag(i_path_opt.get_parent())
                     if i_type == 'separator':
                         self.add_separator_fnc(menu, i_content)
                     elif i_type == 'action':
                         self.add_action_fnc(menu, i_content)
+                    elif i_type == 'group':
+                        self._create_menu(menu, i_path_opt, i_content)
 
-    def __get_menu(self, path_opt):
+    def _create_menu_dag(self, path_opt):
         cur_menu = self._root_menu
         components = path_opt.get_components()
+        # create from root
         components.reverse()
-        for i_component in components:
-            cur_menu = self.__get_menu_force(cur_menu, i_component)
+        for i_seq, i_component in enumerate(components):
+            cur_menu = self._create_menu(cur_menu, i_component)
         return cur_menu
 
-    def __get_menu_force(self, menu, path_opt):
+    def _create_menu(self, menu, path_opt, content=None):
         path = path_opt.path
         if path in self._item_dic:
             return self._item_dic[path]
-        #
+
         name = path_opt.name
+        icon_name = 'file/folder'
         widget_action = QtWidgetAction(menu)
         menu.addAction(widget_action)
         widget_action.setFont(_base.QtFonts.NameNormal)
+        if content is not None:
+            name = content.get('name', name)
+            icon_name = content.get('icon_name', icon_name)
+            
         widget_action.setText(name)
         widget_action.setIcon(
-            _base.GuiQtIcon.generate_by_icon_name('file/folder')
+            _base.QtIcon.generate_by_icon_name(icon_name)
         )
         sub_menu = menu.__class__(menu)
-        sub_menu.setTearOffEnabled(True)
+        # sub_menu.setTearOffEnabled(True)
         widget_action.setMenu(sub_menu)
         self._item_dic[path] = sub_menu
         return sub_menu
@@ -275,9 +374,14 @@ class GuiQtMenuOpt(object):
     @classmethod
     def add_separator_fnc(cls, menu, content):
         name = content.get('name')
-        s = menu.addSeparator()
-        s.setFont(_base.QtFonts.MenuSeparator)
-        s.setText(name)
+        if name is not None:
+            s = QtWidgetActionForSeparator(menu)
+            s.setText(name)
+            menu.addAction(s)
+        else:
+            s = menu.addSeparator()
+            s.setFont(_base.QtFonts.MenuSeparator)
+            s.setText(name)
         return s
 
     def add_action_fnc(self, menu, content):
@@ -296,11 +400,11 @@ class GuiQtMenuOpt(object):
         menu.addAction(widget_action)
         if icon_name:
             widget_action.setIcon(
-                _base.GuiQtIcon.generate_by_icon_name(icon_name)
+                _base.QtIcon.generate_by_icon_name(icon_name)
             )
         else:
             widget_action.setIcon(
-                _base.GuiQtIcon.generate_by_text(name, background_color=(64, 64, 64))
+                _base.QtIcon.generate_by_text(name, background_color=(64, 64, 64))
             )
         #
         if isinstance(executable_fnc, (bool, int)):

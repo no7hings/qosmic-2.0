@@ -13,7 +13,7 @@ from . import connection as _connection
 from . import node_for_dag as _node_for_dag
 
 
-class AnimCurves(object):
+class AnimCurveNodes(object):
     @classmethod
     def get_all_from_selection(cls):
         nodes = cmds.ls(sl=True) or []
@@ -72,221 +72,7 @@ class AnimCurves(object):
         cmds.filterCurve(*curve_names)
 
 
-class Control(object):
-    @classmethod
-    def find_anim_curves(cls, path):
-        history_nodes = cmds.listHistory(path, pruneDagObjects=True, leaf=False) or []
-        return cmds.ls(history_nodes, type='animCurve') or []
-
-
-class NodeAttributeAnmCurveOpt(object):
-    DATA_KEYS = [
-        'inAngle', 'outAngle',
-        'inWeight', 'outWeight',
-        'inTangentType', 'outTangentType',
-    ]
-
-    def __init__(self, path, atr_name):
-        self._path = path
-        self._atr_name = atr_name
-
-    def find_node(self):
-        _ = cmds.findKeyframe(
-            self._path, curve=True, at=self._atr_name
-        )
-        if _:
-            return _[0]
-
-    def get_index_count(self):
-        return cmds.keyframe(
-            self._path,
-            attribute=self._atr_name,
-            query=True,
-            keyframeCount=True
-        ) or 0
-
-    def get_time_at(self, index):
-        _ = cmds.keyframe(
-            self._path,
-            query=1,
-            attribute=self._atr_name,
-            index=(index, index),
-            timeChange=1
-        )
-        if _:
-            return _[0]
-
-    def create_value_at_time(self, frame, value):
-        cmds.setKeyframe(
-            self._path,
-            attribute=self._atr_name,
-            time=(frame, frame),
-            value=value
-        )
-
-    def get_value_at(self, index):
-        _ = cmds.keyframe(
-            self._path,
-            query=1,
-            attribute=self._atr_name,
-            index=(index, index),
-            valueChange=1
-        )
-        if _:
-            return _[0]
-
-    def set_out_tangent_type_at_time(self, frame, tangent_type):
-        cmds.keyTangent(
-            self._path, attribute=self._atr_name,
-            time=(frame, frame), outTangentType=tangent_type
-        )
-
-    def get_tangents_at(self, index):
-        list_ = []
-        for i_key in self.DATA_KEYS:
-            i_kwargs = dict(
-                query=1,
-                attribute=self._atr_name,
-                index=(index, index),
-            )
-            i_kwargs[i_key] = 1
-            _ = cmds.keyTangent(
-                self._path, **i_kwargs
-            )
-            if _:
-                list_.append(_[0])
-            else:
-                list_.append(None)
-        return list_
-
-    def set_tangents_at_time(self, frame, tangents):
-        # fixme: set TangentType first? or weight first?
-        tangents = copy.copy(tangents)
-        tangents.reverse()
-        keys = copy.copy(self.DATA_KEYS)
-        keys.reverse()
-        for i_seq, i_key in enumerate(keys):
-            i_value = tangents[i_seq]
-
-            i_kwargs = dict(
-                attribute=self._atr_name,
-                time=(frame, frame)
-            )
-            i_kwargs[i_key] = i_value
-            cmds.keyTangent(
-                self._path, **i_kwargs
-            )
-
-    def get_points(self):
-        index_count = self.get_index_count()
-        list_ = []
-        for i_index in range(index_count):
-            i_time = self.get_time_at(i_index)
-            i_value = self.get_value_at(i_index)
-            i_tangent = self.get_tangents_at(i_index)
-            list_.append((i_time, i_value, i_tangent))
-        return list_
-
-    def set_points(self, points, frame_offset=0, value_factor=1):
-        for i in points:
-            i_time, i_value, i_tangents = i
-            # fixme: time is None?
-            if i_time is None:
-                continue
-            self.create_value_at_time(i_time+frame_offset, i_value*value_factor)
-            self.set_tangents_at_time(i_time+frame_offset, i_tangents)
-
-        if points:
-            # fix tangent bug
-            first_points = points[0]
-            f_time, f_value, f_tangents = first_points
-            # fixme: time is None?
-            if f_time is None:
-                return
-            self.create_value_at_time(f_time+frame_offset, f_value*value_factor)
-            self.set_tangents_at_time(f_time+frame_offset, f_tangents)
-
-    def offset_all_values(self, offset_value):
-        index_count = self.get_index_count()
-        for i_index in range(index_count):
-            i_time = self.get_time_at(i_index)
-            i_value = self.get_value_at(i_index)
-            i_value_new = i_value+offset_value
-            self.create_value_at_time(i_time, i_value_new)
-
-
-class NodeKeyframe(object):
-
-    @classmethod
-    def apply_value(cls, path, data, force=False, mirror_keys=None):
-        atr_name, value = data
-        if _attribute.NodeAttribute.is_exists(path, atr_name) is False:
-            return
-        # try to unlock
-        if _attribute.NodeAttribute.is_lock(path, atr_name) is True:
-            # when node is from reference, ignore
-            if _reference.Reference.is_from_reference(path) is True:
-                return
-
-            if force is True:
-                _attribute.NodeAttribute.unlock(path, atr_name)
-            else:
-                return
-        # try to break source
-        if _attribute.NodeAttribute.has_source(path, atr_name) is True:
-            if force is True:
-                result = _attribute.NodeAttribute.break_source(path, atr_name)
-                if result is False:
-                    return
-            else:
-                return
-
-        value_dst = _attribute.NodeAttribute.get_value(path, atr_name)
-        if value != value_dst:
-            _attribute.NodeAttribute.set_value(path, atr_name, value)
-
-    @classmethod
-    def apply_curve(cls, path, data, frame_offset=0, force=False, mirror_keys=None):
-        atr_name, curve_type, infinities, curve_points = data
-        if _attribute.NodeAttribute.is_exists(path, atr_name) is False:
-            return
-
-        if _attribute.NodeAttribute.is_lock(path, atr_name) is True:
-            # when node is from reference, ignore
-            if _reference.Reference.is_from_reference(path) is True:
-                return
-            if force is True:
-                _attribute.NodeAttribute.unlock(path, atr_name)
-            else:
-                return
-
-        if _attribute.NodeAttribute.has_source(path, atr_name) is True:
-            if force is True:
-                _attribute.NodeAttribute.break_source(path, atr_name)
-            else:
-                return
-
-        curve_name = '{}_{}'.format(
-            path.split('|')[-1].split(':')[-1],
-            atr_name.replace('.', '_')
-        )
-        curve_name_new = cmds.createNode(curve_type, name=curve_name, skipSelect=1)
-
-        i_atr_path_src = '{}.output'.format(curve_name_new)
-        i_atr_path_dst = '{}.{}'.format(path, atr_name)
-        _connection.Connection.create(i_atr_path_src, i_atr_path_dst)
-
-        NodeAttributeAnmCurveOpt(path, atr_name).set_points(curve_points, frame_offset=frame_offset)
-
-        _attribute.NodeAttribute.set_value(
-            curve_name_new, 'preInfinity', infinities[0]
-        )
-        _attribute.NodeAttribute.set_value(
-            curve_name_new, 'postInfinity', infinities[1]
-        )
-
-
-class AnmCurve(object):
+class AnmCurveNode(object):
     NODE_TYPES = [
         'animCurveTL', 'animCurveTA', 'animCurveTT', 'animCurveTU',
         'animCurveUL', 'animCurveUA', 'animCurveUT', 'animCurveUU'
@@ -320,7 +106,7 @@ class AnmCurve(object):
                 cmds.cutKey(curve_name, time=(min(key_times), max(key_times)))
 
 
-class AnmCurveOpt(object):
+class AnmCurveNodeOpt(object):
     DATA_KEYS = [
         'inAngle', 'outAngle',
         'inWeight', 'outWeight',
@@ -341,13 +127,13 @@ class AnmCurveOpt(object):
             )
 
         curve_type = curve_type or 'animCurveTL'
-        curve_name_new = cmds.createNode(curve_type, name=curve_name, skipSelect=1)
+        curve_name_ = cmds.createNode(curve_type, name=curve_name, skipSelect=1)
 
-        atr_path_src = '{}.output'.format(curve_name_new)
+        atr_path_src = '{}.output'.format(curve_name_)
         atr_path_tgt = '{}.{}'.format(path, atr_name)
         _connection.Connection.create(atr_path_src, atr_path_tgt)
 
-        return cls(curve_name_new)
+        return cls(curve_name_)
 
     @classmethod
     def create_as_translate(cls, path, atr_name, keep_namespace=False):
@@ -362,28 +148,28 @@ class AnmCurveOpt(object):
         return cls.create(path, atr_name, keep_namespace=keep_namespace, curve_type='animCurveTU')
 
     def __init__(self, curve_name):
-        self._curve_name = curve_name
+        self._path = curve_name
 
     @property
     def path(self):
-        return self._curve_name
+        return self._path
 
     def clear(self):
-        AnmCurve.clear_keyframes(self._curve_name)
+        AnmCurveNode.clear_keyframes(self._path)
 
     def delete(self):
-        _node_for_dag.DagNode.delete(self._curve_name)
+        _node_for_dag.DagNode.delete(self._path)
 
     def get_index_count(self):
         return cmds.keyframe(
-            self._curve_name,
+            self._path,
             query=True,
             keyframeCount=True
         ) or 0
 
     def get_time_at(self, index):
         _ = cmds.keyframe(
-            self._curve_name,
+            self._path,
             query=1,
             index=(index, index),
             timeChange=1
@@ -393,7 +179,7 @@ class AnmCurveOpt(object):
 
     def set_time_at(self, index, frame):
         cmds.keyframe(
-            self._curve_name,
+            self._path,
             index=(index, index),
             timeChange=frame
         )
@@ -411,7 +197,7 @@ class AnmCurveOpt(object):
 
     def get_value_at(self, index):
         _ = cmds.keyframe(
-            self._curve_name,
+            self._path,
             query=1,
             index=(index, index),
             valueChange=1
@@ -421,21 +207,21 @@ class AnmCurveOpt(object):
 
     def set_value_at(self, index, value):
         cmds.keyframe(
-            self._curve_name,
+            self._path,
             index=(index, index),
             valueChange=value
         )
 
     def set_value_at_time(self, frame, value):
         cmds.keyframe(
-            self._curve_name,
+            self._path,
             time=(frame, frame),
             valueChange=value
         )
 
     def create_value_at_time(self, frame, value):
         cmds.setKeyframe(
-            self._curve_name,
+            self._path,
             time=(frame, frame),
             value=value
         )
@@ -449,7 +235,7 @@ class AnmCurveOpt(object):
             )
             i_kwargs[i_key] = 1
             _ = cmds.keyTangent(
-                self._curve_name, **i_kwargs
+                self._path, **i_kwargs
             )
             if _:
                 list_.append(_[0])
@@ -460,10 +246,10 @@ class AnmCurveOpt(object):
     def get_tangent_types_at(self, index):
         return (
             cmds.keyTangent(
-                self._curve_name, query=1, index=(index, index), inTangentType=1
+                self._path, query=1, index=(index, index), inTangentType=1
             )[0],
             cmds.keyTangent(
-                self._curve_name, query=1, index=(index, index), outTangentType=1
+                self._path, query=1, index=(index, index), outTangentType=1
             )[0]
         )
 
@@ -483,10 +269,10 @@ class AnmCurveOpt(object):
         "auto"
         """
         cmds.keyTangent(
-            self._curve_name, time=(frame, frame), inTangentType=in_tangent_type
+            self._path, time=(frame, frame), inTangentType=in_tangent_type
         )
         cmds.keyTangent(
-            self._curve_name, time=(frame, frame), outTangentType=out_tangent_type
+            self._path, time=(frame, frame), outTangentType=out_tangent_type
         )
 
     def set_tangents_at_time(self, frame, tangents):
@@ -498,7 +284,7 @@ class AnmCurveOpt(object):
             )
             i_kwargs[i_key] = i_value
             cmds.keyTangent(
-                self._curve_name, **i_kwargs
+                self._path, **i_kwargs
             )
 
     def get_points(self):
@@ -513,13 +299,13 @@ class AnmCurveOpt(object):
 
     def get_infinities(self):
         return (
-            _attribute.NodeAttribute.get_value(self._curve_name, 'preInfinity'),
-            _attribute.NodeAttribute.get_value(self._curve_name, 'postInfinity')
+            _attribute.NodeAttribute.get_value(self._path, 'preInfinity'),
+            _attribute.NodeAttribute.get_value(self._path, 'postInfinity')
         )
 
     def set_infinities(self, pre_infinity, post_infinity):
-        _attribute.NodeAttribute.set_value(self._curve_name, 'preInfinity', pre_infinity)
-        _attribute.NodeAttribute.set_value(self._curve_name, 'postInfinity', post_infinity)
+        _attribute.NodeAttribute.set_value(self._path, 'preInfinity', pre_infinity)
+        _attribute.NodeAttribute.set_value(self._path, 'postInfinity', post_infinity)
 
     def set_points(self, points, frame_offset=0, value_factor=1):
         for i in points:
@@ -539,6 +325,14 @@ class AnmCurveOpt(object):
                 return
             self.create_value_at_time(f_time+frame_offset, f_value*value_factor)
             self.set_tangents_at_time(f_time+frame_offset, f_tangents)
+
+    def offset_all_values(self, offset_value):
+        index_count = self.get_index_count()
+        for i_index in range(index_count):
+            i_time = self.get_time_at(i_index)
+            i_value = self.get_value_at(i_index)
+            i_value_new = i_value+offset_value
+            self.create_value_at_time(i_time, i_value_new)
 
 
 class NodePortAnmLayerOpt(object):
@@ -615,7 +409,7 @@ class NodePortAnmLayerOpt(object):
     def get_data(self):
         layer_data = {}
         for i_anm_curve, i_anm_layer in self.generate_curve_args():
-            i_anm_curve_opt = AnmCurveOpt(i_anm_curve)
+            i_anm_curve_opt = AnmCurveNodeOpt(i_anm_curve)
             # if i_anm_layer is not None:
             #     i_anm_data = []
             #     for j in self.ANM_LAYER_KEYS:
@@ -626,13 +420,3 @@ class NodePortAnmLayerOpt(object):
             #     layer_data[i_anm_layer] = i_anm_data
 
         return layer_data
-
-
-class NodeAnmCurvesOpt(object):
-    def __init__(self, path):
-        self._path = path
-
-    def get_data(self):
-        atr_names = _attribute.NodeAttributes.get_all_keyable_names(self._path)
-        for i_atr_name in atr_names:
-            print i_atr_name

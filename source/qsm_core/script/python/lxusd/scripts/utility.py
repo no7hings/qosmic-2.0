@@ -20,7 +20,7 @@ class ShotUsdCombine(object):
         user_directory_path = bsc_storage.StgTmpBaseMtd.get_user_directory('shot-usd-combine')
         return '{}/{}.usda'.format(
             user_directory_path,
-            bsc_core.TimestampOpt(
+            bsc_core.BscTimestampOpt(
                 bsc_storage.StgFileOpt(file_path_src).get_mtime()
             ).get_as_tag_36()
         )

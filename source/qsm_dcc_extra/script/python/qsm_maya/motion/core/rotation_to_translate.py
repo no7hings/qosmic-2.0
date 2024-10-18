@@ -4,7 +4,7 @@ import math
 import maya.cmds as cmds
 
 
-class RotationToTranslate(object):
+class RotateToTranslate(object):
     class Axis:
         X = 'x'
         Y = 'y'
@@ -30,11 +30,11 @@ class RotationToTranslate(object):
         elif axis == 'z':
             return world_mat[8:11]
 
-    def get_translations(self):
+    def get_translate(self):
         return cmds.xform(self._path, translation=1, worldSpace=0, query=1)
 
     def move_by_rotate_y(self, rotate_y):
-        initial_translate = self.get_translations()
+        initial_translate = self.get_translate()
         initial_rotate = [0, rotate_y, 0]
 
         angle = math.radians(initial_rotate[1])

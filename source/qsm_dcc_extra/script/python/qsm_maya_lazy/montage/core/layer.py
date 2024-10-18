@@ -53,7 +53,7 @@ class CharacterCurve(object):
         atr_path_tgt = '{}.{}'.format(path, atr_name)
         qsm_mya_core.Connection.create(atr_path_src, atr_path_tgt)
 
-        curve_opt = qsm_mya_core.AnmCurveOpt(curve_name_new)
+        curve_opt = qsm_mya_core.AnmCurveNodeOpt(curve_name_new)
 
         if atr_key in {
             'translateX',
@@ -121,7 +121,7 @@ class SketchCurve(object):
 
     @classmethod
     def appy_data(cls, curve_node, atr_name, values, start_frame, translation_scale):
-        curve_opt = qsm_mya_core.AnmCurveOpt(curve_node)
+        curve_opt = qsm_mya_core.AnmCurveNodeOpt(curve_node)
 
         if atr_name in {
             'translateX',
@@ -277,7 +277,7 @@ class AbsAdvMotionLayer(_base.MotionBase):
             if i_curve_path is None:
                 continue
 
-            i_curve_opt = qsm_mya_core.AnmCurveOpt(i_curve_path)
+            i_curve_opt = qsm_mya_core.AnmCurveNodeOpt(i_curve_path)
             i_curve_opt.create_value_at_time(start_frame, pre_root_opt.get(i_atr_src))
             i_curve_opt.set_tangent_types_at_time(start_frame, 'auto', 'step')
 
@@ -301,7 +301,7 @@ class AbsAdvMotionLayer(_base.MotionBase):
             if i_curve_path is None:
                 continue
 
-            i_curve_opt = qsm_mya_core.AnmCurveOpt(i_curve_path)
+            i_curve_opt = qsm_mya_core.AnmCurveNodeOpt(i_curve_path)
             i_curve_opt.create_value_at_time(start_frame, pre_root_opt.get(i_atr_src))
             i_curve_opt.set_tangent_types_at_time(start_frame, 'auto', 'step')
 
@@ -598,7 +598,6 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
                 if i_translate_connections:
                     i_atr = i_translate_connections[0][1]
                     i_atr_dst = '.'.join(i_atr.split('.')[:-1]+['targetWeight'])
-                    # i_atr_src = qsm_mya_core.NodeAttribute.get_source_(i_atr_dst)
                     list_.append(i_atr_dst)
 
             i_rotate_connections = qsm_mya_core.NodeAttribute.get_all_target_connections(
@@ -607,7 +606,6 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
             if i_rotate_connections:
                 i_atr = i_rotate_connections[0][1]
                 i_atr_dst = '.'.join(i_atr.split('.')[:-1]+['targetWeight'])
-                # i_atr_src = qsm_mya_core.NodeAttribute.get_source_(i_atr_dst)
                 list_.append(i_atr_dst)
         return list_
 
@@ -709,7 +707,7 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
         if curve_opt is not None:
             curve_opt.delete()
 
-        curve_opt = qsm_mya_core.AnmCurveOpt.create(self._location, 'main_weight', True)
+        curve_opt = qsm_mya_core.AnmCurveNodeOpt.create(self._location, 'main_weight', True)
         qsm_mya_core.NodeAttribute.set_as_message(
             self._location, 'main_weight_curve', curve_opt.path
         )
@@ -728,7 +726,7 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
                 self._location, i_key+'_curve'
             )
             if i_curve:
-                i_curve_opt = qsm_mya_core.AnmCurveOpt(i_curve)
+                i_curve_opt = qsm_mya_core.AnmCurveNodeOpt(i_curve)
             else:
                 i_curve_opt = None
             dict_[i_key] = i_curve_opt, i_atr_src
@@ -741,7 +739,7 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
                 i_curve_opt.delete()
 
             i_curve_typ = CharacterCurve.CURVE_TYPE_MAP[i_atr_src]
-            i_curve_opt = qsm_mya_core.AnmCurveOpt.create(
+            i_curve_opt = qsm_mya_core.AnmCurveNodeOpt.create(
                 self._location, i_key, keep_namespace=True, curve_type=i_curve_typ
             )
 
@@ -759,7 +757,7 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
         curve_opt = self.get_output_end_curve_opt()
         if curve_opt is not None:
             curve_opt.delete()
-        curve_opt = qsm_mya_core.AnmCurveOpt.create(self._location, 'output_end', True)
+        curve_opt = qsm_mya_core.AnmCurveNodeOpt.create(self._location, 'output_end', True)
         qsm_mya_core.NodeAttribute.set_as_message(
             self._location, 'output_end_curve', curve_opt.path
         )
@@ -769,7 +767,7 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
                 self._location, 'output_end'
             )
         if _:
-            return qsm_mya_core.AnmCurveOpt(
+            return qsm_mya_core.AnmCurveNodeOpt(
                 _
             )
 
@@ -778,7 +776,7 @@ class AdvChrMotionLayer(AbsAdvMotionLayer):
             'main_weight_curve'
         )
         if _:
-            return qsm_mya_core.AnmCurveOpt(
+            return qsm_mya_core.AnmCurveNodeOpt(
                 _
             )
 
@@ -805,7 +803,7 @@ class AdvChrMotionMasterLayerOpt(AbsAdvMotionLayer):
     def __init__(self, *args, **kwargs):
         super(AdvChrMotionMasterLayerOpt, self).__init__(*args, **kwargs)
 
-    def export_motion(self, file_path):
+    def export_motion_to(self, file_path):
         namespace = self.get_resource_namespace()
         start_frame, end_frame = self.get_frame_range()
         resource = _resource.AdvResource(namespace)
@@ -813,15 +811,16 @@ class AdvChrMotionMasterLayerOpt(AbsAdvMotionLayer):
         main_controls = [resource._control_set.get(x) for x in main_control_keys]
         main_controls = list(filter(None, main_controls))
 
+        # fixme: face control is ignore?
         main_control_set = _control.AdvControlSet(main_controls)
-        main_control_set.bake_keyframes(
+        main_control_set.bake_all_keyframes(
             start_frame, end_frame,
             attributes=[
                 'translateX', 'translateY', 'translateZ',
                 'rotateX', 'rotateY', 'rotateZ',
             ]
         )
-        resource._control_set.export_motion(file_path)
+        resource._control_set.export_motion_to(file_path)
         cmds.undo()
 
     def connect_to_resource(self, adv_resource):
@@ -938,7 +937,7 @@ c.AdvChrMotionMasterLayerOpt.test()
         """
         cls(
             cls.find_master_layer_path()
-        ).export_motion(
+        ).export_motion_to(
             'Z:/temporaries/montage_test/test_1.jsz'
         )
 

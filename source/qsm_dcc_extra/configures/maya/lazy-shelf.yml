@@ -20,7 +20,7 @@ build:
                 dbl_script: ''
 
             tool_1:
-                name: 'Lazy Motion Tool'
+                name: 'Lazy NodeMotion Tool'
                 name_chs: '懒人动作工具'
                 tool_tip: 'To be supplemented.'
                 tool_tip_chs:

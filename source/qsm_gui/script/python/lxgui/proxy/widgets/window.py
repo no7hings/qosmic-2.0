@@ -22,9 +22,9 @@ from .. import abstracts as gui_prx_abstracts
 # proxy widgets
 from . import utility as gui_prx_wdt_utility
 
-from . import node as gui_prx_wdt_node
-
 from . import container as gui_prx_wgt_container
+
+from . import option_node as _option_node
 
 
 class AbsPrxDialogWindow(
@@ -126,7 +126,7 @@ class AbsPrxDialogWindow(
         self._customize_layout = _qt_wgt_base.QtVBoxLayout(self._customize_widget)
         self._customize_layout.setAlignment(gui_qt_core.QtCore.Qt.AlignTop)
         # option
-        self._options_prx_node = gui_prx_wdt_node.PrxOptionsNode('options')
+        self._options_prx_node = _option_node.PrxOptionsNode('options')
         self._customize_layout.addWidget(self._options_prx_node.widget)
         self._options_prx_node.set_hide()
         # tip

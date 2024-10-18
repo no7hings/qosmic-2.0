@@ -125,7 +125,7 @@ class FKIKSwitch(object):
     def mark_control_key_auto(cls, control, frame):
         attributes = _mya_core.NodeAttributes.get_all_keyable_names(control)
         for i_atr in attributes:
-            i_control_curve_opt = _mya_core.NodeAttributeAnmCurveOpt(control, i_atr)
+            i_control_curve_opt = _mya_core.NodeAttributeKeyframeOpt(control, i_atr)
             i_control_curve_opt.create_value_at_time(
                 frame, _mya_core.NodeAttribute.get_value(control, i_atr)
             )
@@ -148,7 +148,7 @@ class FKIKSwitch(object):
             return
         # mark pre key
         if mark_key is True:
-            blend_curve_opt = _mya_core.NodeAttributeAnmCurveOpt(blend_control, blend_port)
+            blend_curve_opt = _mya_core.NodeAttributeKeyframeOpt(blend_control, blend_port)
             blend_curve_opt.create_value_at_time(frame-1, blend_value_pre)
             blend_curve_opt.set_out_tangent_type_at_time(frame-1, 'step')
         # mark correspond controls key
@@ -209,7 +209,7 @@ class FKIKSwitch(object):
         # apply new blend
         cmds.setAttr(blend_control+'.FKIKBlend', blend_value)
         if mark_key is True:
-            _mya_core.NodeAttributeAnmCurveOpt(blend_control, blend_port).create_value_at_time(
+            _mya_core.NodeAttributeKeyframeOpt(blend_control, blend_port).create_value_at_time(
                 frame, blend_value
             )
 

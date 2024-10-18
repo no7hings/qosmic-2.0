@@ -836,8 +836,8 @@ class _UnitrResource(
         prx_item_widget.set_index_draw_flag(True)
         name_dict = collections.OrderedDict()
         name_dict['resource'] = dtb_resource.gui_name
-        name_dict['ctime'] = bsc_core.TimePrettifyMtd.to_prettify_by_timetuple(
-            bsc_core.TimePrettifyMtd.to_timetuple(
+        name_dict['ctime'] = bsc_core.BscTimePrettify.to_prettify_by_timetuple(
+            bsc_core.BscTimePrettify.to_timetuple(
                 dtb_resource.ctime, '%Y-%m-%d %H:%M:%S'
             ),
             language=1

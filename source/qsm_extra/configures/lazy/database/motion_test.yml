@@ -1,7 +1,7 @@
 options:
     type: motion
 
-    gui_name: 'Motion (Test)'
+    gui_name: 'NodeMotion (Test)'
     gui_name_chs: '动作（测试）'
 
     gui_item_frame_size: [178, 178]
@@ -195,7 +195,7 @@ entities:
             category: 'group'
             type: 'group'
 
-            gui_name: 'Motion Speeds'
+            gui_name: 'NodeMotion Speeds'
             gui_name_chs: '运动速度'
 
         /basic/motion_speeds/slow:

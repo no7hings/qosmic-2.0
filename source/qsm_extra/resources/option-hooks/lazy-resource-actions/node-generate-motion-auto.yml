@@ -5,9 +5,9 @@ option:
         - '*-*'
     #
     gui:
-        group_name: 'python'
+        group_name: 'nodes'
         #
-        name: 'Generate Motion'
+        name: 'Generate NodeMotion'
         icon_name: 'application/python'
         #
         size: [720, 720]

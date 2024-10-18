@@ -733,7 +733,7 @@ class FncExporterForGeometryUvMapUsd(gnl_fnc_abstracts.AbsFncOptionBase):
         user_directory_path = bsc_storage.StgTmpBaseMtd.get_user_directory('usd-export')
         return '{}/{}.usd'.format(
             user_directory_path,
-            bsc_core.TimestampOpt(
+            bsc_core.BscTimestampOpt(
                 bsc_core.BscSystem.generate_timestamp()
             ).get_as_tag_36()
         )

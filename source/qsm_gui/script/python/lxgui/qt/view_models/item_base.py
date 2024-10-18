@@ -44,6 +44,12 @@ class AbsItemModel(object):
         painter.drawRect(rect)
 
     @classmethod
+    def _draw_rect_0(cls, painter, rect, color):
+        painter.setPen(QtGui.QColor(0, 0, 0, 0))
+        painter.setBrush(color)
+        painter.drawRect(rect)
+
+    @classmethod
     def _draw_pixmap(cls, painter, rect, pixmap):
         pxm_scaled = pixmap.scaled(
             rect.size(),

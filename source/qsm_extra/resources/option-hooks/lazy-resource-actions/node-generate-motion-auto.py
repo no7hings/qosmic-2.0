@@ -3,7 +3,7 @@ import functools
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy.montage.scripts as qsm_lzy_mtg_scripts
+import qsm_lazy.resource.scripts as qsm_lzy_rsc_scripts
 
 
 class Main(object):
@@ -17,7 +17,7 @@ class Main(object):
         with window.gui_progressing(maximum=len(scr_entities)) as g_p:
             for i_scr_entity in scr_entities:
                 i_scr_entity_path = i_scr_entity.path
-                i_opt = qsm_lzy_mtg_scripts.StlConvertionOpt(
+                i_opt = qsm_lzy_rsc_scripts.MotionGenerateOpt(
                     scr_stage_key, i_scr_entity_path
                 )
                 i_args = i_opt.generate_args()
@@ -63,7 +63,7 @@ class Main(object):
                         '如需要终止任务，请点击“关闭”。'
                     )
                 else:
-                    task_window.set_window_title('Motion Convert')
+                    task_window.set_window_title('NodeMotion Convert')
 
                 task_window.run_fnc_delay(
                     functools.partial(

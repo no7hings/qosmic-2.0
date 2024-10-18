@@ -75,7 +75,7 @@ def main(session):
         w.set_options_group_enable()
         #
         p = w._options_prx_node.add_port(
-            gui_prx_widgets.PrxPortAsConstantChoose(
+            gui_prx_widgets.PrxPortForConstantChoose(
                 'project', 'Project'
             )
         )

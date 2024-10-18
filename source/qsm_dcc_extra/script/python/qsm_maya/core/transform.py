@@ -12,7 +12,7 @@ from . import node_for_dag as _node_for_dag
 
 class Transform(_node_for_dag.DagNode):
     @classmethod
-    def to_args(cls, path_or_name):
+    def to_shape_args(cls, path_or_name):
         if _node.Node.is_transform_type(path_or_name):
             transform_path = cls.to_path(path_or_name)
             _ = cls.get_shape(path_or_name)
@@ -116,7 +116,7 @@ class Transform(_node_for_dag.DagNode):
     @classmethod
     def check_is_transform(cls, path):
         """
-        check node is a transform not a group
+        check node is a transform (has shape) not a group
         """
         if cmds.nodeType(path) == 'transform':
             shape_paths = cmds.listRelatives(path, children=1, shapes=1, noIntermediate=0, fullPath=1) or []

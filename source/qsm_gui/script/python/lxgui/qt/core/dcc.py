@@ -261,14 +261,14 @@ class GuiQtDcc(AbsGuiDcc):
             return QtMaya.generate_qt_icon_by_name(icon_name)
         elif cls.get_is_houdini():
             return GuiQtHoudini.generate_qt_icon_by_name(icon_name)
-        return _base.GuiQtIcon.generate_by_name(icon_name)
+        return _base.QtIcon.generate_by_name(icon_name)
 
     @classmethod
     def generate_qt_directory_icon(cls, use_system=False):
         f_i_p = QtWidgets.QFileIconProvider()
         if use_system is True:
             return f_i_p.icon(f_i_p.Folder)
-        return _base.GuiQtIcon.generate_by_icon_name('file/folder')
+        return _base.QtIcon.generate_by_icon_name('file/folder')
 
     @classmethod
     def generate_qt_file_icon(cls, file_path):

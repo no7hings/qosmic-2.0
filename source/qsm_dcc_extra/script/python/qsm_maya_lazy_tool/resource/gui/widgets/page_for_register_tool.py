@@ -5,7 +5,7 @@ import qsm_screw.core as qsm_scr_core
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.preview.scripts as qsm_mya_prv_scripts
+import qsm_maya.steps.general.scripts as qsm_mya_stp_gnl_scripts
 
 import qsm_maya_lazy.resource as qsm_mya_lzy_resource
 
@@ -113,7 +113,7 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
     def do_show_playblast_window(self):
         camera_path = qsm_mya_core.Camera.get_active()
         resolution_size = (512, 512)
-        qsm_mya_prv_scripts.PlayblastOpt.show_window(
+        qsm_mya_stp_gnl_scripts.PlayblastOpt.show_window(
             camera=camera_path,
             resolution=resolution_size,
             texture_enable=True, light_enable=False, shadow_enable=False,
@@ -128,7 +128,7 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
         play_enable = self._prx_options_node.get('playblast.play')
         frame_step = 1
         resolution_size = (512, 512)
-        qsm_mya_prv_scripts.PlayblastOpt.execute(
+        qsm_mya_stp_gnl_scripts.PlayblastOpt.execute(
             movie_path,
             camera=camera_path,
             resolution=resolution_size,
@@ -155,4 +155,3 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxPageForRegisterTool, self).__init__(window, session, *args, **kwargs)
-

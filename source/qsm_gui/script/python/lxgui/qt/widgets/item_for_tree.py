@@ -157,7 +157,7 @@ class QtTreeWidgetItem(
     def _set_icon_color_rgb_(self, rgb, column=0):
         self.setIcon(
             column,
-            _qt_core.GuiQtIcon.generate_by_rgb(rgb)
+            _qt_core.QtIcon.generate_by_rgb(rgb)
         )
 
     def _set_icon_by_text_(self, text, column=0):

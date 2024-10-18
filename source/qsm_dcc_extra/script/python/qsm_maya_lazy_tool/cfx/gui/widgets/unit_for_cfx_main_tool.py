@@ -5,15 +5,15 @@ import lxbasic.storage as bsc_storage
 
 import lxgui.core as gui_core
 
-import qsm_maya.cfx.core as qsm_mya_cfx_core
-
 import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.general.core as qsm_mya_gnl_core
+import qsm_maya.steps.general.core as qsm_mya_stp_gnl_core
 
-import qsm_maya.cfx.scripts as qsm_mya_cfx_scripts
+import qsm_maya.steps.cfx.core as qsm_mya_stp_cfx_core
+
+import qsm_maya.steps.cfx.scripts as qsm_mya_stp_cfx_scripts
 
 import qsm_maya_gui.core as qsm_mya_gui_core
 
@@ -25,7 +25,7 @@ class UnitForCfxResourceView(
 
     NAMESPACE = 'rig'
 
-    RESOURCES_QUERY_CLS = qsm_mya_cfx_core.CfxAdvRigsQuery
+    RESOURCES_QUERY_CLS = qsm_mya_stp_cfx_core.CfxAdvRigAssetsQuery
 
     CHECK_BOX_FLAG = True
 
@@ -91,7 +91,7 @@ class ToolsetUnitForCfxRigExport(
                 maximum=len(resources), label='processing cfx clothes'
             ) as g_p:
                 for i_resource in resources:
-                    i_opt = qsm_mya_cfx_scripts.CfxNClothCacheOpt(i_resource)
+                    i_opt = qsm_mya_stp_cfx_scripts.CfxNClothCacheOpt(i_resource)
                     i_opt.do_export(
                         directory_path,
                         frame_range, frame_step, frame_offset,
@@ -104,9 +104,9 @@ class ToolsetUnitForCfxRigExport(
     def do_dcc_export_cfx_cloth_cache_by_checked_as_backstage(self):
         import lxbasic.web as bsc_web
 
-        import qsm_task.process as qsm_tsk_process
+        import qsm_prc_task.process as qsm_prc_tsk_process
 
-        if qsm_tsk_process.TaskProcessClient.get_server_status():
+        if qsm_prc_tsk_process.TaskProcessClient.get_server_status():
             args = self._get_export_args()
             if args:
                 resources, with_alembic_cache, with_geometry_cache = args
@@ -118,13 +118,13 @@ class ToolsetUnitForCfxRigExport(
 
                 namespaces = [x.namespace for x in resources]
 
-                task_name, scene_src_path, cmd_script = qsm_mya_cfx_scripts.CfxNClothCacheProcess.generate_task_args(
+                task_name, scene_src_path, cmd_script = qsm_mya_stp_cfx_scripts.CfxNClothCacheProcess.generate_task_args(
                     namespaces,
                     directory_path,
                     frame_range, frame_step, frame_offset, with_alembic_cache, with_geometry_cache
                 )
 
-                qsm_tsk_process.TaskProcessClient.new_entity(
+                qsm_prc_tsk_process.TaskProcessClient.new_entity(
                     group=None,
                     type='cfx-cache',
                     name=task_name,
@@ -177,7 +177,7 @@ class ToolsetUnitForCfxRigExport(
 
                 namespaces = [x.namespace for x in resources]
 
-                option_hook = qsm_mya_cfx_scripts.CfxNClothCacheProcess.generate_deadline_job_args(
+                option_hook = qsm_mya_stp_cfx_scripts.CfxNClothCacheProcess.generate_deadline_job_args(
                     namespaces,
                     directory_path,
                     frame_range, frame_step, frame_offset, with_alembic_cache, with_geometry_cache
@@ -340,7 +340,7 @@ class ToolsetUnitForCfxRigImport(
         pot = self._prx_options_node.get_port('cloth.file_tree')
         pot.set_root(directory_path)
 
-        ptn = qsm_mya_gnl_core.FilePatterns.CfxClothAbcFile
+        ptn = qsm_mya_stp_gnl_core.FilePatterns.CfxClothAbcFile
         ptn_opt = bsc_core.BscStgParseOpt(
             ptn
         )
@@ -361,7 +361,7 @@ class ToolsetUnitForCfxRigImport(
 
         cache_paths = pot.get_all(check_only=True)
         if cache_paths:
-            ptn = qsm_mya_gnl_core.FilePatterns.CfxClothAbcFile
+            ptn = qsm_mya_stp_gnl_core.FilePatterns.CfxClothAbcFile
             ptn_opt = bsc_core.BscStgParseOpt(
                 ptn
             )
@@ -369,11 +369,11 @@ class ToolsetUnitForCfxRigImport(
                 maximum=len(cache_paths), label='load cfx clothes'
             ) as g_p:
                 for i_cache_path in cache_paths:
-                    if ptn_opt.get_is_matched(i_cache_path) is True:
+                    if ptn_opt.check_is_matched(i_cache_path) is True:
                         i_properties = ptn_opt.get_variants(i_cache_path)
                         i_resource = resources_query.get(i_properties['namespace'])
                         if i_resource:
-                            i_resource_opt = qsm_mya_cfx_scripts.CfxNClothCacheOpt(i_resource)
+                            i_resource_opt = qsm_mya_stp_cfx_scripts.CfxNClothCacheOpt(i_resource)
                             i_resource_opt.load_cache(i_cache_path)
 
                     g_p.do_update()
@@ -382,7 +382,7 @@ class ToolsetUnitForCfxRigImport(
         resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
-                i_opt = qsm_mya_cfx_scripts.CfxNClothCacheOpt(i_resource)
+                i_opt = qsm_mya_stp_cfx_scripts.CfxNClothCacheOpt(i_resource)
                 i_opt.remove_cache()
 
         self._page.do_gui_refresh_all(force=True)

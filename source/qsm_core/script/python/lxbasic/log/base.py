@@ -428,7 +428,7 @@ class LogProcessContext(object):
         self.__maximum = maximum
         self.__value = 0
         if label is None:
-            label = 'unknown'
+            label = 'process'
 
         self.__label = label
         self.__use_as_bar = use_as_progress_bar

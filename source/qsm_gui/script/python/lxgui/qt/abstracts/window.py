@@ -110,10 +110,10 @@ class AbsQtMainWindowDef(object):
 
     def _set_icon_by_text_(self, text):
         self._widget.setWindowIcon(
-            _qt_core.GuiQtIcon.generate_by_text(text)
+            _qt_core.QtIcon.generate_by_text(text)
         )
 
     def _set_icon_name_(self, icon_name):
         self._widget.setWindowIcon(
-            _qt_core.GuiQtIcon.generate_by_icon_name(icon_name)
+            _qt_core.QtIcon.generate_by_icon_name(icon_name)
         )

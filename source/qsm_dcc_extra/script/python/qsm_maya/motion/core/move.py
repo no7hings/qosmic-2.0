@@ -8,6 +8,12 @@ from . import control as _control
 
 
 class ControlMove(object):
+    @classmethod
+    def test(cls):
+        cls.create_locator_fnc(
+            'nurbsCircle1'
+        )
+
     def __init__(self, path):
         pass
 
@@ -43,7 +49,7 @@ class ControlMove(object):
             )
             _mya_core.ParentConstraint.clear_all_from_source(locator_path)
 
-            _control.ControlMotionOpt(main_control).create_control_move_locator(
+            _control.ControlMotionOpt(main_control).connect_move_locator(
                 locator_path
             )
             _mya_core.Connection.create(
@@ -54,7 +60,7 @@ class ControlMove(object):
 
     @classmethod
     def remove_locator_fnc(cls, main_control):
-        _control.ControlMotionOpt(main_control).remove_control_move_locator()
+        _control.ControlMotionOpt(main_control).remove_move_locator()
 
     @classmethod
     def find_main_control(cls, locator_shape):

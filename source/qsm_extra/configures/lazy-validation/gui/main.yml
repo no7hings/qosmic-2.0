@@ -241,14 +241,47 @@ build:
             name_chs: '选项'
 
             parameters:
+                match_scheme:
+                    widget: capsule_string
+                    options: ['file_pattern', 'file_name_pattern']
+                    name: 'Match Pattern'
+                    name_chs: '匹配方案'
+                    option_names_chs: ['文件模版', '文件名模版']
+                    default: 'project'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        文件模版：
+                            适用于文件夹结构有规则的情况，如项目文件夹
+                        文件名模版：
+                            适用于文件夹结构没有规则，但是文件名有规则，如本地文件，如果文件夹在服务器，速度比较慢
+
                 directory:
                     widget: directory
                     open_or_save: 'open'
                     history_key: 'tool-panels.lazy-validation.rig_batch.directory'
+                    name: 'Directory'
+                    name_chs: '目录'
 
                 file_pattern:
                     widget: string
                     value: '{directory}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
+                    name: 'File Pattern'
+                    name_chs: '文件模版'
+                    visible_condition: {
+                        operator: 'is', port: 'match_scheme', value: 'file_pattern'
+                    }
+
+                file_name_pattern:
+                    widget: string
+                    value: '*_Skin.ma'
+                    name: 'File Name Pattern'
+                    name_chs: '文件名模版'
+                    visible_condition: {
+                        operator: 'is', port: 'match_scheme', value: 'file_name_pattern'
+                    }
 
                 control:
                     widget: capsule_strings
@@ -433,6 +466,10 @@ build:
                 message: 'Entry a file pattern, and continue.'
                 message_chs: '输入一个文件模版，然后继续。'
 
+            no_file_name_pattern:
+                message: 'Entry a file name pattern, and continue.'
+                message_chs: '输入一个文件名模版，然后继续。'
+
             no_assets:
                 message: 'Check or select one or more asset, and continue.'
                 message_chs: '勾选/选中一个或多个资产，然后继续。'
@@ -590,14 +627,47 @@ build:
             name_chs: '选项'
 
             parameters:
+                match_scheme:
+                    widget: capsule_string
+                    options: ['file_pattern', 'file_name_pattern']
+                    name: 'Match Pattern'
+                    name_chs: '匹配方案'
+                    option_names_chs: ['文件模版', '文件名模版']
+                    default: 'project'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        文件模版：
+                            适用于文件夹结构有规则的情况，如项目文件夹
+                        文件名模版：
+                            适用于文件夹结构没有规则，但是文件名有规则，如本地文件，如果文件夹在服务器，速度比较慢
+
                 directory:
                     widget: directory
                     open_or_save: 'open'
                     history_key: 'tool-panels.lazy-validation.scenery_batch.directory'
+                    name: 'Directory'
+                    name_chs: '目录'
 
                 file_pattern:
                     widget: string
                     value: '{directory}/Assets/{role}/{asset}/Maya/Final/{asset}.ma'
+                    name: 'File Pattern'
+                    name_chs: '文件模版'
+                    visible_condition: {
+                        operator: 'is', port: 'match_scheme', value: 'file_pattern'
+                    }
+
+                file_name_pattern:
+                    widget: string
+                    value: '*.ma'
+                    name: 'File Name Pattern'
+                    name_chs: '文件名模版'
+                    visible_condition: {
+                        operator: 'is', port: 'match_scheme', value: 'file_name_pattern'
+                    }
 
                 mesh:
                     widget: capsule_strings
@@ -710,6 +780,10 @@ build:
             no_file_pattern:
                 message: 'Entry a file pattern, and continue.'
                 message_chs: '输入一个文件模版，然后继续。'
+
+            no_file_name_pattern:
+                message: 'Entry a file name pattern, and continue.'
+                message_chs: '输入一个文件名模版，然后继续。'
 
             no_assets:
                 message: 'Check or select one or more asset, and continue.'

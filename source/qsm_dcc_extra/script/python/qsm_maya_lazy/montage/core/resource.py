@@ -46,7 +46,7 @@ c.AdvResource('sam_Skin').test()
         data = self._sketch_set.get_data(start_frame, end_frame)
         data['root_height'] = self.get_root_height()
         # control motion
-        data['controls'] = self._control_set.get_data()
+        data['controls'] = self._control_set.generate_motion_dict()
 
         data['metadata'] = dict(
             ctime=bsc_core.BscSystem.generate_timestamp(),
@@ -57,7 +57,8 @@ c.AdvResource('sam_Skin').test()
                 namespace=self._namespace
             ),
             start_frame=start_frame,
-            end_frame=end_frame
+            end_frame=end_frame,
+            fps=qsm_mya_core.Frame.get_fps_value()
         )
         return data
 
@@ -129,7 +130,7 @@ c.AdvResource('sam_Skin').test()
 
     @classmethod
     def test(cls):
-        cls('sam_Skin')._control_set.bake_keyframes(
+        cls('sam_Skin')._control_set.bake_all_keyframes(
             1, 24, ['translateX', 'translateY']
         )
 

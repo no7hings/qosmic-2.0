@@ -1,0 +1,16 @@
+types:
+    asset:
+        name: 'Asset'
+        name_chs: '资产'
+
+    motion:
+        name: 'NodeMotion'
+        name_chs: '动作'
+
+    video:
+        name: 'Video'
+        name_chs: '视频'
+
+    audio:
+        name: 'Audio'
+        name_chs: '音频'

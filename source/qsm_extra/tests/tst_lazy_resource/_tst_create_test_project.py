@@ -1,9 +1,9 @@
 # coding:utf-8
 import lxbasic.storage as bsc_storage
 
-import qsm_general.scan as qsm_gnl_scan
+import qsm_scan as qsm_scan
 
-scan_root = qsm_gnl_scan.Root.generate()
+scan_root = qsm_scan.Root.generate()
 
 project = scan_root.project('QSM_TST')
 

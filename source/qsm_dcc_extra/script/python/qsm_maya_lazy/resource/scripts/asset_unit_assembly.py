@@ -17,18 +17,18 @@ import qsm_general.core as qsm_gnl_core
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.general.core as qsm_mya_gnl_core
+import qsm_maya.steps.general.core as qsm_mya_stp_gnl_core
 
 import qsm_maya.assembly.core as qsm_mya_asb_core
 
-import qsm_maya.scenery.core as qsm_mya_scn_core
+import qsm_maya.steps.scenery.core as qsm_mya_stp_scn_core
 
 
 class AssetUnitAssemblyOpt(object):
     TASK_KEY = 'unit_assembly_generate'
 
-    CACHE_ROOT = qsm_mya_gnl_core.ResourceCacheNodes.UnitAssemblyRoot
-    CACHE_NAME = qsm_mya_gnl_core.ResourceCacheNodes.UnitAssemblyName
+    CACHE_ROOT = qsm_mya_stp_gnl_core.ResourceCacheNodes.UnitAssemblyRoot
+    CACHE_NAME = qsm_mya_stp_gnl_core.ResourceCacheNodes.UnitAssemblyName
 
     @classmethod
     def create_cache_root_auto(cls):
@@ -216,7 +216,7 @@ class _UnitPrc(object):
     @classmethod
     def filter_prc(cls, shape_path):
         face_count = qsm_mya_core.Mesh.get_face_number(shape_path)
-        if face_count > qsm_mya_scn_core.Assembly.FACE_COUNT_MAXIMUM:
+        if face_count > qsm_mya_stp_scn_core.Assembly.FACE_COUNT_MAXIMUM:
             pass
 
     def __init__(self, cache_directory_path):
@@ -224,7 +224,7 @@ class _UnitPrc(object):
 
     def filter_execute_for(self, shape_path):
         face_count = qsm_mya_core.Mesh.get_face_number(shape_path)
-        if face_count < qsm_mya_scn_core.Assembly.FACE_COUNT_MAXIMUM:
+        if face_count < qsm_mya_stp_scn_core.Assembly.FACE_COUNT_MAXIMUM:
             return
 
         self.execute_for(shape_path)
@@ -258,7 +258,7 @@ class _UnitPrc(object):
 
             qsm_mya_core.Transform.zero_transformations(transform_path_new)
             # gpu
-            gpu_key = qsm_mya_scn_core.Assembly.Keys.GPU
+            gpu_key = qsm_mya_stp_scn_core.Assembly.Keys.GPU
             gpu_file_path = '{}/{}.abc'.format(
                 unit_directory_path, gpu_key
             )
@@ -267,7 +267,7 @@ class _UnitPrc(object):
             )
             file_dict[gpu_key] = gpu_file_path
             # mesh
-            mesh_key = qsm_mya_scn_core.Assembly.Keys.Mesh
+            mesh_key = qsm_mya_stp_scn_core.Assembly.Keys.Mesh
             mesh_file_path = '{}/{}.ma'.format(
                 unit_directory_path, mesh_key
             )
@@ -309,7 +309,7 @@ class _UnitPrc(object):
                             )
                         )
                     # gpu
-                    i_gpu_key = qsm_mya_scn_core.Assembly.Keys.GPU_LOD.format(i_level)
+                    i_gpu_key = qsm_mya_stp_scn_core.Assembly.Keys.GPU_LOD.format(i_level)
                     i_gpu_file_path_lod = '{}/{}.abc'.format(
                         unit_directory_path, i_gpu_key
                     )
@@ -318,7 +318,7 @@ class _UnitPrc(object):
                     )
                     file_dict[i_gpu_key] = i_gpu_file_path_lod
                     # mesh
-                    i_mesh_key = qsm_mya_scn_core.Assembly.Keys.Mesh_LOD.format(i_level)
+                    i_mesh_key = qsm_mya_stp_scn_core.Assembly.Keys.Mesh_LOD.format(i_level)
                     i_mesh_file_path_lod = '{}/{}.ma'.format(
                         unit_directory_path, i_mesh_key
                     )
@@ -328,14 +328,14 @@ class _UnitPrc(object):
                     file_dict[i_mesh_key] = i_mesh_file_path_lod
 
             # add attribute
-            for i_key in qsm_mya_scn_core.Assembly.Keys.All:
+            for i_key in qsm_mya_stp_scn_core.Assembly.Keys.All:
                 if i_key in file_dict:
                     i_file_path = file_dict[i_key]
-                    if i_key.startswith(qsm_mya_scn_core.Assembly.Keys.Mesh):
+                    if i_key.startswith(qsm_mya_stp_scn_core.Assembly.Keys.Mesh):
                         qsm_mya_core.AssemblyDefinition.add_scene(
                             ad_path, i_file_path, i_key
                         )
-                    elif i_key.startswith(qsm_mya_scn_core.Assembly.Keys.GPU):
+                    elif i_key.startswith(qsm_mya_stp_scn_core.Assembly.Keys.GPU):
                         qsm_mya_core.AssemblyDefinition.add_cache(
                             ad_path, i_file_path, i_key
                         )
@@ -531,7 +531,7 @@ class AssetUnitAssemblyProcess(object):
         )
         qsm_mya_core.Scene.clear_unknown_nodes()
         self._all_roots = qsm_mya_core.DagNode.find_roots(import_paths)
-        qsm_mya_scn_core.GpuImport.find_all_gpu_caches(self._directory_path)
+        qsm_mya_stp_scn_core.GpuImport.find_all_gpu_caches(self._directory_path)
         # find lost reference first
         qsm_mya_core.FileReferences.search_all_from(
             [self._directory_path], ignore_exists=True

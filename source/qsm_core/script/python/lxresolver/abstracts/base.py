@@ -1510,7 +1510,7 @@ class AbsRsvConfigureExtraDef(AbsRsvBaseDef):
 
     @staticmethod
     def _completion_rsv_entity_extend_create_kwargs(kwargs, result, kwargs_extend):
-        update = bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
+        update = bsc_core.BscTimePrettify.to_prettify_by_timestamp(
             bsc_storage.StgFileOpt(
                 result
             ).get_mtime(),
@@ -1630,7 +1630,7 @@ class AbsRsvConfigureExtraDef(AbsRsvBaseDef):
         #
         kwargs['result'] = result
         if bsc_storage.StgFileOpt(result).get_is_exists() is True:
-            update = bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
+            update = bsc_core.BscTimePrettify.to_prettify_by_timestamp(
                 bsc_storage.StgFileOpt(
                     result
                 ).get_mtime(),

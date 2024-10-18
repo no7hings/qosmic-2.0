@@ -115,7 +115,7 @@ class EtrBase(bsc_etr_abstracts.AbsEtrBase):
         platform = bsc_core.BscSystem.get_platform()
         package_data = rsv_project.get_package_data()
         cfg_file_path = package_data['application-configure-file'][platform]
-        cfg_file_path = bsc_core.BasParse.update_variants(cfg_file_path, project=rsv_project.get_name())
+        cfg_file_path = bsc_core.BscParse.update_variants(cfg_file_path, project=rsv_project.get_name())
         data = bsc_storage.StgFileOpt(cfg_file_path).set_read()
         if data:
             for i_app, i_data in data.items():
@@ -140,14 +140,14 @@ class EtrBase(bsc_etr_abstracts.AbsEtrBase):
         platform = bsc_core.BscSystem.get_platform()
         package_data = rsv_project.get_package_data()
         cfg_file_path = package_data['application-configure-file'][platform]
-        return bsc_core.BasParse.update_variants(cfg_file_path, project=rsv_project.get_name())
+        return bsc_core.BscParse.update_variants(cfg_file_path, project=rsv_project.get_name())
 
     @classmethod
     def get_deadline_configure_file(cls, rsv_project):
         platform = bsc_core.BscSystem.get_platform()
         package_data = rsv_project.get_package_data()
         cfg_file_path = package_data['deadline-configure-file'][platform]
-        return bsc_core.BasParse.update_variants(cfg_file_path, project=rsv_project.get_name())
+        return bsc_core.BscParse.update_variants(cfg_file_path, project=rsv_project.get_name())
 
     @classmethod
     def send_mail(cls, *args, **kwargs):

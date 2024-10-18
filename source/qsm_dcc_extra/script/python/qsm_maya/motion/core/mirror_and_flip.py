@@ -89,18 +89,19 @@ class MirrorAndFlip(_base.MotionBase):
         """
         # Making positive numbers
         denominator = 0
-        for value in vector:
+        for i in vector:
             # Making values positive,
             # so the denominator will be all values added togther
-            value = abs(value)
-            denominator += value
+            i = abs(i)
+            denominator += i
+
         percentage_strengt = []
-        for value in vector:
-            # Making value positive
+        for i in vector:
+            # Making vector positive
             # in order to get a strengt relative to the other axis
-            value = abs(value)
-            strengt = value / denominator
-            percentage_strengt.append(strengt)
+            i = abs(i)
+            i_strengt = i / denominator
+            percentage_strengt.append(i_strengt)
         # Finding the axis with the highest percentage.
         # Since the percentage_strengt is a xyz list.
         # We can use the index to find xyz.
@@ -114,45 +115,6 @@ class MirrorAndFlip(_base.MotionBase):
         else:
             dominating_axis = '-X' if vector[0] < 0 else 'X'
         return dominating_axis
-
-    @classmethod
-    def get_attribute_data(cls, paths):
-        data = {}
-        for i_path in paths:
-            # Getting data from controller and putting it in a dictionary
-            data[i_path] = {}
-            # Checking if there exist attributes
-            attributes = cmds.listAttr(i_path, keyable=True, unlocked=True)
-            if attributes:
-                for attr in attributes:
-                    # Seeing if attribute has incoming connection,
-                    # and there cannot be modified
-                    source_con = cmds.listConnections(
-                        '{}.{}'.format(i_path, attr),
-                        source=True,
-                        destination=False,
-                    )
-                    # Checking if source connenction is a key
-                    key_source = cmds.listConnections(
-                        '{}.{}'.format(i_path, attr),
-                        source=True,
-                        type='animCurve',
-                    )
-                    if not source_con:
-                        # Getting the value on the controller
-                        # and storing it in data dict
-                        value = cmds.getAttr('{}.{}'.format(i_path, attr))
-                        # Only store data if int or float type
-                        if type(value) in [int, float]:
-                            data[i_path][attr] = value
-                    elif key_source:
-                        # Getting the value on the controller
-                        # and storing it in data dict
-                        value = cmds.getAttr('{}.{}'.format(i_path, attr))
-                        # Only store data if int or float type
-                        if type(value) in [int, float]:
-                            data[i_path][attr] = value
-        return data
 
     @classmethod
     def _mark_rotate(cls, path):
@@ -182,8 +144,8 @@ class MirrorAndFlip(_base.MotionBase):
     def get_axis_vector(cls, path):
         dict_ = {}
         # mark auto key
-        auto_key = cmds.autoKeyframe(state=1, query=1)
-        if auto_key:
+        auto_key_mark = cmds.autoKeyframe(state=1, query=1)
+        if auto_key_mark:
             cmds.autoKeyframe(state=0)
 
         rotate_data = cls._mark_rotate(path)
@@ -192,9 +154,8 @@ class MirrorAndFlip(_base.MotionBase):
 
         world_mat = cmds.xform(path, matrix=1, worldSpace=1, query=1)
         # Rounding the values in the world matrix
-        for i, value in enumerate(world_mat):
-            rounded_value = round(value, 3)
-            world_mat[i] = rounded_value
+        for i, i_value in enumerate(world_mat):
+            world_mat[i] = round(i_value, 3)
 
         dict_['x_axis'] = world_mat[0:3]
         dict_['y_axis'] = world_mat[4:7]
@@ -202,66 +163,33 @@ class MirrorAndFlip(_base.MotionBase):
         # recover rotate
         cls._recover_rotate(rotate_data)
         # recover auto key
-        if auto_key:
+        if auto_key_mark:
             cmds.autoKeyframe(state=True)
         return dict_
 
     @classmethod
-    def mirror_side_fnc(cls, path_src, path_dst, data, mirror_axis):
-        # Getting the direction of the axis on controller
-        vector_src = cls.get_axis_vector(path_src)
-        x_axis_vector_src = vector_src['x_axis']
-        y_axis_vector_src = vector_src['y_axis']
-        z_axis_vector_src = vector_src['z_axis']
-        # Getting the direction of the axis on opposite controller
-        vector_dst = cls.get_axis_vector(path_dst)
-        x_axis_vector_dst = vector_dst['x_axis']
-        y_axis_vector_dst = vector_dst['y_axis']
-        z_axis_vector_dst = vector_dst['z_axis']
-
-        x_dominating_src = cls.get_dominating_by_axis_vector(x_axis_vector_src)
-        y_dominating_src = cls.get_dominating_by_axis_vector(y_axis_vector_src)
-        z_dominating_src = cls.get_dominating_by_axis_vector(z_axis_vector_src)
-
-        x_dominating_dst = cls.get_dominating_by_axis_vector(x_axis_vector_dst)
-        y_dominating_dst = cls.get_dominating_by_axis_vector(y_axis_vector_dst)
-        z_dominating_dst = cls.get_dominating_by_axis_vector(z_axis_vector_dst)
-
-        mirror_atr_axis = cls.get_mirror_atr_axis_by_vector(
-            mirror_axis,
-            x_dominating_src,
-            y_dominating_src,
-            z_dominating_src,
-        )
-
-        for i_atr_name in data[path_src].keys():
-            i_value_src = data[path_src][i_atr_name]
-            i_value_factor = cls.generate_side_attribute_value_factor(
-                i_atr_name,
-                mirror_axis,
-                mirror_atr_axis,
-                x_dominating_src, y_dominating_src, z_dominating_src,
-                x_dominating_dst, y_dominating_dst, z_dominating_dst
-            )
-            i_value_dst = i_value_src*i_value_factor
-            if _mya_core.NodeAttribute.is_exists(path_dst, i_atr_name) is True:
-                cmds.setAttr(
-                    '{}.{}'.format(path_dst, i_atr_name), i_value_dst
-                )
-
-    @classmethod
-    def generate_side_mirror_keys(cls, path_src, path_dst, mirror_axis, key_includes):
+    def generate_side_mirror_keys(
+        cls,
+        path_src, path_dst,
+        axis_vector_src, axis_vector_dst,
+        mirror_axis, key_includes,
+    ):
         list_ = []
         # Getting the direction of the axis on controller
-        vector_src = cls.get_axis_vector(path_src)
-        x_axis_vector_src = vector_src['x_axis']
-        y_axis_vector_src = vector_src['y_axis']
-        z_axis_vector_src = vector_src['z_axis']
+        if axis_vector_src is None:
+            axis_vector_src = cls.get_axis_vector(path_src)
+
+        x_axis_vector_src = axis_vector_src['x_axis']
+        y_axis_vector_src = axis_vector_src['y_axis']
+        z_axis_vector_src = axis_vector_src['z_axis']
+
         # Getting the direction of the axis on opposite controller
-        vector_dst = cls.get_axis_vector(path_dst)
-        x_axis_vector_dst = vector_dst['x_axis']
-        y_axis_vector_dst = vector_dst['y_axis']
-        z_axis_vector_dst = vector_dst['z_axis']
+        if axis_vector_dst is None:
+            axis_vector_dst = cls.get_axis_vector(path_dst)
+
+        x_axis_vector_dst = axis_vector_dst['x_axis']
+        y_axis_vector_dst = axis_vector_dst['y_axis']
+        z_axis_vector_dst = axis_vector_dst['z_axis']
 
         x_dominating_src = cls.get_dominating_by_axis_vector(x_axis_vector_src)
         y_dominating_src = cls.get_dominating_by_axis_vector(y_axis_vector_src)
@@ -291,13 +219,20 @@ class MirrorAndFlip(_base.MotionBase):
         return list_
 
     @classmethod
-    def generate_middle_mirror_keys(cls, path_src, mirror_axis, key_includes):
+    def generate_middle_mirror_keys(
+        cls,
+        path_src,
+        axis_vector_src,
+        mirror_axis, key_includes
+    ):
         list_ = []
 
-        vector_src = cls.get_axis_vector(path_src)
-        x_axis_vector_src = vector_src['x_axis']
-        y_axis_vector_src = vector_src['y_axis']
-        z_axis_vector_src = vector_src['z_axis']
+        if axis_vector_src is None:
+            axis_vector_src = cls.get_axis_vector(path_src)
+
+        x_axis_vector_src = axis_vector_src['x_axis']
+        y_axis_vector_src = axis_vector_src['y_axis']
+        z_axis_vector_src = axis_vector_src['z_axis']
 
         x_dominating_src = cls.get_dominating_by_axis_vector(x_axis_vector_src)
         y_dominating_src = cls.get_dominating_by_axis_vector(y_axis_vector_src)
@@ -423,34 +358,6 @@ class MirrorAndFlip(_base.MotionBase):
         return 1
 
     @classmethod
-    def mirror_middle_fnc(cls, path, data, mirror_axis):
-        # Getting the direction of the axis on middle controller
-        # Getting the direction of the axis on controller
-        vector_src = cls.get_axis_vector(path)
-        x_axis_vector_src = vector_src['x_axis']
-        y_axis_vector_src = vector_src['y_axis']
-        z_axis_vector_src = vector_src['z_axis']
-
-        x_dominating_src = cls.get_dominating_by_axis_vector(x_axis_vector_src)
-        y_dominating_src = cls.get_dominating_by_axis_vector(y_axis_vector_src)
-        z_dominating_src = cls.get_dominating_by_axis_vector(z_axis_vector_src)
-
-        mirror_atr_axis = cls.get_mirror_atr_axis_by_vector(
-            mirror_axis,
-            x_dominating_src,
-            y_dominating_src,
-            z_dominating_src,
-        )
-
-        for i_atr_name in data[path].keys():
-            i_value_src = data[path][i_atr_name]
-            # Finding what axis is pointing the most to the mirror axis
-            i_factor = cls.get_middle_attribute_value_factor(i_atr_name, mirror_atr_axis)
-            if i_factor == -1:
-                i_value_dst = i_value_src*i_factor
-                cmds.setAttr('{}.{}'.format(path, i_atr_name), i_value_dst)
-
-    @classmethod
     def get_middle_attribute_value_factor(
         cls,
         atr_name,
@@ -467,7 +374,7 @@ class MirrorAndFlip(_base.MotionBase):
         return 1
 
     @classmethod
-    def mirror_side(cls, path_src, path_dst, **kwargs):
+    def mirror_side_for(cls, path_src, path_dst, **kwargs):
         """
         left or right only
         """
@@ -475,22 +382,34 @@ class MirrorAndFlip(_base.MotionBase):
         if 'data_override' in kwargs:
             data_src = kwargs.pop('data_override')
         else:
-            data_src = _base.Motion.get(path_src, key_includes=key_includes)
+            data_src = _base.NodeMotion.generate_motion_properties_fnc(path_src, key_includes=key_includes)
+
         mirror_axis = 'X'
+
         mirror_keys = cls.generate_side_mirror_keys(
-            path_src, path_dst, mirror_axis, key_includes
+            path_src, path_dst,
+            kwargs.get('axis_vector_src'), kwargs.get('axis_vector_dst'),
+            mirror_axis, key_includes
         )
-        _base.Motion.apply(path_dst, data_src, mirror_keys=mirror_keys, **kwargs)
+
+        _base.NodeMotion.apply_motion_properties_fnc(path_dst, data_src, mirror_keys=mirror_keys, **kwargs)
 
     @classmethod
-    def mirror_middle(cls, path_src, **kwargs):
+    def mirror_middle_for(cls, path_src, **kwargs):
         """
         middle
         """
         key_includes = cmds.listAttr(path_src, keyable=True, unlocked=True)
-        data_src = _base.Motion.get(path_src, key_includes=key_includes)
+        if 'data_override' in kwargs:
+            data_src = kwargs.pop('data_override')
+        else:
+            data_src = _base.NodeMotion.generate_motion_properties_fnc(path_src, key_includes=key_includes)
+
         mirror_axis = 'X'
+
         mirror_keys = cls.generate_middle_mirror_keys(
-            path_src, mirror_axis, key_includes
+            path_src,
+            kwargs.get('axis_vector_src'),
+            mirror_axis, key_includes
         )
-        _base.Motion.apply(path_src, data_src, mirror_keys=mirror_keys, **kwargs)
+        _base.NodeMotion.apply_motion_properties_fnc(path_src, data_src, mirror_keys=mirror_keys, **kwargs)

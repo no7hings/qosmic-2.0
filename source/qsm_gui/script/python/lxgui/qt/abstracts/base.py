@@ -192,6 +192,7 @@ class AbsQtMenuBaseDef(object):
                     qt_menu = self._auto_generate_menu_(qt_menu)
                     qt_menu._set_menu_content_(menu_content)
                     qt_menu._set_show_()
+
         if self._menu_data_generate_fnc is not None:
             qt_menu = self._auto_generate_menu_(qt_menu)
             menu_data = self._menu_data_generate_fnc()
@@ -221,8 +222,8 @@ class AbsQtStatusBaseDef(object):
     @classmethod
     def _get_rgb_args_(cls, r, g, b, a):
         h, s, v = bsc_core.BscColor.rgb_to_hsv(r, g, b)
-        r_, g_, b_ = bsc_core.BscColor.hsv2rgb(h, s*.75, v*.75)
-        return (r_, g_, b_, a), (r, g, b, a)
+        r_, g_, b_ = bsc_core.BscColor.hsv2rgb(h, s*1.25, v*1.25)
+        return (r, g, b, a), (r_, g_, b_, a)
 
     @classmethod
     def _generate_background_rgba_args_by_status_(cls, status):
@@ -243,9 +244,9 @@ class AbsQtStatusBaseDef(object):
             return cls._get_rgb_args_(*cls.Rgba.LightNeonGreen)
         # validation
         elif status in {cls.ValidationStatus.Enable}:
-            return cls._get_rgb_args_(*cls.Rgba.Gray)
+            return cls._get_rgb_args_(*cls.Rgba.BkgButton)
         elif status in {cls.ValidationStatus.Disable}:
-            return cls._get_rgb_args_(*cls.Rgba.DarkGray)
+            return cls._get_rgb_args_(*cls.Rgba.BkgButtonDisable)
         if status in [cls.ValidationStatus.Warning]:
             return cls._get_rgb_args_(*cls.Rgba.LemonYellow)
         elif status in {cls.ValidationStatus.Error}:
@@ -312,8 +313,11 @@ class AbsQtStatusBaseDef(object):
         #
         self._status = _gui_core.GuiProcessStatus.Stopped
         #
-        self._status_color = _qt_core.QtRgba.Transparent
-        self._hover_status_color = _qt_core.QtRgba.Transparent
+        self._status_background_color = _qt_core.QtRgba.Transparent
+        self._hover_status_background_color = _qt_core.QtRgba.Transparent
+
+        self._status_border_color = _qt_core.QtRgba.Transparent
+        self._hover_status_border_color = _qt_core.QtRgba.Transparent
         #
         self._status_rect = QtCore.QRect()
 
@@ -330,9 +334,15 @@ class AbsQtStatusBaseDef(object):
         else:
             self._widget.unsetCursor()
 
-        self._status_color, self._hover_status_color = self._generate_background_rgba_args_by_status_(
+        (
+            self._status_background_color, self._hover_status_background_color
+        ) = self._generate_background_rgba_args_by_status_(
             self._status
         )
+
+        self._status_border_color = tuple([max(min(x+8, 255), 0) for x in self._status_background_color])
+        self._hover_status_border_color = tuple([max(min(x+8, 255), 0) for x in self._hover_status_background_color])
+
         self._refresh_widget_draw_()
         
     def _set_status_flag_(self, boolean):

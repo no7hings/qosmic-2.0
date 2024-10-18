@@ -96,6 +96,10 @@ class Reference(object):
     def replace(cls, path, file_path):
         cmds.file(file_path, loadReference=path, force=1)
 
+    @classmethod
+    def get_nodes(cls, path):
+        return [cmds.ls(x, long=1)[0] for x in cmds.referenceQuery(path, nodes=1, dagPath=1) or []]
+
 
 class References(object):
     NODE_EXCLUDE = [

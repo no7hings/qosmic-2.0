@@ -270,7 +270,7 @@ class _GuiFileOpt(
             _location = file_opt.get_path()
 
             _name_dict['version'] = file_opt.properties.version
-            _name_dict['time'] = bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(
+            _name_dict['time'] = bsc_core.BscTimePrettify.to_prettify_by_timestamp(
                 file_opt.get_mtime(), language=1
             )
 

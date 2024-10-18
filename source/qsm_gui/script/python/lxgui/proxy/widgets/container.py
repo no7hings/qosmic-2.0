@@ -189,7 +189,7 @@ class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
         qt_layout_0.setContentsMargins(0, 0, 0, 0)
         qt_layout_0.setSpacing(2)
         # header
-        self._qt_head = gui_qt_wgt_head.QtHHead()
+        self._qt_head = gui_qt_wgt_head.QtHHeadFrame()
         qt_layout_0.addWidget(self._qt_head)
         self._qt_head.expand_toggled.connect(self.set_expanded)
         self._qt_head._set_tool_tip_text_('"LMB-click" to expand "on" / "off"')
@@ -316,7 +316,7 @@ class PrxVToolBar(PrxHToolBar):
         qt_layout_0.setSpacing(2)
         qt_layout_0.setAlignment(gui_qt_core.QtCore.Qt.AlignLeft)
         # header
-        self._qt_head = gui_qt_wgt_head.QtVExpandHead1()
+        self._qt_head = gui_qt_wgt_head.QtVHeadFrame()
         qt_layout_0.addWidget(self._qt_head)
         self._qt_head.expand_toggled.connect(self.set_expanded)
         self._qt_head._set_tool_tip_text_('"LMB-click" to expand "on" / "off"')

@@ -119,7 +119,16 @@ class Entity(dict):
         if language == 'chs':
             keys = self.DESCRIPTION_KEYS_CHS
         return '\n'.join(
-            ['{}: {}'.format(x[1], bsc_core.auto_string(self[x[0]])) for x in keys]
+            [
+                '{}: {}'.format(
+                    x[1],
+                    bsc_core.auto_string(
+                        bsc_core.BscTimePrettify.to_prettify_by_timetuple_(
+                            self[x[0]].timetuple(), language
+                        ) if x[0] in {'ctime', 'mtime'} else self[x[0]]
+                    )
+                ) for x in keys
+            ]
         )
 
 
@@ -355,6 +364,10 @@ FLUSH PRIVILEGES;
     @property
     def configure(self):
         return self._configure
+
+    @classmethod
+    def get_main_configure(cls):
+        return bsc_resource.RscExtendConfigure.get_as_content('lazy/database/main')
 
     def connect(self):
         self.Node = generate_entity_type(_database.Node, self._dtb)
@@ -965,7 +978,7 @@ FLUSH PRIVILEGES;
                 if language == 'chs':
                     texts.append(
                         u'{}被"{}"{}；'.format(
-                            bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(i_timestamp, language=0),
+                            bsc_core.BscTimePrettify.to_prettify_by_timestamp(i_timestamp, language=0),
                             i_user_name,
                             bsc_core.ensure_unicode(tag_dict_chs[i_tag])
                         )
@@ -975,7 +988,7 @@ FLUSH PRIVILEGES;
                         '{} by "{}" at {};'.format(
                             tag_dict[i_tag],
                             i_user_name,
-                            bsc_core.TimePrettifyMtd.to_prettify_by_timestamp(i_timestamp, language=1)
+                            bsc_core.BscTimePrettify.to_prettify_by_timestamp(i_timestamp, language=1)
                         )
                     )
             return '\n'.join(texts)
