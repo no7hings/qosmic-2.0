@@ -233,7 +233,7 @@ class _AbsQtPopupAsChoose(
         self._popup_all_unchecked_button.press_clicked.connect(self._execute_popup_all_unchecked_)
         # keyword filter
         self._popup_item_keyword_filter_is_enable = False
-        self._popup_keyword_filter_entry = _entry.QtEntryAsConstant(self)
+        self._popup_keyword_filter_entry = _entry.QtEntryForConstant(self)
         self._popup_keyword_filter_entry.hide()
         self._popup_keyword_filter_entry._set_entry_enable_(True)
         self._popup_keyword_filter_entry.setAlignment(
@@ -1032,7 +1032,7 @@ class QtPopupAsChooseForGuide(
         self._init_frame_base_def_(self)
         self._init_popup_base_def_(self)
         #
-        self._popup_keyword_filter_entry = _entry.QtEntryAsConstant(self)
+        self._popup_keyword_filter_entry = _entry.QtEntryForConstant(self)
         self._popup_keyword_filter_entry.hide()
         self._popup_keyword_filter_entry._set_entry_enable_(True)
         self._popup_keyword_filter_entry.setAlignment(

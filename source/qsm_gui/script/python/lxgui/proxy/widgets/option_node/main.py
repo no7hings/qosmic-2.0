@@ -603,22 +603,22 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
             if default_ is not None:
                 default__ = default_
             elif default_index is not None:
-                default__ = options_[default_]
+                default__ = options_[default_index]
             else:
                 if options_:
                     default__ = options_[0]
 
-            if default_ is not None:
+            if default__ is not None:
                 port.set_default(default__)
 
             pull_history_latest = variants.get('pull_history_latest')
             if pull_history_latest is True:
                 if port.pull_history_latest() is False:
-                    if default_ is not None:
-                        port.set(default_)
+                    if default__ is not None:
+                        port.set(default__)
             else:
-                if default_ is not None:
-                    port.set(default_)
+                if default__ is not None:
+                    port.set(default__)
 
         elif widget_ in {'icon'}:
             all_application_icon = variants.get('all_application_icon')

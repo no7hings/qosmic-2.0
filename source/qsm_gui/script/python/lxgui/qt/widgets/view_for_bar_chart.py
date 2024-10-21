@@ -9,13 +9,13 @@ from ..chart_widgets import bar as _cht_wgt_bar
 
 from ..chart_widgets import info as _cht_wgt_info
 
-from ..widgets import base as _base
+from . import base as _base
 
-from ..widgets import utility as _utility
+from . import utility as _utility
 
-from ..widgets import entry_for_capsule as _entry_for_capsule
+from . import entry as _entry
 
-from ..widgets import button as _button
+from . import button as _button
 
 
 class QtViewForBarChart(
@@ -47,7 +47,7 @@ class QtViewForBarChart(
         main_lot.setContentsMargins(*[0]*4)
         main_lot.setSpacing(2)
 
-        self._key_entry = _entry_for_capsule.QtEntryAsCapsule()
+        self._key_entry = _entry.QtEntryAsCapsule()
         main_lot.addWidget(self._key_entry)
         self._key_entry.setFixedHeight(20)
         self._key_entry._set_use_exclusive_(False)

@@ -3,13 +3,13 @@ import lxbasic.core as bsc_core
 
 import lxbasic.content as bsc_content
 # qt
-from ..core.wrap import *
+from ...core.wrap import *
 
-from .. import core as gui_qt_core
+from ... import core as gui_qt_core
+
+from .. import bubble as gui_qt_wgt_bubble
 # qt widgets
-from . import entry as gui_qt_wgt_entry
-
-from . import bubble as gui_qt_wgt_bubble
+from . import entry_for_constant as _entry_for_constant
 
 
 # entry as path
@@ -29,7 +29,7 @@ class _PathAcceptCmd(QtWidgets.QUndoCommand):
 
 
 #   widget
-class QtEntryExtendAsPath(QtWidgets.QWidget):
+class QtEtdEntryForPath(QtWidgets.QWidget):
     entry_value_changed = qt_signal()
 
     entry_value_change_accepted = qt_signal(str)
@@ -45,7 +45,7 @@ class QtEntryExtendAsPath(QtWidgets.QWidget):
         self._undo_stack = QtWidgets.QUndoStack()
 
     def __init__(self, *args, **kwargs):
-        super(QtEntryExtendAsPath, self).__init__(*args, **kwargs)
+        super(QtEtdEntryForPath, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
 
@@ -61,7 +61,7 @@ class QtEntryExtendAsPath(QtWidgets.QWidget):
         self._path_bubble.component_press_clicked.connect(self._choose_at_)
         self._path_bubble.component_press_dbl_clicked.connect(self._enter_at_)
 
-        self._entry_widget = gui_qt_wgt_entry.QtEntryAsConstant()
+        self._entry_widget = _entry_for_constant.QtEntryForConstant()
         self._lot.addWidget(self._entry_widget)
         self._entry_widget.setFocusPolicy(QtCore.Qt.ClickFocus)
         self._entry_widget.setFont(gui_qt_core.QtFont.generate_2(size=12))

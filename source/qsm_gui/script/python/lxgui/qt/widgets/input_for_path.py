@@ -12,7 +12,7 @@ from . import button as _button
 
 from . import entry_frame as _entry_frame
 
-from . import entry_extend_for_path as _entry_extend_for_path
+from . import entry as _entry
 
 from . import popup as _popup
 
@@ -39,7 +39,7 @@ class QtInputAsPath(
 
     user_input_entry_finished = qt_signal()
 
-    QT_ENTRY_EXTEND_CLS = _entry_extend_for_path.QtEntryExtendAsPath
+    QT_ENTRY_EXTEND_CLS = _entry.QtEtdEntryForPath
 
     QT_COMPLETION_POPUP_CLS = _popup.QtPopupAsCompletion
 

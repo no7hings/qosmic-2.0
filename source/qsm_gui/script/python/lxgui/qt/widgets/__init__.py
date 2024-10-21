@@ -27,10 +27,6 @@ from .entry_frame import *
 
 from .entry import *
 
-from .entry_for_capsule import *
-
-from .entry_extend_for_path import *
-
 from .popup import *
 
 from .item import *
@@ -96,7 +92,3 @@ from .view_for_bar_chart import *
 from .view_for_histogram_chart import *
 
 from .view_for_line_chart import *
-
-
-
-

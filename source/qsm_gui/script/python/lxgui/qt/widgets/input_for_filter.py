@@ -37,7 +37,7 @@ class QtInputAsFilter(
 
     occurrence_accepted = qt_signal(str)
 
-    QT_ENTRY_CLS = _entry.QtEntryAsConstant
+    QT_ENTRY_CLS = _entry.QtEntryForConstant
 
     QT_COMPLETION_POPUP_CLS = _popup.QtPopupAsCompletion
 

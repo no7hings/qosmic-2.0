@@ -1,13 +1,11 @@
 # coding=utf-8
-import six
-
 import lxbasic.core as bsc_core
 # qt
-from ...qt.core.wrap import *
+from ....qt.core.wrap import *
 
-from ...qt import core as _qt_core
+from ....qt import core as _qt_core
 
-from ...qt import abstracts as _qt_abstracts
+from ....qt import abstracts as _qt_abstracts
 
 
 # base entry as capsule, can be select one and more

@@ -84,7 +84,7 @@ class QtEntryAsGuide(
     #
     QT_POPUP_GUIDE_CHOOSE_CLS = _popup.QtPopupAsChooseForGuide
     #
-    QT_ENTRY_CLS = _entry.QtEntryAsConstant
+    QT_ENTRY_CLS = _entry.QtEntryForConstant
     #
     TYPE_FONT_SIZE = 10
     NAME_FONT_SIZE = 12
@@ -445,7 +445,7 @@ class QtInputAsGuide(
     _qt_abstracts.AbsQtInputBaseDef,
     _qt_abstracts.AbsQtInputCompletionExtraDef,
 ):
-    QT_ENTRY_CLS = _entry.QtEntryAsConstant
+    QT_ENTRY_CLS = _entry.QtEntryForConstant
     QT_COMPLETION_POPUP_CLS = _popup.QtPopupAsCompletion
 
     FILTER_COMPLETION_MAXIMUM = 50

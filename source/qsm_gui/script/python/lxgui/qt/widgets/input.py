@@ -34,7 +34,7 @@ class QtInputAsConstant(
     _qt_abstracts.AbsQtNameBaseDef,
     _qt_abstracts.AbsQtInputBaseDef,
 ):
-    QT_ENTRY_CLS = _entry.QtEntryAsConstant
+    QT_ENTRY_CLS = _entry.QtEntryForConstant
 
     entry_value_changed = qt_signal()
 
@@ -94,7 +94,7 @@ class QtInputAsConstantWithChoose(
     def _pull_history_(self, value):
         self._set_value_(value)
 
-    QT_ENTRY_CLS = _entry.QtEntryAsConstant
+    QT_ENTRY_CLS = _entry.QtEntryForConstant
 
     QT_POPUP_CHOOSE_CLS = _popup.QtPopupAsChoose
     QT_COMPLETION_POPUP_CLS = _popup.QtPopupAsCompletion
@@ -306,7 +306,7 @@ class QtInputAsBubbleWithChoose(
     def _refresh_choose_index_(self):
         pass
 
-    QT_ENTRY_CLS = _entry.QtEntryAsBubble
+    QT_ENTRY_CLS = _entry.QtEntryForTextBubble
 
     QT_POPUP_CHOOSE_CLS = _popup.QtPopupAsChoose
 
@@ -377,7 +377,7 @@ class QtInputAsContent(
     def _pull_history_(self, *args, **kwargs):
         pass
 
-    QT_ENTRY_CLS = _entry.QtEntryAsContent
+    QT_ENTRY_CLS = _entry.QtEntryForContent
 
     entry_value_changed = qt_signal()
 
@@ -516,7 +516,7 @@ class QtInputAsList(
     def _pull_history_(self, *args, **kwargs):
         pass
 
-    QT_ENTRY_CLS = _entry.QtEntryAsList
+    QT_ENTRY_CLS = _entry.QtEntryForList
     #
     QT_POPUP_CHOOSE_CLS = _popup.QtPopupAsChoose
     #
@@ -679,7 +679,7 @@ class QtInputAsListWithChoose(
     def _pull_history_(self, *args, **kwargs):
         pass
 
-    QT_ENTRY_CLS = _entry.QtEntryAsList
+    QT_ENTRY_CLS = _entry.QtEntryForList
     QT_POPUP_CHOOSE_CLS = _popup.QtPopupAsChoose
     #
     add_press_clicked = qt_signal()
@@ -837,7 +837,7 @@ class QtInputAsRgba(
     def _pull_history_(self, *args, **kwargs):
         pass
 
-    QT_ENTRY_CLS = _entry.QtEntryAsConstant
+    QT_ENTRY_CLS = _entry.QtEntryForConstant
 
     QT_POPUP_CHOOSE_CLS = _popup.QtPopupAsChooseForRgba
 
@@ -972,7 +972,7 @@ class QtInputAsIcon(
     def _refresh_choose_index_(self):
         pass
 
-    QT_ENTRY_CLS = _entry.QtEntryAsConstant
+    QT_ENTRY_CLS = _entry.QtEntryForConstant
 
     QT_POPUP_CHOOSE_CLS = _popup.QtPopupAsChooseForIcon
 
@@ -1106,7 +1106,7 @@ class QtInputAsTuple(
     def _pull_history_(self, *args, **kwargs):
         pass
 
-    QT_ENTRY_CLS = _entry.QtEntryAsConstant
+    QT_ENTRY_CLS = _entry.QtEntryForConstant
 
     entry_value_changed = qt_signal()
 
@@ -1138,7 +1138,7 @@ class QtInputAsTuple(
         self._set_entry_count_(value_size)
         if value_size:
             for i in range(value_size):
-                i_widget = _entry.QtEntryAsConstant()
+                i_widget = _entry.QtEntryForConstant()
                 i_widget._set_value_type_(self._value_type)
                 self._entry_layout.addWidget(i_widget)
                 self._value_entries.append(i_widget)

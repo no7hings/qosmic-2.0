@@ -7,11 +7,11 @@ from ..core.wrap import *
 
 from ..chart_widgets import line as _cht_wgt_line
 
-from ..widgets import base as _base
+from . import base as _base
 
-from ..widgets import utility as _utility
+from . import utility as _utility
 
-from ..widgets import entry_for_capsule as _entry_for_capsule
+from . import entry as _entry
 
 
 class QtViewForLineChart(
@@ -41,7 +41,7 @@ class QtViewForLineChart(
         top_lot.setContentsMargins(*[0]*4)
         top_lot.setSpacing(2)
 
-        self._key_entry = _entry_for_capsule.QtEntryAsCapsule()
+        self._key_entry = _entry.QtEntryAsCapsule()
         top_lot.addWidget(self._key_entry)
         self._key_entry._set_use_exclusive_(False)
 

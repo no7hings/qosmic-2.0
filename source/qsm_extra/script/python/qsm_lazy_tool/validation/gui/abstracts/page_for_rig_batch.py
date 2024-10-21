@@ -5,6 +5,8 @@ import functools
 
 import lxbasic.core as bsc_core
 
+import lxbasic.scan as bsc_scan
+
 import lxbasic.storage as bsc_storage
 
 import lxgui.core as gui_core
@@ -137,8 +139,6 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
         self._file_to_item_dict = {}
         self._asset_qt_tree_widget._view_model.restore()
 
-        match_scheme = self._prx_options_node.get('match_scheme')
-
         directory_path = self._prx_options_node.get('directory')
         if not directory_path:
             self._window.exec_message_dialog(
@@ -149,28 +149,15 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
             )
             return
 
-        if match_scheme == 'file_pattern':
-            pattern = self._prx_options_node.get('file_pattern')
-            if not pattern:
-                self._window.exec_message_dialog(
-                    self._window.choice_message(
-                        self._window._configure.get('build.{}.messages.no_file_pattern'.format(self.PAGE_KEY))
-                    ),
-                    status='warning'
-                )
-                return
-        elif match_scheme == 'file_name_pattern':
-            pattern = self._prx_options_node.get('file_name_pattern')
-            if not pattern:
-                self._window.exec_message_dialog(
-                    self._window.choice_message(
-                        self._window._configure.get('build.{}.messages.no_file_name_pattern'.format(self.PAGE_KEY))
-                    ),
-                    status='warning'
-                )
-                return
-        else:
-            raise RuntimeError()
+        pattern = self._prx_options_node.get('file_pattern')
+        if not pattern:
+            self._window.exec_message_dialog(
+                self._window.choice_message(
+                    self._window._configure.get('build.{}.messages.no_file_pattern'.format(self.PAGE_KEY))
+                ),
+                status='warning'
+            )
+            return
 
         process_options = self._validation_opt.generate_process_options(self._prx_options_node.to_dict())
         if not process_options:
@@ -184,24 +171,10 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
 
         roles = qsm_gnl_core.QsmAsset.get_character_role_mask()
         role = roles[0]
-        if match_scheme == 'file_pattern':
-            # add root
-            self._create_root()
-            self._create_role(role)
-            self._add_for_role(roles[0], pattern, directory_path, process_options)
-        elif match_scheme == 'file_name_pattern':
-            self._create_root()
-            self._create_role(role)
-            all_file_paths = bsc_storage.StgDirectoryOpt(directory_path).get_all_file_paths()
-            for i_file_path in all_file_paths:
-                i_file_opt = bsc_storage.StgFileOpt(i_file_path)
-                if i_file_opt.is_name_match_pattern(pattern):
-                    i_variants = dict(
-                        role=roles[0],
-                        result=i_file_path,
-                        asset=i_file_opt.name
-                    )
-                    self._add_asset(i_variants, process_options)
+
+        self._create_root()
+        self._create_role()
+        self._add_for_role(role, pattern, directory_path, process_options)
 
     def _create_root(self):
         flag, qt_item = self._asset_qt_tree_widget._view_model.create_item('/')
@@ -215,8 +188,6 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
         qt_item._item_model.set_icon_name('file/folder')
 
     def _add_for_role(self, role, pattern, directory_path, process_options):
-        self._create_role(role)
-
         pattern_opt = bsc_core.BscStgParseOpt(
             pattern,
             variants=dict(
@@ -224,14 +195,14 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
             )
         )
 
-        matches = pattern_opt.get_matches()
+        path_regex = pattern_opt.get_pattern_for_fnmatch()
 
-        if matches:
-            for i_variants in matches:
-                i_variants['role'] = role
-                self._add_asset(i_variants, process_options)
+        file_paths = bsc_scan.ScanGlob.glob_all_files(path_regex)
 
-    def _add_asset(self, variants, process_options):
+        for i_file_path in file_paths:
+            self._add_asset(role, i_file_path, process_options)
+
+    def _add_asset(self, role, file_path, process_options):
         def cache_fnc_():
             _args = self._validation_opt.generate_process_args(file_path)
             if _args is not None:
@@ -268,15 +239,9 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
                 ('Copy Path', 'copy', copy_path_fnc)
             ]
 
-        file_path = variants['result']
-
         file_opt = bsc_storage.StgFileOpt(file_path)
 
-        if 'asset' not in variants:
-            variants['asset'] = file_opt.name
-
-        path_pattern = '/{role}/{asset}'
-        path = path_pattern.format(**variants)
+        path = '/{}/{}'.format(role, file_opt.name)
         flag, qt_item = self._asset_qt_tree_widget._view_model.create_item(path)
 
         qt_item._item_model.set_assign_file(file_path)
