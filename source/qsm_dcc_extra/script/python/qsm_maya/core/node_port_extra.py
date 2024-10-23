@@ -266,7 +266,7 @@ class EtrNodePortOpt(object):
             sourceFromDestination=1
         )
         if _:
-            atr = bsc_core.PthAttributeOpt(_)
+            atr = bsc_core.BscAttributePathOpt(_)
             node_path = atr.obj_path
             if cmds.objExists(node_path) is True:
                 port_path = atr.port_path

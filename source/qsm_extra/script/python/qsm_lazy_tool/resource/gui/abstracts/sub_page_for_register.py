@@ -132,7 +132,7 @@ class _AbsPrxPageForAnyRegister(
             ]
         )
         entity_paths = [x.path for x in entities]
-        leaf_paths = bsc_core.BscPath.to_leaf_paths(entity_paths)
+        leaf_paths = bsc_core.BscNodePath.to_leaf_paths(entity_paths)
 
         for i in entities:
             if i.path in leaf_paths:
@@ -164,7 +164,7 @@ class _AbsPrxPageForAnyRegister(
             ]
         )
         entity_paths = [x.path for x in entities]
-        leaf_paths = bsc_core.BscPath.to_leaf_paths(entity_paths)
+        leaf_paths = bsc_core.BscNodePath.to_leaf_paths(entity_paths)
 
         for i in entities:
             if i.path in leaf_paths:

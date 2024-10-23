@@ -17,10 +17,6 @@ class QtWebServerForTask(QtCore.QObject):
             return text.encode('utf-8')
         return text
 
-    @classmethod
-    def auto_unicode(cls, text):
-        pass
-
     def __init__(self, *args, **kwargs):
         super(QtWebServerForTask, self).__init__(*args, **kwargs)
 

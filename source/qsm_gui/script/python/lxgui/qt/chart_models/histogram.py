@@ -63,7 +63,7 @@ class ChartModelForHistogram(object):
                 for j_idx, (j_k, j_v) in enumerate(i_leaf_data):
                     j_percent = j_v/float(i_value_total)
                     j_percent_text = '{}%'.format(
-                        bsc_core.RawValueMtd.to_percent_prettify(j_v, i_value_total, 4)
+                        bsc_core.BscValue.to_percent_prettify(j_v, i_value_total, 4)
                     )
                     i_r_0, i_g_0, i_b_0 = bsc_core.BscColor.hsv2rgb(
                         360-180*i_percent_pre, .55, .75

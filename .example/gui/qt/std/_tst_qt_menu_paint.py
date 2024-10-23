@@ -14,10 +14,6 @@ class CustomMenu(QMenu):
         self.setAutoFillBackground(True)
         #
         self.setFont(qt_core.QtFonts.NameNormal)
-        #
-        # self.setStyleSheet(
-        #     qt_core.QtStyle.get('QMenu')
-        # )
 
         self.item_height = 22
 

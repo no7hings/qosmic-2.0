@@ -119,7 +119,7 @@ class Setup(object):
     def execute(cls, *args, **kwargs):
         import lxbasic.log as bsc_log
         if cls.get_is_maya():
-            with bsc_log.LogContext.create(cls.LOG_KEY):
+            with bsc_log.LogContext.create(cls.LOG_KEY, 'setup'):
                 # cls.setup_arnold()
                 # cls.setup_usd()
                 cls.setup_td_menu()

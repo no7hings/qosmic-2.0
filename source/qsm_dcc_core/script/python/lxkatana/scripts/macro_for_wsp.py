@@ -707,7 +707,7 @@ class ScpWspShaderChecker(AbsWsp):
             'extra.camera_fit.render_resolution'
         )
         r_w, r_h = ktn_core.ResolutionOpt(render_resolution).get()
-        (t_x, t_y, t_z), (s_x, s_y, s_z) = bsc_core.CameraMtd.compute_project_transformation(
+        (t_x, t_y, t_z), (s_x, s_y, s_z) = bsc_core.BscCamera.compute_project_transformation(
             1, scale_percent, margin_percent, camera_fov, camera_screen_mode, (r_w, r_h)
         )
         ass_opt = ktn_core.NGNodeOpt(
@@ -1005,7 +1005,7 @@ class ScpComponentLayout(AbsWsp):
             paths = ktn_core.CEL(
                 self._ktn_obj, self._obj_opt.get('CEL')
             ).parse()
-            paths_leaf = bsc_core.BscPath.to_leaf_paths(paths)
+            paths_leaf = bsc_core.BscNodePath.to_leaf_paths(paths)
             if paths_leaf:
                 keys = []
                 bboxes = []
@@ -1034,7 +1034,7 @@ class ScpComponentLayout(AbsWsp):
 
                 if xywh_array:
                     dict_ = {}
-                    l_opt = bsc_core.RectLayoutOpt(xywh_array, spacing=spacing)
+                    l_opt = bsc_core.BscRectLayoutOpt(xywh_array, spacing=spacing)
                     rects = l_opt.generate()
                     layout_rect = l_opt.layout_rect
                     layout_rect_exact = layout_rect.exact_rect
@@ -1674,7 +1674,7 @@ class ScpWspRenderLayer(AbsWsp):
                     i_k, i_v = i.split('=')[:2]
                     i_r = re.findall(re.compile(r'\$(.*)', re.S), i_v)
                     if i_r:
-                        i_v = bsc_core.EnvBaseMtd.get(i_r[0])
+                        i_v = bsc_core.BscEnviron.get(i_r[0])
                     dict_[i_k] = i_v
         return dict_
 

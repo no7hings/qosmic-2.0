@@ -6,7 +6,7 @@ import re
 from . import raw as _raw
 
 
-class BscPath(object):
+class BscNodePath(object):
     @classmethod
     def get_dag_args(cls, path, pathsep='/'):
         """
@@ -160,7 +160,7 @@ class BscPath(object):
         etc.
         ps = ['/cgm', '/cjd', '/shl', '/cg7', '/lib', '/lib_bck', '/nsa_dev', '/tnt', '/']
         print(
-            BscPath.find_dag_sibling_names(
+            BscNodePath.find_dag_sibling_names(
                 '/cgm', ps
             )
         )
@@ -201,7 +201,7 @@ class BscPath(object):
         return list_
 
 
-class BscPathOpt(object):
+class BscNodePathOpt(object):
     PLANT_HSV_MAPPER = dict(
         tree_leaf=(120.0, 0.5, 0.15),
         tree_stem=(40.0, 0.5, 0.15),
@@ -240,7 +240,7 @@ class BscPathOpt(object):
     path = property(get_path)
 
     def get_name(self):
-        return BscPath.to_dag_name(
+        return BscNodePath.to_dag_name(
             path=self._path_text, pathsep=self._pathsep
         )
 
@@ -276,7 +276,7 @@ class BscPathOpt(object):
         return self.path == self.pathsep
 
     def get_parent_path(self):
-        return BscPath.get_dag_parent_path(
+        return BscNodePath.get_dag_parent_path(
             path=self._path_text, pathsep=self._pathsep
         )
 
@@ -298,7 +298,7 @@ class BscPathOpt(object):
             )
 
     def get_component_paths(self):
-        return BscPath.get_dag_component_paths(
+        return BscNodePath.get_dag_component_paths(
             path=self._path_text, pathsep=self._pathsep
         )
 
@@ -307,7 +307,7 @@ class BscPathOpt(object):
 
     def translate_to(self, pathsep='/'):
         return self.__class__(
-            BscPath.get_dag_pathsep_replace(
+            BscNodePath.get_dag_pathsep_replace(
                 self.path,
                 pathsep_src=self.pathsep,
                 pathsep_tgt=pathsep
@@ -316,7 +316,7 @@ class BscPathOpt(object):
 
     def clear_namespace_to(self):
         return self.__class__(
-            BscPath.get_dag_path_with_namespace_clear(
+            BscNodePath.get_dag_path_with_namespace_clear(
                 self.path,
                 pathsep=self.pathsep,
                 # namespacesep=':',
@@ -365,14 +365,14 @@ class BscPathOpt(object):
 
     def generate_child(self, name):
         return self.__class__(
-            BscPath.get_dag_child_path(
+            BscNodePath.get_dag_child_path(
                 self._path_text, name, pathsep=self._pathsep
             )
         )
 
     def get_depth(self):
         return len(
-            BscPath.get_dag_args(
+            BscNodePath.get_dag_args(
                 self._path_text,
                 pathsep=self._pathsep
             )
@@ -396,9 +396,9 @@ class BscPathOpt(object):
         )
 
 
-class PthNodeMapOpt(object):
+class BscNodePathMapOpt(object):
     """
-s = PthNodeMapOpt(
+s = BscNodePathMapOpt(
     {
         '/master/mod/hi': '/master/hi',
         '/master/cfx': '/master/aux/cfx',
@@ -441,7 +441,7 @@ for i in [
         return path
 
 
-class PthPortMtd(object):
+class BscPortPath(object):
     @classmethod
     def get_dag_args(cls, path, pathsep='.'):
         return path.split(pathsep)
@@ -473,7 +473,7 @@ class PthPortMtd(object):
         return list_
 
 
-class PthPortOpt(object):
+class BscPortPathOpt(object):
 
     def __init__(self, path, pathsep='.'):
         self._path_text = path
@@ -490,7 +490,7 @@ class PthPortOpt(object):
     path = property(get_path)
 
     def get_name(self):
-        return PthPortMtd.to_dag_name(
+        return BscPortPath.to_dag_name(
             path=self._path_text, pathsep=self._pathsep
         )
 
@@ -498,7 +498,7 @@ class PthPortOpt(object):
         return self.get_parent_path() is None
 
     def get_component_paths(self):
-        return PthPortMtd.get_dag_component_paths(
+        return BscPortPath.get_dag_component_paths(
             path=self._path_text, pathsep=self._pathsep
         )
 
@@ -506,7 +506,7 @@ class PthPortOpt(object):
         return [self.__class__(i) for i in self.get_component_paths()]
 
     def get_parent_path(self):
-        return PthPortMtd.get_dag_parent_path(
+        return BscPortPath.get_dag_parent_path(
             path=self._path_text, pathsep=self._pathsep
         )
 
@@ -530,7 +530,7 @@ class PthPortOpt(object):
         return self.__str__()
 
 
-class PthAttributeMtd(object):
+class BscAttributePath(object):
     @classmethod
     def join_by(cls, obj_path, port_path, port_pathsep='.'):
         return port_pathsep.join([obj_path, port_path])
@@ -541,7 +541,7 @@ class PthAttributeMtd(object):
         return _[0], pathsep.join(_[1:])
 
 
-class PthAttributeOpt(object):
+class BscAttributePathOpt(object):
     def __init__(self, atr_path, port_pathsep='.'):
         self._path = atr_path
         self._port_pathsep = port_pathsep

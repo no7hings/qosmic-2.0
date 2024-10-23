@@ -179,7 +179,7 @@ class QtEntryAsCapsule(
                 if names:
                     i_label = names[i_index]
                 else:
-                    i_label = bsc_core.RawTextMtd.to_prettify(values[i_index], capitalize=True)
+                    i_label = bsc_core.BscText.to_prettify(values[i_index], capitalize=True)
 
                 self._draw_texts.append(i_label)
                 self._frame_rects.append(QtCore.QRect())

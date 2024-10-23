@@ -1,7 +1,7 @@
 # coding:utf-8
 import _port_base
 
-import _input_for_file
+from ..input import input_for_file as _input_for_file
 
 
 class PrxPortForFileList(_port_base.AbsPrxPort):

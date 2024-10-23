@@ -117,7 +117,7 @@ class AbsEntity(object):
         self._root = root
         self._root_entity_stack = root.entity_stack
         self._path = path
-        self._path_opt = bsc_core.BscPathOpt(self._path)
+        self._path_opt = bsc_core.BscNodePathOpt(self._path)
         self._name = self._path_opt.get_name()
         self._variants = variants
         self._properties = Properties()
@@ -212,7 +212,7 @@ class AbsEntitiesCache(object):
             EntityScanPatterns.__dict__[self.EntityClass.Type]
         )
         self._stg_ptn_opt_for_scan.update_variants(**self._variants)
-        self._dcc_ptn_opt = bsc_core.PthDccParseOpt(
+        self._dcc_ptn_opt = bsc_core.BscDccParseOpt(
             EntityNodePatterns.__dict__[self.EntityClass.Type]
         )
         self._cache_dict = {}
@@ -295,7 +295,7 @@ class AbsTask(object):
     def __init__(self, entity, path, variants):
         self._entity = entity
         self._path = path
-        self._path_opt = bsc_core.BscPathOpt(self._path)
+        self._path_opt = bsc_core.BscNodePathOpt(self._path)
         self._name = self._path_opt.get_name()
 
         self._variants = variants
@@ -355,7 +355,7 @@ class AbsTaskQuery(object):
             EntityScanPatterns.__dict__[key]
         )
         self._stg_ptn_opt_for_scan.update_variants(**self._variants)
-        self._dcc_ptn_opt = bsc_core.PthDccParseOpt(
+        self._dcc_ptn_opt = bsc_core.BscDccParseOpt(
             EntityNodePatterns.__dict__[key]
         )
 

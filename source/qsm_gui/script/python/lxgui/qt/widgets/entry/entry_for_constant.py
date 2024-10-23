@@ -1,8 +1,6 @@
 # coding=utf-8
 import six
 
-import os
-
 import lxbasic.storage as bsc_storage
 # qt
 from ....qt.core.wrap import *
@@ -11,11 +9,9 @@ from ....qt import core as _qt_core
 
 from ....qt import abstracts as _qt_abstracts
 # qt widgets
-from .. import utility as _utility
+from .. import utility as _wgt_utility
 
-from .. import entry_frame as _entry_frame
-
-from .. import item_for_list as _item_for_list
+from .. import entry_frame as _wgt_entry_frame
 
 
 # entry as constant, etc. float, integer, string, ...
@@ -150,13 +146,13 @@ class QtEntryForConstant(
             if event.type() == QtCore.QEvent.FocusIn:
                 self._is_focused = True
                 entry_frame = self._get_entry_frame_()
-                if isinstance(entry_frame, _entry_frame.QtEntryFrame):
+                if isinstance(entry_frame, _wgt_entry_frame.QtEntryFrame):
                     entry_frame._set_focused_(True)
                 self.focus_in.emit()
             elif event.type() == QtCore.QEvent.FocusOut:
                 self._is_focused = False
                 entry_frame = self._get_entry_frame_()
-                if isinstance(entry_frame, _entry_frame.QtEntryFrame):
+                if isinstance(entry_frame, _wgt_entry_frame.QtEntryFrame):
                     entry_frame._set_focused_(False)
                 #
                 self.focus_out.emit()
@@ -214,7 +210,7 @@ class QtEntryForConstant(
             )
         #
         if menu_raw:
-            self._qt_menu = _utility.QtMenu(self)
+            self._qt_menu = _wgt_utility.QtMenu(self)
             self._qt_menu._set_menu_data_(menu_raw)
             self._qt_menu._set_show_()
 

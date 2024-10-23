@@ -34,7 +34,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
             self._scr_stage.EntityTypes.Tag,
         )
         scr_entity_paths = [x.path for x in scr_entities]
-        leaf_path_set = set(bsc_core.BscPath.to_leaf_paths(scr_entity_paths))
+        leaf_path_set = set(bsc_core.BscNodePath.to_leaf_paths(scr_entity_paths))
 
         for i in scr_entities:
             i_path = i.path

@@ -5,9 +5,9 @@ import lxbasic.content as bsc_content
 # qt
 from ...core.wrap import *
 
-from ... import core as gui_qt_core
+from ... import core as _qt_core
 
-from .. import bubble as gui_qt_wgt_bubble
+from .. import bubble as _wgt_bubble
 # qt widgets
 from . import entry_for_constant as _entry_for_constant
 
@@ -38,7 +38,7 @@ class QtEtdEntryForPath(QtWidgets.QWidget):
     next_press_clicked = qt_signal()
     next_index_accepted = qt_signal(object)
 
-    BUBBLE_CLS = gui_qt_wgt_bubble.QtPathBubble
+    BUBBLE_CLS = _wgt_bubble.QtPathBubble
 
     def _build_undo_stack(self):
         # undo
@@ -64,7 +64,7 @@ class QtEtdEntryForPath(QtWidgets.QWidget):
         self._entry_widget = _entry_for_constant.QtEntryForConstant()
         self._lot.addWidget(self._entry_widget)
         self._entry_widget.setFocusPolicy(QtCore.Qt.ClickFocus)
-        self._entry_widget.setFont(gui_qt_core.QtFont.generate_2(size=12))
+        self._entry_widget.setFont(_qt_core.QtFont.generate_2(size=12))
         # reg = QtCore.QRegExp(r'^[a-zA-Z][a-zA-Z0-9_]+$')
         reg = QtCore.QRegExp(r'^[a-zA-Z0-9_]+$')
         validator = QtGui.QRegExpValidator(reg, self._entry_widget)
@@ -76,7 +76,7 @@ class QtEtdEntryForPath(QtWidgets.QWidget):
         self._next_name_texts = []
 
         self._entry_widget.setToolTip(
-            gui_qt_core.QtUtil.generate_tool_tip_css(
+            _qt_core.QtUtil.generate_tool_tip_css(
                 'constant entry',
                 [
                     '"LMB-click" to start entry',
@@ -116,7 +116,7 @@ class QtEtdEntryForPath(QtWidgets.QWidget):
 
     def _enter_next_(self, name_text):
         if name_text:
-            if self._get_name_text_is_valid_(name_text) is True:
+            if self._check_name_text_is_valid_(name_text) is True:
                 path_old = self._path_bubble._get_path_()
                 path_new = path_old.generate_child(name_text)
                 self._undo_stack.push(_PathAcceptCmd(self, path_old, path_new))
@@ -148,7 +148,7 @@ class QtEtdEntryForPath(QtWidgets.QWidget):
                 return True
         return False
 
-    def _get_name_text_is_valid_(self, name_text):
+    def _check_name_text_is_valid_(self, name_text):
         name_texts = self._get_next_name_texts_()
         if name_texts:
             name_text = bsc_core.auto_string(name_text)

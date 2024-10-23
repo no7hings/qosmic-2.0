@@ -31,7 +31,7 @@ print rsv_scripts.ScpEnvironment.get_data('/production/shows/nsa_dev/assets/chr/
             else:
                 i_env_value = ''
             #
-            bsc_core.EnvBaseMtd.set(
+            bsc_core.BscEnviron.set(
                 i_env_key, i_env_value
             )
 
@@ -70,7 +70,7 @@ print rsv_scripts.ScpEnvironment.get_data('/production/shows/nsa_dev/assets/chr/
         keys = resolver.VariantTypes.Constructs
         for i_key in keys:
             i_env_key = 'PG_{}'.format(i_key.upper())
-            i_env_value = bsc_core.EnvBaseMtd.get(i_env_key)
+            i_env_value = bsc_core.BscEnviron.get(i_env_key)
             if i_env_value:
                 dict_[i_key] = i_env_value
         return dict_

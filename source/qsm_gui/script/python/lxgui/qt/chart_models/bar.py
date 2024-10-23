@@ -168,7 +168,7 @@ class ChartModelForBar(object):
         branch = _base._Data(
             leafs={},
             path=path,
-            name=bsc_core.BscPath.to_dag_name(path),
+            name=bsc_core.BscNodePath.to_dag_name(path),
             frame_rect=QtCore.QRect(),
             index=index,
             index_text=str(index+1),

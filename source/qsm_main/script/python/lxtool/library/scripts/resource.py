@@ -94,10 +94,10 @@ class ScpResourcesAddByQuixel(object):
             bsc_log.Log.trace_method_error(cls.LOG_KEY, 'file: {} is not available'.format(file_path))
             return None
 
-        category_group = bsc_core.RawTextMtd.clear_up_to(category_group).strip().lower()
+        category_group = bsc_core.BscText.clear_up_to(category_group).strip().lower()
 
         resource_id = quixel_json_file_opt.name_base
-        resource_key = bsc_core.RawTextMtd.clear_up_to(json_content.get('name').strip()).lower()
+        resource_key = bsc_core.BscText.clear_up_to(json_content.get('name').strip()).lower()
 
         resource_name = '{}_{}'.format(resource_key, resource_id)
 
@@ -129,10 +129,10 @@ class ScpResourcesAddByQuixel(object):
         if category_group is None:
             return
 
-        category_group = bsc_core.RawTextMtd.clear_up_to(category_group).strip().lower()
+        category_group = bsc_core.BscText.clear_up_to(category_group).strip().lower()
 
         resource_id = quixel_json_file_opt.name_base
-        resource_key = bsc_core.RawTextMtd.clear_up_to(json_content.get('name').strip()).lower()
+        resource_key = bsc_core.BscText.clear_up_to(json_content.get('name').strip()).lower()
 
         resource_name = '{}_{}'.format(resource_key, resource_id)
         version_name = 'v0001'
@@ -294,7 +294,7 @@ class ScpResourcesAddByQuixel(object):
             elif i_c > 3:
                 i_key_args = i_key_args[:2]+['_'.join(i_key_args[2:])]
             #
-            i_key_args = [bsc_core.RawTextMtd.clear_up_to(i).lower() for i in i_key_args]
+            i_key_args = [bsc_core.BscText.clear_up_to(i).lower() for i in i_key_args]
             #
             i_type_path = '/'+'/'.join(i_key_args)
 
@@ -323,7 +323,7 @@ class ScpResourcesAddByQuixel(object):
             j_ = json_content.get('semanticTags.{}'.format(j_tag_group_name)) or ['other']
             if j_:
                 if isinstance(j_, list):
-                    j_tags = map(lambda x: bsc_core.RawTextMtd.clear_up_to(x.strip()).lower(), j_)
+                    j_tags = map(lambda x: bsc_core.BscText.clear_up_to(x.strip()).lower(), j_)
                     for k_tag in j_tags:
                         if k_tag:
                             if j_tag_group_name in {'color', 'environment', 'state'}:
@@ -463,7 +463,7 @@ class ScpResourcesAddByQuixel(object):
         pattern_kwargs_src.update(variants_src)
         # fix texture tag
         texture_type_tag = pattern_kwargs_src['texture_type_tag']
-        texture_type_tag = bsc_core.RawTextMtd.clear_up_to(texture_type_tag).strip().lower()
+        texture_type_tag = bsc_core.BscText.clear_up_to(texture_type_tag).strip().lower()
         pattern_kwargs_src['texture_type_tag'] = texture_type_tag
         #
         texture_stg_path = pattern_opt_tgt.update_variants_to(
@@ -577,7 +577,7 @@ class ScpResourcesAddByQuixel(object):
         pattern_kwargs_src.update(variants_src)
         # fix texture tag
         texture_type_tag = pattern_kwargs_src['texture_type_tag']
-        texture_type_tag = bsc_core.RawTextMtd.clear_up_to(texture_type_tag).strip().lower()
+        texture_type_tag = bsc_core.BscText.clear_up_to(texture_type_tag).strip().lower()
         pattern_kwargs_src['texture_type_tag'] = texture_type_tag
         # over texture key
         pattern_kwargs_src['key_extra'] = key_extra

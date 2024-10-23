@@ -29,7 +29,7 @@ class AbsRezGraph(gui_prx_widgets.PrxBaseWindow):
             #
             self._hook_gui_configure = self._option_hook_configure.get_as_content('option.gui')
             #
-            raw = bsc_core.EnvBaseMtd.get('REZ_BETA')
+            raw = bsc_core.BscEnviron.get('REZ_BETA')
             if raw:
                 self._rez_beta = True
             else:

@@ -112,7 +112,7 @@ class SsnHookFileMtd(object):
 
     @classmethod
     def get_extra_file(cls, key):
-        directory_path = bsc_core.EnvBaseMtd.get_cache_session_root()
+        directory_path = bsc_core.BscEnviron.get_cache_session_root()
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
         return '{}/.session/extra/{}/{}{}'.format(
             directory_path, region, key, '.yml'
@@ -144,7 +144,7 @@ class SsnHookServerMtd(object):
 
     @classmethod
     def get_file_path(cls, **kwargs):
-        directory_path = bsc_core.EnvBaseMtd.get_cache_session_root()
+        directory_path = bsc_core.BscEnviron.get_cache_session_root()
         key = cls.get_key(**kwargs)
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
         return '{}/.session/option-hook/{}/{}{}'.format(

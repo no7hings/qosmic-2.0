@@ -155,7 +155,7 @@ class GpuInstancesQuery(object):
                 j_path_virtual = '/{}/{}_{}'.format(i_k, j_name, j_seq)
                 j_opt = GpuInstanceOpt(j_path)
                 j_opt._path = j_path_virtual
-                j_opt._path_opt = bsc_core.BscPathOpt(j_path_virtual)
+                j_opt._path_opt = bsc_core.BscNodePathOpt(j_path_virtual)
                 self._cache_dict[j_path_virtual] = j_opt
 
                 self._path_query[j_path] = j_opt

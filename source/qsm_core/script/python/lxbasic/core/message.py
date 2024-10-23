@@ -24,12 +24,12 @@ class MsgBaseMtd(object):
         Password = 'abcd1234,'
 
     FIX = {
-        'fangxiaodong': 'xiaoche',
-        'huangxin': 'mofei'
+        # 'fangxiaodong': 'xiaoche',
+        # 'huangxin': 'mofei'
     }
 
     @classmethod
-    def get_session(cls):
+    def generate_session(cls):
         import requests
 
         session = requests.Session()
@@ -55,7 +55,7 @@ class MsgBaseMtd(object):
             addresses=','.join(addresses or [])
         )
         message_data = {'hi_title': subject, 'message': content}
-        session = cls.get_session()
+        session = cls.generate_session()
         response = session.post(url, data=message_data, files=None)
         result = response.json()
         _bsc_log.Log.trace_method_result(
@@ -82,11 +82,11 @@ class MsgBaseMtd(object):
             receivers=to_receives_fnc_(receivers)
         )
         message_data = {'hi_title': subject, 'message': content}
-        session = cls.get_session()
+        session = cls.generate_session()
         response = session.post(url, data=message_data, files=None)
         result = response.json()
         _bsc_log.Log.trace_method_result(
-            'send mail',
+            'send feishu',
             'result is "{}"'.format(result.get('message') or 'fail')
         )
         return result

@@ -1,7 +1,7 @@
 # coding:utf-8
 import _port_base
 
-import _input_for_array
+from ..input import input_for_array as _input_for_array
 
 
 # any array

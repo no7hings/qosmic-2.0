@@ -63,7 +63,7 @@ class Main(object):
                         '如需要终止任务，请点击“关闭”。'
                     )
                 else:
-                    task_window.set_window_title('NodeMotion Convert')
+                    task_window.set_window_title('Motion Convert')
 
                 task_window.run_fnc_delay(
                     functools.partial(

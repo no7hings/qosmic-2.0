@@ -82,6 +82,11 @@ class AbsItemModel(object):
         self._data = data
 
         self._data.rect = QtCore.QRect()
+        # basic
+        self._data.basic = _base._Data(
+            rect=QtCore.QRect(),
+            size=QtCore.QSize(),
+        )
         # path
         self._data.path = _base._Data(
             text=None
@@ -101,7 +106,8 @@ class AbsItemModel(object):
         # frame
         self._data.frame = _base._Data(
             rect=QtCore.QRect(),
-            color=QtGui.QColor(223, 223, 223)
+            color=QtGui.QColor(*_gui_core.GuiRgba.Dark),
+            brush=QtGui.QBrush(QtGui.QColor(*_gui_core.GuiRgba.Dim))
         )
         # name
         self._data.name = _base._Data(
@@ -149,6 +155,7 @@ class AbsItemModel(object):
         )
         # action for check
         self._data.check_enable = False
+        self._data.check = None
         # drag
         self._data.drag = _base._Data(
             enable=False,
@@ -171,6 +178,7 @@ class AbsItemModel(object):
         # menu
         self._data.menu = _base._Data(
             content=None,
+            content_generate_fnc=None,
             data=None,
             data_generate_fnc=None
         )

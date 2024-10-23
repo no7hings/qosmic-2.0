@@ -117,8 +117,6 @@ class TreeViewModel(_view_base.AbsViewModel):
                     cls=None,
                     grid_size=QtCore.QSize(128, 20),
                 ),
-
-                item_dict=collections.OrderedDict(),
                 expand_method_dict=dict(),
             )
         )
@@ -251,7 +249,7 @@ class TreeViewModel(_view_base.AbsViewModel):
         if path in self._data.item_dict:
             return False, self._data.item_dict[path]
 
-        path_opt = bsc_core.BscPathOpt(path)
+        path_opt = bsc_core.BscNodePathOpt(path)
         index_cur = len(self._data.item_dict)
         item = self._data.item.cls()
         if path_opt.get_is_root():
@@ -267,6 +265,7 @@ class TreeViewModel(_view_base.AbsViewModel):
 
         name = path_opt.get_name()
         item.setText(0, str(index_cur).zfill(4))
+
         item_model = item._item_model
         item_model.set_path(path)
         item_model.set_index(index_cur)
@@ -288,7 +287,7 @@ class TreeViewModel(_view_base.AbsViewModel):
 
     def generate_chart_data(self):
         paths = self._data.item_dict.keys()
-        leaf_paths = bsc_core.BscPath.to_leaf_paths(paths)
+        leaf_paths = bsc_core.BscNodePath.to_leaf_paths(paths)
 
         dict_ = {}
         for i_path in leaf_paths:

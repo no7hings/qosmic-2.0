@@ -18,6 +18,8 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(TestWindow, self).__init__(*args, **kwargs)
         self.set_definition_window_size([720, 720])
+
+        self.set_window_icon_by_name('application/python')
         self._test_()
 
     def _value_completion_gain_fnc_(self, *args, **kwargs):

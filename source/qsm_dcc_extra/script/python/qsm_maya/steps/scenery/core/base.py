@@ -60,7 +60,7 @@ class Assembly(object):
 
     @classmethod
     def find_any_by_shape(cls, shape_path, depth_maximum=3):
-        path_opt = bsc_core.BscPathOpt(shape_path)
+        path_opt = bsc_core.BscNodePathOpt(shape_path)
         paths = path_opt.get_ancestor_paths()
         for i_path in paths[:depth_maximum]:
             if i_path != _mya_core.DagNode.PATHSEP:

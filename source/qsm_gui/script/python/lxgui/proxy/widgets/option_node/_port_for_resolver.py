@@ -2,7 +2,7 @@
 # proxy widgets
 import _port_base
 
-import _input_for_resolver
+from ..input import input_for_resolver as _input_for_resolver
 
 
 class PrxPortForRsvChoose(_port_base.AbsPrxPort):

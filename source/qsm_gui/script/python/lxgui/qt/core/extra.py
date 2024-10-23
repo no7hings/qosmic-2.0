@@ -145,9 +145,14 @@ class QtSystemTrayIcon(QtWidgets.QSystemTrayIcon):
         # self.setPalette(_base.GuiQtDcc.generate_qt_palette())
         menu.setAutoFillBackground(True)
         menu.setFont(_base.QtFonts.NameNormal)
-        menu.setStyleSheet(
-            _style.QtStyle.get('QMenu')
-        )
+        if QT_LOAD_INDEX == 0:
+            menu.setStyleSheet(
+                _style.QtStyle.get('QMenuNew')
+            )
+        else:
+            menu.setStyleSheet(
+                _style.QtStyle.get('QMenu')
+            )
         self.setContextMenu(
             menu
         )
@@ -322,9 +327,9 @@ class GuiQtMenuOpt(object):
         if isinstance(content, bsc_content.AbsContent):
             keys = content.get_keys(regex='*.properties')
             for i_key in keys:
-                i_atr_path_opt = bsc_core.PthAttributeOpt(i_key)
+                i_atr_path_opt = bsc_core.BscAttributePathOpt(i_key)
                 i_path = i_atr_path_opt.obj_path
-                i_path_opt = bsc_core.BscPathOpt(i_path)
+                i_path_opt = bsc_core.BscNodePathOpt(i_path)
                 i_content = content.get_as_content(i_key)
                 i_type = i_content.get('type')
                 if i_path_opt.get_is_root():

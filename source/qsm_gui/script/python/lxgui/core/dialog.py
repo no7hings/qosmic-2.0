@@ -162,7 +162,7 @@ class GuiStorageDialog(object):
         # options |= dlg.DontUseNativeDialog
         r = dlg.getExistingDirectory(
             parent,
-            'Open Directory',
+            'Open Folder',
             '',
             options=options,
         )
@@ -179,7 +179,7 @@ class GuiStorageDialog(object):
         # options |= dlg.DontUseNativeDialog
         r = dlg.getExistingDirectory(
             parent,
-            'Save Directory',
+            'Save Folder',
             '',
             options=options,
         )

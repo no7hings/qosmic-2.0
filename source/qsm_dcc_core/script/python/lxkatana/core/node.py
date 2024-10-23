@@ -289,7 +289,7 @@ class NGNodeOpt(object):
 
     @classmethod
     def _set_create_(cls, path, type_name):
-        path_opt = bsc_core.BscPathOpt(path)
+        path_opt = bsc_core.BscNodePathOpt(path)
         name = path_opt.name
         parent_opt = path_opt.get_parent()
         parent_name = parent_opt.get_name()
@@ -318,7 +318,7 @@ class NGNodeOpt(object):
 
     @classmethod
     def _generate_node_create_args(cls, path, type_name):
-        path_opt = bsc_core.BscPathOpt(path)
+        path_opt = bsc_core.BscNodePathOpt(path)
         name = path_opt.name
         parent_opt = path_opt.get_parent()
         parent_name = parent_opt.get_name()
@@ -346,7 +346,7 @@ class NGNodeOpt(object):
 
     @classmethod
     def _generate_group_child_create_args(cls, path, type_name):
-        path_opt = bsc_core.BscPathOpt(path)
+        path_opt = bsc_core.BscNodePathOpt(path)
         name = path_opt.name
         parent_opt = path_opt.get_parent()
         parent_name = parent_opt.get_name()
@@ -385,7 +385,7 @@ class NGNodeOpt(object):
 
     @classmethod
     def _generate_material_node_graph_create_args(cls, path, type_name, shader_type_name=None):
-        path_opt = bsc_core.BscPathOpt(path)
+        path_opt = bsc_core.BscNodePathOpt(path)
         name = path_opt.name
         parent_opt = path_opt.get_parent()
         parent_name = parent_opt.get_name()
@@ -544,7 +544,7 @@ class NGNodeOpt(object):
     def _generate_ktn_obj(cls, string_arg):
         if string_arg.startswith(cls.PATHSEP):
             return NodegraphAPI.GetNode(
-                bsc_core.BscPathOpt(string_arg).get_name()
+                bsc_core.BscNodePathOpt(string_arg).get_name()
             )
         else:
             return NodegraphAPI.GetNode(string_arg)
@@ -553,7 +553,7 @@ class NGNodeOpt(object):
         if isinstance(ktn_obj, six.string_types):
             if ktn_obj.startswith(self.PATHSEP):
                 self._ktn_obj = NodegraphAPI.GetNode(
-                    bsc_core.BscPathOpt(ktn_obj).get_name()
+                    bsc_core.BscNodePathOpt(ktn_obj).get_name()
                 )
             else:
                 self._ktn_obj = NodegraphAPI.GetNode(ktn_obj)
@@ -1092,7 +1092,7 @@ class NGNodeOpt(object):
             self.set_port_hint(
                 i_port_path_src, dict(
                     text=bsc_core.RawStrUnderlineOpt(
-                        bsc_core.PthPortMtd.to_dag_name(i_port_path_src)
+                        bsc_core.BscPortPath.to_dag_name(i_port_path_src)
                     ).to_prettify(capitalize=False)
                 )
             )
@@ -1303,14 +1303,14 @@ class NGNodeOpt(object):
             if port_path_src is None:
                 port_path_src = self.__class__(node_path_src).get_output_port_names()[0]
 
-            atr_path_src = bsc_core.PthAttributeMtd.join_by(node_path_src, port_path_src)
-            atr_path_tgt = bsc_core.PthAttributeMtd.join_by(self.get_path(), port_path)
+            atr_path_src = bsc_core.BscAttributePath.join_by(node_path_src, port_path_src)
+            atr_path_tgt = bsc_core.BscAttributePath.join_by(self.get_path(), port_path)
             self._create_connections_by_data(
                 [atr_path_src, atr_path_tgt]
             )
         elif isinstance(atr_arg, six.string_types):
             atr_path_src = atr_arg
-            atr_path_tgt = bsc_core.PthAttributeMtd.join_by(self.get_path(), port_path)
+            atr_path_tgt = bsc_core.BscAttributePath.join_by(self.get_path(), port_path)
             self._create_connections_by_data(
                 [atr_path_src, atr_path_tgt]
             )
@@ -1318,13 +1318,13 @@ class NGNodeOpt(object):
     def connect_output_to(self, port_path, atr_arg):
         if isinstance(atr_arg, tuple):
             node_path_tgt, port_path_tgt = atr_arg
-            atr_path_src = bsc_core.PthAttributeMtd.join_by(self.get_path(), port_path)
-            atr_path_tgt = bsc_core.PthAttributeMtd.join_by(node_path_tgt, port_path_tgt)
+            atr_path_src = bsc_core.BscAttributePath.join_by(self.get_path(), port_path)
+            atr_path_tgt = bsc_core.BscAttributePath.join_by(node_path_tgt, port_path_tgt)
             self._create_connections_by_data(
                 [atr_path_src, atr_path_tgt]
             )
         elif isinstance(atr_arg, six.string_types):
-            atr_path_src = bsc_core.PthAttributeMtd.join_by(self.get_path(), port_path)
+            atr_path_src = bsc_core.BscAttributePath.join_by(self.get_path(), port_path)
             atr_path_tgt = atr_arg
             self._create_connections_by_data(
                 [atr_path_src, atr_path_tgt]
@@ -1357,10 +1357,10 @@ class NGNodeOpt(object):
 
     def create_port(self, port_path, port_type, default_value):
         _ = self.get_port(port_path)
-        port_parent = bsc_core.PthPortMtd.get_dag_parent_path(
+        port_parent = bsc_core.BscPortPath.get_dag_parent_path(
             path=port_path, pathsep=self.PORT_PATHSEP
         )
-        port_name = bsc_core.PthPortMtd.to_dag_name(
+        port_name = bsc_core.BscPortPath.to_dag_name(
             path=port_path, pathsep=self.PORT_PATHSEP
         )
         if _ is None:

@@ -34,14 +34,14 @@ class MainShelf(object):
         bsc_log.Log.trace_method_result(
             self.LOG_KEY, 'create'
         )
-        language = bsc_core.EnvBaseMtd.get_ui_language()
+        language = bsc_core.BscEnviron.get_ui_language()
 
         # delete old
         for i in self.OLD_SHELF_NAMES:
             if _mya_core.Shelf.is_exists(i):
                 _mya_core.Shelf.delete(i)
         # create new
-        if bsc_core.EnvBaseMtd.get_ui_language() == 'chs':
+        if bsc_core.BscEnviron.get_ui_language() == 'chs':
             shelf_name = self.MAIN_SHELF_NAME_CHS
         else:
             shelf_name = self.MAIN_SHELF_NAME

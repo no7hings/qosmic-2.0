@@ -540,7 +540,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
     def _load_from_location_fnc(self, root, include_obj_type):
         self.restore_all()
         #
-        root_dag_path = bsc_core.BscPathOpt(root)
+        root_dag_path = bsc_core.BscNodePathOpt(root)
         root_mya_dag_path = root_dag_path.translate_to(mya_core.MyaUtil.OBJ_PATHSEP)
         mya_root = _mya_dcc_obj_node_for_dag.Group(root_mya_dag_path.path)
         if mya_root.get_is_exists() is True:
@@ -556,7 +556,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
         obj_category_name = unr_core.UnrObjCategory.MAYA
         obj_type_name = mya_obj.type
         mya_obj_path = mya_obj.path
-        mya_dag_path = bsc_core.BscPathOpt(mya_obj_path)
+        mya_dag_path = bsc_core.BscNodePathOpt(mya_obj_path)
         dcc_dag_path = mya_dag_path.translate_to('/')
         dcc_obj_path = dcc_dag_path.path
         #
@@ -573,7 +573,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
 
     # clear
     @classmethod
-    @bsc_core.MdfBaseMtd.run_with_result_trace
+    @bsc_core.BscModifier.run_with_result_trace
     def set_unused_scripts_clear(cls):
         for i in cmds.scriptJob(listJobs=1):
             for k in ['leukocyte.antivirus()']:
@@ -592,13 +592,13 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
                 cmds.delete(i)
 
     @classmethod
-    @bsc_core.MdfBaseMtd.run_with_result_trace
+    @bsc_core.BscModifier.run_with_result_trace
     def set_unused_shaders_clear(cls):
         mel.eval('MLdeleteUnused;')
 
     # noinspection PyUnusedLocal
     @classmethod
-    @bsc_core.MdfBaseMtd.run_with_result_trace
+    @bsc_core.BscModifier.run_with_result_trace
     def set_unused_windows_clear(cls, exclude_window_names=None):
         for panel in cmds.getPanel(visiblePanels=1) or []:
             if cmds.panel(panel, query=1, exists=1):
@@ -611,7 +611,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
                     )
 
     @classmethod
-    @bsc_core.MdfBaseMtd.run_with_result_trace
+    @bsc_core.BscModifier.run_with_result_trace
     def set_unknown_plug_ins_clear(cls):
         _ = cmds.unknownPlugin(query=1, list=1) or []
         if _:
@@ -625,7 +625,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
                     )
 
     @classmethod
-    @bsc_core.MdfBaseMtd.run_with_result_trace
+    @bsc_core.BscModifier.run_with_result_trace
     def set_unused_namespaces_clear(cls):
         def get_obj_parent_path_fnc_(path_):
             parent = cmds.listRelatives(path_, parent=1, fullPath=1)
@@ -693,7 +693,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
         fnc_1_()
 
     @classmethod
-    @bsc_core.MdfBaseMtd.run_with_result_trace
+    @bsc_core.BscModifier.run_with_result_trace
     def set_unknown_nodes_clear(cls):
         _ = cmds.ls(type='unknown', long=1) or []
         if _:
@@ -710,7 +710,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
                             )
 
     @classmethod
-    @bsc_core.MdfBaseMtd.run_with_result_trace
+    @bsc_core.BscModifier.run_with_result_trace
     def set_unload_references_clear(cls):
         for reference_node in cmds.ls(type='reference'):
             # noinspection PyBroadException
@@ -728,7 +728,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
                 )
 
     @classmethod
-    @bsc_core.MdfBaseMtd.run_with_result_trace
+    @bsc_core.BscModifier.run_with_result_trace
     def set_unused_names_clear(cls):
         _ = cmds.ls('pasted__*', long=1) or []
         if _:
@@ -744,7 +744,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
                             )
 
     @classmethod
-    @bsc_core.MdfBaseMtd.run_with_result_trace
+    @bsc_core.BscModifier.run_with_result_trace
     def set_unused_display_layers_clear(cls):
         _ = cmds.ls(type='displayLayer', long=1) or []
         if _:

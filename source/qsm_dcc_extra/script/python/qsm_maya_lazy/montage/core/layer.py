@@ -862,7 +862,7 @@ class AdvChrMotionMasterLayerOpt(AbsAdvMotionLayer):
         layer_index = self.get_next_layer_index()
 
         file_opt = bsc_storage.StgFileOpt(file_path)
-        name = bsc_core.RawTextMtd.clear_up_to(file_opt.name_base)
+        name = bsc_core.BscText.clear_up_to(file_opt.name_base)
         layer_namespace = '{}_{}_{}'.format(resource_namespace, name, layer_index)
         motion_layer_opt = AdvChrMotionLayer.create_for(layer_namespace)
         self.fit_layer_scale(motion_layer_opt)

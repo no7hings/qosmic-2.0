@@ -34,7 +34,7 @@ class W(qt_widgets.QtMainWindow):
         self.test()
 
     def test(self):
-        # self._o = bsc_core.RectLayoutOpt(
+        # self._o = bsc_core.BscRectLayoutOpt(
         #     [(0, 0, choice(range(25, 100)), choice(range(25, 100))) for i in range(100)]
         # )
         random.seed(self.__seed)
@@ -130,7 +130,7 @@ class W(qt_widgets.QtMainWindow):
         #     (0, 0, 200, 100),
         #     (0, 0, 100, 200),
         # ]
-        self._o = bsc_core.RectLayoutOpt(
+        self._o = bsc_core.BscRectLayoutOpt(
             a, spacing=8
         )
         # self._o.center = 4, 4

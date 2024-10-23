@@ -376,15 +376,21 @@ class QtMenuBar(QtWidgets.QMenuBar):
 
 class QtMenu(QtWidgets.QMenu):
     def __init__(self, *args, **kwargs):
+        # noinspection PyArgumentList
         super(QtMenu, self).__init__(*args, **kwargs)
         self.setPalette(_qt_core.GuiQtDcc.generate_qt_palette())
         self.setAutoFillBackground(True)
         #
         self.setFont(_qt_core.QtFonts.NameNormal)
-        #
-        self.setStyleSheet(
-            _qt_core.QtStyle.get('QMenu')
-        )
+
+        if QT_LOAD_INDEX == 0:
+            self.setStyleSheet(
+                _qt_core.QtStyle.get('QMenuNew')
+            )
+        else:
+            self.setStyleSheet(
+                _qt_core.QtStyle.get('QMenu')
+            )
 
         self._menu_content_opt = _qt_core.GuiQtMenuOpt(self)
 
@@ -420,9 +426,11 @@ class QtMenu(QtWidgets.QMenu):
                         (types.FunctionType, types.MethodType, functools.partial, types.LambdaType)
                     ):
                         fnc = args_extend
+                        # noinspection PyUnresolvedReferences
                         item.triggered.connect(fnc)
                     elif isinstance(args_extend, six.string_types):
                         cmd_str = args_extend
+                        # noinspection PyUnresolvedReferences
                         item.triggered.connect(lambda *args, **kwargs: cls._set_cmd_run_(cmd_str))
                     elif isinstance(args_extend, (tuple, list)):
                         # check
@@ -441,6 +449,7 @@ class QtMenu(QtWidgets.QMenu):
                                         fnc,
                                         (types.FunctionType, types.MethodType, functools.partial, types.LambdaType)
                                 ):
+                                    # noinspection PyUnresolvedReferences
                                     item.triggered.connect(fnc)
                             else:
                                 set_disable_fnc_(item)
@@ -454,6 +463,7 @@ class QtMenu(QtWidgets.QMenu):
                             else:
                                 is_checked = check_fnc
                             #
+                            # noinspection PyUnresolvedReferences
                             item.triggered.connect(fnc)
                             if isinstance(
                                 enable_fnc,
@@ -956,7 +966,7 @@ class QtStyledItemDelegate(QtWidgets.QStyledItemDelegate):
                         rect = option.rect
                         x, y = rect.x(), rect.y()
                         w, h = rect.width(), rect.height()
-                        spans = bsc_core.RawTextMtd.find_spans(content, filter_keyword)
+                        spans = bsc_core.BscText.find_spans(content, filter_keyword)
                         if spans:
                             line = QtCore.QLine(
                                 x, y+h, x+w, y+h
@@ -1063,6 +1073,7 @@ class QtProgressBar(
 
 class QtFileDialog(QtWidgets.QFileDialog):
     def __init__(self, *args, **kwargs):
+        # noinspection PyArgumentList
         super(QtFileDialog, self).__init__(*args, **kwargs)
 
 

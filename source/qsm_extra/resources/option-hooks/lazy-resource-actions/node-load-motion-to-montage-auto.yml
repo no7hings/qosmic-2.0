@@ -7,7 +7,7 @@ option:
     gui:
         group_name: 'nodes'
         #
-        name: 'Add NodeMotion to Montage'
+        name: 'Add Motion to Montage'
         icon_name: 'application/python'
         #
         size: [720, 720]

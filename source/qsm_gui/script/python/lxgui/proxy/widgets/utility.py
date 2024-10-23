@@ -7,19 +7,15 @@ from ... import core as gui_core
 # qt
 from ...qt import core as gui_qt_core
 # qt widgets
-from ...qt.widgets import base as gui_qt_wgt_base
+from ...qt.widgets.input import input_for_filter as _qt_wgt_input_for_filter
 
-from ...qt.widgets import utility as gui_qt_wgt_utility
+from ...qt.widgets.input import input_for_content as _qt_wgt_ipt_for_content
 
-from ...qt.widgets import button as gui_qt_wgt_button
+from ...qt.widgets import base as _qt_wgt_base
 
-from ...qt.widgets import resize as gui_qt_wgt_resize
+from ...qt.widgets import utility as _wgt_utility
 
-from ...qt.widgets import input_for_filter as gui_qt_wgt_input_for_filter
-
-from ...qt.widgets import item as gui_qt_wgt_item
-
-from ...qt.widgets import input as gui_qt_wgt_input
+from ...qt.widgets import button as _qt_wgt_button
 
 from ...qt.widgets import window_base as _qt_window_base
 
@@ -31,7 +27,7 @@ from .. import abstracts as gui_prx_abstracts
 
 
 class PrxHScrollArea(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtHScrollArea
+    QT_WIDGET_CLS = _wgt_utility.QtHScrollArea
 
     def __init__(self, *args, **kwargs):
         super(PrxHScrollArea, self).__init__(*args, **kwargs)
@@ -69,7 +65,7 @@ class PrxHScrollArea(gui_prx_abstracts.AbsPrxWidget):
 
 
 class PrxVScrollArea(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtVScrollArea
+    QT_WIDGET_CLS = _wgt_utility.QtVScrollArea
 
     def __init__(self, *args, **kwargs):
         super(PrxVScrollArea, self).__init__(*args, **kwargs)
@@ -115,9 +111,9 @@ class Window(gui_prx_abstracts.AbsPrxWindow):
         super(Window, self).__init__(*args, **kwargs)
 
     def _gui_build_(self):
-        self._qt_main_widget = gui_qt_wgt_utility.QtWidget()
+        self._qt_main_widget = _wgt_utility.QtWidget()
         self._qt_widget.setCentralWidget(self._qt_main_widget)
-        self._main_qt_layout = gui_qt_wgt_base.QtHBoxLayout(self._qt_main_widget)
+        self._main_qt_layout = _qt_wgt_base.QtHBoxLayout(self._qt_main_widget)
 
     def get_main_widget(self):
         return self._qt_main_widget
@@ -127,25 +123,25 @@ class Window(gui_prx_abstracts.AbsPrxWindow):
 
 
 class PrxLayerWidget(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
+    QT_WIDGET_CLS = _wgt_utility.QtTranslucentWidget
 
     def __init__(self, *args, **kwargs):
         super(PrxLayerWidget, self).__init__(*args, **kwargs)
 
     def _gui_build_(self):
-        qt_layout_0 = gui_qt_wgt_base.QtVBoxLayout(self.widget)
+        qt_layout_0 = _qt_wgt_base.QtVBoxLayout(self.widget)
         qt_layout_0.setContentsMargins(0, 0, 0, 0)
         qt_layout_0.setSpacing(0)
         #
-        qt_widget_0 = gui_qt_wgt_utility.QtHFrame()
+        qt_widget_0 = _wgt_utility.QtHFrame()
         qt_widget_0.setMaximumHeight(24)
         qt_widget_0.setMinimumHeight(24)
         qt_layout_0.addWidget(qt_widget_0)
         #
-        qt_top_layout_1 = gui_qt_wgt_base.QtHBoxLayout(qt_widget_0)
+        qt_top_layout_1 = _qt_wgt_base.QtHBoxLayout(qt_widget_0)
         qt_top_layout_1.setContentsMargins(0, 0, 0, 0)
         qt_top_layout_1.setSpacing(0)
-        self._qt_label_0 = gui_qt_wgt_utility.QtTextItem()
+        self._qt_label_0 = _wgt_utility.QtTextItem()
         self._qt_label_0._set_name_text_option_(
             gui_qt_core.QtCore.Qt.AlignHCenter|gui_qt_core.QtCore.Qt.AlignVCenter
         )
@@ -156,14 +152,14 @@ class PrxLayerWidget(gui_prx_abstracts.AbsPrxWidget):
         self._button_0.set_icon_hover_color((255, 0, 63, 127))
         qt_top_layout_1.addWidget(self._button_0.widget)
 
-        self._qt_line = gui_qt_wgt_utility.QtHLine()
+        self._qt_line = _wgt_utility.QtHLine()
         qt_layout_0.addWidget(self._qt_line)
-        self._qt_central_widget_0 = gui_qt_wgt_utility.QtWidget()
+        self._qt_central_widget_0 = _wgt_utility.QtWidget()
         self._qt_central_widget_0.setSizePolicy(
             gui_qt_core.QtWidgets.QSizePolicy.Expanding, gui_qt_core.QtWidgets.QSizePolicy.Expanding
         )
         qt_layout_0.addWidget(self._qt_central_widget_0)
-        self._qt_layout_0 = gui_qt_wgt_base.QtVBoxLayout(self._qt_central_widget_0)
+        self._qt_layout_0 = _qt_wgt_base.QtVBoxLayout(self._qt_central_widget_0)
         self._qt_layout_0.setContentsMargins(2, 2, 2, 2)
 
     def set_name(self, text):
@@ -200,7 +196,7 @@ class PrxLayerWidget(gui_prx_abstracts.AbsPrxWidget):
 
 
 class PrxLayer(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtTranslucentWidget
+    QT_WIDGET_CLS = _wgt_utility.QtTranslucentWidget
     #
     PRX_LAYER_WIDGET_CLS = PrxLayerWidget
 
@@ -212,26 +208,26 @@ class PrxLayer(gui_prx_abstracts.AbsPrxWidget):
         return self._layer_widget
 
     def create_widget(self, key, label=None):
-        qt_layout_0 = gui_qt_wgt_base.QtVBoxLayout(self._qt_widget)
+        qt_layout_0 = _qt_wgt_base.QtVBoxLayout(self._qt_widget)
         qt_layout_0.setContentsMargins(0, 0, 0, 0)
         self._layer_widget = self.PRX_LAYER_WIDGET_CLS()
         if label is None:
-            label = bsc_core.RawTextMtd.to_prettify(key)
+            label = bsc_core.BscText.to_prettify(key)
         self._layer_widget.set_name(label)
         qt_layout_0.addWidget(self._layer_widget.widget)
         return self._layer_widget
 
 
 class PrxTextBrowser(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtWidget
+    QT_WIDGET_CLS = _wgt_utility.QtWidget
 
     def __init__(self, *args, **kwargs):
         super(PrxTextBrowser, self).__init__(*args, **kwargs)
 
     def _gui_build_(self):
-        qt_layout_0 = gui_qt_wgt_base.QtVBoxLayout(self.widget)
+        qt_layout_0 = _qt_wgt_base.QtVBoxLayout(self.widget)
         qt_layout_0.setContentsMargins(*[0]*4)
-        widget = gui_qt_wgt_input.QtInputAsContent()
+        widget = _qt_wgt_ipt_for_content.QtInputForContent()
         widget._set_entry_enable_(False)
         qt_layout_0.addWidget(widget)
         self._qt_entry_widget = widget._entry_widget
@@ -310,7 +306,7 @@ class PrxTextBrowser(gui_prx_abstracts.AbsPrxWidget):
 
 
 class PrxMenu(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtMenu
+    QT_WIDGET_CLS = _wgt_utility.QtMenu
 
     def __init__(self, *args, **kwargs):
         super(PrxMenu, self).__init__(*args, **kwargs)
@@ -334,7 +330,7 @@ class PrxMenu(gui_prx_abstracts.AbsPrxWidget):
 
 
 class PrxIconPressButton(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_button.QtIconPressButton
+    QT_WIDGET_CLS = _qt_wgt_button.QtIconPressButton
 
     def __init__(self, *args, **kwargs):
         super(PrxIconPressButton, self).__init__(*args, **kwargs)
@@ -402,7 +398,7 @@ class PrxIconPressButton(gui_prx_abstracts.AbsPrxWidget):
 
 
 class PrxPressButton(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_button.QtPressButton
+    QT_WIDGET_CLS = _qt_wgt_button.QtPressButton
 
     def __init__(self, *args, **kwargs):
         super(PrxPressButton, self).__init__(*args, **kwargs)
@@ -490,7 +486,7 @@ class PrxPressButton(gui_prx_abstracts.AbsPrxWidget):
 
 
 class PrxCheckItem(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_button.QtCheckButton
+    QT_WIDGET_CLS = _qt_wgt_button.QtCheckButton
 
     def __init__(self, *args, **kwargs):
         super(PrxCheckItem, self).__init__(*args, **kwargs)
@@ -505,7 +501,7 @@ class PrxCheckItem(gui_prx_abstracts.AbsPrxWidget):
 
 
 class PrxToggleButton(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_button.QtIconToggleButton
+    QT_WIDGET_CLS = _qt_wgt_button.QtIconToggleButton
 
     def __init__(self, *args, **kwargs):
         super(PrxToggleButton, self).__init__(*args, **kwargs)
@@ -557,7 +553,7 @@ class PrxToggleButton(gui_prx_abstracts.AbsPrxWidget):
 
 
 class PrxFilterBar(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_input_for_filter.QtInputAsFilter
+    QT_WIDGET_CLS = _qt_wgt_input_for_filter.QtInputForFilter
 
     def __init__(self, *args, **kwargs):
         super(PrxFilterBar, self).__init__(*args, **kwargs)
@@ -609,7 +605,7 @@ class PrxFilterBar(gui_prx_abstracts.AbsPrxWidget):
 
 
 class PrxButtonGroup(gui_prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = gui_qt_wgt_utility.QtVLine
+    QT_WIDGET_CLS = _wgt_utility.QtVLine
 
     def __init__(self, *args, **kwargs):
         super(PrxButtonGroup, self).__init__(*args, **kwargs)

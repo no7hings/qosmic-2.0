@@ -115,7 +115,7 @@ class FncExporterForDotXgenUsda(
         option_opt = self.get_option()
         file_path = option_opt.get('file')
         location = option_opt.get('location')
-        location_dag_opt = bsc_core.BscPathOpt(location)
+        location_dag_opt = bsc_core.BscNodePathOpt(location)
         maya_scene_file_path = option_opt.get('maya_scene_file')
         if maya_scene_file_path:
             xgen_collection_file_paths = self._find_scene_xgen_collection_file_paths(maya_scene_file_path)

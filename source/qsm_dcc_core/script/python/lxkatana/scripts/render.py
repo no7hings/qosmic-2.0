@@ -299,9 +299,9 @@ class ScpRenderBuild(object):
                     )
                     i_render_layer_name = i_render_output_directory_opt.get_name()
                     i_render_layer_name = i_render_layer_name.replace('.', '/')
-                    i_video_directory_path = bsc_core.BscPathOpt(i_render_output_directory_path).get_parent_path()
+                    i_video_directory_path = bsc_core.BscNodePathOpt(i_render_output_directory_path).get_parent_path()
                     # etc.
-                    i_video_file_name = bsc_core.BscPathOpt(i_render_output_directory_path).get_name()
+                    i_video_file_name = bsc_core.BscNodePathOpt(i_render_output_directory_path).get_name()
                     i_vedio_file_path = '{}/{}.mov'.format(i_video_directory_path, i_video_file_name)
                     #
                     i_render_frames = bsc_core.BscTextOpt(i_render_frames_string).to_frames()

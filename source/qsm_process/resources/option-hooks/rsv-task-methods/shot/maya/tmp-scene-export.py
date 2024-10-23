@@ -66,7 +66,7 @@ def do_export_asset_scene(rsv_task, rsv_scene_properties):
     test_directory_path = '/l/temp/shanshui/pg_repo/zero_test/ani_temp_tool/anim_farm'
     test_directory = gnl_dcc_objects.StgDirectory(test_directory_path)
     if test_directory.get_is_exists() is True:
-        bsc_core.EnvBaseMtd.set_python_add(
+        bsc_core.BscEnviron.set_python_add(
             test_directory_path
         )
         py_module = bsc_core.PyModule('do_save_ani_maya_file_0')

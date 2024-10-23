@@ -77,7 +77,7 @@ class AbsFncMatcherForDccMesh(object):
             tgt_paths_in_points = self._tgt_data.get(
                 'points.uuid.{}'.format(tgt_points_uuid)
             ) or []
-            uuid_matched_tgt_paths = bsc_core.RawListMtd.get_intersection(
+            uuid_matched_tgt_paths = bsc_core.BscList.to_intersection(
                 tgt_paths_in_face_vertices,
                 tgt_paths_in_points
             )
@@ -139,8 +139,8 @@ class AbsFncMatcherForDccMesh(object):
                 'points.uuid.{}'.format(tgt_points_uuid)
             ) or []
             #
-            uuid_matched_tgt_paths = bsc_core.RawListMtd.get_addition(
-                bsc_core.RawListMtd.get_intersection(tgt_paths_in_face_vertices, tgt_paths_in_points) or [],
+            uuid_matched_tgt_paths = bsc_core.BscList.to_addition(
+                bsc_core.BscList.to_intersection(tgt_paths_in_face_vertices, tgt_paths_in_points) or [],
                 self._src_paths
             ) or []
             if uuid_matched_tgt_paths:
@@ -153,7 +153,7 @@ class AbsFncMatcherForDccMesh(object):
             tgt_paths_in_face_vertices = self._tgt_data.get(
                 'face-vertices.uuid.{}'.format(tgt_face_vertices_uuid)
             ) or []
-            uuid_matched_tgt_paths = bsc_core.RawListMtd.get_addition(
+            uuid_matched_tgt_paths = bsc_core.BscList.to_addition(
                 tgt_paths_in_face_vertices,
                 self._src_paths
             ) or []
@@ -168,7 +168,7 @@ class AbsFncMatcherForDccMesh(object):
             tgt_paths_in_points = self._tgt_data.get(
                 'points.uuid.{}'.format(tgt_points_uuid)
             ) or []
-            uuid_matched_tgt_paths = bsc_core.RawListMtd.get_addition(
+            uuid_matched_tgt_paths = bsc_core.BscList.to_addition(
                 tgt_paths_in_points,
                 self._src_paths
             ) or []
@@ -466,7 +466,7 @@ class AbsFncComparerForDccGeometry(_base.AbsFncOptionBase):
         self._location = self.get('location')
         self._location_source = self.get('location_source')
         #
-        self._cache_directory = bsc_core.EnvBaseMtd.get_cache_temporary_root()
+        self._cache_directory = bsc_core.BscEnviron.get_cache_temporary_root()
         self._resolver = rsv_core.RsvBase.generate_root()
         #
         self._rsv_scene_properties = self._resolver.get_rsv_scene_properties_by_any_scene_file_path(

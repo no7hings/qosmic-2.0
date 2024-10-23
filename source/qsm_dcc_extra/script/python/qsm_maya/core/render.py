@@ -136,7 +136,7 @@ class HardwareRenderSettings(object):
         $gTotalObjTypeFilters[13] = "Joints";
         $gTotalObjTypeFilters[14] = "IK Handles";
         $gTotalObjTypeFilters[15] = "Deformers";
-        $gTotalObjTypeFilters[16] = "NodeMotion Trails";
+        $gTotalObjTypeFilters[16] = "Motion Trails";
         $gTotalObjTypeFilters[17] = "Components";
         $gTotalObjTypeFilters[18] = "Hair Systems";
         $gTotalObjTypeFilters[19] = "Follicles";

@@ -210,7 +210,7 @@ class EtrNodeOpt(object):
         if self._name is not None:
             return self._name
 
-        _ = bsc_core.BscPathOpt(
+        _ = bsc_core.BscNodePathOpt(
             self.get_path()
         ).get_name()
         self._name = _

@@ -18,7 +18,7 @@ class ScpResourcesAddForSurface(object):
         pass
 
     def add_texture_from(self, directory_path_src, type_dtb_path, texture_type_tag):
-        type_opt = bsc_core.BscPathOpt(type_dtb_path)
+        type_opt = bsc_core.BscNodePathOpt(type_dtb_path)
         cs = type_opt.get_components()
         category_group_opt = cs[-2]
         category_group = category_group_opt.get_name()
@@ -55,7 +55,7 @@ class ScpResourcesAddForSurface(object):
             resource_name_p_opt.update_variants(**var)
             if not resource_name_p_opt.get_keys():
                 resource_name = resource_name_p_opt.get_value()
-                resource_name = bsc_core.RawTextMtd.clear_up_to(resource_name).strip().lower()
+                resource_name = bsc_core.BscText.clear_up_to(resource_name).strip().lower()
                 resource_dtb_path = '/{}/{}'.format(category_group, resource_name)
                 version_name = 'v0001'
                 version_dtb_path = '{}/{}'.format(resource_dtb_path, version_name)

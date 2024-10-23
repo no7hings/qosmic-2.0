@@ -30,7 +30,7 @@ def auto_unicode(text):
     return text
 
 
-class BscColor(object):
+class BscColor:
     @classmethod
     def rgb2hex(cls, r, g, b):
         return hex(r)[2:].zfill(2)+hex(g)[2:].zfill(2)+hex(b)[2:].zfill(2)
@@ -287,7 +287,7 @@ class BscCoord(object):
 
 class BscArrayForNested(object):
     @classmethod
-    def set_map_to(cls, array):
+    def map_to(cls, array):
         """
         :param array: etc.[[1, 2], [1, 2]]
         :return: etc.[[1, 1], [1, 2], [2, 1], [2, 2]]
@@ -312,7 +312,7 @@ class BscArrayForNested(object):
         return list_
 
 
-class BscIntegers(object):
+class BscIntegerArray:
     @staticmethod
     def merge_to(array):
         """
@@ -367,7 +367,7 @@ class BscIntegers(object):
         return list_
 
 
-class RawValueMtd(object):
+class BscValue:
     @classmethod
     def step_to(cls, value, delta, step, value_range, direction):
         min0, max0 = value_range
@@ -427,27 +427,29 @@ class RawValueMtd(object):
         return percent
 
 
-class RawListMtd(object):
+class BscList:
     @classmethod
     def grid_to(cls, array, column_count):
         c = len(array)
         return [array[i:i+column_count] for i in range(0, c, column_count)]
 
     @classmethod
-    def get_intersection(cls, a, b):
+    def to_intersection(cls, a, b):
         _ = list(set(a) & set(b))
         _.sort(key=a.index)
         return _
 
     @classmethod
-    def get_addition(cls, a, b):
+    def to_addition(cls, a, b):
         _ = list(set(a)-set(b))
         _.sort(key=a.index)
         return _
 
     @classmethod
-    def get_deletion(cls, a, b):
-        pass
+    def to_deletion(cls, a, b):
+        _ = list(set(b)-set(a))
+        _.sort(key=b.index)
+        return _
 
     @classmethod
     def split_to(cls, lst, max_chunk_count, min_chunk_size):
@@ -470,9 +472,9 @@ class RawListMtd(object):
         return chunks
 
 
-class RawValueRangeMtd(object):
+class BscValueRange(object):
     @classmethod
-    def set_map_to(cls, range_0, range_1, value_0):
+    def map_to(cls, range_0, range_1, value_0):
         value_min_0, value_max_0 = range_0
         value_min_1, value_max_1 = range_1
         #
@@ -482,7 +484,7 @@ class RawValueRangeMtd(object):
         return value_1
 
 
-class BscFrameRang(object):
+class BscFrameRange:
 
     @classmethod
     def get(cls, frame_range, frame_step):
@@ -515,7 +517,7 @@ class BscFrameRang(object):
             raise ValueError()
 
 
-class BscFrames(object):
+class BscFrames:
 
     @staticmethod
     def to_missing_ranges(array):
@@ -590,7 +592,7 @@ class BscFrames(object):
         for deadline
         """
         list_ = []
-        _ = BscIntegers.merge_to(
+        _ = BscIntegerArray.merge_to(
             frames
         )
         for i in _:
@@ -601,7 +603,7 @@ class BscFrames(object):
         return ','.join(list_)
 
 
-class BscInteger(object):
+class BscInteger:
     @classmethod
     def to_prettify_as_file_size(cls, value):
         if value < 1.0:
@@ -728,7 +730,7 @@ class BscInteger(object):
         )
 
 
-class BscRgbRange(object):
+class BscRgbRange:
     def __init__(self, count):
         self._p = 360.0/count
 
@@ -757,7 +759,7 @@ class BscIntegerOpt(object):
         return ''.join(reversed(base36))
 
 
-class RawTextMtd(object):
+class BscText(object):
     @classmethod
     def to_number_embedded_args(cls, text):
         if isinstance(text, six.text_type):
@@ -902,7 +904,7 @@ class BscTextOpt(object):
         string = self.__raw
         if string:
             d = 1000.0
-            a = RawTextMtd.to_integer(string)
+            a = BscText.to_integer(string)
             h = float(a%(360+seed)*d)/d
             s = float((s_p/2)+a%(s_p/2))/100.0
             v = float((v_p/2)+a%(v_p/2))/100.0
@@ -985,7 +987,7 @@ class BscTextOpt(object):
                 else:
                     i_frame_step = 1
                 list_.extend(
-                    BscFrameRang.get(
+                    BscFrameRange.get(
                         (i_start_frame, i_end_frame), i_frame_step
                     )
                 )
@@ -1035,7 +1037,7 @@ class RawStrUnderlineMtd(object):
 class RawTextsMtd(object):
     @classmethod
     def sort_by_number(cls, texts):
-        texts.sort(key=lambda x: RawTextMtd.to_number_embedded_args(x))
+        texts.sort(key=lambda x: BscText.to_number_embedded_args(x))
         return texts
 
     @classmethod

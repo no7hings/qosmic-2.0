@@ -136,7 +136,7 @@ class Frame(object):
             return 'Play every frame'
         elif speed > 0:
             return '{} x {}'.format(
-                bsc_core.RawTextMtd.to_prettify(fps), speed
+                bsc_core.BscText.to_prettify(fps), speed
             )
 
     @classmethod

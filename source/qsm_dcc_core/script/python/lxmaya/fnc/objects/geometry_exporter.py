@@ -115,7 +115,7 @@ class FncExporterForGeometryAbc(object):
                 _ = list(raw)
             else:
                 raise TypeError()
-            return map(lambda x: bsc_core.BscPathOpt(x).translate_to('|').to_string(), _)
+            return map(lambda x: bsc_core.BscNodePathOpt(x).translate_to('|').to_string(), _)
         return []
 
     @classmethod
@@ -368,7 +368,7 @@ class FncExporterForGeometryUsdOld1(object):
         # noinspection PyUnresolvedReferences
         from papyUsd.maya import MayaUsdExport
 
-        root = bsc_core.BscPath.get_dag_pathsep_replace(
+        root = bsc_core.BscNodePath.get_dag_pathsep_replace(
             self._root, pathsep_tgt=mya_core.MyaUtil.OBJ_PATHSEP
         )
         s_r = root
@@ -441,7 +441,7 @@ class FncExporterForCameraAbc(gnl_fnc_abstracts.AbsFncOptionBase):
         super(FncExporterForCameraAbc, self).__init__(option)
         option = self.get_option()
         location = option.get('location')
-        g = mya_dcc_objects.Group(bsc_core.BscPathOpt(location).translate_to('|').to_string())
+        g = mya_dcc_objects.Group(bsc_core.BscNodePathOpt(location).translate_to('|').to_string())
         self._camera_shape_paths = g.get_all_shape_paths(include_obj_type='camera')
         self._camera_transform_paths = map(lambda x: mya_dcc_objects.Shape(x).transform.path, self._camera_shape_paths)
 
@@ -523,7 +523,7 @@ class FncExporterForGeometryUsd(gnl_fnc_abstracts.AbsFncOptionBase):
         if location.startswith('|'):
             location = location.replace('|', '/')
         #
-        root_dag_path = bsc_core.BscPathOpt(location)
+        root_dag_path = bsc_core.BscNodePathOpt(location)
         root_mya_dag_path = root_dag_path.translate_to(
             pathsep=mya_core.MyaUtil.OBJ_PATHSEP
         )
@@ -548,16 +548,16 @@ class FncExporterForGeometryUsd(gnl_fnc_abstracts.AbsFncOptionBase):
                         i_mya_api_type_name = i_mya_obj.get_api_type()
                         i_mya_obj_path = i_mya_obj.get_path()
                         #
-                        i_usd_obj_path = bsc_core.BscPath.get_dag_pathsep_replace(
+                        i_usd_obj_path = bsc_core.BscNodePath.get_dag_pathsep_replace(
                             i_mya_obj_path, pathsep_src=mya_core.MyaUtil.OBJ_PATHSEP
                         )
-                        i_usd_obj_path = bsc_core.BscPath.get_dag_path_lstrip(i_usd_obj_path, usd_root_lstrip)
+                        i_usd_obj_path = bsc_core.BscNodePath.get_dag_path_lstrip(i_usd_obj_path, usd_root_lstrip)
 
                         i_rgb = None
                         if auto_plant_display_color is True:
-                            i_rgb = bsc_core.BscPathOpt(i_usd_obj_path).get_plant_rgb(maximum=1.0)
+                            i_rgb = bsc_core.BscNodePathOpt(i_usd_obj_path).get_plant_rgb(maximum=1.0)
                         elif auto_display_color is True:
-                            i_rgb = bsc_core.BscPathOpt(i_usd_obj_path).get_rgb(maximum=1.0)
+                            i_rgb = bsc_core.BscNodePathOpt(i_usd_obj_path).get_rgb(maximum=1.0)
                         elif with_display_color is True:
                             i_rgb = display_color
                         # clean namespace
@@ -567,10 +567,10 @@ class FncExporterForGeometryUsd(gnl_fnc_abstracts.AbsFncOptionBase):
                                 'obj="{}" has namespace'.format(i_usd_obj_path)
                             )
                         #
-                        i_usd_obj_path = bsc_core.BscPath.get_dag_path_with_namespace_clear(
+                        i_usd_obj_path = bsc_core.BscNodePath.get_dag_path_with_namespace_clear(
                             i_usd_obj_path
                         )
-                        i_usd_obj_path = bsc_core.BscPath.cleanup_dag_path(
+                        i_usd_obj_path = bsc_core.BscNodePath.cleanup_dag_path(
                             i_usd_obj_path
                         )
                         if i_mya_api_type_name in mya_core.MyaNodeApiTypes.Transforms:
@@ -758,7 +758,7 @@ class FncExporterForGeometryUvMapUsd(gnl_fnc_abstracts.AbsFncOptionBase):
         post_deletes = []
         if subdiv_dict:
             for k, v in subdiv_dict.items():
-                i_obj_path = bsc_core.BscPathOpt(
+                i_obj_path = bsc_core.BscNodePathOpt(
                     k
                 ).translate_to('|')
                 # i_results = self._set_subdiv_(
@@ -835,7 +835,7 @@ class FncExporterForGeometryUsdNew(gnl_fnc_abstracts.AbsFncOptionBase):
             i_branch_data = []
             i_leaf_locations = self.get('{}_locations'.format(i_branch_key))
             for j_leaf_location in i_leaf_locations:
-                j_leaf_location_opt_cur = bsc_core.BscPathOpt(j_leaf_location).translate_to(
+                j_leaf_location_opt_cur = bsc_core.BscNodePathOpt(j_leaf_location).translate_to(
                     pathsep
                 )
                 j_leaf_location_cur = j_leaf_location_opt_cur.get_value()

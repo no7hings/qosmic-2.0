@@ -14,7 +14,7 @@ from . import base as _base
 from . import raw as _raw
 
 
-class PtnBaseMtd(object):
+class BscPattern:
     @classmethod
     def glob_fnc(cls, p_str):
         _ = glob.glob(
@@ -27,7 +27,7 @@ class PtnBaseMtd(object):
         return []
 
 
-class PtnFileTilesMtd(object):
+class BscFileTiles:
     RE_UDIM_KEYS = [
         (r'<udim>', r'{}', 4),
     ]
@@ -76,7 +76,7 @@ class PtnFileTilesMtd(object):
     @classmethod
     def to_re_style(cls, pattern):
         pattern_ = pattern
-        args = PtnFileTilesMtd.get_args(pattern)
+        args = BscFileTiles.get_args(pattern)
         for i, (i_key, i_count) in enumerate(args):
             pattern_ = pattern_.replace(
                 i_key, r'[PATTERN-PLACEHOLDER-{}]'.format(i), 1
@@ -119,6 +119,48 @@ class PtnFileTilesMtd(object):
             if results:
                 return True
         return False
+
+
+class BscVersion:
+    @classmethod
+    def to_number_embedded_args(cls, text):
+        pieces = re.compile(r'(\d+)').split(text)
+        pieces[1::2] = map(int, pieces[1::2])
+        return pieces
+
+    @classmethod
+    def sort_by_number(cls, texts):
+        texts.sort(key=lambda x: cls.to_number_embedded_args(x))
+        return texts
+
+    @classmethod
+    def get_version_latest(cls, ptn, padding=3):
+        ptn_glob = ptn.replace('{version}', '[0-9]'*padding)
+
+        _results = glob.glob(ptn_glob)
+        if not _results:
+            return None
+
+        _results = cls.sort_by_number(_results)
+
+        result = _results[-1]
+        result = result.replace('\\', '/')
+        return int(parse.parse(ptn, result)['version'])
+
+    @classmethod
+    def generate_as_new_version(cls, ptn, padding=3):
+        version_latest = cls.get_version_latest(ptn)
+        if version_latest is None:
+            version_latest = 1
+        else:
+            version_latest += 1
+        return ptn.format(version=str(int(version_latest)).zfill(padding))
+
+    @classmethod
+    def generate_as_latest_version(cls, ptn, padding=3):
+        version_latest = cls.get_version_latest(ptn)
+        if version_latest is not None:
+            return ptn.format(version=str(int(version_latest)).zfill(padding))
 
 
 class BscVersionOpt(object):
@@ -299,7 +341,7 @@ class BscFnmatch(object):
         return p
 
 
-class AbsPtnParseOpt(object):
+class AbsParseOpt(object):
 
     def __init__(self, p, variants=None):
         p = BscFnmatch.to_parse_style(p)
@@ -376,12 +418,12 @@ class AbsPtnParseOpt(object):
         return self._variants
 
 
-class PthDccParseOpt(AbsPtnParseOpt):
+class BscDccParseOpt(AbsParseOpt):
     def __init__(self, p, variants=None):
-        super(PthDccParseOpt, self).__init__(p, variants)
+        super(BscDccParseOpt, self).__init__(p, variants)
 
 
-class BscStgParseOpt(AbsPtnParseOpt):
+class BscStgParseOpt(AbsParseOpt):
     def __init__(self, p, variants=None):
         super(BscStgParseOpt, self).__init__(p, variants)
 
@@ -459,54 +501,12 @@ class BscStgParseOpt(AbsPtnParseOpt):
         return self._pattern
 
 
-class PtnDocParseOpt(AbsPtnParseOpt):
+class BscDocParseOpt(AbsParseOpt):
     def __init__(self, p, variants=None):
-        super(PtnDocParseOpt, self).__init__(p, variants)
+        super(BscDocParseOpt, self).__init__(p, variants)
 
     def get_matched_lines(self, lines):
         return fnmatch.filter(
             lines,
             self.get_pattern_for_fnmatch()
         )
-
-
-class PtnVersionPath(object):
-    @classmethod
-    def to_number_embedded_args(cls, text):
-        pieces = re.compile(r'(\d+)').split(text)
-        pieces[1::2] = map(int, pieces[1::2])
-        return pieces
-    
-    @classmethod
-    def sort_by_number(cls, texts):
-        texts.sort(key=lambda x: cls.to_number_embedded_args(x))
-        return texts
-    
-    @classmethod
-    def get_version_latest(cls, ptn, padding=3):
-        ptn_glob = ptn.replace('{version}', '[0-9]'*padding)
-
-        _results = glob.glob(ptn_glob)
-        if not _results:
-            return None
-
-        _results = cls.sort_by_number(_results)
-
-        result = _results[-1]
-        result = result.replace('\\', '/')
-        return int(parse.parse(ptn, result)['version'])
-    
-    @classmethod
-    def generate_as_new_version(cls, ptn, padding=3):
-        version_latest = cls.get_version_latest(ptn)
-        if version_latest is None:
-            version_latest = 1
-        else:
-            version_latest += 1
-        return ptn.format(version=str(int(version_latest)).zfill(padding))
-
-    @classmethod
-    def generate_as_latest_version(cls, ptn, padding=3):
-        version_latest = cls.get_version_latest(ptn)
-        if version_latest is not None:
-            return ptn.format(version=str(int(version_latest)).zfill(padding))

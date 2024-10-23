@@ -14,7 +14,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
 
-        self._wgt = qt_widgets.QtInputAsFilter()
+        self._wgt = qt_widgets.QtInputForFilter()
         self._wgt._set_history_key_('gui.input-filter-test')
 
         self._wgt._set_input_completion_buffer_fnc_(

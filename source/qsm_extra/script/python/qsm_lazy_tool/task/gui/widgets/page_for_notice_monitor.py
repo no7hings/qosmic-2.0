@@ -148,7 +148,7 @@ class _GuiNoticeOpt(
             return
 
         if entity_ids:
-            entity_ids_map = bsc_core.RawListMtd.grid_to(
+            entity_ids_map = bsc_core.BscList.grid_to(
                 entity_ids, self.THREAD_STEP
             )
 

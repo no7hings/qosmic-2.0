@@ -8,39 +8,18 @@
         "type": "tabs",
         "children": [
           {
-            "id": "f0a3005ac8d6e01e",
-            "type": "leaf",
-            "state": {
-              "type": "card-board-view",
-              "state": {}
-            }
-          },
-          {
-            "id": "2d3517a2f5f09340",
+            "id": "7fcf20398ff6d15c",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "开发相关/开发计划/六月.md",
+                "file": "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
                 "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "5099c14e477ae29e",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "开发相关/开发任务/maya/解算相关/解算流程.md",
-                "mode": "source",
-                "source": false
+                "source": true
               }
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -86,8 +65,7 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -107,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "开发相关/开发任务/maya/解算相关/解算流程.md",
+                "file": "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -124,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "开发相关/开发任务/maya/解算相关/解算流程.md",
+                "file": "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -147,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "开发相关/开发任务/maya/解算相关/解算流程.md"
+                "file": "开发相关/开发任务/maya/解算相关/解算（布料）流程.md"
               }
             }
           },
@@ -169,7 +147,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "开发相关/开发任务/maya/解算相关/解算流程.md"
+                "file": "开发相关/开发任务/maya/解算相关/解算（布料）流程.md"
               }
             }
           },
@@ -205,12 +183,22 @@
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
-      "mermaid-tools:Open Mermaid Toolbar": false
+      "mermaid-tools:Open Mermaid Toolbar": false,
+      "card-board:CardBoard": false
     }
   },
-  "active": "5099c14e477ae29e",
+  "active": "7fcf20398ff6d15c",
   "lastOpenFiles": [
-    "开发相关/开发任务/maya/解算相关/解算流程.md",
+    "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
+    "cfx_task_flow_b.png",
+    "Pasted image 20241022131719.png",
+    "cfx_task_flow_a.png",
+    "cfx_task_b.png",
+    "Pasted image 20241022131527.png",
+    "Pasted image 20241022131625.png",
+    "cfx_dcc_flow_b.png",
+    "maya_tool_shelf.png",
+    "cfx_dcc_flow_a.png",
     "开发相关/开发计划/六月.md",
     "开发相关/其他/简模代理.md",
     "开发相关/开发计划/七月-八月.md",
@@ -240,26 +228,15 @@
     "开发相关/开发进度/BUG.md",
     "开发相关/开发进度/maya/动作复制工具.md",
     "开发相关/开发进度/maya/场景显示优化工具.md",
-    "开发相关/开发进度/maya/绑定移动工具.md",
-    "Pasted image 20240628102505.png",
-    "Pasted image 20240627192346.png",
-    "Pasted image 20240627192052.png",
-    "Pasted image 20240628102534.png",
-    "Pasted image 20240628102603.png",
     "随记/PyQt",
     "文档",
     "技术文档/总览.canvas",
     "未命名.canvas",
     "技术文档/Qosmic",
     "技术文档/Qosmic/组件与模块/依赖关系.canvas",
-    "技术文档/工具说明/images/Pasted image 20240520110227.png",
-    "技术文档/工具说明/images/Pasted image 20240520110258.png",
     "随记/python",
     "随记/maya",
     "开发相关/开发任务/maya/相机相关",
-    "ViewFrustum.svg.png",
-    "开发相关/开发文档/images/Pasted image 20240523103725.png",
-    "开发相关/开发文档/images/Pasted image 20240523120517.png",
     "Untitled.canvas"
   ]
 }

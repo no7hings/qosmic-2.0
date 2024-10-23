@@ -294,10 +294,10 @@ class AbsDccNodeSourceDef(object):
         connection_raw = self._get_source_connection_raw_(*args, **kwargs)
         pathsep = self.DCC_CONNECTION_CLS.PORT_PATHSEP
         for source_atr_path, target_atr_path in connection_raw:
-            source_obj_path, source_port_path = bsc_core.PthAttributeMtd.split_by(
+            source_obj_path, source_port_path = bsc_core.BscAttributePath.split_by(
                 source_atr_path, pathsep=pathsep
             )
-            target_obj_path, target_port_path = bsc_core.PthAttributeMtd.split_by(
+            target_obj_path, target_port_path = bsc_core.BscAttributePath.split_by(
                 target_atr_path, pathsep=pathsep
             )
             source = source_obj_cls(source_obj_path).get_port(source_port_path)
@@ -394,10 +394,10 @@ class AbsDccNodeTargetDef(object):
         connection_raw = self._get_target_connection_raw_(*args, **kwargs)
         pathsep = self.DCC_CONNECTION_CLS.PORT_PATHSEP
         for source_atr_path, target_atr_path in connection_raw:
-            source_obj_path, source_port_path = bsc_core.PthAttributeMtd.split_by(
+            source_obj_path, source_port_path = bsc_core.BscAttributePath.split_by(
                 source_atr_path, pathsep=pathsep
             )
-            target_obj_path, target_port_path = bsc_core.PthAttributeMtd.split_by(
+            target_obj_path, target_port_path = bsc_core.BscAttributePath.split_by(
                 target_atr_path, pathsep=pathsep
             )
             source = self.__class__(source_obj_path).get_port(source_port_path)

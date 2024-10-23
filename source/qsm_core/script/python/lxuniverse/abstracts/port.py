@@ -346,7 +346,7 @@ class AbsPortElementExtraDef(object):
 
     # method
     def _set_element_add_(self, port_element):
-        self._port_element_stack.set_object_add(port_element)
+        self._port_element_stack.add_object(port_element)
         # add to obj
         self.obj._add_port_(port_element)
 
@@ -396,7 +396,7 @@ class AbsPortChannelExtraDef(object):
     # method
     def _set_channel_add_(self, channel):
         # add to parent
-        self._channel_stack.set_object_add(channel)
+        self._channel_stack.add_object(channel)
         # add to obj
         self.obj._add_port_(channel)
 

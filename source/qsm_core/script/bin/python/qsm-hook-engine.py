@@ -100,7 +100,7 @@ def __execute_option_hook(hook_option):
     #
     rez_beta = option_opt.get('rez_beta') or False
     if rez_beta is True:
-        bsc_core.EnvBaseMtd.set(
+        bsc_core.BscEnviron.set(
             'REZ_BETA', '1'
         )
     #
@@ -144,7 +144,7 @@ def __execute_option_hook(hook_option):
     # add extend environs
     environs_extend = {}
     #
-    _ = bsc_core.EnvBaseMtd.get('QSM_EXTEND_RESOURCES')
+    _ = bsc_core.BscEnviron.get('QSM_EXTEND_RESOURCES')
     if _:
         environs_extend['QSM_EXTEND_RESOURCES'] = _
     #
@@ -206,7 +206,7 @@ def __execute_option_hook_new(hook_option):
 
     rez_beta = option_opt.get('rez_beta') or False
     if rez_beta is True:
-        bsc_core.EnvBaseMtd.set(
+        bsc_core.BscEnviron.set(
             'REZ_BETA', '1'
         )
 

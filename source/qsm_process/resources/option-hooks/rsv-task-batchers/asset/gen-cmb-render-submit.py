@@ -28,7 +28,7 @@ def main(session):
             )
         )
 
-    bsc_core.EnvBaseMtd.set(
+    bsc_core.BscEnviron.set(
         'RSV_SCENE_FILE', file_path
     )
 

@@ -8,7 +8,7 @@ from .. import log as _bsc_log
 from . import base as _base
 
 
-class MdfBaseMtd(object):
+class BscModifier(object):
     @staticmethod
     def run_as_ignore(fnc):
         def fnc_(*args, **kw):

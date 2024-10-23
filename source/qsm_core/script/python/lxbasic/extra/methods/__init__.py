@@ -10,13 +10,13 @@ def get_module(framework_scheme):
     ).get_module()
 
 
-if bsc_core.EnvExtraMtd.get_scheme() == 'default':
+if bsc_core.BscEnvironExtra.get_scheme() == 'default':
     bsc_log.Log.trace_method_result(
         'extra script',
         'load scheme: "default"'
     )
     from .default import *
-elif bsc_core.EnvExtraMtd.get_scheme() == 'new':
+elif bsc_core.BscEnvironExtra.get_scheme() == 'new':
     bsc_log.Log.trace_method_result(
         'extra script',
         'load scheme: "new"'

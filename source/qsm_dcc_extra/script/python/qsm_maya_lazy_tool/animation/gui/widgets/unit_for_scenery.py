@@ -30,8 +30,8 @@ import qsm_maya_lazy.resource.scripts as qsm_mya_lzy_rsc_scripts
 import qsm_maya_gui.core as qsm_mya_gui_core
 
 
-class UnitForSceneryView(
-    qsm_mya_gui_core.PrxTreeviewUnitForResourceOpt
+class PrxUnitForSceneryAssetView(
+    qsm_mya_gui_core.PrxTreeviewUnitForAssetOpt
 ):
     ROOT_NAME = 'Sceneries'
 
@@ -45,7 +45,7 @@ class UnitForSceneryView(
     ]
 
     def __init__(self, window, unit, session, prx_tree_view):
-        super(UnitForSceneryView, self).__init__(window, unit, session, prx_tree_view)
+        super(PrxUnitForSceneryAssetView, self).__init__(window, unit, session, prx_tree_view)
         self._unit_assembly_load_args_array = []
         self._gpu_instance_load_args_array = []
 
@@ -162,7 +162,7 @@ class PrxToolsetForUnitAssemblyLoad(
 
     def do_dcc_load_unit_assemblies_by_selection(self):
         if self._load_unit_assembly_button.get_is_started() is False:
-            resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
+            resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
             if resources:
                 self._unit_assembly_load_args_array = []
                 create_cmds = []
@@ -201,7 +201,7 @@ class PrxToolsetForUnitAssemblyLoad(
         )
 
     def do_dcc_remove_unit_assemblies(self):
-        resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
+        resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             w = gui_core.GuiDialog.create(
                 label=self._session.gui_name,
@@ -234,7 +234,7 @@ class PrxToolsetForUnitAssemblyLoad(
 
     def do_dcc_load_gpu_instances_by_selection(self):
         if self._load_gpu_instance_button.get_is_started() is False:
-            resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
+            resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
             if resources:
                 self._gpu_instance_load_args_array = []
                 create_cmds = []
@@ -262,7 +262,7 @@ class PrxToolsetForUnitAssemblyLoad(
                     self.do_dcc_load_gpu_instances()
 
     def do_dcc_remove_gpu_instances(self):
-        resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
+        resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             w = gui_core.GuiDialog.create(
                 label=self._session.gui_name,

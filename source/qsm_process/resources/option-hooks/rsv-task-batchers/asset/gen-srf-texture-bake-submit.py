@@ -14,7 +14,7 @@ def main(session):
     #
     file_path = hook_option_opt.get('file')
     #
-    bsc_core.EnvBaseMtd.set(
+    bsc_core.BscEnviron.set(
         'RSV_SCENE_FILE', file_path
     )
     #

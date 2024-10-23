@@ -73,7 +73,7 @@ class AbsCategoryBaseDef(object):
             return stack.get_object(key)
         #
         type_ = category._new_type_(type_name)
-        stack.set_object_add(type_)
+        stack.add_object(type_)
         return type_
 
     def get_type(self, type_name):
@@ -383,7 +383,7 @@ class AbsTypePortQueryExtraDef(object):
             port_query = self._create_port_query_(
                 type_path, port_path, port_assign, raw
             )
-            self._port_query_stack.set_object_add(port_query)
+            self._port_query_stack.add_object(port_query)
         #
         port_query.set(raw)
 
@@ -400,7 +400,7 @@ class AbsTypePortQueryExtraDef(object):
         port_query = self.PORT_QUERY_CLS(
             self, type_path, port_path, port_assign, raw
         )
-        self._port_query_stack.set_object_add(port_query)
+        self._port_query_stack.add_object(port_query)
 
     def get_port_queries(self, regex=None):
         return self._port_query_stack.get_objects(regex)

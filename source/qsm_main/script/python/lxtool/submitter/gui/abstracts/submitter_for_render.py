@@ -50,7 +50,7 @@ class AbsRenderSubmitterDef(object):
             self._hook_gui_configure = self._option_hook_configure.get_as_content('option.gui')
             self._hook_build_configure = self._option_hook_configure.get_as_content('build')
 
-            raw = bsc_core.EnvBaseMtd.get('REZ_BETA')
+            raw = bsc_core.BscEnviron.get('REZ_BETA')
             if raw:
                 self._rez_beta = True
             else:
@@ -79,7 +79,7 @@ class AbsPnlSubmitterForRenderBase(
 
     def __init__(self, hook_option=None, *args, **kwargs):
         super(AbsPnlSubmitterForRenderBase, self).__init__(*args, **kwargs)
-        self._qt_thread_enable = bsc_core.EnvBaseMtd.get_qt_thread_enable()
+        self._qt_thread_enable = bsc_core.BscEnviron.get_qt_thread_enable()
         #
         if hook_option is not None:
             self._set_render_submitter_def_init_(hook_option)
@@ -787,7 +787,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                         'render.shot.frames', frames
                     )
 
-        if bsc_core.EnvExtraMtd.get_is_td_enable() is True:
+        if bsc_core.BscEnvironExtra.get_is_td_enable() is True:
             self._settings_prx_node.set_default(
                 'td.test_scheme', 'td_enable'
             )
@@ -882,7 +882,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
             _key = key_mapper[key_]
             for _i_k in _ks:
                 if c.get(_i_k) is True:
-                    _name = bsc_core.BscPathOpt(_i_k).get_name()
+                    _name = bsc_core.BscNodePathOpt(_i_k).get_name()
                     dic.setdefault(_key, []).append(_name)
 
         #
@@ -1382,7 +1382,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
                 'render.frames', frames
             )
 
-        if bsc_core.EnvExtraMtd.get_is_td_enable() is True:
+        if bsc_core.BscEnvironExtra.get_is_td_enable() is True:
             self._settings_prx_node.set(
                 'td.test_scheme', 'td_enable'
             )

@@ -105,7 +105,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
     def check_used(self, resource_path):
         version_path = '{}/v0001'.format(resource_path)
-        path_opt = bsc_core.BscPathOpt(version_path)
+        path_opt = bsc_core.BscNodePathOpt(version_path)
         cs = path_opt.get_components()
         category_group = cs[-2].get_name()
         dtb_opt = bsc_database.DtbOptForResource(
@@ -122,7 +122,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
         dtb_types = dtb_version_opt.get_types()
         dtb_type = dtb_types[0]
-        category = bsc_core.BscPathOpt(dtb_type.group).get_name()
+        category = bsc_core.BscNodePathOpt(dtb_type.group).get_name()
 
         main_file_path = '{}/{}/{}.png'.format(self._main_dir, category, key)
         sub_file_p = '{}/{}-component/{}-{{index}}.png'.format(self._main_dir, category, key)
@@ -159,7 +159,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
             )
 
         version_path = '{}/v0001'.format(resource_path)
-        path_opt = bsc_core.BscPathOpt(version_path)
+        path_opt = bsc_core.BscNodePathOpt(version_path)
         cs = path_opt.get_components()
         category_group = cs[-2].get_name()
         dtb_opt = bsc_database.DtbOptForResource(
@@ -176,7 +176,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
         dtb_types = dtb_version_opt.get_types()
         dtb_type = dtb_types[0]
-        category = bsc_core.BscPathOpt(dtb_type.group).get_name()
+        category = bsc_core.BscNodePathOpt(dtb_type.group).get_name()
 
         main_file_path = '{}/{}/{}.png'.format(self._main_dir, category, key)
         sub_file_p = '{}/{}-component/{}-{{index}}.png'.format(self._main_dir, category, key)

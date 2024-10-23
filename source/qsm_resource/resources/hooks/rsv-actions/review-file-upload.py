@@ -14,7 +14,7 @@ def ok_method():
     w.show_window_auto()
 
 
-@bsc_core.MdfBaseMtd.run_with_exception_catch
+@bsc_core.BscModifier.run_with_exception_catch
 def main(session):
     import lxgui.core as gui_core
 

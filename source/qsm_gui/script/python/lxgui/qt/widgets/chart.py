@@ -309,7 +309,7 @@ class QtChartAsRgbaChoose(
         radix = 3
         #
         pre_count = self._count
-        cur_count = bsc_core.RawValueMtd.step_to(
+        cur_count = bsc_core.BscValue.step_to(
             value=pre_count,
             delta=-delta,
             step=radix,
@@ -342,7 +342,7 @@ class QtChartAsRgbaChoose(
         delta_y = point.y()
         _radix_x = 5.0
         radix_y = 5.0
-        self._color_v_multiply = bsc_core.RawValueMtd.step_to(
+        self._color_v_multiply = bsc_core.BscValue.step_to(
             value=self._color_v_multiply,
             delta=-delta_y,
             step=radix_y,
@@ -1249,16 +1249,16 @@ class QtChartAsSequence(
             #
             index_array_0 = range(index_range[0], index_range[1]+1)
             self._chart_index_array = index_array
-            index_array_1 = bsc_core.RawListMtd.get_intersection(
+            index_array_1 = bsc_core.BscList.to_intersection(
                 index_array_0, index_array
             )
-            self._chart_index_merge_array = bsc_core.BscIntegers.merge_to(
+            self._chart_index_merge_array = bsc_core.BscIntegerArray.merge_to(
                 index_array_1
             )
-            self._chart_index_lost_array = bsc_core.RawListMtd.get_addition(
+            self._chart_index_lost_array = bsc_core.BscList.to_addition(
                 index_array_0, index_array_1
             )
-            self._chart_index_lost_merge_array = bsc_core.BscIntegers.merge_to(
+            self._chart_index_lost_merge_array = bsc_core.BscIntegerArray.merge_to(
                 self._chart_index_lost_array
             )
             self._chart_index_check_range = index_range

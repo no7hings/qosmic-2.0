@@ -209,7 +209,7 @@ class _PublishOptForGeneral(object):
             option=option_opt.to_string()
         )
 
-    @bsc_core.MdfBaseMtd.run_with_exception_catch
+    @bsc_core.BscModifier.run_with_exception_catch
     def execute(self):
         fncs = [
             self.pre_fnc,
@@ -359,7 +359,7 @@ class AbsPnlPublisherForGeneral(gui_prx_widgets.PrxSessionWindow):
             self.do_close_window_later()
             return
 
-        task_id = bsc_core.EnvBaseMtd.get(
+        task_id = bsc_core.BscEnviron.get(
             'QSM_TASK_ID'
         )
         if task_id:

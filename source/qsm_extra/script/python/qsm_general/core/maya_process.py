@@ -43,7 +43,7 @@ class MayaCacheProcess(object):
 
     @classmethod
     def to_option_file_path(cls, key):
-        root = bsc_core.EnvBaseMtd.get_cache_temporary_root()
+        root = bsc_core.BscEnviron.get_cache_temporary_root()
         user_name = bsc_core.BscSystem.get_user_name()
         region = bsc_storage.StgTmpBaseMtd.get_save_region(key)
         return '{}/.method-option/{}/{}/{}.json'.format(

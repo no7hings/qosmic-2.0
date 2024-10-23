@@ -197,11 +197,11 @@ Field Options:
   -ntsc                       When field rendering is enabled, render odd field
         first (NTSC)
 
-NodeMotion Blur:
-  -mb boolean                 NodeMotion blur on/off
-  -mbf float                  NodeMotion blur by frame
+Motion Blur:
+  -mb boolean                 Motion blur on/off
+  -mbf float                  Motion blur by frame
   -sa float                   Shutter angle for motion blur (1-360)
-  -mb2d boolean               NodeMotion blur 2D on/off
+  -mb2d boolean               Motion blur 2D on/off
   -bll float                  2D motion blur blur length
   -bls float                  2D motion blur blur sharpness
   -smv int                    2D motion blur smooth value
@@ -431,14 +431,14 @@ Depth options
   -ai:vol int                 Set volume GI depth.
   -ai:atd int                 Set auto-transparency depth.
 
-NodeMotion blur
+Motion blur
   -ai:mben boolean            Enable motion blur.
   -ai:mbdf boolean            Enable object deformation motion blur.
   -ai:mbcen boolean           Enable camera motion blur.
   -ai:mbrt int                Position. (0 - Start On Frame, 1 - Center On Frame, 2 - End On Frame, 3 - Custom)
   -ai:mbfr float              Shutter Length.
-  -ai:mbstart float           NodeMotion Start.
-  -ai:mbend float             NodeMotion End.
+  -ai:mbstart float           Motion Start.
+  -ai:mbend float             Motion End.
   -ai:mbms int                Number of motion steps.
 
 Lights

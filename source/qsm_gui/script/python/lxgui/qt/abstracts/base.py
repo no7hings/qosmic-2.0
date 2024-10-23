@@ -44,7 +44,7 @@ class AbsQtWidgetBaseDef(object):
 
     @classmethod
     def _get_language_(cls):
-        return bsc_core.EnvBaseMtd.get_ui_language()
+        return bsc_core.BscEnviron.get_ui_language()
 
 
 class AbsQtBusyBaseDef(object):
@@ -1928,7 +1928,7 @@ class AbsQtProgressBaseDef(object):
         #
         if self._progress_map_maximum > 1:
             map_value = int(
-                bsc_core.RawValueRangeMtd.set_map_to(
+                bsc_core.BscValueRange.map_to(
                     (1, self._progress_maximum), (1, self._progress_map_maximum),
                     self._progress_value
                 )
@@ -2133,7 +2133,7 @@ class AbsQtThreadBaseDef(object):
     def _init_thread_base_def_(self, widget):
         self._widget = widget
 
-        self._qt_thread_enable = bsc_core.EnvBaseMtd.get_qt_thread_enable()
+        self._qt_thread_enable = bsc_core.BscEnviron.get_qt_thread_enable()
 
         self._thread_draw_flag = False
         self._thread_load_index = 0
@@ -2341,7 +2341,7 @@ class AbsQtGuideBaseDef(object):
     def _set_guide_name_text_at_(self, name_text, index=0):
         item = self._get_guide_item_at_(index)
         path_text = item._path_text
-        child_path_text = bsc_core.BscPath.get_dag_child_path(path_text, name_text)
+        child_path_text = bsc_core.BscNodePath.get_dag_child_path(path_text, name_text)
         #
         self._set_guide_path_text_(child_path_text)
         return child_path_text
@@ -2410,12 +2410,12 @@ class AbsQtGuideEntryDef(AbsQtGuideBaseDef):
             return self._get_guide_sibling_name_texts_from_(item)
 
     def _get_guide_child_name_texts_from_(self, item):
-        return bsc_core.BscPath.find_dag_child_names(
+        return bsc_core.BscNodePath.find_dag_child_names(
             item._path_text, self._get_guide_valid_path_texts_()
         )
 
     def _get_guide_sibling_name_texts_from_(self, item):
-        return bsc_core.BscPath.find_dag_sibling_names(
+        return bsc_core.BscNodePath.find_dag_sibling_names(
             item._path_text, self._get_guide_valid_path_texts_()
         )
 
@@ -2626,7 +2626,7 @@ class AbsQtItemFilterDef(object):
         return list(self._item_keyword_filter_keys_tgt)
 
     def _get_keyword_filter_keys_tgt_as_split_(self):
-        return [j for i in self._get_keyword_filter_keys_tgt_() for j in bsc_core.RawTextMtd.find_words(i)]
+        return [j for i in self._get_keyword_filter_keys_tgt_() for j in bsc_core.BscText.find_words(i)]
 
     def _get_keyword_filter_keys_auto_(self):
         # use filter keys default

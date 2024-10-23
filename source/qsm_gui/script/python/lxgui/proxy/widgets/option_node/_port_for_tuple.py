@@ -2,7 +2,7 @@
 # proxy widgets
 import _port_base
 
-import _input_for_tuple
+from ..input import input_for_tuple as _input_for_tuple
 
 
 # tuple

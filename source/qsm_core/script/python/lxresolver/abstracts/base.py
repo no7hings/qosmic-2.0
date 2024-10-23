@@ -257,7 +257,7 @@ class AbsRsvEntityBaseDef(AbsRsvBaseDef):
     type_name = property(get_type_name)
 
     def get_name(self):
-        return bsc_core.BscPath.to_dag_name(self._rsv_path, pathsep=self.PATHSEP)
+        return bsc_core.BscNodePath.to_dag_name(self._rsv_path, pathsep=self.PATHSEP)
 
     name = property(get_name)
 
@@ -324,7 +324,7 @@ class AbsRsvPattern(object):
                 _ = bsc_scan.ScanGlob.glob(p_fnmatch) or []
                 if _:
                     # sort by number
-                    _.sort(key=lambda x: bsc_core.RawTextMtd.to_number_embedded_args(x))
+                    _.sort(key=lambda x: bsc_core.BscText.to_number_embedded_args(x))
                     if trim is not None:
                         _ = _[trim[0]:trim[1]]
                     # fix windows path
@@ -506,7 +506,7 @@ class AbsRsvMatcher(object):
                 _ = bsc_scan.ScanGlob.glob(glob_pattern) or []
                 if _:
                     # sort by number
-                    _.sort(key=lambda x: bsc_core.RawTextMtd.to_number_embedded_args(x))
+                    _.sort(key=lambda x: bsc_core.BscText.to_number_embedded_args(x))
                     if trim is not None:
                         _ = _[trim[0]:trim[1]]
                     # fix windows path
@@ -2887,7 +2887,7 @@ class AbsRsvProject(
         return self._rsv_obj_stack.get_object_exists(rsv_obj_path)
 
     def _project__add_rsv_entity(self, rsv_obj):
-        self._rsv_obj_stack.set_object_add(rsv_obj)
+        self._rsv_obj_stack.add_object(rsv_obj)
         if rsv_core.RESULT_ENABLE is True:
             bsc_log.Log.trace_method_result(
                 'resolver',
@@ -2905,10 +2905,10 @@ class AbsRsvProject(
         return self._rsv_obj_stack.get_objects(regex)
 
     def _project__find_rsv_entity_child_paths(self, path):
-        return bsc_core.BscPath.find_dag_child_paths(path, self._rsv_obj_stack.get_keys())
+        return bsc_core.BscNodePath.find_dag_child_paths(path, self._rsv_obj_stack.get_keys())
 
     def _project__find_rsv_entity_children(self, path):
-        child_paths = bsc_core.BscPath.find_dag_child_paths(path, self._rsv_obj_stack.get_keys())
+        child_paths = bsc_core.BscNodePath.find_dag_child_paths(path, self._rsv_obj_stack.get_keys())
         return [self._rsv_obj_stack.get_object(i) for i in child_paths]
 
     def get_rsv_resource_by_any_file_path(self, file_path, variants_override=None):
@@ -3220,7 +3220,7 @@ class AbsRsvRoot(
         rsv_project._project_update_static_variants_to_rsv_properties()
         obj_type = rsv_project.type
         obj_path = rsv_project.path
-        self._rsv_project_stack.set_object_add(rsv_project)
+        self._rsv_project_stack.add_object(rsv_project)
         if rsv_core.RESULT_ENABLE is True:
             bsc_log.Log.trace_method_result(
                 'resolver',

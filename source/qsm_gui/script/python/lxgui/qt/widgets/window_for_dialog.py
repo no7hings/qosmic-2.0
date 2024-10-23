@@ -11,11 +11,13 @@ from .. import core as _qt_core
 
 from .. import abstracts as _qt_abstracts
 
+from .input import input_for_constant as _ipt_for_constant
+
+from .input import input_for_content as _qt_wgt_ipt_for_content
+
 from . import base as _base
 
 from . import utility as _utility
-
-from . import input as _input
 
 from . import button as _button
 
@@ -174,7 +176,7 @@ class QtContentDialog(_QtDialog):
 
         sca = _utility.QtVScrollArea()
         self._central_qt_layout.addWidget(sca)
-        self._message_input = _input.QtInputAsContent()
+        self._message_input = _qt_wgt_ipt_for_content.QtInputForContent()
         sca._add_widget_(self._message_input)
         self._message_input._set_entry_enable_(False)
 
@@ -437,7 +439,7 @@ class QtInputDialog(
 
     def _set_value_type_(self, type_):
         if type_ in {'string', 'integer', 'float'}:
-            self._value_input = _input.QtInputAsConstant()
+            self._value_input = _ipt_for_constant.QtInputForConstant()
             self._sca._add_widget_(self._value_input)
             self._value_input._set_entry_enable_(True)
             if type_ == 'integer':
@@ -448,7 +450,7 @@ class QtInputDialog(
                 self._do_ok_
             )
         elif type_ in {'text'}:
-            self._value_input = _input.QtInputAsContent()
+            self._value_input = _qt_wgt_ipt_for_content.QtInputForContent()
             self._sca._add_widget_(self._value_input)
             self._value_input._set_entry_enable_(True)
             self._value_input._connect_input_user_entry_value_finished_to_(

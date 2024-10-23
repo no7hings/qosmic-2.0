@@ -2,11 +2,9 @@
 import sys
 
 import os
-# process
-from . import base as _base
 
 
-class EnvBaseMtd(object):
+class BscEnviron(object):
     UI_LANGUAGE_KEY = 'QSM_UI_LANGUAGE'
     DEPLOY_ROOT_KEY = 'QSM_DEPLOY_ROOT'
 
@@ -150,7 +148,7 @@ class EnvBaseMtd(object):
         return cls.get(cls.UI_LANGUAGE_KEY) or 'en_US'
 
 
-class EnvExtraMtd(EnvBaseMtd):
+class BscEnvironExtra(BscEnviron):
     SCHEME_KEY = 'QSM_SCHEME'
     BETA_ENABLE_KEY = 'QSM_BETA_ENABLE'
     TD_ENABLE_KEY = 'QSM_TD_ENABLE'
@@ -188,7 +186,7 @@ class EnvExtraMtd(EnvBaseMtd):
             cls.set(cls.TD_ENABLE_KEY, cls.FALSE)
 
 
-class EnvContentOpt(object):
+class BscEnvironOpt(object):
     def __init__(self, environs):
         self.__raw = environs
 

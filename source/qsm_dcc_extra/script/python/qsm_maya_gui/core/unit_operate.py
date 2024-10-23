@@ -26,20 +26,20 @@ class PrxUnitBaseOpt(object):
         self._session = session
 
 
-class PrxTreeviewUnitForResourceTagOpt(
+class PrxTreeviewUnitForAssetTagFilterOpt(
     PrxUnitBaseOpt,
     gui_prx_abstracts.AbsGuiTreeViewAsTagOpt,
 ):
     GROUP_SCHEME = gui_prx_abstracts.AbsGuiTreeViewAsTagOpt.GroupScheme.Hide
 
     def __init__(self, window, page, session, prx_tree_view):
-        super(PrxTreeviewUnitForResourceTagOpt, self).__init__(window, page, session)
+        super(PrxTreeviewUnitForAssetTagFilterOpt, self).__init__(window, page, session)
         self._init_tree_view_as_tag_opt_(prx_tree_view, self.GUI_NAMESPACE)
 
         self._gui_thread_flag = 0
 
 
-class PrxTreeviewUnitForResourceOpt(
+class PrxTreeviewUnitForAssetOpt(
     PrxUnitBaseOpt,
     gui_prx_abstracts.AbsGuiPrxCacheDef,
 ):
@@ -71,31 +71,31 @@ class PrxTreeviewUnitForResourceOpt(
                 'remove-resource',
                 'tool/maya/remove-reference',
                 '"LMB-click" to remove selected rigs',
-                self.do_dcc_remove_resources
+                self.do_dcc_remove_asset_references
             ),
             (
                 'duplicate-resource',
                 'tool/maya/duplicate-reference',
                 '"LMB-click" to duplicate selected rigs',
-                self.do_dcc_duplicate_resources
+                self.do_dcc_duplicate_asset_references
             ),
             (
                 'reload-resource',
                 'tool/maya/reload-reference',
                 '"LMB-click" to reload selected rigs',
-                self.do_dcc_reload_resources
+                self.do_dcc_reload_asset_references
             ),
             (
                 'unload-resource',
                 'tool/maya/unload-reference',
                 '"LMB-click" to unload selected rigs',
-                self.do_dcc_unload_resources
+                self.do_dcc_unload_asset_references
             ),
             (
                 'replace-resource',
                 'tool/maya/replace-reference',
                 '"LMB-click" to unload replace rigs',
-                self.do_dcc_replace_references
+                self.do_dcc_replace_asset_references
             ),
         ]:
             i_key, i_icon_name, i_tool_tip, i_fnc = i
@@ -107,8 +107,21 @@ class PrxTreeviewUnitForResourceOpt(
             i_tool.connect_press_clicked_to(i_fnc)
             self._tool_dict[i_key] = i_tool
 
+    def _gui_asset_menu_data_generate_fnc(self):
+        return [
+            [
+                'Reference', 'file/folder',
+                [
+                    ('Duplicate', 'tool/maya/duplicate-reference', self.do_dcc_duplicate_asset_references),
+                    ('Reload', 'tool/maya/reload-reference', self.do_dcc_reload_asset_references),
+                    ('Unload', 'tool/maya/unload-reference', self.do_dcc_unload_asset_references),
+                    ('Replace', 'tool/maya/replace-reference', self.do_dcc_replace_asset_references),
+                ]
+            ],
+        ]
+    
     # reference
-    def do_dcc_remove_resources(self):
+    def do_dcc_remove_asset_references(self):
 
         result = self._window.exec_message_dialog(
             self._window.choice_message(
@@ -134,7 +147,7 @@ class PrxTreeviewUnitForResourceOpt(
 
             self._page.do_gui_refresh_all()
 
-    def do_dcc_duplicate_resources(self):
+    def do_dcc_duplicate_asset_references(self):
         _ = self._prx_tree_view.get_selected_items()
         for i in _:
             i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
@@ -143,7 +156,7 @@ class PrxTreeviewUnitForResourceOpt(
 
         self._page.do_gui_refresh_all()
 
-    def do_dcc_reload_resources(self):
+    def do_dcc_reload_asset_references(self):
         _ = self._prx_tree_view.get_selected_items()
         for i in _:
             i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
@@ -152,7 +165,7 @@ class PrxTreeviewUnitForResourceOpt(
 
         self._page.do_gui_refresh_all(force=True)
 
-    def do_dcc_unload_resources(self):
+    def do_dcc_unload_asset_references(self):
         _ = self._prx_tree_view.get_selected_items()
         for i in _:
             i_resource = i.get_gui_dcc_obj(self.NAMESPACE)
@@ -161,7 +174,7 @@ class PrxTreeviewUnitForResourceOpt(
 
         self._page.do_gui_refresh_all(force=True)
 
-    def do_dcc_replace_references(self):
+    def do_dcc_replace_asset_references(self):
         file_path = gui_core.GuiStorageDialog.open_file(
             ext_filter='All File (*.ma *.mb)', parent=self._window._qt_widget
         )
@@ -283,7 +296,7 @@ class PrxTreeviewUnitForResourceOpt(
             self.do_gui_selected(paths)
 
     def __init__(self, window, page, session, prx_tree_view):
-        super(PrxTreeviewUnitForResourceOpt, self).__init__(window, page, session)
+        super(PrxTreeviewUnitForAssetOpt, self).__init__(window, page, session)
         self._init_cache_def_(prx_tree_view)
         self._prx_tree_view = prx_tree_view
         self._prx_tree_view.create_header_view(
@@ -397,7 +410,7 @@ class PrxTreeviewUnitForResourceOpt(
                 _semantic_tag_filter_data.setdefault(
                     _tag_group_key, set()
                 ).add('/status/loaded')
-                self._page._gui_resource_tag_prx_unit.gui_register_tag_by_path(
+                self._page._gui_asset_tag_filter_prx_unit.gui_register_tag_by_path(
                     '/status/loaded', path, auto_create_ancestors=True
                 )
             else:
@@ -407,7 +420,7 @@ class PrxTreeviewUnitForResourceOpt(
                 _semantic_tag_filter_data.setdefault(
                     _tag_group_key, set()
                 ).add('/status/unloaded')
-                self._page._gui_resource_tag_prx_unit.gui_register_tag_by_path(
+                self._page._gui_asset_tag_filter_prx_unit.gui_register_tag_by_path(
                     '/status/unloaded', path, auto_create_ancestors=True
                 )
 
@@ -466,6 +479,8 @@ class PrxTreeviewUnitForResourceOpt(
                 )
                 prx_item.set_name('Rig for {}'.format(tag), 1)
 
+            prx_item.set_menu_data(self._gui_asset_menu_data_generate_fnc())
+
         path = resource.path
         if self.gui_check_exists(path) is False:
             path_opt = resource.path_opt
@@ -496,7 +511,7 @@ class PrxTreeviewUnitForResourceOpt(
                     semantic_tag_filter_data.setdefault(
                         i_tag_group, set()
                     ).add(i_tag_path)
-                    self._page._gui_resource_tag_prx_unit.gui_register_tag_by_path(
+                    self._page._gui_asset_tag_filter_prx_unit.gui_register_tag_by_path(
                         i_tag_path, path, auto_create_ancestors=True
                     )
 
@@ -529,7 +544,7 @@ class PrxTreeviewUnitForResourceOpt(
             )
 
         if self.gui_check_exists(path) is False:
-            path_opt = bsc_core.BscPathOpt(path)
+            path_opt = bsc_core.BscNodePathOpt(path)
             create_kwargs = dict(
                 name='loading ...',
                 filter_key=path,

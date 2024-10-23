@@ -306,7 +306,7 @@ class AndRamp(AndShader):
                 values = [strings.index(self.get_shader_port_value(dcc_port_key))]*int(count)
             elif dcc_port_key in ['ramp_Colors']:
                 _ = self.get_shader_port_value(dcc_port_key)
-                values = bsc_core.RawListMtd.grid_to(_, 3)
+                values = bsc_core.BscList.grid_to(_, 3)
             else:
                 values = self.get_shader_port_value(dcc_port_key)
 

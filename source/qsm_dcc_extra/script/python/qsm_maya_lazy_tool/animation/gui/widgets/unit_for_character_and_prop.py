@@ -28,8 +28,8 @@ import qsm_maya.steps.animation.core as qsm_mya_stp_anm_core
 import qsm_maya.steps.animation.scripts as qsm_mya_stp_anm_scripts
 
 
-class UnitForRigView(
-    qsm_mya_gui_core.PrxTreeviewUnitForResourceOpt
+class PrxUnitForRigAssetView(
+    qsm_mya_gui_core.PrxTreeviewUnitForAssetOpt
 ):
     ROOT_NAME = 'Rigs'
 
@@ -43,7 +43,7 @@ class UnitForRigView(
     ]
 
     def __init__(self, window, unit, session, prx_tree_view):
-        super(UnitForRigView, self).__init__(window, unit, session, prx_tree_view)
+        super(PrxUnitForRigAssetView, self).__init__(window, unit, session, prx_tree_view)
 
 
 class PrxToolbarForCharacterAndPropReference(
@@ -54,7 +54,7 @@ class PrxToolbarForCharacterAndPropReference(
         self._scan_root = qsm_scan.Root.generate()
         self._asset_prx_input = prx_input_for_asset
 
-        self._count_input = qt_widgets.QtInputAsConstant()
+        self._count_input = qt_widgets.QtInputForConstant()
         self._asset_prx_input.add_widget(self._count_input)
         self._count_input._set_value_type_(int)
         self._count_input.setFixedWidth(64)
@@ -119,7 +119,7 @@ class PrxToolbarForCharacterAndPropReference(
             )
             #
             if result is True:
-                assets = self._page._gui_resource_prx_unit.gui_get_selected_resources()
+                assets = self._page._gui_asset_prx_unit.gui_get_selected_resources()
                 for i_asset in assets:
                     i_asset.reference_opt.do_replace(self._asset_path)
 
@@ -174,7 +174,7 @@ class PrxToolsetForSkinProxyLoad(
     def do_gui_refresh_buttons(self):
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         resources = list(
-            filter(None, [self._page._gui_resource_prx_unit.get_resources_query().get(x) for x in namespaces])
+            filter(None, [self._page._gui_asset_prx_unit.get_resources_query().get(x) for x in namespaces])
         )
         self.do_gui_refresh_buttons_for_skin_proxy(resources)
         self.do_gui_refresh_buttons_for_dynamic_gpu(resources)
@@ -242,7 +242,7 @@ class PrxToolsetForSkinProxyLoad(
             self.do_gui_refresh_buttons()
 
     def do_gui_selection_all_resources(self):
-        self._page._gui_resource_prx_unit.do_gui_select_all_resources()
+        self._page._gui_asset_prx_unit.do_gui_select_all_resources()
 
     # skin proxy
     def do_dcc_load_skin_proxies(self):
@@ -261,11 +261,11 @@ class PrxToolsetForSkinProxyLoad(
 
         self._page.do_gui_refresh_all(force=True)
 
-        self._page._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection()
+        self._page._gui_asset_prx_unit.do_gui_refresh_by_dcc_selection()
 
     def do_dcc_load_skin_proxies_by_selection(self):
         if self._load_skin_proxy_prx_button.get_is_started() is False:
-            resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
+            resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
             if resources:
                 self._skin_proxy_load_args_array = []
                 create_cmds = []
@@ -312,10 +312,10 @@ class PrxToolsetForSkinProxyLoad(
 
         self._page.do_gui_refresh_all(force=True)
 
-        self._page._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection()
+        self._page._gui_asset_prx_unit.do_gui_refresh_by_dcc_selection()
 
     def do_dcc_remove_skin_proxies(self):
-        resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
+        resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
                 i_opt = qsm_mya_stp_anm_scripts.SkinProxyOpt(i_resource)
@@ -323,7 +323,7 @@ class PrxToolsetForSkinProxyLoad(
 
         self._page.do_gui_refresh_all(force=True)
 
-        self._page._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection()
+        self._page._gui_asset_prx_unit.do_gui_refresh_by_dcc_selection()
 
     # dynamic gpu
     def do_dcc_load_dynamic_gpus(self):
@@ -338,7 +338,7 @@ class PrxToolsetForSkinProxyLoad(
 
     def do_dcc_load_dynamic_gpus_bt_selection(self):
         if self._load_dynamic_gpu_prx_button.get_is_started() is False:
-            resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
+            resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
             if resources:
                 self._dynamic_gpu_load_args_array = []
                 create_cmds = []
@@ -398,10 +398,10 @@ class PrxToolsetForSkinProxyLoad(
 
         self._page.do_gui_refresh_all(force=True)
 
-        self._page._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection()
+        self._page._gui_asset_prx_unit.do_gui_refresh_by_dcc_selection()
 
     def do_dcc_remove_dynamic_gpus(self):
-        resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
+        resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
                 i_opt = qsm_mya_stp_anm_scripts.DynamicGpuCacheOpt(i_resource)
@@ -612,7 +612,7 @@ class PrxToolsetForSkinProxySwitch(
     def do_gui_refresh_buttons(self):
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         resources = list(
-            filter(None, [self._page._gui_resource_prx_unit.get_resources_query().get(x) for x in namespaces])
+            filter(None, [self._page._gui_asset_prx_unit.get_resources_query().get(x) for x in namespaces])
         )
         self.do_gui_refresh_buttons_for_skin_proxy(resources)
         self.do_gui_refresh_buttons_for_dynamic_gpu(resources)
@@ -680,7 +680,7 @@ class PrxToolsetForSkinProxySwitch(
             self.do_gui_refresh_buttons()
 
     def do_gui_selection_all_resources(self):
-        self._page._gui_resource_prx_unit.do_gui_select_all_resources()
+        self._page._gui_asset_prx_unit.do_gui_select_all_resources()
 
 
 class PrxToolsetForMotion(
@@ -742,7 +742,7 @@ class PrxToolsetForMotion(
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if not namespaces:
             return
-        adv_rig_query = self._page._gui_resource_prx_unit.get_resources_query()
+        adv_rig_query = self._page._gui_asset_prx_unit.get_resources_query()
         valid_namespaces = adv_rig_query.to_valid_namespaces(namespaces)
         if not valid_namespaces:
             return
@@ -761,7 +761,7 @@ class PrxToolsetForMotion(
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if not namespaces:
             return
-        adv_rig_query = self._page._gui_resource_prx_unit.get_resources_query()
+        adv_rig_query = self._page._gui_asset_prx_unit.get_resources_query()
         valid_namespaces = adv_rig_query.to_valid_namespaces(namespaces)
         if not valid_namespaces:
             return
@@ -778,7 +778,7 @@ class PrxToolsetForMotion(
         if namespaces:
             self._dynamic_gpu_load_args_array = []
 
-            adv_rig_query = self._page._gui_resource_prx_unit.get_resources_query()
+            adv_rig_query = self._page._gui_asset_prx_unit.get_resources_query()
             valid_namespaces = adv_rig_query.to_valid_namespaces(namespaces)
             if len(valid_namespaces) >= 2:
                 namespace_src = valid_namespaces[-2]
@@ -804,7 +804,7 @@ class PrxToolsetForMotion(
                 )
 
     def do_dcc_enable_control_playback_visible(self):
-        resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
+        resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
                 if i_resource.is_exists() is False:
@@ -814,7 +814,7 @@ class PrxToolsetForMotion(
                 [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 0) for x in i_controls]
 
     def do_dcc_disable_control_playback_visible(self):
-        resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
+        resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
                 if i_resource.is_exists() is False:

@@ -33,7 +33,7 @@ def get_menu_content_by_hooks(hooks):
                     if 'gui_parent' in i_extra_kwargs:
                         i_gui_parent_path = i_extra_kwargs['gui_parent']
                 #
-                i_gui_parent_path_opt = bsc_core.BscPathOpt(i_gui_parent_path)
+                i_gui_parent_path_opt = bsc_core.BscNodePathOpt(i_gui_parent_path)
                 #
                 if i_gui_parent_path_opt.get_is_root():
                     i_gui_path = '/{}'.format(i_gui_name)
@@ -110,7 +110,7 @@ def get_menu_content_by_hook_options(hook_options):
                     if i_hook_option_opt.get_key_is_exists('gui_parent'):
                         i_gui_parent_path = i_hook_option_opt.get('gui_parent')
                 #
-                i_gui_parent_path_opt = bsc_core.BscPathOpt(i_gui_parent_path)
+                i_gui_parent_path_opt = bsc_core.BscNodePathOpt(i_gui_parent_path)
                 #
                 if i_gui_parent_path_opt.get_is_root():
                     i_gui_path = '/{}'.format(i_gui_name)
@@ -196,7 +196,7 @@ def get_menu_content_by_hook_options_(hook_options):
                     if i_hook_option_opt.get_key_is_exists('gui_parent'):
                         i_gui_parent_path = i_hook_option_opt.get('gui_parent')
                 #
-                i_gui_parent_path_opt = bsc_core.BscPathOpt(i_gui_parent_path)
+                i_gui_parent_path_opt = bsc_core.BscNodePathOpt(i_gui_parent_path)
                 #
                 if i_gui_parent_path_opt.get_is_root():
                     i_gui_path = '/{}'.format(i_gui_name)

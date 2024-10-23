@@ -5,7 +5,7 @@ import lxbasic.core as bsc_core
 
 import lxsession.commands as ssn_commands
 
-bsc_core.EnvBaseMtd.append(
+bsc_core.BscEnviron.append(
     bsc_resource.ExtendResource.ENVIRON_KEY, '/data/e/myworkspace/td/lynxi/script/python/.resources'
 )
 

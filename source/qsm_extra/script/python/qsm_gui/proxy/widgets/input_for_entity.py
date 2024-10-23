@@ -28,7 +28,7 @@ class PrxAssetInputForCharacterAndProp(prx_abstracts.AbsPrxWidget):
         self._qt_layout_0 = qt_widgets.QtHBoxLayout(self.get_widget())
         self._qt_layout_0.setContentsMargins(*[0]*4)
         # self._qt_layout_0._set_align_as_top_()
-        self._qt_path_input = qt_widgets.QtInputAsPath()
+        self._qt_path_input = qt_widgets.QtInputForPath()
         self._qt_layout_0.addWidget(self._qt_path_input)
 
         self._scan_root = qsm_scan.Root.generate()
@@ -97,7 +97,7 @@ class PrxAssetInputForCharacterAndProp(prx_abstracts.AbsPrxWidget):
 
     def _pull_history_fnc(self, path):
         self._buffer_fnc(
-            bsc_core.BscPathOpt(path)
+            bsc_core.BscNodePathOpt(path)
         )
 
     def _buffer_fnc(self, path_opt):
@@ -115,7 +115,7 @@ class PrxAssetInputForCharacterAndProp(prx_abstracts.AbsPrxWidget):
 
     def _cache_entities(self):
         path = self._qt_path_input._get_value_()
-        path_opt = bsc_core.BscPathOpt(path)
+        path_opt = bsc_core.BscNodePathOpt(path)
         cs = path_opt.get_components()
         cs.reverse()
 

@@ -209,7 +209,7 @@ class _GuiTypeOpt(
 
         # cache leaf paths
         self._leaf_entity_path_set = set(
-            bsc_core.BscPath.to_leaf_paths([x.path for x in scr_entities])
+            bsc_core.BscNodePath.to_leaf_paths([x.path for x in scr_entities])
         )
 
         for i_scr_entity in scr_entities:
@@ -241,7 +241,7 @@ class _GuiTypeOpt(
                 qt_item._item_model.refresh_force()
 
         path = scr_entity.path
-        name = bsc_core.BscPath.to_dag_name(path)
+        name = bsc_core.BscNodePath.to_dag_name(path)
 
         flag, qt_item = self._qt_tree_widget._view_model.create_item(path)
 
@@ -344,7 +344,7 @@ class _GuiTypeOpt(
                 qt_item._item_model.refresh_force()
 
         path = scr_entity.path
-        name = bsc_core.BscPath.to_dag_name(path)
+        name = bsc_core.BscNodePath.to_dag_name(path)
 
         flag, qt_item = self._qt_tree_widget._view_model.create_item(path)
 
@@ -548,7 +548,7 @@ class _GuiTagOpt(
 
         # cache leaf paths
         self._leaf_entity_path_set = set(
-            bsc_core.BscPath.to_leaf_paths([x.path for x in scr_entities])
+            bsc_core.BscNodePath.to_leaf_paths([x.path for x in scr_entities])
         )
 
         for i_scr_entity in scr_entities:
@@ -607,7 +607,7 @@ class _GuiTagOpt(
                         lambda _x: _x.path,
                         self._page._scr_stage.find_all_by_ctime_tag(
                             self._page._scr_stage.EntityTypes.Node,
-                            bsc_core.BscPathOpt(path).name,
+                            bsc_core.BscNodePathOpt(path).name,
                             filters=[
                                 ('type', 'is', 'node'),
                                 ('lock', 'is', False),
@@ -842,7 +842,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
 
         self._node_paths = scr_node_paths
 
-        scr_node_paths_map = bsc_core.RawListMtd.split_to(
+        scr_node_paths_map = bsc_core.BscList.split_to(
             self._node_paths, self.THREAD_MAXIMUM, self.CHUNK_SIZE_MINIMUM
         )
 
@@ -895,7 +895,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
         scr_entity, source_type, is_locked, thumbnail_path, scene_path, source_path = entity_data
 
         path = scr_entity.path
-        name = bsc_core.BscPath.to_dag_name(path)
+        name = bsc_core.BscNodePath.to_dag_name(path)
 
         flag, qt_item = self._qt_list_widget._view_model.create_item(path)
         if flag is False:
@@ -994,7 +994,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
                 continue
 
             i_scr_tag_group = self._page._scr_stage.get_entity(
-                self._page._scr_stage.EntityTypes.Tag, bsc_core.BscPath.get_dag_parent_path(i_scr_tag_path)
+                self._page._scr_stage.EntityTypes.Tag, bsc_core.BscNodePath.get_dag_parent_path(i_scr_tag_path)
             )
             if self._window._language == 'chs':
                 i_key = bsc_core.auto_string(i_scr_tag_group.gui_name_chs)

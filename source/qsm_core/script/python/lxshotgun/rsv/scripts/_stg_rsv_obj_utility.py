@@ -312,12 +312,6 @@ class RsvStgTaskOpt(object):
                     subject=subject,
                     content=content
                 )
-                bsc_etr_methods.EtrBase.send_chat(
-                    receivers=message_receivers,
-                    # receivers=['dongchangbao'],
-                    subject=subject,
-                    content='{}\n{}'.format(subject, content)
-                )
 
     def set_stg_description_update(self):
         pass

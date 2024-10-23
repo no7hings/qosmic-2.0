@@ -82,13 +82,13 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
                 node_data = file_opt.set_read()
                 self._lzy_data_for_node = node_data
                 content = bsc_content.Content(value=node_data['data'])
-                path_opts = map(lambda x: bsc_core.BscPathOpt('/{}'.format(x)), content.get_top_keys())
+                path_opts = map(lambda x: bsc_core.BscNodePathOpt('/{}'.format(x)), content.get_top_keys())
                 self._prx_options_node.set(
                     'node_data', path_opts
                 )
             elif file_opt.ext == '.ma':
                 node_dict = qsm_gnl_dotfile.MayaAscii(file_path).get_node_dict()
-                path_opts = map(lambda x: bsc_core.BscPathOpt('/{}'.format(x)), node_dict.keys())
+                path_opts = map(lambda x: bsc_core.BscNodePathOpt('/{}'.format(x)), node_dict.keys())
                 self._prx_options_node.set(
                     'node_data', path_opts
                 )

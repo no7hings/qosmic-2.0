@@ -15,29 +15,6 @@ class TreeItemModel(_item_base.AbsItemModel):
         super(TreeItemModel, self).__init__(
             item,
             _base._Data(
-                rect=QtCore.QRect(),
-
-                select=_base._Data(
-                    flag=False,
-                    rect=QtCore.QRect(),
-                    color=QtGui.QColor(*_gui_core.GuiRgba.LightAzureBlue),
-                ),
-                hover=_base._Data(
-                    flag=False,
-                    rect=QtCore.QRect(),
-                    color=QtGui.QColor(*_gui_core.GuiRgba.LightOrange),
-                ),
-
-                check=_base._Data(
-                    enable=True,
-                    flag=False,
-                    rect_f=QtCore.QRectF(),
-                    svg=_gui_core.GuiIcon.get('tag-filter-unchecked'),
-                    on_svg=_gui_core.GuiIcon.get('tag-filter-checked'),
-                    off_svg=_gui_core.GuiIcon.get('tag-filter-unchecked'),
-                ),
-
-                force_refresh_flag=False,
             )
         )
 

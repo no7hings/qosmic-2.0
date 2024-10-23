@@ -447,7 +447,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
         group_sub_name = gui_configure.get('group_sub_name') or 'Tool'
         if 'gui_parent' in kwargs:
             gui_path = kwargs.get('gui_parent')
-            gui_path_opts = bsc_core.BscPathOpt(gui_path).get_components()
+            gui_path_opts = bsc_core.BscNodePathOpt(gui_path).get_components()
             page_opt = gui_path_opts[1]
             page_name = page_opt.get_name()
             group_sub_opt = gui_path_opts[0]

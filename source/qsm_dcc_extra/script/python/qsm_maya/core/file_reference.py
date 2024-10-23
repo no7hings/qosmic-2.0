@@ -74,7 +74,7 @@ class FileReferences(object):
         node_type = _node.Node.get_type(path)
         if node_type == 'file':
             stg_file = bsc_storage.StgFileOpt(file_path)
-            if bsc_core.PtnFileTilesMtd.is_valid(stg_file.name_base) is True:
+            if bsc_core.BscFileTiles.is_valid(stg_file.name_base) is True:
                 unit_paths = bsc_storage.StgFileTiles.get_tiles(
                     file_path
                 )

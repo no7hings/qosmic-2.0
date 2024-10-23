@@ -6,7 +6,7 @@ from .. import log as _bsc_log
 from . import base as _base
 
 
-class UrlMtd(object):
+class BscUrl(object):
     WINDOWS_BIN_PATHS = [
         "C:/google/Chrome/Application/chrome.exe",
         "D:/google/Chrome/Application/chrome.exe"

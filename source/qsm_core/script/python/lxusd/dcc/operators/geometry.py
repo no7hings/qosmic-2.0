@@ -214,7 +214,7 @@ class MeshOpt(
                 if i_uv_map_name == 'map1':
                     i_uv_map_name = 'st'
                 #
-                i_uv_map_name_new = bsc_core.RawTextMtd.clear_up_to(
+                i_uv_map_name_new = bsc_core.BscText.clear_up_to(
                     i_uv_map_name
                 )
                 if i_uv_map_name != i_uv_map_name_new:

@@ -1,8 +1,6 @@
 # coding=utf-8
 import six
 
-import collections
-
 import lxbasic.core as bsc_core
 # gui
 from ... import core as _gui_core
@@ -13,6 +11,8 @@ from ...qt import core as _qt_core
 
 from ...qt import abstracts as _qt_abstracts
 
+from ..widgets.input import input_for_filter as _wgt_input_for_filter
+
 from ..widgets import utility as _wgt_utility
 
 from ..widgets import container as _wgt_container
@@ -22,8 +22,6 @@ from ..widgets import button as _wgt_button
 from ..widgets import scroll as _wgt_scroll
 
 from ..widgets import chart as _wgt_chart
-
-from ..widgets import input_for_filter as _wgt_input_for_filter
 
 from ..widgets import view_for_histogram_chart as _wgt_view_for_histogram_chart
 
@@ -501,7 +499,7 @@ class QtTreeWidget(
         self._chat_button.press_clicked.connect(self._on_show_chart_)
 
     def _build_keyword_filter_tool_box_(self):
-        self._keyword_filter_input = _wgt_input_for_filter.QtInputAsFilter()
+        self._keyword_filter_input = _wgt_input_for_filter.QtInputForFilter()
         self._keyword_filter_tool_box._add_widget_(self._keyword_filter_input)
 
         self._keyword_filter_input._set_input_completion_buffer_fnc_(self._keyword_filter_input_completion_buffer_fnc)

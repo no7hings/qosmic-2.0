@@ -5,14 +5,14 @@ option:
         - '*-maya'
     #
     gui:
-        name: 'Lazy NodeMotion Tool'
+        name: 'Lazy Motion Tool'
         name_chs: '懒人动作工具'
         group_name: 'General(s)'
         #
         icon_name: 'qosmic/lazy-cfx-tool'
         tool_tip:
             |-
-            For NodeMotion.
+            For Motion.
         #
         tool_tip_chs:
             |-
@@ -28,7 +28,7 @@ build:
 
             tool_tip:
                 |-
-                Tool For NodeMotion Main.
+                Tool For Motion Main.
 
             tool_tip_chs:
                 |-
@@ -49,7 +49,7 @@ build:
                     parameters:
                         character_motion:
                             widget: group
-                            name: 'Character NodeMotion'
+                            name: 'Character Motion'
                             name_chs: '角色动作'
 
                         character_motion/duplicate_characters:
@@ -67,7 +67,7 @@ build:
 
                         control_motion:
                             widget: group
-                            name: 'Control NodeMotion'
+                            name: 'Control Motion'
                             name_chs: '控制器动作'
 
                         character_motion/copy_character:
@@ -176,7 +176,7 @@ build:
 
                         mirror_motion:
                             widget: group
-                            name: 'Mirror NodeMotion'
+                            name: 'Mirror Motion'
                             name_chs: '镜像动作'
 
                         mirror_motion/mirror_characters_right_to_left:
@@ -244,7 +244,7 @@ build:
 
                         mirror_and_paste_motion:
                             widget: group
-                            name: 'Mirror and Paste NodeMotion'
+                            name: 'Mirror and Paste Motion'
                             name_chs: '镜像粘贴动作'
 
                         mirror_and_paste_motion/mirror_and_paste_controls:
@@ -268,7 +268,7 @@ build:
 
                         flip_motion:
                             widget: group
-                            name: 'Mirror NodeMotion'
+                            name: 'Mirror Motion'
                             name_chs: '翻转动作'
 
                         flip_motion/flip_characters:
@@ -644,7 +644,7 @@ build:
                     parameters:
                         motion_path:
                             widget: group
-                            name: 'NodeMotion Path'
+                            name: 'Motion Path'
                             name_chs: '运动路径'
 
                         motion_path/replace_object:
@@ -767,7 +767,7 @@ build:
 
             no_motion_path:
                 message_chs: '未发现动作路径， 先选择需要替换的物体，再旋转被替换的物体（需要带路径动画）。'
-                message: 'NodeMotion path is not found.'
+                message: 'Motion path is not found.'
 
     splicing:
         tab:
@@ -784,7 +784,7 @@ build:
 
         units:
             import_motion:
-                name: 'Import NodeMotion'
+                name: 'Import Motion'
                 name_chs: '导入动作'
 
                 tool_tip: 'To be supplemented.'
@@ -797,7 +797,7 @@ build:
                     parameters:
                         import_character_motion:
                             widget: group
-                            name: 'Import CHR NodeMotion'
+                            name: 'Import CHR Motion'
                             name_chs: '导入角色动作'
 
                         import_character_motion/to_control:

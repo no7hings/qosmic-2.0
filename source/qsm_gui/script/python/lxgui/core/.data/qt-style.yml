@@ -68,6 +68,43 @@ widget:
             padding: 0px 1px 0px 1px;
             height: 2px;
         }
+        QMenu::indicator:non-exclusive {
+            width: 14px;
+            height: 20px;
+            margin-left: 2px;
+        }
+        QMenu::item{
+            min-width: 128px;
+            height: 20px;
+            background: rgba(<option.rgba.Background>);
+            color: rgba(<option.rgba.Text>);
+        }
+        QMenu::item:disabled{
+            min-width: 128px;
+            height: 20px;
+            background: rgba(<option.rgba.Background>);
+            color: rgba(<option.rgba.TextDisable>);
+        }
+        QMenu::item:selected{
+            background: rgba(<option.rgba.BackgroundSelect>);
+            color: rgba(<option.rgba.TextHoverA>);
+        }
+        QMenu::item:selected:disabled{
+            background: rgba(<option.rgba.Transparent>); 
+            color: rgba(<option.rgba.TextHoverA>);
+        }
+    QMenuNew:
+        |-
+        QMenu{
+            background: rgba(<option.rgba.Background>); 
+            border: 1px rgba(<option.rgba.Border>); border-radius: 0px; border-style: solid;
+            color: rgba(<option.rgba.Text>);
+        }
+        QMenu::separator{
+            color: rgba(<option.rgba.Text>);
+            padding: 0px 1px 0px 1px;
+            height: 2px;
+        }
         QMenu::icon {
             padding-left: 2px;
         }

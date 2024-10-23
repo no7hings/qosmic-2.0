@@ -117,7 +117,7 @@ def __execute_hook(option):
         )
         # extend resource paths
         environs_extend = {}
-        _ = bsc_core.EnvBaseMtd.get('QSM_EXTEND_RESOURCES')
+        _ = bsc_core.BscEnviron.get('QSM_EXTEND_RESOURCES')
         if _:
             environs_extend['QSM_EXTEND_RESOURCES'] = (_, 'prepend')
         #

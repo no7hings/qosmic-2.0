@@ -13,8 +13,8 @@ class W(gui_prx_widgets.PrxBaseWindow):
         lot = qt_widgets.QtVBoxLayout(wgt)
         lot._set_align_as_top_()
 
-        for i in qt_widgets.QtInputAsStorage.StorageScheme.All:
-            i_wgt = qt_widgets.QtInputAsStorage()
+        for i in qt_widgets.QtInputForStorage.StorageScheme.All:
+            i_wgt = qt_widgets.QtInputForStorage()
             lot.addWidget(i_wgt)
             i_wgt._set_storage_scheme_(i)
             i_wgt._set_history_key_('gui.input-storage-test-{}'.format(i))

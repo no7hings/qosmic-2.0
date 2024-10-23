@@ -125,7 +125,7 @@ class DagNode(_node.Node):
 
     @classmethod
     def find_roots(cls, paths):
-        return bsc_core.BscPath.find_dag_child_paths(
+        return bsc_core.BscNodePath.find_dag_child_paths(
             '|', paths, '|'
         )
 

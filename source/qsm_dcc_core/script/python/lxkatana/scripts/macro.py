@@ -1038,7 +1038,7 @@ class LxCamera(object):
             h += .2
             c_y += .1
             #
-            (t_x, t_y, t_z), (r_x, r_y, r_z), (s_x, s_y, s_z) = bsc_core.CameraMtd.compute_front_transformation(
+            (t_x, t_y, t_z), (r_x, r_y, r_z), (s_x, s_y, s_z) = bsc_core.BscCamera.compute_front_transformation(
                 geometry_args=((x, y, z), (c_x, c_y, c_z), (w, h, d)),
                 angle=1,
             )
@@ -1095,7 +1095,7 @@ class LxCamera(object):
             h += .2
             c_y += .1
             #
-            (t_x, t_y, t_z), (r_x, r_y, r_z), (s_x, s_y, s_z) = bsc_core.CameraMtd.compute_front_transformation(
+            (t_x, t_y, t_z), (r_x, r_y, r_z), (s_x, s_y, s_z) = bsc_core.BscCamera.compute_front_transformation(
                 geometry_args=((x, y, z), (c_x, c_y, c_z), (w, h, d)),
                 angle=1,
                 mode=1

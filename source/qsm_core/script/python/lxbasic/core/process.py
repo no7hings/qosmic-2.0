@@ -129,7 +129,7 @@ class BscProcess(object):
         if environs_extend:
             environs_old = dict(os.environ)
             environs = {str(k): str(v) for k, v in environs_old.items()}
-            env_opt = _environ.EnvContentOpt(environs)
+            env_opt = _environ.BscEnvironOpt(environs)
             for k, v in environs_extend.items():
                 if isinstance(v, six.string_types):
                     env_opt.set(

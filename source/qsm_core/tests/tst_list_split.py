@@ -3,7 +3,7 @@ import lxbasic.core as bsc_core
 
 a = range(25)
 
-# print bsc_core.RawListMtd.split_to(
+# print bsc_core.BscList.split_to(
 #     a, 16
 # )
 

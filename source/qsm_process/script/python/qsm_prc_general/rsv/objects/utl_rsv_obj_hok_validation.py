@@ -209,7 +209,7 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
         import lxmaya.dcc.objects as mya_dcc_objects
 
         #
-        dcc_location = bsc_core.BscPathOpt(location).translate_to(pathsep).to_string()
+        dcc_location = bsc_core.BscNodePathOpt(location).translate_to(pathsep).to_string()
         dcc_group = mya_dcc_objects.Node(dcc_location)
         if dcc_group.get_is_exists() is False:
             if ignore_check is False:
@@ -274,7 +274,7 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
         root_location = self._rsv_scene_properties.get('dcc.root')
         pathsep = self._rsv_scene_properties.get('dcc.pathsep')
         #
-        dcc_root_location_cur = bsc_core.BscPathOpt(root_location).translate_to(pathsep).to_string()
+        dcc_root_location_cur = bsc_core.BscNodePathOpt(root_location).translate_to(pathsep).to_string()
         if not dcc_root_location_cur:
             return False
         #
@@ -441,7 +441,7 @@ class RsvDccValidationHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
         ]
         results = fnc_geometry_comparer.generate_results()
         for i_src_gmt_path, i_tgt_gmt_path, i_description in results:
-            i_dcc_path = bsc_core.BscPathOpt(i_src_gmt_path).translate_to(pathsep).to_string()
+            i_dcc_path = bsc_core.BscNodePathOpt(i_src_gmt_path).translate_to(pathsep).to_string()
             for j_e in warning_es:
                 if j_e in i_description:
                     validation_checker.register_node_result(

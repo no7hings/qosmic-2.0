@@ -169,7 +169,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             name = bsc_pinyin.Text.to_pinyin_name(gui_name_chs)
             path = '/{}'.format(name)
             self._prx_options_node.set('path', path)
-            gui_name = bsc_core.RawTextMtd.to_prettify(name)
+            gui_name = bsc_core.BscText.to_prettify(name)
             self._prx_options_node.set('gui_name', gui_name)
         else:
             self._prx_options_node.set('path', '')

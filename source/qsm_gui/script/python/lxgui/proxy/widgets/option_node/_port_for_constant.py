@@ -1,12 +1,12 @@
 # coding:utf-8
 import _port_base
 
-import _input_for_constant
+from ..input import input_for_constant as _input_for_constant
 
 
 #   text
 class PrxPortForText(_port_base.AbsPrxPortForConstant):
-    ENTRY_TYPE = 'text'
+    WIDGET_TYPE = 'text'
     PRX_PORT_INPUT_CLS = _input_for_constant.PrxInputForText
 
     def __init__(self, *args, **kwargs):
@@ -15,7 +15,7 @@ class PrxPortForText(_port_base.AbsPrxPortForConstant):
 
 #   string
 class PrxPortForString(_port_base.AbsPrxPortForConstant):
-    ENTRY_TYPE = 'string'
+    WIDGET_TYPE = 'string'
     PRX_PORT_INPUT_CLS = _input_for_constant.PrxInputForString
 
     def __init__(self, *args, **kwargs):
@@ -24,7 +24,7 @@ class PrxPortForString(_port_base.AbsPrxPortForConstant):
 
 #   name
 class PrxPortForName(_port_base.AbsPrxPortForConstant):
-    ENTRY_TYPE = 'name'
+    WIDGET_TYPE = 'name'
     PRX_PORT_INPUT_CLS = _input_for_constant.PrxInputForString
 
     def __init__(self, *args, **kwargs):
@@ -34,7 +34,7 @@ class PrxPortForName(_port_base.AbsPrxPortForConstant):
 
 #   frames
 class PrxPortForFrameString(_port_base.AbsPrxPortForConstant):
-    ENTRY_TYPE = 'frames'
+    WIDGET_TYPE = 'frames'
     PRX_PORT_INPUT_CLS = _input_for_constant.PrxInputForString
 
     def __init__(self, *args, **kwargs):
@@ -44,7 +44,7 @@ class PrxPortForFrameString(_port_base.AbsPrxPortForConstant):
 
 #   integer
 class PrxPortForInteger(_port_base.AbsPrxPortForConstant):
-    ENTRY_TYPE = 'integer'
+    WIDGET_TYPE = 'integer'
     PRX_PORT_INPUT_CLS = _input_for_constant.PrxInputForInteger
 
     def __init__(self, *args, **kwargs):
@@ -53,7 +53,7 @@ class PrxPortForInteger(_port_base.AbsPrxPortForConstant):
 
 #   float
 class PrxPortForFloat(_port_base.AbsPrxPortForConstant):
-    ENTRY_TYPE = 'float'
+    WIDGET_TYPE = 'float'
     PRX_PORT_INPUT_CLS = _input_for_constant.PrxInputForFloat
 
     def __init__(self, *args, **kwargs):

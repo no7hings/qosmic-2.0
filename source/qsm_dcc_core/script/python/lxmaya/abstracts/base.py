@@ -181,7 +181,7 @@ class AbsMyaPort(gnl_dcc_abstracts.AbsDccPort):
             sourceFromDestination=1
         )
         if _:
-            a = bsc_core.PthAttributeOpt(_)
+            a = bsc_core.BscAttributePathOpt(_)
             obj_path = a.obj_path
             port_path = a.port_path
             return self.obj.__class__(obj_path).get_port(port_path)
@@ -208,7 +208,7 @@ class AbsMyaPort(gnl_dcc_abstracts.AbsDccPort):
             destinationFromSource=1
         ) or []
         for i in _:
-            a = bsc_core.PthAttributeOpt(i)
+            a = bsc_core.BscAttributePathOpt(i)
             i_obj_path = a.obj_path
             i_port_path = a.port_path
             lis.append(
@@ -544,7 +544,7 @@ class AbsMyaNode(
             )
 
     def set_repath(self, new_obj_path):
-        new_dcc_path_dag_opt = bsc_core.BscPathOpt(new_obj_path)
+        new_dcc_path_dag_opt = bsc_core.BscNodePathOpt(new_obj_path)
         new_dcc_parent_dag_opt = new_dcc_path_dag_opt.get_parent()
         new_parent_dcc_obj = self.__class__(new_dcc_parent_dag_opt.path)
         if new_parent_dcc_obj.get_is_exists() is True:

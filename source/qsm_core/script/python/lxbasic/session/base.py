@@ -89,16 +89,16 @@ class AbsSsnConfigureBaseDef(object):
 
 class AbsSsnEnvironmentBaseDef(object):
     def _init_environment_base_def_(self):
-        # self._rez_beta = bsc_core.EnvBaseMtd.get('REZ_BETA')
+        # self._rez_beta = bsc_core.BscEnviron.get('REZ_BETA')
         pass
 
     @classmethod
     def get_is_td_enable(cls):
-        return bsc_core.EnvExtraMtd.get_is_td_enable()
+        return bsc_core.BscEnvironExtra.get_is_td_enable()
 
     @classmethod
     def get_is_beta_enable(cls):
-        return bsc_core.EnvExtraMtd.get_is_beta_enable()
+        return bsc_core.BscEnvironExtra.get_is_beta_enable()
 
 
 class AbsSsnGener(
@@ -216,7 +216,7 @@ class AbsSsnGener(
     user = property(get_user)
 
     def get_gui_window_name(self):
-        language = bsc_core.EnvExtraMtd.get_ui_language()
+        language = bsc_core.BscEnvironExtra.get_ui_language()
         gui_name = self.get_gui_name_(language)
         gui_name = bsc_core.auto_string(gui_name)
         if self.get_is_td_enable() is True:
@@ -481,7 +481,7 @@ class AbsSsnGener(
 
     @classmethod
     def open_url(cls, url):
-        bsc_core.UrlMtd.open_in_chrome(url)
+        bsc_core.BscUrl.open_in_chrome(url)
 
     def open_file(self, path):
         pass

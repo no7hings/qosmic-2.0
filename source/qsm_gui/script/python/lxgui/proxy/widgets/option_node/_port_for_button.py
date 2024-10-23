@@ -4,7 +4,7 @@ from .... import core as _gui_core
 
 import _port_base
 
-import _input_for_button
+from ..input import input_for_button as _input_for_button
 
 
 class PrxPortForPressButton(_port_base.AbsPrxPort):

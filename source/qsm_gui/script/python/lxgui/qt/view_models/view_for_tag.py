@@ -13,7 +13,6 @@ class TagViewModel(_view_base.AbsViewModel):
         super(TagViewModel, self).__init__(
             widget,
             _base._Data(
-                item_dict=collections.OrderedDict(),
                 item=_base._Data(
                     cls=None,
                     group_cls=None,
@@ -69,7 +68,7 @@ class TagViewModel(_view_base.AbsViewModel):
         if path in self._data.item_dict:
             return False, self._data.item_dict[path]
 
-        path_opt = bsc_core.BscPathOpt(path)
+        path_opt = bsc_core.BscNodePathOpt(path)
         index_cur = len(self._data.item_dict)
         item = self._data.item.cls()
 

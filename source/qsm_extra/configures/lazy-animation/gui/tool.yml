@@ -126,7 +126,7 @@ build:
 
                         dynamic_gpu/use_motion:
                             widget: boolean
-                            name: 'Use NodeMotion'
+                            name: 'Use Motion'
                             name_chs: '使用动作'
                             value: False
                             enable: True
@@ -337,7 +337,7 @@ build:
                             join_to_next: True
 
             motion:
-                name: 'NodeMotion'
+                name: 'Motion'
                 name_chs: '动作'
 
                 tool_tip: 'Include all tool for rig as extend, etc. animation transfer'

@@ -82,7 +82,6 @@ class ListViewModel(_view_base.AbsViewModel):
                 frm_h = frm_h_pre+step
             else:
                 frm_h = frm_h_pre-step
-
             # width match to height
             frm_h = max(min(frm_h, self._data.item.frame_height_maximum), self._data.item.frame_height_minimum)
             if frm_h != frm_h_pre:
@@ -90,7 +89,7 @@ class ListViewModel(_view_base.AbsViewModel):
                 self.set_item_frame_size(frm_w, frm_h)
 
     def update_all_items_size_hint(self):
-        [self._widget.item(x).setSizeHint(self._widget.gridSize()) for x in range(self._widget.count())]
+        [self._widget.item(x).setSizeHint(self._data.item.grid_size) for x in range(self._widget.count())]
 
     def set_item_frame_size(self, frm_w, frm_h):
         self._data.item.frame_width, self._data.item.frame_height = frm_w, frm_h
@@ -98,7 +97,8 @@ class ListViewModel(_view_base.AbsViewModel):
         grid_w, grid_h = frm_w, frm_h+self._data.item.name_height
         self._data.item.grid_size.setWidth(grid_w)
         self._data.item.grid_size.setHeight(grid_h)
-        self._widget.setGridSize(self._data.item.grid_size)
+        # set grid size to -1 for disable grid size and update item
+        self._widget.setGridSize(QtCore.QSize(-1, -1))
         self.update_all_items_size_hint()
 
     def get_all_items(self):
@@ -171,15 +171,14 @@ class ListViewModel(_view_base.AbsViewModel):
             _base._Data(
                 item=_base._Data(
                     cls=None,
-                    frame_size=QtCore.QSize(128, 128),
-                    frame_width=128,
+                    frame_width=128, frame_height=128,
                     frame_width_maximum=512, frame_height_maximum=512,
                     frame_width_minimum=24, frame_height_minimum=24,
-                    frame_height=128,
                     name_height=20,
                     grid_size=QtCore.QSize(128, 128+20),
                     mode=0,
                 ),
+                item_group_enable=False,
                 info='',
                 # media cache
                 image_cache_dict=dict(),
@@ -200,7 +199,7 @@ class ListViewModel(_view_base.AbsViewModel):
     def data(self):
         return self._data
 
-    # mode
+    # item mode
     def set_item_mode(self, mode):
         self._data.item.mode = mode
         self._update_item_mode()
@@ -225,11 +224,14 @@ class ListViewModel(_view_base.AbsViewModel):
     def draw_item(self, painter, option, index):
         self._widget.itemFromIndex(index)._item_model.draw(painter, option, index)
 
+    def create_group(self, name, *args, **kwargs):
+        pass
+
     def create_item(self, path, *args, **kwargs):
         if path in self._data.item_dict:
             return False, self._data.item_dict[path]
 
-        path_opt = bsc_core.BscPathOpt(path)
+        path_opt = bsc_core.BscNodePathOpt(path)
         name = path_opt.get_name()
 
         index_cur = len(self._data.item_dict)
@@ -292,6 +294,15 @@ class ListViewModel(_view_base.AbsViewModel):
     def push_audio_cache(self, key, data):
         self._data.audio_cache_dict[key] = data
 
-    # sort
+    # item sort
     def _sort_items(self, qt_order):
         self._widget.sortItems(qt_order)
+
+    # item group
+    def set_item_group_enable(self, boolean):
+        self._data.item_group_enable = boolean
+        if boolean is True:
+            self._data.item_group = _base._Data(
+                keys=[],
+                key_current=None,
+            )

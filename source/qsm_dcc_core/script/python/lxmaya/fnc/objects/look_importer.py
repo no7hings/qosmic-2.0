@@ -336,7 +336,7 @@ class AssImportFnc(object):
                     g_p.do_update()
                     #
                     geometry_and_obj_path = geometry_and_obj.path
-                    geometry_dcc_dag_path = bsc_core.BscPathOpt(geometry_and_obj_path).translate_to(
+                    geometry_dcc_dag_path = bsc_core.BscNodePathOpt(geometry_and_obj_path).translate_to(
                         mya_core.MyaUtil.OBJ_PATHSEP
                     )
                     geometry_dcc_obj = mya_dcc_objects.Geometry(geometry_dcc_dag_path.path)
@@ -477,10 +477,10 @@ class FncImporterForLookYml(gnl_fnc_abstracts.AbsFncImporterForLookYmlDcc):
 
     def create_connections_fnc(self):
         for atr_path_src, atr_path_tgt in self._connections:
-            obj_path_src, port_path_src = bsc_core.PthAttributeOpt(atr_path_src).to_args()
+            obj_path_src, port_path_src = bsc_core.BscAttributePathOpt(atr_path_src).to_args()
             if obj_path_src in self._name_dict:
                 obj_path_src = self._name_dict[obj_path_src]
-            atr_path_src = bsc_core.PthAttributeMtd.join_by(obj_path_src, port_path_src)
+            atr_path_src = bsc_core.BscAttributePath.join_by(obj_path_src, port_path_src)
             mya_core.CmdPortOpt._create_connection_fnc(atr_path_src, atr_path_tgt)
 
     def create_node_fnc(

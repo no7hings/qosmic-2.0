@@ -213,7 +213,7 @@ FLUSH PRIVILEGES;
     def get_root(cls):
         if cls.ROOT is not None:
             return cls.ROOT
-        root = bsc_core.EnvBaseMtd.get_library_root()
+        root = bsc_core.BscEnviron.get_library_root()
         if root is None:
             raise RuntimeError()
         cls.ROOT = root
@@ -1002,7 +1002,7 @@ FLUSH PRIVILEGES;
         if file_opt.get_is_file() is False:
             return False
 
-        node_name = bsc_core.BscPathOpt(node_path).name
+        node_name = bsc_core.BscNodePathOpt(node_path).name
         options = copy.copy(self._options)
         options['node'] = node_name
         # use jpg default
@@ -1062,7 +1062,7 @@ FLUSH PRIVILEGES;
         if bsc_storage.StgFileTiles.get_is_exists(file_path) is False:
             return False
 
-        node_name = bsc_core.BscPathOpt(node_path).name
+        node_name = bsc_core.BscNodePathOpt(node_path).name
         options = copy.copy(self._options)
         options['node'] = node_name
         file_opt = bsc_storage.StgFileOpt(file_path)
@@ -1091,7 +1091,7 @@ FLUSH PRIVILEGES;
         if file_opt.get_is_file() is False:
             return False
 
-        node_name = bsc_core.BscPathOpt(node_path).name
+        node_name = bsc_core.BscNodePathOpt(node_path).name
         options = copy.copy(self._options)
         options['node'] = node_name
 
@@ -1126,7 +1126,7 @@ FLUSH PRIVILEGES;
         if file_opt.get_is_file() is False:
             return False
 
-        node_name = bsc_core.BscPathOpt(node_path).name
+        node_name = bsc_core.BscNodePathOpt(node_path).name
         options = copy.copy(self._options)
         options['node'] = node_name
 
@@ -1162,7 +1162,7 @@ FLUSH PRIVILEGES;
         if self.check_node_exists(node_path) is False:
             return False
 
-        node_name = bsc_core.BscPathOpt(node_path).name
+        node_name = bsc_core.BscNodePathOpt(node_path).name
         options = copy.copy(self._options)
         options['node'] = node_name
         options['tag'] = tag
@@ -1177,7 +1177,7 @@ FLUSH PRIVILEGES;
         )
 
     def generate_node_json_path(self, node_path, tag):
-        node_name = bsc_core.BscPathOpt(node_path).name
+        node_name = bsc_core.BscNodePathOpt(node_path).name
         options = copy.copy(self._options)
         options['node'] = node_name
         options['tag'] = tag
@@ -1193,7 +1193,7 @@ FLUSH PRIVILEGES;
         )
 
     def generate_node_maya_scene_path(self, node_path, tag):
-        node_name = bsc_core.BscPathOpt(node_path).name
+        node_name = bsc_core.BscNodePathOpt(node_path).name
         options = copy.copy(self._options)
         options['node'] = node_name
         options['tag'] = tag
@@ -1201,13 +1201,13 @@ FLUSH PRIVILEGES;
 
     def generate_node_motion_json_path(self, node_path, tag):
         options = copy.copy(self._options)
-        options['node'] = bsc_core.BscPathOpt(node_path).name
+        options['node'] = bsc_core.BscNodePathOpt(node_path).name
         options['tag'] = tag
         return self.NodePathPattens.Json.format(**options)
 
     def generate_node_base_dir_path(self, node_path):
         options = copy.copy(self._options)
-        options['node'] = bsc_core.BscPathOpt(node_path).name
+        options['node'] = bsc_core.BscNodePathOpt(node_path).name
         return self.NodePathPattens.BaseDir.format(**options)
 
     def get_node(self, path):

@@ -16,7 +16,7 @@ class DccValidationOptions(object):
 
     def __init__(self, key):
         self._key = key
-        self._language = bsc_core.EnvBaseMtd.get_ui_language()
+        self._language = bsc_core.BscEnviron.get_ui_language()
         self._options_cfg = bsc_resource.RscExtendConfigure.get_as_content(key)
         self._options_cfg.do_flatten()
 

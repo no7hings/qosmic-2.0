@@ -86,7 +86,7 @@ class _GuiDirectoryOpt(
 
         path = directory_path[len(self._root):]
         if self.gui_check_exists(path) is False:
-            path_opt = bsc_core.BscPathOpt(path)
+            path_opt = bsc_core.BscNodePathOpt(path)
             prx_item = self._prx_tree_view.create_item(
                 path_opt.get_name(),
                 icon=gui_core.GuiIcon.get('database/all'),
@@ -111,7 +111,7 @@ class _GuiDirectoryOpt(
         directory_path = directory_opt.get_path()
         path = directory_path[len(self._root):]
         if self.gui_check_exists(path) is False:
-            path_opt = bsc_core.BscPathOpt(path)
+            path_opt = bsc_core.BscNodePathOpt(path)
             #
             parent_gui = self.gui_get_one(path_opt.get_parent_path())
             #
@@ -149,14 +149,14 @@ class _GuiDirectoryOpt(
         directory_opt = bsc_storage.StgDirectoryOpt(directory_path)
         directory_opts = directory_opt.get_directories()
         # sort result
-        directory_opts.sort(key=lambda x: bsc_core.RawTextMtd.to_number_embedded_args(x.path))
+        directory_opts.sort(key=lambda x: bsc_core.BscText.to_number_embedded_args(x.path))
         for i_directory_opt in directory_opts:
             self.gui_add_directory(i_directory_opt)
 
     def gui_add_next_directories_use_thread(self, directory_path):
         def cache_fnc_():
             directory_opts = directory_opt.get_directories()
-            directory_opts.sort(key=lambda x: bsc_core.RawTextMtd.to_number_embedded_args(x.path))
+            directory_opts.sort(key=lambda x: bsc_core.BscText.to_number_embedded_args(x.path))
             return [
                 self._gui_thread_flag,
                 directory_opts

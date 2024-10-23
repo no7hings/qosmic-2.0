@@ -54,7 +54,7 @@ class AbsKtnPort(gnl_dcc_abstracts.AbsDccPort):
 
     def set_create(self, *args):
         ktn_port = self._generate_ktn_port()
-        parent = bsc_core.PthPortMtd.get_dag_parent_path(
+        parent = bsc_core.BscPortPath.get_dag_parent_path(
             path=self._port_path, pathsep=self.PATHSEP
         )
         if ktn_port is None:
@@ -424,12 +424,12 @@ class AbsKtnObj(gnl_dcc_abstracts.AbsDccNode):
                     i_source_ktn_obj = i_source_ktn_port.getNode()
                     i_source_obj_name = i_source_ktn_obj.getName()
                     i_source_port_name = i_source_ktn_port.getName()
-                    i_source_atr_path = bsc_core.PthAttributeMtd.join_by(
+                    i_source_atr_path = bsc_core.BscAttributePath.join_by(
                         i_source_obj_name, i_source_port_name
                     )
                     target_obj_name = target_ktn_port.getNode().getName()
                     target_port_name = target_ktn_port.getName()
-                    target_atr_path = bsc_core.PthAttributeMtd.join_by(
+                    target_atr_path = bsc_core.BscAttributePath.join_by(
                         target_obj_name, target_port_name
                     )
                     lis.append(

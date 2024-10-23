@@ -4,7 +4,7 @@ from random import choice
 import lxbasic.core as bsc_core
 
 
-o = bsc_core.RectLayoutOpt(
+o = bsc_core.BscRectLayoutOpt(
     [(0, 0, choice(range(1, 100)), choice(range(1, 100))) for i in range(100)]
 )
 

@@ -11,7 +11,7 @@ from . import base as _base
 
 
 class StgTmpBaseMtd(object):
-    ROOT = bsc_cor_environ.EnvBaseMtd.get_cache_temporary_root()
+    ROOT = bsc_cor_environ.BscEnviron.get_cache_temporary_root()
 
     @classmethod
     def get_user_directory(cls, tag):
@@ -51,7 +51,7 @@ class StgTmpThumbnailMtd(object):
 
     @classmethod
     def get_file_path_(cls, file_path, width=128, ext='.jpg'):
-        directory_path = bsc_cor_environ.EnvBaseMtd.get_cache_temporary_root()
+        directory_path = bsc_cor_environ.BscEnviron.get_cache_temporary_root()
         key = cls.get_key(file_path)
         region = StgTmpBaseMtd.get_save_region(key)
         return '{}/.thumbnail/{}/{}/{}{}'.format(
@@ -60,7 +60,7 @@ class StgTmpThumbnailMtd(object):
 
     @classmethod
     def generate_for_qt_resize(cls, file_path, width=128, ext='.jpg'):
-        directory_path = bsc_cor_environ.EnvBaseMtd.get_cache_temporary_root()
+        directory_path = bsc_cor_environ.BscEnviron.get_cache_temporary_root()
         key = cls.get_key(file_path)
         region = StgTmpBaseMtd.get_save_region(key)
         return '{}/.qt-thumbnail/{}/{}/{}{}'.format(
@@ -75,7 +75,7 @@ class StgTmpUsdMtd(object):
 
     @classmethod
     def generate_movie_file_path(cls, file_paths):
-        directory_path = bsc_cor_environ.EnvBaseMtd.get_cache_temporary_root()
+        directory_path = bsc_cor_environ.BscEnviron.get_cache_temporary_root()
         key = cls.generate_key(file_paths)
         region = StgTmpBaseMtd.get_save_region(key)
         return '{}/.usd/{}/{}'.format(
@@ -90,7 +90,7 @@ class StgTmpYamlMtd(object):
 
     @classmethod
     def get_file_path(cls, file_path, tag='untitled'):
-        directory_path = bsc_cor_environ.EnvBaseMtd.get_cache_temporary_root()
+        directory_path = bsc_cor_environ.BscEnviron.get_cache_temporary_root()
         key = cls.get_key(file_path)
         region = StgTmpBaseMtd.get_save_region(key)
         return '{}/.yml/{}/{}/{}{}'.format(
@@ -105,7 +105,7 @@ class StgTmpTextMtd(object):
 
     @classmethod
     def get_file_path(cls, file_path, tag='untitled'):
-        directory_path = bsc_cor_environ.EnvBaseMtd.get_cache_temporary_root()
+        directory_path = bsc_cor_environ.BscEnviron.get_cache_temporary_root()
         key = cls.get_key(file_path)
         region = StgTmpBaseMtd.get_save_region(key)
         return '{}/.txt/{}/{}/{}{}'.format(
@@ -120,7 +120,7 @@ class StgTmpInfoMtd(object):
 
     @classmethod
     def get_file_path(cls, file_path, tag='untitled'):
-        directory_path = bsc_cor_environ.EnvBaseMtd.get_cache_temporary_root()
+        directory_path = bsc_cor_environ.BscEnviron.get_cache_temporary_root()
         key = cls.get_key(file_path)
         region = StgTmpBaseMtd.get_save_region(key)
         return '{}/.info/{}/{}/{}{}'.format(
@@ -131,7 +131,7 @@ class StgTmpInfoMtd(object):
 class DccTempCacheMtd(object):
     @classmethod
     def _to_file_path(cls, key, category):
-        directory_path = bsc_cor_environ.EnvBaseMtd.get_cache_database_root()
+        directory_path = bsc_cor_environ.BscEnviron.get_cache_database_root()
         region = StgTmpBaseMtd.get_save_region(key)
         return '{}/{}/{}/{}'.format(directory_path, category, region, key)
 

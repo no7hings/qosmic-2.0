@@ -135,7 +135,7 @@ class TxrMethodForColorSpaceAsAces(_AbsTxrBase):
 
     @classmethod
     def get_is_enable(cls):
-        return bsc_core.EnvBaseMtd.get('OCIO') is not None
+        return bsc_core.BscEnviron.get('OCIO') is not None
 
     def _build(self):
         self._convert_dict = self._configure.get('aces.convert')
@@ -152,7 +152,7 @@ class TxrMethodForColorSpaceAsAces(_AbsTxrBase):
         return self._configure.get('aces.default-color-space')
 
     def get_ocio_file(self):
-        _ = bsc_core.EnvBaseMtd.get('OCIO')
+        _ = bsc_core.BscEnviron.get('OCIO')
         if _ is not None:
             return _
         return self._configure.get('aces.file')

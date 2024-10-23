@@ -457,7 +457,7 @@ if QT_USD_FLAG is True:
         def _usd_update_camera_(self):
             (x, y, z), (c_x, c_y, c_z), (w, h, d) = usd_core.UsdStageOpt(self._usd_stage).compute_geometry_args('/')
             # side-x
-            (t_x, t_y, t_z), (r_x, r_y, r_z), (s_x, s_y, s_z) = bsc_core.CameraMtd.compute_front_transformation(
+            (t_x, t_y, t_z), (r_x, r_y, r_z), (s_x, s_y, s_z) = bsc_core.BscCamera.compute_front_transformation(
                 geometry_args=((z, y, x), (c_z, c_y, c_x), (d, h, w)),
                 angle=1,
                 bottom=True
@@ -468,7 +468,7 @@ if QT_USD_FLAG is True:
                 ((1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (t_x, t_y, t_z, 1))
             )
             # top-y
-            (t_x, t_y, t_z), (r_x, r_y, r_z), (s_x, s_y, s_z) = bsc_core.CameraMtd.compute_front_transformation(
+            (t_x, t_y, t_z), (r_x, r_y, r_z), (s_x, s_y, s_z) = bsc_core.BscCamera.compute_front_transformation(
                 geometry_args=((x, -z, y), (c_x, -c_z, c_y), (w, d, h)),
                 angle=1,
             )
@@ -478,7 +478,7 @@ if QT_USD_FLAG is True:
                 ((1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (t_x, t_y, t_z, 1))
             )
             # front-z
-            (t_x, t_y, t_z), (r_x, r_y, r_z), (s_x, s_y, s_z) = bsc_core.CameraMtd.compute_front_transformation(
+            (t_x, t_y, t_z), (r_x, r_y, r_z), (s_x, s_y, s_z) = bsc_core.BscCamera.compute_front_transformation(
                 geometry_args=((x, y, z), (c_x, c_y, c_z), (w, h, d)),
                 angle=1,
                 bottom=True

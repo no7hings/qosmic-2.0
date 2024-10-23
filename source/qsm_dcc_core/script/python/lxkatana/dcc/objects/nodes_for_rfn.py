@@ -143,9 +143,9 @@ class AbsTextureReferences(object):
 
     @classmethod
     def _set_real_file_path_by_atr_path_(cls, atr_path, file_path):
-        atr_path_opt = bsc_core.PthAttributeOpt(atr_path)
+        atr_path_opt = bsc_core.BscAttributePathOpt(atr_path)
         obj_path, port_path = atr_path_opt.obj_path, atr_path_opt.port_path
-        obj_path_opt = bsc_core.BscPathOpt(obj_path)
+        obj_path_opt = bsc_core.BscNodePathOpt(obj_path)
         obj_name = obj_path_opt.name
         ktn_obj_opt = ktn_core.NGNodeOpt(obj_name)
         shader_type_name = ktn_obj_opt.get_port_raw('nodeType')
@@ -231,7 +231,7 @@ class TextureReferences(AbsTextureReferences):
 
     @classmethod
     def _set_obj_reference_update_(cls, obj):
-        ktn_obj_opt = ktn_core.NGNodeOpt(bsc_core.BscPathOpt(obj.path).name)
+        ktn_obj_opt = ktn_core.NGNodeOpt(bsc_core.BscNodePathOpt(obj.path).name)
         shader_type_name = ktn_obj_opt.get_port_raw('nodeType')
         if shader_type_name in cls.PORT_QUERY_DICT:
             port_keys = cls.PORT_QUERY_DICT[shader_type_name]

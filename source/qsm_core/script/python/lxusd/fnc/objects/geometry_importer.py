@@ -22,7 +22,7 @@ class AbsUsdScene(object):
     def _set_reference_add_(cls, stage, file_path, root):
         usd_root = stage.GetPseudoRoot()
         if root is not None:
-            dag_path_comps = bsc_core.BscPath.get_dag_component_paths(root, pathsep=usd_core.UsdNodes.PATHSEP)
+            dag_path_comps = bsc_core.BscNodePath.get_dag_component_paths(root, pathsep=usd_core.UsdNodes.PATHSEP)
             if dag_path_comps:
                 dag_path_comps.reverse()
             for i in dag_path_comps:

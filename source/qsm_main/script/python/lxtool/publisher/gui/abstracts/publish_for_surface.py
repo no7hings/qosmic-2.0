@@ -104,7 +104,7 @@ class _PublishOptForSurface(object):
             option=option_opt.to_string()
         )
 
-    @bsc_core.MdfBaseMtd.run_with_exception_catch
+    @bsc_core.BscModifier.run_with_exception_catch
     def execute(self):
         fncs = [
             self.collection_review_fnc,
@@ -315,7 +315,7 @@ class AbsValidatorOpt(object):
         return prx_item
 
     def _get_node_(self, scene_prx_item, rsv_scene_properties, group_prx_item, dcc_path, description, status):
-        dcc_path_dag_opt = bsc_core.BscPathOpt(dcc_path)
+        dcc_path_dag_opt = bsc_core.BscNodePathOpt(dcc_path)
         pathsep = dcc_path_dag_opt.get_pathsep()
         pathsep_src = rsv_scene_properties.get('dcc.pathsep')
         if pathsep == pathsep_src:
@@ -336,7 +336,7 @@ class AbsValidatorOpt(object):
         return prx_item
 
     def _get_component_(self, scene_prx_item, node_prx_item, dcc_path, description, status):
-        dcc_path_dag_opt = bsc_core.BscPathOpt(dcc_path)
+        dcc_path_dag_opt = bsc_core.BscNodePathOpt(dcc_path)
         pathsep = dcc_path_dag_opt.get_pathsep()
         if pathsep != self.DCC_PATHSEP:
             dcc_path = dcc_path_dag_opt.translate_to(self.DCC_PATHSEP).to_string()

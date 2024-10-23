@@ -2,13 +2,13 @@
 import math
 
 
-class DccMeshFaceVertexIndicesOpt(object):
-    # print DccMeshFaceVertexIndicesOpt(
+class BscMeshFaceVertexIndicesOpt(object):
+    # print BscMeshFaceVertexIndicesOpt(
     #     [0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 4, 5, 9, 8, 5, 6, 10, 9, 6, 7, 11, 10, 8, 9, 13, 12, 9, 10, 14, 13, 10, 11, 15, 14]
     # ).reverse_by_counts(
     #     [4, 4, 4, 4, 4, 4, 4, 4, 4]
     # )
-    # print DccMeshFaceVertexIndicesOpt(
+    # print BscMeshFaceVertexIndicesOpt(
     #     [0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 4, 5, 9, 8, 5, 6, 10, 9, 6, 7, 11, 10, 8, 9, 13, 12, 9, 10, 14, 13, 10, 11, 15, 14]
     # ).reverse_by_start_indices(
     #     [0, 4, 8, 12, 16, 20, 24, 28, 32, 36]
@@ -38,7 +38,7 @@ class DccMeshFaceVertexIndicesOpt(object):
         return lis
 
 
-class DccMeshFaceShellOpt(object):
+class BscMeshFaceShellOpt(object):
     def __init__(self, vertex_counts, vertex_indices):
         self.__vertex_counts, self.__vertex_indices = vertex_counts, vertex_indices
 
@@ -127,7 +127,7 @@ class DccMeshFaceShellOpt(object):
         )
 
 
-class CameraMtd(object):
+class BscCamera(object):
     # noinspection PyUnusedLocal
     @classmethod
     def compute_front_transformation(cls, geometry_args, angle, mode=0, bottom=False):
@@ -173,7 +173,7 @@ class CameraMtd(object):
         return (t_x, t_y, t_z), (s_x, s_y, s_z)
 
 
-class RectLayoutOpt(object):
+class BscRectLayoutOpt(object):
     class Directions(object):
         class Direction(int):
             def __str__(self):
@@ -234,13 +234,14 @@ class RectLayoutOpt(object):
 
         @property
         def exact_rect(self):
+            # noinspection PyArgumentList
             return self.__class__(
                 self.x, self.y, self.w-self.__spacing, self.h-self.__spacing
             )
 
         @property
         def top_left(self):
-            return RectLayoutOpt.Coord(self.x, self.y)
+            return BscRectLayoutOpt.Coord(self.x, self.y)
 
         @top_left.setter
         def top_left(self, coord):
@@ -248,7 +249,7 @@ class RectLayoutOpt(object):
 
         @property
         def top_right(self):
-            return RectLayoutOpt.Coord(self.x+self.w, self.y)
+            return BscRectLayoutOpt.Coord(self.x+self.w, self.y)
 
         @top_right.setter
         def top_right(self, coord):
@@ -256,7 +257,7 @@ class RectLayoutOpt(object):
 
         @property
         def bottom_left(self):
-            return RectLayoutOpt.Coord(self.x, self.y+self.h)
+            return BscRectLayoutOpt.Coord(self.x, self.y+self.h)
 
         @bottom_left.setter
         def bottom_left(self, coord):
@@ -264,7 +265,7 @@ class RectLayoutOpt(object):
 
         @property
         def bottom_right(self):
-            return RectLayoutOpt.Coord(self.x+self.w, self.y+self.h)
+            return BscRectLayoutOpt.Coord(self.x+self.w, self.y+self.h)
 
         @bottom_right.setter
         def bottom_right(self, coord):
@@ -272,7 +273,7 @@ class RectLayoutOpt(object):
 
         @property
         def center(self):
-            return RectLayoutOpt.Coord(self.x+self.w/2, self.y+self.h/2)
+            return BscRectLayoutOpt.Coord(self.x+self.w/2, self.y+self.h/2)
 
         @center.setter
         def center(self, coord):
@@ -339,14 +340,14 @@ class RectLayoutOpt(object):
                     # layout rect
                     rect.top_left = self.top_left
                     # update fill rect
-                    self.__area_fill_rect = RectLayoutOpt.Rect(x=self.x, y=self.y, w=0, h=0)
+                    self.__area_fill_rect = BscRectLayoutOpt.Rect(x=self.x, y=self.y, w=0, h=0)
                     self.__area_fill_rect.update_range(rect.bottom_right)
                     # try next
                     space_rect_pre = self
                     # find second rect
                     c_r = rect.top_right
                     #
-                    self.__space_rect_cur = RectLayoutOpt.SpaceRect(
+                    self.__space_rect_cur = BscRectLayoutOpt.SpaceRect(
                         area=self, direction=self.__direction.swap(),
                         x=c_r.x, y=c_r.y, w=space_rect_pre.w-rect.w, h=rect.h,
                         parent=None
@@ -363,14 +364,14 @@ class RectLayoutOpt(object):
                     # layout rect
                     rect.top_left = self.top_left
                     # update fill rect
-                    self.__area_fill_rect = RectLayoutOpt.Rect(x=self.x, y=self.y, w=0, h=0)
+                    self.__area_fill_rect = BscRectLayoutOpt.Rect(x=self.x, y=self.y, w=0, h=0)
                     # self.__area_fill_rect.spacing = self.spacing
                     self.__area_fill_rect.update_range(rect.bottom_right)
                     # try next
                     space_rect_pre = self
                     c_r = rect.bottom_left
                     # find second rect
-                    self.__space_rect_cur = RectLayoutOpt.SpaceRect(
+                    self.__space_rect_cur = BscRectLayoutOpt.SpaceRect(
                         area=self, direction=self.__direction.swap(),
                         x=c_r.x, y=c_r.y, w=rect.w, h=space_rect_pre.h-rect.h,
                         parent=None,
@@ -391,7 +392,7 @@ class RectLayoutOpt(object):
                 c_a = self.bottom_right
                 if piece is None:
                     if self.__direction.is_align_w():
-                        self.__piece_rect_cur = RectLayoutOpt.SpaceRect(
+                        self.__piece_rect_cur = BscRectLayoutOpt.SpaceRect(
                             area=self, direction=self.__direction.swap(),
                             x=rect.x, y=rect.y, w=rect.w, h=self.h,
                             parent=None
@@ -404,7 +405,7 @@ class RectLayoutOpt(object):
                                 self.next_piece()
                             else:
                                 c_r_0 = rect.bottom_left
-                                self.__space_rect_cur = RectLayoutOpt.SpaceRect(
+                                self.__space_rect_cur = BscRectLayoutOpt.SpaceRect(
                                     area=self, direction=self.__piece_rect_cur.direction,
                                     x=c_r_0.x, y=c_r_0.y, w=rect.w, h=c_a.y-c_r_0.y,
                                     parent=self.__piece_rect_cur
@@ -412,7 +413,7 @@ class RectLayoutOpt(object):
                                 # self.__space_rect_cur.spacing = self.spacing
                                 self.next_by_space(self.__space_rect_cur, 'new piece')
                     elif self.__direction.is_align_h():
-                        self.__piece_rect_cur = RectLayoutOpt.SpaceRect(
+                        self.__piece_rect_cur = BscRectLayoutOpt.SpaceRect(
                             area=self, direction=self.__direction.swap(),
                             x=rect.x, y=rect.y, w=self.w, h=rect.h,
                             parent=None
@@ -425,7 +426,7 @@ class RectLayoutOpt(object):
                                 self.next_piece()
                             else:
                                 c_r_0 = rect.top_right
-                                self.__space_rect_cur = RectLayoutOpt.SpaceRect(
+                                self.__space_rect_cur = BscRectLayoutOpt.SpaceRect(
                                     area=self, direction=self.__piece_rect_cur.direction.swap(),
                                     x=c_r_0.x, y=c_r_0.y, w=c_a.x-c_r.x, h=rect.h,
                                     parent=self.__piece_rect_cur
@@ -439,7 +440,7 @@ class RectLayoutOpt(object):
                             self.next_piece()
                         else:
                             c_r_0 = rect.bottom_left
-                            self.__space_rect_cur = RectLayoutOpt.SpaceRect(
+                            self.__space_rect_cur = BscRectLayoutOpt.SpaceRect(
                                 area=self, direction=piece.direction,
                                 x=c_r_0.x, y=c_r_0.y, w=piece.w, h=c_a.y-c_r_0.y,
                                 parent=piece
@@ -451,7 +452,7 @@ class RectLayoutOpt(object):
                             self.next_piece()
                         else:
                             c_r_0 = rect.top_right
-                            self.__space_rect_cur = RectLayoutOpt.SpaceRect(
+                            self.__space_rect_cur = BscRectLayoutOpt.SpaceRect(
                                 area=self, direction=piece.direction,
                                 x=c_r_0.x, y=c_r_0.y, w=c_a.x-c_r_0.x, h=piece.h,
                                 parent=piece
@@ -466,7 +467,7 @@ class RectLayoutOpt(object):
             c_a = self.bottom_right
             c_f = self.__area_fill_rect.bottom_right
             if self.__direction.is_align_w():
-                self.__space_rect_cur = RectLayoutOpt.SpaceRect(
+                self.__space_rect_cur = BscRectLayoutOpt.SpaceRect(
                     area=self, direction=self.__direction.swap(),
                     x=c_f.x, y=self.y, w=c_a.x-c_f.x, h=self.h,
                     parent=None
@@ -474,7 +475,7 @@ class RectLayoutOpt(object):
                 # self.__space_rect_cur.spacing = self.spacing
                 self.next_by_space(self.__space_rect_cur, 'next piece')
             elif self.__direction.is_align_h():
-                self.__space_rect_cur = RectLayoutOpt.SpaceRect(
+                self.__space_rect_cur = BscRectLayoutOpt.SpaceRect(
                     area=self, direction=self.__direction.swap(),
                     x=self.x, y=c_f.y, w=self.w, h=c_a.y-c_f.y,
                     parent=None

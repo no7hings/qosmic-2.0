@@ -102,7 +102,7 @@ class AssetWorkspaceOptOld(object):
                 'args.materialAssign.value'
             ).get()
             if material_sg_path:
-                material_dcc_name = bsc_core.BscPathOpt(material_sg_path).name
+                material_dcc_name = bsc_core.BscNodePathOpt(material_sg_path).name
                 dcc_material = ktn_dcc_obj_node.Node(material_dcc_name)
                 shader_dcc_name = '{}__surface__override'.format(dcc_material.name)
                 shader_dcc_path = '{}/{}'.format(dcc_material.get_parent().path, shader_dcc_name)
@@ -279,7 +279,7 @@ class AssetWorkspaceOptOld(object):
                 'args.materialAssign.value'
             ).get()
             if material_sg_path:
-                material_dcc_name = bsc_core.BscPathOpt(material_sg_path).name
+                material_dcc_name = bsc_core.BscNodePathOpt(material_sg_path).name
                 dcc_material = ktn_dcc_obj_node.Node(material_dcc_name)
                 shader_dcc_name = '{}__surface__override'.format(dcc_material.name)
                 shader_dcc_path = '{}/{}'.format(dcc_material.get_parent().path, shader_dcc_name)
@@ -431,7 +431,7 @@ class AssetWorkspaceOptOld(object):
                 'args.materialAssign.value'
             ).get()
             if i_sg_material_path:
-                material_dcc_name = bsc_core.BscPathOpt(i_sg_material_path).name
+                material_dcc_name = bsc_core.BscNodePathOpt(i_sg_material_path).name
                 dcc_material = ktn_dcc_obj_node.Node(material_dcc_name)
                 shader_dcc_name = '{}__surface__override'.format(dcc_material.name)
                 shader_dcc_path = '{}/{}'.format(dcc_material.get_parent().path, shader_dcc_name)

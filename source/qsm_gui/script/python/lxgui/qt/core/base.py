@@ -429,7 +429,7 @@ class QtIcon(object):
             painter.setFont(QtFont.generate(size=int(rd * .675), italic=True))
             painter.drawText(
                 rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
-                str(bsc_core.RawTextMtd.get_first_word(name)).capitalize()
+                str(bsc_core.BscText.get_first_word(name)).capitalize()
             )
         #
         painter.end()
@@ -838,7 +838,7 @@ class GuiQtTreeWidget(object):
             b_w, b_h = 2, 2
             foregrounds = user_data.get('foregrounds')
             if foregrounds is not None:
-                array_grid = bsc_core.RawListMtd.grid_to(foregrounds, 8)
+                array_grid = bsc_core.BscList.grid_to(foregrounds, 8)
                 for column, a in enumerate(array_grid):
                     for row, b in enumerate(a):
                         b_x, b_y = x + (w - b_w * column) - 2, y + (h - b_h * row) - 4

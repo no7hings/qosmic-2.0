@@ -8,7 +8,7 @@ print bsc_storage.StgPath.get_is_writeable(
 )
 
 
-print bsc_core.CameraMtd.get_front_transformation(
+print bsc_core.BscCamera.get_front_transformation(
     geometry_args=((0, 0, 0), (0, 0, 0), (1, 1, 1)),
     angle=1,
     bottom=True

@@ -10,3 +10,15 @@ class QtListItem(QtWidgets.QListWidgetItem):
         super(QtListItem, self).__init__(*args)
 
         self._item_model = _vew_mod_item_for_list.ListItemModel(self)
+
+
+class QtListGroupItem(QtWidgets.QListWidgetItem):
+    HEIGHT = 20
+
+    def __init__(self, *args, **kwargs):
+        super(QtListGroupItem, self).__init__(*args)
+
+        self._item_model = _vew_mod_item_for_list.ListItemModel(self)
+
+    def sizeHint(self):
+        return QtCore.QSize(self.listWidget().viewport().width(), self.HEIGHT)

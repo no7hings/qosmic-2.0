@@ -14,7 +14,7 @@ def main(session):
 
     # get checked resources
     window = session.find_window()
-    gui_resource_opt = window._gui_resource_prx_unit
+    gui_resource_opt = window._gui_asset_prx_unit
     dtb_resources = gui_resource_opt.get_checked_or_selected_db_resources()
     if not dtb_resources:
         gui_core.GuiDialog.create(

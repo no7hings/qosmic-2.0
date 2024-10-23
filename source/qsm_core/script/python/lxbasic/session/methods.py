@@ -134,7 +134,7 @@ class OptionHook(object):
                             if i_hook_option_opt.get_key_is_exists('gui_parent'):
                                 i_gui_parent_path = i_hook_option_opt.get('gui_parent')
 
-                    i_gui_parent_path_opt = bsc_core.BscPathOpt(i_gui_parent_path)
+                    i_gui_parent_path_opt = bsc_core.BscNodePathOpt(i_gui_parent_path)
 
                     if i_gui_parent_path_opt.get_is_root():
                         i_gui_path = six.u('/{}').format(i_gui_name)

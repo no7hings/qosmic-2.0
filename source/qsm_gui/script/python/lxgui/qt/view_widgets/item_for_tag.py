@@ -113,13 +113,13 @@ class _AbsTagItem(object):
         return self._view_widget._item_dict[path]
 
     def _get_ancestors_(self):
-        ancestor_paths = bsc_core.BscPathOpt(
+        ancestor_paths = bsc_core.BscNodePathOpt(
             self._item_model.get_path()
         ).get_ancestor_paths()
         return self._get_all_(ancestor_paths)
 
     def _get_parent_(self):
-        parent_path = bsc_core.BscPath.get_dag_parent_path(self._item_model.get_path())
+        parent_path = bsc_core.BscNodePath.get_dag_parent_path(self._item_model.get_path())
         if parent_path:
             return self._get_one_(parent_path)
 
@@ -129,7 +129,7 @@ class _AbsTagItem(object):
         [x._set_checked_(self._is_checked_()) for x in widgets]
 
     def _update_check_state_for_ancestors_(self):
-        ancestor_paths = bsc_core.BscPathOpt(
+        ancestor_paths = bsc_core.BscNodePathOpt(
             self._item_model.get_path()
         ).get_ancestor_paths()
         ancestors = self._get_all_(ancestor_paths)
@@ -157,7 +157,7 @@ class _AbsTagItem(object):
         self._item_model.set_number(len(path_set))
 
     def _expand_ancestors_(self):
-        ancestor_paths = bsc_core.BscPathOpt(
+        ancestor_paths = bsc_core.BscNodePathOpt(
             self._item_model.get_path()
         ).get_ancestor_paths()
         ancestors = self._get_all_(ancestor_paths)

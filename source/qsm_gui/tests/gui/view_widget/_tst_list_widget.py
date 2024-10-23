@@ -25,7 +25,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
         self._d._set_item_check_enable_(True)
         self._d._view_model.set_item_drag_enable(True)
         self._d._view_model.set_item_lock_enable(True)
-        self._d._view_model.set_item_frame_size(222, 222)
+        self._d._view_model.set_item_frame_size(120, 120)
         self.add_widget(self._d)
         for i in range(100):
             i_path = '/test_aaaaaaaaaaaaaaaa{}'.format(i)
@@ -115,9 +115,10 @@ if __name__ == '__main__':
     import cProfile
     import os
     import pstats
-    file_path = '{}/profile.profile'.format(os.path.dirname(__file__))
-    cProfile.run('test()', file_path)
-
-    p = pstats.Stats(file_path)
-    p.strip_dirs().sort_stats('time').print_stats(10)
+    # file_path = '{}/profile.profile'.format(os.path.dirname(__file__))
+    # cProfile.run('test()', file_path)
+    #
+    # p = pstats.Stats(file_path)
+    # p.strip_dirs().sort_stats('time').print_stats(10)
     # print p.get_top_level_stats()
+    test()

@@ -7,7 +7,7 @@ option:
     gui:
         group_name: 'nodes'
         #
-        name: 'Load NodeMotion'
+        name: 'Load Motion'
         icon_name: 'application/python'
         #
         size: [720, 720]

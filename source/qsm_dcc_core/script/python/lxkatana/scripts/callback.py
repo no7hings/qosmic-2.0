@@ -34,7 +34,7 @@ class ScpCbkEnvironment(object):
     @classmethod
     def register(cls, data):
         for i_index, (i_key, i_env_key, i_env_value) in enumerate(data):
-            bsc_core.EnvBaseMtd.set(
+            bsc_core.BscEnviron.set(
                 i_env_key, i_env_value
             )
             bsc_log.Log.trace_method_result(
@@ -57,7 +57,7 @@ class ScpCbkEnvironment(object):
     def add_from_work_environment(self, *args, **kwargs):
         import lxshotgun.scripts as stg_scripts
 
-        task_id = bsc_core.EnvBaseMtd.get(
+        task_id = bsc_core.BscEnviron.get(
             'QSM_TASK_ID'
         )
         return stg_scripts.ScpEnvironment.get_data(task_id)

@@ -9,7 +9,7 @@ import lxbasic.storage as bsc_storage
 # )
 #
 # for k, v in dic.items():
-#     print bsc_core.BscIntegers.merge_to(v)
+#     print bsc_core.BscIntegerArray.merge_to(v)
 
 # print bsc_storage.StgFileTiles.get_number_args(
 #     'A.1001.1001.exr', '*.<udim>.%04d.*'
@@ -18,6 +18,6 @@ import lxbasic.storage as bsc_storage
 #     'A.1001.exr', '*.####.*'
 # )
 
-print bsc_core.PtnFileTilesMtd.to_fnmatch_style(
+print bsc_core.BscFileTiles.to_fnmatch_style(
     '*.$F03.$F04.*'
 )

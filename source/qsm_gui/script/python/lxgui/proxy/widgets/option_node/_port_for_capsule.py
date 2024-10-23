@@ -1,7 +1,7 @@
 # coding:utf-8
 import _port_base
 
-import _input_for_capsule
+from ..input import input_for_capsule as _input_for_capsule
 
 
 # capsule string

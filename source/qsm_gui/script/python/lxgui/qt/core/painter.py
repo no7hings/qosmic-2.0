@@ -1479,7 +1479,7 @@ class QtPainter(QtGui.QPainter):
                 self.drawRect(frame_rect)
 
         if r >= 31:
-            texts = bsc_core.RawTextMtd.find_words(text)
+            texts = bsc_core.BscText.find_words(text)
             if len(texts) > 1:
                 txt_size = int(r*.5)
                 text_draw = (texts[0][0]+texts[1][0]).upper()
@@ -1575,7 +1575,7 @@ class QtPainter(QtGui.QPainter):
         x_1, y_1 = int(x_0+c_x/w_0*w), int(y_0+c_y/h_0*h)
         w_1, h_1 = int(c_w/w_0*w), int(c_h/h_0*h)
 
-        texts = bsc_core.RawTextMtd.find_words(text)
+        texts = bsc_core.BscText.find_words(text)
         txt_size = (h_1*0.75)
         if len(texts) > 1:
             text_draw = (texts[0][0]+texts[1][0]).upper()

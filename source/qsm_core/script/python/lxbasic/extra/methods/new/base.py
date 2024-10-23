@@ -89,16 +89,16 @@ class EtrBase(bsc_etr_abstracts.AbsEtrBase):
 
     @classmethod
     def set_project(cls, project):
-        bsc_core.EnvExtraMtd.set(
+        bsc_core.BscEnvironExtra.set(
             'QSM_PROJECT_NAME', project.upper()
         )
-        bsc_core.EnvExtraMtd.set(
+        bsc_core.BscEnvironExtra.set(
             'QSM_DATABASE_NAME', 'production'
         )
 
     @classmethod
     def get_project(cls):
-        return (bsc_core.EnvExtraMtd.get(
+        return (bsc_core.BscEnvironExtra.get(
             'QSM_PROJECT_NAME'
         ) or '').lower()
 

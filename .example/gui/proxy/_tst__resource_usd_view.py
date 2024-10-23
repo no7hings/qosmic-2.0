@@ -83,7 +83,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
             pass
 
         version_path = '{}/v0001'.format(resource_path)
-        path_opt = bsc_core.BscPathOpt(version_path)
+        path_opt = bsc_core.BscNodePathOpt(version_path)
         cs = path_opt.get_components()
         category_group = cs[-2].get_name()
         dtb_opt = bsc_database.DtbOptForResource(

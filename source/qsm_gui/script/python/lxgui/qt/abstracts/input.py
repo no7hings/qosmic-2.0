@@ -108,7 +108,7 @@ class AbsQtInputBaseDef(
 
 
 #   tuple, etc. float2, float3, ...
-class AbsQtInputAsComponentsBaseDef(
+class AbsQtInputForComponentsBaseDef(
     gui_qt_abs_base.AbsQtValueBaseDef,
     gui_qt_abs_base.AbsQtValueDefaultExtraDef,
     gui_qt_abs_base.AbsQtValueValidationExtraDef,
@@ -172,7 +172,7 @@ class AbsQtInputAsComponentsBaseDef(
 
 
 #   other, etc. rgba, icon, ...
-class AbsQtInputAsOtherBaseDef(AbsQtInputBaseDef):
+class AbsQtInputForOtherBaseDef(AbsQtInputBaseDef):
     def _pull_history_(self, *args, **kwargs):
         pass
 

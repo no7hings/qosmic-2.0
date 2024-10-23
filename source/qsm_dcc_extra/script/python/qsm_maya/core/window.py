@@ -9,7 +9,7 @@ class Window(object):
     @classmethod
     def create(cls, name, resolution=(480, 320)):
         return cmds.window(
-            name, title=bsc_core.RawTextMtd.to_prettify(name),
+            name, title=bsc_core.BscText.to_prettify(name),
             width=resolution[0], height=resolution[1],
             minimizeButton=1, maximizeButton=1, sizeable=0
         )

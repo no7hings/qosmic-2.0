@@ -163,7 +163,7 @@ class PlayblastOpt(object):
             fps = _mya_core.Frame.get_fps_value()
 
         if frame_step > 1:
-            frames = bsc_core.BscFrameRang.get(
+            frames = bsc_core.BscFrameRange.get(
                 (start_frame, end_frame), frame_step
             )
             for i_frame in frames:
@@ -274,7 +274,7 @@ class PlayblastOpt(object):
                 ).format(
                     bsc_core.auto_unicode(directory_path), bsc_core.auto_unicode(file_opt.name_base)
                 )
-                return bsc_core.PtnVersionPath.generate_as_new_version(ptn)
+                return bsc_core.BscVersion.generate_as_new_version(ptn)
             else:
                 return six.u('{}/{}.mov').format(
                     bsc_core.auto_unicode(directory_path), bsc_core.auto_unicode(file_opt.name_base)
@@ -284,7 +284,7 @@ class PlayblastOpt(object):
                 ptn = six.u(
                     '{}.v{{version}}.mov'
                 ).format(bsc_core.auto_unicode(file_opt.path_base))
-                return bsc_core.PtnVersionPath.generate_as_new_version(ptn)
+                return bsc_core.BscVersion.generate_as_new_version(ptn)
             else:
                 return six.u('{}.mov').format(
                     bsc_core.auto_unicode(file_opt.path_base)
@@ -326,7 +326,7 @@ class PlayblastProcess(object):
         ).format(
             bsc_core.auto_unicode(file_path_opt_current.path_base)
         )
-        file_path = bsc_core.PtnVersionPath.generate_as_new_version(
+        file_path = bsc_core.BscVersion.generate_as_new_version(
             ptn
         )
         file_opt = bsc_storage.StgFileOpt(file_path)

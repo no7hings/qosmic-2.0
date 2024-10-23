@@ -60,7 +60,7 @@ class MayaSetup(object):
     def _set_maya_ae_setup_(cls):
         from lxmaya.node_template import startup as mya_node_template_startup
 
-        _ = bsc_core.EnvBaseMtd.get_as_array(
+        _ = bsc_core.BscEnviron.get_as_array(
             'QSM_MAYA_ARNOLD_RESOURCES'
         )
         lis = []

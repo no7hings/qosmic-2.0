@@ -29,7 +29,7 @@ class ScpLibraryLook(object):
     def __init__(self, location):
         self._location = location
         self._group = mya_dcc_objects.Group(
-            bsc_core.BscPathOpt(self._location).translate_to('|').get_path()
+            bsc_core.BscNodePathOpt(self._location).translate_to('|').get_path()
         )
 
     def rename_look(self, prefix_name):
@@ -347,7 +347,7 @@ mya_scripts.ScpLibraryLook('/geometries').split_meshes_by_subsets()
         data_1_ = data_1[resource_path]
         if data_1_:
             location = self._location
-            group = mya_dcc_objects.Group(bsc_core.BscPathOpt(location).translate_to('|').get_path())
+            group = mya_dcc_objects.Group(bsc_core.BscNodePathOpt(location).translate_to('|').get_path())
             for k, v in data_1_['textures'].items():
                 i_material_path = k
                 i_file_path = v['diffuse']

@@ -91,7 +91,7 @@ class _AbsTagBase(object):
         [x._set_checked_(self._is_checked_()) for x in widgets]
 
     def _update_check_state_for_ancestors_(self):
-        ancestor_paths = bsc_core.BscPathOpt(
+        ancestor_paths = bsc_core.BscNodePathOpt(
             self._get_path_text_()
         ).get_ancestor_paths()
         ancestors = self._get_all_(ancestor_paths)
@@ -113,7 +113,7 @@ class _AbsTagBase(object):
         self._set_number_(len(path_set))
 
     def _expand_ancestors_(self):
-        ancestor_paths = bsc_core.BscPathOpt(
+        ancestor_paths = bsc_core.BscNodePathOpt(
             self._get_path_text_()
         ).get_ancestor_paths()
         ancestors = self._get_all_(ancestor_paths)
@@ -779,8 +779,8 @@ class _QtTagGroupItem(
             widget._set_text_(kwargs['show_name'])
         else:
             widget._set_text_(
-                bsc_core.RawTextMtd.to_prettify(
-                    bsc_core.BscPath.to_dag_name(path),
+                bsc_core.BscText.to_prettify(
+                    bsc_core.BscNodePath.to_dag_name(path),
                     capitalize=True
                 )
             )
@@ -796,8 +796,8 @@ class _QtTagGroupItem(
             widget._set_text_(kwargs['show_name'])
         else:
             widget._set_text_(
-                bsc_core.RawTextMtd.to_prettify(
-                    bsc_core.BscPath.to_dag_name(path),
+                bsc_core.BscText.to_prettify(
+                    bsc_core.BscNodePath.to_dag_name(path),
                     capitalize=True
                 )
             )
@@ -921,7 +921,7 @@ class QtViewForTagRoot(
         if path == self.PATHSEP:
             return self._create_group_root_(path, *args, **kwargs)
 
-        group_widget = self._item_dict[bsc_core.BscPath.get_dag_parent_path(path)]
+        group_widget = self._item_dict[bsc_core.BscNodePath.get_dag_parent_path(path)]
         widget = group_widget._create_group_(path, *args, **kwargs)
 
         widget._set_view_(self)
@@ -933,7 +933,7 @@ class QtViewForTagRoot(
         if path in self._item_dict:
             return self._item_dict[path]
 
-        group_widget = self._item_dict[bsc_core.BscPath.get_dag_parent_path(path)]
+        group_widget = self._item_dict[bsc_core.BscNodePath.get_dag_parent_path(path)]
         widget = group_widget._create_node_(path, *args, **kwargs)
 
         widget._set_view_(self)
@@ -969,7 +969,7 @@ class QtViewForTagRoot(
 
     def _expand_exclusive_for_node_(self, path):
         self._collapse_all_group_items_()
-        paths = bsc_core.BscPath.get_dag_component_paths(path)
+        paths = bsc_core.BscNodePath.get_dag_component_paths(path)
         for i in paths:
             if i in self._item_dict:
                 i_widget = self._item_dict[i]
@@ -981,9 +981,9 @@ class QtViewForTagRoot(
 
     def _expand_for_all_from_(self, path):
         self._collapse_all_group_items_()
-        paths = bsc_core.BscPath.get_dag_component_paths(path)
+        paths = bsc_core.BscNodePath.get_dag_component_paths(path)
         self._set_expanded_for_(paths, True)
-        descendant_paths = bsc_core.BscPath.find_dag_descendant_paths(path, self._item_dict.keys())
+        descendant_paths = bsc_core.BscNodePath.find_dag_descendant_paths(path, self._item_dict.keys())
         self._set_expanded_for_(descendant_paths, True)
 
     def _set_expanded_for_(self, paths, boolean):

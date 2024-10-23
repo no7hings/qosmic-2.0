@@ -953,7 +953,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
             )
             #
             if text in self._rsv_project_paths:
-                self._rsv_project_name_cur = bsc_core.BscPathOpt(text).get_name()
+                self._rsv_project_name_cur = bsc_core.BscNodePathOpt(text).get_name()
                 self.refresh_all()
 
     def gui_tree_select_cbk_1(self, text):
@@ -1134,7 +1134,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
         def quit_fnc_():
             ts.do_quit()
 
-        rsv_entities_map = bsc_core.RawListMtd.grid_to(
+        rsv_entities_map = bsc_core.BscList.grid_to(
             rsv_entities, self.THREAD_STEP
         )
         #
@@ -1184,7 +1184,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
             ts.do_quit()
 
         rsv_entities, gui_thread_flag = args[0]
-        rsv_entities_map = bsc_core.RawListMtd.grid_to(
+        rsv_entities_map = bsc_core.BscList.grid_to(
             rsv_entities, self.THREAD_STEP
         )
 
@@ -1303,7 +1303,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
                         if 'gui_parent' in i_hook_option:
                             i_gui_parent_path = i_hook_option['gui_parent']
                     #
-                    i_gui_parent_path_opt = bsc_core.BscPathOpt(i_gui_parent_path)
+                    i_gui_parent_path_opt = bsc_core.BscNodePathOpt(i_gui_parent_path)
                     #
                     if i_gui_parent_path_opt.get_is_root():
                         i_gui_path = '/{}'.format(i_gui_name)

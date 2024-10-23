@@ -11,7 +11,7 @@ class AbsNodeOpt(object):
 
     def __init__(self, path):
         self._path = path
-        self._path_opt = bsc_core.BscPathOpt(self._path)
+        self._path_opt = bsc_core.BscNodePathOpt(self._path)
         self._name = self._path_opt.get_name()
 
     def __str__(self):

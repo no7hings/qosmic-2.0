@@ -117,7 +117,7 @@ class AbsPrxWidget(AbsPrx):
     def __init__(self, *args, **kwargs):
         super(AbsPrxWidget, self).__init__(*args, **kwargs)
         #
-        self._qt_thread_enable = bsc_core.EnvBaseMtd.get_qt_thread_enable()
+        self._qt_thread_enable = bsc_core.BscEnviron.get_qt_thread_enable()
         #
         self._gui_build_()
 

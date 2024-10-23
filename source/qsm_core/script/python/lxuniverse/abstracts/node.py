@@ -371,7 +371,7 @@ class AbsObjPortExtraDef(object):
             port = self._create_port_fnc(
                 type_path, port_path, port_assign
             )
-            self._port_stack.set_object_add(port)
+            self._port_stack.add_object(port)
         #
         port.set(raw)
 
@@ -383,7 +383,7 @@ class AbsObjPortExtraDef(object):
             port = self._create_port_fnc(
                 type_args, port_path, port_assign
             )
-            self._port_stack.set_object_add(port)
+            self._port_stack.add_object(port)
         return port
 
     def create_parameter(self, type_args, port_path):
@@ -402,7 +402,7 @@ class AbsObjPortExtraDef(object):
         return port
 
     def _add_port_(self, port):
-        self._port_stack.set_object_add(port)
+        self._port_stack.add_object(port)
 
     # port
     def get_port(self, port_string):

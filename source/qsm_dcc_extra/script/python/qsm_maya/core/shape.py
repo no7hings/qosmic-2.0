@@ -110,7 +110,7 @@ class ShapeOpt(_node_for_dag.DagNodeOpt):
 
     @property
     def transform_path(self):
-        return bsc_core.BscPath.get_dag_parent_path(
+        return bsc_core.BscNodePath.get_dag_parent_path(
             self._path, _node_for_dag.DagNode.PATHSEP
         )
 

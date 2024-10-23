@@ -73,7 +73,7 @@ class StgRpc(object):
 
     @classmethod
     def create_directory(cls, directory_path, mode='775'):
-        units = _cor_path.BscPath.get_dag_component_paths(directory_path)
+        units = _cor_path.BscNodePath.get_dag_component_paths(directory_path)
         units.reverse()
         list_ = []
         for i_path in units:
@@ -671,7 +671,7 @@ class StgSystem(object):
 class StgExtra(object):
     @classmethod
     def get_exists_component(cls, path):
-        units = _cor_path.BscPath.get_dag_component_paths(path)
+        units = _cor_path.BscNodePath.get_dag_component_paths(path)
         for i in units:
             if os.path.exists(i):
                 return i
@@ -686,7 +686,7 @@ class StgExtra(object):
             if len(_) > 1:
                 # sort by number
                 if sort_by == 'number':
-                    _.sort(key=lambda x: _cor_raw.RawTextMtd.to_number_embedded_args(x))
+                    _.sort(key=lambda x: _cor_raw.BscText.to_number_embedded_args(x))
         return _
 
     @classmethod
@@ -755,7 +755,7 @@ class StgPathLink(object):
 class StgPath(_cor_base.BscStorage):
     @classmethod
     def get_parent(cls, path):
-        return _cor_path.BscPath.get_dag_parent_path(
+        return _cor_path.BscNodePath.get_dag_parent_path(
             path
         )
 
@@ -872,18 +872,18 @@ class StgFileTiles(object):
     methods using for multiply file
     etc. "/tmp/image.1001.exr" convert to "/tmp/image.####.exr"
     """
-    PATHSEP = _cor_pattern.PtnFileTilesMtd.PATHSEP
+    PATHSEP = _cor_pattern.BscFileTiles.PATHSEP
     P = '[0-9]'
     CACHE = dict()
 
     @classmethod
     def get_number_args(cls, file_name, name_pattern):
         new_file_name = file_name
-        args = _cor_pattern.PtnFileTilesMtd.get_args(
+        args = _cor_pattern.BscFileTiles.get_args(
             name_pattern
         )
         if args:
-            re_pattern = _cor_pattern.PtnFileTilesMtd.to_re_style(name_pattern)
+            re_pattern = _cor_pattern.BscFileTiles.to_re_style(name_pattern)
             results = re.findall(re_pattern, file_name)
             if results:
                 if len(args) > 1:
@@ -920,7 +920,7 @@ class StgFileTiles(object):
             i_name_pattern = i_name_pattern.format(
                 **dict(format=file_opt.get_format())
             )
-            if _cor_pattern.PtnFileTilesMtd.is_valid(i_name_pattern):
+            if _cor_pattern.BscFileTiles.is_valid(i_name_pattern):
                 i_number_args = StgFileTiles.get_number_args(
                     file_opt.name, i_name_pattern
                 )
@@ -936,7 +936,7 @@ class StgFileTiles(object):
             return cls.CACHE[name_base]
         #
         name_base_new = name_base
-        for i_keyword, i_re_format, i_count in _cor_pattern.PtnFileTilesMtd.RE_MULTIPLY_KEYS:
+        for i_keyword, i_re_format, i_count in _cor_pattern.BscFileTiles.RE_MULTIPLY_KEYS:
             i_results = re.finditer(i_re_format.format(i_keyword), name_base, re.IGNORECASE) or []
             for j_result in i_results:
                 j_start, j_end = j_result.span()
@@ -1105,12 +1105,12 @@ class StgPathOpt(object):
             )
 
     def get_component_paths(self):
-        return _cor_path.BscPath.get_dag_component_paths(
+        return _cor_path.BscNodePath.get_dag_component_paths(
             path=self.get_path(), pathsep=self.PATHSEP
         )
 
     def get_parent_path(self):
-        return _cor_path.BscPath.get_dag_parent_path(
+        return _cor_path.BscNodePath.get_dag_parent_path(
             path=self.get_path(), pathsep=self.PATHSEP
         )
 
@@ -1196,7 +1196,7 @@ class StgFileSearchOpt(object):
     def get_result(self, file_path_src):
         name_src = os.path.basename(file_path_src)
         name_base_src, ext_src = os.path.splitext(name_src)
-        name_base_pattern = _cor_pattern.PtnFileTilesMtd.to_fnmatch_style(name_base_src)
+        name_base_pattern = _cor_pattern.BscFileTiles.to_fnmatch_style(name_base_src)
 
         if self._ignore_name_case is True:
             name_base_pattern = name_base_pattern.lower()

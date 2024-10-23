@@ -34,7 +34,7 @@ class FncImporterForCameraAbc(
         location = self.get('location')
         #
         namespace_temporary = 'alembic_import_{}'.format(bsc_core.BscSystem.get_time_tag())
-        mya_location = bsc_core.BscPathOpt(location).translate_to(
+        mya_location = bsc_core.BscNodePathOpt(location).translate_to(
             self.OBJ_PATHSEP
         ).get_value()
         group = mya_dcc_objects.Group(mya_location)
@@ -69,7 +69,7 @@ class FncImporterForCameraAbc(
                             j_camera.set_display_()
                     #
                     target_obj_path = '{}|{}'.format(
-                        mya_location, bsc_core.BscPath.get_dag_name_with_namespace_clear(i_obj.name)
+                        mya_location, bsc_core.BscNodePath.get_dag_name_with_namespace_clear(i_obj.name)
                     )
                     obj_tgt = mya_dcc_objects.Node(target_obj_path)
                     if obj_tgt.get_is_exists() is True:
@@ -78,7 +78,7 @@ class FncImporterForCameraAbc(
                     i_obj.parent_to_path(mya_location)
             #
             i_obj._update_path_()
-            dcc_dag_path = bsc_core.BscPathOpt(i_obj.path).clear_namespace_to()
+            dcc_dag_path = bsc_core.BscNodePathOpt(i_obj.path).clear_namespace_to()
             self._results.append(dcc_dag_path.path)
         #
         namespace_obj.do_delete()

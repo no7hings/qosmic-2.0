@@ -1,7 +1,7 @@
 # coding:utf-8
 import _port_base
 
-import _input_for_shotgun
+from ..input import input_for_shotgun as _input_for_shotgun
 
 
 # shotgun

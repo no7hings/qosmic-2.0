@@ -5,7 +5,7 @@ from ... import core as _gui_core
 # qt
 from ...qt import core as _qt_core
 # qt widgets
-from ...qt.widgets import input_for_guide as _qt_wgt_input_for_guide
+from ...qt.widgets.input import input_for_guide as _qt_wgt_ipt_for_guide
 
 from ...qt.widgets import item_for_list as _qt_wgt_item_for_list
 
@@ -970,7 +970,7 @@ class PrxMediaItem(object):
 class PrxGuideBar(
     _prx_abstracts.AbsPrxWidget,
 ):
-    QT_WIDGET_CLS = _qt_wgt_input_for_guide.QtInputAsGuide
+    QT_WIDGET_CLS = _qt_wgt_ipt_for_guide.QtInputForGuide
 
     def __init__(self, *args, **kwargs):
         super(PrxGuideBar, self).__init__(*args, **kwargs)
@@ -1000,7 +1000,7 @@ class PrxGuideBar(
 class PrxTagBar(
     _prx_abstracts.AbsPrxWidget,
 ):
-    QT_WIDGET_CLS = _qt_wgt_input_for_guide.QtInputAsGuide
+    QT_WIDGET_CLS = _qt_wgt_ipt_for_guide.QtInputForGuide
 
     def __init__(self, *args, **kwargs):
         super(PrxTagBar, self).__init__(*args, **kwargs)

@@ -13,13 +13,13 @@ from .. import core as _qt_core
 
 from .. import abstracts as _qt_abstracts
 # qt widgets
+from .entry import entry_for_constant as _entry_for_constant
+
 from . import utility as _utility
 
 from . import button as _button
 
 from . import chart as _chart
-
-from . import entry as _entry
 
 from . import item_for_list as _item_for_list
 
@@ -233,7 +233,7 @@ class _AbsQtPopupAsChoose(
         self._popup_all_unchecked_button.press_clicked.connect(self._execute_popup_all_unchecked_)
         # keyword filter
         self._popup_item_keyword_filter_is_enable = False
-        self._popup_keyword_filter_entry = _entry.QtEntryForConstant(self)
+        self._popup_keyword_filter_entry = _entry_for_constant.QtEntryForConstant(self)
         self._popup_keyword_filter_entry.hide()
         self._popup_keyword_filter_entry._set_entry_enable_(True)
         self._popup_keyword_filter_entry.setAlignment(
@@ -741,9 +741,9 @@ class _AbsQtPopupAsChoose(
         raise NotImplementedError()
 
 
-class QtPopupAsChoose(_AbsQtPopupAsChoose):
+class QtPopupForChoose(_AbsQtPopupAsChoose):
     def __init__(self, *args, **kwargs):
-        super(QtPopupAsChoose, self).__init__(*args, **kwargs)
+        super(QtPopupForChoose, self).__init__(*args, **kwargs)
         self._popup_quick_start_enable = True
 
     def _get_popup_values_(self):
@@ -753,9 +753,9 @@ class QtPopupAsChoose(_AbsQtPopupAsChoose):
         return self.parent()._bridge_choose_get_popup_texts_current_()
 
 
-class QtPopupAsHistory(_AbsQtPopupAsChoose):
+class QtPopupForHistory(_AbsQtPopupAsChoose):
     def __init__(self, *args, **kwargs):
-        super(QtPopupAsHistory, self).__init__(*args, **kwargs)
+        super(QtPopupForHistory, self).__init__(*args, **kwargs)
 
     def _get_popup_values_(self):
         return self.parent()._bridge_history_get_popup_texts_()
@@ -784,7 +784,7 @@ class QtPopupAsChooseForIcon(_AbsQtPopupAsChoose):
         return self.parent()._bridge_choose_get_popup_texts_current_()
 
 
-class QtPopupAsCompletion(
+class QtPopupForCompletion(
     QtWidgets.QWidget,
     _qt_abstracts.AbsQtFrameBaseDef,
     _qt_abstracts.AbsQtPopupBaseDef,
@@ -831,7 +831,7 @@ class QtPopupAsCompletion(
         self.update()
 
     def __init__(self, *args, **kwargs):
-        super(QtPopupAsCompletion, self).__init__(*args, **kwargs)
+        super(QtPopupForCompletion, self).__init__(*args, **kwargs)
         # use tool tip
         self.setWindowFlags(QtCore.Qt.ToolTip | QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -1032,7 +1032,7 @@ class QtPopupAsChooseForGuide(
         self._init_frame_base_def_(self)
         self._init_popup_base_def_(self)
         #
-        self._popup_keyword_filter_entry = _entry.QtEntryForConstant(self)
+        self._popup_keyword_filter_entry = _entry_for_constant.QtEntryForConstant(self)
         self._popup_keyword_filter_entry.hide()
         self._popup_keyword_filter_entry._set_entry_enable_(True)
         self._popup_keyword_filter_entry.setAlignment(

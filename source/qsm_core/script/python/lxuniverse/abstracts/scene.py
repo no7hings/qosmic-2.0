@@ -78,7 +78,7 @@ class AbsObjUniverseBaseDef(object):
         if stack.get_object_exists(category_name) is True:
             return stack.get_object(category_name)
         obj_category = self.__create_category(category_name)
-        stack.set_object_add(obj_category)
+        stack.add_object(obj_category)
         return obj_category
 
     def get_categories(self):
@@ -100,7 +100,7 @@ class AbsObjUniverseBaseDef(object):
         category_name, type_name = self.CATEGORY_CLS._get_type_path_args_(type_path)
         category = self.create_category(category_name)
         type_ = category._new_type_(type_name)
-        stack.set_object_add(type_)
+        stack.add_object(type_)
         return type_
 
     def get_types(self):
@@ -128,7 +128,7 @@ class AbsObjUniverseBaseDef(object):
         if stack.get_object_exists(obj_category_name) is True:
             return stack.get_object(obj_category_name)
         obj_category = self.__create_obj_category(obj_category_name)
-        stack.set_object_add(obj_category)
+        stack.add_object(obj_category)
         return obj_category
 
     def get_obj_categories(self):
@@ -160,8 +160,8 @@ class AbsObjUniverseBaseDef(object):
 
     # <obj>
     def _add_obj_(self, obj):
-        self._obj_stack.set_object_add(obj)
-        self._obj_stack_test.set_object_add(obj)
+        self._obj_stack.add_object(obj)
+        self._obj_stack_test.add_object(obj)
 
     def _override_obj_(self, old_obj, new_obj):
         """
@@ -170,8 +170,8 @@ class AbsObjUniverseBaseDef(object):
         :param new_obj: instance(<obj>)
         :return:
         """
-        self._obj_stack.set_object_override(old_obj, new_obj)
-        self._obj_stack_test.set_object_override(old_obj, new_obj)
+        self._obj_stack.override_object(old_obj, new_obj)
+        self._obj_stack_test.override_object(old_obj, new_obj)
 
     # noinspection PyMethodMayBeStatic
     def _copy_obj_to_(self, source_obj, target_path):

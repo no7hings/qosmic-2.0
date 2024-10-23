@@ -33,6 +33,6 @@ class MenuBuild(gui_qt_abstracts.AsbGuiQtDccMenuSetup):
             return qt_menu
 
     def execute(self):
-        with bsc_log.LogContext.create(self.LOG_KEY):
+        with bsc_log.LogContext.create(self.LOG_KEY, 'build'):
             import lxsession.commands as ssn_commands
             ssn_commands.execute_hook('dcc-menus/gen-menu')

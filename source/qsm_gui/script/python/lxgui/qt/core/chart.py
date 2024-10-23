@@ -33,7 +33,7 @@ class GuiQtChartDrawDataForSector(object):
         explain, value_maximum, value = datum
         percent = float(value)/float(max(value_maximum, 1))
         #
-        text = '{} : {}%'.format(explain, bsc_core.RawValueMtd.to_percent_prettify(value, value_maximum))
+        text = '{} : {}%'.format(explain, bsc_core.BscValue.to_percent_prettify(value, value_maximum))
         #
         color_percent = max(min(percent, 1), .005)
         if value_maximum == 0:
@@ -375,7 +375,7 @@ class GuiQtChartDrawDataForRadar(object):
         else:
             text_1 = '{} ( {}% )'.format(
                 bsc_core.BscInteger.to_prettify(value_tgt),
-                bsc_core.RawValueMtd.to_percent_prettify(value_sub, value_src)
+                bsc_core.BscValue.to_percent_prettify(value_sub, value_src)
             )
         #
         if value_maximum == 0:
@@ -502,7 +502,7 @@ class GuiQtChartDrawDataForPie(object):
             _i_shadow_path = rim_path-pie_path
             #
             _i_percent = '{}%'.format(
-                bsc_core.RawValueMtd.to_percent_prettify(_i_value, maximum)
+                bsc_core.BscValue.to_percent_prettify(_i_value, maximum)
             )
             #
             lis.append(

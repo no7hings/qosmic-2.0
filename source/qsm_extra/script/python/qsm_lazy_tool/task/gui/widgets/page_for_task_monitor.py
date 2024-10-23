@@ -184,7 +184,7 @@ class _GuiTaskOpt(
         if self.gui_check_exists(path):
             return False, self.gui_get_one(path)
 
-        path_opt = bsc_core.BscPathOpt(path)
+        path_opt = bsc_core.BscNodePathOpt(path)
         parent_gui = self.gui_get_one(path_opt.get_parent_path())
 
         prx_item = parent_gui.prepend_child(
@@ -353,7 +353,7 @@ class _GuiTaskOpt(
             return
 
         if entity_ids:
-            task_ids_map = bsc_core.RawListMtd.grid_to(
+            task_ids_map = bsc_core.BscList.grid_to(
                 entity_ids, self.THREAD_STEP
             )
 

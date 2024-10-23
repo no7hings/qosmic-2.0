@@ -7,8 +7,6 @@ from .bubble import *
 
 from .utility import *
 
-from .menu import *
-
 from .window_for_dialog import *
 
 from .window_base import *
@@ -27,6 +25,8 @@ from .entry_frame import *
 
 from .entry import *
 
+from .input import *
+
 from .popup import *
 
 from .item import *
@@ -36,18 +36,6 @@ from .head import *
 from .container import *
 
 from .container_for_tab import *
-
-from .input import *
-
-from .input_for_capsule import *
-
-from .input_for_storage import *
-
-from .input_for_guide import *
-
-from .input_for_filter import *
-
-from .input_for_path import *
 
 from .item_for_list import *
 

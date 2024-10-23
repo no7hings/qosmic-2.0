@@ -81,7 +81,7 @@ class GuiPrxModForProgress(object):
             #
             if self._maximum > 1:
                 map_value = int(
-                    bsc_core.RawValueRangeMtd.set_map_to(
+                    bsc_core.BscValueRange.map_to(
                         (1, self._maximum), (1, self._map_maximum), self._value
                     )
                 )

@@ -84,7 +84,7 @@ class ChartModelForLine(object):
                 index_text=str(i_idx+1),
                 index_rect=QtCore.QRect(),
                 path=i_k,
-                name=bsc_core.BscPath.to_dag_name(i_k),
+                name=bsc_core.BscNodePath.to_dag_name(i_k),
                 rect=QtCore.QRect(),
                 name_rect=QtCore.QRect(),
                 leafs={},

@@ -511,8 +511,8 @@ class PnlRscTextureAddTool(gui_prx_widgets.PrxSessionWindow):
                     i_resource_n_p_o.update_variants(**i_file_variants)
                     if not i_resource_n_p_o.get_keys():
                         if self._options.get('resource.reduce_name') is True:
-                            i_resource_name = bsc_core.RawTextMtd.clear_up_to(
-                                '_'.join(bsc_core.RawTextMtd.split_any_to(i_resource_n_p_o.get_value()))
+                            i_resource_name = bsc_core.BscText.clear_up_to(
+                                '_'.join(bsc_core.BscText.split_any_to(i_resource_n_p_o.get_value()))
                             ).strip().lower()
                         else:
                             i_resource_name = i_resource_n_p_o.get_value().strip().lower()
@@ -532,7 +532,7 @@ class PnlRscTextureAddTool(gui_prx_widgets.PrxSessionWindow):
         unr_resource.properties.set('pattern_kwargs', pattern_kwargs)
         unr_resource.properties.set('database.category_group', self._category_group)
         if self._options.get('classification.category_and_type_use_name') is True:
-            keys = bsc_core.RawTextMtd.find_words(resource_name)
+            keys = bsc_core.BscText.find_words(resource_name)
             type_args = self._dtb_opt.guess_type_args(
                 [self._category_group]+keys
             )

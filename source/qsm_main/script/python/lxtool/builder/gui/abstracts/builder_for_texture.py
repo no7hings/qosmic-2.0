@@ -38,7 +38,7 @@ class _GuiTextureOpt(gui_prx_abstracts.AbsGuiPrxTreeViewOpt):
 
     def gui_add_group(self, path):
         if self.gui_check_exists(path) is False:
-            path_opt = bsc_core.BscPathOpt(path)
+            path_opt = bsc_core.BscNodePathOpt(path)
             parent_gui = self.gui_get_one(path_opt.get_parent_path())
             gui_name = bsc_core.RawStrUnderlineOpt(path_opt.get_name()).to_prettify()
             prx_item = parent_gui.add_child(
@@ -60,7 +60,7 @@ class _GuiTextureOpt(gui_prx_abstracts.AbsGuiPrxTreeViewOpt):
 
     def gui_add_one(self, path, file_opt):
         if self.gui_check_exists(path) is False:
-            path_opt = bsc_core.BscPathOpt(path)
+            path_opt = bsc_core.BscNodePathOpt(path)
             parent_gui = self.gui_get_one(path_opt.get_parent_path())
             prx_item = parent_gui.add_child(
                 path_opt.get_name(),

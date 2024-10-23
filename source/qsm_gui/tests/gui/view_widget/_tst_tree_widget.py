@@ -37,11 +37,11 @@ class W(gui_prx_widgets.PrxBaseWindow):
             scr_stage.EntityTypes.Type,
         )
         leaf_entity_path_set = set(
-            bsc_core.BscPath.to_leaf_paths([x.path for x in scr_entities])
+            bsc_core.BscNodePath.to_leaf_paths([x.path for x in scr_entities])
         )
         for i_scr_entity in scr_entities:
             i_path = i_scr_entity.path
-            i_path_opt = bsc_core.BscPathOpt(i_path)
+            i_path_opt = bsc_core.BscNodePathOpt(i_path)
             i_name = i_path_opt.get_name()
             i_flag, i_item = self._d._view._view_model.create_item(i_path)
             i_item.setExpanded(True)
@@ -108,12 +108,13 @@ def test():
 
 
 if __name__ == '__main__':
-    import cProfile
-    import os
-    import pstats
-    file_path = '{}/profile.profile'.format(os.path.dirname(__file__))
-    cProfile.run('test()', file_path)
-
-    p = pstats.Stats(file_path)
-    p.strip_dirs().sort_stats('time').print_stats(10)
+    # import cProfile
+    # import os
+    # import pstats
+    # file_path = '{}/profile.profile'.format(os.path.dirname(__file__))
+    # cProfile.run('test()', file_path)
+    #
+    # p = pstats.Stats(file_path)
+    # p.strip_dirs().sort_stats('time').print_stats(10)
     # print p.get_top_level_stats()
+    test()

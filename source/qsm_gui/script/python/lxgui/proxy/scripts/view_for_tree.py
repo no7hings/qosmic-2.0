@@ -36,7 +36,7 @@ class GuiPrxScpForTreeSelection(object):
                         i_path = i_dcc_obj.path
                     #
                     if dcc_pathsep is not None:
-                        i_path = bsc_core.BscPathOpt(i_path).translate_to(
+                        i_path = bsc_core.BscNodePathOpt(i_path).translate_to(
                             dcc_pathsep
                         ).get_value()
                     #
@@ -132,7 +132,7 @@ class GuiPrxScpForTreeTagFilter(object):
         prx_item.set_tool_tip(path)
 
     def _add_prx_item_src_(self, path):
-        path_dag_opt = bsc_core.BscPathOpt(path)
+        path_dag_opt = bsc_core.BscNodePathOpt(path)
         key = path_dag_opt.path
         if key in self._item_dict:
             return False, self._item_dict[key]
@@ -143,7 +143,7 @@ class GuiPrxScpForTreeTagFilter(object):
             filter_key=key
         )
         #
-        parent_path = bsc_core.BscPathOpt(path).get_parent_path()
+        parent_path = bsc_core.BscNodePathOpt(path).get_parent_path()
         if parent_path in self._item_dict:
             prx_item_parent = self._item_dict[parent_path]
             prx_item = prx_item_parent.add_child(
@@ -280,7 +280,7 @@ class GuiPrxScpForTreeTagFilter(object):
         if path in self._item_dict:
             return self._item_dict[path]
         #
-        path_dag_opt = bsc_core.BscPathOpt(path)
+        path_dag_opt = bsc_core.BscNodePathOpt(path)
         ancestor_paths = path_dag_opt.get_ancestor_paths()
         if ancestor_paths:
             ancestor_paths.reverse()
@@ -1002,7 +1002,7 @@ class GuiPrxScpForUsdTreeAdd(GuiPrxScpForTreeAdd1):
         path_src = src_obj.path
         prx_item = src_obj.get_obj_gui()
         if prx_item is not None:
-            path_opt_src = bsc_core.BscPathOpt(path_src)
+            path_opt_src = bsc_core.BscNodePathOpt(path_src)
             path_opt_tgt = path_opt_src.translate_to(self._dcc_pathsep)
             dcc_node = self._dcc_node_class(path_opt_tgt.get_value())
             if dcc_node.get_is_exists() is True:

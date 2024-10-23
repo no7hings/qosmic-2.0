@@ -9,7 +9,7 @@ import lxarnold.startup as and_startup
 # s.add_environ_fnc('LD_LIBRARY_PATH', '/l/packages/pg/prod/maya/2019.2/platform-linux/Application/plug-ins/xgen/lib')
 # s.add_environ_fnc('LD_LIBRARY_PATH', '/l/packages/pg/prod/maya/2019.2/platform-linux/Application/lib')
 
-bsc_core.EnvBaseMtd.set(
+bsc_core.BscEnviron.set(
     'OCIO', '/l/packages/pg/third_party/ocio/aces/1.2/config.ocio'
 )
 

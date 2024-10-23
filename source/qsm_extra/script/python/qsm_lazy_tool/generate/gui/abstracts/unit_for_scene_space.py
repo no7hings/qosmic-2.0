@@ -9,7 +9,7 @@ class AbsPrxUnitForSceneSpace(gui_prx_widgets.PrxBaseUnit):
         self.gui_unit_setup_fnc()
 
     def gui_unit_setup_fnc(self):
-        self._scene_prx_scene_view = gui_prx_widgets.PrxSceneViewA()
+        self._scene_prx_scene_view = gui_prx_widgets.PrxSceneView()
         self._qt_layout.addWidget(self._scene_prx_scene_view.widget)
 
         self._scene_prx_scene_view.set_scene_ext(

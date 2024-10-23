@@ -19,7 +19,7 @@ import qsm_maya_gui.core as qsm_mya_gui_core
 
 
 class UnitForCfxResourceView(
-    qsm_mya_gui_core.PrxTreeviewUnitForResourceOpt
+    qsm_mya_gui_core.PrxTreeviewUnitForAssetOpt
 ):
     ROOT_NAME = 'Rigs'
 
@@ -53,7 +53,7 @@ class ToolsetUnitForCfxRigExport(
     # export
 
     def _get_export_args(self):
-        resources = self._page._gui_resource_prx_unit.gui_get_checked_resources()
+        resources = self._page._gui_asset_prx_unit.gui_get_checked_resources()
         if not resources:
             self._window.exec_message_dialog(
                 self._window.choice_message(
@@ -242,7 +242,7 @@ class ToolsetUnitForCfxRigExport(
             version_directory_ptn = '{directory}/{scene}.v{{version}}'.format(
                 **options
             )
-            version_directory_path = bsc_core.PtnVersionPath.generate_as_new_version(version_directory_ptn)
+            version_directory_path = bsc_core.BscVersion.generate_as_new_version(version_directory_ptn)
         elif version_scheme == 'specified_version':
             version_directory_ptn = '{directory}/{scene}.v{{version}}'.format(
                 **options
@@ -357,7 +357,7 @@ class ToolsetUnitForCfxRigImport(
 
         pot = self._prx_options_node.get_port('cloth.file_tree')
 
-        resources_query = self._page._gui_resource_prx_unit.get_resources_query()
+        resources_query = self._page._gui_asset_prx_unit.get_resources_query()
 
         cache_paths = pot.get_all(check_only=True)
         if cache_paths:
@@ -379,7 +379,7 @@ class ToolsetUnitForCfxRigImport(
                     g_p.do_update()
     
     def do_dcc_remove_cloth_cache_by_checked(self):
-        resources = self._page._gui_resource_prx_unit.gui_get_selected_resources()
+        resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
                 i_opt = qsm_mya_stp_cfx_scripts.CfxNClothCacheOpt(i_resource)
@@ -387,7 +387,7 @@ class ToolsetUnitForCfxRigImport(
 
         self._page.do_gui_refresh_all(force=True)
 
-        self._page._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection()
+        self._page._gui_asset_prx_unit.do_gui_refresh_by_dcc_selection()
     
     def __init__(self, window, unit, session):
         super(ToolsetUnitForCfxRigImport, self).__init__(window, unit, session)

@@ -195,7 +195,7 @@ class DtbBaseOpt(object):
                         data['name'] = ''
                     else:
                         #
-                        path_opt = bsc_core.BscPathOpt(path)
+                        path_opt = bsc_core.BscNodePathOpt(path)
                         group = path_opt.get_parent_path()
                         data['group'] = group
                         name = path_opt.get_name()
@@ -317,7 +317,7 @@ class DtbOptForResource(DtbBaseOpt):
         self._dtb_cfg_opt.do_flatten()
 
         self._dtb_pattern_kwargs = {}
-        library_root = bsc_core.EnvBaseMtd.get_library_root()
+        library_root = bsc_core.BscEnviron.get_library_root()
         if library_root is None:
             raise RuntimeError()
 
@@ -397,7 +397,7 @@ class DtbOptForResource(DtbBaseOpt):
         for i_path, i_kwargs in entities.items():
             i_entity_type = i_kwargs['entity_type']
             i_options = i_kwargs.get('options') or {}
-            i_path_opt = bsc_core.BscPathOpt(i_path)
+            i_path_opt = bsc_core.BscNodePathOpt(i_path)
             i_name = i_path_opt.name
 
             if 'gui_name' in i_kwargs:
@@ -454,7 +454,7 @@ class DtbOptForResource(DtbBaseOpt):
         )
 
     def create_category_group(self, path):
-        path_opt = bsc_core.BscPathOpt(path)
+        path_opt = bsc_core.BscNodePathOpt(path)
         if not self.get_entity(
                 entity_type=self.EntityTypes.CategoryRoot,
                 filters=[
@@ -485,7 +485,7 @@ class DtbOptForResource(DtbBaseOpt):
         )
 
     def create_category(self, path):
-        path_opt = bsc_core.BscPathOpt(path)
+        path_opt = bsc_core.BscNodePathOpt(path)
         if not self.get_entity(
                 entity_type=self.EntityTypes.CategoryGroup,
                 filters=[
@@ -533,7 +533,7 @@ class DtbOptForResource(DtbBaseOpt):
         )
 
     def create_type(self, path):
-        path_opt = bsc_core.BscPathOpt(path)
+        path_opt = bsc_core.BscNodePathOpt(path)
         if not self.get_entity(
                 entity_type=self.EntityTypes.Category,
                 filters=[
@@ -615,7 +615,7 @@ class DtbOptForResource(DtbBaseOpt):
             self.create_category,
             self.create_type,
         ]
-        path_opt = bsc_core.BscPathOpt(path)
+        path_opt = bsc_core.BscNodePathOpt(path)
         components = path_opt.get_components()
         components.reverse()
         results = []
@@ -652,7 +652,7 @@ class DtbOptForResource(DtbBaseOpt):
         if _:
             return False, _
         #
-        path_opt = bsc_core.BscPathOpt(path)
+        path_opt = bsc_core.BscNodePathOpt(path)
         name = path_opt.get_name()
         gui_name = bsc_core.RawStrUnderlineOpt(name).to_prettify()
         options = dict(kind=self.Kinds.Resource, gui_icon_name='database/object')
@@ -696,7 +696,7 @@ class DtbOptForResource(DtbBaseOpt):
         if _:
             return False, _
         #
-        path_opt = bsc_core.BscPathOpt(path)
+        path_opt = bsc_core.BscNodePathOpt(path)
         name = path_opt.get_name()
         gui_name = name
         options = dict(kind=self.Kinds.Version, gui_icon_name='database/object')
@@ -751,7 +751,7 @@ class DtbOptForResource(DtbBaseOpt):
         if _:
             return False, _
         #
-        path_opt = bsc_core.BscPathOpt(path)
+        path_opt = bsc_core.BscNodePathOpt(path)
         name = path_opt.get_name()
         gui_name = name
         options = dict(kind=kind, gui_icon_name='database/object')

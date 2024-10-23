@@ -150,22 +150,6 @@ class ListItemModel(_item_base.AbsItemModel):
         super(ListItemModel, self).__init__(
             item,
             _base._Data(
-                size=QtCore.QSize(),
-                rect=QtCore.QRect(),
-                path=_base._Data(
-                    text=''
-                ),
-
-                frame_color=QtGui.QColor(*_gui_core.GuiRgba.Dark),
-                frame_brush=QtGui.QBrush(QtGui.QColor(*_gui_core.GuiRgba.Dim)),
-
-                basic=_base._Data(
-                    rect=QtCore.QRect(),
-                    size=QtCore.QSize(),
-                ),
-
-                tool_tip_css=None,
-
                 image_placeholder_svg=_gui_core.GuiIcon.get('placeholder/image'),
                 # image
                 image_enable=False,
@@ -182,21 +166,6 @@ class ListItemModel(_item_base.AbsItemModel):
                 # play
                 play_enable=False,
                 autoplay_enable=False,
-                # show
-                show=_base._Data(
-                    load_flag=False,
-
-                    cache_fnc=None,
-                    build_fnc=None,
-                ),
-                menu=_base._Data(
-                    content=None,
-                    data=None,
-                    data_generate_fnc=None
-                ),
-
-                property_dict=dict(),
-                sort_dict=dict(),
             )
         )
 
@@ -481,7 +450,7 @@ class ListItemModel(_item_base.AbsItemModel):
             frame_rect = QtCore.QRect(frm_x, frm_y, frm_w, frm_h)
             # basic frame
             painter.setPen(QtGui.QColor(0, 0, 0, 0))
-            painter.setBrush(self._data.frame_brush)
+            painter.setBrush(self._data.frame.brush)
             painter.drawRect(frame_rect)
             # video for play
             if self._data.video_enable is True:
@@ -500,7 +469,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 img_rect = QtCore.QRect(frm_x, frm_y, frm_w, frm_h)
                 self._draw_pixmap(painter, img_rect, self._data.audio.pixmap)
                 # draw frame
-                painter.setPen(self._data.frame_color)
+                painter.setPen(self._data.frame.color)
                 painter.setBrush(QtGui.QColor(0, 0, 0, 0))
                 painter.drawRect(img_rect)
                 # draw progress and handle
@@ -540,7 +509,7 @@ class ListItemModel(_item_base.AbsItemModel):
                     img_rect = QtCore.QRect(frm_x, frm_y, frm_w, frm_h)
                     self._draw_pixmap(painter, img_rect, self._data.image.pixmap)
                     # draw frame
-                    painter.setPen(self._data.frame_color)
+                    painter.setPen(self._data.frame.color)
                     painter.setBrush(QtGui.QColor(0, 0, 0, 0))
                     painter.drawRect(img_rect)
                 else:
@@ -585,8 +554,9 @@ class ListItemModel(_item_base.AbsItemModel):
                     else:
                         time_txt = self._data.play.time_maximum_text
 
+                        play_s = min([40, frm_w/2, frm_h/2])
                         play_rect = QtCore.QRect(
-                            frm_x+(frm_w-40)/2, frm_y+(frm_h-40)/2, 40, 40
+                            frm_x+(frm_w-play_s)/2, frm_y+(frm_h-play_s)/2, play_s, play_s
                         )
                         self._draw_icon(painter, play_rect, self._data.play.file)
 
@@ -615,7 +585,7 @@ class ListItemModel(_item_base.AbsItemModel):
     def update(self, rect):
         # check rect is change
         if rect != self._data.rect:
-            # need re instance
+            # need rebuild instance
             self._data.rect = QtCore.QRect(rect)
 
             name_h = 20
@@ -1119,3 +1089,12 @@ class ListItemModel(_item_base.AbsItemModel):
             self._data.status.rect.setRect(
                 x+2, y+2, 20, 20
             )
+
+
+class ListGroupItemModel(_item_base.AbsItemModel):
+    def __init__(self, item):
+        super(ListGroupItemModel, self).__init__(
+            item,
+            _base._Data(
+            )
+        )

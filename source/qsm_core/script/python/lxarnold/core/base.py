@@ -44,22 +44,22 @@ class AndUtil(object):
 
 class AndImage(object):
     @staticmethod
-    @bsc_core.MdfBaseMtd.run_as_ignore
+    @bsc_core.BscModifier.run_as_ignore
     def get_resolution(file_path):
         return ai.AiTextureGetResolution(file_path)
 
     @staticmethod
-    @bsc_core.MdfBaseMtd.run_as_ignore
+    @bsc_core.BscModifier.run_as_ignore
     def get_bit(file_path):
         return ai.AiTextureGetBitDepth(file_path)
 
     @staticmethod
-    @bsc_core.MdfBaseMtd.run_as_ignore
+    @bsc_core.BscModifier.run_as_ignore
     def get_type(file_path):
         return ai.AiTextureGetFormat(file_path)
 
     @staticmethod
-    @bsc_core.MdfBaseMtd.run_as_ignore
+    @bsc_core.BscModifier.run_as_ignore
     def get_channel_count(file_path):
         return ai.AiTextureGetNumChannels(file_path)
 

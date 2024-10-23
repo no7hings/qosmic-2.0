@@ -25,7 +25,7 @@ from ..widgets import button as _wgt_button
 
 from ..widgets import chart as _wgt_chart
 
-from ..widgets import input_for_filter as _wgt_input_for_filter
+from ..widgets.input import input_for_filter as _wgt_input_for_filter
 
 from ..view_models import base as _vew_mod_base
 
@@ -43,6 +43,9 @@ class _QtListItemDelegate(QtWidgets.QStyledItemDelegate):
 
     def paint(self, painter, option, index):
         self.parent()._view_model.draw_item(painter, option, index)
+
+    def sizeHint(self, option, index):
+        return self.parent()._view_model._data.item.grid_size
 
 
 class _QtListViewWidget(
@@ -367,6 +370,11 @@ class QtListWidget(
             self._view_model.generate_item_sort_menu_data
         )
         self._item_sort_button.press_clicked.connect(self._on_sort_order_swap_)
+        # group
+        self._item_group_button = _wgt_button.QtIconPressButton()
+        self._sort_and_group_tool_box._add_widget_(self._item_group_button)
+        self._item_group_button._set_name_text_('group')
+        self._item_group_button._set_icon_name_('tool/group-by')
         # mode
         self._item_mode_button = _wgt_button.QtIconPressButton()
         self._sort_and_group_tool_box._add_widget_(self._item_mode_button)
@@ -375,7 +383,7 @@ class QtListWidget(
         self._item_mode_button.press_clicked.connect(self._on_item_mode_swap_)
 
     def _build_keyword_filter_tool_box_(self):
-        self._keyword_filter_input = _wgt_input_for_filter.QtInputAsFilter()
+        self._keyword_filter_input = _wgt_input_for_filter.QtInputForFilter()
         self._keyword_filter_tool_box._add_widget_(self._keyword_filter_input)
 
         self._keyword_filter_input._set_input_completion_buffer_fnc_(self._keyword_filter_input_completion_buffer_fnc)

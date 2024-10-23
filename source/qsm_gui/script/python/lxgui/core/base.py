@@ -22,6 +22,11 @@ import lxbasic.content as bsc_content
 from . import configure as gui_cor_configure
 
 
+class GuiLanguage:
+    CHS = 'chs'
+    EN_US = 'en_us'
+
+
 class GuiState(object):
     NORMAL = 'normal'
     ENABLE = 'enable'
@@ -105,7 +110,7 @@ class GuiUtil(object):
 
     @classmethod
     def get_language(cls):
-        return bsc_core.EnvBaseMtd.get_ui_language()
+        return bsc_core.BscEnviron.get_ui_language()
 
     @classmethod
     def choice_name(cls, language, options):

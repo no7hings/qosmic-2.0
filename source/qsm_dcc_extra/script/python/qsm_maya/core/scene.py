@@ -23,7 +23,7 @@ class Scene(object):
 
     @classmethod
     def get_ui_language(cls):
-        return bsc_core.EnvBaseMtd.get('MAYA_UI_LANGUAGE') or 'en_US'
+        return bsc_core.BscEnviron.get('MAYA_UI_LANGUAGE') or 'en_US'
 
     @classmethod
     def show_message(cls, message, keyword, position='topCenter', fade=1, drag_kill=0, alpha=.5):

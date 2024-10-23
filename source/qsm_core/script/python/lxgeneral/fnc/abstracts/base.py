@@ -13,7 +13,7 @@ class AbsDccExporter(object):
         #
         self._root = root
         if root is not None:
-            self._root_dat_opt = bsc_core.BscPathOpt(root)
+            self._root_dat_opt = bsc_core.BscNodePathOpt(root)
         else:
             self._root_dat_opt = None
         #

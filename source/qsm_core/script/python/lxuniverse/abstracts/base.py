@@ -100,7 +100,7 @@ class AbsObjStack(object):
             return keys != []
         return self._count > 0
 
-    def set_object_add(self, obj):
+    def add_object(self, obj):
         """
         add object
         :param obj: instance(<obj>)
@@ -119,7 +119,7 @@ class AbsObjStack(object):
             return True
         return False
 
-    def set_object_del(self, obj):
+    def remove_object(self, obj):
         """
         delete object
         :param obj: instance(<obj>)
@@ -136,7 +136,7 @@ class AbsObjStack(object):
             return True
         return False
 
-    def set_object_override(self, old_obj, new_obj):
+    def override_object(self, old_obj, new_obj):
         """
         override object
         :param old_obj: instance(<obj>)
@@ -173,7 +173,7 @@ class AbsObjStack(object):
         key = self.get_key(obj)
         if self.get_object_exists(key) is True:
             return self.get_object(key)
-        self.set_object_add(obj)
+        self.add_object(obj)
         return obj
 
     def get_count(self):

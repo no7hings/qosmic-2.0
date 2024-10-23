@@ -19,7 +19,7 @@ from ..widgets import button as _wgt_button
 
 from ..widgets import scroll as _wgt_scroll
 
-from ..widgets import input_for_filter as _wgt_input_for_filter
+from ..widgets.input import input_for_filter as _wgt_input_for_filter
 
 from ..widgets import view_for_histogram_chart as _wgt_view_for_histogram_chart
 
@@ -136,7 +136,7 @@ class _QtTagViewWidget(
         if path == self.PATHSEP:
             return self._create_root_(path, *args, **kwargs)
 
-        group_widget = self._item_dict[bsc_core.BscPath.get_dag_parent_path(path)]
+        group_widget = self._item_dict[bsc_core.BscNodePath.get_dag_parent_path(path)]
         widget = group_widget._create_group_(path, *args, **kwargs)
 
         widget._set_view_(self)
@@ -148,7 +148,7 @@ class _QtTagViewWidget(
         if path in self._item_dict:
             return False, self._item_dict[path]
 
-        group_widget = self._item_dict[bsc_core.BscPath.get_dag_parent_path(path)]
+        group_widget = self._item_dict[bsc_core.BscNodePath.get_dag_parent_path(path)]
         widget = group_widget._create_node_(path, *args, **kwargs)
 
         widget._set_view_(self)
@@ -181,7 +181,7 @@ class _QtTagViewWidget(
 
     def _expand_exclusive_for_node_(self, path):
         self._collapse_all_group_items_()
-        paths = bsc_core.BscPath.get_dag_component_paths(path)
+        paths = bsc_core.BscNodePath.get_dag_component_paths(path)
         for i in paths:
             if i in self._item_dict:
                 i_widget = self._item_dict[i]
@@ -193,9 +193,9 @@ class _QtTagViewWidget(
 
     def _expand_for_all_from_(self, path):
         self._collapse_all_group_items_()
-        paths = bsc_core.BscPath.get_dag_component_paths(path)
+        paths = bsc_core.BscNodePath.get_dag_component_paths(path)
         self._set_expanded_for_(paths, True)
-        descendant_paths = bsc_core.BscPath.find_dag_descendant_paths(path, self._item_dict.keys())
+        descendant_paths = bsc_core.BscNodePath.find_dag_descendant_paths(path, self._item_dict.keys())
         self._set_expanded_for_(descendant_paths, True)
 
     def _set_expanded_for_(self, paths, boolean):
@@ -287,7 +287,7 @@ class QtTagWidget(
 
     def _build_keyword_filter_tool_box_(self):
         self._keyword_filter_completion_cache = None
-        self._keyword_filter_input = _wgt_input_for_filter.QtInputAsFilter()
+        self._keyword_filter_input = _wgt_input_for_filter.QtInputForFilter()
         self._keyword_filter_tool_box._add_widget_(self._keyword_filter_input)
 
     def _on_show_chart_(self):

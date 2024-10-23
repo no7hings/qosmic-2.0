@@ -585,7 +585,7 @@ class _GuiTagOpt(
                 dtb_tag_args.append(i_dtb_tag)
             else:
                 i_tag_path = i_dtb_assign.value
-                i_tag_group = bsc_core.BscPathOpt(i_tag_path).get_parent_path()
+                i_tag_group = bsc_core.BscNodePathOpt(i_tag_path).get_parent_path()
                 dtb_tag_args.append(i_tag_path)
 
             semantic_tag_filter_data.setdefault(
@@ -821,7 +821,7 @@ class _UnitrResource(
         prx_item_widget.set_name(dtb_resource.gui_name)
         prx_item_widget.set_sort_name_key(dtb_resource.gui_name)
         prx_item_widget.set_gui_attribute('path', dtb_type.path)
-        keys = {bsc_core.BscPathOpt(j).get_name() for i_k, i_v in semantic_tag_filter_data.items() for j in i_v}
+        keys = {bsc_core.BscNodePathOpt(j).get_name() for i_k, i_v in semantic_tag_filter_data.items() for j in i_v}
         keys.add(str(dtb_resource.gui_name).lower())
         keys.add(str(dtb_resource.name).lower())
         keys.add(str(dtb_resource.ctime).lower())
@@ -968,7 +968,7 @@ class _GuiDirectoryOpt(
             pass
 
         version_dtb_path = dtb_version.path
-        version_path_opt = bsc_core.BscPathOpt(version_dtb_path)
+        version_path_opt = bsc_core.BscNodePathOpt(version_dtb_path)
         self.gui_add_root(version_path_opt.name)
 
         self._gui_thread_flag += 1
@@ -982,7 +982,7 @@ class _GuiDirectoryOpt(
 
     def gui_add_all(self, dtb_resource, dtb_version, path_cur=None):
         version_dtb_path = dtb_version.path
-        version_path_opt = bsc_core.BscPathOpt(version_dtb_path)
+        version_path_opt = bsc_core.BscNodePathOpt(version_dtb_path)
         #
         self.gui_add_root(version_path_opt.name)
         dtb_directories = self._dtb_opt.get_entities(
@@ -1001,7 +1001,7 @@ class _GuiDirectoryOpt(
             self.gui_add_one(dtb_resource, i_dtb_storage, i_sub_path)
 
     def gui_add_one(self, dtb_resource, dtb_directory, file_type, is_current=False):
-        path_opt = bsc_core.BscPathOpt(file_type)
+        path_opt = bsc_core.BscNodePathOpt(file_type)
         ancestors = path_opt.get_ancestors()
         if ancestors:
             ancestors.reverse()
@@ -1026,7 +1026,7 @@ class _GuiDirectoryOpt(
 
     def gui_add_group(self, file_type):
         if self.gui_check_exists(file_type) is False:
-            path_opt = bsc_core.BscPathOpt(file_type)
+            path_opt = bsc_core.BscNodePathOpt(file_type)
             #
             parent_gui = self.gui_get_one(path_opt.get_parent_path())
             #
@@ -1079,7 +1079,7 @@ class _GuiDirectoryOpt(
             prx_item_widget.set_tool_tip(_location)
 
         if self.gui_check_exists(file_type) is False:
-            path_opt = bsc_core.BscPathOpt(file_type)
+            path_opt = bsc_core.BscNodePathOpt(file_type)
             #
             parent_gui = self.gui_get_one(path_opt.get_parent_path())
             #
@@ -1138,7 +1138,7 @@ class _GuiFileOpt(
                 i_r, i_g, i_b = bsc_core.BscTextOpt(i_name_base).to_rgb_0(maximum=1.0, s_p=50, v_p=50)
                 images.append(
                     dict(
-                        name=bsc_core.RawTextMtd.clear_up_to(i_name_base),
+                        name=bsc_core.BscText.clear_up_to(i_name_base),
                         file=i_file_opt.get_path(),
                         color_r=i_r,
                         color_g=i_g,
@@ -1524,7 +1524,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         else:
             self._dtb_superclass_path_cur = self._dtb_superclass_paths[0]
         #
-        self._dtb_superclass_name_cur = bsc_core.BscPathOpt(self._dtb_superclass_path_cur).get_name()
+        self._dtb_superclass_name_cur = bsc_core.BscNodePathOpt(self._dtb_superclass_path_cur).get_name()
 
         self.refresh_all()
 
@@ -1590,7 +1590,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
                 self.HISTORY_KEY, self._dtb_superclass_path_cur
             )
 
-        self._dtb_superclass_name_cur = bsc_core.BscPathOpt(self._dtb_superclass_path_cur).get_name()
+        self._dtb_superclass_name_cur = bsc_core.BscNodePathOpt(self._dtb_superclass_path_cur).get_name()
         self._dtb_cfg_file_path_extend = bsc_resource.RscExtendConfigure.get_yaml(
             'database/library/resource-{}'.format(self._dtb_superclass_name_cur)
         )
@@ -1615,7 +1615,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         self._gui_tag_opt = _GuiTagOpt(
             self, self._session, self._dtb_opt, self._tag_prx_view
         )
-        self._gui_resource_prx_unit = _UnitrResource(
+        self._gui_asset_prx_unit = _UnitrResource(
             self, self._session, self._dtb_opt, self._resource_prx_view
         )
         #
@@ -1632,14 +1632,14 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
 
         self._gui_thumbnail_cache = gui_core.GuiThumbnailCache(
             bsc_storage.StgFileOpt(
-                '{}/resource/.cache/thumbnail.yml'.format(bsc_core.EnvBaseMtd.get_library_root())
+                '{}/resource/.cache/thumbnail.yml'.format(bsc_core.BscEnviron.get_library_root())
             ).map_to_current()
         )
 
         self.gui_refresh_fnc()
 
     def get_gui_resource_opt(self):
-        return self._gui_resource_prx_unit
+        return self._gui_asset_prx_unit
 
     def gui_guide_choose_cbk(self, text):
         if text is not None:
@@ -1668,7 +1668,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
                 namespace=_UnitrResource.GUI_NAMESPACE
             )
             if dtb_resource:
-                self._gui_resource_prx_unit.copy_to_clipboard_from(dtb_resource)
+                self._gui_asset_prx_unit.copy_to_clipboard_from(dtb_resource)
 
     def __gui_add_resource_copy_tools(self):
         self._copy_tool_box = self._resource_prx_view.create_top_tool_box(
@@ -1707,7 +1707,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         keyword = args[0]
         if keyword:
             _ = fnmatch.filter(
-                self._gui_resource_prx_unit._keys, '*{}*'.format(keyword)
+                self._gui_asset_prx_unit._keys, '*{}*'.format(keyword)
             )
             return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_COMPLETION_MAXIMUM]
         return []
@@ -1721,7 +1721,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
     def gui_refresh_fnc(self):
         self._gui_type_opt.restore()
         self._gui_tag_opt.restore()
-        self._gui_resource_prx_unit.restore()
+        self._gui_asset_prx_unit.restore()
         self._type_guide_bar.do_clear()
         # type
         is_create, prx_item = self._gui_type_opt.gui_add_root()
@@ -1760,7 +1760,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
                 ('kind', 'is', self._dtb_opt.Kinds.ResourceCategory)
             ]
         )
-        dtb_categories_map = bsc_core.RawListMtd.grid_to(
+        dtb_categories_map = bsc_core.BscList.grid_to(
             dtb_categories, self.THREAD_STEP
         )
         # use thread
@@ -1843,7 +1843,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
             ts.do_quit()
 
         #
-        dtb_types_map = bsc_core.RawListMtd.grid_to(
+        dtb_types_map = bsc_core.BscList.grid_to(
             dtb_types, self.THREAD_STEP
         )
         if self._qt_thread_enable is True:
@@ -1899,7 +1899,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
         if gui_thread_flag != self._gui_thread_flag:
             return
 
-        dtb_type_assigns_map = bsc_core.RawListMtd.grid_to(
+        dtb_type_assigns_map = bsc_core.BscList.grid_to(
             dtb_assigns, self.THREAD_STEP
         )
         if self._qt_thread_enable is True:
@@ -1962,7 +1962,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
                 if gui_thread_flag != self._gui_thread_flag:
                     break
 
-                self._gui_resource_prx_unit.gui_add(
+                self._gui_asset_prx_unit.gui_add(
                     i_dtg_type, i_dtb_resource, i_semantic_tag_filter_data
                 )
                 #
@@ -2001,7 +2001,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
             self._main_h_s.get_is_contracted_at(2) is False
             and self._right_v_s.get_is_contracted_at(1) is False
         ):
-            dtb_resource = self._gui_resource_prx_unit.get_current_obj()
+            dtb_resource = self._gui_asset_prx_unit.get_current_obj()
             if dtb_resource is not None:
                 self._dtb_resource_cur = dtb_resource
                 self.__gui_refresh_usd_stage(dtb_resource)

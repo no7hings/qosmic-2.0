@@ -620,7 +620,7 @@ class AbsQtActionForTrackDef(object):
         track_offset_x, track_offset_y = self._tmp_track_offset_x, self._tmp_track_offset_y
         track_d_offset_x, track_d_offset_y = track_point.x(), track_point.y()
         #
-        self._track_offset_x = bsc_core.RawValueMtd.set_offset_range_to(
+        self._track_offset_x = bsc_core.BscValue.set_offset_range_to(
             value=track_offset_x,
             d_value=track_d_offset_x,
             radix=self._track_offset_radix_x,
@@ -628,7 +628,7 @@ class AbsQtActionForTrackDef(object):
             direction=self._track_offset_direction_x
         )
         #
-        self._track_offset_y = bsc_core.RawValueMtd.set_offset_range_to(
+        self._track_offset_y = bsc_core.BscValue.set_offset_range_to(
             value=track_offset_y,
             d_value=track_d_offset_y,
             radix=self._track_offset_radix_y,
@@ -659,7 +659,7 @@ class AbsQtActionForZoomDef(object):
 
     def _execute_action_zoom_scale_(self, event):
         delta = event.angleDelta().y()
-        self._zoom_scale_x = bsc_core.RawValueMtd.step_to(
+        self._zoom_scale_x = bsc_core.BscValue.step_to(
             value=self._zoom_scale_x,
             delta=delta,
             step=self._zoom_scale_radix_x,
@@ -667,7 +667,7 @@ class AbsQtActionForZoomDef(object):
             direction=1
         )
 
-        self._zoom_scale_y = bsc_core.RawValueMtd.step_to(
+        self._zoom_scale_y = bsc_core.BscValue.step_to(
             value=self._zoom_scale_y,
             delta=delta,
             step=self._zoom_scale_radix_y,

@@ -87,7 +87,7 @@ class RsvDccRenderHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                 #
                 if i_render_frame_step > 1:
                     render_frame_range = bsc_core.BscTextOpt(i_render_frames).to_frame_range()
-                    i_render_frames_ = bsc_core.BscFrameRang.get(
+                    i_render_frames_ = bsc_core.BscFrameRange.get(
                         render_frame_range, i_render_frame_step
                     )
                 else:

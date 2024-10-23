@@ -165,7 +165,7 @@ class KitDesktopHookAddOpt(object):
 
         gui_name = self._options.get('gui.name')
         if not gui_name:
-            gui_name = bsc_core.RawTextMtd.to_prettify(name)
+            gui_name = bsc_core.BscText.to_prettify(name)
 
         c.set('option.gui.name', gui_name)
         if group_sub_name != 'None':

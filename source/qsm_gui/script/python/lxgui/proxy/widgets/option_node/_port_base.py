@@ -17,8 +17,6 @@ from ....qt.widgets import item as _qt_wgt_item
 # proxy abstracts
 from ... import abstracts as _prx_abstracts
 
-import _base
-
 
 # port
 #   info
@@ -28,10 +26,10 @@ class PrxPortInfo(_prx_abstracts.AbsPrxWidget):
     def __init__(self, *args, **kwargs):
         super(PrxPortInfo, self).__init__(*args, **kwargs)
         # self.widget.setAlignment(gui_qt_core.QtCore.Qt.AlignRight | gui_qt_core.QtCore.Qt.AlignVCenter)
-        self.widget.setMaximumHeight(_base.OptionNodeBase.PortHeight)
-        self.widget.setMinimumHeight(_base.OptionNodeBase.PortHeight)
-        self.widget.setMaximumWidth(_base.OptionNodeBase.PortHeight)
-        self.widget.setMinimumWidth(_base.OptionNodeBase.PortHeight)
+        self.widget.setMaximumHeight(_gui_core.GuiSize.InputHeight)
+        self.widget.setMinimumHeight(_gui_core.GuiSize.InputHeight)
+        self.widget.setMaximumWidth(_gui_core.GuiSize.InputHeight)
+        self.widget.setMinimumWidth(_gui_core.GuiSize.InputHeight)
 
     def set(self, boolean):
         self.widget._set_checked_(boolean)
@@ -44,10 +42,10 @@ class PrxPortStatus(_prx_abstracts.AbsPrxWidget):
     def __init__(self, *args, **kwargs):
         super(PrxPortStatus, self).__init__(*args, **kwargs)
         # self.widget.setAlignment(gui_qt_core.QtCore.Qt.AlignRight | gui_qt_core.QtCore.Qt.AlignVCenter)
-        self.widget.setMaximumHeight(_base.OptionNodeBase.PortHeight)
-        self.widget.setMinimumHeight(_base.OptionNodeBase.PortHeight)
-        self.widget.setMaximumWidth(_base.OptionNodeBase.PortHeight)
-        self.widget.setMinimumWidth(_base.OptionNodeBase.PortHeight)
+        self.widget.setMaximumHeight(_gui_core.GuiSize.InputHeight)
+        self.widget.setMinimumHeight(_gui_core.GuiSize.InputHeight)
+        self.widget.setMaximumWidth(_gui_core.GuiSize.InputHeight)
+        self.widget.setMinimumWidth(_gui_core.GuiSize.InputHeight)
         self.widget._set_tool_tip_text_(
             '"LMB-click" to use value "default" / "local" / "global"'
         )
@@ -63,8 +61,8 @@ class PrxPortLabel(_prx_abstracts.AbsPrxWidget):
     def __init__(self, *args, **kwargs):
         super(PrxPortLabel, self).__init__(*args, **kwargs)
         # self.widget.setAlignment(gui_qt_core.QtCore.Qt.AlignRight | gui_qt_core.QtCore.Qt.AlignVCenter)
-        self.widget.setMaximumHeight(_base.OptionNodeBase.PortHeight)
-        self.widget.setMinimumHeight(_base.OptionNodeBase.PortHeight)
+        self.widget.setMaximumHeight(_gui_core.GuiSize.InputHeight)
+        self.widget.setMinimumHeight(_gui_core.GuiSize.InputHeight)
         # self._qt_widget._set_name_align_(gui_configure.AlignRegion.Top)
 
     def set_name(self, text):
@@ -85,9 +83,8 @@ class PrxPortLabel(_prx_abstracts.AbsPrxWidget):
         return self._qt_widget._get_name_text_draw_width_()
 
 
-# port =============================================================================================================== #
 class AbsPrxPortBaseDef(object):
-    ENTRY_TYPE = 'custom'
+    WIDGET_TYPE = 'custom'
 
     Status = _gui_core.GuiProcessStatus
     ProcessStatus = _gui_core.GuiProcessStatus
@@ -133,7 +130,7 @@ class AbsPrxPortBaseDef(object):
     category = property(get_category)
 
     def get_type(self):
-        return self.ENTRY_TYPE
+        return self.WIDGET_TYPE
 
     type = property(get_type)
 
@@ -156,7 +153,7 @@ class AbsPrxPortBaseDef(object):
     port_path = property(get_port_path)
 
     def get_group_path(self):
-        return bsc_core.PthPortOpt(
+        return bsc_core.BscPortPathOpt(
             self.get_port_path()
         ).get_parent_path()
 
@@ -168,7 +165,7 @@ class AbsPrxPortBaseDef(object):
     label = property(get_gui_name)
 
     def get_is_top_level(self):
-        return bsc_core.PthPortOpt(
+        return bsc_core.BscPortPathOpt(
             self._port_path
         ).get_is_top_level()
 
@@ -185,7 +182,7 @@ class AbsPrxPortBaseDef(object):
         if self.get_is_pseudo_root():
             _ = [i for i in port_paths if '.' not in i]
         else:
-            _ = bsc_core.BscPath.find_dag_child_paths(
+            _ = bsc_core.BscNodePath.find_dag_child_paths(
                 port_path, port_paths, pathsep='.'
             )
         return node._get_ports_(_)
@@ -235,7 +232,7 @@ class AbsPrxPortBaseDef(object):
 
 
 class AbsPrxPort(AbsPrxPortBaseDef):
-    ENTRY_TYPE = 'custom'
+    WIDGET_TYPE = 'custom'
     ENABLE_CLS = None
     LABEL_CLS = None
     LABEL_HIDED = False
@@ -412,7 +409,7 @@ class AbsPrxPort(AbsPrxPortBaseDef):
 
     def set_tool_tip(self, *args, **kwargs):
         # kwargs['name'] = 'entry as "{}"'.format(
-        #     self.ENTRY_TYPE,
+        #     self.WIDGET_TYPE,
         # )
         # kwargs['name'] = self.get_port_path()
         self._prx_port_input.set_tool_tip(*args, **kwargs)
@@ -511,7 +508,7 @@ class AbsPrxPort(AbsPrxPortBaseDef):
 
 
 class AbsPrxPortForConstant(AbsPrxPort):
-    ENTRY_TYPE = 'constant'
+    WIDGET_TYPE = 'constant'
     ENABLE_CLS = PrxPortStatus
     LABEL_CLS = PrxPortLabel
     PRX_PORT_INPUT_CLS = None

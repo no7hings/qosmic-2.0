@@ -39,11 +39,11 @@ class ScpImport(object):
             )
             type_path = dtb_types[0]
 
-            type_path_opt = bsc_core.BscPathOpt(type_path)
+            type_path_opt = bsc_core.BscNodePathOpt(type_path)
             type_path_opt = type_path_opt.to_dcc()
-            resource_path_opt = bsc_core.BscPathOpt(resource_path)
+            resource_path_opt = bsc_core.BscNodePathOpt(resource_path)
             resource_path_opt = resource_path_opt.to_dcc()
-            file_type_path_opt = bsc_core.BscPathOpt(file_type_path)
+            file_type_path_opt = bsc_core.BscNodePathOpt(file_type_path)
             file_type_path_opt = file_type_path_opt.to_dcc()
 
             resource_location = '{}/{}'.format(
@@ -95,7 +95,7 @@ def main(session):
 
     # get checked resources
     window = session.find_window()
-    gui_resource_opt = window._gui_resource_prx_unit
+    gui_resource_opt = window._gui_asset_prx_unit
     dtb_resources = gui_resource_opt.get_checked_or_selected_db_resources()
     if not dtb_resources:
         gui_core.GuiDialog.create(

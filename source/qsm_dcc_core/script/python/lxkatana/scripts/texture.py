@@ -151,14 +151,14 @@ class ScpTextureBuildCommand(object):
             mtl_ktn_objs = mtl_grp_obj_opt.get_children(type_includes=[mtl_type_name])
             if mtl_ktn_objs:
                 mtl_obj_opt = ktn_core.NGNodeOpt(mtl_ktn_objs[-1])
-                mtl_obj_opt.set_rename(bsc_core.BscPathOpt(mtl_path).get_name())
+                mtl_obj_opt.set_rename(bsc_core.BscNodePathOpt(mtl_path).get_name())
         else:
             mtl_grp_obj_opt = ktn_core.NGNodeOpt(mtl_grp_ktn_obj)
             mtl_grp_ktn_obj.addNetworkMaterialNode()
             mtl_ktn_objs = mtl_grp_obj_opt.get_children(type_includes=[mtl_type_name])
             if mtl_ktn_objs:
                 mtl_obj_opt = ktn_core.NGNodeOpt(mtl_ktn_objs[-1])
-                mtl_obj_opt.set_rename(bsc_core.BscPathOpt(mtl_path).get_name())
+                mtl_obj_opt.set_rename(bsc_core.BscNodePathOpt(mtl_path).get_name())
 
     def create_material(self):
         mtl_grp_path = self._cfg.get('node.material_group.path')
@@ -174,7 +174,7 @@ class ScpTextureBuildCommand(object):
         mtl_ktn_objs = mtl_grp_obj_opt.get_children(type_includes=[mtl_type_name])
         if mtl_ktn_objs:
             mtl_obj_opt = ktn_core.NGNodeOpt(mtl_ktn_objs[-1])
-            mtl_name = bsc_core.BscPathOpt(mtl_path).get_name()
+            mtl_name = bsc_core.BscNodePathOpt(mtl_path).get_name()
             mtl_obj_opt.set_rename(mtl_name)
             self._update_material_collapsed(mtl_grp_obj_opt, mtl_name)
 

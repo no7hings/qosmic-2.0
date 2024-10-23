@@ -298,7 +298,7 @@ class AbsPnlAssetLineup(gui_prx_widgets.PrxSessionWindow):
                         if 'gui_parent' in i_hook_option:
                             i_gui_parent_path = i_hook_option['gui_parent']
                     #
-                    i_gui_parent_path_opt = bsc_core.BscPathOpt(i_gui_parent_path)
+                    i_gui_parent_path_opt = bsc_core.BscNodePathOpt(i_gui_parent_path)
                     #
                     if i_gui_parent_path_opt.get_is_root():
                         i_gui_path = '/{}'.format(i_gui_name)

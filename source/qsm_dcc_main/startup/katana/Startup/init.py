@@ -25,7 +25,7 @@ class Setup(object):
 
         import lxbasic.core as bsc_core
 
-        bsc_core.EnvExtraMtd.append_lua_path(
+        bsc_core.BscEnvironExtra.append_lua_path(
             '{}/?.lua'.format(
                 bsc_resource.ExtendResource.get(
                     'lua-scripts'

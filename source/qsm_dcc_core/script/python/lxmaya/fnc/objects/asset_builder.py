@@ -18,8 +18,8 @@ from ...dcc import operators as mya_dcc_operators
 
 class GeometryAlembicBlender(object):
     def __init__(self, src_root, tgt_root):
-        self._src_root = bsc_core.BscPathOpt(src_root).translate_to('|').to_string()
-        self._tgt_root = bsc_core.BscPathOpt(tgt_root).translate_to('|').to_string()
+        self._src_root = bsc_core.BscNodePathOpt(src_root).translate_to('|').to_string()
+        self._tgt_root = bsc_core.BscNodePathOpt(tgt_root).translate_to('|').to_string()
 
     def __set_meshes_blend_(self):
         self._set_meshes_connect_(
@@ -232,7 +232,7 @@ class FncBuilderForAssetOld(gnl_fnc_abstracts.AbsFncOptionBase):
                             )
                     #
                     mya_core.CmdObjOpt(
-                        bsc_core.BscPathOpt(root).translate_to('|').to_string()
+                        bsc_core.BscNodePathOpt(root).translate_to('|').to_string()
                     ).create_customize_attributes(customize_attributes)
 
     @classmethod
@@ -734,7 +734,7 @@ class FncBuilderForAssetNew(gnl_fnc_abstracts.AbsFncOptionBase):
                         )
                 #
                 mya_core.CmdObjOpt(
-                    bsc_core.BscPathOpt(root).translate_to('|').to_string()
+                    bsc_core.BscNodePathOpt(root).translate_to('|').to_string()
                 ).create_customize_attributes(customize_attributes)
 
     @classmethod

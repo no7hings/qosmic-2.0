@@ -599,7 +599,7 @@ class CmdPortOpt(object):
             sourceFromDestination=1
         )
         if _:
-            a = bsc_core.PthAttributeOpt(_)
+            a = bsc_core.BscAttributePathOpt(_)
             obj_path = a.obj_path
             if CmdObjOpt._get_is_exists_(obj_path) is True:
                 port_path = a.port_path
@@ -1052,12 +1052,12 @@ class CmdShapeOpt(CmdObjOpt):
         super(CmdShapeOpt, self).__init__(path)
 
     def get_transform_name(self):
-        return bsc_core.BscPath.get_dag_parent_name(
+        return bsc_core.BscNodePath.get_dag_parent_name(
             self.get_path(), self.PATHSEP
         )
 
     def get_transform_path(self):
-        return bsc_core.BscPath.get_dag_parent_path(
+        return bsc_core.BscNodePath.get_dag_parent_path(
             self.get_path(), self.PATHSEP
         )
 

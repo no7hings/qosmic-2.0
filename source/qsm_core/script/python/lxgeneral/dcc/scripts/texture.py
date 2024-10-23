@@ -54,7 +54,7 @@ class ScpDccTextures(object):
             'complete'
         )
 
-    @bsc_core.MdfBaseMtd.run_as_ignore
+    @bsc_core.BscModifier.run_as_ignore
     def _repath_post_fnc(self):
         if bsc_core.BscApplication.get_is_maya():
             import lxmaya.scripts as mya_scripts

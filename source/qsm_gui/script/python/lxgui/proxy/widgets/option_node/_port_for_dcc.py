@@ -1,7 +1,7 @@
 # coding:utf-8
 import _port_base
 
-import _input_for_dcc
+from ..input import input_for_dcc as _input_for_dcc
 
 
 class PrxPortForNodeList(_port_base.AbsPrxPort):

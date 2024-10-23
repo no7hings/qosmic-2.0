@@ -508,7 +508,7 @@ class PrxSessionWindow(PrxBaseWindow):
             self.set_window_icon_by_name(self._session.gui_configure.get('icon_name'))
 
         self.set_definition_window_size(self._session.gui_configure.get('size'))
-        self._qt_thread_enable = bsc_core.EnvBaseMtd.get_qt_thread_enable()
+        self._qt_thread_enable = bsc_core.BscEnviron.get_qt_thread_enable()
 
         self.start_window_loading(
             self._gui_setup_fnc

@@ -21,7 +21,7 @@ def main(session):
                 render_frame_step = int(hook_option_opt.get('render_frame_step'))
                 if render_frame_step > 1:
                     render_frame_range = bsc_core.BscTextOpt(render_frames).to_frame_range()
-                    render_frames_ = bsc_core.BscFrameRang.get(
+                    render_frames_ = bsc_core.BscFrameRange.get(
                         render_frame_range, render_frame_step
                     )
                     hook_option_opt.set(

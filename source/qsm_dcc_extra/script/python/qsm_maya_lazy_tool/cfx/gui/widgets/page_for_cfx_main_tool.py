@@ -22,11 +22,11 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
     SCRIPT_JOB_NAME = 'lazy_tool_for_cfx_main'
 
     def do_gui_refresh_by_resource_tag_checking(self):
-        filter_data_src = self._gui_resource_tag_prx_unit.generate_semantic_tag_filter_data_src()
-        qt_view = self._resource_prx_tree_view._qt_view
+        filter_data_src = self._gui_asset_tag_filter_prx_unit.generate_semantic_tag_filter_data_src()
+        qt_view = self._asset_prx_tree_view._qt_view
         qt_view._set_view_semantic_tag_filter_data_src_(filter_data_src)
         qt_view._set_view_keyword_filter_data_src_(
-            self._resource_prx_tree_view.filter_bar.get_keywords()
+            self._asset_prx_tree_view.filter_bar.get_keywords()
         )
         qt_view._refresh_view_items_visible_by_any_filter_()
         qt_view._refresh_viewport_showable_auto_()
@@ -52,7 +52,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         )
         self._script_job_opt.register(
             [
-                self._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection,
+                self._gui_asset_prx_unit.do_gui_refresh_by_dcc_selection,
             ],
             self._script_job_opt.EventTypes.SelectionChanged
         )
@@ -119,7 +119,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         )
 
         self._selection_scheme_prx_input.connect_input_changed_to(
-            self._gui_resource_prx_unit.do_dcc_refresh_resources_selection
+            self._gui_asset_prx_unit.do_dcc_refresh_resources_selection
         )
 
     def gui_get_selection_scheme(self):
@@ -147,27 +147,27 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         self._prx_h_splitter = gui_prx_widgets.PrxHSplitter()
         main_qt_lot.addWidget(self._prx_h_splitter.widget)
         # resource tag
-        self._resource_tag_tree_view = gui_prx_widgets.PrxTreeView()
-        self._prx_h_splitter.add_widget(self._resource_tag_tree_view)
-        self._resource_tag_tree_view.create_header_view(
+        self._asset_tag_filter_tree_view = gui_prx_widgets.PrxTreeView()
+        self._prx_h_splitter.add_widget(self._asset_tag_filter_tree_view)
+        self._asset_tag_filter_tree_view.create_header_view(
             [('name', 2)],
             self._window.get_definition_window_size()[0]
         )
 
-        self._gui_resource_tag_prx_unit = qsm_mya_gui_core.PrxTreeviewUnitForResourceTagOpt(
-            self._window, self, self._session, self._resource_tag_tree_view
+        self._gui_asset_tag_filter_prx_unit = qsm_mya_gui_core.PrxTreeviewUnitForAssetTagFilterOpt(
+            self._window, self, self._session, self._asset_tag_filter_tree_view
         )
         # resource
-        self._resource_prx_tree_view = gui_prx_widgets.PrxTreeView()
-        self._prx_h_splitter.add_widget(self._resource_prx_tree_view)
+        self._asset_prx_tree_view = gui_prx_widgets.PrxTreeView()
+        self._prx_h_splitter.add_widget(self._asset_prx_tree_view)
         self._prx_h_splitter.set_fixed_size_at(0, 240)
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
         self._prx_h_splitter.set_contract_enable(False)
 
-        self._gui_resource_prx_unit = _unit_for_cfx_rig.UnitForCfxResourceView(
-            self._window, self, self._session, self._resource_prx_tree_view
+        self._gui_asset_prx_unit = _unit_for_cfx_rig.UnitForCfxResourceView(
+            self._window, self, self._session, self._asset_prx_tree_view
         )
-        self._resource_tag_tree_view.connect_item_check_changed_to(
+        self._asset_tag_filter_tree_view.connect_item_check_changed_to(
             self.do_gui_refresh_by_resource_tag_checking
         )
         # selection scheme
@@ -212,16 +212,16 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         self._top_prx_tool_bar.do_gui_refresh()
         self._bottom_prx_tool_bar.do_gui_refresh()
         # resource view
-        is_changed = self._gui_resource_prx_unit.get_resources_query().do_update()
+        is_changed = self._gui_asset_prx_unit.get_resources_query().do_update()
         if is_changed is True or force is True:
-            self._gui_resource_tag_prx_unit.restore()
-            self._gui_resource_tag_prx_unit.gui_add_root()
+            self._gui_asset_tag_filter_prx_unit.restore()
+            self._gui_asset_tag_filter_prx_unit.gui_add_root()
 
-            self._gui_resource_prx_unit.restore()
-            self._gui_resource_prx_unit.gui_add_all()
+            self._gui_asset_prx_unit.restore()
+            self._gui_asset_prx_unit.gui_add_all()
 
-        self._gui_resource_prx_unit.do_gui_refresh_by_dcc_selection()
-        self._gui_resource_prx_unit.do_gui_refresh_tools()
+        self._gui_asset_prx_unit.do_gui_refresh_by_dcc_selection()
+        self._gui_asset_prx_unit.do_gui_refresh_tools()
         # tool set
         self.do_gui_refresh_toolset_units()
 

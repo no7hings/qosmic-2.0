@@ -159,7 +159,7 @@ class UsdStageOpt(UsdBasic):
             return _
 
     def create_obj(self, path_text, type_name=''):
-        path_opt = bsc_core.BscPathOpt(path_text)
+        path_opt = bsc_core.BscNodePathOpt(path_text)
         paths = path_opt.get_component_paths()
         paths.reverse()
         for i_path in paths:
@@ -176,7 +176,7 @@ class UsdStageOpt(UsdBasic):
     def copy_dag_from(self, usd_prim):
         usd_stage = usd_prim.GetStage()
         path_text = usd_prim.GetPath().pathString
-        path_opt = bsc_core.BscPathOpt(path_text)
+        path_opt = bsc_core.BscNodePathOpt(path_text)
         paths = path_opt.get_component_paths()
         paths.reverse()
         for i_path in paths:
@@ -207,7 +207,7 @@ class UsdStageOpt(UsdBasic):
         )
 
     def set_root_create(self, root, override=False):
-        dag_path_comps = bsc_core.BscPath.get_dag_component_paths(
+        dag_path_comps = bsc_core.BscNodePath.get_dag_component_paths(
             root, pathsep=_configure.UsdNodes.PATHSEP
         )
         if dag_path_comps:
@@ -229,9 +229,9 @@ class UsdStageOpt(UsdBasic):
             i_usd_prim_opt = UsdPrimOpt(i_usd_prim)
             list_.append(i_usd_prim_opt.get_path())
         #
-        path_opt = bsc_core.BscPathOpt(regex)
+        path_opt = bsc_core.BscNodePathOpt(regex)
         #
-        child_paths = bsc_core.BscPath.find_dag_child_paths(
+        child_paths = bsc_core.BscNodePath.find_dag_child_paths(
             path_opt.get_parent_path(), list_
         )
         #
@@ -456,7 +456,7 @@ class UsdStageOpt(UsdBasic):
     def load_by_location_fnc(self, file_path, location_source, location_target):
         usd_location = self._usd_stage.GetPseudoRoot()
         #
-        dag_path_comps = bsc_core.BscPath.get_dag_component_paths(
+        dag_path_comps = bsc_core.BscNodePath.get_dag_component_paths(
             location_target, pathsep=_configure.UsdNodes.PATHSEP
         )
         if dag_path_comps:
@@ -509,7 +509,7 @@ class UsdFileWriteOpt(object):
         self._usd_stage = Usd.Stage.CreateInMemory()
 
     def set_location_add(self, location):
-        dag_path_comps = bsc_core.BscPath.get_dag_component_paths(
+        dag_path_comps = bsc_core.BscNodePath.get_dag_component_paths(
             location, pathsep=_configure.UsdNodes.PATHSEP
         )
         if dag_path_comps:
@@ -1475,7 +1475,7 @@ class UsdMeshOpt(UsdGeometryOpt):
 
     def get_colors_fom_shell(self, offset=0, seed=0):
         vertex_counts, vertex_indices = self.get_face_vertices()
-        face_to_shell_dict = bsc_core.DccMeshFaceShellOpt(vertex_counts, vertex_indices).generate()
+        face_to_shell_dict = bsc_core.BscMeshFaceShellOpt(vertex_counts, vertex_indices).generate()
         max_shell_index = max(face_to_shell_dict.values())
         choice_colors = bsc_core.BscColor.get_choice_colors(
             count=max_shell_index+1, maximum=1.0, offset=offset, seed=seed

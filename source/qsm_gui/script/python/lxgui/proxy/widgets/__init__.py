@@ -3,7 +3,7 @@ from .utility import *
 
 from .item import *
 
-from .input_for_shotgun_task import *
+from .input import *
 
 from .option_node import *
 

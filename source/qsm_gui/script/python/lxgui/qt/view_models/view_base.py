@@ -7,8 +7,6 @@ from ... import core as _gui_core
 # qt
 from ...qt.core.wrap import *
 
-from ...qt import core as _qt_core
-
 from . import base as _base
 
 
@@ -29,7 +27,7 @@ class AbsViewModel(object):
         self._widget = widget
 
         self._data = data
-        # sort
+        # item sort
         self._data.item_sort = _base._Data(
             enable=False,
             keys=[],
@@ -67,7 +65,7 @@ class AbsViewModel(object):
 
         self._close_flag = False
 
-    # sort
+    # item sort
     def get_item_sort_order(self):
         return self._data.item_sort.order
 
@@ -128,6 +126,9 @@ class AbsViewModel(object):
                     (i_key, icon_name, functools.partial(self.sort_item_by, i_key))
                 )
         return menu_data
+
+    def generate_item_group_menu_data(self):
+        pass
 
     # item lock
     def set_item_lock_enable(self, boolean):

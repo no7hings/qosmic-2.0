@@ -4,6 +4,7 @@ import os
 import enum
 
 
+
 class GuiBase(object):
     ROOT = os.path.dirname(__file__.replace('\\', '/'))
     DATA_ROOT = '{}/.data'.format(ROOT)
@@ -151,19 +152,22 @@ class GuiItemSortOrder(enum.IntEnum):
 class GuiItemMode(enum.IntEnum):
     Icon = 0
     List = 1
+    Image = 2
 
 
-class GuiSize(object):
+class GuiSize:
     ItemDefaultHeight = 20
     BubbleHeightDefault = 16
     EntryBaseHeightDefault = 20
-    InputHeight = 24
 
     LayoutDefaultContentsMargins = 2, 2, 2, 2
     LayoutDefaultSpacing = 2
 
     FontSizeDefault = 8
     FontWeightDefault = 50
+
+    InputHeight = 24
+    InputHeightA = 82
 
 
 class GuiSectorChartMode(enum.IntEnum):
@@ -462,7 +466,6 @@ class GuiProcessStatusMapper(object):
         GuiProcessStatus.Finished: 'Finished',
     }
     MAPPER_CHS = {
-
     }
 
 

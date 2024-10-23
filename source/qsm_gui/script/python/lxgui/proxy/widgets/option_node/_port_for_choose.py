@@ -1,12 +1,12 @@
 # coding:utf-8
 import _port_base
 
-import _input_for_choose
+from ..input import input_for_choose as _input_for_choose
 
 
 # constant choose
 class PrxPortForConstantChoose(_port_base.AbsPrxPort):
-    ENTRY_TYPE = 'enumerate'
+    WIDGET_TYPE = 'enumerate'
 
     ENABLE_CLS = _port_base.PrxPortStatus
     LABEL_CLS = _port_base.PrxPortLabel

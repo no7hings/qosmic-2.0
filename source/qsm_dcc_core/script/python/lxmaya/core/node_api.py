@@ -562,7 +562,7 @@ class Om2MeshOpt(object):
         """
         bsc_log.Log.debug('start create transform')
         transform = cmds.createNode('transform', name=name, skipSelect=1)
-        transform_name = bsc_core.BscPath.to_dag_name(transform, '|')
+        transform_name = bsc_core.BscNodePath.to_dag_name(transform, '|')
         bsc_log.Log.debug('start create mesh')
         om2_fnc = om2.MFnMesh()
         face_vertex_counts, face_vertex_indices = face_vertices
@@ -746,7 +746,7 @@ class Om2MeshOpt(object):
 
     def get_face_shell_ids(self):
         counts, indices = self.get_face_vertices()
-        return bsc_core.DccMeshFaceShellOpt(counts, indices).generate()
+        return bsc_core.BscMeshFaceShellOpt(counts, indices).generate()
 
     def assign_uv_map(self, uv_map_name, uv_map):
         om2_fnc = self._om2_obj_fnc

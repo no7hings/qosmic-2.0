@@ -892,7 +892,7 @@ class RsvTaskOverrideUsdCreator(gnl_fnc_abstracts.AbsFncOptionBase):
         self._renderable_c = self._dcc_data.get_as_content('renderable')
 
         self._location_mapper = {
-            bsc_core.BscPathOpt(i).get_name(): i for i in self._renderable_c.get_all_leaf_values() if i
+            bsc_core.BscNodePathOpt(i).get_name(): i for i in self._renderable_c.get_all_leaf_values() if i
         }
 
     def create_element_geometry_uv_map_over_at(self, directory_path, var_name):

@@ -60,7 +60,7 @@ class RsvDccGeometryHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
         elif version_scheme == 'new':
             version = version_scheme
         #
-        mya_root_dag_opt = bsc_core.BscPathOpt(root).translate_to(
+        mya_root_dag_opt = bsc_core.BscNodePathOpt(root).translate_to(
             pathsep=pathsep
         )
         dcc_root = mya_dcc_objects.Group(
@@ -135,7 +135,7 @@ class RsvDccGeometryHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
         elif version_scheme == 'new':
             version = version_scheme
         #
-        mya_root_dag_opt = bsc_core.BscPathOpt(root).translate_to(
+        mya_root_dag_opt = bsc_core.BscNodePathOpt(root).translate_to(
             pathsep=pathsep
         )
         dcc_root = mya_dcc_objects.Group(
@@ -165,7 +165,7 @@ class RsvDccGeometryHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                     )
                     #
                     i_location = '{}/{}'.format(root, i_location_name)
-                    i_sub_root_dag_path = bsc_core.BscPathOpt(i_location)
+                    i_sub_root_dag_path = bsc_core.BscNodePathOpt(i_location)
                     i_mya_sub_root_dag_path = i_sub_root_dag_path.translate_to(
                         pathsep=pathsep
                     )
@@ -207,7 +207,7 @@ class RsvDccGeometryExtraHookOpt(
         elif version_scheme == 'new':
             version = version_scheme
         #
-        mya_root_dag_opt = bsc_core.BscPathOpt(root).translate_to(
+        mya_root_dag_opt = bsc_core.BscNodePathOpt(root).translate_to(
             pathsep=pathsep
         )
         dcc_root = mya_dcc_objects.Group(

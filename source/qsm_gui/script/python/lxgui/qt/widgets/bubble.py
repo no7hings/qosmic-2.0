@@ -704,7 +704,7 @@ class QtPathBubble(
     def _set_path_text_(self, text):
         if text != self.__path_text:
             self.__path_text = text
-            self.__path = bsc_core.BscPathOpt(self.__path_text)
+            self.__path = bsc_core.BscNodePathOpt(self.__path_text)
             self.__components = self.__path.get_components()
             self.__components.reverse()
             c = len(self.__components)

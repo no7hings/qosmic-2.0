@@ -52,13 +52,13 @@ class EtrBase(bsc_etr_abstracts.AbsEtrBase):
 
     @classmethod
     def set_project(cls, project):
-        bsc_core.EnvExtraMtd.set(
+        bsc_core.BscEnvironExtra.set(
             'PG_SHOW', project.upper()
         )
 
     @classmethod
     def get_project(cls):
-        return (bsc_core.EnvExtraMtd.get(
+        return (bsc_core.BscEnvironExtra.get(
             'PG_SHOW'
         ) or '').lower()
 
@@ -99,11 +99,7 @@ class EtrBase(bsc_etr_abstracts.AbsEtrBase):
 
     @classmethod
     def send_chat(cls, *args, **kwargs):
-        bsc_core.MsgBaseMtd.send_chat_(
-            receivers=kwargs['receivers'],
-            subject=kwargs['subject'],
-            content=kwargs.get('content') or '',
-        )
+        pass
 
     @classmethod
     def register_version_file_dependency(cls, *args, **kwargs):
