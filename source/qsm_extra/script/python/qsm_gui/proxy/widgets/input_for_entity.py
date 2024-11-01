@@ -23,6 +23,11 @@ class PrxAssetInputForCharacterAndProp(prx_abstracts.AbsPrxWidget):
     ROLE_MASK_NEW = qsm_gnl_core.QsmAsset.CHARACTER_AND_PROP_ROLE_MASK_NEW
 
     def __init__(self, *args, **kwargs):
+        if 'history_key' in kwargs:
+            history_key = kwargs.pop('history_key')
+        else:
+            history_key = None
+
         super(PrxAssetInputForCharacterAndProp, self).__init__(*args, **kwargs)
 
         self._qt_layout_0 = qt_widgets.QtHBoxLayout(self.get_widget())
@@ -46,7 +51,10 @@ class PrxAssetInputForCharacterAndProp(prx_abstracts.AbsPrxWidget):
 
         self._qt_path_input._setup_()
 
-        self._qt_path_input._set_history_key_(self.HISTORY_KEY)
+        if history_key is None:
+            history_key = self.HISTORY_KEY
+
+        self._qt_path_input._set_history_key_(history_key)
         self._qt_path_input._pull_history_latest_()
         self._qt_path_input.user_history_pull_accepted.connect(self._pull_history_fnc)
 
@@ -154,6 +162,12 @@ class PrxAssetInputForCharacterAndProp(prx_abstracts.AbsPrxWidget):
 
     def get_path(self):
         return self._qt_path_input._get_value_()
+
+    def set_path(self, path):
+        self._buffer_fnc(
+            bsc_core.BscNodePathOpt(path)
+        )
+        self._qt_path_input._set_value_(path)
 
 
 class PrxAssetInputForScenery(PrxAssetInputForCharacterAndProp):

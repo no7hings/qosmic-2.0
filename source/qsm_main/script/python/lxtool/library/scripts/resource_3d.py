@@ -148,7 +148,7 @@ class ScpResourcesAddFor3dPlant(object):
         resource_p_opt = bsc_core.BscStgParseOpt(resource_p)
         resource_p_opt.update_variants(**variants)
         #
-        matches = resource_p_opt.get_matches(sort=True)
+        matches = resource_p_opt.find_matches(sort=True)
         with bsc_log.LogProcessContext.create_as_bar(maximum=len(matches), label='add any 3d') as l_p:
             for i_variants in matches:
                 l_p.do_update()

@@ -1,0 +1,66 @@
+root_source:
+    windows: 'Z:/projects'
+
+root_release:
+    windows: 'X:'
+    
+root_temporary:
+    windows: 'Z:/projects'
+
+patterns:
+    asset-source-task-dir: '{root_source}/{project}/source/assets/{role}/{asset}/user.{artist}/{step}.{task}'
+    asset-source-task_unit-dir: '<patterns.asset-source-task-dir>/{task_unit}'
+    asset-source-task_scene-file: '<patterns.asset-source-task_unit-dir>/scenes/{asset}.{step}.{task}.{task_unit}.v{version}.{file_format}'
+    asset-source-task_scene-thumbnail-file: '<patterns.asset-source-task_unit-dir>/.thumbnails/{asset}.{step}.{task}.{task_unit}.v{version}.jpg'
+
+    asset-temporary-task-dir: '{root_temporary}/{project}/source/assets/{role}/{asset}/{step}.{task}'
+
+    asset-release-rig-scene-file: '{root_release}/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
+
+dcc-asset-group:
+    cfx_rig:
+        master:
+            cfx:
+                cfx_cloth_grp:
+                    cfx_cloth_geo_grp: ''
+                    cfx_cloth_extra_grp: ''
+
+                cfx_cloth_proxy_grp:
+                    cfx_cloth_proxy_geo_grp: ''
+                    cfx_cloth_proxy_extra_grp: ''
+
+                cfx_appendix_grp:
+                    cfx_appendix_geo_grp: ''
+                    cfx_appendix_extra_grp: ''
+
+                cfx_collider_grp:
+                    cfx_collider_geo_grp: ''
+                    cfx_collider_extra_grp: ''
+
+                cfx_bridge_grp:
+                    cfx_bridge_geo_grp: ''
+                    cfx_bridge_control_grp: ''
+                    cfx_bridge_extra_grp: ''
+
+                cfx_hair_grp: ''
+
+                cfx_ncloth_grp: ''
+                cfx_qualoth_grp: ''
+                cfx_nrigid_grp: ''
+
+                cfx_nucleus_grp: ''
+                cfx_field_grp: ''
+
+                cfx_auxiliary_grp:
+
+                cfx_wrap_grp:
+                    cfx_wrap_geo_grp: ''
+                    cfx_wrap_base_geo_grp: ''
+
+dcc-asset-layer:
+    cfx_rig:
+        - 'CFX_GEO_SRC_LYR'
+
+dcc:
+    root: '/master'
+    cloth_geo: '/master/cfx_grp/cfx_cloth_geo_grp'

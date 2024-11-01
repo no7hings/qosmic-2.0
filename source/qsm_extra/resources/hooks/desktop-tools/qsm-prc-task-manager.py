@@ -4,7 +4,7 @@
 def main(session):
     import lxgui.proxy.core as gui_prx_core
 
-    import qsm_lazy_tool.task.gui.widgets as gui_widgets
+    import qsm_lazy_tool.prc_task.gui.widgets as gui_widgets
 
     gui_prx_core.GuiProxyUtil.show_window_proxy_auto(
         gui_widgets.PrxPanelForTaskManager,

@@ -408,7 +408,7 @@ class QtIcon(object):
             c_w, c_h
         )
         if text is not None:
-            words = bsc_pinyin.Text.split_any_to_letters(text)
+            words = bsc_pinyin.Text.split_any_to_words(text)
             if words:
                 name = words[0]
             else:

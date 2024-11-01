@@ -245,7 +245,7 @@ class QtPainter(QtGui.QPainter):
             text_color = _style.QtRgba.Text
         else:
             background_color = _style.QtRgba.BkgTabGroup
-            text_color = _style.QtRgba.TextTemporary
+            text_color = _style.QtRgba.TxtTemporary
 
         btn_x, btn_y, btn_w, btn_h = button_rect.x(), button_rect.y(), button_rect.width(), button_rect.height()
 
@@ -502,7 +502,7 @@ class QtPainter(QtGui.QPainter):
             text_color = _style.QtRgba.Text
         else:
             background_color = _style.QtRgba.BkgTab
-            text_color = _style.QtRgba.TextTemporary
+            text_color = _style.QtRgba.TxtTemporary
 
         btn_x, btn_y = rect.x(), rect.y()
         btn_w, btn_h = rect.width(), rect.height()

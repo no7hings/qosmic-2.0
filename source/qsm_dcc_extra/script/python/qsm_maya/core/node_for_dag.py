@@ -146,6 +146,7 @@ class DagNode(_node.Node):
 
 class DagNodeOpt(_node.NodeOpt):
     def __init__(self, path):
+        # dag node has path var
         self._path = DagNode.to_path(path)
         self._name = DagNode.to_name(self._path)
         self._uuid = _node.Node.get_uuid(self._path)
@@ -180,11 +181,14 @@ class NodeDisplay(object):
 
     @classmethod
     def is_visible(cls, path):
-        return bool(
-            cmds.getAttr(
-                path+'.visibility'
+        atr_path = path+'.visibility'
+        if cmds.objExists(atr_path) is True:
+            return bool(
+                cmds.getAttr(
+                    path+'.visibility'
+                )
             )
-        )
+        return False
 
     @classmethod
     def set_visible(cls, path, boolean):

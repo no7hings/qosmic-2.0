@@ -484,6 +484,9 @@ class PrxPressButton(gui_prx_abstracts.AbsPrxWidget):
     def set_stopped(self, boolean=True):
         self._is_stopped = boolean
 
+    def set_action_enable(self, boolean):
+        self._qt_widget._set_action_enable_(boolean)
+
 
 class PrxCheckItem(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = _qt_wgt_button.QtCheckButton

@@ -21,7 +21,7 @@ shot-name: '{shot}'
 #
 step-name: '{step}'
 task-name: '{task}'
-task_extra-name: '{task_extra}'
+task_unit-name: '{task_unit}'
 version-name: '{version}'
 version_extra-name: '{version_extra}'
 #
@@ -160,7 +160,7 @@ asset-task-search-patterns:
     release: <asset-release-task-dir>
 #   version name
 asset-version-name: <asset-name>.<step-name>.<task-name>.<version-name>
-asset-version_extra-name: <asset-name>.<step-name>.<task-name>.<task_extra-name>.<version-name>_<version_extra-name>
+asset-version_extra-name: <asset-name>.<step-name>.<task-name>.<task_unit-name>.<version-name>_<version_extra-name>
 asset-no-version-name: <asset-name>.<step-name>.<task-name>
 asset-task-version-look-pass-name: <asset-name>.<step-name>.<task-name>.<look-pass>.<version-name>
 #   version
@@ -755,7 +755,7 @@ shot-task-search-patterns:
     release: <shot-release-task-dir>
 # <shot-version>
 shot-version-name: <shot-name>.<step-name>.<task-name>.<version-name>
-shot-version_extra-name: <shot-name>.<step-name>.<task-name>.<task_extra-name>.<version-name>_<version_extra-name>
+shot-version_extra-name: <shot-name>.<step-name>.<task-name>.<task_unit-name>.<version-name>_<version_extra-name>
 shot-no-version-name: <shot-name>.<step-name>.<task-name>
 #
 shot-source-version-dir: <shot-source-task-dir>/<shot-version-name>

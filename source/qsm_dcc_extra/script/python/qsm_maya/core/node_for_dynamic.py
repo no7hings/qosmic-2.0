@@ -4,15 +4,11 @@ import maya.cmds as cmds
 # noinspection PyUnresolvedReferences
 import maya.mel as mel
 
-from . import history as _history
-
 from . import node as _node
-
-from . import node_for_dag as _node_for_dag
 
 from . import attribute as _attribute
 
-from . import transform as _transform
+from . import node_for_transform as _node_for_transform
 
 from . import shape as _shape
 
@@ -32,8 +28,8 @@ class RebuildForNucleus(object):
         ]
         cmds.select(target_any_paths)
 
-        if _transform.Transform.is_transform_type(target_shape_path):
-            target_shape_path = _transform.Transform.get_shape(target_shape_path)
+        if _node_for_transform.Transform.is_transform_type(target_shape_path):
+            target_shape_path = _node_for_transform.Transform.get_shape(target_shape_path)
 
         if node_type == 'nCloth':
             mel.eval('nClothCreate;')
@@ -43,8 +39,6 @@ class RebuildForNucleus(object):
             mel.eval('assignNewHairSystem;')
         else:
             raise RuntimeError()
-
-        # _history.History.find_one(target_shape_path, [node_type])
 
         _ = _attribute.NodeAttribute.get_target_nodes(
             target_shape_path, 'worldMesh', node_type
@@ -75,7 +69,7 @@ class RebuildForNucleus(object):
                 return node_path
 
 
-class NCloth(object):
+class NCloth:
     @classmethod
     def find_input_mesh_transform(cls, path):
         # target
@@ -85,8 +79,41 @@ class NCloth(object):
         if _:
             return _shape.Shape.get_transform(_)
 
+    @classmethod
+    def get_nucleus(cls, shape_path):
+        return _attribute.NodeAttribute.get_source_node(
+            shape_path, 'startFrame', 'nucleus'
+        )
 
-class NRigid(object):
+
+class MeshNCloth:
+    @classmethod
+    def get_args(cls, transform_path):
+        shape = cls.get_nshape(transform_path)
+        if shape:
+            ntransform = _shape.Shape.get_transform(shape)
+            nucleus = NCloth.get_nucleus(shape)
+            return ntransform, nucleus
+
+    @classmethod
+    def get_nshape(cls, transform_path):
+        shape_path = _node_for_transform.Transform.get_shape(transform_path)
+        return _attribute.NodeAttribute.get_source_node(
+            shape_path, 'inMesh', 'nCloth'
+        )
+
+    @classmethod
+    def create_auto(cls, transform_path):
+        args = cls.get_args(transform_path)
+        if args:
+            return False, args
+
+        cmds.select(transform_path)
+        mel.eval('nClothCreate;')
+        return True, cls.get_args(transform_path)
+
+
+class NRigid:
     @classmethod
     def find_input_mesh_transform(cls, path):
         # source
@@ -96,8 +123,44 @@ class NRigid(object):
         if _:
             return _shape.Shape.get_transform(_)
 
+    @classmethod
+    def get_nucleus(cls, shape_path):
+        return _attribute.NodeAttribute.get_source_node(
+            shape_path, 'startFrame', 'nucleus'
+        )
 
-class Field(object):
+
+class MeshNRigid:
+
+    @classmethod
+    def get_args(cls, transform_path):
+        shape = cls.get_nshape(transform_path)
+        if shape:
+            ntransform = _shape.Shape.get_transform(shape)
+            nucleus = NCloth.get_nucleus(shape)
+            return ntransform, nucleus
+
+    @classmethod
+    def get_nshape(cls, transform_path):
+        shape_path = _node_for_transform.Transform.get_shape(transform_path)
+        _ = _attribute.NodeAttribute.get_target_nodes(
+            shape_path, 'worldMesh[0]', 'nRigid'
+        )
+        if _:
+            return _[0]
+
+    @classmethod
+    def create_auto(cls, transform_path):
+        args = cls.get_args(transform_path)
+        if args:
+            return False, args
+
+        cmds.select(transform_path)
+        mel.eval('nClothMakeCollide;')
+        return True, cls.get_args(transform_path)
+
+
+class Field:
     @classmethod
     def create_for(cls, node_type, target_shape_path, target_any_paths):
         """
@@ -109,8 +172,8 @@ class Field(object):
         ]
         cmds.select(target_any_paths)
 
-        if _transform.Transform.is_transform_type(target_shape_path):
-            target_shape_path = _transform.Transform.get_shape(target_shape_path)
+        if _node_for_transform.Transform.is_transform_type(target_shape_path):
+            target_shape_path = _node_for_transform.Transform.get_shape(target_shape_path)
 
         if node_type == 'airField':
             mel.eval('Air;')

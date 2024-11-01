@@ -14,7 +14,7 @@ import lxmaya.core as mya_core
 
 from . import shape as _shape
 
-from . import transform as _transform
+from . import node_for_transform as _node_for_transform
 
 from . import attribute as _attribute
 
@@ -296,7 +296,7 @@ class MeshOpt(_shape.ShapeOpt):
         return self._om2_obj_fnc.numPolygons
 
     def get_world_extent(self):
-        return _transform.Transform.get_world_extent(
+        return _node_for_transform.Transform.get_world_extent(
             _shape.Shape.get_transform(self.shape_path)
         )
 

@@ -199,17 +199,17 @@ class QtTreeWidgetItem(
                     _gui_core.GuiState.LOST
                 ]:
                     if self._icon_state == _gui_core.GuiState.ENABLE:
-                        background_color = _qt_core.QtRgba.TextEnable
+                        background_color = _qt_core.QtRgba.TxtEnable
                     elif self._icon_state == _gui_core.GuiState.DISABLE:
-                        background_color = _qt_core.QtRgba.TextDisable
+                        background_color = _qt_core.QtRgba.TxtDisable
                     elif self._icon_state == _gui_core.GuiState.WARNING:
-                        background_color = _qt_core.QtRgba.TextWarning
+                        background_color = _qt_core.QtRgba.TxtWarning
                     elif self._icon_state == _gui_core.GuiState.ERROR:
-                        background_color = _qt_core.QtRgba.TextError
+                        background_color = _qt_core.QtRgba.TxtError
                     elif self._icon_state == _gui_core.GuiState.LOCKED:
-                        background_color = _qt_core.QtRgba.TextLock
+                        background_color = _qt_core.QtRgba.TxtLock
                     elif self._icon_state == _gui_core.GuiState.LOST:
-                        background_color = _qt_core.QtRgba.TextTemporary
+                        background_color = _qt_core.QtRgba.TxtTemporary
                     else:
                         raise TypeError()
                     #
@@ -277,18 +277,18 @@ class QtTreeWidgetItem(
         if status == self.ValidationStatus.Normal:
             color = _qt_core.QtRgba.Text
         elif status in {self.ValidationStatus.Correct, self.ValidationStatus.New}:
-            color = _qt_core.QtRgba.TextCorrect
+            color = _qt_core.QtRgba.TxtCorrect
         elif status == self.ValidationStatus.Warning:
-            color = _qt_core.QtRgba.TextWarning
+            color = _qt_core.QtRgba.TxtWarning
         elif status in {self.ValidationStatus.Error, self.ValidationStatus.Unreadable}:
-            color = _qt_core.QtRgba.TextError
+            color = _qt_core.QtRgba.TxtError
         elif status == self.ValidationStatus.Active:
-            color = _qt_core.QtRgba.TextActive
+            color = _qt_core.QtRgba.TxtActive
         elif status in {self.ValidationStatus.Disable, self.ValidationStatus.Lost}:
-            color = _qt_core.QtRgba.TextDisable
+            color = _qt_core.QtRgba.TxtDisable
             font.setItalic(True)
         elif status in {self.ValidationStatus.Locked, self.ValidationStatus.Unwritable}:
-            color = _qt_core.QtRgba.TextLock
+            color = _qt_core.QtRgba.TxtLock
             font.setItalic(True)
         else:
             raise TypeError()
@@ -370,17 +370,17 @@ class QtTreeWidgetItem(
                         draw_status = False
                         background_color = _qt_core.QtRgba.Text
                     elif status in {self.ValidationStatus.Correct, self.ValidationStatus.New}:
-                        background_color = _qt_core.QtRgba.TextCorrect
+                        background_color = _qt_core.QtRgba.TxtCorrect
                     elif status == self.ValidationStatus.Warning:
-                        background_color = _qt_core.QtRgba.TextWarning
+                        background_color = _qt_core.QtRgba.TxtWarning
                     elif status in {self.ValidationStatus.Error, self.ValidationStatus.Unreadable}:
-                        background_color = _qt_core.QtRgba.TextError
+                        background_color = _qt_core.QtRgba.TxtError
                     elif status == self.ValidationStatus.Active:
-                        background_color = _qt_core.QtRgba.TextActive
+                        background_color = _qt_core.QtRgba.TxtActive
                     elif status in {self.ValidationStatus.Disable, self.ValidationStatus.Lost}:
-                        background_color = _qt_core.QtRgba.TextDisable
+                        background_color = _qt_core.QtRgba.TxtDisable
                     elif status in {self.ValidationStatus.Locked, self.ValidationStatus.Unwritable}:
-                        background_color = _qt_core.QtRgba.TextLock
+                        background_color = _qt_core.QtRgba.TxtLock
                     else:
                         raise TypeError()
                     #

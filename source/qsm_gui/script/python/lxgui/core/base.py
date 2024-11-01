@@ -27,6 +27,16 @@ class GuiLanguage:
     EN_US = 'en_us'
 
 
+class GuiName:
+    SortBy = 'Sort by'
+    SortByChs = '排列方式'
+    SortOrder = 'Sort Order'
+    SortOrderChs = '排列顺序'
+
+    GroupBy = 'Group by'
+    GroupByChs = '分组依据'
+
+
 class GuiState(object):
     NORMAL = 'normal'
     ENABLE = 'enable'
@@ -113,9 +123,13 @@ class GuiUtil(object):
         return bsc_core.BscEnviron.get_ui_language()
 
     @classmethod
+    def language_is_chs(cls):
+        return cls.get_language() == GuiLanguage.CHS
+
+    @classmethod
     def choice_name(cls, language, options):
         if options:
-            if language == 'chs':
+            if language == GuiLanguage.CHS:
                 if 'name_chs' in options:
                     return options['name_chs']
             return options['name']
@@ -124,7 +138,7 @@ class GuiUtil(object):
     @classmethod
     def choice_name_auto(cls, options):
         if options:
-            if cls.get_language() == 'chs':
+            if cls.get_language() == GuiLanguage.CHS:
                 if 'name_chs' in options:
                     return options['name_chs']
             return options['name']
@@ -133,7 +147,7 @@ class GuiUtil(object):
     @classmethod
     def choice_description(cls, language, options):
         if options:
-            if language == 'chs':
+            if language == GuiLanguage.CHS:
                 if 'description_chs' in options:
                     return options['description_chs']
             return options['description']
@@ -142,7 +156,7 @@ class GuiUtil(object):
     @classmethod
     def choice_tool_tip(cls, language, options):
         if options:
-            if language == 'chs':
+            if language == GuiLanguage.CHS:
                 if 'tool_tip_chs' in options:
                     return options['tool_tip_chs']
             return options['tool_tip']
@@ -151,7 +165,7 @@ class GuiUtil(object):
     @classmethod
     def choice_message(cls, language, options):
         if options:
-            if language == 'chs':
+            if language == GuiLanguage.CHS:
                 if 'message_chs' in options:
                     return options['message_chs']
             return options['message']

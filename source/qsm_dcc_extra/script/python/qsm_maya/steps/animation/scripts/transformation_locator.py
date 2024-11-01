@@ -48,7 +48,7 @@ class ControlMoveOpt(object):
     def create_auto(cls, **kwargs):
         scheme = kwargs['scheme']
         if scheme == 'default':
-            _mya_core.AnmLayerOpt.switch_to_current_base()
+            # _mya_core.AnmLayerOpt.switch_to_current_base()
 
             main_controls = _mya_core.Selection.get_main_controls()
             if not main_controls:
@@ -68,7 +68,7 @@ class ControlMoveOpt(object):
     def remove_auto(cls, **kwargs):
         scheme = kwargs['scheme']
         if scheme == 'default':
-            _mya_core.AnmLayerOpt.switch_to_current_base()
+            # _mya_core.AnmLayerOpt.switch_to_current_base()
 
             locators = cmds.ls(selection=1, type='locator', dag=1, long=1)
             main_controls = []

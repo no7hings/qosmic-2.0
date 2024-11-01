@@ -52,6 +52,7 @@ class PrxToolbarForCharacterAndPropReference(
     def __init__(self, window, unit, session, prx_input_for_asset):
         super(PrxToolbarForCharacterAndPropReference, self).__init__(window, unit, session)
         self._scan_root = qsm_scan.Root.generate()
+
         self._asset_prx_input = prx_input_for_asset
 
         self._count_input = qt_widgets.QtInputForConstant()

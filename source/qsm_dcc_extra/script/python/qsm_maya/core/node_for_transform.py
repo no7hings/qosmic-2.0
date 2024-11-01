@@ -57,9 +57,17 @@ class Transform(_node_for_dag.DagNode):
 
     @classmethod
     def delete_all_shapes(cls, path):
-        _ = cmds.listRelatives(path, children=1, shapes=1, fullPath=1)
+        _ = cmds.listRelatives(path, children=1, shapes=1, fullPath=1) or []
         for i in _:
             cmds.delete(i)
+    
+    @classmethod
+    def get_all_shapes(cls, path):
+        return cmds.listRelatives(path, children=1, shapes=1, fullPath=1) or []
+    
+    @classmethod
+    def get_all_non_intermediate_shapes(cls, path):
+        return cmds.listRelatives(path, children=1, shapes=1, fullPath=1, noIntermediate=1) or []
 
     @classmethod
     def hide_all_shapes(cls, path):
@@ -124,6 +132,12 @@ class Transform(_node_for_dag.DagNode):
                 return True
             return False
         return False
+    
+    @classmethod
+    def delete_all_intermediate_shapes(cls, path):
+        shapes = cls.get_all_shapes(path)
+        non_intermediate_shapes = cls.get_all_non_intermediate_shapes(path)
+        [cmds.delete(x) for x in shapes if x not in non_intermediate_shapes]
 
 
 class TransformOpt(object):

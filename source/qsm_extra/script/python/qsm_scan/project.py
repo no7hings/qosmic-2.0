@@ -26,22 +26,25 @@ class Project(_base.AbsEntity):
         super(Project, self).__init__(*args, **kwargs)
 
     def find_assets(self, variants_extend=None):
-        return self.get_next_entities(_base.EntityTypes.Asset, variants_extend)
+        return self.find_next_entities(_base.EntityTypes.Asset, variants_extend)
     
     @property
     def assets(self):
-        return self.get_next_entities(_base.EntityTypes.Asset)
+        return self.find_next_entities(_base.EntityTypes.Asset)
 
     def asset(self, name):
-        return self.get_next_entity(name, _base.EntityTypes.Asset)
+        return self.find_next_entity(name, _base.EntityTypes.Asset)
+
+    def find_asset(self, name):
+        return self.find_next_entity(name, _base.EntityTypes.Asset)
 
     @property
     def sequences(self):
-        return self.get_next_entities(_base.EntityTypes.Sequence)
+        return self.find_next_entities(_base.EntityTypes.Sequence)
 
     @property
     def shots(self):
-        return self.get_next_entities(_base.EntityTypes.Shot)
+        return self.find_next_entities(_base.EntityTypes.Shot)
 
 
 class ProjectsCache(_base.AbsEntitiesCache):

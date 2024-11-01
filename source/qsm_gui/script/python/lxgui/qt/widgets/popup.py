@@ -319,7 +319,7 @@ class _AbsQtPopupAsChoose(
                     rect=self._rect_popup_top_toolbar_tool_tip,
                     text=tool_tip_text,
                     font=_qt_core.QtFonts.NameNormal,
-                    text_color=_qt_core.QtRgba.TextDisable,
+                    text_color=_qt_core.QtRgba.TxtDisable,
                     text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 )
             #
@@ -358,7 +358,7 @@ class _AbsQtPopupAsChoose(
                     self._rect_popup_top_toolbar_tool_tip,
                     'entry to filter ...',
                     font=_qt_core.QtFonts.NameNormal,
-                    text_color=_qt_core.QtRgba.TextDisable,
+                    text_color=_qt_core.QtRgba.TxtDisable,
                     text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 )
 
@@ -896,7 +896,7 @@ class QtPopupForCompletion(
                     'press "ESC" to cancel ...'
                 ).format(c),
                 font=_qt_core.QtFonts.NameNormal,
-                text_color=_qt_core.QtRgba.TextDisable,
+                text_color=_qt_core.QtRgba.TxtDisable,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             )
 
@@ -1144,7 +1144,7 @@ class QtPopupAsChooseForGuide(
                 self._rect_popup_top_toolbar_tool_tip,
                 'entry to filter ...',
                 font=_qt_core.QtFonts.NameNormal,
-                text_color=_qt_core.QtRgba.TextDisable,
+                text_color=_qt_core.QtRgba.TxtDisable,
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             )
 

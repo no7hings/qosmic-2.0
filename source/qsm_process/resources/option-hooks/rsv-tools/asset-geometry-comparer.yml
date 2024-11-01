@@ -20,7 +20,7 @@ hook_option:
         task: ''
         #
         source_step: 'mod'
-        source_task: 'modeling'
+        source-task: 'modeling'
 
 build:
     node:

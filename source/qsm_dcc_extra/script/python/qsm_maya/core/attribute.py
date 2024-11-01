@@ -121,6 +121,11 @@ class NodeAttribute:
 
     @classmethod
     def get_source_node(cls, path, atr_name, node_type=None, skip_conversion_nodes=0, shapes=1):
+        # ignore when attribute is non exists
+        atr_path = cls.to_atr_path(path, atr_name)
+        if cmds.objExists(atr_path) is False:
+            return
+
         kwargs = dict(
             destination=0, source=1, shapes=shapes,
             skipConversionNodes=skip_conversion_nodes
@@ -129,7 +134,7 @@ class NodeAttribute:
             kwargs['type'] = node_type
 
         _ = cmds.listConnections(
-            cls.to_atr_path(path, atr_name), **kwargs
+            atr_path, **kwargs
         ) or []
         if _:
             return cls.to_node_path(_[0])
@@ -317,6 +322,16 @@ class NodeAttribute:
             )
             if default is not None:
                 cls.set_value(path, atr_name, default)
+
+    @classmethod
+    def get_array_indices(cls, path, atr_name):
+        if cls.is_exists(path, atr_name) is True:
+            return cmds.getAttr(
+                cls.to_atr_path(path, atr_name),
+                multiIndices=1,
+                silent=1
+            ) or []
+        return []
 
 
 class NodeAttributes:

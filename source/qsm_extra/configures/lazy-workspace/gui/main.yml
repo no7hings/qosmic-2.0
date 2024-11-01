@@ -1,0 +1,219 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-*'
+    #
+    gui:
+        name: 'Lazy Workspace'
+        name_chs: '懒人工作区'
+        group_name: 'General(s)'
+        #
+        icon_name: 'lazy/workspace'
+        tool_tip:
+            |-
+            To be supplemented.
+        #
+        tool_tip_chs:
+            |-
+            待补充。
+
+        size: [800, 720]
+
+build:
+    task_manager:
+        tab:
+            name: 'Task Create/Manager'
+            name_chs: '任务创建/管理'
+
+            tool_tip:
+                |-
+                To be supplemented.
+
+            tool_tip_chs:
+                |-
+                待补充。
+
+        buttons:
+            create_task:
+                name: 'Create'
+                name_chs: '创建'
+
+            save:
+                name: 'Save'
+                name_chs: '保存'
+
+            save_to:
+                name: 'Save To'
+                name_chs: '保存到'
+
+            save_as:
+                name: 'Save As'
+                name_chs: '另存为'
+
+    task_tool:
+        tab:
+            name: 'Task Tool'
+            name_chs: '任务工具'
+
+            tool_tip:
+                |-
+                To be supplemented.
+
+            tool_tip_chs:
+                |-
+                待补充。
+
+
+        cfx_rig:
+            options:
+                name: 'Options'
+                name_chs: '选项'
+
+                parameters:
+                    template:
+                        widget: group
+                        name: 'Template'
+                        name_chs: '模版'
+
+                    template/create_template:
+                        widget: button
+                        name: 'Create Group'
+                        name_chs: '创建模版'
+                        icon: 'tool/create'
+
+                    # cloth
+                    cloth:
+                        widget: group
+                        name: 'Cloth'
+                        name_chs: '布料'
+
+                    cloth/auto_blend:
+                        widget: boolean
+                        name: 'Auto Blend'
+                        name_chs: '自动融合'
+                        value: True
+
+                    cloth/add_to:
+                        widget: button
+                        name: 'Add to Cloth'
+                        name_chs: '加入到布料'
+                        icon: 'tool/add'
+                        join_to_next: True
+
+                    cloth/copy_as:
+                        widget: button
+                        name: 'Copy as Cloth'
+                        name_chs: '拷贝为布料'
+                        icon: 'tool/copy'
+
+                    cloth/create_ncloth:
+                        widget: button
+                        name: 'Create nCloth'
+                        name_chs: '创建 nCloth'
+                        icon: 'tool/maya/ncloth'
+                        join_to_next: True
+
+                    cloth/paint_vertex_input_attract:
+                        widget: button
+                        name: 'Paint Input Attract (Vertex)'
+                        name_chs: '绘制输入吸引（顶点）'
+                        icon: 'tool/maya/paint-vertex'
+
+                    # collider
+                    collider:
+                        widget: group
+                        name: 'Collider'
+                        name_chs: '碰撞对象'
+
+                    collider/auto_blend:
+                        widget: boolean
+                        name: 'Auto Blend'
+                        name_chs: '自动融合'
+                        value: True
+
+                    collider/add_to:
+                        widget: button
+                        name: 'Add to Collider'
+                        name_chs: '加入到碰撞对象'
+                        icon: 'tool/add'
+                        join_to_next: True
+
+                    collider/copy_as:
+                        widget: button
+                        name: 'Copy as Collider'
+                        name_chs: '拷贝为碰撞对象'
+                        icon: 'tool/copy'
+
+                    collider/create_nrigid:
+                        widget: button
+                        name: 'Create nRigid'
+                        name_chs: '创建 nRigid'
+                        icon: 'tool/maya/nrigid'
+
+                    appendix:
+                        widget: group
+                        name: 'Appendix'
+                        name_chs: '配饰'
+
+                    appendix/copy_as:
+                        widget: button
+                        name: 'Copy as Appendix'
+                        name_chs: '拷贝为配饰'
+                        icon: 'tool/add'
+
+                    # bridge
+                    bridge_geometry:
+                        widget: group
+                        name: 'Bridge Geometry'
+                        name_chs: '桥接模型'
+
+                    bridge_geometry/auto_blend:
+                        widget: boolean
+                        name: 'Auto Blend'
+                        name_chs: '自动融合'
+                        value: True
+
+                    bridge_geometry/add_to:
+                        widget: button
+                        name: 'Add to Bridge Geometry'
+                        name_chs: '加入到桥接模型'
+                        icon: 'tool/add'
+                        join_to_next: True
+
+                    bridge_geometry/copy_as:
+                        widget: button
+                        name: 'Copy as Bridge Geometry'
+                        name_chs: '拷贝为桥接模型'
+                        icon: 'tool/copy'
+
+                    automation:
+                        widget: group
+                        name: 'Automation'
+                        name_chs: '自动化'
+
+                    automation/auto_collection:
+                        widget: button
+                        name: 'Auto Collection'
+                        name_chs: '自动收集'
+                        icon: 'tool/input'
+
+        general:
+            options:
+                name: 'Options'
+                name_chs: '选项'
+
+                parameters: {}
+
+    task_publish:
+        tab:
+            name: 'Task Publish'
+            name_chs: '任务发布'
+
+            tool_tip:
+                |-
+                To be supplemented.
+
+            tool_tip_chs:
+                |-
+                待补充。

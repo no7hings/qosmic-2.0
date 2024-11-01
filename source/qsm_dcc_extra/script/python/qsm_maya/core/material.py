@@ -2,11 +2,15 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+from . import node as _node
+
 from . import attribute as _attribute
 
 from . import connection as _connection
 
 from . import node_graph as _node_graph
+
+from . import node_for_shader as _node_for_shader
 
 
 class Material(object):
@@ -17,6 +21,24 @@ class Material(object):
         return cmds.sets(
             renderable=1, noSurfaceShader=1, empty=1, name=name
         )
+
+    @classmethod
+    def create_as_lambert(cls, name, color):
+        shader_name = '{}_SRF'.format(name)
+        _node_for_shader.Shader.create(
+            shader_name, 'lambert'
+        )
+        material_name = name
+        cls.create(material_name)
+
+        _connection.Connection.create(
+            shader_name+'.outColor', material_name+'.surfaceShader'
+        )
+
+        _attribute.NodeAttribute.set_as_tuple(
+            shader_name, 'color', color
+        )
+        return material_name
 
     @classmethod
     def get_all_shading_engines(cls, name):
@@ -49,6 +71,16 @@ class Material(object):
     def get_surface_shader(cls, name):
         return _attribute.NodeAttribute.get_source_node(
             name, 'surfaceShader'
+        )
+
+
+class MaterialOpt(_node.NodeOpt):
+    def __init__(self, *args, **kwargs):
+        super(MaterialOpt, self).__init__(*args, **kwargs)
+
+    def assign_to(self, path):
+        Material.assign_to(
+            self._name_or_path, path
         )
 
 

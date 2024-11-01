@@ -257,7 +257,7 @@ class AbsQtListWidget(
         self._init_thread_worker_extra_def_(self)
 
         self._sort_mode = self.SortMode.Number
-        self._sort_order = self.ItemSortOrder.Ascend
+        self._sort_order = self.ItemSortOrder.Ascending
 
         self._grid_size = 128, 128
 
@@ -307,10 +307,10 @@ class AbsQtListWidget(
             self._refresh_sort_()
 
     def _swap_item_sort_order_(self):
-        if self._sort_order == self.ItemSortOrder.Ascend:
-            self._sort_order = self.ItemSortOrder.Descend
+        if self._sort_order == self.ItemSortOrder.Ascending:
+            self._sort_order = self.ItemSortOrder.Descending
         else:
-            self._sort_order = self.ItemSortOrder.Ascend
+            self._sort_order = self.ItemSortOrder.Ascending
         self._refresh_sort_()
 
     def _refresh_sort_(self):

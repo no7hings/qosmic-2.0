@@ -4,7 +4,6 @@ import os
 import enum
 
 
-
 class GuiBase(object):
     ROOT = os.path.dirname(__file__.replace('\\', '/'))
     DATA_ROOT = '{}/.data'.format(ROOT)
@@ -144,11 +143,6 @@ class GuiSortMode(enum.IntEnum):
     Name = 1
 
 
-class GuiItemSortOrder(enum.IntEnum):
-    Ascend = 0
-    Descend = 1
-    
-
 class GuiItemMode(enum.IntEnum):
     Icon = 0
     List = 1
@@ -156,7 +150,7 @@ class GuiItemMode(enum.IntEnum):
 
 
 class GuiSize:
-    ItemDefaultHeight = 20
+    ItemHeightDefault = 20
     BubbleHeightDefault = 16
     EntryBaseHeightDefault = 20
 
@@ -168,6 +162,9 @@ class GuiSize:
 
     InputHeight = 24
     InputHeightA = 82
+    
+    ItemNameHeight = 20
+    ItemMtimeHeight = 20
 
 
 class GuiSectorChartMode(enum.IntEnum):
@@ -320,6 +317,11 @@ class GuiRgba(object):
     BdrButton = 119, 119, 119, 255
     BdrButtonHover = 151, 151, 151, 255
     BdrButtonDisable = 87, 87, 87, 255
+
+    # menu
+    BkgMenu = 55, 55, 55, 255
+    # border +32
+    BdrMenu = 87, 87, 87, 255
     
     # scroll bar 8x10
     BkgScrollBar = 79, 79, 79, 255
@@ -346,14 +348,16 @@ class GuiRgba(object):
     TextHover = White
     TextDark = 127, 127, 127, 255
 
-    TextEnable = NeonGreen
-    TextDisable = DarkGray
-    TextTemporary = Gray
-    TextWarning = LemonYellow
-    TextError = TorchRed
-    TextLock = Purple
-    TextCorrect = NeonGreen
-    TextActive = AzureBlue
+    TxtMtime = 127, 127, 127, 255
+
+    TxtEnable = NeonGreen
+    TxtDisable = DarkGray
+    TxtTemporary = Gray
+    TxtWarning = LemonYellow
+    TxtError = TorchRed
+    TxtLock = Purple
+    TxtCorrect = NeonGreen
+    TxtActive = AzureBlue
 
     TxtKey = 191, 191, 191, 255
     TxtValue = 255, 255, 255, 255
@@ -518,3 +522,79 @@ class GuiItemStatus(enum.IntEnum):
 
     Enable = Normal
     Disable = 5
+
+
+class GuiItemSortKey:
+    Category = 'category'
+    Type = 'type'
+    Name = 'name'
+    Mtime = 'mtime'
+    Number = 'number'
+    Default = 'default'
+
+    ALL = [
+        Category, Type, Name, Number, Default
+    ]
+
+    NAME_MAP = {
+        Category: 'Category',
+        Type: 'Type',
+        Name: 'Name',
+        Mtime: 'Modified',
+        Number: 'Number',
+        Default: 'Default'
+    }
+    NAME_MAP_CHS = {
+        Category: '分类',
+        Type: '类型',
+        Name: '名字',
+        Mtime: '修改时间',
+        Number: '数量',
+        Default: '默认',
+    }
+
+
+class GuiItemSortOrder:
+    Ascending = 0
+    Descending = 1
+
+    ALL = [
+        Ascending, Descending
+    ]
+
+    NAME_MAP = {
+        Ascending: 'Ascending',
+        Descending: 'Descending'
+    }
+    NAME_MAP_CHS = {
+        Ascending: '递增',
+        Descending: '递减'
+    }
+
+
+class GuiItemGroupKey:
+    Category = 'category'
+    Type = 'type'
+    Name = 'name'
+    Mtime = 'mtime'
+    Null = 'null'
+
+    ALL = [
+        Category, Type, Name, Mtime, Null
+    ]
+
+    NAME_MAP = {
+        Category: 'Category',
+        Type: 'Type',
+        Name: 'Name',
+        Mtime: 'Modified',
+        Null: 'None',
+    }
+
+    NAME_MAP_CHS = {
+        Category: '分类',
+        Type: '类型',
+        Name: '名字',
+        Mtime: '修改时间',
+        Null: '无',
+    }

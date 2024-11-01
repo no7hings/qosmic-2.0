@@ -21,7 +21,7 @@ from . import base as _base
 class QtItemDelegate(QtWidgets.QItemDelegate):
     def sizeHint(self, option, index):
         size = super(QtItemDelegate, self).sizeHint(option, index)
-        size.setHeight(_gui_core.GuiSize.ItemDefaultHeight)
+        size.setHeight(_gui_core.GuiSize.ItemHeightDefault)
         return size
 
 
@@ -380,7 +380,7 @@ class QtMenu(QtWidgets.QMenu):
         super(QtMenu, self).__init__(*args, **kwargs)
         self.setPalette(_qt_core.GuiQtDcc.generate_qt_palette())
         self.setAutoFillBackground(True)
-        #
+
         self.setFont(_qt_core.QtFonts.NameNormal)
 
         if QT_LOAD_INDEX == 0:
@@ -895,6 +895,9 @@ class QtInfoLabel(
     def _set_info_(self, text):
         self._text = text
         self._refresh_widget_all_()
+        
+    def _get_info_(self):
+        return self._text
 
 
 class QtCommonStyle(QtWidgets.QCommonStyle):
@@ -987,7 +990,7 @@ class QtStyledItemDelegate(QtWidgets.QStyledItemDelegate):
 
     def sizeHint(self, option, index):
         size = super(QtStyledItemDelegate, self).sizeHint(option, index)
-        size.setHeight(_gui_core.GuiSize.ItemDefaultHeight)
+        size.setHeight(_gui_core.GuiSize.ItemHeightDefault)
         return size
 
 

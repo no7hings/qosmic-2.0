@@ -1,6 +1,8 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
+import lxbasic.pinyin as bsc_pinyin
+
 import lxbasic.storage as bsc_storage
 
 from ... import core as _gui_core
@@ -150,8 +152,10 @@ class ListItemModel(_item_base.AbsItemModel):
         super(ListItemModel, self).__init__(
             item,
             _base._Data(
-                image_placeholder_svg=_gui_core.GuiIcon.get('placeholder/image'),
+                # group
+                group_enable=False,
                 # image
+                thumbnail_placeholder_svg=_gui_core.GuiIcon.get('placeholder/image'),
                 image_enable=False,
                 image=None,
                 # image sequence, default use none
@@ -197,6 +201,7 @@ class ListItemModel(_item_base.AbsItemModel):
 
     def _init_autoplay(self, fps):
         self._data.autoplay_enable = True
+
         play_thread = _FramePlayThread(self._view)
         play_thread.timeout.connect(self._autoplaying)
         frame_interval = int(1000/fps)
@@ -204,6 +209,7 @@ class ListItemModel(_item_base.AbsItemModel):
 
         wait_timer = QtCore.QTimer(self._view)
         wait_timer.timeout.connect(self._start_autoplay)
+
         self._data.autoplay = _base._Data(
             flag=False,
             play_thread=play_thread,
@@ -354,7 +360,7 @@ class ListItemModel(_item_base.AbsItemModel):
             self._data.basic.rect, self.refresh_pixmap_cache()
         )
 
-        self.draw_names(painter, option, index)
+        self.draw_texts(painter, option, index)
 
         self.draw_status(painter, option, index)
         self.draw_lock(painter, option, index)
@@ -391,31 +397,26 @@ class ListItemModel(_item_base.AbsItemModel):
 
         # draw check
         if self._data.check_enable is True:
-            self._draw_icon(painter, self._data.check.rect, self._data.check.file)
+            self._draw_icon_by_file(painter, self._data.check.rect, self._data.check.file)
         # draw icon
         if self._data.icon_enable is True:
-            self._draw_icon(painter, self._data.icon.rect, self._data.icon.file)
+            self._draw_icon_by_file(painter, self._data.icon.rect, self._data.icon.file)
 
     def draw_lock(self, painter, option, index):
         if self._data.lock_enable is True:
             if self._data.lock.flag is True:
-                self._draw_icon(painter, self._data.lock.rect, self._data.lock.file)
+                self._draw_icon_by_file(painter, self._data.lock.rect, self._data.lock.file)
 
     def draw_status(self, painter, option, index):
         if self._data.status_enable is True:
             status_color = self._get_status_color()
             if status_color is not None:
-                rect = self._data.status.rect
-                polygon = QtGui.QPolygon(
-                    [rect.topLeft(), rect.topRight(), rect.bottomLeft(), rect.topLeft()]
-                )
-                painter.setPen(_qt_core.QtRgba.Transparent)
-                painter.setBrush(status_color)
-                painter.drawPolygon(polygon)
+                rect = self._data.basic.rect
+                self._draw_status_frame(painter, rect, status_color)
 
-    def draw_names(self, painter, option, index):
+    def draw_texts(self, painter, option, index):
         # name
-        if self._data.name.enable is True:
+        if self._data.name_enable is True:
             status_color = self._get_status_color()
             if status_color is not None:
                 text_color = status_color
@@ -423,9 +424,15 @@ class ListItemModel(_item_base.AbsItemModel):
                 text_color = [
                     self._data.text.color, self._data.text.action_color
                 ][self._data.select.flag or self._data.hover.flag]
-            self._draw_name(
+            self._draw_text(
                 painter, self._data.name.rect, self._data.name.text,
                 text_color
+            )
+        # mtime
+        if self._data.mtime_enable is True:
+            self._draw_text(
+                painter, self._data.mtime.rect, self._data.mtime.text,
+                self._data.mtime.text_color, self._data.mtime.text_alignment
             )
 
     def refresh_pixmap_cache(self):
@@ -527,7 +534,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 )
                 img_rect = QtCore.QRectF(frm_x+img_x_, frm_y+img_y_, img_w_, img_h_)
                 # draw empty
-                self._draw_svg(painter, img_rect, self._data.image_placeholder_svg)
+                self._draw_svg(painter, img_rect, self._data.thumbnail_placeholder_svg)
             # about play
             if self._data.play_enable is True:
                 # time and progress
@@ -558,7 +565,7 @@ class ListItemModel(_item_base.AbsItemModel):
                         play_rect = QtCore.QRect(
                             frm_x+(frm_w-play_s)/2, frm_y+(frm_h-play_s)/2, play_s, play_s
                         )
-                        self._draw_icon(painter, play_rect, self._data.play.file)
+                        self._draw_icon_by_file(painter, play_rect, self._data.play.file)
 
                     mrg = 2
 
@@ -588,10 +595,11 @@ class ListItemModel(_item_base.AbsItemModel):
             # need rebuild instance
             self._data.rect = QtCore.QRect(rect)
 
-            name_h = 20
+            txt_h = self._data.text.height
+
             x, y, w, h = rect.x(), rect.y(), rect.width(), rect.height()
 
-            bsc_w_0, bsc_h_0 = w, h-name_h
+            bsc_w_0, bsc_h_0 = w, h-txt_h
 
             bsc_x, bsc_y, bsc_w, bsc_h = x+2, y+2, bsc_w_0-3, bsc_h_0-3
 
@@ -605,9 +613,11 @@ class ListItemModel(_item_base.AbsItemModel):
             self._data.hover.rect.setRect(
                 x+1, y+1, w-2, h-2
             )
-            # check icon
+            # icon
             item_h = 20
-            icn_w = 16
+            item_icon_w = 16
+
+            item_y = y+bsc_h_0
             # lock
             if self._data.lock_enable is True:
                 lck_w = lck_h = int(min(bsc_w, bsc_h)*.75)
@@ -619,22 +629,30 @@ class ListItemModel(_item_base.AbsItemModel):
             if self._data.check_enable is True:
                 cck_w = 20
                 self._data.check.rect.setRect(
-                    x+(cck_w-icn_w)/2+1, y+h-item_h+(cck_w-icn_w)/2, icn_w, icn_w
+                    x+(cck_w-item_icon_w)/2+1, item_y+(cck_w-item_icon_w)/2, item_icon_w, item_icon_w
                 )
             # icon
             icn_w = 0
             if self._data.icon_enable is True:
                 icn_w = 20
                 self._data.icon.rect.setRect(
-                    x+cck_w+(icn_w-icn_w)/2+1, y+h-item_h+(icn_w-icn_w)/2, icn_w, icn_w
+                    x+cck_w+(icn_w-item_icon_w)/2+1, item_y+(icn_w-item_icon_w)/2, item_icon_w, item_icon_w
                 )
             # name
-            txt_offset = cck_w+icn_w
-            if txt_offset == 0:
-                txt_offset = 4
+            txt_w_sub = cck_w+icn_w
+            if txt_w_sub == 0:
+                txt_offset = 2
+            else:
+                txt_offset = txt_w_sub+2
+
             self._data.name.rect.setRect(
-                x+txt_offset+1, y+h-item_h, w-(cck_w+icn_w)-2, item_h
+                x+txt_offset+1, item_y, w-txt_w_sub-4, item_h
             )
+            # mtime
+            if self._data.mtime_enable is True:
+                self._data.mtime.rect.setRect(
+                    x+txt_offset, item_y+20, w-txt_w_sub-4, item_h
+                )
             # status
             self._update_status_rect(rect)
             return True
@@ -714,6 +732,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 size=None,
 
                 index=0,
+                # in play is disable show image at default index
                 index_default=0,
                 index_maximum=1,
 
@@ -759,13 +778,14 @@ class ListItemModel(_item_base.AbsItemModel):
                 self._data.image_sequence.pixmap = _pixmap
                 self._data.image_sequence.size = _pixmap.size()
                 self._data.image_sequence.files = _file_paths
+
                 _frame_count = len(_file_paths)
                 _fps = self._data.image_sequence.fps
                 self._data.image_sequence.index_default = int(_frame_count/2)
                 self._data.image_sequence.index_maximum = _frame_count-1
 
                 self._init_play()
-                self._init_autoplay(24)
+                self._init_autoplay(self._data.image_sequence.fps)
 
                 self._data.play.progress_enable = True
 
@@ -823,6 +843,7 @@ class ListItemModel(_item_base.AbsItemModel):
                 capture_opt=None,
                 size=None,
                 index=0,
+                # in play is disable show image at default index
                 index_default=0,
                 index_maximum=1,
                 fps=24,
@@ -1090,11 +1111,164 @@ class ListItemModel(_item_base.AbsItemModel):
                 x+2, y+2, 20, 20
             )
 
+    # sort
+    def _generate_current_sort_name_text(self):
+        name_text = super(ListItemModel, self)._generate_current_sort_name_text()
+
+        if self._data.group_enable is True:
+            group_text = self._generate_group_name_for(self._data.group.key)
+        else:
+            group_text = ''
+
+        if group_text:
+            return '{}:{}'.format(group_text, name_text)
+        return name_text
+
+    # group
+    def set_group_enable(self, boolean):
+        self._data.group_enable = boolean
+        if boolean is True:
+            self._data.group = _base._Data(
+                dict=dict(),
+                key=None,
+            )
+
+    def set_group_dict(self, dict_):
+        if self.data.group_enable is True:
+            self._data.group.dict = dict_
+
+    def _generate_current_group_name(self):
+        if self._data.group_enable is True:
+            return self._generate_group_name_for(self._data.group.key)
+
+    def _generate_group_name_for(self, group_key):
+        if group_key == self.GroupKey.Category:
+            return self.get_category()
+        if group_key == self.GroupKey.Type:
+            return self.get_type()
+        elif group_key == self.GroupKey.Name:
+            return bsc_core.BscChrGroup().get_group(
+                bsc_pinyin.Text.find_first_chr(self._data.name.text)
+            )
+        return self._data.group.dict.get(group_key)
+
+    def apply_group_key(self, key):
+        if self._data.group_enable is True:
+            self._data.group.key = key
+            self._item.setText(self._generate_current_sort_name_text())
+
+    # select
+    def focus_select(self):
+        widget = self._item.listWidget()
+        widget.scrollToItem(self._item, widget.PositionAtTop)
+        widget.setCurrentItem(self._item)
+
 
 class ListGroupItemModel(_item_base.AbsItemModel):
+
     def __init__(self, item):
         super(ListGroupItemModel, self).__init__(
             item,
             _base._Data(
+                line=_base._Data(
+                    color=_qt_core.QtRgba.Basic
+                ),
+                expand_enable=True,
+                expand=_base._Data(
+                    rect=QtCore.QRect(),
+                    file=_gui_core.GuiIcon.get('expand-open')
+                )
             )
         )
+
+    def update(self, rect):
+        # check rect is change
+        if rect != self._data.rect:
+            # need rebuild instance
+            self._data.rect = QtCore.QRect(rect)
+
+            x, y, w, h = rect.x(), rect.y(), rect.width(), rect.height()
+
+            bsc_x, bsc_y, bsc_w, bsc_h = x+2, y+2, w-3, h-3
+
+            self._data.basic.rect.setRect(
+                bsc_x, bsc_y, bsc_w, bsc_h
+            )
+            # icon
+            item_h = 20
+            item_icon_w = 16
+
+            # expand
+            epd_w = 0
+            if self._data.expand_enable is True:
+                epd_w = 20
+                epd_icn_w = 12
+                self._data.expand.rect.setRect(
+                    x+(epd_w-epd_icn_w)/2+1, y+(epd_w-epd_icn_w)/2, epd_icn_w, epd_icn_w
+                )
+            # check
+            cck_w = 0
+            if self._data.check_enable is True:
+                cck_w = 20
+                self._data.check.rect.setRect(
+                    x+(cck_w-item_icon_w)/2+1, y+(cck_w-item_icon_w)/2, item_icon_w, item_icon_w
+                )
+
+            # name
+            txt_w_sub = epd_w+cck_w
+            if txt_w_sub == 0:
+                txt_offset = 2
+            else:
+                txt_offset = txt_w_sub
+
+            name_w = self._font_metrics.width(self._data.name.text)+16
+            self._data.name.rect.setRect(
+                x+txt_offset+1, y, name_w, item_h
+            )
+
+    def draw(self, painter, option, index):
+        self.update(option.rect)
+
+        self.draw_background(painter, option, index)
+
+        self.draw_texts(painter, option, index)
+
+    def _update_name(self, text):
+        self._item.setText(text)
+
+    def draw_texts(self, painter, option, index):
+        # name
+        if self._data.name_enable is True:
+            text_color = [
+                self._data.text.color, self._data.text.action_color
+            ][self._data.select.flag or self._data.hover.flag]
+            self._draw_text(
+                painter, self._data.name.rect, self._data.name.text,
+                text_color
+            )
+
+    def draw_background(self, painter, option, index):
+        line = QtCore.QLine(
+            self._data.basic.rect.bottomLeft(), self._data.basic.rect.bottomRight()
+        )
+        painter.setPen(self._data.line.color)
+        painter.drawLine(line)
+
+        # draw expand
+        if self._data.expand_enable is True:
+            self._draw_icon_by_file(painter, self._data.expand.rect, self._data.expand.file)
+
+    # sort
+    def apply_sort_order(self, sort_order):
+        if sort_order == self.SortOrder.Ascending:
+            self._update_name(
+                u'{}:'.format(
+                    bsc_core.ensure_unicode(self._data.name.text)
+                )
+            )
+        else:
+            self._update_name(
+                u'{}|'.format(
+                    bsc_core.ensure_unicode(self._data.name.text)
+                )
+            )

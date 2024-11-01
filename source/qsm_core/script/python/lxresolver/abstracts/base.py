@@ -558,7 +558,7 @@ class AbsRsvMatcher(object):
             list_.extend(i_results)
             return list_
 
-    def get_matches(self, trim=None):
+    def find_matches(self, trim=None):
         return self._matcher__get_matches(trim)
 
     def get_latest(self):
@@ -577,7 +577,7 @@ class AbsRsvMatcher(object):
         )
 
     def get_new(self):
-        matches = self.get_matches(trim=(-1, None))
+        matches = self.find_matches(trim=(-1, None))
         format_dict = copy.copy(self._variants)
         if matches:
             result, parameters = matches[-1]
@@ -937,7 +937,7 @@ class AbsRsvUnit(AbsRsvEntity):
             self._pattern,
             kwargs
         )
-        matches = rsv_matcher.get_matches(trim=(-1, None))
+        matches = rsv_matcher.find_matches(trim=(-1, None))
         if matches:
             result, variants = matches[-1]
             version = variants['version']
@@ -963,7 +963,7 @@ class AbsRsvUnit(AbsRsvEntity):
             self._pattern,
             kwargs
         )
-        return rsv_matcher.get_matches()
+        return rsv_matcher.find_matches()
 
     def get_all_exists_results(self, variants_extend=None):
         matches = self.get_all_exists_matches(variants_extend)
@@ -2108,7 +2108,7 @@ class AbsRsvProject(
         rsv_matcher = self._project__generate_main_rsv_matcher(
             kwargs
         )
-        matches = rsv_matcher.get_matches()
+        matches = rsv_matcher.find_matches()
         for i_m in matches:
             _, i_variants = i_m
             i_kwargs = copy.copy(kwargs)
@@ -2174,7 +2174,7 @@ class AbsRsvProject(
         rsv_matcher = self._project__generate_main_rsv_matcher(
             kwargs
         )
-        matches = rsv_matcher.get_matches()
+        matches = rsv_matcher.find_matches()
         if matches:
             result, variants = matches[-1]
             rsv_category = self.EntityCategories.Resource
@@ -2207,7 +2207,7 @@ class AbsRsvProject(
         rsv_matcher = self._project__generate_main_rsv_matcher(
             kwargs_over
         )
-        matches = rsv_matcher.get_matches()
+        matches = rsv_matcher.find_matches()
         for i_m in matches:
             i_result, i_variants = i_m
             if p is not None:
@@ -2285,7 +2285,7 @@ class AbsRsvProject(
         rsv_matcher = self._project__generate_main_rsv_matcher(
             kwargs
         )
-        matches = rsv_matcher.get_matches()
+        matches = rsv_matcher.find_matches()
         if matches:
             rsv_category = self.EntityCategories.Resource
             entity_type = kwargs['branch']
@@ -2319,7 +2319,7 @@ class AbsRsvProject(
             i_rsv_matcher = self._project__generate_main_rsv_matcher(
                 i_kwargs_over
             )
-            i_matches = i_rsv_matcher.get_matches()
+            i_matches = i_rsv_matcher.find_matches()
             for j_match in i_matches:
                 j_result, j_variants = j_match
                 if p is not None:
@@ -2410,7 +2410,7 @@ class AbsRsvProject(
             i_rsv_matcher = self._project__generate_main_rsv_matcher(
                 i_kwargs_over
             )
-            i_matches = i_rsv_matcher.get_matches()
+            i_matches = i_rsv_matcher.find_matches()
             for j_match in i_matches:
                 j_result, j_variants = j_match
                 j_kwargs_over = self._copy_variants_as_branches_(i_kwargs_over)
@@ -2461,7 +2461,7 @@ class AbsRsvProject(
                 i_kwargs_over
             )
 
-            i_matches = i_rsv_matcher.get_matches()
+            i_matches = i_rsv_matcher.find_matches()
             for j_match in i_matches:
                 j_result, j_variants = j_match
                 if p is not None:
@@ -2524,7 +2524,7 @@ class AbsRsvProject(
             i_rsv_matcher = self._project__generate_main_rsv_matcher(
                 i_kwargs_over
             )
-            i_matches = i_rsv_matcher.get_matches()
+            i_matches = i_rsv_matcher.find_matches()
             for j_match in i_matches:
                 j_result, j_variants = j_match
                 j_kwargs_over = self._copy_variants_as_branches_(i_kwargs_over)
@@ -2567,7 +2567,7 @@ class AbsRsvProject(
         rsv_matcher = self._project__generate_main_rsv_matcher(
             kwargs
         )
-        matches = rsv_matcher.get_matches()
+        matches = rsv_matcher.find_matches()
         for i_m in matches:
             _, i_variants = i_m
             i_kwargs = copy.copy(kwargs)
@@ -2624,7 +2624,7 @@ class AbsRsvProject(
         rsv_matcher = self._project__generate_main_rsv_matcher(
             kwargs
         )
-        matches = rsv_matcher.get_matches()
+        matches = rsv_matcher.find_matches()
         if matches:
             result, variants = matches[-1]
             self._completion_rsv_entity_extend_create_kwargs(kwargs, result, variants)
@@ -2708,7 +2708,7 @@ class AbsRsvProject(
         rsv_matcher = self._project__generate_rsv_matcher(
             kwargs
         )
-        matches = rsv_matcher.get_matches()
+        matches = rsv_matcher.find_matches()
         if matches:
             result, variants = matches[-1]
             self._completion_rsv_entity_extend_create_kwargs(kwargs, result, variants)

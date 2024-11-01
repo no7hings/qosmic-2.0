@@ -137,7 +137,7 @@ class QtEntryFrame(
                 painter._draw_text_by_rect_(
                     rect=self._tip_draw_rect,
                     text=self._tip_text,
-                    text_color=_qt_core.QtRgba.TextDisable,
+                    text_color=_qt_core.QtRgba.TxtDisable,
                     font=_qt_core.QtFonts.DefaultItalic,
                     text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
                 )

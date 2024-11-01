@@ -135,7 +135,7 @@ class RsvVariantTypes(object):
     Task = 'task'
     Version = 'version'
 
-    TaskExtra = 'task_extra'
+    TaskExtra = 'task_unit'
     VersionExtra = 'version_extra'
 
     User = 'user'

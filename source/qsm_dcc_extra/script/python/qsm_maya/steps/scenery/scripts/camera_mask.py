@@ -328,7 +328,7 @@ class CameraMask(object):
         hide_paths = list(set(all_path_new)-set(mask_paths_new))
 
         if hide_paths:
-            _mya_core.DisplayLayer.add_nodes(layer, [_mya_core.Shape.get_transform(x) for x in hide_paths])
+            _mya_core.DisplayLayer.add_all(layer, [_mya_core.Shape.get_transform(x) for x in hide_paths])
             _mya_core.DisplayLayer.set_visible(layer, False)
 
 

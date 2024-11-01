@@ -1,0 +1,70 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-*'
+    #
+    gui:
+        name: 'Task Create'
+        name_chs: '任务创建'
+        group_name: 'General(s)'
+        #
+        icon_name: 'lazy/workspace'
+        tool_tip:
+            |-
+            To be supplemented.
+        #
+        tool_tip_chs:
+            |-
+            待补充。
+
+        size: [480, 320]
+
+build:
+    main:
+        buttons:
+            apply_and_close:
+                name: 'Apply and Close'
+                name_chs: '应用并关闭'
+
+            apply:
+                name: 'Apply'
+                name_chs: '应用'
+
+            close:
+                name: 'Name'
+                name_chs: '关闭'
+
+    asset:
+        tab:
+            name: 'Asset'
+            name_chs: '资产'
+
+            tool_tip:
+                |-
+                To be supplemented.
+
+            tool_tip_chs:
+                |-
+                待补充。
+
+        options:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+                step_task:
+                    widget: capsule_string
+                    name: 'Task'
+                    name_chs: '任务'
+                    options: ['mod.modeling', 'grm.grooming', 'rig.rigging', 'cfx.cfx_rig', 'srf.surfacing']
+                    option_names: ['Modeling', 'Grooming', 'Rigging', 'CFX Rig', 'Surfacing']
+                    option_names_chs: ['模型', '毛发', '绑定', '解算预设', '材质']
+                    default: 'cfx.cfx_rig'
+                    lock: True
+
+                task_unit:
+                    widget: name
+                    name: 'Task Unit'
+                    name_chs: '任务单元'
+                    value: 'main'

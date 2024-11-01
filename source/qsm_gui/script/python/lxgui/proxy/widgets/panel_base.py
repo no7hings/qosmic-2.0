@@ -19,7 +19,6 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
 
     PAGE_CLASS_DICT = {}
     SUB_PANEL_CLASS_DICT = {}
-    SUB_PAGE_CLASS_DICT = {}
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxBasePanel, self).__init__(*args, **kwargs)
@@ -73,6 +72,8 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
         self._gui_debug_run(
             self._gui_main_fnc, self.CONFIGURE_KEY
         )
+        
+        self._page_dict = {}
 
     def _gui_main_fnc(self, configure_key):
         self._configure = bsc_resource.RscExtendConfigure.get_as_content(configure_key)
@@ -104,14 +105,14 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
     def gui_setup_post_fnc(self):
         pass
 
-    def generate_sub_panel_for(self, key):
+    def gui_generate_sub_panel_for(self, key):
         return self.SUB_PANEL_CLASS_DICT[key](self._window, self._session)
 
-    def generate_page_for(self, key):
+    def gui_generate_page_for(self, key):
         return self.PAGE_CLASS_DICT[key](self._window, self._session)
 
-    def generate_sub_page_for(self, key, sub_window):
-        return self.SUB_PAGE_CLASS_DICT[key](self._window, self._session, sub_window)
+    def gui_find_page(self, key):
+        return self._page_dict.get(key)
 
 
 class PrxBasePage(_prx_abstracts.AbsPrxWidget):
@@ -148,6 +149,9 @@ class PrxBasePage(_prx_abstracts.AbsPrxWidget):
     def _to_unit_instance(self, cls):
         return cls(self._window, self, self._session)
 
+    def do_gui_refresh_all(self):
+        pass
+
 
 class PrxBaseUnit(_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
@@ -166,6 +170,9 @@ class PrxBaseUnit(_prx_abstracts.AbsPrxWidget):
         self._qt_layout.setSpacing(2)
 
     def gui_unit_setup_fnc(self):
+        pass
+
+    def do_gui_refresh_all(self):
         pass
 
 
@@ -187,9 +194,9 @@ class PrxBaseSubPanel(_window_base.PrxBaseWindow):
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxBaseSubPanel, self).__init__(*args, **kwargs)
-        self._init_base_panel_def(window, session, *args, **kwargs)
-
         self._page_dict = {}
+
+        self._init_base_panel_def(window, session, *args, **kwargs)
 
     def _gui_debug_run(self, fnc, *args, **kwargs):
         # noinspection PyBroadException
@@ -229,6 +236,7 @@ class PrxBaseSubPanel(_window_base.PrxBaseWindow):
     def _init_base_panel_def(self, window, session, *args, **kwargs):
         self._window = window
         if self._window is not None:
+            self._qt_widget.setParent(window._qt_widget, gui_qt_core.QtCore.Qt.Tool)
             self._qt_widget.setWindowFlags(gui_qt_core.QtCore.Qt.Tool)
 
         self._session = session
@@ -266,10 +274,10 @@ class PrxBaseSubPanel(_window_base.PrxBaseWindow):
     def gui_setup_fnc(self):
         pass
 
-    def generate_sub_page_for(self, key):
+    def gui_generate_sub_page_for(self, key):
         return self.SUB_PAGE_CLASS_DICT[key](self._window, self._session, self)
 
-    def gui_get_page(self, key):
+    def gui_find_page(self, key):
         return self._page_dict.get(key)
 
 
@@ -288,3 +296,8 @@ class PrxBaseSubPage(_prx_abstracts.AbsPrxWidget):
         self._qt_layout = _qt_wgt_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout.setContentsMargins(*[0]*4)
         self._qt_layout.setSpacing(2)
+
+    def gui_page_setup_fnc(self):
+        """
+        main setup function put here
+        """

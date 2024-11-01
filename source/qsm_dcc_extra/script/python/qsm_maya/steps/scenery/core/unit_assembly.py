@@ -93,7 +93,7 @@ class UnitAssemblyOpt(object):
         file_path = _mya_core.AssemblyReference.get_file(self._node)
         file_opt = bsc_storage.StgFileOpt(file_path)
         if file_opt.get_is_file() is True:
-            mesh_file_path = '{}/mesh.ma'.format(file_opt.directory_path)
+            mesh_file_path = '{}/mesh.mb'.format(file_opt.directory_path)
 
             namespace = _mya_core.DagNode.to_namespace(self._node)
 

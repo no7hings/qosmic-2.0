@@ -45,7 +45,8 @@ class _QtListItemDelegate(QtWidgets.QStyledItemDelegate):
         self.parent()._view_model.draw_item(painter, option, index)
 
     def sizeHint(self, option, index):
-        return self.parent()._view_model._data.item.grid_size
+        item = self.parent().itemFromIndex(index)
+        return item.sizeHint()
 
 
 class _QtListViewWidget(
@@ -79,6 +80,7 @@ class _QtListViewWidget(
 
         self._view_model = _vew_mod_list.ListViewModel(self)
         self._view_model.data.item.cls = _item_for_list.QtListItem
+        self._view_model.data.item.group_cls = _item_for_list.QtListGroupItem
 
         self.setItemDelegate(_QtListItemDelegate(self))
 
@@ -188,7 +190,7 @@ class _QtListViewWidget(
     def startDrag(self, actions):
         items = self.selectedItems()
         if items:
-            drag_data = self._view_model.get_drag_data_for(items)
+            drag_data = self._view_model.generate_drag_data_for(items)
             if drag_data:
                 mime_data = QtCore.QMimeData()
 
@@ -316,6 +318,14 @@ class QtListWidget(
         self._check_tool_box.setVisible(boolean)
         self._view_model.set_item_check_enable(boolean)
 
+    def _set_item_sort_enable_(self, boolean):
+        self._item_sort_button.setVisible(boolean)
+        self._view_model.set_item_sort_enable(boolean)
+
+    def _set_item_group_enable_(self, boolean):
+        self._item_group_button.setVisible(boolean)
+        self._view_model.set_item_group_enable(boolean)
+
     def _create_top_tool_box_(self, name, size_mode=0):
         tool_box = _wgt_container.QtHToolBox()
         self._top_scroll_box.addWidget(tool_box)
@@ -342,7 +352,8 @@ class QtListWidget(
         )
         self._check_all_button._set_menu_data_(
             [
-                ('check visible', 'tool/show', self._on_check_visible_)
+                ('Check By', ),
+                ('visible', 'tool/show', self._on_check_visible_)
             ]
         )
         #
@@ -356,13 +367,15 @@ class QtListWidget(
         )
         self._uncheck_all_button._set_menu_data_(
             [
-                ('uncheck visible', 'tool/show', self._on_uncheck_visible_)
+                ('Uncheck By',),
+                ('visible', 'tool/show', self._on_uncheck_visible_)
             ]
         )
 
     def _build_sort_and_group_tool_box_(self):
         # sort
         self._item_sort_button = _wgt_button.QtIconPressButton()
+        self._item_sort_button.hide()
         self._sort_and_group_tool_box._add_widget_(self._item_sort_button)
         self._item_sort_button._set_name_text_('sort')
         self._item_sort_button._set_icon_name_('tool/sort-by-name-ascend')
@@ -372,9 +385,13 @@ class QtListWidget(
         self._item_sort_button.press_clicked.connect(self._on_sort_order_swap_)
         # group
         self._item_group_button = _wgt_button.QtIconPressButton()
+        self._item_group_button.hide()
         self._sort_and_group_tool_box._add_widget_(self._item_group_button)
         self._item_group_button._set_name_text_('group')
         self._item_group_button._set_icon_name_('tool/group-by')
+        self._item_group_button._set_menu_data_generate_fnc_(
+            self._view_model.generate_item_group_menu_data
+        )
         # mode
         self._item_mode_button = _wgt_button.QtIconPressButton()
         self._sort_and_group_tool_box._add_widget_(self._item_mode_button)
@@ -409,9 +426,10 @@ class QtListWidget(
         self._view_model.set_visible_items_checked(False)
 
     def _on_sort_order_swap_(self):
-        self._view_model.swap_item_sort_order()
-        order = ['ascend', 'descend'][self._view_model.get_item_sort_order()]
-        self._item_sort_button._set_icon_name_('tool/sort-by-name-{}'.format(order))
+        if self._view_model.is_item_sort_enable():
+            self._view_model.swap_item_sort_order()
+            order = ['ascend', 'descend'][self._view_model.get_item_sort_order()]
+            self._item_sort_button._set_icon_name_('tool/sort-by-name-{}'.format(order))
 
     def _on_item_mode_swap_(self):
         self._view_model.swap_item_mode()

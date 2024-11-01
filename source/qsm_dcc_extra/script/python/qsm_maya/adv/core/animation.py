@@ -101,6 +101,24 @@ class AdvOpt(_base.AdvNamespaceExtra):
             return [_mya_core.DagNode.to_path(x) for x in cmds.sets(_, query=1) or []]
         return []
 
+    # geometry
+
+    def find_geometry_location(self):
+        """
+        Geometry
+        """
+        _ = cmds.ls('{}:Geometry'.format(self._namespace), long=1)
+        if _:
+            return _[0]
+
+    def find_all_meshes(self):
+        _ = self.find_geometry_location()
+        if _:
+            return cmds.ls(
+                _, type='mesh', long=1, noIntermediate=1, dag=1
+            ) or []
+        return []
+
     @_mya_core.Undo.execute
     def duplicate(self, **kwargs):
         namespace_new = _mya_core.Reference.duplicate(
@@ -157,22 +175,6 @@ class AdvChrOpt(AdvOpt):
         return list(
             set(self.find_all_curve_controls())-set(self.find_all_basic_curve_controls())
         )
-
-    def find_geometry_location(self):
-        """
-        Geometry
-        """
-        _ = cmds.ls('{}:Geometry'.format(self._namespace), long=1)
-        if _:
-            return _[0]
-
-    def find_all_meshes(self):
-        _ = self.find_geometry_location()
-        if _:
-            return cmds.ls(
-                _, type='mesh', long=1, noIntermediate=1, dag=1
-            ) or []
-        return []
 
     def find_all_anm_curves(self):
         controls = self.find_all_controls()

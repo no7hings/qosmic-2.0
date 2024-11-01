@@ -848,6 +848,44 @@ class BscText(object):
         return re.findall(r'[A-Z](?:[a-z]+)?|[A-Za-z]+', text)
 
 
+class BscChrGroup(object):
+    INSTANCE = None
+
+    CHR_GROUPS = [
+        'abcdefgh',
+        'ijklmnopq',
+        'rstuvwxyz',
+        '0123456789',
+    ]
+
+    def __init__(self):
+        self._groups = []
+        for i in self.CHR_GROUPS:
+            if len(i) > 1:
+                i_name = '{}-{}'.format(i[0].upper(), i[-1].upper())
+            else:
+                i_name = i
+
+            self._groups.append(i_name)
+
+    def get_group(self, chr_):
+        for idx, i in enumerate(self.CHR_GROUPS):
+            if chr_.lower() in i:
+                return self._groups[idx]
+        return 'Other'
+
+    def groups(self):
+        return self._groups
+
+    def __new__(cls, *args, **kwargs):
+        if cls.INSTANCE is not None:
+            return cls.INSTANCE
+
+        instance = super(BscChrGroup, cls).__new__(cls)
+        cls.INSTANCE = instance
+        return instance
+
+
 class BscTextOpt(object):
     def __init__(self, raw):
         if isinstance(raw, six.string_types):

@@ -1,1 +1,1 @@
->加入[[资源管理工具（Resource Manager）]]
+>加入[[动画工具（Animation Tool）]]

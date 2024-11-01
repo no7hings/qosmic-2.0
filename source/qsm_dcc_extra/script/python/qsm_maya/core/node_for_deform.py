@@ -12,7 +12,9 @@ from . import node as _node
 
 from . import attribute as _attribute
 
-from . import transform as _transform
+from . import node_for_transform as _node_for_transform
+
+from . import shape as _node_for_shape
 
 
 class NonLinear(object):
@@ -23,8 +25,8 @@ class NonLinear(object):
 
         cmds.select(target_any_paths)
 
-        if _transform.Transform.is_transform_type(target_shape_path):
-            target_shape_path = _transform.Transform.get_shape(target_shape_path)
+        if _node_for_transform.Transform.is_transform_type(target_shape_path):
+            target_shape_path = _node_for_transform.Transform.get_shape(target_shape_path)
 
         mel.eval('{};'.format(key.upper()))
         # cmd_base.executeCommand('{}.cmd_create'.format(key))
@@ -59,9 +61,9 @@ class BlendShape:
     def create(cls, transform_path_src, transform_path_tgt, visibility=False):
         nodes = []
 
-        shape_path_src = _transform.Transform.get_shape(transform_path_src)
-        name_src = _transform.Transform.to_name(transform_path_src)
-        shape_path_tgt = _transform.Transform.get_shape(transform_path_tgt)
+        shape_path_src = _node_for_transform.Transform.get_shape(transform_path_src)
+        name_src = _node_for_transform.Transform.to_name(transform_path_src)
+        shape_path_tgt = _node_for_transform.Transform.get_shape(transform_path_tgt)
         # Debug Source Shape Hide
         cmds.setAttr(shape_path_tgt+'.visibility', 1)
         #
@@ -100,7 +102,7 @@ class CurveWarp:
 
     @classmethod
     def get_args_from(cls, deformed_node):
-        args = _transform.Transform.to_shape_args(deformed_node)
+        args = _node_for_transform.Transform.to_shape_args(deformed_node)
         if args:
             transform, shape = args
             shape_type = _node.Node.get_type(shape)
@@ -154,7 +156,7 @@ class CurveWarp:
 
     @classmethod
     def create_for_lattice(cls, node, curve):
-        args = _transform.Transform.to_shape_args(node)
+        args = _node_for_transform.Transform.to_shape_args(node)
         if args:
             transform, shape = args
             if _node.Node.get_type(shape) == 'lattice':
@@ -239,3 +241,45 @@ class CurveWarp:
             cls.create_for(node, curve)
             deform_node_1, curve = cls.get_args_from(node)
             cls.replace_node(deform_node_0, deform_node_1)
+
+
+class Wrap:
+    @classmethod
+    def get_driver_transforms(cls, node):
+        lst = []
+        array_indices = _attribute.NodeAttribute.get_array_indices(node, 'driverPoints')
+        for i in array_indices:
+            i_shape = _attribute.NodeAttribute.get_source_node(
+                node, 'driverPoints[{}]'.format(i), shapes=1
+            )
+            i_transform = _node_for_shape.Shape.get_transform(i_shape)
+            lst.append(i_transform)
+        return lst
+
+    @classmethod
+    def get_base_transforms(cls, node):
+        lst = []
+        array_indices = _attribute.NodeAttribute.get_array_indices(node, 'basePoints')
+        for i in array_indices:
+            i_shape = _attribute.NodeAttribute.get_source_node(
+                node, 'basePoints[{}]'.format(i), shapes=1
+            )
+            i_transform = _node_for_shape.Shape.get_transform(i_shape)
+            lst.append(i_transform)
+        return lst
+
+
+class MeshWrap:
+    @classmethod
+    def get_args(cls, transform_path):
+        node = cls.get_deform_node(transform_path)
+        if node:
+            return node, Wrap.get_driver_transforms(node), Wrap.get_base_transforms(node)
+
+    @classmethod
+    def get_deform_node(cls, transform_path):
+        shape_path = _node_for_transform.Transform.get_shape(transform_path)
+        return _attribute.NodeAttribute.get_source_node(
+            shape_path, 'inMesh', 'wrap'
+        )
+

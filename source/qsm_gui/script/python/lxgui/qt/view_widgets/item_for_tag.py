@@ -455,7 +455,7 @@ class _QtTagGroupItem(
     user_filter_checked = qt_signal()
 
     def _on_context_menu_(self, event):
-        if self._item_model.data.frame.rect.contains(event.pos()):
+        if self._item_model._data.frame.rect.contains(event.pos()):
             menu = None
 
             menu_data = self._item_model.get_menu_data()
@@ -626,11 +626,11 @@ class _QtTagGroupItem(
         else:
             txt_color = QtGui.QColor(*_gui_core.GuiRgba.DarkWhite)
         # expand
-        self._item_model._draw_icon(
+        self._item_model._draw_icon_by_file(
             painter, self._expand_icon_draw_rect, self._expand_icon_file_path_current
         )
         # check
-        self._item_model._draw_icon(
+        self._item_model._draw_icon_by_file(
             painter, self._check_icon_draw_rect, self._check_icon_file_path_current
         )
         painter.setFont(item_model_data.text.font)

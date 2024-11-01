@@ -170,6 +170,10 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
         cmds.file(new=1, force=1)
 
     @classmethod
+    def refresh(cls):
+        cmds.refresh(force=True)
+
+    @classmethod
     def repath_to(cls, file_path, with_create_directory=False):
         if with_create_directory is True:
             f = bsc_storage.StgFileOpt(file_path)
@@ -206,15 +210,22 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
             )
             if result is True:
                 cls.save_to(cls.get_current())
-                cls.open(file_path)
+                cls.open(file_path, add_to_recent=True)
                 return True
             elif result is False:
-                cls.open(file_path)
+                cls.open(file_path, add_to_recent=True)
                 return True
         else:
-            cls.open(file_path)
+            cls.open(file_path, add_to_recent=True)
             return True
         return False
+
+    @classmethod
+    def add_to_recent_files(cls, file_path):
+        pass
+        # recent_files = cmds.optionVar(query="RecentFilesList") or []
+        # if file_path not in recent_files:
+        #     cmds.optionVar(stringValueAppend=("RecentFilesList", file_path))
 
     @classmethod
     def new_with_dialog(cls):
@@ -260,7 +271,34 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
         return True
 
     @classmethod
-    def open(cls, file_path, ignore_format=True):
+    def save_to_with_dialog(cls, file_path):
+        if cls.is_dirty() is True:
+            result = gui_core.GuiApplication.exec_message_dialog(
+                six.u('Save changed to: {}?').format(
+                    cls.get_current()
+                ),
+                title='Save Scene to',
+                show_no=True,
+                show_cancel=True,
+                size=(320, 120),
+                status='warning',
+            )
+            if result is True:
+                # save old
+                cls.save_to(cls.get_current())
+                # save new
+                cls.save_to(file_path)
+                return True
+            elif result is False:
+                cls.save_to(file_path)
+                return True
+        else:
+            cls.save_to(file_path)
+            return True
+        return False
+
+    @classmethod
+    def open(cls, file_path, ignore_format=True, add_to_recent=False):
         if ignore_format is True:
             cmds.file(
                 file_path,
@@ -276,6 +314,9 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
                 force=1,
                 type=cls.get_file_type(file_path)
             )
+
+        if add_to_recent is True:
+            cls.add_to_recent_files(file_path)
 
     @classmethod
     def save_to(cls, file_path):

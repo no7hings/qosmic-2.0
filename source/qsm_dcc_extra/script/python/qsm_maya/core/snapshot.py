@@ -11,7 +11,7 @@ from . import window as _window
 
 from . import viewport as _viewport
 
-from . import transform as _transform
+from . import node_for_transform as _node_for_transform
 
 from . import render_for_hardware as _render_for_hardware
 
@@ -169,7 +169,7 @@ class Snapshot(object):
 
             p_0 = cmds.xform(camera, translation=1, worldSpace=1, query=1)
 
-            d = _transform.Transform.compute_distance(
+            d = _node_for_transform.Transform.compute_distance(
                 p_0, (0, 0, 0)
             )
             cmds.camera(

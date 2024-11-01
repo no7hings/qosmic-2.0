@@ -1,4 +1,9 @@
 # coding:utf-8
+# noinspection PyUnresolvedReferences
+import maya.mel as maya_mel
+# noinspection PyUnresolvedReferences
+import maya.cmds as maya_cmds
+
 from .undo import *
 
 from .transformation import *
@@ -29,7 +34,7 @@ from .container import *
 
 from .group import *
 
-from .transform import *
+from .node_for_transform import *
 
 from .time_ import *
 
@@ -83,7 +88,7 @@ from .window import *
 
 from .shelf import *
 
-from .deform import *
+from .node_for_deform import *
 
 from .node_for_dynamic import *
 

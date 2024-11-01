@@ -147,7 +147,7 @@ class QtCheckButton(
             if self._action_is_enable is True:
                 text_color = [_qt_core.QtRgba.Text, _qt_core.QtRgba.TextHover][self._is_hovered]
             else:
-                text_color = _qt_core.QtRgba.TextDisable
+                text_color = _qt_core.QtRgba.TxtDisable
             #
             painter._draw_text_by_rect_(
                 rect=self._name_draw_rect,
@@ -576,7 +576,7 @@ class QtPressButton(
             if self._action_is_enable is True:
                 text_color = [_qt_core.QtRgba.Text, _qt_core.QtRgba.TextHover][self._is_hovered]
             else:
-                text_color = _qt_core.QtRgba.TextDisable
+                text_color = _qt_core.QtRgba.TxtDisable
             #
             if self._get_sub_process_is_enable_() is True:
                 name_text = '{} - {}'.format(
@@ -595,7 +595,7 @@ class QtPressButton(
                 self._sub_name_draw_rect,
                 text=self._sub_name_text,
                 text_option=QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter,
-                text_color=_qt_core.QtRgba.TextTemporary,
+                text_color=_qt_core.QtRgba.TxtTemporary,
                 font=self._name_draw_font,
                 offset=offset,
             )

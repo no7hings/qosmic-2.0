@@ -1,13 +1,17 @@
 # coding:utf-8
 import os
 
+import random
+
 os.environ['PATH'] += ';Y:/deploy/rez-packages/external/ffmpeg/6.0/platform-windows/bin'
+
+os.environ['QSM_UI_LANGUAGE'] = 'chs'
 
 import functools
 
 import lxgui.qt.widgets as qt_widgets
 
-import lxgui.qt.view_widgets as qt_view_widgets
+import lxgui.qt.view_widgets as gui_qt_view_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
@@ -20,33 +24,53 @@ class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
 
-        self._d = qt_view_widgets.QtListWidget()
-        self._d._view_model.set_item_sort_keys(['name', 'gui_name', 'gui_name_chs'])
+        self._names = [
+            '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'
+        ]
+        self._indices = range(10)
+
+        self._d = gui_qt_view_widgets.QtListWidget()
+        self._d._set_item_sort_enable_(True)
+        self._d._set_item_group_enable_(True)
+        self._d._view_model.set_item_group_keys(['category'])
         self._d._set_item_check_enable_(True)
+        self._d._view_model.set_item_category_enable(True)
         self._d._view_model.set_item_drag_enable(True)
         self._d._view_model.set_item_lock_enable(True)
         self._d._view_model.set_item_frame_size(120, 120)
         self.add_widget(self._d)
+
+        self.test()
+
+        self._d.refresh.connect(self.test)
+
+    def test(self):
+        self._d._view_model.restore()
+
+        random.seed(0)
+
         for i in range(100):
-            i_path = '/test_aaaaaaaaaaaaaaaa{}'.format(i)
+            i_path = '/test_{}'.format(i)
             i_create_flag, i_item = self._d._view._view_model.create_item(i_path)
             # i_item._item_model.set_icon_name('file/file')
             i_item._item_model.set_tool_tip('TEST-{}'.format(i))
             i_item._item_model.register_keyword_filter_keys(['TEST-{}'.format(i), u'测试'])
             if i% 3:
                 i_item._item_model.set_locked(True)
-
-            if i% 4:
+            elif i% 4:
                 i_item._item_model.set_status(i_item._item_model.Status.Error)
 
-            i_item._item_model.register_sort_dict(
+            i_item._item_model.set_group_dict(
                 dict(
-                    name='TEST-{}'.format(i),
-                    gui_name='TEST {}'.format(str(i).zfill(4)),
-                    gui_name_chs=u'测试 ｛｝'.format(str(i).zfill(4)),
+                    category='分类-{}'.format(random.choice(self._indices))
                 )
             )
 
+            i_name = '{}{}{}'.format(
+                random.choice(self._names), random.choice(self._names), random.choice(self._names)
+            )
+
+            i_item._item_model.set_name(i_name)
             i_item._item_model.set_drag_data(
                 dict(file='Z:/libraries/lazy-resource/all/asset_test/QSM_TST_amanda/thumbnail.jpg')
             )

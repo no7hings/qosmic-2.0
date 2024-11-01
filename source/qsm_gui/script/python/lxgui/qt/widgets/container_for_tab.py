@@ -481,6 +481,7 @@ class _AbsQtHTabToolBox(
 
     def _clear_item_hover_(self):
         self._index_hover = None
+
         self._refresh_widget_draw_()
 
     def _do_show_tool_tip_(self, event):
@@ -517,6 +518,7 @@ class _AbsQtHTabToolBox(
     def _do_hover_move_(self, event):
         p = event.pos()
         self._index_hover = None
+
         if self._tab_bar_rect.contains(p):
             for i_index, i_tab_item in enumerate(self._tab_item_stack.get_all_items()):
                 if i_tab_item.rect.contains(p):

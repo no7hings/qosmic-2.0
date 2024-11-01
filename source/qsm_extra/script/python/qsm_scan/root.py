@@ -18,9 +18,9 @@ class Root(_base.AbsEntity):
 
     ROOT = None
 
-    ROOT_DICT = dict()
+    INSTANCE_DICT = dict()
 
-    def __init__(self, root=None):
+    def __init__(self, root='X:'):
         self._root_entity_stack = _base.NodeStack()
         super(Root, self).__init__(
             self, '/', dict(root=root)
@@ -28,11 +28,11 @@ class Root(_base.AbsEntity):
 
     def __new__(cls, *args, **kwargs):
         root = kwargs.get('root', 'X:')
-        if root in cls.ROOT_DICT:
-            return cls.ROOT_DICT[root]
+        if root in cls.INSTANCE_DICT:
+            return cls.INSTANCE_DICT[root]
 
         instance = super(Root, cls).__new__(cls, root=root)
-        cls.ROOT_DICT[root] = instance
+        cls.INSTANCE_DICT[root] = instance
         sys.stdout.write('new scan root: "{}"\n'.format(root))
         return instance
 
@@ -42,10 +42,16 @@ class Root(_base.AbsEntity):
 
     @property
     def projects(self):
-        return self.get_next_entities(_base.EntityTypes.Project)
+        return self.find_next_entities(_base.EntityTypes.Project)
 
     def project(self, name):
-        return self.get_next_entity(name, _base.EntityTypes.Project)
+        return self.find_next_entity(name, _base.EntityTypes.Project)
+
+    def find_project(self, name):
+        return self.find_next_entity(name, _base.EntityTypes.Project)
+
+    def find_asset(self, project, asset):
+        return self.find_project(project).find_asset(asset)
 
     def get_entity(self, path):
         return self._root_entity_stack.get(path)
@@ -58,8 +64,4 @@ class Root(_base.AbsEntity):
 
     @classmethod
     def generate(cls):
-        if cls.ROOT is not None:
-            return cls.ROOT
-        _ = cls(root='X:')
-        cls.ROOT = _
-        return _
+        return cls()

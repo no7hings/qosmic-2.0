@@ -32,7 +32,7 @@ class Main(object):
 
             page_key = 'tag'
             w.gui_setup_pages_for([page_key])
-            assign_page = w.gui_get_page(page_key)
+            assign_page = w.gui_find_page(page_key)
             if assign_page is not None:
                 assign_page.set_scr_stage_key(scr_stage_key)
                 assign_page.set_scr_nodes(

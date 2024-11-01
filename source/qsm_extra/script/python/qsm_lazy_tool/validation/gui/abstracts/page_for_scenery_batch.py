@@ -266,15 +266,15 @@ class AbsPrxPageForSceneryBatch(gui_prx_widgets.PrxBasePage):
         self.gui_page_setup_fnc()
 
     def gui_page_setup_fnc(self):
-        v_prx_sca = gui_prx_widgets.PrxVScrollArea()
-        self._qt_layout.addWidget(v_prx_sca.widget)
+        prx_v_sca = gui_prx_widgets.PrxVScrollArea()
+        self._qt_layout.addWidget(prx_v_sca.widget)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             self._window.choice_name(
                 self._window._configure.get('build.{}.options'.format(self.PAGE_KEY))
             )
         )
-        v_prx_sca.add_widget(self._prx_options_node)
+        prx_v_sca.add_widget(self._prx_options_node)
         self._prx_options_node.build_by_data(
             self._window._configure.get('build.{}.options.parameters'.format(self.PAGE_KEY)),
         )
@@ -284,7 +284,7 @@ class AbsPrxPageForSceneryBatch(gui_prx_widgets.PrxBasePage):
             self._prx_options_node.set(k, v)
 
         self._file_prx_tool_group = gui_prx_widgets.PrxHToolGroup()
-        v_prx_sca.add_widget(self._file_prx_tool_group)
+        prx_v_sca.add_widget(self._file_prx_tool_group)
         self._file_prx_tool_group.set_expanded(True)
         self._file_prx_tool_group.set_name(
             gui_core.GuiUtil.choice_name(
@@ -306,7 +306,7 @@ class AbsPrxPageForSceneryBatch(gui_prx_widgets.PrxBasePage):
 
         # results
         self._result_prx_tool_group = gui_prx_widgets.PrxHToolGroup()
-        v_prx_sca.add_widget(self._result_prx_tool_group)
+        prx_v_sca.add_widget(self._result_prx_tool_group)
         self._result_prx_tool_group.set_expanded(True)
         self._result_prx_tool_group.set_name(
             gui_core.GuiUtil.choice_name(

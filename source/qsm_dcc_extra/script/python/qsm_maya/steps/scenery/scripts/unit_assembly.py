@@ -272,7 +272,7 @@ class UnitAssemblyProcess(object):
                         i_gpu_file_path = '{}/gpu.abc'.format(
                             i_directory_path
                         )
-                        i_mesh_file_path = '{}/mesh.ma'.format(
+                        i_mesh_file_path = '{}/mesh.mb'.format(
                             i_directory_path
                         )
 

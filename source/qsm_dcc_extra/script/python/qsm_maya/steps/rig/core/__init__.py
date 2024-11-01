@@ -1,2 +1,2 @@
 # coding:utf-8
-from .skin import *
+from .rig_skin import *

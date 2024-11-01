@@ -108,7 +108,7 @@ class AbsPrxPanelForResourceManager(gui_prx_widgets.PrxBasePanel):
             tool_tip='...',
             switch_to=switch_to
         )
-        prx_page = self.generate_page_for('manager')
+        prx_page = self.gui_generate_page_for('manager')
         self._tab_page_dict[key] = prx_page
         
         self._prx_tab_view.register_page_delete_pre_fnc(key, self._gui_page_delete_pre_fnc)

@@ -438,6 +438,10 @@ class QtTreeWidget(
         self._check_tool_box.setVisible(boolean)
         self._view_model.set_item_check_enable(boolean)
 
+    def _set_item_sort_enable_(self, boolean):
+        self._item_sort_button.setVisible(boolean)
+        self._view_model.set_item_sort_enable(boolean)
+
     def _create_top_tool_box_(self, name, size_mode=0):
         tool_box = _wgt_container.QtHToolBox()
         self._top_scroll_box.addWidget(tool_box)
@@ -464,7 +468,8 @@ class QtTreeWidget(
         )
         self._check_all_button._set_menu_data_(
             [
-                ('check visible', 'tool/show', self._on_check_visible_)
+                ('Check By', ),
+                ('visible', 'tool/show', self._on_check_visible_)
             ]
         )
         #
@@ -478,12 +483,14 @@ class QtTreeWidget(
         )
         self._uncheck_all_button._set_menu_data_(
             [
-                ('uncheck visible', 'tool/show', self._on_uncheck_visible_)
+                ('Uncheck By',),
+                ('visible', 'tool/show', self._on_uncheck_visible_)
             ]
         )
 
     def _build_sort_and_chart_tool_box_(self):
         self._item_sort_button = _wgt_button.QtIconPressButton()
+        self._item_sort_button.hide()
         self._item_sort_button._set_name_text_('sort')
         self._item_sort_button._set_icon_file_path_(_gui_core.GuiIcon.get('tool/sort-by-name-ascend'))
         self._sort_and_chart_tool_box._add_widget_(self._item_sort_button)
@@ -525,11 +532,13 @@ class QtTreeWidget(
         self._view_model.set_visible_items_checked(False)
 
     def _on_sort_order_swap_(self):
-        self._view_model.swap_item_sort_order()
-        order = ['ascend', 'descend'][self._view_model.get_item_sort_order()]
-        self._item_sort_button._set_icon_file_path_(
-            _gui_core.GuiIcon.get('tool/sort-by-name-{}'.format(order)),
-        )
+        if self._view_model.is_item_sort_enable():
+            self._view_model.swap_item_sort_order()
+
+            order = ['ascend', 'descend'][self._view_model.get_item_sort_order()]
+            self._item_sort_button._set_icon_file_path_(
+                _gui_core.GuiIcon.get('tool/sort-by-name-{}'.format(order)),
+            )
 
     def _on_show_chart_(self):
         data = self._view_model.generate_chart_data()

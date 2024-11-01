@@ -211,7 +211,7 @@ class _QtSeparator(QtWidgets.QWidget):
 
     def _refresh_widget_draw_geometry_(self):
         if self._text is not None:
-            txt_w = self._font_metrics.width(self._text)
+            txt_w = self._font_metrics.width(self._text)+16
             self.setMinimumWidth(txt_w)
             self._text_rect.setRect(
                 0, 0, txt_w, self.height()
@@ -251,14 +251,14 @@ class _QtSeparator(QtWidgets.QWidget):
         painter = QtGui.QPainter(self)
         painter.setFont(self._font)
         painter.setPen(
-            _style.QtRgba.Gray
+            _style.QtRgba.BdrMenu
         )
         painter.drawText(
-            self._text_rect, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter, self._text
+            self._text_rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter, self._text
         )
 
         painter.setPen(
-            _style.QtRgba.DarkGray
+            _style.QtRgba.BdrMenu
         )
         painter.drawLine(
             self._rect.bottomLeft(), self._rect.bottomRight()

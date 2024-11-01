@@ -39,7 +39,7 @@ for i in [
         asset=i_asset,
         step='mod',
         task='modeling',
-        task_extra='modeling',
+        task_unit='modeling',
         version='v000_000'
     )
 

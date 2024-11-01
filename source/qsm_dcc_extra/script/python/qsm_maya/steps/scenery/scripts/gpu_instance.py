@@ -167,7 +167,7 @@ class GpuInstanceProcess(object):
                     i_directory_path
                 )
                 if bsc_storage.StgFileOpt(i_gpu_file_path).get_is_file() is False:
-                    i_mesh_file_path = '{}/mesh.ma'.format(
+                    i_mesh_file_path = '{}/mesh.mb'.format(
                         i_directory_path
                     )
                     # export to gpu and mesh

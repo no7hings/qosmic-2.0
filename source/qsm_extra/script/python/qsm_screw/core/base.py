@@ -638,7 +638,7 @@ FLUSH PRIVILEGES;
 
         dtb_entity_type = self._to_dtb_entity_type(entity_type)
         name = path.split(self.PATHSEP)[-1]
-        names = bsc_pinyin.Text.split_any_to_letters(name)
+        names = bsc_pinyin.Text.split_any_to_words(name)
         gui_name = ' '.join(map(lambda x: str(x).capitalize(), names))
         gui_name_chs = gui_name
         options = dict(

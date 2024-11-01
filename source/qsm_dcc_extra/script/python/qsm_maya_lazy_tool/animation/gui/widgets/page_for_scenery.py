@@ -212,6 +212,7 @@ class PrxPageForSceneryResource(gui_prx_widgets.PrxBasePage):
 
     def do_gui_refresh_all(self, force=False):
         self._top_prx_tool_bar.do_gui_refresh()
+
         is_changed = self._gui_asset_prx_unit.get_resources_query().do_update()
         if is_changed is True or force is True:
             self._gui_asset_tag_filter_prx_unit.restore()

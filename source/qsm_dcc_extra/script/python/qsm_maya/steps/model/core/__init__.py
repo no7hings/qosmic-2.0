@@ -1,2 +1,2 @@
 # coding:utf-8
-from .mesh import *
+from .model_mesh import *

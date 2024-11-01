@@ -393,11 +393,11 @@ class AbsParseOpt(object):
         )
 
     def update_variants_to(self, **kwargs):
-        return self.__class__(
-            BscParse.update_variants(self._pattern, **kwargs)
-        )
+        p = self.__class__(self._pattern)
+        p.update_variants(**kwargs)
+        return p
 
-    def get_variants(self, result):
+    def get_variants(self, result, extract=False):
         if _base.BscSystem.get_is_linux():
             i_p = parse.parse(
                 self._pattern, result, case_sensitive=True
@@ -415,7 +415,9 @@ class AbsParseOpt(object):
                 i_r.update(self._variants)
                 i_r['result'] = result
                 return i_r
-        return self._variants
+        if extract is False:
+            return self._variants
+        return {}
 
 
 class BscDccParseOpt(AbsParseOpt):
@@ -427,7 +429,7 @@ class BscStgParseOpt(AbsParseOpt):
     def __init__(self, p, variants=None):
         super(BscStgParseOpt, self).__init__(p, variants)
 
-    def get_matches(self, sort=False):
+    def find_matches(self, sort=False):
         list_ = []
         paths = _scan_glob.ScanGlob.glob(
             BscParse.to_fnmatch_style(
@@ -481,14 +483,14 @@ class BscStgParseOpt(AbsParseOpt):
         self._variants_default.update(kwargs)
 
     def get_latest_version(self, version_key):
-        ms = self.get_matches(sort=True)
+        ms = self.find_matches(sort=True)
         if ms:
             l_m = ms[-1]
             return l_m[version_key]
         return BscVersionOpt.get_default()
 
     def get_new_version(self, version_key):
-        ms = self.get_matches(sort=True)
+        ms = self.find_matches(sort=True)
         if ms:
             l_m = ms[-1]
             l_v = l_m[version_key]

@@ -47,7 +47,7 @@ class Profile(object):
         else:
             ptn = 'Y:/deploy/.log/profile/process/{date}/{uuid}.json'
         ptn_opt = _core.BscStgParseOpt(ptn)
-        matches = ptn_opt.get_matches()
+        matches = ptn_opt.find_matches()
         dict_0 = {}
         for i_match in matches:
             i_data = _base.StgFileOpt(i_match['result']).set_read()

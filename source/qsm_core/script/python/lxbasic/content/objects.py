@@ -479,3 +479,18 @@ class NodeProperties(dict):
 
     def __getattr__(self, item):
         return self.__getitem__(item)  # = self[item]
+
+
+class DictProperties(dict):
+    def __init__(self, *args, **kwargs):
+        super(DictProperties, self).__init__(*args, **kwargs)
+
+    def __getattr__(self, item):
+        return self.__getitem__(item)  # = self[item]
+
+    def __str__(self):
+        return '(\n{}\n)'.format(
+            '\n'.join(
+                ['    {}={}'.format(k, v) for k, v in self.items()]
+            )
+        )

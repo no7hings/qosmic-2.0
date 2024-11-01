@@ -914,7 +914,7 @@ if __name__ == '__main__':
             "step": "srf",
             "task": "surface",
             "version": "v000_002",
-            "task_extra": "surface",
+            "task_unit": "surface",
             "version_extra": "",
             "user": "",
             "artist": "dongchangbao"

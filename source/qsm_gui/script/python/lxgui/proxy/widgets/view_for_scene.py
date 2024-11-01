@@ -157,7 +157,7 @@ class PrxSceneView(
                 'Save to', 'tool/save-to',
                 sub_menu_data
             ],
-            ('Save New', 'tool/save-new', self.save_new)
+            ('Save New', 'tool/save-as', self.save_new)
         ]
 
     def save_to_name(self, name):

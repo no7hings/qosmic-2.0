@@ -239,7 +239,7 @@ class TreeViewModel(_view_base.AbsViewModel):
     def data(self):
         return self._data
 
-    def create_root(self):
+    def create_root_item(self):
         _ = self.create_item('/')
         if _[0] is True:
             _[1].setExpanded(True)
@@ -270,6 +270,8 @@ class TreeViewModel(_view_base.AbsViewModel):
         item_model.set_path(path)
         item_model.set_index(index_cur)
         item_model.set_name(name)
+        if self.is_item_sort_enable() is True:
+            item_model.set_sort_enable(True)
         if self.is_item_check_enable() is True:
             item_model.set_check_enable(True)
         if self.is_item_color_enable() is True:
@@ -282,7 +284,7 @@ class TreeViewModel(_view_base.AbsViewModel):
     def draw_item(self, painter, option, index):
         self._widget.itemFromIndex(index)._item_model.draw(painter, option, index)
     
-    def _sort_items(self, qt_order):
+    def _sort_items_fnc(self, qt_order):
         self._widget.sortItems(0, qt_order)
 
     def generate_chart_data(self):
@@ -301,18 +303,6 @@ class TreeViewModel(_view_base.AbsViewModel):
                 dict_.setdefault(i_group_key, {})[i_key] = i_value
 
         return dict_
-
-    def generate_item_sort_menu_data(self):
-        menu_data = []
-        keys = self.get_item_sort_keys()
-        order = ['ascend', 'descend'][self.get_item_sort_order()]
-        icon_name = 'tool/sort-by-name-{}'.format(order)
-        for i_key in keys+['index', 'number']:
-            if i_key != self.get_item_sort_key_current():
-                menu_data.append(
-                    (i_key, icon_name, functools.partial(self.sort_item_by, i_key))
-                )
-        return menu_data
 
     def set_head_data(self, raw, max_width=0):
         self._widget.setHeaderHidden(False)

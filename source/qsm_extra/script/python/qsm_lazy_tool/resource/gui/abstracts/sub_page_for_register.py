@@ -1,21 +1,9 @@
 # coding:utf-8
-import copy
-
-import functools
-
-import six
-
 import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.resource as bsc_resource
-
-import lxbasic.pinyin as bsc_pinyin
-
 import lxgui.core as gui_core
-
-import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.widgets as gui_qt_widgets
 
@@ -134,27 +122,35 @@ class _AbsPrxPageForAnyRegister(
         entity_paths = [x.path for x in entities]
         leaf_paths = bsc_core.BscNodePath.to_leaf_paths(entity_paths)
 
-        for i in entities:
-            if i.path in leaf_paths:
-                i_gui_name = i.gui_name
+        for i_scr_entity in entities:
+            if i_scr_entity.path in leaf_paths:
+                i_gui_name = i_scr_entity.gui_name
                 if self._sub_window._language == 'chs':
-                    i_gui_name = i.gui_name_chs
+                    i_gui_name = i_scr_entity.gui_name_chs
 
-                i_flag, i_node = self._type_qt_tag_widget._view_model.create_item(i.path)
+                if i_scr_entity.category == 'group':
+                    i_flag, i_group = self._type_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
 
-                i_node._item_model.set_name(i_gui_name)
-                i_node._set_tool_tip_(i.to_description(self._sub_window._language))
+                    i_group._set_expanded_(True)
+
+                    i_group._item_model.set_name(i_gui_name)
+                    i_group._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
+                else:
+                    i_flag, i_node = self._type_qt_tag_widget._view_model.create_item(i_scr_entity.path)
+
+                    i_node._item_model.set_name(i_gui_name)
+                    i_node._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
             else:
-                i_gui_name = i.gui_name
+                i_gui_name = i_scr_entity.gui_name
                 if self._sub_window._language == 'chs':
-                    i_gui_name = i.gui_name_chs
+                    i_gui_name = i_scr_entity.gui_name_chs
 
-                i_flag, i_group = self._type_qt_tag_widget._view_model.create_item_as_group(i.path)
+                i_flag, i_group = self._type_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
 
                 i_group._set_expanded_(True)
 
                 i_group._item_model.set_name(i_gui_name)
-                i_group._set_tool_tip_(i.to_description(self._sub_window._language))
+                i_group._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
 
     def _load_all_tags(self):
         entities = self._scr_stage.find_all(
@@ -166,27 +162,33 @@ class _AbsPrxPageForAnyRegister(
         entity_paths = [x.path for x in entities]
         leaf_paths = bsc_core.BscNodePath.to_leaf_paths(entity_paths)
 
-        for i in entities:
-            if i.path in leaf_paths:
-                i_gui_name = i.gui_name
+        for i_scr_entity in entities:
+            if i_scr_entity.path in leaf_paths:
+                i_gui_name = i_scr_entity.gui_name
                 if self._sub_window._language == 'chs':
-                    i_gui_name = i.gui_name_chs
+                    i_gui_name = i_scr_entity.gui_name_chs
+                if i_scr_entity.category == 'group':
+                    i_flag, i_group = self._tag_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
 
-                i_flag, i_node = self._tag_qt_tag_widget._view_model.create_item(i.path)
+                    i_group._set_expanded_(True)
+                    i_group._item_model.set_name(i_gui_name)
+                    i_group._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
+                else:
+                    i_flag, i_node = self._tag_qt_tag_widget._view_model.create_item(i_scr_entity.path)
 
-                i_node._item_model.set_name(i_gui_name)
-                i_node._set_tool_tip_(i.to_description(self._sub_window._language))
+                    i_node._item_model.set_name(i_gui_name)
+                    i_node._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
             # add as group
             else:
-                i_gui_name = i.gui_name
+                i_gui_name = i_scr_entity.gui_name
                 if self._sub_window._language == 'chs':
-                    i_gui_name = i.gui_name_chs
+                    i_gui_name = i_scr_entity.gui_name_chs
 
-                i_flag, i_group = self._tag_qt_tag_widget._view_model.create_item_as_group(i.path)
+                i_flag, i_group = self._tag_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
 
                 i_group._set_expanded_(True)
                 i_group._item_model.set_name(i_gui_name)
-                i_group._set_tool_tip_(i.to_description(self._sub_window._language))
+                i_group._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
 
     def _on_list_all_files(self):
         directory_path = self._prx_options_node.get('directory')

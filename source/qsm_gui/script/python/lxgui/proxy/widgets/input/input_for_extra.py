@@ -1,6 +1,8 @@
 # coding:utf-8
 import six
 
+from .... import core as _gui_core
+
 from ....qt.widgets import utility as _qt_wgt_utility
 
 from ....qt.widgets import button as _qt_wgt_button
@@ -17,6 +19,11 @@ class PrxInputForBoolean(_input_base.AbsPrxInput):
 
     def __init__(self, *args, **kwargs):
         super(PrxInputForBoolean, self).__init__(*args, **kwargs)
+
+        self._qt_input_widget._set_check_icon_file_paths_(
+            _gui_core.GuiIcon.get('tag-filter-unchecked'),
+            _gui_core.GuiIcon.get('tag-filter-checked')
+        )
 
     def get(self):
         return self._qt_input_widget._is_checked_()

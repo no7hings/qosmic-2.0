@@ -11,7 +11,7 @@ os.environ['QSM_UI_LANGUAGE'] = 'chs'
 def fnc(w):
     page_key = 'type'
     w.gui_setup_pages_for([page_key])
-    page = w.gui_get_page(page_key)
+    page = w.gui_find_page(page_key)
     if page is not None:
         page.set_scr_stage_key('video_test')
         page.set_scr_node_paths(

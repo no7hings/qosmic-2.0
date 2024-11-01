@@ -3,6 +3,8 @@ import collections
 
 import functools
 
+import lxbasic.core as bsc_core
+
 from ... import core as _gui_core
 # qt
 from ...qt.core.wrap import *
@@ -11,7 +13,12 @@ from . import base as _base
 
 
 class AbsViewModel(object):
+    ItemMode = _gui_core.GuiItemMode
+
+    ItemSortKey = _gui_core.GuiItemSortKey
     ItemSortOrder = _gui_core.GuiItemSortOrder
+
+    ItemGroupKey = _gui_core.GuiItemGroupKey
 
     def do_close(self):
         self._close_flag = True
@@ -27,13 +34,18 @@ class AbsViewModel(object):
         self._widget = widget
 
         self._data = data
-        # item sort
-        self._data.item_sort = _base._Data(
-            enable=False,
-            keys=[],
-            key_current='index',
-            order=0,
-        )
+        # item index
+        self._data.item_index_enable = True
+        # item category
+        self._data.item_category_enable = False
+        # item type
+        self._data.item_type_enable = False
+        # item name
+        self._data.item_name_enable = True
+        # item mtime
+        self._data.item_mtime_enable = False
+        # item number
+        self._data.item_number_enable = False
         # item lock
         self._data.item_lock_enable = False
         # item check
@@ -43,6 +55,8 @@ class AbsViewModel(object):
         self._data.item_drag_enable = False
         # item drop
         self._data.item_drop_enable = False
+        # item sort
+        self._data.item_sort_enable = False
         # menu
         self._data.menu = _base._Data(
             content=None,
@@ -65,70 +79,47 @@ class AbsViewModel(object):
 
         self._close_flag = False
 
-    # item sort
-    def get_item_sort_order(self):
-        return self._data.item_sort.order
+    # item index
+    def set_item_index_enable(self, boolean):
+        self._data.item_index_enable = boolean
 
-    def set_item_sort_order(self, order):
-        self._data.item_sort.order = order
-        self._update_item_sort()
+    def is_item_index_enable(self):
+        return self._data.item_index_enable
 
-    def set_item_sort_keys(self, keys):
-        if keys is not None:
-            self._data.item_sort.enable = True
-            self._data.item_sort.keys = keys
-            self.set_item_sort_enable(True)
-            return True
-        self._data.item_sort.enable = False
-        return False
+    # item category
+    def set_item_category_enable(self, boolean):
+        self._data.item_category_enable = boolean
 
-    def set_item_sort_enable(self, boolean):
-        self._widget.setSortingEnabled(boolean)
-        # sort later
-        if isinstance(self._widget, QtWidgets.QListWidget):
-            self._widget.sortItems(QtCore.Qt.AscendingOrder)
-        elif isinstance(self._widget, QtWidgets.QTreeWidget):
-            self._widget.sortByColumn(0, QtCore.Qt.AscendingOrder)
+    def is_item_category_enable(self):
+        return self._data.item_category_enable
 
-    def get_item_sort_keys(self):
-        return self._data.item_sort.keys
+    # item type
+    def set_item_type_enable(self, boolean):
+        self._data.item_type_enable = boolean
 
-    def get_item_sort_key_current(self):
-        return self._data.item_sort.key_current
+    def is_item_type_enable(self):
+        return self._data.item_type_enable
+    
+    # item name
+    def set_item_name_enable(self, boolean):
+        self._data.item_name_enable = boolean
 
-    def sort_item_by(self, key):
-        self._data.item_sort.key_current = key
-        [x._item_model.apply_sort(key) for x in self.get_all_items()]
-        self._update_item_sort()
+    def is_item_name_enable(self):
+        return self._data.item_name_enable
 
-    def _update_item_sort(self):
-        self._sort_items(
-            [QtCore.Qt.AscendingOrder, QtCore.Qt.DescendingOrder][self.get_item_sort_order()]
-        )
+    # item mtime
+    def set_item_mtime_enable(self, boolean):
+        self._data.item_mtime_enable = boolean
 
-    def _sort_items(self, order):
-        raise NotImplementedError()
+    def is_item_mtime_enable(self):
+        return self._data.item_mtime_enable
 
-    def swap_item_sort_order(self):
-        if self._data.item_sort.order == self.ItemSortOrder.Ascend:
-            self.set_item_sort_order(self.ItemSortOrder.Descend)
-        else:
-            self.set_item_sort_order(self.ItemSortOrder.Ascend)
+    # item number
+    def set_item_number_enable(self, boolean):
+        self._data.item_number_enable = boolean
 
-    def generate_item_sort_menu_data(self):
-        menu_data = []
-        keys = self.get_item_sort_keys()
-        order = ['ascend', 'descend'][self.get_item_sort_order()]
-        icon_name = 'tool/sort-by-name-{}'.format(order)
-        for i_key in keys+['index']:
-            if i_key != self.get_item_sort_key_current():
-                menu_data.append(
-                    (i_key, icon_name, functools.partial(self.sort_item_by, i_key))
-                )
-        return menu_data
-
-    def generate_item_group_menu_data(self):
-        pass
+    def is_item_number_enable(self):
+        return self._data.item_number_enable
 
     # item lock
     def set_item_lock_enable(self, boolean):
@@ -151,6 +142,139 @@ class AbsViewModel(object):
 
     def is_item_color_enable(self):
         return self._data.item_color_enable
+
+    # item sort
+    def set_item_sort_enable(self, boolean):
+        self._data.item_sort_enable = boolean
+        if boolean is True:
+            self._data.item_sort = _base._Data(
+                keys=[],
+                key_current=self.ItemSortKey.Name,
+                order=0,
+            )
+
+        self._widget.setSortingEnabled(boolean)
+        # sort later
+        if isinstance(self._widget, QtWidgets.QListWidget):
+            self._widget.sortItems(QtCore.Qt.AscendingOrder)
+        elif isinstance(self._widget, QtWidgets.QTreeWidget):
+            self._widget.sortByColumn(0, QtCore.Qt.AscendingOrder)
+
+    def is_item_sort_enable(self):
+        return self._data.item_sort_enable
+
+    def set_item_sort_keys(self, keys):
+        if self._data.item_sort_enable is True:
+            assert isinstance(keys, list)
+
+            self._data.item_sort.keys = keys
+
+    def apply_item_sort_order(self, sort_order):
+        if self._data.item_sort_enable is True:
+            self._data.item_sort.order = sort_order
+
+            [x._item_model.apply_sort_order(sort_order) for x in self.get_all_items()]
+
+            self._update_item_sort()
+
+    def get_item_sort_order(self):
+        if self._data.item_sort_enable is True:
+            return self._data.item_sort.order
+
+    def get_item_sort_keys(self):
+        if self._data.item_sort_enable is True:
+            return self._data.item_sort.keys
+        return []
+
+    def get_item_sort_key_current(self):
+        if self._data.item_sort_enable is True:
+            return self._data.item_sort.key_current
+
+    def sort_item_by(self, sort_key):
+        if self._data.item_sort_enable is True:
+            self._data.item_sort.key_current = sort_key
+
+            [x._item_model.apply_sort_key(sort_key) for x in self.get_all_items()]
+
+            self._update_item_sort()
+
+    def _update_item_sort(self):
+        if self._data.item_sort_enable is True:
+            self._sort_items_fnc(
+                [QtCore.Qt.AscendingOrder, QtCore.Qt.DescendingOrder][self._data.item_sort.order]
+            )
+
+    def _sort_items_fnc(self, order):
+        raise NotImplementedError()
+
+    def swap_item_sort_order(self):
+        if self._data.item_sort_enable is True:
+            if self._data.item_sort.order == self.ItemSortOrder.Ascending:
+                self.apply_item_sort_order(self.ItemSortOrder.Descending)
+            else:
+                self.apply_item_sort_order(self.ItemSortOrder.Ascending)
+
+    def generate_item_sort_menu_data(self):
+        if self._data.item_sort_enable is True:
+            menu_data = [
+                (_gui_core.GuiName.SortByChs,) if _gui_core.GuiUtil.language_is_chs() else (_gui_core.GuiName.SortBy,)
+            ]
+
+            for i_sort_key in self.ItemSortKey.ALL:
+                if i_sort_key == self._data.item_sort.key_current:
+                    i_icon_name = 'radio_checked'
+                else:
+                    i_icon_name = 'radio_unchecked'
+
+                if _gui_core.GuiUtil.language_is_chs():
+                    i_name = self.ItemSortKey.NAME_MAP_CHS[i_sort_key]
+                else:
+                    i_name = self.ItemSortKey.NAME_MAP[i_sort_key]
+
+                if i_sort_key == self.ItemSortKey.Default:
+                    menu_data.append(
+                        (
+                            i_name,
+                            i_icon_name,
+                            functools.partial(self.sort_item_by, i_sort_key)
+                        )
+                    )
+                else:
+                    i_enable = self._data.get('item_{}_enable'.format(i_sort_key))
+                    if i_enable is True:
+                        menu_data.append(
+                            (
+                                i_name,
+                                i_icon_name,
+                                functools.partial(self.sort_item_by, i_sort_key)
+                            )
+                        )
+
+            menu_data.append(
+                ()
+            )
+
+            for i_sort_order in self.ItemSortOrder.ALL:
+                if i_sort_order == self._data.item_sort.order:
+                    i_icon_name = 'radio_checked'
+                else:
+                    i_icon_name = 'radio_unchecked'
+
+                if _gui_core.GuiUtil.language_is_chs():
+                    i_name = self.ItemSortOrder.NAME_MAP_CHS[i_sort_order]
+                else:
+                    i_name = self.ItemSortOrder.NAME_MAP[i_sort_order]
+
+                menu_data.append(
+                    (
+                        i_name,
+                        i_icon_name,
+                        functools.partial(self.apply_item_sort_order, i_sort_order)
+                    )
+                )
+
+            return menu_data
+        return []
 
     # item drag
     def set_item_drag_enable(self, boolean):
@@ -262,6 +386,30 @@ class AbsViewModel(object):
     def get_selected_leaf_items(self):
         return [x for x in self.get_selected_items() if not x._item_model.get_children()]
 
+    def get_all_leaf_items(self):
+        return [x for x in self.get_all_items() if not x._item_model.get_children()]
+
+    def select_first_leaf_item(self):
+        leaf_items = self.get_all_leaf_items()
+        if leaf_items:
+            leaf_items[0].setSelected(True)
+
+    def select_last_leaf_item(self):
+        leaf_items = self.get_all_leaf_items()
+        if leaf_items:
+            leaf_items[-1].setSelected(True)
+
+    def get_current_item(self):
+        return self._widget.currentItem()
+
+    def get_all_item_paths(self):
+        return self._data.item_dict.keys()
+
+    # item status
+    def clear_all_items_status(self):
+        for i in self.get_all_items():
+            i._item_model.clear_status()
+
     # menu
     def set_menu_content(self, content):
         self._data.menu.content = content
@@ -311,6 +459,9 @@ class AbsViewModel(object):
     def _get_item(self, path):
         return self._data.item_dict.get(path)
 
+    def find_item(self, path):
+        return self._data.item_dict.get(path)
+
     def _remove_item(self, path):
         item = self._get_item(path)
         if item:
@@ -330,7 +481,7 @@ class AbsViewModel(object):
         for i_item in self.get_all_items():
             i_item._item_model.intersection_assign_path_set(path_set)
 
-    def get_drag_data_for(self, items):
+    def generate_drag_data_for(self, items):
         list_ = []
         for i_item in items:
             if i_item._item_model.is_locked():
@@ -340,6 +491,9 @@ class AbsViewModel(object):
             if i_drag_data:
                 list_.append(i_drag_data)
         return list_
+
+    def create_group_item(self, name, *args, **kwargs):
+        raise NotImplementedError()
 
     def create_item(self, path, *args, **kwargs):
         raise NotImplementedError()

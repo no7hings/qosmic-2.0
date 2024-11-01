@@ -129,7 +129,7 @@ class TreeItemModel(_item_base.AbsItemModel):
         self._update_show_auto()
 
         self.draw_background(painter, option, index)
-        self.draw_names(painter, option, index)
+        self.draw_texts(painter, option, index)
         # number
         if self._data.number_enable is True:
             if column == 0:
@@ -158,6 +158,7 @@ class TreeItemModel(_item_base.AbsItemModel):
             painter.setPen(self._data.select.color)
             painter.setBrush(self._data.select.color)
             painter.drawRect(rect)
+
         # hover and select
         elif condition == (True, True):
             if column == 0:
@@ -184,15 +185,18 @@ class TreeItemModel(_item_base.AbsItemModel):
         if column == 0:
             # draw check
             if self._data.check_enable is True:
-                self._draw_icon(painter, self._data.check.rect, self._data.check.file)
+                self._draw_icon_by_file(painter, self._data.check.rect, self._data.check.file)
             # draw color
             if self._data.color_enable is True:
                 self._draw_color(painter, self._data.color.rect, self._data.color.rgb)
             # draw icon
             if self._data.icon_enable is True:
-                self._draw_icon(painter, self._data.icon.rect, self._data.icon.file)
+                if self._data.icon.file_flag is True:
+                    self._draw_icon_by_file(painter, self._data.icon.rect, self._data.icon.file)
+                elif self._data.icon.pixmap_flag is True:
+                    self._draw_icon_by_pixmap(painter, self._data.icon.rect, self._data.icon.pixmap)
 
-    def draw_names(self, painter, option, index):
+    def draw_texts(self, painter, option, index):
         column = index.column()
         self.draw_name_at(painter, option, column)
 
@@ -222,23 +226,21 @@ class TreeItemModel(_item_base.AbsItemModel):
         for i in self.get_ancestors():
             i.setExpanded(True)
 
-    def apply_sort(self, key):
-        if key == 'index':
-            index = self._data.index
-            self._item.setText(
-                0, str(index).zfill(6)
-            )
-        elif key == 'number':
-            number = self._data.number.value
-            self._item.setText(
-                0, str(number).zfill(6)
-            )
-        else:
-            value = self._data.sort_dict.get(key, '')
-            self._item.setText(0, value)
+    def apply_sort_key(self, sort_key):
+        if self._data.sort_enable is True:
+            self._data.sort.key = sort_key
+
+            self._item.setText(0, self._generate_current_sort_name_text())
 
     def _update_name(self, text):
         self._item.setText(0, text)
 
     def set_expanded(self, boolean):
         self._item.setExpanded(boolean)
+
+    # select
+    def focus_select(self):
+        self.expand_to_ancestors()
+        widget = self._item.treeWidget()
+        widget.scrollToItem(self._item, widget.PositionAtTop)
+        widget.setCurrentItem(self._item)

@@ -43,7 +43,6 @@ class W(gui_prx_widgets.PrxBaseWindow):
         )
 
 
-
 if __name__ == '__main__':
     import sys
     # noinspection PyUnresolvedReferences

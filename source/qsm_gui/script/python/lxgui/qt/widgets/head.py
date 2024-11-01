@@ -43,8 +43,8 @@ class AbsQtHead(
         #
         self._is_expanded = False
 
-        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('expandclose')
-        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('expandopen')
+        self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('expand-close')
+        self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('expand-open')
 
         self._expand_sub_icon_file_path_0 = None
         self._expand_sub_icon_file_path_1 = None

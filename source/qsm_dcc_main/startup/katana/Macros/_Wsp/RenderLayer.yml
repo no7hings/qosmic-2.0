@@ -109,7 +109,7 @@ main:
         parameters/environment/tag_8:
             label: ' '
             widget: strings
-            value: ['task_extra', '$PG_TASK_EXTRA']
+            value: ['task_unit', '$PG_TASK_EXTRA']
             tool_tip: '...'
 
         parameters/environment/tag_9:
@@ -225,7 +225,7 @@ main:
         #   output
         parameters/render/output/directory:
             widget: file
-            value: '{root}/{project}/assets/{role}/{asset}/user/work.{artist}/katana/render/{task_extra}/{asset}.{step}.{task}.{render_version}.{render_layer}'
+            value: '{root}/{project}/assets/{role}/{asset}/user/work.{artist}/katana/render/{task_unit}/{asset}.{step}.{task}.{render_version}.{render_layer}'
             tool_tip: '...'
         #
         parameters/render/output/builtin/image_enable:

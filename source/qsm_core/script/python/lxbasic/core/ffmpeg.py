@@ -816,7 +816,7 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
             six.u(r'-i "{}"').format(video_path_src),
             r'-v error',
             r'-vf',
-            r'"scale={}:-1"'.format(width_maximum),
+            r'"scale=trunc({}/2)*2:trunc(ow/a/2)*2"'.format(width_maximum),
             '-r 24', '-vcodec libx264', '-crf 28', '-preset ultrafast', '-y',
             six.u('"{}"').format(video_path_dst)
         ]

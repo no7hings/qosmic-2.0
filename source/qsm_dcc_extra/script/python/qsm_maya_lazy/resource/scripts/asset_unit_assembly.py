@@ -62,7 +62,7 @@ class AssetUnitAssemblyOpt(object):
         )
 
 
-class _RegionPrc(object):
+class _SceneRegionPrc(object):
     @classmethod
     def _compute_grid_size(cls, mesh_paths):
         mesh_count_data = qsm_mya_core.Meshes.get_evaluate(mesh_paths)
@@ -142,7 +142,7 @@ class _RegionPrc(object):
             gpu_file_path = '{}/gpu.abc'.format(
                 directory_path
             )
-            mesh_file_path = '{}/mesh.ma'.format(
+            mesh_file_path = '{}/mesh.mb'.format(
                 directory_path
             )
 
@@ -210,6 +210,11 @@ class _RegionPrc(object):
         return ar_path_new
 
 
+class _GPURegionUnitPrc(object):
+    def __init__(self, mesh_paths, cache_directory_path):
+        pass
+
+
 class _UnitPrc(object):
     LOG_KEY = 'mesh assembly'
 
@@ -268,7 +273,7 @@ class _UnitPrc(object):
             file_dict[gpu_key] = gpu_file_path
             # mesh
             mesh_key = qsm_mya_stp_scn_core.Assembly.Keys.Mesh
-            mesh_file_path = '{}/{}.ma'.format(
+            mesh_file_path = '{}/{}.mb'.format(
                 unit_directory_path, mesh_key
             )
             qsm_mya_core.SceneFile.export_file(
@@ -390,7 +395,7 @@ class _GpuPrc(object):
                 i_tag = 'gpu_{}_{}'.format(
                     bsc_storage.StgFileOpt(i_gpu_cache_path).name_base.lower(), i_idx
                 )
-                i_region_paths = _RegionPrc(
+                i_region_paths = _SceneRegionPrc(
                     i_mesh_paths, self._cache_directory_path, [i_transform_path], i_tag
                 ).execute()
                 region_paths.extend(i_region_paths)
@@ -465,11 +470,11 @@ class _ScenePrc(object):
     def execute(self):
         unit_prc = _UnitPrc(self._cache_directory_path)
         mesh_paths = qsm_mya_core.Scene.find_all_dag_nodes(type_includes=['mesh'])
-        for i_mesh_path in mesh_paths:
-            unit_prc.filter_execute_for(i_mesh_path)
+        # for i_mesh_path in mesh_paths:
+        #     unit_prc.filter_execute_for(i_mesh_path)
 
         mesh_paths_less = qsm_mya_core.Scene.find_all_dag_nodes(type_includes=['mesh'])
-        return _RegionPrc(
+        return _SceneRegionPrc(
             mesh_paths_less,
             self._cache_directory_path,
             self._exists_roots,

@@ -428,21 +428,23 @@ class BscStorage(object):
 
     @classmethod
     def clear_pathsep_to(cls, path):
-        # convert pathsep first, "\" to "/"
-        path_ = cls.convert_pathsep_to(path)
-        #
-        _ = path_.split(cls.PATHSEP)
-        new_path = cls.PATHSEP.join(filter(None, _))
-        # etc: '/data/f/'
-        if path_.endswith(cls.PATHSEP):
-            new_path += '/'
-        #
-        if path_.startswith(cls.PATHSEP_EXTRA):
-            return cls.PATHSEP_EXTRA+new_path
-        else:
-            if path_.startswith(cls.PATHSEP):
-                return cls.PATHSEP+new_path
-        return new_path
+        # fixme: clear method has bug, ignore
+        return path
+        # # convert pathsep first, "\" to "/"
+        # path_ = cls.convert_pathsep_to(path)
+        # #
+        # _ = path_.split(cls.PATHSEP)
+        # new_path = cls.PATHSEP.join(filter(None, _))
+        # # etc: '/data/f/'
+        # if path_.endswith(cls.PATHSEP):
+        #     new_path += '/'
+        # #
+        # if path_.startswith(cls.PATHSEP_EXTRA):
+        #     return cls.PATHSEP_EXTRA+new_path
+        # else:
+        #     if path_.startswith(cls.PATHSEP):
+        #         return cls.PATHSEP+new_path
+        # return new_path
 
     @classmethod
     def get_permission(cls, path):
@@ -487,7 +489,7 @@ class BscStorage(object):
                     return 'unknown'
             elif BscStorage.get_platform_is_windows():
                 import win32security
-                # print win32security.__file__
+
                 sd = win32security.GetFileSecurity(path, win32security.OWNER_SECURITY_INFORMATION)
                 owner_sid = sd.GetSecurityDescriptorOwner()
                 name, domain, _ = win32security.LookupAccountSid(None, owner_sid)
@@ -511,6 +513,8 @@ class BscStorage(object):
     def create_directory(cls, directory_path):
         if os.path.exists(directory_path) is False:
             os.makedirs(directory_path)
+            return True
+        return False
 
     @classmethod
     def get_relpath(cls, path_src, path_tgt):

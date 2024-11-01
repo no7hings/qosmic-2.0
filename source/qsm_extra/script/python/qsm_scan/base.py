@@ -160,19 +160,20 @@ class AbsEntity(object):
             if variants_extend is not None:
                 _.do_update(variants_extend)
             return _
+
         variants = copy.copy(self._variants)
         _ = self.NextEntityQueryClassDict[entity_type](self._root, variants)
         _.do_update(variants_extend)
         self._next_entity_query_cache_dict[entity_type] = _
         return _
 
-    def get_next_entities(self, entity_type, variants_extend=None):
+    def find_next_entities(self, entity_type, variants_extend=None):
         _ = self._generate_next_entity_query(entity_type, variants_extend)
         if variants_extend is not None:
             return _.find_all(variants_extend)
         return _.get_all()
 
-    def get_next_entity(self, name, entity_type):
+    def find_next_entity(self, name, entity_type):
         _ = self._generate_next_entity_query(entity_type)
         return _.get(name)
 
@@ -228,11 +229,11 @@ class AbsEntitiesCache(object):
                     j_variants = copy.copy(self._variants)
                     j_variants[k] = j
                     j_pth_opt.update_variants(**j_variants)
-                    j_matchers = j_pth_opt.get_matches(sort=True)
+                    j_matchers = j_pth_opt.find_matches(sort=True)
                     for k_variant in j_matchers:
                         self.register(k_variant)
         else:
-            matches = self._stg_ptn_opt_for_scan.get_matches(sort=True)
+            matches = self._stg_ptn_opt_for_scan.find_matches(sort=True)
             for i_variants in matches:
                 self.register(i_variants)
 
@@ -276,7 +277,7 @@ class AbsEntitiesCache(object):
         ptn_opt = self._stg_ptn_opt_for_scan.update_variants_to(
             **variants
         )
-        matches = ptn_opt.get_matches()
+        matches = ptn_opt.find_matches()
         if matches:
             variants_new = matches[0]
             return self.register(variants_new)
@@ -364,7 +365,7 @@ class AbsTaskQuery(object):
         pass
 
     def do_update(self, variants_extend=None):
-        matches = self._stg_ptn_opt_for_scan.get_matches(sort=True)
+        matches = self._stg_ptn_opt_for_scan.find_matches(sort=True)
         for i_variants in matches:
             self.register(i_variants)
     
@@ -392,7 +393,7 @@ class AbsTaskQuery(object):
         ptn_opt = self._stg_ptn_opt_for_scan.update_variants_to(
             **variants
         )
-        matches = ptn_opt.get_matches()
+        matches = ptn_opt.find_matches()
         if matches:
             variants_new = matches[0]
             return self.register(variants_new)

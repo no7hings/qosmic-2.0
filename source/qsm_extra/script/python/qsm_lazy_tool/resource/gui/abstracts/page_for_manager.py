@@ -160,7 +160,7 @@ class _GuiTypeOpt(
         self._qt_tree_widget = gui_qt_vew_widgets.QtTreeWidget()
         self._page._prx_v_splitter_0.add_widget(self._qt_tree_widget)
 
-        self._qt_tree_widget._view_model.set_item_sort_keys(['name', 'gui_name', 'gui_name_chs'])
+        self._qt_tree_widget._set_item_sort_enable_(True)
         # self._qt_tree_widget._set_item_check_enable_(True)
         self._qt_tree_widget._view_model.set_item_color_enable(True)
         self._qt_tree_widget._view_model.set_item_drop_enable(True)
@@ -251,12 +251,11 @@ class _GuiTypeOpt(
         if self._window._language == 'chs':
             gui_name = scr_entity.gui_name_chs
 
-        qt_item._item_model.set_type(scr_entity.entity_type)
+        # qt_item._item_model.set_type(scr_entity.entity_type)
         qt_item._item_model.set_name(gui_name)
         qt_item._item_model.set_icon_name(scr_entity.gui_icon_name)
-        qt_item._item_model.register_sort_dict(
+        qt_item._item_model.set_sort_dict(
             dict(
-                name=name,
                 gui_name=scr_entity.gui_name,
                 gui_name_chs=scr_entity.gui_name_chs,
             )
@@ -354,12 +353,11 @@ class _GuiTypeOpt(
         if self._window._language == 'chs':
             gui_name = scr_entity.gui_name_chs
 
-        qt_item._item_model.set_type(scr_entity.entity_type)
+        # qt_item._item_model.set_type(scr_entity.entity_type)
         qt_item._item_model.set_name(gui_name)
         qt_item._item_model.set_icon_name(scr_entity.gui_icon_name)
-        qt_item._item_model.register_sort_dict(
+        qt_item._item_model.set_sort_dict(
             dict(
-                name=name,
                 gui_name=scr_entity.gui_name,
                 gui_name_chs=scr_entity.gui_name_chs,
             )
@@ -774,7 +772,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
 
         self._qt_list_widget._view_model.set_item_frame_size(*item_frame_size)
 
-        self._qt_list_widget._view_model.set_item_sort_keys(['name', 'gui_name', 'gui_name_chs'])
+        self._qt_list_widget._set_item_sort_enable_(True)
         self._qt_list_widget._view_model.set_item_lock_enable(True)
         self._qt_list_widget._set_item_check_enable_(True)
         self._qt_list_widget._view_model.set_item_drag_enable(True)
@@ -902,10 +900,9 @@ class _GuiNodeOpt(_GuiBaseOpt):
             return
 
         qt_item._scr_entity = scr_entity
-        qt_item._item_model.set_type(scr_entity.type)
-        qt_item._item_model.register_sort_dict(
+        # qt_item._item_model.set_type(scr_entity.type)
+        qt_item._item_model.set_sort_dict(
             dict(
-                name=name,
                 gui_name=scr_entity.gui_name,
                 gui_name_chs=scr_entity.gui_name_chs,
             )
@@ -1030,7 +1027,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
         ]
 
     def _gui_node_show_build_fnc(self, *args):
-        def press_dbl_click_fnc():
+        def press_dbl_click_fnc_():
             if 'source' in property_dict:
                 _file_path = property_dict['source']
                 bsc_storage.StgFileOpt(_file_path).start_in_system()
@@ -1068,7 +1065,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
 
             qt_item._item_model.set_image_sequence(property_dict['image_sequence'], fps)
 
-        qt_item._item_model.register_press_dbl_click_fnc(press_dbl_click_fnc)
+        qt_item._item_model.register_press_dbl_click_fnc(press_dbl_click_fnc_)
         qt_item._item_model.set_property_dict(property_dict)
 
     # by type
@@ -1186,10 +1183,10 @@ class AbsPrxPageForManager(
 
     def _show_node_register_window(self):
         scr_stage_type = self._scr_stage.type
-        w = self._window.generate_sub_panel_for('register')
+        w = self._window.gui_generate_sub_panel_for('register')
         w.gui_setup_pages_for([scr_stage_type])
         w.show_window_auto()
-        register_page = w.gui_get_page(scr_stage_type)
+        register_page = w.gui_find_page(scr_stage_type)
         if register_page is not None:
             register_page.set_scr_stage_key(self._scr_stage.key)
             register_page.set_post_fnc(self.gui_on_register_finished)

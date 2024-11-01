@@ -142,25 +142,25 @@ class PrxTreeItemCheckState(object):
         )
 
     def set_error(self, column=0):
-        self.widget.setForeground(column, _qt_core.QtRgbaBrush.TextError)
+        self.widget.setForeground(column, _qt_core.QtRgbaBrush.TxtError)
         self._item_prx.set_gui_attribute(
             'state', 'error'
         )
 
     def set_warning(self, column=0):
-        self.widget.setForeground(column, _qt_core.QtRgbaBrush.TextWarning)
+        self.widget.setForeground(column, _qt_core.QtRgbaBrush.TxtWarning)
         self._item_prx.set_gui_attribute(
             'state', 'warning'
         )
 
     def set_passed(self, column=0):
-        self.widget.setForeground(column, _qt_core.QtRgbaBrush.TextCorrect)
+        self.widget.setForeground(column, _qt_core.QtRgbaBrush.TxtCorrect)
         self._item_prx.set_gui_attribute(
             'state', 'adopt'
         )
 
     def set_ignored(self, column=0):
-        self.widget.setForeground(column, _qt_core.QtRgbaBrush.TextTemporary)
+        self.widget.setForeground(column, _qt_core.QtRgbaBrush.TxtTemporary)
         self._item_prx.set_gui_attribute(
             'state', 'temporary'
         )
@@ -639,23 +639,23 @@ class PrxLabelTreeItem(PrxTreeItem):
 
     def set_error_state(self):
         self.set_icon_by_file(_gui_core.GuiIcon.get('error'))
-        self.set_foreground_update(_qt_core.QtRgbaBrush.TextError)
+        self.set_foreground_update(_qt_core.QtRgbaBrush.TxtError)
 
     def set_warning_state(self):
         self.set_icon_by_file(_gui_core.GuiIcon.get('warning'))
-        self.set_foreground_update(_qt_core.QtRgbaBrush.TextWarning)
+        self.set_foreground_update(_qt_core.QtRgbaBrush.TxtWarning)
 
     def set_adopt_state(self):
         self.set_icon_by_file(_gui_core.GuiIcon.get('adopt'))
-        self.set_foreground_update(_qt_core.QtRgbaBrush.TextCorrect)
+        self.set_foreground_update(_qt_core.QtRgbaBrush.TxtCorrect)
 
     def set_disable_state(self):
         self.set_icon_by_file(_gui_core.GuiIcon.get('disable'))
-        self.set_foreground_update(_qt_core.QtRgbaBrush.TextDisable)
+        self.set_foreground_update(_qt_core.QtRgbaBrush.TxtDisable)
 
     def set_temporary_state(self):
         self.set_icon_by_file(_gui_core.GuiIcon.get('temporary'))
-        self.set_foreground_update(_qt_core.QtRgbaBrush.TextTemporary)
+        self.set_foreground_update(_qt_core.QtRgbaBrush.TxtTemporary)
 
     def set_foreground_update(self, qt_brush):
         qt_tree_widget = self._qt_widget.treeWidget()
@@ -685,7 +685,7 @@ class PrxObjTreeItem(PrxTreeItem):
         return PrxTreeItemCheckState(self)
 
     def set_temporary_state(self, column=0):
-        self._qt_widget.setForeground(column, _qt_core.QtRgbaBrush.TextDisable)
+        self._qt_widget.setForeground(column, _qt_core.QtRgbaBrush.TxtDisable)
         self.set_gui_attribute(
             'state', 'temporary'
         )
@@ -697,25 +697,25 @@ class PrxObjTreeItem(PrxTreeItem):
         )
 
     def set_error_state(self, column=0):
-        self._qt_widget.setForeground(column, _qt_core.QtRgbaBrush.TextError)
+        self._qt_widget.setForeground(column, _qt_core.QtRgbaBrush.TxtError)
         self.set_gui_attribute(
             'state', 'error'
         )
 
     def set_warning_state(self, column=0):
-        self._qt_widget.setForeground(column, _qt_core.QtRgbaBrush.TextWarning)
+        self._qt_widget.setForeground(column, _qt_core.QtRgbaBrush.TxtWarning)
         self.set_gui_attribute(
             'state', 'warning'
         )
 
     def set_adopt_state(self, column=0):
-        self._qt_widget.setForeground(column, _qt_core.QtRgbaBrush.TextCorrect)
+        self._qt_widget.setForeground(column, _qt_core.QtRgbaBrush.TxtCorrect)
         self.set_gui_attribute(
             'state', 'adopt'
         )
 
     def set_current_state(self, column=0):
-        self._qt_widget.setForeground(column, _qt_core.QtRgbaBrush.TextActive)
+        self._qt_widget.setForeground(column, _qt_core.QtRgbaBrush.TxtActive)
         self.set_gui_attribute(
             'state', 'current'
         )

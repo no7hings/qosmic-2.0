@@ -59,14 +59,17 @@ widget:
     QMenu:
         |-
         QMenu{
-            background: rgba(<option.rgba.Background>); 
-            border: 1px rgba(<option.rgba.Border>); border-radius: 0px; border-style: solid;
+            background: rgba(<option.rgba.BkgMenu>); 
+            border: 1px rgba(<option.rgba.BdrMenu>); border-radius: 0px; border-style: solid;
             color: rgba(<option.rgba.Text>);
         }
         QMenu::separator{
-            color: rgba(<option.rgba.Text>);
+            color: rgba(<option.rgba.BdrMenu>);
+            border: 1px rgba(<option.rgba.BdrMenu>); border-radius: 0px; border-style: none none solid none;
             padding: 0px 1px 0px 1px;
-            height: 2px;
+            margin-left: 4px;
+            margin-right: 4px;
+            height: 1px;
         }
         QMenu::indicator:non-exclusive {
             width: 14px;
@@ -76,14 +79,14 @@ widget:
         QMenu::item{
             min-width: 128px;
             height: 20px;
-            background: rgba(<option.rgba.Background>);
+            background: rgba(<option.rgba.BkgMenu>);
             color: rgba(<option.rgba.Text>);
         }
         QMenu::item:disabled{
             min-width: 128px;
             height: 20px;
-            background: rgba(<option.rgba.Background>);
-            color: rgba(<option.rgba.TextDisable>);
+            background: rgba(<option.rgba.BkgMenu>);
+            color: rgba(<option.rgba.TxtDisable>);
         }
         QMenu::item:selected{
             background: rgba(<option.rgba.BackgroundSelect>);
@@ -96,14 +99,16 @@ widget:
     QMenuNew:
         |-
         QMenu{
-            background: rgba(<option.rgba.Background>); 
-            border: 1px rgba(<option.rgba.Border>); border-radius: 0px; border-style: solid;
+            background: rgba(<option.rgba.BkgMenu>); 
+            border: 1px rgba(<option.rgba.BdrMenu>); border-radius: 0px; border-style: solid;
             color: rgba(<option.rgba.Text>);
         }
         QMenu::separator{
-            color: rgba(<option.rgba.Text>);
-            padding: 0px 1px 0px 1px;
-            height: 2px;
+            color: rgba(<option.rgba.BdrMenu>);
+            border: 1px rgba(<option.rgba.BdrMenu>); border-radius: 0px; border-style: none none solid none;
+            margin-left: 4px;
+            margin-right: 4px;
+            height: 1px;
         }
         QMenu::icon {
             padding-left: 2px;
@@ -117,7 +122,7 @@ widget:
             min-width: 128px;
             padding-left: 22px;
             height: 20px;
-            background: rgba(<option.rgba.Background>);
+            background: rgba(<option.rgba.BkgMenu>);
             border: 1px rgba(<option.rgba.Transparent>); border-style: solid;
             color: rgba(<option.rgba.Text>);
         }
@@ -125,9 +130,9 @@ widget:
             min-width: 128px;
             padding-left: 22px;
             height: 20px;
-            background: rgba(<option.rgba.Background>);
+            background: rgba(<option.rgba.BkgMenu>);
             border: 1px rgba(<option.rgba.Transparent>); border-style: solid;
-            color: rgba(<option.rgba.TextDisable>);
+            color: rgba(<option.rgba.TxtDisable>);
         }
         QMenu::item:selected{
             background: rgba(<option.rgba.BackgroundSelect>);

@@ -86,6 +86,8 @@ class ListWidget(QtWidgets.QListWidget):
 
         self.setResizeMode(QtWidgets.QListWidget.Adjust)
 
+        self.setSortingEnabled(True)
+
         self.setItemDelegate(
             _QtListItemDelegate(self)
         )
@@ -110,25 +112,25 @@ class MainWindow(QtWidgets.QMainWindow):
         self._widget = TreeListView()
         self.setCentralWidget(self._widget)
 
-        group_item = GroupItem('Group', self._widget._listWidget)
+        group_item = GroupItem('/Group-0', self._widget._listWidget)
         group_item.setSizeHint(QtCore.QSize(400, 20))
         self._widget._listWidget.addItem(
             group_item
         )
 
         for i in range(5):
-            item = Item('Item-{}'.format(i), self._widget._listWidget)
+            item = Item('/Group-0/Item-{}'.format(i), self._widget._listWidget)
             item.setSizeHint(QtCore.QSize(120+i*10, 120))
             self._widget._listWidget.addItem(item)
 
-        group_item = GroupItem('Group', self._widget._listWidget)
+        group_item = GroupItem('/Group-1', self._widget._listWidget)
         group_item.setSizeHint(QtCore.QSize(400, 20))
         self._widget._listWidget.addItem(
             group_item
         )
 
         for i in range(5):
-            item = Item('Item-{}'.format(i), self._widget._listWidget)
+            item = Item('/Group-1/Item-{}'.format(i), self._widget._listWidget)
             item.setSizeHint(QtCore.QSize(120+i*10, 120))
             self._widget._listWidget.addItem(item)
 

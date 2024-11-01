@@ -97,8 +97,8 @@ class Geometry(Shape):
 
 
 class ShapeOpt(_node_for_dag.DagNodeOpt):
-    def __init__(self, path):
-        super(ShapeOpt, self).__init__(path)
+    def __init__(self, *args, **kwargs):
+        super(ShapeOpt, self).__init__(*args, **kwargs)
 
     @property
     def shape_path(self):

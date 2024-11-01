@@ -1,7 +1,7 @@
 # coding:utf-8
 from .base import *
 
-from .scenery import *
+from .scn_asset import *
 
 from .unit_assembly import *
 

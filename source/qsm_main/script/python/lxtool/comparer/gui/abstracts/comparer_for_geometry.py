@@ -212,7 +212,7 @@ class AbsPnlComparerForAssetGeometry(gui_prx_widgets.PrxSessionWindow):
 
     def __set_usd_source_file_refresh_(self):
         step = self._session.option_opt.get('source_step')
-        task = self._session.option_opt.get('source_task')
+        task = self._session.option_opt.get('source-task')
 
         keyword = 'asset-geometry-usd-payload-file'
         rsv_task = self._rsv_asset.get_rsv_task(

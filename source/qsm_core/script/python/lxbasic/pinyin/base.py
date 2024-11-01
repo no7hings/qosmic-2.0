@@ -10,14 +10,14 @@ import itertools
 
 class Text(object):
     @staticmethod
-    def split_any_to_words(text):
+    def split_any_to_texts(text):
         # to string
         if isinstance(text, six.text_type):
             text = text.encode('utf-8')
         return re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
 
     @classmethod
-    def split_any_to_letters(cls, text):
+    def split_any_to_words(cls, text):
         lst = []
         # to string
         if isinstance(text, six.text_type):
@@ -35,7 +35,7 @@ class Text(object):
     @classmethod
     def to_prettify(cls, text):
         return six.u(' ').join(
-            map(lambda x: x.capitalize(), cls.split_any_to_words(text))
+            map(lambda x: x.capitalize(), cls.split_any_to_texts(text))
         )
 
     @staticmethod
@@ -50,6 +50,7 @@ class Text(object):
             lst.append(i_c)
             # is chinese
             if re.match(six.u(r'[\u4e00-\u9fff]+'), i_c):
+                # to pinyin
                 lst.append(''.join(map(lambda x: str(x).capitalize(), pypinyin.lazy_pinyin(i_c))))
         return lst
 
@@ -86,11 +87,25 @@ class Text(object):
                 dct[i_pinyin] = i_c
         return lst, dct
 
+    @classmethod
+    def find_first_chr(cls, text):
+        # to string
+        if isinstance(text, six.text_type):
+            text = text.encode('utf-8')
+
+        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
+
+        if chars:
+            c = chars[0]
+            if re.match(six.u(r'[\u4e00-\u9fff]+'), c):
+                return pypinyin.lazy_pinyin(c)[0][0].lower()
+            return c[0].lower()
+
 
 class Texts(object):
     @classmethod
-    def split_any_to_words(cls, texts):
-        return list(itertools.chain(*map(Text.split_any_to_words, texts)))
+    def split_any_to_texts(cls, texts):
+        return list(itertools.chain(*map(Text.split_any_to_texts, texts)))
 
     @classmethod
     def split_any_to_words_extra(cls, texts):

@@ -8,7 +8,9 @@ from . import node_category as _node_category
 
 from . import attribute as _attribute
 
-from . import transform as _transform
+from . import node_for_transform as _node_for_transform
+
+from . import node as _node
 
 from . import shape as _shape
 
@@ -41,8 +43,8 @@ class Shader(object):
     def create_for(cls, shader_type, target_shape_path, target_any_paths):
         cmds.select(target_any_paths)
 
-        if _transform.Transform.is_transform_type(target_shape_path):
-            target_shape_path = _transform.Transform.get_shape(target_shape_path)
+        if _node_for_transform.Transform.is_transform_type(target_shape_path):
+            target_shape_path = _node_for_transform.Transform.get_shape(target_shape_path)
 
         mel_script = 'createAndAssignShader {} "";'.format(shader_type)
         mel.eval(mel_script)
@@ -54,3 +56,8 @@ class Shader(object):
             material, 'surfaceShader', shader_type
         )
         return shader
+
+
+class ShaderOpt(_node.NodeOpt):
+    def __init__(self, *args, **kwargs):
+        super(ShaderOpt, self).__init__(*args, **kwargs)

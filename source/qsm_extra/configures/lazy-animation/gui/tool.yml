@@ -437,7 +437,7 @@ build:
                             widget: button
                             name_chs: '拷贝角色动作'
                             value: ''
-                            icon: 'tool/maya/copy'
+                            icon: 'tool/copy'
                             tool_tip:
                                 |-
                                 press to copy animation
@@ -450,7 +450,7 @@ build:
                             widget: button
                             name_chs: '粘贴角色动作'
                             value: ''
-                            icon: 'tool/maya/paste'
+                            icon: 'tool/paste'
                             tool_tip:
                                 |-
                                 press to paste animation

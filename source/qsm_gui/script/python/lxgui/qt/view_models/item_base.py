@@ -19,7 +19,48 @@ from . import base as _base
 class AbsItemModel(object):
     Status = _gui_core.GuiItemStatus
 
+    SortOrder = _gui_core.GuiItemSortOrder
+    SortKey = _gui_core.GuiItemSortKey
+
+    GroupKey = _gui_core.GuiItemGroupKey
+
     NUMBER_TEXT_FORMAT = '{}'
+
+    NAME_H = 20
+
+    @classmethod
+    def _draw_status_frame(cls, painter, rect, color):
+        w, h = rect.width(), rect.height()
+        x_c, y_c = w/2, h/2
+        r_c = min(x_c, y_c)
+        p1, p2, p3, p4 = rect.topLeft(), rect.topRight(), rect.bottomRight(), rect.bottomLeft()
+        (x1, y1), (x2, y2), (x3, y3), (x4, y4) = (p1.x(), p1.y()), (p2.x(), p2.y()), (p3.x(), p3.y()), (p4.x(), p4.y())
+        point_coords = (
+            # top left
+            (((x1, y1+r_c), (x1, y1), (x1+r_c, y1)), (x1, y1), (x1+r_c, y1+r_c)),
+            # top right
+            (((x2-r_c, y2), (x2, y2), (x2, y2+r_c)), (x2, y2), (x2-r_c, y1+r_c)),
+            # bottom right
+            (((x3, y3-r_c), (x3, y3), (x3-r_c, y3)), (x3, y3), (x3-r_c, y3-r_c)),
+            # bottom left
+            (((x4+r_c, y4), (x4, y4), (x4, y4-r_c)), (x4, y4), (x4+r_c, y4-r_c))
+        )
+        for i_points, i_s, i_e in point_coords:
+            i_start = QtCore.QPoint(*i_s)
+            i_end = QtCore.QPoint(*i_e)
+            i_c = QtGui.QLinearGradient(i_start, i_end)
+            i_c.setColorAt(0, color)
+            i_c.setColorAt(.5, QtGui.QColor(0, 0, 0, 0))
+            i_c.setColorAt(1, QtGui.QColor(0, 0, 0, 0))
+            i_brush = QtGui.QBrush(i_c)
+            i_pen = QtGui.QPen(i_brush, 2)
+            i_pen.setJoinStyle(QtCore.Qt.RoundJoin)
+            painter.setPen(i_pen)
+            painter.setBrush(_qt_core.QtRgba.Transparent)
+            i_path = QtGui.QPainterPath()
+            i_points_f = [QtCore.QPointF(x, y) for x, y in i_points]
+            i_path.addPolygon(QtGui.QPolygonF(i_points_f))
+            painter.drawPath(i_path)
 
     @classmethod
     def _draw_time_text(cls, painter, rect, text):
@@ -27,7 +68,7 @@ class AbsItemModel(object):
         painter.drawText(rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter, text)
 
     @classmethod
-    def _draw_name(cls, painter, rect, text, color):
+    def _draw_text(cls, painter, rect, text, color, text_alignment=None):
         text = painter.fontMetrics().elidedText(
             text,
             QtCore.Qt.ElideMiddle,
@@ -35,7 +76,9 @@ class AbsItemModel(object):
             QtCore.Qt.TextShowMnemonic
         )
         painter.setPen(color)
-        painter.drawText(rect, QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter, text)
+        text_alignment = text_alignment or QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter
+
+        painter.drawText(rect, text_alignment, text)
 
     @classmethod
     def _draw_rect(cls, painter, rect, color):
@@ -87,34 +130,45 @@ class AbsItemModel(object):
             rect=QtCore.QRect(),
             size=QtCore.QSize(),
         )
-        # path
-        self._data.path = _base._Data(
-            text=None
-        )
-        self._data.type = _base._Data(
-            enable=False,
-            text=None
-        )
-        # index
-        self._data.index = 0
-        # text
+        # text option for draw
         self._data.text = _base._Data(
             font=_qt_core.QtFont.generate(size=8),
             color=QtGui.QColor(223, 223, 223),
-            action_color=QtGui.QColor(31, 31, 31)
+            action_color=QtGui.QColor(31, 31, 31),
+            # all text height
+            height=20
         )
-        # frame
+        # frame for draw
         self._data.frame = _base._Data(
             rect=QtCore.QRect(),
             color=QtGui.QColor(*_gui_core.GuiRgba.Dark),
             brush=QtGui.QBrush(QtGui.QColor(*_gui_core.GuiRgba.Dim))
         )
+        # index
+        self._data.index_enable = True
+        self._data.index = 0
+        # path
+        self._data.path = _base._Data(
+            text=None
+        )
+        # category
+        self._data.category_enable = False
+        self._data.category = _base._Data(
+            text=None
+        )
+        # type
+        self._data.type_enable = False
+        self._data.type = _base._Data(
+            text=None
+        )
         # name
+        self._data.name_enable = True
         self._data.name = _base._Data(
-            enable=False,
             text=None,
             rect=QtCore.QRect(),
         )
+        # mtime
+        self._data.mtime_enable = False
         # number
         self._data.number_enable = False
         self._data.number = _base._Data(
@@ -124,18 +178,18 @@ class AbsItemModel(object):
             rect=QtCore.QRect(),
         )
         # status
-        self._data.status = _base._Data(
-            enable=False,
-            value='normal',
-            color=QtGui.QColor(223, 223, 223)
-        )
+        self._data.status_enable = False
         # lock
         self._data.lock_enable = False
         # icon
         self._data.icon_enable = False
         self._data.icon = _base._Data(
+            file_flag=False,
             file=None,
-            rect=QtCore.QRect()
+
+            pixmap_flag=False,
+            pixmap=None,
+            rect=QtCore.QRect(),
         )
         # color
         self._data.color_enable = False
@@ -192,15 +246,14 @@ class AbsItemModel(object):
         # assign
         self._data.assign_enable = True
         self._data.assign = _base._Data(
-            enable=False,
             path_set=set(),
             path_set_pre=set(),
             file=None,
+            directory=None,
+            properties=None
         )
-        # status
-        self._data.status_enable = False
         # sort
-        self._data.sort_dict = dict()
+        self._data.sort_enable = False
         # property
         self._data.property_dict = dict()
         # press
@@ -229,6 +282,9 @@ class AbsItemModel(object):
     def view(self):
         raise NotImplementedError()
 
+    def draw(self, painter, option, index):
+        raise NotImplementedError()
+
     def get_force_hidden_flag(self):
         return self._data.force_hidden_flag
 
@@ -239,27 +295,52 @@ class AbsItemModel(object):
     def get_path(self):
         return self._data.path.text
 
+    # category
+    def set_category_enable(self, boolean):
+        self._data.category_enable = boolean
+
+    def set_category(self, text):
+        if text is not None:
+            self._data.category_enable = True
+            self._data.category.text = text
+            return True
+        self._data.category_enable = False
+        return False
+
+    def get_category(self):
+        return self._data.category.text
+
     # type
+    def set_type_enable(self, boolean):
+        self._data.type_enable = boolean
+
     def set_type(self, text):
         if text is not None:
-            self._data.type.enable = True
+            self._data.type_enable = True
             self._data.type.text = text
             return True
-        self._data.type.enable = False
+        self._data.type_enable = False
         return False
 
     def get_type(self):
         return self._data.type.text
 
+    # index
+    def set_index(self, index):
+        self._data.index = index
+
+    def get_index(self):
+        return self._data.index
+
     # name
     def set_name(self, text):
         if text is not None:
-            self._data.name.enable = True
+            self._data.name_enable = True
             self._data.name.text = text
             # todo: set name to item?
             self._update_name(text)
             return True
-        self._data.name.enable = False
+        self._data.name_enable = False
         return False
 
     def _update_name(self, text):
@@ -268,7 +349,34 @@ class AbsItemModel(object):
     def get_name(self):
         return self._data.name.text
 
+    # mtime
+    def set_mtime_enable(self, boolean):
+        self._data.mtime_enable = boolean
+        if boolean is True:
+            self._data.mtime = _base._Data(
+                timestamp=0,
+                text='',
+                text_color=_qt_core.QtRgba.TxtMtime,
+                text_alignment=QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter,
+                rect=QtCore.QRect(),
+            )
+
+    def set_mtime(self, timestamp):
+        if self._data.mtime_enable is False:
+            self.set_mtime_enable(True)
+
+        self._data.mtime.timestamp = timestamp
+        self._data.mtime.text = bsc_core.BscTimePrettify.to_prettify_by_timestamp_(
+            timestamp, language=_gui_core.GuiUtil.get_language()
+        )
+
     # number
+    def set_number_enable(self, boolean):
+        self._data.number_enable = boolean
+
+    def get_number_enable(self):
+        return self._data.number_enable
+
     def set_number(self, value):
         if value is not None:
             self._data.number_enable = True
@@ -309,13 +417,6 @@ class AbsItemModel(object):
     def _update_number(self, value):
         pass
 
-    # index
-    def set_index(self, index):
-        self._data.index = index
-
-    def get_index(self):
-        return self._data.index
-
     # color
     def set_color_enable(self, boolean):
         self._data.color_enable = boolean
@@ -337,21 +438,31 @@ class AbsItemModel(object):
     # icon
     def set_icon_name(self, icon_name):
         # do not check file exists
-        self._data.icon_enable = True
         file_path = _gui_core.GuiIcon.get(icon_name)
-        self._data.icon.file = file_path
+        if file_path:
+            self._data.icon_enable = True
+            self._data.icon.file_flag = True
+            self._data.icon.file = file_path
+
+    def set_icon(self, icon):
+        if isinstance(icon, QtGui.QIcon):
+            pixmap = icon.pixmap(20, 20)
+            self._data.icon_enable = True
+            self._data.icon.pixmap_flag = True
+            self._data.icon.pixmap = pixmap
 
     # assign
     def set_assign_path_set(self, path_set):
         if path_set is not None:
             assert isinstance(path_set, set)
 
-            self._data.assign.enable = True
+            self._data.assign_enable = True
             self._data.assign.path_set_pre = copy.copy(self._data.assign.path_set)
             self._data.assign.path_set = path_set
             self.set_number(len(path_set))
             return True
-        self._data.assign.enable = False
+
+        self._data.assign_enable = False
         self._data.assign.path_set.clear()
         self.set_number(None)
         return False
@@ -360,7 +471,7 @@ class AbsItemModel(object):
         return self._data.assign.path_set
 
     def _update_assign_path_set(self, path_set_addition, path_set_deletion):
-        self._data.assign.enable = True
+        self._data.assign_enable = True
 
         self._data.assign.path_set_pre = copy.copy(self._data.assign.path_set)
 
@@ -381,7 +492,7 @@ class AbsItemModel(object):
         self._update_assign_path_to_parent()
 
     def _update_assign_path_to_parent(self):
-        if self._data.assign.enable is True:
+        if self._data.assign_enable is True:
             parent_item = self.get_parent()
             if parent_item:
                 path_set = self._data.assign.path_set
@@ -393,11 +504,23 @@ class AbsItemModel(object):
                 parent_item._item_model._update_assign_path_set(path_set_addition, path_set_deletion)
                 parent_item._item_model._update_assign_path_to_parent()
 
+    def set_assign_directory(self, directory_path):
+        self._data.assign.directory = directory_path
+
+    def get_assign_directory(self):
+        return self._data.assign.directory
+
     def set_assign_file(self, file_path):
         self._data.assign.file = file_path
 
     def get_assign_file(self):
         return self._data.assign.file
+
+    def set_assign_properties(self, properties):
+        self._data.assign.properties = properties
+
+    def get_assign_properties(self):
+        return self._data.assign.properties
 
     def set_assign_data(self, key, value):
         self._data.assign[key] = value
@@ -426,6 +549,9 @@ class AbsItemModel(object):
         self._update_status_rect(self._data.rect)
         self.update_view()
 
+    def clear_status(self):
+        self.set_status(self.Status.Normal)
+
     def get_status(self):
         if self._data.status_enable is True:
             return self._data.status.value
@@ -442,6 +568,8 @@ class AbsItemModel(object):
                 return _qt_core.QtRgba.Red
             elif status == self.Status.Correct:
                 return _qt_core.QtRgba.Green
+            elif status == self.Status.Disable:
+                return _qt_core.QtRgba.TxtDisable
 
     # tool tip
     def set_tool_tip(self, text):
@@ -470,19 +598,46 @@ class AbsItemModel(object):
         return self._data.menu.data_generate_fnc
 
     # sort
-    def register_sort_dict(self, dict_):
-        self._data.sort_dict.update(dict_)
-
-    def apply_sort(self, key):
-        if key == 'index':
-            index = self._data.index
-            self._item.setText(
-                str(index).zfill(4)
+    def set_sort_enable(self, boolean):
+        self._data.sort_enable = boolean
+        if boolean is True:
+            self._data.sort = _base._Data(
+                key=self.SortKey.Name,
+                order=self.SortOrder.Ascending,
+                dict=dict()
             )
-        else:
-            value = self._data.sort_dict.get(key, '')
-            self._item.setText(value)
-            # self.set_name(value)
+
+    def set_sort_dict(self, dict_):
+        if self._data.sort_enable is True:
+            self._data.sort.dict.update(dict_)
+
+    def _generate_current_sort_name_text(self):
+        if self._data.sort_enable is True:
+            key = self._data.sort.key
+            if key == self.SortKey.Default:
+                return str(self._data.index).zfill(4)
+            elif key == self.SortKey.Category:
+                return self._data.category.text
+            elif key == self.SortKey.Type:
+                return self._data.type.text
+            elif key == self.SortKey.Name:
+                return self._data.name.text
+            elif key == self.SortKey.Number:
+                return str(self._data.number.value).zfill(6)
+            return self._data.name.text
+        return self._data.name.text
+
+    def apply_sort_key(self, sort_key):
+        if self._data.sort_enable is True:
+            self._data.sort.key = sort_key
+
+            self._item.setText(self._generate_current_sort_name_text())
+
+    def apply_sort_order(self, sort_order):
+        if self._data.sort_enable is True:
+            self._data.sort.order = sort_order
+
+            self._item.setText(self._generate_current_sort_name_text())
 
     # show
     def _update_show_auto(self):
@@ -536,7 +691,7 @@ class AbsItemModel(object):
         keys = []
         keys.extend(texts)
         for i_text in texts:
-            i_texts = bsc_pinyin.Text.split_any_to_letters(i_text)
+            i_texts = bsc_pinyin.Text.split_any_to_words(i_text)
             keys.extend(i_texts)
 
         self._data.keyword_filter.key_tgt_set = set(keys)
@@ -551,13 +706,20 @@ class AbsItemModel(object):
         return '+'.join(self.get_keyword_filter_key_tgt_set())
 
     @classmethod
-    def _draw_icon(cls, painter, rect, file_path):
+    def _draw_icon_by_file(cls, painter, rect, file_path):
         if file_path is None:
             return
         if file_path.endswith('.svg'):
             cls._draw_svg(painter, rect, file_path)
         else:
             cls._draw_image(painter, rect, file_path)
+
+    @classmethod
+    def _draw_icon_by_pixmap(cls, painter, rect, pixmap):
+        pxm_scaled = pixmap.scaled(
+            rect.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation
+        )
+        painter.drawPixmap(rect, pxm_scaled)
 
     @classmethod
     def _draw_svg(cls, painter, rect, svg_path):
@@ -603,7 +765,6 @@ class AbsItemModel(object):
         p_over.setMask(pxm_mask)
         painter.drawPixmap(rect, p_over)
 
-
     @classmethod
     def _fill_image(cls, painter, rect, file_path):
         pass
@@ -642,11 +803,15 @@ class AbsItemModel(object):
     def _update_hover(self, flag):
         if flag != self._data.hover.flag:
             self._data.hover.flag = flag
-
+    
+    # select
     def _update_select(self, flag):
         if flag != self._data.select.flag:
             self._data.select.flag = flag
-
+    
+    def focus_select(self):
+        self._item.setSelected(True)
+    
     # DAG
     def get_parent(self):
         raise NotImplementedError()

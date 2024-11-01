@@ -21,6 +21,10 @@ class Selection(object):
         return [x.split('.')[0] for x in cmds.ls(selection=1, long=1) or []]
 
     @classmethod
+    def get_all_meshes(cls):
+        return cmds.ls(selection=1, dag=1, type='mesh', noIntermediate=1, long=1) or []
+
+    @classmethod
     def get_main_controls(cls):
         list_ = []
         _ = [x.split('.')[0] for x in cmds.ls(selection=1, long=1) or []]

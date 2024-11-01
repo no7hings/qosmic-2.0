@@ -36,7 +36,7 @@ class MotionRegisterOpt(object):
         type_path_src = '/'.join(_[:-1])
         name = _[-1][:-len('.anim')]
 
-        node_path = '/{}'.format('_'.join(bsc_pinyin.Text.split_any_to_letters(path_relative))).lower()
+        node_path = '/{}'.format('_'.join(bsc_pinyin.Text.split_any_to_words(path_relative))).lower()
 
         json_file_path = six.u('{}/pose.json').format(self._directory_path)
         image_sequence_path = six.u('{}/sequence/thumbnail.%04d.jpg').format(self._directory_path)
@@ -57,7 +57,7 @@ class MotionRegisterOpt(object):
         time_unit = content.get('metadata.timeUnit')
         fps = qsm_gnl_core.MayaTimeunit.timeunit_to_fps(time_unit)
 
-        names = bsc_pinyin.Text.split_any_to_letters(name)
+        names = bsc_pinyin.Text.split_any_to_words(name)
         gui_name = ' '.join(map(lambda x: str(x).capitalize(), names))
         gui_name_chs = gui_name
         info = content.get('info')
@@ -91,7 +91,7 @@ class MotionRegisterOpt(object):
         keys = []
         for i in _:
             if _:
-                keys.append('_'.join(bsc_pinyin.Text.split_any_to_letters(i)).lower())
+                keys.append('_'.join(bsc_pinyin.Text.split_any_to_words(i)).lower())
             else:
                 keys.append(i)
 

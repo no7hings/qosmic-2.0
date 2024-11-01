@@ -20,9 +20,9 @@ if rsv_project is not None:
         # print rsv_unit.pattern
         results = rsv_unit.get_result(
             version='all',
-            variants_extend=dict(task_extra='surface')
+            variants_extend=dict(task_unit='surface')
         )
         print results
-        # print rsv_unit.get_result(version='new', variants_extend=dict(task_extra='surface'))
+        # print rsv_unit.get_result(version='new', variants_extend=dict(task_unit='surface'))
 
 

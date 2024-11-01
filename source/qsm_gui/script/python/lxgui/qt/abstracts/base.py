@@ -2652,7 +2652,7 @@ class AbsQtItemFilterDef(object):
         return [
             j
             for i in self._get_keyword_filter_keys_auto_use_cache_()
-            for j in bsc_pinyin.Text.split_any_to_words(i)
+            for j in bsc_pinyin.Text.split_any_to_texts(i)
         ]
 
     def _get_item_keyword_filter_context_(self):

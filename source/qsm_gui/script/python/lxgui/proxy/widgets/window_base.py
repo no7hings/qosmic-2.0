@@ -1,11 +1,11 @@
 # coding:utf-8
 import six
 
+from contextlib import contextmanager
+
 import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
-
-import lxbasic.resource as bsc_resource
 
 import lxbasic.storage as bsc_storage
 
@@ -444,7 +444,31 @@ class PrxBaseWindow(
         return gui_core.GuiUtil.choice_tool_tip(
             self._language, options
         )
-        
+
+    @contextmanager
+    def gui_hidden(self):
+        self._qt_widget.hide()
+        # noinspection PyBroadException
+        try:
+            yield self
+        except Exception:
+            pass
+        finally:
+            self._qt_widget.show()
+
+    @contextmanager
+    def gui_minimized(self):
+        self._qt_widget.hide()
+        self._qt_widget.showMinimized()
+        # noinspection PyBroadException
+        try:
+            yield self
+        except Exception:
+            pass
+        finally:
+            self._qt_widget.showNormal()
+            self._qt_widget.show()
+
 
 class PrxSessionWindow(PrxBaseWindow):
     PRX_TYPE = 'session_window'

@@ -495,7 +495,7 @@ class RsvVedioComposite(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             i_p = p.update_variants_to(
                 layer=i_layer, render_pass=i_render_pass
             )
-            i_matchers = i_p.get_matches()
+            i_matchers = i_p.find_matches()
             for j_match in i_matchers:
                 j_option = {}
                 j_file_path = j_match['result']

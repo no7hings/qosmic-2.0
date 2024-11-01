@@ -4,8 +4,6 @@ import maya.cmds as cmds
 
 from ... import _abc
 
-from .... import core as _mya_core
-
 
 class MeshValidationOpt(_abc.AbsMeshOpt):
     @classmethod

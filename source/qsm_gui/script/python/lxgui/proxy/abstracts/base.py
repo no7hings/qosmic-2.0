@@ -245,9 +245,8 @@ class AbsPrxWindow(AbsPrx):
             # print kwargs['parent']
         else:
             main_window = gui_qt_core.GuiQtDcc.get_qt_main_window()
-            # print main_window.font()
-            if main_window != self.widget:
-                self.widget.setParent(
+            if main_window != self._qt_widget:
+                self._qt_widget.setParent(
                     main_window, gui_qt_core.QtCore.Qt.Window
                 )
         #

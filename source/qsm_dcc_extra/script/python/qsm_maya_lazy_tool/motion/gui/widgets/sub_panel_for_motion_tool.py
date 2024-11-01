@@ -48,7 +48,7 @@ class PrxSubPanelForMotionTool(gui_prx_widgets.PrxBasePanel):
                     self._language, self._window._configure.get('build.{}.tab'.format(i_page_key))
                 )
             )
-            i_prx_page = self._window.generate_page_for(i_page_key)
+            i_prx_page = self._window.gui_generate_page_for(i_page_key)
             self._page_dict[i_page_key] = i_prx_page
             i_prx_sca.add_widget(i_prx_page)
 

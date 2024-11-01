@@ -1,0 +1,203 @@
+# coding:utf-8
+# noinspection PyUnresolvedReferences
+import maya.cmds as cmds
+
+from .... import core as _mya_core
+
+
+# group
+class AbsGroupOpt(object):
+    PATH = None
+
+    def __init__(self):
+        if _mya_core.Node.is_exists(self.PATH) is False:
+            _mya_core.Group.create_dag(self.PATH)
+
+    def add_one(self, path):
+        return _mya_core.Group.add_one(self.PATH, path)
+
+
+#   bridge
+class CfxBridgeGeoGrpOpt(AbsGroupOpt):
+    PATH = '|master|cfx|cfx_bridge_grp|cfx_bridge_geo_grp'
+
+    def __init__(self):
+        super(CfxBridgeGeoGrpOpt, self).__init__()
+
+
+#   cloth
+class CfxClothGeoGrpOpt(AbsGroupOpt):
+    PATH = '|master|cfx|cfx_cloth_grp|cfx_cloth_geo_grp'
+
+    def __init__(self):
+        super(CfxClothGeoGrpOpt, self).__init__()
+
+
+class CfxNClothGrpOpt(AbsGroupOpt):
+    PATH = '|master|cfx|cfx_ncloth_grp'
+
+    def __init__(self):
+        super(CfxNClothGrpOpt, self).__init__()
+
+
+class CfxNRigidGrpOpt(AbsGroupOpt):
+    PATH = '|master|cfx|cfx_nrigid_grp'
+
+    def __init__(self):
+        super(CfxNRigidGrpOpt, self).__init__()
+
+
+#   collider
+class CfxColliderGeoGrpOpt(AbsGroupOpt):
+    PATH = '|master|cfx|cfx_collider_grp|cfx_collider_geo_grp'
+
+    def __init__(self):
+        super(CfxColliderGeoGrpOpt, self).__init__()
+
+
+#   appendix
+class CfxAppendixGeoGrpOpt(AbsGroupOpt):
+    PATH = '|master|cfx|cfx_appendix_grp|cfx_appendix_geo_grp'
+
+    def __init__(self):
+        super(CfxAppendixGeoGrpOpt, self).__init__()
+
+
+#   dynamic
+class CfxNucleusGrpOpt(AbsGroupOpt):
+    PATH = '|master|cfx|cfx_nucleus_grp'
+
+    def __init__(self):
+        super(CfxNucleusGrpOpt, self).__init__()
+
+
+#   wrap
+class CfxWrapGeoGrpOpt(AbsGroupOpt):
+    PATH = '|master|cfx|cfx_wrap_grp|cfx_wrap_geo_grp'
+
+    def __init__(self):
+        super(CfxWrapGeoGrpOpt, self).__init__()
+
+
+class CfxWrapBaseGeoGrpOpt(AbsGroupOpt):
+    PATH = '|master|cfx|cfx_wrap_grp|cfx_wrap_base_geo_grp'
+
+    def __init__(self):
+        super(CfxWrapBaseGeoGrpOpt, self).__init__()
+
+
+# layer
+class AbsLayerOpt(object):
+    NAME = None
+    RGB = (0, 0, 0)
+    VISIBLE = 0
+
+    def __init__(self):
+        if _mya_core.Node.is_exists(self.NAME) is False:
+            _mya_core.DisplayLayer.create(self.NAME)
+            _mya_core.DisplayLayer.set_rgb(self.NAME, self.RGB)
+            _mya_core.DisplayLayer.set_visible(self.NAME, self.VISIBLE)
+
+    def add_one(self, path):
+        _mya_core.DisplayLayer.add_one(self.NAME, path)
+
+
+#   source
+class CfxSourceGeoLyrOpt(AbsLayerOpt):
+    NAME = 'CFX_SOURCE_GEO_LYR'
+    RGB = (0, 0, 0)
+    VISIBLE = 0
+
+    def __init__(self):
+        super(CfxSourceGeoLyrOpt, self).__init__()
+
+
+#   bridge
+class CfxBridgeGeoLyrOpt(AbsLayerOpt):
+    NAME = 'CFX_BRIDGE_GEO_LYR'
+    RGB = (1, 0, 0)
+    VISIBLE = 1
+
+    def __init__(self):
+        super(CfxBridgeGeoLyrOpt, self).__init__()
+
+
+#   cloth
+class CfxClothGeoLyrOpt(AbsLayerOpt):
+    NAME = 'CFX_CLOTH_GEO_LYR'
+    RGB = (1, 0, 1)
+    VISIBLE = 1
+
+    def __init__(self):
+        super(CfxClothGeoLyrOpt, self).__init__()
+
+
+#   collider
+class CfxColliderGeoLyrOpt(AbsLayerOpt):
+    NAME = 'CFX_COLLIDER_GEO_LYR'
+    RGB = (0, 0, 1)
+    VISIBLE = 1
+
+    def __init__(self):
+        super(CfxColliderGeoLyrOpt, self).__init__()
+
+
+#   appendix
+class CfxAppendixGeoLyrOpt(AbsLayerOpt):
+    NAME = 'CFX_APPENDIX_GEO_LYR'
+    RGB = (1, 1, 0)
+    VISIBLE = 1
+
+    def __init__(self):
+        super(CfxAppendixGeoLyrOpt, self).__init__()
+
+
+# material
+class AbsMaterialOpt(object):
+    NAME = None
+    RGB = (0, 0, 0)
+
+    def __init__(self):
+        if _mya_core.Node.is_exists(self.NAME) is False:
+            _mya_core.Material.create_as_lambert(self.NAME, self.RGB)
+
+    def assign_to(self, path):
+        _mya_core.Material.assign_to(
+            self.NAME, path
+        )
+
+
+#   bridge
+class CfxBridgeGeoMtlOpt(AbsMaterialOpt):
+    NAME = 'CFX_BRIDGE_MTL'
+    RGB = (1, 0, 0)
+
+    def __init__(self):
+        super(CfxBridgeGeoMtlOpt, self).__init__()
+
+
+#   cloth
+class CfxClothGeoMtlOpt(AbsMaterialOpt):
+    NAME = 'CFX_CLOTH_MTL'
+    RGB = (1, 0, 1)
+
+    def __init__(self):
+        super(CfxClothGeoMtlOpt, self).__init__()
+
+
+#   collider
+class CfxColliderGeoMtlOpt(AbsMaterialOpt):
+    NAME = 'CFX_COLLIDER_MTL'
+    RGB = (0, 0, 1)
+
+    def __init__(self):
+        super(CfxColliderGeoMtlOpt, self).__init__()
+
+
+#   appendix
+class CfxAppendixGeoMtlOpt(AbsMaterialOpt):
+    NAME = 'CFX_APPENDIX_MTL'
+    RGB = (1, 1, 0)
+
+    def __init__(self):
+        super(CfxAppendixGeoMtlOpt, self).__init__()

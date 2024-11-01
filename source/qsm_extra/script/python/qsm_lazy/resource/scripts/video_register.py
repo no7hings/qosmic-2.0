@@ -16,27 +16,30 @@ class VideoRegister(object):
 
     def execute(self, scr_type_paths=None, scr_tag_paths=None):
         file_opt = bsc_storage.StgFileOpt(self._file_path)
-        uuid = file_opt.to_hash_uuid()
-        scr_node_path = '/{}'.format(uuid)
-        if self._scr_stage.check_node_exists(scr_node_path) is False:
-            self._scr_stage.create_node(
-                scr_node_path,
-                ctime=file_opt.get_ctime(),
-                mtime=file_opt.get_mtime(),
-                user=bsc_core.BscSystem.get_user_name(),
-                gui_name=file_opt.name,
-                gui_name_chs=file_opt.name,
-            )
+        try:
+            uuid = file_opt.to_hash_uuid()
+            scr_node_path = '/{}'.format(uuid)
+            if self._scr_stage.check_node_exists(scr_node_path) is False:
+                self._scr_stage.create_node(
+                    scr_node_path,
+                    ctime=file_opt.get_ctime(),
+                    mtime=file_opt.get_mtime(),
+                    user=bsc_core.BscSystem.get_user_name(),
+                    gui_name=file_opt.name,
+                    gui_name_chs=file_opt.name,
+                )
 
-            if scr_type_paths:
-                [self._scr_stage.create_node_type_assign(scr_node_path, x) for x in scr_type_paths]
+                if scr_type_paths:
+                    [self._scr_stage.create_node_type_assign(scr_node_path, x) for x in scr_type_paths]
 
-            if scr_tag_paths:
-                [self._scr_stage.create_node_tag_assign(scr_node_path, x) for x in scr_tag_paths]
+                if scr_tag_paths:
+                    [self._scr_stage.create_node_tag_assign(scr_node_path, x) for x in scr_tag_paths]
 
-            self._scr_stage.upload_node_video(
-                scr_node_path, self._file_path
-            )
+                self._scr_stage.upload_node_video(
+                    scr_node_path, self._file_path
+                )
+        except Exception:
+            pass
 
 
 class VideoBatchRegister(object):

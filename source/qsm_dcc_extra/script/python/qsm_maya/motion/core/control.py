@@ -230,6 +230,10 @@ class ControlMotionOpt(
             i_curve = self.find_move_curve_node_at(i_atr_name, depth_maximum=5)
             if i_layer is not None:
                 i_source = _mya_core.NodeAttribute.get_source(i_plug_name, 'input1D[0]')
+                # maybe use break connect, ignore it
+                if not i_source:
+                    continue
+
                 _mya_core.NodeAttribute.break_source(
                     path, i_atr_name
                 )
@@ -239,13 +243,24 @@ class ControlMotionOpt(
                 )
                 # offset curve
                 i_main_curve = _mya_core.NodeAttributeKeyframe.find_curve_node(path, i_atr_name)
-                _mya_core.AnmCurveNodeOpt(i_main_curve).offset_all_values(
-                    i_value_current+i_value_offset
-                )
-                cmds.select(i_layer)
-                cmds.dgdirty()
+                if i_main_curve:
+                    _mya_core.AnmCurveNodeOpt(i_main_curve).offset_all_values(
+                        i_value_current+i_value_offset
+                    )
+                    cmds.select(i_layer)
+                    cmds.dgdirty()
+                else:
+                    # original value
+                    i_value = _mya_core.NodeAttribute.get_value(i_plug_name, 'input1D[0]')
+                    _mya_core.NodeAttribute.set_value(
+                        path, i_atr_name, i_value+i_value_current+i_value_offset
+                    )
             elif i_curve is not None:
                 i_source = _mya_core.NodeAttribute.get_source(i_plug_name, 'input1D[0]')
+                # maybe use break connect, ignore it
+                if not i_source:
+                    continue
+
                 _mya_core.NodeAttribute.break_source(
                     path, i_atr_name
                 )
@@ -375,6 +390,9 @@ class ControlMirrorPasteOpt(
 
     @_mya_core.Undo.execute
     def apply_motion_dict(self, data, **kwargs):
+        if not data:
+            return
+
         if isinstance(data, dict):
             for i_control_key, i_data in data.items():
                 i_path = self.find_one_control(i_control_key)

@@ -11,7 +11,7 @@ import lxgui.core as gui_core
 
 import lxgui.qt.core as gui_qt_core
 
-import lxgui.qt.widgets as qt_widgets
+import lxgui.qt.widgets as gui_qt_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
@@ -40,7 +40,7 @@ class _GuiDirectoryOpt(
             '{location}/{entity}/workarea/user.{artist}/{step}.{task}'
         )
         self._file_ptn_opt = bsc_core.BscStgParseOpt(
-            '{location}/{entity}/workarea/user.{artist}/{step}.{task}/{task_extra}/{entity}.{step}.{task}.{task_extra}.v{version}{ext}'
+            '{location}/{entity}/workarea/user.{artist}/{step}.{task}/{task_unit}/{entity}.{step}.{task}.{task_unit}.v{version}{ext}'
         )
 
         self._gui_thread_flag = 0
@@ -209,10 +209,10 @@ class _GuiDirectoryOpt(
         directory_opt = self.gui_get_current_directory()
         if directory_opt is not None:
             variants = dict()
-            variants['task_extra'] = directory_opt.get_name()
+            variants['task_unit'] = directory_opt.get_name()
 
             ptn_opt = self._file_ptn_opt.update_variants_to(**variants)
-            matches = ptn_opt.get_matches()
+            matches = ptn_opt.find_matches()
             matches.reverse()
             if matches:
                 for i_variants in matches:
@@ -234,7 +234,7 @@ class _GuiFileOpt(
     def find_image(cls, file_opt):
         directory_path = file_opt.get_directory_path()
         file_name_base = file_opt.get_name_base()
-        image_file_path = '{}/.snapshot/{}.jpg'.format(directory_path, file_name_base)
+        image_file_path = '{}/.thumbnails/{}.jpg'.format(directory_path, file_name_base)
         if bsc_storage.StgPath.get_is_file(image_file_path):
             return image_file_path
 
@@ -245,6 +245,7 @@ class _GuiFileOpt(
         self._item_frame_size = 200, 100+16*2
         self._item_image_frame_size = 200, 100
         self._item_name_frame_size = 16, 16
+
         self._prx_list_view.set_item_frame_size_basic(*self._item_frame_size)
         self._prx_list_view.set_item_image_frame_size(*self._item_image_frame_size)
         self._prx_list_view.set_item_name_frame_size(*self._item_name_frame_size)
@@ -335,7 +336,7 @@ class _GuiFileOpt(
 
 
 class AbsPrxUnitForWorkarea(prx_abstracts.AbsPrxWidget):
-    QT_WIDGET_CLS = qt_widgets.QtTranslucentWidget
+    QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
 
     def do_gui_refresh_files(self):
         self._gui_file_opt.restore()
@@ -360,37 +361,37 @@ class AbsPrxUnitForWorkarea(prx_abstracts.AbsPrxWidget):
             gui_qt_core.QtWidgets.QSizePolicy.Expanding,
             gui_qt_core.QtWidgets.QSizePolicy.Expanding
         )
-        qt_lot = qt_widgets.QtVBoxLayout(self.widget)
+        qt_lot = gui_qt_widgets.QtVBoxLayout(self.widget)
         qt_lot.setContentsMargins(*[0]*4)
         qt_lot.setSpacing(2)
         # qt_lot._set_align_as_top_()
         # label
-        self._qt_title_label = qt_widgets.QtTextItem()
+        self._qt_title_label = gui_qt_widgets.QtTextItem()
         qt_lot.addWidget(self._qt_title_label)
         self._qt_title_label._set_name_align_h_center_()
         self._qt_title_label.setFixedHeight(20)
         #
-        prx_sca = gui_prx_widgets.PrxVScrollArea()
-        qt_lot.addWidget(prx_sca._qt_widget)
+        prx_v_sca = gui_prx_widgets.PrxVScrollArea()
+        qt_lot.addWidget(prx_v_sca._qt_widget)
 
-        prx_spt_h = gui_prx_widgets.PrxHSplitter()
-        prx_sca.add_widget(prx_spt_h)
+        prx_h_spt = gui_prx_widgets.PrxHSplitter()
+        prx_v_sca.add_widget(prx_h_spt)
 
-        self._directory_prx_tree_view = gui_prx_widgets.PrxTreeView()
-        prx_spt_h.add_widget(self._directory_prx_tree_view)
+        self._branch_qt_tree_widget = gui_prx_widgets.PrxTreeView()
+        prx_h_spt.add_widget(self._branch_qt_tree_widget)
 
         self._root = None
 
-        self._gui_directory_opt = _GuiDirectoryOpt(self, None, self._directory_prx_tree_view)
-        self._directory_prx_tree_view.connect_item_select_changed_to(self.do_gui_refresh_files)
+        self._gui_directory_opt = _GuiDirectoryOpt(self, None, self._branch_qt_tree_widget)
+        self._branch_qt_tree_widget.connect_item_select_changed_to(self.do_gui_refresh_files)
 
         # self._prx_version_file_view = PrxViewForFile()
         self._file_prx_list_view = gui_prx_widgets.PrxListView()
-        prx_spt_h.add_widget(self._file_prx_list_view)
+        prx_h_spt.add_widget(self._file_prx_list_view)
 
         self._gui_file_opt = _GuiFileOpt(self, None, self._file_prx_list_view)
 
-        prx_spt_h.set_fixed_size_at(0, 200)
+        prx_h_spt.set_fixed_size_at(0, 200)
 
         self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
         qt_lot.addWidget(self._bottom_prx_tool_bar._qt_widget)
@@ -414,7 +415,7 @@ class AbsPrxUnitForWorkarea(prx_abstracts.AbsPrxWidget):
         self._save_new_prx_button = gui_prx_widgets.PrxPressButton()
         self._bottom_prx_tool_bar.add_widget(self._save_new_prx_button)
         self._save_new_prx_button.set_name('Save New')
-        self._save_new_prx_button.set_icon_name('tool/save-new')
+        self._save_new_prx_button.set_icon_name('tool/save-as')
         self._save_new_prx_button.set_width(96)
         self._save_new_prx_button.connect_press_clicked_to(self.do_save_new)
 

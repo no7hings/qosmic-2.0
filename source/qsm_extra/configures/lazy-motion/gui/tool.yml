@@ -73,7 +73,7 @@ build:
                         character_motion/copy_character:
                             widget: button
                             name: 'Copy CHR'
-                            icon: 'tool/maya/copy'
+                            icon: 'tool/copy'
                             name_chs: '拷贝角色'
                             tool_tip:
                                 |-
@@ -88,7 +88,7 @@ build:
                         character_motion/paste_character:
                             widget: button
                             name: 'Paste to CHR'
-                            icon: 'tool/maya/paste'
+                            icon: 'tool/paste'
                             name_chs: '粘贴到角色'
                             tool_tip:
                                 |-
@@ -106,7 +106,7 @@ build:
                         character_motion/paste_character_to_controls:
                             widget: button
                             name: 'Paste CHR to CTR'
-                            icon: 'tool/maya/paste'
+                            icon: 'tool/paste'
                             name_chs: '粘贴角色到控制器'
                             tool_tip:
                                 |-
@@ -125,7 +125,7 @@ build:
                             widget: button
                             name: 'Copy CTR'
                             name_chs: '拷贝控制器'
-                            icon: 'tool/maya/copy'
+                            icon: 'tool/copy'
                             tool_tip:
                                 |-
                                 To be supplemented.
@@ -139,7 +139,7 @@ build:
                             widget: button
                             name: 'Paste to CTR'
                             name_chs: '粘贴到控制器'
-                            icon: 'tool/maya/paste'
+                            icon: 'tool/paste'
                             tool_tip:
                                 |-
                                 To be supplemented.
@@ -159,7 +159,7 @@ build:
                             widget: button
                             name: 'Paste CTR to CHR'
                             name_chs: '粘贴控制器到角色'
-                            icon: 'tool/maya/paste'
+                            icon: 'tool/paste'
                             tool_tip:
                                 |-
                                 To be supplemented.

@@ -247,7 +247,7 @@ class QtInfoBubble(
             painter._draw_text_by_rect_(
                 rect=self._text_draw_rect,
                 text=self._text,
-                text_color=_qt_core.QtRgba.TextTemporary,
+                text_color=_qt_core.QtRgba.TxtTemporary,
                 font=self.font(),
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             )
@@ -1027,12 +1027,12 @@ class QtBubbleAsChoice(
             if self.__text_input:
                 if self._idx_all:
                     text = self.__text_input
-                    painter._set_text_color_(_qt_core.QtRgba.TextCorrect)
+                    painter._set_text_color_(_qt_core.QtRgba.TxtCorrect)
                 else:
                     text = self.__text_input
-                    painter._set_text_color_(_qt_core.QtRgba.TextError)
+                    painter._set_text_color_(_qt_core.QtRgba.TxtError)
             else:
-                painter._set_text_color_(_qt_core.QtRgba.TextWarning)
+                painter._set_text_color_(_qt_core.QtRgba.TxtWarning)
                 text = 'type to narrow choices'
 
             painter.drawText(
@@ -1286,7 +1286,7 @@ class QtBubbleAsChoose(
             )
 
             painter._set_font_(_qt_core.QtFont.generate(size=self._tips_font_siz*.725))
-            painter._set_text_color_(_qt_core.QtRgba.TextWarning)
+            painter._set_text_color_(_qt_core.QtRgba.TxtWarning)
 
             painter.drawText(
                 self._tips_draw_rect,

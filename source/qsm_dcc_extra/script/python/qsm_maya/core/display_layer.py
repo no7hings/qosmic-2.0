@@ -2,6 +2,8 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+from . import node as _node
+
 
 class DisplayLayer(object):
     @classmethod
@@ -11,9 +13,32 @@ class DisplayLayer(object):
         return cmds.createDisplayLayer(name=name, number=1, empty=True)
 
     @classmethod
-    def add_nodes(cls, name, nodes):
-        cmds.editDisplayLayerMembers(name, *nodes, noRecurse=1)
+    def add_all(cls, name, nodes):
+        return cmds.editDisplayLayerMembers(name, *nodes, noRecurse=1)
+
+    @classmethod
+    def add_one(cls, name, node):
+        return cmds.editDisplayLayerMembers(name, node, noRecurse=1)
 
     @classmethod
     def set_visible(cls, name, boolean):
         cmds.setAttr(name + '.visibility', boolean)
+
+    @classmethod
+    def set_rgb(cls, name, rgb):
+        cmds.setAttr(name+'.overrideRGBColors', 1)
+        cmds.setAttr(name+'.overrideColorRGB', *rgb)
+
+
+class DisplayLayerOpt(_node.NodeOpt):
+    def __init__(self, *args, **kwargs):
+        super(DisplayLayerOpt, self).__init__(*args, **kwargs)
+
+    def add_all(self, paths):
+        return DisplayLayer.add_all(self._name_or_path, paths)
+
+    def add_one(self, path):
+        return DisplayLayer.add_all(self._name_or_path, [path])
+
+    def set_visible(self, boolean):
+        DisplayLayer.set_visible(self.name_or_path, boolean)

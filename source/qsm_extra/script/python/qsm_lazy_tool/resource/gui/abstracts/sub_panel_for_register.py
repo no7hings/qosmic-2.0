@@ -31,6 +31,6 @@ class AbsPrxSubPanelForRegister(gui_prx_widgets.PrxBaseSubPanel):
                     self._language, self._sub_window._configure.get('build.{}.tab'.format(i_page_key))
                 )
             )
-            i_prx_page = self._sub_window.generate_sub_page_for(i_page_key)
+            i_prx_page = self._sub_window.gui_generate_sub_page_for(i_page_key)
             self._page_dict[i_page_key] = i_prx_page
             i_prx_sca.add_widget(i_prx_page)

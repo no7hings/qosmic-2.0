@@ -157,21 +157,21 @@ class AbsPrxPageForScenery(gui_prx_widgets.PrxBasePage):
         self._asset_load_qt_button.press_clicked.connect(self._on_dcc_load_asset)
         self._asset_load_qt_button._set_action_enable_(False)
 
-        v_prx_sca = gui_prx_widgets.PrxVScrollArea()
-        self._qt_layout.addWidget(v_prx_sca.widget)
+        prx_v_sca = gui_prx_widgets.PrxVScrollArea()
+        self._qt_layout.addWidget(prx_v_sca.widget)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             self._window.choice_name(
                 self._window._configure.get('build.{}.options'.format(self.PAGE_KEY))
             )
         )
-        v_prx_sca.add_widget(self._prx_options_node)
+        prx_v_sca.add_widget(self._prx_options_node)
         self._prx_options_node.build_by_data(
             self._window._configure.get('build.{}.options.parameters'.format(self.PAGE_KEY)),
         )
         # validation results
         self._result_prx_tool_group = gui_prx_widgets.PrxHToolGroup()
-        v_prx_sca.add_widget(self._result_prx_tool_group)
+        prx_v_sca.add_widget(self._result_prx_tool_group)
         self._result_prx_tool_group.set_expanded(True)
         self._result_prx_tool_group.set_name(
             gui_core.GuiUtil.choice_name(

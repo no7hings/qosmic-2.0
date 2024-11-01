@@ -31,6 +31,10 @@ class Node(object):
         return cmds.nodeType(name)
 
     @classmethod
+    def type_is(cls, name, type_name):
+        return cls.get_type(name) == type_name
+
+    @classmethod
     def is_transform_type(cls, name):
         return cls.get_type(name) == cls.Types.Transform
 
@@ -71,8 +75,8 @@ class Node(object):
 
 class NodeOpt(object):
     def __init__(self, name):
-        self._name = name
         self._name_or_path = name
+        self._name = name
         
         self._node_query = None
 
