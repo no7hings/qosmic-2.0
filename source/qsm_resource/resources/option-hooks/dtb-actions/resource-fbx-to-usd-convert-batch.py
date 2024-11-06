@@ -43,7 +43,7 @@ def main(session):
                             continue
                     #
                     self.append_cmd(
-                        gnl_dcc_core.MayaProcess.generate_command(
+                        gnl_dcc_core.MayaProcess.generate_cmd_script(
                             'method=fbx-to-usd&fbx={}&usd={}&use_update_mode={}'.format(
                                 _i_fbx_file_path,
                                 _i_usd_file_path,

@@ -191,22 +191,25 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
                 tool_tip_ = variants['tool_tip_chs']
 
         if widget_type in {'group'}:
-            group = self._create_group_by_path(port_path)
+            prx_group = self._create_group_by_path(port_path)
             if widget_name:
-                group.set_gui_name(widget_name)
+                prx_group.set_gui_name(widget_name)
             #
             expand = variants.get('expand') or False
-            group.set_expanded(expand)
+            prx_group.set_expanded(expand)
 
             collapse = variants.get('collapse') or False
-            group.set_expanded(not collapse)
+            prx_group.set_expanded(not collapse)
             #
-            group.set_visible_condition(
+            prx_group.set_visible_condition(
                 variants.get('visible_condition')
             )
+
+            if tool_tip_:
+                prx_group.set_tool_tip(tool_tip_)
             #
             if 'visible' in variants:
-                group.set_visible(
+                prx_group.set_visible(
                     variants['visible']
                 )
             return

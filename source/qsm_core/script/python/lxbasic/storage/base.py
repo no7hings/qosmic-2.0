@@ -1090,6 +1090,9 @@ class StgPathOpt(object):
     def get_is_writeable(self):
         return os.access(self._path, os.W_OK)
 
+    def get_is_executable(self):
+        return os.access(self._path, os.X_OK)
+
     def map_to_current(self):
         self._path = _cor_base.StgBasePathMapMtd.map_to_current(self._path)
         return self._path

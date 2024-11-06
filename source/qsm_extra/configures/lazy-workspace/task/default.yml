@@ -7,31 +7,50 @@ root_release:
 root_temporary:
     windows: 'Z:/projects'
 
+
+spaces:
+    source: 'source'
+    release: 'release'
+    temporary: 'temporary'
+
+asset-version-name: '{asset}.{step}.{task}.v{version}'
+
 patterns:
-    asset-source-task-dir: '{root_source}/{project}/source/assets/{role}/{asset}/user.{artist}/{step}.{task}'
+    # source
+    asset-source-task-dir: '{root_source}/{project}/{space}/assets/{role}/{asset}/user.{artist}/{step}.{task}'
     asset-source-task_unit-dir: '<patterns.asset-source-task-dir>/{task_unit}'
-    asset-source-task_scene-file: '<patterns.asset-source-task_unit-dir>/scenes/{asset}.{step}.{task}.{task_unit}.v{version}.{file_format}'
-    asset-source-task_scene-thumbnail-file: '<patterns.asset-source-task_unit-dir>/.thumbnails/{asset}.{step}.{task}.{task_unit}.v{version}.jpg'
+
+    # scene
+    asset-source-scene_src-maya-file: '<patterns.asset-source-task_unit-dir>/maya/scenes/{asset}.{step}.{task}.{task_unit}.v{version}.ma'
+    asset-source-scene_src-maya-thumbnail-file: '<patterns.asset-source-task_unit-dir>/maya/.thumbnails/{asset}.{step}.{task}.{task_unit}.v{version}.jpg'
+
+    # release
+    project-release-dir: '{root_release}/{project}/QSM/{space}'
+
+    asset-release-task-dir: '{root_release}/{project}/QSM/{space}/assets/{role}/{asset}/{step}.{task}'
+    asset-release-task_version-dir: '<patterns.asset-release-task-dir>/<asset-version-name>'
+
+    asset-release-scene_src-maya-file: '<patterns.asset-release-task_version-dir>/source/{asset}.ma'
+    asset-release-preview-movie-file: '<patterns.asset-release-task_version-dir>/preview/<asset-version-name>.mov'
+
+    asset-release-scene-maya-file: '<patterns.asset-release-task_version-dir>/maya/{asset}.ma'
+    asset-release-rig-connect_map-json-file: '<patterns.asset-release-task_version-dir>/json/{asset}.connect_map.json'
 
     asset-temporary-task-dir: '{root_temporary}/{project}/source/assets/{role}/{asset}/{step}.{task}'
-
-    asset-release-rig-scene-file: '{root_release}/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
+    # shit
+    asset-release-shit-rig-scene-file: '{root_release}/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
 
 dcc-asset-group:
     cfx_rig:
         master:
             cfx:
-                cfx_cloth_grp:
+                cfx_output_geo_grp:
                     cfx_cloth_geo_grp: ''
-                    cfx_cloth_extra_grp: ''
+                    cfx_appendix_geo_grp: ''
 
                 cfx_cloth_proxy_grp:
                     cfx_cloth_proxy_geo_grp: ''
                     cfx_cloth_proxy_extra_grp: ''
-
-                cfx_appendix_grp:
-                    cfx_appendix_geo_grp: ''
-                    cfx_appendix_extra_grp: ''
 
                 cfx_collider_grp:
                     cfx_collider_geo_grp: ''
@@ -53,9 +72,7 @@ dcc-asset-group:
 
                 cfx_auxiliary_grp:
 
-                cfx_wrap_grp:
-                    cfx_wrap_geo_grp: ''
-                    cfx_wrap_base_geo_grp: ''
+                cfx_wrap_grp: ''
 
 dcc-asset-layer:
     cfx_rig:

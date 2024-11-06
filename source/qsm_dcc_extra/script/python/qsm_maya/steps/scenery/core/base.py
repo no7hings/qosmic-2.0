@@ -79,7 +79,7 @@ class MeshInstance(object):
             self.mesh_prc(i_shape_path)
 
     def mesh_prc(self, shape_path):
-        mesh_opt = _mya_core.MeshOpt(shape_path)
+        mesh_opt = _mya_core.MeshShapeOpt(shape_path)
         hash_key = mesh_opt.to_hash()
         if self._material is True:
             hash_key_1 = mesh_opt.get_material_assign_as_hash_key()

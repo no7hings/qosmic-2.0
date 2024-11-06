@@ -65,7 +65,7 @@ class AssetUnitAssemblyOpt(object):
 class _SceneRegionPrc(object):
     @classmethod
     def _compute_grid_size(cls, mesh_paths):
-        mesh_count_data = qsm_mya_core.Meshes.get_evaluate(mesh_paths)
+        mesh_count_data = qsm_mya_core.MeshShapes.get_evaluate(mesh_paths)
         width, depth = mesh_count_data['width'], mesh_count_data['depth']
         size = max(width, depth)
         m = 100
@@ -123,7 +123,7 @@ class _SceneRegionPrc(object):
             for i_seq, i_key in enumerate(keys):
                 # fixme: comp maybe grid again
                 i_shape_paths = grid_map[i_key]
-                print qsm_mya_core.Meshes.get_triangle_number(i_shape_paths), 'AAAA'
+                print qsm_mya_core.MeshShapes.get_triangle_number(i_shape_paths), 'AAAA'
                 i_ar_path_new = self.prc(i_key, i_seq, i_shape_paths)
                 # fixme: maybe None
                 if i_ar_path_new:
@@ -235,7 +235,7 @@ class _UnitPrc(object):
         self.execute_for(shape_path)
 
     def execute_for(self, shape_path):
-        mesh_opt = qsm_mya_core.MeshOpt(shape_path)
+        mesh_opt = qsm_mya_core.MeshShapeOpt(shape_path)
         face_count = qsm_mya_core.Mesh.get_face_number(shape_path)
         if face_count == 0:
             return
@@ -528,7 +528,7 @@ class AssetUnitAssemblyProcess(object):
         )
 
         bsc_log.Log.trace_method_result(
-            self.LOG_KEY, 'load scene: {}'.format(self._file_path)
+            self.LOG_KEY, 'import scene: {}'.format(self._file_path)
         )
 
         import_paths = qsm_mya_core.SceneFile.import_file(

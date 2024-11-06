@@ -17,6 +17,8 @@ import lxbasic.storage as bsc_storage
 
 import qsm_general.core as qsm_gnl_core
 
+import qsm_general.process as qsm_gnl_process
+
 from .... import core as _mya_core
 
 from ....general import core as _gnl_core
@@ -89,7 +91,7 @@ class UnitAssemblyOpt(_rsc_core.AssetCacheOpt):
 
         cache_path = qsm_gnl_core.MayaCache.generate_asset_unit_assembly_file_new(file_path)
         if bsc_storage.StgFileOpt(cache_path).get_is_file() is False:
-            cmd_script = qsm_gnl_core.MayaCacheProcess.generate_cmd_script_by_option_dict(
+            cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script_by_option_dict(
                 self.TASK_KEY,
                 dict(
                     file_path=file_path,
@@ -245,7 +247,7 @@ class UnitAssemblyProcess(object):
         with bsc_log.LogProcessContext.create(maximum=len(mesh_paths), label='mesh process') as l_p:
             for i_shape_path in mesh_paths:
                 if _mya_core.Node.is_mesh_type(i_shape_path) is True:
-                    i_mesh_opt = _mya_core.MeshOpt(i_shape_path)
+                    i_mesh_opt = _mya_core.MeshShapeOpt(i_shape_path)
                     i_w, i_h, i_d = i_mesh_opt.get_dimension()
                     i_s = max(i_w, i_h, i_d)
                     if i_s < grid_size:
@@ -343,7 +345,7 @@ class UnitAssemblyProcess(object):
         return nodes
 
     def mesh_prc(self, shape_path, check_face_count=True):
-        mesh_opt = _mya_core.MeshOpt(shape_path)
+        mesh_opt = _mya_core.MeshShapeOpt(shape_path)
         face_count = _mya_core.Mesh.get_face_number(shape_path)
         if check_face_count is True:
             if face_count == 0:
@@ -499,7 +501,7 @@ class UnitAssemblyProcess(object):
         )
 
         bsc_log.Log.trace_method_result(
-            self.LOG_KEY, 'load scene: {}'.format(self._file_path)
+            self.LOG_KEY, 'import scene: {}'.format(self._file_path)
         )
 
         import_paths = _mya_core.SceneFile.import_file(
@@ -518,7 +520,7 @@ class UnitAssemblyProcess(object):
         _core.GpuImport().execute()
         # process
         mesh_paths = _mya_core.Scene.find_all_dag_nodes(type_includes=['mesh'])
-        mesh_count_data = _mya_core.Meshes.get_evaluate(mesh_paths)
+        mesh_count_data = _mya_core.MeshShapes.get_evaluate(mesh_paths)
         width, height = mesh_count_data['width'], mesh_count_data['height']
         size = max(width, height)
         d = 100

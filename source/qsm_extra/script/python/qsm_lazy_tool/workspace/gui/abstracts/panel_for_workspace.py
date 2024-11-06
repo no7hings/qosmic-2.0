@@ -26,7 +26,7 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
         self._prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         self.add_widget(self._prx_tab_tool_box)
 
-        self.gui_setup_pages_for(['task_manager', 'task_tool', 'task_publish'])
+        self.gui_setup_pages_for(['task_manager', 'task_tool', 'task_release'])
 
         self._prx_tab_tool_box.set_history_key('lazy-workspace.page_key_current')
         self._prx_tab_tool_box.load_history()
@@ -74,8 +74,7 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
             i_prx_sca.add_widget(i_prx_page)
 
     def do_gui_refresh_all(self):
-        page_key = self._prx_tab_tool_box.get_current_key()
-        page = self.gui_find_page(page_key)
+        page = self.gui_find_page(self._prx_tab_tool_box.get_current_key())
         if page is not None:
             page.do_gui_refresh_all()
 

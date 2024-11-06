@@ -11,7 +11,7 @@ import lxbasic.log as bsc_log
 
 import lxbasic.storage as bsc_storage
 
-import qsm_general.core as qsm_gnl_core
+import qsm_general.process as qsm_gnl_process
 
 from .... import core as _mya_core
 
@@ -93,13 +93,13 @@ class PlayblastOpt(object):
 
         image_file_path_ = '{}.####.jpg'.format(image_file_path_base)
 
-        cmd_script = bsc_core.BscFfmpeg.generate_image_concat_cmd_script(
+        cmd_script = bsc_core.BscFfmpeg.generate_image_sequence_concat_cmd_script(
             input=image_file_path_,
             output=movie_file_path,
             start_frame=start_frame,
             end_frame=end_frame,
             fps=fps,
-            coding=bsc_core.BscFfmpeg.Coding.H264
+            coding=bsc_core.BscFfmpeg.Coding.TEST
         )
 
         bsc_log.Log.trace_method_result(
@@ -337,7 +337,7 @@ class PlayblastProcess(object):
         start_frame, end_frame = frame
         width, height = resolution
         movie_file_path = six.u('{}.mov').format(bsc_core.auto_unicode(file_opt.path_base))
-        cmd_script = qsm_gnl_core.MayaCacheProcess.generate_cmd_script_by_option_dict(
+        cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script_by_option_dict(
             'playblast',
             dict(
                 file=file_path,

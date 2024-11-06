@@ -1,16 +1,14 @@
 # coding:utf-8
-import lxgeneral.dcc.core as gnl_dcc_core
-
 import lxgui.proxy.core as gui_prx_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
 
 def process_fnc_(w_):
-    import qsm_general.core as qsm_gnl_core
+    import qsm_general.process as qsm_gnl_process
 
     w_.start(
-        qsm_gnl_core.MayaCacheProcess.generate_command(
+        qsm_gnl_process.MayaCacheProcess.generate_cmd_script(
             'method=test-process'
         )
     )

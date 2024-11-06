@@ -3,8 +3,6 @@ from .base import *
 
 from .dcc_base import *
 
-from .maya_process import *
-
 from .maya_cache import *
 
 from .adv import *

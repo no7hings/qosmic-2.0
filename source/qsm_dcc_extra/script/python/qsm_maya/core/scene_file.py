@@ -199,7 +199,7 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
     def open_with_dialog(cls, file_path):
         if cls.is_dirty() is True:
             result = gui_core.GuiApplication.exec_message_dialog(
-                six.u('Save changed to: {}?').format(
+                six.u('Save changes to: {}?').format(
                     cls.get_current()
                 ),
                 title='Open Scene',
@@ -231,7 +231,7 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
     def new_with_dialog(cls):
         if cls.is_dirty() is True:
             result = gui_core.GuiApplication.exec_message_dialog(
-                six.u('Save changed to: {}?').format(
+                six.u('Save changes to: {}?').format(
                     cls.get_current()
                 ),
                 title='New Scene',
@@ -261,7 +261,7 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
                 return True
 
             gui_core.GuiApplication.exec_message_dialog(
-                'No changed to save.',
+                'No changes to save.',
                 title='Save Scene',
                 size=(320, 120),
                 status='warning',
@@ -271,13 +271,32 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
         return True
 
     @classmethod
+    def ensure_save_width_dialog(cls):
+        if cls.is_dirty() is True:
+            result = gui_core.GuiApplication.exec_message_dialog(
+                six.u('Save changes to: {}?').format(
+                    cls.get_current()
+                ),
+                title='Save Changes',
+                show_no=True,
+                show_cancel=True,
+                size=(320, 120),
+                status='warning',
+            )
+            if result is True:
+                cls.save()
+                return True
+            return False
+        return True
+
+    @classmethod
     def save_to_with_dialog(cls, file_path):
         if cls.is_dirty() is True:
             result = gui_core.GuiApplication.exec_message_dialog(
-                six.u('Save changed to: {}?').format(
+                six.u('Save changes to: {}?').format(
                     cls.get_current()
                 ),
-                title='Save Scene to',
+                title='Save Changes',
                 show_no=True,
                 show_cancel=True,
                 size=(320, 120),

@@ -103,7 +103,10 @@ class Mesh(_shape.Shape):
         return dict_
 
 
-class Meshes(object):
+MeshShape = Mesh
+
+
+class MeshShapes(object):
 
     @classmethod
     def get_evaluate(cls, paths):
@@ -120,7 +123,7 @@ class Meshes(object):
         return cmds.polyEvaluate(paths, triangle=1) or 0
 
 
-class MeshOpt(_shape.ShapeOpt):
+class MeshShapeOpt(_shape.ShapeOpt):
     @classmethod
     def to_om2_dag_path(cls, path):
         return om2.MGlobal.getSelectionListByName(path).getDagPath(0)
@@ -141,7 +144,10 @@ class MeshOpt(_shape.ShapeOpt):
         return map(lambda x: cls.to_point(x, round_count=round_count), om2_point_array)
 
     def __init__(self, path):
-        super(MeshOpt, self).__init__(path)
+        """
+        path is shape
+        """
+        super(MeshShapeOpt, self).__init__(path)
         self._om2_obj_fnc = self.to_om2_mesh_fnc(self._path)
 
     def get_face_vertices(self):
@@ -211,7 +217,7 @@ class MeshOpt(_shape.ShapeOpt):
 
     def to_hash(self):
         face_vertices = self.get_face_vertices()
-        points = self.get_points()
+        points = self.get_points(round_count=2)
         return bsc_core.BscHash.to_hash_key_for_large_data(
             (face_vertices, points), as_unique_id=True
         )

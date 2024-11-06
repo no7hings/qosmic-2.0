@@ -6,7 +6,7 @@ import maya.cmds as cmds
 class Selection(object):
     @classmethod
     def set(cls, paths):
-        cmds.select(paths)
+        cmds.select([x for x in paths if cmds.objExists(x)])
 
     @classmethod
     def clear(cls):
@@ -21,8 +21,12 @@ class Selection(object):
         return [x.split('.')[0] for x in cmds.ls(selection=1, long=1) or []]
 
     @classmethod
-    def get_all_meshes(cls):
-        return cmds.ls(selection=1, dag=1, type='mesh', noIntermediate=1, long=1) or []
+    def get_all_meshes(cls, dag=True):
+        return cmds.ls(selection=1, dag=dag, type='mesh', noIntermediate=1, long=1) or []
+
+    @classmethod
+    def get_all_transforms(cls, dag=False):
+        return cmds.ls(selection=1, dag=dag, type='transform', noIntermediate=1, long=1) or []
 
     @classmethod
     def get_main_controls(cls):

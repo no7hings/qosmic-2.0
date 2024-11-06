@@ -64,7 +64,7 @@ class PointGridSpace(object):
         group = cmds.group(name='box_grp', empty=1)
         points = set()
         for i_shape_path in self._paths:
-            i_points = _mya_core.MeshOpt(i_shape_path).get_points()
+            i_points = _mya_core.MeshShapeOpt(i_shape_path).get_points()
             for j_x, j_y, j_z in i_points:
                 j_x_r, j_y_r, j_z_r = int(j_x/self._grid_size), int(j_y/self._grid_size), int(j_z/self._grid_size)
                 points.add((j_x_r*self._grid_size, j_y_r*self._grid_size, j_z_r*self._grid_size))

@@ -50,23 +50,23 @@ class TaskParse(object):
         )
 
     @classmethod
-    def to_source_task_scene_path(cls, **kwargs):
+    def to_source_scene_src_path(cls, **kwargs):
         kwargs = copy.copy(kwargs)
         if 'asset' in kwargs:
             kwargs['entity'] = kwargs['asset']
 
         return (
-            '/{project}/{entity}/{step}.{task}/{task_unit}/{entity}.{step}.{task}.{task_unit}.v{version}.{file_format}'
+            '/{project}/{entity}/{step}.{task}/{task_unit}/{entity}.{step}.{task}.{task_unit}.v{version}.ma'
         ).format(
             **kwargs
         )
 
     @classmethod
-    def generate_session_for_auto(cls):
+    def generate_task_session_by_asset_source_scene_src_auto(cls):
         return None
     
     @classmethod
-    def generate_session_for_scene(cls, scene_path):
+    def generate_task_session_by_asset_source_scene_src(cls, scene_path):
         return None
 
     def __init__(self):
@@ -79,24 +79,13 @@ class TaskParse(object):
 
         self._configure.do_flatten()
 
+        self._space_dict = self._configure.get('spaces')
+
         self._properties = bsc_content.DictProperties(
             root_source=self._configure.get('root_source.windows'),
             root_temporary=self._configure.get('root_temporary.windows'),
             root_release=self._configure.get('root_release.windows')
         )
-
-        self._task_ptn_opt = bsc_core.BscStgParseOpt(
-            self._configure.get('patterns.asset-source-task-dir')
-        ).update_variants_to(**self._properties)
-        self._task_unit_ptn_opt = bsc_core.BscStgParseOpt(
-            self._configure.get('patterns.asset-source-task_unit-dir')
-        ).update_variants_to(**self._properties)
-        self._task_scene_ptn_opt = bsc_core.BscStgParseOpt(
-            self._configure.get('patterns.asset-source-task_scene-file')
-        ).update_variants_to(**self._properties)
-        self._task_scene_thumbnail_ptn_opt = bsc_core.BscStgParseOpt(
-            self._configure.get('patterns.asset-source-task_scene-thumbnail-file')
-        ).update_variants_to(**self._properties)
 
     def __new__(cls, *args, **kwargs):
         if cls.INSTANCE is not None:
@@ -114,36 +103,60 @@ class TaskParse(object):
     def configure(self):
         return self._configure
 
-    @property
-    def task_pattern_opt(self):
-        return self._task_ptn_opt
-
     def generate_pattern_opt_for(self, keyword, **kwargs):
-        kwargs.update(**self._properties)
+        kwargs_new = copy.copy(kwargs)
+        _ = keyword.split('-')
+        kwargs_new.update(**self._properties)
+        resource_type = _[0]
+        kwargs_new['resource_type'] = resource_type
+        space_key = _[1]
+        kwargs_new['space_key'] = space_key
+        space = self._space_dict[space_key]
+        kwargs_new['space'] = space
         return bsc_core.BscStgParseOpt(
             self._configure.get('patterns.{}'.format(keyword))
-        ).update_variants_to(**kwargs)
+        ).update_variants_to(**kwargs_new)
 
-    def generate_task_pattern_opt_for(self, **kwargs):
-        return self._task_ptn_opt.update_variants_to(**kwargs)
+    # source
+    @property
+    def asset_source_task_scene_pattern_opt(self):
+        return self.generate_pattern_opt_for(
+            'asset-source-scene_src-maya-file'
+        )
+
+    def generate_asset_source_task_scene_pattern_opt_for(self, **kwargs):
+        return self.generate_pattern_opt_for(
+            'asset-source-scene_src-maya-file', **kwargs
+        )
 
     @property
-    def task_unit_pattern_opt(self):
-        return self._task_unit_ptn_opt
+    def asset_source_task_scene_thumbnail_ptn_opt(self):
+        return self.generate_pattern_opt_for(
+            'asset-source-scene_src-maya-thumbnail-file'
+        )
 
-    def generate_task_unit_pattern_opt_for(self, **kwargs):
-        return self._task_unit_ptn_opt.update_variants_to(**kwargs)
+    def generate_asset_source_task_scene_thumbnail_pattern_opt_for(self, **kwargs):
+        return self.generate_pattern_opt_for(
+            'asset-source-scene_src-maya-thumbnail-file', **kwargs
+        )
 
+    # release
     @property
-    def task_scene_pattern_opt(self):
-        return self._task_scene_ptn_opt
+    def asset_release_task_scene_pattern_opt(self):
+        return self.generate_pattern_opt_for(
+            'asset-release-scene_src-maya-file'
+        )
 
-    def generate_task_scene_pattern_opt_for(self, **kwargs):
-        return self._task_scene_ptn_opt.update_variants_to(**kwargs)
+    def generate_asset_release_new_version_number(self, **kwargs):
+        kwargs_new = copy.copy(kwargs)
+        kwargs_new.pop('version')
 
-    @property
-    def task_scene_thumbnail_ptn_opt(self):
-        return self._task_scene_thumbnail_ptn_opt
+        release_task_version_ptn_opt = self.generate_pattern_opt_for(
+            'asset-release-task_version-dir', **kwargs_new
+        )
 
-    def generate_task_scene_thumbnail_pattern_opt_for(self, **kwargs):
-        return self._task_scene_thumbnail_ptn_opt.update_variants_to(**kwargs)
+        matches = release_task_version_ptn_opt.find_matches(sort=True)
+        if matches:
+            version_latest = int(matches[-1]['version'])
+            return version_latest+1
+        return 1

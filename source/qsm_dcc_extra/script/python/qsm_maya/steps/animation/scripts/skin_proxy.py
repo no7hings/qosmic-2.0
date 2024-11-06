@@ -22,6 +22,8 @@ import lxgui.core as gui_core
 
 import qsm_general.core as qsm_gnl_core
 
+import qsm_general.process as qsm_gnl_process
+
 from .... import core as _mya_core
 
 from ....general import core as _gnl_core
@@ -215,7 +217,7 @@ class SkinProxyOpt(_rsc_core.AssetCacheOpt):
             file_path
         )
         if os.path.isfile(cache_file_path) is False or os.path.isfile(data_file_path) is False:
-            cmd_script = qsm_gnl_core.MayaCacheProcess.generate_command(
+            cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script(
                 'method=skin-proxy-cache-generate&file={}&cache_file={}&data_file={}'.format(
                     file_path,
                     cache_file_path,
@@ -968,7 +970,7 @@ class AdvSkinProxyProcess(object):
             l_p.do_update()
             # step 2
             bsc_log.Log.trace_method_result(
-                self.LOG_KEY, 'load scene: {}'.format(self._file_path)
+                self.LOG_KEY, 'reference scene: {}'.format(self._file_path)
             )
             # use reference
             _mya_core.SceneFile.reference_file(self._file_path, namespace=namespace)

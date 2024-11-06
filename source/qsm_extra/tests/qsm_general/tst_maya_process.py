@@ -1,5 +1,5 @@
 # coding:utf-8
-import qsm_general.core as qsm_gnl_core
+import qsm_general.process as qsm_gnl_process
 
 import lxbasic.core as bsc_core
 
@@ -8,7 +8,7 @@ option_dict = dict(
 )
 
 
-cmd_script = qsm_gnl_core.MayaCacheProcess.generate_cmd_script_by_option_dict(
+cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script_by_option_dict(
     'test-unicode', option_dict
 )
 

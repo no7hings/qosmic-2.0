@@ -11,6 +11,8 @@ import re
 
 import subprocess
 
+import tempfile
+
 from . import base as _base
 
 
@@ -510,8 +512,9 @@ class BscFfmpeg(object):
         H263 = 'h263p'
         H264 = 'libx264'
         H265 = 'libx265'
-        TEST = 'TEST'
         H264_QSV = 'h264_qsv'
+
+        TEST = 'prores_ks'
 
     @classmethod
     def get_ffmpeg_source(cls):
@@ -545,9 +548,9 @@ class BscFfmpeg(object):
         return ' '.join(cmd_args).format(**kwargs)
 
     @classmethod
-    def generate_image_concat_cmd_script(cls, **kwargs):
+    def generate_image_sequence_concat_cmd_script(cls, **kwargs):
         """
-        cmd = BscFfmpeg.generate_image_concat_cmd_script(
+        cmd = BscFfmpeg.generate_image_sequence_concat_cmd_script(
             input='/data/e/workspace/lynxi/test/maya/software-render/render/09/test/image/cam_full_body.####.jpg',
             output='/data/e/workspace/lynxi/test/maya/software-render/render/09/test/cam_full_body.mov',
             fps=24
@@ -598,7 +601,7 @@ class BscFfmpeg(object):
             ' "{output}"'
         ).format(
             bin=cls.get_ffmpeg_source(),
-            input=cls._create_image_concat_file_list(
+            input=cls._create_image_sequence_concat_file_list(
                 kwargs.pop('input'),
                 start_frame=start_frame,
                 end_frame=end_frame,
@@ -611,10 +614,10 @@ class BscFfmpeg(object):
         )
 
     @classmethod
-    def _create_image_concat_file_list(cls, input_file_path, start_frame, end_frame, frame_step):
+    def _create_image_sequence_concat_file_list(cls, input_file_path, start_frame, end_frame, frame_step):
         data = map(
             lambda x: 'file \'{}\''.format(x),
-            cls._completion_image_file_list(input_file_path, start_frame, end_frame, frame_step)
+            cls._completion_image_sequence_file_list(input_file_path, start_frame, end_frame, frame_step)
         )
         cache_directory_path = os.path.dirname(input_file_path)
         cache_name_base = os.path.splitext(os.path.basename(input_file_path))[0].replace(
@@ -641,7 +644,7 @@ class BscFfmpeg(object):
         )
 
     @classmethod
-    def _completion_image_file_list(cls, file_path, start_frame, end_frame, frame_step):
+    def _completion_image_sequence_file_list(cls, file_path, start_frame, end_frame, frame_step):
         list_ = []
         directory_path = os.path.dirname(file_path)
         file_name = os.path.basename(file_path)
@@ -821,5 +824,44 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
             six.u('"{}"').format(video_path_dst)
         ]
         cmd_args = [cmd.encode('mbcs') if isinstance(cmd, unicode) else cmd for cmd in cmd_args]
-        cmd_script = ' '.join(cmd_args)
-        subprocess.check_call(cmd_script)
+        subprocess.check_call(' '.join(cmd_args))
+
+    @classmethod
+    def concat_images(cls, video_path, image_paths, replace=False):
+        video_path = _base.ensure_unicode(video_path)
+
+        if os.path.isfile(video_path) is True:
+            if replace is False:
+                return
+
+        # create directory first
+        directory_path = os.path.dirname(video_path)
+        if os.path.exists(directory_path) is False:
+            os.makedirs(directory_path)
+
+        fd, temp_file_path = tempfile.mkstemp(suffix='.concat.files')
+        # create file list
+        with os.fdopen(fd, 'w') as f:
+            for i_image_path in image_paths:
+                f.write('file \'{}\'\n'.format(os.path.abspath(i_image_path)))
+
+        cmd_args = [
+            cls.get_ffmpeg_source(),
+            '-f', 'concat',
+            '-safe', '0',
+            '-i', temp_file_path,
+            r'-v', 'error',
+            '-vf', 'scale=\'min(1024,iw)\':-2, pad=1024:ih:(ow-iw)/2:(oh-ih)/2',
+            '-r', '24',
+            '-pix_fmt', 'yuv420p',
+            '-c:v', 'prores_ks',
+            '-y',
+            video_path
+        ]
+
+        cmd_args = [cmd.encode('mbcs') if isinstance(cmd, unicode) else cmd for cmd in cmd_args]
+        subprocess.Popen(
+            cmd_args,
+            shell=True,
+        )
+

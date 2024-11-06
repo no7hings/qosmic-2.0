@@ -8,7 +8,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-import qsm_general.core as qsm_gnl_core
+import qsm_general.process as qsm_gnl_process
 
 from .... import core as _mya_core
 
@@ -107,7 +107,7 @@ class CfxNClothCacheOpt(_rsc_core.AssetCacheOpt):
 
             query_dict = {v: k for k, v in data.items()}
             for i_mesh_path in mesh_transforms:
-                i_mesh_opt = _mya_core.MeshOpt(i_mesh_path)
+                i_mesh_opt = _mya_core.MeshShapeOpt(i_mesh_path)
                 i_uuid = i_mesh_opt.get_face_vertices_as_uuid()
                 if i_uuid in query_dict:
                     i_key = query_dict[i_uuid]
@@ -159,7 +159,7 @@ class CfxNClothCacheProcess(object):
             bsc_storage.StgDirectoryOpt(directory_path).get_name(), '{}-{}'.format(*frame_range)
         )
 
-        cmd_script = qsm_gnl_core.MayaCacheProcess.generate_cmd_script_by_option_dict(
+        cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script_by_option_dict(
             'cfx-cloth-cache-generate',
             dict(
                 directory_path=directory_path,
@@ -191,7 +191,7 @@ class CfxNClothCacheProcess(object):
             bsc_storage.StgDirectoryOpt(directory_path).get_name(), '{}-{}'.format(*frame_range)
         )
 
-        hook_option = qsm_gnl_core.MayaCacheProcess.generate_hook_option_by_option_dict(
+        hook_option = qsm_gnl_process.MayaCacheProcess.generate_hook_option_by_option_dict(
             'cfx-cloth-cache-generate',
             dict(
                 directory_path=directory_path,

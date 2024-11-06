@@ -1,5 +1,5 @@
 # coding:utf-8
-import qsm_shark.core as c
+import qsm_shark.resolve as c
 
 
 stage = c.Stage()

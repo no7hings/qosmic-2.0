@@ -1562,6 +1562,9 @@ class AbsQtNameBaseDef(object):
         self._sub_name_draw_rect = QtCore.QRect()
 
         self._tool_tip_text = None
+        self._tool_action_tip_text = None
+
+        self._tool_tip_css = None
 
     def _set_name_align_(self, align):
         self._name_align = align
@@ -1578,10 +1581,10 @@ class AbsQtNameBaseDef(object):
     def _set_name_text_(self, text):
         self._name_flag = True
         self._name_text = text
-        #
-        if self._tool_tip_text is not None:
-            self._set_tool_tip_text_(self._tool_tip_text)
-        #
+
+        if self._tool_tip_text is not None or self._tool_action_tip_text is not None:
+            self._update_tool_tip_css_()
+
         self._widget.update()
 
     def _fix_width_to_name_(self, width_add=None):
@@ -1628,6 +1631,7 @@ class AbsQtNameBaseDef(object):
     def _get_name_rect_(self):
         return self._name_draw_rect
 
+    # tool tip
     def _set_tool_tip_(self, raw, **kwargs):
         if raw is not None:
             if isinstance(raw, six.string_types):
@@ -1687,6 +1691,59 @@ class AbsQtNameBaseDef(object):
             # noinspection PyCallingNonCallable
             # self._tool_tip_text = css
             self.setToolTip(css)
+
+    def _generate_tool_tip_css_(self):
+        css = (
+            '<html>\n'
+            '<body>\n'
+            '<style>.no_wrap{white-space:nowrap;}</style>\n'
+            '<style>.no_warp_and_center{white-space:nowrap;text-align: center;}</style>\n'
+        )
+
+        if self._name_text:
+            name_text = bsc_core.auto_string(self._name_text)
+            name_text = name_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
+            css += '<h3><p class="no_warp_and_center">{}</p></h3>\n'.format(name_text)
+
+        if self._tool_tip_text:
+            # add split line
+            css += '<p><hr></p>\n'
+            text = bsc_core.auto_string(self._tool_tip_text)
+            if isinstance(text, six.string_types):
+                texts = text.split('\n')
+            elif isinstance(text, (tuple, list)):
+                texts = text
+            else:
+                raise RuntimeError()
+            #
+            for i_text in texts:
+                i_text = bsc_core.auto_string(i_text)
+                i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
+                i_text = _qt_core.QtUtil.generate_tool_tip_action_css(i_text)
+                css += '<p class="no_wrap">{}</p>\n'.format(i_text)
+
+        if self._tool_action_tip_text:
+            text = self._tool_action_tip_text
+            css += '<p><hr></p>\n'
+            text = text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
+            text = _qt_core.QtUtil.generate_tool_tip_action_css(text)
+            css += '<p class="no_wrap">{}</p>\n'.format(text)
+
+        css += '</body>\n</html>'
+        return css
+
+    def _update_tool_tip_text_(self, text):
+        self._tool_tip_text = text
+        self._update_tool_tip_css_()
+
+    def _update_tool_action_tip_text_(self, text):
+        self._tool_action_tip_text = text
+        self._update_tool_tip_css_()
+
+    def _update_tool_tip_css_(self):
+        if hasattr(self, 'setToolTip'):
+            self._tool_tip_css = self._generate_tool_tip_css_()
+            self.setToolTip(self._tool_tip_css)
 
     def _get_tool_tip_text_(self):
         return self._tool_tip_text

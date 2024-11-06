@@ -8,7 +8,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 def process_fnc_(w_):
     w_.start(
-        gnl_dcc_core.PythonProcess.generate_command(
+        gnl_dcc_core.PythonProcess.generate_cmd_script(
             'method=test'
         )
     )

@@ -11,6 +11,8 @@ from . import attribute as _attribute
 
 
 class ParentConstraint(object):
+    NODE_TYPE = 'parentConstraint'
+
     @classmethod
     def create(cls, parent_path, child_path, maintain_offset=0):
         # parentConstraint -mo -weight 1
@@ -21,7 +23,7 @@ class ParentConstraint(object):
         return list(
             set(
                 cmds.listConnections(
-                    target_node, destination=0, source=1, type='parentConstraint'
+                    target_node, destination=0, source=1, type=cls.NODE_TYPE
                 ) or []
             )
         )
@@ -32,6 +34,15 @@ class ParentConstraint(object):
         if _:
             for i in _:
                 cmds.delete(i)
+
+
+class ParentConstraintSource:
+
+    @classmethod
+    def get_constrain_nodes(cls, source):
+        return _attribute.NodeAttribute.get_target_nodes(
+            source, 'translate', ParentConstraint.NODE_TYPE
+        )
 
 
 class ScaleConstraint(object):

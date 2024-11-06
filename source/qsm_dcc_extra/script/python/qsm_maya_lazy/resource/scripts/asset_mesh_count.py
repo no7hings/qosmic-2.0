@@ -50,7 +50,7 @@ class AssetGpuMeshCountData(object):
         if mesh_paths:
             cache_dict = {}
             component_dict = {}
-            cache_data = qsm_mya_core.Meshes.get_evaluate(mesh_paths)
+            cache_data = qsm_mya_core.MeshShapes.get_evaluate(mesh_paths)
             cache_data['geometry_all'] = len(mesh_paths)
             cache_data['geometry_visible'] = len(mesh_paths)
             cache_dict[gpu_cache_path] = cache_data
@@ -119,7 +119,7 @@ class AssetMeshCountData(object):
         meshes = qsm_mya_core.Namespace.find_all_dag_nodes(self._namespace, type_includes=['mesh'])
         meshes_no_intermediate = [x for x in meshes if qsm_mya_core.Shape.is_intermediate(x) is False]
         if meshes:
-            all_data = qsm_mya_core.Meshes.get_evaluate(meshes_no_intermediate)
+            all_data = qsm_mya_core.MeshShapes.get_evaluate(meshes_no_intermediate)
             all_data['geometry_all'] = len(meshes)
             all_data['geometry_visible'] = len(meshes_no_intermediate)
             dict_['all'] = all_data

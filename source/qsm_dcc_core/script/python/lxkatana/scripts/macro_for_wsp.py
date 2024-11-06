@@ -1906,7 +1906,7 @@ class ScpInstanceColorMap(object):
             w.show_window_auto(exclusive=False)
 
             w.start(
-                gnl_dcc_core.PythonProcess.generate_command(
+                gnl_dcc_core.PythonProcess.generate_cmd_script(
                     'method=generator-grow-cache&grow_usd={}&image={}&uv_map_name={}&cache_usd={}'.format(
                         grow_usd_file_path, image_file_path, uv_map_name, cache_usd_file_path
                     )
@@ -1939,7 +1939,7 @@ class ScpInstanceColorMap(object):
             w.show_window_auto(exclusive=False)
 
             w.start(
-                gnl_dcc_core.PythonProcess.generate_command(
+                gnl_dcc_core.PythonProcess.generate_cmd_script(
                     (
                         'method=generator-instance-cache'
                         '&grow_usd={}&instance_usd={}&image={}&uv_map_name={}&cache_usd={}&cache_json={}'

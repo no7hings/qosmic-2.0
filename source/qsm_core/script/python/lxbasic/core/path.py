@@ -6,7 +6,17 @@ import re
 from . import raw as _raw
 
 
-class BscNodePath(object):
+class BscNodeName:
+    @classmethod
+    def is_name_match(cls, name, p):
+        return bool(
+            fnmatch.filter(
+                [name], p
+            )
+        )
+
+
+class BscNodePath:
     @classmethod
     def get_dag_args(cls, path, pathsep='/'):
         """

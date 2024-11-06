@@ -260,7 +260,7 @@ Any boolean flag will take the following values as FALSE: off, no, false, or 0.
 
     """
     @classmethod
-    def generate_command(cls, **kwargs):
+    def generate_cmd_script(cls, **kwargs):
         """
 cmd = mya_core.SoftwareRender.get_command(
     scene='/data/e/workspace/lynxi/test/maya/software-render/test_3.ma',
@@ -535,7 +535,7 @@ Any boolean flag will take the following values as FALSE: off, no, false, or 0.
     e.g. -s 1 -e 10 -x 512 -y 512 -cam persp -as 4 -hs 2 -dif 2 file.
     """
     @classmethod
-    def generate_command(cls, **kwargs):
+    def generate_cmd_script(cls, **kwargs):
         quality = kwargs['quality']
         sample_s = (
             ' -ai:as {camera_samples}'

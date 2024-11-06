@@ -2,13 +2,15 @@
 from ..abstracts import unit_for_task_tool as _abs_unit_for_task_tool
 
 
-class GuiNodeOptForGeneral(_abs_unit_for_task_tool.AbsGuiNodeOpt):
+class GuiNodeOptForGnlTool(_abs_unit_for_task_tool.AbsGuiNodeOptForTaskTool):
     def __init__(self, *args, **kwargs):
-        super(GuiNodeOptForGeneral, self).__init__(*args, **kwargs)
+        super(GuiNodeOptForGnlTool, self).__init__(*args, **kwargs)
 
 
-class PrxToolsetForGeneral(_abs_unit_for_task_tool.AbsPrxToolset):
-    GUI_NODE_OPT_CLS = GuiNodeOptForGeneral
+class PrxToolsetForGnlTool(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
+    UNIT_KEY = 'gnl'
+
+    GUI_NODE_OPT_CLS = GuiNodeOptForGnlTool
 
     def __init__(self, *args, **kwargs):
-        super(PrxToolsetForGeneral, self).__init__(*args, **kwargs)
+        super(PrxToolsetForGnlTool, self).__init__(*args, **kwargs)

@@ -51,7 +51,7 @@ def main(session):
                     _i_texture_search_json_file_path = _i_dtb_version_opt.get_file('texture-json-search-file')
 
                     self.append_cmd(
-                        gnl_dcc_core.MayaProcess.generate_command(
+                        gnl_dcc_core.MayaProcess.generate_cmd_script(
                             bsc_core.ArgDictStringOpt(
                                 option=dict(
                                     method='scene-to-look',

@@ -68,7 +68,7 @@ class QtEntryForArray(
         if self._entry_is_enable is True:
             menu_raw = [
                 ('basic',),
-                ('copy', None, (True, self._do_action_copy_, False), QtGui.QKeySequence.Copy),
+                ('copy path', None, (True, self._do_action_copy_, False), QtGui.QKeySequence.Copy),
                 ('paste', None, (True, self._do_action_paste_, False), QtGui.QKeySequence.Paste),
                 ('cut', None, (True, self._do_action_cut_, False), QtGui.QKeySequence.Cut),
                 ('extend',),
@@ -77,7 +77,7 @@ class QtEntryForArray(
         else:
             menu_raw = [
                 ('basic',),
-                ('copy', None, (True, self._do_action_copy_, False), QtGui.QKeySequence.Copy),
+                ('copy path', None, (True, self._do_action_copy_, False), QtGui.QKeySequence.Copy),
                 ('extend',),
                 ('select all', None, (True, self._do_action_select_all_, False), QtGui.QKeySequence.SelectAll)
             ]

@@ -13,7 +13,7 @@ dict_ = collections.OrderedDict()
 
 for i in qsm_mya_core.Scene.find_all_dag_nodes(type_includes=['mesh']):
     i_coords = []
-    i_mesh_opt = qsm_mya_core.MeshOpt(i)
+    i_mesh_opt = qsm_mya_core.MeshShapeOpt(i)
     i_transform_path = i_mesh_opt.transform_path
     i_x = qsm_mya_core.NodeAttribute.get_value(i_transform_path, 'scaleX')
     i_indices = i_mesh_opt.get_face_vertices()

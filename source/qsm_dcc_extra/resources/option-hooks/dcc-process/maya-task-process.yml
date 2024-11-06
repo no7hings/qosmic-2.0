@@ -1,0 +1,30 @@
+option:
+    type: method
+    #
+    systems:
+        - '*-*'
+    #
+    gui:
+        group_name: 'python'
+        #
+        name: 'Maya Task Process'
+        icon_name: 'application/python'
+#
+hook_option:
+    engine: 'maya'
+    #
+    script:
+        method: ''
+    #
+    deadline:
+        #
+        group: all
+        #
+        pool: all
+    #
+    rez:
+        extend_packages: [
+            'maya-2020',
+            'mtoa',
+            'qsm_dcc_main',
+        ]

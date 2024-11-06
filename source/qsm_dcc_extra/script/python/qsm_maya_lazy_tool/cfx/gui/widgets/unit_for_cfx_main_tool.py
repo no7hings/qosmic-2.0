@@ -185,9 +185,7 @@ class ToolsetUnitForCfxRigExport(
 
                 import lxsession.commands as ssn_commands
 
-                ssn_commands.execute_option_hook_by_deadline(
-                    option_hook
-                )
+                ssn_commands.execute_option_hook_by_deadline(option_hook)
                 
                 self._window.exec_message_dialog(
                     self._window.choice_message(
@@ -195,7 +193,6 @@ class ToolsetUnitForCfxRigExport(
                     ),
                     status='correct'
                 )
-
         else:
             self._window.exec_message_dialog(
                 self._window.choice_message(

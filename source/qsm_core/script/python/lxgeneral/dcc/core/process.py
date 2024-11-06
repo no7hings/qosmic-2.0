@@ -3,7 +3,7 @@
 
 class MayaProcess(object):
     @classmethod
-    def generate_command(cls, option):
+    def generate_cmd_script(cls, option):
         # windows
         cmd_args = [
             'rez-env qsm_dcc_main maya-2019 usd-20.11',
@@ -39,7 +39,7 @@ class MayaProcess(object):
 
 class PythonProcess(object):
     @classmethod
-    def generate_command(cls, option):
+    def generate_cmd_script(cls, option):
         import lxbasic.resource as bsc_resource
 
         cmd_args = [

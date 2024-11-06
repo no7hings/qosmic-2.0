@@ -56,9 +56,9 @@ class AbsGroupOpt(object):
         if _mya_core.Node.is_exists(path_or_name) is False:
             raise RuntimeError()
 
-        self._path = _mya_core.Shape.get_transform(path_or_name)
-        self._group_opt = _mya_core.GroupOpt(self._path)
+        self._location = _mya_core.Shape.get_transform(path_or_name)
+        self._group_opt = _mya_core.GroupOpt(self._location)
 
     @property
-    def path(self):
-        return self._path
+    def location(self):
+        return self._location

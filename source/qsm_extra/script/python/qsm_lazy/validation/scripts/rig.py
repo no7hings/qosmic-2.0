@@ -7,6 +7,8 @@ import lxbasic.storage as bsc_storage
 
 import qsm_general.core as qsm_gnl_core
 
+import qsm_general.process as qsm_gnl_process
+
 import _abc
 
 
@@ -35,7 +37,7 @@ class RigValidationOpt(_abc.AbsValidationOpt):
             bsc_storage.StgFileOpt(validation_cache_path).get_is_file() is False
             or bsc_storage.StgFileOpt(mesh_count_cache_path).get_is_file() is False
         ):
-            cmd_script = qsm_gnl_core.MayaCacheProcess.generate_cmd_script_by_option_dict(
+            cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script_by_option_dict(
                 'rig_validation',
                 dict(
                     file_path=file_path,

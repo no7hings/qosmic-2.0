@@ -11,68 +11,14 @@ import lxgui.qt.widgets as gui_qt_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy.workspace.core as qsm_lzy_wsp_core
+import qsm_general.wsp_task as qsm_dcc_wsp_task
 
 
 class AbsPrxSubPageForAssetTaskCreate(gui_prx_widgets.PrxBaseSubPage):
     PAGE_KEY = 'asset'
 
     def _on_apply(self):
-        page = self._sub_window._window.gui_find_page('task_manager')
-        if page is not None:
-            if bsc_core.BscApplication.get_is_maya():
-                import qsm_maya.core as qsm_mya_core
-
-                import qsm_maya_lazy.workspace.core as qsm_mya_lzy_wsp_core
-
-                if qsm_mya_core.SceneFile.new_with_dialog() is True:
-                    task_parse = qsm_lzy_wsp_core.TaskParse()
-                    step_task = self._prx_options_node.get('step_task')
-                    task_unit = self._prx_options_node.get('task_unit')
-                    if not task_unit:
-                        return
-
-                    step, task = step_task.split('.')
-                    kwargs = copy.copy(page.gui_get_entity_properties())
-                    kwargs['step'] = step
-                    kwargs['task'] = task
-                    kwargs['task_unit'] = task_unit
-                    if 'version' in kwargs:
-                        kwargs.pop('version')
-
-                    task_scene_ptn_opt = task_parse.generate_task_scene_pattern_opt_for(**kwargs)
-
-                    matches = task_scene_ptn_opt.find_matches(sort=True)
-                    if matches:
-                        last_version = int(matches[-1]['version'])
-                        version = last_version+1
-                    else:
-                        version = 1
-
-                    kwargs_new = copy.copy(kwargs)
-
-                    kwargs_new['version'] = str(version).zfill(3)
-
-                    task_scene_ptn_opt_new = task_parse.generate_task_scene_pattern_opt_for(**kwargs_new)
-
-                    task_scene_path = task_scene_ptn_opt_new.get_value()
-
-                    if bsc_storage.StgPath.get_is_file(task_scene_path) is False:
-                        qsm_mya_lzy_wsp_core.TaskBuild(task_parse, kwargs_new).execute()
-
-                        qsm_mya_core.SceneFile.save_to(task_scene_path)
-
-                        kwargs_new['result'] = task_scene_path
-
-                        thumbnail_ptn_opt = task_parse.generate_task_scene_thumbnail_pattern_opt_for(**kwargs_new)
-                        thumbnail_path = thumbnail_ptn_opt.get_value()
-
-                        qsm_mya_core.SceneFile.refresh()
-
-                        with self._sub_window._window.gui_minimized():
-                            gui_qt_core.QtMaya.make_snapshot(thumbnail_path)
-
-                        page.gui_load_task_scene(kwargs_new)
+        pass
 
     def _on_close(self):
         self._sub_window.close_window()

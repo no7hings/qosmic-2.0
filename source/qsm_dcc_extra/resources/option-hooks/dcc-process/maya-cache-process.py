@@ -52,11 +52,11 @@ def gpu_instance_generate_fnc(option_opt):
 
 
 def playblast_fnc(option_opt):
-    import qsm_general.core as qsm_gnl_core
+    import qsm_general.process as qsm_gnl_process
 
     import qsm_maya.steps.general.scripts as qsm_mya_stp_gnl_scripts
 
-    dict_ = qsm_gnl_core.MayaCacheProcess.to_option_dict(
+    dict_ = qsm_gnl_process.MayaCacheProcess.to_option_dict(
         option_opt.to_string()
     )
 
@@ -84,11 +84,11 @@ def playblast_fnc(option_opt):
 
 
 def cfx_cloth_cache_generate_fnc(option_opt):
-    import qsm_general.core as qsm_gnl_core
+    import qsm_general.process as qsm_gnl_process
 
     import qsm_maya.steps.cfx.scripts as qsm_mya_stp_cfx_scripts
 
-    kwargs = qsm_gnl_core.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
         option_opt.to_string()
     )
 
@@ -98,11 +98,11 @@ def cfx_cloth_cache_generate_fnc(option_opt):
 
 
 def rig_validation_fnc(option_opt):
-    import qsm_general.core as qsm_gnl_core
+    import qsm_general.process as qsm_gnl_process
 
     import qsm_maya_lazy.validation.tasks as s
 
-    kwargs = qsm_gnl_core.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
         option_opt.to_string()
     )
 
@@ -112,11 +112,11 @@ def rig_validation_fnc(option_opt):
 
 
 def scenery_validation_fnc(option_opt):
-    import qsm_general.core as qsm_gnl_core
+    import qsm_general.process as qsm_gnl_process
 
     import qsm_maya_lazy.validation.tasks as s
 
-    kwargs = qsm_gnl_core.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
         option_opt.to_string()
     )
 
@@ -126,11 +126,11 @@ def scenery_validation_fnc(option_opt):
 
 
 def mesh_count_generate_fnc(option_opt):
-    import qsm_general.core as qsm_gnl_core
+    import qsm_general.process as qsm_gnl_process
 
     import qsm_maya_lazy.resource.scripts as s
 
-    kwargs = qsm_gnl_core.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
         option_opt.to_string()
     )
 
@@ -140,11 +140,11 @@ def mesh_count_generate_fnc(option_opt):
 
 
 def snapshot_generate_fnc(option_opt):
-    import qsm_general.core as qsm_gnl_core
+    import qsm_general.process as qsm_gnl_process
 
     import qsm_maya_lazy.resource.scripts as s
 
-    kwargs = qsm_gnl_core.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
         option_opt.to_string()
     )
 
@@ -154,11 +154,11 @@ def snapshot_generate_fnc(option_opt):
 
 
 def unit_assembly_generate_fnc(option_opt):
-    import qsm_general.core as qsm_gnl_core
+    import qsm_general.process as qsm_gnl_process
 
     import qsm_maya_lazy.resource.scripts as s
 
-    kwargs = qsm_gnl_core.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
         option_opt.to_string()
     )
 
@@ -168,11 +168,11 @@ def unit_assembly_generate_fnc(option_opt):
 
 
 def motion_generate_fnc(option_opt):
-    import qsm_general.core as qsm_gnl_core
+    import qsm_general.process as qsm_gnl_process
 
     import qsm_maya_lazy.montage.scripts as s
 
-    kwargs = qsm_gnl_core.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
         option_opt.to_string()
     )
 

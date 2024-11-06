@@ -276,7 +276,7 @@ class AdvRigAsset(_rsc_core.Asset):
                 if not i_transform_name.startswith(namespace+':'):
                     continue
                 i_key = self.path_to_key(namespace, geometry_root, i_transform_path, pathsep='|')
-                dict_[i_key] = _mya_core.MeshOpt(i).get_face_vertices_as_uuid()
+                dict_[i_key] = _mya_core.MeshShapeOpt(i).get_face_vertices_as_uuid()
         return dict_
 
     def pull_geometry_topology_data(self):

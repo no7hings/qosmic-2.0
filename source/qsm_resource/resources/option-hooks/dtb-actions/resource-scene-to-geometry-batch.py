@@ -44,7 +44,7 @@ def main(session):
                     _i_geometry_abc_file_path = _i_dtb_version_opt.get_file('geometry-abc-file')
                     #
                     self.append_cmd(
-                        gnl_dcc_core.MayaProcess.generate_command(
+                        gnl_dcc_core.MayaProcess.generate_cmd_script(
                             bsc_core.ArgDictStringOpt(
                                 option=dict(
                                     method='scene-to-geometry',

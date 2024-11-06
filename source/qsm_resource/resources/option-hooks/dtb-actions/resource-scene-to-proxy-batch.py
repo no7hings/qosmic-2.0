@@ -43,7 +43,7 @@ def main(session):
                             continue
                     #
                     self.append_cmd(
-                        gnl_dcc_core.MayaProcess.generate_command(
+                        gnl_dcc_core.MayaProcess.generate_cmd_script(
                             bsc_core.ArgDictStringOpt(
                                 option=dict(
                                     method='scene-to-proxy',

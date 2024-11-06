@@ -7,7 +7,7 @@ option:
     gui:
         group_name: 'python'
         #
-        name: 'Maya Process'
+        name: 'Maya Cache Process'
         icon_name: 'application/python'
 #
 hook_option:

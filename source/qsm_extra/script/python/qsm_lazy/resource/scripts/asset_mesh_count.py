@@ -3,6 +3,8 @@ import lxbasic.storage as bsc_storage
 
 import qsm_general.core as qsm_gnl_core
 
+import qsm_general.process as qsm_gnl_process
+
 import qsm_screw.core as qsm_scr_core
 
 from . import asset_general as _asset_general
@@ -32,7 +34,7 @@ class AssetMeshCountGenerateOpt(_asset_general.AssetGeneralOpt):
             # unregister first
             self.unregister()
 
-            cmd_script = qsm_gnl_core.MayaCacheProcess.generate_cmd_script_by_option_dict(
+            cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script_by_option_dict(
                 self.TASK_KEY,
                 dict(
                     file_path=file_path,

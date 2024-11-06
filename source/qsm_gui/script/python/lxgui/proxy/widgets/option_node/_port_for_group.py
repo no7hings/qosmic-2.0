@@ -229,6 +229,9 @@ class PrxNodePortGroup(_port_base.AbsPrxPortBaseDef):
     def set_reset(self):
         pass
 
+    def set_tool_tip(self, text):
+        self._prx_widget.set_tool_tip(text)
+
     def set_visible(self, boolean):
         self._prx_widget.set_visible(boolean)
 

@@ -1,17 +1,11 @@
 # coding:utf-8
-import time
-
 import lxgui.qt.widgets as gui_qt_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import lxbasic.core as bsc_core
-
 import lxgui.qt.core as gui_qt_core
 
-import lxgui.proxy.scripts as prx_scripts
-
-import qsm_general.core as qsm_gnl_core
+import qsm_general.process as qsm_gnl_process
 
 
 class W(gui_prx_widgets.PrxBaseWindow):
@@ -35,13 +29,13 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
             if i == 0:
                 trd.set_fnc(
-                    qsm_gnl_core.MayaCacheProcess.generate_command(
+                    qsm_gnl_process.MayaCacheProcess.generate_cmd_script(
                         'method=test-process&tag=error'
                     )
                 )
             else:
                 trd.set_fnc(
-                    qsm_gnl_core.MayaCacheProcess.generate_command(
+                    qsm_gnl_process.MayaCacheProcess.generate_cmd_script(
                         'method=test-process'
                     )
                 )

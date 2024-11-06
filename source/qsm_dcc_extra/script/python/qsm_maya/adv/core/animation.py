@@ -89,7 +89,7 @@ class AdvOpt(_base.AdvNamespaceExtra):
     # joint
     def find_joint_set(self):
         """
-        DeformSet
+        DeformSet：是ADV的默认设置
         """
         _ = cmds.ls('{}:DeformSet'.format(self._namespace), long=1)
         if _:
@@ -105,14 +105,36 @@ class AdvOpt(_base.AdvNamespaceExtra):
 
     def find_geometry_location(self):
         """
-        Geometry
+        Geometry：是ADV的默认设置
         """
         _ = cmds.ls('{}:Geometry'.format(self._namespace), long=1)
         if _:
             return _[0]
 
     def find_all_meshes(self):
+        """
+        默认忽略中间对象
+        """
         _ = self.find_geometry_location()
+        if _:
+            return cmds.ls(
+                _, type='mesh', long=1, noIntermediate=1, dag=1
+            ) or []
+        return []
+
+    def find_geo_lower_location(self):
+        """
+        Low_Grp：ADV没有这个设置，这是个临时设置，后面会使用配置控制
+        """
+        _ = cmds.ls('{}:Low_Grp'.format(self._namespace), long=1)
+        if _:
+            return _[0]
+
+    def find_all_lower_meshes(self):
+        """
+        默认忽略中间对象
+        """
+        _ = self.find_geo_lower_location()
         if _:
             return cmds.ls(
                 _, type='mesh', long=1, noIntermediate=1, dag=1

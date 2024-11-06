@@ -62,7 +62,7 @@ class BlendShape:
         nodes = []
 
         shape_path_src = _node_for_transform.Transform.get_shape(transform_path_src)
-        name_src = _node_for_transform.Transform.to_name(transform_path_src)
+        name_src = _node_for_transform.Transform.to_name_without_namespace(transform_path_src)
         shape_path_tgt = _node_for_transform.Transform.get_shape(transform_path_tgt)
         # Debug Source Shape Hide
         cmds.setAttr(shape_path_tgt+'.visibility', 1)
@@ -86,6 +86,50 @@ class BlendShape:
                 shape_path_tgt+'.visibility', cmds.getAttr(shape_path_tgt+'.visibility')
             )
         return nodes
+
+
+class MeshBlendShape:
+    @classmethod
+    def get_target_shapes(cls, deform_node):
+        _ = _attribute.NodeAttribute.get_target_nodes(
+            deform_node, 'outputGeometry', 'mesh'
+        )
+        return _
+
+    @classmethod
+    def get_target_transforms(cls, deform_node):
+        return [
+            _node_for_shape.Shape.get_transform(x) for x in cls.get_target_shapes(deform_node)
+        ]
+
+
+class MeshBlendShapeSource:
+    @classmethod
+    def get_args_array(cls, transform_path):
+        lst = []
+        nodes = cls.get_deform_nodes(transform_path)
+        if nodes:
+            for i_node in nodes:
+                pass
+
+    @classmethod
+    def get_deform_nodes(cls, transform_path):
+        shape_path = _node_for_transform.Transform.get_shape(transform_path)
+        return _attribute.NodeAttribute.get_target_nodes(
+            shape_path, 'worldMesh', 'blendShape'
+        )
+
+
+class MeshBlendShapeTarget:
+    @classmethod
+    def get_args(cls, transform_path):
+        node = cls.get_deform_node(transform_path)
+        if node:
+            pass
+
+    @classmethod
+    def get_deform_node(cls, transform_path):
+        pass
 
 
 class CurveWarp:
@@ -244,6 +288,8 @@ class CurveWarp:
 
 
 class Wrap:
+    NODE_TYPE = 'wrap'
+
     @classmethod
     def get_driver_transforms(cls, node):
         lst = []
@@ -269,7 +315,35 @@ class Wrap:
         return lst
 
 
-class MeshWrap:
+class MeshWrapSource:
+    @classmethod
+    def get_base_transforms(cls, transform_path):
+        deform_nodes = cls.get_deform_nodes(transform_path)
+        set_ = set()
+        [set_.update(set(Wrap.get_base_transforms(x))) for x in deform_nodes]
+        return list(set_)
+
+    @classmethod
+    def get_deform_nodes(cls, transform_path):
+        shape_path = _node_for_transform.Transform.get_shape(transform_path)
+        return _attribute.NodeAttribute.get_target_nodes(
+            shape_path, 'worldMesh', Wrap.NODE_TYPE
+        )
+
+    @classmethod
+    def auto_collect_base_transforms(cls, transform_path):
+        base_transforms = cls.get_base_transforms(transform_path)
+        if base_transforms:
+            parent_path = _node_for_transform.Transform.get_parent(transform_path)
+            for i_base_transform in base_transforms:
+                i_parent_path = _node_for_transform.Transform.get_parent(i_base_transform)
+                if i_parent_path != parent_path:
+                    _node_for_transform.Transform.parent_to(
+                        i_base_transform, parent_path
+                    )
+
+
+class MeshWrapTarget:
     @classmethod
     def get_args(cls, transform_path):
         node = cls.get_deform_node(transform_path)
@@ -280,6 +354,6 @@ class MeshWrap:
     def get_deform_node(cls, transform_path):
         shape_path = _node_for_transform.Transform.get_shape(transform_path)
         return _attribute.NodeAttribute.get_source_node(
-            shape_path, 'inMesh', 'wrap'
+            shape_path, 'inMesh', Wrap.NODE_TYPE
         )
 

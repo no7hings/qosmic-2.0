@@ -5,7 +5,7 @@ from . import page_for_task_manager as _page_for_task_manager
 
 from . import page_for_task_tool as _page_for_task_tool
 
-from . import page_for_task_publish as _page_for_task_publish
+from . import page_for_task_release as _page_for_task_publish
 
 from . import sub_panel_for_task_create as _sub_panel_for_task_create
 

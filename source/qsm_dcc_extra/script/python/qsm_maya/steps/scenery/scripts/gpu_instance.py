@@ -13,6 +13,8 @@ import lxbasic.storage as bsc_storage
 
 import qsm_general.core as qsm_gnl_core
 
+import qsm_general.process as qsm_gnl_process
+
 from .... import core as _mya_core
 
 from ....general import core as _gnl_core
@@ -70,7 +72,7 @@ class GpuInstanceOpt(_rsc_core.AssetCacheOpt):
             file_path
         )
         if os.path.isfile(cache_file_path) is False:
-            cmd_script = qsm_gnl_core.MayaCacheProcess.generate_command(
+            cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script(
                 'method=gpu-instance-cache-generate&file={}&cache_file={}'.format(
                     file_path,
                     cache_file_path,
@@ -137,7 +139,7 @@ class GpuInstanceProcess(object):
         list_for_grid = []
         for i_shape_path in paths:
             if _mya_core.Node.is_mesh_type(i_shape_path) is True:
-                i_mesh_opt = _mya_core.MeshOpt(i_shape_path)
+                i_mesh_opt = _mya_core.MeshShapeOpt(i_shape_path)
                 i_w, i_h, i_d = i_mesh_opt.get_dimension()
                 i_s = max(i_w, i_h, i_d)
                 if i_s < _scn_core.Assembly.DIMENSION_MINIMUM:
@@ -203,7 +205,7 @@ class GpuInstanceProcess(object):
         return nodes
 
     def mesh_prc(self, shape_path):
-        mesh_opt = _mya_core.MeshOpt(shape_path)
+        mesh_opt = _mya_core.MeshShapeOpt(shape_path)
         face_count = _mya_core.Mesh.get_face_number(shape_path)
         if face_count == 0:
             return
@@ -344,7 +346,7 @@ class GpuInstanceProcess(object):
         )
 
         bsc_log.Log.trace_method_result(
-            self.LOG_KEY, 'load scene: {}'.format(self._file_path)
+            self.LOG_KEY, 'import scene: {}'.format(self._file_path)
         )
 
         import_paths = _mya_core.SceneFile.import_file(
