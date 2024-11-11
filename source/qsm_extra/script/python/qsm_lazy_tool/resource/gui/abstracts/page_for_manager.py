@@ -1219,7 +1219,7 @@ class AbsPrxPageForManager(
                 self._keyword_set, six.u('*{}*').format(keyword)
             )
             all_texts = match_chs + matches
-            return bsc_core.RawTextsMtd.sort_by_initial(all_texts)[:self.FILTER_COMPLETION_MAXIMUM]
+            return bsc_core.BscTexts.sort_by_initial(all_texts)[:self.FILTER_COMPLETION_MAXIMUM]
         return []
 
     def _gui_update_keyword_filter_path_set_fnc(self, *args, **kwargs):

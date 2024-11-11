@@ -14,13 +14,13 @@ class GuiNodeOptForCfxRigRelease(_abs_unit_for_task_publish.AbsGuiNodeOptForTask
     def on_dcc_select_node(self):
         selected_items = self._qt_tree_widget._view_model.get_selected_items()
         if selected_items:
-            lst = []
+            list_ = []
             for i in selected_items:
                 i_node = i._item_model.get_assign_data('node')
                 if i_node:
-                    lst.append(i_node)
+                    list_.append(i_node)
 
-            qsm_mya_core.Selection.set(lst)
+            qsm_mya_core.Selection.set(list_)
         else:
             qsm_mya_core.Selection.clear()
 

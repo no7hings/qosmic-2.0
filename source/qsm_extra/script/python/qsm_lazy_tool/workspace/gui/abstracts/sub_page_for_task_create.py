@@ -15,7 +15,9 @@ import qsm_general.wsp_task as qsm_dcc_wsp_task
 
 
 class AbsPrxSubPageForAssetTaskCreate(gui_prx_widgets.PrxBaseSubPage):
-    PAGE_KEY = 'asset'
+    PAGE_KEY = None
+
+    RESOURCE_BRANCH = None
 
     def _on_apply(self):
         pass

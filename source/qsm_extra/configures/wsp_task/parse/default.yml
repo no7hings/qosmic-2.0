@@ -1,0 +1,72 @@
+roots:
+    source:
+        windows: 'Z:/projects'
+
+    release:
+        windows: 'X:'
+
+    temporary:
+        windows: 'Z:/projects'
+
+spaces:
+    source: 'source'
+    release: 'release'
+    temporary: 'temporary'
+
+patterns:
+    # project
+    project:
+        release:
+            dir: '{root_release}/{project}/QSM/{space}'
+
+    # asset
+    asset:
+        task-version-name: '{asset}.{step}.{task}.v{version}'
+        task_unit-version-name: '{asset}.{step}.{task}.{task_unit}.v{version}'
+
+        source:
+            dir: '{root_source}/{project}/{space}/assets/{role}/{asset}'
+            # task
+            task-dir: '<.dir>/user.{artist}/{step}.{task}'
+            task_unit-dir: '<.task-dir>/{task_unit}'
+            # files
+            scene_src-maya-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
+            scene_src-maya-thumbnail-file: '<.task_unit-dir>/maya/.thumbnails/<..task_unit-version-name>.jpg'
+
+        release:
+            dir: '{root_release}/{project}/QSM/{space}/assets/{role}/{asset}'
+            # task
+            task-dir: '<.dir>/{step}.{task}'
+            # task version
+            task_version-dir: '<.task-dir>/<..task-version-name>'
+            # files
+            scene_src-maya-file: '<.task_version-dir>/source/{asset}.ma'
+            preview-movie-file: '<.task_version-dir>/preview/<..task-version-name>.mov'
+
+            scene-maya-file: '<.task_version-dir>/maya/{asset}.ma'
+            connect_map-json-file: '<.task_version-dir>/json/{asset}.connect_map.json'
+
+            shit_rig_scene-maya-file: '{root_release}/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
+
+        temporary:
+            dir: '{root_temporary}/{project}/source/assets/{role}/{asset}'
+            # task
+            task-dir: '<.dir>/{step}.{task}'
+
+    shot:
+        task-version-name: '{shot}.{step}.{task}.v{version}'
+        task_unit-version-name: '{shot}.{step}.{task}.{task_unit}.v{version}'
+
+        source:
+            dir: '{root_source}/{project}/{space}/shots/{sequence}/{shot}'
+            # task
+            task-dir: '<.dir>/user.{artist}/{step}.{task}'
+            task_unit-dir: '<.task-dir>/{task_unit}'
+            # files
+            scene_src-maya-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
+            scene_src-maya-thumbnail-file: '<.task_unit-dir>/maya/.thumbnails/<..task_unit-version-name>.jpg'
+
+        release:
+            dir: '{root_release}/{project}/{space}/shots/{sequence}/{shot}'
+
+            shit_animation_scene-file: '{root_release}/{project}/{episode}/{sequence}/动画/通过文件/{shot}.ma'

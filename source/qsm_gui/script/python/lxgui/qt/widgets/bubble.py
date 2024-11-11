@@ -182,9 +182,13 @@ class QtTextBubble(
 class QtInfoBubble(
     QtWidgets.QWidget,
 ):
-    class SizeMode(object):
+    class SizeMode:
         Auto = 0x00
         Fixed = 0x01
+
+    class Style:
+        Default = 0x00
+        Frame = 0x01
 
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_()
@@ -195,6 +199,7 @@ class QtInfoBubble(
 
     def _refresh_widget_draw_geometry_(self):
         if self._text:
+            x, y = 0, 0
             w, h = self.width(), self.height()
 
             self.setFont(_qt_core.QtFont.generate_2(size=h*self._text_draw_percent))
@@ -202,12 +207,19 @@ class QtInfoBubble(
             txt_w, txt_h = self.fontMetrics().width(self._text)+16, self.fontMetrics().height()/2
             s_t = (h-txt_h)/2
 
-            self._frame_border_radius = s_t
+            self._frame_border_radius = 2
 
             w_c = txt_w+s_t*2
 
             if self._size_mode == self.SizeMode.Auto:
                 self.setFixedWidth(w_c)
+                self._frame_draw_rect.setRect(
+                    x+1, y+1, w_c-1, h-1
+                )
+            else:
+                self._frame_draw_rect.setRect(
+                    x+1, y+1, w-1, h-1
+                )
 
             x_0, y_0 = 0, 0
             w_0, h_0 = self.width(), self.height()
@@ -222,8 +234,14 @@ class QtInfoBubble(
             QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding
         )
 
+        self._style = self.Style.Default
+
         self._text = None
+        self._text_font = _qt_core.QtFont.generate(size=8)
+        self.setFont(self._text_font)
         self._text_draw_rect = QtCore.QRect()
+
+        self._frame_draw_rect = QtCore.QRect()
 
         self._text_draw_percent = 0.5
 
@@ -244,13 +262,28 @@ class QtInfoBubble(
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
         if self._text:
-            painter._draw_text_by_rect_(
-                rect=self._text_draw_rect,
-                text=self._text,
-                text_color=_qt_core.QtRgba.TxtTemporary,
-                font=self.font(),
-                text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
-            )
+            if self._style == self.Style.Default:
+                painter._draw_text_by_rect_(
+                    rect=self._text_draw_rect,
+                    text=self._text,
+                    text_color=_qt_core.QtRgba.TxtTemporary,
+                    font=self._text_font,
+                    text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
+                )
+            elif self._style == self.Style.Frame:
+                painter._draw_frame_by_rect_(
+                    rect=self._frame_draw_rect,
+                    border_color=_qt_core.QtRgba.Transparent,
+                    background_color=_qt_core.QtRgba.BkgBubble,
+                    border_radius=self._frame_border_radius,
+                )
+                painter._draw_text_by_rect_(
+                    rect=self._text_draw_rect,
+                    text=self._text,
+                    text_color=_qt_core.QtRgba.TxtBubble,
+                    font=self._text_font,
+                    text_option=QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+                )
 
     def _set_size_mode_(self, mode):
         self._size_mode = mode
@@ -258,6 +291,9 @@ class QtInfoBubble(
     def _set_text_(self, text):
         self._text = text
         self._refresh_widget_all_()
+
+    def _set_style_(self, style):
+        self._style = style
 
 
 class QtMessageBubble(
@@ -485,37 +521,35 @@ class QtPathBubble(
         self.update()
 
     def _refresh_widget_draw_geometry_(self):
-        if self.__components:
+        if self._components:
             x, y = 0, 0
             w, h = self.width(), self.height()
 
             w_d = h/2
             c_x = 0
-            for i_index, i_path in enumerate(self.__components):
+            for i_index, i_path in enumerate(self._components):
                 i_text = i_path.get_name()
-                i_rect_frame = self.__rects_frame[i_index]
-                i_rect_text = self.__rects_text[i_index]
+                i_frame_rect = self._frame_rects[i_index]
+                i_text_rect = self._text_rects[i_index]
+                # root
                 if i_index == 0:
-                    i_w_c = w_d
-                    i_rect_frame.setRect(
-                        x+c_x, y, i_w_c, h
-                    )
-                    i_rect_text.setRect(
-                        x+c_x, y, i_w_c, h
-                    )
-                else:
-                    i_s_t, i_w_t, i_w_c, i_h_c = _qt_core.GuiQtText.generate_draw_args(
-                        self, i_text
-                    )
-                    i_rect_frame.setRect(
-                        x+c_x, y, i_w_c, i_h_c
-                    )
-                    i_rect_text.setRect(
-                        x+c_x+i_s_t, y, i_w_t, i_h_c
-                    )
-                c_x += i_w_c
+                    if self._root_text is not None:
+                        i_text = self._root_text
+
+                i_text_w = QtGui.QFontMetrics(self._text_font).width(i_text)+16
+                i_text_w = min(i_text_w, self._text_w_maximum)
+
+                i_frame_rect.setRect(
+                    x+c_x, y, i_text_w, h
+                )
+                i_text_rect.setRect(
+                    x+c_x, y, i_text_w, h
+                )
+                c_x += i_text_w
+
             # update text
-            self.__rect_next.setRect(c_x, y, w_d, h)
+            self._next_rect.setRect(c_x, y, w_d, h)
+
             c_x += w_d
 
             self.setFixedWidth(c_x)
@@ -528,27 +562,33 @@ class QtPathBubble(
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
         )
-        self.setFont(_qt_core.QtFont.generate_2(size=12))
         self.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self._init_action_base_def_(self)
         self._init_action_for_press_def_(self)
-
+        
+        self._text_font = _qt_core.QtFont.generate_2(size=12)
+        self.setFont(self._text_font)
+        
         self.__path_text = None
-        self.__path = None
-        self.__components = None
-        self.__rects_frame = []
-        self.__rects_text = []
-        self.__rect_next = QtCore.QRect()
-        self.__w_next = 20
+        # path is instance of BscNodePathOpt
+        self._path = None
 
-        self.__icon_next_enable = _gui_core.GuiIcon.get('path_popup')
+        self._components = None
+        self._frame_rects = []
+        self._text_rects = []
+        self._next_rect = QtCore.QRect()
+        self._next_text_rect = QtCore.QRect()
 
-        self.__component_index_hovered = None
-        self.__component_index_pressed = None
+        self._text_w_maximum = 120
 
-        self.__next_is_hovered = False
-        self.__next_is_enable = False
+        self._root_text = None
+
+        self._component_hovered_index = None
+        self._component_pressed_index = None
+
+        self._next_hover_flag = False
+        self._next_is_enable = False
         self.__next_is_waiting = False
 
         self.installEventFilter(self)
@@ -561,37 +601,39 @@ class QtPathBubble(
             elif event.type() == QtCore.QEvent.Enter:
                 self._refresh_widget_draw_()
             elif event.type() == QtCore.QEvent.Leave:
-                self.__component_index_hovered = None
-                self.__next_is_hovered = False
+                self._component_hovered_index = None
+                self._next_hover_flag = False
                 self._refresh_widget_draw_()
+            elif event.type() == QtCore.QEvent.ToolTip:
+                self._do_show_tool_tip_(event)
             elif event.type() == QtCore.QEvent.MouseButtonPress:
                 if event.button() == QtCore.Qt.LeftButton:
-                    if self.__component_index_hovered is not None:
+                    if self._component_hovered_index is not None:
                         self._set_action_flag_(
                             self.ActionFlag.ComponentPress
                         )
-                        self.__component_index_pressed = self.__component_index_hovered
-                    elif self.__next_is_hovered is True:
+                        self._component_pressed_index = self._component_hovered_index
+                    elif self._next_hover_flag is True:
                         self._set_action_flag_(
                             self.ActionFlag.NextPress
                         )
             elif event.type() == QtCore.QEvent.MouseButtonDblClick:
                 if event.button() == QtCore.Qt.LeftButton:
-                    if self.__component_index_hovered is not None:
+                    if self._component_hovered_index is not None:
                         self._set_action_flag_(
                             self.ActionFlag.ComponentDbClick
                         )
-                        self.__component_index_pressed = self.__component_index_hovered
+                        self._component_pressed_index = self._component_hovered_index
             elif event.type() == QtCore.QEvent.MouseMove:
                 self._do_hover_move_(event)
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
                     if self._is_action_flag_match_(self.ActionFlag.ComponentPress):
-                        self.component_press_clicked.emit(self.__component_index_pressed)
-                        self.__component_index_pressed = None
+                        self.component_press_clicked.emit(self._component_pressed_index)
+                        self._component_pressed_index = None
                     elif self._is_action_flag_match_(self.ActionFlag.ComponentDbClick):
-                        self.component_press_dbl_clicked.emit(self.__component_index_pressed)
-                        self.__component_index_pressed = None
+                        self.component_press_dbl_clicked.emit(self._component_pressed_index)
+                        self._component_pressed_index = None
                     elif self._is_action_flag_match_(self.ActionFlag.NextPress):
                         self.next_press_clicked.emit()
 
@@ -600,15 +642,19 @@ class QtPathBubble(
 
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
-        if self.__components:
+        if self._components:
             painter._set_antialiasing_(False)
-            for i_index, i_path in enumerate(self.__components):
+            for i_index, i_path in enumerate(self._components):
                 i_text = i_path.get_name()
-                i_rect_frame = self.__rects_frame[i_index]
-                i_rect_text = self.__rects_text[i_index]
+                if i_index == 0:
+                    if self._root_text is not None:
+                        i_text = self._root_text
+
+                i_frame_rect = self._frame_rects[i_index]
+                i_text_rect = self._text_rects[i_index]
                 painter._set_border_color_(_qt_core.QtRgba.BdrBubble)
-                i_is_hovered = i_index == self.__component_index_hovered
-                i_is_pressed = i_index == self.__component_index_pressed
+                i_is_hovered = i_index == self._component_hovered_index
+                i_is_pressed = i_index == self._component_pressed_index
                 i_offset = [0, 1][i_is_pressed]
                 if i_is_pressed is True:
                     painter._set_background_color_(_qt_core.QtRgba.BkgBubbleAction)
@@ -618,36 +664,45 @@ class QtPathBubble(
                     painter._set_background_color_(_qt_core.QtRgba.BkgBubble)
 
                 if i_offset > 0:
-                    i_rect_frame = QtCore.QRect(
-                        i_rect_frame.x()+i_offset, i_rect_frame.y()+i_offset,
-                        i_rect_frame.width()-i_offset, i_rect_frame.height()-i_offset
+                    i_frame_rect = QtCore.QRect(
+                        i_frame_rect.x()+i_offset, i_frame_rect.y()+i_offset,
+                        i_frame_rect.width()-i_offset, i_frame_rect.height()-i_offset
                     )
-                    i_rect_text = QtCore.QRect(
-                        i_rect_text.x()+i_offset, i_rect_text.y()+i_offset,
-                        i_rect_text.width()-i_offset, i_rect_text.height()-i_offset
+                    i_text_rect = QtCore.QRect(
+                        i_text_rect.x()+i_offset, i_text_rect.y()+i_offset,
+                        i_text_rect.width()-i_offset, i_text_rect.height()-i_offset
                     )
 
-                painter.drawRect(i_rect_frame)
+                painter.drawRect(i_frame_rect)
 
-                if i_index > 0:
-                    painter._set_text_color_(_qt_core.QtRgba.TxtBubble)
-                    painter.drawText(
-                        i_rect_text,
-                        QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
-                        i_text
-                    )
+                i_text_elided = self.fontMetrics().elidedText(
+                    i_text,
+                    QtCore.Qt.ElideMiddle,
+                    i_text_rect.width()-4,
+                    QtCore.Qt.TextShowMnemonic
+                )
+
+                painter._set_text_color_(_qt_core.QtRgba.TxtBubble)
+                painter.drawText(
+                    i_text_rect,
+                    QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
+                    i_text_elided
+                )
             # draw next
-            r_p = self.__rect_next
-            x_p, y_p = r_p.x(), r_p.y()
-            w_p, h_p = r_p.width(), r_p.height()
-            d_p = h_p/2
-            if self.__next_is_enable is True:
+            nxt_p = self._next_rect
+            nxt_x, nxt_y = nxt_p.x(), nxt_p.y()
+            nxt_w, nxt_h = nxt_p.width(), nxt_p.height()
+            nxt_r = nxt_h/2
+            if self._next_is_enable is True:
                 next_coords = [
-                    (x_p, y_p), (x_p+d_p, y_p+d_p), (x_p, y_p+h_p),
-                    (x_p, y_p)
+                    (nxt_x, nxt_y),
+                    (nxt_x+nxt_w, nxt_y+nxt_r),
+                    (nxt_x, nxt_y+nxt_h),
+                    # repeat start
+                    (nxt_x, nxt_y)
                 ]
                 painter._set_border_color_(_qt_core.QtRgba.BdrBubble)
-                if self.__next_is_hovered is True:
+                if self._next_hover_flag is True:
                     if self._is_action_flag_match_(self.ActionFlag.NextPress):
                         painter._set_background_color_(
                             _qt_core.QtRgba.BkgBubbleAction
@@ -660,6 +715,7 @@ class QtPathBubble(
                     painter._set_background_color_(
                         _qt_core.QtRgba.BkgBubble
                     )
+
                 painter._draw_path_by_coords_(
                     next_coords, False
                 )
@@ -669,28 +725,41 @@ class QtPathBubble(
                     painter._set_background_color_(_qt_core.QtRgba.BkgBubbleNextWait)
                 else:
                     painter._set_background_color_(_qt_core.QtRgba.BkgBubbleNextFinish)
+
                 painter.drawRect(
-                    self.__rect_next
+                    self._next_rect
                 )
 
     def _do_hover_move_(self, event):
         p = event.pos()
 
-        self.__component_index_hovered = None
-        for i_index, i_rect in enumerate(self.__rects_frame):
+        self._component_hovered_index = None
+        for i_index, i_rect in enumerate(self._frame_rects):
             if i_rect.contains(p):
-                self.__component_index_hovered = i_index
+                self._component_hovered_index = i_index
         # update next
-        if self.__next_is_enable is True:
-            if self.__rect_next.contains(p):
-                self.__next_is_hovered = True
+        if self._next_is_enable is True:
+            if self._next_rect.contains(p):
+                self._next_hover_flag = True
             else:
-                self.__next_is_hovered = False
+                self._next_hover_flag = False
 
         self._refresh_widget_draw_()
 
+    def _do_show_tool_tip_(self, event):
+        if self._component_hovered_index:
+            component = self._components[self._component_hovered_index]
+
+            css = _qt_core.QtUtil.generate_tool_tip_css(
+                'path', component.to_string()
+            )
+            # noinspection PyArgumentList
+            QtWidgets.QToolTip.showText(
+                QtGui.QCursor.pos(), css, self
+            )
+
     def _set_next_enable_(self, boolean):
-        self.__next_is_enable = boolean
+        self._next_is_enable = boolean
         self._refresh_widget_all_()
 
     def _start_next_wait_(self):
@@ -701,15 +770,18 @@ class QtPathBubble(
         self.__next_is_waiting = False
         self._refresh_widget_draw_()
 
+    def _set_root_text_(self, text):
+        self._root_text = text
+
     def _set_path_text_(self, text):
         if text != self.__path_text:
             self.__path_text = text
-            self.__path = bsc_core.BscNodePathOpt(self.__path_text)
-            self.__components = self.__path.get_components()
-            self.__components.reverse()
-            c = len(self.__components)
-            self.__rects_frame = [QtCore.QRect() for _ in range(c)]
-            self.__rects_text = [QtCore.QRect() for _ in range(c)]
+            self._path = bsc_core.BscNodePathOpt(self.__path_text)
+            self._components = self._path.get_components()
+            self._components.reverse()
+            c = len(self._components)
+            self._frame_rects = [QtCore.QRect() for _ in range(c)]
+            self._text_rects = [QtCore.QRect() for _ in range(c)]
 
             self.value_changed.emit()
 
@@ -719,10 +791,10 @@ class QtPathBubble(
         return self.__path_text
 
     def _get_path_(self):
-        return self.__path
+        return self._path
 
     def _get_component_at_(self, index):
-        return self.__components[index]
+        return self._components[index]
 
 
 class QtBubbleAsChoice(

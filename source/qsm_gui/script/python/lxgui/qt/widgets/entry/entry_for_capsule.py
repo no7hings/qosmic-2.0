@@ -170,7 +170,7 @@ class QtEntryAsCapsule(
 
     def _set_value_options_(self, values, names=None):
         if super(QtEntryAsCapsule, self)._set_value_options_(values) is True:
-            c = len(values)
+            c = len(self._value_options)
             self._indices = range(c)
             self._draw_texts = []
             self._frame_rects = []

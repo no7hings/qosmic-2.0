@@ -132,6 +132,10 @@ class BscEnviron(object):
         return '{}/temporary'.format(cls.get_cache_root())
 
     @classmethod
+    def get_cache_qosmic_root(cls):
+        return '{}/qosmic'.format(cls.get_cache_root())
+
+    @classmethod
     def get_local_cache_temporary_root(cls):
         return '{}/temporary'.format(cls.get_local_cache_root())
 

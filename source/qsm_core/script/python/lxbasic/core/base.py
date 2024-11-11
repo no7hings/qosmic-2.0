@@ -511,6 +511,7 @@ class BscStorage(object):
 
     @classmethod
     def create_directory(cls, directory_path):
+        directory_path = ensure_unicode(directory_path)
         if os.path.exists(directory_path) is False:
             os.makedirs(directory_path)
             return True

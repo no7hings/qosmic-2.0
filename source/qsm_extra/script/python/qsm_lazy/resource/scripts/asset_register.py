@@ -14,7 +14,7 @@ class AssetBatchRegisterOpt(object):
     def __init__(self, project_name, project_chs_name):
         self._project_name = project_name
         self._project_chs_name = project_chs_name
-        self._scan_root = qsm_scan.Root.generate()
+        self._scan_root = qsm_scan.Stage().get_root()
 
         self._scr_stage = qsm_scr_core.Stage('asset_test')
 

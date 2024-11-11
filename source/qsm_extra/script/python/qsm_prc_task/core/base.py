@@ -236,7 +236,7 @@ class AbsEntityPool(object):
         pass
 
 
-class AbsEntitiesCache(object):
+class AbsEntitiesCacheOpt(object):
     ENTITY_CLS = None
 
     def __init__(self, entity_pool):

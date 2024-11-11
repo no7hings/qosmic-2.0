@@ -51,6 +51,14 @@ class TaskSession(object):
         return self._task_parse.to_entity_path(**self._properties)
 
     @property
+    def resource_path(self):
+        return self._task_parse.to_resource_path(**self._properties)
+
+    @property
+    def scan_resource_path(self):
+        return self._task_parse.to_scan_resource_path(**self._properties)
+
+    @property
     def task_unit_path(self):
         return self._task_parse.to_task_unit_path(**self._properties)
 
@@ -61,15 +69,21 @@ class TaskSession(object):
     def save_source_task_scene(self, *args, **kwargs):
         return False
 
+    def generate_pattern_opt_for(self, keyword, **kwargs):
+        return self._task_parse.generate_pattern_opt_for(keyword, **kwargs)
+
     def get_file_for(self, keyword, **kwargs):
         kwargs_new = copy.copy(self._properties)
         kwargs_new.update(**kwargs)
-        return self._task_parse.generate_pattern_opt_for(
+        ptn_opt = self._task_parse.generate_pattern_opt_for(
             keyword, **kwargs_new
-        ).get_value()
-
-    def generate_pattern_opt(self):
-        pass
+        )
+        if not ptn_opt.get_keys():
+            return ptn_opt.get_value()
+        else:
+            matches = ptn_opt.find_matches(sort=True)
+            if matches:
+                return matches[0]['result']
 
     def get_latest_file_for(self, keyword, **kwargs):
         kwargs_new = copy.copy(self._properties)

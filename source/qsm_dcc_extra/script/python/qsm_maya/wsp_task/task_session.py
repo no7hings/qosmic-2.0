@@ -26,6 +26,14 @@ class TaskSession(qsm_dcc_wsp_task.TaskSession):
             return _task_create.MayaAssetGnlTaskCreateOpt(
                 self, self._properties
             )
+        elif 'shot' in self._properties:
+            if task == 'cfx':
+                return _task_create.MayaShotCfxCreateOpt(
+                    self, self._properties
+                )
+            return _task_create.MayaAssetGnlTaskCreateOpt(
+                self, self._properties
+            )
         return _task_create.MayaGnlTaskCreateOpt(
             self, self._properties
         )
@@ -38,6 +46,14 @@ class TaskSession(qsm_dcc_wsp_task.TaskSession):
                     self, self._properties
                 )
             return _task_tool.MayaAssetGnlToolOpt(
+                self, self._properties
+            )
+        elif 'shot' in self._properties:
+            if task == 'cfx':
+                return _task_tool.MayaShotCfxToolOpt(
+                    self, self._properties
+                )
+            return _task_tool.MayaShotGnlToolOpt(
                 self, self._properties
             )
         return _task_tool.MayaGnlToolOpt(
@@ -66,7 +82,7 @@ class TaskSession(qsm_dcc_wsp_task.TaskSession):
         if 'version' in kwargs:
             kwargs.pop('version')
 
-        pattern_opt = self._task_parse.generate_asset_source_task_scene_pattern_opt_for(
+        pattern_opt = self._task_parse.generate_resource_source_task_scene_src_pattern_opt_for(
             **kwargs
         )
         matches = pattern_opt.find_matches(sort=True)
@@ -80,11 +96,13 @@ class TaskSession(qsm_dcc_wsp_task.TaskSession):
         kwargs = copy.copy(self._properties)
         kwargs['version'] = str(version+1).zfill(3)
 
-        scene_ptn_opt = self._task_parse.generate_asset_source_task_scene_pattern_opt_for(**kwargs)
+        scene_ptn_opt = self._task_parse.generate_resource_source_task_scene_src_pattern_opt_for(**kwargs)
         scene_path = scene_ptn_opt.get_value()
         if qsm_mya_core.SceneFile.save_to_with_dialog(scene_path) is True:
             kwargs['result'] = scene_path
-            thumbnail_ptn_opt = self._task_parse.generate_asset_source_task_scene_thumbnail_pattern_opt_for(**kwargs)
+            thumbnail_ptn_opt = self._task_parse.generate_resource_source_task_scene_src_thumbnail_pattern_opt_for(
+                **kwargs
+            )
             thumbnail_path = thumbnail_ptn_opt.get_value()
 
             gui_qt_core.QtMaya.make_snapshot(thumbnail_path)

@@ -63,6 +63,19 @@ build:
             tool_tip_chs:
                 |-
                 待补充。
+        
+        messages:
+            auto_collection:
+                message: 'Do You Want to Execute Auto Collection.'
+                message_chs: '是否要执行自动收集?'
+            
+            auto_name:
+                message: 'Do You Want to Execute Auto Name.'
+                message_chs: '是否要执行自动命名?'
+            
+            auto_connection:
+                message: 'Do You Want to Execute Auto Connect.'
+                message_chs: '是否要执行自动连接?'
 
         cfx_rig:
             options:
@@ -78,7 +91,7 @@ build:
                     template/create_template:
                         widget: button
                         name: 'Create Group'
-                        name_chs: '创建模版'
+                        name_chs: '创建分组'
                         icon: 'tool/create'
 
                     # cloth
@@ -247,7 +260,6 @@ build:
                         name: 'Nucleus'
                         name_chs: 'Nucleus'
 
-
                     nucleus/create_ncloth:
                         widget: button
                         name: 'Create nCloth'
@@ -285,11 +297,53 @@ build:
                         name_chs: '自动命名'
                         icon: 'tool/input'
 
+                    automation/auto_connection:
+                        widget: button
+                        name: 'Auto Connect (Resolve from Scene)'
+                        name_chs: '自动连接（从文件中解析）'
+                        icon: 'tool/input'
+                        join_to_next: True
+
                     automation/rest_rig_controls_transformation:
                         widget: button
                         name: 'Reset Rig Controls Transformation'
                         name_chs: '重置绑定控制器变换'
                         icon: 'tool/rest'
+
+        cfx:
+            options:
+                name: 'Options'
+                name_chs: '选项'
+
+                parameters:
+                    template:
+                        widget: group
+                        name: 'Template'
+                        name_chs: '模版'
+
+                    template/create_template:
+                        widget: button
+                        name: 'Create Group'
+                        name_chs: '创建分组'
+                        icon: 'tool/create'
+                        
+                    cfx_rig:
+                        widget: group
+                        name: 'CFX Rig'
+                        name_chs: '解算预设'
+                        
+                    cfx_rig/load:
+                        widget: button
+                        name: 'Load CFX Rig'
+                        name_chs: '加载解算预设'
+                        icon: 'tool/maya/load-cfx-rig'
+                        join_to_next: True
+
+                    cfx_rig/update:
+                        widget: button
+                        name: 'Update CFX Rig'
+                        name_chs: '更新解算预设'
+                        icon: 'tool/maya/load-cfx-rig'
 
         gnl:
             options:
@@ -342,12 +396,12 @@ build:
                 name_chs: '选项'
 
                 parameters:
-                    preview:
+                    images:
                         widget: medias
-                        name: 'Preview'
-                        name_chs: '预览'
+                        name: 'Image'
+                        name_chs: '图片'
                         value: ''
-                        history_key: 'tool-panels.lazy-workspace.task-publish-preview-open'
+                        history_key: 'tool-panels.lazy-workspace.task-release-images'
                         ext_filter: 'All Image File (*.jpg *.png *.exr)'
                         enable: True
                         height: 120

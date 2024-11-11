@@ -257,7 +257,7 @@ class AbsPrxPageForSceneryBatch(gui_prx_widgets.PrxBasePage):
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxPageForSceneryBatch, self).__init__(window, session, *args, **kwargs)
 
-        self._scan_root = qsm_scan.Root.generate()
+        self._scan_root = qsm_scan.Stage().get_root()
 
         self._validation_opt = qsm_lzy_vld_scripts.SceneryValidationOpt()
 

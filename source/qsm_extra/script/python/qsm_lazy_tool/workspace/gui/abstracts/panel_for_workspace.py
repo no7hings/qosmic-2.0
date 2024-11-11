@@ -19,6 +19,8 @@ import lxgui.qt.view_widgets as gui_qt_vew_widgets
 class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
     CONFIGURE_KEY = 'lazy-workspace/gui/main'
 
+    RESOURCE_BRANCH = None
+
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxPanelForWorkspace, self).__init__(window, session, *args, **kwargs)
 
@@ -28,7 +30,7 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
 
         self.gui_setup_pages_for(['task_manager', 'task_tool', 'task_release'])
 
-        self._prx_tab_tool_box.set_history_key('lazy-workspace.page_key_current')
+        self._prx_tab_tool_box.set_history_key('lazy-workspace.{}-page'.format(self.RESOURCE_BRANCH))
         self._prx_tab_tool_box.load_history()
 
         self.register_window_close_method(
@@ -77,4 +79,3 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
         page = self.gui_find_page(self._prx_tab_tool_box.get_current_key())
         if page is not None:
             page.do_gui_refresh_all()
-

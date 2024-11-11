@@ -180,7 +180,7 @@ class PrxListView(
             _ = bsc_core.BscFnmatch.filter(
                 self._keyword_filter_completion_cache, six.u('*{}*').format(keyword)
             )
-            return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_COMPLETION_MAXIMUM]
+            return bsc_core.BscTexts.sort_by_initial(_)[:self.FILTER_COMPLETION_MAXIMUM]
         return []
 
     def __keyword_filter_cbk(self):

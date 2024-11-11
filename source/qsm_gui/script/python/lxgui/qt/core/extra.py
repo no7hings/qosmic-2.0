@@ -511,11 +511,14 @@ class QtApplication(object):
         w = gui_qt_widget.QtInputDialog()
         w._set_title_(kwargs.get('title', 'Dialog'))
 
-        if 'info' in kwargs:
-            w._set_info_(kwargs['info'])
+        type_ = kwargs.get('type', 'string')
+        w._build_input_(type_)
 
-        if 'type' in kwargs:
-            w._set_value_type_(kwargs['type'])
+        if 'info' in kwargs:
+            w._set_info_text_(kwargs['info'])
+
+        if 'options' in kwargs:
+            w._set_input_options_(kwargs['options'])
 
         if 'value' in kwargs:
             w._set_value_(kwargs['value'])

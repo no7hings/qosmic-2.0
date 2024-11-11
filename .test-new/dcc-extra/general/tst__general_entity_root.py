@@ -1,7 +1,7 @@
 # coding:utf-8
 import qsm_scan as qsm_scan
 
-root = qsm_scan.Root.generate()
+root = qsm_scan.Stage().get_root()
 
 print root.projects
 project = root.project('QSM_TST')

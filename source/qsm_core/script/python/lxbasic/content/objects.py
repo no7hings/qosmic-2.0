@@ -230,9 +230,10 @@ class AbsContent(object):
     def get_as_content(self, key_path, relative=False):
         key = key_path.split(self.PATHSEP)[-1]
         value = self.get(key_path)
-        if relative is True:
-            return self._create_fnc(None, value)
-        return self._create_fnc(key, value)
+        if isinstance(value, dict):
+            if relative is True:
+                return self._create_fnc(None, value)
+            return self._create_fnc(key, value)
 
     def _create_fnc(self, key, value):
         if isinstance(value, dict) is False:

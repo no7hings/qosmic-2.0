@@ -5,7 +5,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.steps.animation.core as qsm_mya_stp_anm_core
+import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
 
 import qsm_maya.adv.core as qsm_mya_adv_core
 
@@ -17,7 +17,7 @@ class PrxToolsetForImportMotion(gui_prx_widgets.PrxBaseUnit):
         results = []
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
-            results = qsm_mya_stp_anm_core.AdvRigAsset.filter_namespaces(namespaces)
+            results = qsm_mya_tsk_anm_core.AdvRigAsset.filter_namespaces(namespaces)
 
         if not results:
             self._window.exec_message_dialog(

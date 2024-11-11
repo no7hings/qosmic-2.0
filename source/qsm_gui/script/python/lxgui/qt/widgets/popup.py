@@ -535,6 +535,7 @@ class _AbsQtPopupAsChoose(
                 tag_filter_dict = self._popup_item_tag_filter_dict
                 #
                 values_cur = self._get_popup_values_current_()
+                values = bsc_core.BscTexts.sort_by_number(values)
                 for index, i_value in enumerate(values):
                     i_item_widget = _utility._QtHItem()
                     i_item = _item_for_list.QtListItem()
@@ -600,10 +601,11 @@ class _AbsQtPopupAsChoose(
                 # tag filter
                 if self._popup_item_tag_filter_is_enable is True:
                     tags = list(set([i for k, v in tag_filter_dict.items() for i in v]))
-                    tags = bsc_core.RawTextsMtd.sort_by_initial(tags)
+                    tags = bsc_core.BscTexts.sort_by_number(tags)
                     if self.TAG_ALL in tags:
                         tags.remove(self.TAG_ALL)
                         tags.insert(0, self.TAG_ALL)
+
                     for i_tag in tags:
                         i_item_widget = _utility._QtHItem()
                         i_item = _item_for_list.QtListItem()
@@ -719,7 +721,7 @@ class _AbsQtPopupAsChoose(
         if isinstance(self._entry_widget, QtWidgets.QLineEdit):
             if self._read_only_mark is not None:
                 self._entry_widget.setReadOnly(self._read_only_mark)
-        #
+
         self._set_popup_activated_(False)
 
     def _execute_auto_resize_(self):

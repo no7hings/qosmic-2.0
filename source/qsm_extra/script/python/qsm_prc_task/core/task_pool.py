@@ -9,7 +9,7 @@ class TaskPool(_base.AbsEntityPool):
 
     CACHE = None
 
-    CACHE_CLS = _task.TasksCache
+    CACHE_CLS = _task.TasksCacheOpt
 
     def __init__(self, location):
         super(TaskPool, self).__init__(location)

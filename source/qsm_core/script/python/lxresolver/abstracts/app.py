@@ -126,7 +126,7 @@ class AbsRsvAppDef(object):
             i_p_opt.update_variants(**self._variants)
             i_results = i_p_opt.get_exists_results()
             if i_results:
-                i_results = bsc_core.RawTextsMtd.sort_by_number(i_results)
+                i_results = bsc_core.BscTexts.sort_by_number(i_results)
                 return i_results[-1]
 
     def _get_configure_file(self):
@@ -143,7 +143,7 @@ class AbsRsvAppDef(object):
             i_p_opt.update_variants(**variants)
             i_results = i_p_opt.get_exists_results()
             if i_results:
-                i_results = bsc_core.RawTextsMtd.sort_by_number(i_results)
+                i_results = bsc_core.BscTexts.sort_by_number(i_results)
                 return i_results[-1]
 
     def get_package(self, package_name):

@@ -1,0 +1,41 @@
+dcc-asset-group:
+    cfx_rig:
+        master:
+            cfx:
+                cfx_output_geo_grp:
+                    cfx_cloth_geo_grp: ''
+                    cfx_appendix_geo_grp: ''
+
+                cfx_cloth_proxy_grp:
+                    cfx_cloth_proxy_geo_grp: ''
+                    cfx_cloth_proxy_extra_grp: ''
+
+                cfx_collider_grp:
+                    cfx_collider_geo_grp: ''
+                    cfx_collider_extra_grp: ''
+
+                cfx_bridge_grp:
+                    cfx_bridge_geo_grp: ''
+                    cfx_bridge_control_grp: ''
+                    cfx_bridge_extra_grp: ''
+
+                cfx_hair_grp: ''
+
+                cfx_ncloth_grp: ''
+                cfx_qualoth_grp: ''
+                cfx_nrigid_grp: ''
+
+                cfx_nucleus_grp: ''
+                cfx_field_grp: ''
+
+                cfx_auxiliary_grp:
+
+                cfx_wrap_grp: ''
+
+dcc-shot-group:
+    cfx:
+        assets:
+            animation:
+                cache: ''
+            cfx:
+                cfx_rig: ''

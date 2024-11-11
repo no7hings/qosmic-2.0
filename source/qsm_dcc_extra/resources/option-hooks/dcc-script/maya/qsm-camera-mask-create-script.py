@@ -1,6 +1,6 @@
 # coding:utf-8
 def main(session):
-    import qsm_maya.steps.scenery.scripts as s
+    import qsm_maya.tasks.scenery.scripts as s
 
     option_opt = session.get_option_opt()
 

@@ -140,7 +140,7 @@ widget:
         }
         QMenu::item:selected:disabled{
             background: rgba(<option.rgba.Transparent>); 
-            color: rgba(<option.rgba.TextHoverA>);
+            color: rgba(<option.rgba.TxtDisable>);
         }
     QTreeView:
         |-

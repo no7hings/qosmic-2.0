@@ -1,5 +1,9 @@
 # coding:utf-8
+import lxbasic.core as bsc_core
+
 import lxbasic.storage as bsc_storage
+
+import lxgui.core as gui_core
 
 import lxgui.qt.widgets as gui_qt_widgets
 
@@ -35,7 +39,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
     def gui_load_tasks(self):
         def cache_fnc_():
             _task_dir_ptn_opt = self._page._task_parse.generate_pattern_opt_for(
-                'asset-source-task-dir', **entity_properties
+                '{}-source-task-dir'.format(self._page.RESOURCE_BRANCH), **entity_properties
             )
             _matches = _task_dir_ptn_opt.find_matches()
             return [_matches, self._gui_thread_flag]
@@ -48,9 +52,6 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
             if _matches:
                 _flag, _root_qt_item = self._qt_tree_widget._view_model.create_root_item()
                 _root_qt_item._item_model.set_icon_name('database/user')
-                _root_qt_item._item_model.set_name(
-                    self._page._entity_properties['artist']
-                )
                 _root_qt_item.setExpanded(True)
 
                 _project_path = self._page._task_parse.to_project_path(**entity_properties)
@@ -58,8 +59,8 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
                 _root_qt_item._item_model.set_icon_name('database/group')
                 _root_qt_item.setExpanded(True)
 
-                _entity_path = self._page._task_parse.to_entity_path(**entity_properties)
-                _flag, _root_qt_item = self._qt_tree_widget._view_model.create_item(_entity_path)
+                _resource_path = self._page._task_parse.to_resource_path(**entity_properties)
+                _flag, _root_qt_item = self._qt_tree_widget._view_model.create_item(_resource_path)
                 _root_qt_item._item_model.set_icon_name('database/group')
                 _root_qt_item.setExpanded(True)
 
@@ -89,7 +90,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
                 return [[], 0]
 
             _task_unit_ptn_opt = self._page._task_parse.generate_pattern_opt_for(
-                'asset-source-task_unit-dir', **properties
+                '{}-source-task_unit-dir'.format(self._page.RESOURCE_BRANCH), **properties
             )
             _matches = _task_unit_ptn_opt.find_matches()
             return [_matches, self._gui_thread_flag]
@@ -116,7 +117,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
             if gui_thread_flag != self._gui_thread_flag:
                 return [[], 0]
 
-            _task_scene_ptn_opt = self._page._task_parse.generate_asset_source_task_scene_pattern_opt_for(**properties)
+            _task_scene_ptn_opt = self._page._task_parse.generate_resource_source_task_scene_src_pattern_opt_for(**properties)
             _matches = _task_scene_ptn_opt.find_matches()
             return [
                 _matches, gui_thread_flag
@@ -146,10 +147,10 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
         qt_item._item_model.set_icon_name('database/object')
 
         if self._page._task_session is not None:
-            entity_path = self._page._entity_path
+            resource_path = self._page._resource_path
             task_unit_path = self._page._task_session.task_unit_path
-            # check is task is current entity
-            if task_unit_path.startswith(entity_path):
+            # check is task is current resource
+            if task_unit_path.startswith(resource_path):
                 if path == task_unit_path:
                     qt_item._item_model.focus_select()
 
@@ -206,11 +207,14 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
                 qt_item._item_model.set_status(qt_item._item_model.Status.Correct)
                 qt_item._item_model.focus_select()
 
+    def gui_restore(self):
+        self._qt_tree_widget._view_model.restore()
+
 
 class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
 
     def find_thumbnail(self, **kwargs):
-        thumbnail_ptn_opt = self._page._task_parse.generate_asset_source_task_scene_thumbnail_pattern_opt_for(**kwargs)
+        thumbnail_ptn_opt = self._page._task_parse.generate_resource_source_task_scene_src_thumbnail_pattern_opt_for(**kwargs)
         return thumbnail_ptn_opt.get_value()
 
     def __init__(self, window, page, session):
@@ -231,7 +235,7 @@ class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
 
     def gui_load_task_scenes(self):
         def cache_fnc_():
-            _task_scene_ptn_opt = self._page._task_parse.generate_asset_source_task_scene_pattern_opt_for(**entity_properties)
+            _task_scene_ptn_opt = self._page._task_parse.generate_resource_source_task_scene_src_pattern_opt_for(**entity_properties)
             _matches = _task_scene_ptn_opt.find_matches()
             return [
                 _matches, self._gui_thread_flag
@@ -338,18 +342,23 @@ class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
                 )
                 qt_item._item_model.focus_select()
 
+    def gui_restore(self):
+        self._qt_list_widget._view_model.restore()
+
 
 class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
     PAGE_KEY = 'task_manager'
 
     TASK_PARSE_CLS = None
 
+    RESOURCE_BRANCH = None
+
     def on_open_task_scene(self, properties):
         return False
 
     def on_save_task_scene(self):
         # regenerate a session to save
-        task_session = self._task_parse.generate_task_session_by_asset_source_scene_src_auto()
+        task_session = self._task_parse.generate_task_session_by_resource_source_scene_src_auto()
         if task_session:
             with self._window.gui_minimized():
                 properties = task_session.save_source_task_scene()
@@ -371,14 +380,17 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
         self._task_parse = self.TASK_PARSE_CLS()
         self._task_session = None
 
-        self._entity_path = None
+        self._user = 'shared'
+
+        self._scan_resource_path = None
+        self._resource_path = None
 
         self.gui_page_setup_fnc()
 
     def gui_load_task_scene(self, properties):
         scene_path = properties.get('result')
         if scene_path:
-            task_session = self._task_parse.generate_task_session_by_asset_source_scene_src(scene_path)
+            task_session = self._task_parse.generate_task_session_by_resource_source_scene_src(scene_path)
             if task_session:
                 self._task_session = task_session
 
@@ -398,36 +410,55 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
     def do_gui_refresh_all_tasks(self):
         self._gui_task_opt.gui_load_tasks()
 
-    def _gui_update_left_visible(self, boolean):
+    def _on_gui_left_visible_swap(self, boolean):
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
 
+    def _on_gui_switch_user(self):
+        options = ['shared', bsc_core.BscSystem.get_user_name()]
+        result = gui_core.GuiApplication.exec_input_dialog(
+            type='choose',
+            options=options,
+            info='Choose Name for User...',
+            value=self._user,
+            title='Switch User'
+        )
+        if result:
+            if result in options:
+                self._user = result
+                self._user_info_bubble._set_text_(self._user)
+
     def _gui_add_main_tools(self):
-        self._left_visible_switch_tool = gui_prx_widgets.PrxToggleButton()
-        self._main_prx_tool_box.add_widget(self._left_visible_switch_tool)
-        self._left_visible_switch_tool.set_name('task')
-        self._left_visible_switch_tool.set_icon_name('tree')
-        self._left_visible_switch_tool.set_checked(True)
-        self._left_visible_switch_tool.connect_check_toggled_to(self._gui_update_left_visible)
+        self._left_visible_swap_tool = gui_prx_widgets.PrxToggleButton()
+        self._main_prx_tool_box.add_widget(self._left_visible_swap_tool)
+        self._left_visible_swap_tool.set_name('task')
+        self._left_visible_swap_tool.set_icon_name('tree')
+        self._left_visible_swap_tool.set_checked(True)
+        self._left_visible_swap_tool.connect_check_toggled_to(self._on_gui_left_visible_swap)
 
         self._user_switch_tool = gui_qt_widgets.QtIconPressButton()
         self._main_prx_tool_box.add_widget(self._user_switch_tool)
         self._user_switch_tool._set_name_text_('user switch')
         self._user_switch_tool._set_icon_name_('users')
+        self._user_switch_tool.press_clicked.connect(self._on_gui_switch_user)
 
-    def _do_gui_refresh_asset_for(self, path):
+        self._user_info_bubble = gui_qt_widgets.QtInfoBubble()
+        self._main_prx_tool_box.add_widget(self._user_info_bubble)
+        self._user_info_bubble._set_style_(
+            self._user_info_bubble.Style.Frame
+        )
+        self._user_info_bubble._set_text_(self._user)
+
+    def _do_gui_refresh_resource_for(self, scan_resource_path):
         self._entity_properties = None
-        self._entity_path = None
+        self._scan_resource_path = None
+        self._resource_path = None
 
-        entity = self._asset_prx_input.get_entity(path)
+        resource = self._scan_resource_prx_input.get_entity(scan_resource_path)
 
-        if entity is not None:
-            if entity.type == 'Asset':
-                scan_properties = entity.properties
+        if resource is not None:
+            if resource.type == 'Asset':
+                scan_properties = resource.properties
                 entity_properties = dict(
-                    root_source='Z:/projects',
-                    root_temporary='Z:/projects',
-                    root_release='X:',
-
                     project=scan_properties.project,
                     resource_type='asset',
                     role=scan_properties.role,
@@ -435,8 +466,31 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
                     file_format='ma',
                     artist='shared',
                 )
-                self._entity_path = self._task_parse.to_entity_path(**entity_properties)
+                self._scan_resource_path = self._task_parse.to_scan_resource_path(**entity_properties)
+                self._resource_path = self._task_parse.to_resource_path(**entity_properties)
+
                 self.gui_setup(entity_properties)
+            elif resource.type == 'Shot':
+                scan_properties = resource.properties
+                entity_properties = dict(
+                    project=scan_properties.project,
+                    resource_type='shot',
+                    episode=scan_properties.episode,
+                    sequence=scan_properties.sequence,
+                    shot=scan_properties.shot,
+                    file_format='ma',
+                    artist='shared',
+                )
+                self._scan_resource_path = self._task_parse.to_scan_resource_path(**entity_properties)
+                self._resource_path = self._task_parse.to_resource_path(**entity_properties)
+
+                self.gui_setup(entity_properties)
+            else:
+                self._gui_task_scene_opt.gui_restore()
+                self._gui_task_opt.gui_restore()
+        else:
+            self._gui_task_scene_opt.gui_restore()
+            self._gui_task_opt.gui_restore()
 
     def _gui_show_task_create_window(self):
         w = self._window.gui_generate_sub_panel_for('task_create')
@@ -454,19 +508,26 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
         )
         self._gui_add_main_tools()
 
-        self._asset_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
+        self._resource_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'reference', size_mode=1
         )
+        if self.RESOURCE_BRANCH == 'asset':
+            self._scan_resource_prx_input = qsm_gui_prx_widgets.PrxInputForAssetCharacterAndProp(
+                history_key='lazy-workspace.{}-path'.format(self.RESOURCE_BRANCH)
+            )
+        elif self.RESOURCE_BRANCH == 'shot':
+            self._scan_resource_prx_input = qsm_gui_prx_widgets.PrxInputForShot(
+                history_key='lazy-workspace.{}-path'.format(self.RESOURCE_BRANCH)
+            )
+        else:
+            raise RuntimeError()
 
-        self._asset_prx_input = qsm_gui_prx_widgets.PrxAssetInputForCharacterAndProp(
-            history_key='lazy-workspace.asset-path'
-        )
-        self._asset_prx_tool_box.add_widget(self._asset_prx_input)
+        self._resource_prx_tool_box.add_widget(self._scan_resource_prx_input)
 
-        self._asset_prx_input.connect_input_change_accepted_to(self._do_gui_refresh_asset_for)
+        self._scan_resource_prx_input.connect_input_change_accepted_to(self._do_gui_refresh_resource_for)
 
         self._create_task_qt_button = gui_qt_widgets.QtPressButton()
-        self._asset_prx_input.add_widget(self._create_task_qt_button)
+        self._scan_resource_prx_input.add_widget(self._create_task_qt_button)
         self._create_task_qt_button._set_name_text_(
             self._window.choice_name(
                 self._window._configure.get('build.{}.buttons.create_task'.format(self.PAGE_KEY))
@@ -539,14 +600,16 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
         self._top_prx_tool_bar.do_gui_refresh()
 
     def do_gui_refresh_all(self, force=False):
-        self._task_session = self._task_parse.generate_task_session_by_asset_source_scene_src_auto()
+        self._task_session = self._task_parse.generate_task_session_by_resource_source_scene_src_auto()
+        # update resource path
         if self._task_session:
-            # update entity path
-            self._asset_prx_input.set_path(self._task_session.entity_path)
+            # check resource branch is match
+            if self._task_session.properties.resource_branch == self.RESOURCE_BRANCH:
+                self._scan_resource_prx_input.set_path(self._task_session.scan_resource_path)
 
-        path = self._asset_prx_input.get_path()
-        if path != self._entity_path or force is True:
-            self._do_gui_refresh_asset_for(self._asset_prx_input.get_path())
+        scan_resource_path = self._scan_resource_prx_input.get_path()
+        if scan_resource_path != self._scan_resource_path or force is True:
+            self._do_gui_refresh_resource_for(self._scan_resource_prx_input.get_path())
 
         self._gui_task_opt.do_gui_refresh_all()
         self._gui_task_scene_opt.do_gui_refresh_all()

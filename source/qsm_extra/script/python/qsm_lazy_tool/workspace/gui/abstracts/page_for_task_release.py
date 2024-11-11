@@ -14,13 +14,13 @@ import qsm_gui.proxy.widgets as qsm_gui_prx_widgets
 import qsm_general.wsp_task as qsm_dcc_wsp_task
 
 
-class AbsPrxPageForTaskPublish(gui_prx_widgets.PrxBasePage):
+class AbsPrxPageForTaskRelease(gui_prx_widgets.PrxBasePage):
     PAGE_KEY = 'task_release'
 
     TASK_PARSE_CLS = None
 
     def __init__(self, window, session, *args, **kwargs):
-        super(AbsPrxPageForTaskPublish, self).__init__(window, session, *args, **kwargs)
+        super(AbsPrxPageForTaskRelease, self).__init__(window, session, *args, **kwargs)
 
         self._task_parse = self.TASK_PARSE_CLS()
         self._task_session = None
@@ -31,7 +31,7 @@ class AbsPrxPageForTaskPublish(gui_prx_widgets.PrxBasePage):
 
     def do_gui_refresh_all(self, force=False):
         # catch task session
-        self._task_session = self._task_parse.generate_task_session_by_asset_source_scene_src_auto()
+        self._task_session = self._task_parse.generate_task_session_by_resource_source_scene_src_auto()
         if self._task_session:
             task = self._task_session.properties['task']
         else:

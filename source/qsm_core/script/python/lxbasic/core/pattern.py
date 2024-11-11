@@ -240,12 +240,13 @@ class BscParse(object):
         if p is not None:
             keys = cls.get_keys(p)
             variants = kwargs
-            s = p
+            # to unicode
+            s = _base.ensure_unicode(p)
             if keys:
                 for i_k in keys:
                     i_v = cls.get_value(i_k, variants)
                     if i_v is not None and i_v != '*':
-                        s = s.replace('{{{}}}'.format(i_k), i_v)
+                        s = s.replace('{{{}}}'.format(i_k), _base.ensure_unicode(i_v))
             return s
         return p
 
@@ -328,6 +329,17 @@ class BscFnmatch(object):
             if match(i_text):
                 list_.append(i_text)
         return list_
+
+    @classmethod
+    def is_match(cls, text, p):
+        try:
+            re_pat = cls.FILTER_CACHE[p]
+        except KeyError:
+            res = fnmatch.translate(p)
+            if len(cls.FILTER_CACHE) >= cls.FILTER_CACHE_MAXIMUM:
+                cls.FILTER_CACHE.clear()
+            cls.FILTER_CACHE[p] = re_pat = re.compile(res, re.IGNORECASE)
+        return bool(re_pat.match(text))
     
     @classmethod
     def to_parse_style(cls, p):
@@ -415,6 +427,7 @@ class AbsParseOpt(object):
                 i_r.update(self._variants)
                 i_r['result'] = result
                 return i_r
+
         if extract is False:
             return self._variants
         return {}
@@ -431,14 +444,18 @@ class BscStgParseOpt(AbsParseOpt):
 
     def find_matches(self, sort=False):
         list_ = []
+
+        regex = BscParse.to_fnmatch_style(
+            self._pattern, self._variants_default
+        )
+
         paths = _scan_glob.ScanGlob.glob(
-            BscParse.to_fnmatch_style(
-                self._pattern, self._variants_default
-            )
+            regex
         )
         if sort is True:
             paths = _raw.RawTextsOpt(paths).sort_by_number()
 
+        # has variant
         if self.get_keys():
             for i_path in paths:
                 i_p = parse.parse(

@@ -70,7 +70,7 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
         self.gui_page_setup_fnc()
 
     def gui_page_setup_fnc(self):
-        self._scan_root = qsm_scan.Root.generate()
+        self._scan_root = qsm_scan.Stage().get_root()
 
         self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
         self._qt_layout.addWidget(self._top_prx_tool_bar.widget)
@@ -86,7 +86,7 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
         self._asset_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'load', size_mode=1
         )
-        self._asset_prx_input = qsm_gui_prx_widgets.PrxAssetInputForCharacterAndProp()
+        self._asset_prx_input = qsm_gui_prx_widgets.PrxInputForAssetCharacterAndProp()
         self._asset_prx_tool_box.add_widget(self._asset_prx_input)
         # self._asset_prx_input.widget.setMaximumWidth(840)
 
@@ -103,8 +103,8 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
 
         self._asset_path = None
 
-        self._asset_prx_input.connect_input_change_accepted_to(self._do_gui_refresh_asset_for)
-        self._do_gui_refresh_asset_for(self._asset_prx_input.get_path())
+        self._asset_prx_input.connect_input_change_accepted_to(self._do_gui_refresh_resource_for)
+        self._do_gui_refresh_resource_for(self._asset_prx_input.get_path())
         # extra
         self._extra_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'extra'
@@ -176,7 +176,7 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
     def _save_scene_fnc(self, scene_path, thumbnail_path):
         return False
     
-    def _do_gui_refresh_asset_for(self, path):
+    def _do_gui_refresh_resource_for(self, path):
         self._asset_path = None
         self._asset_load_qt_button._set_action_enable_(False)
         entity = self._asset_prx_input.get_entity(path)

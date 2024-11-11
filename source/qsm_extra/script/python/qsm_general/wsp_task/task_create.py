@@ -12,6 +12,3 @@ class DccTaskCreateOpt(object):
 
     def create_groups_for(self, task):
         raise NotImplementedError()
-
-    def execute(self):
-        raise NotImplementedError()

@@ -561,7 +561,7 @@ class PrxPageForTaskMonitor(prx_abstracts.AbsPrxWidget):
                 i_count = 0
             texts.append('{} {}'.format(i_count, i_key))
 
-        self._task_info_label._set_info_(
+        self._task_info_label._set_info_text_(
             ', '.join(texts)
         )
 
@@ -597,7 +597,7 @@ class PrxPageForTaskMonitor(prx_abstracts.AbsPrxWidget):
         )
         self._task_info_label = gui_qt_widgets.QtInfoLabel()
         self._info_prx_tool_box.add_widget(self._task_info_label)
-        self._task_info_label._set_info_(
+        self._task_info_label._set_info_text_(
             '0 total'
         )
         

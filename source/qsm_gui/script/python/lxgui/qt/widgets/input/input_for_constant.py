@@ -207,7 +207,7 @@ class QtInputForConstantChoose(
         self._input_button.setHidden(not boolean)
 
         self._update_background_color_by_locked_(boolean)
-        #
+
         self._refresh_widget_all_()
 
     def _set_value_validation_fnc_(self, fnc):
@@ -253,6 +253,9 @@ class QtInputForConstantChoose(
         self._get_entry_widget_()._set_value_options_(
             self._get_choose_values_()
         )
+
+    def _set_value_options_(self, values, *args, **kwargs):
+        self._set_choose_values_(values, *args, **kwargs)
 
     def _extend_choose_values_current_(self, values):
         self._set_value_(values[-1])

@@ -189,8 +189,8 @@ class Task(_base.AbsEntity):
         return self._thread
 
 
-class TasksCache(_base.AbsEntitiesCache):
+class TasksCacheOpt(_base.AbsEntitiesCacheOpt):
     ENTITY_CLS = Task
 
     def __init__(self, entity_pool):
-        super(TasksCache, self).__init__(entity_pool)
+        super(TasksCacheOpt, self).__init__(entity_pool)

@@ -14,7 +14,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.steps.animation.core as qsm_mya_stp_anm_core
+import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
 
 
 class PrxUnitBaseOpt(object):
@@ -424,7 +424,7 @@ class PrxTreeviewUnitForAssetOpt(
                     '/status/unloaded', path, auto_create_ancestors=True
                 )
 
-            if isinstance(resource, qsm_mya_stp_anm_core.AdvRigAsset):
+            if isinstance(resource, qsm_mya_tsk_anm_core.AdvRigAsset):
                 if resource.is_skin_proxy_exists():
                     prx_item.set_status(
                         prx_item.ValidationStatus.Active

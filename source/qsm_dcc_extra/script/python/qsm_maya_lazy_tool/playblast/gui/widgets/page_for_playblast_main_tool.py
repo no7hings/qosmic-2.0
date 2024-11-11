@@ -15,11 +15,11 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.steps.animation.core as qsm_mya_stp_anm_core
+import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
 
-import qsm_maya.steps.general.core as qsm_mya_prv_core
+import qsm_maya.tasks.general.core as qsm_mya_prv_core
 
-import qsm_maya.steps.general.scripts as qsm_mya_stp_gnl_scripts
+import qsm_maya.tasks.general.scripts as qsm_mya_tsk_gnl_scripts
 
 
 class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
@@ -183,11 +183,11 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         save_scheme = self._output_save_scheme_port.get()
         update_scheme = self._output_update_scheme_port.get()
         if save_scheme == 'auto':
-            return qsm_mya_stp_gnl_scripts.PlayblastOpt.generate_movie_file_path(
+            return qsm_mya_tsk_gnl_scripts.PlayblastOpt.generate_movie_file_path(
                 update_scheme=update_scheme
             )
         elif save_scheme == 'specific_directory':
-            _ = qsm_mya_stp_gnl_scripts.PlayblastOpt.generate_movie_file_path(
+            _ = qsm_mya_tsk_gnl_scripts.PlayblastOpt.generate_movie_file_path(
                 directory_path=self._output_directory_port.get(), update_scheme=update_scheme
             )
             if _ is None:
@@ -252,7 +252,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
             'play_enable'
         )
 
-        q = qsm_mya_stp_anm_core.AdvRigAssetsQuery()
+        q = qsm_mya_tsk_anm_core.AdvRigAssetsQuery()
 
         q.do_update()
 
@@ -261,7 +261,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
 
         # noinspection PyBroadException
         try:
-            qsm_mya_stp_gnl_scripts.PlayblastOpt.execute(
+            qsm_mya_tsk_gnl_scripts.PlayblastOpt.execute(
                 movie_path,
                 camera=camera_path,
                 resolution=resolution_size,
@@ -312,7 +312,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
                 'display_setting.hud_enable'
             )
 
-            task_name, file_path, movie_file_path, cmd_script = qsm_mya_stp_gnl_scripts.PlayblastProcess.generate_task_args(
+            task_name, file_path, movie_file_path, cmd_script = qsm_mya_tsk_gnl_scripts.PlayblastProcess.generate_task_args(
                 camera_path=camera_path,
                 frame=frame_range, frame_step=frame_step, fps=fps,
                 resolution=resolution_size,

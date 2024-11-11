@@ -47,16 +47,16 @@ class AbsPrxToolsetForTaskTool(gui_prx_widgets.PrxBaseUnit):
 
         self.gui_build_unit()
 
-    def _gui_update_left_visible(self, boolean):
+    def _on_gui_left_visible_swap(self, boolean):
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
 
     def _gui_add_main_tools(self):
-        self._left_visible_switch_tool = gui_prx_widgets.PrxToggleButton()
-        self._main_prx_tool_box.add_widget(self._left_visible_switch_tool)
-        self._left_visible_switch_tool.set_name('task')
-        self._left_visible_switch_tool.set_icon_name('tree')
-        self._left_visible_switch_tool.set_checked(True)
-        self._left_visible_switch_tool.connect_check_toggled_to(self._gui_update_left_visible)
+        self._left_visible_swap_tool = gui_prx_widgets.PrxToggleButton()
+        self._main_prx_tool_box.add_widget(self._left_visible_swap_tool)
+        self._left_visible_swap_tool.set_name('task')
+        self._left_visible_swap_tool.set_icon_name('tree')
+        self._left_visible_swap_tool.set_checked(True)
+        self._left_visible_swap_tool.connect_check_toggled_to(self._on_gui_left_visible_swap)
 
     def gui_build_unit(self):
         self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()

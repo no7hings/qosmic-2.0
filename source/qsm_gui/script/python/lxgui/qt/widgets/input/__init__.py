@@ -12,3 +12,5 @@ from .input_for_storage import *
 from .input_for_path import *
 
 from .input_for_guide import *
+
+from .input_for_bubble import *

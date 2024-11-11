@@ -892,7 +892,7 @@ class QtInfoLabel(
                 text_option=QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
             )
 
-    def _set_info_(self, text):
+    def _set_info_text_(self, text):
         self._text = text
         self._refresh_widget_all_()
         

@@ -109,6 +109,25 @@ class SceneFile(object):
         )
 
     @classmethod
+    def import_scene(cls, file_path, namespace=':'):
+        """
+        file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash true -namespace ":" -options "v=0;p=17;f=0"  -pr  -importFrameRate true  -importTimeRange "override" "X:/QSM_TST/A001/A001_001/动画/通过文件/A001_001_001.ma";
+        """
+        cmds.file(
+            file_path,
+            i=1,
+            type=cls.get_file_type(file_path),
+            ignoreVersion=1,
+            ra=1,
+            mergeNamespacesOnClash=1,
+            namespace=namespace,
+            options='v=1;',
+            pr=1,
+            importFrameRate=1,
+            importTimeRange='override'
+        )
+
+    @classmethod
     def import_file_ignore_error(cls, file_path, namespace=':'):
         # noinspection PyBroadException
         try:

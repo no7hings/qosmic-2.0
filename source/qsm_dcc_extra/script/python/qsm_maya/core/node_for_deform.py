@@ -88,13 +88,12 @@ class BlendShape:
         return nodes
 
 
-class MeshBlendShape:
+class MeshBlend:
     @classmethod
     def get_target_shapes(cls, deform_node):
-        _ = _attribute.NodeAttribute.get_target_nodes(
+        return _attribute.NodeAttribute.get_target_nodes(
             deform_node, 'outputGeometry', 'mesh'
         )
-        return _
 
     @classmethod
     def get_target_transforms(cls, deform_node):
@@ -103,14 +102,19 @@ class MeshBlendShape:
         ]
 
 
-class MeshBlendShapeSource:
+class MeshBlendSource:
     @classmethod
-    def get_args_array(cls, transform_path):
-        lst = []
+    def get_target_args_map(cls, transform_path):
+        dict_ = {}
         nodes = cls.get_deform_nodes(transform_path)
         if nodes:
             for i_node in nodes:
-                pass
+                i_target_transforms = MeshBlend.get_target_transforms(
+                    i_node
+                )
+                if i_target_transforms:
+                    dict_[i_node] = i_target_transforms
+        return dict_
 
     @classmethod
     def get_deform_nodes(cls, transform_path):
@@ -119,8 +123,26 @@ class MeshBlendShapeSource:
             shape_path, 'worldMesh', 'blendShape'
         )
 
+    @classmethod
+    def get_deform_connection(cls, transform_path):
+        pass
 
-class MeshBlendShapeTarget:
+    @classmethod
+    def get_all_target_transforms(cls, transform_path):
+        set_ = set()
+        nodes = cls.get_deform_nodes(transform_path)
+        if nodes:
+            for i_node in nodes:
+                i_target_transforms = MeshBlend.get_target_transforms(
+                    i_node
+                )
+                if i_target_transforms:
+                    set_.update(set(i_target_transforms))
+        return list(set_)
+
+
+class MeshBlendTarget:
+
     @classmethod
     def get_args(cls, transform_path):
         node = cls.get_deform_node(transform_path)
@@ -270,7 +292,7 @@ class CurveWarp:
     @classmethod
     @_undo.Undo.execute
     def replace_all(cls, paths):
-        path_map = bsc_core.RawTextsMtd.group_elements(
+        path_map = bsc_core.BscTexts.group_elements(
             paths, 2
         )
         for (i_node_0, i_node_1) in path_map:
@@ -292,30 +314,65 @@ class Wrap:
 
     @classmethod
     def get_driver_transforms(cls, node):
-        lst = []
+        list_ = []
         array_indices = _attribute.NodeAttribute.get_array_indices(node, 'driverPoints')
         for i in array_indices:
             i_shape = _attribute.NodeAttribute.get_source_node(
                 node, 'driverPoints[{}]'.format(i), shapes=1
             )
             i_transform = _node_for_shape.Shape.get_transform(i_shape)
-            lst.append(i_transform)
-        return lst
+            list_.append(i_transform)
+        return list_
 
     @classmethod
     def get_base_transforms(cls, node):
-        lst = []
+        list_ = []
         array_indices = _attribute.NodeAttribute.get_array_indices(node, 'basePoints')
         for i in array_indices:
             i_shape = _attribute.NodeAttribute.get_source_node(
                 node, 'basePoints[{}]'.format(i), shapes=1
             )
             i_transform = _node_for_shape.Shape.get_transform(i_shape)
-            lst.append(i_transform)
-        return lst
+            list_.append(i_transform)
+        return list_
+    
+
+class MeshWrap:
+    @classmethod
+    def get_driver_transforms(cls, deform_node):
+        return Wrap.get_driver_transforms(deform_node)
+
+    @classmethod
+    def get_base_transforms(cls, deform_node):
+        return Wrap.get_base_transforms(deform_node)
+
+    @classmethod
+    def get_target_shapes(cls, deform_node):
+        return _attribute.NodeAttribute.get_target_nodes(
+            deform_node, 'outputGeometry', 'mesh'
+        )
+
+    @classmethod
+    def get_target_transforms(cls, deform_node):
+        return [
+            _node_for_shape.Shape.get_transform(x) for x in cls.get_target_shapes(deform_node)
+        ]
 
 
 class MeshWrapSource:
+    @classmethod
+    def get_target_args_map(cls, transform_path):
+        dict_ = {}
+        nodes = cls.get_deform_nodes(transform_path)
+        if nodes:
+            for i_node in nodes:
+                i_target_transforms = MeshWrap.get_target_transforms(
+                    i_node
+                )
+                if i_target_transforms:
+                    dict_[i_node] = i_target_transforms
+        return dict_
+
     @classmethod
     def get_base_transforms(cls, transform_path):
         deform_nodes = cls.get_deform_nodes(transform_path)
@@ -338,10 +395,27 @@ class MeshWrapSource:
             for i_base_transform in base_transforms:
                 i_parent_path = _node_for_transform.Transform.get_parent(i_base_transform)
                 if i_parent_path != parent_path:
-                    _node_for_transform.Transform.parent_to(
+                    i_base_transform = _node_for_transform.Transform.parent_to(
                         i_base_transform, parent_path
                     )
 
+                i_name = _node_for_transform.Transform.to_name_without_namespace(transform_path)
+                i_name_new = '{}Base'.format(i_name)
+                _node_for_transform.Transform.rename(i_base_transform, i_name_new)
+
+    @classmethod
+    def get_all_target_transforms(cls, transform_path):
+        set_ = set()
+        nodes = cls.get_deform_nodes(transform_path)
+        if nodes:
+            for i_node in nodes:
+                i_target_transforms = MeshWrap.get_target_transforms(
+                    i_node
+                )
+                if i_target_transforms:
+                    set_.update(set(i_target_transforms))
+        return list(set_)
+    
 
 class MeshWrapTarget:
     @classmethod
@@ -357,3 +431,9 @@ class MeshWrapTarget:
             shape_path, 'inMesh', Wrap.NODE_TYPE
         )
 
+
+class MeshDeform:
+    @classmethod
+    def break_deform(cls, transform_path):
+        shape_path = _node_for_transform.Transform.get_shape(transform_path)
+        _attribute.NodeAttribute.break_source(shape_path, 'inMesh')

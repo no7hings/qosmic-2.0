@@ -1700,7 +1700,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
             _ = fnmatch.filter(
                 self._gui_type_opt.get_completion_keys(), '*{}*'.format(keyword)
             )
-            return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_COMPLETION_MAXIMUM]
+            return bsc_core.BscTexts.sort_by_initial(_)[:self.FILTER_COMPLETION_MAXIMUM]
         return []
 
     def __gui_resource_completion_gain_fnc(self, *args, **kwargs):
@@ -1709,7 +1709,7 @@ class AbsPnlLibraryForResource(gui_prx_widgets.PrxSessionWindow):
             _ = fnmatch.filter(
                 self._gui_asset_prx_unit._keys, '*{}*'.format(keyword)
             )
-            return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_COMPLETION_MAXIMUM]
+            return bsc_core.BscTexts.sort_by_initial(_)[:self.FILTER_COMPLETION_MAXIMUM]
         return []
 
     def __restore_thread_stack(self):

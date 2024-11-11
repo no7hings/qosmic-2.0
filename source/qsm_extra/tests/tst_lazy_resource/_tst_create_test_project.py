@@ -3,7 +3,7 @@ import lxbasic.storage as bsc_storage
 
 import qsm_scan as qsm_scan
 
-scan_root = qsm_scan.Root.generate()
+scan_root = qsm_scan.Stage().get_root()
 
 project = scan_root.project('QSM_TST')
 

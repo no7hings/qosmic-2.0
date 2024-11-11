@@ -1,4 +1,8 @@
 # coding:utf-8
+import copy
+
+import lxbasic.storage as bsc_storage
+
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
@@ -6,7 +10,9 @@ import qsm_general.wsp_task as qsm_dcc_wsp_task
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.steps.cfx_rig.core as qsm_mya_stp_cfx_rig_core
+import qsm_maya.tasks.cfx_rig.core as qsm_mya_tsk_cfx_rig_core
+
+import qsm_maya.tasks.cfx.core as qsm_mya_tsk_cfx_core
 
 
 class MayaGnlToolOpt(qsm_dcc_wsp_task.DccTaskToolOpt):
@@ -17,30 +23,33 @@ class MayaGnlToolOpt(qsm_dcc_wsp_task.DccTaskToolOpt):
 class MayaAssetGnlToolOpt(MayaGnlToolOpt):
     @classmethod
     def test(cls):
-        cls(qsm_dcc_wsp_task.TaskParse(), {}).create_groups_for('cfx_rig')
+        pass
 
     def __init__(self, *args, **kwargs):
         super(MayaAssetGnlToolOpt, self).__init__(*args, **kwargs)
 
     def create_groups_for(self, task):
-        content = self._task_session._task_parse.configure.get_as_content(
+        content = self._task_session._task_parse.dcc_configure.get_as_content(
             'dcc-asset-group.{}'.format(task), relative=True
         )
-
-        for i_key in content.get_all_keys():
-            i_path = '|{}'.format(i_key.replace('.', '|'))
-            qsm_mya_core.Group.create(i_path)
+        if content:
+            for i_key in content.get_all_keys():
+                i_path = '|{}'.format(i_key.replace('.', '|'))
+                qsm_mya_core.Group.create(i_path)
 
 
 class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
     def __init__(self, *args, **kwargs):
         super(MayaAssetCfxRigToolOpt, self).__init__(*args, **kwargs)
-        self._rig_opt = qsm_mya_stp_cfx_rig_core.RigOpt()
+
+    @classmethod
+    def generate_rig_opt(cls):
+        return qsm_mya_tsk_cfx_rig_core.AssetRigOpt()
 
     # cloth
     @qsm_mya_core.Undo.execute
     def add_to_cloth_geo_by_select(self, *args, **kwargs):
-        mesh_set = self._rig_opt.mesh_set
+        mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
             if i_mesh not in mesh_set:
@@ -52,7 +61,7 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
 
     @qsm_mya_core.Undo.execute
     def copy_as_cloth_geo_by_select(self, *args, **kwargs):
-        mesh_set = self._rig_opt.mesh_set
+        mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
             if i_mesh in mesh_set:
@@ -69,7 +78,7 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
                 )
                 if i_results:
                     # add source
-                    qsm_mya_stp_cfx_rig_core.CfxSourceGeoLyrOpt().add_one(i_transform_path)
+                    qsm_mya_tsk_cfx_rig_core.CfxSourceGeoLyrOpt().add_one(i_transform_path)
 
                     i_result = i_results[0]
                     qsm_mya_core.Transform.delete_all_intermediate_shapes(i_result)
@@ -87,14 +96,14 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
         """
         transform_path is mesh transform
         """
-        transform_path_new = qsm_mya_stp_cfx_rig_core.CfxClothGeoGrpOpt().add_one(transform_path)
-        qsm_mya_stp_cfx_rig_core.CfxClothGeoLyrOpt().add_one(transform_path_new)
-        qsm_mya_stp_cfx_rig_core.CfxClothGeoMtlOpt().assign_to(transform_path_new)
+        transform_path_new = qsm_mya_tsk_cfx_rig_core.CfxClothGeoGrpOpt().add_one(transform_path)
+        qsm_mya_tsk_cfx_rig_core.CfxClothGeoLyrOpt().add_one(transform_path_new)
+        qsm_mya_tsk_cfx_rig_core.CfxClothGeoMtlOpt().assign_to(transform_path_new)
         return transform_path_new
     
     @qsm_mya_core.Undo.execute
     def create_ncloth_by_select(self):
-        mesh_set = self._rig_opt.mesh_set
+        mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
             if i_mesh not in mesh_set:
@@ -112,16 +121,16 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
         if args:
             flag, (ntransform, nucleus) = args
             if flag is True:
-                qsm_mya_stp_cfx_rig_core.NCloth(ntransform).apply_properties(
-                    qsm_mya_stp_cfx_rig_core.NCloth.DEFAULT_PROPERTIES
+                qsm_mya_tsk_cfx_rig_core.NCloth(ntransform).apply_properties(
+                    qsm_mya_tsk_cfx_rig_core.NCloth.DEFAULT_PROPERTIES
                 )
-            qsm_mya_stp_cfx_rig_core.CfxNClothGrpOpt().add_one(ntransform)
-            qsm_mya_stp_cfx_rig_core.CfxNucleusGrpOpt().add_one(nucleus)
+            qsm_mya_tsk_cfx_rig_core.CfxNClothGrpOpt().add_one(ntransform)
+            qsm_mya_tsk_cfx_rig_core.CfxNucleusGrpOpt().add_one(nucleus)
 
     # cloth proxy
     @qsm_mya_core.Undo.execute
     def add_to_cloth_proxy_geo_by_select(self, *args, **kwargs):
-        mesh_set = self._rig_opt.mesh_set
+        mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
             if i_mesh not in mesh_set:
@@ -133,7 +142,7 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
 
     @qsm_mya_core.Undo.execute
     def copy_as_cloth_proxy_geo_by_select(self, *args, **kwargs):
-        mesh_set = self._rig_opt.mesh_set
+        mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
             if i_mesh in mesh_set:
@@ -150,7 +159,7 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
                 )
                 if i_results:
                     # add source
-                    qsm_mya_stp_cfx_rig_core.CfxSourceGeoLyrOpt().add_one(i_transform_path)
+                    qsm_mya_tsk_cfx_rig_core.CfxSourceGeoLyrOpt().add_one(i_transform_path)
 
                     i_result = i_results[0]
                     qsm_mya_core.Transform.delete_all_intermediate_shapes(i_result)
@@ -168,15 +177,15 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
         """
         transform_path is mesh transform
         """
-        transform_path_new = qsm_mya_stp_cfx_rig_core.CfxClothProxyGeoGrpOpt().add_one(transform_path)
-        qsm_mya_stp_cfx_rig_core.CfxClothProxyGeoLyrOpt().add_one(transform_path_new)
-        qsm_mya_stp_cfx_rig_core.CfxClothProxyGeoMtlOpt().assign_to(transform_path_new)
+        transform_path_new = qsm_mya_tsk_cfx_rig_core.CfxClothProxyGeoGrpOpt().add_one(transform_path)
+        qsm_mya_tsk_cfx_rig_core.CfxClothProxyGeoLyrOpt().add_one(transform_path_new)
+        qsm_mya_tsk_cfx_rig_core.CfxClothProxyGeoMtlOpt().assign_to(transform_path_new)
         return transform_path_new
 
     # appendix
     @qsm_mya_core.Undo.execute
     def add_to_appendix_geo_by_select(self, *args, **kwargs):
-        mesh_set = self._rig_opt.mesh_set
+        mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
             if i_mesh not in mesh_set:
@@ -188,7 +197,7 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
     
     @qsm_mya_core.Undo.execute
     def copy_as_appendix_geo_by_select(self, *args, **kwargs):
-        mesh_set = self._rig_opt.mesh_set
+        mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
             if i_mesh in mesh_set:
@@ -204,7 +213,7 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
                     i_transform_path, name=i_transform_name_new, inputConnections=0
                 )
                 if i_results:
-                    qsm_mya_stp_cfx_rig_core.CfxSourceGeoLyrOpt().add_one(i_transform_path)
+                    qsm_mya_tsk_cfx_rig_core.CfxSourceGeoLyrOpt().add_one(i_transform_path)
 
                     self.add_to_appendix_geo(i_results[0])
 
@@ -213,15 +222,15 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
         """
         transform_path is mesh transform
         """
-        transform_path_new = qsm_mya_stp_cfx_rig_core.CfxAppendixGeoGrpOpt().add_one(transform_path)
-        qsm_mya_stp_cfx_rig_core.CfxAppendixGeoLyrOpt().add_one(transform_path_new)
-        qsm_mya_stp_cfx_rig_core.CfxAppendixGeoMtlOpt().assign_to(transform_path_new)
+        transform_path_new = qsm_mya_tsk_cfx_rig_core.CfxAppendixGeoGrpOpt().add_one(transform_path)
+        qsm_mya_tsk_cfx_rig_core.CfxAppendixGeoLyrOpt().add_one(transform_path_new)
+        qsm_mya_tsk_cfx_rig_core.CfxAppendixGeoMtlOpt().assign_to(transform_path_new)
         return transform_path_new
 
     # collider
     @qsm_mya_core.Undo.execute
     def add_to_collider_geo_by_select(self, *args, **kwargs):
-        mesh_set = self._rig_opt.mesh_set
+        mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
             if i_mesh not in mesh_set:
@@ -233,7 +242,7 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
 
     @qsm_mya_core.Undo.execute
     def copy_as_collider_geo_by_select(self, *args, **kwargs):
-        mesh_set = self._rig_opt.mesh_set
+        mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
             if i_mesh in mesh_set:
@@ -250,7 +259,7 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
                 )
                 if i_results:
                     # add source
-                    qsm_mya_stp_cfx_rig_core.CfxSourceGeoLyrOpt().add_one(i_transform_path)
+                    qsm_mya_tsk_cfx_rig_core.CfxSourceGeoLyrOpt().add_one(i_transform_path)
 
                     i_result = i_results[0]
                     qsm_mya_core.Transform.delete_all_intermediate_shapes(i_result)
@@ -268,14 +277,14 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
         """
         transform_path is mesh transform
         """
-        transform_path_new = qsm_mya_stp_cfx_rig_core.CfxColliderGeoGrpOpt().add_one(transform_path)
-        qsm_mya_stp_cfx_rig_core.CfxColliderGeoLyrOpt().add_one(transform_path_new)
-        qsm_mya_stp_cfx_rig_core.CfxColliderGeoMtlOpt().assign_to(transform_path_new)
+        transform_path_new = qsm_mya_tsk_cfx_rig_core.CfxColliderGeoGrpOpt().add_one(transform_path)
+        qsm_mya_tsk_cfx_rig_core.CfxColliderGeoLyrOpt().add_one(transform_path_new)
+        qsm_mya_tsk_cfx_rig_core.CfxColliderGeoMtlOpt().assign_to(transform_path_new)
         return transform_path_new
 
     @qsm_mya_core.Undo.execute
     def create_nrigid_by_select(self):
-        mesh_set = self._rig_opt.mesh_set
+        mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
             if i_mesh not in mesh_set:
@@ -293,16 +302,16 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
         if args:
             flag, (ntransform, nucleus) = args
             if flag is True:
-                qsm_mya_stp_cfx_rig_core.NRigid(ntransform).apply_properties(
-                    qsm_mya_stp_cfx_rig_core.NRigid.DEFAULT_PROPERTIES
+                qsm_mya_tsk_cfx_rig_core.NRigid(ntransform).apply_properties(
+                    qsm_mya_tsk_cfx_rig_core.NRigid.DEFAULT_PROPERTIES
                 )
-            qsm_mya_stp_cfx_rig_core.CfxNRigidGrpOpt().add_one(ntransform)
-            qsm_mya_stp_cfx_rig_core.CfxNucleusGrpOpt().add_one(nucleus)
+            qsm_mya_tsk_cfx_rig_core.CfxNRigidGrpOpt().add_one(ntransform)
+            qsm_mya_tsk_cfx_rig_core.CfxNucleusGrpOpt().add_one(nucleus)
 
     # bridge
     @qsm_mya_core.Undo.execute
     def add_to_bridge_geo_by_select(self, *args, **kwargs):
-        mesh_set = self._rig_opt.mesh_set
+        mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
             if i_mesh not in mesh_set:
@@ -314,7 +323,7 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
 
     @qsm_mya_core.Undo.execute
     def copy_as_bridge_geo_by_select(self, *args, **kwargs):
-        mesh_set = self._rig_opt.mesh_set
+        mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
             if i_mesh in mesh_set:
@@ -331,7 +340,7 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
                 )
                 if i_results:
                     # add source
-                    qsm_mya_stp_cfx_rig_core.CfxSourceGeoLyrOpt().add_one(i_transform_path)
+                    qsm_mya_tsk_cfx_rig_core.CfxSourceGeoLyrOpt().add_one(i_transform_path)
 
                     i_result = i_results[0]
                     qsm_mya_core.Transform.delete_all_intermediate_shapes(i_result)
@@ -349,15 +358,15 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
         """
         transform_path is mesh transform
         """
-        transform_path_new = qsm_mya_stp_cfx_rig_core.CfxBridgeGeoGrpOpt().add_one(transform_path)
-        qsm_mya_stp_cfx_rig_core.CfxBridgeGeoLyrOpt().add_one(transform_path_new)
-        qsm_mya_stp_cfx_rig_core.CfxBridgeGeoMtlOpt().assign_to(transform_path_new)
+        transform_path_new = qsm_mya_tsk_cfx_rig_core.CfxBridgeGeoGrpOpt().add_one(transform_path)
+        qsm_mya_tsk_cfx_rig_core.CfxBridgeGeoLyrOpt().add_one(transform_path_new)
+        qsm_mya_tsk_cfx_rig_core.CfxBridgeGeoMtlOpt().assign_to(transform_path_new)
         return transform_path_new
 
     #   control
     @qsm_mya_core.Undo.execute
     def copy_as_bridge_control_by_select(self, *args, **kwargs):
-        control_set = self._rig_opt.control_set
+        control_set = self.generate_rig_opt().control_set
         _ = qsm_mya_core.Selection.get_all_transforms()
         for i_transform_path in _:
             if i_transform_path in control_set:
@@ -370,8 +379,8 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
                     i_transform_name_new
                 )
 
-                i_result = qsm_mya_stp_cfx_rig_core.CfxBridgeControlGrpOpt().add_one(i_result)
-                qsm_mya_stp_cfx_rig_core.CfxBridgeControlLyrOpt().add_one(i_result)
+                i_result = qsm_mya_tsk_cfx_rig_core.CfxBridgeControlGrpOpt().add_one(i_result)
+                qsm_mya_tsk_cfx_rig_core.CfxBridgeControlLyrOpt().add_one(i_result)
 
                 if kwargs.get('auto_constrain'):
                     qsm_mya_core.ParentConstraint.create(i_transform_path, i_result)
@@ -379,12 +388,102 @@ class MayaAssetCfxRigToolOpt(MayaAssetGnlToolOpt):
     #
     @staticmethod
     def auto_collection():
-        qsm_mya_stp_cfx_rig_core.CfxGroup().auto_collection()
+        qsm_mya_tsk_cfx_rig_core.AssetCfxGroup().auto_collection()
 
     @staticmethod
     def auto_name():
-        qsm_mya_stp_cfx_rig_core.CfxGroup().auto_name()
+        qsm_mya_tsk_cfx_rig_core.AssetCfxGroup().auto_name()
+    
+    @staticmethod
+    def auto_connection():
+        qsm_mya_tsk_cfx_rig_core.AssetCfxGroup().auto_connection()
 
     @qsm_mya_core.Undo.execute
     def rest_rig_controls_transformation(self, *args, **kwargs):
-        self._rig_opt._adv_rig.rest_controls_transformation(translate=True, rotate=True)
+        self.generate_rig_opt()._adv_rig.rest_controls_transformation(translate=True, rotate=True)
+
+
+class MayaShotGnlToolOpt(MayaGnlToolOpt):
+    @classmethod
+    def test(cls):
+        pass
+
+    def __init__(self, *args, **kwargs):
+        super(MayaShotGnlToolOpt, self).__init__(*args, **kwargs)
+
+    def create_groups_for(self, task):
+        content = self._task_session._task_parse.dcc_configure.get_as_content(
+            'dcc-shot-group.{}'.format(task), relative=True
+        )
+        if content:
+            for i_key in content.get_all_keys():
+                i_path = '|{}'.format(i_key.replace('.', '|'))
+                qsm_mya_core.Group.create(i_path)
+
+
+class MayaShotCfxToolOpt(MayaShotGnlToolOpt):
+    @classmethod
+    def test(cls):
+        from . import task_parse as _task_parse
+
+        task_session = _task_parse.TaskParse().generate_task_session_by_resource_source_scene_src_auto()
+
+        task_tool_opt = task_session.generate_task_tool_opt()
+
+        task_tool_opt.load_cfx_rig_for(
+            'lily_Skin'
+        )
+
+    def __init__(self, *args, **kwargs):
+        super(MayaShotCfxToolOpt, self).__init__(*args, **kwargs)
+
+    @staticmethod
+    def to_cfx_rig_namespace(rig_namespace):
+        return 'cfx_rig__{}'.format('__'.join(rig_namespace.split(':')))
+
+    def load_cfx_rig_for(self, rig_namespace):
+
+        reference_cache = qsm_mya_core.ReferenceNamespacesCache()
+
+        rig_scene_path = reference_cache.get_file(rig_namespace)
+
+        if not rig_scene_path:
+            return
+
+        cfx_rig_namespace = self.to_cfx_rig_namespace(rig_namespace)
+
+        # ignore when reference is exists
+        node = reference_cache.get(cfx_rig_namespace)
+        if node is None:
+            rig_scene_ptn_opt = self._task_session.generate_pattern_opt_for(
+                'asset-release-shit_rig_scene-maya-file'
+            )
+            asset_variants = rig_scene_ptn_opt.get_variants(rig_scene_path)
+            if asset_variants:
+                task_variants = copy.copy(asset_variants)
+
+                task_variants['step'] = 'cfx'
+                task_variants['task'] = 'cfx_rig'
+
+                cfx_rig_scene_path = self._task_session.get_file_for(
+                    'asset-release-scene-maya-file', **task_variants
+                )
+                if not rig_scene_path:
+                    if not bsc_storage.StgPath.get_is_file(cfx_rig_scene_path):
+                        return
+                    return
+
+                cfx_rig_connect_map_json_path = self._task_session.get_file_for(
+                    'asset-release-connect_map-json-file', **task_variants
+                )
+
+                if not cfx_rig_connect_map_json_path:
+                    if not bsc_storage.StgPath.get_is_file(cfx_rig_connect_map_json_path):
+                        return
+                    return
+
+                qsm_mya_core.SceneFile.reference_file(
+                    cfx_rig_scene_path, cfx_rig_namespace
+                )
+
+        

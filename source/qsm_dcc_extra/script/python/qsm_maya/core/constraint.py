@@ -231,7 +231,7 @@ class MotionPath:
     @classmethod
     @_undo.Undo.execute
     def replace_all(cls, paths):
-        path_map = bsc_core.RawTextsMtd.group_elements(
+        path_map = bsc_core.BscTexts.group_elements(
             paths, 2
         )
         for (i_node_0, i_node_1) in path_map:

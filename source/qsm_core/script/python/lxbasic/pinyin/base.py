@@ -18,7 +18,7 @@ class Text(object):
 
     @classmethod
     def split_any_to_words(cls, text):
-        lst = []
+        list_ = []
         # to string
         if isinstance(text, six.text_type):
             text = text.encode('utf-8')
@@ -27,10 +27,10 @@ class Text(object):
         for i_c in chars:
             # is chinese
             if re.match(six.u(r'[\u4e00-\u9fff]+'), i_c):
-                lst.append(''.join(map(lambda x: str(x).capitalize(), pypinyin.lazy_pinyin(i_c))))
+                list_.append(''.join(map(lambda x: str(x).capitalize(), pypinyin.lazy_pinyin(i_c))))
             else:
-                lst.append(i_c)
-        return lst
+                list_.append(i_c)
+        return list_
 
     @classmethod
     def to_prettify(cls, text):
@@ -40,23 +40,23 @@ class Text(object):
 
     @staticmethod
     def split_any_to_words_extra(text):
-        lst = []
+        list_ = []
         # to string
         if isinstance(text, six.text_type):
             text = text.encode('utf-8')
 
         chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
         for i_c in chars:
-            lst.append(i_c)
+            list_.append(i_c)
             # is chinese
             if re.match(six.u(r'[\u4e00-\u9fff]+'), i_c):
                 # to pinyin
-                lst.append(''.join(map(lambda x: str(x).capitalize(), pypinyin.lazy_pinyin(i_c))))
-        return lst
+                list_.append(''.join(map(lambda x: str(x).capitalize(), pypinyin.lazy_pinyin(i_c))))
+        return list_
 
     @classmethod
     def to_pinyin_name(cls, text):
-        lst = []
+        list_ = []
         # to string
         if isinstance(text, six.text_type):
             text = text.encode('utf-8')
@@ -65,27 +65,27 @@ class Text(object):
         for i_c in chars:
             # chs
             if re.match(six.u(r'[\u4e00-\u9fff]+'), i_c):
-                lst.append('_'.join(map(lambda x: str(x).lower(), pypinyin.lazy_pinyin(i_c))))
+                list_.append('_'.join(map(lambda x: str(x).lower(), pypinyin.lazy_pinyin(i_c))))
             else:
-                lst.append(i_c)
-        return '_'.join(lst)
+                list_.append(i_c)
+        return '_'.join(list_)
 
     @classmethod
     def to_pinyin_map(cls, text):
-        dct = {}
-        lst = []
+        dict_ = {}
+        list_ = []
         # to string
         if isinstance(text, six.text_type):
             text = text.encode('utf-8')
 
         chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
         for i_c in chars:
-            lst.append(i_c)
+            list_.append(i_c)
             # chs
             if re.match(six.u(r'[\u4e00-\u9fff]+'), i_c):
                 i_pinyin = ''.join(map(lambda x: str(x).capitalize(), pypinyin.lazy_pinyin(i_c)))
-                dct[i_pinyin] = i_c
-        return lst, dct
+                dict_[i_pinyin] = i_c
+        return list_, dict_
 
     @classmethod
     def find_first_chr(cls, text):

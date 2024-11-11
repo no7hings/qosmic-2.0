@@ -129,7 +129,7 @@ class QtInputForGuide(
             _ = fnmatch.filter(
                 path_texts, '*{}*'.format(keyword)
             )
-            return bsc_core.RawTextsMtd.sort_by_initial(_)[:self.FILTER_COMPLETION_MAXIMUM]
+            return bsc_core.BscTexts.sort_by_initial(_)[:self.FILTER_COMPLETION_MAXIMUM]
         return []
 
     def _guide_entry_cbk_(self, text):

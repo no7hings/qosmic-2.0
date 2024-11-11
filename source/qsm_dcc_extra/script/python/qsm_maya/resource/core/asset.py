@@ -34,6 +34,10 @@ class Asset(object):
         return self._node
 
     @property
+    def node(self):
+        return self._node
+
+    @property
     def reference_opt(self):
         return _mya_core.ReferenceOpt(self._node)
 
@@ -71,7 +75,7 @@ class Asset(object):
 class AssetsQuery(object):
     LOG_KEY = 'resource query'
 
-    STG_PTN = 'X:/{project}/Assets/{role}/{asset}/Maya/Final/{asset}.ma'
+    SCENE_PATTERN = 'X:/{project}/Assets/{role}/{asset}/Maya/Final/{asset}.ma'
 
     DAG_PTN = '/{namespace}'
 
@@ -79,7 +83,7 @@ class AssetsQuery(object):
 
     def __init__(self):
         self._pth = bsc_core.BscStgParseOpt(
-            self.STG_PTN
+            self.SCENE_PATTERN
         )
         self._cache_hash_key = None
         self._cache_dict = collections.OrderedDict()

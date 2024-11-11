@@ -1,5 +1,7 @@
 # coding=utf-8
 import six
+
+from .... import core as _gui_core
 # qt
 from ....qt.core.wrap import *
 
@@ -24,27 +26,27 @@ class QtEntryForTextBubble(
         self.update()
 
     def _refresh_widget_draw_geometry_(self):
-        if self.__text:
+        if self._value:
+            x, y = 0, 0
+            w, h = self.width(), self.height()
+            w_c = max([QtGui.QFontMetrics(self._text_font).width(_x)+16 for _x in self._draw_texts])
 
-            if self.__texts_draw:
-                cs = [len(i) for i in self.__texts_draw]
-                text = self.__texts_draw[cs.index(max(cs))]
-            else:
-                text = self.__text
-
-            s_t, w_t, w_c, h_c = _qt_core.GuiQtText.generate_draw_args(self, text, self._text_w_maximum)
             self.setFixedWidth(w_c)
 
-            self._frame_border_radius = s_t
-
-            x, y = 0, 0
-
-            self.__rect_frame_draw.setRect(
-                x+1, y+1, w_c-2, h_c-2
+            self._frame_draw_rect.setRect(
+                x+1, y+1, w_c-1, h-1
             )
-            self.__rect_text_draw.setRect(
-                x+s_t, y, w_t, h_c
+            self._text_draw_rect.setRect(
+                x, y, w_c, h
             )
+
+            self._popup_icon_rect.setRect(
+                x+w_c-8, y+h-8, 8, 8
+            )
+
+    def _do_wheel_(self, event):
+        delta = event.angleDelta().y()
+        return self._scroll_to_(delta)
 
     def __init__(self, *args, **kwargs):
         super(QtEntryForTextBubble, self).__init__(*args, **kwargs)
@@ -53,22 +55,23 @@ class QtEntryForTextBubble(
             QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding
         )
 
-        self.setFont(_qt_core.QtFont.generate_2(size=12))
+        self._text_font = _qt_core.QtFont.generate_2(size=12)
+
+        self.setFont(self._text_font)
 
         self._init_entry_base_def_(self)
 
         self._init_action_base_def_(self)
         self._init_action_for_press_def_(self)
 
-        self.__text = None
-        self.__rect_frame_draw = QtCore.QRect()
-        self.__rect_text_draw = QtCore.QRect()
+        self._frame_draw_rect = QtCore.QRect()
+        self._text_draw_rect = QtCore.QRect()
 
-        self.__texts_draw = []
+        self._draw_texts = []
 
         self._is_hovered = False
 
-        self._frame_border_radius = 0
+        self._frame_border_radius = 2
 
         self._text_w_maximum = 96
 
@@ -83,6 +86,9 @@ class QtEntryForTextBubble(
                 ]
             )
         )
+
+        self._popup_icon_rect = QtCore.QRect()
+        self._popup_icon_file = _gui_core.GuiIcon.get('state/popup')
 
         self.installEventFilter(self)
 
@@ -122,17 +128,16 @@ class QtEntryForTextBubble(
 
         return False
 
-    def _do_wheel_(self, event):
-        delta = event.angleDelta().y()
-        return self._scroll_to_(delta)
-
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
-        if self.__text is not None:
+        if self._value is not None:
             offset = self._get_action_offset_()
-            color_bkg, color_txt = _qt_core.QtColor.generate_color_args_by_text(self.__text)
 
-            rect_frame = self.__rect_frame_draw
+            draw_text = self._draw_texts[self._value_options.index(self._value)]
+
+            color_bkg, color_txt = _qt_core.QtColor.generate_color_args_by_text(draw_text)
+
+            rect_frame = self._frame_draw_rect
             rect_frame = QtCore.QRect(
                 rect_frame.x()+offset, rect_frame.y()+offset, rect_frame.width()-offset, rect_frame.height()-offset
             )
@@ -150,7 +155,7 @@ class QtEntryForTextBubble(
                 QtCore.Qt.AbsoluteSize
             )
 
-            rect_text = self.__rect_text_draw
+            rect_text = self._text_draw_rect
             rect_text = QtCore.QRect(
                 rect_text.x()+offset, rect_text.y()+offset, rect_text.width()-offset, rect_text.height()-offset
             )
@@ -165,16 +170,24 @@ class QtEntryForTextBubble(
             painter.drawText(
                 rect_text,
                 QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter,
-                self.__text
+                draw_text
+            )
+
+            painter._draw_icon_file_by_rect_(
+                self._popup_icon_rect, self._popup_icon_file, offset
             )
 
     def _set_value_(self, value):
         if super(QtEntryForTextBubble, self)._set_value_(value) is True:
-            if isinstance(self._value, six.string_types):
-                self.__text = self._value.capitalize()
-            else:
-                self.__text = str(self._value).capitalize()
 
+            self.entry_value_changed.emit()
+            self.entry_value_change_accepted.emit(value)
+
+        self._refresh_widget_all_()
+
+    def _set_value_by_index_(self, index):
+        value = super(QtEntryForTextBubble, self)._set_value_by_index_(index)
+        if value:
             self.entry_value_changed.emit()
             self.entry_value_change_accepted.emit(value)
 
@@ -185,9 +198,12 @@ class QtEntryForTextBubble(
 
     def _set_value_options_(self, values, names=None):
         if super(QtEntryForTextBubble, self)._set_value_options_(values) is True:
-            self.__texts_draw = map(
-                lambda x: x.capitalize() if isinstance(x, six.string_types) else str(x).capitalize(), values
-            )
+            if names:
+                self._draw_texts = names
+            else:
+                self._draw_texts = map(
+                    lambda x: x.capitalize() if isinstance(x, six.string_types) else str(x).capitalize(), values
+                )
 
         self._refresh_widget_all_()
 
@@ -222,4 +238,4 @@ class QtEntryForTextBubble(
         return False
 
     def _get_frame_rect_(self):
-        return self.__rect_frame_draw
+        return self._frame_draw_rect

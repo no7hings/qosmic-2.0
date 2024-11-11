@@ -65,10 +65,12 @@ class QtEtdEntryForPath(QtWidgets.QWidget):
         self._lot.addWidget(self._entry_widget)
         self._entry_widget.setFocusPolicy(QtCore.Qt.ClickFocus)
         self._entry_widget.setFont(_qt_core.QtFont.generate_2(size=12))
-        # reg = QtCore.QRegExp(r'^[a-zA-Z][a-zA-Z0-9_]+$')
-        reg = QtCore.QRegExp(r'^[a-zA-Z0-9_]+$')
-        validator = QtGui.QRegExpValidator(reg, self._entry_widget)
-        self._entry_widget.setValidator(validator)
+
+        # todo: hss chinese word?
+        # reg = QtCore.QRegExp(r'^[a-zA-Z0-9_]+$')
+        # validator = QtGui.QRegExpValidator(reg, self._entry_widget)
+        # self._entry_widget.setValidator(validator)
+
         self.setFocusProxy(self._entry_widget)
 
         self._build_undo_stack()
@@ -113,6 +115,9 @@ class QtEtdEntryForPath(QtWidgets.QWidget):
 
     def _get_entry_widget_(self):
         return self._entry_widget
+    
+    def _set_entry_tip_(self, text):
+        self._entry_widget._set_entry_tip_(text)
 
     def _enter_next_(self, name_text):
         if name_text:
@@ -151,7 +156,7 @@ class QtEtdEntryForPath(QtWidgets.QWidget):
     def _check_name_text_is_valid_(self, name_text):
         name_texts = self._get_next_name_texts_()
         if name_texts:
-            name_text = bsc_core.auto_string(name_text)
+            name_text = bsc_core.ensure_unicode(name_text)
             return name_text in name_texts
         return False
 
@@ -159,7 +164,7 @@ class QtEtdEntryForPath(QtWidgets.QWidget):
         name_texts = self._get_next_name_texts_()
         if name_texts:
             return bsc_content.ContentUtil.filter(
-                name_texts, '*{}*'.format(keyword)
+                name_texts, u'*{}*'.format(keyword)
             )
         return []
 
@@ -210,7 +215,10 @@ class QtEtdEntryForPath(QtWidgets.QWidget):
         self._update_next_enable_()
 
     def _update_next_enable_(self):
-        self._path_bubble._set_next_enable_(not not self._get_next_name_texts_())
+        self._path_bubble._set_next_enable_(bool(self._get_next_name_texts_()))
+
+    def _set_root_text_(self, text):
+        self._path_bubble._set_root_text_(text)
 
     def _set_path_text_(self, path_text):
         if path_text:

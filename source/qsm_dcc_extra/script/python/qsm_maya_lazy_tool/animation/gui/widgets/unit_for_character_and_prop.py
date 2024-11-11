@@ -23,9 +23,9 @@ import qsm_maya.adv.core as qsm_mya_adv_core
 
 import qsm_maya_gui.core as qsm_mya_gui_core
 
-import qsm_maya.steps.animation.core as qsm_mya_stp_anm_core
+import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
 
-import qsm_maya.steps.animation.scripts as qsm_mya_stp_anm_scripts
+import qsm_maya.tasks.animation.scripts as qsm_mya_tsk_anm_scripts
 
 
 class PrxUnitForRigAssetView(
@@ -35,7 +35,7 @@ class PrxUnitForRigAssetView(
 
     NAMESPACE = 'rig'
 
-    RESOURCES_QUERY_CLS = qsm_mya_stp_anm_core.AdvRigAssetsQuery
+    RESOURCES_QUERY_CLS = qsm_mya_tsk_anm_core.AdvRigAssetsQuery
 
     TOOL_INCLUDES = [
         'isolate-select',
@@ -51,7 +51,7 @@ class PrxToolbarForCharacterAndPropReference(
 ):
     def __init__(self, window, unit, session, prx_input_for_asset):
         super(PrxToolbarForCharacterAndPropReference, self).__init__(window, unit, session)
-        self._scan_root = qsm_scan.Root.generate()
+        self._scan_root = qsm_scan.Stage().get_root()
 
         self._asset_prx_input = prx_input_for_asset
 
@@ -93,11 +93,11 @@ class PrxToolbarForCharacterAndPropReference(
         self._asset_replace_qt_button._set_action_enable_(False)
         self._asset_replace_qt_button.press_clicked.connect(self._on_dcc_replace_to_asset)
 
-        self._asset_prx_input.connect_input_change_accepted_to(self._do_gui_refresh_asset_for)
+        self._asset_prx_input.connect_input_change_accepted_to(self._do_gui_refresh_resource_for)
 
         self._asset_path = None
 
-        self._do_gui_refresh_asset_for(self._asset_prx_input.get_path())
+        self._do_gui_refresh_resource_for(self._asset_prx_input.get_path())
 
     def _on_dcc_load_asset(self):
         if self._asset_path is not None:
@@ -124,7 +124,7 @@ class PrxToolbarForCharacterAndPropReference(
                 for i_asset in assets:
                     i_asset.reference_opt.do_replace(self._asset_path)
 
-    def _do_gui_refresh_asset_for(self, path):
+    def _do_gui_refresh_resource_for(self, path):
         self._asset_path = None
 
         self._asset_load_qt_button._set_action_enable_(False)
@@ -278,7 +278,7 @@ class PrxToolsetForSkinProxyLoad(
                         if i_resource.reference_opt.is_loaded() is False:
                             continue
 
-                        i_opt = qsm_mya_stp_anm_scripts.SkinProxyOpt(i_resource)
+                        i_opt = qsm_mya_tsk_anm_scripts.SkinProxyOpt(i_resource)
                         if i_opt.is_exists() is False:
                             i_task_name, i_cmd_script, i_cache_path, i_data_file_path = i_opt.generate_args()
                             if i_cmd_script is not None:
@@ -319,7 +319,7 @@ class PrxToolsetForSkinProxyLoad(
         resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
-                i_opt = qsm_mya_stp_anm_scripts.SkinProxyOpt(i_resource)
+                i_opt = qsm_mya_tsk_anm_scripts.SkinProxyOpt(i_resource)
                 i_opt.remove_cache()
 
         self._page.do_gui_refresh_all(force=True)
@@ -353,7 +353,7 @@ class PrxToolsetForSkinProxyLoad(
                         if i_resource.reference_opt.is_loaded() is False:
                             continue
 
-                        i_opt = qsm_mya_stp_anm_scripts.DynamicGpuCacheOpt(i_resource)
+                        i_opt = qsm_mya_tsk_anm_scripts.DynamicGpuCacheOpt(i_resource)
                         if i_opt.is_exists() is False:
                             i_task_name, i_cmd_script, i_cache_path = i_opt.generate_args(
                                 start_frame, end_frame, use_motion=use_motion
@@ -405,7 +405,7 @@ class PrxToolsetForSkinProxyLoad(
         resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
-                i_opt = qsm_mya_stp_anm_scripts.DynamicGpuCacheOpt(i_resource)
+                i_opt = qsm_mya_tsk_anm_scripts.DynamicGpuCacheOpt(i_resource)
                 i_opt.remove_cache()
 
         self._page.do_gui_refresh_all(force=True)

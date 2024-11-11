@@ -108,7 +108,7 @@ class AbsPrxPageForScenery(gui_prx_widgets.PrxBasePage):
             500
         )
 
-    def _do_gui_refresh_asset_for(self, path):
+    def _do_gui_refresh_resource_for(self, path):
         self._asset_path = None
         self._asset_load_qt_button._set_action_enable_(False)
         entity = self._asset_prx_input.get_entity(path)
@@ -126,7 +126,7 @@ class AbsPrxPageForScenery(gui_prx_widgets.PrxBasePage):
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxPageForScenery, self).__init__(window, session, *args, **kwargs)
         self._asset_path = None
-        self._scan_root = qsm_scan.Root.generate()
+        self._scan_root = qsm_scan.Stage().get_root()
 
         self._validation_opt = qsm_lzy_vld_scripts.SceneryValidationOpt()
 
@@ -141,7 +141,7 @@ class AbsPrxPageForScenery(gui_prx_widgets.PrxBasePage):
         self._asset_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'load', size_mode=1
         )
-        self._asset_prx_input = qsm_gui_prx_widgets.PrxAssetInputForScenery()
+        self._asset_prx_input = qsm_gui_prx_widgets.PrxInputForAssetScenery()
         self._asset_prx_tool_box.add_widget(self._asset_prx_input)
         # self._asset_prx_input.widget.setMaximumWidth(516)
 
@@ -203,8 +203,8 @@ class AbsPrxPageForScenery(gui_prx_widgets.PrxBasePage):
             self._do_start
         )
 
-        self._asset_prx_input.connect_input_change_accepted_to(self._do_gui_refresh_asset_for)
-        self._do_gui_refresh_asset_for(self._asset_prx_input.get_path())
+        self._asset_prx_input.connect_input_change_accepted_to(self._do_gui_refresh_resource_for)
+        self._do_gui_refresh_resource_for(self._asset_prx_input.get_path())
 
         process_options = self._validation_opt.options.generate_process_options()
         for k, v in process_options.items():

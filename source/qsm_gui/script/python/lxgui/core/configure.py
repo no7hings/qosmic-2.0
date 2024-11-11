@@ -431,6 +431,7 @@ class GuiRgba(object):
     BkgBubbleNextFinish = LightNeonGreen
     BdrBubble = 127, 127, 127, 255
     TxtBubble = 31, 31, 31, 255
+    TxtBubbleNext = 127, 127, 127, 255
 
     BkgProgress = 47, 47, 47, 255
 

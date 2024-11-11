@@ -19,7 +19,7 @@ class AbsPrxPageForTaskTool(gui_prx_widgets.PrxBasePage):
 
     def do_gui_refresh_all(self, force=False):
         # catch task session
-        self._task_session = self._task_parse.generate_task_session_by_asset_source_scene_src_auto()
+        self._task_session = self._task_parse.generate_task_session_by_resource_source_scene_src_auto()
         if self._task_session:
             task = self._task_session.properties['task']
         else:

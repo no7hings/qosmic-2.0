@@ -1011,7 +1011,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
             _ = fnmatch.filter(
                 self._gui_entity_opt.get_completion_keys(), '*{}*'.format(keyword)
             )
-            return bsc_core.RawTextsMtd.sort_by_initial(_)[:50]
+            return bsc_core.BscTexts.sort_by_initial(_)[:50]
         return []
 
     def __setup_gui_options_(self):
@@ -1061,7 +1061,7 @@ class AbsPnlLoaderForRsvTask(gui_prx_widgets.PrxSessionWindow):
             _ = fnmatch.filter(
                 self.__task_keys, '*{}*'.format(keyword)
             )
-            return bsc_core.RawTextsMtd.sort_by_initial(_)
+            return bsc_core.BscTexts.sort_by_initial(_)
         return []
 
     def __restore_thread_stack_(self):

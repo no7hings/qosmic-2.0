@@ -139,7 +139,7 @@ class PrxPageForSceneryResource(gui_prx_widgets.PrxBasePage):
             'reference', size_mode=1
         )
         # reference
-        self._asset_prx_input = qsm_gui_prx_widgets.PrxAssetInputForScenery()
+        self._asset_prx_input = qsm_gui_prx_widgets.PrxInputForAssetScenery()
         self._asset_prx_tool_box.add_widget(self._asset_prx_input)
         # self._asset_prx_input.widget.setMaximumWidth(488)
 

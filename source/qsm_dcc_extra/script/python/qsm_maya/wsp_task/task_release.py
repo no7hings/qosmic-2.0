@@ -16,7 +16,7 @@ import qsm_maya.core as qsm_mya_core
 
 import qsm_maya.adv.core as qsm_mya_adv_core
 
-import qsm_maya.steps.cfx.core as qsm_mya_stp_cfx_core
+import qsm_maya.tasks.cfx.core as qsm_mya_tsk_cfx_core
 
 
 class MayaGnlReleaseOpt(qsm_dcc_wsp_task.DccTaskReleaseOpt):
@@ -26,7 +26,7 @@ class MayaGnlReleaseOpt(qsm_dcc_wsp_task.DccTaskReleaseOpt):
 
         task_parse = task_parse.TaskParse()
 
-        task_session = task_parse.generate_task_session_by_asset_source_scene_src_auto()
+        task_session = task_parse.generate_task_session_by_resource_source_scene_src_auto()
 
         task_publish_opt = task_session.generate_task_release_opt()
 

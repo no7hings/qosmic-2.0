@@ -452,21 +452,21 @@ class BscList:
         return _
 
     @classmethod
-    def split_to(cls, lst, max_chunk_count, min_chunk_size):
-        if len(lst) <= min_chunk_size:
-            return [lst]
+    def split_to(cls, list_, max_chunk_count, min_chunk_size):
+        if len(list_) <= min_chunk_size:
+            return [list_]
 
-        num_chunks = min((len(lst) + min_chunk_size - 1) // min_chunk_size, max_chunk_count)
+        num_chunks = min((len(list_) + min_chunk_size - 1) // min_chunk_size, max_chunk_count)
 
-        avg_size = len(lst) // num_chunks
-        remainder = len(lst) % num_chunks
+        avg_size = len(list_) // num_chunks
+        remainder = len(list_) % num_chunks
 
         chunks = []
         start = 0
 
         for i in range(num_chunks):
             end = start + avg_size + (1 if i < remainder else 0)
-            chunks.append(lst[start:end])
+            chunks.append(list_[start:end])
             start = end
 
         return chunks
@@ -969,7 +969,7 @@ class BscTextOpt(object):
             d = 1000.0
             s_p_min, s_p_max = s_p
             v_p_min, v_p_max = v_p
-            hash_ = hashlib.md5(string.encode('utf-8')).hexdigest()
+            hash_ = hashlib.md5(auto_string(string)).hexdigest()
             h_a = int(hash_[0:8], 16)
             s_a = int(hash_[8:16], 16)
             v_a = int(hash_[16:24], 16)
@@ -1072,7 +1072,7 @@ class RawStrUnderlineMtd(object):
         return re.findall(r'([A-Za-z]+)', string)
 
 
-class RawTextsMtd(object):
+class BscTexts(object):
     @classmethod
     def sort_by_number(cls, texts):
         texts.sort(key=lambda x: BscText.to_number_embedded_args(x))
@@ -1084,8 +1084,8 @@ class RawTextsMtd(object):
         return texts
 
     @staticmethod
-    def group_elements(lst, n):
-        return list(zip(*[lst[i::n] for i in range(n)]))
+    def group_elements(list_, n):
+        return list(zip(*[list_[i::n] for i in range(n)]))
 
 
 class RawTextsOpt(object):
@@ -1093,7 +1093,7 @@ class RawTextsOpt(object):
         self._raw = raw
 
     def sort_by_number(self):
-        return RawTextsMtd.sort_by_number(self._raw)
+        return BscTexts.sort_by_number(self._raw)
 
 
 class RawStrUnderlineOpt(object):

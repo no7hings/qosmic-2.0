@@ -16,7 +16,7 @@ import qsm_gui.qt.widgets as qsm_qt_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.steps.animation.core as qsm_mya_stp_anm_core
+import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
 
 import qsm_maya.motion.core as qsm_mya_mtn_core
 
@@ -30,7 +30,7 @@ class UnitForRigPicker(
         if self._qt_picker._has_focus_() is False:
             namespaces = qsm_mya_core.Namespaces.extract_from_selection()
             if namespaces:
-                namespace_for_adv = qsm_mya_stp_anm_core.AdvRigAsset.filter_namespaces(namespaces)
+                namespace_for_adv = qsm_mya_tsk_anm_core.AdvRigAsset.filter_namespaces(namespaces)
                 if namespace_for_adv:
                     self._qt_picker._set_namespace_(namespaces[-1])
 
@@ -43,7 +43,7 @@ class UnitForRigPicker(
         controls = []
         namespace = self._qt_picker._get_namespace_()
         if namespace:
-            resource = qsm_mya_stp_anm_core.AdvRigAsset(namespace)
+            resource = qsm_mya_tsk_anm_core.AdvRigAsset(namespace)
             for i_key in control_keys:
                 i_controls = resource.find_many_controls(i_key)
                 if i_controls:
@@ -85,7 +85,7 @@ class ToolsetForMotionCopyAndPaste(
         results = []
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
-            results = qsm_mya_stp_anm_core.AdvRigAsset.filter_namespaces(namespaces)
+            results = qsm_mya_tsk_anm_core.AdvRigAsset.filter_namespaces(namespaces)
 
         if not results:
             self._window.exec_message_dialog(
@@ -490,7 +490,7 @@ class ToolsetForMotionKeyframe(
         results = []
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
-            results = qsm_mya_stp_anm_core.AdvRigAsset.filter_namespaces(namespaces)
+            results = qsm_mya_tsk_anm_core.AdvRigAsset.filter_namespaces(namespaces)
 
         if not results:
             self._window.exec_message_dialog(

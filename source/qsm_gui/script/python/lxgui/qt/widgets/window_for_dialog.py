@@ -214,8 +214,8 @@ class QtContentDialog(_QtDialog):
             self._do_window_cancel_auto_close_
         )
 
-    def _set_info_(self, text):
-        self._info_label._set_info_(text)
+    def _set_info_text_(self, text):
+        self._info_label._set_info_text_(text)
 
     def _close_window_delay_as_fade_(self, delay_time):
         super(QtContentDialog, self)._close_window_delay_as_fade_(delay_time)
@@ -224,7 +224,7 @@ class QtContentDialog(_QtDialog):
     def _do_window_auto_close_countdown_(self, delay_time):
         def fnc_():
             if self._window_auto_close_flag is True:
-                self._set_info_(
+                self._set_info_text_(
                     'close after {}s'.format(self._countdown_maximum)
                 )
                 self._countdown_maximum -= 1
@@ -232,7 +232,7 @@ class QtContentDialog(_QtDialog):
                 if self._countdown_maximum <= 0:
                     tmr.stop()
             else:
-                self._set_info_('')
+                self._set_info_text_('')
                 tmr.stop()
 
         self._countdown_maximum = delay_time/1000
@@ -357,6 +357,8 @@ class QtInputDialog(
 
         self.installEventFilter(self)
 
+        self._input_widget = None
+
         self._result = None
 
         self._verbose = False
@@ -419,14 +421,14 @@ class QtInputDialog(
         self._cancel_button._fix_width_to_name_()
         self._cancel_button.press_clicked.connect(self._do_cancel_)
 
-    def _set_info_(self, text):
-        self._info_label._set_info_(text)
+    def _set_info_text_(self, text):
+        self._info_label._set_info_text_(text)
 
     def _do_ok_(self):
         if self._verbose is True:
             sys.stdout.write('you choose ok\n')
 
-        self._result = self._value_input._get_value_()
+        self._result = self._input_widget._get_value_()
         # todo: accept not trigger close event?
         self.accept()
 
@@ -437,34 +439,45 @@ class QtInputDialog(
         self._result = None
         self.reject()
 
-    def _set_value_type_(self, type_):
+    def _build_input_(self, type_):
         if type_ in {'string', 'integer', 'float'}:
-            self._value_input = _ipt_for_constant.QtInputForConstant()
-            self._sca._add_widget_(self._value_input)
-            self._value_input._set_entry_enable_(True)
+            self._input_widget = _ipt_for_constant.QtInputForConstant()
+            self._sca._add_widget_(self._input_widget)
+            self._input_widget._set_entry_enable_(True)
             if type_ == 'integer':
-                self._value_input._set_value_type_(int)
+                self._input_widget._set_value_type_(int)
             elif type_ == 'float':
-                self._value_input._set_value_type_(float)
-            self._value_input._connect_input_user_entry_value_finished_to_(
+                self._input_widget._set_value_type_(float)
+            self._input_widget._connect_input_user_entry_value_finished_to_(
                 self._do_ok_
             )
         elif type_ in {'text'}:
-            self._value_input = _qt_wgt_ipt_for_content.QtInputForContent()
-            self._sca._add_widget_(self._value_input)
-            self._value_input._set_entry_enable_(True)
-            self._value_input._connect_input_user_entry_value_finished_to_(
+            self._input_widget = _qt_wgt_ipt_for_content.QtInputForContent()
+            self._sca._add_widget_(self._input_widget)
+            self._input_widget._set_entry_enable_(True)
+            self._input_widget._connect_input_user_entry_value_finished_to_(
                 self._do_ok_
             )
+        elif type_ in {'choose'}:
+            self._input_widget = _ipt_for_constant.QtInputForConstantChoose()
+            self._sca._add_widget_(self._input_widget)
+            self._input_widget._set_entry_enable_(True)
+
+    def _set_input_options_(self, options):
+        if self._input_widget is not None:
+            self._input_widget._set_value_options_(options)
 
     def _set_value_(self, value):
-        self._value_input._set_value_(value)
+        if self._input_widget is not None:
+            self._input_widget._set_value_(value)
 
     def _get_result_(self):
         return self._result
 
     def _do_window_exec_(self, size=None):
-        self._value_input._entry_widget._set_focused_(True)
+        if self._input_widget is not None:
+            self._input_widget._entry_widget._set_focused_(True)
+
         self._do_window_show_(
             size=size or self.DEFAULT_SIZE, use_exec=True
         )
@@ -545,8 +558,8 @@ class QtToolDialog(
         # self._close_button._fix_width_to_name_()
         # self._close_button.press_clicked.connect(self._do_close_)
 
-    def _set_info_(self, text):
-        self._info_label._set_info_(text)
+    def _set_info_text_(self, text):
+        self._info_label._set_info_text_(text)
 
     def _do_close_(self):
         if self._verbose is True:

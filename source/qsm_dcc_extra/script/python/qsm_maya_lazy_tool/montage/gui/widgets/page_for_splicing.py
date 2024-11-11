@@ -13,7 +13,7 @@ from qsm_lazy_tool.montage.gui import abstracts as _gui_abstracts
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.steps.animation.core as qsm_mya_stp_anm_core
+import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
 
 import qsm_maya_lazy.montage.core as qsm_mya_lzy_mtg_core
 
@@ -86,7 +86,7 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
 
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
-            results = qsm_mya_stp_anm_core.AdvRigAsset.filter_namespaces(namespaces)
+            results = qsm_mya_tsk_anm_core.AdvRigAsset.filter_namespaces(namespaces)
 
         if not results:
             self._window.exec_message_dialog(

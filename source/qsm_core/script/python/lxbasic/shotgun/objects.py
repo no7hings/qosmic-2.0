@@ -1175,5 +1175,5 @@ class StgConnector(object):
                     i_filter_keys.insert(0, 'All')
                     tag_filter_dict[i_key] = i_filter_keys
             #
-            names = bsc_core.RawTextsMtd.sort_by_initial(names)
+            names = bsc_core.BscTexts.sort_by_initial(names)
             return stg_entity_dict, names, image_url_dict, keyword_filter_dict, tag_filter_dict

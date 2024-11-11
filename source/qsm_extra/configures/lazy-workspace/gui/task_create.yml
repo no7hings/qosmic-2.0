@@ -68,3 +68,37 @@ build:
                     name: 'Task Unit'
                     name_chs: '任务单元'
                     value: 'main'
+
+    shot:
+        tab:
+            name: 'Shot'
+            name_chs: '镜头'
+
+            tool_tip:
+                |-
+                To be supplemented.
+
+            tool_tip_chs:
+                |-
+                待补充。
+
+        options:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+                step_task:
+                    widget: capsule_string
+                    name: 'Task'
+                    name_chs: '任务'
+                    options: ['lay.layout', 'blk.blocking', 'ani.animation', 'cfx.cfx', 'efx.effect', 'lgt.lighting']
+                    option_names: ['Layout', 'Blocking', 'Animation', 'CFX', 'Effect', 'Lighting']
+                    option_names_chs: ['分镜', 'BLK', '动画', '解算', '特效', '灯光']
+                    default: 'cfx.cfx'
+                    lock: True
+
+                task_unit:
+                    widget: name
+                    name: 'Task Unit'
+                    name_chs: '任务单元'
+                    value: 'main'

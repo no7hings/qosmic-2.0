@@ -50,12 +50,14 @@ class ScanGlob(object):
 
     @classmethod
     def scan_fnc(cls, path):
-        list_ = []
-        path = cls.ensure_unicode(path)
-        for i in scandir.scandir(path):
-            i_path = i.path.replace('\\', '/')
-            list_.append(i_path)
-        return list_
+        if cls.check_dir_fnc(path):
+            list_ = []
+            path = cls.ensure_unicode(path)
+            for i in scandir.scandir(path):
+                i_path = i.path.replace('\\', '/')
+                list_.append(i_path)
+            return list_
+        return []
 
     @classmethod
     def check_exists_fnc(cls, path):
@@ -115,14 +117,17 @@ class ScanGlob(object):
         filter_names = path_regex.split('/')
         depth_maximum = len(filter_names)-1
         if platform.system() == 'Linux':
+            # etc. /production
             root = '/'+filter_names[1]
             start_index = 1
             flag = True
         elif platform.system() == 'Windows':
+            # etc. //shared
             if path_regex.startswith('//'):
                 root = '//' + filter_names[2]
                 start_index = 2
                 flag = True
+            # etc. Z:/
             else:
                 root = filter_names[0]+'/'
                 start_index = 0

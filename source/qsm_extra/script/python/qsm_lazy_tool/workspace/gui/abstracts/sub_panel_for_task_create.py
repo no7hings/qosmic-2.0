@@ -9,6 +9,8 @@ class AbsPrxSubPanelForTaskCreate(gui_prx_widgets.PrxBaseSubPanel):
 
     SUB_PANEL_KEY = 'task_create'
 
+    RESOURCE_BRANCH = None
+
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxSubPanelForTaskCreate, self).__init__(window, session, *args, **kwargs)
 
@@ -16,7 +18,7 @@ class AbsPrxSubPanelForTaskCreate(gui_prx_widgets.PrxBaseSubPanel):
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         self.add_widget(self._page_prx_tab_tool_box)
 
-        self.gui_setup_pages_for(['asset'])
+        self.gui_setup_pages_for([self.RESOURCE_BRANCH])
 
     def gui_setup_pages_for(self, page_keys):
         for i_page_key in page_keys:

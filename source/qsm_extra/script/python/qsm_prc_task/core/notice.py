@@ -8,7 +8,7 @@ class History(_base.AbsEntity):
         super(History, self).__init__(entities_cache, entity_id)
 
 
-class NoticesCache(_base.AbsEntitiesCache):
+class NoticesCache(_base.AbsEntitiesCacheOpt):
     ENTITY_CLS = History
 
     def __init__(self, entity_pool):

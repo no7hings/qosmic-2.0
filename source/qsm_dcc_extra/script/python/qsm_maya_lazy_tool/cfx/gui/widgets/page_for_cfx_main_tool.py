@@ -32,7 +32,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         qt_view._refresh_viewport_showable_auto_()
 
     def do_gui_update_scene_info(self):
-        self._scene_info_label._set_info_(
+        self._scene_info_label._set_info_text_(
             'Playback speed: {}'.format(
                 qsm_mya_core.Frame.get_playback_info()
             )
@@ -196,7 +196,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         )
         self._scene_info_label = gui_qt_widgets.QtInfoLabel()
         self._info_prx_tool_box.add_widget(self._scene_info_label)
-        self._scene_info_label._set_info_('N/a')
+        self._scene_info_label._set_info_text_('N/a')
 
         self._window.connect_window_activate_changed_to(self.do_gui_update_scene_info)
 

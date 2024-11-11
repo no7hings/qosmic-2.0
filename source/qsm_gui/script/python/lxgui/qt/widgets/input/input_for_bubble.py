@@ -58,10 +58,10 @@ class QtInputForBubbleChoose(
         self._build_input_choose_()
 
         self._entry_widget.press_clicked.connect(self._do_choose_popup_start_)
-        self.user_input_choose_value_accepted.connect(self._set_value_)
         self.input_value_changed = self._entry_widget.entry_value_changed
         self.input_value_accepted = self._entry_widget.entry_value_change_accepted
 
+        # choose
         self._choose_popup_widget._set_popup_style_(
             self._choose_popup_widget.PopupStyle.FromMouse
         )
@@ -73,6 +73,8 @@ class QtInputForBubbleChoose(
         self.input_value_accepted.connect(self._push_history_)
 
         self.input_value_accepted = self._entry_widget.entry_value_change_accepted
+        # choose signal
+        self.user_input_choose_value_accepted.connect(self._set_value_)
 
     def _set_choose_values_(self, values, *args, **kwargs):
         super(QtInputForBubbleChoose, self)._set_choose_values_(values, *args, **kwargs)
