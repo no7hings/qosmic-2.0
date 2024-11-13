@@ -57,6 +57,8 @@ class AbsViewModel(object):
         self._data.item_drop_enable = False
         # item sort
         self._data.item_sort_enable = False
+        # item expand record
+        self._data.item_expand_record_enable = False
         # menu
         self._data.menu = _base._Data(
             content=None,
@@ -399,6 +401,9 @@ class AbsViewModel(object):
         if leaf_items:
             leaf_items[-1].setSelected(True)
 
+    def clear_item_selection(self):
+        self._widget.clearSelection()
+
     def get_current_item(self):
         return self._widget.currentItem()
 
@@ -409,6 +414,14 @@ class AbsViewModel(object):
     def clear_all_items_status(self):
         for i in self.get_all_items():
             i._item_model.clear_status()
+
+    # item expand record
+    def set_item_expand_record_enable(self, boolean):
+        if boolean is True:
+            self._data.item_expand_record_enable = True
+            self._data.item_expand_record = _base._Data(
+                data={}
+            )
 
     # menu
     def set_menu_content(self, content):

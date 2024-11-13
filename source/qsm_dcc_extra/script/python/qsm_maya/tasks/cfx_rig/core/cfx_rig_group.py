@@ -11,30 +11,40 @@ from ... import _abc
 
 from . import cfx_rig_operate as _cfx_rig_operate
 
-from . import rig_operate as _rig_operate
+from . import cfx_rig_asset_operate as _rig_operate
 
 
-class AssetCfxGroup(_abc.AbsGroupOpt):
-    LOCATION = '|master|cfx'
+class AssetCfxRigGroupOpt(_abc.AbsGroupOpt):
+    LOCATION = '|master|cfx_rig'
 
     def __init__(self, *args, **kwargs):
-        if _mya_core.Node.is_exists(self.LOCATION):
+        # create force
+        if _mya_core.Node.is_exists(self.LOCATION) is False:
             _mya_core.Group.create_dag(self.LOCATION)
 
-        super(AssetCfxGroup, self).__init__(
+        super(AssetCfxRigGroupOpt, self).__init__(
             self.LOCATION, *args, **kwargs
         )
     
     def generate_component_data(self):
+        return self.generate_component_data_for(
+            self.LOCATION, '/cfx_rig'
+        )
+
+    @classmethod
+    def generate_component_data_for(cls, dcc_location, gui_location):
         dict_ = collections.OrderedDict()
 
-        location_key = '/cfx'
-        nucleus_location_key = '{}/nucleus'.format(location_key)
-        ncloth_location_key = '{}/ncloth'.format(location_key)
-        nrigid_location_key = '{}/nrigid'.format(location_key)
-        wrap_location_key = '{}/wrap'.format(location_key)
+        dict_[gui_location] = dcc_location
 
-        meshes = self._group_opt.find_all_shapes_by_type('mesh')
+        group_opt = _mya_core.GroupOpt(dcc_location)
+
+        nucleus_location_key = '{}/nucleus'.format(gui_location)
+        ncloth_location_key = '{}/ncloth'.format(gui_location)
+        nrigid_location_key = '{}/nrigid'.format(gui_location)
+        wrap_location_key = '{}/wrap'.format(gui_location)
+
+        meshes = group_opt.find_all_shapes_by_type('mesh')
         for i_mesh_shape in meshes:
             i_mesh_transform = _mya_core.Shape.get_transform(i_mesh_shape)
             i_ncloth_args = _mya_core.MeshNCloth.get_args(
@@ -204,7 +214,7 @@ class AssetCfxGroup(_abc.AbsGroupOpt):
             
     @_mya_core.Undo.execute
     def auto_name(self):
-        rig_opt = _rig_operate.AssetRigOpt()
+        rig_opt = _rig_operate.CfxRigAssetOpt()
         mesh_hash_dict = rig_opt.generate_mesh_hash_map()
         mesh_face_vertices_dict = rig_opt.generate_mesh_face_vertices_map()
 
@@ -264,7 +274,7 @@ class AssetCfxGroup(_abc.AbsGroupOpt):
         temporary function
         """
         errors = []
-        rig_opt = _rig_operate.AssetRigOpt()
+        rig_opt = _rig_operate.CfxRigAssetOpt()
         mesh_set = rig_opt.mesh_set
         with bsc_log.LogProcessContext.create(maximum=len(mesh_set), label='auto connection') as l_p:
             for i_mesh_shape_src in mesh_set:

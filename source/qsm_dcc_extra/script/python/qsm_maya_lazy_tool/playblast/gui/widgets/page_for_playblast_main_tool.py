@@ -219,7 +219,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
                 overscan=self._prx_options_node.get('camera_display.overscan')
             )
 
-    def do_dcc_playblast(self):
+    def on_playblast(self):
         movie_path = self.gui_get_file_path()
         if movie_path is None:
             return
@@ -278,7 +278,10 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
             for i in q.get_all():
                 i.switch_to_cache()
 
-    def do_dcc_playblast_backstage(self):
+    def on_playblast_subprocess(self):
+        pass
+
+    def on_playblast_backstage(self):
         import lxbasic.web as bsc_web
 
         import qsm_prc_task.process as qsm_prc_tsk_process
@@ -312,7 +315,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
                 'display_setting.hud_enable'
             )
 
-            task_name, file_path, movie_file_path, cmd_script = qsm_mya_tsk_gnl_scripts.PlayblastProcess.generate_task_args(
+            task_name, file_path, movie_file_path, cmd_script = qsm_mya_tsk_gnl_scripts.PlayblastProcess.generate_subprocess_args(
                 camera_path=camera_path,
                 frame=frame_range, frame_step=frame_step, fps=fps,
                 resolution=resolution_size,
@@ -434,7 +437,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
                 self._window._language, self._window._configure.get('build.main.buttons.playblast')
             )
         )
-        self._playblast_button.connect_press_clicked_to(self.do_dcc_playblast)
+        self._playblast_button.connect_press_clicked_to(self.on_playblast)
 
         self._playblast_backstage_button = gui_prx_widgets.PrxPressButton()
         tool_bar.add_widget(self._playblast_backstage_button)
@@ -443,7 +446,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
                 self._window._language, self._window._configure.get('build.main.buttons.playblast_backstage')
             )
         )
-        self._playblast_backstage_button.connect_press_clicked_to(self.do_dcc_playblast_backstage)
+        self._playblast_backstage_button.connect_press_clicked_to(self.on_playblast_backstage)
 
         self._do_dcc_register_all_script_jobs()
         self._window.register_window_close_method(self._do_dcc_destroy_all_script_jobs)

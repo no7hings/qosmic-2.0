@@ -24,8 +24,8 @@ class PrxSubPanelForMotionTool(gui_prx_widgets.PrxBasePanel):
     def gui_setup_fnc(self):
         self._page_dict = {}
 
-        self._prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
-        self.add_widget(self._prx_tab_tool_box)
+        self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
+        self.add_widget(self._page_prx_tab_tool_box)
 
         self.gui_setup_pages_for(['main', 'splicing'])
 
@@ -37,7 +37,7 @@ class PrxSubPanelForMotionTool(gui_prx_widgets.PrxBasePanel):
                 continue
 
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()
-            self._prx_tab_tool_box.add_widget(
+            self._page_prx_tab_tool_box.add_widget(
                 i_prx_sca,
                 key=i_page_key,
                 name=gui_core.GuiUtil.choice_name(
@@ -53,5 +53,5 @@ class PrxSubPanelForMotionTool(gui_prx_widgets.PrxBasePanel):
             i_prx_sca.add_widget(i_prx_page)
 
     def do_gui_refresh_all(self):
-        self._page_dict[self._prx_tab_tool_box.get_current_key()].do_gui_refresh_all()
+        self._page_dict[self._page_prx_tab_tool_box.get_current_key()].do_gui_refresh_all()
 

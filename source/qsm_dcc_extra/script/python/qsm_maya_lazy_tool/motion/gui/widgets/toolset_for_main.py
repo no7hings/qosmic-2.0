@@ -70,7 +70,7 @@ class UnitForRigPicker(
 class ToolsetForMotionCopyAndPaste(
     gui_prx_widgets.PrxVirtualUnit
 ):
-    UNIT_KEY = 'copy_paste_mirror'
+    GUI_KEY = 'copy_paste_mirror'
 
     def do_gui_refresh_by_dcc_selection(self):
         pass
@@ -474,7 +474,7 @@ class ToolsetForMotionCopyAndPaste(
 class ToolsetForMotionKeyframe(
     gui_prx_widgets.PrxVirtualUnit
 ):
-    TOOLSET_KEY = 'keyframe'
+    GUI_KEY = 'keyframe'
 
     def _do_dcc_select_all_curves(self):
         curves = qsm_mya_core.AnimCurveNodes.get_all(reference=False, excludes=['timewarp', 'qsm_timewarp'])
@@ -598,12 +598,12 @@ class ToolsetForMotionKeyframe(
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
                 self._window._language,
-                self._window._configure.get('build.main.units.{}.options'.format(self.TOOLSET_KEY))
+                self._window._configure.get('build.main.units.{}.options'.format(self.GUI_KEY))
             )
         )
 
         self._prx_options_node.build_by_data(
-            self._window._configure.get('build.main.units.{}.options.parameters'.format(self.TOOLSET_KEY)),
+            self._window._configure.get('build.main.units.{}.options.parameters'.format(self.GUI_KEY)),
         )
 
         prx_sca = gui_prx_widgets.PrxVScrollArea()
@@ -611,13 +611,13 @@ class ToolsetForMotionKeyframe(
 
         self._page.gui_get_tool_tab_box().add_widget(
             prx_sca,
-            key=self.TOOLSET_KEY,
+            key=self.GUI_KEY,
             name=gui_core.GuiUtil.choice_name(
-                self._window._language, self._window._configure.get('build.main.units.{}'.format(self.TOOLSET_KEY))
+                self._window._language, self._window._configure.get('build.main.units.{}'.format(self.GUI_KEY))
             ),
-            icon_name_text=self.TOOLSET_KEY,
+            icon_name_text=self.GUI_KEY,
             tool_tip=gui_core.GuiUtil.choice_tool_tip(
-                self._window._language, self._window._configure.get('build.main.units.{}'.format(self.TOOLSET_KEY))
+                self._window._language, self._window._configure.get('build.main.units.{}'.format(self.GUI_KEY))
             )
         )
 
@@ -646,7 +646,7 @@ class ToolsetForMotionKeyframe(
 class ToolsetForMove(
     gui_prx_widgets.PrxVirtualUnit
 ):
-    UNIT_KEY = 'move'
+    GUI_KEY = 'move'
 
     @staticmethod
     def do_dcc_create_transformation_locator():
@@ -695,10 +695,10 @@ class ToolsetForMove(
         )
 
 
-class ToolsetForConstrainAndDeform(
+class ToolsetForConstraintAndDeform(
     gui_prx_widgets.PrxVirtualUnit
 ):
-    UNIT_KEY = 'constrain_and_deform'
+    GUI_KEY = 'constrain_and_deform'
 
     def do_dcc_replace_motion_path_object(self):
         paths = cmds.ls(selection=1, type='transform', long=1) or []
@@ -741,26 +741,26 @@ class ToolsetForConstrainAndDeform(
         qsm_mya_core.CurveWarp.create_for_lattice_0(node, curve)
 
     def __init__(self, window, page, session):
-        super(ToolsetForConstrainAndDeform, self).__init__(window, page, session)
+        super(ToolsetForConstraintAndDeform, self).__init__(window, page, session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             gui_core.GuiUtil.choice_name(
-                self._window._language, self._window._configure.get('build.main.units.{}.options'.format(self.UNIT_KEY))
+                self._window._language, self._window._configure.get('build.main.units.{}.options'.format(self.GUI_KEY))
             )
         )
 
         self._prx_options_node.build_by_data(
-            self._window._configure.get('build.main.units.{}.options.parameters'.format(self.UNIT_KEY)),
+            self._window._configure.get('build.main.units.{}.options.parameters'.format(self.GUI_KEY)),
         )
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
-            key=self.UNIT_KEY,
+            key=self.GUI_KEY,
             name=gui_core.GuiUtil.choice_name(
-                self._window._language, self._window._configure.get('build.main.units.{}'.format(self.UNIT_KEY))
+                self._window._language, self._window._configure.get('build.main.units.{}'.format(self.GUI_KEY))
             ),
-            icon_name_text=self.UNIT_KEY,
+            icon_name_text=self.GUI_KEY,
             tool_tip=gui_core.GuiUtil.choice_tool_tip(
-                self._window._language, self._window._configure.get('build.main.units.{}'.format(self.UNIT_KEY))
+                self._window._language, self._window._configure.get('build.main.units.{}'.format(self.GUI_KEY))
             )
         )
 

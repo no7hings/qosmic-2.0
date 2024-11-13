@@ -428,7 +428,7 @@ def register_texture_search(option_opt):
             dtb_opt, dtb_version
         )
 
-        scene_maya_file_path = dtb_version_opt.get_exists_file('scene-maya-file')
+        scene_maya_file_path = dtb_version_opt.get_exists_file('maya-scene-file')
         if scene_maya_file_path:
             mya_dcc_objects.Scene.open_file(scene_maya_file_path)
 

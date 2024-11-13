@@ -144,7 +144,7 @@ class AdvOpt(_base.AdvNamespaceExtra):
     @_mya_core.Undo.execute
     def duplicate(self, **kwargs):
         namespace_new = _mya_core.Reference.duplicate(
-            _mya_core.ReferenceNamespacesCache().get(self._namespace)
+            _mya_core.ReferencesCache().get(self._namespace)
         )
         self.transfer_controls_motion(
             namespace_new, **kwargs

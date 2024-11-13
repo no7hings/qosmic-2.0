@@ -5,9 +5,28 @@ import maya.cmds as cmds
 from .... import core as _mya_core
 
 
+class AbsSetBaseOpt(object):
+    SET_ROOT = 'QSM_SET'
+
+    SET_NAME = None
+
+    @classmethod
+    def create_root_set(cls):
+        return _mya_core.Set.create(cls.SET_ROOT)
+
+    @classmethod
+    def create_set(cls):
+        set_root = cls.create_root_set()
+        set_name = _mya_core.Set.create(cls.SET_NAME)
+        _mya_core.Set.add_one(set_root, set_name)
+        return set_name
+
+
 # group
-class AbsGroupOpt(object):
+class AbsGroupOpt(AbsSetBaseOpt):
     LOCATION = None
+
+    SET_NAME = 'QSM_GROUP_SET'
 
     def __init__(self):
         if _mya_core.Node.is_exists(self.LOCATION) is False:
@@ -21,14 +40,14 @@ class AbsGroupOpt(object):
 
 #   bridge
 class CfxBridgeGeoGrpOpt(AbsGroupOpt):
-    LOCATION = '|master|cfx|cfx_bridge_grp|cfx_bridge_geo_grp'
+    LOCATION = '|master|cfx_rig|cfx_bridge_grp|cfx_bridge_geo_grp'
 
     def __init__(self):
         super(CfxBridgeGeoGrpOpt, self).__init__()
 
 
 class CfxBridgeControlGrpOpt(AbsGroupOpt):
-    LOCATION = '|master|cfx|cfx_bridge_grp|cfx_bridge_control_grp'
+    LOCATION = '|master|cfx_rig|cfx_bridge_grp|cfx_bridge_control_grp'
 
     def __init__(self):
         super(CfxBridgeControlGrpOpt, self).__init__()
@@ -36,7 +55,7 @@ class CfxBridgeControlGrpOpt(AbsGroupOpt):
 
 #   cloth
 class CfxClothGeoGrpOpt(AbsGroupOpt):
-    LOCATION = '|master|cfx|cfx_output_geo_grp|cfx_cloth_geo_grp'
+    LOCATION = '|master|cfx_rig|cfx_output_geo_grp|cfx_cloth_geo_grp'
 
     def __init__(self):
         super(CfxClothGeoGrpOpt, self).__init__()
@@ -44,21 +63,21 @@ class CfxClothGeoGrpOpt(AbsGroupOpt):
 
 #   cloth proxy
 class CfxClothProxyGeoGrpOpt(AbsGroupOpt):
-    LOCATION = '|master|cfx|cfx_cloth_proxy_grp|cfx_cloth_proxy_geo_grp'
+    LOCATION = '|master|cfx_rig|cfx_cloth_proxy_grp|cfx_cloth_proxy_geo_grp'
 
     def __init__(self):
         super(CfxClothProxyGeoGrpOpt, self).__init__()
 
 
 class CfxNClothGrpOpt(AbsGroupOpt):
-    LOCATION = '|master|cfx|cfx_ncloth_grp'
+    LOCATION = '|master|cfx_rig|cfx_ncloth_grp'
 
     def __init__(self):
         super(CfxNClothGrpOpt, self).__init__()
 
 
 class CfxNRigidGrpOpt(AbsGroupOpt):
-    LOCATION = '|master|cfx|cfx_nrigid_grp'
+    LOCATION = '|master|cfx_rig|cfx_nrigid_grp'
 
     def __init__(self):
         super(CfxNRigidGrpOpt, self).__init__()
@@ -66,7 +85,7 @@ class CfxNRigidGrpOpt(AbsGroupOpt):
 
 #   collider
 class CfxColliderGeoGrpOpt(AbsGroupOpt):
-    LOCATION = '|master|cfx|cfx_collider_grp|cfx_collider_geo_grp'
+    LOCATION = '|master|cfx_rig|cfx_collider_grp|cfx_collider_geo_grp'
 
     def __init__(self):
         super(CfxColliderGeoGrpOpt, self).__init__()
@@ -74,7 +93,7 @@ class CfxColliderGeoGrpOpt(AbsGroupOpt):
 
 #   appendix
 class CfxAppendixGeoGrpOpt(AbsGroupOpt):
-    LOCATION = '|master|cfx|cfx_output_geo_grp|cfx_appendix_geo_grp'
+    LOCATION = '|master|cfx_rig|cfx_output_geo_grp|cfx_appendix_geo_grp'
 
     def __init__(self):
         super(CfxAppendixGeoGrpOpt, self).__init__()
@@ -82,7 +101,7 @@ class CfxAppendixGeoGrpOpt(AbsGroupOpt):
 
 #   dynamic
 class CfxNucleusGrpOpt(AbsGroupOpt):
-    LOCATION = '|master|cfx|cfx_nucleus_grp'
+    LOCATION = '|master|cfx_rig|cfx_nucleus_grp'
 
     def __init__(self):
         super(CfxNucleusGrpOpt, self).__init__()
@@ -90,23 +109,27 @@ class CfxNucleusGrpOpt(AbsGroupOpt):
 
 #   wrap
 class CfxWrapGrpOpt(AbsGroupOpt):
-    LOCATION = '|master|cfx|cfx_wrap_grp'
+    LOCATION = '|master|cfx_rig|cfx_wrap_grp'
 
     def __init__(self):
         super(CfxWrapGrpOpt, self).__init__()
 
 
 # layer
-class AbsLayerOpt(object):
+class AbsLayerOpt(AbsSetBaseOpt):
     NAME = None
     RGB = (0, 0, 0)
     VISIBLE = 0
 
+    SET_NAME = 'QSM_LAYER_SET'
+
     def __init__(self):
         if _mya_core.Node.is_exists(self.NAME) is False:
-            _mya_core.DisplayLayer.create(self.NAME)
+            layer_name = _mya_core.DisplayLayer.create(self.NAME)
             _mya_core.DisplayLayer.set_rgb(self.NAME, self.RGB)
             _mya_core.DisplayLayer.set_visible(self.NAME, self.VISIBLE)
+            set_name = self.create_set()
+            _mya_core.Set.add_one(set_name, layer_name)
 
     def add_one(self, path):
         _mya_core.DisplayLayer.add_one(self.NAME, path)
@@ -182,9 +205,11 @@ class CfxAppendixGeoLyrOpt(AbsLayerOpt):
 
 
 # material
-class AbsMaterialOpt(object):
+class AbsMaterialOpt(AbsSetBaseOpt):
     NAME = None
     RGB = (0, 0, 0)
+
+    SET_NAME = 'QSM_MATERIAL_SET'
 
     def __init__(self):
         if _mya_core.Node.is_exists(self.NAME) is False:

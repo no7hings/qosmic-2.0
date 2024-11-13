@@ -13,7 +13,7 @@ from . import toolset_for_main as _toolset_for_main
 
 
 class PrxPageForMotionMain(gui_prx_widgets.PrxBasePage):
-    PAGE_KEY = 'main'
+    GUI_KEY = 'main'
 
     QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
 
@@ -97,7 +97,7 @@ class PrxPageForMotionMain(gui_prx_widgets.PrxBasePage):
             self._window, self, self._session
         )
         # constrain and deform
-        self._gui_constrain_and_deform_prx_toolset = _toolset_for_main.ToolsetForConstrainAndDeform(
+        self._gui_constraint_and_deform_prx_toolset = _toolset_for_main.ToolsetForConstraintAndDeform(
             self._window, self, self._session
         )
         #

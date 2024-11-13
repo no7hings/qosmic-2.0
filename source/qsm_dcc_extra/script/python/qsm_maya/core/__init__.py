@@ -114,6 +114,8 @@ from .joint import *
 
 from .skin_cluster import *
 
+from .set import *
+
 
 
 

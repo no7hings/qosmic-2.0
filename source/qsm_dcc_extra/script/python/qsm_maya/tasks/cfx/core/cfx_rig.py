@@ -1,6 +1,5 @@
 # coding:utf-8
 import collections
-
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
@@ -86,5 +85,5 @@ class CfxAdvRigAsset(_animation_core.AdvRigAsset):
     def __init__(self, *args, **kwargs):
         super(CfxAdvRigAsset, self).__init__(*args, **kwargs)
 
-    def load_cfx_rig(self):
+    def load_cfx_rig_from(self):
         pass

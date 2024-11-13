@@ -278,6 +278,11 @@ class TreeViewModel(_view_base.AbsViewModel):
             item_model.set_color_rgb(bsc_core.BscTextOpt(name).to_hash_rgb(s_p=(35, 50), v_p=(75, 95)))
         item.setSizeHint(0, self.data.item.grid_size)
 
+        if self._data.item_expand_record_enable is True:
+            item.setExpanded(
+                self._data.item_expand_record.data.get(path, False)
+            )
+
         self._data.item_dict[path] = item
         return True, item
 
@@ -337,3 +342,16 @@ class TreeViewModel(_view_base.AbsViewModel):
             # todo: in katana will make text display error, PyQt?
             # if QT_LOAD_INDEX == 1:
             self._widget.headerItem().setIcon(i_idx, icon)
+
+    def restore(self, clear_expand_record=False):
+        # mark expand record before clear
+        if self._data.item_expand_record_enable is True:
+            data = self._data.item_expand_record.data
+            # keep record default
+            if clear_expand_record is True:
+                data.clear()
+
+            for k, v in self._data.item_dict.items():
+                data[k] = v.isExpanded()
+
+        super(TreeViewModel, self).restore()

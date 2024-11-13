@@ -126,7 +126,7 @@ c.AdvResource('sam_Skin').test()
                 _base.Sketch(i_sketch_tgt).match_orients_from(i_sketch_src)
 
     def find_reference_file(self):
-        return qsm_mya_core.ReferenceNamespacesCache().get_file(self._namespace)
+        return qsm_mya_core.ReferencesCache().get_file(self._namespace)
 
     @classmethod
     def test(cls):

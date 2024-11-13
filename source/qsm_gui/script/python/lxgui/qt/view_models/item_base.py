@@ -811,6 +811,9 @@ class AbsItemModel(object):
     
     def focus_select(self):
         self._item.setSelected(True)
+
+    def set_selected(self, boolean):
+        self._item.setSelected(boolean)
     
     # DAG
     def get_parent(self):

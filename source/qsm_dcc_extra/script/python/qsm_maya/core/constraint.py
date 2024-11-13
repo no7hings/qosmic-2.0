@@ -35,11 +35,29 @@ class ParentConstraint(object):
             for i in _:
                 cmds.delete(i)
 
+    @classmethod
+    def set_source(cls, constraint_node, source_node):
+        cs = [
+            ('parentMatrix[0]', 'target[0].targetParentMatrix'),
+            ('translate', 'target[0].targetTranslate'),
+            ('rotatePivot', 'target[0].targetRotatePivot'),
+            ('rotatePivotTranslate', 'target[0].targetRotateTranslate'),
+            ('rotate', 'target[0].targetRotate'),
+            ('rotateOrder', 'target[0].targetRotateOrder'),
+            ('scale', 'target[0].targetScale'),
+        ]
+        for i_src, i_dst in cs:
+            i_source, i_target = '{}.{}'.format(source_node, i_src), '{}.{}'.format(constraint_node, i_dst)
+            if cmds.isConnected(i_source, i_target) is False:
+                cmds.connectAttr(
+                    i_source, i_target
+                )
+
 
 class ParentConstraintSource:
 
     @classmethod
-    def get_constrain_nodes(cls, source):
+    def get_constraint_nodes(cls, source):
         return _attribute.NodeAttribute.get_target_nodes(
             source, 'translate', ParentConstraint.NODE_TYPE
         )

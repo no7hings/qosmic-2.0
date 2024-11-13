@@ -7,7 +7,7 @@ from . import toolset_for_splicing as _toolset_for_splicing
 
 
 class PrxPageForMotionSplicing(gui_prx_widgets.PrxBasePage):
-    PAGE_KEY = 'splicing'
+    GUI_KEY = 'splicing'
     
     UNIT_CLASS_DICT = dict(
         import_motion=_toolset_for_splicing.PrxToolsetForImportMotion
@@ -33,7 +33,7 @@ class PrxPageForMotionSplicing(gui_prx_widgets.PrxBasePage):
 
     def _gui_build_units(self):
         for i_cls in self.UNIT_CLASSES:
-            i_unit_key = i_cls.UNIT_KEY
+            i_unit_key = i_cls.GUI_KEY
 
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()
             self._page_prx_tab_tool_box.add_widget(
@@ -41,12 +41,12 @@ class PrxPageForMotionSplicing(gui_prx_widgets.PrxBasePage):
                 key=i_unit_key,
                 name=gui_core.GuiUtil.choice_name(
                     self._window._language,
-                    self._window._configure.get('build.{}.units.{}'.format(self.PAGE_KEY, i_unit_key))
+                    self._window._configure.get('build.{}.units.{}'.format(self.GUI_KEY, i_unit_key))
                 ),
                 icon_name_text=i_unit_key,
                 tool_tip=gui_core.GuiUtil.choice_tool_tip(
                     self._window._language,
-                    self._window._configure.get('build.{}.units.{}'.format(self.PAGE_KEY, i_unit_key))
+                    self._window._configure.get('build.{}.units.{}'.format(self.GUI_KEY, i_unit_key))
                 )
             )
             i_prx_unit = self._to_unit_instance(i_cls)

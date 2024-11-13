@@ -101,6 +101,14 @@ class MeshBlend:
             _node_for_shape.Shape.get_transform(x) for x in cls.get_target_shapes(deform_node)
         ]
 
+    @classmethod
+    def set_source_transform(cls, deform_node, transform_path):
+        shape_path = _node_for_transform.Transform.get_shape(transform_path)
+        source = '{}.worldMesh[0]'.format(shape_path)
+        target = '{}.inputTarget[0].inputTargetGroup[0].inputTargetItem[6000].inputGeomTarget'.format(deform_node)
+        if cmds.isConnected(source, target) is False:
+            cmds.connectAttr(source, target, force=1)
+
 
 class MeshBlendSource:
     @classmethod

@@ -2,6 +2,8 @@
 import os
 
 import six
+
+import functools
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
@@ -12,6 +14,8 @@ import lxbasic.log as bsc_log
 import lxbasic.storage as bsc_storage
 
 import qsm_general.process as qsm_gnl_process
+
+import qsm_general.prc_task as qsm_prc_task
 
 from .... import core as _mya_core
 
@@ -229,6 +233,84 @@ class PlayblastOpt(object):
             finally:
                 for i in q.get_all():
                     i.switch_to_cache()
+        elif scheme == 'subprocess':
+            def open_fnc_(movie_file_path_):
+                bsc_storage.StgFileOpt(movie_file_path_).start_in_system()
+
+            camera = _mya_core.Camera.get_active()
+            frame = _mya_core.Frame.get_frame_range()
+            fps = _mya_core.Frame.get_fps_value()
+            resolution = _mya_core.RenderSettings.get_resolution()
+
+            task_name, file_path, movie_file_path, cmd_script = PlayblastProcess.generate_subprocess_args(
+                camera_path=camera,
+                frame=frame, frame_step=1, fps=fps,
+                resolution=resolution,
+                texture_enable=True, light_enable=False, shadow_enable=False
+            )
+
+            import lxgui.proxy.widgets as gui_prx_widgets
+
+            task_window = gui_prx_widgets.PrxSprcTaskWindow()
+            if task_window._language == 'chs':
+                task_window.set_window_title('拍屏')
+                task_window.set_tip(
+                    '正在拍屏，请耐心等待；\n'
+                    '这个过程可能会让MAYA前台操作产生些许卡顿；\n'
+                    '如需要终止任务，请点击“关闭”'
+                )
+            else:
+                task_window.set_window_title('Playblast')
+
+            task_window.submit(
+                'playblast',
+                task_name,
+                cmd_script,
+                completed_fnc=functools.partial(open_fnc_, movie_file_path),
+            )
+
+            task_window.show_window_auto(exclusive=False)
+        elif scheme == 'backstage':
+            camera = _mya_core.Camera.get_active()
+            frame = _mya_core.Frame.get_frame_range()
+            fps = _mya_core.Frame.get_fps_value()
+            resolution = _mya_core.RenderSettings.get_resolution()
+
+            task_name, file_path, movie_file_path, cmd_script = PlayblastProcess.generate_subprocess_args(
+                camera_path=camera,
+                frame=frame, frame_step=1, fps=fps,
+                resolution=resolution,
+                texture_enable=True, light_enable=False, shadow_enable=False
+            )
+
+            qsm_prc_task.BackstageSubmit.execute(
+                task_group=None, task_type='playblast', task_name=task_name,
+                cmd_script=cmd_script, icon_name='application/maya',
+                file_path=file_path, output_file_path=movie_file_path,
+                completed_notice_dict=dict(
+                    title='通知',
+                    message='拍屏结束了, 是否打开视频?',
+                    # todo? exec must use unicode
+                    ok_python_script='import os; os.startfile("{}".decode("utf-8"))'.format(
+                        bsc_core.auto_string(movie_file_path)
+                    ),
+                    status='normal'
+                )
+            )
+        elif scheme == 'farm':
+            camera = _mya_core.Camera.get_active()
+            frame = _mya_core.Frame.get_frame_range()
+            fps = _mya_core.Frame.get_fps_value()
+            resolution = _mya_core.RenderSettings.get_resolution()
+
+            option_hook = PlayblastProcess.generate_deadline_hook_option(
+                camera_path=camera,
+                frame=frame, frame_step=1, fps=fps,
+                resolution=resolution,
+                texture_enable=True, light_enable=False, shadow_enable=False
+            )
+
+            qsm_prc_task.FarmSubmit.execute_by_hook_option(option_hook)
 
     @classmethod
     def show_window(
@@ -312,19 +394,20 @@ class PlayblastProcess(object):
         self._shadow_enable = shadow_enable
 
     @classmethod
-    def generate_task_args(
+    def generate_subprocess_args(
         cls,
         camera_path,
         frame, frame_step, fps,
         resolution,
         texture_enable, light_enable, shadow_enable
     ):
-        file_path_current = _mya_core.SceneFile.get_current()
-        file_path_opt_current = bsc_storage.StgFileOpt(file_path_current)
+        file_current = _mya_core.SceneFile.get_current()
+        file_opt_current = bsc_storage.StgFileOpt(file_current)
         ptn = six.u(
-            '{}.export.v{{version}}.ma'
+            '{}/playblast/{}.v{{version}}.ma'
         ).format(
-            bsc_core.auto_unicode(file_path_opt_current.path_base)
+            bsc_core.ensure_unicode(file_opt_current.directory_path),
+            bsc_core.ensure_unicode(file_opt_current.name_base),
         )
         file_path = bsc_core.BscVersion.generate_as_new_version(
             ptn
@@ -353,25 +436,78 @@ class PlayblastProcess(object):
         )
         return task_name, file_path, movie_file_path, cmd_script
 
+    @classmethod
+    def generate_deadline_hook_option(
+        cls,
+        camera_path,
+        frame, frame_step, fps,
+        resolution,
+        texture_enable, light_enable, shadow_enable
+    ):
+        file_current = _mya_core.SceneFile.get_current()
+        file_opt_current = bsc_storage.StgFileOpt(file_current)
+        ptn = six.u(
+            '{}/playblast/{}.v{{version}}.ma'
+        ).format(
+            bsc_core.ensure_unicode(file_opt_current.directory_path),
+            bsc_core.ensure_unicode(file_opt_current.name_base),
+        )
+        file_path = bsc_core.BscVersion.generate_as_new_version(
+            ptn
+        )
+        file_opt = bsc_storage.StgFileOpt(file_path)
+
+        _mya_core.SceneFile.export_file(
+            file_path, keep_reference=True
+        )
+        start_frame, end_frame = frame
+        width, height = resolution
+        movie_file_path = six.u('{}.mov').format(bsc_core.ensure_unicode(file_opt.path_base))
+
+        task_name = '[playblast][{}][{}][{}]'.format(
+            file_opt.name, '{}x{}'.format(width, height), '{}-{}'.format(start_frame, end_frame)
+        )
+
+        hook_option = qsm_gnl_process.MayaCacheProcess.generate_hook_option_by_option_dict(
+            'playblast',
+            dict(
+                file=file_path,
+                movie=movie_file_path,
+                camera=camera_path,
+                start_frame=start_frame, end_frame=end_frame, frame_step=frame_step, fps=fps,
+                width=width, height=height,
+                texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable
+            ),
+            job_name=task_name,
+            output_file=movie_file_path
+        )
+
+        return hook_option
+
     def execute(self):
         # print self._file_path
         file_opt = bsc_storage.StgFileOpt(self._file_path)
         if file_opt.get_is_file():
-            _mya_core.SceneFile.open(self._file_path)
-
-            q = _animation_core.AdvRigAssetsQuery()
-
-            q.do_update()
-
-            for i in q.get_all():
-                i.switch_to_original()
-
-            PlayblastOpt.execute(
-                movie_file_path=self._movie_file_path,
-                camera=self._camera,
-                frame=(self._start_frame, self._end_frame), frame_step=self._frame_step, fps=self._fps,
-                resolution=(self._width, self._height),
-                texture_enable=self._texture_enable, light_enable=self._light_enable, shadow_enable=self._shadow_enable
-            )
+            with bsc_log.LogProcessContext.create(maximum=3) as l_p:
+                # step 1
+                _mya_core.SceneFile.open(self._file_path)
+                l_p.do_update()
+                # step 2
+                q = _animation_core.AdvRigAssetsQuery()
+                q.do_update()
+                for i in q.get_all():
+                    i.switch_to_original()
+                l_p.do_update()
+                # step 3
+                PlayblastOpt.execute(
+                    movie_file_path=self._movie_file_path,
+                    camera=self._camera,
+                    frame=(self._start_frame, self._end_frame), frame_step=self._frame_step, fps=self._fps,
+                    resolution=(self._width, self._height),
+                    texture_enable=self._texture_enable,
+                    light_enable=self._light_enable,
+                    shadow_enable=self._shadow_enable
+                )
+                l_p.do_update()
         else:
             raise RuntimeError()

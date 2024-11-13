@@ -68,6 +68,22 @@ build:
                 icon_text: 'P'
                 script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-playblast-script")'
 
+                actions:
+                    action_0:
+                        name: 'Playblast (subprocess)'
+                        name_chs: '拍屏（子进程）'
+                        script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-playblast-script&scheme=subprocess")'
+
+                    action_1:
+                        name: 'Playblast (backstage)'
+                        name_chs: '拍屏（后台）'
+                        script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-playblast-script&scheme=backstage")'
+
+                    action_2:
+                        name: 'Playblast (farm)'
+                        name_chs: '拍屏（农场）'
+                        script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-playblast-script&scheme=farm")'
+
             tool_1:
                 name: 'Load Skin Proxy'
                 name_chs: '加载简模代理（火柴人）'
@@ -225,15 +241,27 @@ build:
 
         tools:
             tool_0:
-                name: 'Lazy Workspace'
-                name_chs: '懒人工作区域'
+                name: 'Lazy Asset Workspace'
+                name_chs: '懒人资产工作区域'
                 tool_tip: 'To be supplemented.'
                 tool_tip_chs: '待补充。'
                 button_style: 'text_and_icon'
-                button_name: 'WSP'
-                button_name_chs: '工作'
+                button_name: 'Asset'
+                button_name_chs: '资产'
                 icon: 'lazy/workspace'
-                script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-workspace")'
+                script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-asset-workspace")'
+                dbl_script: ''
+
+            tool_1:
+                name: 'Lazy Shot Workspace'
+                name_chs: '懒人镜头工作区域'
+                tool_tip: 'To be supplemented.'
+                tool_tip_chs: '待补充。'
+                button_style: 'text_and_icon'
+                button_name: 'Shot'
+                button_name_chs: '镜头'
+                icon: 'lazy/workspace'
+                script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-shot-workspace")'
                 dbl_script: ''
 
     cfx:

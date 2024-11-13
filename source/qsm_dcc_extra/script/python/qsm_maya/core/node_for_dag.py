@@ -135,7 +135,7 @@ class DagNode(_node.Node):
 
     @classmethod
     def find_siblings(cls, path, type_includes):
-        return cmds.ls(path, type=type_includes, dag=1, long=1) or []
+        return cmds.ls(path, type=type_includes, dag=1, noIntermediate=1, long=1) or []
 
     @classmethod
     def rename(cls, path, new_name):

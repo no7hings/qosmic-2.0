@@ -3,7 +3,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 
 class AbsPrxPageForTaskTool(gui_prx_widgets.PrxBasePage):
-    PAGE_KEY = 'task_tool'
+    GUI_KEY = 'task_tool'
 
     TASK_PARSE_CLS = None
 
@@ -15,7 +15,7 @@ class AbsPrxPageForTaskTool(gui_prx_widgets.PrxBasePage):
 
         self._task = None
 
-        self._task_toolset = None
+        self._gui_task_unit = None
 
     def do_gui_refresh_all(self, force=False):
         # catch task session
@@ -31,8 +31,8 @@ class AbsPrxPageForTaskTool(gui_prx_widgets.PrxBasePage):
             self._qt_layout._clear_all_widgets_()
 
             if self._task in self.UNIT_CLASS_DICT:
-                self._task_toolset = self.UNIT_CLASS_DICT[self._task](self._window, self, self._session)
-                self._qt_layout.addWidget(self._task_toolset.widget)
+                self._gui_task_unit = self.UNIT_CLASS_DICT[self._task](self._window, self, self._session)
+                self._qt_layout.addWidget(self._gui_task_unit.widget)
 
-        if self._task_toolset is not None:
-            self._task_toolset.do_gui_refresh_all()
+        if self._gui_task_unit is not None:
+            self._gui_task_unit.do_gui_refresh_all()

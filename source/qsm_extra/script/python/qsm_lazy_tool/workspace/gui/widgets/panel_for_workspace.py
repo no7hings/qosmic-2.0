@@ -13,19 +13,19 @@ from . import sub_panel_for_task_create as _sub_panel_for_task_create
 class PrxPanelForAssetWorkspace(_abs_panel_for_workspace.AbsPrxPanelForWorkspace):
     PAGE_CLASS_DICT = {
         # task manager
-        _page_for_task_manager.PrxPageForAssetTaskManager.PAGE_KEY:
+        _page_for_task_manager.PrxPageForAssetTaskManager.GUI_KEY:
         _page_for_task_manager.PrxPageForAssetTaskManager,
         # task tool
-        _page_for_task_tool.PrxPageForAssetTaskTool.PAGE_KEY:
+        _page_for_task_tool.PrxPageForAssetTaskTool.GUI_KEY:
         _page_for_task_tool.PrxPageForAssetTaskTool,
         # task publish
-        _page_for_task_publish.PrxPageForAssetTaskRelease.PAGE_KEY:
+        _page_for_task_publish.PrxPageForAssetTaskRelease.GUI_KEY:
         _page_for_task_publish.PrxPageForAssetTaskRelease
 
     }
 
     SUB_PANEL_CLASS_DICT = {
-        _sub_panel_for_task_create.PrxSubPanelForAssetTaskCreate.SUB_PANEL_KEY:
+        _sub_panel_for_task_create.PrxSubPanelForAssetTaskCreate.GUI_KEY:
         _sub_panel_for_task_create.PrxSubPanelForAssetTaskCreate
     }
 
@@ -38,18 +38,18 @@ class PrxPanelForAssetWorkspace(_abs_panel_for_workspace.AbsPrxPanelForWorkspace
 class PrxPanelForShotWorkspace(_abs_panel_for_workspace.AbsPrxPanelForWorkspace):
     PAGE_CLASS_DICT = {
         # task manager
-        _page_for_task_manager.PrxPageForShotTaskManager.PAGE_KEY:
+        _page_for_task_manager.PrxPageForShotTaskManager.GUI_KEY:
         _page_for_task_manager.PrxPageForShotTaskManager,
         # task tool
-        _page_for_task_tool.PrxPageForShotTaskTool.PAGE_KEY:
+        _page_for_task_tool.PrxPageForShotTaskTool.GUI_KEY:
         _page_for_task_tool.PrxPageForShotTaskTool,
         # task publish
-        _page_for_task_publish.PrxPageForShotTaskRelease.PAGE_KEY:
+        _page_for_task_publish.PrxPageForShotTaskRelease.GUI_KEY:
         _page_for_task_publish.PrxPageForShotTaskRelease
     }
 
     SUB_PANEL_CLASS_DICT = {
-        _sub_panel_for_task_create.PrxSubPanelForShotTaskCreate.SUB_PANEL_KEY:
+        _sub_panel_for_task_create.PrxSubPanelForShotTaskCreate.GUI_KEY:
         _sub_panel_for_task_create.PrxSubPanelForShotTaskCreate
     }
 

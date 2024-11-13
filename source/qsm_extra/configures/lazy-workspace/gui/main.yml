@@ -78,279 +78,535 @@ build:
                 message_chs: '是否要执行自动连接?'
 
         cfx_rig:
-            options:
-                name: 'Options'
-                name_chs: '选项'
+            basic:
+                name: 'basic'
+                name_chs: '基础'
 
-                parameters:
-                    template:
-                        widget: group
-                        name: 'Template'
-                        name_chs: '模版'
+                tool_tip:
+                    |-
+                    To be supplemented.
 
-                    template/create_template:
-                        widget: button
-                        name: 'Create Group'
-                        name_chs: '创建分组'
-                        icon: 'tool/create'
+                tool_tip_chs:
+                    |-
+                    待补充。
 
-                    # cloth
-                    cloth:
-                        widget: group
-                        name: 'Cloth'
-                        name_chs: '布料'
-                        tool_tip:
-                            |-
-                            To be supplemented.
-                        tool_tip_chs:
-                            |-
-                            相关的组为：...|cfx|cfx_output_geo_grp|cfx_cloth_geo_grp；
-                            放入这个组的模型条件：
-                                需要输出缓存；
-                                需要被转化成布料；
+                options:
+                    name: 'Options'
+                    name_chs: '选项'
 
-                    # appendix
-                    appendix:
-                        widget: group
-                        name: 'Appendix'
-                        name_chs: '配饰'
-                        tool_tip:
-                            |-
-                            To be supplemented.
-                        tool_tip_chs:
-                            |-
-                            相关的组为：...|cfx|cfx_output_geo_grp|cfx_appendix_geo_grp；
-                            放入这个组的模型条件：
-                                需要输出缓存；
-                                不需要被转化成布料，但是会被其他模型驱动（Wrap等）；
+                    parameters:
+                        template:
+                            widget: group
+                            name: 'Template'
+                            name_chs: '模版'
 
-                    appendix/add_to:
-                        widget: button
-                        name: 'Add to Appendix'
-                        name_chs: '加入到配饰'
-                        icon: 'tool/add'
-                        join_to_next: True
+                        template/create_template:
+                            widget: button
+                            name: 'Create Group'
+                            name_chs: '创建分组'
+                            icon: 'tool/create'
 
-                    appendix/copy_as:
-                        widget: button
-                        name: 'Copy as Appendix'
-                        name_chs: '拷贝为配饰'
-                        icon: 'tool/copy'
+                        # cloth
+                        cloth:
+                            widget: group
+                            name: 'Cloth'
+                            name_chs: '布料'
+                            tool_tip:
+                                |-
+                                To be supplemented.
+                            tool_tip_chs:
+                                |-
+                                相关的组为：...|cfx_rig|cfx_output_geo_grp|cfx_cloth_geo_grp；
+                                放入这个组的模型条件：
+                                    需要输出缓存；
+                                    需要被转化成布料；
 
-                    cloth/auto_blend:
-                        widget: boolean
-                        name: 'Auto Blend'
-                        name_chs: '自动融合'
-                        value: True
+                        # appendix
+                        appendix:
+                            widget: group
+                            name: 'Appendix'
+                            name_chs: '配饰'
+                            tool_tip:
+                                |-
+                                To be supplemented.
+                            tool_tip_chs:
+                                |-
+                                相关的组为：...|cfx_rig|cfx_output_geo_grp|cfx_appendix_geo_grp；
+                                放入这个组的模型条件：
+                                    需要输出缓存；
+                                    不需要被转化成布料，但是会被其他模型驱动（Wrap等）；
 
-                    cloth/add_to:
-                        widget: button
-                        name: 'Add to Cloth'
-                        name_chs: '加入到布料'
-                        icon: 'tool/add'
-                        join_to_next: True
+                        appendix/add_to:
+                            widget: button
+                            name: 'Add to Appendix'
+                            name_chs: '加入到配饰'
+                            icon: 'tool/add'
+                            join_to_next: True
 
-                    cloth/copy_as:
-                        widget: button
-                        name: 'Copy as Cloth'
-                        name_chs: '拷贝为布料'
-                        icon: 'tool/copy'
+                        appendix/copy_as:
+                            widget: button
+                            name: 'Copy as Appendix'
+                            name_chs: '拷贝为配饰'
+                            icon: 'tool/copy'
 
-                    # cloth proxy
-                    cloth_proxy:
-                        widget: group
-                        name: 'Cloth Proxy'
-                        name_chs: '布料代理'
-                        tool_tip:
-                            |-
-                            To be supplemented.
-                        tool_tip_chs:
-                            |-
-                            待补充。
+                        cloth/auto_blend:
+                            widget: boolean
+                            name: 'Auto Blend'
+                            name_chs: '自动融合'
+                            value: True
 
-                    cloth_proxy/auto_blend:
-                        widget: boolean
-                        name: 'Auto Blend'
-                        name_chs: '自动融合'
-                        value: True
+                        cloth/add_to:
+                            widget: button
+                            name: 'Add to Cloth'
+                            name_chs: '加入到布料'
+                            icon: 'tool/add'
+                            join_to_next: True
 
-                    cloth_proxy/add_to:
-                        widget: button
-                        name: 'Add to Cloth Proxy'
-                        name_chs: '加入到布料代理'
-                        icon: 'tool/add'
-                        join_to_next: True
+                        cloth/copy_as:
+                            widget: button
+                            name: 'Copy as Cloth'
+                            name_chs: '拷贝为布料'
+                            icon: 'tool/copy'
 
-                    cloth_proxy/copy_as:
-                        widget: button
-                        name: 'Copy as Cloth Proxy'
-                        name_chs: '拷贝为布料代理'
-                        icon: 'tool/copy'
+                        # cloth proxy
+                        cloth_proxy:
+                            widget: group
+                            name: 'Cloth Proxy'
+                            name_chs: '布料代理'
+                            tool_tip:
+                                |-
+                                To be supplemented.
+                            tool_tip_chs:
+                                |-
+                                待补充。
 
-                    # collider
-                    collider:
-                        widget: group
-                        name: 'Collider'
-                        name_chs: '碰撞对象'
+                        cloth_proxy/auto_blend:
+                            widget: boolean
+                            name: 'Auto Blend'
+                            name_chs: '自动融合'
+                            value: True
 
-                    collider/auto_blend:
-                        widget: boolean
-                        name: 'Auto Blend'
-                        name_chs: '自动融合'
-                        value: True
+                        cloth_proxy/add_to:
+                            widget: button
+                            name: 'Add to Cloth Proxy'
+                            name_chs: '加入到布料代理'
+                            icon: 'tool/add'
+                            join_to_next: True
 
-                    collider/add_to:
-                        widget: button
-                        name: 'Add to Collider'
-                        name_chs: '加入到碰撞对象'
-                        icon: 'tool/add'
-                        join_to_next: True
+                        cloth_proxy/copy_as:
+                            widget: button
+                            name: 'Copy as Cloth Proxy'
+                            name_chs: '拷贝为布料代理'
+                            icon: 'tool/copy'
 
-                    collider/copy_as:
-                        widget: button
-                        name: 'Copy as Collider'
-                        name_chs: '拷贝为碰撞对象'
-                        icon: 'tool/copy'
+                        # collider
+                        collider:
+                            widget: group
+                            name: 'Collider'
+                            name_chs: '碰撞对象'
 
-                    # bridge geometry
-                    bridge_geometry:
-                        widget: group
-                        name: 'Bridge Geometry'
-                        name_chs: '桥接模型'
+                        collider/auto_blend:
+                            widget: boolean
+                            name: 'Auto Blend'
+                            name_chs: '自动融合'
+                            value: True
 
-                    bridge_geometry/auto_blend:
-                        widget: boolean
-                        name: 'Auto Blend'
-                        name_chs: '自动融合'
-                        value: True
+                        collider/add_to:
+                            widget: button
+                            name: 'Add to Collider'
+                            name_chs: '加入到碰撞对象'
+                            icon: 'tool/add'
+                            join_to_next: True
 
-                    bridge_geometry/add_to:
-                        widget: button
-                        name: 'Add to Bridge Geometry'
-                        name_chs: '加入到桥接模型'
-                        icon: 'tool/add'
-                        join_to_next: True
+                        collider/copy_as:
+                            widget: button
+                            name: 'Copy as Collider'
+                            name_chs: '拷贝为碰撞对象'
+                            icon: 'tool/copy'
 
-                    bridge_geometry/copy_as:
-                        widget: button
-                        name: 'Copy as Bridge Geometry'
-                        name_chs: '拷贝为桥接模型'
-                        icon: 'tool/copy'
+                        # bridge geometry
+                        bridge_geometry:
+                            widget: group
+                            name: 'Bridge Geometry'
+                            name_chs: '桥接模型'
 
-                    # bridge control
-                    bridge_control:
-                        widget: group
-                        name: 'Bridge Control'
-                        name_chs: '桥接控制器'
+                        bridge_geometry/auto_blend:
+                            widget: boolean
+                            name: 'Auto Blend'
+                            name_chs: '自动融合'
+                            value: True
 
-                    bridge_control/auto_constrain:
-                        widget: boolean
-                        name: 'Auto Constrain'
-                        name_chs: '自动约束'
-                        value: True
+                        bridge_geometry/add_to:
+                            widget: button
+                            name: 'Add to Bridge Geometry'
+                            name_chs: '加入到桥接模型'
+                            icon: 'tool/add'
+                            join_to_next: True
 
-                    bridge_control/copy_as:
-                        widget: button
-                        name: 'Copy as Bridge Control'
-                        name_chs: '拷贝为桥接控制器'
-                        icon: 'tool/maya/create-locator'
+                        bridge_geometry/copy_as:
+                            widget: button
+                            name: 'Copy as Bridge Geometry'
+                            name_chs: '拷贝为桥接模型'
+                            icon: 'tool/copy'
 
-                    nucleus:
-                        widget: group
-                        name: 'Nucleus'
-                        name_chs: 'Nucleus'
+                        # bridge control
+                        bridge_control:
+                            widget: group
+                            name: 'Bridge Control'
+                            name_chs: '桥接控制器'
 
-                    nucleus/create_ncloth:
-                        widget: button
-                        name: 'Create nCloth'
-                        name_chs: '创建 nCloth'
-                        icon: 'tool/maya/ncloth'
-                        join_to_next: True
+                        bridge_control/auto_constrain:
+                            widget: boolean
+                            name: 'Auto Constrain'
+                            name_chs: '自动约束'
+                            value: True
 
-                    nucleus/create_nrigid:
-                        widget: button
-                        name: 'Create nRigid'
-                        name_chs: '创建 nRigid'
-                        icon: 'tool/maya/nrigid'
+                        bridge_control/copy_as:
+                            widget: button
+                            name: 'Copy as Bridge Control'
+                            name_chs: '拷贝为桥接控制器'
+                            icon: 'tool/maya/create-locator'
 
-                    nucleus/paint_vertex_input_attract:
-                        widget: button
-                        name: 'Paint Input Attract (Vertex)'
-                        name_chs: '绘制输入吸引（顶点）'
-                        icon: 'tool/maya/paint-vertex'
+                        nucleus:
+                            widget: group
+                            name: 'Nucleus'
+                            name_chs: 'Nucleus'
 
-                    automation:
-                        widget: group
-                        name: 'Automation'
-                        name_chs: '自动化'
+                        nucleus/create_ncloth:
+                            widget: button
+                            name: 'Create nCloth'
+                            name_chs: '创建 nCloth'
+                            icon: 'tool/maya/ncloth'
+                            join_to_next: True
 
-                    automation/auto_collection:
-                        widget: button
-                        name: 'Auto Collection'
-                        name_chs: '自动收集'
-                        icon: 'tool/input'
-                        join_to_next: True
+                        nucleus/create_nrigid:
+                            widget: button
+                            name: 'Create nRigid'
+                            name_chs: '创建 nRigid'
+                            icon: 'tool/maya/nrigid'
 
-                    automation/auto_name:
-                        widget: button
-                        name: 'Auto Name'
-                        name_chs: '自动命名'
-                        icon: 'tool/input'
+                        nucleus/paint_vertex_input_attract:
+                            widget: button
+                            name: 'Paint Input Attract (Vertex)'
+                            name_chs: '绘制输入吸引（顶点）'
+                            icon: 'tool/maya/paint-vertex'
 
-                    automation/auto_connection:
-                        widget: button
-                        name: 'Auto Connect (Resolve from Scene)'
-                        name_chs: '自动连接（从文件中解析）'
-                        icon: 'tool/input'
-                        join_to_next: True
+                        automation:
+                            widget: group
+                            name: 'Automation'
+                            name_chs: '自动化'
 
-                    automation/rest_rig_controls_transformation:
-                        widget: button
-                        name: 'Reset Rig Controls Transformation'
-                        name_chs: '重置绑定控制器变换'
-                        icon: 'tool/rest'
+                        automation/auto_collection:
+                            widget: button
+                            name: 'Auto Collection'
+                            name_chs: '自动收集'
+                            icon: 'tool/input'
+                            join_to_next: True
 
-        cfx:
-            options:
-                name: 'Options'
-                name_chs: '选项'
+                        automation/auto_name:
+                            widget: button
+                            name: 'Auto Name'
+                            name_chs: '自动命名'
+                            icon: 'tool/input'
 
-                parameters:
-                    template:
-                        widget: group
-                        name: 'Template'
-                        name_chs: '模版'
+                        automation/auto_connection:
+                            widget: button
+                            name: 'Auto Connect (Resolve from Scene)'
+                            name_chs: '自动连接（从文件中解析）'
+                            icon: 'tool/input'
+                            join_to_next: True
 
-                    template/create_template:
-                        widget: button
-                        name: 'Create Group'
-                        name_chs: '创建分组'
-                        icon: 'tool/create'
-                        
-                    cfx_rig:
-                        widget: group
-                        name: 'CFX Rig'
-                        name_chs: '解算预设'
-                        
-                    cfx_rig/load:
-                        widget: button
-                        name: 'Load CFX Rig'
-                        name_chs: '加载解算预设'
-                        icon: 'tool/maya/load-cfx-rig'
-                        join_to_next: True
+                        automation/rest_rig_controls_transformation:
+                            widget: button
+                            name: 'Reset Rig Controls Transformation'
+                            name_chs: '重置绑定控制器变换'
+                            icon: 'tool/rest'
 
-                    cfx_rig/update:
-                        widget: button
-                        name: 'Update CFX Rig'
-                        name_chs: '更新解算预设'
-                        icon: 'tool/maya/load-cfx-rig'
+        cfx_cloth:
+            messages:
+                no_characters:
+                    message_chs: '选择一个或者多个角色（可以是任意部件）。'
+                    message: 'Select one or more character (any part).'
+
+            basic:
+                name: 'basic'
+                name_chs: '基础'
+
+                tool_tip:
+                    |-
+                    To be supplemented.
+
+                tool_tip_chs:
+                    |-
+                    待补充。
+
+                options:
+                    name: 'Options'
+                    name_chs: '选项'
+
+                    parameters:
+                        template:
+                            widget: group
+                            name: 'Template'
+                            name_chs: '模版'
+
+                        template/create_template:
+                            widget: button
+                            name: 'Create Group'
+                            name_chs: '创建分组'
+                            icon: 'tool/create'
+
+                        cfx_rig:
+                            widget: group
+                            name: 'CFX Rig'
+                            name_chs: '解算预设'
+
+                        cfx_rig/load:
+                            widget: button
+                            name: 'Load CFX Rig'
+                            name_chs: '加载解算预设'
+                            icon: 'tool/maya/load-cfx-rig'
+                            join_to_next: True
+
+                        cfx_rig/update:
+                            widget: button
+                            name: 'Update CFX Rig'
+                            name_chs: '更新解算预设'
+                            icon: 'tool/maya/load-cfx-rig'
+
+                        cfx_rig/enable:
+                            widget: button
+                            name: 'Enable CFX Rig'
+                            name_chs: '启用解算预设'
+                            icon: 'tool/enable'
+                            join_to_next: True
+
+                        cfx_rig/disable:
+                            widget: button
+                            name: 'Disable CFX Rig'
+                            name_chs: '禁用解算预设'
+                            icon: 'tool/disable'
+
+                        simulation:
+                            widget: group
+                            name: 'Simulation'
+                            name_chs: '解算'
+
+                        simulation/enable_solver:
+                            widget: button
+                            name: 'Enable Solver'
+                            name_chs: '启用解算器'
+                            icon: 'tool/enable'
+                            join_to_next: True
+
+                        simulation/disable_solver:
+                            widget: button
+                            name: 'Disable Solver'
+                            name_chs: '禁用解算器'
+                            icon: 'tool/disable'
+
+                        simulation/select_all:
+                            widget: button
+                            name: 'Select All'
+                            name_chs: '选择所有'
+
+                            icon: 'tool/maya/select'
+
+            export:
+                name: 'Export'
+                name_chs: '导出'
+
+                tool_tip: 'To be supplemented.'
+                tool_tip_chs: '待补充。'
+
+                options:
+                    name: 'Options'
+                    name_chs: '选项'
+
+                    parameters:
+                        setting:
+                            widget: group
+                            name: 'Setting'
+                            name_chs: '设置'
+
+                        setting/fps:
+                            widget: capsule_string
+                            name: 'FPS'
+                            name_chs: '帧率'
+                            options: ['24_fps', '30_fps']
+                            default: '24_fps'
+                            tool_tip: 'show scene FPS'
+                            tool_tip_chs: '显示当前场景的帧率'
+                            lock: True
+
+                        setting/frame_scheme:
+                            widget: capsule_string
+                            name: 'Frame Scheme'
+                            name_chs: '帧方案'
+                            options: ['time_slider', 'frame_range']
+                            option_names_chs: ['时间轴', '帧范围']
+                            default: 'time_slider'
+                            enable: True
+                            tool_tip: 'choose a frame scheme'
+                            tool_tip_chs:
+                                |-
+                                设置一个帧方案:
+                                    时间轴：自动读取帧范围
+                                    帧范围：在帧范围中输入
+
+                        setting/frame_range:
+                            widget: integer2
+                            name: 'Frame Range'
+                            name_chs: '帧范围'
+                            value: [0, 24]
+                            tool_tip: '...'
+                            lock: True
+                            visible_condition: {
+                                operator: 'is', port: 'setting/frame_scheme', value: 'frame_range'
+                            }
+
+                        setting/frame_offset:
+                            widget: integer
+                            name: 'Frame Offset'
+                            name_chs: '帧偏移'
+                            value: 0
+                            tool_tip: '...'
+                            visible: False
+
+                        setting/solver_start_frame:
+                            widget: integer
+                            name: 'Solver Start Frame'
+                            name_chs: '解算起始帧'
+                            value: 0
+                            tool_tip: '...'
+
+                        setting/frame_step:
+                            widget: integer
+                            name: 'Frame Step'
+                            name_chs: '帧步长'
+                            value: 1
+                            tool_tip: '...'
+
+                        cache_directory:
+                            widget: group
+                            name: 'Cache Directory'
+                            name_chs: '缓存目录'
+
+                        cache_directory/version_scheme:
+                            widget: capsule_string
+                            name: 'Version Scheme'
+                            name_chs: '版本方案'
+                            options: ['no_version', 'new_version', 'specified_version']
+                            option_names_chs: ['无版本', '新版本', '指定版本']
+                            default: 'new_version'
+                            tool_tip: '...'
+                            enable: True
+
+                        cache_directory/specified_version:
+                            widget: integer
+                            name: 'Specified Version'
+                            name_chs: '指定版本'
+                            value: 0
+                            visible_condition: {
+                                operator: 'is', port: 'cache_directory/version_scheme', value: 'specified_version'
+                            }
+
+                        cache_directory/directory:
+                            widget: directory
+                            open_or_save: save
+                            name: 'Export Directory'
+                            name_chs: '导出目录'
+                            value: ''
+                            history_key: 'tool-panels.lazy-cfx-tool.cache_directory-export-version-directory-open'
+
+                        cache_directory/version_directory:
+                            widget: directory
+                            open_or_save: save
+                            name: 'Export Version Directory'
+                            name_chs: '导出版本目录'
+                            value: ''
+                            lock: True
+
+                        preview_export:
+                            widget: group
+                            name: 'Preview Export'
+                            name_chs: '预览导出'
+
+                        preview_export/playblast:
+                            widget: button
+                            name: 'Playblast'
+                            name_chs: '拍屏'
+                            icon: 'tool/maya/playblast'
+                            join_to_next: True
+
+                        preview_export/playblast_subprocess:
+                            widget: button
+                            name: 'Playblast (subprocess)'
+                            name_chs: '拍屏（子进程）'
+                            icon: 'tool/maya/playblast'
+
+                        preview_export/playblast_backstage:
+                            widget: button
+                            name: 'Playblast (backstage)'
+                            name_chs: '拍屏（后台）'
+                            icon: 'tool/maya/playblast'
+                            join_to_next: True
+
+                        preview_export/playblast_farm:
+                            widget: button
+                            name: 'Playblast (farm)'
+                            name_chs: '拍屏（农场）'
+                            icon: 'tool/maya/playblast'
+
+                        cache_export:
+                            widget: group
+                            name: 'Cache Export'
+                            name_chs: '缓存导出'
+
+                        cache_export/export_cloth_cache:
+                            widget: button
+                            name: 'Export Cache'
+                            name_chs: '导出CFX布料'
+                            icon: 'upload'
+                            join_to_next: True
+
+                        cache_export/export_cloth_cache_subprocess:
+                            widget: button
+                            name: 'Export Cache (subprocess)'
+                            name_chs: '导出CFX布料（子进程）'
+                            icon: 'upload'
+
+                        cache_export/export_cloth_cache_as_backstage:
+                            widget: button
+                            name: 'Export Cache (backstage)'
+                            name_chs: '导出CFX布料（后台）'
+                            icon: 'upload'
+                            join_to_next: True
+
+                        cache_export/export_cloth_cache_as_farm:
+                            widget: button
+                            name: 'Export Cache (farm)'
+                            name_chs: '导出CFX布料（农场）'
+                            icon: 'upload'
 
         gnl:
-            options:
-                name: 'Options'
-                name_chs: '选项'
+            basic:
+                name: 'basic'
+                name_chs: '基础'
 
-                parameters: {}
+                tool_tip:
+                    |-
+                    To be supplemented.
+
+                tool_tip_chs:
+                    |-
+                    待补充。
+
+                options:
+                    name: 'Options'
+                    name_chs: '选项'
+
+                    parameters: {}
 
     task_release:
         tab:

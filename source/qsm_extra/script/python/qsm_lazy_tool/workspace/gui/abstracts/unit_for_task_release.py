@@ -38,9 +38,9 @@ class AbsGuiNodeOptForTaskRelease(_GuiBaseOpt):
 
 
 class AbsPrxToolsetForTaskRelease(gui_prx_widgets.PrxBaseUnit):
-    UNIT_KEY = None
+    GUI_KEY = None
 
-    GUI_NODE_OPT_CLS = None
+    GUI_RESOURCE_VIEW_CLS = None
 
     def on_validation(self):
         pass
@@ -92,18 +92,18 @@ class AbsPrxToolsetForTaskRelease(gui_prx_widgets.PrxBaseUnit):
         self._prx_h_splitter = gui_prx_widgets.PrxHSplitter()
         prx_v_sca.add_widget(self._prx_h_splitter)
 
-        self._gui_node_opt = self.GUI_NODE_OPT_CLS(self._window, self, self._session)
+        self._gui_resource_view_opt = self.GUI_RESOURCE_VIEW_CLS(self._window, self, self._session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             self._window.choice_name(
-                self._window._configure.get('build.{}.{}.options'.format(self._page.PAGE_KEY, self.UNIT_KEY))
+                self._window._configure.get('build.{}.options'.format(self._gui_key_path))
             )
         )
         self._prx_h_splitter.add_widget(self._prx_options_node)
 
         self._prx_options_node.build_by_data(
             self._window._configure.get(
-                'build.{}.{}.options.parameters'.format(self._page.PAGE_KEY, self.UNIT_KEY)
+                'build.{}.options.parameters'.format(self._gui_key_path)
             ),
         )
 
@@ -118,7 +118,7 @@ class AbsPrxToolsetForTaskRelease(gui_prx_widgets.PrxBaseUnit):
         self._validation_qt_button._set_name_text_(
             gui_core.GuiUtil.choice_name(
                 self._window._language,
-                self._window._configure.get('build.{}.buttons.validation'.format(self._page.PAGE_KEY))
+                self._window._configure.get('build.{}.buttons.validation'.format(self._page._gui_key_path))
             )
         )
         self._validation_qt_button.press_clicked.connect(self.on_validation)
@@ -128,7 +128,7 @@ class AbsPrxToolsetForTaskRelease(gui_prx_widgets.PrxBaseUnit):
         self._release_qt_button._set_name_text_(
             gui_core.GuiUtil.choice_name(
                 self._window._language,
-                self._window._configure.get('build.{}.buttons.release'.format(self._page.PAGE_KEY))
+                self._window._configure.get('build.{}.buttons.release'.format(self._page._gui_key_path))
             )
         )
         self._release_qt_button.press_clicked.connect(self.on_release)
@@ -140,10 +140,12 @@ class AbsPrxToolsetForTaskRelease(gui_prx_widgets.PrxBaseUnit):
             scene_src_path_pre = self._scene_src_qt_input._get_value_()
             self._scene_src_qt_input._set_entry_enable_(False)
             if scene_path != scene_src_path_pre:
-                self._task_release_opt = task_session.generate_task_release_opt()
-                self._scene_src_qt_input._set_value_(scene_path)
+                task_release_opt = task_session.generate_task_release_opt()
+                if task_release_opt is not None:
+                    self._task_release_opt = task_release_opt
+                    self._scene_src_qt_input._set_value_(scene_path)
 
             # refresh all time
-            self._gui_node_opt.do_gui_refresh_all()
+            self._gui_resource_view_opt.do_gui_refresh_all()
         else:
             self._task_release_opt = None

@@ -1,4 +1,7 @@
 roots:
+    disorder:
+        windows: 'X:'
+
     source:
         windows: 'Z:/projects'
 
@@ -9,6 +12,7 @@ roots:
         windows: 'Z:/projects'
 
 spaces:
+    disorder : 'disorder'
     source: 'source'
     release: 'release'
     temporary: 'temporary'
@@ -24,14 +28,17 @@ patterns:
         task-version-name: '{asset}.{step}.{task}.v{version}'
         task_unit-version-name: '{asset}.{step}.{task}.{task_unit}.v{version}'
 
+        disorder:
+            rig_scene-maya-file: '{root_disorder}/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
+
         source:
             dir: '{root_source}/{project}/{space}/assets/{role}/{asset}'
             # task
             task-dir: '<.dir>/user.{artist}/{step}.{task}'
             task_unit-dir: '<.task-dir>/{task_unit}'
             # files
-            scene_src-maya-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
-            scene_src-maya-thumbnail-file: '<.task_unit-dir>/maya/.thumbnails/<..task_unit-version-name>.jpg'
+            maya-scene_src-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
+            maya-thumbnail-file: '<.task_unit-dir>/maya/.thumbnails/<..task_unit-version-name>.jpg'
 
         release:
             dir: '{root_release}/{project}/QSM/{space}/assets/{role}/{asset}'
@@ -40,13 +47,11 @@ patterns:
             # task version
             task_version-dir: '<.task-dir>/<..task-version-name>'
             # files
-            scene_src-maya-file: '<.task_version-dir>/source/{asset}.ma'
-            preview-movie-file: '<.task_version-dir>/preview/<..task-version-name>.mov'
+            maya-scene_src-file: '<.task_version-dir>/source/{asset}.ma'
+            preview-file: '<.task_version-dir>/preview/<..task-version-name>.mov'
 
-            scene-maya-file: '<.task_version-dir>/maya/{asset}.ma'
+            maya-scene-file: '<.task_version-dir>/maya/{asset}.ma'
             connect_map-json-file: '<.task_version-dir>/json/{asset}.connect_map.json'
-
-            shit_rig_scene-maya-file: '{root_release}/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
 
         temporary:
             dir: '{root_temporary}/{project}/source/assets/{role}/{asset}'
@@ -57,16 +62,20 @@ patterns:
         task-version-name: '{shot}.{step}.{task}.v{version}'
         task_unit-version-name: '{shot}.{step}.{task}.{task_unit}.v{version}'
 
+        disorder:
+            animation_scene-file: '{root_disorder}/{project}/{episode}/{sequence}/动画/通过文件/{shot}.ma'
+
         source:
             dir: '{root_source}/{project}/{space}/shots/{sequence}/{shot}'
             # task
             task-dir: '<.dir>/user.{artist}/{step}.{task}'
             task_unit-dir: '<.task-dir>/{task_unit}'
             # files
-            scene_src-maya-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
-            scene_src-maya-thumbnail-file: '<.task_unit-dir>/maya/.thumbnails/<..task_unit-version-name>.jpg'
+            maya-scene_src-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
+            maya-thumbnail-file: '<.task_unit-dir>/maya/.thumbnails/<..task_unit-version-name>.jpg'
+            # directories
+            maya-cache-dir: '<.task_unit-dir>/maya/caches'
+            maya-cloth_cache-dir: '<.task_unit-dir>/maya/cloth_caches'
 
         release:
             dir: '{root_release}/{project}/{space}/shots/{sequence}/{shot}'
-
-            shit_animation_scene-file: '{root_release}/{project}/{episode}/{sequence}/动画/通过文件/{shot}.ma'

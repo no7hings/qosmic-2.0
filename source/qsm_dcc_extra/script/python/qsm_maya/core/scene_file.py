@@ -158,7 +158,7 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
         )
     
     @classmethod
-    def export_file(cls, file_path, location=None, keep_reference=False):
+    def export_file(cls, file_path, location=None, keep_reference=False, locations_extend=None):
         kwargs = dict(
             type=cls.get_file_type(file_path),
             options='v=0;',
@@ -167,10 +167,15 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
             # keep reference
             preserveReferences=keep_reference,
         )
-        selected_mark = []
+        sel_mask = []
         if location is not None:
-            selected_mark = cmds.ls(selection=1, long=1) or []
+            sel_mask = cmds.ls(selection=1, long=1) or []
             cmds.select(location)
+            if locations_extend is not None:
+                for i in locations_extend:
+                    if cmds.objExists(i):
+                        cmds.select(i, noExpand=1, add=1)
+
             kwargs['exportSelected'] = True
         else:
             kwargs['exportAll'] = True
@@ -178,8 +183,8 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
         bsc_storage.StgFileOpt(file_path).create_directory()
         results = cmds.file(file_path, **kwargs)
         if 'exportSelected' in kwargs:
-            if selected_mark:
-                cmds.select(selected_mark)
+            if sel_mask:
+                cmds.select(sel_mask)
             else:
                 cmds.select(clear=1)
         return results

@@ -373,7 +373,7 @@ class DynamicGpuCacheGenerate(object):
 
     def __init__(self, namespace):
         self._namespace = namespace
-        self._reference_namespace_query = _mya_core.ReferenceNamespacesCache()
+        self._reference_namespace_query = _mya_core.ReferencesCache()
         self._resource = _core.AdvRigAsset(self._namespace)
         self._root = self._resource.get_root()
         self._geometry_location = self._resource.find_geometry_location()

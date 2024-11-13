@@ -44,7 +44,7 @@ class AbsPrxSubPageForMotionRegister(
     gui_prx_widgets.PrxBaseSubPage,
     _AbsRegister
 ):
-    PAGE_KEY = 'motion'
+    GUI_KEY = 'motion'
 
     def __init__(self, window, session, sub_window, *args, **kwargs):
         super(AbsPrxSubPageForMotionRegister, self).__init__(window, session, sub_window, *args, **kwargs)
@@ -56,13 +56,13 @@ class AbsPrxSubPageForMotionRegister(
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             self._sub_window.choice_name(
-                self._sub_window._configure.get('build.{}.options'.format(self.PAGE_KEY))
+                self._sub_window._configure.get('build.{}.options'.format(self.GUI_KEY))
             )
         )
         prx_sca.add_widget(self._prx_options_node)
 
         self._prx_options_node.build_by_data(
-            self._sub_window._configure.get('build.{}.options.parameters'.format(self.PAGE_KEY)),
+            self._sub_window._configure.get('build.{}.options.parameters'.format(self.GUI_KEY)),
         )
 
         self._prx_tool_group = gui_prx_widgets.PrxHToolGroup()
@@ -70,7 +70,7 @@ class AbsPrxSubPageForMotionRegister(
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
             gui_core.GuiUtil.choice_name(
-                self._sub_window._language, self._sub_window._configure.get('build.{}.filter'.format(self.PAGE_KEY))
+                self._sub_window._language, self._sub_window._configure.get('build.{}.filter'.format(self.GUI_KEY))
             )
         )
         qt_widget_0 = gui_qt_widgets.QtTranslucentWidget()
@@ -221,13 +221,13 @@ class _AbsPrxPageForAnyRegister(
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             self._sub_window.choice_name(
-                self._sub_window._configure.get('build.{}.options'.format(self.PAGE_KEY))
+                self._sub_window._configure.get('build.{}.options'.format(self.GUI_KEY))
             )
         )
         prx_sca.add_widget(self._prx_options_node)
 
         self._prx_options_node.build_by_data(
-            self._sub_window._configure.get('build.{}.options.parameters'.format(self.PAGE_KEY)),
+            self._sub_window._configure.get('build.{}.options.parameters'.format(self.GUI_KEY)),
         )
 
         self._prx_tool_group = gui_prx_widgets.PrxHToolGroup()
@@ -235,7 +235,7 @@ class _AbsPrxPageForAnyRegister(
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
             gui_core.GuiUtil.choice_name(
-                self._sub_window._language, self._sub_window._configure.get('build.{}.filter'.format(self.PAGE_KEY))
+                self._sub_window._language, self._sub_window._configure.get('build.{}.filter'.format(self.GUI_KEY))
             )
         )
         qt_widget_0 = gui_qt_widgets.QtTranslucentWidget()
@@ -291,7 +291,7 @@ class _AbsPrxPageForAnyRegister(
 
 
 class AbsPrxSubPageForVideoRegister(_AbsPrxPageForAnyRegister):
-    PAGE_KEY = 'video'
+    GUI_KEY = 'video'
 
     def __init__(self, window, session, sub_window, *args, **kwargs):
         super(AbsPrxSubPageForVideoRegister, self).__init__(window, session, sub_window, *args, **kwargs)
@@ -330,7 +330,7 @@ class AbsPrxSubPageForVideoRegister(_AbsPrxPageForAnyRegister):
 
 
 class AbsPrxSubPageForAudioRegister(_AbsPrxPageForAnyRegister):
-    PAGE_KEY = 'audio'
+    GUI_KEY = 'audio'
 
     def __init__(self, window, session, sub_window, *args, **kwargs):
         super(AbsPrxSubPageForAudioRegister, self).__init__(window, session, sub_window, *args, **kwargs)

@@ -11,11 +11,11 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_gui.proxy.widgets as qsm_gui_prx_widgets
 
-import qsm_general.wsp_task as qsm_dcc_wsp_task
+import qsm_wsp_task as qsm_dcc_wsp_task
 
 
 class AbsPrxPageForTaskRelease(gui_prx_widgets.PrxBasePage):
-    PAGE_KEY = 'task_release'
+    GUI_KEY = 'task_release'
 
     TASK_PARSE_CLS = None
 

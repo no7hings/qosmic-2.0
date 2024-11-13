@@ -169,7 +169,7 @@ class AssetMeshCountData(object):
 class AssetMeshCountGenerate(object):
     def __init__(self, namespace):
         self._namespace = namespace
-        self._file_path = qsm_mya_core.ReferenceNamespacesCache().get_file(self._namespace)
+        self._file_path = qsm_mya_core.ReferencesCache().get_file(self._namespace)
 
     def generate(self):
         return dict(
@@ -185,7 +185,7 @@ class AssetMeshCountGenerate(object):
     @classmethod
     def test(cls):
         namespace = 'test_gpu_assembly1'
-        file_path = qsm_mya_core.ReferenceNamespacesCache().get_file(namespace)
+        file_path = qsm_mya_core.ReferencesCache().get_file(namespace)
         _asset_general.ProcessUtils.pre_process(namespace, file_path)
         data = cls(namespace).generate()
         print data['mesh_count']['gpu_caches']

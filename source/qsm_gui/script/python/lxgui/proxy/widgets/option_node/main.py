@@ -182,9 +182,9 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
         widget_name = variants.get('label') or variants.get('name')
         tool_tip_ = variants.get('tool_tip')
 
-        ui_language = _gui_core.GuiUtil.get_language()
+        gui_language = _gui_core.GuiUtil.get_language()
 
-        if ui_language == _gui_core.GuiLanguage.CHS:
+        if gui_language == _gui_core.GuiLanguage.CHS:
             if 'name_chs' in variants:
                 widget_name = variants['name_chs']
             if 'tool_tip_chs' in variants:
@@ -419,7 +419,7 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
             value_options = variants.get('options')
             if value_options:
                 value_names = variants.get('option_names')
-                if ui_language == _gui_core.GuiLanguage.CHS:
+                if gui_language == _gui_core.GuiLanguage.CHS:
                     if 'option_names_chs' in variants:
                         value_names = variants['option_names_chs']
 
@@ -452,7 +452,7 @@ class PrxOptionsNode(_prx_abstracts.AbsPrxWidget):
             )
             value_options = variants.get('options')
             value_names = variants.get('labels')
-            if ui_language == _gui_core.GuiLanguage.CHS:
+            if gui_language == _gui_core.GuiLanguage.CHS:
                 if 'option_names_chs' in variants:
                     value_names = variants['option_names_chs']
 

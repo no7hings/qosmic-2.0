@@ -25,19 +25,19 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
         super(AbsPrxPanelForWorkspace, self).__init__(window, session, *args, **kwargs)
 
     def gui_setup_fnc(self):
-        self._prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
-        self.add_widget(self._prx_tab_tool_box)
+        self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
+        self.add_widget(self._page_prx_tab_tool_box)
 
         self.gui_setup_pages_for(['task_manager', 'task_tool', 'task_release'])
 
-        self._prx_tab_tool_box.set_history_key('lazy-workspace.{}-page'.format(self.RESOURCE_BRANCH))
-        self._prx_tab_tool_box.load_history()
+        self._page_prx_tab_tool_box.set_history_key('lazy-workspace.{}-page'.format(self.RESOURCE_BRANCH))
+        self._page_prx_tab_tool_box.load_history()
 
         self.register_window_close_method(
             self.gui_close_fnc
         )
 
-        self._prx_tab_tool_box.connect_current_changed_to(
+        self._page_prx_tab_tool_box.connect_current_changed_to(
             self.do_gui_refresh_all
         )
 
@@ -48,7 +48,7 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
             v.gui_page_setup_post_fnc()
 
     def gui_close_fnc(self):
-        self._prx_tab_tool_box.save_history()
+        self._page_prx_tab_tool_box.save_history()
 
     def gui_setup_pages_for(self, page_keys):
         self._page_dict = {}
@@ -59,7 +59,7 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
 
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()
 
-            self._prx_tab_tool_box.add_widget(
+            self._page_prx_tab_tool_box.add_widget(
                 i_prx_sca,
                 key=i_page_key,
                 name=gui_core.GuiUtil.choice_name(
@@ -76,6 +76,6 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
             i_prx_sca.add_widget(i_prx_page)
 
     def do_gui_refresh_all(self):
-        page = self.gui_find_page(self._prx_tab_tool_box.get_current_key())
+        page = self.gui_find_page(self._page_prx_tab_tool_box.get_current_key())
         if page is not None:
             page.do_gui_refresh_all()

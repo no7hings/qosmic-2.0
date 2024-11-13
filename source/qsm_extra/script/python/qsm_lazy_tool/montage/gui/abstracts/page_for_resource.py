@@ -31,7 +31,7 @@ import lxgui.qt.graph_widgets as gui_qt_graphs
 class AbsPrxPageForResource(gui_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
 
-    PAGE_KEY = 'resource'
+    GUI_KEY = 'resource'
 
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxPageForResource, self).__init__(*args, **kwargs)

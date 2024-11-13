@@ -1,5 +1,5 @@
 # coding:utf-8
-import qsm_general.wsp_task as qsm_dcc_wsp_task
+import qsm_wsp_task as qsm_dcc_wsp_task
 
 from ..abstracts import page_for_task_tool as _abs_page_for_task_tool
 
@@ -11,8 +11,8 @@ class PrxPageForAssetTaskTool(_abs_page_for_task_tool.AbsPrxPageForTaskTool):
 
     UNIT_CLASS_DICT = {
         # general
-        _unit_for_task_tool.PrxToolsetForGnlTool.UNIT_KEY:
-        _unit_for_task_tool.PrxToolsetForGnlTool,
+        _unit_for_task_tool.PrxUnitForGnlTool.GUI_KEY:
+        _unit_for_task_tool.PrxUnitForGnlTool,
     }
 
     def __init__(self, window, session, *args, **kwargs):
@@ -24,8 +24,8 @@ class PrxPageForShotTaskTool(_abs_page_for_task_tool.AbsPrxPageForTaskTool):
 
     UNIT_CLASS_DICT = {
         # general
-        _unit_for_task_tool.PrxToolsetForGnlTool.UNIT_KEY:
-        _unit_for_task_tool.PrxToolsetForGnlTool,
+        _unit_for_task_tool.PrxUnitForGnlTool.GUI_KEY:
+        _unit_for_task_tool.PrxUnitForGnlTool,
     }
 
     def __init__(self, window, session, *args, **kwargs):

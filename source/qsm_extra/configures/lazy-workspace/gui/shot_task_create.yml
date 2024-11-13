@@ -1,0 +1,98 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-*'
+    #
+    gui:
+        name: 'Task Create'
+        name_chs: '任务创建'
+        group_name: 'General(s)'
+        #
+        icon_name: 'lazy/workspace'
+        tool_tip:
+            |-
+            To be supplemented.
+        #
+        tool_tip_chs:
+            |-
+            待补充。
+
+        size: [480, 320]
+
+build:
+    main:
+        buttons:
+            apply_and_close:
+                name: 'Apply and Close'
+                name_chs: '应用并关闭'
+
+            apply:
+                name: 'Apply'
+                name_chs: '应用'
+
+            close:
+                name: 'Name'
+                name_chs: '关闭'
+
+    cfx_cloth:
+        tab:
+            name: 'CFX Cloth'
+            name_chs: '布料解算'
+
+            tool_tip:
+                |-
+                To be supplemented.
+
+            tool_tip_chs:
+                |-
+                待补充。
+
+        options:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+                upstream_scene:
+                    widget: file
+                    open_or_save: open
+                    name: 'Upstream Scene'
+                    name_chs: '上游文件'
+
+                task_unit:
+                    widget: enumerate
+                    name: 'Task Unit'
+                    name_chs: '任务单元'
+                    options: ['main', 'test']
+                    default: 'main'
+
+    cfx_dressing:
+        tab:
+            name: 'CFX Dressing'
+            name_chs: '布料整理'
+
+            tool_tip:
+                |-
+                To be supplemented.
+
+            tool_tip_chs:
+                |-
+                待补充。
+
+        options:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+                upstream_scene:
+                    widget: file
+                    open_or_save: open
+                    name: 'Upstream Scene'
+                    name_chs: '上游文件'
+
+                task_unit:
+                    widget: enumerate
+                    name: 'Task Unit'
+                    name_chs: '任务单元'
+                    options: ['main', 'test']
+                    default: 'main'

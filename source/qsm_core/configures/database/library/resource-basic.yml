@@ -241,7 +241,7 @@ patterns:
     # scene
     scene-dir: '<.version-dir>/scene'
     scene-maya-dir: '<.scene-dir>/maya'
-    scene-maya-file: '<.scene-maya-dir>/{resource}.ma'
+    maya-scene-file: '<.scene-maya-dir>/{resource}.ma'
     scene-maya-src-dir: '<.scene-dir>/maya/source'
     scene-maya-src-file: '<.scene-maya-src-dir>/{resource}.ma'
     # proxy

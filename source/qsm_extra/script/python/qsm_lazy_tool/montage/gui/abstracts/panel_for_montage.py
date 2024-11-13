@@ -28,7 +28,7 @@ class AbsPrxPanelForMontage(gui_prx_widgets.PrxBasePanel):
         self.add_widget(self._page_prx_tab_tool_box)
 
         for i_cls in self.PAGE_CLASSES:
-            i_page_key = i_cls.PAGE_KEY
+            i_page_key = i_cls.GUI_KEY
 
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()
             self._page_prx_tab_tool_box.add_widget(

@@ -32,7 +32,7 @@ import qsm_gui.proxy.widgets as qsm_gui_prx_widgets
 
 class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
 
-    PAGE_KEY = 'splicing'
+    GUI_KEY = 'splicing'
 
     def _do_dcc_register_all_script_jobs(self):
         pass
@@ -95,7 +95,7 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
         self._asset_load_qt_button.setFixedWidth(64)
         self._asset_load_qt_button._set_name_text_(
             self._window.choice_name(
-                self._window._configure.get('build.{}.buttons.create'.format(self.PAGE_KEY))
+                self._window._configure.get('build.{}.buttons.create'.format(self.GUI_KEY))
             )
         )
         self._asset_load_qt_button.press_clicked.connect(self._on_dcc_load_asset)

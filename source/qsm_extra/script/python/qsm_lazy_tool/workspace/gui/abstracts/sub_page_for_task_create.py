@@ -11,13 +11,17 @@ import lxgui.qt.widgets as gui_qt_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_general.wsp_task as qsm_dcc_wsp_task
+import qsm_wsp_task as qsm_dcc_wsp_task
 
 
 class AbsPrxSubPageForAssetTaskCreate(gui_prx_widgets.PrxBaseSubPage):
-    PAGE_KEY = None
+    GUI_KEY = None
 
     RESOURCE_BRANCH = None
+
+    STEP = None
+
+    TASK = None
 
     def _on_apply(self):
         pass
@@ -31,6 +35,7 @@ class AbsPrxSubPageForAssetTaskCreate(gui_prx_widgets.PrxBaseSubPage):
 
     def __init__(self, window, session, sub_window, *args, **kwargs):
         super(AbsPrxSubPageForAssetTaskCreate, self).__init__(window, session, sub_window, *args, **kwargs)
+
         self.gui_page_setup_fnc()
 
     def gui_page_setup_fnc(self):
@@ -39,13 +44,13 @@ class AbsPrxSubPageForAssetTaskCreate(gui_prx_widgets.PrxBaseSubPage):
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             self._sub_window.choice_name(
-                self._sub_window._configure.get('build.{}.options'.format(self.PAGE_KEY))
+                self._sub_window._configure.get('build.{}.options'.format(self.GUI_KEY))
             )
         )
         prx_sca.add_widget(self._prx_options_node)
 
         self._prx_options_node.build_by_data(
-            self._sub_window._configure.get('build.{}.options.parameters'.format(self.PAGE_KEY)),
+            self._sub_window._configure.get('build.{}.options.parameters'.format(self.GUI_KEY)),
         )
 
         bottom_tool_bar = gui_prx_widgets.PrxHToolBar()

@@ -35,6 +35,9 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
 
         self._qt_tree_widget = gui_qt_view_widgets.QtTreeWidget()
         self._page._prx_v_splitter.add_widget(self._qt_tree_widget)
+        self._qt_tree_widget._view_model.set_item_expand_record_enable(True)
+
+        self._qt_tree_widget.refresh.connect(self.gui_load_tasks)
 
     def gui_load_tasks(self):
         def cache_fnc_():
@@ -73,7 +76,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
 
         self._task_unit_path_tmp = None
 
-        entity_properties = self._page._entity_properties
+        entity_properties = self._page._resource_properties
 
         if entity_properties is None:
             return
@@ -233,6 +236,8 @@ class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
 
         self._qt_list_widget._view_model.set_item_frame_size(190, 100)
 
+        self._qt_list_widget.refresh.connect(self.gui_load_task_scenes)
+
     def gui_load_task_scenes(self):
         def cache_fnc_():
             _task_scene_ptn_opt = self._page._task_parse.generate_resource_source_task_scene_src_pattern_opt_for(**entity_properties)
@@ -318,7 +323,7 @@ class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
 
         qt_item._item_model.register_press_dbl_click_fnc(press_dbl_click_fnc_)
 
-    def do_gui_refresh_task_scene(self, properties):
+    def do_gui_refresh_task_scene_for(self, properties):
         path = self._page._task_parse.to_source_scene_src_path(**properties)
         qt_item = self._qt_list_widget._view_model.find_item(path)
         if qt_item is not None:
@@ -347,7 +352,7 @@ class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
 
 
 class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
-    PAGE_KEY = 'task_manager'
+    GUI_KEY = 'task_manager'
 
     TASK_PARSE_CLS = None
 
@@ -375,7 +380,7 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
 
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxPageForTaskManager, self).__init__(window, session, *args, **kwargs)
-        self._entity_properties = {}
+        self._resource_properties = None
 
         self._task_parse = self.TASK_PARSE_CLS()
         self._task_session = None
@@ -397,15 +402,15 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
                 task_unit_path = task_session.task_unit_path
                 if task_unit_path in self._gui_task_opt.gui_get_all_task_unit_paths():
                     self.do_gui_refresh_task_unit(task_unit_path)
-                    self.do_gui_refresh_task_scene(properties)
+                    self.do_gui_refresh_task_scene_for(properties)
                 else:
                     self.do_gui_refresh_all_tasks()
     
     def do_gui_refresh_task_unit(self, task_unit_path):
         self._gui_task_opt.do_gui_refresh_task_unit(task_unit_path)
 
-    def do_gui_refresh_task_scene(self, properties):
-        self._gui_task_scene_opt.do_gui_refresh_task_scene(properties)
+    def do_gui_refresh_task_scene_for(self, properties):
+        self._gui_task_scene_opt.do_gui_refresh_task_scene_for(properties)
 
     def do_gui_refresh_all_tasks(self):
         self._gui_task_opt.gui_load_tasks()
@@ -425,7 +430,7 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
         if result:
             if result in options:
                 self._user = result
-                self._user_info_bubble._set_text_(self._user)
+                self._user_qt_info_bubble._set_text_(self._user)
 
     def _gui_add_main_tools(self):
         self._left_visible_swap_tool = gui_prx_widgets.PrxToggleButton()
@@ -435,21 +440,21 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
         self._left_visible_swap_tool.set_checked(True)
         self._left_visible_swap_tool.connect_check_toggled_to(self._on_gui_left_visible_swap)
 
-        self._user_switch_tool = gui_qt_widgets.QtIconPressButton()
-        self._main_prx_tool_box.add_widget(self._user_switch_tool)
-        self._user_switch_tool._set_name_text_('user switch')
-        self._user_switch_tool._set_icon_name_('users')
-        self._user_switch_tool.press_clicked.connect(self._on_gui_switch_user)
+        self._user_switch_qt_button = gui_qt_widgets.QtIconPressButton()
+        self._main_prx_tool_box.add_widget(self._user_switch_qt_button)
+        self._user_switch_qt_button._set_name_text_('user switch')
+        self._user_switch_qt_button._set_icon_name_('users')
+        self._user_switch_qt_button.press_clicked.connect(self._on_gui_switch_user)
 
-        self._user_info_bubble = gui_qt_widgets.QtInfoBubble()
-        self._main_prx_tool_box.add_widget(self._user_info_bubble)
-        self._user_info_bubble._set_style_(
-            self._user_info_bubble.Style.Frame
+        self._user_qt_info_bubble = gui_qt_widgets.QtInfoBubble()
+        self._main_prx_tool_box.add_widget(self._user_qt_info_bubble)
+        self._user_qt_info_bubble._set_style_(
+            self._user_qt_info_bubble.Style.Frame
         )
-        self._user_info_bubble._set_text_(self._user)
+        self._user_qt_info_bubble._set_text_(self._user)
 
     def _do_gui_refresh_resource_for(self, scan_resource_path):
-        self._entity_properties = None
+        self._resource_properties = None
         self._scan_resource_path = None
         self._resource_path = None
 
@@ -493,8 +498,11 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
             self._gui_task_opt.gui_restore()
 
     def _gui_show_task_create_window(self):
-        w = self._window.gui_generate_sub_panel_for('task_create')
-        w.show_window_auto()
+        if self._resource_properties:
+            w = self._window.gui_generate_sub_panel_for('task_create')
+            w.gui_setup(self._resource_properties)
+            w.do_gui_refresh_all()
+            w.show_window_auto()
 
     def gui_page_setup_fnc(self):
         self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
@@ -530,7 +538,7 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
         self._scan_resource_prx_input.add_widget(self._create_task_qt_button)
         self._create_task_qt_button._set_name_text_(
             self._window.choice_name(
-                self._window._configure.get('build.{}.buttons.create_task'.format(self.PAGE_KEY))
+                self._window._configure.get('build.{}.buttons.create_task'.format(self.GUI_KEY))
             )
         )
         self._create_task_qt_button._set_icon_name_('tool/create')
@@ -565,7 +573,7 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
         self._bottom_prx_tool_bar.add_widget(self._save_prx_button)
         self._save_prx_button.set_name(
             self._window.choice_name(
-                self._window._configure.get('build.{}.buttons.save'.format(self.PAGE_KEY))
+                self._window._configure.get('build.{}.buttons.save'.format(self.GUI_KEY))
             )
         )
         self._save_prx_button.set_icon_name('tool/save')
@@ -577,7 +585,7 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
         self._save_to_prx_button.set_action_enable(False)
         self._save_to_prx_button.set_name(
             self._window.choice_name(
-                self._window._configure.get('build.{}.buttons.save_to'.format(self.PAGE_KEY))
+                self._window._configure.get('build.{}.buttons.save_to'.format(self.GUI_KEY))
             )
         )
         self._save_to_prx_button.set_icon_name('tool/save-to')
@@ -589,7 +597,7 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
         self._save_as_prx_button.set_action_enable(False)
         self._save_as_prx_button.set_name(
             self._window.choice_name(
-                self._window._configure.get('build.{}.buttons.save_as'.format(self.PAGE_KEY))
+                self._window._configure.get('build.{}.buttons.save_as'.format(self.GUI_KEY))
             )
         )
         self._save_as_prx_button.set_icon_name('tool/save-as')
@@ -615,8 +623,8 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
         self._gui_task_scene_opt.do_gui_refresh_all()
 
     def gui_setup(self, entity_properties):
-        self._entity_properties = entity_properties
+        self._resource_properties = entity_properties
         self._gui_task_opt.gui_load_tasks()
 
-    def gui_get_entity_properties(self):
-        return self._entity_properties
+    def gui_get_resource_properties(self):
+        return self._resource_properties

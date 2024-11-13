@@ -75,10 +75,10 @@ class PrxSprcTaskWindow(
         self._subprocess_widgets = []
 
         if self._language == 'chs':
-            self._prx_tool_group.set_name('后台任务')
+            self._prx_tool_group.set_name('子进程任务')
             self._stop_and_close_prx_button.set_name('关闭')
         else:
-            self._prx_tool_group.set_name('Backstage Task')
+            self._prx_tool_group.set_name('Subprocess Task')
             self._stop_and_close_prx_button.set_name('Close')
 
     def _do_gui_stop(self):

@@ -1,5 +1,5 @@
 # coding:utf-8
-import qsm_general.wsp_task as qsm_dcc_wsp_task
+import qsm_wsp_task as qsm_dcc_wsp_task
 
 from ..abstracts import page_for_task_release as _abs_page_for_task_release
 
@@ -11,7 +11,7 @@ class PrxPageForAssetTaskRelease(_abs_page_for_task_release.AbsPrxPageForTaskRel
 
     UNIT_CLASS_DICT = {
         # general
-        _unit_for_task_release.PrxToolsetForGnlRelease.UNIT_KEY:
+        _unit_for_task_release.PrxToolsetForGnlRelease.GUI_KEY:
         _unit_for_task_release.PrxToolsetForGnlRelease
     }
 
@@ -24,7 +24,7 @@ class PrxPageForShotTaskRelease(_abs_page_for_task_release.AbsPrxPageForTaskRele
 
     UNIT_CLASS_DICT = {
         # general
-        _unit_for_task_release.PrxToolsetForGnlRelease.UNIT_KEY:
+        _unit_for_task_release.PrxToolsetForGnlRelease.GUI_KEY:
         _unit_for_task_release.PrxToolsetForGnlRelease
     }
 

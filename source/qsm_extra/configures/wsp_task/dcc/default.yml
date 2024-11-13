@@ -1,7 +1,7 @@
 dcc-asset-group:
     cfx_rig:
         master:
-            cfx:
+            cfx_rig:
                 cfx_output_geo_grp:
                     cfx_cloth_geo_grp: ''
                     cfx_appendix_geo_grp: ''
@@ -33,9 +33,9 @@ dcc-asset-group:
                 cfx_wrap_grp: ''
 
 dcc-shot-group:
-    cfx:
+    cfx_cloth:
         assets:
             animation:
-                cache: ''
+                ani_cache_grp: ''
             cfx:
-                cfx_rig: ''
+                cfx_rig_grp: ''

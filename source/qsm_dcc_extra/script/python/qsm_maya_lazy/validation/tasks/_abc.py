@@ -25,7 +25,7 @@ class AbsValidationTask(object):
 
     def __init__(self, namespace):
         self._namespace = namespace
-        self._file_path = qsm_mya_core.ReferenceNamespacesCache().get_file(namespace)
+        self._file_path = qsm_mya_core.ReferencesCache().get_file(namespace)
 
         self._validation_options = qsm_lzy_vld_core.DccValidationOptions(self.OPTION_KEY)
 

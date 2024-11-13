@@ -101,13 +101,13 @@ class AbsPrxSubPageForAnyAssign(
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             self._sub_window.choice_name(
-                self._sub_window._configure.get('build.{}.options'.format(self.PAGE_KEY))
+                self._sub_window._configure.get('build.{}.options'.format(self.GUI_KEY))
             )
         )
         prx_sca.add_widget(self._prx_options_node)
 
         self._prx_options_node.build_by_data(
-            self._sub_window._configure.get('build.{}.options.parameters'.format(self.PAGE_KEY)),
+            self._sub_window._configure.get('build.{}.options.parameters'.format(self.GUI_KEY)),
         )
 
         self._prx_tool_group = gui_prx_widgets.PrxHToolGroup()
@@ -115,7 +115,7 @@ class AbsPrxSubPageForAnyAssign(
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
             gui_core.GuiUtil.choice_name(
-                self._sub_window._language, self._sub_window._configure.get('build.{}.filter'.format(self.PAGE_KEY))
+                self._sub_window._language, self._sub_window._configure.get('build.{}.filter'.format(self.GUI_KEY))
             )
         )
         self._qt_tag_widget = gui_qt_vew_widgets.QtTagWidget()
@@ -157,7 +157,7 @@ class AbsPrxSubPageForAnyAssign(
 
 
 class AbsPrxSubPageForTypeAssign(AbsPrxSubPageForAnyAssign):
-    PAGE_KEY = 'type'
+    GUI_KEY = 'type'
 
     def __init__(self, window, session, sub_window, *args, **kwargs):
         super(AbsPrxSubPageForTypeAssign, self).__init__(window, session, sub_window, *args, **kwargs)
@@ -262,7 +262,7 @@ class AbsPrxSubPageForTypeAssign(AbsPrxSubPageForAnyAssign):
 
 
 class AbsPrxSubPageForTagAssign(AbsPrxSubPageForAnyAssign):
-    PAGE_KEY = 'tag'
+    GUI_KEY = 'tag'
 
     def __init__(self, window, session, sub_window, *args, **kwargs):
         super(AbsPrxSubPageForTagAssign, self).__init__(window, session, sub_window, *args, **kwargs)

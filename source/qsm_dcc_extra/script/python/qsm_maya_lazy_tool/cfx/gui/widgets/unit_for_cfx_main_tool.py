@@ -118,7 +118,7 @@ class ToolsetUnitForCfxRigExport(
 
                 namespaces = [x.namespace for x in resources]
 
-                task_name, scene_src_path, cmd_script = qsm_mya_tsk_cfx_scripts.CfxNClothCacheProcess.generate_task_args(
+                task_name, scene_src_path, cmd_script = qsm_mya_tsk_cfx_scripts.CfxNClothCacheProcess.generate_subprocess_args(
                     namespaces,
                     directory_path,
                     frame_range, frame_step, frame_offset, with_alembic_cache, with_geometry_cache
@@ -177,7 +177,7 @@ class ToolsetUnitForCfxRigExport(
 
                 namespaces = [x.namespace for x in resources]
 
-                option_hook = qsm_mya_tsk_cfx_scripts.CfxNClothCacheProcess.generate_deadline_job_args(
+                option_hook = qsm_mya_tsk_cfx_scripts.CfxNClothCacheProcess.generate_deadline_hook_option(
                     namespaces,
                     directory_path,
                     frame_range, frame_step, frame_offset, with_alembic_cache, with_geometry_cache

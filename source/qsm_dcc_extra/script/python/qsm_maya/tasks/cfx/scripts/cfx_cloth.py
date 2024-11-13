@@ -14,6 +14,8 @@ from .... import core as _mya_core
 
 from ....general import core as _gnl_core
 
+from ...general import core as _tsk_gnl_core
+
 from ....resource import core as _rsc_core
 
 from .. import core as _core
@@ -45,9 +47,9 @@ class CfxNClothCacheOpt(_rsc_core.AssetCacheOpt):
                 namespace=self._namespace
             )
 
-            mcx_path = _gnl_core.FilePatterns.CfxClothMcxFile.format(**options)
-            abc_path = _gnl_core.FilePatterns.CfxClothAbcFile.format(**options)
-            json_path = _gnl_core.FilePatterns.CfxClothJsonFile.format(**options)
+            mcx_path = _tsk_gnl_core.FilePatterns.CfxClothMcxFile.format(**options)
+            abc_path = _tsk_gnl_core.FilePatterns.CfxClothAbcFile.format(**options)
+            json_path = _tsk_gnl_core.FilePatterns.CfxClothJsonFile.format(**options)
 
             data = dict(
                 scene_file=_mya_core.SceneFile.get_current(),
@@ -142,7 +144,7 @@ class CfxNClothCacheProcess(object):
         self._with_geometry_cache = with_geometry_cache
 
     @classmethod
-    def generate_task_args(
+    def generate_subprocess_args(
         cls,
         namespaces, 
         directory_path,
@@ -152,7 +154,7 @@ class CfxNClothCacheProcess(object):
         options = dict(
             directory=directory_path,
         )
-        scene_src_path = _gnl_core.FilePatterns.SceneSrcFile.format(**options)
+        scene_src_path = _tsk_gnl_core.FilePatterns.SceneSrcFile.format(**options)
         _mya_core.SceneFile.export_file(scene_src_path)
 
         task_name = '[cfx-cloth-cache][{}][{}]'.format(
@@ -174,7 +176,7 @@ class CfxNClothCacheProcess(object):
         return task_name, scene_src_path, cmd_script
 
     @classmethod
-    def generate_deadline_job_args(
+    def generate_deadline_hook_option(
         cls,
         namespaces,
         directory_path,
@@ -184,10 +186,10 @@ class CfxNClothCacheProcess(object):
         options = dict(
             directory=directory_path,
         )
-        scene_src_path = _gnl_core.FilePatterns.SceneSrcFile.format(**options)
+        scene_src_path = _tsk_gnl_core.FilePatterns.SceneSrcFile.format(**options)
         _mya_core.SceneFile.export_file(scene_src_path)
 
-        job_name = '[cfx-cloth-cache][{}][{}]'.format(
+        task_name = '[cfx-cloth-cache][{}][{}]'.format(
             bsc_storage.StgDirectoryOpt(directory_path).get_name(), '{}-{}'.format(*frame_range)
         )
 
@@ -201,7 +203,7 @@ class CfxNClothCacheProcess(object):
                 frame_offset=frame_offset,
                 with_alembic_cache=with_alembic_cache, with_geometry_cache=with_geometry_cache
             ),
-            job_name=job_name,
+            job_name=task_name,
             output_directory=directory_path
         )
 
@@ -211,7 +213,7 @@ class CfxNClothCacheProcess(object):
         options = dict(
             directory=self._directory_path,
         )
-        scene_src_path = _gnl_core.FilePatterns.SceneSrcFile.format(**options)
+        scene_src_path = _tsk_gnl_core.FilePatterns.SceneSrcFile.format(**options)
 
         _mya_core.SceneFile.new()
         if os.path.isfile(scene_src_path) is False:

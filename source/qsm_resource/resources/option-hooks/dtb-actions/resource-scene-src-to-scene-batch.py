@@ -29,7 +29,7 @@ def main(session):
                     _i_dtb_version_opt = version_opt_mapper[_i_scene_maya_src_file_path]
                     _i_scene_maya_src_file_opt = bsc_storage.StgFileOpt(_i_scene_maya_src_file_path)
                     #
-                    _i_scene_maya_file_path = _i_dtb_version_opt.get_file('scene-maya-file')
+                    _i_scene_maya_file_path = _i_dtb_version_opt.get_file('maya-scene-file')
 
                     if _use_update_mode is True:
                         if _i_scene_maya_src_file_opt.get_timestamp_is_same_to(_i_scene_maya_file_path) is True:

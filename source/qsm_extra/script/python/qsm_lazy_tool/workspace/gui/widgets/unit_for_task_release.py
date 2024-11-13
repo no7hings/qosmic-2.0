@@ -8,9 +8,9 @@ class GuiNodeOptForGnlRelease(_abs_unit_for_task_publish.AbsGuiNodeOptForTaskRel
 
 
 class PrxToolsetForGnlRelease(_abs_unit_for_task_publish.AbsPrxToolsetForTaskRelease):
-    UNIT_KEY = 'gnl'
+    GUI_KEY = 'gnl'
 
-    GUI_NODE_OPT_CLS = GuiNodeOptForGnlRelease
+    GUI_RESOURCE_VIEW_CLS = GuiNodeOptForGnlRelease
 
     def __init__(self, *args, **kwargs):
         super(PrxToolsetForGnlRelease, self).__init__(*args, **kwargs)

@@ -118,7 +118,7 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
 class PrxBasePage(_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
 
-    PAGE_KEY = None
+    GUI_KEY = None
 
     UNIT_CLASS_DICT = {}
     UNIT_CLASSES = []
@@ -128,6 +128,8 @@ class PrxBasePage(_prx_abstracts.AbsPrxWidget):
 
         self._window = window
         self._session = session
+
+        self._gui_key_path = self.GUI_KEY
 
         self._qt_layout = _qt_wgt_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout.setContentsMargins(*[0]*4)
@@ -156,7 +158,10 @@ class PrxBasePage(_prx_abstracts.AbsPrxWidget):
 class PrxBaseUnit(_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
 
-    UNIT_KEY = None
+    GUI_KEY = None
+
+    TOOLSET_CLASS_DICT = {}
+    TOOLSET_CLASSES = []
 
     def __init__(self, window, page, session, *args, **kwargs):
         super(PrxBaseUnit, self).__init__(*args, **kwargs)
@@ -165,9 +170,18 @@ class PrxBaseUnit(_prx_abstracts.AbsPrxWidget):
         self._page = page
         self._session = session
 
+        self._toolset_dict = {}
+
+        self._gui_key_path = '{}.{}'.format(
+            self._page.GUI_KEY, self.GUI_KEY
+        )
+
         self._qt_layout = _qt_wgt_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout.setContentsMargins(*[0]*4)
         self._qt_layout.setSpacing(2)
+
+    def gui_find_toolset(self, key):
+        return self._toolset_dict.get(key)
 
     def gui_unit_setup_fnc(self):
         pass
@@ -175,22 +189,52 @@ class PrxBaseUnit(_prx_abstracts.AbsPrxWidget):
     def do_gui_refresh_all(self):
         pass
 
+    def do_gui_refresh_toolsets(self):
+        pass
+
 
 class PrxVirtualUnit(object):
-    UNIT_KEY = None
+    GUI_KEY = None
 
     def __init__(self, window, page, session):
         self._window = window
         self._page = page
         self._session = session
 
+        self._gui_key_path = '{}.{}'.format(
+            self._page.GUI_KEY, self.GUI_KEY
+        )
+        
+    def do_gui_refresh_all(self):
+        pass
+
+
+class PrxBaseToolset(object):
+    GUI_KEY = None
+
+    def __init__(self, window, page, unit, session):
+        self._window = window
+        self._page = page
+        self._unit = unit
+        self._session = session
+
+        self._gui_key_path = '{}.{}.{}'.format(
+            self._page.GUI_KEY, self._unit.GUI_KEY, self.GUI_KEY
+        )
+
+
+    def do_gui_refresh_all(self):
+        pass
+
 
 class PrxBaseSubPanel(_window_base.PrxBaseWindow):
     CONFIGURE_KEY = None
 
-    SUB_PANEL_KEY = None
+    GUI_KEY = None
 
     SUB_PAGE_CLASS_DICT = {}
+
+    SUB_PAGE_KEYS = []
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxBaseSubPanel, self).__init__(*args, **kwargs)
@@ -280,11 +324,14 @@ class PrxBaseSubPanel(_window_base.PrxBaseWindow):
     def gui_find_page(self, key):
         return self._page_dict.get(key)
 
+    def do_gui_refresh_all(self):
+        pass
+
 
 class PrxBaseSubPage(_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
 
-    PAGE_KEY = None
+    GUI_KEY = None
 
     def __init__(self, window, session, sub_window, *args, **kwargs):
         super(PrxBaseSubPage, self).__init__(*args, **kwargs)
@@ -301,3 +348,6 @@ class PrxBaseSubPage(_prx_abstracts.AbsPrxWidget):
         """
         main setup function put here
         """
+
+    def do_gui_refresh_all(self):
+        pass

@@ -5,9 +5,9 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 
 class AbsPrxSubPanelForTaskCreate(gui_prx_widgets.PrxBaseSubPanel):
-    CONFIGURE_KEY = 'lazy-workspace/gui/task_create'
+    CONFIGURE_KEY = None
 
-    SUB_PANEL_KEY = 'task_create'
+    GUI_KEY = 'task_create'
 
     RESOURCE_BRANCH = None
 
@@ -15,18 +15,32 @@ class AbsPrxSubPanelForTaskCreate(gui_prx_widgets.PrxBaseSubPanel):
         super(AbsPrxSubPanelForTaskCreate, self).__init__(window, session, *args, **kwargs)
 
     def gui_setup_fnc(self):
-        self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
-        self.add_widget(self._page_prx_tab_tool_box)
+        self._sub_page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
+        self.add_widget(self._sub_page_prx_tab_tool_box)
 
-        self.gui_setup_pages_for([self.RESOURCE_BRANCH])
+        self.gui_setup_pages_for(self.SUB_PAGE_KEYS)
+
+        self._sub_page_prx_tab_tool_box.set_history_key(
+            'lazy-workspace.{}-toolset'.format(self.GUI_KEY)
+        )
+        self._sub_page_prx_tab_tool_box.load_history()
+
+        self._sub_page_prx_tab_tool_box.connect_current_changed_to(
+            self.do_gui_refresh_all
+        )
+
+    def gui_setup(self, resource_properties):
+        self._resource_properties = resource_properties
 
     def gui_setup_pages_for(self, page_keys):
+        self._page_dict = {}
+
         for i_page_key in page_keys:
             if i_page_key not in self.SUB_PAGE_CLASS_DICT:
                 continue
 
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()
-            self._page_prx_tab_tool_box.add_widget(
+            self._sub_page_prx_tab_tool_box.add_widget(
                 i_prx_sca,
                 key=i_page_key,
                 name=gui_core.GuiUtil.choice_name(
@@ -40,3 +54,9 @@ class AbsPrxSubPanelForTaskCreate(gui_prx_widgets.PrxBaseSubPanel):
             i_prx_page = self._sub_window.gui_generate_sub_page_for(i_page_key)
             self._page_dict[i_page_key] = i_prx_page
             i_prx_sca.add_widget(i_prx_page)
+
+    def do_gui_refresh_all(self):
+        key = self._sub_page_prx_tab_tool_box.get_current_key()
+        page = self._page_dict[key]
+        page.do_gui_refresh_all()
+        self._sub_page_prx_tab_tool_box.save_history()

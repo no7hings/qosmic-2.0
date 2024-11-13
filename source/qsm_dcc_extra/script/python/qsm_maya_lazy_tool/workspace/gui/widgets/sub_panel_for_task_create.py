@@ -5,10 +5,16 @@ from . import sub_page_for_task_create as _sub_page_for_task_create
 
 
 class PrxSubPanelForAssetTaskCreate(_sub_panel_for_task_create.AbsPrxSubPanelForTaskCreate):
+    CONFIGURE_KEY = 'lazy-workspace/gui/asset_task_create'
+
     SUB_PAGE_CLASS_DICT = {
-        _sub_page_for_task_create.PrxSubPageForAssetTaskCreate.PAGE_KEY:
-        _sub_page_for_task_create.PrxSubPageForAssetTaskCreate
+        _sub_page_for_task_create.PrxSubPageForAssetCfxRigCreate.GUI_KEY:
+        _sub_page_for_task_create.PrxSubPageForAssetCfxRigCreate
     }
+
+    SUB_PAGE_KEYS = [
+        _sub_page_for_task_create.PrxSubPageForAssetCfxRigCreate.GUI_KEY
+    ]
 
     RESOURCE_BRANCH = 'asset'
 
@@ -17,10 +23,19 @@ class PrxSubPanelForAssetTaskCreate(_sub_panel_for_task_create.AbsPrxSubPanelFor
 
 
 class PrxSubPanelForShotTaskCreate(_sub_panel_for_task_create.AbsPrxSubPanelForTaskCreate):
+    CONFIGURE_KEY = 'lazy-workspace/gui/shot_task_create'
+
     SUB_PAGE_CLASS_DICT = {
-        _sub_page_for_task_create.PrxSubPageForShotTaskCreate.PAGE_KEY:
-        _sub_page_for_task_create.PrxSubPageForShotTaskCreate
+        _sub_page_for_task_create.PrxSubPageForShotCfxClothCreate.GUI_KEY:
+        _sub_page_for_task_create.PrxSubPageForShotCfxClothCreate,
+        _sub_page_for_task_create.PrxSubPageForShotCfxDressingCreate.GUI_KEY:
+        _sub_page_for_task_create.PrxSubPageForShotCfxDressingCreate
     }
+
+    SUB_PAGE_KEYS = [
+        _sub_page_for_task_create.PrxSubPageForShotCfxClothCreate.GUI_KEY,
+        _sub_page_for_task_create.PrxSubPageForShotCfxDressingCreate.GUI_KEY
+    ]
 
     RESOURCE_BRANCH = 'shot'
 

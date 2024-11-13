@@ -18,7 +18,7 @@ class AdvRigAsset(_rsc_core.Asset):
 
     @classmethod
     def filter_namespaces(cls, namespaces):
-        return [x for x in namespaces if cls(x).get_root() is not None]
+        return [x for x in namespaces if cls(x).find_motion_location() is not None]
 
     def __init__(self, *args, **kwargs):
         super(AdvRigAsset, self).__init__(*args, **kwargs)

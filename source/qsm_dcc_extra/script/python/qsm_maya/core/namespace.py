@@ -3,20 +3,36 @@
 import maya.cmds as cmds
 
 
-class Namespace(object):
+class Namespace:
     @classmethod
     def extract_from_path(cls, path):
         """
         # etc. |A:B:C, is A:B
         """
-        return ':'.join(path.split('|')[-1].split(':')[:-1])
+        name = path.split('|')[-1]
+        if ':' in name:
+            return ':'.join(name.split(':')[:-1])
     
     @classmethod
     def extract_root_from_path(cls, path):
         """
         # etc. |A:B:C, is A
         """
-        return path.split('|')[-1].split(':')[0]
+        name = path.split('|')[-1]
+        if ':' in name:
+            return name.split(':')[0]
+
+    @classmethod
+    def extract_parent_from_path(cls, path):
+        """
+        # etc. |A:B:C, is A
+        """
+        name = path.split('|')[-1]
+        if ':' in name:
+            _ = name.split(':')
+            if len(_) > 2:
+                return ':'.join(_[:-2])
+            return _[0]
 
     @classmethod
     def is_exists(cls, namespace):
@@ -38,6 +54,18 @@ class Namespace(object):
     def find_nodes(cls, namespace, type_includes):
         _ = cls.get_nodes(namespace)
         return [x for x in _ if cmds.nodeType(x) in type_includes]
+
+    @classmethod
+    def find_match_nodes(cls, namespace, node_type, node_name=None):
+        if node_name is not None:
+            return cmds.ls('{}:{}'.format(namespace, node_name), type=node_type, long=1)
+        return cmds.ls('{}:*'.format(namespace), type=node_type, long=1)
+
+    @classmethod
+    def find_one(cls, namespace, node_name):
+        _ = cmds.ls('{}:{}'.format(namespace, node_name), long=1)
+        if _:
+            return _[0]
 
     # include instanced
     @classmethod
@@ -75,7 +103,7 @@ class Namespace(object):
             cmds.namespace(removeNamespace=namespace, mergeNamespaceWithRoot=1)
 
 
-class Namespaces(object):
+class Namespaces:
     @classmethod
     def extract_from_selection(cls):
         paths = cmds.ls(selection=1, long=1)
@@ -94,6 +122,18 @@ class Namespaces(object):
         list_ = []
         for i_path in paths:
             i_namespace = Namespace.extract_root_from_path(i_path)
+            if i_namespace:
+                # must keep order
+                if i_namespace not in list_:
+                    list_.append(i_namespace)
+        return list_
+
+    @classmethod
+    def extract_parents_from_selection(cls):
+        paths = cmds.ls(selection=1, long=1)
+        list_ = []
+        for i_path in paths:
+            i_namespace = Namespace.extract_parent_from_path(i_path)
             if i_namespace:
                 # must keep order
                 if i_namespace not in list_:

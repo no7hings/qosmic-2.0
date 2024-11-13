@@ -15,19 +15,19 @@ class AbsPrxPanelForValidation(gui_prx_widgets.PrxBasePanel):
     def gui_setup_fnc(self):
         self._page_dict = {}
 
-        self._prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
-        self.add_widget(self._prx_tab_tool_box)
+        self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
+        self.add_widget(self._page_prx_tab_tool_box)
 
         self.gui_setup_pages_for(['rig', 'rig_batch', 'scenery', 'scenery_batch'])
 
-        self._prx_tab_tool_box.set_history_key('lazy-validation.page_key_current')
-        self._prx_tab_tool_box.load_history()
+        self._page_prx_tab_tool_box.set_history_key('lazy-validation.page_key_current')
+        self._page_prx_tab_tool_box.load_history()
         self.register_window_close_method(
             self.gui_close_fnc
         )
 
     def gui_close_fnc(self):
-        self._prx_tab_tool_box.save_history()
+        self._page_prx_tab_tool_box.save_history()
 
     def gui_setup_pages_for(self, page_keys):
         for i_page_key in page_keys:
@@ -36,7 +36,7 @@ class AbsPrxPanelForValidation(gui_prx_widgets.PrxBasePanel):
 
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()
 
-            self._prx_tab_tool_box.add_widget(
+            self._page_prx_tab_tool_box.add_widget(
                 i_prx_sca,
                 key=i_page_key,
                 name=gui_core.GuiUtil.choice_name(

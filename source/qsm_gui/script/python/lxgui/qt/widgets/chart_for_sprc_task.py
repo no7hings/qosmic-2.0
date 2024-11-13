@@ -154,13 +154,15 @@ class QtChartForSprcTask(QtWidgets.QWidget):
                 prc_x, prc_y, p_b_w_a+int(p_b_w_b*(self._percent_pre+p_d)), prc_h
             )
 
+        percent_txt_w = QtGui.QFontMetrics(self._text_font).width(self._percent_text)+8
+
         self._main_text = self._generate_main_text_()
         main_txt_w = QtGui.QFontMetrics(self._text_font).width(self._main_text)+8
+        main_txt_w = min(main_txt_w, w-percent_txt_w-8)
         self._main_text_draw_rect.setRect(
             x+2, y+3, main_txt_w, h-6
         )
 
-        percent_txt_w = QtGui.QFontMetrics(self._text_font).width(self._percent_text)+8
         self._percent_text_draw_rect.setRect(
             w-percent_txt_w-2, y+3, percent_txt_w, h-6
         )

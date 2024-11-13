@@ -11,7 +11,7 @@ import qsm_maya.adv.core as qsm_mya_adv_core
 
 
 class PrxToolsetForImportMotion(gui_prx_widgets.PrxBaseUnit):
-    UNIT_KEY = 'import_motion'
+    GUI_KEY = 'import_motion'
 
     def get_dcc_character_args(self):
         results = []
@@ -51,7 +51,7 @@ class PrxToolsetForImportMotion(gui_prx_widgets.PrxBaseUnit):
             self._window.popup_message(
                 self._window.choice_message(
                     self._window._configure.get(
-                        'build.{}.messages.import_characters'.format(self._page.PAGE_KEY)
+                        'build.{}.messages.import_characters'.format(self._page.GUI_KEY)
                     )
                 )
             )
@@ -66,7 +66,7 @@ class PrxToolsetForImportMotion(gui_prx_widgets.PrxBaseUnit):
             gui_core.GuiUtil.choice_name(
                 self._window._language, self._window._configure.get(
                     'build.{}.units.{}.options'.format(
-                        self._page.PAGE_KEY, self.UNIT_KEY
+                        self._page.GUI_KEY, self.GUI_KEY
                     )
                 )
             )
@@ -75,7 +75,7 @@ class PrxToolsetForImportMotion(gui_prx_widgets.PrxBaseUnit):
         self._prx_options_node.build_by_data(
             self._window._configure.get(
                 'build.{}.units.{}.options.parameters'.format(
-                    self._page.PAGE_KEY, self.UNIT_KEY
+                    self._page.GUI_KEY, self.GUI_KEY
                 )
             ),
         )

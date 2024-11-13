@@ -172,14 +172,15 @@ class ReferenceOpt(_base.AbsNodeOpt):
         Reference.replace(self._path, file_path)
 
 
-class ReferenceNamespacesCache(object):
+class ReferencesCache(object):
+    INSTANCE = None
 
     def __init__(self):
         self._cache_dict = dict()
         self.do_update()
 
     def do_update(self):
-        _ = References.get_all_loaded(nested=True)
+        _ = References.get_all(nested=True)
         for i in _:
             i_namespace = Reference.get_namespace(i)
             self._cache_dict[i_namespace] = i

@@ -961,7 +961,7 @@ class DtbNodeOptForRscVersion(object):
         return {}
 
     def get_scene_maya_file(self):
-        p = self._dtb_opt.get_pattern(keyword='scene-maya-file')
+        p = self._dtb_opt.get_pattern(keyword='maya-scene-file')
         p_o = bsc_core.BscStgParseOpt(p)
         return p_o.update_variants_to(**self._variants).get_value()
 

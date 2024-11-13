@@ -139,6 +139,22 @@ class Transform(_node_for_dag.DagNode):
         non_intermediate_shapes = cls.get_all_non_intermediate_shapes(path)
         [cmds.delete(x) for x in shapes if x not in non_intermediate_shapes]
 
+    @classmethod
+    def is_visible(cls, path):
+        return cmds.getAttr(path+'.visibility')
+
+    @classmethod
+    def is_show(cls, path):
+        if cmds.getAttr(path+'.overrideEnabled') is True:
+            return cmds.getAttr('.overrideVisibility')
+        return cmds.getAttr(path+'.visibility')
+
+    @classmethod
+    def is_override_hidden(cls, path):
+        if cmds.getAttr(path+'.overrideEnabled') is True:
+            return not cmds.getAttr(path+'.overrideVisibility')
+        return False
+
 
 class TransformOpt(object):
     def __init__(self, transform_path):

@@ -45,11 +45,11 @@ class PrxPanelForAnimationTool(gui_prx_widgets.PrxBasePanel):
 
     # noinspection PyUnresolvedReferences
     def gui_setup_fnc(self):
-        self._prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
-        self.add_widget(self._prx_tab_tool_box)
+        self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
+        self.add_widget(self._page_prx_tab_tool_box)
         # rig
         rig_prx_sca = gui_prx_widgets.PrxVScrollArea()
-        self._prx_tab_tool_box.add_widget(
+        self._page_prx_tab_tool_box.add_widget(
             rig_prx_sca,
             key='rig',
             name=gui_core.GuiUtil.choice_name(
@@ -67,7 +67,7 @@ class PrxPanelForAnimationTool(gui_prx_widgets.PrxBasePanel):
         rig_prx_sca.add_widget(self._chr_and_prp_prx_page)
         # scenery
         scenery_prx_sca = gui_prx_widgets.PrxVScrollArea()
-        self._prx_tab_tool_box.add_widget(
+        self._page_prx_tab_tool_box.add_widget(
             scenery_prx_sca,
             key='scenery',
             name=gui_core.GuiUtil.choice_name(
@@ -88,11 +88,11 @@ class PrxPanelForAnimationTool(gui_prx_widgets.PrxBasePanel):
             lambda: self.do_gui_refresh_all(True)
         )
 
-        self._prx_tab_tool_box.connect_current_changed_to(
+        self._page_prx_tab_tool_box.connect_current_changed_to(
             self.do_gui_refresh_all
         )
-        self._prx_tab_tool_box.set_history_key('resource-manager.page_key_current')
-        self._prx_tab_tool_box.load_history()
+        self._page_prx_tab_tool_box.set_history_key('resource-manager.page_key_current')
+        self._page_prx_tab_tool_box.load_history()
 
         self.register_window_close_method(
             self.gui_close_fnc
@@ -108,14 +108,14 @@ class PrxPanelForAnimationTool(gui_prx_widgets.PrxBasePanel):
         self._scenery_prx_page.gui_page_setup_post_fnc()
 
     def do_gui_refresh_all(self, force=False):
-        key = self._prx_tab_tool_box.get_current_key()
+        key = self._page_prx_tab_tool_box.get_current_key()
         if key == 'rig':
             self._chr_and_prp_prx_page.do_gui_refresh_all(force)
         elif key == 'scenery':
             self._scenery_prx_page.do_gui_refresh_all(force)
 
     def gui_close_fnc(self):
-        self._prx_tab_tool_box.save_history()
+        self._page_prx_tab_tool_box.save_history()
         self._chr_and_prp_prx_page._page_prx_tab_tool_box.save_history()
         self._scenery_prx_page._page_prx_tab_tool_box.save_history()
 

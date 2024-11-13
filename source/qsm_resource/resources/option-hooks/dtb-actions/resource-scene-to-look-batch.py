@@ -82,7 +82,7 @@ def main(session):
                 #
                 _i_dtb_version = _i_dtb_resource_opt.get_as_node('version')
                 _i_dtb_version_opt = bsc_database.DtbNodeOptForRscVersion(dtb_opt, _i_dtb_version)
-                _i_scene_maya_file_path = _i_dtb_version_opt.get_exists_file('scene-maya-file')
+                _i_scene_maya_file_path = _i_dtb_version_opt.get_exists_file('maya-scene-file')
                 if _i_scene_maya_file_path:
                     _i_types = _i_dtb_version_opt.get_types()
                     _dict[_i_scene_maya_file_path] = _i_dtb_version_opt

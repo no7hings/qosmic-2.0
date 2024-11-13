@@ -235,8 +235,14 @@ class TreeItemModel(_item_base.AbsItemModel):
     def _update_name(self, text):
         self._item.setText(0, text)
 
-    def set_expanded(self, boolean):
-        self._item.setExpanded(boolean)
+    def set_expanded(self, boolean, use_record=True):
+        if use_record is True:
+            widget = self._item.treeWidget()
+            self._item.setExpanded(
+                widget._view_model._data.item_expand_record.data.get(self._data.path.text, boolean)
+            )
+        else:
+            self._item.setExpanded(boolean)
 
     # select
     def focus_select(self):

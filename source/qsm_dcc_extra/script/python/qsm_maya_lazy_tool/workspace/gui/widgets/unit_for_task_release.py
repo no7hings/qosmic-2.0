@@ -36,9 +36,9 @@ class GuiNodeOptForCfxRigRelease(_abs_unit_for_task_publish.AbsGuiNodeOptForTask
 
 
 class PrxToolsetForCfxRigRelease(_abs_unit_for_task_publish.AbsPrxToolsetForTaskRelease):
-    UNIT_KEY = 'cfx_rig'
+    GUI_KEY = 'cfx_rig'
 
-    GUI_NODE_OPT_CLS = GuiNodeOptForCfxRigRelease
+    GUI_RESOURCE_VIEW_CLS = GuiNodeOptForCfxRigRelease
 
     def _delay_fnc(self, task_window):
         pass

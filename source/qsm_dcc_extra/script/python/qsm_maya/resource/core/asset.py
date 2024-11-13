@@ -169,6 +169,7 @@ class AssetCacheOpt(object):
 
     def __init__(self, resource):
         self._resource = resource
+
         self._namespace = resource.namespace
         self._file_path = resource.file
 

@@ -23,7 +23,7 @@ import qsm_gui.proxy.widgets as qsm_gui_prx_widgets
 
 
 class AbsPrxPageForScenery(gui_prx_widgets.PrxBasePage):
-    PAGE_KEY = 'scenery'
+    GUI_KEY = 'scenery'
 
     def _trace_result(self, file_path, validation_cache_path, mesh_count_cache_path, process_options):
         result, result_description, html = self._validation_opt.to_validation_result_args(
@@ -73,7 +73,7 @@ class AbsPrxPageForScenery(gui_prx_widgets.PrxBasePage):
         if not file_paths:
             self._window.exec_message_dialog(
                 self._window.choice_message(
-                    self._window._configure.get('build.{}.messages.no_files'.format(self.PAGE_KEY))
+                    self._window._configure.get('build.{}.messages.no_files'.format(self.GUI_KEY))
                 ),
                 status='warning'
             )
@@ -83,7 +83,7 @@ class AbsPrxPageForScenery(gui_prx_widgets.PrxBasePage):
         if not process_options:
             self._window.exec_message_dialog(
                 self._window.choice_message(
-                    self._window._configure.get('build.{}.messages.no_process_options'.format(self.PAGE_KEY))
+                    self._window._configure.get('build.{}.messages.no_process_options'.format(self.GUI_KEY))
                 ),
                 status='warning'
             )
@@ -151,7 +151,7 @@ class AbsPrxPageForScenery(gui_prx_widgets.PrxBasePage):
         self._asset_load_qt_button.setMinimumWidth(64)
         self._asset_load_qt_button._set_name_text_(
             self._window.choice_name(
-                self._window._configure.get('build.{}.buttons.add'.format(self.PAGE_KEY))
+                self._window._configure.get('build.{}.buttons.add'.format(self.GUI_KEY))
             )
         )
         self._asset_load_qt_button.press_clicked.connect(self._on_dcc_load_asset)
@@ -162,12 +162,12 @@ class AbsPrxPageForScenery(gui_prx_widgets.PrxBasePage):
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             self._window.choice_name(
-                self._window._configure.get('build.{}.options'.format(self.PAGE_KEY))
+                self._window._configure.get('build.{}.options'.format(self.GUI_KEY))
             )
         )
         prx_v_sca.add_widget(self._prx_options_node)
         self._prx_options_node.build_by_data(
-            self._window._configure.get('build.{}.options.parameters'.format(self.PAGE_KEY)),
+            self._window._configure.get('build.{}.options.parameters'.format(self.GUI_KEY)),
         )
         # validation results
         self._result_prx_tool_group = gui_prx_widgets.PrxHToolGroup()
@@ -176,7 +176,7 @@ class AbsPrxPageForScenery(gui_prx_widgets.PrxBasePage):
         self._result_prx_tool_group.set_name(
             gui_core.GuiUtil.choice_name(
                 self._window._language, 
-                self._window._configure.get('build.{}.groups.results'.format(self.PAGE_KEY))
+                self._window._configure.get('build.{}.groups.results'.format(self.GUI_KEY))
             )
         )
         self._result_prx_text_browser = gui_prx_widgets.PrxTextBrowser()
@@ -184,7 +184,7 @@ class AbsPrxPageForScenery(gui_prx_widgets.PrxBasePage):
         self._result_prx_text_browser.set_content(
             gui_core.GuiUtil.choice_description(
                 self._window._language, 
-                self._window._configure.get('build.{}.contents.results'.format(self.PAGE_KEY))
+                self._window._configure.get('build.{}.contents.results'.format(self.GUI_KEY))
             )
         )
         # buttons
@@ -196,7 +196,7 @@ class AbsPrxPageForScenery(gui_prx_widgets.PrxBasePage):
         self._bottom_prx_tool_bar.add_widget(self._start_prx_button)
         self._start_prx_button.set_name(
             gui_core.GuiUtil.choice_name(
-                self._window._language, self._window._configure.get('build.{}.buttons.start'.format(self.PAGE_KEY))
+                self._window._language, self._window._configure.get('build.{}.buttons.start'.format(self.GUI_KEY))
             )
         )
         self._start_prx_button.connect_press_clicked_to(

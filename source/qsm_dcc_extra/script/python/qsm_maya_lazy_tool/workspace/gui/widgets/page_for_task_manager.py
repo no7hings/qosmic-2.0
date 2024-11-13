@@ -1,7 +1,7 @@
 # coding:utf-8
 from qsm_lazy_tool.workspace.gui.abstracts import page_for_task_manager as _abs_page_for_task_manager
 
-import qsm_maya.wsp_task as qsm_mya_wsp_task
+import qsm_maya_wsp_task as qsm_mya_wsp_task
 
 import qsm_maya.core as qsm_mya_core
 

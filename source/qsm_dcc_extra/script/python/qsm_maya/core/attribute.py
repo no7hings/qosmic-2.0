@@ -203,8 +203,9 @@ class NodeAttribute:
     def create_as_string(cls, path, atr_name, default=None):
         if cls.is_exists(path, atr_name) is False:
             cmds.addAttr(path, longName=atr_name, dataType='string')
-            if default is not None:
-                cls.set_as_string(path, atr_name, default)
+
+        if default is not None:
+            cls.set_as_string(path, atr_name, default)
 
     @classmethod
     def create_as_group(cls, path, atr_name, child_number):
@@ -217,15 +218,15 @@ class NodeAttribute:
     def create_as_boolean(cls, path, atr_name, default=None):
         if cls.is_exists(path, atr_name) is False:
             cmds.addAttr(path, longName=atr_name, attributeType='bool', keyable=1)
-            if default is not None:
-                cls.set_value(path, atr_name, default)
+        if default is not None:
+            cls.set_value(path, atr_name, default)
 
     @classmethod
     def create_as_time(cls, path, atr_name, default=None):
         if cls.is_exists(path, atr_name) is False:
             cmds.addAttr(path, longName=atr_name, attributeType='time', keyable=1)
-            if default is not None:
-                cls.set_value(path, atr_name, default)
+        if default is not None:
+            cls.set_value(path, atr_name, default)
 
     @classmethod
     def create_as_message(cls, path, atr_name, default=None, **kwargs):
@@ -235,10 +236,10 @@ class NodeAttribute:
             )
             options.update(**kwargs)
             cmds.addAttr(path, **options)
-            if default is not None:
-                cmds.connectAttr(
-                    default+'.message', path+'.'+atr_name
-                )
+        if default is not None:
+            cmds.connectAttr(
+                default+'.message', path+'.'+atr_name
+            )
 
     @classmethod
     def set_as_message(cls, path, atr_name, value):
@@ -258,8 +259,8 @@ class NodeAttribute:
     def create_as_integer(cls, path, atr_name, default=None):
         if cls.is_exists(path, atr_name) is False:
             cmds.addAttr(path, longName=atr_name, attributeType='long', keyable=1)
-            if default is not None:
-                cls.set_value(path, atr_name, default)
+        if default is not None:
+            cls.set_value(path, atr_name, default)
 
     @classmethod
     def create_as_float(cls, path, atr_name, default=None, **kwargs):
@@ -269,8 +270,8 @@ class NodeAttribute:
             )
             options.update(**kwargs)
             cmds.addAttr(path, **options)
-            if default is not None:
-                cls.set_value(path, atr_name, default)
+        if default is not None:
+            cls.set_value(path, atr_name, default)
 
     @classmethod
     def create_as_length(cls, path, atr_name, default=None, **kwargs):
@@ -280,8 +281,8 @@ class NodeAttribute:
             )
             options.update(**kwargs)
             cmds.addAttr(path, **options)
-            if default is not None:
-                cls.set_value(path, atr_name, default)
+        if default is not None:
+            cls.set_value(path, atr_name, default)
 
     @classmethod
     def create_as_float3(cls, path, atr_name, default=None, **kwargs):
@@ -300,8 +301,8 @@ class NodeAttribute:
             cmds.addAttr(
                 path, longName=atr_name+'Z', attributeType='double', parent=atr_name, keyable=1
             )
-            if default is not None:
-                cls.set_as_tuple(path, atr_name, default)
+        if default is not None:
+            cls.set_as_tuple(path, atr_name, default)
 
     @classmethod
     def create_as_angle(cls, path, atr_name, default=None, **kwargs):
@@ -311,8 +312,8 @@ class NodeAttribute:
             )
             options.update(**kwargs)
             cmds.addAttr(path, **options)
-            if default is not None:
-                cls.set_value(path, atr_name, default)
+        if default is not None:
+            cls.set_value(path, atr_name, default)
 
     @classmethod
     def create_as_enumerate(cls, path, atr_name, options, default=None):
@@ -320,8 +321,8 @@ class NodeAttribute:
             cmds.addAttr(
                 path, longName=atr_name, attributeType='enum', enumName=':'.join(options), keyable=1
             )
-            if default is not None:
-                cls.set_value(path, atr_name, default)
+        if default is not None:
+            cls.set_value(path, atr_name, default)
 
     @classmethod
     def get_array_indices(cls, path, atr_name):

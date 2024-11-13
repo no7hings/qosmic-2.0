@@ -37,15 +37,15 @@ class PrxSubPanelForCfxTool(gui_prx_widgets.PrxBaseWindow):
         self.gui_setup_fnc()
 
     def gui_close_fnc(self):
-        self._prx_tab_tool_box.save_history()
+        self._page_prx_tab_tool_box.save_history()
         self._gui_main_tool_prx_page._page_prx_tab_tool_box.save_history()
 
     def gui_setup_fnc(self):
-        self._prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
-        self.add_widget(self._prx_tab_tool_box)
+        self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
+        self.add_widget(self._page_prx_tab_tool_box)
         # main
         main_tool_prx_sca = gui_prx_widgets.PrxVScrollArea()
-        self._prx_tab_tool_box.add_widget(
+        self._page_prx_tab_tool_box.add_widget(
             main_tool_prx_sca,
             key='main',
             name=gui_core.GuiUtil.choice_name(
@@ -74,7 +74,7 @@ class PrxSubPanelForCfxTool(gui_prx_widgets.PrxBaseWindow):
         self.do_gui_refresh_pages(force)
 
     def do_gui_refresh_pages(self, force):
-        key = self._prx_tab_tool_box.get_current_key()
+        key = self._page_prx_tab_tool_box.get_current_key()
         if key == 'main':
             self._gui_main_tool_prx_page.do_gui_refresh_all(force)
 

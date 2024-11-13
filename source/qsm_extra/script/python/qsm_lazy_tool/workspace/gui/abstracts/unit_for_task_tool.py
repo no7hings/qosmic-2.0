@@ -1,6 +1,8 @@
 # coding:utf-8
 import functools
 
+import lxgui.core as gui_core
+
 import lxgui.qt.widgets as gui_qt_widgets
 
 import lxgui.qt.view_widgets as gui_qt_view_widgets
@@ -20,9 +22,9 @@ class _GuiBaseOpt(object):
         self._gui_thread_flag += 1
 
 
-class AbsGuiNodeOptForTaskTool(_GuiBaseOpt):
+class AbsGuiResourceViewForTaskTool(_GuiBaseOpt):
     def __init__(self, window, page, session):
-        super(AbsGuiNodeOptForTaskTool, self).__init__(window, page, session)
+        super(AbsGuiResourceViewForTaskTool, self).__init__(window, page, session)
 
         self._qt_tree_widget = gui_qt_view_widgets.QtTreeWidget()
         self._page._prx_h_splitter.add_widget(self._qt_tree_widget)
@@ -35,13 +37,47 @@ class AbsGuiNodeOptForTaskTool(_GuiBaseOpt):
         pass
 
 
-class AbsPrxToolsetForTaskTool(gui_prx_widgets.PrxBaseUnit):
-    UNIT_KEY = None
+class AbsPrxToolsetForTaskTool(gui_prx_widgets.PrxBaseToolset):
+    def __init__(self, window, page, unit, session):
+        super(AbsPrxToolsetForTaskTool, self).__init__(window, page, unit, session)
+        
+        prx_v_sca = gui_prx_widgets.PrxVScrollArea()
 
-    GUI_NODE_OPT_CLS = None
+        self._unit._toolset_prx_tab_tool_box.add_widget(
+            prx_v_sca,
+            key=self.GUI_KEY,
+            name=gui_core.GuiUtil.choice_name(
+                self._window._language, self._window._configure.get(
+                    'build.{}'.format(self._gui_key_path)
+                )
+            ),
+            icon_name_text=self.GUI_KEY,
+            tool_tip=gui_core.GuiUtil.choice_tool_tip(
+                self._window._language, self._window._configure.get(
+                    'build.{}'.format(self._gui_key_path)
+                )
+            )
+        )
+
+        self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
+            self._window.choice_name(
+                self._window._configure.get('build.{}.options'.format(self._gui_key_path))
+            )
+        )
+        prx_v_sca.add_widget(self._prx_options_node)
+
+        self._prx_options_node.build_by_data(
+            self._window._configure.get('build.{}.options.parameters'.format(self._gui_key_path))
+        )
+
+
+class AbsPrxUnitForTaskTool(gui_prx_widgets.PrxBaseUnit):
+    GUI_KEY = None
+
+    GUI_RESOURCE_VIEW_CLS = None
 
     def __init__(self, window, page, session, *args, **kwargs):
-        super(AbsPrxToolsetForTaskTool, self).__init__(window, page, session, *args, **kwargs)
+        super(AbsPrxUnitForTaskTool, self).__init__(window, page, session, *args, **kwargs)
         
         self._task_tool_opt = None
 
@@ -84,22 +120,36 @@ class AbsPrxToolsetForTaskTool(gui_prx_widgets.PrxBaseUnit):
         self._prx_h_splitter = gui_prx_widgets.PrxHSplitter()
         prx_v_sca.add_widget(self._prx_h_splitter)
 
-        self._gui_node_opt = self.GUI_NODE_OPT_CLS(self._window, self, self._session)
+        self._gui_resource_view_opt = self.GUI_RESOURCE_VIEW_CLS(self._window, self, self._session)
 
-        node_prx_v_sca = gui_prx_widgets.PrxVScrollArea()
-        self._prx_h_splitter.add_widget(node_prx_v_sca)
-        self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            self._window.choice_name(
-                self._window._configure.get('build.{}.{}.options'.format(self._page.PAGE_KEY, self.UNIT_KEY))
-            )
+        self._toolset_prx_tab_tool_box = gui_prx_widgets.PrxVTabToolBox()
+        self._prx_h_splitter.add_widget(self._toolset_prx_tab_tool_box)
+        self._toolset_prx_tab_tool_box.set_tab_direction(
+            self._toolset_prx_tab_tool_box.TabDirections.RightToLeft
         )
-        node_prx_v_sca.add_widget(self._prx_options_node)
 
-        self._prx_options_node.build_by_data(
-            self._window._configure.get('build.{}.{}.options.parameters'.format(self._page.PAGE_KEY, self.UNIT_KEY)),
+        for i in self.TOOLSET_CLASSES:
+            i_tool_set = i(self._window, self._page, self, self._session)
+            self._toolset_dict[i_tool_set.GUI_KEY] = i_tool_set
+
+        self._toolset_prx_tab_tool_box.set_history_key(
+            'lazy-workspace.{}-{}-toolset'.format(self._page.GUI_KEY, self.GUI_KEY)
+        )
+        self._toolset_prx_tab_tool_box.load_history()
+
+        self._toolset_prx_tab_tool_box.connect_current_changed_to(
+            self.do_gui_refresh_toolsets
         )
 
         self._prx_h_splitter.set_fixed_size_at(0, 400)
+
+    def do_gui_refresh_toolsets(self):
+        key = self._toolset_prx_tab_tool_box.get_current_key()
+        toolset = self.gui_find_toolset(key)
+        if toolset:
+            toolset.do_gui_refresh_all()
+
+        self._toolset_prx_tab_tool_box.save_history()
 
     def do_gui_refresh_all(self):
         task_session = self._page._task_session
@@ -109,10 +159,11 @@ class AbsPrxToolsetForTaskTool(gui_prx_widgets.PrxBaseUnit):
             self._scene_src_qt_input._set_entry_enable_(False)
             if scene_path != scene_src_path_pre:
                 self._task_tool_opt = task_session.generate_task_tool_opt()
-
                 self._scene_src_qt_input._set_value_(scene_path)
 
             # refresh all time
-            self._gui_node_opt.do_gui_refresh_all()
+            self._gui_resource_view_opt.do_gui_refresh_all()
         else:
             self._task_tool_opt = None
+
+        self.do_gui_refresh_toolsets()

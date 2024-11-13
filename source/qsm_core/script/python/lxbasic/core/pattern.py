@@ -442,10 +442,14 @@ class BscStgParseOpt(AbsParseOpt):
     def __init__(self, p, variants=None):
         super(BscStgParseOpt, self).__init__(p, variants)
 
+    @classmethod
+    def to_fnmatch_style_fnc(cls, p, variants=None):
+        return BscParse.to_fnmatch_style(p, variants)
+
     def find_matches(self, sort=False):
         list_ = []
 
-        regex = BscParse.to_fnmatch_style(
+        regex = self.to_fnmatch_style_fnc(
             self._pattern, self._variants_default
         )
 
@@ -488,7 +492,7 @@ class BscStgParseOpt(AbsParseOpt):
 
     def get_match_results(self, sort=False):
         paths = _scan_glob.ScanGlob.glob(
-            BscParse.to_fnmatch_style(
+            self.to_fnmatch_style_fnc(
                 self._pattern, self._variants_default
             )
         )
@@ -518,6 +522,17 @@ class BscStgParseOpt(AbsParseOpt):
 
     def __str__(self):
         return self._pattern
+
+
+class BscTaskParseOpt(BscStgParseOpt):
+    def __init__(self, *args, **kwargs):
+        super(BscTaskParseOpt, self).__init__(*args, **kwargs)
+
+    @classmethod
+    def to_fnmatch_style_fnc(cls, p, variants=None):
+        if 'version' not in variants:
+            variants['version'] = '[0-9][0-9][0-9]'
+        return BscParse.to_fnmatch_style(p, variants)
 
 
 class BscDocParseOpt(AbsParseOpt):

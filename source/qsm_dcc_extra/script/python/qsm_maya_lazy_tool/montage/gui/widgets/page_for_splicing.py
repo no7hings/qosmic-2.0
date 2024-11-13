@@ -78,7 +78,7 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
         if master_layer:
             self._window.exec_message_dialog(
                 self._window.choice_message(
-                    self._window._configure.get('build.main.messages.exists_master_layer'.format(self.PAGE_KEY))
+                    self._window._configure.get('build.main.messages.exists_master_layer'.format(self.GUI_KEY))
                 ),
                 status='warning'
             )
@@ -91,7 +91,7 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
         if not results:
             self._window.exec_message_dialog(
                 self._window.choice_message(
-                    self._window._configure.get('build.main.messages.no_character'.format(self.PAGE_KEY))
+                    self._window._configure.get('build.main.messages.no_character'.format(self.GUI_KEY))
                 ),
                 status='warning'
             )

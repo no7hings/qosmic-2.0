@@ -821,7 +821,7 @@ class AdvSkinProxyGenerate(object):
 
             cmds.setAttr(location + '.blackBox', 1, lock=1)
             if cache_file_path is None:
-                file_path = _mya_core.ReferenceNamespacesCache().get_file(self._namespace)
+                file_path = _mya_core.ReferencesCache().get_file(self._namespace)
                 cache_file_path = qsm_gnl_core.MayaCache.generate_skin_proxy_scene_file(
                     file_path
                 )
