@@ -5,18 +5,23 @@ import lxbasic.scan as bsc_scan
 
 import lxgui.qt.widgets as qt_widgets
 
+import lxgui.proxy.widgets as gui_prx_widgets
 
-class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self, parent=None):
-        super(MainWindow, self).__init__(parent)
+
+class W(gui_prx_widgets.PrxBaseWindow):
+    def __init__(self, *args, **kwargs):
+        super(W, self).__init__(*args, **kwargs)
+
+        self._b = qt_widgets.QtInputForContent()
+        self.add_widget(self._b)
 
         self._test()
 
     def _test(self):
         def fnc_(path_):
-            print path_
+            self._b._append_value_use_signal_(path_)
 
-        bsc_scan.ScanGlob.generate_glob_executor(
+        bsc_scan.ScanGlob.concurrent_glob(
             'X:/QSM_TST/Assets/*/*/Rig/Final/scenes/*_Skin.ma', fnc_
         )
 
@@ -26,7 +31,9 @@ if __name__ == '__main__':
 
     app = QtWidgets.QApplication(sys.argv)
 
-    _w = MainWindow()
-    _w.resize(640, 480)
-    _w.show()
+    w = W()
+    w.set_definition_window_size((480, 480))
+    w.show_window_auto()
+    #
     sys.exit(app.exec_())
+

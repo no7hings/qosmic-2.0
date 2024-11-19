@@ -2,12 +2,12 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-from .... import core as _mya_core
+import qsm_maya.core as qsm_mya_core
 
-from ....resource import core as _rsc_core
+import qsm_maya.resource.core as qsm_mya_rsc_core
 
 
-class CfxRigAsset(_rsc_core.Asset):
+class CfxRigAsset(qsm_mya_rsc_core.Asset):
 
     def __init__(self, *args, **kwargs):
         super(CfxRigAsset, self).__init__(*args, **kwargs)
@@ -26,12 +26,12 @@ class CfxRigAsset(_rsc_core.Asset):
     def generate_cfx_cloth_export_args(self):
         mesh_transforms = []
         location = self.find_output_geo_location()
-        meshes = _mya_core.Group.find_siblings(
+        meshes = qsm_mya_core.Group.find_siblings(
             location, 'mesh'
         )
         for i_shape in meshes:
-            i_transform = _mya_core.Shape.get_transform(i_shape)
-            if _mya_core.Transform.is_visible(i_transform):
+            i_transform = qsm_mya_core.Shape.get_transform(i_shape)
+            if qsm_mya_core.Transform.is_visible(i_transform):
                 mesh_transforms.append(i_transform)
 
         return mesh_transforms

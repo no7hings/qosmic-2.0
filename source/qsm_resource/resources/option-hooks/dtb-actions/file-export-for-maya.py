@@ -17,7 +17,7 @@ def main(session):
         )
         type_path = dtb_types[0]
         data = dict(
-            resource_type=type_path,
+            resource_branch=type_path,
             resource=resource_path,
             file_type=file_type,
             file=file_path,

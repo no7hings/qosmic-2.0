@@ -11,7 +11,7 @@ class Asset(_base.AbsEntity):
     TasksCacheOptClass = _task.TasksCacheOpt
 
     @classmethod
-    def _validation_fnc(cls, variants):
+    def _variant_validation_fnc(cls, variants):
         return _base.VariantKeyMatch.match_fnc(
             variants, cls.VariantKey
         )

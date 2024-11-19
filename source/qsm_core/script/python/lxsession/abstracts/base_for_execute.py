@@ -5,6 +5,8 @@ import lxbasic.content as bsc_content
 
 import lxbasic.log as bsc_log
 
+import lxbasic.web as bsc_web
+
 import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
@@ -105,12 +107,17 @@ class AbsHookExecutor(object):
             )
         # output result, etc. cache, playblast
         # directory
-        output_directory_path = hook_option_opt.get('output_directory')
+        output_directory_path = hook_option_opt.get_as_string('output_directory')
         if output_directory_path:
+            # path maybe has chinese word
+            output_directory_path = bsc_web.UrlValue.unquote(output_directory_path)
             self._ddl_job_submiter.option.set('deadline.output_directory', output_directory_path)
         # file
-        output_file_path = hook_option_opt.get('output_file')
+        output_file_path = hook_option_opt.get_as_string('output_file')
         if output_file_path:
+            # path maybe has chinese word
+            output_file_path = bsc_web.UrlValue.unquote(output_file_path)
+            print output_file_path
             self._ddl_job_submiter.option.set('deadline.output_file', output_file_path)
         # render
         renderer = hook_option_opt.get('renderer')

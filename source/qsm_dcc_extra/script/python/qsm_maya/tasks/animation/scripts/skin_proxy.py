@@ -1,5 +1,4 @@
 # coding:utf-8
-import collections
 import os
 
 import functools
@@ -24,20 +23,20 @@ import qsm_general.core as qsm_gnl_core
 
 import qsm_general.process as qsm_gnl_process
 
-from .... import core as _mya_core
+import qsm_maya.core as qsm_mya_core
 
-from ....general import core as _gnl_core
+import qsm_maya.general.core as qsm_mya_gnl_core
 
-from ....resource import core as _rsc_core
+import qsm_maya.resource.core as qsm_mya_rsc_core
 
-from ....adv import core as _adv_core
+import qsm_maya.adv as qsm_mya_adv
 
 from .. import core as _core
 
 
-class SkinProxyOpt(_rsc_core.AssetCacheOpt):
-    CACHE_ROOT = _gnl_core.ResourceCacheNodes.SkinProxyRoot
-    CACHE_NAME = _gnl_core.ResourceCacheNodes.SkinProxyName
+class SkinProxyOpt(qsm_mya_rsc_core.AssetCacheOpt):
+    CACHE_ROOT = qsm_mya_gnl_core.ResourceCacheNodes.SkinProxyRoot
+    CACHE_NAME = qsm_mya_gnl_core.ResourceCacheNodes.SkinProxyName
 
     def __init__(self, *args, **kwargs):
         super(SkinProxyOpt, self).__init__(*args, **kwargs)
@@ -72,7 +71,7 @@ class SkinProxyOpt(_rsc_core.AssetCacheOpt):
             i_joint = self._resource.find_joint(i_key)
             if i_joint is None:
                 continue
-            i_meshes = _mya_core.Joint.find_influenced_meshes(i_joint)
+            i_meshes = qsm_mya_core.Joint.find_influenced_meshes(i_joint)
             if i_meshes:
                 set_.update(i_meshes)
 
@@ -136,7 +135,7 @@ class SkinProxyOpt(_rsc_core.AssetCacheOpt):
         cache_location = '|{}:{}'.format(self._namespace, self.CACHE_NAME)
         if cmds.objExists(cache_location) is False and cmds.objExists(cache_location_new) is False:
             # noinspection PyBroadException
-            _mya_core.SceneFile.import_file_ignore_error(
+            qsm_mya_core.SceneFile.import_file_ignore_error(
                 cache_file_path, namespace=self._namespace
             )
 
@@ -148,7 +147,7 @@ class SkinProxyOpt(_rsc_core.AssetCacheOpt):
             )
 
             if hide_secondary_controls is True:
-                controls = _adv_core.AdvChrOpt(self._namespace).find_all_secondary_curve_controls()
+                controls = qsm_mya_adv.AdvChrOpt(self._namespace).find_all_secondary_curve_controls()
             else:
                 controls = []
 
@@ -247,14 +246,14 @@ class SkinProxyOpt(_rsc_core.AssetCacheOpt):
                 g_p.do_update()
 
     @classmethod
-    def load_auto(cls, **kwargs):
+    def execute_auto(cls, **kwargs):
         scheme = kwargs['scheme']
         keep_head = kwargs.get('keep_head', True)
         check_bbox = kwargs.get('check_bbox', True)
         hide_secondary_controls = kwargs.get('hide_secondary_controls', True)
         if scheme == 'default':
             resources = []
-            namespaces = _mya_core.Namespaces.extract_from_selection()
+            namespaces = qsm_mya_core.Namespaces.extract_from_selection()
             if namespaces:
                 resources_query = _core.AdvRigAssetsQuery()
                 resources_query.do_update()
@@ -340,8 +339,8 @@ class AdvSkinProxyGenerate(object):
     PROXY_CONTROL_PATH = '|__skin_proxy_control__'
     PROXY_GEOMETRY_GROUP_PATH = '|__skin_proxy_geo_grp__'
 
-    CACHE_ROOT = _gnl_core.ResourceCacheNodes.SkinProxyRoot
-    CACHE_NAME = _gnl_core.ResourceCacheNodes.SkinProxyName
+    CACHE_ROOT = qsm_mya_gnl_core.ResourceCacheNodes.SkinProxyRoot
+    CACHE_NAME = qsm_mya_gnl_core.ResourceCacheNodes.SkinProxyName
 
     @classmethod
     def _create_group(cls, path):
@@ -650,7 +649,7 @@ class AdvSkinProxyGenerate(object):
 
     def create_resource_controls(self, location):
         if cmds.objExists(self.PROXY_CONTROL_PATH) is False:
-            _mya_core.SceneFile.import_file_ignore_error(bsc_resource.ExtendResource.get('rig/skin_proxy_control.ma'))
+            qsm_mya_core.SceneFile.import_file_ignore_error(bsc_resource.ExtendResource.get('rig/skin_proxy_control.ma'))
 
         parent_path = '|'.join(location.split('|')[:-1])
         name = location.split('|')[-1]
@@ -761,11 +760,11 @@ class AdvSkinProxyGenerate(object):
     def create_resource_geometries(self, location):
         if cmds.objExists(self.PROXY_GEOMETRY_GROUP_PATH) is False:
             if qsm_gnl_core.scheme_is_release():
-                _mya_core.SceneFile.import_file_ignore_error(
+                qsm_mya_core.SceneFile.import_file_ignore_error(
                     bsc_resource.ExtendResource.get('rig/skin_proxy_geometry_new.ma')
                 )
             else:
-                _mya_core.SceneFile.import_file_ignore_error(
+                qsm_mya_core.SceneFile.import_file_ignore_error(
                     bsc_resource.ExtendResource.get('rig/skin_proxy_geometry.ma')
                 )
 
@@ -805,11 +804,11 @@ class AdvSkinProxyGenerate(object):
             # step 1
             if cmds.objExists(location) is False:
                 if qsm_gnl_core.scheme_is_release():
-                    _mya_core.SceneFile.import_file_ignore_error(
+                    qsm_mya_core.SceneFile.import_file_ignore_error(
                         bsc_resource.ExtendResource.get('rig/skin_proxy_new.ma')
                     )
                 else:
-                    _mya_core.SceneFile.import_file_ignore_error(
+                    qsm_mya_core.SceneFile.import_file_ignore_error(
                         bsc_resource.ExtendResource.get('rig/skin_proxy.ma')
                     )
             # step 2
@@ -821,7 +820,7 @@ class AdvSkinProxyGenerate(object):
 
             cmds.setAttr(location + '.blackBox', 1, lock=1)
             if cache_file_path is None:
-                file_path = _mya_core.ReferencesCache().get_file(self._namespace)
+                file_path = qsm_mya_core.ReferencesCache().get_file(self._namespace)
                 cache_file_path = qsm_gnl_core.MayaCache.generate_skin_proxy_scene_file(
                     file_path
                 )
@@ -831,7 +830,7 @@ class AdvSkinProxyGenerate(object):
             )
             l_p.do_update()
 
-            _mya_core.SceneFile.export_file(
+            qsm_mya_core.SceneFile.export_file(
                 cache_file_path, location
             )
             l_p.do_update()
@@ -966,14 +965,14 @@ class AdvSkinProxyProcess(object):
         with bsc_log.LogProcessContext.create(maximum=4) as l_p:
             # step 1
             namespace = 'skin_proxy'
-            _mya_core.SceneFile.new()
+            qsm_mya_core.SceneFile.new()
             l_p.do_update()
             # step 2
             bsc_log.Log.trace_method_result(
                 self.LOG_KEY, 'reference scene: {}'.format(self._file_path)
             )
             # use reference
-            _mya_core.SceneFile.reference_file(self._file_path, namespace=namespace)
+            qsm_mya_core.SceneFile.reference_file(self._file_path, namespace=namespace)
             l_p.do_update()
             # step 3
             rsc_adv_rig = _core.AdvRigAsset(

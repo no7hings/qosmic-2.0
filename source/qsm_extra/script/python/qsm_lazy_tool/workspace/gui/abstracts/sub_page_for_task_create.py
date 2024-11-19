@@ -1,20 +1,10 @@
 # coding:utf-8
-import copy
-
-import lxbasic.core as bsc_core
-
-import lxbasic.storage as bsc_storage
-
-import lxgui.qt.core as gui_qt_core
-
 import lxgui.qt.widgets as gui_qt_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_wsp_task as qsm_dcc_wsp_task
 
-
-class AbsPrxSubPageForAssetTaskCreate(gui_prx_widgets.PrxBaseSubPage):
+class AbsPrxSubPageForTaskCreate(gui_prx_widgets.PrxBaseSubPage):
     GUI_KEY = None
 
     RESOURCE_BRANCH = None
@@ -34,7 +24,7 @@ class AbsPrxSubPageForAssetTaskCreate(gui_prx_widgets.PrxBaseSubPage):
         self._on_close()
 
     def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(AbsPrxSubPageForAssetTaskCreate, self).__init__(window, session, sub_window, *args, **kwargs)
+        super(AbsPrxSubPageForTaskCreate, self).__init__(window, session, sub_window, *args, **kwargs)
 
         self.gui_page_setup_fnc()
 

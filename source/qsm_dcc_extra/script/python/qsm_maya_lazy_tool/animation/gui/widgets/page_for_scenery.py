@@ -9,7 +9,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_gui.proxy.widgets as qsm_gui_prx_widgets
+import qsm_lazy.gui.proxy.widgets as lzy_gui_prx_widgets
 
 import qsm_maya_gui.core as qsm_mya_gui_core
 
@@ -139,7 +139,7 @@ class PrxPageForSceneryResource(gui_prx_widgets.PrxBasePage):
             'reference', size_mode=1
         )
         # reference
-        self._asset_prx_input = qsm_gui_prx_widgets.PrxInputForAssetScenery()
+        self._asset_prx_input = lzy_gui_prx_widgets.PrxInputForAssetScenery()
         self._asset_prx_tool_box.add_widget(self._asset_prx_input)
         # self._asset_prx_input.widget.setMaximumWidth(488)
 
@@ -204,7 +204,7 @@ class PrxPageForSceneryResource(gui_prx_widgets.PrxBasePage):
         self._page_prx_tab_tool_box.set_history_key('resource-manager.scenery_page_key_current')
         self._page_prx_tab_tool_box.load_history()
 
-    def gui_page_setup_post_fnc(self):
+    def gui_setup_post_fnc(self):
         self._top_prx_tool_bar.do_gui_refresh()
 
     def gui_get_tool_tab_box(self):
@@ -225,6 +225,8 @@ class PrxPageForSceneryResource(gui_prx_widgets.PrxBasePage):
         self._gui_asset_prx_unit.do_gui_refresh_tools()
 
         self.do_gui_refresh_toolset_units()
+
+        self._top_prx_tool_bar.do_gui_refresh()
 
     def gui_get_tool_tab_current_key(self):
         return self._page_prx_tab_tool_box.get_current_key()

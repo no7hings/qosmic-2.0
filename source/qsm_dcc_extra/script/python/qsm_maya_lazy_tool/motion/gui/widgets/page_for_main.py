@@ -3,7 +3,7 @@ import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.widgets as gui_qt_widgets
 
-import qsm_gui.qt.widgets as qsm_qt_widgets
+import qsm_lazy.gui.qt.widgets as lzy_gui_qt_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
@@ -74,7 +74,7 @@ class PrxPageForMotionMain(gui_prx_widgets.PrxBasePage):
         central_qt_lot.setContentsMargins(*[0]*4)
         central_qt_lot.setSpacing(2)
         # chart
-        self._qt_picker = qsm_qt_widgets.QtAdvCharacterPicker()
+        self._qt_picker = lzy_gui_qt_widgets.QtAdvCharacterPicker()
         central_qt_lot.addWidget(self._qt_picker)
         self._gui_rig_picker_unit = _toolset_for_main.UnitForRigPicker(
             self._window, self, self._session, self._qt_picker,

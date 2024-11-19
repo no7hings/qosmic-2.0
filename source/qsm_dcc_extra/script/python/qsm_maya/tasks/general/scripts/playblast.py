@@ -7,6 +7,8 @@ import functools
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+import lxbasic.web as bsc_web
+
 import lxbasic.core as bsc_core
 
 import lxbasic.log as bsc_log
@@ -17,11 +19,11 @@ import qsm_general.process as qsm_gnl_process
 
 import qsm_general.prc_task as qsm_prc_task
 
-from .... import core as _mya_core
+import qsm_maya.core as qsm_mya_core
 
-from ...animation import core as _animation_core
+from ...animation import core as _tsk_anm_core
 
-from .. import core as _prv_core
+from .. import core as _core
 
 
 class PlayblastOpt(object):
@@ -33,7 +35,7 @@ class PlayblastOpt(object):
         texture_enable, light_enable, shadow_enable, hud_enable,
         use_exists_window=False
     ):
-        _prv_core.Window.create(
+        _core.Window.create(
             camera=camera,
             width=width, height=height,
             display_mode=display_mode,
@@ -49,20 +51,20 @@ class PlayblastOpt(object):
 
     @classmethod
     def hud_prc(cls, camera):
-        _mya_core.Scene.clear_all_hud()
-        _prv_core.HUD.restore()
-        _prv_core.HUD.create(camera)
+        qsm_mya_core.Scene.clear_all_hud()
+        _core.HUD.restore()
+        _core.HUD.create(camera)
 
     @classmethod
     def render_setting_prc(cls, camera, display_mode, texture_enable, light_enable, shadow_enable):
-        _prv_core.RenderSetting.setup(
+        _core.RenderSetting.setup(
             camera, display_mode,
             texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable
         )
 
     @classmethod
     def camera_prc(cls, camera, camera_display_options):
-        _prv_core.CameraDisplay.setup(
+        _core.CameraDisplay.setup(
             camera, camera_display_options
         )
 
@@ -127,8 +129,13 @@ class PlayblastOpt(object):
         use_exists_window=False,
         camera_display_options=None
     ):
+
+        bsc_log.Log.trace_method_result(
+            cls.LOG_KEY, 'camera is {}'.format(camera)
+        )
+
         if resolution is None:
-            resolution = _mya_core.RenderSettings.get_resolution()
+            resolution = qsm_mya_core.RenderSettings.get_resolution()
 
         w, h = resolution
 
@@ -162,16 +169,16 @@ class PlayblastOpt(object):
         image_file_path_tmp = '{}/image.jpg'.format(directory_path_tmp)
         movie_file_path_tmp = '{}/movie.mov'.format(directory_path_tmp)
 
-        start_frame, end_frame = _mya_core.Frame.auto_range(frame)
+        start_frame, end_frame = qsm_mya_core.Frame.auto_range(frame)
         if fps is None:
-            fps = _mya_core.Frame.get_fps_value()
+            fps = qsm_mya_core.Frame.get_fps_value()
 
         if frame_step > 1:
             frames = bsc_core.BscFrameRange.get(
                 (start_frame, end_frame), frame_step
             )
             for i_frame in frames:
-                _mya_core.Frame.set_current(i_frame)
+                qsm_mya_core.Frame.set_current(i_frame)
                 cls.image_prc(
                     image_file_path=image_file_path_tmp, start_frame=i_frame, end_frame=i_frame,
                     width=w, height=h, hud_enable=hud_enable,
@@ -190,7 +197,7 @@ class PlayblastOpt(object):
             start_frame=start_frame, end_frame=end_frame, fps=fps
         )
         # close window
-        _prv_core.Window.close()
+        _core.Window.close()
         # copy to source
         bsc_storage.StgFileOpt(movie_file_path_tmp).copy_to_file(
             movie_file_path, replace=True
@@ -203,10 +210,10 @@ class PlayblastOpt(object):
             )
 
     @classmethod
-    def load_auto(cls, **kwargs):
+    def execute_auto(cls, **kwargs):
         scheme = kwargs['scheme']
         if scheme == 'default':
-            q = _animation_core.AdvRigAssetsQuery()
+            q = _tsk_anm_core.AdvRigAssetsQuery()
 
             q.do_update()
 
@@ -215,10 +222,10 @@ class PlayblastOpt(object):
             # noinspection PyBroadException
             try:
                 movie_file_path = cls.generate_movie_file_path(directory_path=None, update_scheme='no_version')
-                camera = _mya_core.Camera.get_active()
-                frame = _mya_core.Frame.get_frame_range()
-                fps = _mya_core.Frame.get_fps_value()
-                resolution = _mya_core.RenderSettings.get_resolution()
+                camera = qsm_mya_core.Camera.get_non_default_with_dialog()
+                frame = qsm_mya_core.Frame.get_frame_range()
+                fps = qsm_mya_core.Frame.get_fps_value()
+                resolution = qsm_mya_core.RenderSettings.get_resolution()
                 cls.execute(
                     movie_file_path=movie_file_path,
                     camera=camera,
@@ -237,10 +244,10 @@ class PlayblastOpt(object):
             def open_fnc_(movie_file_path_):
                 bsc_storage.StgFileOpt(movie_file_path_).start_in_system()
 
-            camera = _mya_core.Camera.get_active()
-            frame = _mya_core.Frame.get_frame_range()
-            fps = _mya_core.Frame.get_fps_value()
-            resolution = _mya_core.RenderSettings.get_resolution()
+            camera = qsm_mya_core.Camera.get_non_default_with_dialog()
+            frame = qsm_mya_core.Frame.get_frame_range()
+            fps = qsm_mya_core.Frame.get_fps_value()
+            resolution = qsm_mya_core.RenderSettings.get_resolution()
 
             task_name, file_path, movie_file_path, cmd_script = PlayblastProcess.generate_subprocess_args(
                 camera_path=camera,
@@ -271,10 +278,13 @@ class PlayblastOpt(object):
 
             task_window.show_window_auto(exclusive=False)
         elif scheme == 'backstage':
-            camera = _mya_core.Camera.get_active()
-            frame = _mya_core.Frame.get_frame_range()
-            fps = _mya_core.Frame.get_fps_value()
-            resolution = _mya_core.RenderSettings.get_resolution()
+            if qsm_prc_task.BackstageTaskSubmit.check_is_valid() is False:
+                return
+
+            camera = qsm_mya_core.Camera.get_non_default_with_dialog()
+            frame = qsm_mya_core.Frame.get_frame_range()
+            fps = qsm_mya_core.Frame.get_fps_value()
+            resolution = qsm_mya_core.RenderSettings.get_resolution()
 
             task_name, file_path, movie_file_path, cmd_script = PlayblastProcess.generate_subprocess_args(
                 camera_path=camera,
@@ -283,7 +293,7 @@ class PlayblastOpt(object):
                 texture_enable=True, light_enable=False, shadow_enable=False
             )
 
-            qsm_prc_task.BackstageSubmit.execute(
+            qsm_prc_task.BackstageTaskSubmit.execute(
                 task_group=None, task_type='playblast', task_name=task_name,
                 cmd_script=cmd_script, icon_name='application/maya',
                 file_path=file_path, output_file_path=movie_file_path,
@@ -298,19 +308,22 @@ class PlayblastOpt(object):
                 )
             )
         elif scheme == 'farm':
-            camera = _mya_core.Camera.get_active()
-            frame = _mya_core.Frame.get_frame_range()
-            fps = _mya_core.Frame.get_fps_value()
-            resolution = _mya_core.RenderSettings.get_resolution()
+            if qsm_prc_task.FarmTaskSubmit.check_is_valid() is False:
+                return
 
-            option_hook = PlayblastProcess.generate_deadline_hook_option(
+            camera = qsm_mya_core.Camera.get_non_default_with_dialog()
+            frame = qsm_mya_core.Frame.get_frame_range()
+            fps = qsm_mya_core.Frame.get_fps_value()
+            resolution = qsm_mya_core.RenderSettings.get_resolution()
+
+            option_hook = PlayblastProcess.generate_farm_hook_option(
                 camera_path=camera,
                 frame=frame, frame_step=1, fps=fps,
                 resolution=resolution,
                 texture_enable=True, light_enable=False, shadow_enable=False
             )
 
-            qsm_prc_task.FarmSubmit.execute_by_hook_option(option_hook)
+            qsm_prc_task.FarmTaskSubmit.execute_by_hook_option(option_hook)
 
     @classmethod
     def show_window(
@@ -323,7 +336,7 @@ class PlayblastOpt(object):
         camera_display_options=None,
     ):
         if resolution is None:
-            resolution = _mya_core.RenderSettings.get_resolution()
+            resolution = qsm_mya_core.RenderSettings.get_resolution()
 
         w, h = resolution
 
@@ -335,16 +348,18 @@ class PlayblastOpt(object):
         if show_hud is True:
             cls.hud_prc(camera)
 
+        # update render setting
         cls.render_setting_prc(
             camera, display_mode,
             texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable
         )
 
+        # update camera setting
         cls.camera_prc(camera, camera_display_options)
 
     @classmethod
     def generate_movie_file_path(cls, directory_path=None, update_scheme='new_version'):
-        scene_file_path = _mya_core.SceneFile.get_current()
+        scene_file_path = qsm_mya_core.SceneFile.get_current()
         file_opt = bsc_storage.StgFileOpt(scene_file_path)
 
         if directory_path is not None:
@@ -374,24 +389,21 @@ class PlayblastOpt(object):
 
 
 class PlayblastProcess(object):
-    def __init__(
-        self,
-        file_path, movie_file_path, camera_path, start_frame, end_frame, frame_step, fps,
-        width, height,
-        texture_enable, light_enable, shadow_enable
-    ):
-        self._file_path = file_path
-        self._movie_file_path = movie_file_path
-        self._camera = camera_path
-        self._start_frame, self._end_frame = start_frame, end_frame
-        self._frame_step = frame_step
-        self._fps = fps
+    def __init__(self, **kwargs):
+        self._kwargs = kwargs
 
-        self._width, self._height = width, height
+        self._file_path = kwargs.get('file')
+        self._movie_file_path = kwargs.get('movie')
+        self._camera_path = kwargs.get('camera')
+        self._start_frame, self._end_frame = kwargs.get('start_frame'), kwargs.get('end_frame')
+        self._frame_step = kwargs.get('frame_step')
+        self._fps = kwargs.get('fps')
 
-        self._texture_enable = texture_enable
-        self._light_enable = light_enable
-        self._shadow_enable = shadow_enable
+        self._width, self._height = kwargs.get('width'), kwargs.get('height')
+
+        self._texture_enable = kwargs.get('texture_enable')
+        self._light_enable = kwargs.get('light_enable')
+        self._shadow_enable = kwargs.get('shadow_enable')
 
     @classmethod
     def generate_subprocess_args(
@@ -401,7 +413,7 @@ class PlayblastProcess(object):
         resolution,
         texture_enable, light_enable, shadow_enable
     ):
-        file_current = _mya_core.SceneFile.get_current()
+        file_current = qsm_mya_core.SceneFile.get_current()
         file_opt_current = bsc_storage.StgFileOpt(file_current)
         ptn = six.u(
             '{}/playblast/{}.v{{version}}.ma'
@@ -414,7 +426,7 @@ class PlayblastProcess(object):
         )
         file_opt = bsc_storage.StgFileOpt(file_path)
 
-        _mya_core.SceneFile.export_file(
+        qsm_mya_core.SceneFile.export_file(
             file_path, keep_reference=True
         )
         start_frame, end_frame = frame
@@ -437,14 +449,14 @@ class PlayblastProcess(object):
         return task_name, file_path, movie_file_path, cmd_script
 
     @classmethod
-    def generate_deadline_hook_option(
+    def generate_farm_hook_option(
         cls,
         camera_path,
         frame, frame_step, fps,
         resolution,
         texture_enable, light_enable, shadow_enable
     ):
-        file_current = _mya_core.SceneFile.get_current()
+        file_current = qsm_mya_core.SceneFile.get_current()
         file_opt_current = bsc_storage.StgFileOpt(file_current)
         ptn = six.u(
             '{}/playblast/{}.v{{version}}.ma'
@@ -457,7 +469,7 @@ class PlayblastProcess(object):
         )
         file_opt = bsc_storage.StgFileOpt(file_path)
 
-        _mya_core.SceneFile.export_file(
+        qsm_mya_core.SceneFile.export_file(
             file_path, keep_reference=True
         )
         start_frame, end_frame = frame
@@ -468,7 +480,7 @@ class PlayblastProcess(object):
             file_opt.name, '{}x{}'.format(width, height), '{}-{}'.format(start_frame, end_frame)
         )
 
-        hook_option = qsm_gnl_process.MayaCacheProcess.generate_hook_option_by_option_dict(
+        hook_option = qsm_gnl_process.MayaCacheProcess.generate_hook_option_fnc(
             'playblast',
             dict(
                 file=file_path,
@@ -479,7 +491,7 @@ class PlayblastProcess(object):
                 texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable
             ),
             job_name=task_name,
-            output_file=movie_file_path
+            output_file=bsc_web.UrlValue.quote(movie_file_path)
         )
 
         return hook_option
@@ -490,10 +502,10 @@ class PlayblastProcess(object):
         if file_opt.get_is_file():
             with bsc_log.LogProcessContext.create(maximum=3) as l_p:
                 # step 1
-                _mya_core.SceneFile.open(self._file_path)
+                qsm_mya_core.SceneFile.open(self._file_path)
                 l_p.do_update()
                 # step 2
-                q = _animation_core.AdvRigAssetsQuery()
+                q = _tsk_anm_core.AdvRigAssetsQuery()
                 q.do_update()
                 for i in q.get_all():
                     i.switch_to_original()
@@ -501,7 +513,7 @@ class PlayblastProcess(object):
                 # step 3
                 PlayblastOpt.execute(
                     movie_file_path=self._movie_file_path,
-                    camera=self._camera,
+                    camera=self._camera_path,
                     frame=(self._start_frame, self._end_frame), frame_step=self._frame_step, fps=self._fps,
                     resolution=(self._width, self._height),
                     texture_enable=self._texture_enable,

@@ -7,7 +7,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-from .... import core as _mya_core
+import qsm_maya.core as qsm_mya_core
 
 from . import base as _base
 
@@ -17,7 +17,7 @@ class UnitAssemblyOpt(object):
 
     @classmethod
     def create_import_root(cls):
-        return _mya_core.Group.create(
+        return qsm_mya_core.Group.create(
             cls.IMPORT_ROOT
         )
 
@@ -25,7 +25,7 @@ class UnitAssemblyOpt(object):
     def create_import_location(cls, namespace):
         root = cls.create_import_root()
         location = '{}|{}_MESH_GRP'.format(root, namespace)
-        return _mya_core.Group.create(
+        return qsm_mya_core.Group.create(
             location
         )
 
@@ -49,7 +49,7 @@ class UnitAssemblyOpt(object):
         return False
 
     def is_exists(self):
-        return _mya_core.Node.is_exists(self._node)
+        return qsm_mya_core.Node.is_exists(self._node)
 
     @property
     def path(self):
@@ -64,12 +64,12 @@ class UnitAssemblyOpt(object):
         return self._node
 
     def get_active(self):
-        return _mya_core.AssemblyReference.get_active(
+        return qsm_mya_core.AssemblyReference.get_active(
             self._node
         )
 
     def set_active(self, key):
-        file_path = _mya_core.AssemblyReference.get_file(self._node)
+        file_path = qsm_mya_core.AssemblyReference.get_file(self._node)
         file_opt = bsc_storage.StgFileOpt(file_path)
         if file_opt.get_is_file() is True:
             if key.startswith(_base.Assembly.Keys.GPU):
@@ -77,7 +77,7 @@ class UnitAssemblyOpt(object):
                     file_opt.directory_path, key
                 )
                 if bsc_storage.StgPath.get_is_file(file_path_new) is True:
-                    _mya_core.AssemblyReference.set_active(
+                    qsm_mya_core.AssemblyReference.set_active(
                         self._node, key
                     )
             elif key.startswith(_base.Assembly.Keys.Mesh):
@@ -85,39 +85,39 @@ class UnitAssemblyOpt(object):
                     file_opt.directory_path, key
                 )
                 if bsc_storage.StgPath.get_is_file(file_path_new) is True:
-                    _mya_core.AssemblyReference.set_active(
+                    qsm_mya_core.AssemblyReference.set_active(
                         self._node, key
                     )
 
     def do_import_mesh(self):
-        file_path = _mya_core.AssemblyReference.get_file(self._node)
+        file_path = qsm_mya_core.AssemblyReference.get_file(self._node)
         file_opt = bsc_storage.StgFileOpt(file_path)
         if file_opt.get_is_file() is True:
             mesh_file_path = '{}/mesh.mb'.format(file_opt.directory_path)
 
-            namespace = _mya_core.DagNode.to_namespace(self._node)
+            namespace = qsm_mya_core.DagNode.to_namespace(self._node)
 
             import_location = self.create_import_location(namespace)
 
-            paths = _mya_core.SceneFile.import_file(mesh_file_path, namespace)
-            roots = _mya_core.DagNode.find_roots(paths)
+            paths = qsm_mya_core.SceneFile.import_file(mesh_file_path, namespace)
+            roots = qsm_mya_core.DagNode.find_roots(paths)
             for i in roots:
-                i_path_new = _mya_core.DagNode.parent_to(
+                i_path_new = qsm_mya_core.DagNode.parent_to(
                     i, import_location
                 )
 
-                _mya_core.Node.delete(
-                    _mya_core.ParentConstraint.create(
+                qsm_mya_core.Node.delete(
+                    qsm_mya_core.ParentConstraint.create(
                         self._node, i_path_new
                     )
                 )
-                _mya_core.Node.delete(
-                    _mya_core.ScaleConstraint.create(
+                qsm_mya_core.Node.delete(
+                    qsm_mya_core.ScaleConstraint.create(
                         self._node, i_path_new
                     )
                 )
 
-            _mya_core.NodeAttribute.set_visible(
+            qsm_mya_core.NodeAttribute.set_visible(
                 self._node, False
             )
 
@@ -185,14 +185,14 @@ class UnitAssembliesQuery(object):
 
     @classmethod
     def find_one(cls, path):
-        if _mya_core.Node.is_assembly_reference(path):
+        if qsm_mya_core.Node.is_assembly_reference(path):
             _ = path
         else:
             _ = _base.Assembly.find_assembly_reference(path)
             if _ is None:
                 return
 
-        if _mya_core.NodeAttribute.get_is_value(
+        if qsm_mya_core.NodeAttribute.get_is_value(
             _, 'qsm_type', _base.Assembly.Types.UnitAssembly
         ) is True:
             return _
@@ -203,9 +203,9 @@ class UnitAssembliesQuery(object):
         _ = cmds.ls(type='assemblyReference', long=1) or []
         for i_path in _:
             if cmds.objExists(i_path+'.qsm_type') is True:
-                i_qsm_type = _mya_core.NodeAttribute.get_as_string(i_path, 'qsm_type')
+                i_qsm_type = qsm_mya_core.NodeAttribute.get_as_string(i_path, 'qsm_type')
                 if i_qsm_type == 'unit_assembly':
-                    i_qsm_hash_key = _mya_core.NodeAttribute.get_as_string(i_path, 'qsm_hash_key')
+                    i_qsm_hash_key = qsm_mya_core.NodeAttribute.get_as_string(i_path, 'qsm_hash_key')
                     dict_.setdefault(
                         i_qsm_hash_key, []
                     ).append(i_path)

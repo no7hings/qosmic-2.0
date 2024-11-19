@@ -1,8 +1,6 @@
 # coding:utf-8
 import six
 
-import types
-
 import os
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
@@ -222,16 +220,29 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
     @classmethod
     def open_with_dialog(cls, file_path):
         if cls.is_dirty() is True:
-            result = gui_core.GuiApplication.exec_message_dialog(
-                six.u('Save changes to: {}?').format(
-                    cls.get_current()
-                ),
-                title='Open Scene',
-                show_no=True,
-                show_cancel=True,
-                size=(320, 120),
-                status='warning'
-            )
+            if gui_core.GuiUtil.language_is_chs():
+                result = gui_core.GuiApplication.exec_message_dialog(
+                    u'保存修改到: {}?'.format(
+                        cls.get_current()
+                    ),
+                    title='打开文件',
+                    show_no=True,
+                    show_cancel=True,
+                    size=(320, 120),
+                    status='warning'
+                )
+            else:
+                result = gui_core.GuiApplication.exec_message_dialog(
+                    u'Save changes to: {}?'.format(
+                        cls.get_current()
+                    ),
+                    title='Open Scene',
+                    show_no=True,
+                    show_cancel=True,
+                    size=(320, 120),
+                    status='warning'
+                )
+
             if result is True:
                 cls.save_to(cls.get_current())
                 cls.open(file_path, add_to_recent=True)
@@ -254,16 +265,28 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
     @classmethod
     def new_with_dialog(cls):
         if cls.is_dirty() is True:
-            result = gui_core.GuiApplication.exec_message_dialog(
-                six.u('Save changes to: {}?').format(
-                    cls.get_current()
-                ),
-                title='New Scene',
-                show_no=True,
-                show_cancel=True,
-                size=(320, 120),
-                status='warning',
-            )
+            if gui_core.GuiUtil.language_is_chs():
+                result = gui_core.GuiApplication.exec_message_dialog(
+                    u'保存修改到: {}?'.format(
+                        cls.get_current()
+                    ),
+                    title='新建文件',
+                    show_no=True,
+                    show_cancel=True,
+                    size=(320, 120),
+                    status='warning',
+                )
+            else:
+                result = gui_core.GuiApplication.exec_message_dialog(
+                    u'Save changes to: {}?'.format(
+                        cls.get_current()
+                    ),
+                    title='New Scene',
+                    show_no=True,
+                    show_cancel=True,
+                    size=(320, 120),
+                    status='warning',
+                )
             if result is True:
                 cls.save_to(cls.get_current())
                 cls.new()
@@ -284,61 +307,76 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
                 cls.save_to(file_path)
                 return True
 
-            gui_core.GuiApplication.exec_message_dialog(
-                'No changes to save.',
-                title='Save Scene',
-                size=(320, 120),
-                status='warning',
-            )
+            if gui_core.GuiUtil.language_is_chs():
+                gui_core.GuiApplication.exec_message_dialog(
+                    '沒有需要保存的更改。',
+                    title='保存文件',
+                    size=(320, 120),
+                    status='warning',
+                )
+            else:
+                gui_core.GuiApplication.exec_message_dialog(
+                    'No changes to save.',
+                    title='Save Scene',
+                    size=(320, 120),
+                    status='warning',
+                )
             return False
         cls.save_to(file_path)
         return True
 
     @classmethod
-    def ensure_save_width_dialog(cls):
+    def increment_and_save_with_dialog(cls, file_path):
         if cls.is_dirty() is True:
-            result = gui_core.GuiApplication.exec_message_dialog(
-                six.u('Save changes to: {}?').format(
-                    cls.get_current()
-                ),
-                title='Save Changes',
-                show_no=True,
-                show_cancel=True,
+            cls.save_to(file_path)
+            return True
+
+        if gui_core.GuiUtil.language_is_chs():
+            gui_core.GuiApplication.exec_message_dialog(
+                '沒有需要保存的更改。',
+                title='加存',
                 size=(320, 120),
                 status='warning',
             )
+        else:
+            gui_core.GuiApplication.exec_message_dialog(
+                'No changes to save.',
+                title='Increment and Save',
+                size=(320, 120),
+                status='warning',
+            )
+        return False
+
+    @classmethod
+    def ensure_save_width_dialog(cls):
+        if cls.is_dirty() is True:
+            if gui_core.GuiUtil.language_is_chs():
+                result = gui_core.GuiApplication.exec_message_dialog(
+                    u'有未保存的修改：{}，点击“Ok”以继续。'.format(
+                        cls.get_current()
+                    ),
+                    title='保存修改到文件',
+                    show_no=True,
+                    show_cancel=True,
+                    size=(320, 120),
+                    status='warning',
+                )
+            else:
+                result = gui_core.GuiApplication.exec_message_dialog(
+                    u'There are unsaved edits: {}, click "Ok" to continue.'.format(
+                        cls.get_current()
+                    ),
+                    title='Save Changes to Scene',
+                    show_no=True,
+                    show_cancel=True,
+                    size=(320, 120),
+                    status='warning',
+                )
             if result is True:
                 cls.save()
                 return True
             return False
         return True
-
-    @classmethod
-    def save_to_with_dialog(cls, file_path):
-        if cls.is_dirty() is True:
-            result = gui_core.GuiApplication.exec_message_dialog(
-                six.u('Save changes to: {}?').format(
-                    cls.get_current()
-                ),
-                title='Save Changes',
-                show_no=True,
-                show_cancel=True,
-                size=(320, 120),
-                status='warning',
-            )
-            if result is True:
-                # save old
-                cls.save_to(cls.get_current())
-                # save new
-                cls.save_to(file_path)
-                return True
-            elif result is False:
-                cls.save_to(file_path)
-                return True
-        else:
-            cls.save_to(file_path)
-            return True
-        return False
 
     @classmethod
     def open(cls, file_path, ignore_format=True, add_to_recent=False):
@@ -428,3 +466,46 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
         cmds.sets(name='QSM_{}_SET'.format(name.upper()))
         cmds.select(cmds.ls(_, dag=1, head=1), replace=1)
         return _
+
+    @classmethod
+    def collection_alembic_caches_auto(cls):
+        """
+        just use for simulation scene release
+        """
+        from . import alembic_cache as _alembic_cache
+
+        scene_path = cls.get_current()
+
+        directory_path = os.path.dirname(scene_path)
+        file_base_name = os.path.splitext(os.path.basename(scene_path))[0]
+
+        nodes = _alembic_cache.AlembicNodes.get_all()
+
+        for i_node in nodes:
+            i_file_path = _alembic_cache.AlembicNode.get_file(i_node)
+            i_file_name = os.path.basename(i_file_path)
+            i_file_path_new = u'{}/{}__{}'.format(
+                directory_path, file_base_name, i_file_name
+            )
+            if os.path.isfile(i_file_path_new) is False:
+                bsc_storage.StgFileOpt(i_file_path).copy_to_file(i_file_path_new)
+
+            _alembic_cache.AlembicNode.repath_to(i_node, i_file_path_new)
+
+    @classmethod
+    def collection_alembic_caches_to(cls, cache_directory_path):
+        from . import alembic_cache as _alembic_cache
+
+        nodes = _alembic_cache.AlembicNodes.get_all()
+
+        for i_node in nodes:
+            i_file_path = _alembic_cache.AlembicNode.get_file(i_node)
+            i_file_name = os.path.basename(i_file_path)
+            i_file_path_new = u'{}/{}'.format(
+                cache_directory_path, i_file_name
+            )
+
+            if os.path.isfile(i_file_path_new) is False:
+                bsc_storage.StgFileOpt(i_file_path).copy_to_file(i_file_path_new)
+
+            _alembic_cache.AlembicNode.repath_to(i_node, i_file_path_new)

@@ -9,7 +9,7 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_gui.proxy.widgets as qsm_proxy_widgets
+import qsm_lazy.gui.proxy.widgets as qsm_proxy_widgets
 
 
 class W0(gui_prx_widgets.PrxBaseWindow):

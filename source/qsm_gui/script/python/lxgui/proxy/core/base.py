@@ -140,8 +140,8 @@ class GuiProxyUtil(object):
 
     @staticmethod
     def window_proxy_trace_log(window_proxy, text):
-        if hasattr(window_proxy, 'trace_log_use_thread'):
-            window_proxy.trace_log_use_thread(text)
+        if hasattr(window_proxy, 'append_log_use_signal'):
+            window_proxy.append_log_use_signal(text)
 
     @staticmethod
     def window_proxy_write_log(window_proxy, text):

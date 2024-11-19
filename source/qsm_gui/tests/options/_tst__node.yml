@@ -43,11 +43,18 @@ constant:
 
     capsule_string:
         widget: capsule_string
-        value: ['project', 'sequence', 'asset', 'shot']
+        options: ['project', 'sequence', 'asset', 'shot']
         default: 'sequence'
         enable: True
     #    lock: True
         tool_tip: '...'
+
+button:
+    press_button:
+        widget: button
+        name: 'Press Button'
+        icon: 'reload'
+        menu_enable: True
 
 tuple:
     tuple/tuple/float2:
@@ -72,7 +79,7 @@ tuple:
 array:
     array/capsule_strings:
         widget: capsule_strings
-        value: ['project', 'sequence', 'asset', 'shot']
+        options: ['project', 'sequence', 'asset', 'shot']
         default: ['sequence', 'asset']
         enable: True
 

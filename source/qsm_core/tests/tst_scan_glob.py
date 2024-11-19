@@ -14,7 +14,7 @@ def test_1():
     def fnc_(path_):
         print path_
 
-    bsc_scan.ScanGlob.generate_glob_executor(
+    bsc_scan.ScanGlob.concurrent_glob(
         'X:/QSM_TST/Assets/*/*/Rig/Final/scenes/*_Skin.ma', fnc_
     )
 
@@ -29,6 +29,6 @@ def test_1():
 #     'X:/QSM_TST/Assets', '*_Skin.ma'
 # )
 
-print bsc_scan.ScanGlob.glob_all_files('X:/QSM_TST/Assets/*//*_Skin.ma')
+print bsc_scan.ScanGlob.file_glob('X:/QSM_TST/Assets/*//*_Skin.ma')
 
-print bsc_scan.ScanGlob.glob_all_files('X:/QSM_TST/Assets/*/*/Rig/Final/scenes/*_Skin.ma')
+print bsc_scan.ScanGlob.file_glob('X:/QSM_TST/Assets/*/*/Rig/Final/scenes/*_Skin.ma')

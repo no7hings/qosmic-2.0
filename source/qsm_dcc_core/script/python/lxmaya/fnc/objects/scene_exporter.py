@@ -202,7 +202,7 @@ class FncExporterForPreview(
             subdivSurfaces=1,
             fluids=1,
             strokes=1,
-            nCloths=1,
+            # nCloths=1,
             nParticles=1,
             pluginShapes=1,
             pluginObjects=['gpuCacheDisplayFilter', 1],

@@ -5,7 +5,7 @@ import maya.cmds as cmds
 from . import node as _node
 
 
-class DisplayLayer(object):
+class DisplayLayer:
     @classmethod
     def create(cls, name):
         if cmds.objExists(name) is True:
@@ -28,6 +28,10 @@ class DisplayLayer(object):
     def set_rgb(cls, name, rgb):
         cmds.setAttr(name+'.overrideRGBColors', 1)
         cmds.setAttr(name+'.overrideColorRGB', *rgb)
+
+    @classmethod
+    def get_all(cls, name):
+        return cmds.editDisplayLayerMembers(name, query=1) or []
 
 
 class DisplayLayerOpt(_node.NodeOpt):

@@ -104,6 +104,8 @@ class Namespace:
 
 
 class Namespaces:
+    IGNORE_NAMESPACES = ['UI', 'shared']
+
     @classmethod
     def extract_from_selection(cls):
         paths = cmds.ls(selection=1, long=1)
@@ -150,4 +152,11 @@ class Namespaces:
                 if i_namespace not in list_:
                     list_.append(i_namespace)
         return list_
+
+    @classmethod
+    def get_all(cls):
+        namespaces = cmds.namespaceInfo(listOnlyNamespaces=1, recurse=1)
+        namespaces = list(set(namespaces)-set(cls.IGNORE_NAMESPACES))
+        namespaces = sorted(namespaces)
+        return namespaces
 

@@ -101,10 +101,16 @@ class ArgDictStringOpt(object):
 
     value = property(get_value)
 
-    def get(self, key, as_array=False, as_integer=False, as_float=False):
+    def get(self, key, as_array=False, as_string=False, as_integer=False, as_float=False):
         if key in self.__dict:
             _ = self.__dict[key]
-            if as_integer is True:
+            if as_string is True:
+                if isinstance(_, six.string_types):
+                    return _
+                elif isinstance(_, (tuple, list)):
+                    return ' '.join(_)
+                return ''
+            elif as_integer is True:
                 if isinstance(_, int):
                     return _
                 elif isinstance(_, float):
@@ -155,6 +161,9 @@ class ArgDictStringOpt(object):
 
     def get_as_float(self, key):
         return self.get(key, as_float=True)
+
+    def get_as_string(self, key):
+        return self.get(key, as_string=True)
 
     def pop(self, key):
         if key in self.__dict:

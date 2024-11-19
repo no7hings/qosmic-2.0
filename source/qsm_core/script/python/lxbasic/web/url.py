@@ -22,14 +22,23 @@ class UrlOptions(object):
 
 
 class UrlValue(object):
-    @classmethod
-    def auto_unicode(cls, path):
+    @staticmethod
+    def auto_unicode(path):
         if not isinstance(path, six.text_type):
             return path.decode('utf-8')
         return path
 
-    @classmethod
-    def auto_string(cls, path):
+    @staticmethod
+    def ensure_unicode(s):
+        if isinstance(s, six.text_type):
+            return s
+        elif isinstance(s, bytes):
+            return s.decode('utf-8')
+        else:
+            return s
+
+    @staticmethod
+    def auto_string(path):
         if isinstance(path, six.text_type):
             return path.encode('utf-8')
         return path
@@ -42,9 +51,7 @@ class UrlValue(object):
 
     @classmethod
     def unquote(cls, text):
-        return cls.auto_unicode(
-            urlparse.unquote(text)
-        )
+        return urlparse.unquote(text)
 
 
 class Socket(object):

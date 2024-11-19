@@ -6,9 +6,7 @@ import lxbasic.resource as bsc_resource
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.motion.core as qsm_mya_mtn_core
-
-import qsm_maya.adv.core as qsm_mya_adv_core
+import qsm_maya.adv as qsm_mya_adv
 
 
 class ValidationTaskPrc(object):
@@ -53,16 +51,16 @@ class RigValidationTaskPrc(ValidationTaskPrc):
         self._adv_cfg = bsc_resource.RscExtendConfigure.get_as_content('rig/adv_validation')
 
     def find_all_controls(self):
-        return qsm_mya_adv_core.AdvChrOpt(self._namespace).find_all_controls()
+        return qsm_mya_adv.AdvChrOpt(self._namespace).find_all_controls()
 
     def find_all_transform_controls(self):
-        return qsm_mya_adv_core.AdvChrOpt(self._namespace).find_all_transform_controls()
+        return qsm_mya_adv.AdvChrOpt(self._namespace).find_all_transform_controls()
 
     def find_all_joints(self):
-        return qsm_mya_adv_core.AdvChrOpt(self._namespace).find_all_joints()
+        return qsm_mya_adv.AdvChrOpt(self._namespace).find_all_joints()
 
     def find_all_meshes(self):
-        return qsm_mya_adv_core.AdvChrOpt(self._namespace).find_all_meshes()
+        return qsm_mya_adv.AdvChrOpt(self._namespace).find_all_meshes()
 
     @classmethod
     def get_data_for(cls, path):

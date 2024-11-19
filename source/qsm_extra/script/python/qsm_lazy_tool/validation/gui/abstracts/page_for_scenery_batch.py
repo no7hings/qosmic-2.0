@@ -198,7 +198,7 @@ class AbsPrxPageForSceneryBatch(gui_prx_widgets.PrxBasePage):
 
         path_regex = pattern_opt.get_pattern_for_fnmatch()
 
-        file_paths = bsc_scan.ScanGlob.glob_all_files(path_regex)
+        file_paths = bsc_scan.ScanGlob.file_glob(path_regex)
 
         for i_file_path in file_paths:
             self._add_asset(role, i_file_path, process_options)

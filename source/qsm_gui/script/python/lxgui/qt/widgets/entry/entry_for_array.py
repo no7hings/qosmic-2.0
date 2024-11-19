@@ -85,7 +85,7 @@ class QtEntryForArray(
         items = self._get_selected_items_()
         if items:
             menu_raw.append(
-                ('open folder', 'file/open-folder', (True, self._execute_open_in_system_, False),
+                ('open folder', 'file/open-folder', (True, self._on_open_in_system_, False),
                  QtGui.QKeySequence.Open)
             )
         #
@@ -167,7 +167,7 @@ class QtEntryForArray(
     def dropEvent(self, event):
         self._do_drop_(event)
 
-    def _execute_open_in_system_(self):
+    def _on_open_in_system_(self):
         item = self._get_item_current_()
         if item is not None:
             item_widget = self.itemWidget(item)
@@ -386,7 +386,7 @@ class QtEntryForArray(
             i_action = QtWidgets.QAction(self)
             # noinspection PyUnresolvedReferences
             i_action.triggered.connect(
-                self._execute_open_in_system_
+                self._on_open_in_system_
             )
             i_action.setShortcut(
                 QtGui.QKeySequence.Open

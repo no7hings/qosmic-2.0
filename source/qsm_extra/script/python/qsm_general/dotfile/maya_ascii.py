@@ -57,3 +57,6 @@ class MayaAscii(object):
 
         return dict_
 
+    def get_reference_dict(self):
+        pass
+

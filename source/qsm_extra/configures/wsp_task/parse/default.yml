@@ -44,14 +44,14 @@ patterns:
             dir: '{root_release}/{project}/QSM/{space}/assets/{role}/{asset}'
             # task
             task-dir: '<.dir>/{step}.{task}'
-            # task version
-            task_version-dir: '<.task-dir>/<..task-version-name>'
+            # version
+            version-dir: '<.task-dir>/<..task-version-name>'
             # files
-            maya-scene_src-file: '<.task_version-dir>/source/{asset}.ma'
-            preview-file: '<.task_version-dir>/preview/<..task-version-name>.mov'
+            maya-scene_src-file: '<.version-dir>/source/{asset}.ma'
+            preview-mov-file: '<.version-dir>/preview/<..task-version-name>.mov'
 
-            maya-scene-file: '<.task_version-dir>/maya/{asset}.ma'
-            connect_map-json-file: '<.task_version-dir>/json/{asset}.connect_map.json'
+            maya-scene-file: '<.version-dir>/maya/{asset}.ma'
+            connect_map-json-file: '<.version-dir>/json/{asset}.connect_map.json'
 
         temporary:
             dir: '{root_temporary}/{project}/source/assets/{role}/{asset}'
@@ -63,7 +63,8 @@ patterns:
         task_unit-version-name: '{shot}.{step}.{task}.{task_unit}.v{version}'
 
         disorder:
-            animation_scene-file: '{root_disorder}/{project}/{episode}/{sequence}/动画/通过文件/{shot}.ma'
+            animation_scene_s-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_EPT}/动画/通过文件/{shot}.ma'
+            animation_preview_s-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_EPT}/动画/通过文件/{shot}.mov'
 
         source:
             dir: '{root_source}/{project}/{space}/shots/{sequence}/{shot}'
@@ -75,7 +76,22 @@ patterns:
             maya-thumbnail-file: '<.task_unit-dir>/maya/.thumbnails/<..task_unit-version-name>.jpg'
             # directories
             maya-cache-dir: '<.task_unit-dir>/maya/caches'
-            maya-cloth_cache-dir: '<.task_unit-dir>/maya/cloth_caches'
+            maya-cfx_cache-dir: '<.task_unit-dir>/maya/cfx_caches'
 
         release:
-            dir: '{root_release}/{project}/{space}/shots/{sequence}/{shot}'
+            dir: '{root_release}/{project}/QSM/{space}/shots/{sequence}/{shot}'
+            # task
+            task-dir: '<.dir>/{step}.{task}'
+            # version
+            version-dir: '<.task-dir>/<..task-version-name>'
+            # files
+            maya-scene_src-file: '<.version-dir>/source/{shot}.ma'
+            preview-mov-file: '<.version-dir>/preview/<..task-version-name>.mov'
+
+            maya-scene-file: '<.version-dir>/maya/{shot}.ma'
+            
+            abc-cache-dir: '<.version-dir>/cache/abc'
+
+            pack-dir: '<.version-dir>/pack'
+            pack-maya-scene-file: '<.pack-dir>/{shot}.ma'
+            pack-preview-mov-file: '<.pack-dir>/{shot}.mov'

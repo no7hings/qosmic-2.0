@@ -317,12 +317,23 @@ class QtPressButton(
             )
             c_icn_x += icn_frm_h
             c_name_w -= icn_frm_w
+
         # option
         if self._get_option_click_is_enable_() is True:
-            self._option_click_rect.setRect(
+            self._option_rect.setRect(
                 w-icn_frm_w, y, icn_frm_w, icn_frm_h
             )
-            self._option_click_icon_rect.setRect(
+            self._option_icon_draw_rect.setRect(
+                (w-icn_frm_w)+(icn_frm_w-i_f_w)/2, y+(icn_frm_h-i_f_h)/2, i_f_w, i_f_h
+            )
+            c_name_w -= icn_frm_w
+            c_w -= icn_frm_w
+        # menu
+        elif self._menu_flag is True:
+            self._menu_rect.setRect(
+                w-icn_frm_w, y, icn_frm_w, icn_frm_h
+            )
+            self._menu_icon_draw_rect.setRect(
                 (w-icn_frm_w)+(icn_frm_w-i_f_w)/2, y+(icn_frm_h-i_f_h)/2, i_f_w, i_f_h
             )
             c_name_w -= icn_frm_w
@@ -413,9 +424,7 @@ class QtPressButton(
         if widget == self:
             # update rect first
             action_enable = self._get_action_is_enable_()
-            check_enable = self._get_check_action_is_enable_()
-            click_enable = self._get_action_press_is_enable_()
-            option_click_enable = self._get_option_click_is_enable_()
+
             if event.type() == QtCore.QEvent.Resize:
                 self._refresh_widget_draw_geometry_()
                 self._refresh_widget_draw_()
@@ -431,13 +440,19 @@ class QtPressButton(
                     self._is_hovered = False
                     self.update()
                 # press
-                elif event.type() in [QtCore.QEvent.MouseButtonPress, QtCore.QEvent.MouseButtonDblClick]:
+                elif event.type() in {QtCore.QEvent.MouseButtonPress, QtCore.QEvent.MouseButtonDblClick}:
                     self._action_flag = None
-                    #
+
+                    check_enable = self._get_check_action_is_enable_()
+                    click_enable = self._get_action_press_is_enable_()
+                    option_enable = self._get_option_click_is_enable_()
+                    menu_enable = self._menu_flag
+
                     flag_raw = [
                         (check_enable, self._check_frame_rect, self.ActionFlag.CheckPress),
                         (click_enable, self._frame_draw_rect, self.ActionFlag.Press),
-                        (option_click_enable, self._option_click_rect, self.ActionFlag.OptionPress),
+                        (option_enable, self._option_rect, self.ActionFlag.OptionPress),
+                        (menu_enable, self._menu_rect, self.ActionFlag.MenuPress),
                     ]
                     if event.button() == QtCore.Qt.LeftButton:
                         pos = event.pos()
@@ -461,6 +476,8 @@ class QtPressButton(
                         self.press_clicked.emit()
                     elif self._action_flag == self.ActionFlag.OptionPress:
                         self.option_clicked.emit()
+                    elif self._action_flag == self.ActionFlag.MenuPress:
+                        self._popup_menu_()
                     #
                     self._action_flag = None
                     self.update()
@@ -602,8 +619,15 @@ class QtPressButton(
         # option
         if self._get_option_click_is_enable_() is True:
             painter._draw_icon_file_by_rect_(
-                self._option_click_icon_rect,
+                self._option_icon_draw_rect,
                 self._option_icon_file_path,
+                offset=offset,
+                is_hovered=self._is_hovered
+            )
+        elif self._menu_flag is True:
+            painter._draw_icon_file_by_rect_(
+                self._menu_icon_draw_rect,
+                self._menu_icon_file_path,
                 offset=offset,
                 is_hovered=self._is_hovered
             )

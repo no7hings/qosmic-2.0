@@ -10,14 +10,14 @@ class MayaShotCfxDressingCreateOpt(_shot_gnl.MayaShotGnlTaskCreateOpt):
     def __init__(self, *args, **kwargs):
         super(MayaShotCfxDressingCreateOpt, self).__init__(*args, **kwargs)
 
-    def build_scene_src(self, upstream_scene_path=None):
-        task = self._properties['task']
+    def build_scene_src(self, scene_src_path, upstream_scene_path=None):
 
         if upstream_scene_path is None:
-            upstream_scene_path = self._task_session.get_file_for('shot-disorder-animation_scene-file')
+            upstream_scene_path = self._task_session.get_file_for('shot-disorder-animation_scene_s-file')
 
         if upstream_scene_path:
             if bsc_storage.StgPath.get_is_file(upstream_scene_path):
-                qsm_mya_core.SceneFile.import_scene(upstream_scene_path)
-                return True
-        return False
+                qsm_mya_core.SceneFile.open(upstream_scene_path)
+
+        qsm_mya_core.SceneFile.save_to(scene_src_path)
+

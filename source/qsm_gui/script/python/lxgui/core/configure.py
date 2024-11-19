@@ -46,10 +46,11 @@ class GuiActionFlag(enum.IntEnum):
     CheckDbClick = 0x32
     ExpandPress = 0x33
     OptionPress = 0x34
-    ChoosePress = 0x35
-    NextPress = 0x36
-    ComponentPress = 0x37
-    ComponentDbClick = 0x38
+    MenuPress = 0x35
+    ChoosePress = 0x36
+    NextPress = 0x37
+    ComponentPress = 0x38
+    ComponentDbClick = 0x39
     #
     SplitHHover = 0x41
     SplitVHover = 0x42

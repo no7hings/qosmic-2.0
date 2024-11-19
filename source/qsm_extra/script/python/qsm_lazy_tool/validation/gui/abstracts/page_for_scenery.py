@@ -19,7 +19,7 @@ import qsm_scan as qsm_scan
 
 import qsm_lazy.validation.scripts as qsm_lzy_vld_scripts
 
-import qsm_gui.proxy.widgets as qsm_gui_prx_widgets
+import qsm_lazy.gui.proxy.widgets as lzy_gui_prx_widgets
 
 
 class AbsPrxPageForScenery(gui_prx_widgets.PrxBasePage):
@@ -141,7 +141,7 @@ class AbsPrxPageForScenery(gui_prx_widgets.PrxBasePage):
         self._asset_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'load', size_mode=1
         )
-        self._asset_prx_input = qsm_gui_prx_widgets.PrxInputForAssetScenery()
+        self._asset_prx_input = lzy_gui_prx_widgets.PrxInputForAssetScenery()
         self._asset_prx_tool_box.add_widget(self._asset_prx_input)
         # self._asset_prx_input.widget.setMaximumWidth(516)
 

@@ -1,22 +1,18 @@
 # coding:utf-8
 from ..abstracts import page_for_task_manager as _abs_page_for_task_manager
 
+from . import unit_for_task_manager as _unit_for_task_manager
+
 import qsm_wsp_task as qsm_dcc_wsp_task
 
 
-class PrxPageForAssetTaskManager(_abs_page_for_task_manager.AbsPrxPageForTaskManager):
+class PrxPageForTaskManager(_abs_page_for_task_manager.AbsPrxPageForTaskManager):
     TASK_PARSE_CLS = qsm_dcc_wsp_task.TaskParse
 
-    RESOURCE_BRANCH = 'asset'
+    UNIT_CLASSES = [
+        _unit_for_task_manager.PrxUnitForAssetTaskManager,
+        _unit_for_task_manager.PrxUnitForShotTaskManager,
+    ]
 
-    def __init__(self, window, session, *args, **kwargs):
-        super(PrxPageForAssetTaskManager, self).__init__(window, session, *args, **kwargs)
-
-
-class PrxPageForShotTaskManager(_abs_page_for_task_manager.AbsPrxPageForTaskManager):
-    TASK_PARSE_CLS = qsm_dcc_wsp_task.TaskParse
-
-    RESOURCE_BRANCH = 'shot'
-
-    def __init__(self, window, session, *args, **kwargs):
-        super(PrxPageForShotTaskManager, self).__init__(window, session, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(PrxPageForTaskManager, self).__init__(*args, **kwargs)

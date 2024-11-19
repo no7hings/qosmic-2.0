@@ -7,7 +7,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-from .... import core as _mya_core
+import qsm_maya.core as qsm_mya_core
 
 from . import base as _base
 
@@ -17,7 +17,7 @@ class GpuInstanceOpt(object):
 
     @classmethod
     def create_import_root(cls):
-        return _mya_core.Group.create(
+        return qsm_mya_core.Group.create(
             cls.IMPORT_ROOT
         )
 
@@ -25,13 +25,13 @@ class GpuInstanceOpt(object):
     def create_import_location(cls, namespace):
         root = cls.create_import_root()
         location = '{}|{}_MESH_GRP'.format(root, namespace)
-        return _mya_core.Group.create(
+        return qsm_mya_core.Group.create(
             location
         )
 
     def __init__(self, node):
         self._node = node
-        self._shape = _mya_core.Transform.get_shape(self._node)
+        self._shape = qsm_mya_core.Transform.get_shape(self._node)
 
         self._path = None
         self._path_opt = None
@@ -50,7 +50,7 @@ class GpuInstanceOpt(object):
         return False
 
     def is_exists(self):
-        return _mya_core.Node.is_exists(self._node)
+        return qsm_mya_core.Node.is_exists(self._node)
 
     @property
     def path(self):
@@ -65,14 +65,14 @@ class GpuInstanceOpt(object):
         return self._node
 
     def get_active(self):
-        file_path = _mya_core.NodeAttribute.get_as_string(
+        file_path = qsm_mya_core.NodeAttribute.get_as_string(
             self._shape, 'cacheFileName'
         )
         if file_path:
             return bsc_storage.StgFileOpt(file_path).name_base
 
     def set_active(self, key):
-        file_path = _mya_core.NodeAttribute.get_as_string(
+        file_path = qsm_mya_core.NodeAttribute.get_as_string(
             self._shape, 'cacheFileName'
         )
         file_opt = bsc_storage.StgFileOpt(file_path)
@@ -81,41 +81,41 @@ class GpuInstanceOpt(object):
                 file_opt.directory_path, key
             )
             if bsc_storage.StgPath.get_is_file(file_path_new) is True:
-                _mya_core.NodeAttribute.set_as_string(
+                qsm_mya_core.NodeAttribute.set_as_string(
                     self._shape, 'cacheFileName', file_path_new
                 )
 
     def do_import_mesh(self):
-        file_path = _mya_core.NodeAttribute.get_as_string(
+        file_path = qsm_mya_core.NodeAttribute.get_as_string(
             self._shape, 'cacheFileName'
         )
         file_opt = bsc_storage.StgFileOpt(file_path)
         if file_opt.get_is_file() is True:
             mesh_file_path = '{}/mesh.mb'.format(file_opt.directory_path)
 
-            namespace = _mya_core.DagNode.to_namespace(self._node)
+            namespace = qsm_mya_core.DagNode.to_namespace(self._node)
 
             import_location = self.create_import_location(namespace)
 
-            paths = _mya_core.SceneFile.import_file(mesh_file_path, namespace)
-            roots = _mya_core.DagNode.find_roots(paths)
+            paths = qsm_mya_core.SceneFile.import_file(mesh_file_path, namespace)
+            roots = qsm_mya_core.DagNode.find_roots(paths)
             for i in roots:
-                i_path_new = _mya_core.DagNode.parent_to(
+                i_path_new = qsm_mya_core.DagNode.parent_to(
                     i, import_location
                 )
 
-                _mya_core.Node.delete(
-                    _mya_core.ParentConstraint.create(
+                qsm_mya_core.Node.delete(
+                    qsm_mya_core.ParentConstraint.create(
                         self._node, i_path_new
                     )
                 )
-                _mya_core.Node.delete(
-                    _mya_core.ScaleConstraint.create(
+                qsm_mya_core.Node.delete(
+                    qsm_mya_core.ScaleConstraint.create(
                         self._node, i_path_new
                     )
                 )
 
-            _mya_core.NodeAttribute.set_visible(
+            qsm_mya_core.NodeAttribute.set_visible(
                 self._node, False
             )
 
@@ -176,14 +176,14 @@ class GpuInstancesQuery(object):
 
     @classmethod
     def find_one(cls, path):
-        if _mya_core.Node.is_transform_type(path):
+        if qsm_mya_core.Node.is_transform_type(path):
             _ = path
-        elif _mya_core.Node.is_gpu(path):
-            _ = _mya_core.Shape.get_transform(path)
+        elif qsm_mya_core.Node.is_gpu(path):
+            _ = qsm_mya_core.Shape.get_transform(path)
         else:
             return None
 
-        if _mya_core.NodeAttribute.get_is_value(
+        if qsm_mya_core.NodeAttribute.get_is_value(
             _, 'qsm_type', _base.Assembly.Types.GpuInstance
         ) is True:
             return _
@@ -194,9 +194,9 @@ class GpuInstancesQuery(object):
         _ = cmds.ls(type='transform', long=1)
         for i_path in _:
             if cmds.objExists(i_path+'.qsm_type') is True:
-                i_qsm_type = _mya_core.NodeAttribute.get_as_string(i_path, 'qsm_type')
+                i_qsm_type = qsm_mya_core.NodeAttribute.get_as_string(i_path, 'qsm_type')
                 if i_qsm_type == 'gpu_instance':
-                    i_qsm_hash_key = _mya_core.NodeAttribute.get_as_string(i_path, 'qsm_hash_key')
+                    i_qsm_hash_key = qsm_mya_core.NodeAttribute.get_as_string(i_path, 'qsm_hash_key')
                     dict_.setdefault(
                         i_qsm_hash_key, []
                     ).append(i_path)

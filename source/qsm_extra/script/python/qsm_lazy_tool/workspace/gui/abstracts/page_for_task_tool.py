@@ -30,9 +30,15 @@ class AbsPrxPageForTaskTool(gui_prx_widgets.PrxBasePage):
 
             self._qt_layout._clear_all_widgets_()
 
-            if self._task in self.UNIT_CLASS_DICT:
-                self._gui_task_unit = self.UNIT_CLASS_DICT[self._task](self._window, self, self._session)
+            self._gui_task_unit = None
+
+            if self._task in self._unit_class_dict:
+                self._gui_task_unit = self._unit_class_dict[self._task](self._window, self, self._session)
                 self._qt_layout.addWidget(self._gui_task_unit.widget)
 
         if self._gui_task_unit is not None:
             self._gui_task_unit.do_gui_refresh_all()
+
+    def gui_setup_post_fnc(self):
+        if self._gui_task_unit is not None:
+            self._gui_task_unit.gui_setup_post_fnc()

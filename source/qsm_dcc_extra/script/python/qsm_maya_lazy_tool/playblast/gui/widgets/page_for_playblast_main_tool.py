@@ -315,7 +315,9 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
                 'display_setting.hud_enable'
             )
 
-            task_name, file_path, movie_file_path, cmd_script = qsm_mya_tsk_gnl_scripts.PlayblastProcess.generate_subprocess_args(
+            (
+                task_name, file_path, movie_file_path, cmd_script
+            ) = qsm_mya_tsk_gnl_scripts.PlayblastProcess.generate_subprocess_args(
                 camera_path=camera_path,
                 frame=frame_range, frame_step=frame_step, fps=fps,
                 resolution=resolution_size,

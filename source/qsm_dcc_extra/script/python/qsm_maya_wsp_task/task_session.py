@@ -68,6 +68,14 @@ class TaskSession(qsm_dcc_wsp_task.TaskSession):
             return _task_release.MayaAssetGnlReleaseOpt(
                 self, self._properties
             )
+        elif 'shot' in self._properties:
+            if task == 'cfx_dressing':
+                return _task_release.MayaShotCfxDressingReleaseOpt(
+                    self, self._properties
+                )
+            return _task_release.MayaShotGnlReleaseOpt(
+                self, self._properties
+            )
 
     def __init__(self, *args, **kwargs):
         super(TaskSession, self).__init__(*args, **kwargs)
@@ -77,28 +85,31 @@ class TaskSession(qsm_dcc_wsp_task.TaskSession):
         if 'version' in kwargs:
             kwargs.pop('version')
 
-        pattern_opt = self._task_parse.generate_resource_source_task_scene_src_pattern_opt_for(
+        pattern_opt = self._task_parse.generate_source_task_scene_src_pattern_opt_for(
             **kwargs
         )
         matches = pattern_opt.find_matches(sort=True)
         if matches:
             return int(matches[-1]['version'])
         return 0
+    
+    def save_source_task_scene_src(self):
+        pass
 
-    def save_source_task_scene(self):
+    def increment_and_save_source_task_scene_src(self):
         version = self.get_last_version_code()
 
-        kwargs = copy.copy(self._properties)
-        kwargs['version'] = str(version+1).zfill(3)
+        kwargs_new = copy.copy(self._properties)
+        kwargs_new['version'] = str(version+1).zfill(3)
 
-        scene_ptn_opt = self._task_parse.generate_resource_source_task_scene_src_pattern_opt_for(**kwargs)
+        scene_ptn_opt = self._task_parse.generate_source_task_scene_src_pattern_opt_for(**kwargs_new)
         scene_path = scene_ptn_opt.get_value()
-        if qsm_mya_core.SceneFile.save_to_with_dialog(scene_path) is True:
-            kwargs['result'] = scene_path
+        if qsm_mya_core.SceneFile.increment_and_save_with_dialog(scene_path) is True:
+            kwargs_new['result'] = scene_path
             thumbnail_ptn_opt = self._task_parse.generate_resource_source_task_scene_src_thumbnail_pattern_opt_for(
-                **kwargs
+                **kwargs_new
             )
             thumbnail_path = thumbnail_ptn_opt.get_value()
 
             gui_qt_core.QtMaya.make_snapshot(thumbnail_path)
-            return kwargs
+            return kwargs_new

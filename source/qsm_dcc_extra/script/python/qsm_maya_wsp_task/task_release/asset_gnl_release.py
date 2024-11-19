@@ -43,9 +43,7 @@ class MayaAssetGnlReleaseOpt(qsm_dcc_wsp_task.DccTaskReleaseOpt):
 
             properties_new = copy.copy(self._properties)
 
-            release_scene_src_path_latest = self._task_session.get_latest_file_for(
-                'asset-release-maya-scene_src-file'
-            )
+            release_scene_src_path_latest = self._task_session.get_last_release_scene_src_file()
             if release_scene_src_path_latest:
                 if bsc_storage.StgFileOpt(
                     source_scene_src_path
@@ -66,11 +64,15 @@ class MayaAssetGnlReleaseOpt(qsm_dcc_wsp_task.DccTaskReleaseOpt):
                         )
                     return
 
-            version_number_new = self._task_session.generate_asset_release_new_version_number()
+            version_number_new = self._task_session.generate_release_new_version_number()
 
             version_new = str(version_number_new).zfill(3)
 
             properties_new['version'] = str(version_number_new).zfill(3)
+
+            version_dir_path_new = self._task_session.get_file_for(
+                'asset-release-version-dir', version=version_new
+            )
 
             # release source_src file
             release_scene_src_path_new = self._task_session.get_file_for(
@@ -84,9 +86,12 @@ class MayaAssetGnlReleaseOpt(qsm_dcc_wsp_task.DccTaskReleaseOpt):
             images = kwargs.get('images')
             if images:
                 preview_path = self._task_session.get_file_for(
-                    'asset-release-preview-file', version=version_new
+                    'asset-release-preview-mov-file', version=version_new
                 )
                 bsc_core.BscFfmpeg.concat_images(
                     preview_path, images
                 )
-            return release_scene_src_path_new, version_new
+
+            videos = kwargs.get('videos')
+
+            return version_dir_path_new, release_scene_src_path_new, version_new

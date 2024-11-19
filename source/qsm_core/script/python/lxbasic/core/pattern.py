@@ -356,7 +356,9 @@ class BscFnmatch(object):
 class AbsParseOpt(object):
 
     def __init__(self, p, variants=None):
-        p = BscFnmatch.to_parse_style(p)
+        p = BscFnmatch.to_parse_style(
+            _base.ensure_unicode(p)
+        )
 
         self._pattern_origin = p
         self._pattern = p
@@ -456,11 +458,13 @@ class BscStgParseOpt(AbsParseOpt):
         paths = _scan_glob.ScanGlob.glob(
             regex
         )
+
         if sort is True:
             paths = _raw.RawTextsOpt(paths).sort_by_number()
 
+        keys = self.get_keys()
         # has variant
-        if self.get_keys():
+        if keys:
             for i_path in paths:
                 i_p = parse.parse(
                     self._pattern, i_path, case_sensitive=True
@@ -468,10 +472,33 @@ class BscStgParseOpt(AbsParseOpt):
                 if i_p:
                     i_r = i_p.named
                     if i_r:
+                        # ensure update variant form exists
                         i_r.update(self._variants)
                         i_r['result'] = i_path
                         i_r['pattern'] = self._pattern_origin
                         list_.append(i_r)
+
+                # when variant value is '', we collected result also, etc. "X:A{var_0}/B", "X:A/B"
+                else:
+                    i_pattern_new = self._pattern
+
+                    i_vars_new = {}
+                    for i_key in keys:
+                        if i_key.endswith('_EPT'):
+                            i_vars_new[i_key] = ''
+
+                    i_pattern_new = BscParse.update_variants(i_pattern_new, **i_vars_new)
+                    i_p_new = parse.parse(
+                        i_pattern_new, i_path, case_sensitive=True
+                    )
+                    if i_p_new:
+                        i_r_new = i_p_new.named
+                        if i_r_new:
+                            # ensure update variant form exists
+                            i_r_new.update(self._variants)
+                            i_r_new['result'] = i_path
+                            i_r_new['pattern'] = self._pattern_origin
+                            list_.append(i_r_new)
         else:
             for i_path in paths:
                 i_r = dict(result=i_path)
@@ -521,7 +548,7 @@ class BscStgParseOpt(AbsParseOpt):
         return BscVersionOpt.get_default()
 
     def __str__(self):
-        return self._pattern
+        return _base.auto_string(self._pattern)
 
 
 class BscTaskParseOpt(BscStgParseOpt):

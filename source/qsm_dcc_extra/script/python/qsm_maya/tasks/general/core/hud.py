@@ -6,7 +6,7 @@ import maya.mel as mel
 
 import lxbasic.core as bsc_core
 
-from .... import core as _mya_core
+import qsm_maya.core as qsm_mya_core
 
 
 class HUD(object):
@@ -22,15 +22,15 @@ class HUD(object):
 
     @classmethod
     def get_camera(cls, camera_path=None):
-        if _mya_core.Scene.get_is_ui_mode():
-            return _mya_core.DagNode.to_name(
-                _mya_core.Camera.get_active()
+        if qsm_mya_core.Scene.get_is_ui_mode():
+            return qsm_mya_core.DagNode.to_name(
+                qsm_mya_core.Camera.get_active()
             )
-        return _mya_core.DagNode.to_name(camera_path)
+        return qsm_mya_core.DagNode.to_name(camera_path)
 
     @classmethod
     def get_fps_tag(cls):
-        time_unit = _mya_core.Frame.get_fps_()
+        time_unit = qsm_mya_core.Frame.get_fps_()
         return cls.timeConfig[time_unit]
 
     @classmethod
@@ -53,7 +53,7 @@ class HUD(object):
     @classmethod
     def get_time(cls):
 
-        time_unit = _mya_core.Frame.get_fps_()
+        time_unit = qsm_mya_core.Frame.get_fps_()
         #
         start_frame = cmds.playbackOptions(query=1, min=1)
         end_frame = cmds.playbackOptions(query=1, max=1)
@@ -66,7 +66,7 @@ class HUD(object):
 
     @classmethod
     def get_resolution(cls):
-        return '{} x {}'.format(*_mya_core.RenderSettings.get_resolution())
+        return '{} x {}'.format(*qsm_mya_core.RenderSettings.get_resolution())
 
     @classmethod
     def generate_configure(cls, camera_path=None):

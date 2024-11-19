@@ -269,11 +269,11 @@ class PrxTextBrowser(gui_prx_abstracts.AbsPrxWidget):
             gui_core.GuiXml.get_text(text, text_color=gui_core.GuiXmlColor.Yellow)
         )
 
-    def trace_log(self, text):
-        self._qt_entry_widget._add_value_(text)
+    def append_log(self, text):
+        self._qt_entry_widget._append_value_(text)
 
-    def trace_log_use_thread(self, text):
-        self._qt_entry_widget._add_value_with_thread_(text)
+    def append_log_use_signal(self, text):
+        self._qt_entry_widget._append_value_use_signal_(text)
 
     def set_content_with_thread(self, text):
         self._qt_entry_widget._set_value_with_thread_(text)

@@ -10,23 +10,23 @@ import lxbasic.storage as bsc_storage
 
 import qsm_general.process as qsm_gnl_process
 
-from .... import core as _mya_core
+import qsm_maya.core as qsm_mya_core
 
-from ....general import core as _gnl_core
+import qsm_maya.general.core as qsm_gnl_core
+
+import qsm_maya.resource.core as qsm_mya_rsc_core
 
 from ...general import core as _tsk_gnl_core
-
-from ....resource import core as _rsc_core
 
 from .. import core as _core
 
 
-class CfxNClothCacheOpt(_rsc_core.AssetCacheOpt):
-    CACHE_ROOT = _gnl_core.ResourceCacheNodes.CfxClothRoot
-    CACHE_NAME = _gnl_core.ResourceCacheNodes.CfxClothName
+class CfxClothCacheOpt(qsm_mya_rsc_core.AssetCacheOpt):
+    CACHE_ROOT = qsm_gnl_core.ResourceCacheNodes.CfxClothRoot
+    CACHE_NAME = qsm_gnl_core.ResourceCacheNodes.CfxClothName
 
     def __init__(self, *args, **kwargs):
-        super(CfxNClothCacheOpt, self).__init__(*args, **kwargs)
+        super(CfxClothCacheOpt, self).__init__(*args, **kwargs)
 
     @classmethod
     def create_cache_root_auto(cls):
@@ -52,8 +52,8 @@ class CfxNClothCacheOpt(_rsc_core.AssetCacheOpt):
             json_path = _tsk_gnl_core.FilePatterns.CfxClothJsonFile.format(**options)
 
             data = dict(
-                scene_file=_mya_core.SceneFile.get_current(),
-                scene_fps=_mya_core.Frame.get_fps_tag(),
+                scene_file=qsm_mya_core.SceneFile.get_current(),
+                scene_fps=qsm_mya_core.Frame.get_fps_tag(),
                 user=bsc_core.BscSystem.get_user_name(),
                 host=bsc_core.BscSystem.get_host(),
                 time=bsc_core.BscSystem.get_time(),
@@ -65,7 +65,7 @@ class CfxNClothCacheOpt(_rsc_core.AssetCacheOpt):
 
             bsc_storage.StgFileOpt(json_path).set_write(data)
             if with_geometry_cache is True:
-                _mya_core.GeometryCacheOpt(
+                qsm_mya_core.GeometryCacheOpt(
                     file_path=mcx_path,
                     location=mesh_transforms,
                     frame_range=frame_range,
@@ -73,7 +73,7 @@ class CfxNClothCacheOpt(_rsc_core.AssetCacheOpt):
                 ).create_and_assign()
 
             if with_alembic_cache is True:
-                _mya_core.AlembicCacheExport(
+                qsm_mya_core.AlembicCacheExport(
                     file_path=abc_path,
                     location=mesh_transforms,
                     frame_range=frame_range,
@@ -85,19 +85,19 @@ class CfxNClothCacheOpt(_rsc_core.AssetCacheOpt):
         cache_location_new = '{}|{}:{}'.format(self.CACHE_ROOT, self._namespace, self.CACHE_NAME)
         cache_location = '|{}:{}'.format(self._namespace, self.CACHE_NAME)
         if cmds.objExists(cache_location) is False and cmds.objExists(cache_location_new) is False:
-            cache_location = _mya_core.Container.create_as_default(cache_location)
-            nodes = _mya_core.SceneFile.import_file(
+            cache_location = qsm_mya_core.Container.create_as_default(cache_location)
+            nodes = qsm_mya_core.SceneFile.import_file(
                 cache_path, self._namespace
             )
             dags = []
             non_dags = []
             for i in nodes:
-                if _mya_core.DagNode.check_is_dag(i):
+                if qsm_mya_core.DagNode.check_is_dag(i):
                     dags.append(i)
                 else:
                     non_dags.append(i)
 
-            mesh_transforms = [x for x in dags if _mya_core.Node.is_mesh_type(x)]
+            mesh_transforms = [x for x in dags if qsm_mya_core.Node.is_mesh_type(x)]
 
             geometry_location = self._resource.find_geometry_location()
             if geometry_location is None:
@@ -109,7 +109,7 @@ class CfxNClothCacheOpt(_rsc_core.AssetCacheOpt):
 
             query_dict = {v: k for k, v in data.items()}
             for i_mesh_path in mesh_transforms:
-                i_mesh_opt = _mya_core.MeshShapeOpt(i_mesh_path)
+                i_mesh_opt = qsm_mya_core.MeshShapeOpt(i_mesh_path)
                 i_uuid = i_mesh_opt.get_face_vertices_as_uuid()
                 if i_uuid in query_dict:
                     i_key = query_dict[i_uuid]
@@ -117,16 +117,16 @@ class CfxNClothCacheOpt(_rsc_core.AssetCacheOpt):
                     if i_path_tgt is None:
                         continue
 
-                    i_path_src = _mya_core.Shape.get_transform(i_mesh_path)
-                    i_results = _mya_core.BlendShape.create(i_path_src, i_path_tgt)
+                    i_path_src = qsm_mya_core.Shape.get_transform(i_mesh_path)
+                    i_results = qsm_mya_core.BlendShape.create(i_path_src, i_path_tgt)
                     non_dags.extend(i_results)
 
-            dag_roots = _mya_core.DagNode.find_roots(dags)
-            _mya_core.Container.add_dag_nodes(cache_location, dag_roots)
-            _mya_core.Container.add_nodes(cache_location, non_dags)
+            dag_roots = qsm_mya_core.DagNode.find_roots(dags)
+            qsm_mya_core.Container.add_dag_nodes(cache_location, dag_roots)
+            qsm_mya_core.Container.add_nodes(cache_location, non_dags)
 
-            _mya_core.NodeDisplay.set_visible(cache_location, False)
-            _mya_core.DagNode.parent_to(cache_location, self.CACHE_ROOT)
+            qsm_mya_core.NodeDisplay.set_visible(cache_location, False)
+            qsm_mya_core.DagNode.parent_to(cache_location, self.CACHE_ROOT)
 
 
 class CfxNClothCacheProcess(object):
@@ -155,7 +155,7 @@ class CfxNClothCacheProcess(object):
             directory=directory_path,
         )
         scene_src_path = _tsk_gnl_core.FilePatterns.SceneSrcFile.format(**options)
-        _mya_core.SceneFile.export_file(scene_src_path)
+        qsm_mya_core.SceneFile.export_file(scene_src_path)
 
         task_name = '[cfx-cloth-cache][{}][{}]'.format(
             bsc_storage.StgDirectoryOpt(directory_path).get_name(), '{}-{}'.format(*frame_range)
@@ -176,7 +176,7 @@ class CfxNClothCacheProcess(object):
         return task_name, scene_src_path, cmd_script
 
     @classmethod
-    def generate_deadline_hook_option(
+    def generate_farm_hook_option(
         cls,
         namespaces,
         directory_path,
@@ -187,13 +187,13 @@ class CfxNClothCacheProcess(object):
             directory=directory_path,
         )
         scene_src_path = _tsk_gnl_core.FilePatterns.SceneSrcFile.format(**options)
-        _mya_core.SceneFile.export_file(scene_src_path)
+        qsm_mya_core.SceneFile.export_file(scene_src_path)
 
         task_name = '[cfx-cloth-cache][{}][{}]'.format(
             bsc_storage.StgDirectoryOpt(directory_path).get_name(), '{}-{}'.format(*frame_range)
         )
 
-        hook_option = qsm_gnl_process.MayaCacheProcess.generate_hook_option_by_option_dict(
+        hook_option = qsm_gnl_process.MayaCacheProcess.generate_hook_option_fnc(
             'cfx-cloth-cache-generate',
             dict(
                 directory_path=directory_path,
@@ -215,17 +215,17 @@ class CfxNClothCacheProcess(object):
         )
         scene_src_path = _tsk_gnl_core.FilePatterns.SceneSrcFile.format(**options)
 
-        _mya_core.SceneFile.new()
+        qsm_mya_core.SceneFile.new()
         if os.path.isfile(scene_src_path) is False:
             raise RuntimeError()
 
-        _mya_core.SceneFile.open(scene_src_path)
+        qsm_mya_core.SceneFile.open(scene_src_path)
 
         for i_namespace in self._namespaces:
         
             i_resource = _core.CfxAdvRigAssetOld(i_namespace)
 
-            CfxNClothCacheOpt(i_resource).do_export(
+            CfxClothCacheOpt(i_resource).do_export(
                 self._directory_path,
                 self._frame_range, self._frame_step, self._frame_offset,
                 self._with_alembic_cache, self._with_geometry_cache

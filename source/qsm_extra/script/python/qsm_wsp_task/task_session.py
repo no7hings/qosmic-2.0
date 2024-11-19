@@ -69,7 +69,14 @@ class TaskSession(object):
     def scene_src_path(self):
         return self._task_parse.to_source_scene_src_path(**self._properties)
 
-    def save_source_task_scene(self, *args, **kwargs):
+    @property
+    def resource_branch(self):
+        return self._properties['resource_branch']
+    
+    def save_source_task_scene_src(self, *args, **kwargs):
+        return False
+
+    def increment_and_save_source_task_scene_src(self, *args, **kwargs):
         return False
 
     def generate_pattern_opt_for(self, keyword, **kwargs):
@@ -92,7 +99,7 @@ class TaskSession(object):
         else:
             matches = ptn_opt.find_matches(sort=True)
             if matches:
-                return matches[0]['result']
+                return matches[-1]['result']
 
     def get_latest_file_for(self, keyword, **kwargs):
         kwargs_new = copy.copy(self._properties)
@@ -109,9 +116,29 @@ class TaskSession(object):
             return matches[-1]['result']
         return None
 
-    def generate_asset_release_new_version_number(self, **kwargs):
+    def generate_release_new_version_number(self, **kwargs):
         kwargs_new = copy.copy(self._properties)
         kwargs_new.update(**kwargs)
-        return self._task_parse.generate_asset_release_new_version_number(
-            **kwargs_new
-        )
+        resource_branch = kwargs_new['resource_branch']
+        if resource_branch == 'asset':
+            return self._task_parse.generate_asset_release_new_version_number(
+                **kwargs_new
+            )
+        elif resource_branch == 'shot':
+            return self._task_parse.generate_shot_release_new_version_number(
+                **kwargs_new
+            )
+        else:
+            raise RuntimeError()
+
+    def get_last_release_scene_src_file(self):
+        if self.resource_branch == 'asset':
+            return self.get_latest_file_for(
+                'asset-release-maya-scene_src-file'
+            )
+        elif self.resource_branch == 'shot':
+            return self.get_latest_file_for(
+                'shot-release-maya-scene_src-file'
+            )
+        else:
+            raise RuntimeError()

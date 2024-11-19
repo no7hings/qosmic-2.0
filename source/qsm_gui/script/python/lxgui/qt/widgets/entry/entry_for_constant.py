@@ -204,8 +204,14 @@ class QtEntryForConstant(
             menu_raw.extend(
                 [
                     ('system',),
-                    ('open folder', 'file/open-folder', (True, self._execute_open_in_system_, False),
-                     QtGui.QKeySequence.Open)
+                    (
+                        'open folder', 'file/open-folder', (True, self._on_open_in_system_, False),
+                        QtGui.QKeySequence.Open
+                    ),
+                    (
+                        'copy path', 'tool/copy', (True, self._on_copy_path_, False),
+                        QtGui.QKeySequence.Open
+                    )
                 ]
             )
         #
@@ -254,10 +260,15 @@ class QtEntryForConstant(
     def _get_value_type_(self):
         return self._value_type
 
-    def _execute_open_in_system_(self):
+    def _on_open_in_system_(self):
         _ = self.text()
         if _:
             bsc_storage.StgSystem.open(_)
+    
+    def _on_copy_path_(self):
+        _ = self.text()
+        if _:
+            _qt_core.QtUtil.copy_text_to_clipboard(_)
 
     def _set_entry_use_as_storage_(self, boolean=True):
         super(QtEntryForConstant, self)._set_entry_use_as_storage_(boolean)
@@ -265,7 +276,7 @@ class QtEntryForConstant(
             action = QtWidgets.QAction(self)
             # noinspection PyUnresolvedReferences
             action.triggered.connect(
-                self._execute_open_in_system_
+                self._on_open_in_system_
             )
             action.setShortcut(
                 QtGui.QKeySequence.Open
@@ -332,13 +343,17 @@ class QtEntryForConstant(
         _ = self.text()
         # do not encode output, use original data
         if self._value_type == str:
-            # if isinstance(_, six.text_type):
-            #     _ = _.encode('utf-8')
             return _
         elif self._value_type == int:
-            return int(_ or 0)
+            try:
+                return int(_ or 0)
+            except ValueError:
+                return 0
         elif self._value_type == float:
-            return float(_ or 0)
+            try:
+                return float(_ or 0.0)
+            except ValueError:
+                return 0.0
         return _
 
     def _set_value_(self, value):

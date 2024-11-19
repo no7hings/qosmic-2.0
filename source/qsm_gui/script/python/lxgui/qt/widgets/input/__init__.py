@@ -3,6 +3,8 @@ from .input_for_tuple import *
 
 from .input_for_constant import *
 
+from .input_for_content import *
+
 from .input_for_filter import *
 
 from .input_for_capsule import *

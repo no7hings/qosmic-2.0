@@ -9,7 +9,7 @@ def main(session):
 
     option_opt = session.get_option_opt()
 
-    s.SkinProxyOpt.load_auto(
+    s.SkinProxyOpt.execute_auto(
         **option_opt.to_dict()
     )
 

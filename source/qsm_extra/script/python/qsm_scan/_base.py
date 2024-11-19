@@ -48,7 +48,8 @@ class EntityScanPatterns:
 
     Episode = '{root}/{project}/{episode}'
     Sequence = '{root}/{project}/{episode}/{sequence}/动画'
-    Shot = '{root}/{project}/{episode}/{sequence}/动画/通过文件/{shot}.ma'
+    # sequence name has chinese word, so add "{seq_EPT}" for match result.
+    Shot = '{root}/{project}/{episode}/{sequence}{seq_EPT}/动画/通过文件/{shot}.ma'
 
     ProjectTask = '{root}/{project}/{task}'
     AssetTask = '{root}/{project}/Assets/{role}/{asset}/{task}/Final'
@@ -159,7 +160,11 @@ class AbsEntity(object):
     StoragePatterns = StoragePatterns
 
     @classmethod
-    def _validation_fnc(cls, variants):
+    def _variant_cleanup_fnc(cls, variants):
+        return variants
+
+    @classmethod
+    def _variant_validation_fnc(cls, variants):
         return True
 
     @classmethod
@@ -361,11 +366,12 @@ class AbsEntitiesCacheOpt(object):
         return matchers
 
     def register(self, variants):
+        variants = self.EntityClass._variant_cleanup_fnc(variants)
         path = self._dcc_ptn_opt.update_variants_to(**variants).get_value()
         if path in self._entity_dict:
             return self._entity_dict[path]
 
-        if self.EntityClass._validation_fnc(variants) is True:
+        if self.EntityClass._variant_validation_fnc(variants) is True:
             entity = self.EntityClass(self._root, path, variants)
             self._root_entity_stack.register(path, entity)
             self._variants_list.append(variants)

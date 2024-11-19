@@ -2,9 +2,7 @@
 
 
 class FilePatterns(object):
-    SceneSrcFile = '{directory}/maya/scene_src.ma'
-
-    CfxClothSceneSrcFile = '{directory}/maya/{namespace}.scene_src.ma'
+    SceneSrcFile = '{directory}/source/scene.ma'
 
     CfxClothAbcFile = '{directory}/abc/{namespace}.cloth.abc'
     CfxClothJsonFile = '{directory}/json/{namespace}.cloth.json'

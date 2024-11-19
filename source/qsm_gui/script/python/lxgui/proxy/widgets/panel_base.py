@@ -13,15 +13,40 @@ from .. import abstracts as _prx_abstracts
 # proxy widgets
 from . import window_base as _window_base
 
+from . import container_for_tab as _container_for_tab
+
 
 class PrxBasePanel(_window_base.PrxBaseWindow):
+    GUI_TYPE = 'window'
+    GUI_KEY = 'lazy-tool'
+
     CONFIGURE_KEY = None
 
     PAGE_CLASS_DICT = {}
+    PAGE_CLASSES = []
+
     SUB_PANEL_CLASS_DICT = {}
+    SUB_PANEL_CLASSES = []
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxBasePanel, self).__init__(*args, **kwargs)
+
+        if self.PAGE_CLASS_DICT:
+            self._page_class_dict = self.PAGE_CLASS_DICT
+        else:
+            self._page_class_dict = {}
+            if self.PAGE_CLASSES:
+                for i_cls in self.PAGE_CLASSES:
+                    self._page_class_dict[i_cls.GUI_KEY] = i_cls
+
+        if self.SUB_PANEL_CLASS_DICT:
+            self._sub_panel_class_dict = self.SUB_PANEL_CLASS_DICT
+        else:
+            self._sub_panel_class_dict = {}
+            if self.SUB_PANEL_CLASSES:
+                for i_cls in self.SUB_PANEL_CLASSES:
+                    self._sub_panel_class_dict[i_cls.GUI_KEY] = i_cls
+
         self._init_base_panel_def(window, session, *args, **kwargs)
 
     def _gui_debug_run(self, fnc, *args, **kwargs):
@@ -106,10 +131,10 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
         pass
 
     def gui_generate_sub_panel_for(self, key):
-        return self.SUB_PANEL_CLASS_DICT[key](self._window, self._session)
+        return self._sub_panel_class_dict[key](self._window, self._session)
 
     def gui_generate_page_for(self, key):
-        return self.PAGE_CLASS_DICT[key](self._window, self._session)
+        return self._page_class_dict[key](self._window, self._session)
 
     def gui_find_page(self, key):
         return self._page_dict.get(key)
@@ -118,6 +143,7 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
 class PrxBasePage(_prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = _qt_wgt_utility.QtTranslucentWidget
 
+    GUI_TYPE = 'page'
     GUI_KEY = None
 
     UNIT_CLASS_DICT = {}
@@ -126,27 +152,87 @@ class PrxBasePage(_prx_abstracts.AbsPrxWidget):
     def __init__(self, window, session, *args, **kwargs):
         super(PrxBasePage, self).__init__(*args, **kwargs)
 
+        if self.UNIT_CLASS_DICT:
+            self._unit_class_dict = self.UNIT_CLASS_DICT
+        else:
+            self._unit_class_dict = {}
+            if self.UNIT_CLASSES:
+                for i_cls in self.UNIT_CLASSES:
+                    self._unit_class_dict[i_cls.GUI_KEY] = i_cls
+
         self._window = window
         self._session = session
 
         self._gui_key_path = self.GUI_KEY
 
+        self._page_dict = {}
+
         self._qt_layout = _qt_wgt_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout.setContentsMargins(*[0]*4)
         self._qt_layout.setSpacing(2)
+
+    def gui_create_v_tab_tool_box(self):
+        prx_tab_tool_box = _container_for_tab.PrxVTabToolBox()
+        self._qt_layout.addWidget(prx_tab_tool_box.widget)
+        prx_tab_tool_box.set_tab_direction(prx_tab_tool_box.TabDirections.RightToLeft)
+
+        prx_tab_tool_box.set_history_key(
+            '{}.{}-page'.format(self._window.GUI_KEY, self.GUI_KEY)
+        )
+
+        prx_tab_tool_box.connect_current_changed_to(
+            self.do_gui_refresh_all
+        )
+        return prx_tab_tool_box
+
+    def gui_setup_units_for(self, prx_tab_tool_box, keys):
+        self._page_dict = {}
+
+        for i_cls in self.UNIT_CLASSES:
+            i_key = i_cls.GUI_KEY
+            if i_cls.GUI_KEY in keys:
+                i_gui = i_cls(self._window, self, self._session)
+
+                prx_tab_tool_box.add_widget(
+                    i_gui,
+                    key=i_key,
+                    name=gui_core.GuiUtil.choice_name(
+                        self._window._language, self._window._configure.get(
+                            'build.{}.{}'.format(self._gui_key_path, i_gui.GUI_KEY)
+                        )
+                    ),
+                    icon_name_text=i_key,
+                    tool_tip=gui_core.GuiUtil.choice_tool_tip(
+                        self._window._language, self._window._configure.get(
+                            'build.{}.{}'.format(self._gui_key_path, i_gui.GUI_KEY)
+                        )
+                    )
+                )
+
+                self._page_dict[i_key] = i_gui
+
+        prx_tab_tool_box.load_history()
+
+    def do_gui_refresh_units(self, prx_tab_tool_box):
+        key = prx_tab_tool_box.get_current_key()
+        gui = self._page_dict.get(key)
+        if gui:
+            gui.do_gui_refresh_all()
+
+        prx_tab_tool_box.save_history()
 
     def gui_page_setup_fnc(self):
         """
         main setup function put here
         """
 
-    def gui_page_setup_post_fnc(self):
+    def gui_setup_post_fnc(self):
         """
         fix some size bug for size setup delay
         """
 
     def generate_unit_for(self, key):
-        return self.UNIT_CLASS_DICT[key](self._window, self, self._session)
+        return self._unit_class_dict[key](self._window, self, self._session)
 
     def _to_unit_instance(self, cls):
         return cls(self._window, self, self._session)
@@ -166,11 +252,19 @@ class PrxBaseUnit(_prx_abstracts.AbsPrxWidget):
     def __init__(self, window, page, session, *args, **kwargs):
         super(PrxBaseUnit, self).__init__(*args, **kwargs)
 
+        if self.TOOLSET_CLASS_DICT:
+            self._toolset_class_dict = self.TOOLSET_CLASS_DICT
+        else:
+            self._toolset_class_dict = {}
+            if self.TOOLSET_CLASSES:
+                for i_cls in self.TOOLSET_CLASSES:
+                    self._toolset_class_dict[i_cls.GUI_KEY] = i_cls
+
         self._window = window
         self._page = page
         self._session = session
 
-        self._toolset_dict = {}
+        self._page_dict = {}
 
         self._gui_key_path = '{}.{}'.format(
             self._page.GUI_KEY, self.GUI_KEY
@@ -180,10 +274,13 @@ class PrxBaseUnit(_prx_abstracts.AbsPrxWidget):
         self._qt_layout.setContentsMargins(*[0]*4)
         self._qt_layout.setSpacing(2)
 
-    def gui_find_toolset(self, key):
-        return self._toolset_dict.get(key)
+    def gui_find_page(self, key):
+        return self._page_dict.get(key)
 
     def gui_unit_setup_fnc(self):
+        pass
+
+    def gui_setup_post_fnc(self):
         pass
 
     def do_gui_refresh_all(self):
@@ -222,7 +319,6 @@ class PrxBaseToolset(object):
             self._page.GUI_KEY, self._unit.GUI_KEY, self.GUI_KEY
         )
 
-
     def do_gui_refresh_all(self):
         pass
 
@@ -233,11 +329,21 @@ class PrxBaseSubPanel(_window_base.PrxBaseWindow):
     GUI_KEY = None
 
     SUB_PAGE_CLASS_DICT = {}
+    SUB_PAGE_CLASSES = []
 
     SUB_PAGE_KEYS = []
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxBaseSubPanel, self).__init__(*args, **kwargs)
+
+        if self.SUB_PAGE_CLASS_DICT:
+            self._sub_page_class_dict = self.SUB_PAGE_CLASS_DICT
+        else:
+            self._sub_page_class_dict = {}
+            if self.SUB_PAGE_CLASSES:
+                for i_cls in self.SUB_PAGE_CLASSES:
+                    self._sub_page_class_dict[i_cls.GUI_KEY] = i_cls
+
         self._page_dict = {}
 
         self._init_base_panel_def(window, session, *args, **kwargs)
@@ -319,7 +425,7 @@ class PrxBaseSubPanel(_window_base.PrxBaseWindow):
         pass
 
     def gui_generate_sub_page_for(self, key):
-        return self.SUB_PAGE_CLASS_DICT[key](self._window, self._session, self)
+        return self._sub_page_class_dict[key](self._window, self._session, self)
 
     def gui_find_page(self, key):
         return self._page_dict.get(key)

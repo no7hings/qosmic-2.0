@@ -19,6 +19,8 @@ import lxgui.qt.view_widgets as gui_qt_vew_widgets
 class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
     CONFIGURE_KEY = 'lazy-workspace/gui/main'
 
+    GUI_KEY = 'lazy-workspace'
+
     RESOURCE_BRANCH = None
 
     def __init__(self, window, session, *args, **kwargs):
@@ -45,7 +47,7 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
 
     def gui_setup_post_fnc(self):
         for k, v in self._page_dict.items():
-            v.gui_page_setup_post_fnc()
+            v.gui_setup_post_fnc()
 
     def gui_close_fnc(self):
         self._page_prx_tab_tool_box.save_history()
@@ -54,7 +56,7 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
         self._page_dict = {}
 
         for i_page_key in page_keys:
-            if i_page_key not in self.PAGE_CLASS_DICT:
+            if i_page_key not in self._page_class_dict:
                 continue
 
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()
@@ -63,11 +65,11 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
                 i_prx_sca,
                 key=i_page_key,
                 name=gui_core.GuiUtil.choice_name(
-                    self._language, self._window._configure.get('build.{}.tab'.format(i_page_key))
+                    self._language, self._window._configure.get('build.{}'.format(i_page_key))
                 ),
                 icon_name_text=i_page_key,
                 tool_tip=gui_core.GuiUtil.choice_tool_tip(
-                    self._language, self._window._configure.get('build.{}.tab'.format(i_page_key))
+                    self._language, self._window._configure.get('build.{}'.format(i_page_key))
                 )
             )
 

@@ -64,8 +64,12 @@ class ScanGlob(object):
         return os.access(path, os.F_OK)
 
     @classmethod
-    def check_dir_exists_fnc(cls, path):
+    def check_directory_exists_fnc(cls, path):
         return os.access(path, os.F_OK) and os.path.isdir(path)
+
+    @classmethod
+    def check_file_exists_fnc(cls, path):
+        return os.access(path, os.F_OK) and os.path.isfile(path)
 
     @classmethod
     def check_dir_fnc(cls, path):
@@ -135,12 +139,12 @@ class ScanGlob(object):
         else:
             raise SystemError()
 
-        if cls.check_dir_exists_fnc(root) is True:
+        if cls.check_directory_exists_fnc(root) is True:
             _rcs_fnc(root, start_index, is_root_=True, flag_=flag)
         return list_
 
     @classmethod
-    def generate_glob_executor(cls, path_regex, fnc):
+    def concurrent_glob(cls, path_regex, fnc):
         def rcs_fnc_(path_, depth_, is_root_=False, flag_=False):
             path_ = cls.ensure_unicode(path_)
             _depth = depth_+1
@@ -226,19 +230,19 @@ class ScanGlob(object):
 
         list_ = []
 
-        if cls.check_dir_exists_fnc(location) is True:
+        if cls.check_directory_exists_fnc(location) is True:
             rcs_fnc_(location)
 
         return list_
     
     @classmethod
-    def glob_all_files(cls, path_regex):
-        path_regex = cls.ensure_unicode(path_regex)
+    def file_glob(cls, file_regex):
+        file_regex = cls.ensure_unicode(file_regex)
 
-        if '//' in path_regex:
-            _s = path_regex.split('//')
+        if '//' in file_regex:
+            _s = file_regex.split('//')
             if len(_s) > 2:
-                raise RuntimeError(u'more then 2 "//" in "{}", please check item'.format(path_regex))
+                raise RuntimeError(u'more then 2 "//" in "{}", please check item'.format(file_regex))
 
             list_ = []
 
@@ -250,5 +254,8 @@ class ScanGlob(object):
                     list_.extend(i_results)
 
             return list_
-        return cls.glob(path_regex)
+        return cls.glob(file_regex)
 
+    @classmethod
+    def concurrent_file_glob(cls, file_regex, fnc):
+        pass

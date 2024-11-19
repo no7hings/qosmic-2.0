@@ -35,7 +35,7 @@ resolver:
     #
     task_unit:
         keywords:
-            - '{branch}-preview-file': { systems: ['*-*'], hidden: True }
+            - '{branch}-preview-mov-file': { systems: ['*-*'], hidden: True }
             - '{branch}-review-file': { systems: ['*-*'], hidden: True }
             #
             - '{branch}-source-maya-scene-src-file': { systems: ['*-python', '*-maya'] }

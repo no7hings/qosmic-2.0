@@ -13,7 +13,7 @@ import qsm_maya.tasks.cfx_rig.core as qsm_mya_tsk_cfx_rig_core
 
 
 # cfx rig
-class GuiResourceViewForAssetCfxRigTool(_abs_unit_for_task_tool.AbsGuiResourceViewForTaskTool):
+class _GuiResourceViewOpt(_abs_unit_for_task_tool.AbsGuiResourceViewForTaskTool):
     def on_dcc_select_node(self):
         selected_items = self._qt_tree_widget._view_model.get_selected_items()
         if selected_items:
@@ -28,13 +28,14 @@ class GuiResourceViewForAssetCfxRigTool(_abs_unit_for_task_tool.AbsGuiResourceVi
             qsm_mya_core.Selection.clear()
 
     def __init__(self, *args, **kwargs):
-        super(GuiResourceViewForAssetCfxRigTool, self).__init__(*args, **kwargs)
+        super(_GuiResourceViewOpt, self).__init__(*args, **kwargs)
 
         self._component_data = {}
 
         self._qt_tree_widget._view.item_select_changed.connect(
             self.on_dcc_select_node
         )
+        self._qt_tree_widget._view_model.set_item_expand_record_enable(True)
 
     def do_gui_refresh_all(self, force=False):
         if self._page._task_tool_opt is not None:
@@ -81,11 +82,11 @@ class GuiResourceViewForAssetCfxRigTool(_abs_unit_for_task_tool.AbsGuiResourceVi
             )
 
 
-class PrxMainToolsetForAssetCfxRigTool(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
+class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
     GUI_KEY = 'basic'
 
     def __init__(self, *args, **kwargs):
-        super(PrxMainToolsetForAssetCfxRigTool, self).__init__(*args, **kwargs)
+        super(_PrxBasicToolset, self).__init__(*args, **kwargs)
 
         self._prx_options_node.set('template.create_template', self.on_create_template)
 
@@ -287,10 +288,10 @@ class PrxMainToolsetForAssetCfxRigTool(_abs_unit_for_task_tool.AbsPrxToolsetForT
 class PrxToolsetForAssetCfxRigTool(_abs_unit_for_task_tool.AbsPrxUnitForTaskTool):
     GUI_KEY = 'cfx_rig'
 
-    GUI_RESOURCE_VIEW_CLS = GuiResourceViewForAssetCfxRigTool
+    GUI_RESOURCE_VIEW_CLS = _GuiResourceViewOpt
 
     TOOLSET_CLASSES = [
-        PrxMainToolsetForAssetCfxRigTool
+        _PrxBasicToolset
     ]
 
     def __init__(self, *args, **kwargs):

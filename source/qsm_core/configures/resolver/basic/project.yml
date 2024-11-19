@@ -319,7 +319,7 @@ asset-source-render-dir: <asset-source-extend-dir>/render/<artist-name>
 # release **************************************************************************************************************
 # <asset-preview>
 asset-preview-dir: <asset-release-version-dir>/preview
-asset-preview-file: <asset-preview-dir>/<asset-version-name>.mov
+asset-preview-mov-file: <asset-preview-dir>/<asset-version-name>.mov
 asset-preview-mov-file: <asset-preview-dir>/<asset-version-name>.mov
 # <asset-review>
 asset-review-dir: <asset-release-version-dir>/review
@@ -810,7 +810,7 @@ shot-user-nuke-scene-src-dir: <shot-user-nuke-dir>
 shot-user-nuke-scene-src-file: <shot-user-nuke-scene-src-dir>/<shot-version-name>.nk
 # preview
 shot-preview-dir: <shot-release-version-dir>/preview
-shot-preview-file: <shot-preview-dir>/<shot-version-name>.mov
+shot-preview-mov-file: <shot-preview-dir>/<shot-version-name>.mov
 shot-preview-mov-file: <shot-preview-dir>/<shot-version-name>.mov
 # review
 shot-review-dir: <shot-release-version-dir>/review

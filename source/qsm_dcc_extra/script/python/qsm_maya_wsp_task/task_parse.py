@@ -19,11 +19,24 @@ class TaskParse(qsm_dcc_wsp_task.TaskParse):
     def generate_task_session_by_asset_release_scene_src(cls, scene_path):
         task_parse = cls()
 
-        ptn_opt = task_parse.asset_release_task_scene_src_pattern_opt
+        ptn_opt = task_parse.generate_pattern_opt_for(
+            'asset-release-maya-scene_src-file'
+        )
         variants = ptn_opt.get_variants(scene_path, extract=True)
         if variants:
-            if 'asset' in variants:
-                variants['resource_type'] = 'asset'
+            variants['resource_branch'] = 'asset'
+            return _task_session.TaskSession(task_parse, variants)
+
+    @classmethod
+    def generate_task_session_by_shot_release_scene_src(cls, scene_path):
+        task_parse = cls()
+
+        ptn_opt = task_parse.generate_pattern_opt_for(
+            'shot-release-maya-scene_src-file'
+        )
+        variants = ptn_opt.get_variants(scene_path, extract=True)
+        if variants:
+            variants['resource_branch'] = 'shot'
             return _task_session.TaskSession(task_parse, variants)
 
     def __init__(self):

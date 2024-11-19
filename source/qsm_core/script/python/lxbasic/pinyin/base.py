@@ -101,6 +101,22 @@ class Text(object):
                 return pypinyin.lazy_pinyin(c)[0][0].lower()
             return c[0].lower()
 
+    @classmethod
+    def cleanup(cls, text):
+        list_ = []
+        # to string
+        if isinstance(text, six.text_type):
+            text = text.encode('utf-8')
+
+        chars = re.findall(six.u(r'[a-zA-Z0-9]+|[\u4e00-\u9fff]+'), text.decode('utf-8'))
+        for i_c in chars:
+            # chs
+            if re.match(six.u(r'[\u4e00-\u9fff]+'), i_c):
+                pass
+            else:
+                list_.append(i_c)
+        return '_'.join(list_)
+
 
 class Texts(object):
     @classmethod

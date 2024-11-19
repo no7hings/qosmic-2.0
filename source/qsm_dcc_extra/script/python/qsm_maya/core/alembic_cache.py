@@ -15,6 +15,8 @@ from . import time_ as _time
 
 from . import node_for_dag as _node_for_dag
 
+from . import attribute as _attribute
+
 
 class AlembicCacheExport(object):
     FILE = 'file'
@@ -231,4 +233,34 @@ class AlembicCacheExport(object):
 
     def get_outputs(self):
         return self._results
-    
+
+
+class AlembicNode:
+
+    @classmethod
+    def repath_to(cls, node, file_path):
+        file_path_old = cls.get_file(node)
+        if file_path_old != file_path:
+            _attribute.NodeAttribute.set_as_string(
+                node, 'abc_File', file_path
+            )
+
+    @classmethod
+    def get_file(cls, node):
+        return _attribute.NodeAttribute.get_as_string(node, 'abc_File')
+
+    @classmethod
+    def collection_to(cls, node, file_path):
+        pass
+
+
+class AlembicNodes:
+    PLUG_NAME = 'AbcImport'
+    NODE_TYPE_NAME = 'AlembicNode'
+
+    @classmethod
+    def get_all(cls):
+        cmds.loadPlugin(cls.PLUG_NAME, quiet=1)
+        return cmds.ls(
+            type=cls.NODE_TYPE_NAME
+        ) or []

@@ -1,4 +1,6 @@
 # coding:utf-8
+import lxbasic.pinyin as bsc_pinyin
+
 import _base
 
 import _shot
@@ -15,9 +17,16 @@ class Sequence(_base.AbsEntity):
     }
 
     TasksCacheOptClass = _task.TasksCacheOpt
+    
+    @classmethod
+    def _variant_cleanup_fnc(cls, variants):
+        # todo: cleanup name?
+        name = variants[cls.VariantKey]
+        variants[cls.VariantKey] = bsc_pinyin.Text.cleanup(name)
+        return variants
 
     @classmethod
-    def _validation_fnc(cls, variants):
+    def _variant_validation_fnc(cls, variants):
         # maybe episode is unused
         if _base.VariantKeys.Episode in variants:
             return (

@@ -52,17 +52,20 @@ class PrxSprcTaskWindow(
         self._qt_widget.setCentralWidget(self._central_qt_widget)
         self._central_qt_layout = _qt_wgt_base.QtVBoxLayout(self._central_qt_widget)
 
-        self._prx_tool_group = _container.PrxHToolGroupNew()
-        self._central_qt_layout.addWidget(self._prx_tool_group.widget)
-
-        self._prx_tool_group.set_expanded(True)
+        self._task_prx_tool_group = _container.PrxHToolGroupNew()
+        self._central_qt_layout.addWidget(self._task_prx_tool_group.widget)
+        self._task_prx_tool_group.set_expanded(True)
 
         self._prx_scroll_area = gui_prx_wdt_utility.PrxVScrollArea()
-        self._prx_tool_group.add_widget(self._prx_scroll_area)
+        self._task_prx_tool_group.add_widget(self._prx_scroll_area)
+
+        self._tip_prx_tool_group = _container.PrxHToolGroupNew()
+        self._central_qt_layout.addWidget(self._tip_prx_tool_group.widget)
+        self._tip_prx_tool_group.set_expanded(True)
 
         self._tip_prx_text_browser = gui_prx_wdt_utility.PrxTextBrowser()
         self._central_qt_layout.addWidget(self._tip_prx_text_browser.widget)
-        self._tip_prx_text_browser._qt_widget.setMaximumHeight(120)
+        self._tip_prx_text_browser._qt_widget.setMaximumHeight(80)
 
         self._bottom_prx_tool_bar = _container.PrxHToolBar()
         self._central_qt_layout.addWidget(self._bottom_prx_tool_bar.widget)
@@ -75,10 +78,12 @@ class PrxSprcTaskWindow(
         self._subprocess_widgets = []
 
         if self._language == 'chs':
-            self._prx_tool_group.set_name('子进程任务')
+            self._task_prx_tool_group.set_name('进度')
+            self._tip_prx_tool_group.set_name('提示')
             self._stop_and_close_prx_button.set_name('关闭')
         else:
-            self._prx_tool_group.set_name('Subprocess Task')
+            self._task_prx_tool_group.set_name('Progress')
+            self._tip_prx_tool_group.set_name('Tip')
             self._stop_and_close_prx_button.set_name('Close')
 
     def _do_gui_stop(self):

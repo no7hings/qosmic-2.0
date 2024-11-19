@@ -1,5 +1,6 @@
 # coding:utf-8
 import copy
+import sys
 
 import lxbasic.core as bsc_core
 
@@ -18,6 +19,13 @@ class TaskParse(object):
     TASK_SESSION_CLS = _task_session.TaskSession
 
     @classmethod
+    def variants_factor(cls, variants):
+        dict_ = {}
+        for k, v in variants.items():
+            dict_[k] = bsc_core.auto_string(v)
+        return dict_
+
+    @classmethod
     def to_project_path(cls, **kwargs):
         return '/{project}'.format(
             **kwargs
@@ -28,11 +36,11 @@ class TaskParse(object):
         kwargs = copy.copy(kwargs)
         if 'asset' in kwargs:
             kwargs['entity'] = kwargs['asset']
-            return '/{project}/{asset}'.format(
+            return u'/{project}/{asset}'.format(
                 **kwargs
             )
         elif 'shot' in kwargs:
-            return '/{project}/{sequence}/{shot}'.format(
+            return u'/{project}/{sequence}/{shot}'.format(
                 **kwargs
             )
         else:
@@ -43,11 +51,11 @@ class TaskParse(object):
         kwargs = copy.copy(kwargs)
         if 'asset' in kwargs:
             kwargs['entity'] = kwargs['asset']
-            return '/{project}/{asset}'.format(
+            return u'/{project}/{asset}'.format(
                 **kwargs
             )
         elif 'shot' in kwargs:
-            return '/{project}/{shot}'.format(
+            return u'/{project}/{shot}'.format(
                 **kwargs
             )
         else:
@@ -58,11 +66,11 @@ class TaskParse(object):
         kwargs = copy.copy(kwargs)
         if 'asset' in kwargs:
             kwargs['entity'] = kwargs['asset']
-            return '/{project}/{asset}'.format(
+            return u'/{project}/{asset}'.format(
                 **kwargs
             )
         elif 'shot' in kwargs:
-            return '/{project}/{shot}'.format(
+            return u'/{project}/{shot}'.format(
                 **kwargs
             )
         else:
@@ -75,7 +83,7 @@ class TaskParse(object):
             kwargs['entity'] = kwargs['asset']
         elif 'shot' in kwargs:
             kwargs['entity'] = kwargs['shot']
-        return '/{project}/{entity}/{step}.{task}'.format(
+        return u'/{project}/{entity}/{step}.{task}'.format(
             **kwargs
         )
 
@@ -86,7 +94,7 @@ class TaskParse(object):
             kwargs['entity'] = kwargs['asset']
         elif 'shot' in kwargs:
             kwargs['entity'] = kwargs['shot']
-        return '/{project}/{entity}/{step}.{task}/{task_unit}'.format(
+        return u'/{project}/{entity}/{step}.{task}/{task_unit}'.format(
             **kwargs
         )
 
@@ -98,7 +106,7 @@ class TaskParse(object):
         elif 'shot' in kwargs:
             kwargs['entity'] = kwargs['shot']
         return (
-            '/{project}/{entity}/{step}.{task}/{task_unit}/{entity}.{step}.{task}.{task_unit}.v{version}.ma'
+            u'/{project}/{entity}/{step}.{task}/{task_unit}/{entity}.{step}.{task}.{task_unit}.v{version}.ma'
         ).format(
             **kwargs
         )
@@ -123,11 +131,6 @@ class TaskParse(object):
                 return cls.TASK_SESSION_CLS(task_parse, i_variants)
 
     def __init__(self):
-        if qsm_gnl_core.scheme_is_release():
-            configure_key = 'wsp_task/default'
-        else:
-            configure_key = 'wsp_task/default'
-
         self._parse_configure = bsc_resource.RscExtendConfigure.get_as_content('wsp_task/parse/default')
         self._parse_configure.do_flatten()
 
@@ -167,19 +170,27 @@ class TaskParse(object):
         kwargs_new = copy.copy(kwargs)
         keys = keyword.split('-')
         kwargs_new.update(**self._properties)
-        resource_type = keys[0]
-        kwargs_new['resource_type'] = resource_type
+        resource_branch = keys[0]
+        kwargs_new['resource_branch'] = resource_branch
         space_key = keys[1]
         kwargs_new['space_key'] = space_key
         space = self._space_dict[space_key]
         kwargs_new['space'] = space
 
         key = 'patterns.{}.{}.{}'.format(
-            resource_type, space, '-'.join(keys[2:])
+            resource_branch, space, '-'.join(keys[2:])
         )
-        return bsc_core.BscTaskParseOpt(
-            self._parse_configure.get(key)
-        ).update_variants_to(**kwargs_new)
+        value = self._parse_configure.get(key)
+        if value:
+            return bsc_core.BscTaskParseOpt(
+                value
+            ).update_variants_to(**kwargs_new)
+        else:
+            raise RuntimeError(
+                sys.stderr.write(
+                    'pattern: {} is not found.'.format(keyword)
+                )
+            )
 
     # source
     @property
@@ -188,7 +199,7 @@ class TaskParse(object):
             'asset-source-maya-scene_src-file'
         )
 
-    def generate_resource_source_task_scene_src_pattern_opt_for(self, **kwargs):
+    def generate_source_task_scene_src_pattern_opt_for(self, **kwargs):
         if 'asset' in kwargs:
             return self.generate_pattern_opt_for(
                 'asset-source-maya-scene_src-file', **kwargs
@@ -224,7 +235,21 @@ class TaskParse(object):
         kwargs_new.pop('version')
 
         release_task_version_ptn_opt = self.generate_pattern_opt_for(
-            'asset-release-task_version-dir', **kwargs_new
+            'asset-release-version-dir', **kwargs_new
+        )
+
+        matches = release_task_version_ptn_opt.find_matches(sort=True)
+        if matches:
+            version_latest = int(matches[-1]['version'])
+            return version_latest+1
+        return 1
+
+    def generate_shot_release_new_version_number(self, **kwargs):
+        kwargs_new = copy.copy(kwargs)
+        kwargs_new.pop('version')
+
+        release_task_version_ptn_opt = self.generate_pattern_opt_for(
+            'shot-release-version-dir', **kwargs_new
         )
 
         matches = release_task_version_ptn_opt.find_matches(sort=True)

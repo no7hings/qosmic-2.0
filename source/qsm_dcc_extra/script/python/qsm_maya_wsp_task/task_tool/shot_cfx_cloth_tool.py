@@ -31,10 +31,6 @@ class MayaShotCfxToolOpt(_shot_gnl.MayaShotGnlToolOpt):
     def __init__(self, *args, **kwargs):
         super(MayaShotCfxToolOpt, self).__init__(*args, **kwargs)
 
-    @staticmethod
-    def to_cfx_rig_namespace(rig_namespace):
-        return 'cfx_rig__{}'.format('__'.join(rig_namespace.split(':')))
-
     def load_cfx_rig_for(self, rig_namespace):
 
         reference_cache = qsm_mya_core.ReferencesCache()
@@ -69,7 +65,7 @@ class MayaShotCfxToolOpt(_shot_gnl.MayaShotGnlToolOpt):
                         return
                     return
 
-                cfx_cloth_asset_opt.load_cfx_rig_from(cfx_rig_scene_path)
+                cfx_cloth_asset_opt.reference_cfx_rig_from(cfx_rig_scene_path)
 
                 locations = qsm_mya_core.Namespace.find_roots(cfx_rig_namespace)
                 for i_location in locations:
@@ -95,11 +91,19 @@ class MayaShotCfxToolOpt(_shot_gnl.MayaShotGnlToolOpt):
         cfx_cloth_asset_opt.connect_to_rig()
 
     @classmethod
-    def export_cloth_cache_for(cls, rig_namespace, directory_path, frame_range, frame_step=1, frame_offset=0):
+    def export_cloth_cache_by_rig_namespace(cls, rig_namespace, directory_path, frame_range, frame_step=1, frame_offset=0):
         cfx_cloth_asset_opt = qsm_mya_tsk_cfx_clt_core.CfxClothAssetOpt(rig_namespace)
         cfx_rig_namespace = cfx_cloth_asset_opt.cfx_rig_namespace
         resource = qsm_mya_tsk_cfx_clt_core.CfxRigAsset(cfx_rig_namespace)
 
-        qsm_mya_tsk_cfx_clt_scripts.CfxNClothCacheOpt(resource).do_export(
+        qsm_mya_tsk_cfx_clt_scripts.CfxClothCacheOpt(resource).do_export(
             directory_path, frame_range, frame_step, frame_offset
         )
+
+    @classmethod
+    def load_cfx_rig_auto(cls):
+        qsm_mya_tsk_cfx_clt_scripts.CfxRigsOpt().load_all()
+        
+    @classmethod
+    def apply_cfx_rig_solver_start_frame(cls, frame):
+        qsm_mya_tsk_cfx_clt_scripts.CfxRigsOpt().apply_solver_start_frame(frame)

@@ -3,12 +3,12 @@ import collections
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-from .... import core as _mya_core
+import qsm_maya.core as qsm_mya_core
 
-from ...animation import core as _animation_core
+from ...animation import core as _tsk_anm_core
 
 
-class CfxAdvRigAssetOld(_animation_core.AdvRigAsset):
+class CfxAdvRigAssetOld(_tsk_anm_core.AdvRigAsset):
     def __init__(self, *args, **kwargs):
         super(CfxAdvRigAssetOld, self).__init__(*args, **kwargs)
 
@@ -20,7 +20,7 @@ class CfxAdvRigAssetOld(_animation_core.AdvRigAsset):
                 '{}:*'.format(self._namespace), dag=1, type='nCloth', noIntermediate=1, long=1
             ) or []
             for i_path in _:
-                i_mesh_transform_path = _mya_core.NCloth.find_input_mesh_transform(i_path)
+                i_mesh_transform_path = qsm_mya_core.NCloth.find_input_mesh_transform(i_path)
                 if i_mesh_transform_path:
                     mesh_transforms.append(i_mesh_transform_path)
         return mesh_transforms
@@ -34,13 +34,13 @@ class CfxAdvRigAssetOld(_animation_core.AdvRigAsset):
                 '{}:*'.format(self._namespace), dag=1, type='nCloth', noIntermediate=1, long=1
             ) or []
             for i in results:
-                i_mesh_transform_path = _mya_core.NCloth.find_input_mesh_transform(i)
+                i_mesh_transform_path = qsm_mya_core.NCloth.find_input_mesh_transform(i)
                 if i_mesh_transform_path:
                     i_mesh_path = '{}/{}'.format(
-                        self._path, _mya_core.DagNode.to_name_without_namespace(i_mesh_transform_path)
+                        self._path, qsm_mya_core.DagNode.to_name_without_namespace(i_mesh_transform_path)
                     )
                     i_node_path = '{}/{}'.format(
-                        i_mesh_path, _mya_core.DagNode.to_name_without_namespace(i)
+                        i_mesh_path, qsm_mya_core.DagNode.to_name_without_namespace(i)
                     )
                     dict_[i_mesh_path] = i_mesh_transform_path
                     dict_[i_node_path] = i
@@ -49,13 +49,13 @@ class CfxAdvRigAssetOld(_animation_core.AdvRigAsset):
                 '{}:*'.format(self._namespace), dag=1, type='nRigid', noIntermediate=1, long=1
             ) or []
             for i in results:
-                i_mesh_transform_path = _mya_core.NRigid.find_input_mesh_transform(i)
+                i_mesh_transform_path = qsm_mya_core.NRigid.find_input_mesh_transform(i)
                 if i_mesh_transform_path:
                     i_mesh_path = '{}/{}'.format(
-                        self._path, _mya_core.DagNode.to_name_without_namespace(i_mesh_transform_path)
+                        self._path, qsm_mya_core.DagNode.to_name_without_namespace(i_mesh_transform_path)
                     )
                     i_node_path = '{}/{}'.format(
-                        i_mesh_path, _mya_core.DagNode.to_name_without_namespace(i)
+                        i_mesh_path, qsm_mya_core.DagNode.to_name_without_namespace(i)
                     )
                     dict_[i_mesh_path] = i_mesh_transform_path
                     dict_[i_node_path] = i
@@ -65,14 +65,14 @@ class CfxAdvRigAssetOld(_animation_core.AdvRigAsset):
             ) or []
             for i in results:
                 i_node_path = '{}/{}'.format(
-                    self._path, _mya_core.DagNode.to_name_without_namespace(i)
+                    self._path, qsm_mya_core.DagNode.to_name_without_namespace(i)
                 )
                 dict_[i_node_path] = i
 
         return dict_
 
 
-class CfxAdvRigAssetsQueryOld(_animation_core.AdvRigAssetsQuery):
+class CfxAdvRigAssetsQueryOld(_tsk_anm_core.AdvRigAssetsQuery):
     SCENE_PATTERN = 'X:/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
 
     RESOURCE_CLS = CfxAdvRigAssetOld
@@ -81,9 +81,6 @@ class CfxAdvRigAssetsQueryOld(_animation_core.AdvRigAssetsQuery):
         super(CfxAdvRigAssetsQueryOld, self).__init__()
 
 
-class CfxAdvRigAsset(_animation_core.AdvRigAsset):
+class CfxAdvRigAsset(_tsk_anm_core.AdvRigAsset):
     def __init__(self, *args, **kwargs):
         super(CfxAdvRigAsset, self).__init__(*args, **kwargs)
-
-    def load_cfx_rig_from(self):
-        pass

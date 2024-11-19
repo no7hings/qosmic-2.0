@@ -10,50 +10,21 @@ from . import page_for_task_release as _page_for_task_publish
 from . import sub_panel_for_task_create as _sub_panel_for_task_create
 
 
-class PrxPanelForAssetWorkspace(_abs_panel_for_workspace.AbsPrxPanelForWorkspace):
-    PAGE_CLASS_DICT = {
+class PrxPanelForWorkspace(_abs_panel_for_workspace.AbsPrxPanelForWorkspace):
+    PAGE_CLASSES = [
         # task manager
-        _page_for_task_manager.PrxPageForAssetTaskManager.GUI_KEY:
-        _page_for_task_manager.PrxPageForAssetTaskManager,
+        _page_for_task_manager.PrxPageForTaskManager,
         # task tool
-        _page_for_task_tool.PrxPageForAssetTaskTool.GUI_KEY:
-        _page_for_task_tool.PrxPageForAssetTaskTool,
+        # _page_for_task_tool.PrxPageForTaskTool,
         # task publish
-        _page_for_task_publish.PrxPageForAssetTaskRelease.GUI_KEY:
-        _page_for_task_publish.PrxPageForAssetTaskRelease
+        # _page_for_task_publish.PrxPageForTaskRelease
+    ]
 
-    }
-
-    SUB_PANEL_CLASS_DICT = {
-        _sub_panel_for_task_create.PrxSubPanelForAssetTaskCreate.GUI_KEY:
-        _sub_panel_for_task_create.PrxSubPanelForAssetTaskCreate
-    }
-
-    RESOURCE_BRANCH = 'asset'
-
-    def __init__(self, window, session, *args, **kwargs):
-        super(PrxPanelForAssetWorkspace, self).__init__(window, session, *args, **kwargs)
-
-
-class PrxPanelForShotWorkspace(_abs_panel_for_workspace.AbsPrxPanelForWorkspace):
-    PAGE_CLASS_DICT = {
-        # task manager
-        _page_for_task_manager.PrxPageForShotTaskManager.GUI_KEY:
-        _page_for_task_manager.PrxPageForShotTaskManager,
-        # task tool
-        _page_for_task_tool.PrxPageForShotTaskTool.GUI_KEY:
-        _page_for_task_tool.PrxPageForShotTaskTool,
-        # task publish
-        _page_for_task_publish.PrxPageForShotTaskRelease.GUI_KEY:
-        _page_for_task_publish.PrxPageForShotTaskRelease
-    }
-
-    SUB_PANEL_CLASS_DICT = {
-        _sub_panel_for_task_create.PrxSubPanelForShotTaskCreate.GUI_KEY:
-        _sub_panel_for_task_create.PrxSubPanelForShotTaskCreate
-    }
+    SUB_PANEL_CLASSES = [
+        _sub_panel_for_task_create.PrxSubPanelForTaskCreate
+    ]
 
     RESOURCE_BRANCH = 'shot'
 
     def __init__(self, window, session, *args, **kwargs):
-        super(PrxPanelForShotWorkspace, self).__init__(window, session, *args, **kwargs)
+        super(PrxPanelForWorkspace, self).__init__(window, session, *args, **kwargs)

@@ -11,6 +11,7 @@ class Playblast(object):
         file_opt = bsc_storage.StgFileOpt(file_path)
         if file_opt.get_is_exists() is True:
             file_opt.do_delete()
+
         result = cmds.playblast(
             startTime=frame,
             endTime=frame,

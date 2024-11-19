@@ -191,7 +191,7 @@ class QtInputForPath(
 
         self._gui_thread_flag += 1
 
-        self._etd_entry_widget._set_entry_tip_('refreshing...')
+        self._etd_entry_widget._set_entry_tip_('loading ...')
         # todo: always use thread
         self._etd_entry_widget._do_next_wait_start_()
         self._run_build_extra_use_thread_(cache_fnc_, build_fnc_, post_fnc_)

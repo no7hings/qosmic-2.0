@@ -407,13 +407,13 @@ class PrxBaseWindow(
                 self.widget, pos, size=self.get_definition_window_size()
             )
 
-    def trace_log(self, text):
+    def append_log(self, text):
         text_browser = self.get_log_text_browser()
-        text_browser.trace_log(text)
+        text_browser.append_log(text)
 
-    def trace_log_use_thread(self, text):
+    def append_log_use_signal(self, text):
         text_browser = self.get_log_text_browser()
-        text_browser.trace_log_use_thread(text)
+        text_browser.append_log_use_signal(text)
 
     def gui_bustling(self):
         return self._qt_widget._gui_bustling_()

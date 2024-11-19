@@ -46,6 +46,9 @@ class PrxInputForPressButton(_input_base.AbsPrxInput):
                 functools.partial(self.__exec_scp, raw)
             )
 
+    def set_menu_enable(self, boolean):
+        self._qt_input_widget._set_menu_enable_(boolean)
+
     def set_menu_data(self, raw):
         self._qt_input_widget._set_menu_data_(raw)
 

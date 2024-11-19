@@ -8,9 +8,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-from ....assembly import core as _asb_core
-
-from .... import core as _mya_core
+import qsm_maya.core as qsm_mya_core
 
 
 class Assembly(object):
@@ -48,11 +46,11 @@ class Assembly(object):
 
     @classmethod
     def find_assembly_reference(cls, path):
-        _0 = _mya_core.NodeAttribute.get_target_nodes(
+        _0 = qsm_mya_core.NodeAttribute.get_target_nodes(
             path, 'message', 'hyperLayout'
         )
         if _0:
-            _1 = _mya_core.NodeAttribute.get_target_nodes(
+            _1 = qsm_mya_core.NodeAttribute.get_target_nodes(
                 _0[0], 'message', 'assemblyReference'
             )
             if _1:
@@ -63,8 +61,8 @@ class Assembly(object):
         path_opt = bsc_core.BscNodePathOpt(shape_path)
         paths = path_opt.get_ancestor_paths()
         for i_path in paths[:depth_maximum]:
-            if i_path != _mya_core.DagNode.PATHSEP:
-                if _mya_core.NodeAttribute.is_exists(i_path, 'qsm_type') is True:
+            if i_path != qsm_mya_core.DagNode.PATHSEP:
+                if qsm_mya_core.NodeAttribute.is_exists(i_path, 'qsm_type') is True:
                     return i_path
 
 
@@ -79,7 +77,7 @@ class MeshInstance(object):
             self.mesh_prc(i_shape_path)
 
     def mesh_prc(self, shape_path):
-        mesh_opt = _mya_core.MeshShapeOpt(shape_path)
+        mesh_opt = qsm_mya_core.MeshShapeOpt(shape_path)
         hash_key = mesh_opt.to_hash()
         if self._material is True:
             hash_key_1 = mesh_opt.get_material_assign_as_hash_key()
@@ -90,8 +88,8 @@ class MeshInstance(object):
         else:
             shape_path_src = self._hash_key_dict[hash_key]
             transform_path = mesh_opt.transform_path
-            _mya_core.Transform.delete_all_shapes(transform_path)
-            _mya_core.Shape.instance_to(
+            qsm_mya_core.Transform.delete_all_shapes(transform_path)
+            qsm_mya_core.Shape.instance_to(
                 shape_path_src, transform_path
             )
 
@@ -102,13 +100,13 @@ class GpuImport(object):
     @classmethod
     def find_all_gpu_caches(cls, directory_path):
         for i in cmds.ls(type='gpuCache', long=1):
-            i_file_path = _mya_core.NodeAttribute.get_as_string(i, 'cacheFileName')
+            i_file_path = qsm_mya_core.NodeAttribute.get_as_string(i, 'cacheFileName')
             if i_file_path.startswith('O:/ABCWrite/'):
                 i_file_path_new = '{}/ABCWrite/{}'.format(
                     directory_path, i_file_path.replace('O:/ABCWrite/', '')
                 )
                 if os.path.exists(i_file_path_new):
-                    _mya_core.NodeAttribute.set_as_string(
+                    qsm_mya_core.NodeAttribute.set_as_string(
                         i, 'cacheFileName', i_file_path_new
                     )
 
@@ -123,30 +121,30 @@ class GpuImport(object):
 
     @classmethod
     def gpu_prc(cls, shape_path):
-        gpu_file_path = _mya_core.NodeAttribute.get_as_string(
+        gpu_file_path = qsm_mya_core.NodeAttribute.get_as_string(
             shape_path, 'cacheFileName'
         )
-        shape_opt = _mya_core.ShapeOpt(shape_path)
+        shape_opt = qsm_mya_core.ShapeOpt(shape_path)
         transform_path = shape_opt.transform_path
         if bsc_storage.StgPath.get_is_file(gpu_file_path):
-            paths = _mya_core.SceneFile.import_file(
+            paths = qsm_mya_core.SceneFile.import_file(
                 gpu_file_path
             )
 
-            roots = _mya_core.DagNode.find_roots(paths)
+            roots = qsm_mya_core.DagNode.find_roots(paths)
 
-            _mya_core.Transform.delete_all_shapes(transform_path)
+            qsm_mya_core.Transform.delete_all_shapes(transform_path)
 
             if roots:
                 for i_path in roots:
-                    if _mya_core.Node.is_transform_type(i_path):
-                        i_shape_paths = _mya_core.Group.find_siblings(i_path, ['mesh'])
+                    if qsm_mya_core.Node.is_transform_type(i_path):
+                        i_shape_paths = qsm_mya_core.Group.find_siblings(i_path, ['mesh'])
                         for j_shape_path in i_shape_paths:
-                            j_transform_path = _mya_core.Shape.get_transform(j_shape_path)
-                            _mya_core.DagNode.parent_to(j_transform_path, transform_path, relative=True)
+                            j_transform_path = qsm_mya_core.Shape.get_transform(j_shape_path)
+                            qsm_mya_core.DagNode.parent_to(j_transform_path, transform_path, relative=True)
 
-                        if _mya_core.Node.is_exists(i_path):
-                            _mya_core.Node.delete(i_path)
+                        if qsm_mya_core.Node.is_exists(i_path):
+                            qsm_mya_core.Node.delete(i_path)
 
 
 class ShitFixer(object):
@@ -154,8 +152,8 @@ class ShitFixer(object):
         pass
 
     def execute(self):
-        shape_paths = _mya_core.Scene.find_all_dag_nodes(type_includes=['mesh'])
+        shape_paths = qsm_mya_core.Scene.find_all_dag_nodes(type_includes=['mesh'])
         for i_shape_path in shape_paths:
-            i_transform_path = _mya_core.Shape.get_transform(i_shape_path)
+            i_transform_path = qsm_mya_core.Shape.get_transform(i_shape_path)
             _ = cmds.ls(i_transform_path, type='mesh', noIntermediate=0, dag=1, long=1)
             print _

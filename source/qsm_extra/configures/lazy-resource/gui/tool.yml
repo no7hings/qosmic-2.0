@@ -116,7 +116,7 @@ build:
                 name_chs: '应用'
 
             close:
-                name: 'Name'
+                name: 'Close'
                 name_chs: '关闭'
 
         messages:
@@ -291,7 +291,7 @@ build:
                 name_chs: '应用'
 
             close:
-                name: 'Name'
+                name: 'Close'
                 name_chs: '关闭'
 
         tip:

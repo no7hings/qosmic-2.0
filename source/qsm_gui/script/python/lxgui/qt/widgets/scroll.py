@@ -28,6 +28,7 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
         w, h = self.width(), self.height()
         if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
             v_w = self._viewport.layout().minimumSize().width()
+
             abs_w = max(w, v_w)
             self._scroll_bar_model.set_w_or_h(w)
             self._scroll_bar_model.set_abs_w_or_h(abs_w)
@@ -147,7 +148,7 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
                 QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
             )
             self._viewport.setSizePolicy(
-                QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+                QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
             )
             self._layout = QtWidgets.QHBoxLayout(self._viewport)
         elif self.QT_ORIENTATION == QtCore.Qt.Vertical:
@@ -155,7 +156,7 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
                 QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Expanding
             )
             self._viewport.setSizePolicy(
-                QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+                QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
             )
             self._layout = QtWidgets.QVBoxLayout(self._viewport)
         else:

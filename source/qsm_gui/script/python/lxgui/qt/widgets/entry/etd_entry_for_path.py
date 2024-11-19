@@ -47,6 +47,7 @@ class QtEtdEntryForPath(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         super(QtEtdEntryForPath, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+
         self.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self._lot = QtWidgets.QHBoxLayout(self)
@@ -63,6 +64,7 @@ class QtEtdEntryForPath(QtWidgets.QWidget):
 
         self._entry_widget = _entry_for_constant.QtEntryForConstant()
         self._lot.addWidget(self._entry_widget)
+
         self._entry_widget.setFocusPolicy(QtCore.Qt.ClickFocus)
         self._entry_widget.setFont(_qt_core.QtFont.generate_2(size=12))
 

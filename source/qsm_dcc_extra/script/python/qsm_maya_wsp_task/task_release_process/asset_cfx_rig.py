@@ -5,7 +5,7 @@ import lxbasic.storage as bsc_storage
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.tasks.cfx_rig as qsm_mya_task_cfx_rig_core
+import qsm_maya.tasks.cfx_rig.core as qsm_mya_task_cfx_rig_core
 
 from .. import task_parse as _task_parse
 
@@ -14,10 +14,10 @@ class AssetCfxRigReleaseProcess(object):
     LOG_KEY = 'cfx_rig release'
 
     def __init__(self, **kwargs):
-        self._options = kwargs
+        self._kwargs = kwargs
 
     def execute(self):
-        scene_src_path = self._options['scene_src']
+        scene_src_path = self._kwargs['scene_src']
         task_session = _task_parse.TaskParse.generate_task_session_by_asset_release_scene_src(
             scene_src_path
         )

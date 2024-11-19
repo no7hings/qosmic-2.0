@@ -3,14 +3,14 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_gui.qt.widgets as qsm_qt_widgets
+import qsm_lazy.gui.qt.widgets as lzy_gui_qt_widgets
 
 
 class W(gui_prx_widgets.PrxBaseWindow):
     def __init__(self, *args, **kwargs):
         super(W, self).__init__(*args, **kwargs)
 
-        wgt = qsm_qt_widgets.QtAdvCharacterPicker()
+        wgt = lzy_gui_qt_widgets.QtAdvCharacterPicker()
         self.add_widget(wgt)
 
         wgt._set_namespace_('test_Skin')

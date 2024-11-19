@@ -1,5 +1,6 @@
 # coding:utf-8
 import functools
+
 import os
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
@@ -16,20 +17,20 @@ import qsm_general.core as qsm_gnl_core
 
 import qsm_general.process as qsm_gnl_process
 
-from .... import core as _mya_core
+import qsm_maya.core as qsm_mya_core
 
-from ....general import core as _gnl_core
+import qsm_maya.general.core as qsm_mya_gnl_core
 
-from ....resource import core as _rsc_core
+import qsm_maya.resource.core as qsm_mya_rsc_core
 
-from ....adv import core as _adv_core
+import qsm_maya.adv as qsm_mya_adv
 
 from .. import core as _core
 
 
-class DynamicGpuCacheOpt(_rsc_core.AssetCacheOpt):
-    CACHE_ROOT = _gnl_core.ResourceCacheNodes.DynamicGpuRoot
-    CACHE_NAME = _gnl_core.ResourceCacheNodes.DynamicGpuName
+class DynamicGpuCacheOpt(qsm_mya_rsc_core.AssetCacheOpt):
+    CACHE_ROOT = qsm_mya_gnl_core.ResourceCacheNodes.DynamicGpuRoot
+    CACHE_NAME = qsm_mya_gnl_core.ResourceCacheNodes.DynamicGpuName
 
     def __init__(self, *args, **kwargs):
         super(DynamicGpuCacheOpt, self).__init__(*args, **kwargs)
@@ -41,19 +42,19 @@ class DynamicGpuCacheOpt(_rsc_core.AssetCacheOpt):
             bsc_core.BscStorage.create_directory(
                 os.path.dirname(file_path)
             )
-            _mya_core.SceneFile.export_file(
+            qsm_mya_core.SceneFile.export_file(
                 file_path, self._root, keep_reference=True
             )
 
     def generate_motion_args(self):
         if self._root is not None:
-            motion_dict = _adv_core.AdvChrOpt(self._namespace).generate_controls_motion_dict()
+            motion_dict = qsm_mya_adv.AdvChrOpt(self._namespace).generate_controls_motion_dict()
             key = bsc_core.BscHash.to_hash_key(motion_dict)
             directory_path = qsm_gnl_core.MayaCache.generate_dynamic_gpu_directory(key=key)
             motion_file_path = '{}/motion.json'.format(directory_path)
             cache_file_path = '{}/gpu.ma'.format(directory_path)
             if os.path.isfile(motion_file_path) is False:
-                _adv_core.AdvChrOpt(self._namespace).export_controls_motion_to(
+                qsm_mya_adv.AdvChrOpt(self._namespace).export_controls_motion_to(
                     motion_file_path
                 )
                 return True, motion_file_path, cache_file_path
@@ -66,7 +67,7 @@ class DynamicGpuCacheOpt(_rsc_core.AssetCacheOpt):
         cache_location = '|{}:{}'.format(self._namespace, self.CACHE_NAME)
         if cmds.objExists(cache_location) is False and cmds.objExists(cache_location_new) is False:
             if os.path.isfile(cache_file_path) is True:
-                _mya_core.SceneFile.import_file_ignore_error(
+                qsm_mya_core.SceneFile.import_file_ignore_error(
                     cache_file_path, namespace=self._namespace
                 )
                 cmds.setAttr(
@@ -167,15 +168,15 @@ class DynamicGpuCacheOpt(_rsc_core.AssetCacheOpt):
                 g_p.do_update()
 
     @classmethod
-    def load_auto(cls, **kwargs):
+    def execute_auto(cls, **kwargs):
         scheme = kwargs['scheme']
         use_motion = kwargs.get('use_motion', False)
-        start_frame_, end_frame_ = _mya_core.Frame.get_frame_range()
+        start_frame_, end_frame_ = qsm_mya_core.Frame.get_frame_range()
         start_frame = kwargs.get('start_frame', start_frame_)
         end_frame = kwargs.get('end_frame', end_frame_)
         if scheme == 'default':
             resources = []
-            namespaces = _mya_core.Namespaces.extract_from_selection()
+            namespaces = qsm_mya_core.Namespaces.extract_from_selection()
             if namespaces:
                 resources_query = _core.AdvRigAssetsQuery()
                 resources_query.do_update()
@@ -285,8 +286,8 @@ class DynamicGpuCacheGenerate(object):
         cmds.addAttr(location, longName='qsm_index', attributeType='long', keyable=1)
         cmds.addAttr(location, longName='qsm_frame', attributeType='long', keyable=1)
         cmds.connectAttr('time1.outTime', location+'.qsm_frame')
-        _mya_core.NodeAttribute.create_as_float(location, 'qsm_speed', 1.0)
-        _mya_core.NodeAttribute.create_as_integer(location, 'qsm_offset', -start_frame)
+        qsm_mya_core.NodeAttribute.create_as_float(location, 'qsm_speed', 1.0)
+        qsm_mya_core.NodeAttribute.create_as_integer(location, 'qsm_offset', -start_frame)
 
         cmds.addAttr(location, longName='qsm_cache', dataType='string')
         # expression
@@ -373,7 +374,7 @@ class DynamicGpuCacheGenerate(object):
 
     def __init__(self, namespace):
         self._namespace = namespace
-        self._reference_namespace_query = _mya_core.ReferencesCache()
+        self._reference_namespace_query = qsm_mya_core.ReferencesCache()
         self._resource = _core.AdvRigAsset(self._namespace)
         self._root = self._resource.get_root()
         self._geometry_location = self._resource.find_geometry_location()
@@ -393,7 +394,7 @@ class DynamicGpuCacheGenerate(object):
             bsc_core.BscStorage.create_directory(
                 os.path.dirname(file_path)
             )
-            _mya_core.SceneFile.export_file(
+            qsm_mya_core.SceneFile.export_file(
                 file_path, self._root
             )
 
@@ -407,7 +408,7 @@ class DynamicGpuCacheGenerate(object):
         self._build_cache(
             cache_location, gpu_file_path, start_frame, end_frame
         )
-        _mya_core.SceneFile.export_file(
+        qsm_mya_core.SceneFile.export_file(
             cache_file_path, cache_location
         )
 
@@ -435,7 +436,7 @@ class DynamicGpuCacheProcess(object):
     def execute(self):
         with bsc_log.LogProcessContext.create(maximum=4) as l_p:
             # step 1
-            _mya_core.SceneFile.new()
+            qsm_mya_core.SceneFile.new()
             l_p.do_update()
             # step 2
             if os.path.isfile(self._file_path) is False:
@@ -445,10 +446,10 @@ class DynamicGpuCacheProcess(object):
                 self.LOG_KEY, 'reference scene: {}'.format(self._file_path)
             )
             if self._use_motion is False:
-                _mya_core.SceneFile.open(self._file_path)
+                qsm_mya_core.SceneFile.open(self._file_path)
             else:
-                _mya_core.SceneFile.reference_file(self._file_path, namespace=self._namespace)
-                _adv_core.AdvChrOpt(self._namespace).load_controls_motion_from(
+                qsm_mya_core.SceneFile.reference_file(self._file_path, namespace=self._namespace)
+                qsm_mya_adv.AdvChrOpt(self._namespace).load_controls_motion_from(
                     self._motion_file, force=True
                 )
             l_p.do_update()

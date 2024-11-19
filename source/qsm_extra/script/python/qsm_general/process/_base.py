@@ -34,7 +34,7 @@ class DccProcess:
 
     @classmethod
     def generate_cmd_script_by_option_dict(cls, method, method_option_dict, packages_extend=None):
-        option = cls.to_option(method, method_option_dict)
+        option = cls.to_method_option(method, method_option_dict)
         return cls.generate_cmd_script(option, packages_extend=packages_extend)
 
     @classmethod
@@ -42,7 +42,7 @@ class DccProcess:
         return 'option_hook_key=dcc-process/{}&'.format(cls.OPTION_HOOK_KEY) + option
 
     @classmethod
-    def to_option(cls, method, option_dict):
+    def to_method_option(cls, method, option_dict):
         key = bsc_core.BscHash.to_hash_key(option_dict)
         file_path = cls.to_option_file_path(key)
         bsc_storage.StgFileOpt(file_path).set_write(option_dict)
@@ -65,10 +65,14 @@ class DccProcess:
         return bsc_storage.StgFileOpt(file_path).set_read()
 
     @classmethod
-    def generate_hook_option_by_option_dict(cls, method, method_option_dict, **kwargs):
-        method_option = cls.to_option(method, method_option_dict)
+    def generate_hook_option_fnc(cls, method, method_option_dict, **kwargs):
+        method_option = cls.to_method_option(method, method_option_dict)
         hook_option = cls.generate_hook_option(method_option)
         if kwargs:
             option_extend = bsc_core.ArgDictString.to_string(**kwargs)
             return hook_option+'&'+option_extend
         return hook_option
+
+    @classmethod
+    def generate_farm_hook_option_fnc(cls, method, method_option_dict, farm_option_dict, **kwargs):
+        pass

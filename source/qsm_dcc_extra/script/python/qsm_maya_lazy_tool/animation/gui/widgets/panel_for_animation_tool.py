@@ -104,8 +104,8 @@ class PrxPanelForAnimationTool(gui_prx_widgets.PrxBasePanel):
         self.do_gui_refresh_all()
 
     def gui_setup_post_fnc(self):
-        self._chr_and_prp_prx_page.gui_page_setup_post_fnc()
-        self._scenery_prx_page.gui_page_setup_post_fnc()
+        self._chr_and_prp_prx_page.gui_setup_post_fnc()
+        self._scenery_prx_page.gui_setup_post_fnc()
 
     def do_gui_refresh_all(self, force=False):
         key = self._page_prx_tab_tool_box.get_current_key()

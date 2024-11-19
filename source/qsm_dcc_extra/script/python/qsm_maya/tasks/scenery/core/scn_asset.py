@@ -2,20 +2,20 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-from ....general import core as _gnl_core
+import qsm_maya.core as qsm_mya_core
 
-from ....resource import core as _rsc_core
+import qsm_maya.general.core as qsm_mya_gnl_core
 
-from .... import core as _mya_core
+import qsm_maya.resource.core as qsm_mya_rsc_core
 
 
-class SceneryAsset(_rsc_core.Asset):
+class SceneryAsset(qsm_mya_rsc_core.Asset):
     def __init__(self, *args, **kwargs):
         super(SceneryAsset, self).__init__(*args, **kwargs)
 
     def get_unit_assembly_location(self):
         _ = cmds.ls(
-            '{}:{}'.format(self.namespace, _gnl_core.ResourceCacheNodes.UnitAssemblyName),
+            '{}:{}'.format(self.namespace, qsm_mya_gnl_core.ResourceCacheNodes.UnitAssemblyName),
             long=1
         )
         if _:
@@ -30,18 +30,18 @@ class SceneryAsset(_rsc_core.Asset):
     
     def find_nodes_by_scheme(self, scheme):
         if scheme == 'root':
-            return _mya_core.Namespace.find_roots(
+            return qsm_mya_core.Namespace.find_roots(
                 self.namespace
             )
         elif scheme == 'geometry':
-            return _mya_core.Namespace.find_all_dag_nodes(
+            return qsm_mya_core.Namespace.find_all_dag_nodes(
                 self.namespace, ['mesh', 'gpuCache']
             )
         elif scheme == 'none':
             return []
 
 
-class SceneryAssetQuery(_rsc_core.AssetsQuery):
+class SceneryAssetQuery(qsm_mya_rsc_core.AssetsQuery):
     SCENE_PATTERN = 'X:/{project}/Assets/{role}/{asset}/Maya/Final/{asset}.ma'
 
     RESOURCE_CLS = SceneryAsset

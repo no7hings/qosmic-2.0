@@ -9,6 +9,8 @@ import maya.OpenMayaUI as om_ui
 
 from . import node as _node
 
+from . import shape as _node_for_shape
+
 from . import render as _rdr
 
 from . import attribute as _atr
@@ -58,6 +60,36 @@ class Camera(object):
         return camera_dag_path.fullPathName()
 
     @classmethod
+    def get_non_default_with_dialog(cls):
+        import lxgui.core as gui_core
+
+        cameras = Cameras.get_all()
+
+        path_map = {}
+        non_default_names = []
+        for i_camera in cameras:
+            i_transform = _node_for_shape.Shape.get_transform(i_camera)
+            i_name = _node_for_shape.Shape.to_name(i_transform)
+            path_map[i_name] = i_camera
+            if i_name not in Cameras.DEFAULT_NAMES:
+                non_default_names.append(i_name)
+
+        if non_default_names:
+            if len(non_default_names) > 1:
+                options = non_default_names
+                result = gui_core.GuiApplication.exec_input_dialog(
+                    type='choose',
+                    options=options,
+                    info='Choose a camera...',
+                    value=options[0],
+                    title='Camera'
+                )
+                if result:
+                    return path_map[result]
+            return path_map[non_default_names[0]]
+        return Camera.get_active()
+
+    @classmethod
     def get_angle_of_view(cls, path):
         return cmds.camera(path, query=1, horizontalFieldOfView=1)
 
@@ -81,8 +113,19 @@ class Camera(object):
         h_ = w_*float(w)/float(h)
         return w_, h_
 
+    @classmethod
+    def generate_camera_preview(cls):
+        pass
+
 
 class Cameras(object):
+    DEFAULT_NAMES = [
+        'persp',
+        'top',
+        'front',
+        'side'
+    ]
+
     @classmethod
     def get_all(cls):
         return cmds.ls(type='camera', long=1) or []

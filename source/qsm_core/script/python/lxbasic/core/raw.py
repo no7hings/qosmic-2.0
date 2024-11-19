@@ -29,6 +29,14 @@ def auto_unicode(text):
         return text.decode('utf-8')
     return text
 
+def ensure_unicode(s):
+    if isinstance(s, six.text_type):
+        return s
+    elif isinstance(s, bytes):
+        return s.decode('utf-8')
+    else:
+        return s
+
 
 class BscColor:
     @classmethod
@@ -894,11 +902,8 @@ class BscTextOpt(object):
             raise TypeError()
 
     def get_is_contain_chinese(self):
-        check_str = self.__raw
-        # to unicode
-        if not isinstance(check_str, six.text_type):
-            check_str = check_str.decode('utf-8')
-        #
+        check_str = ensure_unicode(self.__raw)
+
         for ch in check_str:
             if u'\u4e00' <= ch <= u'\u9fff':
                 return True

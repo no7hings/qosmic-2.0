@@ -42,7 +42,7 @@ class QtEntryForContent(
         #
         self._print_signals = _qt_core.QtPrintSignals(self)
         #
-        self._print_signals.print_add_accepted.connect(self._add_value_)
+        self._print_signals.print_add_accepted.connect(self._append_value_)
         self._print_signals.print_over_accepted.connect(self._set_value_)
         #
         self.setStyleSheet(
@@ -142,7 +142,7 @@ class QtEntryForContent(
         self.setFont(font)
         self.update()
 
-    def _append_content_(self, text):
+    def _append_value_(self, text):
         def add_fnc_(text_):
             if isinstance(text_, six.text_type):
                 text_ = text_.encode('utf-8')
@@ -161,7 +161,7 @@ class QtEntryForContent(
     def _set_content_(self, text):
         self.setText(text)
 
-    def _add_value_with_thread_(self, text):
+    def _append_value_use_signal_(self, text):
         self._print_signals.print_add_accepted.emit(text)
 
     def _set_value_with_thread_(self, text):

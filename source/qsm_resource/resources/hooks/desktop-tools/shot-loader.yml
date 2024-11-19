@@ -33,7 +33,7 @@ resolver:
     #
     task_unit:
         keywords:
-            - '{branch}-preview-file'
+            - '{branch}-preview-mov-file'
             - '{branch}-review-file'
             - '{branch}-source-maya-scene-src-file': {systems: ['*-python', '*-maya']}
             - '{branch}-source-houdini-scene-src-file': {systems: ['*-python', '*-houdini']}

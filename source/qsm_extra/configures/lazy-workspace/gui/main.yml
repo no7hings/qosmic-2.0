@@ -22,17 +22,16 @@ option:
 
 build:
     task_manager:
-        tab:
-            name: 'Task Create / Manager'
-            name_chs: '任务创建 / 管理'
+        name: 'Task Create / Manager'
+        name_chs: '任务创建 / 管理'
 
-            tool_tip:
-                |-
-                To be supplemented.
+        tool_tip:
+            |-
+            To be supplemented.
 
-            tool_tip_chs:
-                |-
-                待补充。
+        tool_tip_chs:
+            |-
+            待补充。
 
         buttons:
             create_task:
@@ -43,6 +42,10 @@ build:
                 name: 'Save'
                 name_chs: '保存'
 
+            increment_and_save:
+                name: 'Increment and Save'
+                name_chs: '加存'
+
             save_to:
                 name: 'Save To'
                 name_chs: '保存到'
@@ -51,10 +54,9 @@ build:
                 name: 'Save As'
                 name_chs: '另存为'
 
-    task_tool:
-        tab:
-            name: 'Task Tool'
-            name_chs: '任务工具'
+        asset:
+            name: 'Asset'
+            name_chs: '资产'
 
             tool_tip:
                 |-
@@ -63,7 +65,31 @@ build:
             tool_tip_chs:
                 |-
                 待补充。
-        
+
+        shot:
+            name: 'Shot'
+            name_chs: '镜头'
+
+            tool_tip:
+                |-
+                To be supplemented.
+
+            tool_tip_chs:
+                |-
+                待补充。
+
+    task_tool:
+        name: 'Task Tool'
+        name_chs: '任务工具'
+
+        tool_tip:
+            |-
+            To be supplemented.
+
+        tool_tip_chs:
+            |-
+            待补充。
+
         messages:
             auto_collection:
                 message: 'Do You Want to Execute Auto Collection.'
@@ -392,18 +418,34 @@ build:
                             name: 'Simulation'
                             name_chs: '解算'
 
-                        simulation/enable_solver:
+                        simulation/solver:
+                            widget: group
+                            name: 'Solver'
+                            name_chs: '解算器'
+
+                        simulation/solver/enable:
                             widget: button
                             name: 'Enable Solver'
                             name_chs: '启用解算器'
                             icon: 'tool/enable'
                             join_to_next: True
 
-                        simulation/disable_solver:
+                        simulation/solver/disable:
                             widget: button
                             name: 'Disable Solver'
                             name_chs: '禁用解算器'
                             icon: 'tool/disable'
+
+                        simulation/solver/start_frame:
+                            widget: integer
+                            name: 'Solver Start Frame'
+                            name_chs: '解算器起始帧'
+                            value: 1
+
+                        simulation/solver/apply_start_frame:
+                            widget: button
+                            name: 'Apply Solver Start Frame'
+                            name_chs: '应用解算器起始帧'
 
                         simulation/select_all:
                             widget: button
@@ -411,6 +453,7 @@ build:
                             name_chs: '选择所有'
 
                             icon: 'tool/maya/select'
+
 
             export:
                 name: 'Export'
@@ -537,57 +580,90 @@ build:
                             name: 'Playblast'
                             name_chs: '拍屏'
                             icon: 'tool/maya/playblast'
-                            join_to_next: True
-
-                        preview_export/playblast_subprocess:
-                            widget: button
-                            name: 'Playblast (subprocess)'
-                            name_chs: '拍屏（子进程）'
-                            icon: 'tool/maya/playblast'
-
-                        preview_export/playblast_backstage:
-                            widget: button
-                            name: 'Playblast (backstage)'
-                            name_chs: '拍屏（后台）'
-                            icon: 'tool/maya/playblast'
-                            join_to_next: True
-
-                        preview_export/playblast_farm:
-                            widget: button
-                            name: 'Playblast (farm)'
-                            name_chs: '拍屏（农场）'
-                            icon: 'tool/maya/playblast'
+                            menu_enable: True
 
                         cache_export:
                             widget: group
                             name: 'Cache Export'
                             name_chs: '缓存导出'
 
+                        cache_export/scheme:
+                            widget: capsule_string
+                            name: 'Export Scheme'
+                            name_chs: '导出方案'
+                            options: ['all', 'selected']
+                            option_names: ['All', 'Selected']
+                            option_names_chs: ['所有', '选中的']
+
+                            default: 'all'
+
                         cache_export/export_cloth_cache:
                             widget: button
                             name: 'Export Cache'
                             name_chs: '导出CFX布料'
                             icon: 'upload'
+                            menu_enable: True
+
+        cfx_dressing:
+            messages:
+                no_characters:
+                    message_chs: '选择一个或者多个角色（可以是任意部件）。'
+                    message: 'Select one or more character (any part).'
+
+            import:
+                name: 'Import'
+                name_chs: '导入'
+
+                tool_tip:
+                    |-
+                    To be supplemented.
+
+                tool_tip_chs:
+                    |-
+                    待补充。
+
+                options:
+                    name: 'Options'
+                    name_chs: '选项'
+
+                    parameters:
+                        cache_directory:
+                            widget: group
+                            name: 'Cache Directory'
+                            name_chs: '缓存目录'
+
+                        cache_directory/version_directory:
+                            widget: directory
+                            open_or_save: open
+                            name_chs: '导入版本目录'
+                            value: ''
+                            history_key: 'tool-panels.lazy-cfx-tool.cache_directory-import-version-directory-open'
+
+                        cache_directory/file_tree:
+                            widget: file_tree
+                            name: 'File'
+                            name_chs: '文件'
+
+                        cache_import:
+                            widget: group
+                            name: 'Cache Import'
+                            name_chs: '缓存导入'
+
+                        cache_import/load_cloth_cache:
+                            widget: button
+                            name: 'Import Cache'
+                            name_chs: '导入CFX布料'
+                            icon: 'load'
+                            tool_tip_chs:
+                                |-
+                                选择一个目录（版本目录），勾选需要导入的文件，然后点击“导入缓存”
                             join_to_next: True
 
-                        cache_export/export_cloth_cache_subprocess:
+                        cache_import/remove_cloth_cache:
                             widget: button
-                            name: 'Export Cache (subprocess)'
-                            name_chs: '导出CFX布料（子进程）'
-                            icon: 'upload'
-
-                        cache_export/export_cloth_cache_as_backstage:
-                            widget: button
-                            name: 'Export Cache (backstage)'
-                            name_chs: '导出CFX布料（后台）'
-                            icon: 'upload'
-                            join_to_next: True
-
-                        cache_export/export_cloth_cache_as_farm:
-                            widget: button
-                            name: 'Export Cache (farm)'
-                            name_chs: '导出CFX布料（农场）'
-                            icon: 'upload'
+                            name: 'Remove Cache'
+                            name_chs: '移除CFX布料'
+                            icon: 'tool/maya/delete'
 
         gnl:
             basic:
@@ -609,17 +685,16 @@ build:
                     parameters: {}
 
     task_release:
-        tab:
-            name: 'Task Release'
-            name_chs: '任务发布'
+        name: 'Task Release'
+        name_chs: '任务发布'
 
-            tool_tip:
-                |-
-                To be supplemented.
+        tool_tip:
+            |-
+            To be supplemented.
 
-            tool_tip_chs:
-                |-
-                待补充。
+        tool_tip_chs:
+            |-
+            待补充。
 
         buttons:
             validation:
@@ -641,9 +716,23 @@ build:
                         name: 'Image'
                         name_chs: '图片'
                         value: ''
-                        history_key: 'tool-panels.lazy-workspace.task-release-images'
+                        history_key: 'lazy-workspace.task_release_cfx_rig.images'
                         ext_filter: 'All Image File (*.jpg *.png *.exr)'
-                        enable: True
+                        height: 120
+
+        cfx_dressing:
+            options:
+                name: 'Options'
+                name_chs: '选项'
+
+                parameters:
+                    videos:
+                        widget: files
+                        name: 'Video'
+                        name_chs: '视频'
+                        value: ''
+                        history_key: 'lazy-workspace.task_release_cfx_dressing.videos'
+                        ext_includes: ['.mov']
                         height: 120
 
         gnl:
@@ -657,7 +746,6 @@ build:
                         name: 'Image'
                         name_chs: '图片'
                         value: ''
-                        history_key: 'tool-panels.lazy-workspace.task-release-images'
+                        history_key: 'lazy-workspace.task_release_gnl.images'
                         ext_filter: 'All Image File (*.jpg *.png *.exr)'
-                        enable: True
                         height: 120

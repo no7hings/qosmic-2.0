@@ -4,7 +4,7 @@ def main(session):
 
     option_opt = session.get_option_opt()
 
-    qsm_prv_scripts.PlayblastOpt.load_auto(
+    qsm_prv_scripts.PlayblastOpt.execute_auto(
         **option_opt.to_dict()
     )
 

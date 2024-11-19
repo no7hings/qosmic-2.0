@@ -4,9 +4,9 @@ import json
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-from .... import core as _mya_core
+import qsm_maya.core as qsm_mya_core
 
-from ....adv import core as _adv_core
+import qsm_maya.adv as qsm_mya_adv
 
 from . import cfx_rig_operate as _cfx_rig_operate
 
@@ -17,26 +17,26 @@ class CfxRigAssetOpt(object):
 
     @classmethod
     def load_rig(cls, scene_path):
-        _mya_core.SceneFile.reference_file(
+        qsm_mya_core.SceneFile.reference_file(
             scene_path, cls.NAMESPACE
         )
 
     @classmethod
     def remove_rig(cls):
-        _mya_core.Frame.set_current(1)
+        qsm_mya_core.Frame.set_current(1)
 
-        opt = _adv_core.AdvOpt(cls.NAMESPACE)
+        opt = qsm_mya_adv.AdvOpt(cls.NAMESPACE)
         opt.rest_controls_transformation(translate=True, rotate=True)
-        _mya_core.SceneFile.refresh()
+        qsm_mya_core.SceneFile.refresh()
 
-        node = _mya_core.ReferencesCache().get(cls.NAMESPACE)
-        _mya_core.Reference.remove(node)
+        node = qsm_mya_core.ReferencesCache().get(cls.NAMESPACE)
+        qsm_mya_core.Reference.remove(node)
 
     def __init__(self, *args, **kwargs):
-        if _mya_core.Namespace.is_exists(self.NAMESPACE) is False:
+        if qsm_mya_core.Namespace.is_exists(self.NAMESPACE) is False:
             raise RuntimeError()
 
-        self._adv_rig = _adv_core.AdvOpt(self.NAMESPACE)
+        self._adv_rig = qsm_mya_adv.AdvOpt(self.NAMESPACE)
 
         self._mesh_set = set(self._adv_rig.find_all_meshes())
         self._mesh_set.update(set(self._adv_rig.find_all_lower_meshes()))
@@ -53,27 +53,27 @@ class CfxRigAssetOpt(object):
     def generate_blend_map(self, disable=False):
         dict_ = {}
         for i_mesh_shape in self._mesh_set:
-            i_mesh_transform = _mya_core.Shape.get_transform(i_mesh_shape)
-            i_name = _mya_core.DagNode.to_name_without_namespace(i_mesh_transform)
-            i_blend_nodes = _mya_core.MeshBlendSource.get_deform_nodes(
+            i_mesh_transform = qsm_mya_core.Shape.get_transform(i_mesh_shape)
+            i_name = qsm_mya_core.DagNode.to_name_without_namespace(i_mesh_transform)
+            i_blend_nodes = qsm_mya_core.MeshBlendSource.get_deform_nodes(
                 i_mesh_transform
             )
             if i_blend_nodes:
                 i_names = []
                 for j_blend_node in i_blend_nodes:
                     # ignore form reference
-                    if _mya_core.Reference.is_from_reference(j_blend_node) is True:
+                    if qsm_mya_core.Reference.is_from_reference(j_blend_node) is True:
                         continue
 
-                    j_name = _mya_core.DagNode.to_name_without_namespace(j_blend_node)
+                    j_name = qsm_mya_core.DagNode.to_name_without_namespace(j_blend_node)
                     i_names.append(j_name)
 
-                    _mya_core.NodeAttribute.create_as_string(
+                    qsm_mya_core.NodeAttribute.create_as_string(
                         j_blend_node, 'qsm_blend_source', i_name
                     )
 
                     if disable is True:
-                        _mya_core.NodeAttribute.set_value(
+                        qsm_mya_core.NodeAttribute.set_value(
                             j_blend_node, 'envelope', 0
                         )
 
@@ -84,20 +84,20 @@ class CfxRigAssetOpt(object):
     def generate_constraint_map(self, disable=False):
         dict_ = {}
         for i_control_transform in self._control_set:
-            i_name = _mya_core.DagNode.to_name_without_namespace(i_control_transform)
+            i_name = qsm_mya_core.DagNode.to_name_without_namespace(i_control_transform)
 
-            i_constraint_nodes = _mya_core.ParentConstraintSource.get_constraint_nodes(i_control_transform)
+            i_constraint_nodes = qsm_mya_core.ParentConstraintSource.get_constraint_nodes(i_control_transform)
             if i_constraint_nodes:
                 i_names = []
                 for j_constraint_node in i_constraint_nodes:
                     # ignore form reference
-                    if _mya_core.Reference.is_from_reference(j_constraint_node) is True:
+                    if qsm_mya_core.Reference.is_from_reference(j_constraint_node) is True:
                         continue
 
-                    j_name = _mya_core.DagNode.to_name_without_namespace(j_constraint_node)
+                    j_name = qsm_mya_core.DagNode.to_name_without_namespace(j_constraint_node)
                     i_names.append(j_name)
 
-                    _mya_core.NodeAttribute.create_as_string(
+                    qsm_mya_core.NodeAttribute.create_as_string(
                         j_constraint_node, 'qsm_constraint_source', i_name
                     )
 
@@ -109,15 +109,21 @@ class CfxRigAssetOpt(object):
         layer_name = _cfx_rig_operate.CfxSourceGeoLyrOpt().NAME
 
         set_ = set()
-        if _mya_core.Node.is_exists(layer_name):
-            _mya_core.DisplayLayer.set_visible(layer_name, False)
+        if qsm_mya_core.Node.is_exists(layer_name):
+            paths = [
+                qsm_mya_core.DagNode.to_path(x) for x in qsm_mya_core.DisplayLayer.get_all(layer_name)
+            ]
+            # qsm_mya_core.DisplayLayer.set_visible(layer_name, False)
             for i_mesh_shape in self._mesh_set:
-                i_mesh_transform = _mya_core.Shape.get_transform(i_mesh_shape)
-                i_name = _mya_core.DagNode.to_name_without_namespace(i_mesh_transform)
-                if _mya_core.Transform.is_override_hidden(i_mesh_transform) is True:
-                    set_.add(i_name)
+                i_mesh_transform = qsm_mya_core.Shape.get_transform(i_mesh_shape)
+                if i_mesh_transform not in paths:
+                    continue
 
-            _mya_core.NodeAttribute.create_as_string(
+                i_name = qsm_mya_core.DagNode.to_name_without_namespace(i_mesh_transform)
+                # if qsm_mya_core.Transform.is_override_hidden(i_mesh_transform) is True:
+                set_.add(i_name)
+
+            qsm_mya_core.NodeAttribute.create_as_string(
                 layer_name, 'qsm_hidden_set', json.dumps(list(set_))
             )
         return set_
@@ -132,7 +138,7 @@ class CfxRigAssetOpt(object):
     def generate_mesh_hash_map(self):
         dict_ = {}
         for i_mesh_shape in self._mesh_set:
-            i_mesh_opt = _mya_core.MeshShapeOpt(i_mesh_shape)
+            i_mesh_opt = qsm_mya_core.MeshShapeOpt(i_mesh_shape)
             i_key = i_mesh_opt.to_hash()
             dict_[i_key] = i_mesh_shape
         return dict_
@@ -140,7 +146,7 @@ class CfxRigAssetOpt(object):
     def generate_mesh_face_vertices_map(self):
         dict_ = {}
         for i_mesh_shape in self._mesh_set:
-            i_mesh_opt = _mya_core.MeshShapeOpt(i_mesh_shape)
+            i_mesh_opt = qsm_mya_core.MeshShapeOpt(i_mesh_shape)
             i_key = i_mesh_opt.get_face_vertices_as_uuid()
             dict_[i_key] = i_mesh_shape
         return dict_

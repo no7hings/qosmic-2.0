@@ -13,7 +13,7 @@ import qsm_maya_wsp_task as qsm_mya_wsp_task
 
 
 # cfx rig
-class PrxSubPageForAssetCfxRigCreate(_sub_page_for_task_create.AbsPrxSubPageForAssetTaskCreate):
+class PrxSubPageForAssetCfxRigCreate(_sub_page_for_task_create.AbsPrxSubPageForTaskCreate):
     GUI_KEY = 'cfx_rig'
 
     RESOURCE_BRANCH = 'asset'
@@ -27,90 +27,95 @@ class PrxSubPageForAssetCfxRigCreate(_sub_page_for_task_create.AbsPrxSubPageForA
 
     def do_gui_refresh_all(self):
         resource_properties = self._sub_window._resource_properties
-        if resource_properties:
-            kwargs_new = copy.copy(resource_properties)
-            kwargs_new['step'] = 'rig'
-            kwargs_new['task'] = 'rigging'
-            task_parse = qsm_mya_wsp_task.TaskParse()
-            rig_scene_ptn_opt = task_parse.generate_pattern_opt_for(
-                'asset-disorder-rig_scene-maya-file', **kwargs_new
-            )
-            matches = rig_scene_ptn_opt.find_matches()
-            if matches:
-                rig_scene_path = matches[0]['result']
-                self._prx_options_node.set('upstream_scene', rig_scene_path)
+        if not resource_properties:
+            return
+
+        kwargs_new = copy.copy(resource_properties)
+        kwargs_new['step'] = 'rig'
+        kwargs_new['task'] = 'rigging'
+        task_parse = qsm_mya_wsp_task.TaskParse()
+        rig_scene_ptn_opt = task_parse.generate_pattern_opt_for(
+            'asset-disorder-rig_scene-maya-file', **kwargs_new
+        )
+        matches = rig_scene_ptn_opt.find_matches()
+        if matches:
+            rig_scene_path = matches[-1]['result']
+            self._prx_options_node.set('upstream.scene', rig_scene_path)
 
     def _on_apply(self):
-        page = self._sub_window._window.gui_find_page('task_manager')
-        if page is not None:
-            if qsm_mya_core.SceneFile.new_with_dialog() is True:
-                task_parse = qsm_mya_wsp_task.TaskParse()
+        prx_widget = self._sub_window._prx_widget
+        resource_properties = self._sub_window._resource_properties
+        if not resource_properties:
+            return
 
-                task_unit = self._prx_options_node.get('task_unit')
-                if not task_unit:
+        if qsm_mya_core.SceneFile.new_with_dialog() is True:
+            task_parse = qsm_mya_wsp_task.TaskParse()
+
+            task_unit = self._prx_options_node.get('task_unit')
+            if not task_unit:
+                return
+
+            upstream_scene_path = self._prx_options_node.get('upstream.scene')
+            if upstream_scene_path is None:
+                return
+
+            step, task = self.STEP, self.TASK
+            kwargs = copy.copy(resource_properties)
+            kwargs['step'] = step
+            kwargs['task'] = task
+            kwargs['task_unit'] = task_unit
+            if 'version' in kwargs:
+                kwargs.pop('version')
+
+            task_scene_ptn_opt = task_parse.generate_source_task_scene_src_pattern_opt_for(**kwargs)
+
+            matches = task_scene_ptn_opt.find_matches(sort=True)
+            if matches:
+                last_version = int(matches[-1]['version'])
+                version = last_version+1
+            else:
+                version = 1
+
+            kwargs_new = copy.copy(kwargs)
+
+            kwargs_new['version'] = str(version).zfill(3)
+
+            task_scene_ptn_opt_new = task_parse.generate_source_task_scene_src_pattern_opt_for(
+                **kwargs_new
+            )
+
+            scene_src_path = task_scene_ptn_opt_new.get_value()
+
+            if bsc_storage.StgPath.get_is_file(scene_src_path) is False:
+                task_session = task_parse.generate_task_session_by_resource_source_scene_src(scene_src_path)
+
+                # create source
+                task_create_opt = task_session.generate_task_create_opt()
+                if task_create_opt is None:
                     return
 
-                upstream_scene_path = self._prx_options_node.get('upstream_scene')
-                if upstream_scene_path is None:
-                    return
-
-                step, task = self.STEP, self.TASK
-                kwargs = copy.copy(page.gui_get_resource_properties())
-                kwargs['step'] = step
-                kwargs['task'] = task
-                kwargs['task_unit'] = task_unit
-                if 'version' in kwargs:
-                    kwargs.pop('version')
-
-                task_scene_ptn_opt = task_parse.generate_resource_source_task_scene_src_pattern_opt_for(**kwargs)
-
-                matches = task_scene_ptn_opt.find_matches(sort=True)
-                if matches:
-                    last_version = int(matches[-1]['version'])
-                    version = last_version+1
-                else:
-                    version = 1
-
-                kwargs_new = copy.copy(kwargs)
-
-                kwargs_new['version'] = str(version).zfill(3)
-
-                task_scene_ptn_opt_new = task_parse.generate_resource_source_task_scene_src_pattern_opt_for(
-                    **kwargs_new
+                task_create_opt.build_scene_src(
+                    scene_src_path,
+                    upstream_scene_path
                 )
 
-                scene_src_path = task_scene_ptn_opt_new.get_value()
+                kwargs_new['result'] = scene_src_path
 
-                if bsc_storage.StgPath.get_is_file(scene_src_path) is False:
-                    task_session = task_parse.generate_task_session_by_resource_source_scene_src(scene_src_path)
-                    
-                    # create source
-                    task_create_opt = task_session.generate_task_create_opt()
-                    if task_create_opt is None:
-                        return
+                thumbnail_ptn_opt = task_parse.generate_resource_source_task_scene_src_thumbnail_pattern_opt_for(
+                    **kwargs_new
+                )
+                thumbnail_path = thumbnail_ptn_opt.get_value()
 
-                    task_create_opt.build_scene_src(upstream_scene_path)
-                    
-                    # save source
-                    qsm_mya_core.SceneFile.save_to(scene_src_path)
+                qsm_mya_core.SceneFile.refresh()
 
-                    kwargs_new['result'] = scene_src_path
+                with self._sub_window._window.gui_minimized():
+                    gui_qt_core.QtMaya.make_snapshot(thumbnail_path)
 
-                    thumbnail_ptn_opt = task_parse.generate_resource_source_task_scene_src_thumbnail_pattern_opt_for(
-                        **kwargs_new
-                    )
-                    thumbnail_path = thumbnail_ptn_opt.get_value()
-
-                    qsm_mya_core.SceneFile.refresh()
-
-                    with self._sub_window._window.gui_minimized():
-                        gui_qt_core.QtMaya.make_snapshot(thumbnail_path)
-
-                    page.gui_load_task_scene(kwargs_new)
+                prx_widget.gui_load_task_scene(kwargs_new)
 
 
 # cfx cloth
-class PrxSubPageForShotCfxClothCreate(_sub_page_for_task_create.AbsPrxSubPageForAssetTaskCreate):
+class PrxSubPageForShotCfxClothCreate(_sub_page_for_task_create.AbsPrxSubPageForTaskCreate):
     GUI_KEY = 'cfx_cloth'
 
     RESOURCE_BRANCH = 'shot'
@@ -122,92 +127,123 @@ class PrxSubPageForShotCfxClothCreate(_sub_page_for_task_create.AbsPrxSubPageFor
     def __init__(self, window, session, sub_window, *args, **kwargs):
         super(PrxSubPageForShotCfxClothCreate, self).__init__(window, session, sub_window, *args, **kwargs)
 
+        self._prx_options_node.set(
+            'play_preview', self.on_play_preview
+        )
+
+    def on_play_preview(self):
+        preview_path = self._prx_options_node.get('upstream.preview')
+        if preview_path:
+            if bsc_storage.StgPath.get_is_file(preview_path):
+                bsc_storage.StgFileOpt(preview_path).start_in_system()
+
     def do_gui_refresh_all(self):
         resource_properties = self._sub_window._resource_properties
-        if resource_properties:
-            kwargs_new = copy.copy(resource_properties)
-            kwargs_new['step'] = 'ani'
-            kwargs_new['task'] = 'animation'
-            task_parse = qsm_mya_wsp_task.TaskParse()
-            animation_scene_ptn_opt = task_parse.generate_pattern_opt_for(
-                'shot-disorder-animation_scene-file', **kwargs_new
-            )
-            matches = animation_scene_ptn_opt.find_matches()
-            if matches:
-                rig_scene_path = matches[0]['result']
-                self._prx_options_node.set('upstream_scene', rig_scene_path)
+        if not resource_properties:
+            return
+
+        kwargs_new = copy.copy(resource_properties)
+        kwargs_new['step'] = 'ani'
+        kwargs_new['task'] = 'animation'
+        task_parse = qsm_mya_wsp_task.TaskParse()
+
+        # scene
+        animation_scene_ptn_opt = task_parse.generate_pattern_opt_for(
+            'shot-disorder-animation_scene_s-file', **kwargs_new
+        )
+        matches = animation_scene_ptn_opt.find_matches()
+        if matches:
+            rig_scene_path = matches[-1]['result']
+            self._prx_options_node.set('upstream.scene', rig_scene_path)
+
+        # preview
+        animation_preview_pth_opt = task_parse.generate_pattern_opt_for(
+            'shot-disorder-animation_preview_s-file', **kwargs_new
+        )
+        matches = animation_preview_pth_opt.find_matches()
+        if matches:
+            preview_path = matches[-1]['result']
+            self._prx_options_node.set('upstream.preview', preview_path)
 
     def _on_apply(self):
-        page = self._sub_window._window.gui_find_page('task_manager')
-        if page is not None:
-            if qsm_mya_core.SceneFile.new_with_dialog() is True:
-                task_parse = qsm_mya_wsp_task.TaskParse()
+        prx_widget = self._sub_window._prx_widget
+        resource_properties = self._sub_window._resource_properties
+        if not resource_properties:
+            return
 
-                task_unit = self._prx_options_node.get('task_unit')
-                if not task_unit:
+        if qsm_mya_core.SceneFile.new_with_dialog() is True:
+            task_parse = qsm_mya_wsp_task.TaskParse()
+
+            task_unit = self._prx_options_node.get('task_unit')
+            if not task_unit:
+                return
+
+            upstream_scene_path = self._prx_options_node.get('upstream.scene')
+            if upstream_scene_path is None:
+                return
+
+            auto_load_cfx_rig = self._prx_options_node.get('auto_load_cfx_rig')
+            solver_start_frame = self._prx_options_node.get('solver_start_frame')
+
+            step, task = self.STEP, self.TASK
+            kwargs = copy.copy(resource_properties)
+            kwargs['step'] = step
+            kwargs['task'] = task
+            kwargs['task_unit'] = task_unit
+            if 'version' in kwargs:
+                kwargs.pop('version')
+
+            task_scene_ptn_opt = task_parse.generate_source_task_scene_src_pattern_opt_for(**kwargs)
+
+            matches = task_scene_ptn_opt.find_matches(sort=True)
+            if matches:
+                last_version = int(matches[-1]['version'])
+                version = last_version+1
+            else:
+                version = 1
+
+            kwargs_new = copy.copy(kwargs)
+
+            kwargs_new['version'] = str(version).zfill(3)
+
+            task_scene_ptn_opt_new = task_parse.generate_source_task_scene_src_pattern_opt_for(
+                **kwargs_new
+            )
+
+            scene_src_path = task_scene_ptn_opt_new.get_value()
+
+            if bsc_storage.StgPath.get_is_file(scene_src_path) is False:
+                task_session = task_parse.generate_task_session_by_resource_source_scene_src(scene_src_path)
+
+                # create source
+                task_create_opt = task_session.generate_task_create_opt()
+                if task_create_opt is None:
                     return
 
-                upstream_scene_path = self._prx_options_node.get('upstream_scene')
-                if upstream_scene_path is None:
-                    return
-
-                step, task = self.STEP, self.TASK
-                kwargs = copy.copy(page.gui_get_resource_properties())
-                kwargs['step'] = step
-                kwargs['task'] = task
-                kwargs['task_unit'] = task_unit
-                if 'version' in kwargs:
-                    kwargs.pop('version')
-
-                task_scene_ptn_opt = task_parse.generate_resource_source_task_scene_src_pattern_opt_for(**kwargs)
-
-                matches = task_scene_ptn_opt.find_matches(sort=True)
-                if matches:
-                    last_version = int(matches[-1]['version'])
-                    version = last_version+1
-                else:
-                    version = 1
-
-                kwargs_new = copy.copy(kwargs)
-
-                kwargs_new['version'] = str(version).zfill(3)
-
-                task_scene_ptn_opt_new = task_parse.generate_resource_source_task_scene_src_pattern_opt_for(
-                    **kwargs_new
+                task_create_opt.build_scene_src(
+                    scene_src_path=scene_src_path,
+                    upstream_scene_path=upstream_scene_path,
+                    auto_load_cfx_rig=auto_load_cfx_rig,
+                    solver_start_frame=solver_start_frame
                 )
 
-                scene_src_path = task_scene_ptn_opt_new.get_value()
+                kwargs_new['result'] = scene_src_path
 
-                if bsc_storage.StgPath.get_is_file(scene_src_path) is False:
-                    task_session = task_parse.generate_task_session_by_resource_source_scene_src(scene_src_path)
+                thumbnail_ptn_opt = task_parse.generate_resource_source_task_scene_src_thumbnail_pattern_opt_for(
+                    **kwargs_new
+                )
+                thumbnail_path = thumbnail_ptn_opt.get_value()
 
-                    # create source
-                    task_create_opt = task_session.generate_task_create_opt()
-                    if task_create_opt is None:
-                        return
+                qsm_mya_core.SceneFile.refresh()
 
-                    task_create_opt.build_scene_src(upstream_scene_path)
+                with self._sub_window._window.gui_minimized():
+                    gui_qt_core.QtMaya.make_snapshot(thumbnail_path)
 
-                    # save source
-                    qsm_mya_core.SceneFile.save_to(scene_src_path)
-
-                    kwargs_new['result'] = scene_src_path
-
-                    thumbnail_ptn_opt = task_parse.generate_resource_source_task_scene_src_thumbnail_pattern_opt_for(
-                        **kwargs_new
-                    )
-                    thumbnail_path = thumbnail_ptn_opt.get_value()
-
-                    qsm_mya_core.SceneFile.refresh()
-
-                    with self._sub_window._window.gui_minimized():
-                        gui_qt_core.QtMaya.make_snapshot(thumbnail_path)
-
-                    page.gui_load_task_scene(kwargs_new)
+                prx_widget.gui_load_task_scene(kwargs_new)
 
 
 # cfx dressing
-class PrxSubPageForShotCfxDressingCreate(_sub_page_for_task_create.AbsPrxSubPageForAssetTaskCreate):
+class PrxSubPageForShotCfxDressingCreate(_sub_page_for_task_create.AbsPrxSubPageForTaskCreate):
     GUI_KEY = 'cfx_dressing'
 
     RESOURCE_BRANCH = 'shot'
@@ -219,85 +255,111 @@ class PrxSubPageForShotCfxDressingCreate(_sub_page_for_task_create.AbsPrxSubPage
     def __init__(self, window, session, sub_window, *args, **kwargs):
         super(PrxSubPageForShotCfxDressingCreate, self).__init__(window, session, sub_window, *args, **kwargs)
 
+        self._prx_options_node.set(
+            'play_preview', self.on_play_preview
+        )
+
+    def on_play_preview(self):
+        preview_path = self._prx_options_node.get('upstream.preview')
+        if preview_path:
+            if bsc_storage.StgPath.get_is_file(preview_path):
+                bsc_storage.StgFileOpt(preview_path).start_in_system()
+
     def do_gui_refresh_all(self):
         resource_properties = self._sub_window._resource_properties
-        if resource_properties:
-            kwargs_new = copy.copy(resource_properties)
-            kwargs_new['step'] = 'ani'
-            kwargs_new['task'] = 'animation'
-            task_parse = qsm_mya_wsp_task.TaskParse()
-            animation_scene_ptn_opt = task_parse.generate_pattern_opt_for(
-                'shot-disorder-animation_scene-file', **kwargs_new
-            )
-            matches = animation_scene_ptn_opt.find_matches()
-            if matches:
-                rig_scene_path = matches[0]['result']
-                self._prx_options_node.set('upstream_scene', rig_scene_path)
+        if not resource_properties:
+            return
+
+        kwargs_new = copy.copy(resource_properties)
+        kwargs_new['step'] = 'ani'
+        kwargs_new['task'] = 'animation'
+        task_parse = qsm_mya_wsp_task.TaskParse()
+
+        # scene
+        animation_scene_ptn_opt = task_parse.generate_pattern_opt_for(
+            'shot-disorder-animation_scene_s-file', **kwargs_new
+        )
+        matches = animation_scene_ptn_opt.find_matches()
+        if matches:
+            rig_scene_path = matches[-1]['result']
+            self._prx_options_node.set('upstream.scene', rig_scene_path)
+
+        # preview
+        animation_preview_pth_opt = task_parse.generate_pattern_opt_for(
+            'shot-disorder-animation_preview_s-file', **kwargs_new
+        )
+        matches = animation_preview_pth_opt.find_matches()
+        if matches:
+            preview_path = matches[-1]['result']
+            self._prx_options_node.set('upstream.preview', preview_path)
 
     def _on_apply(self):
-        page = self._sub_window._window.gui_find_page('task_manager')
-        if page is not None:
-            if qsm_mya_core.SceneFile.new_with_dialog() is True:
-                task_parse = qsm_mya_wsp_task.TaskParse()
+        prx_widget = self._sub_window._prx_widget
+        resource_properties = self._sub_window._resource_properties
+        if not resource_properties:
+            return
 
-                task_unit = self._prx_options_node.get('task_unit')
-                if not task_unit:
+        if qsm_mya_core.SceneFile.new_with_dialog() is True:
+            task_parse = qsm_mya_wsp_task.TaskParse()
+
+            task_unit = self._prx_options_node.get('task_unit')
+            if not task_unit:
+                return
+
+            upstream_scene_path = self._prx_options_node.get('upstream.scene')
+            if upstream_scene_path is None:
+                return
+
+            step, task = self.STEP, self.TASK
+            kwargs = copy.copy(resource_properties)
+            kwargs['step'] = step
+            kwargs['task'] = task
+            kwargs['task_unit'] = task_unit
+            if 'version' in kwargs:
+                kwargs.pop('version')
+
+            task_scene_ptn_opt = task_parse.generate_source_task_scene_src_pattern_opt_for(**kwargs)
+
+            matches = task_scene_ptn_opt.find_matches(sort=True)
+            if matches:
+                last_version = int(matches[-1]['version'])
+                version = last_version+1
+            else:
+                version = 1
+
+            kwargs_new = copy.copy(kwargs)
+
+            kwargs_new['version'] = str(version).zfill(3)
+
+            task_scene_ptn_opt_new = task_parse.generate_source_task_scene_src_pattern_opt_for(
+                **kwargs_new
+            )
+
+            scene_src_path = task_scene_ptn_opt_new.get_value()
+
+            if bsc_storage.StgPath.get_is_file(scene_src_path) is False:
+                task_session = task_parse.generate_task_session_by_resource_source_scene_src(scene_src_path)
+
+                # create source
+                task_create_opt = task_session.generate_task_create_opt()
+                if task_create_opt is None:
                     return
 
-                upstream_scene_path = self._prx_options_node.get('upstream_scene')
-                if upstream_scene_path is None:
-                    return
-
-                step, task = self.STEP, self.TASK
-                kwargs = copy.copy(page.gui_get_resource_properties())
-                kwargs['step'] = step
-                kwargs['task'] = task
-                kwargs['task_unit'] = task_unit
-                if 'version' in kwargs:
-                    kwargs.pop('version')
-
-                task_scene_ptn_opt = task_parse.generate_resource_source_task_scene_src_pattern_opt_for(**kwargs)
-
-                matches = task_scene_ptn_opt.find_matches(sort=True)
-                if matches:
-                    last_version = int(matches[-1]['version'])
-                    version = last_version+1
-                else:
-                    version = 1
-
-                kwargs_new = copy.copy(kwargs)
-
-                kwargs_new['version'] = str(version).zfill(3)
-
-                task_scene_ptn_opt_new = task_parse.generate_resource_source_task_scene_src_pattern_opt_for(
-                    **kwargs_new
+                task_create_opt.build_scene_src(
+                    scene_src_path,
+                    upstream_scene_path
                 )
 
-                scene_src_path = task_scene_ptn_opt_new.get_value()
+                kwargs_new['result'] = scene_src_path
 
-                if bsc_storage.StgPath.get_is_file(scene_src_path) is False:
-                    task_session = task_parse.generate_task_session_by_resource_source_scene_src(scene_src_path)
+                thumbnail_ptn_opt = task_parse.generate_resource_source_task_scene_src_thumbnail_pattern_opt_for(
+                    **kwargs_new
+                )
+                thumbnail_path = thumbnail_ptn_opt.get_value()
 
-                    # create source
-                    task_create_opt = task_session.generate_task_create_opt()
-                    if task_create_opt is None:
-                        return
+                qsm_mya_core.SceneFile.refresh()
 
-                    task_create_opt.build_scene_src(upstream_scene_path)
+                with self._sub_window._window.gui_minimized():
+                    gui_qt_core.QtMaya.make_snapshot(thumbnail_path)
 
-                    # save source
-                    qsm_mya_core.SceneFile.save_to(scene_src_path)
-
-                    kwargs_new['result'] = scene_src_path
-
-                    thumbnail_ptn_opt = task_parse.generate_resource_source_task_scene_src_thumbnail_pattern_opt_for(
-                        **kwargs_new
-                    )
-                    thumbnail_path = thumbnail_ptn_opt.get_value()
-
-                    qsm_mya_core.SceneFile.refresh()
-
-                    with self._sub_window._window.gui_minimized():
-                        gui_qt_core.QtMaya.make_snapshot(thumbnail_path)
-
-                    page.gui_load_task_scene(kwargs_new)
+                prx_widget.gui_load_task_scene(kwargs_new)

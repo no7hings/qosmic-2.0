@@ -4,9 +4,9 @@ import maya.cmds as cmds
 
 import lxgui.core as gui_core
 
-from .... import core as _mya_core
+import qsm_maya.core as qsm_mya_core
 
-from ....motion import core as _mtn_core
+import qsm_maya.motion.core as qsm_mya_mtn_core
 
 
 class ControlMoveOpt(object):
@@ -29,28 +29,28 @@ class ControlMoveOpt(object):
         if cmds.objExists(cls.ROOT_PATH) is False:
             cmds.delete(cls.ROOT_PATH)
 
-    @_mya_core.Undo.execute
+    @qsm_mya_core.Undo.execute
     def create_locators(self):
         self.create_root()
 
         for i_path in self._main_controls:
-            _mtn_core.ControlMove.create_locator_fnc(
+            qsm_mya_mtn_core.ControlMove.create_locator_fnc(
                 i_path,
                 root=self.ROOT_PATH
             )
 
-    @_mya_core.Undo.execute
+    @qsm_mya_core.Undo.execute
     def remove_locators(self):
         for i_path in self._main_controls:
-            _mtn_core.ControlMove.remove_locator_fnc(i_path)
+            qsm_mya_mtn_core.ControlMove.remove_locator_fnc(i_path)
     
     @classmethod
     def create_auto(cls, **kwargs):
         scheme = kwargs['scheme']
         if scheme == 'default':
-            # _mya_core.AnmLayerOpt.switch_to_current_base()
+            # qsm_mya_core.AnmLayerOpt.switch_to_current_base()
 
-            main_controls = _mya_core.Selection.get_main_controls()
+            main_controls = qsm_mya_core.Selection.get_main_controls()
             if not main_controls:
                 gui_core.GuiDialog.create(
                     '控制器移动定位器创建',
@@ -68,12 +68,12 @@ class ControlMoveOpt(object):
     def remove_auto(cls, **kwargs):
         scheme = kwargs['scheme']
         if scheme == 'default':
-            # _mya_core.AnmLayerOpt.switch_to_current_base()
+            # qsm_mya_core.AnmLayerOpt.switch_to_current_base()
 
             locators = cmds.ls(selection=1, type='locator', dag=1, long=1)
             main_controls = []
             for i_path in locators:
-                i_control = _mtn_core.ControlMove.find_main_control(i_path)
+                i_control = qsm_mya_mtn_core.ControlMove.find_main_control(i_path)
                 if i_control is not None:
                     main_controls.append(i_control)
             if not main_controls:

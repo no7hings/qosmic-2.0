@@ -7,7 +7,7 @@ import qsm_maya.core as qsm_mya_core
 
 import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
 
-import qsm_maya.adv.core as qsm_mya_adv_core
+import qsm_maya.adv as qsm_mya_adv
 
 
 class PrxToolsetForImportMotion(gui_prx_widgets.PrxBaseUnit):
@@ -40,7 +40,7 @@ class PrxToolsetForImportMotion(gui_prx_widgets.PrxBaseUnit):
                     maximum=len(namespaces), label='import motion to characters'
                 ) as g_p:
                     for i_namespace in namespaces:
-                        i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                        i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
                         i_opt.load_controls_motion_from(
                             file_path,
                             force=True,

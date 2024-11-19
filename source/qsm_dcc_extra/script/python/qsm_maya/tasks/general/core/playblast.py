@@ -4,18 +4,19 @@ import maya.cmds as cmds
 # noinspection PyUnresolvedReferences
 import maya.mel as mel
 
-from .... import core as _mya_core
+import qsm_maya.core as qsm_mya_core
 
 
 class RenderSetting(object):
     @classmethod
     def setup(cls, camera, display_mode, texture_enable, light_enable, shadow_enable):
-        if _mya_core.Scene.get_is_ui_mode():
+        if qsm_mya_core.Scene.get_is_ui_mode():
             pass
         else:
-            # cmds.setAttr(camera+'.backgroundColor', 0.106, 0.106, 0.106, type='double3')
-            _mya_core.RenderSettings.set_renderer('mayaHardware2')
-            _mya_core.RenderSettings.open_color_transform()
+            # cmds.setAttr(camera+'.backgroundColor', 0.106, 0.106, 0.106, type='double3')\
+            qsm_mya_core.RenderSettings.set_cameras([camera])
+            qsm_mya_core.RenderSettings.set_renderer('mayaHardware2')
+            qsm_mya_core.RenderSettings.open_color_transform()
 
             # cmds.setAttr('hardwareRenderingGlobals.lineAAEnable', 1)
             # anti_aliasing
@@ -23,9 +24,9 @@ class RenderSetting(object):
             # cmds.setAttr('hardwareRenderingGlobals.ssaoEnable', 1)
             cmds.setAttr('hardwareRenderingGlobals.hwInstancing', 1)
 
-            # _mya_core.HardwareRenderSettings.set_display_mode(display_mode)
+            # qsm_mya_core.HardwareRenderSettings.set_display_mode(display_mode)
             if texture_enable is True:
-                _mya_core.HardwareRenderSettings.set_render_mode(texture_enable, light_enable, shadow_enable)
+                qsm_mya_core.HardwareRenderSettings.set_render_mode(texture_enable, light_enable, shadow_enable)
             # set filter
             # cmds.setAttr(
             #     'hardwareRenderingGlobals.objectTypeFilterValueArray',
@@ -60,12 +61,12 @@ class CameraDisplay(object):
             display_film_origin = options.get('display_film_origin', 0)
             overscan = options.get('overscan', 0)
         else:
-            display_resolution = _mya_core.NodeAttribute.get_value(camera, 'displayResolution')
-            display_safe_action = _mya_core.NodeAttribute.get_value(camera, 'displaySafeAction')
-            display_safe_title = _mya_core.NodeAttribute.get_value(camera, 'displaySafeTitle')
-            display_film_pivot = _mya_core.NodeAttribute.get_value(camera, 'displayFilmPivot')
-            display_film_origin = _mya_core.NodeAttribute.get_value(camera, 'displayFilmOrigin')
-            overscan = _mya_core.NodeAttribute.get_value(camera, 'overscan')
+            display_resolution = qsm_mya_core.NodeAttribute.get_value(camera, 'displayResolution')
+            display_safe_action = qsm_mya_core.NodeAttribute.get_value(camera, 'displaySafeAction')
+            display_safe_title = qsm_mya_core.NodeAttribute.get_value(camera, 'displaySafeTitle')
+            display_film_pivot = qsm_mya_core.NodeAttribute.get_value(camera, 'displayFilmPivot')
+            display_film_origin = qsm_mya_core.NodeAttribute.get_value(camera, 'displayFilmOrigin')
+            overscan = qsm_mya_core.NodeAttribute.get_value(camera, 'overscan')
 
         cmds.camera(
             camera,
@@ -138,7 +139,7 @@ class Window(object):
             subdivSurfaces=1,
             fluids=1,
             strokes=1,
-            nCloths=1,
+            # nCloths=1,
             nParticles=1,
             pluginShapes=1,
             # show GPU
@@ -154,12 +155,12 @@ class Window(object):
         use_exists_window=False,
     ):
         if use_exists_window is True:
-            if _mya_core.Window.is_exists(cls.WINDOW_NAME) is True:
+            if qsm_mya_core.Window.is_exists(cls.WINDOW_NAME) is True:
                 return
 
-        window = _mya_core.Window.create_force(cls.WINDOW_NAME, (width, height))
+        window = qsm_mya_core.Window.create_force(cls.WINDOW_NAME, (width, height))
         if show_window is True:
-            _mya_core.Window.show(window)
+            qsm_mya_core.Window.show(window)
 
         layout = cmds.paneLayout(width=width, height=height, parent=window)
         view_panel_name = cls.WINDOW_NAME+'_view_panel'
@@ -182,7 +183,7 @@ class Window(object):
             use_default_material=use_default_material, hud_enable=hud_enable
         )
         # set latest
-        _mya_core.ViewPanel.set_render_mode(view_panel, texture_enable, light_enable, shadow_enable)
+        qsm_mya_core.ViewPanel.set_render_mode(view_panel, texture_enable, light_enable, shadow_enable)
         # if show_hud is True:
         #     cls.setup_camera(
         #         camera,
@@ -198,5 +199,5 @@ class Window(object):
 
     @classmethod
     def close(cls):
-        _mya_core.Window.delete(cls.WINDOW_NAME)
+        qsm_mya_core.Window.delete(cls.WINDOW_NAME)
 

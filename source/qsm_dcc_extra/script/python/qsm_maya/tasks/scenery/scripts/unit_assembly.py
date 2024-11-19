@@ -19,23 +19,23 @@ import qsm_general.core as qsm_gnl_core
 
 import qsm_general.process as qsm_gnl_process
 
-from .... import core as _mya_core
+import qsm_maya.core as qsm_mya_core
 
-from ....general import core as _gnl_core
+import qsm_maya.general.core as qsm_mya_gnl_core
 
-from ....resource import core as _rsc_core
+import qsm_maya.resource.core as qsm_mya_rsc_core
 
-from ....assembly import core as _asb_core
+import qsm_maya.assembly.core as qsm_mya_asb_core
 
 from .. import core as _core
 
 
-class UnitAssemblyOpt(_rsc_core.AssetCacheOpt):
+class UnitAssemblyOpt(qsm_mya_rsc_core.AssetCacheOpt):
     TASK_KEY = 'unit_assembly_generate'
     API_VERSION = 1.0
 
-    CACHE_ROOT = _gnl_core.ResourceCacheNodes.UnitAssemblyRoot
-    CACHE_NAME = _gnl_core.ResourceCacheNodes.UnitAssemblyName
+    CACHE_ROOT = qsm_mya_gnl_core.ResourceCacheNodes.UnitAssemblyRoot
+    CACHE_NAME = qsm_mya_gnl_core.ResourceCacheNodes.UnitAssemblyName
 
     def __init__(self, resource):
         super(UnitAssemblyOpt, self).__init__(resource)
@@ -51,7 +51,7 @@ class UnitAssemblyOpt(_rsc_core.AssetCacheOpt):
         cache_location = '|{}:{}'.format(namespace, self.CACHE_NAME)
         if cmds.objExists(cache_location) is False and cmds.objExists(cache_location_new) is False:
             if os.path.isfile(cache_file_path) is True:
-                _mya_core.SceneFile.import_container_file(
+                qsm_mya_core.SceneFile.import_container_file(
                     cache_file_path, namespace=namespace
                 )
                 cmds.parent(cache_location, self.CACHE_ROOT)
@@ -72,7 +72,7 @@ class UnitAssemblyOpt(_rsc_core.AssetCacheOpt):
             layer_name = '{}_dynamic_gpu_hide'.format(self._namespace)
             layer_path = cmds.createDisplayLayer(name=layer_name, number=1, empty=True)
 
-            roots = _mya_core.Namespace.find_roots(
+            roots = qsm_mya_core.Namespace.find_roots(
                 self._namespace
             )
             cmds.editDisplayLayerMembers(layer_path, *roots)
@@ -118,11 +118,11 @@ class UnitAssemblyOpt(_rsc_core.AssetCacheOpt):
                 g_p.do_update()
 
     @classmethod
-    def load_auto(cls, **kwargs):
+    def execute_auto(cls, **kwargs):
         scheme = kwargs['scheme']
         if scheme == 'default':
             resources = []
-            namespaces = _mya_core.Namespaces.extract_from_selection()
+            namespaces = qsm_mya_core.Namespaces.extract_from_selection()
             if namespaces:
                 resources_query = _core.SceneryAssetQuery()
                 resources_query.do_update()
@@ -182,7 +182,7 @@ class UnitAssemblyOpt(_rsc_core.AssetCacheOpt):
     @classmethod
     def remove_auto(cls, **kwargs):
         resources = []
-        namespaces = _mya_core.Namespaces.extract_from_selection()
+        namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
             resources_query = _core.SceneryAssetQuery()
             resources_query.do_update()
@@ -241,13 +241,13 @@ class UnitAssemblyProcess(object):
         self._gpu_unpack = gpu_unpack
 
     def grid_mesh_prc(self, grid_size):
-        mesh_paths = _mya_core.Scene.find_all_dag_nodes(['mesh'])
+        mesh_paths = qsm_mya_core.Scene.find_all_dag_nodes(['mesh'])
         nodes = []
         list_for_grid = []
         with bsc_log.LogProcessContext.create(maximum=len(mesh_paths), label='mesh process') as l_p:
             for i_shape_path in mesh_paths:
-                if _mya_core.Node.is_mesh_type(i_shape_path) is True:
-                    i_mesh_opt = _mya_core.MeshShapeOpt(i_shape_path)
+                if qsm_mya_core.Node.is_mesh_type(i_shape_path) is True:
+                    i_mesh_opt = qsm_mya_core.MeshShapeOpt(i_shape_path)
                     i_w, i_h, i_d = i_mesh_opt.get_dimension()
                     i_s = max(i_w, i_h, i_d)
                     if i_s < grid_size:
@@ -258,7 +258,7 @@ class UnitAssemblyProcess(object):
                 l_p.do_update()
 
         if list_for_grid:
-            mapper = _asb_core.GridSpace(list_for_grid, grid_size).generate()
+            mapper = qsm_mya_asb_core.GridSpace(list_for_grid, grid_size).generate()
             keys = mapper.keys()
             keys.sort()
             with bsc_log.LogProcessContext.create(maximum=len(keys), label='grid process') as l_p:
@@ -279,63 +279,63 @@ class UnitAssemblyProcess(object):
                         )
 
                         i_group_path = '|region_{}_GRP'.format(i_seq)
-                        i_group_path_new = _mya_core.Group.create(i_group_path)
+                        i_group_path_new = qsm_mya_core.Group.create(i_group_path)
                         i_shape_paths = mapper[i_key]
                         for j_shape_path in i_shape_paths:
                             # fixme: mesh parent mesh
-                            if _mya_core.DagNode.is_exists(j_shape_path) is False:
+                            if qsm_mya_core.DagNode.is_exists(j_shape_path) is False:
                                 continue
 
-                            j_transform_path = _mya_core.Shape.get_transform(j_shape_path)
-                            _mya_core.Group.add(i_group_path_new, j_transform_path)
+                            j_transform_path = qsm_mya_core.Shape.get_transform(j_shape_path)
+                            qsm_mya_core.Group.add(i_group_path_new, j_transform_path)
                         # export to gpu and mesh
-                        _mya_core.GpuCache.export_frame_(
+                        qsm_mya_core.GpuCache.export_frame_(
                             i_gpu_file_path, i_group_path_new
                         )
-                        _mya_core.SceneFile.export_file(
+                        qsm_mya_core.SceneFile.export_file(
                             i_mesh_file_path, i_group_path_new
                         )
-                        _mya_core.Node.delete(i_group_path_new)
+                        qsm_mya_core.Node.delete(i_group_path_new)
                         # create AD
                         i_ad_path = '|region_{}_AD'.format(i_seq)
                         # ad
-                        _mya_core.AssemblyDefinition.create(
+                        qsm_mya_core.AssemblyDefinition.create(
                             i_ad_path
                         )
-                        _mya_core.AssemblyDefinition.add_cache(
+                        qsm_mya_core.AssemblyDefinition.add_cache(
                             i_ad_path, i_gpu_file_path, 'gpu'
                         )
-                        _mya_core.AssemblyDefinition.add_scene(
+                        qsm_mya_core.AssemblyDefinition.add_scene(
                             i_ad_path, i_mesh_file_path, 'mesh'
                         )
-                        _mya_core.SceneFile.export_file(
+                        qsm_mya_core.SceneFile.export_file(
                             i_ad_file_path, i_ad_path
                         )
-                        _mya_core.Node.delete(i_ad_path)
+                        qsm_mya_core.Node.delete(i_ad_path)
                     else:
                         i_shape_paths = mapper[i_key]
                         for j_shape_path in i_shape_paths:
                             # fixme: mesh parent mesh
-                            if _mya_core.DagNode.is_exists(j_shape_path) is False:
+                            if qsm_mya_core.DagNode.is_exists(j_shape_path) is False:
                                 continue
 
-                            j_transform_path = _mya_core.Shape.get_transform(j_shape_path)
-                            _mya_core.Node.delete(j_transform_path)
+                            j_transform_path = qsm_mya_core.Shape.get_transform(j_shape_path)
+                            qsm_mya_core.Node.delete(j_transform_path)
 
                     i_ar_path = '|region_{}_AR'.format(i_seq)
-                    i_ar_path_new = _mya_core.AssemblyReference.create(
+                    i_ar_path_new = qsm_mya_core.AssemblyReference.create(
                         i_ad_file_path, i_ar_path
                     )
-                    _mya_core.NodeAttribute.create_as_string(
+                    qsm_mya_core.NodeAttribute.create_as_string(
                         i_ar_path_new, 'qsm_type', 'unit_assembly'
                     )
-                    _mya_core.NodeAttribute.create_as_string(
+                    qsm_mya_core.NodeAttribute.create_as_string(
                         i_ar_path_new, 'qsm_hash_key', i_hash_key
                     )
-                    _mya_core.NodeDrawOverride.set_enable(
+                    qsm_mya_core.NodeDrawOverride.set_enable(
                         i_ar_path_new, True
                     )
-                    _mya_core.NodeDrawOverride.set_color(
+                    qsm_mya_core.NodeDrawOverride.set_color(
                         i_ar_path_new, (1.0, .5, .25)
                     )
                     nodes.append(i_ar_path_new)
@@ -345,8 +345,8 @@ class UnitAssemblyProcess(object):
         return nodes
 
     def mesh_prc(self, shape_path, check_face_count=True):
-        mesh_opt = _mya_core.MeshShapeOpt(shape_path)
-        face_count = _mya_core.Mesh.get_face_number(shape_path)
+        mesh_opt = qsm_mya_core.MeshShapeOpt(shape_path)
+        face_count = qsm_mya_core.Mesh.get_face_number(shape_path)
         if check_face_count is True:
             if face_count == 0:
                 return
@@ -368,20 +368,20 @@ class UnitAssemblyProcess(object):
         if bsc_storage.StgPath.get_is_file(ad_file_path) is False:
             file_dict = {}
 
-            transform_path_copy = _mya_core.DagNode.copy_to_world(transform_path)
+            transform_path_copy = qsm_mya_core.DagNode.copy_to_world(transform_path)
 
             transform_new_name = '{}_mesh'.format(transform_name)
-            transform_path_new = _mya_core.DagNode.rename(transform_path_copy, transform_new_name)
+            transform_path_new = qsm_mya_core.DagNode.rename(transform_path_copy, transform_new_name)
 
             ad_path = '|{}_AD'.format(transform_name)
 
-            _mya_core.Transform.zero_transformations(transform_path_new)
+            qsm_mya_core.Transform.zero_transformations(transform_path_new)
             # gpu
             gpu_key = _core.Assembly.Keys.GPU
             gpu_file_path = '{}/{}.abc'.format(
                 unit_directory_path, gpu_key
             )
-            _mya_core.GpuCache.export_frame(
+            qsm_mya_core.GpuCache.export_frame(
                 gpu_file_path, transform_path_new
             )
             file_dict[gpu_key] = gpu_file_path
@@ -390,15 +390,15 @@ class UnitAssemblyProcess(object):
             mesh_file_path = '{}/{}.ma'.format(
                 unit_directory_path, mesh_key
             )
-            _mya_core.SceneFile.export_file(
+            qsm_mya_core.SceneFile.export_file(
                 mesh_file_path, transform_path_new
             )
             file_dict[mesh_key] = mesh_file_path
-            _mya_core.AssemblyDefinition.create(
+            qsm_mya_core.AssemblyDefinition.create(
                 ad_path
             )
 
-            shape_path_new = _mya_core.Transform.get_shape(transform_path_new)
+            shape_path_new = qsm_mya_core.Transform.get_shape(transform_path_new)
             # memory error when face more than 25000000
             if face_count <= 25000000:
                 bsc_log.Log.trace_method_result(
@@ -420,7 +420,7 @@ class UnitAssemblyProcess(object):
                     # todo: may be mesh had lamina or non-manifold
                     # noinspection PyBroadException
                     try:
-                        _mya_core.MeshReduce.reduce_off(shape_path_new, 50)
+                        qsm_mya_core.MeshReduce.reduce_off(shape_path_new, 50)
                     except Exception:
                         bsc_log.Log.trace_method_error(
                             'mesh reduce', 'mesh "{}" had lamina or non-manifold faces or vertices'.format(
@@ -432,7 +432,7 @@ class UnitAssemblyProcess(object):
                     i_gpu_file_path_lod = '{}/{}.abc'.format(
                         unit_directory_path, i_gpu_key
                     )
-                    _mya_core.GpuCache.export_frame(
+                    qsm_mya_core.GpuCache.export_frame(
                         i_gpu_file_path_lod, transform_path_new
                     )
                     file_dict[i_gpu_key] = i_gpu_file_path_lod
@@ -441,7 +441,7 @@ class UnitAssemblyProcess(object):
                     i_mesh_file_path_lod = '{}/{}.ma'.format(
                         unit_directory_path, i_mesh_key
                     )
-                    _mya_core.SceneFile.export_file(
+                    qsm_mya_core.SceneFile.export_file(
                         i_mesh_file_path_lod, transform_path_new
                     )
                     file_dict[i_mesh_key] = i_mesh_file_path_lod
@@ -451,52 +451,52 @@ class UnitAssemblyProcess(object):
                 if i_key in file_dict:
                     i_file_path = file_dict[i_key]
                     if i_key.startswith(_core.Assembly.Keys.Mesh):
-                        _mya_core.AssemblyDefinition.add_scene(
+                        qsm_mya_core.AssemblyDefinition.add_scene(
                             ad_path, i_file_path, i_key
                         )
                     elif i_key.startswith(_core.Assembly.Keys.GPU):
-                        _mya_core.AssemblyDefinition.add_cache(
+                        qsm_mya_core.AssemblyDefinition.add_cache(
                             ad_path, i_file_path, i_key
                         )
 
-            _mya_core.Node.delete(transform_path_new)
+            qsm_mya_core.Node.delete(transform_path_new)
 
-            _mya_core.SceneFile.export_file(
+            qsm_mya_core.SceneFile.export_file(
                 ad_file_path, ad_path
             )
 
-            _mya_core.Node.delete(ad_path)
+            qsm_mya_core.Node.delete(ad_path)
 
-        _mya_core.Transform.delete_all_shapes(transform_path)
+        qsm_mya_core.Transform.delete_all_shapes(transform_path)
 
         ar_path = '{}|{}_AR'.format(transform_path, transform_name)
 
-        ar_path_new = _mya_core.AssemblyReference.create(
+        ar_path_new = qsm_mya_core.AssemblyReference.create(
             ad_file_path, ar_path
         )
-        _mya_core.NodeAttribute.create_as_string(
+        qsm_mya_core.NodeAttribute.create_as_string(
             ar_path_new, 'qsm_type', 'unit_assembly'
         )
-        _mya_core.NodeAttribute.create_as_string(
+        qsm_mya_core.NodeAttribute.create_as_string(
             ar_path_new, 'qsm_hash_key', hash_key
         )
-        _mya_core.NodeDrawOverride.set_enable(
+        qsm_mya_core.NodeDrawOverride.set_enable(
             ar_path_new, True
         )
-        _mya_core.NodeDrawOverride.set_color(
+        qsm_mya_core.NodeDrawOverride.set_color(
             ar_path_new, (1.0, .5, .25)
         )
 
     def execute(self):
-        _mya_core.SceneFile.new()
+        qsm_mya_core.SceneFile.new()
 
         container = '|{}'.format(UnitAssemblyOpt.CACHE_NAME)
 
-        _mya_core.Container.create_as_default(container)
-        _mya_core.NodeAttribute.create_as_string(
+        qsm_mya_core.Container.create_as_default(container)
+        qsm_mya_core.NodeAttribute.create_as_string(
             container, 'qsm_file', self._file_path
         )
-        _mya_core.NodeAttribute.create_as_string(
+        qsm_mya_core.NodeAttribute.create_as_string(
             container, 'qsm_cache', self._cache_file_path
         )
 
@@ -504,23 +504,23 @@ class UnitAssemblyProcess(object):
             self.LOG_KEY, 'import scene: {}'.format(self._file_path)
         )
 
-        import_paths = _mya_core.SceneFile.import_file(
+        import_paths = qsm_mya_core.SceneFile.import_file(
             self._file_path
         )
-        _mya_core.Scene.clear_unknown_nodes()
-        all_roots = _mya_core.DagNode.find_roots(import_paths)
+        qsm_mya_core.Scene.clear_unknown_nodes()
+        all_roots = qsm_mya_core.DagNode.find_roots(import_paths)
         _core.GpuImport.find_all_gpu_caches(self._directory_path)
         # find lost reference first
-        _mya_core.FileReferences.search_all_from(
+        qsm_mya_core.FileReferences.search_all_from(
             [self._directory_path], ignore_exists=True
         )
         # repair all instanced
-        _mya_core.Scene.remove_all_instanced(type_includes=['mesh', 'gpuCache'])
+        qsm_mya_core.Scene.remove_all_instanced(type_includes=['mesh', 'gpuCache'])
         # import all gpu
         _core.GpuImport().execute()
         # process
-        mesh_paths = _mya_core.Scene.find_all_dag_nodes(type_includes=['mesh'])
-        mesh_count_data = _mya_core.MeshShapes.get_evaluate(mesh_paths)
+        mesh_paths = qsm_mya_core.Scene.find_all_dag_nodes(type_includes=['mesh'])
+        mesh_count_data = qsm_mya_core.MeshShapes.get_evaluate(mesh_paths)
         width, height = mesh_count_data['width'], mesh_count_data['height']
         size = max(width, height)
         d = 100
@@ -542,16 +542,16 @@ class UnitAssemblyProcess(object):
         #
         grid_paths = self.grid_mesh_prc(grid_size)
         if grid_paths:
-            _mya_core.Container.add_dag_nodes(container, grid_paths)
+            qsm_mya_core.Container.add_dag_nodes(container, grid_paths)
         # instance all mesh
         # _core.MeshInstance(material=True).execute()
         # remove unused groups
-        _mya_core.Scene.remove_all_empty_groups()
+        qsm_mya_core.Scene.remove_all_empty_groups()
         # collection roots
-        exists_roots = [i for i in all_roots if _mya_core.Node.is_exists(i)]
-        _mya_core.Container.add_dag_nodes(container, exists_roots)
+        exists_roots = [i for i in all_roots if qsm_mya_core.Node.is_exists(i)]
+        qsm_mya_core.Container.add_dag_nodes(container, exists_roots)
 
-        _mya_core.SceneFile.export_file(
+        qsm_mya_core.SceneFile.export_file(
             self._cache_file_path, container
         )
 

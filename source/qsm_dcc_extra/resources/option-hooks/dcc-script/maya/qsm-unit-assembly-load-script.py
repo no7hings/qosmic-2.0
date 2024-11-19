@@ -9,7 +9,7 @@ def main(session):
 
     option_opt = session.get_option_opt()
 
-    s.UnitAssemblyOpt.load_auto(
+    s.UnitAssemblyOpt.execute_auto(
         **option_opt.to_dict()
     )
 

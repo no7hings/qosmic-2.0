@@ -7,14 +7,14 @@ import lxbasic.storage as bsc_storage
 
 import qsm_general.core as qsm_gnl_core
 
-from .... import core as _mya_core
+import qsm_maya.core as qsm_mya_core
 
-from ....general import core as _gnl_core
+import qsm_maya.general.core as qsm_mya_gnl_core
 
-from ....resource import core as _rsc_core
+import qsm_maya.resource.core as qsm_mya_rsc_core
 
 
-class AdvRigAsset(_rsc_core.Asset):
+class AdvRigAsset(qsm_mya_rsc_core.Asset):
 
     @classmethod
     def filter_namespaces(cls, namespaces):
@@ -58,7 +58,7 @@ class AdvRigAsset(_rsc_core.Asset):
     # skin proxy
     def get_skin_proxy_location(self):
         _ = cmds.ls(
-            '{}:{}'.format(self.namespace, _gnl_core.ResourceCacheNodes.SkinProxyName),
+            '{}:{}'.format(self.namespace, qsm_mya_gnl_core.ResourceCacheNodes.SkinProxyName),
             long=1
         )
         if _:
@@ -74,7 +74,7 @@ class AdvRigAsset(_rsc_core.Asset):
     def is_skin_proxy_enable(self):
         _ = self.get_skin_proxy_location()
         if _:
-            return _mya_core.NodeDisplay.is_visible(_)
+            return qsm_mya_core.NodeDisplay.is_visible(_)
         return False
 
     def set_skin_proxy_enable(self, boolean):
@@ -82,28 +82,28 @@ class AdvRigAsset(_rsc_core.Asset):
         if location is None:
             return False
 
-        layers = _mya_core.Container.find_all_nodes(
+        layers = qsm_mya_core.Container.find_all_nodes(
             location, ['displayLayer']
         )
-        _mya_core.NodeDisplay.set_visible(
+        qsm_mya_core.NodeDisplay.set_visible(
             location, boolean
         )
         if layers:
             for i in layers:
-                _mya_core.DisplayLayer.set_visible(i, not boolean)
+                qsm_mya_core.DisplayLayer.set_visible(i, not boolean)
         return True
 
     def remove_skin_proxy(self):
         location = self.get_skin_proxy_location()
         if location is None:
             return False
-        _mya_core.Node.delete(location)
+        qsm_mya_core.Node.delete(location)
         return True
 
     # dynamic gpu
     def get_dynamic_gpu_location(self):
         _ = cmds.ls(
-            '{}:{}'.format(self.namespace, _gnl_core.ResourceCacheNodes.DynamicGpuName),
+            '{}:{}'.format(self.namespace, qsm_mya_gnl_core.ResourceCacheNodes.DynamicGpuName),
             long=1
         )
         if _:
@@ -119,7 +119,7 @@ class AdvRigAsset(_rsc_core.Asset):
     def is_dynamic_gpu_enable(self):
         _ = self.get_dynamic_gpu_location()
         if _:
-            return _mya_core.NodeDisplay.is_visible(_)
+            return qsm_mya_core.NodeDisplay.is_visible(_)
         return False
 
     def set_dynamic_gpu_enable(self, boolean):
@@ -127,15 +127,15 @@ class AdvRigAsset(_rsc_core.Asset):
         if location is None:
             return False
 
-        layers = _mya_core.Container.find_all_nodes(
+        layers = qsm_mya_core.Container.find_all_nodes(
             location, ['displayLayer']
         )
-        _mya_core.NodeDisplay.set_visible(
+        qsm_mya_core.NodeDisplay.set_visible(
             location, boolean
         )
         if layers:
             for i in layers:
-                _mya_core.DisplayLayer.set_visible(i, not boolean)
+                qsm_mya_core.DisplayLayer.set_visible(i, not boolean)
 
         return True
 
@@ -143,13 +143,13 @@ class AdvRigAsset(_rsc_core.Asset):
         location = self.get_dynamic_gpu_location()
         if location is None:
             return False
-        _mya_core.Node.delete(location)
+        qsm_mya_core.Node.delete(location)
         return True
 
     # cfx cloth
     def get_cfx_cloth_location(self):
         _ = cmds.ls(
-            '{}:{}'.format(self.namespace, _gnl_core.ResourceCacheNodes.CfxClothName),
+            '{}:{}'.format(self.namespace, qsm_mya_gnl_core.ResourceCacheNodes.CfxClothName),
             long=1
         )
         if _:
@@ -216,7 +216,7 @@ class AdvRigAsset(_rsc_core.Asset):
         if joint_root:
             return collections.OrderedDict(
                 [
-                    (':'.join(x.split('|')[-1].split(':')[1:]), _mya_core.Transform.get_world_transformation(x))
+                    (':'.join(x.split('|')[-1].split(':')[1:]), qsm_mya_core.Transform.get_world_transformation(x))
                     for x in cmds.ls(joint_root, dag=1, type='joint', long=1) or []
                 ]
             )
@@ -228,9 +228,9 @@ class AdvRigAsset(_rsc_core.Asset):
         if geometry_root:
             _ = cmds.ls(geometry_root, dag=1, type='mesh', noIntermediate=1, long=1) or []
             for i in _:
-                i_transform_path = _mya_core.Shape.get_transform(i)
+                i_transform_path = qsm_mya_core.Shape.get_transform(i)
                 i_key = ':'.join(i_transform_path.split('|')[-1].split(':')[1:])
-                dict_[i_key] = _mya_core.Transform.get_world_extent(i_transform_path)
+                dict_[i_key] = qsm_mya_core.Transform.get_world_extent(i_transform_path)
         return dict_
 
     @classmethod
@@ -270,13 +270,13 @@ class AdvRigAsset(_rsc_core.Asset):
         if geometry_root:
             _ = cmds.ls(geometry_root, dag=1, type='mesh', noIntermediate=1, long=1) or []
             for i in _:
-                i_transform_path = _mya_core.Shape.get_transform(i)
+                i_transform_path = qsm_mya_core.Shape.get_transform(i)
                 i_transform_name = i_transform_path.split('|')[-1]
                 # ignore when not form this asset
                 if not i_transform_name.startswith(namespace+':'):
                     continue
                 i_key = self.path_to_key(namespace, geometry_root, i_transform_path, pathsep='|')
-                dict_[i_key] = _mya_core.MeshShapeOpt(i).get_face_vertices_as_uuid()
+                dict_[i_key] = qsm_mya_core.MeshShapeOpt(i).get_face_vertices_as_uuid()
         return dict_
 
     def pull_geometry_topology_data(self):
@@ -302,7 +302,7 @@ class AdvRigAsset(_rsc_core.Asset):
         return roots
 
 
-class AdvRigAssetsQuery(_rsc_core.AssetsQuery):
+class AdvRigAssetsQuery(qsm_mya_rsc_core.AssetsQuery):
     SCENE_PATTERN = 'X:/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
 
     RESOURCE_CLS = AdvRigAsset

@@ -1,15 +1,11 @@
 # coding:utf-8
 import lxgui.qt.core as gui_qt_core
 
-import lxgui.qt.widgets as gui_qt_widgets
-
-import lxgui.proxy.abstracts as gui_prx_abstracts
-
 import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_gui.proxy.widgets as qsm_gui_prx_widgets
+import qsm_lazy.gui.proxy.widgets as lzy_gui_prx_widgets
 
 import qsm_maya_gui.core as qsm_mya_gui_core
 
@@ -145,7 +141,7 @@ class PrxPageForCharacterAndProp(gui_prx_widgets.PrxBasePage):
             'reference', size_mode=1
         )
         # reference
-        self._asset_prx_input = qsm_gui_prx_widgets.PrxInputForAssetCharacterAndProp()
+        self._asset_prx_input = lzy_gui_prx_widgets.PrxInputForAssetCharacterAndProp()
         self._asset_prx_tool_box.add_widget(self._asset_prx_input)
         # self._asset_prx_input.widget.setMaximumWidth(488)
 
@@ -203,7 +199,7 @@ class PrxPageForCharacterAndProp(gui_prx_widgets.PrxBasePage):
         self._page_prx_tab_tool_box.set_history_key('resource-manager.rig_page_key_current')
         self._page_prx_tab_tool_box.load_history()
 
-    def gui_page_setup_post_fnc(self):
+    def gui_setup_post_fnc(self):
         self._top_prx_tool_bar.do_gui_refresh()
 
     def do_gui_refresh_all(self, force=False):
@@ -221,6 +217,8 @@ class PrxPageForCharacterAndProp(gui_prx_widgets.PrxBasePage):
         self._gui_asset_prx_unit.do_gui_refresh_tools()
 
         self.do_gui_refresh_toolset_units()
+
+        self._top_prx_tool_bar.do_gui_refresh()
 
     def do_gui_refresh_toolset_units(self):
         self._gui_skin_proxy_prx_toolset_unit.do_gui_refresh_by_dcc_selection()

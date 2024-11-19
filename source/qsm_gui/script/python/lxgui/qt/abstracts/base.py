@@ -125,11 +125,20 @@ class AbsQtMenuBaseDef(object):
 
     def _init_menu_base_def_(self, widget):
         self._widget = widget
+        
+        self._menu_flag = False
+        self._menu_rect = QtCore.QRect()
+        self._menu_icon_draw_rect = QtCore.QRect()
+        self._menu_icon_file_path = _gui_core.GuiIcon.get('tab-menu-v')
+
         self._menu_title_text = None
         self._menu_data = []
         self._menu_data_generate_fnc = None
         self._menu_content = None
         self._menu_content_generate_fnc = None
+
+    def _set_menu_enable_(self, boolean):
+        self._menu_flag = boolean
 
     def _set_menu_title_text_(self, text):
         self._menu_title_text = text

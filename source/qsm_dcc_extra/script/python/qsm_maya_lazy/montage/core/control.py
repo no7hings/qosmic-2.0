@@ -8,7 +8,7 @@ import qsm_maya.core as qsm_mya_core
 
 import qsm_maya.motion.core as qsm_mya_mtn_core
 
-import qsm_maya.adv.core as qsm_mya_adv_core
+import qsm_maya.adv as qsm_mya_adv
 
 from . import base as _base
 
@@ -40,7 +40,7 @@ class AdvControlSet(AbsControlSet):
     @classmethod
     def generate(cls, namespace):
         return cls(
-            qsm_mya_adv_core.AdvOpt(namespace).find_all_controls()
+            qsm_mya_adv.AdvOpt(namespace).find_all_controls()
         )
 
     def __init__(self, *args, **kwargs):
@@ -78,7 +78,7 @@ class AdvChrControlSet(AdvControlSet):
     @classmethod
     def generate(cls, namespace):
         return cls(
-            qsm_mya_adv_core.AdvChrOpt(namespace).find_all_controls()
+            qsm_mya_adv.AdvChrOpt(namespace).find_all_controls()
         )
 
     def __init__(self, *args, **kwargs):

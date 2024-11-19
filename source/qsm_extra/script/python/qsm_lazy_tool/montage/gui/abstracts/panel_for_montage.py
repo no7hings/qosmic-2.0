@@ -57,7 +57,7 @@ class AbsPrxPanelForMontage(gui_prx_widgets.PrxBasePanel):
 
     def gui_setup_post_fnc(self):
         for k, v in self._page_dict.items():
-            v.gui_page_setup_post_fnc()
+            v.gui_setup_post_fnc()
 
     def do_gui_refresh_all(self, force=False):
         self._page_dict[self._page_prx_tab_tool_box.get_current_key()].do_gui_refresh_all(force=force)

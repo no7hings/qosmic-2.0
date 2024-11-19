@@ -10,7 +10,7 @@ class MayaAssetCfxRigCreateOpt(_asset_gnl.MayaAssetGnlTaskCreateOpt):
     def __init__(self, *args, **kwargs):
         super(MayaAssetCfxRigCreateOpt, self).__init__(*args, **kwargs)
 
-    def build_scene_src(self, upstream_scene_path=None):
+    def build_scene_src(self, scene_src_path, upstream_scene_path=None):
         task = self._properties['task']
 
         if upstream_scene_path is None:
@@ -18,11 +18,11 @@ class MayaAssetCfxRigCreateOpt(_asset_gnl.MayaAssetGnlTaskCreateOpt):
 
         if upstream_scene_path:
             if bsc_storage.StgPath.get_is_file(upstream_scene_path):
-                self.create_groups_for(task)
-
                 qsm_mya_core.SceneFile.reference_file(
                     upstream_scene_path,
                     namespace='rig'
                 )
-                return True
-        return False
+
+        self.create_groups_for(task)
+
+        qsm_mya_core.SceneFile.save_to(scene_src_path)

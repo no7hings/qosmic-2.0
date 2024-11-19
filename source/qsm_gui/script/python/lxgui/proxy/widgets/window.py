@@ -296,7 +296,7 @@ class AbsPrxDialogWindow(
         self.set_content_with_thread(text)
 
     def add_content(self, text):
-        self.trace_log_use_thread(text)
+        self.append_log_use_signal(text)
 
     def set_content_font_size(self, size):
         self._tip_prx_text_browser.set_font_size(size)
@@ -321,8 +321,8 @@ class AbsPrxDialogWindow(
     def set_options_create_by_configure(self, configure):
         self._options_prx_node.build_by_data(configure)
 
-    def trace_log_use_thread(self, text):
-        self._tip_prx_text_browser.trace_log_use_thread(text)
+    def append_log_use_signal(self, text):
+        self._tip_prx_text_browser.append_log_use_signal(text)
 
     def set_content_with_thread(self, text):
         self._tip_prx_text_browser.set_content_with_thread(text)
@@ -517,7 +517,7 @@ class PrxMonitorWindow(
         return self._status_button
 
     def set_logging(self, *args):
-        self._tip_prx_text_browser.trace_log_use_thread(*args)
+        self._tip_prx_text_browser.append_log_use_signal(*args)
 
     def set_status_at(self, *args):
         self._status_button.set_status_at(*args)
@@ -598,4 +598,4 @@ class PrxSprcTaskWindow(
         return self._task_qt_chart._is_killed_()
 
     def log_update(self, text):
-        self._tip_prx_text_browser.trace_log_use_thread(text)
+        self._tip_prx_text_browser.append_log_use_signal(text)

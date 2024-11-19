@@ -12,7 +12,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_general.core as qsm_gnl_core
 
-import qsm_gui.qt.widgets as qsm_qt_widgets
+import qsm_lazy.gui.qt.widgets as lzy_gui_qt_widgets
 
 import qsm_maya.core as qsm_mya_core
 
@@ -20,7 +20,7 @@ import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
 
 import qsm_maya.motion.core as qsm_mya_mtn_core
 
-import qsm_maya.adv.core as qsm_mya_adv_core
+import qsm_maya.adv as qsm_mya_adv
 
 
 class UnitForRigPicker(
@@ -56,7 +56,7 @@ class UnitForRigPicker(
 
     def __init__(self, window, page, session, qt_picker):
         super(UnitForRigPicker, self).__init__(window, page, session)
-        if not isinstance(qt_picker, qsm_qt_widgets.QtAdvCharacterPicker):
+        if not isinstance(qt_picker, lzy_gui_qt_widgets.QtAdvCharacterPicker):
             raise RuntimeError()
 
         self._qt_picker = qt_picker
@@ -129,7 +129,7 @@ class ToolsetForMotionCopyAndPaste(
                 maximum=len(namespaces), label='duplicate characters'
             ) as g_p:
                 for i_namespace in namespaces:
-                    i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                    i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
                     i_opt.duplicate(
                         control_key_excludes=self.get_control_key_excludes(),
                         frame_offset=self.get_frame_offset(),
@@ -148,7 +148,7 @@ class ToolsetForMotionCopyAndPaste(
         namespaces = self.get_dcc_character_args()
         if namespaces:
             namespace = namespaces[-1]
-            opt = qsm_mya_adv_core.AdvChrOpt(namespace)
+            opt = qsm_mya_adv.AdvChrOpt(namespace)
             file_path = qsm_gnl_core.MayaCache.generate_character_motion_file(bsc_core.BscSystem.get_user_name())
             opt.export_controls_motion_to(
                 file_path,
@@ -189,7 +189,7 @@ class ToolsetForMotionCopyAndPaste(
                     maximum=len(namespaces), label='paste characters'
                 ) as g_p:
                     for i_namespace in namespaces:
-                        i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                        i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
                         i_opt.load_controls_motion_from(
                             file_path,
                             control_key_excludes=self.get_control_key_excludes(),
@@ -247,7 +247,7 @@ class ToolsetForMotionCopyAndPaste(
         if namespaces:
             file_path = qsm_gnl_core.MayaCache.generate_control_motion_file(bsc_core.BscSystem.get_user_name())
             for i_namespace in namespaces:
-                i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
                 i_opt.load_controls_motion_from(
                     file_path,
                     control_key_excludes=self.get_control_key_excludes(),
@@ -267,7 +267,7 @@ class ToolsetForMotionCopyAndPaste(
         namespaces = self.get_dcc_character_args()
         if namespaces:
             for i_namespace in namespaces:
-                i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
                 i_opt.mirror_controls_right_to_left(
                     force=True,
                     frame_offset=self.get_frame_offset(),
@@ -283,7 +283,7 @@ class ToolsetForMotionCopyAndPaste(
         namespaces = self.get_dcc_character_args()
         if namespaces:
             for i_namespace in namespaces:
-                i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
                 i_opt.mirror_controls_middle(
                     force=True,
                     frame_offset=self.get_frame_offset(),
@@ -299,7 +299,7 @@ class ToolsetForMotionCopyAndPaste(
         namespaces = self.get_dcc_character_args()
         if namespaces:
             for i_namespace in namespaces:
-                i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
                 i_opt.mirror_controls_left_to_right(
                     force=True,
                     frame_offset=self.get_frame_offset(),
@@ -317,7 +317,7 @@ class ToolsetForMotionCopyAndPaste(
         if args:
             for k, v in args.items():
                 # generate axis vector dict
-                i_adv_motion_opt = qsm_mya_adv_core.AdvOpt(k)
+                i_adv_motion_opt = qsm_mya_adv.AdvOpt(k)
                 i_controls = i_adv_motion_opt.find_all_controls()
                 ir_axis_vector_dict = qsm_mya_mtn_core.ControlSetMotionOpt(k, i_controls).generate_axis_vector_dict()
 
@@ -360,7 +360,7 @@ class ToolsetForMotionCopyAndPaste(
         namespaces = self.get_dcc_character_args()
         if namespaces:
             for i_namespace in namespaces:
-                i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
                 i_opt.flip_controls(
                     control_key_excludes=self.get_control_key_excludes(),
                     force=True,
@@ -504,7 +504,7 @@ class ToolsetForMotionKeyframe(
         if results:
             curves = []
             for i_namespace in results:
-                i_opt = qsm_mya_adv_core.AdvChrOpt(i_namespace)
+                i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
                 curves.extend(i_opt.find_all_anm_curves())
 
             qsm_mya_core.Selection.set(curves)

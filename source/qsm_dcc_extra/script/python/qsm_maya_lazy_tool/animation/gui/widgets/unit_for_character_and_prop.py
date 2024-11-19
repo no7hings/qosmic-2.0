@@ -19,7 +19,7 @@ import qsm_scan as qsm_scan
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.adv.core as qsm_mya_adv_core
+import qsm_maya.adv as qsm_mya_adv
 
 import qsm_maya_gui.core as qsm_mya_gui_core
 
@@ -749,7 +749,7 @@ class PrxToolsetForMotion(
             return
 
         namespace = valid_namespaces[0]
-        qsm_mya_adv_core.AdvChrOpt(namespace).export_controls_motion_to(
+        qsm_mya_adv.AdvChrOpt(namespace).export_controls_motion_to(
             file_path
         )
 
@@ -769,7 +769,7 @@ class PrxToolsetForMotion(
         namespace = valid_namespaces[0]
         force = self._prx_options_node.get('animation_transfer.force')
         frame_offset = self._prx_options_node.get('animation_transfer.frame_offset')
-        qsm_mya_adv_core.AdvChrOpt(namespace).load_controls_motion_from(
+        qsm_mya_adv.AdvChrOpt(namespace).load_controls_motion_from(
             file_path, frame_offset=frame_offset, force=force
         )
 
@@ -800,7 +800,7 @@ class PrxToolsetForMotion(
             if result is True:
                 force = self._prx_options_node.get('animation_transfer.force')
                 frame_offset = self._prx_options_node.get('animation_transfer.frame_offset')
-                qsm_mya_adv_core.AdvChrOpt(namespace_src).transfer_controls_motion(
+                qsm_mya_adv.AdvChrOpt(namespace_src).transfer_controls_motion(
                     namespace_dst, frame_offset=frame_offset, force=force
                 )
 
@@ -811,7 +811,7 @@ class PrxToolsetForMotion(
                 if i_resource.is_exists() is False:
                     continue
                 i_namespace = i_resource.namespace
-                i_controls = qsm_mya_adv_core.AdvChrOpt(i_namespace).find_all_controls()
+                i_controls = qsm_mya_adv.AdvChrOpt(i_namespace).find_all_controls()
                 [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 0) for x in i_controls]
 
     def do_dcc_disable_control_playback_visible(self):
@@ -821,7 +821,7 @@ class PrxToolsetForMotion(
                 if i_resource.is_exists() is False:
                     continue
                 i_namespace = i_resource.namespace
-                i_controls = qsm_mya_adv_core.AdvChrOpt(i_namespace).find_all_controls()
+                i_controls = qsm_mya_adv.AdvChrOpt(i_namespace).find_all_controls()
                 [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 1) for x in i_controls]
 
     @staticmethod

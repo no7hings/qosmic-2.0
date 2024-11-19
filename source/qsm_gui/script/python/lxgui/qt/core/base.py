@@ -313,6 +313,9 @@ class QtUtil(object):
         # noinspection PyArgumentList
         img_arr = np.array(ptr).reshape(height, width, 4)
         img_arr = cv2.cvtColor(img_arr, cv2.COLOR_BGRA2BGR)
+
+        file_path = bsc_core.ensure_unicode(file_path)
+        file_path = file_path.encode('mbcs')
         cv2.imwrite(file_path, img_arr)
 
 

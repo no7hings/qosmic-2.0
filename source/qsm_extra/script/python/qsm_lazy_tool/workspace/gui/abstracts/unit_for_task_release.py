@@ -53,7 +53,7 @@ class AbsPrxToolsetForTaskRelease(gui_prx_widgets.PrxBaseUnit):
 
         self._task_release_opt = None
 
-        self.gui_build_unit()
+        self.gui_unit_setup_fnc()
 
     def _on_gui_left_visible_swap(self, boolean):
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
@@ -66,7 +66,13 @@ class AbsPrxToolsetForTaskRelease(gui_prx_widgets.PrxBaseUnit):
         self._left_visible_swap_tool.set_checked(True)
         self._left_visible_swap_tool.connect_check_toggled_to(self._on_gui_left_visible_swap)
 
-    def gui_build_unit(self):
+        self._task_qt_info_label = gui_qt_widgets.QtInfoBubble()
+        self._main_prx_tool_box.add_widget(self._task_qt_info_label)
+        self._task_qt_info_label._set_style_(
+            self._task_qt_info_label.Style.Frame
+        )
+
+    def gui_unit_setup_fnc(self):
         self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
         self._qt_layout.addWidget(self._top_prx_tool_bar.widget)
         self._top_prx_tool_bar.set_align_left()
@@ -85,6 +91,9 @@ class AbsPrxToolsetForTaskRelease(gui_prx_widgets.PrxBaseUnit):
         self._scene_src_qt_input = gui_qt_widgets.QtInputForStorage()
         self._scene_prx_tool_box.add_widget(self._scene_src_qt_input)
         self._scene_src_qt_input._set_storage_scheme_(self._scene_src_qt_input.StorageScheme.FileOpen)
+        self._scene_src_qt_input._set_history_key_(
+            'lazy-workspace.{}-{}-scene'.format(self._page.GUI_KEY, self.GUI_KEY)
+        )
 
         prx_v_sca = gui_prx_widgets.PrxVScrollArea()
         self._qt_layout.addWidget(prx_v_sca.widget)
@@ -107,14 +116,18 @@ class AbsPrxToolsetForTaskRelease(gui_prx_widgets.PrxBaseUnit):
             ),
         )
 
-        self._prx_h_splitter.set_fixed_size_at(0, 400)
+        self._prx_h_splitter.set_fixed_size_at(0, 320)
 
         self._bottom_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
         self._qt_layout.addWidget(self._bottom_prx_tool_bar.widget)
         self._bottom_prx_tool_bar.set_expanded(True)
+        self._bottom_prx_tool_bar.set_align_right()
 
         self._validation_qt_button = gui_qt_widgets.QtPressButton()
         self._bottom_prx_tool_bar.add_widget(self._validation_qt_button)
+        self._validation_qt_button._set_width_(96)
+        self._validation_qt_button._set_action_enable_(False)
+        self._validation_qt_button._set_icon_name_('tool/validation')
         self._validation_qt_button._set_name_text_(
             gui_core.GuiUtil.choice_name(
                 self._window._language,
@@ -125,6 +138,8 @@ class AbsPrxToolsetForTaskRelease(gui_prx_widgets.PrxBaseUnit):
 
         self._release_qt_button = gui_qt_widgets.QtPressButton()
         self._bottom_prx_tool_bar.add_widget(self._release_qt_button)
+        self._release_qt_button._set_width_(96)
+        self._release_qt_button._set_icon_name_('tool/release')
         self._release_qt_button._set_name_text_(
             gui_core.GuiUtil.choice_name(
                 self._window._language,
@@ -133,15 +148,20 @@ class AbsPrxToolsetForTaskRelease(gui_prx_widgets.PrxBaseUnit):
         )
         self._release_qt_button.press_clicked.connect(self.on_release)
 
+    def gui_setup_post_fnc(self):
+        self._top_prx_tool_bar.do_gui_refresh()
+
     def do_gui_refresh_all(self):
         task_session = self._page._task_session
         if task_session is not None:
+            task = task_session.properties['task']
             scene_path = task_session.properties['result']
             scene_src_path_pre = self._scene_src_qt_input._get_value_()
-            self._scene_src_qt_input._set_entry_enable_(False)
             if scene_path != scene_src_path_pre:
                 task_release_opt = task_session.generate_task_release_opt()
                 if task_release_opt is not None:
+                    self._task_qt_info_label._set_text_(task)
+
                     self._task_release_opt = task_release_opt
                     self._scene_src_qt_input._set_value_(scene_path)
 
@@ -149,3 +169,5 @@ class AbsPrxToolsetForTaskRelease(gui_prx_widgets.PrxBaseUnit):
             self._gui_resource_view_opt.do_gui_refresh_all()
         else:
             self._task_release_opt = None
+
+        self._top_prx_tool_bar.do_gui_refresh()

@@ -111,8 +111,8 @@ class QtMaya(object):
     #         )
     #         parentPtr = OpenMayaUI.MQtUtil.getCurrentParent()
     #         parentWidget = wrapInstance(parentPtr, QtWidgets.QWidget)
-    #         import qsm_gui.proxy.widgets as qsm_gui_prx_widgets
-    #         p = qsm_gui_prx_widgets.AbsPrxUnitForWorkarea()
+    #         import qsm_lazy.gui.proxy.widgets as lzy_gui_prx_widgets
+    #         p = lzy_gui_prx_widgets.AbsPrxUnitForWorkarea()
     #         p.widget.setParent(parentWidget)
     #         OpenMayaUI.MQtUtil.addWidgetToMayaLayout(
     #             long(getCppPointer(p.widget)[0]), long(parentPtr)

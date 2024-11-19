@@ -1,4 +1,5 @@
 # coding:utf-8
+import sys
 
 
 def skin_proxy_generate_fnc(option_opt):
@@ -56,30 +57,12 @@ def playblast_fnc(option_opt):
 
     import qsm_maya.tasks.general.scripts as qsm_mya_tsk_gnl_scripts
 
-    dict_ = qsm_gnl_process.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
         option_opt.to_string()
     )
 
-    file_path = dict_.get('file')
-    movie_file_path = dict_.get('movie')
-    camera_path = dict_.get('camera')
-    start_frame = dict_.get('start_frame')
-    end_frame = dict_.get('end_frame')
-    frame_step = dict_.get('frame_step') or 1.0
-    fps = dict_.get('fps') or 24.0
-
-    width = dict_.get('width')
-    height = dict_.get('height')
-    texture_enable = dict_.get('texture_enable')
-    light_enable = dict_.get('light_enable')
-    shadow_enable = dict_.get('shadow_enable')
-
     qsm_mya_tsk_gnl_scripts.PlayblastProcess(
-        file_path,
-        movie_file_path,
-        camera_path, start_frame, end_frame, frame_step, fps,
-        width, height,
-        texture_enable, light_enable, shadow_enable
+        **kwargs
     ).execute()
 
 
@@ -93,6 +76,20 @@ def cfx_cloth_cache_generate_fnc(option_opt):
     )
 
     qsm_mya_tsk_cfx_scripts.CfxNClothCacheProcess(
+        **kwargs
+    ).execute()
+
+
+def cfx_cloth_cache_export_fnc(option_opt):
+    import qsm_general.process as qsm_gnl_process
+
+    import qsm_maya.tasks.cfx_cloth.scripts as s
+
+    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
+        option_opt.to_string()
+    )
+
+    s.CfxClothCacheProcess(
         **kwargs
     ).execute()
 
@@ -187,6 +184,7 @@ def test_unicode(method, option_opt):
 
 def test_progress(option_opt):
     import lxbasic.log as bsc_log
+
     import time
 
     tag = option_opt.get('tag')
@@ -228,6 +226,8 @@ def main(session):
         gpu_instance_generate_fnc(option_opt)
     elif method == 'cfx-cloth-cache-generate':
         cfx_cloth_cache_generate_fnc(option_opt)
+    elif method == 'cfx_cloth_cache_export':
+        cfx_cloth_cache_export_fnc(option_opt)
     elif method == 'playblast':
         playblast_fnc(option_opt)
     elif method == 'rig_validation':
@@ -252,7 +252,11 @@ def main(session):
     elif method == 'test-process':
         test_progress(option_opt)
     else:
-        raise RuntimeError()
+        raise RuntimeError(
+            sys.stderr.write(
+                'method is not valid: {}.\n'.format(method)
+            )
+        )
 
 
 if __name__ == '__main__':

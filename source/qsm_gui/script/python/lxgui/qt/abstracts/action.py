@@ -77,6 +77,7 @@ class AbsQtActionBaseDef(object):
                     self.ActionFlag.CheckPress,
                     self.ActionFlag.ExpandPress,
                     self.ActionFlag.OptionPress,
+                    self.ActionFlag.MenuPress,
                     self.ActionFlag.ChoosePress,
                     self.ActionFlag.NextPress,
                     self.ActionFlag.ComponentPress
@@ -575,8 +576,8 @@ class AbsQtActionForOptionPressDef(object):
         self._option_click_is_enable = False
         self._option_icon_file_path = _gui_core.GuiIcon.get('option')
         #
-        self._option_click_rect = QtCore.QRect()
-        self._option_click_icon_rect = QtCore.QRect()
+        self._option_rect = QtCore.QRect()
+        self._option_icon_draw_rect = QtCore.QRect()
 
     def _set_option_click_enable_(self, boolean):
         self._option_click_is_enable = boolean

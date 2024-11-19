@@ -2,7 +2,7 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-from .... import core as _mya_core
+import qsm_maya.core as qsm_mya_core
 
 
 class AbsSetBaseOpt(object):
@@ -12,13 +12,13 @@ class AbsSetBaseOpt(object):
 
     @classmethod
     def create_root_set(cls):
-        return _mya_core.Set.create(cls.SET_ROOT)
+        return qsm_mya_core.Set.create(cls.SET_ROOT)
 
     @classmethod
     def create_set(cls):
         set_root = cls.create_root_set()
-        set_name = _mya_core.Set.create(cls.SET_NAME)
-        _mya_core.Set.add_one(set_root, set_name)
+        set_name = qsm_mya_core.Set.create(cls.SET_NAME)
+        qsm_mya_core.Set.add_one(set_root, set_name)
         return set_name
 
 
@@ -29,13 +29,13 @@ class AbsGroupOpt(AbsSetBaseOpt):
     SET_NAME = 'QSM_GROUP_SET'
 
     def __init__(self):
-        if _mya_core.Node.is_exists(self.LOCATION) is False:
-            _mya_core.Group.create_dag(self.LOCATION)
+        if qsm_mya_core.Node.is_exists(self.LOCATION) is False:
+            qsm_mya_core.Group.create_dag(self.LOCATION)
 
     def add_one(self, path):
         if path.startswith('{}|'.format(self.LOCATION)):
             return path
-        return _mya_core.Group.add_one(self.LOCATION, path)
+        return qsm_mya_core.Group.add_one(self.LOCATION, path)
 
 
 #   bridge
@@ -124,15 +124,15 @@ class AbsLayerOpt(AbsSetBaseOpt):
     SET_NAME = 'QSM_LAYER_SET'
 
     def __init__(self):
-        if _mya_core.Node.is_exists(self.NAME) is False:
-            layer_name = _mya_core.DisplayLayer.create(self.NAME)
-            _mya_core.DisplayLayer.set_rgb(self.NAME, self.RGB)
-            _mya_core.DisplayLayer.set_visible(self.NAME, self.VISIBLE)
+        if qsm_mya_core.Node.is_exists(self.NAME) is False:
+            layer_name = qsm_mya_core.DisplayLayer.create(self.NAME)
+            qsm_mya_core.DisplayLayer.set_rgb(self.NAME, self.RGB)
+            qsm_mya_core.DisplayLayer.set_visible(self.NAME, self.VISIBLE)
             set_name = self.create_set()
-            _mya_core.Set.add_one(set_name, layer_name)
+            qsm_mya_core.Set.add_one(set_name, layer_name)
 
     def add_one(self, path):
-        _mya_core.DisplayLayer.add_one(self.NAME, path)
+        qsm_mya_core.DisplayLayer.add_one(self.NAME, path)
 
 
 #   source
@@ -212,11 +212,11 @@ class AbsMaterialOpt(AbsSetBaseOpt):
     SET_NAME = 'QSM_MATERIAL_SET'
 
     def __init__(self):
-        if _mya_core.Node.is_exists(self.NAME) is False:
-            _mya_core.Material.create_as_lambert(self.NAME, self.RGB)
+        if qsm_mya_core.Node.is_exists(self.NAME) is False:
+            qsm_mya_core.Material.create_as_lambert(self.NAME, self.RGB)
 
     def assign_to(self, path):
-        _mya_core.Material.assign_to(
+        qsm_mya_core.Material.assign_to(
             self.NAME, path
         )
 

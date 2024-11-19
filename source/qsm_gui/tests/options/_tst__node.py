@@ -29,14 +29,18 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
         )
 
     def _test_(self):
+        def open_folder_fnc_():
+            print 'button menu press'
+
         tab_view = gui_prx_widgets.PrxTabView()
         self.add_widget(tab_view)
         self.set_main_style_mode(1)
         for i in [
             'constant',
+            'button',
             'tuple',
             'array',
-            'shotgun',
+            # 'shotgun',
             'storage',
             'storages',
         ]:
@@ -47,6 +51,14 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
             i_n.build_by_data(
                 c.get(i)
             )
+            if i == 'button':
+                p = i_n.get_port('press_button')
+                print p
+                p.set_menu_data(
+                    [
+                        ('Open Folder', 'file/folder', open_folder_fnc_)
+                    ]
+                )
             # print i_n.get_all_ports()
 
         # n.get_port('files.list').set_root('/data/e/workspace/lynxi/script/python/.resources/icons')
@@ -54,6 +66,8 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
         #
         # n.get_port('files.tree').set_root('/data/e/workspace/lynxi/script/python/.resources/icons')
         # n.set('files.tree', ['/data/e/workspace/lynxi/script/python/.resources/icons/add.svg'])
+
+
 
 
 if __name__ == '__main__':

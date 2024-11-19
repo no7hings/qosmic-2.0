@@ -27,7 +27,7 @@ import lxgui.proxy.graphs as gui_prx_graphs
 
 import qsm_scan as qsm_scan
 
-import qsm_gui.proxy.widgets as qsm_gui_prx_widgets
+import qsm_lazy.gui.proxy.widgets as lzy_gui_prx_widgets
 
 
 class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
@@ -86,7 +86,7 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
         self._asset_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'load', size_mode=1
         )
-        self._asset_prx_input = qsm_gui_prx_widgets.PrxInputForAssetCharacterAndProp()
+        self._asset_prx_input = lzy_gui_prx_widgets.PrxInputForAssetCharacterAndProp()
         self._asset_prx_tool_box.add_widget(self._asset_prx_input)
         # self._asset_prx_input.widget.setMaximumWidth(840)
 
@@ -139,7 +139,7 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
 
         self.do_gui_refresh_all()
 
-    def gui_page_setup_post_fnc(self):
+    def gui_setup_post_fnc(self):
         self._top_prx_tool_bar.do_gui_refresh()
 
     def do_gui_refresh_all(self, force=False):

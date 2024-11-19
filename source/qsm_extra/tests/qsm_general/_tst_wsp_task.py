@@ -6,5 +6,5 @@ task_session = c.TaskParse.generate_task_session_by_resource_source_scene_src(
 )
 
 print task_session.get_file_for(
-    'shot-disorder-animation_scene-file'
+    'shot-disorder-animation_scene_s-file'
 )

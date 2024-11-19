@@ -1,0 +1,21 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Lazy Workspace'
+        name_chs: '懒人工作区'
+        group_name: 'General(s)'
+        #
+        icon_name: 'qosmic/lazy-resource-tool'
+        tool_tip:
+            |-
+            To be supplemented.
+        #
+        tool_tip_chs:
+            |-
+            待补充。
+
+        size: [560, 720]

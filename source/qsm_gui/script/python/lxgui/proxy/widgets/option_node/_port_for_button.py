@@ -23,6 +23,9 @@ class PrxPortForPressButton(_port_base.AbsPrxPort):
     def set_option_enable(self, boolean):
         self._prx_port_input.set_option_enable(boolean)
 
+    def set_menu_enable(self, boolean):
+        self._prx_port_input.set_menu_enable(boolean)
+
     def set_icon(self, icon_key):
         self._prx_port_input.set_icon_by_file(
             _gui_core.GuiIcon.get(icon_key)

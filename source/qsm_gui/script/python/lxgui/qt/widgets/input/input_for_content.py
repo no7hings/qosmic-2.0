@@ -146,6 +146,12 @@ class QtInputForContent(
         # ][boolean]
         self._update_background_color_by_locked_(boolean)
         self._refresh_widget_draw_()
+        
+    def _append_value_(self, text):
+        self._entry_widget._append_value_(text)
+
+    def _append_value_use_signal_(self, text):
+        self._entry_widget._append_value_use_signal_(text)
 
     def _set_input_entry_drop_enable_(self, boolean):
         super(QtInputForContent, self)._set_input_entry_drop_enable_(boolean)

@@ -25,6 +25,15 @@ class RenderSettings(object):
     }
 
     @classmethod
+    def set_cameras(cls, cameras):
+        all_cameras = cmds.ls(type='camera', long=1) or []
+        for i in all_cameras:
+            cmds.setAttr(i+'.renderable', 0)
+
+        for i in cameras:
+            cmds.setAttr(i+'.renderable', 1)
+
+    @classmethod
     def set_renderer(cls, renderer):
         cmds.setAttr(cls.RENDER_ATTR_DICT['renderer'], renderer, type='string')
 
