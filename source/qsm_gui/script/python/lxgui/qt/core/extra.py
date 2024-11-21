@@ -336,12 +336,13 @@ class GuiQtMenuOpt(object):
                     pass
                 else:
                     menu = self._create_menu_dag(i_path_opt.get_parent())
+
                     if i_type == 'separator':
-                        self.add_separator_fnc(menu, i_content)
+                        self._create_separator_fnc(menu, i_content)
                     elif i_type == 'action':
-                        self.add_action_fnc(menu, i_content)
+                        self._create_action_fnc(menu, i_content)
                     elif i_type == 'group':
-                        self._create_menu(menu, i_path_opt, i_content)
+                        self._create_group_fnc(menu, i_path_opt, i_content)
 
     def _create_menu_dag(self, path_opt):
         cur_menu = self._root_menu
@@ -349,10 +350,10 @@ class GuiQtMenuOpt(object):
         # create from root
         components.reverse()
         for i_seq, i_component in enumerate(components):
-            cur_menu = self._create_menu(cur_menu, i_component)
+            cur_menu = self._create_group_fnc(cur_menu, i_component)
         return cur_menu
 
-    def _create_menu(self, menu, path_opt, content=None):
+    def _create_group_fnc(self, menu, path_opt, content=None):
         path = path_opt.path
         if path in self._item_dic:
             return self._item_dic[path]
@@ -362,8 +363,14 @@ class GuiQtMenuOpt(object):
         widget_action = QtWidgetAction(menu)
         menu.addAction(widget_action)
         widget_action.setFont(_base.QtFonts.NameNormal)
+
         if content is not None:
             name = content.get('name', name)
+            if _gui_core.GuiUtil.language_is_chs():
+                name_chs = content.get('name_chs')
+                if name_chs:
+                    name = name_chs
+
             icon_name = content.get('icon_name', icon_name)
             
         widget_action.setText(name)
@@ -377,9 +384,14 @@ class GuiQtMenuOpt(object):
         return sub_menu
 
     @classmethod
-    def add_separator_fnc(cls, menu, content):
+    def _create_separator_fnc(cls, menu, content):
         name = content.get('name')
         if name is not None:
+            if _gui_core.GuiUtil.language_is_chs():
+                name_chs = content.get('name_chs')
+                if name_chs:
+                    name = name_chs
+
             s = QtWidgetActionForSeparator(menu)
             s.setText(name)
             menu.addAction(s)
@@ -389,13 +401,17 @@ class GuiQtMenuOpt(object):
             s.setText(name)
         return s
 
-    def add_action_fnc(self, menu, content):
+    def _create_action_fnc(self, menu, content):
         def set_disable_fnc_(widget_action_):
             widget_action_.setFont(_base.QtFonts.NameDisable)
             widget_action_.setDisabled(True)
 
-        #
         name = content.get('name')
+        if _gui_core.GuiUtil.language_is_chs():
+            name_chs = content.get('name_chs')
+            if name_chs:
+                name = name_chs
+
         icon_name = content.get('icon_name')
         executable_fnc = content.get('executable_fnc')
         execute_fnc = content.get('execute_fnc')

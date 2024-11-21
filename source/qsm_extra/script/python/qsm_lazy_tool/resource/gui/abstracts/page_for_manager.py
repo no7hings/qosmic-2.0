@@ -994,11 +994,11 @@ class _GuiNodeOpt(_GuiBaseOpt):
                 self._page._scr_stage.EntityTypes.Tag, bsc_core.BscNodePath.get_dag_parent_path(i_scr_tag_path)
             )
             if self._window._language == 'chs':
-                i_key = bsc_core.auto_string(i_scr_tag_group.gui_name_chs)
-                i_value = bsc_core.auto_string(i_scr_tag.gui_name_chs)
+                i_key = bsc_core.ensure_string(i_scr_tag_group.gui_name_chs)
+                i_value = bsc_core.ensure_string(i_scr_tag.gui_name_chs)
             else:
-                i_key = bsc_core.auto_string(i_scr_tag_group.gui_name)
-                i_value = bsc_core.auto_string(i_scr_tag.gui_name)
+                i_key = bsc_core.ensure_string(i_scr_tag_group.gui_name)
+                i_value = bsc_core.ensure_string(i_scr_tag.gui_name)
 
             if i_key in tag_dict:
                 i_value_all = tag_dict[i_key]

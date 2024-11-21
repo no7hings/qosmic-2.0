@@ -11,9 +11,11 @@
             "id": "b032ec072aca1c53",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "Pasted image 20241118145425.png"
+                "file": "开发相关/开发文档/解算流程工具.md",
+                "mode": "source",
+                "source": false
               }
             }
           },
@@ -25,7 +27,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -75,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 318.5
+    "width": 245.5
   },
   "right": {
     "id": "079848c8f8affc0b",
@@ -91,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Pasted image 20241118145425.png",
+                "file": "开发相关/开发进度/优化.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -108,7 +111,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Pasted image 20241118145425.png",
+                "file": "开发相关/开发进度/优化.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -131,7 +134,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Pasted image 20241118145425.png"
+                "file": "开发相关/开发进度/优化.md"
               }
             }
           },
@@ -153,7 +156,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "Pasted image 20241118145425.png"
+                "file": "开发相关/开发进度/优化.md"
               }
             }
           },
@@ -178,7 +181,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 317.5
+    "width": 317.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -192,43 +196,43 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "b032ec072aca1c53",
+  "active": "ef3c1b24d29d87a5",
   "lastOpenFiles": [
-    "Pasted image 20241118150012.png",
-    "Pasted image 20241118150428.png",
-    "Pasted image 20241119183533.png",
     "开发相关/开发文档/解算流程工具.md",
-    "开发相关/开发任务/maya/解算相关/解算流程工具开发.md",
-    "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
-    "().md",
-    "Pasted image 20241118145425.png",
-    "Pasted image 20241118145403.png",
-    "Pasted image 20241118145132.png",
-    "Pasted image 20241118145116.png",
-    "Pasted image 20241118145040.png",
-    "Pasted image 20241118143828.png",
-    "开发相关/开发文档/后台任务管理工具（Process Task Manager）.md",
-    "开发相关/开发文档/动画工具（Animation Tool）.md",
-    "开发相关/开发任务/maya/绑定相关/动态GPU（Dynamic GPU）.md",
-    "开发相关/开发任务/maya/绑定相关/简模代理（Skin Proxy）.md",
-    "Pasted image 20241118135822.png",
-    "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
-    "开发相关/开发计划/十月-十一月.md",
-    "开发相关/开发任务/maya/解算相关/节点图模版工具（Node Graph Template Tool）.md",
-    "开发相关/开发任务/maya/动作相关/动作拼接工具.md",
-    "开发相关/开发任务/maya/动作相关/动作工具.md",
-    "开发相关/开发进度/maya/动作工具.md",
+    "开发相关/开发进度/优化.md",
     "开发相关/开发计划/七月-八月.md",
+    "开发相关/开发进度/maya/10月-资产检查工具.md",
+    "开发相关/开发进度/maya/11月-解算流程工具.md",
+    "开发相关/开发进度/maya/9月-资源管理工具.md",
     "开发相关/开发计划/总览.md",
-    "开发相关/开发计划/四月-五月.md",
+    "开发相关/开发进度/maya/8月-动作拼接工具.md",
+    "开发相关/开发进度/maya/6月-节点图模版工具.md",
+    "开发相关/开发进度/maya/7月-动作工具.md",
+    "开发相关/开发进度/maya/6月-节点参数模版工具.md",
+    "开发相关/开发进度/maya/6月-绑定移动工具.md",
+    "Pasted image 20241121133157.png",
+    "Pasted image 20241121133136.png",
+    "Pasted image 20241121133050.png",
+    "Pasted image 20241121133029.png",
+    "Pasted image 20241121132357.png",
+    "Pasted image 20241121132329.png",
+    "Pasted image 20241121132300.png",
+    "Pasted image 20241121131610.png",
+    "Pasted image 20241121131446.png",
+    "Pasted image 20241121125405.png",
+    "开发相关/开发进度/maya/5月-简易拍屏工具.md",
     "开发相关/开发计划/六月.md",
     "开发相关/开发计划/九月.md",
-    "开发相关/开发进度/通用/后台任务管理工具.md",
-    "开发相关/开发进度/通用/农场插件.md",
+    "开发相关/开发进度/maya/5月-场景显示优化工具.md",
+    "开发相关/开发进度/maya/4月-绑定显示优化工具.md",
+    "开发相关/开发计划/十月-十一月.md",
+    "开发相关/开发计划/四月-五月.md",
     "开发相关/开发进度/通用/农场解算发布工具.md",
-    "开发相关/开发任务/maya/场景相关/元素组装（Unit Assembly）.md",
-    "开发相关/开发任务/maya/场景相关/GPU实例（GPU Instance）.md",
-    "开发相关/开发任务/通用/农场相关/农场解算发布工具（Deadline Simulation Summit Tool）.md",
+    "开发相关/开发进度/通用/农场插件.md",
+    "开发相关/开发进度/通用/后台任务管理工具.md",
+    "开发相关/开发文档/后台任务管理工具（Process Task Manager）.md",
+    "开发相关/开发任务/maya/解算相关/解算流程工具开发.md",
+    "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
     "USD/植被流程/流程图.canvas",
     "USD/植被流程",
     "USD",

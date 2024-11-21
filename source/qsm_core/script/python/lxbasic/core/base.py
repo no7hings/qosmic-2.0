@@ -38,7 +38,7 @@ import collections
 from . import configure as _configure
 
 
-def auto_string(text):
+def ensure_string(text):
     if isinstance(text, six.text_type):
         return text.encode('utf-8')
     return text

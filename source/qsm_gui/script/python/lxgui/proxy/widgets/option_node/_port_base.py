@@ -454,6 +454,9 @@ class AbsPrxPort(AbsPrxPortBaseDef):
     def set_menu_data(self, raw):
         self._prx_port_input.set_menu_data(raw)
 
+    def set_menu_content(self, raw):
+        self._prx_port_input.set_menu_content(raw)
+
     def to_custom_widget(self, label_width=80):
         if self._custom_widget is not None:
             return self._custom_widget

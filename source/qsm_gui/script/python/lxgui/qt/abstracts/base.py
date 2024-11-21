@@ -987,7 +987,7 @@ class AbsQtActionForDragDef(object):
         self._drag_mime_data = QtCore.QMimeData()
         for k, v in self._drag_data.items():
             self._drag_mime_data.setData(
-                bsc_core.auto_string(k), bsc_core.auto_string(v)
+                bsc_core.ensure_string(k), bsc_core.ensure_string(v)
             )
         #
         if self._drag_urls:
@@ -1670,14 +1670,14 @@ class AbsQtNameBaseDef(object):
                 name_text = kwargs['name']
             #
             if name_text:
-                name_text = bsc_core.auto_string(name_text)
+                name_text = bsc_core.ensure_string(name_text)
                 name_text = name_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
                 css += '<h3><p class="no_warp_and_center">{}</p></h3>\n'.format(name_text)
 
             if text:
                 # add split line
                 css += '<p><hr></p>\n'
-                text = bsc_core.auto_string(text)
+                text = bsc_core.ensure_string(text)
                 if isinstance(text, six.string_types):
                     texts = text.split('\n')
                 elif isinstance(text, (tuple, list)):
@@ -1686,7 +1686,7 @@ class AbsQtNameBaseDef(object):
                     raise RuntimeError()
                 #
                 for i_text in texts:
-                    i_text = bsc_core.auto_string(i_text)
+                    i_text = bsc_core.ensure_string(i_text)
                     i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
                     i_text = _qt_core.QtUtil.generate_tool_tip_action_css(i_text)
                     css += '<p class="no_wrap">{}</p>\n'.format(i_text)
@@ -1712,14 +1712,14 @@ class AbsQtNameBaseDef(object):
         )
 
         if self._name_text:
-            name_text = bsc_core.auto_string(self._name_text)
+            name_text = bsc_core.ensure_string(self._name_text)
             name_text = name_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
             css += '<h3><p class="no_warp_and_center">{}</p></h3>\n'.format(name_text)
 
         if self._tool_tip_text:
             # add split line
             css += '<p><hr></p>\n'
-            text = bsc_core.auto_string(self._tool_tip_text)
+            text = bsc_core.ensure_string(self._tool_tip_text)
             if isinstance(text, six.string_types):
                 texts = text.split('\n')
             elif isinstance(text, (tuple, list)):
@@ -1728,7 +1728,7 @@ class AbsQtNameBaseDef(object):
                 raise RuntimeError()
             #
             for i_text in texts:
-                i_text = bsc_core.auto_string(i_text)
+                i_text = bsc_core.ensure_string(i_text)
                 i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
                 i_text = _qt_core.QtUtil.generate_tool_tip_action_css(i_text)
                 css += '<p class="no_wrap">{}</p>\n'.format(i_text)
@@ -1910,7 +1910,7 @@ class AbsQtNamesBaseDef(AbsQtNameBaseDef):
             #
             name_text = self._name_text
             if name_text:
-                name_text = bsc_core.auto_string(name_text)
+                name_text = bsc_core.ensure_string(name_text)
                 name_text = name_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
                 css += '<h2><p class="no_warp_and_center">{}</p></h2>\n'.format(name_text)
             #
@@ -1918,12 +1918,12 @@ class AbsQtNamesBaseDef(AbsQtNameBaseDef):
             if name_texts:
                 css += '<p><hr></p>\n'
                 for i_text in name_texts:
-                    i_text = bsc_core.auto_string(i_text)
+                    i_text = bsc_core.ensure_string(i_text)
                     i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
                     css += '<p class="no_wrap">{}</p>\n'.format(i_text)
             #
             if text:
-                text = bsc_core.auto_string(text)
+                text = bsc_core.ensure_string(text)
                 css += '<p><hr></p>\n'
                 if isinstance(text, six.string_types):
                     texts_extend = text.split('\n')
@@ -1933,7 +1933,7 @@ class AbsQtNamesBaseDef(AbsQtNameBaseDef):
                     raise RuntimeError()
                 #
                 for i_text in texts_extend:
-                    i_text = bsc_core.auto_string(i_text)
+                    i_text = bsc_core.ensure_string(i_text)
                     i_text = i_text.replace(' ', '&nbsp;').replace('<', '&lt;').replace('>', '&gt;')
                     i_text = _qt_core.QtUtil.generate_tool_tip_action_css(i_text)
                     css += '<p class="no_wrap">{}</p>\n'.format(i_text)
@@ -2326,7 +2326,7 @@ class AbsQtChooseExtraDef(object):
     def _choose_value_completion_gain_fnc_(self, *args, **kwargs):
         return bsc_content.ContentUtil.filter(
             self._choose_values, '*{}*'.format(
-                bsc_core.auto_string((args[0]))
+                bsc_core.ensure_string((args[0]))
             )
         )
 

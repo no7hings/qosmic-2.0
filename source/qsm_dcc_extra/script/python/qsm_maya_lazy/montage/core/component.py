@@ -19,7 +19,7 @@ class _GraphBase(object):
         )
         if is_create is True:
             node_opt = qsm_mya_core.EtrNodeOpt(path)
-            node_opt.apply_properties(properties)
+            node_opt.set_dict(properties)
             node_opt.create_properties(create_properties)
             node_opt.create_connections_by_data(connections)
         return path
@@ -36,7 +36,7 @@ class _GraphBase(object):
         )
         if is_create is True:
             node_opt = qsm_mya_core.EtrNodeOpt(name)
-            node_opt.apply_properties(properties)
+            node_opt.set_dict(properties)
             node_opt.create_properties(create_properties)
             node_opt.create_connections_by_data(connections)
         keyframes = data.get('keyframes')
@@ -56,7 +56,7 @@ class _GraphBase(object):
         )
         if is_create is True:
             node_opt = qsm_mya_core.EtrNodeOpt(path)
-            node_opt.apply_properties(properties)
+            node_opt.set_dict(properties)
             node_opt.create_properties(create_properties)
             node_opt.create_connections_by_data(connections)
         return path

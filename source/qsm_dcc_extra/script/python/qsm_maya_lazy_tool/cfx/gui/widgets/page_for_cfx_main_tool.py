@@ -56,10 +56,10 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
             ],
             self._script_job_opt.EventTypes.SelectionChanged
         )
-        self._script_job_opt.register(
-            self._gui_export_toolset_unit.do_gui_refresh_by_dcc_frame_changing,
-            self._script_job_opt.EventTypes.FrameRangeChanged
-        )
+        # self._script_job_opt.register(
+        #     self._gui_export_toolset_unit.do_gui_refresh_by_dcc_frame_changing,
+        #     self._script_job_opt.EventTypes.FrameRangeChanged
+        # )
         # refresh all when scene changed
         self._script_job_opt.register(
             self.do_gui_refresh_all,
@@ -178,9 +178,9 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         main_qt_lot.addWidget(self._page_prx_tab_tool_box.widget)
         # export
-        self._gui_export_toolset_unit = _unit_for_cfx_rig.ToolsetUnitForCfxRigExport(
-            self._window, self, self._session
-        )
+        # self._gui_export_toolset_unit = _unit_for_cfx_rig.ToolsetUnitForCfxRigExport(
+        #     self._window, self, self._session
+        # )
         # import
         self._gui_import_toolset_unit = _unit_for_cfx_rig.ToolsetUnitForCfxRigImport(
             self._window, self, self._session
@@ -227,6 +227,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
 
     def do_gui_refresh_toolset_units(self):
         if self.gui_get_tool_tab_current_key() == 'export':
-            self._gui_export_toolset_unit.do_gui_refresh_all()
+            pass
+            # self._gui_export_toolset_unit.do_gui_refresh_all()
         elif self.gui_get_tool_tab_current_key() == 'import':
             self._gui_import_toolset_unit.do_gui_refresh_all()

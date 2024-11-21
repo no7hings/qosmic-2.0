@@ -229,7 +229,7 @@ class ChartModelForBar(object):
                     i_leaf['value_rect_over'] = QtCore.QRect()
                     i_leaf['value_color_over'] = QtGui.QColor(255, 0, 0)
                     i_value_text = '{}(>{})'.format(
-                        bsc_core.auto_string(i_value_text), bsc_core.auto_string(i_value_text_limit)
+                        bsc_core.ensure_string(i_value_text), bsc_core.ensure_string(i_value_text_limit)
                     )
 
             i_leaf['value_text'] = i_value_text

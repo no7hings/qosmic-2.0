@@ -531,7 +531,7 @@ class AssetUnitAssemblyProcess(object):
             self.LOG_KEY, 'import scene: {}'.format(self._file_path)
         )
 
-        import_paths = qsm_mya_core.SceneFile.import_file(
+        import_paths = qsm_mya_core.SceneFile.import_file_ignore_error(
             self._file_path
         )
         qsm_mya_core.Scene.clear_unknown_nodes()

@@ -26,14 +26,14 @@ class TaskProcessBase(object):
     TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
     @classmethod
-    def auto_string(cls, text):
+    def ensure_string(cls, text):
         if isinstance(text, six.text_type):
             return text.encode('utf-8')
         return text
 
     @classmethod
     def stdout(cls, name, text):
-        text = cls.auto_string(text)
+        text = cls.ensure_string(text)
         sys.stdout.write(
             '{}         | <{}> {}\n'.format(time.strftime(
                 cls.TIME_FORMAT, time.localtime(time.time())),
@@ -43,7 +43,7 @@ class TaskProcessBase(object):
 
     @classmethod
     def stderr(cls, name, text):
-        text = cls.auto_string(text)
+        text = cls.ensure_string(text)
         sys.stderr.write(
             '{}         | <{}> {}\n'.format(time.strftime(
                 cls.TIME_FORMAT, time.localtime(time.time())),

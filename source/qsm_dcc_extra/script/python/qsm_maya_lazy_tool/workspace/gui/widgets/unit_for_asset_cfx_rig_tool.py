@@ -7,7 +7,7 @@ import lxgui.qt.core as gui_qt_core
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
+import qsm_maya.preset as qsm_mya_preset
 
 import qsm_maya.tasks.cfx_rig.core as qsm_mya_tsk_cfx_rig_core
 
@@ -88,7 +88,7 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
     def __init__(self, *args, **kwargs):
         super(_PrxBasicToolset, self).__init__(*args, **kwargs)
 
-        self._prx_options_node.set('template.create_template', self.on_create_template)
+        self._prx_options_node.set('template.create_groups', self.on_create_groups)
 
         # cloth
         self._prx_options_node.set(
@@ -144,6 +144,15 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
             'nucleus.create_ncloth', self.on_create_ncloth_by_select
         )
 
+        self._prx_options_node.get_port('nucleus.create_ncloth').set_menu_content(
+            qsm_mya_preset.NodePreset.generate_menu_content(
+                'nCloth',
+                atr_excludes=[
+                    'displayColor', 'inputMeshAttract', 'inputAttractMethod', 'inputAttractMapType'
+                ]
+            )
+        )
+
         self._prx_options_node.set(
             'nucleus.create_nrigid', self.on_create_nrigid_by_select
         )
@@ -167,7 +176,7 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
             'automation.rest_rig_controls_transformation', self.on_rest_rig_controls_transformation
         )
 
-    def on_create_template(self):
+    def on_create_groups(self):
         if self._unit._task_tool_opt is not None:
             self._unit._task_tool_opt.create_groups_for('cfx_rig')
 

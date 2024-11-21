@@ -132,7 +132,7 @@ class FrameExtractor(object):
                 os.makedirs(directory_path)
 
             cv2.imwrite(self._image_path, self._frame)
-            sys.stdout.write('Thumbnail saved at: "{}"\n'.format(bsc_core.auto_string(self._image_path)))
+            sys.stdout.write('Thumbnail saved at: "{}"\n'.format(bsc_core.ensure_string(self._image_path)))
         else:
             sys.stderr.write('Error: Cannot read frame.\n')
 

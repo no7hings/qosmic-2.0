@@ -26,7 +26,7 @@ class WebSocket(object):
     VERBOSE_LEVEL = 1
 
     @staticmethod
-    def auto_string(text):
+    def ensure_string(text):
         if isinstance(text, six.text_type):
             return text.encode('utf-8')
         return text
@@ -91,7 +91,7 @@ class WebSocket(object):
 
     @classmethod
     def send_fnc(cls, sock, text):
-        text = cls.auto_string(text)
+        text = cls.ensure_string(text)
 
         message_length = len(text)
 

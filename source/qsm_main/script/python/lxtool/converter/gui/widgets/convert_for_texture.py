@@ -487,7 +487,7 @@ class PnlTextureConverter(gui_prx_widgets.PrxSessionWindow):
                     #
                     i_texture_tgt = i_texture_src.__class__(
                         '{}/{}{}'.format(
-                            directory_path_tgt, bsc_core.auto_string(i_texture_src.name_base), ext_tgt
+                            directory_path_tgt, bsc_core.ensure_string(i_texture_src.name_base), ext_tgt
                         )
                     )
                     if i_texture_src.path == i_texture_tgt.path:

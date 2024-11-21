@@ -360,7 +360,7 @@ class QtChartForSprcTask(QtWidgets.QWidget):
         self._cost_time = self._compute_cost_time_()
         if self._text:
             return '{} | {} | {}'.format(
-                bsc_core.auto_string(self._text),
+                bsc_core.ensure_string(self._text),
                 bsc_core.BscInteger.second_to_time_prettify(self._cost_time, mode=1),
                 _gui_core.GuiProcessStatusMapper.MAPPER[self._status]
 

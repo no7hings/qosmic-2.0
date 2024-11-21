@@ -240,7 +240,7 @@ class _QtListViewWidget(
                             urls.append(QtCore.QUrl.fromLocalFile(j_v))
                         else:
                             mime_data.setData(
-                                bsc_core.auto_string(j_k), bsc_core.auto_string(j_v)
+                                bsc_core.ensure_string(j_k), bsc_core.ensure_string(j_v)
                             )
                 if urls:
                     mime_data.setUrls(urls)

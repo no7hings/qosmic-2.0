@@ -101,7 +101,7 @@ class OptionHook(object):
 
     @classmethod
     def generate_menu_contents(cls, hook_options, language):
-        d_ = bsc_content.Dict()
+        d_ = bsc_content.YmlDict()
         for i_hook_option in hook_options:
             i_hook_args = cls.get_args(i_hook_option)
             if i_hook_args:

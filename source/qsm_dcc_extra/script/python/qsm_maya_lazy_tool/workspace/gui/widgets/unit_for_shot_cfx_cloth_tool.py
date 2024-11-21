@@ -11,6 +11,8 @@ import qsm_general.prc_task as qsm_gnl_prc_task
 
 import qsm_maya.core as qsm_mya_core
 
+import qsm_maya.preset as qsm_mya_preset
+
 import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
 
 import qsm_maya.tasks.cfx_cloth.core as qsm_mya_tsk_cfx_clt_core
@@ -157,6 +159,14 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
         self._prx_options_node.set(
             'cfx_rig.load', self.on_load_cfx_rig_by_select
         )
+        self._prx_options_node.get_port('cfx_rig.load').set_menu_content(
+            qsm_mya_preset.NodePreset.generate_menu_content(
+                'nCloth',
+                atr_excludes=[
+                    'displayColor', 'inputMeshAttract', 'inputAttractMethod', 'inputAttractMapType'
+                ]
+            )
+        )
         self._prx_options_node.set(
             'cfx_rig.update', self.on_update_cfx_rig_by_select
         )
@@ -180,7 +190,7 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
         )
 
         self._prx_options_node.set(
-            'simulation.select_all', self.on_select_all
+            'simulation.select_all_asset', self.on_select_all_asset
         )
 
     def get_rig_namespaces_by_selected(self):
@@ -276,7 +286,7 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
         for i_rig_namespace in rig_namespaces:
             qsm_mya_tsk_cfx_clt_core.CfxClothAssetOpt(i_rig_namespace).apply_all_solver_start_frame(start_frame)
 
-    def on_select_all(self):
+    def on_select_all_asset(self):
         self._unit._gui_resource_view_opt.gui_select_all_root()
 
 
@@ -567,7 +577,7 @@ class _PrxExportToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
                             message='缓存导出结束了, 是否打开文件夹?',
                             # todo? exec must use unicode
                             ok_python_script='import os; os.startfile("{}".decode("utf-8"))'.format(
-                                bsc_core.auto_string(directory_path)
+                                bsc_core.ensure_string(directory_path)
                             ),
                             status='normal'
                         )

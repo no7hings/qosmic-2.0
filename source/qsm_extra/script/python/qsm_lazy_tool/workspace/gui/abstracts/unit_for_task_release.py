@@ -103,17 +103,38 @@ class AbsPrxToolsetForTaskRelease(gui_prx_widgets.PrxBaseUnit):
 
         self._gui_resource_view_opt = self.GUI_RESOURCE_VIEW_CLS(self._window, self, self._session)
 
+        right_v_sca = gui_prx_widgets.PrxVScrollArea()
+        self._prx_h_splitter.add_widget(right_v_sca)
+
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
             self._window.choice_name(
                 self._window._configure.get('build.{}.options'.format(self._gui_key_path))
             )
         )
-        self._prx_h_splitter.add_widget(self._prx_options_node)
+        right_v_sca.add_widget(self._prx_options_node)
 
         self._prx_options_node.build_by_data(
             self._window._configure.get(
                 'build.{}.options.parameters'.format(self._gui_key_path)
-            ),
+            )
+        )
+
+        self._tip_tool_group = gui_prx_widgets.PrxHToolGroup()
+        right_v_sca.add_widget(self._tip_tool_group)
+        self._tip_tool_group.set_expanded(True)
+        self._tip_tool_group.set_name(
+            self._window.choice_name(
+                self._window._configure.get('build.{}.groups.tip'.format(self._page._gui_key_path))
+            )
+        )
+
+        self._tip_text_browser = gui_prx_widgets.PrxTextBrowser()
+        self._tip_tool_group.add_widget(self._tip_text_browser)
+
+        self._tip_text_browser.set_content(
+            self._window.choice_description(
+                self._window._configure.get('build.{}.tip'.format(self._gui_key_path))
+            )
         )
 
         self._prx_h_splitter.set_fixed_size_at(0, 320)
@@ -129,8 +150,7 @@ class AbsPrxToolsetForTaskRelease(gui_prx_widgets.PrxBaseUnit):
         self._validation_qt_button._set_action_enable_(False)
         self._validation_qt_button._set_icon_name_('tool/validation')
         self._validation_qt_button._set_name_text_(
-            gui_core.GuiUtil.choice_name(
-                self._window._language,
+            self._window.choice_name(
                 self._window._configure.get('build.{}.buttons.validation'.format(self._page._gui_key_path))
             )
         )
@@ -141,8 +161,7 @@ class AbsPrxToolsetForTaskRelease(gui_prx_widgets.PrxBaseUnit):
         self._release_qt_button._set_width_(96)
         self._release_qt_button._set_icon_name_('tool/release')
         self._release_qt_button._set_name_text_(
-            gui_core.GuiUtil.choice_name(
-                self._window._language,
+            self._window.choice_name(
                 self._window._configure.get('build.{}.buttons.release'.format(self._page._gui_key_path))
             )
         )

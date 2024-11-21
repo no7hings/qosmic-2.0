@@ -570,7 +570,7 @@ class AbsPnlPublisherForSurface(gui_prx_widgets.PrxSessionWindow):
     def refresh_next_enable_fnc(self):
         self._validation_info_file = self._get_validation_info_file_path_()
         if self._validation_info_file is not None:
-            info = '\n'.join(map(bsc_core.auto_string, self._get_validation_info_texts_()))
+            info = '\n'.join(map(bsc_core.ensure_string, self._get_validation_info_texts_()))
             bsc_storage.StgFileOpt(
                 self._validation_info_file
             ).set_write(

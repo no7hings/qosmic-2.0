@@ -218,7 +218,7 @@ class AbsSsnGener(
     def get_gui_window_name(self):
         language = bsc_core.BscEnvironExtra.get_ui_language()
         gui_name = self.get_gui_name_(language)
-        gui_name = bsc_core.auto_string(gui_name)
+        gui_name = bsc_core.ensure_string(gui_name)
         if self.get_is_td_enable() is True:
             return '[ALPHA] {} - {}'.format(
                     gui_name, str(self.application).capitalize()

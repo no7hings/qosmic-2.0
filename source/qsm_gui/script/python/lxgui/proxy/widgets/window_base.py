@@ -435,6 +435,11 @@ class PrxBaseWindow(
             self._language, options
         )
 
+    def choice_description(self, options):
+        return gui_core.GuiUtil.choice_description(
+            self._language, options
+        )
+
     def choice_message(self, options):
         return gui_core.GuiUtil.choice_message(
             self._language, options

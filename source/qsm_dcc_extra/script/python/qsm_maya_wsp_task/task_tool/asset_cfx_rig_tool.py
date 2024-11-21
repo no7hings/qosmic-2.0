@@ -92,7 +92,7 @@ class MayaAssetCfxRigToolOpt(_asset_gnl.MayaAssetGnlToolOpt):
         if args:
             flag, (ntransform, nucleus) = args
             if flag is True:
-                qsm_mya_tsk_cfx_rig_core.NCloth(ntransform).apply_properties(
+                qsm_mya_tsk_cfx_rig_core.NCloth(ntransform).set_dict(
                     qsm_mya_tsk_cfx_rig_core.NCloth.DEFAULT_PROPERTIES
                 )
             qsm_mya_tsk_cfx_rig_core.CfxNClothGrpOpt().add_one(ntransform)
@@ -273,7 +273,7 @@ class MayaAssetCfxRigToolOpt(_asset_gnl.MayaAssetGnlToolOpt):
         if args:
             flag, (ntransform, nucleus) = args
             if flag is True:
-                qsm_mya_tsk_cfx_rig_core.NRigid(ntransform).apply_properties(
+                qsm_mya_tsk_cfx_rig_core.NRigid(ntransform).set_dict(
                     qsm_mya_tsk_cfx_rig_core.NRigid.DEFAULT_PROPERTIES
                 )
             qsm_mya_tsk_cfx_rig_core.CfxNRigidGrpOpt().add_one(ntransform)

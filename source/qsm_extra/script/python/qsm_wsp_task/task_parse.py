@@ -22,7 +22,7 @@ class TaskParse(object):
     def variants_factor(cls, variants):
         dict_ = {}
         for k, v in variants.items():
-            dict_[k] = bsc_core.auto_string(v)
+            dict_[k] = bsc_core.ensure_string(v)
         return dict_
 
     @classmethod

@@ -529,6 +529,215 @@ class ContentEnvironment(ContentVariant):
         pass
 
 
+class ToString(object):
+    @staticmethod
+    def ensure_string(text):
+        if isinstance(text, six.text_type):
+            return text.encode('utf-8')
+        return text
+
+    @staticmethod
+    def auto_unicode(text):
+        if not isinstance(text, six.text_type):
+            return text.decode('utf-8')
+        return text
+
+    @staticmethod
+    def ensure_unicode(s):
+        if isinstance(s, six.text_type):
+            return s
+        elif isinstance(s, bytes):
+            return s.decode('utf-8')
+        else:
+            return s
+
+    def __init__(self, value):
+        self._indent = 4
+        self._default_quotes = self.ensure_unicode('"')
+        self._data = value
+
+        self._lines = self._next_prc(value, 0, None, True)
+
+    def _key_prc(self, key):
+        if isinstance(key, six.string_types):
+            return self._default_quotes+self.ensure_unicode(key)+self._default_quotes
+        else:
+            return str(type(key))
+
+    def _indent_prc(self, depth):
+        return depth*self._indent*' '
+
+    def _next_prc(self, value, depth, key=None, is_itr_end=False):
+        if isinstance(value, bool):
+            return self._bool_prc(value, depth, key, is_itr_end)
+        elif isinstance(value, (int, float)):
+            return self._num_prc(value, depth, key, is_itr_end)
+        elif isinstance(value, six.string_types):
+            return self._str_prc(value, depth, key, is_itr_end)
+        elif isinstance(value, tuple):
+            return self._tuple_prc(value, depth, key, is_itr_end)
+        elif isinstance(value, list):
+            return self._list_prc(value, depth, key, is_itr_end)
+        elif isinstance(value, dict):
+            return self._dict_prc(value, depth, key, is_itr_end)
+        else:
+            return self._error_value_prc(value, depth, key, is_itr_end)
+
+    def _error_value_prc(self, value, depth, key=None, is_itr_end=False):
+        value_str = str(type(value))
+        if key is None:
+            line = self.ensure_unicode(self._indent_prc(depth)+value_str)
+        else:
+            line = self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+value_str)
+
+        if is_itr_end is True:
+            line += '\n'
+        else:
+            line += ',\n'
+        return [line]
+
+    def _tuple_prc(self, value, depth, key=None, is_itr_end=False):
+        lines = []
+        if value:
+            if key is None:
+                lines.append(
+                    self.ensure_unicode(self._indent_prc(depth)+'(\n')
+                )
+            else:
+                lines.append(
+                    self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+'(\n')
+                )
+
+            c = len(value)
+            for i_idx, i in enumerate(value):
+                lines.extend(
+                    self._next_prc(i, depth+1, None, i_idx==(c-1))
+                )
+
+            end_line = self.ensure_unicode(self._indent_prc(depth)+')')
+        else:
+            if key is None:
+                end_line = self.ensure_unicode(self._indent_prc(depth)+'()')
+            else:
+                end_line = self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+'()')
+
+        if is_itr_end is True:
+            end_line += '\n'
+        else:
+            end_line += ',\n'
+
+        lines.append(end_line)
+        return lines
+
+    def _list_prc(self, value, depth, key=None, is_itr_end=False):
+        lines = []
+
+        if value:
+            if key is None:
+                lines.append(
+                    self.ensure_unicode(self._indent_prc(depth)+'[\n')
+                )
+            else:
+                lines.append(
+                    self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+'[\n')
+                )
+
+            c = len(value)
+            for i_idx, i in enumerate(value):
+                lines.extend(
+                    self._next_prc(i, depth+1, None, i_idx==(c-1))
+                )
+
+            end_line = self.ensure_unicode(self._indent_prc(depth)+']')
+        else:
+            if key is None:
+                end_line = self.ensure_unicode(self._indent_prc(depth)+'[]')
+            else:
+                end_line = self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+'[]')
+
+        if is_itr_end is True:
+            end_line += '\n'
+        else:
+            end_line += ',\n'
+
+        lines.append(end_line)
+        return lines
+
+    def _dict_prc(self, value, depth, key=None, is_itr_end=False):
+        lines = []
+
+        if value:
+            if key is None:
+                lines.append(
+                    self.ensure_unicode(self._indent_prc(depth)+'{\n')
+                )
+            else:
+                lines.append(
+                    self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+'{\n')
+                )
+
+            c = len(value)
+            for i_idx, (k, v) in enumerate(value.items()):
+                lines.extend(
+                    self._next_prc(v, depth+1, k, i_idx==(c-1))
+                )
+
+            end_line = self.ensure_unicode(self._indent_prc(depth)+'}')
+        else:
+            if key is None:
+                end_line = self.ensure_unicode(self._indent_prc(depth)+'{}')
+            else:
+                end_line = self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+'{}')
+
+        if is_itr_end is True:
+            end_line += '\n'
+        else:
+            end_line += ',\n'
+
+        lines.append(end_line)
+        return lines
+
+    def _bool_prc(self, value, depth, key=None, is_itr_end=False):
+        if key is None:
+            line = self.ensure_unicode(self._indent_prc(depth)+str(value))
+        else:
+            line = self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+str(value))
+
+        if is_itr_end is True:
+            line += '\n'
+        else:
+            line += ',\n'
+        return [line]
+
+    def _num_prc(self, value, depth, key=None, is_itr_end=False):
+        if key is None:
+            line = self.ensure_unicode(self._indent_prc(depth)+str(value))
+        else:
+            line = self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+str(value))
+
+        if is_itr_end is True:
+            line += '\n'
+        else:
+            line += ',\n'
+        return [line]
+
+    def _str_prc(self, value, depth, key=None, is_itr_end=False):
+        value_str = self._default_quotes+self.ensure_unicode(value)+self._default_quotes
+        if key is None:
+            line = self.ensure_unicode(self._indent_prc(depth)+value_str)
+        else:
+            line = self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+value_str)
+
+        if is_itr_end is True:
+            line += '\n'
+        else:
+            line += ',\n'
+        return [line]
+
+    def generate(self):
+        return self.ensure_string(u''.join(self._lines))
+
+
 if __name__ == '__main__':
     env = ContentVariant()
 

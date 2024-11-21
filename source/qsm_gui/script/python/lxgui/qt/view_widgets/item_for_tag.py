@@ -36,7 +36,7 @@ class _AbsTagItem(object):
     def __str__(self):
         return '{}({})'.format(
             self.__class__.__name__,
-            bsc_core.auto_string(self._item_model.get_name())
+            bsc_core.ensure_string(self._item_model.get_name())
         )
 
     def __repr__(self):

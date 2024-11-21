@@ -13,6 +13,8 @@ import json
 
 import hashlib
 
+import yaml
+
 from . import base as _base
 
 
@@ -412,6 +414,20 @@ class Dict(AbsContent):
         super(Dict, self).__init__(
             key=key, value=value or collections.OrderedDict()
         )
+
+
+class YmlDict(AbsContent):
+    PATHSEP = '.'
+
+    def __init__(self, key=None, value=None):
+        super(YmlDict, self).__init__(
+            key=key, value=value or collections.OrderedDict()
+        )
+
+    def __str__(self):
+        return _base.ToString(
+            self.get_value()
+        ).generate()
 
 
 class Property(object):

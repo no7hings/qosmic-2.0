@@ -976,7 +976,7 @@ class AbsStgTexture(
 
     @classmethod
     def _get_unit_is_exists_as_tgt_ext_by_src_(cls, file_path_src, ext_tgt, search_directory_path=None):
-        file_path_src = bsc_core.auto_string(file_path_src)
+        file_path_src = bsc_core.ensure_string(file_path_src)
         name = os.path.basename(file_path_src)
         name_base, ext_any = os.path.splitext(name)
         directory_path = os.path.dirname(file_path_src)

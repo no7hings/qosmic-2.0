@@ -548,7 +548,7 @@ class BscStgParseOpt(AbsParseOpt):
         return BscVersionOpt.get_default()
 
     def __str__(self):
-        return _base.auto_string(self._pattern)
+        return _base.ensure_string(self._pattern)
 
 
 class BscTaskParseOpt(BscStgParseOpt):

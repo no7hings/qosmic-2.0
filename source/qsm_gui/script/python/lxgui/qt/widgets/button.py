@@ -597,7 +597,7 @@ class QtPressButton(
             #
             if self._get_sub_process_is_enable_() is True:
                 name_text = '{} - {}'.format(
-                    bsc_core.auto_string(self._name_text), self._get_sub_process_status_text_()
+                    bsc_core.ensure_string(self._name_text), self._get_sub_process_status_text_()
                 )
             #
             painter._draw_text_by_rect_(

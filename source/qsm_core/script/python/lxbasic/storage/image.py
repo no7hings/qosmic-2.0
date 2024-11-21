@@ -65,7 +65,7 @@ class ImgOiioMtd(object):
         option = dict(
             size='{}x{}'.format(*size),
             color='{},{},{}'.format(*rgba),
-            output=bsc_cor_raw.auto_string(file_path)
+            output=bsc_cor_raw.ensure_string(file_path)
         )
         cmd_args = [
             bsc_cor_execute.BscBinExecute.oiiotool(),
@@ -174,8 +174,8 @@ class ImgOiioMtd(object):
     @classmethod
     def convert_color_space_to(cls, file_path_src, file_path_tgt, color_space_src, color_space_tgt):
         option = dict(
-            input=bsc_cor_raw.auto_string(file_path_src),
-            output=bsc_cor_raw.auto_string(file_path_tgt),
+            input=bsc_cor_raw.ensure_string(file_path_src),
+            output=bsc_cor_raw.ensure_string(file_path_tgt),
             from_color_space=color_space_src,
             to_color_space=color_space_tgt,
         )
@@ -195,8 +195,8 @@ class ImgOiioMtd(object):
     @classmethod
     def r_to_rgb(cls, file_path_src, file_path_tgt):
         option = dict(
-            input=bsc_cor_raw.auto_string(file_path_src),
-            output=bsc_cor_raw.auto_string(file_path_tgt),
+            input=bsc_cor_raw.ensure_string(file_path_src),
+            output=bsc_cor_raw.ensure_string(file_path_tgt),
             time_mark=bsc_cor_time.BscTimestamp.to_string(
                 cls.TIME_MARK_PATTERN, _base.StgFileOpt(file_path_src).get_mtime()
             )
@@ -603,11 +603,11 @@ class ImgOiioOpt(object):
             )
             cmd_args = [
                 bsc_cor_execute.BscBinExecute.oiiotool(),
-                '-i "{}"'.format(bsc_cor_raw.auto_string(file_opt_src.get_path())),
+                '-i "{}"'.format(bsc_cor_raw.ensure_string(file_opt_src.get_path())),
                 '--attrib:type=string DateTime "{}"'.format(time_mark),
                 '--adjust-time ',
                 '--threads 1',
-                '-o "{}"'.format(bsc_cor_raw.auto_string(file_opt_tgt.get_path())),
+                '-o "{}"'.format(bsc_cor_raw.ensure_string(file_opt_tgt.get_path())),
             ]
             bsc_cor_process.BscProcess.execute_as_trace(
                 ' '.join(cmd_args)
@@ -682,7 +682,7 @@ class ImgOiioOptForThumbnail(object):
                 #
                 cmd_args = [
                     bsc_cor_execute.BscBinExecute.oiiotool(),
-                    '-i "{}"'.format(bsc_cor_raw.auto_string(self._file_path)),
+                    '-i "{}"'.format(bsc_cor_raw.ensure_string(self._file_path)),
                     '--resize {}x0'.format(width),
                     '-o "{}"'.format(file_path_)
                 ]
@@ -702,7 +702,7 @@ class ImgOiioOptForThumbnail(object):
                 #
                 cmd_args = [
                     bsc_cor_execute.BscBinExecute.oiiotool(),
-                    '-i "{}"'.format(bsc_cor_raw.auto_string(self._file_path)),
+                    '-i "{}"'.format(bsc_cor_raw.ensure_string(self._file_path)),
                     '--resize {}x0'.format(width),
                     '-o "{}"'.format(file_path_)
                 ]
@@ -733,7 +733,7 @@ class ImgOiioOptForThumbnail(object):
                 #
                 cmd_args = [
                     bsc_cor_execute.BscBinExecute.oiiotool(),
-                    '-i "{}"'.format(bsc_cor_raw.auto_string(self._file_path)),
+                    '-i "{}"'.format(bsc_cor_raw.ensure_string(self._file_path)),
                     # use fit, move to center
                     '--fit {}x{}'.format(width, width),
                     # may be png has no alpha channel
@@ -788,11 +788,11 @@ class ImgOiioOptForThumbnail(object):
             )
             cmd_args = [
                 bsc_cor_execute.BscBinExecute.oiiotool(),
-                '-i "{}"'.format(bsc_cor_raw.auto_string(file_opt_src.get_path())),
+                '-i "{}"'.format(bsc_cor_raw.ensure_string(file_opt_src.get_path())),
                 '--attrib:type=string DateTime "{}"'.format(time_mark),
                 '--adjust-time ',
                 '--threads 1',
-                '-o "{}"'.format(bsc_cor_raw.auto_string(file_opt_tgt.get_path())),
+                '-o "{}"'.format(bsc_cor_raw.ensure_string(file_opt_tgt.get_path())),
             ]
             bsc_cor_process.BscProcess.execute_with_result(
                 ' '.join(cmd_args)

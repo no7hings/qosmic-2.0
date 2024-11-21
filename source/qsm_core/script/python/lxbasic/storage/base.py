@@ -610,7 +610,7 @@ class StgUser(object):
 class StgSystem(object):
     @classmethod
     def open_directory(cls, path):
-        path = _cor_raw.auto_string(path)
+        path = _cor_raw.ensure_string(path)
         if _cor_base.BscSystem.get_is_windows():
             # must replace '/' to '\\', when path is share like "//nas/test.text"
             cmd = 'explorer "{}"'.format(path.replace('/', '\\'))
@@ -629,7 +629,7 @@ class StgSystem(object):
 
     @classmethod
     def open_directory_force(cls, path):
-        path = _cor_raw.auto_string(path)
+        path = _cor_raw.ensure_string(path)
         if os.path.exists(path) is False:
             path = StgExtra.get_exists_component(path)
 
@@ -978,7 +978,7 @@ class StgPathOpt(object):
         return path
 
     @classmethod
-    def auto_string(cls, path):
+    def ensure_string(cls, path):
         if isinstance(path, six.text_type):
             return path.encode('utf-8')
         return path
@@ -1232,7 +1232,7 @@ class StgDirectoryOpt(StgPathOpt):
         super(StgDirectoryOpt, self).__init__(path)
 
     def __str__(self):
-        return 'directory(path="{}")'.format(self.auto_string(self._path))
+        return 'directory(path="{}")'.format(self.ensure_string(self._path))
 
     def __repr__(self):
         return self.__str__()
@@ -1343,7 +1343,7 @@ class StgFileOpt(StgPathOpt):
         self._file_type = file_type
 
     def __str__(self):
-        return 'file(path="{}")'.format(self.auto_string(self._path))
+        return 'file(path="{}")'.format(self.ensure_string(self._path))
 
     def __repr__(self):
         return self.__str__()
@@ -1458,6 +1458,8 @@ class StgFileOpt(StgPathOpt):
                     y,
                     indent=4,
                     default_flow_style=False,
+                    allow_unicode=True,
+                    # default_style='\'',
                 )
         elif self.ext in {'.png'}:
             with open(self.path, 'wb') as f:
@@ -1472,7 +1474,7 @@ class StgFileOpt(StgPathOpt):
 
     def append(self, text):
         with open(self.path, 'a+') as f:
-            text = _cor_raw.auto_string(text)
+            text = _cor_raw.ensure_string(text)
             f.write('{}\n'.format(text))
             f.close()
 

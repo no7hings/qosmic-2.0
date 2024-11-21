@@ -1,27 +1,16 @@
 # coding:utf-8
 import collections
+
 import re
 
-import os
+import _abc
 
 
-class MayaAscii(object):
+class MayaAscii(_abc.AbsDotfile):
     SEP = '\n'
 
-    def __init__(self, file_path):
-        self._file_path = file_path
-        if os.path.isfile(self._file_path) is False:
-            raise RuntimeError()
-
-        self._load_lines()
-
-    def _load_lines(self):
-        self._lines = []
-        if self._file_path is not None:
-            with open(self._file_path) as f:
-                data = f.read()
-                sep = self.SEP
-                self._lines = map(lambda x: r'{}{}'.format(x, sep), data.split(sep))
+    def __init__(self, *args, **kwargs):
+        super(MayaAscii, self).__init__(*args, **kwargs)
 
     def get_node_dict(self):
         dict_ = collections.OrderedDict()

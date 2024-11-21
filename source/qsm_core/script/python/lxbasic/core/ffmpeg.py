@@ -696,7 +696,7 @@ class BscFfmpeg(object):
         return path
 
     @staticmethod
-    def auto_string(text):
+    def ensure_string(text):
         if isinstance(text, six.text_type):
             return text.encode('utf-8')
         return text

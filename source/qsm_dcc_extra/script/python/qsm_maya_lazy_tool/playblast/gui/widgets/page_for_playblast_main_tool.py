@@ -339,7 +339,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
                         message='拍屏结束了, 是否打开视频?',
                         # todo? exec must use unicode
                         ok_python_script='import os; os.startfile("{}".decode("utf-8"))'.format(
-                            bsc_core.auto_string(movie_file_path)
+                            bsc_core.ensure_string(movie_file_path)
                         ),
                         status='normal'
                     )

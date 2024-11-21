@@ -109,7 +109,7 @@ class Entity(dict):
         else:
             keys = self.keys()
             keys.sort()
-        return '\n'.join(['{}: {}'.format(x, bsc_core.auto_string(self[x])) for x in keys])
+        return '\n'.join(['{}: {}'.format(x, bsc_core.ensure_string(self[x])) for x in keys])
 
     def is_root(self):
         return self.path == '/'
@@ -122,7 +122,7 @@ class Entity(dict):
             [
                 '{}: {}'.format(
                     x[1],
-                    bsc_core.auto_string(
+                    bsc_core.ensure_string(
                         bsc_core.BscTimePrettify.to_prettify_by_timetuple_(
                             self[x[0]].timetuple(), language
                         ) if x[0] in {'ctime', 'mtime'} else self[x[0]]

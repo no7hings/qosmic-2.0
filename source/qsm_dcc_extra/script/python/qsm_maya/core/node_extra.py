@@ -385,8 +385,12 @@ class EtrNodeOpt(object):
     def to_dict(self):
         pass
 
-    def apply_properties(self, data):
+    def set_dict(self, data, atr_excludes=None):
         for k, v in data.items():
+            if isinstance(atr_excludes, (set, tuple, list)):
+                if k in atr_excludes:
+                    continue
+
             self.set(k, v)
 
     @classmethod

@@ -140,7 +140,7 @@ class ToolsetUnitForCfxRigExport(
                             # todo? exec must use unicode
                             ok_python_script='import os; os.startfile("{}".decode("utf-8"))'.format(
                                 # to string
-                                bsc_core.auto_string(directory_path)
+                                bsc_core.ensure_string(directory_path)
                             ),
                             status='normal'
                         )

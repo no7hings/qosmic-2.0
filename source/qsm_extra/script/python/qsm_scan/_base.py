@@ -223,7 +223,7 @@ class AbsEntity(object):
         self._push_next_entities_cache(cache_key, variants_list)
 
         bsc_log.Log.trace_result(
-            'scan {} for: {}'.format(entity_type, bsc_core.auto_string(self._path))
+            'scan {} for: {}'.format(entity_type, bsc_core.ensure_string(self._path))
         )
 
         self._next_entities_cache_opt_dict[cache_key] = entities_cache_opt
@@ -265,7 +265,7 @@ class AbsEntity(object):
 
     def __str__(self):
         return '{}(path="{}")'.format(
-            self.Type, bsc_core.auto_string(self._path),
+            self.Type, bsc_core.ensure_string(self._path),
         )
 
     def __repr__(self):
@@ -440,7 +440,7 @@ class AbsTask(object):
 
     def __str__(self):
         return '{}(path="{}")'.format(
-            self.Type, bsc_core.auto_string(self._path),
+            self.Type, bsc_core.ensure_string(self._path),
         )
 
     def __repr__(self):

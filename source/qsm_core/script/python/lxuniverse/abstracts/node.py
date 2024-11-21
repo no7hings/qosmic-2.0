@@ -1344,7 +1344,7 @@ class AbsStgFile(
     def __str__(self):
         return '{}(path="{}")'.format(
             self.__class__.__name__,
-            bsc_core.auto_string(self.get_path())
+            bsc_core.ensure_string(self.get_path())
         )
 
     def __repr__(self):

@@ -35,8 +35,8 @@ class AbsShapeOpt(object):
     def shape_path(self):
         return self._shape_path
 
-    def apply_properties(self, properties):
-        self._shape_opt.apply_properties(properties)
+    def set_dict(self, properties):
+        self._shape_opt.set_dict(properties)
 
     def get_properties(self):
         return {}

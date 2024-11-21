@@ -38,7 +38,7 @@ class UrlValue(object):
             return s
 
     @staticmethod
-    def auto_string(path):
+    def ensure_string(path):
         if isinstance(path, six.text_type):
             return path.encode('utf-8')
         return path
@@ -46,7 +46,7 @@ class UrlValue(object):
     @classmethod
     def quote(cls, text):
         return urllib.quote_plus(
-            cls.auto_string(text)
+            cls.ensure_string(text)
         )
 
     @classmethod

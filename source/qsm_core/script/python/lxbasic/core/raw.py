@@ -18,7 +18,7 @@ import collections
 import itertools
 
 
-def auto_string(text):
+def ensure_string(text):
     if isinstance(text, six.text_type):
         return text.encode('utf-8')
     return text
@@ -28,6 +28,7 @@ def auto_unicode(text):
     if not isinstance(text, six.text_type):
         return text.decode('utf-8')
     return text
+
 
 def ensure_unicode(s):
     if isinstance(s, six.text_type):
@@ -649,7 +650,7 @@ class BscInteger:
             for i in list_:
                 s = int(abs(value))/i[0]
                 if s:
-                    return str(round(float(value)/float(i[0]), 2))+auto_string(i[1])
+                    return str(round(float(value)/float(i[0]), 2))+ensure_string(i[1])
         if isinstance(value, int):
             return str(value)
         return str(round(float(value), 2))
@@ -974,7 +975,7 @@ class BscTextOpt(object):
             d = 1000.0
             s_p_min, s_p_max = s_p
             v_p_min, v_p_max = v_p
-            hash_ = hashlib.md5(auto_string(string)).hexdigest()
+            hash_ = hashlib.md5(ensure_string(string)).hexdigest()
             h_a = int(hash_[0:8], 16)
             s_a = int(hash_[8:16], 16)
             v_a = int(hash_[16:24], 16)
@@ -1056,7 +1057,7 @@ class BscTextOpt(object):
         return fnmatch.filter([self.__raw], p)
 
 
-class RawStrCamelcaseMtd(object):
+class BscCamelcaseStr(object):
     def __init__(self, string):
         self.__raw = string
 
@@ -1073,7 +1074,7 @@ class RawStrUnderlineMtd(object):
     @classmethod
     def find_words(cls, string):
         if isinstance(string, six.text_type):
-            string = auto_string(string)
+            string = ensure_string(string)
         return re.findall(r'([A-Za-z]+)', string)
 
 

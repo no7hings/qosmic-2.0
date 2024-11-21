@@ -17,7 +17,7 @@ class AbsQtWebServerForWindowNotice(QtCore.QObject):
     NAME = 'Qosmic Window Notice'
 
     @staticmethod
-    def auto_string(text):
+    def ensure_string(text):
         if isinstance(text, six.text_type):
             return text.encode('utf-8')
         return text
@@ -65,7 +65,7 @@ class AbsQtWebServerForWindowNotice(QtCore.QObject):
 
     @qt_slot(str)
     def _process_fnc_(self, text):
-        text = self.auto_string(text)
+        text = self.ensure_string(text)
         self._window._show_notice_(text)
         for i in self._sockets:
             i.sendTextMessage(text)
@@ -113,7 +113,7 @@ class QtWebServerForWindowNotice(AbsQtWebServerForWindowNotice):
 
     @qt_slot(str)
     def _process_fnc_(self, text):
-        text = self.auto_string(text)
+        text = self.ensure_string(text)
         self._window._show_notice_(text)
         for i in self._sockets:
             i.sendTextMessage(text)
@@ -132,7 +132,7 @@ class QtWebServerForDcc(AbsQtWebServerForWindowNotice):
 
     @qt_slot(str)
     def _process_fnc_(self, text):
-        text = self.auto_string(text)
+        text = self.ensure_string(text)
         exec text
         for i in self._sockets:
             i.sendTextMessage(text)
