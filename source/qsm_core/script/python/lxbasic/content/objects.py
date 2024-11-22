@@ -363,10 +363,9 @@ class AbsContent(object):
                 return str(repr(data))
 
     def __str__(self):
-        return json.dumps(
-            self.value,
-            indent=4
-        )
+        return _base.ToString(
+            self.get_value()
+        ).generate()
 
     def __repr__(self):
         return '{}({})'.format(

@@ -23,8 +23,8 @@ option:
 build:
     main:
         tab:
-            name: 'Main'
-            name_chs: '主要'
+            name: 'Basic'
+            name_chs: '基础'
 
             tool_tip:
                 |-

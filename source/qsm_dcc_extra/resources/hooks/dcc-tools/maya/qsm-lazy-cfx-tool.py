@@ -2,9 +2,9 @@
 
 
 def main(session):
-    import qsm_maya_lazy_tool.cfx.gui.widgets as gui_widgets
+    import qsm_maya_lazy_tool.cfx.gui.main as m
 
-    w = gui_widgets.PrxSubPanelForCfxTool(None, session)
+    w = m.PrxLazyCfxTool(None, session)
     w.show_window_auto()
 
 

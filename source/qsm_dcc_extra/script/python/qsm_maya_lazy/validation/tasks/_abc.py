@@ -11,7 +11,7 @@ import lxbasic.content as bsc_content
 
 import lxbasic.resource as bsc_resource
 
-import qsm_lazy.validation.core as qsm_lzy_vld_core
+import qsm_lazy.validation.core as lzy_vld_core
 
 import qsm_maya.core as qsm_mya_core
 
@@ -27,7 +27,7 @@ class AbsValidationTask(object):
         self._namespace = namespace
         self._file_path = qsm_mya_core.ReferencesCache().get_file(namespace)
 
-        self._validation_options = qsm_lzy_vld_core.DccValidationOptions(self.OPTION_KEY)
+        self._validation_options = lzy_vld_core.DccValidationOptions(self.OPTION_KEY)
 
         self._result_content = bsc_content.Dict()
 

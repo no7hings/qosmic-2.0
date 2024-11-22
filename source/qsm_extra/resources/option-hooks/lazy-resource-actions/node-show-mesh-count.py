@@ -7,7 +7,7 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxbasic.storage as bsc_storage
 
-import qsm_screw.core as qsm_lzy_src_core
+import qsm_screw.core as lzy_src_core
 
 
 class Main(object):
@@ -21,7 +21,7 @@ class Main(object):
             page = window.gui_get_current_page()
             node_opt = page._gui_node_opt
             scr_stage_key = self._option_opt.get('stage_key')
-            self._scr_stage = qsm_lzy_src_core.Stage(scr_stage_key)
+            self._scr_stage = lzy_src_core.Stage(scr_stage_key)
 
             scr_entities = node_opt.gui_get_checked_or_selected_scr_entities()
             if scr_entities:

@@ -19,7 +19,7 @@ import qsm_general.core as qsm_gnl_core
 
 import qsm_scan as qsm_scan
 
-import qsm_lazy.validation.scripts as qsm_lzy_vld_scripts
+import qsm_lazy.validation.scripts as lzy_vld_scripts
 
 
 class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
@@ -252,7 +252,7 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
 
         self._scan_root = qsm_scan.Stage().get_root()
 
-        self._validation_opt = qsm_lzy_vld_scripts.RigValidationOpt()
+        self._validation_opt = lzy_vld_scripts.RigValidationOpt()
 
         self._file_to_item_dict = {}
 

@@ -7,7 +7,7 @@ import lxgui.qt.widgets as qt_widgets
 
 import lxbasic.storage as bsc_storage
 
-import qsm_screw.core as qsm_lzy_src_core
+import qsm_screw.core as lzy_src_core
 
 
 class Main(object):
@@ -18,7 +18,7 @@ class Main(object):
     def execute(self):
         window = self._session.find_window()
         if window is not None:
-            import qsm_lazy_tool.resource.gui.widgets as gui_widgets
+            import qsm_lazy_tool.resource.gui.subpanels.assign as subpanel_assign
 
             scr_stage_key = self._option_opt.get('stage_key')
 
@@ -28,7 +28,7 @@ class Main(object):
             if not scr_entities:
                 return
 
-            w = gui_widgets.PrxSubPanelForAssign(window, self._session)
+            w = subpanel_assign.PrxSubPanelForAssign(window, self._session)
 
             page_key = 'type'
             w.gui_setup_pages_for([page_key])

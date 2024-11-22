@@ -35,6 +35,30 @@ build:
                 name: 'Close'
                 name_chs: '关闭'
 
+    gnl:
+        name: 'General'
+        name_chs: '通用'
+
+        tool_tip:
+            |-
+            To be supplemented.
+
+        tool_tip_chs:
+            |-
+            待补充。
+
+        options:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+                task_unit:
+                    widget: enumerate
+                    name: 'Task Unit'
+                    name_chs: '任务单元'
+                    options: ['main', 'test']
+                    default: 'main'
+
     cfx_rig:
         name: 'CFX Rig'
         name_chs: '解算预设'

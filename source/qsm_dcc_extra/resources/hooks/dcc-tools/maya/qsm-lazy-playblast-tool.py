@@ -2,8 +2,8 @@
 
 
 def main(session):
-    import qsm_maya_lazy_tool.playblast.gui.widgets as gui_widgets
-    w = gui_widgets.PrxSubPanelForLazyPlayblast(None, session)
+    import qsm_maya_lazy_tool.playblast.gui.main as m
+    w = m.PrxLazyPlayblastTool(None, session)
 
     w.show_window_auto()
 

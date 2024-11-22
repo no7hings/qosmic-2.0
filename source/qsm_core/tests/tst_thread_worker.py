@@ -4,7 +4,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.web as bsc_web
 
-import qsm_prc_task.process as qsm_prc_tsk_process
+import qsm_lazy.backstage.process as lzy_bks_process
 
 ts = []
 

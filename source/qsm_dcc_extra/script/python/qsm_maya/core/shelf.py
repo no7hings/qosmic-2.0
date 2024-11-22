@@ -96,4 +96,3 @@ class Shelf(object):
             edit=1,
             menuItem=(name, 'python(\"{}\")'.format(script.replace('"', r'\"')))
         )
-

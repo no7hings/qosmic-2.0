@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxgui.proxy.core as gui_prx_core
 
-import qsm_lazy_tool.resource.gui.widgets as gui_widgets
+import qsm_lazy_tool.resource.gui.subpanels.register as p
 
 import os
 
@@ -17,5 +17,5 @@ def fnc(w):
 
 
 gui_prx_core.GuiProxyUtil.show_window_proxy_auto(
-    gui_widgets.PrxSubPanelForRegister, window=None, session=None, window_process_fnc=fnc
+    p.PrxSubPanelForRegister, window=None, session=None, window_process_fnc=fnc
 )

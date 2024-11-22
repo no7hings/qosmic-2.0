@@ -12,8 +12,8 @@ bsc_core.PyReloader2(
 
 import lxgui.proxy.core as gui_prx_core
 
-import qsm_maya_lazy_tool.resource.gui.widgets as gui_widgets
+import qsm_maya_lazy_tool.resource_cfx.gui.main as m
 
 gui_prx_core.GuiProxyUtil.show_window_proxy_auto(
-    gui_widgets.PrxSubPanelForTool, window=None, session=None
+    m.PrxLazyResourceCfxTool, window=None, session=None
 )

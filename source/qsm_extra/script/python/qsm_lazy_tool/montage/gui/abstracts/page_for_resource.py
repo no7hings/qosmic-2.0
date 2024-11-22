@@ -28,16 +28,13 @@ import lxgui.proxy.graphs as gui_prx_graphs
 import lxgui.qt.graph_widgets as gui_qt_graphs
 
 
-class AbsPrxPageForResource(gui_prx_abstracts.AbsPrxWidget):
+class AbsPrxPageForResource(gui_prx_widgets.PrxBasePage):
     QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
 
     GUI_KEY = 'resource'
 
-    def __init__(self, window, session, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(AbsPrxPageForResource, self).__init__(*args, **kwargs)
-
-        self._window = window
-        self._session = session
 
         self.gui_page_setup_fnc()
 

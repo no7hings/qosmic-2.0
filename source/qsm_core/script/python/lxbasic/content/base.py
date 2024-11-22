@@ -536,33 +536,17 @@ class ToString(object):
             return text.encode('utf-8')
         return text
 
-    @staticmethod
-    def auto_unicode(text):
-        if not isinstance(text, six.text_type):
-            return text.decode('utf-8')
-        return text
-
-    @staticmethod
-    def ensure_unicode(s):
-        if isinstance(s, six.text_type):
-            return s
-        elif isinstance(s, bytes):
-            return s.decode('utf-8')
-        else:
-            return s
-
     def __init__(self, value):
         self._indent = 4
-        self._default_quotes = self.ensure_unicode('"')
+        self._default_quotes = self.ensure_string('"')
         self._data = value
 
         self._lines = self._next_prc(value, 0, None, True)
 
     def _key_prc(self, key):
         if isinstance(key, six.string_types):
-            return self._default_quotes+self.ensure_unicode(key)+self._default_quotes
-        else:
-            return str(type(key))
+            return self._default_quotes+self.ensure_string(key)+self._default_quotes
+        return self._default_quotes+str(type(key))+self._default_quotes
 
     def _indent_prc(self, depth):
         return depth*self._indent*' '
@@ -573,7 +557,7 @@ class ToString(object):
         elif isinstance(value, (int, float)):
             return self._num_prc(value, depth, key, is_itr_end)
         elif isinstance(value, six.string_types):
-            return self._str_prc(value, depth, key, is_itr_end)
+            return self._txt_prc(value, depth, key, is_itr_end)
         elif isinstance(value, tuple):
             return self._tuple_prc(value, depth, key, is_itr_end)
         elif isinstance(value, list):
@@ -584,11 +568,11 @@ class ToString(object):
             return self._error_value_prc(value, depth, key, is_itr_end)
 
     def _error_value_prc(self, value, depth, key=None, is_itr_end=False):
-        value_str = str(type(value))
+        value_str = self._default_quotes+str(type(value))+self._default_quotes
         if key is None:
-            line = self.ensure_unicode(self._indent_prc(depth)+value_str)
+            line = self.ensure_string(self._indent_prc(depth)+value_str)
         else:
-            line = self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+value_str)
+            line = self.ensure_string(self._indent_prc(depth)+self._key_prc(key)+': '+value_str)
 
         if is_itr_end is True:
             line += '\n'
@@ -601,11 +585,11 @@ class ToString(object):
         if value:
             if key is None:
                 lines.append(
-                    self.ensure_unicode(self._indent_prc(depth)+'(\n')
+                    self.ensure_string(self._indent_prc(depth)+'(\n')
                 )
             else:
                 lines.append(
-                    self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+'(\n')
+                    self.ensure_string(self._indent_prc(depth)+self._key_prc(key)+': '+'(\n')
                 )
 
             c = len(value)
@@ -614,12 +598,12 @@ class ToString(object):
                     self._next_prc(i, depth+1, None, i_idx==(c-1))
                 )
 
-            end_line = self.ensure_unicode(self._indent_prc(depth)+')')
+            end_line = self.ensure_string(self._indent_prc(depth)+')')
         else:
             if key is None:
-                end_line = self.ensure_unicode(self._indent_prc(depth)+'()')
+                end_line = self.ensure_string(self._indent_prc(depth)+'()')
             else:
-                end_line = self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+'()')
+                end_line = self.ensure_string(self._indent_prc(depth)+self._key_prc(key)+': '+'()')
 
         if is_itr_end is True:
             end_line += '\n'
@@ -635,11 +619,11 @@ class ToString(object):
         if value:
             if key is None:
                 lines.append(
-                    self.ensure_unicode(self._indent_prc(depth)+'[\n')
+                    self.ensure_string(self._indent_prc(depth)+'[\n')
                 )
             else:
                 lines.append(
-                    self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+'[\n')
+                    self.ensure_string(self._indent_prc(depth)+self._key_prc(key)+': '+'[\n')
                 )
 
             c = len(value)
@@ -648,12 +632,12 @@ class ToString(object):
                     self._next_prc(i, depth+1, None, i_idx==(c-1))
                 )
 
-            end_line = self.ensure_unicode(self._indent_prc(depth)+']')
+            end_line = self.ensure_string(self._indent_prc(depth)+']')
         else:
             if key is None:
-                end_line = self.ensure_unicode(self._indent_prc(depth)+'[]')
+                end_line = self.ensure_string(self._indent_prc(depth)+'[]')
             else:
-                end_line = self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+'[]')
+                end_line = self.ensure_string(self._indent_prc(depth)+self._key_prc(key)+': '+'[]')
 
         if is_itr_end is True:
             end_line += '\n'
@@ -669,11 +653,11 @@ class ToString(object):
         if value:
             if key is None:
                 lines.append(
-                    self.ensure_unicode(self._indent_prc(depth)+'{\n')
+                    self.ensure_string(self._indent_prc(depth)+'{\n')
                 )
             else:
                 lines.append(
-                    self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+'{\n')
+                    self.ensure_string(self._indent_prc(depth)+self._key_prc(key)+': '+'{\n')
                 )
 
             c = len(value)
@@ -682,12 +666,12 @@ class ToString(object):
                     self._next_prc(v, depth+1, k, i_idx==(c-1))
                 )
 
-            end_line = self.ensure_unicode(self._indent_prc(depth)+'}')
+            end_line = self.ensure_string(self._indent_prc(depth)+'}')
         else:
             if key is None:
-                end_line = self.ensure_unicode(self._indent_prc(depth)+'{}')
+                end_line = self.ensure_string(self._indent_prc(depth)+'{}')
             else:
-                end_line = self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+'{}')
+                end_line = self.ensure_string(self._indent_prc(depth)+self._key_prc(key)+': '+'{}')
 
         if is_itr_end is True:
             end_line += '\n'
@@ -699,9 +683,9 @@ class ToString(object):
 
     def _bool_prc(self, value, depth, key=None, is_itr_end=False):
         if key is None:
-            line = self.ensure_unicode(self._indent_prc(depth)+str(value))
+            line = self.ensure_string(self._indent_prc(depth)+str(value))
         else:
-            line = self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+str(value))
+            line = self.ensure_string(self._indent_prc(depth)+self._key_prc(key)+': '+str(value))
 
         if is_itr_end is True:
             line += '\n'
@@ -711,9 +695,9 @@ class ToString(object):
 
     def _num_prc(self, value, depth, key=None, is_itr_end=False):
         if key is None:
-            line = self.ensure_unicode(self._indent_prc(depth)+str(value))
+            line = self.ensure_string(self._indent_prc(depth)+str(value))
         else:
-            line = self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+str(value))
+            line = self.ensure_string(self._indent_prc(depth)+self._key_prc(key)+': '+str(value))
 
         if is_itr_end is True:
             line += '\n'
@@ -721,12 +705,12 @@ class ToString(object):
             line += ',\n'
         return [line]
 
-    def _str_prc(self, value, depth, key=None, is_itr_end=False):
-        value_str = self._default_quotes+self.ensure_unicode(value)+self._default_quotes
+    def _txt_prc(self, value, depth, key=None, is_itr_end=False):
+        value_str = self._default_quotes+self.ensure_string(value)+self._default_quotes
         if key is None:
-            line = self.ensure_unicode(self._indent_prc(depth)+value_str)
+            line = self.ensure_string(self._indent_prc(depth)+value_str)
         else:
-            line = self.ensure_unicode(self._indent_prc(depth)+self._key_prc(key)+': '+value_str)
+            line = self.ensure_string(self._indent_prc(depth)+self._key_prc(key)+': '+value_str)
 
         if is_itr_end is True:
             line += '\n'
@@ -735,7 +719,7 @@ class ToString(object):
         return [line]
 
     def generate(self):
-        return self.ensure_string(u''.join(self._lines))
+        return self.ensure_string(''.join(self._lines))
 
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@ import functools
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy.resource.scripts as qsm_lzy_rsc_scripts
+import qsm_lazy.resource.scripts as lzy_rsc_scripts
 
 
 class Main(object):
@@ -17,7 +17,7 @@ class Main(object):
         with window.gui_progressing(maximum=len(scr_entities)) as g_p:
             for i_scr_entity in scr_entities:
                 i_scr_entity_path = i_scr_entity.path
-                i_opt = qsm_lzy_rsc_scripts.AssetUnitAssemblyGenerateOpt(
+                i_opt = lzy_rsc_scripts.AssetUnitAssemblyGenerateOpt(
                     scr_stage_key, i_scr_entity_path
                 )
                 i_args = i_opt.generate_args()

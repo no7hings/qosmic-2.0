@@ -1,10 +1,10 @@
 # coding:utf-8
 import lxbasic.web as bsc_web
 
-import qsm_prc_task.process as qsm_prc_tsk_process
+import qsm_lazy.backstage.process as lzy_bks_process
 
 skt = bsc_web.WebSocket(
-    qsm_prc_tsk_process.NoticeWebServerBase.HOST, 12306
+    lzy_bks_process.NoticeWebServerBase.HOST, 12306
 )
 
 print skt.is_valid()

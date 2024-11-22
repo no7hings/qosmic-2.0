@@ -2,8 +2,9 @@
 
 
 def main(session):
-    import qsm_maya_lazy_tool.animation.gui.widgets as gui_widgets
-    w = gui_widgets.PrxPanelForAnimationTool(window=None, session=None)
+    import qsm_maya_lazy_tool.animation.gui.main as m
+
+    w = m.PrxLazyAnimationTool(window=None, session=None)
     w.show_window_auto()
 
 

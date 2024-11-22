@@ -10,7 +10,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 import qsm_screw.core as qsm_scr_core
 
 
-class AbsPrxPanelForResourceManager(gui_prx_widgets.PrxBasePanel):
+class AbsPrxResourceTool(gui_prx_widgets.PrxBasePanel):
     CONFIGURE_KEY = 'lazy-resource/gui/manager'
 
     KEY_TAB_KEYS = 'lazy-resource-manager.page_keys'
@@ -117,7 +117,7 @@ class AbsPrxPanelForResourceManager(gui_prx_widgets.PrxBasePanel):
         prx_sca.add_widget(prx_page)
 
     def __init__(self, window, session, *args, **kwargs):
-        super(AbsPrxPanelForResourceManager, self).__init__(window, session, *args, **kwargs)
+        super(AbsPrxResourceTool, self).__init__(window, session, *args, **kwargs)
 
     def gui_close_fnc(self):
         page_keys = self._prx_tab_view.get_all_page_keys()

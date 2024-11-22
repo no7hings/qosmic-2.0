@@ -94,8 +94,14 @@ class AbsPrxUnitForTaskTool(gui_prx_widgets.PrxBaseUnit):
         self._left_visible_swap_tool.set_checked(True)
         self._left_visible_swap_tool.connect_check_toggled_to(self._on_gui_left_visible_swap)
 
+        self._task_qt_button = gui_qt_widgets.QtIconPressButton()
+        self._main_prx_tool_box.add_widget(self._task_qt_button)
+        self._task_qt_button._set_name_text_('task')
+        self._task_qt_button._set_icon_name_('task')
+
         self._task_qt_info_label = gui_qt_widgets.QtInfoBubble()
         self._main_prx_tool_box.add_widget(self._task_qt_info_label)
+        self._task_qt_info_label._set_text_('N/a')
         self._task_qt_info_label._set_style_(
             self._task_qt_info_label.Style.Frame
         )
@@ -150,6 +156,7 @@ class AbsPrxUnitForTaskTool(gui_prx_widgets.PrxBaseUnit):
             self.do_gui_refresh_toolsets
         )
 
+        self._prx_h_splitter.set_contract_enable(False)
         self._prx_h_splitter.set_fixed_size_at(0, 320)
 
     def gui_setup_post_fnc(self):

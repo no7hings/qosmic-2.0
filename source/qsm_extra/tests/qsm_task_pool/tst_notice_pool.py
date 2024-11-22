@@ -1,7 +1,7 @@
 # coding:utf-8
-import qsm_prc_task.core as qsm_tsk_core
+import qsm_lazy.backstage.core as lzy_bks_core
 
-p = qsm_tsk_core.NoticePool.generate()
+p = lzy_bks_core.NoticePool.generate()
 
 print p
 

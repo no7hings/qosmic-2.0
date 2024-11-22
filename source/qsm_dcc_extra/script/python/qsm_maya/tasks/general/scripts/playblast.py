@@ -17,7 +17,7 @@ import lxbasic.storage as bsc_storage
 
 import qsm_general.process as qsm_gnl_process
 
-import qsm_general.prc_task as qsm_prc_task
+import qsm_general.prc_task as qsm_lazy.backstage
 
 import qsm_maya.core as qsm_mya_core
 
@@ -278,7 +278,7 @@ class PlayblastOpt(object):
 
             task_window.show_window_auto(exclusive=False)
         elif scheme == 'backstage':
-            if qsm_prc_task.BackstageTaskSubmit.check_is_valid() is False:
+            if qsm_lazy.backstage.BackstageTaskSubmit.check_is_valid() is False:
                 return
 
             camera = qsm_mya_core.Camera.get_non_default_with_dialog()
@@ -293,7 +293,7 @@ class PlayblastOpt(object):
                 texture_enable=True, light_enable=False, shadow_enable=False
             )
 
-            qsm_prc_task.BackstageTaskSubmit.execute(
+            qsm_lazy.backstage.BackstageTaskSubmit.execute(
                 task_group=None, task_type='playblast', task_name=task_name,
                 cmd_script=cmd_script, icon_name='application/maya',
                 file_path=file_path, output_file_path=movie_file_path,
@@ -308,7 +308,7 @@ class PlayblastOpt(object):
                 )
             )
         elif scheme == 'farm':
-            if qsm_prc_task.FarmTaskSubmit.check_is_valid() is False:
+            if qsm_lazy.backstage.FarmTaskSubmit.check_is_valid() is False:
                 return
 
             camera = qsm_mya_core.Camera.get_non_default_with_dialog()
@@ -323,7 +323,7 @@ class PlayblastOpt(object):
                 texture_enable=True, light_enable=False, shadow_enable=False
             )
 
-            qsm_prc_task.FarmTaskSubmit.execute_by_hook_option(option_hook)
+            qsm_lazy.backstage.FarmTaskSubmit.execute_by_hook_option(option_hook)
 
     @classmethod
     def show_window(

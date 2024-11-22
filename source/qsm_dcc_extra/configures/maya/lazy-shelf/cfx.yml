@@ -1,0 +1,89 @@
+build:
+    name: 'CFX'
+    name_chs: '解算'
+
+    shelves:
+        workspace:
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs: '任务。'
+
+            tools:
+                tool_0:
+                    name: 'Lazy Workspace'
+                    name_chs: '懒人工作区域'
+                    tool_tip: 'To be supplemented.'
+                    tool_tip_chs: '待补充。'
+                    button_style: 'text_and_icon'
+                    button_name: 'Work'
+                    button_name_chs: '工作'
+                    icon: 'lazy/workspace'
+                    script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-workspace")'
+                    dbl_script: ''
+
+        cfx:
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs: '解算。'
+
+            tools:
+                tool_0:
+                    name: 'Lazy CFX Tool'
+                    name_chs: '懒人解算工具'
+                    tool_tip: 'To be supplemented.'
+                    tool_tip_chs: '待补充。'
+                    button_style: 'text_and_icon'
+                    button_name: 'CFX'
+                    button_name_chs: '解算'
+                    icon: 'tool/kit'
+                    script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-cfx-tool")'
+                    dbl_script: ''
+
+        general:
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs: '角色和道具。'
+
+            tools:
+                tool_0:
+                    name: 'Lazy Playblast Tool'
+                    name_chs: '懒人拍屏工具'
+                    tool_tip: 'To be supplemented.'
+                    tool_tip_chs:
+                        |-
+                        点击打开拍屏工具
+                    button_style: 'text_and_icon'
+                    button_name: 'PLB'
+                    button_name_chs: '拍屏'
+                    icon: 'application/playblast'
+                    script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-playblast-tool")'
+
+                tool_1:
+                    name: 'Playblast'
+                    name_chs: '拍屏'
+                    tool_tip: 'To be supplemented.'
+                    tool_tip_chs:
+                        |-
+                        点击开始拍屏:
+                            这个拍屏会自动将简模（火柴人）和GPU切换成原始模型，拍屏结束后会还原成简模和GPU;
+                            这个拍屏工具输出的视频更小，更清晰，默认会自动生成在MAYA文件相同的目录。
+
+                    button_style: 'text_and_icon'
+                    button_name: 'PLB'
+                    button_name_chs: '拍屏'
+                    icon: 'tool/play-start'
+                    icon_text: 'P'
+                    script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-playblast-script")'
+
+                    actions:
+                        action_0:
+                            name: 'Playblast (subprocess)'
+                            name_chs: '拍屏（子进程）'
+                            script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-playblast-script&scheme=subprocess")'
+
+                        action_1:
+                            name: 'Playblast (backstage)'
+                            name_chs: '拍屏（后台）'
+                            script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-playblast-script&scheme=backstage")'
+
+                        action_2:
+                            name: 'Playblast (farm)'
+                            name_chs: '拍屏（农场）'
+                            script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-playblast-script&scheme=farm")'

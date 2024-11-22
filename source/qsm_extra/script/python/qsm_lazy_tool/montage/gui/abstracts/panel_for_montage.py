@@ -1,8 +1,6 @@
 # coding:utf-8
 import functools
 
-import lxbasic.resource as bsc_resource
-
 import lxgui.core as gui_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
