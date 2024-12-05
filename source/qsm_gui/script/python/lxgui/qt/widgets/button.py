@@ -1156,26 +1156,26 @@ class QtIconToggleButton(
         qt_palette = _qt_core.GuiQtDcc.generate_qt_palette()
         self.setPalette(qt_palette)
         self.setFont(_qt_core.QtFonts.NameNormal)
-        #
+
         self.setFixedSize(20, 20)
-        #
+
         self.installEventFilter(self)
-        #
+
         self.setFocusPolicy(QtCore.Qt.NoFocus)
-        #
+
         self._init_widget_base_def_(self)
         self._init_frame_base_def_(self)
         self._init_icon_base_def_(self)
         self._init_name_base_def_(self)
         self._init_menu_base_def_(self)
-        #
+
         self._init_action_for_hover_def_(self)
         self._init_action_base_def_(self)
         self._init_action_for_check_def_(self)
         self._set_check_enable_(True)
-        #
+
         self._init_value_default_extra_def_(self)
-        #
+
         self._refresh_check_()
 
     def _refresh_widget_draw_(self):

@@ -37,7 +37,7 @@ class NodePreset:
                     _mya_core.EtrNodeOpt(i_ncloth).set_dict(dict_, atr_excludes)
                     _mya_core.NodeAttribute.create_as_string(i_ncloth, 'qsm_node_preset', key_)
 
-        ctt = bsc_content.YmlDict()
+        ctt = bsc_content.Dict()
         yaml_path = bsc_resource.ExtendResource.get('maya_node_preset/{}.yml'.format(node_type))
         if yaml_path:
             data = bsc_storage.StgFileOpt(yaml_path).set_read()

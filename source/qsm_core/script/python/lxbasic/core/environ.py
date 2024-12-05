@@ -5,13 +5,15 @@ import os
 
 
 class BscEnviron(object):
-    UI_LANGUAGE_KEY = 'QSM_UI_LANGUAGE'
+    GUI_LANGUAGE_KEY = 'QSM_UI_LANGUAGE'
     DEPLOY_ROOT_KEY = 'QSM_DEPLOY_ROOT'
 
     PROJECT_ROOT_KEY = 'QSM_PROJECT_ROOT'
     CACHE_ROOT_KEY = 'QSM_CACHE_ROOT'
     LOCAL_CACHE_ROOT_KEY = 'QSM_CACHE_LOCAL_ROOT'
     LIBRARY_ROOT_KEY = 'QSM_LIBRARY_ROOT'
+    
+    STUDIO_KEY = 'QSM_STUDIO'
 
     TRUE = 'true'
     FALSE = 'false'
@@ -148,8 +150,12 @@ class BscEnviron(object):
         return '{}/database'.format(cls.get_cache_root())
 
     @classmethod
-    def get_ui_language(cls):
-        return cls.get(cls.UI_LANGUAGE_KEY) or 'en_US'
+    def get_gui_language(cls):
+        return cls.get(cls.GUI_LANGUAGE_KEY) or 'en_US'
+
+    @classmethod
+    def get_studio(cls):
+        return cls.get(cls.STUDIO_KEY) or 'DEVELOP'
 
 
 class BscEnvironExtra(BscEnviron):

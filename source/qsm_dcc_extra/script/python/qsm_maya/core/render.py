@@ -126,7 +126,7 @@ class HardwareRenderSettings(object):
 
     @classmethod
     def set_display_filter(
-        cls, filters
+        cls, **kwargs
     ):
         """
         $gTotalObjTypeFilters[0] = "NURBS Curves";
@@ -152,10 +152,55 @@ class HardwareRenderSettings(object):
         $gTotalObjTypeFilters[20] = "Misc. UI";
         $gTotalObjTypeFilters[21] = "Ornaments";
         """
+        keys = [
+            'nurbs_curve',        # 0
+            'nurbs_surface',      # 1
+            'mesh',               # 2
+            'subdiv_surface',     # 3
+            'particle',           # 4
+            'particle_instance',  # 5
+            'fluid',              # 6
+            'stroke',             # 7
+            'image_plane',        # 8
+            'ui',                 # 9
+            'light',  # 10
+            'camera',  # 11
+            'locator',  # 12
+            'joint',  # 13
+            'ik_handle',  # 14
+            'deformer',  # 15
+            'motion_trail',  # 16
+            'component',  # 17
+            'hair_system',  # 18
+            'follicle',  # 19
+            'misc_ui',  # 20
+            'ornament',  # 21
+        ]
+
+        args = [0L]*len(keys)
+        for i_idx, i in enumerate(keys):
+            if i in kwargs:
+                if kwargs[i]:
+                    args[i_idx] = 1L
+
         cmds.setAttr(
             'hardwareRenderingGlobals.objectTypeFilterValueArray',
-            [
-                0L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 1L, 0L
-            ],
+            args,
+            type='Int32Array'
+        )
+
+        # plug
+        sub_keys = [
+            'gpu_cache'
+        ]
+        sub_args = [0L]*len(sub_keys)
+        for i_idx, i in enumerate(sub_keys):
+            if i in kwargs:
+                if kwargs[i]:
+                    sub_args[i_idx] = 1L
+
+        cmds.setAttr(
+            'hardwareRenderingGlobals.pluginObjectTypeFilterValueArray',
+            sub_args,
             type='Int32Array'
         )

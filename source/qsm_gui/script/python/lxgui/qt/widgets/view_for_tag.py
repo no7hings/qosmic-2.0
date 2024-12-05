@@ -227,7 +227,7 @@ class _QtTagNodeItem(
 
     def _do_leave_(self):
         self._is_hovered = False
-        self._expand_is_hovered = False
+        self._expand_hover_flag = False
         self._refresh_widget_draw_()
 
     def _do_mouse_press_(self, event):
@@ -527,7 +527,7 @@ class _QtTagGroupItem(
             rect=self._expand_icon_draw_rect,
             file_path=self._expand_icon_file_path_current,
             offset=offset,
-            is_hovered=self._expand_is_hovered
+            is_hovered=self._expand_hover_flag
         )
         # check
         painter._draw_icon_file_by_rect_(
@@ -572,25 +572,25 @@ class _QtTagGroupItem(
     def _do_leave_(self):
         self._is_hovered = False
 
-        self._expand_is_hovered = False
+        self._expand_hover_flag = False
         self._is_check_hovered = False
 
-        # print 'leave', self._text, self._expand_is_hovered
+        # print 'leave', self._text, self._expand_hover_flag
 
         self._refresh_widget_draw_()
 
     def _do_hover_move_(self, event):
         p = event.pos()
 
-        self._expand_is_hovered = False
+        self._expand_hover_flag = False
         self._is_check_hovered = False
         if self._head_frame_rect.contains(p):
             if self._expand_frame_rect.contains(p):
-                self._expand_is_hovered = True
+                self._expand_hover_flag = True
             elif self._check_frame_rect.contains(p):
                 self._is_check_hovered = True
 
-        # print self._text, self._expand_is_hovered
+        # print self._text, self._expand_hover_flag
 
         self._refresh_widget_draw_()
 
@@ -601,7 +601,7 @@ class _QtTagGroupItem(
 
     def _do_mouse_press_release_(self, event):
         if self._is_action_flag_match_(self.ActionFlag.Press):
-            if self._expand_is_hovered is True:
+            if self._expand_hover_flag is True:
                 self._swap_expand_()
             elif self._is_check_hovered is True:
                 self._swap_check_()

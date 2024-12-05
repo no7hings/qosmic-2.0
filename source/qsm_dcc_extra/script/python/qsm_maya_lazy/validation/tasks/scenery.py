@@ -56,7 +56,7 @@ class SceneryValidationTask(_abc.AbsValidationTask):
             )
 
 
-class SceneryValidationTaskProcess(object):
+class SceneryValidationTaskSubprocess(object):
     def __init__(self, file_path, validation_cache_path, mesh_count_cache_path, process_options):
         self._file_path = file_path
         self._validation_cache_path = validation_cache_path

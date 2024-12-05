@@ -21,7 +21,7 @@ class MayaCacheProcess(_base.DccProcess):
         if isinstance(packages_extend, (tuple, list)):
             main_arg += ' '+' '.join(packages_extend)
 
-        cmd_scripts = [
+        cmd_args = [
             main_arg,
             (
                 r'-- mayabatch -command '
@@ -32,7 +32,7 @@ class MayaCacheProcess(_base.DccProcess):
                 hook_option='option_hook_key=dcc-process/maya-cache-process&' + option
             )
         ]
-        return ' '.join(cmd_scripts)
+        return ' '.join(cmd_args)
 
     @classmethod
     def generate_hook_option(cls, option):

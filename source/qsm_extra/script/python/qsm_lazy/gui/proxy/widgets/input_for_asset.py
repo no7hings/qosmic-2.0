@@ -64,7 +64,7 @@ class PrxInputForAssetCharacterAndProp(prx_abstracts.AbsPrxWidget):
 
         self._scan_root = qsm_scan.Stage().get_root()
 
-        self._qt_path_input._set_buffer_fnc_(self._buffer_fnc)
+        self._qt_path_input._set_next_buffer_fnc_(self._next_buffer_fnc)
 
         self._qt_path_input._set_value_('/')
         self._qt_path_input._set_choose_popup_auto_resize_enable_(False)
@@ -180,11 +180,11 @@ class PrxInputForAssetCharacterAndProp(prx_abstracts.AbsPrxWidget):
             fnc_()
 
     def _pull_history_fnc(self, path):
-        self._buffer_fnc(
+        self._next_buffer_fnc(
             bsc_core.BscNodePathOpt(path)
         )
 
-    def _buffer_fnc(self, path_opt):
+    def _next_buffer_fnc(self, path_opt):
         cs = path_opt.get_components()
         cs.reverse()
         d = len(cs)

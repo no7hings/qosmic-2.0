@@ -421,7 +421,7 @@ class AbsQtHeadFrame(
         self._init_action_for_press_def_(self)
         self._init_action_for_expand_def_(self)
 
-        self._is_expand_enable = True
+        self._expand_action_is_enable = True
         self._is_expanded = False
         self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('qt-style/arrow-right')
         self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('qt-style/arrow-down')

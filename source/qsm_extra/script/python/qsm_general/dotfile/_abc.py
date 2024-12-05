@@ -5,12 +5,15 @@ import re
 
 import os
 
+import lxbasic.core as bsc_core
+
 
 class AbsDotfile(object):
     SEP = '\n'
 
     def __init__(self, file_path):
-        self._file_path = file_path
+        self._file_path = bsc_core.ensure_unicode(file_path)
+
         if os.path.isfile(self._file_path) is False:
             raise RuntimeError()
 

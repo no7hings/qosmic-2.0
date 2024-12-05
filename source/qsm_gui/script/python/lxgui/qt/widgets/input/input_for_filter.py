@@ -196,6 +196,7 @@ class QtInputForFilter(
         self._entry_widget.textEdited.connect(self._do_refresh_filter_tip_)
         self._entry_widget.user_entry_text_accepted.connect(self._text_bubbles._create_one_)
         self._entry_widget.user_entry_text_accepted.connect(self._push_history_)
+        # backspace press
         self._entry_widget.key_backspace_extra_pressed.connect(self._text_bubbles._on_backspace_)
         #
         self._text_bubbles.bubbles_value_changed.connect(self._do_refresh_filter_tip_)

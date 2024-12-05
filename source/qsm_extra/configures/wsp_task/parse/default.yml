@@ -26,6 +26,9 @@ patterns:
     # asset
     asset:
         task-version-name: '{asset}.{step}.{task}.v{version}'
+        task-zero_version-name: '{asset}.{step}.{task}.v000'
+        task-no_version-name: '{asset}.{step}.{task}'
+
         task_unit-version-name: '{asset}.{step}.{task}.{task_unit}.v{version}'
 
         disorder:
@@ -46,6 +49,8 @@ patterns:
             task-dir: '<.dir>/{step}.{task}'
             # version
             version-dir: '<.task-dir>/<..task-version-name>'
+            zero_version-dir: '<.task-dir>/<..task-zero_version-name>'
+            no_version-dir: '<.task-dir>/<..task-no_version-name>'
             # files
             maya-scene_src-file: '<.version-dir>/source/{asset}.ma'
             preview-mov-file: '<.version-dir>/preview/<..task-version-name>.mov'
@@ -58,23 +63,40 @@ patterns:
             # task
             task-dir: '<.dir>/{step}.{task}'
 
+    sequence:
+        task-version-name: '{sequence}.{step}.{task}.v{version}'
+        task_unit-version-name: '{sequence}.{step}.{task}.{task_unit}.v{version}'
+
+        source:
+            dir: '{root_source}/{project}/{space}/sequences/{sequence}'
+            # task
+            task-dir: '<.dir>/user.{artist}/{step}.{task}'
+            task_unit-dir: '<.task-dir>/{task_unit}'
+            # maya
+            #   files
+            maya-scene_src-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
+            maya-thumbnail-file: '<.task_unit-dir>/maya/.thumbnails/<..task_unit-version-name>.jpg'
+
     shot:
         task-version-name: '{shot}.{step}.{task}.v{version}'
         task_unit-version-name: '{shot}.{step}.{task}.{task_unit}.v{version}'
 
         disorder:
-            animation_scene_s-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_EPT}/动画/通过文件/{shot}.ma'
-            animation_preview_s-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_EPT}/动画/通过文件/{shot}.mov'
+            layout-scene-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_EPT}/分镜/通过文件/{shot}.ma'
+            layout-preview-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_EPT}/分镜/通过文件/{shot}.mov'
+            animation-scene-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_EPT}/动画/通过文件/{shot}.ma'
+            animation-preview-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_EPT}/动画/通过文件/{shot}.mov'
 
         source:
             dir: '{root_source}/{project}/{space}/shots/{sequence}/{shot}'
             # task
             task-dir: '<.dir>/user.{artist}/{step}.{task}'
             task_unit-dir: '<.task-dir>/{task_unit}'
-            # files
+            # maya
+            #   files
             maya-scene_src-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
             maya-thumbnail-file: '<.task_unit-dir>/maya/.thumbnails/<..task_unit-version-name>.jpg'
-            # directories
+            #   directories
             maya-cache-dir: '<.task_unit-dir>/maya/caches'
             maya-cfx_cache-dir: '<.task_unit-dir>/maya/cfx_caches'
 
@@ -84,7 +106,8 @@ patterns:
             task-dir: '<.dir>/{step}.{task}'
             # version
             version-dir: '<.task-dir>/<..task-version-name>'
-            # files
+            # maya
+            #   files
             maya-scene_src-file: '<.version-dir>/source/{shot}.ma'
             preview-mov-file: '<.version-dir>/preview/<..task-version-name>.mov'
 

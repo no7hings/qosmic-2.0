@@ -45,6 +45,9 @@ class _AbsPrxTabToolBox(_prx_abstracts.AbsPrxWidget):
     def set_tab_direction(self, direction):
         self._qt_widget._set_tab_direction_(direction)
 
+    def set_expand_enable(self, boolean):
+        self._qt_widget._set_expand_enable_(boolean)
+
 
 class PrxHTabToolBox(_AbsPrxTabToolBox):
     QT_WIDGET_CLS = _qt_container_for_tab.QtHTabToolBox

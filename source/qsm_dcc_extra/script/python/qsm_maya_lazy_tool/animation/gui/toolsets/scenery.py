@@ -21,9 +21,9 @@ import qsm_scan as qsm_scan
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.tasks.scenery.core as qsm_mya_tsk_scn_core
+import qsm_maya.handles.scenery.core as qsm_mya_hdl_scn_core
 
-import qsm_maya.tasks.scenery.scripts as qsm_mya_tsk_scn_scripts
+import qsm_maya.handles.scenery.scripts as qsm_mya_hdl_scn_scripts
 
 import qsm_maya_lazy.resource.scripts as qsm_mya_lzy_rsc_scripts
 
@@ -37,7 +37,7 @@ class PrxUnitForSceneryAssetView(
 
     NAMESPACE = 'scenery'
 
-    RESOURCES_QUERY_CLS = qsm_mya_tsk_scn_core.SceneryAssetQuery
+    RESOURCES_QUERY_CLS = qsm_mya_hdl_scn_core.SceneryAssetQuery
 
     TOOL_INCLUDES = [
         'isolate-select',
@@ -61,12 +61,12 @@ class PrxToolbarForSceneryReference(
         self._asset_load_qt_button = qt_widgets.QtPressButton()
         self._asset_prx_input.add_widget(self._asset_load_qt_button)
         self._asset_load_qt_button._set_name_text_(
-            self._window.choice_name(
+            self._window.choice_gui_name(
                 self._window._configure.get('build.scenery.buttons.reference')
             )
         )
         self._asset_load_qt_button._set_tool_tip_text_(
-            self._window.choice_tool_tip(
+            self._window.choice_gui_tool_tip(
                 self._window._configure.get('build.scenery.buttons.reference')
             )
         )
@@ -77,12 +77,12 @@ class PrxToolbarForSceneryReference(
         self._unit_assembly_load_qt_button = qt_widgets.QtPressButton()
         self._asset_prx_input.add_widget(self._unit_assembly_load_qt_button)
         self._unit_assembly_load_qt_button._set_name_text_(
-            self._window.choice_name(
+            self._window.choice_gui_name(
                 self._window._configure.get('build.scenery.buttons.load_unit_assembly')
             )
         )
         self._unit_assembly_load_qt_button._set_tool_tip_text_(
-            self._window.choice_tool_tip(
+            self._window.choice_gui_tool_tip(
                 self._window._configure.get('build.scenery.buttons.load_unit_assembly')
             )
         )
@@ -171,7 +171,7 @@ class PrxToolsetForUnitAssemblyLoad(
                     maximum=len(resources), label='processing unit assemblies'
                 ) as g_p:
                     for i_resource in resources:
-                        i_opt = qsm_mya_tsk_scn_scripts.UnitAssemblyOpt(i_resource)
+                        i_opt = qsm_mya_hdl_scn_scripts.UnitAssemblyOpt(i_resource)
                         if i_opt.is_exists() is False:
                             i_task_name, i_cmd_script, i_cache_path = i_opt.generate_args()
                             if i_cmd_script is not None:
@@ -204,7 +204,7 @@ class PrxToolsetForUnitAssemblyLoad(
         resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             w = gui_core.GuiDialog.create(
-                label=self._session.gui_name,
+                label='Scenery',
                 sub_label='Remove Unit Assembly',
                 content='do you remove "Unit Assembly"?,\n press "Ok" to continue',
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
@@ -214,7 +214,7 @@ class PrxToolsetForUnitAssemblyLoad(
             result = w.get_result()
             if result is True:
                 for i_resource in resources:
-                    i_opt = qsm_mya_tsk_scn_scripts.UnitAssemblyOpt(i_resource)
+                    i_opt = qsm_mya_hdl_scn_scripts.UnitAssemblyOpt(i_resource)
                     i_opt.remove_cache()
 
     # gpu instance
@@ -243,7 +243,7 @@ class PrxToolsetForUnitAssemblyLoad(
                     maximum=len(resources), label='processing gpu instances'
                 ) as g_p:
                     for i_resource in resources:
-                        i_opt = qsm_mya_tsk_scn_scripts.GpuInstanceOpt(i_resource)
+                        i_opt = qsm_mya_hdl_scn_scripts.GpuInstanceOpt(i_resource)
                         if i_opt.is_exists() is False:
                             i_cmd_script, i_cache_path = i_opt.generate_args()
                             if i_cmd_script is not None:
@@ -265,7 +265,7 @@ class PrxToolsetForUnitAssemblyLoad(
         resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             w = gui_core.GuiDialog.create(
-                label=self._session.gui_name,
+                label='Scenery',
                 sub_label='Remove GPU Instance',
                 content='do you remove "GPU Instance"?,\n press "Ok" to continue',
                 status=gui_core.GuiDialog.ValidationStatus.Warning,
@@ -275,14 +275,14 @@ class PrxToolsetForUnitAssemblyLoad(
             result = w.get_result()
             if result is True:
                 for i_resource in resources:
-                    i_opt = qsm_mya_tsk_scn_scripts.GpuInstanceOpt(i_resource)
+                    i_opt = qsm_mya_hdl_scn_scripts.GpuInstanceOpt(i_resource)
                     i_opt.remove_cache()
 
     def __init__(self, window, unit, session):
         super(PrxToolsetForUnitAssemblyLoad, self).__init__(window, unit, session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            self._window.choice_name(
+            self._window.choice_gui_name(
                 self._window._configure.get('build.scenery.units.unit_assembly_and_gpu_instance_load.options')
             )
         )
@@ -292,11 +292,11 @@ class PrxToolsetForUnitAssemblyLoad(
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='utility',
-            name=self._window.choice_name(
+            name=self._window.choice_gui_name(
                 self._window._configure.get('build.scenery.units.unit_assembly_and_gpu_instance_load')
             ),
             icon_name_text='utility',
-            tool_tip=self._window.choice_tool_tip(
+            tool_tip=self._window.choice_gui_tool_tip(
                 self._window._configure.get('build.scenery.units.unit_assembly_and_gpu_instance_load')
             )
         )
@@ -328,10 +328,10 @@ class PrxToolsetForUnitAssemblySwitch(
                     maximum=len(self._unit_assembly_paths), label='switch unit assembly'
                 ) as g_p:
                     for i in self._unit_assembly_paths:
-                        qsm_mya_tsk_scn_core.UnitAssemblyOpt(i).set_active(key)
+                        qsm_mya_hdl_scn_core.UnitAssemblyOpt(i).set_active(key)
                         g_p.do_update()
             else:
-                [qsm_mya_tsk_scn_core.UnitAssemblyOpt(x).set_active(key) for x in self._unit_assembly_paths]
+                [qsm_mya_hdl_scn_core.UnitAssemblyOpt(x).set_active(key) for x in self._unit_assembly_paths]
             # fixme: repair selection?
             qsm_mya_core.Selection.set(
                 [x for x in self._unit_assembly_paths]
@@ -346,22 +346,22 @@ class PrxToolsetForUnitAssemblySwitch(
                     maximum=len(self._gpu_instance_paths), label='switch unit assembly'
                 ) as g_p:
                     for i in self._unit_assembly_paths:
-                        qsm_mya_tsk_scn_core.GpuInstanceOpt(i).set_active(key)
+                        qsm_mya_hdl_scn_core.GpuInstanceOpt(i).set_active(key)
                         g_p.do_update()
             else:
-                [qsm_mya_tsk_scn_core.GpuInstanceOpt(x).set_active(key) for x in self._gpu_instance_paths]
+                [qsm_mya_hdl_scn_core.GpuInstanceOpt(x).set_active(key) for x in self._gpu_instance_paths]
 
             self.do_gui_refresh_buttons()
 
     def do_dcc_import_mesh(self):
         if self._unit_assembly_paths:
-            [qsm_mya_tsk_scn_core.UnitAssemblyOpt(x).do_import_mesh() for x in self._unit_assembly_paths]
+            [qsm_mya_hdl_scn_core.UnitAssemblyOpt(x).do_import_mesh() for x in self._unit_assembly_paths]
         if self._gpu_instance_paths:
-            [qsm_mya_tsk_scn_core.GpuInstanceOpt(x).do_import_mesh() for x in self._gpu_instance_paths]
+            [qsm_mya_hdl_scn_core.GpuInstanceOpt(x).do_import_mesh() for x in self._gpu_instance_paths]
 
     def do_dcc_select_by_camera(self):
         camera = qsm_mya_core.Camera.get_active()
-        qsm_mya_tsk_scn_scripts.CameraSelection(camera).execute()
+        qsm_mya_hdl_scn_scripts.CameraSelection(camera).execute()
 
     def do_dcc_update(self):
         pass
@@ -369,7 +369,7 @@ class PrxToolsetForUnitAssemblySwitch(
     def __init__(self, window, unit, session):
         super(PrxToolsetForUnitAssemblySwitch, self).__init__(window, unit, session)
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            self._window.choice_name(
+            self._window.choice_gui_name(
                 self._window._configure.get('build.scenery.units.unit_assembly_and_gpu_instance_switch.options')
                 )
         )
@@ -379,24 +379,24 @@ class PrxToolsetForUnitAssemblySwitch(
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='switch',
-            name=self._window.choice_name(
+            name=self._window.choice_gui_name(
                 self._window._configure.get('build.scenery.units.unit_assembly_and_gpu_instance_switch')
             ),
             icon_name_text='switch',
-            tool_tip=self._window.choice_tool_tip(
+            tool_tip=self._window.choice_gui_tool_tip(
                 self._window._configure.get('build.scenery.units.unit_assembly_and_gpu_instance_switch')
             )
         )
 
-        self._unit_assemblies_query = qsm_mya_tsk_scn_core.UnitAssembliesQuery()
-        self._gpu_instances_query = qsm_mya_tsk_scn_core.GpuInstancesQuery()
+        self._unit_assemblies_query = qsm_mya_hdl_scn_core.UnitAssembliesQuery()
+        self._gpu_instances_query = qsm_mya_hdl_scn_core.GpuInstancesQuery()
 
         self._unit_assembly_button_dict = {}
         self._unit_assembly_paths = []
         self._gpu_instance_button_dict = {}
         self._gpu_instance_paths = []
 
-        for i_key in qsm_mya_tsk_scn_core.Assembly.Keys.All:
+        for i_key in qsm_mya_hdl_scn_core.Assembly.Keys.All:
             i_b = self._prx_options_node.get_port(
                 'switch.unit_assembly.{}'.format(i_key)
             )
@@ -405,7 +405,7 @@ class PrxToolsetForUnitAssemblySwitch(
             )
             self._unit_assembly_button_dict[i_key] = i_b
 
-        for i_key in qsm_mya_tsk_scn_core.Assembly.Keys.GPUs:
+        for i_key in qsm_mya_hdl_scn_core.Assembly.Keys.GPUs:
             i_b = self._prx_options_node.get_port(
                 'switch.gpu_instance.{}'.format(i_key)
             )
@@ -503,7 +503,7 @@ class PrxToolsetForCameraMask(
     def __init__(self, window, unit, session):
         super(PrxToolsetForCameraMask, self).__init__(window, unit, session)
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            self._window.choice_name(
+            self._window.choice_gui_name(
                 self._window._configure.get('build.scenery.units.camera_mask.options')
             )
         )
@@ -513,11 +513,11 @@ class PrxToolsetForCameraMask(
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='extend',
-            name=self._window.choice_name(
+            name=self._window.choice_gui_name(
                 self._window._configure.get('build.scenery.units.camera_mask')
             ),
             icon_name_text='extend',
-            tool_tip=self._window.choice_tool_tip(
+            tool_tip=self._window.choice_gui_tool_tip(
                 self._window._configure.get('build.scenery.units.camera_mask')
             )
         )
@@ -569,34 +569,34 @@ class PrxToolsetForCameraMask(
     # camera mask
     def do_dcc_create_camera_view_frustum(self):
         camera = qsm_mya_core.Camera.get_active()
-        scp = qsm_mya_tsk_scn_scripts.CameraViewFrustum(camera)
+        scp = qsm_mya_hdl_scn_scripts.CameraViewFrustum(camera)
         scp.execute()
 
     def do_dcc_remove_camera_view_frustum(self):
-        qsm_mya_tsk_scn_scripts.CameraViewFrustum.restore()
+        qsm_mya_hdl_scn_scripts.CameraViewFrustum.restore()
 
     def do_dcc_create_dynamic_camera_mask(self):
         camera = qsm_mya_core.Camera.get_active()
         frame_range = self.get_frame_range()
-        qsm_mya_tsk_scn_scripts.DynamicCameraMask(camera, frame_range).execute_for_all()
+        qsm_mya_hdl_scn_scripts.DynamicCameraMask(camera, frame_range).execute_for_all()
 
     def do_dcc_create_camera_mask(self):
 
         camera = qsm_mya_core.Camera.get_active()
         frame_range = self.get_frame_range()
-        qsm_mya_tsk_scn_scripts.CameraMask(
+        qsm_mya_hdl_scn_scripts.CameraMask(
             camera, frame_range
         ).execute_for_all()
 
     def do_dcc_remove_all_camera_masks(self):
-        qsm_mya_tsk_scn_scripts.DynamicCameraMask.restore()
-        qsm_mya_tsk_scn_scripts.CameraMask.restore()
+        qsm_mya_hdl_scn_scripts.DynamicCameraMask.restore()
+        qsm_mya_hdl_scn_scripts.CameraMask.restore()
 
     def do_dcc_create_camera_lod_switch(self):
         camera = qsm_mya_core.Camera.get_active()
         frame_range = self.get_frame_range()
         distance_range = self._prx_options_node.get('camera_lod_switch.distance_range')
-        qsm_mya_tsk_scn_scripts.CameraLodSwitch(
+        qsm_mya_hdl_scn_scripts.CameraLodSwitch(
             camera, frame_range
         ).execute(
             distance_range

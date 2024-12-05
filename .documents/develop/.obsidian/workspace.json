@@ -13,22 +13,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "开发相关/开发文档/解算流程工具.md",
+                "file": "常见问题/命令行/windows.md",
                 "mode": "source",
                 "source": false
               }
             }
-          },
-          {
-            "id": "ef3c1b24d29d87a5",
-            "type": "leaf",
-            "state": {
-              "type": "card-board-view",
-              "state": {}
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -94,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "开发相关/开发进度/优化.md",
+                "file": "常见问题/命令行/windows.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -111,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "开发相关/开发进度/优化.md",
+                "file": "常见问题/命令行/windows.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -134,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "开发相关/开发进度/优化.md"
+                "file": "常见问题/命令行/windows.md"
               }
             }
           },
@@ -156,7 +147,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "开发相关/开发进度/优化.md"
+                "file": "常见问题/命令行/windows.md"
               }
             }
           },
@@ -196,9 +187,22 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "ef3c1b24d29d87a5",
+  "active": "8f2ca1bd910eda9a",
   "lastOpenFiles": [
+    "随记/gantt view.md",
+    "随记/利用标签进行分类.md",
+    "随记/插件和工具为什么不推荐安装在本地.md",
+    "随记/python/Python包安装.md",
+    "随记/python/PyQt.md",
+    "随记/python/custom.md",
+    "随记/python/中文路径处理.md",
     "开发相关/开发文档/解算流程工具.md",
+    "开发相关/开发文档/后台任务管理工具（Process Task Manager）.md",
+    "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
+    "开发相关/开发任务/maya/解算相关/解算流程工具开发.md",
+    "images/cfx_dcc_flow_a.png",
+    "images/Pasted image 20241118133629.png",
+    "images",
     "开发相关/开发进度/优化.md",
     "开发相关/开发计划/七月-八月.md",
     "开发相关/开发进度/maya/10月-资产检查工具.md",
@@ -210,29 +214,18 @@
     "开发相关/开发进度/maya/7月-动作工具.md",
     "开发相关/开发进度/maya/6月-节点参数模版工具.md",
     "开发相关/开发进度/maya/6月-绑定移动工具.md",
-    "Pasted image 20241121133157.png",
-    "Pasted image 20241121133136.png",
-    "Pasted image 20241121133050.png",
-    "Pasted image 20241121133029.png",
-    "Pasted image 20241121132357.png",
-    "Pasted image 20241121132329.png",
-    "Pasted image 20241121132300.png",
-    "Pasted image 20241121131610.png",
-    "Pasted image 20241121131446.png",
-    "Pasted image 20241121125405.png",
+    "images/Pasted image 20241121133157.png",
+    "images/Pasted image 20241121133136.png",
+    "images/Pasted image 20241121133050.png",
+    "images/Pasted image 20241121133029.png",
+    "images/Pasted image 20241121132357.png",
+    "images/Pasted image 20241121132329.png",
+    "images/Pasted image 20241121132300.png",
+    "images/Pasted image 20241121131610.png",
     "开发相关/开发进度/maya/5月-简易拍屏工具.md",
     "开发相关/开发计划/六月.md",
     "开发相关/开发计划/九月.md",
     "开发相关/开发进度/maya/5月-场景显示优化工具.md",
-    "开发相关/开发进度/maya/4月-绑定显示优化工具.md",
-    "开发相关/开发计划/十月-十一月.md",
-    "开发相关/开发计划/四月-五月.md",
-    "开发相关/开发进度/通用/农场解算发布工具.md",
-    "开发相关/开发进度/通用/农场插件.md",
-    "开发相关/开发进度/通用/后台任务管理工具.md",
-    "开发相关/开发文档/后台任务管理工具（Process Task Manager）.md",
-    "开发相关/开发任务/maya/解算相关/解算流程工具开发.md",
-    "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
     "USD/植被流程/流程图.canvas",
     "USD/植被流程",
     "USD",
@@ -246,7 +239,6 @@
     "技术文档/Qosmic/组件与模块/依赖关系.canvas",
     "随记/python",
     "随记/maya",
-    "开发相关/开发任务/maya/相机相关",
     "Untitled.canvas"
   ]
 }

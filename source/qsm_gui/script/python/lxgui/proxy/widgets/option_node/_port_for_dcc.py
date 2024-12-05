@@ -13,14 +13,21 @@ class PrxPortForNodeList(_port_base.AbsPrxPort):
     def __init__(self, *args, **kwargs):
         super(PrxPortForNodeList, self).__init__(*args, **kwargs)
 
+    def set_name(self, *args, **kwargs):
+        super(PrxPortForNodeList, self).set_name(*args, **kwargs)
+        self._prx_port_input._prx_input._qt_widget._set_name_text_(args[0])
+
     def get_all(self):
         return self._prx_port_input.get_all()
 
-    def set_checked_by_include_paths(self, paths):
-        self._prx_port_input.set_checked_by_include_paths(paths)
+    def update_checked_by_paths(self, paths, extra=False):
+        self._prx_port_input.update_checked_by_paths(paths, extra)
 
-    def set_unchecked_by_include_paths(self, paths):
-        self._prx_port_input.set_unchecked_by_include_paths(paths)
+    def update_unchecked_by_paths(self, paths, extra=False):
+        self._prx_port_input.update_unchecked_by_paths(paths, extra)
+
+    def update_check_by_dict(self, dict_):
+        self._prx_port_input.update_check_by_dict(dict_)
 
     def set_all_items_checked(self, boolean):
         self._prx_port_input.set_all_items_checked(boolean)

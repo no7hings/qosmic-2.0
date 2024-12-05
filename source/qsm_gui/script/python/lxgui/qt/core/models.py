@@ -91,7 +91,6 @@ class GuiQtModForTabItemStack(object):
     def create_item(self, widget):
         item = self.ITEM_CLS(self._widget, widget)
         self._items.append(item)
-        #
         self._item_count += 1
         return item
 
@@ -112,15 +111,18 @@ class GuiQtModForTabItemStack(object):
         self._items.pop(index)
         self._item_count -= 1
 
-    def get_index_by_name(self, text):
+    def get_index_by_name(self, name_text):
         for i_index, i_item in enumerate(self._items):
-            if i_item.get_name() == text:
+            if i_item.get_name() == name_text:
                 return i_index
 
-    def get_index_by_key(self, text):
+    def get_index_by_key(self, key_text):
         for i_index, i_item in enumerate(self._items):
-            if i_item.get_key() == text:
+            if i_item.get_key() == key_text:
                 return i_index
+
+    def get_item_index(self, item):
+        return self._items.index(item)
 
     def get_name_at(self, index):
         item = self.get_item_at(index)

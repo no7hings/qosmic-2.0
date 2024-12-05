@@ -120,14 +120,14 @@ class GuiUtil(object):
 
     @classmethod
     def get_language(cls):
-        return bsc_core.BscEnviron.get_ui_language()
+        return bsc_core.BscEnviron.get_gui_language()
 
     @classmethod
     def language_is_chs(cls):
         return cls.get_language() == GuiLanguage.CHS
 
     @classmethod
-    def choice_name(cls, language, options):
+    def choice_gui_name(cls, language, options):
         if options:
             if language == GuiLanguage.CHS:
                 if 'name_chs' in options:
@@ -136,7 +136,7 @@ class GuiUtil(object):
         return 'null'
 
     @classmethod
-    def choice_name_auto(cls, options):
+    def choice_gui_name_auto(cls, options):
         if options:
             if cls.get_language() == GuiLanguage.CHS:
                 if 'name_chs' in options:
@@ -145,7 +145,7 @@ class GuiUtil(object):
         return 'null'
 
     @classmethod
-    def choice_description(cls, language, options):
+    def choice_gui_description(cls, language, options):
         if options:
             if language == GuiLanguage.CHS:
                 if 'description_chs' in options:
@@ -154,7 +154,7 @@ class GuiUtil(object):
         return 'null'
 
     @classmethod
-    def choice_tool_tip(cls, language, options):
+    def choice_gui_tool_tip(cls, language, options):
         if options:
             if language == GuiLanguage.CHS:
                 if 'tool_tip_chs' in options:
@@ -163,7 +163,7 @@ class GuiUtil(object):
         return 'null'
 
     @classmethod
-    def choice_message(cls, language, options):
+    def choice_gui_message(cls, language, options):
         if options:
             if language == GuiLanguage.CHS:
                 if 'message_chs' in options:

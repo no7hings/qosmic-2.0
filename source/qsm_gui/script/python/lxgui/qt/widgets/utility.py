@@ -366,7 +366,7 @@ class QtMenuBar(QtWidgets.QMenuBar):
         self.setFont(_qt_core.QtFonts.NameNormal)
         #
         self.setSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
         )
         #
         self.setStyleSheet(
@@ -631,6 +631,8 @@ class _QtWidget(
 
         self._border_color = _qt_core.QtRgba.Transparent
         self._background_color = _qt_core.QtRgba.Basic
+
+        self._empty_icon_name = 'placeholder/disable'
 
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)

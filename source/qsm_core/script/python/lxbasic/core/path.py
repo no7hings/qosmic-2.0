@@ -211,6 +211,26 @@ class BscNodePath:
         return list_
 
 
+class BscNodeProperties(object):
+    def __init__(self, **kwargs):
+        self._dict = dict(**kwargs)
+
+    def __getattr__(self, key):
+        return self._dict[key]
+
+    def __setattr__(self, key, value):
+        if key in {'_dict'}:
+            self.__dict__[key] = value
+        else:
+            self._dict[key] = value
+
+    def __str__(self):
+        return str(self._dict)
+
+    def __repr__(self):
+        return '\n'+self.__str__()
+
+
 class BscNodePathOpt(object):
     PLANT_HSV_MAPPER = dict(
         tree_leaf=(120.0, 0.5, 0.15),
@@ -238,6 +258,19 @@ class BscNodePathOpt(object):
     def __init__(self, path):
         self._pathsep = path[0]
         self._path_text = path
+
+        self._properties = BscNodeProperties(type='null')
+
+    def __str__(self):
+        return self._path_text
+
+    def __repr__(self):
+        return self.__str__()
+
+    def get_properties(self):
+        return self._properties._dict
+
+    properties = property(get_properties)
 
     def get_pathsep(self):
         return self._pathsep
@@ -388,12 +421,6 @@ class BscNodePathOpt(object):
             )
         )
 
-    def __str__(self):
-        return self._path_text
-
-    def __repr__(self):
-        return self.__str__()
-
     def to_string(self):
         return self._path_text
 
@@ -404,6 +431,16 @@ class BscNodePathOpt(object):
         return self.__class__(
             self.to_dcc_path()
         )
+
+    def set(self, key, value):
+        self._properties._dict[key] = value
+
+    def set_properties(self, dict_):
+        for k, v in dict_.items():
+            self._properties._dict[k] = v
+
+    def get(self, key):
+        return self._properties._dict.get(key)
 
 
 class BscNodePathMapOpt(object):

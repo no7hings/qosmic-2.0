@@ -80,7 +80,7 @@ class PrxTrackWidget(
     def get_stage_model(self):
         return self._qt_widget._track_stage._stage_model
 
-    def get_current_time(self):
+    def get_current(self):
         return self._qt_widget._track_timeline._get_current_frame_()
 
     def set_current_frame(self, frame):

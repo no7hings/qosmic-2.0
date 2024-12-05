@@ -109,7 +109,7 @@ def main(session):
         _file_paths_as_dd = bsc_storage.StgPath.deduplication_files_by_formats(
             file_paths, _formats
         )
-        files_p.set_unchecked_by_include_paths(_file_paths_as_dd)
+        files_p.update_unchecked_by_paths(_file_paths_as_dd)
     # get checked resources
     window = session.find_window()
     gui_resource_opt = window._gui_asset_prx_unit

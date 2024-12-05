@@ -47,7 +47,7 @@ class AbsPrxSubPanelForTool(gui_prx_widgets.PrxBaseWindow):
         )
 
         self.set_window_title(
-            gui_core.GuiUtil.choice_name(self._language, self._configure.get('option.gui'))
+            gui_core.GuiUtil.choice_gui_name(self._language, self._configure.get('option.gui'))
         )
         self.set_window_icon_by_name(
             self._configure.get('option.gui.icon_name')
@@ -91,11 +91,11 @@ class AbsPrxSubPanelForTool(gui_prx_widgets.PrxBaseWindow):
         self._page_prx_tab_tool_box.add_widget(
             register_prx_sca,
             key='register',
-            name=gui_core.GuiUtil.choice_name(
+            name=gui_core.GuiUtil.choice_gui_name(
                 self._language, self._window._configure.get('build.register.tab')
             ),
             icon_name_text='register',
-            tool_tip=gui_core.GuiUtil.choice_tool_tip(
+            tool_tip=gui_core.GuiUtil.choice_gui_tool_tip(
                 self._language, self._window._configure.get('build.register.tab')
             )
         )
@@ -108,11 +108,11 @@ class AbsPrxSubPanelForTool(gui_prx_widgets.PrxBaseWindow):
         self._page_prx_tab_tool_box.add_widget(
             load_prx_sca,
             key='load',
-            name=gui_core.GuiUtil.choice_name(
+            name=gui_core.GuiUtil.choice_gui_name(
                 self._language, self._window._configure.get('build.load.tab')
             ),
             icon_name_text='load',
-            tool_tip=gui_core.GuiUtil.choice_tool_tip(
+            tool_tip=gui_core.GuiUtil.choice_gui_tool_tip(
                 self._language, self._window._configure.get('build.load.tab')
             )
         )
@@ -129,7 +129,7 @@ class AbsPrxSubPanelForTool(gui_prx_widgets.PrxBaseWindow):
         self._apply_and_close_prx_button = gui_prx_widgets.PrxPressButton()
         self._bottom_prx_tool_bar.add_widget(self._apply_and_close_prx_button)
         self._apply_and_close_prx_button.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._configure.get('build.register.buttons.apply_and_close')
             )
         )
@@ -140,7 +140,7 @@ class AbsPrxSubPanelForTool(gui_prx_widgets.PrxBaseWindow):
         self._apply_prx_button = gui_prx_widgets.PrxPressButton()
         self._bottom_prx_tool_bar.add_widget(self._apply_prx_button)
         self._apply_prx_button.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._configure.get('build.register.buttons.apply')
             )
         )
@@ -151,7 +151,7 @@ class AbsPrxSubPanelForTool(gui_prx_widgets.PrxBaseWindow):
         self._close_prx_button = gui_prx_widgets.PrxPressButton()
         self._bottom_prx_tool_bar.add_widget(self._close_prx_button)
         self._close_prx_button.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._configure.get('build.register.buttons.close')
             )
         )

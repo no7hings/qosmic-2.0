@@ -19,6 +19,8 @@ option:
         #
         size: [560, 720]
 
+        version: '1.0.0'
+
 build:
     rig:
         tab:

@@ -5,7 +5,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
+import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 
 import qsm_maya.adv as qsm_mya_adv
 
@@ -17,11 +17,11 @@ class PrxToolsetForImportMotion(gui_prx_widgets.PrxBaseUnit):
         results = []
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
-            results = qsm_mya_tsk_anm_core.AdvRigAsset.filter_namespaces(namespaces)
+            results = qsm_mya_hdl_anm_core.AdvRigAsset.filter_namespaces(namespaces)
 
         if not results:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.no_characters')
                 ),
                 status='warning'
@@ -49,7 +49,7 @@ class PrxToolsetForImportMotion(gui_prx_widgets.PrxBaseUnit):
                         g_p.do_update()
 
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get(
                         'build.{}.messages.import_characters'.format(self._page.GUI_KEY)
                     )
@@ -63,7 +63,7 @@ class PrxToolsetForImportMotion(gui_prx_widgets.PrxBaseUnit):
 
     def gui_unit_setup_fnc(self):
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get(
                     'build.{}.units.{}.options'.format(
                         self._page.GUI_KEY, self.GUI_KEY

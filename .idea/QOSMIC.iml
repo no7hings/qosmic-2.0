@@ -13,6 +13,7 @@
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_main/script/python" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_process/script/python" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/source/qsm_extra/script/python" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/source/qsm_server/script/python" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_lib" />
       <excludeFolder url="file://$MODULE_DIR$/source/qsm_dcc_extra/resources/rig" />
       <excludeFolder url="file://$MODULE_DIR$/.documents" />

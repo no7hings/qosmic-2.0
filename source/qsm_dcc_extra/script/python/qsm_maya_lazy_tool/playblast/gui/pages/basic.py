@@ -15,11 +15,11 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
+import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 
-import qsm_maya.tasks.general.core as qsm_mya_prv_core
+import qsm_maya.handles.general.core as qsm_mya_prv_core
 
-import qsm_maya.tasks.general.scripts as qsm_mya_tsk_gnl_scripts
+import qsm_maya.handles.general.scripts as qsm_mya_hdl_gnl_scripts
 
 
 class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
@@ -183,11 +183,11 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         save_scheme = self._output_save_scheme_port.get()
         update_scheme = self._output_update_scheme_port.get()
         if save_scheme == 'auto':
-            return qsm_mya_tsk_gnl_scripts.PlayblastOpt.generate_movie_file_path(
+            return qsm_mya_hdl_gnl_scripts.PlayblastOpt.generate_movie_file_path(
                 update_scheme=update_scheme
             )
         elif save_scheme == 'specific_directory':
-            _ = qsm_mya_tsk_gnl_scripts.PlayblastOpt.generate_movie_file_path(
+            _ = qsm_mya_hdl_gnl_scripts.PlayblastOpt.generate_movie_file_path(
                 directory_path=self._output_directory_port.get(), update_scheme=update_scheme
             )
             if _ is None:
@@ -252,7 +252,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
             'play_enable'
         )
 
-        q = qsm_mya_tsk_anm_core.AdvRigAssetsQuery()
+        q = qsm_mya_hdl_anm_core.AdvRigAssetsQuery()
 
         q.do_update()
 
@@ -261,7 +261,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
 
         # noinspection PyBroadException
         try:
-            qsm_mya_tsk_gnl_scripts.PlayblastOpt.execute(
+            qsm_mya_hdl_gnl_scripts.PlayblastOpt.execute(
                 movie_path,
                 camera=camera_path,
                 resolution=resolution_size,
@@ -284,9 +284,9 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
     def on_playblast_backstage(self):
         import lxbasic.web as bsc_web
 
-        import qsm_lazy.backstage.process as lzy_bks_process
+        import qsm_lazy.backstage.worker as lzy_bks_worker
 
-        if lzy_bks_process.TaskProcessClient.get_server_status():
+        if lzy_bks_worker.TaskClient.get_server_status():
             movie_path = self.gui_get_file_path()
             if movie_path is None:
                 raise RuntimeError()
@@ -317,14 +317,14 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
 
             (
                 task_name, file_path, movie_file_path, cmd_script
-            ) = qsm_mya_tsk_gnl_scripts.PlayblastProcess.generate_subprocess_args(
+            ) = qsm_mya_hdl_gnl_scripts.PlayblastProcess.generate_subprocess_args(
                 camera_path=camera_path,
-                frame=frame_range, frame_step=frame_step, fps=fps,
+                frame=frame_range, clip_start=None, frame_step=frame_step, fps=fps,
                 resolution=resolution_size,
                 texture_enable=texture_enable, light_enable=light_enable, shadow_enable=shadow_enable
             )
 
-            lzy_bks_process.TaskProcessClient.new_entity(
+            lzy_bks_worker.TaskClient.new_entity(
                 group=None,
                 type='playblast',
                 name=task_name,
@@ -347,14 +347,14 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
             )
 
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.task_submit_successful')
                 ),
                 status='correct'
             )
         else:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.no_task_server')
                 ),
                 status='warning'
@@ -372,7 +372,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         qt_lot.addWidget(prx_sca.widget)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.main.options')
             )
         )
@@ -416,14 +416,14 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         prx_sca.add_widget(self._tip_prx_tool_group)
         self._tip_prx_tool_group.set_expanded(True)
         self._tip_prx_tool_group.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.main.tip')
             )
         )
         self._tip_prx_text_browser = gui_prx_widgets.PrxTextBrowser()
         self._tip_prx_tool_group.add_widget(self._tip_prx_text_browser)
         self._tip_prx_text_browser.set_content(
-            gui_core.GuiUtil.choice_tool_tip(
+            gui_core.GuiUtil.choice_gui_tool_tip(
                 self._window._language, self._window._configure.get('build.main.tip')
             )
         )
@@ -435,7 +435,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         self._playblast_button = gui_prx_widgets.PrxPressButton()
         tool_bar.add_widget(self._playblast_button)
         self._playblast_button.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.main.buttons.playblast')
             )
         )
@@ -444,7 +444,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
         self._playblast_backstage_button = gui_prx_widgets.PrxPressButton()
         tool_bar.add_widget(self._playblast_backstage_button)
         self._playblast_backstage_button.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.main.buttons.playblast_backstage')
             )
         )

@@ -203,7 +203,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
         cmds.currentTime(frame)
 
     @classmethod
-    def get_current_time(cls):
+    def get_current(cls):
         return cmds.currentTime(query=1)
 
     @classmethod
@@ -220,7 +220,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
         elif isinstance(frame, (int, float)):
             start_frame = end_frame = frame
         else:
-            start_frame = end_frame = cls.get_current_time()
+            start_frame = end_frame = cls.get_current()
         return float(start_frame), float(end_frame)
 
     @classmethod

@@ -7,7 +7,7 @@ import lxgui.core as gui_core
 
 import lxgui.qt.core as gui_qt_core
 
-import qsm_lazy.backstage.process as lzy_bks_process
+import qsm_lazy.backstage.worker as lzy_bks_worker
 
 from . import qt as _gui_qt
 
@@ -37,7 +37,7 @@ class PrxLazyBackstageTool(gui_prx_widgets.PrxSessionWindow):
         self._prx_tab_view.add_widget(
             monitor_sca,
             key='task',
-            name=gui_core.GuiUtil.choice_name(
+            name=gui_core.GuiUtil.choice_gui_name(
                 self._language, self._session.configure.get('build.tabs.task')
             ),
             tool_tip='...'
@@ -54,7 +54,7 @@ class PrxLazyBackstageTool(gui_prx_widgets.PrxSessionWindow):
         self._prx_tab_view.add_widget(
             notice_sca,
             key='notice',
-            name=gui_core.GuiUtil.choice_name(
+            name=gui_core.GuiUtil.choice_gui_name(
                 self._language, self._session.configure.get('build.tabs.notice')
             ),
             tool_tip='...'
@@ -88,13 +88,13 @@ class PrxLazyBackstageTool(gui_prx_widgets.PrxSessionWindow):
     def start_web_socket_server(self):
         self._notice_web_server = gui_qt_core.QtWebServerForWindowNotice(self._qt_widget)
         self._notice_web_server._start_(
-            lzy_bks_process.NoticeWebServerBase.NAME,
-            lzy_bks_process.NoticeWebServerBase.HOST,
-            lzy_bks_process.NoticeWebServerBase.PORT
+            lzy_bks_worker.NoticeWebServerBase.NAME,
+            lzy_bks_worker.NoticeWebServerBase.HOST,
+            lzy_bks_worker.NoticeWebServerBase.PORT
         )
         self._task_web_server = _gui_qt.QtWebServerForTask(self._qt_widget)
         self._task_web_server._start_(
-            lzy_bks_process.TaskWebServerBase.HOST, lzy_bks_process.TaskWebServerBase.PORT
+            lzy_bks_worker.TaskWebServerBase.HOST, lzy_bks_worker.TaskWebServerBase.PORT
         )
 
     def start_task_server(self):
@@ -104,17 +104,17 @@ class PrxLazyBackstageTool(gui_prx_widgets.PrxSessionWindow):
             )
             server_process.terminate()
             server_process.join()
-            for i in qsm_prc_server.TaskProcessWorker.PROCESS_LIST:
+            for i in qsm_prc_server.TaskWorker.PROCESS_STACK:
                 i.terminate()
                 # i.join()
             bsc_log.Log.trace_result(
                 'quit server completed'
             )
 
-        import qsm_lazy.backstage.process.server as qsm_prc_server
+        import qsm_lazy.backstage.worker.server as qsm_prc_server
 
         server_process = qsm_prc_server.start_use_process(
-            lzy_bks_process.TaskProcessServerBase.HOST, lzy_bks_process.TaskProcessServerBase.PORT
+            lzy_bks_worker.BackstageServerBase.HOST, lzy_bks_worker.BackstageServerBase.PORT
         )
 
         app = gui_qt_core.QtUtil.get_exists_app()

@@ -7,7 +7,7 @@ import qsm_lazy_tool.resource.gui.abstracts as _abstracts
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya_lazy.resource as qsm_mya_lzy_resource
+import qsm_maya_lazy.resource as mya_lzy_rcs_scripts
 
 
 class PrxPageForLoadTool(_abstracts.AbsPrxPageForLoadTool):
@@ -49,19 +49,19 @@ class PrxPageForLoadTool(_abstracts.AbsPrxPageForLoadTool):
             self.do_gui_update_node_graph_opt_for_any()
 
     def do_gui_update_node_opt_by_dcc_selection_for_dynamic(self, path_map, node_scheme):
-        node_opt_list = qsm_mya_lzy_resource.DynamicGenerator.generate_node_opts(
+        node_opt_list = mya_lzy_rcs_scripts.DynamicGenerator.generate_node_opts(
             path_map.keys(), scheme=node_scheme
         )
         if node_opt_list:
             self._dcc_node_opt_list = node_opt_list
             return
 
-        node_creator_list = qsm_mya_lzy_resource.DynamicGenerator.generate_node_creators(path_map, node_scheme)
+        node_creator_list = mya_lzy_rcs_scripts.DynamicGenerator.generate_node_creators(path_map, node_scheme)
         if node_creator_list:
             self._dcc_node_creator_list = node_creator_list
 
     def do_gui_update_node_graph_opt_for_any(self):
-        node_graph_opt = qsm_mya_lzy_resource.BaseGenerator.generate_node_graph_opt([])
+        node_graph_opt = mya_lzy_rcs_scripts.BaseGenerator.generate_node_graph_opt([])
         if node_graph_opt is not None:
             self._dcc_node_graph_opt = node_graph_opt
 

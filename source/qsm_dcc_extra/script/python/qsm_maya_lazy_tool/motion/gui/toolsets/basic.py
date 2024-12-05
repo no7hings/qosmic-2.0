@@ -16,7 +16,7 @@ import qsm_lazy.gui.qt.widgets as lzy_gui_qt_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
+import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 
 import qsm_maya.motion.core as qsm_mya_mtn_core
 
@@ -24,13 +24,13 @@ import qsm_maya.adv as qsm_mya_adv
 
 
 class UnitForRigPicker(
-    gui_prx_widgets.PrxVirtualUnit
+    gui_prx_widgets.PrxVirtualBaseUnit
 ):
     def do_gui_refresh_by_dcc_selection(self):
         if self._qt_picker._has_focus_() is False:
             namespaces = qsm_mya_core.Namespaces.extract_from_selection()
             if namespaces:
-                namespace_for_adv = qsm_mya_tsk_anm_core.AdvRigAsset.filter_namespaces(namespaces)
+                namespace_for_adv = qsm_mya_hdl_anm_core.AdvRigAsset.filter_namespaces(namespaces)
                 if namespace_for_adv:
                     self._qt_picker._set_namespace_(namespaces[-1])
 
@@ -43,13 +43,17 @@ class UnitForRigPicker(
         controls = []
         namespace = self._qt_picker._get_namespace_()
         if namespace:
-            resource = qsm_mya_tsk_anm_core.AdvRigAsset(namespace)
+            resource = qsm_mya_adv.AdvChrOpt(namespace)
             for i_key in control_keys:
-                i_controls = resource.find_many_controls(i_key)
-                if i_controls:
+                if i_key == 'secondary_cloth':
+                    i_controls = resource.find_all_secondary_curve_controls()
                     controls.extend(i_controls)
+                else:
+                    i_controls = resource.find_many_controls(i_key)
+                    if i_controls:
+                        controls.extend(i_controls)
 
-        qsm_mya_core.Selection.set(controls)
+            qsm_mya_core.Selection.set(controls)
 
     def get_dcc_namespace(self):
         return self._qt_picker._get_namespace_()
@@ -68,7 +72,7 @@ class UnitForRigPicker(
 
 
 class ToolsetForMotionCopyAndPaste(
-    gui_prx_widgets.PrxVirtualUnit
+    gui_prx_widgets.PrxVirtualBaseUnit
 ):
     GUI_KEY = 'copy_paste_mirror'
 
@@ -85,11 +89,11 @@ class ToolsetForMotionCopyAndPaste(
         results = []
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
-            results = qsm_mya_tsk_anm_core.AdvRigAsset.filter_namespaces(namespaces)
+            results = qsm_mya_hdl_anm_core.AdvRigAsset.filter_namespaces(namespaces)
 
         if not results:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.no_characters')
                 ),
                 status='warning'
@@ -101,7 +105,7 @@ class ToolsetForMotionCopyAndPaste(
         args = qsm_mya_mtn_core.ControlSetMotionOpt.get_args_from_selection()
         if not args:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.no_controls')
                 ),
                 status='warning'
@@ -113,7 +117,7 @@ class ToolsetForMotionCopyAndPaste(
         args = qsm_mya_mtn_core.ControlSetMotionOpt.get_args_from_selection_for_mirror()
         if not args:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.no_controls_for_mirror')
                 ),
                 status='warning'
@@ -138,7 +142,7 @@ class ToolsetForMotionCopyAndPaste(
                     g_p.do_update()
 
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.duplicate_characters')
                 )
             )
@@ -155,7 +159,7 @@ class ToolsetForMotionCopyAndPaste(
             )
 
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.copy_character')
                 )
             )
@@ -172,7 +176,7 @@ class ToolsetForMotionCopyAndPaste(
                 file_path,
             )
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.copy_controls')
                 )
             )
@@ -199,7 +203,7 @@ class ToolsetForMotionCopyAndPaste(
                         g_p.do_update()
 
                 self._window.popup_message(
-                    self._window.choice_message(
+                    self._window.choice_gui_message(
                         self._window._configure.get('build.main.messages.paste_characters')
                     )
                 )
@@ -218,7 +222,7 @@ class ToolsetForMotionCopyAndPaste(
                 )
 
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.paste_controls')
                 )
             )
@@ -237,7 +241,7 @@ class ToolsetForMotionCopyAndPaste(
                 )
 
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.paste_controls')
                 )
             )
@@ -256,7 +260,7 @@ class ToolsetForMotionCopyAndPaste(
                 )
 
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.paste_characters')
                 )
             )
@@ -274,7 +278,7 @@ class ToolsetForMotionCopyAndPaste(
                 )
 
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.mirror_any')
                 )
             )
@@ -290,7 +294,7 @@ class ToolsetForMotionCopyAndPaste(
                 )
 
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.mirror_any')
                 )
             )
@@ -306,13 +310,13 @@ class ToolsetForMotionCopyAndPaste(
                 )
 
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.mirror_any')
                 )
             )
 
     # mirror control
-    def do_dcc_mirror_selected_auto(self):
+    def on_dcc_mirror_selected_auto(self):
         args = self.get_dcc_control_args_for_mirror()
         if args:
             for k, v in args.items():
@@ -329,13 +333,13 @@ class ToolsetForMotionCopyAndPaste(
                 )
 
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.mirror_any')
                 )
             )
 
     # mirror and paste
-    def do_dcc_mirror_and_paste_controls(self):
+    def on_dcc_mirror_and_paste_controls(self):
         args = self.get_dcc_control_args_for_mirror()
         if args:
             for k, v in args.items():
@@ -350,13 +354,13 @@ class ToolsetForMotionCopyAndPaste(
                 )
 
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.mirror_any')
                 )
             )
 
     # flip
-    def do_dcc_flip_characters(self):
+    def on_dcc_flip_characters(self):
         namespaces = self.get_dcc_character_args()
         if namespaces:
             for i_namespace in namespaces:
@@ -368,12 +372,12 @@ class ToolsetForMotionCopyAndPaste(
                 )
 
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.mirror_any')
                 )
             )
 
-    def do_dcc_flip_controls(self):
+    def on_dcc_flip_controls(self):
         args = self.get_dcc_control_args_for_mirror()
         if args:
             for k, v in args.items():
@@ -384,10 +388,38 @@ class ToolsetForMotionCopyAndPaste(
                 )
 
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.mirror_any')
                 )
             )
+
+    # reset
+    def on_dcc_reset_characters(self):
+        namespaces = self.get_dcc_character_args()
+        if namespaces:
+            auto_keyframe = self._prx_options_node.get('reset_motion.auto_keyframe')
+
+            for i_namespace in namespaces:
+                i_opt = qsm_mya_adv.AdvChrOpt(i_namespace)
+                i_opt.rest_controls_transformation(
+                    reset_scheme='transform',
+                    translate=True,
+                    rotate=True,
+                    auto_keyframe=auto_keyframe
+                )
+    
+    def on_dcc_reset_controls(self):
+        args = self.get_dcc_control_args()
+        if args:
+            auto_keyframe = self._prx_options_node.get('reset_motion.auto_keyframe')
+
+            for k, v in args.items():
+                i_opt = qsm_mya_mtn_core.ControlSetMotionOpt(k, v)
+                i_opt.reset_transformation(
+                    translate=True,
+                    rotate=True,
+                    auto_keyframe=auto_keyframe
+                )
 
     def __init__(self, window, page, session):
         super(ToolsetForMotionCopyAndPaste, self).__init__(window, page, session)
@@ -395,7 +427,7 @@ class ToolsetForMotionCopyAndPaste(
         self._adv_control_cfg = qsm_gnl_core.AdvCharacterControlConfigure()
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.main.units.copy_paste_mirror.options')
             )
         )
@@ -410,14 +442,15 @@ class ToolsetForMotionCopyAndPaste(
         self._page.gui_get_tool_tab_box().add_widget(
             prx_sca,
             key='copy_paste_mirror',
-            name=gui_core.GuiUtil.choice_name(
+            name=gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.main.units.copy_paste_mirror')
             ),
             icon_name_text='copy_paste_mirror',
-            tool_tip=gui_core.GuiUtil.choice_tool_tip(
+            tool_tip=gui_core.GuiUtil.choice_gui_tool_tip(
                 self._window._language, self._window._configure.get('build.main.units.copy_paste_mirror')
             )
         )
+        
         # copy
         self._prx_options_node.set(
             'character_motion.copy_character', self.do_dcc_copy_character
@@ -428,6 +461,7 @@ class ToolsetForMotionCopyAndPaste(
         self._prx_options_node.set(
             'character_motion.duplicate_characters', self.do_dcc_duplicate_characters
         )
+        
         # paste
         self._prx_options_node.set(
             'character_motion.paste_character', self.do_dcc_paste_characters
@@ -442,6 +476,7 @@ class ToolsetForMotionCopyAndPaste(
         self._prx_options_node.set(
             'control_motion.paste_controls_to_characters', self.do_dcc_paste_controls_to_characters
         )
+        
         # mirror
         self._prx_options_node.set(
             'mirror_motion.mirror_characters_right_to_left', self.do_dcc_mirror_characters_right_to_left
@@ -456,23 +491,33 @@ class ToolsetForMotionCopyAndPaste(
         )
 
         self._prx_options_node.set(
-            'mirror_motion.mirror_selected_auto', self.do_dcc_mirror_selected_auto
+            'mirror_motion.mirror_selected_auto', self.on_dcc_mirror_selected_auto
         )
+        
         # mirror and paste
         self._prx_options_node.set(
-            'mirror_and_paste_motion.mirror_and_paste_controls', self.do_dcc_mirror_and_paste_controls
+            'mirror_and_paste_motion.mirror_and_paste_controls', self.on_dcc_mirror_and_paste_controls
         )
+        
         # flip
         self._prx_options_node.set(
-            'flip_motion.flip_characters', self.do_dcc_flip_characters
+            'flip_motion.flip_characters', self.on_dcc_flip_characters
         )
         self._prx_options_node.set(
-            'flip_motion.flip_controls', self.do_dcc_flip_controls
+            'flip_motion.flip_controls', self.on_dcc_flip_controls
+        )
+        
+        # reset
+        self._prx_options_node.set(
+            'reset_motion.reset_characters', self.on_dcc_reset_characters
+        )
+        self._prx_options_node.set(
+            'reset_motion.reset_controls', self.on_dcc_reset_controls
         )
 
 
 class ToolsetForMotionKeyframe(
-    gui_prx_widgets.PrxVirtualUnit
+    gui_prx_widgets.PrxVirtualBaseUnit
 ):
     GUI_KEY = 'keyframe'
 
@@ -481,7 +526,7 @@ class ToolsetForMotionKeyframe(
         qsm_mya_core.Selection.set(curves)
 
         self._window.popup_message(
-            self._window.choice_message(
+            self._window.choice_gui_message(
                 self._window._configure.get('build.main.messages.select_all_curves')
             )
         )
@@ -490,11 +535,11 @@ class ToolsetForMotionKeyframe(
         results = []
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
-            results = qsm_mya_tsk_anm_core.AdvRigAsset.filter_namespaces(namespaces)
+            results = qsm_mya_hdl_anm_core.AdvRigAsset.filter_namespaces(namespaces)
 
         if not results:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.no_characters')
                 ),
                 status='warning'
@@ -510,10 +555,15 @@ class ToolsetForMotionKeyframe(
             qsm_mya_core.Selection.set(curves)
 
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.select_all_character_curves')
                 )
             )
+
+    def _on_dcc_euler_filter(self):
+        anm_curves = qsm_mya_core.Selection.get_all_anm_curves()
+        if anm_curves:
+            qsm_mya_core.AnimCurveNodes.euler_filter(anm_curves)
 
     def _do_gui_refresh_timewrap_frame_range(self):
         frame_range_src, frame_range_tgt = qsm_mya_mtn_core.TimewarpOpt.get_frame_range_args()
@@ -556,7 +606,7 @@ class ToolsetForMotionKeyframe(
 
         if result is True:
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.update_timewarp_preview')
                 )
             )
@@ -567,13 +617,13 @@ class ToolsetForMotionKeyframe(
         result = qsm_mya_mtn_core.TimewarpOpt.remove()
         if result is True:
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.remove_timewarp_preview')
                 )
             )
         else:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.no_timewarp_preview')
                 ),
                 status='warning'
@@ -585,7 +635,7 @@ class ToolsetForMotionKeyframe(
         result = qsm_mya_mtn_core.TimewarpOpt.apply()
         if result is True:
             self._window.popup_message(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.apply_timewarp')
                 )
             )
@@ -596,7 +646,7 @@ class ToolsetForMotionKeyframe(
         super(ToolsetForMotionKeyframe, self).__init__(window, page, session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language,
                 self._window._configure.get('build.main.units.{}.options'.format(self.GUI_KEY))
             )
@@ -612,11 +662,11 @@ class ToolsetForMotionKeyframe(
         self._page.gui_get_tool_tab_box().add_widget(
             prx_sca,
             key=self.GUI_KEY,
-            name=gui_core.GuiUtil.choice_name(
+            name=gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.main.units.{}'.format(self.GUI_KEY))
             ),
             icon_name_text=self.GUI_KEY,
-            tool_tip=gui_core.GuiUtil.choice_tool_tip(
+            tool_tip=gui_core.GuiUtil.choice_gui_tool_tip(
                 self._window._language, self._window._configure.get('build.main.units.{}'.format(self.GUI_KEY))
             )
         )
@@ -626,6 +676,10 @@ class ToolsetForMotionKeyframe(
         )
         self._prx_options_node.set(
             'selection.select_character_all_curves', self._do_dcc_select_character_all_curves
+        )
+
+        self._prx_options_node.set(
+            'curve_filter.euler_filter', self._on_dcc_euler_filter
         )
 
         self._prx_options_node.set(
@@ -644,7 +698,7 @@ class ToolsetForMotionKeyframe(
 
 
 class ToolsetForMove(
-    gui_prx_widgets.PrxVirtualUnit
+    gui_prx_widgets.PrxVirtualBaseUnit
 ):
     GUI_KEY = 'move'
 
@@ -666,7 +720,7 @@ class ToolsetForMove(
         super(ToolsetForMove, self).__init__(window, page, session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.main.units.move.options')
             )
         )
@@ -677,11 +731,11 @@ class ToolsetForMove(
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='move',
-            name=gui_core.GuiUtil.choice_name(
+            name=gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.main.units.move')
             ),
             icon_name_text='move',
-            tool_tip=gui_core.GuiUtil.choice_tool_tip(
+            tool_tip=gui_core.GuiUtil.choice_gui_tool_tip(
                 self._window._language, self._window._configure.get('build.main.units.move')
             )
         )
@@ -696,7 +750,7 @@ class ToolsetForMove(
 
 
 class ToolsetForConstraintAndDeform(
-    gui_prx_widgets.PrxVirtualUnit
+    gui_prx_widgets.PrxVirtualBaseUnit
 ):
     GUI_KEY = 'constrain_and_deform'
 
@@ -704,7 +758,7 @@ class ToolsetForConstraintAndDeform(
         paths = cmds.ls(selection=1, type='transform', long=1) or []
         if len(paths) < 2:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.less_transforms')
                 ),
                 status='warning'
@@ -717,7 +771,7 @@ class ToolsetForConstraintAndDeform(
         paths = cmds.ls(selection=1, type='transform', long=1) or []
         if len(paths) < 2:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.less_transforms')
                 ),
                 status='warning'
@@ -730,7 +784,7 @@ class ToolsetForConstraintAndDeform(
         paths = cmds.ls(selection=1, type='transform', long=1) or []
         if len(paths) < 2:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.less_transforms')
                 ),
                 status='warning'
@@ -744,7 +798,7 @@ class ToolsetForConstraintAndDeform(
         super(ToolsetForConstraintAndDeform, self).__init__(window, page, session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.main.units.{}.options'.format(self.GUI_KEY))
             )
         )
@@ -755,11 +809,11 @@ class ToolsetForConstraintAndDeform(
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key=self.GUI_KEY,
-            name=gui_core.GuiUtil.choice_name(
+            name=gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.main.units.{}'.format(self.GUI_KEY))
             ),
             icon_name_text=self.GUI_KEY,
-            tool_tip=gui_core.GuiUtil.choice_tool_tip(
+            tool_tip=gui_core.GuiUtil.choice_gui_tool_tip(
                 self._window._language, self._window._configure.get('build.main.units.{}'.format(self.GUI_KEY))
             )
         )

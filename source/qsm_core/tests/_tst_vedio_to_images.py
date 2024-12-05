@@ -1,9 +1,9 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
-video_path = 'Z:/libraries/lazy-resource/all/maya_cfx/bo_lang_A/video/bo_lang_A.mov'
+video_path = 'Z:/temporaries/playblast_test/test_a.mov'
 
-print bsc_core.BscFfmpeg.extract_all_frames(
+print bsc_core.BscFfmpegVideo.extract_all_frames(
     video_path, 'jpg', width_maximum=512
 )
 

@@ -509,9 +509,48 @@ class QtPathBubble(
 ):
     value_changed = qt_signal()
 
-    next_press_clicked = qt_signal()
     component_press_clicked = qt_signal(int)
     component_press_dbl_clicked = qt_signal(int)
+
+    component_wheeling = qt_signal(int, int)
+
+    next_press_clicked = qt_signal()
+
+    def _do_hover_move_(self, event):
+        p = event.pos()
+
+        self._component_hovered_index = None
+        for i_index, i_rect in enumerate(self._frame_rects):
+            if i_rect.contains(p):
+                self._component_hovered_index = i_index
+        # update next
+        if self._next_is_enable is True:
+            if self._next_rect.contains(p):
+                self._next_hover_flag = True
+            else:
+                self._next_hover_flag = False
+
+        self._refresh_widget_draw_()
+
+    def _do_show_tool_tip_(self, event):
+        if self._component_hovered_index:
+            component = self._components[self._component_hovered_index]
+
+            css = _qt_core.QtUtil.generate_tool_tip_css(
+                'path', component.to_string()
+            )
+            # noinspection PyArgumentList
+            QtWidgets.QToolTip.showText(
+                QtGui.QCursor.pos(), css, self
+            )
+
+    def _do_wheel_(self, event):
+        if self._component_hovered_index:
+            delta = event.angleDelta().y()
+            if delta > 0:
+                self.component_wheeling.emit(self._component_hovered_index, 1)
+            else:
+                self.component_wheeling.emit(self._component_hovered_index, -1)
 
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_()
@@ -570,7 +609,7 @@ class QtPathBubble(
         self._text_font = _qt_core.QtFont.generate_2(size=12)
         self.setFont(self._text_font)
         
-        self.__path_text = None
+        self._path_text = None
         # path is instance of BscNodePathOpt
         self._path = None
 
@@ -589,7 +628,7 @@ class QtPathBubble(
 
         self._next_hover_flag = False
         self._next_is_enable = False
-        self.__next_is_waiting = False
+        self._next_is_waiting = False
 
         self.installEventFilter(self)
     
@@ -638,6 +677,9 @@ class QtPathBubble(
                         self.next_press_clicked.emit()
 
                 self._clear_all_action_flags_()
+            elif event.type() == QtCore.QEvent.Wheel:
+                self._do_wheel_(event)
+
         return False
 
     def paintEvent(self, event):
@@ -721,7 +763,7 @@ class QtPathBubble(
                 )
             else:
                 painter._set_border_color_(_qt_core.QtRgba.BdrBubble)
-                if self.__next_is_waiting is True:
+                if self._next_is_waiting is True:
                     painter._set_background_color_(_qt_core.QtRgba.BkgBubbleNextWait)
                 else:
                     painter._set_background_color_(_qt_core.QtRgba.BkgBubbleNextFinish)
@@ -730,53 +772,25 @@ class QtPathBubble(
                     self._next_rect
                 )
 
-    def _do_hover_move_(self, event):
-        p = event.pos()
-
-        self._component_hovered_index = None
-        for i_index, i_rect in enumerate(self._frame_rects):
-            if i_rect.contains(p):
-                self._component_hovered_index = i_index
-        # update next
-        if self._next_is_enable is True:
-            if self._next_rect.contains(p):
-                self._next_hover_flag = True
-            else:
-                self._next_hover_flag = False
-
-        self._refresh_widget_draw_()
-
-    def _do_show_tool_tip_(self, event):
-        if self._component_hovered_index:
-            component = self._components[self._component_hovered_index]
-
-            css = _qt_core.QtUtil.generate_tool_tip_css(
-                'path', component.to_string()
-            )
-            # noinspection PyArgumentList
-            QtWidgets.QToolTip.showText(
-                QtGui.QCursor.pos(), css, self
-            )
-
     def _set_next_enable_(self, boolean):
         self._next_is_enable = boolean
         self._refresh_widget_all_()
 
     def _start_next_wait_(self):
-        self.__next_is_waiting = True
+        self._next_is_waiting = True
         self._refresh_widget_draw_()
 
     def _end_next_wait_(self):
-        self.__next_is_waiting = False
+        self._next_is_waiting = False
         self._refresh_widget_draw_()
 
     def _set_root_text_(self, text):
         self._root_text = text
 
     def _set_path_text_(self, text):
-        if text != self.__path_text:
-            self.__path_text = text
-            self._path = bsc_core.BscNodePathOpt(self.__path_text)
+        if text != self._path_text:
+            self._path_text = text
+            self._path = bsc_core.BscNodePathOpt(self._path_text)
             self._components = self._path.get_components()
             self._components.reverse()
             c = len(self._components)
@@ -788,7 +802,7 @@ class QtPathBubble(
         self._refresh_widget_all_()
 
     def _get_path_text_(self):
-        return self.__path_text
+        return self._path_text
 
     def _get_path_(self):
         return self._path
@@ -918,20 +932,20 @@ class QtBubbleAsChoice(
                     ):
                         if i_seq == 0:
                             if x < h_y < i_y+c_h:
-                                self._index_current = i_index
+                                self._current_index = i_index
                         elif i_seq == c-1:
                             if i_y < h_y < h:
-                                self._index_current = i_index
+                                self._current_index = i_index
                         else:
                             if i_y < h_y < i_y+c_h:
-                                self._index_current = i_index
+                                self._current_index = i_index
 
                     i_rect.setRect(i_x-2, i_y, i_t_w+4, c_h)
                 # clamp to viewport
                 if self.__y_hover < v_y:
-                    self._index_current = self._idx_all[0]
+                    self._current_index = self._idx_all[0]
                 elif self.__y_hover > v_y+v_h:
-                    self._index_current = self._idx_all[-1]
+                    self._current_index = self._idx_all[-1]
 
     def __init__(self, *args, **kwargs):
         super(QtBubbleAsChoice, self).__init__(*args, **kwargs)
@@ -961,7 +975,7 @@ class QtBubbleAsChoice(
 
         self.__y_hover = -1
 
-        self._index_current = None
+        self._current_index = None
         self._idx_maximum, self.__idx_minimum = None, 0
 
         self.__draw_data = []
@@ -1041,7 +1055,7 @@ class QtBubbleAsChoice(
                 for i_index in self._idx_all:
                     i_text = self._texts[i_index]
                     i_rect = self._rects[i_index]
-                    if i_index != self._index_current:
+                    if i_index != self._current_index:
                         i_x, i_y = i_rect.x(), i_rect.y()
                         i_w, i_h = i_rect.width(), i_rect.height()
                         painter._set_border_color_(127, 127, 127, alpha)
@@ -1059,9 +1073,9 @@ class QtBubbleAsChoice(
                             (239, 239, 239, alpha), (31, 63, 31, 127)
                         )
 
-                if self._index_current is not None:
-                    text_cur = self._texts[self._index_current]
-                    rect_cur = self._rects[self._index_current]
+                if self._current_index is not None:
+                    text_cur = self._texts[self._current_index]
+                    rect_cur = self._rects[self._current_index]
 
                     h_c = self._text_h_maximum+4
                     t_w_c, t_h_c = _qt_core.QtFont.compute_size_2(
@@ -1131,7 +1145,7 @@ class QtBubbleAsChoice(
             self._idx_maximum = len(self._idx_all)-1
         else:
             self._idx_maximum = None
-            self._index_current = None
+            self._current_index = None
 
         self._refresh_widget_all_()
 
@@ -1143,43 +1157,43 @@ class QtBubbleAsChoice(
 
     def _do_previous_key_press_(self):
         if self._idx_maximum is not None:
-            if self._index_current is None:
-                self._index_current = self._idx_all[-1]
+            if self._current_index is None:
+                self._current_index = self._idx_all[-1]
             else:
-                if self._index_current not in self._idx_all:
-                    self._index_current = self._idx_all[-1]
+                if self._current_index not in self._idx_all:
+                    self._current_index = self._idx_all[-1]
 
-                index_pre = self._index_current
+                index_pre = self._current_index
                 idx = self._idx_all.index(index_pre)
                 idx -= 1
                 idx = max(min(idx, self._idx_maximum), self.__idx_minimum)
-                self._index_current = self._idx_all[idx]
+                self._current_index = self._idx_all[idx]
 
             self._refresh_widget_draw_()
 
     def _do_next_key_press_(self):
         if self._idx_maximum is not None:
-            if self._index_current is None:
-                self._index_current = self._idx_all[0]
+            if self._current_index is None:
+                self._current_index = self._idx_all[0]
             else:
-                if self._index_current not in self._idx_all:
-                    self._index_current = self._idx_all[0]
+                if self._current_index not in self._idx_all:
+                    self._current_index = self._idx_all[0]
 
-                index_pre = self._index_current
+                index_pre = self._current_index
                 idx = self._idx_all.index(index_pre)
                 idx += 1
                 idx = max(min(idx, self._idx_maximum), self.__idx_minimum)
-                self._index_current = self._idx_all[idx]
+                self._current_index = self._idx_all[idx]
 
             self._refresh_widget_draw_()
 
     def _do_accept_(self):
-        if self._index_current is not None:
-            text = self._texts[self._index_current]
-            self.choice_index_accepted.emit(self._index_current)
+        if self._current_index is not None:
+            text = self._texts[self._current_index]
+            self.choice_index_accepted.emit(self._current_index)
             self.choice_text_accepted.emit(text)
             self.hide()
-            sys.stdout.write('you choose "{}" at {}\n'.format(text, self._index_current))
+            sys.stdout.write('you choose "{}" at {}\n'.format(text, self._current_index))
             self.__is_active = False
         else:
             self._do_cancel_()
@@ -1294,7 +1308,7 @@ class QtBubbleAsChoose(
         self._texts_draw = []
         self._rects = []
 
-        self._index_current = None
+        self._current_index = None
         self._idx_maximum, self.__idx_minimum = None, 0
         self._idx_all = []
 
@@ -1370,7 +1384,7 @@ class QtBubbleAsChoose(
                 i_text_draw = self._texts_draw[i_index]
                 i_rect = self._rects[i_index]
 
-                if i_index == self._index_current:
+                if i_index == self._current_index:
                     painter._set_border_color_(_qt_core.QtRgba.BdrBubble)
                     painter._set_background_color_(_qt_core.QtRgba.BkgBubbleHover)
                 else:
@@ -1388,52 +1402,52 @@ class QtBubbleAsChoose(
                 )
 
     def _do_hover_move_(self, p):
-        index_pre = self._index_current
-        self._index_current = None
+        index_pre = self._current_index
+        self._current_index = None
         if self._rects:
             for i_index, i_rect in enumerate(self._rects):
                 if i_rect.contains(p):
-                    self._index_current = i_index
+                    self._current_index = i_index
                     break
 
-        if self._index_current != index_pre:
+        if self._current_index != index_pre:
             self._refresh_widget_draw_()
 
     def _do_previous_key_press_(self):
         if self._idx_maximum is not None:
-            if self._index_current is None:
-                self._index_current = self._idx_all[-1]
+            if self._current_index is None:
+                self._current_index = self._idx_all[-1]
             else:
-                if self._index_current not in self._idx_all:
-                    self._index_current = self._idx_all[-1]
+                if self._current_index not in self._idx_all:
+                    self._current_index = self._idx_all[-1]
 
-                index_pre = self._index_current
+                index_pre = self._current_index
                 idx = self._idx_all.index(index_pre)
                 idx -= 1
                 idx = max(min(idx, self._idx_maximum), self.__idx_minimum)
-                self._index_current = self._idx_all[idx]
+                self._current_index = self._idx_all[idx]
 
             self._refresh_widget_draw_()
 
     def _do_next_key_press_(self):
         if self._idx_maximum is not None:
-            if self._index_current is None:
-                self._index_current = self._idx_all[0]
+            if self._current_index is None:
+                self._current_index = self._idx_all[0]
             else:
-                if self._index_current not in self._idx_all:
-                    self._index_current = self._idx_all[0]
+                if self._current_index not in self._idx_all:
+                    self._current_index = self._idx_all[0]
 
-                index_pre = self._index_current
+                index_pre = self._current_index
                 idx = self._idx_all.index(index_pre)
                 idx += 1
                 idx = max(min(idx, self._idx_maximum), self.__idx_minimum)
-                self._index_current = self._idx_all[idx]
+                self._current_index = self._idx_all[idx]
 
             self._refresh_widget_draw_()
 
     def _do_accept_(self):
-        if self._index_current is not None:
-            text = self._texts[self._index_current]
+        if self._current_index is not None:
+            text = self._texts[self._current_index]
             self.bubble_text_choose_accepted.emit(text)
             self._result = text
             self._do_popup_close_()

@@ -76,12 +76,12 @@ class _AbsAssign(object):
         self._post_fnc = fnc
 
 
-class AbsPrxSubPageForAnyAssign(
-    gui_prx_widgets.PrxBaseSubPage,
+class AbsPrxSubpageForAnyAssign(
+    gui_prx_widgets.PrxBaseSubpage,
     _AbsAssign
 ):
     def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(AbsPrxSubPageForAnyAssign, self).__init__(window, session, sub_window, *args, **kwargs)
+        super(AbsPrxSubpageForAnyAssign, self).__init__(window, session, sub_window, *args, **kwargs)
         self._init_base()
         self.gui_page_setup_fnc()
 
@@ -100,7 +100,7 @@ class AbsPrxSubPageForAnyAssign(
         self._qt_layout.addWidget(prx_sca.widget)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            self._sub_window.choice_name(
+            self._sub_window.choice_gui_name(
                 self._sub_window._configure.get('build.{}.options'.format(self.GUI_KEY))
             )
         )
@@ -114,7 +114,7 @@ class AbsPrxSubPageForAnyAssign(
         prx_sca.add_widget(self._prx_tool_group)
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._sub_window._language, self._sub_window._configure.get('build.{}.filter'.format(self.GUI_KEY))
             )
         )
@@ -131,7 +131,7 @@ class AbsPrxSubPageForAnyAssign(
         self._apply_and_close_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._apply_and_close_button)
         self._apply_and_close_button._set_name_text_(
-            self._sub_window.choice_name(
+            self._sub_window.choice_gui_name(
                 self._sub_window._configure.get('build.main.buttons.apply_and_close')
             )
         )
@@ -140,7 +140,7 @@ class AbsPrxSubPageForAnyAssign(
         self._apply_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._apply_button)
         self._apply_button._set_name_text_(
-            self._sub_window.choice_name(
+            self._sub_window.choice_gui_name(
                 self._sub_window._configure.get('build.main.buttons.apply')
             )
         )
@@ -149,18 +149,18 @@ class AbsPrxSubPageForAnyAssign(
         self._close_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._close_button)
         self._close_button._set_name_text_(
-            self._sub_window.choice_name(
+            self._sub_window.choice_gui_name(
                 self._sub_window._configure.get('build.main.buttons.close')
             )
         )
         self._close_button.press_clicked.connect(self._on_close)
 
 
-class AbsPrxSubPageForTypeAssign(AbsPrxSubPageForAnyAssign):
+class AbsPrxSubpageForTypeAssign(AbsPrxSubpageForAnyAssign):
     GUI_KEY = 'type'
 
     def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(AbsPrxSubPageForTypeAssign, self).__init__(window, session, sub_window, *args, **kwargs)
+        super(AbsPrxSubpageForTypeAssign, self).__init__(window, session, sub_window, *args, **kwargs)
 
     def _on_apply(self):
         if not self._scr_nodes:
@@ -261,11 +261,11 @@ class AbsPrxSubPageForTypeAssign(AbsPrxSubPageForAnyAssign):
                 i_qt_item._set_assign_path_set_(set())
 
 
-class AbsPrxSubPageForTagAssign(AbsPrxSubPageForAnyAssign):
+class AbsPrxSubpageForTagAssign(AbsPrxSubpageForAnyAssign):
     GUI_KEY = 'tag'
 
     def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(AbsPrxSubPageForTagAssign, self).__init__(window, session, sub_window, *args, **kwargs)
+        super(AbsPrxSubpageForTagAssign, self).__init__(window, session, sub_window, *args, **kwargs)
 
     def _on_apply(self):
         if not self._scr_nodes:

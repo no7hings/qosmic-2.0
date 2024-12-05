@@ -44,7 +44,7 @@ class AbsQtWidgetBaseDef(object):
 
     @classmethod
     def _get_language_(cls):
-        return bsc_core.BscEnviron.get_ui_language()
+        return bsc_core.BscEnviron.get_gui_language()
 
 
 class AbsQtBusyBaseDef(object):
@@ -2813,22 +2813,25 @@ class AbsQtItemFilterDef(object):
     def _get_item_semantic_tag_filter_keys_tgt_(self):
         return self._item_semantic_tag_filter_keys_tgt
 
+    def _set_item_semantic_tag_filter_keys_tgt_(self, data):
+        self._item_semantic_tag_filter_keys_tgt = data
+
     def _generate_item_semantic_tag_filter_tgt_args_(self, data_src):
         data_tgt = self._item_semantic_tag_filter_keys_tgt
         mode = self._item_semantic_tag_filter_mode
         if data_tgt:
             if mode == self.TagFilterMode.MatchAll:
-                for i_key, i_value_tgt in data_tgt.items():
+                for i_key, i_v_tgt in data_tgt.items():
                     if i_key in data_src:
-                        v_src = data_src[i_key]
-                        if not i_value_tgt.intersection(v_src):
+                        i_v_src = data_src[i_key]
+                        if not i_v_tgt.intersection(i_v_src):
                             return True, True
                 return True, False
             elif mode == self.TagFilterMode.MatchOne:
-                for i_key, i_value_tgt in data_tgt.items():
+                for i_key, i_v_tgt in data_tgt.items():
                     if i_key in data_src:
-                        v_src = data_src[i_key]
-                        if i_value_tgt.intersection(v_src):
+                        i_v_src = data_src[i_key]
+                        if i_v_tgt.intersection(i_v_src):
                             return True, False
                 return True, True
             return True, False

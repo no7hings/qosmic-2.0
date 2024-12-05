@@ -1,6 +1,6 @@
 # coding:utf-8
 def main(session):
-    import qsm_maya.tasks.animation.scripts as s
+    import qsm_maya.handles.animation.scripts as s
 
     option_opt = session.get_option_opt()
 

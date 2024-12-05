@@ -23,7 +23,7 @@ from .. import popup as _wgt_popup
 
 from ..entry import entry_for_constant as _entry_for_constant
 
-from ..entry import etd_entry_for_guide as _etd_entry_for_guide
+from ..entry import cmp_entry_for_guide as _cmp_entry_for_guide
 
 
 class QtInputForGuide(
@@ -73,7 +73,7 @@ class QtInputForGuide(
         self._input_layout.addWidget(self._guide_tree_button)
         self._guide_tree_button._set_icon_file_path_(_gui_core.GuiIcon.get('tree'))
 
-        self._guide_entry = _etd_entry_for_guide.QtEtdEntryForGuide()
+        self._guide_entry = _cmp_entry_for_guide.QtCmpEntryForGuide()
         self._input_layout.addWidget(self._guide_entry)
 
         self._guide_entry.entry_started.connect(

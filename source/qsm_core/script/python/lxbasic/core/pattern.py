@@ -1,6 +1,8 @@
 # coding:utf-8
 import glob
 
+import os
+
 import re
 
 import fnmatch
@@ -455,9 +457,7 @@ class BscStgParseOpt(AbsParseOpt):
             self._pattern, self._variants_default
         )
 
-        paths = _scan_glob.ScanGlob.glob(
-            regex
-        )
+        paths = _scan_glob.ScanGlob.glob(regex)
 
         if sort is True:
             paths = _raw.RawTextsOpt(paths).sort_by_number()
@@ -480,25 +480,33 @@ class BscStgParseOpt(AbsParseOpt):
 
                 # when variant value is '', we collected result also, etc. "X:A{var_0}/B", "X:A/B"
                 else:
-                    i_pattern_new = self._pattern
-
                     i_vars_new = {}
                     for i_key in keys:
                         if i_key.endswith('_EPT'):
                             i_vars_new[i_key] = ''
 
-                    i_pattern_new = BscParse.update_variants(i_pattern_new, **i_vars_new)
-                    i_p_new = parse.parse(
-                        i_pattern_new, i_path, case_sensitive=True
-                    )
-                    if i_p_new:
-                        i_r_new = i_p_new.named
-                        if i_r_new:
-                            # ensure update variant form exists
-                            i_r_new.update(self._variants)
-                            i_r_new['result'] = i_path
-                            i_r_new['pattern'] = self._pattern_origin
-                            list_.append(i_r_new)
+                    i_pattern_opt_new = self.update_variants_to(**i_vars_new)
+                    i_pattern_new = i_pattern_opt_new.get_value()
+                    # when has variants
+                    if i_pattern_opt_new.get_keys():
+                        i_p_new = parse.parse(
+                            i_pattern_new, i_path, case_sensitive=True
+                        )
+                        if i_p_new:
+                            i_r_new = i_p_new.named
+                            if i_r_new:
+                                # ensure update variant form exists
+                                i_r_new.update(self._variants)
+                                i_r_new['result'] = i_path
+                                i_r_new['pattern'] = self._pattern_origin
+                                list_.append(i_r_new)
+                    # when no variants
+                    else:
+                        if os.path.exists(i_pattern_new):
+                            i_r = dict(result=i_path)
+                            i_r.update(self._variants)
+                            list_.append(i_r)
+
         else:
             for i_path in paths:
                 i_r = dict(result=i_path)

@@ -101,6 +101,39 @@ class AbsContent(object):
 
         self.__key_unfold_excludes = []
 
+    def __str__(self):
+        return _base.ToString(
+            self.get_value()
+        ).generate()
+
+    def __repr__(self):
+        return '{}({})'.format(
+            self.__class__.__name__,
+            self.__file_path
+        )
+
+    def __getitem__(self, key):
+        return self.get(key)
+
+    def __setitem__(self, key, value):
+        self.set(key, value)
+
+    def __copy__(self):
+        return self.__class__(
+            self.__key, copy.copy(self.__value)
+        )
+
+    def __deepcopy__(self, memo=None):
+        return self.__class__(
+            self.__key, copy.deepcopy(self.__value, memo)
+        )
+
+    def __hash__(self):
+        s = hashlib.md5(
+            json.dumps(self.__value)
+        ).hexdigest()
+        return s.upper()
+
     def save_to(self, file_path):
         _base.ContentFile(file_path).write(self.__value)
 
@@ -361,39 +394,6 @@ class AbsContent(object):
                 return unicode(repr(data), 'utf-8')
             else:
                 return str(repr(data))
-
-    def __str__(self):
-        return _base.ToString(
-            self.get_value()
-        ).generate()
-
-    def __repr__(self):
-        return '{}({})'.format(
-            self.__class__.__name__,
-            self.__file_path
-        )
-
-    def __getitem__(self, key):
-        return self.get(key)
-
-    def __setitem__(self, key, value):
-        self.set(key, value)
-
-    def __copy__(self):
-        return self.__class__(
-            self.__key, copy.copy(self.__value)
-        )
-
-    def __deepcopy__(self, memo=None):
-        return self.__class__(
-            self.__key, copy.deepcopy(self.__value, memo)
-        )
-
-    def __hash__(self):
-        s = hashlib.md5(
-            json.dumps(self.__value)
-        ).hexdigest()
-        return s.upper()
 
     def items(self):
         return self.__value.items()

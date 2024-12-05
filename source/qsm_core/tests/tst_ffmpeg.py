@@ -8,15 +8,15 @@ import lxbasic.storage as bsc_storage
 # ).get_size_as_gb()
 
 
-# print bsc_core.BscFfmpeg.get_frame_args(
+# print bsc_core.BscFfmpegVideo.get_frame_args(
 #     'Z:/temeporaries/dongchangbao/snapshot/test.mkv'
 # )
 #
-# bsc_core.BscFfmpeg.extract_frame(
+# bsc_core.BscFfmpegVideo.extract_frame(
 #     'Z:/temeporaries/dongchangbao/playblast_tool/test.export.v004.mov', 'Z:/temeporaries/dongchangbao/playblast_tool/test.export.v004.png', 0
 # )
 
-cmd_script = bsc_core.BscFfmpeg.generate_video_coding_convert_cmd_script(
+cmd_script = bsc_core.BscFfmpegVideo.generate_video_coding_convert_cmd_script(
     input='Z:/temporaries/camera_mask/maya_avi_1.avi', output='Z:/temporaries/camera_mask/maya_avi_1.mov',
     coding='MPEG4'
 )

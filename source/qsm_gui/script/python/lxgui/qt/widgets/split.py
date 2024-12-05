@@ -25,7 +25,6 @@ class _AbsQtSplitterHandle(
 ):
     QT_ORIENTATION = None
 
-
     def _refresh_widget_all_(self):
         self._refresh_widget_draw_geometry_()
         self._refresh_widget_draw_()

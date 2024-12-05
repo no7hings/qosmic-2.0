@@ -2,6 +2,8 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
+import qsm_general.core as qsm_gnl_core
+
 from .. import core as _mya_core
 
 
@@ -39,6 +41,7 @@ class AdvControl(object):
 
 class AdvNamespaceExtra(object):
     def _init_namespace_extra(self, namespace):
+        self._adv_control_cfg = qsm_gnl_core.AdvCharacterControlConfigure()
         self._namespace = namespace
 
     @property

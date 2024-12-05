@@ -37,7 +37,7 @@ class ShelfBuild(object):
         shelf_data = self._c.get('build.shelves')
 
         for i_k, i_v in shelf_data.items():
-            i_tool_tip = gui_core.GuiUtil.choice_tool_tip(
+            i_tool_tip = gui_core.GuiUtil.choice_gui_tool_tip(
                 language, i_v
             )
 
@@ -48,8 +48,8 @@ class ShelfBuild(object):
             i_tools = self._c.get('build.shelves.{}.tools'.format(i_k))
 
             for j_k, j_v in i_tools.items():
-                j_name = gui_core.GuiUtil.choice_name(language, j_v)
-                j_tool_tip = gui_core.GuiUtil.choice_tool_tip(language, j_v)
+                j_name = gui_core.GuiUtil.choice_gui_name(language, j_v)
+                j_tool_tip = gui_core.GuiUtil.choice_gui_tool_tip(language, j_v)
                 j_script = j_v['script']
                 j_dbl_script = j_v.get('dbl_script') or ''
                 i_button_style = j_v.get('button_style') or 'text_and_icon'

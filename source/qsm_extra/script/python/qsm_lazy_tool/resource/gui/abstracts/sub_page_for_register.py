@@ -40,14 +40,14 @@ class _AbsRegister(object):
         self._post_fnc = fnc
 
 
-class AbsPrxSubPageForMotionRegister(
-    gui_prx_widgets.PrxBaseSubPage,
+class AbsPrxSubpageForMotionRegister(
+    gui_prx_widgets.PrxBaseSubpage,
     _AbsRegister
 ):
     GUI_KEY = 'motion'
 
     def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(AbsPrxSubPageForMotionRegister, self).__init__(window, session, sub_window, *args, **kwargs)
+        super(AbsPrxSubpageForMotionRegister, self).__init__(window, session, sub_window, *args, **kwargs)
         self.gui_page_setup_fnc()
 
     def gui_page_setup_fnc(self):
@@ -55,7 +55,7 @@ class AbsPrxSubPageForMotionRegister(
         self._qt_layout.addWidget(prx_sca.widget)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            self._sub_window.choice_name(
+            self._sub_window.choice_gui_name(
                 self._sub_window._configure.get('build.{}.options'.format(self.GUI_KEY))
             )
         )
@@ -69,7 +69,7 @@ class AbsPrxSubPageForMotionRegister(
         prx_sca.add_widget(self._prx_tool_group)
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._sub_window._language, self._sub_window._configure.get('build.{}.filter'.format(self.GUI_KEY))
             )
         )
@@ -89,7 +89,7 @@ class AbsPrxSubPageForMotionRegister(
 
 
 class _AbsPrxPageForAnyRegister(
-    gui_prx_widgets.PrxBaseSubPage,
+    gui_prx_widgets.PrxBaseSubpage,
     _AbsRegister
 ):
 
@@ -220,7 +220,7 @@ class _AbsPrxPageForAnyRegister(
         self._qt_layout.addWidget(prx_sca.widget)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            self._sub_window.choice_name(
+            self._sub_window.choice_gui_name(
                 self._sub_window._configure.get('build.{}.options'.format(self.GUI_KEY))
             )
         )
@@ -234,7 +234,7 @@ class _AbsPrxPageForAnyRegister(
         prx_sca.add_widget(self._prx_tool_group)
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._sub_window._language, self._sub_window._configure.get('build.{}.filter'.format(self.GUI_KEY))
             )
         )
@@ -261,7 +261,7 @@ class _AbsPrxPageForAnyRegister(
         self._apply_and_close_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._apply_and_close_button)
         self._apply_and_close_button._set_name_text_(
-            self._sub_window.choice_name(
+            self._sub_window.choice_gui_name(
                 self._sub_window._configure.get('build.main.buttons.apply_and_close')
             )
         )
@@ -270,7 +270,7 @@ class _AbsPrxPageForAnyRegister(
         self._apply_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._apply_button)
         self._apply_button._set_name_text_(
-            self._sub_window.choice_name(
+            self._sub_window.choice_gui_name(
                 self._sub_window._configure.get('build.main.buttons.apply')
             )
         )
@@ -279,7 +279,7 @@ class _AbsPrxPageForAnyRegister(
         self._close_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._close_button)
         self._close_button._set_name_text_(
-            self._sub_window.choice_name(
+            self._sub_window.choice_gui_name(
                 self._sub_window._configure.get('build.main.buttons.close')
             )
         )
@@ -290,11 +290,11 @@ class _AbsPrxPageForAnyRegister(
         )
 
 
-class AbsPrxSubPageForVideoRegister(_AbsPrxPageForAnyRegister):
+class AbsPrxSubpageForVideoRegister(_AbsPrxPageForAnyRegister):
     GUI_KEY = 'video'
 
     def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(AbsPrxSubPageForVideoRegister, self).__init__(window, session, sub_window, *args, **kwargs)
+        super(AbsPrxSubpageForVideoRegister, self).__init__(window, session, sub_window, *args, **kwargs)
 
     def _on_apply(self):
         file_paths = self._prx_options_node.get('files')
@@ -319,7 +319,7 @@ class AbsPrxSubPageForVideoRegister(_AbsPrxPageForAnyRegister):
                     self._post_fnc(scr_type_paths_addition, scr_tag_paths_addition)
 
             self._sub_window.popup_message(
-                self._sub_window.choice_message(
+                self._sub_window.choice_gui_message(
                     self._sub_window._configure.get('build.main.messages.register_successful')
                 )
             )
@@ -329,11 +329,11 @@ class AbsPrxSubPageForVideoRegister(_AbsPrxPageForAnyRegister):
         self.clear_type_and_tag_checked()
 
 
-class AbsPrxSubPageForAudioRegister(_AbsPrxPageForAnyRegister):
+class AbsPrxSubpageForAudioRegister(_AbsPrxPageForAnyRegister):
     GUI_KEY = 'audio'
 
     def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(AbsPrxSubPageForAudioRegister, self).__init__(window, session, sub_window, *args, **kwargs)
+        super(AbsPrxSubpageForAudioRegister, self).__init__(window, session, sub_window, *args, **kwargs)
 
     def _on_apply(self):
         file_paths = self._prx_options_node.get('files')
@@ -349,7 +349,7 @@ class AbsPrxSubPageForAudioRegister(_AbsPrxPageForAnyRegister):
             ).execute(scr_type_paths, scr_tag_paths)
 
             self._sub_window.popup_message(
-                self._sub_window.choice_message(
+                self._sub_window.choice_gui_message(
                     self._sub_window._configure.get('build.main.messages.register_successful')
                 )
             )
@@ -359,12 +359,12 @@ class AbsPrxSubPageForAudioRegister(_AbsPrxPageForAnyRegister):
         self.clear_type_and_tag_checked()
 
 
-class AbsPrxSubPageForAssetRegister(
-    gui_prx_widgets.PrxBaseSubPage,
+class AbsPrxSubpageForAssetRegister(
+    gui_prx_widgets.PrxBaseSubpage,
     _AbsRegister
 ):
     def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(AbsPrxSubPageForAssetRegister, self).__init__(window, session, sub_window, *args, **kwargs)
+        super(AbsPrxSubpageForAssetRegister, self).__init__(window, session, sub_window, *args, **kwargs)
         self._init_base()
         self.gui_page_setup_fnc()
 

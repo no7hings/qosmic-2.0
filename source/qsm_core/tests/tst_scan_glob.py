@@ -29,6 +29,6 @@ def test_1():
 #     'X:/QSM_TST/Assets', '*_Skin.ma'
 # )
 
-print bsc_scan.ScanGlob.file_glob('X:/QSM_TST/Assets/*//*_Skin.ma')
+print bsc_scan.ScanGlob.glob_file('X:/QSM_TST/Assets/*//*_Skin.ma')
 
-print bsc_scan.ScanGlob.file_glob('X:/QSM_TST/Assets/*/*/Rig/Final/scenes/*_Skin.ma')
+print bsc_scan.ScanGlob.glob_file('X:/QSM_TST/Assets/*/*/Rig/Final/scenes/*_Skin.ma')

@@ -3,10 +3,6 @@ import re
 
 import fnmatch
 
-import sys
-
-import time
-
 import six
 
 import os
@@ -45,12 +41,12 @@ class ScanGlob(object):
             return s
 
     @classmethod
-    def has_magic_fnc(cls, s):
+    def _has_magic_fnc(cls, s):
         return cls.MAGIC_CHECK.search(s) is not None
 
     @classmethod
-    def scan_fnc(cls, path):
-        if cls.check_dir_fnc(path):
+    def _scan_fnc(cls, path):
+        if cls._check_dir_fnc(path):
             list_ = []
             path = cls.ensure_unicode(path)
             for i in scandir.scandir(path):
@@ -60,52 +56,99 @@ class ScanGlob(object):
         return []
 
     @classmethod
-    def check_exists_fnc(cls, path):
+    def _exists_fnc(cls, path):
         return os.access(path, os.F_OK)
 
     @classmethod
-    def check_directory_exists_fnc(cls, path):
+    def _directory_exists_fnc(cls, path):
         return os.access(path, os.F_OK) and os.path.isdir(path)
 
     @classmethod
-    def check_file_exists_fnc(cls, path):
+    def _file_exists_fnc(cls, path):
         return os.access(path, os.F_OK) and os.path.isfile(path)
 
     @classmethod
-    def check_dir_fnc(cls, path):
+    def _check_dir_fnc(cls, path):
         return os.path.isdir(path)
 
     @classmethod
+    def _match_name_fnc(cls, path, name_regex):
+        name = os.path.basename(path)
+        return Filter.is_match(name, name_regex)
+
+    @classmethod
+    def _filter_files_fnc(cls, location, name_regex):
+        def rcs_fnc_(path_):
+            _next_paths = cls._scan_fnc(path_)
+            for _i_path in _next_paths:
+                if cls._check_dir_fnc(_i_path):
+                    rcs_fnc_(_i_path)
+                else:
+                    if cls._match_name_fnc(_i_path, name_regex):
+                        list_.append(_i_path)
+
+        list_ = []
+
+        if cls._directory_exists_fnc(location) is True:
+            rcs_fnc_(location)
+
+        return list_
+
+    @classmethod
+    def _get_glob_args(cls, path_regex):
+        path_regex = cls.ensure_unicode(path_regex)
+
+        filter_names = path_regex.split('/')
+        depth_maximum = len(filter_names)-1
+        if platform.system() == 'Linux':
+            location = '/'+filter_names[1]
+            start_index = 1
+            flag = True
+        elif platform.system() == 'Windows':
+            if path_regex.startswith('//'):
+                location = '//'+filter_names[2]
+                start_index = 2
+                flag = True
+            else:
+                location = filter_names[0]+'/'
+                start_index = 0
+                flag = False
+        else:
+            raise SystemError()
+
+        return path_regex, location, filter_names, start_index, depth_maximum, flag
+
+    @classmethod
     def glob(cls, path_regex):
-        def _rcs_fnc(path_, depth_, is_root_=False, flag_=False):
+        def _rcs_fnc(path_, depth_, is_root_=False, is_drive_letter_=False):
             path_ = cls.ensure_unicode(path_)
             _depth = depth_+1
             if _depth <= depth_maximum:
                 _filter_name = cls.ensure_unicode(filter_names[_depth])
                 if is_root_ is True:
-                    if flag_ is True:
-                        _filter_path = six.u('{}/{}').format(
+                    if is_drive_letter_ is True:
+                        _filter_path = u'{}/{}'.format(
                             path_, _filter_name
                         )
                     else:
-                        _filter_path = six.u('{}{}').format(
+                        _filter_path = u'{}{}'.format(
                             path_, _filter_name
                         )
                 else:
-                    _filter_path = six.u('{}/{}').format(
+                    _filter_path = u'{}/{}'.format(
                         path_, _filter_name
                     )
 
-                if not cls.has_magic_fnc(_filter_path):
-                    if cls.check_exists_fnc(_filter_path):
+                if not cls._has_magic_fnc(_filter_path):
+                    if cls._exists_fnc(_filter_path):
                         _paths_matched = [_filter_path]
                     else:
                         _paths_matched = []
                 else:
-                    _paths = cls.scan_fnc(path_)
+                    _next_paths = cls._scan_fnc(path_)
 
                     _paths_matched = fnmatch.filter(
-                        _paths, _filter_path
+                        _next_paths, _filter_path
                     )
 
                 if _paths_matched:
@@ -122,121 +165,29 @@ class ScanGlob(object):
         depth_maximum = len(filter_names)-1
         if platform.system() == 'Linux':
             # etc. /production
-            root = '/'+filter_names[1]
+            location = '/'+filter_names[1]
             start_index = 1
             flag = True
         elif platform.system() == 'Windows':
             # etc. //shared
             if path_regex.startswith('//'):
-                root = '//' + filter_names[2]
+                location = '//' + filter_names[2]
                 start_index = 2
                 flag = True
             # etc. Z:/
             else:
-                root = filter_names[0]+'/'
+                location = filter_names[0]+'/'
                 start_index = 0
                 flag = False
         else:
             raise SystemError()
 
-        if cls.check_directory_exists_fnc(root) is True:
-            _rcs_fnc(root, start_index, is_root_=True, flag_=flag)
-        return list_
-
-    @classmethod
-    def concurrent_glob(cls, path_regex, fnc):
-        def rcs_fnc_(path_, depth_, is_root_=False, flag_=False):
-            path_ = cls.ensure_unicode(path_)
-            _depth = depth_+1
-            if _depth <= depth_maximum:
-                _filter_name = cls.ensure_unicode(filter_names[_depth])
-                if is_root_ is True:
-                    if flag_ is True:
-                        _filter_path = six.u('{}/{}').format(
-                            path_, _filter_name
-                        )
-                    else:
-                        _filter_path = six.u('{}{}').format(
-                            path_, _filter_name
-                        )
-                else:
-                    _filter_path = six.u('{}/{}').format(
-                        path_, _filter_name
-                    )
-
-                if not cls.has_magic_fnc(_filter_path):
-                    if cls.check_exists_fnc(_filter_path):
-                        _paths_matched = [_filter_path]
-                    else:
-                        _paths_matched = []
-                else:
-                    _paths = cls.scan_fnc(path_)
-
-                    _paths_matched = fnmatch.filter(
-                        _paths, _filter_path
-                    )
-
-                if _paths_matched:
-                    for _i_path in _paths_matched:
-                        if _depth == depth_maximum:
-                            fnc(_i_path)
-
-                        executor.submit(rcs_fnc_, _i_path, _depth)
-
-        from concurrent.futures import ThreadPoolExecutor
-
-        executor = ThreadPoolExecutor(max_workers=5)
-
-        path_regex = cls.ensure_unicode(path_regex)
-
-        filter_names = path_regex.split('/')
-        depth_maximum = len(filter_names)-1
-        if platform.system() == 'Linux':
-            root = '/'+filter_names[1]
-            start_index = 1
-            flag = True
-        elif platform.system() == 'Windows':
-            if path_regex.startswith('//'):
-                root = '//' + filter_names[2]
-                start_index = 2
-                flag = True
-            else:
-                root = filter_names[0]+'/'
-                start_index = 0
-                flag = False
-        else:
-            raise SystemError()
-
-        rcs_fnc_(root, start_index, is_root_=True, flag_=flag)
-
-        executor.submit(rcs_fnc_, root, start_index, is_root_=True, flag_=flag)
-        return executor
-
-    @classmethod
-    def name_match_fnc(cls, path, name_regex):
-        name = os.path.basename(path)
-        return Filter.is_match(name, name_regex)
-
-    @classmethod
-    def filter_all_files_from(cls, location, name_regex):
-        def rcs_fnc_(path_):
-            _paths = cls.scan_fnc(path_)
-            for _i_path in _paths:
-                if cls.check_dir_fnc(_i_path):
-                    rcs_fnc_(_i_path)
-                else:
-                    if cls.name_match_fnc(_i_path, name_regex):
-                        list_.append(_i_path)
-
-        list_ = []
-
-        if cls.check_directory_exists_fnc(location) is True:
-            rcs_fnc_(location)
-
+        if cls._directory_exists_fnc(location) is True:
+            _rcs_fnc(location, start_index, is_root_=True, is_drive_letter_=flag)
         return list_
     
     @classmethod
-    def file_glob(cls, file_regex):
+    def glob_file(cls, file_regex):
         file_regex = cls.ensure_unicode(file_regex)
 
         if '//' in file_regex:
@@ -246,16 +197,140 @@ class ScanGlob(object):
 
             list_ = []
 
-            paths = cls.glob(_s[0])
+            locations = cls.glob(_s[0])
 
-            for i_path in paths:
-                if cls.check_dir_fnc(i_path):
-                    i_results = cls.filter_all_files_from(i_path, _s[1])
+            for i_path in locations:
+                if cls._check_dir_fnc(i_path):
+                    i_results = cls._filter_files_fnc(i_path, _s[1])
                     list_.extend(i_results)
 
             return list_
         return cls.glob(file_regex)
 
     @classmethod
-    def concurrent_file_glob(cls, file_regex, fnc):
-        pass
+    def concurrent_glob(cls, path_regex, result_fnc, finish_fnc=None):
+        def rcs_fnc_(path_, depth_, is_root_=False, is_drive_letter_=False):
+            path_ = cls.ensure_unicode(path_)
+
+            _depth = depth_+1
+
+            # scan to depth maximum
+            if _depth <= depth_maximum:
+                _filter_name = cls.ensure_unicode(filter_names[_depth])
+                if is_root_ is True:
+                    if is_drive_letter_ is True:
+                        _filter_path = u'{}/{}'.format(
+                            path_, _filter_name
+                        )
+                    else:
+                        _filter_path = u'{}{}'.format(
+                            path_, _filter_name
+                        )
+                else:
+                    _filter_path = u'{}/{}'.format(
+                        path_, _filter_name
+                    )
+
+                # when is not magic, use current exists path
+                if not cls._has_magic_fnc(_filter_path):
+                    if cls._exists_fnc(_filter_path):
+                        _paths_matched = [_filter_path]
+                    else:
+                        _paths_matched = []
+                else:
+                    _next_paths = cls._scan_fnc(path_)
+
+                    _paths_matched = fnmatch.filter(_next_paths, _filter_path)
+
+                if _paths_matched:
+                    _index_maximum = len(_paths_matched)-1
+
+                    for _i_idx, _i_path in enumerate(_paths_matched):
+                        # when is match maximum depth, finish recursion
+                        if _depth == depth_maximum:
+                            result_fnc(_i_path)
+                        else:
+                            task_dict[_i_path] = False
+                            executor.submit(
+                                rcs_fnc_,
+                                path_=_i_path, depth_=_depth
+                            )
+
+            task_dict[path_] = True
+
+            # check finish
+            if finish_fnc is not None:
+                is_finished = sum(task_dict.values()) == len(task_dict.values())
+                if is_finished is True:
+                    finish_fnc()
+
+        from concurrent.futures import ThreadPoolExecutor
+
+        executor = ThreadPoolExecutor(max_workers=32)
+
+        task_dict = {}
+
+        path_regex, location, filter_names, start_index, depth_maximum, flag = cls._get_glob_args(path_regex)
+
+        if cls._directory_exists_fnc(location) is True:
+            task_dict[location] = False
+            executor.submit(
+                rcs_fnc_,
+                path_=location,
+                depth_=start_index,
+                is_root_=True, is_drive_letter_=flag
+            )
+        return executor
+
+    @classmethod
+    def _concurrent_filter_files_fnc(cls, executor, location, name_regex, result_fnc, finish_fnc=None):
+        def rcs_fnc_(path_):
+            _next_paths = cls._scan_fnc(path_)
+
+            for _i_path in _next_paths:
+                # do not check exists
+                if cls._check_dir_fnc(_i_path):
+                    task_dict[_i_path] = False
+
+                    executor.submit(rcs_fnc_, _i_path)
+                # when is file then finish
+                else:
+                    if cls._match_name_fnc(_i_path, name_regex):
+                        result_fnc(_i_path)
+
+            task_dict[path_] = True
+
+            # check finish
+            if finish_fnc is not None:
+                is_finished = sum(task_dict.values()) == len(task_dict.values())
+                if is_finished is True:
+                    finish_fnc()
+
+        task_dict = {}
+
+        if cls._directory_exists_fnc(location) is True:
+            task_dict[location] = False
+            executor.submit(rcs_fnc_, location)
+
+    @classmethod
+    def concurrent_glob_file(cls, file_regex, result_fnc, finish_fnc=None):
+        # ensure path is unicode
+        file_regex = cls.ensure_unicode(file_regex)
+
+        if '//' in file_regex:
+            _s = file_regex.split('//')
+            if len(_s) > 2:
+                raise RuntimeError(u'more then 2 "//" in "{}", please check it.'.format(file_regex))
+
+            locations = cls.glob(_s[0])
+
+            from concurrent.futures import ThreadPoolExecutor
+
+            executor = ThreadPoolExecutor(max_workers=32)
+
+            for i_path in locations:
+                if cls._check_dir_fnc(i_path):
+                    cls._concurrent_filter_files_fnc(executor, i_path, _s[1], result_fnc, finish_fnc)
+            return executor
+        return cls.concurrent_glob(file_regex, result_fnc, finish_fnc)
+

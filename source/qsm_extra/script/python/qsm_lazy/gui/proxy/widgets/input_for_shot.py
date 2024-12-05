@@ -41,7 +41,7 @@ class PrxInputForShot(prx_abstracts.AbsPrxWidget):
                 (
                     '点击重缓存中重载实体。\n'
                     '右键/点击小三角：\n'
-                    '   从系统中重载：重新生成实体缓存。'
+                    '   从系统中重载：重新同步缓存。'
                 )
             )
         else:
@@ -50,7 +50,7 @@ class PrxInputForShot(prx_abstracts.AbsPrxWidget):
                 (
                     'Click on Reload Entity from Cache. \n'
                     'Right click/click on the small triangle: \n'
-                    'Reload from System: Regenerate the entity cache.'
+                    'Reload from System: Sync cache.'
                 )
             )
 
@@ -59,8 +59,8 @@ class PrxInputForShot(prx_abstracts.AbsPrxWidget):
 
         self._scan_root = qsm_scan.Stage().get_root()
 
-        self._qt_path_input._set_buffer_fnc_(
-            self._buffer_fnc
+        self._qt_path_input._set_next_buffer_fnc_(
+            self._next_buffer_fnc
         )
 
         # self._qt_path_input._set_root_text_('Shot:')
@@ -159,11 +159,11 @@ class PrxInputForShot(prx_abstracts.AbsPrxWidget):
         )
 
     def _pull_history_fnc(self, path_text):
-        self._buffer_fnc(
+        self._next_buffer_fnc(
             bsc_core.BscNodePathOpt(path_text)
         )
 
-    def _buffer_fnc(self, path_opt):
+    def _next_buffer_fnc(self, path_opt):
         cs = path_opt.get_components()
         cs.reverse()
         d = len(cs)

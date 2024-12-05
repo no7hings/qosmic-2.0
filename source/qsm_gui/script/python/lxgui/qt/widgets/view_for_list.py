@@ -307,8 +307,6 @@ class QtListWidget(
                             painter.drawPixmap(i_rect, self._item_pixmap_cache)
                             painter.device()
 
-        # super(QtListWidget, self).paintEvent(event)
-
     def _generate_empty_pixmap_(self):
         if self.isHidden():
             return

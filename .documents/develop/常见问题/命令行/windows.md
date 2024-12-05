@@ -8,3 +8,12 @@ rez-env qsm_dcc_main maya-2019 usd-20.11 -- maya -batch -command "python(\"print
 ```shell
 rez-env qsm_dcc_main maya-2019 usd-20.11 -- maya -batch -command "python(\"import lxsession.commands as ssn_commands;ssn_commands.execute_option_hook(option=\\\"option_hook_key=dcc-process/maya-process&method=fbx-to-usd&fbx=Z:/libraries/resource/all/asset/modular_building_balcony_ukjsdavdw/v0001/geometry/fbx/modular_building_balcony_ukjsdavdw.fbx&usd=Z:/libraries/resource/all/asset/modular_building_balcony_ukjsdavdw/v0001/geometry/usd/modular_building_balcony_ukjsdavdw.usd&use_update_mode=True\\\")\")"
 ```
+
+## 正确
+```shell
+rez-env qsm_main -c \"qsm-hook-python -o \\\"option_hook_key=python-process/sync-process^&json=A\\\"\"
+```
+## 错误
+```shell
+rez-env qsm_main -- qsm-hook-python -o "option_hook_key=python-process/sync-process^&json=A"
+```

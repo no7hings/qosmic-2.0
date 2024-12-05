@@ -19,8 +19,8 @@ class Main(object):
         window = self._session.find_window()
         if window is not None:
             result = window.exec_message_dialog(
-                window.choice_tool_tip(self._session.gui_configure.get('window')),
-                title=window.choice_name(self._session.gui_configure.get('window')),
+                window.choice_gui_tool_tip(self._session.gui_configure.get('window')),
+                title=window.choice_gui_name(self._session.gui_configure.get('window')),
                 size=(320, 120),
                 status='warning',
             )

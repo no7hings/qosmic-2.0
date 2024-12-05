@@ -21,6 +21,7 @@ class TimewarpOpt(object):
     @_mya_core.Undo.execute
     def update_by_frame_range(cls, frame_range_src, frame_range_tgt):
         cls.create_auto(frame_range_src)
+
         opt = cls(cls.NODE_NAME)
         opt.frame_range_src = frame_range_src
         opt.frame_range_tgt = frame_range_tgt

@@ -1,6 +1,6 @@
 # coding:utf-8
 def main(session):
-    import qsm_maya.tasks.general.scripts as qsm_prv_scripts
+    import qsm_maya.handles.general.scripts as qsm_prv_scripts
 
     option_opt = session.get_option_opt()
 

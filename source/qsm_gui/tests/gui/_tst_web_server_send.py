@@ -1,10 +1,10 @@
 # coding:utf-8
 import lxbasic.web as bsc_web
 
-import qsm_lazy.backstage.process as lzy_bks_process
+import qsm_lazy.backstage.worker as lzy_bks_worker
 
 skt = bsc_web.WebSocket(
-    lzy_bks_process.NoticeWebServerBase.HOST, lzy_bks_process.NoticeWebServerBase.PORT
+    lzy_bks_worker.NoticeWebServerBase.HOST, lzy_bks_worker.NoticeWebServerBase.PORT
 )
 
 if skt.connect() is True:

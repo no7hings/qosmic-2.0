@@ -4,7 +4,7 @@ import sys
 def asset_cfx_rig_release_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya_wsp_task.task_release_process as p
+    import qsm_maya_lazy_wsp.tasks.asset_cfx_rig.dcc_processes.task_release as p
 
     kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
         option_opt.to_string()
@@ -18,7 +18,7 @@ def asset_cfx_rig_release_fnc(option_opt):
 def shot_cfx_dressing_release_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya_wsp_task.task_release_process as p
+    import qsm_maya_lazy_wsp.tasks.shot_cfx_dressing.dcc_processes.task_release as p
 
     kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
         option_opt.to_string()

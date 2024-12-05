@@ -1,0 +1,774 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Lazy Validation Tool'
+        name_chs: '懒人检查工具'
+        group_name: 'Animation(s)'
+        #
+        icon_name: 'qosmic/lazy-resource-tool'
+        tool_tip:
+            |-
+            To be supplemented.
+        #
+        tool_tip_chs:
+            |-
+            待补充。
+
+        size: [720, 960]
+
+build:
+    rig:
+        name: 'Rig (CHR) Validation'
+        name_chs: '绑定（角色）检查'
+
+        tool_tip:
+            |-
+            For rig validation.
+
+        tool_tip_chs:
+            |-
+            用于绑定（角色）检查。
+
+        groups:
+            results:
+                name: 'Validation Result'
+                name_chs: '检查结果'
+
+        contents:
+            results:
+                description:
+                    |-
+                    To be supplemented.
+                description_chs:
+                    |-
+                    拖拽一个或多个绑定文件到文件框内（目前只支持.ma），点击“开始检查”。
+
+        buttons:
+            start:
+                name: 'Start Validation'
+                name_chs: '开始检查'
+
+            add:
+                name: 'Add'
+                name_chs: '加入'
+
+        messages:
+            no_files:
+                message: 'Drag one or mor file to file box, and continue.'
+                message_chs: '拖拽一个或多个绑定文件到文件框内（目前只支持.ma），然后继续。'
+
+            no_process_options:
+                message: 'Check one or more validation items.'
+                message_chs: '选中一个或多个检查项目。'
+
+        options:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+                files:
+                    widget: files
+                    name: 'Files'
+                    name_chs: '文件'
+                    value: []
+                    ext_includes: ['.ma']
+                    history_key: 'tool-panels.lazy-validation.scenery.files'
+                    height: 240
+
+                control:
+                    widget: capsule_strings
+                    name: 'Control'
+                    name_chs: '控制器'
+                    options: ['rotate_order', 'axis_vector', 'reset_transformations', 'name_overlapping']
+                    option_names_chs: ['旋转顺序', '轴朝向', '重置变换', '重名']
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            旋转顺序：
+                                检查控制器的旋转顺序是否与预设的一致；
+                            轴朝向：
+                                检查控制器的轴朝向是否与预设的一致；
+                            重置变换:
+                                检查控制器的变换属性是否重置（translate, rotate, scale）；
+                            重名：
+                                检查控制器是否存在重名；
+
+                joint:
+                    widget: capsule_strings
+                    name: 'Joint'
+                    name_chs: '关节'
+                    options: ['rotate_order', 'axis_vector', 'completeness', 'name_overlapping']
+                    option_names_chs: ['旋转顺序', '轴朝向', '完整性', '重名']
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            旋转顺序：
+                                检查骨骼的旋转顺序是否与预设的一致；
+                            轴朝向：
+                                检测骨骼的轴朝向是否与预设的一致；
+                            完整性：
+                                检查骨骼部件是否完整；
+                            重名：
+                                检查骨骼是否存在重名；
+
+                skin:
+                    widget: capsule_strings
+                    name: 'Skin'
+                    name_chs: '蒙皮'
+                    options: [
+                        'deficiency_weight_vertices'
+                    ]
+                    option_names: [
+                        'Deficiency Weight Vertices'
+                    ]
+                    option_names_chs: [
+                        '权重不足的点'
+                    ]
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            权重不足的点:
+                                检查模型是否存在骨骼权重之和小于1的点；
+
+                mesh:
+                    widget: capsule_strings
+                    name: 'Mesh'
+                    name_chs: '网格'
+                    options: [
+                        'non_manifold_vertices', 'lamina_faces'
+                    ]
+                    option_names: [
+                        'Non Manifold Vertices', 'Lamina Faces'
+                    ]
+                    option_names_chs: [
+                        '非流形的点', '重叠的面'
+                    ]
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            非流形的点：
+                                检查是否存在非流形的点；
+
+                mesh_count:
+                    widget: capsule_strings
+                    name: 'Mesh Count'
+                    name_chs: '网格计数'
+                    options: [
+                        'triangle', 'triangle_per_world_area',
+                        'geometry_visible',
+                    ]
+                    option_names: [
+                        'Triangle', 'Triangle (Unit area)',
+                        'Geometry (Visible)',
+                    ]
+                    option_names_chs: [
+                        '三角面数', '三角面数（单位面积）',
+                        '模型数（可见）',
+                    ]
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            三角面数：
+                                检查所有模型三角面数之和是否超过推荐值；
+                            三角面数（单位面积）：
+                                检查所有模型单位面积内的三角面数（平均值）是否超过推荐值；
+                            模型数（可见）：
+                                检查所有模型（可见）的数量是否超过推荐值；
+
+                component_mesh_count:
+                    widget: capsule_strings
+                    name: 'Mesh Count (Component)'
+                    name_chs: '网格计数（部件）'
+                    options: [
+                        'component_triangle',
+                    ]
+                    option_names: [
+                        'Triangle',
+                    ]
+                    option_names_chs: [
+                        '三角面数',
+                    ]
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            三角面数：
+                                检查单个模型的面数是否超过推荐值
+
+    rig_batch:
+        name: 'Rig (CHR) Batch Validation'
+        name_chs: '绑定（角色）批量检查'
+
+        tool_tip:
+            |-
+            For rig batch validation.
+
+        tool_tip_chs:
+            |-
+            用于绑定（角色）批量检查。
+
+        options:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+                directory:
+                    widget: directory
+                    open_or_save: 'open'
+                    history_key: 'tool-panels.lazy-validation.rig_batch.directory'
+                    name: 'Directory'
+                    name_chs: '目录'
+
+                file_pattern:
+                    widget: enumerate
+                    options: [
+                        '{directory}/Assets/{role}/*/Rig/Final/scenes/*_Skin.ma',
+                        '{directory}//*_Skin.ma'
+                    ]
+                    default_index: 0
+                    name: 'File Pattern'
+                    name_chs: '文件模版'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        {directory}/Assets/{role}/*/Rig/Final/scenes/*_Skin.ma：
+                            适用于文件夹结构有规则的情况，如项目文件夹
+                        {directory}//*_Skin.ma：
+                            适用于文件夹结构没有规则，但是文件名有规则，如本地文件，如果文件夹在服务器，速度比较慢
+
+                control:
+                    widget: capsule_strings
+                    name: 'Control'
+                    name_chs: '控制器'
+                    options: ['rotate_order', 'axis_vector', 'reset_transformations', 'name_overlapping']
+                    option_names_chs: ['旋转顺序', '轴朝向', '重置变换', '重名']
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            旋转顺序：
+                                检查控制器的旋转顺序是否与预设的一致；
+                            轴朝向：
+                                检查控制器的轴朝向是否与预设的一致；
+                            重置变换:
+                                检查控制器的变换属性是否重置（translate, rotate, scale）；
+                            重名：
+                                检查控制器是否存在重名；
+
+                joint:
+                    widget: capsule_strings
+                    name: 'Joint'
+                    name_chs: '关节'
+                    options: ['rotate_order', 'axis_vector', 'completeness', 'name_overlapping']
+                    option_names_chs: ['旋转顺序', '轴朝向', '完整性', '重名']
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            旋转顺序：
+                                检查骨骼的旋转顺序是否与预设的一致；
+                            轴朝向：
+                                检测骨骼的轴朝向是否与预设的一致；
+                            完整性：
+                                检查骨骼部件是否完整；
+                            重名：
+                                检查骨骼是否存在重名；
+
+                skin:
+                    widget: capsule_strings
+                    name: 'Skin'
+                    name_chs: '蒙皮'
+                    options: [
+                        'deficiency_weight_vertices'
+                    ]
+                    option_names: [
+                        'Deficiency Weight Vertices'
+                    ]
+                    option_names_chs: [
+                        '权重不足的点'
+                    ]
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            权重不足的点:
+                                检查模型是否存在骨骼权重之和小于1的点；
+
+                mesh:
+                    widget: capsule_strings
+                    name: 'Mesh'
+                    name_chs: '网格'
+                    options: [
+                        'non_manifold_vertices', 'lamina_faces'
+                    ]
+                    option_names: [
+                        'Non Manifold Vertices', 'Lamina Faces'
+                    ]
+                    option_names_chs: [
+                        '非流形的点', '重叠的面'
+                    ]
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            非流形的点：
+                                检查是否存在非流形的点；
+
+                mesh_count:
+                    widget: capsule_strings
+                    name: 'Mesh Count'
+                    name_chs: '网格计数'
+                    options: [
+                        'triangle', 'triangle_per_world_area',
+                        'geometry_visible',
+                    ]
+                    option_names: [
+                        'Triangle', 'Triangle (Unit area)',
+                        'Geometry (Visible)',
+                    ]
+                    option_names_chs: [
+                        '三角面数', '三角面数（单位面积）',
+                        '模型数（可见）',
+                    ]
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            三角面数：
+                                检查所有模型三角面数之和是否超过推荐值；
+                            三角面数（单位面积）：
+                                检查所有模型单位面积内的三角面数（平均值）是否超过推荐值；
+                            模型数（可见）：
+                                检查所有模型（可见）的数量是否超过推荐值；
+
+                component_mesh_count:
+                    widget: capsule_strings
+                    name: 'Mesh Count (Component)'
+                    name_chs: '网格计数（部件）'
+                    options: [
+                        'component_triangle',
+                    ]
+                    option_names: [
+                        'Triangle',
+                    ]
+                    option_names_chs: [
+                        '三角面数',
+                    ]
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            三角面数：
+                                检查单个模型的面数是否超过推荐值
+
+        groups:
+            files:
+                name: 'Validation Files'
+                name_chs: '资产'
+
+            results:
+                name: 'Validation Results'
+                name_chs: '检查结果'
+
+        contents:
+            results:
+                description:
+                    |-
+                    To be supplemented.
+                description_chs:
+                    |-
+                    在目录输入框选择一个项目文件夹，点击“列出文件”，勾选/选中需要检查的文件，点击“开始检查”。
+
+            start_scan:
+                description:
+                    |-
+                    The folder is being scanned. Please do not repeat the operation.
+                description_chs:
+                    |-
+                    正在扫描文件夹，请勿重复操作。
+
+        buttons:
+            list_assets:
+                name: 'List Assets'
+                name_chs: '列出资产'
+
+            start:
+                name: 'Start Validation'
+                name_chs: '开始检查'
+
+            save:
+                name: 'Save Result'
+                name_chs: '保存结果'
+
+        messages:
+            no_directory:
+                message: 'Open a project folder in directory entry frame, and continue.'
+                message_chs: '在目录输入框打开一个项目文件夹，然后继续。'
+
+            no_file_pattern:
+                message: 'Entry a file pattern, and continue.'
+                message_chs: '输入一个文件模版，然后继续。'
+
+            no_file_name_pattern:
+                message: 'Entry a file name pattern, and continue.'
+                message_chs: '输入一个文件名模版，然后继续。'
+
+            no_assets:
+                message: 'Check or select one or more asset, and continue.'
+                message_chs: '勾选/选中一个或多个资产，然后继续。'
+
+            no_process_options:
+                message: 'Check one or more validation items.'
+                message_chs: '选中一个或多个检查项目。'
+
+    scenery:
+        name: 'Model (SCN) Validation'
+        name_chs: '模型（场景）'
+
+        tool_tip:
+            |-
+            For scenery validation.
+
+        tool_tip_chs:
+            |-
+            用于模型（场景）。
+
+        groups:
+            results:
+                name: 'Validation Result'
+                name_chs: '检查结果'
+
+        contents:
+            results:
+                description:
+                    |-
+                    To be supplemented.
+                description_chs:
+                    |-
+                    拖拽一个或多个绑定文件到文件框内（目前只支持.ma），点击“开始检查”。
+
+        buttons:
+            start:
+                name: 'Start Validation'
+                name_chs: '开始检查'
+
+            add:
+                name: 'Add'
+                name_chs: '加入'
+
+        messages:
+            no_files:
+                message: 'Drag one or mor file to file box, and continue.'
+                message_chs: '拖拽一个或多个绑定文件到文件框内（目前只支持.ma），然后继续。'
+
+            no_process_options:
+                message: 'Check one or more validation items.'
+                message_chs: '选中一个或多个检查项目。'
+
+        options:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+                files:
+                    widget: files
+                    name: 'Files'
+                    name_chs: '文件'
+                    value: []
+                    ext_includes: ['.ma']
+                    history_key: 'tool-panels.lazy-validation.rig.files'
+                    height: 240
+
+                mesh:
+                    widget: capsule_strings
+                    name: 'Mesh'
+                    name_chs: '网格'
+                    options: [
+                        'non_manifold_vertices', 'lamina_faces'
+                    ]
+                    option_names: [
+                        'Non Manifold Vertices', 'Lamina Faces'
+                    ]
+                    option_names_chs: [
+                        '非流形的点', '重叠的面'
+                    ]
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            待补充。
+
+                mesh_count:
+                    widget: capsule_strings
+                    name: 'Mesh Count'
+                    name_chs: '网格计数'
+                    options: [
+                        'triangle', 'triangle_per_world_area',
+                        'geometry_visible',
+                        'non_cache_face_percentage'
+                    ]
+                    option_names: [
+                        'Triangle', 'Triangle (Unit area)',
+                        'Geometry (Visible)',
+                        'Non-cache Face Percentage (GPU)',
+                    ]
+                    option_names_chs: [
+                        '三角面数', '三角面数（单位面积）',
+                        '模型数（可见）',
+                        '非缓存（GPU）面数百分比'
+                    ]
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            待补充。
+
+                component_mesh_count:
+                    widget: capsule_strings
+                    name: 'Mesh Count (Component)'
+                    name_chs: '网格计数（部件）'
+                    options: [
+                        'component_triangle', 'cache_triangle'
+                    ]
+                    option_names: [
+                        'Component Triangle', 'Cache (GPU) Triangle',
+                    ]
+                    option_names_chs: [
+                        '单体三角面数', '缓存（GPU）三角面数'
+                    ]
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            待补充。
+
+    scenery_batch:
+        name: 'Model (SCN) Batch Validation'
+        name_chs: '模型（场景）批量检查'
+
+        tool_tip:
+            |-
+            For scenery batch validation.
+
+        tool_tip_chs:
+            |-
+            用于场景批量检查。
+
+        options:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+                directory:
+                    widget: directory
+                    open_or_save: 'open'
+                    history_key: 'tool-panels.lazy-validation.scenery_batch.directory'
+                    name: 'Directory'
+                    name_chs: '目录'
+
+                file_pattern:
+                    widget: enumerate
+                    options: [
+                        '{directory}/Assets/{role}/*/Maya/Final/*.ma',
+                        '{directory}//*.ma'
+                    ]
+                    default_index: 0
+                    name: 'File Pattern'
+                    name_chs: '文件模版'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        {directory}/Assets/{role}/*/Maya/Final/*.ma：
+                            适用于文件夹结构有规则的情况，如项目文件夹
+                        {directory}//*.ma：
+                            适用于文件夹结构没有规则，但是文件名有规则，如本地文件，如果文件夹在服务器，速度比较慢
+
+                mesh:
+                    widget: capsule_strings
+                    name: 'Mesh'
+                    name_chs: '网格'
+                    options: [
+                        'non_manifold_vertices', 'lamina_faces'
+                    ]
+                    option_names: [
+                        'Non Manifold Vertices', 'Lamina Faces'
+                    ]
+                    option_names_chs: [
+                        '非流形的点', '重叠的面'
+                    ]
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            待补充。
+
+                mesh_count:
+                    widget: capsule_strings
+                    name: 'Mesh Count'
+                    name_chs: '网格计数'
+                    options: [
+                        'triangle', 'triangle_per_world_area',
+                        'geometry_visible',
+                        'non_cache_face_percentage'
+                    ]
+                    option_names: [
+                        'Triangle', 'Triangle (Unit area)',
+                        'Geometry (Visible)',
+                        'Non-cache Face Percentage (GPU)',
+                    ]
+                    option_names_chs: [
+                        '三角面数', '三角面数（单位面积）',
+                        '模型数（可见）',
+                        '非缓存（GPU）面数百分比'
+                    ]
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            待补充。
+
+                component_mesh_count:
+                    widget: capsule_strings
+                    name: 'Mesh Count (Component)'
+                    name_chs: '网格计数（部件）'
+                    options: [
+                        'component_triangle', 'cache_triangle'
+                    ]
+                    option_names: [
+                        'Component Triangle', 'Cache (GPU) Triangle',
+                    ]
+                    option_names_chs: [
+                        '单体三角面数', '缓存（GPU）三角面数'
+                    ]
+                    default: []
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        检查项目包含：
+                            待补充。
+
+        groups:
+            files:
+                name: 'Validation Files'
+                name_chs: '资产'
+
+            results:
+                name: 'Validation Results'
+                name_chs: '检查结果'
+
+        contents:
+            results:
+                description:
+                    |-
+                    To be supplemented.
+                description_chs:
+                    |-
+                    在目录输入框选择一个项目文件夹，点击“列出文件”，勾选/选中需要检查的文件，点击“开始检查”。
+
+            start_scan:
+                description:
+                    |-
+                    The folder is being scanned. Please do not repeat the operation.
+                description_chs:
+                    |-
+                    正在扫描文件夹，请勿重复操作。
+
+        buttons:
+            list_assets:
+                name: 'List Assets'
+                name_chs: '列出资产'
+
+            start:
+                name: 'Start Validation'
+                name_chs: '开始检查'
+
+            save:
+                name: 'Save Result'
+                name_chs: '保存结果'
+
+        messages:
+            no_directory:
+                message: 'Open a project folder, and continue.'
+                message_chs: '打开一个项目文件夹，然后继续。'
+
+            no_file_pattern:
+                message: 'Entry a file pattern, and continue.'
+                message_chs: '输入一个文件模版，然后继续。'
+
+            no_file_name_pattern:
+                message: 'Entry a file name pattern, and continue.'
+                message_chs: '输入一个文件名模版，然后继续。'
+
+            no_assets:
+                message: 'Check or select one or more asset, and continue.'
+                message_chs: '勾选/选中一个或多个资产，然后继续。'
+
+            no_process_options:
+                message: 'Check one or more validation items.'
+                message_chs: '选中一个或多个检查项目。'

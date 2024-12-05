@@ -263,7 +263,7 @@ class QtEntryForConstant(
     def _on_open_in_system_(self):
         _ = self.text()
         if _:
-            bsc_storage.StgSystem.open(_)
+            bsc_storage.StgExplorer.open(_)
     
     def _on_copy_path_(self):
         _ = self.text()

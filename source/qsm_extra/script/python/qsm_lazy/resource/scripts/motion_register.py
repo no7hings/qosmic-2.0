@@ -9,8 +9,6 @@ import lxbasic.content as bsc_content
 
 import lxbasic.storage as bsc_storage
 
-import lxbasic.scan as bsc_scan
-
 import lxbasic.pinyin as bsc_pinyin
 
 import qsm_general.core as qsm_gnl_core

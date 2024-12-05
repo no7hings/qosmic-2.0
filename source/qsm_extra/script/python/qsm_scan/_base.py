@@ -49,7 +49,8 @@ class EntityScanPatterns:
     Episode = '{root}/{project}/{episode}'
     Sequence = '{root}/{project}/{episode}/{sequence}/动画'
     # sequence name has chinese word, so add "{seq_EPT}" for match result.
-    Shot = '{root}/{project}/{episode}/{sequence}{seq_EPT}/动画/通过文件/{shot}.ma'
+    # Shot = '{root}/{project}/{episode}/{sequence}{seq_EPT}/动画/通过文件/{shot}.ma'
+    Shot = '{root}/{project}/{episode}/{sequence}{seq_EPT}/分镜/通过文件/{shot}.ma'
 
     ProjectTask = '{root}/{project}/{task}'
     AssetTask = '{root}/{project}/Assets/{role}/{asset}/{task}/Final'
@@ -308,6 +309,20 @@ class AbsEntity(object):
 class AbsEntitiesCacheOpt(object):
     EntityClass = None
 
+    def _generate_stg_ptn_opts(self):
+        _ = EntityScanPatterns.__dict__[self.EntityClass.Type]
+        if isinstance(_, list):
+            ps = _
+        else:
+            ps = [_]
+
+        list_ = []
+        for i_p in ps:
+            i_p_opt = bsc_core.BscStgParseOpt(i_p)
+            i_p_opt.update_variants(**self._variants)
+            list_.append(i_p_opt)
+        return list_
+
     def __init__(self, root, variants):
         self._root = root
         self._root_entity_stack = root.entity_stack
@@ -478,8 +493,22 @@ class AbsTask(object):
         return p_opt.get_value()
 
 
-class AbsTasksCache(object):
+class AbsTasksCacheOpt(object):
     EntityClass = None
+
+    def _generate_stg_ptn_opts(self):
+        _ = EntityScanPatterns.__dict__[self.EntityClass.Type]
+        if isinstance(_, list):
+            ps = _
+        else:
+            ps = [_]
+
+        list_ = []
+        for i_p in ps:
+            i_p_opt = bsc_core.BscStgParseOpt(i_p)
+            i_p_opt.update_variants(**self._variants)
+            list_.append(i_p_opt)
+        return list_
 
     def __init__(self, entity, variants):
         self._entity = entity

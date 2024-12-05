@@ -1,0 +1,444 @@
+build:
+    messages:
+        auto_collection:
+            message: 'Do You Want to Execute Auto Collection.'
+            message_chs: '是否要执行自动收集?'
+
+        auto_name:
+            message: 'Do You Want to Execute Auto Name.'
+            message_chs: '是否要执行自动命名?'
+
+        auto_connection:
+            message: 'Do You Want to Execute Auto Connect.'
+            message_chs: '是否要执行自动连接?'
+
+    basic:
+        name: 'basic'
+        name_chs: '基础'
+
+        tool_tip:
+            |-
+            To be supplemented.
+
+        tool_tip_chs:
+            |-
+            待补充。
+
+        options:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+                template:
+                    widget: group
+                    name: 'Template'
+                    name_chs: '模版'
+
+                template/create_groups:
+                    widget: button
+                    name: 'Create Group'
+                    name_chs: '创建分组'
+                    icon: 'tool/create'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        点击创建分组：
+                            默认在任务创建的时候会自动创建分组，如果没通过任务创建工具可使用这个功能创建分组。
+
+                # cloth
+                cloth:
+                    widget: group
+                    name: 'Cloth'
+                    name_chs: '布料'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        相关的组为：|master|cfx_rig|cfx_output_geo_grp|cfx_cloth_geo_grp；
+                        放入这个组的模型条件：
+                            需要输出缓存；
+                            需要被转化成布料。
+
+                cloth/auto_blend:
+                    widget: boolean
+                    name: 'Auto Blend'
+                    name_chs: '自动融合'
+                    value: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        如果启用在执行“拷贝为布料模型”会自动融合拷贝的模型到绑定。
+
+                cloth/add_to:
+                    widget: button
+                    name: 'Add to Cloth Geo'
+                    name_chs: '加入到布料模型'
+                    icon: 'tool/add'
+                    join_to_next: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        将选中的模型加入到“...|cfx_cloth_geo_grp”。
+
+                cloth/copy_as:
+                    widget: button
+                    name: 'Copy as Cloth Geo'
+                    name_chs: '拷贝为布料模型'
+                    icon: 'tool/copy'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        将选中的模型拷贝到“...|cfx_cloth_geo_grp”：
+                            只能拷贝绑定的模型；
+                            勾选“自动融合”将会和原始模型自动融合。
+
+                # appendix
+                appendix:
+                    widget: group
+                    name: 'Appendix'
+                    name_chs: '配饰'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        相关的组为：|master|cfx_rig|cfx_output_geo_grp|cfx_appendix_geo_grp；
+                        放入这个组的模型条件：
+                            需要输出缓存；
+                            不需要被转化成布料，但是会被其他模型驱动（Wrap等）。
+
+                appendix/add_to:
+                    widget: button
+                    name: 'Add to Appendix Geo'
+                    name_chs: '加入到配饰模型'
+                    icon: 'tool/add'
+                    join_to_next: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        将选中的模型加入到“...|cfx_appendix_geo_grp”。
+
+                appendix/copy_as:
+                    widget: button
+                    name: 'Copy as Appendix Geo'
+                    name_chs: '拷贝为配饰模型'
+                    icon: 'tool/copy'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        将选中的模型拷贝到“...|cfx_appendix_geo_grp”：
+                            只能拷贝绑定的模型。
+
+                # cloth proxy
+                cloth_proxy:
+                    widget: group
+                    name: 'Cloth Proxy Geo'
+                    name_chs: '布料代理'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        相关的组为：|master|cfx_rig|cfx_cloth_proxy_grp|cfx_cloth_proxy_geo_grp；
+                        放入这个组的模型条件：
+                            需要被转化成布料。
+
+                cloth_proxy/auto_blend:
+                    widget: boolean
+                    name: 'Auto Blend'
+                    name_chs: '自动融合'
+                    value: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        如果启用在执行“拷贝为布料代理模型”会自动融合拷贝的模型到绑定。
+
+                cloth_proxy/add_to:
+                    widget: button
+                    name: 'Add to Cloth Proxy Geo'
+                    name_chs: '加入到布料代理模型'
+                    icon: 'tool/add'
+                    join_to_next: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        将选中的模型加入到“...|cfx_cloth_geo_grp”。
+
+                cloth_proxy/copy_as:
+                    widget: button
+                    name: 'Copy as Cloth Proxy Geo'
+                    name_chs: '拷贝为布料代理模型'
+                    icon: 'tool/copy'
+
+                # collider
+                collider:
+                    widget: group
+                    name: 'Collider'
+                    name_chs: '碰撞对象'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        相关的组为：|master|cfx_rig|cfx_collider_grp|cfx_collider_geo_grp；
+                        放入这个组的模型条件：
+                            需要被转化成碰撞对象。
+
+                collider/auto_blend:
+                    widget: boolean
+                    name: 'Auto Blend'
+                    name_chs: '自动融合'
+                    value: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        如果启用在执行“拷贝为碰撞模型”会自动融合拷贝的模型到绑定。
+
+                collider/add_to:
+                    widget: button
+                    name: 'Add to Collider Geo'
+                    name_chs: '加入到碰撞模型'
+                    icon: 'tool/add'
+                    join_to_next: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        将选中的模型加入到“...|cfx_collider_geo_grp”。
+
+                collider/copy_as:
+                    widget: button
+                    name: 'Copy as Collider Geo'
+                    name_chs: '拷贝为碰撞模型'
+                    icon: 'tool/copy'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        将选中的模型拷贝到“...|cfx_collider_geo_grp”：
+                            只能拷贝绑定的模型；
+                            勾选“自动融合”将会和原始模型自动融合。
+
+                # bridge geometry
+                bridge_geometry:
+                    widget: group
+                    name: 'Bridge Geometry'
+                    name_chs: '桥接模型'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        相关的组为：|master|cfx_rig|cfx_bridge_grp|cfx_bridge_geo_grp。
+
+                bridge_geometry/auto_blend:
+                    widget: boolean
+                    name: 'Auto Blend'
+                    name_chs: '自动融合'
+                    value: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        如果启用在执行“拷贝为桥接模型”会自动融合拷贝的模型到绑定。
+
+                bridge_geometry/add_to:
+                    widget: button
+                    name: 'Add to Bridge Geometry'
+                    name_chs: '加入到桥接模型'
+                    icon: 'tool/add'
+                    join_to_next: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        将选中的模型加入到“...|cfx_bridge_geo_grp”。
+
+                bridge_geometry/copy_as:
+                    widget: button
+                    name: 'Copy as Bridge Geometry'
+                    name_chs: '拷贝为桥接模型'
+                    icon: 'tool/copy'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        将选中的模型拷贝到“...|cfx_bridge_geo_grp”：
+                            只能拷贝绑定的模型；
+                            勾选“自动融合”将会和原始模型自动融合。
+
+                # bridge control
+                bridge_control:
+                    widget: group
+                    name: 'Bridge Control'
+                    name_chs: '桥接控制器'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        相关的组为：|master|cfx_rig|cfx_bridge_grp|cfx_bridge_control_grp。
+
+                bridge_control/auto_constrain:
+                    widget: boolean
+                    name: 'Auto Constrain'
+                    name_chs: '自动约束'
+                    value: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        如果启用在执行“拷贝为桥接控制器”会自动约束拷贝的控制器到绑定。
+
+                bridge_control/copy_as:
+                    widget: button
+                    name: 'Copy as Bridge Control'
+                    name_chs: '拷贝为桥接控制器'
+                    icon: 'tool/maya/create-locator'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        将选中的控制器拷贝到“...|cfx_bridge_control_grp”：
+                            只能拷贝绑定的控制器；
+                            勾选“自动约束”将会和原始绑定自动约束。
+
+                nucleus:
+                    widget: group
+                    name: 'Nucleus'
+                    name_chs: 'Nucleus'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        解算器相关的工具。
+
+                nucleus/create_ncloth:
+                    widget: button
+                    name: 'Create nCloth'
+                    name_chs: '创建 nCloth'
+                    icon: 'tool/maya/ncloth'
+                    menu_enable: True
+                    join_to_next: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        点击将选中的模型转为nCloth：
+                            默认为网格吸引模式；
+                            右键点击/点击右边三个点可以加载节点模版，加载节点模版可以选中转过nCloth的模型或者选中nCloth。
+
+                nucleus/create_nrigid:
+                    widget: button
+                    name: 'Create nRigid'
+                    name_chs: '创建 nRigid'
+                    icon: 'tool/maya/nrigid'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        点击将选中的模型转为nRigid。
+
+                nucleus/paint_vertex_input_attract:
+                    widget: button
+                    name: 'Paint Input Attract (Vertex)'
+                    name_chs: '绘制输入吸引（顶点）'
+                    icon: 'tool/maya/paint-vertex'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        假如使用了网格吸引的模式，可以使用这个直接绘制吸引属性。
+
+                automation:
+                    widget: group
+                    name: 'Automation'
+                    name_chs: '自动化'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        一些自动化的功能，帮助整理文件。
+
+                automation/auto_collection:
+                    widget: button
+                    name: 'Auto Collection'
+                    name_chs: '自动收集'
+                    icon: 'tool/input'
+                    join_to_next: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        点击自动收集散落在大纲的物体：
+                            包含nCloth，nRigid，wrap等关联物体。
+
+                automation/auto_name:
+                    widget: button
+                    name: 'Auto Name'
+                    name_chs: '自动命名'
+                    icon: 'tool/input'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        自动命名收集的物体。
+
+                automation/auto_connection:
+                    widget: button
+                    name: 'Auto Connect (Resolve from Scene)'
+                    name_chs: '自动连接（从文件中解析）'
+                    icon: 'tool/input'
+                    join_to_next: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        使用前请先使用自动收集和自动命名：
+                            用于整理未使用流程工具之前做的解算预设文件。
+
+                automation/rest_rig_controls_transformation:
+                    widget: button
+                    name: 'Reset Rig Controls Transformation'
+                    name_chs: '重置绑定控制器变换'
+                    icon: 'tool/rest'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        在测试布料的时候会改变控制器的位置，用这个按钮将控制器还原到初始状态。

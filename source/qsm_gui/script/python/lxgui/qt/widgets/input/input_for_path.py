@@ -10,7 +10,7 @@ from ...core.wrap import *
 
 from ... import abstracts as gui_qt_abstracts
 # qt widgets
-from ..entry import etd_entry_for_path as _etd_entry_for_path
+from ..entry import cmp_entry_for_path as _cmp_entry_for_path
 
 from .. import base as _base
 
@@ -43,7 +43,7 @@ class QtInputForPath(
 
     user_input_entry_finished = qt_signal()
 
-    QT_ETD_ENTRY_CLS = _etd_entry_for_path.QtEtdEntryForPath
+    QT_CMP_ENTRY_CLS = _cmp_entry_for_path.QtCmpEntryForPath
 
     QT_COMPLETION_POPUP_CLS = _popup.QtPopupForCompletion
 
@@ -76,8 +76,8 @@ class QtInputForPath(
         self._init_input_completion_extra_def_(self)
         self._init_input_history_extra_def_(self)
 
-        self._buffer_fnc = lambda x: {}
-        self._buffer_cache = {}
+        self._next_buffer_fnc = lambda x: {}
+        self._next_buffer_cache = {}
 
         self._build_input_entry_()
 
@@ -90,56 +90,57 @@ class QtInputForPath(
         entry_layout.setContentsMargins(2, 2, 2, 2)
         entry_layout.setSpacing(4)
 
-        self._etd_entry_widget = self.QT_ETD_ENTRY_CLS()
-        entry_layout.addWidget(self._etd_entry_widget)
-        self._entry_widget = self._etd_entry_widget._get_entry_widget_()
+        self._cmp_entry_widget = self.QT_CMP_ENTRY_CLS()
+        entry_layout.addWidget(self._cmp_entry_widget)
+
+        self._entry_widget = self._cmp_entry_widget._get_entry_widget_()
         self._entry_widget._set_entry_frame_(self)
-        self._etd_entry_widget.next_index_accepted.connect(self._update_next_cbk_)
+        self._cmp_entry_widget.next_path_accepted.connect(self._on_next_path_accepted_)
         self.user_input_entry_finished = self._entry_widget.user_entry_finished
 
         self._history_button = _button.QtIconPressButton()
         entry_layout.addWidget(self._history_button)
         # choose
         self._build_input_choose_()
-        self._etd_entry_widget.next_press_clicked.connect(self._do_choose_popup_start_)
-        self.user_input_choose_value_accepted.connect(self._etd_entry_widget._enter_next_)
+        self._cmp_entry_widget.next_press_clicked.connect(self._do_choose_popup_start_)
+        self.user_input_choose_value_accepted.connect(self._cmp_entry_widget._enter_next_)
         self._entry_widget._set_choose_popup_widget_(self._get_choose_popup_widget_())
-        self._etd_entry_widget.entry_value_changed.connect(
+        self._cmp_entry_widget.entry_value_changed.connect(
             self._choose_popup_widget._do_popup_close_
         )
         # completion
         self._build_input_completion_()
-        self.user_input_completion_value_accepted.connect(self._etd_entry_widget._enter_next_)
+        self.user_input_completion_value_accepted.connect(self._cmp_entry_widget._enter_next_)
         self._set_input_completion_buffer_fnc_(
-            self._etd_entry_widget._get_matched_next_name_texts_
+            self._cmp_entry_widget._get_matched_next_name_texts_
         )
-        self._etd_entry_widget.entry_value_changed.connect(
+        self._cmp_entry_widget.entry_value_changed.connect(
             self._completion_popup_widget._do_popup_close_
         )
         # history
         self._build_input_history_(self._history_button)
-        self._etd_entry_widget.entry_value_change_accepted.connect(self._push_history_)
+        self._cmp_entry_widget.entry_value_change_accepted.connect(self._push_history_)
 
-        self.input_value_changed = self._etd_entry_widget.entry_value_changed
-        self.input_value_accepted = self._etd_entry_widget.entry_value_change_accepted
-        self.user_input_value_accepted = self._etd_entry_widget.user_entry_value_change_accepted
+        self.input_value_changed = self._cmp_entry_widget.entry_value_changed
+        self.input_value_accepted = self._cmp_entry_widget.entry_value_change_accepted
+        self.user_input_value_accepted = self._cmp_entry_widget.user_entry_value_change_accepted
 
-    def _set_buffer_fnc_(self, fnc):
-        self._buffer_fnc = fnc
+    def _set_next_buffer_fnc_(self, fnc):
+        self._next_buffer_fnc = fnc
 
-    def _update_next_cbk_(self, path, post_fnc=None):
+    def _on_next_path_accepted_(self, path, post_fnc=None):
         """
         buffer fnc always use thread
         """
         def cache_fnc_():
             _time_start = time.time()
             _path_text = path.to_string()
-            if _path_text in self._buffer_cache:
+            if _path_text in self._next_buffer_cache:
                 _time_cost = time.time()-_time_start
-                return [self._gui_thread_flag, _time_cost, self._buffer_cache[_path_text]]
+                return [self._gui_thread_flag, _time_cost, self._next_buffer_cache[_path_text]]
 
-            _data = self._buffer_fnc(path)
-            self._buffer_cache[_path_text] = _data
+            _data = self._next_buffer_fnc(path)
+            self._next_buffer_cache[_path_text] = _data
             _time_cost = time.time()-_time_start
             return [self._gui_thread_flag, _time_cost, _data]
 
@@ -150,7 +151,7 @@ class QtInputForPath(
                 return
 
             if _data:
-                self._etd_entry_widget._set_next_name_texts_(
+                self._cmp_entry_widget._set_next_name_texts_(
                     _data.get('name_texts') or []
                 )
                 self._set_choose_popup_item_image_url_dict_(
@@ -164,13 +165,13 @@ class QtInputForPath(
                 )
                 _type_text = _data.get('type_text')
                 if _type_text:
-                    self._etd_entry_widget._set_entry_tip_(
+                    self._cmp_entry_widget._set_entry_tip_(
                         '{} {} is found, cost {}s.'.format(
                             len(_data.get('name_texts') or []), _type_text, round(_time_cost, 2)
                         )
                     )
             else:
-                self._etd_entry_widget._set_next_name_texts_(
+                self._cmp_entry_widget._set_next_name_texts_(
                     []
                 )
                 self._set_choose_popup_item_image_url_dict_(
@@ -182,58 +183,58 @@ class QtInputForPath(
                 self._set_choose_popup_item_tag_filter_dict_(
                     {}
                 )
-                self._etd_entry_widget._set_entry_tip_('')
+                self._cmp_entry_widget._set_entry_tip_('')
 
         def post_fnc_():
-            self._etd_entry_widget._do_next_wait_end_()
+            self._cmp_entry_widget._do_next_wait_end_()
             if post_fnc is not None:
                 post_fnc()
 
         self._gui_thread_flag += 1
 
-        self._etd_entry_widget._set_entry_tip_('loading ...')
+        self._cmp_entry_widget._set_entry_tip_('loading ...')
         # todo: always use thread
-        self._etd_entry_widget._do_next_wait_start_()
+        self._cmp_entry_widget._do_next_wait_start_()
         self._run_build_extra_use_thread_(cache_fnc_, build_fnc_, post_fnc_)
 
     def _update_next_(self):
-        self._etd_entry_widget._update_next_()
+        self._cmp_entry_widget._update_next_()
 
     def _update_next_data_for_(self, path_text, post_fnc=None):
-        if path_text in self._buffer_cache:
-            self._buffer_cache.pop(path_text)
+        if path_text in self._next_buffer_cache:
+            self._next_buffer_cache.pop(path_text)
 
-        self._update_next_cbk_(
+        self._on_next_path_accepted_(
             bsc_core.BscNodePathOpt(path_text), post_fnc
         )
 
     def _set_root_text_(self, text):
-        self._etd_entry_widget._set_root_text_(text)
+        self._cmp_entry_widget._set_root_text_(text)
         
     def _set_entry_tip_(self, text):
-        self._etd_entry_widget._set_entry_tip_(text)
+        self._cmp_entry_widget._set_entry_tip_(text)
 
     def _set_value_(self, value):
-        self._etd_entry_widget._set_path_text_(value)
+        self._cmp_entry_widget._set_path_text_(value)
 
     def _get_value_(self):
-        return self._etd_entry_widget._get_path_text_()
+        return self._cmp_entry_widget._get_path_text_()
 
     def _accept_element_(self, value):
         pass
 
     def _setup_(self):
-        self._etd_entry_widget._update_next_()
+        self._cmp_entry_widget._update_next_()
 
-    def _restore_buffer_cache_(self):
-        self._buffer_cache = {}
+    def _restore_next_cache_(self):
+        self._next_buffer_cache = {}
 
-    def _get_buffer_cache_(self):
-        return self._buffer_cache
+    def _get_next_cache_(self):
+        return self._next_buffer_cache
 
     # choose extra
     def _bridge_choose_get_popup_texts_(self):
-        return self._etd_entry_widget._get_next_name_texts_()
+        return self._cmp_entry_widget._get_next_name_texts_()
 
     def _bridge_choose_get_popup_texts_current_(self):
         return [self._entry_widget._get_value_()]

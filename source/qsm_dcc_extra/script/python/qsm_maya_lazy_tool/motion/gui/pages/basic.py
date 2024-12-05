@@ -59,7 +59,6 @@ class PrxPageForMotionMain(gui_prx_widgets.PrxBasePage):
         return self._page_prx_tab_tool_box
 
     def gui_close_fnc(self):
-        self._page_prx_tab_tool_box.save_history()
         self._script_job_opt.destroy()
 
     def gui_page_setup_fnc(self):
@@ -80,7 +79,7 @@ class PrxPageForMotionMain(gui_prx_widgets.PrxBasePage):
             self._window, self, self._session, self._qt_picker,
         )
         # page
-        self._page_prx_tab_tool_box = gui_prx_widgets.PrxVTabToolBox()
+        self._page_prx_tab_tool_box = self.gui_create_tab_tool_box()
         central_qt_lot.addWidget(self._page_prx_tab_tool_box.widget)
         self._page_prx_tab_tool_box.set_tab_direction(self._page_prx_tab_tool_box.TabDirections.RightToLeft)
         # tool set
@@ -101,14 +100,14 @@ class PrxPageForMotionMain(gui_prx_widgets.PrxBasePage):
             self._window, self, self._session
         )
         #
-        self._page_prx_tab_tool_box.set_history_key('lazy-motion-tool.main.page_key_current')
         self._page_prx_tab_tool_box.load_history()
-        self._page_prx_tab_tool_box.connect_current_changed_to(self.do_gui_refresh_all)
 
         self._do_dcc_register_all_script_jobs()
         self._window.register_window_close_method(self.gui_close_fnc)
 
     def do_gui_refresh_all(self, force=False):
+        self._page_prx_tab_tool_box.save_history()
+
         self._gui_rig_picker_unit.do_gui_refresh_all()
         if self._page_prx_tab_tool_box.get_current_key() == 'keyframe':
             self._gui_motion_keyframe_prx_toolset.do_gui_refresh_all()

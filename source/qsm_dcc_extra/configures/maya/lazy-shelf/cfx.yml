@@ -37,9 +37,9 @@ build:
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-cfx-tool")'
                     dbl_script: ''
 
-        general:
-            tool_tip: 'To be supplemented.'
-            tool_tip_chs: '角色和道具。'
+        playblast:
+            tool_tip: 'Playblast.'
+            tool_tip_chs: '拍屏。'
 
             tools:
                 tool_0:
@@ -56,7 +56,7 @@ build:
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-playblast-tool")'
 
                 tool_1:
-                    name: 'Playblast'
+                    name: 'Lazy Playblast'
                     name_chs: '拍屏'
                     tool_tip: 'To be supplemented.'
                     tool_tip_chs:
@@ -87,3 +87,23 @@ build:
                             name: 'Playblast (farm)'
                             name_chs: '拍屏（农场）'
                             script: 'import lxbasic.session as bsc_session; bsc_session.OptionHook.execute("option_hook_key=dcc-script/maya/qsm-playblast-script&scheme=farm")'
+
+        motion:
+            tool_tip: 'Motion.'
+            tool_tip_chs: '动作。'
+
+            tools:
+                tool_0:
+                    name: 'Lazy Motion Tool'
+                    name_chs: '懒人动作工具'
+                    tool_tip: 'To be supplemented.'
+                    tool_tip_chs:
+                        |-
+                        点击打开动作工具：
+                            包含拷贝，粘贴动作，镜像动作，翻转动作，绑定移动等工具。
+                    button_style: 'text_and_icon'
+                    button_name: 'MTN'
+                    button_name_chs: '动作'
+                    icon: 'application/lineup'
+                    script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-motion-tool")'
+                    dbl_script: ''

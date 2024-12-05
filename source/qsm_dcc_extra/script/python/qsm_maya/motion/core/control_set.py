@@ -155,11 +155,14 @@ class ControlSetMotionOpt(
             )
 
     @_mya_core.Undo.execute
-    def reset_transformation(self, translate=False, rotate=False):
+    def reset_transformation(self, translate=False, rotate=False, auto_keyframe=False):
         # mark auto key
         auto_key_mark = cmds.autoKeyframe(state=1, query=1)
         if auto_key_mark:
-            cmds.autoKeyframe(state=0)
+            cmds.autoKeyframe(state=False)
+
+        if auto_keyframe is True:
+            cmds.autoKeyframe(state=True)
 
         atr_names = []
         if translate is True:
@@ -184,6 +187,7 @@ class ControlSetMotionOpt(
                 if cmds.objExists(j_atr) is False:
                     continue
 
+                # ignore non settable
                 if _mya_core.NodeAttribute.is_settable(i_path, j_atr_name) is False:
                     continue
 
@@ -191,6 +195,9 @@ class ControlSetMotionOpt(
                 if j_value != 0:
                     flag = True
                     cmds.setAttr(j_atr, 0)
+
+        if auto_keyframe is True:
+            cmds.autoKeyframe(state=False)
 
         if auto_key_mark:
             cmds.autoKeyframe(state=True)

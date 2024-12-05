@@ -9,6 +9,6 @@ from .entry_for_bubble import *
 
 from .entry_for_capsule import *
 
-from .etd_entry_for_guide import *
+from .cmp_entry_for_guide import *
 
-from .etd_entry_for_path import *
+from .cmp_entry_for_path import *

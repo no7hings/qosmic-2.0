@@ -607,7 +607,7 @@ class StgUser(object):
         return '{}/{}.yml'.format(directory_path, unique_id)
 
 
-class StgSystem(object):
+class StgExplorer(object):
     @classmethod
     def open_directory(cls, path):
         path = _cor_raw.ensure_string(path)
@@ -1053,7 +1053,7 @@ class StgPathOpt(object):
 
     def show_in_system(self):
         if self.get_path():
-            StgSystem.open(self.get_path())
+            StgExplorer.open(self.get_path())
 
     def start_in_system(self):
         if self.get_path():
@@ -1067,6 +1067,11 @@ class StgPathOpt(object):
         return _cor_time.BscTimestampOpt(
             self.get_mtime()
         ).get_as_tag()
+
+    def get_modify_time(self):
+        return _cor_time.BscTimestampOpt(
+            self.get_mtime()
+        ).get()
 
     def get_user(self):
         return _cor_base.BscStorage.get_user(self.get_path())

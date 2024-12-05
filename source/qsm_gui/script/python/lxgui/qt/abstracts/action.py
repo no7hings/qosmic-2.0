@@ -520,10 +520,11 @@ class AbsQtActionForExpandDef(object):
 
     def _init_action_for_expand_def_(self, widget):
         self._widget = widget
-        #
-        self._is_expand_enable = False
+
+        self._expand_action_is_enable = False
+
         self._is_expanded = False
-        self._expand_is_hovered = False
+        self._expand_hover_flag = False
 
         self._expand_icon_file_path_0 = _gui_core.GuiIcon.get('expand-close')
         self._expand_icon_file_path_1 = _gui_core.GuiIcon.get('expand-open')
@@ -538,6 +539,9 @@ class AbsQtActionForExpandDef(object):
         self._expand_icon_file_path_current = [
             self._expand_icon_file_path_0, self._expand_icon_file_path_1
         ][self._is_expanded]
+
+    def _set_expand_enable_(self, boolean):
+        self._expand_action_is_enable = boolean
 
     def _set_expanded_(self, boolean):
         self._is_expanded = boolean

@@ -9,9 +9,11 @@ from ... import core as _mya_core
 
 
 class ReferenceFix(object):
-    def __init__(self, namespace):
+    def __init__(self, reference_node):
 
-        self._namespace = namespace
+        self._reference_node = reference_node
+
+        self._namespace = _mya_core.Reference.get_namespace(self._reference_node)
 
     @staticmethod
     def _get_anm_curve_args(input_str):
@@ -25,7 +27,7 @@ class ReferenceFix(object):
             return _[0]
 
     def fix_placeholder(self):
-        reference_node = _mya_core.ReferencesCache().get(self._namespace)
+        reference_node = self._reference_node
         if reference_node:
             indices = _mya_core.NodeAttribute.get_array_indices(reference_node, 'placeHolderList')
             for i_index in indices:

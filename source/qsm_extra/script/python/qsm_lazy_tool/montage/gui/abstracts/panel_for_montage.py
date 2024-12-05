@@ -20,7 +20,7 @@ class AbsPrxPanelForMontage(gui_prx_widgets.PrxBasePanel):
         self._page_prx_tab_tool_box.save_history()
 
     def gui_setup_fnc(self):
-        self._page_dict = {}
+        self._tab_widget_dict = {}
 
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         self.add_widget(self._page_prx_tab_tool_box)
@@ -32,18 +32,18 @@ class AbsPrxPanelForMontage(gui_prx_widgets.PrxBasePanel):
             self._page_prx_tab_tool_box.add_widget(
                 i_prx_sca,
                 key=i_page_key,
-                name=gui_core.GuiUtil.choice_name(
+                name=gui_core.GuiUtil.choice_gui_name(
                     self._language, self._window._configure.get('build.{}.tab'.format(i_page_key))
                 ),
                 icon_name_text=i_page_key,
-                tool_tip=gui_core.GuiUtil.choice_tool_tip(
+                tool_tip=gui_core.GuiUtil.choice_gui_tool_tip(
                     self._language, self._window._configure.get('build.{}.tab'.format(i_page_key))
                 )
             )
             i_prx_page = i_cls(
                 self._window, self._session
             )
-            self._page_dict[i_page_key] = i_prx_page
+            self._tab_widget_dict[i_page_key] = i_prx_page
             i_prx_sca.add_widget(i_prx_page)
 
         self._page_prx_tab_tool_box.set_history_key(self.HST_TAB_KEY_CURRENT)
@@ -54,8 +54,8 @@ class AbsPrxPanelForMontage(gui_prx_widgets.PrxBasePanel):
         self._page_prx_tab_tool_box.connect_current_changed_to(self.do_gui_refresh_all)
 
     def gui_setup_post_fnc(self):
-        for k, v in self._page_dict.items():
+        for k, v in self._tab_widget_dict.items():
             v.gui_setup_post_fnc()
 
     def do_gui_refresh_all(self, force=False):
-        self._page_dict[self._page_prx_tab_tool_box.get_current_key()].do_gui_refresh_all(force=force)
+        self._tab_widget_dict[self._page_prx_tab_tool_box.get_current_key()].do_gui_refresh_all(force=force)

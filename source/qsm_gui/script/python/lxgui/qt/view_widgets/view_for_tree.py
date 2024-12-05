@@ -392,12 +392,12 @@ class QtTreeWidget(
         self._left_scroll_box._set_layout_align_left_or_top_()
         self._left_scroll_box.setFixedWidth(self.TOOL_BAR_W)
         # keyword filter
-        self._keyword_filter_tool_box = self._create_top_tool_box_('keyword filter', size_mode=1)
+        self._keyword_filter_tool_box = self._add_top_tool_box_('keyword filter', size_mode=1)
         # check
-        self._check_tool_box = self._create_left_tool_box_('check')
+        self._check_tool_box = self._add_left_tool_box_('check')
         self._check_tool_box.hide()
         # sort and chart
-        self._sort_and_chart_tool_box = self._create_left_tool_box_('sort and chart')
+        self._sort_and_chart_tool_box = self._add_left_tool_box_('sort and chart')
 
         self._view = _QtTreeViewWidget()
         self._grid_lot.addWidget(self._view, 1, 1, 1, 1)
@@ -442,7 +442,7 @@ class QtTreeWidget(
         self._item_sort_button.setVisible(boolean)
         self._view_model.set_item_sort_enable(boolean)
 
-    def _create_top_tool_box_(self, name, size_mode=0):
+    def _add_top_tool_box_(self, name, size_mode=0):
         tool_box = _wgt_container.QtHToolBox()
         self._top_scroll_box.addWidget(tool_box)
         tool_box._set_expanded_(True)
@@ -450,7 +450,7 @@ class QtTreeWidget(
         tool_box._set_size_mode_(size_mode)
         return tool_box
 
-    def _create_left_tool_box_(self, name):
+    def _add_left_tool_box_(self, name):
         tool_box = _wgt_container.QtVToolBox()
         self._left_scroll_box.addWidget(tool_box)
         tool_box._set_expanded_(True)

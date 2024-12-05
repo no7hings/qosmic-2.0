@@ -14,7 +14,7 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
+import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 
 
 class PrxUnitBaseOpt(object):
@@ -108,23 +108,36 @@ class PrxTreeviewUnitForAssetOpt(
             self._tool_dict[i_key] = i_tool
 
     def _gui_asset_menu_data_generate_fnc(self):
-        return [
-            [
-                'Reference', 'file/folder',
+        if gui_core.GuiUtil.language_is_chs():
+            return [
                 [
-                    ('Duplicate', 'tool/maya/duplicate-reference', self.do_dcc_duplicate_asset_references),
-                    ('Reload', 'tool/maya/reload-reference', self.do_dcc_reload_asset_references),
-                    ('Unload', 'tool/maya/unload-reference', self.do_dcc_unload_asset_references),
-                    ('Replace', 'tool/maya/replace-reference', self.do_dcc_replace_asset_references),
-                ]
-            ],
-        ]
+                    '引用', 'file/folder',
+                    [
+                        ('复制', 'tool/maya/duplicate-reference', self.do_dcc_duplicate_asset_references),
+                        ('加载/重载', 'tool/maya/reload-reference', self.do_dcc_reload_asset_references),
+                        ('卸载', 'tool/maya/unload-reference', self.do_dcc_unload_asset_references),
+                        ('替换', 'tool/maya/replace-reference', self.do_dcc_replace_asset_references),
+                    ]
+                ],
+            ]
+        else:
+            return [
+                [
+                    'Reference', 'file/folder',
+                    [
+                        ('Duplicate', 'tool/maya/duplicate-reference', self.do_dcc_duplicate_asset_references),
+                        ('Load/Reload', 'tool/maya/reload-reference', self.do_dcc_reload_asset_references),
+                        ('Unload', 'tool/maya/unload-reference', self.do_dcc_unload_asset_references),
+                        ('Replace', 'tool/maya/replace-reference', self.do_dcc_replace_asset_references),
+                    ]
+                ],
+            ]
     
     # reference
     def do_dcc_remove_asset_references(self):
 
         result = self._window.exec_message_dialog(
-            self._window.choice_message(
+            self._window.choice_gui_message(
                 self._window._configure.get('build.messages.remove_reference')
             ),
             status='warning'
@@ -424,7 +437,7 @@ class PrxTreeviewUnitForAssetOpt(
                     '/status/unloaded', path, auto_create_ancestors=True
                 )
 
-            if isinstance(resource, qsm_mya_tsk_anm_core.AdvRigAsset):
+            if isinstance(resource, qsm_mya_hdl_anm_core.AdvRigAsset):
                 if resource.is_skin_proxy_exists():
                     prx_item.set_status(
                         prx_item.ValidationStatus.Active
@@ -508,6 +521,7 @@ class PrxTreeviewUnitForAssetOpt(
                     i_v = variants[i]
                     i_tag_group = '/{}'.format(i)
                     i_tag_path = '/{}/{}'.format(i, i_v)
+
                     semantic_tag_filter_data.setdefault(
                         i_tag_group, set()
                     ).add(i_tag_path)
@@ -555,6 +569,10 @@ class PrxTreeviewUnitForAssetOpt(
                 prx_item_parent = self.gui_get_one(parent.path)
                 prx_item = prx_item_parent.add_child(
                     **create_kwargs
+                )
+                # fixme: bug for child has non filter data, so copy from parent temporary.
+                prx_item.get_item()._set_item_semantic_tag_filter_keys_tgt_(
+                    prx_item_parent.get_item()._get_item_semantic_tag_filter_keys_tgt_()
                 )
             else:
                 prx_item = self._prx_tree_view.create_item(

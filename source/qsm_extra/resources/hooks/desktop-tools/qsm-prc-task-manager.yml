@@ -5,7 +5,8 @@ option:
         - '*-maya'
     #
     gui:
-        name: 'Process-Task Manager'
+        name: 'Lazy Backstage Task'
+        name_chs: '懒人后台任务'
         group_name: 'General(s)'
         #
         icon_name: 'application/task_manager'

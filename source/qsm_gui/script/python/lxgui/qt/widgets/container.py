@@ -216,9 +216,6 @@ class AbsQtToolBox(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         super(AbsQtToolBox, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        # self.setSizePolicy(
-        #     QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
-        # )
         self._build_widget_()
 
     def _build_widget_(self):
@@ -244,15 +241,17 @@ class AbsQtToolBox(QtWidgets.QWidget):
         self._body = QtWidgets.QWidget()
         lot.addWidget(self._body)
         if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
+            self._body.setFixedHeight(self.QT_HEAD_H)
             self._layout = _base.QtHBoxLayout(self._body)
         elif self.QT_ORIENTATION == QtCore.Qt.Vertical:
+            self._body.setFixedWidth(self.QT_HEAD_W)
             self._layout = _base.QtVBoxLayout(self._body)
         else:
             raise RuntimeError()
 
         self._layout.setContentsMargins(*[0]*4)
+        self._layout.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         self._layout.setSpacing(2)
-        # self._layout.setAlignment(QtCore.Qt.AlignLeft)
 
         self._refresh_expand_()
         self._set_size_mode_(0)
@@ -305,16 +304,10 @@ class AbsQtToolBox(QtWidgets.QWidget):
             self._body.setSizePolicy(
                 QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
             )
-            # self.setSizePolicy(
-            #     QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
-            # )
         elif mode == self.SizeMode.Expanding:
             self._body.setSizePolicy(
                 QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
             )
-            # self.setSizePolicy(
-            #     QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
-            # )
 
 
 class QtHToolBox(AbsQtToolBox):

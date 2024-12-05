@@ -133,7 +133,7 @@ class _GuiCmdForNewVersion(object):
         all_directory_paths = self._workspace_opt.get_all_directories_at(variant)
         v_p_0.set(all_directory_paths)
         v_p_0.set_all_items_checked(False)
-        v_p_0.set_checked_by_include_paths(all_directory_paths[-1])
+        v_p_0.update_checked_by_paths(all_directory_paths[-1])
 
         w.show_window_auto()
 

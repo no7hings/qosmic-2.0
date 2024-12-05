@@ -82,7 +82,7 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
                 )
             elif file_opt.ext == '.ma':
                 node_dict = qsm_gnl_dotfile.MayaAscii(file_path).get_node_dict()
-                path_opts = map(lambda x: bsc_core.BscNodePathOpt('/{}'.format(x)), node_dict.keys())
+                path_opts = map(lambda x: bsc_core.BscNodePathOpt(x), node_dict.keys())
                 self._prx_options_node.set(
                     'node_data', path_opts
                 )
@@ -106,7 +106,7 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
         qt_v_lot.setSpacing(2)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.load.options')
             )
         )
@@ -142,14 +142,14 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
         qt_v_lot.addWidget(self._tip_prx_tool_group.widget)
         self._tip_prx_tool_group.set_expanded(True)
         self._tip_prx_tool_group.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.load.tip')
             )
         )
         self._tip_prx_text_browser = gui_prx_widgets.PrxTextBrowser()
         self._tip_prx_tool_group.add_widget(self._tip_prx_text_browser)
         self._tip_prx_text_browser.set_content(
-            gui_core.GuiUtil.choice_tool_tip(
+            gui_core.GuiUtil.choice_gui_tool_tip(
                 self._window._language, self._window._configure.get('build.load.tip')
             )
         )

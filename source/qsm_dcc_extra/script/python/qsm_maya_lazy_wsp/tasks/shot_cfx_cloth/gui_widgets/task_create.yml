@@ -1,0 +1,115 @@
+build:
+    name: 'CFX Cloth'
+    name_chs: '布料解算'
+
+    tool_tip:
+        |-
+        To be supplemented.
+
+    tool_tip_chs:
+        |-
+        待补充。
+
+    buttons:
+        apply_and_close:
+            name: 'Apply and Close'
+            name_chs: '应用并关闭'
+
+        apply:
+            name: 'Apply'
+            name_chs: '应用'
+
+        close:
+            name: 'Close'
+            name_chs: '关闭'
+
+    options:
+        name: 'Options'
+        name_chs: '选项'
+
+        parameters:
+            upstream:
+                widget: group
+                name: 'Upstream'
+                name_chs: '上游'
+
+            upstream/scene:
+                widget: file
+                open_or_save: open
+                name: 'Scene'
+                name_chs: '文件'
+                tool_tip: 'To be supplemented.'
+                tool_tip_chs: '显示上游文件，可以替换成其他文件。'
+
+            upstream/scene_modify_time:
+                widget: string
+                name: 'Scene Modify Time'
+                name_chs: '文件修改时间'
+                tool_tip: 'To be supplemented.'
+                tool_tip_chs: '显示上游文件修改时间。'
+                lock: True
+
+            upstream/preview:
+                widget: file
+                open_or_save: open
+                name: 'Preview'
+                name_chs: '预览'
+                tool_tip: 'To be supplemented.'
+                tool_tip_chs: '显示上游的预览。'
+                lock: True
+
+            upstream/play_preview:
+                widget: button
+                name: 'Play Preview'
+                name_chs: '播放预览'
+                tool_tip: 'To be supplemented.'
+                tool_tip_chs: '点击播放预览。'
+
+            upstream/scene_references:
+                widget: node_tree
+                name: 'Scene Reference'
+                name_chs: '文件引用'
+                tool_tip: 'To be supplemented.'
+                tool_tip_chs: '显示上游文件中的引用。'
+                height: 240
+
+            upstream/scene_frame_range:
+                widget: integer2
+                name_chs: '帧范围'
+                tool_tip: '...'
+                lock: True
+
+            upstream/fps:
+                widget: string
+                name: 'FPS'
+                name_chs: '帧率'
+                default: '24'
+                tool_tip: 'Show scene FPS'
+                tool_tip_chs: '显示文件的帧率'
+                lock: True
+
+            upstream/analysis_scene:
+                widget: button
+                name: 'Analysis Scene'
+                name_chs: '解析文件'
+                tool_tip: 'To be supplemented.'
+                tool_tip_chs: '点击解析文件中的引用和帧范围。'
+
+            task_unit:
+                widget: enumerate
+                name: 'Task Unit'
+                name_chs: '任务单元'
+                options: ['main', 'test']
+                default: 'main'
+
+            auto_load_cfx_rig:
+                widget: boolean
+                name: 'Auto Load CFX Rig'
+                name_chs: '自动加载解算预设'
+                value: True
+
+            solver_start_frame:
+                widget: integer
+                name: 'Solver Start Frame'
+                name_chs: '解算器起始帧'
+                value: 1

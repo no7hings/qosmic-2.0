@@ -408,10 +408,6 @@ class AbsPrxPort(AbsPrxPortBaseDef):
         self._prx_port_input.set_options(values, names)
 
     def set_tool_tip(self, *args, **kwargs):
-        # kwargs['name'] = 'entry as "{}"'.format(
-        #     self.WIDGET_TYPE,
-        # )
-        # kwargs['name'] = self.get_port_path()
         self._prx_port_input.set_tool_tip(*args, **kwargs)
 
     def get(self):

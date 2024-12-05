@@ -44,6 +44,8 @@ class AbsViewModel(object):
         self._data.item_name_enable = True
         # item mtime
         self._data.item_mtime_enable = False
+        # item user
+        self._data.item_user_enable = False
         # item number
         self._data.item_number_enable = False
         # item lock
@@ -115,6 +117,13 @@ class AbsViewModel(object):
 
     def is_item_mtime_enable(self):
         return self._data.item_mtime_enable
+
+    # item user
+    def set_item_user_enable(self, boolean):
+        self._data.item_user_enable = boolean
+
+    def is_item_user_enable(self):
+        return self._data.item_user_enable
 
     # item number
     def set_item_number_enable(self, boolean):

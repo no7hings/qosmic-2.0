@@ -85,7 +85,6 @@ main_joints:
     - PinkyFinger?_L
     - RingFinger?_L
 
-
 control:
     - Main
     - FKRoot_M

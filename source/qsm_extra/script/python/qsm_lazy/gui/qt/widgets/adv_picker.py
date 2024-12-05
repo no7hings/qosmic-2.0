@@ -91,6 +91,8 @@ class _Keys(object):
     leg_ik_heel_L = 'leg_ik_heel_L'
     leg_ik_heel_R = 'leg_ik_heel_R'
 
+    secondary_cloth = 'secondary_cloth'
+
     All = [
         main,
 
@@ -145,6 +147,8 @@ class _Keys(object):
         leg_ik_toe_roll_L, leg_ik_toe_roll_R,
         leg_ik_toe_roll_end_L, leg_ik_toe_roll_end_R,
         leg_ik_heel_L, leg_ik_heel_R,
+
+        secondary_cloth,
     ]
 
 
@@ -287,8 +291,11 @@ class QtAdvCharacterPicker(
             self.user_select_control_key_changed.emit()
 
         control_keys = []
-        for i in self._sketch_key_set_selected:
-            i_control_keys = self._get_control_keys_(i, self._control_includes)
+        for i_key in self._sketch_key_set_selected:
+            if i_key == _Keys.secondary_cloth:
+                control_keys.append('secondary_cloth')
+
+            i_control_keys = self._get_control_keys_(i_key, self._control_includes)
             if i_control_keys:
                 control_keys.extend(i_control_keys)
 
@@ -335,12 +342,13 @@ class QtAdvCharacterPicker(
         self.setSizePolicy(
             QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
+        self.setMinimumSize(48, 48)
 
         self._init_action_base_def_(self)
 
         self._adv_control_cfg = qsm_gnl_core.AdvCharacterControlConfigure()
 
-        self._body_json_file = bsc_resource.ExtendResource.get('gui/adv-picker-body.json')
+        self._body_json_file = bsc_resource.ExtendResource.get('gui/adv-picker/v1.json')
         if self._body_json_file is None:
             raise RuntimeError()
 
@@ -439,7 +447,20 @@ class QtAdvCharacterPicker(
         for i_key, i_path in self._draw_path_dict.items():
             if i_key in _Keys.All:
                 # select
-                if i_key in self._sketch_key_set_selected:
+                # hover
+                if i_key == self._sketch_key_hover:
+                    i_r, i_g, i_b, _ = gui_core.GuiRgba.LightOrange
+                    painter._set_border_color_(i_r, i_g, i_b, 255)
+                    painter._set_background_color_(i_r, i_g, i_b, alpha)
+                    # painter._set_background_style_(QtCore.Qt.FDiagPattern)
+                    if i_key in self._sketch_key_set_selected:
+                        if i_key == self._sketch_key_current:
+                            painter._set_border_width_(4)
+                        else:
+                            painter._set_border_width_(2)
+                    else:
+                        painter._set_border_width_(1)
+                elif i_key in self._sketch_key_set_selected:
                     if i_key == self._sketch_key_current:
                         i_r, i_g, i_b, _ = gui_core.GuiRgba.LightAzureBlue
                         painter._set_border_color_(i_r, i_g, i_b, 255)
@@ -452,19 +473,14 @@ class QtAdvCharacterPicker(
                         painter._set_background_color_(i_r, i_g, i_b, alpha)
                         # painter._set_background_style_(QtCore.Qt.BDiagPattern)
                         painter._set_border_width_(2)
-                # hover
-                elif i_key == self._sketch_key_hover:
-                    i_r, i_g, i_b, _ = gui_core.GuiRgba.LightOrange
-                    painter._set_border_color_(i_r, i_g, i_b, 255)
-                    painter._set_background_color_(i_r, i_g, i_b, alpha)
-                    # painter._set_background_style_(QtCore.Qt.FDiagPattern)
-                    painter._set_border_width_(1)
                 # default
                 else:
                     if '_fk_ik_swap_' in i_key:
                         i_r, i_g, i_b, _ = gui_core.GuiRgba.Pink
                     elif '_ik_' in i_key:
                         i_r, i_g, i_b, _ = gui_core.GuiRgba.LemonYellow
+                    elif i_key.startswith('secondary_'):
+                        i_r, i_g, i_b, _ = gui_core.GuiRgba.NeonGreen
                     else:
                         i_r, i_g, i_b, _ = gui_core.GuiRgba.Purple
 

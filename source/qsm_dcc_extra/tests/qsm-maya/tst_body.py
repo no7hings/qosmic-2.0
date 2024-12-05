@@ -27,5 +27,5 @@ for i in qsm_mya_core.Scene.find_all_dag_nodes(type_includes=['mesh']):
     dict_[i_key] = i_coords
 
 bsc_storage.StgFileOpt(
-    'E:/myworkspace/qosmic-2.0/source/qsm_extra/resources/gui/adv-picker-body.json'
+    'E:/myworkspace/qosmic-2.0/source/qsm_extra/resources/gui/adv-picker/v1.json'
 ).set_write(dict_)

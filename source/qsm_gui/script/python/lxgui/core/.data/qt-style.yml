@@ -44,7 +44,7 @@ widget:
             background: rgba(<option.rgba.BackgroundDark>); 
             color: rgba(<option.rgba.Text>); 
             border: none;
-            padding: 2px 4px 2px 4px;
+            padding: 4px 8px 4px 8px;
         }
         QMenuBar::item:selected{
             background: rgba(<option.rgba.BackgroundSelect>); 
@@ -157,7 +157,7 @@ widget:
         QTreeView::item:hover{
             background: rgba(<option.rgba.BackgroundHover>);
             border: 1px rgba(<option.rgba.Transparent>); border-radius: 0px; border-style: solid;
-            color: rgba(<option.rgba.TextHover>); 
+            color: rgba(<option.rgba.LightBlack>); 
         }
         QTreeView::item:selected{
             background: rgba(<option.rgba.BackgroundSelect>);
@@ -167,7 +167,7 @@ widget:
         QTreeView::item:selected:hover{
             background: rgba(<option.rgba.BackgroundHover>);
             border: 1px rgba(<option.rgba.Transparent>); border-radius: 0px; border-style: solid;
-            color: rgba(<option.rgba.TextHover>); 
+            color: rgba(<option.rgba.LightBlack>); 
         }
         QTreeView::branch:open:has-children:has-siblings{
             border-image: none; image: url(<option.icon-file.expand>);

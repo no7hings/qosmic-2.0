@@ -15,11 +15,11 @@ import lxgui.proxy.abstracts as prx_abstracts
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy.backstage.core as qsm_task_core
+import qsm_lazy.backstage.core as qsm_dcc_task_core
 
-import qsm_lazy.backstage.process as lzy_bks_process
+import qsm_lazy.backstage.worker as lzy_bks_worker
 
-import qsm_lazy.backstage.process.server as qsm_tsk_prc_server
+import qsm_lazy.backstage.worker.server as qsm_tsk_prc_server
 
 
 class _GuiBaseOpt(object):
@@ -45,7 +45,7 @@ class _GuiTaskOpt(
 
     def do_gui_show_task_log(self, entity):
         self._window.switch_current_layer_to('task_log')
-        log = entity.read_log()
+        log = entity.read_result_log()
         if log:
             self._page._task_log_prx_text_browser.set_content(
                 log
@@ -66,15 +66,15 @@ class _GuiTaskOpt(
     def do_requeue_tasks(self):
         prc_tasks = self.gui_get_selected_prc_tasks()
         if prc_tasks:
-            lzy_bks_process.TaskProcessClient.requeue_tasks(
+            lzy_bks_worker.TaskClient.requeue_tasks(
                 [x.id for x in prc_tasks]
             )
-            # [lzy_bks_process.TaskProcessClient.requeue_task(x.id) for x in prc_tasks]
+            # [lzy_bks_worker.TaskClient.requeue_task(x.id) for x in prc_tasks]
 
     def do_stop_tasks(self):
         prc_tasks = self.gui_get_selected_prc_tasks()
         if prc_tasks:
-            lzy_bks_process.TaskProcessClient.stop_tasks(
+            lzy_bks_worker.TaskClient.stop_tasks(
                 [x.id for x in prc_tasks]
             )
 
@@ -308,7 +308,7 @@ class _GuiTaskOpt(
         self.gui_add_root()
 
         if self._window.SERVER_FLAG is True:
-            self._worker_queue = lzy_bks_process.TaskProcessClient.get_worker_queue()
+            self._worker_queue = lzy_bks_worker.TaskClient.get_worker_queue()
         else:
             self._worker_queue = dict(
                 waiting=[],
@@ -448,7 +448,7 @@ class _GuiTaskOpt(
 
     def _do_gui_refresh_server_status(self):
         def cache_fnc_():
-            pool_status = lzy_bks_process.TaskProcessClient.get_worker_status()
+            pool_status = lzy_bks_worker.TaskClient.get_worker_status()
             return [pool_status]
 
         def build_fnc_(data):
@@ -569,7 +569,7 @@ class PrxPageForTaskMonitor(prx_abstracts.AbsPrxWidget):
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
 
     def gui_page_setup_fnc(self):
-        self._entity_pool = qsm_task_core.TaskPool.generate()
+        self._entity_pool = qsm_dcc_task_core.TaskPool.generate()
 
         self._gui_add_task_log_layer()
         self._gui_add_task_properties_layer()
@@ -604,7 +604,7 @@ class PrxPageForTaskMonitor(prx_abstracts.AbsPrxWidget):
         self._task_pool_status_chart = gui_qt_widgets.QtChartAsPoolStatus()
         self._info_prx_tool_box.add_widget(self._task_pool_status_chart)
         self._task_pool_status_chart._set_maximum_(
-            qsm_tsk_prc_server.TaskProcessWorker.MAXIMUM_INITIAL
+            qsm_tsk_prc_server.TaskWorker.MAXIMUM_INITIAL
         )
 
         self._prx_h_splitter = gui_prx_widgets.PrxHSplitter()

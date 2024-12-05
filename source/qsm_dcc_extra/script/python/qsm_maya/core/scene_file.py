@@ -225,7 +225,7 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
                     u'保存修改到: {}?'.format(
                         cls.get_current()
                     ),
-                    title='打开文件',
+                    title='保存文件？',
                     show_no=True,
                     show_cancel=True,
                     size=(320, 120),
@@ -236,7 +236,7 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
                     u'Save changes to: {}?'.format(
                         cls.get_current()
                     ),
-                    title='Open Scene',
+                    title='Save Scene?',
                     show_no=True,
                     show_cancel=True,
                     size=(320, 120),
@@ -270,7 +270,7 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
                     u'保存修改到: {}?'.format(
                         cls.get_current()
                     ),
-                    title='新建文件',
+                    title='保存文件？',
                     show_no=True,
                     show_cancel=True,
                     size=(320, 120),
@@ -281,7 +281,7 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
                     u'Save changes to: {}?'.format(
                         cls.get_current()
                     ),
-                    title='New Scene',
+                    title='Save Scene?',
                     show_no=True,
                     show_cancel=True,
                     size=(320, 120),
@@ -326,25 +326,29 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
         return True
 
     @classmethod
-    def increment_and_save_with_dialog(cls, file_path):
+    def increment_and_save_with_dialog(cls, file_path, force=False):
         if cls.is_dirty() is True:
             cls.save_to(file_path)
             return True
 
-        if gui_core.GuiUtil.language_is_chs():
-            gui_core.GuiApplication.exec_message_dialog(
-                '沒有需要保存的更改。',
-                title='加存',
-                size=(320, 120),
-                status='warning',
-            )
+        if force is True:
+            cls.save_to(file_path)
+            return True
         else:
-            gui_core.GuiApplication.exec_message_dialog(
-                'No changes to save.',
-                title='Increment and Save',
-                size=(320, 120),
-                status='warning',
-            )
+            if gui_core.GuiUtil.language_is_chs():
+                gui_core.GuiApplication.exec_message_dialog(
+                    '沒有需要保存的更改。',
+                    title='加存',
+                    size=(320, 120),
+                    status='warning',
+                )
+            else:
+                gui_core.GuiApplication.exec_message_dialog(
+                    'No changes to save.',
+                    title='Increment and Save',
+                    size=(320, 120),
+                    status='warning',
+                )
         return False
 
     @classmethod
@@ -379,22 +383,28 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
         return True
 
     @classmethod
-    def open(cls, file_path, ignore_format=True, add_to_recent=False):
+    def open(cls, file_path, ignore_format=True, add_to_recent=False, load_no_references=False):
         if ignore_format is True:
-            cmds.file(
-                file_path,
+            kwargs = dict(
                 open=1,
                 options='v=0;',
                 force=1,
             )
         else:
-            cmds.file(
-                file_path,
+            kwargs = dict(
                 open=1,
                 options='v=0;',
                 force=1,
                 type=cls.get_file_type(file_path)
             )
+
+        if load_no_references is True:
+            kwargs['loadNoReferences'] = True
+
+        cmds.file(
+            file_path,
+            **kwargs
+        )
 
         if add_to_recent is True:
             cls.add_to_recent_files(file_path)

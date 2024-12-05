@@ -981,9 +981,10 @@ class QtPopupForCompletion(
                 if text_current == i_text:
                     has_match = True
                     i_item.setSelected(True)
-            #
+            # fixme: always select top item?
             if has_match is False:
-                self._popup_view._get_all_items_()[0].setSelected(True)
+                pass
+                # self._popup_view._get_all_items_()[0].setSelected(True)
 
             press_pos = self._get_popup_pos_0_(self._entry_frame_widget)
             width, height = self._get_popup_size_from_(self._entry_frame_widget)
@@ -994,7 +995,6 @@ class QtPopupForCompletion(
                 press_pos,
                 (width, height_max)
             )
-
             self._popup_view._set_scroll_to_selected_item_top_()
 
             self._entry_widget._set_focused_(True)
@@ -1007,11 +1007,11 @@ class QtPopupForCompletion(
         selected_item_widget = self._popup_view._get_selected_item_widget_()
         if selected_item_widget:
             text = selected_item_widget._get_name_text_()
-            #
+
             self.user_popup_value_accepted.emit(text)
-        #
+
         self.user_popup_finished.emit()
-        #
+
         self._do_popup_close_()
 
     def _do_popup_close_(self):

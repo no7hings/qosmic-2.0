@@ -71,8 +71,8 @@ class PrxInputAsStgTask(_prx_abstracts.AbsPrxWidget):
         self._qt_path_input = _qt_wgt_ipt_for_path.QtInputForPath()
         l_0.addWidget(self._qt_path_input)
 
-        self._qt_path_input._set_buffer_fnc_(
-            self._buffer_fnc
+        self._qt_path_input._set_next_buffer_fnc_(
+            self._next_buffer_fnc
         )
 
         self._qt_path_input._set_value_('/')
@@ -126,7 +126,7 @@ class PrxInputAsStgTask(_prx_abstracts.AbsPrxWidget):
             path = bsc_core.BscNodePathOpt(path_text)
 
             self.__scheme = text
-            self._qt_path_input._restore_buffer_cache_()
+            self._qt_path_input._restore_next_cache_()
 
             self.__resource_type = None
             if self.__scheme == self.Schemes.AssetTask:
@@ -324,7 +324,7 @@ class PrxInputAsStgTask(_prx_abstracts.AbsPrxWidget):
 
             self.__accept_tip()
 
-    def _buffer_fnc(self, path):
+    def _next_buffer_fnc(self, path):
         dict_ = {}
 
         cs = path.get_components()

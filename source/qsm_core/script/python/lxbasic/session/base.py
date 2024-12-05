@@ -71,6 +71,13 @@ class AbsSsnConfigureBaseDef(object):
 
     gui_name = property(get_gui_name)
 
+    def get_gui_version(self):
+        return self._gui_configure.get(
+            'version'
+        )
+
+    gui_version = property(get_gui_version)
+
     @property
     def gui_icon_name(self):
         return self._gui_configure.get(
@@ -216,7 +223,7 @@ class AbsSsnGener(
     user = property(get_user)
 
     def get_gui_window_name(self):
-        language = bsc_core.BscEnvironExtra.get_ui_language()
+        language = bsc_core.BscEnvironExtra.get_gui_language()
         gui_name = self.get_gui_name_(language)
         gui_name = bsc_core.ensure_string(gui_name)
         if self.get_is_td_enable() is True:

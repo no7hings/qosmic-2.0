@@ -21,6 +21,10 @@ class QtPrintSignals(QtCore.QObject):
     print_over_accepted = qt_signal(str)
 
 
+class QtConcurrentGlobSignals(QtCore.QObject):
+    accepted = qt_signal(tuple, str)
+
+
 class QtMethodSignals(QtCore.QObject):
     stated = qt_signal()
     running = qt_signal()

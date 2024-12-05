@@ -6,8 +6,8 @@ from ..subpages import assign as _subpage_assign
 
 class PrxSubPanelForAssign(_abstracts.AbsPrxSubPanelForAssign):
     SUB_PAGE_CLASS_DICT = dict(
-        type=_subpage_assign.PrxSubPageForTypeAssign,
-        tag=_subpage_assign.PrxSubPageForTagAssign
+        type=_subpage_assign.PrxSubpageForTypeAssign,
+        tag=_subpage_assign.PrxSubpageForTagAssign
     )
 
     def __init__(self, window, session, *args, **kwargs):

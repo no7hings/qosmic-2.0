@@ -186,7 +186,7 @@ class RigValidationTask(
         # print task._result_content
 
 
-class RigValidationTaskProcess(object):
+class RigValidationTaskSubprocess(object):
     def __init__(self, file_path, validation_cache_path, mesh_count_cache_path, process_options):
         self._file_path = file_path
         self._validation_cache_path = validation_cache_path

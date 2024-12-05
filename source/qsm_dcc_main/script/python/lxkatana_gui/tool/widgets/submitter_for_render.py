@@ -156,7 +156,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
             if _name_dict:
                 if 'output-directory' in _name_dict:
                     _directory_path = _name_dict['output-directory']
-                    bsc_storage.StgSystem.open_directory_force(
+                    bsc_storage.StgExplorer.open_directory_force(
                         _directory_path
                     )
 
@@ -261,7 +261,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
         render_file_path = bsc_storage.StgFileOpt(file_path).get_render_file_path()
         if bsc_storage.StgPath.get_is_exists(render_file_path) is True:
             w = gui_core.GuiDialog.create(
-                label=self._session.gui_name,
+                label='Render Submit',
                 content=six.u('Scene is non changed for submit, render file for this scene is exists:\n"{}"').format(
                     render_file_path
                 ),
@@ -280,7 +280,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
         render_nodes = self.get_checked_render_nodes()
         if not render_nodes:
             w = gui_core.GuiDialog.create(
-                label=self._session.gui_name,
+                label='Render Submit',
                 content=(
                     'No render-node is checked, check at least one render-node'
                 ),
@@ -293,7 +293,7 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
             return
 
         w = gui_core.GuiDialog.create(
-            label=self._session.gui_name,
+            label='Render Submit',
             content=(
                 'Submit render to deadline for render node:\n'
                 '{}\n'

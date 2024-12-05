@@ -22,11 +22,11 @@ class PrxPortForFileList(_port_base.AbsPrxPort):
     def set_root(self, path):
         self._prx_port_input.set_root(path)
 
-    def set_checked_by_include_paths(self, paths):
-        self._prx_port_input.set_checked_by_include_paths(paths)
+    def update_checked_by_paths(self, paths, extra=False):
+        self._prx_port_input.update_checked_by_paths(paths, extra)
 
-    def set_unchecked_by_include_paths(self, paths):
-        self._prx_port_input.set_unchecked_by_include_paths(paths)
+    def update_unchecked_by_paths(self, paths, extra=False):
+        self._prx_port_input.update_unchecked_by_paths(paths, extra)
 
     def set_all_items_checked(self, boolean):
         self._prx_port_input.set_all_items_checked(boolean)

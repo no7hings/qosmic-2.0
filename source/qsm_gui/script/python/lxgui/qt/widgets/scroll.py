@@ -254,6 +254,9 @@ class AbsQtScrollBox(gui_qt_wgt_utility.QtLineWidget):
     def addWidget(self, *args, **kwargs):
         self._layout.addWidget(*args, **kwargs)
 
+    def insertWidget(self, *args, **kwargs):
+        self._layout.insertWidget(*args, **kwargs)
+
 
 class QtHScrollBox(AbsQtScrollBox):
     QT_ORIENTATION = QtCore.Qt.Horizontal

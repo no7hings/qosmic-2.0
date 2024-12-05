@@ -179,7 +179,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         data = self.get_data()
         if not data:
             self._window.exec_message_dialog(
-                gui_core.GuiUtil.choice_message(
+                gui_core.GuiUtil.choice_gui_message(
                     self._window._language, self._window._configure.get('build.register.messages.node')
                 ),
                 status='warning'
@@ -190,7 +190,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         gui_name_chs = options.get('gui_name_chs')
         if not gui_name_chs:
             self._window.exec_message_dialog(
-                gui_core.GuiUtil.choice_message(
+                gui_core.GuiUtil.choice_gui_message(
                     self._window._language, self._window._configure.get('build.register.messages.name_empty')
                 ),
                 status='warning'
@@ -202,7 +202,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         preview_files = self._prx_options_node.get('preview')
         if not preview_files:
             self._window.exec_message_dialog(
-                gui_core.GuiUtil.choice_message(
+                gui_core.GuiUtil.choice_gui_message(
                     self._window._language, self._window._configure.get('build.register.messages.preview')
                 ),
                 status='warning'
@@ -212,7 +212,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         node_path = options.get('path')
         if self._scr_stage.check_node_exists(node_path) is True:
             self._window.exec_message_dialog(
-                gui_core.GuiUtil.choice_message(
+                gui_core.GuiUtil.choice_gui_message(
                     self._window._language, self._window._configure.get('build.register.messages.name_exists')
                 ),
                 status='warning'
@@ -222,7 +222,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         type_paths = self._type_prx_tag_view.get_checked_item_paths()
         if not type_paths:
             self._window.exec_message_dialog(
-                gui_core.GuiUtil.choice_message(
+                gui_core.GuiUtil.choice_gui_message(
                     self._window._language, self._window._configure.get('build.register.messages.type')
                 ),
                 status='warning'
@@ -232,7 +232,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         tag_paths = self._tag_prx_tag_view.get_checked_item_paths()
         if not tag_paths:
             self._window.exec_message_dialog(
-                gui_core.GuiUtil.choice_message(
+                gui_core.GuiUtil.choice_gui_message(
                     self._window._language, self._window._configure.get('build.register.messages.tag')
                 ),
                 status='warning'
@@ -277,7 +277,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
                 node_path, 'data_type', qsm_scr_core.DataTypes.MayaNodeGraph
             )
         self._window.exec_message_dialog(
-            gui_core.GuiUtil.choice_message(
+            gui_core.GuiUtil.choice_gui_message(
                 self._window._language, self._window._configure.get('build.register.messages.successful')
             ),
             status='correct'
@@ -289,7 +289,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         qt_v_lot.setSpacing(2)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.register.options')
             )
         )
@@ -311,7 +311,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         qt_v_lot.addWidget(self._prx_tool_group.widget)
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.register.filter')
             )
         )

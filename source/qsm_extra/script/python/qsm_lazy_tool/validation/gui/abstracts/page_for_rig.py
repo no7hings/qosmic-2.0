@@ -22,7 +22,7 @@ import qsm_lazy.validation.scripts as lzy_vld_scripts
 import qsm_lazy.gui.proxy.widgets as lzy_gui_prx_widgets
 
 
-class AbsPrxPageForRig(gui_prx_widgets.PrxBasePage):
+class AbsPrxPageForChrRig(gui_prx_widgets.PrxBasePage):
     GUI_KEY = 'rig'
 
     def _on_dcc_load_asset(self):
@@ -87,7 +87,7 @@ class AbsPrxPageForRig(gui_prx_widgets.PrxBasePage):
         file_paths = self._prx_options_node.get('files')
         if not file_paths:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.{}.messages.no_files'.format(self.GUI_KEY))
                 ),
                 status='warning'
@@ -97,7 +97,7 @@ class AbsPrxPageForRig(gui_prx_widgets.PrxBasePage):
         process_options = self._validation_opt.generate_process_options(self._prx_options_node.to_dict())
         if not process_options:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.{}.messages.no_process_options'.format(self.GUI_KEY))
                 ),
                 status='warning'
@@ -124,7 +124,7 @@ class AbsPrxPageForRig(gui_prx_widgets.PrxBasePage):
         )
 
     def __init__(self, window, session, *args, **kwargs):
-        super(AbsPrxPageForRig, self).__init__(window, session, *args, **kwargs)
+        super(AbsPrxPageForChrRig, self).__init__(window, session, *args, **kwargs)
 
         self._asset_path = None
         self._scan_root = qsm_scan.Stage().get_root()
@@ -151,7 +151,7 @@ class AbsPrxPageForRig(gui_prx_widgets.PrxBasePage):
         self._asset_load_qt_button.setMaximumWidth(64)
         self._asset_load_qt_button.setMinimumWidth(64)
         self._asset_load_qt_button._set_name_text_(
-            self._window.choice_name(
+            self._window.choice_gui_name(
                 self._window._configure.get('build.{}.buttons.add'.format(self.GUI_KEY))
             )
         )
@@ -162,7 +162,7 @@ class AbsPrxPageForRig(gui_prx_widgets.PrxBasePage):
         self._qt_layout.addWidget(prx_v_sca.widget)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            self._window.choice_name(
+            self._window.choice_gui_name(
                 self._window._configure.get('build.{}.options'.format(self.GUI_KEY))
             )
         )
@@ -176,7 +176,7 @@ class AbsPrxPageForRig(gui_prx_widgets.PrxBasePage):
         prx_v_sca.add_widget(self._result_prx_tool_group)
         self._result_prx_tool_group.set_expanded(True)
         self._result_prx_tool_group.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language,
                 self._window._configure.get('build.{}.groups.results'.format(self.GUI_KEY))
             )
@@ -184,7 +184,7 @@ class AbsPrxPageForRig(gui_prx_widgets.PrxBasePage):
         self._result_prx_text_browser = gui_prx_widgets.PrxTextBrowser()
         self._result_prx_tool_group.add_widget(self._result_prx_text_browser)
         self._result_prx_text_browser.set_content(
-            gui_core.GuiUtil.choice_description(
+            gui_core.GuiUtil.choice_gui_description(
                 self._window._language,
                 self._window._configure.get('build.{}.contents.results'.format(self.GUI_KEY))
             )
@@ -197,7 +197,7 @@ class AbsPrxPageForRig(gui_prx_widgets.PrxBasePage):
         self._start_prx_button = gui_prx_widgets.PrxPressButton()
         self._bottom_prx_tool_bar.add_widget(self._start_prx_button)
         self._start_prx_button.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.{}.buttons.start'.format(self.GUI_KEY))
             )
         )

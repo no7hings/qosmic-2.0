@@ -1073,7 +1073,7 @@ class AbsStgDirectory(
 
     def set_open(self):
         if self.get_path():
-            bsc_storage.StgSystem.open_directory(self.get_path())
+            bsc_storage.StgExplorer.open_directory(self.get_path())
 
     def __str__(self):
         return u'{}(path="{}")'.format(

@@ -89,6 +89,13 @@ class Reference(object):
         cmds.file(loadReference=path, force=1)
 
     @classmethod
+    def load(cls, path, load_no_references=False):
+        kwargs = dict(loadReference=path, force=1)
+        if load_no_references is True:
+            kwargs['loadNoReferences'] = True
+        cmds.file(**kwargs)
+
+    @classmethod
     def unload(cls, path):
         cmds.file(unloadReference=path)
 
@@ -200,4 +207,13 @@ class ReferencesCache(object):
                 i_file_path = self.get_file(i_namespace)
                 if i_file_path:
                     list_.append(i_namespace)
+        return list_
+
+    def find_from_selection(self):
+        list_ = []
+        namespaces = _namespace.Namespaces.extract_from_selection()
+        for i_namespace in namespaces:
+            i_reference_node = self.get(i_namespace)
+            if i_reference_node:
+                list_.append(i_reference_node)
         return list_

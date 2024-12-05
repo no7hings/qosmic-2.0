@@ -23,7 +23,7 @@ def main(session):
         type='text',
         info='Entry Name for Create...',
         value='',
-        title=window.choice_name(session.gui_configure.get('window'))
+        title=window.choice_gui_name(session.gui_configure.get('window'))
     )
     if input_result:
         texts = re.split(ur'[^\w\u4e00-\u9fff]+', input_result)

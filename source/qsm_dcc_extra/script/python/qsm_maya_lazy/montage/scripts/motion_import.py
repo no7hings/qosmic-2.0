@@ -11,7 +11,7 @@ import lxbasic.log as bsc_log
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
+import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 
 from .. import core as _core
 
@@ -76,7 +76,7 @@ s.AdvChrMotionImportOpt.append_layer(
     def test_(cls):
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
-            results = qsm_mya_tsk_anm_core.AdvRigAsset.filter_namespaces(namespaces)
+            results = qsm_mya_hdl_anm_core.AdvRigAsset.filter_namespaces(namespaces)
             if results:
                 cls(results[0]).test()
 

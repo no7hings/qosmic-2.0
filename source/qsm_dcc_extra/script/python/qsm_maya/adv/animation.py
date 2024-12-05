@@ -74,7 +74,17 @@ class AdvOpt(_base.AdvNamespaceExtra):
 
     # reset, do not mark undo, "ControlSetMotionOpt" is already using
     def rest_controls_transformation(self, **kwargs):
-        controls = self.find_all_controls()
+        if 'reset_scheme' in kwargs:
+            reset_scheme = kwargs.pop('reset_scheme')
+        else:
+            reset_scheme = 'default'
+        if reset_scheme == 'transform':
+            controls = self.find_all_transform_controls()
+        elif reset_scheme == 'curve':
+            controls = self.find_all_curve_controls()
+        else:
+            controls = self.find_all_controls()
+
         if controls:
             return _motion_core.ControlSetMotionOpt(self._namespace, controls).reset_transformation(**kwargs)
         return False

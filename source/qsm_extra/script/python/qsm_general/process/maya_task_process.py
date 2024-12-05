@@ -2,5 +2,5 @@
 import _base
 
 
-class MayaTaskProcess(_base.DccProcess):
+class MayaTaskSubprocess(_base.DccProcess):
     OPTION_HOOK_KEY = 'maya-task-process'

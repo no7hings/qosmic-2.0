@@ -113,7 +113,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
 
         self._selection_scheme_prx_input.set(default)
         self._selection_scheme_prx_input.set_tool_tip(
-            self._window.choice_tool_tip(
+            self._window.choice_gui_tool_tip(
                 self._window._configure.get('build.rig_selection_scheme')
             )
         )
@@ -177,6 +177,7 @@ class PrxPageForCfxMainTool(gui_prx_abstracts.AbsPrxWidget):
         # tool set
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         main_qt_lot.addWidget(self._page_prx_tab_tool_box.widget)
+        self._page_prx_tab_tool_box.set_expand_enable(True)
         # export
         # self._gui_export_toolset_unit = _toolset_basic.ToolsetUnitForCfxRigExport(
         #     self._window, self, self._session

@@ -1,9 +1,19 @@
 # coding:utf-8
-import qsm_general.dotfile as gnl_dotfile
+import qsm_general.dotfile as qsm_gnl_dotfile
 
 
-ma = gnl_dotfile.MayaAscii(
-    'Z:/projects/QSM_TST/source/shots/A001_002/A001_002_001/user.shared/cfx.cfx_cloth/main/maya/scenes/A001_002_001.cfx.cfx_cloth.main.v001.ma'
+ma = qsm_gnl_dotfile.MayaAscii(
+    'X:/QSM_TST/A001/A001_001/动画/通过文件/A001_001_003.ma'
 )
 
-print ma.get_reference_dict()
+print ma.get_modify_time()
+
+print ma.get_nodes()
+
+print ma.get_references()
+
+print ma.get_fps()
+
+print ma.get_frame_range()
+
+# print ma.get_node_dict()

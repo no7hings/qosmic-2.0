@@ -7,9 +7,9 @@ def skin_proxy_generate_fnc(option_opt):
     cache_file_path = option_opt.get('cache_file')
     data_file_path = option_opt.get('data_file')
 
-    import qsm_maya.tasks.animation.scripts as qsm_mya_tsk_anm_scripts
+    import qsm_maya.handles.animation.scripts as qsm_mya_hdl_anm_scripts
 
-    qsm_mya_tsk_anm_scripts.AdvSkinProxyProcess(
+    qsm_mya_hdl_anm_scripts.AdvSkinProxyProcess(
         file_path, cache_file_path, data_file_path
     ).execute()
 
@@ -23,9 +23,9 @@ def dynamic_gpu_generate_fnc(option_opt):
     motion_file = option_opt.get('motion_file')
     use_motion = option_opt.get_as_boolean('use_motion')
 
-    import qsm_maya.tasks.animation.scripts as qsm_mya_tsk_anm_scripts
+    import qsm_maya.handles.animation.scripts as qsm_mya_hdl_anm_scripts
 
-    qsm_mya_tsk_anm_scripts.DynamicGpuCacheProcess(
+    qsm_mya_hdl_anm_scripts.DynamicGpuCacheProcess(
         file_path, cache_file_path, namespace, start_frame, end_frame, motion_file, use_motion
     ).execute()
 
@@ -34,9 +34,9 @@ def unit_assembly_cache_generate_fnc(option_opt):
     file_path = option_opt.get('file')
     cache_file_path = option_opt.get('cache_file')
 
-    import qsm_maya.tasks.scenery.scripts as qsm_mya_tsk_scn_scripts
+    import qsm_maya.handles.scenery.scripts as qsm_mya_hdl_scn_scripts
 
-    qsm_mya_tsk_scn_scripts.UnitAssemblyProcess(
+    qsm_mya_hdl_scn_scripts.UnitAssemblyProcess(
         file_path, cache_file_path
     ).execute()
 
@@ -45,9 +45,9 @@ def gpu_instance_generate_fnc(option_opt):
     file_path = option_opt.get('file')
     cache_file_path = option_opt.get('cache_file')
 
-    import qsm_maya.tasks.scenery.scripts as qsm_mya_tsk_scn_scripts
+    import qsm_maya.handles.scenery.scripts as qsm_mya_hdl_scn_scripts
 
-    qsm_mya_tsk_scn_scripts.GpuInstanceProcess(
+    qsm_mya_hdl_scn_scripts.GpuInstanceProcess(
         file_path, cache_file_path
     ).execute()
 
@@ -55,13 +55,13 @@ def gpu_instance_generate_fnc(option_opt):
 def playblast_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya.tasks.general.scripts as qsm_mya_tsk_gnl_scripts
+    import qsm_maya.handles.general.scripts as qsm_mya_hdl_gnl_scripts
 
     kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
         option_opt.to_string()
     )
 
-    qsm_mya_tsk_gnl_scripts.PlayblastProcess(
+    qsm_mya_hdl_gnl_scripts.PlayblastProcess(
         **kwargs
     ).execute()
 
@@ -69,13 +69,13 @@ def playblast_fnc(option_opt):
 def cfx_cloth_cache_generate_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya.tasks.cfx.scripts as qsm_mya_tsk_cfx_scripts
+    import qsm_maya.handles.cfx.scripts as qsm_mya_hdl_cfx_scripts
 
     kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
         option_opt.to_string()
     )
 
-    qsm_mya_tsk_cfx_scripts.CfxNClothCacheProcess(
+    qsm_mya_hdl_cfx_scripts.CfxNClothCacheProcess(
         **kwargs
     ).execute()
 
@@ -83,7 +83,7 @@ def cfx_cloth_cache_generate_fnc(option_opt):
 def cfx_cloth_cache_export_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya.tasks.cfx_cloth.scripts as s
+    import qsm_maya_lazy_wsp.tasks.shot_cfx_cloth.dcc_scripts as s
 
     kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
         option_opt.to_string()
@@ -103,7 +103,7 @@ def rig_validation_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.RigValidationTaskProcess(
+    s.RigValidationTaskSubprocess(
         **kwargs
     ).execute()
 
@@ -117,7 +117,7 @@ def scenery_validation_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.SceneryValidationTaskProcess(
+    s.SceneryValidationTaskSubprocess(
         **kwargs
     ).execute()
 

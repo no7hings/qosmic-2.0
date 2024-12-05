@@ -238,7 +238,6 @@ class BscSystem(object):
         elif platform.system() == 'Linux':
             return 'linux'
 
-    #
     @classmethod
     def get_application(cls):
         return BscApplication.get_current()
@@ -488,12 +487,16 @@ class BscStorage(object):
                 except KeyError:
                     return 'unknown'
             elif BscStorage.get_platform_is_windows():
-                import win32security
+                # noinspection PyBroadException
+                try:
+                    import win32security
 
-                sd = win32security.GetFileSecurity(path, win32security.OWNER_SECURITY_INFORMATION)
-                owner_sid = sd.GetSecurityDescriptorOwner()
-                name, domain, _ = win32security.LookupAccountSid(None, owner_sid)
-                return '{}/{}'.format(domain, name)
+                    sd = win32security.GetFileSecurity(path, win32security.OWNER_SECURITY_INFORMATION)
+                    owner_sid = sd.GetSecurityDescriptorOwner()
+                    name, domain, _ = win32security.LookupAccountSid(None, owner_sid)
+                    return name
+                except Exception:
+                    return 'unknown'
         return 'unknown'
 
     @classmethod
@@ -597,8 +600,24 @@ class BscStorage(object):
         return False
 
     @classmethod
-    def rename_file_ext_to(cls, file_path, ext_tgt):
-        return
+    def get_driver_source(cls, drive_letter):
+        if not drive_letter.endswith(":"):
+            drive_letter += ":"
+
+        import ctypes
+
+        remote_name = ctypes.create_unicode_buffer(260)
+        buffer_size = ctypes.c_ulong(ctypes.sizeof(remote_name))
+
+        result = ctypes.windll.mpr.WNetGetConnectionW(
+            ctypes.c_wchar_p(drive_letter),
+            remote_name,
+            ctypes.byref(buffer_size)
+        )
+
+        if result == 0:
+            return remote_name.value.replace('\\', '/')
+        return drive_letter
 
 
 class StgPathMapDict(object):

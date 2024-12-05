@@ -15,3 +15,4 @@ hook_option:
     #
     script:
         scheme: 'default'
+        clip_start: null

@@ -186,7 +186,7 @@ class QtPainter(QtGui.QPainter):
         self._set_background_color_(color)
         self.drawRect(rect)
 
-    def _draw_virtual_buttons_(
+    def _draw_virtual_tab_buttons_(
         self, bar_rect, virtual_items, index_hover, index_pressed,
         index_current,
         orientation, direction
@@ -200,7 +200,7 @@ class QtPainter(QtGui.QPainter):
                 i_is_hovered = i_index == index_hover
                 i_is_pressed = i_index == index_pressed
                 i_is_current = i_index == index_current
-                self._draw_virtual_button_at_(
+                self._draw_virtual_tab_button_at_(
                     bar_rect,
                     i_draw_rect,
                     i_name_text, i_icon_text,
@@ -228,7 +228,7 @@ class QtPainter(QtGui.QPainter):
             )
             self.drawLine(line)
 
-    def _draw_virtual_button_at_(
+    def _draw_virtual_tab_button_at_(
         self,
         bar_rect,
         button_rect, text,
@@ -238,14 +238,16 @@ class QtPainter(QtGui.QPainter):
         bar_x, bar_y, bar_w, bar_h = bar_rect.x(), bar_rect.y(), bar_rect.width(), bar_rect.height()
         a = 255
 
-        border_color = _style.QtRgba.BdrTabGroup
-
         if is_current is True or is_hovered is True:
             background_color = _style.QtRgba.BkgTabGroupActive
             text_color = _style.QtRgba.Text
+
+            border_color = _style.QtRgba.BdrTabGroupActive
         else:
             background_color = _style.QtRgba.BkgTabGroup
             text_color = _style.QtRgba.TxtTemporary
+
+            border_color = _style.QtRgba.BdrTabGroup
 
         btn_x, btn_y, btn_w, btn_h = button_rect.x(), button_rect.y(), button_rect.width(), button_rect.height()
 
@@ -296,7 +298,7 @@ class QtPainter(QtGui.QPainter):
                 raise RuntimeError()
         else:
             border_width = 1
-            font_size = 8
+            font_size = 9
             if orientation == QtCore.Qt.Horizontal:
                 btn_frm_x, btn_frm_y = btn_x, btn_y+4
                 btn_frm_w, btn_frm_h = btn_w, btn_h-6
@@ -360,11 +362,15 @@ class QtPainter(QtGui.QPainter):
             i_r, i_g, i_b = bsc_core.BscTextOpt(icon_name_text).to_hash_rgb(s_p=(35, 50), v_p=(75, 95))
             self._set_border_width_(1)
             self._set_border_color_(_style.QtRgba.Transparent)
-            icn_bkg_color = QtGui.QColor(i_r, i_g, i_b, a)
-            if is_hovered is True:
-                self._set_background_color_(icn_bkg_color)
+
+            if is_current is True or is_hovered is True:
+                a = 255
             else:
-                self._set_background_color_(i_r, i_g, i_b)
+                a = 63
+
+            icn_bkg_color = QtGui.QColor(i_r, i_g, i_b, a)
+            self._set_background_color_(icn_bkg_color)
+
             self.drawRect(icon_rect)
         else:
             icn_w = 0
@@ -445,7 +451,7 @@ class QtPainter(QtGui.QPainter):
                 )
                 self.resetTransform()
 
-    def _draw_tab_buttons_by_rects_(
+    def _draw_tab_view_buttons_(
         self, bar_rect, virtual_items, index_hover, index_pressed,
         index_current
     ):
@@ -463,7 +469,7 @@ class QtPainter(QtGui.QPainter):
                 i_is_pressed = i_index == index_pressed
                 i_is_current = i_index == index_current
                 if i_is_current is False:
-                    self._draw_tab_button_at_(
+                    self._draw_tab_view_button_at_(
                         bar_rect, i_draw_rect, i_name_text, i_icon_text, i_is_hovered, i_is_pressed, i_is_current
                     )
             # draw current
@@ -475,33 +481,33 @@ class QtPainter(QtGui.QPainter):
                 i_is_pressed = i_index == index_pressed
                 i_is_current = i_index == index_current
                 if i_is_current is True:
-                    self._draw_tab_button_at_(
+                    self._draw_tab_view_button_at_(
                         bar_rect, i_draw_rect, i_name_text, i_icon_text, i_is_hovered, i_is_pressed, i_is_current
                     )
         else:
             bar_x, bar_y = bar_rect.x(), bar_rect.y()
             bar_w, bar_h = bar_rect.width(), bar_rect.height()
-            self._set_border_color_(_style.QtRgba.BdrTabActive)
+            self._set_border_color_(_style.QtRgba.BdrTabViewActive)
             self._set_border_width_(1)
             frame_coords = [(bar_x, bar_y+bar_h), (bar_w, bar_y+bar_h)]
             self._draw_path_by_coords_(frame_coords, antialiasing=False)
 
-    def _draw_tab_button_at_(
+    def _draw_tab_view_button_at_(
         self, bar_rect, rect, text, icon_name_text, is_hovered, is_pressed, is_current
     ):
         bar_x, bar_y, bar_w, bar_h = bar_rect.x(), bar_rect.y(), bar_rect.width(), bar_rect.height()
         a = 255
 
         if is_current is True:
-            border_color = _style.QtRgba.BdrTabActive
+            border_color = _style.QtRgba.BdrTabViewActive
         else:
-            border_color = _style.QtRgba.BdrTab
+            border_color = _style.QtRgba.BdrTabView
 
         if is_current is True or is_hovered is True:
-            background_color = _style.QtRgba.BkgTabActive
+            background_color = _style.QtRgba.BkgTabViewActive
             text_color = _style.QtRgba.Text
         else:
-            background_color = _style.QtRgba.BkgTab
+            background_color = _style.QtRgba.BkgTabView
             text_color = _style.QtRgba.TxtTemporary
 
         btn_x, btn_y = rect.x(), rect.y()
@@ -535,7 +541,7 @@ class QtPainter(QtGui.QPainter):
                 (btn_frm_x, btn_frm_y+btn_frm_h), (btn_frm_x+btn_frm_h, btn_frm_y), (btn_frm_x+btn_frm_w-btn_frm_h, btn_frm_y),
                 (btn_frm_x+btn_frm_w, btn_frm_y+btn_frm_h),
             ]
-            font_size = 8
+            font_size = 9
 
         self._set_border_color_(border_color)
         self._set_border_width_(border_width)

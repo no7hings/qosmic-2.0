@@ -350,6 +350,7 @@ class GuiRgba(object):
     TextDark = 127, 127, 127, 255
 
     TxtMtime = 127, 127, 127, 255
+    TxtUser = 127, 127, 127, 255
 
     TxtEnable = NeonGreen
     TxtDisable = DarkGray
@@ -412,17 +413,17 @@ class GuiRgba(object):
     BkgCapsule = 47, 47, 47, 255
     BkgCapsuleDisable = 55, 55, 55, 255
     
-    BdrTab = 63, 63, 63, 255
-    BdrTabActive = 87, 87, 87, 255
-    BkgTab = 47, 47, 47, 255
-    BkgTabActive = 63, 63, 63, 255
+    BdrTabView = 63, 63, 63, 255
+    BdrTabViewActive = 87, 87, 87, 255
+    BkgTabView = 47, 47, 47, 255
+    BkgTabViewActive = 63, 63, 63, 255
 
-    # tab
+    # tab view
     BkgTabGroup = 55, 55, 55, 255
-    BkgTabGroupActive = 63, 63, 63, 255
+    BkgTabGroupActive = 71, 71, 71, 255
     # border +16
     BdrTabGroup = 71, 71, 71, 255
-    BdrTabGroupActive = 79, 79, 79, 255
+    BdrTabGroupActive = 87, 87, 87, 255
     
     BkgBubble = 223, 223, 223, 255
     BkgBubbleDisable = 127, 127, 127, 255

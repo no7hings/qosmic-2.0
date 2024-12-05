@@ -94,7 +94,7 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
         self._asset_prx_input.add_widget(self._asset_load_qt_button)
         self._asset_load_qt_button.setFixedWidth(64)
         self._asset_load_qt_button._set_name_text_(
-            self._window.choice_name(
+            self._window.choice_gui_name(
                 self._window._configure.get('build.{}.buttons.create'.format(self.GUI_KEY))
             )
         )

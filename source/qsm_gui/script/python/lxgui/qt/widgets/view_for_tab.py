@@ -27,7 +27,7 @@ class AbsQtItemsDef(object):
         self._widget = widget
 
         self._tab_item_stack = _qt_core.GuiQtModForTabItemStack(self)
-        self._index_hover = None
+        self._hover_tab_index = None
         self._index_press = None
         self._item_index_dragged = None
 
@@ -78,14 +78,14 @@ class QtTabView(
         )
         m_l, m_t, m_r, m_b = self._tab_view_margins
         t_w, t_h = self._tab_w, self._tab_h
-        c_t_f_x, c_t_f_y = x, y
-        c_t_f_w, c_t_f_h = w, t_h
+        tab_bar_x, tab_bar_y = x, y
+        tab_bar_w, tab_bar_h = w, t_h
 
         self._tab_bar_draw_rect.setRect(
             x, y, w, t_h-1
         )
         scroll_w = w
-        c_x, c_y = x, y
+        tab_btn_x, tab_btn_y = x, y
         #
         btn_f_w, btn_f_h = t_h, t_h
         btn_w, btn_h = 20, 20
@@ -100,11 +100,11 @@ class QtTabView(
             self._tab_add_button.setGeometry(
                 x+(btn_f_w-btn_w)/2, y+(btn_f_h-btn_h)/2, btn_w, btn_h
             )
-            c_x += t_h
+            tab_btn_x += t_h
             scroll_w -= t_h
             #
-            c_t_f_x += btn_f_w
-            c_t_f_w -= btn_f_w
+            tab_bar_x += btn_f_w
+            tab_bar_w -= btn_f_w
         #
         scroll_abs_w = 0
         tab_items = self._tab_item_stack.get_all_items()
@@ -132,24 +132,24 @@ class QtTabView(
             # if self._tab_menu_is_enable is True:
             #     self._tab_menu_button.show()
             #     self._tab_menu_button.setGeometry(
-            #         w-btn_f_w+(btn_f_w-btn_w)/2, c_y+(btn_f_h-btn_h)/2, btn_w, btn_h
+            #         w-btn_f_w+(btn_f_w-btn_w)/2, tab_btn_y+(btn_f_h-btn_h)/2, btn_w, btn_h
             #     )
             # check scroll is valid
             if self._scroll_bar_model.is_valid():
                 btn_w_1, btn_h_1 = btn_w/2, btn_h
                 btn_f_w_r = btn_f_w*2
-                c_x_1, c_y_1 = w-btn_f_w_r, y
-                c_x_1 = max(c_x_1, btn_f_w_r)
+                tab_btn_x_1, tab_btn_y_1 = w-btn_f_w_r, y
+                tab_btn_x_1 = max(tab_btn_x_1, btn_f_w_r)
                 self._tab_right_tool_box_rect.setRect(
-                    c_x_1, c_y_1, btn_f_w_r, btn_f_h
+                    tab_btn_x_1, tab_btn_y_1, btn_f_w_r, btn_f_h
                 )
                 self._tab_right_tool_box_draw_rect.setRect(
-                    c_x_1, c_y_1, btn_f_w_r, btn_f_h-1
+                    tab_btn_x_1, tab_btn_y_1, btn_f_w_r, btn_f_h-1
                 )
                 #
                 self._tab_scroll_previous_button.show()
                 self._tab_scroll_previous_button.setGeometry(
-                    c_x_1+(btn_f_w-btn_w)/2, c_y_1+(btn_f_h-btn_h_1)/2, btn_w_1, btn_h_1
+                    tab_btn_x_1+(btn_f_w-btn_w)/2, tab_btn_y_1+(btn_f_h-btn_h_1)/2, btn_w_1, btn_h_1
                 )
 
                 if self._scroll_bar_model.get_is_minimum():
@@ -159,7 +159,7 @@ class QtTabView(
 
                 self._tab_scroll_next_button.show()
                 self._tab_scroll_next_button.setGeometry(
-                    c_x_1+(btn_f_w-btn_w)/2+btn_w_1, c_y_1+(btn_f_h-btn_h_1)/2, btn_w_1, btn_h_1
+                    tab_btn_x_1+(btn_f_w-btn_w)/2+btn_w_1, tab_btn_y_1+(btn_f_h-btn_h_1)/2, btn_w_1, btn_h_1
                 )
 
                 if self._scroll_bar_model.get_is_maximum():
@@ -169,10 +169,10 @@ class QtTabView(
 
                 self._tab_choose_button.show()
                 self._tab_choose_button.setGeometry(
-                    c_x_1+btn_f_w+(btn_f_w-btn_w)/2, c_y_1+(btn_f_h-btn_h)/2, btn_w, btn_h
+                    tab_btn_x_1+btn_f_w+(btn_f_w-btn_w)/2, tab_btn_y_1+(btn_f_h-btn_h)/2, btn_w, btn_h
                 )
 
-                c_t_f_w -= btn_f_w_r
+                tab_bar_w -= btn_f_w_r
             else:
                 self._tab_scroll_previous_button.hide()
                 self._tab_scroll_next_button.hide()
@@ -193,7 +193,7 @@ class QtTabView(
                     i_w = self._item_width_dict[i_index]
 
                     i_rect.setRect(
-                        c_x+i_x-scroll_value, y, i_w, t_h
+                        tab_btn_x+i_x-scroll_value, y, i_w, t_h
                     )
                     # on drag enter right
                     if self._index_drag_child_polish_start < i_index <= self._index_drag_child_polish:
@@ -212,7 +212,7 @@ class QtTabView(
                         )
                     else:
                         i_draw_rect.setRect(
-                            c_x+i_draw_x-scroll_value, y, i_w, t_h
+                            tab_btn_x+i_draw_x-scroll_value, y, i_w, t_h
                         )
             else:
                 for i_index, i_tab_item in enumerate(tab_items):
@@ -223,10 +223,10 @@ class QtTabView(
                     i_w = self._item_width_dict[i_index]
 
                     i_draw_rect.setRect(
-                        c_x+i_x-scroll_value, y, i_w, t_h
+                        tab_btn_x+i_x-scroll_value, y, i_w, t_h
                     )
                     i_rect.setRect(
-                        c_x+i_x-scroll_value, y, i_w, t_h
+                        tab_btn_x+i_x-scroll_value, y, i_w, t_h
                     )
 
         self._layer_stack.setGeometry(
@@ -234,7 +234,7 @@ class QtTabView(
         )
 
         self._tab_bar_rect.setRect(
-            c_t_f_x, c_t_f_y, c_t_f_w, c_t_f_h
+            tab_bar_x, tab_bar_y, tab_bar_w, tab_bar_h
         )
 
     def _load_history_(self):
@@ -370,7 +370,7 @@ class QtTabView(
                 if event.button() == QtCore.Qt.LeftButton:
                     if self._index_press_tmp is not None:
                         self._set_action_flag_(self.ActionFlag.Press)
-                        self._update_item_index_pressed_(self._index_press_tmp)
+                        self._on_tab_button_press_(self._index_press_tmp)
                 elif event.button() == QtCore.Qt.RightButton:
                     if self._index_press_tmp is not None:
                         self._popup_menu_()
@@ -415,7 +415,7 @@ class QtTabView(
                     event.ignore()
 
                 self._index_press_tmp = None
-                self._index_hover = None
+                self._hover_tab_index = None
                 self._clear_all_action_flags_()
                 self._refresh_widget_all_()
             elif event.type() == QtCore.QEvent.Wheel:
@@ -430,10 +430,10 @@ class QtTabView(
 
     def paintEvent(self, event):
         painter = _qt_core.QtPainter(self)
-        painter._draw_tab_buttons_by_rects_(
+        painter._draw_tab_view_buttons_(
             self._tab_bar_draw_rect,
             virtual_items=self._tab_item_stack.get_all_items(),
-            index_hover=self._index_hover,
+            index_hover=self._hover_tab_index,
             index_pressed=self._index_press_tmp,
             index_current=self._get_current_index_(),
         )
@@ -514,10 +514,10 @@ class QtTabView(
         self._tab_menu_button._set_menu_data_generate_fnc_(fnc)
 
     def _clear_item_hover_(self):
-        self._index_hover = None
+        self._hover_tab_index = None
         self._refresh_widget_draw_()
 
-    def _update_item_index_pressed_(self, index):
+    def _on_tab_button_press_(self, index):
         if index != self._index_press:
             self._index_press = index
 
@@ -573,14 +573,14 @@ class QtTabView(
 
     # noinspection PyUnusedLocal
     def _do_show_tool_tip_(self, event):
-        if self._index_hover is not None:
-            key = self._get_page_key_at_(self._index_hover)
+        if self._hover_tab_index is not None:
+            key = self._get_page_key_at_(self._hover_tab_index)
             if key is None:
-                title = self._get_page_name_text_at_(self._index_hover)
-                tool_tip = self._get_page_tool_tip_text_at_(self._index_hover)
+                title = self._get_page_name_text_at_(self._hover_tab_index)
+                tool_tip = self._get_page_tool_tip_text_at_(self._hover_tab_index)
             else:
-                title = self._get_page_name_text_at_(self._index_hover)
-                tool_tip = self._get_page_tool_tip_text_at_(self._index_hover)
+                title = self._get_page_name_text_at_(self._hover_tab_index)
+                tool_tip = self._get_page_tool_tip_text_at_(self._hover_tab_index)
 
             css = _qt_core.QtUtil.generate_tool_tip_css(
                 title,
@@ -591,7 +591,7 @@ class QtTabView(
                     '"RMB-click" to show more actions for this page',
                 ]
             )
-            rect = self._get_rect_at_(self._index_hover)
+            rect = self._get_rect_at_(self._hover_tab_index)
             p = rect.bottomRight()
             p = self.mapToGlobal(p) + QtCore.QPoint(0, -18)
 
@@ -608,11 +608,11 @@ class QtTabView(
 
     def _do_hover_move_(self, event):
         p = event.pos()
-        self._index_hover = None
+        self._hover_tab_index = None
         if self._tab_bar_rect.contains(p):
             for i_index, i_tab_item in enumerate(self._tab_item_stack.get_all_items()):
                 if i_tab_item.rect.contains(p):
-                    self._index_hover = i_index
+                    self._hover_tab_index = i_index
                     break
 
         self._refresh_widget_draw_()

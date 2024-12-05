@@ -31,7 +31,7 @@ import lxbasic.storage as bsc_storage
 
 import qsm_general.core as qsm_gnl_core
 
-from .. import database as _database
+from .. import database as _model
 
 
 class DataTypes(object):
@@ -58,7 +58,7 @@ class DataTypes(object):
     }
 
 
-def generate_entity_type(model_class, database_):
+def generate_entity_type_models(model_class, database_):
     class Meta:
         database = database_
 
@@ -142,12 +142,12 @@ FLUSH PRIVILEGES;
     """
 
     class EntityTypes:
-        Node = _database.Node.__name__
-        Type = _database.Type.__name__
-        Tag = _database.Tag.__name__
-        Assign = _database.Assign.__name__
-        Property = _database.Property.__name__
-        Connection = _database.Connection.__name__
+        Node = _model.Node.__name__
+        Type = _model.Type.__name__
+        Tag = _model.Tag.__name__
+        Assign = _model.Assign.__name__
+        Property = _model.Property.__name__
+        Connection = _model.Connection.__name__
 
         All = [
             Node,
@@ -267,7 +267,7 @@ FLUSH PRIVILEGES;
         return bsc_resource.RscExtendConfigure.get_as_content('lazy/database/{}'.format(key))
 
     @classmethod
-    def to_expression_str(cls, entity_type, filters):
+    def _to_expression_str(cls, entity_type, filters):
         list_ = []
         for i_key, i_opt, i_value in filters:
             if i_opt == 'is':
@@ -300,7 +300,7 @@ FLUSH PRIVILEGES;
         return cls.__dict__[entity_type]
 
     @classmethod
-    def to_entity(cls, entity_type, data):
+    def _to_entity(cls, entity_type, data):
         return Entity(entity_type, data)
 
     def __init__(self, key, database_type='mysql'):
@@ -370,12 +370,12 @@ FLUSH PRIVILEGES;
         return bsc_resource.RscExtendConfigure.get_as_content('lazy/database/main')
 
     def connect(self):
-        self.Node = generate_entity_type(_database.Node, self._dtb)
-        self.Type = generate_entity_type(_database.Type, self._dtb)
-        self.Tag = generate_entity_type(_database.Tag, self._dtb)
-        self.Assign = generate_entity_type(_database.Assign, self._dtb)
-        self.Property = generate_entity_type(_database.Property, self._dtb)
-        self.Connection = generate_entity_type(_database.Connection, self._dtb)
+        self.Node = generate_entity_type_models(_model.Node, self._dtb)
+        self.Type = generate_entity_type_models(_model.Type, self._dtb)
+        self.Tag = generate_entity_type_models(_model.Tag, self._dtb)
+        self.Assign = generate_entity_type_models(_model.Assign, self._dtb)
+        self.Property = generate_entity_type_models(_model.Property, self._dtb)
+        self.Connection = generate_entity_type_models(_model.Connection, self._dtb)
         self.All = [
             self.Node,
             self.Type,
@@ -547,14 +547,14 @@ FLUSH PRIVILEGES;
     # base method
     def find_one(self, entity_type, filters):
         dtb_entity_type = self._to_dtb_entity_type(entity_type)
-        e_str = self.to_expression_str(
+        e_str = self._to_expression_str(
             entity_type, filters
         )
         _ = dtb_entity_type.select().where(
             eval(e_str)
         )
         if _.exists():
-            return self.to_entity(entity_type, _.first().__data__)
+            return self._to_entity(entity_type, _.first().__data__)
 
     def find_all(self, entity_type, filters=None):
         dtb_entity_type = self._to_dtb_entity_type(entity_type)
@@ -566,7 +566,7 @@ FLUSH PRIVILEGES;
         # )
 
         if filters:
-            e_str = self.to_expression_str(
+            e_str = self._to_expression_str(
                  entity_type, filters
             )
             _ = dtb_entity_type.select().where(
@@ -575,7 +575,7 @@ FLUSH PRIVILEGES;
         else:
             _ = dtb_entity_type.select()
         if _.exists():
-            return map(lambda x: self.to_entity(entity_type, x.__data__), _)
+            return map(lambda x: self._to_entity(entity_type, x.__data__), _)
         return []
 
     # noinspection PyUnusedLocal
@@ -607,17 +607,17 @@ FLUSH PRIVILEGES;
         }
         if filters:
             _ = dtb_entity_type.select().where(
-                eval(conditions[tag]+'&'+self.to_expression_str(entity_type, filters))
+                eval(conditions[tag]+'&'+self._to_expression_str(entity_type, filters))
             )
         else:
             _ = dtb_entity_type.select().where(
                 eval(conditions[tag])
             )
         if _.exists():
-            return map(lambda x: self.to_entity(entity_type, x.__data__), _)
+            return map(lambda x: self._to_entity(entity_type, x.__data__), _)
         return []
 
-    def is_entity_exists(self, entity_type, path):
+    def entity_is_exists(self, entity_type, path):
         dtb_entity_type = self._to_dtb_entity_type(entity_type)
         return dtb_entity_type.select().where(dtb_entity_type.path == path).exists()
 
@@ -625,7 +625,7 @@ FLUSH PRIVILEGES;
         dtb_entity_type = self._to_dtb_entity_type(entity_type)
         _ = dtb_entity_type.select().where(dtb_entity_type.path == path)
         if _.exists():
-            return self.to_entity(entity_type, _.first().__data__)
+            return self._to_entity(entity_type, _.first().__data__)
 
     def get_entity_index_maximum(self, entity_type):
         dtb_entity_type = self._to_dtb_entity_type(entity_type)
@@ -650,7 +650,7 @@ FLUSH PRIVILEGES;
         with Stage.LOCK:
             _ = dtb_entity_type.create(**options)
             _.save()
-            return self.to_entity(entity_type, _.__data__)
+            return self._to_entity(entity_type, _.__data__)
 
     def remove_entity(self, entity_type, path):
         dtb_entity_type = self._to_dtb_entity_type(entity_type)
@@ -883,7 +883,7 @@ FLUSH PRIVILEGES;
 
     def create_or_update_property(self, node_path, port, value, **kwargs):
         path = '{}.{}'.format(node_path, port)
-        if self.is_entity_exists(self.EntityTypes.Property, path) is False:
+        if self.entity_is_exists(self.EntityTypes.Property, path) is False:
             return self.create_property(
                 node_path, port, value, **kwargs
             )
@@ -1036,11 +1036,11 @@ FLUSH PRIVILEGES;
                 self.create_or_update_parameters(
                     node_path, 'video', video_path
                 )
-                bsc_core.BscFfmpeg.extract_frame(video_path, thumbnail_path, 0)
+                bsc_core.BscFfmpegVideo.extract_frame(video_path, thumbnail_path, 0)
                 self.create_or_update_parameters(
                     node_path, 'thumbnail', thumbnail_path
                 )
-                thumbnail_sequence_path = bsc_core.BscFfmpeg.extract_all_frames(
+                thumbnail_sequence_path = bsc_core.BscFfmpegVideo.extract_all_frames(
                     video_path,
                     image_format=self.DEFAULT_THUMBNAIL_FORMAT,
                     width_maximum=self.DEFAULT_THUMBNAIL_WIDTH_MAXIMUM
@@ -1137,7 +1137,7 @@ FLUSH PRIVILEGES;
 
         preview_video_path = self.NodePathPattens.PreviewVideoMov.format(**options)
 
-        bsc_core.BscFfmpeg.create_compress(file_path, preview_video_path, replace=False)
+        bsc_core.BscFfmpegVideo.create_compress(file_path, preview_video_path, replace=False)
 
         self.create_or_update_parameters(
             node_path, 'thumbnail', thumbnail_path
@@ -1251,7 +1251,7 @@ FLUSH PRIVILEGES;
         return False
 
     def check_node_exists(self, path):
-        return self.is_entity_exists(self.EntityTypes.Node, path)
+        return self.entity_is_exists(self.EntityTypes.Node, path)
 
     def copy_from(self, stage):
         entity_types = self.EntityTypes.All

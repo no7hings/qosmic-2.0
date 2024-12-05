@@ -434,6 +434,12 @@ class ListItemModel(_item_base.AbsItemModel):
                 painter, self._data.mtime.rect, self._data.mtime.text,
                 self._data.mtime.text_color, self._data.mtime.text_alignment
             )
+        # user
+        if self._data.user_enable is True:
+            self._draw_text(
+                painter, self._data.user.rect, self._data.user.text,
+                self._data.user.text_color, self._data.user.text_alignment
+            )
 
     def refresh_pixmap_cache(self):
         """
@@ -652,6 +658,10 @@ class ListItemModel(_item_base.AbsItemModel):
             if self._data.mtime_enable is True:
                 self._data.mtime.rect.setRect(
                     x+txt_offset, item_y+20, w-txt_w_sub-4, item_h
+                )
+            if self._data.user_enable is True:
+                self._data.user.rect.setRect(
+                    x+txt_offset, item_y+40, w-txt_w_sub-4, item_h
                 )
             # status
             self._update_status_rect(rect)

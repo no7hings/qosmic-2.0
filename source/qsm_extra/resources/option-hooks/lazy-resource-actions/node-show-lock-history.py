@@ -16,7 +16,7 @@ def main(session):
 
     window.exec_message_dialog(
         scr_stage.generate_node_lock_history(scr_entity_path, window._language),
-        title=window.choice_name(session.gui_configure.get('window')),
+        title=window.choice_gui_name(session.gui_configure.get('window')),
         size=(320, 320)
     )
 

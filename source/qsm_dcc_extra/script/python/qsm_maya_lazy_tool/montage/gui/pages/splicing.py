@@ -11,7 +11,7 @@ from qsm_lazy_tool.montage.gui import abstracts as _gui_abstracts
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
+import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 
 import qsm_maya_lazy.montage.core as qsm_mya_lzy_mtg_core
 
@@ -45,7 +45,7 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
         else:
             qsm_mya_core.Play.stop()
             self._motion_prx_track_widget.set_current_frame(
-                int(qsm_mya_core.Frame.get_current_time())
+                int(qsm_mya_core.Frame.get_current())
             )
 
     def _do_gui_update_frame(self):
@@ -75,7 +75,7 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
         master_layer = qsm_mya_lzy_mtg_scripts.AdvChrMotionImportOpt.find_master_layer_path()
         if master_layer:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.exists_master_layer'.format(self.GUI_KEY))
                 ),
                 status='warning'
@@ -84,11 +84,11 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
 
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if namespaces:
-            results = qsm_mya_tsk_anm_core.AdvRigAsset.filter_namespaces(namespaces)
+            results = qsm_mya_hdl_anm_core.AdvRigAsset.filter_namespaces(namespaces)
 
         if not results:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.no_character'.format(self.GUI_KEY))
                 ),
                 status='warning'
@@ -138,7 +138,7 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
     def do_dcc_motion_update(self):
         stage = self._motion_prx_track_widget.get_stage_model()
         start_frame, end_frame = stage.track_start, stage.track_end
-        current_frame = self._motion_prx_track_widget.get_current_time()
+        current_frame = self._motion_prx_track_widget.get_current()
 
         qsm_mya_core.Frame.update_frame(start_frame, end_frame, current_frame)
 

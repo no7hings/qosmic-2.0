@@ -3,13 +3,13 @@ import lxbasic.core as bsc_core
 
 import lxbasic.web as bsc_web
 
-import qsm_lazy.backstage.process as lzy_bks_process
+import qsm_lazy.backstage.worker as lzy_bks_worker
 
 time_tag = bsc_core.BscSystem.get_time_tag()
 
-if lzy_bks_process.TaskProcessClient.get_server_status():
-    # lzy_bks_process.TaskProcessClient.set_pool_maximum(5)
-    # print lzy_bks_process.TaskProcessClient.get_worker_status()
+if lzy_bks_worker.TaskClient.get_server_status():
+    # lzy_bks_worker.TaskClient.set_pool_maximum(5)
+    # print lzy_bks_worker.TaskClient.get_worker_status()
     for i_index, i_cmd_script in enumerate(
         [
             # r'rez-env python27 -- python -c "import time; time.sleep(30); print \"A\"; raise RuntimeError()"',
@@ -25,7 +25,7 @@ if lzy_bks_process.TaskProcessClient.get_server_status():
             # r'rez-env python27 -- python -c "import time; time.sleep(40); print \"K\""',
         ]
     ):
-        lzy_bks_process.TaskProcessClient.new_entity(
+        lzy_bks_worker.TaskClient.new_entity(
             cmd_script=i_cmd_script,
             group=None,
             type='test',

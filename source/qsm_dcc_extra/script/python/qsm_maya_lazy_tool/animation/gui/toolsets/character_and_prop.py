@@ -23,9 +23,9 @@ import qsm_maya.adv as qsm_mya_adv
 
 import qsm_maya_gui.core as qsm_mya_gui_core
 
-import qsm_maya.tasks.animation.core as qsm_mya_tsk_anm_core
+import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 
-import qsm_maya.tasks.animation.scripts as qsm_mya_tsk_anm_scripts
+import qsm_maya.handles.animation.scripts as qsm_mya_hdl_anm_scripts
 
 
 class PrxUnitForRigAssetView(
@@ -35,7 +35,7 @@ class PrxUnitForRigAssetView(
 
     NAMESPACE = 'rig'
 
-    RESOURCES_QUERY_CLS = qsm_mya_tsk_anm_core.AdvRigAssetsQuery
+    RESOURCES_QUERY_CLS = qsm_mya_hdl_anm_core.AdvRigAssetsQuery
 
     TOOL_INCLUDES = [
         'isolate-select',
@@ -64,12 +64,12 @@ class PrxToolbarForCharacterAndPropReference(
         self._asset_load_qt_button = qt_widgets.QtPressButton()
         self._asset_prx_input.add_widget(self._asset_load_qt_button)
         self._asset_load_qt_button._set_name_text_(
-            self._window.choice_name(
+            self._window.choice_gui_name(
                 self._window._configure.get('build.rig.buttons.reference')
             )
         )
         self._asset_load_qt_button._set_tool_tip_text_(
-            self._window.choice_tool_tip(
+            self._window.choice_gui_tool_tip(
                 self._window._configure.get('build.rig.buttons.reference')
             )
         )
@@ -79,12 +79,12 @@ class PrxToolbarForCharacterAndPropReference(
 
         self._asset_replace_qt_button = qt_widgets.QtPressButton()
         self._asset_replace_qt_button._set_name_text_(
-            self._window.choice_name(
+            self._window.choice_gui_name(
                 self._window._configure.get('build.rig.buttons.replace')
             )
         )
         self._asset_replace_qt_button._set_tool_tip_text_(
-            self._window.choice_tool_tip(
+            self._window.choice_gui_tool_tip(
                 self._window._configure.get('build.rig.buttons.replace')
             )
         )
@@ -113,7 +113,7 @@ class PrxToolbarForCharacterAndPropReference(
     def _on_dcc_replace_to_asset(self):
         if self._asset_path is not None:
             result = self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.messages.replace_reference')
                 ),
                 status='warning'
@@ -278,7 +278,7 @@ class PrxToolsetForSkinProxyLoad(
                         if i_resource.reference_opt.is_loaded() is False:
                             continue
 
-                        i_opt = qsm_mya_tsk_anm_scripts.SkinProxyOpt(i_resource)
+                        i_opt = qsm_mya_hdl_anm_scripts.SkinProxyOpt(i_resource)
                         if i_opt.is_exists() is False:
                             i_task_name, i_cmd_script, i_cache_path, i_data_file_path = i_opt.generate_args()
                             if i_cmd_script is not None:
@@ -319,7 +319,7 @@ class PrxToolsetForSkinProxyLoad(
         resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
-                i_opt = qsm_mya_tsk_anm_scripts.SkinProxyOpt(i_resource)
+                i_opt = qsm_mya_hdl_anm_scripts.SkinProxyOpt(i_resource)
                 i_opt.remove_cache()
 
         self._page.do_gui_refresh_all(force=True)
@@ -353,7 +353,7 @@ class PrxToolsetForSkinProxyLoad(
                         if i_resource.reference_opt.is_loaded() is False:
                             continue
 
-                        i_opt = qsm_mya_tsk_anm_scripts.DynamicGpuCacheOpt(i_resource)
+                        i_opt = qsm_mya_hdl_anm_scripts.DynamicGpuCacheOpt(i_resource)
                         if i_opt.is_exists() is False:
                             i_task_name, i_cmd_script, i_cache_path = i_opt.generate_args(
                                 start_frame, end_frame, use_motion=use_motion
@@ -405,7 +405,7 @@ class PrxToolsetForSkinProxyLoad(
         resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
-                i_opt = qsm_mya_tsk_anm_scripts.DynamicGpuCacheOpt(i_resource)
+                i_opt = qsm_mya_hdl_anm_scripts.DynamicGpuCacheOpt(i_resource)
                 i_opt.remove_cache()
 
         self._page.do_gui_refresh_all(force=True)
@@ -447,7 +447,7 @@ class PrxToolsetForSkinProxyLoad(
     def __init__(self, window, unit, session):
         super(PrxToolsetForSkinProxyLoad, self).__init__(window, unit, session)
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            self._window.choice_name(
+            self._window.choice_gui_name(
                 self._window._configure.get('build.rig.units.skin_proxy_and_dynamic_gpu_load.options')
             )
         )
@@ -457,11 +457,11 @@ class PrxToolsetForSkinProxyLoad(
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='utility',
-            name=self._window.choice_name(
+            name=self._window.choice_gui_name(
                 self._window._configure.get('build.rig.units.skin_proxy_and_dynamic_gpu_load')
             ),
             icon_name_text='utility',
-            tool_tip=self._window.choice_tool_tip(
+            tool_tip=self._window.choice_gui_tool_tip(
                 self._window._configure.get('build.rig.units.skin_proxy_and_dynamic_gpu_load')
             )
         )
@@ -561,7 +561,7 @@ class PrxToolsetForSkinProxySwitch(
     def __init__(self, window, unit, session):
         super(PrxToolsetForSkinProxySwitch, self).__init__(window, unit, session)
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            self._window.choice_name(
+            self._window.choice_gui_name(
                 self._window._configure.get('build.rig.units.skin_proxy_and_dynamic_gpu_switch.options')
             )
         )
@@ -571,11 +571,11 @@ class PrxToolsetForSkinProxySwitch(
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='switch',
-            name=self._window.choice_name(
+            name=self._window.choice_gui_name(
                 self._window._configure.get('build.rig.units.skin_proxy_and_dynamic_gpu_switch')
             ),
             icon_name_text='switch',
-            tool_tip=self._window.choice_tool_tip(
+            tool_tip=self._window.choice_gui_tool_tip(
                 self._window._configure.get('build.rig.units.skin_proxy_and_dynamic_gpu_switch')
             )
         )
@@ -691,7 +691,7 @@ class PrxToolsetForMotion(
         super(PrxToolsetForMotion, self).__init__(window, unit, session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            self._window.choice_name(
+            self._window.choice_gui_name(
                 self._window._configure.get('build.rig.units.motion.options')
             )
         )
@@ -701,11 +701,11 @@ class PrxToolsetForMotion(
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='extend',
-            name=self._window.choice_name(
+            name=self._window.choice_gui_name(
                 self._window._configure.get('build.rig.units.motion')
             ),
             icon_name_text='extend',
-            tool_tip=self._window.choice_tool_tip(
+            tool_tip=self._window.choice_gui_tool_tip(
                 self._window._configure.get('build.rig.units.motion')
             )
         )
@@ -787,7 +787,7 @@ class PrxToolsetForMotion(
 
         if namespace_src is not None and namespace_dst is not None:
             w = gui_core.GuiDialog.create(
-                label=self._session.gui_name,
+                label='Character & Prop',
                 sub_label='transfer-animation',
                 content='do you want transfer animation from "{}" to "{}"?,\n press "Ok" to continue'.format(
                     namespace_src, namespace_dst

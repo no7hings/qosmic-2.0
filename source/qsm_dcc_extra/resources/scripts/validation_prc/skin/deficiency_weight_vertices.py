@@ -6,14 +6,14 @@ class Main(object):
         self._task_prc = task_prc
 
     def execute(self):
-        import qsm_maya.tasks.rig.core as qsm_mya_tsk_rig_core
+        import qsm_maya.handles.rig.core as qsm_mya_hdl_rig_core
 
         meshes = self._task_prc.find_all_meshes()
         if not meshes:
             return
 
         for i_mesh in meshes:
-            i_mesh_opt = qsm_mya_tsk_rig_core.MeshSkinOpt(i_mesh)
+            i_mesh_opt = qsm_mya_hdl_rig_core.MeshSkinOpt(i_mesh)
             i_key_path = self._task_prc.to_node_key_path(i_mesh)
             i_results = []
             if i_mesh_opt.is_valid() is True:

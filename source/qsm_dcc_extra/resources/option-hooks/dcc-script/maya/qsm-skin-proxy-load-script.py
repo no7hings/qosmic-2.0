@@ -5,7 +5,7 @@ def main(session):
     if qsm_gnl_core.check_python_lib() is False:
         return
 
-    import qsm_maya.tasks.animation.scripts as s
+    import qsm_maya.handles.animation.scripts as s
 
     option_opt = session.get_option_opt()
 

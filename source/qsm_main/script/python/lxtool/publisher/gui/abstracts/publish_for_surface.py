@@ -618,7 +618,7 @@ class AbsPnlPublisherForSurface(gui_prx_widgets.PrxSessionWindow):
 
         if contents:
             gui_core.GuiDialog.create(
-                label=self._session.gui_name,
+                label='Surface Release',
                 content=u'\n'.join(contents),
                 status=gui_core.GuiDialog.ValidationStatus.Error,
                 #

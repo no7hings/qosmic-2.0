@@ -16,7 +16,7 @@ class DccValidationOptions(object):
 
     def __init__(self, key):
         self._key = key
-        self._language = bsc_core.BscEnviron.get_ui_language()
+        self._language = bsc_core.BscEnviron.get_gui_language()
         self._options_cfg = bsc_resource.RscExtendConfigure.get_as_content(key)
         self._options_cfg.do_flatten()
 
@@ -37,7 +37,7 @@ class DccValidationOptions(object):
         _ = self._options_cfg.get('convertion.{}'.format(key))
         if not _:
             raise RuntimeError(key)
-        return gui_core.GuiUtil.choice_name(
+        return gui_core.GuiUtil.choice_gui_name(
             self._language, _
         )
 
@@ -136,7 +136,7 @@ class DccValidationOptions(object):
 
                             j_leaf_data = i_branch_data[j_leaf]
                             if j_leaf_data:
-                                j_description = gui_core.GuiUtil.choice_description(
+                                j_description = gui_core.GuiUtil.choice_gui_description(
                                     self._language, j_leaf_options
                                 )
                                 for k in j_leaf_data:

@@ -62,7 +62,7 @@ class Frame(object):
         elif isinstance(frame, (int, float)):
             start_frame = end_frame = frame
         else:
-            start_frame = end_frame = cls.get_current_time()
+            start_frame = end_frame = cls.get_current()
         return int(start_frame), int(end_frame)
 
     @classmethod
@@ -93,7 +93,11 @@ class Frame(object):
         cmds.currentTime(frame)
 
     @classmethod
-    def get_current_time(cls):
+    def set_start_frame(cls, frame):
+        cmds.playbackOptions(minTime=frame), cmds.playbackOptions(animationStartTime=int(frame)-5)
+
+    @classmethod
+    def get_current(cls):
         return cmds.currentTime(query=1)
 
     @classmethod

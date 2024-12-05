@@ -52,11 +52,11 @@ class PrxLazyAnimationTool(gui_prx_widgets.PrxBasePanel):
         self._page_prx_tab_tool_box.add_widget(
             rig_prx_sca,
             key='rig',
-            name=gui_core.GuiUtil.choice_name(
+            name=gui_core.GuiUtil.choice_gui_name(
                 self._language, self._window._configure.get('build.rig.tab')
             ),
             icon_name_text='rig',
-            tool_tip=gui_core.GuiUtil.choice_tool_tip(
+            tool_tip=gui_core.GuiUtil.choice_gui_tool_tip(
                 self._language, self._window._configure.get('build.rig.tab')
             )
         )
@@ -70,11 +70,11 @@ class PrxLazyAnimationTool(gui_prx_widgets.PrxBasePanel):
         self._page_prx_tab_tool_box.add_widget(
             scenery_prx_sca,
             key='scenery',
-            name=gui_core.GuiUtil.choice_name(
+            name=gui_core.GuiUtil.choice_gui_name(
                 self._language, self._window._configure.get('build.scenery.tab')
             ),
             icon_name_text='scenery',
-            tool_tip=gui_core.GuiUtil.choice_tool_tip(
+            tool_tip=gui_core.GuiUtil.choice_gui_tool_tip(
                 self._language, self._window._configure.get('build.scenery.tab')
             )
         )

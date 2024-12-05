@@ -169,6 +169,7 @@ class AbsItemModel(object):
         )
         # mtime
         self._data.mtime_enable = False
+        self._data.user_enable = False
         # number
         self._data.number_enable = False
         self._data.number = _base._Data(
@@ -369,6 +370,23 @@ class AbsItemModel(object):
         self._data.mtime.text = bsc_core.BscTimePrettify.to_prettify_by_timestamp_(
             timestamp, language=_gui_core.GuiUtil.get_language()
         )
+
+    # user
+    def set_user_enable(self, boolean):
+        self._data.user_enable = boolean
+        if boolean is True:
+            self._data.user = _base._Data(
+                text='',
+                text_color=_qt_core.QtRgba.TxtUser,
+                text_alignment=QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter,
+                rect=QtCore.QRect(),
+            )
+
+    def set_user(self, user_name):
+        if self._data.user_enable is False:
+            self.set_user_enable(True)
+
+        self._data.user.text = user_name
 
     # number
     def set_number_enable(self, boolean):

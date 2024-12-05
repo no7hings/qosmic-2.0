@@ -95,7 +95,7 @@ class PrxPageForCharacterAndProp(gui_prx_widgets.PrxBasePage):
 
         self._selection_scheme_prx_input.set(default)
         self._selection_scheme_prx_input.set_tool_tip(
-            self._window.choice_tool_tip(
+            self._window.choice_gui_tool_tip(
                 self._window._configure.get('build.rig_selection_scheme')
             )
         )
@@ -181,6 +181,7 @@ class PrxPageForCharacterAndProp(gui_prx_widgets.PrxBasePage):
         # tool set
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         self._qt_layout.addWidget(self._page_prx_tab_tool_box.widget)
+        self._page_prx_tab_tool_box.set_expand_enable(True)
         # utility
         self._gui_skin_proxy_prx_toolset_unit = _toolsets_character_and_prop.PrxToolsetForSkinProxyLoad(
             self._window, self, self._session

@@ -53,12 +53,12 @@ class ArgDictStringOpt(object):
     def __init__(self, option, default_option=None):
         dict_ = collections.OrderedDict()
         if isinstance(default_option, six.string_types):
-            self._update_by_string_(dict_, default_option)
+            self._update_fnc(dict_, default_option)
         elif isinstance(default_option, dict):
             dict_.update(default_option)
 
         if isinstance(option, six.string_types):
-            self._update_by_string_(dict_, option)
+            self._update_fnc(dict_, option)
         elif isinstance(option, dict):
             dict_.update(option)
         else:
@@ -71,17 +71,14 @@ class ArgDictStringOpt(object):
         }
 
     @classmethod
-    def _update_by_string_(cls, dict_, option_string):
-        ks = [i.lstrip().rstrip() for i in option_string.split(cls.ARGUMENT_SEP)]
+    def _update_fnc(cls, dict_, option_string):
+        ks = [i.strip() for i in option_string.split(cls.ARGUMENT_SEP)]
         for k in ks:
             key, value = k.split('=')
-            value = value.lstrip().rstrip()
-
-            value = cls._set_value_convert_by_string_(value)
-            dict_[key.lstrip().rstrip()] = value
+            dict_[key.strip()] = cls._string_prc(value.strip())
 
     @classmethod
-    def _set_value_convert_by_string_(cls, value_string):
+    def _string_prc(cls, value_string):
         if isinstance(value_string, six.string_types):
             if value_string in {'None'}:
                 return None

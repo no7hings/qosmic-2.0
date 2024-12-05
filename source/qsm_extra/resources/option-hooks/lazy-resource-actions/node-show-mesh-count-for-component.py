@@ -71,7 +71,7 @@ class Main(object):
         )
         gui_core.GuiApplication.show_tool_dialog(
             widget=chart_view,
-            title=gui_core.GuiUtil.choice_name_auto(self._session.gui_configure.get('window')),
+            title=gui_core.GuiUtil.choice_gui_name_auto(self._session.gui_configure.get('window')),
             size=(640, 480)
         )
 

@@ -5,7 +5,7 @@ import lxbasic.web as bsc_web
 
 import lxgui.core as gui_core
 
-import qsm_lazy.backstage.process as lzy_bks_process
+import qsm_lazy.backstage.worker as lzy_bks_worker
 
 
 class BackstageTaskSubmit:
@@ -16,7 +16,7 @@ class BackstageTaskSubmit:
         task_group, task_type, task_name,
         cmd_script, icon_name, file_path, output_file_path, completed_notice_dict,
     ):
-        lzy_bks_process.TaskProcessClient.new_entity(
+        lzy_bks_worker.TaskClient.new_entity(
             group=task_group,
             type=task_type,
             name=task_name,
@@ -46,7 +46,7 @@ class BackstageTaskSubmit:
 
     @classmethod
     def check_is_valid(cls):
-        if lzy_bks_process.TaskProcessClient.get_server_status():
+        if lzy_bks_worker.TaskClient.get_server_status():
             return True
         else:
             if gui_core.GuiUtil.get_language() == 'chs':

@@ -22,7 +22,7 @@ class Scene(object):
         return not cmds.about(batch=1)
 
     @classmethod
-    def get_ui_language(cls):
+    def get_gui_language(cls):
         return bsc_core.BscEnviron.get('MAYA_UI_LANGUAGE') or 'en_US'
 
     @classmethod
@@ -46,7 +46,7 @@ class Scene(object):
         directory_path = file_opt.get_directory_path()
         name_base = file_opt.get_name_base()
         image_file_path = '{}/.snapshot/{}.jpg'.format(directory_path, name_base)
-        _playblast.Playblast.make_snapshot(image_file_path, _time.Frame.get_current_time(), (480, 240))
+        _playblast.Playblast.make_snapshot(image_file_path, _time.Frame.get_current(), (480, 240))
 
     # include instanced
     @classmethod

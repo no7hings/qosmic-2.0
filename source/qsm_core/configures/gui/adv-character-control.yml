@@ -71,6 +71,8 @@ body_control_tree:
                         leg_ik_toe_roll_R:
                             leg_ik_toe_roll_end_R: ''
 
+        secondary_cloth: ''
+
 body_control_map:
     main:
         default:

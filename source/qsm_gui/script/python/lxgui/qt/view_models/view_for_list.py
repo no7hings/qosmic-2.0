@@ -106,6 +106,8 @@ class ListViewModel(_view_base.AbsViewModel):
             txt_h += _gui_core.GuiSize.ItemHeightDefault
         if self.is_item_mtime_enable() is True:
             txt_h += _gui_core.GuiSize.ItemHeightDefault
+        if self.is_item_user_enable() is True:
+            txt_h += _gui_core.GuiSize.ItemHeightDefault
 
         self._data.item.text_height = txt_h
 
@@ -284,9 +286,12 @@ class ListViewModel(_view_base.AbsViewModel):
             item_model.set_sort_enable(True)
         if self.is_item_group_enable() is True:
             item_model.set_group_enable(True)
-        #
+        # item mtime
         if self.is_item_mtime_enable() is True:
             item_model.set_mtime_enable(True)
+        # item user
+        if self.is_item_user_enable() is True:
+            item_model.set_user_enable(True)
         # lock and check
         if self.is_item_lock_enable() is True:
             item_model.set_lock_enable(True)

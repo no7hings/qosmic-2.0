@@ -1,9 +1,10 @@
 # coding:utf-8
 from __future__ import division
 
-import sys
+import json
 
 import os
+import sys
 
 import six
 
@@ -16,7 +17,7 @@ import tempfile
 from . import base as _base
 
 
-class BscFfmpeg(object):
+class BscFfmpegVideo(object):
     """
     ffmpeg version 7.0.1-essentials_build-www.gyan.dev Copyright (c) 2000-2024 the FFmpeg developers
       built with gcc 13.2.0 (Rev5, Built by MSYS2 project)
@@ -550,7 +551,7 @@ class BscFfmpeg(object):
     @classmethod
     def generate_image_sequence_concat_cmd_script(cls, **kwargs):
         """
-        cmd = BscFfmpeg.generate_image_sequence_concat_cmd_script(
+        cmd = BscFfmpegVideo.generate_image_sequence_concat_cmd_script(
             input='/data/e/workspace/lynxi/test/maya/software-render/render/09/test/image/cam_full_body.####.jpg',
             output='/data/e/workspace/lynxi/test/maya/software-render/render/09/test/cam_full_body.mov',
             fps=24
@@ -596,6 +597,8 @@ class BscFfmpeg(object):
             ' -pix_fmt yuv420p'
             # video bit
             ' -b:v 8000k'
+            # fixme: disable bframe?
+            ' -bf 0'
             # override
             ' -y'
             ' "{output}"'
@@ -716,16 +719,16 @@ class BscFfmpeg(object):
 
         cmd_script = '{} "{}"'.format(' '.join(cmd_args), video_path)
 
-        result = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        result = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         stdout, stderr = result.communicate()
 
         if result.returncode != 0:
-            print("Error: ", stderr)
+            sys.stderr.write(stderr+'\n')
             return None
 
         lines = stdout.strip().split('\n')
         if len(lines) < 2:
-            print("Error: Could not retrieve frame rate and duration.")
+            sys.stderr.write("Error: Could not retrieve frame rate and duration.\n")
             return None
 
         frame_rate_str = lines[0]
@@ -755,8 +758,12 @@ Y:/deploy/rez-packages/external/ffmpeg/6.0/platform-windows/bin/ffmpeg.exe -i Z:
                 '-vsync vfr', '-q:v 2', '-y',
                 '"{}"'.format(image_path)
             ]
+
+            cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in cmd_args]
+
             cmd_script = ' '.join(cmd_args)
-            subprocess.check_call(cmd_script)
+            s_p = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            s_p.communicate()
         except subprocess.CalledProcessError:
             import traceback
 
@@ -793,8 +800,10 @@ Y:/deploy/rez-packages/external/ffmpeg/6.0/platform-windows/bin/ffmpeg.exe -i Z:
                     )
                 ]
             )
+            cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in cmd_args]
             cmd_script = ' '.join(cmd_args)
-            subprocess.check_call(cmd_script)
+            s_p = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            s_p.communicate()
             return image_file_path
 
     @classmethod
@@ -823,11 +832,68 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
             '-r 24', '-vcodec libx264', '-crf 28', '-preset ultrafast', '-y',
             six.u('"{}"').format(video_path_dst)
         ]
-        cmd_args = [cmd.encode('mbcs') if isinstance(cmd, unicode) else cmd for cmd in cmd_args]
-        subprocess.check_call(' '.join(cmd_args))
+        cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in cmd_args]
+        cmd_script = ' '.join(cmd_args)
+        subprocess.check_call(cmd_script)
 
     @classmethod
-    def concat_images(cls, video_path, image_paths, replace=False):
+    def create_by_image_sequence(
+        cls,
+        image_sequence, video_path, 
+        start_frame, end_frame, 
+        frame_step=None,
+        fps=24, 
+        coding='libx264', replace=False
+    ):
+
+        video_path = _base.ensure_unicode(video_path)
+
+        if os.path.isfile(video_path) is True:
+            if replace is False:
+                return
+
+        if coding == cls.Coding.H263:
+            filter_string = '"scale=trunc(iw/4)*4:trunc(ih/4)*4"'.format(fps=fps)
+        elif coding == cls.Coding.H264:
+            filter_string = '"scale=trunc(iw/2)*2:trunc(ih/2)*2"'.format(fps=fps)
+        elif coding == cls.Coding.H265:
+            filter_string = '"scale=trunc(iw/2)*2:trunc(ih/2)*2"'.format(fps=fps)
+        elif coding == cls.Coding.H264_QSV:
+            filter_string = '""'.format(fps=fps)
+        else:
+            filter_string = '""'.format(fps=fps)
+
+        cmd_args = [
+            cls.get_ffmpeg_source(),
+            '-v', 'error',
+            '-f', 'concat',
+            '-safe', '0',
+            '-r', str(fps),
+            '-i', cls._create_image_sequence_concat_file_list(
+                image_sequence,
+                start_frame=start_frame,
+                end_frame=end_frame,
+                frame_step=frame_step,
+            ),
+            '-vsync', 'cfr',
+            '-vf', filter_string,
+            '-c:v', coding,
+            '-pix_fmt', 'yuv420p',
+            '-b:v', '8000k',
+            # fixme: disable bframe?
+            '-bf', '0',
+            '-y',
+            video_path,
+        ]
+
+        cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in cmd_args]
+
+        cmd_script = ' '.join(cmd_args)
+        s_p = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        s_p.communicate()
+
+    @classmethod
+    def create_by_images(cls, video_path, image_paths, fps=24, coding='libx264', replace=False):
         video_path = _base.ensure_unicode(video_path)
 
         if os.path.isfile(video_path) is True:
@@ -839,7 +905,7 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
         if os.path.exists(directory_path) is False:
             os.makedirs(directory_path)
 
-        fd, temp_file_path = tempfile.mkstemp(suffix='.concat.files')
+        fd, file_list = tempfile.mkstemp(suffix='.concat.files')
         # create file list
         with os.fdopen(fd, 'w') as f:
             for i_image_path in image_paths:
@@ -849,19 +915,46 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
             cls.get_ffmpeg_source(),
             '-f', 'concat',
             '-safe', '0',
-            '-i', temp_file_path,
-            r'-v', 'error',
-            '-vf', 'scale=\'min(1024,iw)\':-2, pad=1024:ih:(ow-iw)/2:(oh-ih)/2',
-            '-r', '24',
+            '-i', file_list,
+            '-r', str(fps),
+            '-v', 'error',
+            '-vf', '"scale=\'min(1024,iw)\':-2:force_original_aspect_ratio=decrease, pad=1024:ceil(ih/2)*2:(ow-iw)/2:(oh-ih)/2"',
+            '-c:v', coding,
             '-pix_fmt', 'yuv420p',
-            '-c:v', 'prores_ks',
+            '-b:v', '8000k',
+            '-bf', '0',
             '-y',
             video_path
         ]
 
-        cmd_args = [cmd.encode('mbcs') if isinstance(cmd, unicode) else cmd for cmd in cmd_args]
-        subprocess.Popen(
-            cmd_args,
-            shell=True,
-        )
+        cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in cmd_args]
 
+        cmd_script = ' '.join(cmd_args)
+        s_p = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        s_p.communicate()
+
+    @classmethod
+    def get_codec(cls, video_path):
+        video_path = _base.ensure_unicode(video_path)
+
+        cmd_args = [
+            cls.get_ffprobe_source(),
+            "-v", "error",
+            "-select_streams", "v:0",
+            "-show_entries", "stream=codec_name",
+            "-of", "json",
+            video_path
+        ]
+
+        cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in cmd_args]
+
+        result = subprocess.Popen(cmd_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        stdout, stderr = result.communicate()
+
+        if result.returncode != 0:
+            sys.stderr.write(stderr+'\n')
+            return None
+
+        output = json.loads(stdout)
+        if "streams" in output and len(output["streams"]) > 0:
+            return output["streams"][0].get("codec_name")

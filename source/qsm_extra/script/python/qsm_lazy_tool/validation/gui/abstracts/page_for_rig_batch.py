@@ -22,7 +22,7 @@ import qsm_scan as qsm_scan
 import qsm_lazy.validation.scripts as lzy_vld_scripts
 
 
-class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
+class AbsPrxPageForChrRigBatch(gui_prx_widgets.PrxBasePage):
     GUI_KEY = 'rig_batch'
 
     def _start_delay(self, window, file_paths, process_options):
@@ -92,7 +92,7 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
 
         if not qt_items:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.{}.messages.no_assets'.format(self.GUI_KEY))
                 ),
                 status='warning'
@@ -102,7 +102,7 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
         process_options = self._validation_opt.generate_process_options(self._prx_options_node.to_dict())
         if not process_options:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.{}.messages.no_process_options'.format(self.GUI_KEY))
                 ),
                 status='warning'
@@ -136,7 +136,7 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
         directory_path = self._prx_options_node.get('directory')
         if not directory_path:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.{}.messages.no_directory'.format(self.GUI_KEY))
                 ),
                 status='warning'
@@ -146,7 +146,7 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
         pattern = self._prx_options_node.get('file_pattern')
         if not pattern:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.{}.messages.no_file_pattern'.format(self.GUI_KEY))
                 ),
                 status='warning'
@@ -156,19 +156,29 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
         process_options = self._validation_opt.generate_process_options(self._prx_options_node.to_dict())
         if not process_options:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.{}.messages.no_process_options'.format(self.GUI_KEY))
                 ),
                 status='warning'
             )
             return
 
+        self._gui_thread_flag += 1
+
+        self._result_prx_text_browser.set_content(
+            gui_core.GuiUtil.choice_gui_description(
+                self._window._language,
+                self._window._configure.get('build.{}.contents.start_scan'.format(self.GUI_KEY))
+            )
+        )
+
         roles = qsm_gnl_core.QsmAsset.get_character_role_mask()
         role = roles[0]
 
         self._create_root()
         self._create_role(role)
-        self._add_for_role(role, pattern, directory_path, process_options)
+
+        self._add_for_role(role, pattern, directory_path, process_options, self._gui_thread_flag)
 
     def _create_root(self):
         flag, qt_item = self._asset_qt_tree_widget._view_model.create_item('/')
@@ -181,7 +191,13 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
         qt_item._item_model.set_expanded(True)
         qt_item._item_model.set_icon_name('file/folder')
 
-    def _add_for_role(self, role, pattern, directory_path, process_options):
+    def _add_for_role(self, role, pattern, directory_path, process_options, gui_thread_flag):
+        def finish_fnc_():
+            if self._window._language == 'chs':
+                self._result_prx_text_browser.set_content_with_thread(
+                    '扫描完成。'
+                )
+
         pattern_opt = bsc_core.BscStgParseOpt(
             pattern,
             variants=dict(
@@ -191,13 +207,30 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
 
         path_regex = pattern_opt.get_pattern_for_fnmatch()
 
-        file_paths = bsc_scan.ScanGlob.file_glob(path_regex)
+        if role in self._concurrent_execute_dict:
+            cce = self._concurrent_execute_dict[role]
+            cce.shutdown(wait=True)
 
-        for i_file_path in file_paths:
-            self._add_asset(role, i_file_path, process_options)
+        cce = bsc_scan.ScanGlob.concurrent_glob_file(
+            path_regex,
+            result_fnc=functools.partial(self._signals.accepted.emit, (role, process_options, gui_thread_flag)),
+            finish_fnc=finish_fnc_
+        )
+        self._concurrent_execute_dict[role] = cce
 
-    def _add_asset(self, role, file_path, process_options):
+    def _add_asset_fnc(self, args, file_path):
+        role, process_options, gui_thread_flag = args
+        if gui_thread_flag != self._gui_thread_flag:
+            return
+
+        self._add_asset(role, process_options, gui_thread_flag, file_path)
+
+    # last arg must be file path
+    def _add_asset(self, role, process_options, gui_thread_flag, file_path):
         def cache_fnc_():
+            if gui_thread_flag != self._gui_thread_flag:
+                return []
+
             _args = self._validation_opt.generate_process_args(file_path)
             if _args is not None:
                 _task_name, _cmd_script, _validation_cache_path, _mesh_count_cache_path = _args
@@ -209,6 +242,9 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
             return []
 
         def build_fnc_(data_):
+            if gui_thread_flag != self._gui_thread_flag:
+                return
+
             if data_:
                 _result, _result_description, _html = data_
                 qt_item._item_model.set_assign_data('validation', _html)
@@ -248,9 +284,14 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
         self._file_to_item_dict[file_path] = qt_item
 
     def __init__(self, window, session, *args, **kwargs):
-        super(AbsPrxPageForRigBatch, self).__init__(window, session, *args, **kwargs)
+        super(AbsPrxPageForChrRigBatch, self).__init__(window, session, *args, **kwargs)
 
         self._scan_root = qsm_scan.Stage().get_root()
+
+        self._signals = gui_qt_core.QtConcurrentGlobSignals(self._qt_widget)
+        self._signals.accepted.connect(self._add_asset_fnc)
+
+        self._gui_thread_flag = 0
 
         self._validation_opt = lzy_vld_scripts.RigValidationOpt()
 
@@ -258,12 +299,14 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
 
         self.gui_page_setup_fnc()
 
+        self._concurrent_execute_dict = {}
+
     def gui_page_setup_fnc(self):
         prx_v_sca = gui_prx_widgets.PrxVScrollArea()
         self._qt_layout.addWidget(prx_v_sca.widget)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            self._window.choice_name(
+            self._window.choice_gui_name(
                 self._window._configure.get('build.{}.options'.format(self.GUI_KEY))
             )
         )
@@ -280,7 +323,7 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
         prx_v_sca.add_widget(self._file_prx_tool_group)
         self._file_prx_tool_group.set_expanded(True)
         self._file_prx_tool_group.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language,
                 self._window._configure.get('build.{}.groups.files'.format(self.GUI_KEY))
             )
@@ -302,7 +345,7 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
         prx_v_sca.add_widget(self._result_prx_tool_group)
         self._result_prx_tool_group.set_expanded(True)
         self._result_prx_tool_group.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language,
                 self._window._configure.get('build.{}.groups.results'.format(self.GUI_KEY))
             )
@@ -310,7 +353,7 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
         self._result_prx_text_browser = gui_prx_widgets.PrxTextBrowser()
         self._result_prx_tool_group.add_widget(self._result_prx_text_browser)
         self._result_prx_text_browser.set_content(
-            gui_core.GuiUtil.choice_description(
+            gui_core.GuiUtil.choice_gui_description(
                 self._window._language,
                 self._window._configure.get('build.{}.contents.results'.format(self.GUI_KEY))
             )
@@ -324,7 +367,7 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
         self._list_asset_prx_button = gui_prx_widgets.PrxPressButton()
         self._bottom_prx_tool_bar.add_widget(self._list_asset_prx_button)
         self._list_asset_prx_button.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.{}.buttons.list_assets'.format(self.GUI_KEY))
             )
         )
@@ -335,7 +378,7 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
         self._start_prx_button = gui_prx_widgets.PrxPressButton()
         self._bottom_prx_tool_bar.add_widget(self._start_prx_button)
         self._start_prx_button.set_name(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.{}.buttons.start'.format(self.GUI_KEY))
             )
         )
@@ -346,7 +389,7 @@ class AbsPrxPageForRigBatch(gui_prx_widgets.PrxBasePage):
         # self._save_result_button = gui_prx_widgets.PrxPressButton()
         # self._bottom_prx_tool_bar.add_widget(self._save_result_button)
         # self._save_result_button.set_name(
-        #     gui_core.GuiUtil.choice_name(
+        #     gui_core.GuiUtil.choice_gui_name(
         #         self._window._language, self._window._configure.get('build.{}.buttons.save'.format(self.GUI_KEY))
         #     )
         # )

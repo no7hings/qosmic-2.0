@@ -79,8 +79,8 @@ class Camera(object):
                 options = non_default_names
                 result = gui_core.GuiApplication.exec_input_dialog(
                     type='choose',
-                    options=options,
                     info='Choose a camera...',
+                    options=options,
                     value=options[0],
                     title='Camera'
                 )

@@ -7,7 +7,7 @@ from .pages import basic as _page_basic
 
 
 class PrxLazyPlayblastTool(gui_prx_widgets.PrxBasePanel):
-    CONFIGURE_KEY = 'lazy-playblast/gui/tool'
+    CONFIGURE_KEY = None
 
     def __init__(self, *args, **kwargs):
         super(PrxLazyPlayblastTool, self).__init__(*args, **kwargs)
@@ -23,12 +23,12 @@ class PrxLazyPlayblastTool(gui_prx_widgets.PrxBasePanel):
         self._page_prx_tab_tool_box.add_widget(
             main_tool_prx_sca,
             key='main',
-            name=gui_core.GuiUtil.choice_name(
-                self._language, self._window._configure.get('build.main.tab')
+            name=gui_core.GuiUtil.choice_gui_name(
+                self._language, self._window._configure.get('build.main')
             ),
             icon_name_text='main',
-            tool_tip=gui_core.GuiUtil.choice_tool_tip(
-                self._language, self._window._configure.get('build.main.tab')
+            tool_tip=gui_core.GuiUtil.choice_gui_tool_tip(
+                self._language, self._window._configure.get('build.main')
             )
         )
         self._gui_main_tool_prx_page = _page_basic.PrxPageForPlayblast(

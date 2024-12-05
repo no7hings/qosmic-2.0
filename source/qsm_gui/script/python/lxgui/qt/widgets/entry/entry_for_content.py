@@ -143,12 +143,13 @@ class QtEntryForContent(
         self.update()
 
     def _append_value_(self, text):
-        def add_fnc_(text_):
-            if isinstance(text_, six.text_type):
-                text_ = text_.encode('utf-8')
+        def add_fnc_(value_):
+            if value_ is not None:
+                if isinstance(value_, six.text_type):
+                    value_ = value_.encode('utf-8')
 
-            self.moveCursor(QtGui.QTextCursor.End)
-            self.insertPlainText(text_+'\n')
+                self.moveCursor(QtGui.QTextCursor.End)
+                self.insertPlainText(value_+'\n')
 
         #
         if isinstance(text, (tuple, list)):
@@ -169,23 +170,6 @@ class QtEntryForContent(
 
     def _get_value_(self):
         return self.toPlainText()
-
-    def _add_value_(self, value):
-        def add_fnc_(value_):
-            if value_ is not None:
-                if isinstance(value_, six.text_type):
-                    value_ = value_.encode('utf-8')
-
-                self.moveCursor(QtGui.QTextCursor.End)
-                self.insertPlainText(value_+'\n')
-
-        #
-        if isinstance(value, (tuple, list)):
-            [add_fnc_(i) for i in value]
-        else:
-            add_fnc_(value)
-        #
-        self.update()
 
     def _set_value_(self, value):
         if value is not None:

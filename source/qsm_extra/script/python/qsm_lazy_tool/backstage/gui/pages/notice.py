@@ -15,9 +15,9 @@ import lxgui.proxy.abstracts as prx_abstracts
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-import qsm_lazy.backstage.core as qsm_task_core
+import qsm_lazy.backstage.core as qsm_dcc_task_core
 
-import qsm_lazy.backstage.process as lzy_bks_process
+import qsm_lazy.backstage.worker as lzy_bks_worker
 
 
 class _GuiBaseOpt(object):
@@ -48,7 +48,7 @@ class _GuiNoticeOpt(
 
         self._page._main_layout.addWidget(self._qt_history_view)
 
-        self._entity_pool = qsm_task_core.NoticePool.generate()
+        self._entity_pool = qsm_dcc_task_core.NoticePool.generate()
 
         self._status_name_mapper = bsc_core.BasProcessStatus.to_mapper()
 

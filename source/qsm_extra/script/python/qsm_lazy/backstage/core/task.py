@@ -9,7 +9,7 @@ import lxbasic.web as bsc_web
 
 import lxbasic.storage as bsc_storage
 
-import qsm_lazy.backstage.process as lzy_bks_process
+import qsm_lazy.backstage.worker as lzy_bks_worker
 
 from . import base as _base
 
@@ -122,12 +122,12 @@ class Task(_base.AbsEntity):
         self._json_content.set('process.status', int(status))
         self.accept()
 
-    def refresh_start(self):
+    def update_by_start(self):
         self._json_content.set('process.start_time', _base.Util.get_time())
         self._json_content.set('process.progress', 0)
         self.accept()
 
-    def refresh_finish(self):
+    def update_by_finish(self):
         self._json_content.set('process.finish_time', _base.Util.get_time())
         self._json_content.set('process.progress', 100)
         self.accept()
@@ -135,7 +135,7 @@ class Task(_base.AbsEntity):
     def accept(self):
         self._json_content.save()
 
-    def save_log(self, text):
+    def save_process_log(self, text):
         if isinstance(text, list):
             text = '\n'.join(text)
 
@@ -145,43 +145,46 @@ class Task(_base.AbsEntity):
             self._log_location
         ).set_write(text)
 
-    def read_log(self):
+    def read_result_log(self):
         if bsc_storage.StgPath.get_is_file(
             self._log_location
         ):
             return bsc_storage.StgFileOpt(self._log_location).set_read()
 
+    def save_exception_log(self, text):
+        pass
+
     def do_wait_for_start(self):
 
-        def _status_changed_fnc(task, status):
-            task.set_status(status)
+        def on_status_changed_(task_, status_):
+            task_.set_status(status_)
 
-        def _started_fnc(task):
-            task.refresh_start()
+        def on_started_(task_):
+            task_.update_by_start()
 
-        def _completed_fnc(task, results):
-            _completed_notice = task.get_completed_notice()
+        def on_completed_(task_, results_):
+            _completed_notice = task_.get_completed_notice()
             if _completed_notice:
                 # noinspection PyBroadException
                 try:
                     skt = bsc_web.WebSocket(
-                        lzy_bks_process.NoticeWebServerBase.HOST, lzy_bks_process.NoticeWebServerBase.PORT
+                        lzy_bks_worker.NoticeWebServerBase.HOST, lzy_bks_worker.NoticeWebServerBase.PORT
                     )
                     if skt.connect() is True:
                         skt.send(_completed_notice)
                 except Exception:
                     bsc_core.BscException.print_stack()
 
-        def _finished_fnc(task, status, results):
-            task.refresh_finish()
-            task.save_log(results)
+        def on_finished_(task_, status_, results_):
+            task_.update_by_finish()
+            task_.save_process_log(results_)
 
         cmd_script = self._json_content.get('process.cmd_script')
         self._thread = bsc_core.TrdCommandPool.generate(cmd_script, self)
-        self._thread.status_changed.connect_to(_status_changed_fnc)
-        self._thread.started.connect_to(_started_fnc)
-        self._thread.completed.connect_to(_completed_fnc)
-        self._thread.finished.connect_to(_finished_fnc)
+        self._thread.status_changed.connect_to(on_status_changed_)
+        self._thread.started.connect_to(on_started_)
+        self._thread.completed.connect_to(on_completed_)
+        self._thread.finished.connect_to(on_finished_)
 
         self._thread.do_wait_for_start()
 

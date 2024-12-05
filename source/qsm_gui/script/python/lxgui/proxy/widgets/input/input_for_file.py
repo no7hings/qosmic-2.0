@@ -293,19 +293,24 @@ class PrxInputForFiles(_input_base.AbsPrxInputExtra):
         self._root_location = path
         self._root_obj = bsc_storage.StgDirectoryOpt(self._root_location)
 
-    def set_checked_by_include_paths(self, paths):
+    def update_checked_by_paths(self, paths, extra=False):
         _ = self._prx_input.get_all_items()
         if _:
             for i in _:
                 if i.get_gui_dcc_obj(namespace=self.NAMESPACE).path in paths:
-                    i.set_checked(True, extra=False)
+                    i.set_checked(True, extra=extra)
 
-    def set_unchecked_by_include_paths(self, paths):
+    def update_unchecked_by_paths(self, paths, extra=False):
         _ = self._prx_input.get_all_items()
         if _:
             for i in _:
                 if i.get_gui_dcc_obj(namespace=self.NAMESPACE).path not in paths:
-                    i.set_checked(False, extra=False)
+                    i.set_checked(False, extra=extra)
+
+    def update_check_by_dict(self, dict_):
+        for k, v in dict_.items():
+            i_item = self._item_dict[k]
+            i_item.set_checked(v, extra=True)
 
     def set_all_items_checked(self, boolean):
         self._prx_input._qt_view._set_all_items_checked_(boolean)

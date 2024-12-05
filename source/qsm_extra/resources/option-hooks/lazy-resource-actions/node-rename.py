@@ -25,7 +25,7 @@ def main(session):
         type='string',
         info='Entry Name for Rename...',
         value=name_old,
-        title=window.choice_name(session.gui_configure.get('window'))
+        title=window.choice_gui_name(session.gui_configure.get('window'))
     )
 
     if input_result:

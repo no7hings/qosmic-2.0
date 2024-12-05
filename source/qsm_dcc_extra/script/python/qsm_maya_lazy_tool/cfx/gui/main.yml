@@ -1,0 +1,259 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-maya'
+    #
+    gui:
+        name: 'Lazy CFX Tool'
+        name_chs: '懒人解算工具'
+        group_name: 'General(s)'
+        #
+        icon_name: 'qosmic/lazy-cfx-tool'
+        tool_tip:
+            |-
+            For CFX.
+        #
+        tool_tip_chs:
+            |-
+            用于解算。
+
+        size: [560, 720]
+
+        version: '0.0.1'
+
+build:
+    main:
+        name: 'Basic'
+        name_chs: '基础'
+
+        tool_tip:
+            |-
+            For CFX.
+
+        tool_tip_chs:
+            |-
+            用于解算。
+
+        units:
+            export:
+                name: 'Export'
+                name_chs: '导出'
+
+                tool_tip: 'To be supplemented.'
+                tool_tip_chs: '待补充。'
+
+                options:
+                    name: 'Cache'
+                    name_chs: '缓存'
+
+                    parameters:
+                        setting:
+                            widget: group
+                            name: 'Setting'
+                            name_chs: '设置'
+                            collapse: True
+
+                        setting/fps:
+                            widget: capsule_string
+                            name_chs: '帧率'
+                            options: ['24_fps', '30_fps']
+                            default: '24_fps'
+                            tool_tip: 'show scene FPS'
+                            tool_tip_chs: '显示当前场景的帧率'
+                            lock: True
+                            visible: False
+
+                        setting/frame_scheme:
+                            widget: capsule_string
+                            name_chs: '帧方案'
+                            options: ['time_slider', 'frame_range']
+                            option_names_chs: ['时间轴', '帧范围']
+                            default: 'time_slider'
+                            enable: True
+                            tool_tip: 'choose a frame scheme'
+                            tool_tip_chs:
+                                |-
+                                设置一个帧方案:
+                                    时间轴：自动读取帧范围
+                                    帧范围：在帧范围中输入
+
+                        setting/frame_range:
+                            widget: integer2
+                            name_chs: '帧范围'
+                            value: [0, 24]
+                            tool_tip: '...'
+                            lock: True
+                            visible_condition: {
+                                operator: 'is', port: 'setting/frame_scheme', value: 'frame_range'
+                            }
+
+                        setting/frame_offset:
+                            widget: integer
+                            name_chs: '帧偏移'
+                            value: 0
+                            tool_tip: '...'
+                            visible: False
+
+                        setting/frame_step:
+                            widget: integer
+                            name_chs: '帧步长'
+                            value: 1
+                            tool_tip: '...'
+
+                        cloth:
+                            widget: group
+                            name: 'Export'
+                            name_chs: '布料'
+
+                        cloth/version_scheme:
+                            widget: capsule_string
+                            name: 'Export Version Scheme'
+                            name_chs: '导出版本方案'
+                            options: ['no_version', 'new_version', 'specified_version']
+                            option_names_chs: ['无版本', '新版本', '指定版本']
+                            default: 'new_version'
+                            tool_tip: '...'
+                            enable: True
+
+                        cloth/specified_version:
+                            widget: integer
+                            name: 'Specified Version'
+                            name_chs: '指定版本'
+                            value: 0
+                            visible_condition: {
+                                operator: 'is', port: 'cloth/version_scheme', value: 'specified_version'
+                            }
+
+                        cloth/directory:
+                            widget: directory
+                            open_or_save: save
+                            name_chs: '导出目录'
+                            value: ''
+                            history_key: 'tool-panels.lazy-cfx-tool.cloth-export-version-directory-open'
+
+                        cloth/version_directory:
+                            widget: directory
+                            open_or_save: save
+                            name_chs: '导出版本目录'
+                            value: ''
+                            lock: True
+
+                        cloth/with_alembic_cache:
+                            widget: boolean
+                            name: 'Alembic Cache'
+                            name_chs: 'Alembic缓存'
+                            value: True
+                            join_to_next: True
+
+                        cloth/with_geometry_cache:
+                            widget: boolean
+                            name: 'Geometry Cache'
+                            name_chs: '几何缓存'
+                            value: False
+
+                        cloth/export_cfx_cloth:
+                            widget: button
+                            name: 'Export Cache (localhost)'
+                            name_chs: '导出CFX布料'
+                            icon: 'upload'
+                            join_to_next: True
+
+                        cloth/export_cfx_cloth_as_backstage:
+                            widget: button
+                            name: 'Export Cache (backstage)'
+                            name_chs: '导出CFX布料（后台）'
+                            icon: 'upload'
+
+                        cloth/export_cfx_cloth_as_farm:
+                            widget: button
+                            name: 'Export Cache (farm)'
+                            name_chs: '导出CFX布料（农场）'
+                            icon: 'upload'
+
+            import:
+                name: 'Import'
+                name_chs: '导入'
+
+                tool_tip: 'To be supplemented.'
+                tool_tip_chs: '待补充。'
+
+                options:
+                    name: 'Cache'
+                    name_chs: '缓存'
+                    parameters:
+                        cloth:
+                            widget: group
+                            name: 'Export'
+                            name_chs: '布料'
+
+                        cloth/version_directory:
+                            widget: directory
+                            open_or_save: open
+                            name_chs: '导入版本目录'
+                            value: ''
+                            history_key: 'tool-panels.lazy-cfx-tool.cloth-import-version-directory-open'
+
+                        cloth/file_tree:
+                            widget: file_tree
+                            name: 'File'
+                            name_chs: '文件'
+
+                        cloth/load_cfx_cloth:
+                            widget: button
+                            name: 'Import Cache'
+                            name_chs: '导入CFX布料'
+                            icon: 'load'
+                            tool_tip_chs:
+                                |-
+                                选择一个目录（版本目录），勾选需要导入的文件，然后点击“导入缓存”
+                            join_to_next: True
+
+                        cloth/remove_cfx_cloth:
+                            widget: button
+                            name: 'Remove Cache'
+                            name_chs: '移除CFX布料'
+                            icon: 'tool/maya/delete'
+
+        messages:
+            no_resource:
+                message: 'To be supplemented.'
+                message_chs: '勾选至少一个资源。'
+
+            no_cache_type:
+                message: 'To be supplemented.'
+                message_chs: '勾选至少一种缓存类型（Alembic缓存， 几何缓存）。'
+
+            no_task_server:
+                message: 'Backstage Task Server is not Start.'
+                message_chs: '后台任务服务未开启。'
+
+            task_submit_successful:
+                message: 'Task Submit Successful.'
+                message_chs: '任务提交成功。'
+
+            no_farm_server:
+                message: 'Farm Server is not Start.'
+                message_chs: '农场服务未开启。'
+
+            farm_submit_successful:
+                message: 'Farm Task Submit Successful.'
+                message_chs: '农场任务提交成功。'
+
+    messages:
+        remove_reference:
+            message: 'do you want remove selected references?, press "Ok" to continue.'
+            message_chs: '是否要移除选中的引用，点击“Ok”以继续。'
+
+    rig_selection_scheme:
+        options: ['root', 'geometry_root', 'deformation_root', 'motion_root', 'main_control']
+        option_names_chs: ['根组', '模型组', '骨骼组', '控制器组', '主控制器']
+        default: 'main_control'
+        tool_tip: 'choose a selection scheme'
+        tool_tip_chs:
+            |-
+            设置一个选择方案
+                根组：选择整个绑定组
+                模型：选中模型组
+                骨骼：选择骨骼组
+                控制器：选中控制器组

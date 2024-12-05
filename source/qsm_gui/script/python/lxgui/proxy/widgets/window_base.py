@@ -61,7 +61,6 @@ class PrxBaseWindow(
 
     # noinspection PyUnusedLocal
     def _init_base_window_def_(self, *args, **kwargs):
-
         self.set_log_file_path(bsc_storage.StgUser.get_user_log_directory())
 
         self._log_file_path = None
@@ -74,13 +73,13 @@ class PrxBaseWindow(
 
         self.set_show_menu_raw(
             [
-                ('log', 'log', self.show_log_unit),
-                ('help', 'help', self.show_help)
+                ('Log', 'log', self.show_log_unit),
+                ('Help', 'help', self.show_help)
             ]
         )
         self.set_debugger_menu_raw(
             [
-                ('log bar visible', 'box-check', (self._log_tool_bar.get_is_visible, self.swap_log_bar_visible)),
+                ('Log bar visible', 'box-check', (self._log_tool_bar.get_is_visible, self.swap_log_bar_visible)),
             ]
         )
 
@@ -91,18 +90,19 @@ class PrxBaseWindow(
         # menu bar
         self._qt_menu_bar_0 = _qt_wgt_utility.QtMenuBar()
         self._qt_widget.setMenuBar(self._qt_menu_bar_0)
+        self._qt_menu_bar_0.setFixedHeight(24)
         self.__show_menu = _utility.PrxMenu(self._qt_menu_bar_0)
         if self._language == 'chs':
             self.__show_menu.set_name('显示')
         else:
-            self.__show_menu.set_name('show')
+            self.__show_menu.set_name('Show')
         self._qt_menu_bar_0.addMenu(self.__show_menu.widget)
 
         self.__debug_menu = _utility.PrxMenu(self._qt_menu_bar_0)
         if self._language == 'chs':
             self.__debug_menu.set_name('调试器')
         else:
-            self.__debug_menu.set_name('debugger')
+            self.__debug_menu.set_name('Debugger')
         self._qt_menu_bar_0.addMenu(self.__debug_menu.widget)
         #
         self._qt_central_widget = _qt_wgt_utility.QtTranslucentWidget()
@@ -430,23 +430,23 @@ class PrxBaseWindow(
         return self._qt_widget._popup_message_(*args, **kwargs)
 
     # for language
-    def choice_name(self, options):
-        return gui_core.GuiUtil.choice_name(
+    def choice_gui_name(self, options):
+        return gui_core.GuiUtil.choice_gui_name(
             self._language, options
         )
 
-    def choice_description(self, options):
-        return gui_core.GuiUtil.choice_description(
+    def choice_gui_description(self, options):
+        return gui_core.GuiUtil.choice_gui_description(
             self._language, options
         )
 
-    def choice_message(self, options):
-        return gui_core.GuiUtil.choice_message(
+    def choice_gui_message(self, options):
+        return gui_core.GuiUtil.choice_gui_message(
             self._language, options
         )
 
-    def choice_tool_tip(self, options):
-        return gui_core.GuiUtil.choice_tool_tip(
+    def choice_gui_tool_tip(self, options):
+        return gui_core.GuiUtil.choice_gui_tool_tip(
             self._language, options
         )
 

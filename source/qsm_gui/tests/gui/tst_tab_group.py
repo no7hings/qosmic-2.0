@@ -15,6 +15,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
         c_h = gui_prx_widgets.PrxHTabToolBox()
         lot.addWidget(c_h.widget)
+        c_h.set_expand_enable(True)
 
         t_0 = gui_prx_widgets.PrxOptionsNode('TEST-0')
         c_h.add_widget(t_0, name='TEST-0', icon_name_text='A')

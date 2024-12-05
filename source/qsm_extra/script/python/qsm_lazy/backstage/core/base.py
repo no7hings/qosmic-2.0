@@ -322,7 +322,7 @@ class AbsEntitiesCacheOpt(object):
             'entities.{}'.format(entity_id)
         )
 
-    def is_entity_exists(self, entity_id):
+    def entity_is_exists(self, entity_id):
         return entity_id in self._entity_dict
 
     def find_entity(self, entity_id):

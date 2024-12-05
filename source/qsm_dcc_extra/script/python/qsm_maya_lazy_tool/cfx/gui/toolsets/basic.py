@@ -9,11 +9,11 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.tasks.general.core as qsm_mya_tsk_gnl_core
+import qsm_maya.handles.general.core as qsm_mya_hdl_gnl_core
 
-import qsm_maya.tasks.cfx.core as qsm_mya_tsk_cfx_core
+import qsm_maya.handles.cfx.core as qsm_mya_hdl_cfx_core
 
-import qsm_maya.tasks.cfx.scripts as qsm_mya_tsk_cfx_scripts
+import qsm_maya.handles.cfx.scripts as qsm_mya_hdl_cfx_scripts
 
 import qsm_maya_gui.core as qsm_mya_gui_core
 
@@ -25,9 +25,9 @@ class UnitForCfxResourceView(
 
     NAMESPACE = 'rig'
 
-    RESOURCES_QUERY_CLS = qsm_mya_tsk_cfx_core.CfxAdvRigAssetsQueryOld
+    RESOURCES_QUERY_CLS = qsm_mya_hdl_cfx_core.CfxAdvRigAssetsQuery
 
-    CHECK_BOX_FLAG = True
+    CHECK_BOX_FLAG = False
 
     TOOL_INCLUDES = [
         'isolate-select',
@@ -56,7 +56,7 @@ class ToolsetUnitForCfxRigExport(
         resources = self._page._gui_asset_prx_unit.gui_get_checked_resources()
         if not resources:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.no_resource')
                 ),
                 status='warning'
@@ -68,7 +68,7 @@ class ToolsetUnitForCfxRigExport(
 
         if sum([with_alembic_cache, with_geometry_cache]) == 0:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.no_cache_type')
                 ),
                 status='warning'
@@ -91,7 +91,7 @@ class ToolsetUnitForCfxRigExport(
                 maximum=len(resources), label='processing cfx clothes'
             ) as g_p:
                 for i_resource in resources:
-                    i_opt = qsm_mya_tsk_cfx_scripts.CfxClothCacheOpt(i_resource)
+                    i_opt = qsm_mya_hdl_cfx_scripts.CfxClothCacheOpt(i_resource)
                     i_opt.do_export(
                         directory_path,
                         frame_range, frame_step, frame_offset,
@@ -104,9 +104,9 @@ class ToolsetUnitForCfxRigExport(
     def do_dcc_export_cfx_cloth_cache_by_checked_as_backstage(self):
         import lxbasic.web as bsc_web
 
-        import qsm_lazy.backstage.process as lzy_bks_process
+        import qsm_lazy.backstage.worker as lzy_bks_worker
 
-        if lzy_bks_process.TaskProcessClient.get_server_status():
+        if lzy_bks_worker.TaskClient.get_server_status():
             args = self._get_export_args()
             if args:
                 resources, with_alembic_cache, with_geometry_cache = args
@@ -118,13 +118,13 @@ class ToolsetUnitForCfxRigExport(
 
                 namespaces = [x.namespace for x in resources]
 
-                task_name, scene_src_path, cmd_script = qsm_mya_tsk_cfx_scripts.CfxNClothCacheProcess.generate_subprocess_args(
+                task_name, scene_src_path, cmd_script = qsm_mya_hdl_cfx_scripts.CfxNClothCacheProcess.generate_subprocess_args(
                     namespaces,
                     directory_path,
                     frame_range, frame_step, frame_offset, with_alembic_cache, with_geometry_cache
                 )
 
-                lzy_bks_process.TaskProcessClient.new_entity(
+                lzy_bks_worker.TaskClient.new_entity(
                     group=None,
                     type='cfx-cache',
                     name=task_name,
@@ -148,14 +148,14 @@ class ToolsetUnitForCfxRigExport(
                 )
 
                 self._window.exec_message_dialog(
-                    self._window.choice_message(
+                    self._window.choice_gui_message(
                         self._window._configure.get('build.main.messages.task_submit_successful')
                     ),
                     status='correct'
                 )
         else:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.no_task_server')
                 ),
                 status='warning'
@@ -177,7 +177,7 @@ class ToolsetUnitForCfxRigExport(
 
                 namespaces = [x.namespace for x in resources]
 
-                option_hook = qsm_mya_tsk_cfx_scripts.CfxNClothCacheProcess.generate_farm_hook_option(
+                option_hook = qsm_mya_hdl_cfx_scripts.CfxNClothCacheProcess.generate_farm_hook_option(
                     namespaces,
                     directory_path,
                     frame_range, frame_step, frame_offset, with_alembic_cache, with_geometry_cache
@@ -188,14 +188,14 @@ class ToolsetUnitForCfxRigExport(
                 ssn_commands.execute_option_hook_by_deadline(option_hook)
 
                 self._window.exec_message_dialog(
-                    self._window.choice_message(
+                    self._window.choice_gui_message(
                         self._window._configure.get('build.main.messages.farm_submit_successful')
                     ),
                     status='correct'
                 )
         else:
             self._window.exec_message_dialog(
-                self._window.choice_message(
+                self._window.choice_gui_message(
                     self._window._configure.get('build.main.messages.no_farm_server')
                 ),
                 status='warning'
@@ -257,7 +257,7 @@ class ToolsetUnitForCfxRigExport(
         super(ToolsetUnitForCfxRigExport, self).__init__(window, unit, session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.main.units.export.options')
             )
         )
@@ -267,11 +267,11 @@ class ToolsetUnitForCfxRigExport(
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='export',
-            name=gui_core.GuiUtil.choice_name(
+            name=gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.main.units.export')
             ),
             icon_name_text='export',
-            tool_tip=gui_core.GuiUtil.choice_tool_tip(
+            tool_tip=gui_core.GuiUtil.choice_gui_tool_tip(
                 self._window._language, self._window._configure.get('build.main.units.export')
             )
         )
@@ -336,7 +336,7 @@ class ToolsetUnitForCfxRigImport(
         pot = self._prx_options_node.get_port('cloth.file_tree')
         pot.set_root(directory_path)
 
-        ptn = qsm_mya_tsk_gnl_core.FilePatterns.CfxClothAbcFile
+        ptn = qsm_mya_hdl_gnl_core.FilePatterns.CfxClothAbcFile
         ptn_opt = bsc_core.BscStgParseOpt(
             ptn
         )
@@ -357,7 +357,7 @@ class ToolsetUnitForCfxRigImport(
 
         cache_paths = pot.get_all(check_only=True)
         if cache_paths:
-            ptn = qsm_mya_tsk_gnl_core.FilePatterns.CfxClothAbcFile
+            ptn = qsm_mya_hdl_gnl_core.FilePatterns.CfxClothAbcFile
             ptn_opt = bsc_core.BscStgParseOpt(
                 ptn
             )
@@ -369,7 +369,7 @@ class ToolsetUnitForCfxRigImport(
                         i_properties = ptn_opt.get_variants(i_cache_path)
                         i_resource = resources_query.get(i_properties['namespace'])
                         if i_resource:
-                            i_resource_opt = qsm_mya_tsk_cfx_scripts.CfxClothCacheOpt(i_resource)
+                            i_resource_opt = qsm_mya_hdl_cfx_scripts.CfxClothCacheOpt(i_resource)
                             i_resource_opt.load_cache(i_cache_path)
 
                     g_p.do_update()
@@ -378,7 +378,7 @@ class ToolsetUnitForCfxRigImport(
         resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
-                i_opt = qsm_mya_tsk_cfx_scripts.CfxClothCacheOpt(i_resource)
+                i_opt = qsm_mya_hdl_cfx_scripts.CfxClothCacheOpt(i_resource)
                 i_opt.remove_cache()
 
         self._page.do_gui_refresh_all(force=True)
@@ -389,7 +389,7 @@ class ToolsetUnitForCfxRigImport(
         super(ToolsetUnitForCfxRigImport, self).__init__(window, unit, session)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            gui_core.GuiUtil.choice_name(
+            gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.main.units.import.options')
             )
         )
@@ -399,11 +399,11 @@ class ToolsetUnitForCfxRigImport(
         self._page.gui_get_tool_tab_box().add_widget(
             self._prx_options_node,
             key='import',
-            name=gui_core.GuiUtil.choice_name(
+            name=gui_core.GuiUtil.choice_gui_name(
                 self._window._language, self._window._configure.get('build.main.units.import')
             ),
             icon_name_text='import',
-            tool_tip=gui_core.GuiUtil.choice_tool_tip(
+            tool_tip=gui_core.GuiUtil.choice_gui_tool_tip(
                 self._window._language, self._window._configure.get('build.main.units.import')
             )
         )

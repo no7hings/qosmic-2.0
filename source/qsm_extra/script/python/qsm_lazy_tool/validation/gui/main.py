@@ -11,13 +11,18 @@ from .pages import model_batch as _page_model_batch
 
 
 class PrxLazyValidationTool(_abstracts.AbsPrxPanelForValidation):
-    PAGE_CLASS_DICT = dict(
-        rig=_page_rig.PrxPageForChrRig,
-        rig_batch=_page_rig_batch.PrxPageForChrRigBatch,
-        #
-        scenery=_page_model.PrxPageForScnModel,
-        scenery_batch=_page_model_batch.PrxPageForScnModelBatch
-    )
+    GUI_KEY = 'lazy-validation'
+
+    CONFIGURE_KEY = None
+
+    PAGE_CLASSES = [
+        # rig
+        _page_rig.PrxPageForChrRig,
+        _page_rig_batch.PrxPageForChrRigBatch,
+        # model
+        _page_model.PrxPageForScnModel,
+        _page_model_batch.PrxPageForScnModelBatch
+    ]
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxLazyValidationTool, self).__init__(window, session, *args, **kwargs)

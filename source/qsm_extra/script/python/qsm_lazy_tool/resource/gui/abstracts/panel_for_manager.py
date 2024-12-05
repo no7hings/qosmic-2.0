@@ -88,7 +88,7 @@ class AbsPrxResourceTool(gui_prx_widgets.PrxBasePanel):
         self._gui_tab_add_page(key, switch_to=switch_to)
 
     def _gui_page_delete_pre_fnc(self, key):
-        page = self._tab_page_dict.pop(key)
+        page = self._tab_tab_widget_dict.pop(key)
         self._tag_page_key_opened.remove(key)
         return page.gui_close_fnc()
 
@@ -109,7 +109,7 @@ class AbsPrxResourceTool(gui_prx_widgets.PrxBasePanel):
             switch_to=switch_to
         )
         prx_page = self.gui_generate_page_for('manager')
-        self._tab_page_dict[key] = prx_page
+        self._tab_tab_widget_dict[key] = prx_page
         
         self._prx_tab_view.register_page_delete_pre_fnc(key, self._gui_page_delete_pre_fnc)
 
@@ -137,7 +137,7 @@ class AbsPrxResourceTool(gui_prx_widgets.PrxBasePanel):
         self._tag_page_key_opened = set()
         self._all_scr_stage_keys = qsm_scr_core.Stage.get_all_keys()
 
-        self._tab_page_dict = {}
+        self._tab_tab_widget_dict = {}
 
         # self._prx_tab_view.set_add_menu_data_generate_fnc(self._gui_tab_add_menu_data_generate_fnc)
         self._prx_tab_view.set_add_menu_content_generate_fnc(self._gui_tab_add_menu_content_generate_fnc)
@@ -156,8 +156,8 @@ class AbsPrxResourceTool(gui_prx_widgets.PrxBasePanel):
 
     def do_gui_refresh_all(self):
         key = self._prx_tab_view.get_current_key()
-        if key in self._tab_page_dict:
-            self._tab_page_dict[key].do_gui_refresh_all()
+        if key in self._tab_tab_widget_dict:
+            self._tab_tab_widget_dict[key].do_gui_refresh_all()
 
     def gui_get_current_page(self):
-        return self._tab_page_dict[self._prx_tab_view.get_current_key()]
+        return self._tab_tab_widget_dict[self._prx_tab_view.get_current_key()]
