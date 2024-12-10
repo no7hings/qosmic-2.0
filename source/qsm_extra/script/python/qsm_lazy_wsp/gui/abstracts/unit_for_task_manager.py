@@ -283,8 +283,7 @@ class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
         self._qt_list_widget._set_item_group_enable_(True)
         self._qt_list_widget._view_model.set_item_category_enable(True)
         self._qt_list_widget._view_model.set_item_mtime_enable(True)
-        if bsc_core.BscApplication.get_is_dcc() is False:
-            self._qt_list_widget._view_model.set_item_user_enable(True)
+        self._qt_list_widget._view_model.set_item_user_enable(True)
 
         self._qt_list_widget._view_model.set_item_frame_size(190, 100)
 
@@ -295,9 +294,23 @@ class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
 
     def _gui_add_application_tools(self):
         tools = []
-        for i_key, i_enable in [
-            ('maya', True), ('houdini', False), ('katana', False)
-        ]:
+        if bsc_core.BscApplication.get_is_maya():
+            cfg = [
+                ('maya', True)
+            ]
+        elif bsc_core.BscApplication.get_is_houdini():
+            cfg = [
+                ('houdini', True)
+            ]
+        elif bsc_core.BscApplication.get_is_katana():
+            cfg = [
+                ('katana', True)
+            ]
+        else:
+            cfg = [
+                ('maya', True), ('houdini', False), ('katana', False)
+            ]
+        for i_key, i_enable in cfg:
             i_tool = gui_prx_widgets.PrxToggleButton()
             self._application_switch_tool_box._add_widget_(i_tool)
             i_tool._qt_widget._set_exclusive_widgets_(tools)
@@ -348,10 +361,12 @@ class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
         def cache_fnc_():
             if gui_thread_flag != self._gui_thread_flag:
                 return [[], 0]
-
-            _image_path = self.find_thumbnail(**properties)
+            # mtime
+            _mtime = bsc_storage.StgFileOpt(scene_src_path).get_mtime()
+            # user
+            _user = bsc_storage.StgFileOpt(scene_src_path).get_user()
             return [
-                [_image_path], gui_thread_flag
+                [_mtime, _user], gui_thread_flag
             ]
 
         def build_fnc_(data_):
@@ -360,18 +375,10 @@ class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
                 return
 
             if _d:
-                _image_path = _d[0]
-                if _image_path:
-                    qt_item._item_model.set_image(_image_path)
-
-            # mtime
-            _mtime = bsc_storage.StgFileOpt(scene_src_path).get_mtime()
-            qt_item._item_model.set_mtime(_mtime)
-
-            # user
-            if bsc_core.BscApplication.get_is_dcc() is False:
-                _user = bsc_storage.StgFileOpt(scene_src_path).get_user()
-                qt_item._item_model.set_user(_user)
+                _mtime, _user = _d
+                qt_item._item_model.set_mtime(_mtime)
+                if _user:
+                    qt_item._item_model.set_user(_user)
 
             if gui_core.GuiUtil.language_is_chs():
                 qt_item._item_model.set_menu_data(
@@ -411,6 +418,11 @@ class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
         path = self._page._task_parse.to_source_scene_src_path(**properties)
 
         flag, qt_item = self._qt_list_widget._view_model.create_item(path)
+
+        # image
+        image_path = self.find_thumbnail(**properties)
+        if image_path:
+            qt_item._item_model.set_image(image_path)
 
         qt_item._item_model.set_icon_name('application/maya')
         qt_item._item_model.set_category(properties['task_unit'])
@@ -510,7 +522,7 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
         self._task_session = None
 
         self._user = 'shared'
-        self._studio = qsm_gnl_core.Studio.get_current()
+        self._studio = qsm_gnl_core.Sync().studio.get_current()
 
         self._scan_resource_path = None
         self._resource_path = None

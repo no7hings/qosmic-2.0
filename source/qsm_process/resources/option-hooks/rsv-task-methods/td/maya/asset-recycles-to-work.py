@@ -67,7 +67,7 @@ def main(session):
                         convert_maya_to_katana_enable=hook_option_opt.get('convert_maya_to_katana_enable'),
                         #
                         td_enable=hook_option_opt.get('td_enable'),
-                        rez_beta=hook_option_opt.get('rez_beta'),
+                        test_flag=hook_option_opt.get('test_flag'),
                     )
                 )
                 #

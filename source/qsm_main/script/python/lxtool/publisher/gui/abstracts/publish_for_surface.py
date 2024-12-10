@@ -89,8 +89,8 @@ class _PublishOptForSurface(object):
                 #
                 user=user,
                 #
-                td_enable=self._session.get_is_td_enable(),
-                rez_beta=self._session.get_is_beta_enable(),
+                td_enable=self._session.get_devlop_flag(),
+                test_flag=self._session.get_test_flag(),
                 #
                 localhost_enable=self._options['process.deadline.scheme'] == 'localhost'
             )

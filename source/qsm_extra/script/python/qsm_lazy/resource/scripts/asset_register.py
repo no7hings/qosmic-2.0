@@ -79,7 +79,7 @@ class AssetBatchRegisterOpt(object):
                 i_task = i_asset.task(self._scan_root.EntityTasks.Rig)
                 if i_task is not None:
                     i_maya_scene_path = i_task.find_result(
-                        self._scan_root.StoragePatterns.MayaRigFile
+                        self._scan_root.FilePatterns.MayaRigFile
                     )
                     if i_maya_scene_path is not None:
                         i_asset_path = i_asset.path
@@ -96,7 +96,7 @@ class AssetBatchRegisterOpt(object):
                 i_task = i_asset.task(self._scan_root.EntityTasks.Rig)
                 if i_task is not None:
                     i_maya_scene_path = i_task.find_result(
-                        self._scan_root.StoragePatterns.MayaRigFile
+                        self._scan_root.FilePatterns.MayaRigFile
                     )
                     if i_maya_scene_path is not None:
                         i_asset_path = i_asset.path
@@ -113,7 +113,7 @@ class AssetBatchRegisterOpt(object):
                 i_task = i_asset.task(self._scan_root.EntityTasks.Model)
                 if i_task is not None:
                     i_maya_scene_path = i_task.find_result(
-                        self._scan_root.StoragePatterns.MayaModelFIle
+                        self._scan_root.FilePatterns.MayaModelFIle
                     )
                     if i_maya_scene_path is not None:
                         i_asset_path = i_asset.path

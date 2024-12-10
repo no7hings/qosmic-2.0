@@ -86,7 +86,7 @@ def main(session):
             i_time_tag = hook_option_opt.get('time_tag')
             #
             i_td_enable = hook_option_opt.get('td_enable') or False
-            i_rez_beta = hook_option_opt.get('rez_beta') or False
+            i_test_flag = hook_option_opt.get('test_flag') or False
             #
             i_render_output_directory_path = hook_option_opt.get('render_output_directory')
 
@@ -108,7 +108,7 @@ def main(session):
                     #
                     user=i_user, time_tag=i_time_tag,
                     #
-                    td_enable=i_td_enable, rez_beta=i_rez_beta,
+                    td_enable=i_td_enable, test_flag=i_test_flag,
                     #
                     render_file=i_render_file_path,
                     render_output_directory=i_render_output_directory_path,
@@ -136,7 +136,7 @@ def main(session):
                         file=i_file_path,
                         #
                         user=i_user, time_tag=i_time_tag,
-                        td_enable=i_td_enable, rez_beta=i_rez_beta,
+                        td_enable=i_td_enable, test_flag=i_test_flag,
                         #
                         image_file=i_image_path,
                         movie_file=i_movie_file_path,

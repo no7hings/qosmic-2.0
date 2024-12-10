@@ -37,6 +37,8 @@ import collections
 # process
 from . import configure as _configure
 
+from . import cache as _cache
+
 
 def ensure_string(text):
     if isinstance(text, six.text_type):
@@ -337,6 +339,8 @@ class BscStorage(object):
     PATHSEP = '/'
     PATHSEP_EXTRA = '//'
 
+    WINDOWS_USER_CACHE = _cache.LRUCache(maximum=1024)
+
     @classmethod
     def shit_path_auto_convert(cls, path):
         if r'\u' in path:
@@ -476,27 +480,58 @@ class BscStorage(object):
     def get_user(cls, path):
         # noinspection PyBroadException
         if os.path.exists(path) is True:
-            s = os.stat(path)
-            uid = s.st_uid
             if BscStorage.get_platform_is_linux():
-                import pwd
-
-                try:
-                    user = pwd.getpwuid(uid)[0]
-                    return user
-                except KeyError:
-                    return 'unknown'
+                return cls._linux_get_user(path)
             elif BscStorage.get_platform_is_windows():
-                # noinspection PyBroadException
-                try:
-                    import win32security
+                m_time = cls.get_mtime(path)
+                key = u'{}@{}'.format(path, m_time)
+                if key in cls.WINDOWS_USER_CACHE:
+                    return cls.WINDOWS_USER_CACHE[key]
+                user = cls._windows_get_user_2(path)
+                cls.WINDOWS_USER_CACHE[key] = user
+                return user
+        return 'unknown'
 
-                    sd = win32security.GetFileSecurity(path, win32security.OWNER_SECURITY_INFORMATION)
-                    owner_sid = sd.GetSecurityDescriptorOwner()
-                    name, domain, _ = win32security.LookupAccountSid(None, owner_sid)
-                    return name
-                except Exception:
-                    return 'unknown'
+    @classmethod
+    def _linux_get_user(cls, path):
+        s = os.stat(path)
+        uid = s.st_uid
+        import pwd
+        try:
+            user = pwd.getpwuid(uid)[0]
+            return user
+        except KeyError:
+            return 'unknown'
+
+    @classmethod
+    def _windows_get_user_1(cls, path):
+        # noinspection PyBroadException
+        try:
+            import win32security
+
+            sd = win32security.GetFileSecurity(path, win32security.OWNER_SECURITY_INFORMATION)
+            owner_sid = sd.GetSecurityDescriptorOwner()
+            name, domain, _ = win32security.LookupAccountSid(None, owner_sid)
+            return name
+        except Exception:
+            return 'unknown'
+
+    @classmethod
+    def _windows_get_user_2(cls, path):
+        # noinspection PyBroadException
+        try:
+            path = path.encode('mbcs')
+
+            cmd_args = [
+                "powershell",
+                "-Command",
+                "(Get-Acl '{0}').Owner".format(path)
+            ]
+            output = subprocess.check_output(cmd_args, stderr=subprocess.STDOUT, shell=True)
+            owner = output.decode('utf-8').strip()
+            return owner
+        except Exception:
+            pass
         return 'unknown'
 
     @classmethod
@@ -617,7 +652,8 @@ class BscStorage(object):
 
         if result == 0:
             return remote_name.value.replace('\\', '/')
-        return drive_letter
+        if os.path.exists(drive_letter):
+            return drive_letter
 
 
 class StgPathMapDict(object):

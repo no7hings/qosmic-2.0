@@ -21,7 +21,7 @@ def main(session):
                     file=i_work_scene_src_file_path,
                     #
                     td_enable=True,
-                    # rez_beta=True,
+                    # test_flag=True,
                 )
             )
             #

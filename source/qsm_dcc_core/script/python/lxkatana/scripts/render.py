@@ -258,7 +258,7 @@ class ScpRenderBuild(object):
         user = hook_option_opt.get('user')
         time_tag = hook_option_opt.get('time_tag')
         td_enable = hook_option_opt.get('td_enable')
-        rez_beta = hook_option_opt.get('rez_beta')
+        test_flag = hook_option_opt.get('test_flag')
         #
         katana_render_hook_key = 'rsv-project-methods/katana/render'
         rv_video_comp_hook_key = 'rsv-project-methods/rv/video-comp'
@@ -316,7 +316,7 @@ class ScpRenderBuild(object):
                             file=file_path,
                             #
                             user=user, time_tag=time_tag,
-                            td_enable=td_enable, rez_beta=rez_beta,
+                            td_enable=td_enable, test_flag=test_flag,
                             #
                             katana_version=hook_option_opt.get('katana_version'),
                             render_file=render_file_path,
@@ -347,7 +347,7 @@ class ScpRenderBuild(object):
                                 file=file_path,
                                 #
                                 user=user, time_tag=time_tag,
-                                td_enable=td_enable, rez_beta=rez_beta,
+                                td_enable=td_enable, test_flag=test_flag,
                                 #
                                 image_file=i_render_output_image_path,
                                 video_file=i_vedio_file_path,

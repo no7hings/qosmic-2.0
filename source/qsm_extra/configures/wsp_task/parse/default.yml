@@ -17,9 +17,260 @@ spaces:
     release: 'release'
     temporary: 'temporary'
 
+entities:
+    unique_variant_keys:
+        Project: ['project']
+        Asset: ['project', 'asset']
+        Episode: ['project', 'episode']
+        Sequence: ['project', 'sequence']
+        Shot: ['project', 'shot']
+        Task: ['entity_key', 'task']
+        Version: ['entity_key', 'space', 'version']
+
+    resolve_patterns:
+        Project:
+            disorder:
+                - '{root_disorder}/{project}/Assets'
+            source:
+                - '{root_source}/{project}/<spaces.source>'
+        Asset:
+            disorder:
+                - '{root_disorder}/{project}/Assets/{role}/{asset}'
+            source:
+                - '{root_source}/{project}/{space}/assets/{role}/{asset}'
+        Episode:
+            disorder:
+                - '{root_disorder}/{project}/{episode}'
+            source:
+                - '{root_source}/{project}/{space}/episodes/{episode}'
+        Sequence:
+            disorder:
+                - '{root_disorder}/{project}/{episode}/{sequence}/分镜'
+            source:
+                - '{root_source}/{project}/{space}/sequences/{sequence}'
+                - '{root_source}/{project}/{space}/shots/{sequence}'
+        Shot:
+            disorder:
+                - '{root_disorder}/{project}/{episode}/{sequence}{seq_EPT}/分镜/通过文件/{shot}.ma'
+                - '{root_disorder}/{project}/{episode}/{sequence}{seq_EPT}/动画/通过文件/{shot}.ma'
+            source:
+                - '{root_source}/{project}/{space}/shots/{sequence}/{shot}'
+
+    default_space:
+        Project: 'disorder'
+        Asset: 'disorder'
+        Episode: 'disorder'
+        Sequence: 'disorder'
+        Shot: 'disorder'
+
+    variant_key:
+        Project: 'project'
+        Asset: 'asset'
+        Episode: 'episode'
+        Sequence: 'sequence'
+        Shot: 'shot'
+        Task: 'task'
+        Version: 'version'
+
+    path_pattern:
+        Project: '/{project}'
+        Asset: '/{project}/{role}/{asset}'
+        Episode: '/{project}/{episode}'
+        Sequence: '/{project}/{sequence}'
+        Shot: '/{project}/{sequence}/{shot}'
+        Task: '{entity_path}/{task}'
+        Version: '{entity_path}/{version}'
+
+    next_methods:
+        # etc. Project.assets(), Project.asset('same')
+        Project: {
+            # asset
+            asset: {
+                fnc_name: 'find_one',
+                kwargs: {
+                    entity_type: 'Asset',
+                }
+            },
+            assets: {
+                fnc_name: 'find_all',
+                kwargs: {
+                    entity_type: 'Asset',
+                }
+            },
+            # episode
+            episode: {
+                fnc_name: 'find_one',
+                kwargs: {
+                    entity_type: 'Episode',
+                }
+            },
+            episodes: {
+                fnc_name: 'find_all',
+                kwargs: {
+                    entity_type: 'Episode',
+                }
+            },
+            # sequence
+            sequence: {
+                fnc_name: 'find_one',
+                kwargs: {
+                    entity_type: 'Sequence',
+                }
+            },
+            sequences: {
+                fnc_name: 'find_all',
+                kwargs: {
+                    entity_type: 'Sequence',
+                }
+            },
+            # shot
+            shot: {
+                fnc_name: 'find_one',
+                kwargs: {
+                    entity_type: 'Shot',
+                }
+            },
+            shots: {
+                fnc_name: 'find_all',
+                kwargs: {
+                    entity_type: 'Shot',
+                }
+            },
+            # project task
+            task: {
+                fnc_name: 'find_one',
+                kwargs: {
+                    entity_type: 'Task',
+                }
+            },
+            tasks: {
+                fnc_name: 'find_all',
+                kwargs: {
+                    entity_type: 'Task',
+                }
+            },
+        }
+        Asset: {
+            # asset task
+            task: {
+                fnc_name: 'find_one',
+                kwargs: {
+                    entity_type: 'Task',
+                }
+            },
+            tasks: {
+                fnc_name: 'find_all',
+                kwargs: {
+                    entity_type: 'Task',
+                }
+            },
+        }
+        Episode: {
+            # sequence
+            sequence: {
+                fnc_name: 'find_one',
+                kwargs: {
+                    entity_type: 'Sequence',
+                }
+            },
+            sequences: {
+                fnc_name: 'find_all',
+                kwargs: {
+                    entity_type: 'Sequence',
+                }
+            },
+            # shot
+            shot: {
+                fnc_name: 'find_one',
+                kwargs: {
+                    entity_type: 'Shot',
+                }
+            },
+            shots: {
+                fnc_name: 'find_all',
+                kwargs: {
+                    entity_type: 'Shot',
+                }
+            },
+            # episode task
+            task: {
+                fnc_name: 'find_one',
+                kwargs: {
+                    entity_type: 'Task',
+                }
+            },
+            tasks: {
+                fnc_name: 'find_all',
+                kwargs: {
+                    entity_type: 'Task',
+                }
+            },
+        }
+        Sequence: {
+            # shot
+            shot: {
+                fnc_name: 'find_one',
+                kwargs: {
+                    entity_type: 'Shot',
+                }
+            },
+            shots: {
+                fnc_name: 'find_all',
+                kwargs: {
+                    entity_type: 'Shot',
+                }
+            },
+            # sequence task
+            task: {
+                fnc_name: 'find_one',
+                kwargs: {
+                    entity_type: 'Task',
+                }
+            },
+            tasks: {
+                fnc_name: 'find_all',
+                kwargs: {
+                    entity_type: 'Task',
+                }
+            },
+        }
+        Task: {
+            version: {
+                fnc_name: 'find_one',
+                kwargs: {
+                    entity_type: 'Version',
+                }
+            },
+            versions: {
+                fnc_name: 'find_all',
+                kwargs: {
+                    entity_type: 'Version',
+                }
+            },
+        }
+
+variants:
+    cleanup_keys:
+        - sequence
+
+    regex:
+        project: '[a-zA-Z]*'
+        asset: '[a-zA-Z]*'
+
+        episode: '[a-zA-Z]*'
+        sequence: '[a-zA-Z]*'
+        shot: '[a-zA-Z]*[0-9]'
+
 patterns:
     # project
     project:
+        disorder:
+            dir: '{root_disorder}/{project}'
+
+        source:
+            dir: '{root_source}/{project}/{space}'
+            task-dir: '<.dir>/tasks/user.{artist}/{step}.{task}'
+
         release:
             dir: '{root_release}/{project}/QSM/{space}'
 
@@ -62,6 +313,10 @@ patterns:
             dir: '{root_temporary}/{project}/source/assets/{role}/{asset}'
             # task
             task-dir: '<.dir>/{step}.{task}'
+
+    episode:
+        source:
+            dir: '{root_source}/{project}/{space}/episodes/{episode}'
 
     sequence:
         task-version-name: '{sequence}.{step}.{task}.v{version}'

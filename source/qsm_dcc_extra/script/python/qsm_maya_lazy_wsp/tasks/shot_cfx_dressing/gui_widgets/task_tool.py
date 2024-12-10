@@ -57,7 +57,7 @@ class _PrxNodeView(_abs_unit_for_task_tool.AbsPrxNodeViewForTaskTool):
             self.gui_restore()
 
             for i_resource_opt in self._resources_query.get_all():
-                i_cfx_asset_opt = _shot_cfx_cloth_core.ShotCfxClothHandle(i_resource_opt.namespace)
+                i_cfx_asset_opt = _shot_cfx_cloth_core.ShotCfxClothAssetHandle(i_resource_opt.namespace)
                 self.gui_add_resource(i_resource_opt, i_cfx_asset_opt)
 
     def gui_add_resource(self, resource_opt, cfx_asset_opt):
@@ -93,7 +93,7 @@ class _PrxNodeView(_abs_unit_for_task_tool.AbsPrxNodeViewForTaskTool):
             qt_item._item_model.set_assign_data('dcc_node_type', 'root')
             qt_item._item_model.set_assign_data('dcc_resource', resource_opt)
 
-        if cfx_asset_opt.get_cfx_rig_is_loaded():
+        if cfx_asset_opt.cfx_rig_is_loaded():
             qt_item._item_model.set_status(
                 qt_item._item_model.Status.Correct
             )
@@ -178,7 +178,7 @@ class _PrxImportToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
                         i_properties = ptn_opt.get_variants(i_cache_path)
                         i_resource = resources_query.get(i_properties['namespace'])
                         if i_resource:
-                            i_resource_opt = _shot_cfx_cloth_scripts.CfxClothCacheOpt(i_resource)
+                            i_resource_opt = _shot_cfx_cloth_scripts.ShotCfxClothCacheOpt(i_resource)
                             i_resource_opt.load_cache(i_cache_path)
 
                     g_p.do_update()
@@ -191,7 +191,7 @@ class _PrxImportToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
             ) as g_p:
                 for i_rig_namespace in rig_namespaces:
                     i_resource = qsm_mya_hdl_anm_core.AdvRigAsset(i_rig_namespace)
-                    i_opt = _shot_cfx_cloth_scripts.CfxClothCacheOpt(i_resource)
+                    i_opt = _shot_cfx_cloth_scripts.ShotCfxClothCacheOpt(i_resource)
                     i_opt.remove_cache()
 
                 g_p.do_update()

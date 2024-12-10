@@ -42,18 +42,14 @@ class PrxLazyMotionTool(gui_prx_widgets.PrxBasePanel):
                 continue
 
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()
+            i_prx_page = self._window.gui_generate_page_for(i_page_key)
             self._page_prx_tab_tool_box.add_widget(
                 i_prx_sca,
                 key=i_page_key,
-                name=gui_core.GuiUtil.choice_gui_name(
-                    self._language, self._window._configure.get('build.{}'.format(i_page_key))
-                ),
+                name=i_prx_page.get_gui_name(),
                 icon_name_text=i_page_key,
-                tool_tip=gui_core.GuiUtil.choice_gui_tool_tip(
-                    self._language, self._window._configure.get('build.{}'.format(i_page_key))
-                )
+                tool_tip=i_prx_page.get_gui_tool_tip()
             )
-            i_prx_page = self._window.gui_generate_page_for(i_page_key)
             self._tab_widget_dict[i_page_key] = i_prx_page
             i_prx_sca.add_widget(i_prx_page)
 

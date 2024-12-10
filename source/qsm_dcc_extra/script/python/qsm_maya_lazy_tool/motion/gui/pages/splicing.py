@@ -9,16 +9,14 @@ from ..toolsets import splicing as _toolset_splicing
 class PrxPageForMotionSplicing(gui_prx_widgets.PrxBasePage):
     GUI_KEY = 'splicing'
 
-    UNIT_CLASS_DICT = dict(
-        import_motion=_toolset_splicing.PrxToolsetForImportMotion
-    )
-
     UNIT_CLASSES = [
-        _toolset_splicing.PrxToolsetForImportMotion
+        _toolset_splicing.PrxToolsetForImportSplicing
     ]
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxPageForMotionSplicing, self).__init__(window, session, *args, **kwargs)
+
+        self._configure = self.generate_local_configure()
 
         self.gui_page_setup_fnc()
 
@@ -41,11 +39,11 @@ class PrxPageForMotionSplicing(gui_prx_widgets.PrxBasePage):
                 i_prx_sca,
                 key=i_unit_key,
                 name=self.choice_gui_name(
-                    self._configure.get('build.{}.units.{}'.format(self.GUI_KEY, i_unit_key))
+                    self._configure.get('build.units.{}'.format(i_unit_key))
                 ),
                 icon_name_text=i_unit_key,
                 tool_tip=self.choice_gui_tool_tip(
-                    self._configure.get('build.{}.units.{}'.format(self.GUI_KEY, i_unit_key))
+                    self._configure.get('build.units.{}'.format(i_unit_key))
                 )
             )
             i_prx_unit = self._to_unit_instance(i_cls)

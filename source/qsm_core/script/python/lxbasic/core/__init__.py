@@ -1,6 +1,8 @@
 # coding:utf-8
 from .configure import *
 
+from .cache import *
+
 from .base import *
 
 from .thread import *
@@ -40,5 +42,3 @@ from .dcc import *
 from .random_name import *
 
 from .ffmpeg import *
-
-

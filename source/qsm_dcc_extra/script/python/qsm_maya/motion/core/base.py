@@ -76,5 +76,15 @@ class NodeMotion(MotionBase):
         return _mya_core.EtrNodeOpt(path).generate_motion_properties(key_includes)
 
     @classmethod
+    def generate_pose_properties_fnc(cls, path, key_includes=None):
+        if key_includes is None:
+            key_includes = _mya_core.NodeAttributes.get_all_keyable_names(path)
+        return _mya_core.EtrNodeOpt(path).generate_pose_properties(key_includes)
+
+    @classmethod
     def apply_motion_properties_fnc(cls, path, data, **kwargs):
         _mya_core.EtrNodeOpt(path).apply_motion_properties(data, **kwargs)
+
+    @classmethod
+    def apply_pose_properties_fnc(cls, path, data, **kwargs):
+        _mya_core.EtrNodeOpt(path).apply_pose_properties(data, **kwargs)

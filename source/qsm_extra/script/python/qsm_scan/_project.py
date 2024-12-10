@@ -14,7 +14,7 @@ import _task
 
 class Project(_base.AbsEntity):
     Type = _base.EntityTypes.Project
-    VariantKey = _base.VariantKeys.Project
+    VariantKey = _base.EntityVariantKeys.Project
 
     NextEntitiesCacheClassDict = {
         _base.EntityTypes.Asset: _asset.AssetsCacheOpt,

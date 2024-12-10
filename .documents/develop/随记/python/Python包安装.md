@@ -43,3 +43,10 @@ mayapy -m pip install psutil==2.2.1
 
 mayapy -m pip install C:/Users/nothings/Downloads/psutil-2.2.1-cp27-none-win_amd64.whl
 ```
+
+## pywin32
+```
+cd C:\Program Files\Autodesk\Maya2020\bin
+
+mayapy -m pip install pywin32
+```

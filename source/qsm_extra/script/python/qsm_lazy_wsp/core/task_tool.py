@@ -15,3 +15,7 @@ class DccTaskToolOpt(object):
 
     def create_groups_for(self, task):
         raise NotImplementedError()
+
+    @property
+    def task_session(self):
+        return self._task_session

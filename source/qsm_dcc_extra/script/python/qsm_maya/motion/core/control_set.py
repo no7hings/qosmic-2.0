@@ -51,12 +51,28 @@ class ControlSetMotionOpt(
     # motion
     def generate_motion_dict(self):
         dict_ = {}
-        with bsc_log.LogProcessContext.create(maximum=len(self._path_set)) as l_p:
+        c = len(self._path_set)
+        if c >= 500:
+            with bsc_log.LogProcessContext.create(maximum=len(self._path_set)) as l_p:
+                for i_path in self._path_set:
+                    i_control_opt = _control.ControlMotionOpt(i_path)
+                    dict_[i_control_opt.to_control_key(i_path)] = i_control_opt.generate_motion_properties()
+
+                    l_p.do_update()
+        else:
             for i_path in self._path_set:
                 i_control_opt = _control.ControlMotionOpt(i_path)
                 dict_[i_control_opt.to_control_key(i_path)] = i_control_opt.generate_motion_properties()
 
-                l_p.do_update()
+        return dict_
+
+    def generate_pose_dict(self):
+        dict_ = {}
+
+        for i_path in self._path_set:
+            i_control_opt = _control.ControlMotionOpt(i_path)
+            dict_[i_control_opt.to_control_key(i_path)] = i_control_opt.generate_pose_properties()
+
         return dict_
 
     @_mya_core.Undo.execute
@@ -77,11 +93,37 @@ class ControlSetMotionOpt(
             if i_key in data:
                 _control.ControlMotionOpt(i_path).apply_motion_properties(data[i_key], **kwargs)
 
+    @_mya_core.Undo.execute
+    def apply_pose_dict(self, data, **kwargs):
+        bsc_log.Log.trace_method_result(
+            self.LOG_KEY,
+            'apply pose data: "{}"'.format(', '.join(['{}={}'.format(k, v) for k, v in kwargs.items()]))
+        )
+
+        key_excludes = kwargs.pop('control_key_excludes') if 'control_key_excludes' in kwargs else None
+
+        for i_path in self._path_set:
+            i_key = _control.ControlMotionOpt.to_control_key(i_path)
+            if key_excludes:
+                if i_key in key_excludes:
+                    continue
+
+            if i_key in data:
+                _control.ControlMotionOpt(i_path).apply_pose_properties(data[i_key], **kwargs)
+
     def export_motion_to(self, file_path):
         bsc_storage.StgFileOpt(file_path).set_write(self.generate_motion_dict())
 
+    def export_pose_to(self, file_path):
+        bsc_storage.StgFileOpt(file_path).set_write(self.generate_pose_dict())
+
     def load_motion_from(self, file_path, **kwargs):
         self.apply_motion_dict(
+            bsc_storage.StgFileOpt(file_path).set_read(), **kwargs
+        )
+
+    def load_pose_from(self, file_path, **kwargs):
+        self.apply_pose_dict(
             bsc_storage.StgFileOpt(file_path).set_read(), **kwargs
         )
 

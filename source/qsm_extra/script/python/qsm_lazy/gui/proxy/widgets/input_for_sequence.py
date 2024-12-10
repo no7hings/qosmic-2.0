@@ -84,13 +84,13 @@ class PrxInputForSequence(prx_abstracts.AbsPrxWidget):
         if gui_core.GuiUtil.language_is_chs():
             self._qt_reload_button._set_menu_data_(
                 [
-                    ('从系统中重载', 'reload-force', self._on_reload_entities_force)
+                    ('从系统中重载', 'reload-force', self._on_resync_entities)
                 ]
             )
         else:
             self._qt_reload_button._set_menu_data_(
                 [
-                    ('reload form system', 'reload-force', self._on_reload_entities_force)
+                    ('reload form system', 'reload-force', self._on_resync_entities)
                 ]
             )
 
@@ -177,14 +177,14 @@ class PrxInputForSequence(prx_abstracts.AbsPrxWidget):
         self._scan_cache_flag = False
         self._qt_path_input._update_next_data_for_(path_text, post_fnc_)
 
-    def _on_reload_entities_force(self):
+    def _on_resync_entities(self):
         def post_fnc_():
             self._scan_cache_flag = True
-            qsm_scan.Stage.set_file_cache_flag(True)
+            qsm_scan.Stage.set_sync_cache_flag(True)
 
         def fnc_():
             self._scan_cache_flag = False
-            qsm_scan.Stage.set_file_cache_flag(False)
+            qsm_scan.Stage.set_sync_cache_flag(False)
             self._qt_path_input._update_next_data_for_(path_text, post_fnc_)
 
         path_text = self._qt_path_input._get_value_()

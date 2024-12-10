@@ -29,13 +29,13 @@ class AbsRezGraph(gui_prx_widgets.PrxBaseWindow):
             #
             self._hook_gui_configure = self._option_hook_configure.get_as_content('option.gui')
             #
-            raw = bsc_core.BscEnviron.get('REZ_BETA')
+            raw = bsc_core.BscEnviron.get('QSM_TEST')
             if raw:
-                self._rez_beta = True
+                self._test_flag = True
             else:
-                self._rez_beta = False
+                self._test_flag = False
 
-            if self._rez_beta:
+            if self._test_flag:
                 self.set_window_title(
                     '[BETA] {}'.format(self._hook_gui_configure.get('name'))
                 )

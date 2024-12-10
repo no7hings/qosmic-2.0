@@ -1,7 +1,7 @@
 # coding:utf-8
 import qsm_lazy_sync.client as c
 
-# c.TaskClient.requeue_tasks()
+c.TaskClient.requeue_tasks()
 
 # # symlink
 # for i in range(10):
@@ -13,13 +13,13 @@ import qsm_lazy_sync.client as c
 #     )
 #
 # copytree
-for i in range(50):
-    c.TaskClient.new_task(
-        'copytree',
-        source='X:/QSM_TST/QSM/release/assets/chr/lily/cfx.cfx_rig/lily.cfx.cfx_rig.v005',
-        target='Z:/temporaries/copy_test/copytree/lily.cfx.cfx_rig.v{}'.format(str(i).zfill(3)),
-        replace=False
-    )
+# for i in range(50):
+#     c.TaskClient.new_task(
+#         'copytree',
+#         source='X:/QSM_TST/QSM/release/assets/chr/lily/cfx.cfx_rig/lily.cfx.cfx_rig.v005',
+#         target='Z:/temporaries/copy_test/copytree/lily.cfx.cfx_rig.v{}'.format(str(i).zfill(3)),
+#         replace=False
+#     )
 
 # print c.TaskClient.check_status()
 

@@ -550,8 +550,8 @@ class AbsPnlManagerForTextureSpaceDcc(gui_prx_widgets.PrxSessionWindow):
                     target_ext=ext_tgt,
                     width=None,
                     #
-                    td_enable=self._session.get_is_td_enable(),
-                    rez_beta=self._session.get_is_beta_enable(),
+                    td_enable=self._session.get_devlop_flag(),
+                    test_flag=self._session.get_test_flag(),
                 )
             )
             #

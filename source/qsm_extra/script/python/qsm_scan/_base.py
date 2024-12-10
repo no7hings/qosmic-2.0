@@ -7,11 +7,36 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
+import lxbasic.resource as bsc_resource
+
 import lxbasic.storage as bsc_storage
 
 
 class GlobalVar:
-    FILE_CACHE_FLAG = True
+    SYNC_CACHE_FLAG = True
+
+
+class Configure(object):
+    INSTANCE = None
+    INITIALIZED = False
+
+    def __new__(cls, *args, **kwargs):
+        if cls.INSTANCE is not None:
+            return cls.INSTANCE
+
+        self = super(Configure, cls).__new__(cls)
+        
+        # init
+        cfg = bsc_resource.RscExtendConfigure.get_as_content('lazy/scan')
+        self._entity_resolve_pattern_dict = cfg.get('default.entity.resolve_patterns')
+        self._entity_path_pattern_dict = cfg.get('default.entity.path_patterns')
+        self._entity_task_dict = cfg.get('default.entity.tasks')
+        self._entity_variant_key_dict = cfg.get('default.entity.variant_keys')
+        self._entity_variant_key_regex_dict = cfg.get('default.entity.variant_key_regexes')
+        self._file_pattern_dict = cfg.get('default.file_patterns')
+
+        cls.INSTANCE = self
+        return self
 
 
 class Properties(dict):
@@ -32,100 +57,40 @@ class EntityTypes(object):
     Task = 'Task'
 
 
-class VariantKeys:
-    Root = 'root'
-    Project = 'project'
-    Asset = 'asset'
-    Episode = 'episode'
-    Sequence = 'sequence'
-    Shot = 'shot'
-    Task = 'task'
-
-
-class EntityScanPatterns:
-    Project = '{root}/{project}/Assets'
-    Asset = '{root}/{project}/Assets/{role}/{asset}'
-
-    Episode = '{root}/{project}/{episode}'
-    Sequence = '{root}/{project}/{episode}/{sequence}/动画'
-    # sequence name has chinese word, so add "{seq_EPT}" for match result.
-    # Shot = '{root}/{project}/{episode}/{sequence}{seq_EPT}/动画/通过文件/{shot}.ma'
-    Shot = '{root}/{project}/{episode}/{sequence}{seq_EPT}/分镜/通过文件/{shot}.ma'
-
-    ProjectTask = '{root}/{project}/{task}'
-    AssetTask = '{root}/{project}/Assets/{role}/{asset}/{task}/Final'
-    SequenceTask = '{root}/{project}/{sequence}/{task}'
-    ShotTask = '{root}/{project}/{sequence}/{shot}/{task}'
-
-
-class EntityDirectoryPatterns:
-    Project = '{root}/{project}'
-    Asset = '{root}/{project}/Assets/{role}/{asset}'
-    Sequence = '{root}/{project}/{sequence}'
-    Shot = '{root}/{project}/{sequence}/{shot}'
-
-    ProjectTask = '{root}/{project}/{task}'
-    AssetTask = '{root}/{project}/Assets/{role}/{asset}/{task}'
-    SequenceTask = '{root}/{project}/{sequence}/{task}'
-    ShotTask = '{root}/{project}/{sequence}/{shot}/{task}'
+class EntityVariantKeys:
+    Root = None
+    Project = None
+    Asset = None
+    Episode = None
+    Sequence = None
+    Shot = None
+    Task = None
 
 
 class VariantKeyMatch:
-    Project = '[a-zA-Z]*'
-    Asset = '[a-zA-Z]*'
-
-    Episode = '[a-zA-Z]*'
-    Sequence = '[a-zA-Z]*'
-    Shot = '[a-zA-Z]*[0-9]'
-
-    MAP = {
-        VariantKeys.Project: Project,
-        VariantKeys.Asset: Asset,
-
-        VariantKeys.Episode: Episode,
-        VariantKeys.Sequence: Sequence,
-        VariantKeys.Shot: Shot,
-    }
-
     @classmethod
     def is_name_match(cls, name, p):
         return bsc_core.BscFnmatch.is_match(name, p)
     
     @classmethod
     def match_fnc(cls, variants, key):
-        return bsc_core.BscFnmatch.is_match(variants[key], cls.MAP[key])
-
-
-class EntityNodePatterns:
-    Project = '/{project}'
-    Asset = '/{project}/{asset}'
-
-    Episode = '/{project}/{episode}'
-    Sequence = '/{project}/{sequence}'
-    Shot = '/{project}/{sequence}/{shot}'
-    
-    ProjectTask = '/{project}/{task}'
-    AssetTask = '/{project}/{asset}/{task}'
-    SequenceTask = '/{project}/{sequence}/{task}'
-    ShotTask = '/{project}/{sequence}/{shot}/{task}'
-
-
-class AssetRoles(object):
-    Character = None
+        return bsc_core.BscFnmatch.is_match(
+            variants[key], Configure()._entity_variant_key_regex_dict[key]
+        )
 
 
 class EntityTasks(object):
-    Concept = 'Design'
-    Model = 'Maya'
-    Rig = 'Rig'
-    Surface = 'UE'
+    Concept = None
+    Model = None
+    Rig = None
+    Surface = None
 
-    Animation = '动画'
+    Animation = None
 
 
-class StoragePatterns(object):
-    MayaRigFile = '{root}/{project}/Assets/{role}/{asset}/Rig/Final/scenes/{asset}_Skin.ma'
-    MayaModelFIle = '{root}/{project}/Assets/{role}/{asset}/Maya/Final/{asset}.ma'
+class FilePatterns(object):
+    MayaRigFile = None
+    MayaModelFIle = None
 
 
 class EntityStack(object):
@@ -156,9 +121,16 @@ class AbsEntity(object):
     TasksCacheOptClass = None
 
     EntityTypes = EntityTypes
-    EntityTasks = EntityTasks
 
-    StoragePatterns = StoragePatterns
+    # update variants from configure here.
+    EntityVariantKeys = EntityVariantKeys
+    [setattr(EntityVariantKeys, k, v) for k, v in Configure()._entity_variant_key_dict.items()]
+
+    EntityTasks = EntityTasks
+    [setattr(EntityTasks, k, v) for k, v in Configure()._entity_task_dict.items()]
+
+    FilePatterns = FilePatterns
+    [setattr(FilePatterns, k, v) for k, v in Configure()._file_pattern_dict.items()]
 
     @classmethod
     def _variant_cleanup_fnc(cls, variants):
@@ -182,14 +154,14 @@ class AbsEntity(object):
         return '{}/scan/{}.json'.format(location, cache_key)
 
     @classmethod
-    def _pull_next_entities_cache(cls, cache_key):
+    def _pull_next_entities_sync_cache(cls, cache_key):
         cache_path = cls._generate_next_entities_cache_path(cache_key)
         data = bsc_storage.StgFileOpt(cache_path).set_read()
         if data:
             return data.get('next_entities', [])
         return []
 
-    def _push_next_entities_cache(self, cache_key, variants_list):
+    def _push_next_entities_sync_cache(self, cache_key, variants_list):
         data = dict(
             entity=self._variants,
             next_entities=variants_list
@@ -203,16 +175,17 @@ class AbsEntity(object):
 
         cache_key = self._generate_next_entities_cache_key(entity_type, variants, variants_extend)
 
-        # cache mode
+        # cache flag, when is True, use cache from dict
         if cache_flag is True:
             # when is created use exists
             if cache_key in self._next_entities_cache_opt_dict:
                 entities_cache_opt = self._next_entities_cache_opt_dict[cache_key]
                 return entities_cache_opt
 
-        if GlobalVar.FILE_CACHE_FLAG is True:
+        # sync cache flag, when is True, use cache from json
+        if GlobalVar.SYNC_CACHE_FLAG is True:
             # when file cache is exists, use file cache
-            variants_list = self._pull_next_entities_cache(cache_key)
+            variants_list = self._pull_next_entities_sync_cache(cache_key)
             if variants_list:
                 entities_cache_opt = self.NextEntitiesCacheClassDict[entity_type](self._root, variants)
                 entities_cache_opt.update_from_cache(variants_list)
@@ -221,7 +194,7 @@ class AbsEntity(object):
         entities_cache_opt = self.NextEntitiesCacheClassDict[entity_type](self._root, variants)
         variants_list = entities_cache_opt.update_from_storage(variants_extend, cache_flag)
 
-        self._push_next_entities_cache(cache_key, variants_list)
+        self._push_next_entities_sync_cache(cache_key, variants_list)
 
         bsc_log.Log.trace_result(
             'scan {} for: {}'.format(entity_type, bsc_core.ensure_string(self._path))
@@ -310,7 +283,7 @@ class AbsEntitiesCacheOpt(object):
     EntityClass = None
 
     def _generate_stg_ptn_opts(self):
-        _ = EntityScanPatterns.__dict__[self.EntityClass.Type]
+        _ = Configure()._entity_resolve_pattern_dict[self.EntityClass.Type]
         if isinstance(_, list):
             ps = _
         else:
@@ -330,11 +303,11 @@ class AbsEntitiesCacheOpt(object):
         self._variants = {}
         self._variants.update(variants)
         self._stg_ptn_opt_for_scan = bsc_core.BscStgParseOpt(
-            EntityScanPatterns.__dict__[self.EntityClass.Type]
+            Configure()._entity_resolve_pattern_dict[self.EntityClass.Type]
         )
         self._stg_ptn_opt_for_scan.update_variants(**self._variants)
         self._dcc_ptn_opt = bsc_core.BscDccParseOpt(
-            EntityNodePatterns.__dict__[self.EntityClass.Type]
+            Configure()._entity_path_pattern_dict[self.EntityClass.Type]
         )
 
         self._entity_dict = {}
@@ -374,7 +347,7 @@ class AbsEntitiesCacheOpt(object):
 
     def scan_fnc(self, variants):
         pth_opt = bsc_core.BscStgParseOpt(
-            EntityScanPatterns.__dict__[self.EntityClass.Type]
+            Configure()._entity_resolve_pattern_dict[self.EntityClass.Type]
         )
         pth_opt.update_variants(**variants)
         matchers = pth_opt.find_matches(sort=True)
@@ -497,7 +470,7 @@ class AbsTasksCacheOpt(object):
     EntityClass = None
 
     def _generate_stg_ptn_opts(self):
-        _ = EntityScanPatterns.__dict__[self.EntityClass.Type]
+        _ = Configure()._entity_resolve_pattern_dict[self.EntityClass.Type]
         if isinstance(_, list):
             ps = _
         else:
@@ -517,11 +490,11 @@ class AbsTasksCacheOpt(object):
         self._variants.update(variants)
         key = '{}{}'.format(self._entity.Type, self.EntityClass.Type)
         self._stg_ptn_opt_for_scan = bsc_core.BscStgParseOpt(
-            EntityScanPatterns.__dict__[key]
+            Configure()._entity_resolve_pattern_dict[key]
         )
         self._stg_ptn_opt_for_scan.update_variants(**self._variants)
         self._dcc_ptn_opt = bsc_core.BscDccParseOpt(
-            EntityNodePatterns.__dict__[key]
+            Configure()._entity_path_pattern_dict[key]
         )
 
         self._entity_dict = {}

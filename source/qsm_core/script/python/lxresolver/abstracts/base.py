@@ -1812,7 +1812,9 @@ class AbsRsvProject(
 
     def _project_get_workspace_key_mapper_(self):
         if not self._workspace_key_mapper:
-            self._workspace_key_mapper = {v: k for k, v in self.properties.get(self.VariantCategories.Workspaces).items()}
+            self._workspace_key_mapper = {
+                v: k for k, v in self.properties.get(self.VariantCategories.Workspaces).items()
+            }
         return self._workspace_key_mapper
 
     def _project__get_workspace_key_by_variants_(self, variants):
@@ -2989,13 +2991,6 @@ class AbsRsvProject(
                             if i_rsv_task is not None:
                                 return i_rsv_task
 
-    # output
-    def get_rsv_task_by_output_file_path(self, file_path):
-        return self._project__find_rsv_task_by_any_file_path(
-            file_path,
-            variants_override=dict(workspace=self.get_workspace_temporary())
-        )
-
     def restore_all_gui_variants(self):
         for i in self._rsv_obj_stack.get_objects():
             i.set_obj_gui(None)
@@ -3189,7 +3184,7 @@ class AbsRsvRoot(
         )
         return self._root__create_rsv_project(*args, **variants)
 
-    def _root__get_exists_project(self, **kwargs):
+    def _root__get_exists_project(self, *args, **kwargs):
         kwargs_over = collections.OrderedDict()
         kwargs_over.update(kwargs)
         entity_type = 'project'

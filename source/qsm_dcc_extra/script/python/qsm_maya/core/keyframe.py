@@ -1,16 +1,31 @@
 # coding:utf-8
-import copy
-
+from contextlib import contextmanager
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
 from . import attribute as _attribute
 
-from . import reference as _reference
-
 from . import connection as _connection
 
 from . import node_for_dag as _node_for_dag
+
+
+@contextmanager
+def auto_keyframe_context(auto_keyframe=False):
+    auto_key_mark = cmds.autoKeyframe(state=1, query=1)
+    if auto_key_mark:
+        cmds.autoKeyframe(state=False)
+
+    if auto_keyframe is True:
+        cmds.autoKeyframe(state=True)
+
+    yield
+
+    if auto_keyframe is True:
+        cmds.autoKeyframe(state=False)
+
+    if auto_key_mark:
+        cmds.autoKeyframe(state=True)
 
 
 class AnimCurveNodes(object):

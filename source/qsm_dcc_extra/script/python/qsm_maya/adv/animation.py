@@ -28,17 +28,40 @@ class AdvOpt(_base.AdvNamespaceExtra):
             return _motion_core.ControlSetMotionOpt(self._namespace, controls).generate_motion_dict()
         return {}
 
+    def generate_controls_pose_dict(self):
+        controls = self.find_all_controls()
+        if controls:
+            return _motion_core.ControlSetMotionOpt(self._namespace, controls).generate_pose_dict()
+        return {}
+
     def apply_controls_motion_dict(self, data, **kwargs):
         controls = self.find_all_controls()
         if controls:
             _motion_core.ControlSetMotionOpt(self._namespace, controls).apply_motion_dict(data, **kwargs)
+
+    def apply_controls_pose_dict(self, data, **kwargs):
+        controls = self.find_all_controls()
+        if controls:
+            _motion_core.ControlSetMotionOpt(self._namespace, controls).apply_pose_dict(data, **kwargs)
     
     # control motion file
     def export_controls_motion_to(self, file_path):
-        bsc_storage.StgFileOpt(file_path).set_write(self.generate_controls_motion_dict())
+        bsc_storage.StgFileOpt(file_path).set_write(
+            self.generate_controls_motion_dict()
+        )
+
+    def export_controls_pose_to(self, file_path):
+        bsc_storage.StgFileOpt(file_path).set_write(
+            self.generate_controls_pose_dict()
+        )
 
     def load_controls_motion_from(self, file_path, **kwargs):
         self.apply_controls_motion_dict(
+            bsc_storage.StgFileOpt(file_path).set_read(), **kwargs
+        )
+
+    def load_controls_pose_from(self, file_path, **kwargs):
+        self.apply_controls_pose_dict(
             bsc_storage.StgFileOpt(file_path).set_read(), **kwargs
         )
 

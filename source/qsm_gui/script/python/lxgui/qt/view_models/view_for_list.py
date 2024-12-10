@@ -1,6 +1,4 @@
 # coding:utf-8
-import collections
-
 import functools
 
 import lxbasic.core as bsc_core
@@ -210,10 +208,10 @@ class ListViewModel(_view_base.AbsViewModel):
                 item_group=None,
                 info='',
                 # media cache
-                image_cache_dict=dict(),
-                image_sequence_cache_dict=dict(),
-                video_cache_dict=dict(),
-                audio_cache_dict=dict(),
+                image_cache_dict=bsc_core.LRUCache(maximum=1024),
+                image_sequence_cache_dict=bsc_core.LRUCache(maximum=4096),
+                video_cache_dict=bsc_core.LRUCache(maximum=1024),
+                audio_cache_dict=bsc_core.LRUCache(maximum=1024),
             )
 
         )

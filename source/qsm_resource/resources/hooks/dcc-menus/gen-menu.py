@@ -15,10 +15,10 @@ def main(session):
     application = session.application
 
     gui_name = session.gui_name
-    if session.get_is_td_enable() is True:
+    if session.get_devlop_flag() is True:
         gui_name = '[ALPHA] {}'.format(gui_name)
     #
-    if session.get_is_beta_enable() is True:
+    if session.get_test_flag() is True:
         gui_name = '[BETA] {}'.format(gui_name)
 
     if application == 'maya':

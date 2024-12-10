@@ -200,8 +200,8 @@ class _PublishOptForGeneral(object):
                 with_camera_abc=self._options.get('process.settings.with_camera_abc'),
                 with_camera_usd=self._options.get('process.settings.with_camera_usd'),
                 #
-                td_enable=self._session.get_is_td_enable(),
-                rez_beta=self._session.get_is_beta_enable(),
+                td_enable=self._session.get_devlop_flag(),
+                test_flag=self._session.get_test_flag(),
             )
         )
         #

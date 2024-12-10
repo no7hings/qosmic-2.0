@@ -3,8 +3,8 @@
 
 def main(session):
     def create_and_publish_fnc_(file_path_):
-        _rez_beta = session.get_is_beta_enable()
-        _td_enable = session.get_is_td_enable()
+        _test_flag = session.get_test_flag()
+        _td_enable = session.get_devlop_flag()
         _option_opt = bsc_core.ArgDictStringOpt(
             option=dict(
                 option_hook_key='rsv-task-batchers/asset/gen-camera-export',
@@ -13,7 +13,7 @@ def main(session):
                 file=file_path_,
                 #
                 td_enable=_td_enable,
-                rez_beta=_rez_beta,
+                test_flag=_test_flag,
             )
         )
         #
@@ -22,8 +22,8 @@ def main(session):
         )
     #
     def publish_fnc_(file_path_):
-        _rez_beta = session.get_is_beta_enable()
-        _td_enable = session.get_is_td_enable()
+        _test_flag = session.get_test_flag()
+        _td_enable = session.get_devlop_flag()
         _option_opt = bsc_core.ArgDictStringOpt(
             option=dict(
                 option_hook_key='rsv-task-batchers/asset/gen-camera-export',
@@ -32,7 +32,7 @@ def main(session):
                 file=file_path_,
                 #
                 td_enable=_td_enable,
-                rez_beta=_rez_beta,
+                test_flag=_test_flag,
             )
         )
         #

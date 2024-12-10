@@ -135,7 +135,7 @@ class PrxToolbarForCharacterAndPropReference(
                 task = entity.task(self._scan_root.EntityTasks.Rig)
                 if task is not None:
                     result = task.find_result(
-                        self._scan_root.StoragePatterns.MayaRigFile
+                        self._scan_root.FilePatterns.MayaRigFile
                     )
                     if result is not None:
                         self._asset_path = result
@@ -711,10 +711,10 @@ class PrxToolsetForMotion(
         )
         # control
         self._prx_options_node.set(
-            'control.enable_playback_visible', self.do_dcc_enable_control_playback_visible
+            'control.enable_playback_visible', self.on_dcc_enable_control_playback_visible
         )
         self._prx_options_node.set(
-            'control.disable_playback_visible', self.do_dcc_disable_control_playback_visible
+            'control.disable_playback_visible', self.on_dcc_disable_control_playback_visible
         )
         # transformation
         self._prx_options_node.set(
@@ -740,18 +740,18 @@ class PrxToolsetForMotion(
         file_path = qsm_gnl_core.MayaCache.generate_character_motion_file(
             bsc_core.BscSystem.get_user_name()
         )
+
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if not namespaces:
             return
-        adv_rig_query = self._page._gui_asset_prx_unit.get_resources_query()
-        valid_namespaces = adv_rig_query.to_valid_namespaces(namespaces)
+
+        resources_query = self._page._gui_asset_prx_unit.get_resources_query()
+        valid_namespaces = resources_query.to_valid_namespaces(namespaces)
         if not valid_namespaces:
             return
 
         namespace = valid_namespaces[0]
-        qsm_mya_adv.AdvChrOpt(namespace).export_controls_motion_to(
-            file_path
-        )
+        qsm_mya_adv.AdvChrOpt(namespace).export_controls_motion_to(file_path)
 
     def do_dcc_paste_animation(self):
         file_path = qsm_gnl_core.MayaCache.generate_character_motion_file(
@@ -759,13 +759,16 @@ class PrxToolsetForMotion(
         )
         if bsc_storage.StgPath.get_is_file(file_path) is False:
             return
+
         namespaces = qsm_mya_core.Namespaces.extract_from_selection()
         if not namespaces:
             return
-        adv_rig_query = self._page._gui_asset_prx_unit.get_resources_query()
-        valid_namespaces = adv_rig_query.to_valid_namespaces(namespaces)
+
+        resources_query = self._page._gui_asset_prx_unit.get_resources_query()
+        valid_namespaces = resources_query.to_valid_namespaces(namespaces)
         if not valid_namespaces:
             return
+
         namespace = valid_namespaces[0]
         force = self._prx_options_node.get('animation_transfer.force')
         frame_offset = self._prx_options_node.get('animation_transfer.frame_offset')
@@ -779,8 +782,8 @@ class PrxToolsetForMotion(
         if namespaces:
             self._dynamic_gpu_load_args_array = []
 
-            adv_rig_query = self._page._gui_asset_prx_unit.get_resources_query()
-            valid_namespaces = adv_rig_query.to_valid_namespaces(namespaces)
+            resources_query = self._page._gui_asset_prx_unit.get_resources_query()
+            valid_namespaces = resources_query.to_valid_namespaces(namespaces)
             if len(valid_namespaces) >= 2:
                 namespace_src = valid_namespaces[-2]
                 namespace_dst = valid_namespaces[-1]
@@ -804,7 +807,7 @@ class PrxToolsetForMotion(
                     namespace_dst, frame_offset=frame_offset, force=force
                 )
 
-    def do_dcc_enable_control_playback_visible(self):
+    def on_dcc_enable_control_playback_visible(self):
         resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
@@ -814,7 +817,7 @@ class PrxToolsetForMotion(
                 i_controls = qsm_mya_adv.AdvChrOpt(i_namespace).find_all_controls()
                 [qsm_mya_core.NodeAttribute.set_value(x, 'hideOnPlayback', 0) for x in i_controls]
 
-    def do_dcc_disable_control_playback_visible(self):
+    def on_dcc_disable_control_playback_visible(self):
         resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:

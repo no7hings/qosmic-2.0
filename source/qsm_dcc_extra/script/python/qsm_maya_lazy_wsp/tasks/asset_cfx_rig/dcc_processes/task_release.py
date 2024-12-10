@@ -3,6 +3,8 @@ import lxbasic.log as bsc_log
 
 import lxbasic.storage as bsc_storage
 
+import qsm_general.core as qsm_gnl_core
+
 import qsm_maya.core as qsm_mya_core
 
 from ....core import task_parse as _task_parse
@@ -64,5 +66,17 @@ class AssetCfxRigReleaseProcess(object):
             no_version_path = task_session.get_file_for(
                 'asset-release-no_version-dir'
             )
-            c.TaskClient.new_task('symlink', source=version_path, target=no_version_path, replace=True)
+            # fixme: cannot use for production
+            # c.TaskClient.new_task('symlink', source=version_path, target=no_version_path, replace=True)
             l_p.do_update()
+            # sync to other studio
+            
+            studio = qsm_gnl_core.Sync().studio.get_current()
+            
+            symlink_kwargs = qsm_gnl_core.Sync().generate_sync_kwargs(
+                studio, version_path
+            )
+            if symlink_kwargs:
+                c.TaskClient.new_task(
+                    'sync', **symlink_kwargs
+                )

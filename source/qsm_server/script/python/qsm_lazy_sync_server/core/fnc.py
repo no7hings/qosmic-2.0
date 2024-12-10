@@ -75,6 +75,10 @@ class Robocopy:
 
                 raise subprocess.CalledProcessError(s_p.returncode, cmd_script)
 
+            sys.stdout.write(
+                u'copytree {} > {}\n'.format(source, target)
+            )
+
 
 class XCopy:
     """
@@ -118,9 +122,7 @@ class XCopy:
         ]
 
         cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in cmd_args]
-
-        cmd_script = ' '.join(cmd_args)
-        return cmd_script
+        return ' '.join(cmd_args)
 
     @classmethod
     def copytree(cls, source, target, replace=False):
@@ -135,6 +137,10 @@ class XCopy:
                         sys.stdout.write(i+'\n')
 
                 raise subprocess.CalledProcessError(s_p.returncode, cmd_script)
+
+            sys.stdout.write(
+                u'copytree {} > {}\n'.format(source, target)
+            )
 
 
 class Mklink:
@@ -177,6 +183,10 @@ class Mklink:
                         sys.stdout.write(i+'\n')
 
                 raise subprocess.CalledProcessError(s_p.returncode, cmd_script)
+
+            sys.stdout.write(
+                u'symlink {} > {}\n'.format(source, target)
+            )
 
 
 class Extend:

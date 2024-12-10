@@ -38,7 +38,7 @@ class AbsPrxPageForChrRig(gui_prx_widgets.PrxBasePage):
                 task = entity.task(self._scan_root.EntityTasks.Rig)
                 if task is not None:
                     result = task.find_result(
-                        self._scan_root.StoragePatterns.MayaRigFile
+                        self._scan_root.FilePatterns.MayaRigFile
                     )
                     if result is not None:
                         self._asset_path = result

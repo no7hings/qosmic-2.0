@@ -20,8 +20,6 @@ option:
 
         size: [560, 720]
 
-        version: '0.0.1'
-
 build:
     main:
         name: 'Basic'

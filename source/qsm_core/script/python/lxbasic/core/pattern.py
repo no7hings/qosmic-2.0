@@ -253,13 +253,18 @@ class BscParse(object):
         return p
 
     @classmethod
-    def to_fnmatch_style(cls, p, variants=None):
+    def to_fnmatch_style(cls, p, variants=None, regex_dict=None):
         if p is not None:
+            regex_dict = regex_dict or {}
             keys = re.findall(re.compile(cls.RE_KEY_PATTERN, re.S), p)
             s = p
             if keys:
                 for i_k in keys:
-                    i_v = '*'
+                    if i_k in regex_dict:
+                        i_v = regex_dict[i_k]
+                    else:
+                        i_v = '*'
+
                     if isinstance(variants, dict):
                         if i_k in variants:
                             i_v = variants[i_k]
@@ -368,6 +373,8 @@ class AbsParseOpt(object):
         self._variants = {}
         self._variants_default = variants or {}
 
+        self._regex_dict = {}
+
         self._pattern_fnmatch_origin = BscParse.to_fnmatch_style(
             self._pattern_origin, self._variants_default
         )
@@ -436,6 +443,9 @@ class AbsParseOpt(object):
             return self._variants
         return {}
 
+    def set_regex_dict(self, dict_):
+        self._regex_dict = dict_
+
 
 class BscDccParseOpt(AbsParseOpt):
     def __init__(self, p, variants=None):
@@ -446,9 +456,8 @@ class BscStgParseOpt(AbsParseOpt):
     def __init__(self, p, variants=None):
         super(BscStgParseOpt, self).__init__(p, variants)
 
-    @classmethod
-    def to_fnmatch_style_fnc(cls, p, variants=None):
-        return BscParse.to_fnmatch_style(p, variants)
+    def to_fnmatch_style_fnc(self, p, variants=None):
+        return BscParse.to_fnmatch_style(p, variants, self._regex_dict)
 
     def find_matches(self, sort=False):
         list_ = []
@@ -506,10 +515,9 @@ class BscStgParseOpt(AbsParseOpt):
                             i_r = dict(result=i_path)
                             i_r.update(self._variants)
                             list_.append(i_r)
-
         else:
             for i_path in paths:
-                i_r = dict(result=i_path)
+                i_r = dict(result=i_path, pattern=self._pattern_origin)
                 i_r.update(self._variants)
                 list_.append(i_r)
         return list_
@@ -563,8 +571,11 @@ class BscTaskParseOpt(BscStgParseOpt):
     def __init__(self, *args, **kwargs):
         super(BscTaskParseOpt, self).__init__(*args, **kwargs)
 
-    @classmethod
-    def to_fnmatch_style_fnc(cls, p, variants=None):
+        self._regex_dict = dict(
+            version='[0-9][0-9][0-9]'
+        )
+
+    def to_fnmatch_style_fnc(self, p, variants=None):
         if 'version' not in variants:
             variants['version'] = '[0-9][0-9][0-9]'
         return BscParse.to_fnmatch_style(p, variants)

@@ -3,18 +3,20 @@ import lxgui.core as gui_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
-from ..toolsets import fix as _toolset_fix
+from ..toolsets import reference_fix as _toolset_reference_fix
 
 
 class PrxPageForMotionFix(gui_prx_widgets.PrxBasePage):
     GUI_KEY = 'fix'
 
     UNIT_CLASSES = [
-        _toolset_fix.PrxToolsetReferenceFix
+        _toolset_reference_fix.PrxToolsetReferenceFix
     ]
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxPageForMotionFix, self).__init__(window, session, *args, **kwargs)
+
+        self._configure = self.generate_local_configure()
 
         self.gui_page_setup_fnc()
 
@@ -40,12 +42,12 @@ class PrxPageForMotionFix(gui_prx_widgets.PrxBasePage):
                 key=i_unit_key,
                 name=gui_core.GuiUtil.choice_gui_name(
                     self._window._language,
-                    self._window._configure.get('build.{}.units.{}'.format(self.GUI_KEY, i_unit_key))
+                    self._configure.get('build.units.{}'.format(i_unit_key))
                 ),
                 icon_name_text=i_unit_key,
                 tool_tip=gui_core.GuiUtil.choice_gui_tool_tip(
                     self._window._language,
-                    self._window._configure.get('build.{}.units.{}'.format(self.GUI_KEY, i_unit_key))
+                    self._configure.get('build.units.{}'.format(i_unit_key))
                 )
             )
             i_prx_unit = self._to_unit_instance(i_cls)

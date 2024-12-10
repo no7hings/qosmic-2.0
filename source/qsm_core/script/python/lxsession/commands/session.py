@@ -34,7 +34,7 @@ def set_session_option_hooks_execute_by_deadline(session):
                 #
                 choice_scheme=_batch_hook_option_opt.get('choice_scheme'),
                 #
-                rez_beta=_batch_hook_option_opt.get_as_boolean('rez_beta'),
+                test_flag=_batch_hook_option_opt.get_as_boolean('test_flag'),
                 #
                 td_enable=_batch_hook_option_opt.get_as_boolean('td_enable'),
                 localhost_enable=_batch_hook_option_opt.get_as_boolean('localhost_enable'),

@@ -63,7 +63,11 @@ class TaskClient(object):
                 list_.append(i_path)
             elif os.path.isdir(i_path):
                 if i_key in [
-                    '.running', '.waiting', '.failed', '.error'
+                    '.running',
+                    # ignore waiting
+                    # '.waiting',
+                    '.failed',
+                    '.error'
                 ]:
                     i_keys = os.listdir(i_path)
                     for j_key in i_keys:
@@ -86,8 +90,6 @@ class TaskClient(object):
             response = requests.get(url)
             if response.status_code == 200:
                 _ = response.json()
-                # print('Status Code:', response.status_code)
-                # print('Response JSON:', response.json())
                 return True
             else:
                 return False

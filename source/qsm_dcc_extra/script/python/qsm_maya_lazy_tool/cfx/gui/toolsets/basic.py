@@ -91,7 +91,7 @@ class ToolsetUnitForCfxRigExport(
                 maximum=len(resources), label='processing cfx clothes'
             ) as g_p:
                 for i_resource in resources:
-                    i_opt = qsm_mya_hdl_cfx_scripts.CfxClothCacheOpt(i_resource)
+                    i_opt = qsm_mya_hdl_cfx_scripts.ShotCfxClothCacheOpt(i_resource)
                     i_opt.do_export(
                         directory_path,
                         frame_range, frame_step, frame_offset,
@@ -369,7 +369,7 @@ class ToolsetUnitForCfxRigImport(
                         i_properties = ptn_opt.get_variants(i_cache_path)
                         i_resource = resources_query.get(i_properties['namespace'])
                         if i_resource:
-                            i_resource_opt = qsm_mya_hdl_cfx_scripts.CfxClothCacheOpt(i_resource)
+                            i_resource_opt = qsm_mya_hdl_cfx_scripts.ShotCfxClothCacheOpt(i_resource)
                             i_resource_opt.load_cache(i_cache_path)
 
                     g_p.do_update()
@@ -378,7 +378,7 @@ class ToolsetUnitForCfxRigImport(
         resources = self._page._gui_asset_prx_unit.gui_get_selected_resources()
         if resources:
             for i_resource in resources:
-                i_opt = qsm_mya_hdl_cfx_scripts.CfxClothCacheOpt(i_resource)
+                i_opt = qsm_mya_hdl_cfx_scripts.ShotCfxClothCacheOpt(i_resource)
                 i_opt.remove_cache()
 
         self._page.do_gui_refresh_all(force=True)

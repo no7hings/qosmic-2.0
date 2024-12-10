@@ -14,7 +14,7 @@ j_option_opt = bsc_core.ArgDictStringOpt(
         file='/production/shows/nsa_dev/assets/chr/momo/user/work.dongchangbao/maya/scenes/camera/momo.cam.camera.v000_001.ma',
         #
         # td_enable=True,
-        # rez_beta=True,
+        # test_flag=True,
     )
 )
 #

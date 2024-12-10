@@ -89,7 +89,7 @@ def cfx_cloth_cache_export_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.CfxClothCacheProcess(
+    s.ShotCfxClothCacheProcess(
         **kwargs
     ).execute()
 

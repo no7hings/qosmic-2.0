@@ -5,7 +5,7 @@ import lxgui.proxy.core as gui_prx_core
 
 import lxtool.submitter.gui.widgets as smt_gui_widgets
 
-bsc_core.BscEnvironExtra.set_td_enable(True)
+bsc_core.BscEnvironExtra.set_devlop_flag(True)
 
 # hook_option = 'file={}'.format('/l/prod/cgm/work/shots/z88/z88070/ani/animation/maya/scenes/z88070.ani.animation.v026.ma')
 hook_option = 'file={}'.format('/l/prod/xkt/work/shots/z88/z88010/efx/nodes/houdini/z88010.efx.effects.v032.hip')

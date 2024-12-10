@@ -5,6 +5,8 @@ import maya.cmds as cmds
 
 import qsm_maya.core as qsm_mya_core
 
+import qsm_maya.adv as qsm_mya_adv
+
 import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 
 from ...asset_cfx_rig import dcc_core as _asset_cfx_rig_core
@@ -12,13 +14,13 @@ from ...asset_cfx_rig import dcc_core as _asset_cfx_rig_core
 from . import dcc_organize as _cfx_group
 
 
-class ShotCfxClothHandle(object):
+class ShotCfxClothAssetHandle(object):
     def __init__(self, rig_namespace):
         self._rig_namespace = rig_namespace
         self._rig_opt = qsm_mya_hdl_anm_core.AdvRigAsset(rig_namespace)
 
         self._cfx_rig_namespace = self.to_cfx_rig_namespace(self._rig_namespace)
-        self._cfx_rig_group_opt = CfxRigAssetShit(self._cfx_rig_namespace)
+        self._cfx_rig_handle = ShotCfxRigHandle(self._cfx_rig_namespace)
 
     @property
     def rig_namespace(self):
@@ -33,8 +35,8 @@ class ShotCfxClothHandle(object):
         return self._rig_opt
     
     @property
-    def cfx_rig_group_opt(self):
-        return self._cfx_rig_group_opt
+    def cfx_rig_handle(self):
+        return self._cfx_rig_handle
 
     def find_cfx_rig_location(self):
         _ = cmds.ls('{}:cfx_rig'.format(self._cfx_rig_namespace), long=1)
@@ -62,12 +64,12 @@ class ShotCfxClothHandle(object):
 
         self.connect_to_rig()
 
-    def update_cfx_rig_scene(self, scene_path):
+    def replace_cfx_rig_scene(self, scene_path):
         reference_node = qsm_mya_core.ReferencesCache().get(self._cfx_rig_namespace)
         if reference_node:
             qsm_mya_core.Reference.replace(reference_node, scene_path)
 
-    def get_cfx_rig_is_loaded(self):
+    def cfx_rig_is_loaded(self):
         return bool(qsm_mya_core.ReferencesCache().get(self._cfx_rig_namespace))
 
     def get_cfx_rig_scene_path(self):
@@ -84,13 +86,13 @@ class ShotCfxClothHandle(object):
         if reference_node is not None:
             if boolean is True:
                 qsm_mya_core.Reference.reload(reference_node)
-                layer = self.cfx_rig_group_opt.find_source_geo_layer()
+                layer = self.cfx_rig_handle.find_source_geo_layer()
                 # turn off the layer visibility later
                 if layer:
                     qsm_mya_core.DisplayLayer.set_visible(layer, False)
             else:
                 # turn on the layer visibility first
-                layer = self.cfx_rig_group_opt.find_source_geo_layer()
+                layer = self.cfx_rig_handle.find_source_geo_layer()
                 if layer:
                     qsm_mya_core.DisplayLayer.set_visible(layer, True)
                 qsm_mya_core.Reference.unload(reference_node)
@@ -162,24 +164,24 @@ class ShotCfxClothHandle(object):
         self.connect_hidden()
 
 
-class CfxRigAssetShit(object):
+class ShotCfxRigHandle(object):
     def __init__(self, namespace):
-        self._namespace = namespace
-        self._rig_namespace = ':'.join(self._namespace.split(':')[:-1])
+        self._cfx_rig_namespace = namespace
+        self._rig_namespace = ':'.join(self._cfx_rig_namespace.split(':')[:-1])
     
     def find_location(self):
-        _ = cmds.ls('{}:cfx_rig'.format(self._namespace), long=1)
+        _ = cmds.ls('{}:cfx_rig'.format(self._cfx_rig_namespace), long=1)
         if _:
             return _[0]
 
     def find_output_geo_location(self):
-        _ = cmds.ls('{}:cfx_output_geo_grp'.format(self._namespace), long=1)
+        _ = cmds.ls('{}:cfx_output_geo_grp'.format(self._cfx_rig_namespace), long=1)
         if _:
             return _[0]
 
     def find_source_geo_layer(self):
         return qsm_mya_core.Namespace.find_one(
-            self._namespace, node_name=_asset_cfx_rig_core.CfxSourceGeoLyrOrg.NAME
+            self._cfx_rig_namespace, node_name=_asset_cfx_rig_core.CfxSourceGeoLyrOrg.NAME
         )
     
     def generate_component_data(self):
@@ -188,8 +190,9 @@ class CfxRigAssetShit(object):
             gui_location = '/{}/cfx_rig'.format(self._rig_namespace)
             return _asset_cfx_rig_core.AssetCfxRigHandle.generate_component_data_for(dcc_location, gui_location)
         return {}
-    
+
     def generate_export_args(self):
+        mesh_transforms = []
         location = self.find_output_geo_location()
         meshes = qsm_mya_core.Group.find_siblings(
             location, 'mesh'
@@ -197,4 +200,17 @@ class CfxRigAssetShit(object):
         for i_shape in meshes:
             i_transform = qsm_mya_core.Shape.get_transform(i_shape)
             if qsm_mya_core.Transform.is_visible(i_transform):
-                print i_transform
+                mesh_transforms.append(i_transform)
+        return mesh_transforms
+
+    def get_extend_geometry_args(self):
+        mesh_transforms = []
+        adv_opt = qsm_mya_adv.AdvChrOpt(self._rig_namespace)
+        meshes = adv_opt.find_all_meshes()
+        for i_mesh in meshes:
+            i_transform = qsm_mya_core.Shape.get_transform(i_mesh)
+            if qsm_mya_core.MeshDeform.is_valid(i_transform) is True:
+                mesh_transforms.append(i_transform)
+            elif qsm_mya_core.MeshDynamic.is_valid(i_transform) is True:
+                mesh_transforms.append(i_transform)
+        return mesh_transforms

@@ -1,0 +1,47 @@
+build:
+    name: 'Fix'
+    name_chs:  '修复'
+
+    tool_tip:
+        |-
+        To be supplemented.
+    tool_tip_chs:
+        |-
+        待补充
+
+    units:
+        reference_fix:
+            name: 'Reference Fix'
+            name_chs: '引用修复'
+
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs: '待补充。'
+
+            options:
+                name: 'Options'
+                name_chs: '选项'
+
+                parameters:
+                    anm_curve:
+                        widget: group
+                        name: 'Animation Curve'
+                        name_chs: '动画曲线'
+
+                    anm_curve/recover_lost:
+                        widget: button
+                        name: 'Recover Lost Animation Curve'
+                        name_chs: '找回丢失动画曲线'
+
+                        tool_tip:
+                            |-
+                            To be supplemented.
+                        tool_tip_chs:
+                            |-
+                            尝试找回丢失的动画曲线：
+                                1. 选中需要修复的引用的任意部件，
+                                2. 点击按钮。
+
+    messages:
+        no_references:
+            message_chs: '选择一个或者多个引用（可以是任意部件）。'
+            message: 'Select one or more references (any part).'

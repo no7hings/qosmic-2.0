@@ -3,6 +3,8 @@ import os
 
 import inspect
 
+import lxbasic.core as bsc_core
+
 import lxbasic.resource as bsc_resource
 
 import lxbasic.content as bsc_content
@@ -27,6 +29,7 @@ class _ToolBase(object):
     def _init_tool_(self, window):
         self._window = window
         self._configure = self._window._configure
+        self._configure_local_flag = False
         self._language = self._window._language
 
     def _get_subclass_file_path(self):
@@ -38,6 +41,8 @@ class _ToolBase(object):
         return None
 
     def generate_local_configure(self):
+        self._configure_local_flag = True
+
         file_path = self._get_subclass_file_path()
         cfg_file_path = '{}.yml'.format(os.path.splitext(file_path)[0].replace('\\', '/'))
         if os.path.isfile(cfg_file_path):
@@ -178,13 +183,17 @@ class PrxBasePanel(_window_base.PrxBaseWindow):
         self._gui_configure = self._configure.get_as_content('option.gui')
 
         gui_name = gui_core.GuiUtil.choice_gui_name(self._language, self._configure.get('option.gui'))
-        gui_version = self._gui_configure.get('version')
-        if gui_version:
-            window_title = u'{} ver.{}'.format(
-                gui_name, gui_version
+        
+        core_version = bsc_core.BscEnviron.get_core_version()
+        extend_version = bsc_core.BscEnviron.get_extend_version()
+        if extend_version:
+            window_title = u'{} ver.{}({})'.format(
+                gui_name, core_version, extend_version
             )
         else:
-            window_title = gui_name
+            window_title = u'{} ver.{}'.format(
+                gui_name, core_version
+            )
 
         self.set_window_title(window_title)
         self.set_window_icon_by_name(
@@ -335,6 +344,26 @@ class PrxBasePage(
 
     def do_gui_refresh_all(self):
         pass
+
+    def get_gui_name(self):
+        if self._configure_local_flag is True:
+            # use for local
+            return self.choice_gui_name(
+                self._configure.get('build')
+            )
+        return self.choice_gui_name(
+            self._configure.get('build.{}'.format(self.GUI_KEY))
+        )
+
+    def get_gui_tool_tip(self):
+        if self._configure_local_flag is True:
+            # use for local
+            return self.choice_gui_tool_tip(
+                self._configure.get('build')
+            )
+        return self.choice_gui_tool_tip(
+            self._configure.get('build.{}'.format(self.GUI_KEY))
+        )
 
 
 class PrxBaseUnit(

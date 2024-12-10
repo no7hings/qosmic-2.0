@@ -16,7 +16,7 @@ j_option_opt = bsc_core.ArgDictStringOpt(
         # choice_scheme='asset-maya-output',
         #
         td_enable=True,
-        # rez_beta=True,
+        # test_flag=True,
     )
 )
 #

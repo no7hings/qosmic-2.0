@@ -1,4 +1,6 @@
 # coding:utf-8
+import functools
+
 import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
@@ -60,18 +62,49 @@ class _PrxNodeView(_abs_unit_for_task_tool.AbsPrxNodeViewForTaskTool):
         is_changed = self._resources_query.do_update()
         if is_changed is True or force is True:
             self.gui_restore()
-
+            gui_task_tool_opt = self._unit._gui_task_tool_opt
             for i_resource_opt in self._resources_query.get_all():
-                i_cfx_asset_opt = _task_dcc_core.ShotCfxClothHandle(i_resource_opt.namespace)
-                self.gui_add_resource(i_resource_opt, i_cfx_asset_opt)
-                self.gui_add_components(i_cfx_asset_opt)
+                i_cfx_asset_hdl = _task_dcc_core.ShotCfxClothAssetHandle(i_resource_opt.namespace)
+                self.gui_add_resource(gui_task_tool_opt, i_resource_opt, i_cfx_asset_hdl)
 
-    def gui_add_resource(self, resource_opt, cfx_asset_opt):
+    def generate_version_switch_menu_data(
+        self,
+        qt_item, task_session,
+        gui_task_tool_opt, asset_handle, rig_namespace
+    ):
+        def fnc_(scene_path_):
+            gui_task_tool_opt.load_cfx_rig_scene_auto(rig_namespace, scene_path_)
+
+            self._update_resource_version(qt_item, task_session, asset_handle)
+
+        scene_path = asset_handle.get_cfx_rig_scene_path()
+
+        sub_menu_data = []
+        menu_data = [
+            [
+                'Load', 'history', sub_menu_data
+            ]
+        ]
+        dict_ = gui_task_tool_opt.get_cfx_rig_all_version_dict(rig_namespace)
+        for k, v in dict_.items():
+            if v == scene_path:
+                sub_menu_data.append(
+                    (k, 'file/version', None)
+                )
+            else:
+                sub_menu_data.append(
+                    (k, 'file/version', functools.partial(fnc_, v))
+                )
+        return menu_data
+
+    def gui_add_resource(self, gui_task_tool_opt, resource_opt, asset_handle):
         path = resource_opt.path
 
         _ = self._qt_tree_widget._view_model.find_item(path)
         if _:
             return False, _
+
+        task_session = self._unit._page._task_session
 
         path_opt = bsc_core.BscNodePathOpt(path)
 
@@ -98,16 +131,39 @@ class _PrxNodeView(_abs_unit_for_task_tool.AbsPrxNodeViewForTaskTool):
             qt_item._item_model.set_assign_data('dcc_node', root)
             qt_item._item_model.set_assign_data('dcc_node_type', 'root')
 
-        if cfx_asset_opt.get_cfx_rig_is_loaded():
-            qt_item._item_model.set_status(
-                qt_item._item_model.Status.Correct
-            )
+        rig_namespace = asset_handle.rig_namespace
 
+        if asset_handle.cfx_rig_is_loaded():
+            self._update_resource_version(qt_item, task_session, asset_handle)
+
+        qt_item._item_model.set_menu_data_generate_fnc(
+            functools.partial(
+                self.generate_version_switch_menu_data,
+                qt_item, task_session, gui_task_tool_opt, asset_handle, rig_namespace
+            )
+        )
         return qt_item
 
-    def gui_add_components(self, cfx_asset_opt):
-        self._component_data = cfx_asset_opt.cfx_rig_group_opt.generate_component_data()
-        # data_pre = self._component_data
+    def _update_resource_version(self, qt_item, task_session, asset_handle):
+        scene_path = asset_handle.get_cfx_rig_scene_path()
+        version_args = task_session.get_file_version_args('asset-release-maya-scene-file', scene_path)
+        if version_args:
+            version, version_last = version_args
+            if version == version_last:
+                qt_item._item_model.set_subname('v{}'.format(version))
+                qt_item._item_model.set_status(qt_item._item_model.Status.Correct)
+            else:
+                qt_item._item_model.set_subname('v{}({})'.format(version, version_last))
+                qt_item._item_model.set_status(qt_item._item_model.Status.Warning)
+        else:
+            qt_item._item_model.set_status(qt_item._item_model.Status.Error)
+
+        self.gui_add_components(qt_item, asset_handle)
+
+    def gui_add_components(self, resource_qt_item, asset_handle):
+        resource_qt_item._item_model.clear_descendants()
+
+        self._component_data = asset_handle.cfx_rig_handle.generate_component_data()
 
         for i_key, i_value in self._component_data.items():
             self.gui_add_component(i_key, i_value)
@@ -126,7 +182,7 @@ class _PrxNodeView(_abs_unit_for_task_tool.AbsPrxNodeViewForTaskTool):
             i_flag, i_qt_item = self._qt_tree_widget._view_model.create_item(i_path)
             if i_flag is True:
                 i_qt_item._item_model.set_icon_name('database/group')
-                i_qt_item._item_model.set_expanded(True)
+                # i_qt_item._item_model.set_expanded(True)
 
         flag, qt_item = self._qt_tree_widget._view_model.create_item(path)
 
@@ -134,7 +190,7 @@ class _PrxNodeView(_abs_unit_for_task_tool.AbsPrxNodeViewForTaskTool):
 
         qt_icon = gui_qt_core.QtMaya.generate_qt_icon_by_name(node_type)
         qt_item._item_model.set_icon(qt_icon)
-        qt_item._item_model.set_expanded(True)
+        # qt_item._item_model.set_expanded(True)
         qt_item._item_model.set_assign_data('dcc_node', node)
 
         visible = qsm_mya_core.NodeDisplay.is_visible(node)
@@ -240,7 +296,7 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
                 maximum=len(namespaces), label='enable cfx rig'
             ) as g_p:
                 for i_rig_namespace in namespaces:
-                    _task_dcc_core.ShotCfxClothHandle(i_rig_namespace).set_cfx_rig_enable(True)
+                    _task_dcc_core.ShotCfxClothAssetHandle(i_rig_namespace).set_cfx_rig_enable(True)
 
                     g_p.do_update()
 
@@ -251,7 +307,7 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
                 maximum=len(namespaces), label='disable cfx rig'
             ) as g_p:
                 for i_rig_namespace in namespaces:
-                    _task_dcc_core.ShotCfxClothHandle(i_rig_namespace).set_cfx_rig_enable(False)
+                    _task_dcc_core.ShotCfxClothAssetHandle(i_rig_namespace).set_cfx_rig_enable(False)
 
                     g_p.do_update()
 
@@ -262,7 +318,7 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
                 maximum=len(namespaces), label='enable cfx rig solver'
             ) as g_p:
                 for i_rig_namespace in namespaces:
-                    _task_dcc_core.ShotCfxClothHandle(i_rig_namespace).set_all_solver_enable(True)
+                    _task_dcc_core.ShotCfxClothAssetHandle(i_rig_namespace).set_all_solver_enable(True)
 
                     g_p.do_update()
 
@@ -273,7 +329,7 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
                 maximum=len(namespaces), label='disable cfx rig solver'
             ) as g_p:
                 for i_rig_namespace in namespaces:
-                    _task_dcc_core.ShotCfxClothHandle(i_rig_namespace).set_all_solver_enable(False)
+                    _task_dcc_core.ShotCfxClothAssetHandle(i_rig_namespace).set_all_solver_enable(False)
 
                     g_p.do_update()
 
@@ -514,7 +570,7 @@ class _PrxExportToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
                     maximum=len(rig_namespaces), label='load cfx rig'
                 ) as g_p:
                     for i_rig_namespace in rig_namespaces:
-                        i_opt = _task_dcc_core.ShotCfxClothHandle(i_rig_namespace)
+                        i_opt = _task_dcc_core.ShotCfxClothAssetHandle(i_rig_namespace)
                         if i_opt.get_cfx_rig_is_enable():
                             self._unit._gui_task_tool_opt.export_cloth_cache_by_rig_namespace(
                                 i_rig_namespace,
@@ -544,14 +600,14 @@ class _PrxExportToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
                 cfx_rig_namespaces = []
 
                 for i_rig_namespace in rig_namespaces:
-                    i_opt = _task_dcc_core.ShotCfxClothHandle(i_rig_namespace)
+                    i_opt = _task_dcc_core.ShotCfxClothAssetHandle(i_rig_namespace)
                     if i_opt.get_cfx_rig_is_enable():
                         cfx_rig_namespaces.append(i_opt._cfx_rig_namespace)
 
                 if cfx_rig_namespaces:
                     (
                         task_name, scene_src_path, cmd_script
-                    ) = _task_dcc_scripts.CfxClothCacheProcess.generate_subprocess_args(
+                    ) = _task_dcc_scripts.ShotCfxClothCacheProcess.generate_subprocess_args(
                         namespaces=cfx_rig_namespaces,
                         directory_path=directory_path,
                         frame_range=frame_range,
@@ -585,14 +641,14 @@ class _PrxExportToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
                 cfx_rig_namespaces = []
 
                 for i_rig_namespace in rig_namespaces:
-                    i_opt = _task_dcc_core.ShotCfxClothHandle(i_rig_namespace)
+                    i_opt = _task_dcc_core.ShotCfxClothAssetHandle(i_rig_namespace)
                     if i_opt.get_cfx_rig_is_enable():
                         cfx_rig_namespaces.append(i_opt._cfx_rig_namespace)
 
                 if cfx_rig_namespaces:
                     (
                         task_name, scene_src_path, cmd_script
-                    ) = _task_dcc_scripts.CfxClothCacheProcess.generate_subprocess_args(
+                    ) = _task_dcc_scripts.ShotCfxClothCacheProcess.generate_subprocess_args(
                         namespaces=cfx_rig_namespaces,
                         directory_path=directory_path,
                         frame_range=frame_range,
@@ -636,12 +692,12 @@ class _PrxExportToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
                 cfx_rig_namespaces = []
 
                 for i_rig_namespace in rig_namespaces:
-                    i_opt = _task_dcc_core.ShotCfxClothHandle(i_rig_namespace)
+                    i_opt = _task_dcc_core.ShotCfxClothAssetHandle(i_rig_namespace)
                     if i_opt.get_cfx_rig_is_enable():
                         cfx_rig_namespaces.append(i_opt._cfx_rig_namespace)
 
                 if cfx_rig_namespaces:
-                    option_hook = _task_dcc_scripts.CfxClothCacheProcess.generate_farm_hook_option(
+                    option_hook = _task_dcc_scripts.ShotCfxClothCacheProcess.generate_farm_hook_option(
                         namespaces=cfx_rig_namespaces,
                         directory_path=directory_path,
                         frame_range=frame_range,
@@ -667,4 +723,3 @@ class PrxToolsetForShotCfxClothTool(_abs_unit_for_task_tool.AbsPrxUnitForTaskToo
 
     def __init__(self, *args, **kwargs):
         super(PrxToolsetForShotCfxClothTool, self).__init__(*args, **kwargs)
-

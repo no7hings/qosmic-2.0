@@ -360,7 +360,7 @@ class RsvDccSceneHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                     #
                     user=self._hook_option_opt.get('user'), time_tag=self._hook_option_opt.get('time_tag'),
                     #
-                    td_enable=self._hook_option_opt.get('td_enable'), rez_beta=self._hook_option_opt.get('rez_beta'),
+                    td_enable=self._hook_option_opt.get('td_enable'), test_flag=self._hook_option_opt.get('test_flag'),
                     #
                     bake_location=root,
                     bake_indices=list(range(len(mesh_paths))),
@@ -383,7 +383,7 @@ class RsvDccSceneHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                         user=self._hook_option_opt.get('user'), time_tag=self._hook_option_opt.get('time_tag'),
                         #
                         td_enable=self._hook_option_opt.get('td_enable'),
-                        rez_beta=self._hook_option_opt.get('rez_beta'),
+                        test_flag=self._hook_option_opt.get('test_flag'),
                         #
                         with_texture_bake_convert=True,
                         bake_resolution=bake_resolution,

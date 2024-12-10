@@ -1,5 +1,5 @@
 # coding:utf-8
-from ... import core as _gui_core
+import lxbasic.core as bsc_core
 # qt
 from ...qt.core.wrap import *
 
@@ -58,6 +58,19 @@ class TreeItemModel(_item_base.AbsItemModel):
         rcs_fnc_(self._item)
         return list_
 
+    def clear_descendants(self):
+        widget = self._item.treeWidget()
+        item_dict = widget._view_model._data.item_dict
+        paths = item_dict.keys()
+        path = self.get_path()
+        descendants = bsc_core.BscNodePath.find_dag_descendant_paths(
+            path, paths
+        )
+
+        self._item.takeChildren()
+        for i in descendants:
+            item_dict.pop(i)
+
     def is_checked_for_descendants(self):
         for i in self.get_descendants():
             if i._item_model.is_checked():
@@ -96,19 +109,26 @@ class TreeItemModel(_item_base.AbsItemModel):
                 )
 
             txt_y = y+h-item_h
-            # number
+            # subname
             number_w_left_sub = w-(check_frm_w+color_frm_w+icon_frm_w)
-            number_frm_w = 0
+            subname_frm_w = 0
             if self._data.number_enable is True:
-                number_frm_w = self.compute_text_width_by(self._data.number.text)
-                number_frm_w = min(number_w_left_sub, number_frm_w)
+                subname_frm_w = self.compute_text_width_by(self._data.number.text)
+                subname_frm_w = min(number_w_left_sub, subname_frm_w)
                 self._data.number.rect.setRect(
-                    x+w-number_frm_w-2, txt_y, number_frm_w, item_h
+                    x+w-subname_frm_w-2, txt_y, subname_frm_w, item_h
+                )
+
+            elif self._data.subname_enable is True:
+                subname_frm_w = self.compute_text_width_by(self._data.subname.text)
+                subname_frm_w = min(number_w_left_sub, subname_frm_w)
+                self._data.subname.rect.setRect(
+                    x+w-subname_frm_w-2, txt_y, subname_frm_w, item_h
                 )
             # name
             name_w_left_sub = check_frm_w+color_frm_w+icon_frm_w
             self._data.name.rect.setRect(
-                x+name_w_left_sub+1, txt_y, w-(name_w_left_sub+number_frm_w)-2, item_h
+                x+name_w_left_sub+1, txt_y, w-(name_w_left_sub+subname_frm_w)-2, item_h
             )
             return True
         return False
@@ -131,14 +151,20 @@ class TreeItemModel(_item_base.AbsItemModel):
         self.draw_background(painter, option, index)
         self.draw_texts(painter, option, index)
         # number
-        if self._data.number_enable is True:
-            if column == 0:
+        if column == 0:
+            if self._data.number_enable is True:
                 text_color = [
                     self._data.text.color, self._data.text.action_color
                 ][self._data.select.flag or self._data.hover.flag]
                 painter.setFont(self._font)
                 self._draw_name_text(
                     painter, self._data.number.rect, self._data.number.text, text_color,
+                    QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter
+                )
+            elif self._data.subname_enable is True:
+                painter.setFont(self._font)
+                self._draw_name_text(
+                    painter, self._data.subname.rect, self._data.subname.text, self._data.subname.color,
                     QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter
                 )
         painter.restore()

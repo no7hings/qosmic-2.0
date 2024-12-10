@@ -1,5 +1,6 @@
 # coding:utf-8
 import copy
+
 import os.path
 
 # noinspection PyUnresolvedReferences
@@ -39,8 +40,8 @@ class ShotCfxRigsOpt(object):
         for i_resource in self._resources_query.get_all():
             i_rig_namespace = i_resource.namespace
 
-            i_opt = _core.ShotCfxClothHandle(i_rig_namespace)
-            if i_opt.get_cfx_rig_is_loaded() is True:
+            i_opt = _core.ShotCfxClothAssetHandle(i_rig_namespace)
+            if i_opt.cfx_rig_is_loaded() is True:
                 continue
 
             i_scene_path = qsm_mya_core.ReferencesCache().get_file(i_rig_namespace)
@@ -69,11 +70,11 @@ class ShotCfxRigsOpt(object):
 
         for i_resource in self._resources_query.get_all():
             i_rig_namespace = i_resource.namespace
-            i_opt = _core.ShotCfxClothHandle(i_rig_namespace)
+            i_opt = _core.ShotCfxClothAssetHandle(i_rig_namespace)
             i_opt.apply_all_solver_start_frame(frame)
 
 
-class CfxClothCacheOpt(qsm_mya_rsc_core.AssetCacheOpt):
+class ShotCfxClothCacheOpt(qsm_mya_rsc_core.AssetCacheOpt):
     CACHE_ROOT = qsm_mya_gnl_core.ResourceCacheNodes.CfxClothRoot
     CACHE_NAME = qsm_mya_gnl_core.ResourceCacheNodes.CfxClothName
 
@@ -91,7 +92,7 @@ class CfxClothCacheOpt(qsm_mya_rsc_core.AssetCacheOpt):
         )
 
     def __init__(self, *args, **kwargs):
-        super(CfxClothCacheOpt, self).__init__(*args, **kwargs)
+        super(ShotCfxClothCacheOpt, self).__init__(*args, **kwargs)
 
     @classmethod
     def create_cache_root_auto(cls):
@@ -190,7 +191,7 @@ class CfxClothCacheOpt(qsm_mya_rsc_core.AssetCacheOpt):
         pass
 
 
-class CfxClothCacheProcess(object):
+class ShotCfxClothCacheProcess(object):
     @classmethod
     def test(cls):
 
@@ -302,7 +303,7 @@ class CfxClothCacheProcess(object):
                     i_namespace
                 )
 
-                CfxClothCacheOpt(i_resource).do_export(
+                ShotCfxClothCacheOpt(i_resource).do_export(
                     directory_path,
                     frame_range, frame_step, frame_offset
                 )

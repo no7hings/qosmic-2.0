@@ -18,6 +18,19 @@ from . import shape as _node_for_shape
 
 
 class NonLinear(object):
+    KEY_MAPPER = dict(
+        deformBend='bend',
+        deformFlare='flare',
+        deformSine='sine',
+        deformSquash='squash',
+        deformTwist='twist',
+        deformWave='wave',
+    )
+
+    @classmethod
+    def get_all_node_types(cls):
+        return cls.KEY_MAPPER.keys()
+
     @classmethod
     def create_for(cls, key, target_shape_path, target_any_paths):
         # noinspection PyUnresolvedReferences
@@ -53,6 +66,14 @@ class NonLinear(object):
                 )
                 if handle_shape_path:
                     return handle_shape_path
+
+    @classmethod
+    def is_valid(cls, transform_path):
+        history = cmds.listHistory(transform_path)
+        _ = cmds.ls(history, type=cls.get_all_node_types()) or []
+        if _:
+            return True
+        return False
 
 
 class BlendShape:
@@ -445,3 +466,12 @@ class MeshDeform:
     def break_deform(cls, transform_path):
         shape_path = _node_for_transform.Transform.get_shape(transform_path)
         _attribute.NodeAttribute.break_source(shape_path, 'inMesh')
+
+    @classmethod
+    def is_valid(cls, transform_path):
+        shape = _node_for_transform.Transform.get_shape(transform_path)
+        history = cmds.listHistory(shape)
+        _ = cmds.ls(history, type=NonLinear.get_all_node_types()) or []
+        if _:
+            return True
+        return False

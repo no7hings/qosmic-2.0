@@ -867,7 +867,11 @@ class BscChrGroup(object):
         '0123456789',
     ]
 
-    def __init__(self):
+    def __new__(cls, *args, **kwargs):
+        if cls.INSTANCE is not None:
+            return cls.INSTANCE
+
+        self = super(BscChrGroup, cls).__new__(cls)
         self._groups = []
         for i in self.CHR_GROUPS:
             if len(i) > 1:
@@ -876,6 +880,8 @@ class BscChrGroup(object):
                 i_name = i
 
             self._groups.append(i_name)
+        cls.INSTANCE = self
+        return self
 
     def get_group(self, chr_):
         for idx, i in enumerate(self.CHR_GROUPS):
@@ -885,14 +891,6 @@ class BscChrGroup(object):
 
     def groups(self):
         return self._groups
-
-    def __new__(cls, *args, **kwargs):
-        if cls.INSTANCE is not None:
-            return cls.INSTANCE
-
-        instance = super(BscChrGroup, cls).__new__(cls)
-        cls.INSTANCE = instance
-        return instance
 
 
 class BscTextOpt(object):

@@ -5,6 +5,8 @@ import os
 
 
 class BscEnviron(object):
+    CORE_ROOT = 'QSM_CORE_BASE'
+
     GUI_LANGUAGE_KEY = 'QSM_UI_LANGUAGE'
     DEPLOY_ROOT_KEY = 'QSM_DEPLOY_ROOT'
 
@@ -12,15 +14,13 @@ class BscEnviron(object):
     CACHE_ROOT_KEY = 'QSM_CACHE_ROOT'
     LOCAL_CACHE_ROOT_KEY = 'QSM_CACHE_LOCAL_ROOT'
     LIBRARY_ROOT_KEY = 'QSM_LIBRARY_ROOT'
-    
-    STUDIO_KEY = 'QSM_STUDIO'
 
     TRUE = 'true'
     FALSE = 'false'
 
     @classmethod
-    def get_is_beta_enable(cls):
-        _ = cls.get('REZ_BETA')
+    def get_test_flag(cls):
+        _ = cls.get('QSM_TEST')
         if _ == '1':
             return True
         return False
@@ -154,46 +154,58 @@ class BscEnviron(object):
         return cls.get(cls.GUI_LANGUAGE_KEY) or 'en_US'
 
     @classmethod
-    def get_studio(cls):
-        return cls.get(cls.STUDIO_KEY) or 'DEVELOP'
+    def get_extend_version(cls):
+        if cls.get_test_flag() is True:
+            return 'BETA'
+
+    @classmethod
+    def get_core_version(cls):
+        path = os.environ.get(cls.CORE_ROOT)
+        if path:
+            _ = os.path.basename(path)
+            if _ == '99.99.99':
+                return '0.0.0'
+            return _
+        return 'unknown'
 
 
 class BscEnvironExtra(BscEnviron):
     SCHEME_KEY = 'QSM_SCHEME'
-    BETA_ENABLE_KEY = 'QSM_BETA_ENABLE'
-    TD_ENABLE_KEY = 'QSM_TD_ENABLE'
+
+    TEST_FLAG_KEY = 'QSM_TEST'
+    DEVLOP_FLAG = 'QSM_DEVELOP'
 
     @classmethod
     def get_scheme(cls):
         return cls.get(cls.SCHEME_KEY)
 
     @classmethod
-    def get_beta_enable(cls):
-        _ = cls.get(cls.BETA_ENABLE_KEY)
+    def get_test_flag(cls):
+        _ = cls.get(cls.TEST_FLAG_KEY)
         if str(_).lower() == cls.TRUE:
             return True
         return False
 
     @classmethod
-    def set_beta_enable(cls, boolean):
+    def set_test_flag(cls, boolean):
         if boolean is True:
-            cls.set(cls.BETA_ENABLE_KEY, cls.TRUE)
+            cls.set(cls.TEST_FLAG_KEY, cls.TRUE)
         else:
-            cls.set(cls.BETA_ENABLE_KEY, cls.FALSE)
+            cls.set(cls.TEST_FLAG_KEY, cls.FALSE)
 
     @classmethod
-    def get_is_td_enable(cls):
-        _ = cls.get(cls.TD_ENABLE_KEY)
+    def get_devlop_flag(cls):
+        _ = cls.get(cls.DEVLOP_FLAG)
         if _ == cls.TRUE:
             return True
         return False
 
     @classmethod
-    def set_td_enable(cls, boolean):
+    def set_devlop_flag(cls, boolean):
         if boolean is True:
-            cls.set(cls.TD_ENABLE_KEY, cls.TRUE)
+            cls.set(cls.DEVLOP_FLAG, cls.TRUE)
         else:
-            cls.set(cls.TD_ENABLE_KEY, cls.FALSE)
+            cls.set(cls.DEVLOP_FLAG, cls.FALSE)
 
 
 class BscEnvironOpt(object):

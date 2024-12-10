@@ -122,9 +122,9 @@ class _AbsQtHTabToolBox(
                     else:
                         i_txt_w = tab_w
                     # compute tab width
-                    i_tab_w = i_txt_w+16
+                    i_tab_w = i_txt_w+8
                     if i_tab_item.icon_text:
-                        i_tab_w += 10
+                        i_tab_w += 4
                     self._item_width_or_height_dict[i_index] = i_tab_w
                     scroll_abs_w += i_tab_w
                 # scroll
@@ -242,9 +242,9 @@ class _AbsQtHTabToolBox(
                     else:
                         i_txt_w = tab_w
                     # compute tab width
-                    i_tab_w = i_txt_w+16
+                    i_tab_w = i_txt_w+8
                     if i_tab_item.icon_text:
-                        i_tab_w += 10
+                        i_tab_w += 4
                     self._item_width_or_height_dict[i_index] = i_tab_w
                     scroll_abs_w += i_tab_w
                 # scroll

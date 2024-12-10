@@ -234,8 +234,8 @@ class PnlSubmitterForRenderDcc(smt_gui_abstracts.AbsPnlSubmitterForAssetRenderDc
                     default_render_frames=default_render_frames,
                     auto_convert_mov=True,
                     #
-                    td_enable=bsc_core.BscEnvironExtra.get_is_td_enable(),
-                    rez_beta=bsc_core.BscEnvironExtra.get_is_beta_enable(),
+                    td_enable=bsc_core.BscEnvironExtra.get_devlop_flag(),
+                    test_flag=bsc_core.BscEnvironExtra.get_test_flag(),
                 )
             )
             #

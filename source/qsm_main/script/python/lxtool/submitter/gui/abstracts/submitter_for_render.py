@@ -50,11 +50,11 @@ class AbsRenderSubmitterDef(object):
             self._hook_gui_configure = self._option_hook_configure.get_as_content('option.gui')
             self._hook_build_configure = self._option_hook_configure.get_as_content('build')
 
-            raw = bsc_core.BscEnviron.get('REZ_BETA')
+            raw = bsc_core.BscEnviron.get('QSM_TEST')
             if raw:
-                self._rez_beta = True
+                self._test_flag = True
             else:
-                self._rez_beta = False
+                self._test_flag = False
 
             self._stg_connector = bsc_shotgun.StgConnector()
         else:
@@ -83,7 +83,7 @@ class AbsPnlSubmitterForRenderBase(
         #
         if hook_option is not None:
             self._set_render_submitter_def_init_(hook_option)
-            if self._rez_beta:
+            if self._test_flag:
                 self.set_window_title(
                     '[BETA] {}'.format(self._hook_gui_configure.get('name'))
                 )
@@ -787,7 +787,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                         'render.shot.frames', frames
                     )
 
-        if bsc_core.BscEnvironExtra.get_is_td_enable() is True:
+        if bsc_core.BscEnvironExtra.get_devlop_flag() is True:
             self._settings_prx_node.set_default(
                 'td.test_scheme', 'td_enable'
             )
@@ -940,11 +940,11 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                 'td.test_scheme'
             )
             if td_test_scheme == 'auto':
-                dic['rez_beta'] = self._rez_beta
+                dic['test_flag'] = self._test_flag
             elif td_test_scheme == 'td_enable':
                 dic['td_enable'] = True
-            elif td_test_scheme == 'rez_beta':
-                dic['rez_beta'] = True
+            elif td_test_scheme == 'test_flag':
+                dic['test_flag'] = True
         return dic
 
     def get_file_is_changed(self):
@@ -967,7 +967,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
                     user=bsc_core.BscSystem.get_user_name(),
                     #
                     # td_enable=True,
-                    rez_beta=True,
+                    test_flag=True,
                 )
             )
             #
@@ -1382,7 +1382,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
                 'render.frames', frames
             )
 
-        if bsc_core.BscEnvironExtra.get_is_td_enable() is True:
+        if bsc_core.BscEnvironExtra.get_devlop_flag() is True:
             self._settings_prx_node.set(
                 'td.test_scheme', 'td_enable'
             )
@@ -1494,11 +1494,11 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
                 'td.test_scheme'
             )
             if td_test_scheme == 'auto':
-                dic['rez_beta'] = self._rez_beta
+                dic['test_flag'] = self._test_flag
             elif td_test_scheme == 'td_enable':
                 dic['td_enable'] = True
-            elif td_test_scheme == 'rez_beta':
-                dic['rez_beta'] = True
+            elif td_test_scheme == 'test_flag':
+                dic['test_flag'] = True
         return dic
 
     def get_file_is_changed(self):

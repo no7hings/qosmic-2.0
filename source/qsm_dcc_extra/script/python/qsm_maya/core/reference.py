@@ -183,22 +183,25 @@ class ReferencesCache(object):
     INSTANCE = None
 
     def __init__(self):
-        self._cache_dict = dict()
+        self._dict = dict()
         self.do_update()
+
+    def get_data(self):
+        pass
 
     def do_update(self):
         _ = References.get_all(nested=True)
-        for i in _:
-            i_namespace = Reference.get_namespace(i)
-            self._cache_dict[i_namespace] = i
+        for i_reference in _:
+            i_namespace = Reference.get_namespace(i_reference)
+            self._dict[i_namespace] = i_reference
 
     def get_file(self, namespace, extend=True):
-        if namespace in self._cache_dict:
-            path = self._cache_dict[namespace]
-            return Reference.get_file(path, extend)
+        if namespace in self._dict:
+            reference = self._dict[namespace]
+            return Reference.get_file(reference, extend)
 
     def get(self, namespace):
-        return self._cache_dict.get(namespace)
+        return self._dict.get(namespace)
 
     def to_valid_namespaces(self, namespaces):
         list_ = []

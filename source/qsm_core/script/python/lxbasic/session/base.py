@@ -96,16 +96,16 @@ class AbsSsnConfigureBaseDef(object):
 
 class AbsSsnEnvironmentBaseDef(object):
     def _init_environment_base_def_(self):
-        # self._rez_beta = bsc_core.BscEnviron.get('REZ_BETA')
+        # self._test_flag = bsc_core.BscEnviron.get('QSM_TEST')
         pass
 
     @classmethod
-    def get_is_td_enable(cls):
-        return bsc_core.BscEnvironExtra.get_is_td_enable()
+    def get_devlop_flag(cls):
+        return bsc_core.BscEnvironExtra.get_devlop_flag()
 
     @classmethod
-    def get_is_beta_enable(cls):
-        return bsc_core.BscEnvironExtra.get_is_beta_enable()
+    def get_test_flag(cls):
+        return bsc_core.BscEnvironExtra.get_test_flag()
 
 
 class AbsSsnGener(
@@ -226,11 +226,11 @@ class AbsSsnGener(
         language = bsc_core.BscEnvironExtra.get_gui_language()
         gui_name = self.get_gui_name_(language)
         gui_name = bsc_core.ensure_string(gui_name)
-        if self.get_is_td_enable() is True:
+        if self.get_devlop_flag() is True:
             return '[ALPHA] {} - {}'.format(
                     gui_name, str(self.application).capitalize()
                 )
-        elif self.get_is_beta_enable() is True:
+        elif self.get_test_flag() is True:
             return '[BETA] {} - {}'.format(
                     gui_name, str(self.application).capitalize()
                 )

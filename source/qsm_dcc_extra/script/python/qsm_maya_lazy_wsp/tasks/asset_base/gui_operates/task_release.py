@@ -20,6 +20,7 @@ class MayaAssetTaskReleaseOpt(lzy_wsp_core.DccTaskReleaseOpt):
         super(MayaAssetTaskReleaseOpt, self).__init__(*args, **kwargs)
 
     def release_scene_src(self, *args, **kwargs):
+        # ensure source non changed to save
         result = qsm_mya_core.SceneFile.ensure_save_width_dialog()
         if result is True:
             source_scene_src_path = self._properties['result']
@@ -74,7 +75,5 @@ class MayaAssetTaskReleaseOpt(lzy_wsp_core.DccTaskReleaseOpt):
                 bsc_core.BscFfmpegVideo.create_by_images(
                     preview_path, images
                 )
-
-            videos = kwargs.get('videos')
 
             return version_dir_path_new, release_scene_src_path_new, version_new

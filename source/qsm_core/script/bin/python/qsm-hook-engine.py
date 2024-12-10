@@ -98,10 +98,10 @@ def __execute_option_hook(hook_option):
             )
         )
     #
-    rez_beta = option_opt.get('rez_beta') or False
-    if rez_beta is True:
+    test_flag = option_opt.get('test_flag') or False
+    if test_flag is True:
         bsc_core.BscEnviron.set(
-            'REZ_BETA', '1'
+            'QSM_TEST', '1'
         )
     #
     kwargs = option_opt.value
@@ -204,10 +204,10 @@ def __execute_option_hook_new(hook_option):
 
     application = hook_engine.split('-')[0]
 
-    rez_beta = option_opt.get('rez_beta') or False
-    if rez_beta is True:
+    test_flag = option_opt.get('test_flag') or False
+    if test_flag is True:
         bsc_core.BscEnviron.set(
-            'REZ_BETA', '1'
+            'QSM_TEST', '1'
         )
 
     kwargs = option_opt.value

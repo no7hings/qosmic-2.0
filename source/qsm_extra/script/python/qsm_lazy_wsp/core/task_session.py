@@ -1,4 +1,5 @@
 # coding:utf-8
+import collections
 import copy
 
 import lxbasic.content as bsc_content
@@ -8,13 +9,6 @@ class TaskSession(object):
 
     INSTANCE = None
 
-    def generate_opt_for(self, opt_cls):
-        return opt_cls(self, self._properties)
-
-    def __init__(self, task_parse, variants):
-        self._task_parse = task_parse
-        self._properties = bsc_content.DictProperties(variants)
-
     def __new__(cls, task_parse, variants):
         if cls.INSTANCE is not None:
             instance = cls.INSTANCE
@@ -22,15 +16,20 @@ class TaskSession(object):
             instance.update_properties(variants)
             return instance
 
-        instance = super(TaskSession, cls).__new__(cls, task_parse, variants)
-        cls.INSTANCE = instance
-        return instance
+        self = super(TaskSession, cls).__new__(cls, task_parse, variants)
+        self._task_parse = task_parse
+        self._properties = bsc_content.DictProperties(variants)
+        cls.INSTANCE = self
+        return self
 
     def __str__(self):
         return '{}{}'.format(
             self.__class__.__name__,
             str(self._properties)
         )
+
+    def generate_opt_for(self, opt_cls):
+        return opt_cls(self, self._properties)
 
     def update_properties(self, variants):
         self._properties.clear()
@@ -103,6 +102,27 @@ class TaskSession(object):
             matches = ptn_opt.find_matches(sort=True)
             if matches:
                 return matches[-1]['result']
+
+    def get_file_variants_for(self, keyword, file_path):
+        ptn_opt = self._task_parse.generate_pattern_opt_for(
+            keyword
+        )
+        return ptn_opt.get_variants(file_path)
+
+    def get_file_version_args(self, keyword, file_path):
+        ptn_opt = self._task_parse.generate_pattern_opt_for(
+            keyword
+        )
+        variants = ptn_opt.get_variants(file_path)
+        if variants:
+            version = variants['version']
+
+            variants.pop('version')
+            ptn_opt.update_variants(**variants)
+            matches = ptn_opt.find_matches(sort=True)
+            latest = matches[-1]
+            version_latest = latest['version']
+            return version, version_latest
 
     def get_latest_file_for(self, keyword, **kwargs):
         kwargs_new = copy.copy(self._properties)

@@ -39,17 +39,8 @@ class Root(_base.AbsEntity):
     def find_project(self, name, variants_extend=None, cache_flag=True):
         return self._find_next_entity(name, _base.EntityTypes.Project, variants_extend, cache_flag)
 
-    def find_asset(self, project, asset):
-        return self.find_project(project).find_asset(asset)
-
     def get_entity(self, path):
         return self._root_entity_stack.get(path)
-
-    def find_one(self, entity_type, filters):
-        pass
-
-    def find_all(self, entity_type, filters):
-        pass
 
     @classmethod
     def generate(cls):

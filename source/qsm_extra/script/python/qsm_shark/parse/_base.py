@@ -2,21 +2,30 @@
 
 
 class EntityTypes(object):
-    Root = 'Root'
     Project = 'Project'
     Asset = 'Asset'
+    Episode = 'Episode'
     Sequence = 'Sequence'
     Shot = 'Shot'
     Task = 'Task'
+    Version = 'Version'
+
+    All = [
+        Project,
+        Asset,
+        Episode,
+        Sequence,
+        Shot,
+        Task,
+        Version,
+    ]
 
 
-class VariantKeys(object):
-    Root = 'root'
-    Project = 'project'
-    Asset = 'asset'
-    Sequence = 'sequence'
-    Shot = 'shot'
-    Task = 'task'
+class SpaceKeys(object):
+    Disorder = 'disorder'
+    Source = 'source'
+    Release = 'release'
+    Temporary = 'temporary'
 
 
 class Properties(dict):
@@ -27,8 +36,10 @@ class Properties(dict):
         return self.__getitem__(item)  # = self[item]
 
     def __str__(self):
-        return '(\n{}\n)'.format(
-            '\n'.join(
-                ['    {}={}'.format(k, v) for k, v in self.items()]
+        keys = self.keys()
+        keys.sort()
+        return 'dict(\n{}\n)'.format(
+            ',\n'.join(
+                ['    {}="{}"'.format(k, self[k]) for k in keys]
             )
         )

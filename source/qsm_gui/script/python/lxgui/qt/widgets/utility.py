@@ -557,7 +557,7 @@ class QtMenu(QtWidgets.QMenu):
             (),
             [
                 'Label', 'icon_name', [
-                    ()
+                    ('Label', 'icon_name', fnc)
                 ]
             ]
         ]

@@ -49,7 +49,7 @@ def main(session):
     user = hook_option_opt.get('user')
     time_tag = hook_option_opt.get('time_tag')
     td_enable = hook_option_opt.get('td_enable')
-    rez_beta = hook_option_opt.get('rez_beta')
+    test_flag = hook_option_opt.get('test_flag')
     #
     maya_scene_src_file_paths = hook_option_opt.get_as_array('maya_scene_srcs')
     if maya_scene_src_file_paths:
@@ -64,7 +64,7 @@ def main(session):
                 file=main_file_path,
                 #
                 user=user, time_tag=time_tag,
-                td_enable=td_enable, rez_beta=rez_beta,
+                td_enable=td_enable, test_flag=test_flag,
                 #
                 with_scene=hook_option_opt.get_as_boolean('with_scene'),
                 #

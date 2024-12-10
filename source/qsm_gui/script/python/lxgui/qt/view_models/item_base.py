@@ -167,6 +167,13 @@ class AbsItemModel(object):
             text=None,
             rect=QtCore.QRect(),
         )
+        # sub name
+        self._data.subname_enable = False
+        self._data.subname = _base._Data(
+            text=None,
+            rect=QtCore.QRect(),
+            color=QtGui.QColor(*_gui_core.GuiRgba.TxtTemporary)
+        )
         # mtime
         self._data.mtime_enable = False
         self._data.user_enable = False
@@ -349,6 +356,15 @@ class AbsItemModel(object):
 
     def get_name(self):
         return self._data.name.text
+
+    # subname
+    def set_subname(self, text):
+        if text is not None:
+            self._data.subname_enable = True
+            self._data.subname.text = text
+            return True
+        self._data.subname_enable = False
+        return False
 
     # mtime
     def set_mtime_enable(self, boolean):

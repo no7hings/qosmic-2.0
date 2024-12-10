@@ -9,7 +9,15 @@ import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_maya.core as qsm_mya_core
 
-from ..toolsets import basic as _toolset_basic
+from ..toolsets import adv_picker as _toolset_adv_picker
+
+from ..toolsets import copy_paste_mirror as _copy_paste_mirror
+
+from ..toolsets import keyframe as _keyframe
+
+from ..toolsets import control_move as _control_move
+
+from ..toolsets import constrain_deform as _constrain_deform
 
 
 class PrxPageForMotionMain(gui_prx_widgets.PrxBasePage):
@@ -53,6 +61,8 @@ class PrxPageForMotionMain(gui_prx_widgets.PrxBasePage):
     def __init__(self, window, session, *args, **kwargs):
         super(PrxPageForMotionMain, self).__init__(window, session, *args, **kwargs)
 
+        self._configure = self.generate_local_configure()
+
         self.gui_page_setup_fnc()
 
     def gui_get_tool_tab_box(self):
@@ -75,7 +85,7 @@ class PrxPageForMotionMain(gui_prx_widgets.PrxBasePage):
         # chart
         self._qt_picker = lzy_gui_qt_widgets.QtAdvCharacterPicker()
         central_qt_lot.addWidget(self._qt_picker)
-        self._gui_rig_picker_unit = _toolset_basic.UnitForRigPicker(
+        self._gui_rig_picker_unit = _toolset_adv_picker.UnitForAdvPicker(
             self._window, self, self._session, self._qt_picker,
         )
         # page
@@ -83,20 +93,20 @@ class PrxPageForMotionMain(gui_prx_widgets.PrxBasePage):
         central_qt_lot.addWidget(self._page_prx_tab_tool_box.widget)
         self._page_prx_tab_tool_box.set_tab_direction(self._page_prx_tab_tool_box.TabDirections.RightToLeft)
         # tool set
-        # copy and paste
-        self._gui_motion_copy_and_paste_prx_toolset = _toolset_basic.ToolsetForMotionCopyAndPaste(
+        # copy, paste, mirror
+        self._gui_motion_copy_and_paste_prx_toolset = _copy_paste_mirror.ToolsetForMotionCopyAndPasteAndMirror(
             self._window, self, self._session
         )
         # keyframe
-        self._gui_motion_keyframe_prx_toolset = _toolset_basic.ToolsetForMotionKeyframe(
+        self._gui_motion_keyframe_prx_toolset = _keyframe.ToolsetForMotionKeyframe(
             self._window, self, self._session
         )
         # move
-        self._gui_move_prx_toolset = _toolset_basic.ToolsetForMove(
+        self._gui_move_prx_toolset = _control_move.ToolsetForMotionControlAndMove(
             self._window, self, self._session
         )
-        # constrain and deform
-        self._gui_constraint_and_deform_prx_toolset = _toolset_basic.ToolsetForConstraintAndDeform(
+        # constrain, deform
+        self._gui_constraint_and_deform_prx_toolset = _constrain_deform.ToolsetForConstraintDeform(
             self._window, self, self._session
         )
         #

@@ -18,6 +18,28 @@ class TaskParse(object):
 
     TASK_SESSION_CLS = _task_session.TaskSession
 
+    def __new__(cls, *args, **kwargs):
+        if cls.INSTANCE is not None:
+            return cls.INSTANCE
+
+        self = super(TaskParse, cls).__new__(cls)
+        self._parse_configure = bsc_resource.RscExtendConfigure.get_as_content('wsp_task/parse/default')
+        self._parse_configure.do_flatten()
+
+        self._dcc_configure = bsc_resource.RscExtendConfigure.get_as_content('wsp_task/dcc/default')
+        self._dcc_configure.do_flatten()
+
+        self._space_dict = self._parse_configure.get('spaces')
+
+        self._properties = bsc_content.DictProperties(
+            root_disorder=self._parse_configure.get('roots.disorder.windows'),
+            root_source=self._parse_configure.get('roots.source.windows'),
+            root_temporary=self._parse_configure.get('roots.temporary.windows'),
+            root_release=self._parse_configure.get('roots.release.windows')
+        )
+        cls.INSTANCE = self
+        return self
+
     @classmethod
     def variants_factor(cls, variants):
         dict_ = {}
@@ -129,30 +151,6 @@ class TaskParse(object):
             if i_variants:
                 i_variants['resource_branch'] = i_resource_branch
                 return cls.TASK_SESSION_CLS(task_parse, i_variants)
-
-    def __init__(self):
-        self._parse_configure = bsc_resource.RscExtendConfigure.get_as_content('wsp_task/parse/default')
-        self._parse_configure.do_flatten()
-
-        self._dcc_configure = bsc_resource.RscExtendConfigure.get_as_content('wsp_task/dcc/default')
-        self._dcc_configure.do_flatten()
-
-        self._space_dict = self._parse_configure.get('spaces')
-
-        self._properties = bsc_content.DictProperties(
-            root_disorder=self._parse_configure.get('roots.disorder.windows'),
-            root_source=self._parse_configure.get('roots.source.windows'),
-            root_temporary=self._parse_configure.get('roots.temporary.windows'),
-            root_release=self._parse_configure.get('roots.release.windows')
-        )
-
-    def __new__(cls, *args, **kwargs):
-        if cls.INSTANCE is not None:
-            return cls.INSTANCE
-
-        instance = super(TaskParse, cls).__new__(cls)
-        cls.INSTANCE = instance
-        return instance
 
     @property
     def properties(self):

@@ -234,6 +234,10 @@ class NodeAttributeKeyframeOpt(object):
 
     @classmethod
     def apply_value_data_to(cls, path, atr_name, data, force=False, mirror_keys=None):
+        # ignore non exists
+        if _attribute.NodeAttribute.is_exists(path, atr_name) is False:
+            return
+
         value = data['value']
 
         mirror_keys = mirror_keys or []
@@ -245,9 +249,6 @@ class NodeAttributeKeyframeOpt(object):
         # ignore same value
         value_dst = _attribute.NodeAttribute.get_value(path, atr_name)
         if value == value_dst:
-            return
-
-        if _attribute.NodeAttribute.is_exists(path, atr_name) is False:
             return
 
         # try to unlock
@@ -269,6 +270,34 @@ class NodeAttributeKeyframeOpt(object):
                     return
             else:
                 return
+
+        # ignore when is non settable
+        if _attribute.NodeAttribute.is_settable(path, atr_name) is False:
+            return
+
+        _attribute.NodeAttribute.set_value(path, atr_name, value)
+
+    @classmethod
+    def apply_pose(cls, path, atr_name, data, mirror_keys=None):
+        # ignore non exists
+        if _attribute.NodeAttribute.is_exists(path, atr_name) is False:
+            return
+
+        if _attribute.NodeAttribute.is_settable(path, atr_name) is False:
+            return
+
+        value = data['value']
+
+        mirror_keys = mirror_keys or []
+        if atr_name in mirror_keys:
+            value = -value
+        if _attribute.NodeAttribute.is_exists(path, atr_name) is False:
+            return
+
+        # ignore same value
+        value_dst = _attribute.NodeAttribute.get_value(path, atr_name)
+        if value == value_dst:
+            return
 
         _attribute.NodeAttribute.set_value(path, atr_name, value)
 

@@ -60,8 +60,14 @@ class ControlMotionOpt(
     def generate_motion_properties(self, key_includes=None):
         return _base.NodeMotion.generate_motion_properties_fnc(self._path, key_includes)
 
+    def generate_pose_properties(self, key_includes=None):
+        return _base.NodeMotion.generate_pose_properties_fnc(self._path, key_includes)
+
     def apply_motion_properties(self, data, **kwargs):
         _base.NodeMotion.apply_motion_properties_fnc(self._path, data,  **kwargs)
+
+    def apply_pose_properties(self, data, **kwargs):
+        _base.NodeMotion.apply_pose_properties_fnc(self._path, data, **kwargs)
 
     def get_curve_node_at(self, atr_name):
         return _mya_core.NodeAttribute.get_source_node(self._path, atr_name, 'animCurve')

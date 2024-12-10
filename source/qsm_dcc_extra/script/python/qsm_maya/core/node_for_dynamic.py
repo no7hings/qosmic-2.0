@@ -179,3 +179,14 @@ class Field:
             mel.eval('Air;')
         else:
             raise RuntimeError()
+
+
+class MeshDynamic:
+    @classmethod
+    def is_valid(cls, transform_path):
+        shape = _node_for_transform.Transform.get_shape(transform_path)
+        history = cmds.listHistory(shape)
+        _ = cmds.ls(history, type=['nCloth']) or []
+        if _:
+            return True
+        return False

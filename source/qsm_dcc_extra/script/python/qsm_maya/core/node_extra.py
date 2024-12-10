@@ -17,6 +17,8 @@ from . import material as _material
 
 from . import attribute as _attribute
 
+from . import keyframe as _keyframe
+
 from . import node_keyframe as _node_keyframe
 
 from . import node_for_dag as _node_for_dag
@@ -476,6 +478,36 @@ class EtrNodeOpt(object):
                 )
         return dict_
 
+    def generate_pose_properties(self, key_includes=None):
+        if isinstance(key_includes, (tuple, list)):
+            atr_names = [x for x in key_includes if _attribute.NodeAttribute.is_exists(self._path, x) is True]
+        else:
+            atr_names = self.get_all_port_paths()
+
+        dict_ = collections.OrderedDict()
+
+        node_path = self.get_path()
+
+        # mark rotate order
+        if _attribute.NodeAttribute.is_exists(node_path, 'rotateOrder'):
+            rotate_order = _attribute.NodeAttribute.get_value(node_path, 'rotateOrder')
+            dict_['rotateOrder'] = dict(
+                flag='ignore',
+                data=rotate_order
+            )
+
+        for i_atr_name in atr_names:
+            if _attribute.NodeAttribute.is_exists(node_path, i_atr_name) is False:
+                continue
+
+            i_opt = _node_keyframe.NodeAttributeKeyframeOpt(node_path, i_atr_name)
+
+            dict_[i_atr_name] = dict(
+                flag='value',
+                data=i_opt.get_value_data()
+            )
+        return dict_
+
     def apply_motion_properties(self, data, frame_offset=0, force=False, excludes=None, **kwargs):
         mirror_keys = kwargs.get('mirror_keys', [])
         for i_atr_name, i_v in data.items():
@@ -495,3 +527,19 @@ class EtrNodeOpt(object):
                     i_v['data'],
                     frame_offset=frame_offset, force=force, mirror_keys=mirror_keys
                 )
+
+    def apply_pose_properties(self, data, excludes=None, **kwargs):
+        auto_keyframe = kwargs.get('auto_keyframe', False)
+        with _keyframe.auto_keyframe_context(auto_keyframe):
+            mirror_keys = kwargs.get('mirror_keys', [])
+            for i_atr_name, i_v in data.items():
+                if excludes is not None:
+                    if i_atr_name in excludes:
+                        continue
+
+                i_flag = i_v['flag']
+                if i_flag == 'value':
+                    _node_keyframe.NodeAttributeKeyframeOpt.apply_pose(
+                        self._path, i_atr_name, i_v['data'],
+                        mirror_keys=mirror_keys
+                    )

@@ -10,7 +10,7 @@ import _task
 
 class Episode(_base.AbsEntity):
     Type = _base.EntityTypes.Episode
-    VariantKey = _base.VariantKeys.Episode
+    VariantKey = _base.EntityVariantKeys.Episode
 
     NextEntitiesCacheClassDict = {
         _base.EntityTypes.Sequence: _sequence.SequencesCacheOpt,
@@ -22,7 +22,7 @@ class Episode(_base.AbsEntity):
     @classmethod
     def _variant_validation_fnc(cls, variants):
         return (
-            _base.VariantKeyMatch.match_fnc(variants, _base.VariantKeys.Episode) and
+            _base.VariantKeyMatch.match_fnc(variants, _base.EntityVariantKeys.Episode) and
             _base.VariantKeyMatch.match_fnc(variants, cls.VariantKey)
         )
 

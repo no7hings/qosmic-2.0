@@ -6,7 +6,7 @@ import _task
 
 class Asset(_base.AbsEntity):
     Type = _base.EntityTypes.Asset
-    VariantKey = _base.VariantKeys.Asset
+    VariantKey = _base.EntityVariantKeys.Asset
 
     TasksCacheOptClass = _task.TasksCacheOpt
 

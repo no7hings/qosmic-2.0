@@ -1,6 +1,8 @@
 # coding:utf-8
 import lxbasic.content as bsc_content
 
+import qsm_general.core as qsm_gnl_core
+
 
 class DccTaskReleaseOpt(object):
     def __init__(self, task_session, variants):
@@ -15,3 +17,7 @@ class DccTaskReleaseOpt(object):
 
     def release_scene_src(self, *args, **kwargs):
         raise NotImplementedError()
+
+    @classmethod
+    def check_sync_server_is_available(cls):
+        return qsm_gnl_core.Sync.sever_is_available()

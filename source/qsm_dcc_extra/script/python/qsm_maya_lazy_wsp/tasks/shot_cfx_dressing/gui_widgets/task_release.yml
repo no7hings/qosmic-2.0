@@ -39,10 +39,22 @@ build:
                     height: 120
                     tool_tip:
                         |-
-                        To be supplemented.
+                        Add review video (playblast).
                     tool_tip_chs:
                         |-
-                        加入拍屏。
+                        加入审核视频（拍屏）。
+
+                note:
+                    widget: script
+                    name: 'Note'
+                    name_chs: '备注'
+                    height: 120
+                    tool_tip:
+                        |-
+                        Fill in the release notes to record the updated information.
+                    tool_tip_chs:
+                        |-
+                        填写发布备注，记录更新信息。
 
                 show_release_directory:
                     widget: button

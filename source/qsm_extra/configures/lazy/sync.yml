@@ -1,0 +1,55 @@
+studio:
+    XSH: '//10.33.4.90/pipeline-root'
+    XHZ: '//10.1.1.11/pipeline-root'
+    XQD: '//192.160.0.101/pipeline-root'
+    # is non network share
+    DEV: 'Y:'
+
+driver_map:
+    XSH:
+        X: '//nas30/Projects'
+    XHZ:
+        X: '//10.1.1.250/Projects'
+    XQD:
+        X: '//192.160.130.2/projects'
+    # is non network share
+    DEV:
+        X: 'X:'
+
+studio_targets_map:
+    XSH:
+        - XHZ
+        - XQD
+    XHZ:
+        - XSH
+        - XQD
+    XQD:
+        - XSH
+        - XHZ
+    DEV: []
+
+rez_package:
+    XSH:
+        root_source: 'E:/myworkspace/user-root/packages'
+        # XSH
+        root_release: '//10.33.4.90/pipeline-root/deploy/rez-packages/internally/release'
+        root_release_sync: [
+            # XHZ
+            '//10.1.1.11/pipeline-root/deploy/rez-packages/internally/release',
+            # XQD
+            '//192.160.0.101/pipeline-root/deploy/rez-packages/internally/release',
+        ]
+        # XSH
+        root_pre_release: '//10.33.4.90/pipeline-root/deploy/rez-packages/internally/pre-release'
+        root_pre_release_sync: [
+            # XHZ
+            '//10.1.1.11/pipeline-root/deploy/rez-packages/internally/pre-release',
+            # XQD
+            '//192.160.0.101/pipeline-root/deploy/rez-packages/internally/pre-release',
+        ]
+    DEV:
+        root_source: 'E:/myworkspace/qosmic-2.0/source'
+        root_release: 'Y:/deploy/rez-packages/internally/release'
+        root_release_sync: []
+        root_pre_release: 'Y:/deploy/rez-packages/internally/pre-release'
+        root_pre_release_sync: []

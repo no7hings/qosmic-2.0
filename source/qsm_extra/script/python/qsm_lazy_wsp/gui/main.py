@@ -15,9 +15,9 @@ class PrxLazyWorkspaceTool(_abs_panel_for_workspace.AbsPrxPanelForWorkspace):
         # task manager
         _page_task_manager.PrxPageForTaskManager,
         # task tool
-        _page_task_tool.PrxPageForTaskTool,
+        # _page_task_tool.PrxPageForTaskTool,
         # task publish
-        _page_task_release.PrxPageForTaskRelease
+        # _page_task_release.PrxPageForTaskRelease
     ]
 
     SUB_PANEL_CLASSES = [

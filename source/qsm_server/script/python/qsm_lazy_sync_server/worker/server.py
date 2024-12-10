@@ -162,12 +162,21 @@ class TaskServer(object):
     APP = flask.Flask('Lazy Sync Server')
 
     @staticmethod
+    @APP.route('/server_status', methods=['GET'])
+    def server_status_fnc():
+        return flask.jsonify(
+            dict(
+                started=True
+            )
+        )
+
+    @staticmethod
     @APP.route('/task_new', methods=['POST'])
     def task_new_fnc():
         try:
             data = flask.request.get_json()
             if not data or 'json' not in data:
-                return flask.jsonify({'error': 'Invalid input'}), 400
+                return flask.jsonify({'error': 'invalid input.'}), 400
 
             json_path = data['json']
 
@@ -180,7 +189,7 @@ class TaskServer(object):
                 TaskServer.LOG_KEY, 'task is wait for start: {}'.format(task_id)
             )
             TaskWorker.QUEUE.put(task)
-            return flask.jsonify({'status': 'Task added to queue'}), 202
+            return flask.jsonify({'status': 'task added to queue.'}), 202
         except Exception as e:
             import traceback
             traceback.print_exc()

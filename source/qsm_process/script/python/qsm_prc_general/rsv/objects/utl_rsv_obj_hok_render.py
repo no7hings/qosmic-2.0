@@ -30,7 +30,7 @@ class RsvDccRenderHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
         time_tag = self._hook_option_opt.get('time_tag')
         #
         td_enable = self._hook_option_opt.get_as_boolean('td_enable')
-        rez_beta = self._hook_option_opt.get_as_boolean('rez_beta')
+        test_flag = self._hook_option_opt.get_as_boolean('test_flag')
         #
         render_file_path = self.get_asset_katana_render_file()
         #
@@ -119,7 +119,7 @@ class RsvDccRenderHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                         #
                         user=user, time_tag=time_tag,
                         #
-                        td_enable=td_enable, rez_beta=rez_beta,
+                        td_enable=td_enable, test_flag=test_flag,
                         #
                         render_file=render_file_path,
                         render_output_directory=render_output_directory_path,
@@ -156,7 +156,7 @@ class RsvDccRenderHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                                 file=file_path,
                                 #
                                 user=user, time_tag=time_tag,
-                                td_enable=td_enable, rez_beta=rez_beta,
+                                td_enable=td_enable, test_flag=test_flag,
                                 #
                                 image_file=i_image_path_src,
                                 movie_file=i_movie_file_path_tgt,
@@ -189,7 +189,7 @@ class RsvDccRenderHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                                 file=file_path,
                                 #
                                 user=user, time_tag=time_tag,
-                                td_enable=td_enable, rez_beta=rez_beta,
+                                td_enable=td_enable, test_flag=test_flag,
                                 #
                                 image_file=i_image_path_src,
                                 output_image_file=i_image_path_tgt,
@@ -215,7 +215,7 @@ class RsvDccRenderHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                     file=file_path,
                     #
                     user=user, time_tag=time_tag,
-                    td_enable=td_enable, rez_beta=rez_beta,
+                    td_enable=td_enable, test_flag=test_flag,
                     #
                     dependencies=[option_hook_key],
                     dependent_ddl_job_id_extend=render_ddl_job_ids,
@@ -242,7 +242,7 @@ class RsvDccRenderHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                             file=file_path,
                             #
                             user=user, time_tag=time_tag,
-                            td_enable=td_enable, rez_beta=rez_beta,
+                            td_enable=td_enable, test_flag=test_flag,
                             #
                             dependencies=[option_hook_key],
                             dependent_ddl_job_id_extend=[video_composite_ddl_job_id],

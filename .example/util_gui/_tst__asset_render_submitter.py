@@ -5,7 +5,7 @@ import lxgui.proxy.core as gui_prx_core
 
 import lxtool.submitter.gui.widgets as smt_gui_widgets
 
-bsc_core.BscEnvironExtra.set_td_enable(True)
+bsc_core.BscEnvironExtra.set_devlop_flag(True)
 
 # hook_option = 'file={}'.format('/l/prod/cgm/work/assets/chr/nn_14y_test/mod/modeling/maya/scenes/nn_14y_test.mod.modeling.v006.ma')
 # hook_option = 'file={}'.format('/l/prod/cgm/work/assets/chr/nn_14y_test/srf/surfacing/katana/nn_14y_test.srf.surfacing.v045.td_render.katana')

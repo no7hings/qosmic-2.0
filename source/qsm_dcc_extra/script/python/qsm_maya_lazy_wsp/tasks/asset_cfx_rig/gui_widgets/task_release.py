@@ -3,6 +3,8 @@ import os
 
 import lxbasic.storage as bsc_storage
 
+import lxgui.core as gui_core
+
 from qsm_lazy_wsp.gui.abstracts import unit_for_task_release as _abs_unit_for_task_release
 
 import qsm_general.process as qsm_dcc_process
@@ -51,12 +53,24 @@ class PrxToolsetForAssetCfxRigRelease(_abs_unit_for_task_release.AbsPrxUnitForTa
         if task_session is not None:
             task_path = task_session.get_file_for('asset-release-task-dir')
             if task_path:
-                bsc_storage.StgExplorer.open_directory(task_path)
+                if bsc_storage.StgPath.get_is_exists(task_path):
+                    bsc_storage.StgExplorer.open_directory(task_path)
+                else:
+                    gui_core.GuiApplication.exec_message_dialog(
+                        self.choice_gui_message(
+                            self._configure.get('build.messages.no_record')
+                        ),
+                        status='warning'
+                    )
 
     def on_release(self):
         images = self._prx_options_node.get('images')
 
         if self._task_release_opt is not None:
+            if self._task_release_opt.check_sync_server_is_available() is False:
+                return
+
+            # release source
             args = self._task_release_opt.release_scene_src(images=images)
             if args:
                 release_version_dir_path, release_scene_src_path, version_new = args

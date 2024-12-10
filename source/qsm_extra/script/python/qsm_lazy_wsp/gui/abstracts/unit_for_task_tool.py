@@ -85,7 +85,7 @@ class AbsPrxUnitForTaskTool(gui_prx_widgets.PrxBaseUnit):
         self._task_qt_button = gui_qt_widgets.QtIconPressButton()
         self._main_prx_tool_box.add_widget(self._task_qt_button)
         self._task_qt_button._set_name_text_('task')
-        self._task_qt_button._set_icon_name_('task')
+        self._task_qt_button._set_icon_name_('workspace/task')
 
         self._task_qt_info_label = gui_qt_widgets.QtInfoBubble()
         self._main_prx_tool_box.add_widget(self._task_qt_info_label)
@@ -189,3 +189,8 @@ class AbsPrxUnitForTaskTool(gui_prx_widgets.PrxBaseUnit):
             return task_session.generate_opt_for(
                 self.TASK_TOOL_OPT_CLS
             )
+    
+    def generate_gui_task_tool_opt(self):
+        task_session = self._page._task_session
+        if task_session is not None:
+            return self._generate_gui_task_tool_opt_fnc(task_session)

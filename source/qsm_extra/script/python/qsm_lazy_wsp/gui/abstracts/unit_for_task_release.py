@@ -73,7 +73,7 @@ class AbsPrxUnitForTaskRelease(gui_prx_widgets.PrxBaseUnit):
         self._task_qt_button = gui_qt_widgets.QtIconPressButton()
         self._main_prx_tool_box.add_widget(self._task_qt_button)
         self._task_qt_button._set_name_text_('task')
-        self._task_qt_button._set_icon_name_('task')
+        self._task_qt_button._set_icon_name_('workspace/task')
 
         self._task_qt_info_label = gui_qt_widgets.QtInfoBubble()
         self._main_prx_tool_box.add_widget(self._task_qt_info_label)
