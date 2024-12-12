@@ -7,6 +7,8 @@ import lxgui.core as gui_core
 
 import lxgui.proxy.widgets as gui_prx_widgets
 
+import qsm_general.core as qsm_gnl_core
+
 import qsm_maya.core as qsm_mya_core
 
 import qsm_maya.handles.general.core as qsm_mya_hdl_gnl_core
@@ -336,7 +338,7 @@ class ToolsetUnitForCfxRigImport(
         pot = self._prx_options_node.get_port('cloth.file_tree')
         pot.set_root(directory_path)
 
-        ptn = qsm_mya_hdl_gnl_core.FilePatterns.CfxClothAbcFile
+        ptn = qsm_gnl_core.DccFilePatterns.CfxClothAbcFile
         ptn_opt = bsc_core.BscStgParseOpt(
             ptn
         )
@@ -357,7 +359,7 @@ class ToolsetUnitForCfxRigImport(
 
         cache_paths = pot.get_all(check_only=True)
         if cache_paths:
-            ptn = qsm_mya_hdl_gnl_core.FilePatterns.CfxClothAbcFile
+            ptn = qsm_gnl_core.DccFilePatterns.CfxClothAbcFile
             ptn_opt = bsc_core.BscStgParseOpt(
                 ptn
             )

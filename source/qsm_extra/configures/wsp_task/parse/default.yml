@@ -261,6 +261,19 @@ variants:
         sequence: '[a-zA-Z]*'
         shot: '[a-zA-Z]*[0-9]'
 
+steps:
+    general: 'gnl'
+    model: 'mod'
+    groom: 'grm'
+    cfx: 'cfx'
+    animation: 'ani'
+
+tasks:
+    model: 'modeling'
+    groom: 'grooming'
+    cfx_rig: 'cfx_rig'
+    animation: 'animation'
+
 patterns:
     # project
     project:
@@ -354,6 +367,22 @@ patterns:
             #   directories
             maya-cache-dir: '<.task_unit-dir>/maya/caches'
             maya-cfx_cache-dir: '<.task_unit-dir>/maya/cfx_caches'
+            maya-animation_cache-dir: '<.task_unit-dir>/maya/animation_caches'
+            maya-animation_cache-version-dir: '<.maya-animation_cache-dir>/v{version}'
+
+        temporary:
+            dir: '{root_temporary}/{project}/{space}/shots/{sequence}/{shot}'
+            # task
+            task-dir: '<.dir>/{step}.{task}'
+            # version
+            version-dir: '<.task-dir>/<..task-version-name>'
+            # maya
+            #   files
+            maya-scene_src-file: '<.version-dir>/source/{shot}.ma'
+            # cache
+            cache-abc-dir: '<.version-dir>/cache/abc'
+            asset-cache-abc-geometry-file: '<.cache-abc-dir>/{namespace}.geometry.abc'
+            asset-cache-abc-control-file: '<.cache-abc-dir>/{namespace}.control.abc'
 
         release:
             dir: '{root_release}/{project}/QSM/{space}/shots/{sequence}/{shot}'
@@ -368,7 +397,7 @@ patterns:
 
             maya-scene-file: '<.version-dir>/maya/{shot}.ma'
             
-            abc-cache-dir: '<.version-dir>/cache/abc'
+            cache-abc-dir: '<.version-dir>/cache/abc'
 
             pack-dir: '<.version-dir>/pack'
             pack-maya-scene-file: '<.pack-dir>/{shot}.ma'

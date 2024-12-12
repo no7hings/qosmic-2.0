@@ -40,6 +40,14 @@ class AdvRigAsset(qsm_mya_rsc_core.Asset):
         if _:
             return _[0]
 
+    def find_geo_lower_location(self):
+        """
+        Low_Grp：ADV没有这个设置，这是个临时设置，后面会使用配置控制
+        """
+        _ = cmds.ls('{}:Low_Grp'.format(self._namespace), long=1)
+        if _:
+            return _[0]
+
     def find_motion_location(self):
         _ = cmds.ls('{}:MotionSystem'.format(self.namespace), long=1)
         if _:

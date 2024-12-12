@@ -8,22 +8,22 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
+import qsm_general.core as qsm_gnl_core
+
 import qsm_general.process as qsm_gnl_process
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya.general.core as qsm_gnl_core
+import qsm_maya.general.core as qsm_mya_gnl_core
 
 import qsm_maya.resource.core as qsm_mya_rsc_core
-
-from ...general import core as _tsk_gnl_core
 
 from .. import core as _core
 
 
 class ShotCfxClothCacheOpt(qsm_mya_rsc_core.AssetCacheOpt):
-    CACHE_ROOT = qsm_gnl_core.ResourceCacheNodes.CfxClothRoot
-    CACHE_NAME = qsm_gnl_core.ResourceCacheNodes.CfxClothName
+    CACHE_ROOT = qsm_mya_gnl_core.ResourceCacheNodes.CfxClothRoot
+    CACHE_NAME = qsm_mya_gnl_core.ResourceCacheNodes.CfxClothName
 
     def __init__(self, *args, **kwargs):
         super(ShotCfxClothCacheOpt, self).__init__(*args, **kwargs)
@@ -47,9 +47,9 @@ class ShotCfxClothCacheOpt(qsm_mya_rsc_core.AssetCacheOpt):
                 namespace=self._namespace
             )
 
-            mcx_path = _tsk_gnl_core.FilePatterns.CfxClothMcxFile.format(**options)
-            abc_path = _tsk_gnl_core.FilePatterns.CfxClothAbcFile.format(**options)
-            json_path = _tsk_gnl_core.FilePatterns.CfxClothJsonFile.format(**options)
+            mcx_path = qsm_gnl_core.DccFilePatterns.CfxClothMcxFile.format(**options)
+            abc_path = qsm_gnl_core.DccFilePatterns.CfxClothAbcFile.format(**options)
+            json_path = qsm_gnl_core.DccFilePatterns.CfxClothJsonFile.format(**options)
 
             data = dict(
                 scene_file=qsm_mya_core.SceneFile.get_current(),
@@ -154,14 +154,14 @@ class CfxNClothCacheProcess(object):
         options = dict(
             directory=directory_path,
         )
-        scene_src_path = _tsk_gnl_core.FilePatterns.SceneSrcFile.format(**options)
+        scene_src_path = qsm_gnl_core.DccFilePatterns.SceneSrcFile.format(**options)
         qsm_mya_core.SceneFile.export_file(scene_src_path)
 
         task_name = '[cfx-cloth-cache][{}][{}]'.format(
             bsc_storage.StgDirectoryOpt(directory_path).get_name(), '{}-{}'.format(*frame_range)
         )
 
-        cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script_by_option_dict(
+        cmd_script = qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script_by_option_dict(
             'cfx-cloth-cache-generate',
             dict(
                 directory_path=directory_path,
@@ -186,14 +186,14 @@ class CfxNClothCacheProcess(object):
         options = dict(
             directory=directory_path,
         )
-        scene_src_path = _tsk_gnl_core.FilePatterns.SceneSrcFile.format(**options)
+        scene_src_path = qsm_gnl_core.DccFilePatterns.SceneSrcFile.format(**options)
         qsm_mya_core.SceneFile.export_file(scene_src_path)
 
         task_name = '[cfx-cloth-cache][{}][{}]'.format(
             bsc_storage.StgDirectoryOpt(directory_path).get_name(), '{}-{}'.format(*frame_range)
         )
 
-        hook_option = qsm_gnl_process.MayaCacheProcess.generate_hook_option_fnc(
+        hook_option = qsm_gnl_process.MayaCacheSubprocess.generate_hook_option_fnc(
             'cfx-cloth-cache-generate',
             dict(
                 directory_path=directory_path,
@@ -213,7 +213,7 @@ class CfxNClothCacheProcess(object):
         options = dict(
             directory=self._directory_path,
         )
-        scene_src_path = _tsk_gnl_core.FilePatterns.SceneSrcFile.format(**options)
+        scene_src_path = qsm_gnl_core.DccFilePatterns.SceneSrcFile.format(**options)
 
         qsm_mya_core.SceneFile.new()
         if os.path.isfile(scene_src_path) is False:

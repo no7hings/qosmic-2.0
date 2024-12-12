@@ -8,7 +8,7 @@ option_dict = dict(
 )
 
 
-cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script_by_option_dict(
+cmd_script = qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script_by_option_dict(
     'test-unicode', option_dict
 )
 

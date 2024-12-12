@@ -336,7 +336,7 @@ class PrxTreeviewUnitForAssetOpt(
 
         self._item_dict = self._prx_tree_view._item_dict
 
-        self._resources_query = self.RESOURCES_QUERY_CLS()
+        self._assets_query = self.RESOURCES_QUERY_CLS()
 
     def restore(self):
         self._push_cache()
@@ -606,7 +606,7 @@ class PrxTreeviewUnitForAssetOpt(
 
     def gui_add_all(self):
         self.gui_add_root()
-        resources = self._resources_query.get_all()
+        resources = self._assets_query.get_all()
         for i_resource in resources:
             self.gui_add_one(i_resource)
 
@@ -655,7 +655,7 @@ class PrxTreeviewUnitForAssetOpt(
             self._prx_tree_view.clear_selection()
 
     def get_resources_query(self):
-        return self._resources_query
+        return self._assets_query
 
     def do_gui_select_all_resources(self):
         list_ = []

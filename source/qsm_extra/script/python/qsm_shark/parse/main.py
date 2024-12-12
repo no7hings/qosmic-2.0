@@ -1,8 +1,6 @@
 # coding:utf-8
 import json
 
-import hashlib
-
 import collections
 
 import lxbasic.resource as bsc_resource
@@ -22,11 +20,53 @@ class Entity(_abc.AbsEntity):
 
 
 class Stage(_abc.AbsBase):
+    class Roots:
+        """
+        virtual value, real value is from configure.
+        """
+        disorder = None
+        source = None
+        release = None
+        temporary = None
+
+    class Spaces:
+        """
+        virtual value, real value is from configure.
+        """
+        disorder = None
+        source = None
+        release = None
+        temporary = None
+        all = []
+
+    class Steps:
+        """
+        virtual value, real value is from configure.
+        """
+        general = None
+        model = None
+        groom = None
+        cfx = None
+        animation = None
+        all = []
+
+    class Tasks:
+        """
+        virtual value, real value is from configure.
+        """
+        model = None
+        groom = None
+        cfx_rig = None
+        animation = None
+        all = []
 
     INSTANCE_DICT = dict()
 
     ENTITY_DICT = dict()
     NEXT_ENTITIES_DICT = dict()
+
+    def __init__(self, *args, **kwargs):
+        pass
 
     def __new__(cls, *args, **kwargs):
         scheme = kwargs.get('scheme', 'default')
@@ -34,8 +74,10 @@ class Stage(_abc.AbsBase):
             return cls.INSTANCE_DICT[scheme]
 
         self = super(Stage, cls).__new__(cls, *args, **kwargs)
+
         self._scheme = scheme
         self._platform = bsc_core.BscPlatform.get_current()
+
         self._configure = bsc_resource.RscExtendConfigure.get_as_content('wsp_task/parse/{}'.format(self._scheme))
         self._configure.do_flatten()
         self._variants = dict(
@@ -48,6 +90,35 @@ class Stage(_abc.AbsBase):
 
         self._entity_key = '{{"stage": "{}"}}'.format(scheme)
         self._cleanup_variant_keys = self._configure.get('variants.cleanup_keys')
+
+        # load from configure as default, maybe load from database
+
+        # root
+        root_dict = self._configure.get('roots')
+        self.Roots = type('Roots', (), {})()
+        for k, v in root_dict.items():
+            self.Roots.__dict__[k] = v[self._platform]
+
+        # space
+        space_dict = self._configure.get('spaces')
+        self.Spaces = type('Spaces', (), {})()
+        for k, v in space_dict.items():
+            self.Spaces.__dict__[k] = v
+        self.Spaces.all = space_dict.values()
+
+        # step
+        step_dict = self._configure.get('steps')
+        self.Steps = type('Steps', (), {})()
+        for k, v in step_dict.items():
+            self.Steps.__dict__[k] = v
+        self.Steps.all = step_dict.values()
+
+        # task
+        task_dict = self._configure.get('tasks')
+        self.Tasks = type('Tasks', (), {})()
+        for k, v in task_dict.items():
+            self.Tasks.__dict__[k] = v
+        self.Tasks.all = task_dict.values()
 
         cls.INSTANCE_DICT[scheme] = self
         return self

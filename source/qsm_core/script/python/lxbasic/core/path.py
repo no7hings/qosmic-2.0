@@ -211,6 +211,38 @@ class BscNodePath:
         return list_
 
 
+class BscNamespace:
+    @classmethod
+    def get_dag_args(cls, path, pathsep=':'):
+        return path.split(pathsep)
+    
+    @classmethod
+    def to_dag_name(cls, path, pathsep=':'):
+        return cls.get_dag_args(path, pathsep)[-1]
+
+    @classmethod
+    def get_dag_parent_path(cls, path, pathsep=':'):
+        dag_args = cls.get_dag_args(path, pathsep)
+        if len(dag_args) == 1:
+            return None
+        elif len(dag_args) == 2:
+            return dag_args[0]
+        return pathsep.join(dag_args[:-1])
+
+    @classmethod
+    def get_dag_component_paths(cls, path, pathsep=':'):
+        def _rcs_fnc(lis_, path_):
+            if path_ is not None:
+                lis_.append(path_)
+                _parent_path = cls.get_dag_parent_path(path_, pathsep)
+                if _parent_path:
+                    _rcs_fnc(lis_, _parent_path)
+
+        list_ = []
+        _rcs_fnc(list_, path)
+        return list_
+
+
 class BscNodeProperties(object):
     def __init__(self, **kwargs):
         self._dict = dict(**kwargs)

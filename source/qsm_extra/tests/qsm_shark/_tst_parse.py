@@ -1,5 +1,4 @@
 # coding:utf-8
-# coding:utf-8
 import qsm_shark.parse as c
 
 stage = c.Stage()

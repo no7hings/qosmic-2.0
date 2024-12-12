@@ -41,11 +41,13 @@ class MayaShotCfxClothCreateOpt(_shot_gnl_task_create.MayaShotTaskCreateOpt):
 
         task_tool_opt = self._task_session.generate_opt_for(_task_tool.MayaShotCfxClothToolOpt)
 
+        task_tool_opt.apply_animation_scene_src(upstream_scene_path)
+
         if scene_frame_range is not None:
             task_tool_opt.apply_animation_frame_range(*scene_frame_range)
 
         if auto_load_cfx_rig is True:
-            task_tool_opt.load_cfx_rig_auto()
+            task_tool_opt.load_all_cfx_rig()
             task_tool_opt.apply_simulation_start_frame(solver_start_frame)
 
         qsm_mya_core.SceneFile.save_to(scene_src_path)

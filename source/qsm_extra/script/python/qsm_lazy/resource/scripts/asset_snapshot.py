@@ -32,7 +32,7 @@ class AssetSnapShotGenerateOpt(_asset_general.AssetGeneralOpt):
             # unregister first
             self.unregister()
 
-            cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script_by_option_dict(
+            cmd_script = qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script_by_option_dict(
                 self.TASK_KEY,
                 dict(
                     file_path=file_path,

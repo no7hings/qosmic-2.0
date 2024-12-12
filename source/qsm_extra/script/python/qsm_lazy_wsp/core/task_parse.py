@@ -1,5 +1,6 @@
 # coding:utf-8
 import copy
+
 import sys
 
 import lxbasic.core as bsc_core
@@ -8,15 +9,24 @@ import lxbasic.content as bsc_content
 
 import lxbasic.resource as bsc_resource
 
-import qsm_general.core as qsm_gnl_core
+import qsm_shark.parse as qsm_srk_parse
 
 from . import task_session as _task_session
 
 
+# todo: support to each project different stage?
 class TaskParse(object):
+    Roots = qsm_srk_parse.Stage.Roots
+    Spaces = qsm_srk_parse.Stage.Spaces
+    Steps = qsm_srk_parse.Stage.Steps
+    Tasks = qsm_srk_parse.Stage.Tasks
+
     INSTANCE = None
 
     TASK_SESSION_CLS = _task_session.TaskSession
+
+    def __init__(self, *args, **kwargs):
+        pass
 
     def __new__(cls, *args, **kwargs):
         if cls.INSTANCE is not None:
@@ -29,14 +39,14 @@ class TaskParse(object):
         self._dcc_configure = bsc_resource.RscExtendConfigure.get_as_content('wsp_task/dcc/default')
         self._dcc_configure.do_flatten()
 
-        self._space_dict = self._parse_configure.get('spaces')
+        self._parse_stage = qsm_srk_parse.Stage(scheme='default')
+        self.Roots = self._parse_stage.Roots
+        self.Spaces = self._parse_stage.Spaces
+        self.Steps = self._parse_stage.Steps
+        self.Tasks = self._parse_stage.Tasks
 
-        self._properties = bsc_content.DictProperties(
-            root_disorder=self._parse_configure.get('roots.disorder.windows'),
-            root_source=self._parse_configure.get('roots.source.windows'),
-            root_temporary=self._parse_configure.get('roots.temporary.windows'),
-            root_release=self._parse_configure.get('roots.release.windows')
-        )
+        self._properties = bsc_content.DictProperties(self._parse_stage.variants)
+
         cls.INSTANCE = self
         return self
 
@@ -172,7 +182,7 @@ class TaskParse(object):
         kwargs_new['resource_branch'] = resource_branch
         space_key = keys[1]
         kwargs_new['space_key'] = space_key
-        space = self._space_dict[space_key]
+        space = self._parse_stage._to_space(space_key)
         kwargs_new['space'] = space
 
         key = 'patterns.{}.{}.{}'.format(

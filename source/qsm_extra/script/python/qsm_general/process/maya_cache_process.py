@@ -6,7 +6,7 @@ import lxbasic.core as bsc_core
 import _base
 
 
-class MayaCacheProcess(_base.DccProcess):
+class MayaCacheSubprocess(_base.DccProcess):
     OPTION_HOOK_KEY = 'maya-cache-process'
 
     @classmethod

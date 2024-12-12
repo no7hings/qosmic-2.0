@@ -50,32 +50,19 @@ build:
                         |-
                         解算预设相关的功能。
 
-                cfx_rig/load:
+                cfx_rig/load_or_update:
                     widget: button
                     name: 'Load CFX Rig'
                     name_chs: '加载解算预设'
-                    icon: 'tool/maya/load-cfx-rig'
+                    icon: 'file/add-file'
                     menu_enable: True
-                    join_to_next: True
                     tool_tip:
                         |-
                         To be supplemented.
                     tool_tip_chs:
                         |-
-                        点击加载解算预设，需要选中绑定，可以是任意部件。
-
-                cfx_rig/update:
-                    widget: button
-                    name: 'Update CFX Rig'
-                    name_chs: '更新解算预设'
-                    icon: 'tool/maya/load-cfx-rig'
-                    tool_tip:
-                        |-
-                        To be supplemented.
-                    tool_tip_chs:
-                        |-
-                        如果解算预设更新了，可以使用这个按钮进行更新，需要选中绑定，可以是任意部件：
-                            目前更新功能还不是完美，可能会出现BUG。
+                        点击加载解算预设，需要选中绑定，可以是任意部件:
+                            目前更新功能可能会出现BUG。
 
                 cfx_rig/enable:
                     widget: button
@@ -103,6 +90,31 @@ build:
                         |-
                         点击禁用解算预设：
                             只有解算预设被加载了才能使用这个按钮禁用。
+
+                ani_cache:
+                    widget: group
+                    name: 'Animation Cache'
+                    name_chs: '动画缓存'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        动画缓存相关的功能。
+
+                ani_cache/load_or_update:
+                    widget: button
+                    name: 'Load / Update Animation Cache'
+                    name_chs: '加载 / 更新动画缓存'
+                    icon: 'file/add-file'
+                    join_to_next: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        点击加载/ 更新动画缓存，需要选中绑定，可以是任意部件：
+                            目前更新功能可能会出现BUG。
 
                 simulation:
                     widget: group

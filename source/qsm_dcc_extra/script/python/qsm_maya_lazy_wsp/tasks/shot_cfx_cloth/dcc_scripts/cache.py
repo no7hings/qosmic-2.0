@@ -12,6 +12,8 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
+import qsm_general.core as qsm_gnl_core
+
 import qsm_general.process as qsm_gnl_process
 
 import qsm_maya.core as qsm_mya_core
@@ -25,53 +27,6 @@ import qsm_maya.handles.general.core as qsm_mya_hdl_gnl_core
 import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 
 from .. import dcc_core as _core
-
-
-class ShotCfxRigsOpt(object):
-    def __init__(self):
-        pass
-
-    def load_all(self):
-        import qsm_maya_lazy_wsp.core as mya_lzy_wps_core
-
-        self._resources_query = qsm_mya_hdl_anm_core.AdvRigAssetsQuery()
-        self._resources_query.do_update()
-        task_parse = mya_lzy_wps_core.TaskParse()
-        for i_resource in self._resources_query.get_all():
-            i_rig_namespace = i_resource.namespace
-
-            i_opt = _core.ShotCfxClothAssetHandle(i_rig_namespace)
-            if i_opt.cfx_rig_is_loaded() is True:
-                continue
-
-            i_scene_path = qsm_mya_core.ReferencesCache().get_file(i_rig_namespace)
-            if i_scene_path is None:
-                continue
-
-            i_rig_scene_ptn_opt = task_parse.generate_pattern_opt_for(
-                'asset-disorder-rig_scene-maya-file'
-            )
-            i_variants = i_rig_scene_ptn_opt.get_variants(i_scene_path, extract=True)
-            if i_variants:
-                i_task_variants = copy.copy(i_variants)
-                i_task_variants['step'] = 'cfx'
-                i_task_variants['task'] = 'cfx_rig'
-                i_cfx_rig_scene_ptn_opt = task_parse.generate_pattern_opt_for(
-                    'asset-release-maya-scene-file', **i_task_variants
-                )
-                i_matches = i_cfx_rig_scene_ptn_opt.find_matches(sort=True)
-                if i_matches:
-                    i_cfx_fig_scene_path = i_matches[-1]['result']
-                    i_opt.load_cfx_rig_from(i_cfx_fig_scene_path)
-
-    def apply_all_solver_start_frame(self, frame):
-        self._resources_query = qsm_mya_hdl_anm_core.AdvRigAssetsQuery()
-        self._resources_query.do_update()
-
-        for i_resource in self._resources_query.get_all():
-            i_rig_namespace = i_resource.namespace
-            i_opt = _core.ShotCfxClothAssetHandle(i_rig_namespace)
-            i_opt.apply_all_solver_start_frame(frame)
 
 
 class ShotCfxClothCacheOpt(qsm_mya_rsc_core.AssetCacheOpt):
@@ -163,10 +118,10 @@ class ShotCfxClothCacheOpt(qsm_mya_rsc_core.AssetCacheOpt):
                 namespace=name
             )
 
-            abc_path = qsm_mya_hdl_gnl_core.FilePatterns.CfxClothAbcFile.format(**options)
-            json_path = qsm_mya_hdl_gnl_core.FilePatterns.CfxClothJsonFile.format(**options)
+            abc_path = qsm_gnl_core.DccFilePatterns.CfxClothAbcFile.format(**options)
+            json_path = qsm_gnl_core.DccFilePatterns.CfxClothJsonFile.format(**options)
 
-            data = dict(
+            json_data = dict(
                 scene_file=qsm_mya_core.SceneFile.get_current(),
                 scene_fps=qsm_mya_core.Frame.get_fps_tag(),
                 user=bsc_core.BscSystem.get_user_name(),
@@ -178,7 +133,7 @@ class ShotCfxClothCacheOpt(qsm_mya_rsc_core.AssetCacheOpt):
                 frame_offset=frame_offset,
             )
 
-            bsc_storage.StgFileOpt(json_path).set_write(data)
+            bsc_storage.StgFileOpt(json_path).set_write(json_data)
 
             qsm_mya_core.AlembicCacheExport(
                 file_path=abc_path,
@@ -191,7 +146,9 @@ class ShotCfxClothCacheOpt(qsm_mya_rsc_core.AssetCacheOpt):
         pass
 
 
-class ShotCfxClothCacheProcess(object):
+class ShotCfxClothCacheExportProcess(object):
+    TASK_KEY = qsm_gnl_process.MayaTaskSubprocess.TaskKeys.ShotCfxClothCacheExport
+
     @classmethod
     def test(cls):
 
@@ -221,19 +178,23 @@ class ShotCfxClothCacheProcess(object):
         namespaces,
         directory_path,
         frame_range, frame_step=1, frame_offset=0,
+        scene_src_path_override=None
     ):
         options = dict(
             directory=directory_path,
         )
-        scene_src_path = qsm_mya_hdl_gnl_core.FilePatterns.SceneSrcFile.format(**options)
-        qsm_mya_core.SceneFile.export_file(scene_src_path)
+        scene_src_path = qsm_gnl_core.DccFilePatterns.SceneSrcFile.format(**options)
+        if scene_src_path_override:
+            bsc_storage.StgFileOpt(scene_src_path_override).copy_to_file(scene_src_path)
+        else:
+            qsm_mya_core.SceneFile.export_file(scene_src_path)
 
-        task_name = '[cfx-cloth-cache][{}][{}]'.format(
-            bsc_storage.StgDirectoryOpt(directory_path).get_name(), '{}-{}'.format(*frame_range)
+        task_name = '[{}][{}][{}]'.format(
+            cls.TASK_KEY, bsc_storage.StgDirectoryOpt(directory_path).get_name(), '{}-{}'.format(*frame_range)
         )
 
-        cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script_by_option_dict(
-            'cfx_cloth_cache_export',
+        cmd_script = qsm_gnl_process.MayaTaskSubprocess.generate_cmd_script_by_option_dict(
+            cls.TASK_KEY,
             dict(
                 directory_path=directory_path,
                 namespaces=namespaces,
@@ -242,7 +203,6 @@ class ShotCfxClothCacheProcess(object):
                 frame_offset=frame_offset,
             )
         )
-
         return task_name, scene_src_path, cmd_script
 
     @classmethod
@@ -251,19 +211,23 @@ class ShotCfxClothCacheProcess(object):
         namespaces,
         directory_path,
         frame_range, frame_step=1, frame_offset=0,
+        scene_src_path_override=None
     ):
         options = dict(
             directory=directory_path,
         )
-        scene_src_path = qsm_mya_hdl_gnl_core.FilePatterns.SceneSrcFile.format(**options)
-        qsm_mya_core.SceneFile.export_file(scene_src_path)
+        scene_src_path = qsm_gnl_core.DccFilePatterns.SceneSrcFile.format(**options)
+        if scene_src_path_override:
+            bsc_storage.StgFileOpt(scene_src_path_override).copy_to_file(scene_src_path)
+        else:
+            qsm_mya_core.SceneFile.export_file(scene_src_path)
 
-        task_name = '[cfx-cloth-cache][{}][{}]'.format(
-            bsc_storage.StgDirectoryOpt(directory_path).get_name(), '{}-{}'.format(*frame_range)
+        task_name = '[{}][{}][{}]'.format(
+            cls.TASK_KEY, bsc_storage.StgDirectoryOpt(directory_path).get_name(), '{}-{}'.format(*frame_range)
         )
 
-        hook_option = qsm_gnl_process.MayaCacheProcess.generate_hook_option_fnc(
-            'cfx_cloth_cache_export',
+        hook_option = qsm_gnl_process.MayaTaskSubprocess.generate_hook_option_fnc(
+            cls.TASK_KEY,
             dict(
                 directory_path=directory_path,
                 namespaces=namespaces,
@@ -274,7 +238,6 @@ class ShotCfxClothCacheProcess(object):
             job_name=task_name,
             output_directory=directory_path
         )
-
         return hook_option
 
     def execute(self):
@@ -287,7 +250,7 @@ class ShotCfxClothCacheProcess(object):
         options = dict(
             directory=directory_path,
         )
-        scene_src_path = qsm_mya_hdl_gnl_core.FilePatterns.SceneSrcFile.format(**options)
+        scene_src_path = qsm_gnl_core.DccFilePatterns.SceneSrcFile.format(**options)
         with bsc_log.LogProcessContext.create(maximum=len(namespaces)+2, label='cfx cloth cache export') as l_p:
             # step 1
             qsm_mya_core.SceneFile.new()
@@ -297,7 +260,7 @@ class ShotCfxClothCacheProcess(object):
                 raise RuntimeError()
             qsm_mya_core.SceneFile.open(scene_src_path)
             l_p.do_update()
-            # step 3
+            # step 2++
             for i_namespace in namespaces:
                 i_resource = _core.CfxRigAsset(
                     i_namespace
@@ -309,3 +272,50 @@ class ShotCfxClothCacheProcess(object):
                 )
 
                 l_p.do_update()
+
+
+class ShotCfxRigsOpt(object):
+    def __init__(self):
+        pass
+
+    def load_all(self):
+        import qsm_maya_lazy_wsp.core as mya_lzy_wps_core
+
+        self._assets_query = qsm_mya_hdl_anm_core.AdvRigAssetsQuery()
+        self._assets_query.do_update()
+        task_parse = mya_lzy_wps_core.TaskParse()
+        for i_resource in self._assets_query.get_all():
+            i_rig_namespace = i_resource.namespace
+
+            i_handle = _core.ShotCfxClothAssetHandle(i_rig_namespace)
+            if i_handle.cfx_rig_handle.get_is_loaded() is True:
+                continue
+
+            i_scene_path = qsm_mya_core.ReferencesCache().get_file(i_rig_namespace)
+            if i_scene_path is None:
+                continue
+
+            i_rig_scene_ptn_opt = task_parse.generate_pattern_opt_for(
+                'asset-disorder-rig_scene-maya-file'
+            )
+            i_variants = i_rig_scene_ptn_opt.get_variants(i_scene_path, extract=True)
+            if i_variants:
+                i_task_variants = copy.copy(i_variants)
+                i_task_variants['step'] = 'cfx'
+                i_task_variants['task'] = 'cfx_rig'
+                i_cfx_rig_scene_ptn_opt = task_parse.generate_pattern_opt_for(
+                    'asset-release-maya-scene-file', **i_task_variants
+                )
+                i_matches = i_cfx_rig_scene_ptn_opt.find_matches(sort=True)
+                if i_matches:
+                    i_cfx_fig_scene_path = i_matches[-1]['result']
+                    i_handle.cfx_rig_handle.load_scene_auto(i_cfx_fig_scene_path)
+
+    def apply_all_solver_start_frame(self, frame):
+        self._assets_query = qsm_mya_hdl_anm_core.AdvRigAssetsQuery()
+        self._assets_query.do_update()
+
+        for i_resource in self._assets_query.get_all():
+            i_rig_namespace = i_resource.namespace
+            i_handle = _core.ShotCfxClothAssetHandle(i_rig_namespace)
+            i_handle.cfx_rig_handle.apply_all_solver_start_frame(frame)

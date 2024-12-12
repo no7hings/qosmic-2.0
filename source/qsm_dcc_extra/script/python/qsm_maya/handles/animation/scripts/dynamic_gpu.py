@@ -111,7 +111,7 @@ class DynamicGpuCacheOpt(qsm_mya_rsc_core.AssetCacheOpt):
             create_flag, motion_file_path, cache_file_path = self.generate_motion_args()
             if create_flag is True:
                 rig_file_path = self._resource.file
-                cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script(
+                cmd_script = qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script(
                     (
                         'method=dynamic-gpu-cache-generate'
                         '&file={file}&cache_file={cache_file}&namespace={namespace}'
@@ -132,7 +132,7 @@ class DynamicGpuCacheOpt(qsm_mya_rsc_core.AssetCacheOpt):
         source_file_path = '{}/source.ma'.format(directory_path)
         self.export_source(source_file_path)
         cache_file_path = '{}/gpu.ma'.format(directory_path)
-        cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script(
+        cmd_script = qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script(
             (
                 'method=dynamic-gpu-cache-generate'
                 '&file={file}&cache_file={cache_file}&namespace={namespace}'

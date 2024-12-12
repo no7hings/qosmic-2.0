@@ -36,6 +36,11 @@ class ShotAssetsAnimationGroupOrg(_abc.AbsGroupOpt):
             )
         return qsm_mya_core.NodeAttribute.get_value(self.LOCATION, 'start_frame')
 
+    def set_scene_src(self, scene_path):
+        qsm_mya_core.NodeAttribute.create_as_string(
+            self.LOCATION, 'source_src', scene_path
+        )
+
 
 class ShotAssetsCfxGroupOrg(_abc.AbsGroupOpt):
     LOCATION = '|assets|cfx'

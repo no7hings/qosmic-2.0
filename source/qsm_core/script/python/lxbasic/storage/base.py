@@ -1089,6 +1089,13 @@ class StgPathOpt(object):
             return False
         return False
 
+    def get_is_same_to(self, file_path):
+        if file_path is not None:
+            if self.get_is_exists() is True and self.__class__(file_path).get_is_exists() is True:
+                return self.get_hash_value() == self.__class__(file_path).get_hash_value()
+            return False
+        return False
+
     def get_is_readable(self):
         return os.access(self._path, os.R_OK)
 
@@ -1148,6 +1155,20 @@ class StgPathOpt(object):
 
     def get_gui(self):
         return self.__gui
+
+    def get_hash_value(self):
+        if os.path.isfile(self.get_path()):
+            with open(self.get_path(), 'rb') as f:
+                # noinspection PyDeprecation
+                md5 = hashlib.md5()
+                while True:
+                    d = f.read(8096)
+                    if not d:
+                        break
+                    md5.update(d)
+                f.close()
+                return str(md5.hexdigest()).upper()
+        return 'D41D8CD98F00B204E9800998ECF8427E'
 
     def __str__(self):
         return self._path

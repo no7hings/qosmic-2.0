@@ -113,3 +113,13 @@ build:
                 name: 'Solver Start Frame'
                 name_chs: '解算器起始帧'
                 value: 1
+
+
+            drive_mode:
+                widget: capsule_string
+                name: 'Drive Mode'
+                name_chs: '驱动模式'
+                options: ['rig', 'cache']
+                option_names: ['Rig', 'Cache']
+                option_names_chs: ['绑定', '缓存']
+                default: 'rig'

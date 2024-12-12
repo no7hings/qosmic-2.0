@@ -448,7 +448,7 @@ class PlayblastProcess(object):
         start_frame, end_frame = frame
         width, height = resolution
         movie_file_path = six.u('{}.mov').format(bsc_core.auto_unicode(file_opt.path_base))
-        cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script_by_option_dict(
+        cmd_script = qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script_by_option_dict(
             'playblast',
             dict(
                 file=file_path,
@@ -502,7 +502,7 @@ class PlayblastProcess(object):
             file_opt.name, '{}x{}'.format(width, height), '{}-{}'.format(start_frame, end_frame)
         )
 
-        hook_option = qsm_gnl_process.MayaCacheProcess.generate_hook_option_fnc(
+        hook_option = qsm_gnl_process.MayaCacheSubprocess.generate_hook_option_fnc(
             'playblast',
             dict(
                 file=file_path,

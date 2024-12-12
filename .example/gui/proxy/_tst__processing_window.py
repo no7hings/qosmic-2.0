@@ -8,7 +8,7 @@ def process_fnc_(w_):
     import qsm_general.process as qsm_gnl_process
 
     w_.start(
-        qsm_gnl_process.MayaCacheProcess.generate_cmd_script(
+        qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script(
             'method=test-process'
         )
     )

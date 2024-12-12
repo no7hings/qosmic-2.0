@@ -37,7 +37,7 @@ class SceneryValidationOpt(_abc.AbsValidationOpt):
             bsc_storage.StgFileOpt(validation_cache_path).get_is_file() is False
             or bsc_storage.StgFileOpt(mesh_count_cache_path).get_is_file() is False
         ):
-            cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script_by_option_dict(
+            cmd_script = qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script_by_option_dict(
                 'scenery_validation',
                 dict(
                     file_path=file_path,

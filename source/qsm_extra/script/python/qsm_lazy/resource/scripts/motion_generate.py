@@ -18,7 +18,7 @@ class MotionGenerateOpt(object):
         if os.path.isfile(motion_json_path) is False:
             stl_animation_source_path = scr_stage.get_node_parameter(self._scr_node_path, 'stl_animation_source')
             rig_maya_scene_path = scr_stage.get_node_parameter(self._scr_node_path, 'rig_maya_scene')
-            cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script_by_option_dict(
+            cmd_script = qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script_by_option_dict(
                 'motion_generate',
                 dict(
                     stl_animation_source_path=stl_animation_source_path,

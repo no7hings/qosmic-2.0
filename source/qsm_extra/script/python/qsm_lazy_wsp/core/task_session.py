@@ -28,6 +28,10 @@ class TaskSession(object):
             str(self._properties)
         )
 
+    @property
+    def task_parse(self):
+        return self._task_parse
+
     def generate_opt_for(self, opt_cls):
         return opt_cls(self, self._properties)
 

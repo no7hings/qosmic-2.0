@@ -21,7 +21,7 @@ class MayaAssetCfxRigToolOpt(_asset_gnl_task_tool.MayaAssetTaskToolOpt):
 
     # cloth
     @qsm_mya_core.Undo.execute
-    def add_to_cloth_geo_by_select(self, *args, **kwargs):
+    def add_to_cloth_geo_by_selection(self, *args, **kwargs):
         mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
@@ -33,7 +33,7 @@ class MayaAssetCfxRigToolOpt(_asset_gnl_task_tool.MayaAssetTaskToolOpt):
                 self.add_to_cloth_geo(i_transform_path)
 
     @qsm_mya_core.Undo.execute
-    def copy_as_cloth_geo_by_select(self, *args, **kwargs):
+    def copy_as_cloth_geo_by_selection(self, *args, **kwargs):
         mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
@@ -75,7 +75,7 @@ class MayaAssetCfxRigToolOpt(_asset_gnl_task_tool.MayaAssetTaskToolOpt):
         return transform_path_new
 
     @qsm_mya_core.Undo.execute
-    def create_ncloth_by_select(self):
+    def create_ncloth_by_selection(self):
         mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
@@ -102,7 +102,7 @@ class MayaAssetCfxRigToolOpt(_asset_gnl_task_tool.MayaAssetTaskToolOpt):
 
     # cloth proxy
     @qsm_mya_core.Undo.execute
-    def add_to_cloth_proxy_geo_by_select(self, *args, **kwargs):
+    def add_to_cloth_proxy_geo_by_selection(self, *args, **kwargs):
         mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
@@ -114,7 +114,7 @@ class MayaAssetCfxRigToolOpt(_asset_gnl_task_tool.MayaAssetTaskToolOpt):
                 self.add_to_cloth_proxy_geo(i_transform_path)
 
     @qsm_mya_core.Undo.execute
-    def copy_as_cloth_proxy_geo_by_select(self, *args, **kwargs):
+    def copy_as_cloth_proxy_geo_by_selection(self, *args, **kwargs):
         mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
@@ -157,7 +157,7 @@ class MayaAssetCfxRigToolOpt(_asset_gnl_task_tool.MayaAssetTaskToolOpt):
 
     # appendix
     @qsm_mya_core.Undo.execute
-    def add_to_appendix_geo_by_select(self, *args, **kwargs):
+    def add_to_appendix_geo_by_selection(self, *args, **kwargs):
         mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
@@ -169,7 +169,7 @@ class MayaAssetCfxRigToolOpt(_asset_gnl_task_tool.MayaAssetTaskToolOpt):
                 self.add_to_appendix_geo(i_transform_path)
 
     @qsm_mya_core.Undo.execute
-    def copy_as_appendix_geo_by_select(self, *args, **kwargs):
+    def copy_as_appendix_geo_by_selection(self, *args, **kwargs):
         mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
@@ -202,7 +202,7 @@ class MayaAssetCfxRigToolOpt(_asset_gnl_task_tool.MayaAssetTaskToolOpt):
 
     # collider
     @qsm_mya_core.Undo.execute
-    def add_to_collider_geo_by_select(self, *args, **kwargs):
+    def add_to_collider_geo_by_selection(self, *args, **kwargs):
         mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
@@ -214,7 +214,7 @@ class MayaAssetCfxRigToolOpt(_asset_gnl_task_tool.MayaAssetTaskToolOpt):
                 self.add_to_collider_geometry(i_transform_path)
 
     @qsm_mya_core.Undo.execute
-    def copy_as_collider_geo_by_select(self, *args, **kwargs):
+    def copy_as_collider_geo_by_selection(self, *args, **kwargs):
         mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
@@ -256,7 +256,7 @@ class MayaAssetCfxRigToolOpt(_asset_gnl_task_tool.MayaAssetTaskToolOpt):
         return transform_path_new
 
     @qsm_mya_core.Undo.execute
-    def create_nrigid_by_select(self):
+    def create_nrigid_by_selection(self):
         mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
@@ -283,7 +283,7 @@ class MayaAssetCfxRigToolOpt(_asset_gnl_task_tool.MayaAssetTaskToolOpt):
 
     # bridge
     @qsm_mya_core.Undo.execute
-    def add_to_bridge_geo_by_select(self, *args, **kwargs):
+    def add_to_bridge_geo_by_selection(self, *args, **kwargs):
         mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
@@ -295,7 +295,7 @@ class MayaAssetCfxRigToolOpt(_asset_gnl_task_tool.MayaAssetTaskToolOpt):
                 self.add_to_bridge_geometry(i_transform_path)
 
     @qsm_mya_core.Undo.execute
-    def copy_as_bridge_geo_by_select(self, *args, **kwargs):
+    def copy_as_bridge_geo_by_selection(self, *args, **kwargs):
         mesh_set = self.generate_rig_opt().mesh_set
         _ = qsm_mya_core.Selection.get_all_meshes()
         for i_mesh in _:
@@ -338,7 +338,7 @@ class MayaAssetCfxRigToolOpt(_asset_gnl_task_tool.MayaAssetTaskToolOpt):
 
     #   control
     @qsm_mya_core.Undo.execute
-    def copy_as_bridge_control_by_select(self, *args, **kwargs):
+    def copy_as_bridge_control_by_selection(self, *args, **kwargs):
         control_set = self.generate_rig_opt().control_set
         _ = qsm_mya_core.Selection.get_all_transforms()
         for i_transform_path in _:

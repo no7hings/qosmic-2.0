@@ -36,7 +36,7 @@ class ShotCfxDressingReleaseProcess(object):
 
             # step 3
             cache_directory_path = task_session.get_file_for(
-                'shot-release-abc-cache-dir'
+                'shot-release-cache-abc-dir'
             )
             qsm_mya_core.SceneFile.collection_alembic_caches_to(
                 cache_directory_path

@@ -94,56 +94,56 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
 
         # cloth
         self._prx_options_node.set(
-            'cloth.add_to', self.on_add_to_cloth_geo_by_select
+            'cloth.add_to', self.on_add_to_cloth_geo_by_selection
         )
 
         self._prx_options_node.set(
-            'cloth.copy_as', self.on_copy_as_cloth_geo_by_select
+            'cloth.copy_as', self.on_copy_as_cloth_geo_by_selection
         )
 
         # cloth proxy
         self._prx_options_node.set(
-            'cloth_proxy.add_to', self.on_add_to_cloth_proxy_geo_by_select
+            'cloth_proxy.add_to', self.on_add_to_cloth_proxy_geo_by_selection
         )
 
         self._prx_options_node.set(
-            'cloth_proxy.copy_as', self.on_copy_as_cloth_proxy_geo_by_select
+            'cloth_proxy.copy_as', self.on_copy_as_cloth_proxy_geo_by_selection
         )
 
         # appendix
         self._prx_options_node.set(
-            'appendix.add_to', self.on_add_to_appendix_geo_by_select
+            'appendix.add_to', self.on_add_to_appendix_geo_by_selection
         )
 
         self._prx_options_node.set(
-            'appendix.copy_as', self.on_copy_as_appendix_geo_by_select
+            'appendix.copy_as', self.on_copy_as_appendix_geo_by_selection
         )
 
         # collider
         self._prx_options_node.set(
-            'collider.add_to', self.on_add_to_collider_geo_by_select
+            'collider.add_to', self.on_add_to_collider_geo_by_selection
         )
 
         self._prx_options_node.set(
-            'collider.copy_as', self.on_copy_as_collider_geo_by_select
+            'collider.copy_as', self.on_copy_as_collider_geo_by_selection
         )
 
         # bridge
         self._prx_options_node.set(
-            'bridge_geometry.add_to', self.on_add_to_bridge_geo_by_select
+            'bridge_geometry.add_to', self.on_add_to_bridge_geo_by_selection
         )
 
         self._prx_options_node.set(
-            'bridge_geometry.copy_as', self.on_copy_as_bridge_geo_by_select
+            'bridge_geometry.copy_as', self.on_copy_as_bridge_geo_by_selection
         )
 
         self._prx_options_node.set(
-            'bridge_control.copy_as', self.on_copy_as_bridge_control_by_select
+            'bridge_control.copy_as', self.on_copy_as_bridge_control_by_selection
         )
 
         # nucleus
         self._prx_options_node.set(
-            'nucleus.create_ncloth', self.on_create_ncloth_by_select
+            'nucleus.create_ncloth', self.on_create_ncloth_by_selection
         )
 
         self._prx_options_node.get_port('nucleus.create_ncloth').set_menu_content(
@@ -156,7 +156,7 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
         )
 
         self._prx_options_node.set(
-            'nucleus.create_nrigid', self.on_create_nrigid_by_select
+            'nucleus.create_nrigid', self.on_create_nrigid_by_selection
         )
 
         self._prx_options_node.set(
@@ -183,72 +183,72 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
             self._unit._gui_task_tool_opt.create_groups_for('cfx_rig')
 
     # bridge
-    def on_add_to_bridge_geo_by_select(self):
+    def on_add_to_bridge_geo_by_selection(self):
         if self._unit._gui_task_tool_opt is not None:
-            self._unit._gui_task_tool_opt.add_to_bridge_geo_by_select()
+            self._unit._gui_task_tool_opt.add_to_bridge_geo_by_selection()
 
-    def on_copy_as_bridge_geo_by_select(self):
+    def on_copy_as_bridge_geo_by_selection(self):
         if self._unit._gui_task_tool_opt is not None:
-            self._unit._gui_task_tool_opt.copy_as_bridge_geo_by_select(
+            self._unit._gui_task_tool_opt.copy_as_bridge_geo_by_selection(
                 auto_blend=self._prx_options_node.get('bridge_geometry.auto_blend')
             )
 
-    def on_copy_as_bridge_control_by_select(self):
+    def on_copy_as_bridge_control_by_selection(self):
         if self._unit._gui_task_tool_opt is not None:
-            self._unit._gui_task_tool_opt.copy_as_bridge_control_by_select(
+            self._unit._gui_task_tool_opt.copy_as_bridge_control_by_selection(
                 auto_constrain=self._prx_options_node.get('bridge_control.auto_constrain')
             )
 
     # cloth
-    def on_add_to_cloth_geo_by_select(self):
+    def on_add_to_cloth_geo_by_selection(self):
         if self._unit._gui_task_tool_opt is not None:
-            self._unit._gui_task_tool_opt.add_to_cloth_geo_by_select()
+            self._unit._gui_task_tool_opt.add_to_cloth_geo_by_selection()
 
-    def on_copy_as_cloth_geo_by_select(self):
+    def on_copy_as_cloth_geo_by_selection(self):
         if self._unit._gui_task_tool_opt is not None:
-            self._unit._gui_task_tool_opt.copy_as_cloth_geo_by_select(
+            self._unit._gui_task_tool_opt.copy_as_cloth_geo_by_selection(
                 auto_blend=self._prx_options_node.get('cloth.auto_blend')
             )
 
     # cloth proxy
-    def on_add_to_cloth_proxy_geo_by_select(self):
+    def on_add_to_cloth_proxy_geo_by_selection(self):
         if self._unit._gui_task_tool_opt is not None:
-            self._unit._gui_task_tool_opt.add_to_cloth_proxy_geo_by_select()
+            self._unit._gui_task_tool_opt.add_to_cloth_proxy_geo_by_selection()
 
-    def on_copy_as_cloth_proxy_geo_by_select(self):
+    def on_copy_as_cloth_proxy_geo_by_selection(self):
         if self._unit._gui_task_tool_opt is not None:
-            self._unit._gui_task_tool_opt.copy_as_cloth_proxy_geo_by_select(
+            self._unit._gui_task_tool_opt.copy_as_cloth_proxy_geo_by_selection(
                 auto_blend=self._prx_options_node.get('cloth.auto_blend')
             )
 
     # collider
-    def on_add_to_collider_geo_by_select(self):
+    def on_add_to_collider_geo_by_selection(self):
         if self._unit._gui_task_tool_opt is not None:
-            self._unit._gui_task_tool_opt.add_to_collider_geo_by_select()
+            self._unit._gui_task_tool_opt.add_to_collider_geo_by_selection()
 
-    def on_copy_as_collider_geo_by_select(self):
+    def on_copy_as_collider_geo_by_selection(self):
         if self._unit._gui_task_tool_opt is not None:
-            self._unit._gui_task_tool_opt.copy_as_collider_geo_by_select(
+            self._unit._gui_task_tool_opt.copy_as_collider_geo_by_selection(
                 auto_blend=self._prx_options_node.get('collider.auto_blend')
             )
 
     # appendix:
-    def on_add_to_appendix_geo_by_select(self):
+    def on_add_to_appendix_geo_by_selection(self):
         if self._unit._gui_task_tool_opt is not None:
-            self._unit._gui_task_tool_opt.add_to_appendix_geo_by_select()
+            self._unit._gui_task_tool_opt.add_to_appendix_geo_by_selection()
 
-    def on_copy_as_appendix_geo_by_select(self):
+    def on_copy_as_appendix_geo_by_selection(self):
         if self._unit._gui_task_tool_opt is not None:
-            self._unit._gui_task_tool_opt.copy_as_appendix_geo_by_select()
+            self._unit._gui_task_tool_opt.copy_as_appendix_geo_by_selection()
 
     # nucleus
-    def on_create_ncloth_by_select(self):
+    def on_create_ncloth_by_selection(self):
         if self._unit._gui_task_tool_opt is not None:
-            self._unit._gui_task_tool_opt.create_ncloth_by_select()
+            self._unit._gui_task_tool_opt.create_ncloth_by_selection()
 
-    def on_create_nrigid_by_select(self):
+    def on_create_nrigid_by_selection(self):
         if self._unit._gui_task_tool_opt is not None:
-            self._unit._gui_task_tool_opt.create_nrigid_by_select()
+            self._unit._gui_task_tool_opt.create_nrigid_by_selection()
 
     @staticmethod
     def on_paint_vertex_input_attract():

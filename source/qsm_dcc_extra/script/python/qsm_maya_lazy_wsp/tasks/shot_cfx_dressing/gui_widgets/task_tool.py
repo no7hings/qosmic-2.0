@@ -3,15 +3,17 @@ import lxbasic.core as bsc_core
 
 import lxbasic.storage as bsc_storage
 
-from qsm_lazy_wsp.gui.abstracts import unit_for_task_tool as _abs_unit_for_task_tool
-
 import lxgui.qt.core as gui_qt_core
+
+import qsm_general.core as qsm_gnl_core
 
 import qsm_maya.core as qsm_mya_core
 
 import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 
 import qsm_maya.handles.general.core as qsm_mya_hdl_gnl_core
+
+from qsm_lazy_wsp.gui.abstracts import unit_for_task_tool as _abs_unit_for_task_tool
 
 from ...shot_cfx_cloth import dcc_core as _shot_cfx_cloth_core
 
@@ -46,21 +48,21 @@ class _PrxNodeView(_abs_unit_for_task_tool.AbsPrxNodeViewForTaskTool):
 
         self._qt_tree_widget._view_model.set_item_expand_record_enable(True)
 
-        self._resources_query = qsm_mya_hdl_anm_core.AdvRigAssetsQuery()
+        self._assets_query = qsm_mya_hdl_anm_core.AdvRigAssetsQuery()
 
     def gui_restore(self):
         return self._qt_tree_widget._view_model.restore()
 
     def do_gui_refresh_all(self, force=False):
-        is_changed = self._resources_query.do_update()
+        is_changed = self._assets_query.do_update()
         if is_changed is True or force is True:
             self.gui_restore()
 
-            for i_resource_opt in self._resources_query.get_all():
-                i_cfx_asset_opt = _shot_cfx_cloth_core.ShotCfxClothAssetHandle(i_resource_opt.namespace)
-                self.gui_add_resource(i_resource_opt, i_cfx_asset_opt)
+            for i_resource_opt in self._assets_query.get_all():
+                i_asset_handle = _shot_cfx_cloth_core.ShotCfxClothAssetHandle(i_resource_opt.namespace)
+                self.gui_add_resource(i_resource_opt, i_asset_handle)
 
-    def gui_add_resource(self, resource_opt, cfx_asset_opt):
+    def gui_add_resource(self, resource_opt, asset_handle):
         path = resource_opt.path
 
         _ = self._qt_tree_widget._view_model.find_item(path)
@@ -93,7 +95,7 @@ class _PrxNodeView(_abs_unit_for_task_tool.AbsPrxNodeViewForTaskTool):
             qt_item._item_model.set_assign_data('dcc_node_type', 'root')
             qt_item._item_model.set_assign_data('dcc_resource', resource_opt)
 
-        if cfx_asset_opt.cfx_rig_is_loaded():
+        if asset_handle.cfx_rig_handle.get_is_loaded():
             qt_item._item_model.set_status(
                 qt_item._item_model.Status.Correct
             )
@@ -101,7 +103,7 @@ class _PrxNodeView(_abs_unit_for_task_tool.AbsPrxNodeViewForTaskTool):
         return qt_item
 
     def get_resources_query(self):
-        return self._resources_query
+        return self._assets_query
 
     def gui_get_selected_resources(self):
         list_ = []
@@ -145,7 +147,7 @@ class _PrxImportToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
         pot = self._prx_options_node.get_port('cache_directory.file_tree')
         pot.set_root(directory_path)
 
-        ptn = qsm_mya_hdl_gnl_core.FilePatterns.CfxClothAbcFile
+        ptn = qsm_gnl_core.DccFilePatterns.CfxClothAbcFile
         ptn_opt = bsc_core.BscStgParseOpt(
             ptn
         )
@@ -166,7 +168,7 @@ class _PrxImportToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
 
         cache_paths = pot.get_all(check_only=True)
         if cache_paths:
-            ptn = qsm_mya_hdl_gnl_core.FilePatterns.CfxClothAbcFile
+            ptn = qsm_gnl_core.DccFilePatterns.CfxClothAbcFile
             ptn_opt = bsc_core.BscStgParseOpt(
                 ptn
             )
@@ -175,15 +177,15 @@ class _PrxImportToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
             ) as g_p:
                 for i_cache_path in cache_paths:
                     if ptn_opt.check_is_matched(i_cache_path) is True:
-                        i_properties = ptn_opt.get_variants(i_cache_path)
-                        i_resource = resources_query.get(i_properties['namespace'])
+                        i_variants = ptn_opt.get_variants(i_cache_path)
+                        i_resource = resources_query.get(i_variants['namespace'])
                         if i_resource:
                             i_resource_opt = _shot_cfx_cloth_scripts.ShotCfxClothCacheOpt(i_resource)
                             i_resource_opt.load_cache(i_cache_path)
 
                     g_p.do_update()
 
-    def on_dcc_remove_cloth_cache_by_selected(self):
+    def on_dcc_remove_cloth_cache_by_selection(self):
         rig_namespaces = self.get_dcc_character_args()
         if rig_namespaces:
             with self._window.gui_progressing(
@@ -212,7 +214,7 @@ class _PrxImportToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
 
         self._prx_options_node.set(
             'cache_import.remove_cloth_cache',
-            self.on_dcc_remove_cloth_cache_by_selected
+            self.on_dcc_remove_cloth_cache_by_selection
         )
 
     def do_gui_refresh_all(self):

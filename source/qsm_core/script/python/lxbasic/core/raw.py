@@ -867,6 +867,9 @@ class BscChrGroup(object):
         '0123456789',
     ]
 
+    def __init__(self, *args, **kwargs):
+        pass
+
     def __new__(cls, *args, **kwargs):
         if cls.INSTANCE is not None:
             return cls.INSTANCE

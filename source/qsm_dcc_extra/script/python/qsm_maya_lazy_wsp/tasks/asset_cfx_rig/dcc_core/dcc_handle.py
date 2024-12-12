@@ -28,11 +28,11 @@ class AssetCfxRigHandle(_abc.AbsGroupOpt):
     
     def generate_component_data(self):
         return self.generate_component_data_for(
-            self.LOCATION, '/cfx_rig'
+            '/cfx_rig', self.LOCATION
         )
 
     @classmethod
-    def generate_component_data_for(cls, dcc_location, gui_location):
+    def generate_component_data_for(cls, gui_location, dcc_location):
         dict_ = collections.OrderedDict()
 
         dict_[gui_location] = dcc_location

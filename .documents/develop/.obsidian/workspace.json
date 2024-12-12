@@ -33,7 +33,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "随记/python/Python包安装.md",
+                "file": "常见问题/文件路径.md",
                 "mode": "source",
                 "source": false
               }
@@ -106,7 +106,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "随记/python/Python包安装.md",
+                "file": "常见问题/文件路径.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -123,7 +123,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "随记/python/Python包安装.md",
+                "file": "常见问题/文件路径.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -146,7 +146,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "随记/python/Python包安装.md"
+                "file": "常见问题/文件路径.md"
               }
             }
           },
@@ -168,7 +168,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "随记/python/Python包安装.md"
+                "file": "常见问题/文件路径.md"
               }
             }
           },
@@ -204,11 +204,13 @@
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
-      "mermaid-tools:Open Mermaid Toolbar": false
+      "mermaid-tools:Open Mermaid Toolbar": false,
+      "card-board:CardBoard": false
     }
   },
   "active": "d75b4329171ac1b4",
   "lastOpenFiles": [
+    "随记/python/Python包安装.md",
     "随记/python/PyQt.md",
     "随记/python/custom.md",
     "随记/python/中文路径处理.md",
@@ -220,7 +222,6 @@
     "随记/gantt view.md",
     "随记/利用标签进行分类.md",
     "随记/插件和工具为什么不推荐安装在本地.md",
-    "随记/python/Python包安装.md",
     "开发相关/开发文档/解算流程工具.md",
     "开发相关/开发文档/后台任务管理工具（Process Task Manager）.md",
     "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",

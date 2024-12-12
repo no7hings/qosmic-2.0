@@ -33,3 +33,19 @@ class AnmLayers(object):
     def get_all(cls):
         return cmds.ls(type='animLayer', long=1) or []
 
+    @classmethod
+    def merge_all(cls):
+        """
+        C:/Program Files/Autodesk/Maya2020/scripts/others/performAnimLayerMerge.mel
+        """
+        cmds.select(cls.get_all())
+        mel_script = (
+            'source performAnimLayerMerge; '
+            'global string $gSelectedAnimLayers[]; '
+            '$gSelectedAnimLayers = {{{}}}; '
+            'performAnimLayerMerge(0)'
+        ).format(
+            ', '.join(['"{}"'.format(x) for x in cls.get_all()])
+        )
+        mel.eval(mel_script)
+

@@ -34,7 +34,7 @@ class W(gui_prx_widgets.PrxBaseWindow):
             wgt.submit(
                 'TEST',
                 '测试-{}'.format(i),
-                qsm_gnl_process.MayaCacheProcess.generate_cmd_script(
+                qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script(
                     'method=test-process'
                 )
             )

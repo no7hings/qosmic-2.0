@@ -22,8 +22,8 @@ class Asset(object):
         self._variants = None
 
     def __str__(self):
-        return '{}(path="{}")'.format(
-            self.__class__.__name__, self._path
+        return '{}(namespace="{}")'.format(
+            self.__class__.__name__, self._namespace
         )
 
     def __repr__(self):
@@ -87,8 +87,6 @@ class AssetsQuery(object):
         )
         self._cache_hash_key = None
         self._cache_dict = collections.OrderedDict()
-
-        # self.do_update()
 
     def __str__(self):
         return '{}({})'.format(

@@ -57,7 +57,7 @@ def playblast_fnc(option_opt):
 
     import qsm_maya.handles.general.scripts as qsm_mya_hdl_gnl_scripts
 
-    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
     )
 
@@ -71,7 +71,7 @@ def cfx_cloth_cache_generate_fnc(option_opt):
 
     import qsm_maya.handles.cfx.scripts as qsm_mya_hdl_cfx_scripts
 
-    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
     )
 
@@ -80,16 +80,30 @@ def cfx_cloth_cache_generate_fnc(option_opt):
     ).execute()
 
 
-def cfx_cloth_cache_export_fnc(option_opt):
+def shot_animation_cache_export_fnc(option_opt):
+    import qsm_general.process as qsm_gnl_process
+
+    import qsm_maya_lazy_wsp.tasks.shot_animation.dcc_scripts as s
+
+    kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
+        option_opt.to_string()
+    )
+
+    s.ShotAnimationCacheProcess(
+        **kwargs
+    ).execute()
+
+
+def shot_cfx_cloth_cache_export_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
     import qsm_maya_lazy_wsp.tasks.shot_cfx_cloth.dcc_scripts as s
 
-    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
     )
 
-    s.ShotCfxClothCacheProcess(
+    s.ShotCfxClothCacheExportProcess(
         **kwargs
     ).execute()
 
@@ -99,7 +113,7 @@ def rig_validation_fnc(option_opt):
 
     import qsm_maya_lazy.validation.tasks as s
 
-    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
     )
 
@@ -113,7 +127,7 @@ def scenery_validation_fnc(option_opt):
 
     import qsm_maya_lazy.validation.tasks as s
 
-    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
     )
 
@@ -127,7 +141,7 @@ def mesh_count_generate_fnc(option_opt):
 
     import qsm_maya_lazy.resource.scripts as s
 
-    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
     )
 
@@ -141,7 +155,7 @@ def snapshot_generate_fnc(option_opt):
 
     import qsm_maya_lazy.resource.scripts as s
 
-    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
     )
 
@@ -155,7 +169,7 @@ def unit_assembly_generate_fnc(option_opt):
 
     import qsm_maya_lazy.resource.scripts as s
 
-    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
     )
 
@@ -169,7 +183,7 @@ def motion_generate_fnc(option_opt):
 
     import qsm_maya_lazy.montage.scripts as s
 
-    kwargs = qsm_gnl_process.MayaCacheProcess.to_option_dict(
+    kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
     )
 
@@ -226,8 +240,6 @@ def main(session):
         gpu_instance_generate_fnc(option_opt)
     elif method == 'cfx-cloth-cache-generate':
         cfx_cloth_cache_generate_fnc(option_opt)
-    elif method == 'cfx_cloth_cache_export':
-        cfx_cloth_cache_export_fnc(option_opt)
     elif method == 'playblast':
         playblast_fnc(option_opt)
     elif method == 'rig_validation':

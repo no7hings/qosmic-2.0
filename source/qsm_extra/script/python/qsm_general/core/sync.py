@@ -9,6 +9,9 @@ import lxbasic.core as bsc_core
 class Sync(object):
     INSTANCE = None
 
+    def __init__(self, *args, **kwargs):
+        pass
+
     def __new__(cls, *args, **kwargs):
         if cls.INSTANCE is not None:
             return cls.INSTANCE
@@ -77,6 +80,9 @@ class _Studio(object):
     """
     INSTANCE = None
 
+    def __init__(self, *args, **kwargs):
+        pass
+
     def __new__(cls, *args, **kwargs):
         if cls.INSTANCE is not None:
             return cls.INSTANCE
@@ -96,6 +102,9 @@ class _Studio(object):
 
 class _DriverMap(object):
     INSTANCE = None
+
+    def __init__(self, *args, **kwargs):
+        pass
 
     def __new__(cls, *args, **kwargs):
         if cls.INSTANCE is not None:

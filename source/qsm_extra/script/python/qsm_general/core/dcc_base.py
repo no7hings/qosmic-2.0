@@ -27,3 +27,19 @@ class MayaTimeunit:
         if timeunit in cls.TIMEUNIT_TO_FPS_DICT:
             return cls.TIMEUNIT_TO_FPS_DICT[timeunit]
         return int(timeunit[:-3])
+
+
+class DccFilePatterns(object):
+    SceneSrcFile = '{directory}/source/scene.ma'
+    # animation
+    # geometry
+    AniGeoCacheAbcFile = '{directory}/cache/abc/{namespace}.geometry.abc'
+    AniGeoJsonFile = '{directory}/json/{namespace}.geometry.json'
+    # control
+    AniCtlCacheAbcFile = '{directory}/cache/abc/{namespace}.control.abc'
+    AniCtlJsonFile = '{directory}/json/{namespace}.control.json'
+    # CFX
+    # cloth
+    CfxClothAbcFile = '{directory}/abc/{namespace}.cloth.abc'
+    CfxClothJsonFile = '{directory}/json/{namespace}.cloth.json'
+    CfxClothMcxFile = '{directory}/mcx/{namespace}.cloth.mcx'

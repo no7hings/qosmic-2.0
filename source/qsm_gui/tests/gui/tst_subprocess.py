@@ -29,13 +29,13 @@ class W(gui_prx_widgets.PrxBaseWindow):
 
             if i == 0:
                 trd.set_fnc(
-                    qsm_gnl_process.MayaCacheProcess.generate_cmd_script(
+                    qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script(
                         'method=test-process&tag=error'
                     )
                 )
             else:
                 trd.set_fnc(
-                    qsm_gnl_process.MayaCacheProcess.generate_cmd_script(
+                    qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script(
                         'method=test-process'
                     )
                 )

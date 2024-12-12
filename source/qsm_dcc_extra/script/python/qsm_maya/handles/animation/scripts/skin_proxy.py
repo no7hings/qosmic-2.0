@@ -216,7 +216,7 @@ class SkinProxyOpt(qsm_mya_rsc_core.AssetCacheOpt):
             file_path
         )
         if os.path.isfile(cache_file_path) is False or os.path.isfile(data_file_path) is False:
-            cmd_script = qsm_gnl_process.MayaCacheProcess.generate_cmd_script(
+            cmd_script = qsm_gnl_process.MayaCacheSubprocess.generate_cmd_script(
                 'method=skin-proxy-cache-generate&file={}&cache_file={}&data_file={}'.format(
                     file_path,
                     cache_file_path,

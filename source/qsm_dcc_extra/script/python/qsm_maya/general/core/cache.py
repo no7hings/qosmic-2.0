@@ -14,6 +14,9 @@ class ResourceCacheNodes(object):
     GpuInstanceRoot = '|__GPU_INSTANCE__'
     GpuInstanceName = 'gpu_instance_dgc'
 
+    AnimationRoot = '__ANIMATION__'
+    AnimationName = 'animation_dgc'
+
     CfxClothRoot = '|__CFX_CLOTH__'
     CfxClothName = 'cfx_cloth_dgc'
 

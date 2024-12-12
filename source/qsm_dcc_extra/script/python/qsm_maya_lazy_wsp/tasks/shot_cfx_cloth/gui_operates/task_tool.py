@@ -22,7 +22,7 @@ class MayaShotCfxClothToolOpt(_shot_gnl.MayaShotTaskToolOpt):
     def __init__(self, *args, **kwargs):
         super(MayaShotCfxClothToolOpt, self).__init__(*args, **kwargs)
 
-    def load_cfx_rig_for(self, rig_namespace):
+    def load_cfx_rig_auto(self, rig_namespace):
         reference_cache = qsm_mya_core.ReferencesCache()
         rig_scene_path = reference_cache.get_file(rig_namespace)
 
@@ -31,76 +31,7 @@ class MayaShotCfxClothToolOpt(_shot_gnl.MayaShotTaskToolOpt):
 
         asset_handle = _task_dcc_core.ShotCfxClothAssetHandle(rig_namespace)
 
-        cfx_rig_namespace = asset_handle.cfx_rig_namespace
-
         # ignore when reference is exists
-        node = reference_cache.get(cfx_rig_namespace)
-        if node is None:
-            rig_scene_ptn_opt = self._task_session.generate_pattern_opt_for(
-                'asset-disorder-rig_scene-maya-file'
-            )
-            variants = rig_scene_ptn_opt.get_variants(rig_scene_path)
-            if variants:
-                variants_new = copy.copy(variants)
-
-                variants_new['step'] = 'cfx'
-                variants_new['task'] = 'cfx_rig'
-
-                cfx_rig_scene_path = self._task_session.get_latest_file_for(
-                    'asset-release-maya-scene-file', **variants_new
-                )
-                if not rig_scene_path:
-                    if not bsc_storage.StgPath.get_is_file(cfx_rig_scene_path):
-                        return
-                    return
-
-                asset_handle.reference_cfx_rig_from(cfx_rig_scene_path)
-
-                locations = qsm_mya_core.Namespace.find_roots(cfx_rig_namespace)
-                for i_location in locations:
-                    _task_dcc_core.ShotCfxRigGroupOrg().add_one(i_location)
-
-        asset_handle.connect_to_rig()
-
-    def update_cfx_rig_for(self, rig_namespace):
-        asset_handle = _task_dcc_core.ShotCfxClothAssetHandle(rig_namespace)
-        if asset_handle.cfx_rig_is_loaded():
-            scene_path_old = asset_handle.get_cfx_rig_scene_path()
-            variants = self._task_session.generate_file_variants_for(
-                'asset-release-maya-scene-file', scene_path_old
-            )
-            if variants:
-                scene_path_new = self._task_session.get_latest_file_for(
-                    'asset-release-maya-scene-file', **variants
-                )
-                if scene_path_old != scene_path_new:
-                    asset_handle.replace_cfx_rig_scene(scene_path_new)
-
-        asset_handle.connect_to_rig()
-
-    @classmethod
-    def load_cfx_rig_scene_auto(cls, rig_namespace, cfx_rig_scene_path):
-        asset_handle = _task_dcc_core.ShotCfxClothAssetHandle(rig_namespace)
-        if asset_handle.cfx_rig_is_loaded():
-            asset_handle.replace_cfx_rig_scene(cfx_rig_scene_path)
-        else:
-            cfx_rig_namespace = asset_handle.cfx_rig_namespace
-            asset_handle.reference_cfx_rig_from(cfx_rig_scene_path)
-
-            locations = qsm_mya_core.Namespace.find_roots(cfx_rig_namespace)
-            for i_location in locations:
-                _task_dcc_core.ShotCfxRigGroupOrg().add_one(i_location)
-
-        asset_handle.connect_to_rig()
-
-    def get_cfx_rig_all_version_dict(self, rig_namespace):
-        reference_cache = qsm_mya_core.ReferencesCache()
-
-        rig_scene_path = reference_cache.get_file(rig_namespace)
-
-        if not rig_scene_path:
-            return {}
-
         rig_scene_ptn_opt = self._task_session.generate_pattern_opt_for(
             'asset-disorder-rig_scene-maya-file'
         )
@@ -111,7 +42,63 @@ class MayaShotCfxClothToolOpt(_shot_gnl.MayaShotTaskToolOpt):
             variants_new['step'] = 'cfx'
             variants_new['task'] = 'cfx_rig'
 
-            cfx_rig_scene_ptn_opt = self._task_session.generate_pattern_opt_for(
+            cfx_rig_scene_path = self._task_session.get_latest_file_for(
+                'asset-release-maya-scene-file', **variants_new
+            )
+            if not rig_scene_path:
+                if not bsc_storage.StgPath.get_is_file(cfx_rig_scene_path):
+                    return
+                return
+
+            asset_handle.cfx_rig_handle.load_scene_auto(cfx_rig_scene_path)
+
+    # cfx rig
+    def update_cfx_rig_for(self, rig_namespace):
+        asset_handle = _task_dcc_core.ShotCfxClothAssetHandle(rig_namespace)
+        cfx_rig_handle = asset_handle.cfx_rig_handle
+        if cfx_rig_handle.get_is_loaded():
+            keyword = 'asset-release-maya-scene-file'
+            scene_path_old = cfx_rig_handle.get_scene_path()
+            variants = self._task_session.generate_file_variants_for(
+                keyword, scene_path_old
+            )
+            if variants:
+                scene_path_new = self._task_session.get_latest_file_for(
+                    keyword, **variants
+                )
+                if scene_path_old != scene_path_new:
+                    cfx_rig_handle.replace_scene(scene_path_new)
+
+        cfx_rig_handle.connect_to_rig()
+
+    @classmethod
+    def load_cfx_rig_scene_auto(cls, rig_namespace, scene_path):
+        asset_handle = _task_dcc_core.ShotCfxClothAssetHandle(rig_namespace)
+        cfx_rig_handle = asset_handle.cfx_rig_handle
+        cfx_rig_handle.load_scene_auto(scene_path)
+
+    def generate_cfx_rig_version_dict(self, rig_namespace):
+        task_session = self._task_session
+        task_parse = task_session.task_parse
+
+        reference_cache = qsm_mya_core.ReferencesCache()
+
+        rig_scene_path = reference_cache.get_file(rig_namespace)
+
+        if not rig_scene_path:
+            return {}
+
+        rig_scene_ptn_opt = task_parse.generate_pattern_opt_for(
+            'asset-disorder-rig_scene-maya-file'
+        )
+        variants = rig_scene_ptn_opt.get_variants(rig_scene_path)
+        if variants:
+            variants_new = copy.copy(variants)
+
+            variants_new['step'] = task_parse.Steps.cfx
+            variants_new['task'] = task_parse.Tasks.cfx_rig
+
+            cfx_rig_scene_ptn_opt = task_parse.generate_pattern_opt_for(
                 'asset-release-maya-scene-file', **variants_new
             )
             dict_ = collections.OrderedDict()
@@ -121,6 +108,39 @@ class MayaShotCfxClothToolOpt(_shot_gnl.MayaShotTaskToolOpt):
                 dict_['v{}'.format(i['version'])] = i['result']
             return dict_
         return {}
+
+    def generate_ani_geo_cache_version_dict(self, rig_namespace):
+        task_session = self._task_session
+        task_parse = task_session.task_parse
+
+        variants_new = copy.copy(task_session.properties)
+        variants_new['step'] = task_parse.Steps.animation
+        variants_new['task'] = task_parse.Tasks.animation
+        variants_new['namespace'] = rig_namespace.replace(':', '__')
+        variants_new.pop('version')
+
+        # use scene-src for cacheing
+        asset_cache_abc_pth_opt = task_parse.generate_pattern_opt_for(
+            'shot-temporary-asset-cache-abc-geometry-file', **variants_new
+        )
+        dict_ = collections.OrderedDict()
+        matches = asset_cache_abc_pth_opt.find_matches(sort=True)
+        matches = matches[-10:]
+        for i in matches:
+            dict_['v{}'.format(i['version'])] = i['result']
+        return dict_
+
+    @classmethod
+    def load_ani_geo_cache_auto(cls, rig_namespace, cache_path):
+        asset_handle = _task_dcc_core.ShotCfxClothAssetHandle(rig_namespace)
+        ani_geo_cache_handle = asset_handle.ani_geo_cache_handle
+        ani_geo_cache_handle.load_cache_auto(cache_path)
+
+    @classmethod
+    def load_ani_ctl_cache_auto(cls, rig_namespace, cache_path):
+        asset_handle = _task_dcc_core.ShotCfxClothAssetHandle(rig_namespace)
+        ani_ctl_cache_handle = asset_handle.ani_ctl_cache_handle
+        ani_ctl_cache_handle.load_cache_auto(cache_path)
 
     @classmethod
     def export_cloth_cache_by_rig_namespace(
@@ -135,12 +155,16 @@ class MayaShotCfxClothToolOpt(_shot_gnl.MayaShotTaskToolOpt):
         )
 
     @classmethod
-    def load_cfx_rig_auto(cls):
+    def load_all_cfx_rig(cls):
         _task_dcc_scripts.ShotCfxRigsOpt().load_all()
         
     @classmethod
     def apply_animation_start_frame(cls, frame):
         _shot_base_dcc_core.ShotAssetsAnimationGroupOrg().set_start_frame(frame)
+
+    @classmethod
+    def apply_animation_scene_src(cls, scene_path):
+        _shot_base_dcc_core.ShotAssetsAnimationGroupOrg().set_scene_src(scene_path)
 
     @classmethod
     def apply_animation_frame_range(cls, statr_frame, end_frame):
@@ -163,3 +187,16 @@ class MayaShotCfxClothToolOpt(_shot_gnl.MayaShotTaskToolOpt):
     @classmethod
     def get_simulation_start_frame(cls):
         return _shot_base_dcc_core.ShotAssetsCfxGroupOrg().get_start_frame()
+
+    @classmethod
+    def test(cls):
+        import qsm_maya_lazy_wsp.core as c
+
+        task_parse = c.TaskParse()
+        task_session = task_parse.generate_task_session_by_resource_source_scene_src_auto()
+        task_tool_opt = task_session.generate_opt_for(cls)
+
+        task_tool_opt.generate_animation_cache_export_args()
+
+    def generate_animation_cache_export_args(self):
+        pass

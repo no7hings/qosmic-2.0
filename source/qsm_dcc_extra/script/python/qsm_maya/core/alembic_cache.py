@@ -91,7 +91,7 @@ class AlembicCacheExport(object):
                 else:
                     raise KeyError()
         self._data_format = data_format
-        #
+
         self._results = []
 
     @classmethod

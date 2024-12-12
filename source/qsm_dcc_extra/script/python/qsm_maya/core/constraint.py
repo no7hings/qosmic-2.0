@@ -50,7 +50,7 @@ class ParentConstraint(object):
             i_source, i_target = '{}.{}'.format(source_node, i_src), '{}.{}'.format(constraint_node, i_dst)
             if cmds.isConnected(i_source, i_target) is False:
                 cmds.connectAttr(
-                    i_source, i_target
+                    i_source, i_target, force=1
                 )
 
 

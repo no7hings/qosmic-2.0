@@ -104,8 +104,30 @@ class _QtTreeViewWidget(
 
         self.setMouseTracking(True)
 
+        # self.itemDoubleClicked.connect(self._on_item_entry_start_)
+        self.current_edit = None
+
         self.installEventFilter(self)
         self.viewport().installEventFilter(self)
+
+    def _on_item_entry_start_(self, item, column):
+        if not self.current_edit:
+            line_edit = QtWidgets.QLineEdit(self)
+            line_edit.setText(item.text(column))
+            line_edit.setFocus()
+            # noinspection PyUnresolvedReferences
+            line_edit.returnPressed.connect(lambda: self._on_item_entry_finish_(line_edit, item, column))
+            # noinspection PyUnresolvedReferences
+            line_edit.editingFinished.connect(lambda: self._on_item_entry_finish_(line_edit, item, column))
+            self.setItemWidget(item, column, line_edit)
+            self.current_edit = line_edit
+
+    def _on_item_entry_finish_(self, line_edit, item, column):
+        if self.current_edit == line_edit:
+            new_text = line_edit.text()
+            item.setText(column, new_text)
+            self.removeItemWidget(item, column)
+            self.current_edit = None
 
     def _get_item_has_visible_children_by_index_(self, index):
         row_count = self.model().rowCount(index)

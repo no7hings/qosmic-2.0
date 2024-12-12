@@ -20,6 +20,9 @@ class Configure(object):
     INSTANCE = None
     INITIALIZED = False
 
+    def __init__(self, *args, **kwargs):
+        pass
+
     def __new__(cls, *args, **kwargs):
         if cls.INSTANCE is not None:
             return cls.INSTANCE
