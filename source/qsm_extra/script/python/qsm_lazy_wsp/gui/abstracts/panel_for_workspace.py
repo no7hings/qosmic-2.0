@@ -13,7 +13,7 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
 
     GUI_KEY = 'lazy-workspace'
 
-    RESOURCE_BRANCH = None
+    RESOURCE_TYPE = None
 
     def __init__(self, window, session, *args, **kwargs):
         super(AbsPrxPanelForWorkspace, self).__init__(window, session, *args, **kwargs)
@@ -22,9 +22,9 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
         self._page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         self.add_widget(self._page_prx_tab_tool_box)
 
-        self.gui_setup_pages_for(['task_manager', 'task_tool', 'task_release'])
+        self.gui_setup_pages_for(['task_manager', 'task_tool', 'task_release', 'task_tracker'])
 
-        self._page_prx_tab_tool_box.set_history_key('lazy-workspace.{}-page'.format(self.RESOURCE_BRANCH))
+        self._page_prx_tab_tool_box.set_history_key('lazy-workspace.{}-page'.format(self.RESOURCE_TYPE))
         self._page_prx_tab_tool_box.load_history()
 
         self.register_window_close_method(
@@ -102,3 +102,8 @@ class AbsPrxPanelForWorkspace(gui_prx_widgets.PrxBasePanel):
                 bsc_core.BscProcess.execute_use_thread(
                     cmd_script
                 )
+
+    def gui_set_current_page(self, key):
+        result = self._page_prx_tab_tool_box.set_current_key(key)
+        if result is True:
+            return self._tab_widget_dict[key]

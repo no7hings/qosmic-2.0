@@ -25,7 +25,7 @@ def main(session):
         if maya_rsv_scene_properties:
             # get scene src file path as current application
             maya_scene_file_path = maya_rsv_scene_properties.get('extra.file')
-            if bsc_storage.StgFileMtd.get_is_exists(maya_scene_file_path) is True:
+            if bsc_storage.StgFile.get_is_exists(maya_scene_file_path) is True:
                 # open file
                 mya_dcc_objects.Scene.open_file(maya_scene_file_path)
                 #

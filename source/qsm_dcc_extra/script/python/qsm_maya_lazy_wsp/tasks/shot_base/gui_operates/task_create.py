@@ -5,7 +5,7 @@ from . import task_tool as _task_tool
 
 
 class MayaShotTaskCreateOpt(lzy_wsp_core.DccTaskCreateOpt):
-    RESOURCE_BRANCH = 'shot'
+    RESOURCE_TYPE = 'shot'
 
     STEP = 'gnl'
     TASK = 'general'

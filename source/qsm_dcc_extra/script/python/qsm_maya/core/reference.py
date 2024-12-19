@@ -101,7 +101,7 @@ class Reference(object):
 
     @classmethod
     def replace(cls, path, file_path):
-        cmds.file(file_path, loadReference=path, force=1)
+        cmds.file(file_path, loadReference=path, options="v=0", force=1)
 
     @classmethod
     def get_nodes(cls, path):

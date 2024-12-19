@@ -8,39 +8,14 @@
         "type": "tabs",
         "children": [
           {
-            "id": "b032ec072aca1c53",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "常见问题/命令行/windows.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
             "id": "441a472ed7388a18",
             "type": "leaf",
             "state": {
               "type": "card-board-view",
               "state": {}
             }
-          },
-          {
-            "id": "d75b4329171ac1b4",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "常见问题/文件路径.md",
-                "mode": "source",
-                "source": false
-              }
-            }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -90,7 +65,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 245.5
+    "width": 245.5,
+    "collapsed": true
   },
   "right": {
     "id": "079848c8f8affc0b",
@@ -106,7 +82,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "常见问题/文件路径.md",
+                "file": "开发相关/开发进度/优化.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -123,7 +99,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "常见问题/文件路径.md",
+                "file": "开发相关/开发进度/优化.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -146,7 +122,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "常见问题/文件路径.md"
+                "file": "开发相关/开发进度/优化.md"
               }
             }
           },
@@ -168,7 +144,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "常见问题/文件路径.md"
+                "file": "开发相关/开发进度/优化.md"
               }
             }
           },
@@ -208,8 +184,16 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "d75b4329171ac1b4",
+  "active": "441a472ed7388a18",
   "lastOpenFiles": [
+    "开发相关/开发进度/优化.md",
+    "开发相关/开发文档/解算流程工具.md",
+    "Pasted image 20241216122541.png",
+    "Pasted image 20241216122307.png",
+    "Pasted image 20241216121957.png",
+    "Pasted image 20241216121401.png",
+    "Pasted image 20241216112647.png",
+    "常见问题/文件路径.md",
     "随记/python/Python包安装.md",
     "随记/python/PyQt.md",
     "随记/python/custom.md",
@@ -218,11 +202,9 @@
     "随记/maya/Maya性能优化.md",
     "常见问题/命令行/windows.md",
     "常见问题/maya/batch.md",
-    "开发相关/开发进度/优化.md",
     "随记/gantt view.md",
     "随记/利用标签进行分类.md",
     "随记/插件和工具为什么不推荐安装在本地.md",
-    "开发相关/开发文档/解算流程工具.md",
     "开发相关/开发文档/后台任务管理工具（Process Task Manager）.md",
     "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
     "开发相关/开发任务/maya/解算相关/解算流程工具开发.md",
@@ -237,16 +219,9 @@
     "开发相关/开发进度/maya/8月-动作拼接工具.md",
     "开发相关/开发进度/maya/6月-节点图模版工具.md",
     "开发相关/开发进度/maya/7月-动作工具.md",
-    "开发相关/开发进度/maya/6月-节点参数模版工具.md",
-    "开发相关/开发进度/maya/6月-绑定移动工具.md",
     "images/Pasted image 20241121133157.png",
     "images/Pasted image 20241121133136.png",
     "images/Pasted image 20241121133050.png",
-    "images/Pasted image 20241121133029.png",
-    "images/Pasted image 20241121132357.png",
-    "images/Pasted image 20241121132329.png",
-    "images/Pasted image 20241121132300.png",
-    "images/Pasted image 20241121131610.png",
     "USD/植被流程/流程图.canvas",
     "USD/植被流程",
     "USD",

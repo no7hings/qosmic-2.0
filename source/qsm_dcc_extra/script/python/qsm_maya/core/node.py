@@ -72,6 +72,14 @@ class Node(object):
     def rename(cls, name, new_name):
         return cmds.rename(name, new_name)
 
+    @classmethod
+    def is_locked(cls, name):
+        return cmds.lockNode(name, query=1, lock=1) == [True]
+
+    @classmethod
+    def unlock(cls, name):
+        cmds.lockNode(name, lock=False, lockUnpublished=False)
+
 
 class NodeOpt(object):
     def __init__(self, name):

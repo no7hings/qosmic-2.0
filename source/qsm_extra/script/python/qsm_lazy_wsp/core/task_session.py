@@ -44,35 +44,27 @@ class TaskSession(object):
         return self._properties
 
     @property
-    def entity_path(self):
-        return self._task_parse.to_entity_path(**self._properties)
-
-    @property
-    def resource_path(self):
-        return self._task_parse.to_resource_path(**self._properties)
-
-    @property
     def scan_resource_path(self):
         return self._task_parse.to_scan_resource_path(**self._properties)
 
     @property
     def task_unit_path(self):
-        return self._task_parse.to_task_unit_path(**self._properties)
+        return self._task_parse.to_wsp_task_unit_path(**self._properties)
 
     @property
     def scene_src_path(self):
-        return self._task_parse.to_source_scene_src_path(**self._properties)
+        return self._task_parse.to_wsp_task_unit_scene_path(**self._properties)
 
     @property
-    def resource_branch(self):
-        return self._properties['resource_branch']
+    def resource_type(self):
+        return self._properties['resource_type']
 
     def get_all_task_units(self):
-        resource_branch = self._properties['resource_branch']
+        resource_type = self._properties['resource_type']
         kwargs = copy.copy(self._properties)
         kwargs.pop('task_unit')
         ptn_opt = self.generate_pattern_opt_for(
-            '{}-source-task_unit-dir'.format(resource_branch), **kwargs
+            '{}-source-task_unit-dir'.format(resource_type), **kwargs
         )
         matches = ptn_opt.find_matches(sort=True)
         if matches:
@@ -146,12 +138,12 @@ class TaskSession(object):
     def generate_release_new_version_number(self, **kwargs):
         kwargs_new = copy.copy(self._properties)
         kwargs_new.update(**kwargs)
-        resource_branch = kwargs_new['resource_branch']
-        if resource_branch == 'asset':
+        resource_type = kwargs_new['resource_type']
+        if resource_type == 'asset':
             return self._task_parse.generate_asset_release_new_version_number(
                 **kwargs_new
             )
-        elif resource_branch == 'shot':
+        elif resource_type == 'shot':
             return self._task_parse.generate_shot_release_new_version_number(
                 **kwargs_new
             )
@@ -159,11 +151,11 @@ class TaskSession(object):
             raise RuntimeError()
 
     def get_last_release_scene_src_file(self):
-        if self.resource_branch == 'asset':
+        if self.resource_type == 'asset':
             return self.get_latest_file_for(
                 'asset-release-maya-scene_src-file'
             )
-        elif self.resource_branch == 'shot':
+        elif self.resource_type == 'shot':
             return self.get_latest_file_for(
                 'shot-release-maya-scene_src-file'
             )

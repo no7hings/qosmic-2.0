@@ -323,9 +323,9 @@ class AdvRigAssetsQuery(qsm_mya_rsc_core.AssetsQuery):
         is_loaded = kwargs['is_loaded']
         if is_loaded:
             namespace = kwargs['namespace']
-            _ = cmds.ls('{}:MainShape'.format(namespace), long=1)
+            _ = cmds.ls('{}:Root_M'.format(namespace), long=1)
             if _:
-                if cmds.nodeType(_[0]) == 'nurbsCurve':
+                if cmds.nodeType(_[0]) == 'joint':
                     return True
             return False
         else:

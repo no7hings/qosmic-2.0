@@ -22,7 +22,7 @@ class MayaShotCfxClothToolOpt(_shot_gnl.MayaShotTaskToolOpt):
     def __init__(self, *args, **kwargs):
         super(MayaShotCfxClothToolOpt, self).__init__(*args, **kwargs)
 
-    def load_cfx_rig_auto(self, rig_namespace):
+    def load_cfx_rig_auto(self, rig_namespace, force=False):
         reference_cache = qsm_mya_core.ReferencesCache()
         rig_scene_path = reference_cache.get_file(rig_namespace)
 
@@ -50,7 +50,7 @@ class MayaShotCfxClothToolOpt(_shot_gnl.MayaShotTaskToolOpt):
                     return
                 return
 
-            asset_handle.cfx_rig_handle.load_scene_auto(cfx_rig_scene_path)
+            asset_handle.cfx_rig_handle.load_scene_auto(cfx_rig_scene_path, force=force)
 
     # cfx rig
     def update_cfx_rig_for(self, rig_namespace):

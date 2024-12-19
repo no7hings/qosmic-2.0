@@ -26,7 +26,7 @@ rsv-match-condition: 'branch=asset&workspace_key=source+user'
 build:
     node:
         options:
-            resource_branch:
+            resource_type:
                 widget: capsule_string
                 options: ['project', 'asset', 'sequence', 'shot']
                 default: 'asset'
@@ -46,7 +46,7 @@ build:
                 tool_tip: 'choose a "asset / sequence / shot"'
                 enable: True
                 visible_condition: {
-                    operator: 'match_one', port: 'resource_branch', value: ['asset', 'sequence', 'shot']
+                    operator: 'match_one', port: 'resource_type', value: ['asset', 'sequence', 'shot']
                 }
 
             shotgun/task:

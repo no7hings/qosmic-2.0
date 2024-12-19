@@ -160,7 +160,7 @@ class PkgContextNew(object):
                     j_results = j_p_opt.get_exists_results()
                     if j_results:
                         for k_package_file in j_results:
-                            k_package_directory = _base.StgFileMtd.get_directory(k_package_file)
+                            k_package_directory = _base.StgFile.get_directory(k_package_file)
                             k_package_variants = j_p_opt.get_variants(k_package_file)
                             if 'version' not in k_package_variants:
                                 continue
@@ -203,7 +203,7 @@ class PkgContextNew(object):
                         j_results = j_p_opt.get_exists_results()
                         if j_results:
                             for k_package_file in j_results:
-                                k_package_directory = _base.StgFileMtd.get_directory(k_package_file)
+                                k_package_directory = _base.StgFile.get_directory(k_package_file)
                                 k_package_variants = j_p_opt.get_variants(k_package_file)
                                 if 'version' not in k_package_variants:
                                     continue

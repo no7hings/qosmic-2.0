@@ -905,15 +905,17 @@ class ListItemModel(_item_base.AbsItemModel):
                 self._data.video.index_maximum = _frame_count-1
                 self._data.video.fps = _fps
 
-                self._init_play()
-                self._init_autoplay(_fps)
+                # ignore play when frame count is 1
+                if _frame_count > 1:
+                    self._init_play()
+                    self._init_autoplay(_fps)
 
-                self._data.play.progress_enable = True
+                    self._data.play.progress_enable = True
 
-                self._data.play.time_maximum_text = bsc_core.BscInteger.frame_to_time_prettify(
-                    _frame_count,
-                    _fps
-                )
+                    self._data.play.time_maximum_text = bsc_core.BscInteger.frame_to_time_prettify(
+                        _frame_count,
+                        _fps
+                    )
 
                 self.mark_force_refresh(True)
                 self.update_view()

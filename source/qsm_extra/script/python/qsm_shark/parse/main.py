@@ -1,4 +1,9 @@
 # coding:utf-8
+import os.path
+import sys
+
+import copy
+
 import json
 
 import collections
@@ -28,6 +33,7 @@ class Stage(_abc.AbsBase):
         source = None
         release = None
         temporary = None
+        all = []
 
     class Spaces:
         """
@@ -63,7 +69,9 @@ class Stage(_abc.AbsBase):
     INSTANCE_DICT = dict()
 
     ENTITY_DICT = dict()
-    NEXT_ENTITIES_DICT = dict()
+    ENTITY_PATH_QUERY = dict()
+    
+    SYNC_FLAG = True
 
     def __init__(self, *args, **kwargs):
         pass
@@ -95,30 +103,47 @@ class Stage(_abc.AbsBase):
 
         # root
         root_dict = self._configure.get('roots')
-        self.Roots = type('Roots', (), {})()
-        for k, v in root_dict.items():
-            self.Roots.__dict__[k] = v[self._platform]
+        self.Roots = type('Roots', (), dict(all=[]))()
+        for i_key in self.RootKeys.All:
+            if i_key not in root_dict:
+                raise RuntimeError()
+            i_root = root_dict[i_key][self._platform]
+            if i_root not in self.Roots.all:
+                self.Roots.all.append(i_root)
+            self.Roots.__dict__[i_key] = i_root
 
         # space
         space_dict = self._configure.get('spaces')
-        self.Spaces = type('Spaces', (), {})()
-        for k, v in space_dict.items():
-            self.Spaces.__dict__[k] = v
-        self.Spaces.all = space_dict.values()
+        self.Spaces = type('Spaces', (), dict(all=[]))()
+        for i_key in self.SpaceKeys.All:
+            if i_key not in space_dict:
+                raise RuntimeError()
+            i_space = space_dict[i_key]
+            if i_space not in self.Spaces.all:
+                self.Spaces.all.append(i_space)
+            self.Spaces.__dict__[i_key] = i_space
 
         # step
         step_dict = self._configure.get('steps')
-        self.Steps = type('Steps', (), {})()
-        for k, v in step_dict.items():
-            self.Steps.__dict__[k] = v
-        self.Steps.all = step_dict.values()
+        self.Steps = type('Steps', (), dict(all=[]))()
+        for i_key in self.StepKeys.All:
+            if i_key not in step_dict:
+                raise RuntimeError()
+            i_step = step_dict[i_key]
+            if i_step not in self.Steps.all:
+                self.Steps.all.append(i_step)
+            self.Steps.__dict__[i_key] = i_step
 
         # task
         task_dict = self._configure.get('tasks')
-        self.Tasks = type('Tasks', (), {})()
-        for k, v in task_dict.items():
-            self.Tasks.__dict__[k] = v
-        self.Tasks.all = task_dict.values()
+        self.Tasks = type('Tasks', (), dict(all=[]))()
+        for i_key in self.TaskKeys.All:
+            if i_key not in task_dict:
+                raise RuntimeError()
+            i_task = task_dict[i_key]
+            if i_task not in self.Tasks.all:
+                self.Tasks.all.append(i_task)
+            self.Tasks.__dict__[i_key] = i_task
 
         cls.INSTANCE_DICT[scheme] = self
         return self
@@ -134,6 +159,32 @@ class Stage(_abc.AbsBase):
     @property
     def variants(self):
         return self._variants
+
+    def generate_pattern_opt_for(self, keyword, **kwargs):
+        kwargs_new = copy.copy(kwargs)
+        _ = keyword.split('-')
+        kwargs_new.update(**self._variants)
+        resource_type = _[0]
+        kwargs_new['resource_type'] = resource_type
+        space_key = _[1]
+        kwargs_new['space_key'] = space_key
+        space = self._to_space(space_key)
+        kwargs_new['space'] = space
+
+        key = 'patterns.{}.{}.{}'.format(
+            resource_type, space, '-'.join(_[2:])
+        )
+        ptn = self._configure.get(key)
+        if ptn:
+            return bsc_core.BscTaskParseOpt(
+                ptn
+            ).update_variants_to(**kwargs_new)
+        else:
+            raise RuntimeError(
+                sys.stderr.write(
+                    'pattern: {} is not found.'.format(keyword)
+                )
+            )
 
     def _get_variant_regex_dict(self):
         return self._configure.get(
@@ -184,15 +235,15 @@ class Stage(_abc.AbsBase):
         )
 
     # task
-    def _get_entity_task_pattern(self, resource_branch, space_key):
+    def _get_task_pattern(self, resource_type, space_key):
         return self._configure.get(
-            'patterns.{}.{}.task-dir'.format(resource_branch, space_key)
+            'patterns.{}.{}.task-dir'.format(resource_type, space_key)
         )
 
     # version
-    def _get_entity_version_pattern(self, resource_branch, space_key):
+    def _get_version_pattern(self, resource_type, space_key):
         return self._configure.get(
-            'patterns.{}.{}.version-dir'.format(resource_branch, space_key)
+            'patterns.{}.{}.version-dir'.format(resource_type, space_key)
         )
 
     def _to_entity_key(self, entity_type, variants):
@@ -231,40 +282,57 @@ class Stage(_abc.AbsBase):
             **variants
         )
 
-    def _to_entity_variants(self, entity_pre, entity_type, name, **variants):
+    def _to_entity_variants(self, entity_pre, entity_type, name, entity_variants):
         variant_key = self._get_entity_variant_key(entity_type)
-        variants_new = dict(**entity_pre._variants)
-        variants_new.update(variants)
-        variants_new[variant_key] = name
-        return variants_new
+        entity_variants_new = dict(**entity_pre._variants)
+        entity_variants_new.update(entity_variants)
+        entity_variants_new[variant_key] = name
+        return entity_variants_new
 
-    def _generate_entity_args(self, entity_pre, entity_type, name, **variants):
-        entity_variants = self._to_entity_variants(entity_pre, entity_type, name, **variants)
-        entity_key = self._to_entity_key(entity_type, entity_variants)
-        return entity_key, entity_variants
+    def _generate_entity_args(self, entity_pre, entity_type, name, entity_variants):
+        entity_variants_new = self._to_entity_variants(entity_pre, entity_type, name, entity_variants)
+        entity_key = self._to_entity_key(entity_type, entity_variants_new)
+        return entity_key, entity_variants_new
 
     # find entity
-    def _find_entity(self, entity_pre, entity_type, name, **variants):
+    def _find_entity_fnc(self, entity_pre, entity_type, name, **variants):
         entity_key, entity_variants = self._generate_entity_args(
-            entity_pre, entity_type, name, **variants
+            entity_pre, entity_type, name, variants
         )
         if entity_key in self.ENTITY_DICT:
-            return self.ENTITY_DICT[entity_key]
-
-        if entity_type == self.EntityTypes.Task:
-            flag, entity_variants_new = self._resolve_entity_task_from_storage(entity_pre, entity_variants)
-        elif entity_type == self.EntityTypes.Version:
-            flag, entity_variants_new = self._resolve_entity_version_from_storage(entity_pre, entity_variants)
-        else:
-            flag, entity_variants_new = self._resolve_entity_from_storage(entity_type, entity_variants)
-
-        if flag is True:
-            entity_variants.update(entity_variants_new)
-            instance = Entity(self, entity_type, entity_variants)
-            self.ENTITY_DICT[entity_key] = instance
+            instance = self.ENTITY_DICT[entity_key]
+            # kwargs = {}
+            # keys = ['space_key']
+            # for i in keys:
+            #     if i in variants:
+            #         kwargs[i] = variants[i]
+            # instance.update_variants(
+            #     **kwargs
+            # )
             return instance
 
-    def _resolve_entity_from_storage(self, entity_type, entity_variants):
+        if entity_type == self.EntityTypes.Task:
+            flag, entity_variants_next = self._resolve_task_variants_from_storage(entity_pre, entity_variants)
+        elif entity_type == self.EntityTypes.Version:
+            flag, entity_variants_next = self._resolve_version_variants_from_storage(entity_pre, entity_variants)
+        else:
+            flag, entity_variants_next = self._resolve_entity_variants_from_storage(entity_type, entity_variants)
+
+        if flag is True:
+            instance = Entity(self, entity_type, entity_variants_next)
+            self.ENTITY_DICT[entity_key] = instance
+            self.ENTITY_PATH_QUERY[instance.path] = instance
+            return instance
+
+    # entity
+    @classmethod
+    def _entity_variants_prc(cls, entity_variants, variant_key):
+        entity_variants.pop('result')
+        entity_variants.pop('pattern')
+        entity_variants['resource_type'] = variant_key
+        return entity_variants
+
+    def _resolve_entity_variants_from_storage(self, entity_type, entity_variants):
         # default is source
         space_key = entity_variants.get('space_key', self.SpaceKeys.Source)
         entity_variants['space'] = self._to_space(space_key)
@@ -279,10 +347,9 @@ class Stage(_abc.AbsBase):
                 i_matches = i_p_opt.find_matches()
                 if i_matches:
                     i_entity_variants = i_matches[0]
-                    i_entity_variants.pop('result')
-                    i_entity_variants.pop('pattern')
-                    i_entity_variants['resource_branch'] = variant_key
-                    return True, i_entity_variants
+                    i_entity_variants.update(entity_variants)
+                    return True, self._entity_variants_prc(i_entity_variants, variant_key)
+        # when not patterns, may pattern is empty.
         else:
             if patterns is None:
                 self.stderr('resolve pattern is not found for: {} at {}.'.format(entity_type, space_key))
@@ -290,13 +357,22 @@ class Stage(_abc.AbsBase):
             return True, {}
         return False, {}
 
-    def _resolve_entity_task_from_storage(self, entity_pre, entity_variants):
-        resource_branch = entity_pre.variants.resource_branch
+    # task
+    @classmethod
+    def _task_variants_prc(cls, entity_variants, variant_key):
+        entity_variants.pop('result')
+        entity_variants.pop('pattern')
+        # add resource variant here, for version naming
+        entity_variants['resource'] = entity_variants[entity_variants['resource_type']]
+        return entity_variants
+
+    def _resolve_task_variants_from_storage(self, entity_pre, entity_variants):
+        resource_type = entity_pre.variants.resource_type
         # default is source
         space_key = entity_variants.get('space_key', self.SpaceKeys.Source)
         # override space variant
         entity_variants['space'] = self._to_space(space_key)
-        pattern = self._get_entity_task_pattern(resource_branch, space_key)
+        pattern = self._get_task_pattern(resource_type, space_key)
         if pattern:
             patterns = [pattern]
             regex_dict = self._get_variant_regex_dict()
@@ -307,18 +383,26 @@ class Stage(_abc.AbsBase):
                 i_matches = i_p_opt.find_matches()
                 if i_matches:
                     i_entity_variants = i_matches[0]
-                    i_entity_variants.pop('result')
-                    i_entity_variants.pop('pattern')
-                    return True, i_entity_variants
+                    i_entity_variants.update(entity_variants)
+                    return True, self._task_variants_prc(i_entity_variants, None)
         return False, {}
 
-    def _resolve_entity_version_from_storage(self, entity_pre, entity_variants):
-        resource_branch = entity_pre.variants.resource_branch
-        # default is release
+    # version
+    @classmethod
+    def _version_variants_prc(cls, entity_variants, variant_key):
+        entity_variants.pop('result')
+        entity_variants.pop('pattern')
+        # add resource variant here, for version naming
+        entity_variants['resource'] = entity_variants[entity_variants['resource_type']]
+        return entity_variants
+
+    def _resolve_version_variants_from_storage(self, entity_pre, entity_variants):
+        resource_type = entity_pre.variants.resource_type
+        # version space key default is release
         space_key = entity_variants.get('space_key', self.SpaceKeys.Release)
         # override space variant
         entity_variants['space'] = self._to_space(space_key)
-        pattern = self._get_entity_version_pattern(resource_branch, space_key)
+        pattern = self._get_version_pattern(resource_type, space_key)
         if pattern:
             patterns = [pattern]
             regex_dict = self._get_variant_regex_dict()
@@ -329,13 +413,13 @@ class Stage(_abc.AbsBase):
                 i_matches = i_p_opt.find_matches()
                 if i_matches:
                     i_entity_variants = i_matches[0]
-                    i_entity_variants.pop('result')
-                    i_entity_variants.pop('pattern')
-                    return True, i_entity_variants
+                    i_entity_variants.update(entity_variants)
+                    return True, self._version_variants_prc(i_entity_variants, None)
         return False, {}
 
-    def _to_entity_variants_many(self, entity_pre, entity_type, **variants):
+    def _to_entity_variants_parse(self, entity_pre, entity_type, **variants):
         variant_key = self._get_entity_variant_key(entity_type)
+        # copy from pre
         variants_new = dict(**entity_pre._variants)
         variants_new.update(**variants)
         if variant_key in variants_new:
@@ -343,11 +427,8 @@ class Stage(_abc.AbsBase):
         return variants_new
 
     # find entity task
-    def _find_entity_task(self, entity, task):
+    def _find_entity_task_fnc(self, entity, task):
         pass
-
-    def _generate_next_entities_cache_key(self, entity_key, entity_type):
-        return
 
     @classmethod
     def _generate_next_entities_cache_path(cls, entity_key, entity_type):
@@ -358,148 +439,243 @@ class Stage(_abc.AbsBase):
         return '{}/parse/{}/{}.json'.format(location, key, entity_type)
 
     @classmethod
-    def _pull_next_entities_sync_cache(cls, entity_pre, entity_type):
-        cache_path = cls._generate_next_entities_cache_path(entity_pre._entity_key, entity_type)
+    def _generate_next_entities_cache_key(cls, entity_type, entity_variants):
+        variants = copy.copy(entity_variants)
+        variants['entity_type'] = entity_type
+        return bsc_core.BscHash.to_hash_key(variants)
+
+    @classmethod
+    def _generate_next_entities_cache_path_(cls, cache_key):
+        location = bsc_core.BscEnviron.get_cache_qosmic_root()
+        return '{}/parse/{}.json'.format(location, cache_key)
+
+    @classmethod
+    def _pull_next_entities_sync_cache(cls, entity_type, entity_variants):
+        cache_key = cls._generate_next_entities_cache_key(entity_type, entity_variants)
+        cache_path = cls._generate_next_entities_cache_path_(cache_key)
         data = bsc_storage.StgFileOpt(cache_path).set_read()
         if data:
-            return data.get('next_entities', [])
+            return data.get(
+                'next_entities', []
+            )
         return []
 
-    def _push_next_entities_sync_cache(self, entity_pre, entity_type, variants_list):
-        data = dict(
-            entity=entity_pre._variants,
-            next_entities=variants_list
-        )
-        cache_path = self._generate_next_entities_cache_path(entity_pre._entity_key, entity_type)
-        bsc_storage.StgFileOpt(cache_path).set_write(data)
+    @classmethod
+    def _push_next_entities_sync_cache(cls, entity_type, next_entity_variants_list, entity_variants):
+        cache_key = cls._generate_next_entities_cache_key(entity_type, entity_variants)
+        cache_path = cls._generate_next_entities_cache_path_(cache_key)
+        if next_entity_variants_list:
+            data = dict(
+                entity=entity_variants,
+                next_entities=next_entity_variants_list
+            )
+            bsc_storage.StgFileOpt(cache_path).set_write(data)
+        else:
+            # when cache is empty, remove exists cache
+            if os.path.isfile(cache_path):
+                # noinspection PyBroadException
+                try:
+                    os.remove(cache_path)
+                except Exception:
+                    pass
+
+    @classmethod
+    def _get_sync_flag(cls, **kwargs):
+        # flag for sync, default is False
+        if 'sync_flag' in kwargs:
+            sync_flag = kwargs.pop('sync_flag')
+            return sync_flag, kwargs
+        return False, kwargs
+
+    def _find_next_entity_variants(self, entity_pre, entity_type, **variants):
+        sync_flag, variants = self._get_sync_flag(**variants)
+
+        entity_variants = self._to_entity_variants_parse(entity_pre, entity_type, **variants)
+
+        # task
+        if entity_type == self.EntityTypes.Task:
+            next_entity_variants_list = self._task_next_entity_variants_list_gain_fnc(
+                entity_pre, entity_type, entity_variants, sync_flag
+            )
+        # version
+        elif entity_type == self.EntityTypes.Version:
+            next_entity_variants_list = self._version_next_entity_variants_list_gain_fnc(
+                entity_pre, entity_type, entity_variants, sync_flag
+            )
+        # other entity
+        else:
+            next_entity_variants_list = self._resource_next_entity_variants_list_gain_fnc(
+                entity_type, entity_variants, sync_flag
+            )
+
+        return next_entity_variants_list
 
     # find entities
-    def _find_entities(self, entity_pre, entity_type, **variants):
+    def _find_entities_fnc(self, entity_pre, entity_type, **variants):
         list_ = []
-        
-        cache_flag = variants.get('cache_flag', True)
+        keys = ['space_key']
 
-        sync_cache_flag = variants.get('sync_cache_flag', True)
-        if sync_cache_flag is True:
-            entity_variants_list = self._pull_next_entities_sync_cache(entity_pre, entity_type)
-        else:
-            entity_variants = self._to_entity_variants_many(entity_pre, entity_type, **variants)
-            if entity_type == self.EntityTypes.Task:
-                entity_variants_list = self._resolve_entity_tasks_from_storage(entity_pre, entity_variants)
-            elif entity_type == self.EntityTypes.Version:
-                entity_variants_list = self._resolve_entity_versions_from_storage(entity_pre, entity_variants)
-            else:
-                entity_variants_list = self._resolve_entities_from_storage(entity_type, entity_variants)
+        next_entity_variants_list = self._find_next_entity_variants(entity_pre, entity_type, **variants)
 
-            self._push_next_entities_sync_cache(entity_pre, entity_type, entity_variants_list)
-
-        for i_entity_variants in entity_variants_list:
+        for i_entity_variants in next_entity_variants_list:
             i_entity_variants = self._variant_cleanup_fnc(i_entity_variants)
             i_entity_key = self._to_entity_key(entity_type, i_entity_variants)
+            # todo: when variants is changed, update variants?
             if i_entity_key in self.ENTITY_DICT:
-                list_.append(self.ENTITY_DICT[i_entity_key])
+                i_instance = self.ENTITY_DICT[i_entity_key]
+                # i_kwargs = {}
+                # for j in keys:
+                #     if j in variants:
+                #         i_kwargs[j] = variants[j]
+                list_.append(i_instance)
                 continue
 
             i_instance = Entity(self, entity_type, i_entity_variants)
             self.ENTITY_DICT[i_entity_key] = i_instance
+            self.ENTITY_PATH_QUERY[i_instance.path] = i_instance
             list_.append(i_instance)
         return list_
 
-    def _resolve_entities_from_storage(self, entity_type, entity_variants):
+    @classmethod
+    def _next_entity_variants_list_sync_fnc(
+        cls,
+        pattern,
+        entity_type, entity_variants,
+        variant_key, regex_dict,
+        entity_variant_prc,
+        sync_flag
+    ):
+        if sync_flag is False:
+            next_entity_variants_list = cls._pull_next_entities_sync_cache(entity_type, entity_variants)
+            # when has results, ignore scan
+            if next_entity_variants_list:
+                return next_entity_variants_list
+
+        next_entity_variants_list = []
+
+        p_opt = bsc_core.BscStgParseOpt(pattern)
+        p_opt.set_regex_dict(regex_dict)
+        p_opt.update_variants(**entity_variants)
+        matches = p_opt.find_matches(sort=True)
+        for i_match in matches:
+            i_entity_variants_next = i_match
+            i_entity_variants_next.update(entity_variants)
+            next_entity_variants_list.append(entity_variant_prc(i_entity_variants_next, variant_key))
+
+        cls._push_next_entities_sync_cache(entity_type, next_entity_variants_list, entity_variants)
+        return next_entity_variants_list
+
+    # resources
+    def _resource_next_entity_variants_list_gain_fnc(self, entity_type, entity_variants, sync_flag):
         list_ = []
         # default is source
         space_key = entity_variants.get('space_key', self.SpaceKeys.Source)
         entity_variants['space'] = self._to_space(space_key)
+
         patterns = self._get_entity_resolve_patterns(entity_type, space_key)
         if patterns:
             variant_key = self._get_entity_variant_key(entity_type)
             regex_dict = self._get_variant_regex_dict()
             for i_p in patterns:
                 i_p_opt = bsc_core.BscStgParseOpt(i_p)
-                i_p_opt.set_regex_dict(regex_dict)
-                i_p_opt.update_variants(**entity_variants)
-                i_matches = i_p_opt.find_matches(sort=True)
-                if i_matches:
-                    for i_match in i_matches:
-                        i_entity_varints = dict(entity_variants)
-                        i_match.pop('result')
-                        i_match.pop('pattern')
-                        i_entity_varints.update(i_match)
-                        i_entity_varints['resource_branch'] = variant_key
-                        list_.append(i_entity_varints)
+                i_entity_variants_list = i_p_opt.generate_combination_variants(entity_variants)
+                for j_entity_variants in i_entity_variants_list:
+                    j_entity_variants_next_list = self._next_entity_variants_list_sync_fnc(
+                        i_p,
+                        entity_type, j_entity_variants,
+                        variant_key, regex_dict,
+                        self._entity_variants_prc,
+                        sync_flag
+                    )
+                    list_.extend(j_entity_variants_next_list)
         else:
             if patterns is None:
                 self.stderr('resolve pattern is not found: {}.'.format(entity_type))
         return list_
 
-    def _resolve_entity_tasks_from_storage(self, entity_pre, entity_variants):
+    # tasks
+    def _task_next_entity_variants_list_gain_fnc(self, entity_pre, entity_type, entity_variants, sync_flag):
         list_ = []
-        resource_branch = entity_pre.variants.resource_branch
+        resource_type = entity_pre.variants.resource_type
         # default is source
         space_key = entity_variants.get('space_key', self.SpaceKeys.Source)
         # override space variant
         entity_variants['space'] = self._to_space(space_key)
-        pattern = self._get_entity_task_pattern(resource_branch, space_key)
+        pattern = self._get_task_pattern(resource_type, space_key)
         if pattern:
             patterns = [pattern]
+            variant_key = self._get_entity_variant_key(entity_type)
             regex_dict = self._get_variant_regex_dict()
             for i_p in patterns:
                 i_p_opt = bsc_core.BscStgParseOpt(i_p)
                 i_p_opt.set_regex_dict(regex_dict)
-                i_p_opt.update_variants(**entity_variants)
-                i_matches = i_p_opt.find_matches(sort=True)
-                for i_match in i_matches:
-                    i_entity_varints = dict(entity_variants)
-                    i_match.pop('result')
-                    i_match.pop('pattern')
-                    i_entity_varints.update(i_match)
-                    list_.append(i_entity_varints)
+                i_entity_variants_list = i_p_opt.generate_combination_variants(entity_variants)
+                for j_entity_variants in i_entity_variants_list:
+                    j_entity_variants_next_list = self._next_entity_variants_list_sync_fnc(
+                        i_p,
+                        entity_type, j_entity_variants,
+                        variant_key, regex_dict,
+                        self._task_variants_prc,
+                        sync_flag
+                    )
+                    list_.extend(j_entity_variants_next_list)
         return list_
 
-    def _resolve_entity_versions_from_storage(self, entity_pre, entity_variants):
+    # versions
+    def _version_next_entity_variants_list_gain_fnc(self, entity_pre, entity_type, entity_variants, sync_flag):
         list_ = []
-        resource_branch = entity_pre.variants.resource_branch
+        resource_type = entity_pre.variants.resource_type
         # default is release
         space_key = entity_variants.get('space_key', self.SpaceKeys.Release)
         # override space variant
         entity_variants['space'] = self._to_space(space_key)
-        pattern = self._get_entity_version_pattern(resource_branch, space_key)
+        pattern = self._get_version_pattern(resource_type, space_key)
         if pattern:
             patterns = [pattern]
+            variant_key = self._get_entity_variant_key(entity_type)
             regex_dict = self._get_variant_regex_dict()
             for i_p in patterns:
                 i_p_opt = bsc_core.BscStgParseOpt(i_p)
                 i_p_opt.set_regex_dict(regex_dict)
-                i_p_opt.update_variants(**entity_variants)
-                i_matches = i_p_opt.find_matches(sort=True)
-                for i_match in i_matches:
-                    i_entity_varints = dict(entity_variants)
-                    i_match.pop('result')
-                    i_match.pop('pattern')
-                    i_entity_varints.update(i_match)
-                    list_.append(i_entity_varints)
+                # support for variant is multiply, etc. project=["QSM_TST", "QSM_TST_NEW"]
+                i_entity_variants_list = i_p_opt.generate_combination_variants(entity_variants)
+                for j_entity_variants in i_entity_variants_list:
+                    j_entity_variants_next_list = self._next_entity_variants_list_sync_fnc(
+                        i_p,
+                        entity_type, j_entity_variants,
+                        variant_key, regex_dict,
+                        self._version_variants_prc,
+                        sync_flag
+                    )
+                    list_.extend(j_entity_variants_next_list)
         return list_
 
-    # project
-    def project(self, name):
-        return self._find_entity(
-            self, self.EntityTypes.Project, name
-        )
-
-    def projects(self, **variants):
-        return self._find_entities(
-            self, self.EntityTypes.Project, **variants
-        )
-
-    # general
-    def find_one(self, entity_type, name, **kwargs):
-        return self._find_entity(
+    # any entity
+    def find_entity(self, entity_type, name, **kwargs):
+        """
+        entity_type includes see self.EntityTypes, kwargs is variants
+        """
+        return self._find_entity_fnc(
             self, entity_type, name, **kwargs
         )
 
-    def find_all(self, entity_type, **kwargs):
-        return self._find_entities(
+    def find_entities(self, entity_type, **kwargs):
+        """
+        entity_type includes see self.EntityTypes
+        """
+        return self._find_entities_fnc(
             self, entity_type, **kwargs
+        )
+
+    # project
+    def project(self, name, **kwargs):
+        return self.find_entity(
+            self.EntityTypes.Project, name, **kwargs
+        )
+
+    def projects(self, **variants):
+        return self.find_entities(
+            self.EntityTypes.Project, **variants
         )
 
     def all(self):
@@ -507,6 +683,9 @@ class Stage(_abc.AbsBase):
 
     def get_one(self, entity_key):
         return self.ENTITY_DICT.get(entity_key)
+
+    def get_entity(self, path):
+        return self.ENTITY_PATH_QUERY.get(path)
 
     def restore(self):
         return self.ENTITY_DICT.clear()

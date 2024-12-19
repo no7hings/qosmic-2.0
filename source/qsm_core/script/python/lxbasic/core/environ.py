@@ -163,8 +163,8 @@ class BscEnviron(object):
         path = os.environ.get(cls.CORE_ROOT)
         if path:
             _ = os.path.basename(path)
-            if _ == '99.99.99':
-                return '0.0.0'
+            # if _ == '99.99.99':
+            #     return '0.0.0'
             return _
         return 'unknown'
 

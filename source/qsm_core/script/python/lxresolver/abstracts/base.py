@@ -3010,7 +3010,7 @@ class AbsRsvProject(
         )
         if not p_o.get_keys():
             stg_path = p_o.get_value()
-            if bsc_storage.StgFileMtd.get_is_exists(stg_path) is False:
+            if bsc_storage.StgFile.get_is_exists(stg_path) is False:
                 bsc_storage.StgPermissionMtd.create_directory(
                     stg_path
                 )

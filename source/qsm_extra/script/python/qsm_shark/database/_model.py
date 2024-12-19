@@ -41,7 +41,13 @@ class BaseTask(_Prim):
     step = ForeignKeyField(BaseStep, backref='bs')
 
 
+# role
 class Role(_Prim):
+    gui_name = CharField(default='')
+    gui_name_chs = CharField(default='')
+
+
+class User(_Prim):
     gui_name = CharField(default='')
     gui_name_chs = CharField(default='')
 
@@ -77,7 +83,7 @@ class Shot(_Entity):
 
 # task
 class Task(BaseTask):
-    resource_branch = CharField(default='')
+    resource_type = CharField(default='')
 
     asset = ForeignKeyField(Asset, backref='bs')
     episode = ForeignKeyField(Episode, backref='bs')

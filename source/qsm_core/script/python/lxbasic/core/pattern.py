@@ -1,4 +1,5 @@
 # coding:utf-8
+import copy
 import glob
 
 import os
@@ -418,6 +419,7 @@ class AbsParseOpt(object):
     def update_variants_to(self, **kwargs):
         p = self.__class__(self._pattern)
         p.update_variants(**kwargs)
+        p.set_regex_dict(self._regex_dict)
         return p
 
     def get_variants(self, result, extract=False):
@@ -446,6 +448,25 @@ class AbsParseOpt(object):
     def set_regex_dict(self, dict_):
         self._regex_dict = dict_
 
+    def generate_combination_variants(self, variants):
+        keys = self.get_keys()
+        variants_copy = copy.copy(variants)
+        variants_c = {}
+        for i_key in keys:
+            if i_key in variants:
+                i_value = variants_copy[i_key]
+                variants_copy.pop(i_key)
+                if isinstance(i_value, list):
+                    variants_c[i_key] = i_value
+                else:
+                    variants_c[i_key] = [i_value]
+
+        variants_list = _raw.BscVariables.get_all_combinations_(variants_c)
+        for i_variants in variants_list:
+            i_variants.update(variants_copy)
+
+        return variants_list
+
 
 class BscDccParseOpt(AbsParseOpt):
     def __init__(self, p, variants=None):
@@ -469,7 +490,7 @@ class BscStgParseOpt(AbsParseOpt):
         paths = _scan_glob.ScanGlob.glob(regex)
 
         if sort is True:
-            paths = _raw.RawTextsOpt(paths).sort_by_number()
+            paths = _raw.BscTextsOpt(paths).sort_by_number()
 
         keys = self.get_keys()
         # has variant
@@ -491,7 +512,8 @@ class BscStgParseOpt(AbsParseOpt):
                 else:
                     i_vars_new = {}
                     for i_key in keys:
-                        if i_key.endswith('_EPT'):
+                        # ignore
+                        if i_key.endswith('_IGN'):
                             i_vars_new[i_key] = ''
 
                     i_pattern_opt_new = self.update_variants_to(**i_vars_new)
@@ -540,7 +562,7 @@ class BscStgParseOpt(AbsParseOpt):
             )
         )
         if sort is True:
-            paths = _raw.RawTextsOpt(paths).sort_by_number()
+            paths = _raw.BscTextsOpt(paths).sort_by_number()
         return paths
 
     def update_default_variants(self, **kwargs):

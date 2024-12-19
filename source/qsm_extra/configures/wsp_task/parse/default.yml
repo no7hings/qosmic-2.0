@@ -1,4 +1,12 @@
+spaces:
+    disorder : 'disorder'
+    # is work source in server
+    source: 'source'
+    release: 'release'
+    temporary: 'temporary'
+
 roots:
+    # configure root for each space, only support for windows now
     disorder:
         windows: 'X:'
 
@@ -11,13 +19,8 @@ roots:
     temporary:
         windows: 'Z:/projects'
 
-spaces:
-    disorder : 'disorder'
-    source: 'source'
-    release: 'release'
-    temporary: 'temporary'
-
 entities:
+    # version is task's version
     unique_variant_keys:
         Project: ['project']
         Asset: ['project', 'asset']
@@ -25,6 +28,7 @@ entities:
         Sequence: ['project', 'sequence']
         Shot: ['project', 'shot']
         Task: ['entity_key', 'task']
+        # version may in source either in release.
         Version: ['entity_key', 'space', 'version']
 
     resolve_patterns:
@@ -33,28 +37,40 @@ entities:
                 - '{root_disorder}/{project}/Assets'
             source:
                 - '{root_source}/{project}/<spaces.source>'
+            release:
+                - '{root_release}/{project}/QSM/<spaces.release>'
         Asset:
             disorder:
                 - '{root_disorder}/{project}/Assets/{role}/{asset}'
             source:
-                - '{root_source}/{project}/{space}/assets/{role}/{asset}'
+                - '{root_source}/{project}/<spaces.source>/assets/{role}/{asset}'
+            release:
+                - '{root_release}/{project}/QSM/<spaces.release>/assets/{role}/{asset}'
+        # this branch is unusable
         Episode:
             disorder:
                 - '{root_disorder}/{project}/{episode}'
             source:
                 - '{root_source}/{project}/{space}/episodes/{episode}'
+            release:
+                - '{root_release}/{project}/QSM/{space}/episodes/{episode}'
         Sequence:
             disorder:
                 - '{root_disorder}/{project}/{episode}/{sequence}/分镜'
             source:
                 - '{root_source}/{project}/{space}/sequences/{sequence}'
                 - '{root_source}/{project}/{space}/shots/{sequence}'
+            release:
+                - '{root_release}/{project}/QSM/{space}/sequences/{sequence}'
+                - '{root_release}/{project}/QSM/<spaces.release>/shots/{sequence}/{shot}'
         Shot:
             disorder:
-                - '{root_disorder}/{project}/{episode}/{sequence}{seq_EPT}/分镜/通过文件/{shot}.ma'
-                - '{root_disorder}/{project}/{episode}/{sequence}{seq_EPT}/动画/通过文件/{shot}.ma'
+                - '{root_disorder}/{project}/{episode}/{sequence}{seq_IGN}/分镜/通过文件/{shot}.ma'
+                - '{root_disorder}/{project}/{episode}/{sequence}{seq_IGN}/动画/通过文件/{shot}.ma'
             source:
                 - '{root_source}/{project}/{space}/shots/{sequence}/{shot}'
+            release:
+                - '{root_release}/{project}/QSM/<spaces.release>/shots/{sequence}/{shot}'
 
     default_space:
         Project: 'disorder'
@@ -78,73 +94,75 @@ entities:
         Episode: '/{project}/{episode}'
         Sequence: '/{project}/{sequence}'
         Shot: '/{project}/{sequence}/{shot}'
-        Task: '{entity_path}/{task}'
+        # entity_path is pre entity's path
+        Task: '{entity_path}/{step}.{task}'
+        # entity_path is pre entity's path
         Version: '{entity_path}/{version}'
 
     next_methods:
-        # etc. Project.assets(), Project.asset('same')
+        # add dynamic method for Entity, etc. Project.assets(), Project.asset('same')
         Project: {
             # asset
             asset: {
-                fnc_name: 'find_one',
+                fnc_name: 'find_entity',
                 kwargs: {
                     entity_type: 'Asset',
                 }
             },
             assets: {
-                fnc_name: 'find_all',
+                fnc_name: 'find_entities',
                 kwargs: {
                     entity_type: 'Asset',
                 }
             },
             # episode
             episode: {
-                fnc_name: 'find_one',
+                fnc_name: 'find_entity',
                 kwargs: {
                     entity_type: 'Episode',
                 }
             },
             episodes: {
-                fnc_name: 'find_all',
+                fnc_name: 'find_entities',
                 kwargs: {
                     entity_type: 'Episode',
                 }
             },
             # sequence
             sequence: {
-                fnc_name: 'find_one',
+                fnc_name: 'find_entity',
                 kwargs: {
                     entity_type: 'Sequence',
                 }
             },
             sequences: {
-                fnc_name: 'find_all',
+                fnc_name: 'find_entities',
                 kwargs: {
                     entity_type: 'Sequence',
                 }
             },
             # shot
             shot: {
-                fnc_name: 'find_one',
+                fnc_name: 'find_entity',
                 kwargs: {
                     entity_type: 'Shot',
                 }
             },
             shots: {
-                fnc_name: 'find_all',
+                fnc_name: 'find_entities',
                 kwargs: {
                     entity_type: 'Shot',
                 }
             },
             # project task
             task: {
-                fnc_name: 'find_one',
+                fnc_name: 'find_entity',
                 kwargs: {
                     entity_type: 'Task',
                 }
             },
             tasks: {
-                fnc_name: 'find_all',
+                fnc_name: 'find_entities',
                 kwargs: {
                     entity_type: 'Task',
                 }
@@ -153,13 +171,13 @@ entities:
         Asset: {
             # asset task
             task: {
-                fnc_name: 'find_one',
+                fnc_name: 'find_entity',
                 kwargs: {
                     entity_type: 'Task',
                 }
             },
             tasks: {
-                fnc_name: 'find_all',
+                fnc_name: 'find_entities',
                 kwargs: {
                     entity_type: 'Task',
                 }
@@ -168,39 +186,39 @@ entities:
         Episode: {
             # sequence
             sequence: {
-                fnc_name: 'find_one',
+                fnc_name: 'find_entity',
                 kwargs: {
                     entity_type: 'Sequence',
                 }
             },
             sequences: {
-                fnc_name: 'find_all',
+                fnc_name: 'find_entities',
                 kwargs: {
                     entity_type: 'Sequence',
                 }
             },
             # shot
             shot: {
-                fnc_name: 'find_one',
+                fnc_name: 'find_entity',
                 kwargs: {
                     entity_type: 'Shot',
                 }
             },
             shots: {
-                fnc_name: 'find_all',
+                fnc_name: 'find_entities',
                 kwargs: {
                     entity_type: 'Shot',
                 }
             },
             # episode task
             task: {
-                fnc_name: 'find_one',
+                fnc_name: 'find_entity',
                 kwargs: {
                     entity_type: 'Task',
                 }
             },
             tasks: {
-                fnc_name: 'find_all',
+                fnc_name: 'find_entities',
                 kwargs: {
                     entity_type: 'Task',
                 }
@@ -209,26 +227,41 @@ entities:
         Sequence: {
             # shot
             shot: {
-                fnc_name: 'find_one',
+                fnc_name: 'find_entity',
                 kwargs: {
                     entity_type: 'Shot',
                 }
             },
             shots: {
-                fnc_name: 'find_all',
+                fnc_name: 'find_entities',
                 kwargs: {
                     entity_type: 'Shot',
                 }
             },
             # sequence task
             task: {
-                fnc_name: 'find_one',
+                fnc_name: 'find_entity',
                 kwargs: {
                     entity_type: 'Task',
                 }
             },
             tasks: {
-                fnc_name: 'find_all',
+                fnc_name: 'find_entities',
+                kwargs: {
+                    entity_type: 'Task',
+                }
+            },
+        }
+        Shot: {
+            # shot tasks
+            task: {
+                fnc_name: 'find_entity',
+                kwargs: {
+                    entity_type: 'Task',
+                }
+            },
+            tasks: {
+                fnc_name: 'find_entities',
                 kwargs: {
                     entity_type: 'Task',
                 }
@@ -236,18 +269,41 @@ entities:
         }
         Task: {
             version: {
-                fnc_name: 'find_one',
+                fnc_name: 'find_entity',
                 kwargs: {
                     entity_type: 'Version',
                 }
             },
             versions: {
-                fnc_name: 'find_all',
+                fnc_name: 'find_entities',
                 kwargs: {
                     entity_type: 'Version',
                 }
             },
         }
+
+workspace:
+    path_pattern:
+        # project
+        project: '/{project}'
+        project_task: '<.project>/{step}.{task}'
+        project_task_unit: '<.project_task>/{task_unit}'
+        project_task_unit_scene: '<.project_task_unit>/{project}.{step}.{task}.{task_unit}.v{version}'
+        # asset
+        asset: '/{project}/{asset}'
+        asset_task: '<.asset>/{step}.{task}'
+        asset_task_unit: '<.asset_task>/{task_unit}'
+        asset_task_unit_scene: '<.asset_task_unit>/{asset}.{step}.{task}.{task_unit}.v{version}'
+        # sequence
+        sequence: '/{project}/{sequence}'
+        sequence_task: '<.sequence>/{step}.{task}'
+        sequence_task_unit: '<.sequence_task>/{task_unit}'
+        sequence_task_unit_scene: '<.sequence_task_unit>/{sequence}.{step}.{task}.{task_unit}.v{version}'
+        # shot
+        shot: '/{project}/{shot}'
+        shot_task: '<.shot>/{step}.{task}'
+        shot_task_unit: '<.shot_task>/{task_unit}'
+        shot_task_unit_scene: '<.shot_task_unit>/{shot}.{step}.{task}.{task_unit}.v{version}'
 
 variants:
     cleanup_keys:
@@ -255,23 +311,38 @@ variants:
 
     regex:
         project: '[a-zA-Z]*'
+        role: '[a-zA-Z]*'
         asset: '[a-zA-Z]*'
 
         episode: '[a-zA-Z]*'
         sequence: '[a-zA-Z]*'
         shot: '[a-zA-Z]*[0-9]'
 
+resource_branches:
+    project: 'project'
+    asset: 'asset'
+    sequence: 'sequence'
+    shot: 'shot'
+
 steps:
     general: 'gnl'
     model: 'mod'
     groom: 'grm'
+    rig: 'rig'
     cfx: 'cfx'
+    surface: 'srf'
+    layout: 'lay'
     animation: 'ani'
 
 tasks:
+    general: 'general'
     model: 'modeling'
     groom: 'grooming'
+    rig: 'rigging'
     cfx_rig: 'cfx_rig'
+    cfx_cloth: 'cfx_cloth'
+    surface: 'surfacing'
+    layout: 'layout'
     animation: 'animation'
 
 patterns:
@@ -283,6 +354,7 @@ patterns:
         source:
             dir: '{root_source}/{project}/{space}'
             task-dir: '<.dir>/tasks/user.{artist}/{step}.{task}'
+            task_unit-dir: '<.task-dir>/{task_unit}'
 
         release:
             dir: '{root_release}/{project}/QSM/{space}'
@@ -350,10 +422,10 @@ patterns:
         task_unit-version-name: '{shot}.{step}.{task}.{task_unit}.v{version}'
 
         disorder:
-            layout-scene-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_EPT}/分镜/通过文件/{shot}.ma'
-            layout-preview-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_EPT}/分镜/通过文件/{shot}.mov'
-            animation-scene-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_EPT}/动画/通过文件/{shot}.ma'
-            animation-preview-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_EPT}/动画/通过文件/{shot}.mov'
+            layout-scene-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_IGN}/分镜/通过文件/{shot}.ma'
+            layout-preview-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_IGN}/分镜/通过文件/{shot}.mov'
+            animation-scene-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_IGN}/动画/通过文件/{shot}.ma'
+            animation-preview-file: '{root_disorder}/{project}/{episode}/{sequence}{seq_IGN}/动画/通过文件/{shot}.mov'
 
         source:
             dir: '{root_source}/{project}/{space}/shots/{sequence}/{shot}'

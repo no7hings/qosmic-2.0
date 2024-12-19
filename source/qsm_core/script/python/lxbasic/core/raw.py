@@ -1095,7 +1095,7 @@ class BscTexts(object):
         return list(zip(*[list_[i::n] for i in range(n)]))
 
 
-class RawTextsOpt(object):
+class BscTextsOpt(object):
     def __init__(self, raw):
         self._raw = raw
 
@@ -1248,12 +1248,22 @@ class RawRectMtd(object):
         return x_0+x, y_0+y, w, h
 
 
-class RawVariablesMtd(object):
+class BscVariables(object):
     @classmethod
     def get_all_combinations(cls, variables):
         list_ = []
         for i in itertools.product(*[[{k: i} for i in v] for k, v in variables.items()]):
             i_dic = collections.OrderedDict()
+            for j_dic in i:
+                i_dic.update(j_dic)
+            list_.append(i_dic)
+        return list_
+
+    @classmethod
+    def get_all_combinations_(cls, variables):
+        list_ = []
+        for i in itertools.product(*[[{k: i} for i in v] for k, v in variables.items()]):
+            i_dic = {}
             for j_dic in i:
                 i_dic.update(j_dic)
             list_.append(i_dic)

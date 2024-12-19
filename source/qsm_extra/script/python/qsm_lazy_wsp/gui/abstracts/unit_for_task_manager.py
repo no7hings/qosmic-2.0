@@ -21,9 +21,9 @@ import qsm_lazy.gui.proxy.widgets as lzy_gui_prx_widgets
 
 
 class _GuiBaseOpt(object):
-    def __init__(self, window, page, session):
+    def __init__(self, window, unit, session):
         self._window = window
-        self._page = page
+        self._unit = unit
         self._session = session
 
         self._gui_thread_flag = 0
@@ -33,22 +33,35 @@ class _GuiBaseOpt(object):
 
 
 class _GuiSourceTaskOpt(_GuiBaseOpt):
-    def __init__(self, window, page, session):
-        super(_GuiSourceTaskOpt, self).__init__(window, page, session)
+    def __init__(self, *args, **kwargs):
+        super(_GuiSourceTaskOpt, self).__init__(*args, **kwargs)
 
         self._task_unit_path = None
         self._task_unit_path_tmp = None
 
         self._qt_tree_widget = gui_qt_view_widgets.QtTreeWidget()
-        self._page._prx_v_splitter.add_widget(self._qt_tree_widget)
+        self._unit._prx_h_splitter.add_widget(self._qt_tree_widget)
+        self._qt_tree_widget._set_item_sort_enable_(True)
         self._qt_tree_widget._view_model.set_item_expand_record_enable(True)
 
-        self._qt_tree_widget.refresh.connect(self.gui_load_tasks)
+        self._qt_tree_widget.refresh.connect(self.gui_load_all_tasks)
 
-    def gui_load_tasks(self):
+    def _gui_add_entity_groups(self, path):
+        path_opt = bsc_core.BscNodePathOpt(path)
+
+        ancestor_paths = path_opt.get_ancestor_paths()
+        ancestor_paths.reverse()
+
+        for i_path in ancestor_paths:
+            i_flag, i_qt_item = self._qt_tree_widget._view_model.create_item(i_path)
+            if i_flag is True:
+                i_qt_item._item_model.set_expanded(True)
+                i_qt_item._item_model.set_icon_name('workspace/null')
+
+    def gui_load_all_tasks(self):
         def cache_fnc_():
-            _task_dir_ptn_opt = self._page._task_parse.generate_pattern_opt_for(
-                '{}-source-task-dir'.format(self._page.RESOURCE_BRANCH), **entity_properties
+            _task_dir_ptn_opt = self._unit._task_parse.generate_pattern_opt_for(
+                '{}-source-task-dir'.format(self._unit.RESOURCE_TYPE), **entity_properties
             )
             _matches = _task_dir_ptn_opt.find_matches()
             return [_matches, self._gui_thread_flag]
@@ -59,22 +72,10 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
                 return
 
             if _matches:
-                _flag, _root_qt_item = self._qt_tree_widget._view_model.create_root_item()
-                _root_qt_item._item_model.set_icon_name('database/group')
-                _root_qt_item.setExpanded(True)
-
-                _project_path = self._page._task_parse.to_project_path(**entity_properties)
-                _flag, _root_qt_item = self._qt_tree_widget._view_model.create_item(_project_path)
-                _root_qt_item._item_model.set_icon_name('workspace/project')
-                _root_qt_item.setExpanded(True)
-
-                _resource_path = self._page._task_parse.to_resource_path(**entity_properties)
-                _flag, _root_qt_item = self._qt_tree_widget._view_model.create_item(_resource_path)
-                _root_qt_item._item_model.set_icon_name('workspace/resource')
-                _root_qt_item.setExpanded(True)
-
                 for _i_match in _matches:
-                    self.gui_add_task(_i_match, _gui_thread_flag)
+                    i_task_variants = _i_match
+                    i_task_variants.update(entity_properties)
+                    self.gui_add_task(i_task_variants, _gui_thread_flag)
 
         self._qt_tree_widget._view_model.restore()
 
@@ -82,7 +83,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
 
         self._task_unit_path_tmp = None
 
-        entity_properties = self._page._resource_properties
+        entity_properties = self._unit._resource_properties
 
         if entity_properties is None:
             return
@@ -93,13 +94,13 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
 
         trd.do_start()
 
-    def gui_add_task(self, properties, gui_thread_flag):
+    def gui_add_task(self, task_variants, gui_thread_flag):
         def cache_fnc_():
             if gui_thread_flag != self._gui_thread_flag:
                 return [[], 0]
 
-            _task_unit_ptn_opt = self._page._task_parse.generate_pattern_opt_for(
-                '{}-source-task_unit-dir'.format(self._page.RESOURCE_BRANCH), **properties
+            _task_unit_ptn_opt = self._unit._task_parse.generate_pattern_opt_for(
+                '{}-source-task_unit-dir'.format(self._unit.RESOURCE_TYPE), **task_variants
             )
             _matches = _task_unit_ptn_opt.find_matches()
             return [_matches, self._gui_thread_flag]
@@ -111,7 +112,9 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
 
             if _matches:
                 for _i_match in _matches:
-                    self.gui_add_task_unit(_i_match, _gui_thread_flag)
+                    _i_task_unit_variants = _i_match
+                    _i_task_unit_variants.update(task_variants)
+                    self.gui_add_task_unit(_i_task_unit_variants, _gui_thread_flag)
 
             if gui_core.GuiUtil.language_is_chs():
                 qt_item._item_model.set_menu_data(
@@ -131,24 +134,25 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
         def open_folder_fnc_():
             bsc_storage.StgExplorer.open_directory(directory_path)
 
-        directory_path = properties['result']
+        directory_path = task_variants['result']
 
-        path = self._page._task_parse.to_task_path(**properties)
+        path = self._unit._task_parse.to_wsp_task_path(**task_variants)
+
+        self._gui_add_entity_groups(path)
 
         flag, qt_item = self._qt_tree_widget._view_model.create_item(path)
         # fixme: show scene when task is select?
-        # qt_item._item_model.set_assign_properties(properties)
+        # qt_item._item_model.set_assign_properties(task_variants)
         qt_item._item_model.set_icon_name('workspace/task')
 
         qt_item._item_model.set_show_fnc(cache_fnc_, build_fnc_)
 
-    def gui_add_task_unit(self, properties, gui_thread_flag):
+    def gui_add_task_unit(self, task_unit_variants, gui_thread_flag):
         def cache_fnc_():
             if gui_thread_flag != self._gui_thread_flag:
                 return [[], 0]
 
-            _task_scene_ptn_opt = self._page._task_parse.generate_source_task_scene_src_pattern_opt_for(
-                **properties)
+            _task_scene_ptn_opt = self._unit._task_parse.generate_source_task_scene_src_pattern_opt_for(**task_unit_variants)
             _matches = _task_scene_ptn_opt.find_matches(sort=True)
             return [
                 _matches, gui_thread_flag
@@ -157,7 +161,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
         def build_fnc_(data_):
             def press_dbl_click_fnc_():
                 if _matches:
-                    self._page.on_open_task_scene(_matches[-1])
+                    self._unit.on_open_task_scene(_matches[-1])
 
             _matches, _gui_thread_flag = data_
             if _gui_thread_flag != self._gui_thread_flag:
@@ -186,26 +190,25 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
         def open_folder_fnc_():
             bsc_storage.StgExplorer.open_directory(directory_path)
 
-        directory_path = properties['result']
-        task_unit = properties['task_unit']
-        path = self._page._task_parse.to_task_unit_path(**properties)
+        directory_path = task_unit_variants['result']
+        task_unit = task_unit_variants['task_unit']
+        path = self._unit._task_parse.to_wsp_task_unit_path(**task_unit_variants)
 
         flag, qt_item = self._qt_tree_widget._view_model.create_item(path)
-        qt_item._item_model.set_assign_properties(properties)
+        qt_item._item_model.set_assign_properties(task_unit_variants)
 
         if task_unit == 'main':
             qt_item._item_model.set_icon_name('workspace/task-unit-main')
         else:
             qt_item._item_model.set_icon_name('workspace/task-unit')
 
-        if self._page._task_session is not None:
-            resource_path = self._page._resource_path
-            task_unit_path = self._page._task_session.task_unit_path
+        if self._unit._task_session is not None:
+            resource_path = self._unit._resource_path
+            task_unit_path = self._unit._task_session.task_unit_path
             # check is task is current resource
             if task_unit_path.startswith(resource_path):
                 if path == task_unit_path:
                     qt_item._item_model.focus_select()
-
                     qt_item._item_model.set_status(
                         qt_item._item_model.Status.Correct
                     )
@@ -251,7 +254,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
     def do_gui_refresh_all(self):
         self._qt_tree_widget._view_model.clear_all_items_status()
 
-        task_session = self._page._task_session
+        task_session = self._unit._task_session
         if task_session is not None:
             task_unit_path = task_session.task_unit_path
             qt_item = self._qt_tree_widget._view_model.find_item(task_unit_path)
@@ -263,24 +266,24 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
         self._qt_tree_widget._view_model.restore()
 
 
-class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
+class _GuiSourceTaskUnitSceneOpt(_GuiBaseOpt):
 
     def find_thumbnail(self, **kwargs):
-        thumbnail_ptn_opt = self._page._task_parse.generate_resource_source_task_scene_src_thumbnail_pattern_opt_for(
+        thumbnail_ptn_opt = self._unit._task_parse.generate_resource_source_task_scene_src_thumbnail_pattern_opt_for(
             **kwargs)
         return thumbnail_ptn_opt.get_value()
 
-    def __init__(self, window, page, session):
-        super(_GuiSourceTaskSceneOpt, self).__init__(window, page, session)
+    def __init__(self, *args, **kwargs):
+        super(_GuiSourceTaskUnitSceneOpt, self).__init__(*args, **kwargs)
 
         self._qt_list_widget = gui_qt_view_widgets.QtListWidget()
-        self._page._prx_h_splitter.add_widget(self._qt_list_widget)
+        self._unit._prx_h_splitter.add_widget(self._qt_list_widget)
 
         self._qt_list_widget._set_item_sort_enable_(True)
         self._qt_list_widget._view_model.apply_item_sort_order(
             self._qt_list_widget._view_model.ItemSortOrder.Descending
         )
-        self._qt_list_widget._set_item_group_enable_(True)
+        # self._qt_list_widget._set_item_group_enable_(True)
         self._qt_list_widget._view_model.set_item_category_enable(True)
         self._qt_list_widget._view_model.set_item_mtime_enable(True)
         self._qt_list_widget._view_model.set_item_user_enable(True)
@@ -330,7 +333,7 @@ class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
 
     def gui_load_task_scenes(self):
         def cache_fnc_():
-            _task_scene_ptn_opt = self._page._task_parse.generate_source_task_scene_src_pattern_opt_for(
+            _task_scene_ptn_opt = self._unit._task_parse.generate_source_task_scene_src_pattern_opt_for(
                 **entity_properties)
             _matches = _task_scene_ptn_opt.find_matches()
             return [
@@ -341,13 +344,15 @@ class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
             _matches, _gui_thread_flag = data_
 
             for i_match in _matches:
-                self.gui_add_scene(i_match, _gui_thread_flag)
+                i_task_scene_variants = i_match
+                i_task_scene_variants.update(entity_properties)
+                self.gui_add_task_unit_scene(i_task_scene_variants, _gui_thread_flag)
 
         self._qt_list_widget._view_model.restore()
 
         self.gui_update_thread_flag()
 
-        entity_properties = self._page._gui_task_opt.gui_get_current_entity_properties()
+        entity_properties = self._unit._gui_task_opt.gui_get_current_entity_properties()
         if not entity_properties:
             return
 
@@ -357,7 +362,7 @@ class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
 
         trd.do_start()
 
-    def gui_add_scene(self, properties, gui_thread_flag):
+    def gui_add_task_unit_scene(self, task_unit_scene_variants, gui_thread_flag):
         def cache_fnc_():
             if gui_thread_flag != self._gui_thread_flag:
                 return [[], 0]
@@ -411,27 +416,27 @@ class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
             gui_qt_core.QtUtil.copy_text_to_clipboard(scene_src_path)
 
         def press_dbl_click_fnc_():
-            self._page.on_open_task_scene(properties)
+            self._unit.on_open_task_scene(task_unit_scene_variants)
 
-        scene_src_path = properties['result']
+        scene_src_path = task_unit_scene_variants['result']
 
-        path = self._page._task_parse.to_source_scene_src_path(**properties)
+        path = self._unit._task_parse.to_wsp_task_unit_scene_path(**task_unit_scene_variants)
 
         flag, qt_item = self._qt_list_widget._view_model.create_item(path)
 
         # image
-        image_path = self.find_thumbnail(**properties)
+        image_path = self.find_thumbnail(**task_unit_scene_variants)
         if image_path:
             qt_item._item_model.set_image(image_path)
 
         qt_item._item_model.set_icon_name('application/maya')
-        qt_item._item_model.set_category(properties['task_unit'])
+        qt_item._item_model.set_category(task_unit_scene_variants['task_unit'])
         qt_item._item_model.set_show_fnc(
             cache_fnc_, build_fnc_
         )
 
-        if self._page._task_session is not None:
-            if path == self._page._task_session.scene_src_path:
+        if self._unit._task_session is not None:
+            if path == self._unit._task_session.scene_src_path:
                 qt_item._item_model.set_status(
                     qt_item._item_model.Status.Correct
                 )
@@ -440,7 +445,7 @@ class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
         qt_item._item_model.register_press_dbl_click_fnc(press_dbl_click_fnc_)
 
     def do_gui_refresh_task_scene_for(self, properties):
-        path = self._page._task_parse.to_source_scene_src_path(**properties)
+        path = self._unit._task_parse.to_wsp_task_unit_scene_path(**properties)
         qt_item = self._qt_list_widget._view_model.find_item(path)
         if qt_item is not None:
             self._qt_list_widget._view_model.clear_all_items_status()
@@ -453,7 +458,7 @@ class _GuiSourceTaskSceneOpt(_GuiBaseOpt):
 
     def do_gui_refresh_all(self):
         self._qt_list_widget._view_model.clear_all_items_status()
-        task_session = self._page._task_session
+        task_session = self._unit._task_session
         if task_session is not None:
             scene_src_path = task_session.scene_src_path
             qt_item = self._qt_list_widget._view_model.find_item(scene_src_path)
@@ -472,7 +477,7 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
 
     TASK_PARSE_CLS = None
 
-    RESOURCE_BRANCH = None
+    RESOURCE_TYPE = None
 
     def on_open_task_scene(self, properties):
         scene_path = properties.get('result')
@@ -550,7 +555,7 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
         self._gui_task_scene_opt.do_gui_refresh_task_scene_for(properties)
 
     def do_gui_refresh_all_tasks(self):
-        self._gui_task_opt.gui_load_tasks()
+        self._gui_task_opt.gui_load_all_tasks()
 
     def _on_gui_left_visible_swap(self, boolean):
         self._prx_h_splitter.swap_contract_left_or_top_at(0)
@@ -600,25 +605,48 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
         resource = self._scan_resource_prx_input.get_entity(scan_resource_path)
 
         if resource is not None:
-            if resource.type == 'Asset':
-                scan_resource_properties = resource.properties
+            scan_resource_properties = resource.properties
+            if resource.type == 'Project':
                 entity_properties = dict(
                     project=scan_resource_properties.project,
-                    resource_branch='asset',
+                    resource_type='project',
+                    file_format='ma',
+                    artist='shared',
+                )
+                self._scan_resource_path = self._task_parse.to_scan_resource_path(**entity_properties)
+                self._resource_path = self._task_parse.to_wsp_resource_path(**entity_properties)
+
+                self.gui_setup(entity_properties)
+            if resource.type == 'Asset':
+                entity_properties = dict(
+                    project=scan_resource_properties.project,
+                    resource_type='asset',
                     role=scan_resource_properties.role,
                     asset=scan_resource_properties.asset,
                     file_format='ma',
                     artist='shared',
                 )
                 self._scan_resource_path = self._task_parse.to_scan_resource_path(**entity_properties)
-                self._resource_path = self._task_parse.to_resource_path(**entity_properties)
+                self._resource_path = self._task_parse.to_wsp_resource_path(**entity_properties)
+
+                self.gui_setup(entity_properties)
+            elif resource.type == 'Sequence':
+                entity_properties = dict(
+                    project=scan_resource_properties.project,
+                    resource_type='sequence',
+                    episode=scan_resource_properties.episode,
+                    sequence=scan_resource_properties.sequence,
+                    file_format='ma',
+                    artist='shared',
+                )
+                self._scan_resource_path = self._task_parse.to_scan_resource_path(**entity_properties)
+                self._resource_path = self._task_parse.to_wsp_resource_path(**entity_properties)
 
                 self.gui_setup(entity_properties)
             elif resource.type == 'Shot':
-                scan_resource_properties = resource.properties
                 entity_properties = dict(
                     project=scan_resource_properties.project,
-                    resource_branch='shot',
+                    resource_type='shot',
                     episode=scan_resource_properties.episode,
                     sequence=scan_resource_properties.sequence,
                     shot=scan_resource_properties.shot,
@@ -626,7 +654,7 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
                     artist='shared',
                 )
                 self._scan_resource_path = self._task_parse.to_scan_resource_path(**entity_properties)
-                self._resource_path = self._task_parse.to_resource_path(**entity_properties)
+                self._resource_path = self._task_parse.to_wsp_resource_path(**entity_properties)
 
                 self.gui_setup(entity_properties)
             else:
@@ -658,17 +686,21 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
         self._resource_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'reference', size_mode=1
         )
-        if self.RESOURCE_BRANCH == 'asset':
+        if self.RESOURCE_TYPE == 'project':
+            self._scan_resource_prx_input = lzy_gui_prx_widgets.PrxInputForProject(
+                history_key='lazy-workspace.{}-path'.format(self.RESOURCE_TYPE)
+            )
+        elif self.RESOURCE_TYPE == 'asset':
             self._scan_resource_prx_input = lzy_gui_prx_widgets.PrxInputForAssetCharacterAndProp(
-                history_key='lazy-workspace.{}-path'.format(self.RESOURCE_BRANCH)
+                history_key='lazy-workspace.{}-path'.format(self.RESOURCE_TYPE)
             )
-        elif self.RESOURCE_BRANCH == 'sequence':
+        elif self.RESOURCE_TYPE == 'sequence':
             self._scan_resource_prx_input = lzy_gui_prx_widgets.PrxInputForSequence(
-                history_key='lazy-workspace.{}-path'.format(self.RESOURCE_BRANCH)
+                history_key='lazy-workspace.{}-path'.format(self.RESOURCE_TYPE)
             )
-        elif self.RESOURCE_BRANCH == 'shot':
+        elif self.RESOURCE_TYPE == 'shot':
             self._scan_resource_prx_input = lzy_gui_prx_widgets.PrxInputForShot(
-                history_key='lazy-workspace.{}-path'.format(self.RESOURCE_BRANCH)
+                history_key='lazy-workspace.{}-path'.format(self.RESOURCE_TYPE)
             )
         else:
             raise RuntimeError()
@@ -694,12 +726,9 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
         self._prx_h_splitter = gui_prx_widgets.PrxHSplitter()
         prx_v_sca.add_widget(self._prx_h_splitter)
 
-        self._prx_v_splitter = gui_prx_widgets.PrxVSplitter()
-        self._prx_h_splitter.add_widget(self._prx_v_splitter)
-
         self._gui_task_opt = _GuiSourceTaskOpt(self._window, self, self._session)
 
-        self._gui_task_scene_opt = _GuiSourceTaskSceneOpt(self._window, self, self._session)
+        self._gui_task_scene_opt = _GuiSourceTaskUnitSceneOpt(self._window, self, self._session)
 
         self._gui_task_opt._qt_tree_widget._view.item_select_changed.connect(
             self._gui_task_scene_opt.gui_load_task_scenes
@@ -744,7 +773,7 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
         # update resource path
         if self._task_session:
             # check resource branch is match
-            if self._task_session.properties.resource_branch == self.RESOURCE_BRANCH:
+            if self._task_session.properties.resource_type == self.RESOURCE_TYPE:
                 self._scan_resource_prx_input.set_path(self._task_session.scan_resource_path)
 
         scan_resource_path = self._scan_resource_prx_input.get_path()
@@ -758,7 +787,13 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
 
     def gui_setup(self, entity_properties):
         self._resource_properties = entity_properties
-        self._gui_task_opt.gui_load_tasks()
+        self._gui_task_opt.gui_load_all_tasks()
 
     def gui_get_resource_properties(self):
         return self._resource_properties
+
+    def gui_jump_to_resource(self, ett_task):
+        scan_resource_path = self._task_parse.to_scan_resource_path(
+            **ett_task.variants
+        )
+        self._scan_resource_prx_input.set_path(scan_resource_path)

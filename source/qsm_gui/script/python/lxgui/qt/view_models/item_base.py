@@ -665,13 +665,13 @@ class AbsItemModel(object):
         if self._data.sort_enable is True:
             self._data.sort.key = sort_key
 
-            self._item.setText(self._generate_current_sort_name_text())
+            self._update_name(self._generate_current_sort_name_text())
 
     def apply_sort_order(self, sort_order):
         if self._data.sort_enable is True:
             self._data.sort.order = sort_order
 
-            self._item.setText(self._generate_current_sort_name_text())
+            self._update_name(self._generate_current_sort_name_text())
 
     # show
     def _update_show_auto(self):

@@ -171,7 +171,7 @@ class GuiPrxScpForTreeTagFilter(object):
         leaf_paths = self._filter_content.get_all_leaf_key_as_dag_paths()
         all_paths = ['/'] + self._filter_content.get_all_key_as_dag_paths()
         all_paths.sort()
-        all_paths = bsc_core.RawTextsOpt(all_paths).sort_by_number()
+        all_paths = bsc_core.BscTextsOpt(all_paths).sort_by_number()
         for path in all_paths:
             i_is_create, i_prx_item_src = self._add_prx_item_src_(path)
             if path in leaf_paths:

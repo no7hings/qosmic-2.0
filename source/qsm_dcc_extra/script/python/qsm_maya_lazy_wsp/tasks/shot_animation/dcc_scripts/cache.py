@@ -361,22 +361,25 @@ class ShotAnimationCacheSync:
         c.ShotCfxClothAssetHandle(rig_namespace).sync_ani_cache_auto(directory_path)
 
     @classmethod
-    def generate_export_kwargs(cls, namespaces, resource_properties):
+    def generate_export_kwargs(cls, namespaces, resource_properties, scene_path_override=None):
         import qsm_maya_lazy_wsp.core as c
 
         task_parse = c.TaskParse()
 
         variants = copy.copy(resource_properties)
 
-        dso_scene_pth_opt = task_parse.generate_pattern_opt_for(
-            'shot-disorder-animation-scene-file', **variants
-        )
+        if scene_path_override is None:
+            dso_scene_pth_opt = task_parse.generate_pattern_opt_for(
+                'shot-disorder-animation-scene-file', **variants
+            )
 
-        dso_scene_matches = dso_scene_pth_opt.find_matches()
-        if not dso_scene_matches:
-            raise RuntimeError()
+            dso_scene_matches = dso_scene_pth_opt.find_matches()
+            if not dso_scene_matches:
+                raise RuntimeError()
 
-        dod_scene_path = dso_scene_matches[-1]['result']
+            dod_scene_path = dso_scene_matches[-1]['result']
+        else:
+            dod_scene_path = scene_path_override
 
         variants['step'] = task_parse.Steps.animation
         variants['task'] = task_parse.Tasks.animation
@@ -430,11 +433,12 @@ class ShotAnimationCacheSync:
 
         if namespaces_valid:
             frame_range = qsm_gnl_dotfile.MayaAscii(dod_scene_path).get_frame_range()
+            start_frame, end_frame = frame_range
             return True, dict(
                 scene_src_path=tmp_scene_src_path,
                 directory_path=tmp_version_dir_path,
                 namespaces=namespaces_valid,
-                frame_range=frame_range,
+                frame_range=(1, end_frame),
                 frame_step=1,
                 frame_offset=0,
             )
@@ -443,8 +447,8 @@ class ShotAnimationCacheSync:
         )
 
     @classmethod
-    def generate_subprocess_args(cls, namespaces, resource_properties):
-        flag, kwargs = cls.generate_export_kwargs(namespaces, resource_properties)
+    def generate_subprocess_args(cls, namespaces, resource_properties, scene_path_override=None):
+        flag, kwargs = cls.generate_export_kwargs(namespaces, resource_properties, scene_path_override)
         if flag is True:
             directory_path = kwargs['directory_path']
             frame_range = kwargs['frame_range']
@@ -463,7 +467,7 @@ class ShotAnimationCacheSync:
         return False, (kwargs['directory_path'], )
 
     @classmethod
-    def execute_for(cls, namespaces, resource_properties, resource_fnc=None):
+    def execute_for(cls, namespaces, resource_properties, resource_fnc=None, scene_path_override=None):
         def completed_fnc_(directory_path_):
             if resource_fnc is not None:
                 for _i_namespace in namespaces:
@@ -474,6 +478,7 @@ class ShotAnimationCacheSync:
         flag, args = cls.generate_subprocess_args(
             namespaces,
             resource_properties,
+            scene_path_override
         )
         if flag is True:
             task_name, directory_path, cmd_script = args

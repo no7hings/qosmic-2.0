@@ -643,6 +643,8 @@ class _AbsQtHTabToolBox(
         )
         if index is not None:
             self._switch_current_to_(index)
+            return True
+        return False
 
     def _set_tab_direction_(self, direction):
         self._direction = direction

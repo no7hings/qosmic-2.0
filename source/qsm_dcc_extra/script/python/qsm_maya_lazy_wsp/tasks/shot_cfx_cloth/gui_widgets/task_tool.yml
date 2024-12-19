@@ -50,10 +50,22 @@ build:
                         |-
                         解算预设相关的功能。
 
+                cfx_rig/load_or_update_force:
+                    widget: boolean
+                    name: 'Load / Update Force'
+                    name_chs: '强制加载 / 更新'
+
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        当这个选项被勾起的时候，会强制更新解算预设到默认状态，并移除所有的修改。
+
                 cfx_rig/load_or_update:
                     widget: button
-                    name: 'Load CFX Rig'
-                    name_chs: '加载解算预设'
+                    name: 'Load / Update CFX Rig'
+                    name_chs: '加载 / 更新解算预设'
                     icon: 'file/add-file'
                     menu_enable: True
                     tool_tip:
@@ -107,7 +119,7 @@ build:
                     name: 'Load / Update Animation Cache'
                     name_chs: '加载 / 更新动画缓存'
                     icon: 'file/add-file'
-                    join_to_next: True
+                    menu_enable: True
                     tool_tip:
                         |-
                         To be supplemented.

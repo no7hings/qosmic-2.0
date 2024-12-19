@@ -152,20 +152,27 @@ class ShotCfxRigHandle:
         return bool(qsm_mya_core.ReferencesCache().get(self._ani_ctl_cache_namespace))
 
     def reference_scene(self, scene_path):
-        qsm_mya_core.SceneFile.reference_file(
-            scene_path, self._cfx_rig_namespace
-        )
+        qsm_mya_core.SceneFile.reference_file(scene_path, self._cfx_rig_namespace)
         
-    def replace_scene(self, scene_path):
+    def replace_scene(self, scene_path, force=False):
         reference_node = qsm_mya_core.ReferencesCache().get(self._cfx_rig_namespace)
         if reference_node:
-            qsm_mya_core.Reference.replace(reference_node, scene_path)
+            if force is True:
+                # todo: bug for replace, remove and re-reference again?
+                bsc_log.Log.trace_method_result(
+                    self.LOG_KEY, 'replace reference force: {}'.format(self._cfx_rig_namespace)
+                )
+                qsm_mya_core.Reference.remove(reference_node)
+                self.reference_scene(scene_path)
+            else:
+                qsm_mya_core.Reference.replace(reference_node, scene_path)
+                self.repair_solver()
 
-    def load_scene_auto(self, scene_path):
+    def load_scene_auto(self, scene_path, force=False):
         if self.get_is_loaded() is False:
             self.reference_scene(scene_path)
         else:
-            self.replace_scene(scene_path)
+            self.replace_scene(scene_path, force)
 
         locations = qsm_mya_core.Namespace.find_roots(self._cfx_rig_namespace)
         for i_location in locations:
@@ -353,6 +360,21 @@ class ShotCfxRigHandle:
                 if i_source_transform_path:
                     qsm_mya_core.ParentConstraint.set_source(i_constraint_node, i_source_transform_path)
 
+    def repair_solver(self):
+        """
+        method for when reference is replaced, nucleus is broken.
+        """
+        nuclei = qsm_mya_core.Namespace.find_match_nodes(self._cfx_rig_namespace, node_type='nucleus')
+        n_clothes = qsm_mya_core.Namespace.find_match_nodes(self._cfx_rig_namespace, node_type='nCloth')
+        for i in nuclei:
+            for j in n_clothes:
+                qsm_mya_core.Nucleus.assign_to(i, j, force=False)
+
+        n_rigids = qsm_mya_core.Namespace.find_match_nodes(self._cfx_rig_namespace, node_type='nRigid')
+        for i in nuclei:
+            for j in n_rigids:
+                qsm_mya_core.Nucleus.assign_to(i, j, force=False)
+
 
 class ShotAniGeoCacheHandle:
     def __init__(self, namespace):
@@ -363,14 +385,20 @@ class ShotAniGeoCacheHandle:
         return qsm_mya_core.ReferencesCache().get_file(self._ani_geo_cache_namespace)
     
     def reference_cache(self, cache_path):
+        qsm_mya_core.Material.unlock_default()
         qsm_mya_core.SceneFile.reference_file(
             cache_path, self._ani_geo_cache_namespace
         )
 
-    def replace_cache(self, cache_path):
+    def replace_cache(self, cache_path, force=False):
+        qsm_mya_core.Material.unlock_default()
         reference_node = qsm_mya_core.ReferencesCache().get(self._ani_geo_cache_namespace)
         if reference_node:
-            qsm_mya_core.Reference.replace(reference_node, cache_path)
+            if force is True:
+                qsm_mya_core.Reference.remove(reference_node)
+                self.reference_cache(cache_path)
+            else:
+                qsm_mya_core.Reference.replace(reference_node, cache_path)
 
     def load_cache_auto(self, cache_path):
         if self.get_is_loaded() is False:
@@ -424,14 +452,20 @@ class ShotAniCtlCacheHandle:
         return bool(qsm_mya_core.ReferencesCache().get(self._ani_ctl_cache_namespace))
 
     def reference_cache(self, cache_path):
+        qsm_mya_core.Material.unlock_default()
         qsm_mya_core.SceneFile.reference_file(
             cache_path, self._ani_ctl_cache_namespace
         )
     
-    def replace_cache(self, cache_path):
+    def replace_cache(self, cache_path, force=False):
+        qsm_mya_core.Material.unlock_default()
         reference_node = qsm_mya_core.ReferencesCache().get(self._ani_ctl_cache_namespace)
         if reference_node:
-            qsm_mya_core.Reference.replace(reference_node, cache_path)
+            if force is True:
+                qsm_mya_core.Reference.remove(reference_node)
+                self.reference_cache(cache_path)
+            else:
+                qsm_mya_core.Reference.replace(reference_node, cache_path)
 
     def load_cache_auto(self, cache_path):
         if self.get_is_loaded() is False:

@@ -7,6 +7,8 @@ from .pages import task_tool as _page_task_tool
 
 from .pages import task_release as _page_task_release
 
+from .pages import task_tracker as _page_task_tracker
+
 from .subpanels import task_create as _subpanel_task_create
 
 
@@ -17,14 +19,15 @@ class PrxLazyWorkspaceTool(_abs_panel_for_workspace.AbsPrxPanelForWorkspace):
         # task tool
         # _page_task_tool.PrxPageForTaskTool,
         # task publish
-        # _page_task_release.PrxPageForTaskRelease
+        # _page_task_release.PrxPageForTaskRelease,
+        _page_task_tracker.PrxPageForTaskTracker,
     ]
 
     SUB_PANEL_CLASSES = [
         _subpanel_task_create.PrxSubPanelForTaskCreate
     ]
 
-    RESOURCE_BRANCH = 'shot'
+    RESOURCE_TYPE = 'shot'
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxLazyWorkspaceTool, self).__init__(window, session, *args, **kwargs)

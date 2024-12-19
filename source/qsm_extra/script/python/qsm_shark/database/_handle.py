@@ -73,10 +73,11 @@ class Database(_abc.AbsBase):
             raise RuntimeError()
         return self.__dict__[entity_type]
 
-    def __init__(self, name):
-        self._name = name
+    def __init__(self, database_type, database_name):
+        # todo: use only one instance?
+        self._database_name = database_name
 
-        self._database_name = self._to_project_database_name(name)
+        self._database_name = self._to_database_key(database_type, database_name)
         
         self._dtb = peewee.MySQLDatabase(
             self._database_name,
@@ -134,10 +135,11 @@ class Database(_abc.AbsBase):
         ]
 
     def initialize(self):
+        # create database when is non-exists
         _my_sql.MySql.create_database(
             self._get_mysql_options(), self._database_name
         )
-
+        # build all entity type for project
         _base.build_entity_types(
             self.All, self._dtb
         )
@@ -146,5 +148,5 @@ class Database(_abc.AbsBase):
         self.initialize()
 
         self.create_entity(
-            self.EntityTypes.Project, name=self._name, **kwargs
+            self.EntityTypes.Project, name=self._database_name, **kwargs
         )

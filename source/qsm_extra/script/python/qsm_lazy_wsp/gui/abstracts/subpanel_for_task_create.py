@@ -9,7 +9,7 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
 
     GUI_KEY = 'task_create'
 
-    RESOURCE_BRANCH = None
+    RESOURCE_TYPE = None
 
     ASSET_TASKS = [
     ]
@@ -32,16 +32,16 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
     def gui_setup(self, prx_widget, resource_properties):
         self._prx_widget = prx_widget
 
-        resource_branch = resource_properties['resource_branch']
+        resource_type = resource_properties['resource_type']
         self._resource_properties = resource_properties
 
-        if resource_branch == 'asset':
+        if resource_type == 'asset':
             self.gui_setup_sub_pages_for(self.ASSET_TASKS)
-        elif resource_branch == 'shot':
+        elif resource_type == 'shot':
             self.gui_setup_sub_pages_for(self.SHOT_TASKS)
 
         self._sub_page_prx_tab_tool_box.set_history_key(
-            'lazy-workspace.{}-{}-page'.format(self.GUI_KEY, resource_branch)
+            'lazy-workspace.{}-{}-page'.format(self.GUI_KEY, resource_type)
         )
         self._sub_page_prx_tab_tool_box.load_history()
 

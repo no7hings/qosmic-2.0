@@ -11,7 +11,7 @@ class PrxUnitForAssetTaskManager(_abs_unit_for_task_manager.AbsPrxUnitForTaskMan
 
     TASK_PARSE_CLS = mya_lzy_wps_core.TaskParse
 
-    RESOURCE_BRANCH = 'asset'
+    RESOURCE_TYPE = 'asset'
 
     def on_open_task_scene(self, properties):
         scene_path = properties.get('result')

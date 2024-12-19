@@ -24,7 +24,7 @@ class TaskParse(lzy_wsp_core.TaskParse):
         )
         variants = ptn_opt.get_variants(scene_path, extract=True)
         if variants:
-            variants['resource_branch'] = 'asset'
+            variants['resource_type'] = 'asset'
             return _task_session.TaskSession(task_parse, variants)
 
     @classmethod
@@ -36,7 +36,7 @@ class TaskParse(lzy_wsp_core.TaskParse):
         )
         variants = ptn_opt.get_variants(scene_path, extract=True)
         if variants:
-            variants['resource_branch'] = 'shot'
+            variants['resource_type'] = 'shot'
             return _task_session.TaskSession(task_parse, variants)
 
     def __init__(self):

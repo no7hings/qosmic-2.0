@@ -30,6 +30,9 @@ class _AbsPrxTabToolBox(_prx_abstracts.AbsPrxWidget):
     def get_current_key(self):
         return self._qt_widget._get_current_key_text_()
 
+    def set_current_key(self, key):
+        return self._qt_widget._set_current_key_text_(key)
+
     def connect_current_changed_to(self, fnc):
         self._qt_widget.current_changed.connect(fnc)
 

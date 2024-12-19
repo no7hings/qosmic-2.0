@@ -1,4 +1,6 @@
 # coding:utf-8
+import sys
+
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
@@ -72,6 +74,17 @@ class Material(object):
         return _attribute.NodeAttribute.get_source_node(
             name, 'surfaceShader'
         )
+
+    @classmethod
+    def unlock_default(cls):
+        name = 'initialShadingGroup'
+        if _node_for_shader.Shader.is_locked(name) is True:
+            sys.stderr.write('initialShadingGroup is locked. try to unlock it.\n')
+            # noinspection PyBroadException
+            try:
+                _node_for_shader.Shader.unlock(name)
+            except Exception:
+                pass
 
 
 class MaterialOpt(_node.NodeOpt):

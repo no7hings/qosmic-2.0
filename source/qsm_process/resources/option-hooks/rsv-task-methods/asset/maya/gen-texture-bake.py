@@ -20,7 +20,7 @@ def main(session):
         resolver = rsv_core.RsvBase.generate_root()
         rsv_scene_properties = resolver.get_rsv_scene_properties_by_any_scene_file_path(any_scene_file_path)
         if rsv_scene_properties:
-            if bsc_storage.StgFileMtd.get_is_exists(any_scene_file_path) is True:
+            if bsc_storage.StgFile.get_is_exists(any_scene_file_path) is True:
                 mya_dcc_objects.Scene.open_file(any_scene_file_path)
                 bake_indices = hook_option_opt.get('bake_indices', as_array=True) or []
                 if bake_indices:

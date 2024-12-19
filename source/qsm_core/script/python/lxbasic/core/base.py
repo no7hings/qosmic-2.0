@@ -655,6 +655,13 @@ class BscStorage(object):
         if os.path.exists(drive_letter):
             return drive_letter
 
+    @classmethod
+    def start_in_system(cls, path):
+        if path:
+            path = ensure_unicode(path)
+            # must replace '/' to '\\', when path is share like "//nas/test.text"
+            os.startfile(path.replace('/', '\\'))
+
 
 class StgPathMapDict(object):
     def __init__(self, raw):

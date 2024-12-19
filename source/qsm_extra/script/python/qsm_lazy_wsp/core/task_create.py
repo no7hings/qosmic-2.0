@@ -5,7 +5,7 @@ import lxbasic.content as bsc_content
 
 
 class DccTaskCreateOpt(object):
-    RESOURCE_BRANCH = None
+    RESOURCE_TYPE = None
 
     STEP = None
     TASK = None

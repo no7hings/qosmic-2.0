@@ -3,13 +3,20 @@ import qsm_shark.parse as c
 
 stage = c.Stage()
 
-print stage.projects(space_key='disorder')
+project = stage.project('QSM_TST', space_key='source')
 
-project = stage.project('QSM_TST')
-
-for i_sequence in project.sequences(space_key='disorder'):
-    print i_sequence.shots()
+# for i_sequence in project.sequences(space_key='disorder'):
+#     print i_sequence.shots()
 
 # print project.asset('sam')
 
-print project.assets(space_key='disorder')
+print project.assets()
+
+print project.shots()
+
+# print project.shots(sequence=['A001_001'])
+#
+# for i_asset in project.assets(role=['chr']):
+#     i_tasks = i_asset.tasks(step=['cfx', 'rig'])
+#     for j_task in i_tasks:
+#         print j_task.versions()

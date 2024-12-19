@@ -23,7 +23,7 @@ def main(session):
         if katana_rsv_scene_properties:
             katana_scene_src_file_path = katana_rsv_scene_properties.get('extra.file')
             if katana_scene_src_file_path is not None:
-                if bsc_storage.StgFileMtd.get_is_exists(katana_scene_src_file_path) is True:
+                if bsc_storage.StgFile.get_is_exists(katana_scene_src_file_path) is True:
                     ktn_dcc_objects.Scene.open_file(katana_scene_src_file_path)
                     #
                     reload_set_usd = hook_option_opt.get_as_boolean('reload_set_usd')

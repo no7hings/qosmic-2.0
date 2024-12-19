@@ -1167,7 +1167,7 @@ class LxRenderer(object):
             'look_pass': 'lynxi_variants.look_pass',
             'light_pass': 'lynxi_variants.light_pass'
         }
-        combinations = bsc_core.RawVariablesMtd.get_all_combinations(
+        combinations = bsc_core.BscVariables.get_all_combinations(
             variants_dic
         )
         x, y = 0, 0

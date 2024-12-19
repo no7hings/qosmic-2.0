@@ -555,6 +555,8 @@ class QtTabView(
         )
         if index is not None:
             self._switch_current_to_(index)
+            return True
+        return False
 
     def _compute_press_index_loc_(self, p):
         if self._tab_bar_rect.contains(p):

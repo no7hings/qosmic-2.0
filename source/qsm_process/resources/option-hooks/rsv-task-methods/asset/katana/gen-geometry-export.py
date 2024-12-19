@@ -20,7 +20,7 @@ def main(session):
         resolver = rsv_core.RsvBase.generate_root()
         rsv_scene_properties = resolver.get_rsv_scene_properties_by_any_scene_file_path(any_scene_file_path)
         if rsv_scene_properties:
-            if bsc_storage.StgFileMtd.get_is_exists(any_scene_file_path) is True:
+            if bsc_storage.StgFile.get_is_exists(any_scene_file_path) is True:
                 ktn_dcc_objects.Scene.open_file(any_scene_file_path)
                 #
                 with_geometry_usd = hook_option_opt.get('with_geometry_usd') or False

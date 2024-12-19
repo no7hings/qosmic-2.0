@@ -15,7 +15,7 @@ from . import node as _node
 from . import shape as _shape
 
 
-class Shader(object):
+class Shader(_node.Node):
     @classmethod
     def create(cls, name, type_name):
         if cmds.objExists(name) is True:

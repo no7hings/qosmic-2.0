@@ -1,4 +1,5 @@
 studio:
+    # studio address map, use share source path
     XSH: '//10.33.4.90/pipeline-root'
     XHZ: '//10.1.1.11/pipeline-root'
     XQD: '//192.160.0.101/pipeline-root'
@@ -17,6 +18,7 @@ driver_map:
         X: 'X:'
 
 studio_targets_map:
+    # for asset sync.
     XSH:
         - XHZ
         - XQD
@@ -29,27 +31,56 @@ studio_targets_map:
     DEV: []
 
 rez_package:
+    # for rez package sync, etc. push to XSH, then sync to XHZ and XQD
     XSH:
-        root_source: 'E:/myworkspace/user-root/packages'
+        # package
+        package_root_source: 'E:/myworkspace/user-root/packages'
         # XSH
-        root_release: '//10.33.4.90/pipeline-root/deploy/rez-packages/internally/release'
-        root_release_sync: [
+        package_root_release: '//10.33.4.90/pipeline-root/deploy/rez-packages/internally/release'
+        package_root_release_sync: [
             # XHZ
             '//10.1.1.11/pipeline-root/deploy/rez-packages/internally/release',
             # XQD
             '//192.160.0.101/pipeline-root/deploy/rez-packages/internally/release',
         ]
         # XSH
-        root_pre_release: '//10.33.4.90/pipeline-root/deploy/rez-packages/internally/pre-release'
-        root_pre_release_sync: [
+        package_root_pre_release: '//10.33.4.90/pipeline-root/deploy/rez-packages/internally/pre-release'
+        package_root_pre_release_sync: [
             # XHZ
             '//10.1.1.11/pipeline-root/deploy/rez-packages/internally/pre-release',
             # XQD
             '//192.160.0.101/pipeline-root/deploy/rez-packages/internally/pre-release',
         ]
+        # startup
+        build_root_release: '//10.33.4.90/pipeline-root/deploy/.startup/build/release'
+        build_root_release_sync: [
+            # XHZ
+            '//10.1.1.11/pipeline-root/deploy/.startup/build/release',
+            # XQD
+            '//192.160.0.101/pipeline-root/deploy/.startup/build/release',
+        ]
+        build_root_pre_release: '//10.33.4.90/pipeline-root/.startup/build/pre-release'
+        build_root_pre_release_sync: [
+            # XHZ
+            '//10.1.1.11/pipeline-root/.startup/build/pre-release',
+            # XQD
+            '//192.160.0.101/pipeline-root/.startup/build/pre-release',
+        ]
     DEV:
-        root_source: 'E:/myworkspace/qosmic-2.0/source'
-        root_release: 'Y:/deploy/rez-packages/internally/release'
-        root_release_sync: []
-        root_pre_release: 'Y:/deploy/rez-packages/internally/pre-release'
-        root_pre_release_sync: []
+        # package
+        package_root_source: 'E:/myworkspace/qosmic-2.0/source'
+        package_root_release: 'Y:/deploy/rez-packages/internally/release'
+        package_root_release_sync: [
+        ]
+        package_root_pre_release: 'Y:/deploy/rez-packages/internally/pre-release'
+        package_root_pre_release_sync: [
+        ]
+        # startup
+        build_root_release: 'Y:/deploy/.startup/build/release'
+        build_root_release_sync: [
+#            'Y:/deploy/.startup/build_sync/release'
+        ]
+        build_root_pre_release: 'Y:/deploy/.startup/build/pre-release'
+        build_root_pre_release_sync: [
+#            'Y:/deploy/.startup/build_sync/pre-release'
+        ]

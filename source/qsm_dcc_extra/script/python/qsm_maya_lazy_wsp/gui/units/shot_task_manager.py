@@ -11,7 +11,7 @@ class PrxUnitForShotTaskManager(_abs_unit_for_task_manager.AbsPrxUnitForTaskMana
 
     TASK_PARSE_CLS = mya_lzy_wps_core.TaskParse
 
-    RESOURCE_BRANCH = 'shot'
+    RESOURCE_TYPE = 'shot'
 
     def on_open_task_scene(self, properties):
         scene_path = properties.get('result')

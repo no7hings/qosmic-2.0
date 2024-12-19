@@ -17,7 +17,7 @@ def main(session):
     any_scene_file_path = hook_option_opt.get('file')
 
     if any_scene_file_path is not None:
-        if bsc_storage.StgFileMtd.get_is_exists(any_scene_file_path) is True:
+        if bsc_storage.StgFile.get_is_exists(any_scene_file_path) is True:
             mya_dcc_objects.Scene.open_file(any_scene_file_path)
             #
             resolver = rsv_core.RsvBase.generate_root()

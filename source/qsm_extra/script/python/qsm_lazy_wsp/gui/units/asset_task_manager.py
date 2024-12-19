@@ -5,11 +5,11 @@ from ..abstracts import unit_for_task_manager as _abs_unit_for_task_manager
 
 
 class PrxUnitForAssetTaskManager(_abs_unit_for_task_manager.AbsPrxUnitForTaskManager):
-    GUI_KEY = 'asset'
-
     TASK_PARSE_CLS = _lzy_wsp_core.TaskParse
 
-    RESOURCE_BRANCH = 'asset'
+    RESOURCE_TYPE = TASK_PARSE_CLS.ResourceTypes.Asset
+
+    GUI_KEY = RESOURCE_TYPE
 
     def __init__(self, window, session, *args, **kwargs):
         super(PrxUnitForAssetTaskManager, self).__init__(window, session, *args, **kwargs)

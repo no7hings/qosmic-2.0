@@ -105,7 +105,7 @@ class PrxTabView(gui_prx_abstracts.AbsPrxWidget):
         self._qt_widget._set_current_name_text_(name)
 
     def set_current_by_key(self, key):
-        self._qt_widget._set_current_key_text_(key)
+        return self._qt_widget._set_current_key_text_(key)
 
     def set_add_enable(self, boolean):
         self._qt_widget._set_tab_add_enable_(boolean)

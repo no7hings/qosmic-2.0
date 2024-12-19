@@ -13,7 +13,7 @@ def main(session):
     any_scene_file_path = hook_option_opt.get('file')
 
     if any_scene_file_path is not None:
-        if bsc_storage.StgFileMtd.get_is_exists(any_scene_file_path) is True:
+        if bsc_storage.StgFile.get_is_exists(any_scene_file_path) is True:
             resolver = rsv_core.RsvBase.generate_root()
             rsv_scene_properties = resolver.get_rsv_scene_properties_by_any_scene_file_path(any_scene_file_path)
             if rsv_scene_properties:
@@ -34,7 +34,7 @@ def main(session):
                     )
                 #
                 component_usd_file_path = get_component_usd_file(rsv_task, rsv_scene_properties)
-                if bsc_storage.StgFileMtd.get_is_exists(component_usd_file_path) is True:
+                if bsc_storage.StgFile.get_is_exists(component_usd_file_path) is True:
                     hook_option_opt.set(
                         'component_usd_file', component_usd_file_path
                     )

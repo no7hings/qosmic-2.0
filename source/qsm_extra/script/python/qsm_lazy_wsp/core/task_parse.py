@@ -16,6 +16,10 @@ from . import task_session as _task_session
 
 # todo: support to each project different stage?
 class TaskParse(object):
+    EntityTypes = qsm_srk_parse.Stage.EntityTypes
+    SpaceKeys = qsm_srk_parse.Stage.SpaceKeys
+    ResourceTypes = qsm_srk_parse.Stage.ResourceTypes
+
     Roots = qsm_srk_parse.Stage.Roots
     Spaces = qsm_srk_parse.Stage.Spaces
     Steps = qsm_srk_parse.Stage.Steps
@@ -62,86 +66,61 @@ class TaskParse(object):
         return '/{project}'.format(
             **kwargs
         )
-    
+
     @classmethod
-    def to_scan_resource_path(cls, **kwargs):
-        kwargs = copy.copy(kwargs)
-        if 'asset' in kwargs:
-            kwargs['entity'] = kwargs['asset']
-            return u'/{project}/{asset}'.format(
-                **kwargs
+    def to_scan_resource_path(cls, **variants):
+        resource_type = variants['resource_type']
+        variants_new = copy.copy(variants)
+        if resource_type == 'project':
+            return u'/{project}'.format(
+                **variants_new
             )
-        elif 'shot' in kwargs:
+        elif resource_type == 'asset':
+            return u'/{project}/{asset}'.format(
+                **variants_new
+            )
+        elif resource_type == 'sequence':
+            return u'/{project}/{sequence}'.format(
+                **variants_new
+            )
+        elif resource_type == 'shot':
             return u'/{project}/{sequence}/{shot}'.format(
-                **kwargs
+                **variants_new
             )
         else:
             raise RuntimeError()
 
-    @classmethod
-    def to_resource_path(cls, **kwargs):
-        kwargs = copy.copy(kwargs)
-        if 'asset' in kwargs:
-            kwargs['entity'] = kwargs['asset']
-            return u'/{project}/{asset}'.format(
-                **kwargs
-            )
-        elif 'shot' in kwargs:
-            return u'/{project}/{shot}'.format(
-                **kwargs
-            )
+    def to_wsp_resource_path(self, **variants):
+        resource_type = variants['resource_type']
+        ptn = self._parse_configure.get('workspace.path_pattern.{}'.format(resource_type))
+        if ptn:
+            return ptn.format(**variants)
         else:
             raise RuntimeError()
 
-    @classmethod
-    def to_entity_path(cls, **kwargs):
-        kwargs = copy.copy(kwargs)
-        if 'asset' in kwargs:
-            kwargs['entity'] = kwargs['asset']
-            return u'/{project}/{asset}'.format(
-                **kwargs
-            )
-        elif 'shot' in kwargs:
-            return u'/{project}/{shot}'.format(
-                **kwargs
-            )
+    def to_wsp_task_path(self, **variants):
+        resource_type = variants['resource_type']
+        ptn = self._parse_configure.get('workspace.path_pattern.{}_task'.format(resource_type))
+        if ptn:
+            return ptn.format(**variants)
         else:
             raise RuntimeError()
 
-    @classmethod
-    def to_task_path(cls, **kwargs):
-        kwargs = copy.copy(kwargs)
-        if 'asset' in kwargs:
-            kwargs['entity'] = kwargs['asset']
-        elif 'shot' in kwargs:
-            kwargs['entity'] = kwargs['shot']
-        return u'/{project}/{entity}/{step}.{task}'.format(
-            **kwargs
-        )
+    def to_wsp_task_unit_path(self, **variants):
+        resource_type = variants['resource_type']
+        ptn = self._parse_configure.get('workspace.path_pattern.{}_task_unit'.format(resource_type))
+        if ptn:
+            return ptn.format(**variants)
+        else:
+            raise RuntimeError()
 
-    @classmethod
-    def to_task_unit_path(cls, **kwargs):
-        kwargs = copy.copy(kwargs)
-        if 'asset' in kwargs:
-            kwargs['entity'] = kwargs['asset']
-        elif 'shot' in kwargs:
-            kwargs['entity'] = kwargs['shot']
-        return u'/{project}/{entity}/{step}.{task}/{task_unit}'.format(
-            **kwargs
-        )
-
-    @classmethod
-    def to_source_scene_src_path(cls, **kwargs):
-        kwargs = copy.copy(kwargs)
-        if 'asset' in kwargs:
-            kwargs['entity'] = kwargs['asset']
-        elif 'shot' in kwargs:
-            kwargs['entity'] = kwargs['shot']
-        return (
-            u'/{project}/{entity}/{step}.{task}/{task_unit}/{entity}.{step}.{task}.{task_unit}.v{version}.ma'
-        ).format(
-            **kwargs
-        )
+    def to_wsp_task_unit_scene_path(self, **variants):
+        resource_type = variants['resource_type']
+        ptn = self._parse_configure.get('workspace.path_pattern.{}_task_unit_scene'.format(resource_type))
+        if ptn:
+            return ptn.format(**variants)
+        else:
+            raise RuntimeError()
 
     @classmethod
     def generate_task_session_by_resource_source_scene_src_auto(cls):
@@ -159,7 +138,7 @@ class TaskParse(object):
             )
             i_variants = i_ptn_opt.get_variants(scene_path, extract=True)
             if i_variants:
-                i_variants['resource_branch'] = i_resource_branch
+                i_variants['resource_type'] = i_resource_branch
                 return cls.TASK_SESSION_CLS(task_parse, i_variants)
 
     @property
@@ -178,15 +157,15 @@ class TaskParse(object):
         kwargs_new = copy.copy(kwargs)
         keys = keyword.split('-')
         kwargs_new.update(**self._properties)
-        resource_branch = keys[0]
-        kwargs_new['resource_branch'] = resource_branch
+        resource_type = keys[0]
+        kwargs_new['resource_type'] = resource_type
         space_key = keys[1]
         kwargs_new['space_key'] = space_key
         space = self._parse_stage._to_space(space_key)
         kwargs_new['space'] = space
 
         key = 'patterns.{}.{}.{}'.format(
-            resource_branch, space, '-'.join(keys[2:])
+            resource_type, space, '-'.join(keys[2:])
         )
         value = self._parse_configure.get(key)
         if value:

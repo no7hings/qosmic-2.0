@@ -12,7 +12,13 @@ import _base
 
 class AbsBase(object):
     EntityTypes = _base.EntityTypes
+
+    RootKeys = _base.RootKeys
     SpaceKeys = _base.SpaceKeys
+
+    ResourceTypes = _base.ResourceTypes
+    StepKeys = _base.StepKeys
+    TaskKeys = _base.TaskKeys
 
     # 1 is error only
     VERBOSE_LEVEL = 1
@@ -75,6 +81,7 @@ class AbsEntity(AbsBase):
         self._entity_key = self._stage._to_entity_key(entity_type, variants)
         self._variants['entity_key'] = self._entity_key
         self._entity_path = self._stage._to_entity_path(entity_type, variants)
+        # assign entity_path later
         self._variants['entity_path'] = self._entity_path
 
         if self.VERBOSE_LEVEL < 1:
@@ -117,12 +124,15 @@ class AbsEntity(AbsBase):
     def path(self):
         return self._entity_path
 
-    def find_one(self, entity_type, name, **kwargs):
-        return self._stage._find_entity(
+    def update_variants(self, **kwargs):
+        self._variants.update(**kwargs)
+
+    def find_entity(self, entity_type, name, **kwargs):
+        return self._stage._find_entity_fnc(
             self, entity_type, name, **kwargs
         )
 
-    def find_all(self, entity_type, **kwargs):
-        return self._stage._find_entities(
+    def find_entities(self, entity_type, **kwargs):
+        return self._stage._find_entities_fnc(
             self, entity_type, **kwargs
         )

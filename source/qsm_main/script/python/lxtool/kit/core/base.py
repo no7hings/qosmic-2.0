@@ -191,7 +191,7 @@ class KitDesktopHookAddOpt(object):
         linux_shell_script = self._options.get('script.linux')
 
         bsc_storage.StgPermissionMtd.create_directory(
-            bsc_storage.StgFileMtd.get_directory(configure_file_path)
+            bsc_storage.StgFile.get_directory(configure_file_path)
         )
 
         if type_ == 'python-script':

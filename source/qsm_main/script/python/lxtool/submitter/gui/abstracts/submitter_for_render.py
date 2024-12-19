@@ -717,7 +717,7 @@ class AbsPnlRenderSubmitterForAsset(AbsPnlSubmitterForRenderBase):
 
         def cache_fnc_():
             return [
-                bsc_core.RawVariablesMtd.get_all_combinations(
+                bsc_core.BscVariables.get_all_combinations(
                     self._variable_variants_dic
                 )
             ]
@@ -1426,7 +1426,7 @@ class AbsPnlRenderSubmitterForShot(AbsPnlSubmitterForRenderBase):
         self._variable_keys = self._hook_build_configure.get_key_names_at(
             'variables.character'
         )
-        combinations = bsc_core.RawVariablesMtd.get_all_combinations(
+        combinations = bsc_core.BscVariables.get_all_combinations(
             self._variable_variants_dic
         )
         for i_seq, i_variants in enumerate(combinations):

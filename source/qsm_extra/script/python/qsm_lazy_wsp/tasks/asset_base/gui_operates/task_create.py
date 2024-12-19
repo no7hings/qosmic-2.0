@@ -3,7 +3,7 @@ import qsm_lazy_wsp.core as lzy_wsp_core
 
 
 class DccAssetTaskCreateOpt(lzy_wsp_core.DccTaskCreateOpt):
-    RESOURCE_BRANCH = 'asset'
+    RESOURCE_TYPE = 'asset'
 
     STEP = 'gnl'
     TASK = 'general'

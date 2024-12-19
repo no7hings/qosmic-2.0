@@ -5,7 +5,7 @@ from . import task_tool as _task_tool
 
 
 class MayaAssetTaskCreateOpt(lzy_wsp_core.DccTaskCreateOpt):
-    RESOURCE_BRANCH = 'asset'
+    RESOURCE_TYPE = 'asset'
 
     STEP = 'gnl'
     TASK = 'general'

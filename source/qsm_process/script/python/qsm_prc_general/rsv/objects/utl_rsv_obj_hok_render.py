@@ -75,7 +75,7 @@ class RsvDccRenderHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
                 variable_mapper[i_variable_key]
             )
         #
-        combinations = bsc_core.RawVariablesMtd.get_all_combinations(
+        combinations = bsc_core.BscVariables.get_all_combinations(
             variants_dic
         )
         render_ddl_job_ids = []

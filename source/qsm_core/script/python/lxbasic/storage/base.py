@@ -853,7 +853,7 @@ class StgDirectoryMtdForMultiply(object):
         return dict_
 
 
-class StgFileMtd(object):
+class StgFile(object):
     @classmethod
     def get_directory(cls, file_path):
         return os.path.dirname(file_path)

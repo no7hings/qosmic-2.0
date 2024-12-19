@@ -17,7 +17,7 @@ import qsm_scan as qsm_scan
 class PrxInputForSequence(prx_abstracts.AbsPrxWidget):
     QT_WIDGET_CLS = gui_qt_widgets.QtTranslucentWidget
 
-    HISTORY_KEY = 'gui.input-entity-path-shot'
+    HISTORY_KEY = 'gui.input-entity-path-sequence'
 
     def __init__(self, *args, **kwargs):
         if 'history_key' in kwargs:

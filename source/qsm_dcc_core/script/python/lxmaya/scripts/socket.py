@@ -3,7 +3,7 @@
 class ScpMayaNetImport(object):
     def __init__(self, data):
         self._data = data or {}
-        self._resource_type_path = self._data.get('resource_branch')
+        self._resource_type_path = self._data.get('resource_type')
         self._resource_path = self._data.get('resource')
         self._file_type_path = self._data.get('file_type')
         self._file_path = self._data.get('file')

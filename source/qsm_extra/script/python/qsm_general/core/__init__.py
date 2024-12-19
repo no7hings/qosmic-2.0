@@ -1,7 +1,7 @@
 # coding:utf-8
 from .base import *
 
-from .framework import *
+from .rez_package import *
 
 from .dcc_base import *
 

@@ -20,14 +20,15 @@ class MySql(object):
             host=dtb_options['host'],
             port=dtb_options['port']
         )
+
         cursor = connection.cursor()
         cursor.execute(
             "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = %s", (name,)
         )
         exists = cursor.fetchone()
-
         if not exists:
             cursor.execute("CREATE DATABASE {}".format(name))
+
         cursor.close()
         connection.close()
 

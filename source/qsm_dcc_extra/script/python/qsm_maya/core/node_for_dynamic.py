@@ -4,6 +4,8 @@ import maya.cmds as cmds
 # noinspection PyUnresolvedReferences
 import maya.mel as mel
 
+import lxbasic.log as bsc_log
+
 from . import node as _node
 
 from . import attribute as _attribute
@@ -190,3 +192,45 @@ class MeshDynamic:
         if _:
             return True
         return False
+
+
+class Nucleus:
+    LOG_KEY = 'nucleus'
+
+    @classmethod
+    def assign_to(cls, nucleus_path, shape_path, force=False):
+        """
+        assign auto, when force is False: node is connected to any nucleus, ignore
+        """
+        atr_names = [
+            ('startState', 'inputPassiveStart'),
+            ('currentState', 'inputPassive'),
+        ]
+        for i_name_src, i_name_tgt in atr_names:
+            i_src = shape_path+'.'+i_name_src
+            i_cs = cmds.listConnections(
+                i_src, destination=1, source=0, plugs=1
+            ) or []
+            if i_cs:
+                i_c = i_cs[0]
+                i_node = i_c.split('.')[0]
+                if cmds.nodeType(i_node) == 'nucleus':
+                    if force is False:
+                        continue
+
+            j_tgt = None
+            for j in range(100):
+                j_tgt = nucleus_path+'.'+i_name_tgt+'[{}]'.format(j)
+                j_cs = cmds.listConnections(
+                    j_tgt, destination=0, source=1, plugs=1
+                ) or []
+                if not j_cs:
+                    cmds.connectAttr(i_src, j_tgt, force=1)
+                    break
+
+            if j_tgt:
+                bsc_log.Log.trace_method_result(
+                    cls.LOG_KEY, 'repair solver connection: {} > {}'.format(
+                        i_src, j_tgt
+                    )
+                )

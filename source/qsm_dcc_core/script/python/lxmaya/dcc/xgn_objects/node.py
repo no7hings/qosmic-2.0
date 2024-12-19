@@ -587,7 +587,7 @@ class GroomFnc(object):
         file_nodes = cls.get_grow_mesh_painter_file_nodes()
         if file_nodes:
             for i_file_node in file_nodes:
-                if bsc_storage.StgFileMtd.get_is_exists(i_file_node.get('fileTextureName')) is False:
+                if bsc_storage.StgFile.get_is_exists(i_file_node.get('fileTextureName')) is False:
                     list_.append(i_file_node)
         return list_
 
@@ -602,7 +602,7 @@ class GroomFnc(object):
         if file_nodes:
             for i_file_node in file_nodes:
                 i_file_path = i_file_node.get('fileTextureName')
-                if bsc_storage.StgFileMtd.get_is_exists(i_file_path) is False:
+                if bsc_storage.StgFile.get_is_exists(i_file_path) is False:
                     list_.append(i_file_path)
         return list_
 

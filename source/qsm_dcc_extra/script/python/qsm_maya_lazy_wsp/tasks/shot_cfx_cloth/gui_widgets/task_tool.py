@@ -7,6 +7,8 @@ import lxbasic.storage as bsc_storage
 
 from qsm_lazy_wsp.gui.abstracts import unit_for_task_tool as _abs_unit_for_task_tool
 
+import lxgui.core as gui_core
+
 import lxgui.qt.core as gui_qt_core
 
 import qsm_general.prc_task as qsm_gnl_prc_task
@@ -366,6 +368,22 @@ class _PrxBasicToolset(
         self._prx_options_node.set(
             'ani_cache.load_or_update', self.on_load_or_update_ani_cache_by_selection
         )
+        if self._window._language == 'chs':
+            self._prx_options_node.get_port('ani_cache.load_or_update').set_menu_data(
+                [
+                    (
+                        '自定义加载/更新', 'file/file', self.on_load_or_update_ani_cache_customize
+                    )
+                ]
+            )
+        else:
+            self._prx_options_node.get_port('ani_cache.load_or_update').set_menu_data(
+                [
+                    (
+                        'customize load/update', 'file/file', self.on_load_or_update_ani_cache_customize
+                    )
+                ]
+            )
 
         # simulation
         self._prx_options_node.set(
@@ -409,13 +427,14 @@ class _PrxBasicToolset(
     # cfx rig
     def on_load_or_update_cfx_rig_by_selection(self):
         if self._unit._gui_task_tool_opt is not None:
+            force = self._prx_options_node.get('cfx_rig.load_or_update_force')
             namespaces = self.get_rig_namespaces_by_selection()
             if namespaces:
                 with self._window.gui_progressing(
                     maximum=len(namespaces), label='load cfx rig'
                 ) as g_p:
                     for i_rig_namespace in namespaces:
-                        self._unit._gui_task_tool_opt.load_cfx_rig_auto(i_rig_namespace)
+                        self._unit._gui_task_tool_opt.load_cfx_rig_auto(i_rig_namespace, force=force)
 
                         g_p.do_update()
 
@@ -457,6 +476,29 @@ class _PrxBasicToolset(
                     shot=properties.shot,
                 ),
                 resource_fnc=s.ShotAnimationCacheSync.cfx_load_ani_cache_auto_fnc
+            )
+
+    def on_load_or_update_ani_cache_customize(self):
+        namespaces = self.get_rig_namespaces_by_selection()
+        if namespaces:
+            scene_path = gui_core.GuiStorageDialog.open_file(
+                ext_filter='All File (*.ma *.mb)', parent=self._window._qt_widget
+            )
+            if not scene_path:
+                return
+
+            import qsm_maya_lazy_wsp.tasks.shot_animation.dcc_scripts as s
+            properties = self._page._task_session.properties
+            s.ShotAnimationCacheSync.execute_for(
+                namespaces=namespaces,
+                resource_properties=dict(
+                    project=properties.project,
+                    # episode=properties.episode,
+                    sequence=properties.sequence,
+                    shot=properties.shot,
+                ),
+                resource_fnc=s.ShotAnimationCacheSync.cfx_load_ani_cache_auto_fnc,
+                scene_path_override=scene_path
             )
 
     # simulation

@@ -16,7 +16,7 @@ def main(session):
 
     file_path = option_opt.get('file')
 
-    if bsc_storage.StgFileMtd.get_is_exists(file_path) is False:
+    if bsc_storage.StgFile.get_is_exists(file_path) is False:
         raise IOError(
             bsc_log.Log.trace_method_error(
                 'option-hook execute',

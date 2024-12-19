@@ -45,7 +45,7 @@ def main(session):
             variable_mapper[i_variable_key], as_array=True
         )
     #
-    combinations = bsc_core.RawVariablesMtd.get_all_combinations(
+    combinations = bsc_core.BscVariables.get_all_combinations(
         variants_dic
     )
     with bsc_log.LogProcessContext.create(

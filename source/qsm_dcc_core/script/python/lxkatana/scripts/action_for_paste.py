@@ -31,8 +31,8 @@ class ScpActionForNodeGraphMaterialPaste(object):
         text = gui_qt_core.QtUtil.get_text_from_clipboard()
 
         if text:
-            if bsc_storage.StgFileMtd.get_is_exists(text) is True:
-                if bsc_storage.StgFileMtd.get_ext(text) in {'.tx', '.png', '.jpg', '.tiff', '.exr'}:
+            if bsc_storage.StgFile.get_is_exists(text) is True:
+                if bsc_storage.StgFile.get_ext(text) in {'.tx', '.png', '.jpg', '.tiff', '.exr'}:
                     file_path = text
 
         if file_path is not None:
@@ -91,8 +91,8 @@ class ScpActionForNodeGraphGroupPaste(object):
         text = gui_qt_core.QtUtil.get_text_from_clipboard()
 
         if text:
-            if bsc_storage.StgFileMtd.get_is_exists(text) is True:
-                if bsc_storage.StgFileMtd.get_ext(text) in {'.tx', '.exr', '.hdr'}:
+            if bsc_storage.StgFile.get_is_exists(text) is True:
+                if bsc_storage.StgFile.get_ext(text) in {'.tx', '.exr', '.hdr'}:
                     file_path = text
 
         if file_path is not None:

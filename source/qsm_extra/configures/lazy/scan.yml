@@ -6,8 +6,8 @@ default:
             Asset: '{root}/{project}/Assets/{role}/{asset}'
             Episode: '{root}/{project}/{episode}'
             Sequence: '{root}/{project}/{episode}/{sequence}/分镜'
-            # sequence variant has chinese word, so add "{seq_EPT}" for match result.
-            Shot: '{root}/{project}/{episode}/{sequence}{seq_EPT}/分镜/通过文件/{shot}.ma'
+            # sequence variant has chinese word, so add "{seq_IGN}" for match result.
+            Shot: '{root}/{project}/{episode}/{sequence}{seq_IGN}/分镜/通过文件/{shot}.ma'
 
             ProjectTask: '{root}/{project}/{task}'
             AssetTask: '{root}/{project}/Assets/{role}/{asset}/{task}/Final'

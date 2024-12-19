@@ -21,11 +21,76 @@ class EntityTypes(object):
     ]
 
 
-class SpaceKeys(object):
+class RootKeys:
     Disorder = 'disorder'
     Source = 'source'
     Release = 'release'
     Temporary = 'temporary'
+
+    All = [
+        Disorder,
+        Source, Release, Temporary
+    ]
+
+
+class SpaceKeys:
+    Disorder = 'disorder'
+    Source = 'source'
+    Release = 'release'
+    Temporary = 'temporary'
+
+    All = [
+        Disorder,
+        Source, Release, Temporary
+    ]
+
+
+class ResourceTypes:
+    Project = 'project'
+    Asset = 'asset'
+    Sequence = 'sequence'
+    Shot = 'shot'
+
+    All = [
+        Project,
+        Asset,
+        Sequence,
+        Shot
+    ]
+
+
+class StepKeys:
+    General = 'general'
+    Model = 'model'
+    Groom = 'groom'
+    Rig = 'rig'
+    CFX = 'cfx'
+    Surface = 'surface'
+    Layout = 'layout'
+    Animation = 'animation'
+
+    All = [
+        General,
+        Model, Groom, Rig, CFX, Surface,
+        Layout, Animation
+    ]
+
+
+class TaskKeys:
+    General = 'general'
+    Model = 'model'
+    Groom = 'groom'
+    Rig = 'rig'
+    CFXRig = 'cfx_rig'
+    Surface = 'surface'
+    Layout = 'layout'
+    Animation = 'animation'
+
+    All = [
+        General,
+        Model, Groom, Rig, CFXRig, Surface,
+        Layout, Animation
+    ]
 
 
 class Properties(dict):

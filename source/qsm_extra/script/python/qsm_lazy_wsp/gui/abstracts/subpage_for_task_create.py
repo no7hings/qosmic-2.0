@@ -1,4 +1,6 @@
 # coding:utf-8
+import lxbasic.core as bsc_core
+
 import lxgui.qt.widgets as gui_qt_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
@@ -49,6 +51,10 @@ class AbsPrxSubpageForTaskCreate(gui_prx_widgets.PrxBaseSubpage):
 
         self._prx_options_node.build_by_data(
             self._configure.get('build.options.parameters'),
+        )
+
+        self._prx_options_node.get_port('task_unit').set_options(
+            ['main', 'test', bsc_core.BscSystem.get_user_name()]
         )
 
         bottom_tool_bar = gui_prx_widgets.PrxHToolBar()

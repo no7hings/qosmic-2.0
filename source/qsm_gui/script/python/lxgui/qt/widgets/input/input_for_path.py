@@ -151,8 +151,11 @@ class QtInputForPath(
                 return
 
             if _data:
+                name_texts = _data.get('name_texts') or []
+                # sort values
+                name_texts = bsc_core.BscTexts.sort_by_number(name_texts)
                 self._cmp_entry_widget._set_next_name_texts_(
-                    _data.get('name_texts') or []
+                    name_texts
                 )
                 self._set_choose_popup_item_image_url_dict_(
                     _data.get('image_url_dict') or {}

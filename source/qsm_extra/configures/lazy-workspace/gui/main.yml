@@ -54,6 +54,18 @@ build:
                 name: 'Save As'
                 name_chs: '另存为'
 
+        project:
+            name: 'Project'
+            name_chs: '项目'
+
+            tool_tip:
+                |-
+                To be supplemented.
+
+            tool_tip_chs:
+                |-
+                待补充。
+
         asset:
             name: 'Asset'
             name_chs: '资产'
@@ -113,3 +125,63 @@ build:
         tool_tip_chs:
             |-
             待补充。
+
+    task_tracker:
+        name: 'Task Tracker'
+        name_chs: '任务追踪'
+
+        tool_tip:
+            |-
+            To be supplemented.
+
+        tool_tip_chs:
+            |-
+            待补充。
+
+        project:
+            name: 'Project'
+            name_chs: '项目'
+
+            tool_tip:
+                |-
+                To be supplemented.
+
+            tool_tip_chs:
+                |-
+                待补充。
+
+        asset:
+            name: 'Asset'
+            name_chs: '资产'
+
+            tool_tip:
+                |-
+                To be supplemented.
+
+            tool_tip_chs:
+                |-
+                待补充。
+
+        sequence:
+            name: 'Sequence'
+            name_chs: '场次'
+
+            tool_tip:
+                |-
+                To be supplemented.
+
+            tool_tip_chs:
+                |-
+                待补充。
+
+        shot:
+            name: 'Shot'
+            name_chs: '镜头'
+
+            tool_tip:
+                |-
+                To be supplemented.
+
+            tool_tip_chs:
+                |-
+                待补充。
