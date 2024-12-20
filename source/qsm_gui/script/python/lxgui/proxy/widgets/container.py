@@ -92,7 +92,7 @@ class AbsPrxToolGroup(gui_prx_abstracts.AbsPrxWidget):
         self._qt_head.setHidden(not boolean)
 
     def get_is_expanded(self):
-        return self._qt_head._get_is_expanded_()
+        return self._qt_head._is_expanded_()
 
     def add_widget(self, widget):
         if isinstance(widget, gui_qt_core.QtCore.QObject):
@@ -181,8 +181,8 @@ class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
             gui_qt_core.QtWidgets.QSizePolicy.Minimum
         )
 
-    def do_gui_refresh(self, w_over=None):
-        self._qt_view._refresh_widget_all_(w_over=w_over)
+    def do_gui_refresh(self, fix_bug=False):
+        self._qt_view._refresh_widget_all_(fix_bug=fix_bug)
 
     def _gui_build_(self):
         self._wgt_w, self._wgt_h = 28, 28
@@ -256,7 +256,7 @@ class PrxHToolBar(gui_prx_abstracts.AbsPrxWidget):
         self.set_visible(not self.get_is_visible())
 
     def get_is_expanded(self):
-        return self._qt_head._get_is_expanded_()
+        return self._qt_head._is_expanded_()
 
     def add_widget(self, widget):
         if isinstance(widget, gui_qt_core.QtCore.QObject):

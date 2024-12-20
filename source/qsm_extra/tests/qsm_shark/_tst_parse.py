@@ -10,9 +10,9 @@ project = stage.project('QSM_TST', space_key='source')
 
 # print project.asset('sam')
 
-print project.assets()
+# print project.assets(role=['chr'])
 
-print project.shots()
+print project.shots(sequence=['A001_002'])
 
 # print project.shots(sequence=['A001_001'])
 #

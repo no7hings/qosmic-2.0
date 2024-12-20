@@ -37,17 +37,18 @@ class _GuiBaseOpt(object):
         self._gui_thread_flag += 1
 
 
-class _GuiReleaseTaskOpt(_GuiBaseOpt):
+class _GuiTaskOpt(_GuiBaseOpt):
     def __init__(self, *args, **kwargs):
-        super(_GuiReleaseTaskOpt, self).__init__(*args, **kwargs)
+        super(_GuiTaskOpt, self).__init__(*args, **kwargs)
 
         self._task_unit_path = None
         self._task_unit_path_tmp = None
 
         self._qt_tree_widget = gui_qt_view_widgets.QtTreeWidget()
-        self._unit._prx_h_splitter.add_widget(self._qt_tree_widget)
+        self._unit._prx_v_splitter.add_widget(self._qt_tree_widget)
         self._qt_tree_widget._set_item_sort_enable_(True)
         self._qt_tree_widget._view_model.set_item_expand_record_enable(True)
+        self._qt_tree_widget._view_model.set_menu_name_dict(self._window._configure.get('build.menu_names'))
 
         self._qt_tree_widget.refresh.connect(
             functools.partial(self.gui_load_all_tasks, sync_flag=True)
@@ -156,58 +157,31 @@ class _GuiReleaseTaskOpt(_GuiBaseOpt):
                 _entity_qt_item._item_model.set_icon_name('workspace/null')
                 _entity_qt_item._item_model.set_expanded(True)
 
-                if gui_core.GuiUtil.language_is_chs():
-                    _entity_qt_item._item_model.set_menu_data(
+                _entity_qt_item._item_model.set_menu_data(
+                    [
+                        (
+                            'jump_to_task_manager', 'workspace/task',
+                            functools.partial(self.gui_jump_to_task_manager, ett_resource)
+                        ),
                         [
-                            (
-                                '转到任务管理', 'workspace/null',
-                                functools.partial(self.gui_jump_to_task_manager, ett_resource)
-                            ),
+                            'open', 'file/folder',
                             [
-                                '打开', 'file/folder',
-                                [
-                                    (
-                                        '工作目录（服务器）', 'file/folder',
-                                        functools.partial(
-                                            bsc_storage.StgExplorer.open_directory, _source_directory_path
-                                        )
-                                    ),
-                                    (
-                                        '发布目录', 'file/folder',
-                                        functools.partial(
-                                            bsc_storage.StgExplorer.open_directory, _release_directory_path
-                                        )
+                                (
+                                    'work_server_directory', 'file/folder',
+                                    functools.partial(
+                                        bsc_storage.StgExplorer.open_directory, _source_directory_path
                                     )
-                                ]
+                                ),
+                                (
+                                    'release_directory', 'file/folder',
+                                    functools.partial(
+                                        bsc_storage.StgExplorer.open_directory, _release_directory_path
+                                    )
+                                )
                             ]
                         ]
-                    )
-                else:
-                    _entity_qt_item._item_model.set_menu_data(
-                        [
-                            (
-                                'Jump to Task Manager', 'workspace/null',
-                                functools.partial(self.gui_jump_to_task_manager, ett_resource)
-                            ),
-                            [
-                                'Open', 'file/folder',
-                                [
-                                    (
-                                        'Open Work Directory (server)', 'file/folder',
-                                        functools.partial(
-                                            bsc_storage.StgExplorer.open_directory, _source_directory_path
-                                        )
-                                    ),
-                                    (
-                                        'Open Release Directory', 'file/folder',
-                                        functools.partial(
-                                            bsc_storage.StgExplorer.open_directory, _release_directory_path
-                                        )
-                                    )
-                                ]
-                            ]
-                        ]
-                    )
+                    ]
+                )
 
                 [self.gui_add_task(_x, _gui_thread_flag, sync_flag) for _x in _ett_tasks]
 
@@ -268,8 +242,9 @@ class _GuiReleaseTaskOpt(_GuiBaseOpt):
 
     def gui_get_ett_versions(self):
         list_ = []
-        qt_item = self._qt_tree_widget._view_model.get_current_item()
-        if qt_item:
+        _ = self._qt_tree_widget._view_model.get_selected_items()
+        if _:
+            qt_item = _[-1]
             _ = qt_item._item_model.get_descendants()
             # is not task
             if _:
@@ -294,10 +269,44 @@ class _GuiReleaseTaskOpt(_GuiBaseOpt):
         return list_
 
 
-class _GuiReleaseVersionOpt(_GuiBaseOpt):
+class _GuiTaskTagOpt(_GuiBaseOpt):
+    def __init__(self, *args, **kwargs):
+        super(_GuiTaskTagOpt, self).__init__(*args, **kwargs)
+
+        self._qt_tag_widget = gui_qt_view_widgets.QtTagWidget()
+        self._unit._prx_v_splitter.add_widget(self._qt_tag_widget)
+        self._qt_tag_widget._view_model.set_item_expand_record_enable(True)
+
+        self._qt_tag_widget.refresh.connect(self.gui_load_all_task_tags)
+
+    def _gui_add_entity_groups(self, path):
+        path_opt = bsc_core.BscNodePathOpt(path)
+
+        ancestor_paths = path_opt.get_ancestor_paths()
+        ancestor_paths.reverse()
+
+        for i_path in ancestor_paths:
+            i_flag, i_qt_item = self._qt_tag_widget._view_model.create_group_item(i_path)
+            if i_flag is True:
+                i_qt_item._item_model.set_expanded(True)
+
+    def gui_load_all_task_tags(self):
+        self._qt_tag_widget._view_model.restore()
+
+        resource_type = self._unit.RESOURCE_TYPE
+        task_paths = qsm_srk_parse.Stage().generate_wsp_task_paths(resource_type)
+        for i in task_paths:
+            self.gui_add_task_tag(i)
+
+    def gui_add_task_tag(self, path):
+        self._gui_add_entity_groups(path)
+        self._qt_tag_widget._view_model.create_item(path)
+
+
+class _GuiVersionOpt(_GuiBaseOpt):
 
     def __init__(self, *args, **kwargs):
-        super(_GuiReleaseVersionOpt, self).__init__(*args, **kwargs)
+        super(_GuiVersionOpt, self).__init__(*args, **kwargs)
 
         self._qt_list_widget = gui_qt_view_widgets.QtListWidget()
         self._unit._prx_h_splitter.add_widget(self._qt_list_widget)
@@ -312,6 +321,7 @@ class _GuiReleaseVersionOpt(_GuiBaseOpt):
         self._qt_list_widget._view_model.set_item_user_enable(True)
 
         self._qt_list_widget._view_model.set_item_frame_size(190, 100)
+        self._qt_list_widget._view_model.set_menu_name_dict(self._window._configure.get('build.menu_names'))
 
         self._qt_list_widget.refresh.connect(self.gui_load_all_versions)
 
@@ -368,24 +378,14 @@ class _GuiReleaseVersionOpt(_GuiBaseOpt):
                         )
                     )
 
-                if gui_core.GuiUtil.language_is_chs():
-                    qt_item._item_model.set_menu_data(
-                        [
-                            (
-                                '打开文件夹', 'file/folder',
-                                functools.partial(bsc_storage.StgExplorer.open_directory, _folder)
-                            )
-                        ]
-                    )
-                else:
-                    qt_item._item_model.set_menu_data(
-                        [
-                            (
-                                'Open Folder', 'file/folder',
-                                functools.partial(bsc_storage.StgExplorer.open_directory, _folder)
-                            )
-                        ]
-                    )
+                qt_item._item_model.set_menu_data(
+                    [
+                        (
+                            'open_folder', 'file/folder',
+                            functools.partial(bsc_storage.StgExplorer.open_directory, _folder)
+                        )
+                    ]
+                )
 
         if gui_thread_flag != self._gui_thread_flag:
             return
@@ -430,13 +430,18 @@ class AbsPrxUnitForTaskTracker(gui_prx_widgets.PrxBaseUnit):
         self._prx_h_splitter = gui_prx_widgets.PrxHSplitter()
         prx_v_sca.add_widget(self._prx_h_splitter)
 
-        self._gui_task_opt = _GuiReleaseTaskOpt(self._window, self, self._session)
-        self._gui_version_opt = _GuiReleaseVersionOpt(self._window, self, self._session)
+        self._prx_v_splitter = gui_prx_widgets.PrxVSplitter()
+        self._prx_h_splitter.add_widget(self._prx_v_splitter)
+
+        self._gui_task_opt = _GuiTaskOpt(self._window, self, self._session)
+
+        self._gui_task_tag_opt = _GuiTaskTagOpt(self._window, self, self._session)
+
+        self._gui_version_opt = _GuiVersionOpt(self._window, self, self._session)
         self._gui_task_opt._qt_tree_widget._view.item_select_changed.connect(
             self._gui_version_opt.gui_load_all_versions
         )
 
-        self._prx_h_splitter.set_contract_enable(False)
         self._prx_h_splitter.set_fixed_size_at(0, 320)
 
     def do_gui_load_project(self, scn_entity):
@@ -444,6 +449,7 @@ class AbsPrxUnitForTaskTracker(gui_prx_widgets.PrxBaseUnit):
         if project != self._project:
             self._project = project
             self._gui_task_opt.gui_load_all_tasks()
+            self._gui_task_tag_opt.gui_load_all_task_tags()
 
     def do_gui_refresh_all(self):
         scn_entity = self._page.get_scn_entity()

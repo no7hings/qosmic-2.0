@@ -186,6 +186,26 @@ class Stage(_abc.AbsBase):
                 )
             )
 
+    def generate_wsp_task_paths(self, resource_type):
+        list_ = []
+        _ = self._configure.get(
+            'workspace.tasks.{}'.format(resource_type)
+        )
+        step_dict = self._configure.get(
+            'steps'
+        )
+        task_dict = self._configure.get(
+            'tasks'
+        )
+        for i_step_key, i_task_keys in _.items():
+            i_step = step_dict[i_step_key]
+            for j_task_key in i_task_keys:
+                j_task = task_dict[j_task_key]
+                list_.append(
+                    '/{}/{}'.format(i_step, j_task)
+                )
+        return list_
+
     def _get_variant_regex_dict(self):
         return self._configure.get(
             'variants.regex'
@@ -346,8 +366,8 @@ class Stage(_abc.AbsBase):
                 i_p_opt.update_variants(**entity_variants)
                 i_matches = i_p_opt.find_matches()
                 if i_matches:
-                    i_entity_variants = i_matches[0]
-                    i_entity_variants.update(entity_variants)
+                    i_entity_variants = dict(entity_variants)
+                    i_entity_variants.update(i_matches[0])
                     return True, self._entity_variants_prc(i_entity_variants, variant_key)
         # when not patterns, may pattern is empty.
         else:
@@ -382,8 +402,8 @@ class Stage(_abc.AbsBase):
                 i_p_opt.update_variants(**entity_variants)
                 i_matches = i_p_opt.find_matches()
                 if i_matches:
-                    i_entity_variants = i_matches[0]
-                    i_entity_variants.update(entity_variants)
+                    i_entity_variants = dict(entity_variants)
+                    i_entity_variants.update(i_matches[0])
                     return True, self._task_variants_prc(i_entity_variants, None)
         return False, {}
 
@@ -412,8 +432,8 @@ class Stage(_abc.AbsBase):
                 i_p_opt.update_variants(**entity_variants)
                 i_matches = i_p_opt.find_matches()
                 if i_matches:
-                    i_entity_variants = i_matches[0]
-                    i_entity_variants.update(entity_variants)
+                    i_entity_variants = dict(entity_variants)
+                    i_entity_variants.update(i_matches[0])
                     return True, self._version_variants_prc(i_entity_variants, None)
         return False, {}
 
@@ -558,8 +578,8 @@ class Stage(_abc.AbsBase):
         p_opt.update_variants(**entity_variants)
         matches = p_opt.find_matches(sort=True)
         for i_match in matches:
-            i_entity_variants_next = i_match
-            i_entity_variants_next.update(entity_variants)
+            i_entity_variants_next = dict(entity_variants)
+            i_entity_variants_next.update(i_match)
             next_entity_variants_list.append(entity_variant_prc(i_entity_variants_next, variant_key))
 
         cls._push_next_entities_sync_cache(entity_type, next_entity_variants_list, entity_variants)

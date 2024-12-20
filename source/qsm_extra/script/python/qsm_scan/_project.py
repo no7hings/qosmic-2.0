@@ -1,6 +1,8 @@
 # coding:utf-8
 import _base
 
+import _role
+
 import _asset
 
 import _episode
@@ -17,6 +19,7 @@ class Project(_base.AbsEntity):
     VariantKey = _base.EntityVariantKeys.Project
 
     NextEntitiesCacheClassDict = {
+        _base.EntityTypes.Role: _role.RolesCacheOpt,
         _base.EntityTypes.Asset: _asset.AssetsCacheOpt,
         _base.EntityTypes.Episode: _episode.EpisodesCacheOpt,
         _base.EntityTypes.Sequence: _sequence.SequencesCacheOpt,
@@ -33,6 +36,10 @@ class Project(_base.AbsEntity):
 
     def __init__(self, *args, **kwargs):
         super(Project, self).__init__(*args, **kwargs)
+
+    # role
+    def find_roles(self, variants_extend=None, cache_flag=True):
+        return self._find_next_entities(_base.EntityTypes.Role, variants_extend, cache_flag)
 
     # asset
     def find_assets(self, variants_extend=None, cache_flag=True):

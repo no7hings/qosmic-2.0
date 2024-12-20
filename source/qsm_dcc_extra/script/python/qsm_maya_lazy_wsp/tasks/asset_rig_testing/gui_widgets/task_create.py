@@ -63,7 +63,7 @@ class PrxSubpageForAssetRigTestingCreate(_sub_page_for_task_create.AbsPrxSubpage
             (
                 task_create_opt, kwargs_new, scene_src_path, thumbnail_path
             ) = self.TASK_CREATE_OPT_CLS.generate_scene_src_args(
-                resource_properties, task_parse, task_unit
+                resource_properties, task_parse, task_unit, 'maya'
             )
 
             if bsc_storage.StgPath.get_is_file(scene_src_path) is False:

@@ -129,7 +129,7 @@ class AbsQtToolGroup(
         self._refresh_widget_all_()
 
     def _refresh_expand_(self):
-        boolean = self._get_is_expanded_()
+        boolean = self._is_expanded_()
         self._view_widget.setVisible(
             boolean
         )
@@ -168,18 +168,18 @@ class AbsQtToolGroup(
         self.__head._set_expanded_(boolean)
         self._refresh_expand_()
 
-    def _get_is_expanded_(self):
-        return self.__head._get_is_expanded_()
+    def _is_expanded_(self):
+        return self.__head._is_expanded_()
 
     def _get_layout_minimum_size_(self):
         return self.__base_layout.minimumSize()
 
     def _start_drag_mode_(self):
-        if self._get_is_expanded_() is True:
+        if self._is_expanded_() is True:
             self._view_widget.hide()
 
     def _end_drag_mode_(self):
-        if self._get_is_expanded_() is True:
+        if self._is_expanded_() is True:
             self._view_widget.show()
 
 
@@ -257,13 +257,13 @@ class AbsQtToolBox(QtWidgets.QWidget):
         self._set_size_mode_(0)
 
     def _refresh_expand_(self):
-        self._body.setVisible(self._get_is_expanded_())
+        self._body.setVisible(self._is_expanded_())
         self._head._refresh_expand_()
 
         self._refresh_widget_size_()
 
     def _refresh_widget_size_(self):
-        if self._get_is_expanded_() is True:
+        if self._is_expanded_() is True:
             if self.QT_ORIENTATION == QtCore.Qt.Horizontal:
                 self.setMaximumWidth(166667)
             else:
@@ -281,8 +281,8 @@ class AbsQtToolBox(QtWidgets.QWidget):
     def _refresh_container_size_(self):
         pass
 
-    def _get_is_expanded_(self):
-        return self._head._get_is_expanded_()
+    def _is_expanded_(self):
+        return self._head._is_expanded_()
 
     def _add_widget_(self, widget):
         if isinstance(widget, QtCore.QObject):
@@ -360,7 +360,7 @@ class AbsQtToolBar(QtWidgets.QWidget):
         self._refresh_expand_()
 
     def _refresh_expand_(self):
-        if self._get_is_expanded_() is True:
+        if self._is_expanded_() is True:
             self._head.setMaximumSize(self._wgt_w_min, self._wgt_h)
             self._head.setMinimumSize(self._wgt_w_min, self._wgt_h)
 
@@ -371,15 +371,15 @@ class AbsQtToolBar(QtWidgets.QWidget):
 
             self.setFixedHeight(self._wgt_h_min)
 
-        self._body.setVisible(self._get_is_expanded_())
+        self._body.setVisible(self._is_expanded_())
         self._head._refresh_expand_()
 
     def _set_expanded_(self, boolean):
         self._head._set_expanded_(boolean)
         self._refresh_expand_()
 
-    def _get_is_expanded_(self):
-        return self._head._get_is_expanded_()
+    def _is_expanded_(self):
+        return self._head._is_expanded_()
 
     def _add_widget_(self, widget):
         if isinstance(widget, QtCore.QObject):

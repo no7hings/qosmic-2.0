@@ -376,8 +376,7 @@ class QtMenuBar(QtWidgets.QMenuBar):
 
 class QtMenu(QtWidgets.QMenu):
     def __init__(self, *args, **kwargs):
-        # noinspection PyArgumentList
-        super(QtMenu, self).__init__(*args, **kwargs)
+        super(QtMenu, self).__init__(*args)
         self.setPalette(_qt_core.GuiQtDcc.generate_qt_palette())
         self.setAutoFillBackground(True)
 
@@ -392,32 +391,49 @@ class QtMenu(QtWidgets.QMenu):
                 _qt_core.QtStyle.get('QMenu')
             )
 
+        self._name_dict = kwargs.get('name_dict') or {}
+
+        self._language = _gui_core.GuiUtil.get_language()
+
         self._menu_content_opt = _qt_core.GuiQtMenuOpt(self)
 
     @classmethod
     def _set_cmd_run_(cls, cmd_str):
         exec cmd_str
 
-    @classmethod
-    def _create_action_(cls, qt_menu, action_args):
+    def _create_sub_menu_(self, qt_menu, data):
+        name, icon_name, sub_data = data
+        name = self._name_fnc_(name)
+        action = qt_menu.addAction(name)
+        if icon_name is not None:
+            if isinstance(icon_name, six.string_types):
+                action.setIcon(_qt_core.QtIcon.generate_by_name(icon_name))
+        else:
+            action.setIcon(_qt_core.QtIcon.generate_by_text(name, background_color=(64, 64, 64)))
+
+        sub_menu = self.__class__(self.parent())
+        action.setMenu(sub_menu)
+        for i in sub_data:
+            self._create_action_(sub_menu, i)
+
+    def _create_action_(self, qt_menu, data):
         def set_disable_fnc_(qt_widget_action_):
             qt_widget_action_.setFont(_qt_core.QtFonts.NameDisable)
             qt_widget_action_.setDisabled(True)
 
-        if action_args:
-            if len(action_args) == 1:
-                text = action_args[0]
-                cls._add_separator_(qt_menu, text)
-            elif len(action_args) >= 3:
-                name, icon_name, args_extend = action_args[:3]
+        if data:
+            if len(data) == 1:
+                name = data[0]
+                self._create_separator_(qt_menu, self._name_fnc_(name))
+            elif len(data) >= 3:
+                name, icon_name, args_extend = data[:3]
                 item = _qt_core.QtWidgetAction(qt_menu)
                 item.setFont(_qt_core.QtFonts.NameNormal)
                 qt_menu.addAction(item)
-                #
-                item.setText(name)
-                #
+                item.setText(self._name_fnc_(name))
+
                 is_checked = False
-                #
+
                 if args_extend is None:
                     set_disable_fnc_(item)
                 else:
@@ -502,15 +518,15 @@ class QtMenu(QtWidgets.QMenu):
                         _qt_core.QtIcon.generate_by_text(name, background_color=(64, 64, 64))
                     )
                 #
-                if len(action_args) >= 4:
-                    shortcut = action_args[3]
+                if len(data) >= 4:
+                    shortcut = data[3]
                     item.setShortcut(shortcut)
                     item.setShortcutContext(QtCore.Qt.WidgetShortcut)
         else:
-            cls._add_separator_(qt_menu, None)
+            self._create_separator_(qt_menu, None)
 
     @classmethod
-    def _add_separator_(cls, menu, text):
+    def _create_separator_(cls, menu, text):
         if text is not None:
             s = _qt_core.QtWidgetActionForSeparator(menu)
             s.setText(text)
@@ -550,6 +566,10 @@ class QtMenu(QtWidgets.QMenu):
         )
         qt_widget.setIcon(icon)
 
+    def _update_menu_name_dict_(self, dict_):
+        if isinstance(dict_, dict):
+            self._name_dict.update(dict_)
+
     def _set_menu_data_(self, data):
         """
         :param data: [
@@ -569,18 +589,10 @@ class QtMenu(QtWidgets.QMenu):
                     self._create_action_(self, i)
                 # sub menu
                 elif isinstance(i, list):
-                    i_name, i_icon_name, i_sub_data = i
-                    qt_action_item = self.addAction(i_name)
-                    if i_icon_name is not None:
-                        if isinstance(i_icon_name, six.string_types):
-                            qt_action_item.setIcon(_qt_core.QtIcon.generate_by_name(i_icon_name))
-                    else:
-                        qt_action_item.setIcon(_qt_core.QtIcon.generate_by_text(i_name, background_color=(64, 64, 64)))
-                    #
-                    sub_menu = self.__class__(self.parent())
-                    qt_action_item.setMenu(sub_menu)
-                    for j in i_sub_data:
-                        self._create_action_(sub_menu, j)
+                    self._create_sub_menu_(self, i)
+
+    def _set_menu_content_(self, content, append=False):
+        self._menu_content_opt.create_by_content(content, append)
 
     def _set_title_text_(self, text):
         # self.setTearOffEnabled(True)
@@ -596,12 +608,17 @@ class QtMenu(QtWidgets.QMenu):
             QtGui.QCursor().pos()
         )
 
-    def _set_menu_content_(self, content, append=False):
-        self._menu_content_opt.create_by_content(content, append)
-
     @classmethod
     def _set_action_create_by_menu_content_(cls, menu):
         menu.clear()
+
+    def _name_fnc_(self, name):
+        if name in self._name_dict:
+            data = self._name_dict[name]
+            if self._language == 'chs':
+                return data.get('name_chs', name)
+            return data.get('name', name)
+        return name
 
     def _popup_start_(self):
         self.popup(

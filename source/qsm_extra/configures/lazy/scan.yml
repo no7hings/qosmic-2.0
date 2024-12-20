@@ -3,6 +3,7 @@ default:
         resolve_patterns:
             # entity_type: pattern
             Project: '{root}/{project}/Assets'
+            Role: '{root}/{project}/Assets/{role}'
             Asset: '{root}/{project}/Assets/{role}/{asset}'
             Episode: '{root}/{project}/{episode}'
             Sequence: '{root}/{project}/{episode}/{sequence}/分镜'
@@ -16,6 +17,7 @@ default:
 
         path_patterns:
             Project: '/{project}'
+            Role: '/{project}/{role}'
             Asset: '/{project}/{asset}'
 
             Episode: '/{project}/{episode}'
@@ -30,6 +32,7 @@ default:
         variant_keys:
             Root: 'root'
             Project: 'project'
+            Role: 'role'
             Asset: 'asset'
             Episode: 'episode'
             Sequence: 'sequence'
@@ -38,6 +41,7 @@ default:
 
         variant_key_regexes:
             project: '[a-zA-Z]*'
+            role: '[a-zA-Z]*'
             asset: '[a-zA-Z]*'
 
             episode: '[a-zA-Z]*'

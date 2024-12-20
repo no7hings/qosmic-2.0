@@ -65,7 +65,8 @@ class AbsViewModel(object):
         self._data.menu = _base._Data(
             content=None,
             data=None,
-            data_generate_fnc=None
+            data_generate_fnc=None,
+            name_dict=dict()
         )
         # keyword filter
         self._data.keyword_filter = _base._Data(
@@ -451,6 +452,13 @@ class AbsViewModel(object):
     def get_menu_data_generate_fnc(self):
         return self._data.menu.data_generate_fnc
 
+    def set_menu_name_dict(self, dict_):
+        if isinstance(dict_, dict):
+            self._data.menu.name_dict = dict_
+
+    def get_menu_name_dict(self):
+        return self._data.menu.name_dict
+
     def refresh_info(self):
         c = len(self.get_checked_items())
         if c:
@@ -514,7 +522,7 @@ class AbsViewModel(object):
                 list_.append(i_drag_data)
         return list_
 
-    def create_group_item(self, name, *args, **kwargs):
+    def create_group_item(self, path, *args, **kwargs):
         raise NotImplementedError()
 
     def create_item(self, path, *args, **kwargs):

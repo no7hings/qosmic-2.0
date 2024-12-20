@@ -53,6 +53,7 @@ class Properties(dict):
 class EntityTypes(object):
     Root = 'Root'
     Project = 'Project'
+    Role = 'Role'
     Asset = 'Asset'
     Episode = 'Episode'
     Sequence = 'Sequence'
@@ -63,6 +64,7 @@ class EntityTypes(object):
 class EntityVariantKeys:
     Root = None
     Project = None
+    Role = None
     Asset = None
     Episode = None
     Sequence = None

@@ -282,29 +282,6 @@ entities:
             },
         }
 
-workspace:
-    path_pattern:
-        # project
-        project: '/{project}'
-        project_task: '<.project>/{step}.{task}'
-        project_task_unit: '<.project_task>/{task_unit}'
-        project_task_unit_scene: '<.project_task_unit>/{project}.{step}.{task}.{task_unit}.v{version}'
-        # asset
-        asset: '/{project}/{asset}'
-        asset_task: '<.asset>/{step}.{task}'
-        asset_task_unit: '<.asset_task>/{task_unit}'
-        asset_task_unit_scene: '<.asset_task_unit>/{asset}.{step}.{task}.{task_unit}.v{version}'
-        # sequence
-        sequence: '/{project}/{sequence}'
-        sequence_task: '<.sequence>/{step}.{task}'
-        sequence_task_unit: '<.sequence_task>/{task_unit}'
-        sequence_task_unit_scene: '<.sequence_task_unit>/{sequence}.{step}.{task}.{task_unit}.v{version}'
-        # shot
-        shot: '/{project}/{shot}'
-        shot_task: '<.shot>/{step}.{task}'
-        shot_task_unit: '<.shot_task>/{task_unit}'
-        shot_task_unit_scene: '<.shot_task_unit>/{shot}.{step}.{task}.{task_unit}.v{version}'
-
 variants:
     cleanup_keys:
         - sequence
@@ -333,21 +310,36 @@ steps:
     surface: 'srf'
     layout: 'lay'
     animation: 'ani'
+    light: 'lgt'
+
+step_names: {}
 
 tasks:
     general: 'general'
     model: 'modeling'
     groom: 'grooming'
     rig: 'rigging'
+    rig_test: 'rig_testing'
     cfx_rig: 'cfx_rig'
     cfx_cloth: 'cfx_cloth'
+    cfx_dress: 'cfx_dressing'
     surface: 'surfacing'
     layout: 'layout'
     animation: 'animation'
+    light: 'lighting'
+    light_rig: 'light_rig'
+
+task_names: {}
 
 patterns:
     # project
     project:
+        task-version-name: '{asset}.{step}.{task}.v{version}'
+        task-zero_version-name: '{asset}.{step}.{task}.v000'
+        task-no_version-name: '{asset}.{step}.{task}'
+
+        task_unit-version-name: '{asset}.{step}.{task}.{task_unit}.v{version}'
+
         disorder:
             dir: '{root_disorder}/{project}'
 
@@ -355,6 +347,16 @@ patterns:
             dir: '{root_source}/{project}/{space}'
             task-dir: '<.dir>/tasks/user.{artist}/{step}.{task}'
             task_unit-dir: '<.task-dir>/{task_unit}'
+            # scene_src
+            #   maya
+            maya-scene_src-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
+            maya-thumbnail-file: '<.task_unit-dir>/maya/.thumbnails/<..task_unit-version-name>.jpg'
+                # houdini
+            houdini-scene_src-file: '<.task_unit-dir>/houdini/scenes/<..task_unit-version-name>.hip'
+            houdini-thumbnail-file: '<.task_unit-dir>/houdini/.thumbnails/<..task_unit-version-name>.jpg'
+            #   katana
+            katana-scene_src-file: '<.task_unit-dir>/katana/scenes/<..task_unit-version-name>.katana'
+            katana-thumbnail-file: '<.task_unit-dir>/katana/.thumbnails/<..task_unit-version-name>.jpg'
 
         release:
             dir: '{root_release}/{project}/QSM/{space}'
@@ -375,9 +377,16 @@ patterns:
             # task
             task-dir: '<.dir>/user.{artist}/{step}.{task}'
             task_unit-dir: '<.task-dir>/{task_unit}'
-            # files
+            # scene_src
+            #   maya
             maya-scene_src-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
             maya-thumbnail-file: '<.task_unit-dir>/maya/.thumbnails/<..task_unit-version-name>.jpg'
+            # houdini
+            houdini-scene_src-file: '<.task_unit-dir>/houdini/scenes/<..task_unit-version-name>.hip'
+            houdini-thumbnail-file: '<.task_unit-dir>/houdini/.thumbnails/<..task_unit-version-name>.jpg'
+            # katana
+            katana-scene_src-file: '<.task_unit-dir>/katana/scenes/<..task_unit-version-name>.katana'
+            katana-thumbnail-file: '<.task_unit-dir>/katana/.thumbnails/<..task_unit-version-name>.jpg'
 
         release:
             dir: '{root_release}/{project}/QSM/{space}/assets/{role}/{asset}'
@@ -387,7 +396,8 @@ patterns:
             version-dir: '<.task-dir>/<..task-version-name>'
             zero_version-dir: '<.task-dir>/<..task-zero_version-name>'
             no_version-dir: '<.task-dir>/<..task-no_version-name>'
-            # files
+            # scene_src
+            #   maya
             maya-scene_src-file: '<.version-dir>/source/{asset}.ma'
             preview-mov-file: '<.version-dir>/preview/<..task-version-name>.mov'
 
@@ -412,10 +422,16 @@ patterns:
             # task
             task-dir: '<.dir>/user.{artist}/{step}.{task}'
             task_unit-dir: '<.task-dir>/{task_unit}'
-            # maya
-            #   files
+            # scene_src
+            #   maya
             maya-scene_src-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
             maya-thumbnail-file: '<.task_unit-dir>/maya/.thumbnails/<..task_unit-version-name>.jpg'
+            #   houdini
+            houdini-scene_src-file: '<.task_unit-dir>/houdini/scenes/<..task_unit-version-name>.hip'
+            houdini-thumbnail-file: '<.task_unit-dir>/houdini/.thumbnails/<..task_unit-version-name>.jpg'
+            #   katana
+            katana-scene_src-file: '<.task_unit-dir>/katana/scenes/<..task_unit-version-name>.katana'
+            katana-thumbnail-file: '<.task_unit-dir>/katana/.thumbnails/<..task_unit-version-name>.jpg'
 
     shot:
         task-version-name: '{shot}.{step}.{task}.v{version}'
@@ -432,10 +448,16 @@ patterns:
             # task
             task-dir: '<.dir>/user.{artist}/{step}.{task}'
             task_unit-dir: '<.task-dir>/{task_unit}'
-            # maya
-            #   files
+            # scene_src
+            #   maya
             maya-scene_src-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
             maya-thumbnail-file: '<.task_unit-dir>/maya/.thumbnails/<..task_unit-version-name>.jpg'
+            #   houdini
+            houdini-scene_src-file: '<.task_unit-dir>/houdini/scenes/<..task_unit-version-name>.hip'
+            houdini-thumbnail-file: '<.task_unit-dir>/houdini/.thumbnails/<..task_unit-version-name>.jpg'
+            #   katana
+            katana-scene_src-file: '<.task_unit-dir>/katana/scenes/<..task_unit-version-name>.katana'
+            katana-thumbnail-file: '<.task_unit-dir>/katana/.thumbnails/<..task_unit-version-name>.jpg'
             #   directories
             maya-cache-dir: '<.task_unit-dir>/maya/caches'
             maya-cfx_cache-dir: '<.task_unit-dir>/maya/cfx_caches'
@@ -474,3 +496,66 @@ patterns:
             pack-dir: '<.version-dir>/pack'
             pack-maya-scene-file: '<.pack-dir>/{shot}.ma'
             pack-preview-mov-file: '<.pack-dir>/{shot}.mov'
+
+workspace:
+    path_pattern:
+        # project
+        project: '/{project}'
+        project_task: '<.project>/user.{artist}/{step}.{task}'
+        project_task_unit: '<.project_task>/{task_unit}'
+        project_task_unit_scene: '<.project_task_unit>/{project}.{step}.{task}.{task_unit}.v{version}'
+        # asset
+        asset: '/{project}/{asset}'
+        asset_task: '<.asset>/user.{artist}/{step}.{task}'
+        asset_task_unit: '<.asset_task>/{task_unit}'
+        asset_task_unit_scene: '<.asset_task_unit>/{asset}.{step}.{task}.{task_unit}.v{version}'
+        # sequence
+        sequence: '/{project}/{sequence}'
+        sequence_task: '<.sequence>/user.{artist}/{step}.{task}'
+        sequence_task_unit: '<.sequence_task>/{task_unit}'
+        sequence_task_unit_scene: '<.sequence_task_unit>/{sequence}.{step}.{task}.{task_unit}.v{version}'
+        # shot
+        shot: '/{project}/{shot}'
+        shot_task: '<.shot>/user.{artist}/{step}.{task}'
+        shot_task_unit: '<.shot_task>/{task_unit}'
+        shot_task_unit_scene: '<.shot_task_unit>/{shot}.{step}.{task}.{task_unit}.v{version}'
+
+    tasks:
+        # resource type
+        project:
+            # step
+            general:
+                - general
+            light:
+                - light_rig
+        asset:
+            general:
+                - general
+            model:
+                - model
+            rig:
+                - rig
+                - rig_test
+            groom:
+                - groom
+            cfx:
+                - cfx_rig
+            surface:
+                - surface
+        sequence:
+            general:
+                - general
+            light:
+                - light_rig
+        shot:
+            general:
+                - general
+            layout:
+                - layout
+            animation:
+                - animation
+            cfx:
+                - cfx_cloth
+                - cfx_dress
+            light:
+                - light

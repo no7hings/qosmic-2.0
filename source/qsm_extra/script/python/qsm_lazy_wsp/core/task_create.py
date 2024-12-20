@@ -22,7 +22,7 @@ class DccTaskCreateOpt(object):
         return kwargs_new
 
     @classmethod
-    def generate_scene_src_args(cls, resource_properties, task_parse, task_unit):
+    def generate_scene_src_args(cls, resource_properties, task_parse, task_unit, application):
         step, task = cls.STEP, cls.TASK
 
         kwargs = copy.copy(resource_properties)
@@ -32,7 +32,10 @@ class DccTaskCreateOpt(object):
         if 'version' in kwargs:
             kwargs.pop('version')
 
-        task_scene_ptn_opt = task_parse.generate_source_task_scene_src_pattern_opt_for(**kwargs)
+        task_scene_ptn_opt = task_parse.generate_source_task_scene_src_pattern_opt_for(
+            application=application,
+            **kwargs
+        )
 
         matches = task_scene_ptn_opt.find_matches(sort=True)
         if matches:
@@ -45,11 +48,15 @@ class DccTaskCreateOpt(object):
 
         kwargs_new['version'] = str(version).zfill(3)
 
-        task_scene_ptn_opt_new = task_parse.generate_source_task_scene_src_pattern_opt_for(**kwargs_new)
+        task_scene_ptn_opt_new = task_parse.generate_source_task_scene_src_pattern_opt_for(
+            application=application,
+            **kwargs_new
+        )
 
         scene_src_path = task_scene_ptn_opt_new.get_value()
 
-        thumbnail_ptn_opt_new = task_parse.generate_resource_source_task_scene_src_thumbnail_pattern_opt_for(
+        thumbnail_ptn_opt_new = task_parse.generate_source_task_thumbnail_pattern_opt_for(
+            application=application,
             **kwargs_new
         )
         thumbnail_path = thumbnail_ptn_opt_new.get_value()

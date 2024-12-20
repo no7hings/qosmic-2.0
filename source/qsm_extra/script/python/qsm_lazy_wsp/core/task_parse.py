@@ -67,23 +67,22 @@ class TaskParse(object):
             **kwargs
         )
 
-    @classmethod
-    def to_scan_resource_path(cls, **variants):
+    def to_scan_resource_path(self, **variants):
         resource_type = variants['resource_type']
         variants_new = copy.copy(variants)
-        if resource_type == 'project':
+        if resource_type == self.ResourceTypes.Project:
             return u'/{project}'.format(
                 **variants_new
             )
-        elif resource_type == 'asset':
+        elif resource_type == self.ResourceTypes.Asset:
             return u'/{project}/{asset}'.format(
                 **variants_new
             )
-        elif resource_type == 'sequence':
+        elif resource_type == self.ResourceTypes.Sequence:
             return u'/{project}/{sequence}'.format(
                 **variants_new
             )
-        elif resource_type == 'shot':
+        elif resource_type == self.ResourceTypes.Shot:
             return u'/{project}/{sequence}/{shot}'.format(
                 **variants_new
             )
@@ -186,29 +185,17 @@ class TaskParse(object):
             'asset-source-maya-scene_src-file'
         )
 
-    def generate_source_task_scene_src_pattern_opt_for(self, **kwargs):
-        if 'asset' in kwargs:
-            return self.generate_pattern_opt_for(
-                'asset-source-maya-scene_src-file', **kwargs
-            )
-        elif 'shot' in kwargs:
-            return self.generate_pattern_opt_for(
-                'shot-source-maya-scene_src-file', **kwargs
-            )
-        else:
-            raise RuntimeError()
+    def generate_source_task_scene_src_pattern_opt_for(self, application, **variants):
+        resource_type = variants['resource_type']
+        return self.generate_pattern_opt_for(
+            '{}-source-{}-scene_src-file'.format(resource_type, application), **variants
+        )
 
-    def generate_resource_source_task_scene_src_thumbnail_pattern_opt_for(self, **kwargs):
-        if 'asset' in kwargs:
-            return self.generate_pattern_opt_for(
-                'asset-source-maya-thumbnail-file', **kwargs
-            )
-        elif 'shot' in kwargs:
-            return self.generate_pattern_opt_for(
-                'shot-source-maya-thumbnail-file', **kwargs
-            )
-        else:
-            raise RuntimeError()
+    def generate_source_task_thumbnail_pattern_opt_for(self, application, **variants):
+        resource_type = variants['resource_type']
+        return self.generate_pattern_opt_for(
+            '{}-source-{}-thumbnail-file'.format(resource_type, application), **variants
+        )
 
     # release
     @property

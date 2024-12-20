@@ -586,7 +586,7 @@ class _GuiTagOpt(
         if self._window._language == 'chs':
             gui_name = scr_entity.gui_name_chs
 
-        flag, qt_item = self._qt_tag_widget._view_model.create_item_as_group(path)
+        flag, qt_item = self._qt_tag_widget._view_model.create_group_item(path)
         qt_item._scr_entity = scr_entity
         qt_item._item_model.set_name(gui_name)
 

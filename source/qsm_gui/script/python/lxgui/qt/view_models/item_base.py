@@ -242,7 +242,8 @@ class AbsItemModel(object):
             content=None,
             content_generate_fnc=None,
             data=None,
-            data_generate_fnc=None
+            data_generate_fnc=None,
+            name_dict=dict()
         )
         # force
         self._data.force_hidden_flag = False
@@ -630,6 +631,13 @@ class AbsItemModel(object):
 
     def get_menu_data_generate_fnc(self):
         return self._data.menu.data_generate_fnc
+
+    def set_menu_name_dict(self, dict_):
+        if isinstance(dict_, dict):
+            self._data.menu.name_dict = dict_
+
+    def get_menu_name_dict(self):
+        return self._data.menu.name_dict
 
     # sort
     def set_sort_enable(self, boolean):

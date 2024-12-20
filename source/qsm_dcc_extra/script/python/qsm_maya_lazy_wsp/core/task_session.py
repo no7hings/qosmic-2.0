@@ -19,6 +19,7 @@ class TaskSession(lzy_wsp_core.TaskSession):
             kwargs.pop('version')
 
         pattern_opt = self._task_parse.generate_source_task_scene_src_pattern_opt_for(
+            application='maya',
             **kwargs
         )
         matches = pattern_opt.find_matches(sort=True)
@@ -32,14 +33,18 @@ class TaskSession(lzy_wsp_core.TaskSession):
     def increment_and_save_source_task_scene_src(self, force=False):
         version = self.get_last_version_code()
 
-        kwargs_new = copy.copy(self._properties)
+        kwargs_new = dict(self._properties)
         kwargs_new['version'] = str(version+1).zfill(3)
 
-        scene_ptn_opt = self._task_parse.generate_source_task_scene_src_pattern_opt_for(**kwargs_new)
+        scene_ptn_opt = self._task_parse.generate_source_task_scene_src_pattern_opt_for(
+            application='maya',
+            **kwargs_new
+        )
         scene_path = scene_ptn_opt.get_value()
         if qsm_mya_core.SceneFile.increment_and_save_with_dialog(scene_path, force) is True:
             kwargs_new['result'] = scene_path
-            thumbnail_ptn_opt = self._task_parse.generate_resource_source_task_scene_src_thumbnail_pattern_opt_for(
+            thumbnail_ptn_opt = self._task_parse.generate_source_task_thumbnail_pattern_opt_for(
+                application='maya',
                 **kwargs_new
             )
             thumbnail_path = thumbnail_ptn_opt.get_value()
@@ -48,7 +53,7 @@ class TaskSession(lzy_wsp_core.TaskSession):
             return kwargs_new
 
     def save_source_task_scene_scr_to(self, task_unit):
-        variants_new = copy.copy(self._properties)
+        variants_new = dict(self._properties)
         task_unit_old = variants_new['task_unit']
         variants_new['task_unit'] = task_unit
 

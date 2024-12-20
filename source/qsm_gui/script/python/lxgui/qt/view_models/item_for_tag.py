@@ -44,3 +44,16 @@ class TagItemMode(_item_base.AbsItemModel):
 
     def get_parent(self):
         pass
+
+    def set_expanded(self, boolean, use_record=True):
+        if use_record is True:
+            widget = self._item._view_widget
+            if widget._view_model._data.item_expand_record_enable is True:
+                self._item._set_expanded_(
+                    widget._view_model._data.item_expand_record.data.get(self._data.path.text, boolean)
+                )
+            else:
+                self._item._set_expanded_(boolean)
+        else:
+            self._item._set_expanded_(boolean)
+

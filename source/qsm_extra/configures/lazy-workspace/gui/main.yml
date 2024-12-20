@@ -21,6 +21,57 @@ option:
         size: [800, 800]
 
 build:
+    messages:
+        switch_user:
+            message: 'Switch user successful: {artist}.'
+            message_chs: '成功切换用户：{artist}。'
+
+        switch_application:
+            message: 'Switch application successful: {application}.'
+            message_chs: '成功切换软件：{application}。'
+
+    buttons:
+        create_task:
+            name: 'Create Task'
+            name_chs: '创建任务'
+
+    menu_names:
+        open_folder:
+            name: 'Open Folder'
+            name_chs: '打开文件夹'
+
+        show_in_explorer:
+            name: 'Show in Explorer'
+            name_chs: '在资源管理器中显示'
+        copy:
+            name: 'Copy'
+            name_chs: '复制'
+        path:
+            name: 'Path'
+            name_chs: '路径'
+        unix_path:
+            name: 'UNIX Path'
+            name_chs: 'UNIX路径'
+
+        launch_local:
+            name: 'Launch (local)'
+            name_chs: '启动(本地)'
+
+        jump_to_task_manager:
+            name: 'Jump to Task-manager'
+            name_chs: '转到任务管理'
+        open:
+            name: 'Open'
+            name_chs: '打开'
+
+        work_server_directory:
+            name: 'Work Directory (server)'
+            name_chs: '工作目录（服务器）'
+
+        release_directory:
+            name: 'Release Directory'
+            name_chs: '发布目录'
+
     task_manager:
         name: 'Task Create / Manager'
         name_chs: '任务创建 / 管理'
@@ -43,12 +94,8 @@ build:
                 name_chs: '保存'
 
             increment_and_save:
-                name: 'Increment and Save'
+                name: 'Inc & Save'
                 name_chs: '加存'
-
-            save_to:
-                name: 'Save To'
-                name_chs: '保存到'
 
             save_as:
                 name: 'Save As'

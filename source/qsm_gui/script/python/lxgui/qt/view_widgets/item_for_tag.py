@@ -203,12 +203,15 @@ class _QtTagNodeItem(
 ):
     user_filter_checked = qt_signal()
 
+    GROUP_FLAG = False
+
     def _on_context_menu_(self, event):
         menu = None
 
         menu_data = self._item_model.get_menu_data()
         menu_content = self._item_model.get_menu_content()
         menu_data_generate_fnc = self._item_model.get_menu_data_generate_fnc()
+        menu_name_dict = self._item_model.get_menu_name_dict()
 
         if menu_content:
             if menu is None:
@@ -453,6 +456,8 @@ class _QtTagGroupItem(
     SPACING = 2
 
     user_filter_checked = qt_signal()
+
+    GROUP_FLAG = True
 
     def _on_context_menu_(self, event):
         if self._item_model._data.frame.rect.contains(event.pos()):
@@ -839,20 +844,26 @@ class _QtTagGroupItem(
         self._refresh_widget_all_()
 
     def _create_group_(self, path, *args, **kwargs):
+        path_opt = bsc_core.BscNodePathOpt(path)
+        name = path_opt.get_name()
+
         widget = _QtTagGroupItem(self._viewport)
         self._group_lot.addWidget(widget)
         self._group_widgets.append(widget)
         widget._set_group_(self)
         widget._item_model.set_path(path)
-        # self._refresh_widget_all_()
+        widget._item_model.set_name(name)
         return widget
 
     def _create_node_(self, path, *args, **kwargs):
+        path_opt = bsc_core.BscNodePathOpt(path)
+        name = path_opt.get_name()
+
         widget = _QtTagNodeItem(self._viewport)
         self._node_widgets.append(widget)
         widget._set_group_(self)
         widget._item_model.set_path(path)
-        # self._refresh_widget_all_()
+        widget._item_model.set_name(name)
         return widget
 
     def _get_all_checked_nodes_(self):

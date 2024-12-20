@@ -68,7 +68,7 @@ class PrxHToolBox(gui_prx_abstracts.AbsPrxWidget):
         self._refresh_expand_()
 
     def get_is_expanded(self):
-        return self._qt_head._get_is_expanded_()
+        return self._qt_head._is_expanded_()
 
     def add_widget(self, widget):
         if isinstance(widget, gui_qt_core.QtCore.QObject):

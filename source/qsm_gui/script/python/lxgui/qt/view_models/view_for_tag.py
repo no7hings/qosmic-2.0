@@ -55,10 +55,23 @@ class TagViewModel(_view_base.AbsViewModel):
     def get_all_nodes(self):
         return self._widget._get_all_nodes_()
 
-    def restore(self):
+    def restore(self, clear_expand_record=False):
+        if self._data.item_expand_record_enable is True:
+            data = self._data.item_expand_record.data
+            # keep record default
+            if clear_expand_record is True:
+                data.clear()
+
+            for k, v in self._data.item_dict.items():
+                if v.GROUP_FLAG is True:
+                    data[k] = v._is_expanded_()
+
         self._widget._restore_()
 
     def create_item_as_group(self, path, *args, **kwargs):
+        return self._widget._create_group_(path, *args, **kwargs)
+
+    def create_group_item(self, path, *args, **kwargs):
         return self._widget._create_group_(path, *args, **kwargs)
 
     def create_item(self, path, *args, **kwargs):

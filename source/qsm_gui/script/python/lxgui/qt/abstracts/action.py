@@ -547,7 +547,7 @@ class AbsQtActionForExpandDef(object):
         self._is_expanded = boolean
         self._refresh_expand_()
 
-    def _get_is_expanded_(self):
+    def _is_expanded_(self):
         return self._is_expanded
 
     def _swap_expand_(self):

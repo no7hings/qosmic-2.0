@@ -82,7 +82,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "开发相关/开发进度/优化.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -99,7 +98,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "开发相关/开发进度/优化.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -121,9 +119,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "开发相关/开发进度/优化.md"
-              }
+              "state": {}
             }
           },
           {
@@ -143,9 +139,7 @@
             "type": "leaf",
             "state": {
               "type": "file-properties",
-              "state": {
-                "file": "开发相关/开发进度/优化.md"
-              }
+              "state": {}
             }
           },
           {

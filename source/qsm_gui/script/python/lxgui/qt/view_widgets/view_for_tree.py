@@ -328,20 +328,21 @@ class _QtTreeViewWidget(
         menu_data = self._view_model.get_menu_data()
         menu_content = self._view_model.get_menu_content()
         menu_data_generate_fnc = self._view_model.get_menu_data_generate_fnc()
+        menu_name_dict = self._view_model.get_menu_name_dict()
 
         if menu_content:
             if menu is None:
-                menu = self.QT_MENU_CLS(self)
+                menu = self.QT_MENU_CLS(self, name_dict=menu_name_dict)
             menu._set_menu_content_(menu_content, append=True)
 
         if menu_data:
             if menu is None:
-                menu = self.QT_MENU_CLS(self)
+                menu = self.QT_MENU_CLS(self, name_dict=menu_name_dict)
             menu._set_menu_data_(menu_data)
 
         if menu_data_generate_fnc:
             if menu is None:
-                menu = self.QT_MENU_CLS(self)
+                menu = self.QT_MENU_CLS(self, name_dict=menu_name_dict)
             menu._set_menu_data_(menu_data_generate_fnc())
 
         # data from item
@@ -350,20 +351,26 @@ class _QtTreeViewWidget(
             item_menu_data = item._item_model.get_menu_data()
             item_menu_content = item._item_model.get_menu_content()
             item_menu_data_generate_fnc = item._item_model.get_menu_data_generate_fnc()
+            item_menu_name_dict = item._item_model.get_menu_name_dict()
+            menu_name_dict.update(item_menu_name_dict)
+
             if item_menu_content:
                 if menu is None:
-                    menu = self.QT_MENU_CLS(self)
+                    menu = self.QT_MENU_CLS(self, name_dict=menu_name_dict)
                 menu._set_menu_content_(item_menu_content, append=True)
 
             if item_menu_data:
                 if menu is None:
-                    menu = self.QT_MENU_CLS(self)
+                    menu = self.QT_MENU_CLS(self, name_dict=menu_name_dict)
                 menu._set_menu_data_(item_menu_data)
 
             if item_menu_data_generate_fnc:
                 if menu is None:
-                    menu = self.QT_MENU_CLS(self)
+                    menu = self.QT_MENU_CLS(self, name_dict=menu_name_dict)
                 menu._set_menu_data_(item_menu_data_generate_fnc())
+
+            if menu is not None:
+                menu._update_menu_name_dict_(item_menu_name_dict)
 
         if menu is not None:
             menu._popup_start_()
@@ -455,6 +462,13 @@ class QtTreeWidget(
                 QtCore.Qt.WidgetShortcut
             )
             self.addAction(i_action)
+
+    def _insert_left_tool_box_(self, index, name):
+        tool_box = _wgt_container.QtVToolBox()
+        self._left_scroll_box.insertWidget(index, tool_box)
+        tool_box._set_expanded_(True)
+        tool_box._set_name_text_(name)
+        return tool_box
 
     def _set_item_check_enable_(self, boolean):
         self._check_tool_box.setVisible(boolean)

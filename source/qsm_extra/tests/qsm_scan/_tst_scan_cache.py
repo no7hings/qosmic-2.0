@@ -9,6 +9,9 @@ print root
 
 project = root.project('QSM_TST')
 
+for i_role in project.find_roles(variants_extend=dict(role=['chr', 'prp'])):
+    print i_role.find_assets()
+
 print project.find_assets(variants_extend=dict(role='chr'))
 
 print len(project.assets)

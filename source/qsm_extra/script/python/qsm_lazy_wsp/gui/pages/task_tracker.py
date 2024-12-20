@@ -18,11 +18,11 @@ class PrxPageForTaskTracker(_abs_page_for_task_tracker.AbsPrxPageForTaskTracker)
     TASK_PARSE_CLS = _lzy_wsp_core.TaskParse
 
     if qsm_gnl_core.scheme_is_release():
-        TASK_BRANCHES = [
+        RESOURCE_TYPES = [
             'asset', 'shot'
         ]
     else:
-        TASK_BRANCHES = [
+        RESOURCE_TYPES = [
             'project', 'asset', 'sequence', 'shot'
         ]
 

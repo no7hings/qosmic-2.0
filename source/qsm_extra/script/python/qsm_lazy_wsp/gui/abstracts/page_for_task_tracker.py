@@ -13,7 +13,7 @@ import qsm_lazy.gui.proxy.widgets as lzy_gui_prx_widgets
 class AbsPrxPageForTaskTracker(gui_prx_widgets.PrxBasePage):
     GUI_KEY = 'task_tracker'
 
-    TASK_BRANCHES = []
+    RESOURCE_TYPES = []
 
     def __init__(self, *args, **kwargs):
         super(AbsPrxPageForTaskTracker, self).__init__(*args, **kwargs)
@@ -66,7 +66,7 @@ class AbsPrxPageForTaskTracker(gui_prx_widgets.PrxBasePage):
         self._gui_add_main_tools()
 
         self._resource_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
-            'reference', size_mode=1
+            'resource', size_mode=1
         )
         self._scan_resource_prx_input = lzy_gui_prx_widgets.PrxInputForProject(
             history_key='lazy-workspace.task_tracker.project-path'
@@ -79,7 +79,7 @@ class AbsPrxPageForTaskTracker(gui_prx_widgets.PrxBasePage):
         self._unit_prx_tab_tool_box = self.gui_create_tab_tool_box()
         self._qt_layout.addWidget(self._unit_prx_tab_tool_box.widget)
 
-        self.gui_setup_units_for(self._unit_prx_tab_tool_box, self.TASK_BRANCHES)
+        self.gui_setup_units_for(self._unit_prx_tab_tool_box, self.RESOURCE_TYPES)
 
     def gui_setup_post_fnc(self):
         for k, v in self._tab_widget_dict.items():

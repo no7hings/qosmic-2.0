@@ -14,11 +14,11 @@ class PrxPageForTaskManager(_abs_page_for_task_manager.AbsPrxPageForTaskManager)
     TASK_PARSE_CLS = mya_lzy_wps_core.TaskParse
 
     if qsm_gnl_core.scheme_is_release():
-        TASK_BRANCHES = [
+        RESOURCE_TYPES = [
             'asset', 'shot'
         ]
     else:
-        TASK_BRANCHES = [
+        RESOURCE_TYPES = [
             'asset', 'sequence', 'shot'
         ]
 

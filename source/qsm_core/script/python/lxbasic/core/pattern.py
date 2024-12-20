@@ -450,14 +450,16 @@ class AbsParseOpt(object):
 
     def generate_combination_variants(self, variants):
         keys = self.get_keys()
-        variants_copy = copy.copy(variants)
+        variants_copy = dict(variants)
         variants_c = {}
         for i_key in keys:
             if i_key in variants:
                 i_value = variants_copy[i_key]
                 variants_copy.pop(i_key)
+
                 if isinstance(i_value, list):
-                    variants_c[i_key] = i_value
+                    if i_value:
+                        variants_c[i_key] = i_value
                 else:
                     variants_c[i_key] = [i_value]
 
