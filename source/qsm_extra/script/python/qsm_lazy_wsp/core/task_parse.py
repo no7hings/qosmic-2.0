@@ -129,15 +129,13 @@ class TaskParse(object):
     def generate_task_session_by_resource_source_scene_src(cls, scene_path):
         task_parse = cls()
 
-        for i_resource_branch in [
-            'asset', 'shot'
-        ]:
+        for i_resource_type in cls.ResourceTypes.All:
             i_ptn_opt = task_parse.generate_pattern_opt_for(
-                '{}-source-maya-scene_src-file'.format(i_resource_branch)
+                '{}-source-maya-scene_src-file'.format(i_resource_type)
             )
             i_variants = i_ptn_opt.get_variants(scene_path, extract=True)
             if i_variants:
-                i_variants['resource_type'] = i_resource_branch
+                i_variants['resource_type'] = i_resource_type
                 return cls.TASK_SESSION_CLS(task_parse, i_variants)
 
     @property
@@ -174,7 +172,7 @@ class TaskParse(object):
         else:
             raise RuntimeError(
                 sys.stderr.write(
-                    'pattern: {} is not found.'.format(keyword)
+                    'pattern: {} is not found.\n'.format(keyword)
                 )
             )
 

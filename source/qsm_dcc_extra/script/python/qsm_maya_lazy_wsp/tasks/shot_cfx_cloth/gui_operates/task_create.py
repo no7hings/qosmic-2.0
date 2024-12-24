@@ -15,7 +15,7 @@ class MayaShotCfxClothCreateOpt(_shot_gnl_task_create.MayaShotTaskCreateOpt):
     def __init__(self, *args, **kwargs):
         super(MayaShotCfxClothCreateOpt, self).__init__(*args, **kwargs)
 
-    def build_scene_src(
+    def build_scene_src_fnc(
         self,
         scene_src_path, upstream_scene_path=None,
         auto_load_cfx_rig=False, solver_start_frame=1,

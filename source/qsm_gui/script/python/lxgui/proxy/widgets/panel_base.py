@@ -533,7 +533,7 @@ class PrxBaseSubpanel(_window_base.PrxBaseWindow):
 
         self._session = session
 
-        self._sub_window = self
+        self._subwindow = self
 
         self._language = gui_core.GuiUtil.get_language()
 
@@ -589,7 +589,7 @@ class PrxBaseSubpage(
 
         self._init_tool_(window)
         self._session = session
-        self._sub_window = sub_window
+        self._subwindow = sub_window
 
         self._qt_layout = _qt_wgt_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout.setContentsMargins(*[0]*4)

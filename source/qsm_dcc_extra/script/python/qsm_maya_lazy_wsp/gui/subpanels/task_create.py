@@ -3,12 +3,18 @@ import qsm_general.core as qsm_gnl_core
 
 from qsm_lazy_wsp.gui.abstracts import subpanel_for_task_create as _subpanel_for_task_create
 
+# project
+from ...tasks.project_gnl_testing.gui_widgets import task_create as _unit_project_gnl_testing_create
+
 # asset
 from ...tasks.asset_gnl_testing.gui_widgets import task_create as _unit_asset_gnl_testing_create
 
 from ...tasks.asset_rig_testing.gui_widgets import task_create as _unit_asset_rig_testing_create
 
 from ...tasks.asset_cfx_rig.gui_widgets import task_create as _unit_asset_cfx_rig_create
+
+# sequence
+from ...tasks.sequence_gnl_testing.gui_widgets import task_create as _unit_sequence_cfx_rig_create
 
 # shot
 from ...tasks.shot_gnl_testing.gui_widgets import task_create as _unit_shot_gnl_testing_create
@@ -22,6 +28,10 @@ from ...tasks.shot_cfx_dressing.gui_widgets import task_create as _unit_shot_cfx
 
 class PrxSubPanelForTaskCreate(_subpanel_for_task_create.AbsPrxSubpanelForTaskCreate):
     SUB_PAGE_CLASSES = [
+        # project
+        # gnl_testing
+        _unit_project_gnl_testing_create.PrxSubpageForProjectGnlTestingCreate,
+
         # asset
         #   gnl_testing
         _unit_asset_gnl_testing_create.PrxSubpageForAssetGnlTestingCreate,
@@ -31,6 +41,7 @@ class PrxSubPanelForTaskCreate(_subpanel_for_task_create.AbsPrxSubpanelForTaskCr
         _unit_asset_cfx_rig_create.PrxSubpageForAssetCfxRigCreate,
 
         # sequence
+        _unit_sequence_cfx_rig_create.PrxSubpageForSequenceGnlTestingCreate,
 
         # shot
         _unit_shot_gnl_testing_create.PrxSubpageForShotGnlTestingCreate,
@@ -52,15 +63,21 @@ class PrxSubPanelForTaskCreate(_subpanel_for_task_create.AbsPrxSubpanelForTaskCr
             'cfx_dressing',
         ]
     else:
+        PROJECT_TASKS = [
+            'gnl_testing',
+        ]
         ASSET_TASKS = [
             'gnl_testing',
             'rig_testing',
-            #
+
             'cfx_rig',
+        ]
+        SEQUENCE_TASKS = [
+            'gnl_testing',
         ]
         SHOT_TASKS = [
             'gnl_testing',
-            #
+
             'animation',
             'cfx_cloth',
             'cfx_dressing',

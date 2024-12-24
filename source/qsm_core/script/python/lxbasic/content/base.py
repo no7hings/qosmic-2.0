@@ -543,10 +543,28 @@ class ToString(object):
 
         self._lines = self._next_prc(value, 0, None, True)
 
-    def _key_prc(self, key):
-        if isinstance(key, six.string_types):
-            return self._default_quotes+self.ensure_string(key)+self._default_quotes
-        return self._default_quotes+str(type(key))+self._default_quotes
+    def _key_prc(self, value):
+        if isinstance(value, bool):
+            return self.ensure_string(str(value))
+        elif isinstance(value, (int, float)):
+            return self.ensure_string(str(value))
+        elif isinstance(value, six.string_types):
+            return self._default_quotes+self.ensure_string(value)+self._default_quotes
+        elif isinstance(value, tuple):
+            return self._tuple_key_prc(value)
+        return self._default_quotes+str(type(value))+self._default_quotes
+
+    def _tuple_key_prc(self, value):
+        return '({})'.format(', '.join([self._subkey_prc(i) for i in value]))
+
+    def _subkey_prc(self, value):
+        if isinstance(value, bool):
+            return self.ensure_string(str(value))
+        elif isinstance(value, (int, float)):
+            return self.ensure_string(str(value))
+        elif isinstance(value, six.string_types):
+            return self._default_quotes+self.ensure_string(value)+self._default_quotes
+        return str(type(value))
 
     def _indent_prc(self, depth):
         return depth*self._indent*' '

@@ -13,7 +13,7 @@ class MayaAssetTaskCreateOpt(lzy_wsp_core.DccTaskCreateOpt):
     def __init__(self, *args, **kwargs):
         super(MayaAssetTaskCreateOpt, self).__init__(*args, **kwargs)
 
-    def build_scene_src(self, *args, **kwargs):
+    def build_scene_src_fnc(self, *args, **kwargs):
         pass
 
     def create_groups_for(self, task):

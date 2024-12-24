@@ -331,7 +331,7 @@ class QtListItemWidget(
                         i_name_index
                     )
             #
-            if self._icon_is_enable is True:
+            if self._file_icon_flag is True:
                 if self._icon_text:
                     self._icon_text_draw_rect.setRect(
                         x+(w-h), y, h, h
@@ -770,7 +770,7 @@ class QtListItemWidget(
                                 is_hovered=self._is_check_hovered
                             )
         # icon
-        if self._icon_is_enable is True:
+        if self._file_icon_flag is True:
             if self._icon_text:
                 painter._draw_frame_color_with_name_text_by_rect_(
                     rect=self._name_frame_draw_rect,

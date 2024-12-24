@@ -110,11 +110,11 @@ class Frame(object):
                 return _[:-3]+'_fps'
 
     @classmethod
-    def get_fps_value(cls):
+    def get_fps(cls):
         return int(cls.get_fps_tag().split('_')[0])
 
     @classmethod
-    def get_fps_(cls):
+    def get_time_unit(cls):
         return cmds.currentUnit(query=1, time=1)
 
     @classmethod

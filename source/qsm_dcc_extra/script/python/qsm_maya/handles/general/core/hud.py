@@ -30,7 +30,7 @@ class HUD(object):
 
     @classmethod
     def get_fps_tag(cls):
-        time_unit = qsm_mya_core.Frame.get_fps_()
+        time_unit = qsm_mya_core.Frame.get_time_unit()
         return cls.timeConfig[time_unit]
 
     @classmethod
@@ -53,7 +53,7 @@ class HUD(object):
     @classmethod
     def get_time(cls):
 
-        time_unit = qsm_mya_core.Frame.get_fps_()
+        time_unit = qsm_mya_core.Frame.get_time_unit()
         #
         start_frame = cmds.playbackOptions(query=1, min=1)
         end_frame = cmds.playbackOptions(query=1, max=1)

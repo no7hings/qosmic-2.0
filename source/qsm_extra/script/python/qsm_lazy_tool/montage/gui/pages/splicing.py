@@ -15,4 +15,5 @@ class PrxPageForSplicing(_abstracts.AbsPrxPageForSplicing):
     def gui_refresh_stage(self, force=False):
         if force is True:
             self._motion_prx_track_widget.restore()
+
         self._motion_prx_track_widget.create_test()

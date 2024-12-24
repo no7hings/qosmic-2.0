@@ -54,6 +54,12 @@ class _GuiTaskOpt(_GuiBaseOpt):
             functools.partial(self.gui_load_all_tasks, sync_flag=True)
         )
 
+        self._task_options = {}
+
+    def gui_update_task_options(self, options):
+        self._task_options = options
+        self.gui_load_all_tasks()
+
     def _gui_add_entity_groups(self, path):
         path_opt = bsc_core.BscNodePathOpt(path)
 
@@ -86,14 +92,23 @@ class _GuiTaskOpt(_GuiBaseOpt):
             if gui_thread_flag != self._gui_thread_flag:
                 return [[], 0]
 
-            if resource_type == _wsp_core.TaskParse.ResourceTypes.Asset:
+            if resource_type == _wsp_core.TaskParse.ResourceTypes.Project:
+                return [
+                    ett_project.tasks(space_key=space_key, sync_flag=sync_flag), gui_thread_flag
+                ]
+            elif resource_type == _wsp_core.TaskParse.ResourceTypes.Asset:
                 return [
                     ett_project.assets(space_key=space_key, sync_flag=sync_flag), gui_thread_flag
+                ]
+            elif resource_type == _wsp_core.TaskParse.ResourceTypes.Sequence:
+                return [
+                    ett_project.sequences(space_key=space_key, sync_flag=sync_flag), gui_thread_flag
                 ]
             elif resource_type == _wsp_core.TaskParse.ResourceTypes.Shot:
                 return [
                     ett_project.shots(space_key=space_key, sync_flag=sync_flag), gui_thread_flag
                 ]
+
             return [
                 [], 0
             ]
@@ -107,7 +122,18 @@ class _GuiTaskOpt(_GuiBaseOpt):
             _entity_qt_item._item_model.set_icon_name('workspace/null')
             _entity_qt_item._item_model.set_expanded(True)
 
-            [self.gui_add_resource(_x, _gui_thread_flag, space_key, sync_flag) for _x in _ett_resources]
+            if resource_type == _wsp_core.TaskParse.ResourceTypes.Project:
+                _entity_qt_item._item_model.set_menu_data(
+                    [
+                        (
+                            'jump_to_task_manager', 'workspace/task',
+                            functools.partial(self.gui_jump_to_task_manager, ett_project)
+                        )
+                    ]
+                )
+                [self.gui_add_task(_x, _gui_thread_flag, space_key) for _x in _ett_resources]
+            else:
+                [self.gui_add_resource(_x, _gui_thread_flag, space_key, sync_flag) for _x in _ett_resources]
 
         if gui_thread_flag != self._gui_thread_flag:
             return
@@ -141,7 +167,10 @@ class _GuiTaskOpt(_GuiBaseOpt):
             return [
                 [
                     _source_directory_path, _release_directory_path,
-                    ett_resource.tasks(space_key=space_key, sync_flag=sync_flag)
+                    ett_resource.tasks(
+                        space_key=space_key, sync_flag=sync_flag,
+                        **self._task_options
+                    )
                 ],
                 gui_thread_flag
             ]
@@ -279,6 +308,10 @@ class _GuiTaskTagOpt(_GuiBaseOpt):
 
         self._qt_tag_widget.refresh.connect(self.gui_load_all_task_tags)
 
+        self._qt_tag_widget._view.check_paths_change_accepted.connect(
+            self.gui_refresh_tasks
+        )
+
     def _gui_add_entity_groups(self, path):
         path_opt = bsc_core.BscNodePathOpt(path)
 
@@ -301,6 +334,16 @@ class _GuiTaskTagOpt(_GuiBaseOpt):
     def gui_add_task_tag(self, path):
         self._gui_add_entity_groups(path)
         self._qt_tag_widget._view_model.create_item(path)
+
+    def gui_refresh_tasks(self, task_paths):
+        options = {}
+        for i in task_paths:
+            i_ = i.split('/')
+            i_step, i_task = i_[-2:]
+            options.setdefault('step', []).append(i_step)
+            options.setdefault('task', []).append(i_task)
+
+        self._unit._gui_task_opt.gui_update_task_options(options)
 
 
 class _GuiVersionOpt(_GuiBaseOpt):
@@ -443,6 +486,7 @@ class AbsPrxUnitForTaskTracker(gui_prx_widgets.PrxBaseUnit):
         )
 
         self._prx_h_splitter.set_fixed_size_at(0, 320)
+        self._prx_v_splitter.set_fixed_size_at(1, 320)
 
     def do_gui_load_project(self, scn_entity):
         project = scn_entity.name

@@ -760,7 +760,7 @@ class StgPath(_cor_base.BscStorage):
         )
 
 
-class StgDirectoryMtd(object):
+class StgDirectory(object):
 
     @classmethod
     def get_file_paths(cls, directory_path, ext_includes=None):
@@ -841,7 +841,7 @@ class StgDirectoryMtdForMultiply(object):
             if i_number_args:
                 i_pattern, i_numbers = i_number_args
                 if len(i_numbers) == 1:
-                    i_relative_path_dir_path = StgDirectoryMtd.get_file_relative_path(
+                    i_relative_path_dir_path = StgDirectory.get_file_relative_path(
                         directory_path, i_opt.directory_path
                     )
                     i_key = '{}/{}'.format(
@@ -865,6 +865,10 @@ class StgFile(object):
     @classmethod
     def get_ext(cls, file_path):
         return os.path.splitext(file_path)[-1]
+
+    @classmethod
+    def get_name_base(cls, file_path):
+        return os.path.splitext(os.path.basename(file_path))[0]
 
 
 class StgFileTiles(object):
@@ -959,7 +963,7 @@ class StgFileTiles(object):
         if name_base != name_base_new:
             directory_path = os.path.dirname(file_path)
             glob_pattern = cls.PATHSEP.join([directory_path, name_base_new])
-            list_ = StgDirectoryMtd.find_file_paths(glob_pattern)
+            list_ = StgDirectory.find_file_paths(glob_pattern)
             return list_
         return []
 
@@ -1201,7 +1205,7 @@ class StgFileSearchOpt(object):
         if recursion_enable is True:
             _ = _scan_base.ScanBase.get_all_file_paths(directory_path)
         else:
-            _ = StgDirectoryMtd.get_file_paths(directory_path)
+            _ = StgDirectory.get_file_paths(directory_path)
 
         for i in _:
             i_directory_path, i_name_base, i_ext = _cor_base.BscStorage.get_file_args(i)
@@ -1277,7 +1281,7 @@ class StgDirectoryOpt(StgPathOpt):
         )
 
     def get_file_paths(self, ext_includes=None):
-        return StgDirectoryMtd.get_file_paths(
+        return StgDirectory.get_file_paths(
             self.path, ext_includes
         )
 
@@ -2041,7 +2045,7 @@ class StgTextureMtd(object):
                 p_n = p_n.replace(n[i_start:i_end], '{region}', 1)
             g_p = '/'.join([d, g_n])
             p_p = '/'.join([d, p_n])
-            results = StgDirectoryMtd.find_file_paths(g_p)
+            results = StgDirectory.find_file_paths(g_p)
             for i_result in results:
                 i_p = parse.parse(
                     p_p, i_result
@@ -2072,7 +2076,7 @@ class StgTextureMtd(object):
                 i_start, i_end = i_result.span()
                 g_n = g_n.replace(n[i_start:i_end], '[0-9][0-9][0-9][0-9]', 1)
             g_p = '/'.join([d, g_n])
-            return StgDirectoryMtd.find_file_paths(g_p)
+            return StgDirectory.find_file_paths(g_p)
         return []
 
 

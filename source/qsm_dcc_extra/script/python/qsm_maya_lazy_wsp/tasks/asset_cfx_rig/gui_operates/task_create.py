@@ -13,7 +13,7 @@ class MayaAssetCfxRigCreateOpt(_asset_gnl_task_create.MayaAssetTaskCreateOpt):
     def __init__(self, *args, **kwargs):
         super(MayaAssetCfxRigCreateOpt, self).__init__(*args, **kwargs)
 
-    def build_scene_src(self, scene_src_path, upstream_scene_path=None):
+    def build_scene_src_fnc(self, scene_src_path, upstream_scene_path=None):
         task = self._properties['task']
 
         if upstream_scene_path is None:

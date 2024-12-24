@@ -348,7 +348,7 @@ class PrxIconPressButton(gui_prx_abstracts.AbsPrxWidget):
         )
 
     def set_icon_sub_name(self, icon_name):
-        self._qt_widget._set_icon_sub_file_path_(
+        self._qt_widget._set_sub_icon_file_path_(
             gui_core.GuiIcon.get(icon_name)
         )
 
@@ -430,7 +430,7 @@ class PrxPressButton(gui_prx_abstracts.AbsPrxWidget):
 
     def set_icon_by_color(self, color):
         self.widget._icon_color_rgb = color
-        self.widget._icon_is_enable = True
+        self.widget._file_icon_flag = True
         self.widget.update()
 
     def set_icon_by_text(self, text):

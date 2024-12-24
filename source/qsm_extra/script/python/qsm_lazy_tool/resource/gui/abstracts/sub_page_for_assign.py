@@ -89,7 +89,7 @@ class AbsPrxSubpageForAnyAssign(
         pass
 
     def _on_close(self):
-        self._sub_window.close_window()
+        self._subwindow.close_window()
 
     def _on_apply_and_close(self):
         self._on_apply()
@@ -100,14 +100,14 @@ class AbsPrxSubpageForAnyAssign(
         self._qt_layout.addWidget(prx_sca.widget)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            self._sub_window.choice_gui_name(
-                self._sub_window._configure.get('build.{}.options'.format(self.GUI_KEY))
+            self._subwindow.choice_gui_name(
+                self._subwindow._configure.get('build.{}.options'.format(self.GUI_KEY))
             )
         )
         prx_sca.add_widget(self._prx_options_node)
 
         self._prx_options_node.build_by_data(
-            self._sub_window._configure.get('build.{}.options.parameters'.format(self.GUI_KEY)),
+            self._subwindow._configure.get('build.{}.options.parameters'.format(self.GUI_KEY)),
         )
 
         self._prx_tool_group = gui_prx_widgets.PrxHToolGroup()
@@ -115,7 +115,7 @@ class AbsPrxSubpageForAnyAssign(
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
             gui_core.GuiUtil.choice_gui_name(
-                self._sub_window._language, self._sub_window._configure.get('build.{}.filter'.format(self.GUI_KEY))
+                self._subwindow._language, self._subwindow._configure.get('build.{}.filter'.format(self.GUI_KEY))
             )
         )
         self._qt_tag_widget = gui_qt_vew_widgets.QtTagWidget()
@@ -131,8 +131,8 @@ class AbsPrxSubpageForAnyAssign(
         self._apply_and_close_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._apply_and_close_button)
         self._apply_and_close_button._set_name_text_(
-            self._sub_window.choice_gui_name(
-                self._sub_window._configure.get('build.main.buttons.apply_and_close')
+            self._subwindow.choice_gui_name(
+                self._subwindow._configure.get('build.main.buttons.apply_and_close')
             )
         )
         self._apply_and_close_button.press_clicked.connect(self._on_apply_and_close)
@@ -140,8 +140,8 @@ class AbsPrxSubpageForAnyAssign(
         self._apply_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._apply_button)
         self._apply_button._set_name_text_(
-            self._sub_window.choice_gui_name(
-                self._sub_window._configure.get('build.main.buttons.apply')
+            self._subwindow.choice_gui_name(
+                self._subwindow._configure.get('build.main.buttons.apply')
             )
         )
         self._apply_button.press_clicked.connect(self._on_apply)
@@ -149,8 +149,8 @@ class AbsPrxSubpageForAnyAssign(
         self._close_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._close_button)
         self._close_button._set_name_text_(
-            self._sub_window.choice_gui_name(
-                self._sub_window._configure.get('build.main.buttons.close')
+            self._subwindow.choice_gui_name(
+                self._subwindow._configure.get('build.main.buttons.close')
             )
         )
         self._close_button.press_clicked.connect(self._on_close)
@@ -173,7 +173,7 @@ class AbsPrxSubpageForTypeAssign(AbsPrxSubpageForAnyAssign):
             scr_entity_paths_addition = self._get_scr_type_or_tag_paths_addition(self._qt_tag_widget)
             if scr_entity_paths_addition:
                 scr_entity_path_set.update(set(scr_entity_paths_addition))
-                with self._sub_window.gui_progressing(maximum=len(self._scr_nodes)) as g_p:
+                with self._subwindow.gui_progressing(maximum=len(self._scr_nodes)) as g_p:
                     for i_scr_node in self._scr_nodes:
                         for j_scr_entity_path in scr_entity_paths_addition:
                             self._scr_stage.create_node_type_assign(i_scr_node.path, j_scr_entity_path)
@@ -184,7 +184,7 @@ class AbsPrxSubpageForTypeAssign(AbsPrxSubpageForAnyAssign):
             scr_entity_paths_deletion = self._get_scr_type_or_tag_paths_deletion(self._qt_tag_widget)
             if scr_entity_paths_deletion:
                 scr_entity_path_set.update(set(scr_entity_paths_deletion))
-                with self._sub_window.gui_progressing(maximum=len(self._scr_nodes)) as g_p:
+                with self._subwindow.gui_progressing(maximum=len(self._scr_nodes)) as g_p:
                     for i_scr_node in self._scr_nodes:
                         for j_scr_entity_path in scr_entity_paths_deletion:
                             self._scr_stage.remove_node_type_assign(i_scr_node.path, j_scr_entity_path)
@@ -213,7 +213,7 @@ class AbsPrxSubpageForTypeAssign(AbsPrxSubpageForAnyAssign):
         for i_scr_entity in entities:
             if i_scr_entity.path in leaf_paths:
                 i_gui_name = i_scr_entity.gui_name
-                if self._sub_window._language == 'chs':
+                if self._subwindow._language == 'chs':
                     i_gui_name = i_scr_entity.gui_name_chs
 
                 if i_scr_entity.category == 'group':
@@ -221,23 +221,23 @@ class AbsPrxSubpageForTypeAssign(AbsPrxSubpageForAnyAssign):
 
                     i_group._set_expanded_(True)
                     i_group._item_model.set_name(i_gui_name)
-                    i_group._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
+                    i_group._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
                 else:
                     i_flag, i_node = self._qt_tag_widget._view_model.create_item(i_scr_entity.path)
 
                     i_node._item_model.set_name(i_gui_name)
-                    i_node._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
+                    i_node._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
             # add as group
             else:
                 i_gui_name = i_scr_entity.gui_name
-                if self._sub_window._language == 'chs':
+                if self._subwindow._language == 'chs':
                     i_gui_name = i_scr_entity.gui_name_chs
 
                 i_flag, i_group = self._qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
 
                 i_group._set_expanded_(True)
                 i_group._item_model.set_name(i_gui_name)
-                i_group._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
+                i_group._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
 
     def _update_type_or_tags(self):
         self._update_all_types()
@@ -278,7 +278,7 @@ class AbsPrxSubpageForTagAssign(AbsPrxSubpageForAnyAssign):
             scr_entity_paths_addition = self._get_scr_type_or_tag_paths_addition(self._qt_tag_widget)
             if scr_entity_paths_addition:
                 scr_entity_path_set.update(set(scr_entity_paths_addition))
-                with self._sub_window.gui_progressing(maximum=len(self._scr_nodes)) as g_p:
+                with self._subwindow.gui_progressing(maximum=len(self._scr_nodes)) as g_p:
                     for i_scr_node in self._scr_nodes:
                         for j_scr_entity_path in scr_entity_paths_addition:
                             self._scr_stage.create_node_tag_assign(i_scr_node.path, j_scr_entity_path)
@@ -289,7 +289,7 @@ class AbsPrxSubpageForTagAssign(AbsPrxSubpageForAnyAssign):
             scr_entity_paths_deletion = self._get_scr_type_or_tag_paths_deletion(self._qt_tag_widget)
             if scr_entity_paths_deletion:
                 scr_entity_path_set.update(set(scr_entity_paths_deletion))
-                with self._sub_window.gui_progressing(maximum=len(self._scr_nodes)) as g_p:
+                with self._subwindow.gui_progressing(maximum=len(self._scr_nodes)) as g_p:
                     for i_scr_node in self._scr_nodes:
                         for j_scr_entity_path in scr_entity_paths_deletion:
                             self._scr_stage.remove_node_tag_assign(i_scr_node.path, j_scr_entity_path)
@@ -318,7 +318,7 @@ class AbsPrxSubpageForTagAssign(AbsPrxSubpageForAnyAssign):
         for i_scr_entity in entities:
             if i_scr_entity.path in leaf_paths:
                 i_gui_name = i_scr_entity.gui_name
-                if self._sub_window._language == 'chs':
+                if self._subwindow._language == 'chs':
                     i_gui_name = i_scr_entity.gui_name_chs
 
                 if i_scr_entity.category == 'group':
@@ -326,23 +326,23 @@ class AbsPrxSubpageForTagAssign(AbsPrxSubpageForAnyAssign):
 
                     i_group._set_expanded_(True)
                     i_group._item_model.set_name(i_gui_name)
-                    i_group._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
+                    i_group._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
                 else:
                     i_flag, i_node = self._qt_tag_widget._view_model.create_item(i_scr_entity.path)
 
                     i_node._item_model.set_name(i_gui_name)
-                    i_node._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
+                    i_node._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
             # add as group
             else:
                 i_gui_name = i_scr_entity.gui_name
-                if self._sub_window._language == 'chs':
+                if self._subwindow._language == 'chs':
                     i_gui_name = i_scr_entity.gui_name_chs
 
                 i_flag, i_group = self._qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
 
                 i_group._set_expanded_(True)
                 i_group._item_model.set_name(i_gui_name)
-                i_group._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
+                i_group._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
 
     def _update_type_or_tags(self):
         self._update_all_tags()

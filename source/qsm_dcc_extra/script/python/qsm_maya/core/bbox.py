@@ -23,15 +23,17 @@ class BBox(object):
         return cmds.exactWorldBoundingBox(path)
 
     @classmethod
-    def create_bbox(cls, locations):
+    def create_bbox(cls, locations, cube_box=None):
         cmds.select(locations)
         _x, _y, _z, x, y, z = cls.exact_for_many(locations)
         _y = 0
         w, h, d = x-_x, y-_y, z-_z
         x_c, y_c, z_c = (_x+x)/2, (_y+y)/2, (_z+z)/2
-
-        cube_box, _ = cmds.polyCube(name='bbox', w=w, h=h, d=d)
-        cmds.delete(cube_box, constructionHistory=1)
+        if cube_box is None:
+            cube_box, _ = cmds.polyCube(name='bbox', w=w, h=h, d=d)
+            cmds.delete(cube_box, constructionHistory=1)
+        else:
+            cmds.setAttr(cube_box+'.scale', w, h, d)
         cmds.setAttr(cube_box+'.translate', x_c, y_c, z_c)
         cmds.select(clear=1)
         return cube_box

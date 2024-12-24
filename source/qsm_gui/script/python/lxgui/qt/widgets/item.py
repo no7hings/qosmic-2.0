@@ -124,7 +124,7 @@ class _QtHContractItem(
         #
         self._init_icon_base_def_(self)
         self._init_name_base_def_(self)
-        self._icon_name_is_enable = True
+        self._name_icon_flag = True
         #
         self._init_action_for_hover_def_(self)
         self._init_action_base_def_(self)
@@ -250,7 +250,7 @@ class _QtHContractItem(
         self._set_icon_file_path_(
             [self._expand_icon_file_path_0, self._expand_icon_file_path_1][self._is_expanded]
         )
-        self._set_icon_sub_file_path_(
+        self._set_sub_icon_file_path_(
             [self._expand_sub_icon_file_path_1, self._expand_sub_icon_file_path_0][self._is_expanded]
         )
         #

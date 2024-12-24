@@ -15,7 +15,7 @@ class AbsPrxSubpageForTaskCreate(gui_prx_widgets.PrxBaseSubpage):
         pass
 
     def _on_close(self):
-        self._sub_window.close_window()
+        self._subwindow.close_window()
 
     def _on_apply_and_close(self):
         self._on_apply()
@@ -73,7 +73,7 @@ class AbsPrxSubpageForTaskCreate(gui_prx_widgets.PrxBaseSubpage):
         self._apply_and_close_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._apply_and_close_button)
         self._apply_and_close_button._set_name_text_(
-            self._sub_window.choice_gui_name(
+            self._subwindow.choice_gui_name(
                 self._configure.get('build.buttons.apply_and_close')
             )
         )
@@ -82,7 +82,7 @@ class AbsPrxSubpageForTaskCreate(gui_prx_widgets.PrxBaseSubpage):
         self._close_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._close_button)
         self._close_button._set_name_text_(
-            self._sub_window.choice_gui_name(
+            self._subwindow.choice_gui_name(
                 self._configure.get('build.buttons.close')
             )
         )

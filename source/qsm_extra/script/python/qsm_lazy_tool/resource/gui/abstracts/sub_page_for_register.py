@@ -55,14 +55,14 @@ class AbsPrxSubpageForMotionRegister(
         self._qt_layout.addWidget(prx_sca.widget)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            self._sub_window.choice_gui_name(
-                self._sub_window._configure.get('build.{}.options'.format(self.GUI_KEY))
+            self._subwindow.choice_gui_name(
+                self._subwindow._configure.get('build.{}.options'.format(self.GUI_KEY))
             )
         )
         prx_sca.add_widget(self._prx_options_node)
 
         self._prx_options_node.build_by_data(
-            self._sub_window._configure.get('build.{}.options.parameters'.format(self.GUI_KEY)),
+            self._subwindow._configure.get('build.{}.options.parameters'.format(self.GUI_KEY)),
         )
 
         self._prx_tool_group = gui_prx_widgets.PrxHToolGroup()
@@ -70,7 +70,7 @@ class AbsPrxSubpageForMotionRegister(
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
             gui_core.GuiUtil.choice_gui_name(
-                self._sub_window._language, self._sub_window._configure.get('build.{}.filter'.format(self.GUI_KEY))
+                self._subwindow._language, self._subwindow._configure.get('build.{}.filter'.format(self.GUI_KEY))
             )
         )
         qt_widget_0 = gui_qt_widgets.QtTranslucentWidget()
@@ -102,7 +102,7 @@ class _AbsPrxPageForAnyRegister(
         pass
 
     def _on_close(self):
-        self._sub_window.close_window()
+        self._subwindow.close_window()
 
     def _on_apply_and_close(self):
         self._on_apply()
@@ -125,7 +125,7 @@ class _AbsPrxPageForAnyRegister(
         for i_scr_entity in entities:
             if i_scr_entity.path in leaf_paths:
                 i_gui_name = i_scr_entity.gui_name
-                if self._sub_window._language == 'chs':
+                if self._subwindow._language == 'chs':
                     i_gui_name = i_scr_entity.gui_name_chs
 
                 if i_scr_entity.category == 'group':
@@ -134,15 +134,15 @@ class _AbsPrxPageForAnyRegister(
                     i_group._set_expanded_(True)
 
                     i_group._item_model.set_name(i_gui_name)
-                    i_group._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
+                    i_group._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
                 else:
                     i_flag, i_node = self._type_qt_tag_widget._view_model.create_item(i_scr_entity.path)
 
                     i_node._item_model.set_name(i_gui_name)
-                    i_node._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
+                    i_node._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
             else:
                 i_gui_name = i_scr_entity.gui_name
-                if self._sub_window._language == 'chs':
+                if self._subwindow._language == 'chs':
                     i_gui_name = i_scr_entity.gui_name_chs
 
                 i_flag, i_group = self._type_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
@@ -150,7 +150,7 @@ class _AbsPrxPageForAnyRegister(
                 i_group._set_expanded_(True)
 
                 i_group._item_model.set_name(i_gui_name)
-                i_group._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
+                i_group._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
 
     def _load_all_tags(self):
         entities = self._scr_stage.find_all(
@@ -165,30 +165,30 @@ class _AbsPrxPageForAnyRegister(
         for i_scr_entity in entities:
             if i_scr_entity.path in leaf_paths:
                 i_gui_name = i_scr_entity.gui_name
-                if self._sub_window._language == 'chs':
+                if self._subwindow._language == 'chs':
                     i_gui_name = i_scr_entity.gui_name_chs
                 if i_scr_entity.category == 'group':
                     i_flag, i_group = self._tag_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
 
                     i_group._set_expanded_(True)
                     i_group._item_model.set_name(i_gui_name)
-                    i_group._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
+                    i_group._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
                 else:
                     i_flag, i_node = self._tag_qt_tag_widget._view_model.create_item(i_scr_entity.path)
 
                     i_node._item_model.set_name(i_gui_name)
-                    i_node._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
+                    i_node._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
             # add as group
             else:
                 i_gui_name = i_scr_entity.gui_name
-                if self._sub_window._language == 'chs':
+                if self._subwindow._language == 'chs':
                     i_gui_name = i_scr_entity.gui_name_chs
 
                 i_flag, i_group = self._tag_qt_tag_widget._view_model.create_item_as_group(i_scr_entity.path)
 
                 i_group._set_expanded_(True)
                 i_group._item_model.set_name(i_gui_name)
-                i_group._set_tool_tip_(i_scr_entity.to_description(self._sub_window._language))
+                i_group._set_tool_tip_(i_scr_entity.to_description(self._subwindow._language))
 
     def _on_list_all_files(self):
         directory_path = self._prx_options_node.get('directory')
@@ -220,14 +220,14 @@ class _AbsPrxPageForAnyRegister(
         self._qt_layout.addWidget(prx_sca.widget)
 
         self._prx_options_node = gui_prx_widgets.PrxOptionsNode(
-            self._sub_window.choice_gui_name(
-                self._sub_window._configure.get('build.{}.options'.format(self.GUI_KEY))
+            self._subwindow.choice_gui_name(
+                self._subwindow._configure.get('build.{}.options'.format(self.GUI_KEY))
             )
         )
         prx_sca.add_widget(self._prx_options_node)
 
         self._prx_options_node.build_by_data(
-            self._sub_window._configure.get('build.{}.options.parameters'.format(self.GUI_KEY)),
+            self._subwindow._configure.get('build.{}.options.parameters'.format(self.GUI_KEY)),
         )
 
         self._prx_tool_group = gui_prx_widgets.PrxHToolGroup()
@@ -235,7 +235,7 @@ class _AbsPrxPageForAnyRegister(
         self._prx_tool_group.set_expanded(True)
         self._prx_tool_group.set_name(
             gui_core.GuiUtil.choice_gui_name(
-                self._sub_window._language, self._sub_window._configure.get('build.{}.filter'.format(self.GUI_KEY))
+                self._subwindow._language, self._subwindow._configure.get('build.{}.filter'.format(self.GUI_KEY))
             )
         )
         qt_widget_0 = gui_qt_widgets.QtTranslucentWidget()
@@ -261,8 +261,8 @@ class _AbsPrxPageForAnyRegister(
         self._apply_and_close_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._apply_and_close_button)
         self._apply_and_close_button._set_name_text_(
-            self._sub_window.choice_gui_name(
-                self._sub_window._configure.get('build.main.buttons.apply_and_close')
+            self._subwindow.choice_gui_name(
+                self._subwindow._configure.get('build.main.buttons.apply_and_close')
             )
         )
         self._apply_and_close_button.press_clicked.connect(self._on_apply_and_close)
@@ -270,8 +270,8 @@ class _AbsPrxPageForAnyRegister(
         self._apply_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._apply_button)
         self._apply_button._set_name_text_(
-            self._sub_window.choice_gui_name(
-                self._sub_window._configure.get('build.main.buttons.apply')
+            self._subwindow.choice_gui_name(
+                self._subwindow._configure.get('build.main.buttons.apply')
             )
         )
         self._apply_button.press_clicked.connect(self._on_apply)
@@ -279,8 +279,8 @@ class _AbsPrxPageForAnyRegister(
         self._close_button = gui_qt_widgets.QtPressButton()
         bottom_tool_bar.add_widget(self._close_button)
         self._close_button._set_name_text_(
-            self._sub_window.choice_gui_name(
-                self._sub_window._configure.get('build.main.buttons.close')
+            self._subwindow.choice_gui_name(
+                self._subwindow._configure.get('build.main.buttons.close')
             )
         )
         self._close_button.press_clicked.connect(self._on_close)
@@ -318,9 +318,9 @@ class AbsPrxSubpageForVideoRegister(_AbsPrxPageForAnyRegister):
                 if scr_type_paths_addition or scr_tag_paths_addition:
                     self._post_fnc(scr_type_paths_addition, scr_tag_paths_addition)
 
-            self._sub_window.popup_message(
-                self._sub_window.choice_gui_message(
-                    self._sub_window._configure.get('build.main.messages.register_successful')
+            self._subwindow.popup_message(
+                self._subwindow.choice_gui_message(
+                    self._subwindow._configure.get('build.main.messages.register_successful')
                 )
             )
 
@@ -348,9 +348,9 @@ class AbsPrxSubpageForAudioRegister(_AbsPrxPageForAnyRegister):
                 self._scr_stage.key, file_paths
             ).execute(scr_type_paths, scr_tag_paths)
 
-            self._sub_window.popup_message(
-                self._sub_window.choice_gui_message(
-                    self._sub_window._configure.get('build.main.messages.register_successful')
+            self._subwindow.popup_message(
+                self._subwindow.choice_gui_message(
+                    self._subwindow._configure.get('build.main.messages.register_successful')
                 )
             )
 

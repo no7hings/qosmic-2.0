@@ -773,11 +773,11 @@ class PrxListItemWidget(
 
     def set_icon_sub_by_file(self, name=None, file_path=None):
         if name is not None:
-            self._qt_widget._set_icon_sub_file_path_(
+            self._qt_widget._set_sub_icon_file_path_(
                 _gui_core.GuiIcon.get(name)
             )
         elif file_path is not None:
-            self._qt_widget._set_icon_sub_file_path_(
+            self._qt_widget._set_sub_icon_file_path_(
                 file_path
             )
 

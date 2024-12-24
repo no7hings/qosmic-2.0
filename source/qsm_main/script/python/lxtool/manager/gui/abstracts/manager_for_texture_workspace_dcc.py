@@ -53,7 +53,7 @@ class _GuiCmdForNewVersion(object):
 
     @classmethod
     def _pull_texture_as_link(cls, w, directory_path_src, directory_path_tgt):
-        file_paths_src = bsc_storage.StgDirectoryMtd.get_file_paths(
+        file_paths_src = bsc_storage.StgDirectory.get_file_paths(
             directory_path_src
         )
         if file_paths_src:
@@ -387,7 +387,7 @@ class AbsPnlManagerForTextureSpaceDcc(gui_prx_widgets.PrxSessionWindow):
                 g_p.do_update()
 
     def _set_tx_create_data_update_at_(self, directory_path_src, directory_path_tgt, force_enable=False, ext_tgt='.tx'):
-        file_paths_src = bsc_storage.StgDirectoryMtd.get_file_paths(
+        file_paths_src = bsc_storage.StgDirectory.get_file_paths(
             directory_path_src
         )
         if file_paths_src:

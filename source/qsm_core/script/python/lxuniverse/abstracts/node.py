@@ -1014,7 +1014,7 @@ class AbsStgDirectory(
         raise NotImplementedError()
 
     def get_child_file_paths(self):
-        return bsc_storage.StgDirectoryMtd.get_file_paths(
+        return bsc_storage.StgDirectory.get_file_paths(
             self.path
         )
 
@@ -1025,7 +1025,7 @@ class AbsStgDirectory(
             )
 
     def get_file_paths(self, ext_includes=None):
-        return bsc_storage.StgDirectoryMtd.get_file_paths(
+        return bsc_storage.StgDirectory.get_file_paths(
             self.path, ext_includes
         )
 
@@ -1033,7 +1033,7 @@ class AbsStgDirectory(
         return [self.STG_FILE_CLS(i) for i in self.get_file_paths(ext_includes)]
 
     def get_all_file_paths(self, ext_includes=None):
-        return bsc_storage.StgDirectoryMtd.get_all_file_paths(
+        return bsc_storage.StgDirectory.get_all_file_paths(
             self.path, ext_includes
         )
 
@@ -1326,7 +1326,7 @@ class AbsStgFile(
         if self.ext == ext:
             base, ext = os.path.splitext(self.path)
             glob_pattern = '{}.*'.format(base)
-            _ = bsc_storage.StgDirectoryMtd.find_file_paths(
+            _ = bsc_storage.StgDirectory.find_file_paths(
                 glob_pattern
             )
             lis = []

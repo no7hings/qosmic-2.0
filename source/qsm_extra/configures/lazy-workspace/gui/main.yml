@@ -30,6 +30,10 @@ build:
             message: 'Switch application successful: {application}.'
             message_chs: '成功切换软件：{application}。'
 
+        switch_space:
+            message: 'Switch space successful: {space_key}.'
+            message_chs: '成功切换空间：{space_key}。'
+
     buttons:
         create_task:
             name: 'Create Task'

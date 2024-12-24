@@ -34,7 +34,7 @@ class AbsQtHead(
         self._name_draw_font = _qt_core.QtFonts.ToolGroup
         #
         self._init_icon_base_def_(self)
-        self._icon_name_is_enable = True
+        self._name_icon_flag = True
         #
         self._init_action_for_hover_def_(self)
         self._init_action_base_def_(self)
@@ -83,7 +83,7 @@ class AbsQtHead(
         icn_frm_m_w, icn_frm_m_h = (frm_w-icn_frm_w)/2, (frm_h-icn_frm_h)/2
         icn_w, icn_h = icn_frm_w*self._icon_draw_percent, icn_frm_h*self._icon_draw_percent
 
-        if self._icon_sub_file_path is not None:
+        if self._sub_icon_file_path is not None:
             frm_x, frm_y = c_x+(frm_w-icn_frm_w)/2, c_y+(frm_h-icn_frm_h)/2
             sub_icn_w, sub_icn_h = icn_frm_w*self._icon_sub_draw_percent, icn_frm_h*self._icon_sub_draw_percent
             self._set_icon_file_draw_rect_(
@@ -139,7 +139,7 @@ class AbsQtHead(
             offset=offset
         )
         # name-icon
-        if self._icon_name_is_enable is True:
+        if self._name_icon_flag is True:
             if self._icon_text is not None:
                 painter._draw_frame_color_with_name_text_by_rect_(
                     rect=self._frame_draw_rect,
@@ -184,7 +184,7 @@ class AbsQtHead(
         self._set_icon_file_path_(
             [self._expand_icon_file_path_0, self._expand_icon_file_path_1][self._is_expanded]
         )
-        self._set_icon_sub_file_path_(
+        self._set_sub_icon_file_path_(
             [self._expand_sub_icon_file_path_1, self._expand_sub_icon_file_path_0][self._is_expanded]
         )
         #
@@ -214,7 +214,7 @@ class QtHeadStyleB(AbsQtHead):
         icn_frm_m_w, icn_frm_m_h = (frm_w-icn_frm_w)/2, (frm_h-icn_frm_h)/2
         icn_w, icn_h = icn_frm_w*self._icon_draw_percent, icn_frm_h*self._icon_draw_percent
 
-        if self._icon_sub_file_path is not None:
+        if self._sub_icon_file_path is not None:
             frm_x, frm_y = c_x+(frm_w-icn_frm_w)/2, c_y+(frm_h-icn_frm_h)/2
             sub_icn_w, sub_icn_h = icn_frm_w*self._icon_sub_draw_percent, icn_frm_h*self._icon_sub_draw_percent
             self._set_icon_file_draw_rect_(
@@ -263,7 +263,7 @@ class QtHeadStyleB(AbsQtHead):
             # border_width=1
         )
         # name-icon
-        if self._icon_name_is_enable is True:
+        if self._name_icon_flag is True:
             if self._icon_text is not None:
                 painter._draw_frame_color_with_name_text_by_rect_(
                     rect=self._frame_draw_rect,
@@ -311,7 +311,7 @@ class QtHeadStyleC(AbsQtHead):
         icn_frm_m_w, icn_frm_m_h = (frm_w-icn_frm_w)/2, (frm_h-icn_frm_h)/2
         icn_w, icn_h = icn_frm_w*self._icon_draw_percent, icn_frm_h*self._icon_draw_percent
 
-        if self._icon_sub_file_path is not None:
+        if self._sub_icon_file_path is not None:
             frm_x, frm_y = c_x+(frm_w-icn_frm_w)/2, c_y+(frm_h-icn_frm_h)/2
             sub_icn_w, sub_icn_h = icn_frm_w*self._icon_sub_draw_percent, icn_frm_h*self._icon_sub_draw_percent
             self._set_icon_file_draw_rect_(
@@ -360,7 +360,7 @@ class QtHeadStyleC(AbsQtHead):
             # border_width=1
         )
         # name-icon
-        if self._icon_name_is_enable is True:
+        if self._name_icon_flag is True:
             if self._icon_text is not None:
                 painter._draw_frame_color_with_name_text_by_rect_(
                     rect=self._frame_draw_rect,
@@ -563,7 +563,7 @@ class AbsQtHead2(
         #
         self._init_name_base_def_(self)
         self._init_icon_base_def_(self)
-        self._icon_name_is_enable = True
+        self._name_icon_flag = True
         #
         self._init_action_for_hover_def_(self)
         self._init_action_base_def_(self)
@@ -677,7 +677,7 @@ class AbsQtHead2(
         self._set_icon_file_path_(
             [self._expand_icon_file_path_0, self._expand_icon_file_path_1][self._is_expanded]
         )
-        self._set_icon_sub_file_path_(
+        self._set_sub_icon_file_path_(
             [self._expand_sub_icon_file_path_1, self._expand_sub_icon_file_path_0][self._is_expanded]
         )
         #

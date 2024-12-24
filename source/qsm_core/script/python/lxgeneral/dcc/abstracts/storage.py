@@ -102,7 +102,7 @@ class AbsStgDirectory(
             )
 
     def get_directory_paths(self):
-        return bsc_storage.StgDirectoryMtd.get_directory_paths(
+        return bsc_storage.StgDirectory.get_directory_paths(
             self.path
         )
 
@@ -356,7 +356,7 @@ class AbsStgFile(
         #
         if name_base != name_base_new:
             glob_pattern = pathsep.join([directory, name_base_new])
-            list_ = bsc_storage.StgDirectoryMtd.find_file_paths(glob_pattern)
+            list_ = bsc_storage.StgDirectory.find_file_paths(glob_pattern)
             if list_:
                 list_.sort()
         else:

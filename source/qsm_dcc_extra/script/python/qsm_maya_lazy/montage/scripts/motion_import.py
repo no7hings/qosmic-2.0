@@ -117,15 +117,49 @@ s.AdvChrMotionImportOpt.append_layer(
 
     def test(self):
         self.setup()
-        with bsc_log.LogProcessContext.create(maximum=2) as l_p:
-            for i_key, i_cycle in [
-                ('sam_run_forward', 2),
-                ('sam_walk_forward', 2),
-                ('sam_walk_sneak_turn_right', 1),
-                ('sam_run_forward', 3),
-                ('sam_walk_sneak_forward', 3)
-            ]:
+        data = [
+            ('sam_run_forward', 4),
+            ('sam_walk_forward', 4),
+            # ('sam_walk_sneak_turn_right', 1),
+            # ('sam_run_forward', 3),
+            # ('sam_walk_sneak_forward', 3)
+        ]
+        with bsc_log.LogProcessContext.create(maximum=len(data)) as l_p:
+            for i_key, i_cycle in data:
                 i_file_path = bsc_resource.ExtendResource.get('motion/{}.json'.format(i_key))
+
+                self._adv_master_layer.append_layer(
+                    i_file_path,
+                    post_cycle=i_cycle,
+                    pre_blend=4,
+                    post_blend=4,
+                )
+                l_p.do_update()
+
+        qsm_mya_core.Frame.set_frame_range(
+            *self._adv_master_layer.get_frame_range()
+        )
+
+    @classmethod
+    def test_mixamo_(cls):
+        namespaces = qsm_mya_core.Namespaces.extract_from_selection()
+        if namespaces:
+            results = qsm_mya_hdl_anm_core.AdvRigAsset.filter_namespaces(namespaces)
+            if results:
+                cls(results[0]).test_mixamo()
+
+    def test_mixamo(self):
+        self.setup()
+        data = [
+            ('walking', 2),
+            ('slow_run', 2),
+            ('medium_run', 2),
+            ('fast_run', 2),
+            ('jump', 1),
+        ]
+        with bsc_log.LogProcessContext.create(maximum=len(data)) as l_p:
+            for i_key, i_cycle in data:
+                i_file_path = bsc_resource.ExtendResource.get('motion/mixamo/{}.json'.format(i_key))
 
                 self._adv_master_layer.append_layer(
                     i_file_path,

@@ -157,7 +157,7 @@ class QtTrackStage(
     def _draw_track_frame_ranges_(self, painter):
         h = self.height()
 
-        tvl = self._stage_model.generate_valid_frame_range_travel()
+        tvl = self._stage_model.generate_travel()
         while tvl.is_valid():
 
             frame_range, model = tvl.current_data()

@@ -8,6 +8,8 @@ import json
 
 import collections
 
+import six
+
 import lxbasic.resource as bsc_resource
 
 import lxbasic.core as bsc_core
@@ -181,9 +183,7 @@ class Stage(_abc.AbsBase):
             ).update_variants_to(**kwargs_new)
         else:
             raise RuntimeError(
-                sys.stderr.write(
-                    'pattern: {} is not found.'.format(keyword)
-                )
+                'pattern: {} is not found.'.format(keyword)
             )
 
     def generate_wsp_task_paths(self, resource_type):
@@ -442,8 +442,11 @@ class Stage(_abc.AbsBase):
         # copy from pre
         variants_new = dict(**entity_pre._variants)
         variants_new.update(**variants)
+        # fixme: remove current entity's key?
         if variant_key in variants_new:
-            variants_new.pop(variant_key)
+            variant = variants_new[variant_key]
+            if isinstance(variant, six.string_types):
+                variants_new.pop(variant_key)
         return variants_new
 
     # find entity task
@@ -524,7 +527,7 @@ class Stage(_abc.AbsBase):
             )
         # other entity
         else:
-            next_entity_variants_list = self._resource_next_entity_variants_list_gain_fnc(
+            next_entity_variants_list = self._any_entity_next_entity_variants_list_gain_fnc(
                 entity_type, entity_variants, sync_flag
             )
 
@@ -585,8 +588,8 @@ class Stage(_abc.AbsBase):
         cls._push_next_entities_sync_cache(entity_type, next_entity_variants_list, entity_variants)
         return next_entity_variants_list
 
-    # resources
-    def _resource_next_entity_variants_list_gain_fnc(self, entity_type, entity_variants, sync_flag):
+    # any entities
+    def _any_entity_next_entity_variants_list_gain_fnc(self, entity_type, entity_variants, sync_flag):
         list_ = []
         # default is source
         space_key = entity_variants.get('space_key', self.SpaceKeys.Source)
@@ -600,14 +603,14 @@ class Stage(_abc.AbsBase):
                 i_p_opt = bsc_core.BscStgParseOpt(i_p)
                 i_entity_variants_list = i_p_opt.generate_combination_variants(entity_variants)
                 for j_entity_variants in i_entity_variants_list:
-                    j_entity_variants_next_list = self._next_entity_variants_list_sync_fnc(
+                    j_next_entity_variants_list = self._next_entity_variants_list_sync_fnc(
                         i_p,
                         entity_type, j_entity_variants,
                         variant_key, regex_dict,
                         self._entity_variants_prc,
                         sync_flag
                     )
-                    list_.extend(j_entity_variants_next_list)
+                    list_.extend(j_next_entity_variants_list)
         else:
             if patterns is None:
                 self.stderr('resolve pattern is not found: {}.'.format(entity_type))
@@ -631,14 +634,14 @@ class Stage(_abc.AbsBase):
                 i_p_opt.set_regex_dict(regex_dict)
                 i_entity_variants_list = i_p_opt.generate_combination_variants(entity_variants)
                 for j_entity_variants in i_entity_variants_list:
-                    j_entity_variants_next_list = self._next_entity_variants_list_sync_fnc(
+                    j_next_entity_variants_list = self._next_entity_variants_list_sync_fnc(
                         i_p,
                         entity_type, j_entity_variants,
                         variant_key, regex_dict,
                         self._task_variants_prc,
                         sync_flag
                     )
-                    list_.extend(j_entity_variants_next_list)
+                    list_.extend(j_next_entity_variants_list)
         return list_
 
     # versions
@@ -660,14 +663,14 @@ class Stage(_abc.AbsBase):
                 # support for variant is multiply, etc. project=["QSM_TST", "QSM_TST_NEW"]
                 i_entity_variants_list = i_p_opt.generate_combination_variants(entity_variants)
                 for j_entity_variants in i_entity_variants_list:
-                    j_entity_variants_next_list = self._next_entity_variants_list_sync_fnc(
+                    j_next_entity_variants_list = self._next_entity_variants_list_sync_fnc(
                         i_p,
                         entity_type, j_entity_variants,
                         variant_key, regex_dict,
                         self._version_variants_prc,
                         sync_flag
                     )
-                    list_.extend(j_entity_variants_next_list)
+                    list_.extend(j_next_entity_variants_list)
         return list_
 
     # any entity

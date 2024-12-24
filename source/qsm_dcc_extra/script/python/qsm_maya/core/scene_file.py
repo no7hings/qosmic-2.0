@@ -4,6 +4,8 @@ import six
 import os
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
+# noinspection PyUnresolvedReferences
+import maya.mel as mel
 
 import lxbasic.core as bsc_core
 
@@ -12,7 +14,7 @@ import lxbasic.storage as bsc_storage
 import lxgui.core as gui_core
 
 
-class SceneFile(object):
+class SceneFile:
     FILE_TYPE_ASCII = 'mayaAscii'
     FILE_TYPE_BINARY = 'mayaBinary'
     FILE_TYPE_ALEMBIC = 'Alembic'
@@ -20,7 +22,8 @@ class SceneFile(object):
     FILE_TYPE_DICT = {
         '.ma': FILE_TYPE_ASCII,
         '.mb': FILE_TYPE_BINARY,
-        '.abc': FILE_TYPE_ALEMBIC
+        '.abc': FILE_TYPE_ALEMBIC,
+        '.fbx': 'FBX',
     }
 
     @classmethod
@@ -100,6 +103,7 @@ class SceneFile(object):
             force=1,
             options='v=0;',
             type=cls.get_file_type(file_path),
+            ignoreVersion=1,
             ra=1,
             mergeNamespacesOnClash=1,
             returnNewNodes=1,
@@ -123,6 +127,36 @@ class SceneFile(object):
             pr=1,
             importFrameRate=1,
             importTimeRange='override'
+        )
+
+    @classmethod
+    def import_fbx(cls, file_path, namespace=':'):
+        """
+        file
+        -import
+        -type "FBX"
+        -ignoreVersion
+        -ra true
+        -mergeNamespacesOnClash false
+        -namespace "Fast_Run__1_"
+        -options "fbx"
+        -pr
+        -importFrameRate true
+        -importTimeRange "override" "C:/Users/nothings/Downloads/Fast Run (1).fbx";
+        """
+        cmds.file(
+            file_path,
+            i=1,
+            force=1,
+            type=cls.get_file_type(file_path),
+            ignoreVersion=1,
+            ra=1,
+            mergeNamespacesOnClash=1,
+            namespace=namespace,
+            options='fbx',
+            pr=1,
+            importFrameRate=1,
+            importTimeRange='override',
         )
 
     @classmethod
@@ -519,3 +553,95 @@ file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash 
                 bsc_storage.StgFileOpt(i_file_path).copy_to_file(i_file_path_new)
 
             _alembic_cache.AlembicNode.repath_to(i_node, i_file_path_new)
+
+
+class Workspace:
+    WORKSPACE_RULE = {
+        'scene': 'scenes',
+        'templates': 'assets',
+        'images': 'images',
+        'sourceImages': 'sourceimages',
+        'renderData': 'renderData',
+        'clips': 'clips',
+        'sound': 'sound',
+        'scripts': 'scripts',
+        'diskCache': 'data',
+        'movie': 'movies',
+        'translatorData': 'data',
+        'timeEditor': 'Time Editor',
+        'autoSave': 'autosave',
+        'sceneAssembly': 'sceneAssembly',
+        'offlineEdit': 'scenes/edits',
+        '3dPaintTextures': 'sourceimages/3dPaintTextures',
+        'depth': 'renderData/depth',
+        'iprImages': 'renderData/iprImages',
+        'shaders': 'renderData/shaders',
+        'furFiles': 'renderData/fur/furFiles',
+        'furImages': 'renderData/fur/furImages',
+        'furEqualMap': 'renderData/fur/furEqualMap',
+        'furAttrMap': 'renderData/fur/furAttrMap',
+        'furShadowMap': 'renderData/fur/furShadowMap',
+        'particles': 'cache/particles',
+        'fluidCache': 'cache/nCache/fluid',
+        'fileCache': 'cache/nCache',
+        'bifrostCache': 'cache/bifrost',
+        'teClipExports': 'Time Editor/Clip Exports',
+        'mayaAscii': 'scenes',
+        'mayaBinary': 'scenes',
+        'mel': 'scripts',
+        'OBJ': 'data',
+        'audio': 'sound',
+        'move': 'data',
+        'eps': 'data',
+        'illustrator': 'data',
+        'IGES_ATF': 'data',
+        'JT_ATF': 'data',
+        'SAT_ATF': 'data',
+        'STEP_ATF': 'data',
+        'STL_ATF': 'data',
+        'WIRE_ATF': 'data',
+        'INVENTOR_ATF': 'data',
+        'CATIAV4_ATF': 'data',
+        'CATIAV5_ATF': 'data',
+        'NX_ATF': 'data',
+        'PROE_ATF': 'data',
+        'IGES_ATF Export': 'data',
+        'JT_ATF Export': 'data',
+        'SAT_ATF Export': 'data',
+        'STEP_ATF Export': 'data',
+        'STL_ATF Export': 'data',
+        'WIRE_ATF Export': 'data',
+        'INVENTOR_ATF Export': 'data',
+        'CATIAV5_ATF Export': 'data',
+        'NX_ATF Export': 'data',
+        'OBJexport': 'data',
+        'BIF': 'data',
+        'FBX': 'data',
+        'FBX export': 'data',
+        'DAE_FBX': 'data',
+        'DAE_FBX export': 'data',
+        'ASS Export': 'data',
+        'ASS': 'data',
+        'Alembic': 'data',
+        'animImport': 'data',
+        'animExport': 'data'
+    }
+
+    @classmethod
+    def create(cls, directory_path):
+        # create directory
+        cmds.workspace(create=directory_path)
+        # create workspace
+        cmds.workspace(directory_path, openWorkspace=1)
+        # create default rule
+        for k, v in cls.WORKSPACE_RULE.items():
+            cmds.workspace(fileRule=[k, v])
+        # save
+        cmds.workspace(saveWorkspace=1)
+        # noinspection PyBroadException
+        try:
+            mel.eval(
+                'source setProject; sp_setLocalWorkspaceCallback "{}";'.format(directory_path)
+            )
+        except Exception:
+            bsc_core.BscException.set_print()

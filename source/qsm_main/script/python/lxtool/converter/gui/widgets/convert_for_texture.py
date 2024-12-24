@@ -198,7 +198,7 @@ class PnlTextureConverter(gui_prx_widgets.PrxSessionWindow):
             ts.do_start()
 
     def __gui_cache_files(self, directory_path, include_patterns, ext_includes):
-        file_paths = bsc_storage.StgDirectoryMtd.get_file_paths(directory_path, ext_includes)
+        file_paths = bsc_storage.StgDirectory.get_file_paths(directory_path, ext_includes)
         dict_ = collections.OrderedDict()
         for i_file_path in file_paths:
             i_file_opt = bsc_storage.StgFileOpt(i_file_path)

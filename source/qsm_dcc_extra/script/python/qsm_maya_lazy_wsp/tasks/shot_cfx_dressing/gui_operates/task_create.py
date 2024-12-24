@@ -13,7 +13,7 @@ class MayaShotCfxDressingCreateOpt(_shot_gnl_task_create.MayaShotTaskCreateOpt):
     def __init__(self, *args, **kwargs):
         super(MayaShotCfxDressingCreateOpt, self).__init__(*args, **kwargs)
 
-    def build_scene_src(self, scene_src_path, upstream_scene_path=None, defer_load_reference_nodes=None):
+    def build_scene_src_fnc(self, scene_src_path, upstream_scene_path=None, defer_load_reference_nodes=None):
         if upstream_scene_path:
             if bsc_storage.StgPath.get_is_file(upstream_scene_path):
                 # load source

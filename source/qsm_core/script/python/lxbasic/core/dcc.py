@@ -166,6 +166,7 @@ class BscCamera(object):
             x, y = 1, h/w
         elif camera_screen_mode == 'vertical':
             x, y = w/h, 1
+
         s_s = min(x, y)
         s = scale_percent*s_s
         t_x, t_y, t_z = -(0.5*x-s/2)+margin_percent, -(0.5*y-s/2)+margin_percent, -b

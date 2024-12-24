@@ -13,7 +13,7 @@ class MayaShotAnimationCreateOpt(_shot_gnl_task_create.MayaShotTaskCreateOpt):
     def __init__(self, *args, **kwargs):
         super(MayaShotAnimationCreateOpt, self).__init__(*args, **kwargs)
 
-    def build_scene_src(
+    def build_scene_src_fnc(
         self,
         scene_src_path, upstream_scene_path=None,
     ):

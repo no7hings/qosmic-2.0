@@ -146,7 +146,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
     @staticmethod
     def _generate_screenshot_file_path():
         d = bsc_core.BscSystem.get_home_directory()
-        return six.u('{}/screenshot/untitled-{}.mov').format(d, bsc_core.TimeExtraMtd.generate_time_tag_36())
+        return six.u('{}/screenshot/untitled-{}.mov').format(d, bsc_core.BscSystem.get_time_tag())
 
     def do_show_playblast_window(self):
         raise NotImplementedError()

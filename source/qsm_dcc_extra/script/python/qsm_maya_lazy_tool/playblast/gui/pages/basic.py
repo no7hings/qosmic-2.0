@@ -153,7 +153,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
             )
 
     def do_gui_refresh_fps(self):
-        fps = qsm_mya_core.Frame.get_fps_value()
+        fps = qsm_mya_core.Frame.get_fps()
         self._fps_port.set(fps)
 
     def do_gui_refresh_resolution(self):

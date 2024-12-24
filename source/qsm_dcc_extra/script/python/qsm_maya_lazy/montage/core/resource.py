@@ -52,13 +52,13 @@ c.AdvResource('sam_Skin').test()
             ctime=bsc_core.BscSystem.generate_timestamp(),
             user=bsc_core.BscSystem.get_user_name(),
             host=bsc_core.BscSystem.get_host(),
-            refernce=dict(
+            reference=dict(
                 file=self.find_reference_file(),
                 namespace=self._namespace
             ),
             start_frame=start_frame,
             end_frame=end_frame,
-            fps=qsm_mya_core.Frame.get_fps_value()
+            fps=qsm_mya_core.Frame.get_fps()
         )
         return data
 
@@ -132,30 +132,4 @@ c.AdvResource('sam_Skin').test()
     def test(cls):
         cls('sam_Skin')._control_set.bake_all_keyframes(
             1, 24, ['translateX', 'translateY']
-        )
-
-
-class MixamoResource(object):
-    def __init__(self, namespace):
-        self._namespace = namespace
-        self._sketch_set = _sketch.MixamoSketchSet.generate(self._namespace)
-
-    def export_to(self, file_path):
-        bsc_storage.StgFileOpt(file_path).set_write(
-            self.get_data()
-        )
-
-    def get_root_height(self):
-        return 104.25
-
-    def get_data(self):
-        start_frame, end_frame = self._sketch_set.get_frame_range()
-        data = self._sketch_set.get_data(start_frame, end_frame)
-        data['root_height'] = self.get_root_height()
-        return data
-
-    @classmethod
-    def test(cls):
-        cls('mixamorig').export_to(
-            'E:/myworkspace/qosmic-2.0/source/qsm_dcc_extra/resources/motion/mixamo_run_forward.json'
         )

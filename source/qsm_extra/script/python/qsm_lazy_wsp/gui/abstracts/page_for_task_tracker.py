@@ -20,11 +20,12 @@ class AbsPrxPageForTaskTracker(gui_prx_widgets.PrxBasePage):
 
         self._resource_path = None
 
-        self._space_key = 'release'
+        self._space_key_history_key = 'lazy-workspace.space_key'
+        self._space_key = gui_core.GuiHistory.get_one(self._space_key_history_key) or 'release'
 
         self.gui_page_setup_fnc()
 
-    def _gui_add_main_tools(self):
+    def _gui_add_space_switch_tool(self):
         self._space_switch_qt_button = gui_qt_widgets.QtIconPressButton()
         self._main_prx_tool_box.add_widget(self._space_switch_qt_button)
         self._space_switch_qt_button._set_name_text_('space switch')
@@ -43,15 +44,27 @@ class AbsPrxPageForTaskTracker(gui_prx_widgets.PrxBasePage):
         result = gui_core.GuiApplication.exec_input_dialog(
             type='choose',
             options=options,
-            info='Choose Name for User...',
+            info='Choose Space...',
             value=self._space_key,
-            title='Switch User'
+            title='Switch Space'
         )
         if result:
             if result in options:
-                self._space_key = result
-                self._space_qt_info_bubble._set_text_(self._space_key)
-                self.do_gui_refresh_all()
+                self._gui_switch_space(result)
+
+    def _gui_switch_space(self, space_key):
+        if space_key != self._space_key:
+            self._space_key = space_key
+            self._space_qt_info_bubble._set_text_(self._space_key)
+            gui_core.GuiHistory.set_one(self._space_key_history_key, space_key)
+
+            self.do_gui_refresh_all()
+
+            self._window.popup_message(
+                self._window.choice_gui_message(
+                    self._window._configure.get('build.messages.switch_space')
+                ).format(space_key=self._space_key)
+            )
 
     def gui_page_setup_fnc(self):
         self._top_prx_tool_bar = gui_prx_widgets.PrxHToolBar()
@@ -61,9 +74,9 @@ class AbsPrxPageForTaskTracker(gui_prx_widgets.PrxBasePage):
 
         # main tool box
         self._main_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
-            'main'
+            'space'
         )
-        self._gui_add_main_tools()
+        self._gui_add_space_switch_tool()
 
         self._resource_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'resource', size_mode=1

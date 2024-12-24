@@ -1,6 +1,4 @@
 # coding:utf-8
-import lxgui.core as gui_core
-
 import lxgui.proxy.widgets as gui_prx_widgets
 
 
@@ -9,8 +7,8 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
 
     GUI_KEY = 'task_create'
 
-    RESOURCE_TYPE = None
-
+    PROJECT_TASKS =[
+    ]
     ASSET_TASKS = [
     ]
     SEQUENCE_TASKS = [
@@ -34,26 +32,30 @@ class AbsPrxSubpanelForTaskCreate(gui_prx_widgets.PrxBaseSubpanel):
 
         resource_type = resource_properties['resource_type']
         self._resource_properties = resource_properties
-
-        if resource_type == 'asset':
-            self.gui_setup_sub_pages_for(self.ASSET_TASKS)
+        if resource_type == 'project':
+            self.gui_setup_sub_pages_for(resource_type, self.PROJECT_TASKS)
+        elif resource_type == 'asset':
+            self.gui_setup_sub_pages_for(resource_type, self.ASSET_TASKS)
+        elif resource_type == 'sequence':
+            self.gui_setup_sub_pages_for(resource_type, self.SEQUENCE_TASKS)
         elif resource_type == 'shot':
-            self.gui_setup_sub_pages_for(self.SHOT_TASKS)
+            self.gui_setup_sub_pages_for(resource_type, self.SHOT_TASKS)
 
         self._sub_page_prx_tab_tool_box.set_history_key(
             'lazy-workspace.{}-{}-page'.format(self.GUI_KEY, resource_type)
         )
         self._sub_page_prx_tab_tool_box.load_history()
 
-    def gui_setup_sub_pages_for(self, page_keys):
+    def gui_setup_sub_pages_for(self, resource_type, tasks):
         self._tab_widget_dict = {}
 
-        for i_gui_key in page_keys:
+        for i_task in tasks:
+            i_gui_key = '{}/{}'.format(resource_type, i_task)
             if i_gui_key not in self._sub_page_class_dict:
                 continue
 
             i_prx_sca = gui_prx_widgets.PrxVScrollArea()
-            i_prx_page = self._sub_window.gui_generate_sub_page_for(i_gui_key)
+            i_prx_page = self._subwindow.gui_generate_sub_page_for(i_gui_key)
             i_prx_sca.add_widget(i_prx_page)
 
             self._sub_page_prx_tab_tool_box.add_widget(

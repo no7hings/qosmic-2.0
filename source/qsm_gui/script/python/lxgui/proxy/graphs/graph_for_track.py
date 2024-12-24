@@ -97,17 +97,17 @@ class PrxTrackWidget(
 
         args = [
             ('sam_walk_macho_forward', 24),
-            # ('sam_run_turn_left', 32),
-            # ('sam_walk_forward', 48),
-            # ('sam_walk_sneak_turn_right', 24),
-            # ('sam_run_forward', 72),
-            # ('sam_walk_sneak_forward', 32)
+            ('sam_run_turn_left', 32),
+            ('sam_walk_forward', 48),
+            ('sam_walk_sneak_turn_right', 24),
+            ('sam_run_forward', 72),
+            ('sam_walk_sneak_forward', 32)
         ]
 
         random.seed(1)
 
         clip_start = 1
-        for i_index in range(1):
+        for i_index in range(10):
             i_name, i_source_count = random.choice(args)
             i_post_cycle = 1
 

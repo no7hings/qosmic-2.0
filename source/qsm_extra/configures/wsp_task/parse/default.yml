@@ -334,11 +334,11 @@ task_names: {}
 patterns:
     # project
     project:
-        task-version-name: '{asset}.{step}.{task}.v{version}'
-        task-zero_version-name: '{asset}.{step}.{task}.v000'
-        task-no_version-name: '{asset}.{step}.{task}'
+        task-version-name: '{project}.{step}.{task}.v{version}'
+        task-zero_version-name: '{project}.{step}.{task}.v000'
+        task-no_version-name: '{project}.{step}.{task}'
 
-        task_unit-version-name: '{asset}.{step}.{task}.{task_unit}.v{version}'
+        task_unit-version-name: '{project}.{step}.{task}.{task_unit}.v{version}'
 
         disorder:
             dir: '{root_disorder}/{project}'
@@ -347,6 +347,7 @@ patterns:
             dir: '{root_source}/{project}/{space}'
             task-dir: '<.dir>/tasks/user.{artist}/{step}.{task}'
             task_unit-dir: '<.task-dir>/{task_unit}'
+            maya-dir: '<.task_unit-dir>/maya'
             # scene_src
             #   maya
             maya-scene_src-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
@@ -377,6 +378,7 @@ patterns:
             # task
             task-dir: '<.dir>/user.{artist}/{step}.{task}'
             task_unit-dir: '<.task-dir>/{task_unit}'
+            maya-dir: '<.task_unit-dir>/maya'
             # scene_src
             #   maya
             maya-scene_src-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
@@ -422,6 +424,7 @@ patterns:
             # task
             task-dir: '<.dir>/user.{artist}/{step}.{task}'
             task_unit-dir: '<.task-dir>/{task_unit}'
+            maya-dir: '<.task_unit-dir>/maya'
             # scene_src
             #   maya
             maya-scene_src-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'
@@ -432,6 +435,13 @@ patterns:
             #   katana
             katana-scene_src-file: '<.task_unit-dir>/katana/scenes/<..task_unit-version-name>.katana'
             katana-thumbnail-file: '<.task_unit-dir>/katana/.thumbnails/<..task_unit-version-name>.jpg'
+
+        release:
+            dir: '{root_release}/{project}/QSM/{space}/sequences/{sequence}'
+            # task
+            task-dir: '<.dir>/{step}.{task}'
+            # version
+            version-dir: '<.task-dir>/<..task-version-name>'
 
     shot:
         task-version-name: '{shot}.{step}.{task}.v{version}'
@@ -448,6 +458,7 @@ patterns:
             # task
             task-dir: '<.dir>/user.{artist}/{step}.{task}'
             task_unit-dir: '<.task-dir>/{task_unit}'
+            maya-dir: '<.task_unit-dir>/maya'
             # scene_src
             #   maya
             maya-scene_src-file: '<.task_unit-dir>/maya/scenes/<..task_unit-version-name>.ma'

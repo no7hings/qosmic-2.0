@@ -68,10 +68,9 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
     def _gui_switch_user(self, artist):
         if artist != self._artist:
             self._artist = artist
-            self._user_qt_info_bubble._set_text_(
-                '{}:{}'.format(self._studio, self._artist)
-            )
+            self._user_qt_info_bubble._set_text_('{}:{}'.format(self._studio, self._artist))
             gui_core.GuiHistory.set_one(self._artist_history_key, self._artist)
+
             self.do_gui_refresh_all()
             self._window.popup_message(
                 self._window.choice_gui_message(

@@ -285,6 +285,24 @@ class NodeAttribute:
             cls.set_value(path, atr_name, default)
 
     @classmethod
+    def create_as_size(cls, path, atr_name, default=None, **kwargs):
+        if cls.is_exists(path, atr_name) is False:
+            options = dict(
+                longName=atr_name, attributeType='double2', keyable=1
+            )
+            options.update(**kwargs)
+            cmds.addAttr(path, **options)
+
+            cmds.addAttr(
+                path, longName=atr_name+'Width', attributeType='double', parent=atr_name, keyable=1
+            )
+            cmds.addAttr(
+                path, longName=atr_name+'Height', attributeType='double', parent=atr_name, keyable=1
+            )
+        if default is not None:
+            cls.set_as_tuple(path, atr_name, default)
+
+    @classmethod
     def create_as_float3(cls, path, atr_name, default=None, **kwargs):
         if cls.is_exists(path, atr_name) is False:
             options = dict(
@@ -320,6 +338,15 @@ class NodeAttribute:
         if cls.is_exists(path, atr_name) is False:
             cmds.addAttr(
                 path, longName=atr_name, attributeType='enum', enumName=':'.join(options), keyable=1
+            )
+        if default is not None:
+            cls.set_value(path, atr_name, default)
+
+    @classmethod
+    def create_as_matrix(cls, path, atr_name, default=None):
+        if cls.is_exists(path, atr_name) is False:
+            cmds.addAttr(
+                path, longName=atr_name, dataType='matrix', keyable=1
             )
         if default is not None:
             cls.set_value(path, atr_name, default)

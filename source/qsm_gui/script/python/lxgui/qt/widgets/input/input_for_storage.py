@@ -363,7 +363,7 @@ class QtInputForStorage(
         if icon_name is not None:
             button._set_icon_file_path_(gui_core.GuiIcon.get(icon_name))
         if sub_icon_name is not None:
-            button._set_icon_sub_file_path_(gui_core.GuiIcon.get(sub_icon_name))
+            button._set_sub_icon_file_path_(gui_core.GuiIcon.get(sub_icon_name))
         if tool_tip:
             button._set_tool_tip_(tool_tip)
         button._set_icon_frame_draw_size_(18, 18)

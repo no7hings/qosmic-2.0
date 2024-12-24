@@ -9,6 +9,8 @@ import lxgui.core as gui_core
 
 import lxgui.qt.core as gui_qt_core
 
+import lxgui.qt.widgets as gui_qt_widgets
+
 import lxgui.qt.view_widgets as gui_qt_view_widgets
 
 import lxgui.proxy.widgets as gui_prx_widgets
@@ -45,7 +47,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
 
         # application
         self._application = 'maya'
-        self._application_switch_tool_box = self._qt_tree_widget._insert_left_tool_box_(0, 'application')
+        self._application_switch_tool_box = self._qt_tree_widget._add_left_tool_box_('application')
         self._gui_add_application_switch_tools()
 
     def _gui_add_application_switch_tools(self):
@@ -96,7 +98,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
             self._window.popup_message(
                 self._window.choice_gui_message(
                     self._window._configure.get('build.messages.switch_application')
-                ).format(application=application)
+                ).format(application=self._application)
             )
 
     def _gui_add_entity_groups(self, path):
@@ -513,7 +515,7 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
                 if properties:
                     scene_path = properties.get('result')
                     if scene_path:
-                        self.gui_load_task_scene(properties)
+                        self.gui_load_task_unit_scene(properties)
 
     def on_save_task_scene_as(self):
         task_session = self._task_parse.generate_task_session_by_resource_source_scene_src_auto()
@@ -534,7 +536,7 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
                 if properties:
                     scene_path = properties.get('result')
                     if scene_path:
-                        self.gui_load_task_scene(properties)
+                        self.gui_load_task_unit_scene(properties)
 
     def __init__(self, *args, **kwargs):
         super(AbsPrxUnitForTaskManager, self).__init__(*args, **kwargs)
@@ -550,12 +552,17 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
 
         self.gui_unit_setup_fnc()
 
-    def gui_load_task_scene(self, scene_properties):
+    def dcc_set_scene_project(self, task_session):
+        pass
+
+    def gui_load_task_unit_scene(self, scene_properties):
         scene_path = scene_properties.get('result')
         if scene_path:
             task_session = self._task_parse.generate_task_session_by_resource_source_scene_src(scene_path)
             if task_session:
                 self._task_session = task_session
+                # set project for maya
+                self.dcc_set_scene_project(task_session)
 
                 task_unit_path = task_session.task_unit_path
                 if task_unit_path in self._gui_task_opt.gui_get_all_task_unit_paths():
@@ -666,28 +673,29 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
         self._bottom_prx_tool_bar.set_align_right()
 
         # increment save
-        self._increment_and_save_prx_button = gui_prx_widgets.PrxPressButton()
-        self._bottom_prx_tool_bar.add_widget(self._increment_and_save_prx_button)
-        self._increment_and_save_prx_button.set_name(
+        self._increment_and_save_qt_button = gui_qt_widgets.QtPressButton()
+        self._bottom_prx_tool_bar.add_widget(self._increment_and_save_qt_button)
+        self._increment_and_save_qt_button._set_name_text_(
             self._window.choice_gui_name(
                 self._window._configure.get('build.{}.buttons.increment_and_save'.format(self._page.GUI_KEY))
             )
         )
-        self._increment_and_save_prx_button.set_icon_name('tool/save')
-        self._increment_and_save_prx_button.set_width(96)
-        self._increment_and_save_prx_button.connect_press_clicked_to(self.on_increment_and_save_task_scene)
+        self._increment_and_save_qt_button._set_icon_name_('tool/save')
+        self._increment_and_save_qt_button._set_width_(96)
+        self._increment_and_save_qt_button.press_clicked.connect(self.on_increment_and_save_task_scene)
         # save as
-        self._save_as_prx_button = gui_prx_widgets.PrxPressButton()
-        self._bottom_prx_tool_bar.add_widget(self._save_as_prx_button)
-        # self._save_as_prx_button.set_action_enable(False)
-        self._save_as_prx_button.set_name(
+        self._save_as_qt_button = gui_qt_widgets.QtPressButton()
+        self._bottom_prx_tool_bar.add_widget(self._save_as_qt_button)
+        # self._save_as_qt_button.set_action_enable(False)
+        self._save_as_qt_button._set_name_text_(
             self._window.choice_gui_name(
                 self._window._configure.get('build.{}.buttons.save_as'.format(self._page.GUI_KEY))
             )
         )
-        self._save_as_prx_button.set_icon_name('tool/save-as')
-        self._save_as_prx_button.set_width(96)
-        self._save_as_prx_button.connect_press_clicked_to(self.on_save_task_scene_as)
+        self._save_as_qt_button._set_icon_name_('tool/save-as')
+        self._save_as_qt_button._set_sub_icon_name_('action/add')
+        self._save_as_qt_button._set_width_(96)
+        self._save_as_qt_button.press_clicked.connect(self.on_save_task_scene_as)
 
     def gui_setup_post_fnc(self):
         pass

@@ -170,7 +170,7 @@ class PlayblastOpt(object):
 
         start_frame, end_frame = qsm_mya_core.Frame.auto_range(frame)
         if fps is None:
-            fps = qsm_mya_core.Frame.get_fps_value()
+            fps = qsm_mya_core.Frame.get_fps()
 
         if frame_step > 1:
             frames = bsc_core.BscFrameRange.get(
@@ -230,7 +230,7 @@ class PlayblastOpt(object):
                 movie_file_path = cls.generate_movie_file_path(directory_path=None, update_scheme='no_version')
                 camera = qsm_mya_core.Camera.get_non_default_with_dialog()
                 frame = qsm_mya_core.Frame.get_frame_range()
-                fps = qsm_mya_core.Frame.get_fps_value()
+                fps = qsm_mya_core.Frame.get_fps()
                 resolution = qsm_mya_core.RenderSettings.get_resolution()
                 cls.execute(
                     movie_file_path=movie_file_path,
@@ -252,7 +252,7 @@ class PlayblastOpt(object):
 
             camera = qsm_mya_core.Camera.get_non_default_with_dialog()
             frame = qsm_mya_core.Frame.get_frame_range()
-            fps = qsm_mya_core.Frame.get_fps_value()
+            fps = qsm_mya_core.Frame.get_fps()
             resolution = qsm_mya_core.RenderSettings.get_resolution()
 
             task_name, file_path, movie_file_path, cmd_script = PlayblastProcess.generate_subprocess_args(
@@ -292,7 +292,7 @@ class PlayblastOpt(object):
 
             camera = qsm_mya_core.Camera.get_non_default_with_dialog()
             frame = qsm_mya_core.Frame.get_frame_range()
-            fps = qsm_mya_core.Frame.get_fps_value()
+            fps = qsm_mya_core.Frame.get_fps()
             resolution = qsm_mya_core.RenderSettings.get_resolution()
 
             task_name, file_path, movie_file_path, cmd_script = PlayblastProcess.generate_subprocess_args(
@@ -325,7 +325,7 @@ class PlayblastOpt(object):
 
             camera = qsm_mya_core.Camera.get_non_default_with_dialog()
             frame = qsm_mya_core.Frame.get_frame_range()
-            fps = qsm_mya_core.Frame.get_fps_value()
+            fps = qsm_mya_core.Frame.get_fps()
             resolution = qsm_mya_core.RenderSettings.get_resolution()
 
             option_hook = PlayblastProcess.generate_farm_hook_option(

@@ -11,5 +11,5 @@ class MayaShotGnlTestingCreateOpt(_asset_gnl_task_create.MayaShotTaskCreateOpt):
     def __init__(self, *args, **kwargs):
         super(MayaShotGnlTestingCreateOpt, self).__init__(*args, **kwargs)
 
-    def build_scene_src(self, scene_src_path):
+    def build_scene_src_fnc(self, scene_src_path):
         qsm_mya_core.SceneFile.save_to(scene_src_path)

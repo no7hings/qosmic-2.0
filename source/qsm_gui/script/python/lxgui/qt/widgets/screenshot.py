@@ -728,7 +728,7 @@ class QtInputAsScreenshot(
     @staticmethod
     def _generate_screenshot_file_path_():
         d = bsc_core.BscSystem.get_home_directory()
-        return six.u('{}/screenshot/untitled-{}.png').format(d, bsc_core.TimeExtraMtd.generate_time_tag_36())
+        return six.u('{}/screenshot/untitled-{}.png').format(d, bsc_core.BscSystem.get_time_tag())
 
     def _save_screenshot_(self, g):
         f = self._generate_screenshot_file_path_()

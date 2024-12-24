@@ -786,7 +786,7 @@ class Scene(gnl_dcc_abstracts.AbsDccNodeScene):
         # noinspection PyBroadException
         try:
             mel.eval(
-                'sp_setLocalWorkspaceCallback "{}";'.format(directory_path)
+                'source setProject; sp_setLocalWorkspaceCallback "{}";'.format(directory_path)
             )
         except Exception:
             bsc_core.BscException.set_print()

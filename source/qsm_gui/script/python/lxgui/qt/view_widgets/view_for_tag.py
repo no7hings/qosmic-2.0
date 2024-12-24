@@ -224,6 +224,9 @@ class _QtTagViewWidget(
     def _get_all_nodes_(self):
         return [x for x in self._item_dict.values() if isinstance(x, _item_for_tag._QtTagNodeItem)]
 
+    def _get_all_items_(self):
+        return self._item_dict.values()
+
 
 class QtTagWidget(
     _base._BaseViewWidget

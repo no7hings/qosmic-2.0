@@ -272,7 +272,7 @@ class QtPressButton(
     def _refresh_widget_draw_geometry_(self):
         x, y = 0, 0
         w, h = self.width(), self.height()
-        #
+
         check_enable = self._get_check_action_is_enable_()
         # noinspection PyUnusedLocal
         option_click_enable = self._get_option_click_is_enable_()
@@ -280,19 +280,19 @@ class QtPressButton(
         sub_process_is_enable = self._get_sub_process_is_enable_()
         validator_is_enable = self._get_validator_is_enable_()
         progress_enable = self._get_progress_is_enable_()
-        #
+
         icn_frm_w, icn_frm_h = self._icon_frame_draw_size
-        #
+
         i_f_w, i_f_h = self._icon_draw_size
         i_c_w, i_c_h = self._icon_color_draw_size
         i_n_w, i_n_h = self._icon_name_draw_size
-        #
+
         c_x, c_y = x, y
         c_w, c_h = w, h
-        #
+
         c_icn_x, c_icn_y = x, y
         c_name_w, c_name_h = w, h
-        #
+
         if check_enable is True:
             self._check_frame_rect.setRect(
                 c_icn_x, c_icn_y, icn_frm_w, icn_frm_h
@@ -304,8 +304,8 @@ class QtPressButton(
             c_name_w -= icn_frm_w
             c_x += icn_frm_h
             c_w -= icn_frm_w
-        #
-        if self._icon_is_enable is True:
+
+        if self._file_icon_flag is True:
             self._icon_draw_rect.setRect(
                 c_icn_x+(icn_frm_w-i_f_w)/2, c_icn_y+(icn_frm_h-i_f_h)/2, i_f_w, i_f_h
             )
@@ -328,6 +328,7 @@ class QtPressButton(
             )
             c_name_w -= icn_frm_w
             c_w -= icn_frm_w
+        
         # menu
         elif self._menu_flag is True:
             self._menu_rect.setRect(
@@ -567,7 +568,7 @@ class QtPressButton(
                 is_hovered=self._is_hovered
             )
         # icon
-        if self._icon_is_enable is True:
+        if self._file_icon_flag is True:
             if self._icon_file_path is not None:
                 painter._draw_icon_file_by_rect_(
                     self._icon_draw_rect,
@@ -683,10 +684,10 @@ class QtIconPressButton(
         icn_w, icn_h = int(icn_frm_w*self._icon_draw_percent), int(icn_frm_h*self._icon_draw_percent)
         icn_x, icn_y = x+(icn_frm_w-icn_w)/2, y+(icn_frm_h-icn_h)/2
 
-        if self._icon_is_enable is True:
+        if self._file_icon_flag is True:
             # sub icon
             if self._icon is not None or \
-                    self._icon_sub_file_path or \
+                    self._sub_icon_file_path or \
                     self._sub_icon_text or \
                     self._icon_state_draw_is_enable:
                 if self._icon_state_draw_is_enable is True:
@@ -837,7 +838,7 @@ class QtIconPressButton(
                 running=True
             )
         # icon
-        if self._icon_is_enable is True:
+        if self._file_icon_flag is True:
             if self._icon:
                 painter._draw_icon_by_rect_(
                     icon=self._icon,
@@ -877,10 +878,10 @@ class QtIconPressButton(
                         is_pressed=is_pressed
                     )
             #
-            if self._icon_sub_file_path:
+            if self._sub_icon_file_path:
                 painter._draw_image_use_file_path_by_rect_(
                     rect=self._icon_sub_draw_rect,
-                    file_path=self._icon_sub_file_path,
+                    file_path=self._sub_icon_file_path,
                     offset=offset,
                     is_hovered=self._is_hovered,
                     #
@@ -993,7 +994,7 @@ class QtIconPressButton(
         offset = 0
         is_pressed = False
 
-        if self._icon_is_enable is True:
+        if self._file_icon_flag is True:
             if self._icon:
                 painter._draw_icon_by_rect_(
                     icon=self._icon,
@@ -1077,7 +1078,7 @@ class QtIconMenuButton(
         icn_w, icn_h = int(icn_frm_w*self._icon_draw_percent), int(icn_frm_h*self._icon_draw_percent)
         icn_x, icn_y = x+(w-icn_w)/2, y+(h-icn_h)/2
         #
-        if self._icon_is_enable is True:
+        if self._file_icon_flag is True:
             self._icon_draw_rect.setRect(
                 icn_x, icn_y, icn_w, icn_h
             )
@@ -1120,7 +1121,7 @@ class QtIconMenuButton(
         painter = _qt_core.QtPainter(self)
         offset = self._get_action_offset_()
         # icon
-        if self._icon_is_enable is True:
+        if self._file_icon_flag is True:
             if self._icon_file_path is not None:
                 painter._draw_icon_file_by_rect_(
                     rect=self._icon_draw_rect,
@@ -1197,8 +1198,8 @@ class QtIconToggleButton(
             x+(w-icn_frm_w)/2, y+(h-icn_frm_w)/2, icn_frm_w, icn_frm_h
         )
         #
-        if self._icon_is_enable is True:
-            if self._icon_sub_file_path or self._sub_icon_text:
+        if self._file_icon_flag is True:
+            if self._sub_icon_file_path or self._sub_icon_text:
                 self._icon_draw_rect.setRect(
                     x+2, y+2, icn_w, icn_h
                 )
@@ -1267,7 +1268,7 @@ class QtIconToggleButton(
             offset=offset
         )
         #
-        if self._icon_is_enable is True:
+        if self._file_icon_flag is True:
             if self._icon_file_path is not None:
                 painter._draw_icon_file_by_rect_(
                     rect=self._icon_draw_rect,
@@ -1282,10 +1283,10 @@ class QtIconToggleButton(
                         border_radius=4,
                         offset=offset
                     )
-                elif self._icon_sub_file_path:
+                elif self._sub_icon_file_path:
                     painter._draw_icon_file_by_rect_(
                         rect=self._icon_sub_draw_rect,
-                        file_path=self._icon_sub_file_path,
+                        file_path=self._sub_icon_file_path,
                         offset=offset,
                         is_hovered=self._is_hovered
                     )

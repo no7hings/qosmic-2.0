@@ -2,6 +2,7 @@
 import collections
 
 import copy
+
 import math
 
 import sys
@@ -9,6 +10,8 @@ import sys
 import bisect
 
 import lxbasic.core as bsc_core
+
+import lxbasic.content as bsc_content
 
 from . import coord as _coord
 
@@ -91,6 +94,14 @@ class TrackModel(object):
         self._layer_index = int(layer_index)
 
         self._is_bypass = is_bypass
+        
+        self._widget = None
+        
+    def set_widget(self, widget):
+        self._widget = widget
+        
+    def get_widget(self):
+        return self._widget
 
     @classmethod
     def compute_end(cls, start, source_start, source_end, cycle, speed=1.0):
@@ -179,8 +190,8 @@ class TrackModel(object):
         )
 
     def __str__(self):
-        return '{}(key={}, time={}-{}, layer={})'.format(
-            self.__class__.__name__, self._key, self._clip_start, self._clip_end, self._layer_index
+        return '{}({})'.format(
+            self.__class__.__name__, self._key
         )
 
     def __eq__(self, other):
@@ -599,7 +610,7 @@ class TrackStageModel(object):
         return all_frames
 
     def __init__(self):
-        self._track_dict = {}
+        self._track_model_dict = {}
 
         self._time_coord_model = _coord.CoordModel()
         self._time_coord_model.setup(self.TIME_BASIC_UNIT)
@@ -610,10 +621,19 @@ class TrackStageModel(object):
         self._layer_coord_model.update(0, 1.0, self.LAYER_BASIC_UNIT)
 
         self._all_frames = []
-        self._valid_frame_range_dict = collections.OrderedDict()
+        self._ordered_track_model_dict = collections.OrderedDict()
 
         self._track_start = 1
         self._track_end = 24
+
+    def __str__(self):
+        return '{}{}'.format(
+            self.__class__.__name__,
+            bsc_content.ToString(self._ordered_track_model_dict).generate()
+        )
+
+    def __repr__(self):
+        return '\n'+self.__str__()
 
     @property
     def track_start(self):
@@ -632,25 +652,29 @@ class TrackStageModel(object):
         return TrackModel._find_missing_frame_ranges(self._all_frames)
 
     @property
-    def valid_frame_range_dict(self):
-        return self._valid_frame_range_dict
+    def ordered_track_model_dict(self):
+        return self._ordered_track_model_dict
 
     def is_exists(self, key):
-        return key in self._track_dict
+        return key in self._track_model_dict
 
     def create_one(
         self,
         widget,
         **kwargs
     ):
-        model = TrackModel(self)
-        model.setup(
+        track_model = TrackModel(self)
+        track_model.setup(
             **kwargs
         )
-        widget._track_model = model
-        widget._track_last_model = model.copy()
-        self.register(widget)
-        return model
+        if widget is not None:
+            track_model.set_widget(widget)
+
+            widget._track_model = track_model
+            widget._track_last_model = track_model.copy()
+
+        self.register(track_model)
+        return track_model
 
     def step_coord_loc(self, x, y):
         return (
@@ -674,22 +698,24 @@ class TrackStageModel(object):
     def compute_width_for(self, count):
         return self._time_coord_model.compute_size_by_count(count)
 
-    def register(self, widget):
-        self._track_dict[widget._track_model.key] = widget
+    def register(self, track_model):
+        self._track_model_dict[track_model.key] = track_model
         self.update()
 
     def update(self):
         self._all_frames = []
-        self._valid_frame_range_dict.clear()
-        if not self._track_dict:
+        self._ordered_track_model_dict.clear()
+
+        if not self._track_model_dict:
             return
+
         sys.stdout.write('stage is change.\n')
         clip_start_list = []
         clip_end_list = []
         # get data by layer index
         dict_0 = {}
-        for k, v in self._track_dict.items():
-            i_model = v._track_model
+        for k, v in self._track_model_dict.items():
+            i_model = v
             if i_model.is_bypass > 0:
                 i_model.apply_valid_frames([])
                 continue
@@ -710,8 +736,8 @@ class TrackStageModel(object):
             self._layer_prc(self._all_frames, i_models)
 
         dict_1 = {}
-        for k, v in self._track_dict.items():
-            i_model = v._track_model
+        for k, v in self._track_model_dict.items():
+            i_model = v
             i_frame_ranges = i_model.valid_frame_ranges
             for j in i_frame_ranges:
                 dict_1[j] = i_model
@@ -724,7 +750,7 @@ class TrackStageModel(object):
         keys_1 = dict_1.keys()
         keys_1.sort()
         for i_key in keys_1:
-            self._valid_frame_range_dict[i_key] = dict_1[i_key]
+            self._ordered_track_model_dict[i_key] = dict_1[i_key]
 
         if clip_start_list:
             self._track_start = min(clip_start_list)
@@ -736,41 +762,44 @@ class TrackStageModel(object):
             self._track_end = 24
 
     def get_one_node(self, key):
-        return self._track_dict.get(key)
-
-    def get_all_nodes(self):
-        return self._track_dict.values()
+        track_model = self._track_model_dict.get(key)
+        if track_model:
+            return track_model.get_widget()
 
     def get_all_models(self):
-        return [x._track_model for x in self._track_dict.values()]
+        return self._track_model_dict.values()
+
+    def get_all_nodes(self):
+        return [x.get_widget() for x in self._track_model_dict.values()]
 
     def get_all_layer_names(self):
-        return [x._track_model.key for x in self._track_dict.values()]
+        return [x.key for x in self._track_model_dict.values()]
 
-    def generate_valid_frame_range_travel(self):
-        return TrackTravel(self._valid_frame_range_dict)
+    def generate_travel(self):
+        return TrackStageTravel(self._ordered_track_model_dict)
 
     def copy_as_dict(self):
         dict_ = {}
-        for k, v in self._track_dict.items():
-            dict_[k] = v._track_model.copy_as_dict()
+        for k, v in self._track_model_dict.items():
+            dict_[k] = v.copy_as_dict()
         return dict_
 
     def restore(self):
-        self._track_dict.clear()
+        self._track_model_dict.clear()
 
         self._all_frames = []
-        self._valid_frame_range_dict.clear()
+        self._ordered_track_model_dict.clear()
 
     def to_hash(self):
         return bsc_core.BscHash.to_hash_key(
-            {k: v._track_model.to_hash() for k, v in self._track_dict.items()}
+            {k: v.to_hash() for k, v in self._track_model_dict.items()}
         )
 
 
-class TrackTravel(object):
+class TrackStageTravel(object):
     def __init__(self, data):
         self._data = data
+
         self._index = 0
         self._index_minimum = 0
         self._index_maximum = len(self._data)-1
@@ -794,9 +823,9 @@ class TrackTravel(object):
             return self._track_model_dict[self._index-1]
 
     def last_key(self):
-        model = self.last_model()
-        if model:
-            return model.key
+        track_model = self.last_model()
+        if track_model:
+            return track_model.key
 
     def last_last_model(self):
         if self._index > self._index_minimum+1:
@@ -807,9 +836,9 @@ class TrackTravel(object):
             return self._frame_range_dict[self._index-2], self._track_model_dict[self._index-2]
 
     def last_last_key(self):
-        model = self.last_last_model()
-        if model:
-            return model.key
+        track_model = self.last_last_model()
+        if track_model:
+            return track_model.key
 
     def next_data(self):
         if self._index < self._index_maximum:
@@ -820,18 +849,18 @@ class TrackTravel(object):
             return self._track_model_dict[self._index+1]
 
     def next_key(self):
-        model = self.next_model()
-        if model:
-            return model.key
+        track_model = self.next_model()
+        if track_model:
+            return track_model.key
 
     def next_next_model(self):
         if self._index < self._index_maximum-1:
             return self._track_model_dict[self._index+2]
 
     def next_next_key(self):
-        model = self.next_next_model()
-        if model:
-            return model.key
+        track_model = self.next_next_model()
+        if track_model:
+            return track_model.key
 
     def next_is_valid(self):
         if self._index < self._index_maximum:

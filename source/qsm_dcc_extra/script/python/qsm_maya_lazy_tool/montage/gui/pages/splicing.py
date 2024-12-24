@@ -142,7 +142,7 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
 
         qsm_mya_core.Frame.update_frame(start_frame, end_frame, current_frame)
 
-        tvl = stage.generate_valid_frame_range_travel()
+        tvl = stage.generate_travel()
 
         while tvl.is_valid():
             frame_range, track_model = tvl.current_data()
@@ -194,14 +194,15 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
                             layer_opt.update_root_start_opt(layer_opt, layer_opt_last, frame_range[0])
 
             tvl.next()
+
         # update bypass
-        for i in stage.get_all_nodes():
-            i_tack_model = i._track_model
+        for i_tack_model in stage.get_all_models():
             i_key = i_tack_model.key
             i_location = '|{}:LAYER'.format(i_key)
             i_layer_opt = qsm_mya_lzy_mtg_core.AdvChrMotionLayer(i_location)
             i_layer_opt.set('is_bypass', i_tack_model.is_bypass)
-        # flush undo
+
+        # flush maya undo, use montage GUI undo
         qsm_mya_core.Undo.flush()
 
     def do_dcc_update_current_frame(self, frame):

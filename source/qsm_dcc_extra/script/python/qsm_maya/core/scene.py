@@ -92,7 +92,7 @@ class Scene(object):
 
     @classmethod
     def remove_all_empty_groups(cls):
-        mel.eval('source cleanUpScene;deleteEmptyGroups;')
+        mel.eval('source cleanUpScene; deleteEmptyGroups;')
 
     @classmethod
     def set_background_color(cls, rgb):

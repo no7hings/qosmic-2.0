@@ -14,9 +14,9 @@ class ParentConstraint(object):
     NODE_TYPE = 'parentConstraint'
 
     @classmethod
-    def create(cls, parent_path, child_path, maintain_offset=0):
+    def create(cls, parent_node, child_node, maintain_offset=0):
         # parentConstraint -mo -weight 1
-        return cmds.parentConstraint(parent_path, child_path, maintainOffset=maintain_offset)[0]
+        return cmds.parentConstraint(parent_node, child_node, maintainOffset=maintain_offset)[0]
 
     @classmethod
     def get_all_from_source(cls, target_node):
@@ -65,8 +65,8 @@ class ParentConstraintSource:
 
 class ScaleConstraint(object):
     @classmethod
-    def create(cls, parent_path, child_path):
-        return cmds.scaleConstraint(parent_path, child_path)[0]
+    def create(cls, parent_node, child_node):
+        return cmds.scaleConstraint(parent_node, child_node)[0]
 
     @classmethod
     def get_all_from_source(cls, target_node):
@@ -88,8 +88,8 @@ class ScaleConstraint(object):
 
 class PointConstraint(object):
     @classmethod
-    def create(cls, parent_path, child_path):
-        return cmds.pointConstraint(parent_path, child_path)[0]
+    def create(cls, parent_node, child_node, maintain_offset=False):
+        return cmds.pointConstraint(parent_node, child_node, maintainOffset=maintain_offset)[0]
 
     @classmethod
     def get_next_index(cls, node):
@@ -140,9 +140,9 @@ class PointConstraint(object):
 
 class OrientConstraint(object):
     @classmethod
-    def create(cls, source_node, target_node):
+    def create(cls, source_node, target_node, maintain_offset=False):
         # orientConstraint -mo -weight 1;
-        return cmds.orientConstraint(source_node, target_node)[0]
+        return cmds.orientConstraint(source_node, target_node, maintainOffset=maintain_offset)[0]
 
     @classmethod
     def get_next_index(cls, node):

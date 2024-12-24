@@ -54,6 +54,7 @@ class DccTaskCreateOpt(object):
         )
 
         scene_src_path = task_scene_ptn_opt_new.get_value()
+        print scene_src_path
 
         thumbnail_ptn_opt_new = task_parse.generate_source_task_thumbnail_pattern_opt_for(
             application=application,
@@ -68,7 +69,7 @@ class DccTaskCreateOpt(object):
         task_create_opt = task_session.generate_opt_for(cls)
         return task_create_opt, kwargs_new, scene_src_path, thumbnail_path
 
-    def build_scene_src(self, *args, **kwargs):
+    def build_scene_src_fnc(self, *args, **kwargs):
         raise NotImplementedError()
 
     def create_groups_for(self, task):

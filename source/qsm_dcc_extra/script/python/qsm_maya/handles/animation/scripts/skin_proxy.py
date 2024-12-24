@@ -593,18 +593,6 @@ class AdvSkinProxyGenerate(object):
                     for i_shape_path in shape_paths:
                         cmds.polyNormal(i_shape_path, normalMode=0, userNormalMode=0, ch=0)
 
-    @classmethod
-    def _import_file(cls, file_path, namespace=':'):
-        return cmds.file(
-            file_path,
-            i=True,
-            options='v=0;',
-            type='mayaAscii',
-            ra=True,
-            mergeNamespacesOnClash=True,
-            namespace=namespace,
-        )
-
     def __init__(self, namespace):
         self._namespace = namespace
         self._adv_query = _core.AdvQuery(namespace)

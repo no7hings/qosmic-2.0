@@ -18,13 +18,13 @@ from ..gui_operates import task_create as _task_create_opt
 class PrxSubpageForAssetRigTestingCreate(_sub_page_for_task_create.AbsPrxSubpageForTaskCreate):
     TASK_CREATE_OPT_CLS = _task_create_opt.MayaAssetRigTestingCreateOpt
 
-    GUI_KEY = TASK_CREATE_OPT_CLS.TASK
+    GUI_KEY = '{}/{}'.format(TASK_CREATE_OPT_CLS.RESOURCE_TYPE, TASK_CREATE_OPT_CLS.TASK)
 
     def __init__(self, *args, **kwargs):
         super(PrxSubpageForAssetRigTestingCreate, self).__init__(*args, **kwargs)
 
     def do_gui_refresh_all(self):
-        resource_properties = self._sub_window._resource_properties
+        resource_properties = self._subwindow._resource_properties
         if not resource_properties:
             return
 
@@ -44,8 +44,8 @@ class PrxSubpageForAssetRigTestingCreate(_sub_page_for_task_create.AbsPrxSubpage
             self._prx_options_node.set('upstream.scene_modify_time', modify_time)
 
     def _on_apply(self):
-        prx_widget = self._sub_window._prx_widget
-        resource_properties = self._sub_window._resource_properties
+        prx_widget = self._subwindow._prx_widget
+        resource_properties = self._subwindow._resource_properties
         if not resource_properties:
             return
 
@@ -67,14 +67,14 @@ class PrxSubpageForAssetRigTestingCreate(_sub_page_for_task_create.AbsPrxSubpage
             )
 
             if bsc_storage.StgPath.get_is_file(scene_src_path) is False:
-                task_create_opt.build_scene_src(
+                task_create_opt.build_scene_src_fnc(
                     scene_src_path,
                     upstream_scene_path
                 )
 
                 qsm_mya_core.SceneFile.refresh()
 
-                with self._sub_window._window.gui_minimized():
+                with self._subwindow._window.gui_minimized():
                     gui_qt_core.QtMaya.make_snapshot(thumbnail_path)
 
-                prx_widget.gui_load_task_scene(kwargs_new)
+                prx_widget.gui_load_task_unit_scene(kwargs_new)

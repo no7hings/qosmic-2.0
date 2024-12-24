@@ -55,6 +55,9 @@ class TagViewModel(_view_base.AbsViewModel):
     def get_all_nodes(self):
         return self._widget._get_all_nodes_()
 
+    def get_all_items(self):
+        return self._widget._get_all_items_()
+
     def restore(self, clear_expand_record=False):
         if self._data.item_expand_record_enable is True:
             data = self._data.item_expand_record.data
