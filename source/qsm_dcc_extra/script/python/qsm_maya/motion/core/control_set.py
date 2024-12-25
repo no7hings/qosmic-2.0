@@ -16,7 +16,7 @@ from . import control as _control
 
 class ControlSetMotionOpt(
     _control.ControlNamespaceExtra,
-    _base.MotionBase
+    _base.AbsMotion
 ):
     LOG_KEY = 'control set motion'
 

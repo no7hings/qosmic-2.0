@@ -7,7 +7,7 @@ from ... import core as _mya_core
 from . import base as _base
 
 
-class MirrorAndFlip(_base.MotionBase):
+class MirrorAndFlip(_base.AbsMotion):
 
     @classmethod
     def is_dominants_same_and_not_mirror(cls, mirror_axis, dominent, opp_dominent):

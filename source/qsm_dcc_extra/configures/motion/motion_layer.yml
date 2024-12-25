@@ -1,6 +1,9 @@
 options:
     namespace: ''
 
+    angle_input_factor: 57.295779513082323
+    angle_output_factor: 0.017453292519943295
+
 dag_nodes:
     /MAIN:
         type: transform
@@ -40,6 +43,7 @@ dag_nodes:
             rotateX: 0.0
             rotateY: 0.0
             rotateZ: 0.0
+            visibility: 0
     /MAIN/ROOT/Root_M:
         type: joint
         properties:
@@ -1522,7 +1526,7 @@ nodes:
         name: '<options.namespace>:<..key>'
         type: unitConversion
         properties:
-            conversionFactor: 57.295779513082323
+            conversionFactor: <options.angle_input_factor>
         connections:
             - "<options.namespace>:Root_M_rotateX.output"
             - "<options.namespace>:Root_M_rotateX_end_CVT_IN.input"
@@ -1530,7 +1534,7 @@ nodes:
         name: '<options.namespace>:<..key>'
         type: unitConversion
         properties:
-            conversionFactor: 57.295779513082323
+            conversionFactor: <options.angle_input_factor>
         connections:
             - "<options.namespace>:Root_M_rotateY.output"
             - "<options.namespace>:Root_M_rotateY_end_CVT_IN.input"
@@ -1538,7 +1542,7 @@ nodes:
         name: '<options.namespace>:<..key>'
         type: unitConversion
         properties:
-            conversionFactor: 57.295779513082323
+            conversionFactor: <options.angle_input_factor>
         connections:
             - "<options.namespace>:Root_M_rotateZ.output"
             - "<options.namespace>:Root_M_rotateZ_end_CVT_IN.input"
@@ -1574,7 +1578,7 @@ nodes:
         name: '<options.namespace>:<..key>'
         type: unitConversion
         properties:
-            conversionFactor: 0.017453292519943295
+            conversionFactor: <options.angle_output_factor>
         connections:
             - "<options.namespace>:root_rotate_sum.output3D"
             - "<options.namespace>:root_rotate_CVT_OUT.input"
@@ -1596,7 +1600,7 @@ nodes:
         name: '<options.namespace>:<..key>'
         type: unitConversion
         properties:
-            conversionFactor: 57.295779513082323
+            conversionFactor: <options.angle_input_factor>
         connections:
             - "<options.namespace>:ROOT_START.rotate"
             - "<options.namespace>:root_start_rotate_offset_sum_CVT_IN.input"
@@ -1612,7 +1616,7 @@ nodes:
         name: '<options.namespace>:<..key>'
         type: unitConversion
         properties:
-            conversionFactor: 0.017453292519943295
+            conversionFactor: <options.angle_output_factor>
         connections:
             #
             - "<options.namespace>:root_start_rotate_offset_sum.output3D"

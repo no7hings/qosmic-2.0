@@ -6,7 +6,7 @@ import maya.cmds as cmds
 from ... import core as _mya_core
 
 
-class MotionBase(object):
+class AbsMotion(object):
     class ControlDirections(enum.IntEnum):
         Left = 0
         Right = 1
@@ -30,7 +30,7 @@ class MotionBase(object):
                 return _[0]
 
 
-class NodeMotion(MotionBase):
+class NodeMotion(AbsMotion):
     @classmethod
     def get(cls, path, key_includes=None):
         if isinstance(key_includes, (tuple, list)):

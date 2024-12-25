@@ -1,5 +1,11 @@
 options:
     namespace: ''
+    # 24
+    time_input_factor: 0.004
+    time_output_factor: 250
+    # 30
+    #    time_input_factor: 0.005
+    #    time_output_factor: 200.000
 
 nodes:
     time_input_frame:
@@ -7,14 +13,14 @@ nodes:
         type: timeToUnitConversion
         properties:
             # 24fps
-            conversionFactor: 0.004
+            conversionFactor: <options.time_input_factor>
 
     time_output_source_time:
         name: '<options.namespace>:<..key>'
         type: unitToTimeConversion
         properties:
             # 24fps
-            conversionFactor: 250
+            conversionFactor: <options.time_output_factor>
 
     time_speed_reciprocal:
         name: '<options.namespace>:<..key>'

@@ -58,13 +58,13 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
         if force is True:
             self._motion_prx_track_widget.restore()
 
-        data = qsm_mya_lzy_mtg_core.AdvMotionStage().generate_track_data()
+        data = qsm_mya_lzy_mtg_core.MtgStage().generate_track_data()
         if data:
             for i_kwargs in data:
                 self._motion_prx_track_widget.create_node(**i_kwargs)
 
     def _do_check_update(self):
-        dcc_all_layers = qsm_mya_lzy_mtg_core.AdvMotionStage().get_all_layer_names()
+        dcc_all_layers = qsm_mya_lzy_mtg_core.MtgStage().get_all_layer_names()
         gui_all_layers = self._motion_prx_track_widget.get_all_layer_names()
         if set(dcc_all_layers) != set(gui_all_layers):
             self.do_gui_refresh_all(force=True)
@@ -124,10 +124,10 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
             self._new_fnc(self._asset_path)
 
     def _on_dcc_export_asset(self):
-        master_layer = qsm_mya_lzy_mtg_core.AdvChrMotionLayer.find_master_layer_path()
+        master_layer = qsm_mya_lzy_mtg_core.MtgLayer.find_master_layer_path()
         if master_layer:
             file_path = gui_core.GuiStorageDialog.save_file(ext_filter='All File (*.jsz)', parent=self._qt_widget)
-            master_layer_opt = qsm_mya_lzy_mtg_core.AdvChrMotionMasterLayerOpt(master_layer)
+            master_layer_opt = qsm_mya_lzy_mtg_core.MtgMasterLayer(master_layer)
             master_layer_opt.export_motion_to(file_path)
         else:
             self._window.exec_message_dialog(
@@ -153,7 +153,7 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
                 frame_range_index = track_model.get_frame_range_index(frame_range)
                 key = track_model.key
                 location = '|{}:LAYER'.format(key)
-                layer_opt = qsm_mya_lzy_mtg_core.AdvChrMotionLayer(location)
+                layer_opt = qsm_mya_lzy_mtg_core.MtgLayer(location)
 
                 for i_key in bsc_model.TrackModel.MAIN_KEYS:
                     layer_opt.set(i_key, track_model.get(i_key))
@@ -179,7 +179,7 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
                 if model_last:
                     key_last = model_last.key
                     location_last = '|{}:LAYER'.format(key_last)
-                    layer_opt_last = qsm_mya_lzy_mtg_core.AdvChrMotionLayer(location_last)
+                    layer_opt_last = qsm_mya_lzy_mtg_core.MtgLayer(location_last)
                     layer_opt.update_root_start_opt(layer_opt, layer_opt_last, frame_range[0])
                 else:
                     if is_start:
@@ -190,7 +190,7 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
                         if model_last_last:
                             key_last = model_last_last.key
                             location_last = '|{}:LAYER'.format(key_last)
-                            layer_opt_last = qsm_mya_lzy_mtg_core.AdvChrMotionLayer(location_last)
+                            layer_opt_last = qsm_mya_lzy_mtg_core.MtgLayer(location_last)
                             layer_opt.update_root_start_opt(layer_opt, layer_opt_last, frame_range[0])
 
             tvl.next()
@@ -199,7 +199,7 @@ class PrxPageForSplicing(_gui_abstracts.AbsPrxPageForSplicing):
         for i_tack_model in stage.get_all_models():
             i_key = i_tack_model.key
             i_location = '|{}:LAYER'.format(i_key)
-            i_layer_opt = qsm_mya_lzy_mtg_core.AdvChrMotionLayer(i_location)
+            i_layer_opt = qsm_mya_lzy_mtg_core.MtgLayer(i_location)
             i_layer_opt.set('is_bypass', i_tack_model.is_bypass)
 
         # flush maya undo, use montage GUI undo

@@ -223,7 +223,6 @@ class BscProcess(object):
                     env=environs
                 )
             else:
-                print cmd_script
                 s_p = subprocess.Popen(
                     cmd_script,
                     shell=True,

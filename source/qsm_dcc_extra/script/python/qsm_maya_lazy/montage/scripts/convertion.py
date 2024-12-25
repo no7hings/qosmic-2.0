@@ -9,7 +9,7 @@ import lxbasic.storage as bsc_storage
 
 import qsm_maya.core as qsm_mya_core
 
-from . import motion_export as _motion_export
+from . import adv_motion_export as _motion_export
 
 
 class StlConvertionProcess(object):

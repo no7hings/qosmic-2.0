@@ -26,7 +26,7 @@ class ControlNamespaceExtra(object):
 
 class ControlMotionOpt(
     ControlNamespaceExtra,
-    _base.MotionBase
+    _base.AbsMotion
 ):
     LOG_KEY = 'control motion'
 
@@ -388,7 +388,7 @@ class ControlMotionOpt(
 
 class ControlMirrorPasteOpt(
     ControlNamespaceExtra,
-    _base.MotionBase
+    _base.AbsMotion
 ):
 
     def __init__(self, namespace):
