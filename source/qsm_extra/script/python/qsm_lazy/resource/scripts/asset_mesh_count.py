@@ -18,7 +18,7 @@ class AssetMeshCountGenerateOpt(_asset_general.AssetGeneralOpt):
         super(AssetMeshCountGenerateOpt, self).__init__(*args, **kwargs)
 
     def generate_args(self):
-        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
         file_path = scr_stage.get_node_parameter(self._scr_node_path, 'scene')
         if not file_path:
             return 
@@ -46,7 +46,7 @@ class AssetMeshCountGenerateOpt(_asset_general.AssetGeneralOpt):
         return task_name, None, cache_path, image_path
 
     def unregister(self):
-        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
         # remove exists
         scr_stage.remove_assigns_below(
             self._scr_node_path, '/mesh_count/face'
@@ -73,7 +73,7 @@ class AssetMeshCountGenerateOpt(_asset_general.AssetGeneralOpt):
         )
     
     def register(self):
-        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
         file_path = scr_stage.get_node_parameter(self._scr_node_path, 'scene')
         if not file_path:
             return

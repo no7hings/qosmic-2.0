@@ -67,7 +67,7 @@ class _GuiBaseOpt(
 
     def generate_scr_entity_type_menu_content(self, scr_entity_type):
         scr_stage_type = self._page._scr_stage.type
-        scr_stage_key = self._page._scr_stage.key
+        scr_stage_name = self._page._scr_stage.key
         options = []
         c = self._window._configure.get(
             'entity-type-actions.{}.{}.option-hooks'.format(scr_stage_type, scr_entity_type)
@@ -83,7 +83,7 @@ class _GuiBaseOpt(
                 #
                 i_kwargs = dict(
                     option_hook_key=i_key,
-                    stage_key=scr_stage_key,
+                    stage_name=scr_stage_name,
                     window_unique_id=self._window.get_window_unique_id(),
                     entity_type=scr_entity_type,
                 )
@@ -95,7 +95,7 @@ class _GuiBaseOpt(
 
     def generate_scr_entity_menu_content(self, scr_entity, extra_key=None):
         scr_stage_type = self._page._scr_stage.type
-        scr_stage_key = self._page._scr_stage.key
+        scr_stage_name = self._page._scr_stage.key
         options = []
 
         cfg_key = 'entity-actions.{}.{}.option-hooks'.format(scr_stage_type, scr_entity.entity_type)
@@ -114,7 +114,7 @@ class _GuiBaseOpt(
                 #
                 i_kwargs = dict(
                     option_hook_key=i_key,
-                    stage_key=scr_stage_key,
+                    stage_name=scr_stage_name,
                     window_unique_id=self._window.get_window_unique_id(),
                     entity_type=scr_entity.entity_type,
                     entity=scr_entity.path,
@@ -806,7 +806,7 @@ class _GuiNodeOpt(_GuiBaseOpt):
             if data_type is not None:
                 file_path = qt_item._item_model.get_property(data_type)
                 data = dict(
-                    stage=self._page._scr_stage_key,
+                    stage=self._page._scr_stage_name,
                     path=scr_entity.path,
                     gui_name_chs=scr_entity.gui_name_chs,
                     data_type=data_type,
@@ -1156,7 +1156,7 @@ class AbsPrxPageForManager(
     gui_prx_widgets.PrxBasePage,
     _GuiThreadExtra,
 ):
-    HISTORY_KEY = 'lazy-resource.stage_key'
+    HISTORY_KEY = 'lazy-resource.stage_name'
 
     FILTER_COMPLETION_MAXIMUM = 50
 
@@ -1176,8 +1176,8 @@ class AbsPrxPageForManager(
         return True
 
     def do_gui_page_initialize(self, key):
-        self._scr_stage_key = key
-        self._scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
+        self._scr_stage_name = key
+        self._scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
 
         self.gui_page_setup_fnc()
 
@@ -1259,7 +1259,7 @@ class AbsPrxPageForManager(
         super(AbsPrxPageForManager, self).__init__(window, session, *args, **kwargs)
         self._init_gui_thread_extra_(window)
 
-        self._scr_stage_key = None
+        self._scr_stage_name = None
         self._scr_stage = None
 
         # self._window.register_window_close_method(self.gui_close_fnc)

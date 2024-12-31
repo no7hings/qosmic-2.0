@@ -53,8 +53,8 @@ class _AbsAssign(object):
 
         self._post_fnc = None
 
-    def set_scr_stage_key(self, scr_stage_key):
-        self._scr_stage = qsm_scr_core.Stage(scr_stage_key)
+    def set_scr_stage_key(self, scr_stage_name):
+        self._scr_stage = qsm_scr_core.Stage(scr_stage_name)
 
         self._load_type_or_tags()
 
@@ -80,8 +80,8 @@ class AbsPrxSubpageForAnyAssign(
     gui_prx_widgets.PrxBaseSubpage,
     _AbsAssign
 ):
-    def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(AbsPrxSubpageForAnyAssign, self).__init__(window, session, sub_window, *args, **kwargs)
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(AbsPrxSubpageForAnyAssign, self).__init__(window, session, subwindow, *args, **kwargs)
         self._init_base()
         self.gui_page_setup_fnc()
 
@@ -159,8 +159,8 @@ class AbsPrxSubpageForAnyAssign(
 class AbsPrxSubpageForTypeAssign(AbsPrxSubpageForAnyAssign):
     GUI_KEY = 'type'
 
-    def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(AbsPrxSubpageForTypeAssign, self).__init__(window, session, sub_window, *args, **kwargs)
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(AbsPrxSubpageForTypeAssign, self).__init__(window, session, subwindow, *args, **kwargs)
 
     def _on_apply(self):
         if not self._scr_nodes:
@@ -264,8 +264,8 @@ class AbsPrxSubpageForTypeAssign(AbsPrxSubpageForAnyAssign):
 class AbsPrxSubpageForTagAssign(AbsPrxSubpageForAnyAssign):
     GUI_KEY = 'tag'
 
-    def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(AbsPrxSubpageForTagAssign, self).__init__(window, session, sub_window, *args, **kwargs)
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(AbsPrxSubpageForTagAssign, self).__init__(window, session, subwindow, *args, **kwargs)
 
     def _on_apply(self):
         if not self._scr_nodes:

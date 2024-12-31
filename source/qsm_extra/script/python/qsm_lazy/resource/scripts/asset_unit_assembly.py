@@ -14,11 +14,11 @@ class AssetUnitAssemblyGenerateOpt(_asset_general.AssetGeneralOpt):
     TASK_KEY = 'unit_assembly_generate'
     API_VERSION = 1.0
 
-    def __init__(self, scr_stage_key, scr_node_path):
-        super(AssetUnitAssemblyGenerateOpt, self).__init__(scr_stage_key, scr_node_path)
+    def __init__(self, scr_stage_name, scr_node_path):
+        super(AssetUnitAssemblyGenerateOpt, self).__init__(scr_stage_name, scr_node_path)
 
     def generate_args(self):
-        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
         is_model = scr_stage.is_exists_node_tag(
             self._scr_node_path, '/task/model'
         )
@@ -44,7 +44,7 @@ class AssetUnitAssemblyGenerateOpt(_asset_general.AssetGeneralOpt):
             return task_name, None, cache_path
 
     def register(self):
-        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
         file_path = scr_stage.get_node_parameter(self._scr_node_path, 'scene')
         if not file_path:
             return

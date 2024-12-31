@@ -20,7 +20,7 @@ class Main(object):
         if window is not None:
             import qsm_lazy_tool.resource.gui.subpanels.assign as subpanel_assign
 
-            scr_stage_key = self._option_opt.get('stage_key')
+            scr_stage_name = self._option_opt.get('stage_name')
 
             page = window.gui_get_current_page()
             node_opt = page._gui_node_opt
@@ -34,7 +34,7 @@ class Main(object):
             w.gui_setup_pages_for([page_key])
             assign_page = w.gui_find_page(page_key)
             if assign_page is not None:
-                assign_page.set_scr_stage_key(scr_stage_key)
+                assign_page.set_scr_stage_key(scr_stage_name)
                 assign_page.set_scr_nodes(
                     scr_entities
                 )

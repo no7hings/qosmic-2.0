@@ -6,10 +6,10 @@ option:
     #
     gui:
         name: 'Lazy Montage'
-        name_chs: '懒人拼接'
+        name_chs: '懒人动作拼接'
         group_name: 'Animation(s)'
         #
-        icon_name: 'qosmic/lazy-resource-tool'
+        icon_name: 'lazy/montage'
         tool_tip:
             |-
             For motion composition.
@@ -21,19 +21,31 @@ option:
         size: [960, 720]
 
 build:
-    main:
-        messages:
-            exists_master_layer:
-                message_chs: '主层已经存在。'
-                message: 'Master layer is exists.'
+    messages:
+        exists_master_layer:
+            message: 'Splice (master layer) already exists.'
+            message_chs: '拼接（主层）已经存在。'
 
-            no_character:
-                message_chs: '选择一个角色（可以是任意部件）。'
-                message: 'Select one character (any part).'
+        switch_rig_namespace:
+            message: 'Switch Rig successful.'
+            message_chs: '切换绑定成功。'
 
-            save_old:
-                message_chs: '保存修改到文件：{file}？'
-                message: 'Save change to: {file}.'
+        no_character:
+            message: 'Select one character (any part).'
+            message_chs: '选择一个角色（可以是任意部件）。'
+
+        delete_confirm:
+            message: 'Are you sure to delete? Click "Ok" to continue.'
+            message_chs: '确定要删除吗，点击“Ok”继续。'
+
+        bake_confirm:
+            message: 'Are you sure to bake to keyframe? Click "Ok" to continue.'
+            message_chs: '确定要烘培成关键帧吗，点击“Ok”继续。'
+
+    buttons:
+        new_splicing:
+            name: 'New Splicing'
+            name_chs: '新建拼接'
 
     resource:
         tab:

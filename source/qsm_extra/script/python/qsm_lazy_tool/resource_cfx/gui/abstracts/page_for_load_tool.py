@@ -53,7 +53,7 @@ class AbsPrxPageForLoadTool(gui_prx_abstracts.AbsPrxWidget):
         self._session = session
 
         self._all_scr_stage_keys = qsm_scr_core.Stage.get_all_keys()
-        self._scr_stage_key = self._all_scr_stage_keys[0]
+        self._scr_stage_name = self._all_scr_stage_keys[0]
         self._scr_stage = None
 
         self._dcc_node_opt_list = []

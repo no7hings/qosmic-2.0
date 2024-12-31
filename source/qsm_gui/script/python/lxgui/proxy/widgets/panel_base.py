@@ -584,12 +584,12 @@ class PrxBaseSubpage(
 
     GUI_KEY = None
 
-    def __init__(self, window, session, sub_window, *args, **kwargs):
+    def __init__(self, window, session, subwindow, *args, **kwargs):
         super(PrxBaseSubpage, self).__init__(*args, **kwargs)
 
         self._init_tool_(window)
         self._session = session
-        self._subwindow = sub_window
+        self._subwindow = subwindow
 
         self._qt_layout = _qt_wgt_base.QtVBoxLayout(self._qt_widget)
         self._qt_layout.setContentsMargins(*[0]*4)

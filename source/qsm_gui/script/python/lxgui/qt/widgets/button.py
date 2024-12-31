@@ -233,6 +233,8 @@ class QtPressButton(
         self._refresh_check_()
 
         self._set_name_draw_font_(_qt_core.QtFonts.Button)
+        
+        self._auto_width_flag = False
 
         r, g, b = 167, 167, 167
         h, s, v = bsc_core.BscColor.rgb_to_hsv(r, g, b)
@@ -290,6 +292,8 @@ class QtPressButton(
         c_x, c_y = x, y
         c_w, c_h = w, h
 
+        btn_width = 0
+
         c_icn_x, c_icn_y = x, y
         c_name_w, c_name_h = w, h
 
@@ -305,6 +309,8 @@ class QtPressButton(
             c_x += icn_frm_h
             c_w -= icn_frm_w
 
+            btn_width += icn_frm_w
+
         if self._file_icon_flag is True:
             self._icon_draw_rect.setRect(
                 c_icn_x+(icn_frm_w-i_f_w)/2, c_icn_y+(icn_frm_h-i_f_h)/2, i_f_w, i_f_h
@@ -318,6 +324,8 @@ class QtPressButton(
             c_icn_x += icn_frm_h
             c_name_w -= icn_frm_w
 
+            btn_width += icn_frm_w
+
         # option
         if self._get_option_click_is_enable_() is True:
             self._option_rect.setRect(
@@ -328,6 +336,8 @@ class QtPressButton(
             )
             c_name_w -= icn_frm_w
             c_w -= icn_frm_w
+
+            btn_width += icn_frm_w
         
         # menu
         elif self._menu_flag is True:
@@ -339,6 +349,8 @@ class QtPressButton(
             )
             c_name_w -= icn_frm_w
             c_w -= icn_frm_w
+
+            btn_width += icn_frm_w
         #
         self._frame_draw_rect.setRect(
             c_x, c_y, c_w, c_h
@@ -352,6 +364,11 @@ class QtPressButton(
         self._sub_name_draw_rect.setRect(
             c_icn_x, c_icn_y, c_name_w-8, c_name_h
         )
+
+        if self._auto_width_flag is True:
+            txt_w = QtGui.QFontMetrics(self._name_draw_font).width(self._name_text)+16
+            self.setFixedWidth(txt_w+btn_width)
+
         # progress
         if progress_enable is True:
             progress_percent = self._get_progress_percent_()
@@ -415,6 +432,9 @@ class QtPressButton(
 
     def _execute_(self):
         self.press_clicked.emit()
+
+    def _set_auto_width_(self, boolean=True):
+        self._auto_width_flag = boolean
 
     # noinspection PyPep8Naming
     def setText(self, text):

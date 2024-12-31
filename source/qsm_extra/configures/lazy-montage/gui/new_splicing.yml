@@ -1,0 +1,21 @@
+option:
+    type: 'dcc-tool-panel'
+    # config used system
+    systems:
+        - '*-*'
+    #
+    gui:
+        name: 'New Splicing'
+        name_chs: '新建拼接'
+        group_name: 'General(s)'
+        #
+        icon_name: 'lazy/montage'
+        tool_tip:
+            |-
+            To be supplemented.
+        #
+        tool_tip_chs:
+            |-
+            待补充。
+
+        size: [480, 320]

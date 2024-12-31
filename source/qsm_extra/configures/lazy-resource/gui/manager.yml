@@ -76,7 +76,11 @@ entity-type-actions:
                 }
                 # motion extend
                 -   'lazy-resource-actions/node-generate-motion-auto': {
-                    gui_parent: '/Generate', gui_name: 'Motion(for Splicing)', gui_parent_chs: '/生成', gui_name_chs: '动作（用于拼接）'
+                    gui_parent: '/Generate', gui_name: 'Motion(studio library)', gui_parent_chs: '/生成', gui_name_chs: '动作（studio library）'
+                }
+                # motion extend
+                -   'lazy-resource-actions/node-generate-motion-by-fbx-auto': {
+                    gui_parent: '/Generate', gui_name: 'Motion(mixamo)', gui_parent_chs: '/生成', gui_name_chs: '动作（fbx）'
                 }
                 -   'lazy-resource-actions/node-load-motion-to-character-auto': {
                     gui_parent: '/Load', gui_name: 'Motion to Character', gui_parent_chs: '/加载', gui_name_chs: '动作到角色'

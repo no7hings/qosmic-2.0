@@ -29,7 +29,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         self._session = session
 
         self._all_scr_stage_keys = qsm_scr_core.Stage.get_all_keys()
-        self._scr_stage_key = self._all_scr_stage_keys[0]
+        self._scr_stage_name = self._all_scr_stage_keys[0]
         self._scr_stage = None
 
         self._dcc_node_opt = None
@@ -44,9 +44,9 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         if self._scr_stage is not None:
             self._scr_stage.close()
 
-        self._scr_stage_key = key
+        self._scr_stage_name = key
         self._scr_stage = qsm_scr_core.Stage(
-            self._scr_stage_key
+            self._scr_stage_name
         )
         self.do_gui_add_types()
         self.do_gui_add_tags()
@@ -56,7 +56,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
         self.do_gui_update_by_dcc_selection()
         
     def do_gui_load_data_types(self):
-        configure = qsm_scr_core.Stage.get_configure(self._scr_stage_key)
+        configure = qsm_scr_core.Stage.get_configure(self._scr_stage_name)
         values = configure.get('options.data_types')
 
         pot = self._prx_options_node.get_port('data_type')
@@ -210,7 +210,7 @@ class AbsPrxPageForRegisterTool(gui_prx_abstracts.AbsPrxWidget):
             return
 
         node_path = options.get('path')
-        if self._scr_stage.check_node_exists(node_path) is True:
+        if self._scr_stage.node_is_exists(node_path) is True:
             self._window.exec_message_dialog(
                 gui_core.GuiUtil.choice_gui_message(
                     self._window._language, self._window._configure.get('build.register.messages.name_exists')

@@ -59,7 +59,7 @@ class DagNode(_node.Node):
         return cls.PATHSEP.join([x.split(cls.NAMESPACESEP)[-1] for x in cls.to_path(path_or_name).split(cls.PATHSEP)])
 
     @classmethod
-    def to_namespace(cls, path_or_name):
+    def extract_namespace(cls, path_or_name):
         return cls.NAMESPACESEP.join(cls.to_name(path_or_name).split(cls.NAMESPACESEP)[:-1])
 
     @classmethod

@@ -12,13 +12,13 @@ class Main(object):
         self._option_opt = self._session.option_opt
 
     @staticmethod
-    def _start_delay(window, task_window, scr_stage_key, scr_entities):
+    def _start_delay(window, task_window, scr_stage_name, scr_entities):
         process_args = []
         with window.gui_progressing(maximum=len(scr_entities)) as g_p:
             for i_scr_entity in scr_entities:
                 i_scr_entity_path = i_scr_entity.path
                 i_opt = lzy_rsc_scripts.AssetSnapShotGenerateOpt(
-                    scr_stage_key, i_scr_entity_path
+                    scr_stage_name, i_scr_entity_path
                 )
                 i_args = i_opt.generate_args()
                 if i_args:
@@ -55,7 +55,7 @@ class Main(object):
         if window is not None:
             page = window.gui_get_current_page()
             node_opt = page._gui_node_opt
-            scr_stage_key = self._option_opt.get('stage_key')
+            scr_stage_name = self._option_opt.get('stage_name')
 
             scr_entities = node_opt.gui_get_checked_or_selected_scr_entities()
             if scr_entities:
@@ -73,7 +73,7 @@ class Main(object):
                 task_window.run_fnc_delay(
                     functools.partial(
                         self._start_delay,
-                        window, task_window, scr_stage_key, scr_entities
+                        window, task_window, scr_stage_name, scr_entities
                     ),
                     500
                 )

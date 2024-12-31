@@ -252,7 +252,7 @@ build:
                     button_style: 'text_and_icon'
                     button_name: 'SPC'
                     button_name_chs: '拼接'
-                    icon: 'tool/kit'
+                    icon: 'lazy/montage'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-montage")'
                     dbl_script: ''
 

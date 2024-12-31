@@ -12,17 +12,17 @@ class Main(object):
         self._option_opt = self._session.option_opt
 
     @staticmethod
-    def _start_delay(window, task_window, scr_stage_key, scr_entities):
+    def _start_delay(window, task_window, scr_stage_name, scr_entities):
         process_args = []
         with window.gui_progressing(maximum=len(scr_entities)) as g_p:
             for i_scr_entity in scr_entities:
                 i_scr_entity_path = i_scr_entity.path
-                i_opt = lzy_rsc_scripts.MotionGenerateOpt(
-                    scr_stage_key, i_scr_entity_path
+                i_opt = lzy_rsc_scripts.StlMotionGenerate(
+                    scr_stage_name, i_scr_entity_path
                 )
                 i_args = i_opt.generate_args()
                 if i_args:
-                    i_task_name, i_cmd_script, i_cache_path = i_args
+                    i_task_name, i_cmd_script = i_args
                     if i_cmd_script is not None:
                         process_args.append(
                             (i_task_name, i_cmd_script, i_opt)
@@ -50,14 +50,14 @@ class Main(object):
         if window is not None:
             page = window.gui_get_current_page()
             node_opt = page._gui_node_opt
-            scr_stage_key = self._option_opt.get('stage_key')
+            scr_stage_name = self._option_opt.get('stage_name')
 
             scr_entities = node_opt.gui_get_checked_or_selected_scr_entities()
             if scr_entities:
                 task_window = gui_prx_widgets.PrxSprcTaskWindow()
                 task_window.set_thread_maximum(4)
                 if task_window._language == 'chs':
-                    task_window.set_window_title('生成动作（用于拼接）')
+                    task_window.set_window_title('生成动作（studio library）')
                     task_window.set_tip(
                         '正在生成动作，请耐心等待；\n'
                         '如需要终止任务，请点击“关闭”。'
@@ -68,7 +68,7 @@ class Main(object):
                 task_window.run_fnc_delay(
                     functools.partial(
                         self._start_delay,
-                        window, task_window, scr_stage_key, scr_entities
+                        window, task_window, scr_stage_name, scr_entities
                     ),
                     500
                 )

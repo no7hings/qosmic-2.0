@@ -139,7 +139,7 @@ class AbsQtActionBaseDef(object):
                     self.ActionFlag.SplitHPress,
                     self.ActionFlag.SplitHMove,
                     self.ActionFlag.TimeMove,
-                    self.ActionFlag.NGTimeScaleLeft, self.ActionFlag.NGTimeScaleRight
+                    self.ActionFlag.NGSbjScaleLeft, self.ActionFlag.NGSbjScaleRight
                 }:
                     self._widget.setCursor(
                         QtGui.QCursor(
@@ -159,7 +159,7 @@ class AbsQtActionBaseDef(object):
                 # resize
                 elif self._action_flag in {
                     self.ActionFlag.ResizeLeft,
-                    self.ActionFlag.NGTimeResizeLeft
+                    self.ActionFlag.NGSbjTrimLeft
                 }:
                     self._widget.setCursor(
                         QtGui.QCursor(
@@ -168,7 +168,7 @@ class AbsQtActionBaseDef(object):
                     )
                 elif self._action_flag in {
                     self.ActionFlag.ResizeRight,
-                    self.ActionFlag.NGTimeResizeRight
+                    self.ActionFlag.NGSbjTrimRight
                 }:
                     self._widget.setCursor(
                         QtGui.QCursor(

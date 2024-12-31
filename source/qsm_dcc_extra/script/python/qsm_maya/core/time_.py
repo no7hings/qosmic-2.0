@@ -26,7 +26,7 @@ class Frame(object):
         'preMel': 'defaultRenderGlobals.preMel'
     }
 
-    FPS_DICT = {
+    FPS_TAG_DICT = {
         '12_fps': '12fps',
         '15_fps': 'game',
         '16_fps': '16fps',
@@ -37,7 +37,7 @@ class Frame(object):
         '50_fps': 'palf',
         '60_fps': 'ntscf'
     }
-    FPS_QUERY_DICT = {v: k for k, v in FPS_DICT.items()}
+    FPS_QUERY_DICT = {v: k for k, v in FPS_TAG_DICT.items()}
 
     # UnitToTimeFactor
     # 2, 3000
@@ -86,6 +86,9 @@ class Frame(object):
         start_frame_pre, end_frame_pre = cls.get_frame_range()
         if start_frame != start_frame_pre or end_frame != end_frame_pre:
             cls.set_frame_range(start_frame, end_frame)
+            if frame is None:
+                frame = start_frame
+
             cls.set_current(frame)
 
     @classmethod
@@ -118,9 +121,9 @@ class Frame(object):
         return cmds.currentUnit(query=1, time=1)
 
     @classmethod
-    def set_fps(cls, fps):
-        if fps in cls.FPS_DICT:
-            cmds.currentUnit(time=cls.FPS_DICT[fps])
+    def set_fps_tag(cls, fps_tag):
+        if fps_tag in cls.FPS_TAG_DICT:
+            cmds.currentUnit(time=cls.FPS_TAG_DICT[fps_tag])
 
     @classmethod
     def get_render_frame_range(cls):
@@ -134,13 +137,13 @@ class Frame(object):
 
     @classmethod
     def get_playback_info(cls):
-        fps = cls.get_fps_tag()
+        fps_tag = cls.get_fps_tag()
         speed = cls.get_playback_speed()
         if speed == 0:
             return 'Play every frame'
         elif speed > 0:
             return '{} x {}'.format(
-                bsc_core.BscText.to_prettify(fps), speed
+                bsc_core.BscText.to_prettify(fps_tag), speed
             )
 
     @classmethod

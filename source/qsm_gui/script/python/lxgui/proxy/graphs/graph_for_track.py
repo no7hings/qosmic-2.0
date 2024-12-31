@@ -3,7 +3,7 @@ import random
 
 import lxbasic.model as bsc_model
 
-from ...qt.graph_widgets import graph_for_track as _graph_for_track
+from ...qt.graph_widgets.track import graph as _graph_for_track
 # proxy abstracts
 from ...proxy import abstracts as _proxy_abstracts
 
@@ -109,7 +109,7 @@ class PrxTrackWidget(
         clip_start = 1
         for i_index in range(10):
             i_name, i_source_count = random.choice(args)
-            i_post_cycle = 1
+            i_post_cycle = random.choice(post_cycles)
 
             i_clip_end = bsc_model.TrackModel.compute_end(
                 clip_start, 1, i_source_count-1, i_post_cycle
@@ -120,15 +120,13 @@ class PrxTrackWidget(
                 clip_start=clip_start, clip_end=i_clip_end,
                 start=clip_start, speed=1.0, count=None,
                 source_start=1, source_end=i_source_count-1,
-                pre_cycle=0, post_cycle=i_post_cycle,
+                pre_cycle=1, post_cycle=i_post_cycle,
                 scale_start=None, scale_end=None, scale_offset=None,
                 pre_blend=4, post_blend=4,
                 layer_index=i_index,
                 is_bypass=0,
             )
             clip_start = i_clip_end+1
-
-        # self.setup_graph_by_universe()
 
     def get_all_layer_names(self):
         return self._qt_widget._track_stage._stage_model.get_all_layer_names()

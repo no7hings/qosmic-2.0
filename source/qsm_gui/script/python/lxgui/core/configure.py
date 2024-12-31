@@ -70,10 +70,10 @@ class GuiActionFlag(enum.IntEnum):
     ZoomWheel = 0x51
     #
     TimeMove = 0x52
-    NGTimeResizeLeft = 0x53
-    NGTimeResizeRight = 0x54
-    NGTimeScaleLeft = 0x55
-    NGTimeScaleRight = 0x56
+    NGSbjTrimLeft = 0x53
+    NGSbjTrimRight = 0x54
+    NGSbjScaleLeft = 0x55
+    NGSbjScaleRight = 0x56
     #
     RectSelectClick = 0x61
     RectSelectMove = 0x62

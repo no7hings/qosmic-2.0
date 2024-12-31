@@ -12,11 +12,11 @@ class Main(object):
         if window is not None:
             page = window.gui_get_current_page()
             node_opt = page._gui_node_opt
-            scr_stage_key = self._option_opt.get('stage_key')
+            scr_stage_name = self._option_opt.get('stage_name')
 
             scr_entities = node_opt.gui_get_checked_or_selected_scr_entities()
             if scr_entities:
-                scr_stage = qsm_scr_core.Stage(scr_stage_key)
+                scr_stage = qsm_scr_core.Stage(scr_stage_name)
                 for i in scr_entities:
                     i_motion_path = None
 

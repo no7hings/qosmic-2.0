@@ -13,7 +13,7 @@ if __name__ == '__main__':
         # 'motion_test',
         # 'asset_test',
         # 'audio_test',
-        'video_test',
+        'motion_splice',
     ]:
 
         stage = qsm_scr_core.Stage(

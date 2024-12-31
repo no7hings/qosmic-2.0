@@ -10,10 +10,11 @@ if __name__ == '__main__':
         # 'maya_layout',
         # 'maya_motion',
         # 'maya_scene',
-        'asset_test',
-        'motion_test',
-        'video_test',
-        'audio_test'
+        # 'asset_test',
+        # 'motion_test',
+        # 'video_test',
+        # 'audio_test',
+        'motion_splice'
     ]:
 
         stage = qsm_scr_core.Stage(

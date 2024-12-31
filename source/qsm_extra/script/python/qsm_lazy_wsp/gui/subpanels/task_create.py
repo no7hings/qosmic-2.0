@@ -19,5 +19,5 @@ class PrxSubPanelForTaskCreate(_subpanel_for_task_create.AbsPrxSubpanelForTaskCr
         'gnl_testing'
     ]
 
-    def __init__(self, window, session, *args, **kwargs):
-        super(PrxSubPanelForTaskCreate, self).__init__(window, session, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(PrxSubPanelForTaskCreate, self).__init__(*args, **kwargs)

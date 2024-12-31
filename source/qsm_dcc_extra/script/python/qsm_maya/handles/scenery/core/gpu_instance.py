@@ -93,7 +93,7 @@ class GpuInstanceOpt(object):
         if file_opt.get_is_file() is True:
             mesh_file_path = '{}/mesh.mb'.format(file_opt.directory_path)
 
-            namespace = qsm_mya_core.DagNode.to_namespace(self._node)
+            namespace = qsm_mya_core.DagNode.extract_namespace(self._node)
 
             import_location = self.create_import_location(namespace)
 

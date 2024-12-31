@@ -4,9 +4,9 @@ from ...qt.widgets import base as _qt_widget_base
 
 from ...qt.widgets import entry_frame as _qt_wgt_entry_frame
 
-from ...qt.graph_widgets import graph_for_node as _qt_grh_for_node
+from ...qt.graph_widgets.general import graph as _qt_grh_for_general
 
-from ...qt.graph_widgets import graph_for_image as _qt_grh_for_image
+from ...qt.graph_widgets.image import graph as _qt_grh_for_image
 # proxy abstracts
 from ...proxy import abstracts as _proxy_abstracts
 # proxy widgets
@@ -19,7 +19,7 @@ class PrxNGGraph(
     _proxy_abstracts.AbsPrxWidget
 ):
     QT_WIDGET_CLS = _qt_wgt_entry_frame.QtEntryFrame
-    QT_VIEW_CLS = _qt_grh_for_node.QtNodeGraph
+    QT_VIEW_CLS = _qt_grh_for_general.QtGeneralNodeGraph
 
     def __init__(self, *args, **kwargs):
         super(PrxNGGraph, self).__init__(*args, **kwargs)
@@ -60,7 +60,7 @@ class PrxNGTree(
     _proxy_abstracts.AbsPrxWidget
 ):
     QT_WIDGET_CLS = _qt_wgt_entry_frame.QtEntryFrame
-    QT_VIEW_CLS = _qt_grh_for_node._QtNGTree
+    QT_VIEW_CLS = _qt_grh_for_general._QtNGTree
 
     def __init__(self, *args, **kwargs):
         super(PrxNGTree, self).__init__(*args, **kwargs)

@@ -19,7 +19,7 @@ option:
 hook_option:
     script:
         window_unique_id: ''
-        stage_key: ''
+        stage_name: ''
 
         entity_type: ''
         entity: ''

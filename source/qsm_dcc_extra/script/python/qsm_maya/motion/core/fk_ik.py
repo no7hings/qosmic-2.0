@@ -24,7 +24,7 @@ class FKIKSwitch(object):
         _ = cmds.ls(selection=1, long=1)
         if _:
             control_path = _[0]
-            namespace = _mya_core.DagNode.to_namespace(control_path)
+            namespace = _mya_core.DagNode.extract_namespace(control_path)
             if namespace:
                 if cmds.objExists('{}:Main'.format(namespace)) is False:
                     return

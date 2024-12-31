@@ -158,18 +158,14 @@ class ContentUtil(object):
                                 #
                                 if isinstance(_i_v_1, six.string_types):
                                     _value_unfold = _value_unfold.replace('<{}>'.format(_i_v_k_1), _i_v_1)
-                                elif isinstance(_i_v_1, float):
-                                    _value_unfold = _value_unfold.replace('<{}>'.format(_i_v_k_1), str(_i_v_1))
-                                    _value_unfold = float(_value_unfold)
-                                    break
-                                elif isinstance(_i_v_1, int):
-                                    _value_unfold = _value_unfold.replace('<{}>'.format(_i_v_k_1), str(_i_v_1))
-                                    _value_unfold = int(_value_unfold)
-                                    break
-                                elif isinstance(_i_v_1, bool):
-                                    _value_unfold = _value_unfold.replace('<{}>'.format(_i_v_k_1), str(_i_v_1))
-                                    _value_unfold = bool(bool)
-                                    break
+                                elif isinstance(_i_v_1, (float, int, bool)):
+                                    # reference value, etc. <option.scale>
+                                    _ptn = '<{}>'.format(_i_v_k_1)
+                                    if _value_unfold == _ptn:
+                                        _value_unfold = _i_v_1
+                                        break
+                                    else:
+                                        _value_unfold = _value_unfold.replace('<{}>'.format(_i_v_k_1), str(_i_v_1))
                     else:
                         _v_ks_0 = re.findall(re.compile(cls.PATTERN_KEYWORD_ESCAPE, re.S), _value_unfold)
 

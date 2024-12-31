@@ -23,7 +23,7 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
         s = gui_prx_widgets.PrxVScrollArea()
         self.add_widget(s)
 
-        w_3 = qt_widgets.QtTrack()
+        w_3 = qt_widgets.QtTrackNode()
         s.add_widget(w_3)
         w_4 = gui_prx_widgets.PrxTreeView()
         w_3._add_widget_(w_4._qt_widget)

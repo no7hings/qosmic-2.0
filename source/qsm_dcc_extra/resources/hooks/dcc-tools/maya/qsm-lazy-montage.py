@@ -2,7 +2,7 @@
 
 
 def main(session):
-    import qsm_maya_lazy_tool.montage.gui.main as m
+    import qsm_maya_lazy_mtg.gui.main as m
 
     w = m.PrxLazyMontageTool(window=None, session=session)
     w.show_window_auto()

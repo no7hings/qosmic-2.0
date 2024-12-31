@@ -13,6 +13,10 @@ from .asset_snapshot import *
 
 from .asset_unit_assembly import *
 
-from .motion_register import *
+from .studio_library_motion_register import *
 
-from .motion_generate import *
+from .studio_library_motion_generate import *
+
+from .fbx_motion_register import *
+
+from .fbx_motion_generate import *

@@ -6,6 +6,6 @@ d = bsc_storage.StgDirectoryOpt(
 )
 
 
-d.copy_to_directory(
+d.copy_all_files_to_directory(
     '/l/temp/temporary/builder/2023_1121-dongchangbao/jiguang/texture'
 )

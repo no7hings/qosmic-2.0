@@ -3,10 +3,10 @@ from .. import abstracts as _abstracts
 
 
 class PrxSubpageForTypeAssign(_abstracts.AbsPrxSubpageForTypeAssign):
-    def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(PrxSubpageForTypeAssign, self).__init__(window, session, sub_window, *args, **kwargs)
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(PrxSubpageForTypeAssign, self).__init__(window, session, subwindow, *args, **kwargs)
 
 
 class PrxSubpageForTagAssign(_abstracts.AbsPrxSubpageForTagAssign):
-    def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(PrxSubpageForTagAssign, self).__init__(window, session, sub_window, *args, **kwargs)
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(PrxSubpageForTagAssign, self).__init__(window, session, subwindow, *args, **kwargs)

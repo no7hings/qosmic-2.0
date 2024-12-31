@@ -55,7 +55,7 @@ class ControlMotionOpt(
 
     def __init__(self, path):
         self._path = path
-        self._init_namespace_extra(_mya_core.DagNode.to_namespace(self._path))
+        self._init_namespace_extra(_mya_core.DagNode.extract_namespace(self._path))
 
     def generate_motion_properties(self, key_includes=None):
         return _base.NodeMotion.generate_motion_properties_fnc(self._path, key_includes)

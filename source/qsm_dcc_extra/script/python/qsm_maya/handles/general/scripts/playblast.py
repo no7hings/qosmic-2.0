@@ -126,7 +126,8 @@ class PlayblastOpt(object):
         texture_enable=False, light_enable=False, shadow_enable=False,
         hud_enable=False, play_enable=False,
         use_exists_window=False,
-        camera_display_options=None
+        camera_display_options=None,
+        image_sequence_dir_path=None,
     ):
 
         bsc_log.Log.trace_method_result(
@@ -156,16 +157,14 @@ class PlayblastOpt(object):
 
         cmds.select(clear=1)
 
-        file_opt = bsc_storage.StgFileOpt(movie_file_path)
-        file_path_base = file_opt.path_base
-
         directory_path_tmp = '{}/{}'.format(
             bsc_storage.StgUser.get_user_temporary_directory(),
             bsc_core.BscUuid.generate_new()
         )
         bsc_storage.StgPath.create_directory(directory_path_tmp)
-        # directory_path_tmp = '{}.images'.format(file_path_base)
-        image_file_path_tmp = '{}/image.jpg'.format(directory_path_tmp)
+        image_directory_path_tmp = '{}/images'.format(directory_path_tmp)
+        bsc_storage.StgPath.create_directory(image_directory_path_tmp)
+        image_file_path_tmp = '{}/image.jpg'.format(image_directory_path_tmp)
         movie_file_path_tmp = '{}/movie.mov'.format(directory_path_tmp)
 
         start_frame, end_frame = qsm_mya_core.Frame.auto_range(frame)
@@ -202,6 +201,10 @@ class PlayblastOpt(object):
             movie_file_path, replace=True
         )
         # clear temp
+        if image_sequence_dir_path is not None:
+            bsc_storage.StgDirectoryOpt(image_directory_path_tmp).copy_all_files_to_directory(
+                image_sequence_dir_path, replace=True
+            )
         bsc_storage.StgDirectoryOpt(directory_path_tmp).do_delete()
         if play_enable is True:
             os.startfile(

@@ -107,3 +107,20 @@ build:
                     icon: 'application/lineup'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-motion-tool")'
                     dbl_script: ''
+
+        montage:
+            tool_tip: 'To be supplemented.'
+            tool_tip_chs: '动作拼接。'
+
+            tools:
+                tool_0:
+                    name: 'Lazy Montage'
+                    name_chs: '懒人动作拼接'
+                    tool_tip: 'To be supplemented.'
+                    tool_tip_chs: '待补充。'
+                    button_style: 'text_and_icon'
+                    button_name: 'SPC'
+                    button_name_chs: '拼接'
+                    icon: 'lazy/montage'
+                    script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-montage")'
+                    dbl_script: ''

@@ -114,8 +114,12 @@ class Camera(object):
         return w_, h_
 
     @classmethod
-    def generate_camera_preview(cls):
-        pass
+    def over_persp_look(cls, path):
+        viewports = cmds.getPanel(type='modelPanel') or []
+        for i_panel in viewports:
+            i_camera_transform = cmds.modelPanel(i_panel, query=True, camera=True)
+            if 'persp' in i_camera_transform:
+                cmds.modelPanel(i_panel, edit=True, camera=path)
 
 
 class Cameras(object):

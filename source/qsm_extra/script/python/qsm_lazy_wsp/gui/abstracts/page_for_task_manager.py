@@ -112,7 +112,7 @@ class AbsPrxPageForTaskManager(gui_prx_widgets.PrxBasePage):
             )
         )
         self._create_task_qt_button._set_icon_name_('workspace/task-create')
-        self._create_task_qt_button.setFixedWidth(96)
+        self._create_task_qt_button._set_auto_width_(True)
         self._create_task_qt_button.press_clicked.connect(self._gui_show_task_create_window)
 
         self.gui_setup_units_for(self._unit_prx_tab_tool_box, self.RESOURCE_TYPES)

@@ -389,6 +389,7 @@ class EtrNodeOpt(object):
 
     def set_dict(self, data, atr_excludes=None):
         for k, v in data.items():
+            k = k.replace('/', '.')
             if isinstance(atr_excludes, (set, tuple, list)):
                 if k in atr_excludes:
                     continue
@@ -405,6 +406,7 @@ class EtrNodeOpt(object):
 
     def create_properties(self, data):
         for k, v in data.items():
+            k = k.replace('/', '.')
             i_type = v['type']
             i_value = v.get('value', None)
             if i_type == 'float':

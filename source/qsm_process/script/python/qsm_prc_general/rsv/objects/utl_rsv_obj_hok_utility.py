@@ -38,7 +38,7 @@ class RsvRecyclerHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             directory_path_opt_src = bsc_storage.StgDirectoryOpt(directory_path_src)
             directory_path_opt_src.map_to_current()
             if directory_path_opt_src.get_is_exists() is True:
-                directory_path_opt_src.copy_to_directory(
+                directory_path_opt_src.copy_all_files_to_directory(
                     directory_path_tgt
                 )
                 bsc_log.Log.trace_method_result(
@@ -138,7 +138,7 @@ class RsvRecyclerHookOpt(utl_rsv_obj_abstract.AbsRsvObjHookOpt):
             directory_path_opt_src = bsc_storage.StgDirectoryOpt(directory_path_src)
             directory_path_opt_src.map_to_current()
             if directory_path_opt_src.get_is_exists() is True:
-                directory_path_opt_src.copy_to_directory(
+                directory_path_opt_src.copy_all_files_to_directory(
                     directory_path_tgt
                 )
                 bsc_log.Log.trace_method_result(

@@ -95,8 +95,8 @@ class AssetTag(object):
 
 
 class AssetGeneralOpt(object):
-    def __init__(self, scr_stage_key, scr_node_path):
-        self._scr_stage_key = scr_stage_key
+    def __init__(self, scr_stage_name, scr_node_path):
+        self._scr_stage_name = scr_stage_name
         self._scr_node_path = scr_node_path
 
     def register_process_memory_usage_by_profile(self, process_name, profile_data):
@@ -105,7 +105,7 @@ class AssetGeneralOpt(object):
             self.register_process_memory_usage(process_name, memory_size)
 
     def register_process_memory_usage(self, process_name, size):
-        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
         scr_stage.create_or_update_parameters(
             self._scr_node_path, 'process_memory_usage.{}'.format(process_name), str(size)
         )
@@ -116,7 +116,7 @@ class AssetGeneralOpt(object):
             self.register_memory_usage(memory_size)
 
     def register_mesh_face_count_tag(self, mesh_triangle):
-        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
         # remove exists
         scr_stage.remove_assigns_below(
             self._scr_node_path, '/mesh_count/face'
@@ -130,7 +130,7 @@ class AssetGeneralOpt(object):
         )
 
     def register_mesh_geometry_count_tag(self, geometry_count):
-        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
         # remove exists
         scr_stage.remove_assigns_below(
             self._scr_node_path, '/mesh_count/geometry'
@@ -144,7 +144,7 @@ class AssetGeneralOpt(object):
         )
     
     def register_mesh_cache_percentage_tag(self, percentage):
-        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
         # remove exists
         scr_stage.remove_assigns_below(
             self._scr_node_path, '/mesh_count/non_cache_face_percentage'
@@ -158,7 +158,7 @@ class AssetGeneralOpt(object):
         )
 
     def register_memory_usage(self, size):
-        scr_stage = qsm_scr_core.Stage(self._scr_stage_key)
+        scr_stage = qsm_scr_core.Stage(self._scr_stage_name)
 
         scr_stage.create_or_update_parameters(
             self._scr_node_path, 'system_memory_usage', str(size)

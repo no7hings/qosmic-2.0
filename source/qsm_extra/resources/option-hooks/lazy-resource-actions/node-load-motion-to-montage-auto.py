@@ -1,9 +1,13 @@
 # coding:utf-8
 import lxbasic.storage as bsc_storage
 
+import lxgui.core as gui_core
+
 import qsm_screw.core as qsm_scr_core
 
-import qsm_maya_lazy.montage.scripts as qsm_mya_mtg_scripts
+import qsm_maya_lazy_mtg.core as qsm_mya_lzy_mtg_core
+
+import qsm_maya_lazy_mtg.scripts as qsm_mya_mtg_scripts
 
 
 class Main(object):
@@ -14,33 +18,47 @@ class Main(object):
     def execute(self):
         window = self._session.find_window()
         if window is not None:
-            if not qsm_mya_mtg_scripts.AdvChrMotionImportOpt.find_master_layer_path():
+            rig_namespaces = qsm_mya_lzy_mtg_core.MtgStage.find_all_valid_rig_namespaces()
+            if not rig_namespaces:
                 window.exec_message_dialog(
                     'Master layer is not found, you can create use "Lazy Montage".',
                     status='warning'
                 )
                 return
 
-            page = window.gui_get_current_page()
-            node_opt = page._gui_node_opt
-            scr_stage_key = self._option_opt.get('stage_key')
+            if len(rig_namespaces) > 1:
+                options = rig_namespaces
+                rig_namespace = gui_core.GuiApplication.exec_input_dialog(
+                    type='choose',
+                    options=options,
+                    info='Choose Rig Namespace...',
+                    value=options[0],
+                    title='Switch Namespace'
+                )
+            else:
+                rig_namespace = rig_namespaces[0]
 
-            scr_entities = node_opt.gui_get_checked_or_selected_scr_entities()
-            if scr_entities:
-                scr_stage = qsm_scr_core.Stage(scr_stage_key)
-                with window.gui_progressing(maximum=len(scr_entities)) as g_p:
-                    for i_scr_entity in scr_entities:
-                        i_motion_path = scr_stage.get_node_parameter(i_scr_entity.path, 'motion')
-                        if i_motion_path is None:
-                            continue
-                        if bsc_storage.StgPath.get_is_file(i_motion_path) is False:
-                            continue
+            if rig_namespace:
+                page = window.gui_get_current_page()
+                node_opt = page._gui_node_opt
+                scr_stage_name = self._option_opt.get('stage_name')
 
-                        qsm_mya_mtg_scripts.AdvChrMotionImportOpt.append_layer(i_motion_path)
+                scr_entities = node_opt.gui_get_checked_or_selected_scr_entities()
+                if scr_entities:
+                    scr_stage = qsm_scr_core.Stage(scr_stage_name)
+                    with window.gui_progressing(maximum=len(scr_entities)) as g_p:
+                        for i_scr_entity in scr_entities:
+                            i_motion_path = scr_stage.get_node_parameter(i_scr_entity.path, 'motion')
+                            if i_motion_path is None:
+                                continue
+                            if bsc_storage.StgPath.get_is_file(i_motion_path) is False:
+                                continue
 
-                        g_p.do_update()
+                            qsm_mya_mtg_scripts.MtgBuildScp.import_motion_json(rig_namespace, i_motion_path)
 
-                scr_stage.close()
+                            g_p.do_update()
+
+                    scr_stage.close()
 
 
 if __name__ == '__main__':

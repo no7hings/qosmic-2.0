@@ -33,6 +33,8 @@ import qsm_general.core as qsm_gnl_core
 
 from .. import database as _model
 
+from . import mysql as _mysql
+
 
 class DataTypes(object):
     MayaNode = 'maya_node'
@@ -178,6 +180,7 @@ FLUSH PRIVILEGES;
     ]
 
     PTN_SQLITE_DATABASE_PATH = '{root}/lazy-resource/.database/{key}.db'
+    PTN_DATA_ROOT_PATH = '{root}/lazy-resource/all/{key}'
     DEFAULT_THUMBNAIL_FORMAT = 'jpg'
     DEFAULT_THUMBNAIL_WIDTH_MAXIMUM = 512
 
@@ -191,11 +194,12 @@ FLUSH PRIVILEGES;
 
         PreviewDir = '{root}/lazy-resource/all/{key}/{node}/preview'
         PreviewImage = PreviewDir+'/image.{format}'
+        PreviewImageDir = PreviewDir+'/images'
         PreviewImageSequence = PreviewDir+'/images/image.%04d.{format}'
         PreviewVideo = PreviewDir+'/video.{format}'
-        PreviewVideoMov = PreviewDir+'/video.mov'
+        PreviewMov = PreviewDir+'/video.mov'
         PreviewAudio = PreviewDir+'/audio.{format}'
-        PreviewAudioMp3 = PreviewDir+'/audio.mp3'
+        PreviewMp3 = PreviewDir+'/audio.mp3'
         PreviewAudioPickle = PreviewDir+'/audio.pkl'
 
         JsonDir = '{root}/lazy-resource/all/{key}/{node}/json'
@@ -203,6 +207,8 @@ FLUSH PRIVILEGES;
 
         MayaDir = '{root}/lazy-resource/all/{key}/{node}/maya'
         MayaScene = MayaDir+'/{node}.{tag}.ma'
+
+        SourceDir = '{root}/lazy-resource/all/{key}/{node}/source'
 
     ROOT = None
     OPTIONS = dict()
@@ -260,6 +266,13 @@ FLUSH PRIVILEGES;
         copy_options['key'] = key
         _ = cls.PTN_SQLITE_DATABASE_PATH.format(**copy_options)
         cls.DTB_CACHE[key] = _
+        return _
+
+    @classmethod
+    def get_data_root_path(cls, key):
+        copy_options = cls.get_options_as_copy()
+        copy_options['key'] = key
+        _ = cls.PTN_DATA_ROOT_PATH.format(**copy_options)
         return _
 
     @classmethod
@@ -322,9 +335,9 @@ FLUSH PRIVILEGES;
             self._dtb = self.DTB_CACHE[self._dtb_key]
         else:
             if self._dtb_type == 'sqlite':
-                self._dtb_path = self.get_sqlite_dtb_path(key)
+                self._sqlite_dtb_path = self.get_sqlite_dtb_path(self._dtb_name)
                 self._dtb = peewee.SqliteDatabase(
-                    self._dtb_path,
+                    self._sqlite_dtb_path,
                     thread_safe=True,
                     pragmas=dict(
                         max_open=64,
@@ -345,6 +358,8 @@ FLUSH PRIVILEGES;
             else:
                 raise RuntimeError()
 
+            self._data_root_path = self.get_data_root_path(self._dtb_name)
+
             self.DTB_CACHE[self._dtb_key] = self._dtb
 
         self.connect()
@@ -353,8 +368,13 @@ FLUSH PRIVILEGES;
     def type(self):
         return self._type
 
+    # old usage, use name instance
     @property
     def key(self):
+        return self._dtb_name
+
+    @property
+    def name(self):
         return self._dtb_name
 
     @property
@@ -391,10 +411,17 @@ FLUSH PRIVILEGES;
 
     def initialize(self):
         if self._dtb_type == 'sqlite':
-            directory_path = os.path.dirname(self._dtb_path)
+            directory_path = os.path.dirname(self._sqlite_dtb_path)
             if os.path.exists(directory_path) is False:
                 os.makedirs(directory_path)
+        elif self._dtb_type == 'mysql':
+            _mysql.MySql.create_database(
+                self.get_mysql_options(), self._dtb_name
+            )
 
+        bsc_storage.StgPath.create_directory(
+            self._data_root_path
+        )
         self.create_entity_types()
 
     def _to_dtb_entity_type(self, entity_type):
@@ -995,7 +1022,7 @@ FLUSH PRIVILEGES;
         return ''
 
     def upload_node_preview(self, node_path, file_path):
-        if self.check_node_exists(node_path) is False:
+        if self.node_is_exists(node_path) is False:
             return False
 
         file_opt = bsc_storage.StgFileOpt(file_path)
@@ -1056,7 +1083,7 @@ FLUSH PRIVILEGES;
         return False
 
     def upload_node_preview_as_image_sequence(self, node_path, file_path):
-        if self.check_node_exists(node_path) is False:
+        if self.node_is_exists(node_path) is False:
             return False
 
         if bsc_storage.StgFileTiles.get_is_exists(file_path) is False:
@@ -1102,7 +1129,7 @@ FLUSH PRIVILEGES;
         capture_opt = bsc_cv_core.AudioCaptureOpt(file_path)
         capture_opt.create_thumbnail(thumbnail_path, replace=False)
 
-        preview_audio_mp3_path = self.NodePathPattens.PreviewAudioMp3.format(**options)
+        preview_audio_mp3_path = self.NodePathPattens.PreviewMp3.format(**options)
         capture_opt.create_compress(preview_audio_mp3_path, replace=False)
 
         self.create_or_update_parameters(
@@ -1135,7 +1162,7 @@ FLUSH PRIVILEGES;
         import lxbasic.cv.core as bsc_cv_core
         bsc_cv_core.VideoCaptureOpt(file_path).create_thumbnail(thumbnail_path, replace=True)
 
-        preview_video_path = self.NodePathPattens.PreviewVideoMov.format(**options)
+        preview_video_path = self.NodePathPattens.PreviewMov.format(**options)
 
         bsc_core.BscFfmpegVideo.create_compress(file_path, preview_video_path, replace=False)
 
@@ -1159,7 +1186,7 @@ FLUSH PRIVILEGES;
         pass
 
     def upload_node_json(self, node_path, tag, data):
-        if self.check_node_exists(node_path) is False:
+        if self.node_is_exists(node_path) is False:
             return False
 
         node_name = bsc_core.BscNodePathOpt(node_path).name
@@ -1210,6 +1237,21 @@ FLUSH PRIVILEGES;
         options['node'] = bsc_core.BscNodePathOpt(node_path).name
         return self.NodePathPattens.BaseDir.format(**options)
 
+    def generate_node_source_dir_path(self, node_path):
+        options = copy.copy(self._options)
+        options['node'] = bsc_core.BscNodePathOpt(node_path).name
+        return self.NodePathPattens.SourceDir.format(**options)
+
+    def generate_node_preview_mov_path(self, node_path):
+        options = copy.copy(self._options)
+        options['node'] = bsc_core.BscNodePathOpt(node_path).name
+        return self.NodePathPattens.PreviewMov.format(**options)
+
+    def generate_node_image_sequence_dir_path(self, node_path):
+        options = copy.copy(self._options)
+        options['node'] = bsc_core.BscNodePathOpt(node_path).name
+        return self.NodePathPattens.PreviewImageDir.format(**options)
+
     def get_node(self, path):
         return self.get_entity(
             self.EntityTypes.Node, path
@@ -1250,7 +1292,7 @@ FLUSH PRIVILEGES;
             return True
         return False
 
-    def check_node_exists(self, path):
+    def node_is_exists(self, path):
         return self.entity_is_exists(self.EntityTypes.Node, path)
 
     def copy_from(self, stage):

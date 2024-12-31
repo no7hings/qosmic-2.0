@@ -74,7 +74,7 @@ class XgenExporter(gnl_fnc_abstracts.AbsFncOptionBase):
             i_xgen_collection_directory_path_tgt = '{}/{}'.format(
                 xgen_collection_directory_path_tgt, i_xgen_collection_name
                 )
-            gnl_dcc_objects.StgDirectory(i_xgen_collection_data_directory_path_src).copy_to_directory(
+            gnl_dcc_objects.StgDirectory(i_xgen_collection_data_directory_path_src).copy_all_files_to_directory(
                 i_xgen_collection_directory_path_tgt
             )
             i_xgen_collection_file_path = i_xgen_palette_opt.get_file_path()

@@ -2,27 +2,143 @@ options:
     namespace: ''
 
 dag_nodes:
-    /MAIN:
-        path: <options.namespace>:<..key>
+    /montage_master:
+        type: transform
+        properties: {}
+    /montage_master/aux:
+        type: transform
+        properties: {}
+    /montage_master/aux/locator_grp:
         type: transform
         properties:
-            translateX: 0.0
-            translateY: 0.0
-            translateZ: 0.0
-            rotateX: 0.0
-            rotateY: 0.0
-            rotateZ: 0.0
-    /MAIN/ROOT:
-        type: transform
-        properties:
-            translateX: 0.0
-            translateY: 0.0
-            translateZ: 0.0
-            rotateX: 0.0
-            rotateY: 0.0
-            rotateZ: 0.0
             visibility: 0
-    /MAIN/ROOT/Root_M:
+    /montage_master/aux/locator_grp/root_loc:
+        type: transform
+        properties:
+            translateX: 0
+            translateY: 8.372549042545922
+            translateZ: 0
+            rotateX: 0
+            rotateY: 0
+            rotateZ: 0
+    /montage_master/aux/locator_grp/root_loc/root_locShape:
+        type: locator
+        properties: {}
+    /montage_master/aux/locator_grp/min_loc:
+        type: transform
+        properties: {}
+    /montage_master/aux/locator_grp/min_loc/min_locShape:
+        type: locator
+        properties: {}
+    /montage_master/aux/locator_grp/max_loc:
+        type: transform
+        properties: {}
+    /montage_master/aux/locator_grp/max_loc/max_locShape:
+        type: locator
+        properties: {}
+
+    /montage_master/aux/camera_grp:
+        type: transform
+        properties: {}
+
+    /montage_master/aux/camera_grp/camera_grp_PRC:
+        type: parentConstraint
+        properties:
+            enableRestPosition: 1
+
+        connections:
+            # translation
+            - "<options.namespace>:camera_grp_PRC.constraintTranslateX"
+            - "<options.namespace>:camera_grp.translateX"
+            - "<options.namespace>:camera_grp_PRC.constraintTranslateY"
+            - "<options.namespace>:camera_grp.translateY"
+            - "<options.namespace>:camera_grp_PRC.constraintTranslateZ"
+            - "<options.namespace>:camera_grp.translateZ"
+            # rotation
+            - "<options.namespace>:camera_grp_PRC.constraintRotateX"
+            - "<options.namespace>:camera_grp.rotateX"
+            - "<options.namespace>:camera_grp_PRC.constraintRotateY"
+            - "<options.namespace>:camera_grp.rotateY"
+            - "<options.namespace>:camera_grp_PRC.constraintRotateZ"
+            - "<options.namespace>:camera_grp.rotateZ"
+            # default use start source translate
+            - '<options.namespace>:root_loc.translate'
+            - '<options.namespace>:camera_grp_PRC.target[0].targetTranslate'
+            - '<options.namespace>:root_loc.rotate'
+            - '<options.namespace>:camera_grp_PRC.target[0].targetRotate'
+
+    /montage_master/aux/camera_grp/persp_cam:
+        type: transform
+        properties:
+            translateX: -28
+            translateY: 10
+            translateZ: 28
+            rotateX: -15
+            rotateY: -45
+            rotateZ: 0.0
+
+    /montage_master/aux/camera_grp/persp_cam/persp_camShape:
+        type: camera
+        properties:
+            filmFit: 1
+            displayResolution: 1
+            focalLength: 55
+            overscan: 1
+            displayGateMaskOpacity: 1
+            displayGateMaskColor: [0, 0, 0]
+
+    /montage_master/aux/geometry_grp:
+        type: transform
+        properties: {}
+
+    /montage_master/aux/geometry_grp/ground_plane_geo:
+        type: transform
+        properties:
+            scaleX: 24
+            scaleY: 24
+            scaleZ: 24
+
+    /montage_master/aux/geometry_grp/ground_plane_geo/ground_plane_geoShape:
+        type: mesh
+
+    # constraint
+    /montage_master/aux/geometry_grp/geometry_grp_PTC:
+        type: pointConstraint
+        properties:
+            enableRestPosition: 1
+
+    /montage_master/aux/geometry_grp/x_axis_geo:
+        type: transform
+        properties:
+            translateX: 2.5
+            translateY: 0
+            translateZ: -0.2
+            rotateX: 0
+            rotateY: 90
+            rotateZ: 0
+
+    /montage_master/aux/geometry_grp/x_axis_geo/x_axis_geoShape:
+        type: mesh
+
+    /montage_master/aux/geometry_grp/z_axis_geo:
+        type: transform
+        properties:
+            translateX: -0.25
+            translateY: 0
+            translateZ: 2.5
+            rotateX: 0
+            rotateY: 0
+            rotateZ: 0
+
+    /montage_master/aux/geometry_grp/z_axis_geo/z_axis_geoShape:
+        type: mesh
+
+    /montage_master/ROOT:
+        type: transform
+        properties:
+            visibility: 0
+
+    /montage_master/ROOT/Root_M:
         type: joint
         properties:
             radius: 0.2
@@ -35,7 +151,28 @@ dag_nodes:
             jointOrientX: 90.00000250447816
             jointOrientY: 0.0
             jointOrientZ: 90.00000250447816
-    /MAIN/ROOT/Root_M/Hip_R:
+        connections:
+            - '<options.namespace>:geometry_grp_PTC.constraintTranslateX'
+            - '<options.namespace>:geometry_grp.translateX'
+            - '<options.namespace>:geometry_grp_PTC.constraintTranslateZ'
+            - '<options.namespace>:geometry_grp.translateZ'
+            #
+            - '<options.namespace>:geometry_grp.parentInverseMatrix'
+            - '<options.namespace>:geometry_grp_PTC.constraintParentInverseMatrix'
+            - '<options.namespace>:geometry_grp.rotatePivot'
+            - '<options.namespace>:geometry_grp_PTC.constraintRotatePivot'
+            - '<options.namespace>:geometry_grp.rotatePivotTranslate'
+            - '<options.namespace>:geometry_grp_PTC.constraintRotateTranslate'
+            #
+            - '<options.namespace>:Root_M.translate'
+            - '<options.namespace>:geometry_grp_PTC.target[0].targetTranslate'
+            - '<options.namespace>:Root_M.rotatePivot'
+            - '<options.namespace>:geometry_grp_PTC.target[0].targetRotatePivot'
+            - '<options.namespace>:Root_M.rotatePivotTranslate'
+            - '<options.namespace>:geometry_grp_PTC.target[0].targetRotateTranslate'
+            - '<options.namespace>:Root_M.parentMatrix'
+            - '<options.namespace>:geometry_grp_PTC.target[0].targetParentMatrix'
+    /montage_master/ROOT/Root_M/Hip_R:
         type: joint
         properties:
             radius: 0.2
@@ -48,7 +185,7 @@ dag_nodes:
             jointOrientX: 179.45021576190533
             jointOrientY: 0.2930566034566698
             jointOrientZ: -179.3865857195975
-    /MAIN/ROOT/Root_M/Hip_R/Knee_R:
+    /montage_master/ROOT/Root_M/Hip_R/Knee_R:
         type: joint
         properties:
             radius: 0.2
@@ -61,7 +198,7 @@ dag_nodes:
             jointOrientX: -9.939233379573492e-17
             jointOrientY: -5.590818776010089e-17
             jointOrientZ: -3.4260508487653136
-    /MAIN/ROOT/Root_M/Hip_R/Knee_R/Ankle_R:
+    /montage_master/ROOT/Root_M/Hip_R/Knee_R/Ankle_R:
         type: joint
         properties:
             radius: 0.2
@@ -74,7 +211,7 @@ dag_nodes:
             jointOrientX: -1.0169722652891755
             jointOrientY: 0.2871404056553959
             jointOrientZ: 4.042253226767524
-    /MAIN/ROOT/Root_M/Hip_R/Knee_R/Ankle_R/Toes_R:
+    /montage_master/ROOT/Root_M/Hip_R/Knee_R/Ankle_R/Toes_R:
         type: joint
         properties:
             radius: 0.2
@@ -87,7 +224,7 @@ dag_nodes:
             jointOrientX: 2.1228236478136107
             jointOrientY: -1.0785970067453798
             jointOrientZ: 59.98037853616664
-    /MAIN/ROOT/Root_M/Hip_R/Knee_R/Ankle_R/Toes_R/ToesEnd_R:
+    /montage_master/ROOT/Root_M/Hip_R/Knee_R/Ankle_R/Toes_R/ToesEnd_R:
         type: joint
         properties:
             radius: 0.2
@@ -100,7 +237,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M:
+    /montage_master/ROOT/Root_M/Spine1_M:
         type: joint
         properties:
             radius: 0.2
@@ -113,7 +250,7 @@ dag_nodes:
             jointOrientX: -3.791516639546772e-22
             jointOrientY: -5.18178130076575e-22
             jointOrientZ: -2.0127412719108724e-29
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M:
         type: joint
         properties:
             radius: 0.2
@@ -126,7 +263,7 @@ dag_nodes:
             jointOrientX: -3.791516639546772e-22
             jointOrientY: -5.18178130076575e-22
             jointOrientZ: -2.0127412719108724e-29
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M:
         type: joint
         properties:
             radius: 0.2
@@ -139,7 +276,7 @@ dag_nodes:
             jointOrientX: -3.791516639546772e-22
             jointOrientY: -9.47879159886693e-23
             jointOrientZ: -4.899102165692916
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Neck_M:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Neck_M:
         type: joint
         properties:
             radius: 0.2
@@ -152,7 +289,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 11.793716668165006
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Neck_M/Head_M:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Neck_M/Head_M:
         type: joint
         properties:
             radius: 0.2
@@ -165,7 +302,7 @@ dag_nodes:
             jointOrientX: 7.583033279093544e-22
             jointOrientY: 7.73113939782584e-22
             jointOrientZ: -7.136957298186947
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Neck_M/Head_M/HeadEnd_M:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Neck_M/Head_M/HeadEnd_M:
         type: joint
         properties:
             radius: 0.2
@@ -178,7 +315,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R:
         type: joint
         properties:
             radius: 0.2
@@ -191,7 +328,7 @@ dag_nodes:
             jointOrientX: 57.95465371135073
             jointOrientY: 90.02123073241857
             jointOrientZ: 54.91946107818551
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R:
         type: joint
         properties:
             radius: 0.2
@@ -204,7 +341,7 @@ dag_nodes:
             jointOrientX: -7.945795556775837
             jointOrientY: 0.29736421166712645
             jointOrientZ: -1.6286531647825455
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R:
         type: joint
         properties:
             radius: 0.2
@@ -217,7 +354,7 @@ dag_nodes:
             jointOrientX: -2.7462428959817215e-19
             jointOrientY: 1.9868632290703983e-16
             jointOrientZ: 3.3711672905765
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R:
         type: joint
         properties:
             radius: 0.2
@@ -230,7 +367,7 @@ dag_nodes:
             jointOrientX: -2.761171992749937e-19
             jointOrientY: -9.958731327945418e-17
             jointOrientZ: -1.987846675914698e-16
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/MiddleFinger1_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/MiddleFinger1_R:
         type: joint
         properties:
             radius: 0.2
@@ -243,7 +380,7 @@ dag_nodes:
             jointOrientX: 8.042128544829708
             jointOrientY: 4.627903101395208
             jointOrientZ: -0.3748403547634773
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/MiddleFinger1_R/MiddleFinger2_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/MiddleFinger1_R/MiddleFinger2_R:
         type: joint
         properties:
             radius: 0.2
@@ -256,7 +393,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 3.3063643767221156
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/MiddleFinger1_R/MiddleFinger2_R/MiddleFinger3_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/MiddleFinger1_R/MiddleFinger2_R/MiddleFinger3_R:
         type: joint
         properties:
             radius: 0.2
@@ -269,7 +406,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.31504276895152905
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/MiddleFinger1_R/MiddleFinger2_R/MiddleFinger3_R/MiddleFinger4_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/MiddleFinger1_R/MiddleFinger2_R/MiddleFinger3_R/MiddleFinger4_R:
         type: joint
         properties:
             radius: 0.2
@@ -282,7 +419,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/ThumbFinger1_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/ThumbFinger1_R:
         type: joint
         properties:
             radius: 0.2
@@ -295,7 +432,7 @@ dag_nodes:
             jointOrientX: -65.49810587602644
             jointOrientY: 15.002501974196528
             jointOrientZ: 27.02196834726151
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/ThumbFinger1_R/ThumbFinger2_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/ThumbFinger1_R/ThumbFinger2_R:
         type: joint
         properties:
             radius: 0.2
@@ -308,7 +445,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/ThumbFinger1_R/ThumbFinger2_R/ThumbFinger3_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/ThumbFinger1_R/ThumbFinger2_R/ThumbFinger3_R:
         type: joint
         properties:
             radius: 0.2
@@ -321,7 +458,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/ThumbFinger1_R/ThumbFinger2_R/ThumbFinger3_R/ThumbFinger4_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/ThumbFinger1_R/ThumbFinger2_R/ThumbFinger3_R/ThumbFinger4_R:
         type: joint
         properties:
             radius: 0.2
@@ -334,7 +471,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/IndexFinger1_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/IndexFinger1_R:
         type: joint
         properties:
             radius: 0.2
@@ -347,7 +484,7 @@ dag_nodes:
             jointOrientX: 3.051447202745257
             jointOrientY: 2.6966607102717637
             jointOrientZ: 2.31415496226883
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/IndexFinger1_R/IndexFinger2_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/IndexFinger1_R/IndexFinger2_R:
         type: joint
         properties:
             radius: 0.2
@@ -360,7 +497,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 6.422779058192061
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/IndexFinger1_R/IndexFinger2_R/IndexFinger3_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/IndexFinger1_R/IndexFinger2_R/IndexFinger3_R:
         type: joint
         properties:
             radius: 0.2
@@ -373,7 +510,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: -0.36182308142249014
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/IndexFinger1_R/IndexFinger2_R/IndexFinger3_R/IndexFinger4_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/IndexFinger1_R/IndexFinger2_R/IndexFinger3_R/IndexFinger4_R:
         type: joint
         properties:
             radius: 0.2
@@ -386,7 +523,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R:
         type: joint
         properties:
             radius: 0.2
@@ -399,7 +536,7 @@ dag_nodes:
             jointOrientX: 20.021096164984744
             jointOrientY: -10.054865764922
             jointOrientZ: 5.831025128880507
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/PinkyFinger1_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/PinkyFinger1_R:
         type: joint
         properties:
             radius: 0.2
@@ -412,7 +549,7 @@ dag_nodes:
             jointOrientX: -8.883761529831595
             jointOrientY: 5.055206992947206
             jointOrientZ: -16.76448928947933
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/PinkyFinger1_R/PinkyFinger2_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/PinkyFinger1_R/PinkyFinger2_R:
         type: joint
         properties:
             radius: 0.2
@@ -425,7 +562,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 8.250591894714006
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/PinkyFinger1_R/PinkyFinger2_R/PinkyFinger3_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/PinkyFinger1_R/PinkyFinger2_R/PinkyFinger3_R:
         type: joint
         properties:
             radius: 0.2
@@ -438,7 +575,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: -1.145915564648438
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/PinkyFinger1_R/PinkyFinger2_R/PinkyFinger3_R/PinkyFinger4_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/PinkyFinger1_R/PinkyFinger2_R/PinkyFinger3_R/PinkyFinger4_R:
         type: joint
         properties:
             radius: 0.2
@@ -451,7 +588,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/RingFinger1_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/RingFinger1_R:
         type: joint
         properties:
             radius: 0.2
@@ -464,7 +601,7 @@ dag_nodes:
             jointOrientX: -13.90484873966683
             jointOrientY: 9.357466738396896
             jointOrientZ: -13.573562366806408
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/RingFinger1_R/RingFinger2_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/RingFinger1_R/RingFinger2_R:
         type: joint
         properties:
             radius: 0.2
@@ -477,7 +614,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 6.875493387890622
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/RingFinger1_R/RingFinger2_R/RingFinger3_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/RingFinger1_R/RingFinger2_R/RingFinger3_R:
         type: joint
         properties:
             radius: 0.2
@@ -490,7 +627,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/RingFinger1_R/RingFinger2_R/RingFinger3_R/RingFinger4_R:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_R/Shoulder_R/Elbow_R/Wrist_R/Cup_R/RingFinger1_R/RingFinger2_R/RingFinger3_R/RingFinger4_R:
         type: joint
         properties:
             radius: 0.2
@@ -503,7 +640,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L:
         type: joint
         properties:
             radius: 0.2
@@ -516,7 +653,7 @@ dag_nodes:
             jointOrientX: -122.04534881356916
             jointOrientY: 89.9787694464316
             jointOrientZ: 54.919460596166864
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L:
         type: joint
         properties:
             radius: 0.2
@@ -529,7 +666,7 @@ dag_nodes:
             jointOrientX: -7.945795556775837
             jointOrientY: 0.29736421166712645
             jointOrientZ: -1.6286531647825455
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L:
         type: joint
         properties:
             radius: 0.2
@@ -542,7 +679,7 @@ dag_nodes:
             jointOrientX: -5.589359042103863e-18
             jointOrientY: -1.182106513289636e-16
             jointOrientZ: 3.3711672905764987
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L:
         type: joint
         properties:
             radius: 0.2
@@ -555,7 +692,7 @@ dag_nodes:
             jointOrientX: -2.4819267922473163e-18
             jointOrientY: -1.8721675328633496e-17
             jointOrientZ: 1.987846675914698e-16
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/MiddleFinger1_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/MiddleFinger1_L:
         type: joint
         properties:
             radius: 0.2
@@ -568,7 +705,7 @@ dag_nodes:
             jointOrientX: 8.042128544829708
             jointOrientY: 4.627903101395208
             jointOrientZ: -0.3748403547634773
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/MiddleFinger1_L/MiddleFinger2_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/MiddleFinger1_L/MiddleFinger2_L:
         type: joint
         properties:
             radius: 0.2
@@ -581,7 +718,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 3.3063643767221156
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/MiddleFinger1_L/MiddleFinger2_L/MiddleFinger3_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/MiddleFinger1_L/MiddleFinger2_L/MiddleFinger3_L:
         type: joint
         properties:
             radius: 0.2
@@ -594,7 +731,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.31504276895152905
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/MiddleFinger1_L/MiddleFinger2_L/MiddleFinger3_L/MiddleFinger4_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/MiddleFinger1_L/MiddleFinger2_L/MiddleFinger3_L/MiddleFinger4_L:
         type: joint
         properties:
             radius: 0.2
@@ -607,7 +744,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/ThumbFinger1_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/ThumbFinger1_L:
         type: joint
         properties:
             radius: 0.2
@@ -620,7 +757,7 @@ dag_nodes:
             jointOrientX: -65.498107999596
             jointOrientY: 15.002501974196548
             jointOrientZ: 27.021968347261506
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/ThumbFinger1_L/ThumbFinger2_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/ThumbFinger1_L/ThumbFinger2_L:
         type: joint
         properties:
             radius: 0.2
@@ -633,7 +770,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/ThumbFinger1_L/ThumbFinger2_L/ThumbFinger3_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/ThumbFinger1_L/ThumbFinger2_L/ThumbFinger3_L:
         type: joint
         properties:
             radius: 0.2
@@ -646,7 +783,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/ThumbFinger1_L/ThumbFinger2_L/ThumbFinger3_L/ThumbFinger4_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/ThumbFinger1_L/ThumbFinger2_L/ThumbFinger3_L/ThumbFinger4_L:
         type: joint
         properties:
             radius: 0.2
@@ -659,7 +796,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/IndexFinger1_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/IndexFinger1_L:
         type: joint
         properties:
             radius: 0.2
@@ -672,7 +809,7 @@ dag_nodes:
             jointOrientX: 3.051447202745257
             jointOrientY: 2.6966607102717637
             jointOrientZ: 2.31415496226883
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/IndexFinger1_L/IndexFinger2_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/IndexFinger1_L/IndexFinger2_L:
         type: joint
         properties:
             radius: 0.2
@@ -685,7 +822,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 6.422779058192061
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/IndexFinger1_L/IndexFinger2_L/IndexFinger3_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/IndexFinger1_L/IndexFinger2_L/IndexFinger3_L:
         type: joint
         properties:
             radius: 0.2
@@ -698,7 +835,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: -0.36182308142249014
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/IndexFinger1_L/IndexFinger2_L/IndexFinger3_L/IndexFinger4_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/IndexFinger1_L/IndexFinger2_L/IndexFinger3_L/IndexFinger4_L:
         type: joint
         properties:
             radius: 0.2
@@ -711,7 +848,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L:
         type: joint
         properties:
             radius: 0.2
@@ -724,7 +861,7 @@ dag_nodes:
             jointOrientX: 20.021096164984744
             jointOrientY: -10.054865764922
             jointOrientZ: 5.831025128880507
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/PinkyFinger1_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/PinkyFinger1_L:
         type: joint
         properties:
             radius: 0.2
@@ -737,7 +874,7 @@ dag_nodes:
             jointOrientX: -8.883761529831595
             jointOrientY: 5.055206992947206
             jointOrientZ: -16.76448928947933
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/PinkyFinger1_L/PinkyFinger2_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/PinkyFinger1_L/PinkyFinger2_L:
         type: joint
         properties:
             radius: 0.2
@@ -750,7 +887,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 8.250591894714006
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/PinkyFinger1_L/PinkyFinger2_L/PinkyFinger3_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/PinkyFinger1_L/PinkyFinger2_L/PinkyFinger3_L:
         type: joint
         properties:
             radius: 0.2
@@ -763,7 +900,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: -1.145915564648438
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/PinkyFinger1_L/PinkyFinger2_L/PinkyFinger3_L/PinkyFinger4_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/PinkyFinger1_L/PinkyFinger2_L/PinkyFinger3_L/PinkyFinger4_L:
         type: joint
         properties:
             radius: 0.2
@@ -776,7 +913,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/RingFinger1_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/RingFinger1_L:
         type: joint
         properties:
             radius: 0.2
@@ -789,7 +926,7 @@ dag_nodes:
             jointOrientX: -13.90484873966683
             jointOrientY: 9.357466738396896
             jointOrientZ: -13.573562366806408
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/RingFinger1_L/RingFinger2_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/RingFinger1_L/RingFinger2_L:
         type: joint
         properties:
             radius: 0.2
@@ -802,7 +939,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 6.875493387890622
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/RingFinger1_L/RingFinger2_L/RingFinger3_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/RingFinger1_L/RingFinger2_L/RingFinger3_L:
         type: joint
         properties:
             radius: 0.2
@@ -815,7 +952,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/RingFinger1_L/RingFinger2_L/RingFinger3_L/RingFinger4_L:
+    /montage_master/ROOT/Root_M/Spine1_M/Spine2_M/Chest_M/Scapula_L/Shoulder_L/Elbow_L/Wrist_L/Cup_L/RingFinger1_L/RingFinger2_L/RingFinger3_L/RingFinger4_L:
         type: joint
         properties:
             radius: 0.2
@@ -828,7 +965,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: 0.0
             jointOrientZ: 0.0
-    /MAIN/ROOT/Root_M/Hip_L:
+    /montage_master/ROOT/Root_M/Hip_L:
         type: joint
         properties:
             radius: 0.2
@@ -841,7 +978,7 @@ dag_nodes:
             jointOrientX: 179.4502145256768
             jointOrientY: 0.2930565955557249
             jointOrientZ: 0.6134107639427042
-    /MAIN/ROOT/Root_M/Hip_L/Knee_L:
+    /montage_master/ROOT/Root_M/Hip_L/Knee_L:
         type: joint
         properties:
             radius: 0.2
@@ -854,7 +991,7 @@ dag_nodes:
             jointOrientX: 0.0
             jointOrientY: -6.212020862233431e-18
             jointOrientZ: -3.4260508487653136
-    /MAIN/ROOT/Root_M/Hip_L/Knee_L/Ankle_L:
+    /montage_master/ROOT/Root_M/Hip_L/Knee_L/Ankle_L:
         type: joint
         properties:
             radius: 0.2
@@ -867,7 +1004,7 @@ dag_nodes:
             jointOrientX: -1.0169722652891755
             jointOrientY: 0.2871404056553959
             jointOrientZ: 4.042253226767524
-    /MAIN/ROOT/Root_M/Hip_L/Knee_L/Ankle_L/Toes_L:
+    /montage_master/ROOT/Root_M/Hip_L/Knee_L/Ankle_L/Toes_L:
         type: joint
         properties:
             radius: 0.2
@@ -880,7 +1017,7 @@ dag_nodes:
             jointOrientX: 2.122823589543671
             jointOrientY: -1.0785971214673817
             jointOrientZ: 59.98038163168668
-    /MAIN/ROOT/Root_M/Hip_L/Knee_L/Ankle_L/Toes_L/ToesEnd_L:
+    /montage_master/ROOT/Root_M/Hip_L/Knee_L/Ankle_L/Toes_L/ToesEnd_L:
         type: joint
         properties:
             radius: 0.2
@@ -894,7 +1031,163 @@ dag_nodes:
             jointOrientY: 0.0
             jointOrientZ: 0.0
 
-nodes: {}
+nodes:
+    ground_plane_geo_input:
+        name: '<options.namespace>:<..key>'
+        type: polyPlane
+        properties: {}
+        connections:
+            - '<options.namespace>:ground_plane_geo_input.output'
+            - '<options.namespace>:ground_plane_geoShape.inMesh'
+
+    ground_plane_translate_scale:
+        name: '<options.namespace>:<..key>'
+        type: multiplyDivide
+        properties:
+            operation: 2
+
+    ground_plane_repeat:
+        name: '<options.namespace>:<..key>'
+        type: multiplyDivide
+        properties:
+            operation: 2
+
+    ground_plane_translate_scale_invert:
+        name: '<options.namespace>:<..key>'
+        type: multiplyDivide
+        properties:
+            input2: [-1, 1, 1]
+        connections:
+            - '<options.namespace>:ground_plane_translate_scale.outputZ'
+            - '<options.namespace>:ground_plane_translate_scale_invert.input1X'
+
+    ground_plane_uv_transform:
+        name: '<options.namespace>:<..key>'
+        type: place2dTexture
+        properties:
+            repeatUV: [2, 2]
+
+        connections:
+            # self
+            - '<options.namespace>:ground_plane_uv_transform.repeatU'
+            - '<options.namespace>:ground_plane_uv_transform.repeatV'
+            #
+            - '<options.namespace>:ground_plane_translate_scale.outputX'
+            - '<options.namespace>:ground_plane_uv_transform.offsetU'
+            #
+            - '<options.namespace>:ground_plane_translate_scale_invert.outputX'
+            - '<options.namespace>:ground_plane_uv_transform.offsetV'
+            #
+            - '<options.namespace>:ground_plane_repeat.outputX'
+            - '<options.namespace>:ground_plane_translate_scale.input2X'
+            - '<options.namespace>:ground_plane_repeat.outputZ'
+            - '<options.namespace>:ground_plane_translate_scale.input2Z'
+            #
+            - '<options.namespace>:ground_plane_uv_transform.repeatU'
+            - '<options.namespace>:ground_plane_repeat.input2X'
+            - '<options.namespace>:ground_plane_uv_transform.repeatU'
+            - '<options.namespace>:ground_plane_repeat.input2Z'
+            #
+            - '<options.namespace>:geometry_grp.translateX'
+            - '<options.namespace>:ground_plane_translate_scale.input1X'
+            - '<options.namespace>:geometry_grp.translateZ'
+            - '<options.namespace>:ground_plane_translate_scale.input1Z'
+            #
+            - '<options.namespace>:ground_plane_geo.scaleZ'
+            - '<options.namespace>:ground_plane_repeat.input1X'
+            - '<options.namespace>:ground_plane_geo.scaleZ'
+            - '<options.namespace>:ground_plane_repeat.input1Z'
+
+    ground_plane_mask:
+        name: '<options.namespace>:<..key>'
+        type: ramp
+        properties:
+            type: 4
+            colorEntryList[0]/position: 0.0
+            colorEntryList[0]/color: [0, 0, 0]
+            colorEntryList[1]/position: 0.5
+            colorEntryList[1]/color: [1, 1, 1]
+
+    ground_plane_checker:
+        name: '<options.namespace>:<..key>'
+        type: checker
+
+        connections:
+            # from uv transform
+            - '<options.namespace>:ground_plane_uv_transform.outUvFilterSize'
+            - '<options.namespace>:ground_plane_checker.uvFilterSize'
+            - '<options.namespace>:ground_plane_uv_transform.outUV'
+            - '<options.namespace>:ground_plane_checker.uvCoord'
+
+    ground_plane_shader:
+        name: '<options.namespace>:<..key>'
+        type: lambert
+        connections:
+            # checker
+            - '<options.namespace>:ground_plane_checker.outColor'
+            - '<options.namespace>:ground_plane_shader.color'
+            # mask
+            - '<options.namespace>:ground_plane_mask.outColor'
+            - '<options.namespace>:ground_plane_shader.transparency'
+
+    ground_plane_material:
+        name: '<options.namespace>:<..key>'
+        type: shadingEngine
+        connections:
+            # from shader
+            - '<options.namespace>:ground_plane_shader.outColor'
+            - '<options.namespace>:ground_plane_material.surfaceShader'
+            # to geo
+            - '<options.namespace>:ground_plane_geoShape.instObjGroups[0]'
+            - '<options.namespace>:ground_plane_material.dagSetMembers[0]'
+
+    axis_geo_input:
+        name: '<options.namespace>:<..key>'
+        type: polyCube
+        properties:
+            width: 0.5
+            height: 0.05
+            depth: 5
+        connections:
+            - '<options.namespace>:axis_geo_input.output'
+            - '<options.namespace>:x_axis_geoShape.inMesh'
+            - '<options.namespace>:axis_geo_input.output'
+            - '<options.namespace>:z_axis_geoShape.inMesh'
+
+    x_axis_shader:
+        name: '<options.namespace>:<..key>'
+        type: lambert
+        properties:
+            color: [1, 0, 0]
+
+    x_axis_material:
+        name: '<options.namespace>:<..key>'
+        type: shadingEngine
+        connections:
+            # from shader
+            - '<options.namespace>:x_axis_shader.outColor'
+            - '<options.namespace>:x_axis_material.surfaceShader'
+            # to geo
+            - '<options.namespace>:x_axis_geoShape.instObjGroups[0]'
+            - '<options.namespace>:x_axis_material.dagSetMembers[0]'
+
+    z_axis_shader:
+        name: '<options.namespace>:<..key>'
+        type: lambert
+        properties:
+            color: [0, 0, 1]
+
+    z_axis_material:
+        name: '<options.namespace>:<..key>'
+        type: shadingEngine
+        connections:
+            # from shader
+            - '<options.namespace>:z_axis_shader.outColor'
+            - '<options.namespace>:z_axis_material.surfaceShader'
+            # to geo
+            - '<options.namespace>:z_axis_geoShape.instObjGroups[0]'
+            - '<options.namespace>:z_axis_material.dagSetMembers[0]'
+
 
 containers:
     MASTER_LAYER:
@@ -907,6 +1200,22 @@ containers:
                 type: string
                 value: 'motion_master_layer'
 
+            qsm_resource:
+                type: message
+
             match_scale:
                 type: float
                 value: 1.0
+
+            root_loc_tx_curve:
+                type: message
+            root_loc_ty_curve:
+                type: message
+            root_loc_tz_curve:
+                type: message
+            root_loc_rx_curve:
+                type: message
+            root_loc_ry_curve:
+                type: message
+            root_loc_rz_curve:
+                type: message

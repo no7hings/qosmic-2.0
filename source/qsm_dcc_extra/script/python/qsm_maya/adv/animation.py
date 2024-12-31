@@ -18,6 +18,13 @@ from . import base as _base
 class AdvOpt(_base.AdvNamespaceExtra):
     LOG_KEY = 'adv rig motion'
 
+    @classmethod
+    def check_is_valid(cls, namespace):
+        _ = cmds.ls('{}:DeformSet'.format(namespace), long=1)
+        if _:
+            return True
+        return False
+
     def __init__(self, namespace):
         self._init_namespace_extra(namespace)
 

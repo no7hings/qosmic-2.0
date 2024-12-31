@@ -21,8 +21,8 @@ class AbsPrxSubpageForTaskCreate(gui_prx_widgets.PrxBaseSubpage):
         self._on_apply()
         self._on_close()
 
-    def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(AbsPrxSubpageForTaskCreate, self).__init__(window, session, sub_window, *args, **kwargs)
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(AbsPrxSubpageForTaskCreate, self).__init__(window, session, subwindow, *args, **kwargs)
 
         self._configure = self.generate_local_configure()
 

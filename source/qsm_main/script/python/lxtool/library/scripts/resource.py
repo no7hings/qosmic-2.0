@@ -535,7 +535,7 @@ class ScpResourcesAddByQuixel(object):
         for i_index, i_key_extra in enumerate(cls.TEXTURE_EXTRA_KEYS):
             i_directory_path_extra = '{}/{}'.format(directory_path_src, i_key_extra)
             if bsc_storage.StgDirectoryOpt(i_directory_path_extra).get_is_exists() is True:
-                bsc_storage.StgDirectoryOpt(i_directory_path_extra).copy_to_directory(
+                bsc_storage.StgDirectoryOpt(i_directory_path_extra).copy_all_files_to_directory(
                     '{}/{}'.format(quixel_directory_path_tgt, i_key_extra)
                 )
                 i_file_paths_src = bsc_storage.StgDirectoryOpt(i_directory_path_extra).get_file_paths()
@@ -757,7 +757,7 @@ class ScpResourcesAddByQuixel(object):
             )
             i_directory_path_extra = '{}/{}'.format(directory_path_src, i_key_extra)
             if bsc_storage.StgDirectoryOpt(i_directory_path_extra).get_is_exists() is True:
-                bsc_storage.StgDirectoryOpt(i_directory_path_extra).copy_to_directory(
+                bsc_storage.StgDirectoryOpt(i_directory_path_extra).copy_all_files_to_directory(
                     '{}/{}'.format(quixel_directory_path_tgt, i_key_extra)
                 )
                 i_file_paths_src = bsc_storage.StgDirectoryOpt(i_directory_path_extra).get_file_paths()

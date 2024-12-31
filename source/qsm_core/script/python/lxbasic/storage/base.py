@@ -870,6 +870,10 @@ class StgFile(object):
     def get_name_base(cls, file_path):
         return os.path.splitext(os.path.basename(file_path))[0]
 
+    @classmethod
+    def get_path_base(cls, file_path):
+        return os.path.splitext(file_path)[0]
+
 
 class StgFileTiles(object):
     """
@@ -1334,25 +1338,24 @@ class StgDirectoryOpt(StgPathOpt):
     def get_child_names(self):
         return os.listdir(self.get_path()) or []
 
-    def copy_to_directory(self, directory_path_tgt, replace=False):
+    def copy_all_files_to_directory(self, directory_path_tgt, replace=False):
         directory_path_src = self.path
         file_paths_src = self.get_all_file_paths()
-        #
+
         for index, i_file_path_src in enumerate(file_paths_src):
             i_relative_file_path = i_file_path_src[len(directory_path_src):]
             i_file_path_tgt = directory_path_tgt+i_relative_file_path
             #
             i_file_opt_src = StgFileOpt(i_file_path_src)
             i_file_opt_tgt = StgFileOpt(i_file_path_tgt)
-            if i_file_opt_tgt.get_is_exists() is False:
-                # create target directory first
-                i_file_opt_tgt.create_directory()
-                #
-                _cor_thread.TrdMethod.do_pool_wait()
-                _cor_thread.TrdMethod.set_start(
-                    i_file_opt_src.copy_to_file, index,
-                    i_file_path_tgt, replace=replace
-                )
+            # create target directory first
+            i_file_opt_tgt.create_directory()
+            #
+            _cor_thread.TrdMethod.do_pool_wait()
+            _cor_thread.TrdMethod.set_start(
+                i_file_opt_src.copy_to_file, index,
+                i_file_path_tgt, replace=replace
+            )
 
     def get_is_exists(self):
         return self.get_is_directory()
@@ -1566,6 +1569,7 @@ class StgFileOpt(StgPathOpt):
         self.copy_to_file(
             file_path_tgt, replace=replace
         )
+        return file_path_tgt
 
     def get_render_file_path(self):
         return '{directory}/.temporary/render/{time_tag}.{name_base}{ext}'.format(

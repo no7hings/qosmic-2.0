@@ -19,7 +19,7 @@ class AudioRegister(object):
         uuid = file_opt.to_hash_uuid()
         scr_node_path = '/{}'.format(uuid)
 
-        if self._scr_stage.check_node_exists(scr_node_path) is False:
+        if self._scr_stage.node_is_exists(scr_node_path) is False:
             self._scr_stage.create_node(
                 scr_node_path,
                 ctime=file_opt.get_ctime(),
@@ -41,8 +41,8 @@ class AudioRegister(object):
 
 
 class AudioBatchRegister(object):
-    def __init__(self, scr_stage_key, file_paths):
-        self._scr_stage = qsm_scr_core.Stage(scr_stage_key)
+    def __init__(self, scr_stage_name, file_paths):
+        self._scr_stage = qsm_scr_core.Stage(scr_stage_name)
         self._file_paths = file_paths
 
     def execute(self, scr_type_paths=None, scr_tag_paths=None):

@@ -26,7 +26,7 @@ class ControlSetMotionOpt(
         _ = cmds.ls(selection=1, long=1)
         for i_path in _:
             dict_.setdefault(
-                _mya_core.DagNode.to_namespace(i_path), []
+                _mya_core.DagNode.extract_namespace(i_path), []
             ).append(i_path)
         return dict_
 
@@ -40,7 +40,7 @@ class ControlSetMotionOpt(
                 continue
 
             dict_.setdefault(
-                _mya_core.DagNode.to_namespace(i_path), []
+                _mya_core.DagNode.extract_namespace(i_path), []
             ).append(i_path)
         return dict_
 

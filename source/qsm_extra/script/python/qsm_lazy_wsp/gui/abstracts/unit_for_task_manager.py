@@ -681,7 +681,7 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
             )
         )
         self._increment_and_save_qt_button._set_icon_name_('tool/save')
-        self._increment_and_save_qt_button._set_width_(96)
+        self._increment_and_save_qt_button._set_auto_width_(True)
         self._increment_and_save_qt_button.press_clicked.connect(self.on_increment_and_save_task_scene)
         # save as
         self._save_as_qt_button = gui_qt_widgets.QtPressButton()
@@ -694,7 +694,7 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
         )
         self._save_as_qt_button._set_icon_name_('tool/save-as')
         self._save_as_qt_button._set_sub_icon_name_('action/add')
-        self._save_as_qt_button._set_width_(96)
+        self._save_as_qt_button._set_auto_width_(True)
         self._save_as_qt_button.press_clicked.connect(self.on_save_task_scene_as)
 
     def gui_setup_post_fnc(self):

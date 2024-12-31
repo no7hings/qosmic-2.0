@@ -24,8 +24,8 @@ class PrxSubpageForShotCfxClothCreate(_sub_page_for_task_create.AbsPrxSubpageFor
 
     GUI_KEY = '{}/{}'.format(TASK_CREATE_OPT_CLS.RESOURCE_TYPE, TASK_CREATE_OPT_CLS.TASK)
 
-    def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(PrxSubpageForShotCfxClothCreate, self).__init__(window, session, sub_window, *args, **kwargs)
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(PrxSubpageForShotCfxClothCreate, self).__init__(window, session, subwindow, *args, **kwargs)
 
         self._special_load_flag = False
 

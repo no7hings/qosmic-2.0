@@ -1037,7 +1037,7 @@ class AbsStgDirectory(
             self.path, ext_includes
         )
 
-    def copy_to_directory(self, directory_path_tgt):
+    def copy_all_files_to_directory(self, directory_path_tgt):
         def copy_fnc_(src_file_path_, tgt_file_path_):
             shutil.copy2(src_file_path_, tgt_file_path_)
             bsc_log.Log.trace_method_result(
@@ -1313,6 +1313,14 @@ class AbsStgFile(
                         'file="{}" is exception'.format(self.path)
                     )
         return False, None
+
+    def copy_all_files_to_directory(self, directory_path_tgt, replace=False):
+        file_path_tgt = '{}/{}'.format(
+            directory_path_tgt, self.name
+        )
+        self.copy_to_file(
+            file_path_tgt, replace=replace
+        )
 
     def copy_to_directory(self, directory_path_tgt, replace=False):
         file_path_tgt = '{}/{}'.format(

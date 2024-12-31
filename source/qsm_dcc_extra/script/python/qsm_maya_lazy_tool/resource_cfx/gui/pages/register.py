@@ -75,13 +75,13 @@ class PrxPageForRegisterTool(_abstracts.AbsPrxPageForRegisterTool):
         node_paths = qsm_mya_core.Selection.get_as_nodes()
         if node_paths:
             data_type = self.get_resource_data_type()
-            stage_key = self._prx_options_node.get('stage')
-            if stage_key in {'maya_cfx'}:
+            stage_name = self._prx_options_node.get('stage')
+            if stage_name in {'maya_cfx'}:
                 if data_type == qsm_scr_core.DataTypes.MayaNode:
                     self.do_gui_update_node_opt_by_dcc_selection_for_dynamic(node_paths[0])
                 elif data_type == qsm_scr_core.DataTypes.MayaNodeGraph:
                     self.do_gui_update_node_graph_opt_by_dcc_selection_for_any(node_paths)
-            elif stage_key in {'maya_layout'}:
+            elif stage_name in {'maya_layout'}:
                 if data_type == qsm_scr_core.DataTypes.MayaNodeGraph:
                     self.do_gui_update_node_graph_opt_by_dcc_selection_for_any(node_paths)
 

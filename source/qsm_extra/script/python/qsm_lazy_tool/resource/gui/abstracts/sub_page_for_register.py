@@ -28,8 +28,8 @@ class _AbsRegister(object):
 
         self._post_fnc = None
 
-    def set_scr_stage_key(self, scr_stage_key):
-        self._scr_stage = qsm_scr_core.Stage(scr_stage_key)
+    def set_scr_stage_key(self, scr_stage_name):
+        self._scr_stage = qsm_scr_core.Stage(scr_stage_name)
 
         self._load_type_and_tags()
 
@@ -46,8 +46,8 @@ class AbsPrxSubpageForMotionRegister(
 ):
     GUI_KEY = 'motion'
 
-    def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(AbsPrxSubpageForMotionRegister, self).__init__(window, session, sub_window, *args, **kwargs)
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(AbsPrxSubpageForMotionRegister, self).__init__(window, session, subwindow, *args, **kwargs)
         self.gui_page_setup_fnc()
 
     def gui_page_setup_fnc(self):
@@ -93,8 +93,8 @@ class _AbsPrxPageForAnyRegister(
     _AbsRegister
 ):
 
-    def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(_AbsPrxPageForAnyRegister, self).__init__(window, session, sub_window, *args, **kwargs)
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(_AbsPrxPageForAnyRegister, self).__init__(window, session, subwindow, *args, **kwargs)
         self._init_base()
         self.gui_page_setup_fnc()
 
@@ -293,8 +293,8 @@ class _AbsPrxPageForAnyRegister(
 class AbsPrxSubpageForVideoRegister(_AbsPrxPageForAnyRegister):
     GUI_KEY = 'video'
 
-    def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(AbsPrxSubpageForVideoRegister, self).__init__(window, session, sub_window, *args, **kwargs)
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(AbsPrxSubpageForVideoRegister, self).__init__(window, session, subwindow, *args, **kwargs)
 
     def _on_apply(self):
         file_paths = self._prx_options_node.get('files')
@@ -332,8 +332,8 @@ class AbsPrxSubpageForVideoRegister(_AbsPrxPageForAnyRegister):
 class AbsPrxSubpageForAudioRegister(_AbsPrxPageForAnyRegister):
     GUI_KEY = 'audio'
 
-    def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(AbsPrxSubpageForAudioRegister, self).__init__(window, session, sub_window, *args, **kwargs)
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(AbsPrxSubpageForAudioRegister, self).__init__(window, session, subwindow, *args, **kwargs)
 
     def _on_apply(self):
         file_paths = self._prx_options_node.get('files')
@@ -363,8 +363,8 @@ class AbsPrxSubpageForAssetRegister(
     gui_prx_widgets.PrxBaseSubpage,
     _AbsRegister
 ):
-    def __init__(self, window, session, sub_window, *args, **kwargs):
-        super(AbsPrxSubpageForAssetRegister, self).__init__(window, session, sub_window, *args, **kwargs)
+    def __init__(self, window, session, subwindow, *args, **kwargs):
+        super(AbsPrxSubpageForAssetRegister, self).__init__(window, session, subwindow, *args, **kwargs)
         self._init_base()
         self.gui_page_setup_fnc()
 

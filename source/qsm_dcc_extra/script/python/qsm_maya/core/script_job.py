@@ -249,13 +249,19 @@ class ScriptJobOpt(object):
                     parent=self._window_name,
                     # fixme: do not use "replacePrevious"
                     # replacePrevious=True,
-                    attributeChange=[atr_path, lambda: i_method(cmds.getAttr(atr_path))]
+                    attributeChange=[
+                        atr_path,
+                        lambda: i_method(cmds.getAttr(atr_path) if cmds.objExists(atr_path) else None)
+                    ]
                 )
         else:
             cmds.scriptJob(
                 parent=self._window_name,
                 # replacePrevious=True,
-                attributeChange=[atr_path, lambda: method(cmds.getAttr(atr_path))]
+                attributeChange=[
+                    atr_path,
+                    lambda: method(cmds.getAttr(atr_path) if cmds.objExists(atr_path) else None)
+                ]
             )
 
     def destroy(self):
