@@ -28,11 +28,13 @@ class Main(object):
 
             if len(rig_namespaces) > 1:
                 options = rig_namespaces
+
+                current_rig_namespace = qsm_mya_lzy_mtg_core.MtgRoot.get_current_rig_namespace()
                 rig_namespace = gui_core.GuiApplication.exec_input_dialog(
                     type='choose',
                     options=options,
                     info='Choose Rig Namespace...',
-                    value=options[0],
+                    value=current_rig_namespace or options[0],
                     title='Switch Namespace'
                 )
             else:

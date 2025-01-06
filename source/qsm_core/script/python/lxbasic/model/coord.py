@@ -17,7 +17,7 @@ class CoordModel(object):
         self._unit_offset_index = 0
         self._unit_offset_coord = 0
 
-        self._unit_count = 0
+        self._unit_index_count = 0
         self._unit_index_minimum, self._unit_index_maximum = 0, 1
 
         self._draw_offset = -1
@@ -38,10 +38,10 @@ class CoordModel(object):
 
         self._unit_offset_index = self._index_loc(translate)
 
-        self._unit_count = int(size/self._unit_size)+2
+        self._unit_index_count = int(size/self._unit_size)+2
 
         self._unit_index_minimum, self._unit_index_maximum = (
-            -self._unit_offset_index, self._unit_count-self._unit_offset_index
+            -self._unit_offset_index, self._unit_index_count-self._unit_offset_index
         )
 
     def _index_loc(self, coord):
@@ -51,6 +51,9 @@ class CoordModel(object):
 
     def compute_unit_index_loc(self, coord):
         return self._index_loc(coord-self._translate+self._unit_size/2)
+
+    def compute_unit_index_loc_(self, coord):
+        return self._index_loc(coord-self._translate)
 
     def compute_unit_count_by(self, size):
         return int(size/self._unit_size)
@@ -102,9 +105,13 @@ class CoordModel(object):
         return self._unit_offset_coord
 
     @property
-    def unit_count(self):
-        return self._unit_count
+    def unit_index_count(self):
+        return self._unit_index_count
 
     @property
     def unit_index_offset(self):
         return self._unit_offset_index
+
+    @property
+    def unit_index_range(self):
+        return -self._unit_offset_index, (self._unit_index_count-self._unit_offset_index)-2

@@ -17,11 +17,11 @@ from ..widgets import utility as _wgt_utility
 
 from ..widgets import entry_frame as _wgt_entry_frame
 
+from ..widgets import button as _wgt_button
+
 from ..widgets import scroll as _wgt_scroll
 
 from ..widgets import container as _wgt_container
-
-from ..widgets import button as _wgt_button
 
 from ..widgets import chart as _wgt_chart
 

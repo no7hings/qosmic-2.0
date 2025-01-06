@@ -71,15 +71,19 @@ class PrxInputForStorageArray(_input_base.AbsPrxInput):
 
     def set_ext_filter(self, ext_filter):
         self._ext_filter = ext_filter
+
         self._qt_input_widget._get_entry_widget_()._set_empty_sub_text_(
             self._ext_filter
         )
 
     def set_ext_includes(self, texts):
         self._ext_includes = texts
+
         self.set_ext_filter(
             'All File ({})'.format(' '.join(map(lambda x: '*{}'.format(x), texts)))
         )
+
+        self._qt_input_widget._get_entry_widget_()._set_storage_ext_includes_(texts)
 
     def append(self, value):
         self._qt_input_widget._append_value_(

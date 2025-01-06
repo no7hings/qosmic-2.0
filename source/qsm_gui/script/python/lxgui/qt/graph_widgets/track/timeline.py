@@ -27,14 +27,20 @@ class QtTrackTimeline(
 
     def _refresh_widget_draw_geometry_(self):
         x, y = 0, 0
-        frm_h = self.height()
+        frm_w, frm_h = self.width(), self.height()
 
         self._unit_current_coord = self._coord_model.compute_offset_at(self._timeframe_current)
+
+        #
+        self._timeframe_start, self._timeframe_end = self._coord_model.unit_index_range
+
         # timehandle
-        txt_w = self._time_index_text_w
+        txt_w = QtGui.QFontMetrics(self._text_font).width(str(self._timeframe_current))+16
+
         d = self._timeframe_current_handle_w/2
+        txt_h = frm_h-d
         self._timehandle_text_rect.setRect(
-            self._unit_current_coord-(txt_w/2), y+frm_h/2, txt_w, frm_h/2
+            self._unit_current_coord-(txt_w/2), y+d, txt_w, txt_h
         )
         self._timehandle_path = _qt_core.QtPainterPath()
         self._timehandle_path._add_points_(
@@ -49,6 +55,27 @@ class QtTrackTimeline(
                 (self._unit_current_coord-d, y+d),
             ]
         )
+
+        bub_h = frm_h/2
+        bub_gap = (frm_h-bub_h)/2
+
+        self._timeframe_bubble_flag = False
+
+        # left hide
+        if self._timeframe_start > self._timeframe_current:
+            self._timeframe_bubble_flag = True
+
+            self._timeframe_bubble_rect.setRect(
+                x+bub_gap, y+bub_gap, txt_w, bub_h
+            )
+
+        # right hide
+        elif self._timeframe_end < self._timeframe_current:
+            self._timeframe_bubble_flag = True
+
+            self._timeframe_bubble_rect.setRect(
+                x+frm_w-txt_w-bub_gap, y+bub_gap, txt_w, bub_h
+            )
 
     def _update_from_graph_(self, rect, translate, scale):
         x, y, w, h = rect.x(), rect.y(), rect.width(), rect.height()
@@ -98,7 +125,7 @@ class QtTrackTimeline(
         hdl_w = 7
         self._track_timehandle.setGeometry(
             2+self._unit_current_coord-hdl_w/2, 1,
-            hdl_w, self.parent().height()-self.height()/2
+            hdl_w, self.parent().height()-self.height()
         )
         self._track_timehandle._update_from_graph_()
 
@@ -117,8 +144,13 @@ class QtTrackTimeline(
 
         self._init_action_base_def_(self)
 
+        self._text_font = _qt_core.QtFont.generate(size=10, weight=75)
+
         self._time_index_text_w = 64
         self._timeframe_current = 1
+        
+        self._timeframe_bubble_flag = False
+
         self._timeframe_start, self._timeframe_end = 1, 48
 
         self._timeline_frame_rect = QtCore.QRect()
@@ -130,6 +162,8 @@ class QtTrackTimeline(
         self._timehandle_path = _qt_core.QtPainterPath()
         self._timehandle_text_rect = QtCore.QRect()
         self._unit_current_coord = 0
+
+        self._timeframe_bubble_rect = QtCore.QRect()
 
         self._draw_offset = -1
 
@@ -173,7 +207,9 @@ class QtTrackTimeline(
 
     def paintEvent(self, event):
         painter = _qt_core.QtNGPainter(self)
+
         _qt_core.PainterFnc.draw_timeline(painter, self._coord_model, self._timeline_frame_rect)
+
         self._draw_timehandle_(painter)
 
     def _get_current_frame_(self):
@@ -194,10 +230,32 @@ class QtTrackTimeline(
         painter._set_antialiasing_(False)
         painter._set_border_color_(_gui_core.GuiRgba.LightAzureBlue)
         painter._set_background_color_(_gui_core.GuiRgba.LightAzureBlue)
+
+        # handle
         painter.drawPath(self._timehandle_path)
+
+        # text
         painter._set_text_color_(_gui_core.GuiRgba.LightLemonYellow)
-        painter._set_font_(_qt_core.QtFont.generate(size=10, weight=75))
+        painter._set_font_(self._text_font)
         painter.drawText(
-            self._timehandle_text_rect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+            self._timehandle_text_rect,
+            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
             str(self._timeframe_current)
         )
+
+        if self._timeframe_bubble_flag is True:
+            # rect
+            painter._set_antialiasing_(True)
+            painter._set_border_color_(_gui_core.GuiRgba.LightAzureBlue)
+            painter._set_background_color_(_gui_core.GuiRgba.LightAzureBlue)
+            painter.drawRoundedRect(
+                self._timeframe_bubble_rect, 2, 2, QtCore.Qt.AbsoluteSize
+            )
+            # text
+            painter._set_text_color_(_gui_core.GuiRgba.LightLemonYellow)
+            painter._set_font_(self._text_font)
+            painter.drawText(
+                self._timeframe_bubble_rect,
+                QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter,
+                str(self._timeframe_current)
+            )

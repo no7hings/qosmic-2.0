@@ -17,7 +17,7 @@ class Main(object):
         with window.gui_progressing(maximum=len(scr_entities)) as g_p:
             for i_scr_entity in scr_entities:
                 i_scr_entity_path = i_scr_entity.path
-                i_opt = lzy_rsc_scripts.FbxMotionGenerate(
+                i_opt = lzy_rsc_scripts.MoCapFbxMotionGenerate(
                     scr_stage_name, i_scr_entity_path
                 )
                 i_args = i_opt.generate_args()

@@ -460,7 +460,6 @@ class AbsMontage(object):
 
     class Namespaces:
         Transfer = 'transfer'
-        Mixamo = 'mixamorig'
 
     DEFAULT_MASTER_LOWER_HEIGHT = 8.36773617093
     DEFAULT_MASTER_HEIGHT = 15.2693830421

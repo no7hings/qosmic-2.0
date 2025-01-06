@@ -4,6 +4,7 @@ import collections
 import copy
 
 import math
+import os.path
 
 import sys
 
@@ -37,7 +38,8 @@ class TrackModel(object):
         # variant for blend
         '_pre_blend', '_post_blend',
         '_layer_index',
-        '_is_bypass',
+        '_is_bypass', '_is_trash',
+        '_motion_json', '_motion_name',
         #
         '_valid_frames', '_valid_frame_ranges',
     ]
@@ -51,10 +53,8 @@ class TrackModel(object):
         'scale_start', 'scale_end', 'scale_offset',
         'pre_blend', 'post_blend',
         'layer_index',
-        'is_bypass',
-    ]
-    SUB_KEYS = [
-        'motion_json'
+        'is_bypass', 'is_trash',
+        'motion_json',
     ]
 
     def setup(
@@ -67,7 +67,8 @@ class TrackModel(object):
         scale_start=None, scale_end=None, scale_offset=None,
         pre_blend=4, post_blend=4,
         layer_index=0,
-        is_bypass=0,
+        is_bypass=0, is_trash=0,
+        motion_json='',
         **kwargs
     ):
         self._key = key
@@ -99,6 +100,13 @@ class TrackModel(object):
         self._layer_index = int(layer_index)
 
         self._is_bypass = is_bypass
+        self._is_trash = is_trash
+
+        self._motion_json = motion_json
+        if self._motion_json:
+            self._motion_name = os.path.basename(self._motion_json)
+        else:
+            self._motion_name = self._key
 
         self._kwargs = kwargs
 
@@ -217,6 +225,13 @@ class TrackModel(object):
             )
         ).generate()
 
+    def to_dict(self):
+        return collections.OrderedDict(
+            [
+                (x, self.__dict__['_'+x]) for x in self.MAIN_KEYS
+            ]
+        )
+
     def copy(self):
         _ = self.__class__(self._stage_model)
         for i in self.COPY_KEYS:
@@ -226,17 +241,6 @@ class TrackModel(object):
             else:
                 _.__dict__[i] = i_value
         return _
-
-    def copy_as_dict(self):
-        dict_ = {}
-        for i in self.COPY_KEYS:
-            i_key = i[1:]
-            i_value = self.__dict__[i]
-            if isinstance(i_value, (list, dict)):
-                dict_[i_key] = copy.copy(i_value)
-            else:
-                dict_[i_key] = i_value
-        return dict_
 
     def apply_valid_frames(self, frames):
         self._valid_frames = frames
@@ -260,7 +264,7 @@ class TrackModel(object):
 
     @property
     def rgb(self):
-        return bsc_core.BscTextOpt(self._key).to_hash_rgb(s_p=(15, 35), v_p=(75, 95))
+        return bsc_core.BscTextOpt(self._motion_name).to_hash_rgb(s_p=(15, 35), v_p=(75, 95))
 
     @property
     def layer_index(self):
@@ -279,12 +283,29 @@ class TrackModel(object):
     def is_bypass(self, boolean):
         self._is_bypass = boolean
 
+    def set_bypass(self, value):
+        self._is_bypass = int(value)
+
+    @property
+    def is_trash(self):
+        return self._is_trash
+
+    def set_trash(self, value):
+        self._is_trash = int(value)
+
     def swap_bypass(self):
         self._is_bypass = int(not bool(self._is_bypass))
-        print self._key, self._is_bypass, 'AAA'
+        return self._is_bypass
+
+    def swap_trash(self):
+        self._is_trash = int(not bool(self._is_trash))
 
     @property
     def speed_rcp(self):
+        return 1.0/self._speed
+
+    @property
+    def scale(self):
         return 1.0/self._speed
 
     @property
@@ -385,7 +406,7 @@ class TrackModel(object):
         self._count = count-start_offset+self._scale_offset
 
         scale = float(self._count)/float(scale_count)
-        self._speed = 1/scale
+        self._speed = 1.0/scale
         return self.clip_start
 
     def scale_by_clip_count(self, value):
@@ -399,7 +420,7 @@ class TrackModel(object):
         self._count = count-start_offset+self._scale_offset
 
         scale = float(self._count)/float(scale_count)
-        self._speed = 1/scale
+        self._speed = 1.0/scale
         return self.clip_count
 
     @property
@@ -448,6 +469,10 @@ class TrackModel(object):
     @property
     def source_count(self):
         return self._source_end-self._source_start+1
+
+    @property
+    def scale_source_count(self):
+        return self.source_count*self.scale
 
     @property
     def source_pre_count(self):
@@ -552,7 +577,7 @@ class TrackModel(object):
         bsc_x = self.compute_basic_x_at(self._clip_start)
         bsc_y = self.compute_basic_y_at(self._layer_index)
         bsc_w = self.compute_basic_w_by(self.clip_count)
-        bsc_h = TrackWidgetStage.LAYER_BASIC_UNIT
+        bsc_h = TrackStageModel.LAYER_BASIC_UNIT
         return bsc_x, bsc_y, bsc_w, bsc_h
 
     def compute_clip_start_loc(self, x):
@@ -589,7 +614,7 @@ class TrackWidget(object):
         self.__track_last_model = None
 
 
-class TrackWidgetStage(object):
+class TrackStageModel(object):
     TIME_BASIC_UNIT = 100
     LAYER_BASIC_UNIT = 40
 
@@ -704,6 +729,12 @@ class TrackWidgetStage(object):
     def step_x_loc(self, x):
         return self._time_coord_model.step_coord_loc(x)
 
+    def step_y_loc(self, y):
+        return self._layer_coord_model.step_coord_loc(y)
+
+    def compute_layer_index(self, y):
+        return self._layer_coord_model.compute_unit_index_loc_(y)
+
     def compute_start_x(self):
         return self._time_coord_model.compute_unit_coord_at(self._track_start)
 
@@ -733,6 +764,9 @@ class TrackWidgetStage(object):
         for k, v in self._track_widget_dict.items():
             i_model = v._track_model
             if i_model.is_bypass > 0:
+                i_model.apply_valid_frames([])
+                continue
+            elif i_model.is_trash > 0:
                 i_model.apply_valid_frames([])
                 continue
 
@@ -792,12 +826,6 @@ class TrackWidgetStage(object):
     def generate_travel(self):
         return TrackStageTravel(self._ordered_track_model_dict)
 
-    def copy_as_dict(self):
-        dict_ = {}
-        for k, v in self._track_widget_dict.items():
-            dict_[k] = v._track_model.copy_as_dict()
-        return dict_
-
     def restore(self):
         self._track_widget_dict.clear()
 
@@ -808,6 +836,9 @@ class TrackWidgetStage(object):
         return bsc_core.BscHash.to_hash_key(
             {k: v._track_model.to_hash() for k, v in self._track_widget_dict.items()}
         )
+
+    def compute_max_layer_index(self):
+        return max(x.layer_index for x in self.get_all_models())
 
 
 class TrackStageTravel(object):

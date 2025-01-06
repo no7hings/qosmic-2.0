@@ -25,7 +25,14 @@ class AssetCfxRigHandle(_abc.AbsGroupOpt):
         super(AssetCfxRigHandle, self).__init__(
             self.LOCATION, *args, **kwargs
         )
-    
+
+    @classmethod
+    def get_rig_variant(cls):
+        location = cls.LOCATION
+        if qsm_mya_core.NodeAttribute.is_exists(location, 'qsm_variant'):
+            return qsm_mya_core.NodeAttribute.get_as_string(location, 'qsm_variant')
+        return 'default'
+
     def generate_component_data(self):
         return self.generate_component_data_for(
             '/cfx_rig', self.LOCATION

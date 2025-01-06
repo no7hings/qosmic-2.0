@@ -15,6 +15,8 @@ import lxbasic.storage as bsc_storage
 
 import qsm_maya.core as qsm_mya_core
 
+import qsm_maya.adv as qsm_mya_adv
+
 from ..base import util as _bsc_util
 
 from ..base import sketch as _bsc_sketch
@@ -289,6 +291,7 @@ class MtgLayer(AbsMtgLayer):
             # track key
             layer.set('key', key)
             cls.create_curves_for(layer)
+            cmds.select(clear=1)
             return layer
         return cls(layer_name)
 
@@ -417,7 +420,7 @@ class MtgLayer(AbsMtgLayer):
         weight_attributes = layer_opt.get_constraint_weight_attributes()
         for i_weight_atr in weight_attributes:
             cmds.connectAttr(
-                location+'.main_weight_bypass', i_weight_atr,
+                location+'.main_weight_output', i_weight_atr,
                 force=1
             )
         return clip_start, clip_end
@@ -462,9 +465,11 @@ class MtgLayer(AbsMtgLayer):
         if isinstance(master_motion_layer, AbsMtgLayer) is True:
             for i_sketch_key in self.ChrMasterSketches.Basic:
                 i_sketch_src = self.get(i_sketch_key)
+
                 i_sketch_dst = master_motion_layer.get(i_sketch_key)
                 if i_sketch_key == self.ChrMasterSketches.Root_M:
                     _bsc_sketch.Sketch(i_sketch_src).create_point_constraint_to_master_layer(i_sketch_dst)
+
                 _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_master_layer(i_sketch_dst)
 
     def get_constraint_weight_attributes(self):
@@ -658,8 +663,8 @@ class MtgLayer(AbsMtgLayer):
         kwargs = {}
         for j_key in bsc_model.TrackModel.MAIN_KEYS:
             kwargs[j_key] = self._node_opt.get(j_key)
-        for j_key in bsc_model.TrackModel.SUB_KEYS:
-            kwargs[j_key] = self._node_opt.get(j_key)
+        # for j_key in bsc_model.TrackModel.SUB_KEYS:
+        #     kwargs[j_key] = self._node_opt.get(j_key)
         return kwargs
 
 
@@ -672,6 +677,7 @@ class MtgMasterLayer(AbsMtgLayer):
         if is_create is True:
             master_layer = cls(layer_name)
             master_layer.look_from_persp_cam()
+            cmds.select(clear=1)
             return master_layer
         return cls(layer_name)
 
@@ -688,23 +694,28 @@ class MtgMasterLayer(AbsMtgLayer):
 
     def do_bake(self):
         rig_namespace = self.get_rig_namespace()
-        start_frame, end_frame = self.get_frame_range()
-        resource = _adv_resource.AdvResource(rig_namespace)
-        main_control_keys = self.ChrMasterControlMap.Default.values()
-        main_controls = [resource._control_set.get(x) for x in main_control_keys]
-        main_controls = list(filter(None, main_controls))
 
-        # fixme: face control is ignore?
-        main_control_set = _adv_control_set.AdvControlSet(main_controls)
-        main_control_set.bake_all_keyframes(
-            start_frame, end_frame,
-            attributes=[
-                'translateX', 'translateY', 'translateZ',
-                'rotateX', 'rotateY', 'rotateZ',
-            ]
-        )
+        if qsm_mya_adv.AdvOpt.check_is_valid(rig_namespace) is True:
+            start_frame, end_frame = self.get_frame_range()
+            resource = _adv_resource.AdvResource(rig_namespace)
+            main_control_keys = self.ChrMasterControlMap.Default.values()
 
-        self.do_delete()
+            main_controls = [resource._control_set.get(x) for x in main_control_keys]
+            main_controls = list(filter(None, main_controls))
+
+            # fixme: face control is ignore?
+            main_control_set = _adv_control_set.AdvControlSet(main_controls)
+            main_control_set.bake_all_keyframes(
+                start_frame, end_frame,
+                attributes=[
+                    'translateX', 'translateY', 'translateZ',
+                    'rotateX', 'rotateY', 'rotateZ',
+                ]
+            )
+
+            self.do_delete()
+        else:
+            pass
 
     def find_root_loc(self):
         _ = cmds.ls('{}:{}'.format(self._namespace, 'root_loc'), long=1)
@@ -924,13 +935,37 @@ class MtgMasterLayer(AbsMtgLayer):
                 i_value_start = cmds.getAttr(root_start+'.'+i_atr_src)
                 # todo: do not offset Y?
                 if i_atr_src == 'translateY':
-                    i_value_start = self.DEFAULT_MASTER_LOWER_HEIGHT
+                    i_value_start = 0
+
                 i_curve_opt.create_value_at_time(start_frame, i_value_start)
                 i_curve_opt.set_tangent_types_at_time(start_frame, 'clamped', 'clamped')
 
             i_value_end = cmds.getAttr(root_end+'.'+i_atr_src)
             if i_atr_src == 'translateY':
-                i_value_end = self.DEFAULT_MASTER_LOWER_HEIGHT
+                i_value_end = 0
+
+            i_curve_opt.create_value_at_time(end_frame, i_value_end)
+            i_curve_opt.set_tangent_types_at_time(start_frame, 'clamped', 'clamped')
+
+        # filter root track curve later
+        if curve_names:
+            qsm_mya_core.AnimCurveNodes.euler_filter(curve_names)
+
+    def update_root_loc_end_for(self, mtg_layer, start_frame, end_frame):
+        root_end = mtg_layer.find_root_end()
+
+        curve_names = []
+        root_loc_curves_kwargs = self.generate_root_loc_curves_kwargs()
+        for i_key, (i_curve_opt, i_atr_src) in root_loc_curves_kwargs.items():
+            if i_curve_opt is None:
+                continue
+
+            curve_names.append(i_curve_opt.path)
+
+            i_value_end = cmds.getAttr(root_end+'.'+i_atr_src)
+            if i_atr_src == 'translateY':
+                i_value_end = 0
+
             i_curve_opt.create_value_at_time(end_frame, i_value_end)
             i_curve_opt.set_tangent_types_at_time(start_frame, 'clamped', 'clamped')
 

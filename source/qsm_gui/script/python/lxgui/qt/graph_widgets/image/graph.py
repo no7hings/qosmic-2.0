@@ -182,7 +182,7 @@ class QtImageGraph(_gnl_graph.QtGeneralNodeGraph):
                 ng_nodes,
                 sort_key='-height'
             )
-            self._do_frame_nodes_auto_()
+            self._on_graph_node_frame_auto_()
             #
             l_t.stop()
 

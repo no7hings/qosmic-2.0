@@ -65,7 +65,7 @@ class S(QtWidgets.QGraphicsView):
                         self.ActionFlag.NGNodePressClick
                     ) is False:
                         self._set_action_flag_(
-                            self.ActionFlag.RectSelectClick
+                            self.ActionFlag.PressClick
                         )
                         self._do_rect_select_start_(event)
                 #
@@ -86,7 +86,7 @@ class S(QtWidgets.QGraphicsView):
                     event.ignore()
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
-                    self._do_rect_select_end_(event)
+                    self._do_rect_select_end_auto_(event)
                 elif event.button() == QtCore.Qt.RightButton:
                     pass
                 elif event.button() == QtCore.Qt.MidButton:

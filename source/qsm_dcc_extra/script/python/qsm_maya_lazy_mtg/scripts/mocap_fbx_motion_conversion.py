@@ -16,7 +16,7 @@ from ..core.transfer import handle as _cor_trf_handle
 from . import build as _build
 
 
-class FbxMotionConvertProcess(object):
+class MoCapFbxMotionConvertProcess(object):
     def __init__(self, **kwargs):
         self._kwargs = kwargs
 
@@ -32,14 +32,14 @@ class FbxMotionConvertProcess(object):
             raise RuntimeError()
 
         with bsc_log.LogProcessContext.create(maximum=4) as l_p:
+
             # 1. import fbx
             qsm_mya_core.SceneFile.new()
-            qsm_mya_core.SceneFile.import_fbx(fbx_path)
+            qsm_mya_core.SceneFile.import_fbx(fbx_path, namespace='mocap')
             # mark fps
             fps_tag = qsm_mya_core.Frame.get_fps_tag()
             # mark fbx flag, check is mixamo
             namespaces = _cor_tsf_resource.TransferResource.find_mocap_namespaces()
-
             if namespaces:
                 mocap_namespace = namespaces[0]
             else:

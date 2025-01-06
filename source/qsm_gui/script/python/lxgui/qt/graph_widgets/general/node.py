@@ -48,7 +48,7 @@ class QtGeneralNode(
         self._init_icon_base_def_(self)
         self._init_image_base_def_(self)
         self._init_menu_base_def_(self)
-        #
+
         self._init_action_base_def_(self)
         self._init_action_for_hover_def_(self)
         self._init_action_for_press_def_(self)
@@ -60,13 +60,13 @@ class QtGeneralNode(
         self.installEventFilter(self)
 
     def _refresh_widget_all_(self):
-        self._update_node_rect_properties_()
+        self._update_node_geometry_properties_()
         self._update_node_geometry_()
         self._update_node_draw_properties_()
 
         self._refresh_widget_draw_geometry_()
 
-        self._update_attachments_()
+        self._update_node_attachments_()
 
         self._refresh_widget_draw_()
 
@@ -87,16 +87,19 @@ class QtGeneralNode(
 
         x_0, y_0 = x+b_w_0/2, y+b_w_0/2
         w_0, h_0 = w-b_w_0, h-b_w_0
+
         # select
         self._node_selection_rect.setRect(
             x_0, y_0, w_0, h_0
         )
+
         # name
         n_x, n_y = x_0+c_i_r/2, y_0
         n_w, n_h = w_0-c_i_r, self._ng_draw_name_h
         self._name_draw_rect.setRect(
             n_x, n_y, n_w, n_h
         )
+
         # frame
         f_x, f_y = x_0+c_i_r/2, y_0+n_h
         f_w, f_h = w_0-c_i_r, h_0-n_h
@@ -108,17 +111,20 @@ class QtGeneralNode(
         self._head_frame_rect.setRect(
             f_h_x, f_h_y, f_h_w, f_h_h
         )
+
         # icon & button
         i_w, i_h = self._ng_draw_icon_w, self._ng_draw_icon_h
         self._icon_text_draw_rect.setRect(
             f_x+(f_h_h-i_h)/2, f_y+(f_h_h-i_h)/2, i_w, i_h
         )
+
         # button
         b_w, b_h = self._ng_draw_button_w, self._ng_draw_button_h
         s_x = f_x+f_h_h
         self._ng_node_resize_rect.setRect(
             s_x+(f_h_h-i_h)/2, f_y+(f_h_h-i_h)/2, b_w, b_h
         )
+
         # frame body
         f_b_x, f_b_y = f_x, f_y+f_h_h
         f_b_w, f_b_h = f_w, f_h-f_h_h

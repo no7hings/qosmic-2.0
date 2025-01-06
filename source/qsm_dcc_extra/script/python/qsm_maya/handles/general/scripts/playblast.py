@@ -102,7 +102,7 @@ class PlayblastOpt(object):
         if clip_start is not None:
             start_frame = clip_start
 
-        bsc_core.BscFfmpegVideo.create_by_image_sequence(
+        bsc_core.BscFfmpegVideo.concat_by_image_sequence(
             image_sequence=image_file_path_,
             video_path=movie_file_path,
             start_frame=start_frame,

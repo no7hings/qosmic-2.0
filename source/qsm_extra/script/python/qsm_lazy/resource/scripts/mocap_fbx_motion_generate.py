@@ -8,8 +8,8 @@ import qsm_general.process as qsm_gnl_process
 import qsm_screw.core as qsm_scr_core
 
 
-class FbxMotionGenerate(object):
-    TASK_KEY = 'fbx_motion_generate'
+class MoCapFbxMotionGenerate(object):
+    TASK_KEY = 'mocap_fbx_motion_generate'
 
     def __init__(self, scr_stage_name, scr_node_path):
         self._scr_stage_name = scr_stage_name

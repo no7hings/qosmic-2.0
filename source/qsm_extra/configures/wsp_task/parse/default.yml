@@ -406,6 +406,9 @@ patterns:
             maya-scene-file: '<.version-dir>/maya/{asset}.ma'
             connect_map-json-file: '<.version-dir>/json/{asset}.connect_map.json'
 
+            maya-scene-var-file: '<.version-dir>/maya/{asset}.{var}.ma'
+            connect_map-json-var-file: '<.version-dir>/json/{asset}.connect_map.{var}.json'
+
         temporary:
             dir: '{root_temporary}/{project}/source/assets/{role}/{asset}'
             # task

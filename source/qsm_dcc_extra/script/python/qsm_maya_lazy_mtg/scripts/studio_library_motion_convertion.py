@@ -17,6 +17,7 @@ class StlConvertionProcess(object):
     def __init__(self, stl_animation_source_path, rig_maya_scene_path, cache_file_path):
         self._stl_animation_source_path = bsc_core.BscStorage.shit_path_auto_convert(stl_animation_source_path)
         self._rig_maya_scene_path = bsc_core.BscStorage.shit_path_auto_convert(rig_maya_scene_path)
+
         self._cache_file_path = cache_file_path
 
     def execute(self):
@@ -24,6 +25,7 @@ class StlConvertionProcess(object):
             # step 1
             qsm_mya_core.SceneFile.new()
             l_p.do_update()
+
             # step 2
             if os.path.isfile(self._rig_maya_scene_path) is False:
                 raise RuntimeError()

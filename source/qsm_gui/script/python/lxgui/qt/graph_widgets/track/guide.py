@@ -10,7 +10,7 @@ from ... import core as _qt_core
 from ... import abstracts as _qt_abstracts
 
 
-class QtTrackStage(
+class QtTrackGuide(
     QtWidgets.QWidget,
     _qt_abstracts.AbsQtActionBaseDef,
 ):
@@ -57,7 +57,7 @@ class QtTrackStage(
         self._refresh_widget_all_()
 
     def __init__(self, *args, **kwargs):
-        super(QtTrackStage, self).__init__(*args, **kwargs)
+        super(QtTrackGuide, self).__init__(*args, **kwargs)
         self.setMouseTracking(True)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
@@ -80,7 +80,7 @@ class QtTrackStage(
 
         self._graph = None
 
-        self._stage_model = bsc_model.TrackWidgetStage()
+        self._stage_model = bsc_model.TrackStageModel()
 
         self.installEventFilter(self)
 
@@ -182,6 +182,7 @@ class QtTrackStage(
                     name = '{}({})'.format(key, frame_range_index)
                 else:
                     name = key
+
                 node = self._stage_model.get_one_node(key)
                 if last_node is None:
                     last_last_key = tvl.last_last_key()

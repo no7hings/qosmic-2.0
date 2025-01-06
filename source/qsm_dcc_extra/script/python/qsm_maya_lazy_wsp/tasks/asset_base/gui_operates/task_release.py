@@ -67,13 +67,22 @@ class MayaAssetTaskReleaseOpt(lzy_wsp_core.DccTaskReleaseOpt):
                 release_scene_src_path_new
             )
 
-            images = kwargs.get('images')
-            if images:
-                preview_path = self._task_session.get_file_for(
-                    'asset-release-preview-mov-file', version=version_new
-                )
-                bsc_core.BscFfmpegVideo.create_by_images(
-                    preview_path, images
-                )
+            preview_path = self._task_session.get_file_for(
+                'asset-release-preview-mov-file', version=version_new
+            )
+
+            preview_scheme = kwargs.get('preview_scheme')
+            if preview_scheme == 'image':
+                images = kwargs.get('images')
+                if images:
+                    bsc_core.BscFfmpegVideo.concat_by_images(
+                        preview_path, images
+                    )
+            elif preview_scheme == 'video':
+                videos = kwargs.get('videos')
+                if videos:
+                    bsc_core.BscFfmpegVideo.concat_by_videos(
+                        preview_path, videos
+                    )
 
             return version_dir_path_new, release_scene_src_path_new, version_new

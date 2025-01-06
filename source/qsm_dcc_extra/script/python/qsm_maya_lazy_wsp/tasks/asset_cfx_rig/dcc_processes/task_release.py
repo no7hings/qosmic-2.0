@@ -20,6 +20,8 @@ class AssetCfxRigReleaseProcess(object):
 
     def execute(self):
         scene_src_path = self._kwargs['scene_src']
+        rig_variant = self._kwargs['rig_variant']
+
         task_session = _task_parse.TaskParse.generate_task_session_by_asset_release_scene_src(
             scene_src_path
         )
@@ -37,9 +39,15 @@ class AssetCfxRigReleaseProcess(object):
             qsm_mya_core.SceneFile.open(scene_src_path)
             l_p.do_update()
             # step 3, save blend_map
-            connect_map_json_path = task_session.get_file_for(
-                'asset-release-connect_map-json-file'
-            )
+            if rig_variant == 'default':
+                connect_map_json_path = task_session.get_file_for(
+                    'asset-release-connect_map-json-file'
+                )
+            else:
+                connect_map_json_path = task_session.get_file_for(
+                    'asset-release-connect_map-json-var-file', var=rig_variant
+                )
+
             data = _task_dcc_core.AssetCfxRigSceneOpt().generate_connect_map()
             bsc_storage.StgFileOpt(connect_map_json_path).set_write(data)
             l_p.do_update()
@@ -47,14 +55,22 @@ class AssetCfxRigReleaseProcess(object):
             _task_dcc_core.AssetCfxRigSceneOpt().remove_rig()
             l_p.do_update()
             # step 5
-            scene_path = task_session.get_file_for(
-                'asset-release-maya-scene-file'
-            )
+            if rig_variant == 'default':
+                scene_path = task_session.get_file_for(
+                    'asset-release-maya-scene-file'
+                )
+            else:
+                scene_path = task_session.get_file_for(
+                    'asset-release-maya-scene-var-file', var=rig_variant
+                )
+
             bsc_log.Log.trace_method_result(
                 self.LOG_KEY, 'export scene: {}'.format(scene_path)
             )
+
+            location = '|master|cfx_rig'
             qsm_mya_core.SceneFile.export_file(
-                scene_path, '|master|cfx_rig', locations_extend=['QSM_SET']
+                scene_path, location, locations_extend=['QSM_SET']
             )
             l_p.do_update()
             # step 6, link to no version directory

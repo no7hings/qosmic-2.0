@@ -1,15 +1,12 @@
 # coding:utf-8
 from ..abstracts import subpanel_for_new_splicing as _subpanel_for_new_splicing
 
-from ..subpages import mocap as _subpage_new_mocap
-
-from ..subpages import adv as _subpage_new_adv
+from ..subpages import general as _subpage_new_general
 
 
 class PrxSubPanelForNewSplicing(_subpanel_for_new_splicing.AbsPrxSubpanelForNewSplicing):
     SUB_PAGE_CLASSES = [
-        _subpage_new_adv.PrxSubpageForNewAdvSplicing,
-        _subpage_new_mocap.PrxSubpageForNewMocapSplicing,
+        _subpage_new_general.PrxSubpageForNewGeneralSplicing,
     ]
 
     def __init__(self, *args, **kwargs):

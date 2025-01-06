@@ -442,3 +442,24 @@ build:
                     tool_tip_chs:
                         |-
                         在测试布料的时候会改变控制器的位置，用这个按钮将控制器还原到初始状态。
+
+    extra:
+        name: 'Extra'
+        name_chs: '扩展'
+        tool_tip:
+            |-
+            To be supplemented.
+
+        tool_tip_chs:
+            |-
+            待补充。
+
+        options:
+            name: 'Options'
+            name_chs: '选项'
+
+            parameters:
+                mark_rig_variant:
+                    widget: button
+                    name: 'Mark Rig Variant'
+                    name_chs: '标记预设变体'

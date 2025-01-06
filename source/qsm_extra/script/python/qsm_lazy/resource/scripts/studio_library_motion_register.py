@@ -44,6 +44,7 @@ class StlMotionRegister(object):
         references = content.get('metadata.references')
         if not references:
             return
+
         reference_file_path = references[0]['filename']
         ctime = content.get('metadata.ctime')
 
@@ -65,6 +66,7 @@ class StlMotionRegister(object):
                 gui_name_chs = _
 
         type_path = self.create_types(type_path_src)
+
         self._scr_stage.create_node(
             node_path, gui_name=gui_name, gui_name_chs=gui_name_chs, user=user, ctime=float(ctime)
         )

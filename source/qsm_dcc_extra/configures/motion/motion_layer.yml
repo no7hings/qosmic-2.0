@@ -1648,16 +1648,20 @@ nodes:
             #
             - "<options.namespace>:root_start_translate_offset_sum.output3D"
             - "<options.namespace>:ROOT_START.translate"
+    
+    main_weight_disable_sum:
+        name: '<options.namespace>:<..key>'
+        type: plusMinusAverage
 
-    main_weight_bypass_cdt:
+    main_weight_disable_cdt:
         name: '<options.namespace>:<..key>'
         type: condition
         properties:
-            # basic_start condition result
+            # by pass
             firstTerm: 0
-            # basic_end
+            #
             secondTerm: 0
-            # == 0
+            # when == 0, output main_weight value
             operation: 0
             # time, start_frame
             colorIfTrue: [0, 0, 0]
@@ -1693,7 +1697,7 @@ containers:
             main_weight_curve:
                 type: message
 
-            main_weight_bypass:
+            main_weight_output:
                 type: float
                 value: 1.0
 
@@ -1838,16 +1842,26 @@ containers:
                 type: integer
                 value: 0
 
+            is_trash:
+                type: integer
+                value: 0
+
         connections:
+            # main weight disable
+            - '<options.namespace>:LAYER.is_bypass'
+            - "<options.namespace>:main_weight_disable_sum.input1D[0]"
+            #
+            - '<options.namespace>:LAYER.is_trash'
+            - "<options.namespace>:main_weight_disable_sum.input1D[1]"
             # main weight bypass
             - '<options.namespace>:LAYER.main_weight'
-            - '<options.namespace>:main_weight_bypass_cdt.colorIfTrueR'
+            - '<options.namespace>:main_weight_disable_cdt.colorIfTrueR'
             #
-            - '<options.namespace>:LAYER.is_bypass'
-            - '<options.namespace>:main_weight_bypass_cdt.firstTerm'
+            - '<options.namespace>:main_weight_disable_sum.output1D'
+            - '<options.namespace>:main_weight_disable_cdt.firstTerm'
             #
-            - '<options.namespace>:main_weight_bypass_cdt.outColorR'
-            - '<options.namespace>:LAYER.main_weight_bypass'
+            - '<options.namespace>:main_weight_disable_cdt.outColorR'
+            - '<options.namespace>:LAYER.main_weight_output'
             # connect to clip
             - '<options.namespace>:LAYER.valid_start'
             - '<options.namespace>:TIME.clip_start'
@@ -1870,7 +1884,7 @@ containers:
             - '<options.namespace>:LAYER.post_cycle'
             - '<options.namespace>:TIME.post_cycle'
             #
-            - '<options.namespace>:LAYER.main_weight'
+            - '<options.namespace>:LAYER.main_weight_output'
             - '<options.namespace>:LAYER.visibility'
             # translation
             # start

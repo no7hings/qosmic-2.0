@@ -192,7 +192,7 @@ def motion_generate_fnc(option_opt):
     ).execute()
 
 
-def fbx_motion_generate_fnc(option_opt):
+def mocap_fbx_motion_generate_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
     import qsm_maya_lazy_mtg.scripts as s
@@ -201,7 +201,7 @@ def fbx_motion_generate_fnc(option_opt):
         option_opt.to_string()
     )
 
-    s.FbxMotionConvertProcess(
+    s.MoCapFbxMotionConvertProcess(
         **kwargs
     ).execute()
 
@@ -263,8 +263,8 @@ def main(session):
     # new
     elif method == 'motion_generate':
         motion_generate_fnc(option_opt)
-    elif method == 'fbx_motion_generate':
-        fbx_motion_generate_fnc(option_opt)
+    elif method == 'mocap_fbx_motion_generate':
+        mocap_fbx_motion_generate_fnc(option_opt)
     #
     elif method == 'mesh_count_generate':
         mesh_count_generate_fnc(option_opt)

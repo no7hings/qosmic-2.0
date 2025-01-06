@@ -71,7 +71,7 @@ class QtGeneralNodeGraph(
             self._graph_model.tx, self._graph_model.ty
         )
         self._refresh_widget_draw_geometry_(self.rect())
-        self._update_graph_nodes_()
+        self._graph_update_nodes_()
 
         self._refresh_widget_draw_()
 
@@ -133,7 +133,7 @@ class QtGeneralNodeGraph(
             (functools.partial(self._set_ng_action_graph_layout_selection_, '-height'), 'Ctrl+L'),
             (functools.partial(self._set_ng_action_graph_layout_selection_, 'height'), 'Shift+L'),
             (self._set_ng_action_graph_frame_, 'F'),
-            (self._select_all_nodes_, 'Ctrl+A')
+            (self._on_graph_node_select_all_, 'Ctrl+A')
         ]
         for i_fnc, i_shortcut in actions:
             i_action = QtWidgets.QAction(self)
@@ -186,7 +186,7 @@ class QtGeneralNodeGraph(
                         self.ActionFlag.NGNodeAnyAction
                     ) is False:
                         self._set_action_flag_(
-                            self.ActionFlag.RectSelectClick
+                            self.ActionFlag.PressClick
                         )
                         self._do_rect_select_start_(event)
                 #
@@ -220,7 +220,7 @@ class QtGeneralNodeGraph(
                     event.ignore()
             elif event.type() == QtCore.QEvent.MouseButtonRelease:
                 if event.button() == QtCore.Qt.LeftButton:
-                    self._do_rect_select_end_(event)
+                    self._do_rect_select_end_auto_(event)
                 elif event.button() == QtCore.Qt.RightButton:
                     pass
                 elif event.button() == QtCore.Qt.MidButton:
@@ -364,7 +364,7 @@ class QtGeneralNodeGraph(
 
     def _set_ng_show_by_universe_(self, *args, **kwargs):
         def frame_fnc_():
-            self._do_frame_nodes_auto_()
+            self._on_graph_node_frame_auto_()
             t.stop()
 
         if args:
@@ -585,18 +585,16 @@ class QtGeneralNodeGraph(
 
     # action frame select
     def _set_action_frame_execute_(self, event):
-        self._do_frame_nodes_auto_()
+        self._on_graph_node_frame_auto_()
 
     def _set_ng_action_graph_frame_(self):
-        self._do_frame_nodes_auto_()
+        self._on_graph_node_frame_auto_()
 
     def _set_ng_action_graph_layout_selection_(self, sort_key='x'):
         if self._graph_select_nodes:
             self._do_node_press_start_for_any_action_()
-            self._layout_nodes_for_(
-                self._graph_select_nodes, sort_key
-            )
-            self._do_node_press_end_for_transformation_action_()
+            self._layout_nodes_for_(self._graph_select_nodes, sort_key)
+            self._push_selects_nodes_transformation_changed_action_(flag='layout')
 
 
 class _QtNGTreeNode(

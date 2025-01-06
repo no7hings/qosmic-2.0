@@ -17,6 +17,6 @@ from .studio_library_motion_register import *
 
 from .studio_library_motion_generate import *
 
-from .fbx_motion_register import *
+from .mocap_fbx_motion_register import *
 
-from .fbx_motion_generate import *
+from .mocap_fbx_motion_generate import *

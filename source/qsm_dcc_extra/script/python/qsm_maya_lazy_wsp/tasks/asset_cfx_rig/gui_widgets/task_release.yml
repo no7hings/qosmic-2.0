@@ -33,20 +33,56 @@ build:
             name_chs: '选项'
 
             parameters:
+
+                preview_scheme:
+                    widget: capsule_string
+                    name: 'Preview Scheme'
+                    name_chs: '预览方案'
+                    options: ['image', 'video']
+                    default: 'image'
+                    option_names: ['Image', 'Video']
+                    option_names_chs: ['图片', '视频']
+
+                    history_key: 'tool-panels.lazy-workspace.task-release.preview_scheme'
+                    pull_history_latest: True
+
                 images:
                     widget: medias
                     name: 'Image'
                     name_chs: '图片'
                     value: ''
                     history_key: 'lazy-workspace.task_release_cfx_rig.images'
-                    ext_filter: 'All Image File (*.jpg *.png *.exr)'
+                    ext_includes: ['.jpg', '.png', '.exr']
                     height: 120
                     tool_tip:
                         |-
                         Add some screenshots as preview.
                     tool_tip_chs:
                         |-
-                        加入一些截图当作预览。
+                        加入审核图片（截屏）。
+
+                    visible_condition: {
+                        operator: 'is', port: 'preview_scheme', value: 'image'
+                    }
+
+                videos:
+                    widget: files
+                    name: 'Video'
+                    name_chs: '视频'
+                    value: ''
+                    history_key: 'lazy-workspace.task_release_cfx_dressing.videos'
+                    ext_includes: ['.mov']
+                    height: 120
+                    tool_tip:
+                        |-
+                        Add review video (playblast).
+                    tool_tip_chs:
+                        |-
+                        加入审核视频（拍屏）。
+
+                    visible_condition: {
+                        operator: 'is', port: 'preview_scheme', value: 'video'
+                    }
 
                 note:
                     widget: script
@@ -59,6 +95,13 @@ build:
                     tool_tip_chs:
                         |-
                         填写发布备注，记录更新信息。
+
+                rig_variant:
+                    widget: enumerate
+                    name: 'Rig Variant'
+                    name_chs: '预设变体'
+                    options: ['default']
+                    default: 'default'
 
                 show_release_directory:
                     widget: button

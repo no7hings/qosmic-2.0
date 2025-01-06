@@ -61,6 +61,8 @@ class QtEntryForArray(
 
         self._item_icon_file_path = None
 
+        self._storage_ext_includes = []
+
         self._empty_icon_name = 'placeholder/empty'
         self._empty_text = None
 
@@ -251,18 +253,18 @@ class QtEntryForArray(
                 urls = event.mimeData().urls()
                 if urls:
                     values = []
-                    #
+
                     for i_url in urls:
                         i_value = i_url.toLocalFile()
                         if self._get_value_is_valid_(i_value):
                             values.append(bsc_storage.StgPath.clear_pathsep_to(i_value))
-                    #
+
                     if self._entry_use_as_file_multiply is True:
                         values = bsc_storage.StgFileTiles.merge_to(
                             values,
                             ['*.<udim>.####.*', '*.####.*']
                         )
-                    #
+
                     [self._append_value_(i) for i in values]
                     event.accept()
         else:
@@ -299,11 +301,22 @@ class QtEntryForArray(
             self._refresh_viewport_showable_auto_()
 
     def _append_value_(self, value):
+        if not value:
+            return
+
+        if value in self._values:
+            return
+
         # use original value, do not encode
-        if value and value not in self._values:
-            self._values.append(value)
-            self._create_item_(value)
-            self.entry_value_added.emit()
+        if self._entry_use_as_storage:
+            if self._storage_ext_includes:
+                ext = os.path.splitext(value)[-1]
+                if ext not in self._storage_ext_includes:
+                    return
+
+        self._values.append(value)
+        self._create_item_(value)
+        self.entry_value_added.emit()
 
     def _remove_value_(self, value):
         self._delete_value_(value, False)
@@ -395,3 +408,6 @@ class QtEntryForArray(
                 QtCore.Qt.WidgetShortcut
             )
             self.addAction(i_action)
+
+    def _set_storage_ext_includes_(self, texts):
+        self._storage_ext_includes = texts

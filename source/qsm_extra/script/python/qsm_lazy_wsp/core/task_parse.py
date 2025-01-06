@@ -126,7 +126,7 @@ class TaskParse(object):
         return None
 
     @classmethod
-    def generate_task_session_by_resource_source_scene_src(cls, scene_path):
+    def generate_task_session_by_resource_source_scene_src(cls, scene_path, **kwargs_over):
         task_parse = cls()
 
         for i_resource_type in cls.ResourceTypes.All:
@@ -135,6 +135,10 @@ class TaskParse(object):
             )
             i_variants = i_ptn_opt.get_variants(scene_path, extract=True)
             if i_variants:
+                if kwargs_over:
+                    i_variants.update(kwargs_over)
+                # do not pop result
+                # i_variants.pop('result')
                 i_variants['resource_type'] = i_resource_type
                 return cls.TASK_SESSION_CLS(task_parse, i_variants)
 
@@ -193,13 +197,6 @@ class TaskParse(object):
         resource_type = variants['resource_type']
         return self.generate_pattern_opt_for(
             '{}-source-{}-thumbnail-file'.format(resource_type, application), **variants
-        )
-
-    # release
-    @property
-    def asset_release_task_scene_src_pattern_opt(self):
-        return self.generate_pattern_opt_for(
-            'asset-release-maya-scene_src-file'
         )
 
     def generate_asset_release_new_version_number(self, **kwargs):

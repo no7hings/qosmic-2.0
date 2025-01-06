@@ -1104,6 +1104,7 @@ FLUSH PRIVILEGES;
             i_file_path_dst = image_sequence_path.replace('%04d', str(i_seq).zfill(4))
             bsc_storage.StgFileOpt(i_file_path).copy_to_file(i_file_path_dst)
 
+        # copy first frame as thumbnail
         bsc_storage.StgFileOpt(file_paths[0]).copy_to_file(thumbnail_path)
 
         self.create_or_update_parameters(

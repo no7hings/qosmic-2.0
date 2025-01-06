@@ -77,37 +77,74 @@ class MayaShotCfxClothToolOpt(_shot_gnl.MayaShotTaskToolOpt):
         cfx_rig_handle = asset_handle.cfx_rig_handle
         cfx_rig_handle.load_scene_auto(scene_path)
 
-    def generate_cfx_rig_version_dict(self, rig_namespace):
-        task_session = self._task_session
-        task_parse = task_session.task_parse
-
+    def get_cfx_rig_file_variants_by_rig_namespace(self, rig_namespace):
         reference_cache = qsm_mya_core.ReferencesCache()
-
         rig_scene_path = reference_cache.get_file(rig_namespace)
 
         if not rig_scene_path:
             return {}
 
+        task_session = self._task_session
+        task_parse = task_session.task_parse
+
         rig_scene_ptn_opt = task_parse.generate_pattern_opt_for(
             'asset-disorder-rig_scene-maya-file'
         )
-        variants = rig_scene_ptn_opt.get_variants(rig_scene_path)
-        if variants:
-            variants_new = copy.copy(variants)
 
-            variants_new['step'] = task_parse.Steps.cfx
-            variants_new['task'] = task_parse.Tasks.cfx_rig
+        file_variants = rig_scene_ptn_opt.get_variants(rig_scene_path)
+        if file_variants:
+            file_variants_new = copy.copy(file_variants)
+            file_variants_new['step'] = task_parse.Steps.cfx
+            file_variants_new['task'] = task_parse.Tasks.cfx_rig
+            return file_variants_new
 
-            cfx_rig_scene_ptn_opt = task_parse.generate_pattern_opt_for(
-                'asset-release-maya-scene-file', **variants_new
+    def get_cfx_rig_variants(self, file_variants):
+        if file_variants:
+            rig_variants = ['default']
+            task_session = self._task_session
+            ptn_opt = task_session.generate_pattern_opt_for(
+                'asset-release-maya-scene-var-file', **file_variants
             )
-            dict_ = collections.OrderedDict()
-            matches = cfx_rig_scene_ptn_opt.find_matches(sort=True)
-            matches = matches[-10:]
+            matches = ptn_opt.find_matches()
             for i in matches:
-                dict_['v{}'.format(i['version'])] = i['result']
+                i_rig_variant = i['var']
+                if i_rig_variant not in rig_variants:
+                    rig_variants.append(i_rig_variant)
+            return rig_variants
+        return []
+
+    def generate_cfx_rig_version_dict(self, rig_namespace):
+        file_variants = self.get_cfx_rig_file_variants_by_rig_namespace(rig_namespace)
+        if file_variants:
+            cfx_rig_variants = self.get_cfx_rig_variants(file_variants)
+
+            dict_ = collections.OrderedDict()
+            for i_rig_variant in cfx_rig_variants:
+                i_dict = self.generate_cfx_rig_version_dict_for(file_variants, i_rig_variant)
+                dict_[i_rig_variant] = i_dict
+
             return dict_
         return {}
+
+    def generate_cfx_rig_version_dict_for(self, file_variants, rig_variant):
+        task_session = self._task_session
+        task_parse = task_session.task_parse
+
+        if rig_variant == 'default':
+            cfx_rig_scene_ptn_opt = task_parse.generate_pattern_opt_for(
+                'asset-release-maya-scene-file', **file_variants
+            )
+        else:
+            cfx_rig_scene_ptn_opt = task_parse.generate_pattern_opt_for(
+                'asset-release-maya-scene-var-file', **file_variants
+            )
+
+        dict_ = collections.OrderedDict()
+        matches = cfx_rig_scene_ptn_opt.find_matches(sort=True)
+        matches = matches[-10:]
+        for i in matches:
+            dict_['v{}'.format(i['version'])] = i['result']
+        return dict_
 
     def generate_ani_geo_cache_version_dict(self, rig_namespace):
         task_session = self._task_session

@@ -3,6 +3,8 @@ import lxbasic.core as bsc_core
 
 from qsm_lazy_wsp.gui.abstracts import unit_for_task_tool as _abs_unit_for_task_tool
 
+import lxgui.core as gui_core
+
 import lxgui.qt.core as gui_qt_core
 
 import qsm_maya.core as qsm_mya_core
@@ -296,13 +298,38 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
             self._unit._gui_task_tool_opt.rest_rig_controls_transformation()
 
 
+class _PrxExtraToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
+    GUI_KEY = 'extra'
+
+    def __init__(self, *args, **kwargs):
+        super(_PrxExtraToolset, self).__init__(*args, **kwargs)
+        self._prx_options_node.set('mark_rig_variant', self.on_mark_rig_variant)
+
+    @classmethod
+    def on_mark_rig_variant(cls):
+        dcc_rig_variant = _task_dcc_core.AssetCfxRigHandle.get_rig_variant()
+
+        result = gui_core.GuiApplication.exec_input_dialog(
+            type='string',
+            info='Entry Name for Variant...',
+            value=dcc_rig_variant,
+            title='Mark Variant'
+        )
+        if result:
+            location = '|master|cfx_rig'
+            qsm_mya_core.NodeAttribute.create_as_string(
+                location, 'qsm_variant', result
+            )
+
+
 class PrxToolsetForAssetCfxRigTool(_abs_unit_for_task_tool.AbsPrxUnitForTaskTool):
     GUI_KEY = 'cfx_rig'
 
     GUI_RESOURCE_VIEW_CLS = _PrxNodeView
 
     TOOLSET_CLASSES = [
-        _PrxBasicToolset
+        _PrxBasicToolset,
+        _PrxExtraToolset
     ]
 
     TASK_TOOL_OPT_CLS = _gui_task_tool_opt.MayaAssetCfxRigToolOpt

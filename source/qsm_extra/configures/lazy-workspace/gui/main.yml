@@ -47,12 +47,27 @@ build:
         show_in_explorer:
             name: 'Show in Explorer'
             name_chs: '在资源管理器中显示'
+
+        send_to:
+            name: 'Send to'
+            name_chs: '发送到'
+
+        my_space:
+            name: 'My Space'
+            name_chs: '我的空间'
+
+        shared_space:
+            name: 'Shared Space'
+            name_chs: '公共空间'
+
         copy:
             name: 'Copy'
             name_chs: '复制'
+
         path:
             name: 'Path'
             name_chs: '路径'
+
         unix_path:
             name: 'UNIX Path'
             name_chs: 'UNIX路径'

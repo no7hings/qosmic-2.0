@@ -130,7 +130,7 @@ class AbsQtGraphSbjDef(object):
     def _get_selected_nodes_(self):
         return self._graph_select_nodes
 
-    def _update_graph_nodes_(self):
+    def _graph_update_nodes_(self):
         for i_ng_node in self._get_ng_graph_nodes_():
             i_ng_node._refresh_widget_all_()
 
@@ -171,7 +171,7 @@ class AbsQtGraphSbjDef(object):
         # translate
         self._do_graph_frame_translate_for_(nodes)
 
-    def _do_frame_nodes_auto_(self):
+    def _on_graph_node_frame_auto_(self):
         if self._graph_select_nodes:
             nodes = self._graph_select_nodes
         else:
@@ -247,11 +247,11 @@ class AbsQtGraphSbjDef(object):
 
     def _do_node_press_move_for_(self, sbj, d_point):
         if sbj._is_selected_() is True:
-            self._together_move_nodes_(sbj, d_point)
+            self._graph_node_move_together_fnc_(sbj, d_point)
         else:
             self._separate_move_node_(sbj)
 
-    def _together_move_nodes_(self, sbj, d_point):
+    def _graph_node_move_together_fnc_(self, sbj, d_point):
         self._update_current_node_(sbj)
 
         if self._graph_current_node is not None:
@@ -316,7 +316,7 @@ class AbsQtGraphSbjDef(object):
             sbj._scale_right_fnc_(d_point, start_size)
 
     # undo
-    def _do_node_press_end_for_transformation_action_(self, sbj=None):
+    def _push_selects_nodes_transformation_changed_action_(self, sbj=None, flag=None):
         data = []
         for i in self._graph_select_nodes:
             i_coord, i_last_coord = i._get_basic_coord_(), i._get_basic_last_coord_()
@@ -325,6 +325,7 @@ class AbsQtGraphSbjDef(object):
                 data.append(
                     (i, i_coord, i_last_coord, i_size, i_last_size)
                 )
+
         if sbj is not None:
             coord, last_coord = sbj._get_basic_coord_(), sbj._get_basic_last_coord_()
             size, last_size = sbj._get_basic_size_(), sbj._get_basic_last_size_()
@@ -362,7 +363,7 @@ class AbsQtGraphSbjDef(object):
             sbj._set_selected_(True)
             self._graph_select_nodes.append(sbj)
 
-    def _select_all_nodes_(self):
+    def _on_graph_node_select_all_(self):
         for i_sbj in self._graph_nodes:
             self._add_select_node_for_(i_sbj)
 
@@ -395,6 +396,7 @@ class AbsQtActionForRectSelectDef(object):
             0, 0, 0, 0
         )
 
+    # rect select
     def _do_rect_select_start_(self, event):
         self._action_rect_select_point_start = event.pos()
         self._node_selection_flag = self._widget._get_node_selection_flag_()
@@ -408,7 +410,7 @@ class AbsQtActionForRectSelectDef(object):
         )
         self._refresh_widget_draw_()
 
-    def _do_rect_select_end_(self, event):
+    def _do_rect_select_end_auto_(self, event):
         if self._widget._is_action_flag_match_(
             self._widget.ActionFlag.RectSelectMove
         ):
@@ -421,7 +423,7 @@ class AbsQtActionForRectSelectDef(object):
             elif self._node_selection_flag == self._widget.NGSelectionFlag.Invert:
                 self._invert_rect_select_nodes_()
         elif self._widget._is_action_flag_match_(
-            self._widget.ActionFlag.RectSelectClick
+            self._widget.ActionFlag.PressClick
         ):
             self._widget._clear_node_selection_()
         #
@@ -429,7 +431,7 @@ class AbsQtActionForRectSelectDef(object):
 
     def _separate_rect_select_nodes_(self):
         self._widget._clear_node_selection_()
-        #
+
         contains = []
         for i_sbj in self._widget._graph_nodes:
             if self._rect_selection_rect.intersects(

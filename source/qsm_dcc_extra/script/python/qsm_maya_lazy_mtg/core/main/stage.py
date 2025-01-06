@@ -29,6 +29,10 @@ class MtgStage(object):
         return list_
 
     @classmethod
+    def get_current_rig_namespace(cls):
+        return _layer.MtgRoot.get_current_rig_namespace()
+
+    @classmethod
     def update_by_stage(cls, rig_namespace, stage, current_frame=None):
         start_frame, end_frame = stage.track_start, stage.track_end
 
@@ -42,6 +46,10 @@ class MtgStage(object):
             frame_range, track_model = tvl.current_data()
 
             is_start, is_end = tvl.is_start(), tvl.is_end()
+
+            # when is start restore follow camera
+            if is_start is True:
+                mtg_master_layer.restore_root_loc_curves()
 
             if track_model is not None:
                 pre_blend, post_blend = track_model.pre_blend, track_model.post_blend
@@ -67,7 +75,9 @@ class MtgStage(object):
                     mtg_layer.restore_main_weight_curve()
                     mtg_layer.restore_root_start_input_transformation_curves()
 
-                if tvl.next_is_valid() is False:
+                next_is_valid = tvl.next_is_valid()
+
+                if next_is_valid is False:
                     data_next = tvl.next_data()
                     if data_next is not None:
                         frame_range_next, track_model_next = data_next
@@ -94,30 +104,39 @@ class MtgStage(object):
                             layer_name_last = _bsc_util.MtgRigNamespace.to_layer_name(rig_namespace, key_last)
                             mtg_layer_last = _layer.MtgLayer(layer_name_last)
                             mtg_layer.update_root_start_fnc(mtg_layer, mtg_layer_last, frame_range[0])
-
-                # when is start restore follow camera
-                if is_start is True:
-                    mtg_master_layer.restore_root_loc_curves()
-
+                # todo: may chr is not move
                 mtg_master_layer.update_root_loc_for(
                     mtg_layer, is_start, valid_start, valid_end
                 )
+            else:
+                # when current is empty, use last model, ignore start
+                if is_start is False:
+                    model_last = tvl.last_model()
+                    if model_last:
+                        key_last = model_last.key
+                        layer_name_last = _bsc_util.MtgRigNamespace.to_layer_name(rig_namespace, key_last)
+                        mtg_layer_last = _layer.MtgLayer(layer_name_last)
+                        start_frame, end_frame = frame_range
+                        mtg_master_layer.update_root_loc_end_for(
+                            mtg_layer_last, start_frame, end_frame
+                        )
 
             tvl.next()
 
-        # update bypass
+        # update bypass and trash
         for i_tack_model in stage.get_all_models():
             i_key = i_tack_model.key
             i_layer_name = _bsc_util.MtgRigNamespace.to_layer_name(rig_namespace, i_key)
             i_layer_opt = _layer.MtgLayer(i_layer_name)
             i_layer_opt.set('is_bypass', i_tack_model.is_bypass)
+            i_layer_opt.set('is_trash', i_tack_model.is_trash)
 
         # flush maya undo, use montage GUI undo
         qsm_mya_core.Undo.flush()
 
     @classmethod
     def generate_stage_model_fnc(cls, track_data):
-        stage_model = bsc_model.TrackWidgetStage()
+        stage_model = bsc_model.TrackStageModel()
         for i_kwargs in track_data:
             stage_model.create_one(widget=None, **i_kwargs)
         return stage_model
@@ -137,7 +156,7 @@ class MtgStage(object):
         return list_
 
     def generate_stage_model(self):
-        stage_model = bsc_model.TrackWidgetStage()
+        stage_model = bsc_model.TrackStageModel()
         for i_kwargs in self.generate_track_data():
             stage_model.create_one(widget=None, **i_kwargs)
         return stage_model
@@ -158,6 +177,14 @@ class MtgStage(object):
 
         mtg_master_layer = _layer.MtgMasterLayer(self._master_layer_location)
         return mtg_master_layer.get_all_layer_names()
+
+    def get_all_track_keys(self):
+        if self._master_layer_location is None:
+            return []
+
+        mtg_master_layer = _layer.MtgMasterLayer(self._master_layer_location)
+        layer_names = mtg_master_layer.get_all_layer_names()
+        return [x.split(':')[-1] for x in layer_names]
 
     def export_track_data(self, track_json_path):
         data = self.generate_track_data()

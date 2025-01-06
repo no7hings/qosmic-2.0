@@ -448,6 +448,7 @@ class QtInputDialog(
                 self._input_widget._set_value_type_(int)
             elif type_ == 'float':
                 self._input_widget._set_value_type_(float)
+
             self._input_widget._connect_input_user_entry_value_finished_to_(
                 self._do_ok_
             )
@@ -455,13 +456,19 @@ class QtInputDialog(
             self._input_widget = _qt_wgt_ipt_for_content.QtInputForContent()
             self._sca._add_widget_(self._input_widget)
             self._input_widget._set_entry_enable_(True)
+
             self._input_widget._connect_input_user_entry_value_finished_to_(
                 self._do_ok_
             )
         elif type_ in {'choose'}:
             self._input_widget = _ipt_for_constant.QtInputForConstantChoose()
             self._sca._add_widget_(self._input_widget)
+            self._input_widget._set_choose_index_show_enable_(True)
             self._input_widget._set_entry_enable_(True)
+
+            self._input_widget._connect_input_user_entry_value_finished_to_(
+                self._do_ok_
+            )
 
     def _set_input_options_(self, options):
         if self._input_widget is not None:

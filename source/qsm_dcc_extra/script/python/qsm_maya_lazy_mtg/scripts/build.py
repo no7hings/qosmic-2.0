@@ -50,40 +50,56 @@ class MtgBuildScp(object):
         self._mtg_master_layer = _man_layer.MtgMasterLayer.generate_fnc(self._rig_namespace)
         self._mtg_master_layer.connect_to_adv(self._adv_resource)
 
-    def load_template(self, template='walking_running_jumping'):
+    def load_template_(self, template='running_jumping'):
         track_json_path = 'Z:/resources/montage/{}.jsz'.format(template)
 
         if os.path.isfile(track_json_path) is True:
             _man_stage.MtgStage(self._rig_namespace).import_track_json(track_json_path)
 
-    def load_template_old(self, template='walking_running_jumping'):
+    def load_template(self, template='running_jumping'):
         data = None
-        if template == 'walking_running_jumping':
+        if template == 'running_jumping':
             data = [
-                ('a_pose', 1, 4, 4),
-                ('jog_backward', 1, 4, 4),
-                ('idle_1', 1, 4, 4),
-                ('slow_run', 2, 4, 4),
-                ('medium_run', 2, 4, 4),
-                ('fast_run', 2, 4, 4),
-                ('jump', 1, 4, 4),
+                # 30
+                ('a_pose', 1, 8, 8),
+                ('jog_backward', 1, 8, 8),
+                ('idle_1', 1, 8, 8),
+                ('slow_run', 2, 8, 8),
+                ('medium_run', 2, 8, 8),
+                ('fast_run', 2, 8, 8),
+                ('jump', 1, 8, 8),
+            ]
+        elif template == 'walking':
+            data = [
+                ('a_pose', 1, 8, 8),
+                ('female_basic_locomotion_walking', 4, 8, 8)
+            ]
+        elif template == 'jogging':
+            data = [
+                ('a_pose', 1, 8, 8),
+                ('soccer_game_jog_forward', 4, 8, 8)
+            ]
+        elif template == 'running':
+            data = [
+                ('a_pose', 1, 8, 8),
+                ('female_basic_locomotion_running', 4, 8, 8)
             ]
         elif template == 'dancing':
             data = [
-                ('a_pose', 1, 4, 4),
-                ('gangnam_style', 1, 4, 4),
-                ('northern_soul_spin', 1, 4, 4),
+                ('a_pose', 1, 8, 8),
+                # ('gangnam_style', 1, 8, 8),
+                ('northern_soul_spin', 1, 8, 8),
             ]
 
         if data:
             with bsc_log.LogProcessContext.create(maximum=len(data)) as l_p:
                 for i_name, i_cycle, i_pre_blend, i_post_blend in data:
-                    i_file_path = self.MOTION_JSON_PTN.format(name=i_name)
-                    if os.path.exists(i_file_path) is False:
+                    i_motion_json = self.MOTION_JSON_PTN.format(name=i_name)
+                    if os.path.exists(i_motion_json) is False:
                         raise RuntimeError()
 
                     self._mtg_master_layer.append_layer(
-                        i_file_path,
+                        i_motion_json,
                         post_cycle=i_cycle,
                         pre_blend=i_pre_blend,
                         post_blend=i_post_blend,
@@ -113,7 +129,7 @@ class MtgBuildScp(object):
         qsm_mya_core.Undo.flush()
 
     @classmethod
-    def test_mocap(cls, template='walking_running_jumping'):
+    def test_mocap(cls, template='running_jumping'):
         qsm_mya_core.SceneFile.new()
         qsm_mya_core.Frame.set_fps_tag('30_fps')
         scp = cls('test')

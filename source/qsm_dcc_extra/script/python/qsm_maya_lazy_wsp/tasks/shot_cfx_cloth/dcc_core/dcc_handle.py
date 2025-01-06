@@ -213,6 +213,12 @@ class ShotCfxRigHandle:
         if dcc_location:
             return gui_location, dcc_location
         return gui_location, None
+
+    def get_rig_variant(self):
+        location = self.find_location()
+        if qsm_mya_core.NodeAttribute.is_exists(location, 'qsm_variant'):
+            return qsm_mya_core.NodeAttribute.get_as_string(location, 'qsm_variant')
+        return 'default'
     
     def generate_component_data(self):
         gui_location, dcc_location = self.generate_location_args()

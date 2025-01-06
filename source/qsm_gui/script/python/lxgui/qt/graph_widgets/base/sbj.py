@@ -101,6 +101,8 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
 
         self._resize_start_point_0, self._resize_start_size = QtCore.QPoint(), QtCore.QPoint()
 
+        self._size_tmp = (0, 0)
+
     def _set_basic_size_(self, w, h):
         self._node_basic_w, self._node_basic_h = w, h
 
@@ -145,7 +147,7 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
             )
             i._refresh_widget_all_()
 
-    def _update_node_rect_properties_(self):
+    def _update_node_geometry_properties_(self):
         x, y, w, h = self._compute_geometry_by_graph_args_()
 
         self._node_rect.setRect(
@@ -251,18 +253,18 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         self._graph._do_node_press_move_for_(self, d_point)
 
     def _do_press_move_end_(self, event):
-        self._get_graph_()._do_node_press_end_for_transformation_action_()
+        self._get_graph_()._push_selects_nodes_transformation_changed_action_(flag='move')
 
     def _move_to_coord_(self, x, y):
         # move real time
         self._widget.move(x, y)
 
         self._update_basic_coord_as_move_(x, y)
-        self._update_node_rect_properties_()
+        self._update_node_geometry_properties_()
 
-        self._update_attachments_()
+        self._update_node_attachments_()
 
-    def _update_attachments_(self):
+    def _update_node_attachments_(self):
         self._update_connections_()
 
     def _move_to_x_(self, x):
@@ -271,9 +273,9 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         self._widget.move(x, y)
 
         self._update_basic_coord_as_move_(x, y)
-        self._update_node_rect_properties_()
+        self._update_node_geometry_properties_()
 
-        self._update_attachments_()
+        self._update_node_attachments_()
 
     def _move_by_point_(self, d_point, offset_point=None):
         if offset_point is not None:
@@ -294,7 +296,7 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         )
 
     def _do_press_trim_end_(self, event):
-        self._get_graph_()._do_node_press_end_for_transformation_action_(self)
+        self._get_graph_()._push_selects_nodes_transformation_changed_action_(self, flag='trim')
 
     def _trim_left_fnc_(self, d_point, offset_point=None):
         if offset_point is not None:
@@ -324,14 +326,14 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
 
         self._refresh_widget_all_()
 
-        self._update_attachments_()
+        self._update_node_attachments_()
 
     def _trim_right_by_size_(self, w, h):
         self._update_basic_args_as_right_trim_(w, h)
 
         self._refresh_widget_all_()
 
-        self._update_attachments_()
+        self._update_node_attachments_()
 
     # scale
     def _do_press_scale_(self, event):
@@ -343,7 +345,7 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
         )
 
     def _do_press_scale_end_(self, event):
-        self._get_graph_()._do_node_press_end_for_transformation_action_(self)
+        self._get_graph_()._push_selects_nodes_transformation_changed_action_(self, flag='scale')
 
     def _scale_left_fnc_(self, d_point, offset_point=None):
         if offset_point is not None:
@@ -373,7 +375,7 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
 
         self._refresh_widget_all_()
 
-        self._update_attachments_()
+        self._update_node_attachments_()
 
     def _update_basic_args_as_left_scale_(self, x, y, w, h):
         pass
@@ -383,7 +385,7 @@ class AbsQtNodeDef(AbsQtSbjBaseDef):
 
         self._refresh_widget_all_()
 
-        self._update_attachments_()
+        self._update_node_attachments_()
 
     def _update_basic_args_as_right_scale_(self, w, h):
         pass

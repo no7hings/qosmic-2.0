@@ -16,7 +16,7 @@ class AbsPrxSubpanelForNewSplicing(gui_prx_widgets.PrxBaseSubpanel):
         self._sub_page_prx_tab_tool_box = gui_prx_widgets.PrxHTabToolBox()
         self.add_widget(self._sub_page_prx_tab_tool_box)
 
-        self.gui_setup_pages_for(['adv', 'mocap'])
+        self.gui_setup_pages_for(['general'])
 
         self._sub_page_prx_tab_tool_box.set_history_key('lazy-montage.{}-page'.format(self.GUI_KEY))
         self._sub_page_prx_tab_tool_box.load_history()

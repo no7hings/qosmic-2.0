@@ -547,7 +547,8 @@ class BscFfmpegVideo(object):
             r'"{output}"'
         ]
         return ' '.join(cmd_args).format(**kwargs)
-
+    
+    # image sequence
     @classmethod
     def generate_image_sequence_concat_cmd_script(cls, **kwargs):
         """
@@ -632,21 +633,6 @@ class BscFfmpegVideo(object):
         return cache_f
 
     @classmethod
-    def generate_video_concat_cmd_script(cls, **kwargs):
-        input_ = kwargs.pop('input')
-        kwargs['input'] = cls._create_video_concat_file_list(input_, kwargs.get('output'))
-        return (
-            '{bin}'
-            ' -f concat -safe 0 -i "{input}"'
-            ' -c:v copy'
-            ' -y'
-            ' "{output}"'
-        ).format(
-            bin=cls.get_ffmpeg_source(),
-            **kwargs
-        )
-
-    @classmethod
     def _completion_image_sequence_file_list(cls, file_path, start_frame, end_frame, frame_step):
         list_ = []
         directory_path = os.path.dirname(file_path)
@@ -679,6 +665,22 @@ class BscFfmpegVideo(object):
                     if f_name_cur is not None:
                         list_.append(f_name_cur)
         return list_
+    
+    # video
+    @classmethod
+    def generate_video_concat_cmd_script(cls, **kwargs):
+        input_ = kwargs.pop('input')
+        kwargs['input'] = cls._create_video_concat_file_list(input_, kwargs.get('output'))
+        return (
+            '{bin}'
+            ' -f concat -safe 0 -i "{input}"'
+            ' -c:v copy'
+            ' -y'
+            ' "{output}"'
+        ).format(
+            bin=cls.get_ffmpeg_source(),
+            **kwargs
+        )
 
     @classmethod
     def _create_video_concat_file_list(cls, input_video_paths, output_video_path):
@@ -837,7 +839,7 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
         subprocess.check_call(cmd_script)
 
     @classmethod
-    def create_by_image_sequence(
+    def concat_by_image_sequence(
         cls,
         image_sequence, video_path, 
         start_frame, end_frame, 
@@ -893,15 +895,15 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
         s_p.communicate()
 
     @classmethod
-    def create_by_images(cls, video_path, image_paths, fps=24, coding='libx264', replace=False):
-        video_path = _base.ensure_unicode(video_path)
+    def concat_by_images(cls, output_video, image_paths, fps=24, coding='libx264', replace=False):
+        output_video = _base.ensure_unicode(output_video)
 
-        if os.path.isfile(video_path) is True:
+        if os.path.isfile(output_video) is True:
             if replace is False:
                 return
 
         # create directory first
-        directory_path = os.path.dirname(video_path)
+        directory_path = os.path.dirname(output_video)
         if os.path.exists(directory_path) is False:
             os.makedirs(directory_path)
 
@@ -924,7 +926,7 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
             '-b:v', '8000k',
             '-bf', '0',
             '-y',
-            video_path
+            output_video
         ]
 
         cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in cmd_args]
@@ -932,6 +934,69 @@ ffmpeg -i input.mp4 -vf "scale=-1:128" -r 24 -vcodec libx264 -crf 28 -preset ult
         cmd_script = ' '.join(cmd_args)
         s_p = subprocess.Popen(cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         s_p.communicate()
+
+    @classmethod
+    def concat_by_videos(cls, output_video, video_paths, fps=None, coding='libx264', replace=False):
+        if os.path.isfile(output_video) and not replace:
+            return
+
+        # create directory first
+        directory_path = os.path.dirname(output_video)
+        if os.path.exists(directory_path) is False:
+            os.makedirs(directory_path)
+
+        first_video = video_paths[0]
+        cmd_args = [
+            cls.get_ffprobe_source(),
+            '-i', first_video,
+            '-v', 'error',
+            '-select_streams', 'v:0',
+            '-show_entries', 'stream=width,height,r_frame_rate',
+            '-of', 'csv=p=0'
+        ]
+        process = subprocess.Popen(cmd_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        stdout, stderr = process.communicate()
+        if process.returncode != 0:
+            raise RuntimeError("Error getting video properties: {}".format(stderr))
+
+        width, height, fps_first = stdout.strip().split(',')
+        if fps is None:
+            fps = eval(fps_first)
+
+        fd, file_list = tempfile.mkstemp(suffix='.concat.files')
+        with os.fdopen(fd, 'w') as f:
+            for video in video_paths:
+                adjusted_video = tempfile.mktemp(suffix='.mov')
+                cmd_args = [
+                    cls.get_ffmpeg_source(),
+                    '-i', video,
+                    '-vf', 'scale={}:{}'.format(width, height),
+                    '-r', str(fps),
+                    '-c:v', coding,
+                    '-pix_fmt', 'yuv420p',
+                    '-y', adjusted_video
+                ]
+                adjust_process = subprocess.Popen(cmd_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+                adjust_process.communicate()
+                if adjust_process.returncode != 0:
+                    raise RuntimeError("Error adjusting video: {}".format(video))
+                f.write("file '{}'\n".format(adjusted_video))
+
+        cmd_args = [
+            cls.get_ffmpeg_source(),
+            '-f', 'concat',
+            '-safe', '0',
+            '-i', file_list,
+            '-c', 'copy',
+            '-y',
+            output_video
+        ]
+        concat_process = subprocess.Popen(cmd_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        concat_process.communicate()
+        if concat_process.returncode != 0:
+            raise RuntimeError("Error concatenating videos")
+
+        os.remove(file_list)
 
     @classmethod
     def get_codec(cls, video_path):

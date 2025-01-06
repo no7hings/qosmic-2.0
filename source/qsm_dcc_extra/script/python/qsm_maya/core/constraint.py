@@ -137,6 +137,13 @@ class PointConstraint(object):
             set_.update(_)
         return list(set_)
 
+    @classmethod
+    def update_offset(cls, node, translate):
+        for seq, i in enumerate(['restTranslateX', 'restTranslateY', 'restTranslateZ']):
+            cmds.setAttr(
+                '{}.{}'.format(node, i), translate[seq]
+            )
+
 
 class OrientConstraint(object):
     @classmethod
@@ -188,6 +195,13 @@ class OrientConstraint(object):
             ) or []
             set_.update(_)
         return list(set_)
+
+    @classmethod
+    def update_offset(cls, node, translate):
+        for seq, i in enumerate(['restRotateX', 'restRotateY', 'restRotateZ']):
+            cmds.setAttr(
+                '{}.{}'.format(node, i), translate[seq]
+            )
 
 
 class MotionPath:

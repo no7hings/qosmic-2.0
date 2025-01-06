@@ -2,14 +2,13 @@
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
 
-import qsm_maya.core as qsm_mya_core
-
 from . import sketch_set as _sketch_set
 
 
 class MocapResource(object):
     def __init__(self, namespace):
         self._namespace = namespace
+
         self._sketch_set = _sketch_set.MocapSketchSet.generate(self._namespace)
 
     def find_root(self):

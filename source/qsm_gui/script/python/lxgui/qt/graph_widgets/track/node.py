@@ -175,18 +175,25 @@ class QtTrackNode(
     _bsc_sbj.AbsQtBypassDef,
 ):
     TRIM_FLAG = True
-    SCALE_FLAG = False
+    SCALE_FLAG = True
 
     def _refresh_widget_all_(self):
-        self._update_node_rect_properties_()
+        if self._track_model.is_trash > 0:
+            self.hide()
+        else:
+            self.show()
+
+        self._update_node_geometry_properties_()
         self._update_node_geometry_()
 
         self._update_node_draw_properties_()
-        self._refresh_widget_draw_geometry_()
+        
+        self._update_node_attachments_()
 
-        self._update_attachments_()
+        flag = self._refresh_widget_draw_geometry_()
 
-        self._refresh_widget_draw_()
+        if flag is True:
+            self._refresh_widget_draw_()
 
     def _refresh_widget_draw_(self):
         self.update()
@@ -194,6 +201,13 @@ class QtTrackNode(
     def _refresh_widget_draw_geometry_(self):
         x, y = 0, 0
         w, h = self.width(), self.height()
+
+        # fixme, condition is not very well
+        # size = (w, h)
+        # if size == self._size_tmp:
+        #     return False
+        #
+        # self._size_tmp = size
 
         bdr_w = 1
         x_0, y_0 = x+bdr_w/2, y+bdr_w/2
@@ -233,10 +247,10 @@ class QtTrackNode(
             start_offset_x, bdy_frm_y, start_offset_x, frm_h
         )
         # time source
-        source_count = self._track_model.source_count
-        source_w = self._track_model.compute_w_by_count(source_count)
+        scale_source_count = self._track_model.scale_source_count
+        scale_source_w = self._track_model.compute_w_by_count(scale_source_count)
         self._time_source_rect.setRect(
-            start_offset_x, bdy_frm_y, source_w, frm_h
+            start_offset_x, bdy_frm_y, scale_source_w, frm_h
         )
         # time
         self._time_start_rect.setRect(
@@ -307,6 +321,19 @@ class QtTrackNode(
         self._node_output_rect.setRect(
             hrd_frm_x+frm_w-ofs_w, hrd_frm_y, ofs_w, hrd_frm_h
         )
+        return True
+
+    def _refresh_by_trash_(self):
+        # is trash
+        if self._track_model.is_trash > 0:
+            self.hide()
+        else:
+            self.show()
+
+        self._refresh_widget_draw_()
+
+    def _refresh_by_bypass_(self):
+        self._refresh_widget_draw_()
 
     def _update_basic_coord_as_move_(self, x, y):
         clip_start = self._track_model.compute_clip_start_loc(x)
@@ -361,27 +388,32 @@ class QtTrackNode(
             self._graph._update_hover_node_(self)
             self._set_hovered_(True)
             # trim
+            trim_flag = False
             if self.TRIM_FLAG is True:
                 if self._trim_left_rect.contains(pos):
                     self._set_action_flag_(self.ActionFlag.NGSbjTrimLeft)
                     self._update_graph_action_flag_(self.ActionFlag.NGNodeAnyAction)
+                    trim_flag = True
                 elif self._trim_right_rect.contains(pos):
                     self._set_action_flag_(self.ActionFlag.NGSbjTrimRight)
                     self._update_graph_action_flag_(self.ActionFlag.NGNodeAnyAction)
-                else:
-                    self._clear_all_action_flags_()
-                    self._graph._clear_all_action_flags_()
+                    trim_flag = True
+
             # scale
+            scale_flag = False
             if self.SCALE_FLAG is True:
                 if self._scale_left_rect.contains(pos):
                     self._set_action_flag_(self.ActionFlag.NGSbjScaleLeft)
                     self._update_graph_action_flag_(self.ActionFlag.NGNodeAnyAction)
+                    scale_flag = True
                 elif self._scale_right_rect.contains(pos):
                     self._set_action_flag_(self.ActionFlag.NGSbjScaleRight)
                     self._update_graph_action_flag_(self.ActionFlag.NGNodeAnyAction)
-                else:
-                    self._clear_all_action_flags_()
-                    self._graph._clear_all_action_flags_()
+                    scale_flag = True
+
+            if trim_flag is False and scale_flag is False:
+                self._clear_all_action_flags_()
+                self._graph._clear_all_action_flags_()
         else:
             self._graph._update_hover_node_(None)
             self._set_hovered_(False)
@@ -398,6 +430,7 @@ class QtTrackNode(
     def __init__(self, *args, **kwargs):
         super(QtTrackNode, self).__init__(*args, **kwargs)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+
         self.setMouseTracking(True)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
         self.setSizePolicy(
@@ -680,9 +713,9 @@ class QtTrackNode(
                 )
 
                 painter.setPen(QtGui.QColor(0, 0, 0, 0))
-                brush = QtGui.QBrush(QtGui.QColor(95, 95, 95, 255))
-                brush.setStyle(QtCore.Qt.Dense4Pattern)
-                painter.setBrush(brush)
+                i_brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 63))
+                # i_brush.setStyle(QtCore.Qt.Dense4Pattern)
+                painter.setBrush(i_brush)
                 painter.drawRect(i_rect)
 
         for i in range(pre_cycle+1):
@@ -692,8 +725,9 @@ class QtTrackNode(
                     i_x+1, i_y+1, cycle_w, cycle_h
                 )
                 painter.setPen(QtGui.QColor(0, 0, 0, 0))
-                brush = QtGui.QBrush(QtGui.QColor(95, 95, 95, 255))
-                brush.setStyle(QtCore.Qt.Dense4Pattern)
+                i_brush = QtGui.QBrush(QtGui.QColor(255, 255, 255, 63))
+                # i_brush.setStyle(QtCore.Qt.Dense4Pattern)
+                painter.setBrush(i_brush)
                 painter.drawRect(i_rect)
 
         # no frames
@@ -727,7 +761,13 @@ class QtTrackNode(
 
     def _setup_track_(self, **kwargs):
         self._track_model = self._graph._track_stage_model.create_one(self, **kwargs)
-        self._pull_track_geometry_(self._track_model)
+
+        if self._track_model.is_trash is True:
+            self.hide()
+        else:
+            self.show()
+
+        self._node_update_transformation_fnc_(self._track_model)
 
         self._build_timetrack_trim_()
 
@@ -737,8 +777,9 @@ class QtTrackNode(
     def _push_track_model_(self):
         self._track_last_model = self._track_model.copy()
 
-    def _pull_track_geometry_(self, time_model):
-        self._track_model = time_model
+    def _node_update_transformation_fnc_(self, track_model):
+        self._track_model = track_model
+
         x, y, w, h = self._track_model.compute_timetrack_args()
         self._node_basic_x, self._node_basic_y = x, y
         self._node_basic_w, self._node_basic_h = w, h
@@ -761,7 +802,7 @@ class QtTrackNode(
         self._end_trim._set_graph_(self._graph)
         self._end_trim._set_node_(self)
 
-    def _update_attachments_(self):
+    def _update_node_attachments_(self):
         self._update_connections_()
 
         # time offset

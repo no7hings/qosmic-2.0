@@ -1,7 +1,11 @@
 # coding:utf-8
+import os
+
 import random
 
 import lxbasic.model as bsc_model
+
+import lxbasic.storage as bsc_storage
 
 from ...qt.graph_widgets.track import graph as _graph_for_track
 # proxy abstracts
@@ -13,7 +17,7 @@ import lxuniverse.objects as unr_objects
 class PrxTrackWidget(
     _proxy_abstracts.AbsPrxWidget
 ):
-    QT_WIDGET_CLS = _graph_for_track.QtTrackWidget
+    QT_WIDGET_CLS = _graph_for_track.QtTrackView
 
     def __init__(self, *args, **kwargs):
         super(PrxTrackWidget, self).__init__(*args, **kwargs)
@@ -32,7 +36,7 @@ class PrxTrackWidget(
         self._qt_widget._graph._graph_model.scale_to(s_x, s_y)
 
     def connect_stage_change_to(self, fnc):
-        self._qt_widget._track_stage.stage_changed.connect(fnc)
+        self._qt_widget._track_guide.stage_changed.connect(fnc)
 
     def connect_frame_accepted_to(self, fnc):
         self._qt_widget._track_timeline.frame_accepted.connect(fnc)
@@ -78,7 +82,7 @@ class PrxTrackWidget(
         self._qt_widget._graph._setup_graph_by_universe_()
 
     def get_stage_model(self):
-        return self._qt_widget._track_stage._stage_model
+        return self._qt_widget._track_guide._stage_model
 
     def get_current(self):
         return self._qt_widget._track_timeline._get_current_frame_()
@@ -95,21 +99,33 @@ class PrxTrackWidget(
     def create_test(self):
         post_cycles = range(1, 5)
 
-        args = [
-            ('sam_walk_macho_forward', 24),
-            ('sam_run_turn_left', 32),
-            ('sam_walk_forward', 48),
-            ('sam_walk_sneak_turn_right', 24),
-            ('sam_run_forward', 72),
-            ('sam_walk_sneak_forward', 32)
+        motion_json_ptn = 'Z:/libraries/lazy-resource/all/motion_splice/{name}/json/{name}.motion.json'
+
+        keys = [
+            'a_pose',
+            'jog_backward',
+            'idle_1',
+            'slow_run',
+            'medium_run',
+            'fast_run',
+            'jump',
         ]
 
         random.seed(1)
 
         clip_start = 1
         for i_index in range(10):
-            i_name, i_source_count = random.choice(args)
+            i_name = random.choice(keys)
             i_post_cycle = random.choice(post_cycles)
+
+            i_motion_json = motion_json_ptn.format(name=i_name)
+
+            if os.path.exists(i_motion_json) is False:
+                raise RuntimeError()
+
+            i_data = bsc_storage.StgFileOpt(i_motion_json).set_read()
+
+            i_source_count = i_data['frame_count']
 
             i_clip_end = bsc_model.TrackModel.compute_end(
                 clip_start, 1, i_source_count-1, i_post_cycle
@@ -124,9 +140,13 @@ class PrxTrackWidget(
                 scale_start=None, scale_end=None, scale_offset=None,
                 pre_blend=4, post_blend=4,
                 layer_index=i_index,
-                is_bypass=0,
+                is_bypass=0, is_trash=0,
+                motion_json=i_motion_json,
             )
             clip_start = i_clip_end+1
 
     def get_all_layer_names(self):
-        return self._qt_widget._track_stage._stage_model.get_all_layer_names()
+        return self._qt_widget._track_guide._stage_model.get_all_layer_names()
+
+    def get_all_track_keys(self):
+        return self._qt_widget._track_guide._stage_model.get_all_layer_names()

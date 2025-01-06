@@ -144,7 +144,7 @@ class SceneFile:
         -importFrameRate true
         -importTimeRange "override" "C:/Users/nothings/Downloads/Fast Run (1).fbx";
         """
-        cmds.file(
+        nodes = cmds.file(
             file_path,
             i=1,
             force=1,
@@ -157,7 +157,19 @@ class SceneFile:
             pr=1,
             importFrameRate=1,
             importTimeRange='override',
+            returnNewNodes=1,
         )
+        if namespace != ':':
+            if cmds.namespace(exists=namespace) is False:
+                cmds.namespace(add=namespace)
+
+            for i in nodes:
+                i_name = i.split('|')[-1]
+                if ':' in i_name:
+                    i_name_new = '{}:{}'.format(namespace, i_name.split(':')[-1])
+                else:
+                    i_name_new = '{}:{}'.format(namespace, i_name)
+                cmds.rename(i_name, i_name_new)
 
     @classmethod
     def import_file_ignore_error(cls, file_path, namespace=':'):

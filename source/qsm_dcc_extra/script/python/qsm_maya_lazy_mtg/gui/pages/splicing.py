@@ -60,6 +60,7 @@ class PrxPageForSplicing(_page_for_splicing.AbsPrxPageForSplicing):
                     self._rig_namespace = dcc_rig_namespace
                 else:
                     self._rig_namespace = rig_namespaces[0]
+
                 self._rig_namespace_qt_info_bubble._set_text_(
                     self._rig_namespace
                 )
@@ -68,7 +69,6 @@ class PrxPageForSplicing(_page_for_splicing.AbsPrxPageForSplicing):
             return
 
         if self._rig_namespace is not None:
-
             if force is True:
                 self._motion_prx_track_widget.restore()
 
@@ -84,9 +84,9 @@ class PrxPageForSplicing(_page_for_splicing.AbsPrxPageForSplicing):
         rig_namespaces = self._dcc_get_rig_namespaces()
         if rig_namespaces:
             if self._rig_namespace is not None:
-                dcc_all_layers = qsm_mya_lzy_mtg_core.MtgStage(self._rig_namespace).get_all_layer_names()
-                gui_all_layers = self._motion_prx_track_widget.get_all_layer_names()
-                if set(dcc_all_layers) != set(gui_all_layers):
+                dcc_keys = qsm_mya_lzy_mtg_core.MtgStage(self._rig_namespace).get_all_track_keys()
+                gui_keys = self._motion_prx_track_widget.get_all_track_keys()
+                if set(dcc_keys) != set(gui_keys):
                     self.gui_refresh_fnc(force=True)
             else:
                 self.gui_refresh_fnc(force=True)
@@ -127,7 +127,7 @@ class PrxPageForSplicing(_page_for_splicing.AbsPrxPageForSplicing):
         if self._rig_namespace is not None:
             result = self._window.exec_message_dialog(
                 self._window.choice_gui_message(
-                    self._window._configure.get('build.messages.delete_bake')
+                    self._window._configure.get('build.messages.bake_confirm')
                 ),
                 status='warning'
             )

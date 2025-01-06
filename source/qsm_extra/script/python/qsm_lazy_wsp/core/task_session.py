@@ -1,26 +1,22 @@
 # coding:utf-8
 import collections
+
 import copy
 
 import lxbasic.content as bsc_content
+
+import lxbasic.storage as bsc_storage
+
+import lxgui.core as gui_core
 
 
 class TaskSession(object):
 
     INSTANCE = None
 
-    def __new__(cls, task_parse, variants):
-        if cls.INSTANCE is not None:
-            instance = cls.INSTANCE
-            # update properties
-            instance.update_properties(variants)
-            return instance
-
-        self = super(TaskSession, cls).__new__(cls, task_parse, variants)
+    def __init__(self, task_parse, variants):
         self._task_parse = task_parse
         self._properties = bsc_content.DictProperties(variants)
-        cls.INSTANCE = self
-        return self
 
     def __str__(self):
         return '{}{}'.format(
@@ -41,6 +37,10 @@ class TaskSession(object):
 
     @property
     def properties(self):
+        return self._properties
+
+    @property
+    def variants(self):
         return self._properties
 
     @property
@@ -71,11 +71,87 @@ class TaskSession(object):
             return [x['task_unit'] for x in matches]
         return []
 
+    def get_last_version_code(self, application):
+        kwargs = copy.copy(self._properties)
+        if 'version' in kwargs:
+            kwargs.pop('version')
+
+        pattern_opt = self._task_parse.generate_source_task_scene_src_pattern_opt_for(
+            application=application,
+            **kwargs
+        )
+        matches = pattern_opt.find_matches(sort=True)
+        if matches:
+            return int(matches[-1]['version'])
+        return 0
+
     def save_source_task_scene_src(self, *args, **kwargs):
         return False
 
     def increment_and_save_source_task_scene_src(self, *args, **kwargs):
         return False
+
+    def send_source_task_scene_src(self, application, scene_path, thumbnail_path):
+        version_code_latest = self.get_last_version_code(application)
+        if version_code_latest > 0:
+            version_latest = str(version_code_latest).zfill(3)
+            kwargs_latest = dict(self._properties)
+            kwargs_latest['version'] = version_latest
+            scene_ptn_opt_latest = self._task_parse.generate_source_task_scene_src_pattern_opt_for(
+                application=application,
+                **kwargs_latest
+            )
+            scene_path_latest = scene_ptn_opt_latest.get_value()
+            if bsc_storage.StgFileOpt(scene_path).get_is_same_to(scene_path_latest):
+                if gui_core.GuiUtil.language_is_chs():
+                    gui_core.GuiApplication.exec_message_dialog(
+                        '已经存在文件：{}。'.format(scene_path_latest),
+                        title='发送文件',
+                        size=(320, 120),
+                        status='warning',
+                    )
+                else:
+                    gui_core.GuiApplication.exec_message_dialog(
+                        'File exists: {}'.format(scene_path_latest),
+                        title='Send File',
+                        size=(320, 120),
+                        status='warning',
+                    )
+                return
+
+        version_new = str(version_code_latest+1).zfill(3)
+        kwargs_new = dict(self._properties)
+        kwargs_new['version'] = version_new
+
+        scene_ptn_opt_new = self._task_parse.generate_source_task_scene_src_pattern_opt_for(
+            application=application,
+            **kwargs_new
+        )
+        scene_path_new = scene_ptn_opt_new.get_value()
+        bsc_storage.StgFileOpt(scene_path).copy_to_file(scene_path_new)
+
+        if thumbnail_path is not None:
+            thumbnail_ptn_opt_new = self._task_parse.generate_source_task_thumbnail_pattern_opt_for(
+                application=application,
+                **kwargs_new
+            )
+            thumbnail_path_new = thumbnail_ptn_opt_new.get_value()
+            bsc_storage.StgFileOpt(thumbnail_path).copy_to_file(thumbnail_path_new)
+
+        if gui_core.GuiUtil.language_is_chs():
+            gui_core.GuiApplication.exec_message_dialog(
+                '发送文件：{}。'.format(scene_ptn_opt_new),
+                title='发送文件',
+                size=(320, 120),
+                status='correct',
+            )
+        else:
+            gui_core.GuiApplication.exec_message_dialog(
+                'Send file: {}'.format(scene_ptn_opt_new),
+                title='Send File',
+                size=(320, 120),
+                status='correct',
+            )
 
     def generate_pattern_opt_for(self, keyword, **kwargs):
         return self._task_parse.generate_pattern_opt_for(keyword, **kwargs)

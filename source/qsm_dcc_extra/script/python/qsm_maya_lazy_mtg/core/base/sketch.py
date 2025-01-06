@@ -72,11 +72,14 @@ class Sketch(object):
             )
             return node
         else:
+            translate = cmds.getAttr(target_node+'.translate')[0]
             _ = cmds.pointConstraint(
                 self._path, target_node,
                 # maintainOffset=1, weight=1
             )
             node = _[0]
+            # update reset
+            qsm_mya_core.PointConstraint.update_offset(node, translate)
             return node
 
     def create_orient_constraint_to_master_layer(self, target_node):
@@ -99,19 +102,20 @@ class Sketch(object):
             )
             return node
         else:
+            rotate = cmds.getAttr(target_node+'.rotate')[0]
             _ = cmds.orientConstraint(
                 self._path, target_node, maintainOffset=1, weight=1
             )
             node = _[0]
+            # update reset
+            qsm_mya_core.OrientConstraint.update_offset(node, rotate)
+            # remove offset?
             cmds.setAttr(node+'.interpType', 2)
-            for i in [
-                'offsetX',
-                'offsetY',
-                'offsetZ'
-            ]:
+            for i in ['offsetX', 'offsetY', 'offsetZ']:
                 cmds.setAttr(
                     node+'.'+i, 0
                 )
+
             return node
 
     def create_point_constraint_to_resource(self, target_node):

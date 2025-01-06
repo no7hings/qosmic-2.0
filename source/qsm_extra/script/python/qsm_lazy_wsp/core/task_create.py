@@ -54,7 +54,6 @@ class DccTaskCreateOpt(object):
         )
 
         scene_src_path = task_scene_ptn_opt_new.get_value()
-        print scene_src_path
 
         thumbnail_ptn_opt_new = task_parse.generate_source_task_thumbnail_pattern_opt_for(
             application=application,

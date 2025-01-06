@@ -71,7 +71,7 @@ dag_nodes:
         type: transform
         properties:
             translateX: -28
-            translateY: 10
+            translateY: 18.5
             translateZ: 28
             rotateX: -15
             rotateY: -45

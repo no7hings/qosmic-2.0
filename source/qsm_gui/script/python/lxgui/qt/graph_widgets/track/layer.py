@@ -34,6 +34,8 @@ class QtTrackLayer(
 
         self._layer_rect = QtCore.QRect()
 
+        self._current_index = 0
+
     def paintEvent(self, event):
         painter = _qt_core.QtNGPainter(self)
         self._draw_layer_basic_(painter)
@@ -47,6 +49,12 @@ class QtTrackLayer(
 
         self._refresh_widget_all_()
 
+    def _set_current_index_(self, index):
+        self._current_index = index
+        
+    def _get_current_index_(self):
+        return self._current_index
+
     def _set_graph_(self, widget):
         self._graph = widget
 
@@ -56,7 +64,7 @@ class QtTrackLayer(
     def _draw_layer_basic_(self, painter):
         x, y, w, h = self._layer_rect.x(), self._layer_rect.y(), self._layer_rect.width(), self._layer_rect.height()
 
-        c = self._coord_model.unit_count
+        c = self._coord_model.unit_index_count
 
         for i in range(c):
             i_layer_index = self._coord_model.compute_draw_index_at(i)
@@ -66,6 +74,12 @@ class QtTrackLayer(
                 i_rgba =_gui_core.GuiRgba.Dark
                 painter._set_border_color_(i_rgba)
                 painter._set_background_color_(i_rgba)
+                painter.drawRect(i_rect)
+
+            if i_layer_index == self._current_index:
+                painter.setPen(QtGui.QColor(0, 0, 0, 0))
+                i_brush = QtGui.QBrush(QtGui.QColor(95, 127, 255, 63))
+                painter.setBrush(i_brush)
                 painter.drawRect(i_rect)
 
             painter._set_border_color_(_gui_core.GuiRgba.DarkGray)

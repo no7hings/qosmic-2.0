@@ -2861,7 +2861,7 @@ class PainterFnc(object):
         painter._set_border_color_(_gui_core.GuiRgba.LightGray)
         painter._set_font_(_base.QtFont.generate(size=8))
         # draw +1
-        for i in range(coord_model.unit_count):
+        for i in range(coord_model.unit_index_count):
             # offset -1
             i_time_index = coord_model.compute_draw_index_at(i)
             if i_time_index == 0:

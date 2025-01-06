@@ -141,7 +141,7 @@ class _PrxNodeView(
             qt_item._item_model.set_icon(qt_icon)
             qt_item._item_model.set_assign_data('dcc_node', dcc_location)
 
-            self._update_cfx_rig_version(qt_item, task_session, asset_handle)
+            self._refresh_cfx_rig_version(qt_item, task_session, asset_handle)
         else:
             qt_item._item_model.set_icon_name('node/default')
             qt_item._item_model.set_status(qt_item._item_model.Status.Disable)
@@ -154,16 +154,22 @@ class _PrxNodeView(
             )
         )
 
-    def _update_cfx_rig_version(self, qt_item, task_session, asset_handle):
+    def _refresh_cfx_rig_version(self, qt_item, task_session, asset_handle):
+        rig_variant = asset_handle.cfx_rig_handle.get_rig_variant()
         scene_path = asset_handle.cfx_rig_handle.get_scene_path()
-        version_args = task_session.get_file_version_args('asset-release-maya-scene-file', scene_path)
+        if rig_variant == 'default':
+            keyword = 'asset-release-maya-scene-file'
+        else:
+            keyword = 'asset-release-maya-scene-var-file'
+
+        version_args = task_session.get_file_version_args(keyword, scene_path)
         if version_args:
             version, version_last = version_args
             if version == version_last:
-                qt_item._item_model.set_subname('v{}'.format(version))
+                qt_item._item_model.set_subname('v{}@{}'.format(version, rig_variant))
                 qt_item._item_model.set_status(qt_item._item_model.Status.Correct)
             else:
-                qt_item._item_model.set_subname('v{}({})'.format(version, version_last))
+                qt_item._item_model.set_subname('v{}({})@{}'.format(version, version_last, rig_variant))
                 qt_item._item_model.set_status(qt_item._item_model.Status.Warning)
         else:
             qt_item._item_model.set_status(qt_item._item_model.Status.Error)
@@ -171,30 +177,33 @@ class _PrxNodeView(
         self.gui_add_components(qt_item, asset_handle)
 
     def generate_cfx_rig_version_menu_data_fnc(self, qt_item, task_session, gui_task_tool_opt, asset_handle):
-        def fnc_(scene_path_):
-            gui_task_tool_opt.load_cfx_rig_scene_auto(rig_namespace, scene_path_)
+        def fnc_(cfx_rig_path_):
+            gui_task_tool_opt.load_cfx_rig_scene_auto(rig_namespace, cfx_rig_path_)
 
-            self._update_cfx_rig_version(qt_item, task_session, asset_handle)
+            self._refresh_cfx_rig_version(qt_item, task_session, asset_handle)
 
         scene_path = asset_handle.cfx_rig_handle.get_scene_path()
         rig_namespace = asset_handle.rig_namespace
 
-        sub_menu_data = []
-        menu_data = [
-            [
-                'Load', 'history', sub_menu_data
-            ]
-        ]
+        menu_data = []
         version_dict = gui_task_tool_opt.generate_cfx_rig_version_dict(rig_namespace)
-        for k, v in version_dict.items():
-            if v == scene_path:
-                sub_menu_data.append(
-                    (k, 'file/version', None)
-                )
-            else:
-                sub_menu_data.append(
-                    (k, 'file/version', functools.partial(fnc_, v))
-                )
+        for i_rig_variant, v in version_dict.items():
+            i_sub_menu_data = []
+            menu_data.append(
+                [
+                    'Load Rig "{}"'.format(i_rig_variant), 'history',
+                    i_sub_menu_data
+                ]
+            )
+            for j_version, j_cfx_rig_path in v.items():
+                if j_cfx_rig_path == scene_path:
+                    i_sub_menu_data.append(
+                        (j_version, 'file/version', None)
+                    )
+                else:
+                    i_sub_menu_data.append(
+                        (j_version, 'file/version', functools.partial(fnc_, j_cfx_rig_path))
+                    )
         return menu_data
 
     def gui_add_ani_geo_cache(self, gui_task_tool_opt, asset_handle):

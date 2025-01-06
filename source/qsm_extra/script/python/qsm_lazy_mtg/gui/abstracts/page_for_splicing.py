@@ -42,12 +42,23 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
 
     def _gui_add_main_tools(self, prx_tool_box):
         for i in [
-            # ('new', 'montage/splicing-new', 'Press to new splicing', self._on_gui_show_new_splicing_window),
             ('refresh', 'refresh', 'Press to refresh GUI', functools.partial(self.do_gui_refresh_all, force=True)),
-            ('export', 'montage/splicing-export', 'Press to export splicing', self._on_dcc_export),
             ('delete', 'montage/delete', 'Press to delete splicing', self._on_dcc_delete),
             ('bake', 'montage/bake-keyframe', 'Press to bake splicing', self._on_dcc_bake),
             ('look_from_persp_cam', 'tool/camera', 'Press Look from Persp Camera', self._on_dcc_look_from_persp_cam)
+        ]:
+            i_key, i_icon_name, i_tool_tip, i_fnc = i
+            i_tool = gui_prx_widgets.PrxIconPressButton()
+            prx_tool_box.add_widget(i_tool)
+            i_tool.set_name(i_key)
+            i_tool.set_icon_name(i_icon_name)
+            i_tool.set_tool_tip(i_tool_tip)
+            i_tool.connect_press_clicked_to(i_fnc)
+
+    def _gui_add_export_import_tools(self, prx_tool_box):
+        for i in [
+            ('export', 'montage/splicing-export', 'Press to export track', self._on_dcc_export),
+            ('import', 'montage/splicing-import', 'Press to import track', self._on_dcc_import),
         ]:
             i_key, i_icon_name, i_tool_tip, i_fnc = i
             i_tool = gui_prx_widgets.PrxIconPressButton()
@@ -146,6 +157,11 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
         )
         self._gui_add_main_tools(self._main_prx_tool_box)
 
+        self._export_import_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
+            'export import'
+        )
+        self._gui_add_export_import_tools(self._export_import_prx_tool_box)
+
         self._rig_switch_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'rig switch'
         )
@@ -218,6 +234,9 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
         pass
 
     def _on_dcc_export(self):
+        pass
+
+    def _on_dcc_import(self):
         pass
 
     def _on_dcc_delete(self):
