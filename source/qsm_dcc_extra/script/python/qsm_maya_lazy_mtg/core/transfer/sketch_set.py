@@ -179,5 +179,5 @@ class TransferSketchSet(_bsc_sketch_set.AbsSketchSet):
         # do not mark undo here
         qsm_mya_mtn_core.ControlSetBake(self._paths).execute(
             start_frame, end_frame,
-            attributes=attributes
+            attributes=attributes, reduce_filter=False
         )

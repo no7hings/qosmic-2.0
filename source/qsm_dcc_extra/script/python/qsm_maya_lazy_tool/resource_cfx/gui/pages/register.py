@@ -1,5 +1,5 @@
 # coding:utf-8
-import qsm_lazy_tool.resource.gui.abstracts as _abstracts
+import qsm_lazy_rsc.gui.abstracts as _abstracts
 
 import qsm_screw.core as qsm_scr_core
 

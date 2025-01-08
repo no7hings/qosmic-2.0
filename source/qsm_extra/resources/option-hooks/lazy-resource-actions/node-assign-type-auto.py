@@ -18,7 +18,7 @@ class Main(object):
     def execute(self):
         window = self._session.find_window()
         if window is not None:
-            import qsm_lazy_tool.resource.gui.subpanels.assign as subpanel_assign
+            import qsm_lazy_rsc.gui.subpanels.assign as subpanel_assign
 
             scr_stage_name = self._option_opt.get('stage_name')
 

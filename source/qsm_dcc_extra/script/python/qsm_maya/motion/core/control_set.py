@@ -268,7 +268,12 @@ class ControlSetBake(object):
         self._paths = paths
 
     @_mya_core.Undo.execute
-    def execute(self, start_frame, end_frame, attributes, frame_extend=0, **kwargs):
+    def execute(
+        self,
+        start_frame, end_frame,
+        attributes, frame_extend=0,
+        euler_filter=True, reduce_filter=True, **kwargs
+    ):
         """
         bakeResults
             -simulation true
@@ -310,21 +315,27 @@ class ControlSetBake(object):
             self._paths,
             **options
         )
+
         # remove non change frames
         self._simplify(start_frame, end_frame, attributes)
+
         # filter
         curves = _mya_core.AnimCurveNodes.get_all_from(self._paths)
+
         # euler filter
-        cmds.filterCurve(
-            *curves
-        )
+        if euler_filter is True:
+            cmds.filterCurve(
+                *curves
+            )
+
         # reduce
-        cmds.filterCurve(
-            curves,
-            filter='keyReducer',
-            precisionMode=1,
-            precision=2.5,
-        )
+        if reduce_filter is True:
+            cmds.filterCurve(
+                curves,
+                filter='keyReducer',
+                precisionMode=1,
+                precision=2.5,
+            )
 
     def _simplify(self, start_frame, end_frame, attributes):
         """

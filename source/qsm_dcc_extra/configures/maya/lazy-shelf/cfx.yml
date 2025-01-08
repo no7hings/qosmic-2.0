@@ -49,6 +49,7 @@ build:
                     tool_tip_chs:
                         |-
                         点击打开拍屏工具
+
                     button_style: 'text_and_icon'
                     button_name: 'PLB'
                     button_name_chs: '拍屏'
@@ -133,6 +134,6 @@ build:
                     button_style: 'text_and_icon'
                     button_name: 'RSC'
                     button_name_chs: '资源'
-                    icon: 'tool/kit'
+                    icon: 'lazy/resource'
                     script: 'import lxbasic.session as bsc_session; bsc_session.Hook.execute("dcc-tools/maya/qsm-lazy-resource")'
                     dbl_script: ''

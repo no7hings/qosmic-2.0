@@ -136,7 +136,10 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
 
         self.gui_update_thread_flag()
 
-        self._task_unit_path_tmp = None
+        self._unit.gui_update_task_session()
+
+        # restore this variant?
+        # self._task_unit_path_tmp = None
 
         resource_properties = self._unit._resource_properties
 
@@ -213,7 +216,9 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
                 if _matches:
                     _task_unit_variants = dict(task_unit_variants)
                     _task_unit_variants.update(_matches[-1])
+
                     self._unit.on_open_task_scene(_task_unit_variants)
+                    self._unit.gui_update_current_task_unit(_task_unit_variants)
 
             _matches, _gui_thread_flag = data_
             if _gui_thread_flag != self._gui_thread_flag:
@@ -249,7 +254,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
         if self._unit._task_session is not None:
             resource_path = self._unit._resource_path
             task_unit_path = self._unit._task_session.task_unit_path
-            # check is task is current resource
+            # check is task unit is current resource
             if task_unit_path.startswith(resource_path):
                 if path == task_unit_path:
                     qt_item._item_model.focus_select()
@@ -263,7 +268,10 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
         else:
             if self._task_unit_path_tmp is None:
                 if path.endswith('main'):
-                    self._task_unit_path_tmp = path
+                    # self._task_unit_path_tmp = path
+                    qt_item._item_model.focus_select()
+            else:
+                if path == self._task_unit_path_tmp:
                     qt_item._item_model.focus_select()
 
         qt_item._item_model.set_show_fnc(cache_fnc_, build_fnc_)
@@ -495,6 +503,7 @@ class _GuiSourceTaskUnitSceneOpt(_GuiBaseOpt):
 
         def press_dbl_click_fnc_():
             self._unit.on_open_task_scene(task_unit_scene_variants)
+            self._unit.gui_update_current_task_unit(task_unit_scene_variants)
 
         scene_src_path = task_unit_scene_variants['result']
 
@@ -561,10 +570,14 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
 
     RESOURCE_TYPE = None
 
-    def on_open_task_scene(self, task_unit_scene_properties):
-        scene_path = task_unit_scene_properties.get('result')
+    def on_open_task_scene(self, task_unit_scene_variants):
+        scene_path = task_unit_scene_variants.get('result')
         bsc_storage.StgExplorer.open_file(scene_path)
         return False
+
+    def gui_update_current_task_unit(self, task_unit_scene_variants):
+        path = self._task_parse.to_wsp_task_unit_path(**task_unit_scene_variants)
+        self._gui_task_opt._task_unit_path_tmp = path
 
     def on_increment_and_save_task_scene(self):
         # regenerate a session to save
@@ -780,14 +793,13 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
     def do_gui_refresh_all(self, force=False):
         scan_resource_prx_input = self._page.gui_get_scan_resource_prx_input(self.RESOURCE_TYPE)
 
-        self._task_session = self._task_parse.generate_task_session_by_resource_source_scene_src_auto()
+        self.gui_update_task_session()
+
         # update resource path
         if self._task_session:
             # check resource branch is match
             if self._task_session.properties.resource_type == self.RESOURCE_TYPE:
                 scan_resource_prx_input.set_path(self._task_session.scan_resource_path)
-                # artist = self._task_session.properties.get('artist') or 'shared'
-                # self._page._gui_switch_user(artist)
 
         artist = self._page._artist
 
@@ -803,3 +815,7 @@ class AbsPrxUnitForTaskManager(gui_prx_widgets.PrxBaseUnit):
 
         self._gui_task_opt.do_gui_refresh_all()
         self._gui_task_scene_opt.do_gui_refresh_all()
+
+    def gui_update_task_session(self):
+        self._task_session = self._task_parse.generate_task_session_by_resource_source_scene_src_auto()
+        return self._task_session

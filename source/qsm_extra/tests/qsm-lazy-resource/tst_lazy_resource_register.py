@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxgui.proxy.core as gui_prx_core
 
-import qsm_lazy_tool.resource.gui.subpanels.register as p
+import qsm_lazy_rsc.gui.subpanels.register as p
 
 import os
 
