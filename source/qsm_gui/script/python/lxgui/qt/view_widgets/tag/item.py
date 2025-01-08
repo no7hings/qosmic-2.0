@@ -1,28 +1,25 @@
 # coding=utf-8
-import collections
 import copy
 
 import fnmatch
-
-import os
 
 import six
 
 import lxbasic.core as bsc_core
 # gui
-from ... import core as _gui_core
+from .... import core as _gui_core
 # qt
-from ...qt.core.wrap import *
+from ....qt.core.wrap import *
 
-from ...qt import core as _qt_core
+from ....qt import core as _qt_core
 
-from ...qt import abstracts as _qt_abstracts
+from ....qt import abstracts as _qt_abstracts
 # qt widgets
-from ..widgets import base as _wgt_base
+from ...widgets import base as _wgt_base
 
-from ..widgets import utility as _wgt_utility
+from ...widgets import utility as _wgt_utility
 
-from ..view_models import item_for_tag as _vew_mod_item_for_tag
+from ...view_models import item_for_tag as _vew_mod_item_for_tag
 
 
 class _AbsTagItem(object):
@@ -284,7 +281,7 @@ class _QtTagNodeItem(
         self._pixmap_cache = QtGui.QPixmap(size)
         painter = _qt_core.QtPainter(self._pixmap_cache)
         self._pixmap_cache.fill(QtGui.QColor(*_gui_core.GuiRgba.Dim))
-        
+
         item_model_data = self._item_model._data
         is_hovered = item_model_data.hover.flag
 

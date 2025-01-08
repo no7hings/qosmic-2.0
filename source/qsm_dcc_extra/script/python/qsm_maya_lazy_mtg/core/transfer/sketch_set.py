@@ -171,3 +171,13 @@ class TransferSketchSet(_bsc_sketch_set.AbsSketchSet):
         if curve_nodes:
             return qsm_mya_core.AnimCurveNodes.get_range(curve_nodes)
         return qsm_mya_core.Frame.get_frame_range()
+
+    def find_one(self, sketch_key):
+        return self._sketch_map.get(sketch_key)
+
+    def bake_all_keyframes(self, start_frame, end_frame, attributes=None):
+        # do not mark undo here
+        qsm_mya_mtn_core.ControlSetBake(self._paths).execute(
+            start_frame, end_frame,
+            attributes=attributes
+        )

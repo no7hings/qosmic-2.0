@@ -53,8 +53,9 @@ button:
     press_button:
         widget: button
         name: 'Press Button'
-        icon: 'reload'
+#        icon: 'reload'
         menu_enable: True
+        use_name_icon: True
 
 tuple:
     tuple/tuple/float2:

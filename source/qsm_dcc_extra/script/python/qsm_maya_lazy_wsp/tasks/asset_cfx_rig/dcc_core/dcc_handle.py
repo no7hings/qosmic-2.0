@@ -16,6 +16,7 @@ from . import dcc_asset as _rig_operate
 
 class AssetCfxRigHandle(_abc.AbsGroupOpt):
     LOCATION = '|master|cfx_rig'
+    LOCATION_NAME = 'cfx_rig'
 
     def __init__(self, *args, **kwargs):
         # create force
@@ -27,12 +28,101 @@ class AssetCfxRigHandle(_abc.AbsGroupOpt):
         )
 
     @classmethod
-    def get_rig_variant(cls):
+    def get_rig_variant_name(cls):
         location = cls.LOCATION
         if qsm_mya_core.NodeAttribute.is_exists(location, 'qsm_variant'):
             return qsm_mya_core.NodeAttribute.get_as_string(location, 'qsm_variant')
         return 'default'
 
+    @classmethod
+    def get_rig_variant_names(cls):
+        current = cls.get_rig_variant_name()
+        if current:
+            if current != 'default':
+                return [current, 'default']
+        return ['default']
+    
+    @classmethod
+    def mark_rig_variant(cls, name):
+        qsm_mya_core.NodeAttribute.create_as_string(
+            cls.LOCATION, 'qsm_variant', name
+        )
+
+    # rig preset
+    @classmethod
+    def get_rig_preset_name(cls, namespace=None):
+        if namespace is not None:
+            location = '{}:{}'.format(namespace, cls.LOCATION_NAME)
+        else:
+            location = cls.LOCATION
+
+        if qsm_mya_core.NodeAttribute.is_exists(location, 'qsm_preset'):
+            return qsm_mya_core.NodeAttribute.get_as_string(location, 'qsm_preset')
+        return 'default'
+
+    @classmethod
+    def create_or_update_rig_preset(cls, name, namespace=None):
+        if namespace is not None:
+            location = '{}:{}'.format(namespace, cls.LOCATION_NAME)
+        else:
+            location = cls.LOCATION
+
+        qsm_mya_core.NodeAttribute.create_as_string(
+            location, 'qsm_preset', name
+        )
+
+        group_opt = qsm_mya_core.GroupOpt(location)
+        n_clothes = group_opt.find_all_shapes_by_type('nCloth')
+        for i_n_cloth in n_clothes:
+            i_n_cloth_opt = qsm_mya_core.EtrNodeOpt(i_n_cloth)
+            i_dict = i_n_cloth_opt.get_dict(key_includes=qsm_mya_core.NCloth.PRESET_KEY_INCLUDES)
+            i_atr_name = 'qsm_preset_{}'.format(name)
+            qsm_mya_core.NodeAttribute.create_as_dict(i_n_cloth, i_atr_name, i_dict)
+
+            qsm_mya_core.NodeAttribute.create_as_string(i_n_cloth, 'qsm_preset', name)
+
+    @classmethod
+    def load_rig_preset(cls, name, namespace=None):
+        if namespace is not None:
+            location = '{}:{}'.format(namespace, cls.LOCATION_NAME)
+        else:
+            location = cls.LOCATION
+
+        qsm_mya_core.NodeAttribute.create_as_string(
+            location, 'qsm_preset', name
+        )
+        group_opt = qsm_mya_core.GroupOpt(location)
+        n_clothes = group_opt.find_all_shapes_by_type('nCloth')
+        for i_n_cloth in n_clothes:
+            i_atr_name = 'qsm_preset_{}'.format(name)
+            if qsm_mya_core.NodeAttribute.is_exists(i_n_cloth, i_atr_name):
+                i_n_cloth_opt = qsm_mya_core.EtrNodeOpt(i_n_cloth)
+                i_dict = qsm_mya_core.NodeAttribute.get_as_dict(i_n_cloth, i_atr_name)
+                i_n_cloth_opt.set_dict(i_dict)
+
+                qsm_mya_core.NodeAttribute.create_as_string(i_n_cloth, 'qsm_preset', name)
+
+    @classmethod
+    def get_rig_preset_names(cls, namespace=None):
+        if namespace is not None:
+            location = '{}:{}'.format(namespace, cls.LOCATION_NAME)
+        else:
+            location = cls.LOCATION
+
+        list_ = []
+        group_opt = qsm_mya_core.GroupOpt(location)
+        n_clothes = group_opt.find_all_shapes_by_type('nCloth')
+        for i_n_cloth in n_clothes:
+            i_n_cloth_opt = qsm_mya_core.EtrNodeOpt(i_n_cloth)
+            i_names = i_n_cloth_opt.get_all_customize_port_paths()
+            i_matches = bsc_core.BscFnmatch.filter(i_names, 'qsm_preset_*')
+            for j in i_matches:
+                j_name = j[len('qsm_preset_'):]
+                if j_name not in list_:
+                    list_.append(j_name)
+        return list_ or ['default']
+
+    # component data
     def generate_component_data(self):
         return self.generate_component_data_for(
             '/cfx_rig', self.LOCATION
@@ -337,3 +427,7 @@ class AssetCfxRigHandle(_abc.AbsGroupOpt):
         qsm_mya_core.MeshWrapSource.auto_collect_base_transforms(
             mesh_transform_tgt_new
         )
+
+    @classmethod
+    def save_properties_template(cls, name):
+        pass

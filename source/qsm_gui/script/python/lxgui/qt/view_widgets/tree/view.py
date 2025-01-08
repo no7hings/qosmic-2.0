@@ -3,35 +3,35 @@ import six
 
 import lxbasic.core as bsc_core
 # gui
-from ... import core as _gui_core
+from .... import core as _gui_core
 # qt
-from ...qt.core.wrap import *
+from ....qt.core.wrap import *
 
-from ...qt import core as _qt_core
+from ....qt import core as _qt_core
 
-from ...qt import abstracts as _qt_abstracts
+from ....qt import abstracts as _qt_abstracts
 
-from ..widgets.input import input_for_filter as _wgt_input_for_filter
+from ...widgets.input import input_for_filter as _wgt_input_for_filter
 
-from ..widgets import utility as _wgt_utility
+from ...widgets import utility as _wgt_utility
 
-from ..widgets import container as _wgt_container
+from ...widgets import container as _wgt_container
 
-from ..widgets import button as _wgt_button
+from ...widgets import button as _wgt_button
 
-from ..widgets import scroll as _wgt_scroll
+from ...widgets import scroll as _wgt_scroll
 
-from ..widgets import chart as _wgt_chart
+from ...widgets import chart as _wgt_chart
 
-from ..widgets import view_for_histogram_chart as _wgt_view_for_histogram_chart
+from ...widgets import view_for_histogram_chart as _wgt_view_for_histogram_chart
 
-from ..view_models import base as _vew_mod_base
+from ...view_models import base as _vew_mod_base
 
-from ..view_models import view_for_tree as _vew_mod_tree
+from ...view_models import view_for_tree as _vew_mod_tree
 
-from . import item_for_tree as _item_for_tree
+from .. import base as _base
 
-from . import base as _base
+from . import item as _item
 
 
 class _QtListItemDelegate(QtWidgets.QStyledItemDelegate):
@@ -86,7 +86,7 @@ class _QtTreeViewWidget(
         self.setHeaderHidden(True)
 
         self._view_model = _vew_mod_tree.TreeViewModel(self)
-        self._view_model.data.item.cls = _item_for_tree.QtTreeItem
+        self._view_model.data.item.cls = _item.QtTreeItem
 
         self.setItemDelegate(_QtListItemDelegate(self))
 

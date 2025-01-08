@@ -1,17 +1,10 @@
 # coding=utf-8
-import six
-
-import collections
-
-import lxbasic.core as bsc_core
 # gui
 from ... import core as _gui_core
 # qt
 from ...qt.core.wrap import *
 
 from ..widgets import base as _qt_wgt_base
-
-from ..widgets import entry_frame as _wgt_entry_frame
 
 
 class _BaseViewWidget(QtWidgets.QWidget):

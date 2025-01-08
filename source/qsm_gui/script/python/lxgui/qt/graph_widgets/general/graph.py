@@ -344,7 +344,7 @@ class QtGeneralNodeGraph(
             i_ng_node._set_name_text_(
                 i_obj.name
             )
-            i_ng_node._set_icon_by_text_(
+            i_ng_node._set_name_icon_text_(
                 i_obj.type_name
             )
             i_ng_node._set_tool_tip_(['path: "{}"'.format(i_obj.path)])

@@ -103,6 +103,19 @@ build:
                         点击禁用解算预设：
                             只有解算预设被加载了才能使用这个按钮禁用。
 
+                cfx_rig/load_rig_preset:
+                    widget: button
+                    name: 'Load Rig Preset (Cloth)'
+                    name_chs: '加载预设模版（布料）'
+                    use_name_icon: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        点击加载预设模版：
+                            只有资产解算预设阶段做过“预设模版”才能争取记载。
+
                 ani_cache:
                     widget: group
                     name: 'Animation Cache'

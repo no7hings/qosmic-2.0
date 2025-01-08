@@ -108,7 +108,7 @@ class PrxToolsetForAssetCfxRigRelease(_abs_unit_for_task_release.AbsPrxUnitForTa
 
     @classmethod
     def get_rig_variants(cls):
-        return [_task_dcc_core.AssetCfxRigHandle.get_rig_variant()]
+        return [_task_dcc_core.AssetCfxRigHandle.get_rig_variant_name()]
 
     def do_gui_refresh_all(self):
         super(PrxToolsetForAssetCfxRigRelease, self).do_gui_refresh_all()

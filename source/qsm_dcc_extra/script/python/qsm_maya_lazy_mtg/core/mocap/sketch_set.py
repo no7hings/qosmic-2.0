@@ -93,40 +93,36 @@ class MocapSketchSet(_bsc_sketch_set.AbsSketchSet):
             return qsm_mya_core.AnimCurveNodes.get_range(curve_nodes)
         return qsm_mya_core.Frame.get_frame_range()
 
-    def connect_to_master_sketch(self, sketch_set):
-        for i_key, v in self._sketch_map.items():
+    def constraint_to_transfer_sketch(self, sketch_set, break_parent_inverse=False):
+        for i_sketch_key, v in self._sketch_map.items():
             i_src = v
-            i_tgt = sketch_set.get(i_key)
+            i_tgt = sketch_set.get(i_sketch_key)
 
-            if i_key == self.ChrMasterSketches.Root_M:
+            if i_sketch_key == self.ChrMasterSketches.Root_M:
                 qsm_mya_core.PointConstraint.create(
-                    i_src, i_tgt
+                    i_src, i_tgt, break_parent_inverse=break_parent_inverse
                 )
 
             qsm_mya_core.OrientConstraint.create(
                 i_src, i_tgt, maintain_offset=1
             )
 
-    def connect_from_master_layer(self, layer):
-        for i_key, v in self._sketch_map.items():
-            i_src = layer.get(i_key)
-            i_tgt = v
+    def constraint_from_master_layer(self, master_layer):
+        for i_sketch_key, v in self._sketch_map.items():
+            i_sketch_src = master_layer.get_sketch(i_sketch_key)
+            i_sketch_tgt = v
 
-            if i_key == self.ChrMasterSketches.Root_M:
+            if i_sketch_key == self.ChrMasterSketches.Root_M:
                 qsm_mya_core.PointConstraint.create(
-                    i_src, i_tgt
+                    i_sketch_src, i_sketch_tgt
                 )
 
             qsm_mya_core.OrientConstraint.create(
-                i_src, i_tgt, maintain_offset=1
+                i_sketch_src, i_sketch_tgt, maintain_offset=1
             )
 
     def generate_bbox(self):
         self.zero_out()
-        # start_frame, end_frame = self.get_frame_range()
-        # print start_frame, end_frame
-        # count = end_frame-start_frame+1
-        # middle = count/2
-        # print qsm_mya_core.BBox.exact_for_many(
-        #     self._paths
-        # )
+
+    def find_one(self, sketch_key):
+        return self._sketch_map.get(sketch_key)

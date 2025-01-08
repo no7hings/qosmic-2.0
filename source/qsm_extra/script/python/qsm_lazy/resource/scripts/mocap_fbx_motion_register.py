@@ -36,6 +36,8 @@ class MoCapFbxMotionRegister(object):
         '/characters/basics/standing_up': ['stand', 'standing'],
         '/characters/basics/dying': ['die', 'dying'],
         '/characters/basics/laying': ['lay', 'laying'],
+        '/characters/basics/talking': ['talk', 'talking'],
+        '/characters/basics/arguing': ['argue', 'arguing'],
         '/characters/basics/pose': ['pose'],
 
         '/characters/dances/capoeira': ['capoeira'],

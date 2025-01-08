@@ -108,7 +108,7 @@ class AbsQtMainWindowDef(object):
             self._widget, pos, size, use_exec
         )
 
-    def _set_icon_by_text_(self, text):
+    def _set_name_icon_text_(self, text):
         self._widget.setWindowIcon(
             _qt_core.QtIcon.generate_by_text(text)
         )

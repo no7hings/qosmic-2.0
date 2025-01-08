@@ -58,10 +58,10 @@ class AbsPrxToolGroup(gui_prx_abstracts.AbsPrxWidget):
         self._qt_head._set_name_text_(name)
 
     def set_icon_by_text(self, name):
-        self._qt_head._set_icon_by_text_(name)
+        self._qt_head._set_name_icon_text_(name)
 
     def set_name_icon_enable(self, boolean):
-        self._qt_head._set_icon_name_enable_(boolean)
+        self._qt_head._set_name_icon_enable_(boolean)
 
     def set_expand_icon_file(self, icon_file_path_0, icon_file_path_1):
         self._qt_head._set_expand_icon_file_path_(

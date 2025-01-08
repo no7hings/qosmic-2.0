@@ -328,6 +328,7 @@ class AnmCurveNodeOpt(object):
             # fixme: time is None?
             if i_time is None:
                 continue
+
             self.create_value_at_time(i_time+frame_offset, i_value*value_factor)
             self.set_tangents_at_time(i_time+frame_offset, i_tangents)
 
@@ -338,6 +339,7 @@ class AnmCurveNodeOpt(object):
             # fixme: time is None?
             if f_time is None:
                 return
+
             self.create_value_at_time(f_time+frame_offset, f_value*value_factor)
             self.set_tangents_at_time(f_time+frame_offset, f_tangents)
 
@@ -347,7 +349,11 @@ class AnmCurveNodeOpt(object):
             i_time = self.get_time_at(i_index)
             i_value = self.get_value_at(i_index)
             i_value_new = i_value+offset_value
+
             self.create_value_at_time(i_time, i_value_new)
+
+    def do_euler_filter(self):
+        cmds.filterCurve(self._path)
 
 
 class NodePortAnmLayerOpt(object):

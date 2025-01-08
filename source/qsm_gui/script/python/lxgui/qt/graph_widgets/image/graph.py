@@ -146,7 +146,7 @@ class QtImageGraph(_gnl_graph.QtGeneralNodeGraph):
                 i_ng_node._set_name_text_(
                     i_obj.name
                 )
-                i_ng_node._set_icon_by_text_(
+                i_ng_node._set_name_icon_text_(
                     i_obj.type_name
                 )
 

@@ -52,7 +52,7 @@ class Sketch(object):
     def apply_rotations(self, rotations):
         pass
 
-    def create_point_constraint_to_master_layer(self, target_node):
+    def create_point_constraint_to_master_layer(self, target_node, break_parent_inverse=False):
         # when is created, connect to exists
         results = qsm_mya_core.PointConstraint.get_all_from_source(target_node)
         if results:
@@ -78,11 +78,22 @@ class Sketch(object):
                 # maintainOffset=1, weight=1
             )
             node = _[0]
+
             # update reset
-            qsm_mya_core.PointConstraint.update_offset(node, translate)
+            qsm_mya_core.PointConstraint.update_reset(node, translate)
+            
+            # break parent inverse
+            if break_parent_inverse is True:
+                target = node+'.constraintParentInverseMatrix'
+                _ = cmds.listConnections(
+                    target, destination=0, source=1, plugs=1
+                )
+                if _:
+                    source = _[0]
+                    cmds.disconnectAttr(source, target)
             return node
 
-    def create_orient_constraint_to_master_layer(self, target_node):
+    def create_orient_constraint_to_master_layer(self, target_node, break_parent_inverse=False):
         # when is created, connect to exists
         results = qsm_mya_core.OrientConstraint.get_all_from_source(target_node)
         if results:
@@ -103,12 +114,15 @@ class Sketch(object):
             return node
         else:
             rotate = cmds.getAttr(target_node+'.rotate')[0]
+
             _ = cmds.orientConstraint(
                 self._path, target_node, maintainOffset=1, weight=1
             )
             node = _[0]
+
             # update reset
-            qsm_mya_core.OrientConstraint.update_offset(node, rotate)
+            qsm_mya_core.OrientConstraint.update_reset(node, rotate)
+            
             # remove offset?
             cmds.setAttr(node+'.interpType', 2)
             for i in ['offsetX', 'offsetY', 'offsetZ']:
@@ -116,6 +130,15 @@ class Sketch(object):
                     node+'.'+i, 0
                 )
 
+            # break parent inverse
+            if break_parent_inverse is True:
+                target = node+'.constraintParentInverseMatrix'
+                _ = cmds.listConnections(
+                    target, destination=0, source=1, plugs=1
+                )
+                if _:
+                    source = _[0]
+                    cmds.disconnectAttr(source, target)
             return node
 
     def create_point_constraint_to_resource(self, target_node):

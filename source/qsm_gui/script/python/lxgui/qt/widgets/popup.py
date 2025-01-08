@@ -570,7 +570,7 @@ class _AbsQtPopupAsChoose(
                                     i_icon_file_path = icon_file_path_dict[i_value]
                                     i_item_widget._set_icon_file_path_(i_icon_file_path)
                                 else:
-                                    i_item_widget._set_icon_by_text_(i_value)
+                                    i_item_widget._set_name_icon_text_(i_value)
                     #
                     if i_value in keyword_filter_dict:
                         i_filter_keys = keyword_filter_dict[i_value]
@@ -620,7 +620,7 @@ class _AbsQtPopupAsChoose(
                         i_item._initialize_item_show_()
                         #
                         i_item_widget._set_name_text_(i_tag)
-                        i_item_widget._set_icon_by_text_(i_tag)
+                        i_item_widget._set_name_icon_text_(i_tag)
                         i_item_widget._set_tool_tip_text_(i_tag)
                         #
                         i_item_widget._add_item_tag_filter_keys_src_(i_tag)
@@ -975,9 +975,9 @@ class QtPopupForCompletion(
                             _qt_core.GuiQtDcc.generate_qt_file_icon(i_text)
                         )
                     else:
-                        i_item_widget._set_icon_by_text_(i_text)
+                        i_item_widget._set_name_icon_text_(i_text)
                 else:
-                    i_item_widget._set_icon_by_text_(i_text)
+                    i_item_widget._set_name_icon_text_(i_text)
 
                 #
                 if text_current == i_text:
@@ -1219,7 +1219,7 @@ class QtPopupAsChooseForGuide(
                 #
                 if i_text:
                     i_item_widget._set_name_text_(i_text)
-                    i_item_widget._set_icon_by_text_(i_text)
+                    i_item_widget._set_name_icon_text_(i_text)
                 #
                 i_item_widget._set_index_(seq)
                 if text_current == i_text:

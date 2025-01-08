@@ -1206,10 +1206,10 @@ class _QtHItem(
             c_x += icn_frm_w_0+spacing
             c_w -= icn_frm_w_0+spacing
         # use icon name
-        if self._icon_text is not None:
+        if self._name_icon_text is not None:
             icn_p = self._icon_text_draw_percent
             icn_w, icn_h = c_h*icn_p, c_h*icn_p
-            self._icon_text_draw_rect.setRect(
+            self._name_icon_draw_rect.setRect(
                 c_x+(c_h-icn_w)/2, c_y+(c_h-icn_h)/2, icn_w, icn_h
             )
             c_x += c_h+spacing
@@ -1346,10 +1346,10 @@ class _QtHItem(
             )
         else:
             # icon
-            if self._icon_text is not None:
+            if self._name_icon_text is not None:
                 painter._draw_image_use_text_by_rect_(
-                    rect=self._icon_text_draw_rect,
-                    text=self._icon_text,
+                    rect=self._name_icon_draw_rect,
+                    text=self._name_icon_text,
                     background_color=bkg_color,
                     offset=offset,
                     border_radius=1, border_width=2

@@ -314,6 +314,11 @@ class ControlSetBake(object):
         self._simplify(start_frame, end_frame, attributes)
         # filter
         curves = _mya_core.AnimCurveNodes.get_all_from(self._paths)
+        # euler filter
+        cmds.filterCurve(
+            *curves
+        )
+        # reduce
         cmds.filterCurve(
             curves,
             filter='keyReducer',

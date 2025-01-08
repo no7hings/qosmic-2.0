@@ -1037,46 +1037,46 @@ class AbsQtIconBaseDef(object):
 
     def _init_icon_base_def_(self, widget):
         self._widget = widget
-        #
-        self._icon_geometry_mode = self.IconGeometryMode.Square
 
-        self._file_icon_flag = False
+        self._icon_geometry_mode = self.IconGeometryMode.Square
+        
+        self._icon_flag = False
         self._icon_file_path = None
         self._hover_icon_file_path = None
 
-        self._icon_color_rgb = None
-        self._icon_text = None
+        self._color_icon_rgb = None
         self._icon_name_rgba = None
         
         self._sub_file_icon_flag = False
         self._sub_icon_file_path = None
         self._sub_icon_text = None
+
         self._name_icon_flag = False
-        #
-        self._icon_name_auto_color = True
-        #
+        self._name_icon_text = None
+        self._name_icon_auto_color = True
+
         self._icon = None
-        #
+
         self._icon_frame_draw_rect = QtCore.QRect()
         self._icon_draw_rect = QtCore.QRect()
         self._icon_sub_draw_rect = QtCore.QRect()
-        #
-        self._icon_color_draw_rect = QtCore.QRect()
-        self._icon_text_draw_rect = QtCore.QRect()
-        #
+
+        self._color_icon_draw_rect = QtCore.QRect()
+        self._name_icon_draw_rect = QtCore.QRect()
+
         self._icon_hover_color = None
-        #
+
         self._icon_frame_draw_size = 20, 20
-        #
+
         self._icon_draw_size = 16, 16
         self._icon_draw_percent = .75
         self._sub_icon_draw_size = 10, 10
         self._icon_sub_draw_percent = .5
-        #
-        self._icon_color_draw_size = 12, 12
-        self._icon_name_draw_size = 12, 12
+
+        self._icon_color_draw_size = 16, 16
+        self._name_icon_draw_size = 16, 16
         self._icon_text_draw_percent = .675
-        #
+
         self._icon_state_draw_is_enable = False
         self._icon_state_draw_rect = QtCore.QRect()
         self._icon_state_rect = QtCore.QRect()
@@ -1088,7 +1088,7 @@ class AbsQtIconBaseDef(object):
         self._icon_geometry_mode = mode
 
     def _set_icon_enable_(self, boolean):
-        self._file_icon_flag = boolean
+        self._icon_flag = boolean
 
     def _set_icon_state_draw_enable_(self, boolean):
         self._icon_state_draw_is_enable = boolean
@@ -1100,15 +1100,12 @@ class AbsQtIconBaseDef(object):
         self._icon_hover_color = qt_color
 
     def _set_icon_(self, icon):
-        self._file_icon_flag = True
+        self._icon_flag = True
         self._icon = icon
         self._widget.update()
 
-    def _set_icon_name_enable_(self, boolean):
-        self._name_icon_flag = boolean
-
     def _set_icon_file_path_(self, file_path):
-        self._file_icon_flag = True
+        self._icon_flag = True
         self._icon_file_path = file_path
         self._widget.update()
 
@@ -1153,39 +1150,46 @@ class AbsQtIconBaseDef(object):
         self._icon_draw_percent = p
 
     def _get_icon_file_path_(self):
-        if self._file_icon_flag is True:
+        if self._icon_flag is True:
             return self._icon_file_path
 
     def _set_icon_color_rgb_(self, rgb):
-        self._file_icon_flag = True
-        self._icon_color_rgb = rgb
+        self._icon_flag = True
+        self._color_icon_rgb = rgb
         self._widget.update()
 
-    def _set_icon_by_text_(self, text):
-        self._file_icon_flag = True
-        self._icon_text = text
+    # name icon
+    def _set_name_icon_enable_(self, boolean):
+        self._icon_flag = True
+        self._name_icon_flag = boolean
+
+    def _set_name_icon_text_(self, text):
+        self._set_name_icon_enable_(True)
+
+        self._name_icon_text = text
+
         self._widget.update()
 
     def _set_icon_name_auto_color_(self, boolean):
-        self._icon_name_auto_color = boolean
+        self._name_icon_auto_color = boolean
 
     def _set_icon_name_rgba_(self, rgba):
         self._icon_name_rgba = rgba
         self._widget.update()
 
     def _set_color_icon_rect_(self, x, y, w, h):
-        self._icon_color_draw_rect.setRect(
+        self._color_icon_draw_rect.setRect(
             x, y, w, h
         )
 
     def _set_icon_text_draw_rect_(self, x, y, w, h):
-        self._icon_text_draw_rect.setRect(
+        self._name_icon_draw_rect.setRect(
             x, y, w, h
         )
 
     def _get_icon_name_text_(self):
-        if self._file_icon_flag is True:
-            return self._icon_text
+        if self._icon_flag is True:
+            return self._name_icon_text
 
     def _set_icon_frame_draw_rect_(self, x, y, w, h):
         self._icon_frame_draw_rect.setRect(
@@ -1213,7 +1217,7 @@ class AbsQtIconsBaseDef(object):
     def _init_icons_base_def_(self, widget):
         self._widget = widget
 
-        self._file_icon_flag = False
+        self._icon_flag = False
 
         self._icon_pixmaps = []
         self._icon_file_paths = []

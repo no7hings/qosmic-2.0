@@ -867,6 +867,7 @@ class AbsToolKitForDesktop(gui_prx_widgets.PrxSessionWindow):
                 elif icon_color:
                     if icon_style is not None:
                         prx_tool.widget._set_icon_style_(icon_style)
+
                     prx_tool.set_icon_color(icon_color)
                     prx_tool.set_icon_by_text(name)
                 else:

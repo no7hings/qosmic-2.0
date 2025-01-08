@@ -88,8 +88,18 @@ class ScaleConstraint(object):
 
 class PointConstraint(object):
     @classmethod
-    def create(cls, parent_node, child_node, maintain_offset=False):
-        return cmds.pointConstraint(parent_node, child_node, maintainOffset=maintain_offset)[0]
+    def create(cls, parent_node, child_node, maintain_offset=False, break_parent_inverse=False):
+        # disconnectAttr transfer:Root_M.parentInverseMatrix[0] Root_M_pointConstraint1.constraintParentInverseMatrix
+        node = cmds.pointConstraint(parent_node, child_node, maintainOffset=maintain_offset)[0]
+        if break_parent_inverse is True:
+            target = node+'.constraintParentInverseMatrix'
+            _ = cmds.listConnections(
+                target, destination=0, source=1, plugs=1
+            )
+            if _:
+                source = _[0]
+                cmds.disconnectAttr(source, target)
+        return node
 
     @classmethod
     def get_next_index(cls, node):
@@ -138,7 +148,7 @@ class PointConstraint(object):
         return list(set_)
 
     @classmethod
-    def update_offset(cls, node, translate):
+    def update_reset(cls, node, translate):
         for seq, i in enumerate(['restTranslateX', 'restTranslateY', 'restTranslateZ']):
             cmds.setAttr(
                 '{}.{}'.format(node, i), translate[seq]
@@ -147,9 +157,18 @@ class PointConstraint(object):
 
 class OrientConstraint(object):
     @classmethod
-    def create(cls, source_node, target_node, maintain_offset=False):
+    def create(cls, source_node, target_node, maintain_offset=False, break_parent_inverse=False):
         # orientConstraint -mo -weight 1;
-        return cmds.orientConstraint(source_node, target_node, maintainOffset=maintain_offset)[0]
+        node = cmds.orientConstraint(source_node, target_node, maintainOffset=maintain_offset)[0]
+        if break_parent_inverse is True:
+            target = node+'.constraintParentInverseMatrix'
+            _ = cmds.listConnections(
+                target, destination=0, source=1, plugs=1
+            )
+            if _:
+                source = _[0]
+                cmds.disconnectAttr(source, target)
+        return node
 
     @classmethod
     def get_next_index(cls, node):
@@ -197,7 +216,7 @@ class OrientConstraint(object):
         return list(set_)
 
     @classmethod
-    def update_offset(cls, node, translate):
+    def update_reset(cls, node, translate):
         for seq, i in enumerate(['restRotateX', 'restRotateY', 'restRotateZ']):
             cmds.setAttr(
                 '{}.{}'.format(node, i), translate[seq]

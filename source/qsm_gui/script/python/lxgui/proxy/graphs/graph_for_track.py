@@ -17,7 +17,7 @@ import lxuniverse.objects as unr_objects
 class PrxTrackWidget(
     _proxy_abstracts.AbsPrxWidget
 ):
-    QT_WIDGET_CLS = _graph_for_track.QtTrackView
+    QT_WIDGET_CLS = _graph_for_track.QtTrackWidget
 
     def __init__(self, *args, **kwargs):
         super(PrxTrackWidget, self).__init__(*args, **kwargs)

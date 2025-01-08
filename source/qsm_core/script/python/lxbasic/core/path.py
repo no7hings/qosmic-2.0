@@ -102,6 +102,12 @@ class BscNodePath:
         return cls.get_dag_path(list_, pathsep)
 
     @classmethod
+    def dag_path_join_namespace(cls, path, namespace, pathsep='/', namespacesep=':'):
+        return pathsep.join(
+            ['{}{}{}'.format(namespace, namespacesep, x) if x else x for x in path.split(pathsep)]
+        )
+
+    @classmethod
     def get_dag_path_lstrip(cls, path, lstrip=None):
         if lstrip is not None:
             if path.startswith(lstrip):

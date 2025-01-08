@@ -42,7 +42,7 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
 
     def _gui_add_main_tools(self, prx_tool_box):
         for i in [
-            ('refresh', 'refresh', 'Press to refresh GUI', functools.partial(self.do_gui_refresh_all, force=True)),
+            # ('refresh', 'refresh', 'Press to refresh GUI', functools.partial(self.do_gui_refresh_all, force=True)),
             ('delete', 'montage/delete', 'Press to delete splicing', self._on_dcc_delete),
             ('bake', 'montage/bake-keyframe', 'Press to bake splicing', self._on_dcc_bake),
             ('look_from_persp_cam', 'tool/camera', 'Press Look from Persp Camera', self._on_dcc_look_from_persp_cam)
@@ -121,7 +121,7 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
                 ).format(rig_namespace=self._rig_namespace)
             )
 
-    def _gui_add_extra_tool(self, prx_tool_box):
+    def _gui_add_new_tool(self, prx_tool_box):
         self._new_splicing_qt_button = gui_qt_widgets.QtPressButton()
         prx_tool_box.add_widget(self._new_splicing_qt_button)
         self._new_splicing_qt_button._set_auto_width_(True)
@@ -151,6 +151,12 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
         self._top_prx_tool_bar.set_align_left()
         self._top_prx_tool_bar.set_expanded(True)
 
+        # extra
+        self._new_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
+            'new'
+        )
+        self._gui_add_new_tool(self._new_prx_tool_box)
+
         # main tool box
         self._main_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
             'main'
@@ -166,20 +172,6 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
             'rig switch'
         )
         self._gui_add_rig_switch_tools(self._rig_switch_prx_tool_box)
-
-        # filter
-        self._filter_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
-            'filter', size_mode=1
-        )
-
-        self._prx_filter_bar = gui_prx_widgets.PrxFilterBar()
-        self._filter_prx_tool_box.add_widget(self._prx_filter_bar)
-
-        # extra
-        self._extra_prx_tool_box = self._top_prx_tool_bar.create_tool_box(
-            'extra'
-        )
-        self._gui_add_extra_tool(self._extra_prx_tool_box)
         # track
         self._motion_prx_track_widget = gui_prx_graphs.PrxTrackWidget()
         self._qt_layout.addWidget(self._motion_prx_track_widget.widget)
@@ -189,6 +181,10 @@ class AbsPrxPageForSplicing(gui_prx_widgets.PrxBasePage):
 
         self._motion_prx_track_widget.connect_stage_change_to(self.on_dcc_stage_update)
         self._motion_prx_track_widget.connect_frame_accepted_to(self.do_dcc_update_current_frame)
+
+        self._motion_prx_track_widget._qt_widget.refresh.connect(
+            functools.partial(self.do_gui_refresh_all, force=True)
+        )
         # post method
         self._do_dcc_register_all_script_jobs()
         self._window.register_window_close_method(self._do_dcc_destroy_all_script_jobs)

@@ -287,7 +287,7 @@ class QtPressButton(
 
         i_f_w, i_f_h = self._icon_draw_size
         i_c_w, i_c_h = self._icon_color_draw_size
-        i_n_w, i_n_h = self._icon_name_draw_size
+        i_n_w, i_n_h = self._name_icon_draw_size
 
         c_x, c_y = x, y
         c_w, c_h = w, h
@@ -310,15 +310,16 @@ class QtPressButton(
             c_w -= icn_frm_w
 
             btn_width += icn_frm_w
-
-        if self._file_icon_flag is True:
+        
+        # icon
+        if self._icon_flag is True:
             self._icon_draw_rect.setRect(
                 c_icn_x+(icn_frm_w-i_f_w)/2, c_icn_y+(icn_frm_h-i_f_h)/2, i_f_w, i_f_h
             )
-            self._icon_color_draw_rect.setRect(
+            self._color_icon_draw_rect.setRect(
                 c_icn_x+(icn_frm_w-i_c_w)/2, c_icn_y+(icn_frm_h-i_c_h)/2, i_c_w, i_c_h
             )
-            self._icon_text_draw_rect.setRect(
+            self._name_icon_draw_rect.setRect(
                 c_icn_x+(icn_frm_w-i_n_w)/2, c_icn_y+(icn_frm_h-i_n_h)/2, i_n_w, i_n_h
             )
             c_icn_x += icn_frm_h
@@ -588,25 +589,24 @@ class QtPressButton(
                 is_hovered=self._is_hovered
             )
         # icon
-        if self._file_icon_flag is True:
+        if self._icon_flag is True:
             if self._icon_file_path is not None:
                 painter._draw_icon_file_by_rect_(
                     self._icon_draw_rect,
                     self._icon_file_path,
-                    offset=offset,
-                    is_hovered=self._is_hovered
+                    offset=offset, is_hovered=self._is_hovered
                 )
-            elif self._icon_color_rgb is not None:
+            elif self._color_icon_rgb is not None:
                 painter._set_color_icon_draw_(
-                    self._icon_color_draw_rect, self._icon_color_rgb, offset=offset
+                    self._color_icon_draw_rect,
+                    self._color_icon_rgb,
+                    offset=offset
                 )
-            elif self._icon_text is not None:
+            elif self._name_icon_text is not None:
                 painter._draw_image_use_text_by_rect_(
-                    self._icon_text_draw_rect,
-                    self._icon_text,
-                    offset=offset,
-                    border_radius=2,
-                    is_hovered=self._is_hovered
+                    self._name_icon_draw_rect,
+                    self._name_icon_text,
+                    offset=offset, border_radius=2, is_hovered=self._is_hovered
                 )
         # name
         if self._name_text is not None:
@@ -704,7 +704,7 @@ class QtIconPressButton(
         icn_w, icn_h = int(icn_frm_w*self._icon_draw_percent), int(icn_frm_h*self._icon_draw_percent)
         icn_x, icn_y = x+(icn_frm_w-icn_w)/2, y+(icn_frm_h-icn_h)/2
 
-        if self._file_icon_flag is True:
+        if self._icon_flag is True:
             # sub icon
             if self._icon is not None or \
                     self._sub_icon_file_path or \
@@ -858,7 +858,7 @@ class QtIconPressButton(
                 running=True
             )
         # icon
-        if self._file_icon_flag is True:
+        if self._icon_flag is True:
             if self._icon:
                 painter._draw_icon_by_rect_(
                     icon=self._icon,
@@ -875,11 +875,11 @@ class QtIconPressButton(
                     is_pressed=is_pressed,
                     is_action_enable=self._action_is_enable,
                 )
-            elif self._icon_text is not None:
+            elif self._name_icon_text is not None:
                 if self.__icon_style is not None:
                     painter._draw_styled_button_use_text_by_rect_(
                         rect=self._icon_draw_rect,
-                        text=self._icon_text,
+                        text=self._name_icon_text,
                         icon_style=self.__icon_style,
                         background_color=self._icon_name_rgba,
                         offset=offset,
@@ -889,7 +889,7 @@ class QtIconPressButton(
                 else:
                     painter._draw_image_use_text_by_rect_(
                         rect=self._icon_draw_rect,
-                        text=self._icon_text,
+                        text=self._name_icon_text,
                         background_color=self._icon_name_rgba,
                         offset=offset,
                         border_width='auto',
@@ -1014,7 +1014,7 @@ class QtIconPressButton(
         offset = 0
         is_pressed = False
 
-        if self._file_icon_flag is True:
+        if self._icon_flag is True:
             if self._icon:
                 painter._draw_icon_by_rect_(
                     icon=self._icon,
@@ -1030,11 +1030,11 @@ class QtIconPressButton(
                     hover_color=self._icon_hover_color,
                     is_pressed=is_pressed,
                 )
-            elif self._icon_text is not None:
+            elif self._name_icon_text is not None:
                 if self.__icon_style is not None:
                     painter._draw_styled_button_use_text_by_rect_(
                         rect=rect,
-                        text=self._icon_text,
+                        text=self._name_icon_text,
                         icon_style=self.__icon_style,
                         background_color=self._icon_name_rgba,
                         offset=offset,
@@ -1044,7 +1044,7 @@ class QtIconPressButton(
                 else:
                     painter._draw_image_use_text_by_rect_(
                         rect=rect,
-                        text=self._icon_text,
+                        text=self._name_icon_text,
                         background_color=self._icon_name_rgba,
                         offset=offset,
                         border_width='auto',
@@ -1098,7 +1098,7 @@ class QtIconMenuButton(
         icn_w, icn_h = int(icn_frm_w*self._icon_draw_percent), int(icn_frm_h*self._icon_draw_percent)
         icn_x, icn_y = x+(w-icn_w)/2, y+(h-icn_h)/2
         #
-        if self._file_icon_flag is True:
+        if self._icon_flag is True:
             self._icon_draw_rect.setRect(
                 icn_x, icn_y, icn_w, icn_h
             )
@@ -1141,7 +1141,7 @@ class QtIconMenuButton(
         painter = _qt_core.QtPainter(self)
         offset = self._get_action_offset_()
         # icon
-        if self._file_icon_flag is True:
+        if self._icon_flag is True:
             if self._icon_file_path is not None:
                 painter._draw_icon_file_by_rect_(
                     rect=self._icon_draw_rect,
@@ -1218,7 +1218,7 @@ class QtIconToggleButton(
             x+(w-icn_frm_w)/2, y+(h-icn_frm_w)/2, icn_frm_w, icn_frm_h
         )
         #
-        if self._file_icon_flag is True:
+        if self._icon_flag is True:
             if self._sub_icon_file_path or self._sub_icon_text:
                 self._icon_draw_rect.setRect(
                     x+2, y+2, icn_w, icn_h
@@ -1288,7 +1288,7 @@ class QtIconToggleButton(
             offset=offset
         )
         #
-        if self._file_icon_flag is True:
+        if self._icon_flag is True:
             if self._icon_file_path is not None:
                 painter._draw_icon_file_by_rect_(
                     rect=self._icon_draw_rect,

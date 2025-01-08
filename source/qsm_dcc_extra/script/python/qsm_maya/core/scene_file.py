@@ -163,13 +163,18 @@ class SceneFile:
             if cmds.namespace(exists=namespace) is False:
                 cmds.namespace(add=namespace)
 
+            # remove from leaf
+            if nodes:
+                nodes.reverse()
+
             for i in nodes:
                 i_name = i.split('|')[-1]
                 if ':' in i_name:
                     i_name_new = '{}:{}'.format(namespace, i_name.split(':')[-1])
                 else:
                     i_name_new = '{}:{}'.format(namespace, i_name)
-                cmds.rename(i_name, i_name_new)
+
+                cmds.rename(i, i_name_new)
 
     @classmethod
     def import_file_ignore_error(cls, file_path, namespace=':'):

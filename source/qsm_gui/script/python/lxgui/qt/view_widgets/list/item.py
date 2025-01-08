@@ -1,8 +1,8 @@
 # coding=utf-8
 # qt
-from ...qt.core.wrap import *
+from ....qt.core.wrap import *
 
-from ..view_models import item_for_list as _vew_mod_item_for_list
+from ...view_models import item_for_list as _vew_mod_item_for_list
 
 
 class QtListItem(QtWidgets.QListWidgetItem):

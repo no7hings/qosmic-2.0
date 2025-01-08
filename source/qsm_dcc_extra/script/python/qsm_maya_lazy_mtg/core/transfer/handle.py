@@ -10,6 +10,8 @@ import qsm_maya.core as qsm_mya_core
 
 from ..mocap import resource as _mcp_resource
 
+from ..adv import resource as _adv_resource
+
 from . import resource as _resource
 
 
@@ -24,23 +26,8 @@ class MocapTransferHandle(object):
         )
         self._mocap_resource = _mcp_resource.MocapResource(self._mocap_namespace)
 
-    def match_height_to_mocap(self):
-        height_0 = self._mocap_resource.get_root_height()
-        height_1 = self._transfer_resource.get_root_height()
-
-        scale = height_0/height_1
-
-        root_location = self._transfer_resource.find_root_location()
-
-        cmds.setAttr(
-            root_location+'.scale', scale, scale, scale
-        )
-
     def connect_to_mocap(self):
-        self.match_height_to_mocap()
-        self._mocap_resource.sketch_set.connect_to_master_sketch(
-            self._transfer_resource._sketch_set
-        )
+        self._transfer_resource.connect_from_mocap(self._mocap_resource)
 
     def get_data_from_mocap(self):
         start_frame, end_frame = self._mocap_resource.sketch_set.get_frame_range()
@@ -56,6 +43,14 @@ class MocapTransferHandle(object):
         )
         return data
 
+    def bake_sketches_keyframes(self):
+        start_frame, end_frame = self._mocap_resource.get_frame_range()
+        self._transfer_resource.bake_sketches_keyframes(start_frame, end_frame)
+
+    @classmethod
+    def test(cls):
+        pass
+
     def export_mocap_to(self, file_path):
         bsc_storage.StgFileOpt(file_path).set_write(
             self.get_data_from_mocap()
@@ -68,6 +63,45 @@ class MocapTransferHandle(object):
             handle = cls(namespaces[0])
             handle.setup()
             handle.connect_to_mocap()
+            # bake key frame first
+            handle.bake_sketches_keyframes()
             handle.export_mocap_to(
-                'Z:/resources/motion_json/mixamo/a_pose.json'
+                'Z:/resources/motion_json_new/idle.json'
             )
+
+
+class MocapToAdvHandle(object):
+    def __init__(self, adv_namespace, mocap_namespace):
+        self._adv_namespace = adv_namespace
+        self._mocap_namespace = mocap_namespace
+
+    def setup(self):
+        _resource.TransferResource.create_sketches()
+        self._transfer_resource = _resource.TransferResource(
+            _resource.TransferResource.Namespaces.Transfer
+        )
+
+        self._mocap_resource = _mcp_resource.MocapResource(self._mocap_namespace)
+        self._adv_resource = _adv_resource.AdvResource(self._adv_namespace)
+
+    def create_mocap_resource_connection(self):
+        self._transfer_resource.connect_from_mocap(self._mocap_resource)
+
+    def create_adv_connection(self):
+        self._adv_resource.connect_from_transfer_resource(self._transfer_resource)
+
+    def bake_adv_controls_keyframes(self):
+        frame_range = self._mocap_resource.get_frame_range()
+        self._adv_resource.bake_controls_keyframes(*frame_range)
+
+    def delete_transfer_resource(self):
+        self._transfer_resource.do_delete()
+
+    @classmethod
+    def test(cls):
+        h = cls('rig', 'mixamorig')
+        h.setup()
+        h.create_mocap_resource_connection()
+        h.create_adv_connection()
+        h.bake_adv_controls_keyframes()
+        h.delete_transfer_resource()

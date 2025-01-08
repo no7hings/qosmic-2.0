@@ -10,7 +10,7 @@ class GuiQtModForTabItem(object):
         self._widget = widget
         self._key_text = None
         self._name_text = None
-        self._icon_text = None
+        self._name_icon_text = None
         self._tool_tip = 'N/a'
         self._rect = QtCore.QRect()
         self._draw_rect = QtCore.QRect()
@@ -38,10 +38,10 @@ class GuiQtModForTabItem(object):
     name_text = property(get_name)
 
     def set_icon_text(self, text):
-        self._icon_text = text
+        self._name_icon_text = text
 
     def get_icon_text(self):
-        return self._icon_text
+        return self._name_icon_text
 
     icon_text = property(get_icon_text)
 

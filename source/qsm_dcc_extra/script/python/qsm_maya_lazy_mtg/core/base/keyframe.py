@@ -84,7 +84,7 @@ class SketchCurve(object):
         atr_path_src = '{}.output'.format(curve_name_new)
         atr_path_tgt = '{}.{}'.format(sketch_path, atr_name)
         qsm_mya_core.Connection.create(atr_path_src, atr_path_tgt)
-        # setAttr "test:Hip_L_rotateZ.postInfinity" 4;
+
         qsm_mya_core.NodeAttribute.set_value(
             curve_name_new, 'preInfinity', 4
         )
@@ -115,3 +115,6 @@ class SketchCurve(object):
         for i_index, i_value in enumerate(values):
             i_frame = i_index+start_frame
             curve_opt.create_value_at_time(i_frame, i_value*value_scale)
+
+        curve_opt.do_euler_filter()
+

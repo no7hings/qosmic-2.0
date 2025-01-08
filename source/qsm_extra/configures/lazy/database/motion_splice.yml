@@ -142,6 +142,18 @@ entities:
 
             gui_name_chs: '躺倒'
 
+        /characters/basics/talking:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '说话'
+
+        /characters/basics/arguing:
+            category: 'node'
+            type: 'node'
+
+            gui_name_chs: '吵架'
+
         /characters/basics/pose:
             category: 'node'
             type: 'node'

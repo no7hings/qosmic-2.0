@@ -8,39 +8,43 @@
         "type": "tabs",
         "children": [
           {
-            "id": "9252e2bcda35aa87",
+            "id": "e33357c3fe4e62b7",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "开发相关/开发进度/maya/7月-动作工具.md",
+                "file": "开发相关/开发任务/maya/绑定相关/动态GPU（Dynamic GPU）.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "441a472ed7388a18",
-            "type": "leaf",
-            "state": {
-              "type": "card-board-view",
-              "state": {}
-            }
-          },
-          {
-            "id": "344e83780fadfa8b",
+            "id": "0693214f7357a353",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
                 "file": "开发相关/开发文档/解算流程工具.md",
                 "mode": "source",
-                "source": true
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "ef24a4961c19771e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "随记/2025随记.md",
+                "mode": "source",
+                "source": false
               }
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -90,7 +94,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 245.5
+    "width": 324.5
   },
   "right": {
     "id": "079848c8f8affc0b",
@@ -208,29 +212,36 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "344e83780fadfa8b",
+  "active": "0693214f7357a353",
   "lastOpenFiles": [
-    "Pasted image 20250106113022.png",
-    "Pasted image 20250106112605.png",
-    "Pasted image 20250106112317.png",
-    "Pasted image 20250106110426.png",
-    "Pasted image 20250106110203.png",
-    "Pasted image 20250106105859.png",
-    "Pasted image 20250106105616.png",
-    "Pasted image 20250106105259.png",
-    "Pasted image 20250106105121.png",
-    "Pasted image 20250106104758.png",
-    "Pasted image 20250106104017.png",
+    "随记/2025随记.md",
+    "开发相关/开发文档/解算流程工具.md",
+    "开发相关/开发文档/images/Pasted image 20241216112647.png",
+    "技术文档/Qosmic.md",
+    "开发相关/开发任务/2025-规划.md",
+    "开发相关/开发任务/maya/绑定相关/动态GPU（Dynamic GPU）.md",
+    "开发相关/开发任务/maya/动作相关/动作拼接工具.md",
+    "开发相关/开发文档/后台任务管理工具（Process Task Manager）.md",
+    "随记/gantt view.md",
+    "开发相关/开发计划/2024-4~5.md",
+    "开发相关/开发计划/总览.md",
+    "开发相关/开发文档/images/Pasted image 20250106113022.png",
+    "开发相关/开发文档/images/Pasted image 20250106112605.png",
+    "开发相关/开发文档/images/Pasted image 20250106112317.png",
+    "开发相关/开发文档/images/Pasted image 20250106110426.png",
+    "开发相关/开发文档/images/Pasted image 20250106110203.png",
+    "开发相关/开发文档/images/Pasted image 20250106105859.png",
+    "开发相关/开发文档/images/Pasted image 20250106105616.png",
+    "开发相关/开发文档/images/Pasted image 20250106105259.png",
+    "开发相关/开发文档/images/Pasted image 20250106105121.png",
     "随记/动作拼接.md",
     "开发相关/开发进度/优化.md",
     "开发相关/开发进度/maya/7月-动作工具.md",
-    "开发相关/开发计划/总览.md",
     "开发相关/开发计划/2024-9.md",
     "开发相关/开发计划/2024-10~11.md",
     "开发相关/开发进度/maya/11月-解算流程工具.md",
     "开发相关/开发计划/2024-7~8.md",
     "开发相关/开发计划/2024-6.md",
-    "开发相关/开发计划/2024-4~5.md",
     "开发相关/开发进度/maya/8月-动作拼接工具.md",
     "开发相关/开发进度/maya/6月-节点参数模版工具.md",
     "开发相关/开发进度/maya/6月-绑定移动工具.md",
@@ -238,15 +249,7 @@
     "开发相关/开发进度/maya/5月-场景显示优化工具.md",
     "开发相关/开发进度/maya/4月-绑定显示优化工具.md",
     "未命名.canvas",
-    "开发相关/开发文档/解算流程工具.md",
     "常见问题/文件路径.md",
-    "随记/python/Python包安装.md",
-    "随记/python/PyQt.md",
-    "随记/python/custom.md",
-    "随记/python/中文路径处理.md",
-    "随记/maya/Mayabatch.md",
-    "随记/maya/Maya性能优化.md",
-    "常见问题/命令行/windows.md",
     "images",
     "USD/植被流程/流程图.canvas",
     "USD/植被流程",

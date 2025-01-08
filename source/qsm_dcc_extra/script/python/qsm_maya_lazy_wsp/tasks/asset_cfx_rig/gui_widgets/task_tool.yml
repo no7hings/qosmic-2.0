@@ -459,7 +459,64 @@ build:
             name_chs: '选项'
 
             parameters:
-                mark_rig_variant:
+                rig_variant:
+                    widget: group
+                    name: 'Rig Variant'
+                    name_chs: '预设变体'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        待补充。
+
+                rig_variant/mark:
                     widget: button
                     name: 'Mark Rig Variant'
                     name_chs: '标记预设变体'
+                    use_name_icon: True
+
+                rig_preset:
+                    widget: group
+                    name: 'Rig Preset'
+                    name_chs: '预设模版'
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        待补充。
+                
+                rig_preset/create_or_update:
+                    widget: button
+                    name: 'Create / Update Rig Preset (Cloth)'
+                    name_chs: '创建/更新预设模版（布料）'
+                    use_name_icon: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        点击创建或更新预设模版：
+                            目前只记录nCloth的属性；
+                            在创建其他模版之前推荐先创建“default”模版；
+                            节点属性是记录在各自的节点上。
+                    join_to_next: True
+
+                rig_preset/load:
+                    widget: button
+                    name: 'Load Rig Preset (Cloth)'
+                    name_chs: '加载预设模版（布料）'
+                    use_name_icon: True
+                    tool_tip:
+                        |-
+                        To be supplemented.
+                    tool_tip_chs:
+                        |-
+                        点击加载预设模版：
+                            需要先创建预设模版；
+                        说明：
+                            节点属性是记录在各自的节点上；
+                            由于某些节点可能是在创建预设模版之后创建的，可能会出现某些节点没有特性的预设；
+                            在招不到对应的预设的时候默认会加载“default”，如果没有“default”，将不会做任何操作；
+

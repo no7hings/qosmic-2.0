@@ -1879,7 +1879,8 @@ class QtPainter(QtGui.QPainter):
         else:
             rect_offset = rect
         #
-        self._set_border_color_(colors[0])
+        # self._set_border_color_(colors[0])
+        self.setPen(QtGui.QColor(0, 0, 0, 0))
         background_color = self._get_alternating_color_(
             rect_offset, colors, 20, int(time.time()*10),
             running=running, x_offset=x_offset, y_offset=y_offset

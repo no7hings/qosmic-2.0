@@ -55,6 +55,9 @@ class PrxInputForPressButton(_input_base.AbsPrxInput):
     def set_menu_content(self, content):
         self._qt_input_widget._set_menu_content_(content)
 
+    def set_name_icon_text(self, text):
+        self._qt_input_widget._set_name_icon_text_(text)
+
     def set_option_enable(self, boolean):
         self._qt_input_widget._set_option_click_enable_(boolean)
 

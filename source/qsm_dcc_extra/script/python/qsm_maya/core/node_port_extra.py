@@ -1,4 +1,6 @@
 # coding:utf-8
+import sys
+
 import six
 
 import fnmatch
@@ -130,7 +132,13 @@ class EtrNodePortOpt(object):
         return []
 
     def get(self, as_string=False):
-        if self.get_type_name() in {'message', 'TdataCompound', 'Nobject', 'nurbsCurve'}:
+        if self.get_type_name() in {
+            'message',
+            'TdataCompound',
+            'Nobject',
+            'nurbsCurve', 'mesh',
+            'newParticles'
+        }:
             return None
 
         if as_string is True:
@@ -197,6 +205,7 @@ class EtrNodePortOpt(object):
                             cmds.setAttr(path, value, clamp=1)
         except Exception:
             import traceback
+            sys.stderr.write('error set attribute for: {}\n'.format(self._path))
             traceback.print_exc()
 
     def get_default(self):

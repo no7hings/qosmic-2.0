@@ -36,8 +36,8 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
         self.add_widget(tab_view)
         self.set_main_style_mode(1)
         for i in [
-            'constant',
             'button',
+            'constant',
             'tuple',
             'array',
             # 'shotgun',
@@ -66,7 +66,6 @@ class TestWindow(gui_prx_widgets.PrxBaseWindow):
         #
         # n.get_port('files.tree').set_root('/data/e/workspace/lynxi/script/python/.resources/icons')
         # n.set('files.tree', ['/data/e/workspace/lynxi/script/python/.resources/icons/add.svg'])
-
 
 
 

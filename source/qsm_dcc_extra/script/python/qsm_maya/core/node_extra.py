@@ -384,14 +384,28 @@ class EtrNodeOpt(object):
     def delete(self):
         cmds.delete(self.get_path())
 
-    def to_dict(self):
-        pass
+    def get_dict(self, key_includes=None):
+        if isinstance(key_includes, (tuple, list)):
+            atr_names = [x for x in key_includes if _attribute.NodeAttribute.is_exists(self._path, x) is True]
+        else:
+            atr_names = self.get_all_port_paths()
 
-    def set_dict(self, data, atr_excludes=None):
+        dict_ = collections.OrderedDict()
+
+        node_path = self.get_path()
+
+        for i_atr_name in atr_names:
+            if _attribute.NodeAttribute.is_exists(node_path, i_atr_name) is False:
+                continue
+
+            dict_[i_atr_name] = self.get(i_atr_name)
+        return dict_
+
+    def set_dict(self, data, key_excludes=None):
         for k, v in data.items():
             k = k.replace('/', '.')
-            if isinstance(atr_excludes, (set, tuple, list)):
-                if k in atr_excludes:
+            if isinstance(key_excludes, (set, tuple, list)):
+                if k in key_excludes:
                     continue
 
             self.set(k, v)

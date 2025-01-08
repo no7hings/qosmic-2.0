@@ -151,7 +151,7 @@ class _PrxBasicToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
         self._prx_options_node.get_port('nucleus.create_ncloth').set_menu_content(
             qsm_mya_preset.NodePreset.generate_menu_content(
                 'nCloth',
-                atr_excludes=[
+                key_excludes=[
                     'displayColor', 'inputMeshAttract', 'inputAttractMethod', 'inputAttractMapType'
                 ]
             )
@@ -303,23 +303,57 @@ class _PrxExtraToolset(_abs_unit_for_task_tool.AbsPrxToolsetForTaskTool):
 
     def __init__(self, *args, **kwargs):
         super(_PrxExtraToolset, self).__init__(*args, **kwargs)
-        self._prx_options_node.set('mark_rig_variant', self.on_mark_rig_variant)
+
+        self._prx_options_node.set('rig_variant.mark', self.on_mark_rig_variant)
+
+        self._prx_options_node.set('rig_preset.create_or_update', self.on_create_or_update_rig_preset)
+
+        self._prx_options_node.set('rig_preset.load', self.on_load_rig_preset)
 
     @classmethod
     def on_mark_rig_variant(cls):
-        dcc_rig_variant = _task_dcc_core.AssetCfxRigHandle.get_rig_variant()
+        options = _task_dcc_core.AssetCfxRigHandle.get_rig_variant_names()
+        variant = _task_dcc_core.AssetCfxRigHandle.get_rig_variant_name()
 
         result = gui_core.GuiApplication.exec_input_dialog(
-            type='string',
+            type='choose',
             info='Entry Name for Variant...',
-            value=dcc_rig_variant,
-            title='Mark Variant'
+            options=options,
+            value=variant,
+            title='Mark Rig Variant'
         )
         if result:
-            location = '|master|cfx_rig'
-            qsm_mya_core.NodeAttribute.create_as_string(
-                location, 'qsm_variant', result
-            )
+            _task_dcc_core.AssetCfxRigHandle.mark_rig_variant(result)
+
+    @classmethod
+    def on_create_or_update_rig_preset(cls):
+        options = _task_dcc_core.AssetCfxRigHandle.get_rig_preset_names()
+        name = _task_dcc_core.AssetCfxRigHandle.get_rig_preset_name()
+
+        result = gui_core.GuiApplication.exec_input_dialog(
+            type='choose',
+            info='Entry Name for Preset...',
+            options=options,
+            value=name,
+            title='Mark Rig Preset'
+        )
+        if result:
+            _task_dcc_core.AssetCfxRigHandle.create_or_update_rig_preset(result)
+
+    @classmethod
+    def on_load_rig_preset(cls):
+        options = _task_dcc_core.AssetCfxRigHandle.get_rig_preset_names()
+        name = _task_dcc_core.AssetCfxRigHandle.get_rig_preset_name()
+
+        result = gui_core.GuiApplication.exec_input_dialog(
+            type='choose',
+            info='Entry Name for Preset...',
+            options=options,
+            value=name,
+            title='Mark Rig Preset'
+        )
+        if result:
+            _task_dcc_core.AssetCfxRigHandle.load_rig_preset(result)
 
 
 class PrxToolsetForAssetCfxRigTool(_abs_unit_for_task_tool.AbsPrxUnitForTaskTool):

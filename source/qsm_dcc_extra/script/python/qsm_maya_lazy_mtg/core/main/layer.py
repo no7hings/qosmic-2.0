@@ -140,6 +140,9 @@ class AbsMtgLayer(_bsc_abc.AbsMontage):
     def get(self, sketch_key):
         return self._cache_dict.get(sketch_key)
 
+    def get_sketch(self, sketch_key):
+        return self._cache_dict.get(sketch_key)
+
     def get_all(self):
         return self._cache_dict.values()
 
@@ -444,6 +447,7 @@ class MtgLayer(AbsMtgLayer):
             i_curve_node_name = _bsc_keyframe.SketchCurve.to_curve_node_name(sketch_path, i_atr_name)
             if qsm_mya_core.Node.is_exists(i_curve_node_name) is False:
                 continue
+
             _bsc_keyframe.SketchCurve.appy_data(
                 i_curve_node_name, i_atr_name, i_values, start_frame, translation_scale
             )
@@ -468,9 +472,16 @@ class MtgLayer(AbsMtgLayer):
 
                 i_sketch_dst = master_motion_layer.get(i_sketch_key)
                 if i_sketch_key == self.ChrMasterSketches.Root_M:
-                    _bsc_sketch.Sketch(i_sketch_src).create_point_constraint_to_master_layer(i_sketch_dst)
-
-                _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_master_layer(i_sketch_dst)
+                    _bsc_sketch.Sketch(i_sketch_src).create_point_constraint_to_master_layer(
+                        i_sketch_dst, break_parent_inverse=True
+                    )
+                    _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_master_layer(
+                        i_sketch_dst, break_parent_inverse=True
+                    )
+                else:
+                    _bsc_sketch.Sketch(i_sketch_src).create_orient_constraint_to_master_layer(
+                        i_sketch_dst
+                    )
 
     def get_constraint_weight_attributes(self):
         list_ = []
@@ -697,10 +708,10 @@ class MtgMasterLayer(AbsMtgLayer):
 
         if qsm_mya_adv.AdvOpt.check_is_valid(rig_namespace) is True:
             start_frame, end_frame = self.get_frame_range()
-            resource = _adv_resource.AdvResource(rig_namespace)
+            adv_resource = _adv_resource.AdvResource(rig_namespace)
             main_control_keys = self.ChrMasterControlMap.Default.values()
 
-            main_controls = [resource._control_set.get(x) for x in main_control_keys]
+            main_controls = [adv_resource._control_set.get(x) for x in main_control_keys]
             main_controls = list(filter(None, main_controls))
 
             # fixme: face control is ignore?
@@ -775,9 +786,9 @@ class MtgMasterLayer(AbsMtgLayer):
     def export_motion_to(self, file_path):
         rig_namespace = self.get_rig_namespace()
         start_frame, end_frame = self.get_frame_range()
-        resource = _adv_resource.AdvResource(rig_namespace)
+        adv_resource = _adv_resource.AdvResource(rig_namespace)
         main_control_keys = self.ChrMasterControlMap.Default.values()
-        main_controls = [resource._control_set.get(x) for x in main_control_keys]
+        main_controls = [adv_resource._control_set.get(x) for x in main_control_keys]
         main_controls = list(filter(None, main_controls))
 
         # fixme: face control is ignore?
@@ -789,23 +800,20 @@ class MtgMasterLayer(AbsMtgLayer):
                 'rotateX', 'rotateY', 'rotateZ',
             ]
         )
-        resource._control_set.export_motion_to(file_path)
+        adv_resource._control_set.export_motion_to(file_path)
         cmds.undo()
 
-    def connect_to_adv(self, resource):
+    def connect_to_adv(self, adv_resource):
         qsm_mya_core.NodeAttribute.set_as_message(
-            self._location, 'qsm_resource', resource.find_root()
+            self._location, 'qsm_resource', adv_resource.find_root_location()
         )
-        resource.fit_master_layer_scale(self)
-        resource.fit_master_layer_sketches(self)
-        resource.connect_from_master_layer(self)
+        adv_resource.connect_from_master_layer(self)
 
-    def connect_to_mocap(self, resource):
+    def connect_to_mocap(self, mocap_resource):
         qsm_mya_core.NodeAttribute.set_as_message(
-            self._location, 'qsm_resource', resource.find_root()
+            self._location, 'qsm_resource', mocap_resource.find_root_location()
         )
-        resource.fit_master_layer_scale(self)
-        resource.connect_from_master_layer(self)
+        mocap_resource.connect_from_master_layer(self)
 
     def get_next_layer_index(self):
         for i in range(100):

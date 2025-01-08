@@ -284,7 +284,7 @@ class QtMainWindow(
         w._do_window_exec_(size=kwargs.get('size'))
         return w._get_result_()
 
-    def _set_icon_by_text_(self, text):
+    def _set_name_icon_text_(self, text):
         self.setWindowIcon(
             _qt_core.QtIcon.generate_by_text(text)
         )

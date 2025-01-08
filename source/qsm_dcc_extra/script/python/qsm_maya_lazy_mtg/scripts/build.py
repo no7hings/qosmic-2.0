@@ -158,12 +158,31 @@ class MtgBuildScp(object):
                 scp.load_template()
 
     @classmethod
+    def test_import_motion_json(cls):
+        qsm_mya_core.SceneFile.new()
+
+        qsm_mya_core.Frame.set_fps_tag('30_fps')
+        scp = cls('test')
+        scp.setup_for_mocap()
+
+        scp._mtg_master_layer.append_layer(
+            'Z:/resources/motion_json_new/idle.json',
+            post_cycle=4,
+            pre_blend=8,
+            post_blend=8,
+        )
+
+        qsm_mya_core.Frame.set_frame_range(
+            *scp._mtg_master_layer.get_frame_range()
+        )
+
+    @classmethod
     def test_import_track_json(cls):
-        # qsm_mya_core.SceneFile.new()
-        #
-        # qsm_mya_core.Frame.set_fps_tag('30_fps')
-        # scp = cls('test')
-        # scp.setup_for_mocap()
+        qsm_mya_core.SceneFile.new()
+
+        qsm_mya_core.Frame.set_fps_tag('30_fps')
+        scp = cls('test')
+        scp.setup_for_mocap()
 
         _man_stage.MtgStage(
             'test'

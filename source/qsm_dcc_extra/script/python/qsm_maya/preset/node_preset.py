@@ -13,7 +13,7 @@ from .. import core as _mya_core
 class NodePreset:
 
     @classmethod
-    def generate_menu_content(cls, node_type, atr_excludes=None):
+    def generate_menu_content(cls, node_type, key_excludes=None):
         @_mya_core.Undo.execute
         def fnc_(key_, dict_):
             _ = _mya_core.Selection.get_as_nodes()
@@ -34,7 +34,7 @@ class NodePreset:
                         i_ncloth = _mya_core.MeshNCloth.get_nshape(i_transform)
 
                 if i_ncloth:
-                    _mya_core.EtrNodeOpt(i_ncloth).set_dict(dict_, atr_excludes)
+                    _mya_core.EtrNodeOpt(i_ncloth).set_dict(dict_, key_excludes)
                     _mya_core.NodeAttribute.create_as_string(i_ncloth, 'qsm_node_preset', key_)
 
         ctt = bsc_content.Dict()

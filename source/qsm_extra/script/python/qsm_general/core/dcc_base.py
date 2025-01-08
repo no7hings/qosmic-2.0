@@ -1,4 +1,6 @@
 # coding:utf-8
+import os
+
 import sys
 
 import collections
@@ -43,7 +45,12 @@ class MayaBin:
             ]
             _cmd_args = [cmd.encode('mbcs') if isinstance(cmd, six.text_type) else cmd for cmd in _cmd_args]
             _cmd_script = ' '.join(_cmd_args)
-            _result = subprocess.Popen(_cmd_script, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+
+            _result = subprocess.Popen(
+                _cmd_script,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+                env=bsc_core.BscProcess.ENVIRON_MARK
+            )
             _stdout, _stderr = _result.communicate()
 
             if _result.returncode != 0:

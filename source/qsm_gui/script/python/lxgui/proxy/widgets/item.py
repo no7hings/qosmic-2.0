@@ -247,7 +247,7 @@ class PrxTreeItem(
         self._qt_widget._set_icon_color_rgb_(color, column)
 
     def set_icon_by_text(self, text, column=0):
-        self._qt_widget._set_icon_by_text_(text, column)
+        self._qt_widget._set_name_icon_text_(text, column)
 
     def set_sub_icon_by_text(self, text, column=0):
         self._qt_widget._set_sub_icon_by_text_(text, column)
@@ -763,7 +763,7 @@ class PrxListItemWidget(
 
     def set_icon_by_file(self, name=None, file_path=None):
         if name is not None:
-            self._qt_widget._set_icon_by_text_(
+            self._qt_widget._set_name_icon_text_(
                 _gui_core.GuiIcon.get(name)
             )
         elif file_path is not None:
@@ -795,7 +795,7 @@ class PrxListItemWidget(
         )
 
     def set_icon_by_text(self, text):
-        self._qt_widget._set_icon_by_text_(
+        self._qt_widget._set_name_icon_text_(
             text
         )
 

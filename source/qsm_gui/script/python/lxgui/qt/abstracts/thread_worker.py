@@ -11,6 +11,7 @@ class AbsQtThreadWorkerExtraDef(object):
 
         self._thread_worker_mutex = QtCore.QMutex()
         self._thread_worker_condition = QtCore.QWaitCondition()
+
         self._thread_worker_maximum = 16
         self._thread_worker_value = 0
 

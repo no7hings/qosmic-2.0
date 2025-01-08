@@ -82,7 +82,7 @@ class _QtStatusItem(
         if self._is_checked_():
             background_color = [_qt_core.QtRgba.Yellow, _qt_core.QtRgba.BackgroundHover][is_hovered]
             painter._draw_image_use_text_by_rect_(
-                rect=self._icon_color_draw_rect,
+                rect=self._color_icon_draw_rect,
                 text='l',
                 background_color=background_color,
                 offset=offset,
@@ -92,7 +92,7 @@ class _QtStatusItem(
         else:
             background_color = [_qt_core.QtRgba.Transparent, _qt_core.QtRgba.BackgroundHover][is_hovered]
             painter._draw_image_use_text_by_rect_(
-                rect=self._icon_color_draw_rect,
+                rect=self._color_icon_draw_rect,
                 text='d',
                 background_color=background_color,
                 offset=offset,

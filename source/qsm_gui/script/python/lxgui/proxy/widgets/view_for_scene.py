@@ -11,7 +11,7 @@ from ...qt.widgets import button as _qt_widget_button
 
 from ...qt.view_widgets import base as _qt_vew_wgt_base
 
-from ...qt.view_widgets import view_for_list as _qt_vew_wgt_list
+from ...qt.view_widgets.list import view as _qt_vew_wgt_list
 # proxy abstracts
 from .. import abstracts as gui_prx_abstracts
 

@@ -19,6 +19,8 @@ import qsm_maya.preset as qsm_mya_preset
 
 import qsm_maya.handles.animation.core as qsm_mya_hdl_anm_core
 
+from ....tasks.asset_cfx_rig import dcc_core as _ast_cfx_rig_dcc_core
+
 from .. import dcc_core as _task_dcc_core
 
 from .. import dcc_scripts as _task_dcc_scripts
@@ -155,7 +157,7 @@ class _PrxNodeView(
         )
 
     def _refresh_cfx_rig_version(self, qt_item, task_session, asset_handle):
-        rig_variant = asset_handle.cfx_rig_handle.get_rig_variant()
+        rig_variant = asset_handle.cfx_rig_handle.get_rig_variant_name()
         scene_path = asset_handle.cfx_rig_handle.get_scene_path()
         if rig_variant == 'default':
             keyword = 'asset-release-maya-scene-file'
@@ -360,7 +362,7 @@ class _PrxBasicToolset(
         self._prx_options_node.get_port('cfx_rig.load_or_update').set_menu_content(
             qsm_mya_preset.NodePreset.generate_menu_content(
                 'nCloth',
-                atr_excludes=[
+                key_excludes=[
                     'displayColor', 'inputMeshAttract', 'inputAttractMethod', 'inputAttractMapType'
                 ]
             )
@@ -371,6 +373,11 @@ class _PrxBasicToolset(
         )
         self._prx_options_node.set(
             'cfx_rig.disable', self.on_disable_cfx_rig_by_selection
+        )
+
+        # rig preset
+        self._prx_options_node.set(
+            'cfx_rig.load_rig_preset', self.on_load_rig_preset
         )
 
         # animation cache
@@ -468,7 +475,27 @@ class _PrxBasicToolset(
                     _task_dcc_core.ShotCfxClothAssetHandle(i_rig_namespace).cfx_rig_handle.set_enable(False)
 
                     g_p.do_update()
-    
+
+    # rig preset
+
+    def on_load_rig_preset(self):
+        namespaces = self.get_rig_namespaces_by_selection()
+        if namespaces:
+            rig_namespace = namespaces[-1]
+            cfx_rig_namespace = _task_dcc_core.ShotCfxClothAssetHandle.to_cfx_rig_namespace(rig_namespace)
+            options = _ast_cfx_rig_dcc_core.AssetCfxRigHandle.get_rig_preset_names(namespace=cfx_rig_namespace)
+            name = _ast_cfx_rig_dcc_core.AssetCfxRigHandle.get_rig_preset_name(namespace=cfx_rig_namespace)
+
+            result = gui_core.GuiApplication.exec_input_dialog(
+                type='choose',
+                info='Entry Name for Preset...',
+                options=options,
+                value=name,
+                title='Mark Rig Preset'
+            )
+            if result:
+                _ast_cfx_rig_dcc_core.AssetCfxRigHandle.load_rig_preset(result, namespace=cfx_rig_namespace)
+
     # animation cache
     def on_load_or_update_ani_cache_by_selection(self):
         import qsm_maya_lazy_wsp.tasks.shot_animation.dcc_scripts as s

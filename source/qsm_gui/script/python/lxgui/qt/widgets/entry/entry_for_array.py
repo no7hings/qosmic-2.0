@@ -350,12 +350,12 @@ class QtEntryForArray(
                     _qt_core.GuiQtDcc.generate_qt_file_icon(text)
                 )
             else:
-                item_widget._set_icon_by_text_(text)
+                item_widget._set_name_icon_text_(text)
         else:
             if self._item_icon_file_path is not None:
                 item_widget._set_icon_file_path_(self._item_icon_file_path)
             else:
-                item_widget._set_icon_by_text_(text)
+                item_widget._set_name_icon_text_(text)
 
     def _create_item_(self, value):
         def cache_fnc_():

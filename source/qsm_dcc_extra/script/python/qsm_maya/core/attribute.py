@@ -1,6 +1,10 @@
 # coding:utf-8
+import json
+
 # noinspection PyUnresolvedReferences
 import maya.cmds as cmds
+
+import lxbasic.core as bsc_core
 
 
 class NodeAttribute:
@@ -206,6 +210,22 @@ class NodeAttribute:
 
         if default is not None:
             cls.set_as_string(path, atr_name, default)
+
+    @classmethod
+    def create_as_dict(cls, path, atr_name, default=None):
+        if cls.is_exists(path, atr_name) is False:
+            cmds.addAttr(path, longName=atr_name, dataType='string')
+
+        if default is not None:
+            cls.set_as_dict(path, atr_name, default)
+
+    @classmethod
+    def get_as_dict(cls, path, atr_name):
+        return json.loads(cls.get_as_string(path, atr_name))
+
+    @classmethod
+    def set_as_dict(cls, path, atr_name, value):
+        cls.set_as_string(path, atr_name, json.dumps(value))
 
     @classmethod
     def create_as_group(cls, path, atr_name, child_number):

@@ -3,7 +3,7 @@ import json
 
 import copy
 # gui
-from ... import core as _gui_core
+from .... import core as _gui_core
 # qt
 from ...core.wrap import *
 
@@ -13,7 +13,15 @@ from ... import abstracts as _qt_abstracts
 
 from ...widgets import base as _qt_wgt_base
 
-from ...widgets import entry_frame as _qt_wgt_entry_frame
+from ...widgets import button as _wgt_button
+
+from ...widgets import scroll as _wgt_scroll
+
+from ...widgets import container as _wgt_container
+
+from ...widgets.input import input_for_filter as _wgt_input_for_filter
+
+from ...view_widgets import base as _vew_wgt_base
 
 from ..base import graph as _bsc_graph
 
@@ -466,18 +474,18 @@ class QtTrackGraph(
                 self._do_graph_zoom_(event)
                 return True
             #
-            elif event.type() == QtCore.QEvent.FocusIn:
-                self._is_focused = True
-                self.focus_accepted.emit(True)
-                parent = self.parent()
-                if isinstance(parent, _qt_wgt_entry_frame.QtEntryFrame):
-                    parent._set_focused_(True)
-            elif event.type() == QtCore.QEvent.FocusOut:
-                self._is_focused = False
-                self.focus_accepted.emit(False)
-                parent = self.parent()
-                if isinstance(parent, _qt_wgt_entry_frame.QtEntryFrame):
-                    parent._set_focused_(False)
+            # elif event.type() == QtCore.QEvent.FocusIn:
+            #     self._is_focused = True
+            #     self.focus_accepted.emit(True)
+            #     parent = self.parent()
+            #     if isinstance(parent, _qt_wgt_entry_frame.QtEntryFrame):
+            #         parent._set_focused_(True)
+            # elif event.type() == QtCore.QEvent.FocusOut:
+            #     self._is_focused = False
+            #     self.focus_accepted.emit(False)
+            #     parent = self.parent()
+            #     if isinstance(parent, _qt_wgt_entry_frame.QtEntryFrame):
+            #         parent._set_focused_(False)
         return False
 
     def paintEvent(self, event):
@@ -539,9 +547,7 @@ class QtTrackGraph(
         self._undo_stack.clear()
 
 
-class QtTrackView(
-    _qt_wgt_entry_frame.QtEntryFrame
-):
+class QtTrackView(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         super(QtTrackView, self).__init__(*args, **kwargs)
 
@@ -573,3 +579,82 @@ class QtTrackView(
         self._track_timehandle = _timehandle.QtTimeHandle(self)
         self._track_timeline._set_timehandle_(self._track_timehandle)
 
+
+class QtTrackWidget(_vew_wgt_base._BaseViewWidget):
+    def __init__(self, *args, **kwargs):
+        super(QtTrackWidget, self).__init__(*args, **kwargs)
+        # refresh
+        self._refresh_button = _wgt_button.QtIconPressButton()
+        self._grid_lot.addWidget(self._refresh_button, 0, 0, 1, 1)
+        self._refresh_button.setFixedSize(self.TOOL_BAR_W, self.TOOL_BAR_W)
+        self._refresh_button._set_icon_file_path_(
+            _gui_core.GuiIcon.get('refresh')
+        )
+        self._refresh_button.press_clicked.connect(self.refresh.emit)
+        # top
+        self._top_scroll_box = _wgt_scroll.QtHScrollBox()
+        self._grid_lot.addWidget(self._top_scroll_box, 0, 1, 1, 1)
+        self._top_scroll_box._set_layout_align_left_or_top_()
+        self._top_scroll_box.setFixedHeight(self.TOOL_BAR_W)
+        # left
+        self._left_scroll_box = _wgt_scroll.QtVScrollBox()
+        self._grid_lot.addWidget(self._left_scroll_box, 1, 0, 1, 1)
+        self._left_scroll_box._set_layout_align_left_or_top_()
+        self._left_scroll_box.setFixedWidth(self.TOOL_BAR_W)
+        # keyword filter
+        self._keyword_filter_tool_box = self._add_top_tool_box_('keyword filter', size_mode=1)
+
+        self._view = QtTrackView()
+        self._grid_lot.addWidget(self._view, 1, 1, 1, 1)
+        self._view._graph.setFocusProxy(self)
+
+        self._track_layer = self._view._track_layer
+        self._track_guide = self._view._track_guide
+        self._graph = self._view._graph
+        self._track_timeline = self._view._track_timeline
+        self._track_timehandle = self._view._track_timehandle
+
+        self._build_keyword_filter_tool_box_()
+
+    def _add_top_tool_box_(self, name, size_mode=0):
+        tool_box = _wgt_container.QtHToolBox()
+        self._top_scroll_box.addWidget(tool_box)
+        tool_box._set_expanded_(True)
+        tool_box._set_name_text_(name)
+        tool_box._set_size_mode_(size_mode)
+        return tool_box
+
+    def _insert_top_tool_box_(self, index, name):
+        tool_box = _wgt_container.QtVToolBox()
+        self._top_scroll_box.insertWidget(index, tool_box)
+        tool_box._set_expanded_(True)
+        tool_box._set_name_text_(name)
+        return tool_box
+
+    def _add_left_tool_box_(self, name):
+        tool_box = _wgt_container.QtVToolBox()
+        self._left_scroll_box.addWidget(tool_box)
+        tool_box._set_expanded_(True)
+        tool_box._set_name_text_(name)
+        return tool_box
+
+    def _insert_left_tool_box_(self, index, name):
+        tool_box = _wgt_container.QtVToolBox()
+        self._left_scroll_box.insertWidget(index, tool_box)
+        tool_box._set_expanded_(True)
+        tool_box._set_name_text_(name)
+        return tool_box
+
+    def _build_keyword_filter_tool_box_(self):
+        self._keyword_filter_input = _wgt_input_for_filter.QtInputForFilter()
+        self._keyword_filter_tool_box._add_widget_(self._keyword_filter_input)
+
+        # self._keyword_filter_input._set_input_completion_buffer_fnc_(self._keyword_filter_input_completion_buffer_fnc)
+        # self._keyword_filter_input.input_value_changed.connect(self._on_keyword_filer)
+        # self._keyword_filter_input.occurrence_previous_press_clicked.connect(
+        #     self._view_model.occurrence_item_previous
+        # )
+        # self._keyword_filter_input.occurrence_next_press_clicked.connect(
+        #     self._view_model.occurrence_item_next
+        # )
+        # self._keyword_filter_input._set_occurrence_buttons_enable_(True)

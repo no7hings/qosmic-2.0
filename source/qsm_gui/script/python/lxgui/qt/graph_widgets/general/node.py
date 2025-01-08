@@ -114,7 +114,7 @@ class QtGeneralNode(
 
         # icon & button
         i_w, i_h = self._ng_draw_icon_w, self._ng_draw_icon_h
-        self._icon_text_draw_rect.setRect(
+        self._name_icon_draw_rect.setRect(
             f_x+(f_h_h-i_h)/2, f_y+(f_h_h-i_h)/2, i_w, i_h
         )
 
@@ -259,10 +259,10 @@ class QtGeneralNode(
                 offset=offset
             )
 
-        if self._icon_text is not None:
+        if self._name_icon_text is not None:
             painter._draw_image_use_text_by_rect_(
-                self._icon_text_draw_rect,
-                text=self._icon_text,
+                self._name_icon_draw_rect,
+                text=self._name_icon_text,
                 offset=offset,
                 border_width=self._ng_draw_border_w,
                 border_radius=-1

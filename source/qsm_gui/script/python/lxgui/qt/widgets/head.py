@@ -140,10 +140,10 @@ class AbsQtHead(
         )
         # name-icon
         if self._name_icon_flag is True:
-            if self._icon_text is not None:
+            if self._name_icon_text is not None:
                 painter._draw_frame_color_with_name_text_by_rect_(
                     rect=self._frame_draw_rect,
-                    text=self._icon_text,
+                    text=self._name_icon_text,
                     offset=offset,
                 )
         # file-icon
@@ -264,10 +264,10 @@ class QtHeadStyleB(AbsQtHead):
         )
         # name-icon
         if self._name_icon_flag is True:
-            if self._icon_text is not None:
+            if self._name_icon_text is not None:
                 painter._draw_frame_color_with_name_text_by_rect_(
                     rect=self._frame_draw_rect,
-                    text=self._icon_text,
+                    text=self._name_icon_text,
                     offset=offset,
                 )
         # file-icon
@@ -361,10 +361,10 @@ class QtHeadStyleC(AbsQtHead):
         )
         # name-icon
         if self._name_icon_flag is True:
-            if self._icon_text is not None:
+            if self._name_icon_text is not None:
                 painter._draw_frame_color_with_name_text_by_rect_(
                     rect=self._frame_draw_rect,
-                    text=self._icon_text,
+                    text=self._name_icon_text,
                     offset=offset,
                 )
         # file-icon

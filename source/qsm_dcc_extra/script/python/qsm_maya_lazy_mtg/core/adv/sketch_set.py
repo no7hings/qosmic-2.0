@@ -162,3 +162,5 @@ class AdvChrSketchSet(AdvSketchSet):
         distance = qsm_mya_core.Transform.compute_distance(point_0, point_1)
         return distance
 
+    def find_one(self, sketch_key):
+        return self._sketch_map.get(sketch_key)

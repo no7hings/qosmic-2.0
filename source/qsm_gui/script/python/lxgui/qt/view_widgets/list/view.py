@@ -5,35 +5,35 @@ import collections
 
 import lxbasic.core as bsc_core
 # gui
-from ... import core as _gui_core
+from .... import core as _gui_core
 # qt
-from ...qt.core.wrap import *
+from ....qt.core.wrap import *
 
-from ...qt import core as _qt_core
+from ....qt import core as _qt_core
 
-from ...qt import abstracts as _qt_abstracts
+from ....qt import abstracts as _qt_abstracts
 
-from ..widgets import utility as _wgt_utility
+from ...widgets import utility as _wgt_utility
 
-from ..widgets import entry_frame as _wgt_entry_frame
+from ...widgets import entry_frame as _wgt_entry_frame
 
-from ..widgets import button as _wgt_button
+from ...widgets import button as _wgt_button
 
-from ..widgets import scroll as _wgt_scroll
+from ...widgets import scroll as _wgt_scroll
 
-from ..widgets import container as _wgt_container
+from ...widgets import container as _wgt_container
 
-from ..widgets import chart as _wgt_chart
+from ...widgets import chart as _wgt_chart
 
-from ..widgets.input import input_for_filter as _wgt_input_for_filter
+from ...widgets.input import input_for_filter as _wgt_input_for_filter
 
-from ..view_models import base as _vew_mod_base
+from ...view_models import base as _vew_mod_base
 
-from ..view_models import view_for_list as _vew_mod_list
+from ...view_models import view_for_list as _vew_mod_list
 
-from . import item_for_list as _item_for_list
+from .. import base as _base
 
-from . import base as _base
+from . import item as _item
 
 
 class _QtListItemDelegate(QtWidgets.QStyledItemDelegate):
@@ -79,8 +79,8 @@ class _QtListViewWidget(
         self.itemSelectionChanged.connect(self.item_select_changed.emit)
 
         self._view_model = _vew_mod_list.ListViewModel(self)
-        self._view_model.data.item.cls = _item_for_list.QtListItem
-        self._view_model.data.item.group_cls = _item_for_list.QtListGroupItem
+        self._view_model.data.item.cls = _item.QtListItem
+        self._view_model.data.item.group_cls = _item.QtListGroupItem
 
         self.setItemDelegate(_QtListItemDelegate(self))
 
@@ -347,7 +347,7 @@ class QtListWidget(
         tool_box._set_expanded_(True)
         tool_box._set_name_text_(name)
         return tool_box
-    
+
     def _insert_left_tool_box_(self, index, name):
         tool_box = _wgt_container.QtVToolBox()
         self._left_scroll_box.insertWidget(index, tool_box)
@@ -366,7 +366,7 @@ class QtListWidget(
         )
         self._check_all_button._set_menu_data_(
             [
-                ('Check By', ),
+                ('Check By',),
                 ('visible', 'tool/show', self._on_check_visible_)
             ]
         )

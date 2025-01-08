@@ -83,6 +83,7 @@ class QtTrackTimeline(
         self._coord_model.update(translate, scale, w)
 
         frm_h = self.height()
+
         self._timeline_frame_rect.setRect(x, y, w, frm_h)
 
         self._refresh_widget_all_()
@@ -122,10 +123,11 @@ class QtTrackTimeline(
             self._refresh_widget_all_()
 
     def _update_to_timehandle_(self):
+        view = self.parent()
         hdl_w = 7
         self._track_timehandle.setGeometry(
             2+self._unit_current_coord-hdl_w/2, 1,
-            hdl_w, self.parent().height()-self.height()
+            hdl_w, view.height()-self.height()
         )
         self._track_timehandle._update_from_graph_()
 

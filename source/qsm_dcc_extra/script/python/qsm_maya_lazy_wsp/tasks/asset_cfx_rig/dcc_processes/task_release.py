@@ -64,11 +64,14 @@ class AssetCfxRigReleaseProcess(object):
                     'asset-release-maya-scene-var-file', var=rig_variant
                 )
 
+            # reset rig preset to default
+            _task_dcc_core.AssetCfxRigHandle.load_rig_preset('default')
+
             bsc_log.Log.trace_method_result(
                 self.LOG_KEY, 'export scene: {}'.format(scene_path)
             )
 
-            location = '|master|cfx_rig'
+            location = _task_dcc_core.AssetCfxRigHandle.LOCATION
             qsm_mya_core.SceneFile.export_file(
                 scene_path, location, locations_extend=['QSM_SET']
             )
