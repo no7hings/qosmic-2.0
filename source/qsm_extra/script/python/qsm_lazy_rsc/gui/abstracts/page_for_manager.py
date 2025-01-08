@@ -1,5 +1,6 @@
 # coding:utf-8
 import collections
+
 import copy
 
 import functools
@@ -14,23 +15,13 @@ import lxbasic.pinyin as bsc_pinyin
 
 import lxbasic.session as bsc_session
 
-import lxgui.core as gui_core
-
-import lxgui.qt.widgets as gui_qt_widgets
-
 import lxgui.qt.core as gui_qt_core
 
 import lxgui.qt.view_widgets as gui_qt_vew_widgets
 
-import lxgui.proxy.abstracts as gui_prx_abstracts
-
 import lxgui.proxy.widgets as gui_prx_widgets
 
 import qsm_screw.core as qsm_scr_core
-
-import lxsession.commands as ssn_commands
-
-from .... import core as _lzy_tol_core
 
 
 class _GuiThreadExtra:
