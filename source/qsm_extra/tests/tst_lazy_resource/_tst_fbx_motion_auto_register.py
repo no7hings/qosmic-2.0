@@ -1,7 +1,7 @@
 # coding:utf-8
 import lxbasic.core as bsc_core
 
-import qsm_lazy.resource.scripts as s
+import qsm_lazy_rsc.scripts as s
 
 s.MoCapFbxMotionRegisterBatch(
     'Z:/resources/mixamo',

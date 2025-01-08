@@ -139,7 +139,7 @@ def scenery_validation_fnc(option_opt):
 def mesh_count_generate_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya_lazy.resource.scripts as s
+    import qsm_maya_lazy_rsc.scripts as s
 
     kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
@@ -153,7 +153,7 @@ def mesh_count_generate_fnc(option_opt):
 def snapshot_generate_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya_lazy.resource.scripts as s
+    import qsm_maya_lazy_rsc.scripts as s
 
     kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()
@@ -167,7 +167,7 @@ def snapshot_generate_fnc(option_opt):
 def unit_assembly_generate_fnc(option_opt):
     import qsm_general.process as qsm_gnl_process
 
-    import qsm_maya_lazy.resource.scripts as s
+    import qsm_maya_lazy_rsc.scripts as s
 
     kwargs = qsm_gnl_process.MayaCacheSubprocess.to_option_dict(
         option_opt.to_string()

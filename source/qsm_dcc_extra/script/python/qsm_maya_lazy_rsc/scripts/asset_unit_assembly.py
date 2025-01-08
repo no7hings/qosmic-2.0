@@ -9,8 +9,6 @@ import lxbasic.log as bsc_log
 
 import lxbasic.core as bsc_core
 
-import lxbasic.model as bsc_model
-
 import lxbasic.storage as bsc_storage
 
 import qsm_general.core as qsm_gnl_core

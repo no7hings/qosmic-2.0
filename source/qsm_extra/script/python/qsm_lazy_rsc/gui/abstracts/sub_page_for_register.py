@@ -303,7 +303,7 @@ class AbsPrxSubpageForVideoRegister(_AbsPrxPageForAnyRegister):
         scr_tag_paths = self.gui_get_scr_tag_paths()
 
         if file_paths:
-            import qsm_lazy.resource.scripts as lzy_rsc_scripts
+            import qsm_lazy_rsc.scripts as lzy_rsc_scripts
 
             lzy_rsc_scripts.VideoBatchRegister(
                 self._scr_stage.key, file_paths
@@ -342,7 +342,7 @@ class AbsPrxSubpageForAudioRegister(_AbsPrxPageForAnyRegister):
         scr_tag_paths = self.gui_get_scr_tag_paths()
 
         if file_paths:
-            import qsm_lazy.resource.scripts as lzy_rsc_scripts
+            import qsm_lazy_rsc.scripts as lzy_rsc_scripts
 
             lzy_rsc_scripts.AudioBatchRegister(
                 self._scr_stage.key, file_paths

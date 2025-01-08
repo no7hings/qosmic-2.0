@@ -5,7 +5,7 @@ import qsm_screw.core as qsm_scr_core
 
 import qsm_maya.core as qsm_mya_core
 
-import qsm_maya_lazy.resource.scripts as mya_lzy_rcs_scripts
+import qsm_maya_lazy_rsc.scripts as mya_lzy_rcs_scripts
 
 
 class Main(object):
