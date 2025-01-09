@@ -9,7 +9,7 @@ import lxbasic.web as bsc_web
 
 import lxbasic.storage as bsc_storage
 
-import qsm_lazy.backstage.worker as lzy_bks_worker
+from .. import worker as _bks_worker
 
 from . import base as _base
 
@@ -168,7 +168,7 @@ class Task(_base.AbsEntity):
                 # noinspection PyBroadException
                 try:
                     skt = bsc_web.WebSocket(
-                        lzy_bks_worker.NoticeWebServerBase.HOST, lzy_bks_worker.NoticeWebServerBase.PORT
+                        _bks_worker.NoticeWebServerBase.HOST, _bks_worker.NoticeWebServerBase.PORT
                     )
                     if skt.connect() is True:
                         skt.send(_completed_notice)

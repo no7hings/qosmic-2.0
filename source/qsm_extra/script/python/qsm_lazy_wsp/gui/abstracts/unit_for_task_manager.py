@@ -281,8 +281,9 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
                     qt_item._item_model.focus_select()
         else:
             if self._task_unit_path_tmp is None:
+                # select main as default
                 if path.endswith('main'):
-                    # self._task_unit_path_tmp = path
+                    self._task_unit_path_tmp = path
                     qt_item._item_model.focus_select()
             else:
                 if path == self._task_unit_path_tmp:

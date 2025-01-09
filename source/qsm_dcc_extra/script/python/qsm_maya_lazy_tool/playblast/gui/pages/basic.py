@@ -284,7 +284,7 @@ class PrxPageForPlayblast(prx_abstracts.AbsPrxWidget):
     def on_playblast_backstage(self):
         import lxbasic.web as bsc_web
 
-        import qsm_lazy.backstage.worker as lzy_bks_worker
+        import qsm_lazy_bks.worker as lzy_bks_worker
 
         if lzy_bks_worker.TaskClient.get_server_status():
             movie_path = self.gui_get_file_path()

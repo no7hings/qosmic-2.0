@@ -7,7 +7,7 @@ import lxgui.core as gui_core
 
 import lxgui.qt.core as gui_qt_core
 
-import qsm_lazy.backstage.worker as lzy_bks_worker
+import qsm_lazy_bks.worker as lzy_bks_worker
 
 from . import qt as _gui_qt
 
@@ -111,7 +111,7 @@ class PrxLazyBackstageTool(gui_prx_widgets.PrxSessionWindow):
                 'quit server completed'
             )
 
-        import qsm_lazy.backstage.worker.server as qsm_prc_server
+        import qsm_lazy_bks.worker.server as qsm_prc_server
 
         server_process = qsm_prc_server.start_use_process(
             lzy_bks_worker.BackstageServerBase.HOST, lzy_bks_worker.BackstageServerBase.PORT

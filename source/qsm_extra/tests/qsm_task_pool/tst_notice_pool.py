@@ -1,5 +1,5 @@
 # coding:utf-8
-import qsm_lazy.backstage.core as lzy_bks_core
+import qsm_lazy_bks.core as lzy_bks_core
 
 p = lzy_bks_core.NoticePool.generate()
 

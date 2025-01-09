@@ -4,7 +4,7 @@ import lxbasic.core as bsc_core
 
 import lxbasic.web as bsc_web
 
-import qsm_lazy.backstage.worker as lzy_bks_worker
+import qsm_lazy_bks.worker as lzy_bks_worker
 
 ts = []
 

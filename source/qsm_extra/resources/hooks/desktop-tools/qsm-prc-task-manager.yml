@@ -9,7 +9,7 @@ option:
         name_chs: '懒人后台任务'
         group_name: 'General(s)'
         #
-        icon_name: 'application/task_manager'
+        icon_name: 'lazy/backstage'
         tool_tip:
             - 'for task monitor'
             - '...'
