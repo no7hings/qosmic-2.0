@@ -47,8 +47,12 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
 
         # application
         self._application = 'maya'
-        self._application_switch_tool_box = self._qt_tree_widget._add_left_tool_box_('application')
+        self._application_switch_qt_tool_box = self._qt_tree_widget._add_left_tool_box_('application')
         self._gui_add_application_switch_tools()
+        
+        # extra
+        self._extra_qt_tool_box = self._qt_tree_widget._add_left_tool_box_('extra')
+        self._gui_add_extra_tools()
 
     def _gui_add_application_switch_tools(self):
 
@@ -76,7 +80,7 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
         tools = []
         for i_application, i_icon_name in cfg:
             i_tool = gui_prx_widgets.PrxToggleButton()
-            self._application_switch_tool_box._add_widget_(i_tool)
+            self._application_switch_qt_tool_box._add_widget_(i_tool)
             i_tool._qt_widget._set_exclusive_widgets_(tools)
             i_tool.set_name(i_application)
             i_tool.set_icon_name(i_icon_name)
@@ -100,6 +104,16 @@ class _GuiSourceTaskOpt(_GuiBaseOpt):
                     self._window._configure.get('build.messages.switch_application')
                 ).format(application=self._application)
             )
+
+    def _gui_add_extra_tools(self):
+        self._setting_qt_button = gui_qt_widgets.QtIconPressButton()
+        self._extra_qt_tool_box._add_widget_(self._setting_qt_button)
+        self._setting_qt_button._set_name_text_('setting')
+        self._setting_qt_button._set_icon_name_('lazy/setting')
+        self._setting_qt_button._set_tool_tip_('Press Show Setting')
+
+    def _gui_get_auto_switch_workspace(self):
+        return True
 
     def _gui_add_entity_groups(self, path):
         path_opt = bsc_core.BscNodePathOpt(path)

@@ -13,38 +13,34 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "开发相关/开发任务/maya/绑定相关/动态GPU（Dynamic GPU）.md",
+                "file": "开发相关/开发进度/优化.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "0693214f7357a353",
+            "id": "159cdc048157b980",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "开发相关/开发任务/2025-规划.md",
-                "mode": "source",
-                "source": false
-              }
+              "type": "card-board-view",
+              "state": {}
             }
           },
           {
-            "id": "ef24a4961c19771e",
+            "id": "7742e8c75589751e",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "随记/2025随记.md",
+                "file": "技术文档/工具安装说明（临时版）.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -110,7 +106,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "开发相关/开发任务/2025-规划.md",
+                "file": "技术文档/工具安装说明（临时版）.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -127,7 +123,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "开发相关/开发任务/2025-规划.md",
+                "file": "技术文档/工具安装说明（临时版）.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -150,7 +146,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "开发相关/开发任务/2025-规划.md"
+                "file": "技术文档/工具安装说明（临时版）.md"
               }
             }
           },
@@ -172,7 +168,7 @@
             "state": {
               "type": "file-properties",
               "state": {
-                "file": "开发相关/开发任务/2025-规划.md"
+                "file": "技术文档/工具安装说明（临时版）.md"
               }
             }
           },
@@ -212,17 +208,33 @@
       "card-board:CardBoard": false
     }
   },
-  "active": "0693214f7357a353",
+  "active": "7742e8c75589751e",
   "lastOpenFiles": [
-    "开发相关/开发任务/maya/动作相关/动作拼接工具.md",
-    "随记/2025随记.md",
+    "技术文档/Qosmic/环境变量（Environment）.md",
+    "技术文档/Qosmic/存储结构（Storage Hierarchy）.md",
+    "开发相关/开发进度/优化.md",
     "开发相关/开发文档/解算流程工具.md",
+    "开发相关/开发任务/2025-规划.md",
+    "随记/2025随记.md",
+    "Pasted image 20250109134709.png",
+    "Pasted image 20250109134209.png",
+    "Pasted image 20250109134149.png",
+    "Pasted image 20250109133827.png",
+    "开发相关/开发任务/maya/解算相关/解算流程工具开发.md",
+    "开发相关/开发任务/maya/解算相关/解算（布料）流程.md",
+    "开发相关/开发任务/maya/解算相关/节点图模版工具（Node Graph Template Tool）.md",
+    "开发相关/开发任务/maya/解算相关/节点参数模版工具（Node Parameter Template Tool）.md",
+    "开发相关/开发任务/maya/动作相关/动作工具.md",
+    "随记/利用标签进行分类.md",
+    "随记/gantt view.md",
+    "未命名.canvas",
+    "README.md",
+    "README 1.md",
+    "开发相关/开发任务/maya/绑定相关/动态GPU（Dynamic GPU）.md",
+    "开发相关/开发任务/maya/动作相关/动作拼接工具.md",
     "开发相关/开发文档/images/Pasted image 20241216112647.png",
     "技术文档/Qosmic.md",
-    "开发相关/开发任务/2025-规划.md",
-    "开发相关/开发任务/maya/绑定相关/动态GPU（Dynamic GPU）.md",
     "开发相关/开发文档/后台任务管理工具（Process Task Manager）.md",
-    "随记/gantt view.md",
     "开发相关/开发计划/2024-4~5.md",
     "开发相关/开发计划/总览.md",
     "开发相关/开发文档/images/Pasted image 20250106113022.png",
@@ -230,26 +242,11 @@
     "开发相关/开发文档/images/Pasted image 20250106112317.png",
     "开发相关/开发文档/images/Pasted image 20250106110426.png",
     "开发相关/开发文档/images/Pasted image 20250106110203.png",
-    "开发相关/开发文档/images/Pasted image 20250106105859.png",
-    "开发相关/开发文档/images/Pasted image 20250106105616.png",
-    "开发相关/开发文档/images/Pasted image 20250106105259.png",
-    "开发相关/开发文档/images/Pasted image 20250106105121.png",
     "随记/动作拼接.md",
-    "开发相关/开发进度/优化.md",
     "开发相关/开发进度/maya/7月-动作工具.md",
     "开发相关/开发计划/2024-9.md",
     "开发相关/开发计划/2024-10~11.md",
     "开发相关/开发进度/maya/11月-解算流程工具.md",
-    "开发相关/开发计划/2024-7~8.md",
-    "开发相关/开发计划/2024-6.md",
-    "开发相关/开发进度/maya/8月-动作拼接工具.md",
-    "开发相关/开发进度/maya/6月-节点参数模版工具.md",
-    "开发相关/开发进度/maya/6月-绑定移动工具.md",
-    "开发相关/开发进度/maya/5月-简易拍屏工具.md",
-    "开发相关/开发进度/maya/5月-场景显示优化工具.md",
-    "开发相关/开发进度/maya/4月-绑定显示优化工具.md",
-    "未命名.canvas",
-    "常见问题/文件路径.md",
     "images",
     "USD/植被流程/流程图.canvas",
     "USD/植被流程",

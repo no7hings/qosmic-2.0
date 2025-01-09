@@ -37,7 +37,7 @@ build:
     buttons:
         create_task:
             name: 'Create Task'
-            name_chs: '创建任务'
+            name_chs: '新建任务'
 
     menu_names:
         open_folder:
@@ -106,7 +106,7 @@ build:
         buttons:
             create_task:
                 name: 'Create Task'
-                name_chs: '创建任务'
+                name_chs: '新建任务'
 
             save:
                 name: 'Save'
